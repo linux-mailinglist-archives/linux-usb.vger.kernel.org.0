@@ -1,249 +1,142 @@
-Return-Path: <linux-usb+bounces-7471-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7472-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 843E88700A0
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Mar 2024 12:47:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 883F28700D8
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Mar 2024 12:56:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A829F1C213B5
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Mar 2024 11:46:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BA5961C20E60
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Mar 2024 11:56:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95D5A3B189;
-	Mon,  4 Mar 2024 11:46:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C953C3C07B;
+	Mon,  4 Mar 2024 11:55:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DvdcOhRh"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AZJ1cpMh"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98B212BCFF;
-	Mon,  4 Mar 2024 11:46:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C122C3BB4E;
+	Mon,  4 Mar 2024 11:55:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709552810; cv=none; b=uX4X3LWbdwPsoGpPLbFPxLdRFq+nGlEt9VKicaSIGOJlwgMkqdII5+18rlqAXPEyIIxRDKitDoDX5sM8KnDtqhEpbyiW9D/6x2Kr7MHKOiYFtKAJyFXO4/wW1IV1+8KsFj9EWeDlKvPK7uGROnPeKHGSZidU9mx+rm070VlwSPo=
+	t=1709553355; cv=none; b=lLFDB8eT05VqUkLZc9Hqu6tei3kcp2oLw7nX/dVfWiNKr+zsRbnJRuKGr40Vdb17+gtbnYp1h48kGNXB08qgAygMV/LtoVh/3GQERCpIN7bYCefss7a5XvyYA1lyljjOZTLYrBTe2SiWbtqBy86ijKttZSWbH/NWV3K3+dfM/fc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709552810; c=relaxed/simple;
-	bh=MREf+q+trSbCOEQo2zmMzNcMz+h6WiYld+brhD1xTWI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=vAwaLAzDFboMP/bVJFK9zywBFqXy1AIds7Fm2YeGVoUrEQdCLkU8eWgGadbQDQJ0JCVVCnNvVc7kn/x66Ipn9U6s3bdjbzYXtYK+aSeZSjR7A7FLyvT8jOtxJWddXCXipOaVpyXqVCdbcH1Zsx+WtZ2YIbsqGPYQV7hurDvKiaI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DvdcOhRh; arc=none smtp.client-ip=209.85.161.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-5a0a19c9bb7so3538188eaf.3;
-        Mon, 04 Mar 2024 03:46:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709552808; x=1710157608; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6JEGHtbqyJwPzknb9cutu3F9GTXF2cnTcxkajaqQGKU=;
-        b=DvdcOhRhKJyzGkG7Xb+992GJpuMqhdDK05IQXQlF3RDOmeun1SMzVBtpt8kqypkoyR
-         5+JSoS0LXJ+EJJhxTa4FOGIRA3bwp2TDgRTtdwn5TM0LELJJseas43sRlLsKxAhwVaKT
-         v+Hi5kqyLRPj0iTqtFuNjta5vU/X1IgpPlBa+AYMW3Kd/OA8eCLBr/IkUM8hVGLD8YRm
-         Ii0Bx8wTHySCJcPoEPgBJnyhL9gFcNOXRjEJzNfLbuvGof4dFnRdyYu+keqP29PYUhey
-         GgaxbzGK1dularqYVkhBM4ixCMQTA4MKiRsdJfx1ZoO8HMv83eFHT6JyCqwVo9w7C/SF
-         JShA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709552808; x=1710157608;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6JEGHtbqyJwPzknb9cutu3F9GTXF2cnTcxkajaqQGKU=;
-        b=kg0IeYDFci5KRr4K63TTWp3sELHuJCguH5li7mJrv7K4Rd+InU8xWj45Ny6apR1kJW
-         9eQ41V9MFM3u6z3Zqd8v+J3Gr0j7o4yjU9JqYj6QeSRn4146XefFfMVSSgH+biCxFr5U
-         ix3BWG5dPShZmGxgr9KVr6NW2gwJYVzKHWBdeD6SvKumivyLvMIlLMhAxM0Sw6vJr43o
-         vELmL1MbUW2DV9Heqg9XLOfvaxcGM+KYGJBQEDl52Gs40mSY5AgBYQbV8JpkmiNxp03N
-         w8xE6uc5fbo+d8opwgeB9uQt0SZlRti5fDqRbVBv+DR2E4ZszO+ma/24+SpTFdaUdq6X
-         VpaQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWOywENJYacw6n6vNS4N8GMG0rypYriOC6pWoT8vIYSpkNrog27t1ocGAYz4Qs47JHxQberi3caS07NGFuKaMXQ8RHvH+9ErTd1nPHLz8K5MJ6XWNMvyNrc1ccicQKbuMdzX3MbSvpUBk+K30HyblX5wIIOyekYWM/ryIQhQKmGYRBWOoxUL9TZKlA=
-X-Gm-Message-State: AOJu0YyBFHIiJDuoJCam9w8bY7DSOkiBJv/TxyqlIT17q+/qA+CkibJE
-	qlHG3Kap2k7WUiRbSBlR+c5kpheyvsHZ+6bE3ehqTJWllJ57WyIuDq2KGiGPQ5DgPQsihpCpz1V
-	KHVvAHswhiv36hGFSk5aRYFwa24w=
-X-Google-Smtp-Source: AGHT+IEeP26jeJGto7pU0/H3MLxor72shrPPLiWXPA7B5vfhOmQFc4jDmdCqhuCwpM9prlDnUrdGDerfdd0RJie/m6k=
-X-Received: by 2002:a05:6820:2281:b0:5a1:841:c2a6 with SMTP id
- ck1-20020a056820228100b005a10841c2a6mr7832749oob.3.1709552807779; Mon, 04 Mar
- 2024 03:46:47 -0800 (PST)
+	s=arc-20240116; t=1709553355; c=relaxed/simple;
+	bh=STXcOLTjf1xq1SwKva2e5Epz+VhE7cqnT+3mPxu+aNA=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:From:Subject:
+	 In-Reply-To:Content-Type; b=SlUTVox9NfDXxm2E+WFaWFe8TJYugTSVKTLtLlh8RV+c75bAiP3vQIsxxAEk85B9zkjpba28F+NmJJt9psCpWjKPvZpn6l4l1geW8hE3eg2q90C5j/HtyzybV2pHOc5pfA/k1J6qDOLhS22Fs26TpXMo9vZnboHzucm3IERZgdg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AZJ1cpMh; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1709553354; x=1741089354;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=STXcOLTjf1xq1SwKva2e5Epz+VhE7cqnT+3mPxu+aNA=;
+  b=AZJ1cpMhZWrq6eJRZd5OwuUIHr6PIqOlCbr/NEWRFIhKpnABwxoWdxcE
+   CvonFc7DDBciUkx1Fh6D/SLhWuetbKLuz9fhL4jrdRxzP52DaD0ECmmyo
+   w3xzFKN5Bdtsazethez2RMhYRb6lm0ix+eF1aHYm7sDEwAceiZnBy0clr
+   PFoY9sNjf2uu7kGIM8fAe6tj+TbwdeeJqVldOjTxUA4UGSolLZcllGUr9
+   ZcFsaPtm03xln2nvxqWKxl+qxQOQ3mlyToOGpeqzkhPRpZhZSbDao43jW
+   CzkdpDBvPC5giOjflavVJvhWwCz88TvfHvOxPfrzUeshOX4EQlTTYKjzO
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11002"; a="3898898"
+X-IronPort-AV: E=Sophos;i="6.06,203,1705392000"; 
+   d="scan'208";a="3898898"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2024 03:55:52 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,11002"; a="937040376"
+X-IronPort-AV: E=Sophos;i="6.06,203,1705392000"; 
+   d="scan'208";a="937040376"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmsmga001.fm.intel.com with ESMTP; 04 Mar 2024 03:55:50 -0800
+Message-ID: <a6a04009-c3fe-e50d-d792-d075a14ff825@linux.intel.com>
+Date: Mon, 4 Mar 2024 13:57:32 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240301193831.3346-1-linux.amoon@gmail.com> <20240301193831.3346-4-linux.amoon@gmail.com>
- <52158bf6-16fe-4ce2-b9b6-bbc6550a6e14@wanadoo.fr> <CANAwSgTCaSSMN2QCw5fr=RBp0WwWaLuebzQDO=scnABNFNctJQ@mail.gmail.com>
- <e85ad80f-af7d-4eaf-9d14-dff13451f7e5@wanadoo.fr>
-In-Reply-To: <e85ad80f-af7d-4eaf-9d14-dff13451f7e5@wanadoo.fr>
-From: Anand Moon <linux.amoon@gmail.com>
-Date: Mon, 4 Mar 2024 17:16:35 +0530
-Message-ID: <CANAwSgRrOw+6MHLPDP8RwLwzwB1EVGBTovtR2ChhqR3b5uWowA@mail.gmail.com>
-Subject: Re: [PATCH v1 3/4] usb: dwc3: exynos: Use devm_regulator_bulk_get_enable()
- helper function
-To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
-	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.13.0
+Content-Language: en-US
+To: Chris Yokum <linux-usb@mail.totalphase.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Linux regressions mailing list <regressions@lists.linux.dev>,
+ stable <stable@vger.kernel.org>, linux-usb@vger.kernel.org,
+ Niklas Neronin <niklas.neronin@linux.intel.com>
+References: <949223224.833962.1709339266739.JavaMail.zimbra@totalphase.com>
+ <50f3ca53-40e3-41f2-8f7a-7ad07c681eea@leemhuis.info>
+ <2024030246-wife-detoxify-08c0@gregkh>
+ <278587422.841245.1709394906640.JavaMail.zimbra@totalphase.com>
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: 6.5.0 broke XHCI URB submissions for count >512
+In-Reply-To: <278587422.841245.1709394906640.JavaMail.zimbra@totalphase.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Christophe,
+On 2.3.2024 17.55, Chris Yokum wrote:
+> 
+> The submission of >512 URBs is via usbfs, yes. This worked forever, and still works on EHCI, it's just been failing on xHCI once the indicated change was applied.
+> 
 
-On Sun, 3 Mar 2024 at 00:07, Christophe JAILLET
-<christophe.jaillet@wanadoo.fr> wrote:
->
-> Le 02/03/2024 =C3=A0 17:48, Anand Moon a =C3=A9crit :
-> > Hi Christophe,
-> >
-> > On Sat, 2 Mar 2024 at 21:20, Christophe JAILLET
-> > <christophe.jaillet@wanadoo.fr> wrote:
-> >>
-> >> Le 01/03/2024 =C3=A0 20:38, Anand Moon a =C3=A9crit :
-> >>> Use devm_regulator_bulk_get_enable() instead of open coded
-> >>> 'devm_regulator_get(), regulator_enable(), regulator_disable().
-> >>>
-> >>> Signed-off-by: Anand Moon <linux.amoon@gmail.com>
-> >>> ---
-> >>>    drivers/usb/dwc3/dwc3-exynos.c | 49 +++---------------------------=
-----
-> >>>    1 file changed, 4 insertions(+), 45 deletions(-)
-> >>>
-> >>> diff --git a/drivers/usb/dwc3/dwc3-exynos.c b/drivers/usb/dwc3/dwc3-e=
-xynos.c
-> >>> index 5d365ca51771..7c77f3c69825 100644
-> >>> --- a/drivers/usb/dwc3/dwc3-exynos.c
-> >>> +++ b/drivers/usb/dwc3/dwc3-exynos.c
-> >>> @@ -32,9 +32,6 @@ struct dwc3_exynos {
-> >>>        struct clk              *clks[DWC3_EXYNOS_MAX_CLOCKS];
-> >>>        int                     num_clks;
-> >>>        int                     suspend_clk_idx;
-> >>> -
-> >>> -     struct regulator        *vdd33;
-> >>> -     struct regulator        *vdd10;
-> >>>    };
-> >>>
-> >>>    static int dwc3_exynos_probe(struct platform_device *pdev)
-> >>> @@ -44,6 +41,7 @@ static int dwc3_exynos_probe(struct platform_device=
- *pdev)
-> >>>        struct device_node      *node =3D dev->of_node;
-> >>>        const struct dwc3_exynos_driverdata *driver_data;
-> >>>        int                     i, ret;
-> >>> +     static const char * const regulators[] =3D { "vdd33", "vdd10" }=
-;
-> >>>
-> >>>        exynos =3D devm_kzalloc(dev, sizeof(*exynos), GFP_KERNEL);
-> >>>        if (!exynos)
-> >>> @@ -78,27 +76,9 @@ static int dwc3_exynos_probe(struct platform_devic=
-e *pdev)
-> >>>        if (exynos->suspend_clk_idx >=3D 0)
-> >>>                clk_prepare_enable(exynos->clks[exynos->suspend_clk_id=
-x]);
-> >>>
-> >>> -     exynos->vdd33 =3D devm_regulator_get(dev, "vdd33");
-> >>> -     if (IS_ERR(exynos->vdd33)) {
-> >>> -             ret =3D PTR_ERR(exynos->vdd33);
-> >>> -             goto vdd33_err;
-> >>> -     }
-> >>> -     ret =3D regulator_enable(exynos->vdd33);
-> >>> -     if (ret) {
-> >>> -             dev_err(dev, "Failed to enable VDD33 supply\n");
-> >>> -             goto vdd33_err;
-> >>> -     }
-> >>> -
-> >>> -     exynos->vdd10 =3D devm_regulator_get(dev, "vdd10");
-> >>> -     if (IS_ERR(exynos->vdd10)) {
-> >>> -             ret =3D PTR_ERR(exynos->vdd10);
-> >>> -             goto vdd10_err;
-> >>> -     }
-> >>> -     ret =3D regulator_enable(exynos->vdd10);
-> >>> -     if (ret) {
-> >>> -             dev_err(dev, "Failed to enable VDD10 supply\n");
-> >>> -             goto vdd10_err;
-> >>> -     }
-> >>> +     ret =3D devm_regulator_bulk_get_enable(dev, ARRAY_SIZE(regulato=
-rs), regulators);
-> >>> +     if (ret)
-> >>> +             return dev_err_probe(dev, ret, "Failed to enable regula=
-tors\n");
-> >>>
-> >>>        if (node) {
-> >>>                ret =3D of_platform_populate(node, NULL, NULL, dev);
-> >>> @@ -115,10 +95,6 @@ static int dwc3_exynos_probe(struct platform_devi=
-ce *pdev)
-> >>>        return 0;
-> >>>
-> >>>    populate_err:
-> >>> -     regulator_disable(exynos->vdd10);
-> >>> -vdd10_err:
-> >>> -     regulator_disable(exynos->vdd33);
-> >>> -vdd33_err:
-> >>>        for (i =3D exynos->num_clks - 1; i >=3D 0; i--)
-> >>>                clk_disable_unprepare(exynos->clks[i]);
-> >>>
-> >>> @@ -140,9 +116,6 @@ static void dwc3_exynos_remove(struct platform_de=
-vice *pdev)
-> >>>
-> >>>        if (exynos->suspend_clk_idx >=3D 0)
-> >>>                clk_disable_unprepare(exynos->clks[exynos->suspend_clk=
-_idx]);
-> >>> -
-> >>> -     regulator_disable(exynos->vdd33);
-> >>> -     regulator_disable(exynos->vdd10);
-> >>>    }
-> >>>
-> >>>    static const struct dwc3_exynos_driverdata exynos5250_drvdata =3D =
+>>> We have found a regression bug, where more than 512 URBs cannot be
+>>> reliably submitted to XHCI. URBs beyond that return 0x00 instead of
+>>> valid data in the buffer.
+> 
+>>
+>> FWIW, that's f5af638f0609af ("xhci: Fix transfer ring expansion size
+>> calculation") [v6.5-rc1] from Mathias.
+>>
+>>> Attached is a test program that demonstrates the problem. We used a few
+>>> different USB-to-Serial adapters with no driver installed as a
+>>> convenient way to reproduce. We check the TRB debug information before
+>>> and after to verify the actual number of allocated TRBs.
+> 
+
+Could you send me that test program as well?
+
+> Ah, so this is just through usbfs?
+> 
+>>> With some adapters on unaffected kernels, the TRB map gets expanded
+>>> correctly. This directly corresponds to correct functional behavior. On
+>>> affected kernels, the TRB ring does not expand, and our functional tests
+>>> also will fail.
+>>>
+>>> We don't know exactly why this happens. Some adapters do work correctly,
+>>> so there seems to also be some subtle problem that was being masked by
+>>> the liberal expansion of the TRB ring in older kernels. We also saw on
+>>> one system that the TRB expansion did work correctly with one particular
+>>> adapter. However, on all systems at least two adapters did exhibit the
+>>> problem and fail.
+
+Ok, I see, this could be the empty ring exception check in xhci-ring.c:
+
+It could falsely assume ring is empty when it in fact is filled up in one
+go by queuing several small urbs.
+
+static unsigned int xhci_ring_expansion_needed(struct xhci_hcd *xhci, struct xhci_ring *ring,
+                                                unsigned int num_trbs)
 {
-> >>> @@ -196,9 +169,6 @@ static int dwc3_exynos_suspend(struct device *dev=
-)
-> >>>        for (i =3D exynos->num_clks - 1; i >=3D 0; i--)
-> >>>                clk_disable_unprepare(exynos->clks[i]);
-> >>>
-> >>> -     regulator_disable(exynos->vdd33);
-> >>> -     regulator_disable(exynos->vdd10);
-> >>
-> >> Hi,
-> >>
-> >> Same here, I don't think that removing regulator_[en|dis]able from the
-> >> suspend and resume function is correct.
-> >>
-> >> The goal is to stop some hardware when the system is suspended, in ord=
-er
-> >> to save some power.
-> > Ok,
-> >>
-> >> Why did you removed it?
-> >
-> > As per the description of the function  devm_regulator_bulk_get_enable
-> >
-> > * This helper function allows drivers to get several regulator
-> >   * consumers in one operation with management, the regulators will
-> >   * automatically be freed when the device is unbound.  If any of the
-> >   * regulators cannot be acquired then any regulators that were
-> >   * allocated will be freed before returning to the caller.
->
-> The code in suspend/resume is not about freeing some resources. It is
-> about enabling/disabling some hardware to save some power.
->
-> Think to the probe/remove functions as the software in the kernel that
-> knows how to handle some hardawre, and the suspend/resume as the on/off
-> button to power-on and off the electrical chips.
->
-> When the system is suspended, the software is still around. But some
-> hardware can be set in a low consumption mode to save some power.
->
-> IMHO, part of the code you removed changed this behaviour and increase
-> the power consumption when the system is suspended.
->
+  ...
+         /* Empty ring special case, enqueue stuck on link trb while dequeue advanced */
+         if (trb_is_link(ring->enqueue) && ring->enq_seg->next->trbs == ring->dequeue)
+                 return 0;
+...
+}
 
-You are correct, I have changed the regulator API from
-devm_regulator_get_enable to devm_regulator_bulk_get_enable
-which changes this behavior.
-I will fix it in the next version.
+https://elixir.bootlin.com/linux/v6.7/source/drivers/usb/host/xhci-ring.c#L333
 
-> CJ
+Can you help me test some patches on your setup?
 
 Thanks
--Anand
+Mathias
+
+  
 
