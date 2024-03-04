@@ -1,126 +1,98 @@
-Return-Path: <linux-usb+bounces-7468-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7469-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 37EC686FED0
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Mar 2024 11:20:06 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3DE5D86FEF1
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Mar 2024 11:23:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B0300B24B71
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Mar 2024 10:20:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E7DE81F25EF8
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Mar 2024 10:23:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 978D53C492;
-	Mon,  4 Mar 2024 10:16:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C93D24A0D;
+	Mon,  4 Mar 2024 10:21:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m1v6gwCK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ni22rTZM"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B51EA2574D;
-	Mon,  4 Mar 2024 10:16:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C1D4225D2
+	for <linux-usb@vger.kernel.org>; Mon,  4 Mar 2024 10:21:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709547414; cv=none; b=Bg2cse9RsPWukdnP1InQmkGN0IYh5llLkrS9/KW+WsmD/rjGIEa4SXC4JPQZM7ITHBT/vx48mVfRyW25inSp0Gmo7i3I7ZNhfE2LGT/10r87/p+B5KtF4AfuBNREofXyUfizlRZ2cwXubbJI4blRCuC5KwrvPhDDqovAqTQBgsE=
+	t=1709547692; cv=none; b=tAfq9pggBSHm54rOKTwBm/OdXHvk69VeCzBafYLrQA/TB2o9N9kA1IgoJB4RuJO3ZmuWm+nOrPvTLLVybPAlioV+WebJYd+mzqgwq5u/jHtj+dWiI0KBJ8e7FVTjagaGVrey5GH0c6GCwwnCIgD4yqLZ2+MVKCbH+eG/zCMDMpI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709547414; c=relaxed/simple;
-	bh=r9R7fsoaFTssCD4S8pAvGpfWz79/sdKQ+D2RchM3Vp8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sACfMU//dZUIQWAhOoYx7BTdnKjzvzlQbTs+cwoiYGqY36o1tgZdEeKvEEnretEZbOFq6mWQ36SP25BM6x/01rcOAuyYcs3av0O+A6vHetHmv5eg/M26Sagid60/wcN+oDer7coNFj12tGvOeBJBG92zbcGEDNbcHj3gFrmYLfg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m1v6gwCK; arc=none smtp.client-ip=209.85.161.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-5a0932aa9ecso2244363eaf.3;
-        Mon, 04 Mar 2024 02:16:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709547412; x=1710152212; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=9IduB56gCouP3puaRFBT9qXQWpSpTWONTThlDJRHj/0=;
-        b=m1v6gwCKzw48XrtMF9FKJ7IGIkm2+RdpmNCD6V2UnWqJrnPCCIHAw1M7/lmyl31oRa
-         gnvlz1YoolMrnWd4A59JTsRiAquY/9e8zuVwkB3tueL1zgN1ZJX0MWgr88ygXbOWEEnY
-         /BEJOARYB+t5VihMuRgbzJnPHYpQAVdrUVUsivWg31JU2B20fOJ5lhIfK1ghfxAXbSFa
-         HyDk7Q/h1ZTeT3BvM8qdjQ5h6oZPYDmIqqQEp7zWAZDNEkcb9paqLXvpzcpbgvpEjjaH
-         MddkcwIpqTE4AHojjE3khyIwleeAfpBHAWvuT7iF23L2DgDJ+O7FSwRyv3/7O/gAKlRT
-         YuBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709547412; x=1710152212;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9IduB56gCouP3puaRFBT9qXQWpSpTWONTThlDJRHj/0=;
-        b=t9OuSEJQBD0APTWMN9oXqD+WZ6xJRRr2nyYOyB89nxzDIfr4QnzRpT/GTzRbyHQ8o+
-         nEKK7Z5KcfjLkS9uUUrFbbAEfUv9Z/xVY/iSaroxCvET6WvGwCtcPHy0WJwcFhqTa9c9
-         J9HUhcxturenhMuMJNC5kiKMAwpMaakzSan1NSmSTGgbPBWCZdey+8zbAwyWq5rDSSHP
-         zyH3geKJNs6gHZbKXe0kNCY6LV42OwwLcqM5u4N8eEmr/nKiMqMqpY/ypIrHQaDxINBk
-         EnaL81gKmv9VTUyk10nQhnnRzTh3ye7Il7gjOD4plTkyGXQCUAkSk+uz9avsVbq9hm2L
-         43wQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUHN2W0nefe09Q1Ssc/tXfdXwWFpR/qwzdgqKtJPL4XPkkRqi0CHkqgoUGs+EpGVRiwSN4aol65A843lvUxw5KH361bODi7L9xQMeiyj6lxbOorFbwqXXDd4m52nl0ctgJ3ID238nByVZNrvf/Tf4tQ7WSd0KwnwFZYeYzS0D9q9TDspwrbhqbQBz0=
-X-Gm-Message-State: AOJu0YwtTW8uGZpJ2dxeRNtXMlzPv5vvHu8LaozsnQ95I0b6LkNiV3Rq
-	Cec+TEziiTep0UUskOQyNnpHSTVG5o47dNxpbL9clwzr51lRhrOmLdEtg9MsNmbIol+ppGe//qr
-	2grawcS0m4upTJPykFO4n5cnBvMk=
-X-Google-Smtp-Source: AGHT+IGKlDQiwe2ETynuP1WjM66TUUfTvgAkEekSsjW8GST4aMh5tCx5vaqg6xAtZrzbO88Nx3b5zZhE0vTBzIOc68s=
-X-Received: by 2002:a05:6820:808:b0:5a1:ff2:4c46 with SMTP id
- bg8-20020a056820080800b005a10ff24c46mr6436866oob.9.1709547411912; Mon, 04 Mar
- 2024 02:16:51 -0800 (PST)
+	s=arc-20240116; t=1709547692; c=relaxed/simple;
+	bh=WumH4WZk7ff/hemxLr7ZSHU49W20i3tsm7MUnVoVuX0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=q9wn3pkxgTCKUbg7VNWYgxx7EphLu1T/USUMMdp7R1cuBdx7rPn56bWZ3erVoCbP11H3U+xdPMTgBqaSdLiwdVc3htyyYyl834kyXtmads8K8CCUw1LLxRbeHU0Ml/WQqvxFxmBXFmRGVFdgNyKPn2H3/pTnKxfmRdNBM8cE6A0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ni22rTZM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A494C433F1;
+	Mon,  4 Mar 2024 10:21:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709547692;
+	bh=WumH4WZk7ff/hemxLr7ZSHU49W20i3tsm7MUnVoVuX0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Ni22rTZMPk55XxLsfuZ1jzzlw1Oi0Ul2dAR48Hb73fJMr7oERSgbJZQkzyeOoZIeU
+	 hKhBXSenG0Ri6z8HhcRmDQV6ZxEYJxC/WBnBAlH0vgCmO+0mT0CAcwqb+8h/UBs+89
+	 jiwHuKSSDVj/d0JEjGuKJIG/Yzir1ivgjUtbn3RNHqR3CdwL06PcZmlXQgmSeFP2vM
+	 pU9FXlK4hDZ64yM6ABtsyAw72rLw3z8gYpXpoKINDAQ2Ry18dPOi5JiqqScE3kUkPS
+	 jjIyoEuVFAQjSVDZYnysan2YslXSnpkei0pTnLjDB1kqW30mG9ie8roOfFlDi6cRrE
+	 p7Q4EEK/vJuxQ==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1rh5Rz-000000007Zm-3JsF;
+	Mon, 04 Mar 2024 11:21:40 +0100
+Date: Mon, 4 Mar 2024 11:21:39 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Mike Miller <u492758@gmail.com>
+Cc: linux-usb@vger.kernel.org
+Subject: Re: Tell linux-usb@vger.kernel.org to add your device to a proper
+ driver
+Message-ID: <ZeWgs0ZClpCwE5lT@hovoldconsulting.com>
+References: <b133097f-0793-47bb-953f-4c31a721a5c6@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240301193831.3346-1-linux.amoon@gmail.com> <20240301193831.3346-3-linux.amoon@gmail.com>
- <ZeWSp4ohOhHGclud@hovoldconsulting.com>
-In-Reply-To: <ZeWSp4ohOhHGclud@hovoldconsulting.com>
-From: Anand Moon <linux.amoon@gmail.com>
-Date: Mon, 4 Mar 2024 15:46:39 +0530
-Message-ID: <CANAwSgShe9-Buyta5Ej9nmhp1dy467da6Cdfm5a+pwpEjem=QA@mail.gmail.com>
-Subject: Re: [PATCH v1 2/4] usb: ehci-exynos: Switch from CONFIG_PM guards to pm_ptr()
-To: Johan Hovold <johan@kernel.org>
-Cc: Alan Stern <stern@rowland.harvard.edu>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
-	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b133097f-0793-47bb-953f-4c31a721a5c6@gmail.com>
 
-Hi Johan,
+On Wed, Feb 07, 2024 at 08:48:12PM +0800, Mike Miller wrote:
+> I am only doing this because dmesg has told me to :).
 
-On Mon, 4 Mar 2024 at 14:51, Johan Hovold <johan@kernel.org> wrote:
->
-> On Sat, Mar 02, 2024 at 01:08:09AM +0530, Anand Moon wrote:
-> > Use the new PM macros for the suspend and resume functions to be
-> > automatically dropped by the compiler when CONFIG_PM are disabled,
-> > without having to use #ifdef guards. If CONFIG_PM unused,
-> > they will simply be discarded by the compiler.
-> >
-> > Use RUNTIME_PM_OPS runtime macro for suspend/resume function.
-> >
-> > Signed-off-by: Anand Moon <linux.amoon@gmail.com>
-> > ---
-> >  drivers/usb/host/ehci-exynos.c | 10 ++--------
-> >  1 file changed, 2 insertions(+), 8 deletions(-)
->
-> >  static const struct dev_pm_ops exynos_ehci_pm_ops = {
-> > -     .suspend        = exynos_ehci_suspend,
-> > -     .resume         = exynos_ehci_resume,
-> > +     RUNTIME_PM_OPS(exynos_ehci_suspend, exynos_ehci_resume, NULL)
-> >  };
->
-> This is also broken and clearly not tested. See the definition of
-> RUNTIME_PM_OPS() which sets the runtime pm callbacks, not the suspend
-> ones:
->
->         #define RUNTIME_PM_OPS(suspend_fn, resume_fn, idle_fn) \
->                 .runtime_suspend = suspend_fn, \
->                 .runtime_resume = resume_fn, \
->                 .runtime_idle = idle_fn,
->
-> Johan
+Thanks for the report.
+ 
+> I am struggling to get a cheap arse Chinese knock-off Arduino Nano 
+> working on my
+> 
+> Linux MyLinux 6.5.0-15-generic #15~22.04.1-Ubuntu SMP PREEMPT_DYNAMIC 
+> Fri Jan 12 18:54:30 UTC 2 x86_64 x86_64 x86_64 GNU/Linux
+> 
+> and I get the message
+> 
+> [ 2840.099780] usb 2-1.2: new low-speed USB device number 8 using ehci-pci
+> [ 2840.210523] usb 2-1.2: New USB device found, idVendor=16d0, 
+> idProduct=0753, bcdDevice= 2.02
+> [ 2840.210537] usb 2-1.2: New USB device strings: Mfr=0, Product=0, 
+> SerialNumber=0
+> [ 2840.211335] usbserial_generic 2-1.2:1.0: The "generic" usb-serial 
+> driver is only for testing and one-off prototypes.
+> [ 2840.211338] usbserial_generic 2-1.2:1.0: Tell 
+> linux-usb@vger.kernel.org to add your device to a proper driver.
+> [ 2840.211340] usbserial_generic 2-1.2:1.0: device has no bulk endpoints
 
-Ok, I will drop these changes.
+Hmm. Without bulk endpoints you shouldn't be able to actually use the
+device with the generic driver.
 
-Thanks.
--Anand
+> This something you really can address?
+
+Can you please post the output of lsusb -v for this device?
+
+Johan
 
