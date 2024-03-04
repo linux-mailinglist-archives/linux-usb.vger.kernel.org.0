@@ -1,75 +1,82 @@
-Return-Path: <linux-usb+bounces-7466-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7467-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3655586FEBA
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Mar 2024 11:17:57 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E3D686FEC9
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Mar 2024 11:19:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E80B6282B1F
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Mar 2024 10:17:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D863D1F235EB
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Mar 2024 10:19:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD77F22F08;
-	Mon,  4 Mar 2024 10:14:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9933B3B789;
+	Mon,  4 Mar 2024 10:16:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UP/VLUnY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D2U7f8S4"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A363225A2;
-	Mon,  4 Mar 2024 10:14:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D7C33B19E;
+	Mon,  4 Mar 2024 10:16:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709547269; cv=none; b=kLytkASZo4Y6DbGYvxSGvLipkTzI+7druCaUfhPmh/EqiGeP7EIUmzfeEUnikvWqLedjZFu8+7ubeS/Cixr9cU7I4VY6dIWulM+JR8O9Gc4nRpmpZ7CNLO36m/aljDNBffMV7JPYLzo4Xn6C5hksEIO7R+zzASCoUPplB7LCoMM=
+	t=1709547366; cv=none; b=jE7A7eisFUlsDk0iqDaKRnymsNT2YcUGN5D3PfEcK/cx0/kAkyuinaYnRHIttAxyrSCAF5p1K8EvJVIMBYBzsK0BTgvZFnbgZJvn5GfLjXJXVna7rWigbHyZNQlXapXviVmPuSfVfTCEcdZeGh8NcsiyNBMBQ6b+rfd/foJD5HY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709547269; c=relaxed/simple;
-	bh=nhV3nLQLv9fmwP/nySp4wv0mZvbHQ0i0sj34n6Bo4pk=;
+	s=arc-20240116; t=1709547366; c=relaxed/simple;
+	bh=dqE1sGx2sTd5SmitjperBZu1xsLydudjgfF8a3ciIT8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MwshFnyFErNkA2arx+76EQX3KybIf1GMwQ/wV8lqrvgeZ6u5eFBhWUx1X9EFUPL/tmMRr6nd5Z+2JlnreZaD4dp8jAR49eMhnB15PNpO7DC/CeU+udn/JqEKl1jksN5CzKnXN8sOrIODJejxZkSYMGYrK9GoZi8WFPQgv20Fht8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UP/VLUnY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3236C433F1;
-	Mon,  4 Mar 2024 10:14:28 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=jYNM4VjljBhvc603zYco14BU1xP8fE/0g3zaIfzwLS0hR+NtDs8ykqkEX12IvXV0bmn0nfEm+68XEO8YZZxVXgUgx6ZQWoPRCsmIOnZNTYPXVhuNDMWav6FPMe087EiWFSu27pBumi71DvMdJvzv+wm7kiKtI0VJx1luPQsXGvI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D2U7f8S4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3904C433F1;
+	Mon,  4 Mar 2024 10:16:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709547268;
-	bh=nhV3nLQLv9fmwP/nySp4wv0mZvbHQ0i0sj34n6Bo4pk=;
+	s=k20201202; t=1709547365;
+	bh=dqE1sGx2sTd5SmitjperBZu1xsLydudjgfF8a3ciIT8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UP/VLUnY5u+1a64IBrRO5uXaeBnbx88yQUVRsYK7v7zuM/y7npA6dhXODCCKE/lyR
-	 sk6EO2HIRaz46qWpIj5DTEqPsOIbvmceH7kqI4cW3KyvTXhkwijxTqtX5CnEaj8gez
-	 SGJwprpM9PeZmRXDTzF4ZV2Xf2uJ5B8TBUX1G3RHgkXVMkazpxgTfeKCdyhC1OoJac
-	 9ZnAnl8LIFUNhtBRrotYLPnoAiTF/4k57q66meSZVPOwQ1HFwQP4sCAax12yYkYMk0
-	 Q30mbiHHH10X3Nl2wDiEoKpgAMsVfzHt40N+yGibjS9J/UE4MLwO37fA0H0voK8bms
-	 d9eBqY+i6N6ow==
+	b=D2U7f8S4AVG/EzXbOAh4ulCAGNB/BE0AyYiqVjkH7e6+e1WXr+e3VfePvjSfM3JSP
+	 namBQkjTiiaG7ZwCvR0R5OS6z8PU2D/9W9vLyaRPQbKQjiWvLxjO5IEIFUuIMJexUd
+	 dsBy6E3dCLO0l9cQLJ6v/k3aP2l8HjHb/DDFbvB2nVsOSWcgLlcnYTvnv7qzd9xCia
+	 Cu1U6LpFqcgwoiaRfOjplt2ju2c/eSrsV6Mmqz1KWfwGop4vohUFtZJVix+9nDWX5X
+	 3t7CSO0KKP6eOFM7HQD0iImfFM1jEIWmBiEFtFxLoIpMRLvR5pBlUhAOy9hqgzsLw2
+	 duO9eNg3sWqyQ==
 Received: from johan by xi.lan with local (Exim 4.97.1)
 	(envelope-from <johan@kernel.org>)
-	id 1rh5LB-0000000076g-0Foe;
-	Mon, 04 Mar 2024 11:14:37 +0100
-Date: Mon, 4 Mar 2024 11:14:37 +0100
+	id 1rh5Mk-0000000079W-0OpA;
+	Mon, 04 Mar 2024 11:16:14 +0100
+Date: Mon, 4 Mar 2024 11:16:14 +0100
 From: Johan Hovold <johan@kernel.org>
-To: Cameron Williams <cang1@live.co.uk>
-Cc: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: serial: Add device ID for cp210x
-Message-ID: <ZeWfDU3Mx7dhq-j6@hovoldconsulting.com>
-References: <DU0PR02MB7899B4A2A35EFE1B350E6F97C44F2@DU0PR02MB7899.eurprd02.prod.outlook.com>
+To: Christian =?utf-8?B?SMOkZ2dzdHLDtm0=?= <christian.haggstrom@orexplore.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] USB: serial: cp210x: add ID for MGP Instruments PDS100
+Message-ID: <ZeWfbpXW5yynhorz@hovoldconsulting.com>
+References: <18444448-6e04-4d28-b93d-5852958e35c1@orexplore.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <DU0PR02MB7899B4A2A35EFE1B350E6F97C44F2@DU0PR02MB7899.eurprd02.prod.outlook.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <18444448-6e04-4d28-b93d-5852958e35c1@orexplore.com>
 
-On Tue, Feb 13, 2024 at 09:53:29PM +0000, Cameron Williams wrote:
-> Add device ID for a (probably fake) CP2102 UART device.
-> lsusb -v output:
+On Wed, Feb 14, 2024 at 11:47:29AM +0100, Christian Häggström wrote:
+> The radiation meter has the text MGP Instruments PDS-100G or PDS-100GN
+> produced by Mirion Technologies. Tested by forcing the driver
+> association with
+> 
+>    echo 10c4 863c > /sys/bus/usb-serial/drivers/cp210x/new_id
+> 
+> and then setting the serial port in 115200 8N1 mode. The device
+> announces ID_USB_VENDOR_ENC=Silicon\x20Labs and ID_USB_MODEL_ENC=PDS100
+> 
+> Signed-off-by: Christian Häggström <christian.haggstrom@orexplore.com>
 
-Now applied with a slightly updated summary:
-
-	USB: serial: add device ID for VeriFone adapter
+Now applied, thanks.
 
 Johan
 
