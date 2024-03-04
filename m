@@ -1,60 +1,60 @@
-Return-Path: <linux-usb+bounces-7479-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7480-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B97D387032D
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Mar 2024 14:47:35 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7357D870366
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Mar 2024 14:55:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5888F282D1A
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Mar 2024 13:47:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D7420B2584B
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Mar 2024 13:55:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D9C23F9F9;
-	Mon,  4 Mar 2024 13:46:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA5D63F8E4;
+	Mon,  4 Mar 2024 13:55:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T7oxjHHT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W9K8S3N9"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ECDC3EA73;
-	Mon,  4 Mar 2024 13:46:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 221D43D97F;
+	Mon,  4 Mar 2024 13:55:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709560018; cv=none; b=RjOANlMMgc3W5b8PbuZsCzUvXtKK65QmEGbWhRXAdX9fAJ/rdcn47f3ZfsCvydZqroE1g2GvCiLpj5RwGRcqydqUpxZeQu7AIUlgAfXQQjrs9aDgI6SehQEMZrGaMvvivruU+2Cx+cwMytS1oI9FkX61o2nWQasOuHaxtGMO9xs=
+	t=1709560515; cv=none; b=dOg1NpNprCiwwO+mC7zLm7NK9RtCCQNwomqsJKY+xqVhSPAEh07R24Ovrl5skjjBNhcSJWJwMq4RWttJknw7lDceddFW/SX+9Ta4sb0wWTyD84bUo/vyNRnZfVuDq31fOl132KeLGXmBt1F99+zx8kc6HiyzMDPAioxqmyVw46c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709560018; c=relaxed/simple;
-	bh=yFBwC5/sksPQ9ymeW8V7bys/1cfugBaMwQ2j7y4e7ig=;
+	s=arc-20240116; t=1709560515; c=relaxed/simple;
+	bh=JUZYfNWqeyu8ax9/CquXg+BUUuuvENf3/WvlTt7mlvg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=p1McnP3cxHXbMtVEDKtYNUElzVsEfdUE5yze+3FIqWY0AxUiPbrhY1gJVxf17VyPLDiGQZThOBkSXtUHsa+IGV/YcwYMxpYfY9qTQSsD2bMXEf+LDmJpBLQ2e+A2PTj2m7cE+3hhpyprVAFQRrX3XQThaWRXe3Fbe+PwxbWQRDY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T7oxjHHT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90710C433C7;
-	Mon,  4 Mar 2024 13:46:57 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=MBmFwSpHRoIYSkXRmHLFCUrTwYg9an2PebJAJMZ+NwFL0pb9j/iNYwjRNzUdCMsp3C3RjI59oRTmIGUPo/xZtBocwdX6Ghx/yUhBLH4aom7RPuxWrHRELlrOUdPcKk9hRZb8sZyFAPOZI3O72AZg0dxbVek4nZ498uGC61gftGE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W9K8S3N9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DA7DC43390;
+	Mon,  4 Mar 2024 13:55:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709560017;
-	bh=yFBwC5/sksPQ9ymeW8V7bys/1cfugBaMwQ2j7y4e7ig=;
+	s=k20201202; t=1709560514;
+	bh=JUZYfNWqeyu8ax9/CquXg+BUUuuvENf3/WvlTt7mlvg=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=T7oxjHHTg+A4+P1XacVV/zgozW0iv5PMdG9cftGboomQPo1YIj6GKGh4/h2ptKC6k
-	 OCjbgsGsN5Ih77f9WceVMuXZVaolzxr2VXagSUfJcRTkmWGjY82/hW3zkFwWp4moab
-	 5yJ/rRF5wAemWtqa/MO0OP+nb9P2czB4oqB5UUnjokrXYFpiQFHkTHj7z4wQrMBk9W
-	 zfoNwS97M1u23f3FoUqGk6X3dOf0cSNSPpv63Ov1CBrN0K2MWsxuiGnBWmxuRFowgY
-	 Ymwv+iBf1pRyd/TcP0WdTEjlLV3toexgJlqSP6ImqlcXD1LuApdQP67SlYO7BinUKq
-	 kIx3adM6gt0Vw==
+	b=W9K8S3N9URDm+X7z2jypotzkYL8LSs2LjKWeGlAnwAMSB4izfdnJcLG+5fKlzJ03f
+	 j7Tcuky8aipYB/OzxP51i7SFrvNpv8pMRrJDItdfMiaPN14bai6lCEl2yqu03WlFvF
+	 2qGKZTGyrUDKKtcr2bBz9xPVDoSCxCuB5738Q7EifYU3c+7v1qoMHCAGCFfA05yVSI
+	 GOMYRLc7OWUKLLWyanL+KDgqxrGA0M6G9Kzw/6U0HBjyse8zCFrBZdolzSLUFf2mx2
+	 lNATCEOA6+eOPiWkit3C3lVLPScI2+VQJ4p9zjpU670RxvAP/s18uRQKX9UUO63UsX
+	 tpPRkitG4xNtQ==
 Received: from johan by xi.lan with local (Exim 4.97.1)
 	(envelope-from <johan@kernel.org>)
-	id 1rh8eo-000000000ZF-15wE;
-	Mon, 04 Mar 2024 14:47:06 +0100
-Date: Mon, 4 Mar 2024 14:47:06 +0100
+	id 1rh8mo-000000000yW-2VPm;
+	Mon, 04 Mar 2024 14:55:23 +0100
+Date: Mon, 4 Mar 2024 14:55:22 +0100
 From: Johan Hovold <johan@kernel.org>
 To: Colin Ian King <colin.i.king@gmail.com>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH][next] USB: serial: ftdi_sio: Remove redundant assignment
- to variable cflag
-Message-ID: <ZeXQ2rTMwuIOpFpo@hovoldconsulting.com>
-References: <20240207104936.2441424-1-colin.i.king@gmail.com>
+Subject: Re: [PATCH][next] USB: serial: keyspan: Remove redundant assignment
+ to pointer data
+Message-ID: <ZeXSyit1fq5CFJSc@hovoldconsulting.com>
+References: <20240207104128.2441210-1-colin.i.king@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -63,16 +63,16 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240207104936.2441424-1-colin.i.king@gmail.com>
+In-Reply-To: <20240207104128.2441210-1-colin.i.king@gmail.com>
 
-On Wed, Feb 07, 2024 at 10:49:36AM +0000, Colin Ian King wrote:
-> The variable cflag is being assigned a value that is not being read
-> afterwards, it is being re-assigned later on. The assignment is
-> redundant and can be removed.
+On Wed, Feb 07, 2024 at 10:41:28AM +0000, Colin Ian King wrote:
+> The pointer data is being assigned a value that is not being
+> read afterwards, it is being re-assigned later inside a do-while
+> loop. The assignment is redundant and can be removed.
 > 
 > Cleans up clang scan warning:
-> drivers/usb/serial/ftdi_sio.c:2613:15: warning: Value stored to 'cflag'
-> during its initialization is never read [deadcode.DeadStores]
+> drivers/usb/serial/keyspan.c:924:2: warning: Value stored to 'data'
+> is never read [deadcode.DeadStores]
 > 
 > Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 
