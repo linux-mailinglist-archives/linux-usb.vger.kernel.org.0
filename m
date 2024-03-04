@@ -1,62 +1,54 @@
-Return-Path: <linux-usb+bounces-7484-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7485-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1EACB870633
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Mar 2024 16:51:33 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 696BD870660
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Mar 2024 17:00:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C91B51F2296C
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Mar 2024 15:51:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C754828456C
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Mar 2024 16:00:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D31D147F59;
-	Mon,  4 Mar 2024 15:51:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88A7E482CA;
+	Mon,  4 Mar 2024 15:59:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="R6CByYTB"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="H7N+N9yn"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D56FE4654E;
-	Mon,  4 Mar 2024 15:51:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D8DB481D1
+	for <linux-usb@vger.kernel.org>; Mon,  4 Mar 2024 15:59:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709567486; cv=none; b=tkuINaVGpKEqukaSBMGxC5k2f+ghSo8de+MfX6jraH13OnhYRPGHbwtQgNDcTNj+0T1VWm+mztXNaD7oehf7zAYScTotiBR/ycWfSwQMK/aV8WPMasHNcHTWBZtrPWVeBUEBvUkUi20DyJlPFvITlPyhz2AYEqWtvsC2YxMC21U=
+	t=1709567988; cv=none; b=qqJzFq57X8D7UZAwG8TiXagq+p4RDaUn0T/B2VPH/yd3/oMgdttltFdaYcDtqPCnhEyVwuFQeRkd7TBcp36e3XcNw+wsWtEdBkeeHxdSgG2x3pD1Pvsg0qFKiIE24ipORoUSTwdgrddJUYXnEc0XdcATxqtQ7SVPgfHslcXft1M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709567486; c=relaxed/simple;
-	bh=0lbdHoE8wBY59uc2iX+cWek1vZda8uKlxFEeIYRikvY=;
+	s=arc-20240116; t=1709567988; c=relaxed/simple;
+	bh=Q7ylEujqfgR6huOg65Xk3XTQLZdydtRD7v5p23RD7wU=;
 	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=XKDTLoxaYDbhvRq5jNliZtM5Ex+osAEcf48uHAGR/8rqb+1/LV0mdpC25jSs3H8C3w5xhAeaY89wEy7U16rpgEuwrdFP4of9qts5MHyMpyEFKokBm/2fo9QZiqRCYo4hPpLN5VO9r7Y9wmRKI83/FgqLhlJhYFhV+KmguonX42s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=R6CByYTB; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709567485; x=1741103485;
-  h=message-id:date:mime-version:subject:from:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=0lbdHoE8wBY59uc2iX+cWek1vZda8uKlxFEeIYRikvY=;
-  b=R6CByYTBJhgFp1iKtpkg5s2IYlrjIBwTiBeBo33iRpzRMTgGEr/z0fUa
-   XCqYnr7IWf7+GC37lP9CUGTuB8L+i1C8+YdZnfefu4mOPSTQIq7pH+qSp
-   2f1WUit3mq5ZEAKdOW6PAWZE1UURhtdF3fS5GF3hQ+OASkAGcHwkWikON
-   Iv4jBB3GYeXtTYfgGSO2zRAvhysWhziFUMN7jzj1jBJqSuQ7o/9dVXlZK
-   30ZG+3UF0qqVqD+1ByDa0HlsHscA9xNadyQTrJiLMDpM2xsiP/wzwMdWx
-   q2fIJkfOSbKjj+8gGNTJWqmoeyxbZ5VAokJQCCroUnn+NayRD/IzslmWg
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11002"; a="3929473"
-X-IronPort-AV: E=Sophos;i="6.06,203,1705392000"; 
-   d="scan'208";a="3929473"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2024 07:51:24 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11002"; a="937040723"
-X-IronPort-AV: E=Sophos;i="6.06,203,1705392000"; 
-   d="scan'208";a="937040723"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmsmga001.fm.intel.com with ESMTP; 04 Mar 2024 07:51:22 -0800
-Message-ID: <3a560c60-ffa2-a511-98d3-d29ef807b213@linux.intel.com>
-Date: Mon, 4 Mar 2024 17:53:03 +0200
+	 In-Reply-To:Content-Type; b=fnQVSe7C5RrdEst5IAQPHomqmqF//iE/5qqOTKbBPxQiDnLwIksTD1Tu/wvz70cIQBmbLUwsH8RV7iMW7yO0rZL+ADxy4gzDQAnOUoGFL0YEQC3HAvUpv7L/oLRANLU8DgrFOxKMt4yk2Vw4mxLlFC4l37bWgxjr7Nr1yDhSykw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=H7N+N9yn; arc=none smtp.client-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:
+	Cc:To:From:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=RJ8ayUD7jeKjKG0iGt1FVR6w5hQU6L/FTODDhjGGMMo=; b=H7N+N9yn15Ao/9B2d0T9O4xdSA
+	mJvkhCODqlKEwdH6ZaqbzzmRyn2pptO04w/n5k9Yy8JCD+Fo0jMugjmKdNx4h850Nz/PISqDbsx+c
+	yn/OA7klzFKVwfcdtMd7OsdsXnPX5mtTGbL3v38fZIXRX6HDlS589nhSIrGRgK26G56fdSOfVRXyG
+	zeoEeyPDaDUu7YGm9po1qb++Z4oISTi4L06Sw02hTcteEP7svHvHMu8gQSctarg2izCNkVQ/tBdis
+	XUfKyjCECiBiO3RgBqTUPnGTm+f7TfZeJ6ncj+81ttOUwghNcsEAADntn1TEI3FgK/BWXrfK8igKN
+	pYcZh8Gw==;
+Received: from [187.90.173.251] (helo=[192.168.1.60])
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+	id 1rhAiy-005uOa-G8; Mon, 04 Mar 2024 16:59:32 +0100
+Message-ID: <7594701a-34d7-579b-6c9c-05a18d3ab651@igalia.com>
+Date: Mon, 4 Mar 2024 12:59:24 -0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -64,60 +56,65 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.13.0
-Subject: Re: 6.5.0 broke XHCI URB submissions for count >512
+ Thunderbird/102.15.1
+Subject: Re: [PATCH] usb: dwc3: Fix spurious wakeup when port is on device
+ mode
+From: "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+ "balbi@kernel.org" <balbi@kernel.org>,
+ "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+ "johan@kernel.org" <johan@kernel.org>,
+ "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
+ "kernel@gpiccoli.net" <kernel@gpiccoli.net>,
+ "kernel-dev@igalia.com" <kernel-dev@igalia.com>,
+ Andrey Smirnov <andrew.smirnov@gmail.com>,
+ Vivek Dasmohapatra <vivek@collabora.com>,
+ "piyush.mehta@amd.com" <piyush.mehta@amd.com>,
+ "ray.huang@amd.com" <ray.huang@amd.com>
+References: <20240118003949.tmw3uq76hvwe4ylz@synopsys.com>
+ <e2d02355-b47b-8298-c5c9-8c6d199b2728@igalia.com>
+ <20240123021237.hyckfhsxvem7ydqv@synopsys.com>
+ <dd3339b0-75ac-b64e-4dac-d9394e91baef@igalia.com>
+ <20240130021704.ndbkkyksauku7nwr@synopsys.com>
+ <29ebf575-e09b-4452-ed60-41a667e78c5f@igalia.com>
+ <20240201012301.qtp4vr67cwnte5im@synopsys.com>
+ <20d855ca-678c-671b-d956-f08f2ac88573@igalia.com>
+ <20240206025307.j2lz3v2idwm7gusp@synopsys.com>
+ <43013c1a-92c1-658b-ace9-8ed6ae98769e@igalia.com>
+ <20240208235300.pjife5zxfz5onqvk@synopsys.com>
+ <b9495221-54be-ae5d-774a-f1450290b104@igalia.com>
 Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-To: Chris Yokum <linux-usb@mail.totalphase.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Linux regressions mailing list <regressions@lists.linux.dev>,
- stable <stable@vger.kernel.org>, linux-usb@vger.kernel.org,
- Niklas Neronin <niklas.neronin@linux.intel.com>
-References: <949223224.833962.1709339266739.JavaMail.zimbra@totalphase.com>
- <50f3ca53-40e3-41f2-8f7a-7ad07c681eea@leemhuis.info>
- <2024030246-wife-detoxify-08c0@gregkh>
- <278587422.841245.1709394906640.JavaMail.zimbra@totalphase.com>
- <a6a04009-c3fe-e50d-d792-d075a14ff825@linux.intel.com>
-In-Reply-To: <a6a04009-c3fe-e50d-d792-d075a14ff825@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <b9495221-54be-ae5d-774a-f1450290b104@igalia.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 4.3.2024 13.57, Mathias Nyman wrote:
-> On 2.3.2024 17.55, Chris Yokum wrote:
->>>> We have found a regression bug, where more than 512 URBs cannot be
->>>> reliably submitted to XHCI. URBs beyond that return 0x00 instead of
->>>> valid data in the buffer.
->>>
->>> FWIW, that's f5af638f0609af ("xhci: Fix transfer ring expansion size
->>> calculation") [v6.5-rc1] from Mathias.
->>>
+On 08/02/2024 22:18, Guilherme G. Piccoli wrote:
+> On 08/02/2024 20:53, Thinh Nguyen wrote:
+>> [...]
+>>
+>> Thanks. I have some suspicions of what happened. I'll create a patch,
+>> but I'll need some time.
+>>
+>> Thanks,
+>> Thinh
 > 
-> Ok, I see, this could be the empty ring exception check in xhci-ring.c:
+> Thank you a bunch! Let us know when you have a candidate, I can test it
+> quickly in the Steam Deck =)
 > 
-> It could falsely assume ring is empty when it in fact is filled up in one
-> go by queuing several small urbs.
+> Cheers,
+> 
+> 
+> Guilherme
+> 
 
-Does this help?
+Hi Thinh, hope everything is alright.
 
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 6a29ebd6682d..52278afea94b 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -332,7 +332,13 @@ static unsigned int xhci_ring_expansion_needed(struct xhci_hcd *xhci, struct xhc
-         /* how many trbs will be queued past the enqueue segment? */
-         trbs_past_seg = enq_used + num_trbs - (TRBS_PER_SEGMENT - 1);
-  
--       if (trbs_past_seg <= 0)
-+       /*
-+        * Consider expanding the ring already if num_trbs fills the current
-+        * segment (i.e. trbs_past_seg == 0), not only when num_trbs goes into
-+        * the next segment. Avoids confusing full ring with special empty ring
-+        * case below
-+        */
-+       if (trbs_past_seg < 0)
-                 return 0;
+Let me know if we can help in anything or provide more test results,
+we'd be glad to.
 
-Thanks
-Mathias
+Thanks,
 
+
+Guilherme
 
