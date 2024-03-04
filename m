@@ -1,82 +1,126 @@
-Return-Path: <linux-usb+bounces-7467-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7468-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E3D686FEC9
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Mar 2024 11:19:33 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 37EC686FED0
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Mar 2024 11:20:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D863D1F235EB
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Mar 2024 10:19:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B0300B24B71
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Mar 2024 10:20:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9933B3B789;
-	Mon,  4 Mar 2024 10:16:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 978D53C492;
+	Mon,  4 Mar 2024 10:16:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D2U7f8S4"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m1v6gwCK"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D7C33B19E;
-	Mon,  4 Mar 2024 10:16:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B51EA2574D;
+	Mon,  4 Mar 2024 10:16:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709547366; cv=none; b=jE7A7eisFUlsDk0iqDaKRnymsNT2YcUGN5D3PfEcK/cx0/kAkyuinaYnRHIttAxyrSCAF5p1K8EvJVIMBYBzsK0BTgvZFnbgZJvn5GfLjXJXVna7rWigbHyZNQlXapXviVmPuSfVfTCEcdZeGh8NcsiyNBMBQ6b+rfd/foJD5HY=
+	t=1709547414; cv=none; b=Bg2cse9RsPWukdnP1InQmkGN0IYh5llLkrS9/KW+WsmD/rjGIEa4SXC4JPQZM7ITHBT/vx48mVfRyW25inSp0Gmo7i3I7ZNhfE2LGT/10r87/p+B5KtF4AfuBNREofXyUfizlRZ2cwXubbJI4blRCuC5KwrvPhDDqovAqTQBgsE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709547366; c=relaxed/simple;
-	bh=dqE1sGx2sTd5SmitjperBZu1xsLydudjgfF8a3ciIT8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jYNM4VjljBhvc603zYco14BU1xP8fE/0g3zaIfzwLS0hR+NtDs8ykqkEX12IvXV0bmn0nfEm+68XEO8YZZxVXgUgx6ZQWoPRCsmIOnZNTYPXVhuNDMWav6FPMe087EiWFSu27pBumi71DvMdJvzv+wm7kiKtI0VJx1luPQsXGvI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D2U7f8S4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3904C433F1;
-	Mon,  4 Mar 2024 10:16:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709547365;
-	bh=dqE1sGx2sTd5SmitjperBZu1xsLydudjgfF8a3ciIT8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=D2U7f8S4AVG/EzXbOAh4ulCAGNB/BE0AyYiqVjkH7e6+e1WXr+e3VfePvjSfM3JSP
-	 namBQkjTiiaG7ZwCvR0R5OS6z8PU2D/9W9vLyaRPQbKQjiWvLxjO5IEIFUuIMJexUd
-	 dsBy6E3dCLO0l9cQLJ6v/k3aP2l8HjHb/DDFbvB2nVsOSWcgLlcnYTvnv7qzd9xCia
-	 Cu1U6LpFqcgwoiaRfOjplt2ju2c/eSrsV6Mmqz1KWfwGop4vohUFtZJVix+9nDWX5X
-	 3t7CSO0KKP6eOFM7HQD0iImfFM1jEIWmBiEFtFxLoIpMRLvR5pBlUhAOy9hqgzsLw2
-	 duO9eNg3sWqyQ==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1rh5Mk-0000000079W-0OpA;
-	Mon, 04 Mar 2024 11:16:14 +0100
-Date: Mon, 4 Mar 2024 11:16:14 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Christian =?utf-8?B?SMOkZ2dzdHLDtm0=?= <christian.haggstrom@orexplore.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: cp210x: add ID for MGP Instruments PDS100
-Message-ID: <ZeWfbpXW5yynhorz@hovoldconsulting.com>
-References: <18444448-6e04-4d28-b93d-5852958e35c1@orexplore.com>
+	s=arc-20240116; t=1709547414; c=relaxed/simple;
+	bh=r9R7fsoaFTssCD4S8pAvGpfWz79/sdKQ+D2RchM3Vp8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=sACfMU//dZUIQWAhOoYx7BTdnKjzvzlQbTs+cwoiYGqY36o1tgZdEeKvEEnretEZbOFq6mWQ36SP25BM6x/01rcOAuyYcs3av0O+A6vHetHmv5eg/M26Sagid60/wcN+oDer7coNFj12tGvOeBJBG92zbcGEDNbcHj3gFrmYLfg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m1v6gwCK; arc=none smtp.client-ip=209.85.161.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-5a0932aa9ecso2244363eaf.3;
+        Mon, 04 Mar 2024 02:16:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1709547412; x=1710152212; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=9IduB56gCouP3puaRFBT9qXQWpSpTWONTThlDJRHj/0=;
+        b=m1v6gwCKzw48XrtMF9FKJ7IGIkm2+RdpmNCD6V2UnWqJrnPCCIHAw1M7/lmyl31oRa
+         gnvlz1YoolMrnWd4A59JTsRiAquY/9e8zuVwkB3tueL1zgN1ZJX0MWgr88ygXbOWEEnY
+         /BEJOARYB+t5VihMuRgbzJnPHYpQAVdrUVUsivWg31JU2B20fOJ5lhIfK1ghfxAXbSFa
+         HyDk7Q/h1ZTeT3BvM8qdjQ5h6oZPYDmIqqQEp7zWAZDNEkcb9paqLXvpzcpbgvpEjjaH
+         MddkcwIpqTE4AHojjE3khyIwleeAfpBHAWvuT7iF23L2DgDJ+O7FSwRyv3/7O/gAKlRT
+         YuBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709547412; x=1710152212;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9IduB56gCouP3puaRFBT9qXQWpSpTWONTThlDJRHj/0=;
+        b=t9OuSEJQBD0APTWMN9oXqD+WZ6xJRRr2nyYOyB89nxzDIfr4QnzRpT/GTzRbyHQ8o+
+         nEKK7Z5KcfjLkS9uUUrFbbAEfUv9Z/xVY/iSaroxCvET6WvGwCtcPHy0WJwcFhqTa9c9
+         J9HUhcxturenhMuMJNC5kiKMAwpMaakzSan1NSmSTGgbPBWCZdey+8zbAwyWq5rDSSHP
+         zyH3geKJNs6gHZbKXe0kNCY6LV42OwwLcqM5u4N8eEmr/nKiMqMqpY/ypIrHQaDxINBk
+         EnaL81gKmv9VTUyk10nQhnnRzTh3ye7Il7gjOD4plTkyGXQCUAkSk+uz9avsVbq9hm2L
+         43wQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUHN2W0nefe09Q1Ssc/tXfdXwWFpR/qwzdgqKtJPL4XPkkRqi0CHkqgoUGs+EpGVRiwSN4aol65A843lvUxw5KH361bODi7L9xQMeiyj6lxbOorFbwqXXDd4m52nl0ctgJ3ID238nByVZNrvf/Tf4tQ7WSd0KwnwFZYeYzS0D9q9TDspwrbhqbQBz0=
+X-Gm-Message-State: AOJu0YwtTW8uGZpJ2dxeRNtXMlzPv5vvHu8LaozsnQ95I0b6LkNiV3Rq
+	Cec+TEziiTep0UUskOQyNnpHSTVG5o47dNxpbL9clwzr51lRhrOmLdEtg9MsNmbIol+ppGe//qr
+	2grawcS0m4upTJPykFO4n5cnBvMk=
+X-Google-Smtp-Source: AGHT+IGKlDQiwe2ETynuP1WjM66TUUfTvgAkEekSsjW8GST4aMh5tCx5vaqg6xAtZrzbO88Nx3b5zZhE0vTBzIOc68s=
+X-Received: by 2002:a05:6820:808:b0:5a1:ff2:4c46 with SMTP id
+ bg8-20020a056820080800b005a10ff24c46mr6436866oob.9.1709547411912; Mon, 04 Mar
+ 2024 02:16:51 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <18444448-6e04-4d28-b93d-5852958e35c1@orexplore.com>
+References: <20240301193831.3346-1-linux.amoon@gmail.com> <20240301193831.3346-3-linux.amoon@gmail.com>
+ <ZeWSp4ohOhHGclud@hovoldconsulting.com>
+In-Reply-To: <ZeWSp4ohOhHGclud@hovoldconsulting.com>
+From: Anand Moon <linux.amoon@gmail.com>
+Date: Mon, 4 Mar 2024 15:46:39 +0530
+Message-ID: <CANAwSgShe9-Buyta5Ej9nmhp1dy467da6Cdfm5a+pwpEjem=QA@mail.gmail.com>
+Subject: Re: [PATCH v1 2/4] usb: ehci-exynos: Switch from CONFIG_PM guards to pm_ptr()
+To: Johan Hovold <johan@kernel.org>
+Cc: Alan Stern <stern@rowland.harvard.edu>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
+	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Feb 14, 2024 at 11:47:29AM +0100, Christian Häggström wrote:
-> The radiation meter has the text MGP Instruments PDS-100G or PDS-100GN
-> produced by Mirion Technologies. Tested by forcing the driver
-> association with
-> 
->    echo 10c4 863c > /sys/bus/usb-serial/drivers/cp210x/new_id
-> 
-> and then setting the serial port in 115200 8N1 mode. The device
-> announces ID_USB_VENDOR_ENC=Silicon\x20Labs and ID_USB_MODEL_ENC=PDS100
-> 
-> Signed-off-by: Christian Häggström <christian.haggstrom@orexplore.com>
+Hi Johan,
 
-Now applied, thanks.
+On Mon, 4 Mar 2024 at 14:51, Johan Hovold <johan@kernel.org> wrote:
+>
+> On Sat, Mar 02, 2024 at 01:08:09AM +0530, Anand Moon wrote:
+> > Use the new PM macros for the suspend and resume functions to be
+> > automatically dropped by the compiler when CONFIG_PM are disabled,
+> > without having to use #ifdef guards. If CONFIG_PM unused,
+> > they will simply be discarded by the compiler.
+> >
+> > Use RUNTIME_PM_OPS runtime macro for suspend/resume function.
+> >
+> > Signed-off-by: Anand Moon <linux.amoon@gmail.com>
+> > ---
+> >  drivers/usb/host/ehci-exynos.c | 10 ++--------
+> >  1 file changed, 2 insertions(+), 8 deletions(-)
+>
+> >  static const struct dev_pm_ops exynos_ehci_pm_ops = {
+> > -     .suspend        = exynos_ehci_suspend,
+> > -     .resume         = exynos_ehci_resume,
+> > +     RUNTIME_PM_OPS(exynos_ehci_suspend, exynos_ehci_resume, NULL)
+> >  };
+>
+> This is also broken and clearly not tested. See the definition of
+> RUNTIME_PM_OPS() which sets the runtime pm callbacks, not the suspend
+> ones:
+>
+>         #define RUNTIME_PM_OPS(suspend_fn, resume_fn, idle_fn) \
+>                 .runtime_suspend = suspend_fn, \
+>                 .runtime_resume = resume_fn, \
+>                 .runtime_idle = idle_fn,
+>
+> Johan
 
-Johan
+Ok, I will drop these changes.
+
+Thanks.
+-Anand
 
