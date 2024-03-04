@@ -1,57 +1,58 @@
-Return-Path: <linux-usb+bounces-7465-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7466-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8425986FE6E
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Mar 2024 11:10:12 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3655586FEBA
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Mar 2024 11:17:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3FA33280AB6
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Mar 2024 10:10:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E80B6282B1F
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Mar 2024 10:17:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2FC7224DF;
-	Mon,  4 Mar 2024 10:10:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD77F22F08;
+	Mon,  4 Mar 2024 10:14:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dyde3t/J"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UP/VLUnY"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EF7E20B33
-	for <linux-usb@vger.kernel.org>; Mon,  4 Mar 2024 10:10:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A363225A2;
+	Mon,  4 Mar 2024 10:14:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709547006; cv=none; b=KhCKGfF9ePQThkSdX+TK5Fz7STph1riZD5pHUiBLcct1JrNeEmgh3HH6DmuXzGtlI/6a/Cx5CbAUVOYt9uVigvdoxNspMeQE93CXOSDDX6SfvwuVdZYEaJRaZ7OQmwqJnZ/wY1dcyizEBRHI6MgFxskYxH/9tS6SS+lFfe19730=
+	t=1709547269; cv=none; b=kLytkASZo4Y6DbGYvxSGvLipkTzI+7druCaUfhPmh/EqiGeP7EIUmzfeEUnikvWqLedjZFu8+7ubeS/Cixr9cU7I4VY6dIWulM+JR8O9Gc4nRpmpZ7CNLO36m/aljDNBffMV7JPYLzo4Xn6C5hksEIO7R+zzASCoUPplB7LCoMM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709547006; c=relaxed/simple;
-	bh=7rD8/990B1Ks5Im289lqsU2U9FSY1flqJ5ZsE+0MKdg=;
+	s=arc-20240116; t=1709547269; c=relaxed/simple;
+	bh=nhV3nLQLv9fmwP/nySp4wv0mZvbHQ0i0sj34n6Bo4pk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EXR53yBc44o5J22VyBqiM9ybkIxvbMWCeVaYScIkbUObc8ovhNT3stsy1OWMXNLwJvgbKgZx7Lb/8/bylptoUK28E3uP4iHCT9GaeXlTUpEhiY/i7PZAzRm7QF3UgIC1vkbDuDuAer9QvIjcI8Gmc28R8A3CWSzsC5DDfTTrDL0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dyde3t/J; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5B5CC43390;
-	Mon,  4 Mar 2024 10:10:05 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=MwshFnyFErNkA2arx+76EQX3KybIf1GMwQ/wV8lqrvgeZ6u5eFBhWUx1X9EFUPL/tmMRr6nd5Z+2JlnreZaD4dp8jAR49eMhnB15PNpO7DC/CeU+udn/JqEKl1jksN5CzKnXN8sOrIODJejxZkSYMGYrK9GoZi8WFPQgv20Fht8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UP/VLUnY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3236C433F1;
+	Mon,  4 Mar 2024 10:14:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709547005;
-	bh=7rD8/990B1Ks5Im289lqsU2U9FSY1flqJ5ZsE+0MKdg=;
+	s=k20201202; t=1709547268;
+	bh=nhV3nLQLv9fmwP/nySp4wv0mZvbHQ0i0sj34n6Bo4pk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dyde3t/JoEXjwuAzC5J3X2uJw3hV/3UshTS3PM1B27TLFN8dLeINPcsNlmQikjp1X
-	 zX5TkUsoE8lwpe+jUtFWj0dcVpqEgOkff9WV4vA/lqk/zokClOoASbgY6a/KKj2a7A
-	 KzWULsOJ5jLHwKLjo+tpEnpxhw+Tejgy44F8jFOMXYsqXpIEQrnW++iNG/yRV/SnFr
-	 wXr0hZ0BwLtOtvg1li93+GKHAuIYNmiNaOIbN4thW7KwcstCc6l27aI30favkX5NBy
-	 kw4vQ5l2s2AmWGyYKcwlV9unYQ/C4kNAVhQKgKW7v+ORJm2iX1Pf5ZdHAQm6HQU4a1
-	 FjsXlpKSoS4lw==
+	b=UP/VLUnY5u+1a64IBrRO5uXaeBnbx88yQUVRsYK7v7zuM/y7npA6dhXODCCKE/lyR
+	 sk6EO2HIRaz46qWpIj5DTEqPsOIbvmceH7kqI4cW3KyvTXhkwijxTqtX5CnEaj8gez
+	 SGJwprpM9PeZmRXDTzF4ZV2Xf2uJ5B8TBUX1G3RHgkXVMkazpxgTfeKCdyhC1OoJac
+	 9ZnAnl8LIFUNhtBRrotYLPnoAiTF/4k57q66meSZVPOwQ1HFwQP4sCAax12yYkYMk0
+	 Q30mbiHHH10X3Nl2wDiEoKpgAMsVfzHt40N+yGibjS9J/UE4MLwO37fA0H0voK8bms
+	 d9eBqY+i6N6ow==
 Received: from johan by xi.lan with local (Exim 4.97.1)
 	(envelope-from <johan@kernel.org>)
-	id 1rh5Gv-000000006Kl-3H2S;
-	Mon, 04 Mar 2024 11:10:14 +0100
-Date: Mon, 4 Mar 2024 11:10:13 +0100
+	id 1rh5LB-0000000076g-0Foe;
+	Mon, 04 Mar 2024 11:14:37 +0100
+Date: Mon, 4 Mar 2024 11:14:37 +0100
 From: Johan Hovold <johan@kernel.org>
-To: Daniel Vogelbacher <daniel@chaospixel.com>
-Cc: linux-usb@vger.kernel.org
-Subject: Re: [PATCH] ftdi_sio: Support for GMC Z216C Adapter IR-USB
-Message-ID: <ZeWeBcHr1-v96OND@hovoldconsulting.com>
-References: <20240211144245.2469439-1-daniel@chaospixel.com>
+To: Cameron Williams <cang1@live.co.uk>
+Cc: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: serial: Add device ID for cp210x
+Message-ID: <ZeWfDU3Mx7dhq-j6@hovoldconsulting.com>
+References: <DU0PR02MB7899B4A2A35EFE1B350E6F97C44F2@DU0PR02MB7899.eurprd02.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -60,24 +61,15 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240211144245.2469439-1-daniel@chaospixel.com>
+In-Reply-To: <DU0PR02MB7899B4A2A35EFE1B350E6F97C44F2@DU0PR02MB7899.eurprd02.prod.outlook.com>
 
-On Sun, Feb 11, 2024 at 03:42:46PM +0100, Daniel Vogelbacher wrote:
-> GMC IR-USB adapter cable utilizes FTDI FT232R chip.
-> 
-> This patch adds VID/PID for this adapter so it can be used
-> as serial device via ftdi_sio.
-> 
-> Signed-off-by: Daniel Vogelbacher <daniel@chaospixel.com>
+On Tue, Feb 13, 2024 at 09:53:29PM +0000, Cameron Williams wrote:
+> Add device ID for a (probably fake) CP2102 UART device.
+> lsusb -v output:
 
-Now applied with an amended commit summary and message:
+Now applied with a slightly updated summary:
 
-    USB: serial: ftdi_sio: add support for GMC Z216C Adapter IR-USB
-    
-    The GMC IR-USB adapter cable utilizes a FTDI FT232R chip.
-    
-    Add VID/PID for this adapter so it can be used as serial device via
-    ftdi_sio.
+	USB: serial: add device ID for VeriFone adapter
 
 Johan
 
