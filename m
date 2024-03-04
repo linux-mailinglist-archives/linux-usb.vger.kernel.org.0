@@ -1,83 +1,80 @@
-Return-Path: <linux-usb+bounces-7451-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7452-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 397DA86FB13
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Mar 2024 08:47:11 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EAC9C86FBEA
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Mar 2024 09:31:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4FA3A1C21035
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Mar 2024 07:47:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 28F951C21B58
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Mar 2024 08:31:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 092B516436;
-	Mon,  4 Mar 2024 07:47:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA6F3175AB;
+	Mon,  4 Mar 2024 08:31:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=aixigo.com header.i=@aixigo.com header.b="LbgZJAtV"
+	dkim=pass (2048-bit key) header.d=crafticoz.com header.i=@crafticoz.com header.b="Fs3qL46+"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail.aixigo.de (mail.aixigo.de [5.145.142.10])
+Received: from mail.crafticoz.com (mail.crafticoz.com [217.61.16.185])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C9D353A6;
-	Mon,  4 Mar 2024 07:46:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.145.142.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71BA917571
+	for <linux-usb@vger.kernel.org>; Mon,  4 Mar 2024 08:31:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.61.16.185
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709538423; cv=none; b=NbwxCi0Mx/xauGI51f5cEdDRWq1WMD+Mgk6NKVLisDZ1vFZa4XrcoXuq5AStdrImHKnQKP93gJDEI5PpEKgI753UOxwXg+cnMl+z2OhjyBZZC8haEiktL6nBcvOybe43T3lH8WKKoNIohGwrh/gGa741K8iWsB5J2NW/jNB6wXs=
+	t=1709541097; cv=none; b=mCNFqOrcgZ8mCx08BEGPOwus32vqdYuUxX69A29iJm1Thooc1dEVGnY6IAzkY3RI28Kh04wmHmqOr3gjJnM03Sy/uMX07YDSlJDmLKrSRLcf4HrSi7CMWhsBC+1yUvS0WK4WSXfvJQC4HjMVg0zYqUv8wcA5Kqrf0ECCzP9G0t0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709538423; c=relaxed/simple;
-	bh=kYuDADgxuY7kBX+z2hzyjWgZ4GOjlV8L30E1XRRoGOo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EM2FDzJynfYyU5MzIjlc94oD2MAump+qCvv1Jpvvpwt1jm3VPsnwTGczUW0oth9AXFKGHyfKPswpXKNXoApnpKns5dzI6Wfj+HhwOx1UCGBpOi/X0GZ4DjOwjU/lV8Y4+R2is7KgqElBPkW2rcafj7t41c6WYinrZtdRi8e1mng=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=aixigo.com; spf=pass smtp.mailfrom=aixigo.com; dkim=pass (1024-bit key) header.d=aixigo.com header.i=@aixigo.com header.b=LbgZJAtV; arc=none smtp.client-ip=5.145.142.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=aixigo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aixigo.com
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; s=default; bh=kYuDADgxuY7k
-	BX+z2hzyjWgZ4GOjlV8L30E1XRRoGOo=; h=in-reply-to:from:references:cc:to:
-	subject:date; d=aixigo.com; b=LbgZJAtVMV7/0TiA+SyrQAlB7UrhKlyaCKEq4N4i
-	2L55yNF7HedB3xX+sQCXlJ7Kzs1wJbTVtfZ/X8VXKsCsx4/WCvtZa55eTEVqNpjVPfBoqa
-	13TNjO2jqtJWc6WJ4DJGdldnVlF+Uv6v8CEkZo/IPeX19ZUAIXKG90h+N/MJs=
-Received: from mailhost.ac.aixigo.de (mailhost.ac.aixigo.de [172.19.96.11])
-	by mail.aixigo.de (OpenSMTPD) with ESMTPS id 2ca81bb0 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-	Mon, 4 Mar 2024 08:46:56 +0100 (CET)
-Received: from [172.19.97.128] (dpcl082.ac.aixigo.de [172.19.97.128])
-	by mailhost.ac.aixigo.de (8.17.1.9/8.17.1.9/Debian-2) with ESMTPS id 4247kuAg801660
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT);
-	Mon, 4 Mar 2024 08:46:56 +0100
-Message-ID: <029ff780-902e-42da-a5ed-6c306c6cb2e4@aixigo.com>
-Date: Mon, 4 Mar 2024 08:46:56 +0100
+	s=arc-20240116; t=1709541097; c=relaxed/simple;
+	bh=1IoqoUjByUuGlvKIsPqzKB660hvTAuw0hON+G/wNfyM=;
+	h=Message-ID:Date:From:To:Subject:MIME-Version:Content-Type; b=HMMonJ1xY9PcI+f5aYrEIYnuW7bZ2bAfwOYj4Y1E0M1uztbWMo4YJXQu8lnyDZR8cvIbk3hYN45oxwn/WGeAWpM+JwIjig6qft5gIuenBNn5ZKoYfX30cOTzY+ldj/aaSRlyzrhPi3brzO8GGuk6rOkp8LHPjPgTHOvhBnj7edQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crafticoz.com; spf=pass smtp.mailfrom=crafticoz.com; dkim=pass (2048-bit key) header.d=crafticoz.com header.i=@crafticoz.com header.b=Fs3qL46+; arc=none smtp.client-ip=217.61.16.185
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crafticoz.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crafticoz.com
+Received: by mail.crafticoz.com (Postfix, from userid 1002)
+	id 3087C82537; Mon,  4 Mar 2024 09:31:16 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=crafticoz.com;
+	s=mail; t=1709541086;
+	bh=1IoqoUjByUuGlvKIsPqzKB660hvTAuw0hON+G/wNfyM=;
+	h=Date:From:To:Subject:From;
+	b=Fs3qL46+aiRtOhWSNp3wLcHwijJGqWcWJ6taci7LUxn4H3HJ1jjnga/jTcwxp6K0U
+	 u8/02IB7ZEiVb2AdkhFCTIxzKl4FHUFGRgib79hNtZgIXcDW1wV2BWSOgfKYsuhpl5
+	 3fr3QGqXFRQIeRuNr88/L2vH1XyHTmNrp6eOXR4BSOKEAUKQFEE1sQnc2X21QZQWy5
+	 y8dEVmi6FSzHpxMyKLGlDUnNm4e93LTlH8vilbBkaAMHJdg1E8OpMiFu4ImodM+inX
+	 5y9YcK6TwbekNGfiyXYy9UOPKCsfhuPl4Qb5qgu5fWz4dTnpY5MsAuaWseKaONMVgm
+	 YpLPpZ8MoyDAg==
+Received: by mail.crafticoz.com for <linux-usb@vger.kernel.org>; Mon,  4 Mar 2024 08:31:10 GMT
+Message-ID: <20240304084500-0.1.18.3i79.0.denxcrsiy9@crafticoz.com>
+Date: Mon,  4 Mar 2024 08:31:10 GMT
+From: "Maxwell Atlee" <maxwell.atlee@crafticoz.com>
+To: <linux-usb@vger.kernel.org>
+Subject: Development of new flavors
+X-Mailer: mail.crafticoz.com
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Betterbird (Linux)
-Subject: Re: RIP on discard, JMicron USB adaptor
-To: "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Keith Busch <kbusch@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-Cc: Jens Axboe <axboe@kernel.dk>, Bart Van Assche <bvanassche@acm.org>,
-        linux-block@vger.kernel.org, linux-usb@vger.kernel.org,
-        Harald Dunkel <harri@afaics.de>
-References: <70bc51d7-c8a2-4b06-ab7a-e321d20db49a@aixigo.com>
- <62296d89-f7e6-4f54-add8-35b531dc657c@rowland.harvard.edu>
- <Zd9Xbz3L6JEvBHHT@kbusch-mbp> <yq1sf1c1h0x.fsf@ca-mkp.ca.oracle.com>
- <7a10ff3b-0c4c-4aa3-8218-02d5f27ab062@afaics.de>
-From: Harald Dunkel <harald.dunkel@aixigo.com>
-Content-Language: en-US
-In-Reply-To: <7a10ff3b-0c4c-4aa3-8218-02d5f27ab062@afaics.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 1.0.3 at srvvm01.ac.aixigo.de
-X-Virus-Status: Clean
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi folks,
+Hi,
 
-having some kind of feedback would be nice. Is this a known problem?
-User error?
+Are you interested in expanding your offer with innovative food products?
 
-Of course I would be glad to help to track down this problem.
+We offer freeze-dried fruits and vegetables in various fractions and orga=
+nic and conventional versions. We mix and pack our products, delivering r=
+eady-made mixtures for direct use in production.
 
-Regards
-Harri
+They can be added to various food products, from breakfast cereals to ice=
+ cream, which gives a wide scope for experimenting and introducing new fl=
+avors and a completely new range. We provide support in developing the co=
+ncept and turning it into a real product.
+
+I will be happy to provide you with details and provide samples for you t=
+o test. We can talk?
+
+
+Best regards
+Maxwell Atlee
 
