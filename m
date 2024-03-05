@@ -1,191 +1,162 @@
-Return-Path: <linux-usb+bounces-7573-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7574-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90D8D872775
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Mar 2024 20:22:23 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C375872920
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Mar 2024 22:08:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2C5A71F25EA0
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Mar 2024 19:22:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 301DE1C22D5A
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Mar 2024 21:08:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 548F4433C0;
-	Tue,  5 Mar 2024 19:22:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CA4D12CDA8;
+	Tue,  5 Mar 2024 21:08:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aX8Y8+Zd"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="b6pjJNYH"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1A01250FE;
-	Tue,  5 Mar 2024 19:22:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D96312BF31
+	for <linux-usb@vger.kernel.org>; Tue,  5 Mar 2024 21:07:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709666533; cv=none; b=HxJu1y8ReJ75ph0ra31vHdeWQ2/zmHaMspaXf5LTAJltcILgWunegNnqaZakl2YabBEyqIEpB9J5HiEtgJZnFtY4pFPNedFYQrscSL+/fGxm5ifHm+9ipzC6uvyoGALMJ5s3IGRTM0lAZwGk0IIVpbVXixFbQZHQa38Es72w8SU=
+	t=1709672879; cv=none; b=p9UW7eo/i6kk+/GXWO3IyfLBvZO59XpQZZlCUSCZGf44Rz0qH+gJQ0R6aD3N/n587ERX9IFY0OA0ZUVLUcWKD2nKWimBCHP21rQe4+tDqcIbZRLaf4UVXqHzlRGuXEPDSY6QZKa2VFE8xBxev1w18P2hil5T/6Wn0RT9xSyLY8I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709666533; c=relaxed/simple;
-	bh=WK1G/NaCYvxTxQ/E6MRFLMHXXETCzVWrlTphyKmWH/s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Q2fFRpoDMQ/NKkqOvkEh/UB0/LcS9m4jCsUuOTIomrlACWzG/qooyiIGbJEzMftsRIctsoQ70N90U68C0iabCBK/Lkq6+CZV8mxCBIVGKb82pAohwh7XTjaqvDqG341j6/pDMcdOAP4SQHuNIAMCmdIQfn9L6c495bchnzn4Jvs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aX8Y8+Zd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B45EC433C7;
-	Tue,  5 Mar 2024 19:22:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709666533;
-	bh=WK1G/NaCYvxTxQ/E6MRFLMHXXETCzVWrlTphyKmWH/s=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=aX8Y8+Zdk66foHU/vgrLhRefbVfoikrZmF/gHYbKS8iwxqGuKMao8AKX2dUTTPLZE
-	 PPxBFJmD30zUO1nCZDHPHHT+OZaih4sHfTFhtPUHQ5w9WRu6MK+nx1GImp19ggsEcQ
-	 Nh5nbkHh6rAUaJsRiOuulf/KSZsrYE+czREyXeiEGhGDTnzzwssBu6lIidtAZNxaxI
-	 ezPNglsH/T3IB1JRycxGEq996pd55valJ8I+djh8U9C4lbdLXAxMgYX9tR9OdQAWv2
-	 opbvye3lD/s9F+4xQ5sSjKXB9aHxIzsWtkrplp+GdYMd32CvC6PHWOZM0m9C0ZjXXj
-	 fxGHEoE90EXJQ==
-Date: Tue, 5 Mar 2024 13:22:09 -0600
-From: Bjorn Andersson <andersson@kernel.org>
-To: Sriram Dash <quic_sriramd@quicinc.com>
-Cc: konrad.dybcio@linaro.org, vkoul@kernel.org, kishon@kernel.org, 
-	robh@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, 
-	gregkh@linuxfoundation.org, quic_wcheng@quicinc.com, Thinh.Nguyen@synopsys.com, 
-	p.zabel@pengutronix.de, linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	quic_psodagud@quicinc.com, quic_nkela@quicinc.com, manivannan.sadhasivam@linaro.org, 
-	ulf.hansson@linaro.org, sudeep.holla@arm.com, quic_shazhuss@quicinc.com
-Subject: Re: [RFC 2/3] USB: dwc3: qcom: Add support for firmware managed
- resources
-Message-ID: <ltjrdqxvupzjdqa22fvpzndeh7pc7zfmi5ybqxu2izjnnxjon7@jojqkltzukvv>
-References: <1709657858-8563-1-git-send-email-quic_sriramd@quicinc.com>
- <1709657858-8563-3-git-send-email-quic_sriramd@quicinc.com>
+	s=arc-20240116; t=1709672879; c=relaxed/simple;
+	bh=b09ID0S8XkErCqQ2Ru57MwiOAeJTYdJ0mk6wlA5iiPQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=DPDmAAlQlZ2+PBgTtmSXwdyKpKcus3rlGu0D59qEt3X7T2QOZIDmarjn92V+qFLYn17DuCURmmzqMiR/8tN6hvbeLTpivuNqDJ6QrBktlRZxy2L9VVcYTfqR9/gSQOvBwC++NL+FbLXkxVaJ8c/Eon/VJKy25XSY0dUbR+QCEeM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=b6pjJNYH; arc=none smtp.client-ip=209.85.167.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-51331634948so196540e87.0
+        for <linux-usb@vger.kernel.org>; Tue, 05 Mar 2024 13:07:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1709672875; x=1710277675; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=b09ID0S8XkErCqQ2Ru57MwiOAeJTYdJ0mk6wlA5iiPQ=;
+        b=b6pjJNYH8qiTMx3PGtSfc0eRO7APB4h2wPVWKuvTs2npXiseiriE2Yv0Lmt3arIY5e
+         aWVsbXJ73ADVr6KoW62Wwwsep9coBfXHltW1mWlLUNaVntkTqAaGmxMWU7JthpdVMvq+
+         YAbl4kYGgYYh5P1pZ7DxvBT0scSZKI96R3gSjBzf2BpdFz/npXLDquvB7BDvx6Ueq8Yg
+         K99lZTejysCZ3ks+dkotnsMNi1DkdxUEBoNJTslOKp9j4gBHgJlmJfGJI+vz3aB8iDwZ
+         GXk4qInyX5wly4kCaH7zDE5Q+JkYAlbkM19IJWFFkcrOIX0YUiC7AbB/pv0jWFjfy+fh
+         z1sg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709672875; x=1710277675;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=b09ID0S8XkErCqQ2Ru57MwiOAeJTYdJ0mk6wlA5iiPQ=;
+        b=mV8YwNcNgwFrGVro0MxPBhoFmse1rZs+j8BxlomVrqaD/MB9otdS8NI/wo1zE9mgvX
+         dNU3zgxf55qqGcmh+zzraMEmswpvx9m6JA+sJHZPe4x1KqKxWwzu75T5R4Mffqamt2yx
+         lrNpQWBOkQ5ZKyiGlv0vlZBgCjh3p9eJP7N/p+R4Ok6wa5WupsPnYU2QhpT9vKQILQ5r
+         UVsQSdDJy/LYOiGBs09BwBb6LJhy2DTfubyJ65grJXBLjRkdURatuwSw8hluI7RlnVe7
+         m7rWpD8+lGoJQunbxHWwyO60Oespj/uAi+135kmXV4LN80H1jiMEMOZX2dE8fVT1gXh1
+         COVA==
+X-Forwarded-Encrypted: i=1; AJvYcCV7ZwwSb71uxZU5JiSmRryLBdHkAqh25p2BBVmv5n8SIBGYOgoe0beqRVxXSHvwsifPYVqQQOt0eypA3vV2KrFgBecrKM5JE+i5
+X-Gm-Message-State: AOJu0YzlP10A94cQiG/wfbuye+obGKHuOnQ31yCXlEoidSKk+N1q+lfi
+	/n/kGuS9aWEyWsssINx9MII4Xad9AkyRstRFd/WGmcz+rbe3DvvGElTnF1ymbq8=
+X-Google-Smtp-Source: AGHT+IGBKoiS7ffna3KjUqa82zmNiDZh4gX9qfpTO1pytymFQ8KydevY5xCfcZoe8Xkpy4Obklbznw==
+X-Received: by 2002:a05:6512:281a:b0:513:2c5f:1078 with SMTP id cf26-20020a056512281a00b005132c5f1078mr1337677lfb.8.1709672875550;
+        Tue, 05 Mar 2024 13:07:55 -0800 (PST)
+Received: from [172.30.204.154] (UNUSED.212-182-62-129.lubman.net.pl. [212.182.62.129])
+        by smtp.gmail.com with ESMTPSA id g13-20020ac24d8d000000b0051316ccc5besm2300433lfe.269.2024.03.05.13.07.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Mar 2024 13:07:54 -0800 (PST)
+Message-ID: <5736796f-061b-46a0-b4eb-ab447fac4426@linaro.org>
+Date: Tue, 5 Mar 2024 22:07:52 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1709657858-8563-3-git-send-email-quic_sriramd@quicinc.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC 3/3] arm64: dts: qcom: sa8775p-ride: Enable support for
+ firmware managed resources
+Content-Language: en-US
+To: Sriram Dash <quic_sriramd@quicinc.com>,
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, andersson@kernel.org,
+ vkoul@kernel.org, kishon@kernel.org, robh@kernel.org,
+ krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+ gregkh@linuxfoundation.org, quic_wcheng@quicinc.com,
+ Thinh.Nguyen@synopsys.com, p.zabel@pengutronix.de,
+ linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ quic_psodagud@quicinc.com, quic_nkela@quicinc.com,
+ manivannan.sadhasivam@linaro.org, ulf.hansson@linaro.org,
+ sudeep.holla@arm.com, quic_shazhuss@quicinc.com, devicetree@vger.kernel.org
+References: <1709657858-8563-1-git-send-email-quic_sriramd@quicinc.com>
+ <1709657858-8563-4-git-send-email-quic_sriramd@quicinc.com>
+ <b9142874-0afb-40a6-9008-b33bd8f56840@linaro.org>
+ <399555e8-d8fa-46b7-8b15-3d3a4a30809b@quicinc.com>
+ <a2e863e2-9c8b-47c2-b4d8-5664d954cd49@quicinc.com>
+From: Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <a2e863e2-9c8b-47c2-b4d8-5664d954cd49@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Tue, Mar 05, 2024 at 10:27:37PM +0530, Sriram Dash wrote:
-> Some target systems allow multiple resources to be managed by firmware.
-> On these targets, tasks related to clocks, regulators, resets, and
-> interconnects can be delegated to the firmware, while the remaining
-> responsibilities are handled by Linux.
-> 
-> The driver is responsible for managing multiple power domains and
-> linking them to consumers as needed. Incase there is only single
-> power domain, it is considered to be a standard GDSC hooked on to
-> the qcom dt node which is read and assigned to device structure
-> (by genpd framework) before the driver probe even begins.
-> 
-> This differentiation logic allows the driver to determine whether
-> device resources are managed by Linux or firmware, ensuring
-> backward compatibility.
-> 
-> Furthermore, minor cleanup is performed for the private data of
 
-No "futhermore"s please, separate matters should be proposed as separate
-patches. Perhaps these can be sent separately and merged immediately?
 
-> the SNPS Femto PHY. However, ACPI handling is omitted due to the
-> absence of clients on the ACPI side.
-> 
-> Signed-off-by: Sriram Dash <quic_sriramd@quicinc.com>
-> ---
->  drivers/phy/qualcomm/phy-qcom-qmp-usb.c       | 290 ++++++++++++++++++++------
->  drivers/phy/qualcomm/phy-qcom-snps-femto-v2.c | 213 +++++++++++++++----
->  drivers/usb/dwc3/dwc3-qcom.c                  | 259 +++++++++++++++++------
+On 3/5/24 19:25, Sriram Dash wrote:
+> On 3/5/2024 11:33 PM, Sriram Dash wrote:
+>> On 3/5/2024 10:38 PM, Krzysztof Kozlowski wrote:
+>>> On 05/03/2024 17:57, Sriram Dash wrote:
+>>>> Establish the channel and domain mapping for the power domains to connect
+>>>> with firmware, enabling the firmware to handle the assigned resources.
+>>>> Since these delegated resources will remain invisible to the operating
+>>>> system, ensure that any references to them are removed.
+>>>>
+>>>> Signed-off-by: Sriram Dash <quic_sriramd@quicinc.com>
+>>>> ---
+>>>>   arch/arm64/boot/dts/qcom/sa8775p-ride.dts | 96 +++++++++++++++++++++++++------
+>>>>   1 file changed, 77 insertions(+), 19 deletions(-)
+>>>
+>>> Do not mix DTS patches with submissions to netdev or USB.
+>>>
+>>> Please put it inside your internal guides, so you will not be repeating
+>>> this over and over.
+>>>
+>>
+>> Sure. Will take care. Thanks.
+>>
+>>>>
+>>>> diff --git a/arch/arm64/boot/dts/qcom/sa8775p-ride.dts b/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
+>>>> index 26ad05b..b6c9cac 100644
+>>>> --- a/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
+>>>> +++ b/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
+>>>> @@ -764,8 +764,18 @@
+>>>>   };
+>>>>   &usb_0 {
+>>>> -    pinctrl-names = "default";
+>>>> -    pinctrl-0 = <&usb0_en_state>;
+>>>> +    /delete-property/ clocks;
+>>>> +    /delete-property/ clock-names;
+>>>> +    /delete-property/ assigned-clocks;
+>>>> +    /delete-property/ assigned-clock-rates;
+>>>> +    /delete-property/ required-opps;
+>>>> +    /delete-property/ resets;
+>>>> +    /delete-property/ interconnects;
+>>>> +    /delete-property/ interconnect-names;
 
-You're making independent changes across three different drivers across
-two different subsystems, with different maintainers, this is not
-acceptable as a single patch.
+This is totally unacceptable.. And especially makes no sense given
+ride is likely the only sa8775 board in existence..
 
->  3 files changed, 594 insertions(+), 168 deletions(-)
-> 
-> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-usb.c b/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
-> index 8525393..1ac1b50 100644
-> --- a/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
-> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
-> @@ -21,6 +21,9 @@
->  
->  #include "phy-qcom-qmp-common.h"
->  
-> +#include <linux/pm_opp.h>
-> +#include <linux/pm_domain.h>
+>>>> +
+>>>> +    power-domains = <TODO>, <TODO>;
+>>>
+>>> This wasn't even tested.
+>>>
+>>
+>> This is tested with the specific power domains in place
+>> of <TODO>. SCMI interface is used for the power domains.
 
-Why are these includes alone here? Integrate your changes with the
-driver properly.
+I'm sorry, but "break compilation successfully" is not a valid
+test result..
 
-> +
->  #include "phy-qcom-qmp.h"
->  #include "phy-qcom-qmp-pcs-misc-v3.h"
->  #include "phy-qcom-qmp-pcs-misc-v4.h"
-> @@ -1212,6 +1215,9 @@ struct qmp_phy_cfg {
->  	unsigned int pcs_usb_offset;
->  };
->  
-> +#define DOMAIN_GENPD_TRANSFER			0
-> +#define DOMAIN_GENPD_CORE			1
-
-Does this really represent the hardware? What hardware constructs does
-"transfer" and "core" maps to?
-
-> +
->  struct qmp_usb {
->  	struct device *dev;
->  
-> @@ -1236,6 +1242,19 @@ struct qmp_usb {
->  	struct phy *phy;
->  
->  	struct clk_fixed_rate pipe_clk_fixed;
-> +
-> +	struct dev_pm_domain_list *pd_list;
-> +	struct device *genpd_core;
-> +	struct device *genpd_transfer;
-> +
-> +	bool fw_managed;
-> +	/* separate resource management for fw_managed vs locally managed devices */
-> +	struct qmp_usb_device_ops {
-> +		int (*bus_resume_resource)(struct qmp_usb *qmp);
-
-Not only does these function pointers make the drivers much harder to
-follow, your naming of these seems chosen to maximize the confusion.
-
-In your managed case this doesn't seem to relate to any "bus", in the
-"local" case, this doesn't relate to a "bus", and these callbacks are
-decoupled from the actual runtime resume and suspend cycle of the QMP
-device itself...
-
-> +		int (*runtime_resume_resource)(struct qmp_usb *qmp);
-> +		int (*bus_suspend_resource)(struct qmp_usb *qmp);
-> +		int (*runtime_suspend_resource)(struct qmp_usb *qmp);
-> +	} qmp_usb_device_ops;
->  };
->  
->  static inline void qphy_setbits(void __iomem *base, u32 offset, u32 val)
-> @@ -1598,6 +1617,41 @@ static const struct qmp_phy_cfg x1e80100_usb3_uniphy_cfg = {
->  	.regs			= qmp_v7_usb3phy_regs_layout,
->  };
->  
-> +static void qmp_fw_managed_domain_remove(struct qmp_usb *qmp)
-> +{
-> +	dev_pm_domain_detach_list(qmp->pd_list);
-> +}
-> +
-> +static int qmp_fw_managed_domain_init(struct qmp_usb *qmp)
-> +{
-> +	struct device *dev = qmp->dev;
-> +	struct dev_pm_domain_attach_data pd_data = {
-> +		.pd_flags	= PD_FLAG_NO_DEV_LINK,
-
-Iiuc, you attach the two power-domains with NO_DEV_LINK, such that the
-pm runtime state of the device itself won't reflect on the power
-domains, and then you hand-code all the involved logic yourself?
-
-Why can't you integrate with the device and use its runtime state?
-Please clearly explain why you're doing it like this in your commit
-messages.
-
-Regards,
-Bjorn
+Konrad
 
