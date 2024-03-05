@@ -1,279 +1,140 @@
-Return-Path: <linux-usb+bounces-7551-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7552-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7CDE872305
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Mar 2024 16:41:35 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 018608723DA
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Mar 2024 17:12:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 618321F25E1E
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Mar 2024 15:41:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 25DA41C23914
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Mar 2024 16:12:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F26412880D;
-	Tue,  5 Mar 2024 15:40:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D768A12880F;
+	Tue,  5 Mar 2024 16:11:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="l7B3LSMF"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="gHuMppaZ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2088.outbound.protection.outlook.com [40.107.100.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AA0C1272DE;
-	Tue,  5 Mar 2024 15:40:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709653215; cv=none; b=qPHYZoe58JMxLh52Trnv3FsRr0mmd0WpVVWJLTUODmSQZT/99HvBESNnAXc9UTrtIx47YFmqDImQUVVEJ2iek1FEH2vtaqmBcz35M4BbwZTwsULhwuIbIeOMccJB+w3UmimrfRuHESAtlvwI/EeFnUnwWin3kTpS7uvKuBOKQOw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709653215; c=relaxed/simple;
-	bh=HQ8LElIrX/sLoGmlzmqY66LOagmGK5gMS7TguVW+4Jc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=ABpJ+bqunBTmoVZPU2BrABXIoMgPPhacQoSGD+hl/oXNI176zXjQvK7qklWHDrKrt25Pr2j2c01uKtKPymGAFofY0XAlLJE28Pl+vTvnGevmu2BCiEBSrbbfPXt3TpePXOZldOBRlxeGoY2URa7jyisy/W6NX8B0hh3B3k9uPCo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=l7B3LSMF; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 425EgpvG030820;
-	Tue, 5 Mar 2024 15:40:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=mUhQ9NC4uDpSL805AO4NNumQdKUkJS0ItnGbPImrg5k=; b=l7
-	B3LSMF//ly4WIKMhNJlpVYVWjJCFdWZ3MWMZzr1nLU1sJU0sp8BKvodvuOapnbqS
-	leZx/o03alqJDu4mcMg1TyAbSrL+CrEEluo/nJSGxh5ECtBtshaeo7CgxJw2m/Yp
-	N1dLQT6rb2Tmtiv1WvkecbTmLvs2XB90/oz84Qu8MeG3gGxYbC3JYRcWp+jzH2f7
-	OSbjQTK3WqsGpEi+TcEOleqyD70Ne9FITmpYv329fguT57LyVm73FvRPFsB88851
-	mWEgpnjH5kC7XRGQQ19mhi3kKQwIJr48/cJNjqVPXLhBt4B7Jf2VVb6ByiDTK9eG
-	rqjeQm+pNWlDk1U8ua3Q==
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wnucrsd3m-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 05 Mar 2024 15:40:06 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 425Fe57Y028651
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 5 Mar 2024 15:40:05 GMT
-Received: from [10.216.49.73] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Tue, 5 Mar
- 2024 07:40:00 -0800
-Message-ID: <f329cf0c-6fce-43ae-bff8-ceb02a246068@quicinc.com>
-Date: Tue, 5 Mar 2024 21:09:57 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD1B25C604;
+	Tue,  5 Mar 2024 16:11:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.100.88
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1709655109; cv=fail; b=D+dYYD8DfZSBNr38h8xgJZAo06NboQbaWk7yysNArmZWdKLaHi4GW7VWm8lFZF7Mi7l3zzBgJskyEflBTkgLzKIoKv+vEpNiCxkHtgZElnYeydYudro5DJfJ0jGOHbHpB4QYcP0WqVRgKaAGOgyhq+pv+KSJ79pz0jDzTSyqosg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1709655109; c=relaxed/simple;
+	bh=/oaisVswNk56wMPXCBv4ZTtNqW8JPJ/xUI0AqzWDsZo=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=pihYZe8CM7XerNGZ1t6yLbDv2VeCXfIAir7z1Pt4pp/+3IZ7JMz6PoSmDEDdV/NfwxlCw3ikcwxwWtqIEz2Nv+h2FnPCdoOr4DnvZowB735BwIPcb2mQJnAbl3NJR/MK9g0PiBrlemF5ieU6SdBZQH49vGKEKszwyfNJ463Lyyo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=gHuMppaZ; arc=fail smtp.client-ip=40.107.100.88
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hvcGxIzyg61soIdkKJPW4Mdib8wmy56ZyANSsla2mgQ+Brq/Cw1lIkLYUVsVYaCaEr6fAkUzg3rtmLbuZe/a4zmhx9OvhXjCA3AxJ6ZuOvZsog6XSN8uegmZ4mNPHSaxyQHGpFeN7TEtT/51fh4RdHJ5qZAMAkvot+2ZaD5gdn8OFiQqyUfGG20vNCkE1pu2BEp/+7Toh5syNPOgmYj0gfjh6YDcxGY3f8v08NZbubnx+hV0iwEzyZwSntxfAY5NyeqObQIZaf2kZQIqtGUnQP3w0Rkq4tkX+nniUK4NKmXZ07R2JMYyp/AyqJFmr3DgDQ1rvtqOBjPySBv4MmOGhw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SO45lOFvJcLZT+DGum/ICeQlwjklBsjkwhTc+DYnH1I=;
+ b=BXWpZ5m8rj5q2K0uwlGiS3MexrHyysOP8IpNeoxclVZkt6PV2sKftjZIINoTwGN0pjUjKPO962PeX0uDYiJN2z8HWtH9IOQP2MR64VrRiqtgNoCaWjrFxYMKrmINqWHL3mJ/16zFg1XdYyu7vza9SCbjqklA+JXznOUDuNeA8gzZXkYkdulK5snNcEWnKsy7UvPAQ2BqZcbjgj8xEcp5Dg2TMVNzeygomB7DpPhpMJQciMnTY9u/iNzidZZ+6E6SEZIeT+y0TtHUp3JzxOeGzudjeh1vpzbGkSPzorwOnTCUsVsZ83SEyecxEZFEmVSZJhPXHX5aLLk7XYbgmasKAw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.232) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SO45lOFvJcLZT+DGum/ICeQlwjklBsjkwhTc+DYnH1I=;
+ b=gHuMppaZQjjTo8ar0MHO40JFnAZPNqCzPDdevdMi9OJf3NVtwPnfs9rq0XcDckjJq8DJRCp2kVTgSdbZvpAj3jZPpKQgU2EW8aQBZ6oQC7xcqH2qhGRcF+CWceinP3UgA7E/viLAk86iDwGR4njrxYGpQvIeiOirSxfcFVn0/l12uILOKgV0YS8kg1n8kMZkZBbjudUzODMmluvFkCBMJivbrhGcm+rxyY/qQfwHMuMp99K2hJ+zMYjjG+K+1sPtdgNnHLTTv0SRrng+HNCX/OdZUCMQ4VKYTF8B21mx96BRRlOdf99eQC14vLDQOKM7Tbq+wZWs//3k9sP6cbxCpw==
+Received: from SN6PR16CA0071.namprd16.prod.outlook.com (2603:10b6:805:ca::48)
+ by BL1PR12MB5924.namprd12.prod.outlook.com (2603:10b6:208:39b::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7339.39; Tue, 5 Mar
+ 2024 16:11:40 +0000
+Received: from SN1PEPF00026367.namprd02.prod.outlook.com
+ (2603:10b6:805:ca:cafe::8a) by SN6PR16CA0071.outlook.office365.com
+ (2603:10b6:805:ca::48) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7339.39 via Frontend
+ Transport; Tue, 5 Mar 2024 16:11:40 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.232) by
+ SN1PEPF00026367.mail.protection.outlook.com (10.167.241.132) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7362.11 via Frontend Transport; Tue, 5 Mar 2024 16:11:39 +0000
+Received: from drhqmail202.nvidia.com (10.126.190.181) by mail.nvidia.com
+ (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Tue, 5 Mar 2024
+ 08:11:26 -0800
+Received: from drhqmail201.nvidia.com (10.126.190.180) by
+ drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1258.12; Tue, 5 Mar 2024 08:11:25 -0800
+Received: from waynec-Precision-5760.nvidia.com (10.127.8.13) by
+ mail.nvidia.com (10.126.190.180) with Microsoft SMTP Server id 15.2.1258.12
+ via Frontend Transport; Tue, 5 Mar 2024 08:11:23 -0800
+From: Wayne Chang <waynec@nvidia.com>
+To: <waynec@nvidia.com>, <jonathanh@nvidia.com>, <thierry.reding@gmail.com>,
+	<jckuo@nvidia.com>, <vkoul@kernel.org>, <kishon@kernel.org>,
+	<gregkh@linuxfoundation.org>
+CC: <linux-phy@lists.infradead.org>, <linux-tegra@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
+Subject: [PATCH 0/2] Fix incorrect USB3 phy parsing in tegra-xudc
+Date: Wed, 6 Mar 2024 00:11:20 +0800
+Message-ID: <20240305161122.1254099-1-waynec@nvidia.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v15 7/9] usb: dwc3: qcom: Refactor IRQ handling in glue
- driver
-To: Johan Hovold <johan@kernel.org>
-CC: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring
-	<robh+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Wesley Cheng
-	<quic_wcheng@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "Greg
- Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Conor Dooley
-	<conor+dt@kernel.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Felipe Balbi
-	<balbi@kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_ppratap@quicinc.com>,
-        <quic_jackp@quicinc.com>
-References: <20240216005756.762712-1-quic_kriskura@quicinc.com>
- <20240216005756.762712-8-quic_kriskura@quicinc.com>
- <ZeHd5Hh3-cDByLd-@hovoldconsulting.com>
-Content-Language: en-US
-From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <ZeHd5Hh3-cDByLd-@hovoldconsulting.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: NkQBllxYU4f3h0JeqWq_DvvFR9T3N06G
-X-Proofpoint-ORIG-GUID: NkQBllxYU4f3h0JeqWq_DvvFR9T3N06G
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-03-05_12,2024-03-05_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 bulkscore=0
- spamscore=0 adultscore=0 mlxscore=0 phishscore=0 priorityscore=1501
- malwarescore=0 impostorscore=0 mlxlogscore=999 lowpriorityscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2402120000 definitions=main-2403050125
+X-NVConfidentiality: public
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN1PEPF00026367:EE_|BL1PR12MB5924:EE_
+X-MS-Office365-Filtering-Correlation-Id: f121e18d-1e8e-4453-ef0f-08dc3d2ef0ff
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	pam/BsaorIwXv9EME4NtmyXVVXHWUYgara50Vplfb5qF5Vky3y6DlDqH9NbEfltt3ZNslrg5A/0cxhdDOWNr838zNhh7PBWmYaQnwjMVT0Knzj4w7UtdsMHtUO8PbTS7BisgG3kDEjCGI3iXAA4YhejpDz6C5ZvagedmhbEDOQDO2+benu7f45IEzfuKAgSjdwHtXxP8QEzfoCsV+q/s4KfKtYMKUltU+eRMmezBYUIOCqiZ7Oz+O8yhsB6iqdtZD0wGdX+DdrGC2513hJNbdCcWYIYPs7VRT9jzcLy4cwLt7GSR58myvIL4iiZLl7n7d5gVSlrwFR3sNLr/opU01lexEj2fn5pndzRvCO6TzCn9U5KM78XuHDJZbFp/2dtVu+2JCFMF0Z4q6hzOn1RNC5atiBf1oXRuF6ATM9DTFSim3h71SvOjbh63BaZnqdDQSK1Sx3vFcfWyzsyj3hNbwehQykmL+kV+DlRGdOflkuEkObKmT1lHOk/IpO/rCmXEy0fIn1ck2+dMJeY3mYgO4FBJdAoEnoXrnnwIjbCJgK26n7WgdOouyj9qPV+XkJzbshngL0xEx8pDX0fJK7wiX7yi4KFIY1TD9VboLtxbTSlEPClumNpmvLrSlrTwLn1uMDkGPQL2pnTO/cSnxi5ikZI6PUjqUJ2B6chVgSXU4KNwQtDomglfjjTLMpmw87xgyR3XA2LqoTautHktctAVx6BWCAtMaMMNPxHyg2mqVssT9zCbietKbZGZxLuK91PY
+X-Forefront-Antispam-Report:
+	CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230031)(376005)(36860700004)(82310400014);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Mar 2024 16:11:39.9612
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f121e18d-1e8e-4453-ef0f-08dc3d2ef0ff
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SN1PEPF00026367.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5924
+
+The patch series introduces a new API for retrieving the port number of the PHY.
+And then utilized this API to address an issue in the USB3 PHY retrieval logic.
+
+Wayne Chang (2):
+  phy: tegra: xusb: Add API to retrieve the port number of phy
+  usb: gadget: tegra-xudc: Fix USB3 PHY retrieval logic
+
+ drivers/phy/tegra/xusb.c            | 13 ++++++++++
+ drivers/usb/gadget/udc/tegra-xudc.c | 39 ++++++++++++++++++-----------
+ include/linux/phy/tegra/xusb.h      |  1 +
+ 3 files changed, 39 insertions(+), 14 deletions(-)
 
 
+base-commit: 90d35da658da8cff0d4ecbb5113f5fac9d00eb72
+-- 
+2.25.1
 
-On 3/1/2024 7:23 PM, Johan Hovold wrote:
-
-[...]
-
->> +
->>   struct dwc3_acpi_pdata {
->>   	u32			qscratch_base_offset;
->>   	u32			qscratch_base_size;
->>   	u32			dwc3_core_base_size;
->> -	int			qusb2_phy_irq_index;
->> -	int			dp_hs_phy_irq_index;
->> -	int			dm_hs_phy_irq_index;
->> -	int			ss_phy_irq_index;
->> +	/*
->> +	 * The phy_irq_index corresponds to ACPI indexes of (in order)
->> +	 * DP/DM/SS/QUSB2 IRQ's respectively.
->> +	 */
->> +	int			phy_irq_index[NUM_PHY_IRQ];
->>   	bool			is_urs;
->>   };
-> 
-> I asked you to add a port structure and get rid of the PHY indexes in
-> v13, and so you did for the diver data below, but you still have an
-> array of indexes here for the ACPI data.
-> 
-> I don't think ever got around to actually reviewing the ACPI hack (and
-> maybe I was hoping that we'd be able to drop ACPI support before merging
-> multi-port support), but removing these fields and replacing them with
-> an array is a step in the wrong direction (e.g. making the code harder
-> to read).
-> 
-> Why can't you just add a helper function which returns one of these
-> fields based on the interrupt name string?
-
-I think since [1] has been accepted, this comment has been taken care of.
-
-> 
->> +struct dwc3_qcom_port {
->> +	int			dp_hs_phy_irq;
->> +	int			dm_hs_phy_irq;
->> +	int			ss_phy_irq;
->> +};
-> 
-> And as I've explicitly said before, you should include hs_phy_irq here.
-> 
-> It's a port interrupt and special casing just this one make no sense at
-> all even if there are no multi-port controller that use it.
-> 
-
-Okay. Will add it to port structure.
-I only kept it outside because there are no real devices which has 
-multiple ports and qusb2_phy_irq in them.
-
->> +
->>   struct dwc3_qcom {
->>   	struct device		*dev;
->>   	void __iomem		*qscratch_base;
->> @@ -74,9 +90,7 @@ struct dwc3_qcom {
->>   	struct reset_control	*resets;
->>   
->>   	int			qusb2_phy_irq;
->> -	int			dp_hs_phy_irq;
->> -	int			dm_hs_phy_irq;
->> -	int			ss_phy_irq;
->> +	struct dwc3_qcom_port	port_info[DWC3_MAX_PORTS];
-> 
-> Just name the array 'ports' as I already suggested. It's more succinct
-> and makes the code that uses it easier to read.
-> 
->>   	enum usb_device_speed	usb2_speed;
->>   
->>   	struct extcon_dev	*edev;
->> @@ -91,6 +105,7 @@ struct dwc3_qcom {
->>   	bool			pm_suspended;
->>   	struct icc_path		*icc_path_ddr;
->>   	struct icc_path		*icc_path_apps;
->> +	u8			num_ports;
-> 
-> Any reason not to keep this one closer to the ports array?
-> 
->>   };
->   
-
-[...]
-
->> -	irq = dwc3_qcom_get_irq(pdev, "ss_phy_irq",
->> -				pdata ? pdata->ss_phy_irq_index : -1);
->> -	if (irq > 0) {
->> -		ret = dwc3_qcom_request_irq(qcom, irq, "ss_phy_irq");
->> -		if (ret)
->> -			return ret;
->> -		qcom->ss_phy_irq = irq;
->> +	for (i = 0; i < irq_count; i++) {
->> +		irq_index = dwc3_qcom_get_irq_index(irq_names[i]);
->> +		if (irq_index == -1) {
->> +			dev_err(&pdev->dev, "Unknown interrupt-name \"%s\" found\n", irq_names[i]);
-> 
-> This is now spamming the logs with errors like
-> 
-> 	dwc3-qcom a6f8800.usb: Unknown interrupt-name "pwr_event" found
-> 
-> which is clearly just broken.
-> 
->> +			continue;
->> +		}
->> +		port_index = dwc3_qcom_get_port_index(irq_names[i], irq_index);
->> +		if (port_index == -1) {
->> +			dev_err(&pdev->dev, "Invalid interrupt-name suffix \"%s\"\n", irq_names[i]);
->> +			continue;
->> +		}
->> +
->> +		acpi_index = dwc3_qcom_get_acpi_index(qcom, irq_index, port_index);
->> +
->> +		irq = dwc3_qcom_get_irq(pdev, irq_names[i], acpi_index);
->> +		if (irq > 0) {
->> +			ret = dwc3_qcom_request_irq(qcom, irq, irq_names[i]);
->> +			if (ret)
->> +				return ret;
->> +
->> +			switch (irq_index) {
->> +			case DP_HS_PHY_IRQ_INDEX:
->> +				qcom->port_info[port_index - 1].dp_hs_phy_irq = irq;
->> +				break;
->> +			case DM_HS_PHY_IRQ_INDEX:
->> +				qcom->port_info[port_index - 1].dm_hs_phy_irq = irq;
->> +				break;
->> +			case SS_PHY_IRQ_INDEX:
->> +				qcom->port_info[port_index - 1].ss_phy_irq = irq;
->> +				break;
->> +			case QUSB2_PHY_IRQ_INDEX:
->> +				qcom->qusb2_phy_irq = irq;
->> +				break;
->> +			}
->> +
->> +			if (qcom->num_ports < port_index)
->> +				qcom->num_ports = port_index;
->> +		}
->>   	}
-> 
-> Why don't you add a port helper for fetching the interrupts instead?
-> 
-> There are multiple ways that you can use to determine if this is a
-> multiport controller or not; you can use OF match data, or simply look
-> at one of the interrupts that would always be there for a multiport
-> (or single port) controller (e.g. "dp_hs_phy_1").
-> 
-> You can even determine the number of ports first by parsing the
-> interrupts names and looking for the highest port number.
-> 
-> Then you can iterate over the ports and parse the interrupts for each
-> port in turn, which should allow for a much cleaner and less
-> error-prone implementation.
-> 
-
-With [1] merged, I think I can use your suggestion of going through and 
-checking if dp_hs_phy_X is present or not and if present, it is 
-multiport and go through dp_hs_phy_{1/2/3/4} to see the num of ports 
-present.
-
-That must simplify the code and make it clean as well.
-
-[1]: 
-https://lore.kernel.org/all/20240305093216.3814787-1-quic_kriskura@quicinc.com/
-
-Regards,
-Krishna,
 
