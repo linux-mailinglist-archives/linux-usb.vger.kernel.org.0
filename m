@@ -1,168 +1,220 @@
-Return-Path: <linux-usb+bounces-7561-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7562-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A978387256D
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Mar 2024 18:13:23 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 140D0872576
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Mar 2024 18:14:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CD3CF1C25CD2
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Mar 2024 17:13:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8F0561F22E65
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Mar 2024 17:14:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 400D9179BF;
-	Tue,  5 Mar 2024 17:12:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60F1C13FE7;
+	Tue,  5 Mar 2024 17:14:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="chBpdGSr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o1fUwZ5i"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A32017BC9
-	for <linux-usb@vger.kernel.org>; Tue,  5 Mar 2024 17:12:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA08E17582
+	for <linux-usb@vger.kernel.org>; Tue,  5 Mar 2024 17:14:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709658744; cv=none; b=XPOROqttMEnNwNTMK00+peNgDk4aHbOoBM8LnkB2sXIojIv5QabmSnxDqok/pv3T9a3edNvFCsyoMjoRVLFKs40XQKp/BQkR8D516Clk6T4rnvGicseJn95wYJIwhlEyh3AWgOwynFFUMnE79ERW6lIj3Xd6nXHOSCMofFd516U=
+	t=1709658886; cv=none; b=mo1gEUds6rOJobnr/2gP22qpCcT+aH9pyGmQDfXrRqA0L+e3qUqW6BOJfuMsZoU6sREIw1VrR8l94ya+uqSrQRP++MFwzfP78nwWsqYiMQSqZ/W76eBlR/CDUuLhiM3E9t5atapniy8k8R4q5lupKM5N5cISxPrAgTM0/05KAKc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709658744; c=relaxed/simple;
-	bh=2Tpkmbdi9N07LzhU26UHK7jF7P9BtsRTxn63iH6J6qE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=p660ALnJSwO+2hZ6uo4rf+w8EJ6/LxjeU9K6u9QnVojzoHxYJFOH5VWwLGHXCPBDSYniLzXGjdPKAa/Fzmj5Xzps1AF08RSObKTusqjSKK7QQmUW/U5Q8yhjIZBNPedhdjFnmBLGCgKcJ3WeuWUTUtP8Jc97+1t2CdnjcVHBDRo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=chBpdGSr; arc=none smtp.client-ip=209.85.218.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a456ab934eeso307721866b.0
-        for <linux-usb@vger.kernel.org>; Tue, 05 Mar 2024 09:12:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1709658741; x=1710263541; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tw5qY/yrG8Cl06TuYqfyN+gfIP9rYoMHvnA9fsjGPpE=;
-        b=chBpdGSrFk52MqjJNT9+kQaRPRrh/olb3vYD64rMBVYL11TBNZgI+xtK3oTdovj+Ef
-         M5DDrqOrg7SI/hZ4uv7VjUgckXdOI8HXwwyD86R/+maE/zqaqiBe0GkEsdHZy6WdDFHl
-         v8dssaUSOo/vcaNoTgr7r3wESz9kWo51OcUDZHABBkQiY7j9OvjYxHs55uXD0Sxwc6Fo
-         5uBjH22QWMPnUtYamipnlOGFKdipGKbSk1gbuTaQv5mfmFPhfn3m5/hPyWbN1HtQfWkG
-         SB+AuzvihWpgzWtS3YsluvyGPDaYQcAyaA50uhCOGQW5WcrVxmHw3kdX4I4LOriSCLnW
-         6wug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709658741; x=1710263541;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tw5qY/yrG8Cl06TuYqfyN+gfIP9rYoMHvnA9fsjGPpE=;
-        b=HOPpq4UCtXoNVVaykTgcOr0/Y8f97P40HrPLY25Fn1/Q4Vo0AVARaaHJLPlkI1co0p
-         69OR/gnMuUcWCJgj4KQGjB/xy8HJPXpE08RjwAIilKK4KePWb0XmrshFt1tmZcytjJNg
-         IYZt/T4VaOd+pjDlrWNz7SkVTNngtxIY3rLEhx93/EXYKA9MkR7qi8Hjn6RKIEdzf+O7
-         8c8nCxAp1jKCOHouHvufqU+Y4lzokfLDCfB3NoJvm1c3C2a1CFUjvZLqGNQd847o9Hy3
-         VzSXDtDo47hABVvlVGL1876Y+LmAMQUqb6ShIAMjfvsX8yN9aCXKsLtaRy81u537Ujcz
-         VYPg==
-X-Forwarded-Encrypted: i=1; AJvYcCWS5jalVCRw8n+D3vO+HFNbdX5BwAZ5DtbCW7yDp7WDzjfDZjd5jk+ksrMfC8eC9+qwCEasu/D3axRPEFwbNp1lGLzesMf+n4zu
-X-Gm-Message-State: AOJu0Yz2TZ9F2wvF12BP9jADRJm3MT48SWyNxLNt35tmKTCmKA1bNbOq
-	i1jekWJB6zHoqXqg9/U3we4bKk7QJNuC2qqnWgIrTJHd464Bf/N9B+yR1/CQodE=
-X-Google-Smtp-Source: AGHT+IGBRWKPpgiOPv81nwRPgePQqNj1yMSlZJA2kwknURX1IDOqsusbtKktkwBfxEs4zczyJJPAhA==
-X-Received: by 2002:a17:906:1d5a:b0:a44:48c5:85f6 with SMTP id o26-20020a1709061d5a00b00a4448c585f6mr9000357ejh.43.1709658741636;
-        Tue, 05 Mar 2024 09:12:21 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.222.97])
-        by smtp.gmail.com with ESMTPSA id d14-20020a170906040e00b00a4138c3f065sm6192107eja.56.2024.03.05.09.12.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Mar 2024 09:12:21 -0800 (PST)
-Message-ID: <4d2501a7-d56d-4736-95d7-41556166859b@linaro.org>
-Date: Tue, 5 Mar 2024 18:12:18 +0100
+	s=arc-20240116; t=1709658886; c=relaxed/simple;
+	bh=R6fLkJ7z+fSXa+snc58Cczgm2VyJiklEfzQgFmYsqzY=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=sO71NoOStdMBt++QioYVLX/+oL9W/5UDIiqUzpHqVaD/D6ut9RdKfVbZ7c6jPU3IqGX66OUooUzgJIWUUfL3fYa3y4OP6pUrEI4ZlpbK8FVyigR/cMHitwzi/WiGkwDNfqoKvEBKnajF5Bw3HN2qMFz+Rx2qzn1WDEfIZgU+jnw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o1fUwZ5i; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6F5DEC433C7
+	for <linux-usb@vger.kernel.org>; Tue,  5 Mar 2024 17:14:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709658886;
+	bh=R6fLkJ7z+fSXa+snc58Cczgm2VyJiklEfzQgFmYsqzY=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=o1fUwZ5iAndf7UpsJKAWjh8BlXbwrPk9YvMX5/jbPJnchgQT7LR9US4168HM8KOzT
+	 Q7LlcNY3hf9pCobqrmdcVjbhE7DK5a6FbtcgRoyWflzcoaatkwjmYjJZ7Z0U6mZPQz
+	 6pycejtl/idbOE1G02FeB7gaRhN4fVnUyo7i1v+RcR8/8u9dGOCnAWvuj1sDz4DrYF
+	 M9tWyN0a7W6RXLz6/XRWa03mrnDOjPKu50ELUYGIAnr7DLZVYaOTgRdPk4Wm0Ht1T4
+	 8nEy5l7XObKT9O0bopyIsmMP/rqH0ArxewJ3kQx5L2NrxzX6y8rweSywuhZkiIvh3E
+	 wG+e3dcHQOAMQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 5DAFBC53BC6; Tue,  5 Mar 2024 17:14:46 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 218544] not enough bandwidth, synaptics hi-res audio duplex
+ audio
+Date: Tue, 05 Mar 2024 17:14:46 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: ibmalone@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: attachments.created
+Message-ID: <bug-218544-208809-uweqEWldM2@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-218544-208809@https.bugzilla.kernel.org/>
+References: <bug-218544-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC 0/3] Enable firmware-managed USB resources on Qcom targets
-Content-Language: en-US
-To: Sriram Dash <quic_sriramd@quicinc.com>, andersson@kernel.org,
- konrad.dybcio@linaro.org, vkoul@kernel.org, kishon@kernel.org,
- robh@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
- gregkh@linuxfoundation.org, quic_wcheng@quicinc.com,
- Thinh.Nguyen@synopsys.com, p.zabel@pengutronix.de,
- linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, quic_psodagud@quicinc.com,
- quic_nkela@quicinc.com, manivannan.sadhasivam@linaro.org,
- ulf.hansson@linaro.org, sudeep.holla@arm.com, quic_shazhuss@quicinc.com
-References: <1709657858-8563-1-git-send-email-quic_sriramd@quicinc.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <1709657858-8563-1-git-send-email-quic_sriramd@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-On 05/03/2024 17:57, Sriram Dash wrote:
-> Some target systems allow multiple resources to be managed by firmware.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218544
 
-Which? Why this is so vague...
+--- Comment #10 from Ian Malone (ibmalone@gmail.com) ---
+Created attachment 305965
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D305965&action=3Dedit
+/sys/kernel/debug/usb/devices other devices and hid disabled
 
-> On these targets, tasks related to clocks, regulators, resets, and
-> interconnects can be delegated to the firmware, while the remaining
-> responsibilities are handled by Linux.
-> 
-> To support the management of partial resources in Linux and leave the rest
-> to firmware, multiple power domains are introduced. Each power domain can
-> manage one or more resources, depending on the specific use case.
-> 
-> These power domains handle SCMI calls to the firmware, enabling the
-> activation and deactivation of firmware-managed resources.
-> 
-> The driver is responsible for managing multiple power domains and
-> linking them to consumers as needed. Incase there is only single
-> power domain, it is considered to be a standard GDSC hooked on to
-> the qcom dt node which is read and assigned to device structure
-> (by genpd framework) before the driver probe even begins.
+You are of course right, the patch can't be easily adapted to apply against=
+ the
+current driver and there are too many incompatibilities with memory managem=
+ent
+and the rest of the USB system for it to be trivial to drop in the whole 2.=
+6.18
+host controller. I'm not sure it was ever really submitted, which is a pity=
+ as
+it looks like it implemented FSTN handling that never otherwise got added. I
+might fiddle with it a bit more to see if it can be built just to see if it
+would have helped.
 
-This will break the ABI. Sorry, come with an ABI stable solution.
+Meanwhile, I've tried disabling the HID as well, /sys/kernel/debug/usb/devi=
+ces
+attached. This still doesn't work (same "cannot submit urb 0, error -28: not
+enough bandwidth"). It does puzzle me a bit, we're now down to a single FS
+device on the hub, while I can understand the scheduling for LS/FS onto HS =
+is
+complicated I'd have thought this issue would have popped up frequently eno=
+ugh
+when these laptops were common that it would have been addressed back then.=
+ Is
+there any other information I can extract to find out what's going on with =
+the
+scheduler? The following are the FS/LS portion of
+/sys/kernel/debug/usb/ehci/0000:00:1a.0/bandwidth for a good device in out,=
+ in
+and duplex and the problematic device:
 
-Best regards,
-Krzysztof
+good device out
+TT 2-1 port 0  FS/LS bandwidth allocation (us per frame)
+    482  482  482  482  482  482  482  482
+FS/LS budget (us per microframe)
+ 0:   24   0 125 125 125  83   0   0
+ 8:   24   0 125 125 125  83   0   0
+16:   24   0 125 125 125  83   0   0
+24:   24   0 125 125 125  83   0   0
+32:   24   0 125 125 125  83   0   0
+40:   24   0 125 125 125  83   0   0
+48:   24   0 125 125 125  83   0   0
+56:   24   0 125 125 125  83   0   0
+2-1.1 ep 82:    24 @  0.0+1 mask 1c01
+2-1.1 ep 01:   458 @  0.2+1 mask 003c
 
+good device in good
+TT 2-1 port 0  FS/LS bandwidth allocation (us per frame)
+    109  109  109  109  109  109  109  109
+FS/LS budget (us per microframe)
+ 0:   24   0   0  85   0   0   0   0
+ 8:   24   0   0  85   0   0   0   0
+16:   24   0   0  85   0   0   0   0
+24:   24   0   0  85   0   0   0   0
+32:   24   0   0  85   0   0   0   0
+40:   24   0   0  85   0   0   0   0
+48:   24   0   0  85   0   0   0   0
+56:   24   0   0  85   0   0   0   0
+2-1.1 ep 82:    24 @  0.0+1 mask 1c01
+2-1.1 ep 81:    85 @  0.3+1 mask e008
+
+good device duplex
+TT 2-1 port 0  FS/LS bandwidth allocation (us per frame)
+    567  567  567  567  567  567  567  567
+FS/LS budget (us per microframe)
+ 0:   24  85 125 125 125  83   0   0
+ 8:   24  85 125 125 125  83   0   0
+16:   24  85 125 125 125  83   0   0
+24:   24  85 125 125 125  83   0   0
+32:   24  85 125 125 125  83   0   0
+40:   24  85 125 125 125  83   0   0
+48:   24  85 125 125 125  83   0   0
+56:   24  85 125 125 125  83   0   0
+2-1.1 ep 82:    24 @  0.0+1 mask 1c01
+2-1.1 ep 01:   458 @  0.2+1 mask 003c
+2-1.1 ep 81:    85 @  0.1+1 mask 3802
+
+bad device in
+TT 2-1 port 0  FS/LS bandwidth allocation (us per frame)
+    273  273  273  273  273  273  273  273
+FS/LS budget (us per microframe)
+ 0:   39   0 125 109   0   0   0   0
+ 8:   39   0 125 109   0   0   0   0
+16:   39   0 125 109   0   0   0   0
+24:   39   0 125 109   0   0   0   0
+32:   39   0 125 109   0   0   0   0
+40:   39   0 125 109   0   0   0   0
+48:   39   0 125 109   0   0   0   0
+56:   39   0 125 109   0   0   0   0
+2-1.1 ep 84:    39 @  0.0+1 mask 1c01
+2-1.1 ep 81:   234 @  0.2+1 mask f004
+
+bad device out
+TT 2-1 port 0  FS/LS bandwidth allocation (us per frame)
+    497  497  497  497  497  497  497  497
+FS/LS budget (us per microframe)
+ 0:   39   0 125 125 125  83   0   0
+ 8:   39   0 125 125 125  83   0   0
+16:   39   0 125 125 125  83   0   0
+24:   39   0 125 125 125  83   0   0
+32:   39   0 125 125 125  83   0   0
+40:   39   0 125 125 125  83   0   0
+48:   39   0 125 125 125  83   0   0
+56:   39   0 125 125 125  83   0   0
+2-1.1 ep 84:    39 @  0.0+1 mask 1c01
+2-1.1 ep 01:   458 @  0.2+1 mask 003c
+
+bad device duplex
+TT 2-1 port 0  FS/LS bandwidth allocation (us per frame)
+    497  497  497  497  497  497  497  497
+FS/LS budget (us per microframe)
+ 0:   39   0 125 125 125  83   0   0
+ 8:   39   0 125 125 125  83   0   0
+16:   39   0 125 125 125  83   0   0
+24:   39   0 125 125 125  83   0   0
+32:   39   0 125 125 125  83   0   0
+40:   39   0 125 125 125  83   0   0
+48:   39   0 125 125 125  83   0   0
+56:   39   0 125 125 125  83   0   0
+2-1.1 ep 84:    39 @  0.0+1 mask 1c01
+2-1.1 ep 01:   458 @  0.2+1 mask 003c
+
+It looks like there's an extra 234us to accommodate for input to work, I'm
+guessing there are restrictions on where that can go. Is it plausible that =
+if a
+lower bandwidth mode is requested from the device it would work? That's
+essentially what I was wondering about with respect to the snd-usb-audio mo=
+dule
+before this was moved over to usb.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
