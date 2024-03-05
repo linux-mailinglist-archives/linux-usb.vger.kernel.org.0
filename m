@@ -1,135 +1,101 @@
-Return-Path: <linux-usb+bounces-7526-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7527-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C918187176A
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Mar 2024 08:54:47 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B81A9871790
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Mar 2024 09:06:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 85A2028662E
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Mar 2024 07:54:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EA1C81C21AEF
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Mar 2024 08:06:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D6DF7F476;
-	Tue,  5 Mar 2024 07:52:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="LpGlrz6U"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7F7E7F467;
+	Tue,  5 Mar 2024 08:06:21 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from cstnet.cn (unknown [159.226.251.81])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01EF47E78B;
-	Tue,  5 Mar 2024 07:52:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F8287EEE1;
+	Tue,  5 Mar 2024 08:06:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709625146; cv=none; b=JvJV9uaQ2sciBrTvI8Uj5a3sVh1rQ183WeTszRftQ5iv5juCNBhK9ZOa/uqZUHFAYNmLuSZujBFMYzFg4w4xErqcoIv7/HEfCLaDgwNYwm9+fw6hlWnMD6YiLNWP5/sPDoSY+iMMKgqqT+b9XGu0ByHPeu1Vk9+eqP9eo3FH5SY=
+	t=1709625981; cv=none; b=sI2ABXHDV0bYftyMMOIeHhXeJuZnEx+pLZrLaxTHmlCIkyI7VVGTSy7LwOFeV2Eko3CBkHhMRD5GPgLAS2c98kCHN6R7T560CurXBCVvKww1TY6VFK6NQN6ublN326iHJAWedgoAMZcdQWM6nM0pn3jIuJHyB7C8pPcraYVA1VI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709625146; c=relaxed/simple;
-	bh=AM09GKPYJH/8gNJ+NzSyVqjaenAF0cZN+Cb8vT4dlew=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=e6IpfZnpS/6UQh0t/I/RlAxgWojU3HkvwgGOQ6R5I0A29d1zwyDA6wcuMlDH63r8Up+ukI377tWKpeFyCgD9Xi6DDK6RHtTnDdFgvoCbJoUnYiqptddNKAprpiLyR7aHEBMiGnVNif4D5juTGYj08d37mWgI/YFzwXXsJQImDCM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=LpGlrz6U; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74159C43390;
-	Tue,  5 Mar 2024 07:52:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1709625143;
-	bh=AM09GKPYJH/8gNJ+NzSyVqjaenAF0cZN+Cb8vT4dlew=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LpGlrz6U4DYo0szXcCLN3qySBTzVZK09L0wBZrGS5comnhFIvVJWxIm+PynYFkYdX
-	 1WwxtHQ+/h+An5Seq91B6O12hyMxiGuEhsOmqfEi4xqyOO5bqnB+TkRtmcLtv0uTr9
-	 FlEmJ28M/aW5DwvTPoqJNoQ8QCjctH8YvuEHxzXs=
-Date: Tue, 5 Mar 2024 07:52:20 +0000
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Elbert Mai <code@elbertmai.com>
-Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2] usb: Export BOS descriptor to sysfs
-Message-ID: <2024030515-cruelly-ungreased-3fd9@gregkh>
-References: <20240305002301.95323-1-code@elbertmai.com>
+	s=arc-20240116; t=1709625981; c=relaxed/simple;
+	bh=ySWIDViivnyBgPoRDA0NQG2nLO6tW6adzChOSmMQGcc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=PxQT6GddQTlm7zZ7SY+J0oV9jFnXg0GemVpHaAbBt4SPHAWUjNk0ZrU6Q04X9fUBPPIHyJyTQWgU+bhWaP4/CsQY3aozVyA+/FALBh+Epe3IYQNKHSF+vNSsqkekMxS47uYDbplep4wly3PQmUL+u5hVgKVMNROX1KC4+D+4s2A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
+Received: from localhost (unknown [124.16.138.129])
+	by APP-03 (Coremail) with SMTP id rQCowAD3_v7x0OZlJi1KBA--.14974S2;
+	Tue, 05 Mar 2024 15:59:45 +0800 (CST)
+From: Chen Ni <nichen@iscas.ac.cn>
+To: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	justinstitt@google.com,
+	andrew@lunn.ch,
+	linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Chen Ni <nichen@iscas.ac.cn>
+Subject: [PATCH] sr9800: Add check for usbnet_get_endpoints
+Date: Tue,  5 Mar 2024 07:59:27 +0000
+Message-Id: <20240305075927.261284-1-nichen@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240305002301.95323-1-code@elbertmai.com>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:rQCowAD3_v7x0OZlJi1KBA--.14974S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7Gw4ktF17uF1UGw1kZr1rtFb_yoWxtwb_Cw
+	18uF15Wr1UGryqg39rKr4Svry3ZFs5XryxZFsYga9xZa4qqanxXry0vFn7JFn7ur1FvFnr
+	Cwn7GF95GrW8tjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUbVkFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+	A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+	Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVWxJr
+	0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+	2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+	W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
+	Y2ka0xkIwI1lc2xSY4AK67AK6r4xMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r
+	1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CE
+	b7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0x
+	vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAI
+	cVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2Kf
+	nxnUUI43ZEXa7VU10tC7UUUUU==
+X-CM-SenderInfo: xqlfxv3q6l2u1dvotugofq/
 
-On Mon, Mar 04, 2024 at 04:23:01PM -0800, Elbert Mai wrote:
-> Motivation
-> ----------
-> 
-> The binary device object store (BOS) of a USB device consists of the BOS
-> descriptor followed by a set of device capability descriptors. One that is
-> of interest to users is the platform descriptor. This contains a 128-bit
-> UUID and arbitrary data, and it allows parties outside of USB-IF to add
-> additional metadata about a USB device in a standards-compliant manner.
-> Notable examples include the WebUSB and Microsoft OS 2.0 descriptors.
-> 
-> The kernel already retrieves and caches the BOS from USB devices if its
-> bcdUSB is >= 0x0201. Because the BOS is flexible and extensible, we export
-> the entire BOS to sysfs so users can retrieve whatever device capabilities
-> they desire, without requiring USB I/O or elevated permissions.
-> 
-> Implementation
-> --------------
-> 
-> Add bos_descriptors attribute to sysfs. This is a binary file and it works
-> the same way as the existing descriptors attribute. The file exists only if
-> the BOS is present in the USB device.
-> 
-> Also create a binary attribute group, so the driver core can handle the
-> creation of both the descriptors and bos_descriptors attributes in sysfs.
-> 
-> Signed-off-by: Elbert Mai <code@elbertmai.com>
-> ---
-> Changes in v2:
->  - Rename to bos_descriptors (plural) since the attribute contains the
->    entire BOS, not just the first descriptor in it.
->  - Use binary attribute groups to let driver core handle attribute
->    creation for both descriptors and bos_descriptors.
->  - The attribute is visible in sysfs only if the BOS is present in the
->    USB device.
+Add check for usbnet_get_endpoints() and return the error if it fails
+in order to transfer the error.
 
-Very nice, thanks for this!
+Signed-off-by: Chen Ni <nichen@iscas.ac.cn>
+---
+ drivers/net/usb/sr9800.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-One very minor comment, you can send a follow-on patch for this if you
-like:
+diff --git a/drivers/net/usb/sr9800.c b/drivers/net/usb/sr9800.c
+index 143bd4ab160d..57947a5590cc 100644
+--- a/drivers/net/usb/sr9800.c
++++ b/drivers/net/usb/sr9800.c
+@@ -737,7 +737,9 @@ static int sr9800_bind(struct usbnet *dev, struct usb_interface *intf)
+ 
+ 	data->eeprom_len = SR9800_EEPROM_LEN;
+ 
+-	usbnet_get_endpoints(dev, intf);
++	ret = usbnet_get_endpoints(dev, intf);
++	if (ret)
++		goto out;
+ 
+ 	/* LED Setting Rule :
+ 	 * AABB:CCDD
+-- 
+2.25.1
 
-> +static umode_t dev_bin_attrs_are_visible(struct kobject *kobj,
-> +		struct bin_attribute *a, int n)
-> +{
-> +	struct device *dev = kobj_to_dev(kobj);
-> +	struct usb_device *udev = to_usb_device(dev);
-> +
-> +	/* All USB devices have a device descriptor, so the descriptors
-> +	 * attribute always exists. No need to check for its visibility.
-> +	 */
-
-This comment is in the "wrong" style, I think checkpatch will complain
-about that, right?
-
-But it's a bit confusing, you say "no need to check", and then you:
-
-> +	if (a == &bin_attr_bos_descriptors) {
-> +		if (udev->bos == NULL)
-> +			return 0;
-> +	}
-
-check something :)
-
-How about this as a comment instead:
-	/*
-	 * If this is the BOS descriptor, check to verify if the device
-	 * has that descriptor at all or not.
-	 */
-
-That's all you need here, right?
-
-Anyway, again, very nice, I'll go queue this up and run it through the
-0-day tests.
-
-thanks!
-
-greg k -h
 
