@@ -1,54 +1,50 @@
-Return-Path: <linux-usb+bounces-7576-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7577-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D7038729F7
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Mar 2024 23:10:15 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28A28872A42
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Mar 2024 23:36:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E1CF11F2B431
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Mar 2024 22:10:14 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B6A35B285D0
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Mar 2024 22:36:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A990512D201;
-	Tue,  5 Mar 2024 22:10:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B515D3D0CA;
+	Tue,  5 Mar 2024 22:36:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="az7C5Nbt"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="RE8tmbbc"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1E7812BEAE;
-	Tue,  5 Mar 2024 22:10:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40D637E563
+	for <linux-usb@vger.kernel.org>; Tue,  5 Mar 2024 22:36:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709676607; cv=none; b=gVIDA/nCHeziK5euY5XLrvrqdUQCaJqW0rc5OczGJNzUodGYT12knL3oR6WgX19aFyN74kEZrB8fHGzNPkAmqin2Z3Y5mQfMjrtZBaOhucdoMt2LyRX1ai0WiOBwYTRdnV46u7jLSrPxXV9vsWTcpvHG9q5V1GnSClao02QNTi8=
+	t=1709678172; cv=none; b=CWNMBl4t25mfq/GELqrzqPOVc3tQ9x5OPx6kd4TLOWIDqhC2O43ym/AEGaZsSJrOjacY953dyANnzS9Qgw8lCW6z5bHB5+sq3Gu+uKi6fkBIR3+9riJ6WR+zWd88asofqNEytLrddvLZO1J+hE59Y3w91lrP/5NqaFWZJ6Fb5xY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709676607; c=relaxed/simple;
-	bh=WDxMUNOyXV2FFp94ZE1OPJHosybU6j2MV9abgvJyXmQ=;
+	s=arc-20240116; t=1709678172; c=relaxed/simple;
+	bh=g55cu2cg6/g5DxUZcaY/hxqidlXJ4vwTOT97PDU99Ws=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=R6hQ2vZJWlnWu/difVF3nE4JSZwvh1FUmXXC2E9+xhxtz1A5NktaUmHpzOXYCnSMq21+9zIpqBCrtXTwaxs0vC522kHK4Jg8Ac6ZZUXV+fA6FxnBI7WLp6c9NmdSWA2DIN3NxdQOwWrGzzVxCFpZ/KbqunhthIZmbcRLTVBwNJU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=az7C5Nbt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E995DC433F1;
-	Tue,  5 Mar 2024 22:10:05 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=aSW8aDbCl5sVYml7YjulykfSDwNQ3vprp/TCudCn87labfyCXmYxKi9vPcCOSzMrDpNsutUjbjiddfQ7ELNkwtY32vKjxmImq3QF5Lcp3OGz7jMey8V82VYomBmwahd+FtMiDmU+gw7rp7KWOzBr1voF2URnveKmzteiaN+Td+Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=RE8tmbbc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 610CCC433C7;
+	Tue,  5 Mar 2024 22:36:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1709676606;
-	bh=WDxMUNOyXV2FFp94ZE1OPJHosybU6j2MV9abgvJyXmQ=;
+	s=korg; t=1709678171;
+	bh=g55cu2cg6/g5DxUZcaY/hxqidlXJ4vwTOT97PDU99Ws=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=az7C5NbtIzHvbFY1k6RzXtyMA4G2ovT4iIuq2qGGFKzfSb8A466Xms9g9gAM91/Sd
-	 og+XcB2nHMHjZhAznjVov+MTzwoi9/bBPr2aPvdlImEjJpCzSsmqS81OJZpHu4k18B
-	 oVVNfNT/qh/v7X42qVgXBHRy8hmrEfNVHcSb+ZCs=
-Date: Tue, 5 Mar 2024 22:10:02 +0000
+	b=RE8tmbbcJCPatJ0bm2DbZCTtsCMeDPXd4v/yhJ5eIJ0csY3J47QyDdmQPfdqlXBwY
+	 48RjPFc3ydjUA+0ND9WtQtMG9Z3Gfqtb39tVLP+LVXyoGLs5eIGkfYbfjIEjwA3PRb
+	 VB2AHU4TtyFlRfIeF4u0le/9vdtH0MACGaZbiqfY=
+Date: Tue, 5 Mar 2024 22:36:09 +0000
 From: Greg KH <gregkh@linuxfoundation.org>
-To: Wayne Chang <waynec@nvidia.com>
-Cc: jonathanh@nvidia.com, thierry.reding@gmail.com, jckuo@nvidia.com,
-	vkoul@kernel.org, kishon@kernel.org, linux-phy@lists.infradead.org,
-	linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH 2/2] usb: gadget: tegra-xudc: Fix USB3 PHY retrieval logic
-Message-ID: <2024030542-broker-promptly-de99@gregkh>
-References: <20240305161122.1254099-1-waynec@nvidia.com>
- <20240305161122.1254099-3-waynec@nvidia.com>
+To: Elbert Mai <code@elbertmai.com>
+Cc: linux-usb@vger.kernel.org
+Subject: Re: [PATCH v3] usb: Export BOS descriptor to sysfs
+Message-ID: <2024030535-bobsled-kinsman-330c@gregkh>
+References: <20240305193356.118229-1-code@elbertmai.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -57,36 +53,62 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240305161122.1254099-3-waynec@nvidia.com>
+In-Reply-To: <20240305193356.118229-1-code@elbertmai.com>
 
-On Wed, Mar 06, 2024 at 12:11:22AM +0800, Wayne Chang wrote:
-> This commit resolves an issue in the tegra-xudc USB gadget driver that
-> incorrectly fetched USB3 PHY instances. The problem stemmed from the
-> assumption of a one-to-one correspondence between USB2 and USB3 PHY
-> names and their association with physical USB ports in the device tree.
-> 
-> Previously, the driver associated USB3 PHY names directly with the USB3
-> instance number, leading to mismatches when mapping the physical USB
-> ports. For instance, if using USB3-1 PHY, the driver expect the
-> corresponding PHY name as 'usb3-1'. However, the physical USB ports in
-> the device tree were designated as USB2-0 and USB3-0 as we only have
-> one device controller, causing a misalignment.
-> 
-> This commit rectifies the issue by adjusting the PHY naming logic.
-> Now, the driver correctly correlates the USB2 and USB3 PHY instances,
-> allowing the USB2-0 and USB3-1 PHYs to form a physical USB port pair
-> while accurately reflecting their configuration in the device tree by
-> naming them USB2-0 and USB3-0, respectively.
-> 
-> The change ensures that the PHY and PHY names align appropriately,
-> resolving the mismatch between physical USB ports and their associated
-> names in the device tree.
-> 
-> Fixes: b4e19931c98a ("usb: gadget: tegra-xudc: Support multiple device modes")
-> Cc: stable@vger.kernel.org
+On Tue, Mar 05, 2024 at 11:33:56AM -0800, Elbert Mai wrote:
 
-You mark patch 2/2 for stable, but not patch 1/2?  That's not going to
-work well, is it?  :(
+<snip>
+
+For some reason you forgot to cc: linux-usb@vger.kernel.org and only
+sent this to me.  Added it back now...
+
+> ---
+> Changes in v3:
+>  - Cosmetic only. Made a comment less confusing.
+> Changes in v2:
+>  - Rename to bos_descriptors (plural) since the attribute contains the
+>    entire BOS, not just the first descriptor in it.
+>  - Use binary attribute groups to let driver core handle attribute
+>    creation for both descriptors and bos_descriptors.
+>  - The attribute is visible in sysfs only if the BOS is present in the
+>    USB device.
+> 
+> I've ran the prior patches against scripts/checkpatch.pl and it seems to be
+> okay with the comment style. But I agree the comment could use some work.
+> The point of the comment was to show that not checking for the descriptors
+> attribute is intentional and not an oversight.
+> 
+> So here's a follow-on patch that hopefully made that particular comment a
+> bit less confusing. Nothing else was changed.
+
+I already applied your v2 patch, so I need a commit that goes on top of
+that, unless you want me to revert your patch from the tree (I'd not
+recommend that.)
+
+Also, one thing:
+
+> diff --git a/Documentation/ABI/testing/sysfs-bus-usb b/Documentation/ABI/testing/sysfs-bus-usb
+> index 614d216dff1d..102ee4215e48 100644
+> --- a/Documentation/ABI/testing/sysfs-bus-usb
+> +++ b/Documentation/ABI/testing/sysfs-bus-usb
+> @@ -293,3 +293,13 @@ Description:
+>  		USB 3.2 adds Dual-lane support, 2 rx and 2 tx -lanes over Type-C.
+>  		Inter-Chip SSIC devices support asymmetric lanes up to 4 lanes per
+>  		direction. Devices before USB 3.2 are single lane (tx_lanes = 1)
+> +
+> +What:		/sys/bus/usb/devices/.../bos_descriptors
+> +Date:		March 2024
+> +Contact:	Elbert Mai <code@elbertmai.com>
+> +Description:
+> +		Binary file containing the cached binary device object store (BOS)
+> +		of the device. This consists of the BOS descriptor followed by the
+> +		set of device capability descriptors. All descriptors read from
+> +		this file are in bus-endian format. Note that the kernel will not
+> +		request the BOS from a device if its bcdUSB is less than 0x0201.
+
+I moved this to the entry after the "descriptors" description in this
+file, and dropped the "..." portion to show the correct string, as the
+"..." doesn't make sense here, right?
 
 thanks,
 
