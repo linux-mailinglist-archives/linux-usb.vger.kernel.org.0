@@ -1,284 +1,89 @@
-Return-Path: <linux-usb+bounces-7535-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7536-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B955871BF1
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Mar 2024 11:46:27 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2167B871E7B
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Mar 2024 13:03:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 841041C22701
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Mar 2024 10:46:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CF506285D9D
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Mar 2024 12:03:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B19956B70;
-	Tue,  5 Mar 2024 10:32:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B278959B5C;
+	Tue,  5 Mar 2024 12:03:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Xger4mzA"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="n9r0LJ9R"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C159548E0
-	for <linux-usb@vger.kernel.org>; Tue,  5 Mar 2024 10:32:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 398105676D;
+	Tue,  5 Mar 2024 12:03:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709634765; cv=none; b=Fmvx3D00T+o6D1cUkc9Ynnllcjp8S9Q45VkDzS1Bwvptmx4/yragM4OwwfnlOI7az8E0DRmC6rHuZoJN4iqDoPjXEqNveV+NZRJEc2iYanba1+PBOZr41KEEntBv6CGL7pXYbkC0Ev5NSKeDY/uei/U/D/wh98+xLspYAo2OSmE=
+	t=1709640187; cv=none; b=LCI5BFodUOhy5zwts3vrAZJQTODl8qxKjK66MUrYtVRpydzcVOoXB1N5dIrenEHs0nBmc7wgqSQhmIFZB1K29S6p5IYZv1SKB1dQ8Kzvfqa3QUpC+b70/3dGmfwIT2eTAbPkv5GccgAi0wCIKFxOBkFZsgRvdvs83Z3Wl2w0oiQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709634765; c=relaxed/simple;
-	bh=xYk2y2msx31kSDUXnS/kgk8cEsZue7VusMaHiZHNklg=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=jhugbpFFN0MqbdSfEQ1OV1wbw1h+lE3y1FrjHWFxCcXfqqM5PuYgvUUV0P6yYmqRZSEegIkKJojvfgtohckTu1+Tk7RxbbjhmhYFL9rojwHRrm43PGHQecuQBzTiAESFXYoNbtgK3gNTZsSVo0wGE0bNsGNrGwK7bPykoOq/FF0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Xger4mzA; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709634763; x=1741170763;
-  h=date:from:to:cc:subject:message-id;
-  bh=xYk2y2msx31kSDUXnS/kgk8cEsZue7VusMaHiZHNklg=;
-  b=Xger4mzAJ5chbn1wBA9vBq6D1hsNB9OiDAVDZfvQ1qU9bjVb11Qo9LBM
-   +2LhmFa8jGDbOX77CiWz0GIfTDaNOMhxwU4jxdoD7KxSUKjZWc/fWbsKc
-   OxK9DrAVNxFybk14PG01KMvmhShPB4ot5P2qhM7gPFZi+U3SRa26Z5f86
-   v/8YfOvPQsesof8UjMW7xxrBiqg7no2yCCs2FYtdBV3KZzMva54pUJT38
-   1ywcgjYm0ShBiJtVuLYhJhv7SW3t2x0xAnR3lKCCd4yn8XXvEML56uyCp
-   1WutogKqp4f39ZXgM2etz37xD3iosBeKjNInkG/36tnUgnkt6uIfE2SL1
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11003"; a="15583511"
-X-IronPort-AV: E=Sophos;i="6.06,205,1705392000"; 
-   d="scan'208";a="15583511"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2024 02:32:43 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,205,1705392000"; 
-   d="scan'208";a="9396302"
-Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 05 Mar 2024 02:32:41 -0800
-Received: from kbuild by b21307750695 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rhS6A-0003Ev-3C;
-	Tue, 05 Mar 2024 10:32:38 +0000
-Date: Tue, 05 Mar 2024 18:32:07 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Subject: [usb:usb-next] BUILD SUCCESS
- a14e6fd1b67799da7da9cc344023bd16aaf0d17d
-Message-ID: <202403051804.6B33xRIu-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1709640187; c=relaxed/simple;
+	bh=79bRoIfWwTyJNE+ZvVpy+oLKq8Gm67lYHHCXczcorVs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kQAFh5SEChdFYbybxBhNLc1lbF/RKGHyhSbcJYvZQjFcT7DXcEtWjDXT7CmKpQ3NRNhXpiRE5KwscVDAkpUIH7LG9jQJxI1IlpGDkVtTLpWXT3Y3Z585I1GnY4F4Q4rUOe7zwPrYbm99sfV72MFKCAte777ilPh2ZyXBW0WrMOE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=n9r0LJ9R; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 328C4C43390;
+	Tue,  5 Mar 2024 12:03:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1709640186;
+	bh=79bRoIfWwTyJNE+ZvVpy+oLKq8Gm67lYHHCXczcorVs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=n9r0LJ9RfA/26lr6yOwdcDslL6g/pWULDLz2lup790Qe42gB6MIHIicIPKgGCUp5C
+	 5bg2wfB9MJFYgFnuO+6azNvbksiLEEIGw4DFBgavYf34a6zDAD4XmVzam7aPIMZMur
+	 xn7Vc6tfwLwr7etf40KCf3apgiHddiw9d7EeqCM4=
+Date: Tue, 5 Mar 2024 12:03:03 +0000
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: Sam Sun <samsun1006219@gmail.com>, Tejun Heo <tj@kernel.org>,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	"xrivendell7@gmail.com" <xrivendell7@gmail.com>,
+	hgajjar@de.adit-jv.com, quic_ugoswami@quicinc.com,
+	stanley_chang@realtek.com, heikki.krogerus@linux.intel.com
+Subject: Re: [Bug] INFO: task hung in hub_activate
+Message-ID: <2024030557-bullwhip-stray-9db4@gregkh>
+References: <CAEkJfYO6jRVC8Tfrd_R=cjO0hguhrV31fDPrLrNOOHocDkPoAA@mail.gmail.com>
+ <e9d710fc-eace-44de-b3cc-1117c3575ef7@rowland.harvard.edu>
+ <2024030428-graph-harmful-1597@gregkh>
+ <416a8311-c725-419a-8b22-74c80207347f@rowland.harvard.edu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <416a8311-c725-419a-8b22-74c80207347f@rowland.harvard.edu>
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-next
-branch HEAD: a14e6fd1b67799da7da9cc344023bd16aaf0d17d  dt-bindings: usb: qcom,pmic-typec: add support for the PM4125 block
+On Mon, Mar 04, 2024 at 01:30:35PM -0500, Alan Stern wrote:
+> On Mon, Mar 04, 2024 at 05:36:19PM +0100, Greg KH wrote:
+> > On Mon, Mar 04, 2024 at 11:15:24AM -0500, Alan Stern wrote:
+> > > Third, this must be a generic problem.  It will occur any time a sysfs
+> > > attribute callback tries to lock its device while another process is
+> > > trying to unregister that device.
+> > > 
+> > > We faced this sort of problem some years ago when we were worrying
+> > > about "suicidal" attributes -- ones which would unregister their own
+> > > devices.  I don't remember what the fix was or how it worked.  But we
+> > > need something like it here.
+> > > 
+> > > Greg and Tejun, any ideas?  Is it possible somehow for an attribute file 
+> > > to be removed while its callback is still running?
+> > 
+> > Yes, it's a pain, and I hate it, but I think SCSI does this somehow for
+> > one of their attributes.  I don't remember how at the moment, and I
+> > can't look it up (am traveling), but this should be a good hint.
+> 
+> Are you thinking of the sysfs_break_active_protection() and 
+> sysfs_unbreak_active_protection() functions?  They seem to be the 
+> appropriate ones to use here.
 
-elapsed time: 1469m
-
-configs tested: 195
-configs skipped: 3
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                            hsdk_defconfig   gcc  
-arc                        nsimosci_defconfig   gcc  
-arc                   randconfig-001-20240305   gcc  
-arc                   randconfig-002-20240305   gcc  
-arc                           tb10x_defconfig   gcc  
-arc                        vdk_hs38_defconfig   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   clang
-arm                              allyesconfig   gcc  
-arm                                 defconfig   clang
-arm                           h3600_defconfig   gcc  
-arm                           imxrt_defconfig   clang
-arm                       multi_v4t_defconfig   clang
-arm                       netwinder_defconfig   gcc  
-arm                   randconfig-001-20240305   clang
-arm                   randconfig-002-20240305   gcc  
-arm                   randconfig-003-20240305   clang
-arm                   randconfig-004-20240305   gcc  
-arm                        shmobile_defconfig   gcc  
-arm                         socfpga_defconfig   gcc  
-arm                         vf610m4_defconfig   gcc  
-arm                    vt8500_v6_v7_defconfig   gcc  
-arm                         wpcm450_defconfig   gcc  
-arm64                            allmodconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                 randconfig-001-20240305   gcc  
-arm64                 randconfig-002-20240305   clang
-arm64                 randconfig-003-20240305   gcc  
-arm64                 randconfig-004-20240305   gcc  
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-csky                  randconfig-001-20240305   gcc  
-csky                  randconfig-002-20240305   gcc  
-hexagon                          allmodconfig   clang
-hexagon                           allnoconfig   clang
-hexagon                          allyesconfig   clang
-hexagon                             defconfig   clang
-hexagon               randconfig-001-20240305   clang
-hexagon               randconfig-002-20240305   clang
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-001-20240305   clang
-i386         buildonly-randconfig-002-20240305   gcc  
-i386         buildonly-randconfig-003-20240305   gcc  
-i386         buildonly-randconfig-004-20240305   clang
-i386         buildonly-randconfig-005-20240305   clang
-i386         buildonly-randconfig-006-20240305   gcc  
-i386                                defconfig   clang
-i386                  randconfig-001-20240305   clang
-i386                  randconfig-002-20240305   gcc  
-i386                  randconfig-003-20240305   clang
-i386                  randconfig-004-20240305   gcc  
-i386                  randconfig-005-20240305   gcc  
-i386                  randconfig-006-20240305   gcc  
-i386                  randconfig-011-20240305   gcc  
-i386                  randconfig-012-20240305   gcc  
-i386                  randconfig-013-20240305   gcc  
-i386                  randconfig-014-20240305   gcc  
-i386                  randconfig-015-20240305   clang
-i386                  randconfig-016-20240305   clang
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20240305   gcc  
-loongarch             randconfig-002-20240305   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                          multi_defconfig   gcc  
-m68k                           sun3_defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                  maltasmvp_eva_defconfig   gcc  
-mips                       rbtx49xx_defconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                 randconfig-001-20240305   gcc  
-nios2                 randconfig-002-20240305   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-openrisc                    or1ksim_defconfig   gcc  
-openrisc                 simple_smp_defconfig   gcc  
-openrisc                       virt_defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc                randconfig-001-20240305   gcc  
-parisc                randconfig-002-20240305   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   clang
-powerpc                 canyonlands_defconfig   clang
-powerpc                          g5_defconfig   gcc  
-powerpc                 linkstation_defconfig   clang
-powerpc                   microwatt_defconfig   gcc  
-powerpc                   motionpro_defconfig   clang
-powerpc                      pmac32_defconfig   clang
-powerpc                         ps3_defconfig   gcc  
-powerpc               randconfig-001-20240305   gcc  
-powerpc               randconfig-002-20240305   gcc  
-powerpc               randconfig-003-20240305   gcc  
-powerpc                     tqm8560_defconfig   gcc  
-powerpc64             randconfig-001-20240305   clang
-powerpc64             randconfig-002-20240305   clang
-powerpc64             randconfig-003-20240305   gcc  
-riscv                            allmodconfig   clang
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   clang
-riscv                               defconfig   clang
-riscv                 randconfig-001-20240305   clang
-riscv                 randconfig-002-20240305   gcc  
-s390                             allmodconfig   clang
-s390                              allnoconfig   clang
-s390                             allyesconfig   gcc  
-s390                          debug_defconfig   gcc  
-s390                                defconfig   clang
-s390                  randconfig-001-20240305   gcc  
-s390                  randconfig-002-20240305   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                         apsh4a3a_defconfig   gcc  
-sh                                  defconfig   gcc  
-sh                    randconfig-001-20240305   gcc  
-sh                    randconfig-002-20240305   gcc  
-sh                           se7206_defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-sparc64               randconfig-001-20240305   gcc  
-sparc64               randconfig-002-20240305   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   gcc  
-um                                  defconfig   clang
-um                             i386_defconfig   gcc  
-um                    randconfig-001-20240305   gcc  
-um                    randconfig-002-20240305   gcc  
-um                           x86_64_defconfig   clang
-x86_64                            allnoconfig   clang
-x86_64                           allyesconfig   clang
-x86_64       buildonly-randconfig-001-20240305   clang
-x86_64       buildonly-randconfig-002-20240305   clang
-x86_64       buildonly-randconfig-003-20240305   clang
-x86_64       buildonly-randconfig-004-20240305   clang
-x86_64       buildonly-randconfig-005-20240305   clang
-x86_64       buildonly-randconfig-006-20240305   gcc  
-x86_64                              defconfig   gcc  
-x86_64                randconfig-001-20240305   clang
-x86_64                randconfig-002-20240305   clang
-x86_64                randconfig-003-20240305   gcc  
-x86_64                randconfig-004-20240305   clang
-x86_64                randconfig-005-20240305   clang
-x86_64                randconfig-006-20240305   gcc  
-x86_64                randconfig-011-20240305   gcc  
-x86_64                randconfig-012-20240305   gcc  
-x86_64                randconfig-013-20240305   clang
-x86_64                randconfig-014-20240305   gcc  
-x86_64                randconfig-015-20240305   clang
-x86_64                randconfig-016-20240305   clang
-x86_64                randconfig-071-20240305   gcc  
-x86_64                randconfig-072-20240305   gcc  
-x86_64                randconfig-073-20240305   clang
-x86_64                randconfig-074-20240305   clang
-x86_64                randconfig-075-20240305   gcc  
-x86_64                randconfig-076-20240305   clang
-x86_64                          rhel-8.3-rust   clang
-xtensa                           alldefconfig   gcc  
-xtensa                            allnoconfig   gcc  
-xtensa                randconfig-001-20240305   gcc  
-xtensa                randconfig-002-20240305   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Yes, that sounds correct.
 
