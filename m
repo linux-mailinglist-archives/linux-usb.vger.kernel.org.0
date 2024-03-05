@@ -1,251 +1,194 @@
-Return-Path: <linux-usb+bounces-7500-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7501-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4695D8711B9
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Mar 2024 01:33:14 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BBE60871376
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Mar 2024 03:15:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6360D1C20DB6
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Mar 2024 00:33:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5D0571F22ED5
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Mar 2024 02:15:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11F4E4439;
-	Tue,  5 Mar 2024 00:33:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00AB118E20;
+	Tue,  5 Mar 2024 02:14:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=invisiblethingslab.com header.i=@invisiblethingslab.com header.b="K1Z4gYN5";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="qwHM/ScL"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="SPwlIZww";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="Vpd3zWY9"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from fhigh6-smtp.messagingengine.com (fhigh6-smtp.messagingengine.com [103.168.172.157])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D3AF7F;
-	Tue,  5 Mar 2024 00:33:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.157
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709598787; cv=none; b=sg2kxSX4RFJ5oXdBKcrnELNGUGP7XKE5D5evF00bo1qeDBtmIBQ+XMYkVcq1gkORx8vogV/kd5XZbm6QAFuql1KbK+H8B4bB1mtwWiIWp7AkEpTn6bq+MrLnCJN7fjEQ5K5XLG/ixkU0bBwGRHV7I8qiJTiLD6KinR+d0t/p4DE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709598787; c=relaxed/simple;
-	bh=N6tOP2RWdPRzTJ9KeGlyEB+LAPp1OIf/zST7GNIXy9M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Gl+kYVyJbsivddHkJGKI+b30C7CXFJL3K6a0nQfDPBzUHix5iEGLyFjCqsUh13IQRv82t9UOfo7MzPx1u4npH19eP1VzBpeO9BNzViTQLRUR/ILyJRAnzqMzCTIMn0qj8YW/MTaNT8cVOmACVwqs02dNIPNitAJj55NDt1IIdEk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=invisiblethingslab.com; spf=none smtp.mailfrom=invisiblethingslab.com; dkim=pass (2048-bit key) header.d=invisiblethingslab.com header.i=@invisiblethingslab.com header.b=K1Z4gYN5; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=qwHM/ScL; arc=none smtp.client-ip=103.168.172.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=invisiblethingslab.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=invisiblethingslab.com
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailfhigh.nyi.internal (Postfix) with ESMTP id 7841D11400F6;
-	Mon,  4 Mar 2024 19:33:04 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Mon, 04 Mar 2024 19:33:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	invisiblethingslab.com; h=cc:cc:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1709598784;
-	 x=1709685184; bh=wZuDpRIyUxwZpbFgO9ouiTzyAoWAyZapOYUHwxkoViA=; b=
-	K1Z4gYN5l+/76tvNZGSuhYtBCOZ1G1lisWyqv0po381ymXfLYG2fK0U8HLOole3n
-	53EaYa34+h5o/imN97zQprzM8e6w7t9YP3f0zQgcBctSCi7oT5EdUEVpRWrv5UfD
-	YZpiON6vnnH1e2K6zQRFPXhs/rpclp6QxzlWqVLKiP4oDSndt9AkQt2AUdZB/OLy
-	L4gTy/6FiwwcQSusemciamBadsBt6M+2pM2VsawLMLW0WJJa+XESXq6uMYYOVvxZ
-	pF93Oqwc4KeaVFnxLVJRTiXVeFhW+RT6e23sjOVdBfNt2ihEwP5L0jWewOGgiEX6
-	I3eV507z/2mQ6DEFKSBV5A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm1; t=1709598784; x=1709685184; bh=wZuDpRIyUxwZpbFgO9ouiTzyAoWA
-	yZapOYUHwxkoViA=; b=qwHM/ScLraRh9QoSdk9k0Wxc2DC45pwGx3twiyA3j0rP
-	SwLz5U5V/ctXQ6ZugRxMurPCMluWP1G6tKrWP9j/RZUs/NaH+f7iZvbK/zo1Y2YU
-	Vv5xAG+ZqDASi1L0lNGBjgBp2TQJpF89RxeRinkSerfV4L5XwCaXHYQRU0k34dgH
-	ysbs0D+ggKBlzx+qoLh3DhgeX1y6E78iuIPeuXiYcBUO8DH9ESwHK5DoO4SdHVGD
-	ag8gI96rFTNsEbruJZ/s39SW9r8wcPDNxkGUETLdaVHYmFr11t5ffqROge7dEYpA
-	O6xC9kZyvuKBQ6q65YMPFr2Sk1QbZk2WQR14BtRqOQ==
-X-ME-Sender: <xms:QGjmZfFaQd_KhluVR5FHVhbvXCe9C9v-yQV68n2eRjH78TS9KYNgfg>
-    <xme:QGjmZcVaquKqxTfBZBZxoZZbeiCAtGMOLwTvLL_N3qBfXaRXq1Ox0iKRqXtSFaZeL
-    caCXmDRC5sjJw>
-X-ME-Received: <xmr:QGjmZRL8EQtRfD07rgWn0IOv13T9mnckkd0T86o3f2o3Z28RFAZaHocpvHa20sAVZA6k1GWxiO6o2PfmhJNqm3l9kD10lqQKiQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrheekgddvfecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttdejnecuhfhrohhmpeforghrvghk
-    ucforghrtgiihihkohifshhkihdqifpkrhgvtghkihcuoehmrghrmhgrrhgvkhesihhnvh
-    hishhisghlvghthhhinhhgshhlrggsrdgtohhmqeenucggtffrrghtthgvrhhnpefgudel
-    teefvefhfeehieetleeihfejhfeludevteetkeevtedtvdegueetfeejudenucevlhhush
-    htvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrghrmhgrrhgvkhes
-    ihhnvhhishhisghlvghthhhinhhgshhlrggsrdgtohhm
-X-ME-Proxy: <xmx:QGjmZdHrmyBAkVJLEgDF4p7hkz_-aKw8uFIfFgRkiDldiuk9Kc8NrA>
-    <xmx:QGjmZVXyMNdmJz8FA1tD3N3wXBBmdckmKFSjsFwtR0Xjy6oSPjFsFg>
-    <xmx:QGjmZYMo0jZ8E88z4L8fu4rrxQNFfe3p9fRIuB_P07AT1G6Z9h1d7A>
-    <xmx:QGjmZYT717WO7rv0EAVGJGFDs4N5HvcHKIe1GsCSZqSa2ADxjcmdyg>
-Feedback-ID: i1568416f:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 4 Mar 2024 19:33:03 -0500 (EST)
-Date: Tue, 5 Mar 2024 01:33:00 +0100
-From: Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= <marmarek@invisiblethingslab.com>
-To: Demi Marie Obenour <demi@invisiblethingslab.com>
-Cc: Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: usbip doesn't work with userspace code that accesses USB devices
-Message-ID: <ZeZoPAJw2Ip_Lgch@mail-itl>
-References: <ZeYov0k8njwcZzGX@itl-email>
- <2024030406-kilogram-raving-33c5@gregkh>
- <ZeZPLX6z5pyn2Eh_@mail-itl>
- <ZeZetkR-i1bCDr9v@mail-itl>
- <ZeZh82gIm2xo_UFM@itl-email>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BA8D18C28;
+	Tue,  5 Mar 2024 02:14:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1709604896; cv=fail; b=Wu6/pz2PZPfavdt10l/KWIuzjDv4vuq+twwYHRLLJjFYHxbojpDcKMestL/ehFKNNrz7rDVlZXRhPLDNExzG6CE4UrPUmZ1ceJIKS9LMycJndkgvHKXF5Z7AXt1vrOdOqGH0KdoPr1jgLRdDT+ro1LgjjuYtBK/yXJ9gOr0cSYY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1709604896; c=relaxed/simple;
+	bh=8zVcxpc4lj6FlDM3eYcMB8Ypm9Ie0NzSKwujtbNP8os=;
+	h=To:Cc:Subject:From:Message-ID:References:Date:In-Reply-To:
+	 Content-Type:MIME-Version; b=Z0rHKCKLOwEDsiUep4tLQsmlvK1qsv04nbylq5isIkvAsq6TCh9U2APWEWrhKnnsmUtR6+n61994yoFBDL2A70/47ySosPKU2ADAUIqB04hPKLU6x1haEoOc84fhCgJwNcwBEWdmMar6IhpYCd4rphTVhNhbOHrGChrl8kAWWqw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=SPwlIZww; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=Vpd3zWY9; arc=fail smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 424IxfDg002258;
+	Tue, 5 Mar 2024 02:14:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : message-id : references : date : in-reply-to : content-type :
+ mime-version; s=corp-2023-11-20;
+ bh=VgcGe0I+lfb0M9OjfYgcbcsTooWwtpH6IzVi+HDZOrA=;
+ b=SPwlIZwwSqwrBDMicitX1HKe9ILzvYl4ovIYMj5Y/ktspHjmzEyMq71FGnzq9CrrO23u
+ FEJb0iroCaR+0xzXaWhveYul+ioZ6mOdMSZKTSoNthkq5R4CCmSuYni5Vgyq+m1Erogf
+ +Rtb9rWOOWKPworOn+T92EKOFAgkCYZmzv1v9+naK33yg8j2F/pPeZnQpiuY2nryIT1I
+ i3hfwY/1Jb4ZBTtGOY+WiAMO+zehZjepLWY7bHBRLNOMcAaCfOnexomewlOoraIE9ert
+ s4cbWEGtNTr48NqjAPlLlW2xrQtb/mpplbOxZJomH7lXNq6dyeAdUMeq9Lp4lf+N12oo AQ== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3wkv5dd6p3-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 05 Mar 2024 02:14:30 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 4251ldJR016990;
+	Tue, 5 Mar 2024 02:14:29 GMT
+Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2168.outbound.protection.outlook.com [104.47.59.168])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3wktj6s068-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 05 Mar 2024 02:14:29 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=R1OEn262NYAQKC8Domu77PqL6gW3NvcBKOkpN80kp/dCKbv61TaCPVVLrNrgYvyVUkUO6QHK1Nz457s3UHMwg8DyRTVgTT5WdhY/CtrC/4wTS5SPkw+SgPae1MkMmdeGiHbffkeTEcAEH2tUkl8qp8PEhSdfXVzxZbdM4d0zoqMjf/TzIIxt/g3AZgqk1dp2UvDCL2Czii1DK2p/RbthTdFD2/VYh/He5buWUcc4Y/mxc+I46Q29Fl3QhjOG3mMpqrygZ7VTGmyDJWUAp4bDtFUCKwoJg9bken1kfh/Z2rSdiHUa66eQQr3cfX7pKWjGpTncFhaPAn4a5G6/w4fwjg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VgcGe0I+lfb0M9OjfYgcbcsTooWwtpH6IzVi+HDZOrA=;
+ b=MoXOT8gI7V3gcrvIxTPmdCkxXIwhoMRAr/zGKWrkjlYNBI8NLUYJhKTYFaWPZwUggOuNj9Rv+3Ad4CuIyLB+bKbsBI5Wq8VGOU12FSxu8hStfFuAFGBkb5kFBUdUvvF/B2GFRSjOeDT/JazOy9ucWcVwMiXEyntGu9t+sCYXE8X+/STo0CroAJFjcReM40P7m7lDswxS+8maZ3sIZz9Wc7cEVpJ6pqRqMFcSrdA3W7SPRYydzEAbcOcD+A1np4kI6snJCzKwHRbiBMna+ilqnUYcasJQPXGZcBCj5K3fEmslCscjmewUNC8rRcxReNnXlvUps+9d03k6vB3YO4GKrQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=VgcGe0I+lfb0M9OjfYgcbcsTooWwtpH6IzVi+HDZOrA=;
+ b=Vpd3zWY9eTXLNCpx6vmSSKFl7GjXulimioz4pVq0F9+uKrUxzfeEuhgAZcRxvqzBnuRXMz8wC/nnvUMJW3HlqmkBi5fsm+T5dKPNjQrk9OvC8TbUTym1TheclVRiDNM3EvLP+rJpDH/uuLGjE1vsMSjEkvgg/Y/EccQOop3d3LU=
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
+ by DS0PR10MB7398.namprd10.prod.outlook.com (2603:10b6:8:135::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7339.39; Tue, 5 Mar
+ 2024 02:14:27 +0000
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::7856:8db7:c1f6:fc59]) by PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::7856:8db7:c1f6:fc59%4]) with mapi id 15.20.7339.035; Tue, 5 Mar 2024
+ 02:14:27 +0000
+To: Harald Dunkel <harald.dunkel@aixigo.com>
+Cc: "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Keith Busch
+ <kbusch@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>, Jens Axboe
+ <axboe@kernel.dk>,
+        Bart Van Assche <bvanassche@acm.org>, linux-block@vger.kernel.org,
+        linux-usb@vger.kernel.org, Harald Dunkel
+ <harri@afaics.de>
+Subject: Re: RIP on discard, JMicron USB adaptor
+From: "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+Message-ID: <yq14jdlv3cv.fsf@ca-mkp.ca.oracle.com>
+References: <70bc51d7-c8a2-4b06-ab7a-e321d20db49a@aixigo.com>
+	<62296d89-f7e6-4f54-add8-35b531dc657c@rowland.harvard.edu>
+	<Zd9Xbz3L6JEvBHHT@kbusch-mbp> <yq1sf1c1h0x.fsf@ca-mkp.ca.oracle.com>
+	<7a10ff3b-0c4c-4aa3-8218-02d5f27ab062@afaics.de>
+	<029ff780-902e-42da-a5ed-6c306c6cb2e4@aixigo.com>
+Date: Mon, 04 Mar 2024 21:14:24 -0500
+In-Reply-To: <029ff780-902e-42da-a5ed-6c306c6cb2e4@aixigo.com> (Harald
+	Dunkel's message of "Mon, 4 Mar 2024 08:46:56 +0100")
+Content-Type: text/plain
+X-ClientProxiedBy: BY3PR03CA0028.namprd03.prod.outlook.com
+ (2603:10b6:a03:39a::33) To PH0PR10MB4759.namprd10.prod.outlook.com
+ (2603:10b6:510:3d::12)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="WN7gfDbbAqHw1d2/"
-Content-Disposition: inline
-In-Reply-To: <ZeZh82gIm2xo_UFM@itl-email>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR10MB4759:EE_|DS0PR10MB7398:EE_
+X-MS-Office365-Filtering-Correlation-Id: 75ff6b93-780e-436c-f55d-08dc3cb9fbb8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 
+	71o8+8E5F7pJADULaHtlED3DxL2DxMHmxPfDObRWOLl42yWu5ANY9zgk+dTGfu5KOVZ5ljT24/kax6hTt9SH7US+CEVMshI5BsPDCAVd4iaYYzbduUNkGZgy5TUuHYfgrOOX0j1Jdn7f7FE7eWxcZHPpwrWYqigiafl1oh+GvYeuVfdgKH8CKHYGcMzRsKUL5JeP2zt/LFnYUwEJYGmzEn6fnea76lL/pz6khzYNjVcgHWBhOyybL9h5tULeQZam/wMkJ+H3cSEbrvpeBc5IPDEA3zfAiCvfcEtrteIlpJEqANHUa2aKoa/6uQ0UJdKKW61jv4BnVUZ1FtX66G5Dl2ChCTQBPciQvu1pol/5Onp55D11X+4BwIcHULZuRA/KC3IvnhjvLntdicIJLzLXsSA3uD8ptt2qazkGOAsUSKtdjnXnXOeIJIeG1nT3TTT2586ssjmh0I3OOrZLEV7LvYhx7i/hWvGjZKOYSV7061APOVNbTmQ4pt7yvtr1JFtq1qOaxL9STBj8uWRurc6zP2kZ5LdxqKnF7TTy/3zah/hWNHWGi8LsgnIzMs+EyGNYcKiWwFRp0JfVMuL51GmcZGbtKLU8+9vmv6kokviGz5donN/a9qVhr/AC+u8CXJN0Q7UhKqqVn0JPm0vJijxEO3soYaZWAlI5MW5xQPrjPAc=
+X-Forefront-Antispam-Report: 
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: 
+	=?us-ascii?Q?55oybX24McRn6XmSLaFx2Yd7Kw53hRp2GB0uMl9Dy66BP/kFDtIuB8lA5ayJ?=
+ =?us-ascii?Q?gjr6LLRY/ifzm/ACXKK1pFVxJayzQwlK9cP7VFQvgO1HZso0aZS5aCCdXbXj?=
+ =?us-ascii?Q?uvdxCWaIutpJQMFcuMjS2/NIJZrnIk2wmDk8SkREwBGwpq8UQuCMl5NliwjM?=
+ =?us-ascii?Q?kdNKCwHVOjePP3uE+WhKW6u424wkoDOb4IharoX95/W3m8pQMfpS9QFWXYC4?=
+ =?us-ascii?Q?p8HmML4DsGbUKkIIl6OE2GlwqkY7evgyRlttN6etJU6yGYz6l68Y3kio0fkC?=
+ =?us-ascii?Q?v5T2pNsilJTY/uAZCV5JTHo5jo1VtciVVlLZqWWccai/G2kE+Yo/io0kwoix?=
+ =?us-ascii?Q?YOrJOjzClaarYYaPmMcrQfAzlL2itAUEXnsps8U43KUSM3/78M55rUKncvJZ?=
+ =?us-ascii?Q?XT3a4dyj4y1uqbiOz4U1VsHK1ZeN5fX4/f9VwBkRriRE5b+0bg9HX6a2tL99?=
+ =?us-ascii?Q?r7J1i8+Z6DvsYzNPgBx6FHUZbCu7JROU/OdNgAu3tLPODCBshGXfysMNRxmN?=
+ =?us-ascii?Q?OOa5ORHAm8X1XATqMsoeXuykZzxNr/D7qhk8TZEj/BUWoxTKTbLrkmpPvwmZ?=
+ =?us-ascii?Q?W42FoAop/c+agJtC7vQvXSHDvleo8fOV74/Lh9tyt5aa5jQcBFqj7z51/u3C?=
+ =?us-ascii?Q?+30F5fN04libRwpZu/bTh/t5L45tXs89/nZ21E8C6EF3d/W2FTBXDdu7Olmf?=
+ =?us-ascii?Q?Pf5RH/xdPdklbhq9rACvOrFfNNfpIZX52n1dAJseYb2c/N62ILL2UPUAlf+r?=
+ =?us-ascii?Q?VEbQ20WmFlMKE1jjor9Q7A3k3+28PcrENPsgCYqA0loUQqBrIOW1We0rxMqw?=
+ =?us-ascii?Q?pab90DvdDh2xn/nJiveoph0vDP+O9m3bD7DGREbcdzTPodzpbUXaYih8a22c?=
+ =?us-ascii?Q?GUTkyVBMTfbjF7agAQoG8jOwQueyUcMeWVP3Iph6PnyDvH8EANxlZK8i8UMH?=
+ =?us-ascii?Q?QnNj6eIu5VxWu1wLzVOgYdDWLBSCjUk1Ym38TJwN8b2jRQ94texZB8l+yl99?=
+ =?us-ascii?Q?oAu2hGhChpFNv8ktu7YGuBxFTjFZuU15+LjmMqFnW348CpTlu8DzYwZOCZI3?=
+ =?us-ascii?Q?e0K6zxozcB+qQvudliVqswcGz0KxHyoMvI7mxWAS8VR9Rbs5ENz2GsMPK/Hb?=
+ =?us-ascii?Q?aumwS7xbCmUVRO5Bnm8XXbaJMybqXM5cY/LLRDpXCQub9e7lq2LW+4qJkOUP?=
+ =?us-ascii?Q?CtO7sV/z9HIx65hxmg4jbkOHAYAZg88qnyquYis/Mz4E79nccwm4SbpcZMdX?=
+ =?us-ascii?Q?HSuSwD6qoX9xhuV0Mm5auI68143uymAPjvBTDrJPe2fhs7IXDuOjcS1lO1DR?=
+ =?us-ascii?Q?IkZ/qMqlK/4DQkqDCZ1StHArJq1jYOD28OfAe/NFU/4Y3i3PFLTWtKAcc6Xe?=
+ =?us-ascii?Q?Kf08y/m79EvClmog9GoFfGZBg181igKvxyfP75nbrX4B8Y++y84uZEnoH7Wy?=
+ =?us-ascii?Q?X2qkRE5y8d7LFF90kuBOI25nSPEHd5I9CWfRQRjjtMlLdR7vY41huMlgsiSp?=
+ =?us-ascii?Q?nxsao2egXNIqr6lFTgHBqNu8cvECaa63//kg9PU7SCRAC5lJNspncR2w2mSM?=
+ =?us-ascii?Q?1MVSNxWQXsm9Bi6fTcixI321aj9al/Ha3KQa6+EB3e0XuLRIi8wTHI23INVP?=
+ =?us-ascii?Q?fQ=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
+	ogDFeHH2Y8Y0IHiadLRYNdu5cxHJvk+W4nV+F6p/qMI07NRcR3pDXO/83eFsXxImt68S7nr/WI4Cdvso03CxPKnzonMg6LVgBd0rPSCJ7cVZSIN03TdSnIh+WqTDlg56IrZt70daeqZCJYsiSl98rgMfjG9Sqlz1pYrwgE2LBOaAuFq7nraTgAiMwDZCK/FnVw5cX5y2r4UKtIIFPJNjKCH7YSzbYV0cuJ5j8pHgVTuGGaWvVlu3CS8zp9ycA1rjLXCyVrrkITNKjcQlMjKIEoUmxjtKeuY/cYrQZAciu8kjOvsjQYJonYTmQmu/ZdhOc+qQmqBrmYv5siLd0oN2fbCyvpIRcrkwCpPxiko5pK055gUscNfcgg42iOhZ8FIQqfp6PP/HLVhxUzA4T24B/GZ/e4+IlGb9qsyhN2ct/40z16TlVsku6iH1szwnFqJGoSChwYlC4w3GYx8xgTd7eSrrHpjYXuys6HEdLQvg6SRYq8IHak1kne6f/dh3d42BR154es5yK78sZf+9KbzIeyx1wNgUnyct0w31oH8AnCUjqreDFdoJ8WzMKercnkqM+2GJt7lAeFh5JJzw1ouyNDNmf0ECgXae19LJqGV8sfU=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 75ff6b93-780e-436c-f55d-08dc3cb9fbb8
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Mar 2024 02:14:27.1409
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8c4ylLAlf9/5hc9VSlgay+8VRaHgG3VHMXk0ZBZMLMB8zeogLfUuTJqalMuG2aDsqU8rJp4UrMkh+5g/bCKpJlCB9vIKdXrairDHaNAd8f0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR10MB7398
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-03-04_20,2024-03-04_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=828 bulkscore=0 mlxscore=0
+ spamscore=0 phishscore=0 suspectscore=0 malwarescore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311290000
+ definitions=main-2403050015
+X-Proofpoint-GUID: BNhEnmbaAQzZ_2ubW9AH0mz15THndzEs
+X-Proofpoint-ORIG-GUID: BNhEnmbaAQzZ_2ubW9AH0mz15THndzEs
 
 
---WN7gfDbbAqHw1d2/
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 5 Mar 2024 01:33:00 +0100
-From: Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= <marmarek@invisiblethingslab.com>
-To: Demi Marie Obenour <demi@invisiblethingslab.com>
-Cc: Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: usbip doesn't work with userspace code that accesses USB devices
+Harald,
 
-On Mon, Mar 04, 2024 at 07:06:08PM -0500, Demi Marie Obenour wrote:
-> On Tue, Mar 05, 2024 at 12:52:22AM +0100, Marek Marczykowski-G=C3=B3recki=
- wrote:
-> > On Mon, Mar 04, 2024 at 11:46:04PM +0100, Marek Marczykowski-G=C3=B3rec=
-ki wrote:
-> > > On Mon, Mar 04, 2024 at 09:04:00PM +0000, Greg KH wrote:
-> > > > On Mon, Mar 04, 2024 at 03:01:51PM -0500, Demi Marie Obenour wrote:
-> > > > > Qubes OS users are reporting that MTP doesn't work with USB passt=
-hrough.
-> > > > > Fastboot (used for flashing a custom OS to an Android device) also
-> > > > > doesn't work.  Kernel-mode drivers, such as Bluetooth and USB sto=
-rage,
-> > > > > seem to usually work as expected.  Since MTP and fastboot are both
-> > > > > implemented in userspace, it appears that there is some problem w=
-ith the
-> > > > > interaction of usbip, our USB proxy (which is based on USBIP), and
-> > > > > userspace programs that interact with USB devices directly.
-> > > > >=20
-> > > > > The bug report can be found at [1] and the source code for the US=
-B proxy
-> > > > > can be found at [2].  The script used on the sending side (the on=
-e with
-> > > > > the physical USB controller) is at [3] and the script used by the
-> > > > > receiving side (the one the device is attached to) is at [4].  Al=
-l of
-> > > > > these links are for the current version as of this email being se=
-nt, so
-> > > > > that anyone looking at this email in the future doesn't get confu=
-sed.
-> > > > >=20
-> > > > > Is this a bug in usbip, or is this due to usbip being used incorr=
-ectly?
-> > > >=20
-> > > > I'm amazed that usbip works with usbfs at all, I didn't think that =
-was a
-> > > > thing.
-> > > >=20
-> > > > If you have a reproducer, or some error messages somewhere, that mi=
-ght
-> > > > be the easiest way forward.  In reading the bug report, it looks li=
-ke
-> > > > the "bridge" you all made can't handle the device disconnecting its=
-elf
-> > > > properly?  But that's just a guess, could be anything.
-> > >=20
-> > > Device disconnecting itself indeed is an issue (our proxy doesn't
-> > > automatically reconnect it, at least not yet). But that's definitely =
-not
-> > > the only issue, things break also when disconnect is not involved.
-> > >=20
-> > > Terminology:
-> > > 1. sys-usb - a VM where USB controller (a PCI device) lives; here
-> > > usbip-host is attached to the device
-> > > 2. testvm - target VM where usbip is connected; here vhci-hcd is used
-> > > 3. qvm-usb - tool that connects the above two (equivalent of
-> > > userspace part of standard usbip)
-> > >=20
-> > > Specific steps:
-> > > 1. Connect android phone - at this point it's only in sys-usb
-> > > 2. Switch its mode to file transfer - observe reconnect in sys-usb
-> > > 3. Use qvm-usb to attach it to the testvm
-> > > 4. Call jmtpfs -d /mnt in testvm
-> >=20
-> > Or maybe reset or something is involved here too?
-> >=20
-> > After using qvm-usb to attach _and detach_ the device, it stays bound to
-> > usbip-host driver (that's intentional). But then, even after re-binding
-> > back to the "usb" driver, jmtpfs called in sys-usb directly fails the
-> > same way, including failure to reset.
-> >=20
-> > In fact, even without usbip involved at all, jmtpfs directly in sys-usb
-> > works only once. The second attempt (without either physically reconnec=
-ting
-> > the phone, or changing its more to "no data transfer" and back to "file
-> > transfer") fails the same way. After terminating the first instance, I
-> > see just this logged:
-> >=20
-> >     [921332.525210] usb 2-1: reset high-speed USB device number 22 usin=
-g xhci_hcd
->=20
-> What happens if the device is not bound to _any_ driver in sys-usb?  For
-> instance, does the problem go away if the only USB-related drivers in
-> sys-usb are xhci-pci, usbip-host, and their dependencies?  If not, what
-> about if sys-usb's kernel has no other USB-related drivers included at
-> all?
+> having some kind of feedback would be nice. Is this a known problem?
+> User error?
+>
+> Of course I would be glad to help to track down this problem.
 
-I don't think I can get rid of the "usb" driver, and that's what binds to
-the device. There is no driver bound to the first interface of the
-device (2-1:1.0) at all.
+Well, the device reports that block provisioning is disabled (lbpme=0)
+which explains why discard is not enabled by default.
 
-> Also, if you have not done so already, could you try uninstalling gvfs
-> from sys-usb's template?  gvfs might be interacting with the device.
-> Using a -minimal template might help.
+Oddly enough your device does not report an UNMAP granularity. I'm
+trying to figure out how your discard granularity ends up being 0 given
+that your device reports a physical block size of 4096.
 
-I highly doubt it would change anything.
-
-> > Since both problematic cases involve Android, maybe the actual issue is
-> > somewhere in Android instead of usbip? But then, fastboot could be a
-> > completely different issue, likely related to reconnection (this one I
-> > haven't tried to reproduce, and can't find much details in our issues
-> > tracker).
-> > On the other hand, USB tethering works just fine, so at least some
-> > Android functions do work with usbip (but then, it's a kernel driver,
-> > not usbfs).
-> > Could be also an issue with just MTP implementation on either side of
-> > the connection (I did tried also gvfs instead of jmtpfs with similar
-> > result, but they likely use the same implementation). Since that's
-> > Android, the device side is Linux too, but I don't know how MTP is
-> > implemented there (I don't see MTP gadget function in upstream Linux).
->=20
-> I suspect MTP is implemented in userspace somewhere in AOSP.
-
---=20
-Best Regards,
-Marek Marczykowski-G=C3=B3recki
-Invisible Things Lab
-
---WN7gfDbbAqHw1d2/
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEhrpukzGPukRmQqkK24/THMrX1ywFAmXmaDwACgkQ24/THMrX
-1yxsRgf+NaWUFQIbjKfO9lABM6LoyHD8VWptDVKH/sjrdvn2asmmNDnfqOmj+ZGl
-rZwxXHfgOvL3atnUHRCbMCPo1PwH4+6C3xyPBkW+ISTCLE/hk1g9WUDkxx/RJ9z9
-jSUIw07LThGcPp2zkLynNZRGBoc5Jz/JFX75GGIS2Fx/GnwVdmXpjJGou8cul7+e
-rvXkYfslXT8JLG8SZ3XmmfWF6eQ6v109kyEE9csYC5buOe77hT0ej/ur8naSjstl
-4QeWZFOxZ8WZIkiKwo9E4uGQI7ywU0Mur2Rjm46jfEc9kXVP/VvHzv2msbStQ5xU
-QUsZHWfwDgSE4ZxQRlLwfPUfxIxK0g==
-=HwDX
------END PGP SIGNATURE-----
-
---WN7gfDbbAqHw1d2/--
+-- 
+Martin K. Petersen	Oracle Linux Engineering
 
