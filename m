@@ -1,164 +1,279 @@
-Return-Path: <linux-usb+bounces-7550-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7551-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03979872287
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Mar 2024 16:17:53 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E7CDE872305
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Mar 2024 16:41:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 355921C216D1
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Mar 2024 15:17:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 618321F25E1E
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Mar 2024 15:41:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0270B1272A8;
-	Tue,  5 Mar 2024 15:17:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F26412880D;
+	Tue,  5 Mar 2024 15:40:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xd+RLHP8"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="l7B3LSMF"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80923126F11
-	for <linux-usb@vger.kernel.org>; Tue,  5 Mar 2024 15:17:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AA0C1272DE;
+	Tue,  5 Mar 2024 15:40:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709651866; cv=none; b=bdONbNBTbR+niC2a5OiXmhwJrPw6yAUj0qB3Vfw2CXM/JKMzNYtb63IphJPXgZ1S5myUE6GG0VwQSQ3q2PAg4DSxpuBdkYlwZ9OzvwPdM1/bbpNbJiRbTdXzS2eCtauuMrnHn2+Z8DXy56r/28Xau1b9jL/jjRbXrBkMqGeY8dc=
+	t=1709653215; cv=none; b=qPHYZoe58JMxLh52Trnv3FsRr0mmd0WpVVWJLTUODmSQZT/99HvBESNnAXc9UTrtIx47YFmqDImQUVVEJ2iek1FEH2vtaqmBcz35M4BbwZTwsULhwuIbIeOMccJB+w3UmimrfRuHESAtlvwI/EeFnUnwWin3kTpS7uvKuBOKQOw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709651866; c=relaxed/simple;
-	bh=IpbO9r4iYjiAkuYkmFPgdHhsccL3pjk3CctMn8K3YW4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sg0ksEh3DQBQ+/Jv6NeciNH4jhXaYHjEL72ZF4GW7bS307gEnt64RSH5x8QNcldlAz93Oj6/t0+7FqvhvXROGWC6q8TdGHG6SnuA1683HN8lLRU5SwANUzBZ6wjk8JHgsXoBYfXoSPrdS74flWNBympedy8L+wJzp/uPgob6xDE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xd+RLHP8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56005C433C7;
-	Tue,  5 Mar 2024 15:17:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709651866;
-	bh=IpbO9r4iYjiAkuYkmFPgdHhsccL3pjk3CctMn8K3YW4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Xd+RLHP8+gKHHdsRqccLHG4W1R4L/BGznEg6/9XRr987UmXM/WzBAz48gIv8gDfM5
-	 rLDb9LNb2XexoqL6NJZs0Qu9upqDCwsIDdNG6pdF6oWa5PXGMx0T+g+wVkgO+4QPoB
-	 N13yg5MVUc5MMWtjEYgQ6RP3fTalTnPlGGaLDIRIkPvCUEE33aAqmR0yN3FkKT+m3j
-	 CbLU/XK9YudRNnLxc6oqPHrh6sr4t2FJVtf3asyVpnvy8IP7Bth46AO/Ia46syDXA9
-	 867XB7sztegO0GigslMXl831tcNFsvRk7Ylm37MZsnJSp+WCp8nAUabesmY6GXYSlY
-	 sLaxNHymX+A2g==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1rhWYE-000000000X9-03a4;
-	Tue, 05 Mar 2024 16:17:54 +0100
-Date: Tue, 5 Mar 2024 16:17:54 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Mike Miller <u492758@gmail.com>
-Cc: linux-usb@vger.kernel.org
-Subject: Re: Tell linux-usb@vger.kernel.org to add your device to a proper
- driver
-Message-ID: <Zec3oiuao-jnN09x@hovoldconsulting.com>
-References: <b133097f-0793-47bb-953f-4c31a721a5c6@gmail.com>
- <ZeWgs0ZClpCwE5lT@hovoldconsulting.com>
- <d7e18ecb-a239-4dfd-8df2-c0df89997b98@gmail.com>
+	s=arc-20240116; t=1709653215; c=relaxed/simple;
+	bh=HQ8LElIrX/sLoGmlzmqY66LOagmGK5gMS7TguVW+4Jc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=ABpJ+bqunBTmoVZPU2BrABXIoMgPPhacQoSGD+hl/oXNI176zXjQvK7qklWHDrKrt25Pr2j2c01uKtKPymGAFofY0XAlLJE28Pl+vTvnGevmu2BCiEBSrbbfPXt3TpePXOZldOBRlxeGoY2URa7jyisy/W6NX8B0hh3B3k9uPCo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=l7B3LSMF; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 425EgpvG030820;
+	Tue, 5 Mar 2024 15:40:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=mUhQ9NC4uDpSL805AO4NNumQdKUkJS0ItnGbPImrg5k=; b=l7
+	B3LSMF//ly4WIKMhNJlpVYVWjJCFdWZ3MWMZzr1nLU1sJU0sp8BKvodvuOapnbqS
+	leZx/o03alqJDu4mcMg1TyAbSrL+CrEEluo/nJSGxh5ECtBtshaeo7CgxJw2m/Yp
+	N1dLQT6rb2Tmtiv1WvkecbTmLvs2XB90/oz84Qu8MeG3gGxYbC3JYRcWp+jzH2f7
+	OSbjQTK3WqsGpEi+TcEOleqyD70Ne9FITmpYv329fguT57LyVm73FvRPFsB88851
+	mWEgpnjH5kC7XRGQQ19mhi3kKQwIJr48/cJNjqVPXLhBt4B7Jf2VVb6ByiDTK9eG
+	rqjeQm+pNWlDk1U8ua3Q==
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wnucrsd3m-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 05 Mar 2024 15:40:06 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 425Fe57Y028651
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 5 Mar 2024 15:40:05 GMT
+Received: from [10.216.49.73] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Tue, 5 Mar
+ 2024 07:40:00 -0800
+Message-ID: <f329cf0c-6fce-43ae-bff8-ceb02a246068@quicinc.com>
+Date: Tue, 5 Mar 2024 21:09:57 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d7e18ecb-a239-4dfd-8df2-c0df89997b98@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v15 7/9] usb: dwc3: qcom: Refactor IRQ handling in glue
+ driver
+To: Johan Hovold <johan@kernel.org>
+CC: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring
+	<robh+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Wesley Cheng
+	<quic_wcheng@quicinc.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "Greg
+ Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Conor Dooley
+	<conor+dt@kernel.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Felipe Balbi
+	<balbi@kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_ppratap@quicinc.com>,
+        <quic_jackp@quicinc.com>
+References: <20240216005756.762712-1-quic_kriskura@quicinc.com>
+ <20240216005756.762712-8-quic_kriskura@quicinc.com>
+ <ZeHd5Hh3-cDByLd-@hovoldconsulting.com>
+Content-Language: en-US
+From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <ZeHd5Hh3-cDByLd-@hovoldconsulting.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: NkQBllxYU4f3h0JeqWq_DvvFR9T3N06G
+X-Proofpoint-ORIG-GUID: NkQBllxYU4f3h0JeqWq_DvvFR9T3N06G
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-03-05_12,2024-03-05_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 bulkscore=0
+ spamscore=0 adultscore=0 mlxscore=0 phishscore=0 priorityscore=1501
+ malwarescore=0 impostorscore=0 mlxlogscore=999 lowpriorityscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2402120000 definitions=main-2403050125
 
-On Tue, Mar 05, 2024 at 09:50:09PM +0800, Mike Miller wrote:
 
-> Since sending you the email, a couple of things I have also noticed.
+
+On 3/1/2024 7:23 PM, Johan Hovold wrote:
+
+[...]
+
+>> +
+>>   struct dwc3_acpi_pdata {
+>>   	u32			qscratch_base_offset;
+>>   	u32			qscratch_base_size;
+>>   	u32			dwc3_core_base_size;
+>> -	int			qusb2_phy_irq_index;
+>> -	int			dp_hs_phy_irq_index;
+>> -	int			dm_hs_phy_irq_index;
+>> -	int			ss_phy_irq_index;
+>> +	/*
+>> +	 * The phy_irq_index corresponds to ACPI indexes of (in order)
+>> +	 * DP/DM/SS/QUSB2 IRQ's respectively.
+>> +	 */
+>> +	int			phy_irq_index[NUM_PHY_IRQ];
+>>   	bool			is_urs;
+>>   };
 > 
-> 1. If I run the Audrino IDE (on windows), I have to plug in the device 
-> after I initiate the upload of the script (it actally tells me to do it).
+> I asked you to add a port structure and get rid of the PHY indexes in
+> v13, and so you did for the diver data below, but you still have an
+> array of indexes here for the ACPI data.
 > 
-> 2. I have to use a specific cable (1 of 3 I have tried).
+> I don't think ever got around to actually reviewing the ACPI hack (and
+> maybe I was hoping that we'd be able to drop ACPI support before merging
+> multi-port support), but removing these fields and replacing them with
+> an array is a step in the wrong direction (e.g. making the code harder
+> to read).
 > 
-> 3. It doesnt create the ACM0 device I was expecting and ttyS0 doesnt 
-> work (not ttys4, which are the only 2 options).
+> Why can't you just add a helper function which returns one of these
+> fields based on the interrupt name string?
 
-The generic USB serial driver, which you tried to use and which printed
-the message about reporting this upstream, would have created a ttyUSB0
-character device if it worked.
+I think since [1] has been accepted, this comment has been taken care of.
 
-But as I mentioned below, and as is clear from the lsusb output you
-posted, the device in question does not have any bulk endpoints, which
-the USB serial driver requires.
+> 
+>> +struct dwc3_qcom_port {
+>> +	int			dp_hs_phy_irq;
+>> +	int			dm_hs_phy_irq;
+>> +	int			ss_phy_irq;
+>> +};
+> 
+> And as I've explicitly said before, you should include hs_phy_irq here.
+> 
+> It's a port interrupt and special casing just this one make no sense at
+> all even if there are no multi-port controller that use it.
+> 
 
-I don't know how this device is expected to work, but it does not look
-like a serial device in its current (default) configuration. Perhaps it
-needs to be reconfigured before you can use it somehow.
+Okay. Will add it to port structure.
+I only kept it outside because there are no real devices which has 
+multiple ports and qusb2_phy_irq in them.
 
-> Anyway, to your particular request, with the "right" cable, the lsusb -v 
-> output is
+>> +
+>>   struct dwc3_qcom {
+>>   	struct device		*dev;
+>>   	void __iomem		*qscratch_base;
+>> @@ -74,9 +90,7 @@ struct dwc3_qcom {
+>>   	struct reset_control	*resets;
+>>   
+>>   	int			qusb2_phy_irq;
+>> -	int			dp_hs_phy_irq;
+>> -	int			dm_hs_phy_irq;
+>> -	int			ss_phy_irq;
+>> +	struct dwc3_qcom_port	port_info[DWC3_MAX_PORTS];
+> 
+> Just name the array 'ports' as I already suggested. It's more succinct
+> and makes the code that uses it easier to read.
+> 
+>>   	enum usb_device_speed	usb2_speed;
+>>   
+>>   	struct extcon_dev	*edev;
+>> @@ -91,6 +105,7 @@ struct dwc3_qcom {
+>>   	bool			pm_suspended;
+>>   	struct icc_path		*icc_path_ddr;
+>>   	struct icc_path		*icc_path_apps;
+>> +	u8			num_ports;
+> 
+> Any reason not to keep this one closer to the ports array?
+> 
+>>   };
+>   
 
-> Bus 001 Device 022: ID 16d0:0753 MCS Digistump DigiSpark
-> Device Descriptor:
->    bLength                18
->    bDescriptorType         1
->    bcdUSB               1.10
->    bDeviceClass          255 Vendor Specific Class
->    bDeviceSubClass         0
->    bDeviceProtocol         0
->    bMaxPacketSize0         8
->    idVendor           0x16d0 MCS
->    idProduct          0x0753 Digistump DigiSpark
->    bcdDevice            2.02
->    iManufacturer           0
->    iProduct                0
->    iSerial                 0
->    bNumConfigurations      1
->    Configuration Descriptor:
->      bLength                 9
->      bDescriptorType         2
->      wTotalLength       0x0012
->      bNumInterfaces          1
->      bConfigurationValue     1
->      iConfiguration          0
->      bmAttributes         0x80
->        (Bus Powered)
->      MaxPower              100mA
->      Interface Descriptor:
->        bLength                 9
->        bDescriptorType         4
->        bInterfaceNumber        0
->        bAlternateSetting       0
->        bNumEndpoints           0
->        bInterfaceClass         0
->        bInterfaceSubClass      0
->        bInterfaceProtocol      0
->        iInterface              0
-> Device Status:     0x0067
->    Self Powered
->    Remote Wakeup Enabled
->    Test Mode
->    Debug Mode
+[...]
 
-> On 4/3/24 18:21, Johan Hovold wrote:
-> > On Wed, Feb 07, 2024 at 08:48:12PM +0800, Mike Miller wrote:
- 
-> >> I am struggling to get a cheap arse Chinese knock-off Arduino Nano
-> >> working on my
-> >>
-> >> Linux MyLinux 6.5.0-15-generic #15~22.04.1-Ubuntu SMP PREEMPT_DYNAMIC
-> >> Fri Jan 12 18:54:30 UTC 2 x86_64 x86_64 x86_64 GNU/Linux
-> >>
-> >> and I get the message
-> >>
-> >> [ 2840.099780] usb 2-1.2: new low-speed USB device number 8 using ehci-pci
-> >> [ 2840.210523] usb 2-1.2: New USB device found, idVendor=16d0,
-> >> idProduct=0753, bcdDevice= 2.02
-> >> [ 2840.210537] usb 2-1.2: New USB device strings: Mfr=0, Product=0,
-> >> SerialNumber=0
-> >> [ 2840.211335] usbserial_generic 2-1.2:1.0: The "generic" usb-serial
-> >> driver is only for testing and one-off prototypes.
-> >> [ 2840.211338] usbserial_generic 2-1.2:1.0: Tell
-> >> linux-usb@vger.kernel.org to add your device to a proper driver.
-> >> [ 2840.211340] usbserial_generic 2-1.2:1.0: device has no bulk endpoints
+>> -	irq = dwc3_qcom_get_irq(pdev, "ss_phy_irq",
+>> -				pdata ? pdata->ss_phy_irq_index : -1);
+>> -	if (irq > 0) {
+>> -		ret = dwc3_qcom_request_irq(qcom, irq, "ss_phy_irq");
+>> -		if (ret)
+>> -			return ret;
+>> -		qcom->ss_phy_irq = irq;
+>> +	for (i = 0; i < irq_count; i++) {
+>> +		irq_index = dwc3_qcom_get_irq_index(irq_names[i]);
+>> +		if (irq_index == -1) {
+>> +			dev_err(&pdev->dev, "Unknown interrupt-name \"%s\" found\n", irq_names[i]);
+> 
+> This is now spamming the logs with errors like
+> 
+> 	dwc3-qcom a6f8800.usb: Unknown interrupt-name "pwr_event" found
+> 
+> which is clearly just broken.
+> 
+>> +			continue;
+>> +		}
+>> +		port_index = dwc3_qcom_get_port_index(irq_names[i], irq_index);
+>> +		if (port_index == -1) {
+>> +			dev_err(&pdev->dev, "Invalid interrupt-name suffix \"%s\"\n", irq_names[i]);
+>> +			continue;
+>> +		}
+>> +
+>> +		acpi_index = dwc3_qcom_get_acpi_index(qcom, irq_index, port_index);
+>> +
+>> +		irq = dwc3_qcom_get_irq(pdev, irq_names[i], acpi_index);
+>> +		if (irq > 0) {
+>> +			ret = dwc3_qcom_request_irq(qcom, irq, irq_names[i]);
+>> +			if (ret)
+>> +				return ret;
+>> +
+>> +			switch (irq_index) {
+>> +			case DP_HS_PHY_IRQ_INDEX:
+>> +				qcom->port_info[port_index - 1].dp_hs_phy_irq = irq;
+>> +				break;
+>> +			case DM_HS_PHY_IRQ_INDEX:
+>> +				qcom->port_info[port_index - 1].dm_hs_phy_irq = irq;
+>> +				break;
+>> +			case SS_PHY_IRQ_INDEX:
+>> +				qcom->port_info[port_index - 1].ss_phy_irq = irq;
+>> +				break;
+>> +			case QUSB2_PHY_IRQ_INDEX:
+>> +				qcom->qusb2_phy_irq = irq;
+>> +				break;
+>> +			}
+>> +
+>> +			if (qcom->num_ports < port_index)
+>> +				qcom->num_ports = port_index;
+>> +		}
+>>   	}
+> 
+> Why don't you add a port helper for fetching the interrupts instead?
+> 
+> There are multiple ways that you can use to determine if this is a
+> multiport controller or not; you can use OF match data, or simply look
+> at one of the interrupts that would always be there for a multiport
+> (or single port) controller (e.g. "dp_hs_phy_1").
+> 
+> You can even determine the number of ports first by parsing the
+> interrupts names and looking for the highest port number.
+> 
+> Then you can iterate over the ports and parse the interrupts for each
+> port in turn, which should allow for a much cleaner and less
+> error-prone implementation.
+> 
 
-> > Hmm. Without bulk endpoints you shouldn't be able to actually use the
-> > device with the generic driver.
+With [1] merged, I think I can use your suggestion of going through and 
+checking if dp_hs_phy_X is present or not and if present, it is 
+multiport and go through dp_hs_phy_{1/2/3/4} to see the num of ports 
+present.
 
-Johan
+That must simplify the code and make it clean as well.
+
+[1]: 
+https://lore.kernel.org/all/20240305093216.3814787-1-quic_kriskura@quicinc.com/
+
+Regards,
+Krishna,
 
