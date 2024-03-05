@@ -1,101 +1,240 @@
-Return-Path: <linux-usb+bounces-7527-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7528-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B81A9871790
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Mar 2024 09:06:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 99B26871809
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Mar 2024 09:19:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EA1C81C21AEF
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Mar 2024 08:06:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BEE951C21121
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Mar 2024 08:19:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7F7E7F467;
-	Tue,  5 Mar 2024 08:06:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D9F47F482;
+	Tue,  5 Mar 2024 08:17:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="UnbE/QWz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from cstnet.cn (unknown [159.226.251.81])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F8287EEE1;
-	Tue,  5 Mar 2024 08:06:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C77279F2;
+	Tue,  5 Mar 2024 08:17:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709625981; cv=none; b=sI2ABXHDV0bYftyMMOIeHhXeJuZnEx+pLZrLaxTHmlCIkyI7VVGTSy7LwOFeV2Eko3CBkHhMRD5GPgLAS2c98kCHN6R7T560CurXBCVvKww1TY6VFK6NQN6ublN326iHJAWedgoAMZcdQWM6nM0pn3jIuJHyB7C8pPcraYVA1VI=
+	t=1709626647; cv=none; b=dl+K1U68eY3Lg8k7qdA28nLfbkWky7VqvlNn2mcJvzWkUjd3VA9lKZ6BesXJM1hg/VY5J/09fiRZsR1C0s07BrnSolmDyMqfhjLBCz5k+L3eMh3/cxJDdFLnNzdkOaHGjPkFGEyDDeL55nkJCvM3sBciLPHNqKQJY/XlkFnJtIY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709625981; c=relaxed/simple;
-	bh=ySWIDViivnyBgPoRDA0NQG2nLO6tW6adzChOSmMQGcc=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=PxQT6GddQTlm7zZ7SY+J0oV9jFnXg0GemVpHaAbBt4SPHAWUjNk0ZrU6Q04X9fUBPPIHyJyTQWgU+bhWaP4/CsQY3aozVyA+/FALBh+Epe3IYQNKHSF+vNSsqkekMxS47uYDbplep4wly3PQmUL+u5hVgKVMNROX1KC4+D+4s2A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
-Received: from localhost (unknown [124.16.138.129])
-	by APP-03 (Coremail) with SMTP id rQCowAD3_v7x0OZlJi1KBA--.14974S2;
-	Tue, 05 Mar 2024 15:59:45 +0800 (CST)
-From: Chen Ni <nichen@iscas.ac.cn>
-To: davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	justinstitt@google.com,
-	andrew@lunn.ch,
-	linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Chen Ni <nichen@iscas.ac.cn>
-Subject: [PATCH] sr9800: Add check for usbnet_get_endpoints
-Date: Tue,  5 Mar 2024 07:59:27 +0000
-Message-Id: <20240305075927.261284-1-nichen@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1709626647; c=relaxed/simple;
+	bh=Scq4z644jE8YjDLQKqzdXOBUBpcHsdXLwob6hlsAETw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=lJulNJKa0ZNdKo8lmuL2Q+Rpy1aGJo2dg+JqRCoJAXj2kviBIs64lkK4XNHIuehkkkqNLZ2NBHCabE07fVr4Ll1WwOjYTgqQCG+1moivCOsYl+eKwyKFRveNllxhfDY2ew6SjBtn9VwgKBJr0rQTY+eIQmJVEH21tidFIDvQ1WQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=UnbE/QWz; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 4257vWqx021648;
+	Tue, 5 Mar 2024 08:17:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=cpxkCg4LuU89alEVCTIshVZabpQiqCVC51QCdIoFkxA=; b=Un
+	bE/QWz5iRDauRir1AA8MP4lASbRhgmnQwL2ykKzqgiR6a26p9k+iDu4qQ0zxWumx
+	lQhHWq/pXnb9fti/4iDBwJsmyueuhYNDVpeo5lYtxyEfRyasiRqhKiBqLejYWEu8
+	1ttOzdz3z1pw2l0hFDYVV5Y6ORdZ7TCzGnMaPDk2uu67FvFln6wQc2mrgUxQP2yF
+	+VXr6ycy5aatYWeUpB0mbF+0yZVUsbGGMkK08nf61LnRqgk1ttAvcCjViBPf/dPd
+	JE6rg5pH+WKrjaVFMhfg8yTKnaMnBxIh9lqp/hdeZjKJlKaTg4ag3iV+lNMs61yG
+	izR88peM+RMyPnQjJ5eA==
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wnarj2pq7-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 05 Mar 2024 08:17:18 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 4258HHHe029855
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 5 Mar 2024 08:17:17 GMT
+Received: from [10.216.49.73] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Tue, 5 Mar
+ 2024 00:17:13 -0800
+Message-ID: <0c2c039e-b49e-4172-9c7f-24061e3ac5c6@quicinc.com>
+Date: Tue, 5 Mar 2024 13:47:05 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:rQCowAD3_v7x0OZlJi1KBA--.14974S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7Gw4ktF17uF1UGw1kZr1rtFb_yoWxtwb_Cw
-	18uF15Wr1UGryqg39rKr4Svry3ZFs5XryxZFsYga9xZa4qqanxXry0vFn7JFn7ur1FvFnr
-	Cwn7GF95GrW8tjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUIcSsGvfJTRUUUbVkFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-	A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
-	Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVWxJr
-	0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-	2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-	W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
-	Y2ka0xkIwI1lc2xSY4AK67AK6r4xMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r
-	1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CE
-	b7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0x
-	vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAI
-	cVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2Kf
-	nxnUUI43ZEXa7VU10tC7UUUUU==
-X-CM-SenderInfo: xqlfxv3q6l2u1dvotugofq/
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb: dwc3: qcom: Remove ACPI support from glue driver
+To: Johan Hovold <johan@kernel.org>
+CC: Bjorn Andersson <andersson@kernel.org>,
+        Wesley Cheng
+	<quic_wcheng@quicinc.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "Greg
+ Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Thinh Nguyen
+	<Thinh.Nguyen@synopsys.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_ppratap@quicinc.com>,
+        <quic_jackp@quicinc.com>
+References: <20240305042143.3455101-1-quic_kriskura@quicinc.com>
+ <ZebFKlae0a-deBKl@hovoldconsulting.com>
+Content-Language: en-US
+From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <ZebFKlae0a-deBKl@hovoldconsulting.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: RuZNma4jQxjzz2EndhVkXrzhs-Bhk-Gc
+X-Proofpoint-GUID: RuZNma4jQxjzz2EndhVkXrzhs-Bhk-Gc
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-03-05_05,2024-03-04_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=780 adultscore=0
+ spamscore=0 impostorscore=0 mlxscore=0 malwarescore=0 phishscore=0
+ suspectscore=0 bulkscore=0 priorityscore=1501 clxscore=1015
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2402120000 definitions=main-2403050065
 
-Add check for usbnet_get_endpoints() and return the error if it fails
-in order to transfer the error.
 
-Signed-off-by: Chen Ni <nichen@iscas.ac.cn>
----
- drivers/net/usb/sr9800.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/usb/sr9800.c b/drivers/net/usb/sr9800.c
-index 143bd4ab160d..57947a5590cc 100644
---- a/drivers/net/usb/sr9800.c
-+++ b/drivers/net/usb/sr9800.c
-@@ -737,7 +737,9 @@ static int sr9800_bind(struct usbnet *dev, struct usb_interface *intf)
- 
- 	data->eeprom_len = SR9800_EEPROM_LEN;
- 
--	usbnet_get_endpoints(dev, intf);
-+	ret = usbnet_get_endpoints(dev, intf);
-+	if (ret)
-+		goto out;
- 
- 	/* LED Setting Rule :
- 	 * AABB:CCDD
--- 
-2.25.1
+On 3/5/2024 12:39 PM, Johan Hovold wrote:
+> On Tue, Mar 05, 2024 at 09:51:43AM +0530, Krishna Kurapati wrote:
+>> Minimal ACPI support was added to the Qualcomm DWC3 glue driver in order to
+>> enable USB on SDM850 and SC8180X compute platforms. The support is still
+>> functional, but unnoticed regressions in other drivers indicates that no
+>> one actually booting any of platforms dependent on this implementation.
+>>
+>> The functionality provides is the bare minimum and is not expected to aid
+>> in the effort of bringing full ACPI support to the driver in the future.
+>>
+>> Remove the ACPI code from the Qualcomm DWC3 glue driver to aid in the
+>> implementation of improvements that are actually used like multiport and
+>> flattening device tree.
+> 
+> With a simple lookup function that returns the ACPI index based on name
+> this shouldn't be required to add multiport support even if it may
+> simplify it slightly. But IIRC it would help more with the devicetree
+> binding rework.
+>   
 
+I agree to both your comments.
+Actually both series are equally important to me. Adding a lookup 
+function must ACPI index must help multiport code without this patch as 
+well. But removing this is helping in multiport to write better code and 
+definitely helps in flattening series.
+
+>> Commit message by Bjorn Andersson.
+>>
+>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+>> ---
+>>   drivers/usb/dwc3/dwc3-qcom.c | 273 ++---------------------------------
+>>   1 file changed, 11 insertions(+), 262 deletions(-)
+> 
+> You should update the Kconfig entry for USB_DWC3_QCOM as well and drop
+> the ACPI dependency.
+
+Missed it. Thanks for the catch. The following is the one right ?
+
+diff --git a/drivers/usb/dwc3/Kconfig b/drivers/usb/dwc3/Kconfig
+index 5fc27b20df63..31078f3d41b8 100644
+--- a/drivers/usb/dwc3/Kconfig
++++ b/drivers/usb/dwc3/Kconfig
+@@ -131,7 +131,7 @@ config USB_DWC3_QCOM
+         tristate "Qualcomm Platform"
+         depends on ARCH_QCOM || COMPILE_TEST
+         depends on EXTCON || !EXTCON
+-       depends on (OF || ACPI)
++       depends on OF
+
+
+> 
+>>   static int dwc3_qcom_probe(struct platform_device *pdev)
+>>   {
+>>   	struct device_node	*np = pdev->dev.of_node;
+>>   	struct device		*dev = &pdev->dev;
+>>   	struct dwc3_qcom	*qcom;
+>>   	struct resource		*res, *parent_res = NULL;
+> 
+> You should drop parent_res as well.
+
+Ahh, thanks for the catch.
+
+> 
+>> -	struct resource		local_res;
+>>   	int			ret, i;
+>>   	bool			ignore_pipe_clk;
+>>   	bool			wakeup_source;
+>> @@ -825,14 +659,6 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+>>   	platform_set_drvdata(pdev, qcom);
+>>   	qcom->dev = &pdev->dev;
+>>   
+>> -	if (has_acpi_companion(dev)) {
+>> -		qcom->acpi_pdata = acpi_device_get_match_data(dev);
+>> -		if (!qcom->acpi_pdata) {
+>> -			dev_err(&pdev->dev, "no supporting ACPI device data\n");
+>> -			return -EINVAL;
+>> -		}
+>> -	}
+>> -
+>>   	qcom->resets = devm_reset_control_array_get_optional_exclusive(dev);
+>>   	if (IS_ERR(qcom->resets)) {
+>>   		return dev_err_probe(&pdev->dev, PTR_ERR(qcom->resets),
+>> @@ -860,41 +686,18 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+>>   	}
+>>   
+>>   	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+>> -
+>> -	if (np) {
+>> -		parent_res = res;
+>> -	} else {
+>> -		memcpy(&local_res, res, sizeof(struct resource));
+>> -		parent_res = &local_res;
+>> -
+>> -		parent_res->start = res->start +
+>> -			qcom->acpi_pdata->qscratch_base_offset;
+>> -		parent_res->end = parent_res->start +
+>> -			qcom->acpi_pdata->qscratch_base_size;
+>> -
+>> -		if (qcom->acpi_pdata->is_urs) {
+>> -			qcom->urs_usb = dwc3_qcom_create_urs_usb_platdev(dev);
+>> -			if (IS_ERR_OR_NULL(qcom->urs_usb)) {
+>> -				dev_err(dev, "failed to create URS USB platdev\n");
+>> -				if (!qcom->urs_usb)
+>> -					ret = -ENODEV;
+>> -				else
+>> -					ret = PTR_ERR(qcom->urs_usb);
+>> -				goto clk_disable;
+>> -			}
+>> -		}
+>> -	}
+>> +	parent_res = res;
+>>   
+>>   	qcom->qscratch_base = devm_ioremap_resource(dev, parent_res);
+> 
+> And just use res here.
+
+ACK.
+
+> 
+>>   	if (IS_ERR(qcom->qscratch_base)) {
+>>   		ret = PTR_ERR(qcom->qscratch_base);
+>> -		goto free_urs;
+>> +		goto clk_disable;
+>> }
+> 
+> Looks good to me otherwise.
+
+Thanks for the review. Wanted to reply to your comments on multiport 
+series depending on how this patch goes in upstream.
+
+Can I push out v2 or wait for a couple of days (as a standard practice 
+before putting a new version) ?
+
+Regards,
+Krishna,
 
