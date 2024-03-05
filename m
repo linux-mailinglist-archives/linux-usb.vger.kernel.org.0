@@ -1,64 +1,50 @@
-Return-Path: <linux-usb+bounces-7525-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7526-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F3D1871643
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Mar 2024 08:09:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C918187176A
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Mar 2024 08:54:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F063D281150
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Mar 2024 07:09:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 85A2028662E
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Mar 2024 07:54:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FEA27D408;
-	Tue,  5 Mar 2024 07:09:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D6DF7F476;
+	Tue,  5 Mar 2024 07:52:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VZZKx7aq"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="LpGlrz6U"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E37D845005;
-	Tue,  5 Mar 2024 07:09:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01EF47E78B;
+	Tue,  5 Mar 2024 07:52:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709622565; cv=none; b=gOzRmBZ7raIUvDMsBPGRspOmtZMeaISA6F8CWsaHj++liyY0nmAjKbnT2Kcdznz3LKV32UMTVG4+/rg7/SVAzDQczMRLwVY/YwFQvPKOtHdf94QH5HjDr3Uj/G7aSqJh57CE98zlXrwR50VzS9DUnx7hke7wB6C6qaERastk/YU=
+	t=1709625146; cv=none; b=JvJV9uaQ2sciBrTvI8Uj5a3sVh1rQ183WeTszRftQ5iv5juCNBhK9ZOa/uqZUHFAYNmLuSZujBFMYzFg4w4xErqcoIv7/HEfCLaDgwNYwm9+fw6hlWnMD6YiLNWP5/sPDoSY+iMMKgqqT+b9XGu0ByHPeu1Vk9+eqP9eo3FH5SY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709622565; c=relaxed/simple;
-	bh=iLJtfJRG3AykwJvs44aX4uKsd63Qlq1YiC9OCMcC31U=;
+	s=arc-20240116; t=1709625146; c=relaxed/simple;
+	bh=AM09GKPYJH/8gNJ+NzSyVqjaenAF0cZN+Cb8vT4dlew=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fOsAmeABDx/TZ9DfbtNODYS0Un2SuLv+rOvc80l/b696z3jk+HiI+HxtcVOQNHlO8/AOjb7p56Lmhu8bgX9FcQwrZabBaqxEbxRMx/6GtpC7ZBEMLRk94GPeJYh1IWRU2gfl8qsyjDy51B1E5TGaC3x1cA14JtmZSA1BcB9GIYw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VZZKx7aq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2FF9C433F1;
-	Tue,  5 Mar 2024 07:09:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709622564;
-	bh=iLJtfJRG3AykwJvs44aX4uKsd63Qlq1YiC9OCMcC31U=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=e6IpfZnpS/6UQh0t/I/RlAxgWojU3HkvwgGOQ6R5I0A29d1zwyDA6wcuMlDH63r8Up+ukI377tWKpeFyCgD9Xi6DDK6RHtTnDdFgvoCbJoUnYiqptddNKAprpiLyR7aHEBMiGnVNif4D5juTGYj08d37mWgI/YFzwXXsJQImDCM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=LpGlrz6U; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74159C43390;
+	Tue,  5 Mar 2024 07:52:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1709625143;
+	bh=AM09GKPYJH/8gNJ+NzSyVqjaenAF0cZN+Cb8vT4dlew=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=VZZKx7aqHcP6Ly6lUphCoXqjWxAvksTF4ak3Y8fCg05LhRVZROMttCjmSkrJcPcnJ
-	 okAGM0RW/vHxwON1IvSMvVooywP0aEW/hsroPF4j6lU3rps8BnLdky865zVkUtzR5t
-	 QrVzxGgVK9ZQotLuqbUiFf69AvuQBaFj4NmeQdfLi8nEZkOH7UQS9EFNia1cA2FCpK
-	 uZca0/iiOLhTvkxsdGHf5B7BA1UAE6Vu5YEemVMlLa72Lb1U959dPH1lpuRdX6i2Ta
-	 JPKXxsTxF9ua9qzQ5Mb4qhJrJ2TEH9H5uEC5JHX/BRYvIYz7klwHNcIggsxcLO78y9
-	 afRcy0E/4hghA==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1rhOva-000000002G7-0EMj;
-	Tue, 05 Mar 2024 08:09:30 +0100
-Date: Tue, 5 Mar 2024 08:09:30 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Krishna Kurapati <quic_kriskura@quicinc.com>
-Cc: Bjorn Andersson <andersson@kernel.org>,
-	Wesley Cheng <quic_wcheng@quicinc.com>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, quic_ppratap@quicinc.com,
-	quic_jackp@quicinc.com
-Subject: Re: [PATCH] usb: dwc3: qcom: Remove ACPI support from glue driver
-Message-ID: <ZebFKlae0a-deBKl@hovoldconsulting.com>
-References: <20240305042143.3455101-1-quic_kriskura@quicinc.com>
+	b=LpGlrz6U4DYo0szXcCLN3qySBTzVZK09L0wBZrGS5comnhFIvVJWxIm+PynYFkYdX
+	 1WwxtHQ+/h+An5Seq91B6O12hyMxiGuEhsOmqfEi4xqyOO5bqnB+TkRtmcLtv0uTr9
+	 FlEmJ28M/aW5DwvTPoqJNoQ8QCjctH8YvuEHxzXs=
+Date: Tue, 5 Mar 2024 07:52:20 +0000
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Elbert Mai <code@elbertmai.com>
+Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2] usb: Export BOS descriptor to sysfs
+Message-ID: <2024030515-cruelly-ungreased-3fd9@gregkh>
+References: <20240305002301.95323-1-code@elbertmai.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -67,105 +53,83 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240305042143.3455101-1-quic_kriskura@quicinc.com>
+In-Reply-To: <20240305002301.95323-1-code@elbertmai.com>
 
-On Tue, Mar 05, 2024 at 09:51:43AM +0530, Krishna Kurapati wrote:
-> Minimal ACPI support was added to the Qualcomm DWC3 glue driver in order to
-> enable USB on SDM850 and SC8180X compute platforms. The support is still
-> functional, but unnoticed regressions in other drivers indicates that no
-> one actually booting any of platforms dependent on this implementation.
+On Mon, Mar 04, 2024 at 04:23:01PM -0800, Elbert Mai wrote:
+> Motivation
+> ----------
 > 
-> The functionality provides is the bare minimum and is not expected to aid
-> in the effort of bringing full ACPI support to the driver in the future.
+> The binary device object store (BOS) of a USB device consists of the BOS
+> descriptor followed by a set of device capability descriptors. One that is
+> of interest to users is the platform descriptor. This contains a 128-bit
+> UUID and arbitrary data, and it allows parties outside of USB-IF to add
+> additional metadata about a USB device in a standards-compliant manner.
+> Notable examples include the WebUSB and Microsoft OS 2.0 descriptors.
 > 
-> Remove the ACPI code from the Qualcomm DWC3 glue driver to aid in the
-> implementation of improvements that are actually used like multiport and
-> flattening device tree.
-
-With a simple lookup function that returns the ACPI index based on name
-this shouldn't be required to add multiport support even if it may
-simplify it slightly. But IIRC it would help more with the devicetree
-binding rework.
- 
-> Commit message by Bjorn Andersson.
+> The kernel already retrieves and caches the BOS from USB devices if its
+> bcdUSB is >= 0x0201. Because the BOS is flexible and extensible, we export
+> the entire BOS to sysfs so users can retrieve whatever device capabilities
+> they desire, without requiring USB I/O or elevated permissions.
 > 
-> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> Implementation
+> --------------
+> 
+> Add bos_descriptors attribute to sysfs. This is a binary file and it works
+> the same way as the existing descriptors attribute. The file exists only if
+> the BOS is present in the USB device.
+> 
+> Also create a binary attribute group, so the driver core can handle the
+> creation of both the descriptors and bos_descriptors attributes in sysfs.
+> 
+> Signed-off-by: Elbert Mai <code@elbertmai.com>
 > ---
->  drivers/usb/dwc3/dwc3-qcom.c | 273 ++---------------------------------
->  1 file changed, 11 insertions(+), 262 deletions(-)
+> Changes in v2:
+>  - Rename to bos_descriptors (plural) since the attribute contains the
+>    entire BOS, not just the first descriptor in it.
+>  - Use binary attribute groups to let driver core handle attribute
+>    creation for both descriptors and bos_descriptors.
+>  - The attribute is visible in sysfs only if the BOS is present in the
+>    USB device.
 
-You should update the Kconfig entry for USB_DWC3_QCOM as well and drop
-the ACPI dependency.
+Very nice, thanks for this!
 
->  static int dwc3_qcom_probe(struct platform_device *pdev)
->  {
->  	struct device_node	*np = pdev->dev.of_node;
->  	struct device		*dev = &pdev->dev;
->  	struct dwc3_qcom	*qcom;
->  	struct resource		*res, *parent_res = NULL;
+One very minor comment, you can send a follow-on patch for this if you
+like:
 
-You should drop parent_res as well.
+> +static umode_t dev_bin_attrs_are_visible(struct kobject *kobj,
+> +		struct bin_attribute *a, int n)
+> +{
+> +	struct device *dev = kobj_to_dev(kobj);
+> +	struct usb_device *udev = to_usb_device(dev);
+> +
+> +	/* All USB devices have a device descriptor, so the descriptors
+> +	 * attribute always exists. No need to check for its visibility.
+> +	 */
 
-> -	struct resource		local_res;
->  	int			ret, i;
->  	bool			ignore_pipe_clk;
->  	bool			wakeup_source;
-> @@ -825,14 +659,6 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
->  	platform_set_drvdata(pdev, qcom);
->  	qcom->dev = &pdev->dev;
->  
-> -	if (has_acpi_companion(dev)) {
-> -		qcom->acpi_pdata = acpi_device_get_match_data(dev);
-> -		if (!qcom->acpi_pdata) {
-> -			dev_err(&pdev->dev, "no supporting ACPI device data\n");
-> -			return -EINVAL;
-> -		}
-> -	}
-> -
->  	qcom->resets = devm_reset_control_array_get_optional_exclusive(dev);
->  	if (IS_ERR(qcom->resets)) {
->  		return dev_err_probe(&pdev->dev, PTR_ERR(qcom->resets),
-> @@ -860,41 +686,18 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
->  	}
->  
->  	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> -
-> -	if (np) {
-> -		parent_res = res;
-> -	} else {
-> -		memcpy(&local_res, res, sizeof(struct resource));
-> -		parent_res = &local_res;
-> -
-> -		parent_res->start = res->start +
-> -			qcom->acpi_pdata->qscratch_base_offset;
-> -		parent_res->end = parent_res->start +
-> -			qcom->acpi_pdata->qscratch_base_size;
-> -
-> -		if (qcom->acpi_pdata->is_urs) {
-> -			qcom->urs_usb = dwc3_qcom_create_urs_usb_platdev(dev);
-> -			if (IS_ERR_OR_NULL(qcom->urs_usb)) {
-> -				dev_err(dev, "failed to create URS USB platdev\n");
-> -				if (!qcom->urs_usb)
-> -					ret = -ENODEV;
-> -				else
-> -					ret = PTR_ERR(qcom->urs_usb);
-> -				goto clk_disable;
-> -			}
-> -		}
-> -	}
-> +	parent_res = res;
->  
->  	qcom->qscratch_base = devm_ioremap_resource(dev, parent_res);
+This comment is in the "wrong" style, I think checkpatch will complain
+about that, right?
 
-And just use res here.
+But it's a bit confusing, you say "no need to check", and then you:
 
->  	if (IS_ERR(qcom->qscratch_base)) {
->  		ret = PTR_ERR(qcom->qscratch_base);
-> -		goto free_urs;
-> +		goto clk_disable;
-> }
+> +	if (a == &bin_attr_bos_descriptors) {
+> +		if (udev->bos == NULL)
+> +			return 0;
+> +	}
 
-Looks good to me otherwise.
+check something :)
 
-Johan
+How about this as a comment instead:
+	/*
+	 * If this is the BOS descriptor, check to verify if the device
+	 * has that descriptor at all or not.
+	 */
+
+That's all you need here, right?
+
+Anyway, again, very nice, I'll go queue this up and run it through the
+0-day tests.
+
+thanks!
+
+greg k -h
 
