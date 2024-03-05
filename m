@@ -1,83 +1,81 @@
-Return-Path: <linux-usb+bounces-7570-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7571-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E4EC872708
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Mar 2024 19:54:51 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4A40587270D
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Mar 2024 19:55:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 524071C2457C
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Mar 2024 18:54:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7B9F31C26EB2
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Mar 2024 18:55:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BED971B809;
-	Tue,  5 Mar 2024 18:54:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB7311AAC4;
+	Tue,  5 Mar 2024 18:55:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="My9YfPPF"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="HawU4/9M"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8BF81AAAE
-	for <linux-usb@vger.kernel.org>; Tue,  5 Mar 2024 18:54:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3EB818EBB
+	for <linux-usb@vger.kernel.org>; Tue,  5 Mar 2024 18:55:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709664883; cv=none; b=CUBNK7+wgurOt4H+uUagjLtl4IJtgwOwsmEiN1NBUym1+8QG/JNPY+lmabU2FwhTIvp7HUvW2w8015qCoZmqdJdfpq4+pG6YD/7X+yxx3DCM3FaK4cq4IomiucDivHTNamT/6y2OnoP8cNsOz5KLvKf3JFNW2gnJX5WUsWiteEU=
+	t=1709664931; cv=none; b=HEudQhplQaiRoj2UtJQKnIE0UHD5fwcGFWOKbypsrfo3oM4jkIQ69gNvjC/nCl7Rt3tyrmSl+jnQG3v8OqxYrs6qPQrC/ln+fWbo7YDaiYM+fe/tBuy0a5+ztmeFgGB+vrCiYW0ZibmWwPkqnbVosCEf2CzvbmnOQv8jPPhpzN4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709664883; c=relaxed/simple;
-	bh=vSbegJ/mfKJlAVFDjG5b7omrS1QW3UlmocGh5VJ7JEo=;
+	s=arc-20240116; t=1709664931; c=relaxed/simple;
+	bh=iF7k1/BvifiPN9TSkNXOCDncvhbUHkmOoNs4nie4SL0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aDzZdDcOdZJ3HmotsycC8bnsLnR/8cyt9j/jLuzgYAeiPn9ItbIWxXL6OpMZZTnmyQLmautQkSnys0eQWcP/am8CSNwLHvajPblpRfoeZt3TT4sn4F0u4jyE+BXNukgwJuzYhyrpO4LInN96E1zONx27U9Ryn7uuAlfKEzW5fiI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=My9YfPPF; arc=none smtp.client-ip=209.85.214.179
+	 Content-Type:Content-Disposition:In-Reply-To; b=rid6UsyqHOl0Wt4aDL5j7Y+xhwQkj3i4KPNdcKaRYTMWzNUTRzDZy4JW+achlOEaMqozADC3JZiANPJeCrpWj5cVHRnh8a8E0i6yy+sSNoXVpzvqnFEmvZ2C3+sa4QjbmR0SAgeQU53fIjVyJjamz3voCBLgJco4psgrnWS1vLU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=HawU4/9M; arc=none smtp.client-ip=209.85.210.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-1dc5d0162bcso52199295ad.0
-        for <linux-usb@vger.kernel.org>; Tue, 05 Mar 2024 10:54:41 -0800 (PST)
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-6e627596554so1865434b3a.2
+        for <linux-usb@vger.kernel.org>; Tue, 05 Mar 2024 10:55:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1709664881; x=1710269681; darn=vger.kernel.org;
+        d=chromium.org; s=google; t=1709664929; x=1710269729; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=smEnDw1iDeBsm7OWKZul3/JCo3QrVo/nFFRvio7e+IU=;
-        b=My9YfPPFtj84Ezs5+jqbZ3TkvsEBG7SUfW71+KXSgXoxmP1Ga6bgP+/BXzW2PSnmj0
-         unhiLceJrOaPH8pjJGeqSG64ispIHC6U/Z5GmQVeizqKeuHfksR9xeo/OOzSe/2sEPeF
-         uoxAXvCbXkGaOBluYkmVro44H/jA4MuSVd/q4=
+        bh=N6tcpCezM4szO4PrRorLtqFpYFaRv1y6CJa/aon/dew=;
+        b=HawU4/9M4MnWxQtgipzpt9PqgTG7VjpdQIvAtOzw++aBwYS/ZQuqTtHCND9n0Q8yKZ
+         /WHZ+7vWR7Ycjjoajv4J+3Z8yUzgEzABfRnS4O7jusnCgRtD8YXjdlEixeaqV4xlqlIE
+         n9KibNMgbfLlSjKkMdiojnAqZl5d4jjysuy6Q=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709664881; x=1710269681;
+        d=1e100.net; s=20230601; t=1709664929; x=1710269729;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=smEnDw1iDeBsm7OWKZul3/JCo3QrVo/nFFRvio7e+IU=;
-        b=TxFc6qg3kS9YiY+GwTbEACXQLOuYTrXvUiEMzTTmVO24Vic4iKu79Q/mUcQpf/imUS
-         7tobqPTexHJfivVmrKanVihtu/vlDd6VhUgHEQQbHvrnzV7Sk19osnSf1tAcN8Mruwgf
-         gjczly1BZUlIAJjlgJTzphN8CsO1pHIPi2ocMak5B3jnNabhH20/RC+r5WVhchb87QvD
-         0M6mxeLr4EDSBLdqHAwimOCngiarWNtMVNHqZ6sZtG8GOhr9cZLevd9wHWrkmY+0B9jl
-         BTi4jbIA5395+j4gcs8s3OoL46aqUIUsoj7/YwF5gjUWd8AAgY/MSL6/q9qI3Exzpily
-         P3bQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW/SJGrp7fnCUA0KY3Fog3GyM8f02KiPWCzvkxt6N6Js2V3zM35vuUdWKFOWi6NhykSiYkXnzsp7+rZpRZCo6qjqe/GBCSYx/Xb
-X-Gm-Message-State: AOJu0YwXhDgtqY9QZORiwdPSexrLuATu8EtwrU1jDDTgX0ZVtAbRuo+B
-	MWAShRMGIRderQIyOxnLAh5egOg0zMX6mBPj4NJ2Ek5xT9gek2cKh0Vtz5VJLA==
-X-Google-Smtp-Source: AGHT+IFQ/JUjhZlOOudg5Vl14EDqM//GwJuL9aAWqrRTcOFpZJnoov8OawOP5MFzqtbq2hPtIZRiEw==
-X-Received: by 2002:a17:902:6b07:b0:1dc:f7cb:bbaf with SMTP id o7-20020a1709026b0700b001dcf7cbbbafmr2523098plk.22.1709664881047;
-        Tue, 05 Mar 2024 10:54:41 -0800 (PST)
-Received: from chromium.org (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id x15-20020a170902ec8f00b001dcb654d1a5sm10886409plg.21.2024.03.05.10.54.40
+        bh=N6tcpCezM4szO4PrRorLtqFpYFaRv1y6CJa/aon/dew=;
+        b=nxAHacHri03BmQGJ0ibjtSrcwOeIEhwc+/wBeqMcChkcXOtG/XGqT4JtXz6Vht2gFO
+         +c5PblkO6jgxnni+nzdetw4XuwZN5Dc7GyXACEkTy9D9mDcuSTbmqkYLwJVd1NTrQoRK
+         8KffqNTeZ8QYtOHh32lUvpcnD1RO/tJHbmYvluF6cp7JO9Qnowxvr5L80dYotmCgNONC
+         AKE+efNHZQbYP3uKEYb+8/TdS80u/amUun6nlXCmKshTUr2/V/oiqkdnW+B002Bvp7dA
+         WaDmGQsJxfiMpilWNge4vxDb4WPsX/Kl+2J9aET8VIJyXkES757GXoBgfKqE3m9fHzmc
+         6zNA==
+X-Forwarded-Encrypted: i=1; AJvYcCW1kiKXEVJE19N4bl19GBqaK20pXn7H89i+2g0UFSX48SpWDjAbRizCVoshONsx+wBOnRPQJ/Qk21xvjUZ0QXjdA+EGGj41CENm
+X-Gm-Message-State: AOJu0YxIaBxZiafpQGYUmVBR9VlcxUrYqQKVWavODWcAVFl4WpbH1R5s
+	qexSfJDhlOH+Jw415bDIoqwI1l9MbXrIN/+UZl8zmlUdbBbAalt7BYYoIHCGXQ==
+X-Google-Smtp-Source: AGHT+IHucMJYCi/tee/LOp3cS5lJgIaeKKgyMbj7aVLxKu5Ic8uHzyu+W5p5aK2Pcs5AeZOxBZF9FA==
+X-Received: by 2002:a05:6a00:3908:b0:6e4:dfec:1b0e with SMTP id fh8-20020a056a00390800b006e4dfec1b0emr13080584pfb.19.1709664929226;
+        Tue, 05 Mar 2024 10:55:29 -0800 (PST)
+Received: from www.outflux.net ([198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id f6-20020a056a00238600b006e58553e613sm9295684pfc.74.2024.03.05.10.55.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Mar 2024 10:54:40 -0800 (PST)
-Date: Tue, 5 Mar 2024 18:54:39 +0000
-From: Prashant Malani <pmalani@chromium.org>
-To: Jameson Thies <jthies@google.com>
-Cc: heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
-	bleung@google.com, abhishekpandit@chromium.org,
-	andersson@kernel.org, dmitry.baryshkov@linaro.org,
-	fabrice.gasnier@foss.st.com, gregkh@linuxfoundation.org,
-	hdegoede@redhat.com, neil.armstrong@linaro.org,
-	rajaram.regupathy@intel.com, saranya.gopal@intel.com,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 3/4] usb: typec: ucsi: Register SOP/SOP' Discover
- Identity Responses
-Message-ID: <Zedqb6_fe0GoUR9U@chromium.org>
-References: <20240305025804.1290919-1-jthies@google.com>
- <20240305025804.1290919-4-jthies@google.com>
+        Tue, 05 Mar 2024 10:55:28 -0800 (PST)
+Date: Tue, 5 Mar 2024 10:55:28 -0800
+From: Kees Cook <keescook@chromium.org>
+To: Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+	Attreyee Mukherjee <tintinm2017@gmail.com>
+Cc: linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+	syzbot <syzbot+c52569baf0c843f35495@syzkaller.appspotmail.com>,
+	linux-usb@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [syzbot] [PATCH] usbhid: fix array-index-out-of-bounds in
+ usbhid_parse UBSAN warning
+Message-ID: <202403051052.DA58CAC19@keescook>
+References: <000000000000d330500607d85a5f@google.com>
+ <0000000000009ae37b060d32c643@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -86,146 +84,55 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240305025804.1290919-4-jthies@google.com>
+In-Reply-To: <0000000000009ae37b060d32c643@google.com>
 
-On Mar 05 02:58, Jameson Thies wrote:
-> Register SOP and SOP' Discover Identity responses with the USB Type-C
-> Connector Class as partner and cable identities, respectively. Discover
-> Identity responses are requested from the PPM using the GET_PD_MESSAGE
-> UCSI command.
+Hi,
+
+What's happened to getting a new version of this patch? This flaw is
+still reachable in -next from what I can see?
+
+Thanks,
+
+-Kees
+
+On Sat, Dec 23, 2023 at 11:59:51AM -0800, syzbot wrote:
+> For archival purposes, forwarding an incoming command email to
+> linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com.
 > 
-> Signed-off-by: Jameson Thies <jthies@google.com>
-
-Mostly line splitting nits (which I have listed below). Once those are
-addressed, please feel free to add:
-Reviewed-by: Prashant Malani <pmalani@chromium.org>
-
-> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> index 7c84687b5d1a3..3b64a0f51041c 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.c
-> +++ b/drivers/usb/typec/ucsi/ucsi.c
-> @@ -646,6 +646,108 @@ static int ucsi_get_src_pdos(struct ucsi_connector *con)
->  	return ret;
->  }
+> ***
+> 
+> Subject: [PATCH] usbhid: fix array-index-out-of-bounds in usbhid_parse UBSAN warning
+> Author: tintinm2017@gmail.com
+> 
+> #syz test: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> 
+> Look at the bug https://syzkaller.appspot.com/bug?extid=c52569baf0c843f35495 reported by syzbot. Tested a patch through syzbot, which gives an error. 
+> Requesting help from the maintainers to understand what is really going wrong in the code. 
+> 
+> Based on my understanding, I believe the value of the number of descriptors is calculated incorrectly before the for loop.
+> 
+> Signed-off-by: Attreyee Mukherjee <tintinm2017@gmail.com>
+> ---
+>  drivers/hid/usbhid/hid-core.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/hid/usbhid/hid-core.c b/drivers/hid/usbhid/hid-core.c
+> index a90ed2ceae84..582ddbef448f 100644
+> --- a/drivers/hid/usbhid/hid-core.c
+> +++ b/drivers/hid/usbhid/hid-core.c
+> @@ -1021,6 +1021,8 @@ static int usbhid_parse(struct hid_device *hid)
+>  	       (hdesc->bLength - offset) / sizeof(struct hid_class_descriptor));
 >  
-> +static int ucsi_read_identity(struct ucsi_connector *con, u8 recipient,
-> +			      u8 offset, u8 bytes, void *resp)
-> +{
-> +	struct ucsi *ucsi = con->ucsi;
-> +	u64 command;
-> +	int ret;
-> +
-> +	command = UCSI_COMMAND(UCSI_GET_PD_MESSAGE) |
-> +	    UCSI_CONNECTOR_NUMBER(con->num);
-> +	command |= UCSI_GET_PD_MESSAGE_RECIPIENT(recipient);
-> +	command |= UCSI_GET_PD_MESSAGE_OFFSET(offset);
-> +	command |= UCSI_GET_PD_MESSAGE_BYTES(bytes);
-> +	command |= UCSI_GET_PD_MESSAGE_TYPE(UCSI_GET_PD_MESSAGE_TYPE_IDENTITY);
-> +
-> +	ret = ucsi_send_command(ucsi, command, resp, bytes);
-> +	if (ret < 0)
-> +		dev_err(ucsi->dev, "UCSI_GET_PD_MESSAGE failed (%d)\n", ret);
-> +
-> +	return ret;
-> +}
-> +
-> +static int ucsi_get_identity(struct ucsi_connector *con, u8 recipient,
-> +			      struct usb_pd_identity *id)
+>  	for (n = 0; n < num_descriptors; n++)
+> +		if (n >= ARRAY_SIZE(hdesc->desc))
+> +			break;
+>  		if (hdesc->desc[n].bDescriptorType == HID_DT_REPORT)
+>  			rsize = le16_to_cpu(hdesc->desc[n].wDescriptorLength);
+>  
+> -- 
+> 2.34.1
+> 
 
-nit: Line limits are 100 now [1], so this can fit on one line.
-
-> +{
-> +	struct ucsi *ucsi = con->ucsi;
-> +	struct ucsi_pd_message_disc_id resp = {};
-> +	int ret;
-> +
-> +	if (ucsi->version < UCSI_VERSION_2_0) {
-> +		/*
-> +		 * Before UCSI v2.0, MESSAGE_IN is 16 bytes which cannot fit
-> +		 * the 28 byte identity response including the VDM header.
-> +		 * First request the VDM header, ID Header VDO, Cert Stat VDO
-> +		 * and Product VDO.
-> +		 */
-> +		ret = ucsi_read_identity(con, recipient, 0, 0x10, &resp);
-> +		if (ret < 0)
-> +			return ret;
-> +
-> +
-> +		/* Then request Product Type VDO1 through Product Type VDO3. */
-> +		ret = ucsi_read_identity(con, recipient, 0x10, 0xc,
-> +					 &resp.vdo[0]);
-
-nit: Can fit on one line.
-
-> +		if (ret < 0)
-> +			return ret;
-> +
-> +	} else {
-> +		/*
-> +		 * In UCSI v2.0 and after, MESSAGE_IN is large enough to request
-> +		 * the large enough to request the full Discover Identity
-> +		 * response at once.
-> +		 */
-> +		ret = ucsi_read_identity(con, recipient, 0x0, 0x1c, &resp);
-> +		if (ret < 0)
-> +			return ret;
-> +	}
-> +
-> +	id->id_header = resp.id_header;
-> +	id->cert_stat = resp.cert_stat;
-> +	id->product = resp.product;
-> +	id->vdo[0] = resp.vdo[0];
-> +	id->vdo[1] = resp.vdo[1];
-> +	id->vdo[2] = resp.vdo[2];
-> +	return 0;
-> +}
-> +
-> +static int ucsi_get_partner_identity(struct ucsi_connector *con)
-> +{
-> +	int ret;
-> +
-> +	ret = ucsi_get_identity(con, UCSI_RECIPIENT_SOP,
-> +				 &con->partner_identity);
-
-nit: One line please.
-
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	ret = typec_partner_set_identity(con->partner);
-> +	if (ret < 0) {
-> +		dev_err(con->ucsi->dev, "Failed to set partner identity (%d)\n",
-> +			ret);
-
-nit: One line (100 is the limit now).
-
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +static int ucsi_get_cable_identity(struct ucsi_connector *con)
-> +{
-> +	int ret;
-> +
-> +	ret = ucsi_get_identity(con, UCSI_RECIPIENT_SOP_P,
-> +				 &con->cable_identity);
-
-nit: One line.
-
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	ret = typec_cable_set_identity(con->cable);
-> +	if (ret < 0) {
-> +		dev_err(con->ucsi->dev, "Failed to set cable identity (%d)\n",
-> +			ret);
-
-nit: One line.
-
-Best regards,
-
--Prashant
-
-[1] https://github.com/torvalds/linux/blob/master/scripts/checkpatch.pl#L59
+-- 
+Kees Cook
 
