@@ -1,116 +1,97 @@
-Return-Path: <linux-usb+bounces-7577-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7578-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 28A28872A42
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Mar 2024 23:36:34 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99E89872BA9
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Mar 2024 01:15:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B6A35B285D0
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Mar 2024 22:36:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CC25F1C21961
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Mar 2024 00:15:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B515D3D0CA;
-	Tue,  5 Mar 2024 22:36:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8D231C02;
+	Wed,  6 Mar 2024 00:15:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="RE8tmbbc"
+	dkim=pass (2048-bit key) header.d=elbertmai.com header.i=@elbertmai.com header.b="F9LteIn3";
+	dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b="u6YoWFrZ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sendmail.purelymail.com (sendmail.purelymail.com [34.202.193.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40D637E563
-	for <linux-usb@vger.kernel.org>; Tue,  5 Mar 2024 22:36:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E367C803
+	for <linux-usb@vger.kernel.org>; Wed,  6 Mar 2024 00:15:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=34.202.193.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709678172; cv=none; b=CWNMBl4t25mfq/GELqrzqPOVc3tQ9x5OPx6kd4TLOWIDqhC2O43ym/AEGaZsSJrOjacY953dyANnzS9Qgw8lCW6z5bHB5+sq3Gu+uKi6fkBIR3+9riJ6WR+zWd88asofqNEytLrddvLZO1J+hE59Y3w91lrP/5NqaFWZJ6Fb5xY=
+	t=1709684146; cv=none; b=GnXJ2ara2w8UY92yUuD77eLNiCkl3+w6GEBkLMFcsc7CVOomx4QzWtUfg2Zp5nfC9nbcJd0IdJtWgjiFZOUVz3NUCfp84PMW8jhYsISXPgoQw/h2vj/7rRhArGJGSd0KZlfjhx0YMXyajOhLKYE+rHvFbCEd3uSyhlFJ9B2PRrg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709678172; c=relaxed/simple;
-	bh=g55cu2cg6/g5DxUZcaY/hxqidlXJ4vwTOT97PDU99Ws=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aSW8aDbCl5sVYml7YjulykfSDwNQ3vprp/TCudCn87labfyCXmYxKi9vPcCOSzMrDpNsutUjbjiddfQ7ELNkwtY32vKjxmImq3QF5Lcp3OGz7jMey8V82VYomBmwahd+FtMiDmU+gw7rp7KWOzBr1voF2URnveKmzteiaN+Td+Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=RE8tmbbc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 610CCC433C7;
-	Tue,  5 Mar 2024 22:36:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1709678171;
-	bh=g55cu2cg6/g5DxUZcaY/hxqidlXJ4vwTOT97PDU99Ws=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=RE8tmbbcJCPatJ0bm2DbZCTtsCMeDPXd4v/yhJ5eIJ0csY3J47QyDdmQPfdqlXBwY
-	 48RjPFc3ydjUA+0ND9WtQtMG9Z3Gfqtb39tVLP+LVXyoGLs5eIGkfYbfjIEjwA3PRb
-	 VB2AHU4TtyFlRfIeF4u0le/9vdtH0MACGaZbiqfY=
-Date: Tue, 5 Mar 2024 22:36:09 +0000
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Elbert Mai <code@elbertmai.com>
-Cc: linux-usb@vger.kernel.org
-Subject: Re: [PATCH v3] usb: Export BOS descriptor to sysfs
-Message-ID: <2024030535-bobsled-kinsman-330c@gregkh>
-References: <20240305193356.118229-1-code@elbertmai.com>
+	s=arc-20240116; t=1709684146; c=relaxed/simple;
+	bh=ZGP8ITsnSgvunGZyoMCg11L8zV60Rr1VSRoZJHxlQk4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=kXwzYCWGXSC11OqzZnzTygXJtJNPerlFHzjEbbmkeaHFz3c4gBfnIsNiFnOwPeORxXQiazeLo7A06y+HM21SGwPeeA5ZMv6lZI/fpcvfB3l0bkc5APW5F0t9tWIGu1DxcCHzPBwbbmkBjzC+fAQPabnn1naFr50kB7cGRH4NVzo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=elbertmai.com; spf=pass smtp.mailfrom=elbertmai.com; dkim=pass (2048-bit key) header.d=elbertmai.com header.i=@elbertmai.com header.b=F9LteIn3; dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b=u6YoWFrZ; arc=none smtp.client-ip=34.202.193.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=elbertmai.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=elbertmai.com
+Authentication-Results: purelymail.com; auth=pass
+DKIM-Signature: a=rsa-sha256; b=F9LteIn3dF4ep8VXUY0iN52qTSxgBwM+Y3Y8Q1ChNeWw6vujXEz2S7bGlCkOmUA6lfx1W1wQVjjgOF6IMe+DfRKuxhZLrq0TRCgCZ84sltkPIXFIZiQzYXcCw/UWzPTMkqoZpaPdtoN6BQ3gRqnphA2Am6s/KOHPG+d+0QjH5K9fYGmAyjS2e+YoUwhfR2n4wgbscfH12ikjOWrFFcusKflVyAUVefOg5CM2Qat8RltO3ClAjGI4WR5ZTk4KCYOWO3UnJqkU4s6x6+keNY4uk1B1EHmIn/RdXdrn9Z1q/V97pNBPHFT+S24TzRqcClELD3ouAnD3oIuWc5S30hoXBg==; s=purelymail2; d=elbertmai.com; v=1; bh=ZGP8ITsnSgvunGZyoMCg11L8zV60Rr1VSRoZJHxlQk4=; h=Received:From:To:Subject;
+DKIM-Signature: a=rsa-sha256; b=u6YoWFrZkpxPDjg7Qyj535tfxKUAvhsx1XbMbgrEfi0dTIpUfxt10rfRC5UrpCn1bnctdA+XXy2AUDzxYbGJp7DMSjIV1iavxmbb3KUvRXp8Q70vYrzBMFDK9MjC2tEPGQzk1pYuEl+6r1AjzRDwvL+RUoOAYun5OtprqyJWZohA24hASBklnVDIrV9jN5yxLWYDft5TJNY6bbWlWKbw+zc/X21Ty9jym5NXjxCATosLpWut6+Z0IzkyXo/rrJ5ONX0f763nkRHd5BNhhjUETILEIOR0izptkYlCWl7gBoPy7bJeNlOHSaHqP/XtmlHMi1oWMNb04Oc3FE8BAtIyxA==; s=purelymail2; d=purelymail.com; v=1; bh=ZGP8ITsnSgvunGZyoMCg11L8zV60Rr1VSRoZJHxlQk4=; h=Feedback-ID:Received:From:To:Subject;
+Feedback-ID: 5995:1482:null:purelymail
+X-Pm-Original-To: linux-usb@vger.kernel.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1397573428;
+          (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+          Wed, 06 Mar 2024 00:15:25 +0000 (UTC)
+From: Elbert Mai <code@elbertmai.com>
+To: gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org
+Cc: Elbert Mai <code@elbertmai.com>
+Subject: [PATCH] usb: Clarify expected behavior of dev_bin_attrs_are_visible()
+Date: Tue,  5 Mar 2024 16:15:03 -0800
+Message-Id: <20240306001503.313028-1-code@elbertmai.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240305193356.118229-1-code@elbertmai.com>
+Content-Transfer-Encoding: quoted-printable
+X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
+Content-Type: text/plain; charset=UTF-8
 
-On Tue, Mar 05, 2024 at 11:33:56AM -0800, Elbert Mai wrote:
+The commit "usb: Export BOS descriptor to sysfs" added a binary attribute
+group to sysfs. It doesn't check if the descriptors attribute should be
+visible, which is by design and not an oversight. Update a comment so that
+it better explains this in the dev_bin_attrs_are_visible() function.
 
-<snip>
+Signed-off-by: Elbert Mai <code@elbertmai.com>
+---
+I had mistakenly written the entry as if it went into stable/sysfs-bus-usb
+instead of testing/sysfs-bus-usb, so the "..." shouldn't be there. I see
+you have already moved and corrected the bos_descriptors documentation, so
+it should be all OK now.
 
-For some reason you forgot to cc: linux-usb@vger.kernel.org and only
-sent this to me.  Added it back now...
+ drivers/usb/core/sysfs.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-> ---
-> Changes in v3:
->  - Cosmetic only. Made a comment less confusing.
-> Changes in v2:
->  - Rename to bos_descriptors (plural) since the attribute contains the
->    entire BOS, not just the first descriptor in it.
->  - Use binary attribute groups to let driver core handle attribute
->    creation for both descriptors and bos_descriptors.
->  - The attribute is visible in sysfs only if the BOS is present in the
->    USB device.
-> 
-> I've ran the prior patches against scripts/checkpatch.pl and it seems to be
-> okay with the comment style. But I agree the comment could use some work.
-> The point of the comment was to show that not checking for the descriptors
-> attribute is intentional and not an oversight.
-> 
-> So here's a follow-on patch that hopefully made that particular comment a
-> bit less confusing. Nothing else was changed.
+diff --git a/drivers/usb/core/sysfs.c b/drivers/usb/core/sysfs.c
+index 777526f59720..f98263e21c2a 100644
+--- a/drivers/usb/core/sysfs.c
++++ b/drivers/usb/core/sysfs.c
+@@ -929,8 +929,11 @@ static umode_t dev_bin_attrs_are_visible(struct kobjec=
+t *kobj,
+ =09struct device *dev =3D kobj_to_dev(kobj);
+ =09struct usb_device *udev =3D to_usb_device(dev);
+=20
+-=09/* All USB devices have a device descriptor, so the descriptors
+-=09 * attribute always exists. No need to check for its visibility.
++=09/*
++=09 * There's no need to check if the descriptors attribute should
++=09 * be visible because all devices have a device descriptor. The
++=09 * bos_descriptors attribute should be visible if and only if
++=09 * the device has a BOS, so check if it exists here.
+ =09 */
+ =09if (a =3D=3D &bin_attr_bos_descriptors) {
+ =09=09if (udev->bos =3D=3D NULL)
+--=20
+2.34.1
 
-I already applied your v2 patch, so I need a commit that goes on top of
-that, unless you want me to revert your patch from the tree (I'd not
-recommend that.)
-
-Also, one thing:
-
-> diff --git a/Documentation/ABI/testing/sysfs-bus-usb b/Documentation/ABI/testing/sysfs-bus-usb
-> index 614d216dff1d..102ee4215e48 100644
-> --- a/Documentation/ABI/testing/sysfs-bus-usb
-> +++ b/Documentation/ABI/testing/sysfs-bus-usb
-> @@ -293,3 +293,13 @@ Description:
->  		USB 3.2 adds Dual-lane support, 2 rx and 2 tx -lanes over Type-C.
->  		Inter-Chip SSIC devices support asymmetric lanes up to 4 lanes per
->  		direction. Devices before USB 3.2 are single lane (tx_lanes = 1)
-> +
-> +What:		/sys/bus/usb/devices/.../bos_descriptors
-> +Date:		March 2024
-> +Contact:	Elbert Mai <code@elbertmai.com>
-> +Description:
-> +		Binary file containing the cached binary device object store (BOS)
-> +		of the device. This consists of the BOS descriptor followed by the
-> +		set of device capability descriptors. All descriptors read from
-> +		this file are in bus-endian format. Note that the kernel will not
-> +		request the BOS from a device if its bcdUSB is less than 0x0201.
-
-I moved this to the entry after the "descriptors" description in this
-file, and dropped the "..." portion to show the correct string, as the
-"..." doesn't make sense here, right?
-
-thanks,
-
-greg k-h
 
