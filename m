@@ -1,108 +1,135 @@
-Return-Path: <linux-usb+bounces-7615-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7596-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DAF5F873D67
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Mar 2024 18:22:02 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A3461873346
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Mar 2024 10:59:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 96094283F0B
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Mar 2024 17:22:01 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AF1A6B25D3F
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Mar 2024 09:59:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDF9713BACA;
-	Wed,  6 Mar 2024 17:21:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="fRm7+o8X"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFA105FB84;
+	Wed,  6 Mar 2024 09:58:22 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx1.zhaoxin.com (MX1.ZHAOXIN.COM [210.0.225.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DD1F13666B
-	for <linux-usb@vger.kernel.org>; Wed,  6 Mar 2024 17:21:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF4BA5F463
+	for <linux-usb@vger.kernel.org>; Wed,  6 Mar 2024 09:58:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.0.225.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709745715; cv=none; b=RlJYtnUtlKvy9vqRZcnx45qsjSXj+kND2Zy5F/0V2FqlWAVJDT+H/62dLDGns+4WbsWdIyJoDMYef8knfyBkG1l/txXo/4Np/3MY7x9lrzNtf/hHyqk+isK3FhG5BZLPed//sYCOOcEq7rc8EC+wpfB/BF81tfqFILwQ6NtQyug=
+	t=1709719102; cv=none; b=AKwrD4SfGRLFWS3rdixK3K/Csrnf0JZcX1rw8dEucBtmCMcaa39roAhReQXCsomBux3WGaV1HYGWbeje5SMw8wXbCmsOZ76LusHgUKGC2Gix/LQAGkgXOjXIus72SP9dPfdGNxESxHateGKYJONji4OT9r7YihbsFqWCF1sCLto=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709745715; c=relaxed/simple;
-	bh=wJSO9638b0C0bTkeAKGbBDFerfuAF+ha8QNh1SaDGgE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gvIPKE9neR/tyJvd25TB3lDncGg90IIlDZTFpvDddbPbpVI7iDrtnzPXKyB90QsNo7nxP1/OITIOW7PFQXTgFk8kcRjvfncqJm7rPyZq19RLgvGDGp6JW1BJRd2f3pCzLAZaeM9tv9fa3snUTja34Oc6bNksxt2GZgIOv6imIHY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=fRm7+o8X; arc=none smtp.client-ip=209.85.218.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a3f893ad5f4so879566b.2
-        for <linux-usb@vger.kernel.org>; Wed, 06 Mar 2024 09:21:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1709745712; x=1710350512; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aZepAgoRBGZH9lV/EuYJdoD5pQyR7I1LHPo56Sgxp+s=;
-        b=fRm7+o8X6luHbtIn0MekEH46F83uCtuC4tahRjMW97WTYDobyq0VtK4aZjq8I7yHyQ
-         RY4NamcNIL/JQzT5MUreXbsXnmHxlRhYtpfyVpFuzeZSkCGW25/2BxNZ8aHDvy+mCcI4
-         9sfJsde7Xkd0E/yyqgL9fe4NXLLXH8OyJRM6na/HtAFYOIhXXotyw1F2+wLN2udv/Zkw
-         u1KwJpdBpLgqDVrPpJwKFh5RlguJsL5quhcuOFWwEVjeAeuZUiDqzkncunowgW2ZKCEm
-         QJpugBmtKhmUwQvuvIsHs8yhXw9jKr3/G6ajey2h7HvC6mT3wZoc7C+ZTilEoqdWvRs+
-         z3Eg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709745712; x=1710350512;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aZepAgoRBGZH9lV/EuYJdoD5pQyR7I1LHPo56Sgxp+s=;
-        b=R/aypccfkfQr4PZjJbNheg+HZJDYksg/fetbPJOK/YNGkzCt+VXRqb6JwINcyklSH/
-         zTk+kFf7ULPvHM4kmuBDu88yVBm2f0MSobUfZ5txJ6yGWFabX0uvccoNmIS1YF2QK7g0
-         DU2hjSgNBPQTfiQaMBSqukr3jY61rQFKOA4mjmOZBo3ur+yYRfPaTcbbjW8j5BN4zsS1
-         b69x4gDSpMT4oTySk9Iqa7KLr/BsEgOiW4waPcEOeHWDuyVy9tyqMkdOenTSI5c1luq3
-         T7+b6y+cy53Y9WhPzNemRR2j8e20zn7iVya3LZvXEQ8GtUqLJCVzSw/3lanphasEZIIY
-         M6Xw==
-X-Forwarded-Encrypted: i=1; AJvYcCUKimMTr7JK3gJ5vHZ3WoYFZAqRI0a0Rg5amc8xZkVX+JbDZhlXxPWbmKAR6b5j0xgbw8DOVO4JYQGkInlvzpkmRWj/hLuKgn0b
-X-Gm-Message-State: AOJu0YxN4SY+RLAuELjLG4H1i6KIvpi4C91taV70qSxU2ALl8+8v+veU
-	4ZcjzHP3JZnf5ipy96NquwZ8r1/HbAnFmQJediv8Pbeih/xK4145SbbTAMQkglk=
-X-Google-Smtp-Source: AGHT+IG5Ek2K8BgwD0/SVHizIWQQJr+PjUabNHq1xlLEvApHUtlN0BPvjHeIrpzAR3rfE2HBylF2Og==
-X-Received: by 2002:a17:906:37d6:b0:a45:f05:7e10 with SMTP id o22-20020a17090637d600b00a450f057e10mr8072132ejc.24.1709745711674;
-        Wed, 06 Mar 2024 09:21:51 -0800 (PST)
-Received: from ?IPV6:2001:a61:1366:6801:b2db:904d:e0b0:46ec? ([2001:a61:1366:6801:b2db:904d:e0b0:46ec])
-        by smtp.gmail.com with ESMTPSA id fw17-20020a170906c95100b00a4576dd5a8csm2978506ejb.201.2024.03.06.09.21.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Mar 2024 09:21:51 -0800 (PST)
-Message-ID: <b836152b-72a6-4815-a4d0-ee4956331a8d@suse.com>
-Date: Wed, 6 Mar 2024 18:21:50 +0100
+	s=arc-20240116; t=1709719102; c=relaxed/simple;
+	bh=F0VrgEoGn3VKVW7CjuxLe+mN+rspzZTMdmiYktONjv0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=ElU6tM4TrSvlR24aE7C/hcD3VcnY0FwgII2Nf5XFeMZZQDm7wcUQ0mKHXah5KstCh8Ok3b1XacS8zVR0WGdNmPcnzeuPZ0o4CF4WkUv1Ud3tk+PoXR7N28VYOHFFGPucDu5GboxHFfLtIXDAKxBJILnz9gFzs8/vy+/8+1ywpkc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com; spf=pass smtp.mailfrom=zhaoxin.com; arc=none smtp.client-ip=210.0.225.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zhaoxin.com
+X-ASG-Debug-ID: 1709719089-086e23661a01e80001-YVMibp
+Received: from ZXSHMBX2.zhaoxin.com (ZXSHMBX2.zhaoxin.com [10.28.252.164]) by mx1.zhaoxin.com with ESMTP id s9aSJHPSEpQwNNlP (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Wed, 06 Mar 2024 17:58:09 +0800 (CST)
+X-Barracuda-Envelope-From: WeitaoWang-oc@zhaoxin.com
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.164
+Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHMBX2.zhaoxin.com
+ (10.28.252.164) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Wed, 6 Mar
+ 2024 17:58:08 +0800
+Received: from [10.29.8.21] (10.29.8.21) by zxbjmbx1.zhaoxin.com
+ (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Wed, 6 Mar
+ 2024 17:58:07 +0800
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.164
+Message-ID: <3d5254cf-27de-b689-352b-45698e265f5e@zhaoxin.com>
+X-Barracuda-RBL-Trusted-Forwarder: 10.29.8.21
+Date: Thu, 7 Mar 2024 01:58:06 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next 2/2] net: usbnet: Remove generic .ndo_get_stats64
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3] USB:UAS:return ENODEV when submit urbs fail with
+ device not attached
 Content-Language: en-US
-To: Breno Leitao <leitao@debian.org>, Oliver Neukum <oneukum@suse.com>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, horms@kernel.org,
- dsahern@kernel.org,
- "open list:USB NETWORKING DRIVERS" <linux-usb@vger.kernel.org>
-References: <20240306142643.2429409-1-leitao@debian.org>
- <20240306142643.2429409-2-leitao@debian.org>
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <20240306142643.2429409-2-leitao@debian.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-ASG-Orig-Subj: Re: [PATCH v3] USB:UAS:return ENODEV when submit urbs fail with
+ device not attached
+To: Greg KH <gregkh@linuxfoundation.org>
+CC: <oneukum@suse.com>, <stern@rowland.harvard.edu>,
+	<linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-scsi@vger.kernel.org>, <usb-storage@lists.one-eyed-alien.net>,
+	<WeitaoWang@zhaoxin.com>, <stable@vger.kernel.org>
+References: <20240229193349.5407-1-WeitaoWang-oc@zhaoxin.com>
+ <2024030530-trinity-triangle-c334@gregkh>
+From: "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>
+In-Reply-To: <2024030530-trinity-triangle-c334@gregkh>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: ZXSHCAS2.zhaoxin.com (10.28.252.162) To
+ zxbjmbx1.zhaoxin.com (10.29.252.163)
+X-Barracuda-Connect: ZXSHMBX2.zhaoxin.com[10.28.252.164]
+X-Barracuda-Start-Time: 1709719089
+X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
+X-Barracuda-URL: https://10.28.252.35:4443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at zhaoxin.com
+X-Barracuda-Scan-Msg-Size: 2055
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
+X-Barracuda-Spam-Score: 1.09
+X-Barracuda-Spam-Status: No, SCORE=1.09 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=DATE_IN_FUTURE_06_12, DATE_IN_FUTURE_06_12_2
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.121736
+	Rule breakdown below
+	 pts rule name              description
+	---- ---------------------- --------------------------------------------------
+	0.01 DATE_IN_FUTURE_06_12   Date: is 6 to 12 hours after Received: date
+	3.10 DATE_IN_FUTURE_06_12_2 DATE_IN_FUTURE_06_12_2
 
-
-
-On 06.03.24 15:26, Breno Leitao wrote:
-> Commit 3e2f544dd8a33 ("net: get stats64 if device if driver is
-> configured") moved the callback to dev_get_tstats64() to net core, so,
-> unless the driver is doing some custom stats collection, it does not
-> need to set .ndo_get_stats64.
+On 2024/3/5 21:25, Greg KH wrote:
 > 
-> Since this driver is now relying in NETDEV_PCPU_STAT_TSTATS, then, it
-> doesn't need to set the dev_get_tstats64() generic .ndo_get_stats64
-> function pointer.
 > 
-> Signed-off-by: Breno Leitao <leitao@debian.org>
-Acked-by: Oliver Neukum <oneukum@suse.com>
+> On Fri, Mar 01, 2024 at 03:33:49AM +0800, Weitao Wang wrote:
+>> In the scenario of entering hibernation with udisk in the system, if the
+>> udisk was gone or resume fail in the thaw phase of hibernation. Its state
+>> will be set to NOTATTACHED. At this point, usb_hub_wq was already freezed
+>> and can't not handle disconnect event. Next, in the poweroff phase of
+>> hibernation, SYNCHRONIZE_CACHE SCSI command will be sent to this udisk
+>> when poweroff this scsi device, which will cause uas_submit_urbs to be
+>> called to submit URB for sense/data/cmd pipe. However, these URBs will
+>> submit fail as device was set to NOTATTACHED state. Then, uas_submit_urbs
+>> will return a value SCSI_MLQUEUE_DEVICE_BUSY to the caller. That will lead
+>> the SCSI layer go into an ugly loop and system fail to go into hibernation.
+>>
+>> On the other hand, when we specially check for -ENODEV in function
+>> uas_queuecommand_lck, returning DID_ERROR to SCSI layer will cause device
+>> poweroff fail and system shutdown instead of entering hibernation.
+>>
+>> To fix this issue, let uas_submit_urbs to return original generic error
+>> when submitting URB failed. At the same time, we need to translate -ENODEV
+>> to DID_NOT_CONNECT for the SCSI layer.
+>>
+>> Suggested-by: Oliver Neukum <oneukum@suse.com>
+>> Cc: stable@vger.kernel.org
+>> Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+>> ---
+>> v2->v3
+>>   - Modify the description of this patch.
+>>   - An error is returned directly when submitting URB fails.
+> 
+> This change breaks the build, please be more careful'
+> 
+> drivers/usb/storage/uas.c: In function ‘uas_submit_urbs’:
+> drivers/usb/storage/uas.c:559:21: error: unused variable ‘urb’ [-Werror=unused-variable]
+>    559 |         struct urb *urb;
+>       |                     ^~~
+> 
+
+I'm sorry for the carelessness. Now, I have removed this unused variable
+and completed the compilation test. I'll resubmit this patch with a new version.
+
+Thanks
+weitao
 
