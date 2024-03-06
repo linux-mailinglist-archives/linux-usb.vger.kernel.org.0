@@ -1,218 +1,156 @@
-Return-Path: <linux-usb+bounces-7588-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7589-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D17AA872FBC
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Mar 2024 08:34:04 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 958B6872FEE
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Mar 2024 08:41:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 014301C21A98
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Mar 2024 07:34:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4C33A287161
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Mar 2024 07:41:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4F775C903;
-	Wed,  6 Mar 2024 07:33:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB9515CDC6;
+	Wed,  6 Mar 2024 07:41:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="AXE9O5u4"
+	dkim=pass (1024-bit key) header.d=fibocomcorp.onmicrosoft.com header.i=@fibocomcorp.onmicrosoft.com header.b="kQqx9yzW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2110.outbound.protection.outlook.com [40.107.215.110])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A926F171BB;
-	Wed,  6 Mar 2024 07:33:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709710435; cv=none; b=jJfFH0/f1rjtRok+ebxZxINbnNPXFdTCipsHGeNxHUCE2OuD6QbbqndkkvG/8OJX50vGRhfYDeJlhmd6n7aSQJoNOTLA7UoNad4Btfx0H+ZX02l1gU5qucc4hxPom/ru65MzJikk4Cb4BkPw4SPcWLntRDCIxl2hYce3E3ZUDFQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709710435; c=relaxed/simple;
-	bh=9LwIcjfSJuhq4EOzgVx3TMaB2oEXbqURWt5hBLxw1fI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:CC:From:
-	 In-Reply-To:Content-Type; b=vBx47541nKoYQaQu+ikSq9v6RViBBt/9Mhr8TGe4sFwv9jOXyTqOaDWgXhiK1gH9p2OqkVlBJKDIb6DhNok3003rC9jw9X7S/K5qtXJH0EyD7oX5hbgUTwuex5cwS8vCnBBQUKYpcZBXoPRL0DyQSIYk0RHtgzlhiUfFELhx+Jk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=AXE9O5u4; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 4265sDK4008944;
-	Wed, 6 Mar 2024 07:33:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:references:cc:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=xldv1UnPREtmqS9LLWWTF2pSaiIvufnBwmJJW0C3zks=; b=AX
-	E9O5u4Xc7UCCJlicsPDQt2oK7UKo6pVy2UwAW2qftQxG9zcnQ23888yCzQqUAcTb
-	GU9imTEp0QcZUZUK53wah9d4etzAWLRqln2vr0cnCXP/m1AdSmGcrUQw3SrDoCBK
-	b9GWpUC8zaMirbE2DzhHh2ODARx3Gvt/fy8k08yQRBwVKHksqzMxJBlIvmBwgOq+
-	hU+YQcC9bX7CUkbTe7+8cXKYeJSlKE1ws4INVEL+FR9ar5oXmmGwvpaRhPs1urei
-	buStvPpHEtYeLeQvb40BzB7HT/B7QIxIXA7jK6QaPI+2KVYuZGu9ivWYtLRk0uiZ
-	sEesn5UeDmKiqERPNVLg==
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wpbav11xh-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 06 Mar 2024 07:33:38 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 4267XbLk018155
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 6 Mar 2024 07:33:37 GMT
-Received: from [10.216.23.39] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Tue, 5 Mar
- 2024 23:33:29 -0800
-Message-ID: <e441e458-a90b-495f-abf1-448620c14c85@quicinc.com>
-Date: Wed, 6 Mar 2024 13:03:26 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 888CA5C8F9;
+	Wed,  6 Mar 2024 07:41:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.215.110
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1709710905; cv=fail; b=awlk1GMNL+w4nyEKkJiua6+RIHoGdCWwgtL6Q7TwwK2AvQ+7N9+gKjfIP154PeSpd9j8MCZbrgiXLFIepkZpQ1pxa27/E3858QvuinAGR9k1pHshPAxCglaZ22ocljPbi/LBwv9ggF+WcpwLNSnXoIwt5Dnkcw8t+SLAbUlaees=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1709710905; c=relaxed/simple;
+	bh=q/mYZuakaFRDzPePeUyz8PyKq70GrFfEYpnYQhZH8jI=;
+	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=QwZM0POO4S1sgSP4dAQsO6ONWezKOMzfKbilkelss/DrKxr3C0A+94WERvxSokuedH6QS7GdsMgst0uUoIyywrpNl5Q4iPtjMruiW3dLRieNOziAF72pa3YWV5ZKqyBwAp7ObISLXMYaEfXVBAvy/NFnniNVPFZmJ2RG0JjGm3Y=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fibocom.com; spf=pass smtp.mailfrom=fibocom.com; dkim=pass (1024-bit key) header.d=fibocomcorp.onmicrosoft.com header.i=@fibocomcorp.onmicrosoft.com header.b=kQqx9yzW; arc=fail smtp.client-ip=40.107.215.110
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fibocom.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fibocom.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VC/JwRvKVMFvmpJrl0kQ7iYu2wbZCR4HDvozvJLIIem+4hQpkvp36QWKj5CRLUCoTx6UpeqlAzjTYNzKhaViZ4PC4B9eyQwqZncA/CYinkO+UkWp/Uu7HfEmll7l5ugvSTne5ixXvreojqZRuvLSeOj8QB1vaQ4DPlYdBuljzNBLDRayDQnUsFwxtgD0InXEWF/w8AkdA1G6pYJmWN9/B6bF+eyaEd4ltOeJtQI5Ttn3+iQl6BvL2iBIYjfQFHYS6OKsOH7nMlQ1hmJwdrTFcTPuvfPI+n4h0AzvJ/To707MwdsDCVetfWxl+FBWcPrTHdHMpobQ5Rk1IAZ2Mw1ZTw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=q/mYZuakaFRDzPePeUyz8PyKq70GrFfEYpnYQhZH8jI=;
+ b=HlC4LOdb4zgyB0F4vkoBVNMhQQgdI36yAF2ZyfvGHgxzPb5aAnXLokfm43HwN51buI/iCWJZehGFkT9FPbGmrgolVtUhZX1BeCHvsT7jokQjZ8l9Ql7a74RQpC8iPq0m1pEJhd7PTqPIelTlwz5dpZw8Lb2L4gE/zL/3xQ4Sz8j1WUMBTu+JKNQl14lo2go7ShC56voQnOHw/xjqAzyM8HPmGHtiwD/AAyjfS1ZDYqgzSVwc9lVA1y0A5SnBu+Qlqbjuaogor/5VC1V3a1smJzPmlqFhPQhCV/87toltD0ZXmHX9q9bIPYoO9hgt73HizSeaOgNA7XFtJ2ddtjRxTQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fibocom.com; dmarc=pass action=none header.from=fibocom.com;
+ dkim=pass header.d=fibocom.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=fibocomcorp.onmicrosoft.com; s=selector1-fibocomcorp-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=q/mYZuakaFRDzPePeUyz8PyKq70GrFfEYpnYQhZH8jI=;
+ b=kQqx9yzWP2TjIegJ+1fpD2cwM/uR4y3j/rQNSTGLXVAFsA8BrfLgMpr0drt65H2FYiF627kCwC+Fb7pM7HWLUKH3WLyh8QzbxgzzJcldFVQatHf2bGj0wDZcod+B26I0rHuiI2QmvajEoBwqGU1dOCjxInbEPjBh2AwRmIg3uLI=
+Received: from KL1PR02MB6283.apcprd02.prod.outlook.com (2603:1096:820:dc::11)
+ by TYZPR02MB6074.apcprd02.prod.outlook.com (2603:1096:400:25c::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7339.39; Wed, 6 Mar
+ 2024 07:41:37 +0000
+Received: from KL1PR02MB6283.apcprd02.prod.outlook.com
+ ([fe80::87a8:fbd4:757d:2f75]) by KL1PR02MB6283.apcprd02.prod.outlook.com
+ ([fe80::87a8:fbd4:757d:2f75%7]) with mapi id 15.20.7316.023; Wed, 6 Mar 2024
+ 07:41:37 +0000
+From: "Bolan Wang(Bolan)" <bolan.wang@fibocom.com>
+To: Lars Melin <larsm17@gmail.com>, "johan@kernel.org" <johan@kernel.org>,
+	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+CC: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] USB: serial: option: add Fibocom FM135-GL variants
+Thread-Topic: [PATCH] USB: serial: option: add Fibocom FM135-GL variants
+Thread-Index: Adpvko0jRh2Nq0RESdW8MpHCbG6u0A==
+Date: Wed, 6 Mar 2024 07:41:37 +0000
+Message-ID:
+ <KL1PR02MB6283F5203E50CD87F344331689212@KL1PR02MB6283.apcprd02.prod.outlook.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=fibocom.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: KL1PR02MB6283:EE_|TYZPR02MB6074:EE_
+x-ms-office365-filtering-correlation-id: 59c7b070-aab2-4808-26ef-08dc3db0daac
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ Uf3oiHAe1MZUE6kJmaSKiPXJf/6asKTm8zvxc8v1ODy905xWNclRX+crABos1CbCS5qbjwtWMX23luQLWiNhwRqIafcPmDQiJ7gFoHtsF+GJf7VTX0TurjariqOH63ppVYUntws5EhI7qE3U/kFFiAVYUHmF8t6l/9UDoD7+7/L/n2lWJPiqxw82GIkqXs/qmVy/DgVDvTr1dNmxEAuRQLGd/MIFKUZ6KAvG2LVLMv5h2jFEl8OHs6R/xMFCAvYb6POhMTtB98ebdvMnQiyjRDU4h/Fy556tr15MMmTK9+je+Ph5i8jYiVp3kCvhd7quI7bzdVSIlEXhL+MQ6govqrbU8hJJlCq+O8PHq+ebLepiHGCtsk4n0o/bFvhittt3qiL+gOC5Fu58Wg9V0z3PIkLrw6nguPY0YYgHSmB39UInhhN3aYEBDQqwhdZ3uKiqmmXlVt2vFXfK7288rmEHFJV0x39k48LEGS8oOqnPwLFBGSQi0f9/9j/db04/j8b7gN2ZmZa5yzeRJOZFtP2euUqpQg0CIxCEzynzpD0T04H8IJ41QQzJ2qg0ZGQ6vjvCI9NTgaaleyMek90cr/8tTssPvdEsNtUN/va3B8C+KF9GQqCrrHT4L+dhsmQE/f83aL+aArrZXMlrP/ujFBBG18ctcgCme+xLtzo6yyaKo47/9tgveABj5BvsiDOPSeADdAgVor97cqwyk7KVJTn+9A==
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:zh-cn;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:KL1PR02MB6283.apcprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(38070700009);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?bDVHRlhBQUlLUFlSRmpxT1JaSDlHU05OZW9SRWJzUFpaT041UWlLWWRoeHZB?=
+ =?utf-8?B?STIwV1kvWEYyb1VpUkNjVFQvSmVzNlJFUDRWQk9rYU5qRnU1MnlLaG9nSlhX?=
+ =?utf-8?B?M0dIN1p2T2NRUkJOcGVlTzREa1V3UnRZbWg3TDUxV1RWcUJJYlBnR0lNbFIx?=
+ =?utf-8?B?Rjg2ZVhOLzBTMDhJN21IM1JyM011Q1BQOFN1czN3OVZxWUpLLzVpTmFKdUJK?=
+ =?utf-8?B?MFFDOTNVSlJQNGIvRyt3VXVMbTRVSnNrN0lIT3p0SG1NZVBYRUI1S1JtcG9u?=
+ =?utf-8?B?R2Q2b3dEOVZmamZlQUhFUTdUNUpJZWZ3UUJKSklZQ0NsaTFCSmUxZTd2MHRG?=
+ =?utf-8?B?Q05OZXJOTWZTbjAvb2RuMzdUTk1OODI3RmJVQ3M2KytJQmhOdjd6djFHZVpC?=
+ =?utf-8?B?TjQwNGZQS3lPV1hWUmxEcFN3aGxpNnUrNzVoSnNNbDlsUG1OVGsrTzdxdHJO?=
+ =?utf-8?B?SVhEbDBoTGtzVUtZYzR0cmxHVGd3ZnJBaThyUVduSWVxeWJnRy95akUrenU0?=
+ =?utf-8?B?aGpTK3lqUWhTRndVUlFkU3BiT080a2I1aktJS0FPVUM3Q3FGU3labjNrM1ht?=
+ =?utf-8?B?b1AydUlPU0o5L0JlQ0J3N1BNNEZSZnJra0NtVGlpb0EzbitlYjRlQUJzRVZM?=
+ =?utf-8?B?aGFlNlZIZ0RYZ1hqV2pwaWxxSk5GSFcxaTY0VVJYaTVTc0d5RUxoN21lemJ3?=
+ =?utf-8?B?ckVSQk9kU25MUGY0R1BpUDZPYTIvV0QvNko1aENoZENENnhiN1Z4S2hZZ0Yx?=
+ =?utf-8?B?TE9OMENsNldDUmtwUldVNEV3RFl3ZjIzdHUyVy8xTWhvVnRLT3Rpdk13dGZE?=
+ =?utf-8?B?WUhoaXJCZ0hqWFViUkw3eVYxQ2FPMzV0dDRIRUw3N0I4SHpnUFVDWm02ZXJ4?=
+ =?utf-8?B?aG5tdWtzQmFOaG5BQUpFWnNYbVE3VVB4QWpTZHBCK0lNNjRxeDNLWEhTd2Yz?=
+ =?utf-8?B?NHR5eXB5dlBNOXNSMmJwU1hDS2VRWUdKbWpIUjFmQ3V2Zm9zOCtaa2ZPSDVQ?=
+ =?utf-8?B?V3VkQ0cwajRVZG5nTUlRK2UxN2xuN3cvQ2NDaWxlNkZ4Zm5PS2dNUDUxYTdS?=
+ =?utf-8?B?YUxnNmh2VEJsY0plT2xscloyV2p5enNVcFJhbS9YVXRCdWlEbFo3VndJcWRM?=
+ =?utf-8?B?enVnWDZwL3JBNWhNT0hoeVpsYVdyRDJ3ZXhKTldVRldLdkZpQVAwMmovbTB4?=
+ =?utf-8?B?ZzZZYWVEM2Y4dngwWjdQWTRzdWkrTUpyOEhxZHhhUVVFaVl5cXJuM3RXcjMz?=
+ =?utf-8?B?UDB0NkhySnFFT2ZJYkdJbkVpQnJXNXJTTUNsUDZYNU1KT0dwNmRvNU1uVFNq?=
+ =?utf-8?B?S2l5eUdRUDRnSHFCQ0cxNk1mUTBPWmVYVmRFYzFTcEttckdhRTM4WERkTVRS?=
+ =?utf-8?B?R3N0WFlBbFdoVWZmUXZPRHM0aDdCcS9WS3ZCdnc1dkt1RTlaMWE1emk1VG1L?=
+ =?utf-8?B?Z00rT3NIZzMvUDU3M0NSb0g0N21RY01YSmxZTy9Xd1g3djQrclpJWFRnckNK?=
+ =?utf-8?B?LzcxeDVlUHdocDFRZ0tMcU9XZndPRTBaQkIrZTJqcUhYS0Q4VVBLdzlpWnlq?=
+ =?utf-8?B?VUZjMlR6Y0d5eU5wekRtK1JWQ2syRXpFSnNibUFya2JJd0p0UHpIcmMvL2FV?=
+ =?utf-8?B?TWFXMkhRcXZnWklVS2lQYm5zSTZMK2JFUGdVZmJNbWh1VWtPSnRTTWZhY2U4?=
+ =?utf-8?B?TUt6eERkUUVsL0Q5VXZGUEJ6b2cyemRiWDc1aDlDbndZQ080WW1zUW9KZVVv?=
+ =?utf-8?B?SFJwWXdaL0FudDc3ZWprTHN2UWlPL2VPR3FFWHVEb0hkOGxIM0htZnpqVnpJ?=
+ =?utf-8?B?d3JtRG1WWTN5ZTJaS1NzaGwyQnhiS1pNL0ZadjlqQ1dRb0p3YlhSTERlaW1p?=
+ =?utf-8?B?ZTFBNFo3ZlgrU0RQTzlta1BjV1d2R2pvdXlzdEFGWUtUYzVEOXd1anZCSGFF?=
+ =?utf-8?B?M1UxSXc0TllnZWhiY3ArNmZVc2F4dlduL0lCaE5SKzZnOVZVTGdGOWUzemc4?=
+ =?utf-8?B?bTV2dUFXeFFIOTNEVFB0S2ZzUU5kYTRaQWhsVnY0MHhLdDlBYzJRNCtQWkNN?=
+ =?utf-8?B?WHFydk16NE1Fd1k0SXdINnVQblFVMTM3L3g2Z2ZsYkp1c3pVSC9FRzhMVUNr?=
+ =?utf-8?Q?4ufec39zR2rcVmtGUkVysd5C2?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC 1/3] dt-bindings: usb: qcom,dwc3: Add support for multiple
- power-domains
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Sriram Dash
-	<quic_sriramd@quicinc.com>, <andersson@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>
-References: <1709657858-8563-1-git-send-email-quic_sriramd@quicinc.com>
- <1709657858-8563-2-git-send-email-quic_sriramd@quicinc.com>
- <86371fc0-ef49-4dc9-b98c-7c5131cd1227@linaro.org>
- <986b49f5-6a4a-430d-ba6a-2f387f2a262a@quicinc.com>
- <84618a4a-be20-4c59-badc-15fa65debf4c@linaro.org>
-Content-Language: en-US
-CC: <quic_shazhuss@quicinc.com>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <Thinh.Nguyen@synopsys.com>,
-        <kishon@kernel.org>, <konrad.dybcio@linaro.org>, <robh@kernel.org>,
-        <sudeep.holla@arm.com>, <p.zabel@pengutronix.de>,
-        <ulf.hansson@linaro.org>, <conor+dt@kernel.org>,
-        <manivannan.sadhasivam@linaro.org>, <quic_psodagud@quicinc.com>,
-        <quic_nkela@quicinc.com>, <gregkh@linuxfoundation.org>,
-        <linux-arm-msm@vger.kernel.org>, <quic_wcheng@quicinc.com>,
-        <linux-phy@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <vkoul@kernel.org>
-From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <84618a4a-be20-4c59-badc-15fa65debf4c@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: A9fYxT-kTiART89yEKpTt9SUhqZi-ITM
-X-Proofpoint-ORIG-GUID: A9fYxT-kTiART89yEKpTt9SUhqZi-ITM
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-03-06_04,2024-03-05_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- mlxlogscore=693 impostorscore=0 adultscore=0 bulkscore=0 mlxscore=0
- phishscore=0 clxscore=1011 priorityscore=1501 spamscore=0 malwarescore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2402120000 definitions=main-2403060059
+X-OriginatorOrg: fibocom.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: KL1PR02MB6283.apcprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 59c7b070-aab2-4808-26ef-08dc3db0daac
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Mar 2024 07:41:37.1392
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 889bfe61-8c21-436b-bc07-3908050c8236
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ID8GmbrTVSF4MD/kLEqFZIbb61K6THwI3juzMyLMIgDPVWZGq8o6858jPnEkHv4yw5xYDpxvGS5qnGNst4bfRg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR02MB6074
 
-
-
-On 3/6/2024 12:33 PM, Krzysztof Kozlowski wrote:
-> On 05/03/2024 19:03, Sriram Dash wrote:
->> On 3/5/2024 10:37 PM, Krzysztof Kozlowski wrote:
->>> On 05/03/2024 17:57, Sriram Dash wrote:
->>>> Some target systems allow multiple resources to be managed by firmware.
->>>> On these targets, tasks related to clocks, regulators, resets, and
->>>> interconnects can be delegated to the firmware, while the remaining
->>>> responsibilities are handled by Linux.
->>>>
->>>> To support the management of partial resources in Linux and leave the rest
->>>> to firmware, multiple power domains are introduced. Each power domain can
->>>> manage one or more resources, depending on the specific use case.
->>>>
->>>> These power domains handle SCMI calls to the firmware, enabling the
->>>> activation and deactivation of firmware-managed resources.
->>>>
->>>> Signed-off-by: Sriram Dash <quic_sriramd@quicinc.com>
->>>> ---
->>>>    .../phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml        | 74 ++++++++++++++++------
->>>>    .../bindings/phy/qcom,usb-snps-femto-v2.yaml       | 49 ++++++++++++--
->>>>    .../devicetree/bindings/usb/qcom,dwc3.yaml         | 37 ++++++++++-
->>>>    3 files changed, 130 insertions(+), 30 deletions(-)
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml
->>>> index 1e2d4dd..53b9ba9 100644
->>>> --- a/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml
->>>> +++ b/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml
->>>> @@ -44,7 +44,32 @@ properties:
->>>>        maxItems: 5
->>>>    
->>>>      power-domains:
->>>> -    maxItems: 1
->>>> +    description: specifies a phandle to PM domain provider node
->>>
->>> Please drop all redundant descriptions. Adding them is not even related
->>> to this patch.
->>>
->>
->> Thanks Krzysztof for the super quick response !
->> Sure. will drop the description for power-domain
->> and power-doamin-names.
->>
->>>> +    minItems: 1
->>>> +    maxItems: 2
->>>> +
->>>> +  power-domain-names:
->>>> +    description:
->>>> +      A list of power domain name strings sorted in the same order as the
->>>> +      power-domains property.
->>>> +
->>>> +      For platforms where some resource are firmware managed, the name
->>>> +      corresponding to the index of an SCMI domain provider can be
->>>> +      "usb_core" or "usb_transfer".
->>>> +    items:
->>>> +      - const: usb_core
->>>> +      - const: usb_transfer
->>>
->>> How is this related to fw-managed? I fail to see it. Don't mix
->>> independent problems in one patch.
->>>
->>
->> Some of the the resources like clocks, regulators, etc will be
->> controlled by the firmware instead of OS. However, some resources
->> still will be controlled by OS (interrupts for example).
->>
->> So, to support the management of partial resources in Linux, and
->> offload the other resource management to firmware, multiple power
->> domains are introduced. They will be corresponding to different
->> hw blocks.
->>
->> Do you suggest splitting the addition of power-domain-names and
->> addition of fw-managed property in separate patches for bindings!
->>
->>>> +
->>>> +  qmp,fw-managed:
->>>
->>> Please do not upstream vendor code directly, but perform basic
->>> adjustment to upstream Linux kernel. There is no such company as gmp.
->>>
->>> Run this first through your internal review process.
->>>
->>
->> This property is newly introduced for the qmp superspeed phy and
->> similar dt properties are introduced for hsphy and dwc3 qcom
->> controller glue layer driver. It will govern the suspend/ resume
->> of the resources (by firmware or OS) as required.
-> 
-> So that's your answer to "there is no such company as gmp"? It's not
-> relevant at all.
-> 
-> Please run it through internal review first.
-> 
-> 
-Hi Sriram,
-
-  QMP indicates the driver name "QMP Phy" (for super speed mode of 
-operation), not the company name. If this property is for identification 
-of fw management to be done / (or not to be done) in QMP Phy, then 
-please rename is appropriately. Check how other properties are defined 
-in the QMP bindings and add "qcom" at beginning preferably. For 
-reference as to how properties were added to femto phy driver: [1].
-
-[1]: 
-https://patchwork.kernel.org/project/linux-arm-msm/patch/1662480933-12326-2-git-send-email-quic_kriskura@quicinc.com/
-
-Regards,
-Krishna,
+PiBIaSBCb2xhbiwNCj4gc28geW91IGFscmVhZHkga25vdyB0aGF0IG90aGVyIHZlcnNpb25zIG9m
+IHRoZSBjYXJkIHdpbGwgaGF2ZSB0aGUgcGlkDQo+IDB4MDFhMSBhbmQgdGhlIHNlcmlhbCBpbnRl
+cmZhY2VzIHdpbGwgYmUgb2YgY2xhc3MgZmYgYnV0IHlvdSBkb24ndCBrbm93IHdoYXQgdGhvc2Ug
+aW50ZXJmYWNlcyB3aWxsIGJlIHVzZWQgZm9yPw0KPiBZb3Ugc2hhbGwgb25seSBhZGQgZHJpdmVy
+IHN1cHBvcnQgZm9yIHdoYXQgeW91IGtub3cgdG9kYXkgYW5kIG5vdCBmb3Igc29tZXRoaW5nIHRo
+YXQgbWlnaHQgb3IgbWlnaHQgbm90IGJlIGltcGxlbWVudGVkIGluIHRoZSBmdXR1cmUuDQoNCj4g
+Rm9yIHRoZSBkZXZpY2Ugd2l0aCBwaWQgMHgwMTE1IHlvdSBoYXZlIGxpc3RlZCBhbiBhZGIgaW50
+ZXJmYWNlIGFuZCBhZGIgaW50ZXJmYWNlcyBzaG91bGQgbm90IGJlIGluIHRoZSBvcHRpb24gZHJp
+dmVyLg0KDQpIaSBMYXJzOg0KDQpPaywgSSB3aWxsIHJlbW92ZSAweDAxYTEgZnJvbSBvcHRpb24g
+c2VyaWFsIGRyaXZlci4gQW5kIHRoZSBhZGIgbGlzdGVkIGluIHBpZCAweDAxMTUgd2lsbCBhbHNv
+IGJlIHJlbW92ZWQuDQpBY3R1YWxseSBhZGIgaW50ZXJmYWNlIGluZm8gd2l0aCBwaWQgMHgwMTE1
+IGlzOiBDbGFzc19mZiZTdWJDbGFzc180MiZQcm90XzAxLCB0aGUgb3B0aW9uIGRyaXZlciB3aWxs
+IG5vdCBiaW5kIGl0Pw0KSSB3aWxsIHJlc3VibWl0IGEgbmV3IHBhdGNoLCBwbGVhc2UgaGVscCBy
+ZXZpZXcgYW5kIGFiYW5kb24gdGhpcy4NCg0KdGhhbmtzDQpib2xhbg0KDQoNCg==
 
