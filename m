@@ -1,120 +1,155 @@
-Return-Path: <linux-usb+bounces-7591-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7592-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F07A8730B3
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Mar 2024 09:30:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A78C6873105
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Mar 2024 09:45:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BA7EDB21F03
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Mar 2024 08:30:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3A22CB24EAB
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Mar 2024 08:45:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 424105D8E2;
-	Wed,  6 Mar 2024 08:30:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E5E25D8E3;
+	Wed,  6 Mar 2024 08:45:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lcXDCXnI"
+	dkim=pass (1024-bit key) header.d=fibocomcorp.onmicrosoft.com header.i=@fibocomcorp.onmicrosoft.com header.b="nNRwse2e"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2114.outbound.protection.outlook.com [40.107.117.114])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71BF45D730;
-	Wed,  6 Mar 2024 08:30:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709713803; cv=none; b=obPtpQgBXiLSHLOd8XP29y+KOKWB8XoDYLy5r17K+4V9/yEi9VBcPk0tiIn/pApVn8YtXQ9D1RwOptJRqYeFp/Ytxe6yn0XomoaYoRijMJzDK7AYRLWk2CpLZEIZ6xpaEz1XbWKE/TSs1NWPSFBm65ARBjv5MWgCEH7k8D9vIqA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709713803; c=relaxed/simple;
-	bh=DjMvANrFgFvNlIdE1sM6AN8+G0NpuxLckY37WzfXlAo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=upDYAXI9osZBYzlit/6T1uQ5ucG8KXvJdsDSPJ5wZR1AD6eaeDYRweW1hWWrLQ0wIp2b5a9iRBLAv7x6hwkwUouunZDi7bvgnrsNkHC5uRZKr7v2blAGJSYEKbpsvB0sEK9RhGeJuGlJBXrfWs9vYQB1YAaKvVgCLi5jpzHhoa0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lcXDCXnI; arc=none smtp.client-ip=209.85.210.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-6e5a50d91b4so6382652b3a.2;
-        Wed, 06 Mar 2024 00:30:02 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C2372E641;
+	Wed,  6 Mar 2024 08:45:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.117.114
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1709714738; cv=fail; b=k4/0QuaSKARde0VmFxBq0jlNaLA4zY2HIgpbD+Rw7p8JYAomAqsLoPpqnlY9LuomEG1ylhVDYzQc3nwBZsLU9MBsRCRsZYystbUj/g0xSOjJ6uOni+fBw3Km2LajRyEUdIkSvHjufcGI+0RX+Z+Nn3udLkI9jJw32WeBu5m2m94=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1709714738; c=relaxed/simple;
+	bh=ob2otnfSPAmYzfdkvYKAXFO7sUsIIZKqKkhLZvm9428=;
+	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=tBCudxp4vHibyX+FYmMpF9MSaJ++Qt3uPb0oYLd62RXNlIQtgfHI83joB3ggzpQ2mLMwDZkO0RuM8+cNtz/ywHgh3/G3PYYvtW7mgGRCm093KZczG7R9lkkEfwYsUEyyaZnZGFiKftAQxVHY0PAm6/29GgNlYmWXDvZd8Hf+4zM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fibocom.com; spf=pass smtp.mailfrom=fibocom.com; dkim=pass (1024-bit key) header.d=fibocomcorp.onmicrosoft.com header.i=@fibocomcorp.onmicrosoft.com header.b=nNRwse2e; arc=fail smtp.client-ip=40.107.117.114
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fibocom.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fibocom.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JFi61XI6p20rMLP1EDqKtQn5O4yWpEiaKDvPM/kuR7ec4RNVNqoYHCYsEsp7IiF0AtkohGLs+liGgwk+ELlLwv1oQYU1R8aRbYsdNJ5nSfF7jyZ4ZP4i+tdVcfkSLj4j0AsG0ZCKyb0Ffc7Y9wNP3EhgHqpiFuCq554V146+/KdqnUKFGYaXv88b7cAxW8uhDKmmnlaNpT5v+4rm4zgQlGY7/7ImKGaBIGC3Ezo5carYQmawyXc4CGBqkBewbD79doBA68Qs1XHQGhfNYKIt6lFevklSE262y00qtSFyHiwfaZxkTWNks7wMgDORj9FBDzHPcKFl/e7MgAk3cJ7z/w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ob2otnfSPAmYzfdkvYKAXFO7sUsIIZKqKkhLZvm9428=;
+ b=jDu08MI7QImbKnlK0+m2OhxvNIshOXz75FYAMi5sJTMxWNzhIORH6CzyYsmobUdSxd8SUIFEs/lYPkFMxch5xbYnjsv8RC8u2iCu83wSN/JauZEJyfhOojgpeSgtH1oc5kslDR+PN1DU3EsUvPdMxEeRimKCiEKXX54tyieCHz3hVUMp/sv89SOoYiPbIXQ68vAQlq+zYNglUaCJnw6/upx78bHEPwRwGhjKyy3nNqOxc/mHRToqDB22P0YPp2EzP7Xk7U/mBwro9HQQ1n0LfLEVPvc/Pg9DuxWOi7xMnGEHYpjRYAtb9aVSgJb9qqHrF4rOxymBklup5LHuzw8Jng==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fibocom.com; dmarc=pass action=none header.from=fibocom.com;
+ dkim=pass header.d=fibocom.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709713802; x=1710318602; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=V6jJFKSb+rris1ipccPGLL2PjrVECDvGnkU4+GtbfFw=;
-        b=lcXDCXnIIknuC8GBu74hpKnR9r7k4U9aHLOIVxBPR3od7wih/wGnvO7VINWFw94dqy
-         56NCN1a5WXDgiijIEBF41g2SxFjIYrn5NlqWxSPayT1XX2eDPlohe3uTQXXJ8K8nSvkd
-         MwxXnujcPLDaJbueuq9gTsG17XEzswA/+UevFCyu+BQ+zAFKEj1RUGKt0Mnihc7jnZdz
-         wLiqaEBcipoSklvkmCsiTpn8niiUyOYcglyzYI/KH3HvEzhGYtca5XFrqOzRaSzxbALY
-         EKOmAWFOl5aF0NnV4JLlXcpmV999h21buaGA/iGSd0Lc6tYxOkqWiMdw2TKbSV6fX/Vy
-         rCpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709713802; x=1710318602;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=V6jJFKSb+rris1ipccPGLL2PjrVECDvGnkU4+GtbfFw=;
-        b=KnE5bJ2WJk8Yz2Jg8F2dZpbuZX77g2Zn2Q/witGOEHKgOrX1z9TbUJSAZgKfe+WdbV
-         KV3kNnp9Vp7dttBiJ3us4u8uD//nymyj13byV1iphcV/nG57fGK32r4InUp+DtPUoeB6
-         5KZfu83h5L78ExBbz1IBed5azC/FjNTTXmKZ/2GncGja1PRnVI57i5FVv3sEdzM8yrJb
-         kWC4ukvQhZ0/r+kVdyKqU6uHAcfR4QQQ1voqnWX37FJsCSCuMzefbiwkDoIn7Y2Cnlc2
-         daMAkN0uMm64ox829OM0kJXrrZvcWN+uNqcuYrNJQ3kvTFMfeAo/isyRo3VVDmPdfizA
-         3+Qg==
-X-Forwarded-Encrypted: i=1; AJvYcCV50kZ2epcHTLPOhKLM1glGIXtHhHZfOF3riD9hysIjYRogiddAL4hTjAg7KghAAi/O8GekohV7FATWYQHQBW/Of1GH2o6hrxOUGnyK
-X-Gm-Message-State: AOJu0YxkNEnl+1fOFK8W188Sv7D+r2Qd41D1y6DyxNWokEdBpUvQ1stV
-	7I+4scvm+XijaSa+/AYXyfzmQqhLfx/CfEMHYqMRiIuQxXn2iovn
-X-Google-Smtp-Source: AGHT+IEUxQN9KsAkJ7POL4yjbqWISpiywQOTZlQQRLmUgtmwOU5W+0e5hOl2U47mWDj0CtEry03Pkg==
-X-Received: by 2002:a05:6a00:139e:b0:6e6:31aa:695d with SMTP id t30-20020a056a00139e00b006e631aa695dmr7401339pfg.30.1709713801594;
-        Wed, 06 Mar 2024 00:30:01 -0800 (PST)
-Received: from [192.168.1.7] ([61.7.133.192])
-        by smtp.googlemail.com with ESMTPSA id h10-20020aa79f4a000000b006e647716b6esm1367472pfr.149.2024.03.06.00.29.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Mar 2024 00:30:01 -0800 (PST)
-Message-ID: <f93317e4-1848-4fa0-85b7-c9a0d303d0fc@gmail.com>
-Date: Wed, 6 Mar 2024 15:29:53 +0700
+ d=fibocomcorp.onmicrosoft.com; s=selector1-fibocomcorp-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ob2otnfSPAmYzfdkvYKAXFO7sUsIIZKqKkhLZvm9428=;
+ b=nNRwse2eITAK+PefKkly/pglfU9Y15GrUOrzg5F+fvg9nlFEPhre/00QolcR699atOrFqJ6ZQWKTtdU69zkIEN8I6K9cmQIKcTglGZq/Wrj6HvgMgdkAZRk07IsIAI3koe+uJ93Z5n/4LZKYUYqYK71kKJNL0CslQk30uujUcb8=
+Received: from KL1PR02MB6283.apcprd02.prod.outlook.com (2603:1096:820:dc::11)
+ by TYZPR02MB7289.apcprd02.prod.outlook.com (2603:1096:405:45::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7339.38; Wed, 6 Mar
+ 2024 08:45:31 +0000
+Received: from KL1PR02MB6283.apcprd02.prod.outlook.com
+ ([fe80::87a8:fbd4:757d:2f75]) by KL1PR02MB6283.apcprd02.prod.outlook.com
+ ([fe80::87a8:fbd4:757d:2f75%7]) with mapi id 15.20.7316.023; Wed, 6 Mar 2024
+ 08:45:31 +0000
+From: "Bolan Wang(Bolan)" <bolan.wang@fibocom.com>
+To: Lars Melin <larsm17@gmail.com>, "johan@kernel.org" <johan@kernel.org>,
+	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+CC: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] USB: serial: option: add Fibocom FM135-GL variants
+Thread-Topic: [PATCH] USB: serial: option: add Fibocom FM135-GL variants
+Thread-Index: AdpvoTys3NfocRUQSaSnRRCqeB1ziQ==
+Date: Wed, 6 Mar 2024 08:45:31 +0000
+Message-ID:
+ <KL1PR02MB628382F4B33785C080A9ECA089212@KL1PR02MB6283.apcprd02.prod.outlook.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=fibocom.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: KL1PR02MB6283:EE_|TYZPR02MB7289:EE_
+x-ms-office365-filtering-correlation-id: b8c7a8bf-4a6a-4461-a60d-08dc3db9c805
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ 4n8wZkL2zUgPegFtJii05L/c0M1Y1WzWk4RICci+fxzcl7b5olpPg+Kbsr7/q2E44OkKz6e1/ur42KPTwGykcThxxFJ6G2gsGfmMZ0YR/8bb+GkvObwicPcaq9aQ6XHcUb31w8IyXtWhEgSlOmg9uoxgzHXf6xj9JqLee4j7cr2AEvj4V5HDAPINWe7W2MqFBbjEjDlLANQp8Yfhj/cpi7TRtiuD+3+WZkJgVUX9IHEmYV0Y6qaocRFsawgJ2Yu+MC8fQXdrhVpiOYXjyD6gc4iM0FxRouHxVzFxjOd5tvZJ4b4cAgqOsLqLHy6zZK+eeEzh7OT+gGH22rx0tUOxDR5sD5D/u3alBs4dgFi9QCrnpomO1CqU+dkx0TiAw8cJrP8mxKaECtZp+dZphmoGPwrF/aTwNwxFnu4mmKFyQeXfcw7Tf2Nca5N7tXPU12V4L56hyoLcI+KtQtMYR4jvBfRRdWk0G7h+LlXNxfuohlpIgY5Ow5SYwVL++0r0KPHnXLoIFnsfY8hN5eseR9uycK21oMFiOpnXG2VzAFmbb23VTKW+/cUrn8p/cYfRtLd6zp7oUao5iXWrRrFla6IbgA/PlU8os+69FWv7jfyWSqDL4E5MEG5OE4JED1VTJfLa5PH1G7dACDcaCzgRIRvf43SDMzGQ4O7OdWZZluKtM2W6smyxlrgrN/fkRjJfiEkkxMrt2PlFQfCPwCzwoWWwBTWzXN/DWqL5B0CpFMUbNVw=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:zh-cn;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:KL1PR02MB6283.apcprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(38070700009);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?WEFLcEhES05CL1FNckozWGlxMVZNK2Q1dXdITTVhZVFjN3pJYUpkcWR1ZVU4?=
+ =?utf-8?B?SjZtTVJ1ekVkUEU3MmRZWGt4U2liN0RiZkhYQUJINlF6N3dMVGRJUFRjTWk1?=
+ =?utf-8?B?bE50d2RyV09qU0owVGlUL0l4WFQ0T2h3eGFHZ2FUV0lrT2lXVWtzeDlWYkdZ?=
+ =?utf-8?B?R09ZVDJDSUhOckFtQ0pMdHl4V1EybVhMMk5CS0NUWDhleTREdjE2T3ZCbVYr?=
+ =?utf-8?B?RGpuaFcwbGFVWmlndG5xVDZ0bm13RDF0VktkUW5icnp6U1pEeVNiNmVCanhB?=
+ =?utf-8?B?cjBVcWlpb3F2WUEvWGRpbm5HaVBPckNIY3dYdFp4dXo1OFVtRDIxbUxsZmVF?=
+ =?utf-8?B?ZklpVDlwZ3BuNEZoSHg2ZFhweXZ3bHk3TTNOdENVb2dDMnhWcW9pY094WXF1?=
+ =?utf-8?B?dy9id1A1ZGVxQmc3ZkdLTTNvOWJ2NnQzMGVWWnN4QlRjSEl4TUFVRjU1VFVD?=
+ =?utf-8?B?cldZTmZlZi9nUU9XdzZMbUE1ZmhyN2xlaVh1V0ZaUlQ3eWVlS1JNcmNZSTg3?=
+ =?utf-8?B?Ylhsc1ZrRHF4cE1vRDRCbTNGMVExU1dwUUwya1FWMXN4T0R0MUtyMEVhVkNQ?=
+ =?utf-8?B?djBIT0J5dklNNE5seUVudzQ5b0hRMG9iS090OHdZKzhPSjVnVXplVk9taEU2?=
+ =?utf-8?B?OStwZlY1MHhnVUtNNitwZkc3QlVLaXM4MWIwOGFTZ0hEcEloU2hqWjNNV1Z1?=
+ =?utf-8?B?ZG03MS9BeDRIVjNWUThjcW9HN1UwcGRzTmVsYitZU1RyZ1M3YUpRZFZuQUlp?=
+ =?utf-8?B?RHI3eDYwT2tGQ1BnRlp1TTJRdHAvZzBNZ0VrR0VzanR2MnlhYkpMV3U1RHdB?=
+ =?utf-8?B?cVpmSWp5WnJmc09uUlZ1RXlJdDRvWTZRd3ZBaTFsMHJlQXV5OWlxTWJuUURr?=
+ =?utf-8?B?ZjZTVGNvajNDTUI3cDJ4R1BrUHFxeHRzWWhGcGFsRDJ4NHNpUDFmRXBHd2tv?=
+ =?utf-8?B?bncvMmc0b2ZUUWQ5QXhxeFJ5WFNiT1dUWC9ZdkREZXBJZTFyR09IaDJOMXIw?=
+ =?utf-8?B?dzBqSDBaVk9FcHplZlV2WlMxdHZsWlJ0WEVQd1pjSUtTQ1U3ejl6NGVKYnFx?=
+ =?utf-8?B?ZXJDSmcrRituQkJ1QW5JUkd5dnFSRnBRSHJUamxrZ3hKaFZCb2lKTVpNS1Q2?=
+ =?utf-8?B?bTZIVWN0T1oxQnpQUmRpTFVLWVFFOFN0L3BITUo0Q0pYWDdPeVVvSjYxNDNm?=
+ =?utf-8?B?bTlQRTFNcU83c0w4Y1czT2xrUURVNmJjN3pkdlkzTFJwMVlWZUxiaXYwWExF?=
+ =?utf-8?B?Y3NGUytubzFHMDVRWFhWY2pCR3NWbEFQYVB6cllKVGFoendZZ25XZmtYbmJl?=
+ =?utf-8?B?bDNCVlUyZUpWUEdVQ2FCeVJOSzUvZ0ZsZlBqRjVYazR5ODQ3NEdrcXNSdzho?=
+ =?utf-8?B?TklzcjV4QWtBa3FwSG1EWXFrQ09FcUtnUGh0Slh4UDI1SDhPSnBHN2RRUElo?=
+ =?utf-8?B?MTJVUURxRGxQTFVVVWhYcG9hT3BLOGQrM3FDTnUzTXViMGhRWnFoMzdXT0Zo?=
+ =?utf-8?B?dmdPWWp2cGVzMHVCL200UjUxeTM0WnJUYUIrRGFocjBSTVdJZVBuYTNNdUpi?=
+ =?utf-8?B?OGpuNmQvRTBOL3RQWDV0ZjBPeFZsbVN3ZVhGYzNhaStSUWxLTm9WL2c4RE9x?=
+ =?utf-8?B?Zzl6S1NuNkZibWVlU1drWkJSVW9CS3p3QzgzTkpwdFlrc3dMZTJPbG9DdVZq?=
+ =?utf-8?B?MjhlWW5qZVlqZWRVUHNmbGVSYnZhV2dpYitweHhxL2kvcnByWHhCVUdoWVcz?=
+ =?utf-8?B?ZEF6U2VmajRDT09RMjdNSDFGUG81MWtMSDQyWENvdzBmZVFpa1daWXU5U2hM?=
+ =?utf-8?B?c2YyaXJrMXpuN3VQNDJIRVZOZEV3SlRDTm11d20xZXFMSVdQTkpsY2xPcEta?=
+ =?utf-8?B?ZW9SMk83N0orM01STE54ZWordy9mRVIrWkJVTjlOS3U0eU9SRy95NVdTUEl4?=
+ =?utf-8?B?U3ZyZS9hK0VRblJJTU93cnVmbXlSMjZscDJvOVhLQ2p4T2NabXZkVy8rQmlo?=
+ =?utf-8?B?QWRvZ0lDbXowcHhLcko4RUc5eEFQcWY1OEp1bTBsUVJ4OHJJVWxuMlY3SG8x?=
+ =?utf-8?B?VTRsUERmcnE4V1d2NW1SdWZ5V0paNWZaNDd6ejFCL1JXZy9CVDZmRjZXZHpa?=
+ =?utf-8?Q?/L8E2W9xYWZJXfddLalU/EjR9?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] USB: serial: option: add Fibocom FM135-GL variants
-Content-Language: en-US
-To: "Bolan Wang(Bolan)" <bolan.wang@fibocom.com>,
- "johan@kernel.org" <johan@kernel.org>,
- "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-Cc: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <KL1PR02MB6283F5203E50CD87F344331689212@KL1PR02MB6283.apcprd02.prod.outlook.com>
-From: Lars Melin <larsm17@gmail.com>
-In-Reply-To: <KL1PR02MB6283F5203E50CD87F344331689212@KL1PR02MB6283.apcprd02.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-OriginatorOrg: fibocom.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: KL1PR02MB6283.apcprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b8c7a8bf-4a6a-4461-a60d-08dc3db9c805
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Mar 2024 08:45:31.3598
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 889bfe61-8c21-436b-bc07-3908050c8236
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: jvwJg21kUzXy0+34ObEkM6ApzxOCxfL4t3ZqStqvw0fr19GefTcB5hcRevUI8qT9jCFPePWPUCQxRILCk8UUew==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR02MB7289
 
-On 2024-03-06 14:41, Bolan Wang(Bolan) wrote:
->> Hi Bolan,
->> so you already know that other versions of the card will have the pid
->> 0x01a1 and the serial interfaces will be of class ff but you don't know what those interfaces will be used for?
->> You shall only add driver support for what you know today and not for something that might or might not be implemented in the future.
-> 
->> For the device with pid 0x0115 you have listed an adb interface and adb interfaces should not be in the option driver.
-> 
-> Hi Lars:
-> 
-> Ok, I will remove 0x01a1 from option serial driver. And the adb listed in pid 0x0115 will also be removed.
-> Actually adb interface info with pid 0x0115 is: Class_ff&SubClass_42&Prot_01, the option driver will not bind it?
-> I will resubmit a new patch, please help review and abandon this.
-> 
-> thanks
-> bolan
-> 
-> 
-
-The option driver will bind because you have matched only on Class ff 
-"{ USB_DEVICE_INTERFACE_CLASS(0x2cb7, 0x01a1, 0xff) }"
-There are other macros that you could possibly use but I can't tell you 
-which since you have not shown an usb-device listing for the device.
-You can also blacklist an interface (RSV). The option driver source is 
-full of examples of macro use and combinations.
-
-thanks
-Lars
+DQo+IFRoZSBvcHRpb24gZHJpdmVyIHdpbGwgYmluZCBiZWNhdXNlIHlvdSBoYXZlIG1hdGNoZWQg
+b25seSBvbiBDbGFzcyBmZiAieyBVU0JfREVWSUNFX0lOVEVSRkFDRV9DTEFTUygweDJjYjcsIDB4
+MDFhMSwgMHhmZikgfSINCj4gVGhlcmUgYXJlIG90aGVyIG1hY3JvcyB0aGF0IHlvdSBjb3VsZCBw
+b3NzaWJseSB1c2UgYnV0IEkgY2FuJ3QgdGVsbCB5b3Ugd2hpY2ggc2luY2UgeW91IGhhdmUgbm90
+IHNob3duIGFuIHVzYi1kZXZpY2UgbGlzdGluZyBmb3IgdGhlIGRldmljZS4NCj4gWW91IGNhbiBh
+bHNvIGJsYWNrbGlzdCBhbiBpbnRlcmZhY2UgKFJTVikuIFRoZSBvcHRpb24gZHJpdmVyIHNvdXJj
+ZSBpcyBmdWxsIG9mIGV4YW1wbGVzIG9mIG1hY3JvIHVzZSBhbmQgY29tYmluYXRpb25zLg0KDQoN
+CkhpIExhcnM6DQoNClRoZSBJbnRlcmZhY2VOdW1iZXIgb2YgdGhlIGFkYiBpbnRlcmZhY2UgaXMg
+MDUsIHNvIHRoZSBmb2xsb3dpbmcgY29kZSBjYW4gYmxhY2tsaXN0IGFuIGludGVyZmFjZSAoUlNW
+KT8gSXMgdGhpcyBhcHByb3ByaWF0ZSBmb3IgYWRiIGludGVyZmFjZT8NCg0KKwl7IFVTQl9ERVZJ
+Q0VfSU5URVJGQUNFX0NMQVNTKDB4MmNiNywgMHgwMTE1LCAweGZmKSwNCiAuZHJpdmVyX2luZm8g
+PSBSU1ZEKDUpICB9LAkJCS8qIEZpYm9jb20gRk0xMzUgKGxhcHRvcCBNQklNKSAqLw0KDQoNCnRo
+YW5rcw0KYm9sYW4NCg==
 
