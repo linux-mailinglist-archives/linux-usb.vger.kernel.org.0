@@ -1,159 +1,120 @@
-Return-Path: <linux-usb+bounces-7590-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7591-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3231887308F
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Mar 2024 09:20:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F07A8730B3
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Mar 2024 09:30:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 90BD9B26B27
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Mar 2024 08:20:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BA7EDB21F03
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Mar 2024 08:30:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28E595D48A;
-	Wed,  6 Mar 2024 08:20:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 424105D8E2;
+	Wed,  6 Mar 2024 08:30:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=fibocomcorp.onmicrosoft.com header.i=@fibocomcorp.onmicrosoft.com header.b="jK1I7oyJ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lcXDCXnI"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2125.outbound.protection.outlook.com [40.107.255.125])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5F035C057;
-	Wed,  6 Mar 2024 08:20:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.255.125
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709713237; cv=fail; b=pfIe9A9zGIO6zkIq8Ut42k032pyx7tpp39UmeOkktiwVUvGxxawF/ZpB/9oXArgGjMAeG63Ngscphjv9STCT0+7KmXVy5BE1Pl5MoD5ndbMuTkvfqr55z1vn1whWnIQk/sC8dWhCXUinAf/iiZWo3NN+YUKL4TTz7uyEfKenzy0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709713237; c=relaxed/simple;
-	bh=9Kkx3qVbRiYmSqz52+xEJPs7nSjmiT/xkXEaviRQGcc=;
-	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=NE1UKy/Pxl3oz448Egf8cbcgX7PdmKVMBnaQgGQTlTXh7IOdCXvpxTO2mYkX5pICHY1v5NnmLwzOgLAYcJBdqwbC4IrmVhK2mQlfqSOlS2TVa+hBe1jPsSNfaZEEwQQb1ROyj8IKGoYq8ozI4gGGt6ICl+LCF44B4enGNjcDlzU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fibocom.com; spf=pass smtp.mailfrom=fibocom.com; dkim=pass (1024-bit key) header.d=fibocomcorp.onmicrosoft.com header.i=@fibocomcorp.onmicrosoft.com header.b=jK1I7oyJ; arc=fail smtp.client-ip=40.107.255.125
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fibocom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fibocom.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VSvqNDrUPr2Uck9Bpbrr+SftiPTkc/FJEalGIVdQtu7FrlsLesPYthAhzSFunM/u5w4rTgUQtANhLo85aZPTusqulNZJYwLnmZ9jYgpK0rPek1/enuSqfgPXZxU5QiLFX0bGF1UiIjMobo5UHYDA6GhKgD0iM71cM9e8AbrG0v+BoL3SmvW+pxXB+ODrHhMCPsUOMGm/9AK5kvh6VONe0+4umVudSt74btATP0KiTEqVfw04YOSQy6eO4Wq+2s+6nFBdSqec+PWGdd6uQ1CtfTOKiSL4+TuNQONNQVFlfBjUjZTbWiizCBfos1hRtI3OWkamZ7zU+0A45sYs+mx5nA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=s8mddwrWO4BNP6S4N7P+V5yo2k6JNMEpf4xQGZsmkN0=;
- b=hgJJWE/kFWOXsYtkLrZiad6UqqaZocCvM5bTFE0W9x0RPLYY2bYw79Xs3kh/QpurIFbxzE1MSbJMJ/XhbisPYiFE2oeBzj2v68Mr+aXKHMgIJAK796Fjqs4+3tMfv/XZNUcsNKPZ+cHbUk7MXmOFBQxjZJPeoVAHmJREJiO+xMRS37z2OMczZNqfcGfS/fgspeBAX2CXGqiFchdJrHkvyC/9WLToJQPT0qiJMBeVNAsO2ijAAbzp5drGVdJodvajnS6ZWRjSG8YYYYabLwbk7WWSNzP4ArbZhgcsWRQK8MjXqQwd4TEkCwZXg1PIXteOKUFtiIpCxHMJYIA8kv2i2Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fibocom.com; dmarc=pass action=none header.from=fibocom.com;
- dkim=pass header.d=fibocom.com; arc=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71BF45D730;
+	Wed,  6 Mar 2024 08:30:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1709713803; cv=none; b=obPtpQgBXiLSHLOd8XP29y+KOKWB8XoDYLy5r17K+4V9/yEi9VBcPk0tiIn/pApVn8YtXQ9D1RwOptJRqYeFp/Ytxe6yn0XomoaYoRijMJzDK7AYRLWk2CpLZEIZ6xpaEz1XbWKE/TSs1NWPSFBm65ARBjv5MWgCEH7k8D9vIqA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1709713803; c=relaxed/simple;
+	bh=DjMvANrFgFvNlIdE1sM6AN8+G0NpuxLckY37WzfXlAo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=upDYAXI9osZBYzlit/6T1uQ5ucG8KXvJdsDSPJ5wZR1AD6eaeDYRweW1hWWrLQ0wIp2b5a9iRBLAv7x6hwkwUouunZDi7bvgnrsNkHC5uRZKr7v2blAGJSYEKbpsvB0sEK9RhGeJuGlJBXrfWs9vYQB1YAaKvVgCLi5jpzHhoa0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lcXDCXnI; arc=none smtp.client-ip=209.85.210.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-6e5a50d91b4so6382652b3a.2;
+        Wed, 06 Mar 2024 00:30:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=fibocomcorp.onmicrosoft.com; s=selector1-fibocomcorp-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=s8mddwrWO4BNP6S4N7P+V5yo2k6JNMEpf4xQGZsmkN0=;
- b=jK1I7oyJM/yOnxFu5/79a/DEGF4vrmAidfIw4RQD8iYQS4H9k798sNwMg5rj9KGjr65mQxdqHmMCCiw+CYW4WMnoqKq9wBBGF+6U1ABH82X5MdSl6mChwLElw91X6qv0LHDVH4VjAMxKqrOD1vYdDfQ/jWTU6HSWb2o3oaYcww8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=fibocom.com;
-Received: from KL1PR02MB6283.apcprd02.prod.outlook.com (2603:1096:820:dc::11)
- by OSQPR02MB7742.apcprd02.prod.outlook.com (2603:1096:604:281::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7339.38; Wed, 6 Mar
- 2024 08:20:28 +0000
-Received: from KL1PR02MB6283.apcprd02.prod.outlook.com
- ([fe80::87a8:fbd4:757d:2f75]) by KL1PR02MB6283.apcprd02.prod.outlook.com
- ([fe80::87a8:fbd4:757d:2f75%7]) with mapi id 15.20.7316.023; Wed, 6 Mar 2024
- 08:20:28 +0000
-From: bolan wang <bolan.wang@fibocom.com>
-To: johan@kernel.org,
-	gregkh@linuxfoundation.org,
-	larsm17@gmail.com
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bolan wang <bolan.wang@fibocom.com>
-Subject: [PATCH] USB: serial: option: add Fibocom FM135-GL variants
-Date: Wed,  6 Mar 2024 16:20:16 +0800
-Message-Id: <20240306082016.1279110-1-bolan.wang@fibocom.com>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI1PR02CA0019.apcprd02.prod.outlook.com
- (2603:1096:4:1f4::15) To KL1PR02MB6283.apcprd02.prod.outlook.com
- (2603:1096:820:dc::11)
+        d=gmail.com; s=20230601; t=1709713802; x=1710318602; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=V6jJFKSb+rris1ipccPGLL2PjrVECDvGnkU4+GtbfFw=;
+        b=lcXDCXnIIknuC8GBu74hpKnR9r7k4U9aHLOIVxBPR3od7wih/wGnvO7VINWFw94dqy
+         56NCN1a5WXDgiijIEBF41g2SxFjIYrn5NlqWxSPayT1XX2eDPlohe3uTQXXJ8K8nSvkd
+         MwxXnujcPLDaJbueuq9gTsG17XEzswA/+UevFCyu+BQ+zAFKEj1RUGKt0Mnihc7jnZdz
+         wLiqaEBcipoSklvkmCsiTpn8niiUyOYcglyzYI/KH3HvEzhGYtca5XFrqOzRaSzxbALY
+         EKOmAWFOl5aF0NnV4JLlXcpmV999h21buaGA/iGSd0Lc6tYxOkqWiMdw2TKbSV6fX/Vy
+         rCpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709713802; x=1710318602;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=V6jJFKSb+rris1ipccPGLL2PjrVECDvGnkU4+GtbfFw=;
+        b=KnE5bJ2WJk8Yz2Jg8F2dZpbuZX77g2Zn2Q/witGOEHKgOrX1z9TbUJSAZgKfe+WdbV
+         KV3kNnp9Vp7dttBiJ3us4u8uD//nymyj13byV1iphcV/nG57fGK32r4InUp+DtPUoeB6
+         5KZfu83h5L78ExBbz1IBed5azC/FjNTTXmKZ/2GncGja1PRnVI57i5FVv3sEdzM8yrJb
+         kWC4ukvQhZ0/r+kVdyKqU6uHAcfR4QQQ1voqnWX37FJsCSCuMzefbiwkDoIn7Y2Cnlc2
+         daMAkN0uMm64ox829OM0kJXrrZvcWN+uNqcuYrNJQ3kvTFMfeAo/isyRo3VVDmPdfizA
+         3+Qg==
+X-Forwarded-Encrypted: i=1; AJvYcCV50kZ2epcHTLPOhKLM1glGIXtHhHZfOF3riD9hysIjYRogiddAL4hTjAg7KghAAi/O8GekohV7FATWYQHQBW/Of1GH2o6hrxOUGnyK
+X-Gm-Message-State: AOJu0YxkNEnl+1fOFK8W188Sv7D+r2Qd41D1y6DyxNWokEdBpUvQ1stV
+	7I+4scvm+XijaSa+/AYXyfzmQqhLfx/CfEMHYqMRiIuQxXn2iovn
+X-Google-Smtp-Source: AGHT+IEUxQN9KsAkJ7POL4yjbqWISpiywQOTZlQQRLmUgtmwOU5W+0e5hOl2U47mWDj0CtEry03Pkg==
+X-Received: by 2002:a05:6a00:139e:b0:6e6:31aa:695d with SMTP id t30-20020a056a00139e00b006e631aa695dmr7401339pfg.30.1709713801594;
+        Wed, 06 Mar 2024 00:30:01 -0800 (PST)
+Received: from [192.168.1.7] ([61.7.133.192])
+        by smtp.googlemail.com with ESMTPSA id h10-20020aa79f4a000000b006e647716b6esm1367472pfr.149.2024.03.06.00.29.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Mar 2024 00:30:01 -0800 (PST)
+Message-ID: <f93317e4-1848-4fa0-85b7-c9a0d303d0fc@gmail.com>
+Date: Wed, 6 Mar 2024 15:29:53 +0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: KL1PR02MB6283:EE_|OSQPR02MB7742:EE_
-X-MS-Office365-Filtering-Correlation-Id: eb76e3a5-dfb0-4b9a-d39e-08dc3db647ef
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	pP9POuIeU4nb9uv1v9nAnewkpKABZ8zIlXbMih3DrxKqfp6gmgYx1HF3/QoFai85FvPt1dpEVzra5AjO7hTQsI6HPKTS4la/1k2BMVIABD4OJgv5w2Fflk6Vp1ht1N09dqFEcu/gM0hUw7oPb515BAe7vFkqUYWSh3CJV99QYELjrbSv2430N/nmvWJDcpc2GZLkDrPDfoFrfcXj2NXKnkG+ff17YLIxveBSyb3c3NzPyRuquTZfQXmVnIooopqiwG6hTMYoEL5N6q2cxU4IrclTDSIn+Dm1ywRTpIOnen21JNZ2x+KKjt/sp+bmp0pMtt/kqEZuzO5hte/6rbq2Od4JNM3t9IZL6KOu76jQfBFU6yeecccjzAKBkg8xanjPi3n76kBBbXShCnRRc6WS85at2lm3QcwKEGen8evdlPIFVPdC15oKoagSrCNB27QBDeJ6NIi4Fkucp52IZqxpMjZvEWpRkdNc2w1NDkWbfqy/WTylLLmDkq+0hXAxvlgYbrm2Gchemt361pvwhbtTCnJ8cbSSoaV9NY5jpJbHcQ9xBsrW7FTECeLgf2DMbsiOiHHbB5zantw3Qf5hgCv2UcxV+ER2ZB9Dfa4lJZ8nlhMmVlWmL7EWlEnK6QY+1TRfCaTcabmZCNoL1Cl8dM8fn4PhLUxFeYxrYf0dAoyMvW8Bxa5tRkHmEKEXmDDqUhC+amyDdy6EGyAUi3Zm6+uSkA90zOXT/2eFh6GM/2NNKuM=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:KL1PR02MB6283.apcprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(38350700005);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?RRjMaS3M+zxlw5VShpkVuXmcoVYL0SYrI2fwFO8LXYs5FSFZ71ny7GBuXVTT?=
- =?us-ascii?Q?V09veoHXqFDl498SdOpfJW7vKWIaBkL0CsYJ9U+KFNtZm3q0LY2YyNl7PuT3?=
- =?us-ascii?Q?G86paaGAjQ/00bWF/qXgNYNGA9B9eELCtq1HZ3mjQ39jKCmEmZWRz59PdA1B?=
- =?us-ascii?Q?z+yXTQloREBKLU5Jt8/dJXfxg+4JKB03rlglq02hTuRaActe+9n6a7TAw0Cd?=
- =?us-ascii?Q?bFCBHqVFKMwCzMne0RqqOR8fuIimiAQpDO+IXeGObi3nHu4jeBfIxYq/DJmy?=
- =?us-ascii?Q?3zx5pZUUTgHdKpcEuEZqRp5smMIxawK/Ba4+XW813xPXF+jXNyyaLm4Lb/1w?=
- =?us-ascii?Q?JC5O2uySZdN4V0eQMG2qIOXI03DTN+OrweP8MYXWoEntODYbVjsz+9fJ2yJH?=
- =?us-ascii?Q?prLT/A9+tY/SvERY+A0QGohj3rcPnaB74LOsvNqdT0fwmTs7bq9CT45ZYaR5?=
- =?us-ascii?Q?6YVpHHWF0cih1rvt1tE2b9nuQ50RmCAAXPsgYiYVH3bVdojCvLhyiO5/MXdb?=
- =?us-ascii?Q?vUe2TPzmtTGn0irLDBUTbVIPcBp8qLw1U87PXys3GqkLzkhtOQt+ARjb+KXc?=
- =?us-ascii?Q?ItDTAHlxD/+FTnhi6WlR50bYT1QAvRI3/GTOaZ1ooZENYOA34sYXjKYjf5EH?=
- =?us-ascii?Q?zVnWeDfI8ofdCKjX9q8Ny87YFyMr7QmtQ4hYOgwb9E7LZG4P1lPjCCuH1VnD?=
- =?us-ascii?Q?YY7xTjTKkBbqF5UWTXdJYYKjdwhZ3UwtvFPZyhpSa3wPSsm8cf9Ecm0LnYQJ?=
- =?us-ascii?Q?p8qBQ1fu5JhhEnwsNi7LDdcJLhl37YJeP7f/ZvLeTgxjyr4R+dICc429gV8K?=
- =?us-ascii?Q?RDU5bKVDXFCnIMEiq9qofhkvG71WsnD20KjIz6px3OObdkiDLI/ByGXzdnTJ?=
- =?us-ascii?Q?vavqhjDOmQpEWTE1ytl2nGYl8yJ6EzuwMmJmNbdhmCw/sRvBu23goOyD75iC?=
- =?us-ascii?Q?sSKXjVYXrWhVgzLLM29dXB6mTNpaRKcH4Dha3Z9IzNA6KpNeLk26gdLCSDYE?=
- =?us-ascii?Q?gDR9WXWhk6yuhkYVaRfd3/CszD/cPNXcfU8qjjGMnLS+QJFqA1to6gxbQHCB?=
- =?us-ascii?Q?azs7Aaw+iLmsQWzd7hvu3kxNtcfbSM7j20vGIW2JQGflHOQDgENWYmmvcylv?=
- =?us-ascii?Q?y1kgsMJsrt1h/SGA6cbZJEPvpfrGA2nSPXafiFyBcBB3PdEaT2TFBAnvPHiK?=
- =?us-ascii?Q?lecZJ+92bwQ7LxLfk1k/6pA7boK1rpa1lmZWx3JErlluojsOCcMLodGJjvtb?=
- =?us-ascii?Q?1mc5q5dMOZ6j9JSw5BBm5lp8LMPJ7dUyiD/PiTueocPVbDoO27ykJl4oowrM?=
- =?us-ascii?Q?ODp+TZ6MILEVhSPzyg0mdbM6CzsJsHpdIc/hV6ZX9ywU37OVeh6zg9G3M72r?=
- =?us-ascii?Q?UTd7JqdrI2ovahSVfSKMoH/pjSh/DNAwNE7qQo6YYLOd4npNcKHCrY5PawvG?=
- =?us-ascii?Q?xv5JhD4Z4qInDqqEWRYtw6Vcnsu9yk4Z7w+lvgSysCw2EbL8nsd3t8t8Auuj?=
- =?us-ascii?Q?fN/sWz+9Xk4TdS3u5Q6Y0okdr68W2RANBmasQb9+aCY2RvQm+bUFIFmVuDAn?=
- =?us-ascii?Q?uAooNt440adPu77rdTaZTRbb5r9yI+eUVgKNux0F?=
-X-OriginatorOrg: fibocom.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: eb76e3a5-dfb0-4b9a-d39e-08dc3db647ef
-X-MS-Exchange-CrossTenant-AuthSource: KL1PR02MB6283.apcprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Mar 2024 08:20:28.3490
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 889bfe61-8c21-436b-bc07-3908050c8236
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8ICpmB97Eoqifh5JYEOHoABNpSKlCUGw1fieZ7aiCAw917v84WEnjEyEyJPDo1VBmjPb0ENDTceJqqzmtLdZEQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSQPR02MB7742
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] USB: serial: option: add Fibocom FM135-GL variants
+Content-Language: en-US
+To: "Bolan Wang(Bolan)" <bolan.wang@fibocom.com>,
+ "johan@kernel.org" <johan@kernel.org>,
+ "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+Cc: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <KL1PR02MB6283F5203E50CD87F344331689212@KL1PR02MB6283.apcprd02.prod.outlook.com>
+From: Lars Melin <larsm17@gmail.com>
+In-Reply-To: <KL1PR02MB6283F5203E50CD87F344331689212@KL1PR02MB6283.apcprd02.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Update the USB serial option driver support for the Fibocom
-FM135-GL LTE modules.
-- VID:PID 2cb7:0115, FM135-GL for laptop debug M.2 cards(with MBIM
-interface for /Linux/Chrome OS)
+On 2024-03-06 14:41, Bolan Wang(Bolan) wrote:
+>> Hi Bolan,
+>> so you already know that other versions of the card will have the pid
+>> 0x01a1 and the serial interfaces will be of class ff but you don't know what those interfaces will be used for?
+>> You shall only add driver support for what you know today and not for something that might or might not be implemented in the future.
+> 
+>> For the device with pid 0x0115 you have listed an adb interface and adb interfaces should not be in the option driver.
+> 
+> Hi Lars:
+> 
+> Ok, I will remove 0x01a1 from option serial driver. And the adb listed in pid 0x0115 will also be removed.
+> Actually adb interface info with pid 0x0115 is: Class_ff&SubClass_42&Prot_01, the option driver will not bind it?
+> I will resubmit a new patch, please help review and abandon this.
+> 
+> thanks
+> bolan
+> 
+> 
 
-0x0115: mbim, diag, at, pipe
+The option driver will bind because you have matched only on Class ff 
+"{ USB_DEVICE_INTERFACE_CLASS(0x2cb7, 0x01a1, 0xff) }"
+There are other macros that you could possibly use but I can't tell you 
+which since you have not shown an usb-device listing for the device.
+You can also blacklist an interface (RSV). The option driver source is 
+full of examples of macro use and combinations.
 
-Signed-off-by: bolan wang <bolan.wang@fibocom.com>
----
- drivers/usb/serial/option.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index 2ae124c49d44..ac637ba27313 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -2267,6 +2267,7 @@ static const struct usb_device_id option_ids[] = {
- 	{ USB_DEVICE_AND_INTERFACE_INFO(0x2cb7, 0x010b, 0xff, 0xff, 0x30) },	/* Fibocom FG150 Diag */
- 	{ USB_DEVICE_AND_INTERFACE_INFO(0x2cb7, 0x010b, 0xff, 0, 0) },		/* Fibocom FG150 AT */
- 	{ USB_DEVICE_INTERFACE_CLASS(0x2cb7, 0x0111, 0xff) },			/* Fibocom FM160 (MBIM mode) */
-+	{ USB_DEVICE_INTERFACE_CLASS(0x2cb7, 0x0115, 0xff) },			/* Fibocom FM135 (laptop MBIM) */
- 	{ USB_DEVICE_INTERFACE_CLASS(0x2cb7, 0x01a0, 0xff) },			/* Fibocom NL668-AM/NL652-EU (laptop MBIM) */
- 	{ USB_DEVICE_INTERFACE_CLASS(0x2cb7, 0x01a2, 0xff) },			/* Fibocom FM101-GL (laptop MBIM) */
- 	{ USB_DEVICE_INTERFACE_CLASS(0x2cb7, 0x01a3, 0xff) },			/* Fibocom FM101-GL (laptop MBIM) */
--- 
-2.34.1
-
+thanks
+Lars
 
