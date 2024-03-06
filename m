@@ -1,115 +1,105 @@
-Return-Path: <linux-usb+bounces-7619-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7620-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E8F68740E0
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Mar 2024 20:54:57 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D3AE2874173
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Mar 2024 21:37:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DCD9C28739F
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Mar 2024 19:54:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 10D401C231A9
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Mar 2024 20:37:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3A45140E30;
-	Wed,  6 Mar 2024 19:54:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB78F12E7F;
+	Wed,  6 Mar 2024 20:37:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=codewreck.org header.i=@codewreck.org header.b="hHBK/PQJ";
-	dkim=pass (2048-bit key) header.d=codewreck.org header.i=@codewreck.org header.b="vsuUZWPA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PmApm0DK"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD67013BAF4;
-	Wed,  6 Mar 2024 19:54:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.121.71.147
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FFAB1373
+	for <linux-usb@vger.kernel.org>; Wed,  6 Mar 2024 20:37:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709754890; cv=none; b=tKjk5+aNBnFjGe/IRBTpYMR8U12zLHolQVyOkKYBXwjVPyJdrXn1Kw9GhVZie9YDqmekYZV2j6RFqn+LZIvystnLr9LxLW/dryDlg9S/6wk+q7eHprOov8Wf5abCGjFGYs59hl8OtfZM530Oo/mogy30vHHJ/0BWV1XMbULBJVU=
+	t=1709757452; cv=none; b=Wghiilal89Nyz4wr7DpfjeuTKlMkzRxkMlDJTFnmMjMvBpguWWXRKb3c6OjNngJrOOt2xm+K4N0w5uCLuyx+H8oTd0szihNjiReraC+895a3948wz740ECpFHmRgt8JTlY4pxtRTB2icGN5eeSaj3vSu+BXhdLHIXFkxwj/P9Xw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709754890; c=relaxed/simple;
-	bh=xI7TPdfaJh9c0jfLQMhlGytKcdh3yS9fkAl7t5GvxjQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mQLjUGgg/Wdf8uZkN6mza3KL9FQGO7sooWn+4mSVa0lbF1MdaMpUVUK8MpV2AjKTy3KLXyLmrSvjqzuyep5YbI4lKBvE6Dr418lINr8IifsohQ6MVF0oqvgpirdLJvwlQZPFPlGzY00EVT6XGx2Zkq5p/PqhyJKSAGMUjiwLgkM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codewreck.org; spf=pass smtp.mailfrom=codewreck.org; dkim=pass (2048-bit key) header.d=codewreck.org header.i=@codewreck.org header.b=hHBK/PQJ; dkim=pass (2048-bit key) header.d=codewreck.org header.i=@codewreck.org header.b=vsuUZWPA; arc=none smtp.client-ip=91.121.71.147
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codewreck.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codewreck.org
-Received: by nautica.notk.org (Postfix, from userid 108)
-	id 0720CC01A; Wed,  6 Mar 2024 20:54:45 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-	t=1709754886; bh=fo5mwjEgwLizlp9QJ9Xrr1GYd1WkhnXCPfwsqkjnlH8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hHBK/PQJ6plFEoNZ07LNp3KjQr3kjGSc+l87Sre6iLewUg7aC25NZ0elHEX7Z1TY8
-	 NQxteBQu8YqMByOFi0h/9cJa9TQmkBm2q3zF0koSBE7NexKJki1n2OFeSv8v4G1cyH
-	 yWZWxEa4Wcm+lVV9cPPJDeZSVUSycMJP9T3bmsxOC2dTyTBmrTjAYSIUpDQWZq+Aeh
-	 Rx3VZmiNx9kz2noPnFi5nKNFTHE/y52U9/rA+pWCkt3qhEoXGY6sPXcO6JIPRo0kMv
-	 jPRt+9wYAypYuwmJqUai627isiLz2MVzaXm0OLXnKZFC9M16AIA3erMMZDU3EnDfOF
-	 Iln8cAiwEbzOQ==
-X-Spam-Level: 
-Received: from gaia.codewreck.org (localhost [127.0.0.1])
-	by nautica.notk.org (Postfix) with ESMTPS id C86ADC009;
-	Wed,  6 Mar 2024 20:54:41 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-	t=1709754885; bh=fo5mwjEgwLizlp9QJ9Xrr1GYd1WkhnXCPfwsqkjnlH8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=vsuUZWPACzLRO5Ug0FK4IbtulE0XQDChom7n/QBCf7YU4t6eXiGtillaPfH7aZenK
-	 93IWiVE5vunHl9hK1StXbTA+Od4LirUoFek+uPuRmQRm7nNs3S/zozag5+uQJhdJGy
-	 yaCKdtsdYJzk+dG49TU/JlUcdR05KJBaY8S8YTXauD2madD/eV+HcShUsFECWHnajB
-	 4QVaqsZ88yk9/VplhZ38QWoRvtRwO7LTuJBVOk/+uuLEHJEE0ojVEn8eYQzJDNf7uR
-	 0myW0GcwPO47DiqgbMvTWVsqGPfxFRFbu6qz6174H7Bd60yLECPfSw8MxDTcG3F3m3
-	 kUXM6FX3jL2BQ==
-Received: from localhost (gaia.codewreck.org [local])
-	by gaia.codewreck.org (OpenSMTPD) with ESMTPA id b9697cf9;
-	Wed, 6 Mar 2024 19:54:36 +0000 (UTC)
-Date: Thu, 7 Mar 2024 04:54:21 +0900
-From: Dominique Martinet <asmadeus@codewreck.org>
-To: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Cc: Michael Grzeschik <m.grzeschik@pengutronix.de>,
-	Eric Van Hensbergen <ericvh@kernel.org>,
-	Latchesar Ionkov <lucho@ionkov.net>,
-	Christian Schoenebeck <linux_oss@crudebyte.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	v9fs@lists.linux.dev, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	kernel@pengutronix.de
-Subject: Re: [PATCH v3 2/3] net/9p/usbg: Add new usb gadget function transport
-Message-ID: <ZejJ7W_yUMBtqi70@codewreck.org>
-References: <20240116-ml-topic-u9p-v3-0-c62a36eccda1@pengutronix.de>
- <20240116-ml-topic-u9p-v3-2-c62a36eccda1@pengutronix.de>
- <915890fa-e763-470a-a82b-eda97c47c0c8@collabora.com>
+	s=arc-20240116; t=1709757452; c=relaxed/simple;
+	bh=piWR/wk6PEK58e2lGwA30alp4qzCJjfG5AgybpPWwUs=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=QZruOfwfoECT62DBYRor85SDkfyrPIvrF4wXmw1It5zzHUqpEvctAQ6k9KVL5VK069Ys4NtKChDGEPbus7kjCuK21bfQoJCxf0zjxzM8GR9NTfjWp6RjMOFW6FwJq8puSKuLnm8M1rYclhEB14g/5QSSdbeelmaa6rK0khwqu7A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PmApm0DK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E6042C433C7
+	for <linux-usb@vger.kernel.org>; Wed,  6 Mar 2024 20:37:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709757451;
+	bh=piWR/wk6PEK58e2lGwA30alp4qzCJjfG5AgybpPWwUs=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=PmApm0DKvjYiersLRTXN3oQd5lK2v+M2WSru4D06RojzX4uF0lB8d8TAK2EGgTdq3
+	 O9AjTtSRholGOOGeqSfkl+IwHXWDzyrH5lpviZI+x31ngAvvK3l9+MsuEQ/PVcJZwu
+	 pMXKCX3Xelta5C2dP4IdvRoM7mpUHWIX25lREBw+RMY3R8DOd50MeT+73U8qutVIUR
+	 E8M2VCT440Xm4Kx7P93hbj70mwRnjKYppT9tmKd4qhf+ffEK9Uv3osclyuqwen81wG
+	 eXBSAyPcN4hYy/ZY3DUS3eWJSiKRAkdEsHr+Fuj+1h1h1E2o8FScsBe3kaUWFHZvz9
+	 J7icYaYkXmI+g==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id D02C3C53BD0; Wed,  6 Mar 2024 20:37:31 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 218544] not enough bandwidth, synaptics hi-res audio duplex
+ audio
+Date: Wed, 06 Mar 2024 20:37:31 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: stern@rowland.harvard.edu
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-218544-208809-QHDD7DzyvD@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-218544-208809@https.bugzilla.kernel.org/>
+References: <bug-218544-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <915890fa-e763-470a-a82b-eda97c47c0c8@collabora.com>
 
-Andrzej Pietrasiewicz wrote on Wed, Mar 06, 2024 at 04:18:54PM +0100:
-> Reading the earlier discussions on v1 and v2 I was somehow under the impression
-> that what you submitted here does not contain configfs support.
-> 
-> But once I started reading the code I realized it does.
-> 
-> It worked for me, both as a legacy gadget and when composed with configfs.
-> 
-> I noticed that when you stop the forwarder at the host side when 9pfs remains
-> mounted at the gadget side, umount hangs at the gadget side until the forwarder
-> is restarted. I know that once the host-side software dies, not much can be
-> done, however, unmounting a dead filesystem seems a reasonable thing to do
-> and the way usb9pfs worked for me it is not possible to unmount in this
-> situation. Any ideas on improving this?
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218544
 
-If the trans_usbg code can detect the host device is gone it should mark
-client->status as Disconnected then wake up all pending requests
-(something like p9_conn_cancel in trans_fd.c)
+--- Comment #11 from Alan Stern (stern@rowland.harvard.edu) ---
+The most obvious difference is that the "good" device requires only 85 us/f=
+rame
+for its audio-in channel whereas the "bad" device requires 234 us/frame.  T=
+his
+is the difference between 16-bit and 24-bit captures that you mentioned
+originally.  (The 39 vs. 24 for the interrupt endpoint wouldn't have a
+significant effect.)  There could be other factors in play, but that differ=
+ence
+is likely enough to tip the balance.
 
-Sorry I haven't found time to test/review either; I'd still be
-interested in running this in qemu for non-reg over using a real device
-so need to spend a few minutes figuring out the exact command line
-required.. I'll try to find some time this weekend
+The times in the bandwidth file indicate that audio subsystem is using the
+device's higher bandwidth setting.  Using the lower bandwidth setting inste=
+ad
+could well make a difference.  I don't know how to tell the sound interface=
+ to
+do this; maybe Takashi can say.
 
--- 
-Dominique
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
