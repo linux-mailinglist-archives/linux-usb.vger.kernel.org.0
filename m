@@ -1,156 +1,159 @@
-Return-Path: <linux-usb+bounces-7589-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7590-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 958B6872FEE
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Mar 2024 08:41:53 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3231887308F
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Mar 2024 09:20:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4C33A287161
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Mar 2024 07:41:52 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 90BD9B26B27
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Mar 2024 08:20:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB9515CDC6;
-	Wed,  6 Mar 2024 07:41:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28E595D48A;
+	Wed,  6 Mar 2024 08:20:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=fibocomcorp.onmicrosoft.com header.i=@fibocomcorp.onmicrosoft.com header.b="kQqx9yzW"
+	dkim=pass (1024-bit key) header.d=fibocomcorp.onmicrosoft.com header.i=@fibocomcorp.onmicrosoft.com header.b="jK1I7oyJ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2110.outbound.protection.outlook.com [40.107.215.110])
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2125.outbound.protection.outlook.com [40.107.255.125])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 888CA5C8F9;
-	Wed,  6 Mar 2024 07:41:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.215.110
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5F035C057;
+	Wed,  6 Mar 2024 08:20:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.255.125
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709710905; cv=fail; b=awlk1GMNL+w4nyEKkJiua6+RIHoGdCWwgtL6Q7TwwK2AvQ+7N9+gKjfIP154PeSpd9j8MCZbrgiXLFIepkZpQ1pxa27/E3858QvuinAGR9k1pHshPAxCglaZ22ocljPbi/LBwv9ggF+WcpwLNSnXoIwt5Dnkcw8t+SLAbUlaees=
+	t=1709713237; cv=fail; b=pfIe9A9zGIO6zkIq8Ut42k032pyx7tpp39UmeOkktiwVUvGxxawF/ZpB/9oXArgGjMAeG63Ngscphjv9STCT0+7KmXVy5BE1Pl5MoD5ndbMuTkvfqr55z1vn1whWnIQk/sC8dWhCXUinAf/iiZWo3NN+YUKL4TTz7uyEfKenzy0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709710905; c=relaxed/simple;
-	bh=q/mYZuakaFRDzPePeUyz8PyKq70GrFfEYpnYQhZH8jI=;
-	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=QwZM0POO4S1sgSP4dAQsO6ONWezKOMzfKbilkelss/DrKxr3C0A+94WERvxSokuedH6QS7GdsMgst0uUoIyywrpNl5Q4iPtjMruiW3dLRieNOziAF72pa3YWV5ZKqyBwAp7ObISLXMYaEfXVBAvy/NFnniNVPFZmJ2RG0JjGm3Y=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fibocom.com; spf=pass smtp.mailfrom=fibocom.com; dkim=pass (1024-bit key) header.d=fibocomcorp.onmicrosoft.com header.i=@fibocomcorp.onmicrosoft.com header.b=kQqx9yzW; arc=fail smtp.client-ip=40.107.215.110
+	s=arc-20240116; t=1709713237; c=relaxed/simple;
+	bh=9Kkx3qVbRiYmSqz52+xEJPs7nSjmiT/xkXEaviRQGcc=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=NE1UKy/Pxl3oz448Egf8cbcgX7PdmKVMBnaQgGQTlTXh7IOdCXvpxTO2mYkX5pICHY1v5NnmLwzOgLAYcJBdqwbC4IrmVhK2mQlfqSOlS2TVa+hBe1jPsSNfaZEEwQQb1ROyj8IKGoYq8ozI4gGGt6ICl+LCF44B4enGNjcDlzU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fibocom.com; spf=pass smtp.mailfrom=fibocom.com; dkim=pass (1024-bit key) header.d=fibocomcorp.onmicrosoft.com header.i=@fibocomcorp.onmicrosoft.com header.b=jK1I7oyJ; arc=fail smtp.client-ip=40.107.255.125
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fibocom.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fibocom.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VC/JwRvKVMFvmpJrl0kQ7iYu2wbZCR4HDvozvJLIIem+4hQpkvp36QWKj5CRLUCoTx6UpeqlAzjTYNzKhaViZ4PC4B9eyQwqZncA/CYinkO+UkWp/Uu7HfEmll7l5ugvSTne5ixXvreojqZRuvLSeOj8QB1vaQ4DPlYdBuljzNBLDRayDQnUsFwxtgD0InXEWF/w8AkdA1G6pYJmWN9/B6bF+eyaEd4ltOeJtQI5Ttn3+iQl6BvL2iBIYjfQFHYS6OKsOH7nMlQ1hmJwdrTFcTPuvfPI+n4h0AzvJ/To707MwdsDCVetfWxl+FBWcPrTHdHMpobQ5Rk1IAZ2Mw1ZTw==
+ b=VSvqNDrUPr2Uck9Bpbrr+SftiPTkc/FJEalGIVdQtu7FrlsLesPYthAhzSFunM/u5w4rTgUQtANhLo85aZPTusqulNZJYwLnmZ9jYgpK0rPek1/enuSqfgPXZxU5QiLFX0bGF1UiIjMobo5UHYDA6GhKgD0iM71cM9e8AbrG0v+BoL3SmvW+pxXB+ODrHhMCPsUOMGm/9AK5kvh6VONe0+4umVudSt74btATP0KiTEqVfw04YOSQy6eO4Wq+2s+6nFBdSqec+PWGdd6uQ1CtfTOKiSL4+TuNQONNQVFlfBjUjZTbWiizCBfos1hRtI3OWkamZ7zU+0A45sYs+mx5nA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=q/mYZuakaFRDzPePeUyz8PyKq70GrFfEYpnYQhZH8jI=;
- b=HlC4LOdb4zgyB0F4vkoBVNMhQQgdI36yAF2ZyfvGHgxzPb5aAnXLokfm43HwN51buI/iCWJZehGFkT9FPbGmrgolVtUhZX1BeCHvsT7jokQjZ8l9Ql7a74RQpC8iPq0m1pEJhd7PTqPIelTlwz5dpZw8Lb2L4gE/zL/3xQ4Sz8j1WUMBTu+JKNQl14lo2go7ShC56voQnOHw/xjqAzyM8HPmGHtiwD/AAyjfS1ZDYqgzSVwc9lVA1y0A5SnBu+Qlqbjuaogor/5VC1V3a1smJzPmlqFhPQhCV/87toltD0ZXmHX9q9bIPYoO9hgt73HizSeaOgNA7XFtJ2ddtjRxTQ==
+ bh=s8mddwrWO4BNP6S4N7P+V5yo2k6JNMEpf4xQGZsmkN0=;
+ b=hgJJWE/kFWOXsYtkLrZiad6UqqaZocCvM5bTFE0W9x0RPLYY2bYw79Xs3kh/QpurIFbxzE1MSbJMJ/XhbisPYiFE2oeBzj2v68Mr+aXKHMgIJAK796Fjqs4+3tMfv/XZNUcsNKPZ+cHbUk7MXmOFBQxjZJPeoVAHmJREJiO+xMRS37z2OMczZNqfcGfS/fgspeBAX2CXGqiFchdJrHkvyC/9WLToJQPT0qiJMBeVNAsO2ijAAbzp5drGVdJodvajnS6ZWRjSG8YYYYabLwbk7WWSNzP4ArbZhgcsWRQK8MjXqQwd4TEkCwZXg1PIXteOKUFtiIpCxHMJYIA8kv2i2Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=fibocom.com; dmarc=pass action=none header.from=fibocom.com;
  dkim=pass header.d=fibocom.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=fibocomcorp.onmicrosoft.com; s=selector1-fibocomcorp-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=q/mYZuakaFRDzPePeUyz8PyKq70GrFfEYpnYQhZH8jI=;
- b=kQqx9yzWP2TjIegJ+1fpD2cwM/uR4y3j/rQNSTGLXVAFsA8BrfLgMpr0drt65H2FYiF627kCwC+Fb7pM7HWLUKH3WLyh8QzbxgzzJcldFVQatHf2bGj0wDZcod+B26I0rHuiI2QmvajEoBwqGU1dOCjxInbEPjBh2AwRmIg3uLI=
+ bh=s8mddwrWO4BNP6S4N7P+V5yo2k6JNMEpf4xQGZsmkN0=;
+ b=jK1I7oyJM/yOnxFu5/79a/DEGF4vrmAidfIw4RQD8iYQS4H9k798sNwMg5rj9KGjr65mQxdqHmMCCiw+CYW4WMnoqKq9wBBGF+6U1ABH82X5MdSl6mChwLElw91X6qv0LHDVH4VjAMxKqrOD1vYdDfQ/jWTU6HSWb2o3oaYcww8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=fibocom.com;
 Received: from KL1PR02MB6283.apcprd02.prod.outlook.com (2603:1096:820:dc::11)
- by TYZPR02MB6074.apcprd02.prod.outlook.com (2603:1096:400:25c::6) with
+ by OSQPR02MB7742.apcprd02.prod.outlook.com (2603:1096:604:281::10) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7339.39; Wed, 6 Mar
- 2024 07:41:37 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7339.38; Wed, 6 Mar
+ 2024 08:20:28 +0000
 Received: from KL1PR02MB6283.apcprd02.prod.outlook.com
  ([fe80::87a8:fbd4:757d:2f75]) by KL1PR02MB6283.apcprd02.prod.outlook.com
  ([fe80::87a8:fbd4:757d:2f75%7]) with mapi id 15.20.7316.023; Wed, 6 Mar 2024
- 07:41:37 +0000
-From: "Bolan Wang(Bolan)" <bolan.wang@fibocom.com>
-To: Lars Melin <larsm17@gmail.com>, "johan@kernel.org" <johan@kernel.org>,
-	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-CC: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] USB: serial: option: add Fibocom FM135-GL variants
-Thread-Topic: [PATCH] USB: serial: option: add Fibocom FM135-GL variants
-Thread-Index: Adpvko0jRh2Nq0RESdW8MpHCbG6u0A==
-Date: Wed, 6 Mar 2024 07:41:37 +0000
-Message-ID:
- <KL1PR02MB6283F5203E50CD87F344331689212@KL1PR02MB6283.apcprd02.prod.outlook.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=fibocom.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: KL1PR02MB6283:EE_|TYZPR02MB6074:EE_
-x-ms-office365-filtering-correlation-id: 59c7b070-aab2-4808-26ef-08dc3db0daac
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info:
- Uf3oiHAe1MZUE6kJmaSKiPXJf/6asKTm8zvxc8v1ODy905xWNclRX+crABos1CbCS5qbjwtWMX23luQLWiNhwRqIafcPmDQiJ7gFoHtsF+GJf7VTX0TurjariqOH63ppVYUntws5EhI7qE3U/kFFiAVYUHmF8t6l/9UDoD7+7/L/n2lWJPiqxw82GIkqXs/qmVy/DgVDvTr1dNmxEAuRQLGd/MIFKUZ6KAvG2LVLMv5h2jFEl8OHs6R/xMFCAvYb6POhMTtB98ebdvMnQiyjRDU4h/Fy556tr15MMmTK9+je+Ph5i8jYiVp3kCvhd7quI7bzdVSIlEXhL+MQ6govqrbU8hJJlCq+O8PHq+ebLepiHGCtsk4n0o/bFvhittt3qiL+gOC5Fu58Wg9V0z3PIkLrw6nguPY0YYgHSmB39UInhhN3aYEBDQqwhdZ3uKiqmmXlVt2vFXfK7288rmEHFJV0x39k48LEGS8oOqnPwLFBGSQi0f9/9j/db04/j8b7gN2ZmZa5yzeRJOZFtP2euUqpQg0CIxCEzynzpD0T04H8IJ41QQzJ2qg0ZGQ6vjvCI9NTgaaleyMek90cr/8tTssPvdEsNtUN/va3B8C+KF9GQqCrrHT4L+dhsmQE/f83aL+aArrZXMlrP/ujFBBG18ctcgCme+xLtzo6yyaKo47/9tgveABj5BvsiDOPSeADdAgVor97cqwyk7KVJTn+9A==
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:zh-cn;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:KL1PR02MB6283.apcprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(38070700009);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?bDVHRlhBQUlLUFlSRmpxT1JaSDlHU05OZW9SRWJzUFpaT041UWlLWWRoeHZB?=
- =?utf-8?B?STIwV1kvWEYyb1VpUkNjVFQvSmVzNlJFUDRWQk9rYU5qRnU1MnlLaG9nSlhX?=
- =?utf-8?B?M0dIN1p2T2NRUkJOcGVlTzREa1V3UnRZbWg3TDUxV1RWcUJJYlBnR0lNbFIx?=
- =?utf-8?B?Rjg2ZVhOLzBTMDhJN21IM1JyM011Q1BQOFN1czN3OVZxWUpLLzVpTmFKdUJK?=
- =?utf-8?B?MFFDOTNVSlJQNGIvRyt3VXVMbTRVSnNrN0lIT3p0SG1NZVBYRUI1S1JtcG9u?=
- =?utf-8?B?R2Q2b3dEOVZmamZlQUhFUTdUNUpJZWZ3UUJKSklZQ0NsaTFCSmUxZTd2MHRG?=
- =?utf-8?B?Q05OZXJOTWZTbjAvb2RuMzdUTk1OODI3RmJVQ3M2KytJQmhOdjd6djFHZVpC?=
- =?utf-8?B?TjQwNGZQS3lPV1hWUmxEcFN3aGxpNnUrNzVoSnNNbDlsUG1OVGsrTzdxdHJO?=
- =?utf-8?B?SVhEbDBoTGtzVUtZYzR0cmxHVGd3ZnJBaThyUVduSWVxeWJnRy95akUrenU0?=
- =?utf-8?B?aGpTK3lqUWhTRndVUlFkU3BiT080a2I1aktJS0FPVUM3Q3FGU3labjNrM1ht?=
- =?utf-8?B?b1AydUlPU0o5L0JlQ0J3N1BNNEZSZnJra0NtVGlpb0EzbitlYjRlQUJzRVZM?=
- =?utf-8?B?aGFlNlZIZ0RYZ1hqV2pwaWxxSk5GSFcxaTY0VVJYaTVTc0d5RUxoN21lemJ3?=
- =?utf-8?B?ckVSQk9kU25MUGY0R1BpUDZPYTIvV0QvNko1aENoZENENnhiN1Z4S2hZZ0Yx?=
- =?utf-8?B?TE9OMENsNldDUmtwUldVNEV3RFl3ZjIzdHUyVy8xTWhvVnRLT3Rpdk13dGZE?=
- =?utf-8?B?WUhoaXJCZ0hqWFViUkw3eVYxQ2FPMzV0dDRIRUw3N0I4SHpnUFVDWm02ZXJ4?=
- =?utf-8?B?aG5tdWtzQmFOaG5BQUpFWnNYbVE3VVB4QWpTZHBCK0lNNjRxeDNLWEhTd2Yz?=
- =?utf-8?B?NHR5eXB5dlBNOXNSMmJwU1hDS2VRWUdKbWpIUjFmQ3V2Zm9zOCtaa2ZPSDVQ?=
- =?utf-8?B?V3VkQ0cwajRVZG5nTUlRK2UxN2xuN3cvQ2NDaWxlNkZ4Zm5PS2dNUDUxYTdS?=
- =?utf-8?B?YUxnNmh2VEJsY0plT2xscloyV2p5enNVcFJhbS9YVXRCdWlEbFo3VndJcWRM?=
- =?utf-8?B?enVnWDZwL3JBNWhNT0hoeVpsYVdyRDJ3ZXhKTldVRldLdkZpQVAwMmovbTB4?=
- =?utf-8?B?ZzZZYWVEM2Y4dngwWjdQWTRzdWkrTUpyOEhxZHhhUVVFaVl5cXJuM3RXcjMz?=
- =?utf-8?B?UDB0NkhySnFFT2ZJYkdJbkVpQnJXNXJTTUNsUDZYNU1KT0dwNmRvNU1uVFNq?=
- =?utf-8?B?S2l5eUdRUDRnSHFCQ0cxNk1mUTBPWmVYVmRFYzFTcEttckdhRTM4WERkTVRS?=
- =?utf-8?B?R3N0WFlBbFdoVWZmUXZPRHM0aDdCcS9WS3ZCdnc1dkt1RTlaMWE1emk1VG1L?=
- =?utf-8?B?Z00rT3NIZzMvUDU3M0NSb0g0N21RY01YSmxZTy9Xd1g3djQrclpJWFRnckNK?=
- =?utf-8?B?LzcxeDVlUHdocDFRZ0tMcU9XZndPRTBaQkIrZTJqcUhYS0Q4VVBLdzlpWnlq?=
- =?utf-8?B?VUZjMlR6Y0d5eU5wekRtK1JWQ2syRXpFSnNibUFya2JJd0p0UHpIcmMvL2FV?=
- =?utf-8?B?TWFXMkhRcXZnWklVS2lQYm5zSTZMK2JFUGdVZmJNbWh1VWtPSnRTTWZhY2U4?=
- =?utf-8?B?TUt6eERkUUVsL0Q5VXZGUEJ6b2cyemRiWDc1aDlDbndZQ080WW1zUW9KZVVv?=
- =?utf-8?B?SFJwWXdaL0FudDc3ZWprTHN2UWlPL2VPR3FFWHVEb0hkOGxIM0htZnpqVnpJ?=
- =?utf-8?B?d3JtRG1WWTN5ZTJaS1NzaGwyQnhiS1pNL0ZadjlqQ1dRb0p3YlhSTERlaW1p?=
- =?utf-8?B?ZTFBNFo3ZlgrU0RQTzlta1BjV1d2R2pvdXlzdEFGWUtUYzVEOXd1anZCSGFF?=
- =?utf-8?B?M1UxSXc0TllnZWhiY3ArNmZVc2F4dlduL0lCaE5SKzZnOVZVTGdGOWUzemc4?=
- =?utf-8?B?bTV2dUFXeFFIOTNEVFB0S2ZzUU5kYTRaQWhsVnY0MHhLdDlBYzJRNCtQWkNN?=
- =?utf-8?B?WHFydk16NE1Fd1k0SXdINnVQblFVMTM3L3g2Z2ZsYkp1c3pVSC9FRzhMVUNr?=
- =?utf-8?Q?4ufec39zR2rcVmtGUkVysd5C2?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+ 08:20:28 +0000
+From: bolan wang <bolan.wang@fibocom.com>
+To: johan@kernel.org,
+	gregkh@linuxfoundation.org,
+	larsm17@gmail.com
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bolan wang <bolan.wang@fibocom.com>
+Subject: [PATCH] USB: serial: option: add Fibocom FM135-GL variants
+Date: Wed,  6 Mar 2024 16:20:16 +0800
+Message-Id: <20240306082016.1279110-1-bolan.wang@fibocom.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI1PR02CA0019.apcprd02.prod.outlook.com
+ (2603:1096:4:1f4::15) To KL1PR02MB6283.apcprd02.prod.outlook.com
+ (2603:1096:820:dc::11)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: KL1PR02MB6283:EE_|OSQPR02MB7742:EE_
+X-MS-Office365-Filtering-Correlation-Id: eb76e3a5-dfb0-4b9a-d39e-08dc3db647ef
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	pP9POuIeU4nb9uv1v9nAnewkpKABZ8zIlXbMih3DrxKqfp6gmgYx1HF3/QoFai85FvPt1dpEVzra5AjO7hTQsI6HPKTS4la/1k2BMVIABD4OJgv5w2Fflk6Vp1ht1N09dqFEcu/gM0hUw7oPb515BAe7vFkqUYWSh3CJV99QYELjrbSv2430N/nmvWJDcpc2GZLkDrPDfoFrfcXj2NXKnkG+ff17YLIxveBSyb3c3NzPyRuquTZfQXmVnIooopqiwG6hTMYoEL5N6q2cxU4IrclTDSIn+Dm1ywRTpIOnen21JNZ2x+KKjt/sp+bmp0pMtt/kqEZuzO5hte/6rbq2Od4JNM3t9IZL6KOu76jQfBFU6yeecccjzAKBkg8xanjPi3n76kBBbXShCnRRc6WS85at2lm3QcwKEGen8evdlPIFVPdC15oKoagSrCNB27QBDeJ6NIi4Fkucp52IZqxpMjZvEWpRkdNc2w1NDkWbfqy/WTylLLmDkq+0hXAxvlgYbrm2Gchemt361pvwhbtTCnJ8cbSSoaV9NY5jpJbHcQ9xBsrW7FTECeLgf2DMbsiOiHHbB5zantw3Qf5hgCv2UcxV+ER2ZB9Dfa4lJZ8nlhMmVlWmL7EWlEnK6QY+1TRfCaTcabmZCNoL1Cl8dM8fn4PhLUxFeYxrYf0dAoyMvW8Bxa5tRkHmEKEXmDDqUhC+amyDdy6EGyAUi3Zm6+uSkA90zOXT/2eFh6GM/2NNKuM=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:KL1PR02MB6283.apcprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(38350700005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?RRjMaS3M+zxlw5VShpkVuXmcoVYL0SYrI2fwFO8LXYs5FSFZ71ny7GBuXVTT?=
+ =?us-ascii?Q?V09veoHXqFDl498SdOpfJW7vKWIaBkL0CsYJ9U+KFNtZm3q0LY2YyNl7PuT3?=
+ =?us-ascii?Q?G86paaGAjQ/00bWF/qXgNYNGA9B9eELCtq1HZ3mjQ39jKCmEmZWRz59PdA1B?=
+ =?us-ascii?Q?z+yXTQloREBKLU5Jt8/dJXfxg+4JKB03rlglq02hTuRaActe+9n6a7TAw0Cd?=
+ =?us-ascii?Q?bFCBHqVFKMwCzMne0RqqOR8fuIimiAQpDO+IXeGObi3nHu4jeBfIxYq/DJmy?=
+ =?us-ascii?Q?3zx5pZUUTgHdKpcEuEZqRp5smMIxawK/Ba4+XW813xPXF+jXNyyaLm4Lb/1w?=
+ =?us-ascii?Q?JC5O2uySZdN4V0eQMG2qIOXI03DTN+OrweP8MYXWoEntODYbVjsz+9fJ2yJH?=
+ =?us-ascii?Q?prLT/A9+tY/SvERY+A0QGohj3rcPnaB74LOsvNqdT0fwmTs7bq9CT45ZYaR5?=
+ =?us-ascii?Q?6YVpHHWF0cih1rvt1tE2b9nuQ50RmCAAXPsgYiYVH3bVdojCvLhyiO5/MXdb?=
+ =?us-ascii?Q?vUe2TPzmtTGn0irLDBUTbVIPcBp8qLw1U87PXys3GqkLzkhtOQt+ARjb+KXc?=
+ =?us-ascii?Q?ItDTAHlxD/+FTnhi6WlR50bYT1QAvRI3/GTOaZ1ooZENYOA34sYXjKYjf5EH?=
+ =?us-ascii?Q?zVnWeDfI8ofdCKjX9q8Ny87YFyMr7QmtQ4hYOgwb9E7LZG4P1lPjCCuH1VnD?=
+ =?us-ascii?Q?YY7xTjTKkBbqF5UWTXdJYYKjdwhZ3UwtvFPZyhpSa3wPSsm8cf9Ecm0LnYQJ?=
+ =?us-ascii?Q?p8qBQ1fu5JhhEnwsNi7LDdcJLhl37YJeP7f/ZvLeTgxjyr4R+dICc429gV8K?=
+ =?us-ascii?Q?RDU5bKVDXFCnIMEiq9qofhkvG71WsnD20KjIz6px3OObdkiDLI/ByGXzdnTJ?=
+ =?us-ascii?Q?vavqhjDOmQpEWTE1ytl2nGYl8yJ6EzuwMmJmNbdhmCw/sRvBu23goOyD75iC?=
+ =?us-ascii?Q?sSKXjVYXrWhVgzLLM29dXB6mTNpaRKcH4Dha3Z9IzNA6KpNeLk26gdLCSDYE?=
+ =?us-ascii?Q?gDR9WXWhk6yuhkYVaRfd3/CszD/cPNXcfU8qjjGMnLS+QJFqA1to6gxbQHCB?=
+ =?us-ascii?Q?azs7Aaw+iLmsQWzd7hvu3kxNtcfbSM7j20vGIW2JQGflHOQDgENWYmmvcylv?=
+ =?us-ascii?Q?y1kgsMJsrt1h/SGA6cbZJEPvpfrGA2nSPXafiFyBcBB3PdEaT2TFBAnvPHiK?=
+ =?us-ascii?Q?lecZJ+92bwQ7LxLfk1k/6pA7boK1rpa1lmZWx3JErlluojsOCcMLodGJjvtb?=
+ =?us-ascii?Q?1mc5q5dMOZ6j9JSw5BBm5lp8LMPJ7dUyiD/PiTueocPVbDoO27ykJl4oowrM?=
+ =?us-ascii?Q?ODp+TZ6MILEVhSPzyg0mdbM6CzsJsHpdIc/hV6ZX9ywU37OVeh6zg9G3M72r?=
+ =?us-ascii?Q?UTd7JqdrI2ovahSVfSKMoH/pjSh/DNAwNE7qQo6YYLOd4npNcKHCrY5PawvG?=
+ =?us-ascii?Q?xv5JhD4Z4qInDqqEWRYtw6Vcnsu9yk4Z7w+lvgSysCw2EbL8nsd3t8t8Auuj?=
+ =?us-ascii?Q?fN/sWz+9Xk4TdS3u5Q6Y0okdr68W2RANBmasQb9+aCY2RvQm+bUFIFmVuDAn?=
+ =?us-ascii?Q?uAooNt440adPu77rdTaZTRbb5r9yI+eUVgKNux0F?=
 X-OriginatorOrg: fibocom.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-Network-Message-Id: eb76e3a5-dfb0-4b9a-d39e-08dc3db647ef
 X-MS-Exchange-CrossTenant-AuthSource: KL1PR02MB6283.apcprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 59c7b070-aab2-4808-26ef-08dc3db0daac
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Mar 2024 07:41:37.1392
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Mar 2024 08:20:28.3490
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 889bfe61-8c21-436b-bc07-3908050c8236
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ID8GmbrTVSF4MD/kLEqFZIbb61K6THwI3juzMyLMIgDPVWZGq8o6858jPnEkHv4yw5xYDpxvGS5qnGNst4bfRg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR02MB6074
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 889bfe61-8c21-436b-bc07-3908050c8236
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8ICpmB97Eoqifh5JYEOHoABNpSKlCUGw1fieZ7aiCAw917v84WEnjEyEyJPDo1VBmjPb0ENDTceJqqzmtLdZEQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSQPR02MB7742
 
-PiBIaSBCb2xhbiwNCj4gc28geW91IGFscmVhZHkga25vdyB0aGF0IG90aGVyIHZlcnNpb25zIG9m
-IHRoZSBjYXJkIHdpbGwgaGF2ZSB0aGUgcGlkDQo+IDB4MDFhMSBhbmQgdGhlIHNlcmlhbCBpbnRl
-cmZhY2VzIHdpbGwgYmUgb2YgY2xhc3MgZmYgYnV0IHlvdSBkb24ndCBrbm93IHdoYXQgdGhvc2Ug
-aW50ZXJmYWNlcyB3aWxsIGJlIHVzZWQgZm9yPw0KPiBZb3Ugc2hhbGwgb25seSBhZGQgZHJpdmVy
-IHN1cHBvcnQgZm9yIHdoYXQgeW91IGtub3cgdG9kYXkgYW5kIG5vdCBmb3Igc29tZXRoaW5nIHRo
-YXQgbWlnaHQgb3IgbWlnaHQgbm90IGJlIGltcGxlbWVudGVkIGluIHRoZSBmdXR1cmUuDQoNCj4g
-Rm9yIHRoZSBkZXZpY2Ugd2l0aCBwaWQgMHgwMTE1IHlvdSBoYXZlIGxpc3RlZCBhbiBhZGIgaW50
-ZXJmYWNlIGFuZCBhZGIgaW50ZXJmYWNlcyBzaG91bGQgbm90IGJlIGluIHRoZSBvcHRpb24gZHJp
-dmVyLg0KDQpIaSBMYXJzOg0KDQpPaywgSSB3aWxsIHJlbW92ZSAweDAxYTEgZnJvbSBvcHRpb24g
-c2VyaWFsIGRyaXZlci4gQW5kIHRoZSBhZGIgbGlzdGVkIGluIHBpZCAweDAxMTUgd2lsbCBhbHNv
-IGJlIHJlbW92ZWQuDQpBY3R1YWxseSBhZGIgaW50ZXJmYWNlIGluZm8gd2l0aCBwaWQgMHgwMTE1
-IGlzOiBDbGFzc19mZiZTdWJDbGFzc180MiZQcm90XzAxLCB0aGUgb3B0aW9uIGRyaXZlciB3aWxs
-IG5vdCBiaW5kIGl0Pw0KSSB3aWxsIHJlc3VibWl0IGEgbmV3IHBhdGNoLCBwbGVhc2UgaGVscCBy
-ZXZpZXcgYW5kIGFiYW5kb24gdGhpcy4NCg0KdGhhbmtzDQpib2xhbg0KDQoNCg==
+Update the USB serial option driver support for the Fibocom
+FM135-GL LTE modules.
+- VID:PID 2cb7:0115, FM135-GL for laptop debug M.2 cards(with MBIM
+interface for /Linux/Chrome OS)
+
+0x0115: mbim, diag, at, pipe
+
+Signed-off-by: bolan wang <bolan.wang@fibocom.com>
+---
+ drivers/usb/serial/option.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index 2ae124c49d44..ac637ba27313 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -2267,6 +2267,7 @@ static const struct usb_device_id option_ids[] = {
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(0x2cb7, 0x010b, 0xff, 0xff, 0x30) },	/* Fibocom FG150 Diag */
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(0x2cb7, 0x010b, 0xff, 0, 0) },		/* Fibocom FG150 AT */
+ 	{ USB_DEVICE_INTERFACE_CLASS(0x2cb7, 0x0111, 0xff) },			/* Fibocom FM160 (MBIM mode) */
++	{ USB_DEVICE_INTERFACE_CLASS(0x2cb7, 0x0115, 0xff) },			/* Fibocom FM135 (laptop MBIM) */
+ 	{ USB_DEVICE_INTERFACE_CLASS(0x2cb7, 0x01a0, 0xff) },			/* Fibocom NL668-AM/NL652-EU (laptop MBIM) */
+ 	{ USB_DEVICE_INTERFACE_CLASS(0x2cb7, 0x01a2, 0xff) },			/* Fibocom FM101-GL (laptop MBIM) */
+ 	{ USB_DEVICE_INTERFACE_CLASS(0x2cb7, 0x01a3, 0xff) },			/* Fibocom FM101-GL (laptop MBIM) */
+-- 
+2.34.1
+
 
