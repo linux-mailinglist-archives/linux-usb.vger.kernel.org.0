@@ -1,132 +1,190 @@
-Return-Path: <linux-usb+bounces-7631-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7632-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C286787468E
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Mar 2024 04:09:35 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D05348746D0
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Mar 2024 04:34:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F36971C2146B
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Mar 2024 03:09:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 463D5B21679
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Mar 2024 03:34:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6698CDDC3;
-	Thu,  7 Mar 2024 03:09:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11A90FBE1;
+	Thu,  7 Mar 2024 03:34:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="uvsQp752"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OXd+bcRA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A159CA6B
-	for <linux-usb@vger.kernel.org>; Thu,  7 Mar 2024 03:09:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 668963214
+	for <linux-usb@vger.kernel.org>; Thu,  7 Mar 2024 03:34:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709780969; cv=none; b=D6JMoQF82YgMLOg9cgjv0DU82C74j2iAU/td+ldN4A3S0EcPOVvqlum4tDjH1KdPf5lzgaKq5yyloH1sGkzPhvFLSYDbgUCai4c/mkj5RSkNchIo1xudm/8+wvt9r73idvtc7St1MWTNRVTYlnfbtVE/SkX9JXes41GWy+GFul0=
+	t=1709782486; cv=none; b=Sw//UQD+uhTyP6U5/vPGw3kuRZnxJUiPZc7z1UV+6u1hSa5ZGrkAOvgl4OofsxMsTwZb5CPq4gCqdirRhkUdf+toOWzvOspwpZIIywOKKYMsogp0nJWdM6CWDM+AFuyCRFZvdAOewC0tFT7RxoPIXLqcPGXQGrrsfHK7D7UhmNM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709780969; c=relaxed/simple;
-	bh=9VKCNfoO34uLb81d+s+T+24G9GZ1ZWMwJkSj0hyrqZY=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Content-Type; b=pcyCUNeWWK4yGed0YWMjHBrubxh78ZCb1mcEjhDihwMbBIUQ9drLGrcHr1wJ8k3u8RW8fYH5tDzvNjZEEsPvy4coa5CGf2ZYZGn6vBi6hvtY9tw9tp/H5ywj0n1hT63R4CRRDfU94+3ExwM1GYN4wqlq7GEARh+2EblKK0viIFo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--royluo.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=uvsQp752; arc=none smtp.client-ip=209.85.128.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--royluo.bounces.google.com
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-60810219282so6971787b3.0
-        for <linux-usb@vger.kernel.org>; Wed, 06 Mar 2024 19:09:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1709780966; x=1710385766; darn=vger.kernel.org;
-        h=to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=H5Ul/l6h3QQByB9upBvQ9wSmoGLdWz++Sa5jGQeBypo=;
-        b=uvsQp752U+bq5zn6RGkp/M49d2MSATTBfqhBXMZdHv5v+NC1zVMNHmCTmZr/xbS3JX
-         SeTUwNFLfN6FjSKEAfKwFycAH2qpCDzYWAjBpDEqARXIV3t+10auKnbUEQ6p2aFBvdqA
-         nVmNQo6oIKdtbuMQcMeCARYhOch/UK3gKC+HfODRRbDa5x/PUOrRU5uAKakz7Z/6UiZN
-         yvNw8tqq4w4xg7s2u6P2VoF8fog6CO8JF+/tY93iJVVvLgAhy+wRvUiFp9eYp5tbx4Hi
-         761onZY42phWeARNUQLWK1ZTeaPqHd2snlZPgSbwmmw6W74tgQDMKGqIa/5JZ7unlrLd
-         i2cw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709780966; x=1710385766;
-        h=to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=H5Ul/l6h3QQByB9upBvQ9wSmoGLdWz++Sa5jGQeBypo=;
-        b=bDb3XH5vxaLBIqAoPBLMby3Nfm63ME+t4Mrbx2GgBf9TIxGViw80qa+6RgMcg/W/yt
-         lL8IreQGYwGiQi5si3oE1/NfPWqBpy+XRJgUa1egsvUuv8ZAHFogbZcate/IfKoq/wi7
-         znwD00/mQXto1eGQ6PjlvFywwFeB8z8kfWMbtKvzmwlMGPRcdEOxBXhSD4wD7ZE8Ih0P
-         kG8aEMdbotYo/2BTLoDYLbC9so5y/gSap258SdP8Lso9gj8wVIxr+EBt0H+MZnus0qr9
-         mg6o8n47Izoh9c/uz0T4pfln0eElRwj41fZYwmLJxY1XAB3FbYV/vlaYi5sC1isqiUaF
-         3/Kw==
-X-Forwarded-Encrypted: i=1; AJvYcCW0rmfqCjORepNknlzddk29dUXKFTL+eoA1tUEhReCWr6CYCj80Mhnh0ztyxRv/Iir/OdtQXZbQTIhOcySpuMYYiFYXg0mWIgWA
-X-Gm-Message-State: AOJu0Yy94uPdOI1CecqSjpiGorH8zFDBxIjsL0z5dEAbT5/qlNrDOZ5S
-	UV93rCVXUeCBjsnCqhNDj6JgIM/klT00XDyYglog3FVEXKzJqPdWbpv9LRxrlifdTQMNxcT589/
-	74w==
-X-Google-Smtp-Source: AGHT+IHeaYvtkY0Bcfb1Npr2PybT8dlXhavGfsAAIqzbqBoTOs8R7yumV2r/35rHceoTxqMk4lHGh/7MQQo=
-X-Received: from royluo-cloudtop0.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:bb8])
- (user=royluo job=sendgmr) by 2002:a05:690c:3612:b0:607:a30d:8cf with SMTP id
- ft18-20020a05690c361200b00607a30d08cfmr3779456ywb.4.1709780966471; Wed, 06
- Mar 2024 19:09:26 -0800 (PST)
-Date: Thu,  7 Mar 2024 03:09:22 +0000
+	s=arc-20240116; t=1709782486; c=relaxed/simple;
+	bh=s8YmLTqHVjNsHkISgOJ/ZnYN8NmA+qmEOHucDzunWD8=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=KFjLQXxj2xgGZFB5avHoKbeDwRzY+k3Cs5FFJ58kue4tTWOtyBaWdjIjfoWw9kElTQley36ptCgX4ceL5fQdD1hh1uYzdKlilcehtORN8yCPvNH2eo3Ru6VVjAhqTAZP+h2vzD7YHQtbNiwXp4nFNRRAJ6FeOQuerMIIhlxn2PE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OXd+bcRA; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1709782485; x=1741318485;
+  h=date:from:to:cc:subject:message-id;
+  bh=s8YmLTqHVjNsHkISgOJ/ZnYN8NmA+qmEOHucDzunWD8=;
+  b=OXd+bcRAHSinPag4phMzIB5DQUrHozxNCzGxKvlWF8g8scXpf+zOtJGV
+   RxR39BO7vI9fqdbVj16/RJxiLDrZyNpR/64t+hKlPMEABHGrNNQzvRXdK
+   bxPjYCRsfjDu88EnBpnwG9MfaPLasp2BKzzn23yrXGMZC9VN7c423dZNg
+   j5//0Bxd+Jh9geVLe97Icunf6+eBeOnZtzVKVx00StxaJVNzD5Vn1I7ul
+   p22S3eYMK/XYCzAG9Yj6XOjrhZpFUChhCrdj8dMolhg5+RzLAIh5wCLf6
+   UkPxzOzTnT4bKQ5dgWd9iTCCgUa9k70ds0tm+c+JMjzzcNXV/PFNqyTNc
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11005"; a="4602558"
+X-IronPort-AV: E=Sophos;i="6.06,209,1705392000"; 
+   d="scan'208";a="4602558"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2024 19:34:43 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,209,1705392000"; 
+   d="scan'208";a="14464909"
+Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 06 Mar 2024 19:34:42 -0800
+Received: from kbuild by b21307750695 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ri4Wl-0004ku-2R;
+	Thu, 07 Mar 2024 03:34:39 +0000
+Date: Thu, 07 Mar 2024 11:34:29 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ dfea18989aa7beb42c2cb6344fe8787de35d9471
+Message-ID: <202403071126.SttiqZ3c-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.44.0.278.ge034bb2e1d-goog
-Message-ID: <20240307030922.3573161-1-royluo@google.com>
-Subject: [PATCH v1] USB: gadget: core: create sysfs link between udc and gadget
-From: Roy Luo <royluo@google.com>
-To: royluo@google.com, gregkh@linuxfoundation.org, stern@rowland.harvard.edu, 
-	badhri@google.com, quic_kriskura@quicinc.com, francesco.dolcini@toradex.com, 
-	quic_eserrao@quicinc.com, ivan.orlov0322@gmail.com, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
 
-udc device and gadget device are tightly coupled, yet there's no good
-way to corelate the two. Add a sysfs link in udc that points to the
-corresponding gadget device.
-An example use case: userspace configures a f_midi configfs driver and
-bind the udc device, then it tries to locate the corresponding midi
-device, which is a child device of the gadget device. The gadget device
-that's associated to the udc device has to be identified in order to
-index the midi device. Having a sysfs link would make things much
-easier.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: dfea18989aa7beb42c2cb6344fe8787de35d9471  usb: Clarify expected behavior of dev_bin_attrs_are_visible()
 
-Signed-off-by: Roy Luo <royluo@google.com>
----
- drivers/usb/gadget/udc/core.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+elapsed time: 950m
 
-diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
-index d59f94464b87..876b8635b16f 100644
---- a/drivers/usb/gadget/udc/core.c
-+++ b/drivers/usb/gadget/udc/core.c
-@@ -1419,8 +1419,16 @@ int usb_add_gadget(struct usb_gadget *gadget)
- 	if (ret)
- 		goto err_free_id;
- 
-+	ret = sysfs_create_link(&udc->dev.kobj,
-+				&gadget->dev.kobj, "gadget");
-+	if (ret)
-+		goto err_del_gadget;
-+
- 	return 0;
- 
-+ err_del_gadget:
-+	device_del(&gadget->dev);
-+
-  err_free_id:
- 	ida_free(&gadget_id_numbers, gadget->id_number);
- 
-@@ -1529,6 +1537,7 @@ void usb_del_gadget(struct usb_gadget *gadget)
- 	mutex_unlock(&udc_lock);
- 
- 	kobject_uevent(&udc->dev.kobj, KOBJ_REMOVE);
-+	sysfs_remove_link(&udc->dev.kobj, "gadget");
- 	flush_work(&gadget->work);
- 	device_del(&gadget->dev);
- 	ida_free(&gadget_id_numbers, gadget->id_number);
+configs tested: 101
+configs skipped: 3
 
-base-commit: 67be068d31d423b857ffd8c34dbcc093f8dfff76
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allmodconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arm                              allmodconfig   gcc  
+arm                               allnoconfig   clang
+arm                              allyesconfig   gcc  
+arm                                 defconfig   clang
+arm64                            allmodconfig   clang
+arm64                             allnoconfig   gcc  
+arm64                               defconfig   gcc  
+csky                             allmodconfig   gcc  
+csky                              allnoconfig   gcc  
+csky                             allyesconfig   gcc  
+csky                                defconfig   gcc  
+hexagon                          allmodconfig   clang
+hexagon                           allnoconfig   clang
+hexagon                          allyesconfig   clang
+hexagon                             defconfig   clang
+i386                             allmodconfig   gcc  
+i386                              allnoconfig   gcc  
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-001-20240307   clang
+i386         buildonly-randconfig-002-20240307   gcc  
+i386         buildonly-randconfig-003-20240307   clang
+i386         buildonly-randconfig-004-20240307   gcc  
+i386         buildonly-randconfig-005-20240307   gcc  
+i386         buildonly-randconfig-006-20240307   clang
+i386                                defconfig   clang
+i386                  randconfig-001-20240307   gcc  
+i386                  randconfig-002-20240307   gcc  
+i386                  randconfig-003-20240307   clang
+i386                  randconfig-004-20240307   gcc  
+i386                  randconfig-005-20240307   gcc  
+i386                  randconfig-006-20240307   clang
+i386                  randconfig-011-20240307   clang
+i386                  randconfig-012-20240307   gcc  
+i386                  randconfig-013-20240307   clang
+i386                  randconfig-014-20240307   clang
+i386                  randconfig-015-20240307   clang
+i386                  randconfig-016-20240307   clang
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                       allyesconfig   gcc  
+microblaze                          defconfig   gcc  
+mips                              allnoconfig   gcc  
+mips                             allyesconfig   gcc  
+nios2                            allmodconfig   gcc  
+nios2                             allnoconfig   gcc  
+nios2                            allyesconfig   gcc  
+nios2                               defconfig   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                         allyesconfig   gcc  
+openrisc                            defconfig   gcc  
+parisc                           allmodconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                          allyesconfig   clang
+riscv                            allmodconfig   clang
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   clang
+riscv                               defconfig   clang
+s390                             allmodconfig   clang
+s390                              allnoconfig   clang
+s390                             allyesconfig   gcc  
+s390                                defconfig   clang
+sh                               allmodconfig   gcc  
+sh                                allnoconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                                  defconfig   gcc  
+sparc                            allmodconfig   gcc  
+sparc                             allnoconfig   gcc  
+sparc                               defconfig   gcc  
+sparc64                          allmodconfig   gcc  
+sparc64                          allyesconfig   gcc  
+sparc64                             defconfig   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   gcc  
+um                                  defconfig   clang
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   clang
+x86_64                            allnoconfig   clang
+x86_64                           allyesconfig   clang
+x86_64                              defconfig   gcc  
+x86_64                          rhel-8.3-rust   clang
+xtensa                            allnoconfig   gcc  
+
 -- 
-2.44.0.278.ge034bb2e1d-goog
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
