@@ -1,87 +1,139 @@
-Return-Path: <linux-usb+bounces-7685-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7686-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5FF8487552B
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Mar 2024 18:30:12 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DDF8087553B
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Mar 2024 18:32:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1C0A8286908
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Mar 2024 17:30:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 62DC0B24712
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Mar 2024 17:32:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54643130E5D;
-	Thu,  7 Mar 2024 17:29:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D173130E27;
+	Thu,  7 Mar 2024 17:32:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="cv9Cizq7"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id 332A5130E24
-	for <linux-usb@vger.kernel.org>; Thu,  7 Mar 2024 17:29:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0587C130AC4;
+	Thu,  7 Mar 2024 17:32:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709832595; cv=none; b=dasiYnsoa2tHgyz+TGejxDEQ/UIhX/1VGiRgy3sGCEp7bpEORSZPpLT1/COxWJfTzZ1Un9BduogUh0iPtx/nETVpY5HCfbDAnfNokxDU2ddIIq55UCoHIrUrWwGfy27VzCqSgdWj+KfcaNVbeau3NfMAO8az26jYOk1OjwA3PZQ=
+	t=1709832759; cv=none; b=nNSlRl/nyFD+Y3MM8gzuLC3VVFaK57sFJpO44brnrleMoco85KdrfVFvDtLuSSLU7Dbw7peJS7VQizxIAOz5WEc0Bvmo1Fj30f8ZScBlTbQzrvpqM/25wD1i6JAMVlWPJU5Eir624INA8o2aHCG+dfCojnsrz4SNAURir6FpCl0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709832595; c=relaxed/simple;
-	bh=knRagf2SaEsYlyHQSJfvNiE/tRYyl0/2a8GwXg+213Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mx+2OyJqhLT/G7tnMZ3Lz70P1IHtA/ecbwyfHDYiKIWoSVAwX8hiqUIoN2rrV5pVa7LFhYSB9j2+P3gphJ902zBBbqlnim8RiosXySu2uWoG2O84GC1tRTunLbQlRwoL3hUettEILoVG+NEqBXr4/NIeLBKsbkInz9jvts0+0V8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
-Received: (qmail 226215 invoked by uid 1000); 7 Mar 2024 12:29:51 -0500
-Date: Thu, 7 Mar 2024 12:29:51 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>
-Cc: Colin Ian King <colin.i.king@gmail.com>,
-  Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
-  kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH][next] usb: gadget: net2272: remove redundant variable
- irqflags
-Message-ID: <2b318367-2428-44ba-b4d9-0a452fcb7858@rowland.harvard.edu>
-References: <20240307105135.1981060-1-colin.i.king@gmail.com>
- <mywsgq453muhggv5y7pfrsg7zrodtuebcpo5rbc4kus5h2ameo@fhnpemjuntaz>
+	s=arc-20240116; t=1709832759; c=relaxed/simple;
+	bh=os7MvWdKXLSw9AkDhcPRjA7sgslEH0TCOsCPjkfdKLY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Z1QwIDoKWAQ+EvP2bo5Edwpc8TpGEdqJh5UlUKEPPwFRNvzuwY+0EIMeh+4VQ2lgnnaJ5RC2p1Y0ZopzJabVrOTM5wKGgaEe2XZ4xTdCShcPX8qaZpgZB2Heq+iEUjDu0A6CUhXGwNQ79iiwhPk+A071FrMAvrIMEQjEFgj9ylg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=cv9Cizq7; arc=none smtp.client-ip=117.135.210.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=56j5n
+	tVzigxy+mWlLsPQSN6BzY98TlaoAkW9sN3oqa4=; b=cv9Cizq73AGnBDEaxElb1
+	SZFxJSelIbZILxPmvoaqsKryhbwOIwXTZoBLfvUYRcAlMkhQa+q+ndZtqPxxCdMR
+	VmLW09v9jqlM4Mo15gaeV16a+nVeM0TzUs9JIoAjUVD+Bc0d3eTHCTFaLmDnHw6B
+	PBBQEPqz91uCZdoMOE/8Bg=
+Received: from sc9-mailhost1.vmware.com (unknown [114.250.139.10])
+	by gzga-smtp-mta-g2-0 (Coremail) with SMTP id _____wD3f2Al+ullk2FrAA--.14028S2;
+	Fri, 08 Mar 2024 01:32:22 +0800 (CST)
+From: Dingyan Li <18500469033@163.com>
+To: stern@rowland.harvard.edu,
+	gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] USB: Use EHCI control transfer pid macros instead of constant values.
+Date: Fri,  8 Mar 2024 01:31:59 +0800
+Message-Id: <20240307173159.318384-1-18500469033@163.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <mywsgq453muhggv5y7pfrsg7zrodtuebcpo5rbc4kus5h2ameo@fhnpemjuntaz>
+X-CM-TRANSID:_____wD3f2Al+ullk2FrAA--.14028S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7uF13KF1fAFyfJw47AFWkWFg_yoW5JF15pr
+	W3WF47trWUJr4aqr9rArs5JF1rJw13JFyUKFy7W3y8CF40y3WUGF17KFWfJr9rXry8Gr1Y
+	qF45WryUurs7JFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UE9aPUUUUU=
+X-CM-SenderInfo: jprykiiquwmiitt6il2tof0z/xtbBzxKay2V4IHY5PgABsB
 
-On Thu, Mar 07, 2024 at 05:51:59PM +0100, Uwe Kleine-König wrote:
-> On Thu, Mar 07, 2024 at 10:51:35AM +0000, Colin Ian King wrote:
-> > The variable irqflags is being initialized and being bit-or'd with
-> > values but it is never read afterwards. The variable is redundant
-> > and can be removed.
-> > 
-> > Cleans up clang scan build warning:
-> > drivers/usb/gadget/udc/net2272.c:2610:15: warning: variable 'irqflags'
-> > set but not used [-Wunused-but-set-variable]
-> > 
-> > Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-> 
-> this "problem" exists since the driver was introduced in commit
-> ceb80363b2ec ("USB: net2272: driver for PLX NET2272 USB device
-> controller"). Might be worth a Fixes: line.
-> 
-> I wonder if the better fix would be:
-> 
-> diff --git a/drivers/usb/gadget/udc/net2272.c b/drivers/usb/gadget/udc/net2272.c
-> index 12e76bb62c20..19bbc38f3d35 100644
-> --- a/drivers/usb/gadget/udc/net2272.c
-> +++ b/drivers/usb/gadget/udc/net2272.c
-> @@ -2650,7 +2650,7 @@ net2272_plat_probe(struct platform_device *pdev)
->  		goto err_req;
->  	}
->  
-> -	ret = net2272_probe_fin(dev, IRQF_TRIGGER_LOW);
-> +	ret = net2272_probe_fin(dev, irqflags);
->  	if (ret)
->  		goto err_io;
+Macros with good names offer better readability. Besides, also move
+the definition to ehci.h.
 
-I agree, that makes much more sense.
+Signed-off-by: Dingyan Li <18500469033@163.com>
+---
+ drivers/usb/host/ehci-q.c | 10 +++-------
+ drivers/usb/host/ehci.h   |  8 +++++++-
+ 2 files changed, 10 insertions(+), 8 deletions(-)
 
-Alan Stern
+diff --git a/drivers/usb/host/ehci-q.c b/drivers/usb/host/ehci-q.c
+index 666f5c4db25a..51b46001e344 100644
+--- a/drivers/usb/host/ehci-q.c
++++ b/drivers/usb/host/ehci-q.c
+@@ -27,10 +27,6 @@
+ 
+ /*-------------------------------------------------------------------------*/
+ 
+-/* PID Codes that are used here, from EHCI specification, Table 3-16. */
+-#define PID_CODE_IN    1
+-#define PID_CODE_SETUP 2
+-
+ /* fill a qtd, returning how much of the buffer we were able to queue up */
+ 
+ static unsigned int
+@@ -230,7 +226,7 @@ static int qtd_copy_status (
+ 			/* fs/ls interrupt xfer missed the complete-split */
+ 			status = -EPROTO;
+ 		} else if (token & QTD_STS_DBE) {
+-			status = (QTD_PID (token) == 1) /* IN ? */
++			status = (QTD_PID(token) == PID_CODE_IN) /* IN ? */
+ 				? -ENOSR  /* hc couldn't read data */
+ 				: -ECOMM; /* hc couldn't write data */
+ 		} else if (token & QTD_STS_XACT) {
+@@ -606,7 +602,7 @@ qh_urb_transaction (
+ 		/* SETUP pid */
+ 		qtd_fill(ehci, qtd, urb->setup_dma,
+ 				sizeof (struct usb_ctrlrequest),
+-				token | (2 /* "setup" */ << 8), 8);
++				token | (PID_CODE_SETUP << 8), 8);
+ 
+ 		/* ... and always at least one more pid */
+ 		token ^= QTD_TOGGLE;
+@@ -642,7 +638,7 @@ qh_urb_transaction (
+ 	}
+ 
+ 	if (is_input)
+-		token |= (1 /* "in" */ << 8);
++		token |= (PID_CODE_IN << 8);
+ 	/* else it's already initted to "out" pid (0 << 8) */
+ 
+ 	maxpacket = usb_endpoint_maxp(&urb->ep->desc);
+diff --git a/drivers/usb/host/ehci.h b/drivers/usb/host/ehci.h
+index 1441e3400796..dafa6628e134 100644
+--- a/drivers/usb/host/ehci.h
++++ b/drivers/usb/host/ehci.h
+@@ -321,10 +321,16 @@ struct ehci_qtd {
+ 	size_t			length;			/* length of buffer */
+ } __aligned(32);
+ 
++/* PID Codes that are used here, from EHCI specification, Table 3-16. */
++/* #define PID_CODE_OUT   0 */
++#define PID_CODE_IN    1
++#define PID_CODE_SETUP 2
++
+ /* mask NakCnt+T in qh->hw_alt_next */
+ #define QTD_MASK(ehci)	cpu_to_hc32(ehci, ~0x1f)
+ 
+-#define IS_SHORT_READ(token) (QTD_LENGTH(token) != 0 && QTD_PID(token) == 1)
++#define IS_SHORT_READ(token) (QTD_LENGTH(token) != 0 && \
++						QTD_PID(token) == PID_CODE_IN)
+ 
+ /*-------------------------------------------------------------------------*/
+ 
+-- 
+2.25.1
+
 
