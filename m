@@ -1,186 +1,248 @@
-Return-Path: <linux-usb+bounces-7663-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7664-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CCB39874E6C
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Mar 2024 12:58:18 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3EBD0874F16
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Mar 2024 13:32:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F07BA1C23ACB
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Mar 2024 11:58:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AAABC1F247C6
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Mar 2024 12:32:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 488B0129A8A;
-	Thu,  7 Mar 2024 11:57:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55ED712BEB1;
+	Thu,  7 Mar 2024 12:31:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JKPelkEM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bzb1l7Zf"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FDCB129A72;
-	Thu,  7 Mar 2024 11:57:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA05741A94;
+	Thu,  7 Mar 2024 12:31:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709812675; cv=none; b=B92GCGaZplNm2Hv4oUB7GPF/RjmjGxm80s+NXbU7yMXD5psejiV2ICTHe1Atxo5uiThH/9YjgSdA88xNxLVNWOU+0mpzx6wd829tSu6bsaod4Yjin3D814L1CL5exm4nFBBDc7b5wkN7V5Vf68BUciBwVhjcZnbw0mLgcCRmwK0=
+	t=1709814718; cv=none; b=YfnKAe+9LGSc0KP3VnL+b8LQ6VcEOkFuz6nGPSa6w/k3+XTQ8t3WXrqpNhUyNHTkHe1Uxugw6Fu7NGgztWS8qm2TYQGI/xy+V/yP3Nf2CNorIpePJiSMjolr8xf3839XkyTZBWoRXf4n0i5tWncalZl/W+ZpUheFJ7t3rWi2lPw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709812675; c=relaxed/simple;
-	bh=J86UKY8qhazKaB7pPML7j0nM+vkhkOPEx5DuuIIA3J8=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=PCcry7tefH44Ia3qqHzUEKceLJSLwnCU7JbAQ7o9fQmbPJ4ie8uA7HCTBODmZBUfnduPHTQftIgDaRsZDnZUF+gDQ0glGhDHNXYLpu9aaZNH93BCn4fQ5MMaxSSBqaT5Lg+2qvk+Rs1QZIWLVaDOwGL464fvtWvpVb1HASxY0cQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JKPelkEM; arc=none smtp.client-ip=209.85.215.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-5dbd519bde6so657265a12.1;
-        Thu, 07 Mar 2024 03:57:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709812674; x=1710417474; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GnDe8WtbZ9hcODNTV3jRGEgDe7+iT2YCtcCLNf4Qsns=;
-        b=JKPelkEMPcXIaOxjKzKvJfNaJXgH8pc9Ej3xlH1GvengBtze6GwrVyclaj9KFj1QqN
-         ua1F90If9HQV2l5MpwA8EQ63HvAbsyRp4pXSuJE5sy8dGlDPWd0d96eJv4hb1aQB3lwO
-         I7ONpCUrtzNVMojZgOgwOCkQ4y83ElfCbx5BNnnhhTsf0T30ljbdjX1Wy1Wm9vAPT76V
-         ouSEoApFTO6IfvnxAS82dviTPec5xR2b4zN4UdFTohmE+0qDxygEt+ORz6wwopVjmb2h
-         NwxP258R4n9hB1z850MeCvTZBlZ8myS1tveZGfkpw5G8Xt4zi02G8Y/85G4hY5HMniJ6
-         J/LQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709812674; x=1710417474;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GnDe8WtbZ9hcODNTV3jRGEgDe7+iT2YCtcCLNf4Qsns=;
-        b=ZlNOjMvev5cDBFrI5dcdOq2Ci6PdBvR5cTW4grc1w9Fcu/Kw21oF4w7evx3GIfkm9S
-         6x7Iwps7cNkgyJrCJbO1wZOEfwa4mX3VbQVCCexxzYXof850OtYNtdnsPEDSz85S0U9e
-         8AKyh55qKQeMfLMQV0X0Cpg1B8bng9J3yRsNqy7QFIKzBgF86EULIyfHhiucGvCaO/D/
-         s2ZdGBt87J5zTvsirHFIU6cFMhQBT4U1F+sA3FRFsHNpN+yuXlp2ioPbIOj+EYdTR2MZ
-         bj+dB+l6LhKv4pwGZ88lghCV95ig+Jw2wYZrpq7ffI6tMTi2V9E/iKQHePz+yV8JAD4g
-         yEgA==
-X-Forwarded-Encrypted: i=1; AJvYcCVL4lsdZrV6FUfeeAtxQAFgYbZGEwJnj1+C8KgtnQvCr+kdB04spG+MtSs3vu6b3ts+beWWcnx1JO9Tz6Ss/rtpm1W/cVBmU7HRxE3z
-X-Gm-Message-State: AOJu0YwHqPjar0FOBkZk+xpzxliuc9HTccYOrIMA+ahnnrfuZ6dPIroL
-	g85Reh+rQ0e/XbjaU2VGLADUMrrIR9G+b2xD2q7eSg1ea2ZJrPJ1
-X-Google-Smtp-Source: AGHT+IGh+oenmFUHmGunUsmpdxKdgB27yRhLeGFEaRlazILAGetA315ev5uBqawUMt3AexyzdHKHHQ==
-X-Received: by 2002:a05:6a20:ba84:b0:1a1:4df8:1ec4 with SMTP id fb4-20020a056a20ba8400b001a14df81ec4mr6282239pzb.19.1709812673611;
-        Thu, 07 Mar 2024 03:57:53 -0800 (PST)
-Received: from VM-147-239-centos.localdomain ([14.22.11.162])
-        by smtp.gmail.com with ESMTPSA id q4-20020a63e944000000b005dc1edf7371sm12722063pgj.9.2024.03.07.03.57.51
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 07 Mar 2024 03:57:53 -0800 (PST)
-From: Yongzhi Liu <hyperlyzcs@gmail.com>
-To: hdegoede@redhat.com,
-	wentong.wu@intel.com,
-	gregkh@linuxfoundation.org,
-	andi.shyti@linux.intel.com
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	jitxie@tencent.com,
-	huntazhang@tencent.com,
-	Yongzhi Liu <hyperlyzcs@gmail.com>
-Subject: [PATCH V2] usb: misc: ljca: Fix double free in error handling path
-Date: Thu,  7 Mar 2024 19:57:43 +0800
-Message-Id: <20240307115743.13104-1-hyperlyzcs@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <2c77e58a-fe07-464f-9032-3933080be349@redhat.com>
-References: <2c77e58a-fe07-464f-9032-3933080be349@redhat.com>
+	s=arc-20240116; t=1709814718; c=relaxed/simple;
+	bh=xeHxrSQbO4a/rV3efFhMHDrWz7mv30QQMuGrfJCirxg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hqAz0ueHJyCvAWv3HTRQz4ygo9dRg3dTKzVjZj/jHVgggMRd9C9m6g4ydA5Ri9rAgnb8NZRjUV4/pgKo7Z/9YcNh8HKH/yE5vwsK1I7jYWtM3B4cVJqbggmhv9SopSMT2lB3yCRRsX7ZA/lCR5fhkh2fR7o/LP2TGLxaQpXUvGg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Bzb1l7Zf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 659A6C433F1;
+	Thu,  7 Mar 2024 12:31:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709814718;
+	bh=xeHxrSQbO4a/rV3efFhMHDrWz7mv30QQMuGrfJCirxg=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Bzb1l7ZfrRZ03Pxp/q8/QA+XKV/1P654+rwlFvzSTAU+8Kv3O50Ldl89F5z2bM+fg
+	 9jEc78VtH74Abb1rbfisiEmy5JEdhjKraoAAsm7oEPOqteqZXRyGYoLgIcDiuPmd1B
+	 7HrV1gppyJvIUZqgiRwaxA+xsukIjmMN9eUmRwdphtVFEOlKqWkt4rlNx/n6ZV3RgF
+	 fMwvy9lPzrExXCt2KbjtVhL9g49id+HmQv3+1+5hHM3PdA1kYTbr8Jb6gcWT8tuEiV
+	 QEfjnxEviQEVkQpiOuSLj3k67OK0Fg8owup5ILmPuVKs7KbY3Y+hcg0FvPblY26xkt
+	 wlpeoFFl53PCQ==
+Message-ID: <d1ca5d29-8ef4-4d7f-b1c8-bcb361e6c351@kernel.org>
+Date: Thu, 7 Mar 2024 14:31:51 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 3/9] usb: cdns3-ti: move reg writes from probe into
+ ->runtime_resume()
+Content-Language: en-US
+To: =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Peter Chen <peter.chen@kernel.org>,
+ Pawel Laszczak <pawell@cadence.com>, Nishanth Menon <nm@ti.com>,
+ Vignesh Raghavendra <vigneshr@ti.com>, Tero Kristo <kristo@kernel.org>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ =?UTF-8?Q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>,
+ Kevin Hilman <khilman@kernel.org>, Alan Stern <stern@rowland.harvard.edu>,
+ linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20240307-j7200-usb-suspend-v4-0-5ec7615431f3@bootlin.com>
+ <20240307-j7200-usb-suspend-v4-3-5ec7615431f3@bootlin.com>
+From: Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <20240307-j7200-usb-suspend-v4-3-5ec7615431f3@bootlin.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-When auxiliary_device_add() returns error and then calls
-auxiliary_device_uninit(), callback function ljca_auxdev_release
-calls kfree(auxdev->dev.platform_data) to free the parameter data
-of the function ljca_new_client_device. The callers of
-ljca_new_client_device shouldn't call kfree() again
-in the error handling path to free the platform data.
+Hi,
 
-Fix this by cleaning up the redundant kfree() in all callers and
-adding kfree() the passed in platform_data on errors which happen
-before auxiliary_device_init() succeeds .
+On 07/03/2024 11:55, Théo Lebrun wrote:
+> The hardware initialisation register write sequence is only used at
+> probe. Move it from being done at explicitely at probe to being done
+> implicitely by pm_runtime_get_sync() that calls ->runtime_resume().
 
-Fixes: acd6199f195d ("usb: Add support for Intel LJCA device")
-Signed-off-by: Yongzhi Liu <hyperlyzcs@gmail.com>
----
- drivers/usb/misc/usb-ljca.c | 26 +++++++++-----------------
- 1 file changed, 9 insertions(+), 17 deletions(-)
+explicitly / implicitly
 
-diff --git a/drivers/usb/misc/usb-ljca.c b/drivers/usb/misc/usb-ljca.c
-index 35770e608c64..bd9ccbea6e72 100644
---- a/drivers/usb/misc/usb-ljca.c
-+++ b/drivers/usb/misc/usb-ljca.c
-@@ -518,8 +518,10 @@ static int ljca_new_client_device(struct ljca_adapter *adap, u8 type, u8 id,
- 	int ret;
- 
- 	client = kzalloc(sizeof *client, GFP_KERNEL);
--	if (!client)
-+	if (!client) {
-+		kfree(data);
- 		return -ENOMEM;
-+	}
- 
- 	client->type = type;
- 	client->id = id;
-@@ -535,8 +537,10 @@ static int ljca_new_client_device(struct ljca_adapter *adap, u8 type, u8 id,
- 	auxdev->dev.release = ljca_auxdev_release;
- 
- 	ret = auxiliary_device_init(auxdev);
--	if (ret)
-+	if (ret) {
-+		kfree(data);
- 		goto err_free;
-+	}
- 
- 	ljca_auxdev_acpi_bind(adap, auxdev, adr, id);
- 
-@@ -590,12 +594,8 @@ static int ljca_enumerate_gpio(struct ljca_adapter *adap)
- 		valid_pin[i] = get_unaligned_le32(&desc->bank_desc[i].valid_pins);
- 	bitmap_from_arr32(gpio_info->valid_pin_map, valid_pin, gpio_num);
- 
--	ret = ljca_new_client_device(adap, LJCA_CLIENT_GPIO, 0, "ljca-gpio",
-+	return ljca_new_client_device(adap, LJCA_CLIENT_GPIO, 0, "ljca-gpio",
- 				     gpio_info, LJCA_GPIO_ACPI_ADR);
--	if (ret)
--		kfree(gpio_info);
--
--	return ret;
- }
- 
- static int ljca_enumerate_i2c(struct ljca_adapter *adap)
-@@ -626,13 +626,9 @@ static int ljca_enumerate_i2c(struct ljca_adapter *adap)
- 		i2c_info->capacity = desc->info[i].capacity;
- 		i2c_info->intr_pin = desc->info[i].intr_pin;
- 
--		ret = ljca_new_client_device(adap, LJCA_CLIENT_I2C, i,
-+		return ljca_new_client_device(adap, LJCA_CLIENT_I2C, i,
- 					     "ljca-i2c", i2c_info,
- 					     LJCA_I2C1_ACPI_ADR + i);
--		if (ret) {
--			kfree(i2c_info);
--			return ret;
--		}
- 	}
- 
- 	return 0;
-@@ -666,13 +662,9 @@ static int ljca_enumerate_spi(struct ljca_adapter *adap)
- 		spi_info->id = desc->info[i].id;
- 		spi_info->capacity = desc->info[i].capacity;
- 
--		ret = ljca_new_client_device(adap, LJCA_CLIENT_SPI, i,
-+		return ljca_new_client_device(adap, LJCA_CLIENT_SPI, i,
- 					     "ljca-spi", spi_info,
- 					     LJCA_SPI1_ACPI_ADR + i);
--		if (ret) {
--			kfree(spi_info);
--			return ret;
--		}
- 	}
- 
- 	return 0;
+> 
+> Keep devicetree parsing in probe and add a new field in the private
+> struct to remember the USB2 refclk rate code computation result.
+> 
+> This opens the door to having the init sequence being executed later
+> down the road, at system-wide resume for example. This is NOT currently
+> happening because runtime PM is disabled at suspend without the
+> refcount being affected.
+> 
+> Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
+> ---
+>  drivers/usb/cdns3/cdns3-ti.c | 90 +++++++++++++++++++++++++-------------------
+>  1 file changed, 52 insertions(+), 38 deletions(-)
+> 
+> diff --git a/drivers/usb/cdns3/cdns3-ti.c b/drivers/usb/cdns3/cdns3-ti.c
+> index 5945c4b1e11f..4c8a557e6a6f 100644
+> --- a/drivers/usb/cdns3/cdns3-ti.c
+> +++ b/drivers/usb/cdns3/cdns3-ti.c
+> @@ -57,6 +57,7 @@ struct cdns_ti {
+>  	unsigned vbus_divider:1;
+>  	struct clk *usb2_refclk;
+>  	struct clk *lpm_clk;
+> +	int usb2_refclk_rate_code;
+>  };
+>  
+>  static const int cdns_ti_rate_table[] = {	/* in KHZ */
+> @@ -90,10 +91,8 @@ static int cdns_ti_probe(struct platform_device *pdev)
+>  	struct device *dev = &pdev->dev;
+>  	struct device_node *node = pdev->dev.of_node;
+>  	struct cdns_ti *data;
+> -	int error;
+> -	u32 reg;
+> -	int rate_code, i;
+>  	unsigned long rate;
+> +	int error, i;
+>  
+>  	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+>  	if (!data)
+> @@ -133,7 +132,9 @@ static int cdns_ti_probe(struct platform_device *pdev)
+>  		return -EINVAL;
+>  	}
+>  
+> -	rate_code = i;
+> +	data->usb2_refclk_rate_code = i;
+> +	data->vbus_divider = device_property_read_bool(dev, "ti,vbus-divider");
+> +	data->usb2_only = device_property_read_bool(dev, "ti,usb2-only");
+>  
+>  	pm_runtime_enable(dev);
+>  	error = pm_runtime_get_sync(dev);
+> @@ -142,40 +143,6 @@ static int cdns_ti_probe(struct platform_device *pdev)
+>  		goto err;
+>  	}
+>  
+> -	/* assert RESET */
+> -	reg = cdns_ti_readl(data, USBSS_W1);
+> -	reg &= ~USBSS_W1_PWRUP_RST;
+> -	cdns_ti_writel(data, USBSS_W1, reg);
+> -
+> -	/* set static config */
+> -	reg = cdns_ti_readl(data, USBSS_STATIC_CONFIG);
+> -	reg &= ~USBSS1_STATIC_PLL_REF_SEL_MASK;
+> -	reg |= rate_code << USBSS1_STATIC_PLL_REF_SEL_SHIFT;
+> -
+> -	reg &= ~USBSS1_STATIC_VBUS_SEL_MASK;
+> -	data->vbus_divider = device_property_read_bool(dev, "ti,vbus-divider");
+> -	if (data->vbus_divider)
+> -		reg |= 1 << USBSS1_STATIC_VBUS_SEL_SHIFT;
+> -
+> -	cdns_ti_writel(data, USBSS_STATIC_CONFIG, reg);
+> -	reg = cdns_ti_readl(data, USBSS_STATIC_CONFIG);
+> -
+> -	/* set USB2_ONLY mode if requested */
+> -	reg = cdns_ti_readl(data, USBSS_W1);
+> -	data->usb2_only = device_property_read_bool(dev, "ti,usb2-only");
+> -	if (data->usb2_only)
+> -		reg |= USBSS_W1_USB2_ONLY;
+> -
+> -	/* set default modestrap */
+> -	reg |= USBSS_W1_MODESTRAP_SEL;
+> -	reg &= ~USBSS_W1_MODESTRAP_MASK;
+> -	reg |= USBSS_MODESTRAP_MODE_NONE << USBSS_W1_MODESTRAP_SHIFT;
+> -	cdns_ti_writel(data, USBSS_W1, reg);
+> -
+> -	/* de-assert RESET */
+> -	reg |= USBSS_W1_PWRUP_RST;
+> -	cdns_ti_writel(data, USBSS_W1, reg);
+> -
+>  	error = of_platform_populate(node, NULL, NULL, dev);
+>  	if (error) {
+>  		dev_err(dev, "failed to create children: %d\n", error);
+> @@ -211,6 +178,52 @@ static void cdns_ti_remove(struct platform_device *pdev)
+>  	platform_set_drvdata(pdev, NULL);
+>  }
+>  
+> +static int cdns_ti_runtime_resume(struct device *dev)
+> +{
+> +	struct cdns_ti *data = dev_get_drvdata(dev);
+> +	u32 reg;
+> +
+> +	/* assert RESET */
+> +	reg = cdns_ti_readl(data, USBSS_W1);
+> +	reg &= ~USBSS_W1_PWRUP_RST;
+> +	cdns_ti_writel(data, USBSS_W1, reg);
+> +
+> +	/* set static config */
+> +	reg = cdns_ti_readl(data, USBSS_STATIC_CONFIG);
+> +	reg &= ~USBSS1_STATIC_PLL_REF_SEL_MASK;
+> +	reg |= data->usb2_refclk_rate_code << USBSS1_STATIC_PLL_REF_SEL_SHIFT;
+> +
+> +	reg &= ~USBSS1_STATIC_VBUS_SEL_MASK;
+> +
+> +	if (data->vbus_divider)
+> +		reg |= 1 << USBSS1_STATIC_VBUS_SEL_SHIFT;
+> +
+> +	cdns_ti_writel(data, USBSS_STATIC_CONFIG, reg);
+> +	reg = cdns_ti_readl(data, USBSS_STATIC_CONFIG);
+> +
+> +	/* set USB2_ONLY mode if requested */
+> +	reg = cdns_ti_readl(data, USBSS_W1);
+> +
+> +	if (data->usb2_only)
+> +		reg |= USBSS_W1_USB2_ONLY;
+> +
+> +	/* set default modestrap */
+> +	reg |= USBSS_W1_MODESTRAP_SEL;
+> +	reg &= ~USBSS_W1_MODESTRAP_MASK;
+> +	reg |= USBSS_MODESTRAP_MODE_NONE << USBSS_W1_MODESTRAP_SHIFT;
+> +	cdns_ti_writel(data, USBSS_W1, reg);
+> +
+> +	/* de-assert RESET */
+> +	reg |= USBSS_W1_PWRUP_RST;
+> +	cdns_ti_writel(data, USBSS_W1, reg);
+
+I don't think USB controller requires a reset and re-init between runtime suspend/resume.
+
+What you need is reset/re-init during system Resume on certain platforms.
+So you should move this part of code into a helper function and call it
+from .probe() and .system_resume()
+
+
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct dev_pm_ops cdns_ti_pm_ops = {
+> +	RUNTIME_PM_OPS(NULL, cdns_ti_runtime_resume, NULL)
+> +};
+> +
+>  static const struct of_device_id cdns_ti_of_match[] = {
+>  	{ .compatible = "ti,j721e-usb", },
+>  	{ .compatible = "ti,am64-usb", },
+> @@ -224,6 +237,7 @@ static struct platform_driver cdns_ti_driver = {
+>  	.driver		= {
+>  		.name	= "cdns3-ti",
+>  		.of_match_table	= cdns_ti_of_match,
+> +		.pm	= pm_ptr(&cdns_ti_pm_ops),
+>  	},
+>  };
+>  
+> 
+
 -- 
-2.36.1
-
+cheers,
+-roger
 
