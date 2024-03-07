@@ -1,79 +1,78 @@
-Return-Path: <linux-usb+bounces-7657-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7658-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 999B3874CB6
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Mar 2024 11:51:53 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC764874D26
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Mar 2024 12:14:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DB0A0B2143F
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Mar 2024 10:51:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 89F031F21E8C
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Mar 2024 11:14:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2AFF86AC4;
-	Thu,  7 Mar 2024 10:51:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A85B2128811;
+	Thu,  7 Mar 2024 11:13:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bw4K5vLn"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DPrLV54m"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9906383CB9;
-	Thu,  7 Mar 2024 10:51:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96485DDC9;
+	Thu,  7 Mar 2024 11:13:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709808700; cv=none; b=LKas4FOh7ylqgrUZs08kVj/4mo4o9z+xDinO45iNmjO3IZCEXFv2xuvnpETBAQkNBFkJipCoxH2rf1HQ2CIoj9CLyy07iiudoUAd8lvNEGQRnhp+6h+kpfRngt45980QF3kfrXWN89gsubF/ruXO4EtOFGFd5Jj36JlYNqSH8Tg=
+	t=1709810036; cv=none; b=TsK4ab+yhhcdtJZ9k0SXkahKduXXPtmkk6NXTTJn9ulnrg0yD0k6p/EAiFi2w3+YUWYMTiq5K83VDLD/Q0ovaVdrvFlVGzD6JoMDzC6au3P0V5G9g7voC+Sp9z1qeKyoo2hi7kDVtVSRgrER64DQQjvxDCfSDwItSJmvUzaFxLM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709808700; c=relaxed/simple;
-	bh=LFi8S+OWOa1EYqqXXM+L4rFj+uOGc2AEYkl18pL38+0=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=ECr3HlnhImdONHA0JfAC97CqcTD09/R9v3pnCJBlN5H3M5U4eHwJqNiMhImFsawI/MbJteccxMOsueeOwNU6UpnOtt9Xr6hvlbc1Oy1tn6Hopz4dNElTztQXMKyFGBiY1UM5BATSVAZhWbp6rpT8WkS7J8igIrtSuyoqicPDtKw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Bw4K5vLn; arc=none smtp.client-ip=209.85.128.43
+	s=arc-20240116; t=1709810036; c=relaxed/simple;
+	bh=vzH93D4jP/qdyA1AdyLTY5J4mAvCYF4Oh9LEd1nqK1g=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=iHXJY0E04c4BKzYpOZAY4zaXHnOdovzUrnoliSDMoaN/0ZTvef7Gx3gC/411NJGpeRQFRXzDznXF5gAf/O5u4qys/cBPUkNizK1eVesq8nsg9S6onrZieNw99bpvcUhdBrICBnXWutfut2V1ti457JcfA8y+tmo+x/VyU1kpGy8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DPrLV54m; arc=none smtp.client-ip=209.85.221.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4130e293686so5240945e9.3;
-        Thu, 07 Mar 2024 02:51:38 -0800 (PST)
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-33e17342ea7so407340f8f.2;
+        Thu, 07 Mar 2024 03:13:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709808697; x=1710413497; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1709810033; x=1710414833; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZOL8jp68frDmdFmotjs/CjSEGrRrsCfDr/cS6FaUvfQ=;
-        b=Bw4K5vLn1BbT5HKrWqMEiNe4yyYkqN6ok3MFtRFgjqu5Bc9fkXMmMVlhMIT/Jafexa
-         SsbIeU0zvSammARhKpPaz1PNva67iJyMIjo/BrGytZCC1aCzOrwW4WJkNHQn+l6iW8M/
-         Zg3s1WL+C6m0iT8egEhoKjb1UlubR/IEZd6IBUHlyZt3t5ADkUyUa2XMGMzcEN5dkInU
-         beDc4lHAHde7cdVBr3HaNq2pc6VWgHM3kvHOJxDsO09UU2FXntWjOb7z3mGno90RQQxH
-         TluxCQ1v/6NMJLsy4GyUaotSwP3NRi82TQrzPESMdrj3PW+EXGb6RjHEEAHtFhAoT+pO
-         QWkA==
+        bh=HMTM+W302u0jntrzElYraz9pp6IOGybZeSVVmTNPZVI=;
+        b=DPrLV54mHpyffnS1Uj0R3iXCdGRkdF5x/fuztpsNIanAPzv/iVQUOxYPerb9FbGGbq
+         uZ+7f9aHAEj3GxFZse8AYEvgyuXQNxRnWP2vxit1rQmVWwtRmQFVwGlB2v0J8aaPo2L2
+         Xtq2iwgmIM7qOJoCxqzEBBiKSeY6RsnMgtbo38ha0F79WmGFPg+WDluJ3qh/2DvKAQCZ
+         H0nQ9hRbLnbwzj8G+yj3y14x7klOMTpwB868PinkNnylI/sER3aRlFDkWVCa1xNyogsF
+         CijdUXGyXGHTgchkPoSdnc3sYZHbxUMcjiI/VlUjH3T5Ghw/9+VMJ7agf2I4O3M6LKwl
+         HnrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709808697; x=1710413497;
+        d=1e100.net; s=20230601; t=1709810033; x=1710414833;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ZOL8jp68frDmdFmotjs/CjSEGrRrsCfDr/cS6FaUvfQ=;
-        b=Am0G5Y8qe4oThMDJEYc9vMIvrFu60R3oUt7gfcUaUcNjTMGLwv7guUC2VMB2pxdIbk
-         vMoBsNw7M/e6clWePczaqK/fzNuFRxPmzZ5Uem4JUTbS/Gm37tYrfT8s0PHhjQNH93Rd
-         Ql8hyG4iEIU4rdvwqS8rw7Ibp9Hqs9MrsZFxe/3NGlhUtZ07j5C87S2OG1xM/MiPOUgJ
-         kautF65FMy8iM6zwGILQMm+eLHSo2Gtav8Q4nUGvlerRDOFYTXAorjhXwi+/mUv4iIk6
-         xHOd8orv6n7ZLUm9lVuX2xLf4FkiqSkzEmmiW+5YKLICHml11ZPLEVQsbwsK99Fo9XlA
-         zjIA==
-X-Forwarded-Encrypted: i=1; AJvYcCXFxzOFnUf1iIjvK1XiIeFKNYfvVfp0wM3gGjlYq99Ezn5+8WABcV+hrK688dAZDrkQgZMDPx0YdpQYIyS3NiNtQB6DrShDXr1BsGJm9PmGMOrXeROONI5kYhYPycIe8B3z2F61bpEl
-X-Gm-Message-State: AOJu0YxmRn3H/qUeegtIYR8D8NjaI74ro/KvDSH+/gMrGO+Y/fA98KRf
-	aawvZFPwQVzg+9OgGTH2VAtXj2WzVPDzZyQGoKH3gjApKj3OMp2cBaOngbTDcUU=
-X-Google-Smtp-Source: AGHT+IGeEgkRgsaiFwIjcNuzK8ZuJjK2X784yUxLBu2x7jaeWNAD/A3sG6sJX9D0PSNNKgNvB3Mxaw==
-X-Received: by 2002:adf:f249:0:b0:33b:87fb:7106 with SMTP id b9-20020adff249000000b0033b87fb7106mr12194062wrp.55.1709808696943;
-        Thu, 07 Mar 2024 02:51:36 -0800 (PST)
+        bh=HMTM+W302u0jntrzElYraz9pp6IOGybZeSVVmTNPZVI=;
+        b=Bu40FclSJFYReT4/L4R0JzXdUSY0sv8nwNyY63m195Cc+OD6PzOyfdl7j6X8FIxBLZ
+         7zff46B54pTOxhXiNJz6ktl99wtHqa7uXEluTmDc5O78NXvEBHDOSHi7R/y0VCDNv2sx
+         43RLgKt4QA8h8X+RXIVKLD9dgxoUY+l+V1c1VEGesOYyo0pS980bRECx7ao+mQ56GsnJ
+         yTFSUrH2OA6GMDvo6lQ3vDgJGHweT6kl6gtZ405aNxgdatRPFZpvmeoukHmQIF5IJjI4
+         lllYZj40abSqBP6Hh4HLv+PZT+HSb5TiVOqC/V3phUbkC5vlIatpAyqklaN73mRZMMM3
+         F9Jw==
+X-Forwarded-Encrypted: i=1; AJvYcCX+8mJVT8hsWb6mMSuYJH9HakoEfkQ/Sp48k2f0aeHvjNnNXmZacu5QitkKpHbdXxA9GiMx8ZhRsW6rq6dVLnHCx06DQJL/HN+7lfS7dhPPvGN8ZbsxALksAJeVp035ONhyfGfxxVfK
+X-Gm-Message-State: AOJu0YzFTMsWqjoYmu8lNxtWzLSPVSNtzQqVBhn6nwSX6nKwMwOVJubi
+	cyFymx3CTJIx2dCimqzjHCOw7rHJtbKlzhhaf7h5JDkCkMBO3THE
+X-Google-Smtp-Source: AGHT+IHvBV7sDcOnurRdoGtHENGsA5MWuFky9TsdX6SGRc40zvSZN0wPOrZKxDJvP0GqaMGO8NfEoQ==
+X-Received: by 2002:adf:ef88:0:b0:33e:2f43:b35d with SMTP id d8-20020adfef88000000b0033e2f43b35dmr9539693wro.21.1709810032619;
+        Thu, 07 Mar 2024 03:13:52 -0800 (PST)
 Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id bk23-20020a0560001d9700b0033d282c7537sm20282575wrb.23.2024.03.07.02.51.36
+        by smtp.gmail.com with ESMTPSA id bt17-20020a056000081100b0033e3cb02cefsm11067688wrb.86.2024.03.07.03.13.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Mar 2024 02:51:36 -0800 (PST)
+        Thu, 07 Mar 2024 03:13:52 -0800 (PST)
 From: Colin Ian King <colin.i.king@gmail.com>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	u.kleine-koenig@pengutronix.de,
 	linux-usb@vger.kernel.org
 Cc: kernel-janitors@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH][next] usb: gadget: net2272: remove redundant variable irqflags
-Date: Thu,  7 Mar 2024 10:51:35 +0000
-Message-Id: <20240307105135.1981060-1-colin.i.king@gmail.com>
+Subject: [PATCH] usb: sl811-hcd: only defined function checkdone if QUIRK2 is defined
+Date: Thu,  7 Mar 2024 11:13:51 +0000
+Message-Id: <20240307111351.1982382-1-colin.i.king@gmail.com>
 X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -84,48 +83,38 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-The variable irqflags is being initialized and being bit-or'd with
-values but it is never read afterwards. The variable is redundant
-and can be removed.
+Function checkdone is only required if QUIRK2 is defined, so add
+appropriate #if / #endif around the function.
 
 Cleans up clang scan build warning:
-drivers/usb/gadget/udc/net2272.c:2610:15: warning: variable 'irqflags'
-set but not used [-Wunused-but-set-variable]
+drivers/usb/host/sl811-hcd.c:588:18: warning: unused function
+'checkdone' [-Wunused-function]
 
 Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 ---
- drivers/usb/gadget/udc/net2272.c | 11 -----------
- 1 file changed, 11 deletions(-)
+ drivers/usb/host/sl811-hcd.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/usb/gadget/udc/net2272.c b/drivers/usb/gadget/udc/net2272.c
-index 12e76bb62c20..afd2a836be6d 100644
---- a/drivers/usb/gadget/udc/net2272.c
-+++ b/drivers/usb/gadget/udc/net2272.c
-@@ -2607,7 +2607,6 @@ net2272_plat_probe(struct platform_device *pdev)
+diff --git a/drivers/usb/host/sl811-hcd.c b/drivers/usb/host/sl811-hcd.c
+index 0956495bba57..2b871540bb50 100644
+--- a/drivers/usb/host/sl811-hcd.c
++++ b/drivers/usb/host/sl811-hcd.c
+@@ -585,6 +585,7 @@ done(struct sl811 *sl811, struct sl811h_ep *ep, u8 bank)
+ 		finish_request(sl811, ep, urb, urbstat);
+ }
+ 
++#ifdef QUIRK2
+ static inline u8 checkdone(struct sl811 *sl811)
  {
- 	struct net2272 *dev;
- 	int ret;
--	unsigned int irqflags;
- 	resource_size_t base, len;
- 	struct resource *iomem, *iomem_bus, *irq_res;
+ 	u8	ctl;
+@@ -616,6 +617,7 @@ static inline u8 checkdone(struct sl811 *sl811)
+ #endif
+ 	return irqstat;
+ }
++#endif
  
-@@ -2623,16 +2622,6 @@ net2272_plat_probe(struct platform_device *pdev)
- 	if (IS_ERR(dev))
- 		return PTR_ERR(dev);
- 
--	irqflags = 0;
--	if (irq_res->flags & IORESOURCE_IRQ_HIGHEDGE)
--		irqflags |= IRQF_TRIGGER_RISING;
--	if (irq_res->flags & IORESOURCE_IRQ_LOWEDGE)
--		irqflags |= IRQF_TRIGGER_FALLING;
--	if (irq_res->flags & IORESOURCE_IRQ_HIGHLEVEL)
--		irqflags |= IRQF_TRIGGER_HIGH;
--	if (irq_res->flags & IORESOURCE_IRQ_LOWLEVEL)
--		irqflags |= IRQF_TRIGGER_LOW;
--
- 	base = iomem->start;
- 	len = resource_size(iomem);
- 	if (iomem_bus)
+ static irqreturn_t sl811h_irq(struct usb_hcd *hcd)
+ {
 -- 
 2.39.2
 
