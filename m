@@ -1,377 +1,388 @@
-Return-Path: <linux-usb+bounces-7679-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7680-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 53709875400
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Mar 2024 17:15:47 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9516E87540D
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Mar 2024 17:17:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BE9AB1F23BE8
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Mar 2024 16:15:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B72041C21462
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Mar 2024 16:17:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9E4912F5B3;
-	Thu,  7 Mar 2024 16:15:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE1D812FB18;
+	Thu,  7 Mar 2024 16:17:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=sairon.cz header.i=@sairon.cz header.b="NfmcWaie"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AF3612F380
-	for <linux-usb@vger.kernel.org>; Thu,  7 Mar 2024 16:15:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEB731E49E
+	for <linux-usb@vger.kernel.org>; Thu,  7 Mar 2024 16:17:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709828140; cv=none; b=GWk6oIaQbDRFYEzz7ld73vFjvkt8pvok8KrtC+U8EBK55F8lbUq3nBypOLmG48zljiD/Z1uBqtdZU7Z6yod9eMJ2K3/SkjkRWIhi3Q0M+h/OhAYe6Lbo7XeR4fdXqlh07wWg2j990Xgxod+4wbtLUpN82jCE3HLnrPThd9txfxU=
+	t=1709828247; cv=none; b=UEynS+hbYBTPkp0RtOrkB70HOAgTM2cU+PoUczRju8QHRp8lxP0+OAcB7ygJnQWu27U7jRA0KuLGRIhAwleCGOW/98I/+Uktj9cJrM+rLiWVT4LFv9Hhugwb60YPHttvWgjlrtGvn+tlZmE1wyaYYUsn7BstHlWgF8cr47nmd/4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709828140; c=relaxed/simple;
-	bh=qJYnLCapEmT7Ajrz9ekftaJwc5Tg58ZuGzaIhu4UQeI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ckTUcTjUfCWsf9I/eI8cbrj0+lm8m37nPJhbFHPd3HnTml/BGa3dXd4Fa/Si/caem7FKMl1fZ6il5o2yqfaWjsfABjCd0aij+GvHaNHG+0+J/C1lJHu5f1jPY+MJ7cJMEZwwuawbL5EelaDD2lDRUQdUrLXB5SJrkKaxAWoYGqs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1riGOo-00085I-8E; Thu, 07 Mar 2024 17:15:14 +0100
-Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1riGOn-004ybQ-4E; Thu, 07 Mar 2024 17:15:13 +0100
-Received: from mgr by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1riGOn-006SBZ-04;
-	Thu, 07 Mar 2024 17:15:13 +0100
-Date: Thu, 7 Mar 2024 17:15:12 +0100
-From: Michael Grzeschik <mgr@pengutronix.de>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Dan Vacura <w36195@motorola.com>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	Daniel Scally <dan.scally@ideasonboard.com>,
-	Jeff Vanhoof <qjv001@motorola.com>,
-	"stable@vger.kernel.org" <stable@vger.kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Felipe Balbi <balbi@kernel.org>,
-	Paul Elder <paul.elder@ideasonboard.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-Subject: Re: [PATCH v3 2/6] usb: dwc3: gadget: cancel requests instead of
- release after missed isoc
-Message-ID: <ZenoEJmne73BlCFI@pengutronix.de>
-References: <20221017205446.523796-1-w36195@motorola.com>
- <20221017205446.523796-3-w36195@motorola.com>
- <ZdaPLGTbsBo4F4pK@pengutronix.de>
- <20240222011955.7sida4udjlvrlue7@synopsys.com>
- <Zd5Nns91uXvTOAwd@pengutronix.de>
- <20240307015736.4dhcrzsli4dihym5@synopsys.com>
+	s=arc-20240116; t=1709828247; c=relaxed/simple;
+	bh=HlJFS+N4fAQ4Lz8RUhCbxj0mRjLMfbPHnBP2YTCVmeo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=EcelxPLk9ZhwRCPanGP4M644D84TBHgNhM0qLmM1YsnhH79YOdeTOnN2qK2ViQ5mwNR/sMdOd436eupVwB3sTiTQAnVOyA+u6H61vI6lLaYOqMFgezX0/LKitZQv9oD+f4gWJfsomyA2V2mkwlf6RR8LQg2ioY20fC0Ka8eUNog=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sairon.cz; spf=pass smtp.mailfrom=sairon.cz; dkim=pass (2048-bit key) header.d=sairon.cz header.i=@sairon.cz header.b=NfmcWaie; arc=none smtp.client-ip=209.85.208.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sairon.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sairon.cz
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5673b5a356eso1380090a12.0
+        for <linux-usb@vger.kernel.org>; Thu, 07 Mar 2024 08:17:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sairon.cz; s=google; t=1709828242; x=1710433042; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Qt+CgjTUfQUyJTTNV8+W0Z0U/4NxDg/6pvqKShA/pP0=;
+        b=NfmcWaie4kIWMA/iQqvP8W+fG6bmSPObEjDPJ3AsvQC+lB1z94yAUBrnVDIytG6hGo
+         dCK3dQdjTGY6Y6Xgd/MNl2BxjufOYummmDzznajrd9YkDv2hqmLs66tS0aFlr6MzbeBq
+         IkW+C48mon/3AmA9MMrk8fVBSJTW5u6tkNY/Td/ovE981XWlIrW3MlLe4OX95OxtQlAI
+         SjJJleqFMSvFZUI2BS4u6/R9h4qmmeZdH/nvvDjDi6z5gynyogAKVDwCqWAfhQGrwFi9
+         LtWwM0bThlGqYJ7FmLIW4Nho7Rh4fLir2vjL+ynwyj7j3JRmBgyCiKS/lsd4KidcLUQq
+         mNrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709828242; x=1710433042;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Qt+CgjTUfQUyJTTNV8+W0Z0U/4NxDg/6pvqKShA/pP0=;
+        b=qgBqjYsgLgOQr3FD+5XJWw+7JlRnbcDF6oHLfFQ7bTtHm7Qf9YP25sGAhgxncaiJPm
+         1tzIplx2qOZrG5o8qgzJUr7M4novFIOLzYAvfA+MxC7+R78M3tUOswhR8k0SVZy3rRDg
+         pfcxssCA78ynbbtKQuDbsuw4pV0IQoYrOltXTu7UaKl3d0GbfYY12MZg3z4J7AOTqsSV
+         RjRm7iX4jOJCoM+9gPWpo5VgDdWXz6U+GXWMbBmqibNENqbKDc8NeYCxe4xxgVNrGpOu
+         /TbFWhWDbVHeLGXOB0O+ssPncOT77AvdR8N/zLrd3/VfxqgXDHzaFhkts5Qi/AVaVSmv
+         fMTw==
+X-Forwarded-Encrypted: i=1; AJvYcCX766X3tTnIdbt/3ySzm7z7R568DwmCYvVwkOvSG97Wfo3aFZUlf6RVCpfBeZa1QgNKvMor8AgenH2qm4isGEcYn8Dn8McsYCKN
+X-Gm-Message-State: AOJu0Yw+hl/wEIKise3aqKVJiGfcCjwr3KUd03CW3rk0Lfp6R+E6aKvo
+	tAF7FCce9d+TlgsV4xDWIFMix2HN5yVHRolcfPZtWnhEWnSLjm47R7hDWGvnp6k=
+X-Google-Smtp-Source: AGHT+IE87XG0K7rYlOiNT2JRUrvBY7FaaWDo8w0M8pIA8xyrJkzqbw/Jg0VMsA7WDGuuF7eah+DHHw==
+X-Received: by 2002:a50:c908:0:b0:566:348:fc4a with SMTP id o8-20020a50c908000000b005660348fc4amr168761edh.32.1709828241941;
+        Thu, 07 Mar 2024 08:17:21 -0800 (PST)
+Received: from [192.168.127.42] (ip-89-103-66-201.bb.vodafone.cz. [89.103.66.201])
+        by smtp.gmail.com with ESMTPSA id cs4-20020a0564020c4400b00566a4dec01fsm8083137edb.11.2024.03.07.08.17.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Mar 2024 08:17:21 -0800 (PST)
+Message-ID: <00f0786b-a9f2-4f73-8d23-3b1fa4c8b77e@sairon.cz>
+Date: Thu, 7 Mar 2024 17:17:20 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="r33SlKd0DtSnqSFk"
-Content-Disposition: inline
-In-Reply-To: <20240307015736.4dhcrzsli4dihym5@synopsys.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL: http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [REGRESSION] Re: [PATCH 0/3] USB: core: Don't overwrite device
+ descriptor during reinitialization
+Content-Language: en-US
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: Greg KH <gregkh@linuxfoundation.org>, Khazhy Kumykov <khazhy@google.com>,
+ USB mailing list <linux-usb@vger.kernel.org>, regressions@lists.linux.dev
+References: <6eadec91-990a-4fbd-8883-8366c4a4d8e4@rowland.harvard.edu>
+ <1e954652-dfb3-4248-beea-b8a449128ff0@sairon.cz>
+ <4c3ab861-0274-409b-aad3-7cfb53dc2308@rowland.harvard.edu>
+From: =?UTF-8?B?SmFuIMSMZXJtw6Fr?= <sairon@sairon.cz>
+In-Reply-To: <4c3ab861-0274-409b-aad3-7cfb53dc2308@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+
+Hi Alan,
+
+On 06. 03. 24 22:08, Alan Stern wrote:
+> Can you provide two usbmon traces, one showing the problem with those
+> patches present and the other (on the same system but with the patches
+> reverted) showing the recovery?  Comparison of the two should indicate
+> what's happening differently.
+
+I reproduced the issue on my old ThinkPad X220 with 6.6.20 kernel, you 
+can find the usbmon captures below.
+
+Regards,
+Jan
 
 
---r33SlKd0DtSnqSFk
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+#############################
+# Failing to recover (6.6.20)
+#############################
 
-On Thu, Mar 07, 2024 at 01:57:44AM +0000, Thinh Nguyen wrote:
->On Tue, Feb 27, 2024, Michael Grzeschik wrote:
->> On Thu, Feb 22, 2024 at 01:20:04AM +0000, Thinh Nguyen wrote:
->> > On Thu, Feb 22, 2024, Michael Grzeschik wrote:
->> > > For #2: I found an issue in the handling of the completion of reques=
-ts in
->> > > the started list. When the interrupt handler is *explicitly* calling
->> > > stop_active_transfer if the overall event of the request was an miss=
-ed
->> > > event. This event value only represents the value of the request that
->> > > was actually triggering the interrupt.
->> > >
->> > > It also calls ep_cleanup_completed_requests and is iterating over the
->> > > started requests and will call giveback/complete functions of the
->> > > requests with the proper request status.
->> > >
->> > > So this will also catch missed requests in the queue. However, since
->> > > there might be, lets say 5 good requests and one missed request, what
->> > > will happen is, that each complete call for the first good requests =
-will
->> > > enqueue new requests into the started list and will also call the
->> > > updatecmd on that transfer that was already missed until the loop wi=
-ll
->> > > reach the one request with the MISSED status bit set.
->> > >
->> > > So in my opinion the patch from Jeff makes sense when adding the
->> > > following change aswell. With those both changes the underruns and
->> > > broken frames finally disappear. I am still unsure about the complete
->> > > solution about that, since with this the mentioned 5 good requests
->> > > will be cancelled aswell. So this is still a WIP status here.
->> > >
->> >
->> > When the dwc3 driver issues stop_active_transfer(), that means that the
->> > started_list is empty and there is an underrun.
->>
->> At this moment this is only the case when both, pending and started list
->> are empty. Or the interrupt event was EXDEV.
->>
->> The main problem is that the function
->> dwc3_gadget_ep_cleanup_completed_requests(dep, event, status); will
->> issue an complete for each started request, which on the other hand will
->> refill the pending list, and therefor after that refill the
->> stop_active_transfer is currently never hit.
->>
->> > It treats the incoming requests as staled. However, for UVC, they are
->> > still "good".
->>
->> Right, so in that case we can requeue them anyway. But this will have to
->> be done after the stop transfer cmd has finished.
->>
->> > I think you can just check if the started_list is empty before queuing
->> > new requests. If it is, perform stop_active_transfer() to reschedule t=
-he
->> > incoming requests. None of the newly queue requests will be released
->> > yet since they are in the pending_list.
->>
->> So that is basically exactly what my patch is doing. However in the case
->> of an underrun it is not safe to call dwc3_gadget_ep_cleanup_completed_r=
-equests
->> as jeff stated. So his underlying patch is really fixing an issue here.
->
->What I mean is to actively check for started list on every
->usb_ep_queue() call. Checking during
->dwc3_gadget_ep_cleanup_completed_requests() is already too late.
+ffff9f9a012cae40 297301265 C Ii:1:002:1 0:2048 1 = 04
+ffff9f9a012cae40 297301305 S Ii:1:002:1 -115:2048 1 <
+ffff9f9a29b3f300 297301346 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff9f9a29b3f300 297301530 C Ci:1:002:0 0 4 = 01010100
+ffff9f9a29b3f300 297301555 S Co:1:002:0 s 23 01 0010 0002 0000 0
+ffff9f9a29b3f300 297301789 C Co:1:002:0 0 0
+ffff9f9a29b3f300 297301803 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff9f9a29b3f300 297302073 C Ci:1:002:0 0 4 = 01010000
+ffff9f9a29b3f300 297329100 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff9f9a29b3f300 297329348 C Ci:1:002:0 0 4 = 01010000
+ffff9f9a29b3f300 297356109 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff9f9a29b3f300 297356276 C Ci:1:002:0 0 4 = 01010000
+ffff9f9a29b3f300 297383108 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff9f9a29b3f300 297383392 C Ci:1:002:0 0 4 = 01010000
+ffff9f9a29b3f300 297410108 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff9f9a29b3f300 297410303 C Ci:1:002:0 0 4 = 01010000
+ffff9f9a29b3f300 297410342 S Co:1:002:0 s 23 03 0004 0002 0000 0
+ffff9f9a29b3f300 297410560 C Co:1:002:0 0 0
+ffff9f9a29b3f300 297422109 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff9f9a29b3f300 297422231 C Ci:1:002:0 0 4 = 03011000
+ffff9f9a29b3f300 297422249 S Co:1:002:0 s 23 01 0014 0002 0000 0
+ffff9f9a29b3f300 297422492 C Co:1:002:0 0 0
+ffff9f9a29b3f300 297474142 S Ci:1:000:0 s 80 06 0100 0000 0040 64 <
+ffff9f9a29b3f300 297474386 C Ci:1:000:0 -32 0
+ffff9f9a29b3f300 297474654 S Ci:1:000:0 s 80 06 0100 0000 0040 64 <
+ffff9f9a29b3f300 297474910 C Ci:1:000:0 -32 0
+ffff9f9a29b3f300 297474959 S Ci:1:000:0 s 80 06 0100 0000 0040 64 <
+ffff9f9a29b3f300 297475295 C Ci:1:000:0 -32 0
+ffff9f9a29b3f300 297475361 S Co:1:002:0 s 23 03 0004 0002 0000 0
+ffff9f9a29b3f300 297475613 C Co:1:002:0 0 0
+ffff9f9a29b3f300 297488055 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff9f9a29b3f300 297488336 C Ci:1:002:0 0 4 = 03011000
+ffff9f9a29b3f300 297488365 S Co:1:002:0 s 23 01 0014 0002 0000 0
+ffff9f9a29b3f300 297488593 C Co:1:002:0 0 0
+ffff9f9a29b3f300 297646110 S Ci:1:000:0 s 80 06 0100 0000 0040 64 <
+ffff9f9a29b3f300 297646603 C Ci:1:000:0 -32 0
+ffff9f9a29b3f300 297646635 S Ci:1:000:0 s 80 06 0100 0000 0040 64 <
+ffff9f9a29b3f300 297646934 C Ci:1:000:0 -32 0
+ffff9f9a29b3f300 297646998 S Ci:1:000:0 s 80 06 0100 0000 0040 64 <
+ffff9f9a29b3f300 297647326 C Ci:1:000:0 -32 0
+ffff9f9a29b3f300 297647390 S Co:1:002:0 s 23 03 0004 0002 0000 0
+ffff9f9a29b3f300 297647649 C Co:1:002:0 0 0
+ffff9f9a29b3f300 297659102 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff9f9a29b3f300 297659257 C Ci:1:002:0 0 4 = 03011000
+ffff9f9a29b3f300 297659272 S Co:1:002:0 s 23 01 0014 0002 0000 0
+ffff9f9a29b3f300 297659512 C Co:1:002:0 0 0
+ffff9f9a29b3f300 297814110 S Co:1:002:0 s 23 01 0001 0002 0000 0
+ffff9f9a29b3f300 297814487 C Co:1:002:0 0 0
+ffff9f9a29b3f240 297814536 S Co:1:002:0 s 23 03 0004 0002 0000 0
+ffff9f9a29b3f240 297814758 C Co:1:002:0 0 0
+ffff9f9a29b3f240 297826111 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff9f9a29b3f240 297826417 C Ci:1:002:0 0 4 = 03011000
+ffff9f9a29b3f240 297826444 S Co:1:002:0 s 23 01 0014 0002 0000 0
+ffff9f9a29b3f240 297826680 C Co:1:002:0 0 0
+ffff9f9a29b3f240 297878173 S Ci:1:000:0 s 80 06 0100 0000 0040 64 <
+ffff9f9a29b3f240 297878367 C Ci:1:000:0 -32 0
+ffff9f9a29b3f240 297878391 S Ci:1:000:0 s 80 06 0100 0000 0040 64 <
+ffff9f9a29b3f240 297878992 C Ci:1:000:0 -32 0
+ffff9f9a29b3f240 297879258 S Ci:1:000:0 s 80 06 0100 0000 0040 64 <
+ffff9f9a29b3f240 297879521 C Ci:1:000:0 -32 0
+ffff9f9a29b3f240 297879608 S Co:1:002:0 s 23 03 0004 0002 0000 0
+ffff9f9a29b3f240 297879852 C Co:1:002:0 0 0
+ffff9f9a29b3f240 297891106 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff9f9a29b3f240 297891266 C Ci:1:002:0 0 4 = 03011000
+ffff9f9a29b3f240 297891294 S Co:1:002:0 s 23 01 0014 0002 0000 0
+ffff9f9a29b3f240 297891528 C Co:1:002:0 0 0
+ffff9f9a29b3f240 298046109 S Ci:1:000:0 s 80 06 0100 0000 0040 64 <
+ffff9f9a29b3f240 298046587 C Ci:1:000:0 -32 0
+ffff9f9a29b3f240 298046610 S Ci:1:000:0 s 80 06 0100 0000 0040 64 <
+ffff9f9a29b3f240 298046926 C Ci:1:000:0 -32 0
+ffff9f9a29b3f240 298046998 S Ci:1:000:0 s 80 06 0100 0000 0040 64 <
+ffff9f9a29b3f240 298047338 C Ci:1:000:0 -32 0
+ffff9f9a29b3f240 298047353 S Co:1:002:0 s 23 03 0004 0002 0000 0
+ffff9f9a29b3f240 298047600 C Co:1:002:0 0 0
+ffff9f9a29b3f240 298059108 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff9f9a29b3f240 298059372 C Ci:1:002:0 0 4 = 03011000
+ffff9f9a29b3f240 298059398 S Co:1:002:0 s 23 01 0014 0002 0000 0
+ffff9f9a29b3f240 298059630 C Co:1:002:0 0 0
+ffff9f9a29b3f240 298214111 S Co:1:002:0 s 23 01 0001 0002 0000 0
+ffff9f9a29b3f240 298214247 C Co:1:002:0 0 0
+ffff9f9a29b3f300 298214304 S Co:1:002:0 s 23 01 0008 0002 0000 0
+ffff9f9a29b3f300 298214501 C Co:1:002:0 0 0
+ffff9f9a29b3f300 298422107 S Co:1:002:0 s 23 03 0008 0002 0000 0
+ffff9f9a29b3f300 298422285 C Co:1:002:0 0 0
+ffff9f9a29b3f300 298526126 S Co:1:002:0 s 23 03 0004 0002 0000 0
+ffff9f9a29b3f300 298526358 C Co:1:002:0 0 0
+ffff9f9a29b3f300 298538105 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff9f9a29b3f300 298538360 C Ci:1:002:0 0 4 = 03011100
+ffff9f9a29b3f300 298538388 S Co:1:002:0 s 23 01 0010 0002 0000 0
+ffff9f9a29b3f300 298538633 C Co:1:002:0 0 0
+ffff9f9a29b3f300 298538675 S Co:1:002:0 s 23 03 0004 0002 0000 0
+ffff9f9a29b3f300 298538893 C Co:1:002:0 0 0
+ffff9f9a012cae40 298581342 C Ii:1:002:1 0:2048 1 = 04
+ffff9f9a012cae40 298581372 S Ii:1:002:1 -115:2048 1 <
+ffff9f9a29b3f300 298742112 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff9f9a29b3f300 298742459 C Ci:1:002:0 0 4 = 03011000
+ffff9f9a29b3f300 298742483 S Co:1:002:0 s 23 01 0014 0002 0000 0
+ffff9f9a29b3f300 298742715 C Co:1:002:0 0 0
+ffff9f9a29b3f300 298794144 S Co:1:000:0 s 00 05 0006 0000 0000 0
+ffff9f9a29b3f300 298794387 C Co:1:000:0 -32 0
+ffff9f9a29b3f300 298998127 S Co:1:000:0 s 00 05 0006 0000 0000 0
+ffff9f9a29b3f300 298998509 C Co:1:000:0 -32 0
+ffff9f9a012cae40 299093323 C Ii:1:002:1 0:2048 1 = 04
+ffff9f9a012cae40 299093338 S Ii:1:002:1 -115:2048 1 <
+ffff9f9a29b3f300 299206193 S Co:1:002:0 s 23 01 0001 0002 0000 0
+ffff9f9a29b3f300 299206523 C Co:1:002:0 0 0
+ffff9f9a29b3f240 299206583 S Co:1:002:0 s 23 03 0004 0002 0000 0
+ffff9f9a29b3f240 299206778 C Co:1:002:0 0 0
+ffff9f9a29b3f240 299218068 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff9f9a29b3f240 299218239 C Ci:1:002:0 0 4 = 03011100
+ffff9f9a29b3f240 299218261 S Co:1:002:0 s 23 01 0010 0002 0000 0
+ffff9f9a29b3f240 299218503 C Co:1:002:0 0 0
+ffff9f9a29b3f240 299218534 S Co:1:002:0 s 23 03 0004 0002 0000 0
+ffff9f9a29b3f240 299218765 C Co:1:002:0 0 0
+ffff9f9a012cae40 299349383 C Ii:1:002:1 0:2048 1 = 04
+ffff9f9a012cae40 299349398 S Ii:1:002:1 -115:2048 1 <
+ffff9f9a29b3f240 299422112 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff9f9a29b3f240 299422523 C Ci:1:002:0 0 4 = 03011000
+ffff9f9a29b3f240 299422547 S Co:1:002:0 s 23 01 0014 0002 0000 0
+ffff9f9a29b3f240 299422781 C Co:1:002:0 0 0
+ffff9f9a29b3f240 299474143 S Co:1:000:0 s 00 05 0007 0000 0000 0
+ffff9f9a29b3f240 299474452 C Co:1:000:0 0 0
+ffff9f9a29b3f300 299488113 S Ci:1:007:0 s 80 06 0100 0000 0008 8 <
+ffff9f9a29b3f300 299488395 C Ci:1:007:0 -32 0
+ffff9f9a29b3f300 299488479 S Ci:1:007:0 s 80 06 0100 0000 0008 8 <
+ffff9f9a29b3f300 299488798 C Ci:1:007:0 -32 0
+ffff9f9a29b3f300 299488868 S Ci:1:007:0 s 80 06 0100 0000 0008 8 <
+ffff9f9a29b3f300 299489193 C Ci:1:007:0 -32 0
+ffff9f9a29b3f300 299610112 S Ci:1:007:0 s 80 06 0100 0000 0008 8 <
+ffff9f9a29b3f300 299610456 C Ci:1:007:0 -32 0
+ffff9f9a29b3f300 299610480 S Ci:1:007:0 s 80 06 0100 0000 0008 8 <
+ffff9f9a29b3f300 299610792 C Ci:1:007:0 -32 0
+ffff9f9a29b3f300 299610817 S Ci:1:007:0 s 80 06 0100 0000 0008 8 <
+ffff9f9a29b3f300 299611376 C Ci:1:007:0 -32 0
+ffff9f9a29b3f300 299718111 S Co:1:002:0 s 23 01 0001 0002 0000 0
+ffff9f9a29b3f300 299718382 C Co:1:002:0 0 0
+ffff9f9a29b3f240 299718493 S Co:1:002:0 s 23 01 0001 0002 0000 0
+ffff9f9a29b3f240 299718640 C Co:1:002:0 0 0
+ffff9f9a29b3f240 299718675 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff9f9a29b3f240 299718902 C Ci:1:002:0 0 4 = 01010000
 
-I see.
+#############################
+# Recovered (6.6.20 + revert)
+#############################
 
->>
->> > For UVC, perhaps you can introduce a new flag to usb_request called
->> > "ignore_queue_latency" or something equivalent. The dwc3 is already
->> > partially doing this for UVC. With this new flag, we can rework dwc3 to
->> > clearly separate the expected behavior from the function driver.
->>
->> I don't know why this "extra" flag is even necessary. The code example
->> is already working without that extra flag.
->
->The flag is for controller to determine what kinds of behavior the
->function driver expects. My intention is if this extra flag is not set,
->the dwc3 driver will not attempt to reshcedule isoc request at all (ie.
->no stop_active_transfer()).
-
-Ok.
-
->>
->> Actually I even came up with an better solution. Additionally of checkin=
-g if
->> one of the requests in the started list was missed, we can activly check=
- if
->> the trb ring did run dry and if dwc3_gadget_endpoint_trbs_complete is
->> going to enqueue in to the empty trb ring.
->>
->> So my whole change looks like that:
->>
->> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
->> index efe6caf4d0e87..2c8047dcd1612 100644
->> --- a/drivers/usb/dwc3/core.h
->> +++ b/drivers/usb/dwc3/core.h
->> @@ -952,6 +952,7 @@ struct dwc3_request {
->>  #define DWC3_REQUEST_STATUS_DEQUEUED		3
->>  #define DWC3_REQUEST_STATUS_STALLED		4
->>  #define DWC3_REQUEST_STATUS_COMPLETED		5
->> +#define DWC3_REQUEST_STATUS_MISSED_ISOC		6
->>  #define DWC3_REQUEST_STATUS_UNKNOWN		-1
->>  	u8			epnum;
->> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
->> index 858fe4c299b7a..a31f4d3502bd3 100644
->> --- a/drivers/usb/dwc3/gadget.c
->> +++ b/drivers/usb/dwc3/gadget.c
->> @@ -2057,6 +2057,9 @@ static void dwc3_gadget_ep_cleanup_cancelled_reque=
-sts(struct dwc3_ep *dep)
->>  		req =3D next_request(&dep->cancelled_list);
->>  		dwc3_gadget_ep_skip_trbs(dep, req);
->>  		switch (req->status) {
->> +		case 0:
->> +			dwc3_gadget_giveback(dep, req, 0);
->> +			break;
->>  		case DWC3_REQUEST_STATUS_DISCONNECTED:
->>  			dwc3_gadget_giveback(dep, req, -ESHUTDOWN);
->>  			break;
->> @@ -2066,6 +2069,9 @@ static void dwc3_gadget_ep_cleanup_cancelled_reque=
-sts(struct dwc3_ep *dep)
->>  		case DWC3_REQUEST_STATUS_STALLED:
->>  			dwc3_gadget_giveback(dep, req, -EPIPE);
->>  			break;
->> +		case DWC3_REQUEST_STATUS_MISSED_ISOC:
->> +			dwc3_gadget_giveback(dep, req, -EXDEV);
->> +			break;
->>  		default:
->>  			dev_err(dwc->dev, "request cancelled with wrong reason:%d\n", req->s=
-tatus);
->>  			dwc3_gadget_giveback(dep, req, -ECONNRESET);
->> @@ -3509,6 +3515,36 @@ static int dwc3_gadget_ep_cleanup_completed_reque=
-st(struct dwc3_ep *dep,
->>  	return ret;
->>  }
->> +static int dwc3_gadget_ep_check_missed_requests(struct dwc3_ep *dep)
->> +{
->> +	struct dwc3_request	*req;
->> +	struct dwc3_request	*tmp;
->> +	int ret =3D 0;
->> +
->> +	list_for_each_entry_safe(req, tmp, &dep->started_list, list) {
->> +		struct dwc3_trb *trb;
->> +
->> +		trb =3D req->trb;
->> +		switch (DWC3_TRB_SIZE_TRBSTS(trb->size)) {
->> +		case DWC3_TRBSTS_MISSED_ISOC:
->> +			/* Isoc endpoint only */
->> +			ret =3D -EXDEV;
->> +			break;
->> +		case DWC3_TRB_STS_XFER_IN_PROG:
->> +			/* Applicable when End Transfer with ForceRM=3D0 */
->> +		case DWC3_TRBSTS_SETUP_PENDING:
->> +			/* Control endpoint only */
->> +		case DWC3_TRBSTS_OK:
->> +		default:
->> +			ret =3D 0;
->> +			break;
->> +		}
->> +	}
->> +
->> +	return ret;
->> +}
->> +
->>  static void dwc3_gadget_ep_cleanup_completed_requests(struct dwc3_ep *d=
-ep,
->>  		const struct dwc3_event_depevt *event, int status)
->>  {
->> @@ -3565,22 +3601,51 @@ static bool dwc3_gadget_endpoint_trbs_complete(s=
-truct dwc3_ep *dep,
->>  {
->>  	struct dwc3		*dwc =3D dep->dwc;
->>  	bool			no_started_trb =3D true;
->> +	unsigned int		transfer_in_flight =3D 0;
->> +
->> +	/* It is possible that the interrupt thread was delayed by
->> +	 * scheduling in the system, and therefor the HW has already
->> +	 * run dry. In that case the last trb in the queue is already
->> +	 * handled by the hw. By checking the HWO bit we know to restart
->> +	 * the whole transfer. The condition to appear is more likelely
->> +	 * if not every trb has the IOC bit set and therefor does not
->> +	 * trigger the interrupt thread fewer.
->> +	 */
->> +	if (dep->number && usb_endpoint_xfer_isoc(dep->endpoint.desc)) {
->> +		struct dwc3_trb *trb;
->> -	dwc3_gadget_ep_cleanup_completed_requests(dep, event, status);
->> +		trb =3D dwc3_ep_prev_trb(dep, dep->trb_enqueue);
->> +		transfer_in_flight =3D trb->ctrl & DWC3_TRB_CTRL_HWO;
->> +	}
->> -	if (dep->flags & DWC3_EP_END_TRANSFER_PENDING)
->> -		goto out;
->> +	if (status =3D=3D -EXDEV || !transfer_in_flight) {
->> +		struct dwc3_request *tmp;
->> +		struct dwc3_request *req;
->> -	if (!dep->endpoint.desc)
->> -		return no_started_trb;
->> +		if (!(dep->flags & DWC3_EP_END_TRANSFER_PENDING))
->> +			dwc3_stop_active_transfer(dep, true, true);
->> -	if (usb_endpoint_xfer_isoc(dep->endpoint.desc) &&
->> -		list_empty(&dep->started_list) &&
->> -		(list_empty(&dep->pending_list) || status =3D=3D -EXDEV))
-
-@[!!here!!]
-
->> -		dwc3_stop_active_transfer(dep, true, true);
->> -	else if (dwc3_gadget_ep_should_continue(dep))
->> -		if (__dwc3_gadget_kick_transfer(dep) =3D=3D 0)
->> -			no_started_trb =3D false;
->> +		list_for_each_entry_safe(req, tmp, &dep->started_list, list) {
->> +			dwc3_gadget_move_cancelled_request(req,
->> +					(DWC3_TRB_SIZE_TRBSTS(req->trb->size) =3D=3D DWC3_TRBSTS_MISSED_IS=
-OC) ?
->> +					DWC3_REQUEST_STATUS_MISSED_ISOC : 0);
->> +		}
->> +	} else {
->> +		dwc3_gadget_ep_cleanup_completed_requests(dep, event, status);
->> +
->> +		if (dep->flags & DWC3_EP_END_TRANSFER_PENDING)
->> +			goto out;
->> +
->> +		if (!dep->endpoint.desc)
->> +			return no_started_trb;
->> +
->> +		if (usb_endpoint_xfer_isoc(dep->endpoint.desc) &&
->> +			list_empty(&dep->started_list) && list_empty(&dep->pending_list))
->> +			dwc3_stop_active_transfer(dep, true, true);
->> +		else if (dwc3_gadget_ep_should_continue(dep))
->> +			if (__dwc3_gadget_kick_transfer(dep) =3D=3D 0)
->> +				no_started_trb =3D false;
->> +	}
->>  out:
->>  	/*
->>
->> I will seperate the whole hunk into smaller changes and send an v1
->> the next days to review.
->>
-
-I finally send a v1 of my series.
-
-https://lore.kernel.org/linux-usb/20240307-dwc3-gadget-complete-irq-v1-0-4f=
-e9ac0ba2b7@pengutronix.de/
-
-For the rest of the discussion, I would like to move the conversation to
-the newly send series.
-
->No, we should not reschedule for every missed-isoc. We only want to
->target underrun condition.
-
-As you stated above, with reschedule what you mean is calling
-stop_transfer after a missed transfer was seen?
-
-If so, why is this condition in there already? (@[!!here!!])
-
-Michael
-
---=20
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
-
---r33SlKd0DtSnqSFk
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmXp6A4ACgkQC+njFXoe
-LGSWkA//ZQaQ+k1jx9KQsMAKpuYUdItk4XYUxoq//AzhMksEfL9bBjueJ4c1mT5P
-nY9y0wUWelHZPDz41LBMBN0vKaWQ/8tzu6Y/iW/OQM0BTQ8qxz9tbI1DoYGCbx7s
-SylqrBgkasGvCmQ2iWacq4kcIQhx7E34xTPf05epxh7qihtYZkwzc9HSyugxXFnl
-X0SPRKYjUD13dpaGGYYp04tBzzpKgXuXSBsDyqmQvbwAtB0aBTVlgYLfmioidKDo
-wuVozstMYjo0BNypLB1GqPqgrTaRDs+3rhSZcjO2pOlJpfsGrkKfvJ4gYDHjmyvM
-fbsLtKEdvRvDq7rxm1PINWN9VOW3zGhuOiyRAAaZGSe7yZMtyCn2kPF84q/vkz8W
-MfATuXJrWbqC1qCI+dXAl/vXUg65280atKgZFBlwl/d23KuMSYrdNwBJfxYs0KWQ
-axugdmcyLIb0uMtDkT1QXwnUNBGZz8wIMaD+JcTqU9CQUbNn7BuaDpBhQxGIaPiR
-cvwmQwIynhS24OgUX+2raI+S+5rvqjGipXbTkkTEvsxbB5j3dojy4J1dT7L4/G5q
-0Xapy2geNwYImilZpvqdxSQjjiSaLVHTuN/5d4RJxdGrf5gplkExXXZuYGYQ71Z5
-kCT9HoupuDvl1OlAVDm7H5PCFG1jL+Nl75XeKuMdqE15hnszRk0=
-=LLdF
------END PGP SIGNATURE-----
-
---r33SlKd0DtSnqSFk--
+ffff8fc4c0c5ac00 367063066 C Ii:1:002:1 0:2048 1 = 04
+ffff8fc4c0c5ac00 367063105 S Ii:1:002:1 -115:2048 1 <
+ffff8fc4ee367300 367063140 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff8fc4ee367300 367063319 C Ci:1:002:0 0 4 = 01010100
+ffff8fc4ee367300 367063325 S Co:1:002:0 s 23 01 0010 0002 0000 0
+ffff8fc4ee367300 367063590 C Co:1:002:0 0 0
+ffff8fc4ee367300 367063619 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff8fc4ee367300 367063850 C Ci:1:002:0 0 4 = 01010000
+ffff8fc4ee367240 367090072 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff8fc4ee367240 367090360 C Ci:1:002:0 0 4 = 01010000
+ffff8fc4ee367240 367117131 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff8fc4ee367240 367117280 C Ci:1:002:0 0 4 = 01010000
+ffff8fc4ee367240 367144088 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff8fc4ee367240 367144414 C Ci:1:002:0 0 4 = 01010000
+ffff8fc4ee367240 367171102 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff8fc4ee367240 367171308 C Ci:1:002:0 0 4 = 01010000
+ffff8fc4ee367240 367171358 S Co:1:002:0 s 23 03 0004 0002 0000 0
+ffff8fc4ee367240 367171559 C Co:1:002:0 0 0
+ffff8fc4ee367240 367183082 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff8fc4ee367240 367183422 C Ci:1:002:0 0 4 = 03011000
+ffff8fc4ee367240 367183452 S Co:1:002:0 s 23 01 0014 0002 0000 0
+ffff8fc4ee367240 367183693 C Co:1:002:0 0 0
+ffff8fc4ee367240 367235143 S Ci:1:000:0 s 80 06 0100 0000 0040 64 <
+ffff8fc4ee367240 367235569 C Ci:1:000:0 -32 0
+ffff8fc4ee367240 367235656 S Ci:1:000:0 s 80 06 0100 0000 0040 64 <
+ffff8fc4ee367240 367235907 C Ci:1:000:0 -32 0
+ffff8fc4ee367240 367235922 S Ci:1:000:0 s 80 06 0100 0000 0040 64 <
+ffff8fc4ee367240 367236569 C Ci:1:000:0 -32 0
+ffff8fc4ee367240 367236656 S Co:1:002:0 s 23 03 0004 0002 0000 0
+ffff8fc4ee367240 367236915 C Co:1:002:0 0 0
+ffff8fc4ee367240 367248033 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff8fc4ee367240 367248326 C Ci:1:002:0 0 4 = 03011000
+ffff8fc4ee367240 367248343 S Co:1:002:0 s 23 01 0014 0002 0000 0
+ffff8fc4ee367240 367248585 C Co:1:002:0 0 0
+ffff8fc4ee367240 367406114 S Ci:1:000:0 s 80 06 0100 0000 0040 64 <
+ffff8fc4ee367240 367406405 C Ci:1:000:0 -32 0
+ffff8fc4ee367240 367406432 S Ci:1:000:0 s 80 06 0100 0000 0040 64 <
+ffff8fc4ee367240 367406778 C Ci:1:000:0 -32 0
+ffff8fc4ee367240 367406796 S Ci:1:000:0 s 80 06 0100 0000 0040 64 <
+ffff8fc4ee367240 367407117 C Ci:1:000:0 -32 0
+ffff8fc4ee367240 367407188 S Co:1:002:0 s 23 03 0004 0002 0000 0
+ffff8fc4ee367240 367407446 C Co:1:002:0 0 0
+ffff8fc4ee367240 367419108 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff8fc4ee367240 367419418 C Ci:1:002:0 0 4 = 03011000
+ffff8fc4ee367240 367419451 S Co:1:002:0 s 23 01 0014 0002 0000 0
+ffff8fc4ee367240 367419869 C Co:1:002:0 0 0
+ffff8fc4ee367240 367574110 S Co:1:002:0 s 23 01 0001 0002 0000 0
+ffff8fc4ee367240 367574446 C Co:1:002:0 0 0
+ffff8fc4ee367180 367574511 S Co:1:002:0 s 23 03 0004 0002 0000 0
+ffff8fc4ee367180 367574700 C Co:1:002:0 0 0
+ffff8fc4ee367180 367586105 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff8fc4ee367180 367586361 C Ci:1:002:0 0 4 = 03011000
+ffff8fc4ee367180 367586390 S Co:1:002:0 s 23 01 0014 0002 0000 0
+ffff8fc4ee367180 367586619 C Co:1:002:0 0 0
+ffff8fc4ee367180 367638098 S Ci:1:000:0 s 80 06 0100 0000 0040 64 <
+ffff8fc4ee367180 367638506 C Ci:1:000:0 -32 0
+ffff8fc4ee367180 367638524 S Ci:1:000:0 s 80 06 0100 0000 0040 64 <
+ffff8fc4ee367180 367639020 C Ci:1:000:0 -32 0
+ffff8fc4ee367180 367639037 S Ci:1:000:0 s 80 06 0100 0000 0040 64 <
+ffff8fc4ee367180 367639390 C Ci:1:000:0 -32 0
+ffff8fc4ee367180 367639406 S Co:1:002:0 s 23 03 0004 0002 0000 0
+ffff8fc4ee367180 367639654 C Co:1:002:0 0 0
+ffff8fc4ee367180 367651093 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff8fc4ee367180 367651455 C Ci:1:002:0 0 4 = 03011000
+ffff8fc4ee367180 367651483 S Co:1:002:0 s 23 01 0014 0002 0000 0
+ffff8fc4ee367180 367651706 C Co:1:002:0 0 0
+ffff8fc4ee367180 367806113 S Ci:1:000:0 s 80 06 0100 0000 0040 64 <
+ffff8fc4ee367180 367806291 C Ci:1:000:0 -32 0
+ffff8fc4ee367180 367806319 S Ci:1:000:0 s 80 06 0100 0000 0040 64 <
+ffff8fc4ee367180 367806947 C Ci:1:000:0 -32 0
+ffff8fc4ee367180 367807039 S Ci:1:000:0 s 80 06 0100 0000 0040 64 <
+ffff8fc4ee367180 367807536 C Ci:1:000:0 -32 0
+ffff8fc4ee367180 367807569 S Co:1:002:0 s 23 03 0004 0002 0000 0
+ffff8fc4ee367180 367808060 C Co:1:002:0 0 0
+ffff8fc4ee367180 367820112 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff8fc4ee367180 367820430 C Ci:1:002:0 0 4 = 03011000
+ffff8fc4ee367180 367820456 S Co:1:002:0 s 23 01 0014 0002 0000 0
+ffff8fc4ee367180 367820694 C Co:1:002:0 0 0
+ffff8fc4ee367180 367974107 S Co:1:002:0 s 23 01 0001 0002 0000 0
+ffff8fc4ee367180 367974289 C Co:1:002:0 0 0
+ffff8fc4ee367240 367974353 S Co:1:002:0 s 23 01 0008 0002 0000 0
+ffff8fc4ee367240 367974556 C Co:1:002:0 0 0
+ffff8fc4ee367240 368182107 S Co:1:002:0 s 23 03 0008 0002 0000 0
+ffff8fc4ee367240 368182386 C Co:1:002:0 0 0
+ffff8fc4ee367240 368286131 S Co:1:002:0 s 23 03 0004 0002 0000 0
+ffff8fc4ee367240 368286298 C Co:1:002:0 0 0
+ffff8fc4ee367240 368298105 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff8fc4ee367240 368298310 C Ci:1:002:0 0 4 = 03011100
+ffff8fc4ee367240 368298332 S Co:1:002:0 s 23 01 0010 0002 0000 0
+ffff8fc4ee367240 368298571 C Co:1:002:0 0 0
+ffff8fc4ee367240 368298641 S Co:1:002:0 s 23 03 0004 0002 0000 0
+ffff8fc4ee367240 368298823 C Co:1:002:0 0 0
+ffff8fc4c0c5ac00 368343025 C Ii:1:002:1 0:2048 1 = 04
+ffff8fc4c0c5ac00 368343056 S Ii:1:002:1 -115:2048 1 <
+ffff8fc4ee367240 368502095 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff8fc4ee367240 368502372 C Ci:1:002:0 0 4 = 01011100
+ffff8fc4ee367240 368502407 S Co:1:002:0 s 23 01 0010 0002 0000 0
+ffff8fc4ee367240 368502627 C Co:1:002:0 0 0
+ffff8fc4ee367240 368502648 S Co:1:002:0 s 23 03 0004 0002 0000 0
+ffff8fc4ee367240 368502886 C Co:1:002:0 0 0
+ffff8fc4c0c5ac00 368598913 C Ii:1:002:1 0:2048 1 = 04
+ffff8fc4c0c5ac00 368598925 S Ii:1:002:1 -115:2048 1 <
+ffff8fc4ee367240 368710109 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff8fc4ee367240 368710339 C Ci:1:002:0 0 4 = 03011000
+ffff8fc4ee367240 368710367 S Co:1:002:0 s 23 01 0014 0002 0000 0
+ffff8fc4ee367240 368710594 C Co:1:002:0 0 0
+ffff8fc4ee367240 368762141 S Co:1:000:0 s 00 05 0006 0000 0000 0
+ffff8fc4ee367240 368762451 C Co:1:000:0 0 0
+ffff8fc4ee367180 368776096 S Ci:1:006:0 s 80 06 0100 0000 0008 8 <
+ffff8fc4ee367180 368776399 C Ci:1:006:0 0 8 = 12010002 02000008
+ffff8fc4ee367240 368778058 S Ci:1:006:0 s 80 06 0100 0000 0012 18 <
+ffff8fc4ee367240 368778361 C Ci:1:006:0 0 18 = 12010002 02000008 
+58060002 00000000 0001
+ffff8fc4ee367240 368778400 S Ci:1:006:0 s 80 06 0600 0000 000a 10 <
+ffff8fc4ee367240 368778629 C Ci:1:006:0 -32 0
+ffff8fc4ee367240 368778644 S Ci:1:006:0 s 80 06 0600 0000 000a 10 <
+ffff8fc4ee367240 368778967 C Ci:1:006:0 -32 0
+ffff8fc4ee367240 368778996 S Ci:1:006:0 s 80 06 0600 0000 000a 10 <
+ffff8fc4ee367240 368779315 C Ci:1:006:0 -32 0
+ffff8fc4ee367240 368779397 S Ci:1:006:0 s 80 06 0200 0000 0009 9 <
+ffff8fc4ee367240 368779667 C Ci:1:006:0 0 9 = 09024300 02010080 32
+ffff8fc4ee367240 368779679 S Ci:1:006:0 s 80 06 0200 0000 0043 67 <
+ffff8fc4ee367240 368780133 C Ci:1:006:0 0 67 = 09024300 02010080 
+32090400 00010202 01000524 00100105 24010001 04240200
+ffff8fc4ee367000 368780596 S Co:1:006:0 s 00 09 0001 0000 0000 0
+ffff8fc4ee367000 368780976 C Co:1:006:0 0 0
+ffff8fc4ee367000 368781766 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff8fc4ee367000 368782044 C Ci:1:002:0 0 4 = 03010000
+ffff8fc505e4b480 368805117 S Co:1:006:0 s 21 20 0000 0000 0007 7 = 
+80250000 000008
+ffff8fc505e4b480 368805270 C Co:1:006:0 0 7 >
 
