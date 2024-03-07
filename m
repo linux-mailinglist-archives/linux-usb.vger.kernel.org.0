@@ -1,121 +1,100 @@
-Return-Path: <linux-usb+bounces-7658-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7659-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC764874D26
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Mar 2024 12:14:09 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49E01874D50
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Mar 2024 12:24:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 89F031F21E8C
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Mar 2024 11:14:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7C0B51C23574
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Mar 2024 11:24:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A85B2128811;
-	Thu,  7 Mar 2024 11:13:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E96D127B7C;
+	Thu,  7 Mar 2024 11:24:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DPrLV54m"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CpmjCSFE"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96485DDC9;
-	Thu,  7 Mar 2024 11:13:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECA6982D91;
+	Thu,  7 Mar 2024 11:24:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709810036; cv=none; b=TsK4ab+yhhcdtJZ9k0SXkahKduXXPtmkk6NXTTJn9ulnrg0yD0k6p/EAiFi2w3+YUWYMTiq5K83VDLD/Q0ovaVdrvFlVGzD6JoMDzC6au3P0V5G9g7voC+Sp9z1qeKyoo2hi7kDVtVSRgrER64DQQjvxDCfSDwItSJmvUzaFxLM=
+	t=1709810652; cv=none; b=stGjNnFsRlRlhZp+G8Q6PSMVeTm3XoNqmSj414GOP8k7YWo46AhmvPZD+v7X3bUkoovmRGf6r5lSGR5erA0xyihIC+4h1HhZkhm8ajGvjhp5OKBH1T9iBMqQ5L1woXhgF0AY18cXcyuNe4jtH5GyDl21+EZjitYU/aJH1xZe+F0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709810036; c=relaxed/simple;
-	bh=vzH93D4jP/qdyA1AdyLTY5J4mAvCYF4Oh9LEd1nqK1g=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=iHXJY0E04c4BKzYpOZAY4zaXHnOdovzUrnoliSDMoaN/0ZTvef7Gx3gC/411NJGpeRQFRXzDznXF5gAf/O5u4qys/cBPUkNizK1eVesq8nsg9S6onrZieNw99bpvcUhdBrICBnXWutfut2V1ti457JcfA8y+tmo+x/VyU1kpGy8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DPrLV54m; arc=none smtp.client-ip=209.85.221.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-33e17342ea7so407340f8f.2;
-        Thu, 07 Mar 2024 03:13:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709810033; x=1710414833; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=HMTM+W302u0jntrzElYraz9pp6IOGybZeSVVmTNPZVI=;
-        b=DPrLV54mHpyffnS1Uj0R3iXCdGRkdF5x/fuztpsNIanAPzv/iVQUOxYPerb9FbGGbq
-         uZ+7f9aHAEj3GxFZse8AYEvgyuXQNxRnWP2vxit1rQmVWwtRmQFVwGlB2v0J8aaPo2L2
-         Xtq2iwgmIM7qOJoCxqzEBBiKSeY6RsnMgtbo38ha0F79WmGFPg+WDluJ3qh/2DvKAQCZ
-         H0nQ9hRbLnbwzj8G+yj3y14x7klOMTpwB868PinkNnylI/sER3aRlFDkWVCa1xNyogsF
-         CijdUXGyXGHTgchkPoSdnc3sYZHbxUMcjiI/VlUjH3T5Ghw/9+VMJ7agf2I4O3M6LKwl
-         HnrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709810033; x=1710414833;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HMTM+W302u0jntrzElYraz9pp6IOGybZeSVVmTNPZVI=;
-        b=Bu40FclSJFYReT4/L4R0JzXdUSY0sv8nwNyY63m195Cc+OD6PzOyfdl7j6X8FIxBLZ
-         7zff46B54pTOxhXiNJz6ktl99wtHqa7uXEluTmDc5O78NXvEBHDOSHi7R/y0VCDNv2sx
-         43RLgKt4QA8h8X+RXIVKLD9dgxoUY+l+V1c1VEGesOYyo0pS980bRECx7ao+mQ56GsnJ
-         yTFSUrH2OA6GMDvo6lQ3vDgJGHweT6kl6gtZ405aNxgdatRPFZpvmeoukHmQIF5IJjI4
-         lllYZj40abSqBP6Hh4HLv+PZT+HSb5TiVOqC/V3phUbkC5vlIatpAyqklaN73mRZMMM3
-         F9Jw==
-X-Forwarded-Encrypted: i=1; AJvYcCX+8mJVT8hsWb6mMSuYJH9HakoEfkQ/Sp48k2f0aeHvjNnNXmZacu5QitkKpHbdXxA9GiMx8ZhRsW6rq6dVLnHCx06DQJL/HN+7lfS7dhPPvGN8ZbsxALksAJeVp035ONhyfGfxxVfK
-X-Gm-Message-State: AOJu0YzFTMsWqjoYmu8lNxtWzLSPVSNtzQqVBhn6nwSX6nKwMwOVJubi
-	cyFymx3CTJIx2dCimqzjHCOw7rHJtbKlzhhaf7h5JDkCkMBO3THE
-X-Google-Smtp-Source: AGHT+IHvBV7sDcOnurRdoGtHENGsA5MWuFky9TsdX6SGRc40zvSZN0wPOrZKxDJvP0GqaMGO8NfEoQ==
-X-Received: by 2002:adf:ef88:0:b0:33e:2f43:b35d with SMTP id d8-20020adfef88000000b0033e2f43b35dmr9539693wro.21.1709810032619;
-        Thu, 07 Mar 2024 03:13:52 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id bt17-20020a056000081100b0033e3cb02cefsm11067688wrb.86.2024.03.07.03.13.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Mar 2024 03:13:52 -0800 (PST)
-From: Colin Ian King <colin.i.king@gmail.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org
-Cc: kernel-janitors@vger.kernel.org,
+	s=arc-20240116; t=1709810652; c=relaxed/simple;
+	bh=VQNpMcdrVmdHySPPhS2W+ZB0l9yLXptAua58xe/6us4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=kaoSGwCAETfwMD/P1JxICBrKJGxeG9rK6/XsJPUgAIfLuu1dDA4kebd/e0PDw8nTli4yRWl0wdKAYhpf0Pzex0Q46wDaWDRbX5NEm8IdKnMaweFpDSt/etzl75Ikj0n0eGGzGL4TBBbXUlkC+28uZmNeW47gzynWnSvJV4p9ms8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CpmjCSFE; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1709810651; x=1741346651;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=VQNpMcdrVmdHySPPhS2W+ZB0l9yLXptAua58xe/6us4=;
+  b=CpmjCSFEf+N63wl+xF637RiXSVb0ew/3xdvZREZpSVM1HZyC3b3hpnJF
+   0u5PnCtZNRHZnVJ92kAJrvZzXI0Ae1ktYy0OkLJ5DyGjeJALa+GBK8TYG
+   FjwO63Srw8tlxYGKiIAFVztoMs00yHS889k5d6s0sle5mmgbifNhqI2Oe
+   eCFiB/EwXYQSHJ/NywGbrK9sp2ETZpvGDHxdeLyxF9sSKANhPq6XZEQxY
+   NgBT0wGBiwUX33gTyU4fiCRJMN0Qp2aMOuXxrRECgLVT9jlKE+KD9H8DQ
+   jd1hOq8cu5S227AVdPCQGXzlEKEV4Frvgv9WbrmxfQqGB3k/QYRwMpu7l
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11005"; a="5059653"
+X-IronPort-AV: E=Sophos;i="6.07,211,1708416000"; 
+   d="scan'208";a="5059653"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2024 03:24:10 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,11005"; a="937045836"
+X-IronPort-AV: E=Sophos;i="6.07,211,1708416000"; 
+   d="scan'208";a="937045836"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 07 Mar 2024 03:24:08 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+	id BDC7E193; Thu,  7 Mar 2024 13:24:07 +0200 (EET)
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: linux-usb@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: sl811-hcd: only defined function checkdone if QUIRK2 is defined
-Date: Thu,  7 Mar 2024 11:13:51 +0000
-Message-Id: <20240307111351.1982382-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.39.2
+Cc: Alan Stern <stern@rowland.harvard.edu>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] usb: ohci-pxa27x: Remove unused of_gpio.h
+Date: Thu,  7 Mar 2024 13:24:06 +0200
+Message-ID: <20240307112406.3625756-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.43.0.rc1.1.gbec44491f096
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-Function checkdone is only required if QUIRK2 is defined, so add
-appropriate #if / #endif around the function.
+of_gpio.h is deprecated and subject to remove.
+The driver doesn't use it, simply remove the unused header.
 
-Cleans up clang scan build warning:
-drivers/usb/host/sl811-hcd.c:588:18: warning: unused function
-'checkdone' [-Wunused-function]
-
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/usb/host/sl811-hcd.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/usb/host/ohci-pxa27x.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/usb/host/sl811-hcd.c b/drivers/usb/host/sl811-hcd.c
-index 0956495bba57..2b871540bb50 100644
---- a/drivers/usb/host/sl811-hcd.c
-+++ b/drivers/usb/host/sl811-hcd.c
-@@ -585,6 +585,7 @@ done(struct sl811 *sl811, struct sl811h_ep *ep, u8 bank)
- 		finish_request(sl811, ep, urb, urbstat);
- }
- 
-+#ifdef QUIRK2
- static inline u8 checkdone(struct sl811 *sl811)
- {
- 	u8	ctl;
-@@ -616,6 +617,7 @@ static inline u8 checkdone(struct sl811 *sl811)
- #endif
- 	return irqstat;
- }
-+#endif
- 
- static irqreturn_t sl811h_irq(struct usb_hcd *hcd)
- {
+diff --git a/drivers/usb/host/ohci-pxa27x.c b/drivers/usb/host/ohci-pxa27x.c
+index 357d9aee38a3..3348c25ddb18 100644
+--- a/drivers/usb/host/ohci-pxa27x.c
++++ b/drivers/usb/host/ohci-pxa27x.c
+@@ -27,7 +27,6 @@
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+ #include <linux/of_platform.h>
+-#include <linux/of_gpio.h>
+ #include <linux/platform_data/usb-ohci-pxa27x.h>
+ #include <linux/platform_data/pxa2xx_udc.h>
+ #include <linux/platform_device.h>
 -- 
-2.39.2
+2.43.0.rc1.1.gbec44491f096
 
 
