@@ -1,139 +1,129 @@
-Return-Path: <linux-usb+bounces-7686-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7687-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DDF8087553B
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Mar 2024 18:32:48 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D3E78875548
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Mar 2024 18:34:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 62DC0B24712
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Mar 2024 17:32:46 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3593EB20C1A
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Mar 2024 17:34:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D173130E27;
-	Thu,  7 Mar 2024 17:32:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="cv9Cizq7"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D00B13173E;
+	Thu,  7 Mar 2024 17:33:44 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0587C130AC4;
-	Thu,  7 Mar 2024 17:32:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
+Received: from hi1smtp01.de.adit-jv.com (smtp1.de.adit-jv.com [93.241.18.167])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1836B130AC4;
+	Thu,  7 Mar 2024 17:33:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.241.18.167
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709832759; cv=none; b=nNSlRl/nyFD+Y3MM8gzuLC3VVFaK57sFJpO44brnrleMoco85KdrfVFvDtLuSSLU7Dbw7peJS7VQizxIAOz5WEc0Bvmo1Fj30f8ZScBlTbQzrvpqM/25wD1i6JAMVlWPJU5Eir624INA8o2aHCG+dfCojnsrz4SNAURir6FpCl0=
+	t=1709832824; cv=none; b=ZRnoPGh7crU69lS29UVJ1fdO8pycTV2SXlq5DtsCeQK6ssiZr+p4EiN2o6yLpnu8U+8QkPzjWAlPK1SyMs+/I5kjqC79XK3nMLdYkKVr2HFgNm36ZQl4P6DensNu+PSj3ppyWOqMkJYVaopN6oHGd9Eld0JZmQCACGyOCH6j7e0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709832759; c=relaxed/simple;
-	bh=os7MvWdKXLSw9AkDhcPRjA7sgslEH0TCOsCPjkfdKLY=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Z1QwIDoKWAQ+EvP2bo5Edwpc8TpGEdqJh5UlUKEPPwFRNvzuwY+0EIMeh+4VQ2lgnnaJ5RC2p1Y0ZopzJabVrOTM5wKGgaEe2XZ4xTdCShcPX8qaZpgZB2Heq+iEUjDu0A6CUhXGwNQ79iiwhPk+A071FrMAvrIMEQjEFgj9ylg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=cv9Cizq7; arc=none smtp.client-ip=117.135.210.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=56j5n
-	tVzigxy+mWlLsPQSN6BzY98TlaoAkW9sN3oqa4=; b=cv9Cizq73AGnBDEaxElb1
-	SZFxJSelIbZILxPmvoaqsKryhbwOIwXTZoBLfvUYRcAlMkhQa+q+ndZtqPxxCdMR
-	VmLW09v9jqlM4Mo15gaeV16a+nVeM0TzUs9JIoAjUVD+Bc0d3eTHCTFaLmDnHw6B
-	PBBQEPqz91uCZdoMOE/8Bg=
-Received: from sc9-mailhost1.vmware.com (unknown [114.250.139.10])
-	by gzga-smtp-mta-g2-0 (Coremail) with SMTP id _____wD3f2Al+ullk2FrAA--.14028S2;
-	Fri, 08 Mar 2024 01:32:22 +0800 (CST)
-From: Dingyan Li <18500469033@163.com>
-To: stern@rowland.harvard.edu,
-	gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] USB: Use EHCI control transfer pid macros instead of constant values.
-Date: Fri,  8 Mar 2024 01:31:59 +0800
-Message-Id: <20240307173159.318384-1-18500469033@163.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1709832824; c=relaxed/simple;
+	bh=AOxseAzx/mhHRMcaW+02RE9BF5vJ6cOgE9bQGk0LgG4=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZaQH2Oc5sUo/nXveInp3ok1FY7I+CoEqIAlvHRffthtgQzKcCKe7vcgS6aKVA1Qo55l8vmnQhhVsqEi3KmguXHxXI5DcWgFBCHWt7fc2av8b72IXBgaC8uGOFzch8Oqh3hGDYwD4IsGXGfuRTgkh/go4Bql7o+rrKYNy0vclDbo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=de.adit-jv.com; spf=pass smtp.mailfrom=de.adit-jv.com; arc=none smtp.client-ip=93.241.18.167
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=de.adit-jv.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=de.adit-jv.com
+Received: from hi2exch02.adit-jv.com (hi2exch02.adit-jv.com [10.72.92.28])
+	by hi1smtp01.de.adit-jv.com (Postfix) with ESMTP id E8252520369;
+	Thu,  7 Mar 2024 18:33:37 +0100 (CET)
+Received: from vmlxhi-118.adit-jv.com (10.72.93.77) by hi2exch02.adit-jv.com
+ (10.72.92.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Thu, 7 Mar
+ 2024 18:33:37 +0100
+Date: Thu, 7 Mar 2024 18:33:27 +0100
+From: Hardik Gajjar <hgajjar@de.adit-jv.com>
+To: Greg KH <gregkh@linuxfoundation.org>
+CC: Hardik Gajjar <hgajjar@de.adit-jv.com>, <quic_kriskura@quicinc.com>,
+	<maze@google.com>, <quic_linyyuan@quicinc.com>, <linux-usb@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <guofeng.li@gm.com>,
+	<hardik.gajjar@bosch.com>, <eugeniu.rosca@bosch.com>
+Subject: Re: [PATCH] usb: gadget: f_ncm: Fix Kernel Panic due to access of
+ invalid gadget ptr
+Message-ID: <20240307173327.GA14716@vmlxhi-118.adit-jv.com>
+References: <20240307161849.9145-1-hgajjar@de.adit-jv.com>
+ <2024030736-racism-cornflake-63e9@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wD3f2Al+ullk2FrAA--.14028S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7uF13KF1fAFyfJw47AFWkWFg_yoW5JF15pr
-	W3WF47trWUJr4aqr9rArs5JF1rJw13JFyUKFy7W3y8CF40y3WUGF17KFWfJr9rXry8Gr1Y
-	qF45WryUurs7JFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UE9aPUUUUU=
-X-CM-SenderInfo: jprykiiquwmiitt6il2tof0z/xtbBzxKay2V4IHY5PgABsB
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <2024030736-racism-cornflake-63e9@gregkh>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: hi2exch02.adit-jv.com (10.72.92.28) To
+ hi2exch02.adit-jv.com (10.72.92.28)
 
-Macros with good names offer better readability. Besides, also move
-the definition to ehci.h.
+On Thu, Mar 07, 2024 at 04:45:13PM +0000, Greg KH wrote:
+> On Thu, Mar 07, 2024 at 05:18:49PM +0100, Hardik Gajjar wrote:
+> > In the scenario where the system enters suspend to RAM mode (STR) triggers
+> > the disconnection of Dual Role USB Hub, and the UDC platform driver calls
+> > usb_del_gadget_udc() to cleanup and delete the associated gadget.
+> > 
+> > However, at this point, the usb0 interface is not yet deleted, leading to
+> > a race condition with the TCP/IP stack attempting to access the network
+> > device parent (gadget pointer), through operations like the GETLINK net
+> > message.
+> > 
+> > This patch addresses the issue by clearing the netdevice's parent device
+> > pointer when the ncm unbinds, effectively preventing the race condition
+> > during this critical phase.
+> > 
+> > Followinfg is the backtrace of such race condition
+> > [ 3566.105792] Call trace:
+> > [ 3566.105984] if_nlmsg_size+0x48/0x3b0
+> > [ 3566.107497] rtnetlink_rcv_msg+0x1cc/0x408
+> > [ 3566.107905] netlink_rcv_skb+0x12c/0x164
+> > [ 3566.108264] rtnetlink_rcv+0x18/0x24
+> > [ 3566.108851] netlink_unicast_kernel+0xc4/0x14c
+> > [ 3566.109192] netlink_unicast+0x210/0x2b0
+> > [ 3566.109606] netlink_sendmsg+0x2ec/0x360
+> > [ 3566.110046] __sys_sendto+0x1b8/0x25c
+> > [ 3566.111594] __arm64_sys_sendto+0x28/0x38
+> > [ 3566.112599] el0_svc_common+0xb4/0x19c
+> > [ 3566.112978] el0_svc_handler+0x74/0x98
+> > [ 3566.113269] el0_svc+0x8/0xc
+> > 
+> > - code: if_nlmsg_size call the following function
+> > 
+> > static inline int rtnl_vfinfo_size(const struct net_device *dev,
+> > 				   u32 ext_filter_mask)
+> > {
+> > 	// dev->dev.parent is not NULL
+> > 	if (dev->dev.parent && (ext_filter_mask & RTEXT_FILTER_VF)) {
+> > 		// dev_num_vf use the dev->dev.parent->bus lead to kernel panic.
+> > 		int num_vfs = dev_num_vf(dev->dev.parent);
+> > 		size_t size = nla_total_size(0);
+> > 		size += num_vfs *
+> > 			(nla_total_size(0) +
+> > 			 nla_total_size(sizeof(struct ifla_vf_mac)) +
+> > 			 nla_total_size(sizeof(struct ifla_vf_vlan)) +
+> > 			 nla_total_size(0) + /* nest IFLA_VF_VLAN_LIST *
+> > 
+> > Signed-off-by: Hardik Gajjar <hgajjar@de.adit-jv.com>
+> > ---
+> >  drivers/usb/gadget/function/f_ncm.c | 7 +++++++
+> >  1 file changed, 7 insertions(+)
+> 
+> What commit id does this fix?
+> 
+> thanks,
+> 
+> greg k-h
 
-Signed-off-by: Dingyan Li <18500469033@163.com>
----
- drivers/usb/host/ehci-q.c | 10 +++-------
- drivers/usb/host/ehci.h   |  8 +++++++-
- 2 files changed, 10 insertions(+), 8 deletions(-)
+Hi Greg,
 
-diff --git a/drivers/usb/host/ehci-q.c b/drivers/usb/host/ehci-q.c
-index 666f5c4db25a..51b46001e344 100644
---- a/drivers/usb/host/ehci-q.c
-+++ b/drivers/usb/host/ehci-q.c
-@@ -27,10 +27,6 @@
- 
- /*-------------------------------------------------------------------------*/
- 
--/* PID Codes that are used here, from EHCI specification, Table 3-16. */
--#define PID_CODE_IN    1
--#define PID_CODE_SETUP 2
--
- /* fill a qtd, returning how much of the buffer we were able to queue up */
- 
- static unsigned int
-@@ -230,7 +226,7 @@ static int qtd_copy_status (
- 			/* fs/ls interrupt xfer missed the complete-split */
- 			status = -EPROTO;
- 		} else if (token & QTD_STS_DBE) {
--			status = (QTD_PID (token) == 1) /* IN ? */
-+			status = (QTD_PID(token) == PID_CODE_IN) /* IN ? */
- 				? -ENOSR  /* hc couldn't read data */
- 				: -ECOMM; /* hc couldn't write data */
- 		} else if (token & QTD_STS_XACT) {
-@@ -606,7 +602,7 @@ qh_urb_transaction (
- 		/* SETUP pid */
- 		qtd_fill(ehci, qtd, urb->setup_dma,
- 				sizeof (struct usb_ctrlrequest),
--				token | (2 /* "setup" */ << 8), 8);
-+				token | (PID_CODE_SETUP << 8), 8);
- 
- 		/* ... and always at least one more pid */
- 		token ^= QTD_TOGGLE;
-@@ -642,7 +638,7 @@ qh_urb_transaction (
- 	}
- 
- 	if (is_input)
--		token |= (1 /* "in" */ << 8);
-+		token |= (PID_CODE_IN << 8);
- 	/* else it's already initted to "out" pid (0 << 8) */
- 
- 	maxpacket = usb_endpoint_maxp(&urb->ep->desc);
-diff --git a/drivers/usb/host/ehci.h b/drivers/usb/host/ehci.h
-index 1441e3400796..dafa6628e134 100644
---- a/drivers/usb/host/ehci.h
-+++ b/drivers/usb/host/ehci.h
-@@ -321,10 +321,16 @@ struct ehci_qtd {
- 	size_t			length;			/* length of buffer */
- } __aligned(32);
- 
-+/* PID Codes that are used here, from EHCI specification, Table 3-16. */
-+/* #define PID_CODE_OUT   0 */
-+#define PID_CODE_IN    1
-+#define PID_CODE_SETUP 2
-+
- /* mask NakCnt+T in qh->hw_alt_next */
- #define QTD_MASK(ehci)	cpu_to_hc32(ehci, ~0x1f)
- 
--#define IS_SHORT_READ(token) (QTD_LENGTH(token) != 0 && QTD_PID(token) == 1)
-+#define IS_SHORT_READ(token) (QTD_LENGTH(token) != 0 && \
-+						QTD_PID(token) == PID_CODE_IN)
- 
- /*-------------------------------------------------------------------------*/
- 
--- 
-2.25.1
+The network device parent is not being properly cleaned up during unbind since the initial commit of the driver.
+In that case, should I mention the First commit ID of the driver as broken commit or
+would you advice to say, For example "Clean up netdev parent in unbind".
 
+Thanks,
+Hardik
 
