@@ -1,116 +1,131 @@
-Return-Path: <linux-usb+bounces-7682-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7683-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BAAC887546B
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Mar 2024 17:45:22 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CDBA1875499
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Mar 2024 17:52:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5B78F1F2398B
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Mar 2024 16:45:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0BAC91C232C4
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Mar 2024 16:52:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB7D912FB26;
-	Thu,  7 Mar 2024 16:45:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="e3FRSlb8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFB8D12F5B0;
+	Thu,  7 Mar 2024 16:52:05 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 217627AE43;
-	Thu,  7 Mar 2024 16:45:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A94BC12DDBE
+	for <linux-usb@vger.kernel.org>; Thu,  7 Mar 2024 16:52:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709829916; cv=none; b=iYogCMliURU6ChtX3Po2JTAGIlxVHOvGwMWFEw5422jfodiWSHpih7bTijhYNDH9IT6X00S1/HCbNH1EMTG2jZL4oGgVzX+mIIn6IglImFFFgQbpEVDFYvUomRUptS3qAefLvp55x1ECnFKPDoBAHl2voVHfeGCRp9HmpL9nvTM=
+	t=1709830325; cv=none; b=JEQQ3GgYKurTldSWoJkJEQ8ITkqks/QVARCtaNVAFcOpB5T8BvUdp23rlGE3ngFa3y0tguDseEEwTfBj47MZm9CvWSHOXiaixMgWg2p9b2OUdJjvWz+Ze7Zco27Bpvf0InTOND8cUHv2w+BMEaCAQt/OWEaA9kJoEIcCwEWpPBk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709829916; c=relaxed/simple;
-	bh=jxxknMt2uyiAxMDOvBrYg92hTC4bK3O5IyG3V1Kaq/c=;
+	s=arc-20240116; t=1709830325; c=relaxed/simple;
+	bh=i9CCT9j7BCqV2bE+0gCx3jMpwRqeW581xksody4aj88=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NYa9xgdSG3ZMf2wqEG2/rHJPF4j91B/oIJ9KRSPAvCGejbfeVafopCQhJXkpfAPNX68Dku34a7i4h9EJKwuvXVMBjeAkeQk4udVNsD/PT5sspqeMsez/XZHWoI89wOD5GJ1UB6sfTCxaJIdtvAwSd5Gy3fj+TLtzTboeQeWvJOo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=e3FRSlb8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66AA4C433F1;
-	Thu,  7 Mar 2024 16:45:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1709829915;
-	bh=jxxknMt2uyiAxMDOvBrYg92hTC4bK3O5IyG3V1Kaq/c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=e3FRSlb8M1qg21a1FOKSGlsVk/ZW7Ea+ktipGMWT2MGPoCYmAoSu0eEcQOHv7580v
-	 gyLuzNXAzBpOgw58Fv8b3nq0c4AGUP6KzgFn9gaWI0VLIqJlWnXGbTD5PPCEQw8O3q
-	 KUZXold7/UyL2smD4mZS/dVM2Q5mEKtqQg/g+h9k=
-Date: Thu, 7 Mar 2024 16:45:13 +0000
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Hardik Gajjar <hgajjar@de.adit-jv.com>
-Cc: quic_kriskura@quicinc.com, maze@google.com, quic_linyyuan@quicinc.com,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	guofeng.li@gm.com, hardik.gajjar@bosch.com, eugeniu.rosca@bosch.com
-Subject: Re: [PATCH] usb: gadget: f_ncm: Fix Kernel Panic due to access of
- invalid gadget ptr
-Message-ID: <2024030736-racism-cornflake-63e9@gregkh>
-References: <20240307161849.9145-1-hgajjar@de.adit-jv.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=BcCOZancUywRkpygTUaojrxWLD2WNkul7HaE849gHrBNOBb2WhpwZIZVNOaLWVqlqBIaefCnFMBw4hXPxskfi6YadXI+/WFLkxgV3Ol+QS+0r6hEkHovfjBoeAAR1DNxf+e8K4b/6Z9m0bTzDmLgsR3/cukt+n8lltZuqk/F39w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1riGyO-00019r-AR; Thu, 07 Mar 2024 17:52:00 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1riGyN-004yht-Qw; Thu, 07 Mar 2024 17:51:59 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1riGyN-001PCL-2O;
+	Thu, 07 Mar 2024 17:51:59 +0100
+Date: Thu, 7 Mar 2024 17:51:59 +0100
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: Colin Ian King <colin.i.king@gmail.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH][next] usb: gadget: net2272: remove redundant variable
+ irqflags
+Message-ID: <mywsgq453muhggv5y7pfrsg7zrodtuebcpo5rbc4kus5h2ameo@fhnpemjuntaz>
+References: <20240307105135.1981060-1-colin.i.king@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="gewgcxuilb6kaoqd"
 Content-Disposition: inline
-In-Reply-To: <20240307161849.9145-1-hgajjar@de.adit-jv.com>
+In-Reply-To: <20240307105135.1981060-1-colin.i.king@gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
-On Thu, Mar 07, 2024 at 05:18:49PM +0100, Hardik Gajjar wrote:
-> In the scenario where the system enters suspend to RAM mode (STR) triggers
-> the disconnection of Dual Role USB Hub, and the UDC platform driver calls
-> usb_del_gadget_udc() to cleanup and delete the associated gadget.
-> 
-> However, at this point, the usb0 interface is not yet deleted, leading to
-> a race condition with the TCP/IP stack attempting to access the network
-> device parent (gadget pointer), through operations like the GETLINK net
-> message.
-> 
-> This patch addresses the issue by clearing the netdevice's parent device
-> pointer when the ncm unbinds, effectively preventing the race condition
-> during this critical phase.
-> 
-> Followinfg is the backtrace of such race condition
-> [ 3566.105792] Call trace:
-> [ 3566.105984] if_nlmsg_size+0x48/0x3b0
-> [ 3566.107497] rtnetlink_rcv_msg+0x1cc/0x408
-> [ 3566.107905] netlink_rcv_skb+0x12c/0x164
-> [ 3566.108264] rtnetlink_rcv+0x18/0x24
-> [ 3566.108851] netlink_unicast_kernel+0xc4/0x14c
-> [ 3566.109192] netlink_unicast+0x210/0x2b0
-> [ 3566.109606] netlink_sendmsg+0x2ec/0x360
-> [ 3566.110046] __sys_sendto+0x1b8/0x25c
-> [ 3566.111594] __arm64_sys_sendto+0x28/0x38
-> [ 3566.112599] el0_svc_common+0xb4/0x19c
-> [ 3566.112978] el0_svc_handler+0x74/0x98
-> [ 3566.113269] el0_svc+0x8/0xc
-> 
-> - code: if_nlmsg_size call the following function
-> 
-> static inline int rtnl_vfinfo_size(const struct net_device *dev,
-> 				   u32 ext_filter_mask)
-> {
-> 	// dev->dev.parent is not NULL
-> 	if (dev->dev.parent && (ext_filter_mask & RTEXT_FILTER_VF)) {
-> 		// dev_num_vf use the dev->dev.parent->bus lead to kernel panic.
-> 		int num_vfs = dev_num_vf(dev->dev.parent);
-> 		size_t size = nla_total_size(0);
-> 		size += num_vfs *
-> 			(nla_total_size(0) +
-> 			 nla_total_size(sizeof(struct ifla_vf_mac)) +
-> 			 nla_total_size(sizeof(struct ifla_vf_vlan)) +
-> 			 nla_total_size(0) + /* nest IFLA_VF_VLAN_LIST *
-> 
-> Signed-off-by: Hardik Gajjar <hgajjar@de.adit-jv.com>
-> ---
->  drivers/usb/gadget/function/f_ncm.c | 7 +++++++
->  1 file changed, 7 insertions(+)
 
-What commit id does this fix?
+--gewgcxuilb6kaoqd
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-thanks,
+On Thu, Mar 07, 2024 at 10:51:35AM +0000, Colin Ian King wrote:
+> The variable irqflags is being initialized and being bit-or'd with
+> values but it is never read afterwards. The variable is redundant
+> and can be removed.
+>=20
+> Cleans up clang scan build warning:
+> drivers/usb/gadget/udc/net2272.c:2610:15: warning: variable 'irqflags'
+> set but not used [-Wunused-but-set-variable]
+>=20
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 
-greg k-h
+this "problem" exists since the driver was introduced in commit
+ceb80363b2ec ("USB: net2272: driver for PLX NET2272 USB device
+controller"). Might be worth a Fixes: line.
+
+I wonder if the better fix would be:
+
+diff --git a/drivers/usb/gadget/udc/net2272.c b/drivers/usb/gadget/udc/net2=
+272.c
+index 12e76bb62c20..19bbc38f3d35 100644
+--- a/drivers/usb/gadget/udc/net2272.c
++++ b/drivers/usb/gadget/udc/net2272.c
+@@ -2650,7 +2650,7 @@ net2272_plat_probe(struct platform_device *pdev)
+ 		goto err_req;
+ 	}
+=20
+-	ret =3D net2272_probe_fin(dev, IRQF_TRIGGER_LOW);
++	ret =3D net2272_probe_fin(dev, irqflags);
+ 	if (ret)
+ 		goto err_io;
+=20
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--gewgcxuilb6kaoqd
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmXp8K4ACgkQj4D7WH0S
+/k726wgApuSl5j8yqZxfz0r/ljO+iYK/Mkfds9vddxUBRxPq16H/WB7iqdlAAj6L
+Z3+ZTxiXgsExqYh+ZEeU4lKwHa8DYotgoQZOxkANsqjJBIK+JQoDj73w+UvraCEv
+sGi0Uv606kD8zV1Nb8pYq5O9n8G24XWwH9f1y96zKlt+IAnwLnDrq0D8d6SfIfd4
+VJFvrVTl2oNsWky9RS74vRfGEkc2H9R3UrwRRyD1Sv2PpZOpyKJKru621qHw1kv/
++aPOIxHEty7nTu87lQJZ1RwRX7rmwYwqlPChOoL6hLD4KM1fkcsihbGqSr/3pMqz
+EKbgDXH/dFyvvnrWghAoTkEkjujmmQ==
+=8zp0
+-----END PGP SIGNATURE-----
+
+--gewgcxuilb6kaoqd--
 
