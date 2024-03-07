@@ -1,96 +1,116 @@
-Return-Path: <linux-usb+bounces-7692-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7693-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 515E6875620
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Mar 2024 19:31:24 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D6D687563D
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Mar 2024 19:43:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E59AF1F23F6E
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Mar 2024 18:31:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AAF2DB23DB5
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Mar 2024 18:43:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6282131E2F;
-	Thu,  7 Mar 2024 18:31:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97B2E1353F9;
+	Thu,  7 Mar 2024 18:42:58 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id CC0E31CA9A
-	for <linux-usb@vger.kernel.org>; Thu,  7 Mar 2024 18:31:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with SMTP id 20B9A1E4A2
+	for <linux-usb@vger.kernel.org>; Thu,  7 Mar 2024 18:42:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709836271; cv=none; b=sqxyA7/DwozFmnzDMtDW+uWdxmzbYmRDjhwXQEWhKChPXl5MZMcXk5sfD4aicyvOTG7fEyGB/TD7g5gDED6hM6hLgbgYxJbhj63ZyCK7Oxt7S09I8J/nrstZkZGBe9U3Mm35x1bX8GVKat65B9L3goGtquKTuaRf4xLwz66FHoA=
+	t=1709836978; cv=none; b=QqPpVzutSdCko6kj/rZ0UTeYzJS/P94pJXVa5T6lBTdEw9F911i7RvLx6qxeGAI9W5Fk0Na/7N6i4oqiYMtPbX6zh2y+3IhBxB5JKHISIy/B9a3NY5TYqcsp+boNEr4Tg/sEVs4CL80WFbLH2OtuVbxuwjUkX/91kALNYPO4xnk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709836271; c=relaxed/simple;
-	bh=0ZoTdFgjgoaNOj1z3j65pqp/ccOZVO6NBa1Y6kLfHH4=;
+	s=arc-20240116; t=1709836978; c=relaxed/simple;
+	bh=MTvwfxmTyM79R2y6PoopPD/AeBFc8u0r4vdurAjyuhY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=p0JWGKnaZY1sNVE2rCL01gfdGOPDDH8/8md2VWFBew/y1GqnjbbZqzuWjJJtCa270tLb7AxvQQ6D3WpJo3OTmZZmrXDbvFpggfvSm8D3C84lvyQN4TqFkCF2zVQoCQDTj7F3vxysx+J1LkURdCgmcVeCXQPn+7NPsYOEW4DcOPM=
+	 Content-Type:Content-Disposition:In-Reply-To; b=OfUGdJQTQgm10W3LRK18XFYsjuitIN41G8naqfiWf6B02ngwunxuNVescX/Szv1EZpXxQZT8aaXCjGq8QBp1cq+aZBXXEWOt5NItv4WmTHNirunMO6O/uMHdoCAPPp6AndsZ/Uv3F2DswtPwYw7NCvW3t849jnwuwo4ets1LPk0=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
-Received: (qmail 227973 invoked by uid 1000); 7 Mar 2024 13:31:07 -0500
-Date: Thu, 7 Mar 2024 13:31:07 -0500
+Received: (qmail 228290 invoked by uid 1000); 7 Mar 2024 13:42:55 -0500
+Date: Thu, 7 Mar 2024 13:42:55 -0500
 From: Alan Stern <stern@rowland.harvard.edu>
-To: Colin Ian King <colin.i.king@gmail.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-  Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
-  Roy Huang <roy.huang@analog.com>, Ash Aziz <ash.aziz@plxtech.com>,
-  Mike Frysinger <vapier@gentoo.org>, Seth Levy <seth.levy@plxtech.com>,
-  linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org,
+To: Dingyan Li <18500469033@163.com>
+Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
   linux-kernel@vger.kernel.org
-Subject: Re: [PATCH][next][V2] usb: gadget: net2272: Use irqflags in the call
- to net2272_probe_fin
-Message-ID: <668a1a8b-925f-4baa-a443-a84b9cd854c1@rowland.harvard.edu>
-References: <20240307181734.2034407-1-colin.i.king@gmail.com>
+Subject: Re: [PATCH] USB: Use EHCI control transfer pid macros instead of
+ constant values.
+Message-ID: <1e7f57d6-a4c1-4a3d-8cff-f966c89a8140@rowland.harvard.edu>
+References: <20240307173159.318384-1-18500469033@163.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240307181734.2034407-1-colin.i.king@gmail.com>
+In-Reply-To: <20240307173159.318384-1-18500469033@163.com>
 
-On Thu, Mar 07, 2024 at 06:17:34PM +0000, Colin Ian King wrote:
-> Currently the variable irqflags is being set but is not being used,
-> it appears it should be used in the call to net2272_probe_fin
-> rather than IRQF_TRIGGER_LOW being used. Kudos to Uwe Kleine-König
-> for suggesting the fix.
+On Fri, Mar 08, 2024 at 01:31:59AM +0800, Dingyan Li wrote:
+> Macros with good names offer better readability. Besides, also move
+> the definition to ehci.h.
 > 
-> Cleans up clang scan build warning:
-> drivers/usb/gadget/udc/net2272.c:2610:15: warning: variable 'irqflags'
-> set but not used [-Wunused-but-set-variable]
-> 
-> Fixes: ceb80363b2ec ("USB: net2272: driver for PLX NET2272 USB device controller")
-> 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-
+> Signed-off-by: Dingyan Li <18500469033@163.com>
 > ---
+
+Good idea, but you missed a few spots.
+
+>  drivers/usb/host/ehci-q.c | 10 +++-------
+>  drivers/usb/host/ehci.h   |  8 +++++++-
+>  2 files changed, 10 insertions(+), 8 deletions(-)
 > 
-> V2: don't remove irqflags but instead use it in the call to net2272_probe_fin
-> 
-> ---
->  drivers/usb/gadget/udc/net2272.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/gadget/udc/net2272.c b/drivers/usb/gadget/udc/net2272.c
-> index 12e76bb62c20..19bbc38f3d35 100644
-> --- a/drivers/usb/gadget/udc/net2272.c
-> +++ b/drivers/usb/gadget/udc/net2272.c
-> @@ -2650,7 +2650,7 @@ net2272_plat_probe(struct platform_device *pdev)
->  		goto err_req;
+> diff --git a/drivers/usb/host/ehci-q.c b/drivers/usb/host/ehci-q.c
+> index 666f5c4db25a..51b46001e344 100644
+> --- a/drivers/usb/host/ehci-q.c
+> +++ b/drivers/usb/host/ehci-q.c
+> @@ -27,10 +27,6 @@
+>  
+>  /*-------------------------------------------------------------------------*/
+>  
+> -/* PID Codes that are used here, from EHCI specification, Table 3-16. */
+> -#define PID_CODE_IN    1
+> -#define PID_CODE_SETUP 2
+> -
+>  /* fill a qtd, returning how much of the buffer we were able to queue up */
+>  
+>  static unsigned int
+> @@ -230,7 +226,7 @@ static int qtd_copy_status (
+>  			/* fs/ls interrupt xfer missed the complete-split */
+>  			status = -EPROTO;
+>  		} else if (token & QTD_STS_DBE) {
+> -			status = (QTD_PID (token) == 1) /* IN ? */
+> +			status = (QTD_PID(token) == PID_CODE_IN) /* IN ? */
+>  				? -ENOSR  /* hc couldn't read data */
+>  				: -ECOMM; /* hc couldn't write data */
+>  		} else if (token & QTD_STS_XACT) {
+> @@ -606,7 +602,7 @@ qh_urb_transaction (
+>  		/* SETUP pid */
+>  		qtd_fill(ehci, qtd, urb->setup_dma,
+>  				sizeof (struct usb_ctrlrequest),
+> -				token | (2 /* "setup" */ << 8), 8);
+> +				token | (PID_CODE_SETUP << 8), 8);
+>  
+>  		/* ... and always at least one more pid */
+>  		token ^= QTD_TOGGLE;
+
+There is an occurrence on line 623.
+
+> @@ -642,7 +638,7 @@ qh_urb_transaction (
 >  	}
 >  
-> -	ret = net2272_probe_fin(dev, IRQF_TRIGGER_LOW);
-> +	ret = net2272_probe_fin(dev, irqflags);
->  	if (ret)
->  		goto err_io;
+>  	if (is_input)
+> -		token |= (1 /* "in" */ << 8);
+> +		token |= (PID_CODE_IN << 8);
+>  	/* else it's already initted to "out" pid (0 << 8) */
 >  
-> -- 
-> 2.39.2
-> 
-> 
+>  	maxpacket = usb_endpoint_maxp(&urb->ep->desc);
+
+You could use PID_CODE_IN on lines 712 and 1232.
+
+There are occurrences on lines 1206, 1219.
+
+Also, there's a bunch of "switch" cases near line 433 in ehci-dbg.c.
+
+Alan Stern
 
