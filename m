@@ -1,50 +1,50 @@
-Return-Path: <linux-usb+bounces-7671-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7672-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3CEA987523C
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Mar 2024 15:47:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 15904875249
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Mar 2024 15:50:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E73F91F27CC5
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Mar 2024 14:47:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C758D1F21835
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Mar 2024 14:50:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B25141EB2F;
-	Thu,  7 Mar 2024 14:47:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D912112E1D1;
+	Thu,  7 Mar 2024 14:50:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="BwetML2N"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="i8djEudV"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 035F81E866;
-	Thu,  7 Mar 2024 14:47:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 003CC5B1FD;
+	Thu,  7 Mar 2024 14:50:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709822849; cv=none; b=CzhSNNu3G//HmmsL+vKxnMi1gLBYw3FYE0fix9zBlL4ZDuE8r2TLiTg10g6vaH/7LXTrHK07LVbGqkX6ZsMzkhaT45+qX9qajyTJELNHEOcgW0NbEPZB8MlVl0Q3xhu6ffeEp64eRLf3oNwwVG2nFxo3tVgmi2dpNig0Gd4YVgI=
+	t=1709823026; cv=none; b=APvAgHFjlWyDNCU4ib8UEj2j9D4ysFBTxG/ed3OWRZIfGSNlJExM9cW7c17pnqGzJzvhfJ77Vi4RhXOCFamSqjPJW/6JwJoz1fC/6uyni30fbKAgsV2PDt5EEWDKb/L5V2XK6Ew3BNzHr/Qw6hAhvprDR8s4I2DjmjelguZnFik=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709822849; c=relaxed/simple;
-	bh=Km2LqwgcdVVDZyJtk6ImV9GP5lvaIR2i3Xbk0PN+jYk=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:To:From:Subject:
-	 References:In-Reply-To; b=NMTn4I05fLl8FugjmNKC9nFibK8FEkZYPIzvJqKJ08x/jqnMnhChHMy4XshVfRv2Q/CSSQssmeWG4qlIBFMsE+GbWC+7ps6zb2fpVYdcsl0Tfa2gcLO4cggqMp1BSzd2Zh9nMgf4xZde2+tCWlRjfckBUYu7BEs6Z5du0uwiXrE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=BwetML2N; arc=none smtp.client-ip=217.70.183.197
+	s=arc-20240116; t=1709823026; c=relaxed/simple;
+	bh=bMgcq8RI+0U/9suH2RY7GnPRGcioM+SwL8B1CFmqRKI=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:Subject:Cc:To:
+	 References:In-Reply-To; b=WAVBL5r1Gf4hcMiZr/94v0v9dzBqN/WRox3NW0z7TYY84D3yQ7tp0yWNUnn1wEN7wyjlFFY0SqkUdQqskJhHBG0CwCmgF4K86fkbu1pLIJgtO9CLHsLOXQWiR0++fPs0SuHTY6SCpj3oVq7gSDO9GE1o1aorqb02pNHHyYhZLLs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=i8djEudV; arc=none smtp.client-ip=217.70.183.196
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 4A8681C000C;
-	Thu,  7 Mar 2024 14:47:22 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 80720E000E;
+	Thu,  7 Mar 2024 14:50:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1709822843;
+	t=1709823022;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Km2LqwgcdVVDZyJtk6ImV9GP5lvaIR2i3Xbk0PN+jYk=;
-	b=BwetML2Nvuxg3humKkkGofoQSPzBvCFAr3106R7KsRbVuH95a8R3iv32qZfqvW3hP1N/bU
-	QftFWxf0kZmTZqAZ14iNng5XmOj46xH7JwF1PGrUQXPa3PRbxTA2yviKPDqxdZIjgAVf6d
-	vgwGwNsamireV7q6t9GjpudPj18/oW6Oo2W70U0MFchAZT1FkTYS4cwnBsyqfurtg5u+fO
-	tpONToan2coljFio+GwUqS/Lckl7HhAbEy6XGEobh52HN67rkgo7C3/mNmSEwDAuIaMzUu
-	zB2kqhqRXi29lyzlGSoeDhfcBpyuk0MNtUtJ4fA9+YGQ1b73Osi+lT56zb5Vpw==
+	bh=5Np8Esugsr9ZGR7h4Wh+XY5vmJlU7fOGNOduAjb30l0=;
+	b=i8djEudVbUI2ZCGYHvGBtxY00fhEPP/loSQiIlYzcojCGeisT56oYNXXRffq8XtzR/cMoB
+	fPzYUv64iAnrQyLRhVWIpHHVq9nlmg/ubisuFkgTzmnbCm+xuRjPwrb+5Lnl+gV7gIP9Ne
+	E7w7p0jqTFsxRna6XOm6NG0khpDFjY7ehRu7VgHIIy4CleCY652a0Z8n8GOouf7rfU0yKF
+	uRfSaxBxrQKTnZfldzs3GTZM3jLFFC4mPXBgH970EYSifusoqpWTgiAZbI7aRlWhVTtx3o
+	QCQZX0aCv7cCE3iv/Kq362a9icYAN1tIEXJAE+CVOfDwnZg0RYWDtkbsoknnRA==
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -53,47 +53,75 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 07 Mar 2024 15:47:21 +0100
-Message-Id: <CZNLM1VYID7L.1PVM0H06E6TBO@bootlin.com>
-Cc: "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>,
+Date: Thu, 07 Mar 2024 15:50:21 +0100
+Message-Id: <CZNLOCAIE6P7.1BJ23DWJPCSHS@bootlin.com>
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Subject: Re: [PATCH v4 2/9] dt-bindings: usb: ti,j721e-usb: add ti,j7200-usb
+ compatible
+Cc: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, "Krzysztof Kozlowski"
+ <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley" <conor+dt@kernel.org>,
+ "Roger Quadros" <rogerq@kernel.org>, "Peter Chen" <peter.chen@kernel.org>,
+ "Pawel Laszczak" <pawell@cadence.com>, "Nishanth Menon" <nm@ti.com>,
+ "Vignesh Raghavendra" <vigneshr@ti.com>, "Tero Kristo" <kristo@kernel.org>,
+ "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>,
  =?utf-8?q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>, "Kevin
  Hilman" <khilman@kernel.org>, "Alan Stern" <stern@rowland.harvard.edu>,
  <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
  <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
-To: "Roger Quadros" <rogerq@kernel.org>, "Greg Kroah-Hartman"
- <gregkh@linuxfoundation.org>, "Rob Herring" <robh+dt@kernel.org>,
- "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley"
- <conor+dt@kernel.org>, "Peter Chen" <peter.chen@kernel.org>, "Pawel
- Laszczak" <pawell@cadence.com>, "Nishanth Menon" <nm@ti.com>, "Vignesh
- Raghavendra" <vigneshr@ti.com>, "Tero Kristo" <kristo@kernel.org>
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Subject: Re: [PATCH v4 5/9] usb: cdns3-ti: pass auxdata from match data to
- of_platform_populate()
+To: "Rob Herring" <robh@kernel.org>
 X-Mailer: aerc 0.15.2
 References: <20240307-j7200-usb-suspend-v4-0-5ec7615431f3@bootlin.com>
- <20240307-j7200-usb-suspend-v4-5-5ec7615431f3@bootlin.com>
- <bc361325-1510-4fe0-a7ee-bc5be0a1b4cc@kernel.org>
-In-Reply-To: <bc361325-1510-4fe0-a7ee-bc5be0a1b4cc@kernel.org>
+ <20240307-j7200-usb-suspend-v4-2-5ec7615431f3@bootlin.com>
+ <20240307142159.GA2542409-robh@kernel.org>
+In-Reply-To: <20240307142159.GA2542409-robh@kernel.org>
 X-GND-Sasl: theo.lebrun@bootlin.com
 
-Hello,
+Hello Rob,
 
-On Thu Mar 7, 2024 at 1:38 PM CET, Roger Quadros wrote:
->
->
-> On 07/03/2024 11:55, Th=C3=A9o Lebrun wrote:
-> > Allow compatible to pick auxdata given to child platform devices.
+On Thu Mar 7, 2024 at 3:21 PM CET, Rob Herring wrote:
+> On Thu, Mar 07, 2024 at 10:55:03AM +0100, Th=C3=A9o Lebrun wrote:
+> > On J7200, the controller & its wrapper are reset on resume. It has the
+> > same behavior as ti,j721e-usb with a different SoC integration.
 > >=20
-> > No compatible exploits this functionality, just yet.
+> > Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
+> > ---
+> >  Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml | 3 +++
+> >  1 file changed, 3 insertions(+)
 > >=20
+> > diff --git a/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml b/=
+Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
+> > index 653a89586f4e..e8f7e7511483 100644
+> > --- a/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
+> > +++ b/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
+> > @@ -16,6 +16,9 @@ properties:
+> >        - items:
+> >            - const: ti,am64-usb
+> >            - const: ti,j721e-usb
+> > +      - items:
+> > +          - const: ti,j7200-usb
+> > +          - const: ti,j721e-usb
 >
-> This patch could be merged with Patch 7 so we know exactly how auxdata
-> is used?
+> Combine this with the previous entry:
+>
+> items:
+>   - enum:
+>       - ti,am64-usb
+>       - ti,j7200-usb
+>   - const: ti,j721e-usb
 
-Indeed. I liked splitting. Previous revision had it as a single patch.
-I can revert.
+Makes sense, will do. Full block will become:
 
-Regards,
+	properties:
+	  compatible:
+	    oneOf:
+	      - const: ti,j721e-usb
+	      - items:
+	          - enum:
+	              - const: ti,am64-usb
+	              - const: ti,j7200-usb
+	          - const: ti,j721e-usb
+
+Thanks,
 
 --
 Th=C3=A9o Lebrun, Bootlin
