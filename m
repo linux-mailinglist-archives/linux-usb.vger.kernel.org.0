@@ -1,243 +1,170 @@
-Return-Path: <linux-usb+bounces-7646-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7647-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 76320874B35
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Mar 2024 10:46:42 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3415A874B6A
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Mar 2024 10:55:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 82BBCB21E1B
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Mar 2024 09:46:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B7C691F28561
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Mar 2024 09:55:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E137684FB9;
-	Thu,  7 Mar 2024 09:46:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CCDB85274;
+	Thu,  7 Mar 2024 09:55:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="k/yUmt4K"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3DB984FB7
-	for <linux-usb@vger.kernel.org>; Thu,  7 Mar 2024 09:46:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62D5484FCE;
+	Thu,  7 Mar 2024 09:55:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709804792; cv=none; b=KZ6xkQ/lPHu8P1WjefkLgrla2/ddZNSYRGqLM5k9WNmJwWNhlazHTWWaoaeEiCREs41jkKyFJ9ZeREdq9mT7WV8lgOnwn+hrxL2xq1wqDtSDDy60m4vMUmnRETorrnG3kd7aazIxkvSf6XZqzMm7PozGpK4vB5PLRpOSVQW4E04=
+	t=1709805319; cv=none; b=HaVTHdriEJTGP8yq/h0sX4WJHBgegpPblw0jZEgkgvX0zhPL9n34TqlHj+pZB+xNXbodtNKoO6edk8dwvEGRLy/LLQZpzWufOE+79tpOZIuuN9cisTNgtvkDRfS+mEyNUxWCCX9iEFTUvewkzqxSMPbskGzl50AlgMsQRLPsUlU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709804792; c=relaxed/simple;
-	bh=wmbWd6x+OjGeqEW39eS7Q3JfTpXKvNC6d/RLscj6RgE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Hb83tS4d3j+Z8A53rmEopbT6Gfbz35DYTGv3s7PRaKxOHNRV0lGu8rGOTuMYX9f7U+GxDAjXYp4U9GRY1hz8wvbpfe+ro7FNxG6ufJ1EF87u60YMU3skU/WkxxM7UmMp5S+CwmHFBvwKp1Ygsdgk+NNK8shaCM/eUyJ6LmnAO0s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1riAKS-0002L8-Ue; Thu, 07 Mar 2024 10:46:20 +0100
-Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1riAKR-004uji-0B; Thu, 07 Mar 2024 10:46:19 +0100
-Received: from mfe by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1riAKQ-006MWO-2u;
-	Thu, 07 Mar 2024 10:46:18 +0100
-Date: Thu, 7 Mar 2024 10:46:18 +0100
-From: Marco Felsch <m.felsch@pengutronix.de>
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: devicetree@vger.kernel.org, conor+dt@kernel.org, kernel@pengutronix.de,
-	gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, linux@roeck-us.net,
-	jun.li@nxp.com
-Subject: Re: [PATCH v3 4/4] usb: typec: tcpci: add support to set connector
- orientation
-Message-ID: <20240307094618.b3yhzlq4y6y6qfqf@pengutronix.de>
-References: <20240222210903.208901-1-m.felsch@pengutronix.de>
- <20240222210903.208901-5-m.felsch@pengutronix.de>
- <ZdxII9W/CBx76Xai@kuha.fi.intel.com>
- <20240226122701.inqpodm6mdfxwjo2@pengutronix.de>
+	s=arc-20240116; t=1709805319; c=relaxed/simple;
+	bh=GX4KTVPwu7/sM0ebVF3+c9yx37JZf8jPLcPRgBdmNTE=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=D3ji6phbQLlZZ3iEJxrU+qPH3UD9l4yaG1GxWPvSROJ6wyB94oCRkqfIpdXLjHICxat8RdOs53t8tTri3q+DbtOSq5yYMp5SN1th7J+/fVHAAVtO4R9R6ViiG5v1ZjWM5JcyQZeHV0MB00z78bdMHvXCXuUIuxrnHBQaLJUZ67s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=k/yUmt4K; arc=none smtp.client-ip=217.70.183.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C43F81C000D;
+	Thu,  7 Mar 2024 09:55:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1709805309;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=FrpwCNaPpyNVsE9fXv374zUizJeKHMMetWPo1eTKKX8=;
+	b=k/yUmt4KXSwbxveB9wpW16SJznSJ9mRn6kLa8aaHoW4mozDs/f0A5uTGDym04VWj41AMI3
+	rzF0rmTpqAKPJMNXffFVGi33HJ5K44JM1ZB5JNFnKMIFUthFq2GklqZfFblwxSJNhjFX8H
+	DLxcvcS6cS+z/SfdE5fgP/vMtJ6/GMnYJRFZo5vceWJZYJPuZ7k75JqxzLe6eT7ywuRsdP
+	lrlZMbPuv/KDqSzoH2hURhAHMtpc9u1V54PYCrby7e+hrmZC8sTZNEWJepZG4x478cGi3D
+	4FUrENZksqXUPl5MJt7tuH3BqXRCl0pthrQc5Ka3g3DEWLrgDdxzgUFyEDfkmw==
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Subject: [PATCH v4 0/9] usb: cdns: fix suspend on J7200 by assuming
+ reset-on-resume
+Date: Thu, 07 Mar 2024 10:55:01 +0100
+Message-Id: <20240307-j7200-usb-suspend-v4-0-5ec7615431f3@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240226122701.inqpodm6mdfxwjo2@pengutronix.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAPaO6WUC/33OSwrCMBCA4atI1kbmEWl15T3ERZpONaJNadqil
+ N7dVBAUxeU/MN/MqKK0XqLaLkbVyuCjD3UKs1wod7L1UbQvUysCYkRkfc4IQPex0LGPjdSlJmu
+ yiihHAaPSXtNK5W9Pc39IffKxC+39eWLAefpPG1CDtiWKZGhyXrtdEUJ38fXKhauavYHeDIJfB
+ iUDOHeZGMtlZb4NfhkGiH7+wckoDLpNvmGLDJ/GNE0PLxdAZDwBAAA=
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Rob Herring <robh+dt@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Roger Quadros <rogerq@kernel.org>, 
+ Peter Chen <peter.chen@kernel.org>, Pawel Laszczak <pawell@cadence.com>, 
+ Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>, 
+ Tero Kristo <kristo@kernel.org>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ =?utf-8?q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>, 
+ Kevin Hilman <khilman@kernel.org>, Alan Stern <stern@rowland.harvard.edu>, 
+ linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+X-Mailer: b4 0.13.0
+X-GND-Sasl: theo.lebrun@bootlin.com
 
 Hi,
 
-gentle ping, since Greg started to pick the other patches.
+Here is a new revision of the J7200 USB suspend fix. It is currently
+broken on the platform, leading to a kernel panic at resume. Patches
+are tested on a J7200 evaluation board, both s2idle and suspend-to-RAM.
 
-On 24-02-26, Marco Felsch wrote:
-> Hi,
-> 
-> On 24-02-26, Heikki Krogerus wrote:
-> > On Thu, Feb 22, 2024 at 10:09:03PM +0100, Marco Felsch wrote:
-> > > This add the support to set the optional connector orientation bit which
-> > > is part of the optional CONFIG_STANDARD_OUTPUT register 0x18 [1]. This
-> > > allows system designers to connect the tcpc orientation pin directly to
-> > > the 2:1 ss-mux.
-> > > 
-> > > [1] https://www.usb.org/sites/default/files/documents/usb-port_controller_specification_rev2.0_v1.0_0.pdf
-> > > 
-> > > Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
-> > > ---
-> > > v3:
-> > > - no changes
-> > > v2:
-> > > - Make use of fallthrough 
-> > > 
-> > >  drivers/usb/typec/tcpm/tcpci.c | 44 ++++++++++++++++++++++++++++++++++
-> > >  include/linux/usb/tcpci.h      |  8 +++++++
-> > >  2 files changed, 52 insertions(+)
-> > > 
-> > > diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-> > > index 7118551827f6..73a52e7f95c2 100644
-> > > --- a/drivers/usb/typec/tcpm/tcpci.c
-> > > +++ b/drivers/usb/typec/tcpm/tcpci.c
-> > > @@ -67,6 +67,18 @@ static int tcpci_write16(struct tcpci *tcpci, unsigned int reg, u16 val)
-> > >  	return regmap_raw_write(tcpci->regmap, reg, &val, sizeof(u16));
-> > >  }
-> > >  
-> > > +static bool tcpci_check_std_output_cap(struct regmap *regmap, u8 mask)
-> > > +{
-> > > +	unsigned int reg;
-> > > +	int ret;
-> > > +
-> > > +	ret = regmap_read(regmap, TCPC_STD_OUTPUT_CAP, &reg);
-> > > +	if (ret < 0)
-> > > +		return ret;
-> > > +
-> > > +	return (reg & mask) == mask;
-> > > +}
-> > > +
-> > >  static int tcpci_set_cc(struct tcpc_dev *tcpc, enum typec_cc_status cc)
-> > >  {
-> > >  	struct tcpci *tcpci = tcpc_to_tcpci(tcpc);
-> > > @@ -301,6 +313,28 @@ static int tcpci_set_polarity(struct tcpc_dev *tcpc,
-> > >  			   TCPC_TCPC_CTRL_ORIENTATION : 0);
-> > >  }
-> > >  
-> > > +static int tcpci_set_orientation(struct tcpc_dev *tcpc,
-> > > +				 enum typec_orientation orientation)
-> > > +{
-> > > +	struct tcpci *tcpci = tcpc_to_tcpci(tcpc);
-> > > +	unsigned int reg;
-> > > +
-> > > +	switch (orientation) {
-> > > +	case TYPEC_ORIENTATION_NONE:
-> > > +		/* We can't put a single output into high impedance */
-> > > +		fallthrough;
-> > > +	case TYPEC_ORIENTATION_NORMAL:
-> > > +		reg = TCPC_CONFIG_STD_OUTPUT_ORIENTATION_NORMAL;
-> > > +		break;
-> > > +	case TYPEC_ORIENTATION_REVERSE:
-> > > +		reg = TCPC_CONFIG_STD_OUTPUT_ORIENTATION_FLIPPED;
-> > > +		break;
-> > > +	}
-> > > +
-> > > +	return regmap_update_bits(tcpci->regmap, TCPC_CONFIG_STD_OUTPUT,
-> > > +				  TCPC_CONFIG_STD_OUTPUT_ORIENTATION_MASK, reg);
-> > > +}
-> > > +
-> > >  static void tcpci_set_partner_usb_comm_capable(struct tcpc_dev *tcpc, bool capable)
-> > >  {
-> > >  	struct tcpci *tcpci = tcpc_to_tcpci(tcpc);
-> > > @@ -808,6 +842,9 @@ struct tcpci *tcpci_register_port(struct device *dev, struct tcpci_data *data)
-> > >  	if (tcpci->data->vbus_vsafe0v)
-> > >  		tcpci->tcpc.is_vbus_vsafe0v = tcpci_is_vbus_vsafe0v;
-> > >  
-> > > +	if (tcpci->data->set_orientation)
-> > > +		tcpci->tcpc.set_orientation = tcpci_set_orientation;
-> > 
-> > I don't think that flag is needed - not yet at least. Please just call
-> > tcpci_check_std_output_cap() directly from here.
-> 
-> The reason for having it this way was to not break exsisting user like:
-> tcpci_rt1711h, tcpci_mt6370, tcpci_maxim which may or may not implement
-> the TCPC_STD_OUTPUT_CAP_ORIENTATION. This way the users of
-> tcpci_register_port() can decide by on its own if they do have this
-> feature or not and how this is checked. I'm fine with your proposal if
-> you still think that we can check this unconditional.
-						      ^
-						      ?
+This revision only changes dt-bindings and DTS stuff. We fix the current
+situation (as discussed previously [0]) and add our J7200 compatible.
 
-Regards,
-  Marco
+Have a nice day,
+Théo
 
-> Regards,
->   Marco
-> 
-> > >  	err = tcpci_parse_config(tcpci);
-> > >  	if (err < 0)
-> > >  		return ERR_PTR(err);
-> > > @@ -851,6 +888,13 @@ static int tcpci_probe(struct i2c_client *client)
-> > >  	if (err < 0)
-> > >  		return err;
-> > >  
-> > > +	err = tcpci_check_std_output_cap(chip->data.regmap,
-> > > +					 TCPC_STD_OUTPUT_CAP_ORIENTATION);
-> > > +	if (err < 0)
-> > > +		return err;
-> > > +
-> > > +	chip->data.set_orientation = err;
-> > > +
-> > >  	chip->tcpci = tcpci_register_port(&client->dev, &chip->data);
-> > >  	if (IS_ERR(chip->tcpci))
-> > >  		return PTR_ERR(chip->tcpci);
-> > > diff --git a/include/linux/usb/tcpci.h b/include/linux/usb/tcpci.h
-> > > index 467e8045e9f8..f2bfb4250366 100644
-> > > --- a/include/linux/usb/tcpci.h
-> > > +++ b/include/linux/usb/tcpci.h
-> > > @@ -47,6 +47,9 @@
-> > >  #define TCPC_SINK_FAST_ROLE_SWAP	BIT(0)
-> > >  
-> > >  #define TCPC_CONFIG_STD_OUTPUT		0x18
-> > > +#define TCPC_CONFIG_STD_OUTPUT_ORIENTATION_MASK		BIT(0)
-> > > +#define TCPC_CONFIG_STD_OUTPUT_ORIENTATION_NORMAL	0
-> > > +#define TCPC_CONFIG_STD_OUTPUT_ORIENTATION_FLIPPED	1
-> > >  
-> > >  #define TCPC_TCPC_CTRL			0x19
-> > >  #define TCPC_TCPC_CTRL_ORIENTATION	BIT(0)
-> > > @@ -127,6 +130,7 @@
-> > >  #define TCPC_DEV_CAP_2			0x26
-> > >  #define TCPC_STD_INPUT_CAP		0x28
-> > >  #define TCPC_STD_OUTPUT_CAP		0x29
-> > > +#define TCPC_STD_OUTPUT_CAP_ORIENTATION	BIT(0)
-> > >  
-> > >  #define TCPC_MSG_HDR_INFO		0x2e
-> > >  #define TCPC_MSG_HDR_INFO_DATA_ROLE	BIT(3)
-> > > @@ -198,12 +202,16 @@ struct tcpci;
-> > >   *		Chip level drivers are expected to check for contaminant and call
-> > >   *		tcpm_clean_port when the port is clean to put the port back into
-> > >   *		toggling state.
-> > > + * @set_orientation:
-> > > + *		Optional; Enable setting the connector orientation
-> > > + *		CONFIG_STANDARD_OUTPUT (0x18) bit0.
-> > >   */
-> > >  struct tcpci_data {
-> > >  	struct regmap *regmap;
-> > >  	unsigned char TX_BUF_BYTE_x_hidden:1;
-> > >  	unsigned char auto_discharge_disconnect:1;
-> > >  	unsigned char vbus_vsafe0v:1;
-> > > +	unsigned char set_orientation:1;
-> > >  
-> > >  	int (*init)(struct tcpci *tcpci, struct tcpci_data *data);
-> > >  	int (*set_vconn)(struct tcpci *tcpci, struct tcpci_data *data,
-> > > -- 
-> > > 2.39.2
-> > 
-> > -- 
-> > heikki
-> > 
-> 
-> 
+[0]: https://lore.kernel.org/lkml/20240223-j7200-usb-suspend-v3-1-b41c9893a130@bootlin.com/
+
+--
+Théo Lebrun, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
+Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
+---
+Changes in v4:
+- dt-bindings: usb: ti,j721e-usb:
+  - Remove ti,am64-usb single compatible entry.
+  - Reverse ordering of compatible pair j721e + am64
+    (becoming am64 + j721e).
+  - Add j7200 + j721e compatible pair (versus only j7200). It is the
+    same thing as am64: only the integration differs with base j721e
+    compatible.
+  - NOT taking trailers from Conor as patches changed substantially.
+- arm64: dts: ti: j3-j7200:
+  - Use j7200 + j721e compatible pair (versus only j7200 previously).
+- arm64: dts: ti: j3-am64:
+  - Fix to use am64 + j721e compatible pair (versus only am64).
+    This is a new patch.
+- Link to v3: https://lore.kernel.org/r/20240223-j7200-usb-suspend-v3-0-b41c9893a130@bootlin.com
+
+Changes in v3:
+- dt-bindings: use an enum to list compatibles instead of the previous
+  odd construct. This is done in a separate patch from the one adding
+  J7200 compatible.
+- dt-bindings: dropped Acked-by Conor as the changes were modified a lot.
+- Add runtime PM back. Put the init sequence in ->runtime_resume(). It
+  gets called at probe for all compatibles and at resume for J7200.
+- Introduce a cdns_ti_match_data struct rather than rely on compatible
+  from code.
+- Reorder code changes. Add infrastructure based on match data THEN add
+  compatible and its match data.
+- DTSI: use only J7200 compatible rather than both J7200 then J721E.
+- Link to v2: https://lore.kernel.org/r/20231120-j7200-usb-suspend-v2-0-038c7e4a3df4@bootlin.com
+
+Changes in v2:
+- Remove runtime PM from cdns3-ti; it brings nothing. That means our
+  cdns3-ti suspend/resume patch is simpler; there is no need to handle
+  runtime PM at suspend/resume.
+- Do not add cdns3 host role suspend/resume callbacks; they are not
+  needed as core detects reset on resume & calls cdns_drd_host_on when
+  needed.
+- cdns3-ti: Move usb2_refclk_rate_code assignment closer to the value
+  computation.
+- cdns3/host.c: do not pass XHCI_SUSPEND_RESUME_CLKS quirk to xHCI; it
+  is unneeded on our platform.
+- Link to v1: https://lore.kernel.org/r/20231113-j7200-usb-suspend-v1-0-ad1ee714835c@bootlin.com
+
+---
+Théo Lebrun (9):
+      dt-bindings: usb: ti,j721e-usb: fix compatible list
+      dt-bindings: usb: ti,j721e-usb: add ti,j7200-usb compatible
+      usb: cdns3-ti: move reg writes from probe into ->runtime_resume()
+      usb: cdns3-ti: support reset-on-resume behavior
+      usb: cdns3-ti: pass auxdata from match data to of_platform_populate()
+      usb: cdns3: add quirk to platform data for reset-on-resume
+      usb: cdns3-ti: add J7200 support with reset-on-resume behavior
+      arm64: dts: ti: k3-j7200: use J7200-specific USB compatible
+      arm64: dts: ti: k3-am64: add USB fallback compatible to J721E
+
+ .../devicetree/bindings/usb/ti,j721e-usb.yaml      |   6 +-
+ arch/arm64/boot/dts/ti/k3-am64-main.dtsi           |   2 +-
+ arch/arm64/boot/dts/ti/k3-j7200-main.dtsi          |   2 +-
+ drivers/usb/cdns3/cdns3-ti.c                       | 125 ++++++++++++++++-----
+ drivers/usb/cdns3/core.h                           |   1 +
+ drivers/usb/cdns3/host.c                           |   3 +
+ 6 files changed, 105 insertions(+), 34 deletions(-)
+---
+base-commit: 1871c27e3539e5b812d50ec6ccad7567ec5414f2
+change-id: 20231113-j7200-usb-suspend-2a47f2281e04
+
+Best regards,
+-- 
+Théo Lebrun <theo.lebrun@bootlin.com>
+
 
