@@ -1,137 +1,106 @@
-Return-Path: <linux-usb+bounces-7689-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7690-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41FC9875579
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Mar 2024 18:46:44 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 39F708755E8
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Mar 2024 19:14:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6FF271C219D3
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Mar 2024 17:46:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CEA89B250DB
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Mar 2024 18:14:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1458130E53;
-	Thu,  7 Mar 2024 17:46:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2229A131E3C;
+	Thu,  7 Mar 2024 18:14:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OjoQWOFC"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cs+QXhVC"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE578130AE1;
-	Thu,  7 Mar 2024 17:46:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9832C21A14;
+	Thu,  7 Mar 2024 18:14:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709833596; cv=none; b=UzA5dfhd5EIjktpGjSOJA9I+gPn9SybDQlWVLU/pZwtAR+r0aQWqCV0VyZQhrb9l/ZNf5zwl6Cu8Di06y0fB59MAnEEHGF0WoGcOBnLnc/8/ZJKD/HuTOCiJ463a6bVHB0+/BOmMFirz2WvTeUsk1U74E0X1GMSFg34HDOXNm8s=
+	t=1709835264; cv=none; b=l3W66DUhhG23gX9HvngyqxP25KKl78tlzw2O4PFDcU20h5vWn59Jrubs4s7nCKuyCTSUlVbOlOh7bdpGJOPx1gba+2m+EBZbMykwpsfjPfOEh8Vric/raMoE4BPdn6IRlcc3Wgtp1Ng8JLejkdgxmcQDgmYqv3GrWFAnUWPy0PQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709833596; c=relaxed/simple;
-	bh=X59QqX4H8M/10w2nNvVyVuDtckeb/yTabVDkxTaENJU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Xt7ADROPT8UuUqZMe0DA4VGY5vmpenpVkWRzSWk+fTHbV0/upYDJ8pOQ0KWG1LudSXeAg4w4UVv0LfdsMASNjNMJ0gLAhqzwlO55Zq/Tc3SG28WVzkp8S1r/Q1EOYzsXx2dns5/Pet44CJgkD80HCkBW5hAu+owoW+L/+Lh6SI8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OjoQWOFC; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4131651709bso984445e9.2;
-        Thu, 07 Mar 2024 09:46:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709833593; x=1710438393; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zidrMVgwKZG7PoFFeaVJDkEIlmqOlMqbL//oQj2VMe0=;
-        b=OjoQWOFChxbSpB9AS+JZgmabKUD0mgFo+ChAO+Yfpu0O35hTzuRdEOxzoaqXqHuniD
-         Harn5wFv7i4/BePEsVOLT11XUv+MfTQBrG+A7DE5B+/F3QmGc4pJuE1xdXYkOvHdI5++
-         +j4y6+E9pzYwoq4DPaVMFOp5uBOcrfmPYLgGMcoGZczCPlkrVJTAbRtDHS7YK5WFnTjo
-         UT0azqA10Iw/frSF+dt+be3LcVUOg9BRT0PwUZR/v28+gg74hATTTiqphJygwu1FEsp9
-         p0D5kvOe5mZ1ct9IgSsSkRg7kvmN76w8YNHO9c8QqvMEet1rNYu7rtmtnPDBCSBAkfap
-         RXhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709833593; x=1710438393;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zidrMVgwKZG7PoFFeaVJDkEIlmqOlMqbL//oQj2VMe0=;
-        b=g2IDhh1alMPBc3xqFAD7TikRmgvPZDFajEhfrEM1TW9an4C+fC0cpNRNipNE7xUGtJ
-         Jx7YFA8NI2nQdqeRaSe+L1ltKIYFBnXBAQQO8h1owpcY3bhQfiNtaZz0HExqhLM8xk+b
-         Bl3NqolS6bwZw09NbvVd/Vm7tyf2lo+yPavxBE0zsqpjD4wWbkkLVx+2Hdz1nksxNtzJ
-         Ywi0oQEHNFqG4OrSugnpNwrUjt4zTkaDNojeAmtnCKULq/oXSxHQc42scylKsN9xAvQX
-         P/pAPKjrDUP6oZryZx440wGhA0zKeF1ED+7huRAg8agZ6LYfaAXRbt4crgGMHqwY4av+
-         mI9Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUiy+XYS+P8VdW+9eoebCYrHrd4SQ4meEDmNW85v/9hA+ootf00vaqJf8o4LFd5/pEUFHsP63LnESJdK79MmpgFapv/9Oi+MEwU462zWQD2RCrqwiiLHSB6Vw8pJvgJ2SQyUyeiv93fhqlpP5bBzGBuDbWQiGJi0WWAyPLVL70lAUtoYkxk3hP1
-X-Gm-Message-State: AOJu0YyPpIMEuocm2lq5VPRTBvGoT1n158GxFKV0XM3poSukqiNy7g0y
-	rErOmljzv+TMY7VVtIRt1LQ8fWbWpgxYb5Q6Z+TQHASCfCS9A1iY
-X-Google-Smtp-Source: AGHT+IHetAQpP5/ML/yXLg+SIqzs0WbSWPeIuCRA1d1fNHUAKAT9glKWnCfGjizvnc9rO6jrvLS/0A==
-X-Received: by 2002:a05:600c:46cd:b0:412:dcf0:991a with SMTP id q13-20020a05600c46cd00b00412dcf0991amr10169173wmo.12.1709833592771;
-        Thu, 07 Mar 2024 09:46:32 -0800 (PST)
-Received: from [192.168.0.101] (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.googlemail.com with ESMTPSA id n20-20020a05600c501400b00412ea92f1b4sm3473188wmr.19.2024.03.07.09.46.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Mar 2024 09:46:32 -0800 (PST)
-Message-ID: <7aab696f-6a4f-410d-9769-17fda28f5c4d@gmail.com>
-Date: Thu, 7 Mar 2024 17:46:31 +0000
+	s=arc-20240116; t=1709835264; c=relaxed/simple;
+	bh=20r6C0Cvk2VdqRyx6dy4WLmP4PSKivLliJzJpVzkc3w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lMBNrqOqYCZFkHO5XLyLCQossQA9H6NI4+EBY2Q2pkdDv3IUvQob2vhcJoJoUj0SNjFrLOo+44R40ENc8UtLHq4RravNAIhoHNEkm6uVxo99BydNxVS39RyQaNRNvrjHuyAFjM2C2ROF7R1aIXnlIsnXkyibTdxwaW8JO9zJe5o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cs+QXhVC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A811C433F1;
+	Thu,  7 Mar 2024 18:14:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709835263;
+	bh=20r6C0Cvk2VdqRyx6dy4WLmP4PSKivLliJzJpVzkc3w=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=cs+QXhVCvaUvmaJJagrBX8G3H66YXEauXPbPtHNyfeTIL3EQWQNAuCLK3rAiHzTtf
+	 3ShEATpHNFK7kiIkTINmOixb5t+i0E62nwaCmC39JF2K8cKNc0Ml7X+TXrxa8B6ikY
+	 a75GmnlVPt95bl1K6ov8c5EhWea0dyoVEfocHig1GxqmfwLBzMknpWrGtCNkXxtOWx
+	 OVXM2buDOanFKXzteFRcTWzl+4GL+6L9M5zxQnpdzZc0ZmpIwYCygLI68r6dLvlJnS
+	 SDOtBgQAV+MNcv7q6U/5RW1iWSyZFoiIAs2dIuxF13Ovq3ocH5EPURZrgGH7TjOC5J
+	 YblkwAqPUSxnA==
+Date: Thu, 7 Mar 2024 18:14:17 +0000
+From: Conor Dooley <conor@kernel.org>
+To: =?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Roger Quadros <rogerq@kernel.org>,
+	Peter Chen <peter.chen@kernel.org>,
+	Pawel Laszczak <pawell@cadence.com>, Nishanth Menon <nm@ti.com>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Tero Kristo <kristo@kernel.org>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	=?iso-8859-1?Q?Gr=E9gory?= Clement <gregory.clement@bootlin.com>,
+	Kevin Hilman <khilman@kernel.org>,
+	Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v4 1/9] dt-bindings: usb: ti,j721e-usb: fix compatible
+ list
+Message-ID: <20240307-suffering-skyrocket-3113838c5cdb@spud>
+References: <20240307-j7200-usb-suspend-v4-0-5ec7615431f3@bootlin.com>
+ <20240307-j7200-usb-suspend-v4-1-5ec7615431f3@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH][next] usb: gadget: net2272: remove redundant variable
- irqflags
-Content-Language: en-US
-To: Alan Stern <stern@rowland.harvard.edu>,
- =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20240307105135.1981060-1-colin.i.king@gmail.com>
- <mywsgq453muhggv5y7pfrsg7zrodtuebcpo5rbc4kus5h2ameo@fhnpemjuntaz>
- <2b318367-2428-44ba-b4d9-0a452fcb7858@rowland.harvard.edu>
-From: "Colin King (gmail)" <colin.i.king@gmail.com>
-In-Reply-To: <2b318367-2428-44ba-b4d9-0a452fcb7858@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="pqa1Qtm6gzddN83E"
+Content-Disposition: inline
+In-Reply-To: <20240307-j7200-usb-suspend-v4-1-5ec7615431f3@bootlin.com>
 
-On 07/03/2024 17:29, Alan Stern wrote:
-> On Thu, Mar 07, 2024 at 05:51:59PM +0100, Uwe Kleine-König wrote:
->> On Thu, Mar 07, 2024 at 10:51:35AM +0000, Colin Ian King wrote:
->>> The variable irqflags is being initialized and being bit-or'd with
->>> values but it is never read afterwards. The variable is redundant
->>> and can be removed.
->>>
->>> Cleans up clang scan build warning:
->>> drivers/usb/gadget/udc/net2272.c:2610:15: warning: variable 'irqflags'
->>> set but not used [-Wunused-but-set-variable]
->>>
->>> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
->>
->> this "problem" exists since the driver was introduced in commit
->> ceb80363b2ec ("USB: net2272: driver for PLX NET2272 USB device
->> controller"). Might be worth a Fixes: line.
->>
->> I wonder if the better fix would be:
->>
->> diff --git a/drivers/usb/gadget/udc/net2272.c b/drivers/usb/gadget/udc/net2272.c
->> index 12e76bb62c20..19bbc38f3d35 100644
->> --- a/drivers/usb/gadget/udc/net2272.c
->> +++ b/drivers/usb/gadget/udc/net2272.c
->> @@ -2650,7 +2650,7 @@ net2272_plat_probe(struct platform_device *pdev)
->>   		goto err_req;
->>   	}
->>   
->> -	ret = net2272_probe_fin(dev, IRQF_TRIGGER_LOW);
->> +	ret = net2272_probe_fin(dev, irqflags);
->>   	if (ret)
->>   		goto err_io;
-> 
-> I agree, that makes much more sense.
 
-OK, I'll send a V2, but I can't test it, so I suspect that is a risk, 
-but it is clearly wrong as it stands.
+--pqa1Qtm6gzddN83E
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Colin
+On Thu, Mar 07, 2024 at 10:55:02AM +0100, Th=E9o Lebrun wrote:
+> Compatible can be A or B+A, not A or B or A+B. B got added afterwards,
+> we want B+A not A+B. A=3Dti,j721e-usb and B=3Dti,am64-usb.
+>=20
+> Signed-off-by: Th=E9o Lebrun <theo.lebrun@bootlin.com>
 
-> 
-> Alan Stern
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
+Thanks for the update.
+
+--pqa1Qtm6gzddN83E
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZeoD+QAKCRB4tDGHoIJi
+0tLGAP9kEz0p6yt6oDzXTh6N/kxI8BPC+LKmUVTGAkNrmWqrOQEA23pMFGK5/FTa
+TmvNQFaaOGysW1lDv+SZEr8cxw1SCwc=
+=ZjoR
+-----END PGP SIGNATURE-----
+
+--pqa1Qtm6gzddN83E--
 
