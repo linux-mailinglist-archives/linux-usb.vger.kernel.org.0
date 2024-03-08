@@ -1,119 +1,88 @@
-Return-Path: <linux-usb+bounces-7737-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7738-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 951F88769ED
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Mar 2024 18:30:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id BB4EC876A81
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Mar 2024 19:09:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C6E4C1C21016
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Mar 2024 17:30:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EC4CA1C214C2
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Mar 2024 18:09:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 572FA381B8;
-	Fri,  8 Mar 2024 17:29:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="2jeLcoHp"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66E2C54792;
+	Fri,  8 Mar 2024 18:09:36 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADC9D28DAE;
-	Fri,  8 Mar 2024 17:29:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CD0E36D;
+	Fri,  8 Mar 2024 18:09:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709918986; cv=none; b=FB5XVOfwAilaoNEiu99X1xPKwDaCQvBOMlwXvZW17h2fTGRhkE5/yxUb5OUCc560+mEtXMMa+NGhkN5ehpLEHGqr4pdG711wb16GddB6N3yLee9z3PaUAlFpMhT40MSbp3jFQ/RrX+BmHoTI9vFt7hfVF5Ibct40KuGwIvvarro=
+	t=1709921376; cv=none; b=P524bAlty+5B4J4TN7ZA4Qjd2Wq6E//EaVFl9eGHE9qGKszT3l2khEILGZ+YFnum+EuDsCpBZqQdNT9wAN0SVQo7NeRkre8D6+6QDTtUtmH6uuOIXS0yocBk9BNkKeSCaRr+3nmsEEyujlk9/u1yTsiTr8hehu5SFoT03SwiYpY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709918986; c=relaxed/simple;
-	bh=iuKd7BJCZde3rcVymwHNOdzVrzk9Y9A/nmtw093sWLs=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Z20ZqBpN4p5Q/hkq3td9/FB8Vq4DyNhO/IXpRRBT0B1Vb5mNI+vG9bmwc+G0xS0fS6himSzDXbCrmnLs5gNQ7/cua4PpP3TcbqsVTpgtIspGW0KFsYa7aMMSbJ6PkL+x12uQts59Ojl1D200DbY6Qa2pYUUBl6x8ScM14txm2w0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=2jeLcoHp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B283AC433F1;
-	Fri,  8 Mar 2024 17:29:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1709918986;
-	bh=iuKd7BJCZde3rcVymwHNOdzVrzk9Y9A/nmtw093sWLs=;
-	h=Date:From:To:Cc:Subject:From;
-	b=2jeLcoHp/Hw7n2ScOxtQ53yPVWPgJ0G/T32fHwopai0qdXc5P9JMbRIAIxta2W+/8
-	 tg23Ig4WOzaG2acN392GnbSlsgf6xb9N0//+ogbt4Z+IyAMUGeMPbT403xfhQiuRwH
-	 Z+bhryRhefUz/+wXQQPYoc+fj38HgZLuU5DjSrPE=
-Date: Fri, 8 Mar 2024 17:29:43 +0000
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB/Thunderbolt driver fixes for 6.8-rc8
-Message-ID: <ZetLB2-_00QyZZJs@kroah.com>
+	s=arc-20240116; t=1709921376; c=relaxed/simple;
+	bh=aXymyymSYLuzBbeJcCp1m7Gd501leCKKmuIOTBAl+1A=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=VAjVMHNXhtajHya2pVXSofBlw7i3M++nAXsC6lUnM2+aL3zw0H351H0w7abKH0so5gWVuIGENgu1HDcts5NvhOCVkDMVKMNwQFx4uZ/LYpd9NT8Hc8/bmQ+Y4gqnxcyhWQyvDZkoOTrcR+oUE6+WRx9i9k04gG/OdKqHJ522ZqI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; arc=none smtp.client-ip=210.160.252.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
+X-IronPort-AV: E=Sophos;i="6.07,110,1708354800"; 
+   d="scan'208";a="196951375"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie5.idc.renesas.com with ESMTP; 09 Mar 2024 03:09:26 +0900
+Received: from localhost.localdomain (unknown [10.226.92.24])
+	by relmlir5.idc.renesas.com (Postfix) with ESMTP id DE49340138F8;
+	Sat,  9 Mar 2024 03:09:22 +0900 (JST)
+From: Biju Das <biju.das.jz@bp.renesas.com>
+To: Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Cc: Biju Das <biju.das.jz@bp.renesas.com>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+	linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+	Biju Das <biju.das.au@gmail.com>
+Subject: [PATCH 0/4] Fix USB pipe configuration for RZ/G2L
+Date: Fri,  8 Mar 2024 18:09:15 +0000
+Message-Id: <20240308180919.6603-1-biju.das.jz@bp.renesas.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-The following changes since commit d206a76d7d2726f3b096037f2079ce0bd3ba329b:
+The USBHS IP found on RZ/G2L SoCs only has 10 pipe buffers compared
+to 16 pipe buffers on RZ/A2M. Document renesas,rzg2l-usbhs family
+compatible to handle this difference for RZ/G2L family SoCs.
 
-  Linux 6.8-rc6 (2024-02-25 15:46:06 -0800)
+This patch series aims to fix the USB pipe configuration for RZ/G2L
+family SoCs.
 
-are available in the Git repository at:
+Biju Das (3):
+  dt-bindings: usb: renesas,usbhs: Document RZ/G2L family compatible
+  usb: renesas_usbhs: Remove trailing comma in the terminator entry for
+    OF table
+  arm64: dts: renesas: r9a07g0{43,44,54}: Update usbhs family compatible
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.8-rc8
+Huy Nguyen (1):
+  usb: renesas_usbhs: Update usbhs pipe configuration for RZ/G2L family
 
-for you to fetch changes up to b234c70fefa7532d34ebee104de64cc16f1b21e4:
+ .../bindings/usb/renesas,usbhs.yaml           |  6 +++-
+ arch/arm64/boot/dts/renesas/r9a07g043.dtsi    |  2 +-
+ arch/arm64/boot/dts/renesas/r9a07g044.dtsi    |  2 +-
+ arch/arm64/boot/dts/renesas/r9a07g054.dtsi    |  2 +-
+ drivers/usb/renesas_usbhs/common.c            | 33 +++++++++++++++++--
+ 5 files changed, 38 insertions(+), 7 deletions(-)
 
-  xhci: Fix failure to detect ring expansion need. (2024-03-05 13:47:08 +0000)
+-- 
+2.25.1
 
-----------------------------------------------------------------
-USB / Thunderbolt fixes for 6.8-rc8 (or -final)
-
-Here are some small remaining fixes for USB and Thunderbolt drivers for
-6.8-rc8.  Included in here are fixes for:
-  - thunderbold NULL dereference fix
-  - typec driver fixes
-  - xhci driver regression fix
-  - usb-storage divide-by-0 fix
-  - ncm gadget driver fix
-
-All of these have been in linux-next with no reported issues.
-
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-----------------------------------------------------------------
-Alan Stern (1):
-      USB: usb-storage: Prevent divide-by-0 error in isd200_ata_command
-
-Badhri Jagan Sridharan (1):
-      usb: typec: tpcm: Fix PORT_RESET behavior for self powered devices
-
-Greg Kroah-Hartman (1):
-      Merge tag 'thunderbolt-for-v6.8-rc7' of git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt into usb-linus
-
-Krishna Kurapati (1):
-      usb: gadget: ncm: Fix handling of zero block length packets
-
-Mathias Nyman (2):
-      usb: port: Don't try to peer unused USB ports based on location
-      xhci: Fix failure to detect ring expansion need.
-
-Mika Westerberg (1):
-      thunderbolt: Fix NULL pointer dereference in tb_port_update_credits()
-
-Neil Armstrong (1):
-      usb: typec: ucsi: fix UCSI on SM8550 & SM8650 Qualcomm devices
-
-RD Babiera (1):
-      usb: typec: altmodes/displayport: create sysfs nodes as driver's default device attribute group
-
- drivers/thunderbolt/switch.c             |  3 +++
- drivers/usb/core/port.c                  |  5 +++--
- drivers/usb/gadget/function/f_ncm.c      |  2 +-
- drivers/usb/host/xhci-ring.c             |  8 +++++++-
- drivers/usb/storage/isd200.c             | 23 ++++++++++++++++++-----
- drivers/usb/typec/altmodes/displayport.c | 18 +++++++++---------
- drivers/usb/typec/tcpm/tcpm.c            |  7 +++++--
- drivers/usb/typec/ucsi/ucsi_glink.c      |  1 +
- 8 files changed, 47 insertions(+), 20 deletions(-)
 
