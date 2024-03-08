@@ -1,166 +1,115 @@
-Return-Path: <linux-usb+bounces-7732-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7733-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 543D98765EF
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Mar 2024 15:04:52 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 06FC7876666
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Mar 2024 15:34:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0EA132811BA
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Mar 2024 14:04:51 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 81092B20F25
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Mar 2024 14:34:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FF5F3FB80;
-	Fri,  8 Mar 2024 14:04:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2BCA15C0;
+	Fri,  8 Mar 2024 14:34:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d4v2elPw"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="VMwJ+zar"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 044664086A
-	for <linux-usb@vger.kernel.org>; Fri,  8 Mar 2024 14:04:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6AC0173;
+	Fri,  8 Mar 2024 14:34:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709906678; cv=none; b=cLSBCyypwSNtoACx2T2xb1ZYZySScbElcazsIv1MGaD1+rhEIJzUMAqHqVXL6OuYKQVk7Xbjevu/8wczS0N4swTaEodRC46J53cGGd9tyQgY2NR5NqS6lySIzzZz7A0+Zo4Qsb0UwwXnVXfXOlCwnbAUaoMQsy2RF8WMKE0agho=
+	t=1709908469; cv=none; b=kz6x/pSk0pV4oW7ojJ/FzPWEFJTB8m7EwWjRb+5sujOJGxCQ9Q67yhUQPjSuH2Nj80A25WlRMlr9olEbRp8lo9FOBTGCxwfrecPAvnir/1dUJh6ymUrv4QmPSt4/Jty74GPnu7L7EoeO83QViS09PsdJBLBNRWnWGfUb3EP1Egg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709906678; c=relaxed/simple;
-	bh=gf6i8cDQidksLDZJQEfsR2JezU6Lt7Garjdo7I3tknY=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=sIzrnhtaGJG91gokdYSiHB40sqA5WKvAD3ZXM/tBzwJVWWc4EXMOAkv7tmfAizZKh+gZP+S+Pp7byk0hsa+Qzs+EsM40RGVQUx944fqx0s5DQrfSt653H2dmOLe/wjxvwuxsx16vSJwXo+Ik24sso1+VmIU8j0kYNhU/Fk7XIaY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d4v2elPw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9FCD9C433F1
-	for <linux-usb@vger.kernel.org>; Fri,  8 Mar 2024 14:04:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709906677;
-	bh=gf6i8cDQidksLDZJQEfsR2JezU6Lt7Garjdo7I3tknY=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=d4v2elPwWHuMDrVU7eBri0pyhPeOrgh0lx5OHhLZKv7+coxUE5k6kEkj70JnsMAOR
-	 zXeimk+zL+K+Vocys8rK/LxWwg/ZtXZt6iLt56NKGjhLi0FgTc6TF3cBWogicMduIF
-	 OFGvXMfAXRV5hfCvibUyVMkTXMkpP/jEz7Ml0ZkxyI04ITisojfMq1gCt/1zUGgBSk
-	 xREStfLLNxEslrlKLXKNS6cJB81wBNoxCAsZI7GBipVnceNDsR8DbkRS0WgD6Vd71C
-	 8nRR/42L/3TPhlqtnJyY2D+KbDj6vzsOgSIcm4x+iD2CzeSnzCj3assY8FkUH6KN3G
-	 Pt8xNXuGrF9Zw==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 87322C53BD0; Fri,  8 Mar 2024 14:04:36 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 218544] not enough bandwidth, synaptics hi-res audio duplex
- audio
-Date: Fri, 08 Mar 2024 14:04:36 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: ibmalone@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-218544-208809-0fwafq1eKm@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218544-208809@https.bugzilla.kernel.org/>
-References: <bug-218544-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1709908469; c=relaxed/simple;
+	bh=iR2HDRYdl3kEYPLqKR2vIC9j8WLlVsgpS+eB1ICs/2A=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=slvVRx3U8R/jDMDpBPA3GsjKRZqf4cCT1dBZPm6BWDXX5xU080iN1a4W6TFfVZ1IQPGIuqHGkuI1kV8psXfESSMZLsYxXWr5z3pUBJKfIXrJnXIiHJPBeucnK/2J9PW25Eth0b5kVqfYAjVN1P1je7b4oCQnKMK1NzL6Oebw4Z8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=VMwJ+zar; arc=none smtp.client-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+	References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=SvCqnE1sc6/yLfNTVKRPKG7Xabu6+CcefkiE3L8kYbE=; b=VMwJ+zaruZzA2E9dp4mWe+qfWV
+	XBJbPsDud128dPJmdBX93J3WBfQqb1vw9y41GCIfMLFQRl+/gI0QDQUWwHCJM+chnX1fgnNzWneX2
+	KciUh2W7FtMvbzUinb3P9ie5RGdCQwc8gATTGE7kZiKvn/SsVzK9nplDjGF5XDKWjrrNbu6Bl9O5T
+	5Ld0LzoxAf5yhdxX5xfl195VzB+WTv2H7bHcbaIMBmIuQpewJoTplzo9rqxz9YlW4ocfxwkOMq/qp
+	Ji3PdVMG8NwWJqEQk6ZX4ejWKSgmBl2F45bFqECjgxMuXjkfWybcV7e5v/AXTaBO75XEICw8dsB/Z
+	lVUbXneA==;
+Received: from [177.62.247.190] (helo=[192.168.1.60])
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+	id 1ribIg-007oYz-H9; Fri, 08 Mar 2024 15:34:18 +0100
+Message-ID: <cac3f811-189f-be7f-e5fa-12ee6ca8a62a@igalia.com>
+Date: Fri, 8 Mar 2024 11:34:13 -0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH] usb: dwc3: Properly set system wakeup
+Content-Language: en-US
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: John Youn <John.Youn@synopsys.com>,
+ "stable@vger.kernel.org" <stable@vger.kernel.org>,
+ John Schoenick <johns@valvesoftware.com>,
+ Andrey Smirnov <andrew.smirnov@gmail.com>,
+ Vivek Dasmohapatra <vivek@collabora.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+References: <667cfda7009b502e08462c8fb3f65841d103cc0a.1709865476.git.Thinh.Nguyen@synopsys.com>
+From: "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <667cfda7009b502e08462c8fb3f65841d103cc0a.1709865476.git.Thinh.Nguyen@synopsys.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218544
+On 07/03/2024 23:40, Thinh Nguyen wrote:
+> If the device is configured for system wakeup, then make sure that the
+> xHCI driver knows about it and make sure to permit wakeup only at the
+> appropriate time.
+> 
+> For host mode, if the controller goes through the dwc3 code path, then a
+> child xHCI platform device is created. Make sure the platform device
+> also inherits the wakeup setting for xHCI to enable remote wakeup.
+> 
+> For device mode, make sure to disable system wakeup if no gadget driver
+> is bound. We may experience unwanted system wakeup due to the wakeup
+> signal from the controller PMU detecting connection/disconnection when
+> in low power (D3). E.g. In the case of Steam Deck, the PCI PME prevents
+> the system staying in suspend.
+> 
+> Cc: stable@vger.kernel.org
+> Reported-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+> Closes: https://lore.kernel.org/linux-usb/70a7692d-647c-9be7-00a6-06fc60f77294@igalia.com/T/#mf00d6669c2eff7b308d1162acd1d66c09f0853c7
+> Fixes: d07e8819a03d ("usb: dwc3: add xHCI Host support")
+> Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
 
---- Comment #12 from Ian Malone (ibmalone@gmail.com) ---
-Okay, I think we may have reached a dead end. Using wireplumber (creating r=
-ules
-in ~/.config/wireplumber/main.lua.d) it's possible to manipulate the audio
-formats that pipewire will use for a device, so I can independently request=
- the
-16 bit mode for the input and output streams. The bandwidth profiles for th=
-ose
-are as follows (wMaxPacketSize is for the in/out interface descriptor with =
-the
-corresponding bBitResolution as reported by lsusb -v):
+[CCing some interested parties here from Deck development teams]
 
-in (48kHz)
-16bit, expected wMaxpacket size 192bytes
-bandwidth: 1-1.1 ep 81:   159 @  0.2+1 mask f004
-uframes 125  34
+Hi Thinh, thanks a bunch for the fix, and all the support and attention
+on this issue - much appreciated!
 
-24bit, expected wMaxPacketSize 288bytes
-bandwidth: 1-1.1 ep 81:   234 @  0.2+1 mask f004
-uframes 125 109
+I've tested this fix on top of v6.8-rc7, in the Steam Deck, and it
+manages to resolve the sleep problems we have on device mode.
+So, feel free to add:
 
-out (48kHz)
-16bit, expected wMaxPacketSize 768bytes (?!)
-bandwidth: 1-1.1 ep 01:   608 @  0.1+1 mask 003e
-uframes 125 125 125 125 108
-
-24bit, expected wMaxPacketSize 458bytes
-bandwidth: 1-1.1 ep 01:   458 @  0.2+1 mask 003c
-uframes 125 125 125  83
-
-There's also the HID endpoint (unbinding doesn't seem to remove the bandwid=
-th
-usage) expected wMaxPacketSize 35bytes:
-1-1.1 ep 84:    39 @  0.0+1 mask 1c01
-
-The bandwidth to wMaxPacketSize ratio is approximately the same for all str=
-eams
-(1.2-1.3, 1.11 for the HID I guess slightly different overheads).
-
-Following the rules that ehci-sched.c sets out, this can't be met:
-max_tt_usecs[] =3D { 125, 125, 125, 125, 125, 125, 30, 0 };
-and:
-/* special case for isoc transfers larger than 125us:
- * the first and each subsequent fully used uframe
- * must be empty, so as to not illegally delay
- * already scheduled transactions
- */
-
-The minimum bandwidth configuration is:
-out(24b) 125 125 125  83
-in (16b) 125  34
-hid      39
-
-And there is no way to block them such that 30 in microframe 7 isn't exceed=
-ed.
-125 125 125  83 125  34 39 0 etc.
-
-Unless it's legal to schedule the hid into microframe 6 after the audio inp=
-ut
-as its final microframe is not fully used?
+Tested-by: Guilherme G. Piccoli <gpiccoli@igalia.com> # Steam Deck
 
 
-A final point of interest is 16bit output, wMaxPacketSize 768bytes. 24 bit
-output has allowed frequencies 44.1kHz, 48kHz, 96kHz, 2 channels. 16 bit has
-8kHz, 16kHz, 32kHz, 441.kHz, 48kHz, 96kHz. Input 24 and 16 bit have only 48=
-kHz
-and 44.1kHz, 2 channels.
-wMaxPacketSize / (Max sampling frequency * sample bytes * channels )
-in16b  192 / (48kHz * 2 * 2) =3D 1ms
-in24b  288 / (48kHz * 3 * 2) =3D 1ms
-out16b 768 / (96kHz * 2 * 2) =3D 2ms
-out24b 576 / (96kHz * 3 * 2) =3D 1ms
+Should we try to get it included last minute on v6.8, or better to make
+use of the merge window opening next week?
+Cheers,
 
-Out 16 bit mode claims to accept 2ms packets (but still interval 1). I'm
-wondering if this is just an error in the device reported capability (or ma=
-ybe
-it can buffer?). Do isochronous outputs have to use the full max packet siz=
-e?
 
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Guilherme
 
