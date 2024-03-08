@@ -1,113 +1,166 @@
-Return-Path: <linux-usb+bounces-7731-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7732-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 748DE876584
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Mar 2024 14:43:30 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 543D98765EF
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Mar 2024 15:04:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A195B1C218EB
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Mar 2024 13:43:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0EA132811BA
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Mar 2024 14:04:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 741DE3BBE0;
-	Fri,  8 Mar 2024 13:43:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FF5F3FB80;
+	Fri,  8 Mar 2024 14:04:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ISO+WFMH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d4v2elPw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6448238389;
-	Fri,  8 Mar 2024 13:43:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 044664086A
+	for <linux-usb@vger.kernel.org>; Fri,  8 Mar 2024 14:04:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709905404; cv=none; b=dD9B5LaC57leccY1X0zaAkx28+QHoOp11U2oyg6xRtUA0BAuhtn2I8ObZb1viQHXZ3fCmQG/iiwbZi1ReMk94hLl4RqGHRdodTnIZFSL5BDByB7xpovtkCrO5rFZlsWg+2eUR5GgO9R33Abh9qRaltr9jTHysd8PenNVs4Ym53U=
+	t=1709906678; cv=none; b=cLSBCyypwSNtoACx2T2xb1ZYZySScbElcazsIv1MGaD1+rhEIJzUMAqHqVXL6OuYKQVk7Xbjevu/8wczS0N4swTaEodRC46J53cGGd9tyQgY2NR5NqS6lySIzzZz7A0+Zo4Qsb0UwwXnVXfXOlCwnbAUaoMQsy2RF8WMKE0agho=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709905404; c=relaxed/simple;
-	bh=SzLNVnFsiFEmEu5RPvzvTKKqcsB1lkgqALEjkxSE3lw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O3I6cL09l7KeAih3vcJsxYzOqnKbfxWER8652jNXs9p3XHUbhFe0RGjQVp+o17ER68iM7VYnZDQ05e7nq8vthwJ4HTdTa4UyXlRJAnIq6tQp7AaKTgLDk7seX92+br3W1bt/GqEllGXM+8W5P6Fkf+uat1lUhPsVZvlc7mnA/Ds=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ISO+WFMH; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709905402; x=1741441402;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SzLNVnFsiFEmEu5RPvzvTKKqcsB1lkgqALEjkxSE3lw=;
-  b=ISO+WFMHegAEe+FpfktAu3jih1kYCH69NraaNa2vH/gy07/y8aX50xtX
-   O+UUcaKp4rIwNCIdExuQjrn4Aef3Nw8QVBXW+DvICHC33SrvRaVph+vRw
-   m6S6SFMKJweYMvnTFgqXWZ6LSP6JncZ5dUQSDAhu1sqjlMlPH8NZeauTS
-   EZxrsPX+RxP45Fu8owRU1iM7AmvgA8XtaIYmZkJcpqgcXV1StQt3bnzuv
-   am4XI/zTE3sqDSB/ZwBkXNu+MV6LYj4pqt+Y+se393TL6DonV0Sht0W2M
-   bjze6txKw/yZrMqpOxqEj4QBl5S5qqokKxxVGed1x8rwOlRs9YCHdgh1J
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11006"; a="4494109"
-X-IronPort-AV: E=Sophos;i="6.07,109,1708416000"; 
-   d="scan'208";a="4494109"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2024 05:43:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11006"; a="914246903"
-X-IronPort-AV: E=Sophos;i="6.07,109,1708416000"; 
-   d="scan'208";a="914246903"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2024 05:43:18 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.97)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1riaVG-0000000Aqv2-4Ben;
-	Fri, 08 Mar 2024 15:43:15 +0200
-Date: Fri, 8 Mar 2024 15:43:14 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Howard Yen <howardyen@google.com>
-Cc: gregkh@linuxfoundation.org, rafael@kernel.org, mathias.nyman@intel.com,
-	hch@lst.de, m.szyprowski@samsung.com, robin.murphy@arm.com,
-	petr.tesarik.ext@huawei.com, broonie@kernel.org, james@equiv.tech,
-	james.clark@arm.com, masahiroy@kernel.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	iommu@lists.linux.dev
-Subject: Re: [PATCH v4 2/2] usb: host: xhci-plat: add support for multi
- memory regions
-Message-ID: <ZesV8iKdf1tQQtXu@smile.fi.intel.com>
-References: <20240308095320.1961469-1-howardyen@google.com>
- <20240308095320.1961469-3-howardyen@google.com>
+	s=arc-20240116; t=1709906678; c=relaxed/simple;
+	bh=gf6i8cDQidksLDZJQEfsR2JezU6Lt7Garjdo7I3tknY=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=sIzrnhtaGJG91gokdYSiHB40sqA5WKvAD3ZXM/tBzwJVWWc4EXMOAkv7tmfAizZKh+gZP+S+Pp7byk0hsa+Qzs+EsM40RGVQUx944fqx0s5DQrfSt653H2dmOLe/wjxvwuxsx16vSJwXo+Ik24sso1+VmIU8j0kYNhU/Fk7XIaY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d4v2elPw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9FCD9C433F1
+	for <linux-usb@vger.kernel.org>; Fri,  8 Mar 2024 14:04:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709906677;
+	bh=gf6i8cDQidksLDZJQEfsR2JezU6Lt7Garjdo7I3tknY=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=d4v2elPwWHuMDrVU7eBri0pyhPeOrgh0lx5OHhLZKv7+coxUE5k6kEkj70JnsMAOR
+	 zXeimk+zL+K+Vocys8rK/LxWwg/ZtXZt6iLt56NKGjhLi0FgTc6TF3cBWogicMduIF
+	 OFGvXMfAXRV5hfCvibUyVMkTXMkpP/jEz7Ml0ZkxyI04ITisojfMq1gCt/1zUGgBSk
+	 xREStfLLNxEslrlKLXKNS6cJB81wBNoxCAsZI7GBipVnceNDsR8DbkRS0WgD6Vd71C
+	 8nRR/42L/3TPhlqtnJyY2D+KbDj6vzsOgSIcm4x+iD2CzeSnzCj3assY8FkUH6KN3G
+	 Pt8xNXuGrF9Zw==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 87322C53BD0; Fri,  8 Mar 2024 14:04:36 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 218544] not enough bandwidth, synaptics hi-res audio duplex
+ audio
+Date: Fri, 08 Mar 2024 14:04:36 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: ibmalone@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-218544-208809-0fwafq1eKm@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-218544-208809@https.bugzilla.kernel.org/>
+References: <bug-218544-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240308095320.1961469-3-howardyen@google.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Fri, Mar 08, 2024 at 09:53:20AM +0000, Howard Yen wrote:
-> The reason why it needs multiple regions is that in my system there is
-> an always-on subsystem which includes a small size memory, and several
-> functions need to run and occupy the memory from the small memory if
-> they need to run on the always-on subsystem. These functions must
-> allocate the memory from the small memory region, so that they can get
-> benefit from the always-on subsystem. So the small memory is split for
-> multiple functions which are satisfied with their generic use cases.
-> But in specific use cases, like USB3 devices which support the stream
-> trasnsfer or multiple devices connect to the host, they required more
-> memory than their pre-allocated memory region, so I tried to propose
-> this patch to give it the ability to get the memory from the other
-> larger memory to solve the issue.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218544
 
-...
+--- Comment #12 from Ian Malone (ibmalone@gmail.com) ---
+Okay, I think we may have reached a dead end. Using wireplumber (creating r=
+ules
+in ~/.config/wireplumber/main.lua.d) it's possible to manipulate the audio
+formats that pipewire will use for a device, so I can independently request=
+ the
+16 bit mode for the input and output streams. The bandwidth profiles for th=
+ose
+are as follows (wMaxPacketSize is for the in/out interface descriptor with =
+the
+corresponding bBitResolution as reported by lsusb -v):
 
-> +	count = of_property_count_elems_of_size(sysdev->of_node, "memory-region",
-> +						sizeof(u32));
+in (48kHz)
+16bit, expected wMaxpacket size 192bytes
+bandwidth: 1-1.1 ep 81:   159 @  0.2+1 mask f004
+uframes 125  34
 
-Open coded of_property_count_u32_elems().
+24bit, expected wMaxPacketSize 288bytes
+bandwidth: 1-1.1 ep 81:   234 @  0.2+1 mask f004
+uframes 125 109
 
--- 
-With Best Regards,
-Andy Shevchenko
+out (48kHz)
+16bit, expected wMaxPacketSize 768bytes (?!)
+bandwidth: 1-1.1 ep 01:   608 @  0.1+1 mask 003e
+uframes 125 125 125 125 108
+
+24bit, expected wMaxPacketSize 458bytes
+bandwidth: 1-1.1 ep 01:   458 @  0.2+1 mask 003c
+uframes 125 125 125  83
+
+There's also the HID endpoint (unbinding doesn't seem to remove the bandwid=
+th
+usage) expected wMaxPacketSize 35bytes:
+1-1.1 ep 84:    39 @  0.0+1 mask 1c01
+
+The bandwidth to wMaxPacketSize ratio is approximately the same for all str=
+eams
+(1.2-1.3, 1.11 for the HID I guess slightly different overheads).
+
+Following the rules that ehci-sched.c sets out, this can't be met:
+max_tt_usecs[] =3D { 125, 125, 125, 125, 125, 125, 30, 0 };
+and:
+/* special case for isoc transfers larger than 125us:
+ * the first and each subsequent fully used uframe
+ * must be empty, so as to not illegally delay
+ * already scheduled transactions
+ */
+
+The minimum bandwidth configuration is:
+out(24b) 125 125 125  83
+in (16b) 125  34
+hid      39
+
+And there is no way to block them such that 30 in microframe 7 isn't exceed=
+ed.
+125 125 125  83 125  34 39 0 etc.
+
+Unless it's legal to schedule the hid into microframe 6 after the audio inp=
+ut
+as its final microframe is not fully used?
 
 
+A final point of interest is 16bit output, wMaxPacketSize 768bytes. 24 bit
+output has allowed frequencies 44.1kHz, 48kHz, 96kHz, 2 channels. 16 bit has
+8kHz, 16kHz, 32kHz, 441.kHz, 48kHz, 96kHz. Input 24 and 16 bit have only 48=
+kHz
+and 44.1kHz, 2 channels.
+wMaxPacketSize / (Max sampling frequency * sample bytes * channels )
+in16b  192 / (48kHz * 2 * 2) =3D 1ms
+in24b  288 / (48kHz * 3 * 2) =3D 1ms
+out16b 768 / (96kHz * 2 * 2) =3D 2ms
+out24b 576 / (96kHz * 3 * 2) =3D 1ms
+
+Out 16 bit mode claims to accept 2ms packets (but still interval 1). I'm
+wondering if this is just an error in the device reported capability (or ma=
+ybe
+it can buffer?). Do isochronous outputs have to use the full max packet siz=
+e?
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
