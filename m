@@ -1,126 +1,119 @@
-Return-Path: <linux-usb+bounces-7736-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7737-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD1178769EC
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Mar 2024 18:30:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 951F88769ED
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Mar 2024 18:30:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BE5A61C21405
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Mar 2024 17:30:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C6E4C1C21016
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Mar 2024 17:30:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74C1A48CC6;
-	Fri,  8 Mar 2024 17:28:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 572FA381B8;
+	Fri,  8 Mar 2024 17:29:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P/2xoO/P"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="2jeLcoHp"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1B643FBB9
-	for <linux-usb@vger.kernel.org>; Fri,  8 Mar 2024 17:28:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADC9D28DAE;
+	Fri,  8 Mar 2024 17:29:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709918917; cv=none; b=LynQo2pdLItVCOH7HEYniGO6RABFOxUlXVAvy+kLw9CUoi7xQnIhGu0oyU0C5vhsO95M3+Xd0xgOKmlxIAykJFA2lTq0nTEWnpoRbolwaNpd9oEo6U29mo3zj5qRFSFBc9cr7dRC9dIzlbnZvoGaeDqlovk2h9nrsitW0jwQ+XQ=
+	t=1709918986; cv=none; b=FB5XVOfwAilaoNEiu99X1xPKwDaCQvBOMlwXvZW17h2fTGRhkE5/yxUb5OUCc560+mEtXMMa+NGhkN5ehpLEHGqr4pdG711wb16GddB6N3yLee9z3PaUAlFpMhT40MSbp3jFQ/RrX+BmHoTI9vFt7hfVF5Ibct40KuGwIvvarro=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709918917; c=relaxed/simple;
-	bh=7gi6ll+G9R8rEzPej294cTM2/1QiK2kjjt/IiCxgTgU=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=DqIpsDCKcLR2QT5UEciesWFJzawQuzUvFP4TGcV8WOmKOzKtGd+WYuc42NTQGub78ezU2HyM5ahMRjoHD0kAgyjIJ1PtYJKQg77Ssw7ckxw/2gVTH8wJmpUw4Cou2t5+AYUT2zDvjQA139O0/Lo+5cbPvCdukS/hanhOvZMhGZg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P/2xoO/P; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6AAA8C433F1
-	for <linux-usb@vger.kernel.org>; Fri,  8 Mar 2024 17:28:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709918916;
-	bh=7gi6ll+G9R8rEzPej294cTM2/1QiK2kjjt/IiCxgTgU=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=P/2xoO/Pyy8UT3CuHI8peJRndmNxkkTpaAEqy6z8YF1iVyBFxiyXnMlXXMJb3Uz+n
-	 jDH/55eAogRD3m5TR49Q4QmmEYzTfnVgpXunI0USvfjcU8z2FmY39c6pqSSPz0JzhL
-	 72sz01VW5I4UK705vU4nShPijDpQrUWzdH3bquPG7s8+EpDc/iFw2pd/HnHmypKq/5
-	 0RN7CevpzAOoaiwwyhYYTLcHYYMbHBDDyFvbbLRbBOHSYiNgShuQNAwkCUnFcOTYWB
-	 Cy0VuDMLirbebercJBrfNNVCHoljCXF14Kxaz/GVUoj+aeL08YkE6pVrAIfsZqWyYo
-	 XeOdE2MzMjzGA==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 5A4A6C53BC6; Fri,  8 Mar 2024 17:28:36 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 218544] not enough bandwidth, synaptics hi-res audio duplex
- audio
-Date: Fri, 08 Mar 2024 17:28:36 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: stern@rowland.harvard.edu
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-218544-208809-jLXP7KsHZJ@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218544-208809@https.bugzilla.kernel.org/>
-References: <bug-218544-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1709918986; c=relaxed/simple;
+	bh=iuKd7BJCZde3rcVymwHNOdzVrzk9Y9A/nmtw093sWLs=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Z20ZqBpN4p5Q/hkq3td9/FB8Vq4DyNhO/IXpRRBT0B1Vb5mNI+vG9bmwc+G0xS0fS6himSzDXbCrmnLs5gNQ7/cua4PpP3TcbqsVTpgtIspGW0KFsYa7aMMSbJ6PkL+x12uQts59Ojl1D200DbY6Qa2pYUUBl6x8ScM14txm2w0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=2jeLcoHp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B283AC433F1;
+	Fri,  8 Mar 2024 17:29:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1709918986;
+	bh=iuKd7BJCZde3rcVymwHNOdzVrzk9Y9A/nmtw093sWLs=;
+	h=Date:From:To:Cc:Subject:From;
+	b=2jeLcoHp/Hw7n2ScOxtQ53yPVWPgJ0G/T32fHwopai0qdXc5P9JMbRIAIxta2W+/8
+	 tg23Ig4WOzaG2acN392GnbSlsgf6xb9N0//+ogbt4Z+IyAMUGeMPbT403xfhQiuRwH
+	 Z+bhryRhefUz/+wXQQPYoc+fj38HgZLuU5DjSrPE=
+Date: Fri, 8 Mar 2024 17:29:43 +0000
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB/Thunderbolt driver fixes for 6.8-rc8
+Message-ID: <ZetLB2-_00QyZZJs@kroah.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218544
+The following changes since commit d206a76d7d2726f3b096037f2079ce0bd3ba329b:
 
---- Comment #15 from Alan Stern (stern@rowland.harvard.edu) ---
-Some years ago I did try allocating interrupt transfers from the end of fra=
-me
-backwards, but decided against it in the end -- I don't remember why.  It
-certainly helps in your case, so maybe that decision should be reconsidered.
+  Linux 6.8-rc6 (2024-02-25 15:46:06 -0800)
 
-Maybe the reason was that the absence of FSTN nodes makes interrupt transfe=
-rs
-near the end of the frame less reliable.  If any unexpected delays should p=
-ush
-the transfer back a few hundred microseconds, there wouldn't be enough
-complete-splits to guarantee it could finish correctly.  In the examples you
-give above, 1-1.4 ep 81 and 1-1.1 ep 84 each have only one complete-split (=
-only
-one bit set in the high-order byte of the mask), whereas the spec says there
-should be enough complete-splits for the entire LS/FS packet plus two extra.
+are available in the Git repository at:
 
-snd-usb-audio using a smaller packet size for the output streams wouldn't h=
-elp
-the scheduling; the scheduler has to assume that each endpoint will use the
-maximum packet size allowed (i.e., the maxpacket value).
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.8-rc8
 
-The reason for scheduling isochronous transfers earlier than interrupt
-transfers has to do with the way transaction translators in hubs behave.  I
-forget the details (it's described in the USB-2 spec), but there's some
-scenario in which they will lose data if an isochronous packet comes after =
-an
-interrupt packet in the same microframe.
+for you to fetch changes up to b234c70fefa7532d34ebee104de64cc16f1b21e4:
 
-Scheduling interrupt transfers late in the frame _is_ legal according to the
-spec, so long as it is done properly.  And in theory the driver could rebal=
-ance
-the schedule, changing which microframes are assigned to each endpoint, as =
-new
-endpoints are added.  But that would add another whole new level of complex=
-ity
-to the driver and I never implemented it.  Besides, without FSTN nodes you
-still wouldn't be able to get the full benefit.
+  xhci: Fix failure to detect ring expansion need. (2024-03-05 13:47:08 +0000)
 
---=20
-You may reply to this email to add a comment.
+----------------------------------------------------------------
+USB / Thunderbolt fixes for 6.8-rc8 (or -final)
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Here are some small remaining fixes for USB and Thunderbolt drivers for
+6.8-rc8.  Included in here are fixes for:
+  - thunderbold NULL dereference fix
+  - typec driver fixes
+  - xhci driver regression fix
+  - usb-storage divide-by-0 fix
+  - ncm gadget driver fix
+
+All of these have been in linux-next with no reported issues.
+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+Alan Stern (1):
+      USB: usb-storage: Prevent divide-by-0 error in isd200_ata_command
+
+Badhri Jagan Sridharan (1):
+      usb: typec: tpcm: Fix PORT_RESET behavior for self powered devices
+
+Greg Kroah-Hartman (1):
+      Merge tag 'thunderbolt-for-v6.8-rc7' of git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt into usb-linus
+
+Krishna Kurapati (1):
+      usb: gadget: ncm: Fix handling of zero block length packets
+
+Mathias Nyman (2):
+      usb: port: Don't try to peer unused USB ports based on location
+      xhci: Fix failure to detect ring expansion need.
+
+Mika Westerberg (1):
+      thunderbolt: Fix NULL pointer dereference in tb_port_update_credits()
+
+Neil Armstrong (1):
+      usb: typec: ucsi: fix UCSI on SM8550 & SM8650 Qualcomm devices
+
+RD Babiera (1):
+      usb: typec: altmodes/displayport: create sysfs nodes as driver's default device attribute group
+
+ drivers/thunderbolt/switch.c             |  3 +++
+ drivers/usb/core/port.c                  |  5 +++--
+ drivers/usb/gadget/function/f_ncm.c      |  2 +-
+ drivers/usb/host/xhci-ring.c             |  8 +++++++-
+ drivers/usb/storage/isd200.c             | 23 ++++++++++++++++++-----
+ drivers/usb/typec/altmodes/displayport.c | 18 +++++++++---------
+ drivers/usb/typec/tcpm/tcpm.c            |  7 +++++--
+ drivers/usb/typec/ucsi/ucsi_glink.c      |  1 +
+ 8 files changed, 47 insertions(+), 20 deletions(-)
 
