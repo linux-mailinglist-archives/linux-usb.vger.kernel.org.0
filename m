@@ -1,228 +1,178 @@
-Return-Path: <linux-usb+bounces-7745-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7746-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EAB3A876C63
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Mar 2024 22:29:12 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 23562876C94
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Mar 2024 22:58:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 754481F21F30
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Mar 2024 21:29:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5655D282CF7
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Mar 2024 21:58:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 493D75F848;
-	Fri,  8 Mar 2024 21:29:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YjKlkCg7"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 711B95FDAD;
+	Fri,  8 Mar 2024 21:58:30 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 401E75A0E9
-	for <linux-usb@vger.kernel.org>; Fri,  8 Mar 2024 21:29:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79B3424B2A
+	for <linux-usb@vger.kernel.org>; Fri,  8 Mar 2024 21:58:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709933346; cv=none; b=MNOLf1mmZU2zs+6BsrRRT8LF3SM3YXIsxZzsm+KTgjdZx8roRxbgWsFetZr/TBT0bzzV5AQgh/rHG9hg6e43ZgWDHzmUp220SP+RByy+d3qiZYhgkPQ+OlZ6PyovbgILayKlo6+K/+fh8+8F6a62afNB+I/oUa4LZr4m4ANozp8=
+	t=1709935110; cv=none; b=Z1HjwBb5XUhoXIsNfWKP/j9zuhD5CHGnUiCgexJ9xiDFWEDZndYxmbpPzARjIyBlc9uO5Ljx8cBNBuuSDZaQ+xyr5ixFXwVmRxwMDN9ujTm1YbHiZcBUI72MlOKOScJH/QyNzmPbmKvnbZWm8GP7FqQLfNnS7Gdw5q4XB7Vy/p4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709933346; c=relaxed/simple;
-	bh=sH9QWu0qBnrsuSG0mRCFi5QohPxdoG+BDraz44NqpjM=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=tHt5/ubMrQGUdf2Oi4J+hLEe/ny6PDBquhcH8+1DxJJbxhaU1DzvQSV0O8j/J/5OGbXUA9M7shHTn3eWdRI79FYI/WBvqLzaVQk9Btd6RG2SXz9Z2nUIOOJ2uz8e9s/f8JyjrOgkJj7faXznTJIzrDqs/tIGcP9mAr+kw9lvyrk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YjKlkCg7; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709933344; x=1741469344;
-  h=date:from:to:cc:subject:message-id;
-  bh=sH9QWu0qBnrsuSG0mRCFi5QohPxdoG+BDraz44NqpjM=;
-  b=YjKlkCg71PJDqptDZD3GR+a1ST5yhZz95SvYF81PbJxAPCD96nq2RGaf
-   TeOHkZ3fivuG5JqfrTk24JHGy5a+3/aj+EMrFd9tUajOM4YbfB/grrcqg
-   yFv+6xS47oQOb7piMjfAidWgR00LkLEQfLiKbsn8clUwDmLE4B3XXEHGz
-   dQSSO0NBtV56x/UL8ZiWPa5muLOHjg04ZcTjbSmWVHtu5Wk1NIUerUg2Q
-   E90WMvNO1Xoh0QjlD5siW0EkCmkNZNT84k8NbbIe6+RbLjhvWL7QSAm7k
-   4PTANABmpZ4pou6e68+T5WKkzsVU7ZIIXbFPiI4Fgc3kWaatAcd2AGKHk
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11007"; a="4841492"
-X-IronPort-AV: E=Sophos;i="6.07,110,1708416000"; 
-   d="scan'208";a="4841492"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2024 13:29:04 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,110,1708416000"; 
-   d="scan'208";a="10463181"
-Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 08 Mar 2024 13:29:02 -0800
-Received: from kbuild by b21307750695 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rihm0-0006jr-1m;
-	Fri, 08 Mar 2024 21:29:00 +0000
-Date: Sat, 09 Mar 2024 05:28:40 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- d99e42ce6b8341d3f09e22c6706461ec900fe172
-Message-ID: <202403090536.0KvO3bPz-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1709935110; c=relaxed/simple;
+	bh=jdRp3ycnJ2inLRjB5QbGRF0M5UnIWgjy+M+stLJdElI=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=ANDCbwqW9fMzMdbo3d+I9bvj1mEp1i/eMMIqDaRESX+BBwm+uzM/4Fb0n2q4GsZR7j23j3spEzZqXNs96r6PukTbdp+nWGzIgt3qkaAUAuMr07tQBJ7Ao5mmNgyZFg+tH+GuMch5n1jhj/RD3que1QkMhgbCsUDldBvQw2jJ/4c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=baylibre.com; arc=none smtp.client-ip=209.85.215.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-5dca1efad59so2041906a12.2
+        for <linux-usb@vger.kernel.org>; Fri, 08 Mar 2024 13:58:27 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709935107; x=1710539907;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ssskNoWRSgCf0JIsEmdc/9vm6xbNQG/h290+Hjyy4Ms=;
+        b=TD/lLVa8PwJMBrwrxiA2KfhiCRSt5O6FFKkz+DCkkmjj7SptTcNSeI4zi2q7h3VNkJ
+         OdEFevbQQq6/rb5u/uRHgzCBoLUKkHI7+PezD2Lio0aPfmsKrNvazGSBjOrTcKIQgtlE
+         +woIsL6149h2nAcgdYFVbKzdLjtTffcxTflPPnLzhdEnZssPlca33rno9jyDBx2rn0WG
+         XGzXCaIfNmV3AZSWe7tPBmCa9JG8oZTt/zXFucyicxMtR0OW3BcGH+7JJuzbOZgqamUY
+         LaIh0GuOWXOs5Y1BgVPIp4blNhs5GhvpntQGfrKoc5mjTJcqJUOneqp9iWzFOojM/uT8
+         ovUg==
+X-Forwarded-Encrypted: i=1; AJvYcCXigaQmWMEzJwOW4vmJ9VxexQjxfobGl73A1HkJNe3AJRwpaFFqeHdzhXnvTM6za7AWjt5d/JCHejSXOklEpUFKhYffwUuvNJhr
+X-Gm-Message-State: AOJu0YztRb86tSdCbOqfhNKJNadgcDrs3ZcauBcacArLZxq1RIYQfXQC
+	0LN/gDBggJZTXf5udpUhykKpJLfRcwSyc9hLOb5aDGiYX8S802l7L/Oa7avQXphmdY2vQEGSyoZ
+	un2M=
+X-Google-Smtp-Source: AGHT+IFZ/B9Q9BM4+JaRrVPqYSOZwZirEIB9Olp87R9nCLM6pykqEyS178FOw4nQALVX/Vp33qnx1A==
+X-Received: by 2002:a05:6a20:1454:b0:1a0:e944:15b7 with SMTP id a20-20020a056a20145400b001a0e94415b7mr357270pzi.5.1709935106742;
+        Fri, 08 Mar 2024 13:58:26 -0800 (PST)
+Received: from localhost (71-212-63-227.tukw.qwest.net. [71.212.63.227])
+        by smtp.gmail.com with ESMTPSA id g19-20020a631113000000b005cd8044c6fesm167442pgl.23.2024.03.08.13.58.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Mar 2024 13:58:26 -0800 (PST)
+From: Kevin Hilman <khilman@kernel.org>
+To: =?utf-8?Q?Th=C3=A9o?= Lebrun <theo.lebrun@bootlin.com>, Greg
+ Kroah-Hartman
+ <gregkh@linuxfoundation.org>, Rob Herring <robh+dt@kernel.org>, Krzysztof
+ Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley
+ <conor+dt@kernel.org>, Roger Quadros <rogerq@kernel.org>, Peter Chen
+ <peter.chen@kernel.org>, Pawel Laszczak <pawell@cadence.com>, Nishanth
+ Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>, Tero Kristo
+ <kristo@kernel.org>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, =?utf-8?Q?Gr=C3=A9gor?=
+ =?utf-8?Q?y?= Clement
+ <gregory.clement@bootlin.com>, Alan Stern <stern@rowland.harvard.edu>,
+ linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ =?utf-8?Q?Th=C3=A9o?=
+ Lebrun <theo.lebrun@bootlin.com>
+Subject: Re: [PATCH v4 4/9] usb: cdns3-ti: support reset-on-resume behavior
+In-Reply-To: <20240307-j7200-usb-suspend-v4-4-5ec7615431f3@bootlin.com>
+References: <20240307-j7200-usb-suspend-v4-0-5ec7615431f3@bootlin.com>
+ <20240307-j7200-usb-suspend-v4-4-5ec7615431f3@bootlin.com>
+Date: Fri, 08 Mar 2024 13:58:25 -0800
+Message-ID: <7h4jdgperi.fsf@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: d99e42ce6b8341d3f09e22c6706461ec900fe172  Merge tag 'usb-serial-6.9-rc1' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-next
+Th=C3=A9o Lebrun <theo.lebrun@bootlin.com> writes:
 
-elapsed time: 743m
+> Add match data support, with one boolean to indicate whether the
+> hardware resets after a system-wide suspend. If hardware resets, we
+> force execute ->runtime_resume() at system-wide resume to run the
+> hardware init sequence.
 
-configs tested: 139
-configs skipped: 3
+Is "whether the hardware resets after a system-wide suspend" really a
+function of the IP itself, or rather whether the IP is in a power domain
+that might power down?
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+> No compatible exploits this functionality, just yet.
+>
+> Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
+> ---
+>  drivers/usb/cdns3/cdns3-ti.c | 27 +++++++++++++++++++++++++++
+>  1 file changed, 27 insertions(+)
+>
+> diff --git a/drivers/usb/cdns3/cdns3-ti.c b/drivers/usb/cdns3/cdns3-ti.c
+> index 4c8a557e6a6f..f76327566798 100644
+> --- a/drivers/usb/cdns3/cdns3-ti.c
+> +++ b/drivers/usb/cdns3/cdns3-ti.c
+> @@ -57,9 +57,14 @@ struct cdns_ti {
+>  	unsigned vbus_divider:1;
+>  	struct clk *usb2_refclk;
+>  	struct clk *lpm_clk;
+> +	const struct cdns_ti_match_data *match_data;
+>  	int usb2_refclk_rate_code;
+>  };
+>=20=20
+> +struct cdns_ti_match_data {
+> +	bool reset_on_resume;
+> +};
+> +
+>  static const int cdns_ti_rate_table[] =3D {	/* in KHZ */
+>  	9600,
+>  	10000,
+> @@ -101,6 +106,7 @@ static int cdns_ti_probe(struct platform_device *pdev)
+>  	platform_set_drvdata(pdev, data);
+>=20=20
+>  	data->dev =3D dev;
+> +	data->match_data =3D device_get_match_data(dev);
+>=20=20
+>  	data->usbss =3D devm_platform_ioremap_resource(pdev, 0);
+>  	if (IS_ERR(data->usbss)) {
+> @@ -220,8 +226,29 @@ static int cdns_ti_runtime_resume(struct device *dev)
+>  	return 0;
+>  }
+>=20=20
+> +static int cdns_ti_suspend(struct device *dev)
+> +{
+> +	struct cdns_ti *data =3D dev_get_drvdata(dev);
+> +
+> +	if (data->match_data && data->match_data->reset_on_resume)
+> +		return pm_runtime_force_suspend(dev);
+> +	else
+> +		return 0;
+> +}
+> +
+> +static int cdns_ti_resume(struct device *dev)
+> +{
+> +	struct cdns_ti *data =3D dev_get_drvdata(dev);
+> +
+> +	if (data->match_data && data->match_data->reset_on_resume)
+> +		return pm_runtime_force_resume(dev);
+> +	else
+> +		return 0;
+> +}
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                   randconfig-001-20240308   gcc  
-arc                   randconfig-002-20240308   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   clang
-arm                              allyesconfig   gcc  
-arm                                 defconfig   clang
-arm                   randconfig-001-20240308   gcc  
-arm                   randconfig-002-20240308   clang
-arm                   randconfig-003-20240308   clang
-arm                   randconfig-004-20240308   clang
-arm64                            allmodconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                 randconfig-001-20240308   clang
-arm64                 randconfig-002-20240308   clang
-arm64                 randconfig-003-20240308   clang
-arm64                 randconfig-004-20240308   gcc  
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-csky                  randconfig-001-20240308   gcc  
-csky                  randconfig-002-20240308   gcc  
-hexagon                          allmodconfig   clang
-hexagon                           allnoconfig   clang
-hexagon                          allyesconfig   clang
-hexagon                             defconfig   clang
-hexagon               randconfig-001-20240308   clang
-hexagon               randconfig-002-20240308   clang
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-001-20240308   clang
-i386         buildonly-randconfig-002-20240308   clang
-i386         buildonly-randconfig-003-20240308   gcc  
-i386         buildonly-randconfig-004-20240308   gcc  
-i386         buildonly-randconfig-005-20240308   gcc  
-i386         buildonly-randconfig-006-20240308   clang
-i386                                defconfig   clang
-i386                  randconfig-001-20240308   clang
-i386                  randconfig-002-20240308   clang
-i386                  randconfig-003-20240308   clang
-i386                  randconfig-004-20240308   gcc  
-i386                  randconfig-005-20240308   clang
-i386                  randconfig-006-20240308   clang
-i386                  randconfig-011-20240308   gcc  
-i386                  randconfig-012-20240308   clang
-i386                  randconfig-013-20240308   clang
-i386                  randconfig-014-20240308   clang
-i386                  randconfig-015-20240308   gcc  
-i386                  randconfig-016-20240308   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20240308   gcc  
-loongarch             randconfig-002-20240308   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                 randconfig-001-20240308   gcc  
-nios2                 randconfig-002-20240308   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc                randconfig-001-20240308   gcc  
-parisc                randconfig-002-20240308   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   clang
-powerpc               randconfig-001-20240308   gcc  
-powerpc               randconfig-002-20240308   clang
-powerpc               randconfig-003-20240308   clang
-powerpc64             randconfig-001-20240308   gcc  
-powerpc64             randconfig-002-20240308   clang
-powerpc64             randconfig-003-20240308   clang
-riscv                            allmodconfig   clang
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   clang
-riscv                               defconfig   clang
-riscv                 randconfig-001-20240308   clang
-riscv                 randconfig-002-20240308   clang
-s390                             allmodconfig   clang
-s390                              allnoconfig   clang
-s390                             allyesconfig   gcc  
-s390                                defconfig   clang
-s390                  randconfig-001-20240308   gcc  
-s390                  randconfig-002-20240308   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sh                    randconfig-001-20240308   gcc  
-sh                    randconfig-002-20240308   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-sparc64               randconfig-001-20240308   gcc  
-sparc64               randconfig-002-20240308   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   gcc  
-um                                  defconfig   clang
-um                             i386_defconfig   gcc  
-um                    randconfig-001-20240308   clang
-um                    randconfig-002-20240308   gcc  
-um                           x86_64_defconfig   clang
-x86_64                            allnoconfig   clang
-x86_64                           allyesconfig   clang
-x86_64                              defconfig   gcc  
-x86_64                          rhel-8.3-rust   clang
-xtensa                            allnoconfig   gcc  
-xtensa                randconfig-001-20240308   gcc  
-xtensa                randconfig-002-20240308   gcc  
+Conditionally forcing runtime suspend/resume based on a property of the
+IP doesn't feel right to me.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+IMO, the device should always runtime suspend/resume, and in the
+runtime PM hooks is where the conditional logic should be.
+
+And speaking of the conditional logic... let's go back to whether
+"resets_on_resume" is a property of the IP or the enclosing power
+domain.
+
+Instead of having an IP-specific flag, another way of approaching this
+when ->runtime_resume() is called every time is simply for that hook to
+check if a reset has happend.  Sometimes you can tell this simply by
+reading a register that has been previously programmed by the driver but
+has a known reset.  Simply check that regisister and you can tell
+whether context has been lost.
+
+Doing it this way makes the driver "smart" and then you don't have to
+rely on bool flag based on the IP and dependent on the DT compatible.
+
+Kevin
 
