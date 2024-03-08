@@ -1,166 +1,117 @@
-Return-Path: <linux-usb+bounces-7726-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7727-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 838DB876396
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Mar 2024 12:47:41 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5AE5A8763A9
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Mar 2024 12:53:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B41E31C20E75
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Mar 2024 11:47:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 16B25282949
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Mar 2024 11:53:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3B3F56478;
-	Fri,  8 Mar 2024 11:47:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A856856743;
+	Fri,  8 Mar 2024 11:53:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="O1G0eL1u"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="m6Z2B9ki"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C60BC1DA21
-	for <linux-usb@vger.kernel.org>; Fri,  8 Mar 2024 11:47:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9C305645C
+	for <linux-usb@vger.kernel.org>; Fri,  8 Mar 2024 11:52:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709898454; cv=none; b=ETxSOvQ7+3ewcEpDLghjN7rb9kzae7UGRAxnkMPEz9/HPKV1ocFFcfsrrkT0Pe8qpRN8sZsyGNaktG9rgqvZPf2bwEk7LJiTbK5e5Y+ykXo9FxHoh96PguIWlZRLxft2eTGeLhbRTs8kMIKFp0Fry/JI8o6Ym2vyg7gIV1L2MPE=
+	t=1709898778; cv=none; b=U15Zb0TCxvTpbx8thcae/W2HZK507nioAeGGFHtSh5/7nCV+ywjRb97e5D5nuQLocL8Ucq8Vw6IUTCtdsdhYv8S2yrQR5frbnKgGIh34InbBQgwnfjcyZGeQ5XGqf4sY0mI04zj9/Cb+/VAJlsoehAgI6X3hp/3h1K6HK2PUN+c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709898454; c=relaxed/simple;
-	bh=1cmWuxioymsaJqObFxvlX94MIOPKMFzPNwfpzu9hVrQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eVnqTjrOW+JHpAVk5LfngV0Q8IOBNTrp1Gl0wGFAWJ+swrbUl3M88jEW0QbpsWLIlLlwf7UlKP+6Q1HkkP4dGXKcJlirHuycQWCzdkikzdgsxJoZ4bLJmx4p0KC0VcSPdh7dAoKwsMVxgZOx2dMdMEl1ts07UWE11n4GbtzxU7o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=O1G0eL1u; arc=none smtp.client-ip=209.85.160.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-428405a0205so228231cf.1
-        for <linux-usb@vger.kernel.org>; Fri, 08 Mar 2024 03:47:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1709898452; x=1710503252; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1cmWuxioymsaJqObFxvlX94MIOPKMFzPNwfpzu9hVrQ=;
-        b=O1G0eL1u/3mOURwEQuGdxge0CsUMXguS3aoOiT59Lno04BAfLP/tT7lq3689jJHb8k
-         Wtq3pbSKBwP9euzrfvk4nR8KEdlc6JfgBr4kfvYAVkZrin76Cn25TSyhWbYlGLy68RSv
-         gUOyqT2ZJbJ8dDWZdq/71M376oivL4bH29dA4hwk5An/73lamgSIhRgSNP807sxQHy2/
-         xnJVxuIJBWVOcmsZMI+I602o2AfVf/75vTVqLh9zP5vZuBaddh7Eyx1CdulWM+HDFjIB
-         RIxm8B3cqTuhGA+HuO+HpnNudUhdNrhgZrfIAZSI1usvWXUQ1DleH3q3d5T5l2Frvq8/
-         a4dw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709898452; x=1710503252;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1cmWuxioymsaJqObFxvlX94MIOPKMFzPNwfpzu9hVrQ=;
-        b=IBYXYkVeE2np88gB2bglfdUKw2xtn7YkYOkptVagh89+IAKrQ6vM4GZNpFTgNwnD+o
-         RBMBFCHjsv/M5f/TErMnE8sVhWM7USqxW0mjQZHsJ8Hm0DWWoDc2GXSiZ2ryIVAIPMJq
-         sXpD7eicmpLKMHrdb5y7zGphvYZKdmLRi5hU4w534d1MT6gw1Ty7I/lO+3gi0GS8w5j2
-         XgPeS+O/ok12IJquYIj7G6KlLCkiB217pREF8CAZ+WbdZjQxWSSbCE9gf3QW0ri5aoGZ
-         chknN7ss7Out6eB3bOb3Z+tZZWekg4QlQ8LdFRrX53AglNgirb1h9R28Gm66Y5I5gbtj
-         Yu1Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVuEamL2YhPykSOfd4INwnuZY7jIhehw5V2IPOlMXpL65gX+8rvYOO6wGfKg4rYORczA3WHImVawHFymn8QRxoGaD86lDt/LOgY
-X-Gm-Message-State: AOJu0YzcYvTVCCzSLSGbJwqIfnlegODzkbz6ltuRbnvWfW35jcXLZqUN
-	F1Gma+98+OjXu35H/D8oUoTPVNR+bFTZZCOjNgPYK00YVxwAKYeQLMWuiu/UYRebBgS/3dKpAQo
-	W0HumLPY5Edl2hx0xkAXFS1nTJAIzVBgCI362Sas5VoPk6OtJ6g==
-X-Google-Smtp-Source: AGHT+IGPOqprHhMJkgjBrB+wgYAmcpdie7nmOd7ylnxVDyd8IN6rpm51JSosupi80fyFkW0i7mkNRzWnZlD92z0nDCk=
-X-Received: by 2002:ac8:5e0b:0:b0:42e:b7b2:2e99 with SMTP id
- h11-20020ac85e0b000000b0042eb7b22e99mr697473qtx.2.1709898451413; Fri, 08 Mar
- 2024 03:47:31 -0800 (PST)
+	s=arc-20240116; t=1709898778; c=relaxed/simple;
+	bh=47LPPDaz7lrJErYBNhcjaCyCKxO0cLiShhaU4RxK2Kw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MRNMzAO3XJ6jrChw/2asEtAJJ2s/WuMF6Gh/wqoibzrkL/vcZHjvi5BOiOMKBmOCyI4VNXa6M8h8ffnWXSoITfm7JLPUi+EbAe1SC//hqgdBkieUB8ZpGUrRDZrXMuSW1nuatWhE5ChMf5NckzLSf3iQGfbpaNWWnL6ppEsgyeQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=m6Z2B9ki; arc=none smtp.client-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+	References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=Om6ct9ir0Uo8G1CdIyR0hxI9H0pu5I/UArfWef6382o=; b=m6Z2B9kiIQHFGToJcGBWp2/rSz
+	TTp353MIIIhfgATmlqrSHOBdpcd4Sb/Y84JE7Km8UfALYYNlRT4MUlpMzQ1xa73ylO68AMpgrBV1B
+	MUcXl26Rk4a4zGZ6mFTByCOxnyfPLdDxJ3oZAABID2APrF2QwcOk3PyepIphTXwaTsnj3CmusInwY
+	HORSAOspJGLUq7A4oDfvI7zklmRFMPJ+ZfVDXjAzlWKAE3DjWu4BryjkLQlQ8hpe9tT/7QB4s9wxu
+	0EQ9xWRMHvfdok+dnWbIYzjT9mU7beKFW3PNMFb5HnfL3L/gSZq3+Ct46p411qiSDBj2/rHisoGri
+	XfQWWgPg==;
+Received: from [177.62.247.190] (helo=[192.168.1.60])
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+	id 1riYmM-007l9H-9S; Fri, 08 Mar 2024 12:52:46 +0100
+Message-ID: <f8452c1a-f13f-2ed0-466b-a0f00c65e15d@igalia.com>
+Date: Fri, 8 Mar 2024 08:52:35 -0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240116141801.396398-1-khtsai@google.com> <02bec7b8-7754-4b9d-84ae-51621d6aa7ec@kernel.org>
- <2024012724-chirpy-google-51bb@gregkh> <CAKzKK0oEO5_-CBKvYSw4DKY4Wp5UPrrt1ehBFRd79idy7FsUuQ@mail.gmail.com>
-In-Reply-To: <CAKzKK0oEO5_-CBKvYSw4DKY4Wp5UPrrt1ehBFRd79idy7FsUuQ@mail.gmail.com>
-From: Kuen-Han Tsai <khtsai@google.com>
-Date: Fri, 8 Mar 2024 19:47:04 +0800
-Message-ID: <CAKzKK0pmswLnGa8zabp_wo=6BcvCd9DR368FCJ5mcpZ38i4Jdw@mail.gmail.com>
-Subject: Re: [PATCH] usb: gadget: u_serial: Add null pointer checks after
- RX/TX submission
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: Jiri Slaby <jirislaby@kernel.org>, quic_prashk@quicinc.com, 
-	stern@rowland.harvard.edu, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH] usb: dwc3: Fix spurious wakeup when port is on device
+ mode
+Content-Language: en-US
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+ "balbi@kernel.org" <balbi@kernel.org>,
+ "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+ "johan@kernel.org" <johan@kernel.org>,
+ "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
+ "kernel@gpiccoli.net" <kernel@gpiccoli.net>,
+ "kernel-dev@igalia.com" <kernel-dev@igalia.com>,
+ Andrey Smirnov <andrew.smirnov@gmail.com>,
+ Vivek Dasmohapatra <vivek@collabora.com>,
+ "piyush.mehta@amd.com" <piyush.mehta@amd.com>,
+ "ray.huang@amd.com" <ray.huang@amd.com>
+References: <29ebf575-e09b-4452-ed60-41a667e78c5f@igalia.com>
+ <20240201012301.qtp4vr67cwnte5im@synopsys.com>
+ <20d855ca-678c-671b-d956-f08f2ac88573@igalia.com>
+ <20240206025307.j2lz3v2idwm7gusp@synopsys.com>
+ <43013c1a-92c1-658b-ace9-8ed6ae98769e@igalia.com>
+ <20240208235300.pjife5zxfz5onqvk@synopsys.com>
+ <b9495221-54be-ae5d-774a-f1450290b104@igalia.com>
+ <7594701a-34d7-579b-6c9c-05a18d3ab651@igalia.com>
+ <20240307003955.js57ik6cuxhhsae3@synopsys.com>
+ <70a7692d-647c-9be7-00a6-06fc60f77294@igalia.com>
+ <20240308024222.oaxnvagajnnstxrh@synopsys.com>
+From: "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <20240308024222.oaxnvagajnnstxrh@synopsys.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Greg & Jiri,
+On 07/03/2024 23:42, Thinh Nguyen wrote:
+> [...]
+>> And when in host mode, with USB connected, I see the following on dmesg:
+>> "xhci-hcd xhci-hcd.2.auto: xhci_plat_suspend: device_may_wakeup: 1"
+> 
+> That's great! I assumed you tested remote wakeup from the keyboard?
+> 
 
-On Sun, Jan 28, 2024 at 9:29=E2=80=AFAM Greg KH <gregkh@linuxfoundation.org=
-> wrote:
->
-> On Thu, Jan 18, 2024 at 10:27:54AM +0100, Jiri Slaby wrote:
-> > On 16. 01. 24, 15:16, Kuen-Han Tsai wrote:
-> > > Commit ffd603f21423 ("usb: gadget: u_serial: Add null pointer check i=
-n
-> > > gs_start_io") adds null pointer checks to gs_start_io(), but it doesn=
-'t
-> > > fully fix the potential null pointer dereference issue. While
-> > > gserial_connect() calls gs_start_io() with port_lock held, gs_start_r=
-x()
-> > > and gs_start_tx() release the lock during endpoint request submission=
-.
-> > > This creates a window where gs_close() could set port->port_tty to NU=
-LL,
-> > > leading to a dereference when the lock is reacquired.
-> > >
-> > > This patch adds a null pointer check for port->port_tty after RX/TX
-> > > submission, and removes the initial null pointer check in gs_start_io=
-()
-> > > since the caller must hold port_lock and guarantee non-null values fo=
-r
-> > > port_usb and port_tty.
-> >
-> > Or you switch to tty_port refcounting and need not fiddling with this a=
-t all
-> > ;).
->
-> I agree, Kuen-Han, why not do that instead?
+Hi Thinh, uh..I didn't test keyboard wakeup yday, but tried just now heh
+It doesn't work, but I don't think it's related with this patch.
 
-The u_serial driver has already maintained the usage count of a TTY
-structure for open and close. While the driver tracks the usage count
-via open/close, it doesn't fully eliminate race conditions. Below are
-two potential scenarios:
+I've also tested with pure XHCI (by disabling DRD mode on BIOS) and it
+doesn't wakeup too. So, I personally don't think that "diminishes" this
+patch, which is a proper fix. Oh, and also I'm testing through a very
+very cheap OTG adapter, so not 100% confidence.
 
-Case 1 (Observed):
-1. gs_open() sets usage count to 1.
-2. gserial_connect(), gs_start_io(), and gs_start_rx() execute in
-sequence (lock held).
-3. Lock released, usb_ep_queue() called.
-4. In parallel, gs_close() executes, sees count of 1, clears TTY, releases =
-lock.
-5. Original thread resumes in gs_start_rx(), potentially leading to
-kernel panic on an invalid TTY.
+> [...]
+> Thanks for testing! I sent out the patch. I think it can be done in a
+> single patch. Your Tested-by will be very helpful.
+> 
 
----
+Thank you Thinh, for the great support here - much appreciated!
+Cheers,
 
-Case 2: Hypothesis. Similar to Case 1, but the race occurs between
-gs_open() and gs_close(), also potentially causing a kernel panic.
-1. gserial_connect() enables usb endpoints.
-2. gs_open(), gs_start_io(), and gs_start_rx() execute in sequence (lock he=
-ld).
-3. Lock released, usb_ep_queue() called.
-4. In parallel, gs_close() executes, sees count of 1, clears TTY, releases =
-lock.
-5. Original thread resumes in gs_start_rx(), potentially leading to
-kernel panic on an invalid TTY.
 
----
-
-Since both gserial_connect() and gs_open() initiate gs_start_io(),
-there's a brief window where gs_start_rx() releases a spinlock for USB
-submission. If gs_close() executes during this window, it could
-acquire the lock and clear the TTY structure prematurely. This happens
-because the lock is released and the usage count remains 1, making it
-appear like a valid final reference, even though gs_start_io() is
-still in progress.
-
-My only solution so far is to recheck the TTY structure after
-gs_start_rx() or gs_start_tx(). I would greatly appreciate your
-insights on how to address this race condition effectively.
-
-Regards,
-Kuen-Han
+Guilherme
 
