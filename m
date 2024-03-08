@@ -1,129 +1,113 @@
-Return-Path: <linux-usb+bounces-7716-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7717-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7CB6487603A
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Mar 2024 09:52:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2EA2487604B
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Mar 2024 09:54:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AE0831C2253C
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Mar 2024 08:52:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 592901C22435
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Mar 2024 08:53:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02ED053E04;
-	Fri,  8 Mar 2024 08:52:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFBF2524CA;
+	Fri,  8 Mar 2024 08:53:25 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF7B45103F
-	for <linux-usb@vger.kernel.org>; Fri,  8 Mar 2024 08:51:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E108B51C5A
+	for <linux-usb@vger.kernel.org>; Fri,  8 Mar 2024 08:53:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709887920; cv=none; b=VHfp0XgcPnPP4GoSZOAtfPKkIAobnsSmdrz9f+QyXs9V4scAM5KXNX5PtPlfSlihf+8BG1bPqMEv6SPpwy40WW5CWV6Y2T/zGhzkbmVCNwwQOW2yq54jUg7j8rvGDTqpZWNidtbRkN6X+2VEfV0Y3Q2MVhvsYAXXsyyzeHKe4cc=
+	t=1709888005; cv=none; b=eAXlncsqIm8CBuo63zvmASmPjNmfRlMQT1gdfSM8YYWFRI2Gn37ee+VoaoKHNoUuKCP56bqB66Bxa8NJLeonPChfQ4tKYQ1IhPtypWZuCE0AdcppLxnXcCDrS79cJhlUW4YZWcpaQjTT0ZD8syufEFvE5/3vLPRNetZ2qBUvobg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709887920; c=relaxed/simple;
-	bh=UND3LN2cxUflw7dQF4s+C69E5KDxmztIpomMK2CtFqg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=UETj2vaLxIHt1EUTFimA9HkZ56paNhtFnUj2FBtMhalS9N0n6VnEwZhGxtV0gK7Yhehx4kr/GFBllskKRNLnaN+z6UypbAXFLPBamVB39gZWY9dS4W/q2VWk5gjE6+6obR7gJ0GuEuww9Pxs1vNVA5VtvM7PAOwVfgj/hV/ebR4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1riVxH-0006zY-QM; Fri, 08 Mar 2024 09:51:51 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1riVxG-0056Nl-Mn; Fri, 08 Mar 2024 09:51:50 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1riVxG-00246D-20;
-	Fri, 08 Mar 2024 09:51:50 +0100
-From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: Avi Fishman <avifishman70@gmail.com>,
-	Tomer Maimon <tmaimon77@gmail.com>,
-	Tali Perry <tali.perry1@gmail.com>,
-	Peter Chen <peter.chen@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Patrick Venture <venture@google.com>,
-	Nancy Yuen <yuenn@google.com>,
-	Benjamin Fair <benjaminfair@google.com>,
-	openbmc@lists.ozlabs.org,
-	linux-usb@vger.kernel.org,
-	kernel@pengutronix.de
-Subject: [PATCH] usb: chipidea: npcm: Convert to platform remove callback returning void
-Date: Fri,  8 Mar 2024 09:51:18 +0100
-Message-ID:  <91311e53e9432ae84d5720485c3b436fb7f06227.1709886922.git.u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1709888005; c=relaxed/simple;
+	bh=WuLlOiYmj9s7y86RnjWbEhbOMJs/ikccw8x07WP3uvc=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=k2rhnSWD3jPyHbEKhKA7nI14fcgANvyodqIP5mzTbx5K4AwnXUqgFCcN8OBixwrQ5kFUwC4FW/jxK6yb+6EHmEB3U/nf+M+0sz478KXWwV2Zh1kv4TRGsmEO/jrW1Rbcdhl5Ji+W1lGQSNtn4eTugQiqiEhbzizM9kAMy/HX708=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f70.google.com with SMTP id ca18e2360f4ac-7c85f86e4c7so58170439f.3
+        for <linux-usb@vger.kernel.org>; Fri, 08 Mar 2024 00:53:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709888003; x=1710492803;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8LJaZFzEhjA6xI4uEzq7WXkdneFEvV9I2SWWd9J1OrE=;
+        b=nkTAw56P4Mlx3eJ8Muf9+/cIk0i8nv4i8V0na7R7uVPOZfH4xtjj8IUZaJZ6vcn8w/
+         OgdC6SGpMQ6+Rx520OMP6MSlNsxfkNT8NTL5pR/Cfop/M0URjt34hubPjSJQLkw3JwG4
+         kbWuxN25wItIyhhcoxzBt9ASXbn4RFruVTEy2XS0yQ+uuHnaSurs6QnQ+Vyjdg5rQWne
+         WpO4bFWVjCaDoshqgaZHhYV64B2AlGiRhlbujQSX5oidSag2PHRUYVniBoBOqRue2mj6
+         tkg2zp72aDvv8yYLP+EnvQ7h3EREOA46pPQyjXyIBm8fxSxdqxXX3/RYuEPy98mt3LGk
+         ifRQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVQnQbtLfz2Sq0Gmug2WPYOdfXuURmjQ20UtKQKesBeXESV9RYcZw03D7T5QEM5c6FoduTUFPF0AlJb15tOJ9Fxp1D+JXLJ5y91
+X-Gm-Message-State: AOJu0Yxs+k7A7az4Qv1Dm74Xse1QhNXdYS/uKH6K1i388q45SkLdeV1H
+	yByAYODxoX1qjbHDqciRB1QwClF7ZYi/80uMVLtG3RJ2ZulRuC3jkgAwlVfFyBs3d4RBvU+MyzU
+	BklRizZKwsEXXwPKcYiijSaCH0jZW6C5l0u+kWQJhMl2lfThP7iAvu+k=
+X-Google-Smtp-Source: AGHT+IFXSPDo4pOdBkNk+ykdLG0YZU8ZetNXvBtqXuL4pUBvKUzKjt9eJRUK87IBMKhNvQIvTbBLutL0YHwwJPyOOa2I/dYIQksZ
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1902; i=u.kleine-koenig@pengutronix.de; h=from:subject:message-id; bh=UND3LN2cxUflw7dQF4s+C69E5KDxmztIpomMK2CtFqg=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBl6tGLzeOg4w6Z5Ct9P5xdIpqSFWK5xjUq8lifW Tin4bDyCfeJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZerRiwAKCRCPgPtYfRL+ TnELCACpUSdK/UC2Id2ldrUSo5k8ta2kYi8yCD76nX2Wy3e4aUb3QumJQpMSX7pyOD0qrECpV1m YLWa65U7wDCsCv0QyiQbTkuEKl0TySQIyHRY1wzY9hexDKMmVy1ZreCMZOqzsSu0yloG0V3c3vQ PpFAVyL2bbr5WJnowgocAlIsZMpkJUmEjPj/J0h848GOXiVym93IGBglbppEiFl4qfpBkQLnfbv J95BQYekOVrmKkJxBgQjRFQmHHU/zgBWt2aFU1fCp4pMO890W08cDoP19rJn03ZHDIWtJZkCAyR uzC00sFPq9ptUia6dl2GIWeexvm2PV3vqmduVEZ5w4Itp0PF
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+X-Received: by 2002:a05:6602:2c8b:b0:7c8:421f:bfa8 with SMTP id
+ i11-20020a0566022c8b00b007c8421fbfa8mr250384iow.4.1709888003129; Fri, 08 Mar
+ 2024 00:53:23 -0800 (PST)
+Date: Fri, 08 Mar 2024 00:53:23 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000000851660613225344@google.com>
+Subject: [syzbot] Monthly usb report (Mar 2024)
+From: syzbot <syzbot+list2ae0342013f79ec1e51e@syzkaller.appspotmail.com>
+To: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-The .remove() callback for a platform driver returns an int which makes
-many driver authors wrongly assume it's possible to do error handling by
-returning an error code. However the value returned is ignored (apart
-from emitting a warning) and this typically results in resource leaks.
+Hello usb maintainers/developers,
 
-To improve here there is a quest to make the remove callback return
-void. In the first step of this quest all drivers are converted to
-.remove_new(), which already returns void. Eventually after all drivers
-are converted, .remove_new() will be renamed to .remove().
+This is a 31-day syzbot report for the usb subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/usb
 
-Trivially convert this driver from always returning zero in the remove
-callback to the void returning variant.
+During the period, 7 new issues were detected and 0 were fixed.
+In total, 66 issues are still open and 332 have been fixed so far.
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Some of the still happening issues:
+
+Ref  Crashes Repro Title
+<1>  3225    Yes   WARNING in firmware_fallback_sysfs
+                   https://syzkaller.appspot.com/bug?extid=95f2e2439b97575ec3c0
+<2>  949     Yes   WARNING in implement
+                   https://syzkaller.appspot.com/bug?extid=38e7237add3712479d65
+<3>  864     Yes   general protection fault in ir_raw_event_store_with_filter
+                   https://syzkaller.appspot.com/bug?extid=34008406ee9a31b13c73
+<4>  634     Yes   INFO: task hung in hub_port_init (3)
+                   https://syzkaller.appspot.com/bug?extid=b6f11035e572f08bc20f
+<5>  509     Yes   INFO: task hung in usbdev_open (2)
+                   https://syzkaller.appspot.com/bug?extid=b73659f5bb96fac34820
+<6>  390     Yes   INFO: task hung in r871xu_dev_remove
+                   https://syzkaller.appspot.com/bug?extid=f39c1dad0b7db49ca4a8
+<7>  268     No    INFO: task hung in hub_event (3)
+                   https://syzkaller.appspot.com/bug?extid=a7edecbf389d11a369d4
+<8>  257     Yes   INFO: task hung in get_bMaxPacketSize0
+                   https://syzkaller.appspot.com/bug?extid=f7ac46d91cf13b4591a4
+<9>  222     Yes   INFO: rcu detected stall in hub_event
+                   https://syzkaller.appspot.com/bug?extid=ec5f884c4a135aa0dbb9
+<10> 172     Yes   INFO: rcu detected stall in syscall_exit_to_user_mode (2)
+                   https://syzkaller.appspot.com/bug?extid=a68ef3b1f46bc3aced5c
+
 ---
- drivers/usb/chipidea/ci_hdrc_npcm.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/drivers/usb/chipidea/ci_hdrc_npcm.c b/drivers/usb/chipidea/ci_hdrc_npcm.c
-index e4a191e02ceb..b14127873c55 100644
---- a/drivers/usb/chipidea/ci_hdrc_npcm.c
-+++ b/drivers/usb/chipidea/ci_hdrc_npcm.c
-@@ -80,15 +80,13 @@ static int npcm_udc_probe(struct platform_device *pdev)
- 	return ret;
- }
- 
--static int npcm_udc_remove(struct platform_device *pdev)
-+static void npcm_udc_remove(struct platform_device *pdev)
- {
- 	struct npcm_udc_data *ci = platform_get_drvdata(pdev);
- 
- 	pm_runtime_disable(&pdev->dev);
- 	ci_hdrc_remove_device(ci->ci);
- 	clk_disable_unprepare(ci->core_clk);
--
--	return 0;
- }
- 
- static const struct of_device_id npcm_udc_dt_match[] = {
-@@ -100,7 +98,7 @@ MODULE_DEVICE_TABLE(of, npcm_udc_dt_match);
- 
- static struct platform_driver npcm_udc_driver = {
- 	.probe = npcm_udc_probe,
--	.remove = npcm_udc_remove,
-+	.remove_new = npcm_udc_remove,
- 	.driver = {
- 		.name = "npcm_udc",
- 		.of_match_table = npcm_udc_dt_match,
+To disable reminders for individual bugs, reply with the following command:
+#syz set <Ref> no-reminders
 
-base-commit: 8ffc8b1bbd505e27e2c8439d326b6059c906c9dd
--- 
-2.43.0
+To change bug's subsystems, reply with:
+#syz set <Ref> subsystems: new-subsystem
 
+You may send multiple commands in a single email message.
 
