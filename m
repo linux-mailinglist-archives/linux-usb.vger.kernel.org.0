@@ -1,79 +1,96 @@
-Return-Path: <linux-usb+bounces-7747-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7748-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33623876D16
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Mar 2024 23:28:57 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E569876DE0
+	for <lists+linux-usb@lfdr.de>; Sat,  9 Mar 2024 00:35:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 646701C218C5
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Mar 2024 22:28:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2EB6EB20FFC
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Mar 2024 23:35:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8A12604BC;
-	Fri,  8 Mar 2024 22:28:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FED33BBDF;
+	Fri,  8 Mar 2024 23:35:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M04k5eqF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e1bnZOMw"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DB9E604AE;
-	Fri,  8 Mar 2024 22:28:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2B6011707
+	for <linux-usb@vger.kernel.org>; Fri,  8 Mar 2024 23:35:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709936901; cv=none; b=K5LUHGP4CBSEW4uWcTSvuQ4uXMM2s8/RnJBS4Ltlw5P9z8mC9U1CIfjgOQAEqJsxbWF2WIkAppQjdQ4I/Hvat0d9XY81rXfPs1iXZSGoSUmZv2jbTu/KZF0YrFWPQA1IxUtQIYE4oqvLc/xMaAAUMRMNocIT98hkeEQfV5piVtI=
+	t=1709940906; cv=none; b=IBq4Mmei1FVCzyVrP2ZTHYslA2de/cjdiP6DWvYNUSJDwuxHRMxamfDpNUUi+AVfwjGxv/yF3uzPCqPkk94s5vRwAWlmU6jRYe5VjXIn+JSfmP0qxCQeSxuOvmy+V0luFVyVwZ9v2mmGJ6iBGRH0EIJTh1qZuKJ7koGRsxiI4z4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709936901; c=relaxed/simple;
-	bh=f+aA1pXh0Fecuf0nO1G0I+WuUBCGnya/AIRsrq2HsvY=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=SHGBLHOwuh+w+zYoZ4aj/B3GU/HlOo/aeoaaxIZUxMKexn64aMWsUArrtsHqoVgGVF9WbV8QkaKbxkHpgTZFavG23IG60h3bvnWHwSFt+YaJ5jXSvQ9OEQDoGE2t4/ZziDHZimY5QTZuWJHrLRVKkP+KTZPxkdfYylkDTGnt4Do=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M04k5eqF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C65CFC433F1;
-	Fri,  8 Mar 2024 22:28:20 +0000 (UTC)
+	s=arc-20240116; t=1709940906; c=relaxed/simple;
+	bh=4RM70+P0XiOBtRQSPQNjK3ATyGahxNk0286ox/09ntQ=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=cj7NeNUndNcj1tfEODqrX6n+76tVHouSwP9Uepla33/JEP7ooFGHkaLk7RW04FsraSa75LZDBtnTeReNQ1lqllTIpjV/gCmXiYdQyYJsZlKemR3bhpvwbwCGVKNNOxpDBlgm7QATEEQYI9PKfw01CDUcFEawIMZJpM7+tYkc7vM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e1bnZOMw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6FE6DC433F1
+	for <linux-usb@vger.kernel.org>; Fri,  8 Mar 2024 23:35:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709936900;
-	bh=f+aA1pXh0Fecuf0nO1G0I+WuUBCGnya/AIRsrq2HsvY=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=M04k5eqFCdbc4nGsAz17gkp+c4I76Xr4+hR8aeLkEzDDmDk4qROdvfJhnoVw4xtAq
-	 Y+qyPgLaWKodoCjeV1BwdPW1y/7sYcghNfKJmkPcCz32uO/j7eaThKOifC3t5299kR
-	 c387p8HYcrNvq+2DemyjnE30TtKHk6ezGWT0/8X6IHebZWplrOg1f2BxGpYfH7gA8I
-	 bCXIWu7abeJ7xvZ8LoiKC4ZiOgEgu41oyIF3cUisTrCxgcLNlz2aiiXdwHL9RN7MsP
-	 gmpqbAFFcp/tYJZsChYC0+1ithbl8rGluVq+lHg1HL4KEELq8aPNqbwpdV5Jv/T9z7
-	 MqA6xikk6E3Hg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B16B7C59A4C;
-	Fri,  8 Mar 2024 22:28:20 +0000 (UTC)
-Subject: Re: [GIT PULL] USB/Thunderbolt driver fixes for 6.8-rc8
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <ZetLB2-_00QyZZJs@kroah.com>
-References: <ZetLB2-_00QyZZJs@kroah.com>
-X-PR-Tracked-List-Id: <linux-usb.vger.kernel.org>
-X-PR-Tracked-Message-Id: <ZetLB2-_00QyZZJs@kroah.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.8-rc8
-X-PR-Tracked-Commit-Id: b234c70fefa7532d34ebee104de64cc16f1b21e4
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: e536e0d44c44f8854a6c527195c70ce9dd1e0c0b
-Message-Id: <170993690072.2485.16888337815076439293.pr-tracker-bot@kernel.org>
-Date: Fri, 08 Mar 2024 22:28:20 +0000
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+	s=k20201202; t=1709940905;
+	bh=4RM70+P0XiOBtRQSPQNjK3ATyGahxNk0286ox/09ntQ=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=e1bnZOMwSR2+ZSX3FdnhkvGQrFJqwLzFfjiAG3IbKo1bmERA6I3w4+iyuBlOriuAM
+	 O1caSRplalIz2K1Iuw0f9h7YWrotF3F8Ig1AGUej7+RlWHqRIZM1cplYHY1LsDFYRp
+	 8FA4b6FghmbTiFcAS4T3uzc0nkFmziW0ZTYA623aC9ik4NVJiCsHdZpz06ruxLuBcW
+	 +lBzr0w/Zxc6TKhMwpevWztBCwZ0RtZPXbzIW7dOY4NoK/ex1K1vgzZL/QFi4hmufM
+	 1UM8O4qtA5v5xEaXsvwlJzjXGZXbhvTG5+VJDlR08XpEelA1WHKnIHAzsT/GU3X2m+
+	 CEq2kLb/HAi/w==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 5ADB6C53BD0; Fri,  8 Mar 2024 23:35:05 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 218544] not enough bandwidth, synaptics hi-res audio duplex
+ audio
+Date: Fri, 08 Mar 2024 23:35:05 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: ibmalone@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-218544-208809-PySPETcX2P@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-218544-208809@https.bugzilla.kernel.org/>
+References: <bug-218544-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
 
-The pull request you sent on Fri, 8 Mar 2024 17:29:43 +0000:
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218544
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.8-rc8
+--- Comment #16 from Ian Malone (ibmalone@gmail.com) ---
+Thanks for looking into it. I think we can close this then, if I manage to =
+test
+the packet size fix I'll find out where the correct place to submit it as a
+device quirk is, by itself that might be enough with the current scheduler.
+Unlikely I'll get into porting over that old scheduler reimplementation, I
+don't really need it, it seems few people have, and it almost certainly
+requires a deeper understanding of the protocol than I've picked up so far.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/e536e0d44c44f8854a6c527195c70ce9dd1e0c0b
+--=20
+You may reply to this email to add a comment.
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
