@@ -1,163 +1,123 @@
-Return-Path: <linux-usb+bounces-7729-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7730-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39D30876426
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Mar 2024 13:18:10 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9995E876581
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Mar 2024 14:41:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C93041F21F89
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Mar 2024 12:18:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4D588281F55
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Mar 2024 13:41:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E57B05676F;
-	Fri,  8 Mar 2024 12:18:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4349C38DCD;
+	Fri,  8 Mar 2024 13:41:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="EbOBsIR5"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SPiYGXzR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEA4856763;
-	Fri,  8 Mar 2024 12:17:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50CC917EF;
+	Fri,  8 Mar 2024 13:41:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709900281; cv=none; b=Ep5lBSrNm2etJfLqtoRX/VSNaN9HZKOGHmPpMEV7hH9MwnPf3SLidYCTOZs9DLhL6Zp6c09PzBUMzZyqgE4LYdk54gY/1eGJSWyySshQizIdm3bgbDtTYO9i/VN+qjX0y1Z163na6wjMkorkKarwSkn6mc/FDIuqEj+jF+1jjc4=
+	t=1709905290; cv=none; b=uzFUQPkPcrKXhzLKQCtULYMS1J1xiTRIijM6Ik6HJMUnOZQmlCsDmMKKnjrgARlQI2Nm9uNwuq/6TeXyOzcKeqv2GrxTDaG8guziloJoj3lsWVrEU6uA0oZS86CJlgHGmSGwI5o6BDeXySi4dMx0pnmET5dOXLH0d/jYFe3FtzQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709900281; c=relaxed/simple;
-	bh=pwUsUTNB4CXn5jwmeq9Yam1lIk14dD1UFdgsfTppWeI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=ruFBAc+zVLf5g8eR+RBZmKX47QXbKGlMvTYz3KWMZHOeV5KXoBaF4od1xRQoGD9UmDEdjkVN1M3NmnQJwjOCd4BzflPF460iZMr0V6YVYw2JXJLqiD33pSUmIfVEJzCpNeNrVQktM1gNWnhv9VicoQjOnXnW3t9rwWMh1vBbRmA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=EbOBsIR5; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 428CG7fr016040;
-	Fri, 8 Mar 2024 12:17:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=J6c0uTF3I1nxAq5/QiDVTuwY4eatOHB2G6Mxe9XZGS0=; b=Eb
-	OBsIR5Yp1KuXcNP6CZ3qN8ti4Sd+I5cp1Js9wD3sVqRZHIMuvfwe22HAjDwx5X1P
-	GNhjBIl8wJFhjQhmGi+Vqvd0RGYGq1vvefswCma13yNRzGeD8Usf0QvulBjSkqXF
-	ahaiYi63PkUtyqiaS2zqeTSb039sv0irgs1dTqGBwATZQ74tc52QcYy2QF06gznL
-	w6WKOC6ULPRC2i27US6+o00ZGVpfcaC1qo6zNNb+TfmqYQQV9bOxsB9ohIANP/V2
-	zlfai4X7nbWL6B/gvNpAmelS2uHkiFS1mgs+qBTmjryixojVZL+PbobwCx8M44Gp
-	ygUGRm/gmw7/f4glKG7w==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wqyfsreab-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 08 Mar 2024 12:17:43 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 428CHgQD011585
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 8 Mar 2024 12:17:42 GMT
-Received: from [10.216.63.135] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Fri, 8 Mar
- 2024 04:17:40 -0800
-Message-ID: <4816d981-3955-495c-8fc6-3b9b15ba1689@quicinc.com>
-Date: Fri, 8 Mar 2024 17:47:37 +0530
+	s=arc-20240116; t=1709905290; c=relaxed/simple;
+	bh=+t1ETm8CzkM9ZXH1uUmD6NmBHPg3pT1jV+G0NVp2IPU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lQ5v78pQQ6A9C/0Z2lizwGIU2cgIrogFhTGR4SWvOYbRz/A2lBpSvHxCJKODS++fbkKdAxC3sdy9y3fBoWlJ25yU1e1/q3TlqDR4fpQCMiXGLRQIG1FHcJNe4dY/INygI11vybG396LUvj1/8H060eoxsRDHx5xaDCzcJ4x1108=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SPiYGXzR; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1709905289; x=1741441289;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+t1ETm8CzkM9ZXH1uUmD6NmBHPg3pT1jV+G0NVp2IPU=;
+  b=SPiYGXzRIoAdLwWc52JLCY8D5XJL0FMo6yiOJug8b1qESCwf2ttNFbqV
+   BSvGKno3cRDRI4n0jYsdX9YDJ1makS8HKimZ1f3hvX8xf+Gn65JFnzqKY
+   ZKtlaH2Z+nAAvP0HicFOeVDMNzgxG9KzqZ2tFT7ReckQMtP+pB0TCKRMi
+   hKc8Z85Q/Wwq6MbIsvkLxYZLTfCN9R6Q6hwIuvnpMN8Gw4fryyj9su6Mz
+   tt9VqqWBnT8WfClfZT2vuCqV9JYi9W0zc5vE7MFgfColISNm4ZBmfsLlL
+   SnIF5kchtVZ+PpzRh4c0hjhCBJFjQxZMSe7WAu24hr6B0Kb75HpafGpXG
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11006"; a="4493989"
+X-IronPort-AV: E=Sophos;i="6.07,109,1708416000"; 
+   d="scan'208";a="4493989"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2024 05:41:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,11006"; a="914246852"
+X-IronPort-AV: E=Sophos;i="6.07,109,1708416000"; 
+   d="scan'208";a="914246852"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2024 05:41:25 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.97)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1riaTR-0000000AqtQ-48QB;
+	Fri, 08 Mar 2024 15:41:21 +0200
+Date: Fri, 8 Mar 2024 15:41:21 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Howard Yen <howardyen@google.com>
+Cc: gregkh@linuxfoundation.org, rafael@kernel.org, mathias.nyman@intel.com,
+	hch@lst.de, m.szyprowski@samsung.com, robin.murphy@arm.com,
+	petr.tesarik.ext@huawei.com, broonie@kernel.org, james@equiv.tech,
+	james.clark@arm.com, masahiroy@kernel.org,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	iommu@lists.linux.dev
+Subject: Re: [PATCH v4 1/2] dma-coherent: add support for multi coherent
+ rmems per dev
+Message-ID: <ZesVgXi9xBFvDL4O@smile.fi.intel.com>
+References: <20240308095320.1961469-1-howardyen@google.com>
+ <20240308095320.1961469-2-howardyen@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: gadget: f_ncm: Fix Kernel Panic due to access of
- invalid gadget ptr
-To: Hardik Gajjar <hgajjar@de.adit-jv.com>
-CC: <gregkh@linuxfoundation.org>, <maze@google.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <guofeng.li@gm.com>, <hardik.gajjar@bosch.com>,
-        <eugeniu.rosca@bosch.com>
-References: <20240307161849.9145-1-hgajjar@de.adit-jv.com>
- <8d116b78-9227-4e48-8d37-3a0cb0465dfd@quicinc.com>
- <20240308115506.GA5631@vmlxhi-118.adit-jv.com>
-Content-Language: en-US
-From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <20240308115506.GA5631@vmlxhi-118.adit-jv.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: g4r7HiYzWehTB7vfJPVAcvEQKnnvW2it
-X-Proofpoint-ORIG-GUID: g4r7HiYzWehTB7vfJPVAcvEQKnnvW2it
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-03-08_08,2024-03-06_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
- malwarescore=0 mlxscore=0 lowpriorityscore=0 mlxlogscore=806
- priorityscore=1501 suspectscore=0 bulkscore=0 adultscore=0 clxscore=1011
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2402120000 definitions=main-2403080098
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240308095320.1961469-2-howardyen@google.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-
-
-On 3/8/2024 5:25 PM, Hardik Gajjar wrote:
-> On Thu, Mar 07, 2024 at 11:12:07PM +0530, Krishna Kurapati PSSNV wrote:
->>
-
-[...]
-
+On Fri, Mar 08, 2024 at 09:53:19AM +0000, Howard Yen wrote:
+> Add support for multiple coherent rmems per device. This patch replaces
+> original dma_mem with dma_mems list in device structure to store multiple
+> rmems.
 > 
-> I believe using gether_cleanup altogether may not be an optimal solution.
-> The creation and deletion of network interfaces should align with the behavior of each specific network driver.
+> These multiple rmems can be assigned to the device one by one by
+> of_reserved_mem_device_init_by_idx() with the memory-region
+> declaration in device tree as below and store the rmem to the dma_mems
+> list.
 > 
-> For instance, in the case of NCM, the usb0 interface is created upon the creation of a directory
-> in config/usb_gadget/gX/functions/ncm.usb0, and it is removed when the corresponding directory
-> is deleted. This follows a standard flow observed in many network drivers, where interfaces are
-> created during driver loading/probing and deleted during removal.
+> 	device1@0 {
+> 		...
+> 		memory-region = <&reserved_mem0>, <&reserved_mem1>;
+> 		...
+> 	};
 > 
+> When driver tries to allocate memory from the rmems, looks for the first
+> available rmem and allocates the memory from this rmem.
+> 
+> Then if driver removed, of_reserved_mem_device_release() needs to be
+> invoked to release all the rmems assigned to the device.
 
-Hi Hardik,
+...
 
-  Yeah. I observed this behavior.
+> +#endif
+> +#ifdef CONFIG_DMA_DECLARE_COHERENT
+> +	INIT_LIST_HEAD(&dev->dma_mems);
+>  #endif
 
-> Typically, deleting the gadget on every disconnection is not considered a good practice, as it can
-> negatively impact the user experience when accessing the gadget.
-> 
+Side note: Have you used --histogram diff algo? If no, use it in the future.
 
-Got it. I was suspecting issues might come up during fast Plug-In/ 
-Plug-Out cases as setting and cleanup of network interface might take 
-some time.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-> In our specific scenario, retaining the usb0 network interface has proven to enhance performance
-> and stabilize connections. Previous attempts to remove it resulted in an observed increase in time of 300ms,
-> particularly at the start of Apple CarPlay sessions.
-> 
 
-Thanks for this info. Makes sense to keep it in free_inst only. But my 
-initial doubt only stemmed from the fact that actions taken during bind 
-must be reversed during unbind.
-
-> Furthermore, it's important to highlight that in Qualcomm products and msm kernels, the inclusion of gether_cleanup
-> in the unbind process was eventually reverted. While the specific reason for reverting the patch is unknown,
-> it suggests that the addition may not have yielded the intended or required results
-> 
-> Following is the revert patch details in msm-5.4 kernel, if you want check it.
-> 
-> Revert "usb: gadget: f_ncm: allocate/free net device upon driver bind/unbind"
-> 
-> This reverts commit 006d8adf555a8c6d34113f564ade312d68abd3b3.
-> 
-> Move back the allocation of netdevice to alloc_inst(), one-time
-> registration to bind(), deregistration and free to rm_inst(). The
-> UI update issue will be taken up with proper stakeholders.
-> 
-> Change-Id: I56448b08f6796a43ec5b0dfe0dd2d42cdc0eec14
-> 
-
-Agree. This was merged first in 4.19 downstream (most probably for car 
-play use case only) and then reverted in 5.4. But present 4.19 code in 
-QC still keeps it in unbind path. The only reason I suspect it was 
-reverted was to get back on to same page with upstream driver (atleast 
-starting from 5.10, this was the reasoning to remove gether_cleanup in 
-unbind path and put it back in free_inst).
-
-Thanks,
-Krishna,
 
