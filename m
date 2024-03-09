@@ -1,158 +1,277 @@
-Return-Path: <linux-usb+bounces-7754-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7755-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B1F98770F3
-	for <lists+linux-usb@lfdr.de>; Sat,  9 Mar 2024 13:07:45 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA5FB87718B
+	for <lists+linux-usb@lfdr.de>; Sat,  9 Mar 2024 14:56:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 52DAE1C20923
-	for <lists+linux-usb@lfdr.de>; Sat,  9 Mar 2024 12:07:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CDE6D1C20AF0
+	for <lists+linux-usb@lfdr.de>; Sat,  9 Mar 2024 13:56:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 721FD38FA1;
-	Sat,  9 Mar 2024 12:07:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Fsm0zcWM"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D40F040873;
+	Sat,  9 Mar 2024 13:56:24 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D7A7381CC
-	for <linux-usb@vger.kernel.org>; Sat,  9 Mar 2024 12:07:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D64151BDF4
+	for <linux-usb@vger.kernel.org>; Sat,  9 Mar 2024 13:56:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.69
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709986057; cv=none; b=SHGCAJvi3lAO55+o7CUfEzlSVpthPJQbO9LNXYo9TEGQSoIotJiXS4Qonju+7LDbqC0YZMuEjJnw/SYLyRz0UP+GNHY5jF0gBm4jo0xIlTlWyAx8oTs9JKfxiGmDUHeFGS9SFmHR84vAgb1W06oDqiAbMivAZw6TFv2G59csJ9Y=
+	t=1709992584; cv=none; b=qI/fMgg9AvLvvgrQaxSrlKUDh72dIl4vmmHDSsmIkczZMTs9qzha8rI/tZXJAtVJc5L5hMnhed9TmXP28FjXsUpRFrHJAeGCxI/HYZUW20T0aZUcOvcFG5sMtzuFekXDNRATGl5vhFgF/fHi2bSLm7S+2wvv2TkOFO1eHNdDKu0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709986057; c=relaxed/simple;
-	bh=hptZnaht2w5YtGt7LErCmk1SGVForCNV8/3BL892w4Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XJl3uZB584nRcKIFQobCwkEkHWXGtLkqzE+mgopJ1VV/puMih+jQhV0JTytTEMPzUJCFAm77XlKKj7AFBiq0a10C+VqbVkTpEGIXdrpQpqtTTpkFvFTBjNPB2L6/5T+EwmC++1sU2W9EESn5vkika+Xia2WvKmVHhtRuIIjWNAo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Fsm0zcWM; arc=none smtp.client-ip=209.85.218.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a3ddc13bbb3so721381366b.0
-        for <linux-usb@vger.kernel.org>; Sat, 09 Mar 2024 04:07:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1709986054; x=1710590854; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HuYQqTzOh2dbxKcDW8fuo4NyC7wUn/V1EGwtPNsCUbk=;
-        b=Fsm0zcWMmwfTFP3txqBjkKTCJGZrypnU1xGTrGC2iVbIqzg5fMJjBQCB0+mYlIX6Kv
-         csavZTlb0VWrl5FkaH3pMVpuxDTOC/dOtHe7B2TVXZiG+aKTojHkHZK/i55JuSCtzz/g
-         LlnTkt9pywlvJG5XchVhMBQ/nzTCz464TL0LFGVIQyf012JpyDFm8U2Gn/XMM+f7Rsdx
-         Iav8etxzp5SNvsZLLem0JUEkWv/iPxcOrZ86U5C/OW5hkIkms5UWc8rzJcjeArgrtJ/o
-         eXGILaLT7yUD4IhHYJ7+IYGlqwzeAVz6V28xzp8NveWs7fLLMHfj+hWFEk3K+BMGYYsA
-         xqlA==
+	s=arc-20240116; t=1709992584; c=relaxed/simple;
+	bh=4/rRvptdp4qKmeIoYfCSm0w2FvFvH5RKhZS0MyGJ7MU=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=Q9y/B1rLgyqXFAELIQXAW5rXyEAGC9xqTfrwk/lweJynQ6W/UYTCeAxcrLtU6kIE0RrwdSm4pMJimYixQTXpA7rDwSRNtGB9AZJL1VNVvC2sYQi4ecWyCaPq8F3mLgumC/Bh00tXG0Weg6EbaEJXTtdV6Ytw7HZF1UKjFW9iR2Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.69
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-7c8364e4a31so314303739f.2
+        for <linux-usb@vger.kernel.org>; Sat, 09 Mar 2024 05:56:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709986054; x=1710590854;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HuYQqTzOh2dbxKcDW8fuo4NyC7wUn/V1EGwtPNsCUbk=;
-        b=nT5o1w/1mBInOH5IUbB+v5VaKWsREGOtl5tizcpaXD//oHGkkb+uJPgdD6xzLShazo
-         6i0Bg2c99Nz3zH1cSMsOZO1MS7DUhkeRdIEEvNJlKxhD6OHbhPRtruem5MyjvSAuqwFX
-         tLE1lPCMBYrrL0kZlC2+l/8H1FlWTd4VNSnRH9X7GaiwYRlwfiuRHE0LzUMi9FFuBD1X
-         eo5hDeQV7DDPyxMSrUVwwi6INeC6S0TeegokpM9Tbdkm6XlWUafKGv3+2fVJnxUoA0yr
-         linPKP00AME5MZoR3/r8wIvw13DQTMYBwzgjeJfWogLUbrr8Iq+l7YahAWYXmqhY/E5X
-         6pEw==
-X-Forwarded-Encrypted: i=1; AJvYcCU6ZpT2NxIHiJu/t3tXDUzj8EVYubM2+U9RkXXiamDF5cJYJiVWOKPHyL2wLR/4wqSorAGQQicUUjT3GICVWYbddNrWFRaytEiK
-X-Gm-Message-State: AOJu0Yy7YOvnsFsWXFfMhlvzRbA2Ntc+A5Xg0fD+aDLHGCleAqG6w3v7
-	0T1ddVVvROQ0a3KQca23LTx6v5MqOBl9+lGxMwRy0rvmmzehjiAsVvPgCjeeTno=
-X-Google-Smtp-Source: AGHT+IEh/WtamVuOiyuhNuIJsHYzIghyKm1Sx7t5QlkGmFTtNeu9z9W6GZQEXeUuHmYnsOhzhHZAgQ==
-X-Received: by 2002:a17:906:ba84:b0:a45:5fe8:26b4 with SMTP id cu4-20020a170906ba8400b00a455fe826b4mr1365446ejd.24.1709986053663;
-        Sat, 09 Mar 2024 04:07:33 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.222.97])
-        by smtp.gmail.com with ESMTPSA id h25-20020a1709070b1900b00a3e5adf11c7sm811529ejl.157.2024.03.09.04.07.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 09 Mar 2024 04:07:33 -0800 (PST)
-Message-ID: <e78c43a9-9142-436d-a303-40871a44069a@linaro.org>
-Date: Sat, 9 Mar 2024 13:07:31 +0100
+        d=1e100.net; s=20230601; t=1709992582; x=1710597382;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yeWdolIukjuIT6djSO5vJ9A0bt1LKEAUENPR0p05oog=;
+        b=SumfqlYXxv/IGOHlH32NnZsYlKiFBh1wlQKtcWZWLiQ2qggrR5WRyg2s0n6UJrT3LH
+         ooHxnE7x59QzVXCJR1hTRibvSiZ5P2kdfC8HH9FtXR/4Qa3liCaGZs8SbGL3vNaCi/YJ
+         zfnQ296PLPNRM9JMEAL94FqlXGslgW5Ylhrw8ROgi59VtXQE232VxgKBCa83DjF3pvch
+         I8MX6D/QUWdCSmVtSAPRmDPwJ3ps0ciM2QmgxqgUOhNeDcL1svuLaiV0+kuQ4A7d2nJf
+         9WBoq0Q0Wm1j0vFcJek7VukrRsLcyHX5hVnAfZqJG1rlowLLrosUKx7XQjuI3TX7B+MJ
+         iZaQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVQGAXJWqmi+Qaa/QDuwy7Icuo9zeS1OL6xONLtg8//06Sym4Y1x2IbTjZFYGZnRPf1tOGH2MKGsdQFY0N3LSNZ7wzkm5kBb8Ku
+X-Gm-Message-State: AOJu0YxpIGx73Buo1erfTsRlwjMoTfRMs5KLzUQEFD0K+G8HU1rYpDSW
+	xIDBgBP+hQVaHDRbL3KmWV7lghyVMUQLVNuKzCALADLBc32F/tuaJQYQd7Co+37e//5+RsBLA5G
+	0//sHaiMvTcTVczyH5LnE9m18WIxmswfTsW15K04Bu46Yt5zWErxerpo=
+X-Google-Smtp-Source: AGHT+IGospwXP3X//QXmS850gEnXTtJTITsLt1q19l2raEN3aAt2yX9zRlc27x6V4JGS+3bKBjHBiAkPP5Ixom+Sv014ly6u103d
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/4] dt-bindings: usb: renesas,usbhs: Document RZ/G2L
- family compatible
-Content-Language: en-US
-To: Biju Das <biju.das.jz@bp.renesas.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Geert Uytterhoeven <geert+renesas@glider.be>,
- Magnus Damm <magnus.damm@gmail.com>,
- Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
- linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
- linux-renesas-soc@vger.kernel.org,
- Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
- Biju Das <biju.das.au@gmail.com>
-References: <20240308180919.6603-1-biju.das.jz@bp.renesas.com>
- <20240308180919.6603-2-biju.das.jz@bp.renesas.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20240308180919.6603-2-biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-Received: by 2002:a05:6602:6403:b0:7c8:593f:fdc3 with SMTP id
+ gn3-20020a056602640300b007c8593ffdc3mr33513iob.4.1709992582162; Sat, 09 Mar
+ 2024 05:56:22 -0800 (PST)
+Date: Sat, 09 Mar 2024 05:56:22 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000006dbb0b06133aacee@google.com>
+Subject: [syzbot] [mm?] [input?] [usb?] INFO: rcu detected stall in asm_exc_page_fault
+From: syzbot <syzbot+360faf5c01a5be55581d@syzkaller.appspotmail.com>
+To: akpm@linux-foundation.org, linux-input@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, linux-usb@vger.kernel.org, 
+	pasha.tatashin@soleen.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On 08/03/2024 19:09, Biju Das wrote:
-> The USBHS IP found on RZ/G2L SoCs only has 10 pipe buffers compared
-> to 16 pipe buffers on RZ/A2M. Document renesas,rzg2l-usbhs family
-> compatible to handle this difference for RZ/G2L family SoCs.
-> 
+Hello,
 
-Another point of futility of using generic fallbacks which are simply
-not correct. Just start using SoCs fallbacks.
+syzbot found the following issue on:
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+HEAD commit:    90d35da658da Linux 6.8-rc7
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=122f6f6a180000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=119d08814b43915b
+dashboard link: https://syzkaller.appspot.com/bug?extid=360faf5c01a5be55581d
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=124056de180000
 
-Best regards,
-Krzysztof
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/fb2c1adf4ec3/disk-90d35da6.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/09c5b88a8ceb/vmlinux-90d35da6.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/5e5cbc312e49/bzImage-90d35da6.xz
 
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+360faf5c01a5be55581d@syzkaller.appspotmail.com
+
+rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: {
+ 1-....
+ } 4831 jiffies s: 1849 root: 0x2/.
+rcu: blocking rcu_node structures (internal RCU debug):
+Sending NMI from CPU 0 to CPUs 1:
+ kthread+0x2ef/0x390 kernel/kthread.c:388
+NMI backtrace for cpu 1
+CPU: 1 PID: 5232 Comm: syz-executor.3 Not tainted 6.8.0-rc7-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/25/2024
+RIP: 0010:format_decode+0x546/0x1bb0
+Code: 85 96 01 00 00 45 84 ff 0f 84 8d 01 00 00 48 bb 00 ff ff ff 00 ff ff ff 48 8b 44 24 20 42 0f b6 04 30 84 c0 0f 85 4d 10 00 00 <48> 8b 54 24 48 48 21 da 48 8b 44 24 28 42 0f b6 04 30 84 c0 48 8d
+RSP: 0000:ffffc900001efa20 EFLAGS: 00000046
+RAX: 0000000000000000 RBX: ffffff00ffffff00 RCX: ffff8880219e0000
+RDX: ffff8880219e0000 RSI: 0000000000000025 RDI: 0000000000000000
+RBP: ffffc900001efb10 R08: ffffffff8b57a4c8 R09: ffffffff8b57a1aa
+R10: 0000000000000002 R11: ffff8880219e0000 R12: ffffffff8bab75e6
+R13: ffffffff8bab75e6 R14: dffffc0000000000 R15: 0000000000000025
+FS:  0000555555c82480(0000) GS:ffff8880b9500000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f74dc087056 CR3: 0000000021bc6000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <NMI>
+ </NMI>
+ <IRQ>
+ vsnprintf+0x14f/0x1da0 lib/vsprintf.c:2776
+ sprintf+0xda/0x120 lib/vsprintf.c:3028
+ print_time kernel/printk/printk.c:1324 [inline]
+ info_print_prefix+0x16b/0x310 kernel/printk/printk.c:1350
+ record_print_text kernel/printk/printk.c:1399 [inline]
+ printk_get_next_message+0x408/0xce0 kernel/printk/printk.c:2828
+ console_emit_next_record kernel/printk/printk.c:2868 [inline]
+ console_flush_all+0x42d/0xec0 kernel/printk/printk.c:2967
+ console_unlock+0x13b/0x4d0 kernel/printk/printk.c:3036
+ vprintk_emit+0x508/0x720 kernel/printk/printk.c:2303
+ _printk+0xd5/0x120 kernel/printk/printk.c:2328
+ printk_stack_address arch/x86/kernel/dumpstack.c:72 [inline]
+ show_trace_log_lvl+0x438/0x520 arch/x86/kernel/dumpstack.c:285
+ sched_show_task+0x50c/0x6d0 kernel/sched/core.c:9171
+ show_state_filter+0x19e/0x270 kernel/sched/core.c:9216
+ kbd_keycode drivers/tty/vt/keyboard.c:1524 [inline]
+ kbd_event+0x30fa/0x4910 drivers/tty/vt/keyboard.c:1543
+ input_to_handler drivers/input/input.c:132 [inline]
+ input_pass_values+0x945/0x1200 drivers/input/input.c:161
+ input_event_dispose drivers/input/input.c:378 [inline]
+ input_handle_event drivers/input/input.c:406 [inline]
+ input_repeat_key+0x3fd/0x6c0 drivers/input/input.c:2263
+ call_timer_fn+0x17e/0x600 kernel/time/timer.c:1700
+ expire_timers kernel/time/timer.c:1751 [inline]
+ __run_timers+0x621/0x830 kernel/time/timer.c:2038
+ run_timer_softirq+0x67/0xf0 kernel/time/timer.c:2051
+ __do_softirq+0x2bb/0x942 kernel/softirq.c:553
+ invoke_softirq kernel/softirq.c:427 [inline]
+ __irq_exit_rcu+0xf1/0x1c0 kernel/softirq.c:632
+ irq_exit_rcu+0x9/0x30 kernel/softirq.c:644
+ sysvec_apic_timer_interrupt+0x97/0xb0 arch/x86/kernel/apic/apic.c:1076
+ </IRQ>
+ <TASK>
+ asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:649
+RIP: 0010:page_table_check_set+0x58/0x700 mm/page_table_check.c:109
+Code: 95 ff 85 ed 0f 84 5f 03 00 00 49 bf 00 00 00 00 00 fc ff df 48 c1 e3 06 48 bd 00 00 00 00 00 ea ff ff 48 8d 3c 2b 48 89 3c 24 <e8> 33 e9 ff ff 49 89 c6 4c 8d 64 2b 08 4c 89 e5 48 c1 ed 03 42 80
+RSP: 0000:ffffc90004d0f650 EFLAGS: 00000202
+RAX: 0000000000000000 RBX: 0000000001c8ae80 RCX: ffff8880219e0000
+RDX: ffff8880219e0000 RSI: 0000000000000001 RDI: ffffea0001c8ae80
+RBP: ffffea0000000000 R08: ffffffff81fdf590 R09: 1ffffffff1f0880d
+R10: dffffc0000000000 R11: fffffbfff1f0880e R12: 0000000000000000
+R13: 0000000000000001 R14: 00000000722ba025 R15: dffffc0000000000
+ __page_table_check_ptes_set+0x220/0x280 mm/page_table_check.c:196
+ page_table_check_ptes_set include/linux/page_table_check.h:74 [inline]
+ set_ptes include/linux/pgtable.h:241 [inline]
+ set_pte_range+0x885/0x8b0 mm/memory.c:4549
+ filemap_map_order0_folio mm/filemap.c:3513 [inline]
+ filemap_map_pages+0xee2/0x1830 mm/filemap.c:3559
+ do_fault_around mm/memory.c:4716 [inline]
+ do_read_fault mm/memory.c:4749 [inline]
+ do_fault mm/memory.c:4888 [inline]
+ do_pte_missing mm/memory.c:3745 [inline]
+ handle_pte_fault mm/memory.c:5164 [inline]
+ __handle_mm_fault+0x485d/0x72d0 mm/memory.c:5305
+ handle_mm_fault+0x27e/0x770 mm/memory.c:5470
+ do_user_addr_fault arch/x86/mm/fault.c:1355 [inline]
+ handle_page_fault arch/x86/mm/fault.c:1498 [inline]
+ exc_page_fault+0x456/0x870 arch/x86/mm/fault.c:1554
+ asm_exc_page_fault+0x26/0x30 arch/x86/include/asm/idtentry.h:570
+RIP: 0033:0x7f74dc087080
+Code: Unable to access opcode bytes at 0x7f74dc087056.
+RSP: 002b:00007ffe028d3bb8 EFLAGS: 00010246
+RAX: 00007f74dcdfb9d0 RBX: 00007f74dcdfb6c0 RCX: 00007f74dc07de67
+RDX: 0000000000000003 RSI: 0000000000020000 RDI: 00007f74dcdfb6c0
+RBP: 0000000000000000 R08: 00000000ffffffff R09: 0000000000000000
+R10: 0000000000021000 R11: 0000000000000206 R12: 00007ffe028d3e60
+R13: ffffffffffffffc0 R14: 0000000000001000 R15: 0000000000000000
+ </TASK>
+ ret_from_fork+0x4b/0x80 arch/x86/kernel/process.c:147
+ ret_from_fork_asm+0x1b/0x30 arch/x86/entry/entry_64.S:243
+ </TASK>
+task:kworker/u4:0    state:I stack:24400 pid:11    tgid:11    ppid:2      flags:0x00004000
+Workqueue:  0x0 (events_unbound)
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5400 [inline]
+ __schedule+0x177f/0x49a0 kernel/sched/core.c:6727
+ __schedule_loop kernel/sched/core.c:6802 [inline]
+ schedule+0x149/0x260 kernel/sched/core.c:6817
+ worker_thread+0xc26/0x1000 kernel/workqueue.c:2802
+ kthread+0x2ef/0x390 kernel/kthread.c:388
+ ret_from_fork+0x4b/0x80 arch/x86/kernel/process.c:147
+ ret_from_fork_asm+0x1b/0x30 arch/x86/entry/entry_64.S:243
+ </TASK>
+task:kworker/u4:1    state:I stack:23344 pid:12    tgid:12    ppid:2      flags:0x00004000
+Workqueue:  0x0 (bat_events)
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5400 [inline]
+ __schedule+0x177f/0x49a0 kernel/sched/core.c:6727
+ __schedule_loop kernel/sched/core.c:6802 [inline]
+ schedule+0x149/0x260 kernel/sched/core.c:6817
+ worker_thread+0xc26/0x1000 kernel/workqueue.c:2802
+ kthread+0x2ef/0x390 kernel/kthread.c:388
+ ret_from_fork+0x4b/0x80 arch/x86/kernel/process.c:147
+ ret_from_fork_asm+0x1b/0x30 arch/x86/entry/entry_64.S:243
+ </TASK>
+task:kworker/R-mm_pe state:I stack:28752 pid:13    tgid:13    ppid:2      flags:0x00004000
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5400 [inline]
+ __schedule+0x177f/0x49a0 kernel/sched/core.c:6727
+ __schedule_loop kernel/sched/core.c:6802 [inline]
+ schedule+0x149/0x260 kernel/sched/core.c:6817
+ rescuer_thread+0xc45/0xda0 kernel/workqueue.c:2937
+ kthread+0x2ef/0x390 kernel/kthread.c:388
+ ret_from_fork+0x4b/0x80 arch/x86/kernel/process.c:147
+ ret_from_fork_asm+0x1b/0x30 arch/x86/entry/entry_64.S:243
+ </TASK>
+task:rcu_tasks_kthre state:I stack:27448 pid:14    tgid:14    ppid:2      flags:0x00004000
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5400 [inline]
+ __schedule+0x177f/0x49a0 kernel/sched/core.c:6727
+ __schedule_loop kernel/sched/core.c:6802 [inline]
+ schedule+0x149/0x260 kernel/sched/core.c:6817
+ rcu_tasks_one_gp+0x7f5/0xda0 kernel/rcu/tasks.h:578
+ rcu_tasks_kthread+0x186/0x1b0 kernel/rcu/tasks.h:625
+ kthread+0x2ef/0x390 kernel/kthread.c:388
+ ret_from_fork+0x4b/0x80 arch/x86/kernel/process.c:147
+ ret_from_fork_asm+0x1b/0x30 arch/x86/entry/entry_64.S:243
+ </TASK>
+task:rcu_tasks_trace state:I stack:27144 pid:15    tgid:15    ppid:2      flags:0x00004000
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5400 [inline]
+ __schedule+0x177f/0x49a0 kernel/sched/core.c:6727
+ __schedule_loop kernel/sched/core.c:6802 [inline]
+ schedule+0x149/0x260 kernel/sched/core.c:6817
+ rcu_tasks_one_gp+0x7f5/0xda0 kernel/rcu/tasks.h:578
+ rcu_tasks_kthread+0x186/0x1b0 kernel/rcu/tasks.h:625
+ kthread+0x2ef/0x390 kernel/kthread.c:388
+ ret_from_fork+0x4b/0x80 arch/x86/kernel/process.c:147
+ ret_from_fork_asm+0x1b/0x30 arch/x86/entry/entry_64.S:243
+ </TASK>
+task:ksoftirqd/0
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
