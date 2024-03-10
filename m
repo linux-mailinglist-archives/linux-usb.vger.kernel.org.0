@@ -1,127 +1,121 @@
-Return-Path: <linux-usb+bounces-7787-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7788-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E26087761F
-	for <lists+linux-usb@lfdr.de>; Sun, 10 Mar 2024 11:38:24 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E6678877639
+	for <lists+linux-usb@lfdr.de>; Sun, 10 Mar 2024 12:21:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8B5961C20A8B
-	for <lists+linux-usb@lfdr.de>; Sun, 10 Mar 2024 10:38:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 55487B20CC6
+	for <lists+linux-usb@lfdr.de>; Sun, 10 Mar 2024 11:21:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97A5E1EB46;
-	Sun, 10 Mar 2024 10:38:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bw/KztFx"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCCF31EB44;
+	Sun, 10 Mar 2024 11:20:56 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7E783D8E;
-	Sun, 10 Mar 2024 10:38:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAEBC1EB23
+	for <linux-usb@vger.kernel.org>; Sun, 10 Mar 2024 11:20:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710067094; cv=none; b=S822KuWBpvYEND4UACqtxHNcPVQyjHW2uizh0A95vza3tfoLdRp9lVf9VedJ/Ure5i08FILblP2yD91zY/Qy+89gjha9q5ALooYu7RQwh40RZTj61nqFAbkud5hPHIbr/l/t3q8VriogykGDYbBFzcT4kaB8bNHtWILs5Ta/FUs=
+	t=1710069656; cv=none; b=nbeG57LhCnsvJAi7tz4YoY0v3RFeC9sdeDyrTVt60vuUT1asAQije9ttayKlYDfju0dC/3IJrSM4aGSjNYEYQvfW2a+fyv9UR7iHFPmgX9mivrgqiUIhI7wVx5x5IKhTwOgPpsLJOSznubqkBcXlYaFcpInr4Ertx/G28fIc61w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710067094; c=relaxed/simple;
-	bh=8/J5Jwa+0rLFUZyeqG/2hEgXFAgXb6jr08TRztCGnd4=;
+	s=arc-20240116; t=1710069656; c=relaxed/simple;
+	bh=1lo6Ufa9Y9sMpEkHeCVyy0nzTlREwq9VUjUqovb3NiM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CwCu27Hj8ZieCBrfCGCFtM63fk7k28E7mui4EVgPHH+ACdmQIlagKv2VQ7LHaW7TdmyXT/XBo4PvloPpwgW86fH9fbXEDckJqo1NDlwEy9xn04WPBx6EdPlFwFBVa3q1kBPkktXc51ziteSWTQ2f9D8SBtWiKlRq6X1HvxcZXcU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bw/KztFx; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1710067092; x=1741603092;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8/J5Jwa+0rLFUZyeqG/2hEgXFAgXb6jr08TRztCGnd4=;
-  b=bw/KztFxr2RGA20RrmiEl8fvCxsf8uXqk06fmxN1bqJOKfdCJl4qV4ZN
-   xiNZpSpdGtbhSRljEtcYZ5tG0uTNH2RUZ7Hyx6ncAJhkPV8MBFp5w4wH8
-   EzuoJkS8H52fo+6+kyNpxH67sEukvGnQDUOOGkQgqRfAe2++7/Ejkefqr
-   Fj8bUQzmixfS1vOhhO/GG4pofa0Ye9vbtWwIRc8FgsQwKsd6tcaz6X/14
-   5qDSURKjuKVR9CGWk9jdNZZZLFLYQGLz7NZLWteq/QRR+Vl1b4JcG0TlX
-   OFjDpsi2rIjKvDkDszlqLCYYrhYTG8mFWGYwoawo1/l1LJOiEZXzN08Yu
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11008"; a="4868405"
-X-IronPort-AV: E=Sophos;i="6.07,114,1708416000"; 
-   d="scan'208";a="4868405"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2024 03:38:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,114,1708416000"; 
-   d="scan'208";a="10787715"
-Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 10 Mar 2024 03:38:05 -0700
-Received: from kbuild by b21307750695 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rjGZ9-0008BP-19;
-	Sun, 10 Mar 2024 10:38:03 +0000
-Date: Sun, 10 Mar 2024 18:37:53 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sam Ravnborg via B4 Relay <devnull+sam.ravnborg.org@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Arnd Bergmann <arnd@kernel.org>,
-	Andreas Larsson <andreas@gaisler.com>
-Cc: oe-kbuild-all@lists.linux.dev, netdev@vger.kernel.org,
-	Helge Deller <deller@gmx.de>, Randy Dunlap <rdunlap@infradead.org>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	Mark Cave-Ayland <mark.cave-ayland@ilande.co.uk>,
-	Kjetil Oftedal <oftedal@gmail.com>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-	sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, linux-sound@vger.kernel.org,
-	Sam Ravnborg <sam@ravnborg.org>
-Subject: Re: [PATCH v2 14/28] sparc32: Drop unused mmu models
-Message-ID: <202403101854.Z94SAU13-lkp@intel.com>
-References: <20240309-sunset-v2-14-f09912574d2c@ravnborg.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=R0N+K/35jNFwlgU/Si8rS/HC7rzB76hMDBf8FkctT+TorcBcaEGSxkModdRvizIia/uWEPA7t04ickdRI/hwQ49dyflgvny8EmwAwqwgvfTYr+8ZEyjhecgb3LuSkmTorau38jMKs/bq7bwcZAV4kEmrfSrIlLNhd8V7THY5/Ag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rjHEQ-0001CI-P0; Sun, 10 Mar 2024 12:20:42 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rjHEP-005VO1-1y; Sun, 10 Mar 2024 12:20:41 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rjHEO-003OnK-35;
+	Sun, 10 Mar 2024 12:20:40 +0100
+Date: Sun, 10 Mar 2024 12:20:40 +0100
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: Colin Ian King <colin.i.king@gmail.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Roy Huang <roy.huang@analog.com>, Ash Aziz <ash.aziz@plxtech.com>, 
+	Mike Frysinger <vapier@gentoo.org>, Seth Levy <seth.levy@plxtech.com>, linux-usb@vger.kernel.org, 
+	kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH][next][V2] usb: gadget: net2272: Use irqflags in the call
+ to net2272_probe_fin
+Message-ID: <hycmac4toie3uk7xvgrgqrcw5f2vi2sm4j45ca5coc4qs7orec@gtigekcag6d6>
+References: <20240307181734.2034407-1-colin.i.king@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="nsvuqs7gnggucupu"
 Content-Disposition: inline
-In-Reply-To: <20240309-sunset-v2-14-f09912574d2c@ravnborg.org>
+In-Reply-To: <20240307181734.2034407-1-colin.i.king@gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
-Hi Sam,
 
-kernel test robot noticed the following build warnings:
+--nsvuqs7gnggucupu
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[auto build test WARNING on 84b76d05828a1909e20d0f66553b876b801f98c8]
+Hello,
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Sam-Ravnborg-via-B4-Relay/sparc32-Update-defconfig-to-LEON-SMP/20240310-021717
-base:   84b76d05828a1909e20d0f66553b876b801f98c8
-patch link:    https://lore.kernel.org/r/20240309-sunset-v2-14-f09912574d2c%40ravnborg.org
-patch subject: [PATCH v2 14/28] sparc32: Drop unused mmu models
-config: sparc-randconfig-r113-20240310 (https://download.01.org/0day-ci/archive/20240310/202403101854.Z94SAU13-lkp@intel.com/config)
-compiler: sparc-linux-gcc (GCC) 13.2.0
-reproduce: (https://download.01.org/0day-ci/archive/20240310/202403101854.Z94SAU13-lkp@intel.com/reproduce)
+On Thu, Mar 07, 2024 at 06:17:34PM +0000, Colin Ian King wrote:
+> Currently the variable irqflags is being set but is not being used,
+> it appears it should be used in the call to net2272_probe_fin
+> rather than IRQF_TRIGGER_LOW being used. Kudos to Uwe Kleine-K=F6nig
+> for suggesting the fix.
+>=20
+> Cleans up clang scan build warning:
+> drivers/usb/gadget/udc/net2272.c:2610:15: warning: variable 'irqflags'
+> set but not used [-Wunused-but-set-variable]
+>=20
+> Fixes: ceb80363b2ec ("USB: net2272: driver for PLX NET2272 USB device con=
+troller")
+>=20
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403101854.Z94SAU13-lkp@intel.com/
+Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+Suggested-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
 
-sparse warnings: (new ones prefixed by >>)
->> arch/sparc/mm/srmmu.c:49:5: sparse: sparse: symbol 'vac_line_size' was not declared. Should it be static?
+Best regards
+Uwe
 
-vim +/vac_line_size +49 arch/sparc/mm/srmmu.c
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-accf032cfa582e Sam Ravnborg   2012-05-19  46  
-^1da177e4c3f41 Linus Torvalds 2005-04-16  47  int vac_cache_size;
-9d262d95114cf2 Guenter Roeck  2017-04-01  48  EXPORT_SYMBOL(vac_cache_size);
-^1da177e4c3f41 Linus Torvalds 2005-04-16 @49  int vac_line_size;
-^1da177e4c3f41 Linus Torvalds 2005-04-16  50  
+--nsvuqs7gnggucupu
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmXtl4cACgkQj4D7WH0S
+/k4YHQf8Dde9ohuB8pl8cPyQtzLgarlGSXTb6nDXSoQO1UA128zHw7Aj2rGHThMq
+xeeodRSsqpQRLpz/ANWuDpCgBRSGcDagzYBDCKFj2oBfIzmNOkAGVFBq2Sf1K6Ai
+Mj+lObCZFRG5vLAENcII3I2bghO8hPSnbZEwgvYbKaTdZwXKExf/oxJzb+KyxlpT
+AS+FNRu/ZxYajiL9nZbWjSmMNVuzGdUFrYJP8IQmLCgGj6JYsf7ur7v1/dFy3S4G
+E5SokdH9QlDoJyJ1Vx1sXsVVU6m//YGF0F/IOGpQuwhKwImjpF4tdy/zvbnlf9fh
+5Ehlr5FfggTzLqNWnkWOrOOwuaJaFQ==
+=POC+
+-----END PGP SIGNATURE-----
+
+--nsvuqs7gnggucupu--
 
