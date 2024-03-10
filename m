@@ -1,121 +1,216 @@
-Return-Path: <linux-usb+bounces-7788-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7789-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6678877639
-	for <lists+linux-usb@lfdr.de>; Sun, 10 Mar 2024 12:21:11 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E674877671
+	for <lists+linux-usb@lfdr.de>; Sun, 10 Mar 2024 12:46:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 55487B20CC6
-	for <lists+linux-usb@lfdr.de>; Sun, 10 Mar 2024 11:21:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AA5211F2147D
+	for <lists+linux-usb@lfdr.de>; Sun, 10 Mar 2024 11:46:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCCF31EB44;
-	Sun, 10 Mar 2024 11:20:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1EB320326;
+	Sun, 10 Mar 2024 11:46:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dbeuut79"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAEBC1EB23
-	for <linux-usb@vger.kernel.org>; Sun, 10 Mar 2024 11:20:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 975CC200D6
+	for <linux-usb@vger.kernel.org>; Sun, 10 Mar 2024 11:46:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710069656; cv=none; b=nbeG57LhCnsvJAi7tz4YoY0v3RFeC9sdeDyrTVt60vuUT1asAQije9ttayKlYDfju0dC/3IJrSM4aGSjNYEYQvfW2a+fyv9UR7iHFPmgX9mivrgqiUIhI7wVx5x5IKhTwOgPpsLJOSznubqkBcXlYaFcpInr4Ertx/G28fIc61w=
+	t=1710071190; cv=none; b=cYs56tuIkvsOD2pAmXYC9G4VtNbZqMLi1BrEMZWmPxA45Rx4e4Rqgsh8CcjRG/9x/sVFdvrzJpWb8yiBfpoSa4JMbH3a0+uD6nj1khRQvKb6nli3Wp6PCW13P1bQ1YaAw1wC5LO2kU5kQpyO8qSLSB5Css4Dk+WTEwhn7rkgGfU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710069656; c=relaxed/simple;
-	bh=1lo6Ufa9Y9sMpEkHeCVyy0nzTlREwq9VUjUqovb3NiM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=R0N+K/35jNFwlgU/Si8rS/HC7rzB76hMDBf8FkctT+TorcBcaEGSxkModdRvizIia/uWEPA7t04ickdRI/hwQ49dyflgvny8EmwAwqwgvfTYr+8ZEyjhecgb3LuSkmTorau38jMKs/bq7bwcZAV4kEmrfSrIlLNhd8V7THY5/Ag=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rjHEQ-0001CI-P0; Sun, 10 Mar 2024 12:20:42 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rjHEP-005VO1-1y; Sun, 10 Mar 2024 12:20:41 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rjHEO-003OnK-35;
-	Sun, 10 Mar 2024 12:20:40 +0100
-Date: Sun, 10 Mar 2024 12:20:40 +0100
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: Colin Ian King <colin.i.king@gmail.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Roy Huang <roy.huang@analog.com>, Ash Aziz <ash.aziz@plxtech.com>, 
-	Mike Frysinger <vapier@gentoo.org>, Seth Levy <seth.levy@plxtech.com>, linux-usb@vger.kernel.org, 
-	kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH][next][V2] usb: gadget: net2272: Use irqflags in the call
- to net2272_probe_fin
-Message-ID: <hycmac4toie3uk7xvgrgqrcw5f2vi2sm4j45ca5coc4qs7orec@gtigekcag6d6>
-References: <20240307181734.2034407-1-colin.i.king@gmail.com>
+	s=arc-20240116; t=1710071190; c=relaxed/simple;
+	bh=uizi5IRvd5NvjgqfhI2wCMBimt43g2ByEAhc/niz0pY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=cYYeEhR1TJZOBk8srnDkvTsKcJg1xYk2BvqSnEsgHlqWod+9zPWR+qzIhWIGTdvAEmeS1J9/5MM0aWTtolvBX0QhmYrA/0+LTS/SDMQkmlL33Xz9Q0WpTyvZbtrIi7qSO+mBzcBdoVsoCJM5DEOEnXLZON5U1mFnXQ4n8RScq5A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dbeuut79; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1710071187;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=KET7QTLCZ3S+u1REsJgRib9mJHyqhY3qVaHdaO5OW3w=;
+	b=dbeuut791euHkd1F/MPPIMuwkaZJasdGrfgvS03c91AvWhrMXDj3vDJCOLO2W8UQiwopgO
+	pwIXUjwrUXU60BscBCEKihPo3mTRJkC7B90O6A/zgmuDOlEi4horjvuyjHy4rCwV2MnhXW
+	l63+KTSVbb3zM6Hozmh9VAib+tJSs/k=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-616-Kt2nyrq-OgWg7IoX1GOszw-1; Sun, 10 Mar 2024 07:46:25 -0400
+X-MC-Unique: Kt2nyrq-OgWg7IoX1GOszw-1
+Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-a449be9db59so179407066b.1
+        for <linux-usb@vger.kernel.org>; Sun, 10 Mar 2024 04:46:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710071184; x=1710675984;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KET7QTLCZ3S+u1REsJgRib9mJHyqhY3qVaHdaO5OW3w=;
+        b=bF9hvzRGElKjHGlPmU/pW7d2rTyS6m+CMuTJ18OjZ3chPTaRfrttEVgO40hP4YaJQG
+         jWJXh/kIVojqv6B3MlLiKE9pPTiRhOfZnqx95r3JSjym5PHkqw1F+2TXckJQUWA158fc
+         0b70j3vc9XBnc2njeVqNzbDjQQaIrTwTyZIeqdHCxFolO9m/x3A1X/9AjBbuSWlNHdDe
+         D5+rzDNQ/l3cB4EMH24vWPU0st7tjNsueUMvrHfgr/Sey+rSu3XFk2MMHoNhruzcMLBf
+         +p1rL7w080/z5ZwqMMJ7R4mK9PeG6sHwz7Gvj1Rc3+n/cLhaCo0b6O/2k+hwovLF5+wR
+         X/fw==
+X-Gm-Message-State: AOJu0Yzh/wZNLo8CGUD4kepdDfRvvN82oWOayMAbLr/l0Uj1rmS9IuV1
+	izh9BknSfvyGABZiea+z6cb+3kKGQLhp3E3CErVmvbKCWUioAPqJWb9e4KiIJKC+wQduBegBC4U
+	UAaIyrwLY9QGQOmn2Gq33Gx3z4CzSe240U9S/CoS6smPy2yezBwP/Um8Z9w==
+X-Received: by 2002:a17:907:a705:b0:a3e:68a2:3d4e with SMTP id vw5-20020a170907a70500b00a3e68a23d4emr2483241ejc.54.1710071184186;
+        Sun, 10 Mar 2024 04:46:24 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHeCEv47Gv2F/UtTX5L4hoIfKNN7um5zd3GdBdlzWig0mpU0KOQoa9GqJnzwVjAlTfVVq0Niw==
+X-Received: by 2002:a17:907:a705:b0:a3e:68a2:3d4e with SMTP id vw5-20020a170907a70500b00a3e68a23d4emr2483229ejc.54.1710071183848;
+        Sun, 10 Mar 2024 04:46:23 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id me24-20020a170906aed800b00a450164cec6sm1846571ejb.194.2024.03.10.04.46.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 10 Mar 2024 04:46:23 -0700 (PDT)
+Message-ID: <36e56422-d027-4edd-af6e-8ebcebc1dfe3@redhat.com>
+Date: Sun, 10 Mar 2024 12:46:22 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="nsvuqs7gnggucupu"
-Content-Disposition: inline
-In-Reply-To: <20240307181734.2034407-1-colin.i.king@gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V2] usb: misc: ljca: Fix double free in error handling
+ path
+Content-Language: en-US, nl
+To: Yongzhi Liu <hyperlyzcs@gmail.com>, wentong.wu@intel.com,
+ gregkh@linuxfoundation.org, andi.shyti@linux.intel.com
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ jitxie@tencent.com, huntazhang@tencent.com
+References: <2c77e58a-fe07-464f-9032-3933080be349@redhat.com>
+ <20240307115743.13104-1-hyperlyzcs@gmail.com>
+From: Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20240307115743.13104-1-hyperlyzcs@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+Hi Yongzhi Liu,
+
+On 3/7/24 12:57, Yongzhi Liu wrote:
+> When auxiliary_device_add() returns error and then calls
+> auxiliary_device_uninit(), callback function ljca_auxdev_release
+> calls kfree(auxdev->dev.platform_data) to free the parameter data
+> of the function ljca_new_client_device. The callers of
+> ljca_new_client_device shouldn't call kfree() again
+> in the error handling path to free the platform data.
+> 
+> Fix this by cleaning up the redundant kfree() in all callers and
+> adding kfree() the passed in platform_data on errors which happen
+> before auxiliary_device_init() succeeds .
+> 
+> Fixes: acd6199f195d ("usb: Add support for Intel LJCA device")
+> Signed-off-by: Yongzhi Liu <hyperlyzcs@gmail.com>
+> ---
+>  drivers/usb/misc/usb-ljca.c | 26 +++++++++-----------------
+>  1 file changed, 9 insertions(+), 17 deletions(-)
+> 
+> diff --git a/drivers/usb/misc/usb-ljca.c b/drivers/usb/misc/usb-ljca.c
+> index 35770e608c64..bd9ccbea6e72 100644
+> --- a/drivers/usb/misc/usb-ljca.c
+> +++ b/drivers/usb/misc/usb-ljca.c
+> @@ -518,8 +518,10 @@ static int ljca_new_client_device(struct ljca_adapter *adap, u8 type, u8 id,
+>  	int ret;
+>  
+>  	client = kzalloc(sizeof *client, GFP_KERNEL);
+> -	if (!client)
+> +	if (!client) {
+> +		kfree(data);
+>  		return -ENOMEM;
+> +	}
+>  
+>  	client->type = type;
+>  	client->id = id;
+> @@ -535,8 +537,10 @@ static int ljca_new_client_device(struct ljca_adapter *adap, u8 type, u8 id,
+>  	auxdev->dev.release = ljca_auxdev_release;
+>  
+>  	ret = auxiliary_device_init(auxdev);
+> -	if (ret)
+> +	if (ret) {
+> +		kfree(data);
+>  		goto err_free;
+> +	}
+>  
+>  	ljca_auxdev_acpi_bind(adap, auxdev, adr, id);
+>  
+> @@ -590,12 +594,8 @@ static int ljca_enumerate_gpio(struct ljca_adapter *adap)
+>  		valid_pin[i] = get_unaligned_le32(&desc->bank_desc[i].valid_pins);
+>  	bitmap_from_arr32(gpio_info->valid_pin_map, valid_pin, gpio_num);
+>  
+> -	ret = ljca_new_client_device(adap, LJCA_CLIENT_GPIO, 0, "ljca-gpio",
+> +	return ljca_new_client_device(adap, LJCA_CLIENT_GPIO, 0, "ljca-gpio",
+>  				     gpio_info, LJCA_GPIO_ACPI_ADR);
+> -	if (ret)
+> -		kfree(gpio_info);
+> -
+> -	return ret;
+>  }
+>  
+>  static int ljca_enumerate_i2c(struct ljca_adapter *adap)
+> @@ -626,13 +626,9 @@ static int ljca_enumerate_i2c(struct ljca_adapter *adap)
+>  		i2c_info->capacity = desc->info[i].capacity;
+>  		i2c_info->intr_pin = desc->info[i].intr_pin;
+>  
+> -		ret = ljca_new_client_device(adap, LJCA_CLIENT_I2C, i,
+> +		return ljca_new_client_device(adap, LJCA_CLIENT_I2C, i,
+>  					     "ljca-i2c", i2c_info,
+>  					     LJCA_I2C1_ACPI_ADR + i);
+> -		if (ret) {
+> -			kfree(i2c_info);
+> -			return ret;
+> -		}
+
+This is in a for loop, by using:
+
+		return ljca_new_client_device(...);
+
+you are now only creating the first ljca-i2c controller, while
+there may be more instead just drop the kfree() from the if (ret) {}
+block:
+
+		ret = ljca_new_client_device(...);
+		if (ret)
+			return ret;
+
+Sorry for not noticing this with the v1 posting.
+
+>  	}
+>  
+>  	return 0;
+> @@ -666,13 +662,9 @@ static int ljca_enumerate_spi(struct ljca_adapter *adap)
+>  		spi_info->id = desc->info[i].id;
+>  		spi_info->capacity = desc->info[i].capacity;
+>  
+> -		ret = ljca_new_client_device(adap, LJCA_CLIENT_SPI, i,
+> +		return ljca_new_client_device(adap, LJCA_CLIENT_SPI, i,
+>  					     "ljca-spi", spi_info,
+>  					     LJCA_SPI1_ACPI_ADR + i);
+> -		if (ret) {
+> -			kfree(spi_info);
+> -			return ret;
+> -		}
+>  	}
+
+Same remark as with the creation of the i2c controllers, please use:
+
+		ret = ljca_new_client_device(...);
+		if (ret)
+			return ret;
+
+Regards,
+
+Hans
 
 
---nsvuqs7gnggucupu
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hello,
-
-On Thu, Mar 07, 2024 at 06:17:34PM +0000, Colin Ian King wrote:
-> Currently the variable irqflags is being set but is not being used,
-> it appears it should be used in the call to net2272_probe_fin
-> rather than IRQF_TRIGGER_LOW being used. Kudos to Uwe Kleine-K=F6nig
-> for suggesting the fix.
->=20
-> Cleans up clang scan build warning:
-> drivers/usb/gadget/udc/net2272.c:2610:15: warning: variable 'irqflags'
-> set but not used [-Wunused-but-set-variable]
->=20
-> Fixes: ceb80363b2ec ("USB: net2272: driver for PLX NET2272 USB device con=
-troller")
->=20
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-
-Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-Suggested-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---nsvuqs7gnggucupu
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmXtl4cACgkQj4D7WH0S
-/k4YHQf8Dde9ohuB8pl8cPyQtzLgarlGSXTb6nDXSoQO1UA128zHw7Aj2rGHThMq
-xeeodRSsqpQRLpz/ANWuDpCgBRSGcDagzYBDCKFj2oBfIzmNOkAGVFBq2Sf1K6Ai
-Mj+lObCZFRG5vLAENcII3I2bghO8hPSnbZEwgvYbKaTdZwXKExf/oxJzb+KyxlpT
-AS+FNRu/ZxYajiL9nZbWjSmMNVuzGdUFrYJP8IQmLCgGj6JYsf7ur7v1/dFy3S4G
-E5SokdH9QlDoJyJ1Vx1sXsVVU6m//YGF0F/IOGpQuwhKwImjpF4tdy/zvbnlf9fh
-5Ehlr5FfggTzLqNWnkWOrOOwuaJaFQ==
-=POC+
------END PGP SIGNATURE-----
-
---nsvuqs7gnggucupu--
 
