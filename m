@@ -1,104 +1,119 @@
-Return-Path: <linux-usb+bounces-7809-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7812-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40888877F5B
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Mar 2024 12:56:38 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0CBED877F7B
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Mar 2024 13:03:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 71F1A1C218A5
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Mar 2024 11:56:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A1445B21A23
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Mar 2024 12:03:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 717EE3B7AC;
-	Mon, 11 Mar 2024 11:56:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1CD03D551;
+	Mon, 11 Mar 2024 12:03:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dqS8dL68"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="D1rwrRu7"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95C6138394
-	for <linux-usb@vger.kernel.org>; Mon, 11 Mar 2024 11:56:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF2993C064;
+	Mon, 11 Mar 2024 12:03:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710158193; cv=none; b=lk23GgoLxT7aAbINgYezRjx/6KhzNdM2lyUQZ1xXBj5uDYY9o+Vxc+3xpv8kYIw0b3UUJl00xv7ZPG4a7Hceyzipo77y7mUHW4XJZPsE7QGGx8yC7MfBKjEnUSBTTI7v15/1cySB2b/WHnFS5gZVEvGPKnLJ0Ku0chsHZl9esOw=
+	t=1710158603; cv=none; b=guT371itFtXBYomCFXhaMmfRDxj25OFmgIqYOOfWNSdelyZT+Gm7AlouANirjAdhtbwHoLZP+vF2k1BjTrgYwT92wNrSdIhl1xCg5NI3lC0sX4nUAllwsJDoGybM/Gbg2AfrbxeNWAnUt1r3ZqH28i120DwSccXNuwiXEBADiOc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710158193; c=relaxed/simple;
-	bh=5iZi2i9hsdhPL4yJkwbmA8KofrNZFuLx3k52EgS+WwU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CaBSBFMYN8AtBolItIdB8vCNBF1KwDaFAuoeoMYajxxew+mUKzl/DIblll6g6p9Bz+e0LxP+xIY0/A9QgcDi15TzV+lPSzKy1ev0Tkz6URuU45RK4kDI5LrzhAo4TjLPiGC+J6p4RWdQkYLsmi8juYU+o5+AvcSwDWZ3Q4Dx4qk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dqS8dL68; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1710158192; x=1741694192;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5iZi2i9hsdhPL4yJkwbmA8KofrNZFuLx3k52EgS+WwU=;
-  b=dqS8dL68FYknK55e0nIDKq5P9cKSTGWjcY7utOJ1S2epsHIAavxGQXql
-   mBSG5I2vnUEDVELU3es7jtJqWSqeJ6CMNGxFoA0ctbtFb0O3Hzb/jTqoI
-   PGW2H7tKdOKA1wcjLQKzY+Tgk0b/h96ZE67MLK22l0ocqVOi3Xd5GJhN/
-   rOtjbKnVDKrOLRGuO3tlOuZ6AKAo/OBzHrRk8C5ZkcQ5Bhb98IJdQn8H5
-   eUm6I4aQ67dyn+mQvOmOZEWSiDLPgy4HvefDUUEP43kSUI0WceyotVazE
-   eRgu0X1wxTnsKAr12z+nDyRoGJ3MmFuMsCSdBL34MbDy52ZsuoBpRMk6c
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11009"; a="16253565"
-X-IronPort-AV: E=Sophos;i="6.07,116,1708416000"; 
-   d="scan'208";a="16253565"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2024 04:56:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11009"; a="937049691"
-X-IronPort-AV: E=Sophos;i="6.07,116,1708416000"; 
-   d="scan'208";a="937049691"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 11 Mar 2024 04:56:28 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id 48F44177; Mon, 11 Mar 2024 13:56:27 +0200 (EET)
-Date: Mon, 11 Mar 2024 13:56:27 +0200
-From: "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>
-To: "mohamed.rayan@siemens.com" <mohamed.rayan@siemens.com>
-Cc: "andreas.noever@gmail.com" <andreas.noever@gmail.com>,
-	"michael.jamet@intel.com" <michael.jamet@intel.com>,
-	"YehezkelShB@gmail.com" <YehezkelShB@gmail.com>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"mohamed.samy@siemens.com" <mohamed.samy@siemens.com>,
-	"mohamed.el_nahas@siemens.com" <mohamed.el_nahas@siemens.com>,
-	"ahmed_mohammed@siemens.com" <ahmed_mohammed@siemens.com>
-Subject: Re: Inquiry about tb/usb4 driver
-Message-ID: <20240311115627.GD112498@black.fi.intel.com>
-References: <SEZPR06MB5439E9D11593D4550BDCA4AFF35F2@SEZPR06MB5439.apcprd06.prod.outlook.com>
- <20240229123042.GH8454@black.fi.intel.com>
- <SEZPR06MB5439B1EDA735894215D6263BF35F2@SEZPR06MB5439.apcprd06.prod.outlook.com>
- <20240229125536.GI8454@black.fi.intel.com>
- <SEZPR06MB5439FEE8694906792549E92FF3242@SEZPR06MB5439.apcprd06.prod.outlook.com>
+	s=arc-20240116; t=1710158603; c=relaxed/simple;
+	bh=TKMT2rdzO+/5ChgLIqApqclXNnkC3VHE5qfko++u4Cs=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=RaIIOtqDnlrLuJyiKN9rRarxWP+amuDcWl5B0ZAKWRrmwVgxwrU9BNKBp4jmh/0Q9hEOLazPFq9OnahyaYPn+XsC+Oi+wvY+ERHS8gsERhB0/Vm/qHgbhYkb/YNZVHXfBJ45Dyn+9x7uhVArhAxg141P1aIuOxyAl8DGB/3Rpho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=D1rwrRu7; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 42B8LItZ018303;
+	Mon, 11 Mar 2024 12:03:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	from:to:cc:subject:date:message-id:mime-version
+	:content-transfer-encoding:content-type; s=qcppdkim1; bh=d99JtsJ
+	ZhHsoZbUbQC6eIvwCP4EmFMN0LTeOQNY2154=; b=D1rwrRu7C/BQnG2TLMCVWw2
+	Oha5UOawSqnKd3YRw7P3c4P0XkqDILZzegxF+2E1ALsjD645GHCsNSoCEvAWS4ll
+	8oUwVZl7DkQzYHf1ADAr4v843y5nLfmfsJ+m3J+s5Qys7r/7FOwYYKnHR4UZvWoZ
+	TeElaxzrIjPH+/kuAUvkx8pUvzAJG5QIiGZYvdxPQhEBZAE5cWF/pSNClqaYtEFD
+	9U2CnAZ/OeF1giDsx3Cn7DlWa1/T/JM+cmVD99ReF+H/vi8bR3XgwBJEG5ls3txX
+	GL5xP9RIt0kL+qyzX9lSvdR54JRUcSsLOWo39W8fidNBI8sq45mMdBjRqbl6e/w=
+	=
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wsxbvgk2b-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 11 Mar 2024 12:03:01 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 42BC30q3008886
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 11 Mar 2024 12:03:00 GMT
+Received: from hu-kbajaj-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Mon, 11 Mar 2024 05:02:55 -0700
+From: Komal Bajaj <quic_kbajaj@quicinc.com>
+To: Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio
+	<konrad.dybcio@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        "Kishon Vijay
+ Abraham I" <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof
+ Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley
+	<conor+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>
+CC: <linux-arm-msm@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, Komal Bajaj <quic_kbajaj@quicinc.com>
+Subject: [PATCH 0/4] Add USB Support on Qualcomm's QDU/QRU1000 Platform
+Date: Mon, 11 Mar 2024 17:32:11 +0530
+Message-ID: <20240311120215.16845-1-quic_kbajaj@quicinc.com>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <SEZPR06MB5439FEE8694906792549E92FF3242@SEZPR06MB5439.apcprd06.prod.outlook.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: ZCX08ZLZ9iip6Ws4TPoNjUnMzz_vvQgi
+X-Proofpoint-GUID: ZCX08ZLZ9iip6Ws4TPoNjUnMzz_vvQgi
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-03-11_08,2024-03-06_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ mlxlogscore=675 impostorscore=0 adultscore=0 bulkscore=0 clxscore=1011
+ phishscore=0 spamscore=0 lowpriorityscore=0 malwarescore=0 mlxscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2402120000 definitions=main-2403110091
 
-Hi,
+This series adds support of USB3 PHY support for Qualcomm's QDU/QRU1000 Platform.
 
-On Mon, Mar 11, 2024 at 11:11:45AM +0000, mohamed.rayan@siemens.com wrote:
-> Hello Mike,
-> 
-> Sorry for my late response,
-> 
-> Kindly find the request log info as attached.
-> 
-> Please note that I have generated this log using the following steps:
->     1- echo "module thunderbolt +p" > /sys/kernel/debug/dynamic_debug/control
->     2- To get the debug data I have ran: cat /sys/kernel/debug/dynamic_debug/control | grep thunderbolt
+Komal Bajaj (4):
+  dt-bindings: phy: qcom,usb-snps-femto-v2: Add bindings for QDU1000
+  dt-bindings: phy: qcom,qmp-usb: Add QDU1000 USB3 PHY
+  dt-bindings: usb: dwc3: Add QDU1000 compatible
+  phy: qcpm-qmp-usb: Add support for QDU1000/QRU1000
 
-You need to run "dmesg" to get the debug data. Please do 1) and then
-repro and send the output of "dmesg" to me.
+ .../phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml   |  2 +
+ .../bindings/phy/qcom,usb-snps-femto-v2.yaml  |  1 +
+ .../devicetree/bindings/usb/qcom,dwc3.yaml    |  3 ++
+ drivers/phy/qualcomm/phy-qcom-qmp-usb.c       | 52 +++++++++++++++++++
+ 4 files changed, 58 insertions(+)
 
-Thanks!
+--
+2.42.0
+
 
