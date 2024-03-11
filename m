@@ -1,195 +1,147 @@
-Return-Path: <linux-usb+bounces-7816-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7817-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7DABB877FB1
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Mar 2024 13:11:42 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 81C97877FDF
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Mar 2024 13:22:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 340362822E5
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Mar 2024 12:11:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3DAA82832D9
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Mar 2024 12:22:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6ABA33C478;
-	Mon, 11 Mar 2024 12:11:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="To/mIZ2a"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 512A93C489;
+	Mon, 11 Mar 2024 12:21:43 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F2863BB48
-	for <linux-usb@vger.kernel.org>; Mon, 11 Mar 2024 12:11:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.174
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61CFD3D566;
+	Mon, 11 Mar 2024 12:21:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710159093; cv=none; b=XqHAgXWeBaI8Yj/mGtl0j6X/FfGrhBPZFODscDrzzLzuPPfmQUtnup9D622pAJkeGzVZNgs+qbyB6IDwDbr2i0JxlJ708iuEjMoClwZWz0WIzc8rDem+FUZFXIjG9ZnEZl16/gqm7DVFtddb3i//yR8PhO+ybPpUv+/S7RP7fxY=
+	t=1710159703; cv=none; b=Smqh1yPln8Vp9ze4JKcA54UTo/sAobHZBHZbm1UgH2n2ASnXqTwOJxhTqTOE8lTEr20wSF8Np0FzPWY8dJLswBqhO54rmVSGlwnwfr3PGQNASe+7YVUeHnYRPnvOjVuvdRv56L01FLbNAnO+P/xMANs145BSNYjEN+BBusQmt3A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710159093; c=relaxed/simple;
-	bh=hPCVMa6Dg6Dev/02Qlr2EszqiAAyEsxvBg5lx8hr1bY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=C8HLyrabU2N0JsXl7qH29+lg+Sg443yjqQfmEYH58LBra4EGosSDXz0yeMYebKQ0Wo717ySEjimSEPBjKU8L/+6ztYXt25CY2nhsj9v8Ha2QEOYHRHZYjxugiQwtjIejzEQzWpZhrBALIrnLW7E9LYQOpxzt3ocSy7rcmCi3rzQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=To/mIZ2a; arc=none smtp.client-ip=209.85.128.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-60a0a54869bso19290077b3.1
-        for <linux-usb@vger.kernel.org>; Mon, 11 Mar 2024 05:11:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1710159091; x=1710763891; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=8Df2BGMbvWb2FVi+eRBRBYDqje0ymDCBi93nT5jupjk=;
-        b=To/mIZ2a/NT8WwzOsnA38kwGMfoew/534sla9xvfbdwCGDypvthEq3zJDT2ewT7ELO
-         yCQK+TUMZF8CpmIa9dKABV/K78FZYcrOiS4MQQk7PDytRa0pIX69WgSWyJYExkyUBhiR
-         sQWsc4jYjyOpzuJLuXBUAFRs6jZowOjG7ZsOiFl9s/4CPOF/7oHsGIh3efYUOuHcVWf1
-         TVEcUGIJSXkOhvkxCPB1QWT4l6lEb4pwAtCQIIEqi9cgdw2NAroDoftWHhrTL23PG4/t
-         UKjhlfnnV4m7c/SC3frH/DCVC0RYNl4bEO4l/SA3KTDbBRRyzvnPitnbo84/eEV0g7P/
-         QUHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710159091; x=1710763891;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8Df2BGMbvWb2FVi+eRBRBYDqje0ymDCBi93nT5jupjk=;
-        b=Z3FijQ4oclwrpVIX+ShxX7gJfAdB7t/MY5er3qckaLn0MHNtRDoLyi7mPWXgeEHmmS
-         7Ou79fbLrr9+c5b7XQj1G1KWU1fBkHZVgR8+4jt2fF6szSxJ7rF0zvdY4sZOA0J4jSKW
-         /7DkovWkUY2zVFi/BTjP+4txh+1sVOa+HN6d8100PcK+sZ5vN/E4DwBxKfDH+/1WoBlp
-         OHYhFD31jo5qky5haPpQYEuS/+ftK3jmEVpuwouJ2oK3ufS2a+JHPlvT24cFXIOnGoVv
-         LweUZPjSPHGtDPM8P4oilJvrHL5NIBXuwxyf5G6ecoqWVKqKfeRIY+FTLZ2UDs60Hj73
-         vibw==
-X-Forwarded-Encrypted: i=1; AJvYcCW0PYDUUpyJrA9wknZ9pLUg2d4TSlTlTvSmvOlDKt2ewmQiqSwiJ+mYnFRsq986ReFEjQtBAWdf5soRESwOtFqQdTGuT2y8FzLa
-X-Gm-Message-State: AOJu0YxVl3Fp5DGuzke9ui/XDwA2EgvY8LwB53eQYQV1WQlXJvdg+mmu
-	PL4ku7ZdWramHf6QJUn85eD0UlrEGiG9UE1o9n655qb5U/VIuKvezWXFWFxUh7hfGHc6BtmUv0B
-	PrttUtvkyVNtJHh8qrW4G49+PxKjRl7zSVKK8lQ==
-X-Google-Smtp-Source: AGHT+IH3uEU9Y3NgSjn2ucTTnuKP0tLiafc9xxzHXN2G6ScWOy3+Ws7ZAt0RIOXZIhqarb09H4oVYpgLcqNXFBV4RIE=
-X-Received: by 2002:a0d:eec1:0:b0:60a:36c2:fdf8 with SMTP id
- x184-20020a0deec1000000b0060a36c2fdf8mr1469676ywe.18.1710159091155; Mon, 11
- Mar 2024 05:11:31 -0700 (PDT)
+	s=arc-20240116; t=1710159703; c=relaxed/simple;
+	bh=YWXmoG22Kj2qyiViztAEHNEe7bmLj3dtO38tSp891P8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=TIgyRDviSJ99H4gCCuUX02l03fXY/OEEmj1y7QvGdUGk3BxAS6NkUV3Ugo7ZqDAdNTFiROMVsRsV//R9+TjTdRXzhUO//gJopV4lXUASu5zxNTMqbhhfz073wtxGM0dQdvUrdW+ykGpcnv00riHZJ97G4BrqrwBsYaN2Ub1XTzk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 66175FEC;
+	Mon, 11 Mar 2024 05:22:16 -0700 (PDT)
+Received: from [10.57.49.244] (unknown [10.57.49.244])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B4C773F64C;
+	Mon, 11 Mar 2024 05:21:36 -0700 (PDT)
+Message-ID: <2195bcc4-e5e5-44de-93c7-667da1409de3@arm.com>
+Date: Mon, 11 Mar 2024 12:21:27 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240311120215.16845-1-quic_kbajaj@quicinc.com> <20240311120215.16845-5-quic_kbajaj@quicinc.com>
-In-Reply-To: <20240311120215.16845-5-quic_kbajaj@quicinc.com>
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Mon, 11 Mar 2024 14:11:19 +0200
-Message-ID: <CAA8EJpo7Zd-QxAxKFuo5zaR-=N8eBefpL=LcLQ9j+akhFQYUrg@mail.gmail.com>
-Subject: Re: [PATCH 4/4] phy: qcpm-qmp-usb: Add support for QDU1000/QRU1000
-To: Komal Bajaj <quic_kbajaj@quicinc.com>
-Cc: Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
-	Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Wesley Cheng <quic_wcheng@quicinc.com>, 
-	linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, Amrit Anand <quic_amrianan@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 2/2] usb: host: xhci-plat: add support for multi memory
+ regions
+To: Howard Yen <howardyen@google.com>, gregkh@linuxfoundation.org,
+ rafael@kernel.org, mathias.nyman@intel.com, hch@lst.de,
+ m.szyprowski@samsung.com, andriy.shevchenko@linux.intel.com,
+ petr.tesarik.ext@huawei.com, broonie@kernel.org, james@equiv.tech,
+ james.clark@arm.com, masahiroy@kernel.org
+Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ iommu@lists.linux.dev
+References: <20240311094947.3738200-1-howardyen@google.com>
+ <20240311094947.3738200-3-howardyen@google.com>
+From: Robin Murphy <robin.murphy@arm.com>
+Content-Language: en-GB
+In-Reply-To: <20240311094947.3738200-3-howardyen@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, 11 Mar 2024 at 14:05, Komal Bajaj <quic_kbajaj@quicinc.com> wrote:
->
-> Add QDU1000/QRU1000 specific register layout and table configs.
->
-> Co-developed-by: Amrit Anand <quic_amrianan@quicinc.com>
-> Signed-off-by: Amrit Anand <quic_amrianan@quicinc.com>
-> Signed-off-by: Komal Bajaj <quic_kbajaj@quicinc.com>
+On 2024-03-11 9:49 am, Howard Yen wrote:
+> The reason why it needs multiple regions is that in my system there is
+> an always-on subsystem which includes a small size memory, and several
+> functions need to run and occupy the memory from the small memory if
+> they need to run on the always-on subsystem. These functions must
+> allocate the memory from the small memory region, so that they can get
+> benefit from the always-on subsystem. So the small memory is split for
+> multiple functions which are satisfied with their generic use cases.
+> But in specific use cases, like USB3 devices which support the stream
+> trasnsfer or multiple devices connect to the host, they required more
+> memory than their pre-allocated memory region, so I tried to propose
+> this patch to give it the ability to get the memory from the other
+> larger memory to solve the issue.
+
+Once again this still fails to make sense - The USB controller has a 
+special always-on pool from which it "must allocate", yet it's fine if 
+it also allocates from elsewhere? How on Earth is that supposed to work?
+
+As I said before, if it's actually the case that only certain specific 
+allocations (based on driver-level knowledge) must come from the special 
+pool, then this is not something which can realistically be abstracted 
+by the generic dma-coherent API as it stands (and if so, do the 
+non-special allocations even need a dedicated second reserved region, or 
+is that in fact just a massive hack around the dma_coherent_mem design 
+intentionally not falling back to the regular allocator?)
+
+Thanks,
+Robin.
+
+> Signed-off-by: Howard Yen <howardyen@google.com>
 > ---
->  drivers/phy/qualcomm/phy-qcom-qmp-usb.c | 52 +++++++++++++++++++++++++
->  1 file changed, 52 insertions(+)
->
-> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-usb.c b/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
-> index 5c003988c35d..e067574bea7a 100644
-> --- a/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
-> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
-> @@ -1441,6 +1441,32 @@ static const struct qmp_phy_init_tbl x1e80100_usb3_uniphy_pcs_usb_tbl[] = {
->         QMP_PHY_INIT_CFG(QPHY_V7_PCS_USB3_RCVR_DTCT_DLY_U3_H, 0x00),
->  };
->
+>   drivers/usb/host/xhci-plat.c | 19 ++++++++++++++++++-
+>   1 file changed, 18 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+> index 3d071b875308..7892d3eb26d2 100644
+> --- a/drivers/usb/host/xhci-plat.c
+> +++ b/drivers/usb/host/xhci-plat.c
+> @@ -14,6 +14,7 @@
+>   #include <linux/pci.h>
+>   #include <linux/of.h>
+>   #include <linux/of_device.h>
+> +#include <linux/of_reserved_mem.h>
+>   #include <linux/platform_device.h>
+>   #include <linux/usb/phy.h>
+>   #include <linux/slab.h>
+> @@ -149,7 +150,7 @@ int xhci_plat_probe(struct platform_device *pdev, struct device *sysdev, const s
+>   	struct xhci_hcd		*xhci;
+>   	struct resource         *res;
+>   	struct usb_hcd		*hcd, *usb3_hcd;
+> -	int			ret;
+> +	int			i, count, ret;
+>   	int			irq;
+>   	struct xhci_plat_priv	*priv = NULL;
+>   	bool			of_match;
+> @@ -194,6 +195,19 @@ int xhci_plat_probe(struct platform_device *pdev, struct device *sysdev, const s
+>   
+>   	xhci->allow_single_roothub = 1;
+>   
+> +	count = of_property_count_u32_elems(sysdev->of_node, "memory-region");
 > +
-> +static const struct qmp_phy_init_tbl qdu1000_usb3_uniphy_pcs_tbl[] = {
-> +       QMP_PHY_INIT_CFG(QPHY_V4_PCS_LOCK_DETECT_CONFIG1, 0xc4),
-> +       QMP_PHY_INIT_CFG(QPHY_V4_PCS_LOCK_DETECT_CONFIG2, 0x89),
-> +       QMP_PHY_INIT_CFG(QPHY_V4_PCS_LOCK_DETECT_CONFIG3, 0x20),
-> +       QMP_PHY_INIT_CFG(QPHY_V4_PCS_LOCK_DETECT_CONFIG6, 0x13),
-> +       QMP_PHY_INIT_CFG(QPHY_V4_PCS_RCVR_DTCT_DLY_P1U2_L, 0xe7),
-> +       QMP_PHY_INIT_CFG(QPHY_V4_PCS_RCVR_DTCT_DLY_P1U2_H, 0x03),
-> +       QMP_PHY_INIT_CFG(QPHY_V4_PCS_RX_SIGDET_LVL, 0xaa),
-> +       QMP_PHY_INIT_CFG(QPHY_V4_PCS_PCS_TX_RX_CONFIG, 0x0c),
-> +       QMP_PHY_INIT_CFG(QPHY_V4_PCS_CDR_RESET_TIME, 0x0a),
-> +       QMP_PHY_INIT_CFG(QPHY_V4_PCS_ALIGN_DETECT_CONFIG1, 0x88),
-> +       QMP_PHY_INIT_CFG(QPHY_V4_PCS_ALIGN_DETECT_CONFIG2, 0x13),
-> +       QMP_PHY_INIT_CFG(QPHY_V4_PCS_EQ_CONFIG1, 0x4b),
-> +       QMP_PHY_INIT_CFG(QPHY_V4_PCS_EQ_CONFIG5, 0x10),
-> +       QMP_PHY_INIT_CFG(QPHY_V4_PCS_REFGEN_REQ_CONFIG1, 0x21),
-> +};
+> +	for (i = 0; i < count; i++) {
+> +		ret = of_reserved_mem_device_init_by_idx(sysdev, sysdev->of_node, i);
+> +		if (ret) {
+> +			dev_err(sysdev, "Could not get reserved memory\n");
+> +			if (i > 0)
+> +				of_reserved_mem_device_release(sysdev);
 > +
-> +static const struct qmp_phy_init_tbl qdu1000_usb3_uniphy_pcs_usb_tbl[] = {
-> +       QMP_PHY_INIT_CFG(QPHY_V4_PCS_USB3_RXEQTRAINING_DFE_TIME_S2, 0x07),
-> +       QMP_PHY_INIT_CFG(QPHY_V4_PCS_USB3_LFPS_DET_HIGH_COUNT_VAL, 0xf8),
-> +       QMP_PHY_INIT_CFG(QPHY_V4_PCS_USB3_POWER_STATE_CONFIG1, 0x6f),
-> +};
+> +			return ret;
+> +		}
+> +	}
 > +
+>   	/*
+>   	 * Not all platforms have clks so it is not an error if the
+>   	 * clock do not exist.
+> @@ -431,6 +445,9 @@ void xhci_plat_remove(struct platform_device *dev)
+>   	clk_disable_unprepare(clk);
+>   	clk_disable_unprepare(reg_clk);
+>   	reset_control_assert(xhci->reset);
 > +
+> +	of_reserved_mem_device_release(hcd->self.sysdev);
 > +
-
-Please drop extra empty lines.
-
-Also the tables are more or less sorted out. Please move this to a
-correct place.
-
->  struct qmp_usb_offsets {
->         u16 serdes;
->         u16 pcs;
-> @@ -1693,6 +1719,29 @@ static const struct qmp_phy_cfg msm8996_usb3phy_cfg = {
->         .regs                   = qmp_v2_usb3phy_regs_layout,
->  };
->
-> +static const struct qmp_phy_cfg qdu1000_usb3_uniphy_cfg = {
-> +       .lanes                  = 1,
-> +
-> +       .offsets                = &qmp_usb_offsets_v5,
-> +
-> +       .serdes_tbl             = sm8150_usb3_uniphy_serdes_tbl,
-> +       .serdes_tbl_num         = ARRAY_SIZE(sm8150_usb3_uniphy_serdes_tbl),
-> +       .tx_tbl                 = sm8350_usb3_uniphy_tx_tbl,
-> +       .tx_tbl_num             = ARRAY_SIZE(sm8350_usb3_uniphy_tx_tbl),
-> +       .rx_tbl                 = sm8350_usb3_uniphy_rx_tbl,
-> +       .rx_tbl_num             = ARRAY_SIZE(sm8350_usb3_uniphy_rx_tbl),
-> +       .pcs_tbl                = qdu1000_usb3_uniphy_pcs_tbl,
-> +       .pcs_tbl_num            = ARRAY_SIZE(qdu1000_usb3_uniphy_pcs_tbl),
-> +       .pcs_usb_tbl            = qdu1000_usb3_uniphy_pcs_usb_tbl,
-> +       .pcs_usb_tbl_num        = ARRAY_SIZE(qdu1000_usb3_uniphy_pcs_usb_tbl),
-> +       .vreg_list              = qmp_phy_vreg_l,
-> +       .num_vregs              = ARRAY_SIZE(qmp_phy_vreg_l),
-> +       .regs                   = qmp_v4_usb3phy_regs_layout,
-> +       .pcs_usb_offset         = 0x1000,
-> +
-> +       .has_pwrdn_delay        = true,
-> +};
-> +
->  static const struct qmp_phy_cfg sa8775p_usb3_uniphy_cfg = {
->         .lanes                  = 1,
->
-> @@ -2620,6 +2669,9 @@ static const struct of_device_id qmp_usb_of_match_table[] = {
->         }, {
->                 .compatible = "qcom,sdx65-qmp-usb3-uni-phy",
->                 .data = &sdx65_usb3_uniphy_cfg,
-> +       }, {
-> +               .compatible = "qcom,qdu1000-qmp-usb3-uni-phy",
-> +               .data = &qdu1000_usb3_uniphy_cfg,
-
-Please keep the table sorted.
-
->         }, {
->                 .compatible = "qcom,sdx75-qmp-usb3-uni-phy",
->                 .data = &sdx75_usb3_uniphy_cfg,
-> --
-> 2.42.0
->
->
-
-
--- 
-With best wishes
-Dmitry
+>   	usb_put_hcd(hcd);
+>   
+>   	pm_runtime_disable(&dev->dev);
 
