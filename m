@@ -1,46 +1,46 @@
-Return-Path: <linux-usb+bounces-7827-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7828-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 34DC187832E
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Mar 2024 16:20:32 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E401A87835D
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Mar 2024 16:25:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 85814B2234A
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Mar 2024 15:20:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 08C3E1C217A2
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Mar 2024 15:25:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32D605B692;
-	Mon, 11 Mar 2024 15:13:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5562D626A1;
+	Mon, 11 Mar 2024 15:14:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N8UYp7Z8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E6PEyWbJ"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89DF25A7BB;
-	Mon, 11 Mar 2024 15:13:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8A2761688;
+	Mon, 11 Mar 2024 15:14:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710170001; cv=none; b=ECGtvaKb6Sx6lPHhB9WqjmRHFBspEhJlwrCRsJ5dBPz9yoWb8pTWquVZUWWupiZtj11BuCpvLq/ShgnPXLF2F1QnEy1lrnEZwKpdFIfCa5NfLlezbGgct3uQTh5hJSuYkhIWYoZHPC7D/OXZI1gMAuE94gX+OOfUbVqwMYC36pc=
+	t=1710170040; cv=none; b=Ntr+mZvZYIzC1O91RaVNs9tFn1aHc+I7TpSJv7M134EzcD2wRvhSjqX8N5vtI6T661Ukk40rX2p5qQRZeXVPc6CFyw4dguqIqJXGdwIHNmQyrO1XpOI6NqOIabpprFHouUFCFQ9EQTOsRycVtNSJta+XUYyX6t/lpig/QL3sxB8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710170001; c=relaxed/simple;
+	s=arc-20240116; t=1710170040; c=relaxed/simple;
 	bh=d+U/DMyqrJmz9isk37XQbdH4HzIhR5FvXPZ0QF5sqY0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QhxLQF8Ce2loJAMb1qXv+XmvXIedLU+ksVP73+4EjfO9phhvd5c9SPkQ/3ekvjk96a3zbE/XOnHFj3j4dvmoJjh2xlvFEI1peFPIEs5pRSfcfPtNrO0YROOv8u6urnGWRERejgCyO5gG8F9S+GqRJ9ZOWdabWPe/eoNmwFvNQbU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N8UYp7Z8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22E93C433C7;
-	Mon, 11 Mar 2024 15:13:20 +0000 (UTC)
+	 MIME-Version; b=IdeFK+dVSlYHqPo9XFOh4Rg5yB9UURzLsfa3ikQ39ySyfB9DWZZ4lKuZQWI74sPagYz7PNemYYmz/wXXpobMWDGAgzWKWZW+P31EL2TIp7f4MlwxKgTSS+dqH8sg8z9/mjsSJnsIqsAM4t6AvPd2cA4/cSgiv3/znI24Uh98lGE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E6PEyWbJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0852DC43330;
+	Mon, 11 Mar 2024 15:13:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710170001;
+	s=k20201202; t=1710170040;
 	bh=d+U/DMyqrJmz9isk37XQbdH4HzIhR5FvXPZ0QF5sqY0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=N8UYp7Z8MrCGEUxj52hgjiPgAYy28G7sGz6butJ5D+bmTKu/6Z4fDoIeAN3CDaBTY
-	 hhcOhCAvCqhemtnMQAfPtvNIGWkypvvhvCoXEt1431uf7vbM7btXcuExyKR/npdv3/
-	 18flvgfsAYxuz/mzin4T3vrEq7STTl7i7dF4PdH4Bxj6zF/kxD/Y2zqX9KROi0el1F
-	 unjglmWDCOmgJ4EkM/q/Bk6kSqcG8NERZjAq2LRjGTdA07Vnw1TxO6wQBd5qovNwcl
-	 uDwQTh7VxyOZK2+60ALKixKqadaR1tH+YYyvU49JtC/f6byo4WeVg9590NDpd8iXQP
-	 4Ri5mT0YZ6q2w==
+	b=E6PEyWbJnpkW518898zpXHAWfk5m0ttcshw0gbfxfnqWnt7R6lWs/IJ3JK1FbGET4
+	 KHcigW+9ToppGQidRx45F9uTMOI5GuW+3hZxliV3h5iGa8lHxIR/HIeCVdztNCDHok
+	 w+eYZDlPG/FAp4hYqfu3pOCTlOda5XHuhJc1I/xiLvQNPrShBhYce0fXqWgHkLprSS
+	 lkra5trbWfc/RAr4PtT5BIBRhI3M5jQYIZsiiQowYeJrGt1YcnLUKisBhPILZV22lB
+	 yEoh3zhEVRLyV06stlyK4ae4t3pQZ+nWXhWxde0SR7eunt/y6NiHxWb8Jj0i8Lze7E
+	 hQPIkmjtJfTrA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -54,12 +54,12 @@ Cc: Andre Werner <andre.werner@systec-electronic.com>,
 	pabeni@redhat.com,
 	netdev@vger.kernel.org,
 	linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.6 04/17] net: smsc95xx: add support for SYS TEC USB-SPEmodule1
-Date: Mon, 11 Mar 2024 11:12:55 -0400
-Message-ID: <20240311151314.317776-4-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 03/13] net: smsc95xx: add support for SYS TEC USB-SPEmodule1
+Date: Mon, 11 Mar 2024 11:13:38 -0400
+Message-ID: <20240311151354.318293-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240311151314.317776-1-sashal@kernel.org>
-References: <20240311151314.317776-1-sashal@kernel.org>
+In-Reply-To: <20240311151354.318293-1-sashal@kernel.org>
+References: <20240311151354.318293-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -68,7 +68,7 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.6.21
+X-stable-base: Linux 6.1.81
 Content-Transfer-Encoding: 8bit
 
 From: Andre Werner <andre.werner@systec-electronic.com>
