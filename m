@@ -1,110 +1,364 @@
-Return-Path: <linux-usb+bounces-7831-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7832-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1ECB387863D
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Mar 2024 18:23:26 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF30E87864E
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Mar 2024 18:28:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 501CE1C223E5
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Mar 2024 17:23:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3D61E282F7C
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Mar 2024 17:28:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C8824E1BE;
-	Mon, 11 Mar 2024 17:23:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D33E4C601;
+	Mon, 11 Mar 2024 17:28:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VJnXGeuX"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="AAc4f3pZ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C8D13F8F6
-	for <linux-usb@vger.kernel.org>; Mon, 11 Mar 2024 17:23:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAA391EB5C
+	for <linux-usb@vger.kernel.org>; Mon, 11 Mar 2024 17:28:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710177795; cv=none; b=OeJe3I7vfarn5ncrNFECJgXnNw8CJDJ1KaLzFy2Cei3QIsTCu4KkGdtSyOYvzDHWTuWZ1zX4Vf3gmKCrrb4Yf+MPYMv1aubhkB8mvnmn7WlOvejhZF6AYDptToK2ber4fbmcYzHPpjpggLlmKQ8bZzcKIj5VH5sI6WIkU1VpCyk=
+	t=1710178126; cv=none; b=H+e97gVQrfz5aHZE1lNtpN3OJWER/QZvXwD+1sCtzYvntTKDecs/hiuO6u6lqMlJGfupVdUN9g8/PMUdL04hCPVkDYs+tajnf3wmVFcFqHSiptDCJSVh4mW0z3bMFkSwtIZ1jTlvE1ieIVEbDd7/DhrVg+G7hAy8kMC+NsTuaQ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710177795; c=relaxed/simple;
-	bh=oKUsJDC4xXjk3cXvZ0UkhE+m5A6JJ3EOsCl7WrkesAY=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=OrlKQqrv20/8bYNHNw2R63hQXM75LrGs0z3ZsBV+XpajTR7NSboVcxLMH0B/KSx9DoqTHTpGqKdxWKFVJ4RWTrSsPZbaTa45VLTz0wPHFM0E6PPkfOMiR5cp3QvWngxIEpjzBeXVf1bfl6Z60cBIpPVTai2LXQQsJ4F3MHZifB0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kyletso.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VJnXGeuX; arc=none smtp.client-ip=209.85.219.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kyletso.bounces.google.com
-Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-dc6b26783b4so3981517276.0
-        for <linux-usb@vger.kernel.org>; Mon, 11 Mar 2024 10:23:12 -0700 (PDT)
+	s=arc-20240116; t=1710178126; c=relaxed/simple;
+	bh=Nw25BQDEBBWTtAI0Su/vGdntGRWOTZRExRHJTOGMSwI=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=IPVnbfnCGFZQDbowxdG/pTWzo7BLUGTsoqhsPMta/j/va0W3RLmPEXiRp7B3qRLFCG8oByWVAgvEBrK6Th6CoLvcZdFyA+2zEgBi1JGH0EexAGjwKdDpVjJiqCz8qAFkGR286oTG8mLL2yue9Cy9CZVae7Ig+VUvhZ3QsQQ+6xs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=AAc4f3pZ; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-33e5978fc1bso2005173f8f.3
+        for <linux-usb@vger.kernel.org>; Mon, 11 Mar 2024 10:28:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1710177792; x=1710782592; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=eEFSDQP8nEwgMk7vCT7vaN5aD9pBnwi9LafjzuTKO94=;
-        b=VJnXGeuXXmWKS0uRl6BNBeMoQhcNH/BnuKEhE1cT1f27uNBl6tD2HVSgFnQqPFvomY
-         nZAYqloYaLJn5ezj6znJfy+mpOfQFBmdRPcsovnyWXEUg+QO3eFx2bD8s2sDbGEyAoUa
-         ub2Pq+3qZEadLIT+5hAxqK6kzlBTvA2m/T0Ep39pwjdy5ytwwRb/9gwmGcRnz4dSnJb1
-         HRWeHmvtuIPEHTvsICPXMcILjnqIkbgd3kx7ZKM+7EFHX7KT8FMAElnArQ3cZ8uUNbH7
-         FTdB9M47DMO7ujY1Guuk2r3ErJ9y2jr7C5iFMumX/GqPGIVg71rJ7D3wlZwJf1608AlK
-         Gghw==
+        d=linaro.org; s=google; t=1710178123; x=1710782923; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :references:cc:to:content-language:subject:reply-to:from:user-agent
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YaqRMTDlNRfW2PpP+QR36rJyQxLqvOR69AbrC2VVwPo=;
+        b=AAc4f3pZ0Hyk+NQ9NZP+qk3nf+ciHiWPAH4icar1D0SqKD9j7HSb4a1D4YnA182TjH
+         t21MAaKW4U9G5Prjf4mCILOqgXVb3wOxlhO18unnn3skiXaF2u7dIAOJg8HmYDW0lP61
+         o5PfInH6S/Pi0jv2+2b5tkGKTSm5nvWbSls2xzxe4+Ag9zZtJD2YOGOPU9uWMx86U2te
+         zydkFKvt7nocEPYYSMN5CDc30Ql5Ixm5mjKDvCrm1rV+Ir3Um633pjYleUUCcEPvCSwk
+         Ij1jgLi35oeyMHzLFEWhxdSsqfjJY8cIjRZLJ2a4nhCLGV9ZgO+omFKVqdLa9tIukY3j
+         GOzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710177792; x=1710782592;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=eEFSDQP8nEwgMk7vCT7vaN5aD9pBnwi9LafjzuTKO94=;
-        b=SOlVuAtpy8eA4Q6hDUi30fk8ccDlq+PhTc/H/JfUqCKoGH37OyHV5YuZIRaa78YH5o
-         k2FzOGQOOHf3wu9jKjNmITLk6RJxRbFHcrSXNIANRaA5BD5t3AAbaNop13qVKU/WcAUb
-         JMfKp0VjFavEhNWD0mIIR4GpQuKzPKG4AFpm5nr1G6V+SwvF1cxqscPAkTegQQelUmAw
-         xohf6Xes0WP2FPetJmXJjv6L7Hx7OKOIjQl2GoqXstP78BMWqGuJsKHEaAFzrR7l03me
-         HQviS2wSa+XLYjcxkUwuvkMFAOJC1qNhSiXodZtJGNb8lr8DEqtSIz+D4TEnbNzmL9G6
-         Boog==
-X-Forwarded-Encrypted: i=1; AJvYcCVU5iLwxuTn4I5+nvWHHC1YEQJKaekHaYd9n9pRfENDVNFgzSpwW4ReY7VVaYYZyKYfsxmqLOs6gxkcKRBs1kZ8/+i3FkhBYs3U
-X-Gm-Message-State: AOJu0YwiFXLUwpsZuHmSY578k2AmlxeLWiO4KgC6ZsmC4QRFRj3MF6TC
-	oTaspU/ewWToHmxzRMMKk6PwQePyyD4VtKriam76WGmDT6OjjoS3NS9+0utdOR9TjK1f8s7ynVN
-	9CDGYPw==
-X-Google-Smtp-Source: AGHT+IEOmE8gBkWsQ+VxVdk/lX9Bz/bX02Oz9mDyF9yTgj6j/8N1NeP6m21R1WLnEHPrOKjNcIihOqVPnS0z
-X-Received: from kyletso-p620lin01.ntc.corp.google.com ([2401:fa00:fc:202:f39:e78f:4944:b22])
- (user=kyletso job=sendgmr) by 2002:a25:c4c4:0:b0:dcc:6bf0:2eb6 with SMTP id
- u187-20020a25c4c4000000b00dcc6bf02eb6mr387095ybf.6.1710177792170; Mon, 11 Mar
- 2024 10:23:12 -0700 (PDT)
-Date: Tue, 12 Mar 2024 01:23:06 +0800
+        d=1e100.net; s=20230601; t=1710178123; x=1710782923;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :references:cc:to:content-language:subject:reply-to:from:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=YaqRMTDlNRfW2PpP+QR36rJyQxLqvOR69AbrC2VVwPo=;
+        b=nEIJyJgWSoBLK4WAQ+i+tMuqFaR8zuYlDc+tLOEUrf07MkPfmnsDsofOirmVfQMVgQ
+         X6PHYnVW6s27u4jnuVYLTT3nYvrYs+ML8QNyXvgKWeypgnQJ12IgTi6Kg+z7zVTbUFn4
+         HayL9YrUtn19e4wux7KQeGS9Io0ox2f62QCOjrymqdCeHtUl/rb/8WKkR2TQXQJ/ukF4
+         0BJ6LEL8/3W7X3Jezn5VAdZJm+MJM7TdBAteos5dwdyp55t6E56xkfRlvbL1VFQToseC
+         sqaoDgsjnqx1AidDuVrtTWymDx6DpDqNyn0X/Oq9oNQRJfROvf99fOo0jkxQz50xHFFh
+         a44w==
+X-Forwarded-Encrypted: i=1; AJvYcCWaOhjWFKeAY60U7Bhl8US5WTdPyscyWxlGmCm1GkJ6sAxmQjS3WaK5Yrv37ZaN0FTxplSCIftvu2YBZx+R7aaYKJgG3wPqTDi8
+X-Gm-Message-State: AOJu0YxYNyYLp4e5yOshasBCS3cTCy/vYF1G1cu2zf4jPM8laTd56kQL
+	ZIGzeNyUZkxbmVu5jqlu+jhlOX5mHFy7ngwSO5HWPoaR2p2atX0T8cI/xXIkTF0=
+X-Google-Smtp-Source: AGHT+IFrLJCN2Bq1hiT2DJzxlrw4FVJoQrPBI9Tj7Ld+Y6OA2vh/7ORJ0+xmzZZzHzBKuu5AgaxBGA==
+X-Received: by 2002:a5d:456f:0:b0:33d:af84:2a59 with SMTP id a15-20020a5d456f000000b0033daf842a59mr4813193wrc.28.1710178123100;
+        Mon, 11 Mar 2024 10:28:43 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:48be:feb9:192b:f402? ([2a01:e0a:982:cbb0:48be:feb9:192b:f402])
+        by smtp.gmail.com with ESMTPSA id bs15-20020a056000070f00b0033e9f6997c7sm940065wrb.66.2024.03.11.10.28.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Mar 2024 10:28:42 -0700 (PDT)
+Message-ID: <44e8142f-d9b3-487b-83fe-39deadddb492@linaro.org>
+Date: Mon, 11 Mar 2024 18:28:41 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.44.0.278.ge034bb2e1d-goog
-Message-ID: <20240311172306.3911309-1-kyletso@google.com>
-Subject: [PATCH v1] usb: typec: tcpm: Update PD of Type-C port upon pd_set
-From: Kyle Tso <kyletso@google.com>
-To: linux@roeck-us.net, heikki.krogerus@linux.intel.com, 
-	gregkh@linuxfoundation.org
-Cc: badhri@google.com, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	Kyle Tso <kyletso@google.com>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+From: neil.armstrong@linaro.org
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH v4 2/4] usb: typec: ucsi: Register cables based on
+ GET_CABLE_PROPERTY
+Content-Language: en-US, fr
+To: Jameson Thies <jthies@google.com>, heikki.krogerus@linux.intel.com,
+ linux-usb@vger.kernel.org
+Cc: pmalani@chromium.org, bleung@google.com, abhishekpandit@chromium.org,
+ andersson@kernel.org, dmitry.baryshkov@linaro.org,
+ fabrice.gasnier@foss.st.com, gregkh@linuxfoundation.org,
+ hdegoede@redhat.com, rajaram.regupathy@intel.com, saranya.gopal@intel.com,
+ linux-kernel@vger.kernel.org, Benson Leung <bleung@chromium.org>,
+ Linux regressions mailing list <regressions@lists.linux.dev>
+References: <20240305025804.1290919-1-jthies@google.com>
+ <20240305025804.1290919-3-jthies@google.com>
+Autocrypt: addr=neil.armstrong@linaro.org; keydata=
+ xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
+ GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
+ BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
+ qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
+ 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
+ AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
+ OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
+ Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
+ YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
+ GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
+ UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
+ GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
+ yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
+ QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
+ SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
+ 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
+ Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
+ oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
+ M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
+ 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
+ KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
+ 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
+ QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
+Organization: Linaro Developer Services
+In-Reply-To: <20240305025804.1290919-3-jthies@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-The PD of Type-C port needs to be updated in pd_set. Unlink the Type-C
-port device to the old PD before linking it to a new one.
+Hi,
 
-Fixes: cd099cde4ed2 ("usb: typec: tcpm: Support multiple capabilities")
-Cc: stable@vger.kernel.org
-Signed-off-by: Kyle Tso <kyletso@google.com>
----
- drivers/usb/typec/tcpm/tcpm.c | 2 ++
- 1 file changed, 2 insertions(+)
+On 05/03/2024 03:58, Jameson Thies wrote:
+> Register cables with the Type-C Connector Class in the UCSI driver based
+> on the PPM response to GET_CABLE_PROPERTY. Registered cable properties
+> include plug type, cable type and major revision.
+> 
+> Reviewed-by: Benson Leung <bleung@chromium.org>
+> Reviewed-by: Prashant Malani <pmalani@chromium.org>
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Signed-off-by: Jameson Thies <jthies@google.com>
+> ---
+> Expected cable properties populate the USB Type-C connector class sysfs
+> paths:
+> nospike-rev4 /sys/class/typec # ls port0-cable
+> device  identity  plug_type  port0-plug0  power  subsystem  type  uevent
+> usb_power_delivery_revision
+> 
+> Changes in v4:
+> - None.
+> 
+> Changes in v3:
+> - None.
+> 
+> Changes in v2:
+> - Shortened lines to within 80 characters.
+> - Tested on usb-testing branch merged with chromeOS 6.8-rc2 kernel.
+> 
+>   drivers/usb/typec/ucsi/ucsi.c | 73 +++++++++++++++++++++++++++++++++++
+>   drivers/usb/typec/ucsi/ucsi.h |  5 +++
+>   2 files changed, 78 insertions(+)
 
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index 3d505614bff1..896f594b9328 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -6907,7 +6907,9 @@ static int tcpm_pd_set(struct typec_port *p, struct usb_power_delivery *pd)
- 
- 	port->port_source_caps = data->source_cap;
- 	port->port_sink_caps = data->sink_cap;
-+	typec_port_set_usb_power_delivery(p, NULL);
- 	port->selected_pd = pd;
-+	typec_port_set_usb_power_delivery(p, port->selected_pd);
- unlock:
- 	mutex_unlock(&port->lock);
- 	return ret;
--- 
-2.44.0.278.ge034bb2e1d-goog
+Since those were merged, I see the following errors on SM8550-QRD and SM8650-QRD running linux-next:
+
+[    8.668966] ucsi_glink.pmic_glink_ucsi pmic_glink.ucsi.0: UCSI_GET_PD_MESSAGE failed (-95)
+[   11.170560] ucsi_glink.pmic_glink_ucsi pmic_glink.ucsi.0: GET_CABLE_PROPERTY failed (-95)
+[   16.361678] ucsi_glink.pmic_glink_ucsi pmic_glink.ucsi.0: timeout waiting for UCSI sync write response
+[   21.409633] ucsi_glink.pmic_glink_ucsi pmic_glink.ucsi.0: error -ETIMEDOUT: PPM init failed
+
+perhaps you should check the GET_CAPABILITY.bmOptionalFeatures bit 5 (Cable details supported) and 8 (GET_PD_MESSAGE supported)
+before sending UCSI_GET_PD_MESSAGE and GET_CABLE_PROPERTY messages ?
+
+With:
+=================><====================================
+diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+index cf52cb34d285..eec64a4c8cdd 100644
+--- a/drivers/usb/typec/ucsi/ucsi.c
++++ b/drivers/usb/typec/ucsi/ucsi.c
+@@ -1189,8 +1189,10 @@ static void ucsi_handle_connector_change(struct work_struct *work)
+                         ucsi_register_partner(con);
+                         ucsi_partner_task(con, ucsi_check_connection, 1, HZ);
+                         ucsi_partner_task(con, ucsi_check_connector_capability, 1, HZ);
+-                       ucsi_partner_task(con, ucsi_get_partner_identity, 1, HZ);
+-                       ucsi_partner_task(con, ucsi_check_cable, 1, HZ);
++                       if (con->ucsi->cap.features & UCSI_CAP_GET_PD_MESSAGE)
++                               ucsi_partner_task(con, ucsi_get_partner_identity, 1, HZ);
++                       if (con->ucsi->cap.features & UCSI_CAP_CABLE_DETAILS)
++                               ucsi_partner_task(con, ucsi_check_cable, 1, HZ);
+
+                         if (UCSI_CONSTAT_PWR_OPMODE(con->status.flags) ==
+                             UCSI_CONSTAT_PWR_OPMODE_PD)
+@@ -1589,8 +1591,10 @@ static int ucsi_register_port(struct ucsi *ucsi, struct ucsi_connector *con)
+                 ucsi_register_partner(con);
+                 ucsi_pwr_opmode_change(con);
+                 ucsi_port_psy_changed(con);
+-               ucsi_get_partner_identity(con);
+-               ucsi_check_cable(con);
++               if (con->ucsi->cap.features & UCSI_CAP_GET_PD_MESSAGE)
++                       ucsi_get_partner_identity(con);
++               if (con->ucsi->cap.features & UCSI_CAP_CABLE_DETAILS)
++                       ucsi_check_cable(con);
+         }
+
+         /* Only notify USB controller if partner supports USB data */
+diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
+index 32daf5f58650..2e9c35a3af27 100644
+--- a/drivers/usb/typec/ucsi/ucsi.h
++++ b/drivers/usb/typec/ucsi/ucsi.h
+@@ -215,6 +215,7 @@ struct ucsi_capability {
+  #define UCSI_CAP_CABLE_DETAILS                 BIT(5)
+  #define UCSI_CAP_EXT_SUPPLY_NOTIFICATIONS      BIT(6)
+  #define UCSI_CAP_PD_RESET                      BIT(7)
++#define UCSI_CAP_GET_PD_MESSAGE                        BIT(8)
+         u16 reserved_1;
+         u8 num_alt_modes;
+         u8 reserved_2;
+=================><====================================
+it works fine again.
+
+#regzbot introduced: 38ca416597b0
+
+Thanks,
+Neil
+
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index ae105383e69e7..7c84687b5d1a3 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -734,6 +734,52 @@ static void ucsi_unregister_partner_pdos(struct ucsi_connector *con)
+>   	con->partner_pd = NULL;
+>   }
+>   
+> +static int ucsi_register_cable(struct ucsi_connector *con)
+> +{
+> +	struct typec_cable *cable;
+> +	struct typec_cable_desc desc = {};
+> +
+> +	switch (UCSI_CABLE_PROP_FLAG_PLUG_TYPE(con->cable_prop.flags)) {
+> +	case UCSI_CABLE_PROPERTY_PLUG_TYPE_A:
+> +		desc.type = USB_PLUG_TYPE_A;
+> +		break;
+> +	case UCSI_CABLE_PROPERTY_PLUG_TYPE_B:
+> +		desc.type = USB_PLUG_TYPE_B;
+> +		break;
+> +	case UCSI_CABLE_PROPERTY_PLUG_TYPE_C:
+> +		desc.type = USB_PLUG_TYPE_C;
+> +		break;
+> +	default:
+> +		desc.type = USB_PLUG_NONE;
+> +		break;
+> +	}
+> +
+> +	desc.active = !!(UCSI_CABLE_PROP_FLAG_ACTIVE_CABLE &
+> +			 con->cable_prop.flags);
+> +	desc.pd_revision = UCSI_CABLE_PROP_FLAG_PD_MAJOR_REV_AS_BCD(
+> +	    con->cable_prop.flags);
+> +
+> +	cable = typec_register_cable(con->port, &desc);
+> +	if (IS_ERR(cable)) {
+> +		dev_err(con->ucsi->dev,
+> +			"con%d: failed to register cable (%ld)\n", con->num,
+> +			PTR_ERR(cable));
+> +		return PTR_ERR(cable);
+> +	}
+> +
+> +	con->cable = cable;
+> +	return 0;
+> +}
+> +
+> +static void ucsi_unregister_cable(struct ucsi_connector *con)
+> +{
+> +	if (!con->cable)
+> +		return;
+> +
+> +	typec_unregister_cable(con->cable);
+> +	con->cable = NULL;
+> +}
+> +
+>   static void ucsi_pwr_opmode_change(struct ucsi_connector *con)
+>   {
+>   	switch (UCSI_CONSTAT_PWR_OPMODE(con->status.flags)) {
+> @@ -807,6 +853,7 @@ static void ucsi_unregister_partner(struct ucsi_connector *con)
+>   	typec_partner_set_usb_power_delivery(con->partner, NULL);
+>   	ucsi_unregister_partner_pdos(con);
+>   	ucsi_unregister_altmodes(con, UCSI_RECIPIENT_SOP);
+> +	ucsi_unregister_cable(con);
+>   	typec_unregister_partner(con->partner);
+>   	con->partner = NULL;
+>   }
+> @@ -907,6 +954,30 @@ static int ucsi_check_connection(struct ucsi_connector *con)
+>   	return 0;
+>   }
+>   
+> +static int ucsi_check_cable(struct ucsi_connector *con)
+> +{
+> +	u64 command;
+> +	int ret;
+> +
+> +	if (con->cable)
+> +		return 0;
+> +
+> +	command = UCSI_GET_CABLE_PROPERTY | UCSI_CONNECTOR_NUMBER(con->num);
+> +	ret = ucsi_send_command(con->ucsi, command, &con->cable_prop,
+> +				sizeof(con->cable_prop));
+> +	if (ret < 0) {
+> +		dev_err(con->ucsi->dev, "GET_CABLE_PROPERTY failed (%d)\n",
+> +			ret);
+> +		return ret;
+> +	}
+> +
+> +	ret = ucsi_register_cable(con);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	return 0;
+> +}
+> +
+>   static void ucsi_handle_connector_change(struct work_struct *work)
+>   {
+>   	struct ucsi_connector *con = container_of(work, struct ucsi_connector,
+> @@ -948,6 +1019,7 @@ static void ucsi_handle_connector_change(struct work_struct *work)
+>   			ucsi_register_partner(con);
+>   			ucsi_partner_task(con, ucsi_check_connection, 1, HZ);
+>   			ucsi_partner_task(con, ucsi_check_connector_capability, 1, HZ);
+> +			ucsi_partner_task(con, ucsi_check_cable, 1, HZ);
+>   
+>   			if (UCSI_CONSTAT_PWR_OPMODE(con->status.flags) ==
+>   			    UCSI_CONSTAT_PWR_OPMODE_PD)
+> @@ -1346,6 +1418,7 @@ static int ucsi_register_port(struct ucsi *ucsi, struct ucsi_connector *con)
+>   		ucsi_register_partner(con);
+>   		ucsi_pwr_opmode_change(con);
+>   		ucsi_port_psy_changed(con);
+> +		ucsi_check_cable(con);
+>   	}
+>   
+>   	/* Only notify USB controller if partner supports USB data */
+> diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
+> index 469a2baf472e4..f0aabef0b7c64 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.h
+> +++ b/drivers/usb/typec/ucsi/ucsi.h
+> @@ -265,6 +265,9 @@ struct ucsi_cable_property {
+>   #define   UCSI_CABLE_PROPERTY_PLUG_TYPE_C	2
+>   #define   UCSI_CABLE_PROPERTY_PLUG_OTHER	3
+>   #define UCSI_CABLE_PROP_FLAG_MODE_SUPPORT	BIT(5)
+> +#define UCSI_CABLE_PROP_FLAG_PD_MAJOR_REV(_f_)	(((_f_) & GENMASK(7, 6)) >> 6)
+> +#define UCSI_CABLE_PROP_FLAG_PD_MAJOR_REV_AS_BCD(_f_) \
+> +	UCSI_SPEC_REVISION_TO_BCD(UCSI_CABLE_PROP_FLAG_PD_MAJOR_REV(_f_))
+>   	u8 latency;
+>   } __packed;
+>   
+> @@ -400,6 +403,7 @@ struct ucsi_connector {
+>   
+>   	struct typec_port *port;
+>   	struct typec_partner *partner;
+> +	struct typec_cable *cable;
+>   
+>   	struct typec_altmode *port_altmode[UCSI_MAX_ALTMODES];
+>   	struct typec_altmode *partner_altmode[UCSI_MAX_ALTMODES];
+> @@ -408,6 +412,7 @@ struct ucsi_connector {
+>   
+>   	struct ucsi_connector_status status;
+>   	struct ucsi_connector_capability cap;
+> +	struct ucsi_cable_property cable_prop;
+>   	struct power_supply *psy;
+>   	struct power_supply_desc psy_desc;
+>   	u32 rdo;
 
 
