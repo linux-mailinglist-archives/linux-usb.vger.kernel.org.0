@@ -1,161 +1,293 @@
-Return-Path: <linux-usb+bounces-7801-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7802-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1843877D4F
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Mar 2024 10:50:37 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 92C61877D74
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Mar 2024 10:58:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7D1791F21E2D
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Mar 2024 09:50:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 86EE31C20D47
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Mar 2024 09:58:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BA41199AD;
-	Mon, 11 Mar 2024 09:50:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 891F81CD1C;
+	Mon, 11 Mar 2024 09:58:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Jdwn2ad8"
+	dkim=pass (2048-bit key) header.d=sairon.cz header.i=@sairon.cz header.b="ji05csUY"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A677E2BAFC
-	for <linux-usb@vger.kernel.org>; Mon, 11 Mar 2024 09:50:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBF0117577
+	for <linux-usb@vger.kernel.org>; Mon, 11 Mar 2024 09:58:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710150605; cv=none; b=Dz1TLZOaf0jwclaKxTNWmAG0whBMkNsyJ+wr5KPDn+1ecEJi9T5pFda/RYp2nJ8mIL3HhYYM59jrzWmsjzbWEFbB2nArhSBwgThnMwh00xlZgAIdTJCTSn97YQaEU0Fe4I5fSqvbikXzrGw76j3sC0ibvrwRfqchu7+yeOajUBE=
+	t=1710151105; cv=none; b=JuqjYKRC6edoyVZImC2e3AJ9WoayFLgxbANyN+BtcFiJIssJ4oE7jFtTYNx6KDnE9gIywirKKDTiDH2uojJriwBTD8/JjNTwuwZmvsWA7UtKVr5cBkp8lzQZb3zUo87XaYC4HaVOeumu07YUkCJKKIneKNpa4AZ3VkUOadVCyFQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710150605; c=relaxed/simple;
-	bh=uvJ2hakYbHneCq8YNG7tuA44/YBDsJTeR/dxao+/8HQ=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=R/GIgRuMaiysuKI/u7KYCJCKzccloxT6aLWCwCyRV8m5cSINnJBH8Ko/rdyybsg/Xy7/RPJmwlpKHZNsCtaMzI2yoe5PxuxSvT/dblFqP1NSYNJh0EtKCyAdAJfD4OAtdohKvr/I/cImnjrjePrTeBv3eC6y18kWWdSPDVDWKyE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--howardyen.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Jdwn2ad8; arc=none smtp.client-ip=209.85.215.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--howardyen.bounces.google.com
-Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-5cec8bc5c66so2940633a12.1
-        for <linux-usb@vger.kernel.org>; Mon, 11 Mar 2024 02:50:03 -0700 (PDT)
+	s=arc-20240116; t=1710151105; c=relaxed/simple;
+	bh=WzOuexDXNHJfVLpDsLi/j5carQxZ7Ator1iXUkcUXVg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Um/M3PFTijbC1vaavhqoZpJpgOD0E2Fd8AoQKvBtVnAC2S7nHcmd0rOPg2caMAI9V08gPJYbYIJoYI+rCACU9pdX4iIxA5GondjdXGYDBgoJjIR6IZhIKOblHFEyJz15ivd6B+Guc+XIT3Lxq67OlqSMLCEoDMfqraR8tOvnyNA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sairon.cz; spf=pass smtp.mailfrom=sairon.cz; dkim=pass (2048-bit key) header.d=sairon.cz header.i=@sairon.cz header.b=ji05csUY; arc=none smtp.client-ip=209.85.218.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sairon.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sairon.cz
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a45606c8444so491599666b.3
+        for <linux-usb@vger.kernel.org>; Mon, 11 Mar 2024 02:58:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1710150603; x=1710755403; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=U9nKgRIKf+zajKM49T+JUxDbdLW2EfnvvMithLFK/Yc=;
-        b=Jdwn2ad8Yjvze3A/IsjvHJzhvSbO1gi9QO23jsfDhj2r9A+5kvu3/nu7UlL+mMgNRr
-         o9aagpGNLo0caS1btUv5dxPFRAwhK3etIZPjHQZucQRvtmdJxRp7rGN8JwmttVmvJdvP
-         iAVlxg5z1fMOEnBOsIXBau2LHW7FmpBbZeh2VDZywnr2AZVqWe7qFKybaeWy9l2RklQB
-         BjPRHVExc3+YhznWIJyIosgOsLSa8gi583oo24vSp6xaEoJ5uNB/y27N1yAKNVSUoK/r
-         CUbKNBrKcRLBd+oUVul8GFhk+PvCzDiY8WkwXr9kXq4SEDJbhypRgykOVMu3UU3hQQ+g
-         IkzA==
+        d=sairon.cz; s=google; t=1710151100; x=1710755900; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+4G+RFqm6TAKRoasVo5QUl7d7n7sQEAw3Vx1YsE9jgQ=;
+        b=ji05csUYFAfI3qXvJv3mXBxAEzR+0L1dlHmdIf3vOuvt2e+C49WWAQEmFeFps0iM2a
+         6jQ4z3m0THHyDVUl27J/LP4ER28vNaC3cYFlHN1XYlDk7YqsXETSnhPhbGpUQz9saf5z
+         fFRW5tBEdWsLDRGDsx49gQ25VZJuMbmHjGnvsrJV4Mykj/BkbXnb4JV2o67tt6IDAT13
+         8JG8wanEmLbbsv+BbkPMrpCSl2G6kGi1ws7locNWerb6T5/x5gjKvg057rZwzMVmRfFo
+         GB7nSyQH8xpVD/RwhE4tUjCLF5H4w1r8SwjreRm0rFu5jCWWym3IhPSE0L69cQld7uhD
+         ucSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710150603; x=1710755403;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=U9nKgRIKf+zajKM49T+JUxDbdLW2EfnvvMithLFK/Yc=;
-        b=fzqSWGvggLNBMOu7Bh1csRTVX2rIozPjLQygt9sK07RMQth5ENtbX+IEsY0fGL/tz5
-         jWKNLG34TeH9MhRCrv2e24f6cuAZlEK6JGchg9dH6TSG4+OacBMm6CG2YKeottX/Xw7I
-         k+RmMzUCUUBPpKbXF1jXWnNn/VCu9O7mvTs/6u7y3JmA6d1IKVtSHq5KYTafjzlVc+CE
-         s/GVWsI6LsoUddEdYXw1T0/+GiOBC1I6u3UPdHl0HE6rFUreUKt+aTR6bmu3M4hvcgAG
-         8jiR0MXFdoUqc/zfLtrO2ofyECbBgCIZijHhjUcEegxYMt1tvqp8gSx80bC8/Fb7hQ3U
-         9EEQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXoQrifiAc941Xb+HUSZZPzCAow4LFa8AFKyA+2Ualu1cMC/q7dA3NSnwEEh7bbY0RALO3wJgdNK1lxsbyU5WJbQIOWrMBOwPnu
-X-Gm-Message-State: AOJu0Yw7XzE6Uu7xdjIdIJ4LEibuySoWzvrhnQbnkmT25kSx5cc3jie3
-	i4InWBbLmOc6Wv1G9KsJ9Qud0eKRiGo6xhFO2ZjB+WtJ42qjicZdimdZk6M03lzVbz79Opwx1UN
-	CBSUVHAzAhagwoA==
-X-Google-Smtp-Source: AGHT+IE5C8YFsWfQeFn6ZmMrCYM8EsZdK0R7B2x7aijsSo9T46qxw3LGysRAMLa17HQzOWxQTbFW0fvfbLQGTOw=
-X-Received: from howardyen2.c.googlers.com ([fda3:e722:ac3:cc00:3:22c1:c0a8:16f7])
- (user=howardyen job=sendgmr) by 2002:a63:de0b:0:b0:5dc:aa2a:7790 with SMTP id
- f11-20020a63de0b000000b005dcaa2a7790mr17226pgg.2.1710150602720; Mon, 11 Mar
- 2024 02:50:02 -0700 (PDT)
-Date: Mon, 11 Mar 2024 09:49:47 +0000
-In-Reply-To: <20240311094947.3738200-1-howardyen@google.com>
+        d=1e100.net; s=20230601; t=1710151100; x=1710755900;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+4G+RFqm6TAKRoasVo5QUl7d7n7sQEAw3Vx1YsE9jgQ=;
+        b=JsgvES6foLTda2+grppY8ulKr4qbh9IExeZLC+O/04AliCG7jGbD6//vzFT4fwKCvX
+         2SWeZfmwmx2qCaxzKwQXFx1qKzkkoTUFkP2jHs84lQIGzhxJi8IkR7t9ABBkxEGkXQry
+         396a8JRTbJuP66CRow4Mx4G5aQ4zDZFL51GK4JVJexE0d1V5TGOM1/4rRr67zLnduUj0
+         s0qqR+ZyCDdktONX8yGzL8XYTJYahru/c4eVkk/xoWY9uaaoFYK2qKk/iUTn0sZJ5LdJ
+         29OhvBm8uMuifsbVq4sbNO7xewvwix5CBOsHuSXHeEnshjliSQk71OSU3N2GCom8Ww2N
+         35CQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUUKgEP1SGlkDSHPQ6/69LK0L+0m2McI2owwfo7p0KvCOASM8bn2SMup8k+3RL43bahlPlUa0p9h8jYuaYYlRY/HCvd1WHp57FA
+X-Gm-Message-State: AOJu0YySWf7ZpDDTA6RQ8cGXjjeUQSaSqyuDGLOGcqASzO9TdEVi75Dq
+	epe1TpWW2eCe4dawfDAK3/lNJuH7dHbQJjk8ihb/9mhqksa5Q7+z6YeuizsgOOQ=
+X-Google-Smtp-Source: AGHT+IEWFd0Lni3H4a6DBK8eJOmQ7Sv16rcrNe3OaaWJJMOGHqjkeAixGqq3+/h7HWx0N8qfprWWkA==
+X-Received: by 2002:a17:907:c706:b0:a3e:cdae:7aa2 with SMTP id ty6-20020a170907c70600b00a3ecdae7aa2mr3802782ejc.35.1710151099987;
+        Mon, 11 Mar 2024 02:58:19 -0700 (PDT)
+Received: from [192.168.127.42] (ip-89-103-66-201.bb.vodafone.cz. [89.103.66.201])
+        by smtp.gmail.com with ESMTPSA id ae1-20020a17090725c100b00a45ffe583acsm2590321ejc.187.2024.03.11.02.58.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Mar 2024 02:58:19 -0700 (PDT)
+Message-ID: <4c2a410b-2997-4a7a-8fd6-2bec819a1c4f@sairon.cz>
+Date: Mon, 11 Mar 2024 10:58:18 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240311094947.3738200-1-howardyen@google.com>
-X-Mailer: git-send-email 2.44.0.278.ge034bb2e1d-goog
-Message-ID: <20240311094947.3738200-3-howardyen@google.com>
-Subject: [PATCH v5 2/2] usb: host: xhci-plat: add support for multi memory regions
-From: Howard Yen <howardyen@google.com>
-To: gregkh@linuxfoundation.org, rafael@kernel.org, mathias.nyman@intel.com, 
-	hch@lst.de, m.szyprowski@samsung.com, robin.murphy@arm.com, 
-	andriy.shevchenko@linux.intel.com, petr.tesarik.ext@huawei.com, 
-	broonie@kernel.org, james@equiv.tech, james.clark@arm.com, 
-	masahiroy@kernel.org
-Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	iommu@lists.linux.dev, Howard Yen <howardyen@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [REGRESSION] Re: [PATCH 0/3] USB: core: Don't overwrite device
+ descriptor during reinitialization
+Content-Language: en-US
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: Greg KH <gregkh@linuxfoundation.org>, Khazhy Kumykov <khazhy@google.com>,
+ USB mailing list <linux-usb@vger.kernel.org>, regressions@lists.linux.dev
+References: <6eadec91-990a-4fbd-8883-8366c4a4d8e4@rowland.harvard.edu>
+ <1e954652-dfb3-4248-beea-b8a449128ff0@sairon.cz>
+ <4c3ab861-0274-409b-aad3-7cfb53dc2308@rowland.harvard.edu>
+ <00f0786b-a9f2-4f73-8d23-3b1fa4c8b77e@sairon.cz>
+ <60def275-5237-48df-b37b-ab886f4ee017@rowland.harvard.edu>
+From: =?UTF-8?B?SmFuIMSMZXJtw6Fr?= <sairon@sairon.cz>
+In-Reply-To: <60def275-5237-48df-b37b-ab886f4ee017@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-The reason why it needs multiple regions is that in my system there is
-an always-on subsystem which includes a small size memory, and several
-functions need to run and occupy the memory from the small memory if
-they need to run on the always-on subsystem. These functions must
-allocate the memory from the small memory region, so that they can get
-benefit from the always-on subsystem. So the small memory is split for
-multiple functions which are satisfied with their generic use cases.
-But in specific use cases, like USB3 devices which support the stream
-trasnsfer or multiple devices connect to the host, they required more
-memory than their pre-allocated memory region, so I tried to propose
-this patch to give it the ability to get the memory from the other
-larger memory to solve the issue.
+On 07. 03. 24 20:34, Alan Stern wrote:
+> Another thing the traces showed is that the device doesn't like the
+> "new" initialization scheme; it wants the "old" one.  You can test
+> this by setting the old_scheme_first module parameter for usbcore
+> before plugging in the device:
+> 
+> 	echo 1 >/sys/module/usbcore/parameters/old_scheme_first
+> 
 
-Signed-off-by: Howard Yen <howardyen@google.com>
----
- drivers/usb/host/xhci-plat.c | 19 ++++++++++++++++++-
- 1 file changed, 18 insertions(+), 1 deletion(-)
+You are right, this indeed works and probing is successful after the 
+power-cycling attempt.
 
-diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-index 3d071b875308..7892d3eb26d2 100644
---- a/drivers/usb/host/xhci-plat.c
-+++ b/drivers/usb/host/xhci-plat.c
-@@ -14,6 +14,7 @@
- #include <linux/pci.h>
- #include <linux/of.h>
- #include <linux/of_device.h>
-+#include <linux/of_reserved_mem.h>
- #include <linux/platform_device.h>
- #include <linux/usb/phy.h>
- #include <linux/slab.h>
-@@ -149,7 +150,7 @@ int xhci_plat_probe(struct platform_device *pdev, struct device *sysdev, const s
- 	struct xhci_hcd		*xhci;
- 	struct resource         *res;
- 	struct usb_hcd		*hcd, *usb3_hcd;
--	int			ret;
-+	int			i, count, ret;
- 	int			irq;
- 	struct xhci_plat_priv	*priv = NULL;
- 	bool			of_match;
-@@ -194,6 +195,19 @@ int xhci_plat_probe(struct platform_device *pdev, struct device *sysdev, const s
- 
- 	xhci->allow_single_roothub = 1;
- 
-+	count = of_property_count_u32_elems(sysdev->of_node, "memory-region");
-+
-+	for (i = 0; i < count; i++) {
-+		ret = of_reserved_mem_device_init_by_idx(sysdev, sysdev->of_node, i);
-+		if (ret) {
-+			dev_err(sysdev, "Could not get reserved memory\n");
-+			if (i > 0)
-+				of_reserved_mem_device_release(sysdev);
-+
-+			return ret;
-+		}
-+	}
-+
- 	/*
- 	 * Not all platforms have clks so it is not an error if the
- 	 * clock do not exist.
-@@ -431,6 +445,9 @@ void xhci_plat_remove(struct platform_device *dev)
- 	clk_disable_unprepare(clk);
- 	clk_disable_unprepare(reg_clk);
- 	reset_control_assert(xhci->reset);
-+
-+	of_reserved_mem_device_release(hcd->self.sysdev);
-+
- 	usb_put_hcd(hcd);
- 
- 	pm_runtime_disable(&dev->dev);
--- 
-2.44.0.278.ge034bb2e1d-goog
+> Also, you can try the patch below (without the module parameter set).
+> I suspect it should be applied in any case, but it would be nice to
+> know if it makes any difference in your case.
+> 
+> Index: usb-devel/drivers/usb/core/hub.c
+> ===================================================================
+> --- usb-devel.orig/drivers/usb/core/hub.c
+> +++ usb-devel/drivers/usb/core/hub.c
+> @@ -5481,6 +5481,7 @@ loop:
+>   			msleep(2 * hub_power_on_good_delay(hub));
+>   			usb_hub_set_port_power(hdev, hub, port1, true);
+>   			msleep(hub_power_on_good_delay(hub));
+> +			hub_port_debounce_be_stable(hub, port1);
+>   		}
+>   	}
+>   	if (hub->hdev->parent ||
 
+Unfortunately, this doesn't fix it. It changes the log output a bit but 
+still does not enumerate:
+
+[  199.295695] usb 1-1.2: new full-speed USB device number 25 using ehci-pci
+[  199.360684] usb 1-1.2: device descriptor read/64, error -32
+[  199.534678] usb 1-1.2: device descriptor read/64, error -32
+[  199.708671] usb 1-1.2: new full-speed USB device number 26 using ehci-pci
+[  199.773666] usb 1-1.2: device descriptor read/64, error -32
+[  199.941602] usb 1-1.2: device descriptor read/64, error -32
+[  200.044871] usb 1-1-port2: attempt power cycle
+[  200.528631] usb 1-1.2: new full-speed USB device number 27 using ehci-pci
+[  200.940603] usb 1-1.2: device not accepting address 27, error -32
+[  201.208592] usb 1-1.2: new full-speed USB device number 28 using ehci-pci
+[  201.223783] usb 1-1.2: device descriptor read/8, error -32
+[  201.345772] usb 1-1.2: device descriptor read/8, error -32
+[  201.452899] usb 1-1-port2: unable to enumerate USB device
+
+I'm attaching usbmon traces with this patch.
+
+Regards,
+Jan
+
+####################################################
+
+
+ffff94ff414f8a80 199261119 C Ii:1:002:1 0:2048 1 = 04
+ffff94ff414f8a80 199261158 S Ii:1:002:1 -115:2048 1 <
+ffff94ff882bd840 199261199 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff94ff882bd840 199261378 C Ci:1:002:0 0 4 = 01010100
+ffff94ff882bd840 199261383 S Co:1:002:0 s 23 01 0010 0002 0000 0
+ffff94ff882bd840 199261635 C Co:1:002:0 0 0
+ffff94ff882bd840 199261661 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff94ff882bd840 199261902 C Ci:1:002:0 0 4 = 01010000
+ffff94ff882bd840 199288109 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff94ff882bd840 199288463 C Ci:1:002:0 0 4 = 01010000
+ffff94ff882bd840 199315108 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff94ff882bd840 199315374 C Ci:1:002:0 0 4 = 01010000
+ffff94ff882bd840 199342113 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff94ff882bd840 199342504 C Ci:1:002:0 0 4 = 01010000
+ffff94ff882bd840 199369107 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff94ff882bd840 199369447 C Ci:1:002:0 0 4 = 01010000
+ffff94ff882bd840 199369498 S Co:1:002:0 s 23 03 0004 0002 0000 0
+ffff94ff882bd840 199369903 C Co:1:002:0 0 0
+ffff94ff882bd840 199381106 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff94ff882bd840 199381375 C Ci:1:002:0 0 4 = 03011000
+ffff94ff882bd840 199381410 S Co:1:002:0 s 23 01 0014 0002 0000 0
+ffff94ff882bd840 199381633 C Co:1:002:0 0 0
+ffff94ff882bd840 199433148 S Ci:1:000:0 s 80 06 0100 0000 0040 64 <
+ffff94ff882bd840 199433339 C Ci:1:000:0 -32 0
+ffff94ff882bd840 199433360 S Ci:1:000:0 s 80 06 0100 0000 0040 64 <
+ffff94ff882bd840 199433971 C Ci:1:000:0 -32 0
+ffff94ff882bd840 199433988 S Ci:1:000:0 s 80 06 0100 0000 0040 64 <
+ffff94ff882bd840 199434342 C Ci:1:000:0 -32 0
+ffff94ff882bd840 199434363 S Co:1:002:0 s 23 03 0004 0002 0000 0
+ffff94ff882bd840 199434609 C Co:1:002:0 0 0
+ffff94ff882bd840 199446107 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff94ff882bd840 199446423 C Ci:1:002:0 0 4 = 03011000
+ffff94ff882bd840 199446448 S Co:1:002:0 s 23 01 0014 0002 0000 0
+ffff94ff882bd840 199446679 C Co:1:002:0 0 0
+ffff94ff882bd840 199606111 S Ci:1:000:0 s 80 06 0100 0000 0040 64 <
+ffff94ff882bd840 199606348 C Ci:1:000:0 -32 0
+ffff94ff882bd840 199606372 S Ci:1:000:0 s 80 06 0100 0000 0040 64 <
+ffff94ff882bd840 199607003 C Ci:1:000:0 -32 0
+ffff94ff882bd840 199607090 S Ci:1:000:0 s 80 06 0100 0000 0040 64 <
+ffff94ff882bd840 199607593 C Ci:1:000:0 -32 0
+ffff94ff882bd840 199607623 S Co:1:002:0 s 23 03 0004 0002 0000 0
+ffff94ff882bd840 199608123 C Co:1:002:0 0 0
+ffff94ff882bd840 199620108 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff94ff882bd840 199620506 C Ci:1:002:0 0 4 = 03011000
+ffff94ff882bd840 199620531 S Co:1:002:0 s 23 01 0014 0002 0000 0
+ffff94ff882bd840 199620770 C Co:1:002:0 0 0
+ffff94ff882bd840 199782114 S Co:1:002:0 s 23 01 0001 0002 0000 0
+ffff94ff882bd840 199782380 C Co:1:002:0 0 0
+ffff94ff882bd900 199782433 S Co:1:002:0 s 23 03 0004 0002 0000 0
+ffff94ff882bd900 199782639 C Co:1:002:0 0 0
+ffff94ff882bd900 199794109 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff94ff882bd900 199794511 C Ci:1:002:0 0 4 = 03011000
+ffff94ff882bd900 199794536 S Co:1:002:0 s 23 01 0014 0002 0000 0
+ffff94ff882bd900 199794769 C Co:1:002:0 0 0
+ffff94ff882bd900 199846142 S Ci:1:000:0 s 80 06 0100 0000 0040 64 <
+ffff94ff882bd900 199846554 C Ci:1:000:0 -32 0
+ffff94ff882bd900 199846574 S Ci:1:000:0 s 80 06 0100 0000 0040 64 <
+ffff94ff882bd900 199846828 C Ci:1:000:0 -32 0
+ffff94ff882bd900 199846842 S Ci:1:000:0 s 80 06 0100 0000 0040 64 <
+ffff94ff882bd900 199847170 C Ci:1:000:0 -32 0
+ffff94ff882bd900 199847236 S Co:1:002:0 s 23 03 0004 0002 0000 0
+ffff94ff882bd900 199847490 C Co:1:002:0 0 0
+ffff94ff882bd900 199859108 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff94ff882bd900 199859470 C Ci:1:002:0 0 4 = 03011000
+ffff94ff882bd900 199859496 S Co:1:002:0 s 23 01 0014 0002 0000 0
+ffff94ff882bd900 199859726 C Co:1:002:0 0 0
+ffff94ff882bd900 200014111 S Ci:1:000:0 s 80 06 0100 0000 0040 64 <
+ffff94ff882bd900 200014492 C Ci:1:000:0 -32 0
+ffff94ff882bd900 200014516 S Ci:1:000:0 s 80 06 0100 0000 0040 64 <
+ffff94ff882bd900 200014828 C Ci:1:000:0 -32 0
+ffff94ff882bd900 200014854 S Ci:1:000:0 s 80 06 0100 0000 0040 64 <
+ffff94ff882bd900 200015180 C Ci:1:000:0 -32 0
+ffff94ff882bd900 200015251 S Co:1:002:0 s 23 03 0004 0002 0000 0
+ffff94ff882bd900 200015502 C Co:1:002:0 0 0
+ffff94ff882bd900 200027108 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff94ff882bd900 200027318 C Ci:1:002:0 0 4 = 03011000
+ffff94ff882bd900 200027345 S Co:1:002:0 s 23 01 0014 0002 0000 0
+ffff94ff882bd900 200027579 C Co:1:002:0 0 0
+ffff94ff882bd900 200182109 S Co:1:002:0 s 23 01 0001 0002 0000 0
+ffff94ff882bd900 200182296 C Co:1:002:0 0 0
+ffff94ff882bd840 200182354 S Co:1:002:0 s 23 01 0008 0002 0000 0
+ffff94ff882bd840 200182551 C Co:1:002:0 0 0
+ffff94ff882bd840 200390109 S Co:1:002:0 s 23 03 0008 0002 0000 0
+ffff94ff882bd840 200390345 C Co:1:002:0 0 0
+ffff94ff882bd840 200494114 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff94ff882bd840 200494318 C Ci:1:002:0 0 4 = 01010100
+ffff94ff882bd840 200494345 S Co:1:002:0 s 23 01 0010 0002 0000 0
+ffff94ff882bd840 200494571 C Co:1:002:0 0 0
+ffff94ff882bd840 200521107 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff94ff882bd840 200521316 C Ci:1:002:0 0 4 = 01010000
+ffff94ff882bd840 200548107 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff94ff882bd840 200548426 C Ci:1:002:0 0 4 = 01010000
+ffff94ff882bd840 200575100 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff94ff882bd840 200575338 C Ci:1:002:0 0 4 = 01010000
+ffff94ff882bd840 200602100 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff94ff882bd840 200602260 C Ci:1:002:0 0 4 = 01010000
+ffff94ff882bd840 200602311 S Co:1:002:0 s 23 03 0004 0002 0000 0
+ffff94ff882bd840 200602714 C Co:1:002:0 0 0
+ffff94ff882bd840 200614101 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff94ff882bd840 200614389 C Ci:1:002:0 0 4 = 03011000
+ffff94ff882bd840 200614416 S Co:1:002:0 s 23 01 0014 0002 0000 0
+ffff94ff882bd840 200614842 C Co:1:002:0 0 0
+ffff94ff882bd840 200666141 S Co:1:000:0 s 00 05 001b 0000 0000 0
+ffff94ff882bd840 200666529 C Co:1:000:0 -32 0
+ffff94ff414f8a80 200797181 C Ii:1:002:1 0:2048 1 = 04
+ffff94ff414f8a80 200797212 S Ii:1:002:1 -115:2048 1 <
+ffff94ff882bd840 200870110 S Co:1:000:0 s 00 05 001b 0000 0000 0
+ffff94ff882bd840 200870423 C Co:1:000:0 -32 0
+ffff94ff414f8a80 201053174 C Ii:1:002:1 0:2048 1 = 04
+ffff94ff414f8a80 201053190 S Ii:1:002:1 -115:2048 1 <
+ffff94ff882bd840 201079556 S Co:1:002:0 s 23 01 0001 0002 0000 0
+ffff94ff882bd840 201079768 C Co:1:002:0 0 0
+ffff94ff882bd900 201079814 S Co:1:002:0 s 23 03 0004 0002 0000 0
+ffff94ff882bd900 201080045 C Co:1:002:0 0 0
+ffff94ff882bd900 201092106 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff94ff882bd900 201092293 C Ci:1:002:0 0 4 = 03011100
+ffff94ff882bd900 201092321 S Co:1:002:0 s 23 01 0010 0002 0000 0
+ffff94ff882bd900 201092559 C Co:1:002:0 0 0
+ffff94ff882bd900 201092596 S Co:1:002:0 s 23 03 0004 0002 0000 0
+ffff94ff882bd900 201092819 C Co:1:002:0 0 0
+ffff94ff882bd900 201294110 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff94ff882bd900 201294319 C Ci:1:002:0 0 4 = 03011000
+ffff94ff882bd900 201294346 S Co:1:002:0 s 23 01 0014 0002 0000 0
+ffff94ff882bd900 201294575 C Co:1:002:0 0 0
+ffff94ff882bd900 201346134 S Co:1:000:0 s 00 05 001c 0000 0000 0
+ffff94ff882bd900 201346293 C Co:1:000:0 0 0
+ffff94ff882bd840 201360112 S Ci:1:028:0 s 80 06 0100 0000 0008 8 <
+ffff94ff882bd840 201360521 C Ci:1:028:0 -32 0
+ffff94ff882bd840 201360558 S Ci:1:028:0 s 80 06 0100 0000 0008 8 <
+ffff94ff882bd840 201360922 C Ci:1:028:0 -32 0
+ffff94ff882bd840 201360938 S Ci:1:028:0 s 80 06 0100 0000 0008 8 <
+ffff94ff882bd840 201361276 C Ci:1:028:0 -32 0
+ffff94ff882bd840 201482107 S Ci:1:028:0 s 80 06 0100 0000 0008 8 <
+ffff94ff882bd840 201482304 C Ci:1:028:0 -32 0
+ffff94ff882bd840 201482330 S Ci:1:028:0 s 80 06 0100 0000 0008 8 <
+ffff94ff882bd840 201482934 C Ci:1:028:0 -32 0
+ffff94ff882bd840 201482954 S Ci:1:028:0 s 80 06 0100 0000 0008 8 <
+ffff94ff882bd840 201483278 C Ci:1:028:0 -32 0
+ffff94ff882bd840 201590112 S Co:1:002:0 s 23 01 0001 0002 0000 0
+ffff94ff882bd840 201590387 C Co:1:002:0 0 0
+ffff94ff882bd900 201591835 S Co:1:002:0 s 23 01 0001 0002 0000 0
+ffff94ff882bd900 201592045 C Co:1:002:0 0 0
+ffff94ff882bd900 201592073 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff94ff882bd900 201592497 C Ci:1:002:0 0 4 = 01010000
 
