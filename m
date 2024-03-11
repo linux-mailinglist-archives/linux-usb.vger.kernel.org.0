@@ -1,188 +1,315 @@
-Return-Path: <linux-usb+bounces-7794-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7795-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BEE4C877B17
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Mar 2024 07:52:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8AC56877C52
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Mar 2024 10:12:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2258628237F
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Mar 2024 06:52:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 413E92822C3
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Mar 2024 09:12:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8CB4F9FD;
-	Mon, 11 Mar 2024 06:52:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE3791755B;
+	Mon, 11 Mar 2024 09:12:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="Mo965NQu"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JnepWx1Q"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02on2046.outbound.protection.outlook.com [40.107.247.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 626FAFC17
-	for <linux-usb@vger.kernel.org>; Mon, 11 Mar 2024 06:52:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.247.46
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710139935; cv=fail; b=TK+qHWYClDWrVOk+6TvtLpSNGD1koUx4jnnxJkq6gb8cbNCBpXrQfQFFmGKGU3WP/DRCVjqlBaQYTozGVLHhlqxyHOkPwygop046KJuTSq9GnzMHCgQfaLblXotaqH2aXYSDsm5jr74MdaIEsVu/f6F0FrbozUI1jQ49uzoNvpI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710139935; c=relaxed/simple;
-	bh=3B0ob0P2kkKoVPo/r9rvedU150rQHMbpZkudZrDC9LE=;
-	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=qYJm/CBS/PieJn8XnOpWzTTusI0zjie+FJ+VpBB8Ux+YXiMCCKV/Cd8ChT6qNG37BYReKUByV8C8YcFYSakZ2/sh2dLg61haFFzTX/IxQMyK+x5hWvPTjB8VSjqCJkaqn90OFX6qJmjo8spchNJ5FBBDZl5PyBN4iLGGVGd4Mic=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b=Mo965NQu; arc=fail smtp.client-ip=40.107.247.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ME93sYVMmZq2Rgo4JHpjZEeX5MjTPlomfqMkVP2HQZM6nPrdwe6iQhkqhNsXLECs8hpPZjQbVUNBJUJr11KPUQ+Nn2ntJMNWkT8iTn9Ro7XlIEREB4NACMBTmrAEXiOb2tGsNYDvjGg49QaNO0K4tvd1jHZFlvkco4YjNgQkRUraBicEklfUVqCjXiVK/MMoj1XX+KfAFZqlBVDkbc4F+Rm4fsWv71DBVuZwqAJVopXSgMYmrkrwSiKWEa0NOx9Y6ub3HM7jgSnEDgX24VjlSRNZP3YaOhLylzIx91yv6cm99jZnmaE2ZdFZVk0rkY/ctMYvFT83ntynAADWS5Nz7Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=iikwJdY0YiqimEZ/jrqcQMGiU/Q31sV2HqDWBCi4EHI=;
- b=hPwESkRUdzCoGVnfi9d44tJ2iWyQCleZEFs3gvVzzRJ2opFUCJmqjx1rWkkhVoP8UyvebQCYOo5wHoZ74tsoNVi+N0RlsjX+rJ8P3HZlX0RDL54prdApIM8frhViRdGLtfOf+zlRcliNJi8I9wfSQZuEz2KzYLZGGuX2U305opGW0jxb/wOKGa8YTJTkSALxiwJFn7B8X+fM4W4SwME5eXg+x6GUEguAJOzV9uEm3lNfKXl+bS2AzHfcdyIH34zojn/MH9bK9rR2o56kbIdK/dhRm1Rxeq9si4k2YXZ4MHFhPwwlKG0oFU5AG6O20dA6CyToy8e7YiHMs1YO0cp/xg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=iikwJdY0YiqimEZ/jrqcQMGiU/Q31sV2HqDWBCi4EHI=;
- b=Mo965NQuqlC9oi09QHd1PkIfjv+vC+vzHHjgOhZ4GOPCO2ogKwUvuqBh7SVecwqvukmVivOszgJVPW9lvZw5xxuR2APfPqZb7LKqHJzHLRxf4xuIYITdPCa2+C5bMZ8uN1N0zySroYGIp6nESfaQTgLP3zolxxkC5VVtbTHHZMk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from DU2PR04MB8822.eurprd04.prod.outlook.com (2603:10a6:10:2e1::11)
- by AM0PR04MB7123.eurprd04.prod.outlook.com (2603:10a6:208:197::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7362.35; Mon, 11 Mar
- 2024 06:52:10 +0000
-Received: from DU2PR04MB8822.eurprd04.prod.outlook.com
- ([fe80::d45f:4483:c11:68b0]) by DU2PR04MB8822.eurprd04.prod.outlook.com
- ([fe80::d45f:4483:c11:68b0%7]) with mapi id 15.20.7362.035; Mon, 11 Mar 2024
- 06:52:10 +0000
-From: Xu Yang <xu.yang_2@nxp.com>
-To: heikki.krogerus@linux.intel.com,
-	gregkh@linuxfoundation.org,
-	linux@roeck-us.net
-Cc: rdbabiera@google.com,
-	badhri@google.com,
-	frank.wang@rock-chips.com,
-	kyletso@google.com,
-	zhipeng.wang_1@nxp.com,
-	aisheng.dong@nxp.com,
-	jun.li@nxp.com,
-	linux-usb@vger.kernel.org,
-	imx@lists.linux.dev
-Subject: [PATCH] usb: typec: tcpm: fix double-free issue in tcpm_port_unregister_pd()
-Date: Mon, 11 Mar 2024 14:52:19 +0800
-Message-Id: <20240311065219.777037-1-xu.yang_2@nxp.com>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2PR04CA0007.apcprd04.prod.outlook.com
- (2603:1096:4:197::19) To DU2PR04MB8822.eurprd04.prod.outlook.com
- (2603:10a6:10:2e1::11)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76D5E14275;
+	Mon, 11 Mar 2024 09:12:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1710148357; cv=none; b=Fl7yW9v0qRnUFVmHBDfSVCvKGr+DnO/kc4u1+CVYWl/u62kQdS/Dc41n4XNLFpbC+KFYRh4561k8EpQapok46eN0OrOXbSZYwWYVEfvb6HMoI252P1duxf4AzwV++j5BVeZnuNFxPOF4GJ61r76zl33YmVghIBAHRF0HO/KyO7k=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1710148357; c=relaxed/simple;
+	bh=LZf8aKALWQ4GjXdbZ2Phxwp+kFTjxyvh+JWieX5/E2w=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rkmDfV0OCcDVJdMpzY3o0h4NEm9ot9EsdLY+xScn4RXIsFMuoMXmQg2PwXJmBI3tkkDoPWjL6qJsa/HOm2Oh1zJy71o77T0FW3KdyYn5KajEeGkDbMUEW4pJ8Rsm5yHsTsbx4Ghw280VtYjRnqS6EKgZdib7+n6XDU3JxkZGQpk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JnepWx1Q; arc=none smtp.client-ip=209.85.215.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-5d8b70b39efso2223042a12.0;
+        Mon, 11 Mar 2024 02:12:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1710148355; x=1710753155; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=dVlARnxmjviZM9MgRuztuSx0uEpoNo7afHr6yWCY/5c=;
+        b=JnepWx1Q4VmUUJ1RghGR4z+Ur46ysQ6jYHwOAyw+b20B08DvnjCfEI3xLCZtdOyXuV
+         Zsz5PMnlEA1zJzbHfe/BHtOjKLfKmw9FukIDjPdthgojpdE3y8A4IOQMWYDki6n3XDn7
+         GhmHNvmGfiv8d92QhH/vrX8RmZ3BBpaaSBsX1kCJZkY553vgCpDejyONs7lCKDYEWTSu
+         re2P8ynb7czjJfkug67kg5SnQexrLFOBN2PelTf4N4ak/PFyNFufi8R92+tiaDLr5Y5Q
+         Pj/YG5cfiymM3K4mnKc3M+uzzJ3f21mTUZUnG9z3nZRqK2KevQOkPEwi+vCU3uuWgIUA
+         fcnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710148355; x=1710753155;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dVlARnxmjviZM9MgRuztuSx0uEpoNo7afHr6yWCY/5c=;
+        b=RIjvlF1hsFt69XUFW77rRic/RNf3W8R2UnFqwW+la3TyDT/v5hwCZJyDAr4Yopi40Y
+         hagxpcKMmgOfHxxq1KPEPYJ6111WrGUru1EuvVYYrSnPhNo20IB/2pPNCMTnGz0C4l2d
+         IPUzj9fI81gIWlaCRUqKPIA4oPg7KTw+kpuyf62TrZ0vG7XPu25vE1hGM5Ald7oGZpAG
+         6nW4ZUWDFO+MyJbslM5GIFc6p6DxFkpCwB5ZzzJhqts5kvcL3q0ECFwH2qaWMW/Mt9HW
+         odM5Xw/J9oCQyqW1h4xBJpNhKIdsdJBcXoJD2BcD+oe57Y4jwnHTkDf9fo5cSPoDyqqq
+         qeog==
+X-Forwarded-Encrypted: i=1; AJvYcCXQcjRSBjMQ5xacN6t6tplnZ2JSGuIUxCID6gvlfgv7y4uqRV4+7JdKUmVUsWKbKw1tzQsMYRHjpgAEUrZxtHQvhx04ORQydo/J+z4yVrnDC13PS8g93JogbPum0qZAOd/S1g9QUL3EcZD+5xkLe0A9/u7KIDRgVwRYDDapAeBtbeAuLi0=
+X-Gm-Message-State: AOJu0YyojmuOdlWJCpd0c/Rs9t8T0uDoaqbirurVR88sWtuNP6jyfC03
+	4dkUGmB22CuUkBgs2fgE3GPiD6hV8zXr24uGRNJCdj3P/p6GA8dVpDEFa7nUEoEQb2uQmMFzIU3
+	ooKyFhIugcBfo9TGDKJJNIQCkO/U=
+X-Google-Smtp-Source: AGHT+IFc0HSgZ+Yo+k/KJIgQmyPYsfswEkj9cwlLYmD9PwYcLgfm7FbrGKk7NxkxSnYk25WK5DovQcqp9jhQCa58VR0=
+X-Received: by 2002:a17:90a:4683:b0:29b:db64:c1db with SMTP id
+ z3-20020a17090a468300b0029bdb64c1dbmr2704961pjf.15.1710148354710; Mon, 11 Mar
+ 2024 02:12:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU2PR04MB8822:EE_|AM0PR04MB7123:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2b0b9a23-1d36-41ad-82a8-08dc4197c643
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	Uubze4bdHGizcJ8qZy7cmwi09hzyOVBDsBEfHMzZL1XgRnVnZnK5WUMdVgovHf60GIGV7OPu/soXLO3dzwD1vRkNrA3WcaFORY3uQOg+zxNHh2AfRB2F9Ibie8c5WQCCT2DUGCyI2vYS7R0OqaIHQCLFL8+9neyaA14yy8ay02cIF55i2Mn8kQ1ne/xvyGBKf4Iikekx0AAo/30nVnlYh3RPKRxYBb6EDpXHeFYG6QTDbIyNv7g8ByH0VGnk6IVAViKYkipw+hyyl+rd5Z6NlUS0oVyg6/ikRonpYXE1tabQqwbkh66ZxrVbUX7em25CdkhYJLYfYIBRh7oz+PGzmUjlKhEy32musW5njZAoI+rvj2hi3tKujSq/M7gX9rbi8cqq/orz/vXJ5nQEtjMj/l9qijispsHuDGtLF4h7Gwn8qysApzttB5IYz/ZADLqwvclEBSshgS6OamnwBXVm2Kc+IzGd2EcKRfkEmWT1H2icYYaIKSlUTO/Xw2/Vq1q0fonJRtYppgLRKe0KXHqzKt2HHYCRMPOU9GL24gGYiG4JMJRMsXahl4BP7t98LmD4rHOggqNji3vgEbbbxI1flUlG+ssCqoLBlrMV8kYSfFH0PBU+fh1vbSFm1Uc4MeAYJQL1MuWioCQ7NnzlrT58CPlE5VheR3ap2rMYgZ7m74dtIvP1tdWeVQ4VGDlZ8HRFNwDU4z7aQZcNvarGb/BLGog1RsZmD5s1SkJdznAA7Vg=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8822.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(1800799015)(52116005)(38350700005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?mLCfugKLmMWUqQX0F84gQbpA4Ne4gOETY/63J6TO//A0GomiANOLzoiJpGk9?=
- =?us-ascii?Q?9wfLqRoGmSmhFZcqzAlPV+iif6rpw05jc8HJ23cxfCJuLH8TnF67IHZ/IAPW?=
- =?us-ascii?Q?KhvuAEVIkZIOyBeulq2IAN51QRD6m9hX+1qf/zedlCoeVptzJWbnKp96qPqO?=
- =?us-ascii?Q?cSvdnMAZ6MqsR7eMUeRuMhEZiwP8j0d0F/Sn3An+p8WBD74XEoLEAQvsVPOv?=
- =?us-ascii?Q?/e/Ugy4yTFaKhwMvuCN7Ax2rL4arYZPPJuVBjytuNtx+yhSeQPjjIXyvKz/N?=
- =?us-ascii?Q?A7w6NaYjkUu1DE8PtxHx8ULRVgdO0AiNfeSFPdbMQvvH4i+XJWpc9r+EjIch?=
- =?us-ascii?Q?0xWiBWlYK90oqw4fwaDFhf1mdeOdTPidnUdFDI12FMRxR0xjUK3BcPPUMk8l?=
- =?us-ascii?Q?gEVWiyPRp6wHJDIqhA06IHhHowBvQz12K0b+Ph4maNPontXq6L5xh/SRvpRd?=
- =?us-ascii?Q?55CNLiiB+kfhQlOo9gxYLVufuhNXkAfs10g3yZnIblJCXvxO82UDyw6BMGWR?=
- =?us-ascii?Q?Yqp/gwcILIYshtSiQ9bp48bk9lhUDcJ25Dnku6CnCIZhc6HXr6pgigi1/91A?=
- =?us-ascii?Q?8ICut3EEkIxfqYLMXXlsi8cizXrInW3ud7lRQZfJ2AFRXylZnozjWVLhZYeI?=
- =?us-ascii?Q?t2ay31/DwTHqmLk3tqf76Df0BS4ei7LyYgSSiglVpK8Zs/RAKSXx92unhP5E?=
- =?us-ascii?Q?dVe6l1dDGpf6f9nafMA1uJE6QqB5d5XtC9FAC1ANtCPA/75lD5EdaAK7KlIs?=
- =?us-ascii?Q?T/QRPf0KaOsyPA56K4JoGpHcxgQ1LidHqZnVBUaWbIIfno4R4vjopyhL7vBZ?=
- =?us-ascii?Q?Wxol5XTrAcfD6M8yDxyQokPQkYGM/V6ssyf3GRo8H2f8buEnulSduGlf6Dy8?=
- =?us-ascii?Q?bii6ud0IhMGpu+D54dED4ZQ93NvV4OanCl82Rx2H14D2PhuwstiaFIoMwnkE?=
- =?us-ascii?Q?4z+NQwkEiwfRJLIoS/rVMQ80c8+APz1JbYc+RZ8WZ7IyyryN1tvawYNZJM12?=
- =?us-ascii?Q?sVEe9ArNuojebkcM83hpNG3IeQYdVqDeuYwY+vn2L8Rskg84YIko/RJl5J/I?=
- =?us-ascii?Q?EmZHuv++noTKzTpLX/Pgm0WsnNSK2OpwIKQvh0LpL5CwZamwS26LoM5J1Xz8?=
- =?us-ascii?Q?l/0dRraKlhuB8oKgD0cC0FWcqLcD1mr0OUUneG/i73hzljSwAmCeO6aJvPx9?=
- =?us-ascii?Q?JrlDp3n6q9dpemYwTXlffeesVJP7rJzATwXArz8Id5lq/7iaRYKRT9nbHvLE?=
- =?us-ascii?Q?rh4utqiuO8fklsAQwfag0UZWaI9tJ3RSZapwgd4WQ0s8QmD4diMXD8tcXkD6?=
- =?us-ascii?Q?b/ZqgXOravwJefwsCM0BkjiqI3bPvfVZKTyxt6YfF5Q1IYJkALMpdZUQG+zY?=
- =?us-ascii?Q?GhTnKVjs+PFgEYINeNwz1bOJYAefeVKiTRawrExdnaCH+wCUHQ11eamVZwBe?=
- =?us-ascii?Q?CfgGEwR3ZAs9DdzxhZWdiqB54//oXVnvOQNbqY1iUXtgEcOpAnOx++XTslJx?=
- =?us-ascii?Q?yDMrOWlT+3jCXITcYRV04xmrYEjcITnDHd0cISAOv/TzjAc38KGz8+LAonP1?=
- =?us-ascii?Q?p0Yla0/FOCj9F+OCChzHdfdkFQ4wjNSVug/0Bp1j?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2b0b9a23-1d36-41ad-82a8-08dc4197c643
-X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8822.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Mar 2024 06:52:10.4753
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: IOwlSlO37N2EKVfRczgr6IGZr6I0o8I2CtUiOHN/BgE+IvYDgOrwz2nEtISBSWSmF0domCcTQpHRjjF9HbsQlw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB7123
+References: <0000000000006dbb0b06133aacee@google.com>
+In-Reply-To: <0000000000006dbb0b06133aacee@google.com>
+From: Z qiang <qiang.zhang1211@gmail.com>
+Date: Mon, 11 Mar 2024 17:12:23 +0800
+Message-ID: <CALm+0cX+J-Cb_-Vd7i=2M3FiDa89BreqrdXYwMB=yeR6G7GGvw@mail.gmail.com>
+Subject: Re: [syzbot] [mm?] [input?] [usb?] INFO: rcu detected stall in asm_exc_page_fault
+To: syzbot <syzbot+360faf5c01a5be55581d@syzkaller.appspotmail.com>
+Cc: akpm@linux-foundation.org, linux-input@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, linux-usb@vger.kernel.org, 
+	pasha.tatashin@soleen.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-When unregister pd capabilitie in tcpm, KASAN will capture below double
--free issue. The root cause is the same capabilitiy will be kfreed twice,
-the first time is kfreed by pd_capabilities_release() and the second time
-is explicitly kfreed by tcpm_port_unregister_pd().
+>
+> Hello,
+>
+> syzbot found the following issue on:
+>
+> HEAD commit:    90d35da658da Linux 6.8-rc7
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=122f6f6a180000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=119d08814b43915b
+> dashboard link: https://syzkaller.appspot.com/bug?extid=360faf5c01a5be55581d
+> compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=124056de180000
+>
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/fb2c1adf4ec3/disk-90d35da6.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/09c5b88a8ceb/vmlinux-90d35da6.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/5e5cbc312e49/bzImage-90d35da6.xz
+>
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+360faf5c01a5be55581d@syzkaller.appspotmail.com
 
-[    3.988059] BUG: KASAN: double-free in tcpm_port_unregister_pd+0x1a4/0x3dc
-[    3.995001] Free of addr ffff0008164d3000 by task kworker/u16:0/10
-[    4.001206]
-[    4.002712] CPU: 2 PID: 10 Comm: kworker/u16:0 Not tainted 6.8.0-rc5-next-20240220-05616-g52728c567a55 #53
-[    4.012402] Hardware name: Freescale i.MX8QXP MEK (DT)
-[    4.017569] Workqueue: events_unbound deferred_probe_work_func
-[    4.023456] Call trace:
-[    4.025920]  dump_backtrace+0x94/0xec
-[    4.029629]  show_stack+0x18/0x24
-[    4.032974]  dump_stack_lvl+0x78/0x90
-[    4.036675]  print_report+0xfc/0x5c0
-[    4.040289]  kasan_report_invalid_free+0xa0/0xc0
-[    4.044937]  __kasan_slab_free+0x124/0x154
-[    4.049072]  kfree+0xb4/0x1e8
-[    4.052069]  tcpm_port_unregister_pd+0x1a4/0x3dc
-[    4.056725]  tcpm_register_port+0x1dd0/0x2558
-[    4.061121]  tcpci_register_port+0x420/0x71c
-[    4.065430]  tcpci_probe+0x118/0x2e0
 
-To fix the issue, this will remove kree() from tcpm_port_unregister_pd().
+#syz test https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+master
 
-Fixes: cd099cde4ed2 ("usb: typec: tcpm: Support multiple capabilities")
-cc: <stable@vger.kernel.org>
-Suggested-by: Aisheng Dong <aisheng.dong@nxp.com>
-Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
----
- drivers/usb/typec/tcpm/tcpm.c | 2 --
- 1 file changed, 2 deletions(-)
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 7019a40457a6..69e344f07e68 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -9233,6 +9233,7 @@ void show_state_filter(unsigned int state_filter)
+                 */
+                touch_nmi_watchdog();
+                touch_all_softlockup_watchdogs();
++               rcu_cpu_stall_reset();
+                if (state_filter_match(state_filter, p))
+                        sched_show_task(p);
 
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index 3d505614bff1..afbb0d832db2 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -6940,9 +6940,7 @@ static void tcpm_port_unregister_pd(struct tcpm_port *port)
- 	port->port_source_caps = NULL;
- 	for (i = 0; i < port->pd_count; i++) {
- 		usb_power_delivery_unregister_capabilities(port->pd_list[i]->sink_cap);
--		kfree(port->pd_list[i]->sink_cap);
- 		usb_power_delivery_unregister_capabilities(port->pd_list[i]->source_cap);
--		kfree(port->pd_list[i]->source_cap);
- 		devm_kfree(port->dev, port->pd_list[i]);
- 		port->pd_list[i] = NULL;
- 		usb_power_delivery_unregister(port->pds[i]);
--- 
-2.34.1
+        }
 
+
+>
+> rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: {
+>  1-....
+>  } 4831 jiffies s: 1849 root: 0x2/.
+> rcu: blocking rcu_node structures (internal RCU debug):
+> Sending NMI from CPU 0 to CPUs 1:
+>  kthread+0x2ef/0x390 kernel/kthread.c:388
+> NMI backtrace for cpu 1
+> CPU: 1 PID: 5232 Comm: syz-executor.3 Not tainted 6.8.0-rc7-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/25/2024
+> RIP: 0010:format_decode+0x546/0x1bb0
+> Code: 85 96 01 00 00 45 84 ff 0f 84 8d 01 00 00 48 bb 00 ff ff ff 00 ff ff ff 48 8b 44 24 20 42 0f b6 04 30 84 c0 0f 85 4d 10 00 00 <48> 8b 54 24 48 48 21 da 48 8b 44 24 28 42 0f b6 04 30 84 c0 48 8d
+> RSP: 0000:ffffc900001efa20 EFLAGS: 00000046
+> RAX: 0000000000000000 RBX: ffffff00ffffff00 RCX: ffff8880219e0000
+> RDX: ffff8880219e0000 RSI: 0000000000000025 RDI: 0000000000000000
+> RBP: ffffc900001efb10 R08: ffffffff8b57a4c8 R09: ffffffff8b57a1aa
+> R10: 0000000000000002 R11: ffff8880219e0000 R12: ffffffff8bab75e6
+> R13: ffffffff8bab75e6 R14: dffffc0000000000 R15: 0000000000000025
+> FS:  0000555555c82480(0000) GS:ffff8880b9500000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007f74dc087056 CR3: 0000000021bc6000 CR4: 00000000003506f0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  <NMI>
+>  </NMI>
+>  <IRQ>
+>  vsnprintf+0x14f/0x1da0 lib/vsprintf.c:2776
+>  sprintf+0xda/0x120 lib/vsprintf.c:3028
+>  print_time kernel/printk/printk.c:1324 [inline]
+>  info_print_prefix+0x16b/0x310 kernel/printk/printk.c:1350
+>  record_print_text kernel/printk/printk.c:1399 [inline]
+>  printk_get_next_message+0x408/0xce0 kernel/printk/printk.c:2828
+>  console_emit_next_record kernel/printk/printk.c:2868 [inline]
+>  console_flush_all+0x42d/0xec0 kernel/printk/printk.c:2967
+>  console_unlock+0x13b/0x4d0 kernel/printk/printk.c:3036
+>  vprintk_emit+0x508/0x720 kernel/printk/printk.c:2303
+>  _printk+0xd5/0x120 kernel/printk/printk.c:2328
+>  printk_stack_address arch/x86/kernel/dumpstack.c:72 [inline]
+>  show_trace_log_lvl+0x438/0x520 arch/x86/kernel/dumpstack.c:285
+>  sched_show_task+0x50c/0x6d0 kernel/sched/core.c:9171
+>  show_state_filter+0x19e/0x270 kernel/sched/core.c:9216
+>  kbd_keycode drivers/tty/vt/keyboard.c:1524 [inline]
+>  kbd_event+0x30fa/0x4910 drivers/tty/vt/keyboard.c:1543
+>  input_to_handler drivers/input/input.c:132 [inline]
+>  input_pass_values+0x945/0x1200 drivers/input/input.c:161
+>  input_event_dispose drivers/input/input.c:378 [inline]
+>  input_handle_event drivers/input/input.c:406 [inline]
+>  input_repeat_key+0x3fd/0x6c0 drivers/input/input.c:2263
+>  call_timer_fn+0x17e/0x600 kernel/time/timer.c:1700
+>  expire_timers kernel/time/timer.c:1751 [inline]
+>  __run_timers+0x621/0x830 kernel/time/timer.c:2038
+>  run_timer_softirq+0x67/0xf0 kernel/time/timer.c:2051
+>  __do_softirq+0x2bb/0x942 kernel/softirq.c:553
+>  invoke_softirq kernel/softirq.c:427 [inline]
+>  __irq_exit_rcu+0xf1/0x1c0 kernel/softirq.c:632
+>  irq_exit_rcu+0x9/0x30 kernel/softirq.c:644
+>  sysvec_apic_timer_interrupt+0x97/0xb0 arch/x86/kernel/apic/apic.c:1076
+>  </IRQ>
+>  <TASK>
+>  asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:649
+> RIP: 0010:page_table_check_set+0x58/0x700 mm/page_table_check.c:109
+> Code: 95 ff 85 ed 0f 84 5f 03 00 00 49 bf 00 00 00 00 00 fc ff df 48 c1 e3 06 48 bd 00 00 00 00 00 ea ff ff 48 8d 3c 2b 48 89 3c 24 <e8> 33 e9 ff ff 49 89 c6 4c 8d 64 2b 08 4c 89 e5 48 c1 ed 03 42 80
+> RSP: 0000:ffffc90004d0f650 EFLAGS: 00000202
+> RAX: 0000000000000000 RBX: 0000000001c8ae80 RCX: ffff8880219e0000
+> RDX: ffff8880219e0000 RSI: 0000000000000001 RDI: ffffea0001c8ae80
+> RBP: ffffea0000000000 R08: ffffffff81fdf590 R09: 1ffffffff1f0880d
+> R10: dffffc0000000000 R11: fffffbfff1f0880e R12: 0000000000000000
+> R13: 0000000000000001 R14: 00000000722ba025 R15: dffffc0000000000
+>  __page_table_check_ptes_set+0x220/0x280 mm/page_table_check.c:196
+>  page_table_check_ptes_set include/linux/page_table_check.h:74 [inline]
+>  set_ptes include/linux/pgtable.h:241 [inline]
+>  set_pte_range+0x885/0x8b0 mm/memory.c:4549
+>  filemap_map_order0_folio mm/filemap.c:3513 [inline]
+>  filemap_map_pages+0xee2/0x1830 mm/filemap.c:3559
+>  do_fault_around mm/memory.c:4716 [inline]
+>  do_read_fault mm/memory.c:4749 [inline]
+>  do_fault mm/memory.c:4888 [inline]
+>  do_pte_missing mm/memory.c:3745 [inline]
+>  handle_pte_fault mm/memory.c:5164 [inline]
+>  __handle_mm_fault+0x485d/0x72d0 mm/memory.c:5305
+>  handle_mm_fault+0x27e/0x770 mm/memory.c:5470
+>  do_user_addr_fault arch/x86/mm/fault.c:1355 [inline]
+>  handle_page_fault arch/x86/mm/fault.c:1498 [inline]
+>  exc_page_fault+0x456/0x870 arch/x86/mm/fault.c:1554
+>  asm_exc_page_fault+0x26/0x30 arch/x86/include/asm/idtentry.h:570
+> RIP: 0033:0x7f74dc087080
+> Code: Unable to access opcode bytes at 0x7f74dc087056.
+> RSP: 002b:00007ffe028d3bb8 EFLAGS: 00010246
+> RAX: 00007f74dcdfb9d0 RBX: 00007f74dcdfb6c0 RCX: 00007f74dc07de67
+> RDX: 0000000000000003 RSI: 0000000000020000 RDI: 00007f74dcdfb6c0
+> RBP: 0000000000000000 R08: 00000000ffffffff R09: 0000000000000000
+> R10: 0000000000021000 R11: 0000000000000206 R12: 00007ffe028d3e60
+> R13: ffffffffffffffc0 R14: 0000000000001000 R15: 0000000000000000
+>  </TASK>
+>  ret_from_fork+0x4b/0x80 arch/x86/kernel/process.c:147
+>  ret_from_fork_asm+0x1b/0x30 arch/x86/entry/entry_64.S:243
+>  </TASK>
+> task:kworker/u4:0    state:I stack:24400 pid:11    tgid:11    ppid:2      flags:0x00004000
+> Workqueue:  0x0 (events_unbound)
+> Call Trace:
+>  <TASK>
+>  context_switch kernel/sched/core.c:5400 [inline]
+>  __schedule+0x177f/0x49a0 kernel/sched/core.c:6727
+>  __schedule_loop kernel/sched/core.c:6802 [inline]
+>  schedule+0x149/0x260 kernel/sched/core.c:6817
+>  worker_thread+0xc26/0x1000 kernel/workqueue.c:2802
+>  kthread+0x2ef/0x390 kernel/kthread.c:388
+>  ret_from_fork+0x4b/0x80 arch/x86/kernel/process.c:147
+>  ret_from_fork_asm+0x1b/0x30 arch/x86/entry/entry_64.S:243
+>  </TASK>
+> task:kworker/u4:1    state:I stack:23344 pid:12    tgid:12    ppid:2      flags:0x00004000
+> Workqueue:  0x0 (bat_events)
+> Call Trace:
+>  <TASK>
+>  context_switch kernel/sched/core.c:5400 [inline]
+>  __schedule+0x177f/0x49a0 kernel/sched/core.c:6727
+>  __schedule_loop kernel/sched/core.c:6802 [inline]
+>  schedule+0x149/0x260 kernel/sched/core.c:6817
+>  worker_thread+0xc26/0x1000 kernel/workqueue.c:2802
+>  kthread+0x2ef/0x390 kernel/kthread.c:388
+>  ret_from_fork+0x4b/0x80 arch/x86/kernel/process.c:147
+>  ret_from_fork_asm+0x1b/0x30 arch/x86/entry/entry_64.S:243
+>  </TASK>
+> task:kworker/R-mm_pe state:I stack:28752 pid:13    tgid:13    ppid:2      flags:0x00004000
+> Call Trace:
+>  <TASK>
+>  context_switch kernel/sched/core.c:5400 [inline]
+>  __schedule+0x177f/0x49a0 kernel/sched/core.c:6727
+>  __schedule_loop kernel/sched/core.c:6802 [inline]
+>  schedule+0x149/0x260 kernel/sched/core.c:6817
+>  rescuer_thread+0xc45/0xda0 kernel/workqueue.c:2937
+>  kthread+0x2ef/0x390 kernel/kthread.c:388
+>  ret_from_fork+0x4b/0x80 arch/x86/kernel/process.c:147
+>  ret_from_fork_asm+0x1b/0x30 arch/x86/entry/entry_64.S:243
+>  </TASK>
+> task:rcu_tasks_kthre state:I stack:27448 pid:14    tgid:14    ppid:2      flags:0x00004000
+> Call Trace:
+>  <TASK>
+>  context_switch kernel/sched/core.c:5400 [inline]
+>  __schedule+0x177f/0x49a0 kernel/sched/core.c:6727
+>  __schedule_loop kernel/sched/core.c:6802 [inline]
+>  schedule+0x149/0x260 kernel/sched/core.c:6817
+>  rcu_tasks_one_gp+0x7f5/0xda0 kernel/rcu/tasks.h:578
+>  rcu_tasks_kthread+0x186/0x1b0 kernel/rcu/tasks.h:625
+>  kthread+0x2ef/0x390 kernel/kthread.c:388
+>  ret_from_fork+0x4b/0x80 arch/x86/kernel/process.c:147
+>  ret_from_fork_asm+0x1b/0x30 arch/x86/entry/entry_64.S:243
+>  </TASK>
+> task:rcu_tasks_trace state:I stack:27144 pid:15    tgid:15    ppid:2      flags:0x00004000
+> Call Trace:
+>  <TASK>
+>  context_switch kernel/sched/core.c:5400 [inline]
+>  __schedule+0x177f/0x49a0 kernel/sched/core.c:6727
+>  __schedule_loop kernel/sched/core.c:6802 [inline]
+>  schedule+0x149/0x260 kernel/sched/core.c:6817
+>  rcu_tasks_one_gp+0x7f5/0xda0 kernel/rcu/tasks.h:578
+>  rcu_tasks_kthread+0x186/0x1b0 kernel/rcu/tasks.h:625
+>  kthread+0x2ef/0x390 kernel/kthread.c:388
+>  ret_from_fork+0x4b/0x80 arch/x86/kernel/process.c:147
+>  ret_from_fork_asm+0x1b/0x30 arch/x86/entry/entry_64.S:243
+>  </TASK>
+> task:ksoftirqd/0
+>
+>
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+>
+> If the report is already addressed, let syzbot know by replying with:
+> #syz fix: exact-commit-title
+>
+> If you want syzbot to run the reproducer, reply with:
+> #syz test: git://repo/address.git branch-or-commit-hash
+> If you attach or paste a git patch, syzbot will apply it before testing.
+>
+> If you want to overwrite report's subsystems, reply with:
+> #syz set subsystems: new-subsystem
+> (See the list of subsystem names on the web dashboard)
+>
+> If the report is a duplicate of another one, reply with:
+> #syz dup: exact-subject-of-another-report
+>
+> If you want to undo deduplication, reply with:
+> #syz undup
+>
 
