@@ -1,196 +1,157 @@
-Return-Path: <linux-usb+bounces-7814-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7815-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5CD6D877F8B
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Mar 2024 13:05:12 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD67B877F8F
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Mar 2024 13:05:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 12B062833A4
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Mar 2024 12:05:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 71DBD1F22817
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Mar 2024 12:05:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 805E43FB8E;
-	Mon, 11 Mar 2024 12:03:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="BpcD1Sp8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93F3B3C6A6;
+	Mon, 11 Mar 2024 12:04:32 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from hi1smtp01.de.adit-jv.com (smtp1.de.adit-jv.com [93.241.18.167])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9332F40866;
-	Mon, 11 Mar 2024 12:03:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60D0337169;
+	Mon, 11 Mar 2024 12:04:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.241.18.167
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710158615; cv=none; b=Ovow/AS7HeYXAT26HwDbZWbsayNP3StXrrNhQBEHVzQNZqx5zWhkE5KJTMB4OdfLH3bfuy8ZChpqg/reNqcrgU9912qeJ5BQmNLnejJQOtl9/jg0fHNNpbJ5twyiTlRULbaEJT0jJfeDSMHz7ub/3Wl+TuhOVScaqkEPW8c8Qyo=
+	t=1710158672; cv=none; b=g1S1m9BI3KADqMjnDzdl9dIuFHRvxtxI/tJAWcpL2tXa/jXPE8osoxvpGoFVUOjiqXX2Iy5pd1qwotlRJzUHRq/Y1wDYqiUZlAs7xu+p/HVXCz/2E/Ulo+JQw7cgcmIq4UKL5zpowiNvtA97fZPD8CDX0s6HMEMo9C2KDllM7kw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710158615; c=relaxed/simple;
-	bh=k2NdMsKIALfGOxx0yqMJZDw7ld1Mtu/LUzghBezCTWY=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=TeG05h1aj9rsLADHVrscPPJb4K/6r5t3eUz9ub3Ai9OeAFGVgrXBb+U58FUxvIsu09D4YWGKm37dZ35BMbG+2JPzANGVLU/f+HmahYswPivUwEhaKo3T/7VNmsKxlPXv0PUSBlOk7LgPGSenEBbabURryMV1E0+U4ktJ3OPFCyg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=BpcD1Sp8; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 42B7dfg0029395;
-	Mon, 11 Mar 2024 12:03:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	from:to:cc:subject:date:message-id:in-reply-to:references
-	:mime-version:content-transfer-encoding:content-type; s=
-	qcppdkim1; bh=qN2LYBqNqYo/WOmJkpszc7fUOLXRVicK9CAnnbqJPlA=; b=Bp
-	cD1Sp8mCNg8Vzec07gViFnRRFaX4Ml1nSIxklnHQjZdtYw48WtJ7eyGpT61FyC3e
-	OUlfqJXuJrvzVLD6mZoWkvEFyIauq3YYwcRwYlvIkIX1tgd9qizCI6qixx3u2epg
-	GsyQdeAsAgaDwgNtXSJgQ53nehgRAN0nQ3lNZWiVrSQjuYbeXzMsiLSqyfARt/i9
-	C1aXY0FqJ8LB49Og0/aO/IrYBLURdY8Frp7mGP6/s3/cT0Jae2bldDGA6MEJsdJD
-	FZ9wcke9G/RtOPQxybe6I3BOpd+8Ci7ETQWSxFXQOBtmtxUzwvnuQX1IcJgYR2IJ
-	7yBA09tIYBE/bEsS+MFQ==
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wswrsrnm4-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 11 Mar 2024 12:03:26 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 42BC3Pd0015165
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 11 Mar 2024 12:03:25 GMT
-Received: from hu-kbajaj-hyd.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Mon, 11 Mar 2024 05:03:20 -0700
-From: Komal Bajaj <quic_kbajaj@quicinc.com>
-To: Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio
-	<konrad.dybcio@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        "Kishon Vijay
- Abraham I" <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof
- Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley
-	<conor+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>
-CC: <linux-arm-msm@vger.kernel.org>, <linux-phy@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, Komal Bajaj <quic_kbajaj@quicinc.com>,
-        "Amrit
- Anand" <quic_amrianan@quicinc.com>
-Subject: [PATCH 4/4] phy: qcpm-qmp-usb: Add support for QDU1000/QRU1000
-Date: Mon, 11 Mar 2024 17:32:15 +0530
-Message-ID: <20240311120215.16845-5-quic_kbajaj@quicinc.com>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20240311120215.16845-1-quic_kbajaj@quicinc.com>
-References: <20240311120215.16845-1-quic_kbajaj@quicinc.com>
+	s=arc-20240116; t=1710158672; c=relaxed/simple;
+	bh=nkJgEXT1Ucxn9qpvwgcSnGtM5AohvS1u5Nys0R2lLFU=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rJi337aqaeihfOnKpT0shFCGlmkBJOkJcJpEePD/MCRM31ZzWFtlQk5tUx9f/WFeWncJjiZC2QGIE2udPtOq7v+PwQOmwt5/g2S6CRJ0anUKz8bc3NE2IFKIW4aEAeX8UQhmkYA3UyzAeMpMUES+3XClJle2abE5eikWV6zlugk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=de.adit-jv.com; spf=pass smtp.mailfrom=de.adit-jv.com; arc=none smtp.client-ip=93.241.18.167
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=de.adit-jv.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=de.adit-jv.com
+Received: from hi2exch02.adit-jv.com (hi2exch02.adit-jv.com [10.72.92.28])
+	by hi1smtp01.de.adit-jv.com (Postfix) with ESMTP id BEBFD52014F;
+	Mon, 11 Mar 2024 13:04:18 +0100 (CET)
+Received: from vmlxhi-118.adit-jv.com (10.72.93.77) by hi2exch02.adit-jv.com
+ (10.72.92.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Mon, 11 Mar
+ 2024 13:04:18 +0100
+Date: Mon, 11 Mar 2024 13:04:18 +0100
+From: Hardik Gajjar <hgajjar@de.adit-jv.com>
+To: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>,
+	<gregkh@linuxfoundation.org>
+CC: Hardik Gajjar <hgajjar@de.adit-jv.com>, <maze@google.com>,
+	<linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<guofeng.li@gm.com>, <hardik.gajjar@bosch.com>, <eugeniu.rosca@bosch.com>
+Subject: Re: [PATCH] usb: gadget: f_ncm: Fix Kernel Panic due to access of
+ invalid gadget ptr
+Message-ID: <20240311120418.GB5631@vmlxhi-118.adit-jv.com>
+References: <20240307161849.9145-1-hgajjar@de.adit-jv.com>
+ <8d116b78-9227-4e48-8d37-3a0cb0465dfd@quicinc.com>
+ <20240308115506.GA5631@vmlxhi-118.adit-jv.com>
+ <4816d981-3955-495c-8fc6-3b9b15ba1689@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: KzL1r2zOWVE7VhhNreMFTeSvmJH8VY2K
-X-Proofpoint-ORIG-GUID: KzL1r2zOWVE7VhhNreMFTeSvmJH8VY2K
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-03-11_08,2024-03-06_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 spamscore=0
- malwarescore=0 priorityscore=1501 impostorscore=0 mlxscore=0
- suspectscore=0 mlxlogscore=999 bulkscore=0 adultscore=0 phishscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2402120000 definitions=main-2403110091
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <4816d981-3955-495c-8fc6-3b9b15ba1689@quicinc.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: hi2exch02.adit-jv.com (10.72.92.28) To
+ hi2exch02.adit-jv.com (10.72.92.28)
 
-Add QDU1000/QRU1000 specific register layout and table configs.
+On Fri, Mar 08, 2024 at 05:47:37PM +0530, Krishna Kurapati PSSNV wrote:
+> 
+> 
+> On 3/8/2024 5:25 PM, Hardik Gajjar wrote:
+> > On Thu, Mar 07, 2024 at 11:12:07PM +0530, Krishna Kurapati PSSNV wrote:
+> > > 
+> 
+> [...]
+> 
+> > 
+> > I believe using gether_cleanup altogether may not be an optimal solution.
+> > The creation and deletion of network interfaces should align with the behavior of each specific network driver.
+> > 
+> > For instance, in the case of NCM, the usb0 interface is created upon the creation of a directory
+> > in config/usb_gadget/gX/functions/ncm.usb0, and it is removed when the corresponding directory
+> > is deleted. This follows a standard flow observed in many network drivers, where interfaces are
+> > created during driver loading/probing and deleted during removal.
+> > 
+> 
+> Hi Hardik,
+> 
+>  Yeah. I observed this behavior.
+> 
+> > Typically, deleting the gadget on every disconnection is not considered a good practice, as it can
+> > negatively impact the user experience when accessing the gadget.
+> > 
+> 
+> Got it. I was suspecting issues might come up during fast Plug-In/ Plug-Out
+> cases as setting and cleanup of network interface might take some time.
+> 
+> > In our specific scenario, retaining the usb0 network interface has proven to enhance performance
+> > and stabilize connections. Previous attempts to remove it resulted in an observed increase in time of 300ms,
+> > particularly at the start of Apple CarPlay sessions.
+> > 
+> 
+> Thanks for this info. Makes sense to keep it in free_inst only. But my
+> initial doubt only stemmed from the fact that actions taken during bind must
+> be reversed during unbind.
+> 
+> > Furthermore, it's important to highlight that in Qualcomm products and msm kernels, the inclusion of gether_cleanup
+> > in the unbind process was eventually reverted. While the specific reason for reverting the patch is unknown,
+> > it suggests that the addition may not have yielded the intended or required results
+> > 
+> > Following is the revert patch details in msm-5.4 kernel, if you want check it.
+> > 
+> > Revert "usb: gadget: f_ncm: allocate/free net device upon driver bind/unbind"
+> > 
+> > This reverts commit 006d8adf555a8c6d34113f564ade312d68abd3b3.
+> > 
+> > Move back the allocation of netdevice to alloc_inst(), one-time
+> > registration to bind(), deregistration and free to rm_inst(). The
+> > UI update issue will be taken up with proper stakeholders.
+> > 
+> > Change-Id: I56448b08f6796a43ec5b0dfe0dd2d42cdc0eec14
+> > 
+> 
+> Agree. This was merged first in 4.19 downstream (most probably for car play
+> use case only) and then reverted in 5.4. But present 4.19 code in QC still
+> keeps it in unbind path. The only reason I suspect it was reverted was to
+> get back on to same page with upstream driver (atleast starting from 5.10,
+> this was the reasoning to remove gether_cleanup in unbind path and put it
+> back in free_inst).
+> 
+> Thanks,
+> Krishna,
 
-Co-developed-by: Amrit Anand <quic_amrianan@quicinc.com>
-Signed-off-by: Amrit Anand <quic_amrianan@quicinc.com>
-Signed-off-by: Komal Bajaj <quic_kbajaj@quicinc.com>
----
- drivers/phy/qualcomm/phy-qcom-qmp-usb.c | 52 +++++++++++++++++++++++++
- 1 file changed, 52 insertions(+)
+Thanks Krinshna for your comment
+Come to the first comment from Greg. 
 
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-usb.c b/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
-index 5c003988c35d..e067574bea7a 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
-@@ -1441,6 +1441,32 @@ static const struct qmp_phy_init_tbl x1e80100_usb3_uniphy_pcs_usb_tbl[] = {
- 	QMP_PHY_INIT_CFG(QPHY_V7_PCS_USB3_RCVR_DTCT_DLY_U3_H, 0x00),
- };
+> What commit id does this fix?
+> 
+> thanks,
+> 
+> greg k-h
 
-+
-+static const struct qmp_phy_init_tbl qdu1000_usb3_uniphy_pcs_tbl[] = {
-+	QMP_PHY_INIT_CFG(QPHY_V4_PCS_LOCK_DETECT_CONFIG1, 0xc4),
-+	QMP_PHY_INIT_CFG(QPHY_V4_PCS_LOCK_DETECT_CONFIG2, 0x89),
-+	QMP_PHY_INIT_CFG(QPHY_V4_PCS_LOCK_DETECT_CONFIG3, 0x20),
-+	QMP_PHY_INIT_CFG(QPHY_V4_PCS_LOCK_DETECT_CONFIG6, 0x13),
-+	QMP_PHY_INIT_CFG(QPHY_V4_PCS_RCVR_DTCT_DLY_P1U2_L, 0xe7),
-+	QMP_PHY_INIT_CFG(QPHY_V4_PCS_RCVR_DTCT_DLY_P1U2_H, 0x03),
-+	QMP_PHY_INIT_CFG(QPHY_V4_PCS_RX_SIGDET_LVL, 0xaa),
-+	QMP_PHY_INIT_CFG(QPHY_V4_PCS_PCS_TX_RX_CONFIG, 0x0c),
-+	QMP_PHY_INIT_CFG(QPHY_V4_PCS_CDR_RESET_TIME, 0x0a),
-+	QMP_PHY_INIT_CFG(QPHY_V4_PCS_ALIGN_DETECT_CONFIG1, 0x88),
-+	QMP_PHY_INIT_CFG(QPHY_V4_PCS_ALIGN_DETECT_CONFIG2, 0x13),
-+	QMP_PHY_INIT_CFG(QPHY_V4_PCS_EQ_CONFIG1, 0x4b),
-+	QMP_PHY_INIT_CFG(QPHY_V4_PCS_EQ_CONFIG5, 0x10),
-+	QMP_PHY_INIT_CFG(QPHY_V4_PCS_REFGEN_REQ_CONFIG1, 0x21),
-+};
-+
-+static const struct qmp_phy_init_tbl qdu1000_usb3_uniphy_pcs_usb_tbl[] = {
-+	QMP_PHY_INIT_CFG(QPHY_V4_PCS_USB3_RXEQTRAINING_DFE_TIME_S2, 0x07),
-+	QMP_PHY_INIT_CFG(QPHY_V4_PCS_USB3_LFPS_DET_HIGH_COUNT_VAL, 0xf8),
-+	QMP_PHY_INIT_CFG(QPHY_V4_PCS_USB3_POWER_STATE_CONFIG1, 0x6f),
-+};
-+
-+
-+
- struct qmp_usb_offsets {
- 	u16 serdes;
- 	u16 pcs;
-@@ -1693,6 +1719,29 @@ static const struct qmp_phy_cfg msm8996_usb3phy_cfg = {
- 	.regs			= qmp_v2_usb3phy_regs_layout,
- };
+>Hi Greg,
 
-+static const struct qmp_phy_cfg qdu1000_usb3_uniphy_cfg = {
-+	.lanes			= 1,
-+
-+	.offsets		= &qmp_usb_offsets_v5,
-+
-+	.serdes_tbl		= sm8150_usb3_uniphy_serdes_tbl,
-+	.serdes_tbl_num		= ARRAY_SIZE(sm8150_usb3_uniphy_serdes_tbl),
-+	.tx_tbl			= sm8350_usb3_uniphy_tx_tbl,
-+	.tx_tbl_num		= ARRAY_SIZE(sm8350_usb3_uniphy_tx_tbl),
-+	.rx_tbl			= sm8350_usb3_uniphy_rx_tbl,
-+	.rx_tbl_num		= ARRAY_SIZE(sm8350_usb3_uniphy_rx_tbl),
-+	.pcs_tbl		= qdu1000_usb3_uniphy_pcs_tbl,
-+	.pcs_tbl_num		= ARRAY_SIZE(qdu1000_usb3_uniphy_pcs_tbl),
-+	.pcs_usb_tbl		= qdu1000_usb3_uniphy_pcs_usb_tbl,
-+	.pcs_usb_tbl_num	= ARRAY_SIZE(qdu1000_usb3_uniphy_pcs_usb_tbl),
-+	.vreg_list		= qmp_phy_vreg_l,
-+	.num_vregs		= ARRAY_SIZE(qmp_phy_vreg_l),
-+	.regs			= qmp_v4_usb3phy_regs_layout,
-+	.pcs_usb_offset		= 0x1000,
-+
-+	.has_pwrdn_delay	= true,
-+};
-+
- static const struct qmp_phy_cfg sa8775p_usb3_uniphy_cfg = {
- 	.lanes			= 1,
+>The network device parent is not being properly cleaned up during unbind since the \
+>initial commit of the driver. In that case, should I mention the First commit ID of \
+>the driver as broken commit or would you advice to say, For example "Clean up netdev \
+>parent in unbind".
 
-@@ -2620,6 +2669,9 @@ static const struct of_device_id qmp_usb_of_match_table[] = {
- 	}, {
- 		.compatible = "qcom,sdx65-qmp-usb3-uni-phy",
- 		.data = &sdx65_usb3_uniphy_cfg,
-+	}, {
-+		.compatible = "qcom,qdu1000-qmp-usb3-uni-phy",
-+		.data = &qdu1000_usb3_uniphy_cfg,
- 	}, {
- 		.compatible = "qcom,sdx75-qmp-usb3-uni-phy",
- 		.data = &sdx75_usb3_uniphy_cfg,
---
-2.42.0
+>Thanks,
+>Hardik
 
+@Greg, 
+
+Can you please provide guidance on how to proceed? Should I update the commit message to exclude the term 'Fix' in the title?
+
+Thanks,
+Hardik
 
