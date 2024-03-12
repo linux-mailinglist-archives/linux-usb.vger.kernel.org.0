@@ -1,179 +1,179 @@
-Return-Path: <linux-usb+bounces-7861-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7862-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B29D9879071
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Mar 2024 10:16:19 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4CC9D879078
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Mar 2024 10:17:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 622312817A8
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Mar 2024 09:16:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7E9451C21DB5
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Mar 2024 09:17:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A32EE77F3B;
-	Tue, 12 Mar 2024 09:16:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFF2A77F1F;
+	Tue, 12 Mar 2024 09:17:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Dbf/Ic9U"
+	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="CgDszee5"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2078.outbound.protection.outlook.com [40.107.105.78])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C9926997B;
-	Tue, 12 Mar 2024 09:16:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710234970; cv=none; b=RN3N+6y5RtzvPDFOqXPy7oR60btmhL52xxdDDOQh5aRPFsh9xyCRsarYf0CzHVem7Tufu3SjLvyskdTd7Nc65h4deqPy/3hYcIJTGtRpWNFXZWZ3IshPrCreLxaXCzeECcrInNaiWKMCVZ44f9QAROkUjePfw82DkuzHbGopUHU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710234970; c=relaxed/simple;
-	bh=U8Bew2R19R1dmK0w/Sze3/oX4ouZZi6iE/VeohOzCF8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TfZXHjhxCXWIfSvahNC+fjo6ZiZm5qglVLDD4CdxeoGVX7z5M1oWogJhL/yu+IL6dYSW7ZIB/JYf/DgixsYEpphUSwSILMoGTNP6PUB8C8GvBMl/VNgQuiHbvXQnPhj2lujPSuCE3fxyY+LifJ1VqVZ5AuN3q+Ln699EF4mMVmc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Dbf/Ic9U; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1710234969; x=1741770969;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=U8Bew2R19R1dmK0w/Sze3/oX4ouZZi6iE/VeohOzCF8=;
-  b=Dbf/Ic9UR6y0LLmgEmxIW30CvRXOXElhoeJif8ble21pKJNSN1vQzZ3P
-   kp5pqUxl3piSlN1PgSe40dlZDnzEzBxzWYnRtBSTClWZ6ju0B/pCg+tbn
-   TcdbEIV+r2qtHnUB4Piv+gO8x8Kj03MIdxddH4rYE9mcrkhTJsyPTFvSi
-   XtyU+6WIqfGVb1Ev/4EufMzDMsKR+di+mEweIKoR9rE2VWN5DjgP7kwf0
-   9AsyYnabz0/Tl9N+JvCsDWpULk+9m4H9EzbW7bY5Rz8AL94xL0ej9D3By
-   V1DLXa1KJQYTQQmz30VSK8gGkBDXjslSXsDrhTwI+FRuVV+iZWOd41Lw+
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11010"; a="4784069"
-X-IronPort-AV: E=Sophos;i="6.07,119,1708416000"; 
-   d="scan'208";a="4784069"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2024 02:16:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11010"; a="937051535"
-X-IronPort-AV: E=Sophos;i="6.07,119,1708416000"; 
-   d="scan'208";a="937051535"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 12 Mar 2024 02:16:03 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 12 Mar 2024 11:16:02 +0200
-Date: Tue, 12 Mar 2024 11:16:02 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Krishna Kurapati <quic_kriskura@quicinc.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Johan Hovold <johan+linaro@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Min-Hua Chen <minhuadotchen@gmail.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	quic_ppratap@quicinc.com, quic_jackp@quicinc.com,
-	quic_wcheng@quicinc.com, quic_subbaram@quicinc.com,
-	stable@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: ucsi: Fix race between typec_switch and
- role_switch
-Message-ID: <ZfAdUhbsVpMVFmYJ@kuha.fi.intel.com>
-References: <20240301040914.458492-1-quic_kriskura@quicinc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 820C06997B;
+	Tue, 12 Mar 2024 09:16:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.105.78
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1710235020; cv=fail; b=GqCJeqPLJlLzW7axlqiAVaj9kqU64xFjiIECWhCHQ0S5Sz0xLBdxbxbRJ0N5un0xHmR41NB/Gu1lhj5D3NYPD6OrJZgiurfzXqyp93zq2AXImYnQrQQBpsCnMrDXVPxowC3LPRb3pybrV7oTzVUK7+0kDHqxLIjaXAtZOC64QS0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1710235020; c=relaxed/simple;
+	bh=kUcXiNxR1qeitTi5ck+dOw2KGHL3jlbfl0978ZtRWnA=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=kYLa8LoVfWqzAm3nB8OkNspL3J33k+rindDDTGQUpjG4PhFaIKKB4AiidOEWoOmk9n7akNo3Il87esPqX4SxHQ8H4lWJnMoag4JuUsI8GJHT0WSXnFBAy5RF0/elZqMkC7vF/5vDS+mSRh3Xc6spiiq2yAAmeMcZEeTN1ihde7Y=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b=CgDszee5; arc=fail smtp.client-ip=40.107.105.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WRv4rVFWoYd4QZjZ8XUC/uO+oTGCDK07ftOGxgVyfeOik7lU5iRQRCNKK0OC7s2pVXOrN1kyFZ8Wbh40bUdu8cCR9SE9hsuKCh16KCMQImvnyggEja/CkYKNN60O16KWGxKaIP5+JY/WfmkojTlSd2gL1Y6m5gfAROc7cp9x9YT1WQgnsiyMDPVp0pxDHee9OkNrhrx4jmIM/ogbqeAkx6HG8jP8yA+zgAMlYc8xMPSSUtOTPtazYb46y0Ebo0OIrjUwfd1icKr8JCmIX9MLFKzRVnEcNEG3vMNzFU1cvhbQNJJreiofCzjj+bDWs2MlEpOQXR1Ie5dEwvhkMErm1A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wlzOd4S4p8gXG7ZgEdu8HKJHotz0OIDe3L2E9fFsOp4=;
+ b=lUjvndJIUuOtpklpqCLCQk71uXJRdZ+6iACpQxsyVHLJNwieiQahKp9TUwV7cHDiKeAL34wkvW+J2uBW7ZO0XsApx8Ih3uceKmoLOrMr8ivoFT3MDmYEg7p8WSbuNM2A06OKo10gFhax8ERxs/KrJrxUrPLVEOSiHLNvCKNXH2aTH6AoyCb3rtSUcnaFKL8usTlsePsqVA1r7rWwvWHLsPJr1MAXAnN9Khzeg6cYlZof/XBRCd71WxFbNKkphnijoGkpT1x9DqOSjcFFUnHyHh6k1FtslfMg+P+GxBtPrijbwev/GgKJfcpnKlQfAyeZsXo/hG5P0jDXMULIBhV3IA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wlzOd4S4p8gXG7ZgEdu8HKJHotz0OIDe3L2E9fFsOp4=;
+ b=CgDszee5OB2sG5mBuMXkesL7qoYV+GnQLKeMZMKoZOxpBD4NFGzKtkN+gYKlbYpiCNXTTW7r0DTY3AI5Qc0iEqRkf6b+PRZNjSorWr61XYs3qmDTJ8zv/mbsOfQOSBio108OyallCi05jSo/vv9MMDDKkdZEJYoQ9r8OG+62+/w=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from DU2PR04MB8822.eurprd04.prod.outlook.com (2603:10a6:10:2e1::11)
+ by AM8PR04MB7876.eurprd04.prod.outlook.com (2603:10a6:20b:240::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7386.18; Tue, 12 Mar
+ 2024 09:16:55 +0000
+Received: from DU2PR04MB8822.eurprd04.prod.outlook.com
+ ([fe80::d45f:4483:c11:68b0]) by DU2PR04MB8822.eurprd04.prod.outlook.com
+ ([fe80::d45f:4483:c11:68b0%7]) with mapi id 15.20.7362.035; Tue, 12 Mar 2024
+ 09:16:55 +0000
+From: Xu Yang <xu.yang_2@nxp.com>
+To: gregkh@linuxfoundation.org,
+	robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org,
+	shawnguo@kernel.org,
+	conor+dt@kernel.org
+Cc: s.hauer@pengutronix.de,
+	kernel@pengutronix.de,
+	festevam@gmail.com,
+	linux-imx@nxp.com,
+	peter.chen@kernel.org,
+	xu.yang_2@nxp.com,
+	jun.li@nxp.com,
+	linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	imx@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v8 01/10] dt-bindings: usb: usbmisc-imx: add fsl,imx8ulp-usbmisc compatible
+Date: Tue, 12 Mar 2024 17:16:54 +0800
+Message-Id: <20240312091703.1220649-1-xu.yang_2@nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR02CA0026.apcprd02.prod.outlook.com
+ (2603:1096:4:195::19) To DU2PR04MB8822.eurprd04.prod.outlook.com
+ (2603:10a6:10:2e1::11)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240301040914.458492-1-quic_kriskura@quicinc.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU2PR04MB8822:EE_|AM8PR04MB7876:EE_
+X-MS-Office365-Filtering-Correlation-Id: be155ef1-1013-49ed-84fa-08dc42752948
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	AtBtapKMzeUp+HP6CX1qGOJsPtspcyj1duePVHUYBnMZuLTfEHbUfz1LQVi9WyeLfQTfGnXpRbY3oshdTifBFctiILLyHE8xy92lBQ/lZaiyQyiDlvRDgD0uqrP0wiGNIh+6JeK/Ahsr9oimcAGpUOZNldaCeDTCCwpBLOjD7ZR/1yry3Oe8aChm9EC6sSNrI2/yx3pSTzlq2HZwoLwyuUIMyj6THO/9/KFSpM09DNwJ4XSM5Aqb5vGhxE7EoZDCvmnkdq2IC26OrzuGygFGjfxqt9Q0ARPld4WRyEjexVEtiCkTK1hQsKxXZYmZd3EewJo+4Z8Xbf7YemEbDb+K/mxGLTWuGocNbNSSAMPjMWlKfeVdcXI04cb9o6jfJYw8tzy+mJYWvuh/kjD/Fdbp5vuz2VUoECMuNI8KmOaK4mCn2Lg3TWH/Ug5lDdKQO+SMWNKGINOaS9TcbbVR93l7xItttH08zpPmFx/R1aevwnudHxiU1shx/wPh9ZvHMwd9srIHVapXXMIbuzF/J73tzuSROc7ElEHKqxxsXbyEhx7yZJh2VRD3wcajEdmcfYLLk2ASp6DD5G5CKRRl0d+8Y4tOHLhKZmfjWYTCfntXVwrdPy9kk1d/Y30PRf5adVnxDT9zGnzhDHpOMXQYPJuVolp6u7uV9cu3GNQvOyy/0WrAVgDxtbBnlZfEtl23CcakTspVLRQrmuLi0tsEH1ga2Iy3HKY/OQcKdh4uoX3jPAw=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8822.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(1800799015)(52116005)(7416005)(376005)(38350700005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?8UBOo1Y8dwm0vDlWNW9ILzfvOOXrmQb+j2Z6g/SmULv2EcEWfNn6o9tP712E?=
+ =?us-ascii?Q?R5549kRNKb27P14T3wN6LZahW66sTzHCnBF1XlUgwc9HYlSBs6TYfXAQpM/d?=
+ =?us-ascii?Q?ft+q3DTGu2+VOqfTuFYxz1sLOnwHpGjp3QNe6Yo3Pj2W/tM4vjUU8hW/r++I?=
+ =?us-ascii?Q?Muxrmq5hExeXvB9Z8wq7regLQ9yGowdfG7RynuWL28nnx8cuk1mUv8T+KC4h?=
+ =?us-ascii?Q?3LuBiDQQFlcl6ajSlr57FwAlFn4czY1McxxsJL4vfCjV/TmHD21fwVCa7mOM?=
+ =?us-ascii?Q?b2UcYxOMTA/oKDywDoS2qbBi9LlM/cF6MjtnUiUML4C27uBa0h8BLk/Hj5iJ?=
+ =?us-ascii?Q?OfynRQ1fBI76jn555nXCxjyPNx9LvLdjQ0ITM41kv1Rbo3Ssqkrwm6ZVTS1N?=
+ =?us-ascii?Q?6a4RkJ5llI0H1ARP56HsGSHr/AwwRRBWAW0UpjiIvhbWWuLQxMKZKDD1Eu0Y?=
+ =?us-ascii?Q?FXvYhTn0+/V+BDTJhiluGs0g5yc8+7j8kd7sOwZ4Ety6UyB3E7jk/xFWmvI/?=
+ =?us-ascii?Q?CLM4X23p2ILANTQCaGuEZdpRSL1yRrrEn55tdFH+b68aGPavgNmk8KCxaGyP?=
+ =?us-ascii?Q?uc2xVnZcryjodyr4z9apJZJ9t6pdYhB+okfPU1Q2bdQYayaWEyj0ftw2Mz4C?=
+ =?us-ascii?Q?NpArOamcM33q1QWaAe0MQM4g2D7JIvB3DmqDl73Nv/WdO1KIW+6dP/sPEnTy?=
+ =?us-ascii?Q?yDu3L2FWGB/lpmH5DZnw9AYCRS1DnUe/zlTXPIBhPpackNU5HGu/ihCSlF7+?=
+ =?us-ascii?Q?dNEC5t6XKYENb/UcPARHxiABzR7DxSq83iJ5rHST3yox4VRUyHPOw4dcgRIK?=
+ =?us-ascii?Q?qy3nJnbFFCCPx6/FUR4mRAj1Dkb0saf+9/gQNJ/I/VkirlGAgNK4xZOJtWMt?=
+ =?us-ascii?Q?LgGxJ9GRau5JsKUS3wnZ8J/SqeNzjdM6G2kCjBmCxzs0hAvpc8lRQxpJWWib?=
+ =?us-ascii?Q?Fnh3jjUqXlo7RQRs3i9EB1uN1WLpsHuUk7tMZWocxEH5O5c9Q4GOr4mQkec5?=
+ =?us-ascii?Q?yzL7SztSyPsZDf36en/xaoanuOoq6TxxDkz+JAz4dTdcfM+rSRgEyQQuUCKH?=
+ =?us-ascii?Q?gPArdgBSZd25mfaJOIXUAApx/vui1brAtNttmqAvzmeRU3OeV6nD65vd3xPO?=
+ =?us-ascii?Q?FENkfcNRSL4W0T3MCtag/1ee12Ye0k+j8p2BuJcQvl5EFE391djOqQJ69Mnv?=
+ =?us-ascii?Q?IyseymY4tar7MvUR1cXGYTLYwexaiuHrTNq7ySS5f1CBDXxMfZ32TRZRsdo0?=
+ =?us-ascii?Q?UNMEC7pSAy+RvJaE8/kBCNLd9OTaffZxjqp+40imTJ4alGIPDDCAP+83rk2L?=
+ =?us-ascii?Q?rwF9v12SJSk8njwMuxoAdJ/Pwenoq7evgLs2yHTFdMmU/diVU0HVIz4q8Pe5?=
+ =?us-ascii?Q?ahGFkPObCObbFvh60eG9vugARPeCEGiXGKndkHSWBmvrWpDqi/ku3cZf7ANF?=
+ =?us-ascii?Q?HXFvpT3t8BCpwXqQL2ILR9+uUhhdOKJI0u6RAElaxrFM6XYW5eHLPK1dGRWV?=
+ =?us-ascii?Q?Cd051GOFzy8dLQB4awwBxpZ7lExbl/E0rVrJDhlsHQZY5m49pueYu4xZ3ljR?=
+ =?us-ascii?Q?vYyl3Hxig2assbp0yz0WGcz8qlWxuw9OtPS9+8J4?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: be155ef1-1013-49ed-84fa-08dc42752948
+X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8822.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Mar 2024 09:16:55.4058
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: QGiFxBNPPFtW6qxrZfessU55KCqy9NJbwq+acy7/5UXKMwrM6WU4c+IeEKwtE1Zz9XGmv1Qz16iyFEm6sPMX7w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR04MB7876
 
-On Fri, Mar 01, 2024 at 09:39:14AM +0530, Krishna Kurapati wrote:
-> When orientation switch is enabled in ucsi glink, there is a xhci
-> probe failure seen when booting up in host mode in reverse
-> orientation.
-> 
-> During bootup the following things happen in multiple drivers:
-> 
-> a) DWC3 controller driver initializes the core in device mode when the
-> dr_mode is set to DRD. It relies on role_switch call to change role to
-> host.
-> 
-> b) QMP driver initializes the lanes to TYPEC_ORIENTATION_NORMAL as a
-> normal routine. It relies on the typec_switch_set call to get notified
-> of orientation changes.
-> 
-> c) UCSI core reads the UCSI_GET_CONNECTOR_STATUS via the glink and
-> provides initial role switch to dwc3 controller.
-> 
-> When booting up in host mode with orientation TYPEC_ORIENTATION_REVERSE,
-> then we see the following things happening in order:
-> 
-> a) UCSI gives initial role as host to dwc3 controller ucsi_register_port.
-> Upon receiving this notification, the dwc3 core needs to program GCTL from
-> PRTCAP_DEVICE to PRTCAP_HOST and as part of this change, it asserts GCTL
-> Core soft reset and waits for it to be  completed before shifting it to
-> host. Only after the reset is done will the dwc3_host_init be invoked and
-> xhci is probed. DWC3 controller expects that the usb phy's are stable
-> during this process i.e., the phy init is already done.
-> 
-> b) During the 100ms wait for GCTL core soft reset, the actual notification
-> from PPM is received by ucsi_glink via pmic glink for changing role to
-> host. The pmic_glink_ucsi_notify routine first sends the orientation
-> change to QMP and then sends role to dwc3 via ucsi framework. This is
-> happening exactly at the time GCTL core soft reset is being processed.
-> 
-> c) When QMP driver receives typec switch to TYPEC_ORIENTATION_REVERSE, it
-> then re-programs the phy at the instant GCTL core soft reset has been
-> asserted by dwc3 controller due to which the QMP PLL lock fails in
-> qmp_combo_usb_power_on.
-> 
-> d) After the 100ms of GCTL core soft reset is completed, the dwc3 core
-> goes for initializing the host mode and invokes xhci probe. But at this
-> point the QMP is non-responsive and as a result, the xhci plat probe fails
-> during xhci_reset.
-> 
-> Fix this by passing orientation switch to available ucsi instances if
-> their gpio configuration is available before ucsi_register is invoked so
-> that by the time, the pmic_glink_ucsi_notify provides typec_switch to QMP,
-> the lane is already configured and the call would be a NOP thus not racing
-> with role switch.
-> 
-> Cc: <stable@vger.kernel.org>
-> Fixes: c6165ed2f425 ("usb: ucsi: glink: use the connector orientation GPIO to provide switch events")
-> Suggested-by: Wesley Cheng <quic_wcheng@quicinc.com>
-> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+Add "fsl,imx8ulp-usbmisc" compatible.
 
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
 
-> ---
->  drivers/usb/typec/ucsi/ucsi_glink.c | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
-> 
-> diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c b/drivers/usb/typec/ucsi/ucsi_glink.c
-> index 0bd3f6dee678..466df7b9f953 100644
-> --- a/drivers/usb/typec/ucsi/ucsi_glink.c
-> +++ b/drivers/usb/typec/ucsi/ucsi_glink.c
-> @@ -255,6 +255,20 @@ static void pmic_glink_ucsi_notify(struct work_struct *work)
->  static void pmic_glink_ucsi_register(struct work_struct *work)
->  {
->  	struct pmic_glink_ucsi *ucsi = container_of(work, struct pmic_glink_ucsi, register_work);
-> +	int orientation;
-> +	int i;
-> +
-> +	for (i = 0; i < PMIC_GLINK_MAX_PORTS; i++) {
-> +		if (!ucsi->port_orientation[i])
-> +			continue;
-> +		orientation = gpiod_get_value(ucsi->port_orientation[i]);
-> +
-> +		if (orientation >= 0) {
-> +			typec_switch_set(ucsi->port_switch[i],
-> +					 orientation ? TYPEC_ORIENTATION_REVERSE
-> +					     : TYPEC_ORIENTATION_NORMAL);
-> +		}
-> +	}
->  
->  	ucsi_register(ucsi->ucsi);
->  }
-> -- 
-> 2.34.1
+---
+Changes in v3:
+ - new patch due to missed this little one
+Changes in v4:
+ - no changes
+Changes in v5:
+ - add Acked-by tag
+Changes in v6:
+ - no changes
+Changes in v7:
+ - no changes
+Changes in v8:
+ - no changes
+---
+ Documentation/devicetree/bindings/usb/fsl,usbmisc.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
+diff --git a/Documentation/devicetree/bindings/usb/fsl,usbmisc.yaml b/Documentation/devicetree/bindings/usb/fsl,usbmisc.yaml
+index 2d3589d284b2..0a6e7ac1b37e 100644
+--- a/Documentation/devicetree/bindings/usb/fsl,usbmisc.yaml
++++ b/Documentation/devicetree/bindings/usb/fsl,usbmisc.yaml
+@@ -33,6 +33,7 @@ properties:
+               - fsl,imx7ulp-usbmisc
+               - fsl,imx8mm-usbmisc
+               - fsl,imx8mn-usbmisc
++              - fsl,imx8ulp-usbmisc
+           - const: fsl,imx7d-usbmisc
+           - const: fsl,imx6q-usbmisc
+       - items:
 -- 
-heikki
+2.34.1
+
 
