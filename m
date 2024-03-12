@@ -1,71 +1,79 @@
-Return-Path: <linux-usb+bounces-7860-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7861-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 662CD87905C
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Mar 2024 10:06:37 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B29D9879071
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Mar 2024 10:16:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 913D01C219F5
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Mar 2024 09:06:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 622312817A8
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Mar 2024 09:16:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCD4B77F35;
-	Tue, 12 Mar 2024 09:06:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A32EE77F3B;
+	Tue, 12 Mar 2024 09:16:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AfLpJMkF"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Dbf/Ic9U"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7191077A03;
-	Tue, 12 Mar 2024 09:06:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C9926997B;
+	Tue, 12 Mar 2024 09:16:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710234389; cv=none; b=envz9VZ5SC9a4PBIgL0GdQe0R2e5PzRFDVIhnCvg4/5zshoHLVRPnAlwEob4riL4u8F/A7TraPfawepK+rWiY9uiK3eb2wKng5ZrnDgSxc/s8OLKpkm8mvu0WQKvCFtZTyunxx/8Ic+sVWymFhqWpHv++6GKGzabYXUonbumUaQ=
+	t=1710234970; cv=none; b=RN3N+6y5RtzvPDFOqXPy7oR60btmhL52xxdDDOQh5aRPFsh9xyCRsarYf0CzHVem7Tufu3SjLvyskdTd7Nc65h4deqPy/3hYcIJTGtRpWNFXZWZ3IshPrCreLxaXCzeECcrInNaiWKMCVZ44f9QAROkUjePfw82DkuzHbGopUHU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710234389; c=relaxed/simple;
-	bh=CdCjIk0bgMmKT5rhRO2SSXtQNGEFBKH06lI9dt9QC9o=;
+	s=arc-20240116; t=1710234970; c=relaxed/simple;
+	bh=U8Bew2R19R1dmK0w/Sze3/oX4ouZZi6iE/VeohOzCF8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jkEDiM8hbDg1m+M8+QUtoBnS15roCjF/vOoECXNns0Rb1WUYig3NzpZEsKvvyE7UEjJrlOTXmcRgeCqXBK5cNkows04FAhwHEYOv8QIKH3tA3RDyjQSSijrTBfmwvuGV/wUz6GZzIy/AYuHhwk7RcT85FqVJaCHYGCLvWrIMaYk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AfLpJMkF; arc=none smtp.client-ip=192.198.163.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=TfZXHjhxCXWIfSvahNC+fjo6ZiZm5qglVLDD4CdxeoGVX7z5M1oWogJhL/yu+IL6dYSW7ZIB/JYf/DgixsYEpphUSwSILMoGTNP6PUB8C8GvBMl/VNgQuiHbvXQnPhj2lujPSuCE3fxyY+LifJ1VqVZ5AuN3q+Ln699EF4mMVmc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Dbf/Ic9U; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1710234388; x=1741770388;
+  t=1710234969; x=1741770969;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=CdCjIk0bgMmKT5rhRO2SSXtQNGEFBKH06lI9dt9QC9o=;
-  b=AfLpJMkFDvf4zkGWTNwEomoUZIbr6mQEeUSnDkp9vXPwK783PSCTQqfx
-   JDfU41mzi6qDAWfcqr33A15djELq07FsvxYSJgRe2Qq00fMFm6fQXTeBJ
-   DkbwWeazRknt3CB7D7ISShOyp8g/i3zO0SEeY9PyrNysW1suRXAyVJb1M
-   QWAwrlLGHwonCKqJZn2Z75ByKTEW6+tk7Ntg0Ut32Ng8LpY07R/TiqCbM
-   pTxj+8cpP9I56KgOnn5n83Ox3Sl2s/go9meD3PrHzG9FmlD283NeZaB8C
-   Pw1UkMwqU2qyHVgH19nIrTnkHAWCHjVWlmLVZmxM8UyA26OeX7MfKKwyS
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11010"; a="4783119"
-X-IronPort-AV: E=Sophos;i="6.07,118,1708416000"; 
-   d="scan'208";a="4783119"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2024 02:06:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11010"; a="937051516"
+  bh=U8Bew2R19R1dmK0w/Sze3/oX4ouZZi6iE/VeohOzCF8=;
+  b=Dbf/Ic9UR6y0LLmgEmxIW30CvRXOXElhoeJif8ble21pKJNSN1vQzZ3P
+   kp5pqUxl3piSlN1PgSe40dlZDnzEzBxzWYnRtBSTClWZ6ju0B/pCg+tbn
+   TcdbEIV+r2qtHnUB4Piv+gO8x8Kj03MIdxddH4rYE9mcrkhTJsyPTFvSi
+   XtyU+6WIqfGVb1Ev/4EufMzDMsKR+di+mEweIKoR9rE2VWN5DjgP7kwf0
+   9AsyYnabz0/Tl9N+JvCsDWpULk+9m4H9EzbW7bY5Rz8AL94xL0ej9D3By
+   V1DLXa1KJQYTQQmz30VSK8gGkBDXjslSXsDrhTwI+FRuVV+iZWOd41Lw+
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11010"; a="4784069"
 X-IronPort-AV: E=Sophos;i="6.07,119,1708416000"; 
-   d="scan'208";a="937051516"
+   d="scan'208";a="4784069"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2024 02:16:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,11010"; a="937051535"
+X-IronPort-AV: E=Sophos;i="6.07,119,1708416000"; 
+   d="scan'208";a="937051535"
 Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 12 Mar 2024 02:06:24 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 12 Mar 2024 11:06:23 +0200
-Date: Tue, 12 Mar 2024 11:06:23 +0200
+  by fmsmga001.fm.intel.com with SMTP; 12 Mar 2024 02:16:03 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 12 Mar 2024 11:16:02 +0200
+Date: Tue, 12 Mar 2024 11:16:02 +0200
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: RD Babiera <rdbabiera@google.com>
-Cc: gregkh@linuxfoundation.org, badhri@google.com,
+To: Krishna Kurapati <quic_kriskura@quicinc.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Johan Hovold <johan+linaro@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Min-Hua Chen <minhuadotchen@gmail.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
 	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	quic_ppratap@quicinc.com, quic_jackp@quicinc.com,
+	quic_wcheng@quicinc.com, quic_subbaram@quicinc.com,
 	stable@vger.kernel.org
-Subject: Re: [PATCH v3] usb: typec: altmodes/displayport: create sysfs nodes
- as driver's default device attribute group
-Message-ID: <ZfAbDxq1yGfUdHo/@kuha.fi.intel.com>
-References: <20240229001101.3889432-2-rdbabiera@google.com>
+Subject: Re: [PATCH] usb: typec: ucsi: Fix race between typec_switch and
+ role_switch
+Message-ID: <ZfAdUhbsVpMVFmYJ@kuha.fi.intel.com>
+References: <20240301040914.458492-1-quic_kriskura@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -74,104 +82,97 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240229001101.3889432-2-rdbabiera@google.com>
+In-Reply-To: <20240301040914.458492-1-quic_kriskura@quicinc.com>
 
-On Thu, Feb 29, 2024 at 12:11:02AM +0000, RD Babiera wrote:
-> The DisplayPort driver's sysfs nodes may be present to the userspace before
-> typec_altmode_set_drvdata() completes in dp_altmode_probe. This means that
-> a sysfs read can trigger a NULL pointer error by deferencing dp->hpd in
-> hpd_show or dp->lock in pin_assignment_show, as dev_get_drvdata() returns
-> NULL in those cases.
+On Fri, Mar 01, 2024 at 09:39:14AM +0530, Krishna Kurapati wrote:
+> When orientation switch is enabled in ucsi glink, there is a xhci
+> probe failure seen when booting up in host mode in reverse
+> orientation.
 > 
-> Remove manual sysfs node creation in favor of adding attribute group as
-> default for devices bound to the driver. The ATTRIBUTE_GROUPS() macro is
-> not used here otherwise the path to the sysfs nodes is no longer compliant
-> with the ABI.
+> During bootup the following things happen in multiple drivers:
 > 
-> Fixes: 0e3bb7d6894d ("usb: typec: Add driver for DisplayPort alternate mode")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: RD Babiera <rdbabiera@google.com>
+> a) DWC3 controller driver initializes the core in device mode when the
+> dr_mode is set to DRD. It relies on role_switch call to change role to
+> host.
+> 
+> b) QMP driver initializes the lanes to TYPEC_ORIENTATION_NORMAL as a
+> normal routine. It relies on the typec_switch_set call to get notified
+> of orientation changes.
+> 
+> c) UCSI core reads the UCSI_GET_CONNECTOR_STATUS via the glink and
+> provides initial role switch to dwc3 controller.
+> 
+> When booting up in host mode with orientation TYPEC_ORIENTATION_REVERSE,
+> then we see the following things happening in order:
+> 
+> a) UCSI gives initial role as host to dwc3 controller ucsi_register_port.
+> Upon receiving this notification, the dwc3 core needs to program GCTL from
+> PRTCAP_DEVICE to PRTCAP_HOST and as part of this change, it asserts GCTL
+> Core soft reset and waits for it to be  completed before shifting it to
+> host. Only after the reset is done will the dwc3_host_init be invoked and
+> xhci is probed. DWC3 controller expects that the usb phy's are stable
+> during this process i.e., the phy init is already done.
+> 
+> b) During the 100ms wait for GCTL core soft reset, the actual notification
+> from PPM is received by ucsi_glink via pmic glink for changing role to
+> host. The pmic_glink_ucsi_notify routine first sends the orientation
+> change to QMP and then sends role to dwc3 via ucsi framework. This is
+> happening exactly at the time GCTL core soft reset is being processed.
+> 
+> c) When QMP driver receives typec switch to TYPEC_ORIENTATION_REVERSE, it
+> then re-programs the phy at the instant GCTL core soft reset has been
+> asserted by dwc3 controller due to which the QMP PLL lock fails in
+> qmp_combo_usb_power_on.
+> 
+> d) After the 100ms of GCTL core soft reset is completed, the dwc3 core
+> goes for initializing the host mode and invokes xhci probe. But at this
+> point the QMP is non-responsive and as a result, the xhci plat probe fails
+> during xhci_reset.
+> 
+> Fix this by passing orientation switch to available ucsi instances if
+> their gpio configuration is available before ucsi_register is invoked so
+> that by the time, the pmic_glink_ucsi_notify provides typec_switch to QMP,
+> the lane is already configured and the call would be a NOP thus not racing
+> with role switch.
+> 
+> Cc: <stable@vger.kernel.org>
+> Fixes: c6165ed2f425 ("usb: ucsi: glink: use the connector orientation GPIO to provide switch events")
+> Suggested-by: Wesley Cheng <quic_wcheng@quicinc.com>
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
 > ---
-> Changes from v1:
-> * Moved sysfs node creation instead of NULL checking dev_get_drvdata().
-> Changes from v2:
-> * Removed manual sysfs node creation, now added as default device group in
-> driver.
-> ---
->  drivers/usb/typec/altmodes/displayport.c | 18 +++++++++---------
->  1 file changed, 9 insertions(+), 9 deletions(-)
+>  drivers/usb/typec/ucsi/ucsi_glink.c | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
 > 
-> diff --git a/drivers/us<F16>b/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
-> index 5a80776c7255..94e1b43a862d 100644
-> --- a/drivers/usb/typec/altmodes/displayport.c
-> +++ b/drivers/usb/typec/altmodes/displayport.c
-> @@ -702,16 +702,21 @@ static ssize_t hpd_show(struct device *dev, struct device_attribute *attr, char
->  }
->  static DEVICE_ATTR_RO(hpd);
->  
-> -static struct attribute *dp_altmode_attrs[] = {
-> +static struct attribute *displayport_attrs[] = {
->  	&dev_attr_configuration.attr,
->  	&dev_attr_pin_assignment.attr,
->  	&dev_attr_hpd.attr,
->  	NULL
->  };
->  
-> -static const struct attribute_group dp_altmode_group = {
-> +static const struct attribute_group displayport_group = {
->  	.name = "displayport",
-> -	.attrs = dp_altmode_attrs,
-> +	.attrs = displayport_attrs,
-> +};
-> +
-> +static const struct attribute_group *displayport_groups[] = {
-> +	&displayport_group,
-> +	NULL,
->  };
->  
->  int dp_altmode_probe(struct typec_altmode *alt)
-> @@ -720,7 +725,6 @@ int dp_altmode_probe(struct typec_altmode *alt)
->  	struct typec_altmode *plug = typec_altmode_get_plug(alt, TYPEC_PLUG_SOP_P);
->  	struct fwnode_handle *fwnode;
->  	struct dp_altmode *dp;
-> -	int ret;
->  
->  	/* FIXME: Port can only be DFP_U. */
->  
-> @@ -731,10 +735,6 @@ int dp_altmode_probe(struct typec_altmode *alt)
->  	      DP_CAP_PIN_ASSIGN_DFP_D(alt->vdo)))
->  		return -ENODEV;
->  
-> -	ret = sysfs_create_group(&alt->dev.kobj, &dp_altmode_group);
-> -	if (ret)
-> -		return ret;
-> -
->  	dp = devm_kzalloc(&alt->dev, sizeof(*dp), GFP_KERNEL);
->  	if (!dp)
->  		return -ENOMEM;
-> @@ -777,7 +777,6 @@ void dp_altmode_remove(struct typec_altmode *alt)
+> diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c b/drivers/usb/typec/ucsi/ucsi_glink.c
+> index 0bd3f6dee678..466df7b9f953 100644
+> --- a/drivers/usb/typec/ucsi/ucsi_glink.c
+> +++ b/drivers/usb/typec/ucsi/ucsi_glink.c
+> @@ -255,6 +255,20 @@ static void pmic_glink_ucsi_notify(struct work_struct *work)
+>  static void pmic_glink_ucsi_register(struct work_struct *work)
 >  {
->  	struct dp_altmode *dp = typec_altmode_get_drvdata(alt);
+>  	struct pmic_glink_ucsi *ucsi = container_of(work, struct pmic_glink_ucsi, register_work);
+> +	int orientation;
+> +	int i;
+> +
+> +	for (i = 0; i < PMIC_GLINK_MAX_PORTS; i++) {
+> +		if (!ucsi->port_orientation[i])
+> +			continue;
+> +		orientation = gpiod_get_value(ucsi->port_orientation[i]);
+> +
+> +		if (orientation >= 0) {
+> +			typec_switch_set(ucsi->port_switch[i],
+> +					 orientation ? TYPEC_ORIENTATION_REVERSE
+> +					     : TYPEC_ORIENTATION_NORMAL);
+> +		}
+> +	}
 >  
-> -	sysfs_remove_group(&alt->dev.kobj, &dp_altmode_group);
->  	cancel_work_sync(&dp->work);
->  	typec_altmode_put_plug(dp->plug_prime);
->  
-> @@ -803,6 +802,7 @@ static struct typec_altmode_driver dp_altmode_driver = {
->  	.driver = {
->  		.name = "typec_displayport",
->  		.owner = THIS_MODULE,
-> +		.dev_groups = displayport_groups,
->  	},
->  };
->  module_typec_altmode_driver(dp_altmode_driver);
-> 
-> base-commit: a560a5672826fc1e057068bda93b3d4c98d037a2
+>  	ucsi_register(ucsi->ucsi);
+>  }
 > -- 
-> 2.44.0.rc1.240.g4c46232300-goog
+> 2.34.1
 
 -- 
 heikki
