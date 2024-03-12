@@ -1,160 +1,117 @@
-Return-Path: <linux-usb+bounces-7879-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7880-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40723879275
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Mar 2024 11:52:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0BE928792B9
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Mar 2024 12:08:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 864111F22C21
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Mar 2024 10:52:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A18E41F2138D
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Mar 2024 11:08:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 723F778B7B;
-	Tue, 12 Mar 2024 10:52:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B731079B66;
+	Tue, 12 Mar 2024 11:08:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="l9K2VNOl"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Fqp1vIrb"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12D002572
-	for <linux-usb@vger.kernel.org>; Tue, 12 Mar 2024 10:52:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BA4E7993A;
+	Tue, 12 Mar 2024 11:08:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710240725; cv=none; b=SH+AbWtXAToivvq6njU6jDh6UHGQgT4XBPEJXB0Xv0P9ErB5IEwTVGAhHlq8doxrwHek95XICM6yc/5wSi66p8KKP/ORRnQYuccqOTbRSqUgr0O5gi4ZSfUzUTMsr0nxIBP45Lnk7w7jDJYOClCjdA8zuFVOcC1syDrXHvDpHPs=
+	t=1710241687; cv=none; b=uVmmvrF5oMyXeCj5Mrmd10gvIPm8KvlUfQwcMbPbOqETo+hQczfUTUaZpeq/hsUhQfCbw2K9Iz8gbceZ0iqvBkp+Q997wPpMih2WaYDbXcFZ8Lfolm2DRzsLctE49s/PzMjsSXO/rwi3Z3FGRpIseTT0+5UAHHi04FKe7QtjUiA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710240725; c=relaxed/simple;
-	bh=/ZEjD7efh3KrQdGAWE7k/j4K4u2Fm9HoiF/t4L9kY7o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=iyXutOTALkVChpc0a+hxwyqzvKyvfFxAQEyHbezZTT6BtCjKF3g0urwHGkLY5g5bQIvEh+Os9vXyCA5PFwJQAmSWPKUUaNW3BX3KWAOcICedg9L9UubD8pQfKC2eATBfx8QeQsKPCe9OFICYyB/o1KALeve+SWQHEQ/sHNv+MbQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=l9K2VNOl; arc=none smtp.client-ip=209.85.208.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-5683576ea18so4944197a12.3
-        for <linux-usb@vger.kernel.org>; Tue, 12 Mar 2024 03:52:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1710240720; x=1710845520; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bu6+LLVfvLRk+4XXFg43GrQ97HaC/9aw5HQn0qTXuKQ=;
-        b=l9K2VNOlXrDVR0/njYQoY7kAYkwfO2w7q+vu5Hmo562vUJxVjt5KxGlIC26t0FhCvA
-         LaM3CaHpB2BSzIpLaRK8EdeJ6VZ2G/3z8DLQ7QVIrcD5kyDq8du+z5GJu/j2cxbgna4Q
-         gis/mKZTAUCXh6y8k4rmMWyS06eC2LP85aNXGB2maDWJHJZu6AIijvyxmJgyCb2duA0Q
-         KLchgY9rDNIjhanWIWdM5pOd6gAi4r2btX6rpJalNGtX5lAde/gMLBBfZQKSGe4QOMY9
-         VCYVtyAJrcyed/tRANuSmrshA8jcq06IBvGOiWtW1aqSZc07W20yebijfm5gCjgLJU2X
-         Ds7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710240720; x=1710845520;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bu6+LLVfvLRk+4XXFg43GrQ97HaC/9aw5HQn0qTXuKQ=;
-        b=OBhCbn8PjPzv01OH1MMIHpJzWZtdTEwxdRVVL1svRt81NX2nkq8Md8P6S4GseiqcZS
-         6Y3TC49QfuArFeLOXYxfg1Ix/scY6+1C5ahwwM+/tU9cUOn6PSUkzSnw29WLby8uw7kY
-         FeXsKhvaaIELA454WhsRGU9y9A8fbnR0aIUCvQQP/abWcpemjS1FWzC80Cw2OlW3lhC9
-         25JkKjMWPfRReK8ut6vSEeDWXSIL8axdid1GxTrs4xzJtfxRbfxjMEqZ/EgQqz8INwFf
-         qr5qUdewOaVZyOQKINymZwzpGHKkbH5jilxDo+Mj+ZSS3CpZ6TPKHgFYW9Qa9CBloKnA
-         cLrg==
-X-Forwarded-Encrypted: i=1; AJvYcCVW0xysO0+rZW98kMCa8fFdx62484wjVIS55nxG8Y/vNrDo/Ihr0Hjy9ZhbzU74nr6sIj1sIeks1XiOyBhNsHvfMq3ztoWfb8BD
-X-Gm-Message-State: AOJu0YxcN5fDhUM7rzSmR64ceBK6D3lLQK3NMdRsc3DBGa+5duMs6OE6
-	61sHqJBiP7fPAXqoBvv5+YyTF7leAmxD3seF8X3zB1wNWIhmiNl3cvvEvaH0gAU=
-X-Google-Smtp-Source: AGHT+IFJul748kXjFnz4DDSxsfZTHrCjYIviegCUOTT6PMd8nf3sfLy+vD9FNqMyKsXcyHIF0tWOKg==
-X-Received: by 2002:a50:85c3:0:b0:566:ab90:1073 with SMTP id q3-20020a5085c3000000b00566ab901073mr3022007edh.34.1710240720446;
-        Tue, 12 Mar 2024 03:52:00 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.222.97])
-        by smtp.gmail.com with ESMTPSA id da17-20020a056402177100b005684fc23524sm2716259edb.49.2024.03.12.03.51.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Mar 2024 03:51:59 -0700 (PDT)
-Message-ID: <afd0fc30-6c05-420e-95cb-b9315a29f56f@linaro.org>
-Date: Tue, 12 Mar 2024 11:51:57 +0100
+	s=arc-20240116; t=1710241687; c=relaxed/simple;
+	bh=gy+C3KqRUOKk7iMhwdgz6Nj8AE8jLwwNIVN5icJq1as=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YTlCZneBD3yuSmyFDt+8KcNPF7RfyTzWnO5E5CCC3mDKSh7BntXNL4fPEv01mVDMy7If6um4UDZ2WbeIvjmdW9IgylhDezEui59wXX8Y0vA6uKczuVlWb+uPMBFDbGROoSIljcfqgNqrpVB1Lw2Z+lCaUpGeKIchAWw5k5DVxZE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Fqp1vIrb; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1710241685; x=1741777685;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gy+C3KqRUOKk7iMhwdgz6Nj8AE8jLwwNIVN5icJq1as=;
+  b=Fqp1vIrb22RaM8wJVIzYR4oD5NhtgbwedNIkjjtsZrS36VXQD11yK4rN
+   S3ySUiKSAS2ts+SrTH8PEcUvbiVtuKBhZ4CsEJo15SciUO9lgexuN6wdM
+   tZtuSlgoTLDlQQ5He8WrzuKaezxZOzMA5i3yB+7b6Pdac8ZK/f+c8x59K
+   IGkD4NVDgtyipclvE4SYGBQHDejrlngwSiBOz+1lglarTneES5zpNIuna
+   s0dWionIPKpsqT6MNBH7OPZuEu1ZfOPklCBwFMFFeUxXTYWkISMp5Ar8l
+   9ZxNm9rRNIWghDveknwAQe114W56YIdAmMOZrS3eRO4aRxvNtm/sa57zo
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11010"; a="30382055"
+X-IronPort-AV: E=Sophos;i="6.07,119,1708416000"; 
+   d="scan'208";a="30382055"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2024 04:08:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,11010"; a="937051685"
+X-IronPort-AV: E=Sophos;i="6.07,119,1708416000"; 
+   d="scan'208";a="937051685"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 12 Mar 2024 04:07:59 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 12 Mar 2024 13:07:59 +0200
+Date: Tue, 12 Mar 2024 13:07:59 +0200
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Michael Wu <michael@allwinnertech.com>
+Cc: gregkh@linuxfoundation.org, linux@roeck-us.net, badhri@google.com,
+	kyletso@google.com, frank.wang@rock-chips.com, rdbabiera@google.com,
+	xu.yang_2@nxp.com, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: tcpm: support sink port for debounce
+Message-ID: <ZfA3jzTqn8jNIsLZ@kuha.fi.intel.com>
+References: <20240312011300.75081-1-michael@allwinnertech.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCHv2 1/2] dt-bindings: usb: typec: anx7688: start a binding
- document
-Content-Language: en-US
-To: Pavel Machek <pavel@ucw.cz>, phone-devel@vger.kernel.org,
- kernel list <linux-kernel@vger.kernel.org>, fiona.klute@gmx.de,
- martijn@brixit.nl, samuel@sholland.org, heikki.krogerus@linux.intel.com,
- gregkh@linuxfoundation.org, linux-usb@vger.kernel.org, robh+dt@kernel.org,
- krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org, megi@xff.cz
-References: <ZcaCXYOf6o4VNneu@duo.ucw.cz> <ZdkOCqPKqa/u9Ftb@duo.ucw.cz>
- <Ze92B/PPOvvrtnkA@duo.ucw.cz>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <Ze92B/PPOvvrtnkA@duo.ucw.cz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240312011300.75081-1-michael@allwinnertech.com>
 
-On 11/03/2024 22:22, Pavel Machek wrote:
-> Hi!
+On Tue, Mar 12, 2024 at 09:13:00AM +0800, Michael Wu wrote:
+> When both CC1 and CC2 pins are simultaneously pulled up, it often leads
+> to the double Rp to Vbus cable being stuck in the SNK_ATTACH_WAIT state.
+> And the state machine fails to transition to the SNK_ATTACHED state.
 > 
->> Add binding for anx7688 usb type-c bridge. I don't have a datasheet,
->> but I did best I could.
->>
->> Signed-off-by: Pavel Machek <pavel@ucw.cz>
+> Therefore, it is recommended to focus on transitioning the sink port to
+> the SNK_DEBOUNCED state instead. By doing so, the desired outcome can be
+> achieved more effectively.
+
+Recommended by whom (or what)?
+
+> [  134.525750] VBUS on
+> [  134.713240] CC1: 0 -> 3, CC2: 0 -> 3 [state TOGGLING, polarity 0, connected]
+> [  134.713249] state change TOGGLING -> SNK_ATTACH_WAIT [rev3 NONE_AMS]
 > 
-> Any more comments here? Automatic system told me I need to replace one
-> character...
+> Signed-off-by: Michael Wu <michael@allwinnertech.com>
+> ---
+>  drivers/usb/typec/tcpm/tcpm.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index 0965972310275..9228dbd78bf2b 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -4197,6 +4197,8 @@ static void run_state_machine(struct tcpm_port *port)
+>  		else if (tcpm_port_is_disconnected(port))
+>  			tcpm_set_state(port, SNK_UNATTACHED,
+>  				       PD_T_PD_DEBOUNCE);
+> +		else if (tcpm_port_is_sink(port))
+> +			tcpm_set_state(port, SNK_DEBOUNCED, 0);
+>  		break;
+>  	case SNK_DEBOUNCED:
+>  		if (tcpm_port_is_disconnected(port))
+> -- 
+> 2.29.0
 
-Well, I often do not review patches which have build failure so were not
-compiled. In the terms of bindings `dt_binding_check` is like test
-compilation of C, so just like no one reviews onbuildable C code, I
-don't usually look at "unbuildable" bindings.
-
-Plus original v2 patch went into some other email thread, because of
-"References" field, so a bit disappeared from my inbox.
-
-Best regards,
-Krzysztof
-
+-- 
+heikki
 
