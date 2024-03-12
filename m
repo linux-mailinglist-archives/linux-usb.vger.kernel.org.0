@@ -1,72 +1,72 @@
-Return-Path: <linux-usb+bounces-7847-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7848-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF1EA878E4E
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Mar 2024 06:56:29 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A0ABD878E4F
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Mar 2024 06:56:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 659F81F22839
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Mar 2024 05:56:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D2E821C221C0
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Mar 2024 05:56:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E65123CF79;
-	Tue, 12 Mar 2024 05:56:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 984F5182CF;
+	Tue, 12 Mar 2024 05:56:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hF/OPg7g"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="etubsTLo"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 266F22DF84
-	for <linux-usb@vger.kernel.org>; Tue, 12 Mar 2024 05:56:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A34603984D
+	for <linux-usb@vger.kernel.org>; Tue, 12 Mar 2024 05:56:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710222976; cv=none; b=Yrrt3yyLWtTuOOGYJWxK24A/N9YhgJqK3+bqujEZc5tP/Zi8l1bScvx1kkVHlEfEQLwBWpywb0Oy7JW2Kd3123jBiYwMy84a8catHYq+w+LKmctuFylQJhqGIOnWJdQepJosgyBHLX6hQvqQAirwtqF4EKdlX5VK7gMgQ8X2ntg=
+	t=1710222978; cv=none; b=k1meBBMwkamuSlEHaSkIc8F8wBNCQrM8cSo7ST4o2t5uPGwyvwVwdlzaLVGETUKCjrYc10R0fTShrefyr+CYjiki+Hjn9AV/k1lDwS4yQMYMjh9GNaj24w30pdSnUa4lzwO+7ywzwnyuEmwBBsnAfur+ki/3crUURR2+MCDr9yw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710222976; c=relaxed/simple;
-	bh=jvySCg8KzME4AwDmlR1Ld67nFxe5EkiMe5MIIk+sHws=;
+	s=arc-20240116; t=1710222978; c=relaxed/simple;
+	bh=NfwcbhR5aa39GTFpbvoYtRIeiLvtfmSJKvhlGGDL/wE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=T+losNwY8Yx+ueOtHG5N1QSKKLc77oy24QQSz0OcqSXw4bToXUgtIHrX3Nhl1CWOWoUzhL0KhIbq4AjxodZ1FhmT9ORMHhKBgR4WoCfAKEZIoc26QqAU02Fb7TlKAKItFaqOaLOpsDqxCQg6CsmpTT+bhSlF0JMxFLZDq3IIsuQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hF/OPg7g; arc=none smtp.client-ip=209.85.210.171
+	 MIME-Version; b=HfuzxJc/kQBY+U9hDI/iiHKI/DxugZncAhPsDywZp2xEIiJcZ49FQxTe7cTZLB+n5RX515GG3pML8BhR7QxXo9dulNuHyk9fR29MTzaJbyBE/7adm6fOfL6fX63EedMC25e/+S9HKMz7cefXk++adTJ5mnkjEuGYNStFXv9jTXU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=etubsTLo; arc=none smtp.client-ip=209.85.210.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-6e5c0be115aso3352194b3a.3
-        for <linux-usb@vger.kernel.org>; Mon, 11 Mar 2024 22:56:15 -0700 (PDT)
+Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-6e0f43074edso3529204a34.1
+        for <linux-usb@vger.kernel.org>; Mon, 11 Mar 2024 22:56:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710222974; x=1710827774; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1710222976; x=1710827776; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5maZ1JX1BnhIFhkLqq8OYrtHrSjOUVxGgN6MCqRapwA=;
-        b=hF/OPg7gYhhsFomq//jTc7DoAgYnajRZgucYnTUSSZg5RlvckeWG+TvNQX/y59B28a
-         gtXsm9EQm/2sjoZkqZjAA+ipmA0Q592ZcneBalmrAVMUUJn+WOMNj/tJZOpMERnFkr7K
-         Z7CbquUnQ4bBy9/tUYlxMsC1FpBjV7T8+6Ax9cgm9oSN0JVOoOhZ3sqkII6tOxRVig06
-         /npBCRcJy49UxsDkDnKk2PfTdRKE9IXqyyE3zgLdXDBNUUfpD0GlgVfTYz8XO5q1dwyQ
-         9awyHVmPA2oRSqlkMOPkti6WHvy/7t82Q7q+QaW6C9cWlYWGCkm6qQsR75J7Uy5GOUoZ
-         Rj6A==
+        bh=/bipMtOGV/gTPSxHYeSqPV+LKKjbQyn34/0Nkf0Hyhc=;
+        b=etubsTLooNEMdOfiEgHoAUeUY9UU3MQT8Ghvv9m8HFowgbJabawTLhvUIILLH5m1nY
+         e3CnTehTtf6ZP/tg261MwyezvMKdPYVlaC86zNtSrhVACNuuz1RfQachef4Nn7ZE79Db
+         K2DOi/8W4LioTpDgG9aWwRJIOjPk6IY/fSgpRa/VAV1X+YsM0B5jqfD7kaiS9+HFrLfH
+         +nHkiOZk58KjER9GxVrwqzT0No4XNRK9XHgSNqtjsbXGTuMferUzkosQXguadedub7+R
+         po8FWiCN29DuSQDgxnsYNFRfz6XqNfsXIYXOqQO41bqLk/taC6Q8HCDtKc7d8ddbwcJV
+         2RFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710222974; x=1710827774;
+        d=1e100.net; s=20230601; t=1710222976; x=1710827776;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5maZ1JX1BnhIFhkLqq8OYrtHrSjOUVxGgN6MCqRapwA=;
-        b=E0PqD2VZL3bU0Pnnc7UmDSi9n9u/7qxRVI0wv+tv3W3tx2DErejH5q5oO0tAgL18y3
-         hwXbJ1IoZN6RdOnHkMXkfrmxRur+kUEQVd2EKW33FNZEwyEGlcaHcFCERFfO2YR3bbPl
-         wycFrAl1MiF2xN4/c8r73/kl9zWCdYFXtbLsqLHQH8Vtajxtu19I1CO+8HiLuUxOhcqP
-         NqXnaZzUd/ZXJC73UbaDmN7IHMLgOOoTLu4NJDJsT6SRDEEIEdfbDt/2msGMu/tzXMNK
-         IWwnroAnw9q+gBLsh9kRANSw3oq2fvauvpVk9TdZWcwC4TxOYpVA/Gk364hC+MTab6Dd
-         ESZw==
-X-Forwarded-Encrypted: i=1; AJvYcCUXeeL9GYPe0ITeLEWN8ZbdzJy8NDEznxMApvNNrM3KmU/7GmzAxVa2Lnh9WKElnz/4kqrSFEXAiAyS/maD1h7hJGgmY5S4jWR2
-X-Gm-Message-State: AOJu0Yzf4+DVyx8aDCrmPpv13WVfs3Zd3NyNuMCQ5t0/Czmm0fjO8sYV
-	vPWRgQkw8RkDe2rrgBfIrkvKWgJAiVZFklCmdxZBt38sdDDGbQbQ
-X-Google-Smtp-Source: AGHT+IFeixIj/6ZApVN7QghFofefeV2nTX75kgv7UVu6seIP6knRYZGe+R6oGfsTbMkffLD63D8WGw==
-X-Received: by 2002:a05:6a00:130e:b0:6e6:270a:9303 with SMTP id j14-20020a056a00130e00b006e6270a9303mr7983048pfu.32.1710222974446;
-        Mon, 11 Mar 2024 22:56:14 -0700 (PDT)
+        bh=/bipMtOGV/gTPSxHYeSqPV+LKKjbQyn34/0Nkf0Hyhc=;
+        b=d35CioVYLxt+chgkVo5SaYL1gN/DYDCGVijSMTTPTJPooZCdBGFGisltVTu/y93NjT
+         HGAWJ/2BfhcBDtFdvGxtItmFVLg8t4JU9paLAhnfpW0aJwYR+Bo4xYi2KktNsA6Mx6oa
+         NPRWHL3BM2EEOfrA0k9bW5OCR3tGQK/Rb2vMA4uMXnCKnoNw/Nzys1NLzJXx15LgClPr
+         jSKhovkV7npx2QlWpg+5laujM+C24Q1OuBq3LHSPB/ENQwzsO4tgUFWZQ6PEcA/JZ+mH
+         XfMK4IiDg14+e1tm1D0q5mWONMPG6o35lyuNuuSB/fmYC9zxRo9n0rCfC6SXHFcOiA7w
+         z4hw==
+X-Forwarded-Encrypted: i=1; AJvYcCVjlvqWYFpLcPGNt4bPp6j0RUE6ahZaJcq2vH6qSJBepLZBoiCohx6vk6yErXWykWXLImNlvIFjZBl2j7/MxKIGa64o1WqzPgss
+X-Gm-Message-State: AOJu0YzuRjdruWal4+sFieRWjgeEhnkCs3w31K53QViYYtzLCaA0u72q
+	CuDUo5m0wgoom9DdwdjAGRYPtoN0j2VYnSo/50zAjoedkbJq9AyM
+X-Google-Smtp-Source: AGHT+IEEPBR0WadFpkeHeRyELxle/6vAx1+ttD0XNfRRI7+hZIvsIVceYuaZLrN1plY2c1h7n10ZEA==
+X-Received: by 2002:a05:6870:96ac:b0:21e:80ee:523b with SMTP id o44-20020a05687096ac00b0021e80ee523bmr7297638oaq.34.1710222975622;
+        Mon, 11 Mar 2024 22:56:15 -0700 (PDT)
 Received: from petra.lan ([2607:fa18:9ffd::d95])
-        by smtp.gmail.com with ESMTPSA id k30-20020aa79d1e000000b006e65720e892sm5448898pfp.94.2024.03.11.22.56.13
+        by smtp.gmail.com with ESMTPSA id k30-20020aa79d1e000000b006e65720e892sm5448898pfp.94.2024.03.11.22.56.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Mar 2024 22:56:14 -0700 (PDT)
+        Mon, 11 Mar 2024 22:56:15 -0700 (PDT)
 From: Alex Henrie <alexhenrie24@gmail.com>
 To: linux-parport@lists.infradead.org,
 	linux-usb@vger.kernel.org,
@@ -77,9 +77,9 @@ To: linux-parport@lists.infradead.org,
 	reboots@g-cipher.net,
 	mike@trausch.us
 Cc: Alex Henrie <alexhenrie24@gmail.com>
-Subject: [PATCH 4/7] usb: misc: uss720: point pp->dev to usbdev->dev
-Date: Mon, 11 Mar 2024 23:50:29 -0600
-Message-ID: <20240312055350.205878-4-alexhenrie24@gmail.com>
+Subject: [PATCH 5/7] usb: misc: uss720: document the names of the compatible devices
+Date: Mon, 11 Mar 2024 23:50:30 -0600
+Message-ID: <20240312055350.205878-5-alexhenrie24@gmail.com>
 X-Mailer: git-send-email 2.44.0
 In-Reply-To: <20240312055350.205878-1-alexhenrie24@gmail.com>
 References: <20240312055350.205878-1-alexhenrie24@gmail.com>
@@ -91,25 +91,40 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This avoids a "fix this legacy no-device port driver" warning.
+Information about 04b8:0002 and 05ab:0002 is from commit e3cb7bde9a6a
+("USB: misc: uss720: more vendor/product ID's", 2018-03-20). The rest
+are from <http://reboots.g-cipher.net/lcd/>.
 
 Signed-off-by: Alex Henrie <alexhenrie24@gmail.com>
 ---
- drivers/usb/misc/uss720.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/usb/misc/uss720.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/usb/misc/uss720.c b/drivers/usb/misc/uss720.c
-index fadceb7ab34d..be7d3fa4c150 100644
+index be7d3fa4c150..15cafc7dfd22 100644
 --- a/drivers/usb/misc/uss720.c
 +++ b/drivers/usb/misc/uss720.c
-@@ -720,6 +720,7 @@ static int uss720_probe(struct usb_interface *intf,
- 	priv->pp = pp;
- 	pp->private_data = priv;
- 	pp->modes = PARPORT_MODE_TRISTATE | PARPORT_MODE_EPP | PARPORT_MODE_ECP | PARPORT_MODE_COMPAT;
-+	pp->dev = &usbdev->dev;
+@@ -767,14 +767,14 @@ static void uss720_disconnect(struct usb_interface *intf)
  
- 	/* set the USS720 control register to manual mode, no ECP compression, enable all ints */
- 	set_1284_register(pp, 7, 0x00, GFP_KERNEL);
+ /* table of cables that work through this driver */
+ static const struct usb_device_id uss720_table[] = {
+-	{ USB_DEVICE(0x047e, 0x1001) },
+-	{ USB_DEVICE(0x04b8, 0x0002) },
+-	{ USB_DEVICE(0x04b8, 0x0003) },
++	{ USB_DEVICE(0x047e, 0x1001) }, /* Infowave 901-0030 */
++	{ USB_DEVICE(0x04b8, 0x0002) }, /* Epson CAEUL0002 ISD-103 */
++	{ USB_DEVICE(0x04b8, 0x0003) }, /* Epson ISD-101 */
+ 	{ USB_DEVICE(0x050d, 0x0002) },
+-	{ USB_DEVICE(0x050d, 0x1202) },
++	{ USB_DEVICE(0x050d, 0x1202) }, /* Belkin F5U120-PC */
+ 	{ USB_DEVICE(0x0557, 0x2001) },
+-	{ USB_DEVICE(0x05ab, 0x0002) },
+-	{ USB_DEVICE(0x06c6, 0x0100) },
++	{ USB_DEVICE(0x05ab, 0x0002) }, /* Belkin F5U002 ISD-101 */
++	{ USB_DEVICE(0x06c6, 0x0100) }, /* Infowave ISD-103 */
+ 	{ USB_DEVICE(0x0729, 0x1284) },
+ 	{ USB_DEVICE(0x1293, 0x0002) },
+ 	{ }						/* Terminating entry */
 -- 
 2.44.0
 
