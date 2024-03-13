@@ -1,291 +1,132 @@
-Return-Path: <linux-usb+bounces-7903-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7904-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1B0387A1EC
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Mar 2024 04:26:44 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9839387A204
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Mar 2024 04:54:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 67D702814DA
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Mar 2024 03:26:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1BB90B21DA6
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Mar 2024 03:54:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F53A10A1A;
-	Wed, 13 Mar 2024 03:26:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16DD710A1A;
+	Wed, 13 Mar 2024 03:54:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="ShWEY/7j"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="iOzrJosK"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-db5eur01on2045.outbound.protection.outlook.com [40.107.15.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 588D3101E3;
-	Wed, 13 Mar 2024 03:26:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.15.45
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710300394; cv=fail; b=cyU2VHoe9h/90b3JxnXRBGR7eKRMN0BiiqiT7iGoqoYPkORxT97JjAd7KbEROcgXueu5yqFeAYuvYvXYO7z+6yNAWH7P0/BNeUFY4aDMVEFp3SXEPRKb3OVVEvgsZdBNhqMPY1f8hTnplrrvbngn8OMT5CtJDnsRhY68F5Lue2A=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710300394; c=relaxed/simple;
-	bh=7ckFtzEb1t2xJeSt7PAv7TGA3wOnJjp8FNKtNVc9bPU=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=gbuwjTUVB8BrSKINxjjfuLvsy31mm3/qOnxd4m2CzXNsumgMjyqc5uYr5/qHKWA9wLyW8+/6diJgrSv4Anq9+XNu8O0EmR/LSEPZmCizF3ALMzDrqY5cpJjcd7f0FVO3+1G97GldTXciiXAIh0csxioSIokGkyGUe1p4U0WN+MA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b=ShWEY/7j; arc=fail smtp.client-ip=40.107.15.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aW8P57nZJ7X2H0u4QbrBR1MNKbdqDDzoljyrRx+4rUOOuGkikGo/S8AIHGAQ4RHcQuJmyS/6u4tmw8D+kLCxylb4JyWIRGDEp1bksO6EMGDMQkctLhc/sTAipE548Ju+tkwGwnIT3pQ5zvigLYguVca7tj1zu5lhwxNcNBaDE+SV+vALiqzzFYRHJJVRiBNudRkLrrELC484PUG0cq5Oe5zLBXFu6QzazUThojO1/BY+YihktL7JAIYWMdsg2E27MpIa+tH8o7nXOIIKM4KqIbI3Ve0uaAm8WB0gVcZHE/W02ImdW5f4XyHo/gOE+8sfLqppzhb7pcuDRoZdSSnKfg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Uds5PQn9pCfy4h/i5beiDpDtKcnh5VhPLHtD6Ck1kA8=;
- b=DL/eb/67N13HVTVoVHhZqQyoCq7IK/eO2xpGNxCZsVGT9zIJNdCxmV2nCsDRU/Kj/nlCZ8Kl8jWV7xlJGKehDJsA0LtoBI/kNIp06JGuV/hZUjcW5mKKpnAzE5Pe+LCJYNUn2170IXfH9GBcn8z0g2IB/lNJTg+Oqe1FySiL04sZ3C1gfVuirmbsXI5wT9eByQTZTKUXRpi/efZNIES3+ZNhgtMW2CVAH7vY8JMWybb9j3okhNtpvQPw5dAe0Y6L9URnspBuf6hL7AUmk5hTOlXQ9pJ1rPcTj9rnBZCTsKWObUgqUP1lrqC/YXmUtGugmX8q10OZbcjj6reOxuIH1Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Uds5PQn9pCfy4h/i5beiDpDtKcnh5VhPLHtD6Ck1kA8=;
- b=ShWEY/7jGKgFIcJ6rkFOwIyVqrPkFPb5K6MsFO/1zoVB9k3ry3V1z0t6tge6SUJ5A8Dt3LqqfiNEHJnjVZm3HE8o4EFEc1PR2dblPROtZfkie2TKUS2rY9hDgd5QDnx27tNDg7xVvlyYxeQAYk2XHJjvUMAVeei6JD6QIpFgOf0=
-Received: from DU2PR04MB8822.eurprd04.prod.outlook.com (2603:10a6:10:2e1::11)
- by DBBPR04MB8012.eurprd04.prod.outlook.com (2603:10a6:10:1e6::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7362.36; Wed, 13 Mar
- 2024 03:26:29 +0000
-Received: from DU2PR04MB8822.eurprd04.prod.outlook.com
- ([fe80::d45f:4483:c11:68b0]) by DU2PR04MB8822.eurprd04.prod.outlook.com
- ([fe80::d45f:4483:c11:68b0%7]) with mapi id 15.20.7362.035; Wed, 13 Mar 2024
- 03:26:29 +0000
-From: Xu Yang <xu.yang_2@nxp.com>
-To: Frank Li <frank.li@nxp.com>
-CC: Rob Herring <robh@kernel.org>, "gregkh@linuxfoundation.org"
-	<gregkh@linuxfoundation.org>, "krzysztof.kozlowski+dt@linaro.org"
-	<krzysztof.kozlowski+dt@linaro.org>, "shawnguo@kernel.org"
-	<shawnguo@kernel.org>, "conor+dt@kernel.org" <conor+dt@kernel.org>,
-	"s.hauer@pengutronix.de" <s.hauer@pengutronix.de>, "kernel@pengutronix.de"
-	<kernel@pengutronix.de>, "festevam@gmail.com" <festevam@gmail.com>,
-	dl-linux-imx <linux-imx@nxp.com>, "peter.chen@kernel.org"
-	<peter.chen@kernel.org>, Jun Li <jun.li@nxp.com>, "linux-usb@vger.kernel.org"
-	<linux-usb@vger.kernel.org>, "devicetree@vger.kernel.org"
-	<devicetree@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "imx@lists.linux.dev"
-	<imx@lists.linux.dev>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>
-Subject: RE: [EXT] Re: [PATCH v8 05/10] dt-bindings: usb: ci-hdrc-usb2-imx:
- add restrictions for reg, interrupts, clock and clock-names properties
-Thread-Topic: [EXT] Re: [PATCH v8 05/10] dt-bindings: usb: ci-hdrc-usb2-imx:
- add restrictions for reg, interrupts, clock and clock-names properties
-Thread-Index: AQHadF4T9fa4/JJRF0KTO2HRURFsjLE0MIuAgAC6gbCAABN3gIAAAmKw
-Date: Wed, 13 Mar 2024 03:26:29 +0000
-Message-ID:
- <DU2PR04MB8822EBCB6C77F2055D2CF0FD8C2A2@DU2PR04MB8822.eurprd04.prod.outlook.com>
-References: <20240312091703.1220649-1-xu.yang_2@nxp.com>
- <20240312091703.1220649-5-xu.yang_2@nxp.com>
- <20240312145035.GA2204647-robh@kernel.org>
- <DU2PR04MB8822976F9F052E18D7951FA48C2A2@DU2PR04MB8822.eurprd04.prod.outlook.com>
- <ZfEYg1BVTVMGAUJX@lizhi-Precision-Tower-5810>
-In-Reply-To: <ZfEYg1BVTVMGAUJX@lizhi-Precision-Tower-5810>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DU2PR04MB8822:EE_|DBBPR04MB8012:EE_
-x-ms-office365-filtering-correlation-id: a53d6ea0-6a03-4c7d-e613-08dc430d5f46
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info:
- kdA3F0PyOF548VA3q2IHt7GxHumyJ7o/LD8RRWEBicCRH+EGByRJ/2W/wzgX7kQmfAa2DE4CXiE2RmOCjTfJYYGdYeHfPW/J3bt+BoTsfy9Ji5ji0cNRsVJsDr0vozWa54vnwqCYN1KJALVOorDXeD+qbLWUKtk62QAzbuxG0yBzSv87itaZO2ZJcq/J8903sbjG04p1V84qTuXSr64UTBJoY8dr/O9Bb0R9BcGA09fWtk6IFxZFbN2jLQc1gfDkqkjlp7wTivFbVFqFggOWIRiZ5ijizXQi68iBe3GqB19R+cCh5r8nwa1XRKxQVX+GUXDAN7SiA4WqUiD9qjpJvZR3vHmgIv+fTwmqDa+1RA1WvpR2gb69U+kn4AUxes9vwSKQxM4yHFvSM6H5waGlUmHegIizMLVZZ3LPOLokjuU3dNWxD/wf2qZubxGWuXBjw3zcwq1aFOf0Wv9fs+JGOg5yfmF8PI06BAD2POYXXn0HYXmaQo6EMlyhnWWA5rrL7ONYsqUifUhfv697iXv929Sf9Q8+LUCXVJc5i3g9tQI+MILL8XRTCXJrgJcZhsqzFae5x1XhmjK4EQ8aULAKNTpOAcbX21WLyRB3C22ei3op2sj98u5KLMHQaKbdomwq677U8wG8G7bkhSLy1m4+RFjEStVNpHKiRfsSyoDVxeorzIzYPsQD0pRkJtH735C9O87RrG1eWYdhB2wlejtzYB2NBJfLdqFbx57y0IWSON4=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8822.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7416005)(376005)(1800799015)(38070700009);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?ix4S9gIMdtyGwpx02I7uFNlZoa3qMvtpmrIiJQFLap74m7ZIfv8wjfIn6c8U?=
- =?us-ascii?Q?Xm4oJxaUQ1SW5oEeNuyoJivEqme73lLva9d1vz8SlYLwrs16ckGeq6xAMXhH?=
- =?us-ascii?Q?ntZxVM/2JgBTvcHeIa3aWyiXuGwOonn9PEPbPxrhTiZpqVdA8gqO+RC3V1Ni?=
- =?us-ascii?Q?qrroFxtqZwN8oOZIqqis99ibxP/YKIZ38DelMOZzM5C+VxFJWidHlom06gwq?=
- =?us-ascii?Q?jRLcdiv8TZu+Ve3Bp3cZSJuN7bssCDZfpjRbucg2SmzBAIcMvKyAhQrrzAmN?=
- =?us-ascii?Q?2XTzJuxVj1epW00xGGhv4Sztv+FyG7oSKxqMTJSFF0ArlFT31jzfXJ1ZX6Zm?=
- =?us-ascii?Q?boJkA2pi1Z5xmvJ0xHQTgDBavzip/n9YkvipZYIzYOlwx+sBHkwqdUC/pj/I?=
- =?us-ascii?Q?WEFNbEWXUz0Tae7CqQJuLT0pUr4jSAMVi7v+wD50jBrRCoGDgdShF3zs1899?=
- =?us-ascii?Q?IE5NEMnz+WVuzS7SAMSehp7iT5UQpNlF2vDcpPAiqphi4DaTXXha5n/Ktjwq?=
- =?us-ascii?Q?hSZsaYg5gQzr76OgicNpxImOktXGY/ZaUZJTXL2CF0+LmiMm/tb58hzYmztS?=
- =?us-ascii?Q?puUfKW12Yni+1SKuGEvOaUz69mDPHAF1EDaXZK3K3MbuvGQ7Ojn/AmAdPtj/?=
- =?us-ascii?Q?br6q5xE2JZn06CnwvdmdQb2oWqM8CZXV1VbUFKLkkIYAl10mj0quT0GT5/g4?=
- =?us-ascii?Q?IkvhBI45NWs7RJN3Crf3RTHkhYNDi74xkweLBgmPukqg6/d4zcTzaT4HGbkN?=
- =?us-ascii?Q?Hw3UXqRin+9PeOkM8LDdaaJSk4o+c81JNG+Evvt84etv1LIbF5kxQqEUrhQ2?=
- =?us-ascii?Q?cByKge5ze5+RotSvGm2bCekg60rriz8sn0f6GbsQ0EfCHqV54PYQy981+upD?=
- =?us-ascii?Q?cgP3G93iBOJUVU2qWaTomdn626fa4LPXDql9RV4owbcTjAIkeENPG3mK5VuA?=
- =?us-ascii?Q?9IDkewAfRUGseZ5sdRvtdIlgES9tPO0jl47CZrK81dZGVnXHpV6VaH3bXlC8?=
- =?us-ascii?Q?fWjOI1/N+G/8MvnAbiL9Gy1HaBgxC2Zi7qU7Zea25UzJ9cgeOK0+jJ5SxZF0?=
- =?us-ascii?Q?sVqOAwF9qj6Da8/nq0vfDFqKWChNCsHi6SktJcPOcs2aUcKsJf9cSSKh2TF2?=
- =?us-ascii?Q?Rkk/de/BAolg0ZF2Rn9SCmXn3aq5l9xOnLpv8xHE/i3a99eFWec37Byp+wnD?=
- =?us-ascii?Q?F2SKYIwhDiv0/t8lG07nVWlUGMxfJZ6uUvxCKRyEaxCQwGJhd6WUEm8NTpXf?=
- =?us-ascii?Q?QCm5sMSF0JqXM9yQeW7IRmD5SB5gqoBq4D8zdUrkHnCdKS3xq0V4oOT6YvIZ?=
- =?us-ascii?Q?1EfT0RN++N80OcUA+MKCP8Fu7HgOo/AqZZE65esR8/Xy4VDK0rOeVfQjiGEi?=
- =?us-ascii?Q?XpjW3iI3l2JBOJ4nmA0hJkOgDjQw6AoxOUzhV0PvrYjc7PLteMfz2PzAO8ib?=
- =?us-ascii?Q?5kG+YJybK5nzIR/TzgDeuZteQPk5S/G1lDCTfRdjdR/LIZAiQXuPO5SEd642?=
- =?us-ascii?Q?CXccnTSzoxA7twkKVyb0s+Ql2R3czEy5RhelM1/acYnkigXemHhx1TF8I1DE?=
- =?us-ascii?Q?rjP3shUYMN4nVO1XpoA=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4544107B6
+	for <linux-usb@vger.kernel.org>; Wed, 13 Mar 2024 03:54:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.173
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1710302064; cv=none; b=Fb5EVb8OPDIWTbVpKEj2WavhxwI4HKgKkF/RuGdcRtBjwUGoxTJzsOHc6Str/1qQBVOn8JEFpUcO7G+ALzKhiLKdDEzxdfzHZeLKYlVoJeAP06XrRusmQqlxiqb52gnf18uwwUb0EVoVzA2DeLSVxu+sBPFiFE1nPO/5SGruGNY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1710302064; c=relaxed/simple;
+	bh=uuYeQvYvdPa6xmGP869tkZ5w3Kz9K6rlx7X6sdK7szI=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=YTXjeEgNywH/vxRCBtbJ8D2IH78i2OqjHy/IYXbIRFZsTgz9jpan8aE9Uu2y8t9u6GRyQaWF3ccqqXzjIgXMHdVu6YRlAlVvAmt0VqkaGILZgKdfm5OfTfPsijU0wFVwVbKLCsJ6jNrFDe8wUjfwih18SCAH8IfrLTSSYLDKiD0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=iOzrJosK; arc=none smtp.client-ip=209.85.208.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-2d24a727f78so7600871fa.0
+        for <linux-usb@vger.kernel.org>; Tue, 12 Mar 2024 20:54:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1710302061; x=1710906861; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ul9kMS0dDijopmqealloW1ilUpaK8SpmQOuP6iZpG7o=;
+        b=iOzrJosKf/4P2vfyFYxlGjdPDMnBaYb0pZNWChh6287FnZGgiVGyyqm3mnTcP9V8l+
+         VMBB98sLzN8nYTTq3y/400VOfbHLiPxey4T32uw0Cjp2c7WWV0q9MPpyb0rDcvZ1S68N
+         AD9JPRT3RaDVMtLAW2KH+7xbaHFNe680yh9bnuErvHm8w/a1Vdsd4ez5K5CRpm+fPO4j
+         D5P2p78jTzqjkvbRjWGyORTiGoIa4YX1v4yClJArHEzwni8CmnWhmcSx83hqjydPnaas
+         MFu8QtvPakQ0k/krM5rNZ2AFzsffXXnOvlqNf9idvx9d6JrEqHbuhNyJNW1G++rRFMH9
+         ynSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710302061; x=1710906861;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Ul9kMS0dDijopmqealloW1ilUpaK8SpmQOuP6iZpG7o=;
+        b=rpEU6gUgwRLWo1ukRkm0RC1ShjsPKrS7IrzjpY1EYa2VQnPDJQJI9tWd32Z9YB6SsR
+         aSFB6kmSQAn0b228JTWSL2O0o88C9QZs839l8U/HETQJd2Fj26OPo7iX+K+ld0FB97v2
+         QI0ZNc2yNtgwAdbdkovexeTuUh0oJmeRM4hwUl32z0zQfqfh/DotwbDLd2NVQY1m6ckV
+         xTaViZ7sJcGgb16W7/E1aNo0zQ1PRmIz0uwz5IADmEDG2o03JVDDVgR/Ld9O+83/hKwj
+         7kzZxuYqAwefaBhSjYHGbqWi/llILgDC3dSHMvyeSC5QQo/o5LamYgj+6RuxBcCLYykk
+         ARFA==
+X-Forwarded-Encrypted: i=1; AJvYcCVivGODy+z4emE9voU8049DJRrojVukujCXzv348lpX0pvRZOnH0JDcwBQxS4WHk5clrhAx6CcvCm9PpngYGqdut+WtC70uvEOH
+X-Gm-Message-State: AOJu0YxZKNZWpmTX23tLR3pYzHc003Ico6NuO35yk8SEqFbCrQ5y8Ykc
+	ikHoE3AkAeN6D8FXv56175v718IWFrPHnuSjdOakvYsKnfXxpXobS5lYIMv/FGE=
+X-Google-Smtp-Source: AGHT+IFFWO0p1YoK78R5xGmkweZHTNPWCkFoHXOWekR/ioaaF/xOmbY+3EHSZ9Lmr/mIoMKmse9siQ==
+X-Received: by 2002:a2e:9cd4:0:b0:2d4:54dc:28e3 with SMTP id g20-20020a2e9cd4000000b002d454dc28e3mr2747237ljj.28.1710302060670;
+        Tue, 12 Mar 2024 20:54:20 -0700 (PDT)
+Received: from umbar.lan ([192.130.178.91])
+        by smtp.gmail.com with ESMTPSA id f25-20020a05651c02d900b002d0acb57c89sm1854319ljo.64.2024.03.12.20.54.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Mar 2024 20:54:20 -0700 (PDT)
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: [PATCH 0/7] usb: typec: ucsi: fix several issues manifesting on
+ Qualcomm platforms
+Date: Wed, 13 Mar 2024 05:54:10 +0200
+Message-Id: <20240313-qcom-ucsi-fixes-v1-0-74d90cb48a00@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8822.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a53d6ea0-6a03-4c7d-e613-08dc430d5f46
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Mar 2024 03:26:29.1803
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: uKoqiD3wPcJwDVaZQBlVxb7746oxo/2U5YMOfx/BEI0fggZHgz89jwxXHcziJsSRWric5xJPUNg/Ysp3Sm/IyA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB8012
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAGIj8WUC/x3LQQ5AMBBA0avIrE1SRYmriIXWYBaUTohEeneN5
+ cvPf0EoMAl02QuBbhb2e0KRZ+DWcV8IeUoGrXSlykLj6fyGlxPGmR8SNHXTTro01igL6ToC/SF
+ N/RDjByyx2sNhAAAA
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Guenter Roeck <linux@roeck-us.net>, Bjorn Andersson <andersson@kernel.org>, 
+ Neil Armstrong <neil.armstrong@linaro.org>, 
+ Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc: Johan Hovold <johan+linaro@kernel.org>, linux-usb@vger.kernel.org, 
+ linux-arm-msm@vger.kernel.org, stable@vger.kernel.org
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1153;
+ i=dmitry.baryshkov@linaro.org; h=from:subject:message-id;
+ bh=uuYeQvYvdPa6xmGP869tkZ5w3Kz9K6rlx7X6sdK7szI=;
+ b=owGbwMvMwMXYbdNlx6SpcZXxtFoSQ+pH5azXzEv/mU/YY+XI72Umr/rxs/apdoM7X0MX5ZaJ5
+ Ypxs1h0MhqzMDByMciKKbL4FLRMjdmUHPZhx9R6mEGsTCBTGLg4BWAije0cDDM+yrCzKq48cYHp
+ 1IP1QT+EHQR5wxh+3NTr39h6Z43ulx8TV2x51u8rK6AgeNW7irNLblcKz3reBZvjeHdYtUtP18n
+ WXdzVu9Ln1CdVxy3ppvJJHUvX2Sxct2Z/+sw9xRmZ75tOSsaoi6lY8LuKPPmimbZB/Pr+NBmLqA
+ Mz5aNP7PJbd0zmmMtbvmAlrbVHE6teepWpOHRN27fIWUaT1yc2M2tyIf+i6c/vNxlOTrS7MLMyz
+ JBvmzffURf77w9bXzgsusqX8Lvf9kWj5BHPkutnzDY2n5CsF/S5Ybw0wluDN0Dkepr9pSw17cBf
+ pUYz9gnZi066UuLGdnqtjcPuyPd9M64YWJW3bJX/d+YlAA==
+X-Developer-Key: i=dmitry.baryshkov@linaro.org; a=openpgp;
+ fpr=8F88381DD5C873E4AE487DA5199BF1243632046A
 
+Fix several issues discovered while debugging UCSI implementation on
+Qualcomm platforms (ucsi_glink). With these patches I was able to
+get a working Type-C port managament implementation. Tested on SC8280XP
+(Lenovo X13s laptop) and SM8350-HDK.
 
->=20
-> On Wed, Mar 13, 2024 at 02:48:00AM +0000, Xu Yang wrote:
-> >
-> > >
-> > > On Tue, Mar 12, 2024 at 05:16:58PM +0800, Xu Yang wrote:
-> > > > Add restrictions for reg, interrupts, clock and clock-names propert=
-ies
-> > > > for imx Socs.
-> > > >
-> > > > Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
-> > > >
-> > > > ---
-> > > > Changes in v4:
-> > > >  - new patch since v3's discussion
-> > > >  - split the reg, interrupts, clock and clock-names properties into
-> > > >    common part and device-specific
-> > > > Changes in v5:
-> > > >  - keep common property unchanged
-> > > >  - make if-then more readable
-> > > >  - remove non imx part
-> > > > Changes in v6:
-> > > >  - new patch based on ci-hdrc-usb2-imx.yaml
-> > > > Changes in v7:
-> > > >  - no changes
-> > > > Changes in v8:
-> > > >  - remove if:else:if:else:if:else block
-> > > > ---
-> > > >  .../bindings/usb/chipidea,usb2-imx.yaml       | 80 +++++++++++++++=
-++++
-> > > >  1 file changed, 80 insertions(+)
-> > > >
-> > > > diff --git a/Documentation/devicetree/bindings/usb/chipidea,usb2-im=
-x.yaml
-> > > b/Documentation/devicetree/bindings/usb/chipidea,usb2-imx.yaml
-> > > > index cdbb224e9f68..fb1c378dfe88 100644
-> > > > --- a/Documentation/devicetree/bindings/usb/chipidea,usb2-imx.yaml
-> > > > +++ b/Documentation/devicetree/bindings/usb/chipidea,usb2-imx.yaml
-> > > > @@ -49,6 +49,12 @@ properties:
-> > > >            - const: fsl,imx6ul-usb
-> > > >            - const: fsl,imx27-usb
-> > > >
-> > > > +  reg:
-> > > > +    maxItems: 1
-> > > > +
-> > > > +  interrupts:
-> > > > +    maxItems: 1
-> > > > +
-> > > >    clocks:
-> > > >      minItems: 1
-> > > >      maxItems: 3
-> > > > @@ -144,6 +150,80 @@ allOf:
-> > > >              - const: idle
-> > > >              - const: active
-> > > >
-> > > > +  # imx27 Soc needs three clocks
-> > > > +  - if:
-> > > > +      properties:
-> > > > +        compatible:
-> > > > +          const: fsl,imx27-usb
-> > > > +    then:
-> > > > +      properties:
-> > > > +        clocks:
-> > > > +          minItems: 3
-> > > > +          maxItems: 3
-> > >
-> > > The max is already 3, so drop maxItems.
-> >
-> > Okay.
-> >
-> > >
-> > > > +        clock-names:
-> > > > +          items:
-> > > > +            - const: ipg
-> > > > +            - const: ahb
-> > > > +            - const: per
-> > > > +
-> > > > +  # imx25 and imx35 Soc need three clocks
-> > > > +  - if:
-> > > > +      properties:
-> > > > +        compatible:
-> > > > +          contains:
-> > > > +            enum:
-> > > > +              - fsl,imx25-usb
-> > > > +              - fsl,imx35-usb
-> > > > +    then:
-> > > > +      properties:
-> > > > +        clocks:
-> > > > +          minItems: 3
-> > > > +          maxItems: 3
-> > >
-> > > Same here.
-> >
-> > Okay.
-> >
-> > >
-> > > > +        clock-names:
-> > > > +          items:
-> > > > +            - const: ipg
-> > > > +            - const: ahb
-> > > > +            - const: per
-> > > > +
-> > > > +  # imx7d Soc need one clock
-> > > > +  - if:
-> > > > +      properties:
-> > > > +        compatible:
-> > > > +          items:
-> > > > +            - const: fsl,imx7d-usb
-> > > > +            - const: fsl,imx27-usb
-> > > > +    then:
-> > > > +      properties:
-> > > > +        clocks:
-> > > > +          maxItems: 1
-> > > > +        clock-names:
-> > > > +          maxItems: 1
-> > >
-> > > What's the name?
-> >
-> > Can I not specify the name since the macro definition for USB
-> > controller clock in clock.h is recognizable and the driver doesn't
-> > get this clock by name rather index?
->=20
-> If clock-names is not required for fsl,imx7d-usb,
->=20
-> clock-names: false
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+---
+Dmitry Baryshkov (7):
+      usb: typec: ucsi: fix race condition in connection change ACK'ing
+      usb: typec: ucsi: acknowledge the UCSI_CCI_NOT_SUPPORTED
+      usb: typec: ucsi: make ACK_CC_CI rules more obvious
+      usb: typec: ucsi: allow non-partner GET_PDOS for Qualcomm devices
+      usb: typec: ucsi: limit the UCSI_NO_PARTNER_PDOS even further
+      usb: typec: ucsi: properly register partner's PD device
+      soc: qcom: pmic_glink: reenable UCSI on sc8280xp
 
-Set it to false make sense to me.
+ drivers/soc/qcom/pmic_glink.c |  1 -
+ drivers/usb/typec/ucsi/ucsi.c | 51 +++++++++++++++++++++++++++++++++----------
+ 2 files changed, 39 insertions(+), 13 deletions(-)
+---
+base-commit: ea86f16f605361af3779af0e0b4be18614282091
+change-id: 20240312-qcom-ucsi-fixes-6578d236b60b
 
->=20
-> If driver use index to get clock, why need clock-names at other platform?
-> I supposed these should be the same for all chips.
-
-Yes, they are same. I add clock-names because some dts already have
-clock-names in the usb node.=20
-If I set it to false, I should remove clock-names from these platforms in
-next version.
-
-Thanks,
-Xu Yang
+Best regards,
+-- 
+Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
 
