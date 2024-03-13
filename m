@@ -1,167 +1,178 @@
-Return-Path: <linux-usb+bounces-7930-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7931-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9CA3287A71E
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Mar 2024 12:30:38 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D010987AA4C
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Mar 2024 16:17:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CEBD91C20BC8
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Mar 2024 11:30:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1764E282499
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Mar 2024 15:17:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C15C3F8FF;
-	Wed, 13 Mar 2024 11:30:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B97FA45BFD;
+	Wed, 13 Mar 2024 15:17:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="JHTkQMP3"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="OSqylJdb"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6B8A3EA72;
-	Wed, 13 Mar 2024 11:30:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 142544596D
+	for <linux-usb@vger.kernel.org>; Wed, 13 Mar 2024 15:17:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710329430; cv=none; b=L591MWBMTZnk81D3gEn8KZ6AhEIXkigVmCaO+DpNU7DNhjbIidPk3LI1vtqIJriEITGqBLyvM6UsrC59hfeCAGfNq5q9st7Xys0gvRlltrtMpzk+LF1QZ0rS1li7WdusZC+q5p5PU3QuTBuPKFd4s7wB14FBqaMNm18Ds44Xnkc=
+	t=1710343064; cv=none; b=dzLJI6w7OiSdWPFXNsPgTyBfOXSzfLIaVGlfjFChp/VV63IWp4Rk8DRKq8Sqcp4LANqHb0B4oJ3MoG4mlFyr9fTQfChtSjzTphTzWlEy92oBXQ3e/Avob/1BgDsNNWIf8rSK03QApgu+67yziGz7sBH3iPtwYo9YS7thpgRK7Jo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710329430; c=relaxed/simple;
-	bh=rwEW4ySKbuvJZTu5EpEHtshEWyyGgcijixSrw4EKNwA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nyZvgj2IWacyZfRc/oTrEwPyh/1nUvF4VmD5nNS/gL78uCicSk9j2f7oCNkl+/v8e3CqvLADCea58nYUnXdm3ROxzdA3vNXS6Bd6u5AELuGbCkc95nqpkCpt3qsW25DJlw5BotOa7ZqA4NBVpPxhZzGYOn0VTMWMM8bISdsU+h8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=JHTkQMP3; arc=none smtp.client-ip=213.97.179.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=igalia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:
-	Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=kky/dRJyKBUx3h381cnSb+YhqF1W+SBQhMlIYZOCUjM=; b=JHTkQMP3eWxl1jUynSym40Wck1
-	g2mAz51Fn20s+96CmQHKcDABvD0U7X7MAh8NV7U2WODtevqXR+r8b54O4wETah2klzrZr0JSF9Klr
-	JCO6EBtnGl4WIzUgTXbxYw8ATutMGifsELKriAZe14vi2xe3feV3COcNe8fh8P5QEBP8muiGfF5uh
-	PIR55YxKP0+WQEuJZYhrb7gt9/hMS65JrRi+SAeubqb4sxzT5LY1sMc122Z2V+cPs9h0g7WbFc0W5
-	dTuICzDf03P8r0XenOZhJqn45vVLCoiFWmmaKunBfnN3Wn6DpGh/WHZ+7gzsYscYbvrM6z5xnQylM
-	VGF4cc5w==;
-Received: from [177.62.247.190] (helo=localhost)
-	by fanzine2.igalia.com with esmtpsa 
-	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1rkMoN-009vIC-01; Wed, 13 Mar 2024 12:30:19 +0100
-From: "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-To: linux-scsi@vger.kernel.org
-Cc: jejb@linux.ibm.com,
-	martin.petersen@oracle.com,
-	stern@rowland.harvard.edu,
-	linux-usb@vger.kernel.org,
-	usb-storage@lists.one-eyed-alien.net,
-	kernel-dev@igalia.com,
-	kernel@gpiccoli.net,
-	"Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-	syzbot+c645abf505ed21f931b5@syzkaller.appspotmail.com,
-	stable@vger.kernel.org,
-	Bart Van Assche <bvanassche@acm.org>,
-	John Garry <john.g.garry@oracle.com>,
-	Shin'ichiro Kawasaki <shinichiro.kawasaki@wdc.com>
-Subject: [PATCH] scsi: core: Fix unremoved procfs host directory regression
-Date: Wed, 13 Mar 2024 08:21:20 -0300
-Message-ID: <20240313113006.2834799-1-gpiccoli@igalia.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1710343064; c=relaxed/simple;
+	bh=11UofkdzAExKUodQZTLMIkHUIKl99ZAoZeaG0RVN+J4=;
+	h=Content-Type:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To; b=ammNdb68K0fSeyIcMZEpS7cxruDMPJioW58rlIkIHsAjdYaNyFZjr7P+8irLOfkhZ4rpS1KI5OkibdmKoDwNCjgjkL1uWYHCDzMd/wjwTmv/TrRzy/wpjpAMX1VLNBxAlYapAR4tVsMrOH8Pl2JtcNLM91anLXvzqrgp51nl4ec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=OSqylJdb; arc=none smtp.client-ip=209.85.167.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-5135e8262e4so7320478e87.0
+        for <linux-usb@vger.kernel.org>; Wed, 13 Mar 2024 08:17:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1710343060; x=1710947860; darn=vger.kernel.org;
+        h=in-reply-to:from:references:cc:to:content-language:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iS8b1PNR7V7x5h/CO4cJabYLHw2QhRL0rgl3lEA2FHw=;
+        b=OSqylJdbUXYAav1inUDpPp+FGoaDjBCLZxCgE+xCRG2cNVg3eMmKJqYW7rBR6X4W24
+         EyB/FqRV6YnTqq2ptFh9TsQXngafL9d6Tbrk7K1P7XSIB195Q2IXeu8YYZQ0KMPT6jZA
+         Mtk3xmZXeZNSX0WfTEZXw3W75qebudaJ6yUJ3QseqeKD6nvcjO8SXhNyZXjJxVQFnKPU
+         bbiUEjUAR/cNUBpojxhTOa2HjAz/XXiSjiOS4x1g+0yPp1Pz+7yYv4kW4TwzrWdt0abJ
+         nHiK8F/bffugB5CQgPad8LVNRxHMo3gzJrevYvmoc9FSQ3G6XMpv41XyLUaZosx3lVqW
+         LgeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710343060; x=1710947860;
+        h=in-reply-to:from:references:cc:to:content-language:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=iS8b1PNR7V7x5h/CO4cJabYLHw2QhRL0rgl3lEA2FHw=;
+        b=fvNRbn8PJ2EbpIbJcpUriF50So5gFhBwQoXirB/AWwAYOk/0A5KNHhF6U+5rik3QQQ
+         9ye3OcZsRdvpqWywlFUXqxMphymz4EHOZFXjb/oMmb5uDaLtJDNxy4OPHnQ5rl6oiEZj
+         ts9uDANqJtXFc7r2Yq6Rmi0i4C4+d2eqSZ/1dYjlXZcfhRUWNfgaCtUb0neKW73modQn
+         X7sAY3yaAmULkly/p8VjNM4xPuKr9Mfox3/hAVS2xDRa68TEfBqeT4IUJ21vz4CNhoh9
+         k+pLYgTSnwKgQ4GmTYNq0c09ZIWrXSqkFnkcDhLhgC3XqNOPWrTIGETGrhaP6f9qgol8
+         nsHQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWqsqqSUJSuGYhvwyCAAGdOC9KUGqwecAlkvAD68zsifOyMXOOS+Gp7+1Em0ZXccNon2aB1lFXF2bIXcODLDelsGi3muN4BcwJ8
+X-Gm-Message-State: AOJu0YzWfhWYdCdFsRqW9sAKqVzqscGgiDjQP8q72WOS9apwI97o6ZpD
+	tWv/K7DmTfQRrRH39HwXZJGOoP60HxfgJzoiGHDDoX2HjUdluy2VQe0vYu1LlRs=
+X-Google-Smtp-Source: AGHT+IHcN9Wtw70fHKfw/UDw2H/LNma04m/ChfLuNtPXhUAVOnPqiThafrqSRmzTm0e2cfDHUlsWCA==
+X-Received: by 2002:a05:6512:443:b0:513:ca65:8c58 with SMTP id y3-20020a056512044300b00513ca658c58mr1222391lfk.43.1710343060413;
+        Wed, 13 Mar 2024 08:17:40 -0700 (PDT)
+Received: from ?IPV6:2001:a61:1366:6801:7ce4:a9a1:7f22:a638? ([2001:a61:1366:6801:7ce4:a9a1:7f22:a638])
+        by smtp.gmail.com with ESMTPSA id kn22-20020a170906aa5600b00a45200fe2b5sm4936479ejb.224.2024.03.13.08.17.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Mar 2024 08:17:39 -0700 (PDT)
+Content-Type: multipart/mixed; boundary="------------bx0M9M0d0PX5GwoPpd9ybdav"
+Message-ID: <1196d35e-46a0-4c96-8271-12becb932f06@suse.com>
+Date: Wed, 13 Mar 2024 16:17:38 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [Linux Kernel Bug][usb/f_printer] WARNING in usb_ep_queue
+Content-Language: en-US
+To: Chenyuan Yang <chenyuan0y@gmail.com>, gregkh@linuxfoundation.org,
+ azeemshaikh38@gmail.com, ivan.orlov0322@gmail.com,
+ benjamin.tissoires@redhat.com, linux-usb@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, syzkaller@googlegroups.com,
+ Zijie Zhao <zzjas98@gmail.com>
+References: <CALGdzurBnMztPW1Q8mujfYaopVQ8MkSUXUvnAqJcLGu5ROSU4Q@mail.gmail.com>
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <CALGdzurBnMztPW1Q8mujfYaopVQ8MkSUXUvnAqJcLGu5ROSU4Q@mail.gmail.com>
 
-Commit fc663711b944 ("scsi: core: Remove the /proc/scsi/${proc_name} directory
-earlier") fixed a bug related to modules loading/unloading, by adding a
-call to scsi_proc_hostdir_rm() on scsi_remove_host(). But that led to a
-potential duplicate call to the hostdir_rm() routine, since it's also
-called from scsi_host_dev_release(). That triggered a regression report,
-which was then fixed by commit be03df3d4bfe ("scsi: core: Fix a procfs host
-directory removal regression"). The fix just dropped the hostdir_rm() call
-from dev_release().
+This is a multi-part message in MIME format.
+--------------bx0M9M0d0PX5GwoPpd9ybdav
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-But happens that this proc directory is created on scsi_host_alloc(),
-and that function "pairs" with scsi_host_dev_release(), while
-scsi_remove_host() pairs with scsi_add_host(). In other words, it seems
-the reason for removing the proc directory on dev_release() was meant to
-cover cases in which a SCSI host structure was allocated, but the call
-to scsi_add_host() didn't happen. And that pattern happens to exist in
-some error paths, for example.
+On 02.02.24 19:59, Chenyuan Yang wrote:
+> Dear Linux Developers for F_printer,
+> 
+> We encountered "WARNING in usb_ep_queue" when testing the f_printer driver with
+> Syzkaller and our generated specifications.
+> 
 
-Syzkaller causes that by using USB raw gadget device, error'ing on usb-storage
-driver, at usb_stor_probe2(). By checking that path, we can see that the
-BadDevice label leads to a scsi_host_put() after a SCSI host allocation, but
-there's no call to scsi_add_host() in such path. That leads to messages like
-this in dmesg (and a leak of the SCSI host proc structure):
+Hi,
 
-usb-storage 4-1:87.51: USB Mass Storage device detected
-proc_dir_entry 'scsi/usb-storage' already registered
-WARNING: CPU: 1 PID: 3519 at fs/proc/generic.c:377 proc_register+0x347/0x4e0 fs/proc/generic.c:376
+it is clear what happens, but at least to me it is not clear why we allow
+a write() before we enable the endpoint. Anyway, does this fix the issue?
 
-The proper fix seems to still call scsi_proc_hostdir_rm() on dev_release(),
-but guard that with the state check for SHOST_CREATED; there is even a
-comment in scsi_host_dev_release() detailing that: such conditional is
-meant for cases where the SCSI host was allocated but there was no calls
-to {add,remove}_host(), like the usb-storage case.
+	Regards
+		Oliver
 
-This is what we propose here and with that, the error path of usb-storage
-does not trigger the warning anymore.
+--------------bx0M9M0d0PX5GwoPpd9ybdav
+Content-Type: text/x-patch; charset=UTF-8;
+ name="0001-usb-f_printer-sanity-check-in-write.patch"
+Content-Disposition: attachment;
+ filename="0001-usb-f_printer-sanity-check-in-write.patch"
+Content-Transfer-Encoding: base64
 
-Reported-by: syzbot+c645abf505ed21f931b5@syzkaller.appspotmail.com
-Fixes: be03df3d4bfe ("scsi: core: Fix a procfs host directory removal regression")
-Cc: stable@vger.kernel.org
-Cc: Bart Van Assche <bvanassche@acm.org>
-Cc: John Garry <john.g.garry@oracle.com>
-Cc: Shin'ichiro Kawasaki <shinichiro.kawasaki@wdc.com>
-Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
----
+RnJvbSAwMDA4Njk3YjhjZTM3M2EwMzc4MDU4YjYwZDFmMTQ5OGMzODIxMzMwIE1vbiBTZXAg
+MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3VtQHN1c2UuY29t
+PgpEYXRlOiBXZWQsIDEzIE1hciAyMDI0IDE2OjE1OjU2ICswMTAwClN1YmplY3Q6IFtQQVRD
+SF0gdXNiOiBmX3ByaW50ZXI6IHNhbml0eSBjaGVjayBpbiB3cml0ZQoKVXNlciBzcGFjZSBj
+YW4gdHJpZ2dlciBhIHdyaXRlKCkgYmVmb3JlIHRoZSBlbmRwb2ludCBuZWVkZWQKZm9yIHRo
+YXQgaXMgZW5hYmxlZC4gQ2hlY2sgZm9yIHRoYXQuCgpTaWduZWQtb2ZmLWJ5OiBPbGl2ZXIg
+TmV1a3VtIDxvbmV1a3VtQHN1c2UuY29tPgotLS0KIGRyaXZlcnMvdXNiL2dhZGdldC9mdW5j
+dGlvbi9mX3ByaW50ZXIuYyB8IDM3ICsrKysrKysrKysrKysrKystLS0tLS0tLS0KIDEgZmls
+ZSBjaGFuZ2VkLCAyNCBpbnNlcnRpb25zKCspLCAxMyBkZWxldGlvbnMoLSkKCmRpZmYgLS1n
+aXQgYS9kcml2ZXJzL3VzYi9nYWRnZXQvZnVuY3Rpb24vZl9wcmludGVyLmMgYi9kcml2ZXJz
+L3VzYi9nYWRnZXQvZnVuY3Rpb24vZl9wcmludGVyLmMKaW5kZXggMDc2ZGQ0YzFiZTk2Li4x
+ZTI2NmJhNjk3ZTggMTAwNjQ0Ci0tLSBhL2RyaXZlcnMvdXNiL2dhZGdldC9mdW5jdGlvbi9m
+X3ByaW50ZXIuYworKysgYi9kcml2ZXJzL3VzYi9nYWRnZXQvZnVuY3Rpb24vZl9wcmludGVy
+LmMKQEAgLTU3Nyw2ICs1NzcsNyBAQCBwcmludGVyX3dyaXRlKHN0cnVjdCBmaWxlICpmZCwg
+Y29uc3QgY2hhciBfX3VzZXIgKmJ1Ziwgc2l6ZV90IGxlbiwgbG9mZl90ICpwdHIpCiAJc2l6
+ZV90CQkJYnl0ZXNfY29waWVkID0gMDsKIAlzdHJ1Y3QgdXNiX3JlcXVlc3QJKnJlcTsKIAlp
+bnQJCQl2YWx1ZTsKKwlpbnQgZXJyID0gLUVOT0RFVjsKIAogCURCRyhkZXYsICJwcmludGVy
+X3dyaXRlIHRyeWluZyB0byBzZW5kICVkIGJ5dGVzXG4iLCAoaW50KWxlbik7CiAKQEAgLTU4
+NiwxMSArNTg3LDggQEAgcHJpbnRlcl93cml0ZShzdHJ1Y3QgZmlsZSAqZmQsIGNvbnN0IGNo
+YXIgX191c2VyICpidWYsIHNpemVfdCBsZW4sIGxvZmZfdCAqcHRyKQogCW11dGV4X2xvY2so
+JmRldi0+bG9ja19wcmludGVyX2lvKTsKIAlzcGluX2xvY2tfaXJxc2F2ZSgmZGV2LT5sb2Nr
+LCBmbGFncyk7CiAKLQlpZiAoZGV2LT5pbnRlcmZhY2UgPCAwKSB7Ci0JCXNwaW5fdW5sb2Nr
+X2lycXJlc3RvcmUoJmRldi0+bG9jaywgZmxhZ3MpOwotCQltdXRleF91bmxvY2soJmRldi0+
+bG9ja19wcmludGVyX2lvKTsKLQkJcmV0dXJuIC1FTk9ERVY7Ci0JfQorCWlmIChkZXYtPmlu
+dGVyZmFjZSA8IDApCisJCWdvdG8gZXJyb3Jfc3BpbjsKIAogCS8qIENoZWNrIGlmIGEgcHJp
+bnRlciByZXNldCBoYXBwZW5zIHdoaWxlIHdlIGhhdmUgaW50ZXJydXB0cyBvbiAqLwogCWRl
+di0+cmVzZXRfcHJpbnRlciA9IDA7CkBAIC02MDUsOCArNjAzLDggQEAgcHJpbnRlcl93cml0
+ZShzdHJ1Y3QgZmlsZSAqZmQsIGNvbnN0IGNoYXIgX191c2VyICpidWYsIHNpemVfdCBsZW4s
+IGxvZmZfdCAqcHRyKQogCQkgKiBhIE5PTi1CbG9ja2luZyBjYWxsIG9yIG5vdC4KIAkJICov
+CiAJCWlmIChmZC0+Zl9mbGFncyAmIChPX05PTkJMT0NLfE9fTkRFTEFZKSkgewotCQkJbXV0
+ZXhfdW5sb2NrKCZkZXYtPmxvY2tfcHJpbnRlcl9pbyk7Ci0JCQlyZXR1cm4gLUVBR0FJTjsK
+KwkJCWVyciA9IC1FQUdBSU47CisJCQlnb3RvIGVycm9yX211dGV4OwogCQl9CiAKIAkJLyog
+U2xlZXAgdW50aWwgYSB3cml0ZSBidWZmZXIgaXMgYXZhaWxhYmxlICovCkBAIC02NTcsOSAr
+NjU1LDE3IEBAIHByaW50ZXJfd3JpdGUoc3RydWN0IGZpbGUgKmZkLCBjb25zdCBjaGFyIF9f
+dXNlciAqYnVmLCBzaXplX3QgbGVuLCBsb2ZmX3QgKnB0cikKIAkJLyogV2UndmUgZGlzY29u
+bmVjdGVkIG9yIHJlc2V0IHNvIGZyZWUgdGhlIHJlcSBhbmQgYnVmZmVyICovCiAJCWlmIChk
+ZXYtPnJlc2V0X3ByaW50ZXIpIHsKIAkJCWxpc3RfYWRkKCZyZXEtPmxpc3QsICZkZXYtPnR4
+X3JlcXMpOwotCQkJc3Bpbl91bmxvY2tfaXJxcmVzdG9yZSgmZGV2LT5sb2NrLCBmbGFncyk7
+Ci0JCQltdXRleF91bmxvY2soJmRldi0+bG9ja19wcmludGVyX2lvKTsKLQkJCXJldHVybiAt
+RUFHQUlOOworCQkJZXJyID0gLUVBR0FJTjsKKwkJCWdvdG8gZXJyb3Jfc3BpbjsKKwkJfQor
+CisJCS8qCisJCSAqIFdlIGNhbm5vdCBndWFyYW50ZWUgdXNlciBzcGFjZSBpcyB1c2luZyB0
+aGUgQVBJIG5pY2VseQorCQkgKiBUaGlzIGNoZWNrIG5lZWRzIHRvIGJlIGR1cGxpY2F0ZWQK
+KwkJICovCisJCWlmICghZGV2LT5pbl9lcC0+ZW5hYmxlZCAmJiBkZXYtPmluX2VwLT5hZGRy
+ZXNzKSB7CisJCQllcnIgPSAtRVNIVVRET1dOOworCQkJZ290byBlcnJvcl9zcGluOwogCQl9
+CiAKIAkJbGlzdF9hZGQoJnJlcS0+bGlzdCwgJmRldi0+dHhfcmVxc19hY3RpdmUpOwpAQCAt
+NjcwLDkgKzY3Niw4IEBAIHByaW50ZXJfd3JpdGUoc3RydWN0IGZpbGUgKmZkLCBjb25zdCBj
+aGFyIF9fdXNlciAqYnVmLCBzaXplX3QgbGVuLCBsb2ZmX3QgKnB0cikKIAkJc3Bpbl9sb2Nr
+KCZkZXYtPmxvY2spOwogCQlpZiAodmFsdWUpIHsKIAkJCWxpc3RfbW92ZSgmcmVxLT5saXN0
+LCAmZGV2LT50eF9yZXFzKTsKLQkJCXNwaW5fdW5sb2NrX2lycXJlc3RvcmUoJmRldi0+bG9j
+aywgZmxhZ3MpOwotCQkJbXV0ZXhfdW5sb2NrKCZkZXYtPmxvY2tfcHJpbnRlcl9pbyk7Ci0J
+CQlyZXR1cm4gLUVBR0FJTjsKKwkJCWVyciA9IC1FQUdBSU47CisJCQlnb3RvIGVycm9yX3Nw
+aW47CiAJCX0KIAl9CiAKQEAgLTY4NSw2ICs2OTAsMTIgQEAgcHJpbnRlcl93cml0ZShzdHJ1
+Y3QgZmlsZSAqZmQsIGNvbnN0IGNoYXIgX191c2VyICpidWYsIHNpemVfdCBsZW4sIGxvZmZf
+dCAqcHRyKQogCQlyZXR1cm4gYnl0ZXNfY29waWVkOwogCWVsc2UKIAkJcmV0dXJuIC1FQUdB
+SU47CisKK2Vycm9yX3NwaW46CisJc3Bpbl91bmxvY2tfaXJxcmVzdG9yZSgmZGV2LT5sb2Nr
+LCBmbGFncyk7CitlcnJvcl9tdXRleDoKKwltdXRleF91bmxvY2soJmRldi0+bG9ja19wcmlu
+dGVyX2lvKTsKKwlyZXR1cm4gZXJyOwogfQogCiBzdGF0aWMgaW50Ci0tIAoyLjQ0LjAKCg==
 
 
-Hi folks, thanks in advance for reviews.
-
-The issue  with usb-storage happens upstream but despite we have a
-repro in the aforementioned Syzkaller report, it's only easy to reproduce
-the proc_dir_entry warning in a timely manner on stable right now.
-
-The reason for that is commit 036abd614007 ("scsi: core: Introduce a new
-list for SCSI proc directory entries") not being present on stable. This
-commit (indirectly) bumps the ->present field from unsigned char to uint,
-and the bug reproducer shows the warning whenever such field overflows,
-hence it's way easier/faster to see this problem in stable, though it's
-present in latest v6.8.0 too.
-
-Cheers,
-
-Guilherme
-
-
- drivers/scsi/hosts.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/scsi/hosts.c b/drivers/scsi/hosts.c
-index d7f51b84f3c7..445f4a220df3 100644
---- a/drivers/scsi/hosts.c
-+++ b/drivers/scsi/hosts.c
-@@ -353,12 +353,13 @@ static void scsi_host_dev_release(struct device *dev)
- 
- 	if (shost->shost_state == SHOST_CREATED) {
- 		/*
--		 * Free the shost_dev device name here if scsi_host_alloc()
--		 * and scsi_host_put() have been called but neither
-+		 * Free the shost_dev device name and remove the proc host dir
-+		 * here if scsi_host_{alloc,put}() have been called but neither
- 		 * scsi_host_add() nor scsi_remove_host() has been called.
- 		 * This avoids that the memory allocated for the shost_dev
--		 * name is leaked.
-+		 * name as well as the proc dir structure are leaked.
- 		 */
-+		scsi_proc_hostdir_rm(shost->hostt);
- 		kfree(dev_name(&shost->shost_dev));
- 	}
- 
--- 
-2.43.0
-
+--------------bx0M9M0d0PX5GwoPpd9ybdav--
 
