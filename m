@@ -1,75 +1,63 @@
-Return-Path: <linux-usb+bounces-7931-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7932-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D010987AA4C
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Mar 2024 16:17:52 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E1A5787ADA7
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Mar 2024 18:40:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1764E282499
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Mar 2024 15:17:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9D0DB2829B8
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Mar 2024 17:40:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B97FA45BFD;
-	Wed, 13 Mar 2024 15:17:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB3DF657B7;
+	Wed, 13 Mar 2024 16:44:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="OSqylJdb"
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="CN8A/RbA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from 009.lax.mailroute.net (009.lax.mailroute.net [199.89.1.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 142544596D
-	for <linux-usb@vger.kernel.org>; Wed, 13 Mar 2024 15:17:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97C4C47A6F;
+	Wed, 13 Mar 2024 16:44:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710343064; cv=none; b=dzLJI6w7OiSdWPFXNsPgTyBfOXSzfLIaVGlfjFChp/VV63IWp4Rk8DRKq8Sqcp4LANqHb0B4oJ3MoG4mlFyr9fTQfChtSjzTphTzWlEy92oBXQ3e/Avob/1BgDsNNWIf8rSK03QApgu+67yziGz7sBH3iPtwYo9YS7thpgRK7Jo=
+	t=1710348270; cv=none; b=uC+sDhtU45Q83UGB8XGJpLBb/vIVCU8waUSyYOKPHY3jppgglZifZV5ZQnI0O+gUKEl3rfa92ipkllZhI/sIX7TLKOf2J3stmQw9uWX4bN4vzCFuE+NEiLlDLNIdBZnOPMKI/1oZOZA3E/H4pfnIbe+8Vqhgn9+QQAMiNZ8eCmA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710343064; c=relaxed/simple;
-	bh=11UofkdzAExKUodQZTLMIkHUIKl99ZAoZeaG0RVN+J4=;
-	h=Content-Type:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To; b=ammNdb68K0fSeyIcMZEpS7cxruDMPJioW58rlIkIHsAjdYaNyFZjr7P+8irLOfkhZ4rpS1KI5OkibdmKoDwNCjgjkL1uWYHCDzMd/wjwTmv/TrRzy/wpjpAMX1VLNBxAlYapAR4tVsMrOH8Pl2JtcNLM91anLXvzqrgp51nl4ec=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=OSqylJdb; arc=none smtp.client-ip=209.85.167.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-5135e8262e4so7320478e87.0
-        for <linux-usb@vger.kernel.org>; Wed, 13 Mar 2024 08:17:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1710343060; x=1710947860; darn=vger.kernel.org;
-        h=in-reply-to:from:references:cc:to:content-language:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iS8b1PNR7V7x5h/CO4cJabYLHw2QhRL0rgl3lEA2FHw=;
-        b=OSqylJdbUXYAav1inUDpPp+FGoaDjBCLZxCgE+xCRG2cNVg3eMmKJqYW7rBR6X4W24
-         EyB/FqRV6YnTqq2ptFh9TsQXngafL9d6Tbrk7K1P7XSIB195Q2IXeu8YYZQ0KMPT6jZA
-         Mtk3xmZXeZNSX0WfTEZXw3W75qebudaJ6yUJ3QseqeKD6nvcjO8SXhNyZXjJxVQFnKPU
-         bbiUEjUAR/cNUBpojxhTOa2HjAz/XXiSjiOS4x1g+0yPp1Pz+7yYv4kW4TwzrWdt0abJ
-         nHiK8F/bffugB5CQgPad8LVNRxHMo3gzJrevYvmoc9FSQ3G6XMpv41XyLUaZosx3lVqW
-         LgeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710343060; x=1710947860;
-        h=in-reply-to:from:references:cc:to:content-language:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=iS8b1PNR7V7x5h/CO4cJabYLHw2QhRL0rgl3lEA2FHw=;
-        b=fvNRbn8PJ2EbpIbJcpUriF50So5gFhBwQoXirB/AWwAYOk/0A5KNHhF6U+5rik3QQQ
-         9ye3OcZsRdvpqWywlFUXqxMphymz4EHOZFXjb/oMmb5uDaLtJDNxy4OPHnQ5rl6oiEZj
-         ts9uDANqJtXFc7r2Yq6Rmi0i4C4+d2eqSZ/1dYjlXZcfhRUWNfgaCtUb0neKW73modQn
-         X7sAY3yaAmULkly/p8VjNM4xPuKr9Mfox3/hAVS2xDRa68TEfBqeT4IUJ21vz4CNhoh9
-         k+pLYgTSnwKgQ4GmTYNq0c09ZIWrXSqkFnkcDhLhgC3XqNOPWrTIGETGrhaP6f9qgol8
-         nsHQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWqsqqSUJSuGYhvwyCAAGdOC9KUGqwecAlkvAD68zsifOyMXOOS+Gp7+1Em0ZXccNon2aB1lFXF2bIXcODLDelsGi3muN4BcwJ8
-X-Gm-Message-State: AOJu0YzWfhWYdCdFsRqW9sAKqVzqscGgiDjQP8q72WOS9apwI97o6ZpD
-	tWv/K7DmTfQRrRH39HwXZJGOoP60HxfgJzoiGHDDoX2HjUdluy2VQe0vYu1LlRs=
-X-Google-Smtp-Source: AGHT+IHcN9Wtw70fHKfw/UDw2H/LNma04m/ChfLuNtPXhUAVOnPqiThafrqSRmzTm0e2cfDHUlsWCA==
-X-Received: by 2002:a05:6512:443:b0:513:ca65:8c58 with SMTP id y3-20020a056512044300b00513ca658c58mr1222391lfk.43.1710343060413;
-        Wed, 13 Mar 2024 08:17:40 -0700 (PDT)
-Received: from ?IPV6:2001:a61:1366:6801:7ce4:a9a1:7f22:a638? ([2001:a61:1366:6801:7ce4:a9a1:7f22:a638])
-        by smtp.gmail.com with ESMTPSA id kn22-20020a170906aa5600b00a45200fe2b5sm4936479ejb.224.2024.03.13.08.17.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Mar 2024 08:17:39 -0700 (PDT)
-Content-Type: multipart/mixed; boundary="------------bx0M9M0d0PX5GwoPpd9ybdav"
-Message-ID: <1196d35e-46a0-4c96-8271-12becb932f06@suse.com>
-Date: Wed, 13 Mar 2024 16:17:38 +0100
+	s=arc-20240116; t=1710348270; c=relaxed/simple;
+	bh=+j4MnK8yhYNXo+bM95kvafS7T8rM0IDGcmMjawvqJlA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=TAfdHgXdMqdAXqdBzGuf7MSKv6WK4NjAQdAy6SpJw5zIiCA5LhQsNSPCIqM0QJhGOBRxveslRgxlignkD/QPrx1AACZpp9GPUjK5VOxnXX9SIPIVtRycJSpM1XV5vTJaKtr9QZrK0L1FVVailAAToxGIUQLZB8habfVPQb0RDiA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=CN8A/RbA; arc=none smtp.client-ip=199.89.1.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=acm.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
+Received: from localhost (localhost [127.0.0.1])
+	by 009.lax.mailroute.net (Postfix) with ESMTP id 4TvxDk1mczzlgVnY;
+	Wed, 13 Mar 2024 16:44:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
+	content-transfer-encoding:content-type:content-type:in-reply-to
+	:from:from:references:content-language:subject:subject
+	:user-agent:mime-version:date:date:message-id:received:received;
+	 s=mr01; t=1710348258; x=1712940259; bh=+j4MnK8yhYNXo+bM95kvafS7
+	T8rM0IDGcmMjawvqJlA=; b=CN8A/RbAmz+zbf0DpgisXuF0mIn5y25apVnP6Sq2
+	A8lmrxn1JsWRUV/o1c0x2MTLuqvU37Ar5Sd6Xl2GlwXBuQcZsg1imEwjaIoHH6d9
+	GlYR6VY67QuF+W0o6IJ9gIOwN3NbJYxtKil7aRzVfGjCBGxC2b8bhdS8Iha0gy+C
+	P/hiQ73bjRRrcm9LCcUa7u4xf0dDylJgUFkliwchl1r+43HjqkxHAE/gavrK7XEq
+	eEjhVMnpICnTwaTX1bGwLaQRrurO+cX4SB2LlvxdM3NUUsQABsGA0fT3glZWUSsX
+	nLMdvbJWqIplWtY6tf5Ke2riXG2Bt7yX9m/vNQm38SzHiw==
+X-Virus-Scanned: by MailRoute
+Received: from 009.lax.mailroute.net ([127.0.0.1])
+ by localhost (009.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
+ id VLYf3Jaka_yc; Wed, 13 Mar 2024 16:44:18 +0000 (UTC)
+Received: from [100.96.154.173] (unknown [104.132.1.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: bvanassche@acm.org)
+	by 009.lax.mailroute.net (Postfix) with ESMTPSA id 4TvxDb2X9XzlgVnW;
+	Wed, 13 Mar 2024 16:44:14 +0000 (UTC)
+Message-ID: <c8683449-1545-4372-b937-dbd0e023c22d@acm.org>
+Date: Wed, 13 Mar 2024 09:44:12 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -77,102 +65,29 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [Linux Kernel Bug][usb/f_printer] WARNING in usb_ep_queue
+Subject: Re: [PATCH] scsi: core: Fix unremoved procfs host directory
+ regression
 Content-Language: en-US
-To: Chenyuan Yang <chenyuan0y@gmail.com>, gregkh@linuxfoundation.org,
- azeemshaikh38@gmail.com, ivan.orlov0322@gmail.com,
- benjamin.tissoires@redhat.com, linux-usb@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, syzkaller@googlegroups.com,
- Zijie Zhao <zzjas98@gmail.com>
-References: <CALGdzurBnMztPW1Q8mujfYaopVQ8MkSUXUvnAqJcLGu5ROSU4Q@mail.gmail.com>
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <CALGdzurBnMztPW1Q8mujfYaopVQ8MkSUXUvnAqJcLGu5ROSU4Q@mail.gmail.com>
-
-This is a multi-part message in MIME format.
---------------bx0M9M0d0PX5GwoPpd9ybdav
+To: "Guilherme G. Piccoli" <gpiccoli@igalia.com>, linux-scsi@vger.kernel.org
+Cc: jejb@linux.ibm.com, martin.petersen@oracle.com,
+ stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
+ usb-storage@lists.one-eyed-alien.net, kernel-dev@igalia.com,
+ kernel@gpiccoli.net, syzbot+c645abf505ed21f931b5@syzkaller.appspotmail.com,
+ stable@vger.kernel.org, John Garry <john.g.garry@oracle.com>,
+ Shin'ichiro Kawasaki <shinichiro.kawasaki@wdc.com>
+References: <20240313113006.2834799-1-gpiccoli@igalia.com>
+From: Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20240313113006.2834799-1-gpiccoli@igalia.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 02.02.24 19:59, Chenyuan Yang wrote:
-> Dear Linux Developers for F_printer,
-> 
-> We encountered "WARNING in usb_ep_queue" when testing the f_printer driver with
-> Syzkaller and our generated specifications.
-> 
+On 3/13/24 04:21, Guilherme G. Piccoli wrote:
+> The proper fix seems to still call scsi_proc_hostdir_rm() on dev_release(),
+> but guard that with the state check for SHOST_CREATED; there is even a
+> comment in scsi_host_dev_release() detailing that: such conditional is
+> meant for cases where the SCSI host was allocated but there was no calls
+> to {add,remove}_host(), like the usb-storage case.
 
-Hi,
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
 
-it is clear what happens, but at least to me it is not clear why we allow
-a write() before we enable the endpoint. Anyway, does this fix the issue?
-
-	Regards
-		Oliver
-
---------------bx0M9M0d0PX5GwoPpd9ybdav
-Content-Type: text/x-patch; charset=UTF-8;
- name="0001-usb-f_printer-sanity-check-in-write.patch"
-Content-Disposition: attachment;
- filename="0001-usb-f_printer-sanity-check-in-write.patch"
-Content-Transfer-Encoding: base64
-
-RnJvbSAwMDA4Njk3YjhjZTM3M2EwMzc4MDU4YjYwZDFmMTQ5OGMzODIxMzMwIE1vbiBTZXAg
-MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3VtQHN1c2UuY29t
-PgpEYXRlOiBXZWQsIDEzIE1hciAyMDI0IDE2OjE1OjU2ICswMTAwClN1YmplY3Q6IFtQQVRD
-SF0gdXNiOiBmX3ByaW50ZXI6IHNhbml0eSBjaGVjayBpbiB3cml0ZQoKVXNlciBzcGFjZSBj
-YW4gdHJpZ2dlciBhIHdyaXRlKCkgYmVmb3JlIHRoZSBlbmRwb2ludCBuZWVkZWQKZm9yIHRo
-YXQgaXMgZW5hYmxlZC4gQ2hlY2sgZm9yIHRoYXQuCgpTaWduZWQtb2ZmLWJ5OiBPbGl2ZXIg
-TmV1a3VtIDxvbmV1a3VtQHN1c2UuY29tPgotLS0KIGRyaXZlcnMvdXNiL2dhZGdldC9mdW5j
-dGlvbi9mX3ByaW50ZXIuYyB8IDM3ICsrKysrKysrKysrKysrKystLS0tLS0tLS0KIDEgZmls
-ZSBjaGFuZ2VkLCAyNCBpbnNlcnRpb25zKCspLCAxMyBkZWxldGlvbnMoLSkKCmRpZmYgLS1n
-aXQgYS9kcml2ZXJzL3VzYi9nYWRnZXQvZnVuY3Rpb24vZl9wcmludGVyLmMgYi9kcml2ZXJz
-L3VzYi9nYWRnZXQvZnVuY3Rpb24vZl9wcmludGVyLmMKaW5kZXggMDc2ZGQ0YzFiZTk2Li4x
-ZTI2NmJhNjk3ZTggMTAwNjQ0Ci0tLSBhL2RyaXZlcnMvdXNiL2dhZGdldC9mdW5jdGlvbi9m
-X3ByaW50ZXIuYworKysgYi9kcml2ZXJzL3VzYi9nYWRnZXQvZnVuY3Rpb24vZl9wcmludGVy
-LmMKQEAgLTU3Nyw2ICs1NzcsNyBAQCBwcmludGVyX3dyaXRlKHN0cnVjdCBmaWxlICpmZCwg
-Y29uc3QgY2hhciBfX3VzZXIgKmJ1Ziwgc2l6ZV90IGxlbiwgbG9mZl90ICpwdHIpCiAJc2l6
-ZV90CQkJYnl0ZXNfY29waWVkID0gMDsKIAlzdHJ1Y3QgdXNiX3JlcXVlc3QJKnJlcTsKIAlp
-bnQJCQl2YWx1ZTsKKwlpbnQgZXJyID0gLUVOT0RFVjsKIAogCURCRyhkZXYsICJwcmludGVy
-X3dyaXRlIHRyeWluZyB0byBzZW5kICVkIGJ5dGVzXG4iLCAoaW50KWxlbik7CiAKQEAgLTU4
-NiwxMSArNTg3LDggQEAgcHJpbnRlcl93cml0ZShzdHJ1Y3QgZmlsZSAqZmQsIGNvbnN0IGNo
-YXIgX191c2VyICpidWYsIHNpemVfdCBsZW4sIGxvZmZfdCAqcHRyKQogCW11dGV4X2xvY2so
-JmRldi0+bG9ja19wcmludGVyX2lvKTsKIAlzcGluX2xvY2tfaXJxc2F2ZSgmZGV2LT5sb2Nr
-LCBmbGFncyk7CiAKLQlpZiAoZGV2LT5pbnRlcmZhY2UgPCAwKSB7Ci0JCXNwaW5fdW5sb2Nr
-X2lycXJlc3RvcmUoJmRldi0+bG9jaywgZmxhZ3MpOwotCQltdXRleF91bmxvY2soJmRldi0+
-bG9ja19wcmludGVyX2lvKTsKLQkJcmV0dXJuIC1FTk9ERVY7Ci0JfQorCWlmIChkZXYtPmlu
-dGVyZmFjZSA8IDApCisJCWdvdG8gZXJyb3Jfc3BpbjsKIAogCS8qIENoZWNrIGlmIGEgcHJp
-bnRlciByZXNldCBoYXBwZW5zIHdoaWxlIHdlIGhhdmUgaW50ZXJydXB0cyBvbiAqLwogCWRl
-di0+cmVzZXRfcHJpbnRlciA9IDA7CkBAIC02MDUsOCArNjAzLDggQEAgcHJpbnRlcl93cml0
-ZShzdHJ1Y3QgZmlsZSAqZmQsIGNvbnN0IGNoYXIgX191c2VyICpidWYsIHNpemVfdCBsZW4s
-IGxvZmZfdCAqcHRyKQogCQkgKiBhIE5PTi1CbG9ja2luZyBjYWxsIG9yIG5vdC4KIAkJICov
-CiAJCWlmIChmZC0+Zl9mbGFncyAmIChPX05PTkJMT0NLfE9fTkRFTEFZKSkgewotCQkJbXV0
-ZXhfdW5sb2NrKCZkZXYtPmxvY2tfcHJpbnRlcl9pbyk7Ci0JCQlyZXR1cm4gLUVBR0FJTjsK
-KwkJCWVyciA9IC1FQUdBSU47CisJCQlnb3RvIGVycm9yX211dGV4OwogCQl9CiAKIAkJLyog
-U2xlZXAgdW50aWwgYSB3cml0ZSBidWZmZXIgaXMgYXZhaWxhYmxlICovCkBAIC02NTcsOSAr
-NjU1LDE3IEBAIHByaW50ZXJfd3JpdGUoc3RydWN0IGZpbGUgKmZkLCBjb25zdCBjaGFyIF9f
-dXNlciAqYnVmLCBzaXplX3QgbGVuLCBsb2ZmX3QgKnB0cikKIAkJLyogV2UndmUgZGlzY29u
-bmVjdGVkIG9yIHJlc2V0IHNvIGZyZWUgdGhlIHJlcSBhbmQgYnVmZmVyICovCiAJCWlmIChk
-ZXYtPnJlc2V0X3ByaW50ZXIpIHsKIAkJCWxpc3RfYWRkKCZyZXEtPmxpc3QsICZkZXYtPnR4
-X3JlcXMpOwotCQkJc3Bpbl91bmxvY2tfaXJxcmVzdG9yZSgmZGV2LT5sb2NrLCBmbGFncyk7
-Ci0JCQltdXRleF91bmxvY2soJmRldi0+bG9ja19wcmludGVyX2lvKTsKLQkJCXJldHVybiAt
-RUFHQUlOOworCQkJZXJyID0gLUVBR0FJTjsKKwkJCWdvdG8gZXJyb3Jfc3BpbjsKKwkJfQor
-CisJCS8qCisJCSAqIFdlIGNhbm5vdCBndWFyYW50ZWUgdXNlciBzcGFjZSBpcyB1c2luZyB0
-aGUgQVBJIG5pY2VseQorCQkgKiBUaGlzIGNoZWNrIG5lZWRzIHRvIGJlIGR1cGxpY2F0ZWQK
-KwkJICovCisJCWlmICghZGV2LT5pbl9lcC0+ZW5hYmxlZCAmJiBkZXYtPmluX2VwLT5hZGRy
-ZXNzKSB7CisJCQllcnIgPSAtRVNIVVRET1dOOworCQkJZ290byBlcnJvcl9zcGluOwogCQl9
-CiAKIAkJbGlzdF9hZGQoJnJlcS0+bGlzdCwgJmRldi0+dHhfcmVxc19hY3RpdmUpOwpAQCAt
-NjcwLDkgKzY3Niw4IEBAIHByaW50ZXJfd3JpdGUoc3RydWN0IGZpbGUgKmZkLCBjb25zdCBj
-aGFyIF9fdXNlciAqYnVmLCBzaXplX3QgbGVuLCBsb2ZmX3QgKnB0cikKIAkJc3Bpbl9sb2Nr
-KCZkZXYtPmxvY2spOwogCQlpZiAodmFsdWUpIHsKIAkJCWxpc3RfbW92ZSgmcmVxLT5saXN0
-LCAmZGV2LT50eF9yZXFzKTsKLQkJCXNwaW5fdW5sb2NrX2lycXJlc3RvcmUoJmRldi0+bG9j
-aywgZmxhZ3MpOwotCQkJbXV0ZXhfdW5sb2NrKCZkZXYtPmxvY2tfcHJpbnRlcl9pbyk7Ci0J
-CQlyZXR1cm4gLUVBR0FJTjsKKwkJCWVyciA9IC1FQUdBSU47CisJCQlnb3RvIGVycm9yX3Nw
-aW47CiAJCX0KIAl9CiAKQEAgLTY4NSw2ICs2OTAsMTIgQEAgcHJpbnRlcl93cml0ZShzdHJ1
-Y3QgZmlsZSAqZmQsIGNvbnN0IGNoYXIgX191c2VyICpidWYsIHNpemVfdCBsZW4sIGxvZmZf
-dCAqcHRyKQogCQlyZXR1cm4gYnl0ZXNfY29waWVkOwogCWVsc2UKIAkJcmV0dXJuIC1FQUdB
-SU47CisKK2Vycm9yX3NwaW46CisJc3Bpbl91bmxvY2tfaXJxcmVzdG9yZSgmZGV2LT5sb2Nr
-LCBmbGFncyk7CitlcnJvcl9tdXRleDoKKwltdXRleF91bmxvY2soJmRldi0+bG9ja19wcmlu
-dGVyX2lvKTsKKwlyZXR1cm4gZXJyOwogfQogCiBzdGF0aWMgaW50Ci0tIAoyLjQ0LjAKCg==
-
-
---------------bx0M9M0d0PX5GwoPpd9ybdav--
 
