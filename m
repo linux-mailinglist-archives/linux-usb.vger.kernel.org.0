@@ -1,211 +1,108 @@
-Return-Path: <linux-usb+bounces-7939-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7940-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3CE3F87B1BC
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Mar 2024 20:25:17 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19EA787B461
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Mar 2024 23:30:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BD3D01F2293D
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Mar 2024 19:25:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 79FA1B23544
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Mar 2024 22:30:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E77195787D;
-	Wed, 13 Mar 2024 19:19:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 444A554725;
+	Wed, 13 Mar 2024 22:30:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="IkQLFkI1"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FRmjRg4X"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1F695677A;
-	Wed, 13 Mar 2024 19:19:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6037E1A38F3
+	for <linux-usb@vger.kernel.org>; Wed, 13 Mar 2024 22:30:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710357558; cv=none; b=RfULVWSPeIC2OWhtWxTWjYw3GVfJ6cI50sLdM+MZyRC/6xwqWLAEMbTu6LSyLdmljhsHERI5H7JIbj6Ye85c/h+HP2ddhgtGP9XQrqs8RFeu8s0IzkpUhMCoxukiNCxc6NZFBvYUSJrJ6f1gjJk3PbsU9zvh+iJ7X7nf80q6aHs=
+	t=1710369041; cv=none; b=n6Ni+WfCjJxalu0wlgKMhbHEEw5RSXKlG5ep86OjaYDR4387P/rdF0ItysLSI0zdos91rqVQ6VPk73vPtYU30FLeBE6FBMiHPN19uV/Pqac4e//L5M2kEsRazLiTir3CgedcS0TeYUnoTHhaGsnSLWJW3zbnoeObq8xtCWo8JqQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710357558; c=relaxed/simple;
-	bh=U5Ctd0fHGAqPrMjfc2snlTP8ttHo2mRJD6/wag+K4jU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=bX9HodTGGYAb54ZcNSggC47eiyRPmeaHbeQQf5xNbPI5S29Hx0PNXjyYh1E44vPGfCh0l0ItU2TrZI2aC+k9CYWJB3a72dFIsvyq1buMeJZ4nsxUx2f2XpQyc3N4SE08ByCLWFELzAhRcgA6MnuzY5O7dt20qGx9cCn2UnSgCRU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=IkQLFkI1; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 42DGF66r015454;
-	Wed, 13 Mar 2024 19:18:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=KTKmv5ZSX3PW4T2dtjcDox5Wlq9+CL4HUpMzr1+x5ME=; b=Ik
-	QLFkI13R2Ict+AQcLYytUzb2Dmj1SzsySsl4TpRIsNquh24sQq9k4KBFYlbfxIeu
-	RG8a2Ci7HFyj2FrIfklrwgoMfhNJxfAu4M4i2CjudUFE8awp8ZXz6UX3GQ3qgB8n
-	mTExL7pw1k19UAuf6oMehPmOSJwi89+nLsJVkFjunzkiXNyrK6pkrh/cDUAoQ55V
-	GIVvGRwvae3Jk9Pm6xr38EBX8aRr7bY9p27F5kDQtAQZG6P+AsZmp6wqtdtvsSEl
-	viiMlkQi31sX1iR87/RBiiYU469moLZEPDHAFem8IhGaOOBWuQkeAk0nOOQi4iAr
-	chzATwRiRz1E5RGQslcg==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wu81m1k70-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 13 Mar 2024 19:18:51 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 42DJIoLp008331
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 13 Mar 2024 19:18:50 GMT
-Received: from [10.110.68.255] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Wed, 13 Mar
- 2024 12:18:49 -0700
-Message-ID: <d97f635f-053b-70a7-5ffe-a1ae273091d1@quicinc.com>
-Date: Wed, 13 Mar 2024 12:18:45 -0700
+	s=arc-20240116; t=1710369041; c=relaxed/simple;
+	bh=K2vItKUSPwjVNWTaNx+deqah7GibR40npGAyO5smBOk=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=d5N0hGZVKIMeMe7PNqpkO0E/YDV1+lZo13D1mGdBk3ptJrQ7gC78SxKGHYWzQbIuT37iLNU7BalUwCB2B5UMhDcGMOqRpQLdZgQoLkmVp6hF+/7U2npyHEaWN9Xmd3s961Ztfvx0k3EpVppJr5KGpTCanmko7beVqPUZLEeAshw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FRmjRg4X; arc=none smtp.client-ip=209.85.219.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-d9b9adaf291so255626276.1
+        for <linux-usb@vger.kernel.org>; Wed, 13 Mar 2024 15:30:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1710369039; x=1710973839; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=K2vItKUSPwjVNWTaNx+deqah7GibR40npGAyO5smBOk=;
+        b=FRmjRg4XwJqmqypzbG4/aj0ibBbb83OOufBipXlLTxOg7F66sx11ayAkx8Pm9x2P6z
+         9WYHXKQXNxr9OrbWxqpku+BbEfcE8AtlMuKTzLKI2I+uIvRjoeuEKbMeZQlZRpSon9JQ
+         1txNPtHaRcF5KU0MREizdIwyKyhxKQIegIiWKbV8sYeTLjlS/z9YffPXThitsLG2P86T
+         gAuToIieZnNmJeJg/rAvSokyNwugJUKhARyQ74AoxmDbekYgBx1racLCHFwwOUZY7GIj
+         xsmxcAy3jAl8bKiBH+zPe11FxW9ibSoaJTA6su3OrHc/8Erw16YiObqkA6MTItDvP9BQ
+         zPtw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710369039; x=1710973839;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=K2vItKUSPwjVNWTaNx+deqah7GibR40npGAyO5smBOk=;
+        b=EWoha+6kbX+GcNvn+d1KOt/jcAv/WM/cQfw/IXjzw8D4jLJUtnx2DM8btctvkoySk/
+         7u+GYrYNeAhcwij1FzzlLzxDYn8VZHY/D+snpN6p2yzePREKxNzii1dN2Kw4jYnNo2Yj
+         Zx3cNdFpLbU3glUq6vAAlf9jy3iFvXHRgbwnDpH+HP48SRkqrKaJhf6dCfCP8izcr8tn
+         hwP/h+N47cdM/PrlVuGarGiu+jGNocdMfbmof5Hu4NnkpNH+vl2NzRa9Gg7uO1vC2icq
+         zy0lLdvW+rBy+ULt1hEMvFlgdDk2htXHuIjpM0ttiiS0FFBZfTM4HMduCvnoyredPbri
+         MGLQ==
+X-Gm-Message-State: AOJu0YwmZVfLhjkiQ1+I00lAaTnnqagVeH8Q6jHZwI4WjemeL6y8+hyL
+	zp+XZlaM6hWV4Q6CDhMutilqpf+SjkqSkxQbqfP5E+1MmGMf1Qnb1MiLNlXA0nVfcausVcsmqd8
+	1rrOUX12xisUkcNx9ojCEA1iekP8=
+X-Google-Smtp-Source: AGHT+IGDrvviJxHI8LumXawQmYZe+I38zK3eNbzHVaUbz3l3Arg+5U+STj8YiGQX5zgJ/bkjqgqBHVKfxm/kQcWb/Uw=
+X-Received: by 2002:a05:6902:304:b0:dd1:4908:7a91 with SMTP id
+ b4-20020a056902030400b00dd149087a91mr44964ybs.49.1710369039297; Wed, 13 Mar
+ 2024 15:30:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH v18 20/41] ALSA: usb-audio: qcom: Introduce QC USB SND
- offloading support
-Content-Language: en-US
-To: Albert Wang <albertccwang@google.com>
-CC: <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
-        <perex@perex.cz>, <conor+dt@kernel.org>, <corbet@lwn.net>,
-        <lgirdwood@gmail.com>, <andersson@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <gregkh@linuxfoundation.org>,
-        <Thinh.Nguyen@synopsys.com>, <broonie@kernel.org>,
-        <bgoswami@quicinc.com>, <tiwai@suse.com>, <robh+dt@kernel.org>,
-        <konrad.dybcio@linaro.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-sound@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <alsa-devel@alsa-project.org>
-References: <20240228013619.29758-1-quic_wcheng@quicinc.com>
- <20240228013619.29758-21-quic_wcheng@quicinc.com>
- <CANqn-rjTgHgzssxZiuwvTKzOS31wzjS4Y9G-XacZN4a7c82MaA@mail.gmail.com>
-From: Wesley Cheng <quic_wcheng@quicinc.com>
-In-Reply-To: <CANqn-rjTgHgzssxZiuwvTKzOS31wzjS4Y9G-XacZN4a7c82MaA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: c1ey3JD6Fr1K_B5-zrMxzjn4x6MkJIlO
-X-Proofpoint-GUID: c1ey3JD6Fr1K_B5-zrMxzjn4x6MkJIlO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-03-13_09,2024-03-13_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
- malwarescore=0 lowpriorityscore=0 clxscore=1011 phishscore=0
- priorityscore=1501 mlxlogscore=999 impostorscore=0 suspectscore=0
- spamscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2402120000 definitions=main-2403130148
+From: Chris Bainbridge <chris.bainbridge@gmail.com>
+Date: Wed, 13 Mar 2024 22:30:28 +0000
+Message-ID: <CAP-bSRazabvM26Z2JnQw0yxKU6Sh1dOgdNaQV7_fi=O5noqc2g@mail.gmail.com>
+Subject: BUG: new USB3 devices not detected after unplugging dock
+To: mathias.nyman@intel.com
+Cc: linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Albert,
+Hardware: Razer Blade 15 2018 Base, HP G5 USB-C dock
+Kernel: all tested including 6.8.0-rc7
 
-On 3/13/2024 1:03 AM, Albert Wang wrote:
-> +/**
-> + * qc_usb_audio_offload_suspend() - USB offload PM suspend handler
-> + * @intf: USB interface
-> + * @message: suspend type
-> + *
-> + * PM suspend handler to ensure that the USB offloading driver is able to stop
-> + * any pending traffic, so that the bus can be suspended.
-> + *
-> + */
-> +static void qc_usb_audio_offload_suspend(struct usb_interface *intf,
-> +                                               pm_message_t message)
-> +{
-> +       struct qmi_uaudio_stream_ind_msg_v01 disconnect_ind = {0};
-> +       struct snd_usb_audio *chip = usb_get_intfdata(intf);
-> +       struct uaudio_qmi_svc *svc = uaudio_svc;
-> +       struct uaudio_dev *dev;
-> +       int card_num;
-> +       int ret;
-> +
-> +       if (!chip)
-> +               return;
-> +
-> +       card_num = chip->card->number;
-> +       if (card_num >= SNDRV_CARDS)
-> +               return;
-> +
-> +
-> +       mutex_lock(&chip->mutex);
-> +       dev = &uadev[card_num];
-> +
-> +       if (atomic_read(&dev->in_use)) {
-> +               mutex_unlock(&chip->mutex);
-> +               dev_dbg(uaudio_qdev->data->dev, "sending qmi
-> indication suspend\n");
-> +               disconnect_ind.dev_event = USB_QMI_DEV_DISCONNECT_V01;
-> +               disconnect_ind.slot_id = dev->udev->slot_id;
-> +               disconnect_ind.controller_num = dev->usb_core_id;
-> +               disconnect_ind.controller_num_valid = 1;
-> +               ret = qmi_send_indication(svc->uaudio_svc_hdl, &svc->client_sq,
-> +                               QMI_UAUDIO_STREAM_IND_V01,
-> +                               QMI_UAUDIO_STREAM_IND_MSG_V01_MAX_MSG_LEN,
-> +                               qmi_uaudio_stream_ind_msg_v01_ei,
-> +                               &disconnect_ind);
-> +               if (ret < 0)
-> +                       dev_err(uaudio_qdev->data->dev,
-> +                               "qmi send failed with err: %d\n", ret);
-> +
-> +               ret = wait_event_interruptible_timeout(dev->disconnect_wq,
-> +                               !atomic_read(&dev->in_use),
-> +                               msecs_to_jiffies(DEV_RELEASE_WAIT_TIMEOUT));
-> +               if (!ret) {
-> +                       dev_err(uaudio_qdev->data->dev,
-> +                               "timeout while waiting for dev_release\n");
-> +                       atomic_set(&dev->in_use, 0);
-> +               } else if (ret < 0) {
-> +                       dev_err(uaudio_qdev->data->dev,
-> +                               "failed with ret %d\n", ret);
-> +                               atomic_set(&dev->in_use, 0);
-> +               }
-> +               mutex_lock(&chip->mutex);
-> +       }
-> +       mutex_unlock(&chip->mutex);
-> +}
-> +
-> 
-> Hi Wesley,
-> 
-> The suspend function `qc_usb_audio_offload_suspend()` looks to stop
-> the traffic on the bus, so that the bus can be suspended. That allows
-> the application processor(AP) to enter suspend. There is a subtle
-> difference with our feature, which is to allow AP suspend with the
-> Host and USB controller active to continue the audio offloading. We
-> call this feature `allow AP suspend in playback`. So, I have some
-> points to clarify with you:
+The HP G5 dock uses Alt Mode for external monitors. Booting the kernel
+with dock connected and then unplugging and replugging the dock
+results in the monitors and USB3 devices no longer being detected
+(some USB2 devices are still detected). By not detected, I mean that
+the kernel log does not show anything at all when the device is
+plugged into the USB-C port. This is not a problem with the dock - a
+USB-C NVME drive was plugged in and also not detected, and neither was
+the dock after being power cycled. I have narrowed this problem down
+to the usb3 and usb4 bus devices being automatically suspended after
+the dock is unplugged:
 
-Yes, I'm aware of that feature also.
+/sys/bus/usb/devices# cat usb[34]/power/runtime_status
+suspended
+suspended
+/sys/bus/usb/devices# cat usb[34]/power/control
+auto
+auto
 
-> 1. Will the suspend flow `usb_audio_suspend() -->
-> platform_ops->suspend_cb() --> qc_usb_audio_offload_suspend()` be
-> called when offloading is active?
+If I plug the dock (or NVME drive) in and then force either of these
+bus devices on (echo on > usb3/power/control), then the port wakes up,
+and the dock and displays plugged into it are detected.
 
-It can be.  This is why in our case, we are going to issue the 
-disconnect event to the audio DSP to stop the session if it is currently 
-in one.
-
-> 2. As my understanding, the suspend function is to allow AP suspend
-> when the offloading is IDLE, but it won't allow AP suspend when in
-> playback or capture. Please correct me if anything is wrong.
-
-As mentioned above, it will let apps go into PM suspend after forcing 
-the audio stream to be idle.  We won't block PM suspend entry.
-
-> 3. We would like to integrate the `allow AP suspend in playback`
-> feature with your framework to become one upstream offload solution.
-> Here is the patch:
-> https://patchwork.kernel.org/project/linux-pm/patch/20240223143833.1509961-1-guanyulin@google.com/
-> .
-
-Yes, I saw that patch as well.  I'll take a look once this series lands 
-upstream.
-
-Thanks
-Wesley Cheng
+This problem seems to be related to the external monitors connected to
+the dock - with a single display connected, it happens rarely, but
+with two displays it happens every time the dock is unplugged. If the
+kernel is booted with "usbcore.autosuspend=-1" then the problem never
+occurs.
 
