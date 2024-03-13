@@ -1,110 +1,110 @@
-Return-Path: <linux-usb+bounces-7919-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7920-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1CBC587A4C5
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Mar 2024 10:19:50 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A0B3B87A4C8
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Mar 2024 10:20:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 504DFB21C2A
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Mar 2024 09:19:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C438F1C21BA7
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Mar 2024 09:20:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B27591CA8F;
-	Wed, 13 Mar 2024 09:19:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A18FB1CF87;
+	Wed, 13 Mar 2024 09:19:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b="tliXNBbx";
-	dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b="a7kZA+P6";
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=synopsys.com header.i=@synopsys.com header.b="kZievUVL"
+	dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b="t+7+1JNU";
+	dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b="GDzHROGz";
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=synopsys.com header.i=@synopsys.com header.b="WPri12cR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-00230701.pphosted.com (mx0b-00230701.pphosted.com [148.163.158.9])
+Received: from mx0a-00230701.pphosted.com (mx0a-00230701.pphosted.com [148.163.156.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D0AD18EB2
-	for <linux-usb@vger.kernel.org>; Wed, 13 Mar 2024 09:19:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=148.163.158.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A3771B95F
+	for <linux-usb@vger.kernel.org>; Wed, 13 Mar 2024 09:19:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=148.163.156.19
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710321581; cv=fail; b=uY/4sWgJ5l59lzc8fj9W2ZhurP55mZzbKspguZ+kQo4oHp2fGNlevZpPhF9Se3ipqx/4vdDnhinYJYUGuIXVaNQrxoXSfTizsOKYrZ+LbOqEfKCLFLF18WPHig+TU4COdCorZtipepLITNATyZbtIysRhWmOTb1CFUjmbbEWsUs=
+	t=1710321598; cv=fail; b=YItDn5Vvt1GAyCElttOHRI2PLarujA7/M1J4EsTr7wanu1eS08m2omxSunL5gZiLta9IDJPaQXZvbMLBA/37wfboukHP3M+P5n+BewBZhzRTaQ4huV7Eqc3zYUAhTVT6eI15LgvMZKgozTNqYgVraiUVZslyNJtrox9BYN1CWrI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710321581; c=relaxed/simple;
-	bh=YbxTA26ZYyEP3CGieMFeGFKTSmNqHb03eKmkV77nIr0=;
+	s=arc-20240116; t=1710321598; c=relaxed/simple;
+	bh=YhKqOuJ9oV+Kog1fjtn+vl3JKN/W3szKolThuRlzlRw=;
 	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=K/0z/GklRXcAyROCKAp9xdzSgt547p5jvCBEV8VrMYLAUK1X2ty5CCDIfUFE1ELk/rPqUUASxfBNxg1t0PaqijAxpTQsQlooK3J8D8vsJ7xCoSzhzPmLoSZo7uupS2ICk06SqnZHYeJCwlPqDUm3QGKSn9VCSUjBBL1cSb+kvR0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=synopsys.com; spf=pass smtp.mailfrom=synopsys.com; dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b=tliXNBbx; dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b=a7kZA+P6; dkim=fail (1024-bit key) header.d=synopsys.com header.i=@synopsys.com header.b=kZievUVL reason="signature verification failed"; arc=fail smtp.client-ip=148.163.158.9
+	 Content-Type:MIME-Version; b=AgZGggUjHmeVLx6AJoKXxSSGYivknAq39/N297kSlhuzeeJ0rX2Q8P1AvnBVrM+9gx+NO1XCZ6w5m+0OyVA+AysbRw4J4Idezd1yTdfFs7nhARG2vTzxTvAsPwp/6haqs0CLNmmJzf1klycXqqvlJVkTGjXp76MuxA3A/MV8jNc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=synopsys.com; spf=pass smtp.mailfrom=synopsys.com; dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b=t+7+1JNU; dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b=GDzHROGz; dkim=fail (1024-bit key) header.d=synopsys.com header.i=@synopsys.com header.b=WPri12cR reason="signature verification failed"; arc=fail smtp.client-ip=148.163.156.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=synopsys.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=synopsys.com
-Received: from pps.filterd (m0098572.ppops.net [127.0.0.1])
-	by mx0b-00230701.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 42D8KYcX030567;
-	Wed, 13 Mar 2024 02:19:36 -0700
+Received: from pps.filterd (m0098571.ppops.net [127.0.0.1])
+	by mx0a-00230701.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 42D8Kecp028835;
+	Wed, 13 Mar 2024 02:19:47 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com; h=
 	from:to:cc:subject:date:message-id:references:in-reply-to
 	:content-type:content-transfer-encoding:mime-version; s=
-	pfptdkimsnps; bh=EXB3E4C486fI6Dxq76hi4eSVZ6DhOCjQRLDMIMHGGRM=; b=
-	tliXNBbxsv7EJkED0FzaeL6IEQ9T5qGTwpegvAjBEGFefwST3qkAdOf5xgZHqHBC
-	tNPZPx6mUHmFPquI6M0Vp/AErAzr9U3E3cQkn29nTeAvFUWlFwn6vNj9gAdpPAoQ
-	JHZkWzNTp051Hqpj/a0CqONYAx/yAiKcJfJAXaaD38b6en4htjcfsjA+NbeCy8gz
-	eIJME40shICMM2GOMSN4L/wwZ5j72wMkZjb12LBXQKIphNy0IuuS3YonU4PHq8Pq
-	X/tUkCODYbnrUtsBjGJbkNCW5yNrW9xhdA/VkYHUnnb7fyYuY4xWRoJMneSj+xDv
-	Uhh3UyeJT7oN8eJdDhjZ3g==
-Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com [149.117.87.133])
-	by mx0b-00230701.pphosted.com (PPS) with ESMTPS id 3wtugxuhsv-1
+	pfptdkimsnps; bh=7pfOVeRyVeKuKn+oNgnmwe8a+AHWyRjbO9uJlKQ1juA=; b=
+	t+7+1JNU/+u+qGRBPQ6SlK37zl3OoM/cmVkL7kI471Fhrv+X5xvuN1cUawIEGr0B
+	FN4qSl+DWSZApZ/5rQEBLzpm22rZMGrUqj16tah5JTuKsvq3iLwpX9yWg8uZ9+0D
+	DHOV+9P+v49L3gayqzz4BqcY9vG4cPlPV/zIrSAKq1BN1KPjIrcguX0hOu7b3FAN
+	R38HnriX5qJw3xWY7MleuX+HS/W4fG5ws0PyOM5r1OoQAiaDXKRoxAl1G/Ly1YxN
+	MaujRTBJI7vC6jLfi2uy6jf8OCRsFP0UCog1IQLcZIi7Rs0X0KW2IpqWWiuLs2dF
+	0W/De28h91uqgHsjogKQHw==
+Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com [149.117.73.133])
+	by mx0a-00230701.pphosted.com (PPS) with ESMTPS id 3wtugwkgp2-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 13 Mar 2024 02:19:36 -0700 (PDT)
+	Wed, 13 Mar 2024 02:19:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-	t=1710321575; bh=YbxTA26ZYyEP3CGieMFeGFKTSmNqHb03eKmkV77nIr0=;
+	t=1710321587; bh=YhKqOuJ9oV+Kog1fjtn+vl3JKN/W3szKolThuRlzlRw=;
 	h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-	b=a7kZA+P64bwqZ0+8lzHYO4DzTsrVtghwj0DfkrYi/97g3lp5TKWK2xNUKrEExbPLC
-	 c7Z2o1j6jlJkQliYKzgxbLtQ8ElrUMrKUfcfxjV3wqEr0j0xakHMc3Y8V2ufy67gkN
-	 EVTgoaO763OzzK1I3jm9/heep2UUc8pNSNZr/ns6AgISE6nExNGAckAXfW4iRrhBho
-	 rjeNngULV2VMG3LAiBfrtLa0SHqSKqyj6xn8ALHQrO5iUdWmLNb3eexXNcAsEmoLPs
-	 QKym6yAyeuyEcP9PmL4HeM+MkMqJZYxqOqTAwoOeqO8bU3/HlriAgyZ+99RgFr9Pns
-	 V2fYNVl39ZD3Q==
-Received: from mailhost.synopsys.com (badc-mailhost4.synopsys.com [10.192.0.82])
+	b=GDzHROGzpehpZ5zFyqjxR7QqXmkaUUfpclLkQ87bYFKbhFjv0zz1S7QduMrn30jig
+	 3dqnfICR2t94tCpI3CJ1/ycWh7eK5aE5GzbLIlNK5wS2ZTverTq9CVW/Cg1apK0zIg
+	 c5jzinKYITAdRawtIIK23AXqUgefhV26JOFfkt+vvaY8i3ryF46d9D1Z01mMv8ngJ5
+	 yLll4Rjz2Gfew19fdKT142dZrc5nyX/b28gIiTBbD+e3yiBw5eIn7Js5TaGwunjk4V
+	 Wu541Yq69BHaWSaP5WjWxyJ1Yos5pXkJPHTEBSYpU83jtluoclXLqaCUQL8r4nSYU3
+	 3x6KUKTg+w93A==
+Received: from mailhost.synopsys.com (sv1-mailhost2.synopsys.com [10.205.2.132])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits)
 	 client-signature RSA-PSS (2048 bits))
 	(Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
-	by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 58D264035E;
-	Wed, 13 Mar 2024 09:19:35 +0000 (UTC)
-Received: from o365relay-in.synopsys.com (us03-o365relay1.synopsys.com [10.4.161.137])
+	by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 234384052B;
+	Wed, 13 Mar 2024 09:19:47 +0000 (UTC)
+Received: from o365relay-in.synopsys.com (sv2-o365relay1.synopsys.com [10.202.1.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
 	(Client CN "o365relay-in.synopsys.com", Issuer "Entrust Certification Authority - L1K" (verified OK))
-	by mailhost.synopsys.com (Postfix) with ESMTPS id 256CEA005F;
-	Wed, 13 Mar 2024 09:19:35 +0000 (UTC)
+	by mailhost.synopsys.com (Postfix) with ESMTPS id E6275A006D;
+	Wed, 13 Mar 2024 09:19:46 +0000 (UTC)
 Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
 Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=synopsys.com
 Authentication-Results: o365relay-in.synopsys.com;
-	dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.a=rsa-sha256 header.s=selector1 header.b=kZievUVL;
+	dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.a=rsa-sha256 header.s=selector1 header.b=WPri12cR;
 	dkim-atps=neutral
 Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2100.outbound.protection.outlook.com [104.47.58.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(Client CN "mail.protection.outlook.com", Issuer "DigiCert Cloud Services CA-1" (verified OK))
-	by o365relay-in.synopsys.com (Postfix) with ESMTPS id C5205401F3;
-	Wed, 13 Mar 2024 09:19:34 +0000 (UTC)
+	by o365relay-in.synopsys.com (Postfix) with ESMTPS id 781CB40236;
+	Wed, 13 Mar 2024 09:19:46 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bMUWLY9UvkkOYojTaGKk/bShlkc4HuGjkc8iNVRxOMItRaB8hcWGJXeMjhP9z/XK7vgrs84Tjm7g4wDJu6/M88+xZXx3qfqluqyzSL/Sy4KnEXhFol25+sv1of4NDDMdwV9CzDXEZfRgKVjG2hnMXuu25xGYjBQQlC8tKSUrVruEiNyEhxtnk74n9/8yf6PKiJYUxezLHANHNqWztg8bMtnLV08w93mErl/g70qXAIuu4niiyVmxcI6PbM9qsSejgnQFcujuwXqTDmnYAS6R/lZEuOYFZQSMdcFp4MV5Gd/IjhbFExelrL++K8YBKvOkngMCDLjLD3PMEK3FimTj8g==
+ b=O239Zmx3Z+SD9jw7Ec+9yU/NQoFqua/vKfwgjhbwcU7+0uSZXklMjUVNK6Frveo4I9IquFRKoPedadLaiR48EhO4As9rno2V8yZjDvDGKGCnePqEyl523p/ypCwwukv5PB8XIAVhSWVkq6YsUpeRF9bJY2KkdlCBbIwuY8P5+9PKtmrsCCdLHBURrnx4+4KX7cmhgP6rwKKqNQ+MBRsOlDQ91F0jhNiI6dRR7Z8/pEybLnuFGa4SasfHZuRW1MTyxGnh3Pd5+CC8vJknq9hZCbpyRgCpW1mVZCauFExDC1iByTpx9+IYfH9cL1oVI66AsDu4FIWSU+BG0lS3axeoSQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EXB3E4C486fI6Dxq76hi4eSVZ6DhOCjQRLDMIMHGGRM=;
- b=Hl5JKku0jEjRMGMYcpIlg8cwdn/3UJlhKQ4ZxCiC1Mu7Rd2c353QwbWP5iH/CEJn4S0Udz99gTtGKna91EYNav3ikT7cnIl/KsoNtJ/24z+fUdvltqi+ZQSDMLx76VNhOQKTmyi6hNuhL2c1vjQqdl5NkW74F+8P6LZ3RwsQu0tFkGwWTbLQ8abv+D/ID6vs0QbraH49dCR2Ss/dLo8ETFDcQcG6WmwrGZuNxw8ZIKQc6nMoElu5EmZ5bc5HFAcqVoFP+cynwomw5g1rqB6/5/jAAmBOgP5NaNzRjA1z9Mue5+4LZgbIe8/iYqYQSb/3E06o4+OYt6X5zofht0We3Q==
+ bh=7pfOVeRyVeKuKn+oNgnmwe8a+AHWyRjbO9uJlKQ1juA=;
+ b=R7bUL6TR2St4ZwK0y7221WbZ8BrK1NkNG/6xjE+PJZwXEhv4+5jeZiaeieThkPWfXaGb+ZPL293yAGyRt7Of1EklupXgj0Pvhi8xLSH1AXwVjD0mlRwtUXYYIqTgZtHR4ySuLVl0eNKMBu6N34vcbYx8Fx1O0GWvGUVPtywlWQSqyJ31QjpWLfLhuX5e7x2ZfReKG/HpqTBR/QmqMkeAA9nAujHiJF8SH9NWCV3cCzfZtl1fK+R6+BUpS8Yd8umiuOQPGTMsuMXETwC38EGdqVzH0x7Z3tLvZWpyru7mbE40PYIow+y8g3GM15zbCOx6NpDoZby7IITYsmBcJ8NJUQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
  dkim=pass header.d=synopsys.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EXB3E4C486fI6Dxq76hi4eSVZ6DhOCjQRLDMIMHGGRM=;
- b=kZievUVLWzpnqqdVJ4k4e3k85FErFj4ywrM7igVh0FmOpU4Tgk8NSaUBX+0Jhq0GAXDNTu1xAU3MTqIRTJ0npwH7Bh+PEArh6cXFTq2G6gKa/lsQRyWoVuMcZPFr/WgnBLP9lRL0LfkanZWiFzA89cV7dyO3NAkI3ZVouEAxM5o=
+ bh=7pfOVeRyVeKuKn+oNgnmwe8a+AHWyRjbO9uJlKQ1juA=;
+ b=WPri12cRZzB14rxD6liW0WzJ5QJVYZcL+3ggBL/LHIGaN/0vzAaSSrKBMXxCTkJHbMXAxbHu8hCdDsFLOt4kG2gsrSLeLOCQmSQsnjBTABxQ+MJjFnWHPb5xkZoQfpomU87uEvUGvi+XbYvp2Bxh3i0CK/Y/fMvQvcRY0+vZWJU=
 Received: from PH7PR12MB8796.namprd12.prod.outlook.com (2603:10b6:510:272::22)
  by SN7PR12MB6910.namprd12.prod.outlook.com (2603:10b6:806:262::21) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7362.36; Wed, 13 Mar
- 2024 09:19:32 +0000
+ 2024 09:19:42 +0000
 Received: from PH7PR12MB8796.namprd12.prod.outlook.com
  ([fe80::2c3d:b3d4:f995:915b]) by PH7PR12MB8796.namprd12.prod.outlook.com
  ([fe80::2c3d:b3d4:f995:915b%6]) with mapi id 15.20.7362.036; Wed, 13 Mar 2024
- 09:19:32 +0000
+ 09:19:42 +0000
 X-SNPS-Relay: synopsys.com
 From: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -112,12 +112,12 @@ To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
 CC: John Youn <John.Youn@synopsys.com>,
         Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-Subject: [PATCH 3/7] usb: dwc2: Add new parameter eusb2_disc
-Thread-Topic: [PATCH 3/7] usb: dwc2: Add new parameter eusb2_disc
-Thread-Index: AQHadSeOhekvow7sok+PVADviXz93A==
-Date: Wed, 13 Mar 2024 09:19:32 +0000
+Subject: [PATCH 4/7] usb: dwc2: Add eUSB2 PHY disconnect flow support
+Thread-Topic: [PATCH 4/7] usb: dwc2: Add eUSB2 PHY disconnect flow support
+Thread-Index: AQHadSeVs115QvChmEe/IGU77ifdaQ==
+Date: Wed, 13 Mar 2024 09:19:42 +0000
 Message-ID: 
- <e77cc4312bda797d1ddaa4351d86c65a69c8b926.1708948356.git.Minas.Harutyunyan@synopsys.com>
+ <9d50b83df693cda8c391313e90048df8dd611c04.1708948356.git.Minas.Harutyunyan@synopsys.com>
 References: <cover.1708948356.git.Minas.Harutyunyan@synopsys.com>
 In-Reply-To: <cover.1708948356.git.Minas.Harutyunyan@synopsys.com>
 Accept-Language: en-US
@@ -126,44 +126,44 @@ X-MS-Has-Attach:
 X-MS-TNEF-Correlator: 
 x-ms-publictraffictype: Email
 x-ms-traffictypediagnostic: PH7PR12MB8796:EE_|SN7PR12MB6910:EE_
-x-ms-office365-filtering-correlation-id: dfb594ec-c8ff-4fb4-28f6-08dc433eb15c
+x-ms-office365-filtering-correlation-id: b88c025d-b7f9-4136-1598-08dc433eb7a3
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
 x-microsoft-antispam-message-info: 
- baqjUv/ZpyYOlLXohuKm5s2kYv8/ipdIeKflFJMLKw08c1zvqK4xU9yj+Zu7cq0d4QDhL6nKqFJ8e6HOyJgPkH28Nq7PAw4QavBN74cLlXj5lJQOtWTRpbSvMUTRKjHaqFXBcJVOntHiezRtpUfNj8TMXm+ibG13KcSB/1y3XS2urW7dUEAxhQCJBX0KffGF0NNmbdWfCBTwPfQwh0IHB68Yt26K+oPjA0MyAVwQHMaSnQ0euAslJw3S+xbD/ZlIPSmh5et08rcSjNgCGJ5wbL2/r4U8TzcV7mJoH9hJwXvspU3ziMu+LyMm/2IOv0jmsKymNX8lRyY8VJTKdBloLXyLkMKBeNPEdAV1uQdX9X1XUTEzSvtY7tldV1jyJjG8eB4YeW17ndY1Pl51nZ6JcJ7idM36djAYCWeHecP2eYNjTPWsJJYqNy9VTFtF3AYky5n55ZLbqZ5IOiKibrb9vqA3JjWfWltKMGFIH6ofqTVNbojm4mkIja6dq2TzlMkixBYIOE8XNzaUdggV6wCubG+u0x6zbyrr3esiYkDnQ/neHfNVo6uw1QcH25UO9YwLo/Rmy5yDDmb/JtLkdnd+urhvEAJ9WrW+pvUt1bfcgZQwZ00FflQAY7CB2WOcGP37UqyFghZW7yEpBinOPlakIlqtRo0wBa1sl6J9gCXGzAr0CFpIjto6E7+79OBKoD4B1AT1NoAikUNUFZISN+NQ7vkPnuYOpEll2TxQO81FAIE=
+ QZtFYoklEk6a4vmH+wYTrm1oZX1UG1xYSREpwoZst2ETphLPe63ap2Igv5Yh+gxksKua2q/oRAf13W7oiwOdSE1gIzYq6kiVnFbWPcRf45ohL90SZY14bCec2wUWnMGZf8Lso/jNHPTN+s9QjHTqLfDVH2DXQ6fn5ZRTpCgnPxw1UGPXmGWbVGiBeWX8YAlNhVv/q7VygYa7j8lblxcwwiyM5MewE/oWuCYdv/VLGOQqVvzZc7psffq2aIljFJavznD6BfC5EWt9lO8F9xlweS3/Wp3t0cLiygC6fza72QRTowFm+m4TH8WFpMfFEWJxSm2tBg3db127Y/pNmOzQJRKO3aWvbEd3ikQ7pxSugWrzycczhFIpV5wmVTAyS2m4L9t9vQ40hwgm/U9TZjhjMOnFMIAiEbC6+yo0MzEA6DmzhTLGPpT4vDeOio6XcEjuJiMwK2TCDjg5OCtzGhUvWuUPKeE2ySDaHUjmdNgJqf0X1OwEXBaWOzVb7JYhvbcVoYRHfyLeibbGfovqHZ4rns5chdkerNfKFP6GE+77C1mGUxM0A3ShD3rwBTVZDth8XScJxqLgy8iwmQ0Onsd8E/+qXJOvo0xUiWFSRDwY055G2nBWv9yTJqOzHoriYANsvM4qKi4RgyQxXuDFGNsL6n9odoI7Bo1e8x4Ye+96gRvlTyFrTVA5pFpmMO6aQLKccGmw56qsDDrxRl5yzFGXhTk/5rt8Uou0Y6p5kGcrdFQ=
 x-forefront-antispam-report: 
  CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB8796.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(1800799015)(38070700009);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
 x-ms-exchange-antispam-messagedata-0: 
- =?iso-8859-1?Q?grUxR+XWWRD0X3FL75cfL1bPP49eXIXT2/T2gVCdMsISd56w5iwSqr9J4e?=
- =?iso-8859-1?Q?rDfjgUANEQAGoDoo579AmwEe+gKKHBnScbztpwbrS4ADyNinJoDZM4R4MG?=
- =?iso-8859-1?Q?iXHesnajOp16+mLVEyZVwjv1kiL7KJXc4+s2loy0oYZbmpSvtibQeGh8Gm?=
- =?iso-8859-1?Q?cCzmUo5B8TnyRAplx12uj6OVaiFSEYojSv2SgcXuR1vLWQ0b1gaPT5sBfU?=
- =?iso-8859-1?Q?GfGzBcWt92oT3J62hmnUbXZ/hdIT7XX6srzXZXyhR++La3NCrQm2O2rNL+?=
- =?iso-8859-1?Q?wQIMq5ZHJ7EE7+n36ZrG/Bg+mGbhNRlYF3ZGzq0pMzW7pvN49NtJJvaoQ6?=
- =?iso-8859-1?Q?FxheOAjulPrPZl1BHoNDRWhjRVbT7HyNwi4AYWYs4hTxA1yE81iLt2CrRv?=
- =?iso-8859-1?Q?OoFwPdNvqwpYLm6o350OHzWdMGNhdSwADupNR+0eihtiVyM3kxOMf+6wxv?=
- =?iso-8859-1?Q?QYUp+hqWUGk7VDRH+NcgMXBbX/QP/mtvnBi3aedoGHmUxz76BPhfRAUVwF?=
- =?iso-8859-1?Q?JOFwAEbnSU2shbkam4OP84u4++UupHDbpv3PSsHgCfp1XQ2uaE2gcgIOHt?=
- =?iso-8859-1?Q?HXYO44bHR0Lzk/JDr8OTwhdPrj5VaeYJ18gT2qU/5suqP/rfHOGEomTUEf?=
- =?iso-8859-1?Q?0sa2D792KJ3f4CYwc3J8HFPm12yywhsyv36QdlVM2flyb/PX3ZkRaN2qa/?=
- =?iso-8859-1?Q?MsAm98uuCTECEepzqb4xEVO6aA7jYOcUm/1EaXShmGyu4zjEX+5rGveGr3?=
- =?iso-8859-1?Q?QYUAcRjuo17FjXEq1X2FW+6BOuTvzBTONOnxvbZ2YCsBpUt6jgY+DIVWX5?=
- =?iso-8859-1?Q?AaSxxAlovcPhyVnZX55zhg+YixttdyXHfJRa5qW1O30BzkvSxsU55NVnge?=
- =?iso-8859-1?Q?d3lw+7hipbIrn418jBSZ3OeFlyKD3iDfJKABq56CvTLCN+EzFvkVkpUSV0?=
- =?iso-8859-1?Q?VV7UCTUsj/xsPAzuASW8z+KXnxIfzspHwWyENdF5Er//MWGyYc6ssYKeW/?=
- =?iso-8859-1?Q?NtxzrnQpDfJ3YdH5c4u11C01C6tBHVzYiT8KDLCrByUDIn0qAng1Wm/Oz4?=
- =?iso-8859-1?Q?sQH/Uos5NUD/gqKetbNgUPuzIt1LiJ+rq0kgi3CsnNJuOzhrh3MhsgpY4m?=
- =?iso-8859-1?Q?1fbcMkrKzQc+/Iv0YVOTkQK/fX6Z0fl/YNWbkIvaAIwLU3h3RT9VcVCFjA?=
- =?iso-8859-1?Q?KJNbLBW9R4qS1KlumTNWr0731cFQrILctZWcf/DaDoOtd+AGrQ1TcHKNL9?=
- =?iso-8859-1?Q?MfONX/Dcd/1a+kWbRkgo1OK0R5V9keKOaEP22QTktRitLcRXA+pcL3iOvM?=
- =?iso-8859-1?Q?wN5SoNH35ZuioN/DG5Sub6pZMF8oxP8tiVtjtR5tWM479IfU39LZl33m07?=
- =?iso-8859-1?Q?REDemVov0nEwBf/WtYYdg1HRmC003ocehGic4TzjfPxA70f5vg2aLGlyv5?=
- =?iso-8859-1?Q?8SStRN/ENJaaP/iq2oNWW9gPcj+ZM9lZagU/b5Q0+Lxenzo5z0/joW3foM?=
- =?iso-8859-1?Q?4rKiil0poRVezwW7YoSAFpPsd0F2o+dAmkdtW2VIHekCgn9mSE72Zl6SJP?=
- =?iso-8859-1?Q?imR1ltHW69ACiZ6pR8KsmA6Y7l5rlha4CcNhxSE3caOXvz6t0YQfzAzbU6?=
- =?iso-8859-1?Q?DLQ1jDXYiRtm1soGMQLUzAmH23KZfykb0M?=
+ =?iso-8859-1?Q?L6GuWD2lFhI5fAsCN5MU7jYyGzYzWMDaoaOVrUPeRRdIVTUMgkb7QfvJci?=
+ =?iso-8859-1?Q?uWU0mVOD4TDhb9nlOz3vhwatnbEbEkwjr0xmoBzVRn4CZ1AhsDdl4JSi++?=
+ =?iso-8859-1?Q?guJhVdYOPob36Exk7RLfj/S3/X9zKnoIqLDI+cwlE/GlRB27Q6/bA2X5mz?=
+ =?iso-8859-1?Q?lQKZx7fyu/P6xeOjz3qrg5bDDfmLch7/3PNpZPjXJbby+pda+cgdYPfezw?=
+ =?iso-8859-1?Q?pVuE9kpIQmAjkYTZRZMJEzOjrv4JZF7xRmcIMtKE0XEwr9QqXHI8LoE0oJ?=
+ =?iso-8859-1?Q?bFeyBQHCFGr1xWcFKnbbgcOvea9d+PKF2k45Sh9omSX8N8tKSCl6qJ5/i3?=
+ =?iso-8859-1?Q?CQdE0vk+VDKB66NkobzfiUU/XNJ/QROc2Aho0FLsgFyMbShAegoEI07swK?=
+ =?iso-8859-1?Q?kJmVBjRDPyTxkr3vFnBIi1ij0NkuiZgoHuqbf0GbBIa4xvcPKDIEpsOmOS?=
+ =?iso-8859-1?Q?6Al+/mQpsJXKDzzQsLaDL+f6CerOaxoJwvdphsS0xEE23PB5a+V7VhHwOR?=
+ =?iso-8859-1?Q?Xvq2tAhXjNbDwVq9cwBKFmhHlv5bbkU0eq4SR4QllRB1uJEPD0WqANkpy3?=
+ =?iso-8859-1?Q?sqwpsB+gItMmMVO8jjWbHu8ymg+3NXX5hsqg4Xa1XMu8EF9JwMFKbE49bQ?=
+ =?iso-8859-1?Q?eJ+6tmA6svGmNhg+tqWp55DqAFjU/ZmN5W058NgY7NQcF9F5WgwKUhm+BG?=
+ =?iso-8859-1?Q?rIEE7MqQ9NXwYIz/zBG2NPoChKEWFA1CKxj0zY3DJ8cLTZGQBR7WyPjWRs?=
+ =?iso-8859-1?Q?4WkfMOiK2td/STmIe1movM3aypJQfN5Py8jyADhlhHgxmmyRIlV9MQhsnA?=
+ =?iso-8859-1?Q?PV67/eUIWBPPSxntsSvqTalIaHITeSr4qW6VhUiEYeZroDZjBAd8vVn29T?=
+ =?iso-8859-1?Q?FC5MN3cBPIFxqrDCEW0zcT2t7pZw1w/YVBGspzMx2n6XHmK+c+732bcDpL?=
+ =?iso-8859-1?Q?vOQB86J5ujH30TbVXSgyNS+vjTWKi787h65eNk3aP+BPO7J3quibQ9vdBj?=
+ =?iso-8859-1?Q?555FqeHb9yN9Ldlj6lP/dNjAhpbiCw/DmhjV/IGXWvgWKnEgDm5dcARAVI?=
+ =?iso-8859-1?Q?ml2ZQ50ZL5+lMYiuB9EITmC+em1cX1lEff724ZrthGZ31qwXeMjMmvNLf0?=
+ =?iso-8859-1?Q?zhw0S5LdunfD28UtL8ZheUGXpjkvSaPkiEz9hHZdKn99hp17QbKeeIVoW+?=
+ =?iso-8859-1?Q?UE/zt2CjYHIOGJEXUttD8diz9zYOsIZgK8/8UodHBE8ayvJExjNiMAOZSf?=
+ =?iso-8859-1?Q?QH5bNJfexsfM4RIrafqOYvdjXaz4vAR9uljF5IwZo+kuEBF3a6O7mGwuwq?=
+ =?iso-8859-1?Q?7LXlWPWPjM+RYrkysb9AfV/uHOnZN2EqzWQzDqWJoj4/IYJYdnWi5+Prr4?=
+ =?iso-8859-1?Q?KkI5pE9EJ20ayLe2+m6Fk4SPOQEs0cYJJJinnzKOn+3bKVkTtyhgGM4JYv?=
+ =?iso-8859-1?Q?lmWqS3PJYNCSRDBShyJYhQ6uzU6unWFjr+NLPslIxnOTCDHGtyKixzvlzm?=
+ =?iso-8859-1?Q?vANOSj3ssvQXMbm2yxQYfePUwcE1UrJwmFhgtZjnjH0sVQ8gVUa6YjOK5x?=
+ =?iso-8859-1?Q?bF3yJ0SnM1HCJ03RhQo8PIqi+yRLDucA33wiS/A7Q5htyMsN7X0qFBaOFy?=
+ =?iso-8859-1?Q?Rnz/4KJZS+cKHtrrnxfC52k6HzX8Lvr7WG?=
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
@@ -174,135 +174,117 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
-	/SgIh8+A2zQickmLXaiDETrcOy0rYVI68Feeb4vX2wDveISjV/a4OrJW04N7/GDVmEizTJ1MtzIC56H8QXKfnUNXXHQBs8FmSO2QCxzNUJz+QQ7IRq8y7AEDJws3tZaVw29bPWX4bi+6fDvOCt9kfp9KXZ1ae4uGLBPuZtQ6xR8+WTUI8i1vpQzsDAOVJlIoDejlO5PLUkpNg449+nQ/yi6Iizd8C+1DQM5YU4hmxKuZ5gqDzSd/scyubnomLpeWQz2sKs6+c4f6+e/EGjBn6UJG336fYSCqwuKne6okDL7TC5nFPTbblA22LzOAvDbj0tkuJz4COrXbYbEO7IyWAqL/6Rh45QiJy7KAmqoSTDWbUMBLyi8vU6l6dYol0YM5h8ZX2hTf3Uvis1ZCXw057w7rp2TP5MboRn9a4do1XEwTEUhlEN/KAcU8NcGp6VjDxeKlRJ8qXj2VxUDgtHc4oOAQLpOuFijGtnm1VUd5Ck2yqp0g9WxbB5aXIxoysa3DXcYY+Hhi+9MFGTIyDIWZ8d5OdH8Dog0uWq8kYb91tGs9DUroiX0j+ui2vrRokmqfffVZLB9+hJoJncTfT/bJ/VYVHNyXf510Jv1qQ5j8LkvPQff2K0WO5RQ22dFAp9i5U84B2dchffsRpnGVe1foxg==
+	a6ENiWLvwfuMeKFTJpA0IGNJGgXUGW9U8pBCg+VNHE5FPFJhK2YPusbskTG8XuOl5HBP8IILCdPyam0ACebNCWonOEGc4PKUbnL6qaRjImYuiFx3GLrq/G03vpGR8oSO4HBhIlyu6TIfUwRk+V3aoGB5YoGAqfpseLOLb4bAzCSm3p/olsO5CTqMntmNmm97YC9HZ6TPgA1wI1ERaP3MVa7Kh+XC682ezAH1QJC5PSMwB9MBrAwSsNEQKwud74yxQFNFOu8Bzh7rzp+stTzlOBPR3M2UpI52OT57xZS/wpAdmYBRWDAd3AwtHXN9yQ2zOffuaumNCpBR13dYILc5RtFmuWl/EuKBBHsj/OVSLjH0yNsZVoZbgrsy5kk3f/MtALOX3HJgrmQUfL2pX9K0KhLMJHHQx0J8zuQ+6F9c/vYu6IhNsdh2VHhAALUhOtmIyLnqR2Fzhnu2UZFac91hcQNgE8Rx69XKhonLZbSto56eWPDpzacJT9LI3xOObur5ER/ZTIZh2AgcKaNWOfnXPnBYbNELbSL80Oc3dIaNSydwjsQKlK9O9cb21A/UeMxUplMH63Lwen9pkkVx4pf85oKKWWjeafpIjaZ2H8Zgd82E+hUFQ+nLsLoKCk/T2QffFVsNRdwfyu5k187zzE9mjw==
 X-OriginatorOrg: synopsys.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB8796.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: dfb594ec-c8ff-4fb4-28f6-08dc433eb15c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Mar 2024 09:19:32.2291
+X-MS-Exchange-CrossTenant-Network-Message-Id: b88c025d-b7f9-4136-1598-08dc433eb7a3
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Mar 2024 09:19:42.7103
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 9o57hBH8kOB9/sRUnwoVsuuL0pF9631cF8W8MC5I/2/AS4Qz3tjtO9NGdEPwraSyMKDfvEgx0mvK92LpTGPXkg==
+X-MS-Exchange-CrossTenant-userprincipalname: EvXuCd1RBxWRY9mqY2o3JWeh7q0I2L5WxkFXScvgV0CC68CD+lfbw2malptPUy4OENEq7gdiv+vS/v3x3R4ZFw==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB6910
-X-Proofpoint-GUID: 9h90OmofSoCwPeSZMxmTrq22pMImxskG
-X-Proofpoint-ORIG-GUID: 9h90OmofSoCwPeSZMxmTrq22pMImxskG
+X-Proofpoint-GUID: h3I1lEk0fN49IVm2gkC4aO2xqIviqpQT
+X-Proofpoint-ORIG-GUID: h3I1lEk0fN49IVm2gkC4aO2xqIviqpQT
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2024-03-13_07,2024-03-12_01,2023-05-22_02
 X-Proofpoint-Spam-Details: rule=outbound_active_cloned_notspam policy=outbound_active_cloned score=0
- phishscore=0 clxscore=1015 spamscore=0 malwarescore=0 suspectscore=0
- lowpriorityscore=0 impostorscore=0 bulkscore=0 mlxscore=0 mlxlogscore=999
- priorityscore=1501 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2402120000 definitions=main-2403130068
+ suspectscore=0 malwarescore=0 adultscore=0 priorityscore=1501 phishscore=0
+ lowpriorityscore=0 bulkscore=0 impostorscore=0 mlxscore=0 mlxlogscore=999
+ clxscore=1015 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2402120000 definitions=main-2403130067
 
-Added new parameter eusb2_disc to list of core parameters which specify
-whether eUSB2 PHY disconnect support flow applicable or no.
-Set to false as default value and checked core version if set to true.
-This parameter applicable in device mode of HSOTG and HS IOT cores
-v5.00 or higher.
+To support eUSB2 PHY disconnect flow required in Soft disconnect
+state set GOTGCTL_EUSB2_DISC_SUPP bit, if applicable.
 
-Added print this parameter in show parameters of debugfs.
+On Session End Detected interrupt clear PCGCTL_GATEHCLK and
+PCGCTL_STOPPCLK bits if eusb2_disc parameter true.
 
 Signed-off-by: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
 ---
- drivers/usb/dwc2/core.h    |  6 ++++++
- drivers/usb/dwc2/debugfs.c |  1 +
- drivers/usb/dwc2/params.c  | 22 ++++++++++++++++++++++
- 3 files changed, 29 insertions(+)
+ drivers/usb/dwc2/core_intr.c | 21 ++++++++++++++++++---
+ drivers/usb/dwc2/gadget.c    |  5 ++++-
+ 2 files changed, 22 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
-index 0c10bd0c32fd..16d6ac97f23b 100644
---- a/drivers/usb/dwc2/core.h
-+++ b/drivers/usb/dwc2/core.h
-@@ -288,6 +288,11 @@ enum dwc2_ep0_state {
-  *                      core has been configured to work at either data pa=
-th
-  *                      width.
-  *                       8 or 16 (default 16 if available)
-+ * @eusb2_disc:         Specifies whether eUSB2 PHY disconnect support flo=
-w
-+ *                      applicable or no. Applicable in device mode of HSO=
-TG
-+ *                      and HS IOT cores v5.00 or higher.
-+ *                       0 - eUSB2 PHY disconnect support flow not applica=
-ble
-+ *                       1 - eUSB2 PHY disconnect support flow applicable
-  * @phy_ulpi_ddr:       Specifies whether the ULPI operates at double or s=
-ingle
-  *                      data rate. This parameter is only applicable if ph=
-y_type
-  *                      is ULPI.
-@@ -442,6 +447,7 @@ struct dwc2_core_params {
- #define DWC2_SPEED_PARAM_LOW	2
+diff --git a/drivers/usb/dwc2/core_intr.c b/drivers/usb/dwc2/core_intr.c
+index 158ede753854..bb6bb771375a 100644
+--- a/drivers/usb/dwc2/core_intr.c
++++ b/drivers/usb/dwc2/core_intr.c
+@@ -84,6 +84,7 @@ static void dwc2_handle_otg_intr(struct dwc2_hsotg *hsotg=
+)
+ 	u32 gotgint;
+ 	u32 gotgctl;
+ 	u32 gintmsk;
++	u32 pcgctl;
 =20
- 	u8 phy_utmi_width;
-+	bool eusb2_disc;
- 	bool phy_ulpi_ddr;
- 	bool phy_ulpi_ext_vbus;
- 	bool enable_dynamic_fifo;
-diff --git a/drivers/usb/dwc2/debugfs.c b/drivers/usb/dwc2/debugfs.c
-index 1d72ece9cfe4..7c82ab590401 100644
---- a/drivers/usb/dwc2/debugfs.c
-+++ b/drivers/usb/dwc2/debugfs.c
-@@ -686,6 +686,7 @@ static int params_show(struct seq_file *seq, void *v)
- 	print_param(seq, p, host_channels);
- 	print_param(seq, p, phy_type);
- 	print_param(seq, p, phy_utmi_width);
-+	print_param(seq, p, eusb2_disc);
- 	print_param(seq, p, phy_ulpi_ddr);
- 	print_param(seq, p, phy_ulpi_ext_vbus);
- 	print_param(seq, p, i2c_enable);
-diff --git a/drivers/usb/dwc2/params.c b/drivers/usb/dwc2/params.c
-index eb677c3cfd0b..c47524483f48 100644
---- a/drivers/usb/dwc2/params.c
-+++ b/drivers/usb/dwc2/params.c
-@@ -475,6 +475,7 @@ static void dwc2_set_default_params(struct dwc2_hsotg *=
-hsotg)
- 	dwc2_set_param_lpm(hsotg);
- 	p->phy_ulpi_ddr =3D false;
- 	p->phy_ulpi_ext_vbus =3D false;
-+	p->eusb2_disc =3D false;
+ 	gotgint =3D dwc2_readl(hsotg, GOTGINT);
+ 	gotgctl =3D dwc2_readl(hsotg, GOTGCTL);
+@@ -96,8 +97,22 @@ static void dwc2_handle_otg_intr(struct dwc2_hsotg *hsot=
+g)
+ 			dwc2_op_state_str(hsotg));
+ 		gotgctl =3D dwc2_readl(hsotg, GOTGCTL);
 =20
- 	p->enable_dynamic_fifo =3D hw->enable_dynamic_fifo;
- 	p->en_multiple_tx_fifo =3D hw->en_multiple_tx_fifo;
-@@ -737,6 +738,25 @@ static void dwc2_check_param_tx_fifo_sizes(struct dwc2=
-_hsotg *hsotg)
- 	}
- }
-=20
-+static void dwc2_check_param_eusb2_disc(struct dwc2_hsotg *hsotg)
-+{
-+	u32 gsnpsid;
+-		if (dwc2_is_device_mode(hsotg))
++		if (dwc2_is_device_mode(hsotg)) {
++			if (hsotg->params.eusb2_disc) {
++				/* Clear the Gate hclk. */
++				pcgctl =3D dwc2_readl(hsotg, PCGCTL);
++				pcgctl &=3D ~PCGCTL_GATEHCLK;
++				dwc2_writel(hsotg, pcgctl, PCGCTL);
++				udelay(5);
 +
-+	if (!hsotg->params.eusb2_disc)
-+		return;
-+	gsnpsid =3D dwc2_readl(hsotg, GSNPSID);
-+	/*
-+	 * eusb2_disc not supported by FS IOT devices.
-+	 * For other cores, it supported starting from version 5.00a
-+	 */
-+	if ((gsnpsid & ~DWC2_CORE_REV_MASK) =3D=3D DWC2_FS_IOT_ID ||
-+	    (gsnpsid & DWC2_CORE_REV_MASK) <
-+	    (DWC2_CORE_REV_5_00a & DWC2_CORE_REV_MASK)) {
-+		hsotg->params.eusb2_disc =3D false;
-+		return;
++				/* Clear Phy Clock bit. */
++				pcgctl =3D dwc2_readl(hsotg, PCGCTL);
++				pcgctl &=3D ~PCGCTL_STOPPCLK;
++				dwc2_writel(hsotg, pcgctl, PCGCTL);
++				udelay(5);
++			}
+ 			dwc2_hsotg_disconnect(hsotg);
++		}
+=20
+ 		if (hsotg->op_state =3D=3D OTG_STATE_B_HOST) {
+ 			hsotg->op_state =3D OTG_STATE_B_PERIPHERAL;
+@@ -117,7 +132,7 @@ static void dwc2_handle_otg_intr(struct dwc2_hsotg *hso=
+tg)
+ 			 * disconnected
+ 			 */
+ 			/* Reset to a clean state */
+-			hsotg->lx_state =3D DWC2_L0;
++			hsotg->lx_state =3D DWC2_L3;
+ 		}
+=20
+ 		gotgctl =3D dwc2_readl(hsotg, GOTGCTL);
+@@ -286,7 +301,7 @@ static void dwc2_handle_session_req_intr(struct dwc2_hs=
+otg *hsotg)
+ 		hsotg->lx_state);
+=20
+ 	if (dwc2_is_device_mode(hsotg)) {
+-		if (hsotg->lx_state =3D=3D DWC2_L2) {
++		if (hsotg->lx_state !=3D DWC2_L0) {
+ 			if (hsotg->in_ppd) {
+ 				ret =3D dwc2_exit_partial_power_down(hsotg, 0,
+ 								   true);
+diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+index b517a7216de2..680737d471c1 100644
+--- a/drivers/usb/dwc2/gadget.c
++++ b/drivers/usb/dwc2/gadget.c
+@@ -3420,8 +3420,11 @@ void dwc2_hsotg_core_init_disconnected(struct dwc2_h=
+sotg *hsotg,
+=20
+ 	dwc2_hsotg_init_fifo(hsotg);
+=20
+-	if (!is_usb_reset)
++	if (!is_usb_reset) {
+ 		dwc2_set_bit(hsotg, DCTL, DCTL_SFTDISCON);
++		if (hsotg->params.eusb2_disc)
++			dwc2_set_bit(hsotg, GOTGCTL, GOTGCTL_EUSB2_DISC_SUPP);
 +	}
-+}
-+
- #define CHECK_RANGE(_param, _min, _max, _def) do {			\
- 		if ((int)(hsotg->params._param) < (_min) ||		\
- 		    (hsotg->params._param) > (_max)) {			\
-@@ -765,6 +785,8 @@ static void dwc2_check_params(struct dwc2_hsotg *hsotg)
- 	dwc2_check_param_speed(hsotg);
- 	dwc2_check_param_phy_utmi_width(hsotg);
- 	dwc2_check_param_power_down(hsotg);
-+	dwc2_check_param_eusb2_disc(hsotg);
-+
- 	CHECK_BOOL(enable_dynamic_fifo, hw->enable_dynamic_fifo);
- 	CHECK_BOOL(en_multiple_tx_fifo, hw->en_multiple_tx_fifo);
- 	CHECK_BOOL(i2c_enable, hw->i2c_enable);
+=20
+ 	dcfg |=3D DCFG_EPMISCNT(1);
+=20
 --=20
 2.41.0
 
