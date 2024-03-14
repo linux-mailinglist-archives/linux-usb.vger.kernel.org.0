@@ -1,72 +1,47 @@
-Return-Path: <linux-usb+bounces-7947-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7948-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC48D87BA5E
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Mar 2024 10:26:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B025987BA73
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Mar 2024 10:32:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DE3881C22C4A
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Mar 2024 09:26:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E2FED1C214FF
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Mar 2024 09:32:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BE1B6CDBE;
-	Thu, 14 Mar 2024 09:26:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b="EveSoR15";
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b="hxDGIgTL"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 011BC6CDC6;
+	Thu, 14 Mar 2024 09:32:12 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C1036CDAA;
-	Thu, 14 Mar 2024 09:26:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.104.207.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A679F6CDBC;
+	Thu, 14 Mar 2024 09:32:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.154.21.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710408406; cv=none; b=IXn7EC100nIWWSmPX3ZEIFKOXoy3kaW5Rt+A+Vl2L7qZODkwOC0CXCVnaOXXjK3xEwcc2ttneZGZwjliakTVkosszcg8kocWTNacAF3U4nlN8gLgLMc/U/pYMEj4X573yXPlezMTEhhBkub+2/PGP1PszXPY8A34OuJoddDfLy8=
+	t=1710408731; cv=none; b=VN2jTnD0fOEOtvYBPqEZp+eSToqvDiZOK370vDSoImLWIJ57rk3MUTduH+9lvlrhOKQPATyk/9AIFnzCGUpCumRi9YIkIYaFG0ZlQC5B/kT+LWg0IuvypSClxguOIyoSpf6lt6O8onXkpjRzG7PhkaN7K10R6Fvgqpqb16k3hJc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710408406; c=relaxed/simple;
-	bh=GtdGMaGlOqd8YnCeRxL1pdean0HNUs9CwrpBwyhyj8c=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=DxB2/wBzm09llfPLYCgc5m0kV+EttNxwCJBCFEylIG73k1/1wE92Qf07RsLTxq2WuhQ4/oSBr/FW7TUreOGEctgfIU6pHSfWtZxuOgQ9Bh35ISFhAnGKi7I1GktTiTeQUsiuHAwsAOz3yMuQ0hrJtaok91Sv1Tw3Xg8xsKoJWlk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b=EveSoR15; dkim=fail (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b=hxDGIgTL reason="key not found in DNS"; arc=none smtp.client-ip=93.104.207.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1710408403; x=1741944403;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=BINM8nk0+9lReE+wDNfi5X4NNgZwosYeCRM2pL/Dyp4=;
-  b=EveSoR15zL3hsM276ZOdE4puvnIo6/sGOvelI00JJfRMbPPd7nuXAPz+
-   pZVtrIaSFKPSe56LwqZ16I6WMM9TnrMZ0uIOsPpMyPtgkyX/Z0sWeFy6G
-   Tg/lQzVPhL0I6WUydjLPMG3bYtOVqMmmyrNf/v41iz6Q3q3GEmynYFxIl
-   p0vNr/7zbaI6JZ7f1Zlb6QhURw4r14Fqm1e9eTPLX6g7CAuXPAUqz+A37
-   a1XcX1wWTioHIr9mHGlxcOo4H9wzRzq82UxNGK2hbkFmJ6q+taqo2QBeS
-   ClFUdurLDTYZomlkdRpA8SYPZfdwfeuUui/4SSVK3XsX5FWet+6vSHrtj
-   Q==;
-X-IronPort-AV: E=Sophos;i="6.07,125,1708383600"; 
-   d="scan'208";a="35907474"
-Received: from vmailcow01.tq-net.de ([10.150.86.48])
-  by mx1.tq-group.com with ESMTP; 14 Mar 2024 10:26:34 +0100
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 761C216E684;
-	Thu, 14 Mar 2024 10:26:29 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ew.tq-group.com;
-	s=dkim; t=1710408389; h=from:subject:date:message-id:to:cc:mime-version:
-	 content-transfer-encoding; bh=BINM8nk0+9lReE+wDNfi5X4NNgZwosYeCRM2pL/Dyp4=;
-	b=hxDGIgTLVmCZPueyCNHsfO82t4HPRJFas02KypfP0qt7ftSeMa8H3vbJln72WjcdSIVYa4
-	XfuHD36l+ElcU3HwFpqLyks0peT4HWBTl2pkJgWsz7Bdj5noOucGPMa2TFCp8/qlLGI2E2
-	S13NZxNzjXB9JkO7+x2W4Q7pKxl0hTWDhgJT6VUatBtdZi30+4uqobhAf/p2jeysOQPQId
-	BsE5uuXwPI4aYQRICgDmYI4ktyoZwg2AYRCpfcT/Lv3H2MI1YDyKYoMZpXh94v9//3FdDi
-	tPipm9fNp6tknJshFBnBU3gBBjpRh3wfmUhTqBz/Frm8vOUB46iye7yTftlE4w==
-From: Alexander Stein <alexander.stein@ew.tq-group.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Sean Anderson <sean.anderson@seco.com>,
-	Alexander Stein <alexander.stein@ew.tq-group.com>,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 1/1 usb-next] Revert "usb: phy: generic: Get the vbus supply"
-Date: Thu, 14 Mar 2024 10:26:27 +0100
-Message-Id: <20240314092628.1869414-1-alexander.stein@ew.tq-group.com>
+	s=arc-20240116; t=1710408731; c=relaxed/simple;
+	bh=4yJRZjKqPaTm31UQT+k6xPGX1PqZ0dzpVSE3l/nbGGc=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=pgFtVKfx1Od9E8MTfaxNqf+c0s2GxNsGa4raGXKrbM83TK6Hl7zJiW2xA+haBRK+BkZOjEnsPHSIov/8IkR9cGoy6xm89JeB2onh5Ettj+ORr76qkvAKjEiw9QJC8pNuiAeqxDXIJBrvAF4dqFppq/d5GmvfjvODOgNphU9xVXk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=omp.ru; spf=pass smtp.mailfrom=omp.ru; arc=none smtp.client-ip=90.154.21.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=omp.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=omp.ru
+Received: from localhost.localdomain (78.37.41.175) by msexch01.omp.ru
+ (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1258.12; Thu, 14 Mar
+ 2024 12:31:57 +0300
+From: Roman Smirnov <r.smirnov@omp.ru>
+To: Alan Stern <stern@rowland.harvard.edu>, Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>
+CC: Roman Smirnov <r.smirnov@omp.ru>, <linux-usb@vger.kernel.org>,
+	<usb-storage@lists.one-eyed-alien.net>, <linux-kernel@vger.kernel.org>,
+	Sergey Shtylyov <s.shtylyov@omp.ru>, Karina Yankevich <k.yankevich@omp.ru>,
+	<lvc-project@linuxtesting.org>, <stable@vger.kernel.org>
+Subject: [PATCH] usb: storage: isd200: fix error checks in  isd200_{read,write}_config()
+Date: Thu, 14 Mar 2024 12:31:36 +0300
+Message-ID: <20240314093136.16386-1-r.smirnov@omp.ru>
 X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -75,39 +50,78 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 6.1.0, Database issued on: 03/14/2024 09:10:01
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 184157 [Mar 14 2024]
+X-KSE-AntiSpam-Info: Version: 6.1.0.4
+X-KSE-AntiSpam-Info: Envelope from: r.smirnov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 10 0.3.10
+ 53c821b925e16276b831986eabc71d60ab82ee60
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info:
+	127.0.0.199:7.1.2;78.37.41.175:7.1.2;omp.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
+X-KSE-AntiSpam-Info: ApMailHostAddress: 78.37.41.175
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 03/14/2024 09:14:00
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 3/14/2024 6:00:00 AM
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
 
-This reverts commit 75fd6485cccef269ac9eb3b71cf56753341195ef.
-This patch was applied twice by accident, causing probe failures.
-Revert the accident.
+The expression result >= 0 will be true even if usb_stor_ctrl_transfer()
+returns an error code. It is necessary to compare result with
+USB_STOR_XFER_GOOD.
 
-Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+Found by Linux Verification Center (linuxtesting.org) with Svace.
+
+Signed-off-by: Roman Smirnov <r.smirnov@omp.ru>
+Cc: stable@vger.kernel.org
+Reviewed-by: Sergey Shtylyov <s.shtylyov@omp.ru>
 ---
-See [1] for details. This applies only to usb-next.
+ drivers/usb/storage/isd200.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-[1] https://lore.kernel.org/linux-usb/3469745.QJadu78ljV@steina-w/
-
- drivers/usb/phy/phy-generic.c | 7 -------
- 1 file changed, 7 deletions(-)
-
-diff --git a/drivers/usb/phy/phy-generic.c b/drivers/usb/phy/phy-generic.c
-index 8f735a86cd19..fdcffebf415c 100644
---- a/drivers/usb/phy/phy-generic.c
-+++ b/drivers/usb/phy/phy-generic.c
-@@ -262,13 +262,6 @@ int usb_phy_gen_create_phy(struct device *dev, struct usb_phy_generic *nop)
- 		return dev_err_probe(dev, PTR_ERR(nop->vbus_draw),
- 				     "could not get vbus regulator\n");
+diff --git a/drivers/usb/storage/isd200.c b/drivers/usb/storage/isd200.c
+index 300aeef160e7..2a1531793820 100644
+--- a/drivers/usb/storage/isd200.c
++++ b/drivers/usb/storage/isd200.c
+@@ -774,7 +774,7 @@ static int isd200_write_config( struct us_data *us )
+ 		(void *) &info->ConfigData, 
+ 		sizeof(info->ConfigData));
  
--	nop->vbus_draw = devm_regulator_get_exclusive(dev, "vbus");
--	if (PTR_ERR(nop->vbus_draw) == -ENODEV)
--		nop->vbus_draw = NULL;
--	if (IS_ERR(nop->vbus_draw))
--		return dev_err_probe(dev, PTR_ERR(nop->vbus_draw),
--				     "could not get vbus regulator\n");
--
- 	nop->dev		= dev;
- 	nop->phy.dev		= nop->dev;
- 	nop->phy.label		= "nop-xceiv";
+-	if (result >= 0) {
++	if (result == USB_STOR_XFER_GOOD) {
+ 		usb_stor_dbg(us, "   ISD200 Config Data was written successfully\n");
+ 	} else {
+ 		usb_stor_dbg(us, "   Request to write ISD200 Config Data failed!\n");
+@@ -816,7 +816,7 @@ static int isd200_read_config( struct us_data *us )
+ 		sizeof(info->ConfigData));
+ 
+ 
+-	if (result >= 0) {
++	if (result == USB_STOR_XFER_GOOD) {
+ 		usb_stor_dbg(us, "   Retrieved the following ISD200 Config Data:\n");
+ #ifdef CONFIG_USB_STORAGE_DEBUG
+ 		isd200_log_config(us, info);
 -- 
 2.34.1
 
