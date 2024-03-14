@@ -1,108 +1,139 @@
-Return-Path: <linux-usb+bounces-7940-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7941-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19EA787B461
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Mar 2024 23:30:55 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC1B687B85E
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Mar 2024 08:17:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 79FA1B23544
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Mar 2024 22:30:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E84421C221EA
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Mar 2024 07:17:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 444A554725;
-	Wed, 13 Mar 2024 22:30:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FRmjRg4X"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E03935C617;
+	Thu, 14 Mar 2024 07:16:56 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mta22.hihonor.com (mta22.hihonor.com [81.70.192.198])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6037E1A38F3
-	for <linux-usb@vger.kernel.org>; Wed, 13 Mar 2024 22:30:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D05EE5A119;
+	Thu, 14 Mar 2024 07:16:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=81.70.192.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710369041; cv=none; b=n6Ni+WfCjJxalu0wlgKMhbHEEw5RSXKlG5ep86OjaYDR4387P/rdF0ItysLSI0zdos91rqVQ6VPk73vPtYU30FLeBE6FBMiHPN19uV/Pqac4e//L5M2kEsRazLiTir3CgedcS0TeYUnoTHhaGsnSLWJW3zbnoeObq8xtCWo8JqQ=
+	t=1710400616; cv=none; b=fE1Nuj6E5Rf0YmvdbOiHeyxwMmZauBAfVpzZdFxc+KlJpuMA4TK358/NwC0DWEkePxYfi1//Gd0XQ8ZrK1UuITIKS12EoCxa+nRjpDq6pfR9KmzBQzjWFSEpPGw+cqKYQN4NIUgNqaPjN2KtM/IlD+9yIqz7HrDkuWe8OXnJTAY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710369041; c=relaxed/simple;
-	bh=K2vItKUSPwjVNWTaNx+deqah7GibR40npGAyO5smBOk=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=d5N0hGZVKIMeMe7PNqpkO0E/YDV1+lZo13D1mGdBk3ptJrQ7gC78SxKGHYWzQbIuT37iLNU7BalUwCB2B5UMhDcGMOqRpQLdZgQoLkmVp6hF+/7U2npyHEaWN9Xmd3s961Ztfvx0k3EpVppJr5KGpTCanmko7beVqPUZLEeAshw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FRmjRg4X; arc=none smtp.client-ip=209.85.219.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-d9b9adaf291so255626276.1
-        for <linux-usb@vger.kernel.org>; Wed, 13 Mar 2024 15:30:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710369039; x=1710973839; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=K2vItKUSPwjVNWTaNx+deqah7GibR40npGAyO5smBOk=;
-        b=FRmjRg4XwJqmqypzbG4/aj0ibBbb83OOufBipXlLTxOg7F66sx11ayAkx8Pm9x2P6z
-         9WYHXKQXNxr9OrbWxqpku+BbEfcE8AtlMuKTzLKI2I+uIvRjoeuEKbMeZQlZRpSon9JQ
-         1txNPtHaRcF5KU0MREizdIwyKyhxKQIegIiWKbV8sYeTLjlS/z9YffPXThitsLG2P86T
-         gAuToIieZnNmJeJg/rAvSokyNwugJUKhARyQ74AoxmDbekYgBx1racLCHFwwOUZY7GIj
-         xsmxcAy3jAl8bKiBH+zPe11FxW9ibSoaJTA6su3OrHc/8Erw16YiObqkA6MTItDvP9BQ
-         zPtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710369039; x=1710973839;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=K2vItKUSPwjVNWTaNx+deqah7GibR40npGAyO5smBOk=;
-        b=EWoha+6kbX+GcNvn+d1KOt/jcAv/WM/cQfw/IXjzw8D4jLJUtnx2DM8btctvkoySk/
-         7u+GYrYNeAhcwij1FzzlLzxDYn8VZHY/D+snpN6p2yzePREKxNzii1dN2Kw4jYnNo2Yj
-         Zx3cNdFpLbU3glUq6vAAlf9jy3iFvXHRgbwnDpH+HP48SRkqrKaJhf6dCfCP8izcr8tn
-         hwP/h+N47cdM/PrlVuGarGiu+jGNocdMfbmof5Hu4NnkpNH+vl2NzRa9Gg7uO1vC2icq
-         zy0lLdvW+rBy+ULt1hEMvFlgdDk2htXHuIjpM0ttiiS0FFBZfTM4HMduCvnoyredPbri
-         MGLQ==
-X-Gm-Message-State: AOJu0YwmZVfLhjkiQ1+I00lAaTnnqagVeH8Q6jHZwI4WjemeL6y8+hyL
-	zp+XZlaM6hWV4Q6CDhMutilqpf+SjkqSkxQbqfP5E+1MmGMf1Qnb1MiLNlXA0nVfcausVcsmqd8
-	1rrOUX12xisUkcNx9ojCEA1iekP8=
-X-Google-Smtp-Source: AGHT+IGDrvviJxHI8LumXawQmYZe+I38zK3eNbzHVaUbz3l3Arg+5U+STj8YiGQX5zgJ/bkjqgqBHVKfxm/kQcWb/Uw=
-X-Received: by 2002:a05:6902:304:b0:dd1:4908:7a91 with SMTP id
- b4-20020a056902030400b00dd149087a91mr44964ybs.49.1710369039297; Wed, 13 Mar
- 2024 15:30:39 -0700 (PDT)
+	s=arc-20240116; t=1710400616; c=relaxed/simple;
+	bh=rWIeLb4RUhYpHhwwe81U3ahk3XwZPUa8yLrRX7/PgVc=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=sso9pWMF8Tm+m5KMNLoa1G08csdmjiYsTRaBu5WYkQbva3ZPPhzPnvtXY0XOQ4oczq8bS8puKmWGTjvtB4mHnZT235Qt9qk505iJ+3yWIBlGwul/ZkB3j+8cbxxLIBbDWkYcMBv2N2XaGfozA04dwG5+hhYW6gYc2TvIn82rw8E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hihonor.com; spf=pass smtp.mailfrom=hihonor.com; arc=none smtp.client-ip=81.70.192.198
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hihonor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hihonor.com
+Received: from w003.hihonor.com (unknown [10.68.17.88])
+	by mta22.hihonor.com (SkyGuard) with ESMTPS id 4TwJBW109YzYsCZm;
+	Thu, 14 Mar 2024 14:58:43 +0800 (CST)
+Received: from w025.hihonor.com (10.68.28.69) by w003.hihonor.com
+ (10.68.17.88) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.25; Thu, 14 Mar
+ 2024 15:00:14 +0800
+Received: from localhost.localdomain (10.144.17.252) by w025.hihonor.com
+ (10.68.28.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.25; Thu, 14 Mar
+ 2024 15:00:13 +0800
+From: yuan linyu <yuanlinyu@hihonor.com>
+To: Alan Stern <stern@rowland.harvard.edu>, Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>
+CC: <linux-usb@vger.kernel.org>, yuan linyu <yuanlinyu@hihonor.com>,
+	<stable@vger.kernel.org>
+Subject: [PATCH v1] usb: f_mass_storage: reduce chance to queue disable ep
+Date: Thu, 14 Mar 2024 14:59:49 +0800
+Message-ID: <20240314065949.2627778-1-yuanlinyu@hihonor.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Chris Bainbridge <chris.bainbridge@gmail.com>
-Date: Wed, 13 Mar 2024 22:30:28 +0000
-Message-ID: <CAP-bSRazabvM26Z2JnQw0yxKU6Sh1dOgdNaQV7_fi=O5noqc2g@mail.gmail.com>
-Subject: BUG: new USB3 devices not detected after unplugging dock
-To: mathias.nyman@intel.com
-Cc: linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-ClientProxiedBy: w002.hihonor.com (10.68.28.120) To w025.hihonor.com
+ (10.68.28.69)
 
-Hardware: Razer Blade 15 2018 Base, HP G5 USB-C dock
-Kernel: all tested including 6.8.0-rc7
+It is possible trigger below warning message from mass storage function,
 
-The HP G5 dock uses Alt Mode for external monitors. Booting the kernel
-with dock connected and then unplugging and replugging the dock
-results in the monitors and USB3 devices no longer being detected
-(some USB2 devices are still detected). By not detected, I mean that
-the kernel log does not show anything at all when the device is
-plugged into the USB-C port. This is not a problem with the dock - a
-USB-C NVME drive was plugged in and also not detected, and neither was
-the dock after being power cycled. I have narrowed this problem down
-to the usb3 and usb4 bus devices being automatically suspended after
-the dock is unplugged:
+------------[ cut here ]------------
+WARNING: CPU: 6 PID: 3839 at drivers/usb/gadget/udc/core.c:294 usb_ep_queue+0x7c/0x104
+CPU: 6 PID: 3839 Comm: file-storage Tainted: G S      WC O       6.1.25-android14-11-g354e2a7e7cd9 #1
+pstate: 22400005 (nzCv daif +PAN -UAO +TCO -DIT -SSBS BTYPE=--)
+pc : usb_ep_queue+0x7c/0x104
+lr : fsg_main_thread+0x494/0x1b3c
 
-/sys/bus/usb/devices# cat usb[34]/power/runtime_status
-suspended
-suspended
-/sys/bus/usb/devices# cat usb[34]/power/control
-auto
-auto
+Root cause is mass storage function try to queue request from main thread,
+but other thread may already disable ep when function disable.
 
-If I plug the dock (or NVME drive) in and then force either of these
-bus devices on (echo on > usb3/power/control), then the port wakes up,
-and the dock and displays plugged into it are detected.
+As mass storage function have record of ep enable/disable state, let's
+add the state check before queue request to UDC, it maybe avoid warning.
 
-This problem seems to be related to the external monitors connected to
-the dock - with a single display connected, it happens rarely, but
-with two displays it happens every time the dock is unplugged. If the
-kernel is booted with "usbcore.autosuspend=-1" then the problem never
-occurs.
+Also use common lock to protect ep state which avoid race between main
+thread and function disable.
+
+Cc: <stable@vger.kernel.org> # 6.1
+Signed-off-by: yuan linyu <yuanlinyu@hihonor.com>
+---
+ drivers/usb/gadget/function/f_mass_storage.c | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
+index c265a1f62fc1..056083cb68cb 100644
+--- a/drivers/usb/gadget/function/f_mass_storage.c
++++ b/drivers/usb/gadget/function/f_mass_storage.c
+@@ -520,12 +520,25 @@ static int fsg_setup(struct usb_function *f,
+ static int start_transfer(struct fsg_dev *fsg, struct usb_ep *ep,
+ 			   struct usb_request *req)
+ {
++	unsigned long flags;
+ 	int	rc;
+ 
+-	if (ep == fsg->bulk_in)
++	spin_lock_irqsave(&fsg->common->lock, flags);
++	if (ep == fsg->bulk_in) {
++		if (!fsg->bulk_in_enabled) {
++			spin_unlock_irqrestore(&fsg->common->lock, flags);
++			return -ESHUTDOWN;
++		}
+ 		dump_msg(fsg, "bulk-in", req->buf, req->length);
++	} else {
++		if (!fsg->bulk_out_enabled) {
++			spin_unlock_irqrestore(&fsg->common->lock, flags);
++			return -ESHUTDOWN;
++		}
++	}
+ 
+ 	rc = usb_ep_queue(ep, req, GFP_KERNEL);
++	spin_unlock_irqrestore(&fsg->common->lock, flags);
+ 	if (rc) {
+ 
+ 		/* We can't do much more than wait for a reset */
+@@ -2406,8 +2419,10 @@ static int fsg_set_alt(struct usb_function *f, unsigned intf, unsigned alt)
+ static void fsg_disable(struct usb_function *f)
+ {
+ 	struct fsg_dev *fsg = fsg_from_func(f);
++	unsigned long flags;
+ 
+ 	/* Disable the endpoints */
++	spin_lock_irqsave(&fsg->common->lock, flags);
+ 	if (fsg->bulk_in_enabled) {
+ 		usb_ep_disable(fsg->bulk_in);
+ 		fsg->bulk_in_enabled = 0;
+@@ -2416,6 +2431,7 @@ static void fsg_disable(struct usb_function *f)
+ 		usb_ep_disable(fsg->bulk_out);
+ 		fsg->bulk_out_enabled = 0;
+ 	}
++	spin_unlock_irqrestore(&fsg->common->lock, flags);
+ 
+ 	__raise_exception(fsg->common, FSG_STATE_CONFIG_CHANGE, NULL);
+ }
+-- 
+2.25.1
+
 
