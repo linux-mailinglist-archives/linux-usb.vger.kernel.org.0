@@ -1,94 +1,100 @@
-Return-Path: <linux-usb+bounces-7944-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7945-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D618C87B9ED
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Mar 2024 10:00:20 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A57F587BA0B
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Mar 2024 10:08:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 64D96B21A3C
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Mar 2024 09:00:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D6E331C2173F
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Mar 2024 09:08:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 052C26BFA7;
-	Thu, 14 Mar 2024 09:00:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D2506BFA9;
+	Thu, 14 Mar 2024 09:07:55 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 167586BB5D;
-	Thu, 14 Mar 2024 09:00:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 608BE4C96;
+	Thu, 14 Mar 2024 09:07:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710406811; cv=none; b=Fl06x6sG2oasXmNwqXxK26yOtCieYBaSCwMEvL1VHRp2fkmnwDcDLI/5Ptpl34x8fyrlC6KMIC0a0sJn6iwRPLwy7XouW83YjrgKsC6aGVBpEz5a4OjyeYGmc50b3s5dGJI6PwyE2HwrZocS5f/9tCO8RDDx2eEZDBqfAFxKgPY=
+	t=1710407275; cv=none; b=T4C4R+7cIdBltvL5r9MQ9l0pnUqFCrRkC8wam8/FZeuKeXNtt3RB1fvPxLjuI8YePJ+2j3H7J7KK+xgpEDzC/5rWE/jqhBUGDk8AALe2sDl2TgnTvt9KW1/7ulOm72muKYTJjuG1JAgWEhrC8Gob3OWUUVVMBAm5AUXIz2EmOSs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710406811; c=relaxed/simple;
-	bh=wWNgQRUvkK9MTUs5Kk4ts9b8Fi+6ZczpdI/RP3Xgg/w=;
+	s=arc-20240116; t=1710407275; c=relaxed/simple;
+	bh=r0Ms/0c+w3Xzez5UMRRwkgAgwlRMVWP1iCoaKbWtQUM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uIiWbqoE830duUG/KeHbS0Nrry0XcZHC+N0axIowt+/Q5WdbtWfbZqy8fjq5WS+ZSX0yebP9w36p/HDCloDpKhQ2gDnwrQ4Hg6Hze+ysCJsp/7mFqxheS60b6zJx1BGVXS9F9kaQQLThDB6o4hov43/l7Yz8ziqb7Clm0d+px3o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.182
+	 To:Cc:Content-Type; b=gO8In/EYZSDSIydWa9MhqV99vXqqlUkt9OT0X5I5Bq7Ecud3wpnShSjBSTDlC3OMsU7p4zNUhHyouxDnYXtAXy1C/R9i1o4UZUckV49U0dQs2wmJJGFuEO7yDlc9lf2d7rwznRAUCSqPH43KrsEv0EuldWu757VL0uCS2qSMOxk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-60a434ea806so8184907b3.3;
-        Thu, 14 Mar 2024 02:00:09 -0700 (PDT)
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-609fb19ae76so7948887b3.2;
+        Thu, 14 Mar 2024 02:07:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710406809; x=1711011609;
+        d=1e100.net; s=20230601; t=1710407272; x=1711012072;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=uEABEMDokfrAOg1stpzpwp/A5lYF9OZcDSPLypcKwyg=;
-        b=vJcLKUwqM1DgSNHUdAF/tov5DHZAIfMvj0IxLvt5P1AbbGx00jdatwOTpPoPBYRrYu
-         VxBI/2/QDoEaMUx32JJPEP+dFRk8cc3R07gOpoGyzZWH1VsjI6+ibluIMfD1KthFsNNM
-         QF0KQsDHz9/TeGRtn0w3q1FJ4AwN3WEsZGMhDPwD+ZhMh/Ts6LC0EbfwwpOyWaUJevCl
-         lQ1g/SZE628BO3idqOPfGyEYqRgvUySdoAdo3MDjQx37Y6gBNtvanyqJYFfaanlzHhM0
-         Kz6TRLzBuchQeUrWtkYycSufnAGmErPw62DSiWzLqynACivL5089cjj/FkSejP31jSgp
-         KT6w==
-X-Forwarded-Encrypted: i=1; AJvYcCV2NR0aHqc3ck39X9YLc9x7ga75OaneFUXfD8Kx5bGvCaBcz0dtr2eFAutZS+M8wgzsMbbhLmCw0fzJpkaQbSxMV4bmBH+WYxQd1LcoBl7wob8kGYHVEXxHpo3mujcEO97gS014rHw3AY4kgsU=
-X-Gm-Message-State: AOJu0YzU/O0yvphKTbt4vSf7QRpBrTUrz4sCI61k3i3rDzWHfV+aSjhI
-	9losjfoLJoyyCGTP5I/BvBXTxsZW9stwSIx+cMmBi8uhXOYlgyqo52OYDuMKN7k=
-X-Google-Smtp-Source: AGHT+IE6N9ofhgDo+wpMt2iBVWAehp9NEEUQZUa/JGm5z2Rsthbi2OMLMd/DP0lfES51rjN8UkB9cw==
-X-Received: by 2002:a0d:ea03:0:b0:60a:2046:e1b0 with SMTP id t3-20020a0dea03000000b0060a2046e1b0mr1108019ywe.0.1710406808750;
-        Thu, 14 Mar 2024 02:00:08 -0700 (PDT)
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com. [209.85.219.178])
-        by smtp.gmail.com with ESMTPSA id fb6-20020a05690c310600b00609fe4e5f5csm186869ywb.81.2024.03.14.02.00.08
+        bh=yHsIDtkvQxOlMnscQiXVojq07MntWgDaFDPSS8+uwXk=;
+        b=FIuqiULeIqGWNtt/1BI9e7PfLLetUsLITaC8QMyHh8E/K1SVMXKK+i4HtpryT1zaF3
+         jZWtp0DZMjSU11YvepqYw4hVsZL5hWF2ImN4kZZ+EitIz+o/H1d1zcSLNKhCSgvn4JSY
+         mb+ws9SeFyGXon8Gi6hcKoJOUmqsz1QKmLr+Fm0D9ehYCvhdac9ec5/9URV3NKBgLfb6
+         66nAxPrc1CU1BUZjLYz37YHannCH4uz6YUgVQJ5CXORqZFRgRd2LnttikUcsw3qNwOyS
+         iZfG1X+whUKepPuyE9uS14s+2225F1W7VSa9vFVnK5qI7ubER0Ka3Pze/CV+ZcDfnz2x
+         f9jw==
+X-Forwarded-Encrypted: i=1; AJvYcCU5bxxMJU4+6kDjR8SFEqZ2omskRwL7EuFJycaElefOh704/k6shvzDgViUYYUsIdszP7sjZNN/DTPJN5gTsxFIzaNuy1jl5lhA0Za1b3BYBQCpkfOxv2wDQKNpzzLUlX7+pf0cOuTa8Dii+LggNM68lEPcjfPz9eR9s1prqDnfEwkkS/uFuF+O
+X-Gm-Message-State: AOJu0YwNb8d9M/7t4UqQG/SqNToIrHnFTkeeAYSmzzvPrAt4lo6TK6uk
+	aE2uvB+4e9komEP2o4Zx+4/1F3mkoGLQmzSxWVof/3zU7mJsNEqxDtEqTL8r7PQ=
+X-Google-Smtp-Source: AGHT+IFvi9h9EaNg9thHuxQNmYIULHPeSdySyhn7zwGq5QVK0HxQsbQJYjqrV3rB0MZAVS0mtIfCvQ==
+X-Received: by 2002:a0d:d8d0:0:b0:609:eeb4:a5f1 with SMTP id a199-20020a0dd8d0000000b00609eeb4a5f1mr95265ywe.33.1710407271922;
+        Thu, 14 Mar 2024 02:07:51 -0700 (PDT)
+Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com. [209.85.219.171])
+        by smtp.gmail.com with ESMTPSA id y127-20020a0dd685000000b0060a046c50f1sm195865ywd.58.2024.03.14.02.07.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Mar 2024 02:00:08 -0700 (PDT)
-Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-dc236729a2bso612906276.0;
-        Thu, 14 Mar 2024 02:00:08 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCX4x6rpsRCur0cbUHttCijn979BDtKyVe3X736jda16IOElqEiQiTxfMHnvn0nUrj5GlYzQSza9sStbJrd7aqHpBvFy2QHoKdg/DRGMSLIz6w7HMRC0rkatvHqasKrT606nmb7TfY/1qhiXxLo=
-X-Received: by 2002:a25:338b:0:b0:dc6:cbb9:e with SMTP id z133-20020a25338b000000b00dc6cbb9000emr1035233ybz.41.1710406808350;
- Thu, 14 Mar 2024 02:00:08 -0700 (PDT)
+        Thu, 14 Mar 2024 02:07:51 -0700 (PDT)
+Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-dcc71031680so588690276.2;
+        Thu, 14 Mar 2024 02:07:51 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWBXoUjibJhTaIhIKQ4hvhKSuxF538J08tE5jsSWBlPu3bYP9BQWoWQWLGXUjU2F9yqnSCM9BBTiYJ74b7N1eFVe9dYKqSf0y54kLjMmbmZTBFckwBSv67Qm7TpJxykIjpQxMbUJVku8ChEP803Slb38BIhdqH3rUn5fMjkVHWEMwS/CjiLPAFa
+X-Received: by 2002:a25:4f41:0:b0:dc6:49d3:dd52 with SMTP id
+ d62-20020a254f41000000b00dc649d3dd52mr999321ybb.34.1710407271524; Thu, 14 Mar
+ 2024 02:07:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240313181602.156840-1-biju.das.jz@bp.renesas.com> <20240313181602.156840-3-biju.das.jz@bp.renesas.com>
-In-Reply-To: <20240313181602.156840-3-biju.das.jz@bp.renesas.com>
+References: <20240313181602.156840-1-biju.das.jz@bp.renesas.com> <20240313181602.156840-2-biju.das.jz@bp.renesas.com>
+In-Reply-To: <20240313181602.156840-2-biju.das.jz@bp.renesas.com>
 From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 14 Mar 2024 09:59:56 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVBK7Y8d5zjdtcvDyRONdGRjT06gb+VbeY8YdU7AUKHVQ@mail.gmail.com>
-Message-ID: <CAMuHMdVBK7Y8d5zjdtcvDyRONdGRjT06gb+VbeY8YdU7AUKHVQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/5] usb: renesas_usbhs: Simplify obtaining device data
+Date: Thu, 14 Mar 2024 10:07:39 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVKHOi4X_-3WXkEk+2P+bgrjThetP_oZ+GSRn6iMS3SjA@mail.gmail.com>
+Message-ID: <CAMuHMdVKHOi4X_-3WXkEk+2P+bgrjThetP_oZ+GSRn6iMS3SjA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/5] dt-bindings: usb: renesas,usbhs: Document RZ/G2L
+ family compatible
 To: Biju Das <biju.das.jz@bp.renesas.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Magnus Damm <magnus.damm@gmail.com>, 
-	Huy Nguyen <huy.nguyen.wh@renesas.com>, Rob Herring <robh@kernel.org>, 
-	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
-	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@pengutronix.de>, 
-	linux-usb@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
-	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>, Biju Das <biju.das.au@gmail.com>
+Cc: Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Magnus Damm <magnus.damm@gmail.com>, 
+	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>, linux-usb@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
+	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>, Biju Das <biju.das.au@gmail.com>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
 On Wed, Mar 13, 2024 at 7:16=E2=80=AFPM Biju Das <biju.das.jz@bp.renesas.co=
 m> wrote:
-> Simplify probe() by removing redundant dev->of_node check.
->
-> While at it, replace dev_err->dev_err_probe for error path.
+> The USBHS IP found on RZ/G2L SoCs only has 10 pipe buffers compared
+> to 16 pipe buffers on RZ/A2M. Document renesas,rzg2l-usbhs family
+> compatible to handle this difference for RZ/G2L family SoCs.
 >
 > Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+> v1->v2:
+>  * Added Ack from Krzysztof Kozlowski.
 
 Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
@@ -96,7 +102,8 @@ Gr{oetje,eeting}s,
 
                         Geert
 
---=20
+
+--
 Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
 .org
 
