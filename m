@@ -1,130 +1,108 @@
-Return-Path: <linux-usb+bounces-7943-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7944-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5130587B951
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Mar 2024 09:32:03 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D618C87B9ED
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Mar 2024 10:00:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0C3802862C6
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Mar 2024 08:32:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 64D96B21A3C
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Mar 2024 09:00:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40CBE67C49;
-	Thu, 14 Mar 2024 08:31:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 052C26BFA7;
+	Thu, 14 Mar 2024 09:00:12 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mta20.hihonor.com (mta20.hihonor.com [81.70.206.69])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92C8E679F3;
-	Thu, 14 Mar 2024 08:31:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=81.70.206.69
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 167586BB5D;
+	Thu, 14 Mar 2024 09:00:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710405117; cv=none; b=AQg5VMq8rTX5KMmgsWa0aKtXgiP3VWYrj7lXwcst7YAUOGiwLoHw9cdL2TUs/U1q1+R91jLkqYsqhJY9ol/cC8sMo+v+7oCmAMe2oXztU5rKnK5vNjSGJG3WV0dFUAvtxqbVAggO+XAI5l1euXgNj2/zgxBr8+6YighzeY/v4kI=
+	t=1710406811; cv=none; b=Fl06x6sG2oasXmNwqXxK26yOtCieYBaSCwMEvL1VHRp2fkmnwDcDLI/5Ptpl34x8fyrlC6KMIC0a0sJn6iwRPLwy7XouW83YjrgKsC6aGVBpEz5a4OjyeYGmc50b3s5dGJI6PwyE2HwrZocS5f/9tCO8RDDx2eEZDBqfAFxKgPY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710405117; c=relaxed/simple;
-	bh=zb1QEqmI6ZbtSaKHQpUGGWKDKghREVVAkBnJmi/i9sE=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=Ct3ifd+loLqY+WPf2BHHZZlBtbd0WCWHWd8QtDNdgVxNbpexiTJQM4fmLjAvRv7DBw42/m6afgOvdUD/icAdnfhvCnh1BwPIcEhVlZHN/355ZKTZKT/47Xr4pdviLh1GItskSNHZQMtg+0cIKW0E6LGFHXRQLALpDAQpmlm9l/s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hihonor.com; spf=pass smtp.mailfrom=hihonor.com; arc=none smtp.client-ip=81.70.206.69
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hihonor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hihonor.com
-Received: from w011.hihonor.com (unknown [10.68.20.122])
-	by mta20.hihonor.com (SkyGuard) with ESMTPS id 4TwKs12YKczblSvt;
-	Thu, 14 Mar 2024 16:13:41 +0800 (CST)
-Received: from a001.hihonor.com (10.68.28.182) by w011.hihonor.com
- (10.68.20.122) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.25; Thu, 14 Mar
- 2024 16:14:19 +0800
-Received: from w025.hihonor.com (10.68.28.69) by a001.hihonor.com
- (10.68.28.182) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.25; Thu, 14 Mar
- 2024 16:14:19 +0800
-Received: from w025.hihonor.com ([fe80::5770:e914:c15d:4346]) by
- w025.hihonor.com ([fe80::5770:e914:c15d:4346%14]) with mapi id
- 15.02.1258.025; Thu, 14 Mar 2024 16:14:19 +0800
-From: yuanlinyu <yuanlinyu@hihonor.com>
-To: Oliver Neukum <oneukum@suse.com>, Alan Stern <stern@rowland.harvard.edu>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: RE: [PATCH v1] usb: f_mass_storage: reduce chance to queue disable ep
-Thread-Topic: [PATCH v1] usb: f_mass_storage: reduce chance to queue disable
- ep
-Thread-Index: AQHadd1DBEawBTTN7U63+22niyjmfrE2V6OAgACK6iA=
-Date: Thu, 14 Mar 2024 08:14:19 +0000
-Message-ID: <ee024edfcb4447fb884878b15fe202f0@hihonor.com>
-References: <20240314065949.2627778-1-yuanlinyu@hihonor.com>
- <2233fe16-ca3e-4a5e-bc69-a2447ddd2e82@suse.com>
-In-Reply-To: <2233fe16-ca3e-4a5e-bc69-a2447ddd2e82@suse.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	s=arc-20240116; t=1710406811; c=relaxed/simple;
+	bh=wWNgQRUvkK9MTUs5Kk4ts9b8Fi+6ZczpdI/RP3Xgg/w=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=uIiWbqoE830duUG/KeHbS0Nrry0XcZHC+N0axIowt+/Q5WdbtWfbZqy8fjq5WS+ZSX0yebP9w36p/HDCloDpKhQ2gDnwrQ4Hg6Hze+ysCJsp/7mFqxheS60b6zJx1BGVXS9F9kaQQLThDB6o4hov43/l7Yz8ziqb7Clm0d+px3o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-60a434ea806so8184907b3.3;
+        Thu, 14 Mar 2024 02:00:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710406809; x=1711011609;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uEABEMDokfrAOg1stpzpwp/A5lYF9OZcDSPLypcKwyg=;
+        b=vJcLKUwqM1DgSNHUdAF/tov5DHZAIfMvj0IxLvt5P1AbbGx00jdatwOTpPoPBYRrYu
+         VxBI/2/QDoEaMUx32JJPEP+dFRk8cc3R07gOpoGyzZWH1VsjI6+ibluIMfD1KthFsNNM
+         QF0KQsDHz9/TeGRtn0w3q1FJ4AwN3WEsZGMhDPwD+ZhMh/Ts6LC0EbfwwpOyWaUJevCl
+         lQ1g/SZE628BO3idqOPfGyEYqRgvUySdoAdo3MDjQx37Y6gBNtvanyqJYFfaanlzHhM0
+         Kz6TRLzBuchQeUrWtkYycSufnAGmErPw62DSiWzLqynACivL5089cjj/FkSejP31jSgp
+         KT6w==
+X-Forwarded-Encrypted: i=1; AJvYcCV2NR0aHqc3ck39X9YLc9x7ga75OaneFUXfD8Kx5bGvCaBcz0dtr2eFAutZS+M8wgzsMbbhLmCw0fzJpkaQbSxMV4bmBH+WYxQd1LcoBl7wob8kGYHVEXxHpo3mujcEO97gS014rHw3AY4kgsU=
+X-Gm-Message-State: AOJu0YzU/O0yvphKTbt4vSf7QRpBrTUrz4sCI61k3i3rDzWHfV+aSjhI
+	9losjfoLJoyyCGTP5I/BvBXTxsZW9stwSIx+cMmBi8uhXOYlgyqo52OYDuMKN7k=
+X-Google-Smtp-Source: AGHT+IE6N9ofhgDo+wpMt2iBVWAehp9NEEUQZUa/JGm5z2Rsthbi2OMLMd/DP0lfES51rjN8UkB9cw==
+X-Received: by 2002:a0d:ea03:0:b0:60a:2046:e1b0 with SMTP id t3-20020a0dea03000000b0060a2046e1b0mr1108019ywe.0.1710406808750;
+        Thu, 14 Mar 2024 02:00:08 -0700 (PDT)
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com. [209.85.219.178])
+        by smtp.gmail.com with ESMTPSA id fb6-20020a05690c310600b00609fe4e5f5csm186869ywb.81.2024.03.14.02.00.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Mar 2024 02:00:08 -0700 (PDT)
+Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-dc236729a2bso612906276.0;
+        Thu, 14 Mar 2024 02:00:08 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCX4x6rpsRCur0cbUHttCijn979BDtKyVe3X736jda16IOElqEiQiTxfMHnvn0nUrj5GlYzQSza9sStbJrd7aqHpBvFy2QHoKdg/DRGMSLIz6w7HMRC0rkatvHqasKrT606nmb7TfY/1qhiXxLo=
+X-Received: by 2002:a25:338b:0:b0:dc6:cbb9:e with SMTP id z133-20020a25338b000000b00dc6cbb9000emr1035233ybz.41.1710406808350;
+ Thu, 14 Mar 2024 02:00:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20240313181602.156840-1-biju.das.jz@bp.renesas.com> <20240313181602.156840-3-biju.das.jz@bp.renesas.com>
+In-Reply-To: <20240313181602.156840-3-biju.das.jz@bp.renesas.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Thu, 14 Mar 2024 09:59:56 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVBK7Y8d5zjdtcvDyRONdGRjT06gb+VbeY8YdU7AUKHVQ@mail.gmail.com>
+Message-ID: <CAMuHMdVBK7Y8d5zjdtcvDyRONdGRjT06gb+VbeY8YdU7AUKHVQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/5] usb: renesas_usbhs: Simplify obtaining device data
+To: Biju Das <biju.das.jz@bp.renesas.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Magnus Damm <magnus.damm@gmail.com>, 
+	Huy Nguyen <huy.nguyen.wh@renesas.com>, Rob Herring <robh@kernel.org>, 
+	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@pengutronix.de>, 
+	linux-usb@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
+	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>, Biju Das <biju.das.au@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-PiBGcm9tOiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3VtQHN1c2UuY29tPg0KPiBTZW50OiBUaHVyc2Rh
-eSwgTWFyY2ggMTQsIDIwMjQgMzo1NCBQTQ0KPiBUbzogeXVhbmxpbnl1IDx5dWFubGlueXVAaGlo
-b25vci5jb20+OyBBbGFuIFN0ZXJuDQo+IDxzdGVybkByb3dsYW5kLmhhcnZhcmQuZWR1PjsgR3Jl
-ZyBLcm9haC1IYXJ0bWFuDQo+IDxncmVna2hAbGludXhmb3VuZGF0aW9uLm9yZz4NCj4gQ2M6IGxp
-bnV4LXVzYkB2Z2VyLmtlcm5lbC5vcmc7IHN0YWJsZUB2Z2VyLmtlcm5lbC5vcmcNCj4gU3ViamVj
-dDogUmU6IFtQQVRDSCB2MV0gdXNiOiBmX21hc3Nfc3RvcmFnZTogcmVkdWNlIGNoYW5jZSB0byBx
-dWV1ZSBkaXNhYmxlIGVwDQo+IA0KPiBIaSwNCj4gDQo+IEkgYW0gc29ycnksIGJ1dCB0aGlzIGNv
-bnRhaW5zIGEgbWFqb3IgaXNzdWUuDQo+IA0KPiBPbiAxNC4wMy4yNCAwNzo1OSwgeXVhbiBsaW55
-dSB3cm90ZToNCj4gPiBJdCBpcyBwb3NzaWJsZSB0cmlnZ2VyIGJlbG93IHdhcm5pbmcgbWVzc2Fn
-ZSBmcm9tIG1hc3Mgc3RvcmFnZSBmdW5jdGlvbiwNCj4gPg0KPiA+IC0tLS0tLS0tLS0tLVsgY3V0
-IGhlcmUgXS0tLS0tLS0tLS0tLQ0KPiA+IFdBUk5JTkc6IENQVTogNiBQSUQ6IDM4MzkgYXQgZHJp
-dmVycy91c2IvZ2FkZ2V0L3VkYy9jb3JlLmM6Mjk0DQo+IHVzYl9lcF9xdWV1ZSsweDdjLzB4MTA0
-DQo+ID4gQ1BVOiA2IFBJRDogMzgzOSBDb21tOiBmaWxlLXN0b3JhZ2UgVGFpbnRlZDogRyBTICAg
-ICAgV0MgTw0KPiA2LjEuMjUtYW5kcm9pZDE0LTExLWczNTRlMmE3ZTdjZDkgIzENCj4gPiBwc3Rh
-dGU6IDIyNDAwMDA1IChuekN2IGRhaWYgK1BBTiAtVUFPICtUQ08gLURJVCAtU1NCUyBCVFlQRT0t
-LSkNCj4gPiBwYyA6IHVzYl9lcF9xdWV1ZSsweDdjLzB4MTA0DQo+ID4gbHIgOiBmc2dfbWFpbl90
-aHJlYWQrMHg0OTQvMHgxYjNjDQo+ID4NCj4gPiBSb290IGNhdXNlIGlzIG1hc3Mgc3RvcmFnZSBm
-dW5jdGlvbiB0cnkgdG8gcXVldWUgcmVxdWVzdCBmcm9tIG1haW4gdGhyZWFkLA0KPiA+IGJ1dCBv
-dGhlciB0aHJlYWQgbWF5IGFscmVhZHkgZGlzYWJsZSBlcCB3aGVuIGZ1bmN0aW9uIGRpc2FibGUu
-DQo+ID4NCj4gPiBBcyBtYXNzIHN0b3JhZ2UgZnVuY3Rpb24gaGF2ZSByZWNvcmQgb2YgZXAgZW5h
-YmxlL2Rpc2FibGUgc3RhdGUsIGxldCdzDQo+ID4gYWRkIHRoZSBzdGF0ZSBjaGVjayBiZWZvcmUg
-cXVldWUgcmVxdWVzdCB0byBVREMsIGl0IG1heWJlIGF2b2lkIHdhcm5pbmcuDQo+ID4NCj4gPiBB
-bHNvIHVzZSBjb21tb24gbG9jayB0byBwcm90ZWN0IGVwIHN0YXRlIHdoaWNoIGF2b2lkIHJhY2Ug
-YmV0d2VlbiBtYWluDQo+ID4gdGhyZWFkIGFuZCBmdW5jdGlvbiBkaXNhYmxlLg0KPiA+DQo+ID4g
-Q2M6IDxzdGFibGVAdmdlci5rZXJuZWwub3JnPiAjIDYuMQ0KPiA+IFNpZ25lZC1vZmYtYnk6IHl1
-YW4gbGlueXUgPHl1YW5saW55dUBoaWhvbm9yLmNvbT4NCj4gTmFja2VkLWJ5OiBPbGl2ZXIgTmV1
-a3VtIDxvbmV1a3VtQHN1c2UuY29tPg0KPiANCj4gPiAtLS0NCj4gPiAgIGRyaXZlcnMvdXNiL2dh
-ZGdldC9mdW5jdGlvbi9mX21hc3Nfc3RvcmFnZS5jIHwgMTggKysrKysrKysrKysrKysrKystDQo+
-ID4gICAxIGZpbGUgY2hhbmdlZCwgMTcgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQ0KPiA+
-DQo+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2dhZGdldC9mdW5jdGlvbi9mX21hc3Nfc3Rv
-cmFnZS5jDQo+IGIvZHJpdmVycy91c2IvZ2FkZ2V0L2Z1bmN0aW9uL2ZfbWFzc19zdG9yYWdlLmMN
-Cj4gPiBpbmRleCBjMjY1YTFmNjJmYzEuLjA1NjA4M2NiNjhjYiAxMDA2NDQNCj4gPiAtLS0gYS9k
-cml2ZXJzL3VzYi9nYWRnZXQvZnVuY3Rpb24vZl9tYXNzX3N0b3JhZ2UuYw0KPiA+ICsrKyBiL2Ry
-aXZlcnMvdXNiL2dhZGdldC9mdW5jdGlvbi9mX21hc3Nfc3RvcmFnZS5jDQo+ID4gQEAgLTUyMCwx
-MiArNTIwLDI1IEBAIHN0YXRpYyBpbnQgZnNnX3NldHVwKHN0cnVjdCB1c2JfZnVuY3Rpb24gKmYs
-DQo+ID4gICBzdGF0aWMgaW50IHN0YXJ0X3RyYW5zZmVyKHN0cnVjdCBmc2dfZGV2ICpmc2csIHN0
-cnVjdCB1c2JfZXAgKmVwLA0KPiA+ICAgCQkJICAgc3RydWN0IHVzYl9yZXF1ZXN0ICpyZXEpDQo+
-ID4gICB7DQo+ID4gKwl1bnNpZ25lZCBsb25nIGZsYWdzOw0KPiA+ICAgCWludAlyYzsNCj4gPg0K
-PiA+IC0JaWYgKGVwID09IGZzZy0+YnVsa19pbikNCj4gPiArCXNwaW5fbG9ja19pcnFzYXZlKCZm
-c2ctPmNvbW1vbi0+bG9jaywgZmxhZ3MpOw0KPiANCj4gVGFraW5nIGEgc3BpbmxvY2suDQo+IA0K
-PiA+ICsJaWYgKGVwID09IGZzZy0+YnVsa19pbikgew0KPiA+ICsJCWlmICghZnNnLT5idWxrX2lu
-X2VuYWJsZWQpIHsNCj4gPiArCQkJc3Bpbl91bmxvY2tfaXJxcmVzdG9yZSgmZnNnLT5jb21tb24t
-PmxvY2ssIGZsYWdzKTsNCj4gPiArCQkJcmV0dXJuIC1FU0hVVERPV047DQo+ID4gKwkJfQ0KPiA+
-ICAgCQlkdW1wX21zZyhmc2csICJidWxrLWluIiwgcmVxLT5idWYsIHJlcS0+bGVuZ3RoKTsNCj4g
-PiArCX0gZWxzZSB7DQo+ID4gKwkJaWYgKCFmc2ctPmJ1bGtfb3V0X2VuYWJsZWQpIHsNCj4gPiAr
-CQkJc3Bpbl91bmxvY2tfaXJxcmVzdG9yZSgmZnNnLT5jb21tb24tPmxvY2ssIGZsYWdzKTsNCj4g
-PiArCQkJcmV0dXJuIC1FU0hVVERPV047DQo+ID4gKwkJfQ0KPiA+ICsJfQ0KPiA+DQo+ID4gICAJ
-cmMgPSB1c2JfZXBfcXVldWUoZXAsIHJlcSwgR0ZQX0tFUk5FTCk7DQo+IA0KPiBUaGlzIGNhbiBz
-bGVlcC4NCj4gDQo+ID4gKwlzcGluX3VubG9ja19pcnFyZXN0b3JlKCZmc2ctPmNvbW1vbi0+bG9j
-aywgZmxhZ3MpOw0KPiANCj4gR2l2aW5nIHVwIHRoZSBsb2NrLg0KPiANCj4gDQo+IFNvcnJ5LCBu
-b3cgZm9yIHRoZSBsb25nZXIgZXhwbGFuYXRpb24uIFlvdSdkIGludHJvZHVjZSBhIGRlYWRsb2Nr
-Lg0KPiBZb3UganVzdCBjYW5ub3Qgc2xlZXAgd2l0aCBhIHNwaW5sb2NrIGhlbGQuIEl0IHNlZW1z
-IHRvIG1lIHRoYXQNCg0KSSBkaWRuJ3QgcmV2aWV3IHVzYl9lcF9xdWV1ZSgpIGNsZWFybHksIGlu
-IG15IHRlc3QsIEkgZGlkbid0IGhpdCBzbGVlcC4NCkJ1dCB0aGUgY29uY2VybiBpcyBnb29kLCB3
-aWxsIGZpbmQgYmV0dGVyIHdheSB0byBhdm9pZCBpdC4NCg0KPiBpZiB5b3Ugd2FudCB0byBkbyB0
-aGlzIGNsZWFubHksIHlvdSBuZWVkIHRvIHJldmlzaXQgdGhlIGxvY2tpbmcNCj4gdG8gdXNlIGxv
-Y2tzIHlvdSBjYW4gc2xlZXAgdW5kZXIuDQo+IA0KPiAJSFRIDQo+IAkJT2xpdmVyDQo=
+On Wed, Mar 13, 2024 at 7:16=E2=80=AFPM Biju Das <biju.das.jz@bp.renesas.co=
+m> wrote:
+> Simplify probe() by removing redundant dev->of_node check.
+>
+> While at it, replace dev_err->dev_err_probe for error path.
+>
+> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
