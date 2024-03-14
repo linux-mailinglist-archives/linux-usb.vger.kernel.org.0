@@ -1,212 +1,93 @@
-Return-Path: <linux-usb+bounces-7946-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7949-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF33987BA2A
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Mar 2024 10:15:30 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E122487BA8C
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Mar 2024 10:36:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7FC7CB2252A
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Mar 2024 09:15:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 95BE91F23282
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Mar 2024 09:36:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C88626D1BF;
-	Thu, 14 Mar 2024 09:14:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C9206CDD5;
+	Thu, 14 Mar 2024 09:36:11 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mta21.hihonor.com (mta21.hihonor.com [81.70.160.142])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C079C6BFD2;
-	Thu, 14 Mar 2024 09:14:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27C636BFAC;
+	Thu, 14 Mar 2024 09:36:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=81.70.160.142
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710407687; cv=none; b=J8mM1g//KCpgzo1JbOUfttqK6X6KvXJ3p0sMwGBJBw3dNuEOJDvIKO7qLzV5D1n4oaliNXGHnPxRsVwXaOTXpWkas00cTfqrhMCk3Vm8LACdk2WZyQ2PnPBAQcuc+peh1Thxu3g3eM0xC1T+xWpYQaL20P+Kf4jhOd475lI3o24=
+	t=1710408970; cv=none; b=gC+CqA9BVgvZIOgC8dhrPY3fIc2WWDZUTrqOP8q61N5FyV83/rjHyqrpn6CPFqB+YRfb0Ylxw5AmYFnRD4OXqnaHoG8RHaHpyKClBtSYkpphxIk6PSNodTJns+W55I90pyS+YJd5OdKUx2b+AxjGu9Sxk2goIFim0552fk83OtU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710407687; c=relaxed/simple;
-	bh=seqSV+lF1OaRIJKsveNwNp6KgJVzl5CYLb51gkmYVZk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uOt07V0ArOuxBXzhpjTdxXWnwdJD+TZHJQx9E3kGSk2FEmXxlycLoChdYnZy154bYSSDVA/M+NixpTQgISz4xAxIsjGYrsU9TU/6G9nKb5oxpTqyqS1caGZajj/RNkRZ20EhXoqF/CVRbMRtteH8X5zOAWZsBQ1aAuuz+8vwPaM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-60cbcd04de8so5884777b3.0;
-        Thu, 14 Mar 2024 02:14:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710407683; x=1711012483;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AEXtpqYTtQhI3FXq9PWUVbeDJTLFVDpRROmQL3Uopb8=;
-        b=FTD/QXnkt6r6/0nSvu8ZRFxzSnfQNuGDzKllzXVKITG7tPzImzE1Xea873ecEd0jKq
-         N3Pl2IGBCg52FeDMa25iJIAi+Fh4uupi9Sd9GTFkNZ6hcl41clfLpHCrmFaQcNJ6zgG2
-         lEneP/FEzf6T0Am0/Xut8m/tvU4ZK7qMTHaapi+LA0QO1bhPQWinOb+GsYZH+qmcvAHN
-         QMLHCsYWLXe52hNmnqHlg9nj6NrmDZjsSX1yUx0Ycxwcdkp/Cod3Dv563OkFUIMq+P9V
-         sE5Pl8JNtue3rFIDudqzflfnuYtXIcxVSmgWRLzqFPniy2c7r+cdcmVCb2qc347mV+Se
-         qwGg==
-X-Forwarded-Encrypted: i=1; AJvYcCW2J5kD9cXd3tGeSi/YBdF2ATXrTPL8ZagudvwCfzLmrq+XHZvCQqpdZnvFDU0Ckh+UmaaFtyWBgWtGs0eHnI6P2wxgRytbFroDMXb/Uqs5takMsjz7rhR5n9+cozDtwYYCWzqGtd7Sy7Ob7ZE=
-X-Gm-Message-State: AOJu0Yy759mtBKW+x62LPRpuT/J6VzHR1LNHBmIaOkYvc1RGLYPfQUn+
-	gbw5ki+UO7vs7a9jwA63azkxbBPi5MrwwmbMZaLvvx3AjWAdQtcj6oOmdFz2Jso=
-X-Google-Smtp-Source: AGHT+IFmycTX6pAHeIZKYWaiw8fR+/gcjzYDG7XQZox7iWTHOsL6+zmztYWLnQ3D5PxnsEC3Ot74kA==
-X-Received: by 2002:a0d:c507:0:b0:60c:bb52:3c55 with SMTP id h7-20020a0dc507000000b0060cbb523c55mr2678035ywd.18.1710407683091;
-        Thu, 14 Mar 2024 02:14:43 -0700 (PDT)
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
-        by smtp.gmail.com with ESMTPSA id k21-20020a81ac15000000b0060a0cd01a8fsm195342ywh.89.2024.03.14.02.14.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Mar 2024 02:14:42 -0700 (PDT)
-Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-dbed179f0faso1341989276.1;
-        Thu, 14 Mar 2024 02:14:42 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXrsy1exxMmWb8Rur/GF5NBQPgYhZnUQMSdq8F2xBaSEJZZ7vod6bxFLgxP4KzCk/o8/SrRIwO+MUkBRk2BkE76Wj6rPATfCcZvQtthRoLcuRWVE2J0f1UWIZcVoMrQ7s+69/nRQLsnIDakW3s=
-X-Received: by 2002:a25:44d5:0:b0:dbe:d2ec:e31 with SMTP id
- r204-20020a2544d5000000b00dbed2ec0e31mr3492845yba.27.1710407681891; Thu, 14
- Mar 2024 02:14:41 -0700 (PDT)
+	s=arc-20240116; t=1710408970; c=relaxed/simple;
+	bh=Qcl1blVSnSRz1idRFGTxtnYrVglAakLoz0XoHSP6hkM=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=MtdAV5nRSeMWfVdXTmXdz1Tio6KZ07IrLwdK1KSgOpJsMR+BymC/27dXt7BoG6r+0a0Q85gp1T7o0Qf5t/kHMo1ECXYrwmfDNjvVss6ANvwHb/iJnFn9xSyU+SWZx9hdWswg2YEN7QrBgrMpr3CV8ezRv2L35xEs+Fpcfe1ailE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hihonor.com; spf=pass smtp.mailfrom=hihonor.com; arc=none smtp.client-ip=81.70.160.142
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hihonor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hihonor.com
+Received: from w011.hihonor.com (unknown [10.68.20.122])
+	by mta21.hihonor.com (SkyGuard) with ESMTPS id 4TwMKg3BqfzcXYv8;
+	Thu, 14 Mar 2024 17:20:07 +0800 (CST)
+Received: from a008.hihonor.com (10.68.30.56) by w011.hihonor.com
+ (10.68.20.122) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.25; Thu, 14 Mar
+ 2024 17:20:26 +0800
+Received: from w025.hihonor.com (10.68.28.69) by a008.hihonor.com
+ (10.68.30.56) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.25; Thu, 14 Mar
+ 2024 17:20:25 +0800
+Received: from w025.hihonor.com ([fe80::5770:e914:c15d:4346]) by
+ w025.hihonor.com ([fe80::5770:e914:c15d:4346%14]) with mapi id
+ 15.02.1258.025; Thu, 14 Mar 2024 17:20:25 +0800
+From: yuanlinyu <yuanlinyu@hihonor.com>
+To: Oliver Neukum <oneukum@suse.com>, Alan Stern <stern@rowland.harvard.edu>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: RE: [PATCH v1] usb: f_mass_storage: reduce chance to queue disable ep
+Thread-Topic: [PATCH v1] usb: f_mass_storage: reduce chance to queue disable
+ ep
+Thread-Index: AQHadd1DBEawBTTN7U63+22niyjmfrE2V6OAgACK6iCAABJd8A==
+Date: Thu, 14 Mar 2024 09:20:25 +0000
+Message-ID: <fd1200d4a72840acbb09e1d91ccd30c4@hihonor.com>
+References: <20240314065949.2627778-1-yuanlinyu@hihonor.com>
+ <2233fe16-ca3e-4a5e-bc69-a2447ddd2e82@suse.com>
+ <ee024edfcb4447fb884878b15fe202f0@hihonor.com>
+In-Reply-To: <ee024edfcb4447fb884878b15fe202f0@hihonor.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240313181602.156840-1-biju.das.jz@bp.renesas.com> <20240313181602.156840-4-biju.das.jz@bp.renesas.com>
-In-Reply-To: <20240313181602.156840-4-biju.das.jz@bp.renesas.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 14 Mar 2024 10:14:30 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUMEA2d9+H7GwDDLTfeXp2fAyBTt8jpihOzjCEMUuSK-A@mail.gmail.com>
-Message-ID: <CAMuHMdUMEA2d9+H7GwDDLTfeXp2fAyBTt8jpihOzjCEMUuSK-A@mail.gmail.com>
-Subject: Re: [PATCH v2 3/5] usb: renesas_usbhs: Update usbhs pipe
- configuration for RZ/G2L family
-To: Biju Das <biju.das.jz@bp.renesas.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Huy Nguyen <huy.nguyen.wh@renesas.com>, 
-	Magnus Damm <magnus.damm@gmail.com>, Rob Herring <robh@kernel.org>, 
-	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
-	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@pengutronix.de>, 
-	linux-usb@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
-	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>, Biju Das <biju.das.au@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi Biju,
-
-On Wed, Mar 13, 2024 at 7:16=E2=80=AFPM Biju Das <biju.das.jz@bp.renesas.co=
-m> wrote:
-> From: Huy Nguyen <huy.nguyen.wh@renesas.com>
->
-> The RZ/G2L family SoCs has 10 PIPE buffers compared to 16 pipe
-> buffers on RZ/A2M. Update the pipe configuration for RZ/G2L family
-> SoCs and use family SoC specific compatible to handle this difference.
->
-> Added SoC specific compatible to OF table toavoid ABI breakage with old
-> DTB. To optimize memory usage the SoC specific compatible will be removed
-> later.
->
-> Signed-off-by: Huy Nguyen <huy.nguyen.wh@renesas.com>
-> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-> ---
-> v1->v2:
->  * Dropped using of_device_is_compatible() in probe.
->  * Added usbhs_rzg2l_plat_info and replaced the device data for RZ/G2L
->    from usbhs_rza2_plat_info->usbhs_rzg2l_plat_info.
->  * Moved usbhsc_rzg2l_pipe table near to the user.
->  * Updated commit description.
-
-Thanks for the update!
-
-> --- a/drivers/usb/renesas_usbhs/common.c
-> +++ b/drivers/usb/renesas_usbhs/common.c
-> @@ -640,8 +656,13 @@ static int usbhs_probe(struct platform_device *pdev)
->
->         /* set default param if platform doesn't have */
->         if (usbhs_get_dparam(priv, has_new_pipe_configs)) {
-> -               priv->dparam.pipe_configs =3D usbhsc_new_pipe;
-> -               priv->dparam.pipe_size =3D ARRAY_SIZE(usbhsc_new_pipe);
-> +               if (info->driver_param.pipe_configs) {
-> +                       priv->dparam.pipe_configs =3D info->driver_param.=
-pipe_configs;
-> +                       priv->dparam.pipe_size =3D info->driver_param.pip=
-e_size;
-> +               } else {
-> +                       priv->dparam.pipe_configs =3D usbhsc_new_pipe;
-> +                       priv->dparam.pipe_size =3D ARRAY_SIZE(usbhsc_new_=
-pipe);
-> +               }
-
-I think it would be cleaner to populate
-renesas_usbhs_platform_info.driver_param.pipe_{configs,size} everywhere,
-and use info->driver_param.pipe_{configs,size} unconditionally.
-
->         } else if (!priv->dparam.pipe_configs) {
->                 priv->dparam.pipe_configs =3D usbhsc_default_pipe;
->                 priv->dparam.pipe_size =3D ARRAY_SIZE(usbhsc_default_pipe=
-);
-> diff --git a/drivers/usb/renesas_usbhs/rza.h b/drivers/usb/renesas_usbhs/=
-rza.h
-> index a29b75fef057..8b879aa34a20 100644
-> --- a/drivers/usb/renesas_usbhs/rza.h
-> +++ b/drivers/usb/renesas_usbhs/rza.h
-> @@ -3,3 +3,4 @@
->
->  extern const struct renesas_usbhs_platform_info usbhs_rza1_plat_info;
->  extern const struct renesas_usbhs_platform_info usbhs_rza2_plat_info;
-> +extern const struct renesas_usbhs_platform_info usbhs_rzg2l_plat_info;
-> diff --git a/drivers/usb/renesas_usbhs/rza2.c b/drivers/usb/renesas_usbhs=
-/rza2.c
-> index f079817250bb..0336b419b37c 100644
-> --- a/drivers/usb/renesas_usbhs/rza2.c
-> +++ b/drivers/usb/renesas_usbhs/rza2.c
-> @@ -58,6 +58,36 @@ static int usbhs_rza2_power_ctrl(struct platform_devic=
-e *pdev,
->         return retval;
->  }
->
-> +/* commonly used on RZ/G2L family */
-> +static struct renesas_usbhs_driver_pipe_config usbhsc_rzg2l_pipe[] =3D {
-> +       RENESAS_USBHS_PIPE(USB_ENDPOINT_XFER_CONTROL, 64, 0x00, false),
-> +       RENESAS_USBHS_PIPE(USB_ENDPOINT_XFER_ISOC, 1024, 0x08, true),
-> +       RENESAS_USBHS_PIPE(USB_ENDPOINT_XFER_ISOC, 1024, 0x28, true),
-> +       RENESAS_USBHS_PIPE(USB_ENDPOINT_XFER_BULK, 512, 0x48, true),
-> +       RENESAS_USBHS_PIPE(USB_ENDPOINT_XFER_BULK, 512, 0x58, true),
-> +       RENESAS_USBHS_PIPE(USB_ENDPOINT_XFER_BULK, 512, 0x68, true),
-> +       RENESAS_USBHS_PIPE(USB_ENDPOINT_XFER_INT, 64, 0x04, false),
-> +       RENESAS_USBHS_PIPE(USB_ENDPOINT_XFER_INT, 64, 0x05, false),
-> +       RENESAS_USBHS_PIPE(USB_ENDPOINT_XFER_INT, 64, 0x06, false),
-> +       RENESAS_USBHS_PIPE(USB_ENDPOINT_XFER_INT, 64, 0x07, false),
-> +};
-
-This is similar (but slightly different) from usbhsc_default_pipe[].
-Can RZ/G2L work with usbhsc_default_pipe[] instead?  If yes, you could
-just set  .has_new_pipe_configs to zero instead of adding new code/data.
-
-> +
-> +const struct renesas_usbhs_platform_info usbhs_rzg2l_plat_info =3D {
-> +       .platform_callback =3D {
-> +               .hardware_init =3D usbhs_rza2_hardware_init,
-> +               .hardware_exit =3D usbhs_rza2_hardware_exit,
-> +               .power_ctrl =3D usbhs_rza2_power_ctrl,
-> +               .get_id =3D usbhs_get_id_as_gadget,
-> +       },
-> +       .driver_param =3D {
-> +               .pipe_configs =3D usbhsc_rzg2l_pipe,
-> +               .pipe_size =3D ARRAY_SIZE(usbhsc_rzg2l_pipe),
-> +               .has_cnen =3D 1,
-> +               .cfifo_byte_addr =3D 1,
-> +               .has_new_pipe_configs =3D 1,
-> +       },
-> +};
-> +
->  const struct renesas_usbhs_platform_info usbhs_rza2_plat_info =3D {
->         .platform_callback =3D {
->                 .hardware_init =3D usbhs_rza2_hardware_init,
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+PiBGcm9tOiB5dWFubGlueXUNCj4gU2VudDogVGh1cnNkYXksIE1hcmNoIDE0LCAyMDI0IDQ6MTQg
+UE0NCj4gVG86ICdPbGl2ZXIgTmV1a3VtJyA8b25ldWt1bUBzdXNlLmNvbT47IEFsYW4gU3Rlcm4N
+Cj4gPHN0ZXJuQHJvd2xhbmQuaGFydmFyZC5lZHU+OyBHcmVnIEtyb2FoLUhhcnRtYW4NCj4gPGdy
+ZWdraEBsaW51eGZvdW5kYXRpb24ub3JnPg0KPiBDYzogbGludXgtdXNiQHZnZXIua2VybmVsLm9y
+Zzsgc3RhYmxlQHZnZXIua2VybmVsLm9yZw0KPiBTdWJqZWN0OiBSRTogW1BBVENIIHYxXSB1c2I6
+IGZfbWFzc19zdG9yYWdlOiByZWR1Y2UgY2hhbmNlIHRvIHF1ZXVlIGRpc2FibGUgZXANCj4gDQo+
+ID4gRnJvbTogT2xpdmVyIE5ldWt1bSA8b25ldWt1bUBzdXNlLmNvbT4NCj4gPiBTZW50OiBUaHVy
+c2RheSwgTWFyY2ggMTQsIDIwMjQgMzo1NCBQTQ0KPiA+DQo+ID4NCj4gPiBTb3JyeSwgbm93IGZv
+ciB0aGUgbG9uZ2VyIGV4cGxhbmF0aW9uLiBZb3UnZCBpbnRyb2R1Y2UgYSBkZWFkbG9jay4NCj4g
+PiBZb3UganVzdCBjYW5ub3Qgc2xlZXAgd2l0aCBhIHNwaW5sb2NrIGhlbGQuIEl0IHNlZW1zIHRv
+IG1lIHRoYXQNCj4gDQo+IEkgZGlkbid0IHJldmlldyB1c2JfZXBfcXVldWUoKSBjbGVhcmx5LCBp
+biBteSB0ZXN0LCBJIGRpZG4ndCBoaXQgc2xlZXAuDQo+IEJ1dCB0aGUgY29uY2VybiBpcyBnb29k
+LCB3aWxsIGZpbmQgYmV0dGVyIHdheSB0byBhdm9pZCBpdC4NCg0KT2xpdmVyLCBjb3VsZCB5b3Ug
+c2hhcmUgb25lIGV4YW1wbGUgd2hpY2ggY2FuIHNsZWVwID8NCg0KSSBjaGVjayBzZXZlcmFsIFVE
+QyBkcml2ZXJzLCBsaWtlIGR3YzMsIGNkbnNwLCBjZG5zMywgDQpCb3RoIGRpc2FibGUvcXVldWUg
+ZnVuY3Rpb24gaGF2ZSBzcGlubG9jaywgdGhpcyBtZWFucyBubyBzbGVlcCwgcmlnaHQgPw0KDQo+
+IA0KPiA+IGlmIHlvdSB3YW50IHRvIGRvIHRoaXMgY2xlYW5seSwgeW91IG5lZWQgdG8gcmV2aXNp
+dCB0aGUgbG9ja2luZw0KPiA+IHRvIHVzZSBsb2NrcyB5b3UgY2FuIHNsZWVwIHVuZGVyLg0KPiA+
+DQo+ID4gCUhUSA0KPiA+IAkJT2xpdmVyDQo=
 
