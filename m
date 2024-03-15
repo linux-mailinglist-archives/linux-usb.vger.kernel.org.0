@@ -1,85 +1,96 @@
-Return-Path: <linux-usb+bounces-7986-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7987-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73A3287CA6B
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Mar 2024 10:08:23 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D284287CB23
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Mar 2024 11:08:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A50581C22594
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Mar 2024 09:08:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 106DC1C21252
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Mar 2024 10:08:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B87B417736;
-	Fri, 15 Mar 2024 09:08:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02932182A7;
+	Fri, 15 Mar 2024 10:08:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vsg5AFy0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail.lichtvoll.de (luna.lichtvoll.de [194.150.191.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08E6617592;
-	Fri, 15 Mar 2024 09:08:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.150.191.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CAAB17BCB
+	for <linux-usb@vger.kernel.org>; Fri, 15 Mar 2024 10:07:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710493696; cv=none; b=KR70I7IZAAuXd0k0OfBNKspD58A7MIykmPCbBEmWLYsFbAmt+gj5K2ghwFzxyRTGoOkwc+7GBzVtH6hQI7/TYM+GEQOaqXoHuVkc7JkSeNF6bs+qH3JnbFFy7qXC8Rl1O8sbWvIKW28Ja47vhi/NZeXSnPFtjTmyjQzYzpyqcN0=
+	t=1710497279; cv=none; b=P9U/35z9vX2fam1Or6UjYseFofeN8UlFHLGVvnyOONtRM5v7V8j2ZhJMXKD6Zb7vRyCastbLQ80slkUpdLHprJWpHSpdDfkYOJ7cTD8XonloRVnotNrYLqKw+Ja1Ug6VwlXFoihBiHW1tlXgCKHXr9nOd8oOj3PKqLfJLQkg0CQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710493696; c=relaxed/simple;
-	bh=2ZA3lXw/Y5WlDbXJ1oa4fCewvxABns3BN9JEMbyDDEU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=dsqsYoC7P0wFZ9ytNO3Bk8H0xL2MN5UzRCn83WZrrPuOJzuRSf0k+WVRxrrHYga0PbeCSBq7aarF0NzQ7/EyjZ5HCYuAdX1a8Iz7P4TWQNh5Opv1R7gn+clSuENf8+xu5/dmCZGmdNE0XUTpKQKRz/3g0uKE46DVrVXv8EOD0+g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lichtvoll.de; spf=pass smtp.mailfrom=lichtvoll.de; arc=none smtp.client-ip=194.150.191.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lichtvoll.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lichtvoll.de
-Received: from 127.0.0.1 (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (secp384r1) server-digest SHA384)
-	(No client certificate requested)
-	by mail.lichtvoll.de (Postfix) with ESMTPSA id E8A1B8C0883;
-	Fri, 15 Mar 2024 10:08:10 +0100 (CET)
-Authentication-Results: mail.lichtvoll.de;
-	auth=pass smtp.auth=martin smtp.mailfrom=martin@lichtvoll.de
-From: Martin Steigerwald <martin@lichtvoll.de>
-To: Kent Overstreet <kent.overstreet@linux.dev>
-Cc: stable@vger.kernel.org, regressions@lists.linux.dev,
- linux-usb@vger.kernel.org,
- Holger =?ISO-8859-1?Q?Hoffst=E4tte?= <holger@applied-asynchrony.com>,
- linux-bcachefs@vger.kernel.org
-Subject: Re: I/O errors while writing to external Transcend XS-2000 4TB SSD
-Date: Fri, 15 Mar 2024 10:08:10 +0100
-Message-ID: <4894644.GXAFRqVoOG@lichtvoll.de>
-In-Reply-To: <mqlu3q3npll5wxq5cfuxejcxtdituyydkjdz3pxnpqqmpbs2cl@tox3ulilhaq2>
-References:
- <1854085.atdPhlSkOF@lichtvoll.de> <5444405.Sb9uPGUboI@lichtvoll.de>
- <mqlu3q3npll5wxq5cfuxejcxtdituyydkjdz3pxnpqqmpbs2cl@tox3ulilhaq2>
+	s=arc-20240116; t=1710497279; c=relaxed/simple;
+	bh=Qim3DTxdYiHE/6eNSYU4MQ5GZaxqU9s/i54pDkbNIYM=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Y8s7gOv+pS9CjDcMdmNLB9fa2vSs7q8YoGnWDXm8EK/Fh9DO7ds/5OjGL3PDvBfpFlTNFctBc/n47R5u6p0buxeyZFTZdsHS2dqZ5fFZn9mgCB9TslpmapQ5Kk8711mP0L90lL6lh71yKV338h52wo/Plt4vsBGc8/3B5zdIVL4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vsg5AFy0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 01123C43390
+	for <linux-usb@vger.kernel.org>; Fri, 15 Mar 2024 10:07:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1710497279;
+	bh=Qim3DTxdYiHE/6eNSYU4MQ5GZaxqU9s/i54pDkbNIYM=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=Vsg5AFy0RO+mVBIjB4Lduwd1r5c7K10WiITfdnDtQ/9pgyEt9J3LEOO8d0/9eqwfm
+	 ZktEmddOPzOr9QU3VhmrAqoj8ZJxxPemlBC7dz15/ev9qUnhCVUGpgIXawnYJVdxWB
+	 NtnqfQWZPqrPC3KaAOjFT+BUCTRXiC42ZRniojMa+SQLxZnph0EM6IAhRlDLlWB6tq
+	 otiY+OQi6OQ4+Ib4aX/FHOzU+UqsEXxzuKRsIf1mD7ams98c/QdFuNNc0Hf7VweczJ
+	 iLeTlxXRgONPGKapnlj1dR8hw+CMLPsuziTVBi+3TKm9JHZhoUk9Lj09Dfo9rhekmA
+	 tjkfNK/J2yTdg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id E628AC53BD0; Fri, 15 Mar 2024 10:07:58 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 216422] BUG: kernel NULL pointer dereference, address:
+ 0000000000000000
+Date: Fri, 15 Mar 2024 10:07:58 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: aros@gmx.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-216422-208809-QOj8K1quFB@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-216422-208809@https.bugzilla.kernel.org/>
+References: <bug-216422-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
 
-Hi!
+https://bugzilla.kernel.org/show_bug.cgi?id=3D216422
 
-Kent Overstreet - 11.02.24, 19:51:32 CET:
-> He only got errors after an hour or so, or 10 minutes with UAS disabled;
-> we send flushes once a second. Sounds like a screwy device.
+Artem S. Tashkinov (aros@gmx.com) changed:
 
-Kingston support intends to RMA the XS-2000 4 TB SSD with a variant with a 
-newer firmware version, in case they have it available, while they work on 
-a newer firmware version for the device variant the error happened on.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |aros@gmx.com
 
-So it appears the device has a bug. I will keep you posted, once I either 
-receive that other variant or a firmware upgrade for the existing one.
+--- Comment #4 from Artem S. Tashkinov (aros@gmx.com) ---
+Is this still an issue in 6.7.9 or 6.8?
 
-I am happy with Kingston support so far. It takes quite a while, but they 
-are taking the issue for real instead of writing use Windows instead of 
-Linux or something like that :) - like I read before in other occasions 
-with hardware from other suppliers. Thanks!
+--=20
+You may reply to this email to add a comment.
 
-Best,
--- 
-Martin
-
-
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
