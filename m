@@ -1,80 +1,85 @@
-Return-Path: <linux-usb+bounces-7985-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7986-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6095387C988
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Mar 2024 09:01:37 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73A3287CA6B
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Mar 2024 10:08:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 18DBD283630
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Mar 2024 08:01:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A50581C22594
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Mar 2024 09:08:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7182114AAD;
-	Fri, 15 Mar 2024 08:01:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G7coXQ5b"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B87B417736;
+	Fri, 15 Mar 2024 09:08:16 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.lichtvoll.de (luna.lichtvoll.de [194.150.191.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E24E71426E;
-	Fri, 15 Mar 2024 08:01:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08E6617592;
+	Fri, 15 Mar 2024 09:08:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.150.191.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710489693; cv=none; b=fQgRtM5UmxWovovs9zwsLVH1JDX5xeKDa0urhSg3uEX381BNeO1iSFMOA/8eszQEe8uPvJ9Y50gmYRwp2slmQRgQ9iV2efni+sGwtH3dBrtrT10sV6yNzVLDrMT7yuvChSVblqud4iEeE7leHE+NwkeqcezoyoI65Lfaw2PPhGQ=
+	t=1710493696; cv=none; b=KR70I7IZAAuXd0k0OfBNKspD58A7MIykmPCbBEmWLYsFbAmt+gj5K2ghwFzxyRTGoOkwc+7GBzVtH6hQI7/TYM+GEQOaqXoHuVkc7JkSeNF6bs+qH3JnbFFy7qXC8Rl1O8sbWvIKW28Ja47vhi/NZeXSnPFtjTmyjQzYzpyqcN0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710489693; c=relaxed/simple;
-	bh=PbfTZHsdENp14D3ovvidJYfMH17kDutf9n4cQyx8ox0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jrzZ5Hf3LScACMXBGaOUoKC/hbtLbGy39PCGlb71zZ+0xt+oWgBfd7SXG1X/1Lvn1wLvOeOmvNOUV8L3pG0EpVVQ0Tmx06QHq0nvF9XLU3Iwl/B7Lh+G3/I/YeluH13Ms1/TCyTziWIXSvpST0xMISh2d6JQ4JBsttxQ4uiGZbU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G7coXQ5b; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68149C433F1;
-	Fri, 15 Mar 2024 08:01:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710489692;
-	bh=PbfTZHsdENp14D3ovvidJYfMH17kDutf9n4cQyx8ox0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=G7coXQ5b54VgdvnYDcpTmho63RMgSvh+gH59wZrrzZ9+h4CZl36BS63F8qZc/s/lg
-	 NAhNDnIKCI8xPyXd6Xo6zku/rT8xaQSC911N22l78wLy5ErP1kFSq4kmujJzRwSguJ
-	 RMaV7PCBdqwsfD7C84m08pZD2kZfMCfMnzWkhBbDqRuK+Qv4TAlP7VsMXCZ+SWEFn8
-	 KiJ/c19OkKwNvBB9gmNh+J+jikwPr8RtfWgT5vscVNmpfcMhBJxlZj9qwy1EzfBPEL
-	 mMqm/wb28HHMKR1zl9PDjy4rRRrVpTvGKUWKbFRaVQKCc70d9tPJhQ0yxRqrMmba3N
-	 5LTPjSjVqQzWA==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1rl2VZ-000000006XA-0BOB;
-	Fri, 15 Mar 2024 09:01:41 +0100
-Date: Fri, 15 Mar 2024 09:01:41 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Cameron Williams <cang1@live.co.uk>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: CH341 RTS/CTS flow control disabled in driver?
-Message-ID: <ZfQAZdMwQENJ_yMC@hovoldconsulting.com>
-References: <DU0PR02MB7899EC8515D8FF35B4D01465C4292@DU0PR02MB7899.eurprd02.prod.outlook.com>
+	s=arc-20240116; t=1710493696; c=relaxed/simple;
+	bh=2ZA3lXw/Y5WlDbXJ1oa4fCewvxABns3BN9JEMbyDDEU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=dsqsYoC7P0wFZ9ytNO3Bk8H0xL2MN5UzRCn83WZrrPuOJzuRSf0k+WVRxrrHYga0PbeCSBq7aarF0NzQ7/EyjZ5HCYuAdX1a8Iz7P4TWQNh5Opv1R7gn+clSuENf8+xu5/dmCZGmdNE0XUTpKQKRz/3g0uKE46DVrVXv8EOD0+g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lichtvoll.de; spf=pass smtp.mailfrom=lichtvoll.de; arc=none smtp.client-ip=194.150.191.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lichtvoll.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lichtvoll.de
+Received: from 127.0.0.1 (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (secp384r1) server-digest SHA384)
+	(No client certificate requested)
+	by mail.lichtvoll.de (Postfix) with ESMTPSA id E8A1B8C0883;
+	Fri, 15 Mar 2024 10:08:10 +0100 (CET)
+Authentication-Results: mail.lichtvoll.de;
+	auth=pass smtp.auth=martin smtp.mailfrom=martin@lichtvoll.de
+From: Martin Steigerwald <martin@lichtvoll.de>
+To: Kent Overstreet <kent.overstreet@linux.dev>
+Cc: stable@vger.kernel.org, regressions@lists.linux.dev,
+ linux-usb@vger.kernel.org,
+ Holger =?ISO-8859-1?Q?Hoffst=E4tte?= <holger@applied-asynchrony.com>,
+ linux-bcachefs@vger.kernel.org
+Subject: Re: I/O errors while writing to external Transcend XS-2000 4TB SSD
+Date: Fri, 15 Mar 2024 10:08:10 +0100
+Message-ID: <4894644.GXAFRqVoOG@lichtvoll.de>
+In-Reply-To: <mqlu3q3npll5wxq5cfuxejcxtdituyydkjdz3pxnpqqmpbs2cl@tox3ulilhaq2>
+References:
+ <1854085.atdPhlSkOF@lichtvoll.de> <5444405.Sb9uPGUboI@lichtvoll.de>
+ <mqlu3q3npll5wxq5cfuxejcxtdituyydkjdz3pxnpqqmpbs2cl@tox3ulilhaq2>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DU0PR02MB7899EC8515D8FF35B4D01465C4292@DU0PR02MB7899.eurprd02.prod.outlook.com>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 
-On Thu, Mar 14, 2024 at 10:13:03PM +0000, Cameron Williams wrote:
+Hi!
 
-> I am wondering if anyone knows anything regarding the RTS/CTS lines on
-> the CH341 (maybe CH340 though I have no chip example).
+Kent Overstreet - 11.02.24, 19:51:32 CET:
+> He only got errors after an hour or so, or 10 minutes with UAS disabled;
+> we send flushes once a second. Sounds like a screwy device.
 
-> From my tests, neither of them seem to have RTS/CTS respected, and I
-> don't believe they are fake?
+Kingston support intends to RMA the XS-2000 4 TB SSD with a variant with a 
+newer firmware version, in case they have it available, while they work on 
+a newer firmware version for the device variant the error happened on.
 
-> Is this intended behaviour? Looking through the source I can see
-> RTS/DTR should be supported, but it just doesn't seem to work.
+So it appears the device has a bug. I will keep you posted, once I either 
+receive that other variant or a firmware upgrade for the existing one.
 
-The driver does not implement hardware flow control (CRTSCTS) so this is
-expected behaviour.
+I am happy with Kingston support so far. It takes quite a while, but they 
+are taking the issue for real instead of writing use Windows instead of 
+Linux or something like that :) - like I read before in other occasions 
+with hardware from other suppliers. Thanks!
 
-Johan
+Best,
+-- 
+Martin
+
+
 
