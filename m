@@ -1,113 +1,104 @@
-Return-Path: <linux-usb+bounces-8010-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8011-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E768287D3D6
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Mar 2024 19:44:12 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1EFF87D5EB
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Mar 2024 22:02:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AE48328382E
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Mar 2024 18:44:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AED90282D19
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Mar 2024 21:02:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAEBC1F619;
-	Fri, 15 Mar 2024 18:44:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D14B45972;
+	Fri, 15 Mar 2024 21:02:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="MwKAaevR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ozvSAthk"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B15EA1EB48
-	for <linux-usb@vger.kernel.org>; Fri, 15 Mar 2024 18:44:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA89DD51D
+	for <linux-usb@vger.kernel.org>; Fri, 15 Mar 2024 21:02:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710528245; cv=none; b=uUdL90DskvhSBxlQIIrXnyzn4SjKePq+PcabNsQcIVejBBdDOKhLEZ1abOgaZneAdE2Va+ep1oWRsHx2wLAxwaxh6/N5xoYz26iQDHPV1KvX6hx1q9nN8SBOqjF81RgBwSY8yJ6AIVz34P9GYZ8SRhBA8ZIcuckZ5BxKvDeXOc8=
+	t=1710536572; cv=none; b=BvrxcfRf8bwu05e+xJhcDJUXFaXIauYVpZcn6EoZvh+vNv0lrXUrkwY/RM9qwoTohxSHA3EQGwCEz5/J0b5SDBLBCIH3er3LyXfkV2p8ztJKzpGH6/d1TEh2Yhq7uHfEvhF6GxIOQawC5hOpdt6qzyB08HWDU5+VLHG4bdBQ7oo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710528245; c=relaxed/simple;
-	bh=1hIcaEugVHYM9qv9vCZLr+cROMsMJ1VI8gM2ISBNduI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gc6Dqzc/SgdSW33lvVC6kjzUjBAMjJM/1Hyhi521vL4lWXLO1CvNokTKrAnnnV9f1WDMdc7q58U+vhrGSNduxQLzafz+8W5LthTgMEckk+nIbCfla037ew8gvnqj3pEnPe3tK/l/Qwgjzjgu0iuGsiozGnap+IOfgL4BNtvNPq4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=MwKAaevR; arc=none smtp.client-ip=209.85.167.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-5101cd91017so3831976e87.2
-        for <linux-usb@vger.kernel.org>; Fri, 15 Mar 2024 11:44:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1710528242; x=1711133042; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=unYKsN6XP1tGmxG8mlEYFLlvddoUm5Z9kRt/TflohbA=;
-        b=MwKAaevRMzrfYEe3Nz4rdKAEAkimUYY35sWA4sxD8D1D9XFtW/jBsarxXxQ5xjq3vI
-         ZY5g9w0b7SbRyNO5ZlpAgu3ChpNyejpAYipLT4oEBr5ZRDhBh2wIh/W/lYTBays+WWOP
-         PfQahhy2iALf0RlqrXc3cjuAYbljqYIdm30T21fp5j1G6hRqJMcM12tCAHcuk65Wqxxx
-         mdxs+MsYuFCTNeVefwyM2w4UMaThPOicIBZqgIOAsrwQdkqhsVbJ222E+Nmad1FwVgO8
-         +ZFD5msGU4fDmHMQrouc0+8HtyoTDBr8Z720/BUQQEB6G/GmQA6/lJZyvHpPacyn6hN1
-         OMAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710528242; x=1711133042;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=unYKsN6XP1tGmxG8mlEYFLlvddoUm5Z9kRt/TflohbA=;
-        b=LXmPbrUu2/xF8/2C0WyqANHZR9ZoW2XjycenYxCFG0Ry/pES4+s3UshLiw9VJa4prN
-         9O77S4I36PZ1p2aC2moZYLOybQkxxL5M8J9uxYcB2otG/qiFFu0sgX4ISC+h1IrgDNf5
-         qSEDyqm6sAIrW/5AgXy+cqwFvZs+sfH/2Lddj7PDJEBv6yFHdqWCsSj/FMx87QtqL7lG
-         2nA38Sn6wfi1QhDVFBQKzLMYjPCl9c+Sga1Abd2A4r8SgkaKY/YUVuHLafeTaNSX0RPJ
-         r8qamA1M5bLmZOidPlX8j4Qcow6KujMe74HpkJ5EbfaaUoX6lgGJlxzRXmu7vyNbSHRL
-         wXvw==
-X-Forwarded-Encrypted: i=1; AJvYcCX8UCU9IjxsjXwM318wZAMZEWJK6Sr11KMQnLcrsD4rH4kbQtKiM4iTtnbB97ruL0rGCdZHGNgldUEb0dG4rDmN95nWfhrpmIhq
-X-Gm-Message-State: AOJu0YzWwuwS7WEHk1ZgRw+Dcl9NTBpAY0husrVItU7eqgyIe9pFo9eU
-	mkGlWdVadLOXVklxnpgseYdJWwFWmI5KC4LNtXSYajs3XF3fCMlAfKhNttD5X7w=
-X-Google-Smtp-Source: AGHT+IGepkNfjDBvL+Ow3oH9rGw1nhLPfmkERiJyEG0SK9efGs8Tt8dyBlC5GPFaxBFpGKlpa7MjuQ==
-X-Received: by 2002:a19:4353:0:b0:513:cc91:9ed7 with SMTP id m19-20020a194353000000b00513cc919ed7mr3525941lfj.11.1710528241555;
-        Fri, 15 Mar 2024 11:44:01 -0700 (PDT)
-Received: from localhost ([102.222.70.76])
-        by smtp.gmail.com with ESMTPSA id r11-20020a05600c35cb00b00414038162e1sm2016682wmq.23.2024.03.15.11.43.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Mar 2024 11:44:00 -0700 (PDT)
-Date: Fri, 15 Mar 2024 21:43:56 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] usb: usb-acpi: fix uninitialized variable in
- usb_acpi_get_connect_type()
-Message-ID: <eb25d06f-775c-43f9-9e7e-4f859f6cc41c@moroto.mountain>
-References: <fdd4f94d-fb8c-44a0-9472-3485a567caca@moroto.mountain>
- <2a3ab595-80b2-fd4a-8748-c823fa5ec098@linux.intel.com>
+	s=arc-20240116; t=1710536572; c=relaxed/simple;
+	bh=g8RWJd1oNrfPUmAHcCaBJ1ZW7c+uRqf5D4R4iKlqLig=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Wum7wC5YIa70WKdLBlvLLkWRBePTznWGfN7JkTEP6M62dx1jL2noZ/olVM4j7GjHP5eh9JWB79G72O26dO4wxW6ELoSVRTta5Jc6qJHM8cAy5TWfL9LmZrmHNNEFjtvUFnZqtBG4wukB7ex1rR+XgxnK4RPMgiSr+BkWDYGJXR0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ozvSAthk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 80CC1C433C7
+	for <linux-usb@vger.kernel.org>; Fri, 15 Mar 2024 21:02:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1710536571;
+	bh=g8RWJd1oNrfPUmAHcCaBJ1ZW7c+uRqf5D4R4iKlqLig=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=ozvSAthkeHUEBW/aWYfHtPP4hTJHTfrsi5jTD6+TtUx0HZTBf+fu+TIIGgDACKRvl
+	 ruVLfssULOwuoUgLgbJ0yGLuubO3ZiNjAR1YVTC4Xqr01O5Qkbt6OZ7DVuZahHTYgD
+	 yImTozWY1zQTtSESXZ9KWrImpxR68LSVUA0Gn/2fCN9SKKSVdSQKSfTIpzZ3UIcIr1
+	 Hb5AIkEREIZIF9Cd3mcbUIKKYyrxbS9l/QvS4FyaBvkaXVzWLcLm2PW6zADdTBC2k2
+	 U/5+i5OeOmL3u/h1+dfe6G3eHoVd0UccikTQGn+GqJv+hnM80NfM04P8xY99gWL6ps
+	 Ug1ubhOJS60Nw==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 6B928C4332E; Fri, 15 Mar 2024 21:02:51 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 218546] xhci_hcd prevents hibernate/S4 suspend from working on
+ several systems
+Date: Fri, 15 Mar 2024 21:02:51 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: corngood@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-218546-208809-CJEdtRTHnJ@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-218546-208809@https.bugzilla.kernel.org/>
+References: <bug-218546-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2a3ab595-80b2-fd4a-8748-c823fa5ec098@linux.intel.com>
 
-On Fri, Mar 15, 2024 at 05:36:16PM +0200, Mathias Nyman wrote:
-> On 15.3.2024 17.21, Dan Carpenter wrote:
-> > The "pld" pointer is uninitialized if acpi_get_physical_device_location()
-> > fails.  Initialize it to NULL.
-> > 
-> > Fixes: f3ac348e6e04 ("usb: usb-acpi: Set port connect type of not connectable ports correctly")
-> > Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
-> > ---
-> 
-> I sent a similar patch a week ago, just before merge window opened.
-> looks like it didn't make it.
-> 
-> https://lore.kernel.org/linux-usb/20240308113425.1144689-1-mathias.nyman@linux.intel.com/
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218546
 
-Huh.  That's interesting that this bug was causing issues in real life.
-I thought everyone was using the GCC extension to zero stack variables.
-I've only been fixing uninitialized variable bugs out of sense of
-stubbornness and to boost my patch count.  :P
+David McFarland (corngood@gmail.com) changed:
 
-regards,
-dan carpenter
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |corngood@gmail.com
 
+--- Comment #6 from David McFarland (corngood@gmail.com) ---
+I'm getting the same symbol on a Dell 7430, but I don't see the xhci_hcd er=
+rors
+you listed.  I used dynamic debug 'module xhci_hcd +pflm'.
+
+It started occurring with:
+
+0c4cae1bc00d PM: hibernate: Avoid missing wakeup events during hibernation
+
+However that's presumably just exposing the underlying problem.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
