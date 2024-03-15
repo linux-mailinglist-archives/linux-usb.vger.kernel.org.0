@@ -1,94 +1,97 @@
-Return-Path: <linux-usb+bounces-7989-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7990-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 630CE87CD70
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Mar 2024 13:50:54 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 85F8187CE9D
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Mar 2024 15:22:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6C0171C22322
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Mar 2024 12:50:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 481DB28435C
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Mar 2024 14:22:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90DF528DCF;
-	Fri, 15 Mar 2024 12:50:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O/eNxFyv"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74A60374FC;
+	Fri, 15 Mar 2024 14:22:12 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BB1A288DB
-	for <linux-usb@vger.kernel.org>; Fri, 15 Mar 2024 12:50:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id B3ADC3717C
+	for <linux-usb@vger.kernel.org>; Fri, 15 Mar 2024 14:22:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710507040; cv=none; b=V/kBCy4goCFX+ZeTlz4aSO+eGAJSMJqY3i+tMAFB+3p76WU1Y4vNNrXCSDI8QNFBHfWLa8F59vqTVzTKjhQUk6YAuSZIHDySxPkR/8Tgjs9APKwZ28sc4HkuvhC4fv3VkRa2//z2ZEato09TsW+fhnx3SGrPDy5TYm7f4hMk974=
+	t=1710512532; cv=none; b=cRLI9BwSPaGsopdIxUEG+nPT+JSqLVtuN7UyWOM+sVuqppsdeNDRCnTHiytqIPcPlD1OxXtk54xpwHA8/3krH/7cDDDrqCmlchMBrdbI5wyYDPDPx2KOI/FBGgHoiYhOvm03bugjnhCb8jwB3lC7FDfIDzCefjJJ98KqUoSWskY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710507040; c=relaxed/simple;
-	bh=770bh/VID85NaoRx5tnYpIfvy1/0RgHLHK+qWftp6Us=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=quxuUVK25JuloXq6oKxCj50o2SJU2rjHbWMjuLXYD7Vavojd+NUlGyimyDEms9GjMqa2Cx0DhMHwqUUi+clgmY5YsRE2n2VJ5OVgvitHmDUaAxc1n5I7KSP/5eBFmC3azjyEoK1YmxSQfqI2w8KRioBXWNRjYMV6JSxpK/lO7Bc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O/eNxFyv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 97589C433F1
-	for <linux-usb@vger.kernel.org>; Fri, 15 Mar 2024 12:50:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710507039;
-	bh=770bh/VID85NaoRx5tnYpIfvy1/0RgHLHK+qWftp6Us=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=O/eNxFyvvxIhUAw28utCEjq1yoPyyMvCsW3oehHwbHhunbaR8E94PvBUx6yqYTHB7
-	 7JtlrIcELMVli383W0h//JHWLQqu6zKxmRg8GhaKUFh0a+77IziTweROTJHNiNAA0S
-	 3ToAqG1mLuilDFrvaJcQB8mAvzOp1Xn2cg660xuQaUueO9bMYGY2LDuBH+jtwJHMXH
-	 mbe/EjM2aqsy0aCsl6j1DjwpzIdLWIDIPBKBcKIIiJaPUuew65H96rqizxQLe5ISWb
-	 3yd8QO1HECe0TEm36/nUtiPiHWMM6+GYP0C4QO5XKa7BIKmSmGmwuOaXF7fSTVP1E1
-	 QhZMyWrgOCZJQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 8F3DDC53BD0; Fri, 15 Mar 2024 12:50:39 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 218544] not enough bandwidth, synaptics hi-res audio duplex
- audio
-Date: Fri, 15 Mar 2024 12:50:39 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: ibmalone@gmail.com
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: ANSWERED
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_status resolution
-Message-ID: <bug-218544-208809-z0nvy9l7kd@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218544-208809@https.bugzilla.kernel.org/>
-References: <bug-218544-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1710512532; c=relaxed/simple;
+	bh=935tHhPFb8easobao5KURj8zNIGm8JAYqqWC6Vw2Ocw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=j8bOyRHAyZUvvRkwIYS351pR423h1rhlozOJAv2aZovGmF86TE4/lspKyyoby5rVVvckrAfAr9CP2KzGlyaYI48g9q+ywF6i3wI8tu6aAaJsLqWaiiU4ithMorPa3Wc/bizH2OCW+jjMmt3x+9O8ZvvPmfy9RqOLs+G3XjEXCzw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
+Received: (qmail 487065 invoked by uid 1000); 15 Mar 2024 10:22:04 -0400
+Date: Fri, 15 Mar 2024 10:22:04 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: yuan linyu <yuanlinyu@hihonor.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+  linux-usb@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v4] usb: udc: remove warning when queue disabled ep
+Message-ID: <17a9f299-7550-4498-b209-8f9433c493b6@rowland.harvard.edu>
+References: <20240315020144.2715575-1-yuanlinyu@hihonor.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240315020144.2715575-1-yuanlinyu@hihonor.com>
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218544
+On Fri, Mar 15, 2024 at 10:01:44AM +0800, yuan linyu wrote:
+> It is possible trigger below warning message from mass storage function,
+> 
+> WARNING: CPU: 6 PID: 3839 at drivers/usb/gadget/udc/core.c:294 usb_ep_queue+0x7c/0x104
+> pc : usb_ep_queue+0x7c/0x104
+> lr : fsg_main_thread+0x494/0x1b3c
+> 
+> Root cause is mass storage function try to queue request from main thread,
+> but other thread may already disable ep when function disable.
+> 
+> As there is no function failure in the driver, in order to avoid effort
+> to fix warning, change WARN_ON_ONCE() in usb_ep_queue() to pr_debug().
+> 
+> Suggested-by: Alan Stern <stern@rowland.harvard.edu>
+> Cc: <stable@vger.kernel.org>
+> Signed-off-by: yuan linyu <yuanlinyu@hihonor.com>
+> ---
 
-Ian Malone (ibmalone@gmail.com) changed:
+Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |ANSWERED
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+> v4: add version info in subject
+> v3: add more debug info, remove two line commit description
+>     https://lore.kernel.org/linux-usb/20240315015854.2715357-1-yuanlinyu@hihonor.com/
+> v2: change WARN_ON_ONCE() in usb_ep_queue() to pr_debug()
+>     https://lore.kernel.org/linux-usb/20240315013019.2711135-1-yuanlinyu@hihonor.com/
+> v1: https://lore.kernel.org/linux-usb/20240314065949.2627778-1-yuanlinyu@hihonor.com/
+> 
+>  drivers/usb/gadget/udc/core.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
+> index 9d4150124fdb..b3a9d18a8dcd 100644
+> --- a/drivers/usb/gadget/udc/core.c
+> +++ b/drivers/usb/gadget/udc/core.c
+> @@ -292,7 +292,9 @@ int usb_ep_queue(struct usb_ep *ep,
+>  {
+>  	int ret = 0;
+>  
+> -	if (WARN_ON_ONCE(!ep->enabled && ep->address)) {
+> +	if (!ep->enabled && ep->address) {
+> +		pr_debug("USB gadget: queue request to disabled ep 0x%x (%s)\n",
+> +				 ep->address, ep->name);
+>  		ret = -ESHUTDOWN;
+>  		goto out;
+>  	}
+> -- 
+> 2.25.1
+> 
 
