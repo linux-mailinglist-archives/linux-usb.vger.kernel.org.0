@@ -1,163 +1,111 @@
-Return-Path: <linux-usb+bounces-7997-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7998-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6819487D26B
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Mar 2024 18:09:41 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6918A87D290
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Mar 2024 18:19:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 25CFD28228A
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Mar 2024 17:09:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 23AE41C212C4
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Mar 2024 17:19:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 942E9481B9;
-	Fri, 15 Mar 2024 17:06:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CA3C46548;
+	Fri, 15 Mar 2024 17:18:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="m6luGXXi"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id 2F24C3A8E1
-	for <linux-usb@vger.kernel.org>; Fri, 15 Mar 2024 17:06:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 331F43A8E1
+	for <linux-usb@vger.kernel.org>; Fri, 15 Mar 2024 17:18:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710522400; cv=none; b=fRl4GDTsCO7gCDa9EKb2S7YQQCnTHBYrRfIjnhXI6SQ9PEh4AwXpoagXV3OdZQUByMJjdTOna76X1V7ZSkMXM6CdH3wWjJmHvQwcAT/aAr/wpmlSBDQqQcouqI+NgYs7v+dmS6SrGowQOG9d49HVO7JuGvSIw+Eb430ZA3zqMlI=
+	t=1710523138; cv=none; b=SLjglKhePAM3iQPLMZSfHIFIbcGR6ivI7VtPlMbvXMqYG+ylHJ49842kqb3LBxLLwtx0FOmGuYqGgDcJgDeDTKv86d6k6O3LFaY71Ft2nIJYfoxwXsWPsH1MK84uhyJDui7mTi5nbEGM8zAwqE4M8gX1Cr48rZFwVfX1/Imrb7U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710522400; c=relaxed/simple;
-	bh=OU8YWnHZFBpqGmHKHbqWjGFcwiWMPKRdz06JfTnuXuo=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=fPdpZ+1dvu+qEb+PqFjSPDx57rC+OvlRvWsB+3/GhQU9ydhiAJ/Rgs6bmRUluV3YxDQRQQKLz9vu33cVQTLAtmTELi43FTfRN2L033yUwcXwQMMqOmB7oC/rWI/o7CcgzoWqCGCeG5GmUH4xlOikQrMl5AcVJdvqWcBCSIh+bF0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
-Received: (qmail 492609 invoked by uid 1000); 15 Mar 2024 13:06:33 -0400
-Date: Fri, 15 Mar 2024 13:06:33 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: USB mailing list <linux-usb@vger.kernel.org>
-Subject: [PATCH 2/2] USB: core: Fix deadlock in port "disable" sysfs attribute
-Message-ID: <f7a8c135-a495-4ce6-bd49-405a45e7ea9a@rowland.harvard.edu>
+	s=arc-20240116; t=1710523138; c=relaxed/simple;
+	bh=LjdE53DAeCK/DV4IGBzwE6QKkJ7zjfXL42DBeebkQMg=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=bcuUEJ3DouUvCEr96TRNPBAmxaWguH+qEWNxcLCOS1PH7aPrDBhd4QLtAzh9zf5JVdH4G2ufXZXqMtCPg5TcDMk6ss53yMbdOyXmqiF2a1RVRhFwtZTFVWWcUrKKByO+lRxN91b2+FBZjNblckWaFre7avumb/j9PhO+lsWzQ1I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jthies.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=m6luGXXi; arc=none smtp.client-ip=209.85.128.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jthies.bounces.google.com
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-60a08eb0956so37128017b3.3
+        for <linux-usb@vger.kernel.org>; Fri, 15 Mar 2024 10:18:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1710523136; x=1711127936; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=x+U5NBs6WRZY8QHIXBoAKLIZmwg0dfigkJKpGoGlj90=;
+        b=m6luGXXi0PWusywGR+Lq/xkyw7xDaTzplPCL5M83eLqy8JEnPGZHJa3IRei94ZXlH8
+         0DF2tBQX2dvSmk3tw0AEZXIRRYpwusZvxB5bOabQcjedOzF2WIngnXQX7HCrIRmtJuOm
+         1fAAURqN2TgDvGu2lFUJUcoUx+j1cMpl4NNAfuwSbrJvvPv1Xv1f+B9yEuEjj678BrNe
+         P0Sn0Ivseq5S6b+QrCzRPVIiwuycgY08AFb9N0elYfAlqejMwdZmcok0MIV1cV0uMpKe
+         AFfNKUa4yvK2JigmPy5evrzujpIB9B7JmcOs7EBZ5xnT37/tehRB6etaq6Z9QoH2jdP/
+         zscA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710523136; x=1711127936;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=x+U5NBs6WRZY8QHIXBoAKLIZmwg0dfigkJKpGoGlj90=;
+        b=q8/JHXEcD/IlEksanhtP2iYGpnTQb3IO8tJ2Z7Y4ZaDqyoxGD6nhwtMa1zrOxNnEdP
+         zTquha9bp1xoeGSr1gUI78VvXFrwbQrw1r7ALIu9wPabQ+QEb1yTTlpH5OJneNmk3/Kr
+         Gt1nSi/1xPdDMduedGOmKvEwv3muaIdBvKFJJZX5amjcKKEBSsoeSln9uU/homN6iGFG
+         Cb/jxqRbZNyV4uHEbXpZtPg5aiEJY2zezI13b39yh0FruR3Nfk2ZUE+UfuEAj2hLxr5b
+         RPerv4ItXirtEHdldJwd1/yI127ofrNovPpUN53EbRC9yHXp8Y7VGK72wD7Axj+njKWi
+         hi+w==
+X-Forwarded-Encrypted: i=1; AJvYcCX6QYq6R+06KK9SOrWn7cje3Y4c8jOL0msj5yyyRprHwUdjOH/sFW9m0bFLpXLdSkUQGMxdOAepQVJbeYiL2BWUmSF8iDuSuWN2
+X-Gm-Message-State: AOJu0YzKUIXw0fod9nYyqGFcgjUrTgcHnUv1EolTtNHHblk6YcG85D6l
+	+rapdC03/cVr2ismgHE83wDN5lctJl0+nTPARpiQSWhg3q7Qfuo6bkNjXToJIzzCZ7aLsOKOXBA
+	ORA==
+X-Google-Smtp-Source: AGHT+IEJ7GpoKdok/Jv7P5V2DJOncHhW1qMA+O9OKiAgOc41iLcJp85JipwLdakV4XdThj9EjCn4ZDMQlmo=
+X-Received: from jthies.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:23db])
+ (user=jthies job=sendgmr) by 2002:a81:4ed3:0:b0:60a:5d76:a875 with SMTP id
+ c202-20020a814ed3000000b0060a5d76a875mr890098ywb.5.1710523136230; Fri, 15 Mar
+ 2024 10:18:56 -0700 (PDT)
+Date: Fri, 15 Mar 2024 17:18:34 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <604da420-ae8a-4a9e-91a4-2d511ff404fb@rowland.harvard.edu>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.44.0.291.gc1ea87d7ee-goog
+Message-ID: <20240315171836.343830-1-jthies@google.com>
+Subject: [PATCH v2 0/1] usb: typec: ucsi: Check capabilities before discovery
+From: Jameson Thies <jthies@google.com>
+To: heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org
+Cc: jthies@google.com, pmalani@chromium.org, bleung@google.com, 
+	abhishekpandit@chromium.org, andersson@kernel.org, 
+	dmitry.baryshkov@linaro.org, fabrice.gasnier@foss.st.com, 
+	gregkh@linuxfoundation.org, hdegoede@redhat.com, neil.armstrong@linaro.org, 
+	rajaram.regupathy@intel.com, saranya.gopal@intel.com, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-The show and store callback routines for the "disable" sysfs attribute
-file in port.c acquire the device lock for the port's parent hub
-device.  This can cause problems if another process has locked the hub
-to remove it or change its configuration:
+Hi Heikki,
 
-	Removing the hub or changing its configuration requires the
-	hub interface to be removed, which requires the port device
-	to be removed, and device_del() waits until all outstanding
-	sysfs attribute callbacks for the ports have returned.  The
-	lock can't be released until then.
+This patch updates the UCSI driver to better check the appropriate
+capability bit before sending a UCSI command to discovery cable and
+identity information.
 
-	But the disable_show() or disable_store() routine can't return
-	until after it has acquired the lock.
+These have been tested on a the usb-testing branch merged with a
+chromeOS 6.8-rc2 kernel. Let me know if you have any questions.
 
-The resulting deadlock can be avoided by calling
-sysfs_break_active_protection().  This will cause the sysfs core not
-to wait for the attribute's callback routine to return, allowing the
-removal to proceed.  The disadvantage is that after making this call,
-there is no guarantee that the hub structure won't be deallocated at
-any moment.  To prevent this, we have to acquire a reference to it
-first by calling hub_get().
+Thanks,
+Jameson
 
-Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-Cc: <stable@vger.kernel.org>	# Needs the previous patch in this series
+Jameson Thies (1):
+  usb: typec: ucsi: Check capabilities before cable and identity
+    discovery
 
----
+ drivers/usb/typec/ucsi/ucsi.c | 34 +++++++++++++++++++++-------------
+ drivers/usb/typec/ucsi/ucsi.h |  5 +++--
+ 2 files changed, 24 insertions(+), 15 deletions(-)
 
- drivers/usb/core/port.c |   38 ++++++++++++++++++++++++++++++++++----
- 1 file changed, 34 insertions(+), 4 deletions(-)
 
-Index: usb-devel/drivers/usb/core/port.c
-===================================================================
---- usb-devel.orig/drivers/usb/core/port.c
-+++ usb-devel/drivers/usb/core/port.c
-@@ -55,11 +55,22 @@ static ssize_t disable_show(struct devic
- 	u16 portstatus, unused;
- 	bool disabled;
- 	int rc;
-+	struct kernfs_node *kn;
- 
-+	hub_get(hub);
- 	rc = usb_autopm_get_interface(intf);
- 	if (rc < 0)
--		return rc;
-+		goto out_hub_get;
- 
-+	/*
-+	 * Prevent deadlock if another process is concurrently
-+	 * trying to unregister hdev.
-+	 */
-+	kn = sysfs_break_active_protection(&dev->kobj, &attr->attr);
-+	if (!kn) {
-+		rc = -ENODEV;
-+		goto out_autopm;
-+	}
- 	usb_lock_device(hdev);
- 	if (hub->disconnected) {
- 		rc = -ENODEV;
-@@ -69,9 +80,13 @@ static ssize_t disable_show(struct devic
- 	usb_hub_port_status(hub, port1, &portstatus, &unused);
- 	disabled = !usb_port_is_power_on(hub, portstatus);
- 
--out_hdev_lock:
-+ out_hdev_lock:
- 	usb_unlock_device(hdev);
-+	sysfs_unbreak_active_protection(kn);
-+ out_autopm:
- 	usb_autopm_put_interface(intf);
-+ out_hub_get:
-+	hub_put(hub);
- 
- 	if (rc)
- 		return rc;
-@@ -89,15 +104,26 @@ static ssize_t disable_store(struct devi
- 	int port1 = port_dev->portnum;
- 	bool disabled;
- 	int rc;
-+	struct kernfs_node *kn;
- 
- 	rc = kstrtobool(buf, &disabled);
- 	if (rc)
- 		return rc;
- 
-+	hub_get(hub);
- 	rc = usb_autopm_get_interface(intf);
- 	if (rc < 0)
--		return rc;
-+		goto out_hub_get;
- 
-+	/*
-+	 * Prevent deadlock if another process is concurrently
-+	 * trying to unregister hdev.
-+	 */
-+	kn = sysfs_break_active_protection(&dev->kobj, &attr->attr);
-+	if (!kn) {
-+		rc = -ENODEV;
-+		goto out_autopm;
-+	}
- 	usb_lock_device(hdev);
- 	if (hub->disconnected) {
- 		rc = -ENODEV;
-@@ -118,9 +144,13 @@ static ssize_t disable_store(struct devi
- 	if (!rc)
- 		rc = count;
- 
--out_hdev_lock:
-+ out_hdev_lock:
- 	usb_unlock_device(hdev);
-+	sysfs_unbreak_active_protection(kn);
-+ out_autopm:
- 	usb_autopm_put_interface(intf);
-+ out_hub_get:
-+	hub_put(hub);
- 
- 	return rc;
- }
+base-commit: d99e42ce6b8341d3f09e22c6706461ec900fe172
+-- 
+2.44.0.291.gc1ea87d7ee-goog
+
 
