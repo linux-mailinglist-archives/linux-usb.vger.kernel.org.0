@@ -1,98 +1,121 @@
-Return-Path: <linux-usb+bounces-8021-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8022-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D2FDD87DDB9
-	for <lists+linux-usb@lfdr.de>; Sun, 17 Mar 2024 16:04:44 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D98D87DE21
+	for <lists+linux-usb@lfdr.de>; Sun, 17 Mar 2024 16:51:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 59F5B281443
-	for <lists+linux-usb@lfdr.de>; Sun, 17 Mar 2024 15:04:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DDC6C1C21051
+	for <lists+linux-usb@lfdr.de>; Sun, 17 Mar 2024 15:51:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2946A1C68F;
-	Sun, 17 Mar 2024 15:04:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EC211CAA6;
+	Sun, 17 Mar 2024 15:51:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Tv9K+v2x"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id A44BC1BF50
-	for <linux-usb@vger.kernel.org>; Sun, 17 Mar 2024 15:04:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
+Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC29B1CA81;
+	Sun, 17 Mar 2024 15:51:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710687876; cv=none; b=D5wOUqp+gI2cNEOn3YOg2rsVaQs7nfojOOEyPQr/oKsXxpeLJaZQ9zw7yNghmw4d5ybey3zKiDTTjhLIdE5dW/yzHMkL3hGJWsuk/5rv/lYXV1JD/+VooKYyHfitmm3+tzlXC6iWajcbTmHY+iwEdnIONzGjRw4dLlEpswAIaXI=
+	t=1710690676; cv=none; b=LHprTrdV9GPNyrhAna5KirUWBHsPIytciIBDw0mFemAUgJ6xSW2kZZODH7ZTdMdJttIIpeKL5uEHmKmM4rLwi61TzFx5MY1T0uFvypbjGuLlQkzXwq+oe+mWlchwRwXAJHO+Z6Dz+Ny8i0+4pvqd50fmMOU5Rxd/zMTUrhimN+Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710687876; c=relaxed/simple;
-	bh=cEBWygA37gsqfLBFhtl6suQR4GExIWOd2AcEt4hWdlk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mEtjWSGQgi3Eh3J/2/dA8376HUGBbFDUMfWhmSrEbcLvvlLixQupyBxsogpwZm348ZlidfEJw4dxU9AjpwU3YTAKm4qMrBNd12pAvrs5AQhQNX/nZSZ1w9aSNQfb9u08OxAKUrrh3AANvE0g6x8bWyRgExC6Gz9r/KOBRcaaqQY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
-Received: (qmail 548205 invoked by uid 1000); 17 Mar 2024 11:04:33 -0400
-Date: Sun, 17 Mar 2024 11:04:33 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: xingwei lee <xrivendell7@gmail.com>
-Cc: gregkh@linuxfoundation.org, usb-storage@lists.one-eyed-alien.net,
-  linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-  samsun1006219@gmail.com, syzkaller-bugs@googlegroups.com
-Subject: Re: divide error in alauda_transport
-Message-ID: <cc7eb13f-b61d-4a4c-8c35-394a833d5917@rowland.harvard.edu>
-References: <CABOYnLw8=VM4LxgBsrwTi3HzdvGV7cYJU=4t7MMYTnrDCaDKAQ@mail.gmail.com>
+	s=arc-20240116; t=1710690676; c=relaxed/simple;
+	bh=Knbi8ECvoxJZzgUbotfa2HhgH5qH908FPV/fLMPvbss=;
+	h=Subject:From:To:Cc:References:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=RXZbWGMW2d3lK5nfjYu/NToO5BpHszwrBrqQnDtm8nOGWZJhwb7fuSCFKCaLuG10SOQ/7Br78iheOKQOK+Mtwfri9Za6Z7BZHEMhkQjAX/s9Nl+FXtKqWuqLJMXo6gWbUCKfy9nG1UfwZO7pom2eimbktlvJ0HvRv9dxb1EcbKU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Tv9K+v2x; arc=none smtp.client-ip=209.85.208.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2d47a92cfefso46804381fa.1;
+        Sun, 17 Mar 2024 08:51:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1710690673; x=1711295473; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:references:cc:to:from:subject:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=E6xHh0myDZ/4a+0J2/NsOabUugm5P6ZKzY67ZXaFfgI=;
+        b=Tv9K+v2x7+XLTZeLWB2UIAZe94IG8ZKkMT+9cpVFbWMtBrV/4GRH11/QebnqI017AO
+         Vol46K5IuJxP/OP+o+UEVbmf4qwe6zHd5umxwLEFoqHO2aAmWXqFig/Tn+UtNLbhomZ2
+         4TLcCjr7w3g0UEkB4dsJ6ndXBxVxsrUaqr7F20UPCV2E/YGVibOw2Sk83FwKm7PIIbph
+         yCRRiWTF4mbNN9fqku1TriUhZdtfDq4UnSh1Xs9EEL93+Jtlj4d8CQnrJJ0YSDZWofNE
+         q6IrKMkQhERLklHrTu2V3ikBTa10TEECmE3KO3gxxqqA+hEKtaKXkGHHDQ4HQ/mDMgMT
+         p/EQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710690673; x=1711295473;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:references:cc:to:from:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=E6xHh0myDZ/4a+0J2/NsOabUugm5P6ZKzY67ZXaFfgI=;
+        b=gr4g3nRnUA/2344qiU8Pn1e9WaJgzyVt6o8XIcXWYb2Qtmrq0Oc53sSm7JUAyt1Dpx
+         Jy6OdWIGryNEraTHFavuE3NzKJ8RlELyFa+pI0MPDyGSQmC2cwtpFNid2eApapiP8qX2
+         LIs0DiFlf+AlN2nldaiH2YpaGPIZP/Nn8B2Pe6oisXazTe1qWxWNCEetpXOCchrhVaWX
+         OBEpvHtXQ1HfTEjsX7CQ2VeZwzKdVJZj5LvqLEZ4DsCHrBDzOhRpbjhc721OGMneQ76o
+         gwnoyJdkL3XqC0SC0CGpgjcTHMZLdc60EtrBwPK22NmKF9oNUWFbBJe39FIoNrtla6zh
+         h8ZQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX7bA9tYWjSuWB+YPN3lnXXR2G7xYsZqOE4B03lMv/P/dW1Imxj61HyP+E6guygUrZ+A47lOsjeDN9l6DyMLCPYUCOlXbetmwTi44SXYAnqzCa7J69kd3z2yIpvSEwbdPHnf1alvgToK2Ps5cQf+bVLJc653mprn+DC7VWtMN6i2OQE/Zjg4z55yaEjd4/QCIkEv7luz2Z0Fif6Sk7O2Q==
+X-Gm-Message-State: AOJu0YzDZsWYd5UdXdN1tWXmz1/tywWF8LbnjxVGkv8QGRY8yZAY88HN
+	zmoLJ0PWhUggGVSfWYSgFObtu8vX+TMEVtuur1wLpsuLNvCigDr+
+X-Google-Smtp-Source: AGHT+IGN3UivLHGlxSXapjlX6Y4g1qr5b2KnSwEX+5CCupeWG0w1xgNeNySKlc/nixI5uMbZyAJU2A==
+X-Received: by 2002:a19:384e:0:b0:513:cfd6:d151 with SMTP id d14-20020a19384e000000b00513cfd6d151mr5384671lfj.18.1710690672962;
+        Sun, 17 Mar 2024 08:51:12 -0700 (PDT)
+Received: from [192.168.1.105] ([178.176.78.158])
+        by smtp.gmail.com with ESMTPSA id q15-20020ac25a0f000000b00513e18a47a5sm491232lfn.130.2024.03.17.08.51.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 17 Mar 2024 08:51:12 -0700 (PDT)
+Subject: Re: [PATCH v5 3/5] usb: gadget: udc: add Renesas RZ/N1 USBF
+ controller support
+From: Sergei Shtylyov <sergei.shtylyov@gmail.com>
+To: Herve Codina <herve.codina@bootlin.com>,
+ Geert Uytterhoeven <geert+renesas@glider.be>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Magnus Damm <magnus.damm@gmail.com>,
+ Gareth Williams <gareth.williams.jx@renesas.com>
+Cc: linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Miquel Raynal <miquel.raynal@bootlin.com>
+References: <20230105152257.310642-1-herve.codina@bootlin.com>
+ <20230105152257.310642-4-herve.codina@bootlin.com>
+ <260e0089-0817-cf12-dfcd-c28263808518@gmail.com>
+Message-ID: <84b7d23d-0a94-3aab-71fb-01fc37039178@gmail.com>
+Date: Sun, 17 Mar 2024 18:51:10 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CABOYnLw8=VM4LxgBsrwTi3HzdvGV7cYJU=4t7MMYTnrDCaDKAQ@mail.gmail.com>
+In-Reply-To: <260e0089-0817-cf12-dfcd-c28263808518@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 
-On Sun, Mar 17, 2024 at 04:31:01PM +0800, xingwei lee wrote:
-> Hello I found a bug in latest upstream titled "divide error in
-> alauda_transport", and maybe is realted with usb.
-> I comfired in the latest upstream the poc tree can trigger the issue.
+On 3/17/24 3:18 PM, Sergei Shtylyov wrote:
+[...]
+
+>> Add support for the Renesas USBF controller.
+>> This controller is an USB2.0 UDC controller available in the
+>> Renesas r9a06g032 SoC (RZ/N1 family).
 > 
-> If you fix this issue, please add the following tag to the commit:
-> Reported-by: xingwei lee <xrivendell7@gmail.com>
-> Reported-by: yue sun <samsun1006219@gmail.com>
-> 
-> kernel: upstream 9187210eee7d87eea37b45ea93454a88681894a4
-> config: https://syzkaller.appspot.com/text?tag=KernelConfig&x=1c6662240382da2
-> with KASAN enabled
-> compiler: gcc (Debian 12.2.0-14) 12.2.0
-> 
-> divide error: 0000 [#1] PREEMPT SMP KASAN NOPTI
-> CPU: 2 PID: 8229 Comm: usb-storage Not tainted 6.8.0-05202-g9187210eee7d #20
-> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-> 1.16.2-1.fc38 04/01/2014
-> RIP: 0010:alauda_read_data drivers/usb/storage/alauda.c:954 [inline]
-> RIP: 0010:alauda_transport+0xcaf/0x3830 drivers/usb/storage/alauda.c:1184
+>    I think I've done the NEC EC-4255 USBF driver for Robert Bosch
+> Car Multimedia, too bad it's never hit upstream... :-)
 
-Can you please test the patch below?
+   EC-4260, sorry; it was mostly known to us back then as NaviEngine
+(mid)...
 
-Alan Stern
+>> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
 
+[...]
 
-
-Index: usb-devel/drivers/usb/storage/alauda.c
-===================================================================
---- usb-devel.orig/drivers/usb/storage/alauda.c
-+++ usb-devel/drivers/usb/storage/alauda.c
-@@ -951,7 +951,6 @@ static int alauda_read_data(struct us_da
- 		unsigned int lba_offset = lba - (zone * uzonesize);
- 		unsigned int pages;
- 		u16 pba;
--		alauda_ensure_map_for_zone(us, zone);
- 
- 		/* Not overflowing capacity? */
- 		if (lba >= max_lba) {
-@@ -961,6 +960,8 @@ static int alauda_read_data(struct us_da
- 			break;
- 		}
- 
-+		alauda_ensure_map_for_zone(us, zone);
-+
- 		/* Find number of pages we can read in this block */
- 		pages = min(sectors, blocksize - page);
- 		len = pages << pageshift;
+MBR, Sergey
 
