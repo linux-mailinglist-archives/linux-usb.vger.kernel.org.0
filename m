@@ -1,167 +1,96 @@
-Return-Path: <linux-usb+bounces-8014-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8016-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D1AA87DB6F
-	for <lists+linux-usb@lfdr.de>; Sat, 16 Mar 2024 21:35:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C48BF87DC1A
+	for <lists+linux-usb@lfdr.de>; Sun, 17 Mar 2024 01:20:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B91E91F215CA
-	for <lists+linux-usb@lfdr.de>; Sat, 16 Mar 2024 20:35:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5BAB6282360
+	for <lists+linux-usb@lfdr.de>; Sun, 17 Mar 2024 00:20:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C872182B5;
-	Sat, 16 Mar 2024 20:35:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E67836F;
+	Sun, 17 Mar 2024 00:20:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F2YVn50z"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id 51133611E
-	for <linux-usb@vger.kernel.org>; Sat, 16 Mar 2024 20:35:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97EBC367
+	for <linux-usb@vger.kernel.org>; Sun, 17 Mar 2024 00:20:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710621341; cv=none; b=HlU09q6Fr+aRM8AH7L3hvxmHTDxOBcAmt+5ciSnNFieDGpvr3l/tpVq4EChUT64gJhc52z+Q0H6WLPX0eJAjlPAWUUAwNZlCNM35gGQz4tJubys6GzckRCwYFzN6Id2nCTW2BIAzFtflorvJJHTQyUgSktz4f7oaRpk+NcDXiCU=
+	t=1710634852; cv=none; b=Hd07rJHrzQ2QZrP2IWPvizVcEQTH/34fiiWj1QjnV0OM3WJ9YC66VA1n+9ApcqBOmqDN5+YbrUPds9kafhO+EiVkkNLfnQlN3dOKqrlURg6tdUPM+Lzefgv4ZyMHcpsEDiTaQKCotA0AueOBvZGemB880DRIZqc9nw8EM/rlSmw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710621341; c=relaxed/simple;
-	bh=gTuos2vrk2Aq2RdkAXzhuDP3hXzu8Fb6ZlqMaChzjhI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=APONsMnJrjXCbLGNh9fDyMuLlNtIQgwbanYPJyiO5OO2mXH9JCY4QQcZFXIwxL9aaxVhmG6aWi1i0mYPtqSdylTULhz67uZfVpvw/wuf/tSLkSIXtljKnEDXl99eDfNyh9XQVvoeOc/WPqAIjEfeub+N6eYR45RHYlrcvrywwUY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
-Received: (qmail 524355 invoked by uid 1000); 16 Mar 2024 16:35:30 -0400
-Date: Sat, 16 Mar 2024 16:35:30 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Jan =?utf-8?B?xIxlcm3DoWs=?= <sairon@sairon.cz>
-Cc: Greg KH <gregkh@linuxfoundation.org>, Khazhy Kumykov <khazhy@google.com>,
-  USB mailing list <linux-usb@vger.kernel.org>, regressions@lists.linux.dev
-Subject: Re: [REGRESSION] Re: [PATCH 0/3] USB: core: Don't overwrite device
- descriptor during reinitialization
-Message-ID: <8b8e2773-47eb-48f4-b5e8-dcd885ee5c5b@rowland.harvard.edu>
-References: <6eadec91-990a-4fbd-8883-8366c4a4d8e4@rowland.harvard.edu>
- <1e954652-dfb3-4248-beea-b8a449128ff0@sairon.cz>
- <4c3ab861-0274-409b-aad3-7cfb53dc2308@rowland.harvard.edu>
- <00f0786b-a9f2-4f73-8d23-3b1fa4c8b77e@sairon.cz>
- <60def275-5237-48df-b37b-ab886f4ee017@rowland.harvard.edu>
- <4c2a410b-2997-4a7a-8fd6-2bec819a1c4f@sairon.cz>
- <4a168b8b-f012-4b36-92bd-83aeb6849410@rowland.harvard.edu>
- <92d3d802-73df-4ab5-aab4-b2325512e98f@sairon.cz>
+	s=arc-20240116; t=1710634852; c=relaxed/simple;
+	bh=iFqzLL/kK3EQjduaeGD4idwioXWU0GVKsGL4VQ+aA1o=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=o/rYm+fhwGXK6ir7MXQ4FUwa/X8W8EkKgCcUgZfga3N5YFXjIoyR0OL7+QgiIoOu0tucpRzkgmEmk2YxSIpUqw9HojCfJLXOBeN8BY4VnrE/vWPUoXXTRYzdi0bw3eYMXlD0m+6+RGSBY7IVKnuTzBWuxKdb6iTmSyqo7cA8RWA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F2YVn50z; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0630BC433F1
+	for <linux-usb@vger.kernel.org>; Sun, 17 Mar 2024 00:20:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1710634852;
+	bh=iFqzLL/kK3EQjduaeGD4idwioXWU0GVKsGL4VQ+aA1o=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=F2YVn50zwwiQoM/O4dUiD3ruK6WLoPCQyq3vNSPyhRKnMKd2jtUmuDgbZuH4IoArc
+	 38J37PTW/R8IyhR8yz6gp14DYelf7rt0T74VDwVeKDdIStUFfZTKA3+MStLLxXsPra
+	 d+l3AksftmQVAIBLzs+tA0ksJ2Ghd6c1Rvpj3S4zSc7DGPancuPCZR+WQ74+Itrz/S
+	 AU1uok6oNgyb7/krbJ5xUjI1m327cQ2tF7fuqeqOque3+zSzFA4EWpcP5TiLC7TYfz
+	 nulPfZM8xI0tBqO1AP2nKA1ubQ/u8m3ZtB/J2YHFocKLoHsId3/EKbTusFJGyJEXOc
+	 Cqj/xRjPAQ9cw==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id E9FCBC4332E; Sun, 17 Mar 2024 00:20:51 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 218546] xhci_hcd prevents hibernate/S4 suspend from working on
+ several systems
+Date: Sun, 17 Mar 2024 00:20:51 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: corngood@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-218546-208809-ABcozkLqP9@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-218546-208809@https.bugzilla.kernel.org/>
+References: <bug-218546-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <92d3d802-73df-4ab5-aab4-b2325512e98f@sairon.cz>
 
-On Tue, Mar 12, 2024 at 09:57:06AM +0100, Jan Čermák wrote:
-> Hi Alan
-> 
-> On 11. 03. 24 15:43, Alan Stern wrote:
-> > Well, at least this means you do have a way of using the device, even
-> > if it is rather awkward.  It might even work on the Raspberry Pi machine.
-> 
-> Still, I'm looking for a more permanent and robust solution. If it were only
-> a single device I'm using myself, I could come up with a workaround.
-> However, this is one of the very few available Z-Wave USB interfaces and
-> there are more users affected. So far we went with reverting the patches,
-> but that's surely not the way we want to go forward.
-> 
-> > The device is so non-responsive, I'm amazed it ever works at all.
-> > Judging by the usbmon traces, it doesn't look as if it would work on a
-> > Windows system.
-> > 
-> > Actually, if you have access to a computer running Windows or Mac OSX
-> > and you can try out the device on that computer, it would be good to
-> > get the equivalent of a usbmon trace (something like a Wireshark
-> > capture log would do).  If those systems manage to do something that
-> > Linux doesn't, we ought to know what it is.
-> 
-> Fredrik (one of the original reporters) is following this conversation, here
-> [1] are logs from his machine with some details in the ticket [2]. He also
-> wonders why the initialization doesn't work only on USB2 ports but works on
-> USB3 if the initialization code is shared between those two.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218546
 
-It's very difficult to compare the Windows log with the usbmon trace.  
-However, something Frederik mentioned about the number of resets led me 
-to check more closely.  There are some extra unnecessary resets in the 
-usbmon trace, and a reset that should be there is missing.
+--- Comment #8 from David McFarland (corngood@gmail.com) ---
+I think I tracked mine down to this happening during hibernation:
 
-Below is a patch meant to get the number of resets back to what it 
-should be.  I'd appreciate it if you can test this, and report the 
-kernel log output along with the usbmon output for the normal case and 
-also with the "old_scheme_first" parameter set.
+[   37.511141] ACPI: PM: Waking up from system sleep state S4
+[   37.529656] ACPI: button: The lid device is not compliant to SW_LID.
+[   37.529657] ACPI: \_SB_.LID0: ACPI LID open
 
-I'm not very hopeful that this will solve the problem, but there's a 
-good chance it will help point us in the right direction by removing 
-extraneous complications.
+So it's probably unrelated.
 
-Alan Stern
+--=20
+You may reply to this email to add a comment.
 
-
-
- drivers/usb/core/hub.c |   27 ++++++++++++++++++++-------
- 1 file changed, 20 insertions(+), 7 deletions(-)
-
-Index: usb-devel/drivers/usb/core/hub.c
-===================================================================
---- usb-devel.orig/drivers/usb/core/hub.c
-+++ usb-devel/drivers/usb/core/hub.c
-@@ -4961,6 +4961,18 @@ hub_port_init(struct usb_hub *hub, struc
- 			break;
- 		}
- 
-+		if (retries > 0) {
-+			retval = hub_port_reset(hub, port1, udev, delay, false);
-+			if (retval < 0)		/* error or disconnect */
-+				goto fail;
-+			if (oldspeed != udev->speed) {
-+				dev_dbg(&udev->dev,
-+					"device reset changed speed!\n");
-+				retval = -ENODEV;
-+				goto fail;
-+			}
-+		}
-+
- 		if (do_new_scheme) {
- 			retval = hub_enable_device(udev);
- 			if (retval < 0) {
-@@ -4972,6 +4984,13 @@ hub_port_init(struct usb_hub *hub, struc
- 
- 			maxp0 = get_bMaxPacketSize0(udev, buf,
- 					GET_DESCRIPTOR_BUFSIZE, retries == 0);
-+			if (maxp0 < 0) {
-+				if (maxp0 != -ENODEV)
-+					dev_err(&udev->dev, "device descriptor read/64, error %d\n",
-+							maxp0);
-+				retval = maxp0;
-+				continue;
-+			}
- 			if (maxp0 > 0 && !initial &&
- 					maxp0 != udev->descriptor.bMaxPacketSize0) {
- 				dev_err(&udev->dev, "device reset changed ep0 maxpacket size!\n");
-@@ -4988,13 +5007,6 @@ hub_port_init(struct usb_hub *hub, struc
- 				retval = -ENODEV;
- 				goto fail;
- 			}
--			if (maxp0 < 0) {
--				if (maxp0 != -ENODEV)
--					dev_err(&udev->dev, "device descriptor read/64, error %d\n",
--							maxp0);
--				retval = maxp0;
--				continue;
--			}
- 		}
- 
- 		for (operations = 0; operations < SET_ADDRESS_TRIES; ++operations) {
-@@ -5533,6 +5545,7 @@ loop:
- 			msleep(2 * hub_power_on_good_delay(hub));
- 			usb_hub_set_port_power(hdev, hub, port1, true);
- 			msleep(hub_power_on_good_delay(hub));
-+			hub_port_debounce_be_stable(hub, port1);
- 		}
- 	}
- 	if (hub->hdev->parent ||
-
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
