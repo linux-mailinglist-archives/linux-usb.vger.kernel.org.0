@@ -1,163 +1,167 @@
-Return-Path: <linux-usb+bounces-8034-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8035-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20B1287E671
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Mar 2024 10:54:08 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE9FC87E791
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Mar 2024 11:43:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1214FB21DE0
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Mar 2024 09:54:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9577C282A04
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Mar 2024 10:43:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E43F2D61A;
-	Mon, 18 Mar 2024 09:52:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C9062E647;
+	Mon, 18 Mar 2024 10:43:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dTZDfcLr"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CBF6376F5;
-	Mon, 18 Mar 2024 09:52:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B8902206B;
+	Mon, 18 Mar 2024 10:43:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710755528; cv=none; b=OSAeSrEgfxK2aqu93TSpMSweX2UtEQZrCUCkNFx2cuxJVXOCi+V6AbyiO66xUoxDp3oWg2TFSnWDUI+tHmYRwUQYF0z3aRsiZ7h/U/LC6oA+xA3TcAPJP3QFzBwRbEipstRV7zohIYe9V0Vc9Qs2qcH8pJDDoCO6HcRnW7853RQ=
+	t=1710758590; cv=none; b=rJ/+4LI6EO72tVZDCJ/5UbG924Xbb74V5lbqN3ql2xTaICaDiKbmoDf0lZvxmXDQfMhW4ObJBfBpCCZZVON+Yh6Cm02sHxI1ws+hDDvOhXMJmT38viBVkTVDfMWYav3hJmDGfwsNjHNSXL40shquFm7atwt3SylPP6gCaOr63AY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710755528; c=relaxed/simple;
-	bh=QepCC4jh/z1oyfrAB08Nh/+RtZkJcjdQvGuSYzUyAXY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XXo/M/Q273n2IfkH83lIWxRJveGhg2fJhJgvcqY2g39xPqjVT19D7OSe5Lr5Vg0nD69+IkH0BKPLpF11SIwFyBF89Imv0Lhc9VocqOpSAb4PXsKNr0imk6htBJ6AETmVF8Esy2kL9Dnpvtq0ytg4Dj/3TIV4GLco51So69MWX4g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.219.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-dc23bf7e5aaso3852817276.0;
-        Mon, 18 Mar 2024 02:52:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710755525; x=1711360325;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hbC4jkIjZgELDVdlA/y+TC0dWbtax/sF1ynKF0NWsYI=;
-        b=gNTuk0C70iicW1VEOSK7h+Ue79Y4IIgKE5sh5Jbl95wgQKNqj6BaX/JVol22oebNdB
-         6517VGoq7YnBQmASrUGQLNNhQ5F7eW98E+hAtiMCcSQHp5g7Y7pkbgvkOvq6a+AfKnXd
-         k6X939R3j/cnlDs1pBn222wiLNQvMGcnFCbldh8I3pgy0P2qv4j+HnEyGUdac/I4q1yM
-         YvXTgsy1ET/OQiiPtqhgCcUh2FOIo+tpOjdYI1/StzYodVYPI03c4/TpPoZjroNC1aMt
-         76yhaj8sMbd4USx6raYsO/OdxWb3Jj+/4135KHEHs9rO6B4Uk5St2g1vchcforGGvTxa
-         SIqg==
-X-Forwarded-Encrypted: i=1; AJvYcCVil0hXWtzWhx1bnaURkNQ3AuL/lU/MdG/u+Oqp5TpqHFhKjaHeJqYPK+WHbSYcFd0E10pQ8FpL0V75iLkkcyn2tn8nNJaFXqG2rDFKN6ntiQ9I3bp64g5NhUUATQCsgwKH3FJ3vExcjn7tq2s=
-X-Gm-Message-State: AOJu0YxAiAr22uF4CzjkmTgAKWdz5/h2VkNGYd5VcCuzO8vHPxRiLQwa
-	PqVC/vwgt8k0Nkyf9uQSo+Rb+p840Qg2N4g1Uveyrm7jOezvM9lEf/VbWVY6KIw=
-X-Google-Smtp-Source: AGHT+IFX4cSvfRhJAQTdOXWimB5MIi6ohfvPHPlkKuUVChiy+XvN/8rq0x9F/ZJ1ej9BIYkYMghhJQ==
-X-Received: by 2002:a25:8591:0:b0:dcd:59e4:620c with SMTP id x17-20020a258591000000b00dcd59e4620cmr9342436ybk.49.1710755524844;
-        Mon, 18 Mar 2024 02:52:04 -0700 (PDT)
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com. [209.85.128.180])
-        by smtp.gmail.com with ESMTPSA id b11-20020a252e4b000000b00dc7622402b9sm1692646ybn.43.2024.03.18.02.52.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Mar 2024 02:52:04 -0700 (PDT)
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-609f060cbafso48302837b3.0;
-        Mon, 18 Mar 2024 02:52:04 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXj33tVkEB0Vg/l5qTHbcKcpFqpZxqOqyTpZMn/zwZ5AZgIJCbNPhh8qzW21aMobFz958zX5IT1eEYmof1AfxwX4L3/ajtgwmMGMV0BtWpeM7utrqUwIJamkUtM+3WdM+rP2vifx7RNKvmgcok=
-X-Received: by 2002:a81:9e44:0:b0:608:3785:707a with SMTP id
- n4-20020a819e44000000b006083785707amr11164943ywj.52.1710755524097; Mon, 18
- Mar 2024 02:52:04 -0700 (PDT)
+	s=arc-20240116; t=1710758590; c=relaxed/simple;
+	bh=4Fni8SYLFfRRbsrD9nvd2suOlqS7UsLniPM7ZmjNnqE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=opSPXjfC4yhDOntyu/RnEzPlcUe3zuac1OlkvDfa9lU/+r4QJlWcysNTnl6UnsPJ76jvva4ASH1a+9Vw/uqVOULUoi7J5hwP/qIklvCqq7d5g3J5BVt5WTG7OXEuE0dyK8RyEOgmgrv1TydEi+K0ijuclSCWbBjND9TBS0fGO4o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dTZDfcLr; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1710758589; x=1742294589;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4Fni8SYLFfRRbsrD9nvd2suOlqS7UsLniPM7ZmjNnqE=;
+  b=dTZDfcLrBjUBcYJs5hz7u+OYoY1SFLXKUJxbgiEpLyid1c5vE984CIsG
+   +5jsubDzyILp/D3Ng7OqN1w94XAIBQOgFnBGqQ6ZmebVO9ulVfcsB5qVs
+   YxWWgpuzvPSEeLihvRpT/24fAjYkhSYE8hP0tysREhykNz7mL2uRMm9f+
+   YGs7+IOnNfCvYr7Pv6CJB8gLhgyXmNmRZDAZhaCJP72pNy8WQs2tKosdz
+   bBWG6H7B3YT81PhPy0RtRnXGd5XVPao8ylrgWRr3qnPKqeN1TO3GAJOLX
+   t3ufJLtii7tuHOU76Hs+NrNDFMUlsJmUrjgSqZH4Jo2/JeYkcR+czLR2/
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11016"; a="5688068"
+X-IronPort-AV: E=Sophos;i="6.07,134,1708416000"; 
+   d="scan'208";a="5688068"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2024 03:43:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,11016"; a="937060144"
+X-IronPort-AV: E=Sophos;i="6.07,134,1708416000"; 
+   d="scan'208";a="937060144"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 18 Mar 2024 03:43:04 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 18 Mar 2024 12:43:03 +0200
+Date: Mon, 18 Mar 2024 12:43:03 +0200
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Johan Hovold <johan+linaro@kernel.org>, linux-usb@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH 1/7] usb: typec: ucsi: fix race condition in connection
+ change ACK'ing
+Message-ID: <Zfgat85yW7gBgnxB@kuha.fi.intel.com>
+References: <20240313-qcom-ucsi-fixes-v1-0-74d90cb48a00@linaro.org>
+ <20240313-qcom-ucsi-fixes-v1-1-74d90cb48a00@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240315183921.375751-1-biju.das.jz@bp.renesas.com>
- <20240315183921.375751-6-biju.das.jz@bp.renesas.com> <CAMuHMdW5ZWOXuWc+thDTJ6+h7mcH7o+N6tVLhhkH=TKG2BZC6A@mail.gmail.com>
- <OSAPR01MB1587E4455F259156CE371F04862D2@OSAPR01MB1587.jpnprd01.prod.outlook.com>
-In-Reply-To: <OSAPR01MB1587E4455F259156CE371F04862D2@OSAPR01MB1587.jpnprd01.prod.outlook.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Mon, 18 Mar 2024 10:51:52 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdV4BEr7uO8FiHbPSiRFhRwdXu0+=xqbG65UhStdpcy2BA@mail.gmail.com>
-Message-ID: <CAMuHMdV4BEr7uO8FiHbPSiRFhRwdXu0+=xqbG65UhStdpcy2BA@mail.gmail.com>
-Subject: Re: [PATCH v3 5/7] usb: renesas_usbhs: Update usbhs pipe
- configuration for RZ/G2L family
-To: Biju Das <biju.das.jz@bp.renesas.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Magnus Damm <magnus.damm@gmail.com>, 
-	Huy Nguyen <huy.nguyen.wh@renesas.com>, Rob Herring <robh@kernel.org>, 
-	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
-	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@pengutronix.de>, 
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, 
-	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>, 
-	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>, 
-	"biju.das.au" <biju.das.au@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240313-qcom-ucsi-fixes-v1-1-74d90cb48a00@linaro.org>
 
-Hi Biju,
+Hi Dmitry,
 
-On Mon, Mar 18, 2024 at 10:46=E2=80=AFAM Biju Das <biju.das.jz@bp.renesas.c=
-om> wrote:
-> > From: Geert Uytterhoeven <geert@linux-m68k.org>
-> > On Fri, Mar 15, 2024 at 7:39=E2=80=AFPM Biju Das <biju.das.jz@bp.renesa=
-s.com> wrote:
-> > > The RZ/G2L family SoCs has 10 PIPE buffers compared to 16 pipe buffer=
-s
-> > > on RZ/A2M. Update the pipe configuration for RZ/G2L family SoCs and
-> > > use family SoC specific compatible to handle this difference.
-> > >
-> > > Added SoC specific compatible to OF table to avoid ABI breakage with
-> > > old DTB. To optimize memory usage the SoC specific compatible will be
-> > > removed later.
-> > >
-> > > The pipe configuration of RZ/G2L is same as the default one, so reuse
-> > > the common table by renaming
-> > > usbhs_default_pipe[]->usbhs_rcar_default_pipe[]
-> > > and changing static qualifier to global to fill the pipe configuratio=
-n
-> > > data.
-> > >
-> > > Signed-off-by: Huy Nguyen <huy.nguyen.wh@renesas.com>
-> > > Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-> > > ---
-> > > v2->v3:
-> > >  * Updated commit description
-> > >  * Dropped usbhsc_rzg2l_pipe[] and reusing the default_pipe[].
-> >
-> > Thanks for the update!
-> >
-> > > --- a/drivers/usb/renesas_usbhs/common.c
-> > > +++ b/drivers/usb/renesas_usbhs/common.c
-> > > @@ -363,8 +363,8 @@ static void usbhsc_clk_disable_unprepare(struct u=
-sbhs_priv *priv)
-> > >   *             platform default param
-> > >   */
-> > >
-> > > -/* commonly used on old SH-Mobile SoCs */ -static struct
-> > > renesas_usbhs_driver_pipe_config usbhsc_default_pipe[] =3D {
-> > > +/* commonly used on old SH-Mobile and RZ/G2L family SoCs */ struct
-> > > +renesas_usbhs_driver_pipe_config usbhsc_rcar_default_pipe[] =3D {
-> >
-> > So why rename this to have "rcar" in the name?
->
-> Oops, it is not used by R-Car, but used by old SH SoCs and RZ/G2L
-> As this structure becomes global now, Will use usbhsc_rzg2l_default_pipe[=
-] instead??
->
-> Or
->
-> Will make this as static like current driver and drop filling pipe config=
-s in info and
-> use .has_new_pipe_configs to zero for devices using usbhsc_default_pipe[]=
-??
+On Wed, Mar 13, 2024 at 05:54:11AM +0200, Dmitry Baryshkov wrote:
+> The code to handle connection change events contains a race: there is an
+> open window for notifications to arrive between clearing EVENT_PENDING
+> bit and sending the ACK_CC_CI command to acknowledge the connection
+> change. This is mostly not an issue, but on Qualcomm platforms when the
+> PPM receives ACK_CC_CI with the ConnectorChange bit set if there is no
+> pending reported Connector Change, it responds with the CommandCompleted
+> + NotSupported notifications, completely breaking UCSI state machine.
+> 
+> Fix this by reading out CCI after ACK_CC_CI and scheduling the work if
+> there is a connector change reported.
+ 
+> Fixes: bdc62f2bae8f ("usb: typec: ucsi: Simplified registration and I/O API")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-I think just using .has_new_pipe_configs is the simplest solution.
+UCSI specification quite clearly states that the PPM must wait until
+OPM has acknowledged the notification before sending the next
+notification, so this looks like a workaround for Qualcomm specific
+issue. Ideally it would have been isolated - now this is done on
+every platform.
 
-Gr{oetje,eeting}s,
+I'm a little bit uncomfortable with the unconditional reading of the
+CCI field. On most systems reading the field will clear it completely.
+Hopefully that will not cause more problems.
 
-                        Geert
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
+> ---
+>  drivers/usb/typec/ucsi/ucsi.c | 20 +++++++++++++++++---
+>  1 file changed, 17 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index cf52cb34d285..4abb752c6806 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -61,12 +61,28 @@ static int ucsi_acknowledge_command(struct ucsi *ucsi)
+>  
+>  static int ucsi_acknowledge_connector_change(struct ucsi *ucsi)
+>  {
+> +	unsigned int con_num;
+>  	u64 ctrl;
+> +	u32 cci;
+> +	int ret;
+>  
+>  	ctrl = UCSI_ACK_CC_CI;
+>  	ctrl |= UCSI_ACK_CONNECTOR_CHANGE;
+>  
+> -	return ucsi->ops->sync_write(ucsi, UCSI_CONTROL, &ctrl, sizeof(ctrl));
+> +	ret = ucsi->ops->sync_write(ucsi, UCSI_CONTROL, &ctrl, sizeof(ctrl));
+> +	if (ret)
+> +		return ret;
+> +
+> +	clear_bit(EVENT_PENDING, &ucsi->flags);
+> +	ret = ucsi->ops->read(ucsi, UCSI_CCI, &cci, sizeof(cci));
+> +	if (ret)
+> +		return ret;
+> +
+> +	con_num = UCSI_CCI_CONNECTOR(cci);
+> +	if (con_num)
+> +		ucsi_connector_change(ucsi, con_num);
+> +
+> +	return 0;
+>  }
+>  
+>  static int ucsi_exec_command(struct ucsi *ucsi, u64 command);
+> @@ -1215,8 +1231,6 @@ static void ucsi_handle_connector_change(struct work_struct *work)
+>  	if (con->status.change & UCSI_CONSTAT_CAM_CHANGE)
+>  		ucsi_partner_task(con, ucsi_check_altmodes, 1, 0);
+>  
+> -	clear_bit(EVENT_PENDING, &con->ucsi->flags);
+> -
+>  	mutex_lock(&ucsi->ppm_lock);
+>  	ret = ucsi_acknowledge_connector_change(ucsi);
+>  	mutex_unlock(&ucsi->ppm_lock);
+> 
+> -- 
+> 2.39.2
 
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+-- 
+heikki
 
