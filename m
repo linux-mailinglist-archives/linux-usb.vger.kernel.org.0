@@ -1,111 +1,130 @@
-Return-Path: <linux-usb+bounces-8048-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8049-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6228D87EBBA
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Mar 2024 16:10:27 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 93E3F87EEF0
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Mar 2024 18:35:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E9D90281034
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Mar 2024 15:10:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C29381C22135
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Mar 2024 17:35:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 454E34EB5D;
-	Mon, 18 Mar 2024 15:10:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m6K0lFRc"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C05456742;
+	Mon, 18 Mar 2024 17:33:34 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C32704EB50
-	for <linux-usb@vger.kernel.org>; Mon, 18 Mar 2024 15:10:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15D7C55C04;
+	Mon, 18 Mar 2024 17:33:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710774607; cv=none; b=llwVsWUvCp2ddVlIJAxRXWZbnLIyQoMgZnar1AzlkJxBDEbrUun6Y4L9a+YBh8EfuiU16bzMW2ZnHGXrbV9rAMW1kC5wb7qlNip5Mv0Jgj1Dzo86ibEQalC+T5emQ3+O/iDF4xm8L8e6gF2VUqgwQPtNjjYGxdpOsdVhO5geGto=
+	t=1710783214; cv=none; b=jJvVNcCSBvHME4gZmCV/cmyjEVGzhqvL9FE4n4T/eq9OfFX+Eyru8Vxo9VQQb7Ap6f50yJgmmLppb/ghtp04VB9BFQtYD7UNY4fy9bhZKuVjnSPKZfVpT2QTXZ7/N9NgFSaqJFPb/OXrgv1JEh1m6ZrAkiTFwZTqLNAogwlKyBE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710774607; c=relaxed/simple;
-	bh=6ubgJcbceGX7Iqvnn5bIy3z8s6iWEB5nPul/za8qqCo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=coyMJJcOSx/PC6bHobmOg6HiKvgFs5muOyg+wAQ8CwLk4aKcFgcSbfEV6Bu4SurPBug2kzUPY56nf6m9Aimlvkdse4eYd7bgjCqc1eXv3/Ad8J8nf0BAWOpSkmm93naJko7m0dRTBNZxtoS44I3YdQ3KBMtOp4Eql4m8xu/opqI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m6K0lFRc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 517FCC433F1;
-	Mon, 18 Mar 2024 15:10:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710774607;
-	bh=6ubgJcbceGX7Iqvnn5bIy3z8s6iWEB5nPul/za8qqCo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=m6K0lFRcaveRDMoNcbfWGD7DXimd4VnM/H0fGx1eWjaOz+c8eCHoIC0KtExhgbxy+
-	 hylQRliyOrqt4Vb9uFkhdiQrulkuVpRQLZsWVPieAM2ZElqcNTiFSmLYe1WYkonjL4
-	 0bhWt6DGAoUx3Yhc8gujGhg6TBQZGMYskyAbK+7/LkmnIYA4Me2ZaDlpfnmyu78olP
-	 GRsPTlv3s2gBhPVGUCSyrva6QRsWybjELh9nEm8M7EgpD6UWFj/n5tV93KINPlaMwL
-	 6+HGwnGB4pi2Viak6FcigTfzSMU4K3VgMOHfVtdAaigb/pWfF+o38nT0OuEDP7bDR/
-	 PQcwJUoAYkXGw==
-Date: Mon, 18 Mar 2024 15:10:03 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: Mathias Nyman <mathias.nyman@linux.intel.com>,
-	Aishwarya TCV <aishwarya.tcv@arm.com>,
-	Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
-	Klara Modin <klarasmodin@gmail.com>
-Subject: Re: [PATCH] usb: usb-acpi: Fix oops due to freeing uninitialized pld
- pointer
-Message-ID: <1ef6601b-bdb3-41f1-b3ce-07418dd9c031@sirena.org.uk>
-References: <20240308113425.1144689-1-mathias.nyman@linux.intel.com>
- <f5681869-0cf2-4888-83b9-4ff14b1174c6@arm.com>
- <1b67d844-440a-52c3-b9e7-d12c6fe5dad2@linux.intel.com>
- <f0039c32-e670-455c-8d64-d7b706c6ad7a@sirena.org.uk>
- <19ec72e2-8273-43a0-bbeb-706565e926f2@rowland.harvard.edu>
+	s=arc-20240116; t=1710783214; c=relaxed/simple;
+	bh=pkhKpxpft/xtkFnEhD1ehUAl7sy49h8RDYhhWIDUOs8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=GzxHcfoqmtrXfgJEUahI/9IBWPGSky/EDo768rMq/SXMh4k3/JCwPO73a1BKxZvbSF+jgb/E33TMR2HHde+OTJRNuJcz+oV7wALfn3LygDUrVVr3FPEq9Rszj9pKJdsflgmxtZkX+1AMLAi04qmxsgBCksTaWjHCq8yKcEXiCIA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; arc=none smtp.client-ip=210.160.252.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
+X-IronPort-AV: E=Sophos;i="6.07,134,1708354800"; 
+   d="scan'208";a="198216079"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie5.idc.renesas.com with ESMTP; 19 Mar 2024 02:33:26 +0900
+Received: from localhost.localdomain (unknown [10.226.93.20])
+	by relmlir6.idc.renesas.com (Postfix) with ESMTP id 8D30040359E5;
+	Tue, 19 Mar 2024 02:33:22 +0900 (JST)
+From: Biju Das <biju.das.jz@bp.renesas.com>
+To: Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Cc: Biju Das <biju.das.jz@bp.renesas.com>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+	linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+	Biju Das <biju.das.au@gmail.com>
+Subject: [PATCH v4 0/6] Fix USB pipe configuration for RZ/G2L
+Date: Mon, 18 Mar 2024 17:33:13 +0000
+Message-Id: <20240318173319.201799-1-biju.das.jz@bp.renesas.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="k+olrj424WxTyTpT"
-Content-Disposition: inline
-In-Reply-To: <19ec72e2-8273-43a0-bbeb-706565e926f2@rowland.harvard.edu>
-X-Cookie: Alaska:
+Content-Transfer-Encoding: 8bit
 
+The USBHS IP found on RZ/G2L SoCs only has 10 pipe buffers compared
+to 16 pipe buffers on RZ/A2M. Document renesas,rzg2l-usbhs family
+compatible to handle this difference for RZ/G2L family SoCs.
 
---k+olrj424WxTyTpT
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This patch series aims to fix the USB pipe configuration for RZ/G2L
+family SoCs.
 
-On Mon, Mar 18, 2024 at 10:55:54AM -0400, Alan Stern wrote:
-> On Mon, Mar 18, 2024 at 02:40:31PM +0000, Mark Brown wrote:
-> > On Mon, Mar 18, 2024 at 04:36:24PM +0200, Mathias Nyman wrote:
+For the backward compatibility SoC specific compatible is used
+and will be removed the same after few kernel releases.
 
-> > > We are already mid merge window.
-> > > Not sure if there's some way Greg can still get this in, otherwise I'm
-> > > afraid we need wait for rc1, and try to get this into rc2.
+As the DTS update has a hard dependency on the driver fix, Got ack
+from Geert for patch#6 to apply the DTS update together with the driver
+fix.
 
-> > Given that it's a bug fix for a fairly serious issue (it's causing boot
-> > failures) it should be perfectly fine to apply during the merge window?
+v3->v4:
+ * Added Rbtag from Geert for patch#3.
+ * Dropped patch#4
+ * Credit  Huy Nguyen's work in the commit message for patch#4 and dropped
+   his name from Signed-off-by tag.
+ * Selection of usbhsc_rzg2l_default_pipe[] by setting the variable
+   has_new_pipe_configs to zero.
+ * Updated commit description for patch#4.
+ * Dropped the check 'priv->dparam.pipe_configs' as it is same as
+   checking !has_new_pipe_configs.
+v2->v3:
+ * Added Rb tag from Geert for patch#1,#2 and #7
+ * Added Ack tag from Geert for patch#7.
+ * Added patch#3 for improving usbhsc_default_pipe[] for isochronous
+   transfers
+ * Added patch#4 for dropping has_new_pipe_configs from struct
+   renesas_usbhs_driver_param
+ * Updated commit description for patch#5
+ * Dropped usbhsc_rzg2l_pipe[] and reusing the default_pipe[].
+v1->v2:
+ * Added Ack from Krzysztof Kozlowski for patch#1.
+ * Added patch#2 for simplify obtaining device data.
+ * Dropped using of_device_is_compatible() in probe.
+ * Added usbhs_rzg2l_plat_info and replaced the device data for RZ/G2L
+   from usbhs_rza2_plat_info->usbhs_rzg2l_plat_info.
+ * Moved usbhsc_rzg2l_pipe table near to the user.
+ * Updated commit description in patch#3
+ * Added Rb tag from Geert for patch#4.
+ * Updated commit description about ABI breakage in patch#5.
+ * Updated commit header in patch#5 as it is RZ/G2L specific.
 
-> Greg is away on vacation until this weekend.  If the bug is all that=20
-> serious, you could consider sending the fix directly to Linus.
+Biju Das (6):
+  dt-bindings: usb: renesas,usbhs: Document RZ/G2L family compatible
+  usb: renesas_usbhs: Simplify obtaining device data
+  usb: renesas_usbhs: Improve usbhsc_default_pipe[] for isochronous
+    transfers
+  usb: renesas_usbhs: Update usbhs pipe configuration for RZ/G2L family
+  usb: renesas_usbhs: Remove trailing comma in the terminator entry for
+    OF table
+  arm64: dts: renesas: r9a07g0{43,44,54}: Update RZ/G2L family
+    compatible
 
-I can do that, or Mathias do you want to resend it?  Boot breaks in -rc1
-tend to be pretty miserable for testing since a lot of people use it as
-a base for their branches.
+ .../bindings/usb/renesas,usbhs.yaml           |  6 ++-
+ arch/arm64/boot/dts/renesas/r9a07g043.dtsi    |  2 +-
+ arch/arm64/boot/dts/renesas/r9a07g044.dtsi    |  2 +-
+ arch/arm64/boot/dts/renesas/r9a07g054.dtsi    |  2 +-
+ drivers/usb/renesas_usbhs/common.c            | 43 ++++++++++++-------
+ drivers/usb/renesas_usbhs/rza.h               |  1 +
+ drivers/usb/renesas_usbhs/rza2.c              | 13 ++++++
+ 7 files changed, 49 insertions(+), 20 deletions(-)
 
---k+olrj424WxTyTpT
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
+2.25.1
 
------BEGIN PGP SIGNATURE-----
-
-iQEyBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmX4WUoACgkQJNaLcl1U
-h9D5rQf44xPOn6uZz/O3aUk0sCgJVx7gJFYsE7y6tCKwNOL2MJA4vLvuqGI1Hr/I
-iy533CeUJybxco5E+n4R7Cbiu4hgZz3cupDjPlPoQ0y5bX2PdQp41HhqwMd4sQB3
-0MONv4+4ZszZxd8NM5fqH+QF2sL3mHU/yV0Gn8xzxHeP6ZGsWEJKh1Mq1273kFdb
-2FblKnl1mcmrVcS5hPrbpF+H8faBDolYAf46m77/Ew7kszuONP5HWPx4deioJcio
-B1XKqWEXmZ9xOaL5TEyX3OwRVjbILqSBTMSnH+Eqgt1d8snYhkLficOcfwS0l43B
-ALQRyGzoDehIwzaCDd3VJ1q10ceh
-=918Q
------END PGP SIGNATURE-----
-
---k+olrj424WxTyTpT--
 
