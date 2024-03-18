@@ -1,75 +1,71 @@
-Return-Path: <linux-usb+bounces-8042-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8043-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95AAE87E847
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Mar 2024 12:11:48 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 285E387E850
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Mar 2024 12:12:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E89E7B219B5
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Mar 2024 11:11:45 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C5B9BB22F4B
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Mar 2024 11:12:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC91C364A5;
-	Mon, 18 Mar 2024 11:11:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0566364AE;
+	Mon, 18 Mar 2024 11:12:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XPng3DZO"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dKtxEQZ1"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8397E31A66;
-	Mon, 18 Mar 2024 11:11:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A503538385;
+	Mon, 18 Mar 2024 11:12:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710760298; cv=none; b=I88lFzlK77gZY1y+2LzpDKB1y6Gn0VxBvYKw+kTRE19ARUZ5An42gTSgYjH3z1Yj+K7Oc+O21VAVhqlt3s/MlUddCiTftNnYyu1yzgS51uHFFSIGcWku/YiwstjDIKT8tN69Id0HOtLa1/hUX4J/hhKPbMr5fCjkLBXWS4uEU9Y=
+	t=1710760362; cv=none; b=Cv3Vn1d4C+EMuV2cSfKpuD3ty0tY8zIGeZjJ4r0cKdkCi/ne1Sz9mII4PSWk7NUSozyiW8HGg9uRTFVM9VfkEWSM8duBA/i4ACmdwz0UgmkI25hFqhfnN+xNTt4EV5nR+ftTMbK6cecmXQe7HeIgNXb8MzOa+9XXDwO+Z+0nTGE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710760298; c=relaxed/simple;
-	bh=/eNWMsh0F9jXQBWzGgZPQU2dDcVV4ugepMs2kdOvIcA=;
+	s=arc-20240116; t=1710760362; c=relaxed/simple;
+	bh=SrNpO6frBXeFes4/cfwvtY7bovpO8PEcBwfDBnzsgX8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HBBQ1BJN52U5KlnXHDhuJXiV0nYcert4oq6jQXpd55IthNeSDeURJLJqZ3vUs8OPRAjScOjsVIYAT5OmH5yaedgEOkDqfRr1HbA4Ok4iAUjMKHX5519bzoPSfKlyqlYHqC+CvPRg1Ip0a74zIw8YlDoLLdw94dJlfq8agBbfoz0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XPng3DZO; arc=none smtp.client-ip=198.175.65.12
+	 Content-Type:Content-Disposition:In-Reply-To; b=b/RwDKSWsG017UMNU0nKJvllmdTYPI1bsOLKwMPeIqtQ8sJrPhgpW6qKTCkybEwlZKP8+jqS23gvgIBYJoSrXijygb/hAL4VKHQHlP3zZEacP0biozCDd4Nr5XIibaV3mcOqXrR+jaGpQlOMQuiBb3EKpwSC3Uz8A2sU9/Sxkn0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dKtxEQZ1; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1710760297; x=1742296297;
+  t=1710760361; x=1742296361;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=/eNWMsh0F9jXQBWzGgZPQU2dDcVV4ugepMs2kdOvIcA=;
-  b=XPng3DZO7w8UttmABkFa5gYOR6zZjTF607GFjPr/Dh+Kv9MzObjrCBvu
-   vDWah2AuBd9mAYyTKSEctz3/N1CKtEM/sipcpHuBJtWHuVhwawym/lUBd
-   sZ/UJagKIAS3PP/zAZmhFtlaVaTXxzAAzXqCpqOIwpUfKUNyrqmM+4z9V
-   KfW11KpQQixkUWi2u9hf5SbmAVAjZ0RVJABsKo/rRCGbTNZ3jAIbkupl5
-   SvYIxIp6JXBga5amdq7GqbWikfmrEdeCSKWcem6qXbbyRuxElDUuK2qvc
-   4prcXmfwh6RRbEpzOqFq/PBLtbzzONCVcARwl8j9xeFKcU2wViFCkEV6Z
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11016"; a="17012273"
+  bh=SrNpO6frBXeFes4/cfwvtY7bovpO8PEcBwfDBnzsgX8=;
+  b=dKtxEQZ1vGph4AFryJ7ptrpdbBXXNCuVcKi2zATf0BnmcUfFfT0XSrLt
+   PaDLZRDKVh0NL4/Nu3hr6Z8qWTzrJ36pZwIQ6mj+MWbA3YgO+WKZj68Ef
+   V8l6zn6ktcOxVQTu+YkvALI5rWDXR4REIedZ/aLjKvYCHREeJo/Y/Ghwy
+   jCMwEG+g5zkhVIlsJx6Ny+iePMRJoEQMxez1mRATBQ7ZEvYcKj6U8RP02
+   g9PUKaRFpQTocnSn9oUd2P6E6i9nW3cLQ3p2+aqOg3R93UUgLoT+2QLPz
+   ocOpQy+cCVKAyQz0joR9geOJmpQcXHgObEBGVDwNYBG728H54f8Y6n7BP
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11016"; a="17012457"
 X-IronPort-AV: E=Sophos;i="6.07,134,1708416000"; 
-   d="scan'208";a="17012273"
+   d="scan'208";a="17012457"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2024 04:11:36 -0700
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2024 04:12:40 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11016"; a="937060155"
+X-IronPort-AV: E=McAfee;i="6600,9927,11016"; a="937060156"
 X-IronPort-AV: E=Sophos;i="6.07,134,1708416000"; 
-   d="scan'208";a="937060155"
+   d="scan'208";a="937060156"
 Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 18 Mar 2024 04:11:30 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 18 Mar 2024 13:11:30 +0200
-Date: Mon, 18 Mar 2024 13:11:30 +0200
+  by fmsmga001.fm.intel.com with SMTP; 18 Mar 2024 04:12:36 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 18 Mar 2024 13:12:36 +0200
+Date: Mon, 18 Mar 2024 13:12:36 +0200
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Jameson Thies <jthies@google.com>
-Cc: linux-usb@vger.kernel.org, pmalani@chromium.org, bleung@google.com,
-	abhishekpandit@chromium.org, andersson@kernel.org,
-	dmitry.baryshkov@linaro.org, fabrice.gasnier@foss.st.com,
-	gregkh@linuxfoundation.org, hdegoede@redhat.com,
-	neil.armstrong@linaro.org, rajaram.regupathy@intel.com,
-	saranya.gopal@intel.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/1] usb: typec: ucsi: Check capabilities before cable
- and identity discovery
-Message-ID: <ZfghYnmiFBMdDp3/@kuha.fi.intel.com>
-References: <20240315171836.343830-1-jthies@google.com>
- <20240315171836.343830-2-jthies@google.com>
+To: Luca Weiss <luca.weiss@fairphone.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: ptn36502: switch to DRM_AUX_BRIDGE
+Message-ID: <ZfghpN81iR6vL+pu@kuha.fi.intel.com>
+References: <20240315-ptn36502-aux-v1-1-c9d3c828ff2e@fairphone.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -78,119 +74,121 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240315171836.343830-2-jthies@google.com>
+In-Reply-To: <20240315-ptn36502-aux-v1-1-c9d3c828ff2e@fairphone.com>
 
-On Fri, Mar 15, 2024 at 05:18:35PM +0000, Jameson Thies wrote:
-> Check the UCSI_CAP_GET_PD_MESSAGE bit before sending GET_PD_MESSAGE to
-> discover partner and cable identity, check UCSI_CAP_CABLE_DETAILS before
-> sending GET_CABLE_PROPERTY to discover the cable and check
-> UCSI_CAP_ALT_MODE_DETAILS before registering the a cable plug. Additionally,
-> move 8 bits from reserved_1 to features in the ucsi_capability struct. This
-> makes the field 16 bits, still 8 short of the 24 bits allocated for it in
-> UCSI v3.0, but it will not overflow because UCSI only defines 14 bits in
-> bmOptionalFeatures.
+On Fri, Mar 15, 2024 at 05:04:22PM +0100, Luca Weiss wrote:
+> Switch to using the new DRM_AUX_BRIDGE helper to create the transparent
+> DRM bridge device instead of handcoding corresponding functionality.
 > 
-> Fixes: 38ca416597b0 ("usb: typec: ucsi: Register cables based on GET_CABLE_PROPERTY")
-> Link: https://lore.kernel.org/linux-usb/44e8142f-d9b3-487b-83fe-39deadddb492@linaro.org
-> Suggested-by: Neil Armstrong <neil.armstrong@linaro.org>
-> Signed-off-by: Jameson Thies <jthies@google.com>
+> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
 
 Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
 > ---
-> Confirmed a device which supports GET_PD_MESSAGE, GET_CABLE_PROPERTY and
-> GET_ALTERNATE_MODES still requested identity and cable information.
+> Very similar to this patch:
+> c5d296bad640 ("usb: typec: nb7vpq904m: switch to DRM_AUX_BRIDGE")
+> ---
+>  drivers/usb/typec/mux/Kconfig    |  2 +-
+>  drivers/usb/typec/mux/ptn36502.c | 44 ++--------------------------------------
+>  2 files changed, 3 insertions(+), 43 deletions(-)
 > 
->  drivers/usb/typec/ucsi/ucsi.c | 34 +++++++++++++++++++++-------------
->  drivers/usb/typec/ucsi/ucsi.h |  5 +++--
->  2 files changed, 24 insertions(+), 15 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> index cf52cb34d2859..958dc82989b60 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.c
-> +++ b/drivers/usb/typec/ucsi/ucsi.c
-> @@ -1133,17 +1133,21 @@ static int ucsi_check_cable(struct ucsi_connector *con)
->  	if (ret < 0)
->  		return ret;
+> diff --git a/drivers/usb/typec/mux/Kconfig b/drivers/usb/typec/mux/Kconfig
+> index 399c7b0983df..4827e86fed6d 100644
+> --- a/drivers/usb/typec/mux/Kconfig
+> +++ b/drivers/usb/typec/mux/Kconfig
+> @@ -60,7 +60,7 @@ config TYPEC_MUX_PTN36502
+>  	tristate "NXP PTN36502 Type-C redriver driver"
+>  	depends on I2C
+>  	depends on DRM || DRM=n
+> -	select DRM_PANEL_BRIDGE if DRM
+> +	select DRM_AUX_BRIDGE if DRM_BRIDGE
+>  	select REGMAP_I2C
+>  	help
+>  	  Say Y or M if your system has a NXP PTN36502 Type-C redriver chip
+> diff --git a/drivers/usb/typec/mux/ptn36502.c b/drivers/usb/typec/mux/ptn36502.c
+> index 72ae38a1b2be..0ec86ef32a87 100644
+> --- a/drivers/usb/typec/mux/ptn36502.c
+> +++ b/drivers/usb/typec/mux/ptn36502.c
+> @@ -8,7 +8,7 @@
+>   * Copyright (C) 2023 Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+>   */
 >  
-> -	ret = ucsi_get_cable_identity(con);
-> -	if (ret < 0)
-> -		return ret;
-> +	if (con->ucsi->cap.features & UCSI_CAP_GET_PD_MESSAGE) {
-> +		ret = ucsi_get_cable_identity(con);
-> +		if (ret < 0)
-> +			return ret;
-> +	}
+> -#include <drm/drm_bridge.h>
+> +#include <drm/bridge/aux-bridge.h>
+>  #include <linux/bitfield.h>
+>  #include <linux/i2c.h>
+>  #include <linux/kernel.h>
+> @@ -68,8 +68,6 @@ struct ptn36502 {
 >  
-> -	ret = ucsi_register_plug(con);
-> -	if (ret < 0)
-> -		return ret;
-> +	if (con->ucsi->cap.features & UCSI_CAP_ALT_MODE_DETAILS) {
-> +		ret = ucsi_register_plug(con);
-> +		if (ret < 0)
-> +			return ret;
+>  	struct typec_switch *typec_switch;
 >  
-> -	ret = ucsi_register_altmodes(con, UCSI_RECIPIENT_SOP_P);
-> -	if (ret < 0)
-> -		return ret;
-> +		ret = ucsi_register_altmodes(con, UCSI_RECIPIENT_SOP_P);
-> +		if (ret < 0)
-> +			return ret;
-> +	}
+> -	struct drm_bridge bridge;
+> -
+>  	struct mutex lock; /* protect non-concurrent retimer & switch */
 >  
+>  	enum typec_orientation orientation;
+> @@ -283,44 +281,6 @@ static int ptn36502_detect(struct ptn36502 *ptn)
 >  	return 0;
 >  }
-> @@ -1189,8 +1193,10 @@ static void ucsi_handle_connector_change(struct work_struct *work)
->  			ucsi_register_partner(con);
->  			ucsi_partner_task(con, ucsi_check_connection, 1, HZ);
->  			ucsi_partner_task(con, ucsi_check_connector_capability, 1, HZ);
-> -			ucsi_partner_task(con, ucsi_get_partner_identity, 1, HZ);
-> -			ucsi_partner_task(con, ucsi_check_cable, 1, HZ);
-> +			if (con->ucsi->cap.features & UCSI_CAP_GET_PD_MESSAGE)
-> +				ucsi_partner_task(con, ucsi_get_partner_identity, 1, HZ);
-> +			if (con->ucsi->cap.features & UCSI_CAP_CABLE_DETAILS)
-> +				ucsi_partner_task(con, ucsi_check_cable, 1, HZ);
 >  
->  			if (UCSI_CONSTAT_PWR_OPMODE(con->status.flags) ==
->  			    UCSI_CONSTAT_PWR_OPMODE_PD)
-> @@ -1589,8 +1595,10 @@ static int ucsi_register_port(struct ucsi *ucsi, struct ucsi_connector *con)
->  		ucsi_register_partner(con);
->  		ucsi_pwr_opmode_change(con);
->  		ucsi_port_psy_changed(con);
-> -		ucsi_get_partner_identity(con);
-> -		ucsi_check_cable(con);
-> +		if (con->ucsi->cap.features & UCSI_CAP_GET_PD_MESSAGE)
-> +			ucsi_get_partner_identity(con);
-> +		if (con->ucsi->cap.features & UCSI_CAP_CABLE_DETAILS)
-> +			ucsi_check_cable(con);
->  	}
+> -#if IS_ENABLED(CONFIG_OF) && IS_ENABLED(CONFIG_DRM_PANEL_BRIDGE)
+> -static int ptn36502_bridge_attach(struct drm_bridge *bridge,
+> -				  enum drm_bridge_attach_flags flags)
+> -{
+> -	struct ptn36502 *ptn = container_of(bridge, struct ptn36502, bridge);
+> -	struct drm_bridge *next_bridge;
+> -
+> -	if (!(flags & DRM_BRIDGE_ATTACH_NO_CONNECTOR))
+> -		return -EINVAL;
+> -
+> -	next_bridge = devm_drm_of_get_bridge(&ptn->client->dev, ptn->client->dev.of_node, 0, 0);
+> -	if (IS_ERR(next_bridge)) {
+> -		dev_err(&ptn->client->dev, "failed to acquire drm_bridge: %pe\n", next_bridge);
+> -		return PTR_ERR(next_bridge);
+> -	}
+> -
+> -	return drm_bridge_attach(bridge->encoder, next_bridge, bridge,
+> -				 DRM_BRIDGE_ATTACH_NO_CONNECTOR);
+> -}
+> -
+> -static const struct drm_bridge_funcs ptn36502_bridge_funcs = {
+> -	.attach	= ptn36502_bridge_attach,
+> -};
+> -
+> -static int ptn36502_register_bridge(struct ptn36502 *ptn)
+> -{
+> -	ptn->bridge.funcs = &ptn36502_bridge_funcs;
+> -	ptn->bridge.of_node = ptn->client->dev.of_node;
+> -
+> -	return devm_drm_bridge_add(&ptn->client->dev, &ptn->bridge);
+> -}
+> -#else
+> -static int ptn36502_register_bridge(struct ptn36502 *ptn)
+> -{
+> -	return 0;
+> -}
+> -#endif
+> -
+>  static const struct regmap_config ptn36502_regmap = {
+>  	.max_register = 0x0d,
+>  	.reg_bits = 8,
+> @@ -369,7 +329,7 @@ static int ptn36502_probe(struct i2c_client *client)
+>  	if (ret)
+>  		goto err_disable_regulator;
 >  
->  	/* Only notify USB controller if partner supports USB data */
-> diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
-> index 32daf5f586505..0e7c92eb1b227 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.h
-> +++ b/drivers/usb/typec/ucsi/ucsi.h
-> @@ -206,7 +206,7 @@ struct ucsi_capability {
->  #define UCSI_CAP_ATTR_POWER_OTHER		BIT(10)
->  #define UCSI_CAP_ATTR_POWER_VBUS		BIT(14)
->  	u8 num_connectors;
-> -	u8 features;
-> +	u16 features;
->  #define UCSI_CAP_SET_UOM			BIT(0)
->  #define UCSI_CAP_SET_PDM			BIT(1)
->  #define UCSI_CAP_ALT_MODE_DETAILS		BIT(2)
-> @@ -215,7 +215,8 @@ struct ucsi_capability {
->  #define UCSI_CAP_CABLE_DETAILS			BIT(5)
->  #define UCSI_CAP_EXT_SUPPLY_NOTIFICATIONS	BIT(6)
->  #define UCSI_CAP_PD_RESET			BIT(7)
-> -	u16 reserved_1;
-> +#define UCSI_CAP_GET_PD_MESSAGE		BIT(8)
-> +	u8 reserved_1;
->  	u8 num_alt_modes;
->  	u8 reserved_2;
->  	u16 bc_version;
+> -	ret = ptn36502_register_bridge(ptn);
+> +	ret = drm_aux_bridge_register(dev);
+>  	if (ret)
+>  		goto err_disable_regulator;
+>  
+> 
+> ---
+> base-commit: 9bb9b28d0568991b1d63e66fe75afa5f97ad1156
+> change-id: 20240315-ptn36502-aux-15dd6f289aff
+> 
+> Best regards,
 > -- 
-> 2.44.0.291.gc1ea87d7ee-goog
+> Luca Weiss <luca.weiss@fairphone.com>
 
 -- 
 heikki
