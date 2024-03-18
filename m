@@ -1,222 +1,215 @@
-Return-Path: <linux-usb+bounces-8026-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8129-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7DA8887E2A8
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Mar 2024 04:41:47 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 726EB8855E4
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Mar 2024 09:41:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9DB271C213E0
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Mar 2024 03:41:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3548E282267
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Mar 2024 08:41:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76D4F20313;
-	Mon, 18 Mar 2024 03:41:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25AB61864A;
+	Thu, 21 Mar 2024 08:41:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="bImWTj85"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b3OZmXHa"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02on2043.outbound.protection.outlook.com [40.107.247.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E37321E866;
-	Mon, 18 Mar 2024 03:41:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.247.43
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710733295; cv=fail; b=V757ahXIzmPF0bM6l7XV1BVJCzSNIfn6HQ3r5LIZ+4n/ZtAknAGSpuNvGYVPcepGVRYISSpqfFgEnQGctnDlEoviXjxMwTKazrO2FFuLeJ9FC+AFi+6ydJ8sKtWeA01CbPiqNEd5PnXR4Zdg2U5OafS49UyNTWgc2Ux2roxuOU8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710733295; c=relaxed/simple;
-	bh=y/AF53/2tcJJNQNlDtKdxiKXj5qlc9WPBa1ebuW7mS0=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=D++zQ6kZxy/1ke/QtL1IoH0v816FOOAmY93m2gZOwc6xPohv26a29zl7tTw7tr8uLH+Mw9BrzWLhLs4LP1IQ+V9jSLGqpTavX7EpMco92VN5E6jsnF8IDSaUFuEfNssFmpdHEWVYm7mWHoToMO2VJCxCt1i/mSGB+oGfhyW+8r8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b=bImWTj85; arc=fail smtp.client-ip=40.107.247.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lNwBmBd+1j/UVoJ3OSlN0a17MVKgCfDLhFf96WfRAGunD+6LU+FKZQZq/fbi6ivpcd/PXUU3yuu3bm6QEbLbwzFMSIxYeat6iBHHqzy0ij7vyM8Hd/28FHz1lIMIX+uWIlWb9o0uVyvkM/ULiVTNhI/e7wqVrzvtAETGLrEVO4i09e/gjeBc/WnNEXJjwlOd58RVaRbT0F0CSjFP+hVHVHh5qYu+uckQgoHZoVNa7wv5J8V73YgrYHchU1eGphULIfJerdiRDx5dJ3s1sMHVqzhGK8is+SWXjWjKz9T6STL2fBaYSOrBKi9uxOhdIATBPm7f5Weuu8z2B01f3tckpw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kwZ42fMHEro8l8wnIEHFqYe0BZz7Jo3Af8i8j7Hmt1w=;
- b=UuTDeCOfUIIDSDrKu2qYSxGK1sFu5kylwNal6vJYvnj3Wb5d6HcZB3m6iZk8VlzWiX/8ncCzqi7ptEgoGOktovvtthXXnB9t/ImKKHxKganNSg6dfuN6W8qGYIhypwyj82EkKQdFKRxKObQjVO/4UR8a+kwyQ10Jzi06+7oVeverTbnHz7qtj7V+K7GZB7gwNWT1Z8V4/fAg4l5HK7XV9ekay+6ARCAdqmSLcR7OzGAQxOcsWF8YYaBVgxDNZcWMs65SkfLFYb70RSTSxcskmdSgPiYC/vWaK0oLI/a8AElvDWaNq/7wayHDOvkxwZS/8P8HJkSQpMZTWn9y6ONN0g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kwZ42fMHEro8l8wnIEHFqYe0BZz7Jo3Af8i8j7Hmt1w=;
- b=bImWTj85kIWi04BiID9mQxcMpJc/wmPAgkfNxM6h42sdIVfLbgBl/NUQPCUXur1jdRxS7r77ejQXFQZQLGmtkmM1hQa4v5leA3FXIawacVEFoAAUVdKBBb3Fc/9gYANW4h4BckT8bk/PsfGpefs+1KgpoNR958fbKCsL6Wsy8mQ=
-Received: from DU2PR04MB8822.eurprd04.prod.outlook.com (2603:10a6:10:2e1::11)
- by AM9PR04MB8179.eurprd04.prod.outlook.com (2603:10a6:20b:3b5::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7386.26; Mon, 18 Mar
- 2024 03:41:29 +0000
-Received: from DU2PR04MB8822.eurprd04.prod.outlook.com
- ([fe80::d45f:4483:c11:68b0]) by DU2PR04MB8822.eurprd04.prod.outlook.com
- ([fe80::d45f:4483:c11:68b0%7]) with mapi id 15.20.7386.023; Mon, 18 Mar 2024
- 03:41:29 +0000
-From: Xu Yang <xu.yang_2@nxp.com>
-To: Rob Herring <robh@kernel.org>
-CC: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-	"krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>,
-	"shawnguo@kernel.org" <shawnguo@kernel.org>, "conor+dt@kernel.org"
-	<conor+dt@kernel.org>, "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-	"kernel@pengutronix.de" <kernel@pengutronix.de>, "festevam@gmail.com"
-	<festevam@gmail.com>, dl-linux-imx <linux-imx@nxp.com>,
-	"peter.chen@kernel.org" <peter.chen@kernel.org>, Jun Li <jun.li@nxp.com>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "imx@lists.linux.dev"
-	<imx@lists.linux.dev>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>
-Subject: RE: [EXT] Re: [PATCH v9 05/11] dt-bindings: usb: ci-hdrc-usb2-imx:
- add restrictions for reg, interrupts, clock and clock-names properties
-Thread-Topic: [EXT] Re: [PATCH v9 05/11] dt-bindings: usb: ci-hdrc-usb2-imx:
- add restrictions for reg, interrupts, clock and clock-names properties
-Thread-Index: AQHadqnlkxnusB+sL02CNAeG3TUcubE8XMUAgAB+19A=
-Date: Mon, 18 Mar 2024 03:41:29 +0000
-Message-ID:
- <DU2PR04MB88222B5B241454120EE6B5A58C2D2@DU2PR04MB8822.eurprd04.prod.outlook.com>
-References: <20240315072455.2481613-1-xu.yang_2@nxp.com>
- <20240315072455.2481613-5-xu.yang_2@nxp.com>
- <20240317195524.GA2109053-robh@kernel.org>
-In-Reply-To: <20240317195524.GA2109053-robh@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DU2PR04MB8822:EE_|AM9PR04MB8179:EE_
-x-ms-office365-filtering-correlation-id: e89e105f-9d95-4d4f-755d-08dc46fd4c05
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info:
- bJLMRmGQWg76WujxHZtbburzpG+UbG/Y8BJ8alIvC+OGFuuBfAJnb9XiAZMF0cH+DuBZpzoQ/A5Hf7XsgVQ+Tjk/E4Qi/bpKnh7DWPZ19zBSYOsSxcRTbDSnOuB/rW2z+i6YwtH2eK67GPX2RWtZq8e4JiVy+hRkRYd9g7W7jDzzcQ2PS6FVVH3+sGS2XxOrEyPC0GTao428u8+XoV6VqvwOxhZ4c1cYMbaUGeIgYq1a801zQ8KOESGRvnYUPDcnxwkiuAhSNGnlo5+4HIEU7lhvmPk1kz2BmyjapqwIb6yt37bGWkuYo62D1FFULjekMsncA3EifUFtTXQWiwLyiJtil+c4xDSuK/knWfNDrarlSFMVveUi8unUPLuUyYurDPb92iQQ7uJfvbykGWD3+j2QTYk4rTrzrZkLgLJTkhggbG3R7Go0n8RFXETwoP/SuVVeuzSqxKsGY/zJ1Lo6pc7bBUFNPrO+fWkvCs8sldpQ1/aO7ccGfgxnNBJHId8hlY/Fh2dVTHlwE86R3RPPlodU2EYLemdBandtPC+c0ygbGQW+ulaFL9hjEZm3ffUcqD187xfE5VYM1B6nTL1LZy0lVmczK4Wz46pqsoH8tQIehVJHqbh2Ez9OEr4ecDGDm5cAIl0PLGPcP5XOHtVqpcjLkeUNMDpbMLkm8HRhMMeCyphf9uBIoGMa0OSC/ga6a3j4wcykekvGGft7ILhMflXu6Wqu890/lSL8MLfhKjY=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8822.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(1800799015)(7416005)(376005)(366007)(38070700009);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?PGNqQb33/Va64ErTWL+X3x+ThvfkFf7lu2n2Ovd79B4dD1ZvTYpapvvijJEr?=
- =?us-ascii?Q?CFpv9kY4JXInsJ3j1Bbx7IIkGKDMV/n/gBd9VWYBta3Fio+Mkli7TbtZEWNA?=
- =?us-ascii?Q?Dbe0++VbOBKQGFdGLuKywtRK57NVzgtL4tbFgNRCvSOYKafGAqWonAHV2ckU?=
- =?us-ascii?Q?qPzES5YJM/QzXeQRv7EMiCZCBHmtMAY7YzweYXqEHLCHEySwbu3ofOnzAX43?=
- =?us-ascii?Q?gFe4EzpsSYzsXxucdsfO8rOnu06GJopo+XWIHxJWbgyVkiq5N7FuENNUGWBe?=
- =?us-ascii?Q?au62XZgoCqA5KsmO2Dxrk59zRFjRul+QrESMmM49RmJVDCpWEDJ3OkgIhK7N?=
- =?us-ascii?Q?O1mpO1uOsyOiH+9BnCRnlsP4z2Cmmx0fa29tfRpxAJcbaMQhSDUN/CADZKBz?=
- =?us-ascii?Q?qQtJdL9C6rawYNhhn5zCP9qwPHtMqEkiWEm7+uRyVGXAhTXtHTlQf+8nAcLU?=
- =?us-ascii?Q?TVAXYUPnU6eV2pXGbLCa7U0EXNOhvzKtcATHVvCQlR79NR5CK4r1D8npP40m?=
- =?us-ascii?Q?8IbVoQRffrKk2+g6pgpSnObp4f0/IZEkZ7gHDndL0EVzgXbdrvrG3GAlR55u?=
- =?us-ascii?Q?bRGD900pYuWLt3AA1SFZWtwPFqLc+URAtdP88KQBzOWtlgxIGahUyEvX16hv?=
- =?us-ascii?Q?vPa5BSBYomm8WE/LI5F+RPj7SwWAOgPFvQuYorCq9xYPuBVjmYS6WOm2rxAX?=
- =?us-ascii?Q?xOiyE+Col04WCGuiNMBaaL8WreKZyw7N4ldcqM2h1HKQZHQkCv74qP02mqjX?=
- =?us-ascii?Q?aggya/nLgrgy16dNlHuUaZC23osum0l38XkuoKDUZ+zYj2hLAIKx1/S4JeHV?=
- =?us-ascii?Q?z54ec512ZPlaCZaDP2yIe0vicXDONTFsGzB/jNFdL0ZJ3w9FVm4ZngnU6985?=
- =?us-ascii?Q?pcIv881dbRqkSmFqoOz3ATE9t/pnWXCEsoEMVjDPrb4Jq61M9KEA8qV4c2hP?=
- =?us-ascii?Q?maNY8zjqL03BMOfGaVm8lEQyDIuPgJoTpxZZxcEG6URgci6v41bZPnI+G0Rf?=
- =?us-ascii?Q?0agtTYLW+hXsG2rDWaBTQcxY0SaGQt7zUfk48y2utBW1qtAqs9O9QLO/rmO6?=
- =?us-ascii?Q?5JenjcfkgK7wEvyc2q+vektWi7TSSKKmNKRs2lNrW5ozcfkXnb/baO//GwNI?=
- =?us-ascii?Q?jEXy4RX5/lIsre/s3zHv4uisFST9np0RqlpZNFjyDrQ3RCaBQYz/6vLu30vt?=
- =?us-ascii?Q?E5Hl1lTwQoADYkS4HWxus33RahpPy9gBLgNebY4W2EKPoJVOIrsQUiVCVZdX?=
- =?us-ascii?Q?6Y10Yhp1RHWoNFsgJYX0pP9LV0s/hFs4jzTszD4INgFObFbzX9hgC/bd9zhW?=
- =?us-ascii?Q?+1mKqe4Qyj4UkUO4aFfHk0wajnRkEOyHXhTieelPzSAbgltb2knrdEkwycfR?=
- =?us-ascii?Q?BSxy4NYQz6QHhRNrA0GKBZWQbbP37w/JER3XlJFLFpPtW1sM7yP8Sl5hAWvY?=
- =?us-ascii?Q?lWcZe2fzoNT4uayEzl6aLmXt1HbQNTljDAWJm6FYR8BZD6xfM6irx6tZHSpw?=
- =?us-ascii?Q?u/GSM8ncQAFYkNww548Ui6Ie4anlx8BNw4pxsk1RKJ4PW5ccq5YW7UFyiyMb?=
- =?us-ascii?Q?BUTs6o8SSzAHdhaRsSU=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32A77C8FF
+	for <linux-usb@vger.kernel.org>; Thu, 21 Mar 2024 08:41:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=209.85.128.169
+ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1711010486; cv=fail; b=Xm1QkxuAal4SoZjezqfbx0PMGwrZYyndeBRlKHmBRvO5YsvoGzOqNVQL3bOZseQm3OGXFN/PLR+C3vxgQVnglLPw3mqmu04OpkwaFXRqpWpHe7IH6kMrXKRgwv3bnLBjlmygcTuG/NbUFEoxvuGSgVab+dJQggqqDZe2IeNbA9Y=
+ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1711010486; c=relaxed/simple;
+	bh=HjZ6DTTFckPQMqiYHpgCAvYOUnUnPN6rebRmm1d1J9Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jDvYVsYEXISgVar2Rs4nKJSJGq4HV1SuBn3Jj4+gJlf6rXX3L/at2gvY5aZKRXjRmH5IaU9mrbF8P6RNV/IRlIVS9Hx6UwV4hPEK4nmne0/dsdAJVyp/HIXjkWbJbaWoz4yqGHfg89WtGTxMtaGAHTqm8RmGhqEVXqYFx8tlrVc=
+ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b3OZmXHa; arc=fail smtp.client-ip=209.85.128.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-60a15449303so7462007b3.0
+        for <linux-usb@vger.kernel.org>; Thu, 21 Mar 2024 01:41:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711010484; x=1711615284;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:dkim-signature:x-forwarded-for:x-forwarded-to:resent-to
+         :resent-message-id:resent-date:resent-from:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=p3vo1wc6J3C2AA1kLchReOFQ9IMrR/d6PBa4DE7a/Vs=;
+        b=Ppq6FJvc8WL1hGysKLlNKFHWVSNx+wev0pJS8QFwwGZqzI5i/lUQbZJbRTuYyLihv4
+         cQ240DRP0RnsR34HlH0VeawD+vGjqs6tXuaZcVRYbVMENCaW1HKVcXdHQ25nVUHPjlkk
+         ywHJ0+ZP3oWGbzyAoRzMCuT/9X4hkH7pf9gLZECFmWjvhTc2XXJLpTFhjpmRqZULftwS
+         wgjeU8/9w8YwRou/YnsZfybnbHu/tWsmYETgNdt6WexXuNJbuEKvFrehdjZDGW+jnlU8
+         3PeOYbZwk5Q3KRwv53mg1Slp8TahpCmMt48dkBcRw/euM+UkqaC4TvjmFuuk2/0vQnGe
+         dS4w==
+X-Gm-Message-State: AOJu0YzdODPG3kdCc+yTKYt/jajuFk7UvbDz6sLZ9LGshCOK6OJQON9m
+	9X7F//yKwTuA56XwxaZTBKlw0g2QURcdJ1HtjMQh4I3TkxGhDMp1+IGWYgsI
+X-Google-Smtp-Source: AGHT+IEs2BZnG9n8DJIVAaVjiMTX8ncyqbrznoAUkUk40jzsqcNqee8MfckGKrWhMFgChGHKSUBJHw==
+X-Received: by 2002:a81:d354:0:b0:60c:c4fd:7649 with SMTP id d20-20020a81d354000000b0060cc4fd7649mr1252481ywl.16.1711010483469;
+        Thu, 21 Mar 2024 01:41:23 -0700 (PDT)
+Received: from vps.qemfd.net (vps.qemfd.net. [173.230.130.29])
+        by smtp.gmail.com with ESMTPSA id t8-20020a818308000000b006079e8f3572sm3214121ywf.85.2024.03.21.01.41.22
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Mar 2024 01:41:23 -0700 (PDT)
+Received: from schwarzgerat.orthanc (schwarzgerat.danknet [192.168.128.2])
+	by vps.qemfd.net (Postfix) with ESMTP id C02112B624
+	for <linux-usb@vger.kernel.org>; Thu, 21 Mar 2024 04:41:22 -0400 (EDT)
+Received: by schwarzgerat.orthanc (Postfix, from userid 1000)
+	id 89669600199; Thu, 21 Mar 2024 04:37:11 -0400 (EDT)
+Resent-From: nick black <dankamongmen@gmail.com>
+Resent-Date: Thu, 21 Mar 2024 04:37:11 -0400
+Resent-Message-ID: <20240321083711.GA1787714@schwarzgerat.orthanc>
+Resent-To: linux-usb@vger.kernel.org
+X-Spam-Level: 
+X-Original-To: dank@localhost
+Received: from schwarzgerat.orthanc (localhost [IPv6:::1])
+	by schwarzgerat.orthanc (Postfix) with ESMTP id 7D5F3601E1A
+	for <dank@localhost>; Mon, 18 Mar 2024 01:26:10 -0400 (EDT)
+X-Original-To: dank@qemfd.net
+Received: from 192.168.128.1 [192.168.128.1]
+	by schwarzgerat.orthanc with IMAP (fetchmail-6.4.38)
+	for <dank@localhost> (single-drop); Mon, 18 Mar 2024 01:26:10 -0400 (EDT)
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+	by vps.qemfd.net (Postfix) with ESMTPS id E53A12B35B
+	for <dank@qemfd.net>; Mon, 18 Mar 2024 01:26:09 -0400 (EDT)
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-56a2bb7d944so523138a12.3
+        for <dank@qemfd.net>; Sun, 17 Mar 2024 22:26:09 -0700 (PDT)
+ARC-Seal: i=2; a=rsa-sha256; t=1710739568; cv=pass;
+        d=google.com; s=arc-20160816;
+        b=THBCIeRDRipQg58zyWyKcrfZMCmXIG3nZObo7Ri1FOoj5nr5lofQ7MmpOz0iRD27zR
+         Q9kIPeqsRrh1mSqQC7QKEMj12oL7CjJMrJqz+r39XqssQzq2g/mYzWsVofllzDUBikfc
+         nJalnbk9cEdOc7vbq0ae48gkOM2NS/bNIZsv/pD/6/WerxT0TPBkmWXEQQJquW4aVoeW
+         //mGtn4KDJuRXusMOs5qKor6Wt2OD38RWCU4GYOjs/Tiy/PAbCzvsMD7zwi0gsrWPV0P
+         QLxIhWe3dPY7cJbei4RbwkE9UVXsFw6wnef7F3Yx0pqWQQrxl1lhd2ZHV3P8kLCpmH2x
+         3Sdg==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:dkim-signature:delivered-to;
+        bh=p3vo1wc6J3C2AA1kLchReOFQ9IMrR/d6PBa4DE7a/Vs=;
+        fh=v04QiUVcuwj4hU78H6bavRzVPq5VuA7HFyH/DPabRGs=;
+        b=yYiU77qas1WEOl5ku9j7yL6c5YHXKwOuR7WUZTGLuDnNG9iasVoAVob1DDktJTDcyq
+         xah0OH77R+DnqHsIQWUkMY1FUJeWE9utXLqkqb+lEpbq1i/XAZP0OFowBjmN8s3dLBnv
+         Kz1dB8GShmeKnlVQAaTR5ZpxmuGsuY1HaNr6UvKy+xdaEdNMtKF0nhTnYTACPUaTOQn8
+         /KD1PWsv5Dgv1b+xWxQw+mQ10e78PZohvS6CaIXNEpEX5+lTsyEc3wZrWT7783qeURG0
+         Sklrkbb8mxZvEdfwJcMDQZFa6j0AQPMJ38KoPD3diqTVg5Oc1IRIIuuQf0upjtpSwrpI
+         rDqw==;
+        darn=qemfd.net
+ARC-Authentication-Results: i=2; mx.google.com;
+       dkim=pass header.i=@gmail.com header.s=20230601 header.b=b3OZmXHa;
+       spf=pass (google.com: domain of dankamongmen@gmail.com designates 209.85.220.41 as permitted sender) smtp.mailfrom=dankamongmen@gmail.com;
+       dmarc=pass (p=NONE sp=QUARANTINE dis=NONE) header.from=gmail.com
+X-Forwarded-Encrypted: i=2; AJvYcCVgFU6Mms69sz5685lHavyp5V4zSxAzfrzPB3PMB+Fg57STG/qgtDsawx3zicm4C0tr7U5IDnR2DyIqzkYVrA==
+X-Received: by 2002:a17:907:209c:b0:a46:c24f:ddf8 with SMTP id pv28-20020a170907209c00b00a46c24fddf8mr583315ejb.34.1710739568677;
+        Sun, 17 Mar 2024 22:26:08 -0700 (PDT)
+X-Forwarded-To: dank@qemfd.net
+X-Forwarded-For: dankamongmen@gmail.com dank@qemfd.net
+Received: by 2002:a17:906:c8d5:b0:a46:a9c5:d38d with SMTP id gc21csp921850ejb;
+        Sun, 17 Mar 2024 22:26:07 -0700 (PDT)
+X-Received: by 2002:a25:3357:0:b0:dd0:bb34:1e77 with SMTP id z84-20020a253357000000b00dd0bb341e77mr6758682ybz.53.1710739567380;
+        Sun, 17 Mar 2024 22:26:07 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1710739567; cv=none;
+        d=google.com; s=arc-20160816;
+        b=TmZQu1qPKJ6PsQncIqG+pu+ZNyGQ1nBe1wCcUwTzXj4T1AVMn8KDiYpVR/ygrsT5KP
+         ko/XD+rzuSahYktnsz9ZyQTL7qah5EGtaDFgC3c5Y4LnS/rYL+Fx+qXB9vDq3r3G5lhq
+         +JbP3xMvDChaI10nrt6YQbOH/j3KFe6KV99h/7f22/FcVHrd/dEvan2ZwLTwh8JaIbzu
+         rlpsWUw5iMUU/CHZykZD6KOdECKR+jHi/aFkatH0ydhPDtmQRYMDaWlAgoF3odhhi4tU
+         +bfi7BSQXpE4MWHzPJP3UWEXB3fBwFWada2Rlyxu+j6IjNSTtFKdTtZjlIn24NAx08uL
+         GKew==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:dkim-signature;
+        bh=p3vo1wc6J3C2AA1kLchReOFQ9IMrR/d6PBa4DE7a/Vs=;
+        fh=1z2MSwc646+KKXK4Cwhx+L5urR8S2Cq86EFYdYEWC5Q=;
+        b=g1VLT7QUinwLtO4y6/vLbYxtmxyygm/lUkB4wtyBQi8yGkJ8vYorONqzN7gFsvGV9M
+         Zc/zyXGbg2CTCN+Cx6SC8Ny0aYjnBwp5hRc7phW4VfQ03KU6bj4CTZJpejx4wFCHfn/I
+         GTdX3gOaeFwjKk1au02BAHEBjp4oPoWUKFcvDwwMY2RgltumXuKJLP5eG++O/S6oTWyF
+         fnwnrz493v0wVylUskFG+3u4hbyK5VZwaXVZEacEfrlGBcqRYCSkKMMnxvubIEwtbYfc
+         kD0FtCd4+CpHzQ8aL0wbVAQYcMciMP++k+K2AHmv62HuM6F4oS8Wn5TEYRcxgDxJQM7Q
+         vPWQ==;
+        dara=google.com
+ARC-Authentication-Results: i=1; mx.google.com;
+       dkim=pass header.i=@gmail.com header.s=20230601 header.b=b3OZmXHa;
+       spf=pass (google.com: domain of dankamongmen@gmail.com designates 209.85.220.41 as permitted sender) smtp.mailfrom=dankamongmen@gmail.com;
+       dmarc=pass (p=NONE sp=QUARANTINE dis=NONE) header.from=gmail.com
+Received: from mail-sor-f41.google.com (mail-sor-f41.google.com. [209.85.220.41])
+        by mx.google.com with SMTPS id u6-20020a25ab06000000b00dc7012d99fbsor3212819ybi.4.2024.03.17.22.26.07
+        for <dankamongmen@gmail.com>
+        (Google Transport Security);
+        Sun, 17 Mar 2024 22:26:07 -0700 (PDT)
+Received-SPF: pass (google.com: domain of dankamongmen@gmail.com designates 209.85.220.41 as permitted sender) client-ip=209.85.220.41;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1710739566; x=1711344366; dara=google.com;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=p3vo1wc6J3C2AA1kLchReOFQ9IMrR/d6PBa4DE7a/Vs=;
+        b=b3OZmXHaj0ZOXNqg/E4DBSn2S1/vAxB32kXhPD7PrG8JJiCoRRXdn3AvM7ks9t67er
+         wNtIkMxZ6amTqL/2fmj/ZAv6AiZnwc49yp7nMW0DCo2LXg2nAJM10atDi6mRk0KcKmp0
+         ktPbQVuUE13SuDCvNowKDqdoswezZ5/zqg55bSJ0jx732YRdHKyd7dM04H1wGDjMTInK
+         scqFENDCsHaIEITkjZG4UnNW5OBOJIRzpGnzgW2gPF26Fb7u0/rZhKGKs3nWIUTFH6Vr
+         yoCz8OAaf0cOdPGwPsH6H0Se2w3/PntwJZtr87tvJUIuy+YBnqAiJgLYI8RusgSsuTh4
+         OOEA==
+X-Received: by 2002:a5b:9d0:0:b0:dcc:1a56:597a with SMTP id y16-20020a5b09d0000000b00dcc1a56597amr7740065ybq.36.1710739565943;
+        Sun, 17 Mar 2024 22:26:05 -0700 (PDT)
+Received: from vps.qemfd.net (vps.qemfd.net. [173.230.130.29])
+        by smtp.gmail.com with ESMTPSA id d6-20020a259706000000b00dcc234241c4sm1600217ybo.55.2024.03.17.22.26.04
+        for <dankamongmen@gmail.com>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 17 Mar 2024 22:26:05 -0700 (PDT)
+Received: from schwarzgerat.orthanc (schwarzgerat.danknet [192.168.128.2])
+	by vps.qemfd.net (Postfix) with ESMTP id AB67B2B354;
+	Mon, 18 Mar 2024 01:26:04 -0400 (EDT)
+Received: by schwarzgerat.orthanc (Postfix, from userid 1000)
+	id 9C25E601E3A; Mon, 18 Mar 2024 01:26:04 -0400 (EDT)
+From: nick black <dankamongmen@gmail.com>
+To: linux-usb@vger.kernel.org
+Cc: nick black <dankamongmen@gmail.com>
+Subject: [PATCH] usb: always print reset/new device message
+Date: Mon, 18 Mar 2024 01:25:23 -0400
+Message-ID: <20240318052600.671908-1-dankamongmen@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8822.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e89e105f-9d95-4d4f-755d-08dc46fd4c05
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Mar 2024 03:41:29.5276
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Q5WQTEn7R/QVbRoBZcfpa2c34QwOeEcBmAtYk3Ov0BDMIELyNg6pAPC5dC9RoRkaoCTbA2U7aogaauk0xIksGg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8179
+Content-Transfer-Encoding: 8bit
 
+Since usb_speed_string() always returns a valid string
+(invalid speeds turn into "UNKNOWN"), go ahead and
+always print this diagnostic, rather than checking the
+speed here (which wasn't up to date for SPEED_SUPER_PLUS,
+and looks like it had an off-by-one error anyway).
 
+Signed-off-by: nick black <dankamongmen@gmail.com>
+---
+ drivers/usb/core/hub.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
->=20
-> On Fri, Mar 15, 2024 at 03:24:49PM +0800, Xu Yang wrote:
-> > Add restrictions for reg, interrupts, clock and clock-names properties
-> > for imx Socs.
-> >
-> > Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
-> >
-> > ---
->=20
-> [...]
->=20
-> > +  # imx7d Soc need one clock
-> > +  - if:
-> > +      properties:
-> > +        compatible:
-> > +          items:
-> > +            - const: fsl,imx7d-usb
-> > +            - const: fsl,imx27-usb
-> > +    then:
-> > +      properties:
-> > +        clocks:
-> > +          maxItems: 1
-> > +        clock-names: false
-> > +
-> > +  # other Soc need one clock
-> > +  - if:
-> > +      properties:
-> > +        compatible:
-> > +          contains:
-> > +            enum:
-> > +              - fsl,imx23-usb
-> > +              - fsl,imx28-usb
-> > +              - fsl,imx50-usb
-> > +              - fsl,imx51-usb
-> > +              - fsl,imx53-usb
-> > +              - fsl,imx6q-usb
-> > +              - fsl,imx6sl-usb
-> > +              - fsl,imx6sx-usb
-> > +              - fsl,imx6ul-usb
-> > +              - fsl,imx8mm-usb
-> > +              - fsl,imx8mn-usb
-> > +              - fsl,vf610-usb
->=20
-> Can't you add 'fsl,imx7d-usb' here and drop the previous if/then?
->=20
-> With that,
-
-If I do this I need to remove 'fsl,imx7d-usb' again in patch 06/11.
-(KK said I'd not better do that)
-Because imx93 is compatible with imx7d in non-wakeup case, but
-imx93 need one wakeup clock to support wakeup feature. Here 'contains'
-'fsl,imx7d-usb' will include both imx7d and imx7d compliant socs.
-
-Thanks,
-Xu Yang
-
->=20
-> Reviewed-by: Rob Herring <robh@kernel.org>
->=20
-> > +    then:
-> > +      properties:
-> > +        clocks:
-> > +          maxItems: 1
-> > +        clock-names: false
-> > +
-> >  unevaluatedProperties: false
-> >
-> >  examples:
-> > --
-> > 2.34.1
-> >
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index e38a4124f610..7325e5420900 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -4909,11 +4909,10 @@ hub_port_init(struct usb_hub *hub, struct usb_device *udev, int port1,
+ 	else
+ 		driver_name = udev->bus->sysdev->driver->name;
+ 
+-	if (udev->speed < USB_SPEED_SUPER)
+-		dev_info(&udev->dev,
+-				"%s %s USB device number %d using %s\n",
+-				(initial ? "new" : "reset"), speed,
+-				devnum, driver_name);
++	dev_info(&udev->dev,
++			"%s %s USB device number %d using %s\n",
++			(initial ? "new" : "reset"), speed,
++			devnum, driver_name);
+ 
+ 	if (initial) {
+ 		/* Set up TT records, if needed  */
+-- 
+2.43.0
 
