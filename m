@@ -1,67 +1,70 @@
-Return-Path: <linux-usb+bounces-8063-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8064-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A99987F598
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Mar 2024 03:49:32 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2595587F5BA
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Mar 2024 03:52:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D7A611F220E0
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Mar 2024 02:49:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 552581C218F8
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Mar 2024 02:52:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FC6D7C6CA;
-	Tue, 19 Mar 2024 02:48:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B72D37F489;
+	Tue, 19 Mar 2024 02:49:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dF/xkLvT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vQ3f/wy1"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F23A17C0A6;
-	Tue, 19 Mar 2024 02:48:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30EEA7F46B;
+	Tue, 19 Mar 2024 02:49:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710816536; cv=none; b=lxfay4HKc3o9W04cdpvoMCh/kUeMRXyxHgGo5su3BKh9ZhPzcGmSJQinz0vpoBVxbbUOPT9rEHijbBruI8CfFKvA7+blG3S8mgUp/egFtBQBwV6AENlKo2lltzU+0pjeo7Ufufug6jNtkM7EgBLBC6wSk7J0KH61k2yNOH5HqHo=
+	t=1710816547; cv=none; b=lLJo+LG91pAR2aBaaKu9h0xw2jZtm4TCY6X7NrPb4FjdcdOfqB1Hz00P1jbOIUcduA337pTqrRv7eBRHt914QtLp2vWiKS3Nu242naofpV/upsddNuDjpH41lGcCjjD6qYYXQ1supib95NXQKS8L+NOsnpKE/3bJj/7SzN2VbwA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710816536; c=relaxed/simple;
-	bh=KG12zIBDSTpwLyKXLKeQCT1nll5yY2+7NVNysu+KqOQ=;
+	s=arc-20240116; t=1710816547; c=relaxed/simple;
+	bh=UdyM8K4GzjIHSMUUdauDrVIa/8xlFArGKMGdPI/IAbs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Azx/wThCiSmp/MFCQziFmBVKIQlAlsT8Qkc1XfKT07GrtciGQj++4SDb61Ppket2b6oeCsOa45wVwzijPrccbaUoAALt0eOBRy4GWTtBNCRm+ZVRPmdV/kBJEm+z2Z76ojCQLjggdWn+xAysgvi2StCru/uASwnVjKCrOJUx2IE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dF/xkLvT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 659AAC433C7;
-	Tue, 19 Mar 2024 02:48:54 +0000 (UTC)
+	 MIME-Version:Content-Type; b=Pvq1j5WFnzTCIpBw5QVt6RmD4zwmD7nBFN2BExBQ8tb++uhfXrHiZ7XkKKT/iMPJgsRRFGqbi8eX5Q41OZ1uFs5CxD859YqQXzlEqDCxoNZOYWY+sYELPZL+wIN7ufpKeohIabtia8WoLCzpu0rt8vw8hUCzSXFhsMgfuN0PVGg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vQ3f/wy1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8174CC43399;
+	Tue, 19 Mar 2024 02:49:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710816535;
-	bh=KG12zIBDSTpwLyKXLKeQCT1nll5yY2+7NVNysu+KqOQ=;
+	s=k20201202; t=1710816546;
+	bh=UdyM8K4GzjIHSMUUdauDrVIa/8xlFArGKMGdPI/IAbs=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=dF/xkLvTn+UuY3bZzHd/RFkWqFlsc4hyBDj3Tw1QmEUFcuna+3Bg0vJp8ChxAXr9g
-	 ZOZUpjxC57c5B3nbcP9ScXQrjPvNrEMBGbdCC+K5V60jZ/cNccn/HHGWi3Vpk8JZn9
-	 lwJwcXLA3pvWwzDkzdSSHTK/LsIinTu4VNbOzET2oLxV3FOsx+R7m+/drf4shmnUgB
-	 +2vaFXh3S45/iWfDaLtnN5HnebQfvdl/uIa15/P/+X3FurcJKrMkqI5NYAbmiDD+WD
-	 7gGRj95nyBnff1rDv05HjyXpzfZWquz832k3rMWvQ2Lzl/yPMz0r1kJoePNdQAwjSj
-	 iBwN+gIMo03Fg==
+	b=vQ3f/wy1v35B1z5wdNVAsmaNguQghmCIuXBr21qzdES+uv6bDRF+hwPgDlEbn9gHX
+	 oudAIydwn4fEwIRKw3PqPKe3FGPB69xOH0+RAXK/sBRosmZYFqsF/El3eEeB5ungmJ
+	 FKPrBAcB59+9Wd6KolhbAvl8HHAgi4HOjafO88iNH3nH/S2bRNjlFbAsB2KZMAADI/
+	 i/0/gJ5+zVI1BHrGMsvOI1TTT8frCTdwATpe/ZSw0jdJtUMsL/j8yL33aVRc2D4RL0
+	 LderRT3GVMkV7OmVjLO7FUQ9i2pCoS93gGhFRBFBDxD5b6L+BCpWmUPsnwB8uCHmCi
+	 Jpsv9NC7rzpGw==
 From: Bjorn Andersson <andersson@kernel.org>
 To: Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
 	Rob Herring <robh+dt@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
 	Conor Dooley <conor+dt@kernel.org>,
-	Wesley Cheng <quic_wcheng@quicinc.com>,
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: linux-arm-msm@vger.kernel.org,
+	cros-qcom-dts-watchers@chromium.org,
+	Rob Herring <robh@kernel.org>,
+	Luca Weiss <luca.weiss@fairphone.com>
+Cc: ~postmarketos/upstreaming@lists.sr.ht,
+	phone-devel@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org,
 	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
 	linux-usb@vger.kernel.org,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: (subset) [PATCH v4 0/2] arm64: dts: qcom: qrb2210-rb1: enable Type-C support
-Date: Mon, 18 Mar 2024 21:48:27 -0500
-Message-ID: <171081652656.198276.14383798661229086457.b4-ty@kernel.org>
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: Re: (subset) [PATCH v2 0/2] Fairphone 5 PMIC-GLINK support (USB-C, charger, fuel gauge)
+Date: Mon, 18 Mar 2024 21:48:37 -0500
+Message-ID: <171081652647.198276.12432944971969961855.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240304-pm4125-typec-v4-0-f3601a16f9ea@linaro.org>
-References: <20240304-pm4125-typec-v4-0-f3601a16f9ea@linaro.org>
+In-Reply-To: <20240208-fp5-pmic-glink-v2-0-4837d4abd5a4@fairphone.com>
+References: <20240208-fp5-pmic-glink-v2-0-4837d4abd5a4@fairphone.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -72,17 +75,16 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
 
-On Mon, 04 Mar 2024 11:26:09 +0200, Dmitry Baryshkov wrote:
-> Reuse Type-C support implemented for the PMI632 PMIC (found on Qualcomm
-> Robotics RB2 platform) and implement Type-C handling for the Qualcomm
-> Robotics RB1 platform.
+On Thu, 08 Feb 2024 10:52:31 +0100, Luca Weiss wrote:
+> This series adds all the necessary bits to enable USB-C role switching,
+> charger and fuel gauge (all via pmic-glink) on Fairphone 5.
 > 
 > 
 
 Applied, thanks!
 
-[2/2] arm64: dts: qcom: qrb2210-rb1: enable USB-C port handling
-      commit: c39c5aed65d428f2a1c2364851c8b44702e9d7db
+[1/2] dt-bindings: soc: qcom: qcom,pmic-glink: document QCM6490 compatible
+      commit: a5b150af2c6ad2749aee51edc36f9f9883869f5b
 
 Best regards,
 -- 
