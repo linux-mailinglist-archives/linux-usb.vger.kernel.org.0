@@ -1,121 +1,177 @@
-Return-Path: <linux-usb+bounces-8089-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8090-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EABA587FEED
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Mar 2024 14:36:00 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7987887FF35
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Mar 2024 14:59:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A5E5C283E67
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Mar 2024 13:35:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D9A781F253A7
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Mar 2024 13:59:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E832F8060B;
-	Tue, 19 Mar 2024 13:35:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD04081ADB;
+	Tue, 19 Mar 2024 13:58:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="cpa/qaVr"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZE75yvUo"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com [209.85.161.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE0EA3FBB9;
-	Tue, 19 Mar 2024 13:35:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C6C081725;
+	Tue, 19 Mar 2024 13:58:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710855351; cv=none; b=p7MevtTSR+/scyvFHmodHjtivIZw2IKO3Go1YaaZNPHtqD+JhQ5oelCIP3eVkMm3kZiEYjXSBUWclFPUj3efDvZKa4eN+p1Qzyvf+LG1PgEfVja/lhv/hjjp+AKvV1f9yGOSCXqNp5Gbn6hns/efAF4BMU2gvZzD0SLhGa92Iv0=
+	t=1710856714; cv=none; b=sHWduXbDEQxAGsLF07wc1OtjdOWgbKbp4LqnKoIyYZ3XVYDAYLIiYy5T2L9w1PZE9P5SENAq1iXQDDDNBl5csK1mfuyY8nMHRK0vICafyXQM5ud422wUH4QFjJiog6fDwg43qEzZHT1Jfn9oBXCkWafZCY2Y+pjJc4R++PPYxac=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710855351; c=relaxed/simple;
-	bh=WUInyl/jD2mssJJeqfCfavJZ6jHxUaoYbXOk6ZYrnrY=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=B1fphEKpQpit7ZJMPCfnxmgdoL+An6utKG7hHgZ5HrSpn6v1S0rcJkkSQrVEsONjSClZmVHuogqyJIFagOKOrTga4/287WdEez3JAo1yrctCekuDPoHHTKOzVr06FHJpLOIpUO92LRGhl/UCI9bwAunR+X0eIFFkqPqwqE7tOJI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=cpa/qaVr; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 42JBc44H019578;
-	Tue, 19 Mar 2024 13:35:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	from:to:cc:subject:date:message-id:mime-version:content-type; s=
-	qcppdkim1; bh=3RVbbLQH3qedt1uny8kNh/EGzyenVrTTNlpoD4Ex0ek=; b=cp
-	a/qaVrG03ptUqSb2DPFOsBAepVqLe7ij3hi6LaI4QVbeZtuvVTF6AwlN7rGtyTUG
-	4i9xFBn/jkfFl4MovuQaWEVBG5pz0yOdK7I+y9iJ0jnYAdwgye+cr/PlPGKIAXq1
-	9O/t2kbTjq5e9TaF0wMpyvSPbjZ5V+11dAxOaZN8LqBxsA/N80bDXDGraexxsR0/
-	fg7qBr/D9ZEt4rR1rw9O8B5OqqPAgYFZHkiIMUWnRnF4Drfyy0GA3ctZlau1U99S
-	XWO/U0UC9Cstsqk8RUUHZH8AphvBRGrN15eaVfVjkpYne1C0BDumMKDqViaF1mvb
-	g+TBnVLbSGQuEFVUtlBQ==
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wy9ee8c0b-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 19 Mar 2024 13:35:41 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 42JDZeII015042
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 19 Mar 2024 13:35:40 GMT
-Received: from hu-ugoswami-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Tue, 19 Mar 2024 06:35:37 -0700
-From: Udipto Goswami <quic_ugoswami@quicinc.com>
-To: Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio
-	<konrad.dybcio@linaro.org>
-CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Rob Herring
-	<robh+dt@kernel.org>,
-        Udipto Goswami <quic_ugoswami@quicinc.com>
-Subject: [PATCH] arm64: dts: qcom: sm8450: Update SNPS Phy parameters for QRD platform
-Date: Tue, 19 Mar 2024 19:05:27 +0530
-Message-ID: <20240319133527.25025-1-quic_ugoswami@quicinc.com>
-X-Mailer: git-send-email 2.17.1
+	s=arc-20240116; t=1710856714; c=relaxed/simple;
+	bh=U9hpVncJzy2lA3W/C1VFV8DykwmuLIUpD9mFaLxoWNA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=h3kcXeXeDDoKgJGEPrfrZJvCeushPzDSIY/TvJoF/L9Xc0/E0l8Lh1mgLSzCwPWkUFLCoxi3zDSHqGbrn5pzN2EQ3vTxkf/MgsXeKCSj8soheOXHMyDU9FgOKHovosx5G1R+fOaap010XOHrqaf3+mB6tCkQ8FMDWyff7x+pGco=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZE75yvUo; arc=none smtp.client-ip=209.85.161.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-5a496fde460so1710795eaf.1;
+        Tue, 19 Mar 2024 06:58:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1710856711; x=1711461511; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=hs18eHNDInn0iqGJWsnk8ODqQ1LsXwtDyJ+PpnjaiKg=;
+        b=ZE75yvUor2DH/JQOcd+2/SZgXiamnl2mhz8eO4XFbQ/q3P7TU1cNFf8reeRL9fFdzA
+         biavkHU+9/bkfiKA52XtaLRmtOkO2dy/1gl4enYdjzaMeJ5Y9fbNTvnuTJEkGG+rNa2S
+         C8bU+W7bxfddBKfslpFWT9fheE6LNaPYilmM+JGVwZjGL49JYH86zXcabPzBph2DOEqr
+         L3K9CPFtR234reMvHYZMTRLfxTffG+Yk1k880EK+yVY+ugP4Yn+oSpeOK3jvXez6dHPu
+         KLjafw8BZBaqATQgVXp6MCJrrZwwU/FlcQ5AR9IxEoKcUn3SQc2NSq/5Djfn7AzTbxsJ
+         eouA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710856711; x=1711461511;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hs18eHNDInn0iqGJWsnk8ODqQ1LsXwtDyJ+PpnjaiKg=;
+        b=fazS9RNY5zSm99tLhTj+bBePZpQzfHmXzqxN4QkplHgi8sNshiEcGYi0/10ER+c/zb
+         Da2ApvjJwWUT4IXg1AjgNk8NhM5pIoomd/0pPBJbqR65LvBuSw1akLqye36na9SxFTyx
+         d1GOwMIUqVEsWElZDzVbWIQfCvC29Gdv8PCR4OaRU438ASGSvCjCXHWXxBREbmTkWviJ
+         m3JeQ+3BEwM9K/MExJbxW0Xq9p5VMQdFpZ9RTQriIQLFfRmNwQGdVon6ngY2+YafymRB
+         mFiiVj0nPvtF31N+8yrySW8TV9W4jfyeffhAgQJ3JTZiTbRvM1FvIOxA50h18ahSEuVI
+         HivA==
+X-Forwarded-Encrypted: i=1; AJvYcCVPYxy2CUjMSC5q3Ji4YzJDzqNNxHjY08RXRhStj3hhvEqqb8yZnuDUPNQn9l/ci10sjWb+z6kFDWBjy4s5zlFmDdyALMEWfJreDK5gHe7z93wdfblk+yWf4+C8P2MSmDlFHNfI6gnV4ohDpVd1xMr7DhdDCX6zFkGsfZ5ouDyW
+X-Gm-Message-State: AOJu0YzsKLox+5ogwC6mvqsN+l+Tn+Y2uZp5YjOGHxLvLeQKjaGxH/MX
+	inerxqaaTEvZbhpU6YgUJtWXR9b19Gdh4wus1v3C1P5n3iSAfkA4
+X-Google-Smtp-Source: AGHT+IFfqG/DybEXAPLWK+Umu1i/zBwL+CVJ38gwjFMo9hzWC1E36qjCV9wZcPZ28r6LgAweyc8C+Q==
+X-Received: by 2002:a05:6871:28f:b0:222:7193:f7cb with SMTP id i15-20020a056871028f00b002227193f7cbmr16694360oae.26.1710856711548;
+        Tue, 19 Mar 2024 06:58:31 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id o14-20020a63fb0e000000b005cfc1015befsm9060642pgh.89.2024.03.19.06.58.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Mar 2024 06:58:30 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <b83890e7-f118-4d58-b1d5-cafd2d08f4ca@roeck-us.net>
+Date: Tue, 19 Mar 2024 06:58:29 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: iX2XaXD22LLxKBIe7wk3P90KuVSvJoKQ
-X-Proofpoint-ORIG-GUID: iX2XaXD22LLxKBIe7wk3P90KuVSvJoKQ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-03-19_03,2024-03-18_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- lowpriorityscore=0 priorityscore=1501 mlxlogscore=765 bulkscore=0
- impostorscore=0 clxscore=1011 phishscore=0 spamscore=0 suspectscore=0
- adultscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2403140001 definitions=main-2403190104
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1] usb: typec: Return size of buffer if pd_set operation
+ succeeds
+Content-Language: en-US
+To: Kyle Tso <kyletso@google.com>, heikki.krogerus@linux.intel.com,
+ gregkh@linuxfoundation.org
+Cc: badhri@google.com, linux-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org, stable@vger.kernel.org
+References: <20240319074309.3306579-1-kyletso@google.com>
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <20240319074309.3306579-1-kyletso@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Update SNPS Phy tuning parameters for sm8450 QRD platform to fix
-electrical compliance failures.
+On 3/19/24 00:43, Kyle Tso wrote:
+> The attribute writing should return the number of bytes used from the
+> buffer on success.
+> 
+> Fixes: a7cff92f0635 ("usb: typec: USB Power Delivery helpers for ports and partners")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Kyle Tso <kyletso@google.com>
 
-Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
----
- arch/arm64/boot/dts/qcom/sm8450-qrd.dts | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8450-qrd.dts b/arch/arm64/boot/dts/qcom/sm8450-qrd.dts
-index c7d05945aa51..7b62ead68e77 100644
---- a/arch/arm64/boot/dts/qcom/sm8450-qrd.dts
-+++ b/arch/arm64/boot/dts/qcom/sm8450-qrd.dts
-@@ -467,6 +467,14 @@
- 	vdda-pll-supply = <&vreg_l5b_0p88>;
- 	vdda18-supply = <&vreg_l1c_1p8>;
- 	vdda33-supply = <&vreg_l2b_3p07>;
-+	qcom,squelch-detector-bp = <(-2090)>;
-+	qcom,hs-disconnect-bp = <1743>;
-+	qcom,pre-emphasis-amplitude-bp = <40000>;
-+	qcom,pre-emphasis-duration-bp = <20000>;
-+	qcom,hs-amplitude-bp = <2000>;
-+	qcom,hs-output-impedance-micro-ohms = <2600000>;
-+	qcom,hs-crossover-voltage-microvolt = <(-31000)>;
-+	qcom,hs-rise-fall-time-bp = <(-4100)>;
- };
- 
- &usb_1_qmpphy {
--- 
-2.17.1
+> ---
+>   drivers/usb/typec/class.c | 7 ++++++-
+>   1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+> index 389c7f0b8d93..9610e647a8d4 100644
+> --- a/drivers/usb/typec/class.c
+> +++ b/drivers/usb/typec/class.c
+> @@ -1310,6 +1310,7 @@ static ssize_t select_usb_power_delivery_store(struct device *dev,
+>   {
+>   	struct typec_port *port = to_typec_port(dev);
+>   	struct usb_power_delivery *pd;
+> +	int ret;
+>   
+>   	if (!port->ops || !port->ops->pd_set)
+>   		return -EOPNOTSUPP;
+> @@ -1318,7 +1319,11 @@ static ssize_t select_usb_power_delivery_store(struct device *dev,
+>   	if (!pd)
+>   		return -EINVAL;
+>   
+> -	return port->ops->pd_set(port, pd);
+> +	ret = port->ops->pd_set(port, pd);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return size;
+>   }
+>   
+>   static ssize_t select_usb_power_delivery_show(struct device *dev,
 
 
