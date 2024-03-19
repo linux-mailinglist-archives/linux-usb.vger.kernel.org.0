@@ -1,125 +1,110 @@
-Return-Path: <linux-usb+bounces-8085-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8086-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6FD9387FCC0
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Mar 2024 12:25:33 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C48387FD04
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Mar 2024 12:37:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A1A101C225AD
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Mar 2024 11:25:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 16FE42819A2
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Mar 2024 11:37:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B27F7F478;
-	Tue, 19 Mar 2024 11:25:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBBF47EF00;
+	Tue, 19 Mar 2024 11:37:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jn2+hoiP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB2A27EF18;
-	Tue, 19 Mar 2024 11:25:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 524711CD13
+	for <linux-usb@vger.kernel.org>; Tue, 19 Mar 2024 11:37:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710847516; cv=none; b=BkvYRF2PkWnRV8pU6kQOmalX7eyiFMS0tr/lgPzA8eTWW3T0BTv7kA63WtQh4/Ylkk4YHJxsSVpVPqHHYve5da7SjNSTw+8+XRGBuQ0gBKH1rXFR8QeCw0Myt3HlMIAspMuNlI5wsj5ybAdI/AmbYsvtKV1PUr1hbTdC1rHwpMY=
+	t=1710848258; cv=none; b=uA+C9pqW+2GVUjza+qgtFlTFjhbOzljI6F/WliSZPLqrWKVZcdU3zfIzGyJ4KEYtB+NVn5kS4MtZtqLDuj3oGDlfEEzIzyTG32K9c/ZZmO9L3zNOR50Cmp4YQ4TJ5y6EznrvwYoH+og6Z+LIy3JSXV7nGqWraZc3gk0nZGvef7Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710847516; c=relaxed/simple;
-	bh=O3XfRAlsxj1cTSKG8Un87uspj0OssNlC3ZR5Bfa4Tzg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=L1wtjJMnytUF+9s3qMuq3yKLpij0b4lX47Zo7/eVwZBGvGfBaKDIdSj9lW+3PUwYVZfTTmcHjEE5pnjtaqy3JQl8OGaDQMdSBioDnz1yDu6nnRmhy8DGXzCW/Q8+3Hh6BYZ4Kk8ztfHvvzun9RYgpSTQ2dTv1zmP7ySIXa1yq3s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.219.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-dc6dcd9124bso5109924276.1;
-        Tue, 19 Mar 2024 04:25:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710847512; x=1711452312;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IRHixnOWRC/KMdGbivl51biaiJO7zcc3pvTocEgACtY=;
-        b=qHrlbuBkIxcEPW6NXVQcDNmX/lt0qC6zP0EiqXx+BYtUipDjb1qGPW8KLBcV6m7jtW
-         rTM0/Klv5gM7fU8Bro8r1CxeXZ1m/YnQaSaoiukbxNfuRgrNMxI9UVm+0kRIZkCsIbPU
-         Sf4vKYCl74DNX13XCa+gXwiXdDajkqQi8ld0GPRrXxFT9kNdK7nRQuAppbXMCQeKrzRv
-         lj/n/LTXBJlECkpL31cSBz0NsC8aOD4MKKQMbujm7aXXcuuxLzfwiP/wtH0qouPpFq1r
-         6f9Xp0fuPpr2lWEd7YNgdJRTC7OzAHlQhKKDvOJHK5ZORrIgMeUGglbgJIKr4+OE5pPc
-         OZ0g==
-X-Forwarded-Encrypted: i=1; AJvYcCXXbaUX8Exfk54CQIQxvGIgu2N1uLheRlCz6cskr0X4oKbkdhMCdzebWg+KmSGZckXZjt+51uwsnJ8QCI1Ql0kwOvIeNlkakEMqmJkA6BfK4DgTCx6BNwrDM8/UHxzcNE9dhbh9a5Wruz/E76w=
-X-Gm-Message-State: AOJu0YyBmCe8NyaEixu6WVIR3I+yEgRZwvqmItId1TsOecxKlKQboRQ1
-	4kXCuDlcy+joWXdqfa8juK0nXhsil3ps38v6+9dEANkwVnGIKznEBRtT9cW0Cks=
-X-Google-Smtp-Source: AGHT+IFOE5qU6uDOTeV1C5Ip/v05Zf7GLBu17GazOMxyt0Z6wOsbPBsSJXF7TnmH90JOZcYFPPxY/w==
-X-Received: by 2002:a5b:8c6:0:b0:dd0:c866:ec3a with SMTP id w6-20020a5b08c6000000b00dd0c866ec3amr9259270ybq.22.1710847512140;
-        Tue, 19 Mar 2024 04:25:12 -0700 (PDT)
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com. [209.85.128.176])
-        by smtp.gmail.com with ESMTPSA id y23-20020a25ad17000000b00dcd56356c80sm1603544ybi.47.2024.03.19.04.25.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Mar 2024 04:25:11 -0700 (PDT)
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-60a0a1bd04eso56780377b3.1;
-        Tue, 19 Mar 2024 04:25:11 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUpLPA3t2QiXob4Ixc2PK2JYGg9FNzMI+IO6+/lC9guzsIYFDtLcTln9nstR13D3M9nrHkHwgnxGEplUyT/ACJslE/LUnHAbzYurHVmJJPAixquAOpAAd8RguXZtuCIvAzxeJG54yhF8FUQ+Gg=
-X-Received: by 2002:a81:d514:0:b0:60c:bdb0:cd28 with SMTP id
- i20-20020a81d514000000b0060cbdb0cd28mr16408139ywj.6.1710847511226; Tue, 19
- Mar 2024 04:25:11 -0700 (PDT)
+	s=arc-20240116; t=1710848258; c=relaxed/simple;
+	bh=rnLSiRh8vWPaiQuJF/eJ9b9imjLOosOSwooUu7yfpt4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=H0mdiAoQFQI4drnkicT+77CUTBqmfThEgLfFIpnlYl+CGgJQ+TDejzBIyrOsELaPUIVyMz+gjJ+60v/cgHBwcKdCCSPPshwwZ561TYJFve4wAek6ybav16WwqzBrHA+VQUI1cXs6Fs/xM6vmSzyHGvzg2iTzCHmjCTCARYR2Svc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jn2+hoiP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC9B3C433C7;
+	Tue, 19 Mar 2024 11:37:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1710848258;
+	bh=rnLSiRh8vWPaiQuJF/eJ9b9imjLOosOSwooUu7yfpt4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jn2+hoiPITrazOXc6gjXLlF2/Zou3h/1FK0rx+H0og+s4AHK7oC5kBIoDjM4PbVYv
+	 /doY34G90AiMQE+K7FUXoAdblhICKi504AHUHdqG3TCkr1bNNKgVa2dK/Ev00daEVK
+	 c2BkEfqDKkDhlO5C9h/2yeznkKphBFsc74r8N1IwdtPkB81ZcXrA0DTkDXO94YOYLy
+	 Mrc9c3f7OADD3pBdv0UjUKJ9DW6t3ICNX/v3thUBkxFOOJqTG9rUqvdoqEDH6rMkm1
+	 NjJpcruSh74RnA3QzLD376JbC6hxdRmJBor250ex0oWqsBUlTouKASC1ZXlRB2K3mF
+	 7r1bPkg1n0/gg==
+Date: Tue, 19 Mar 2024 11:37:33 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: Alan Stern <stern@rowland.harvard.edu>,
+	Aishwarya TCV <aishwarya.tcv@arm.com>,
+	Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
+	Klara Modin <klarasmodin@gmail.com>
+Subject: Re: [PATCH] usb: usb-acpi: Fix oops due to freeing uninitialized pld
+ pointer
+Message-ID: <26b94fe8-8fe9-4eb8-8e3a-61aebe571fba@sirena.org.uk>
+References: <20240308113425.1144689-1-mathias.nyman@linux.intel.com>
+ <f5681869-0cf2-4888-83b9-4ff14b1174c6@arm.com>
+ <1b67d844-440a-52c3-b9e7-d12c6fe5dad2@linux.intel.com>
+ <f0039c32-e670-455c-8d64-d7b706c6ad7a@sirena.org.uk>
+ <19ec72e2-8273-43a0-bbeb-706565e926f2@rowland.harvard.edu>
+ <1ef6601b-bdb3-41f1-b3ce-07418dd9c031@sirena.org.uk>
+ <0f633317-4996-83a7-7b77-cca2868c762d@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240319105356.87287-1-biju.das.jz@bp.renesas.com> <20240319105356.87287-5-biju.das.jz@bp.renesas.com>
-In-Reply-To: <20240319105356.87287-5-biju.das.jz@bp.renesas.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Tue, 19 Mar 2024 12:24:59 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXCF4o34ipVygU0_gXcie2JSkoeC3n18+EO=A5we2W1-g@mail.gmail.com>
-Message-ID: <CAMuHMdXCF4o34ipVygU0_gXcie2JSkoeC3n18+EO=A5we2W1-g@mail.gmail.com>
-Subject: Re: [PATCH v5 4/6] usb: renesas_usbhs: Update usbhs pipe
- configuration for RZ/G2L family
-To: Biju Das <biju.das.jz@bp.renesas.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, 
-	Huy Nguyen <huy.nguyen.wh@renesas.com>, Rob Herring <robh@kernel.org>, 
-	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
-	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@pengutronix.de>, 
-	linux-usb@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
-	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>, Biju Das <biju.das.au@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="oeYYWb1XXyqeYuAq"
+Content-Disposition: inline
+In-Reply-To: <0f633317-4996-83a7-7b77-cca2868c762d@linux.intel.com>
+X-Cookie: You were s'posed to laugh!
 
-On Tue, Mar 19, 2024 at 11:54=E2=80=AFAM Biju Das <biju.das.jz@bp.renesas.c=
-om> wrote:
-> The RZ/G2L family SoCs has 10 pipe buffers compared to 16 pipe buffers on
-> RZ/A2M. Update the pipe configuration for RZ/G2L family SoCs and use
-> family SoC specific compatible to handle this difference.
->
-> The pipe configuration of RZ/G2L is same as usbhsc_rzg2l_default_pipe[],
-> so select the default pipe configuration for RZ/G2L SoCs by setting
-> .has_new_pipe_configs to zero.
->
-> Add SoC specific compatible to OF table to avoid ABI breakage with old
-> DTB. To optimize memory usage the SoC specific compatible will be removed
-> later.
->
-> Based on the patch in BSP by Huy Nguyen <huy.nguyen.wh@renesas.com>
->
-> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-> ---
-> v4->v5:
->  * Restored the else path for has_new_pipe_configs check in usbhs_probe()=
-.
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+--oeYYWb1XXyqeYuAq
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Gr{oetje,eeting}s,
+On Tue, Mar 19, 2024 at 09:29:22AM +0200, Mathias Nyman wrote:
+> On 18.3.2024 17.10, Mark Brown wrote:
+> > On Mon, Mar 18, 2024 at 10:55:54AM -0400, Alan Stern wrote:
 
-                        Geert
+> > > Greg is away on vacation until this weekend.  If the bug is all that
+> > > serious, you could consider sending the fix directly to Linus.
 
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
+> > I can do that, or Mathias do you want to resend it?  Boot breaks in -rc1
+> > tend to be pretty miserable for testing since a lot of people use it as
+> > a base for their branches.
 
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+> Linus hasn't pulled usb-next yet so it won't apply.
+> I'll send it directly to Linus if usb-next is pulled before Greg notices this.
+
+Great, thanks.
+
+--oeYYWb1XXyqeYuAq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmX5eP0ACgkQJNaLcl1U
+h9BlbAf/Xg6SSOVfBgmms8mLVfIububUT0TT96YoC7+F2t9Ymv4Kdxe6DtGjM6WF
+XHviZa6B9Oixu3XtnuA8DC20hyBpCyMO9k8AgOxLuU7QuYbSUFQAt2Az0EYVuwKo
+rwO3vdLde8Ele7PGPdrPa2G227MwTKrXqwmKUBPzNEW5lpA7gHeE7dKqYHS6b0Rk
+bAyYh1j1q7e5PrHRcg130fEF6a6FrxOT8JL8wjZY7Qp7vrUYOMoCUJXDT3xhuZl+
+PSMZ8lkAluyldA5tBllsHr4oL8/9IWCK9YbI6v05THHmJfC6lN+2TrR7L2r/HB85
+0SFLHwxQhAlTvrqbfJbsaqy3wGLljQ==
+=j/uO
+-----END PGP SIGNATURE-----
+
+--oeYYWb1XXyqeYuAq--
 
