@@ -1,107 +1,132 @@
-Return-Path: <linux-usb+bounces-8078-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8079-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A288D87FADE
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Mar 2024 10:37:11 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D49187FC37
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Mar 2024 11:54:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A82831C21BE8
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Mar 2024 09:37:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6D6681C222B5
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Mar 2024 10:54:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 542317D3F3;
-	Tue, 19 Mar 2024 09:36:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ur5sHkaH"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBB8456444;
+	Tue, 19 Mar 2024 10:54:13 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40EEA1CAB1
-	for <linux-usb@vger.kernel.org>; Tue, 19 Mar 2024 09:36:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.177
+Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 586CF2A8D7;
+	Tue, 19 Mar 2024 10:54:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710841000; cv=none; b=XitxmrLzdtvNiC+MVXAkgXO0DtxSYtAeCyL6Kc4Ztlva+YJHVESK41DtujJBHB3UZzaAi1pbVR9bPh0uEuCq7EznHsvbrtO1hgS/NE2SQqi8sLKD0t8FrnrBonm9yS1UhiQeiCFAsVcVD9xisD2lGZawZwKrvtPrtOX6qMKR024=
+	t=1710845653; cv=none; b=any4BqAbN6ul4ihV+ElChnopn9pTY+7YFRdxJfJ5bPPn0GYXY5O8RppGfNBRh66J8O/Ao6DA1DZtUuhp1BEFq6LHZWHNzust25ALkDHTlG+XsDECDQo3unSLa7wUHv67Rr4penejgoI3DKS9CbCArcgT1QPCR3rbOF9fMQSPfrw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710841000; c=relaxed/simple;
-	bh=V0KFxvnAtrXSOfjvHQg7knauss62x8U+7KogQn+yF7o=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NvYN239t+MqaQ9oFX06472Bp9r3n4W00wcMrb3lA4vNRfVhMs4jiheX7CxVzXesgkXztGV2tA5QLXLkG5ydnOQ4KgZkFwzVpdvZX5y0lT56PuWgC4t3k6QPxoDrRaij51ZvdLE07P37t3M/QteyQQgTPxYrppFS5RoaD3llYIgs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ur5sHkaH; arc=none smtp.client-ip=209.85.128.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-609f24f447cso58867157b3.2
-        for <linux-usb@vger.kernel.org>; Tue, 19 Mar 2024 02:36:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1710840997; x=1711445797; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=q0tE4rTRpsmTL16kdGX+KFzRwJVG6ZUmpKExRxozggI=;
-        b=ur5sHkaH1WBCooEn4kzGlfv0xfwUj1BPKByU96pD+V7cV8qLZbf9SqY0QcIRcB4pD3
-         JygIk8+g0480VCiYNj6AF4Pf3B87qxYmjy8RDRfTfV6tEDpkZvr2WWr7KcI+q6ti0ZX/
-         qvUjiFsTdy+FL9C0wJNNd5+lwg09/AlZFgZSb4oVdlB2rfCjhfN7S0T5m54c3G4F5vMG
-         corZjYM0KyWV9MBkcxZlVURwDXu6VbNsyHS4d1/6KrLhBj2LQlJPLhaR/iD8FXkljMzz
-         xR8jJmHA7VBLhyplUjzZ3KaLz6G1/H3oOm6WThqrrV7MjdZh2Y9OKPHEcr+gpV4RA4rv
-         m+mg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710840997; x=1711445797;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=q0tE4rTRpsmTL16kdGX+KFzRwJVG6ZUmpKExRxozggI=;
-        b=s3QIfAvSDlLm5xuyfv2QxKGRxgpFB2q/xRgpeCksUc4pu6SsybraTqwnrxOF6sOB+y
-         RAhdsGJPhcm13l2yjdRfTw2/gTuP9wd1WO2olZwPx9adV9pbbZU3lVcOtNTX1ugzRkth
-         WN0+TE1iUahRLZUgCdn7TIkogJQSDMvb0xkRZXfjr4KyevRSnXevFzutGBR1eK6G0dHN
-         VYkbBv10tsL0gQqtam7c/WuhSQbBPIMdCMjhO1JPCWZZc0PUAbAAuiOnp4uH6QIlERII
-         jMif+TCdQeVYVId+NYuYWJENbAQbbrOIdEg2OiPrLDY/tjNiHTLkCTjQDwzzO4FrkXL2
-         LBiQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUekzxmmeoSUGBMF46nUCEaxQUI8jXGehtrxh2JXIw9y71Py6O01ISFUPKpWzR1BOx1ytLp7Cr+yyDCyMOgiCpZ1Qc+5xlH1Lop
-X-Gm-Message-State: AOJu0YyenIDnb34XcWi1pE1ZRoDmLpLk4zx7htt43KHrnvhukxp3Ozii
-	El2uj5pqGAT8ORoBLlPIz9LtBKUEXZDbJP9XSUowiHRJJRlFlWsa6U7GehzTqWj1F+gMY4H183b
-	A+KMNumJCaLhjI8KMAj5gcNhKKcAXDrWaPIv6TQ==
-X-Google-Smtp-Source: AGHT+IFuWQSJLHTIN+PSrx6VRbyj8bCDJjySSc07ahzVtGH46dRpslwe/Jo5mgbf3sHZSjSGNrfPeFwn5DSGSqdzqaY=
-X-Received: by 2002:a0d:ef07:0:b0:610:968f:c8d2 with SMTP id
- y7-20020a0def07000000b00610968fc8d2mr8021450ywe.39.1710840997353; Tue, 19 Mar
- 2024 02:36:37 -0700 (PDT)
+	s=arc-20240116; t=1710845653; c=relaxed/simple;
+	bh=ZS5nhtTtRPjj1W3fF3ceyO7tg6di5jiVNSnWrHN7yLg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=sIeQ5Ln6P5UzSCOiCOEv72xM2TMdsMXGDBSWbwteu9WCxVJHKSpqZM6dhp8gs94YHmPC/hqFw/X4wgq2qEUXrMg8Xjehkxes04qwnkZM7t3exPZkxpk7vOAWVb2yFqK2uJ2aj+b9uu6tyeAF7EUbOaRm6nKIT9DgX9irtymXE9s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; arc=none smtp.client-ip=210.160.252.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
+X-IronPort-AV: E=Sophos;i="6.07,136,1708354800"; 
+   d="scan'208";a="202296486"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie6.idc.renesas.com with ESMTP; 19 Mar 2024 19:54:02 +0900
+Received: from localhost.localdomain (unknown [10.226.92.214])
+	by relmlir5.idc.renesas.com (Postfix) with ESMTP id 08CAF4006DFB;
+	Tue, 19 Mar 2024 19:53:58 +0900 (JST)
+From: Biju Das <biju.das.jz@bp.renesas.com>
+To: Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Cc: Biju Das <biju.das.jz@bp.renesas.com>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+	linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+	Biju Das <biju.das.au@gmail.com>
+Subject: [PATCH v5 0/6] Fix USB pipe configuration for RZ/G2L
+Date: Tue, 19 Mar 2024 10:53:50 +0000
+Message-Id: <20240319105356.87287-1-biju.das.jz@bp.renesas.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240319090729.14674-1-quic_kbajaj@quicinc.com> <20240319090729.14674-5-quic_kbajaj@quicinc.com>
-In-Reply-To: <20240319090729.14674-5-quic_kbajaj@quicinc.com>
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Tue, 19 Mar 2024 11:36:26 +0200
-Message-ID: <CAA8EJpqgFcBetRRFPQbG1WKHpxqO3tVQ-Yn0k7a+GVx=WN9AWQ@mail.gmail.com>
-Subject: Re: [PATCH 4/4] phy: qcpm-qmp-usb: Add support for QDU1000/QRU1000
-To: Komal Bajaj <quic_kbajaj@quicinc.com>
-Cc: Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
-	Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Wesley Cheng <quic_wcheng@quicinc.com>, 
-	linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, Amrit Anand <quic_amrianan@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-On Tue, 19 Mar 2024 at 11:09, Komal Bajaj <quic_kbajaj@quicinc.com> wrote:
->
-> Add QDU1000/QRU1000 specific register layout and table configs.
->
-> Co-developed-by: Amrit Anand <quic_amrianan@quicinc.com>
-> Signed-off-by: Amrit Anand <quic_amrianan@quicinc.com>
-> Signed-off-by: Komal Bajaj <quic_kbajaj@quicinc.com>
-> ---
->  drivers/phy/qualcomm/phy-qcom-qmp-usb.c | 49 +++++++++++++++++++++++++
->  1 file changed, 49 insertions(+)
->
+The USBHS IP found on RZ/G2L SoCs only has 10 pipe buffers compared
+to 16 pipe buffers on RZ/A2M. Document renesas,rzg2l-usbhs family
+compatible to handle this difference for RZ/G2L family SoCs.
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+This patch series aims to fix the USB pipe configuration for RZ/G2L
+family SoCs.
 
+For the backward compatibility SoC specific compatible is used
+and will be removed the same after few kernel releases.
+
+As the DTS update has a hard dependency on the driver fix, Got ack
+from Geert for patch#6 to apply the DTS update together with the driver
+fix.
+
+v4->v5:
+ * Restored the else path for has_new_pipe_configs check in usbhs_probe().
+v3->v4:
+ * Added Rbtag from Geert for patch#3.
+ * Dropped patch#4
+ * Credit  Huy Nguyen's work in the commit message for patch#4 and dropped
+   his name from Signed-off-by tag.
+ * Selection of usbhsc_rzg2l_default_pipe[] by setting the variable
+   has_new_pipe_configs to zero.
+ * Updated commit description for patch#4.
+ * Dropped the check 'priv->dparam.pipe_configs' as it is same as
+   checking !has_new_pipe_configs.
+v2->v3:
+ * Added Rb tag from Geert for patch#1,#2 and #7
+ * Added Ack tag from Geert for patch#7.
+ * Added patch#3 for improving usbhsc_default_pipe[] for isochronous
+   transfers
+ * Added patch#4 for dropping has_new_pipe_configs from struct
+   renesas_usbhs_driver_param
+ * Updated commit description for patch#5
+ * Dropped usbhsc_rzg2l_pipe[] and reusing the default_pipe[].
+v1->v2:
+ * Added Ack from Krzysztof Kozlowski for patch#1.
+ * Added patch#2 for simplify obtaining device data.
+ * Dropped using of_device_is_compatible() in probe.
+ * Added usbhs_rzg2l_plat_info and replaced the device data for RZ/G2L
+   from usbhs_rza2_plat_info->usbhs_rzg2l_plat_info.
+ * Moved usbhsc_rzg2l_pipe table near to the user.
+ * Updated commit description in patch#3
+ * Added Rb tag from Geert for patch#4.
+ * Updated commit description about ABI breakage in patch#5.
+ * Updated commit header in patch#5 as it is RZ/G2L specific.
+
+Biju Das (6):
+  dt-bindings: usb: renesas,usbhs: Document RZ/G2L family compatible
+  usb: renesas_usbhs: Simplify obtaining device data
+  usb: renesas_usbhs: Improve usbhsc_default_pipe[] for isochronous
+    transfers
+  usb: renesas_usbhs: Update usbhs pipe configuration for RZ/G2L family
+  usb: renesas_usbhs: Remove trailing comma in the terminator entry for
+    OF table
+  arm64: dts: renesas: r9a07g0{43,44,54}: Update RZ/G2L family
+    compatible
+
+ .../bindings/usb/renesas,usbhs.yaml           |  6 ++-
+ arch/arm64/boot/dts/renesas/r9a07g043.dtsi    |  2 +-
+ arch/arm64/boot/dts/renesas/r9a07g044.dtsi    |  2 +-
+ arch/arm64/boot/dts/renesas/r9a07g054.dtsi    |  2 +-
+ drivers/usb/renesas_usbhs/common.c            | 41 ++++++++++++-------
+ drivers/usb/renesas_usbhs/rza.h               |  1 +
+ drivers/usb/renesas_usbhs/rza2.c              | 13 ++++++
+ 7 files changed, 48 insertions(+), 19 deletions(-)
 
 -- 
-With best wishes
-Dmitry
+2.25.1
+
 
