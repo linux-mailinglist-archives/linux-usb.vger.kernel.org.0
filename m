@@ -1,100 +1,113 @@
-Return-Path: <linux-usb+bounces-8093-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8094-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8768788015A
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Mar 2024 17:03:53 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C0D588050F
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Mar 2024 19:45:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1BE0AB23912
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Mar 2024 16:03:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CE4391C228FC
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Mar 2024 18:45:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6683181AAA;
-	Tue, 19 Mar 2024 16:03:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A0B53987D;
+	Tue, 19 Mar 2024 18:45:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=orange.fr header.i=@orange.fr header.b="hiaq+oF0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id E088381ABF
-	for <linux-usb@vger.kernel.org>; Tue, 19 Mar 2024 16:03:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
+Received: from smtp.smtpout.orange.fr (smtp-20.smtpout.orange.fr [80.12.242.20])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3124938DC3
+	for <linux-usb@vger.kernel.org>; Tue, 19 Mar 2024 18:45:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710864220; cv=none; b=om1GkXK6Pj24NV62+ox65OieIj97Eao5YJunhwOOEPpCuBc+HzsNcF66oHbXXYoe5OrYysjfa3j3k6vVV18jjGfMeKCwGCd10wL1gHBYmwBO/Ue2qfVNw5htukO/Shpknn0XqvoLamtyo3qgzVeeRGj7vf8z/6sPs62Ld9/aIbU=
+	t=1710873934; cv=none; b=B09HEwJJHmhRvlvrjDfueFvmh05T9LU9IARYlcNXrOrQvzwQwrx9BqacLzsTR0k0zz0EVEDq4ZnRIlY0vWzHoH+ZwTfy3SAGKVy8pz96CwfK1NGteAx95gD2ZEujhWdMk+PXVrFzXS6ijEk+5k5cTwrNVPLgpVqcdbcJxqLfa4k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710864220; c=relaxed/simple;
-	bh=GfaLZGMTz9cmq4flbeIofGJbdiKDWXVWn45A7/cEDbI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OXUGoe1U8/L8d4iFhv6YPzODGMVJNBrqOa5wE9hrb7kK6eOGelEvJJS+PIG7TM+UlCPXZXbwTEP6FZIgEEA0DeBDINaF1XrkQ+/vnerG7781FPa4TvJ3J1yP4ZoCbgAfOb2k1qZRYOPsfNOrF6kLtnjiNXswxgRC50ngvDy3wHE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
-Received: (qmail 625704 invoked by uid 1000); 19 Mar 2024 12:03:30 -0400
-Date: Tue, 19 Mar 2024 12:03:30 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Jan =?utf-8?B?xIxlcm3DoWs=?= <sairon@sairon.cz>
-Cc: Greg KH <gregkh@linuxfoundation.org>, Khazhy Kumykov <khazhy@google.com>,
-  USB mailing list <linux-usb@vger.kernel.org>, regressions@lists.linux.dev
-Subject: Re: [REGRESSION] Re: [PATCH 0/3] USB: core: Don't overwrite device
- descriptor during reinitialization
-Message-ID: <1b2ccaf6-597c-40fe-877a-4ed1fab5261b@rowland.harvard.edu>
-References: <6eadec91-990a-4fbd-8883-8366c4a4d8e4@rowland.harvard.edu>
- <1e954652-dfb3-4248-beea-b8a449128ff0@sairon.cz>
- <4c3ab861-0274-409b-aad3-7cfb53dc2308@rowland.harvard.edu>
- <00f0786b-a9f2-4f73-8d23-3b1fa4c8b77e@sairon.cz>
- <60def275-5237-48df-b37b-ab886f4ee017@rowland.harvard.edu>
- <4c2a410b-2997-4a7a-8fd6-2bec819a1c4f@sairon.cz>
- <4a168b8b-f012-4b36-92bd-83aeb6849410@rowland.harvard.edu>
- <92d3d802-73df-4ab5-aab4-b2325512e98f@sairon.cz>
- <8b8e2773-47eb-48f4-b5e8-dcd885ee5c5b@rowland.harvard.edu>
- <befc1081-e512-4727-a911-f030e1aac626@sairon.cz>
+	s=arc-20240116; t=1710873934; c=relaxed/simple;
+	bh=7GcSqlNA9db0TU+PtWJBvIPc33uOUli4tM8yo1e7qb8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=sfTSoVSMSDnndaOFVDUL8DfuxV1I7zC2WM6UFyd4cngF+bATRR0urytqQJHR5ErclUX9nXikJDFefV0K7k4kBLP2dfYxKC8SDJPtfKXXzu6zqlTtEnSb+5MK+BtT03VcR/rWmvTA4uT8AVAN8OuBzXrvneZ+xsTeEunpQKrRQEU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=orange.fr; spf=pass smtp.mailfrom=orange.fr; dkim=pass (2048-bit key) header.d=orange.fr header.i=@orange.fr header.b=hiaq+oF0; arc=none smtp.client-ip=80.12.242.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=orange.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=orange.fr
+Received: from jules-desktop.dynamic.ziggo.nl ([84.105.71.69])
+	by smtp.orange.fr with ESMTPA
+	id meK0rHRJYX7HUmeKArj0ew; Tue, 19 Mar 2024 19:36:35 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=orange.fr;
+	s=t20230301; t=1710873395;
+	bh=qXNQkp6Qc32Utj5LOnG0LI21fIJd6XSTE2Y5kLhNc5E=;
+	h=From:To:Subject:Date:Message-Id:MIME-Version;
+	b=hiaq+oF0Tq7obWAaO4gvkQsq/4OWbegQ0vbWg3tzqE/1pHRkJBG3X0ZgXcyhFJDhh
+	 MiZL45e+QcVrotSA0VCnzoMunOqhQevFLwRw1VB8t6KTRNxdzYkcOE1CS7XbZKIQNi
+	 6UcTj0VBuRqtfLlZjza28E7lHWsebxnIwhUPsAS/839JbeEzpjkyi0/XuBF+uFHATe
+	 Al0nvKRAFA/X2I9f3AdeWbIdqkyA+K4VyXgoZ2Q0k4+GZhApyZ7xrGe5vrweRsMGUD
+	 /wzPv3Rev85vn0kQxliK2B+k2aQZWFzV3KpC3z+UkngY7VX5GmxHsZOnOTzTHV2fEa
+	 0Mrh0SNxeta6w==
+X-ME-Helo: jules-desktop.dynamic.ziggo.nl
+X-ME-Auth: anVsZXMubm9pcmFudEBvcmFuZ2UuZnI=
+X-ME-Date: Tue, 19 Mar 2024 19:36:35 +0100
+X-ME-IP: 84.105.71.69
+From: Jules Noirant <jules.noirant@orange.fr>
+To: jkosina@suse.com
+Cc: bentiss@kernel.org,
+	jkosina@suse.cz,
+	Jules Noirant <jules.noirant@orange.fr>,
+	Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+	linux-usb@vger.kernel.org,
+	linux-input@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] HID: hid-pidff: stop all effects before enabling actuators
+Date: Tue, 19 Mar 2024 19:24:43 +0100
+Message-Id: <20240319182443.18161-1-jules.noirant@orange.fr>
+X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <befc1081-e512-4727-a911-f030e1aac626@sairon.cz>
 
-On Tue, Mar 19, 2024 at 12:54:37PM +0100, Jan Čermák wrote:
-> Hello Alan,
-> 
-> On 16. 03. 24 21:35, Alan Stern wrote:
-> > Below is a patch meant to get the number of resets back to what it
-> > should be.  I'd appreciate it if you can test this, and report the
-> > kernel log output along with the usbmon output for the normal case and
-> > also with the "old_scheme_first" parameter set.
-> > 
-> > I'm not very hopeful that this will solve the problem, but there's a
-> > good chance it will help point us in the right direction by removing
-> > extraneous complications.
-> 
-> unfortunately you were right, the problem is still unresolved with your
-> patch. I hope the traces will provide some new insights then.
+Some PID compliant devices automatically play effects after boot (i.e.
+autocenter spring) that prevent the rendering of other effects since
+it is done outside of the kernel driver.
 
-I get the strong impression that this device just takes a long time to
-initialize when it is plugged in.  A lot longer than the current
-debounce time of 150 ms -- more like 2000 ms!  The usbmon traces show
-the device disconnecting and reconnecting about 1500 ms after it is
-first plugged in, and then it starts working about 300-400 ms later.
+This makes sure all the effects currently played are stopped after
+resetting the device.
+It brings compatibility to the Brunner CLS-P joystick.
 
-Try doing this: Keep the patch applied, but make the following changes
-in addition.  In drivers/usb/core/hub.c, around line 128 the code says:
+Signed-off-by: Jules Noirant <jules.noirant@orange.fr>
+---
+ drivers/hid/usbhid/hid-pidff.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-#define HUB_DEBOUNCE_TIMEOUT	2000
-#define HUB_DEBOUNCE_STEP	  25
-#define HUB_DEBOUNCE_STABLE	 100
+diff --git a/drivers/hid/usbhid/hid-pidff.c b/drivers/hid/usbhid/hid-pidff.c
+index 3b4ee21cd..aade18f9e 100644
+--- a/drivers/hid/usbhid/hid-pidff.c
++++ b/drivers/hid/usbhid/hid-pidff.c
+@@ -109,8 +109,9 @@ static const u8 pidff_pool[] = { 0x80, 0x83, 0xa9 };
+ /* Special field key tables used to put special field keys into arrays */
+ 
+ #define PID_ENABLE_ACTUATORS	0
+-#define PID_RESET		1
+-static const u8 pidff_device_control[] = { 0x97, 0x9a };
++#define PID_STOP_ALL_EFFECTS	1
++#define PID_RESET		2
++static const u8 pidff_device_control[] = { 0x97, 0x99, 0x9a };
+ 
+ #define PID_CONSTANT	0
+ #define PID_RAMP	1
+@@ -1157,6 +1158,10 @@ static void pidff_reset(struct pidff_device *pidff)
+ 	hid_hw_request(hid, pidff->reports[PID_DEVICE_CONTROL], HID_REQ_SET_REPORT);
+ 	hid_hw_wait(hid);
+ 
++	pidff->device_control->value[0] = pidff->control_id[PID_STOP_ALL_EFFECTS];
++	hid_hw_request(hid, pidff->reports[PID_DEVICE_CONTROL], HID_REQ_SET_REPORT);
++	hid_hw_wait(hid);
++
+ 	pidff->device_control->value[0] =
+ 		pidff->control_id[PID_ENABLE_ACTUATORS];
+ 	hid_hw_request(hid, pidff->reports[PID_DEVICE_CONTROL], HID_REQ_SET_REPORT);
+-- 
+2.40.1
 
-Change the HUB_DEBOUNCE_TIMEOUT value to 4500, the HUB_DEBOUNCE_STEP
-value to 250 and the HUB_DEBOUNCE_STABLE value to 2000.  That just
-might give the device enough time to settle down and start working
-before the computer tries using it.
-
-This is not something we would want to do for ordinary kernels; it
-would cause new USB devices to be ignored for more than 2 seconds
-after they are plugged in, which would annoy many people.  But if my
-theory is right, it may be what your device needs.
-
-Alan Stern
 
