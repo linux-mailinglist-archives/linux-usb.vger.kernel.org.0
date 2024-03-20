@@ -1,127 +1,157 @@
-Return-Path: <linux-usb+bounces-8108-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8109-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 642018810AF
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Mar 2024 12:16:49 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 50B59881247
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Mar 2024 14:25:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 501C7B23E71
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Mar 2024 11:16:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 09A89285D25
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Mar 2024 13:25:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CAFB3C485;
-	Wed, 20 Mar 2024 11:13:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F30244120C;
+	Wed, 20 Mar 2024 13:25:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b="JLKYxriM"
+	dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b="aVFQoHPn"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from l2mail1.panix.com (l2mail1.panix.com [166.84.1.75])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC11D52F72;
-	Wed, 20 Mar 2024 11:13:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.84.1.75
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EE754087B
+	for <linux-usb@vger.kernel.org>; Wed, 20 Mar 2024 13:25:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710933202; cv=none; b=E4RqzMOJ9C0wdO/pubwENom24nTsz56oW+FT+G7ZyuYS1z97g1zkASnnzlvz0GFoJ5T22xAB6AwHIRD9VBEkEcxFb4wniueGlGeVO383SEcr0r7dv14B2gMXDHSgOwa2jq/NpS8hEtLgU4XJbqFqy0L6mBeAPi3ys+4CjqIL+HA=
+	t=1710941140; cv=none; b=NAuMCsyiEphrSjVg8Mp0dtJe2bYs0pUh30e4GlLsNXv42Ja1AKrMm9U0cyZGsscqR+ZXxD69BKGGfSTDq582R+d0RSebDudCJEGKnOBcF241whXHQSxng39refHlPD35IikUUKvVHnlkZfdl7nqJ9QfkjRjKxLZbwe06nQ7rnKQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710933202; c=relaxed/simple;
-	bh=KkoXZqXTiQUiGpG1SwuWDZlorVWMeQ5IO4olyeGPWfw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lk8O7zMarLa5w/9ybDlcfyNaadbpZmw+Dk7VyyTvuckOAXtSvdixDvIgtAVydgv9JuRpH7ay5DmLPgS0Umnwonu+75uVpdYV4oNXc0bn9uyOmfEtFQ7bf32dtoIHwh/rdQ3cpo0TiQN/gyMb+8ceTKnB+D7yxG8HNHb29dHFelI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com; spf=pass smtp.mailfrom=panix.com; dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b=JLKYxriM; arc=none smtp.client-ip=166.84.1.75
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=panix.com
-Received: from mailbackend.panix.com (mailbackend.panix.com [166.84.1.89])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (1024 bits) server-digest SHA256)
-	(No client certificate requested)
-	by l2mail1.panix.com (Postfix) with ESMTPS id 4V056g2b3gzDQ2;
-	Wed, 20 Mar 2024 06:53:31 -0400 (EDT)
-Received: from [192.168.126.36] (ip70-164-218-85.oc.oc.cox.net [70.164.218.85])
-	by mailbackend.panix.com (Postfix) with ESMTPSA id 4V056R00Fnz1Cjt;
-	Wed, 20 Mar 2024 06:53:18 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=panix.com; s=panix;
-	t=1710932000; bh=KkoXZqXTiQUiGpG1SwuWDZlorVWMeQ5IO4olyeGPWfw=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=JLKYxriMX7zMfvqajAhu61lGwcXTSuYM5aom+l91dfXJe3yVu9xu8UsWUMZ9f5/MV
-	 /QEFLVN2rd5UPVcICEuTm09jLSfe9A0GRsK5HpkZADZ0S56IdZa7Lj7W5hIafYkES8
-	 YtqIk/BREIuLPvxDgftxek5C/jIc02y7B+VPfdbc=
-Message-ID: <fba7503a-7947-4487-95e6-9d41d636b075@panix.com>
-Date: Wed, 20 Mar 2024 03:53:16 -0700
+	s=arc-20240116; t=1710941140; c=relaxed/simple;
+	bh=gR/FUHdn3EPInPai+cCRTw8sGb1MxWEDTW6umqaTPzQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cDA/seqri++5L2iwAct3krzJQOUIUAmtwnZersvJul62Ynzkue1P1LXZQBLOEt/Nbksr2XOEIoA49UqhYV+y0chQ1qFBmm79OeAD69ybrxXvxD25zEJT4nroYTz3VUXROVG1sviyQjKlolMK5yhfRx0Z7JAycoW6NtnmCaJmWU0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us; spf=none smtp.mailfrom=resnulli.us; dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b=aVFQoHPn; arc=none smtp.client-ip=209.85.167.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=resnulli.us
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-512ed314881so4894760e87.2
+        for <linux-usb@vger.kernel.org>; Wed, 20 Mar 2024 06:25:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=resnulli-us.20230601.gappssmtp.com; s=20230601; t=1710941136; x=1711545936; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=U+O+9Gk/MHV5z7NRBi1Il6wqa6Gb+IZES0piBkUl54A=;
+        b=aVFQoHPnaDKgDkToXBGA9isd3Vv3eaDU7zEEbuvYX1cKKxj4JqNKgWOd9J2VrCtYBE
+         sJzPNHrBP5lcy1mi4MDaASavoEfeH5A8XaXqSYDGT0Fz22YKu+ssgnLSjhSM3KkYTBXP
+         v926fNbNLG7rNft8VuCRCjDPY9atrnVvR4Pxxh6AbsCpHqhI3VkRI8vzZxPZul4uH9WA
+         VtlIJIUhVVeTPoAFHiw1dfhdXD3oc1OorBFt9WJYD/d3SflqmT19/zXNniNPtGzswt0C
+         PhpttKHR5lfIc2jqyArjkx/kGZlL3MtuKhUJJ3l3322kZ2hM1DNX/YazsoWA5l4hvpon
+         KSsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710941136; x=1711545936;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=U+O+9Gk/MHV5z7NRBi1Il6wqa6Gb+IZES0piBkUl54A=;
+        b=Km+o2UfzSGidYxpgXDJNQlQl7MHIzHR03J/cO7cpNSpzBn7Fnd2qXR1Ds8EWmTuSGX
+         4+MrTeVJavOLVDsQLiji4ua6P3zHi72iU3yPiv8wjFrAIMVTzglrEd68eiu0gzpoHQFn
+         UXSRPlFJxQuHcRGLPfEJN22C13Sp8niGkyAQJPt0C4CWNrLcCo+P7n2bMj7RCUDCu7Wb
+         9dYGu9f3cyv9uB98LhLw/r8kVQQSv0/4S1H3y/idQMD2E6QNA0P4U/lu7gfL+s/SbS9+
+         rn+rTaPLNVbyprbSxLhzx2fGX8vpI5sE6Gi5mnkGnsk3Lc2H3EfVxHMfbo+4/J2zIL6l
+         PajQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWRyJoJBSmN0Ob4zWjqT+MAwfzxmsNCigOIMi2msHHTGVozCp5HNdGKdr4hDC88jzV0RmUDQ49wzBNXs/ljWoQubxc8+oTTBWYs
+X-Gm-Message-State: AOJu0YztVUZ7dahWRckxoOjKY+EDCc1hvG+a+u56QKMAYg6w5JMZmJaJ
+	gOjI9aMBX0pbXqgwkfpVI53u+OfwCpsNG61KeeH5pcW9LqrNGrOF6Bx6kJR4r64=
+X-Google-Smtp-Source: AGHT+IH1JTkwnk04Rj4pxpdQhzrL58EhI+ZavY62ptJIN0Og8Gbp4eITtl6DxXmmvXUKf33XTdi5ZA==
+X-Received: by 2002:a05:6512:311c:b0:513:30fb:d64 with SMTP id n28-20020a056512311c00b0051330fb0d64mr1597089lfb.44.1710941136269;
+        Wed, 20 Mar 2024 06:25:36 -0700 (PDT)
+Received: from localhost ([86.61.181.4])
+        by smtp.gmail.com with ESMTPSA id a8-20020a05600c348800b004146bee69aesm2077725wmq.40.2024.03.20.06.25.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Mar 2024 06:25:35 -0700 (PDT)
+Date: Wed, 20 Mar 2024 14:25:34 +0100
+From: Jiri Pirko <jiri@resnulli.us>
+To: Chen Ni <nichen@iscas.ac.cn>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, grundler@chromium.org,
+	christian.riesch@omicron.at, linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net] net: asix: Add check for usbnet_get_endpoints
+Message-ID: <ZfrjzjOuK8deu0Fp@nanopsycho>
+References: <20240320073715.2002973-1-nichen@iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/5] Fix various races in UCSI
-To: "Christian A. Ehrhardt" <lk@c--e.de>, linux-kernel@vger.kernel.org
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Prashant Malani <pmalani@chromium.org>, Jameson Thies <jthies@google.com>,
- Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
- Neil Armstrong <neil.armstrong@linaro.org>,
- =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
- =?UTF-8?Q?Samuel_=C4=8Cavoj?= <samuel@cavoj.net>, linux-usb@vger.kernel.org
-References: <20240320073927.1641788-1-lk@c--e.de>
-Content-Language: en-US
-From: Kenneth Crudup <kenny@panix.com>
-In-Reply-To: <20240320073927.1641788-1-lk@c--e.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240320073715.2002973-1-nichen@iscas.ac.cn>
+
+Wed, Mar 20, 2024 at 08:37:15AM CET, nichen@iscas.ac.cn wrote:
+>Add check for usbnet_get_endpoints() and return the error if it fails
+>in order to transfer the error.
+>
+>Fixes: b4cdae20ef95 ("asix: Rename asix.c to asix_devices.c")
+
+Are you sure this is the commit that introduced this? Too lazy to look,
+but most probably this just moved already buggy code.
 
 
-Applied (cleanly) onto 6.8.1; I'll be testing over the next few days, 
-but a few connects/disconnects mixed in with suspend/resume cycles shows 
-no obvious issues (and everything seems to work).
-
-Dell XPS 9320, BIOS 2.10.0
-
--K
-
-On 3/20/24 00:39, Christian A. Ehrhardt wrote:
-> Fix various races in UCSI code:
-> - The EVENT_PENDING bit should be cleared under the PPM lock to
->    avoid spurious re-checking of the connector status.
-> - The initial connector change notification during init may be
->    lost which can cause a stuck UCSI controller. Observed by me
->    and others during resume or after module reload.
-> - Unsupported commands must be ACKed. This was uncovered by the
->    recent change from Jameson Thies that did sent unsupported commands.
-> - The DELL quirk still isn't quite complete and I've found a more
->    elegant way to handle this. A connector change ack _is_ accepted
->    on affected systems if it is bundled with a command ack.
-> - If we do two consecutive resets or the controller is already
->    reset at boog the second reset might complete early because the
->    reset complete bit is already set. ucsi_ccg.c has a work around
->    for this but it looks like an more general issue to me.
+>Signed-off-by: Chen Ni <nichen@iscas.ac.cn>
+>---
+> drivers/net/usb/asix_devices.c | 12 +++++++++---
+> 1 file changed, 9 insertions(+), 3 deletions(-)
+>
+>diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
+>index f7cff58fe044..4732a2951bf2 100644
+>--- a/drivers/net/usb/asix_devices.c
+>+++ b/drivers/net/usb/asix_devices.c
+>@@ -230,7 +230,9 @@ static int ax88172_bind(struct usbnet *dev, struct usb_interface *intf)
+> 	int i;
+> 	unsigned long gpio_bits = dev->driver_info->data;
 > 
-> NOTE:
-> As a result of these individual fixes we could think about the
-> question if there are additional cases where we send some type
-> of command to the PPM while the bit that indicates its completion
-> is already set in CCI. And in fact there is one more case where
-> this can happen: The ack command that clears the connector change
-> is sent directly after the ack command for the previous command.
-> It might be possible to simply ack the connector change along with
-> the first command ucsi_handle_connector_change() and not at the
-> end. AFAICS the connector lock should protect us from races that
-> might arise out of this.
-> 
-> Christian A. Ehrhardt (5):
->    usb: typec: ucsi: Clear EVENT_PENDING under PPM lock
->    usb: typec: ucsi: Check for notifications after init
->    usb: typec: ucsi: Ack unsupported commands
->    usb: typec: ucsi_acpi: Refactor and fix DELL quirk
->    usb: typec: ucsi: Clear UCSI_CCI_RESET_COMPLETE before reset
-> 
->   drivers/usb/typec/ucsi/ucsi.c      | 56 ++++++++++++++++++++--
->   drivers/usb/typec/ucsi/ucsi_acpi.c | 75 +++++++++++++-----------------
->   2 files changed, 84 insertions(+), 47 deletions(-)
-> 
+>-	usbnet_get_endpoints(dev,intf);
+>+	ret = usbnet_get_endpoints(dev, intf);
+>+	if (ret < 0)
 
--- 
-Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange 
-County CA
+I don't think that usbnet_get_endpoints() can return positive value.
+Better to have just:
+	ret = usbnet_get_endpoints(dev, intf);
+	if (ret)
+
+
+>+		goto out;
+
+just "return ret" here. I know that the rest of the function does this
+too, don't copy odd pattern.
+
+
+> 
+> 	/* Toggle the GPIOs in a manufacturer/model specific way */
+> 	for (i = 2; i >= 0; i--) {
+>@@ -834,7 +836,9 @@ static int ax88772_bind(struct usbnet *dev, struct usb_interface *intf)
+> 
+> 	dev->driver_priv = priv;
+> 
+>-	usbnet_get_endpoints(dev, intf);
+>+	ret = usbnet_get_endpoints(dev, intf);
+>+	if (ret < 0)
+>+		return ret;
+> 
+> 	/* Maybe the boot loader passed the MAC address via device tree */
+> 	if (!eth_platform_get_mac_address(&dev->udev->dev, buf)) {
+>@@ -1258,7 +1262,9 @@ static int ax88178_bind(struct usbnet *dev, struct usb_interface *intf)
+> 	int ret;
+> 	u8 buf[ETH_ALEN] = {0};
+> 
+>-	usbnet_get_endpoints(dev,intf);
+>+	ret = usbnet_get_endpoints(dev, intf);
+>+	if (ret < 0)
+>+		return ret;
+> 
+> 	/* Get the MAC address */
+> 	ret = asix_read_cmd(dev, AX_CMD_READ_NODE_ID, 0, 0, ETH_ALEN, buf, 0);
+>-- 
+>2.25.1
+>
+>
 
