@@ -1,78 +1,78 @@
-Return-Path: <linux-usb+bounces-8097-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8098-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3D2F8809E4
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Mar 2024 03:49:25 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 30B4C8809E6
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Mar 2024 03:49:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 638C31F24508
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Mar 2024 02:49:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E1738287415
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Mar 2024 02:49:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 984D112E59;
-	Wed, 20 Mar 2024 02:43:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBE84171D8;
+	Wed, 20 Mar 2024 02:43:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="nkgsiLel"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="DNghZSKb"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2C22125B4
-	for <linux-usb@vger.kernel.org>; Wed, 20 Mar 2024 02:43:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2E5617558
+	for <linux-usb@vger.kernel.org>; Wed, 20 Mar 2024 02:43:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710902597; cv=none; b=cz3WbxvM+BP6SbcYuPV9askM0QGsYOYozUaWbP5CD8u4eh74FpZzXxLSYzCSRMzMJdWYaAN58Jc6Pzo5puDOSxo0hSusEIKWKBAUgxwBntz4PC+Mxhv/o5m7IUnFeOf/g8P81QQceu5rSfmSej9S/Fpn/CT9YEs5/4qu0jd3Mn4=
+	t=1710902617; cv=none; b=M4MITTnaPyEEHtzBqAW1FsnIWOfwqMc07b6rWJeN4CpgbA2145a0a2hz8gvtVpNcOqMpDZvK0Qm0ttoRizc8mq0fLqClb0gsaOzn8SbqHfxe4dWrq6b+6YcTD6rOwgXXF+KaJoeg2UOIi/0xshixnmjyIGLxbY61HjUzllgMc7Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710902597; c=relaxed/simple;
-	bh=78eAdLWYs8wwvbK9BciCfjdMEEABSf7QMrNnx8TDQLE=;
+	s=arc-20240116; t=1710902617; c=relaxed/simple;
+	bh=BfvY3vyLR6lXc/XFMQ0qkGmpXmDZdpmrBKNycQGWXU0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Bdao2IzZuPCU2CoQTM3TPa3Dz7EkbWyKnJ7oXFOaiYheDmLsiFSX/T1BrdP6BlIR1lLYnKzK/yg9dgfSoXvKCF3PNRvs8q9qLhoVj5EvIV6Q9l+77ZKRO/aJPwPgKDKsrPbVOG6CnQB+dU2HnuQk7HGzfYXJsI1qCkFKS0h/DTA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=nkgsiLel; arc=none smtp.client-ip=209.85.216.53
+	 Content-Type:Content-Disposition:In-Reply-To; b=aRPC7/3nYd+Ek8hFkYMl64D5QX8PKgpf9x7ZCcSPzMbTppBjSd/85kMd6feDv/HfOmd6W00XMHGTbzxtJl6NqKMoBzLKU/kW5ii9VdrJoot+9kjSmfhxgQJ3QuxM5XeNH0NVmfVTf1etxuRLm6+t6ZvzDda9Kj5K203lbIdLf24=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=DNghZSKb; arc=none smtp.client-ip=209.85.214.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-29deb7e2f7aso3898974a91.1
-        for <linux-usb@vger.kernel.org>; Tue, 19 Mar 2024 19:43:15 -0700 (PDT)
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1e0511a4383so8000185ad.2
+        for <linux-usb@vger.kernel.org>; Tue, 19 Mar 2024 19:43:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1710902595; x=1711507395; darn=vger.kernel.org;
+        d=chromium.org; s=google; t=1710902615; x=1711507415; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Gl3MfsEQolD8Nt3URRB4l+12pLmNtTMn/BYm+Iehbxw=;
-        b=nkgsiLelw4DZ2MxSXVM4r6LHpFDe8V6cKCPp10ab6I/n2/F5fzdoy7s9bSKDSScqu1
-         eua2yOKwjTc+nkBRKUK3GGB6Anv/LiOxDzbE4/EBzZW9eILuXDhH6kRdp7n+/lq3F9BW
-         KUs1/6BOGjRfmaDQ9PPWka9IiG6CqzXMRLDIs=
+        bh=g6fFauTTG4W/mn5n1JHyH5xPf3JyfWAj7waGLeqk3zI=;
+        b=DNghZSKbb+nZ0jz0xHSDiD5ILl/k+Ymy5cPumn3vg3ENIJPXDjGM8oT2zqARxNpjpN
+         BdeIiQLHOv6dwQS/xgbzEZWWW1X95qJ21PHWv9umLj0jFP+oGanOucQPpo8hKvtNv+uh
+         mIhUqnPr89pk5Ytrk4+KXdQUGEJnBm/Ayj/E8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710902595; x=1711507395;
+        d=1e100.net; s=20230601; t=1710902615; x=1711507415;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Gl3MfsEQolD8Nt3URRB4l+12pLmNtTMn/BYm+Iehbxw=;
-        b=YUcJOMiHpDrRStbHCCWyM/TSVM8MKyo1qTZv5d2xqLkgIf2LFNy5JneX9/3Pe9za0C
-         B65YXHhgttvbTckS3ffrcJYbkna9JZicAq8wEzO11wbBFGE8cs5PeSGevG8eWzqhUSDQ
-         W9WyirLbfMO0ReQU6BMOH82nEFUCaBREWNdWVno4X0uKNNe3MoUEAJlgZKFbHWxQAUeV
-         2euXSPnTgnTYlGm0glRUOda4Act8A3gKe5ZlSErfOkC6MQHj3ps8O1wwghAnHxquWELC
-         WisiJf960uDtSI3FIIWUjfaw7KI+Y+e/+sQh3TQQzEr/VpYGeYcLq8p/CbpKXqgKL/bN
-         dqmg==
-X-Forwarded-Encrypted: i=1; AJvYcCWS3yEsE4+2si2rv+33u48jrOWr8sXZqFmEXinKlqpTX524mnNyj6IGqbQhPbzN/kmZ/erOtOVGCo8YTUUoRgTc9uN+hISZFImM
-X-Gm-Message-State: AOJu0YxvyudHonvgQzokWXXh/GRsonLq0afadmP75jwiu6lH8sjWoONO
-	jihANWUs5hCpEqr4BN0Pfk7VKEPx7Yy3n+/gHQbIT8O/O1/Z5M1+1OUvOwtdMg==
-X-Google-Smtp-Source: AGHT+IHSdhN4oJ83ReMTrtiLGx9DZo48f9RSwLPHgCXKWMgJYzIj42lDSWD/yZnIWQYlaNfyBJMyJA==
-X-Received: by 2002:a17:90a:430b:b0:29c:6c79:7e92 with SMTP id q11-20020a17090a430b00b0029c6c797e92mr4024106pjg.19.1710902594823;
-        Tue, 19 Mar 2024 19:43:14 -0700 (PDT)
+        bh=g6fFauTTG4W/mn5n1JHyH5xPf3JyfWAj7waGLeqk3zI=;
+        b=gxNX0/uE4TKfFZ+Ag62/pKmlX/HMAi/V1hOi5fkOO7EROGTsMh8EsslcNyBWZHMvN0
+         nLZ8oyppoOkwtbfJG2WABfl5W1wY594jH8utfm1uow+GiTP6Novf740B7yaSGdsJjk6Y
+         LY8QnvqitGzYOcGUCdKFmM9HGCgCPoGVBU+k85WwLtChpGvlg2bsPrkfGUDvQrdofQzM
+         9dZqZ1Bjmtb/WjkqzYJWmLIWw9fVpbMNIDzLTLMd1CdAD3jJ5G3yrk18Oyr3orlo8Eq/
+         p3ofjxfx5snnknyp2BXRwv7gI0Ui+PNxctUy2Aa8MxaRlRbG8p7RRF314Y55SQlM9qFK
+         zfGw==
+X-Forwarded-Encrypted: i=1; AJvYcCUs6R+or71WFCt2QS/N1QXPfLCriCrCfjz0PQmjwrfd+u360fz/OGlauEfOQiaei+wqS+R0xsC4IApc7q9c64aGT/D6GpsAMesV
+X-Gm-Message-State: AOJu0Yx+kbth+3W4hAID9xrt4Nka2fnBjwaxC3EfvaqOgIKKZc8NBvXA
+	q1MbWZ8aoJ/86MGf9Z5vUFRz4iCRjbc6lLCbbi7SmnFgmlfixj5bJQcTzRtz3w==
+X-Google-Smtp-Source: AGHT+IEWmlMM501UpoKPpKqkmGwRAMYGO6OYBvdUB6jJX5Jkb9LM3OMFZqUtjh4V2htoBunvlx5FxA==
+X-Received: by 2002:a17:902:7798:b0:1dd:ae5b:86f1 with SMTP id o24-20020a170902779800b001ddae5b86f1mr15575726pll.29.1710902615342;
+        Tue, 19 Mar 2024 19:43:35 -0700 (PDT)
 Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id x8-20020a17090a164800b0029de1e54bcesm364496pje.18.2024.03.19.19.43.14
+        by smtp.gmail.com with ESMTPSA id e12-20020a170902784c00b001e0501d3058sm1548080pln.63.2024.03.19.19.43.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Mar 2024 19:43:14 -0700 (PDT)
-Date: Tue, 19 Mar 2024 19:43:13 -0700
+        Tue, 19 Mar 2024 19:43:34 -0700 (PDT)
+Date: Tue, 19 Mar 2024 19:43:33 -0700
 From: Kees Cook <keescook@chromium.org>
 To: Justin Stitt <justinstitt@google.com>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: u_ether: replace deprecated strncpy with
+Subject: Re: [PATCH] usb: gadget: mv_u3d: replace deprecated strncpy with
  strscpy
-Message-ID: <202403191943.3F041A01CB@keescook>
-References: <20240318-strncpy-drivers-usb-gadget-function-u_ether-c-v1-1-e8543a1db24a@google.com>
+Message-ID: <202403191943.942C08892@keescook>
+References: <20240318-strncpy-drivers-usb-gadget-udc-mv_u3d_core-c-v1-1-64f8dcdb7c07@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -81,16 +81,18 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240318-strncpy-drivers-usb-gadget-function-u_ether-c-v1-1-e8543a1db24a@google.com>
+In-Reply-To: <20240318-strncpy-drivers-usb-gadget-udc-mv_u3d_core-c-v1-1-64f8dcdb7c07@google.com>
 
-On Mon, Mar 18, 2024 at 11:10:34PM +0000, Justin Stitt wrote:
+On Mon, Mar 18, 2024 at 11:31:53PM +0000, Justin Stitt wrote:
 > strncpy() is deprecated for use on NUL-terminated destination strings
 > [1] and as such we should prefer more robust and less ambiguous string
 > interfaces.
 > 
-> Let's use the new 2-argument strscpy() as this guarantees
-> NUL-termination on the destination buffer and also uses the destination
-> buffer's size to bound the operation.
+> Let's opt for the new 2-argument version of strscpy() which guarantees
+> NUL-termination on the destination buffer and simplifies snytax. The
+> NUL-padding behavior that strncpy() provides is not required as u3d->eps
+> is already zero-allocated:
+> |	u3d->eps = kzalloc(size, GFP_KERNEL);
 > 
 > Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#strncpy-on-nul-terminated-strings [1]
 > Link: https://manpages.debian.org/testing/linux-manual-4.8/strscpy.9.en.html [2]
@@ -98,7 +100,7 @@ On Mon, Mar 18, 2024 at 11:10:34PM +0000, Justin Stitt wrote:
 > Cc: linux-hardening@vger.kernel.org
 > Signed-off-by: Justin Stitt <justinstitt@google.com>
 
-Looks correct. Thanks!
+Thanks!
 
 Reviewed-by: Kees Cook <keescook@chromium.org>
 
