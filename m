@@ -1,51 +1,50 @@
-Return-Path: <linux-usb+bounces-8103-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8105-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71BED880C50
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Mar 2024 08:46:56 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C3D5C880C58
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Mar 2024 08:48:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9F9F51C2105B
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Mar 2024 07:46:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 785301F216D0
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Mar 2024 07:48:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DADF425605;
-	Wed, 20 Mar 2024 07:46:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F16E2BD01;
+	Wed, 20 Mar 2024 07:48:39 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7540D20DCC;
-	Wed, 20 Mar 2024 07:46:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.81
+Received: from cae.in-ulm.de (cae.in-ulm.de [217.10.14.231])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E310E2231C;
+	Wed, 20 Mar 2024 07:48:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.10.14.231
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710920808; cv=none; b=tw5PffJttBJ7Sn2j6OmYgy6NqciEhH8dowwrYiyo5vYmJ4aFFBGfceaPb1/o291HEX0CVehfBROPyVSqtfr37FuWUIA0O2OB6tqTy1lQB83jxcKpEJFqtWlSLmClgmbPKsyXwMofCzQtjEqIH4RfGyvOVa4XZVtOilHImIS8l18=
+	t=1710920918; cv=none; b=JhSuh/VrFFrtsP5QBJZiXyj7tW9u3EbwSw72SKlM5X8IPktHymibfIIH3ZBDHe9K9Do5WFLlNRGF9Ro3ldPWEl1Hf6GbPbK+ugDoUVXFKsgTQ87TughLLVzux8HsusUa9gnSnDqnOw50DsCXYIwbRb1SICv73OHDSjwfmVY8wI4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710920808; c=relaxed/simple;
-	bh=R8qWnT0pcFEIMIHAwgUqU6SjvSra2zMocjTcX/gqfSU=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=WTKaP8KOtuShYbg6SiC/TsjWw4dHYLe63VR2U+AFybE5iavlAfYnxC/iJoWz18PbC3PlvXp4Rw3vtYFYPRbCPBeqSPP+UxTBkF90Nwobw3FtKjiDE+p4gcRZDcr5PrKmkHmzjCWKnlXYR1APwQeaO+7bjZ82bs6tssu/C9sbf1U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
-Received: from localhost (unknown [124.16.138.129])
-	by APP-03 (Coremail) with SMTP id rQCowACHZwBdkvplsfItBw--.36178S2;
-	Wed, 20 Mar 2024 15:38:06 +0800 (CST)
-From: Chen Ni <nichen@iscas.ac.cn>
-To: davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	grundler@chromium.org,
-	christian.riesch@omicron.at,
+	s=arc-20240116; t=1710920918; c=relaxed/simple;
+	bh=6v51l2BaV+t4HJloO9qBHphewQnPu0qnDnrMTLpEHjk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=g9+s4TYPJCI9lPEyEGZfLBrmWbgKAV7/FEB5EYkzKhVuSuNqZ8tQDf+A/DeAh+h//VnXBrItehVIFc8Tjgdu5wGYbj2vTx8zXlkSYNQhEH4BTohhzYl1a2HeM4+LnGMOpKnSoGQjdQNpBwd1OfkCsGssUE6j7o0TpiIYJMVxQ/M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c--e.de; spf=pass smtp.mailfrom=c--e.de; arc=none smtp.client-ip=217.10.14.231
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c--e.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=c--e.de
+Received: by cae.in-ulm.de (Postfix, from userid 1000)
+	id EBA5E140551; Wed, 20 Mar 2024 08:40:01 +0100 (CET)
+From: "Christian A. Ehrhardt" <lk@c--e.de>
+To: linux-kernel@vger.kernel.org
+Cc: "Christian A. Ehrhardt" <lk@c--e.de>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Prashant Malani <pmalani@chromium.org>,
+	Jameson Thies <jthies@google.com>,
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+	=?UTF-8?q?Samuel=20=C4=8Cavoj?= <samuel@cavoj.net>,
 	linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Chen Ni <nichen@iscas.ac.cn>
-Subject: [PATCH net] net: asix: Add check for usbnet_get_endpoints
-Date: Wed, 20 Mar 2024 07:37:15 +0000
-Message-Id: <20240320073715.2002973-1-nichen@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+	Kenneth Crudup <kenny@panix.com>
+Subject: [PATCH 0/5] Fix various races in UCSI
+Date: Wed, 20 Mar 2024 08:39:21 +0100
+Message-Id: <20240320073927.1641788-1-lk@c--e.de>
+X-Mailer: git-send-email 2.30.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -53,72 +52,47 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:rQCowACHZwBdkvplsfItBw--.36178S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7tFy3AFyDGr1DXr18Aw1fWFg_yoW8Wry5pF
-	48Ga98tr48JrW8G3yDtw48urW5ZFn2qa42kF92kw1a9Fy3AF93Gr10kw1Yy3s29FWfXa4q
-	yF4DGw4Yqr15WaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUv014x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-	6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
-	1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-	6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr
-	0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E
-	8cxan2IY04v7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
-	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8
-	ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
-	0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
-	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUb
-	0D73UUUUU==
-X-CM-SenderInfo: xqlfxv3q6l2u1dvotugofq/
 
-Add check for usbnet_get_endpoints() and return the error if it fails
-in order to transfer the error.
+Fix various races in UCSI code:
+- The EVENT_PENDING bit should be cleared under the PPM lock to
+  avoid spurious re-checking of the connector status.
+- The initial connector change notification during init may be
+  lost which can cause a stuck UCSI controller. Observed by me
+  and others during resume or after module reload.
+- Unsupported commands must be ACKed. This was uncovered by the
+  recent change from Jameson Thies that did sent unsupported commands.
+- The DELL quirk still isn't quite complete and I've found a more
+  elegant way to handle this. A connector change ack _is_ accepted
+  on affected systems if it is bundled with a command ack.
+- If we do two consecutive resets or the controller is already
+  reset at boog the second reset might complete early because the
+  reset complete bit is already set. ucsi_ccg.c has a work around
+  for this but it looks like an more general issue to me.
 
-Fixes: b4cdae20ef95 ("asix: Rename asix.c to asix_devices.c")
-Signed-off-by: Chen Ni <nichen@iscas.ac.cn>
----
- drivers/net/usb/asix_devices.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+NOTE:
+As a result of these individual fixes we could think about the
+question if there are additional cases where we send some type
+of command to the PPM while the bit that indicates its completion
+is already set in CCI. And in fact there is one more case where
+this can happen: The ack command that clears the connector change
+is sent directly after the ack command for the previous command.
+It might be possible to simply ack the connector change along with
+the first command ucsi_handle_connector_change() and not at the
+end. AFAICS the connector lock should protect us from races that
+might arise out of this.
 
-diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
-index f7cff58fe044..4732a2951bf2 100644
---- a/drivers/net/usb/asix_devices.c
-+++ b/drivers/net/usb/asix_devices.c
-@@ -230,7 +230,9 @@ static int ax88172_bind(struct usbnet *dev, struct usb_interface *intf)
- 	int i;
- 	unsigned long gpio_bits = dev->driver_info->data;
- 
--	usbnet_get_endpoints(dev,intf);
-+	ret = usbnet_get_endpoints(dev, intf);
-+	if (ret < 0)
-+		goto out;
- 
- 	/* Toggle the GPIOs in a manufacturer/model specific way */
- 	for (i = 2; i >= 0; i--) {
-@@ -834,7 +836,9 @@ static int ax88772_bind(struct usbnet *dev, struct usb_interface *intf)
- 
- 	dev->driver_priv = priv;
- 
--	usbnet_get_endpoints(dev, intf);
-+	ret = usbnet_get_endpoints(dev, intf);
-+	if (ret < 0)
-+		return ret;
- 
- 	/* Maybe the boot loader passed the MAC address via device tree */
- 	if (!eth_platform_get_mac_address(&dev->udev->dev, buf)) {
-@@ -1258,7 +1262,9 @@ static int ax88178_bind(struct usbnet *dev, struct usb_interface *intf)
- 	int ret;
- 	u8 buf[ETH_ALEN] = {0};
- 
--	usbnet_get_endpoints(dev,intf);
-+	ret = usbnet_get_endpoints(dev, intf);
-+	if (ret < 0)
-+		return ret;
- 
- 	/* Get the MAC address */
- 	ret = asix_read_cmd(dev, AX_CMD_READ_NODE_ID, 0, 0, ETH_ALEN, buf, 0);
+Christian A. Ehrhardt (5):
+  usb: typec: ucsi: Clear EVENT_PENDING under PPM lock
+  usb: typec: ucsi: Check for notifications after init
+  usb: typec: ucsi: Ack unsupported commands
+  usb: typec: ucsi_acpi: Refactor and fix DELL quirk
+  usb: typec: ucsi: Clear UCSI_CCI_RESET_COMPLETE before reset
+
+ drivers/usb/typec/ucsi/ucsi.c      | 56 ++++++++++++++++++++--
+ drivers/usb/typec/ucsi/ucsi_acpi.c | 75 +++++++++++++-----------------
+ 2 files changed, 84 insertions(+), 47 deletions(-)
+
 -- 
-2.25.1
+2.40.1
 
 
