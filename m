@@ -1,97 +1,79 @@
-Return-Path: <linux-usb+bounces-8137-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8138-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 970A0886204
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Mar 2024 21:48:18 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 988A4886254
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Mar 2024 22:11:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 528E72831C6
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Mar 2024 20:48:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 20A38B234BD
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Mar 2024 21:11:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E13AC136643;
-	Thu, 21 Mar 2024 20:45:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF10C137C29;
+	Thu, 21 Mar 2024 21:10:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s+Im4Uh+"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72879135415
-	for <linux-usb@vger.kernel.org>; Thu, 21 Mar 2024 20:45:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.154.21.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42EAC13793A;
+	Thu, 21 Mar 2024 21:10:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711053908; cv=none; b=m7174wpqJaxCiI/1v1FVWimLIWxf5mPKk4uuqcPboX4mhmNCh3A9cOCTzzMlWcBzAF4ojgKmGrwt7cvXYlH0CBP7uNccouUAQlTP3VyH6k01cP2toc9vir2M7GZRK9hRtmyFHwEXpWA9gyCUW+XM3XM291p+AfI6boFWV11RlaM=
+	t=1711055405; cv=none; b=YZQjY9BWTDwkkSkifzexDFPg1gkMX4xkTmcjEWmtRzokGYTZ9yroaS4v3JKmsUCy3s56O5/xQGbUWHVn6Og6hCV4kE1WBgQh9DFH9fpr3FQ++OFjzh+F1w0a/Df8lc2cwKA27TJKma/nbNTEqRmlCL/Bd5ZysIj0vz3AddLpAqM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711053908; c=relaxed/simple;
-	bh=o13E2AO+2zVFxIEWSWE+VPjZ5LrUStCQlETKfAndI7U=;
-	h=Subject:From:To:CC:References:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=Om2R3o0emyTYwSqK6tuqFohmvJuyNv2Kelp5qe1q/EBoGJuLDtySLqJJxPGAFL8OgLLoSK7pg+lNN7CXjFrM8DRWXz1HCr3NZyb3D4DSr/tldiuO1v2WnsGLwuecvIAUsn952EANSI0AhmNXrrPTbo9cC6FlZQXb7Gbcbq1zP2E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=omp.ru; spf=pass smtp.mailfrom=omp.ru; arc=none smtp.client-ip=90.154.21.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=omp.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=omp.ru
-Received: from [192.168.1.105] (31.173.84.168) by msexch01.omp.ru
- (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1258.12; Thu, 21 Mar
- 2024 23:45:02 +0300
-Subject: Re: [PATCH v4] usb: storage: sddr55: fix sloppy typing in
- sddr55_{read|write}_data()
-From: Sergey Shtylyov <s.shtylyov@omp.ru>
-To: Alan Stern <stern@rowland.harvard.edu>, Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
-	<usb-storage@lists.one-eyed-alien.net>
-CC: <lvc-project@linuxtesting.org>
-References: <a98c7ef0-ffb4-369a-ddee-dc5a1f8d6b89@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <155aa9a5-9b3b-bfe5-8786-a89c267f6349@omp.ru>
-Date: Thu, 21 Mar 2024 23:45:02 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+	s=arc-20240116; t=1711055405; c=relaxed/simple;
+	bh=zfw97roRPwNvwiA+ypnoyqxgOFpkjOKwMIhgusYB4N4=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=knGhZJu2m9rNKyEVrYTw7tj3MhspK6I7Yd/M0wXc788AiUV1fsMKbygd6/Ps0vFgamMYoXfVWQ5u+sdyAacpUh62fp18rUjwJRFyXvf86UvuccWLZ2DOYD12q1QG4VzI0z+jdijhPqIrPshpnbf15rK3qs/yxY5suPG/l/+ZJVY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s+Im4Uh+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 21BDEC433C7;
+	Thu, 21 Mar 2024 21:10:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711055405;
+	bh=zfw97roRPwNvwiA+ypnoyqxgOFpkjOKwMIhgusYB4N4=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=s+Im4Uh+ez/TaAMowBWxUGjdxJl2k8lE7gJ7Nx39p9qXuqMgGbEq5SH5+H3lSnL3+
+	 H5jqsmIzdwQ6dVPYqEetqhU7FjEACauR/cMuhr/p6ZCmFHDPplnj/lF7rIpvsrBi6D
+	 a3rRJ+QGmi87M6b4i2bjDhjeiryo7B33y1E66NU/yzEUwrcjcJwNY4gtSzVLxg8e4m
+	 Mouj0JFMbJ5WluTopv1DHeSMiVpqh1sD/nWAED1sFTHaEzcIPr6CB+9dx1tkeJkju7
+	 jiWKGc6bvwy+jxYACIGjIJU2Rn4PaDwtcbJ4oLtwzCEgnFJexjsLNKWQ9g1x0O68ce
+	 D/qRnCcm9y1VQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id ED999D8C729;
+	Thu, 21 Mar 2024 21:10:04 +0000 (UTC)
+Subject: Re: [GIT PULL] USB/Thunderbolt driver changes for 6.9-rc1
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <Zfwvg03C-ptMQKVk@kroah.com>
+References: <Zfwvg03C-ptMQKVk@kroah.com>
+X-PR-Tracked-List-Id: <linux-usb.vger.kernel.org>
+X-PR-Tracked-Message-Id: <Zfwvg03C-ptMQKVk@kroah.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.9-rc1
+X-PR-Tracked-Commit-Id: a788e53c05aee6e3d60792a59e10c0fac56b5086
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: e09bf86f3d53ecf4da61163d88036c4c16419d70
+Message-Id: <171105540494.8284.2741645346835667470.pr-tracker-bot@kernel.org>
+Date: Thu, 21 Mar 2024 21:10:04 +0000
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-In-Reply-To: <a98c7ef0-ffb4-369a-ddee-dc5a1f8d6b89@omp.ru>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
- (10.188.4.12)
-X-KSE-ServerInfo: msexch01.omp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 6.1.0, Database issued on: 03/21/2024 20:27:00
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 0
-X-KSE-AntiSpam-Info: Lua profiles 184337 [Mar 21 2024]
-X-KSE-AntiSpam-Info: Version: 6.1.0.4
-X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
-X-KSE-AntiSpam-Info: LuaCore: 11 0.3.11
- 5ecf9895443a5066245fcb91e8430edf92b1b594
-X-KSE-AntiSpam-Info: {rep_avail}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info:
-	d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2;omp.ru:7.1.1
-X-KSE-AntiSpam-Info: ApMailHostAddress: 31.173.84.168
-X-KSE-AntiSpam-Info: Rate: 0
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
- smtp.mailfrom=omp.ru;dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 03/21/2024 20:32:00
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 3/21/2024 6:05:00 PM
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
 
-Hello!
+The pull request you sent on Thu, 21 Mar 2024 14:00:51 +0100:
 
-   Ignore this one, it was sent out with a wrong subject... :/
+> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.9-rc1
 
-MBR, Sergey
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/e09bf86f3d53ecf4da61163d88036c4c16419d70
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
