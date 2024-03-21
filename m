@@ -1,118 +1,265 @@
-Return-Path: <linux-usb+bounces-8128-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8130-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6EA5B8855AE
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Mar 2024 09:29:35 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EDA7288595F
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Mar 2024 13:48:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 18BE41F23F3F
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Mar 2024 08:29:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1A9201C21B68
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Mar 2024 12:48:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B075669971;
-	Thu, 21 Mar 2024 08:29:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88FC58405B;
+	Thu, 21 Mar 2024 12:48:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S3PLOttA"
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="NMYbxKjV";
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="B8z9YuAR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F87E6994D;
-	Thu, 21 Mar 2024 08:29:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9BB083CC6;
+	Thu, 21 Mar 2024 12:48:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711009763; cv=none; b=Uahta9xDGZDTXOroliyVeFMtxmrlZM1cFE2+FRhNkozGqV1FPy6Nx4+Z/XGtKWDFpv9HJs7wrX92AlO79uDj4eYSYuzID/azHj6RjJLBQzCzQ8FMR/ttGXaYjNWsR2/G2kd/PYC11o9WNoYyvZQsPieS5IVJmmgVZOAyWRuvXoo=
+	t=1711025286; cv=none; b=uG96Zqy1Yy8bNb2T1Xt3uvoObB7gRQyeJHovIsGRZ+QB8QJdm0IBnqcvvoAKz+7YZE0GCAEa7eHnEuhFJwiN89TupCCNRs9L+sejUblNzLpAopomp09THvlz7GGgRanE7ZIQ2lRF+8t1a3JmyOPo9iA4RZp19+UFNy1rjv9Vxj8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711009763; c=relaxed/simple;
-	bh=7kCuWcguJfXb+C5s5vznrmpMKt2aumVRMMbZ27GwQRI=;
-	h=From:To:Cc:Subject:References:Date:In-Reply-To:Message-ID:
-	 MIME-Version:Content-Type; b=Tn6tPdeIMWlzv+iDYBWF7av1ygEI6GnjVUEb/DDZ1I+gFqZb0vmYwNyZlIVWyK7nPA74HlXtnSP84GTeYwbmfYR5MtFUE95k/+hp7RqatF1fnchsZLpBFN/rCR9xQ9a14Ho4q4bUwfWKGpporTaDPcK82ndu4LQW5Jvr/nfFpH8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S3PLOttA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDFA4C433C7;
-	Thu, 21 Mar 2024 08:29:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711009762;
-	bh=7kCuWcguJfXb+C5s5vznrmpMKt2aumVRMMbZ27GwQRI=;
-	h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-	b=S3PLOttAxQVJs5+U1SxWEPd1adUzlZKsRvspPFtIee7I+PkW7lYi5w01c5dKOfR8K
-	 qvGRCZ2YCxx6++ElMesCX5CyH73jUNLxtPE4cKM6a9wo8lzNe1tcRBIbYxoKXdojFh
-	 rzGySzbifLgGxwVRBD7BKLGlx+Pu7nln3i78b/welbNKlYgUrQKOln7QJV/aHj/TNw
-	 ZtVAjCUxOLAvyXT/5kGJzi/Xys4ZhypuKbrShGMAcbNkruLovn5Auw/TV4+Skul6uF
-	 zShoCG2AovfLVmh8Odh0g7HqKFPD92U/d8sBpZ5hcpg41eNmllphYZ4nSfmO0OrINj
-	 rT9nl9deErSgA==
-From: Kalle Valo <kvalo@kernel.org>
-To: Edward Adam Davis <eadavis@qq.com>
-Cc: syzbot+93cbd5fbb85814306ba1@syzkaller.appspotmail.com,
-  linux-kernel@vger.kernel.org,  linux-usb@vger.kernel.org,
-  linux-wireless@vger.kernel.org,  netdev@vger.kernel.org,
-  syzkaller-bugs@googlegroups.com,  toke@toke.dk
-Subject: Re: [PATCH usb] wifi: ath9k: fix oob in htc_issue_send
-References: <0000000000004e41110614187d35@google.com>
-	<tencent_7225DC0D859205DD8BDDAE191CCFBF0D8907@qq.com>
-Date: Thu, 21 Mar 2024 10:29:18 +0200
-In-Reply-To: <tencent_7225DC0D859205DD8BDDAE191CCFBF0D8907@qq.com> (Edward
-	Adam Davis's message of "Thu, 21 Mar 2024 15:31:33 +0800")
-Message-ID: <87bk789ee9.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+	s=arc-20240116; t=1711025286; c=relaxed/simple;
+	bh=4pwkuVPASujLtvUAcOeumSFvUYsF5sf+M00LrdtdnmY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RXtXJoSnSduzo4epT1DPxftCzmeQV27meVCXzop/H2xNr5eWTXZ1c7bVfxxR6GSuA6g8AUzLCp82UIJVevHGdzDNU+qMM9clr3MzwC/7A++I0Zvw58X8C1Jx8rHYrh6h3SNAy5iimh+ud0F05T48+PSOD7WJ6HVtdTOhSElU2io=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=NMYbxKjV; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=B8z9YuAR; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id EAE551FC83;
+	Thu, 21 Mar 2024 12:48:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1711025282; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=gVje2G/MWNXU76aPP5C7g31t/cKVQY55RCzo6eErdoU=;
+	b=NMYbxKjVzVQqSddBaVOYu7ujpvbBArz5B1aY6U+HuybMK/O4wdmPrFCt+mDs3yudNjpFKh
+	qZiuF+I1UgZoxm2cDDmV5So1PsipAfVQJCMej9iuhMRRoINGYrcMo9KM1nc7i92dUGwxTD
+	DHsVciLld0fAjcd2fnhmFtKkMqwedKM=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1711025281; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=gVje2G/MWNXU76aPP5C7g31t/cKVQY55RCzo6eErdoU=;
+	b=B8z9YuARPR1yqmPrxgg9bQI98U1yx3nTKtFsfVmMplhd2KJK/3hs+/NRGTCFQm4VXcHe4g
+	zyXjgI4EzvJ8SafYlgtDSBHNOpfBrmtzPe08zePc26C5LTvouJU5adEPQRtPjqSCwXnYNm
+	4PbLJm/Az1UUZ2zsjYhW2lg612QQ1+U=
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 7D666136AD;
+	Thu, 21 Mar 2024 12:48:01 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([10.150.64.162])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id y0NXHIEs/GVCTQAAD6G6ig
+	(envelope-from <oneukum@suse.com>); Thu, 21 Mar 2024 12:48:01 +0000
+From: Oliver Neukum <oneukum@suse.com>
+To: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	netdev@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Oliver Neukum <oneukum@suse.com>,
+	syzbot+9665bf55b1c828bbcd8a@syzkaller.appspotmail.com
+Subject: [PATCH net-next] usbnet: fix cyclical race on disconnect with work queue
+Date: Thu, 21 Mar 2024 13:46:41 +0100
+Message-ID: <20240321124758.6302-1-oneukum@suse.com>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Spam-Score: 2.20
+X-Spamd-Result: default: False [2.20 / 50.00];
+	 ARC_NA(0.00)[];
+	 RCVD_VIA_SMTP_AUTH(0.00)[];
+	 BAYES_HAM(-3.00)[100.00%];
+	 FROM_HAS_DN(0.00)[];
+	 TO_DN_SOME(0.00)[];
+	 R_MISSING_CHARSET(2.50)[];
+	 TO_MATCH_ENVRCPT_ALL(0.00)[];
+	 TAGGED_RCPT(0.00)[9665bf55b1c828bbcd8a];
+	 MIME_GOOD(-0.10)[text/plain];
+	 BROKEN_CONTENT_TYPE(1.50)[];
+	 NEURAL_HAM_LONG(-1.00)[-1.000];
+	 RCVD_COUNT_THREE(0.00)[3];
+	 DKIM_SIGNED(0.00)[suse.com:s=susede1];
+	 NEURAL_HAM_SHORT(-0.20)[-1.000];
+	 RCPT_COUNT_SEVEN(0.00)[9];
+	 MID_CONTAINS_FROM(1.00)[];
+	 DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email];
+	 FUZZY_BLOCKED(0.00)[rspamd.com];
+	 FROM_EQ_ENVFROM(0.00)[];
+	 MIME_TRACE(0.00)[0:+];
+	 RCVD_TLS_ALL(0.00)[];
+	 SUSPICIOUS_RECIPS(1.50)[]
+X-Spam-Level: **
+Authentication-Results: smtp-out2.suse.de;
+	none
+X-Spam-Flag: NO
 
-Edward Adam Davis <eadavis@qq.com> writes:
+The work can submit URBs and the URBs can schedule the work.
+This cycle needs to be broken, when a device is to be stopped.
+Use a flag to do so.
 
-> [syzbot reported]
-> usb 1-1: ath9k_htc: Transferred FW: ath9k_htc/htc_9271-1.4.0.fw, size: 51008
-> ath9k_htc 1-1:1.0: ath9k_htc: HTC initialized with 33 credits
-> ------------[ cut here ]------------
-> UBSAN: array-index-out-of-bounds in drivers/net/wireless/ath/ath9k/htc_hst.c:26:51
-> index 255 is out of range for type 'htc_endpoint [22]'
-> CPU: 1 PID: 2494 Comm: kworker/1:2 Not tainted 6.8.0-rc6-syzkaller-00190-ga788e53c05ae #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/29/2024
-> Workqueue: events request_firmware_work_func
-> Call Trace:
->  <TASK>
->  __dump_stack lib/dump_stack.c:88 [inline]
->  dump_stack_lvl+0x125/0x1b0 lib/dump_stack.c:106
->  ubsan_epilogue lib/ubsan.c:217 [inline]
->  __ubsan_handle_out_of_bounds+0x111/0x150 lib/ubsan.c:347
->  htc_issue_send.constprop.0+0x209/0x230 drivers/net/wireless/ath/ath9k/htc_hst.c:26
->  ath9k_wmi_cmd_issue drivers/net/wireless/ath/ath9k/wmi.c:305 [inline]
->  ath9k_wmi_cmd+0x424/0x630 drivers/net/wireless/ath/ath9k/wmi.c:342
->  ath9k_regread+0xdb/0x160 drivers/net/wireless/ath/ath9k/htc_drv_init.c:242
->  ath9k_hw_read_revisions drivers/net/wireless/ath/ath9k/hw.c:287 [inline]
->  __ath9k_hw_init drivers/net/wireless/ath/ath9k/hw.c:572 [inline]
->  ath9k_hw_init+0xf02/0x2b30 drivers/net/wireless/ath/ath9k/hw.c:700
->  ath9k_init_priv drivers/net/wireless/ath/ath9k/htc_drv_init.c:662 [inline]
->  ath9k_init_device drivers/net/wireless/ath/ath9k/htc_drv_init.c:839 [inline]
->  ath9k_htc_probe_device+0xb37/0x25f0 drivers/net/wireless/ath/ath9k/htc_drv_init.c:963
->  ath9k_htc_hw_init+0x33/0x70 drivers/net/wireless/ath/ath9k/htc_hst.c:529
->  ath9k_hif_usb_firmware_cb+0x272/0x620 drivers/net/wireless/ath/ath9k/hif_usb.c:1273
->  request_firmware_work_func+0x13a/0x240 drivers/base/firmware_loader/main.c:1163
->  process_one_work+0x886/0x15d0 kernel/workqueue.c:2633
->  process_scheduled_works kernel/workqueue.c:2706 [inline]
->  worker_thread+0x8b9/0x1290 kernel/workqueue.c:2787
->  kthread+0x2c6/0x3a0 kernel/kthread.c:388
->  ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
->  ret_from_fork_asm+0x11/0x20 arch/x86/entry/entry_64.S:243
->  </TASK>
-> ---[ end trace ]---
-> [Fix]
-> If the target does not return a valid end point id during the device connection
-> process, returns a failure.
->
-> Fixes: fb9987d0f748 ("ath9k_htc: Support for AR9271 chipset.")
-> Reported-and-tested-by: syzbot+93cbd5fbb85814306ba1@syzkaller.appspotmail.com
-> Signed-off-by: Edward Adam Davis <eadavis@qq.com>
+Fixes: f29fc259976e9 ("[PATCH] USB: usbnet (1/9) clean up framing")
+Reported-by: syzbot+9665bf55b1c828bbcd8a@syzkaller.appspotmail.com
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+---
+ drivers/net/usb/usbnet.c   | 37 ++++++++++++++++++++++++++++---------
+ include/linux/usb/usbnet.h | 18 ++++++++++++++++++
+ 2 files changed, 46 insertions(+), 9 deletions(-)
 
-This should go to ath tree, not usb. No need to resend because of this.
-
+diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
+index e84efa661589..422d91635045 100644
+--- a/drivers/net/usb/usbnet.c
++++ b/drivers/net/usb/usbnet.c
+@@ -467,10 +467,12 @@ static enum skb_state defer_bh(struct usbnet *dev, struct sk_buff *skb,
+ void usbnet_defer_kevent (struct usbnet *dev, int work)
+ {
+ 	set_bit (work, &dev->flags);
+-	if (!schedule_work (&dev->kevent))
+-		netdev_dbg(dev->net, "kevent %s may have been dropped\n", usbnet_event_names[work]);
+-	else
+-		netdev_dbg(dev->net, "kevent %s scheduled\n", usbnet_event_names[work]);
++	if (!usbnet_going_away(dev)) {
++		if (!schedule_work (&dev->kevent))
++			netdev_dbg(dev->net, "kevent %s may have been dropped\n", usbnet_event_names[work]);
++		else
++			netdev_dbg(dev->net, "kevent %s scheduled\n", usbnet_event_names[work]);
++	}
+ }
+ EXPORT_SYMBOL_GPL(usbnet_defer_kevent);
+ 
+@@ -538,7 +540,8 @@ static int rx_submit (struct usbnet *dev, struct urb *urb, gfp_t flags)
+ 			tasklet_schedule (&dev->bh);
+ 			break;
+ 		case 0:
+-			__usbnet_queue_skb(&dev->rxq, skb, rx_start);
++			if (!usbnet_going_away(dev))
++				__usbnet_queue_skb(&dev->rxq, skb, rx_start);
+ 		}
+ 	} else {
+ 		netif_dbg(dev, ifdown, dev->net, "rx: stopped\n");
+@@ -849,6 +852,16 @@ int usbnet_stop (struct net_device *net)
+ 	del_timer_sync (&dev->delay);
+ 	tasklet_kill (&dev->bh);
+ 	cancel_work_sync(&dev->kevent);
++
++	/*
++	 * we have cyclic dependencies. Those calls are needed
++	 * to break a cycle. We cannot fall into the gaps because
++	 * we have a flag
++	 */
++	tasklet_kill (&dev->bh);
++	del_timer_sync (&dev->delay);
++	cancel_work_sync(&dev->kevent);
++
+ 	if (!pm)
+ 		usb_autopm_put_interface(dev->intf);
+ 
+@@ -1174,7 +1187,8 @@ usbnet_deferred_kevent (struct work_struct *work)
+ 					   status);
+ 		} else {
+ 			clear_bit (EVENT_RX_HALT, &dev->flags);
+-			tasklet_schedule (&dev->bh);
++			if (!usbnet_going_away(dev))
++				tasklet_schedule (&dev->bh);
+ 		}
+ 	}
+ 
+@@ -1196,10 +1210,13 @@ usbnet_deferred_kevent (struct work_struct *work)
+ 			}
+ 			if (rx_submit (dev, urb, GFP_KERNEL) == -ENOLINK)
+ 				resched = 0;
+-			usb_autopm_put_interface(dev->intf);
+ fail_lowmem:
+-			if (resched)
++			usb_autopm_put_interface(dev->intf);
++			if (resched) {
++				set_bit (EVENT_RX_MEMORY, &dev->flags);
++
+ 				tasklet_schedule (&dev->bh);
++			}
+ 		}
+ 	}
+ 
+@@ -1212,13 +1229,13 @@ usbnet_deferred_kevent (struct work_struct *work)
+ 		if (status < 0)
+ 			goto skip_reset;
+ 		if(info->link_reset && (retval = info->link_reset(dev)) < 0) {
+-			usb_autopm_put_interface(dev->intf);
+ skip_reset:
+ 			netdev_info(dev->net, "link reset failed (%d) usbnet usb-%s-%s, %s\n",
+ 				    retval,
+ 				    dev->udev->bus->bus_name,
+ 				    dev->udev->devpath,
+ 				    info->description);
++			usb_autopm_put_interface(dev->intf);
+ 		} else {
+ 			usb_autopm_put_interface(dev->intf);
+ 		}
+@@ -1562,6 +1579,7 @@ static void usbnet_bh (struct timer_list *t)
+ 	} else if (netif_running (dev->net) &&
+ 		   netif_device_present (dev->net) &&
+ 		   netif_carrier_ok(dev->net) &&
++		   !usbnet_going_away(dev) &&
+ 		   !timer_pending(&dev->delay) &&
+ 		   !test_bit(EVENT_RX_PAUSED, &dev->flags) &&
+ 		   !test_bit(EVENT_RX_HALT, &dev->flags)) {
+@@ -1609,6 +1627,7 @@ void usbnet_disconnect (struct usb_interface *intf)
+ 	usb_set_intfdata(intf, NULL);
+ 	if (!dev)
+ 		return;
++	usbnet_mark_going_away(dev);
+ 
+ 	xdev = interface_to_usbdev (intf);
+ 
+diff --git a/include/linux/usb/usbnet.h b/include/linux/usb/usbnet.h
+index 9f08a584d707..d26599faab33 100644
+--- a/include/linux/usb/usbnet.h
++++ b/include/linux/usb/usbnet.h
+@@ -76,8 +76,26 @@ struct usbnet {
+ #		define EVENT_LINK_CHANGE	11
+ #		define EVENT_SET_RX_MODE	12
+ #		define EVENT_NO_IP_ALIGN	13
++/*
++ * this one is special, as it indicates that the device is going away
++ * there are cyclic dependencies between tasklet, timer and bh
++ * that must be broken
++ */
++#		define EVENT_UNPLUG		31
+ };
+ 
++static inline bool usbnet_going_away(struct usbnet *ubn)
++{
++	smp_mb__before_atomic();
++	return test_bit(EVENT_UNPLUG, &ubn->flags);
++}
++
++static inline void usbnet_mark_going_away(struct usbnet *ubn)
++{
++	set_bit(EVENT_UNPLUG, &ubn->flags);
++	smp_mb__after_atomic();
++}
++
+ static inline struct usb_driver *driver_of(struct usb_interface *intf)
+ {
+ 	return to_usb_driver(intf->dev.driver);
 -- 
-https://patchwork.kernel.org/project/linux-wireless/list/
+2.44.0
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
 
