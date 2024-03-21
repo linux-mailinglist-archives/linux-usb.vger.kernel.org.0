@@ -1,158 +1,183 @@
-Return-Path: <linux-usb+bounces-8116-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8117-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16D1F88552C
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Mar 2024 08:52:03 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EEC9D885560
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Mar 2024 09:14:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9A2051F21E38
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Mar 2024 07:52:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 02E001C21298
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Mar 2024 08:14:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47C2A7867A;
-	Thu, 21 Mar 2024 07:50:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2824853819;
+	Thu, 21 Mar 2024 08:14:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="OmGWHcvf"
+	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="IXDDjfwA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2088.outbound.protection.outlook.com [40.107.21.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1BDD5914C;
-	Thu, 21 Mar 2024 07:50:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711007425; cv=none; b=uj39rPlIQMvBHXOor0SZ5FgK5zGzGCFtAaKycasUGEEoVYZEFJ60Vo3flC22iG8yCO2BT+VJwVi3rS4jWYMiyoZpnqKaOei2gaMBcyntaPddgIrZMn5VtOOJCu1ctO+SA0VzsT33+1kbb4+3+CcUFSGVuubyOYHlFYI9W2cdSNQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711007425; c=relaxed/simple;
-	bh=jz0FnzSzpqsMaLVsUsazaeeE2gPTKuo3vV3JKyGyhmI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lDBmcQpMIJ2iMPFJ0RwsXMRUYE3FWW3PebU0jta6Jd8LMh2DiWEbtEoxYY9GLyPMiJlIFVY4ugarUS1T1FC69PbFKROq82GMmt1anARgHqgYTqSsvncrnm0O1zldgAwDepWky8sCmB/Nudibpt474398/UI5L8i1WZrsE1DY71I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=OmGWHcvf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4D84C433F1;
-	Thu, 21 Mar 2024 07:50:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1711007424;
-	bh=jz0FnzSzpqsMaLVsUsazaeeE2gPTKuo3vV3JKyGyhmI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=OmGWHcvf2B5O4nBtgvkYXiC24XKm73vjYH7lJpZWzI+HqkLZZg8lHtqfxltjaWIC1
-	 mhD7oZ9/d+73UluyADfIYRvecLPptfFXBG3eMj2/mp3L1ibZbhqLzvsRjoDjLK9tho
-	 5GEmSFNeo9QGPkFnjyItNXLCEZIcq7eRUKOWI8SM=
-Date: Thu, 21 Mar 2024 08:50:20 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Edward Adam Davis <eadavis@qq.com>
-Cc: syzbot+93cbd5fbb85814306ba1@syzkaller.appspotmail.com, kvalo@kernel.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-	syzkaller-bugs@googlegroups.com, toke@toke.dk
-Subject: Re: [PATCH usb] wifi: ath9k: fix oob in htc_issue_send
-Message-ID: <2024032107-discover-sulfide-af1d@gregkh>
-References: <0000000000004e41110614187d35@google.com>
- <tencent_7225DC0D859205DD8BDDAE191CCFBF0D8907@qq.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A458B1DFD2;
+	Thu, 21 Mar 2024 08:14:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.21.88
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1711008870; cv=fail; b=bHRSsdi5w2FxOFP7y1wntqlDwGsy83SkXTp1S7sEGhvqnMFv4MMkl8DVNQWVhn4t/e12H93Xur1h7gaYjmdJNZv5t3XUqy5kdjuhhvSZ5V2j1cR1Mrfc2vOb0DA+jowQ5xII4ZlAhSrBWcrqqJdurx7a6bwn7SFePw2gFPP2ScI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1711008870; c=relaxed/simple;
+	bh=sRGmEeyhKeGWOaf8mTKNraTh5/baJPdYJeqBnIFd9x0=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=qRzPwdfmUJc/cS9q6EcZifq4moONwoyEZSC0thK0hBX7AH7sY1rCU+pQNPqQX0bkx7HAckG2PK8ryt0UFJ67N2kYp6eqX1WJw/VfJTmNKdK+0RpHo17FhZvFeglf6pNDSSarfhvyncxcUx+LX7+c5Y2fG53JJnDX7m0bBTYhKZ0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b=IXDDjfwA; arc=fail smtp.client-ip=40.107.21.88
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=R2ttVEeyQUmiRarxNQCk5xyc2C4y/slFonPM7ywpaKeWg3UKhxNosyKPx8cp6lKOIFzct09AltPGaD0BJpLYpK5VjqHquEHsGzGrk6u2yT2+hj5tezNhBf2qxXC8xukjWxcRHTPBI0KzdebbU4V5kF8aPL3xNICQ85bTEO2RU8C1Q8WMZJC+tgGFkmXSzAb9YdrWLqY/EaLc0I2FocDze+tqRhsujdl32q3dQZvMawLLjYuWqMSYhG9gVe+Z8rlWOHgDqPDX04wS7vF2j/XORRUqBJw633ldZNCa8vqB1i8W794eqDejEQ5zhr2n1hdrUWLAvs1SUEiftF3vw3qegg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hSHyOddBEJo9ceYWhM5FWULK+mE9tqxnELWq/3vYdVk=;
+ b=Bg6l+3isHzCci4UrRUfP/WwzMBK3gAzWXkqdQ6Ic5tbVaXVha0LIisID/mrvXl7XtOkVgMlpuaJDMVT2dGiNKaAdbyYE4YXAgHfu6V4jFUzssCSrkEy9nWvcknzfHGrL4hrykilmkNtUb+xebD1pchxNloQzQl+jaCcS3exdMysSABZwZp7Xu0ZMULmMRuaa9T0CyFAKoZ7r4fJfqgCxCT5IKnPF9ZHXxF1O3uiPNdRWqW3QE0SKWt2D8IoKe4FTbiCYQRr522teNxBnTZjJYCR7ITShnu5WpKx5jDG5z7LQomoyY+tWkQLNfFZOgV47ZclGQccG5jq1HAej7faYPw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hSHyOddBEJo9ceYWhM5FWULK+mE9tqxnELWq/3vYdVk=;
+ b=IXDDjfwAxbBcBX6DDVwl1Q8QfXw+zgPsaw5/deuLZRzuK2mAbfquOYEwmULdC0xCXAmZmS6eQ0bhdpl/mIwDSmHTLv3l8mJnsMxbcE5twbgyAmSxUdrcXne1tnL/MkA+TxfBcMeJjvAnuDp6Pl4DKSL/Myf/L5c9eVx4PEwqSDw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from DU2PR04MB8822.eurprd04.prod.outlook.com (2603:10a6:10:2e1::11)
+ by AS8PR04MB9191.eurprd04.prod.outlook.com (2603:10a6:20b:44e::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7386.30; Thu, 21 Mar
+ 2024 08:14:25 +0000
+Received: from DU2PR04MB8822.eurprd04.prod.outlook.com
+ ([fe80::d45f:4483:c11:68b0]) by DU2PR04MB8822.eurprd04.prod.outlook.com
+ ([fe80::d45f:4483:c11:68b0%7]) with mapi id 15.20.7386.023; Thu, 21 Mar 2024
+ 08:14:24 +0000
+From: Xu Yang <xu.yang_2@nxp.com>
+To: gregkh@linuxfoundation.org,
+	robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org,
+	shawnguo@kernel.org,
+	conor+dt@kernel.org
+Cc: s.hauer@pengutronix.de,
+	kernel@pengutronix.de,
+	festevam@gmail.com,
+	linux-imx@nxp.com,
+	peter.chen@kernel.org,
+	xu.yang_2@nxp.com,
+	jun.li@nxp.com,
+	linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	imx@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v10 01/11] dt-bindings: usb: usbmisc-imx: add fsl,imx8ulp-usbmisc compatible
+Date: Thu, 21 Mar 2024 16:14:29 +0800
+Message-Id: <20240321081439.541799-1-xu.yang_2@nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR02CA0022.apcprd02.prod.outlook.com
+ (2603:1096:3:17::34) To DU2PR04MB8822.eurprd04.prod.outlook.com
+ (2603:10a6:10:2e1::11)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <tencent_7225DC0D859205DD8BDDAE191CCFBF0D8907@qq.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU2PR04MB8822:EE_|AS8PR04MB9191:EE_
+X-MS-Office365-Filtering-Correlation-Id: ba8471af-87dd-43f7-5e09-08dc497eeb83
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	8XcKpOxUxBrOIV8H+77MX7yhEtWZdEsG2Wca6+it4+NbSlSmBI+J1aP/gCXJ1RdvsU0YBUk4VNauSM6VZzOS6qYNFU9KIXy8Pjzm1Pu2idWAuB8grpwvJtTuGbTofGRFV9rsDCoBbfoBdG4R0DTxC5LeHeev7CbcFIkl1dWiaGRiiSZS/jDz3XGFZEd2aDTdz5Kk+ixnW8FllY1E28iS28N4slFdUhQxUpnNHm/a7dYx0XC6tzJiJnh76vy6NYRvjkvnBUXuPtpcSx6lT2iP4xwtoAjU1hdpcUVMP5EAjYFLJr2crcA7a5JRVFS1JJMUEmBZuQcBMbzjI+O/wgyD6+G3oMxUc/lbhq63OS1YQGkPcYmq2x1c0sOw0m5Dg7FdnGUpIiMbAsO0tVlLPOCqDRzrqEmGg8G5xCC8ostPnlBpiEFNLni288oNl9cgAR5kI1vWJxjhMlriWWzWWiip4fqzTf0faYSZx8b0gNnsZ1/rTagRv4ld+wq5N4uNBapN34Mfb8s/SAKOw4+ezC6yxiVlUogOu+yJdm81a+ZdCXWgc5b7vZPmzWryiGgOEBNvnWOv+Rvzfsp/UtvLvBOhlpdb/kDFF3P5W2I4EsHMqZ57s9Fx5YA0BXOy4jc8hfh8MPzTu+IGex3rCE+1aSVFqMrXoahE+KkVXuWEUnn+pWyao/cqmUtKNi6TeAmbSMuCiu6gz9ZlsaIqNEEqNobk12rgIALNys6LQuG1KLPDQSM=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8822.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(52116005)(376005)(7416005)(366007)(1800799015)(38350700005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?Tzk+YriZH0DzCdrGwqx6LX3IRWyRb2a7sYz6ngu8Qw1gULAjI6nhPr4lYiqF?=
+ =?us-ascii?Q?z73qPZuv37SD45g2//w9PTFjRPuCoQceemBTBM5osJZbUUfV+xNeCgFy8ZlX?=
+ =?us-ascii?Q?6e8u47PBpUvrKTPkolrin+mBCKv1gZTj2XzVt9rI2xGmudn98Xao5sfbnd5B?=
+ =?us-ascii?Q?YeMM1TEbei7dXM3pL5NgQNRE9bjNcamAbk1VQH7tasniTAqETQjaUgleQWFl?=
+ =?us-ascii?Q?0F1b3d6F8vF22D+kzgVSYDuME3iYr/0P7c/7XQJ2k1ujZuYdKgSzm/ndBIg7?=
+ =?us-ascii?Q?57kEq1OLMPzeIMOtUWc7A5fZ4U0FgNYfBNvVJeRLSi8C3eaarFtNv5hClRWE?=
+ =?us-ascii?Q?xuzzHGzMZUfQyph6RDSb9Lmu8AjZXKr92Oa1Z0AK6QsIeqeNa/aKedohs1NN?=
+ =?us-ascii?Q?DEaFTPtokOyQHhr7Ys5eMAvcbqVTLsChe0Ul0xKx2WMAN706gguAhFFhVomw?=
+ =?us-ascii?Q?lvHAq8z0dZTyBGgBf+gZ0knh/8yzC5Yb8HKKFgyUSMSwyNrJXofDH00o9vjg?=
+ =?us-ascii?Q?i1QHCVhcW+nJsE4uhqokEZ4NNqrE3LjarPqVGPq98Knad0kWpTXrNVjy7ldM?=
+ =?us-ascii?Q?K3CiWZ6BLj0VVTwqZCbYEdx5NiJ6r2svoZF3XHusI+ToQw9DWuFRD1IRHxO7?=
+ =?us-ascii?Q?Gq+zgp4rSmTKnmYNDyqLdw2bRJp3lNeg1fTeZhMOuUwfCmZXL/dV/VYku6ao?=
+ =?us-ascii?Q?JrV7Jdz1BH1VVaPt4noSAhemYLHKNxITOrAlam8yw8AevqKgeinLWmv1zEt4?=
+ =?us-ascii?Q?d/QS8CfL1FMEgf/G0MN4qjzWvJD3VqMVJ9csYHshZnMDUikZ8K3I0moOgd/b?=
+ =?us-ascii?Q?F9mQCrFV1xSWazvHxD3rhSKI+wE70sM7aajbHrxhOGiyP+XsW123h2CqcYnN?=
+ =?us-ascii?Q?8+ZlHLseVY6UPdBnZaN2K6UxNPQw6gtdhf2q8sJKzhgIaM4Pdf1jZGnvbzGb?=
+ =?us-ascii?Q?DauTokvuE7fU6ukY6jvnpcmBGtYuEMFtQXSnhvbmSFwg6QS7uJFU9ZIlp8CC?=
+ =?us-ascii?Q?UMBfUmkNnEp+de+sJaBpZX8n7Vk9JWWQv8VxdYag1Z4eKO0qoAO0r3qK9GhT?=
+ =?us-ascii?Q?CY/BdMh+wcDyiR/PqW0E2mUupZe4GjcrpleuuKGC16YFd38dJ47yUKADThNQ?=
+ =?us-ascii?Q?ygay7n3qB4KJGWSYzbETmzadu64J3U9acG21cBZYbl/26+do4xtdmOdfK7OE?=
+ =?us-ascii?Q?6qW8YUZvrJrDm9ueygP3ByRArzCO/9ez0gPGFTDy6Fi3BM7BFuXoMzaP1vuI?=
+ =?us-ascii?Q?8gL8C+rCShmoQLJ6ZtmBqSYtIIGjSSse/DYCVMV1B2+qwnfVtl4yBB6vzwI7?=
+ =?us-ascii?Q?dPeCxIgr4uLadOAQi51tNRqlbfegQYoWNZ18Amii5fzo4n4ApamIj3pXLqSh?=
+ =?us-ascii?Q?3SzxU5dEcMW+DACJdmrVYuncEIy5erRodfiayas3b1tpQMKXBqnVjbzrCoO5?=
+ =?us-ascii?Q?zlv1BAy/8sS0ywfNKkAAfV9AnUSSrcr/L/VGguSJQeMHSnFzuXooewNtgpv4?=
+ =?us-ascii?Q?ZErRWTWC4IaepMO686W6xucchWxd4OBYHohBooFRtQPHMkqpvZeSTccKeE7B?=
+ =?us-ascii?Q?LNoRlFAq8kETqE5EfqGOZBlpEfDBEO4mLT6azvHP?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ba8471af-87dd-43f7-5e09-08dc497eeb83
+X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8822.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Mar 2024 08:14:24.9186
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ttG0A9kzernkp1Hw3XtvJ1pndmHJm42s68QmNIwru3ByTDbMGHnwJub8a7g879dc3JdRVntQHAexZ1H64lOqTQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB9191
 
-On Thu, Mar 21, 2024 at 03:31:33PM +0800, Edward Adam Davis wrote:
-> [syzbot reported]
-> usb 1-1: ath9k_htc: Transferred FW: ath9k_htc/htc_9271-1.4.0.fw, size: 51008
-> ath9k_htc 1-1:1.0: ath9k_htc: HTC initialized with 33 credits
-> ------------[ cut here ]------------
-> UBSAN: array-index-out-of-bounds in drivers/net/wireless/ath/ath9k/htc_hst.c:26:51
-> index 255 is out of range for type 'htc_endpoint [22]'
-> CPU: 1 PID: 2494 Comm: kworker/1:2 Not tainted 6.8.0-rc6-syzkaller-00190-ga788e53c05ae #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/29/2024
-> Workqueue: events request_firmware_work_func
-> Call Trace:
->  <TASK>
->  __dump_stack lib/dump_stack.c:88 [inline]
->  dump_stack_lvl+0x125/0x1b0 lib/dump_stack.c:106
->  ubsan_epilogue lib/ubsan.c:217 [inline]
->  __ubsan_handle_out_of_bounds+0x111/0x150 lib/ubsan.c:347
->  htc_issue_send.constprop.0+0x209/0x230 drivers/net/wireless/ath/ath9k/htc_hst.c:26
->  ath9k_wmi_cmd_issue drivers/net/wireless/ath/ath9k/wmi.c:305 [inline]
->  ath9k_wmi_cmd+0x424/0x630 drivers/net/wireless/ath/ath9k/wmi.c:342
->  ath9k_regread+0xdb/0x160 drivers/net/wireless/ath/ath9k/htc_drv_init.c:242
->  ath9k_hw_read_revisions drivers/net/wireless/ath/ath9k/hw.c:287 [inline]
->  __ath9k_hw_init drivers/net/wireless/ath/ath9k/hw.c:572 [inline]
->  ath9k_hw_init+0xf02/0x2b30 drivers/net/wireless/ath/ath9k/hw.c:700
->  ath9k_init_priv drivers/net/wireless/ath/ath9k/htc_drv_init.c:662 [inline]
->  ath9k_init_device drivers/net/wireless/ath/ath9k/htc_drv_init.c:839 [inline]
->  ath9k_htc_probe_device+0xb37/0x25f0 drivers/net/wireless/ath/ath9k/htc_drv_init.c:963
->  ath9k_htc_hw_init+0x33/0x70 drivers/net/wireless/ath/ath9k/htc_hst.c:529
->  ath9k_hif_usb_firmware_cb+0x272/0x620 drivers/net/wireless/ath/ath9k/hif_usb.c:1273
->  request_firmware_work_func+0x13a/0x240 drivers/base/firmware_loader/main.c:1163
->  process_one_work+0x886/0x15d0 kernel/workqueue.c:2633
->  process_scheduled_works kernel/workqueue.c:2706 [inline]
->  worker_thread+0x8b9/0x1290 kernel/workqueue.c:2787
->  kthread+0x2c6/0x3a0 kernel/kthread.c:388
->  ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
->  ret_from_fork_asm+0x11/0x20 arch/x86/entry/entry_64.S:243
->  </TASK>
-> ---[ end trace ]---
-> [Fix]
-> If the target does not return a valid end point id during the device connection
-> process, returns a failure.
-> 
-> Fixes: fb9987d0f748 ("ath9k_htc: Support for AR9271 chipset.")
-> Reported-and-tested-by: syzbot+93cbd5fbb85814306ba1@syzkaller.appspotmail.com
-> Signed-off-by: Edward Adam Davis <eadavis@qq.com>
-> ---
->  drivers/net/wireless/ath/ath9k/htc_hst.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/net/wireless/ath/ath9k/htc_hst.c b/drivers/net/wireless/ath/ath9k/htc_hst.c
-> index eb631fd3336d..0d1115d1cc29 100644
-> --- a/drivers/net/wireless/ath/ath9k/htc_hst.c
-> +++ b/drivers/net/wireless/ath/ath9k/htc_hst.c
-> @@ -295,6 +295,9 @@ int htc_connect_service(struct htc_target *target,
->  	}
->  
->  	*conn_rsp_epid = target->conn_rsp_epid;
-> +	if (*conn_rsp_epid < 0 || *conn_rsp_epid > ENDPOINT_MAX)
-> +		return -EINVAL;
-> +
->  	return 0;
->  err:
->  	kfree_skb(skb);
-> -- 
-> 2.43.0
-> 
-> 
+Add "fsl,imx8ulp-usbmisc" compatible.
 
-Hi,
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+---
+Changes in v3:
+ - new patch due to missed this little one
+Changes in v4:
+ - no changes
+Changes in v5:
+ - add Acked-by tag
+Changes in v6:
+ - no changes
+Changes in v7:
+ - no changes
+Changes in v8:
+ - no changes
+Changes in v9:
+ - no changes
+Changes in v10:
+ - no changes
+---
+ Documentation/devicetree/bindings/usb/fsl,usbmisc.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+diff --git a/Documentation/devicetree/bindings/usb/fsl,usbmisc.yaml b/Documentation/devicetree/bindings/usb/fsl,usbmisc.yaml
+index 2d3589d284b2..0a6e7ac1b37e 100644
+--- a/Documentation/devicetree/bindings/usb/fsl,usbmisc.yaml
++++ b/Documentation/devicetree/bindings/usb/fsl,usbmisc.yaml
+@@ -33,6 +33,7 @@ properties:
+               - fsl,imx7ulp-usbmisc
+               - fsl,imx8mm-usbmisc
+               - fsl,imx8mn-usbmisc
++              - fsl,imx8ulp-usbmisc
+           - const: fsl,imx7d-usbmisc
+           - const: fsl,imx6q-usbmisc
+       - items:
+-- 
+2.34.1
 
-- You have marked a patch with a "Fixes:" tag for a commit that is in an
-  older released kernel, yet you do not have a cc: stable line in the
-  signed-off-by area at all, which means that the patch will not be
-  applied to any older kernel releases.  To properly fix this, please
-  follow the documented rules in the
-  Documentation/process/stable-kernel-rules.rst file for how to resolve
-  this.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
 
