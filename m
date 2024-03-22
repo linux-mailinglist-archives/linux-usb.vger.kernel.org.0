@@ -1,123 +1,141 @@
-Return-Path: <linux-usb+bounces-8148-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8149-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 94BCD8869A2
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Mar 2024 10:47:57 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1CF208869A9
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Mar 2024 10:49:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4850A1F243E1
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Mar 2024 09:47:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4D84C1C2200A
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Mar 2024 09:49:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8891C22099;
-	Fri, 22 Mar 2024 09:47:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FKhkGeK6"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CD7821370;
+	Fri, 22 Mar 2024 09:49:26 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 869B022071;
-	Fri, 22 Mar 2024 09:47:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A329417566
+	for <linux-usb@vger.kernel.org>; Fri, 22 Mar 2024 09:49:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.154.21.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711100868; cv=none; b=oumoXRHoNdEgY29pPSTt+dcMia+/igyvmt2QZCuKVK/RVTzN5AXB1Z0/eBiV3yuxWRStnM9d7C8dx8rrCrIy0nZ3KhAu71Rxo+qSVidpmNeGk8NQt9MT2tY1cnwCR1DJbMpIZJ9/NKIeE+bApYv+svDF2WcDtu4X5BtY0JvxJQw=
+	t=1711100966; cv=none; b=vDN/Fx+VYvFjwDQew23raxk+k5t3nxnjs/G+hUj897TBeWxDx2oGK9SshFDhZkc/M/tITaDPTpW1MOtmXy9owhFovF1zmxceh0tkW5i83zCu0RhZQHC8NDM6dgwcWiMwQgPgYdmF6KwxGVBlYOqUOIz/LBYLhShdu0p0xX162n0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711100868; c=relaxed/simple;
-	bh=d8QI1fvrWimyZ+FSH0Pau+AvhF+Z/HjOosxcR2O3zaQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Pb3EXRYV1PnL+SV7po9WQ/Zip6J9DZNrlptRh+5rArsIMSq8UpTCVbXimmxXgvWK3ZSQBB2fHo3coL9FonhIS6V2yr5V/I7JrCtqIYLONFleaIjtZI7PWs4GBiNL88rOv9L8Ecpy5HKmcXVJC99Yek7znpla109oLsx8YjL7Rws=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FKhkGeK6; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711100866; x=1742636866;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=d8QI1fvrWimyZ+FSH0Pau+AvhF+Z/HjOosxcR2O3zaQ=;
-  b=FKhkGeK6EVi2iOlbZpB4g5G9kOk5gLbKHhi7brru8IjFBkleItDngykA
-   PHE1t6ExjhQfkB097BoriziaACzYAYnG5LdXkuSnWbe3YGUGfM82SaZxc
-   GA4OhiUARCQfCh0rizAv+Q8A96/XVGWG/yeCsjOsKe+bjYu+dG3YjIe+p
-   tELNwp7YIz8/2CkEqKwBBMylAbNgKRtXc1Y6In1Ko/GDVdsDCSjy3ygI3
-   jLeJzz1ARXTgGCW4IzVp+hV4dAJqGFwsC1KMmwKKHBdc14Gk9++giF7do
-   C47LB7/3B1RJRD6m2dQqQF+rH6U3KAAtOhEYtlfXJ3fywRB5jybbiPvTC
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11020"; a="16868984"
-X-IronPort-AV: E=Sophos;i="6.07,145,1708416000"; 
-   d="scan'208";a="16868984"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2024 02:47:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11020"; a="937066503"
-X-IronPort-AV: E=Sophos;i="6.07,145,1708416000"; 
-   d="scan'208";a="937066503"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 22 Mar 2024 02:47:43 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 22 Mar 2024 11:47:42 +0200
-Date: Fri, 22 Mar 2024 11:47:42 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Kyle Tso <kyletso@google.com>
-Cc: linux@roeck-us.net, gregkh@linuxfoundation.org, badhri@google.com,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: Re: [PATCH v1] usb: typec: Return size of buffer if pd_set operation
- succeeds
-Message-ID: <Zf1Tvk0SeE9oxXiA@kuha.fi.intel.com>
-References: <20240319074309.3306579-1-kyletso@google.com>
+	s=arc-20240116; t=1711100966; c=relaxed/simple;
+	bh=3buljDP7ISVdORoHtzVZqpf3iccEzwTtOkvVUiftLNk=;
+	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=snvjBxwTyDmeRMupG6FP1uXCVEpYhxHky5BWYvy3BR3S1D3CR4dbesXyL+RL8N/UyXJc9IYnwKBPe7Yb7IuLdF3ltmKMJ7azjuFFFebR5S2hmHRvez+TskgN5FkIYZP7Fp1cCOoVD5TGLlDavU0xU6R5motXZnRnlMa+STqthBo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=omp.ru; spf=pass smtp.mailfrom=omp.ru; arc=none smtp.client-ip=90.154.21.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=omp.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=omp.ru
+Received: from [192.168.1.105] (178.176.73.112) by msexch01.omp.ru
+ (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1258.12; Fri, 22 Mar
+ 2024 12:49:11 +0300
+Subject: Re: [PATCH] usb: storage: isd200: fix sloppy typing in
+ isd200_scsi_to_ata()
+To: Alan Stern <stern@rowland.harvard.edu>
+CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	<linux-usb@vger.kernel.org>, <usb-storage@lists.one-eyed-alien.net>,
+	<lvc-project@linuxtesting.org>
+References: <e8c20e3c-3cbe-b5c1-f673-0a7f22566879@omp.ru>
+ <4e13319d-30a8-4274-bfa0-36d915b1e1ec@rowland.harvard.edu>
+From: Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <5ccbb639-10fd-ae7f-1c59-3c6f642275e9@omp.ru>
+Date: Fri, 22 Mar 2024 12:49:10 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240319074309.3306579-1-kyletso@google.com>
+In-Reply-To: <4e13319d-30a8-4274-bfa0-36d915b1e1ec@rowland.harvard.edu>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 6.1.0, Database issued on: 03/22/2024 09:25:02
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 184345 [Mar 22 2024]
+X-KSE-AntiSpam-Info: Version: 6.1.0.4
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 11 0.3.11
+ 5ecf9895443a5066245fcb91e8430edf92b1b594
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.73.112 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info:
+	omp.ru:7.1.1;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
+X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.73.112
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 03/22/2024 09:29:00
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 3/22/2024 6:00:00 AM
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
 
-On Tue, Mar 19, 2024 at 03:43:09PM +0800, Kyle Tso wrote:
-> The attribute writing should return the number of bytes used from the
-> buffer on success.
+On 3/22/24 3:57 AM, Alan Stern wrote:
+[...]
+
+>> When isd200_scsi_to_ata() emulates the SCSI READ CAPACITY command, the
+>> capacity local variable is needlessly typed as *unsigned long* -- which
+>> is 32-bit type on the 32-bit arches and 64-bit type on the 64-bit arches;
+>> this variable's value should always fit into 32 bits for both the ATA and
+>> the SCSI capacity data...
+>>
+>> While at it, arrange the local variable declarations in the reverse Xmas
+>> tree order...
+>>
+>> Found by Linux Verification Center (linuxtesting.org) with the SVACE static
+>> analysis tool.
+>>
+>> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+>>
+>> ---
+>>  drivers/usb/storage/isd200.c |    2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> Index: usb/drivers/usb/storage/isd200.c
+>> ===================================================================
+>> --- usb.orig/drivers/usb/storage/isd200.c
+>> +++ usb/drivers/usb/storage/isd200.c
+>> @@ -1283,8 +1283,8 @@ static int isd200_scsi_to_ata(struct scs
+>>  
+>>  	case READ_CAPACITY:
+>>  	{
+>> -		unsigned long capacity;
+>>  		struct read_capacity_data readCapacityData;
+>> +		u32 capacity;
 > 
-> Fixes: a7cff92f0635 ("usb: typec: USB Power Delivery helpers for ports and partners")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Kyle Tso <kyletso@google.com>
+> This is a bit peculiar.  Why bother to change the type of the capacity 
+> variable without also changing the types of lba and blockCount at the 
+> start of the routine?
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+   The resason is simple: Svace didn't complain about those. I'll fix
+them up in v2 if you;re not opposed to this patch...
 
-> ---
->  drivers/usb/typec/class.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-> index 389c7f0b8d93..9610e647a8d4 100644
-> --- a/drivers/usb/typec/class.c
-> +++ b/drivers/usb/typec/class.c
-> @@ -1310,6 +1310,7 @@ static ssize_t select_usb_power_delivery_store(struct device *dev,
->  {
->  	struct typec_port *port = to_typec_port(dev);
->  	struct usb_power_delivery *pd;
-> +	int ret;
->  
->  	if (!port->ops || !port->ops->pd_set)
->  		return -EOPNOTSUPP;
-> @@ -1318,7 +1319,11 @@ static ssize_t select_usb_power_delivery_store(struct device *dev,
->  	if (!pd)
->  		return -EINVAL;
->  
-> -	return port->ops->pd_set(port, pd);
-> +	ret = port->ops->pd_set(port, pd);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return size;
->  }
->  
->  static ssize_t select_usb_power_delivery_show(struct device *dev,
-> -- 
-> 2.44.0.291.gc1ea87d7ee-goog
+> Alan Stern
 
--- 
-heikki
+MBR, Sergey
 
