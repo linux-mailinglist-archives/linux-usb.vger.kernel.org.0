@@ -1,332 +1,349 @@
-Return-Path: <linux-usb+bounces-8179-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8180-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7E718871DF
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Mar 2024 18:26:35 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4348887209
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Mar 2024 18:43:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 007DC1C22579
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Mar 2024 17:26:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 38CE32829F1
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Mar 2024 17:43:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 203D25FBAC;
-	Fri, 22 Mar 2024 17:26:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 320845FDAE;
+	Fri, 22 Mar 2024 17:43:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=marvell.com header.i=@marvell.com header.b="or+twNsX"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 062F15FB86
-	for <linux-usb@vger.kernel.org>; Fri, 22 Mar 2024 17:26:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.70
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711128387; cv=none; b=eq8vES6szlLCqxol1GVdp66T+9ExmQ6DJPgpoXSaMt5SjFICOWUBIWSGzios7IzUOWKGOMQ/azOEee7cggxFy1ryigjR4mbIkRRpgPbNdawfzpBh7P/jTwTTS01C2WQGuyFSorQPvKHgDm/MZQKmcCPd/Z6LwNOMFup088n2D4k=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711128387; c=relaxed/simple;
-	bh=2CKlv4+T3vj39SBEUKoS2DPuXIpvy/3FoZqU2TjnnR0=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=SJi5XVqbbGvvs8yWHZX/E9QrbI/FUmKLqtoo0Hps/BXEWqYcBfNINTR70U15pIOZvHnPLq4Pk012ZXdo7E+epMCZdQDB2JzakrdI3aelgT5H9tUza9mN/ZpoqlTNYUApJQTYf4tRB84XJ9dLh62R/U0YuDUsQnKT4ovEze5dP4k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f70.google.com with SMTP id ca18e2360f4ac-7cbf2ff0e33so239720239f.1
-        for <linux-usb@vger.kernel.org>; Fri, 22 Mar 2024 10:26:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711128385; x=1711733185;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XYXZlVsCre4i8XQwEHc1ovgUMqljeJWzH2iHLGCbKkY=;
-        b=ClCnSQUJrZ3GF+QH3+GimrO9pg+GEVNLR6unfjs2z2viQdaikJPK/ZPXFJNNfRV2Rr
-         tWU941t4HBN8kpd6IeYkIwys4vweykjFl01/ygOpeBF42EBd1eP8Z2G/8DWzNwzPZtFW
-         lHSKdcIcYpvK90BAXu3rtigAmhYUOoBYOb4N3vXevG1lUCQs1LMtHez0TaOSzrA9ls6l
-         ENusIvrQyggo7mNm+AP8A5pywm++ggI4SM82O0YjBxEcz4pEhqdmuMv6i3Z0JeoNXj0B
-         FeYNrbsZ4/s6KC6UFYYMc+9WmfUweIgfUqw3xXC8ooEXP54MDPLCttuDALFd+GzSYnv5
-         v0jw==
-X-Forwarded-Encrypted: i=1; AJvYcCUyntr0NrSxStyxmlyS357xade+8YI2sUVh4o0LKe7lJfuovaEayYfKou2Rm3P3TtVrTfyUKVvVTPdZIx4/ScqNsN/6ojeWZ04g
-X-Gm-Message-State: AOJu0YyhbbQM5dBCCbJvauTqQ5OuFNSuayJlO6k7+P4K1SujMQQ+foKq
-	SCLQq/cz0w9Wcjc7o+ynRMTMXEw4OM+A+iboUCRAFaLIndY91i17Mv7vLD37kx5rRuuK6uIiPGi
-	JVfvU1g5knY4acApTOFdp819jIx64FEeiAzsZxIYSwVQzcEulhsPOqgg=
-X-Google-Smtp-Source: AGHT+IFOucJOm6usN4h7L1CkochZx0y/BKfEredQ9/vq/XXYBFE/enVConp/yiYTk0xOrFq3UZsVQKctNJO2OIuC9iVgtJa40aIR
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF0035FB86;
+	Fri, 22 Mar 2024 17:43:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=67.231.148.174
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1711129418; cv=fail; b=GDokVvkPz1AVvdZFmLnXUCCoatQXERruw2N/WR6wsh7RJsA/6i4+e5Xyn7Fofe2SeMubeE+KdPbCr4luFB9KFtUV1zpwQa7hkCD+t8D641i0rOeqywRbqJL4eFO9RipIvS2IqJbq/P54j6cVMtcEgfMWtJU/8rXa3wLVqCoZ9PY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1711129418; c=relaxed/simple;
+	bh=bObKwJ3CLPnEjJWlEcSgXEThOUQtqdSdOfXIXQBBtLQ=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=r/Ti3Bs2gWcA17H3jwc01NbpRdjbkdMNzmRqzRmGLZcSNDQwJrswpNOAV2FqH6zQD66vonyG99l3EvGF+pPtAapIgctcQ49+YReamSjso/5mGD2u83I66BG8pFU7nVBFCM6Ut8J/YKAD/rLkNePuhys7TxfPYoMqhlZbvzoxsWw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (1024-bit key) header.d=marvell.com header.i=@marvell.com header.b=or+twNsX; arc=fail smtp.client-ip=67.231.148.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+	by mx0a-0016f401.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 42ME6Mt7019977;
+	Fri, 22 Mar 2024 10:43:15 -0700
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2101.outbound.protection.outlook.com [104.47.55.101])
+	by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3x0ybuavu4-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 22 Mar 2024 10:43:14 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=njgqBCO434ScqJiv4NgeRsbczla4o96gFU5ReLcw8/kDqjR9old8anzP1sWZZfh51+Bna5LRnlbP3lqynvkfCkGP3iRh1B817rLEcPgMIur8oycpoBhwPy4mFzBSa2qCWQGL9cPlUCjl56JyT4M8qJoMCMdeCmZJmLuHLVODqnMuHZ38pa4NdrXjcnca3efJBSnVpIZmQMIB12jkCItOtV+Z5xhrb1SU6Dzdyf87KL9un1LCRdwvdwZ7Ynfc7l5k9X4C4LmaNEVi+g2WtH5q8fOpBSoAG9gydWcF4usIlKCPx9fuelFOwtQk8uC4JPtxAJxP8rkU/VTveFIXDdkPYA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=TlI1ztqwpjXnS5kLB8Q3ZWCOTlZAl/QUAS5Y8DVr5VM=;
+ b=Jcj1hU87zFkWVX07xYmSLG8Jna12g4FoT7VX1CHQgDB7mRnKAGXmNRWG3BtDeVNoDrB6vMa4/b2FM4kjSGtKX7uqAiK4TYGKv1c/fnQYO4X0lE/xkfDrgNAsRbnaOqXwyh4VOi98ajhkZwz0IGJMI+To58MFYMke3OIglQUdEueBf2QqWCEg3ZflFr8aDliwel2z2r3FsXWCWlaeKuNF0c2vkg5sa5jULpQyQi2E7H6vva/BtBgtsWl0Py2yE9V03GLbUh214ecgmACoYEUpvjZEtvCz8Gm/XtUGNP+8nc1UyOd7XYqYb6hG44bKAbjgBmcSCNSTLuc/ROZw7xV6jw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=marvell.com; dmarc=pass action=none header.from=marvell.com;
+ dkim=pass header.d=marvell.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=TlI1ztqwpjXnS5kLB8Q3ZWCOTlZAl/QUAS5Y8DVr5VM=;
+ b=or+twNsXaaJnPuH7YDhqkbKlD5Ma0TciFijo43EskTFzYPILl1oe4+xMbRT1AO87fnrmlEyHPXPZAraozadellXYWjMkg6xAGH/RxKnjPrjPpeQKFvdUMfADXeGLLxSEdFswFZssmMhEWD/+shBHA3jt4B9ArSBGNtK+K2P+Gy0=
+Received: from SA1PR18MB4709.namprd18.prod.outlook.com (2603:10b6:806:1d8::10)
+ by SA1PR18MB5994.namprd18.prod.outlook.com (2603:10b6:806:3e3::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7386.34; Fri, 22 Mar
+ 2024 17:43:12 +0000
+Received: from SA1PR18MB4709.namprd18.prod.outlook.com
+ ([fe80::ebe0:68b0:1b37:b100]) by SA1PR18MB4709.namprd18.prod.outlook.com
+ ([fe80::ebe0:68b0:1b37:b100%5]) with mapi id 15.20.7386.031; Fri, 22 Mar 2024
+ 17:43:12 +0000
+From: Sai Krishna Gajula <saikrishnag@marvell.com>
+To: Oliver Neukum <oneukum@suse.com>,
+        "davem@davemloft.net"
+	<davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC: "syzbot+9665bf55b1c828bbcd8a@syzkaller.appspotmail.com"
+	<syzbot+9665bf55b1c828bbcd8a@syzkaller.appspotmail.com>
+Subject: RE:  [PATCH net-next] usbnet: fix cyclical race on disconnect with
+ work queue
+Thread-Topic: [PATCH net-next] usbnet: fix cyclical race on disconnect with
+ work queue
+Thread-Index: AQHafIBp1dqMXcvK9kC5zLoffE3WoA==
+Date: Fri, 22 Mar 2024 17:43:12 +0000
+Message-ID: 
+ <SA1PR18MB470955BBB332D3A9F9A6F247A0312@SA1PR18MB4709.namprd18.prod.outlook.com>
+References: <20240321124758.6302-1-oneukum@suse.com>
+In-Reply-To: <20240321124758.6302-1-oneukum@suse.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SA1PR18MB4709:EE_|SA1PR18MB5994:EE_
+x-ms-office365-filtering-correlation-id: 881dd50b-085f-4afc-9124-08dc4a978be5
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 
+ svLRM3LA7Mxxhy8didAP9vqCHHSOh2g5FGy3oKpZF+oBlp7ag6D08VXbm7yNt7O1GvC6V1Fl9sWDErFYlTX+tMNzKmaeufteWbiNU6FhK2E2GCf94FIHW/wB8gEY46rMWvI8+GP1pYHnb41gwLOXPQqYCoZr4un2gLOIheTMBUR7SVSYOygcz+xY7RlOrcRT4wRxu+Ypjo6j4hMrqVPMJvRaqTV1Yjw+zcqfU4ln4sa59tCvBL3/531YPu5zIO9nBJGTXOZBN+VuwMNg226hr5ad7sA0jWipHiyBdN465JOo7Dbse72JMUloUu8pFbNBMdrxATndHF2KAe2l1Fco2f4fzGKfMQkM+4yvRjD7RUxFj8EpA88Ib7Hbg79eoghhvteFmF0WWlVw0EHfNOxf2RJJu7SzKuKhL/Sel4e1UJH0qr8wxW0WouC2Dyg+bypE+9Uy/BR7cRBdWdlQiiISQJ3qPug7+ejW7qXty2yuMKzSRYm85Bm3DmMFPnGxacixV6wB+mqKhQtgG4nDcJX2Y5ZGyhugJGORYKnjzd1YiqOljvvI0FiX7VcGtM4bfCy2m9KI12lq2lA9DLuVPgTN+MiOFIHXb2xUAJP0KA8JfeGxFltiXSF3GCsPnLCDhpjzH4S40dJZLcz8/5w4aj+Yn+bruz0fUGEQ/f0VOEoJrraWG6kflizkQJpAyZoYFt/QcS7n/MLbFQieZMztzKryut5RDg+IbvwQcOKl41BLnyM=
+x-forefront-antispam-report: 
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR18MB4709.namprd18.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(1800799015)(376005)(366007)(38070700009);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: 
+ =?us-ascii?Q?sKcKHbbTmwPGb2HZ1u6sPqsh34wFGNvzbGd2DuKeOico+NWMDyNJTRKMRq2w?=
+ =?us-ascii?Q?QYZ5r9qeRlPHg0oypLfu8MO+3Ltsg/zSDEpeYRr0vGqGSN/ux82E9s2Gavrs?=
+ =?us-ascii?Q?NywtjQ2fCH+w6XXnW1bxuCtVWqAB4yo4Oj/Mpdvzx0cJgfKVfFy+/qYMTdmT?=
+ =?us-ascii?Q?lDgOX5WBC1UnUpiColVQjnDj+ga10r2poR5BSMVws0BdqRZf8tv+W1qreyLQ?=
+ =?us-ascii?Q?uT4v7Ze9S9B5bpwCMqLggKvWgaS/bDDltrUe4aQyv/vgRt7iFTCAZ4pK1l+v?=
+ =?us-ascii?Q?P+CEF0pJuSK1faZaTwsY2AQ03uCZ0lrzKKgnzUXBid7Le9EY5CSfmPQrOqdM?=
+ =?us-ascii?Q?RqxoubHrl7Ww7IamzkQolr3xQKJfz5R2AtOR4rEYIw1bmWdTxUjAXNoL6C1D?=
+ =?us-ascii?Q?iqye0oUVhhFnMBpwSBYbn98Y/25eoUvtSPyXGR+YMRorlZiGv7xzsz199Xuh?=
+ =?us-ascii?Q?38gZtJimsfOx9JWYV45U4jBAD4+Y9A3Fosg1qYs8D7bSceU6ph+c1O9S4GVE?=
+ =?us-ascii?Q?V5DMtjfnVyLuRTz583OUK0rpzGgtTc6t6pv8SM7+7+CfLz+gTC0brCfS0qJh?=
+ =?us-ascii?Q?iMKWCI6UM391FwURzOKGElJXkFp4Y3d87x3todWtYHUL/OcCFvH7TwvJLKVT?=
+ =?us-ascii?Q?eYfPst6V/HnxiHM3Kif7lgQu/P1I7/GgnofiXGCiUa9lS+7DIPNzgUPDtmAe?=
+ =?us-ascii?Q?eLzEQU8tTzoVyfamu4EP/lkC3KxdsrvD0hOJccN4Ket7rQ8DWu3QV1h/G8QS?=
+ =?us-ascii?Q?QUmp04UYALAm7+EoKBzotrMOL6Pw3iHQAlGg71A7JoCtEtOjJ/qHFwiJDrxW?=
+ =?us-ascii?Q?HiEyiSyh/Ll5AuGaPd0uvxQVlmMfoQCSvVVNo5hi9XFzwLaSQy+RuJu7THpM?=
+ =?us-ascii?Q?ziOYXjZ2yssZUuCtZnsgrK5qcWXqbx6SHHtVtTMXjr5zvoWcwYNOmFaMGoo9?=
+ =?us-ascii?Q?CRDjJxKBkT+Ct1+epbH9i/q4zYMNZkcnGDCGieP0adxSpfbrzYBKiDCoK0Uv?=
+ =?us-ascii?Q?x/CMB1wA0GE+7NL39qTZXDwwtFwJcIOeqZ68QeBbIc7z0WDMseFYOmozf8L0?=
+ =?us-ascii?Q?7Fw/5KA5ESzshYMQYdbrhkAOkP9wPmkUpONuikIoN6Bvx3a7H9+uE4uO+TxO?=
+ =?us-ascii?Q?t8efTMXgC5ijBGA8gXcr7VWNwydFiNNJbQnxeisiCbe+KcGkkeeDFzukmZNw?=
+ =?us-ascii?Q?5r4kPYhgrQJtQwNPJU+Is0qOmBWInJcPD9JWrjBI2WXB014qJH/tico7EL7T?=
+ =?us-ascii?Q?R52Y1z4SiR+IgUHx9DP7Z9l12L+f048miQnUUNIcOTgNmpTYTIVgk5TDISQt?=
+ =?us-ascii?Q?tmvUpLuKtQqAQSz3wTnr9opb3y5ei39USl9He0jKcQQik/4X6NkEsgWhcBNy?=
+ =?us-ascii?Q?UuBO/0VmpnTXiGoMrSySomIYuX+UeXcr5qPxpvoF8On35r4kXxgN5aWhcS+C?=
+ =?us-ascii?Q?3UJuzskYRo8KLiWUjqzsAvoUBk7jjCMVUgRKHC8yf8vmg92zVuR6L3RTz67j?=
+ =?us-ascii?Q?anjRJ7cQ1Xj0LIrkXcbubToqwyaCFb942DXW5TtjTF6jg7hu7q9SxxNGWQSM?=
+ =?us-ascii?Q?0jr8vSqPjTsDAWVv17eza8YxTwtu6CMtD6ti4Qy/?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:3001:b0:366:bcbd:ed9e with SMTP id
- bd1-20020a056e02300100b00366bcbded9emr1687ilb.3.1711128385159; Fri, 22 Mar
- 2024 10:26:25 -0700 (PDT)
-Date: Fri, 22 Mar 2024 10:26:25 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000090170a0614431f47@google.com>
-Subject: [syzbot] [usb?] KASAN: slab-use-after-free Read in
- __usb_hcd_giveback_urb (2)
-From: syzbot <syzbot+7f5e98b052c766f47f68@syzkaller.appspotmail.com>
-To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-
-Hello,
-
-syzbot found the following issue on:
-
-HEAD commit:    480e035fc4c7 Merge tag 'drm-next-2024-03-13' of https://gi..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=125789be180000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=1e5b814e91787669
-dashboard link: https://syzkaller.appspot.com/bug?extid=7f5e98b052c766f47f68
-compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/5f73b6ef963d/disk-480e035f.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/46c949396aad/vmlinux-480e035f.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/e3b4d0f5a5f8/bzImage-480e035f.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+7f5e98b052c766f47f68@syzkaller.appspotmail.com
-
-xpad 1-1:179.65: xpad_irq_in - usb_submit_urb failed with result -19
-xpad 1-1:179.65: xpad_irq_out - usb_submit_urb failed with result -19
-==================================================================
-BUG: KASAN: slab-use-after-free in register_lock_class+0x8d1/0x980 kernel/locking/lockdep.c:1333
-Read of size 1 at addr ffff88809222f091 by task syz-executor.1/5107
-
-CPU: 1 PID: 5107 Comm: syz-executor.1 Not tainted 6.8.0-syzkaller-08073-g480e035fc4c7 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/29/2024
-Call Trace:
- <IRQ>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x241/0x360 lib/dump_stack.c:114
- print_address_description mm/kasan/report.c:377 [inline]
- print_report+0x169/0x550 mm/kasan/report.c:488
- kasan_report+0x143/0x180 mm/kasan/report.c:601
- register_lock_class+0x8d1/0x980 kernel/locking/lockdep.c:1333
- __lock_acquire+0xda/0x1fd0 kernel/locking/lockdep.c:5014
- lock_acquire+0x1e4/0x530 kernel/locking/lockdep.c:5754
- __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
- _raw_spin_lock_irqsave+0xd5/0x120 kernel/locking/spinlock.c:162
- __wake_up_common_lock+0x25/0x1e0 kernel/sched/wait.c:105
- __usb_hcd_giveback_urb+0x3ac/0x530 drivers/usb/core/hcd.c:1653
- dummy_timer+0x8aa/0x3220 drivers/usb/gadget/udc/dummy_hcd.c:1987
- call_timer_fn+0x17e/0x600 kernel/time/timer.c:1792
- expire_timers kernel/time/timer.c:1843 [inline]
- __run_timers kernel/time/timer.c:2408 [inline]
- __run_timer_base+0x66a/0x8e0 kernel/time/timer.c:2419
- run_timer_base kernel/time/timer.c:2428 [inline]
- run_timer_softirq+0xb7/0x170 kernel/time/timer.c:2438
- __do_softirq+0x2bc/0x943 kernel/softirq.c:554
- invoke_softirq kernel/softirq.c:428 [inline]
- __irq_exit_rcu+0xf2/0x1c0 kernel/softirq.c:633
- irq_exit_rcu+0x9/0x30 kernel/softirq.c:645
- instr_sysvec_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1043 [inline]
- sysvec_apic_timer_interrupt+0xa6/0xc0 arch/x86/kernel/apic/apic.c:1043
- </IRQ>
- <TASK>
- asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:702
-RIP: 0010:ptep_get include/linux/pgtable.h:291 [inline]
-RIP: 0010:copy_pte_range mm/memory.c:1075 [inline]
-RIP: 0010:copy_pmd_range mm/memory.c:1187 [inline]
-RIP: 0010:copy_pud_range mm/memory.c:1224 [inline]
-RIP: 0010:copy_p4d_range mm/memory.c:1248 [inline]
-RIP: 0010:copy_page_range+0x11c2/0x4240 mm/memory.c:1346
-Code: 00 e8 b2 45 b5 ff c7 44 24 3c 00 00 00 00 eb 09 89 5c 24 3c e8 9f 45 b5 ff 48 8b 5c 24 20 49 89 de 49 c1 ee 03 43 80 3c 2e 00 <74> 08 48 89 df e8 a4 94 18 00 48 8b 1b 48 8d bc 24 80 03 00 00 48
-RSP: 0018:ffffc9000441f400 EFLAGS: 00000246
-RAX: ffffffff81dfafb1 RBX: ffff888029b8d958 RCX: ffff88807966bc00
-RDX: 0000000000000000 RSI: 0000000000000018 RDI: 000000000000001f
-RBP: ffffc9000441f8b0 R08: ffffffff81dfae98 R09: 1ffffffff1f0e59d
-R10: dffffc0000000000 R11: fffffbfff1f0e59e R12: ffff88802c9bea00
-R13: dffffc0000000000 R14: 1ffff11005371b2b R15: 8000000085de3007
- dup_mmap kernel/fork.c:747 [inline]
- dup_mm kernel/fork.c:1687 [inline]
- copy_mm+0x12f5/0x21b0 kernel/fork.c:1736
- copy_process+0x187a/0x3df0 kernel/fork.c:2389
- kernel_clone+0x21e/0x8d0 kernel/fork.c:2796
- __do_sys_clone kernel/fork.c:2939 [inline]
- __se_sys_clone kernel/fork.c:2923 [inline]
- __x64_sys_clone+0x258/0x2a0 kernel/fork.c:2923
- do_syscall_64+0xfb/0x240
- entry_SYSCALL_64_after_hwframe+0x6d/0x75
-RIP: 0033:0x7f94a6c7add3
-Code: 1f 84 00 00 00 00 00 64 48 8b 04 25 10 00 00 00 45 31 c0 31 d2 31 f6 bf 11 00 20 01 4c 8d 90 d0 02 00 00 b8 38 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 35 89 c2 85 c0 75 2c 64 48 8b 04 25 10 00 00
-RSP: 002b:00007f94a6ecfc58 EFLAGS: 00000246 ORIG_RAX: 0000000000000038
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f94a6c7add3
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000001200011
-RBP: 0000000000000001 R08: 0000000000000000 R09: 0000000000000000
-R10: 000055556a081750 R11: 0000000000000246 R12: 0000000000000000
-R13: 0000000000000000 R14: 0000000000000001 R15: 0000000000000001
- </TASK>
-
-Allocated by task 7837:
- kasan_save_stack mm/kasan/common.c:47 [inline]
- kasan_save_track+0x3f/0x80 mm/kasan/common.c:68
- poison_kmalloc_redzone mm/kasan/common.c:370 [inline]
- __kasan_kmalloc+0x98/0xb0 mm/kasan/common.c:387
- kasan_kmalloc include/linux/kasan.h:211 [inline]
- kmalloc_trace+0x1db/0x360 mm/slub.c:3997
- kmalloc include/linux/slab.h:628 [inline]
- kzalloc include/linux/slab.h:749 [inline]
- xpad_probe+0x3c8/0x1b90 drivers/input/joystick/xpad.c:2013
- usb_probe_interface+0x5cb/0xb00 drivers/usb/core/driver.c:399
- really_probe+0x29e/0xc50 drivers/base/dd.c:658
- __driver_probe_device+0x1a2/0x3e0 drivers/base/dd.c:800
- driver_probe_device+0x50/0x430 drivers/base/dd.c:830
- __device_attach_driver+0x2d6/0x530 drivers/base/dd.c:958
- bus_for_each_drv+0x24e/0x2e0 drivers/base/bus.c:457
- __device_attach+0x333/0x520 drivers/base/dd.c:1030
- bus_probe_device+0x189/0x260 drivers/base/bus.c:532
- device_add+0x8ff/0xca0 drivers/base/core.c:3639
- usb_set_configuration+0x1976/0x1fb0 drivers/usb/core/message.c:2207
- usb_generic_driver_probe+0x88/0x140 drivers/usb/core/generic.c:254
- usb_probe_device+0x13e/0x2d0 drivers/usb/core/driver.c:294
- really_probe+0x29e/0xc50 drivers/base/dd.c:658
- __driver_probe_device+0x1a2/0x3e0 drivers/base/dd.c:800
- driver_probe_device+0x50/0x430 drivers/base/dd.c:830
- __device_attach_driver+0x2d6/0x530 drivers/base/dd.c:958
- bus_for_each_drv+0x24e/0x2e0 drivers/base/bus.c:457
- __device_attach+0x333/0x520 drivers/base/dd.c:1030
- bus_probe_device+0x189/0x260 drivers/base/bus.c:532
- device_add+0x8ff/0xca0 drivers/base/core.c:3639
- usb_new_device+0x104a/0x19a0 drivers/usb/core/hub.c:2614
- hub_port_connect drivers/usb/core/hub.c:5483 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5623 [inline]
- port_event drivers/usb/core/hub.c:5783 [inline]
- hub_event+0x2d13/0x50f0 drivers/usb/core/hub.c:5865
- process_one_work kernel/workqueue.c:3254 [inline]
- process_scheduled_works+0xa00/0x1770 kernel/workqueue.c:3335
- worker_thread+0x86d/0xd70 kernel/workqueue.c:3416
- kthread+0x2f0/0x390 kernel/kthread.c:388
- ret_from_fork+0x4b/0x80 arch/x86/kernel/process.c:147
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:243
-
-Freed by task 7828:
- kasan_save_stack mm/kasan/common.c:47 [inline]
- kasan_save_track+0x3f/0x80 mm/kasan/common.c:68
- kasan_save_free_info+0x40/0x50 mm/kasan/generic.c:579
- poison_slab_object+0xa6/0xe0 mm/kasan/common.c:240
- __kasan_slab_free+0x37/0x60 mm/kasan/common.c:256
- kasan_slab_free include/linux/kasan.h:184 [inline]
- slab_free_hook mm/slub.c:2106 [inline]
- slab_free mm/slub.c:4280 [inline]
- kfree+0x14a/0x380 mm/slub.c:4390
- xpad_disconnect+0x359/0x490 drivers/input/joystick/xpad.c:2194
- usb_unbind_interface+0x1d4/0x850 drivers/usb/core/driver.c:461
- device_remove drivers/base/dd.c:569 [inline]
- __device_release_driver drivers/base/dd.c:1272 [inline]
- device_release_driver_internal+0x503/0x7c0 drivers/base/dd.c:1295
- bus_remove_device+0x34f/0x420 drivers/base/bus.c:574
- device_del+0x581/0xa30 drivers/base/core.c:3828
- usb_disable_device+0x3bf/0x850 drivers/usb/core/message.c:1416
- usb_disconnect+0x340/0x950 drivers/usb/core/hub.c:2267
- hub_port_connect drivers/usb/core/hub.c:5323 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5623 [inline]
- port_event drivers/usb/core/hub.c:5783 [inline]
- hub_event+0x1e62/0x50f0 drivers/usb/core/hub.c:5865
- process_one_work kernel/workqueue.c:3254 [inline]
- process_scheduled_works+0xa00/0x1770 kernel/workqueue.c:3335
- worker_thread+0x86d/0xd70 kernel/workqueue.c:3416
- kthread+0x2f0/0x390 kernel/kthread.c:388
- ret_from_fork+0x4b/0x80 arch/x86/kernel/process.c:147
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:243
-
-The buggy address belongs to the object at ffff88809222f000
- which belongs to the cache kmalloc-1k of size 1024
-The buggy address is located 145 bytes inside of
- freed 1024-byte region [ffff88809222f000, ffff88809222f400)
-
-The buggy address belongs to the physical page:
-page:ffffea0002488a00 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x92228
-head:ffffea0002488a00 order:3 entire_mapcount:0 nr_pages_mapped:0 pincount:0
-flags: 0xfff00000000840(slab|head|node=0|zone=1|lastcpupid=0x7ff)
-page_type: 0xffffffff()
-raw: 00fff00000000840 ffff888014c41dc0 dead000000000100 dead000000000122
-raw: 0000000000000000 0000000000100010 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 3, migratetype Unmovable, gfp_mask 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 5104, tgid 5104 (syz-executor.0), ts 131508902879, free_ts 0
- set_page_owner include/linux/page_owner.h:31 [inline]
- post_alloc_hook+0x1ea/0x210 mm/page_alloc.c:1533
- prep_new_page mm/page_alloc.c:1540 [inline]
- get_page_from_freelist+0x33ea/0x3580 mm/page_alloc.c:3311
- __alloc_pages+0x256/0x680 mm/page_alloc.c:4569
- __alloc_pages_node include/linux/gfp.h:238 [inline]
- alloc_pages_node include/linux/gfp.h:261 [inline]
- alloc_slab_page+0x5f/0x160 mm/slub.c:2175
- allocate_slab mm/slub.c:2338 [inline]
- new_slab+0x84/0x2f0 mm/slub.c:2391
- ___slab_alloc+0xc73/0x1260 mm/slub.c:3525
- __slab_alloc mm/slub.c:3610 [inline]
- __slab_alloc_node mm/slub.c:3663 [inline]
- slab_alloc_node mm/slub.c:3835 [inline]
- __do_kmalloc_node mm/slub.c:3965 [inline]
- __kmalloc_node+0x2db/0x4e0 mm/slub.c:3973
- kmalloc_node include/linux/slab.h:648 [inline]
- kzalloc_node include/linux/slab.h:760 [inline]
- qdisc_alloc+0x95/0x950 net/sched/sch_generic.c:941
- qdisc_create_dflt+0x62/0x490 net/sched/sch_generic.c:999
- attach_one_default_qdisc net/sched/sch_generic.c:1164 [inline]
- netdev_for_each_tx_queue include/linux/netdevice.h:2500 [inline]
- attach_default_qdiscs net/sched/sch_generic.c:1182 [inline]
- dev_activate+0x3c0/0x1240 net/sched/sch_generic.c:1241
- __dev_open+0x352/0x450 net/core/dev.c:1439
- __dev_change_flags+0x1e2/0x6f0 net/core/dev.c:8683
- dev_change_flags+0x8b/0x1a0 net/core/dev.c:8755
- do_setlink+0xccd/0x41f0 net/core/rtnetlink.c:2884
- __rtnl_newlink net/core/rtnetlink.c:3680 [inline]
- rtnl_newlink+0x180b/0x20a0 net/core/rtnetlink.c:3727
- rtnetlink_rcv_msg+0x89b/0x10d0 net/core/rtnetlink.c:6595
-page_owner free stack trace missing
-
-Memory state around the buggy address:
- ffff88809222ef80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
- ffff88809222f000: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->ffff88809222f080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                         ^
- ffff88809222f100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff88809222f180: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
-----------------
-Code disassembly (best guess):
-   0:	00 e8                	add    %ch,%al
-   2:	b2 45                	mov    $0x45,%dl
-   4:	b5 ff                	mov    $0xff,%ch
-   6:	c7 44 24 3c 00 00 00 	movl   $0x0,0x3c(%rsp)
-   d:	00
-   e:	eb 09                	jmp    0x19
-  10:	89 5c 24 3c          	mov    %ebx,0x3c(%rsp)
-  14:	e8 9f 45 b5 ff       	call   0xffb545b8
-  19:	48 8b 5c 24 20       	mov    0x20(%rsp),%rbx
-  1e:	49 89 de             	mov    %rbx,%r14
-  21:	49 c1 ee 03          	shr    $0x3,%r14
-  25:	43 80 3c 2e 00       	cmpb   $0x0,(%r14,%r13,1)
-* 2a:	74 08                	je     0x34 <-- trapping instruction
-  2c:	48 89 df             	mov    %rbx,%rdi
-  2f:	e8 a4 94 18 00       	call   0x1894d8
-  34:	48 8b 1b             	mov    (%rbx),%rbx
-  37:	48 8d bc 24 80 03 00 	lea    0x380(%rsp),%rdi
-  3e:	00
-  3f:	48                   	rex.W
+X-OriginatorOrg: marvell.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR18MB4709.namprd18.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 881dd50b-085f-4afc-9124-08dc4a978be5
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Mar 2024 17:43:12.7229
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: zZ59++4ndPBVD+WiyuinZc0gH+cF9bsON3i0nykYCJscwXevvshbrwPmc0u9voeAjUClYjGM8lFr2ElkUNonHA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR18MB5994
+X-Proofpoint-GUID: 5MOq8SKb9LkO3prPFPHgEf3QCA8V7NjH
+X-Proofpoint-ORIG-GUID: 5MOq8SKb9LkO3prPFPHgEf3QCA8V7NjH
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-03-22_10,2024-03-21_02,2023-05-22_02
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+> -----Original Message-----
+> From: Oliver Neukum <oneukum@suse.com>
+> Sent: Thursday, March 21, 2024 6:17 PM
+> To: davem@davemloft.net; edumazet@google.com; kuba@kernel.org;
+> pabeni@redhat.com; netdev@vger.kernel.org; linux-usb@vger.kernel.org;
+> linux-kernel@vger.kernel.org
+> Cc: Oliver Neukum <oneukum@suse.com>;
+> syzbot+9665bf55b1c828bbcd8a@syzkaller.appspotmail.com
+> Subject: [PATCH net-next] usbnet: fix cyclical race on disconnect
+> with work queue
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+This patch seems to be a fix, in that case the subject need to be with [PAT=
+CH net]
 
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
+>=20
+> The work can submit URBs and the URBs can schedule the work.
+> This cycle needs to be broken, when a device is to be stopped.
+> Use a flag to do so.
+>=20
+> Fixes: f29fc259976e9 ("[PATCH] USB: usbnet (1/9) clean up framing")
 
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
+Please use correct Fixes: style 'Fixes: <12 chars of sha1> ("<title line>")=
+' - ie: 'Fixes: f29fc259976e ("[PATCH] USB: usbnet (1/9) clean up framing")=
+'=20
 
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
+> Reported-by: syzbot+9665bf55b1c828bbcd8a@syzkaller.appspotmail.com
+> Signed-off-by: Oliver Neukum <oneukum@suse.com>
+> ---
+>  drivers/net/usb/usbnet.c   | 37 ++++++++++++++++++++++++++++---------
+>  include/linux/usb/usbnet.h | 18 ++++++++++++++++++
+>  2 files changed, 46 insertions(+), 9 deletions(-)
+>=20
+> diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c index
+> e84efa661589..422d91635045 100644
+> --- a/drivers/net/usb/usbnet.c
+> +++ b/drivers/net/usb/usbnet.c
+> @@ -467,10 +467,12 @@ static enum skb_state defer_bh(struct usbnet *dev,
+> struct sk_buff *skb,  void usbnet_defer_kevent (struct usbnet *dev, int w=
+ork)
 
-If you want to undo deduplication, reply with:
-#syz undup
+space prohibited between function name and open parenthesis '('
+
+> {
+>  	set_bit (work, &dev->flags);
+> -	if (!schedule_work (&dev->kevent))
+> -		netdev_dbg(dev->net, "kevent %s may have been
+> dropped\n", usbnet_event_names[work]);
+> -	else
+> -		netdev_dbg(dev->net, "kevent %s scheduled\n",
+> usbnet_event_names[work]);
+> +	if (!usbnet_going_away(dev)) {
+> +		if (!schedule_work (&dev->kevent))
+> +			netdev_dbg(dev->net, "kevent %s may have been
+> dropped\n", usbnet_event_names[work]);
+> +		else
+> +			netdev_dbg(dev->net, "kevent %s scheduled\n",
+> usbnet_event_names[work]);
+> +	}
+>  }
+>  EXPORT_SYMBOL_GPL(usbnet_defer_kevent);
+>=20
+> @@ -538,7 +540,8 @@ static int rx_submit (struct usbnet *dev, struct urb
+> *urb, gfp_t flags)
+
+space prohibited between function name and open parenthesis '(', where ever=
+ applicable.
+
+>  			tasklet_schedule (&dev->bh);
+>  			break;
+>  		case 0:
+> -			__usbnet_queue_skb(&dev->rxq, skb, rx_start);
+> +			if (!usbnet_going_away(dev))
+> +				__usbnet_queue_skb(&dev->rxq, skb,
+> rx_start);
+>  		}
+>  	} else {
+>  		netif_dbg(dev, ifdown, dev->net, "rx: stopped\n"); @@ -849,6
+> +852,16 @@ int usbnet_stop (struct net_device *net)
+>  	del_timer_sync (&dev->delay);
+>  	tasklet_kill (&dev->bh);
+>  	cancel_work_sync(&dev->kevent);
+> +
+> +	/*
+> +	 * we have cyclic dependencies. Those calls are needed
+> +	 * to break a cycle. We cannot fall into the gaps because
+> +	 * we have a flag
+> +	 */
+
+Networking block comments don't use an empty /* line, use /* Comment...
+
+> +	tasklet_kill (&dev->bh);
+> +	del_timer_sync (&dev->delay);
+> +	cancel_work_sync(&dev->kevent);
+> +
+>  	if (!pm)
+>  		usb_autopm_put_interface(dev->intf);
+>=20
+> @@ -1174,7 +1187,8 @@ usbnet_deferred_kevent (struct work_struct *work)
+>  					   status);
+>  		} else {
+>  			clear_bit (EVENT_RX_HALT, &dev->flags);
+> -			tasklet_schedule (&dev->bh);
+> +			if (!usbnet_going_away(dev))
+> +				tasklet_schedule (&dev->bh);
+>  		}
+>  	}
+>=20
+> @@ -1196,10 +1210,13 @@ usbnet_deferred_kevent (struct work_struct
+> *work)
+>  			}
+>  			if (rx_submit (dev, urb, GFP_KERNEL) =3D=3D -ENOLINK)
+>  				resched =3D 0;
+> -			usb_autopm_put_interface(dev->intf);
+>  fail_lowmem:
+> -			if (resched)
+> +			usb_autopm_put_interface(dev->intf);
+> +			if (resched) {
+> +				set_bit (EVENT_RX_MEMORY, &dev->flags);
+> +
+>  				tasklet_schedule (&dev->bh);
+> +			}
+>  		}
+>  	}
+>=20
+> @@ -1212,13 +1229,13 @@ usbnet_deferred_kevent (struct work_struct
+> *work)
+>  		if (status < 0)
+>  			goto skip_reset;
+>  		if(info->link_reset && (retval =3D info->link_reset(dev)) < 0) {
+> -			usb_autopm_put_interface(dev->intf);
+>  skip_reset:
+>  			netdev_info(dev->net, "link reset failed (%d) usbnet
+> usb-%s-%s, %s\n",
+>  				    retval,
+>  				    dev->udev->bus->bus_name,
+>  				    dev->udev->devpath,
+>  				    info->description);
+> +			usb_autopm_put_interface(dev->intf);
+>  		} else {
+>  			usb_autopm_put_interface(dev->intf);
+>  		}
+> @@ -1562,6 +1579,7 @@ static void usbnet_bh (struct timer_list *t)
+>  	} else if (netif_running (dev->net) &&
+>  		   netif_device_present (dev->net) &&
+>  		   netif_carrier_ok(dev->net) &&
+> +		   !usbnet_going_away(dev) &&
+>  		   !timer_pending(&dev->delay) &&
+>  		   !test_bit(EVENT_RX_PAUSED, &dev->flags) &&
+>  		   !test_bit(EVENT_RX_HALT, &dev->flags)) { @@ -1609,6
+> +1627,7 @@ void usbnet_disconnect (struct usb_interface *intf)
+>  	usb_set_intfdata(intf, NULL);
+>  	if (!dev)
+>  		return;
+> +	usbnet_mark_going_away(dev);
+>=20
+>  	xdev =3D interface_to_usbdev (intf);
+>=20
+> diff --git a/include/linux/usb/usbnet.h b/include/linux/usb/usbnet.h inde=
+x
+> 9f08a584d707..d26599faab33 100644
+> --- a/include/linux/usb/usbnet.h
+> +++ b/include/linux/usb/usbnet.h
+> @@ -76,8 +76,26 @@ struct usbnet {
+>  #		define EVENT_LINK_CHANGE	11
+>  #		define EVENT_SET_RX_MODE	12
+>  #		define EVENT_NO_IP_ALIGN	13
+> +/*
+> + * this one is special, as it indicates that the device is going away
+> + * there are cyclic dependencies between tasklet, timer and bh
+> + * that must be broken
+> + */
+
+Networking block comments don't use an empty /* line, use /* Comment...
+
+> +#		define EVENT_UNPLUG		31
+>  };
+>=20
+> +static inline bool usbnet_going_away(struct usbnet *ubn) {
+> +	smp_mb__before_atomic();
+> +	return test_bit(EVENT_UNPLUG, &ubn->flags); }
+> +
+> +static inline void usbnet_mark_going_away(struct usbnet *ubn) {
+> +	set_bit(EVENT_UNPLUG, &ubn->flags);
+> +	smp_mb__after_atomic();
+> +}
+> +
+>  static inline struct usb_driver *driver_of(struct usb_interface *intf)  =
+{
+>  	return to_usb_driver(intf->dev.driver);
+> --
+> 2.44.0
+>=20
+
 
