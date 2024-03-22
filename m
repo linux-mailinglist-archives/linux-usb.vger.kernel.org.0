@@ -1,45 +1,51 @@
-Return-Path: <linux-usb+bounces-8172-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8173-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2403B886EC2
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Mar 2024 15:38:41 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 61403886ECE
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Mar 2024 15:40:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 65B7EB20F22
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Mar 2024 14:38:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 847F71C2253F
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Mar 2024 14:40:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8572747F7F;
-	Fri, 22 Mar 2024 14:38:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 836B147F5D;
+	Fri, 22 Mar 2024 14:40:49 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id 4D7C7433B3
-	for <linux-usb@vger.kernel.org>; Fri, 22 Mar 2024 14:38:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with SMTP id 849EC46420
+	for <linux-usb@vger.kernel.org>; Fri, 22 Mar 2024 14:40:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711118312; cv=none; b=XZWVbpzLkrNmguf0JVPUWt85URp3IaOpQwV2sgra/E2WaFoLiUuk6kK9WyRJRAMJHTe2H7WRM3KqKgmqqELXX+3NDtBtYdQMfa3qOfV7H/cEsRFzRQBZETgrTQkNDA2qE0UzdRojYJw9tHWH/An0/t/PoDkTYA6P1cnoHyqYfZo=
+	t=1711118449; cv=none; b=b1/JT7G7UB1ZLNUWqTdeCzmV+qa7pfdvbmVtYJSz3KtPDg4WR+HBUVBBO1GssfvTLVQFfjVVZFeV03UoCRkmMjB5wMuRx1LTJssYeBj+ZUK1BSm7C8K2OsmraR4/ghGrbsvjdmCeHHYXaZ/oRtfA7954RiTkOhwsrVnFKSkvC88=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711118312; c=relaxed/simple;
-	bh=3r7v095ouw39d4PdKpuAInEYq5heJvH/c8twfhfxMcc=;
+	s=arc-20240116; t=1711118449; c=relaxed/simple;
+	bh=VmvTwIK00BUsWSa6IRrE06C6cD4KWMsHDZSl8m19mcU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uYIwOzZn+WmmNAHiEXNDdPa8y0B/w2wPmzfP3Z5cef4tDOTRl9Nzh2eSRKwYpliivcvQQyFNjF/PWyR9CGM1CtJz7T6ehXBRG+ZlOzZUPIIqd4Ti8y7A2R6ZSZRXOqPmrqpQUUJyw01LWtI2ZpEkut1M4V6WgXYI2X37XDUEac0=
+	 Content-Type:Content-Disposition:In-Reply-To; b=sVOY8Aib6vBxdAE4GgT8x6k6ZH+wlj4VgdArpFpQE0nINPUQcIK/wD0WpKOUbNefW7StXwJnkwkUqL7bB41Je9MkN0qk4it6zPpWKkcHFpbCVanroNvgslectPX7BoCJRmwMB4m5DWGzUnjhe7hLJYoyQPH191zOsVkCHI1LmBA=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
-Received: (qmail 761017 invoked by uid 1000); 22 Mar 2024 10:38:26 -0400
-Date: Fri, 22 Mar 2024 10:38:26 -0400
+Received: (qmail 761098 invoked by uid 1000); 22 Mar 2024 10:40:46 -0400
+Date: Fri, 22 Mar 2024 10:40:46 -0400
 From: Alan Stern <stern@rowland.harvard.edu>
-To: Sergey Shtylyov <s.shtylyov@omp.ru>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-  linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
-  lvc-project@linuxtesting.org
-Subject: Re: [PATCH] usb: storage: isd200: fix sloppy typing in
- isd200_scsi_to_ata()
-Message-ID: <26d483d0-a89c-4c33-99f2-455f0f13e6e5@rowland.harvard.edu>
-References: <e8c20e3c-3cbe-b5c1-f673-0a7f22566879@omp.ru>
- <4e13319d-30a8-4274-bfa0-36d915b1e1ec@rowland.harvard.edu>
- <6425997a-669b-919d-af44-880a7ce28ffc@omp.ru>
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: Ricardo Ribalda <ribalda@chromium.org>, Oliver Neukum <oneukum@suse.com>,
+  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+  Mauro Carvalho Chehab <mchehab@kernel.org>, linux-usb@vger.kernel.org,
+  linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+  stable@vger.kernel.org
+Subject: Re: [PATCH v4] media: ucvideo: Add quirk for Logitech Rally Bar
+Message-ID: <588d2e1f-1cb5-4868-9160-11a36e8640d6@rowland.harvard.edu>
+References: <20240108-rallybar-v4-1-a7450641e41b@chromium.org>
+ <20240204105227.GB25334@pendragon.ideasonboard.com>
+ <ca89eb86-a566-422c-9448-d8d5254d54b8@suse.com>
+ <6aade777-d97c-4c65-b542-14ce5b39abb6@rowland.harvard.edu>
+ <20240213104725.GC5012@pendragon.ideasonboard.com>
+ <CANiDSCvqEkzD_-pUExT2Aci9t_tfFPWusnjST5iF-5N9yiob4g@mail.gmail.com>
+ <CANiDSCsqER=3OqzxRKYR_vs4as5aO1bfSXmFJtNmzw1kznd_wQ@mail.gmail.com>
+ <20240322115734.GB31979@pendragon.ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -48,56 +54,79 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6425997a-669b-919d-af44-880a7ce28ffc@omp.ru>
+In-Reply-To: <20240322115734.GB31979@pendragon.ideasonboard.com>
 
-On Fri, Mar 22, 2024 at 12:49:23PM +0300, Sergey Shtylyov wrote:
-> On 3/22/24 3:57 AM, Alan Stern wrote:
-> [...]
+On Fri, Mar 22, 2024 at 01:57:34PM +0200, Laurent Pinchart wrote:
+> On Thu, Feb 29, 2024 at 05:57:38PM +0100, Ricardo Ribalda wrote:
+> > Oliver, friendly ping
 > 
-> >> When isd200_scsi_to_ata() emulates the SCSI READ CAPACITY command, the
-> >> capacity local variable is needlessly typed as *unsigned long* -- which
-> >> is 32-bit type on the 32-bit arches and 64-bit type on the 64-bit arches;
-> >> this variable's value should always fit into 32 bits for both the ATA and
-> >> the SCSI capacity data...
-> >>
-> >> While at it, arrange the local variable declarations in the reverse Xmas
-> >> tree order...
-> >>
-> >> Found by Linux Verification Center (linuxtesting.org) with the SVACE static
-> >> analysis tool.
-> >>
-> >> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
-> >>
-> >> ---
-> >>  drivers/usb/storage/isd200.c |    2 +-
-> >>  1 file changed, 1 insertion(+), 1 deletion(-)
-> >>
-> >> Index: usb/drivers/usb/storage/isd200.c
-> >> ===================================================================
-> >> --- usb.orig/drivers/usb/storage/isd200.c
-> >> +++ usb/drivers/usb/storage/isd200.c
-> >> @@ -1283,8 +1283,8 @@ static int isd200_scsi_to_ata(struct scs
-> >>  
-> >>  	case READ_CAPACITY:
-> >>  	{
-> >> -		unsigned long capacity;
-> >>  		struct read_capacity_data readCapacityData;
-> >> +		u32 capacity;
-> > 
-> > This is a bit peculiar.  Why bother to change the type of the capacity 
-> > variable without also changing the types of lba and blockCount at the 
-> > start of the routine?
-> 
->    The reason is simple: Svace didn't complain about those.
+> Seconded :-) We can help with the implementation, but we would like your
+> guidance on the direction you think this should take.
 
-You shouldn't trust automated code checkers too far.  Always verify 
-their reports, and look around the vicinity to see if they missed 
-something obvious.
-
->  I'll fix
-> them up in v2 if you're not opposed to this patch...
-
-Sure, go ahead.
+Thirded  :-)  I want to hear what Oliver thinks about the original 
+patch.
 
 Alan Stern
+
+> > On Mon, 19 Feb 2024 at 16:13, Ricardo Ribalda wrote:
+> > >
+> > > Hi Oliver
+> > >
+> > > Would you prefer a version like this?
+> > >
+> > > https://lore.kernel.org/all/20231222-rallybar-v2-1-5849d62a9514@chromium.org/
+> > >
+> > > If so I can re-submit a version with the 3 vid/pids.  Alan, would you
+> > > be happy with that?
+> > >
+> > > Regards!
+> > >
+> > > On Tue, 13 Feb 2024 at 11:47, Laurent Pinchart wrote:
+> > > > On Mon, Feb 12, 2024 at 02:04:31PM -0500, Alan Stern wrote:
+> > > > > On Mon, Feb 12, 2024 at 01:22:42PM +0100, Oliver Neukum wrote:
+> > > > > > On 04.02.24 11:52, Laurent Pinchart wrote:
+> > > > > > > Hi Ricardo,
+> > > > > > >
+> > > > > > > Thank you for the patch.
+> > > > > >
+> > > > > > Hi,
+> > > > > >
+> > > > > > sorry for commenting on this late, but this patch has
+> > > > > > a fundamental issue. In fact this issue is the reason the
+> > > > > > handling for quirks is in usbcore at all.
+> > > > > >
+> > > > > > If you leave the setting/clearing of this flag to a driver you
+> > > > > > are introducing a race condition. The driver may or may not be
+> > > > > > present at the time a device is enumerated. And you have
+> > > > > > no idea how long the autosuspend delay is on a system
+> > > > > > and what its default policy is regarding suspending
+> > > > > > devices.
+> > > > > > That means that a device can have been suspended and
+> > > > > > resumed before it is probed. On a device that needs
+> > > > > > RESET_RESUME, we are in trouble.
+> > > > >
+> > > > > Not necessarily.  If the driver knows that one of these devices may
+> > > > > already have been suspend and resumed, it can issue its own preemptive
+> > > > > reset at probe time.
+> > > > >
+> > > > > > The inverse issue will arise if a device does not react
+> > > > > > well to RESET_RESUME. You cannot rule out that a device
+> > > > > > that must not be reset will be reset.
+> > > > >
+> > > > > That's a separate issue, with its own list of potential problems.
+> > > > >
+> > > > > > I am sorry, but it seems to me that the exceptions need
+> > > > > > to go into usbcore.
+> > > > >
+> > > > > If we do then we may want to come up with a better scheme for seeing
+> > > > > which devices need to have a quirk flag set.  A static listing probably
+> > > > > won't be good enough; the decision may have to be made dynamically.
+> > > >
+> > > > I don't mind either way personally. Oliver, could you try to find a good
+> > > > solution with Ricardo ? I'll merge the outcome.
+> 
+> -- 
+> Regards,
+> 
+> Laurent Pinchart
 
