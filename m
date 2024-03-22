@@ -1,189 +1,139 @@
-Return-Path: <linux-usb+bounces-8165-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8166-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3DAEF886B97
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Mar 2024 12:53:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4397F886BB4
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Mar 2024 12:58:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 87586B23431
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Mar 2024 11:53:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BCC9AB23878
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Mar 2024 11:57:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AC3A40BE0;
-	Fri, 22 Mar 2024 11:52:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D416F3FE54;
+	Fri, 22 Mar 2024 11:57:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="T+2f2l4/"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="wH6eNOa+"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E420A3FB04
-	for <linux-usb@vger.kernel.org>; Fri, 22 Mar 2024 11:52:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B67C93F8F7;
+	Fri, 22 Mar 2024 11:57:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711108354; cv=none; b=mi3n3xxoutGHCFbxXlaH6Le7pNhdhRlYaNgmFMcz0zCtdUHhD0uA//uhD4Y6923n9lw5Sau6x0cv1qobF512hNxVa1ka06LAc756IP/OSSZTQUfyennPeQ+ByVPe34hze9twucfSM5JEgTC5IcRnhqrqSJgJ8A2QapCegL8dRCY=
+	t=1711108661; cv=none; b=RnhG8StasZvPPWaUAdak368p2WlM5rBrQNLYrE06nuWt9GOwu0GJtdeB8N7W2xNph9Eczov4AOsxYmmy1qzbjgtYNY8Ju0gcM9SKisovsfbiEjC4gJxi0uTiRBmscKVlKUQPh185bNSWZpuhMhP/WYedF178jWYEpiMGyB+zIhg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711108354; c=relaxed/simple;
-	bh=sNL+P1h7bA7A/w8ikEYKlALN61mPmedZHQKBVN02bv4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=BAPM562QWoIyT3/ZIsFywpqwg8fSoWrv79lxSi0ij4uBYtq4/PJvFeyg/ZDNUqJlhfqFGqAUm4TWET08qilYV5fGoJlfldumMfKe2xIfhDXqt+zGUDNu+9yr6RK+lRD07wrfgKpcv9L/xrRLZgtkMQH2U7beDa6VnxtYGe6O27Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=T+2f2l4/; arc=none smtp.client-ip=209.85.167.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-512ed314881so1539896e87.2
-        for <linux-usb@vger.kernel.org>; Fri, 22 Mar 2024 04:52:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1711108351; x=1711713151; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OJ+GFLZIXNkg5v+GlXl4TnEHJE7knc6+m/ZcyQWbv4w=;
-        b=T+2f2l4/E+UZqiJP/2bDLZJKszTxG8NJ/9VxrbYBuC+56d732wqKSJPFTTUXkUm0Gt
-         gmpisWYuOwLQiULOHCt9DakG6wOgh6825/LC22D0WhtampIB4nXaAlYKYsxCjlAiWKzT
-         YmFyviwc8vpeu6sQdC4Foil3uuBtZG5E7iL1vfaWBn79FuIp0twC/N516mC6023AYEo2
-         3JTG+ooHnzworhlXYFLrLCQrIF6rFqWUAAC4+JFuR0jyIbT2XcGydcaeo67l21L2Akf7
-         QThBz9SCP8QPm4DNJYCucXZzOsv3+eVlEdkbIYMn0foCidmV2j+LBQs8J6Ca0KbEBsZk
-         4jEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711108351; x=1711713151;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OJ+GFLZIXNkg5v+GlXl4TnEHJE7knc6+m/ZcyQWbv4w=;
-        b=rpKOXpUl/3KhT8kymYxvYhprQ0oqZ7gdewLj6PggcqxcDxOOIoKWBZQbAeLq9MQBvK
-         QO2CViaWnIq0JDMEWJiqxtx5rehKiJGqmEhMsGIGqzeNU+DAd2+opUHqjnVXEa226L/U
-         PhfN6xNm7IHWmiErD7rTqE83OqUQ8utl4y1Ke1z7JTpXXkKcLoRtM+K81hA0ih7kHOMf
-         rP5iJ/AzRObj0xw0828vaQnftyHXxk7C4IwyQI7U97dXe9WFhh+IblVMGdqUCbHr0/Ho
-         LVkfub/2gmC7d5IwYMdcgCKhm5QAsqw7jOfHyLbyYizVVUjRiOmdqMtgECbu6PEvChCa
-         KJ5Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUMXYhAMTVto+BJccD1zT0O3nQKNfjIJjzUhXHjabwtNgHQ1U4oI0y/8ILRGju8hJPX3TJ1ZD690qz6cdq7ZoudenHA2Uc3/ETU
-X-Gm-Message-State: AOJu0YyyKoIZ08nCBVuQjE+wPOiV1OlTr1ZoWuOOnuekx0Ll61zm8kMJ
-	AwdwXaYqaINE+kqUkIeeO6prfdmKBRCfZRX54aZu5q3iLgfxdvP/lDZR7M50bi0=
-X-Google-Smtp-Source: AGHT+IHOrQzzpTNeMHB5pyVYf6AvHcpttAJajZrK/jIORc2gpzME5sDrHJsvjeLGUZT8gTbSc53y+A==
-X-Received: by 2002:a05:6512:558:b0:513:76ec:2d21 with SMTP id h24-20020a056512055800b0051376ec2d21mr1539868lfl.10.1711108351065;
-        Fri, 22 Mar 2024 04:52:31 -0700 (PDT)
-Received: from umbar.lan ([192.130.178.91])
-        by smtp.gmail.com with ESMTPSA id y18-20020a056512045200b00514b644bfebsm320136lfk.299.2024.03.22.04.52.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Mar 2024 04:52:30 -0700 (PDT)
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Fri, 22 Mar 2024 13:52:22 +0200
-Subject: [PATCH 2/2] dt-bindings: usb: qcom,pmic-typec: update example to
- follow connector schema
+	s=arc-20240116; t=1711108661; c=relaxed/simple;
+	bh=4fLslFzxOvf0s9odzqysPxgn/WllfqCRi1EcNhOBrms=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GMucqFUUlVDBwwHW8aASbI1Gw5gYZzcX88Pqp90PdmVw2o1UezO/xDIBOkcHmIr56ucT6yOBeA3rGvcnc3TXPVXF1dIVces4ZFxEHqulObccf7rsRH8LGNhc8InRPGWGpbQ4W0NYof4jE2fqIPBVhTe01X1I+8vKRz+rBFLqFjE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=wH6eNOa+; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2CA45842;
+	Fri, 22 Mar 2024 12:57:09 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1711108629;
+	bh=4fLslFzxOvf0s9odzqysPxgn/WllfqCRi1EcNhOBrms=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=wH6eNOa+I4DHBwEdojUrqDk3Q+u0sJxJPiKlNCJQBQ1tBIiDtqCuXIjhx+A5RxLBy
+	 f0xOof1HkCVTDPiYBlrumRHtixPW3EyxxRKIcbqr6dSrXeBJ+z9fHMI1HAL0DdJ0pQ
+	 kjRjiP+00oU1jfvzrGAxwdUtS5pPDPQkRUzy/4tU=
+Date: Fri, 22 Mar 2024 13:57:34 +0200
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Ricardo Ribalda <ribalda@chromium.org>
+Cc: Oliver Neukum <oneukum@suse.com>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-media@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v4] media: ucvideo: Add quirk for Logitech Rally Bar
+Message-ID: <20240322115734.GB31979@pendragon.ideasonboard.com>
+References: <20240108-rallybar-v4-1-a7450641e41b@chromium.org>
+ <20240204105227.GB25334@pendragon.ideasonboard.com>
+ <ca89eb86-a566-422c-9448-d8d5254d54b8@suse.com>
+ <6aade777-d97c-4c65-b542-14ce5b39abb6@rowland.harvard.edu>
+ <20240213104725.GC5012@pendragon.ideasonboard.com>
+ <CANiDSCvqEkzD_-pUExT2Aci9t_tfFPWusnjST5iF-5N9yiob4g@mail.gmail.com>
+ <CANiDSCsqER=3OqzxRKYR_vs4as5aO1bfSXmFJtNmzw1kznd_wQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240322-typec-fix-example-v1-2-6b01c347419e@linaro.org>
-References: <20240322-typec-fix-example-v1-0-6b01c347419e@linaro.org>
-In-Reply-To: <20240322-typec-fix-example-v1-0-6b01c347419e@linaro.org>
-To: Bjorn Andersson <andersson@kernel.org>, 
- Konrad Dybcio <konrad.dybcio@linaro.org>, 
- Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- Conor Dooley <conor+dt@kernel.org>
-Cc: linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Luca Weiss <luca.weiss@fairphone.com>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2868;
- i=dmitry.baryshkov@linaro.org; h=from:subject:message-id;
- bh=sNL+P1h7bA7A/w8ikEYKlALN61mPmedZHQKBVN02bv4=;
- b=owEBbQGS/pANAwAKAYs8ij4CKSjVAcsmYgBl/XD8eVS0HaN3UvT0a0rdJ3gp1+uqRKHzDDbaP
- OEyDy2vAYCJATMEAAEKAB0WIQRMcISVXLJjVvC4lX+LPIo+Aiko1QUCZf1w/AAKCRCLPIo+Aiko
- 1f7/CACV8GFASdzCAHKIGIiR13c2TTORHa+O+xBHdGr2I3E3hqY4SWWGvLfMmoqQKIMEuOjp6/5
- y5UDtuSPpcnD8qHtA1y9CDC8xeT91G7qnk+IZVrWt7Y3jULTC0FntriWYlTMroSOpQqEUm04aXH
- rmX6Ml5ZC1YbP6tU+M6Ez4SZwApiYKIcJnRzOSKYen8v6+TZbEx2RtxxSstVCuJ0FXeQtnUSMgj
- pFFA1YMC/dJSRM1jolpaPaXMC30ObZOpyODx9CJJzN0iwU5GOxTl9d9kCCL3ouRvdTtNNV7ywS8
- FlRW0cyk9/1ZWGC9CVUsgr565CbqF6aZmOazrTnl7F4A7aMB
-X-Developer-Key: i=dmitry.baryshkov@linaro.org; a=openpgp;
- fpr=8F88381DD5C873E4AE487DA5199BF1243632046A
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CANiDSCsqER=3OqzxRKYR_vs4as5aO1bfSXmFJtNmzw1kznd_wQ@mail.gmail.com>
 
-Update Qualcomm PMIC Type-C examples to follow the USB-C connector
-schema. The USB-C connector should have three ports (USB HS @0,
-SSTX/RX @1 and SBU @2 lanes). Reorder ports accordingly and add SBU port
-connected to the SBU mux (e.g. FSA4480).
+On Thu, Feb 29, 2024 at 05:57:38PM +0100, Ricardo Ribalda wrote:
+> Oliver, friendly ping
 
-Fixes: 00bb478b829e ("dt-bindings: usb: Add Qualcomm PMIC Type-C")
-Reported-by: Luca Weiss <luca.weiss@fairphone.com>
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
----
- .../devicetree/bindings/usb/qcom,pmic-typec.yaml   | 34 +++++++++++++++++-----
- 1 file changed, 26 insertions(+), 8 deletions(-)
+Seconded :-) We can help with the implementation, but we would like your
+guidance on the direction you think this should take.
 
-diff --git a/Documentation/devicetree/bindings/usb/qcom,pmic-typec.yaml b/Documentation/devicetree/bindings/usb/qcom,pmic-typec.yaml
-index 63020a88a355..beecbda40e3c 100644
---- a/Documentation/devicetree/bindings/usb/qcom,pmic-typec.yaml
-+++ b/Documentation/devicetree/bindings/usb/qcom,pmic-typec.yaml
-@@ -187,15 +187,22 @@ examples:
- 
-                     port@0 {
-                         reg = <0>;
--                        pmic_typec_mux_out: endpoint {
--                            remote-endpoint = <&usb_phy_typec_mux_in>;
-+                        pmic_typec_hs_in: endpoint {
-+                            remote-endpoint = <&usb_hs_out>;
-                         };
-                     };
- 
-                     port@1 {
-                         reg = <1>;
--                        pmic_typec_role_switch_out: endpoint {
--                            remote-endpoint = <&usb_role_switch_in>;
-+                        pmic_typec_ss_in: endpoint {
-+                            remote-endpoint = <&usb_phy_typec_ss_out>;
-+                        };
-+                    };
-+
-+                    port@2 {
-+                        reg = <2>;
-+                        pmic_typec_sbu: endpoint {
-+                            remote-endpoint = <&usb_mux_sbu>;
-                         };
-                     };
-                 };
-@@ -207,8 +214,8 @@ examples:
-         dr_mode = "otg";
-         usb-role-switch;
-         port {
--            usb_role_switch_in: endpoint {
--                remote-endpoint = <&pmic_typec_role_switch_out>;
-+            usb_hs_out: endpoint {
-+                remote-endpoint = <&pmic_typec_hs_in>;
-             };
-         };
-     };
-@@ -216,8 +223,19 @@ examples:
-     usb-phy {
-         orientation-switch;
-         port {
--            usb_phy_typec_mux_in: endpoint {
--                remote-endpoint = <&pmic_typec_mux_out>;
-+            usb_phy_typec_ss_out: endpoint {
-+                remote-endpoint = <&pmic_typec_ss_in>;
-+            };
-+        };
-+    };
-+
-+    usb-mux {
-+        orientation-switch;
-+        mode-switch;
-+
-+        port {
-+            usb_mux_sbu: endpoint {
-+                remote-endpoint = <&pmic_typec_sbu>;
-             };
-         };
-     };
+> On Mon, 19 Feb 2024 at 16:13, Ricardo Ribalda wrote:
+> >
+> > Hi Oliver
+> >
+> > Would you prefer a version like this?
+> >
+> > https://lore.kernel.org/all/20231222-rallybar-v2-1-5849d62a9514@chromium.org/
+> >
+> > If so I can re-submit a version with the 3 vid/pids.  Alan, would you
+> > be happy with that?
+> >
+> > Regards!
+> >
+> > On Tue, 13 Feb 2024 at 11:47, Laurent Pinchart wrote:
+> > > On Mon, Feb 12, 2024 at 02:04:31PM -0500, Alan Stern wrote:
+> > > > On Mon, Feb 12, 2024 at 01:22:42PM +0100, Oliver Neukum wrote:
+> > > > > On 04.02.24 11:52, Laurent Pinchart wrote:
+> > > > > > Hi Ricardo,
+> > > > > >
+> > > > > > Thank you for the patch.
+> > > > >
+> > > > > Hi,
+> > > > >
+> > > > > sorry for commenting on this late, but this patch has
+> > > > > a fundamental issue. In fact this issue is the reason the
+> > > > > handling for quirks is in usbcore at all.
+> > > > >
+> > > > > If you leave the setting/clearing of this flag to a driver you
+> > > > > are introducing a race condition. The driver may or may not be
+> > > > > present at the time a device is enumerated. And you have
+> > > > > no idea how long the autosuspend delay is on a system
+> > > > > and what its default policy is regarding suspending
+> > > > > devices.
+> > > > > That means that a device can have been suspended and
+> > > > > resumed before it is probed. On a device that needs
+> > > > > RESET_RESUME, we are in trouble.
+> > > >
+> > > > Not necessarily.  If the driver knows that one of these devices may
+> > > > already have been suspend and resumed, it can issue its own preemptive
+> > > > reset at probe time.
+> > > >
+> > > > > The inverse issue will arise if a device does not react
+> > > > > well to RESET_RESUME. You cannot rule out that a device
+> > > > > that must not be reset will be reset.
+> > > >
+> > > > That's a separate issue, with its own list of potential problems.
+> > > >
+> > > > > I am sorry, but it seems to me that the exceptions need
+> > > > > to go into usbcore.
+> > > >
+> > > > If we do then we may want to come up with a better scheme for seeing
+> > > > which devices need to have a quirk flag set.  A static listing probably
+> > > > won't be good enough; the decision may have to be made dynamically.
+> > >
+> > > I don't mind either way personally. Oliver, could you try to find a good
+> > > solution with Ricardo ? I'll merge the outcome.
 
 -- 
-2.39.2
+Regards,
 
+Laurent Pinchart
 
