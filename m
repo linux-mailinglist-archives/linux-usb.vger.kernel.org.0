@@ -1,141 +1,126 @@
-Return-Path: <linux-usb+bounces-8150-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8151-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C1CA8869AB
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Mar 2024 10:49:42 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2821E8869BB
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Mar 2024 10:53:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AB6861F25F93
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Mar 2024 09:49:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BF4DE1F24EBC
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Mar 2024 09:53:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94E3421A0C;
-	Fri, 22 Mar 2024 09:49:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FE17224CF;
+	Fri, 22 Mar 2024 09:53:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hqk45EGR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5469A17566
-	for <linux-usb@vger.kernel.org>; Fri, 22 Mar 2024 09:49:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.154.21.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96A1918EC3;
+	Fri, 22 Mar 2024 09:53:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711100976; cv=none; b=nhEyEke83hV9EVN8GUtk0Scv1zfb2JogLDjOptOgU8mUDb4DlWbwxIKdjyhALc6A7+A1EJmvGSxXzPw+ymsJnDY4wanA+G4F1JyISQdfTwXinLrs0W97tmf0xlXJvaekHQSXe5rtzeTLTIKnHS2xoRmt7KgCN5SghsP0dvwlecg=
+	t=1711101210; cv=none; b=kkOKw06y26YSZpsNqgJdpo3C6A0g28KCbwKz+kpUWwZYgDozTbz6LC4oFo5tDQmfPnQAKrZyZNDkpurv23cgaXaavczrEXGNbvqZSbtNxDDNxYd3TkCXiUj63z7C5XDXsxKfIgyfOgiDthVKkVFSgrVyuFsF9n4QADmCVvUBppM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711100976; c=relaxed/simple;
-	bh=28Pe8vP8m1PU4RFwoQb/M1OhrhWC9aQ4DMcRlreUo3s=;
-	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=nTULoU8BgIQuI7yAdq3jESyKQTxMueFcp6ziJnp5e3F1i5I6rAVhMy9YP77LwkPQuNzvjYnTijiH9g8EhDoTN9LWIH+TKAWH9Pvv9Drj89R3pJDdeURBUQeFzRov0IJf0xfUUBqv0l0oA3osBFIsnSHV1mJ2R7K9ogwRLstuaX8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=omp.ru; spf=pass smtp.mailfrom=omp.ru; arc=none smtp.client-ip=90.154.21.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=omp.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=omp.ru
-Received: from [192.168.1.105] (178.176.73.112) by msexch01.omp.ru
- (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1258.12; Fri, 22 Mar
- 2024 12:49:24 +0300
-Subject: Re: [PATCH] usb: storage: isd200: fix sloppy typing in
- isd200_scsi_to_ata()
-To: Alan Stern <stern@rowland.harvard.edu>
-CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	<linux-usb@vger.kernel.org>, <usb-storage@lists.one-eyed-alien.net>,
-	<lvc-project@linuxtesting.org>
-References: <e8c20e3c-3cbe-b5c1-f673-0a7f22566879@omp.ru>
- <4e13319d-30a8-4274-bfa0-36d915b1e1ec@rowland.harvard.edu>
-From: Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <6425997a-669b-919d-af44-880a7ce28ffc@omp.ru>
-Date: Fri, 22 Mar 2024 12:49:23 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+	s=arc-20240116; t=1711101210; c=relaxed/simple;
+	bh=LEYSOkamyNi59UriO71s2y6PNJhbxCI+6IL5kL8GRI4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CBy2U23W5P9mn8fGQ+EgQ4wx1FiB8jWSj37CR6v5EP8k1PF14K+buwZAvG59+6+zwXKAhC2CoHSmgM1BKgqCGy74oUUrxWm1UFBnAHfgdtj6thB43anyC74rk87jIKGHVICEsu4P12uo/zb1OM2fwZh5OZVxJVZ+SyxEnN4kkdA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hqk45EGR; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1711101207; x=1742637207;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LEYSOkamyNi59UriO71s2y6PNJhbxCI+6IL5kL8GRI4=;
+  b=hqk45EGRTWO3AiRJx6uW/7bCraaIsvbxgv0ia9crwpLn/YkV6DQZQSq4
+   Q++VqfKExAVuKK8BfcgKWaBaWVql4Rk58pHukC4vAqKLicBHdsBlMiZzv
+   T3Jq234x8F+iIMmg/IukJntScExG/MlkLthhEpUvYO6+oCX8JYwjKXNx5
+   7agL7U3DTACr0mj2tCsAE1b3cTkxonMthxlkdCxmdoIVF6QIRJpLIaT6J
+   ReQ5Uc4lA7BHobIgwf8hp4tQqgfUZj9HXTzW1xwL7GibLq15559lwZ9aK
+   NoJye6NmNqPzeZ0IJ8EMWff4HtsiWypO/g519swanpAmJaBxiE7Jumx+1
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11020"; a="16869363"
+X-IronPort-AV: E=Sophos;i="6.07,145,1708416000"; 
+   d="scan'208";a="16869363"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2024 02:53:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,11020"; a="937066505"
+X-IronPort-AV: E=Sophos;i="6.07,145,1708416000"; 
+   d="scan'208";a="937066505"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 22 Mar 2024 02:53:23 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 22 Mar 2024 11:53:22 +0200
+Date: Fri, 22 Mar 2024 11:53:22 +0200
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: "Christian A. Ehrhardt" <lk@c--e.de>
+Cc: linux-kernel@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Prashant Malani <pmalani@chromium.org>,
+	Jameson Thies <jthies@google.com>,
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
+	Samuel =?utf-8?B?xIxhdm9q?= <samuel@cavoj.net>,
+	linux-usb@vger.kernel.org, Kenneth Crudup <kenny@panix.com>
+Subject: Re: [PATCH 1/5] usb: typec: ucsi: Clear EVENT_PENDING under PPM lock
+Message-ID: <Zf1VEimCKdRIKPXQ@kuha.fi.intel.com>
+References: <20240320073927.1641788-1-lk@c--e.de>
+ <20240320073927.1641788-2-lk@c--e.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <4e13319d-30a8-4274-bfa0-36d915b1e1ec@rowland.harvard.edu>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
- (10.188.4.12)
-X-KSE-ServerInfo: msexch01.omp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 6.1.0, Database issued on: 03/22/2024 09:25:02
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 59
-X-KSE-AntiSpam-Info: Lua profiles 184345 [Mar 22 2024]
-X-KSE-AntiSpam-Info: Version: 6.1.0.4
-X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
-X-KSE-AntiSpam-Info: LuaCore: 11 0.3.11
- 5ecf9895443a5066245fcb91e8430edf92b1b594
-X-KSE-AntiSpam-Info: {rep_avail}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: {relay has no DNS name}
-X-KSE-AntiSpam-Info: {SMTP from is not routable}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.73.112 in (user)
- b.barracudacentral.org}
-X-KSE-AntiSpam-Info:
-	127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;omp.ru:7.1.1
-X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.73.112
-X-KSE-AntiSpam-Info: {DNS response errors}
-X-KSE-AntiSpam-Info: Rate: 59
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
- smtp.mailfrom=omp.ru;dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 03/22/2024 09:29:00
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 3/22/2024 6:00:00 AM
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240320073927.1641788-2-lk@c--e.de>
 
-On 3/22/24 3:57 AM, Alan Stern wrote:
-[...]
-
->> When isd200_scsi_to_ata() emulates the SCSI READ CAPACITY command, the
->> capacity local variable is needlessly typed as *unsigned long* -- which
->> is 32-bit type on the 32-bit arches and 64-bit type on the 64-bit arches;
->> this variable's value should always fit into 32 bits for both the ATA and
->> the SCSI capacity data...
->>
->> While at it, arrange the local variable declarations in the reverse Xmas
->> tree order...
->>
->> Found by Linux Verification Center (linuxtesting.org) with the SVACE static
->> analysis tool.
->>
->> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
->>
->> ---
->>  drivers/usb/storage/isd200.c |    2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> Index: usb/drivers/usb/storage/isd200.c
->> ===================================================================
->> --- usb.orig/drivers/usb/storage/isd200.c
->> +++ usb/drivers/usb/storage/isd200.c
->> @@ -1283,8 +1283,8 @@ static int isd200_scsi_to_ata(struct scs
->>  
->>  	case READ_CAPACITY:
->>  	{
->> -		unsigned long capacity;
->>  		struct read_capacity_data readCapacityData;
->> +		u32 capacity;
+On Wed, Mar 20, 2024 at 08:39:22AM +0100, Christian A. Ehrhardt wrote:
+> Suppose we sleep on the PPM lock after clearing the EVENT_PENDING
+> bit because the thread for another connector is executing a command.
+> In this case the command completion of the other command will still
+> report the connector change for our connector.
 > 
-> This is a bit peculiar.  Why bother to change the type of the capacity 
-> variable without also changing the types of lba and blockCount at the 
-> start of the routine?
+> Clear the EVENT_PENDING bit under the PPM lock to avoid another
+> useless call to ucsi_handle_connector_change() in this case.
+> 
+> Fixes: c9aed03a0a68 ("usb: ucsi: Add missing ppm_lock")
+> Signed-off-by: Christian A. Ehrhardt <lk@c--e.de>
 
-   The reason is simple: Svace didn't complain about those. I'll fix
-them up in v2 if you're not opposed to this patch...
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-> Alan Stern
+> ---
+>  drivers/usb/typec/ucsi/ucsi.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index cf52cb34d285..8a6645ffd938 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -1215,11 +1215,11 @@ static void ucsi_handle_connector_change(struct work_struct *work)
+>  	if (con->status.change & UCSI_CONSTAT_CAM_CHANGE)
+>  		ucsi_partner_task(con, ucsi_check_altmodes, 1, 0);
+>  
+> -	clear_bit(EVENT_PENDING, &con->ucsi->flags);
+> -
+>  	mutex_lock(&ucsi->ppm_lock);
+> +	clear_bit(EVENT_PENDING, &con->ucsi->flags);
+>  	ret = ucsi_acknowledge_connector_change(ucsi);
+>  	mutex_unlock(&ucsi->ppm_lock);
+> +
+>  	if (ret)
+>  		dev_err(ucsi->dev, "%s: ACK failed (%d)", __func__, ret);
+>  
+> -- 
+> 2.40.1
 
-MBR, Sergey
+-- 
+heikki
 
