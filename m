@@ -1,74 +1,74 @@
-Return-Path: <linux-usb+bounces-8185-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8186-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4101C8872F1
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Mar 2024 19:20:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id F24CE887310
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Mar 2024 19:27:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6A02AB2351F
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Mar 2024 18:20:51 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4F5B8B2368B
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Mar 2024 18:27:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5283A64CD2;
-	Fri, 22 Mar 2024 18:20:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2731C664AB;
+	Fri, 22 Mar 2024 18:26:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Tvtfg27V"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Ynwp4U3A"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 268A66351C
-	for <linux-usb@vger.kernel.org>; Fri, 22 Mar 2024 18:20:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1561E664B0
+	for <linux-usb@vger.kernel.org>; Fri, 22 Mar 2024 18:26:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711131634; cv=none; b=HduDIn2UTjXIdhtR6NV2b8kdffqP2HNgZzOpFyscB6V8pnfcU1dfzZ+5802KtgH4oTH6S9RL9TkMJiPTsth0UpucyUK3RHz3okAOrFaNvtoweIUX5EzKyXMerWiV8TNSt0vEi5LqtOx/udoIhQVTos7UQWj18F79pfNPR4bqObA=
+	t=1711132016; cv=none; b=J3uMUZWqgfISElER5IgTfv94niTx3pe6LIf9iM6Vm53WdgPUt4mdW+XEvl2EyTlxeXbzxeH2h41Yo34rSf2BHsd2P9ZFenonSNNV6W3RW2jUMoIa82Gfi+kM/BdPyvrVx5v9jRV3KSYjdN89HBeRjkRd3cYLTdEZGXpOsAVaVcA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711131634; c=relaxed/simple;
-	bh=rB+ZR1pQrRoiSlVFEn8eDKGzWc6r+bkLqQy/ExzQfZU=;
+	s=arc-20240116; t=1711132016; c=relaxed/simple;
+	bh=Q/u452WT4SEBFlq4/JQ3yRAJcz5QKxX8IHHraP8XT0E=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dv7CvXYCE8I7wH3Khzv65e73zisuhLiHk9ig9sanP7oOzyQ+k9yzi/eRyMy5DyfR0Lvd/YIZs9UjqNWiejRE5cWdzMCJIoYrCShXznd8Tfl6a9/tXBdAkbCNExmuI2aFl5HD5flp4q0/Uz8LDlYS3/y/QS/Uz7lvArpc0l+AZHY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Tvtfg27V; arc=none smtp.client-ip=209.85.208.49
+	 In-Reply-To:Content-Type; b=rsGgWcc6EghwZvrUqHCocTaiEYLR7KgwDvtKWONoMHsQ3iN/FTgreIL5uFgizVKwxWErvTvuMa2r0ODszuGm7ijgdJAUJU97uZL/XvjEjFfU5cdv3vZqDvGN6+jYEHXPE/KPvX+SkMJZ387DdHTAvoYHB2sUzEHKpFJK77jmMbc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Ynwp4U3A; arc=none smtp.client-ip=209.85.208.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-56845954ffeso3106474a12.2
-        for <linux-usb@vger.kernel.org>; Fri, 22 Mar 2024 11:20:32 -0700 (PDT)
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-563c403719cso2935835a12.2
+        for <linux-usb@vger.kernel.org>; Fri, 22 Mar 2024 11:26:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1711131631; x=1711736431; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1711132013; x=1711736813; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Un7oE5SOcfiOdZ/t+Y9JYnUgsb/a3y3TBifkzTStaMI=;
-        b=Tvtfg27VvulZdLfON61/uzaOV5v4WDtlNzGLbi1pQF9V0O/ggQdX0ii3zdN0OKcBVj
-         GPS1ZqjgUR+MYymP7F0G1E0nUbBHrcOvZLZasAV+29D8kHhtow21tnCXDt4oADpdEDI/
-         uJ31iNi9cEZkE6HteXpAQFf/s4h2jq8XWO+errV8voS+uThm92dKcVyjC3dblsr9V7vM
-         tDP64qnNWH7wbAmIx2p+cvwD2glI1VPnpVfQ4fKExZpYa/RrFCvxaZPxlW9b488LRKZz
-         /cSUdbRF8rz/8ByIgfpAeUu+QQzZaqo0Nlc/rIRAs08R3r/ksWS2PBEnDuqA+fY2mnFX
-         AS2w==
+        bh=BXnRqDF4YLp0T9y0ST2nEq3wWDFSifmMU5J5sVht3i0=;
+        b=Ynwp4U3A8+gXGUodnmCHhhytsCoOhTVcIuz0Kklbg6bbwFUdbsG4iEc+VfSuxMfYSg
+         evVaVAo9N0JCz+y5Pwth7e5q8GAuWcxpUVyqzICa0qfk/PbaKjzmq0utDg5cKyo7FGpn
+         F3ocCdxT8yEpXqVTMQZzDnHSkFHyifUe4tCqAnU9W93zNzOS3R3XTLcbeHIFi3Y5i8Xm
+         ij9FgDIhyN8n3petwpmEDOzWILFXbxfRIqdW3/nlo32Prlxn+/UZZ0qRuHMeq3wIrw8a
+         jC6xoOM5cnfb859C5gFTULleIHmLJwkxtoJUbzepRYKLB/eoxjDFd6Cb6xS68fWVx8i0
+         +cKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711131631; x=1711736431;
+        d=1e100.net; s=20230601; t=1711132013; x=1711736813;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Un7oE5SOcfiOdZ/t+Y9JYnUgsb/a3y3TBifkzTStaMI=;
-        b=EwpHWp/Uq9mZUkU61mXl2Keqk7jPz+weIpIfAeYULeRQlLYH/SZwfGgsLn2R+oYzH+
-         sTQV0M9bt22eRBeSie/1TmCqZBKZPspT5u1Ift7nhVTbn9WSUW6X56TXSzepUNQOqglJ
-         hHBXFhYCyFhR8mWVIkuahr5GxAB+Gg2yNeCJHdISpx5d97C2Tx9mYd+1gqj97jvlTMrx
-         Ozh5y8A0MtFDbGtzFZ7zcDy0Pj/+J7n7L09b4KtAF1NnYqQ2aPiU6LAPFWty2MxxF+w2
-         5oj7U1KbLBTxX9s3nA+F1ha9ltR7VykdVhp7CZcvYTyxkU/kr9WONA0b4QjibZuX4UQi
-         YBaA==
-X-Forwarded-Encrypted: i=1; AJvYcCVqGldcKQhbQK8pQ2mSx+aC+bGTtM4f4IwqRCHan2CgH6mb20daGNjXaoOQM0xjwkvZqueIrG4swXzJ0JSEZyz1RtlvS+FnwBgb
-X-Gm-Message-State: AOJu0YxAZ0IMt7Dm6bYwnqNJ5CFOKtES0xaFfix+CTAhM6vj8fMVIRpS
-	apW+SyV0n9+qKZAPH350Qc/Z4/GRfrLOlkknbiTQ6Ks11iYNWFAjgkDFiP+VOms=
-X-Google-Smtp-Source: AGHT+IHJZHkIFw8Xxv4Z+VCYrQlX8b4lzO1gktTzl1yaDPSw65KFV2RR4m1ioqmMf9vNBQVckwV88Q==
-X-Received: by 2002:a50:f603:0:b0:56b:eb86:2107 with SMTP id c3-20020a50f603000000b0056beb862107mr190997edn.41.1711131631547;
-        Fri, 22 Mar 2024 11:20:31 -0700 (PDT)
+        bh=BXnRqDF4YLp0T9y0ST2nEq3wWDFSifmMU5J5sVht3i0=;
+        b=QRmJb7LQIUboTuZyJbe4rBrBdCEmz0+ut9G6VD62NSG/eofR48Hh2aGBrrWRMAfqmJ
+         HFx6vN3jsdBdlb1EUtT0snUy+Dohpoadn9mMd5Xd+RV0jtEbxPgpFHoLZzK//WvEzJYW
+         k5L2TGJGvFGplQfYOY1fCfUWLwbI8+ADbJ6PSiJch4mpz7FuA3GuzD7hI4mjLK90sKqX
+         omDeSu9PJYzafW1AxChc1Hmz992mZpNdHcmN7fX3OrcU1mZBVZowlII7YceyUoNtX9y9
+         QhlrvY+bQjLKs15V9dq6u8c3GiTa6NvU+2Xpy57JSpRoowDPz+HyXWNrnglmj6vshbw5
+         IPNg==
+X-Forwarded-Encrypted: i=1; AJvYcCUO79/uWinFLWMGDS/Stqbf5xZw66nrYROILvW20A0NUhjS7gPJBsDaHePqn5+Q72Vtsg9exaggpQ5gtP6u3tCOMGyGGRnR/CWc
+X-Gm-Message-State: AOJu0YyonQ0akt7JdA06BodROudD+K3phHyjx3l+utxsdWnvvGq7gOjX
+	43iupgxEsNXDnQuqXhIfR6QSQDZ5CwugSwBOXsXT3JUPPJT5Q3+v0yXJsAsXvoI=
+X-Google-Smtp-Source: AGHT+IGz5DnzgT/I8P9WToBe0xq02OvN1rsW50qQzORerVn9Tb0FvWjU1lHVQ7pLUk2OOmuEpSw0NQ==
+X-Received: by 2002:a50:8e01:0:b0:568:32f7:6c53 with SMTP id 1-20020a508e01000000b0056832f76c53mr235919edw.3.1711132013484;
+        Fri, 22 Mar 2024 11:26:53 -0700 (PDT)
 Received: from [192.168.92.47] (078088045141.garwolin.vectranet.pl. [78.88.45.141])
-        by smtp.gmail.com with ESMTPSA id o16-20020aa7c510000000b0056bafdda14bsm81000edq.28.2024.03.22.11.20.29
+        by smtp.gmail.com with ESMTPSA id ig4-20020a056402458400b00568b6d731e1sm86945edb.4.2024.03.22.11.26.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Mar 2024 11:20:30 -0700 (PDT)
-Message-ID: <ab5550e0-4d08-4c31-800c-c936809a1d38@linaro.org>
-Date: Fri, 22 Mar 2024 19:20:28 +0100
+        Fri, 22 Mar 2024 11:26:53 -0700 (PDT)
+Message-ID: <1fe26dcd-87c9-4d9e-80ac-5cd37d5b7b96@linaro.org>
+Date: Fri, 22 Mar 2024 19:26:51 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -76,20 +76,21 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 4/5] arm64: dts: qcom: pm7250b: Add a TCPM description
+Subject: Re: [PATCH 2/2] dt-bindings: usb: qcom,pmic-typec: update example to
+ follow connector schema
 Content-Language: en-US
-To: Luca Weiss <luca.weiss@fairphone.com>,
- Bjorn Andersson <andersson@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
- Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Wesley Cheng <quic_wcheng@quicinc.com>,
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+ Bjorn Andersson <andersson@kernel.org>,
  Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org, linux-usb@vger.kernel.org
-References: <20240322-fp4-tcpm-v1-0-c5644099d57b@fairphone.com>
- <20240322-fp4-tcpm-v1-4-c5644099d57b@fairphone.com>
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>
+Cc: linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Luca Weiss <luca.weiss@fairphone.com>
+References: <20240322-typec-fix-example-v1-0-6b01c347419e@linaro.org>
+ <20240322-typec-fix-example-v1-2-6b01c347419e@linaro.org>
 From: Konrad Dybcio <konrad.dybcio@linaro.org>
 Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
  xsFNBF9ALYUBEADWAhxdTBWrwAgDQQzc1O/bJ5O7b6cXYxwbBd9xKP7MICh5YA0DcCjJSOum
@@ -126,21 +127,22 @@ Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
  bGqMHex48FVZhexNPYOd58EY9/7mL5u0sJmo+jTeb4JBgIbFPJCFyng4HwbniWgQJZ1WqaUC
  nas9J77uICis2WH7N8Bs9jy0wQYezNzqS+FxoNXmDQg2jetX8en4bO2Di7Pmx0jXA4TOb9TM
  izWDgYvmBE8=
-In-Reply-To: <20240322-fp4-tcpm-v1-4-c5644099d57b@fairphone.com>
+In-Reply-To: <20240322-typec-fix-example-v1-2-6b01c347419e@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 22.03.2024 09:01, Luca Weiss wrote:
-> Type-C port management functionality lives inside of the PMIC block on
-> pm7250b.
+On 22.03.2024 12:52, Dmitry Baryshkov wrote:
+> Update Qualcomm PMIC Type-C examples to follow the USB-C connector
+> schema. The USB-C connector should have three ports (USB HS @0,
+> SSTX/RX @1 and SBU @2 lanes). Reorder ports accordingly and add SBU port
+> connected to the SBU mux (e.g. FSA4480).
 > 
-> The Type-C port management logic controls orientation detection,
-> vbus/vconn sense and to send/receive Type-C Power Domain messages.
-> 
-> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+> Fixes: 00bb478b829e ("dt-bindings: usb: Add Qualcomm PMIC Type-C")
+> Reported-by: Luca Weiss <luca.weiss@fairphone.com>
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 > ---
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Acked-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
 Konrad
 
