@@ -1,182 +1,159 @@
-Return-Path: <linux-usb+bounces-8175-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8176-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C82FD886F73
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Mar 2024 16:09:21 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB85C886F90
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Mar 2024 16:13:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 77FB62882AD
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Mar 2024 15:09:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7034EB239A0
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Mar 2024 15:13:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA47A4DA14;
-	Fri, 22 Mar 2024 15:09:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="u0vc9sCA"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FCD94D5A5;
+	Fri, 22 Mar 2024 15:12:55 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 929144D134
-	for <linux-usb@vger.kernel.org>; Fri, 22 Mar 2024 15:09:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B29124644E
+	for <linux-usb@vger.kernel.org>; Fri, 22 Mar 2024 15:12:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.154.21.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711120151; cv=none; b=YIDqYaR3V/nedQO9qjfFyAIpb+n7UV6fgh31nKC0Btw4u/up21daTwHscSUUemu4vNfrezQQOodNuMYOUepQ8bkrQXI1H2jxpP99H55Wj5MkWv20/WIoJu0gEgY39V1CFZ1oJz1yx3vVZrelVRCzFBgqbRtwkBP0S7QlnNiXvl8=
+	t=1711120375; cv=none; b=BF0ncdiO0dlPkMqK8mta2GP3K4Hj/lX4+7OnB1I0a378B0SSA5GgvanhDTmIl+wkTOMzVQ+ShO/E3ckczVmWEasjgd/3ZXieHp2013Mf1RIdk43p3WVOC0kjphCvCUYlVjhPGZzSG7r0SMtxXrRQK3grjcj4ULptNP4uUAtqhUw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711120151; c=relaxed/simple;
-	bh=ioCddxy0Wrih4HSkFxOLHM43p7Jl973JpXnI5PGwl2M=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=kT8w1S+T3G9qqsh9102FJ6gWLhL87O2CMusEvJu3lVDORgezeWJnuGKRJbKfknGRog7B/2LD1BNDr2qYjqEdbw4RhC7x6VFuk5G5qg5RKfosFI9Dhj/pS3aHGtFc095L3+OcaTEGjunK2JU+Ajd/mCDv8oM+75Qhn2RApRpQk2Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=u0vc9sCA; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4147c4862caso5777725e9.0
-        for <linux-usb@vger.kernel.org>; Fri, 22 Mar 2024 08:09:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1711120148; x=1711724948; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+yvhwYHTfV+3rWYF2DgHMW8lY8LzP+BMH9HrnaAPrfM=;
-        b=u0vc9sCAI1HN3xQAtVMng+IZkpfhxd0M+Zez/GowzxWXDfoQQs/W6F5dzLQDFHXCSN
-         7Z0cIcxcSiId6TyOZ2xqToWVuebqWOJccpP4cAT5lm+F7rm3HJctW0RcZhQsXaxYYtSw
-         B1fqGzwuIz8eX2A5m5s6NfNmssfdub21t/ysRSD+84j+9ORp95K6/mVGPxYzixvppmT/
-         zUJPZmdx8CkHXwmA8CAdsB9omACsCCJaxxCrBPBk8PgGJ0atpkXD+/bYHKvZGLDZnCVY
-         EZf/zmXtpU/TcOZSavc7kxiA+xgsW0uiv9WEsQvyca8yrLjoCahDYyFghBymprB7GBF4
-         AkBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711120148; x=1711724948;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=+yvhwYHTfV+3rWYF2DgHMW8lY8LzP+BMH9HrnaAPrfM=;
-        b=WrQBIbqfNxFRe29o4s6K2iIv1b1IItot4wS3CqAKseCEsEzXMZCuAyk8g29LbRhiaq
-         JBAw35DVc0tnDKwHZ5dHijMkS40p8GBNOZd6D75dI12+Nl92TBxxgTJwC+bm2ERl9ynu
-         83WbrJRzFdkkvY1PuGdt/ebFOm43XseRk5SAoGVra+A/ZqJfbHOTmtwdfYAEJvkHt46J
-         ulvxxTrdxFOyXyTrLYeU/IopE71PsjcKyow94QAn38HDwJmrxO4HQCfcM1wGCN5n2E4o
-         0th/+stKAi4W8aGA6HSjXZa7dR8Kd9yc7YE68Diu83NcbRr2RJxQQ0ectZW1MukrUfyB
-         87ig==
-X-Forwarded-Encrypted: i=1; AJvYcCXfSpNaSwyP7pUd3/qfmoTKGZr03kuGlYS4Ii+PN63mnzqY118lVotOIQjdEoiZzwGWrITvFzltJ4SJhYAfc+DY68rJ/bpk/vyy
-X-Gm-Message-State: AOJu0Yx8p3blJev2ShKVXiezpl75hBw8JdKUdvnsM3gww8q/tAcBzJ45
-	sFdIqnNLDqA3vzrifgAfRkLpPognKv5kyop4HT8TA8Nh6mxqi7wgBsCP5K2GX54=
-X-Google-Smtp-Source: AGHT+IH+c2Vf59CqJ5Cq+G3Tl6E5gw0t2OS8y62T87hvyxoA76WeFaOA1V0WIJpkrZVfPD9fa8oFJw==
-X-Received: by 2002:a05:600c:3546:b0:413:2a10:8a29 with SMTP id i6-20020a05600c354600b004132a108a29mr2656828wmq.13.1711120147837;
-        Fri, 22 Mar 2024 08:09:07 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:b232:2557:aa5b:1e23? ([2a01:e0a:982:cbb0:b232:2557:aa5b:1e23])
-        by smtp.gmail.com with ESMTPSA id p17-20020a05600c469100b004132ae838absm3289819wmo.43.2024.03.22.08.09.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Mar 2024 08:09:07 -0700 (PDT)
-Message-ID: <c0f1e898-7638-4b7b-a938-9e31e5b57e57@linaro.org>
-Date: Fri, 22 Mar 2024 16:09:06 +0100
+	s=arc-20240116; t=1711120375; c=relaxed/simple;
+	bh=OVaYD82hujmNUVFXhxbWGwQG520Ru2DlD4qoPhjDKYI=;
+	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=XR1sndYzx/3V7tEj0yttRjhI4n15zPI+B1OGt67jJW09Qs6Yq/XDeTiM/S0lMVzxNH0E45adqBkz33RxH9OczURdDHf1p1GopnegjnqkEV/3sWUO+qfQQS5f8B+ZBxeHYX1Z8bkniv39dx/dr3apMWuII0JlY3j5tKLD+EC4MAw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=omp.ru; spf=pass smtp.mailfrom=omp.ru; arc=none smtp.client-ip=90.154.21.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=omp.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=omp.ru
+Received: from [192.168.1.105] (31.173.81.221) by msexch01.omp.ru
+ (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1258.12; Fri, 22 Mar
+ 2024 18:12:35 +0300
+Subject: Re: [PATCH] usb: storage: isd200: fix sloppy typing in
+ isd200_scsi_to_ata()
+To: Alan Stern <stern@rowland.harvard.edu>
+CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	<linux-usb@vger.kernel.org>, <usb-storage@lists.one-eyed-alien.net>,
+	<lvc-project@linuxtesting.org>
+References: <e8c20e3c-3cbe-b5c1-f673-0a7f22566879@omp.ru>
+ <4e13319d-30a8-4274-bfa0-36d915b1e1ec@rowland.harvard.edu>
+ <6425997a-669b-919d-af44-880a7ce28ffc@omp.ru>
+ <26d483d0-a89c-4c33-99f2-455f0f13e6e5@rowland.harvard.edu>
+From: Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <43618519-0608-9306-35cc-87ebe47ea9c2@omp.ru>
+Date: Fri, 22 Mar 2024 18:12:35 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: neil.armstrong@linaro.org
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH 1/2] dt-bindings: usb: qcom,pmic-typec: drop port
- description
-To: Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konrad.dybcio@linaro.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, linux-arm-msm@vger.kernel.org,
- linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20240322-typec-fix-example-v1-0-6b01c347419e@linaro.org>
- <20240322-typec-fix-example-v1-1-6b01c347419e@linaro.org>
- <230eab52-9751-43fd-8e47-fbfe12410e44@linaro.org>
- <CAA8EJprD3fM966pLV4QXPUu=bFTn24fvPMKOaGqtqkAbdz7sOQ@mail.gmail.com>
- <5ea4a187-1971-4970-a289-826d96c0351a@linaro.org>
-Content-Language: en-US, fr
-Autocrypt: addr=neil.armstrong@linaro.org; keydata=
- xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
- GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
- BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
- qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
- 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
- AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
- OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
- Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
- YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
- GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
- UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
- GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
- yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
- QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
- SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
- 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
- Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
- oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
- M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
- 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
- KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
- 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
- QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
-Organization: Linaro
-In-Reply-To: <5ea4a187-1971-4970-a289-826d96c0351a@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <26d483d0-a89c-4c33-99f2-455f0f13e6e5@rowland.harvard.edu>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 6.1.0, Database issued on: 03/22/2024 14:50:40
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 184363 [Mar 22 2024]
+X-KSE-AntiSpam-Info: Version: 6.1.0.4
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 11 0.3.11
+ 5ecf9895443a5066245fcb91e8430edf92b1b594
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.81.221 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info:
+	127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;omp.ru:7.1.1
+X-KSE-AntiSpam-Info: ApMailHostAddress: 31.173.81.221
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 03/22/2024 14:55:00
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 3/22/2024 12:08:00 PM
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
 
-On 22/03/2024 15:52, Bryan O'Donoghue wrote:
-> On 22/03/2024 13:28, Dmitry Baryshkov wrote:
->> Then the actual usage doesn't match the schema. usb-c-connector
->> clearly defines HS, SS and SBU ports
-> 
-> Its a bit restrictive IMO, data-role and power-role switching is not limited to HS and in fact can be done with a GPIO for example.
-> 
-> /Looks in Documentation/devicetree/bindings/connector/usb-connector.yaml
-> 
-> Yeah I mean this just doesn't cover all use-cases ..
-> 
-> ports:
->      $ref: /schemas/graph.yaml#/properties/ports
->      description: OF graph bindings modeling any data bus to the connector
->        unless the bus is between parent node and the connector. Since a single
->        connector can have multiple data buses every bus has an assigned OF graph
->        port number as described below.
-> 
->      properties:
->        port@0:
->          $ref: /schemas/graph.yaml#/properties/port
->          description: High Speed (HS), present in all connectors.
-> 
->        port@1:
->          $ref: /schemas/graph.yaml#/properties/port
->          description: Super Speed (SS), present in SS capable connectors.
-> 
->        port@2:
->          $ref: /schemas/graph.yaml#/properties/port
->          description: Sideband Use (SBU), present in USB-C. This describes the
->            alternate mode connection of which SBU is a part.
-> 
-> TBH I think we should drop this HS, SS stuff from the connector definition - there's nothing to say in a h/w definition anywhere HS must be a port or indeed SS - not all hardware knows or cares about different HS/SS signalling.
+On 3/22/24 5:38 PM, Alan Stern wrote:
+[...]
 
-It matches the USB-C connector electrical characteristics, which by spec has, at least:
-- High-Speed USB Line
-- up to 4 differential high-speed lanes that can be switched to DP, USB2 or PCIe
-- SideBand line (SBU)
-
-And those 3 components can be handled by 3 different HW in the SoC, so each one has a dedicated port.
-
-Remember DT describes the HW, not the SW implementation.
-
-Neil
-
+>>>> When isd200_scsi_to_ata() emulates the SCSI READ CAPACITY command, the
+>>>> capacity local variable is needlessly typed as *unsigned long* -- which
+>>>> is 32-bit type on the 32-bit arches and 64-bit type on the 64-bit arches;
+>>>> this variable's value should always fit into 32 bits for both the ATA and
+>>>> the SCSI capacity data...
+>>>>
+>>>> While at it, arrange the local variable declarations in the reverse Xmas
+>>>> tree order...
+>>>>
+>>>> Found by Linux Verification Center (linuxtesting.org) with the SVACE static
+>>>> analysis tool.
+>>>>
+>>>> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+>>>>
+>>>> ---
+>>>>  drivers/usb/storage/isd200.c |    2 +-
+>>>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>
+>>>> Index: usb/drivers/usb/storage/isd200.c
+>>>> ===================================================================
+>>>> --- usb.orig/drivers/usb/storage/isd200.c
+>>>> +++ usb/drivers/usb/storage/isd200.c
+>>>> @@ -1283,8 +1283,8 @@ static int isd200_scsi_to_ata(struct scs
+>>>>  
+>>>>  	case READ_CAPACITY:
+>>>>  	{
+>>>> -		unsigned long capacity;
+>>>>  		struct read_capacity_data readCapacityData;
+>>>> +		u32 capacity;
+>>>
+>>> This is a bit peculiar.  Why bother to change the type of the capacity 
+>>> variable without also changing the types of lba and blockCount at the 
+>>> start of the routine?
+>>
+>>    The reason is simple: Svace didn't complain about those.
 > 
-> Documentation bit-rot
-> 
-> ---
-> bod
-> 
+> You shouldn't trust automated code checkers too far.  Always verify 
 
+   I never do. In this case, Svace suggested a cast to 64-bit type to
+avoid what it suspected to be an overflow. :-)
+
+> their reports, and look around the vicinity to see if they missed 
+> something obvious.
+
+   Yeah, I forgot to do that. :-)
+
+>>  I'll fix
+>> them up in v2 if you're not opposed to this patch...
+> 
+> Sure, go ahead.
+
+   OK! :-)
+
+> Alan Stern
+
+MBR. Sergey
 
