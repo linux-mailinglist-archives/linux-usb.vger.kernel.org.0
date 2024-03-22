@@ -1,62 +1,62 @@
-Return-Path: <linux-usb+bounces-8154-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8155-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED7D38869DE
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Mar 2024 11:03:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C53B8869E3
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Mar 2024 11:04:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8C9A91F23852
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Mar 2024 10:03:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1D9E71F2502D
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Mar 2024 10:04:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C724325575;
-	Fri, 22 Mar 2024 10:03:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A20A826ADB;
+	Fri, 22 Mar 2024 10:04:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lvEvppby"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l0vO/cRa"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE0913D38D;
-	Fri, 22 Mar 2024 10:03:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85E7B2556E;
+	Fri, 22 Mar 2024 10:04:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711101785; cv=none; b=hLdin+V4tjfDrZLvGtBy52Sh8+jdvynJlMfarmEC1TGYsB4EmwNQsw2w7yNeIeHZ+C+Mo2Ew8MFgpTVNv6BjErSxz2RxlwqtIpdRa0AcuwZqBGysAKtjcX/w0L2ANtfd0Uzu7dMFRhJK6mboRar7Romux2Pf4iwEsDOf3X4sWJ8=
+	t=1711101861; cv=none; b=fzyeYUsWFONF2gv4DEU2y2H4Vf828oluarAl9HoZVFjD1Vc91DB+WYdcP9/4fEGIzx2FaiSKlUoZ2ou9K0KZQWG7xsCxyAm4+Qyo2YPXYtfNg2QF8tkUNBTLKhm1g+XMkTp3g3W9LkIHYqykENxXVn2VweXHMYuwR0jDVTQEbsc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711101785; c=relaxed/simple;
-	bh=tgfiNFatiqtNr3KSDdxr5ZCL/CAMYjZ3/K/FVVDuepw=;
+	s=arc-20240116; t=1711101861; c=relaxed/simple;
+	bh=R7fiJlvHXXPfk/5nfmw6Moa8sktAs3sdecIxZhYQ3Zk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aJmNzGUJv6KbdszewM31Aup8DQptHZgxth+Bo4+T2WxY+ZWeSwP5ldbyNhhcTKafDsuoTKSfUbeEh9xpJjDyH0drjJeeA5vtvLqmnyeLLK53qW3n2NIXR+R4cf4zuG9JH02LYpZrEps0qk2BY8XiYvKfrphQld2a3uUc1Cs1KOg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lvEvppby; arc=none smtp.client-ip=198.175.65.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=dnFptYTAzWYaYDSgV5BA4pEy3up8e5ien9/LVBQCcSCcFVoNT1R0VHt53KbVLUNf0sbdk0xOpkg6eba0lly+SPHmmS4NEALDY8wdSieNgTdupIpDL7gHeQUICFjpBKnIOvaswmGdadky/B1Hai1K29gUuAhKZhfsQJ145Er0Ass=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l0vO/cRa; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711101784; x=1742637784;
+  t=1711101859; x=1742637859;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=tgfiNFatiqtNr3KSDdxr5ZCL/CAMYjZ3/K/FVVDuepw=;
-  b=lvEvppbyzi1Zh7p6CqQ2lKRikMaYLQnLcc5q2Z7uZZmlzzq/diafgDFa
-   pvV1zshOZF3y9lNDGMiWw9wZHZUn/sWVsoNl5P3I9wtu/ueCLEvjQVoiQ
-   JLMtCaXoFq0DAZwvjgy71DSPiBXV4K1Gpl73SA4Xrni8AfH5Bsb4lUGpw
-   NvNJpksBn+LdBRVIoV9xihBqr1oHi+ucCdiCueNZ/slsnQ0/gzNAXVXmp
-   Yub1kNAR+sQLCFIvQSgRlwK4FW6sAiGYIIObfji+ag6SF20eI9EAxksGA
-   TWTW8k+Y+lKCkTgDUhLfei4RNHMgadavuWnvQT3Qj6R8zLL0xoV90m+iD
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11020"; a="6267178"
+  bh=R7fiJlvHXXPfk/5nfmw6Moa8sktAs3sdecIxZhYQ3Zk=;
+  b=l0vO/cRaVYkGd2HAH1305jPrpgd9hRIpRVqAFTuuGWxyGUyKpFqo0cdW
+   /oSkESFDMbw5ZTHO8yzUSBHuiAkFhKcN/VDAfIchTRYq6KglMLsbQ+7iH
+   NVVxHHAqnhrc1DqnogopPqUhrS4E7yZZp8P1l61ps0tQbcP8lJB3cEOts
+   yWNfJiYW6rHAusVEwdZND8YhYRtpm5q/NV+rSE1jyID6PDfZTO/Nbf1ov
+   eFzXppOxugFyOwvqG/GB8JTNjM91Evhe/h9dT48G8zXvtrgRKFwlMVwH2
+   7SQPExk1UWgQ2FvLpGDgMWh/q6I/IToZR/cHRBBk1fd9f4IBoi1HvRQf1
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11020"; a="6267505"
 X-IronPort-AV: E=Sophos;i="6.07,145,1708416000"; 
-   d="scan'208";a="6267178"
+   d="scan'208";a="6267505"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2024 03:03:03 -0700
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2024 03:04:19 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11020"; a="937066512"
+X-IronPort-AV: E=McAfee;i="6600,9927,11020"; a="937066513"
 X-IronPort-AV: E=Sophos;i="6.07,145,1708416000"; 
-   d="scan'208";a="937066512"
+   d="scan'208";a="937066513"
 Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 22 Mar 2024 03:02:58 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 22 Mar 2024 12:02:58 +0200
-Date: Fri, 22 Mar 2024 12:02:58 +0200
+  by fmsmga001.fm.intel.com with SMTP; 22 Mar 2024 03:04:14 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 22 Mar 2024 12:04:14 +0200
+Date: Fri, 22 Mar 2024 12:04:14 +0200
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To: "Christian A. Ehrhardt" <lk@c--e.de>
 Cc: linux-kernel@vger.kernel.org,
@@ -68,9 +68,10 @@ Cc: linux-kernel@vger.kernel.org,
 	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
 	Samuel =?utf-8?B?xIxhdm9q?= <samuel@cavoj.net>,
 	linux-usb@vger.kernel.org, Kenneth Crudup <kenny@panix.com>
-Subject: Re: [PATCH 0/5] Fix various races in UCSI
-Message-ID: <Zf1XUrG1UbVJWzoz@kuha.fi.intel.com>
+Subject: Re: [PATCH 3/5] usb: typec: ucsi: Ack unsupported commands
+Message-ID: <Zf1XnmQlsQxpeK/Q@kuha.fi.intel.com>
 References: <20240320073927.1641788-1-lk@c--e.de>
+ <20240320073927.1641788-4-lk@c--e.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -79,40 +80,42 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240320073927.1641788-1-lk@c--e.de>
+In-Reply-To: <20240320073927.1641788-4-lk@c--e.de>
 
-On Wed, Mar 20, 2024 at 08:39:21AM +0100, Christian A. Ehrhardt wrote:
-> Fix various races in UCSI code:
-> - The EVENT_PENDING bit should be cleared under the PPM lock to
->   avoid spurious re-checking of the connector status.
-> - The initial connector change notification during init may be
->   lost which can cause a stuck UCSI controller. Observed by me
->   and others during resume or after module reload.
-> - Unsupported commands must be ACKed. This was uncovered by the
->   recent change from Jameson Thies that did sent unsupported commands.
-> - The DELL quirk still isn't quite complete and I've found a more
->   elegant way to handle this. A connector change ack _is_ accepted
->   on affected systems if it is bundled with a command ack.
-> - If we do two consecutive resets or the controller is already
->   reset at boog the second reset might complete early because the
->   reset complete bit is already set. ucsi_ccg.c has a work around
->   for this but it looks like an more general issue to me.
+On Wed, Mar 20, 2024 at 08:39:24AM +0100, Christian A. Ehrhardt wrote:
+> If a command completes the OPM must send an ack. This applies
+> to unsupported commands, too.
 > 
-> NOTE:
-> As a result of these individual fixes we could think about the
-> question if there are additional cases where we send some type
-> of command to the PPM while the bit that indicates its completion
-> is already set in CCI. And in fact there is one more case where
-> this can happen: The ack command that clears the connector change
-> is sent directly after the ack command for the previous command.
-> It might be possible to simply ack the connector change along with
-> the first command ucsi_handle_connector_change() and not at the
-> end. AFAICS the connector lock should protect us from races that
-> might arise out of this.
+> Send the required ACK for unsupported commands.
+> 
+> Signed-off-by: Christian A. Ehrhardt <lk@c--e.de>
 
-That sounds good to me.
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-thanks,
+> ---
+>  drivers/usb/typec/ucsi/ucsi.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index dceeed207569..63f340dbd867 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -151,8 +151,12 @@ static int ucsi_exec_command(struct ucsi *ucsi, u64 cmd)
+>  	if (!(cci & UCSI_CCI_COMMAND_COMPLETE))
+>  		return -EIO;
+>  
+> -	if (cci & UCSI_CCI_NOT_SUPPORTED)
+> +	if (cci & UCSI_CCI_NOT_SUPPORTED) {
+> +		if (ucsi_acknowledge_command(ucsi) < 0)
+> +			dev_err(ucsi->dev,
+> +				"ACK of unsupported command failed\n");
+>  		return -EOPNOTSUPP;
+> +	}
+>  
+>  	if (cci & UCSI_CCI_ERROR) {
+>  		if (cmd == UCSI_GET_ERROR_STATUS)
+> -- 
+> 2.40.1
 
 -- 
 heikki
