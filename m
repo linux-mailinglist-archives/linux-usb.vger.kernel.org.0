@@ -1,76 +1,74 @@
-Return-Path: <linux-usb+bounces-8161-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8162-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B0A5886AC2
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Mar 2024 11:57:38 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C53E886AD3
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Mar 2024 11:59:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5946BB227B7
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Mar 2024 10:57:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8F80E1C2214F
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Mar 2024 10:59:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8849F3D3B3;
-	Fri, 22 Mar 2024 10:57:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 736383EA88;
+	Fri, 22 Mar 2024 10:58:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="i1FXu7VY"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="YCppqF3l"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40EA822EF5
-	for <linux-usb@vger.kernel.org>; Fri, 22 Mar 2024 10:57:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6FEA3E479
+	for <linux-usb@vger.kernel.org>; Fri, 22 Mar 2024 10:58:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711105048; cv=none; b=JAypeGHNO7FDDrfqcm2GE45p7L7IECGDScuWkdkDyKQwER1HullPLh5Wk1xUL5ATUmX5mB3n55dxqhg4tOois7qfOaWm+LRoEHDb1+RjemtTjUF2wvGcTT3vkP3MmjDqq3SMYGs72oN88pAhotFRUDwNVGGHGGmOiLgzxs1VQ0I=
+	t=1711105132; cv=none; b=uK0g1BkpmFjCe4bw56qHRV20vpQlEAk1bsaQZDEXfKyrnLQ4UHhd2Ey9Qs0894uV4rF0hsqlz6ecwlHe2UzAJoVBl16bVcL0dk+UUt3dnQctswRZEodABkIVY9O+sMJg6iQZQc8dNgh8Ab/9hHQuSpjYYW0RO6Zuth0aKody/bE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711105048; c=relaxed/simple;
-	bh=Cj8CW05WFikXqfvjU+HNE0R+/A78r+ijywBO0mXjTdI=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=LHnSJBCLT2NTI5g1nNXIkyHbMlTW7812B8uXFkdPkqy5a5UuO65Yc01gOxaK+fbBkcVYZH73qASUxpPKKjVIuuuGmiDgZpZ8ZGvsfuZ0XOKGXi7aLDWmoUvabCS94tuNL0USbUEIEGF4H8vmggqk1M0K1ZP9s+Pm2pM3ZVftCo0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=i1FXu7VY; arc=none smtp.client-ip=209.85.221.50
+	s=arc-20240116; t=1711105132; c=relaxed/simple;
+	bh=E+QRJbbDXgOnG+F7y9VJSSIz2tXSZacnuTn39fmlItM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=a+62my8cQKc8sSWYV5KMnbos1w6aMY+6XEBL9kNsQInPqj3zk0LYtkxYf6shAuItmeSkkVapHvZ4W6w3e43xu+rGl9mu47jpJiUFOBiqTG7k9MMWI3McYQ15qAylqH/kyvgFYfA42izNbX010K+5SOuniFTgrL30jDb1E+wWns0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=YCppqF3l; arc=none smtp.client-ip=209.85.208.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-33eee0258abso718947f8f.3
-        for <linux-usb@vger.kernel.org>; Fri, 22 Mar 2024 03:57:26 -0700 (PDT)
+Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-2d46d729d89so23170571fa.3
+        for <linux-usb@vger.kernel.org>; Fri, 22 Mar 2024 03:58:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1711105044; x=1711709844; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xZLlkmNPx75eHGWlfmm8s0Qd4svN3CYLNYxvTdYFd8c=;
-        b=i1FXu7VYT65IWqKTe3zOkoRaA9VJPiGUosovVptbytuLLYUc/5iT9+rq7RJqi6H6WP
-         gt8xYw9TnCHTDS27pgGI2qhFVIOr2L1o826bME28+01RA4ephhp+O3j/AWDgdw84PFsI
-         VT+iwSNxzAmjFsdtZzrO8nSUdK3COwViH8geMZzxKnF7exLGW4eJXOB2oLplZwq6Mbh8
-         wkz+MZN3lb3hfM+GacmgqjmG7jJC6+xgezfLllTNK+Y5eIz+zNQx/YuEKto5CZSG97oS
-         Q3lCHvTHlb8TXQ011orLo+T53hlxQxemxqeGByEU0tJHRD1oDTPI+mmt9le+tRFAv0qU
-         N1eg==
+        d=linaro.org; s=google; t=1711105127; x=1711709927; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5J6hKaN1QOoxxXz1T+5CFRE6tdsrp4JJET9C/glDPY0=;
+        b=YCppqF3ltq357pitHV0u324fMPt7ZhDR35D83/zE5U3Wl9X2jnbj0mhlvtGjjZ8+s1
+         PzLPo44lDvNvoZqKcwBcZq7KyIaNiGe5x1NwIJ5B2WxXDZmXGWYAj75orbj+5nmNOYqE
+         YMgRNSYokBJzrWSN3LC2CTHL94q2gG0sKeLKCX4U6FHBB+tY3XwIR5DSXRuIdm1h+HuC
+         ccWVxyMpnejRioSQeevDD8fzYWFt4eolAgT5Ge61jJyoutsRZuZ44s85Qgu/qKTavyD7
+         UkelL3CfTweWXlGwOooztCvGFz/dZw/225V4zMjSAjPjqCt1qaAEOIq4pS0Vc+k5aA+J
+         Ib1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711105044; x=1711709844;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=xZLlkmNPx75eHGWlfmm8s0Qd4svN3CYLNYxvTdYFd8c=;
-        b=HHv8xK6n1s+PdanbiKO9mQepFkkcN3Xya2P0kJHH4xgJa+oTDSObip6GhT7ytDr1Z6
-         ahxKEX4N/WcDOKH9wTZn2mcJa9iUFC6bhM/m5FIM/LyCy638Nz6MIlfpPHQLYFGFlBmV
-         nYd7vUmn+n5xCdAqLFDGGboHSNH7eZgyGXMC3n6tEuyI+5KeIJIYUV34KlLfHXCV/3s1
-         vUiH0cGL9QqvlvjuSH9Vr7yU/uUlUxPBuQ7jOLplCRhGV49/rK0AaKkEdD1md3w5CVoC
-         LsdSiUFZQLCiHzNi/L9L+YYq0vFyxNTkJAg4JeTn6FHaZmrGCCti3EgId+8PCPkfukII
-         AgcA==
-X-Forwarded-Encrypted: i=1; AJvYcCVA6Arzk9QRk7dpmJ1HYAvKc2NZmiIsMedgKN3dY9WVU7v33omY99chyRLpW1ci//+3edpDGL9vQLxKw3exqSoNKU7k+roy3Ayi
-X-Gm-Message-State: AOJu0Yz6jpp5hxAQpd+xhL/Gmnhjp4q7/8dIa/GbFeFbDn09gqclqO7D
-	Y/SwYl/+b4DGfjPGfPYNa0wkPANJ5AVlCHv/JnShmfOmboJ5vSUb9sONcHAhzQg=
-X-Google-Smtp-Source: AGHT+IG/EZKQRSLX55zopIgDS9o2qD3oCSZTXiicFNy+friKvPgI3RgZS4Z2vxdn5IswWtPlmViBzw==
-X-Received: by 2002:a05:6000:402c:b0:341:b88b:1625 with SMTP id cp44-20020a056000402c00b00341b88b1625mr951641wrb.47.1711105044385;
-        Fri, 22 Mar 2024 03:57:24 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:3ee1:a278:2b57:55f7? ([2a01:e0a:982:cbb0:3ee1:a278:2b57:55f7])
-        by smtp.gmail.com with ESMTPSA id dj9-20020a0560000b0900b0033ec812ee0esm1798226wrb.71.2024.03.22.03.57.23
+        d=1e100.net; s=20230601; t=1711105127; x=1711709927;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5J6hKaN1QOoxxXz1T+5CFRE6tdsrp4JJET9C/glDPY0=;
+        b=gbh++mWdDeBXbpY/tYxfy/mtAVhDlT54Ijb5EyzmflWMEmwJafjv9MdAhLrR7ShTxO
+         sV9Hlcx2IotxbxsTIh2x6qYE3paCGpeszKmDxZMXEjBAL7sZvHA8xCKTj56uhGEYK1fD
+         3seMPxOhU77S3i86AZwWydYtbfgwwSJ3VEa6ihfUnZ3JZbXND2e65M2Qsf+p23CSfTwF
+         CJqTieLZJXrjMAHzeAJsGZgXyn5U8KyZnrcCtrLHjAja9Pm9ydpvwKfPS5APxX3GHBNG
+         mOGM/O76SCHL00tmeojGUHROqRVOcWAdo2AksA4jJby49G243ctxrIp5QmOTvtqCz5lO
+         VSRw==
+X-Forwarded-Encrypted: i=1; AJvYcCWIUc07flNi7a3SWlqsLtNED3iJ5Ulihhuq8h7oBa9NVkppAzd65xni8B0lMVabKq41+NLkYvO3vugRqqgZIJMfDQeW31+w2lOF
+X-Gm-Message-State: AOJu0YyGKqvVX6JjUkuP4xOD9TFXbystz526piPhsYOfPvwRECFw+mNC
+	c2bjBytWxY15o1VBCv2b0RaS5jZN1LW9a4h84k3eoRiNcLIZystAN6qQecrqvjU=
+X-Google-Smtp-Source: AGHT+IGM3Kt2gQLYglQ72vKDBZNdU1ywAm2J5Zc15UKLNfhAkHKQE43HaGykC/84SoWzGvuuRFn+7A==
+X-Received: by 2002:a19:4353:0:b0:512:be8e:79da with SMTP id m19-20020a194353000000b00512be8e79damr1302079lfj.8.1711105126886;
+        Fri, 22 Mar 2024 03:58:46 -0700 (PDT)
+Received: from [192.168.0.102] ([176.61.106.68])
+        by smtp.gmail.com with ESMTPSA id w15-20020a05600c474f00b00414037f27a9sm2740627wmo.31.2024.03.22.03.58.45
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Mar 2024 03:57:24 -0700 (PDT)
-Message-ID: <ccb4cb7e-9198-4c2f-b66f-014f596b657d@linaro.org>
-Date: Fri, 22 Mar 2024 11:57:22 +0100
+        Fri, 22 Mar 2024 03:58:46 -0700 (PDT)
+Message-ID: <f8e4a364-a1b4-4b0e-905d-d3dde3557fe2@linaro.org>
+Date: Fri, 22 Mar 2024 10:58:45 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -78,107 +76,192 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-From: Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH 0/5] Fix various races in UCSI
-To: Kenneth Crudup <kenny@panix.com>, "Christian A. Ehrhardt" <lk@c--e.de>,
- linux-kernel@vger.kernel.org
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Prashant Malani <pmalani@chromium.org>, Jameson Thies <jthies@google.com>,
- Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
- =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
- =?UTF-8?Q?Samuel_=C4=8Cavoj?= <samuel@cavoj.net>, linux-usb@vger.kernel.org
-References: <20240320073927.1641788-1-lk@c--e.de>
- <fba7503a-7947-4487-95e6-9d41d636b075@panix.com>
-Content-Language: en-US, fr
-Autocrypt: addr=neil.armstrong@linaro.org; keydata=
- xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
- GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
- BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
- qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
- 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
- AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
- OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
- Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
- YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
- GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
- UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
- GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
- yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
- QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
- SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
- 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
- Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
- oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
- M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
- 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
- KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
- 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
- QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
-Organization: Linaro
-In-Reply-To: <fba7503a-7947-4487-95e6-9d41d636b075@panix.com>
+Subject: Re: [PATCH 5/5] arm64: dts: qcom: sm7225-fairphone-fp4: Enable USB
+ role switching
+Content-Language: en-US
+To: Luca Weiss <luca.weiss@fairphone.com>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konrad.dybcio@linaro.org>, Liam Girdwood
+ <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+ Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Wesley Cheng <quic_wcheng@quicinc.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20240322-fp4-tcpm-v1-0-c5644099d57b@fairphone.com>
+ <20240322-fp4-tcpm-v1-5-c5644099d57b@fairphone.com>
+From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <20240322-fp4-tcpm-v1-5-c5644099d57b@fairphone.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 20/03/2024 11:53, Kenneth Crudup wrote:
+On 22/03/2024 08:01, Luca Weiss wrote:
+> Configure the Type-C and VBUS regulator on PM7250B and wire it up to the
+> USB PHY, so that USB role and orientation switching works.
 > 
-> Applied (cleanly) onto 6.8.1; I'll be testing over the next few days, but a few connects/disconnects mixed in with suspend/resume cycles shows no obvious issues (and everything seems to work).
+> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+> ---
+> With this patch I'm not quite sure if the 'ports' are connected
+> correctly, though functionally everything appears to work fine.
 > 
-> Dell XPS 9320, BIOS 2.10.0
+> On some other SoCs port@1 in qmpphy and a second port in dwc3 are
+> connected together also - one port of USB 2.0 HS, one for USB 3.0 SS.
 > 
-> -K
+> Here I'm following sm8250's solution. Also checking the binding doc
+> doesn't reveal anything useful.
+
+I don't see a redriver on your schematics which appears to be the only 
+big difference to the qrb5165 reference.
+
+https://www.fairphone.com/wp-content/uploads/2022/09/FP4_Information-for-repairers-and-recyclers.pdf
+
+
+> ---
+>   arch/arm64/boot/dts/qcom/sm6350.dtsi              | 25 ++++++++++
+>   arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts | 57 ++++++++++++++++++++++-
+>   2 files changed, 81 insertions(+), 1 deletion(-)
 > 
-> On 3/20/24 00:39, Christian A. Ehrhardt wrote:
->> Fix various races in UCSI code:
->> - The EVENT_PENDING bit should be cleared under the PPM lock to
->>    avoid spurious re-checking of the connector status.
->> - The initial connector change notification during init may be
->>    lost which can cause a stuck UCSI controller. Observed by me
->>    and others during resume or after module reload.
->> - Unsupported commands must be ACKed. This was uncovered by the
->>    recent change from Jameson Thies that did sent unsupported commands.
->> - The DELL quirk still isn't quite complete and I've found a more
->>    elegant way to handle this. A connector change ack _is_ accepted
->>    on affected systems if it is bundled with a command ack.
->> - If we do two consecutive resets or the controller is already
->>    reset at boog the second reset might complete early because the
->>    reset complete bit is already set. ucsi_ccg.c has a work around
->>    for this but it looks like an more general issue to me.
->>
->> NOTE:
->> As a result of these individual fixes we could think about the
->> question if there are additional cases where we send some type
->> of command to the PPM while the bit that indicates its completion
->> is already set in CCI. And in fact there is one more case where
->> this can happen: The ack command that clears the connector change
->> is sent directly after the ack command for the previous command.
->> It might be possible to simply ack the connector change along with
->> the first command ucsi_handle_connector_change() and not at the
->> end. AFAICS the connector lock should protect us from races that
->> might arise out of this.
->>
->> Christian A. Ehrhardt (5):
->>    usb: typec: ucsi: Clear EVENT_PENDING under PPM lock
->>    usb: typec: ucsi: Check for notifications after init
->>    usb: typec: ucsi: Ack unsupported commands
->>    usb: typec: ucsi_acpi: Refactor and fix DELL quirk
->>    usb: typec: ucsi: Clear UCSI_CCI_RESET_COMPLETE before reset
->>
->>   drivers/usb/typec/ucsi/ucsi.c      | 56 ++++++++++++++++++++--
->>   drivers/usb/typec/ucsi/ucsi_acpi.c | 75 +++++++++++++-----------------
->>   2 files changed, 84 insertions(+), 47 deletions(-)
->>
+> diff --git a/arch/arm64/boot/dts/qcom/sm6350.dtsi b/arch/arm64/boot/dts/qcom/sm6350.dtsi
+> index 24bcec3366ef..b267500467f0 100644
+> --- a/arch/arm64/boot/dts/qcom/sm6350.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm6350.dtsi
+> @@ -1686,6 +1686,27 @@ usb_1_qmpphy: phy@88e8000 {
+>   			#phy-cells = <1>;
+>   
+>   			status = "disabled";
+> +
+> +			ports {
+> +				#address-cells = <1>;
+> +				#size-cells = <0>;
+> +
+> +				port@0 {
+> +					reg = <0>;
+> +
+> +					usb_1_qmpphy_out: endpoint {};
+> +				};
+> +
+> +				port@1 {
+> +					reg = <1>;
+> +				};
+> +
+> +				port@2 {
+> +					reg = <2>;
+> +
+> +					usb_1_qmpphy_dp_in: endpoint {};
+> +				};
+> +			};
+>   		};
+>   
+>   		dc_noc: interconnect@9160000 {
+> @@ -1861,6 +1882,10 @@ usb_1_dwc3: usb@a600000 {
+>   				snps,hird-threshold = /bits/ 8 <0x10>;
+>   				phys = <&usb_1_hsphy>, <&usb_1_qmpphy QMP_USB43DP_USB3_PHY>;
+>   				phy-names = "usb2-phy", "usb3-phy";
+> +
+> +				port {
+> +					usb_1_role_switch_out: endpoint {};
+> +				};
+>   			};
+>   		};
+>   
+> diff --git a/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts b/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
+> index bc67e8c1fe4d..104f23ec322d 100644
+> --- a/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
+> +++ b/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
+> @@ -19,6 +19,7 @@
+>   #include <dt-bindings/leds/common.h>
+>   #include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
+>   #include <dt-bindings/regulator/qcom,rpmh-regulator.h>
+> +#include <dt-bindings/usb/pd.h>
+>   #include "sm7225.dtsi"
+>   #include "pm6150l.dtsi"
+>   #include "pm6350.dtsi"
+> @@ -543,6 +544,50 @@ conn-therm@1 {
+>   	};
+>   };
+>   
+> +&pm7250b_typec {
+> +	vdd-pdphy-supply = <&vreg_l3a>;
+> +
+> +	status = "okay";
+> +
+> +	connector {
+> +		compatible = "usb-c-connector";
+> +
+> +		power-role = "source";
+> +		data-role = "dual";
+> +		self-powered;
+> +
+> +		source-pdos = <PDO_FIXED(5000, 1500,
+> +					 PDO_FIXED_DUAL_ROLE |
+> +					 PDO_FIXED_USB_COMM |
+> +					 PDO_FIXED_DATA_SWAP)>;
+> +
+> +		ports {
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +
+> +			port@0 {
+> +				reg = <0>;
+> +				pm7250b_role_switch_in: endpoint {
+> +					remote-endpoint = <&usb_1_role_switch_out>;
+> +				};
+> +			};
+> +
+> +			port@1 {
+> +				reg = <1>;
+> +				pm7250b_typec_mux_in: endpoint {
+> +					remote-endpoint = <&usb_1_qmpphy_out>;
+> +				};
+> +			};
+> +		};
+> +	};
+> +};
+> +
+> +&pm7250b_vbus {
+> +	regulator-min-microamp = <500000>;
+> +	regulator-max-microamp = <1500000>;
+> +	status = "okay";
+> +};
+> +
+>   &pmk8350_rtc {
+>   	status = "okay";
+>   };
+> @@ -726,7 +771,12 @@ &usb_1 {
+>   
+>   &usb_1_dwc3 {
+>   	maximum-speed = "super-speed";
+> -	dr_mode = "peripheral";
+> +	dr_mode = "otg";
+> +	usb-role-switch;
+> +};
+> +
+> +&usb_1_role_switch_out {
+> +	remote-endpoint = <&pm7250b_role_switch_in>;
+>   };
+>   
+>   &usb_1_hsphy {
+> @@ -740,10 +790,15 @@ &usb_1_hsphy {
+>   &usb_1_qmpphy {
+>   	vdda-phy-supply = <&vreg_l22a>;
+>   	vdda-pll-supply = <&vreg_l16a>;
+> +	orientation-switch;
+>   
+>   	status = "okay";
+>   };
+>   
+> +&usb_1_qmpphy_out {
+> +	remote-endpoint = <&pm7250b_typec_mux_in>;
+> +};
+> +
+>   &wifi {
+>   	vdd-0.8-cx-mx-supply = <&vreg_l4a>;
+>   	vdd-1.8-xo-supply = <&vreg_l7a>;
 > 
 
-with [1] applied:
+This looks consistent with 8250
 
-Tested-by: Neil Armstrong <neil.armstrong@linaro.org> # on SM8550-QRD
-Tested-by: Neil Armstrong <neil.armstrong@linaro.org> # on SM8650-QRD
-Tested-by: Neil Armstrong <neil.armstrong@linaro.org> # on SM8550-HDK
-
-[1] https://lore.kernel.org/all/20240315171836.343830-1-jthies@google.com/
-
-Thanks,
-Neil
+Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 
