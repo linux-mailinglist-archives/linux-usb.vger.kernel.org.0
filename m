@@ -1,67 +1,45 @@
-Return-Path: <linux-usb+bounces-8171-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8172-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64865886E14
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Mar 2024 15:10:00 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2403B886EC2
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Mar 2024 15:38:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DD03DB21593
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Mar 2024 14:09:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 65B7EB20F22
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Mar 2024 14:38:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D69D47796;
-	Fri, 22 Mar 2024 14:09:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ObXyUU3Z"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8572747F7F;
+	Fri, 22 Mar 2024 14:38:32 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA82446453;
-	Fri, 22 Mar 2024 14:09:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id 4D7C7433B3
+	for <linux-usb@vger.kernel.org>; Fri, 22 Mar 2024 14:38:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711116592; cv=none; b=fsTAkZdbpy7IFV1i4OGTKO/K/J7ylPhe+PzltwWi0ZVoWXRmzgk15iokgUQWce8v6XJBl8xaa0AgYT+YlCgDihSyVliTEi6jZXUInjYajUcTc+JlhGATitkTQ7Kx0YAarLzU1nSxNBo52+24tdiUv7oxriyV20SEDIccGuUjsY4=
+	t=1711118312; cv=none; b=XZWVbpzLkrNmguf0JVPUWt85URp3IaOpQwV2sgra/E2WaFoLiUuk6kK9WyRJRAMJHTe2H7WRM3KqKgmqqELXX+3NDtBtYdQMfa3qOfV7H/cEsRFzRQBZETgrTQkNDA2qE0UzdRojYJw9tHWH/An0/t/PoDkTYA6P1cnoHyqYfZo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711116592; c=relaxed/simple;
-	bh=3hjrSiZrXVvhQPVUAwTazg/nHINEV1fiqNYHTv2SMNs=;
+	s=arc-20240116; t=1711118312; c=relaxed/simple;
+	bh=3r7v095ouw39d4PdKpuAInEYq5heJvH/c8twfhfxMcc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=V5CXjmXQHOEXcHPMj3LDDs/ex4SAjlCrlkdUVTHyXXhJgD0H/+sznBR8xVSjCzwmjIjDOYYw9ZhiEfhEFneATxXxP+mNun+dpSgpixTJKO2wAMe/Akmn9yuwqd3A/vz2Ey8khtf9EyMxEYabfhekZYDaLXfeSYJQgHapvPqBWJs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ObXyUU3Z; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68C70C433F1;
-	Fri, 22 Mar 2024 14:09:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711116591;
-	bh=3hjrSiZrXVvhQPVUAwTazg/nHINEV1fiqNYHTv2SMNs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ObXyUU3ZWvUjxheQokI0qKNL1E8ywhyyR8oCV0CpcsemvVe4HcUysp+dRIZFqkYZP
-	 UOFl//Is9VaKgl1TEY8SQ2bD3TldKZ6kdpF4tlDr2v0UHDIEBaM/azoAIf0bU5cvju
-	 CLfVQ6mCU2ikedscI1yh6S5CA6yKL8rtVehwRNK4aoADMJPHLux+WwGRtpMzhYdcFT
-	 qYEFFgKURWy+qSNOtVL7lSuCWTWAtHS9f+robJE/NNDrkl/fVg72YyCNYAaAoXJqhT
-	 CfGPcBXjLLBtGVVfkX0WDDOmXzn1WiewBODqCaXNKBdsZFGEWog9YvWLq3S6nJ2gAr
-	 lWUE6MxzNuW/A==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1rnfaq-000000000r3-3AKN;
-	Fri, 22 Mar 2024 15:10:00 +0100
-Date: Fri, 22 Mar 2024 15:10:00 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Johan Hovold <johan+linaro@kernel.org>, linux-usb@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH 0/7] usb: typec: ucsi: fix several issues manifesting on
- Qualcomm platforms
-Message-ID: <Zf2ROG1Dl274-F5K@hovoldconsulting.com>
-References: <20240313-qcom-ucsi-fixes-v1-0-74d90cb48a00@linaro.org>
- <Zf12vSHvDiFTufLE@hovoldconsulting.com>
- <CAA8EJpoat+u6OK35BNEUT3xv5Da0UdMKhC-wEs0ZoViSr7xFZg@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=uYIwOzZn+WmmNAHiEXNDdPa8y0B/w2wPmzfP3Z5cef4tDOTRl9Nzh2eSRKwYpliivcvQQyFNjF/PWyR9CGM1CtJz7T6ehXBRG+ZlOzZUPIIqd4Ti8y7A2R6ZSZRXOqPmrqpQUUJyw01LWtI2ZpEkut1M4V6WgXYI2X37XDUEac0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
+Received: (qmail 761017 invoked by uid 1000); 22 Mar 2024 10:38:26 -0400
+Date: Fri, 22 Mar 2024 10:38:26 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Sergey Shtylyov <s.shtylyov@omp.ru>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+  linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+  lvc-project@linuxtesting.org
+Subject: Re: [PATCH] usb: storage: isd200: fix sloppy typing in
+ isd200_scsi_to_ata()
+Message-ID: <26d483d0-a89c-4c33-99f2-455f0f13e6e5@rowland.harvard.edu>
+References: <e8c20e3c-3cbe-b5c1-f673-0a7f22566879@omp.ru>
+ <4e13319d-30a8-4274-bfa0-36d915b1e1ec@rowland.harvard.edu>
+ <6425997a-669b-919d-af44-880a7ce28ffc@omp.ru>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -70,52 +48,56 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAA8EJpoat+u6OK35BNEUT3xv5Da0UdMKhC-wEs0ZoViSr7xFZg@mail.gmail.com>
+In-Reply-To: <6425997a-669b-919d-af44-880a7ce28ffc@omp.ru>
 
-On Fri, Mar 22, 2024 at 03:39:36PM +0200, Dmitry Baryshkov wrote:
-> On Fri, 22 Mar 2024 at 14:16, Johan Hovold <johan@kernel.org> wrote:
-> > On Wed, Mar 13, 2024 at 05:54:10AM +0200, Dmitry Baryshkov wrote:
-
-> > > Dmitry Baryshkov (7):
-> > >       usb: typec: ucsi: fix race condition in connection change ACK'ing
-> > >       usb: typec: ucsi: acknowledge the UCSI_CCI_NOT_SUPPORTED
-> > >       usb: typec: ucsi: make ACK_CC_CI rules more obvious
-> > >       usb: typec: ucsi: allow non-partner GET_PDOS for Qualcomm devices
-> > >       usb: typec: ucsi: limit the UCSI_NO_PARTNER_PDOS even further
-> > >       usb: typec: ucsi: properly register partner's PD device
-> >
-> > >       soc: qcom: pmic_glink: reenable UCSI on sc8280xp
-> >
-> > I just gave this series a quick spin on my X13s and it seems there are
-> > still some issues that needs to be resolved before merging at least the
-> > final patch in this series:
-> >
-> > [    7.786167] ucsi_glink.pmic_glink_ucsi pmic_glink.ucsi.0: unknown error 0
-> > [    7.786445] ucsi_glink.pmic_glink_ucsi pmic_glink.ucsi.0: UCSI_GET_PDOS failed (-5)
-
-> > I see these errors on boot both with and without my charger and ethernet
-> > device connected.
+On Fri, Mar 22, 2024 at 12:49:23PM +0300, Sergey Shtylyov wrote:
+> On 3/22/24 3:57 AM, Alan Stern wrote:
+> [...]
 > 
-> Just to doublecheck: do you have latest adsp installed?
+> >> When isd200_scsi_to_ata() emulates the SCSI READ CAPACITY command, the
+> >> capacity local variable is needlessly typed as *unsigned long* -- which
+> >> is 32-bit type on the 32-bit arches and 64-bit type on the 64-bit arches;
+> >> this variable's value should always fit into 32 bits for both the ATA and
+> >> the SCSI capacity data...
+> >>
+> >> While at it, arrange the local variable declarations in the reverse Xmas
+> >> tree order...
+> >>
+> >> Found by Linux Verification Center (linuxtesting.org) with the SVACE static
+> >> analysis tool.
+> >>
+> >> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+> >>
+> >> ---
+> >>  drivers/usb/storage/isd200.c |    2 +-
+> >>  1 file changed, 1 insertion(+), 1 deletion(-)
+> >>
+> >> Index: usb/drivers/usb/storage/isd200.c
+> >> ===================================================================
+> >> --- usb.orig/drivers/usb/storage/isd200.c
+> >> +++ usb/drivers/usb/storage/isd200.c
+> >> @@ -1283,8 +1283,8 @@ static int isd200_scsi_to_ata(struct scs
+> >>  
+> >>  	case READ_CAPACITY:
+> >>  	{
+> >> -		unsigned long capacity;
+> >>  		struct read_capacity_data readCapacityData;
+> >> +		u32 capacity;
+> > 
+> > This is a bit peculiar.  Why bother to change the type of the capacity 
+> > variable without also changing the types of lba and blockCount at the 
+> > start of the routine?
+> 
+>    The reason is simple: Svace didn't complain about those.
 
-Yes, there has only been one adsp fw released to linux-firmware and
-that's the one I'm using.
+You shouldn't trust automated code checkers too far.  Always verify 
+their reports, and look around the vicinity to see if they missed 
+something obvious.
 
-If this depends on anything newer that should have been mentioned in
-the commit message and we obviously can't enable UCSI until that
-firmware has been released.
+>  I'll fix
+> them up in v2 if you're not opposed to this patch...
 
-> Do you have your bootloaders updated?
+Sure, go ahead.
 
-Yes.
-
-> If you back up the patch #5 ("limit the UCSI_NO_PARTNER_PDOS even
-> further"), does it still break for you?
-
-I don't understand what you mean by "back up the patch #5". Revert
-(drop) patch 5?
-
-The errors are still there with patch 5 reverted.
-
-Johan
+Alan Stern
 
