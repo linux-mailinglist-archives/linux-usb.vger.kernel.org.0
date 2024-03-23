@@ -1,100 +1,88 @@
-Return-Path: <linux-usb+bounces-8193-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8195-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5146E887752
-	for <lists+linux-usb@lfdr.de>; Sat, 23 Mar 2024 07:58:24 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 29E8B8879D2
+	for <lists+linux-usb@lfdr.de>; Sat, 23 Mar 2024 18:58:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C466BB23020
-	for <lists+linux-usb@lfdr.de>; Sat, 23 Mar 2024 06:58:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 43C6C1C20BAE
+	for <lists+linux-usb@lfdr.de>; Sat, 23 Mar 2024 17:58:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6020C10A39;
-	Sat, 23 Mar 2024 06:57:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="XHrfy2Kv"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51E4C53E2B;
+	Sat, 23 Mar 2024 17:58:28 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.smtpout.orange.fr (smtp-28.smtpout.orange.fr [80.12.242.28])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F01ECA6F;
-	Sat, 23 Mar 2024 06:57:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.28
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id C93AC535A8
+	for <linux-usb@vger.kernel.org>; Sat, 23 Mar 2024 17:58:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711177057; cv=none; b=OdrAM9SPG6KHkLpqokOxLw3lNSNYzAkT7QYs5BtdfqUFTwS4fQzVv7lz3JzVjx6NQk9q5Kkwt4XXa/DcWFVJMfXKON99PSbqlT4vF30rOomnpTqb+Hq6lH/CD+39/mqa79rwk9EJKcrFgTg3APO1HR2PXWTkeDZLe70KpU0Ldd4=
+	t=1711216708; cv=none; b=ODe1RI/fZ7FfUhXgT8koJIYoK3LwVrvaiOhQYMlGFzgQJLqV3fb8wQ0RfkNaYAQuhXyFWJwjNI/bw8XcBM05TxI+MCDCx42GK3KSNVb3QHgXa379Z2J0ebUbm7bnCBntEUt+nA/vm4U6deE2EaqgvvGrowP4vMX6ZqGf3lu3v6I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711177057; c=relaxed/simple;
-	bh=y2BUhWyG2HK6NoiwSsb///Wz9WQ5PTYaMBs7R+bsQKo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=a6aW6dtC8smoTq2g8O7Q9j9H2YhldHLJFtlnXAlKEJ7VRUbmeOgarhQTOPub5lEUN1bk/0MHaY0iLMcWgj4rg/GxNzFLsnwmc58HpAMAKt61E8vR9HDuEpR9KxSvTwodcur3ai9vxXAnf+sr1LqHouTqfYtASjI04D4rrH78CEE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=XHrfy2Kv; arc=none smtp.client-ip=80.12.242.28
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from fedora.home ([86.243.17.157])
-	by smtp.orange.fr with ESMTPA
-	id nvJZrKeyIixjunvJnrMrik; Sat, 23 Mar 2024 07:57:27 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1711177047;
-	bh=GqVTzgUhSwxWnPsMh7JKr/v6dWRM2rIpiyLhxqJvIk4=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=XHrfy2KvjpqI2gsrxiQRiC5mc3PqShjlMeYJXhoH60ZzN62+0BZ9tFIHYZVOPYB9A
-	 DzRU4dISD/6Hqn4JIf+QAX/5N8gxmfiO31dJepjEYciQI0TYbNFORTbRODUUAalg3z
-	 uEVDua/GKX+TsPNfp6Uz+0GqXHh2N1J3K8MsMP/STa6BbhIl4Dswnioj6HNK2m/BJ7
-	 NOczLzbj7niily6rh+bLGF6mL4IgdHwVudTXOWxB3mX/ORjPBY9hVaI/jim5D+WaEW
-	 aLM2Xt31V8Te8+0RRlISBfGjb4xBFKroEwiVC42n4z92JtQt85i414avwWeZveYdVy
-	 9jueAhMZbbJVQ==
-X-ME-Helo: fedora.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 23 Mar 2024 07:57:27 +0100
-X-ME-IP: 86.243.17.157
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To: gregkh@linuxfoundation.org,
-	jbrunet@baylibre.com,
-	ruslan.bilovol@gmail.com
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	kernel-janitors@vger.kernel.org,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH 3/3] usb: gadget: u_audio: Use snprintf() instead of sprintf()
-Date: Sat, 23 Mar 2024 07:57:05 +0100
-Message-ID: <5703e697687e4a39059bf90659969ffc86b2cfbd.1711176701.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <cover.1711176700.git.christophe.jaillet@wanadoo.fr>
-References: <cover.1711176700.git.christophe.jaillet@wanadoo.fr>
+	s=arc-20240116; t=1711216708; c=relaxed/simple;
+	bh=VVP9ALTpJ5W8ZjBOBlZ+323rDesK2QDow0OPQCpYd8w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=R/15BQ/N9cd4eQ6gDKr0pov/wX31kWDRV7nfO7QfyBOYzSo4k2DA3cRf30iPfbwMPuV2sNro1UKKVtZZL9Tc1tG6vaU70vscnzf7GDe9hcICoFI60ezRGD7TYhWsKWWu7KRJimplH6liJivTBbezHWP3mSjP86ut+H1L7WciGAI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
+Received: (qmail 794401 invoked by uid 1000); 23 Mar 2024 13:58:17 -0400
+Date: Sat, 23 Mar 2024 13:58:17 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: nick black <dankamongmen@gmail.com>
+Cc: linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: always print reset/new device message
+Message-ID: <4175e097-85e4-48ac-91d3-d78822c2a3b7@rowland.harvard.edu>
+References: <20240318052600.671908-1-dankamongmen@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240318052600.671908-1-dankamongmen@gmail.com>
 
-In order to be consistent with other s[n]printf() usage in this file,
-switch to snprintf() here as well.
+On Mon, Mar 18, 2024 at 01:25:23AM -0400, nick black wrote:
+> Since usb_speed_string() always returns a valid string
+> (invalid speeds turn into "UNKNOWN"), go ahead and
+> always print this diagnostic, rather than checking the
+> speed here (which wasn't up to date for SPEED_SUPER_PLUS,
+> and looks like it had an off-by-one error anyway).
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-Compile tested only
----
- drivers/usb/gadget/function/u_audio.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+This change isn't needed.  For speeds >= SPEED_SUPER, the corresponding 
+information is printed in the vicinity of line 5027.
 
-diff --git a/drivers/usb/gadget/function/u_audio.c b/drivers/usb/gadget/function/u_audio.c
-index 5dba7ed9b0a1..1a634646bd24 100644
---- a/drivers/usb/gadget/function/u_audio.c
-+++ b/drivers/usb/gadget/function/u_audio.c
-@@ -1388,7 +1388,8 @@ int g_audio_setup(struct g_audio *g_audio, const char *pcm_name,
- 
- 	strscpy(card->driver, card_name);
- 	strscpy(card->shortname, card_name);
--	sprintf(card->longname, "%s %i", card_name, card->dev->id);
-+	snprintf(card->longname, sizeof(card->longname), "%s %i",
-+		 card_name, card->dev->id);
- 
- 	snd_pcm_set_managed_buffer_all(pcm, SNDRV_DMA_TYPE_CONTINUOUS,
- 				       NULL, 0, BUFF_SIZE_MAX);
--- 
-2.44.0
+Alan Stern
 
+> Signed-off-by: nick black <dankamongmen@gmail.com>
+> ---
+>  drivers/usb/core/hub.c | 9 ++++-----
+>  1 file changed, 4 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> index e38a4124f610..7325e5420900 100644
+> --- a/drivers/usb/core/hub.c
+> +++ b/drivers/usb/core/hub.c
+> @@ -4909,11 +4909,10 @@ hub_port_init(struct usb_hub *hub, struct usb_device *udev, int port1,
+>  	else
+>  		driver_name = udev->bus->sysdev->driver->name;
+>  
+> -	if (udev->speed < USB_SPEED_SUPER)
+> -		dev_info(&udev->dev,
+> -				"%s %s USB device number %d using %s\n",
+> -				(initial ? "new" : "reset"), speed,
+> -				devnum, driver_name);
+> +	dev_info(&udev->dev,
+> +			"%s %s USB device number %d using %s\n",
+> +			(initial ? "new" : "reset"), speed,
+> +			devnum, driver_name);
+>  
+>  	if (initial) {
+>  		/* Set up TT records, if needed  */
+> -- 
+> 2.43.0
+> 
 
