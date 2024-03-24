@@ -1,123 +1,280 @@
-Return-Path: <linux-usb+bounces-8199-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8200-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 85810887B4D
-	for <lists+linux-usb@lfdr.de>; Sun, 24 Mar 2024 02:16:12 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D5EF889203
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Mar 2024 07:55:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B6FD51C20CAB
-	for <lists+linux-usb@lfdr.de>; Sun, 24 Mar 2024 01:16:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E87182807DE
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Mar 2024 06:55:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20AAAEC4;
-	Sun, 24 Mar 2024 01:16:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B08FB19D1BD;
+	Mon, 25 Mar 2024 00:42:21 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id E23E8A50
-	for <linux-usb@vger.kernel.org>; Sun, 24 Mar 2024 01:16:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BADF21485D
+	for <linux-usb@vger.kernel.org>; Sun, 24 Mar 2024 23:32:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711242966; cv=none; b=nyjreY8G5OhDijTLEtl7+QNwI5PiTM7GHekAsHGpLAxQJX4f412ViEYEznRYdCz3CBupX+fRk7qah1uPaQNQkg8qTAX/8eQud0et1C3RVIPXEZcwtZrbkHkIbjHPj6IL9lz746gFBQIJbF07Qaw2sX/AeRI4O5bsmzVZ2rd2wpI=
+	t=1711323162; cv=none; b=mIywlPuIJ96guH5nlC3ERQq/Z06seMbV+Q84qInPaaNuepgWkQX27NBMOUf4VxwIrpUe8l9OU9H01wzeyysjQttiKXNycoBzz1kgSWU6K7EjxbU8eQQUqjGI5N936hmny/LCHtMWRNJCEve9wm+fPMTya24uPjuBEHGPk1S+fs0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711242966; c=relaxed/simple;
-	bh=mzHVKCiZ56ALFBV7ryVhtBdGHCMKgNnQ+S46dJqSans=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aizgGYa0KKdrS9ckyu77kRgHrOYsrgzMIL3kLJIY6uaBc4IvhsJko/iWbkizW8M4Qy1nMJl4pJjiQpRCNqayMYOCxdmFUb04jTGAblVBPQxXxLlfOyDV7Sw46lJ9GET+JJtkuvcNdHPtnV/JNGjYKrgt8KMif9Ut44w6SjXYpks=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
-Received: (qmail 803520 invoked by uid 1000); 23 Mar 2024 21:16:02 -0400
-Date: Sat, 23 Mar 2024 21:16:02 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Sergey Shtylyov <s.shtylyov@omp.ru>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-  linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
-  lvc-project@linuxtesting.org
-Subject: Re: [PATCH v2] usb: storage: isd200: fix sloppy typing in
- isd200_scsi_to_ata()
-Message-ID: <9c0fd456-078a-4bc1-9a07-1a6605a5b85e@rowland.harvard.edu>
-References: <8d6beef7-5995-c831-a7b6-ff98d3887231@omp.ru>
+	s=arc-20240116; t=1711323162; c=relaxed/simple;
+	bh=MR6LiyqvdzJQOZPGvyqmUcabXsb6JiaKTN2J7yPF1+M=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Sr+6q/38h0cK4QXl0uj4XzfHX3OXm10dmi5wIAVqr+V15ncdmqfxQwxC9CFHYnOR45k/4/a7S5OtXaBhrTxSqrstbt4/2S3PXtnTIZsjn4CsIWvpEH6LgwC32tqqD8g0WQTglE/kcQNb/6gy5ZyqkXS+RZp3Lp8Nzrm00qByPrs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <m.grzeschik@pengutronix.de>)
+	id 1roXKN-0007qh-Ea; Mon, 25 Mar 2024 00:32:35 +0100
+Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <m.grzeschik@pengutronix.de>)
+	id 1roXKM-008JQl-QP; Mon, 25 Mar 2024 00:32:34 +0100
+Received: from localhost ([::1] helo=dude04.red.stw.pengutronix.de)
+	by dude04.red.stw.pengutronix.de with esmtp (Exim 4.96)
+	(envelope-from <m.grzeschik@pengutronix.de>)
+	id 1roXKM-00FsDT-2S;
+	Mon, 25 Mar 2024 00:32:34 +0100
+From: Michael Grzeschik <m.grzeschik@pengutronix.de>
+Date: Mon, 25 Mar 2024 00:32:30 +0100
+Subject: [PATCH] usb: gadget: uvc: Improve error checking and tagging
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8d6beef7-5995-c831-a7b6-ff98d3887231@omp.ru>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240324-uvc-gadget-errorcheck-v1-1-5538c57bbeba@pengutronix.de>
+X-B4-Tracking: v=1; b=H4sIAA24AGYC/x2NywqDMBAAf0X23AWTBiz9ldLDZrN5UIllU0UQ/
+ 73B4wwMc0ATLdLgORygspVWltrB3AbgTDUJltAZ7GjdeLcO140xUUjyQ1FdlLPwB53xDzNRjM4
+ F6K2nJuiVKude13Weu/yqxLJfs9f7PP8ir+1yfAAAAA==
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
+ Daniel Scally <dan.scally@ideasonboard.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Michael Grzeschik <m.grzeschik@pengutronix.de>
+X-Mailer: b4 0.12.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7088;
+ i=m.grzeschik@pengutronix.de; h=from:subject:message-id;
+ bh=MR6LiyqvdzJQOZPGvyqmUcabXsb6JiaKTN2J7yPF1+M=;
+ b=owEBbQKS/ZANAwAKAb9pWET5cfSrAcsmYgBmALgSL9zCLOcFouQ2WqIZ76dmrdygu07rc5KnE
+ WytqzTr1t6JAjMEAAEKAB0WIQQV2+2Fpbqd6fvv0Gi/aVhE+XH0qwUCZgC4EgAKCRC/aVhE+XH0
+ q3wlD/4uVVTJGFEIGn/Hde+HACmjdT839upbn0Qf3YKQpGAlNpalz0XN1jyEu+C25dvUHXTA+NL
+ wBB9TkAwlXPCD0mdlLWqWqjvzFskGGS0yJnBZeQkaKaj0qRg4qGwB4IXIK4fOCcqSaOzN1GADpc
+ z1RQDRLOuIS7acCxPQ3jdl7gb9VGTP6ApEIi1PJ63MMyNgFLLlov6gHhXD1Dxtb4BVU4diGIJ68
+ C66qwD08HJEIXn5SYfpnvtK+Ye+pwAOmwUo3qGcGmR+7b1QzWxCRyG6Zs882/TKPWrsRvRcghm0
+ W5rGL0/e9ApIDCMBWG8igQ1814pPq+Z3kHhAbxUFDRCbxkxMb9qm4xm9/+rxPCh5nVzZCqolDcr
+ IZ/lDHoXCoqqRi7G4dC3ICPiAdns+ZNxbCiriSipz0TzalldcPt4lVoa9fZqLo+E2ZlT5qxEqnR
+ SJ7juHdj3baui6VYZQpec3QKjFN8qcd/rQX59OXikAUXxAK/cFL2jy7z2rYthyUT+UwF/BIEVkm
+ ZmZoHa2Z8Z2HNwAVBmSnC6kuxT9NlAv4NtBkSn51UG/zBfZ6uHW4eo4gBBxojI0FmRlkHVrjkg4
+ pUwK7Klhl25aqxdsQ7VGDFNSfUEYzTmymohFcgsC+brZtXUZFLFx7hKWqfbuQdoi2RzVGFlHim6
+ 1iLNAJkNYpua50w==
+X-Developer-Key: i=m.grzeschik@pengutronix.de; a=openpgp;
+ fpr=957BC452CE953D7EA60CF4FC0BE9E3157A1E2C64
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: m.grzeschik@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
-On Sat, Mar 23, 2024 at 10:55:51PM +0300, Sergey Shtylyov wrote:
-> When isd200_scsi_to_ata() emulates the SCSI READ/WRITE (10) commands,
-> the LBA is a 32-bit CDB field and the transfer length is a 16-bit CDB
-> field, so using *unsigned long* (which is 32-bit type on the 32-bit
-> arches and 64-bit type on the 64-bit arches) to declare the lba and
-> blockCount variables doesn't make much sense.  Also, when it emulates
-> the READ CAPACITY command, the returned LBA is a 32-bit parameter data
-> field and the ATA device CHS mode capacity fits into 32 bits as well,
-> so using *unsigned long* to declare the capacity variable doesn't make
-> much sense as well. Let's use the u16/u32 types for those variables...
-> 
-> Found by Linux Verification Center (linuxtesting.org) with the SVACE
-> static analysis tool.
-> 
-> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+Right now after one transfer was completed with EXDEV the currently
+encoded frame will get the UVC_STREAM_ERR tag attached. Since the
+complete and encode path are handling separate requests from different
+threads, there is no direct correspondence between the missed transfer
+of one request and the currently encoded request which might already
+belong to an completely different frame.
 
-Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
+When queueing requests into the hardware by calling ep_queue the
+underlying ringbuffer of the usb driver will be filled. However when
+one of these requests will have some issue while transfer the hardware
+will trigger an interrupt but will continue transferring the pending
+requests in the ringbuffer. This interrupt-latency will make it
+impossible to react in time to tag the fully enqueued frame with the
+UVC_STREAM_ERR in the header.
 
-> ---
-> This patch is against the 'usb-next' branch of Greg KH's usb.git repo...
-> 
-> Changes in version 2:
-> - fixed up the lba and blockCount variable declarations;
-> - removed the typecasts from the blockCount variable calculation;
-> - undid the reordering of the capacity variable declaration;
-> - completely rewrote the patch description.
-> 
->  drivers/usb/storage/isd200.c |   10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
-> 
-> Index: usb/drivers/usb/storage/isd200.c
-> ===================================================================
-> --- usb.orig/drivers/usb/storage/isd200.c
-> +++ usb/drivers/usb/storage/isd200.c
-> @@ -1232,8 +1232,8 @@ static int isd200_scsi_to_ata(struct scs
->  	int sendToTransport = 1;
->  	unsigned char sectnum, head;
->  	unsigned short cylinder;
-> -	unsigned long lba;
-> -	unsigned long blockCount;
-> +	u32 lba;
-> +	u16 blockCount;
->  	unsigned char senseData[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
->  
->  	memset(ataCdb, 0, sizeof(union ata_cdb));
-> @@ -1291,7 +1291,7 @@ static int isd200_scsi_to_ata(struct scs
->  
->  	case READ_CAPACITY:
->  	{
-> -		unsigned long capacity;
-> +		u32 capacity;
->  		struct read_capacity_data readCapacityData;
->  
->  		usb_stor_dbg(us, "   ATA OUT - SCSIOP_READ_CAPACITY\n");
-> @@ -1316,7 +1316,7 @@ static int isd200_scsi_to_ata(struct scs
->  		usb_stor_dbg(us, "   ATA OUT - SCSIOP_READ\n");
->  
->  		lba = be32_to_cpu(*(__be32 *)&srb->cmnd[2]);
-> -		blockCount = (unsigned long)srb->cmnd[7]<<8 | (unsigned long)srb->cmnd[8];
-> +		blockCount = srb->cmnd[7] << 8 | srb->cmnd[8];
->  
->  		if (ata_id_has_lba(id)) {
->  			sectnum = (unsigned char)(lba);
-> @@ -1348,7 +1348,7 @@ static int isd200_scsi_to_ata(struct scs
->  		usb_stor_dbg(us, "   ATA OUT - SCSIOP_WRITE\n");
->  
->  		lba = be32_to_cpu(*(__be32 *)&srb->cmnd[2]);
-> -		blockCount = (unsigned long)srb->cmnd[7]<<8 | (unsigned long)srb->cmnd[8];
-> +		blockCount = srb->cmnd[7] << 8 | srb->cmnd[8];
->  
->  		if (ata_id_has_lba(id)) {
->  			sectnum = (unsigned char)(lba);
+This patch is also addressing this particular issue by delaying the
+transmit of the EOF/ERR tagged header by waiting for the last enqueued
+buffer of the frame to be completed. This way it is possible to react to
+send the EOF/ERR tag depending on the whole frame transfer status.
+
+As this is patch is adding latency to the enqueuing path of the frames
+we make this errorcheck optional by adding an extra module parameter.
+
+Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+---
+ drivers/usb/gadget/function/f_uvc.c     |  4 ++
+ drivers/usb/gadget/function/uvc.h       |  3 ++
+ drivers/usb/gadget/function/uvc_video.c | 69 +++++++++++++++++++++++++++++----
+ 3 files changed, 68 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
+index 929666805bd23..6a7ca8ccaf360 100644
+--- a/drivers/usb/gadget/function/f_uvc.c
++++ b/drivers/usb/gadget/function/f_uvc.c
+@@ -33,6 +33,10 @@ unsigned int uvc_gadget_trace_param;
+ module_param_named(trace, uvc_gadget_trace_param, uint, 0644);
+ MODULE_PARM_DESC(trace, "Trace level bitmask");
+ 
++bool uvc_gadget_errorcheck_param = true;
++module_param_named(errorcheck, uvc_gadget_errorcheck_param, bool, 0644);
++MODULE_PARM_DESC(errorcheck, "Check and mark errors in the transfer of a frame");
++
+ /* --------------------------------------------------------------------------
+  * Function descriptors
+  */
+diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
+index cb35687b11e7e..e21fea6784597 100644
+--- a/drivers/usb/gadget/function/uvc.h
++++ b/drivers/usb/gadget/function/uvc.h
+@@ -46,6 +46,7 @@ struct uvc_device;
+ #define UVC_WARN_PROBE_DEF			1
+ 
+ extern unsigned int uvc_gadget_trace_param;
++extern bool uvc_gadget_errorcheck_param;
+ 
+ #define uvc_trace(flag, msg...) \
+ 	do { \
+@@ -91,6 +92,8 @@ struct uvc_video {
+ 	struct work_struct pump;
+ 	struct workqueue_struct *async_wq;
+ 
++	struct usb_request *last_req;
++
+ 	/* Frame parameters */
+ 	u8 bpp;
+ 	u32 fcc;
+diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
+index d41f5f31dadd5..8e9ec21b5154b 100644
+--- a/drivers/usb/gadget/function/uvc_video.c
++++ b/drivers/usb/gadget/function/uvc_video.c
+@@ -35,9 +35,6 @@ uvc_video_encode_header(struct uvc_video *video, struct uvc_buffer *buf,
+ 
+ 	data[1] = UVC_STREAM_EOH | video->fid;
+ 
+-	if (video->queue.flags & UVC_QUEUE_DROP_INCOMPLETE)
+-		data[1] |= UVC_STREAM_ERR;
+-
+ 	if (video->queue.buf_used == 0 && ts.tv_sec) {
+ 		/* dwClockFrequency is 48 MHz */
+ 		u32 pts = ((u64)ts.tv_sec * USEC_PER_SEC + ts.tv_nsec / NSEC_PER_USEC) * 48;
+@@ -62,7 +59,8 @@ uvc_video_encode_header(struct uvc_video *video, struct uvc_buffer *buf,
+ 
+ 	data[0] = pos;
+ 
+-	if (buf->bytesused - video->queue.buf_used <= len - pos)
++	if (!uvc_gadget_errorcheck_param &&
++	    (buf->bytesused - video->queue.buf_used <= len - pos))
+ 		data[1] |= UVC_STREAM_EOF;
+ 
+ 	return pos;
+@@ -366,6 +364,32 @@ static void uvc_video_ep_queue_initial_requests(struct uvc_video *video)
+ 	spin_unlock_irqrestore(&video->req_lock, flags);
+ }
+ 
++static void
++uvc_video_fixup_header(struct usb_request *next, struct usb_request *done,
++		       bool error)
++{
++	struct uvc_request *next_ureq = next->context;
++	struct uvc_request *done_ureq = done->context;
++	struct uvc_video *video = next_ureq->video;
++	struct uvc_video_queue *queue = &video->queue;
++
++	u8 header = UVC_STREAM_EOF;
++
++	if (error)
++		header |= UVC_STREAM_ERR;
++
++	if (queue->use_sg) {
++		memcpy(next_ureq->header, done_ureq->header,
++				UVCG_REQUEST_HEADER_LEN);
++
++		((u8 *)next_ureq->header)[1] |= header;
++	} else {
++		memcpy(next->buf, done->buf, UVCG_REQUEST_HEADER_LEN);
++
++		((u8 *)next->buf)[1] |= header;
++	}
++}
++
+ static void
+ uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
+ {
+@@ -377,6 +401,7 @@ uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
+ 	unsigned long flags;
+ 	bool is_bulk = video->max_payload_size;
+ 	int ret = 0;
++	bool error = false;
+ 
+ 	spin_lock_irqsave(&video->req_lock, flags);
+ 	if (!video->is_enabled) {
+@@ -419,6 +444,8 @@ uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
+ 
+ 	if (last_buf) {
+ 		spin_lock_irqsave(&queue->irqlock, flags);
++		if (queue->flags & UVC_QUEUE_DROP_INCOMPLETE)
++			error = true;
+ 		uvcg_complete_buffer(queue, last_buf);
+ 		spin_unlock_irqrestore(&queue->irqlock, flags);
+ 	}
+@@ -449,11 +476,37 @@ uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
+ 	 * requests and cannot recover.
+ 	 */
+ 	to_queue->length = 0;
++
++	/* If the last request was queued the just copy the previous
++	 * header without payload to the empty request and fixup the
++	 * tags with ERR/EOF to finish the frame.
++	 */
++	if (uvc_gadget_errorcheck_param && (video->last_req == req)) {
++		uvc_video_fixup_header(to_queue, req, error);
++		to_queue->length = UVCG_REQUEST_HEADER_LEN;
++		video->last_req = NULL;
++	}
++
+ 	if (!list_empty(&video->req_ready)) {
+-		to_queue = list_first_entry(&video->req_ready,
+-			struct usb_request, list);
+-		list_del(&to_queue->list);
+-		list_add_tail(&req->list, &video->req_free);
++		struct usb_request *next_req =
++				list_first_entry(&video->req_ready,
++						 struct usb_request, list);
++		struct uvc_request *next_ureq = next_req->context;
++
++		/* If the last request of the frame will be queued, we delay
++		 * the enqueueing of every next request. This way it is
++		 * possible to react to send the EOF/ERR tag depending
++		 * on the whole frame transfer status.
++		 */
++		if (!video->last_req && !to_queue->length) {
++			if (uvc_gadget_errorcheck_param && next_ureq->last_buf)
++				video->last_req = next_req;
++
++			to_queue = next_req;
++			list_del(&to_queue->list);
++			list_add_tail(&req->list, &video->req_free);
++		}
++
+ 		/*
+ 		 * Queue work to the wq as well since it is possible that a
+ 		 * buffer may not have been completely encoded with the set of
+
+---
+base-commit: bfa8f18691ed2e978e4dd51190569c434f93e268
+change-id: 20240324-uvc-gadget-errorcheck-41b817aff44d
+
+Best regards,
+-- 
+Michael Grzeschik <m.grzeschik@pengutronix.de>
+
 
