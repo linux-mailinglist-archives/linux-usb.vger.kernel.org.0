@@ -1,280 +1,184 @@
-Return-Path: <linux-usb+bounces-8200-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8202-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D5EF889203
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Mar 2024 07:55:26 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EEBAC889A2E
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Mar 2024 11:26:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E87182807DE
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Mar 2024 06:55:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7B6A61F329F4
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Mar 2024 10:26:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B08FB19D1BD;
-	Mon, 25 Mar 2024 00:42:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7045E13FD69;
+	Mon, 25 Mar 2024 01:17:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="iFGmw5+9"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BADF21485D
-	for <linux-usb@vger.kernel.org>; Sun, 24 Mar 2024 23:32:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E671A2A13F6;
+	Sun, 24 Mar 2024 23:55:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711323162; cv=none; b=mIywlPuIJ96guH5nlC3ERQq/Z06seMbV+Q84qInPaaNuepgWkQX27NBMOUf4VxwIrpUe8l9OU9H01wzeyysjQttiKXNycoBzz1kgSWU6K7EjxbU8eQQUqjGI5N936hmny/LCHtMWRNJCEve9wm+fPMTya24uPjuBEHGPk1S+fs0=
+	t=1711324526; cv=none; b=eODJ96ZamOs4dwYpfLoYjEKVNc5RPUFu6d+S9OJBbE7vWqJ2XNWO6dGg61DfZxU+/GqNdl+wtys9CAfRhRSDx+pFq/NS5oUJqT3FugufSUKjigsTOCwHcQt9G6qsRb5um25jL4Qecz8yK78M0xwtvil2AgAPmJTBGPoz3lnBpjg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711323162; c=relaxed/simple;
-	bh=MR6LiyqvdzJQOZPGvyqmUcabXsb6JiaKTN2J7yPF1+M=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Sr+6q/38h0cK4QXl0uj4XzfHX3OXm10dmi5wIAVqr+V15ncdmqfxQwxC9CFHYnOR45k/4/a7S5OtXaBhrTxSqrstbt4/2S3PXtnTIZsjn4CsIWvpEH6LgwC32tqqD8g0WQTglE/kcQNb/6gy5ZyqkXS+RZp3Lp8Nzrm00qByPrs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <m.grzeschik@pengutronix.de>)
-	id 1roXKN-0007qh-Ea; Mon, 25 Mar 2024 00:32:35 +0100
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <m.grzeschik@pengutronix.de>)
-	id 1roXKM-008JQl-QP; Mon, 25 Mar 2024 00:32:34 +0100
-Received: from localhost ([::1] helo=dude04.red.stw.pengutronix.de)
-	by dude04.red.stw.pengutronix.de with esmtp (Exim 4.96)
-	(envelope-from <m.grzeschik@pengutronix.de>)
-	id 1roXKM-00FsDT-2S;
-	Mon, 25 Mar 2024 00:32:34 +0100
-From: Michael Grzeschik <m.grzeschik@pengutronix.de>
-Date: Mon, 25 Mar 2024 00:32:30 +0100
-Subject: [PATCH] usb: gadget: uvc: Improve error checking and tagging
+	s=arc-20240116; t=1711324526; c=relaxed/simple;
+	bh=HM+xgQnk/LbBudkCoxqN/+jLocL868hQICD0EUJlSmQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=hE8Kqn4bSeynGHMOyFf3rDM03u8X6nfk4ez8O4SQ/rlHIhn8g7JRbNd2O/YsfWDTGnrGw4IOcAdyDYh4A/iEYQ87fURbZqhSDNyR+ke0shVzf54vltGU5ssLZWH8Ut3kT1YgXuHu2ObAoZ9QPo2A9PzO6eKUjcT65qc3zc21xJU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=iFGmw5+9; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=eHfDKYBKDOSF5nkhxH0HKhVm+4o+I6CDGNU5dThwXeo=; b=iFGmw5+9ejiIzgsJsfpITQ1Gxa
+	cNW+HGYcPgHMfnTTMiFBjgg/8YplxgjdIXeW4gatcGxyvUM7bGrMDOWAIrjcehyUhcf7yhs1uTF8N
+	j/6E4rX+8NSQvugVHBLrxw7uClWfF5izDdYsOMowrlpd0gP8sKhOV32KkfOLhEDHUSl3icbfQUSEh
+	1RdL5Fr6g8stlf8eeiTi8gHT0IloiZnnoe2zXE7a3EqYV6jbG/i8o1mnWgPTn42fGOsI/LxGYp5FC
+	1w9lylFq5FkbrbbCCcnli40xb1G/s+kidml/0U4kMgM6qC7wORl5rjWoB+R0mM3L8qlcXwHLQZScE
+	u8JuhRUA==;
+Received: from [210.13.83.2] (helo=localhost)
+	by bombadil.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1roXfu-0000000DzJc-2rva;
+	Sun, 24 Mar 2024 23:54:51 +0000
+From: Christoph Hellwig <hch@lst.de>
+To: Jens Axboe <axboe@kernel.dk>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: Damien Le Moal <dlemoal@kernel.org>,
+	Niklas Cassel <cassel@kernel.org>,
+	Takashi Sakamoto <o-takashi@sakamocchi.jp>,
+	Sathya Prakash <sathya.prakash@broadcom.com>,
+	Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+	Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>,
+	"Juergen E. Fischer" <fischer@norbit.de>,
+	Xiang Chen <chenxiang66@hisilicon.com>,
+	HighPoint Linux Team <linux@highpoint-tech.com>,
+	Tyrel Datwyler <tyreld@linux.ibm.com>,
+	Brian King <brking@us.ibm.com>,
+	Lee Duncan <lduncan@suse.com>,
+	Chris Leech <cleech@redhat.com>,
+	Mike Christie <michael.christie@oracle.com>,
+	John Garry <john.g.garry@oracle.com>,
+	Jason Yan <yanaijie@huawei.com>,
+	Kashyap Desai <kashyap.desai@broadcom.com>,
+	Sumit Saxena <sumit.saxena@broadcom.com>,
+	Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
+	Chandrakanth patil <chandrakanth.patil@broadcom.com>,
+	Jack Wang <jinpu.wang@cloud.ionos.com>,
+	Nilesh Javali <njavali@marvell.com>,
+	GR-QLogic-Storage-Upstream@marvell.com,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Avri Altman <avri.altman@wdc.com>,
+	Bart Van Assche <bvanassche@acm.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	linux-block@vger.kernel.org,
+	linux-ide@vger.kernel.org,
+	linux1394-devel@lists.sourceforge.net,
+	MPT-FusionLinux.pdl@broadcom.com,
+	linux-scsi@vger.kernel.org,
+	open-iscsi@googlegroups.com,
+	megaraidlinux.pdl@broadcom.com,
+	mpi3mr-linuxdrv.pdl@broadcom.com,
+	linux-samsung-soc@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	usb-storage@lists.one-eyed-alien.net
+Subject: convert SCSI to atomic queue limits, part 1
+Date: Mon, 25 Mar 2024 07:54:25 +0800
+Message-Id: <20240324235448.2039074-1-hch@lst.de>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240324-uvc-gadget-errorcheck-v1-1-5538c57bbeba@pengutronix.de>
-X-B4-Tracking: v=1; b=H4sIAA24AGYC/x2NywqDMBAAf0X23AWTBiz9ldLDZrN5UIllU0UQ/
- 73B4wwMc0ATLdLgORygspVWltrB3AbgTDUJltAZ7GjdeLcO140xUUjyQ1FdlLPwB53xDzNRjM4
- F6K2nJuiVKude13Weu/yqxLJfs9f7PP8ir+1yfAAAAA==
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
- Daniel Scally <dan.scally@ideasonboard.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Michael Grzeschik <m.grzeschik@pengutronix.de>
-X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7088;
- i=m.grzeschik@pengutronix.de; h=from:subject:message-id;
- bh=MR6LiyqvdzJQOZPGvyqmUcabXsb6JiaKTN2J7yPF1+M=;
- b=owEBbQKS/ZANAwAKAb9pWET5cfSrAcsmYgBmALgSL9zCLOcFouQ2WqIZ76dmrdygu07rc5KnE
- WytqzTr1t6JAjMEAAEKAB0WIQQV2+2Fpbqd6fvv0Gi/aVhE+XH0qwUCZgC4EgAKCRC/aVhE+XH0
- q3wlD/4uVVTJGFEIGn/Hde+HACmjdT839upbn0Qf3YKQpGAlNpalz0XN1jyEu+C25dvUHXTA+NL
- wBB9TkAwlXPCD0mdlLWqWqjvzFskGGS0yJnBZeQkaKaj0qRg4qGwB4IXIK4fOCcqSaOzN1GADpc
- z1RQDRLOuIS7acCxPQ3jdl7gb9VGTP6ApEIi1PJ63MMyNgFLLlov6gHhXD1Dxtb4BVU4diGIJ68
- C66qwD08HJEIXn5SYfpnvtK+Ye+pwAOmwUo3qGcGmR+7b1QzWxCRyG6Zs882/TKPWrsRvRcghm0
- W5rGL0/e9ApIDCMBWG8igQ1814pPq+Z3kHhAbxUFDRCbxkxMb9qm4xm9/+rxPCh5nVzZCqolDcr
- IZ/lDHoXCoqqRi7G4dC3ICPiAdns+ZNxbCiriSipz0TzalldcPt4lVoa9fZqLo+E2ZlT5qxEqnR
- SJ7juHdj3baui6VYZQpec3QKjFN8qcd/rQX59OXikAUXxAK/cFL2jy7z2rYthyUT+UwF/BIEVkm
- ZmZoHa2Z8Z2HNwAVBmSnC6kuxT9NlAv4NtBkSn51UG/zBfZ6uHW4eo4gBBxojI0FmRlkHVrjkg4
- pUwK7Klhl25aqxdsQ7VGDFNSfUEYzTmymohFcgsC+brZtXUZFLFx7hKWqfbuQdoi2RzVGFlHim6
- 1iLNAJkNYpua50w==
-X-Developer-Key: i=m.grzeschik@pengutronix.de; a=openpgp;
- fpr=957BC452CE953D7EA60CF4FC0BE9E3157A1E2C64
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: m.grzeschik@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-Right now after one transfer was completed with EXDEV the currently
-encoded frame will get the UVC_STREAM_ERR tag attached. Since the
-complete and encode path are handling separate requests from different
-threads, there is no direct correspondence between the missed transfer
-of one request and the currently encoded request which might already
-belong to an completely different frame.
+Hi all,
 
-When queueing requests into the hardware by calling ep_queue the
-underlying ringbuffer of the usb driver will be filled. However when
-one of these requests will have some issue while transfer the hardware
-will trigger an interrupt but will continue transferring the pending
-requests in the ringbuffer. This interrupt-latency will make it
-impossible to react in time to tag the fully enqueued frame with the
-UVC_STREAM_ERR in the header.
+this series converts the SCSI midlayer and LLDDs to use atomic queue limits
+API.  It is pretty straight forward, except for the mpt3mr driver which
+does really weird and probably already broken things by setting limits
+from unlocked device iteration callsbacks.
 
-This patch is also addressing this particular issue by delaying the
-transmit of the EOF/ERR tagged header by waiting for the last enqueued
-buffer of the frame to be completed. This way it is possible to react to
-send the EOF/ERR tag depending on the whole frame transfer status.
+The first patch is actually a bug fix and should probably go into 6.9-rc.
+The other would probably best be in a shared branch between the block and
+scsi code, as the ULD drivers will be a lot more extensive.  I'm actually
+scratching my head on dealing with some of the updates that it does from
+the I/O completion handler and ->open calls for already open devices.
+Suggestions welcome..
 
-As this is patch is adding latency to the enqueuing path of the frames
-we make this errorcheck optional by adding an extra module parameter.
-
-Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
----
- drivers/usb/gadget/function/f_uvc.c     |  4 ++
- drivers/usb/gadget/function/uvc.h       |  3 ++
- drivers/usb/gadget/function/uvc_video.c | 69 +++++++++++++++++++++++++++++----
- 3 files changed, 68 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
-index 929666805bd23..6a7ca8ccaf360 100644
---- a/drivers/usb/gadget/function/f_uvc.c
-+++ b/drivers/usb/gadget/function/f_uvc.c
-@@ -33,6 +33,10 @@ unsigned int uvc_gadget_trace_param;
- module_param_named(trace, uvc_gadget_trace_param, uint, 0644);
- MODULE_PARM_DESC(trace, "Trace level bitmask");
- 
-+bool uvc_gadget_errorcheck_param = true;
-+module_param_named(errorcheck, uvc_gadget_errorcheck_param, bool, 0644);
-+MODULE_PARM_DESC(errorcheck, "Check and mark errors in the transfer of a frame");
-+
- /* --------------------------------------------------------------------------
-  * Function descriptors
-  */
-diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
-index cb35687b11e7e..e21fea6784597 100644
---- a/drivers/usb/gadget/function/uvc.h
-+++ b/drivers/usb/gadget/function/uvc.h
-@@ -46,6 +46,7 @@ struct uvc_device;
- #define UVC_WARN_PROBE_DEF			1
- 
- extern unsigned int uvc_gadget_trace_param;
-+extern bool uvc_gadget_errorcheck_param;
- 
- #define uvc_trace(flag, msg...) \
- 	do { \
-@@ -91,6 +92,8 @@ struct uvc_video {
- 	struct work_struct pump;
- 	struct workqueue_struct *async_wq;
- 
-+	struct usb_request *last_req;
-+
- 	/* Frame parameters */
- 	u8 bpp;
- 	u32 fcc;
-diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
-index d41f5f31dadd5..8e9ec21b5154b 100644
---- a/drivers/usb/gadget/function/uvc_video.c
-+++ b/drivers/usb/gadget/function/uvc_video.c
-@@ -35,9 +35,6 @@ uvc_video_encode_header(struct uvc_video *video, struct uvc_buffer *buf,
- 
- 	data[1] = UVC_STREAM_EOH | video->fid;
- 
--	if (video->queue.flags & UVC_QUEUE_DROP_INCOMPLETE)
--		data[1] |= UVC_STREAM_ERR;
--
- 	if (video->queue.buf_used == 0 && ts.tv_sec) {
- 		/* dwClockFrequency is 48 MHz */
- 		u32 pts = ((u64)ts.tv_sec * USEC_PER_SEC + ts.tv_nsec / NSEC_PER_USEC) * 48;
-@@ -62,7 +59,8 @@ uvc_video_encode_header(struct uvc_video *video, struct uvc_buffer *buf,
- 
- 	data[0] = pos;
- 
--	if (buf->bytesused - video->queue.buf_used <= len - pos)
-+	if (!uvc_gadget_errorcheck_param &&
-+	    (buf->bytesused - video->queue.buf_used <= len - pos))
- 		data[1] |= UVC_STREAM_EOF;
- 
- 	return pos;
-@@ -366,6 +364,32 @@ static void uvc_video_ep_queue_initial_requests(struct uvc_video *video)
- 	spin_unlock_irqrestore(&video->req_lock, flags);
- }
- 
-+static void
-+uvc_video_fixup_header(struct usb_request *next, struct usb_request *done,
-+		       bool error)
-+{
-+	struct uvc_request *next_ureq = next->context;
-+	struct uvc_request *done_ureq = done->context;
-+	struct uvc_video *video = next_ureq->video;
-+	struct uvc_video_queue *queue = &video->queue;
-+
-+	u8 header = UVC_STREAM_EOF;
-+
-+	if (error)
-+		header |= UVC_STREAM_ERR;
-+
-+	if (queue->use_sg) {
-+		memcpy(next_ureq->header, done_ureq->header,
-+				UVCG_REQUEST_HEADER_LEN);
-+
-+		((u8 *)next_ureq->header)[1] |= header;
-+	} else {
-+		memcpy(next->buf, done->buf, UVCG_REQUEST_HEADER_LEN);
-+
-+		((u8 *)next->buf)[1] |= header;
-+	}
-+}
-+
- static void
- uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
- {
-@@ -377,6 +401,7 @@ uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
- 	unsigned long flags;
- 	bool is_bulk = video->max_payload_size;
- 	int ret = 0;
-+	bool error = false;
- 
- 	spin_lock_irqsave(&video->req_lock, flags);
- 	if (!video->is_enabled) {
-@@ -419,6 +444,8 @@ uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
- 
- 	if (last_buf) {
- 		spin_lock_irqsave(&queue->irqlock, flags);
-+		if (queue->flags & UVC_QUEUE_DROP_INCOMPLETE)
-+			error = true;
- 		uvcg_complete_buffer(queue, last_buf);
- 		spin_unlock_irqrestore(&queue->irqlock, flags);
- 	}
-@@ -449,11 +476,37 @@ uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
- 	 * requests and cannot recover.
- 	 */
- 	to_queue->length = 0;
-+
-+	/* If the last request was queued the just copy the previous
-+	 * header without payload to the empty request and fixup the
-+	 * tags with ERR/EOF to finish the frame.
-+	 */
-+	if (uvc_gadget_errorcheck_param && (video->last_req == req)) {
-+		uvc_video_fixup_header(to_queue, req, error);
-+		to_queue->length = UVCG_REQUEST_HEADER_LEN;
-+		video->last_req = NULL;
-+	}
-+
- 	if (!list_empty(&video->req_ready)) {
--		to_queue = list_first_entry(&video->req_ready,
--			struct usb_request, list);
--		list_del(&to_queue->list);
--		list_add_tail(&req->list, &video->req_free);
-+		struct usb_request *next_req =
-+				list_first_entry(&video->req_ready,
-+						 struct usb_request, list);
-+		struct uvc_request *next_ureq = next_req->context;
-+
-+		/* If the last request of the frame will be queued, we delay
-+		 * the enqueueing of every next request. This way it is
-+		 * possible to react to send the EOF/ERR tag depending
-+		 * on the whole frame transfer status.
-+		 */
-+		if (!video->last_req && !to_queue->length) {
-+			if (uvc_gadget_errorcheck_param && next_ureq->last_buf)
-+				video->last_req = next_req;
-+
-+			to_queue = next_req;
-+			list_del(&to_queue->list);
-+			list_add_tail(&req->list, &video->req_free);
-+		}
-+
- 		/*
- 		 * Queue work to the wq as well since it is possible that a
- 		 * buffer may not have been completely encoded with the set of
-
----
-base-commit: bfa8f18691ed2e978e4dd51190569c434f93e268
-change-id: 20240324-uvc-gadget-errorcheck-41b817aff44d
-
-Best regards,
--- 
-Michael Grzeschik <m.grzeschik@pengutronix.de>
-
+Diffstat:
+ block/blk-settings.c                        |  248 ----------------------------
+ block/bsg-lib.c                             |    6 
+ drivers/ata/ahci.h                          |    2 
+ drivers/ata/libata-sata.c                   |   10 -
+ drivers/ata/libata-scsi.c                   |   19 +-
+ drivers/ata/libata.h                        |    3 
+ drivers/ata/pata_macio.c                    |   11 -
+ drivers/ata/sata_mv.c                       |    2 
+ drivers/ata/sata_nv.c                       |   24 +-
+ drivers/ata/sata_sil24.c                    |    2 
+ drivers/firewire/sbp2.c                     |   13 -
+ drivers/message/fusion/mptfc.c              |    1 
+ drivers/message/fusion/mptsas.c             |    1 
+ drivers/message/fusion/mptscsih.c           |    2 
+ drivers/message/fusion/mptspi.c             |    1 
+ drivers/s390/block/dasd_eckd.c              |    6 
+ drivers/scsi/aha152x.c                      |    8 
+ drivers/scsi/aic94xx/aic94xx_init.c         |    2 
+ drivers/scsi/hisi_sas/hisi_sas.h            |    3 
+ drivers/scsi/hisi_sas/hisi_sas_main.c       |    7 
+ drivers/scsi/hisi_sas/hisi_sas_v1_hw.c      |    2 
+ drivers/scsi/hisi_sas/hisi_sas_v2_hw.c      |    2 
+ drivers/scsi/hisi_sas/hisi_sas_v3_hw.c      |    7 
+ drivers/scsi/hosts.c                        |    6 
+ drivers/scsi/hptiop.c                       |    8 
+ drivers/scsi/ibmvscsi/ibmvfc.c              |    5 
+ drivers/scsi/imm.c                          |   12 -
+ drivers/scsi/ipr.c                          |   10 -
+ drivers/scsi/isci/init.c                    |    2 
+ drivers/scsi/iscsi_tcp.c                    |    2 
+ drivers/scsi/libsas/sas_scsi_host.c         |    7 
+ drivers/scsi/megaraid/megaraid_sas.h        |    2 
+ drivers/scsi/megaraid/megaraid_sas_base.c   |   29 +--
+ drivers/scsi/megaraid/megaraid_sas_fusion.c |    3 
+ drivers/scsi/mpi3mr/mpi3mr.h                |    1 
+ drivers/scsi/mpi3mr/mpi3mr_app.c            |   12 -
+ drivers/scsi/mpi3mr/mpi3mr_os.c             |   76 +++-----
+ drivers/scsi/mpt3sas/mpt3sas_scsih.c        |   18 --
+ drivers/scsi/mvsas/mv_init.c                |    2 
+ drivers/scsi/pm8001/pm8001_init.c           |    2 
+ drivers/scsi/pmcraid.c                      |   11 -
+ drivers/scsi/ppa.c                          |    8 
+ drivers/scsi/qla2xxx/qla_os.c               |    6 
+ drivers/scsi/scsi_lib.c                     |   40 +---
+ drivers/scsi/scsi_scan.c                    |   79 ++++----
+ drivers/scsi/scsi_transport_fc.c            |   15 +
+ drivers/scsi/scsi_transport_iscsi.c         |    6 
+ drivers/scsi/scsi_transport_sas.c           |    4 
+ drivers/staging/rts5208/rtsx.c              |   24 +-
+ drivers/ufs/core/ufs_bsg.c                  |    3 
+ drivers/ufs/core/ufshcd.c                   |    3 
+ drivers/ufs/host/ufs-exynos.c               |    8 
+ drivers/usb/image/microtek.c                |    8 
+ drivers/usb/storage/scsiglue.c              |   57 ++----
+ drivers/usb/storage/uas.c                   |   29 +--
+ drivers/usb/storage/usb.c                   |   10 +
+ include/linux/blkdev.h                      |   13 -
+ include/linux/bsg-lib.h                     |    3 
+ include/linux/libata.h                      |   10 -
+ include/linux/mmc/host.h                    |    4 
+ include/scsi/libsas.h                       |    3 
+ include/scsi/scsi_host.h                    |    9 +
+ include/scsi/scsi_transport.h               |    2 
+ include/scsi/scsi_transport_fc.h            |    1 
+ include/ufs/ufshcd.h                        |    1 
+ 65 files changed, 335 insertions(+), 601 deletions(-)
 
