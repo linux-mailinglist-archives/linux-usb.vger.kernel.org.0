@@ -1,133 +1,109 @@
-Return-Path: <linux-usb+bounces-8327-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8328-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6199988B292
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Mar 2024 22:20:35 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 31E2D88B3AD
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Mar 2024 23:13:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1DC462E425C
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Mar 2024 21:20:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E157F304232
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Mar 2024 22:13:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 949D06D1A3;
-	Mon, 25 Mar 2024 21:19:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="KsJmHKED"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A25B75805;
+	Mon, 25 Mar 2024 22:13:33 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD95071733
-	for <linux-usb@vger.kernel.org>; Mon, 25 Mar 2024 21:19:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F6C97350C;
+	Mon, 25 Mar 2024 22:13:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711401591; cv=none; b=OfcGUahm04DSkM6MdmpdEOIsutE8u4CY7KOSwYgvHwWh2+lGgXoDUBmG9g70fkOjmwg7Y/zdbuLAxmOooT0aLE05SZfUBAlO8o28aIx/SzUAw5edlysJNqr8ujzHin1XfSg3Flu8i11/sfD5eSN1e4zU+63iH0UO3FRa9HgTYzQ=
+	t=1711404813; cv=none; b=BMaD4tZCFtSySwV3DQw7JPCZeV+szYFezoFJP5e6+NZ/JokslO/mCqmSqp9dO5Jz++35JitOZ7nQcakAjdWdPYwo/7RpAOHX4pIxA46bqOd41GWOSfUc3HtcODVSfCfRpXyv6dPNR3NTjNo/MhASR/98P2LdzgBk6O5AI9DIyFE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711401591; c=relaxed/simple;
-	bh=ppMvWVev0cLIJM7WJ4IVef/LN8AiezVVGMMPIfD8CQU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=DGfxKfCWWr9jRiY8pgkv1Cq9XK1pBZhgJJrB12sR9zLxYlmJdKf8SAL//RxvbyubYuvQPbbgscbsPl442rzoF02rQzJQhKEDmo5muFLf81IEtr8KJPkwyuHkaz5BlhEPmEsgTx1OQX/MByJI2/pXV1vg9pjxPn+KGTUm9isZgdo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=KsJmHKED; arc=none smtp.client-ip=209.85.210.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-6e73e8bdea2so3948732b3a.0
-        for <linux-usb@vger.kernel.org>; Mon, 25 Mar 2024 14:19:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1711401589; x=1712006389; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=IWkKtqlB2IYpNkVz6EWQgOv/DTm4sZRBKwumKBADUJY=;
-        b=KsJmHKEDmlarbQ4DTOv3j9DNvkgyDGMBh0ZuauXXw3XHR8PdtZ+QID1uwIj3DhWzbD
-         AeKMb2bptOdrqE1eWLR7sfiP32BxYOjQcJkODyQ5CSq403Kvgl2Td3UHIrVuXXRguGUm
-         sbrzrbANJsikyJPwQnTpYuAqjx6oQu4JopLmM=
+	s=arc-20240116; t=1711404813; c=relaxed/simple;
+	bh=yq4DZOZpV+tgfo1VME0SGUbSt682+RvFZTbCx2WgCR4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=W6sO0IFX7r3LXImhNOx/oxny3yI992RcNolC418L4bopU79/BJyOaLSKjgGpubNHR1VDw5NiJBnYYSIX/BZkhuuL8jLaDzjdD/0GhS8+NjHEjswSsXi8JL6ohwoNNbay1jGQsw27h6UNX3EmFFgK3guJ5NYnNryLxu5Yv83wkII=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=acm.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=acm.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1e0d6356ce9so7001755ad.3;
+        Mon, 25 Mar 2024 15:13:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711401589; x=1712006389;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IWkKtqlB2IYpNkVz6EWQgOv/DTm4sZRBKwumKBADUJY=;
-        b=lEfXIUsM2/COJKXH6Bb7IUiPv7U0Z49f9XT4zGkkOZwLzTLF065IaxGzNVdZO+xbUV
-         V3YDojdWR8xY1fkB4hr9fEyKAmuNhiDJSBJCpNRfwN8dJFsy4yWlOhi4AD0JX2QHiXm/
-         sfFycx5DuDvBzQvOJNHwIR+RSLYFqiLBchlzdGx67gKUCsIT0IJIjpdCU7pFTjO96eBZ
-         /5OiENgxyqtnHAeIf0gmODrPUZgzpzPL1t6nRKNKiLRJxnqFuDU97ix+g1FB3vlsoQnb
-         hsa+l7VzUgpwa9u4Rg2Rye5yatEKKmWvuZwzEoWN/BVaaeL50RifNUC9mwzkLanO+XIX
-         wU6A==
-X-Gm-Message-State: AOJu0YxPAwuO44NJ4UTo1zIo0VLTPQCweICLvpD1pCJ7Tm/8c7BA5yiP
-	s+2Hpz1s9kMaKDCJ9hrh7C1qUy0LV8ROpdHU4vSKxg2YXePlAYSZWX24sNzLDg==
-X-Google-Smtp-Source: AGHT+IGa9QHBomnxFI9sI+UI1mcpYHhl4i65j4DlNlm8nhqgmv3Q7Naz5j9Z2uKmzsd6N0Gv8/Rkag==
-X-Received: by 2002:a05:6a20:9585:b0:1a3:bc78:fd1 with SMTP id iu5-20020a056a20958500b001a3bc780fd1mr9199760pzb.59.1711401589029;
-        Mon, 25 Mar 2024 14:19:49 -0700 (PDT)
-Received: from pholla1.c.googlers.com (210.73.125.34.bc.googleusercontent.com. [34.125.73.210])
-        by smtp.gmail.com with ESMTPSA id r17-20020aa79ed1000000b006eaada3860dsm1851656pfq.200.2024.03.25.14.19.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Mar 2024 14:19:48 -0700 (PDT)
-From: Pavan Holla <pholla@chromium.org>
-Date: Mon, 25 Mar 2024 21:19:43 +0000
-Subject: [PATCH] usb: typec: ucsi: Wait 20ms before retrying reset
+        d=1e100.net; s=20230601; t=1711404811; x=1712009611;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yq4DZOZpV+tgfo1VME0SGUbSt682+RvFZTbCx2WgCR4=;
+        b=bQH34Brtu8RGua08PrUxEMuYd1Vj4SXkEm2/PHgWG3yFJHfUj7hzTrDNCe9i44s2Dj
+         n2rnDnJiTqN1k9RBKNDicalabbZN8F+OqRo3i+TY9oALj+ua6a5thHM4nosaoj4l8RJG
+         P5V9Ji154SECUjKf1d0D8jsgM9tQf0w2ommhyW1A7bb9DrzB0nQNP0TBLFsgxtvdS7Sc
+         hs4bEFzZWJOh+DfYlPUTfQSMNUrq0fWsOT6zJumBF6fqxnONpIvxtxwh1Cb7Gz2bu8WD
+         np8R0Poy7h4bdI5nYb7KA7WGiTGQoXo674iqQU+lDOabcPZTG24ZXFiq008dB/vjdhWR
+         ZkVA==
+X-Forwarded-Encrypted: i=1; AJvYcCWMwRT0PlImX3H3bdaqpIsp8G+FYyf1WniCM3oWKRQDFhQNbp2D6IPQk+PBgODx+FLcyrPn8IYC30uCL+dERzZx+X9Ol/fnCZxuILbGjLKWuJY5ywjMUY6uKGaU6M/Wf6MDtTO7a+yoxk0vDpQi/dDD1xf3Btvw4WdWJEsrkg+5jET2qwkheZPvdZbqT/ely69jjWRYyuNgaO2VSMYnuN0Ryd+ggq77ymnyFOgVig+JkcTBEDZlYWFombO/cDe8jv8=
+X-Gm-Message-State: AOJu0YxXHeuaHEB4gwwYvVctx/W1nyc+/+1y9EqWkQ5y8du+j175poWz
+	cBpBhGRLcVkRYcdIgPan0cV/7+gC/2TOnfk32C72IXfQ4bMU49WJ
+X-Google-Smtp-Source: AGHT+IFaHJC+gMGwZBDS54U2xblKvH/ZQv/lUiX2ff21oMRk0HlwTXFQX07O58x1/aW2WPYfkb1oYQ==
+X-Received: by 2002:a17:902:784e:b0:1df:fda8:e0ea with SMTP id e14-20020a170902784e00b001dffda8e0eamr7291037pln.28.1711404810841;
+        Mon, 25 Mar 2024 15:13:30 -0700 (PDT)
+Received: from ?IPV6:2620:0:1000:8411:262:e41e:a4dd:81c6? ([2620:0:1000:8411:262:e41e:a4dd:81c6])
+        by smtp.gmail.com with ESMTPSA id s19-20020a170902989300b001dd67c8e108sm5195084plp.199.2024.03.25.15.13.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Mar 2024 15:13:29 -0700 (PDT)
+Message-ID: <bb3b5924-d266-49f5-944f-5e7ee3d3b5b7@acm.org>
+Date: Mon, 25 Mar 2024 15:13:26 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 09/23] scsi: use the atomic queue limits API in
+ scsi_add_lun
+Content-Language: en-US
+To: Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+ "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: Damien Le Moal <dlemoal@kernel.org>, Niklas Cassel <cassel@kernel.org>,
+ Takashi Sakamoto <o-takashi@sakamocchi.jp>,
+ Sathya Prakash <sathya.prakash@broadcom.com>,
+ Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+ Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>,
+ "Juergen E. Fischer" <fischer@norbit.de>,
+ Xiang Chen <chenxiang66@hisilicon.com>,
+ HighPoint Linux Team <linux@highpoint-tech.com>,
+ Tyrel Datwyler <tyreld@linux.ibm.com>, Brian King <brking@us.ibm.com>,
+ Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
+ Mike Christie <michael.christie@oracle.com>,
+ John Garry <john.g.garry@oracle.com>, Jason Yan <yanaijie@huawei.com>,
+ Kashyap Desai <kashyap.desai@broadcom.com>,
+ Sumit Saxena <sumit.saxena@broadcom.com>,
+ Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
+ Chandrakanth patil <chandrakanth.patil@broadcom.com>,
+ Jack Wang <jinpu.wang@cloud.ionos.com>, Nilesh Javali <njavali@marvell.com>,
+ GR-QLogic-Storage-Upstream@marvell.com,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Alim Akhtar <alim.akhtar@samsung.com>, Avri Altman <avri.altman@wdc.com>,
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+ Alan Stern <stern@rowland.harvard.edu>, linux-block@vger.kernel.org,
+ linux-ide@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
+ MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+ open-iscsi@googlegroups.com, megaraidlinux.pdl@broadcom.com,
+ mpi3mr-linuxdrv.pdl@broadcom.com, linux-samsung-soc@vger.kernel.org,
+ linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net
+References: <20240324235448.2039074-1-hch@lst.de>
+ <20240324235448.2039074-10-hch@lst.de>
+From: Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20240324235448.2039074-10-hch@lst.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240325-ucsi-reset-delay-v1-1-d9e183e0f1e6@chromium.org>
-X-B4-Tracking: v=1; b=H4sIAG7qAWYC/x3MQQ5AMBBA0avIrE1SpSSuIhalUyYRpIOQxt01l
- m/xfwShwCTQZhECXSy8rQlFnsE423UiZJcMWulKldrgOQpjIKEDHS32wcH5uil0ZYx3kLI9kOf
- 7X3b9+37ptv4VYgAAAA==
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Abhishek Pandit-Subedi <abhishekpandit@chromium.org>, 
- Pavan Holla <pholla@chromium.org>
-X-Mailer: b4 0.12.4
 
-The PPM might take time to process reset. Allow 20ms for the reset to
-complete before issuing another reset.
+On 3/24/24 16:54, Christoph Hellwig wrote:
+> Switch scsi_add_lun to use the atomic queue limits API to update the
+> max_hw_sectors for devices with quirks.
 
-Signed-off-by: Pavan Holla <pholla@chromium.org>
----
-There is a 20ms delay for a reset retry to complete. However, the first
-reset attempt is expected to complete immediately after an async write
-of the reset command. This patch adds 20ms between the async write and
-the CCI read that expects the reset to be complete. The additional delay
-also allows the PPM to settle after the first reset, which seems to be
-the intention behind the original 20ms delay ( kernel v4.14 has a comment
-regarding the same )
----
- drivers/usb/typec/ucsi/ucsi.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index cf52cb34d285..6b642c4c58b7 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -1280,6 +1280,9 @@ static int ucsi_reset_ppm(struct ucsi *ucsi)
- 			goto out;
- 		}
- 
-+		/* Give the PPM time to reset and stabilize */
-+		msleep(20);
-+
- 		ret = ucsi->ops->read(ucsi, UCSI_CCI, &cci, sizeof(cci));
- 		if (ret)
- 			goto out;
-@@ -1293,7 +1296,6 @@ static int ucsi_reset_ppm(struct ucsi *ucsi)
- 				goto out;
- 		}
- 
--		msleep(20);
- 	} while (!(cci & UCSI_CCI_RESET_COMPLETE));
- 
- out:
-
----
-base-commit: 4cece764965020c22cff7665b18a012006359095
-change-id: 20240325-ucsi-reset-delay-bdf6712455fd
-
-Best regards,
--- 
-Pavan Holla <pholla@chromium.org>
-
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
 
