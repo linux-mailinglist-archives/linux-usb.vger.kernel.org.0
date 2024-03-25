@@ -1,239 +1,203 @@
-Return-Path: <linux-usb+bounces-8310-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8311-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 13A2C88A8C4
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Mar 2024 17:18:19 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8599488A94E
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Mar 2024 17:29:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3F9CE344C25
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Mar 2024 16:17:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 262011F671A4
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Mar 2024 16:29:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32D9E12B150;
-	Mon, 25 Mar 2024 14:15:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA9C515FA7B;
+	Mon, 25 Mar 2024 14:29:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="PMydQKiD"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="Vz0PfXj6"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2048.outbound.protection.outlook.com [40.107.244.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B96A74CB37
-	for <linux-usb@vger.kernel.org>; Mon, 25 Mar 2024 14:14:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711376099; cv=none; b=b+lUN7D3Jw0qJjvjGMzzUOuTyC+hBOup4PHg0jO/R8VqiFhpS8NqSviqsS3Gl5pCSqaDNfIfZ+jJ+hmmXvx9BBLh0m9l9Lqv5bg5moxhXFS+tBoqRNCOd2NLATI++Oq6kzaZrPc5AcLTpa998LWwaVIyEC7IlgT1FCCWzbiA3w8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711376099; c=relaxed/simple;
-	bh=+MN35LfFWjPF5vSaIYz6fTe7dxOZ73WsvEV6oMFCNb4=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=nyXeMsDJ2lndJQBbaCpZRRQ3wH8ZqMAqJr4wQRBtSrwmZMOhJsRvWQQgU+J9fRm1WmYoCgQE+lHByCAkBrNmwAGwJD+deIeP1WAUZbtAuOPkeKgUQievKzFqKgeRXTjeRVYdLUM+GAbCMPUon97iKmRS0JZT8CXbIeVbUAVzxLE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=PMydQKiD; arc=none smtp.client-ip=209.85.167.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-513edc88d3cso4710662e87.0
-        for <linux-usb@vger.kernel.org>; Mon, 25 Mar 2024 07:14:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1711376096; x=1711980896; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qt/0XGoAZ8t0mfKWvAzt9mb6uEidcJPFQo67Ml6oNt4=;
-        b=PMydQKiDaY2ewhv6E1lwEUtqOpiIi8SiJPNbb7hSL+veb1IyJqGRKXzc/mpe9KXELS
-         gx8qIluus2c6PIfiWBd0E+Ip7QQza7xESAYPQ3tEiOEgr6OFmky0R+haHYnqeZib9tN0
-         W5z2MoiaYh5fFaEVZ38oIe078zCEAgTgCh++FePAP3E5L07u1ZnWL3j8JiMEIJADUH0S
-         Of63zbdWDkavTr/ITxKalfCOgJ31/JLRdTVpF70oMvP1XHSsQ2g7slqPQiEo1bryFbqo
-         AQkIt8xoW+RkuFDMNhlTUIsQiyOFi6I1mC3q8C0tLZhIewbmMM9iCXCjfrtuRnqbtX+6
-         bLTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711376096; x=1711980896;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=qt/0XGoAZ8t0mfKWvAzt9mb6uEidcJPFQo67Ml6oNt4=;
-        b=es2sXUUMqfBbH/1wffebKv5IFrqfQdQMpF6SmxoxQWrc57UgypBeHtRpgEzVwu5Rtz
-         YDWhwYjSlQkCckIH9EesE8P2XUqk4+4tUrw/Obxr8Bt+3g0LK9I3z54ox2w3jFI3ituB
-         9OMj51TZlTNgfgOFJaYzNR2vzDyybH2kYuumGNS+Ytm0inD6u+HvlEuiboEZeFI93P04
-         mYMELEMV9hdEO2gLIFaI2qLJYdMkLOAtqM17QbamFurnLu2hFDTkCODwic3EoJZMwF4p
-         RLimtTgDJU5fhDA9Q3fLra8nvXRxnM1FLEuL8C1FV9/qKGCgjJBaM4Y+IAzf5l1mdYCD
-         v4Xw==
-X-Gm-Message-State: AOJu0Yx1uFKUi4QqIxwWBzQHBB12C69QkjcNc9LQFrcokNmya+DA132U
-	BGhRecSZdrUuJnI0rsDJLXwUdNqGg8PETr2/0djV9rjoGoYHp7eVM5rR5Soe7aE=
-X-Google-Smtp-Source: AGHT+IFexrqaXNHt0cRrFp3/XbxcHYhkejQscLuwDwa5MdyepA9vGAQ5lNzK0+SYQ2n1pDcYsLfgKw==
-X-Received: by 2002:a19:6917:0:b0:513:a39e:ae45 with SMTP id e23-20020a196917000000b00513a39eae45mr4689250lfc.62.1711376095721;
-        Mon, 25 Mar 2024 07:14:55 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:5176:2c0a:cfc0:1ada? ([2a01:e0a:982:cbb0:5176:2c0a:cfc0:1ada])
-        by smtp.gmail.com with ESMTPSA id k8-20020a5d66c8000000b00341ce4a3bd6sm2384247wrw.13.2024.03.25.07.14.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Mar 2024 07:14:55 -0700 (PDT)
-Message-ID: <ee3496ce-7c42-4074-b6d0-18fc14c6a767@linaro.org>
-Date: Mon, 25 Mar 2024 15:14:42 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82BDC148FFE;
+	Mon, 25 Mar 2024 14:29:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.48
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1711376978; cv=fail; b=Uu+MUJQD6IF1p/g6tMeha4L/mrPF3fO9GsSg/VI5LhC6DmDu7jDcw81coEZfKsxkutcgyVG3OsSRuNZsvo50eX2FBl1RgDEVNL0B9//Je7vdvCJyXl7FCBAvPKXqOcWCf1rzPKHobs9+VV9W44ekaJdxvXEogOBfjaswyNJEa3g=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1711376978; c=relaxed/simple;
+	bh=mU4J/HqOwBx1SR1jGfuAcpIevId8pZO7sQvljxwnXSw=;
+	h=From:To:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=hAAm/SVF22nENMn8w18hKR/FjZSQvUh7JgAlRCgaTzoO83OblFB9lGvMdfEAuOvb33WLqK/n0Bmyheki7DCi++9cCOOn2JX20ym8fMHzmAgM0FKFLIuFZb6QyQ1OsI4WM1uAcD0fG+f7U1C8fB7tDLaGE0qUciOXX9uza+j8W2s=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=Vz0PfXj6; arc=fail smtp.client-ip=40.107.244.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=oT+EHUMerCHUu0ROCGUS/YbIhsA+cnwdB/M/KQ0zZblRRBJdgzD7fWGAzcplr9xz76tq2ereY6X6mfvjyd0FkyFQJ6qv24k+TymcupvbG2MMzPU4h6oXoo/RDo2PG+l1Ba1xLEzfMEuKGHlHxiCwyPw5mG+iDxgwb89ci7dVdScoZ/DFjMpNExNwlTBXXGnb2mpQCHvBx52XWqA72ZYHtOTZ//3yVlAPEya/dm/rz9Vl+lklhmAuLIzQkp2Ugqo9xkamPwHGhGAYReW8/BuQ2qoGdZJn2pJGascW9LCvFEzYgy5ucWeWmtOoElOB10f9oW+XDEpUE4pOXyV/gyItig==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=s1cf1ybIQ719TWll5sHnwDP9q2eXxYq4Sn2sZqkrOg0=;
+ b=FEGDxUCAV9RU/XiKe2lDBTDQ7gd1/NIYLVG/92HBqh+Nx/J4mUf+Rhkjm+di4iMllTd7YCWukLVvn4jqxEJoIbDCinlIprvMH9i80OQ9YRyDmEFYGuhT5Y9wOUWXFxtYKHkBfEaaVr4bavZT1JzjsraeKzUt13gpEJRHYe/7meuJ/4OCzs8yKe1P7moJo4A1EminNTiwID7sfhmEhJQgTg6ACO9z0OxWPOmt7CFHyYixQS4scfwwncGzOJGKzM38JcUhTaDBmIvk5q1eIroAalEauYwz7pgPjFK6UCtvBuJ948v2ounJJz1bU89VXxU2qRVkqmwRAYAvFNCN8IGdIQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=s1cf1ybIQ719TWll5sHnwDP9q2eXxYq4Sn2sZqkrOg0=;
+ b=Vz0PfXj6hCgVQvf1IaNyd4n5XpkTFbe8gp8+imE3YLYeNGlocXBPnzxOj27QOUVjAxYNNoY0S1L78BcRDTFjNqrZ6vJlRSZ0ac+CZm8WapaJ3j0WMCv9N3gO0yHF3Z0SZKJXDsVVIbbDDyQGiVZGaO6haqcLP3ILmBDXrNSvsao=
+Received: from BL1PR12MB5144.namprd12.prod.outlook.com (2603:10b6:208:316::6)
+ by CH3PR12MB9146.namprd12.prod.outlook.com (2603:10b6:610:19c::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.31; Mon, 25 Mar
+ 2024 14:29:32 +0000
+Received: from BL1PR12MB5144.namprd12.prod.outlook.com
+ ([fe80::b001:1430:f089:47ae]) by BL1PR12MB5144.namprd12.prod.outlook.com
+ ([fe80::b001:1430:f089:47ae%7]) with mapi id 15.20.7409.031; Mon, 25 Mar 2024
+ 14:29:32 +0000
+From: "Deucher, Alexander" <Alexander.Deucher@amd.com>
+To: Damien Le Moal <dlemoal@kernel.org>, "linux-pci@vger.kernel.org"
+	<linux-pci@vger.kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, Manivannan
+ Sadhasivami <manivannan.sadhasivam@linaro.org>, "linux-scsi@vger.kernel.org"
+	<linux-scsi@vger.kernel.org>, "Martin K . Petersen"
+	<martin.petersen@oracle.com>, Jaroslav Kysela <perex@perex.cz>,
+	"linux-sound@vger.kernel.org" <linux-sound@vger.kernel.org>, Greg
+ Kroah-Hartman <gregkh@linuxfoundation.org>, "linux-usb@vger.kernel.org"
+	<linux-usb@vger.kernel.org>, "linux-serial@vger.kernel.org"
+	<linux-serial@vger.kernel.org>, Hans de Goede <hdegoede@redhat.com>,
+	"platform-driver-x86@vger.kernel.org" <platform-driver-x86@vger.kernel.org>,
+	"ntb@lists.linux.dev" <ntb@lists.linux.dev>, Lee Jones <lee@kernel.org>,
+	David Airlie <airlied@gmail.com>, "amd-gfx@lists.freedesktop.org"
+	<amd-gfx@lists.freedesktop.org>, Jason Gunthorpe <jgg@ziepe.ca>,
+	"linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>, "David S . Miller"
+	<davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 10/28] drm: amdgpu: Use PCI_IRQ_INTX
+Thread-Topic: [PATCH 10/28] drm: amdgpu: Use PCI_IRQ_INTX
+Thread-Index: AQHafoOKlUhYM8aBa0G0tfj2QKDt0LFIhGoQ
+Date: Mon, 25 Mar 2024 14:29:32 +0000
+Message-ID:
+ <BL1PR12MB51440D32B6A0969FD72665B3F7362@BL1PR12MB5144.namprd12.prod.outlook.com>
+References: <20240325070944.3600338-1-dlemoal@kernel.org>
+ <20240325070944.3600338-11-dlemoal@kernel.org>
+In-Reply-To: <20240325070944.3600338-11-dlemoal@kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+msip_labels:
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ActionId=b1c1248d-a2f1-4b4f-81c1-228a2cc72858;MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ContentBits=0;MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Enabled=true;MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Method=Privileged;MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Name=Public-AIP
+ 2.0;MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SetDate=2024-03-25T14:28:44Z;MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BL1PR12MB5144:EE_|CH3PR12MB9146:EE_
+x-ms-office365-filtering-correlation-id: 24beedf2-c2f3-4dc9-643d-08dc4cd7fd08
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ 7sUu4jem5SUg6LkkHg24B8Haub110pvdDyq7PtxW3JsNtfpnouG4eQHb3vm1BXsbhiQrxgDIiB1OttR/E9KDWjNHbxwa8BK7wp4oTIDt6hFi9xjwa1KCZmjsWIuH8Z+oy/8sHA0zsCIwBWjKaJB4f5p+BmGQsf0+AtpT9ofbzflCwZyrfBm+mV8fH3Yj2XZb/UG6UnU3EzU4cHvQYoOZA0KVT5QmV/cCYBt7UjxgnzmRe/b0GoVSwIpT4FIdseOaF1k0iXk00mT2Iqel30wxftwZ4/xlvzY3DpIvVtWLA9uS5w1GKAsshwwaZMJ9Mc9czJsIVUmJaH42NFh5zYvg5JHxfsUV71Z5f0IloqKTa46sJhnHTl5CyqMzQNhaFJSMh6QeYt77EYNo8yx4BGOzYOEA9MJZqQY9eaPRzz1Y5eNEJnvlJs6Mcfe+Ct0CKo3sKkKuUj/5UvaNECoiGeym6mZMr3BWU3HE28TfBnRa6uX1F3poc50CIszTlz6PxayyPjr+3ZLn9tome/LpeteyI5y3nCFScOdV1Rwpn6WiW1w9AgaHLYgJw/zxLYsNKEC9vmFJo16jNUfN09LlD6vz8WPv+UT2nqUswAbPhRwBGvryocmlmuRt4xo5X0qwkXNcapqrqQ2X5hoJoK1AT1vpW1DnVZDbxG8z2m9mvf3fnpFYJiNJkiKY//67uJaJhzmqvWJPvTkMo0J82TMsMelsYGcu9QblpS7AZuXFGvuUN/8=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5144.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7416005)(366007)(376005)(1800799015)(38070700009)(921011);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?dqNnZj7oblLLQZfgLVxGWwnLgPQYa8sB2fZl/03a+QOZ08SXWZxue4BW78DB?=
+ =?us-ascii?Q?uX8je2UbmsCjtu3to+3uxlZbx3PpAu58yojhzm2ZevcjgQg/zt+bpmBe5wbH?=
+ =?us-ascii?Q?SCXVwll6q+O8gS5ON9CYObnhJJrf7e2a8zUCEppsuKoSXNpgI/ruxDM8Losa?=
+ =?us-ascii?Q?VWZk/fF3r78/oGLjd1zd+VoMEkyv24CXjSIiFTAATb3Qf6OqJtWa72wIX9OL?=
+ =?us-ascii?Q?8/7KTThTM1aH1BoE+O+Ht54VnLxdZjB5LMBJflciIWilojVxTl0kDxCkw8Or?=
+ =?us-ascii?Q?pvMts9x9waUgKAx8Gou+wnQosojtrKus1pNtney3e1edQA7o3uFp6yAtfpjH?=
+ =?us-ascii?Q?dDoLkev/6FWiZ2jDyJvvuK7/S4TK7GP3i78O+TwQgLUSBLDjAa79ZHKTVuPJ?=
+ =?us-ascii?Q?wa1ZjBvisaxRQD/YdbXDe2toVhzDMWlKV3hgPQB5Ikub8AKGJEuriKRQxhV5?=
+ =?us-ascii?Q?AtGO0+pIwJmbY/QL1dg5lYTcFvv/TYAx5P/7bCgwYfc9rt29Ea+MqGOnx6Nc?=
+ =?us-ascii?Q?jm2pfFkm9OVklfVF5U2NqUcUg+ZQVzUrUAKnrW5Lj5hEzpFIBw2g5iS96qWt?=
+ =?us-ascii?Q?ykcxiYzAu5qbajHKgBOEllwBFTWcMEx8cTerwoCAG7JaD1fX+u8P5KXuwm9c?=
+ =?us-ascii?Q?lbiNS/YV+DIqTE3qQ8vURwVSaX7ySQqDTkHe9veEbloNt7CQhcFMYX16DPQE?=
+ =?us-ascii?Q?+st55DaAdAev8R6QdLNHOLkrIQwBp+thnhElcz0vr47s8dTyvS9uII8Jjqyv?=
+ =?us-ascii?Q?fko755tHOtJTryxT5dXKk31ZDx/ReGVnll2AQjorqOxjT7aMePV+3KoHV5ik?=
+ =?us-ascii?Q?Ptmw7dQsbDf6S3gxyVC0wgwjeUF31S9u0oPQwARPihVGDAlp0nVk3+I9iEkY?=
+ =?us-ascii?Q?zKUDCqXD3ZqMJGfLGBDh8D8SyM3RpNxEUgRM63AM/sdnKPnQIRAkot8LJyyL?=
+ =?us-ascii?Q?yanwO9/fLFRCTlBUA2nVwcl8dK6m9Jew73C6YKabniHyVzJpBjfVzCWgb/ss?=
+ =?us-ascii?Q?sonzveISA0ftSBOGCj8O4Lc9uRXWa8Cbj3MyAgzCwmOc6HA4PLZ1CYhrz1lI?=
+ =?us-ascii?Q?AtaYNqU2bYnhLPPxyomp5AYxTgshjyZnivbetpOzemcbavrUjlwDXEAnFrhN?=
+ =?us-ascii?Q?wPJFDVyG9KChLffau5cDc1gB5NLtWnDvPAQ8mMR5tVgAkP4YIm1AlMaFTYhY?=
+ =?us-ascii?Q?odF9fPpC4H51+re8Vjn9mwClp7MJwG8mmxWybJh3pAQqzYLftHrRhyckncVG?=
+ =?us-ascii?Q?yMst6SqNPLg8CfMpl5FapZBlDg7uJMvMMOSwaQG/8kWhUAtLL2QwBKKm9qI7?=
+ =?us-ascii?Q?CTijoLJjCAKBCzH+aNQt5djQbPW0WCp5IbkAeS8BqoQ6lrUJM3O7gTjLAhib?=
+ =?us-ascii?Q?qHHKSJTpT58AAsLXXxNnFwFmyQQd8XKGG/JQYh7COiQ9IvobQ7UCMyBN/4zI?=
+ =?us-ascii?Q?K0czqVAqyNaSnftGWeEl/R4MiSBIGh/ZJ6/LCcX3d+hS5SMq+GYOYCA19HoW?=
+ =?us-ascii?Q?8ud+WYdqRXfKot7ljMKqvx2Z8jUwWqPsFNSxFtWjK+vv32od8lsmqUH8EKQ2?=
+ =?us-ascii?Q?S2oyFX8gIO3Cg87hoEo=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: neil.armstrong@linaro.org
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v2 1/1] usb: typec: ucsi: Check capabilities before cable
- and identity discovery
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, heikki.krogerus@linux.intel.com,
- Jameson Thies <jthies@google.com>, pmalani@chromium.org, bleung@google.com,
- abhishekpandit@chromium.org, andersson@kernel.org,
- dmitry.baryshkov@linaro.org, fabrice.gasnier@foss.st.com,
- hdegoede@redhat.com, rajaram.regupathy@intel.com, saranya.gopal@intel.com,
- linux-kernel@vger.kernel.org, linux-arm-msm <linux-arm-msm@vger.kernel.org>
-References: <20240315171836.343830-1-jthies@google.com>
- <20240315171836.343830-2-jthies@google.com>
-Content-Language: en-US, fr
-Autocrypt: addr=neil.armstrong@linaro.org; keydata=
- xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
- GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
- BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
- qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
- 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
- AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
- OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
- Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
- YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
- GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
- UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
- GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
- yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
- QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
- SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
- 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
- Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
- oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
- M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
- 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
- KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
- 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
- QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
-Organization: Linaro
-In-Reply-To: <20240315171836.343830-2-jthies@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5144.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 24beedf2-c2f3-4dc9-643d-08dc4cd7fd08
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Mar 2024 14:29:32.6058
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 1YUQp0KlyzSsfIYumLiIbMdqJmZMQCH6iMPbspqv4rxX///SrCQDwYbJXb/9iEJZjWVIqOR9Jk/qzCWRK/p+EA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB9146
 
-Hi Greg,
+[Public]
 
-On 15/03/2024 18:18, Jameson Thies wrote:
-> Check the UCSI_CAP_GET_PD_MESSAGE bit before sending GET_PD_MESSAGE to
-> discover partner and cable identity, check UCSI_CAP_CABLE_DETAILS before
-> sending GET_CABLE_PROPERTY to discover the cable and check
-> UCSI_CAP_ALT_MODE_DETAILS before registering the a cable plug. Additionally,
-> move 8 bits from reserved_1 to features in the ucsi_capability struct. This
-> makes the field 16 bits, still 8 short of the 24 bits allocated for it in
-> UCSI v3.0, but it will not overflow because UCSI only defines 14 bits in
-> bmOptionalFeatures.
-> 
-> Fixes: 38ca416597b0 ("usb: typec: ucsi: Register cables based on GET_CABLE_PROPERTY")
-> Link: https://lore.kernel.org/linux-usb/44e8142f-d9b3-487b-83fe-39deadddb492@linaro.org
-> Suggested-by: Neil Armstrong <neil.armstrong@linaro.org>
-> Signed-off-by: Jameson Thies <jthies@google.com>
+> -----Original Message-----
+> From: amd-gfx <amd-gfx-bounces@lists.freedesktop.org> On Behalf Of
+> Damien Le Moal
+> Sent: Monday, March 25, 2024 3:09 AM
+> To: linux-pci@vger.kernel.org; Bjorn Helgaas <bhelgaas@google.com>;
+> Manivannan Sadhasivami <manivannan.sadhasivam@linaro.org>; linux-
+> scsi@vger.kernel.org; Martin K . Petersen <martin.petersen@oracle.com>;
+> Jaroslav Kysela <perex@perex.cz>; linux-sound@vger.kernel.org; Greg Kroah=
+-
+> Hartman <gregkh@linuxfoundation.org>; linux-usb@vger.kernel.org; linux-
+> serial@vger.kernel.org; Hans de Goede <hdegoede@redhat.com>; platform-
+> driver-x86@vger.kernel.org; ntb@lists.linux.dev; Lee Jones <lee@kernel.or=
+g>;
+> David Airlie <airlied@gmail.com>; amd-gfx@lists.freedesktop.org; Jason
+> Gunthorpe <jgg@ziepe.ca>; linux-rdma@vger.kernel.org; David S . Miller
+> <davem@davemloft.net>; Eric Dumazet <edumazet@google.com>;
+> netdev@vger.kernel.org; linux-kernel@vger.kernel.org
+> Subject: [PATCH 10/28] drm: amdgpu: Use PCI_IRQ_INTX
+>
+> Use the macro PCI_IRQ_INTX instead of the deprecated PCI_IRQ_LEGACY
+> macro.
+>
+> Signed-off-by: Damien Le Moal <dlemoal@kernel.org>
 
-Could you queue this for v6.9-rc2 ? So far most of the recent Qualcomm boards are waiting
-this fix to be unbroken.
-
-Thanks,
-Neil
+Feel free to take it through whatever tree makes sense.  If you want me to =
+pick it up, let me know.
+Acked-by: Alex Deucher <alexander.deucher@amd.com>
 
 > ---
-> Confirmed a device which supports GET_PD_MESSAGE, GET_CABLE_PROPERTY and
-> GET_ALTERNATE_MODES still requested identity and cable information.
-> 
->   drivers/usb/typec/ucsi/ucsi.c | 34 +++++++++++++++++++++-------------
->   drivers/usb/typec/ucsi/ucsi.h |  5 +++--
->   2 files changed, 24 insertions(+), 15 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> index cf52cb34d2859..958dc82989b60 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.c
-> +++ b/drivers/usb/typec/ucsi/ucsi.c
-> @@ -1133,17 +1133,21 @@ static int ucsi_check_cable(struct ucsi_connector *con)
->   	if (ret < 0)
->   		return ret;
->   
-> -	ret = ucsi_get_cable_identity(con);
-> -	if (ret < 0)
-> -		return ret;
-> +	if (con->ucsi->cap.features & UCSI_CAP_GET_PD_MESSAGE) {
-> +		ret = ucsi_get_cable_identity(con);
-> +		if (ret < 0)
-> +			return ret;
-> +	}
->   
-> -	ret = ucsi_register_plug(con);
-> -	if (ret < 0)
-> -		return ret;
-> +	if (con->ucsi->cap.features & UCSI_CAP_ALT_MODE_DETAILS) {
-> +		ret = ucsi_register_plug(con);
-> +		if (ret < 0)
-> +			return ret;
->   
-> -	ret = ucsi_register_altmodes(con, UCSI_RECIPIENT_SOP_P);
-> -	if (ret < 0)
-> -		return ret;
-> +		ret = ucsi_register_altmodes(con, UCSI_RECIPIENT_SOP_P);
-> +		if (ret < 0)
-> +			return ret;
-> +	}
->   
->   	return 0;
->   }
-> @@ -1189,8 +1193,10 @@ static void ucsi_handle_connector_change(struct work_struct *work)
->   			ucsi_register_partner(con);
->   			ucsi_partner_task(con, ucsi_check_connection, 1, HZ);
->   			ucsi_partner_task(con, ucsi_check_connector_capability, 1, HZ);
-> -			ucsi_partner_task(con, ucsi_get_partner_identity, 1, HZ);
-> -			ucsi_partner_task(con, ucsi_check_cable, 1, HZ);
-> +			if (con->ucsi->cap.features & UCSI_CAP_GET_PD_MESSAGE)
-> +				ucsi_partner_task(con, ucsi_get_partner_identity, 1, HZ);
-> +			if (con->ucsi->cap.features & UCSI_CAP_CABLE_DETAILS)
-> +				ucsi_partner_task(con, ucsi_check_cable, 1, HZ);
->   
->   			if (UCSI_CONSTAT_PWR_OPMODE(con->status.flags) ==
->   			    UCSI_CONSTAT_PWR_OPMODE_PD)
-> @@ -1589,8 +1595,10 @@ static int ucsi_register_port(struct ucsi *ucsi, struct ucsi_connector *con)
->   		ucsi_register_partner(con);
->   		ucsi_pwr_opmode_change(con);
->   		ucsi_port_psy_changed(con);
-> -		ucsi_get_partner_identity(con);
-> -		ucsi_check_cable(con);
-> +		if (con->ucsi->cap.features & UCSI_CAP_GET_PD_MESSAGE)
-> +			ucsi_get_partner_identity(con);
-> +		if (con->ucsi->cap.features & UCSI_CAP_CABLE_DETAILS)
-> +			ucsi_check_cable(con);
->   	}
->   
->   	/* Only notify USB controller if partner supports USB data */
-> diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
-> index 32daf5f586505..0e7c92eb1b227 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.h
-> +++ b/drivers/usb/typec/ucsi/ucsi.h
-> @@ -206,7 +206,7 @@ struct ucsi_capability {
->   #define UCSI_CAP_ATTR_POWER_OTHER		BIT(10)
->   #define UCSI_CAP_ATTR_POWER_VBUS		BIT(14)
->   	u8 num_connectors;
-> -	u8 features;
-> +	u16 features;
->   #define UCSI_CAP_SET_UOM			BIT(0)
->   #define UCSI_CAP_SET_PDM			BIT(1)
->   #define UCSI_CAP_ALT_MODE_DETAILS		BIT(2)
-> @@ -215,7 +215,8 @@ struct ucsi_capability {
->   #define UCSI_CAP_CABLE_DETAILS			BIT(5)
->   #define UCSI_CAP_EXT_SUPPLY_NOTIFICATIONS	BIT(6)
->   #define UCSI_CAP_PD_RESET			BIT(7)
-> -	u16 reserved_1;
-> +#define UCSI_CAP_GET_PD_MESSAGE		BIT(8)
-> +	u8 reserved_1;
->   	u8 num_alt_modes;
->   	u8 reserved_2;
->   	u16 bc_version;
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_irq.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_irq.c
+> b/drivers/gpu/drm/amd/amdgpu/amdgpu_irq.c
+> index 7e6d09730e6d..d18113017ee7 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_irq.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_irq.c
+> @@ -279,7 +279,7 @@ int amdgpu_irq_init(struct amdgpu_device *adev)
+>       adev->irq.msi_enabled =3D false;
+>
+>       if (!amdgpu_msi_ok(adev))
+> -             flags =3D PCI_IRQ_LEGACY;
+> +             flags =3D PCI_IRQ_INTX;
+>       else
+>               flags =3D PCI_IRQ_ALL_TYPES;
+>
+> --
+> 2.44.0
 
 
