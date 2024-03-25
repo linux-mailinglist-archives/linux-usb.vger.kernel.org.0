@@ -1,117 +1,137 @@
-Return-Path: <linux-usb+bounces-8321-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8322-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E82F88B05F
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Mar 2024 20:45:24 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1702988B198
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Mar 2024 21:36:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4A6D32E8208
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Mar 2024 19:45:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 49BCE1C61B82
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Mar 2024 20:36:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE73B40BEE;
-	Mon, 25 Mar 2024 19:45:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B78C95C612;
+	Mon, 25 Mar 2024 20:35:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qyE+1Y9W"
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="CwOss4Dj"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from 009.lax.mailroute.net (009.lax.mailroute.net [199.89.1.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66AE71773A;
-	Mon, 25 Mar 2024 19:45:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C8035A0ED;
+	Mon, 25 Mar 2024 20:35:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711395904; cv=none; b=A+6AYtHFHXG9hn8Yiq6hDZq1PjoUSpmYlabaKynrAGlR0oYS+zZXlvHktCeUYav60FoK68YEHJbCCEQy8CExf6LLH97r8Ymeuz9CWWJO9ypgB3L5av9ju5e8xfmANYXlBl9Lqpdt+p3uf67MW+jKglwvWJ6k+lSEoik02cjVhRM=
+	t=1711398939; cv=none; b=UjI5pggAGQmDBVxZJ91ZQfxUU2rDPc5bV5WOVSlB9lLG4O3+9kABfhOsrI8Rbi+4U/DhuPr2ZmrIAi00Hh4ZmcFTOXQYgZMyjcqGEBYE+1gKYbMJj4BOafyWQRjSnn84o7FvkCPU2tLnUIDoLklFaSh8HV1HKGuk826iTXbx0hc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711395904; c=relaxed/simple;
-	bh=fmSP58Mlsw0EmWE5dRwtBGOBojXEan7WVvl/tP9c13Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EyiF8jXL/tfib3Pexwt8F/Twj28SfOOvGarxERJxqg3WJzufVVBRIRCrH3QzfGFwy16iiOzyGBPlnfNswwIjP3vmCluNjaxOOLC80rtQUN+2HUBMetmFwFz/IlRnSDwyJf4ZupT4O6uZQWPUZw2DW30ByIZB5w6stmmbQt1271Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qyE+1Y9W; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7603C433C7;
-	Mon, 25 Mar 2024 19:45:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711395904;
-	bh=fmSP58Mlsw0EmWE5dRwtBGOBojXEan7WVvl/tP9c13Y=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qyE+1Y9WohHcUH3RjYjT9XlInd+WKuPnKALoxESvLrqFuGqedJNELJVHuf50bbz+L
-	 F8VIf/aVJVNPVrkLLtQDXfLB5jfQ9Jtutw+jZDS46K+TELbQ5XSYLir4wgbQxWBjsf
-	 MPiyuCxUdvypuPdCIdzzX1hh9ictL6aNyXscb09ZSWZrK9haMhShpaP7TwtQT7hvlY
-	 5NcEWdBRWXriJX/geiG7u9vz0MrcmvAJe/H0Z+iPG3ZZY//WigMQDd7oIHpSOpEsdd
-	 mnhicwrP7tFbUZu/7GndS7lfV15goZ8amRQm7i8rlTBSFqz7hobgHrrgUtRkUY+7HA
-	 TmGcEYHKvTGeA==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1roqFr-000000004KO-2Miw;
-	Mon, 25 Mar 2024 20:45:11 +0100
-Date: Mon, 25 Mar 2024 20:45:11 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Wesley Cheng <quic_wcheng@quicinc.com>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Felipe Balbi <balbi@kernel.org>, devicetree@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, quic_ppratap@quicinc.com,
-	quic_jackp@quicinc.com
-Subject: Re: [PATCH v16 7/9] usb: dwc3: qcom: Refactor IRQ handling in glue
- driver
-Message-ID: <ZgHUR-Rk-YzqiTtt@hovoldconsulting.com>
-References: <20240307062052.2319851-1-quic_kriskura@quicinc.com>
- <20240307062052.2319851-8-quic_kriskura@quicinc.com>
- <ZgFyukBXIIwZo7v-@hovoldconsulting.com>
- <50926b91-3c61-4dbf-85c9-7558ab96e628@quicinc.com>
- <ZgF6zvaT2OkrbkHK@hovoldconsulting.com>
- <807015d4-c5ed-4e04-9948-fd1ff894a04e@quicinc.com>
+	s=arc-20240116; t=1711398939; c=relaxed/simple;
+	bh=XNfyrdt8IwQ8sHcus5wiHVSWAwkkOBqq6H3cQ1K8ILY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=A0CI9ae8Vcs9fgl5KRmBaDIANEz8eqKUSRoEnjP5Fw3wP0GFGin6LXUSNnVFV0xgieZSgrrAMHAPgCxcsqr+/51Aq89zQooOkyVehwI6O0cBUxMhrzQ8iQjfDtX4ln/XlboNwGhY60RoJdL/uZkdlip15YSaRgpTPRoOonocWV4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=CwOss4Dj; arc=none smtp.client-ip=199.89.1.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=acm.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
+Received: from localhost (localhost [127.0.0.1])
+	by 009.lax.mailroute.net (Postfix) with ESMTP id 4V3Pp04KSNzlgVnN;
+	Mon, 25 Mar 2024 20:35:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
+	content-transfer-encoding:content-type:content-type:in-reply-to
+	:from:from:references:content-language:subject:subject
+	:user-agent:mime-version:date:date:message-id:received:received;
+	 s=mr01; t=1711398923; x=1713990924; bh=QT9Io8KlSjuHM6Qho+N/CED+
+	XBtHtFpIBkOTBJKm48w=; b=CwOss4DjseDThUn2brTB1Hu6WUzYytx3mm1/m30Y
+	Mqh18pNyF0OMual3NSavgmfjBLQ5ojLlIH/MP4VcMBg8JKW8Gx3AZzHqty4MkMho
+	xQZ137EV1NYikFm/w0XRC1eC7ZaQ163f2HIl+GaCyd6CFsu5+G1/JeVLVhjzCgD9
+	w1KGli9BewpP4Fookosj9MhkOBgK4xcaj0PSyX/w4lf7qvDCrM2VsjR02k8NN+FP
+	kEz0Of8c4gtFWCSegx1yAxGoFvy6odVLz5Y0DmnMSvzhuKTVjqzvzo+Gpiw0L1b6
+	7/6krY9wp0l4UykThkNiDoraaMUf3l+ihJTCVVtR7NwKCA==
+X-Virus-Scanned: by MailRoute
+Received: from 009.lax.mailroute.net ([127.0.0.1])
+ by localhost (009.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
+ id qG5C0clMo2Zv; Mon, 25 Mar 2024 20:35:23 +0000 (UTC)
+Received: from [100.96.154.173] (unknown [104.132.1.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: bvanassche@acm.org)
+	by 009.lax.mailroute.net (Postfix) with ESMTPSA id 4V3PnV22fmzlgTGW;
+	Mon, 25 Mar 2024 20:35:09 +0000 (UTC)
+Message-ID: <b3ee2dec-3258-4c9f-81d8-0a266128b9ef@acm.org>
+Date: Mon, 25 Mar 2024 13:35:08 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <807015d4-c5ed-4e04-9948-fd1ff894a04e@quicinc.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 10/23] scsi: add a device_configure method to the host
+ template
+Content-Language: en-US
+To: Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+ "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: Damien Le Moal <dlemoal@kernel.org>, Niklas Cassel <cassel@kernel.org>,
+ Takashi Sakamoto <o-takashi@sakamocchi.jp>,
+ Sathya Prakash <sathya.prakash@broadcom.com>,
+ Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+ Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>,
+ "Juergen E. Fischer" <fischer@norbit.de>,
+ Xiang Chen <chenxiang66@hisilicon.com>,
+ HighPoint Linux Team <linux@highpoint-tech.com>,
+ Tyrel Datwyler <tyreld@linux.ibm.com>, Brian King <brking@us.ibm.com>,
+ Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
+ Mike Christie <michael.christie@oracle.com>,
+ John Garry <john.g.garry@oracle.com>, Jason Yan <yanaijie@huawei.com>,
+ Kashyap Desai <kashyap.desai@broadcom.com>,
+ Sumit Saxena <sumit.saxena@broadcom.com>,
+ Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
+ Chandrakanth patil <chandrakanth.patil@broadcom.com>,
+ Jack Wang <jinpu.wang@cloud.ionos.com>, Nilesh Javali <njavali@marvell.com>,
+ GR-QLogic-Storage-Upstream@marvell.com,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Alim Akhtar <alim.akhtar@samsung.com>, Avri Altman <avri.altman@wdc.com>,
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+ Alan Stern <stern@rowland.harvard.edu>, linux-block@vger.kernel.org,
+ linux-ide@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
+ MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+ open-iscsi@googlegroups.com, megaraidlinux.pdl@broadcom.com,
+ mpi3mr-linuxdrv.pdl@broadcom.com, linux-samsung-soc@vger.kernel.org,
+ linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net
+References: <20240324235448.2039074-1-hch@lst.de>
+ <20240324235448.2039074-11-hch@lst.de>
+From: Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20240324235448.2039074-11-hch@lst.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, Mar 25, 2024 at 10:59:49PM +0530, Krishna Kurapati PSSNV wrote:
-> On 3/25/2024 6:53 PM, Johan Hovold wrote:
-
-> > 	ret = dwc3_qcom_find_num_ports(pdev);
-> > 	if (ret < 0)
-> > 		return ret;
-> > 
-> > 	qcom->num_ports = ret;
-> > 
-> > It looks like dwc3_qcom_find_num_ports() can also return 0 (e.g. on
-> > malformed DT), which also needs to be handled somehow. I missed that
-> > earlier.
+On 3/24/24 16:54, Christoph Hellwig wrote:
+> This is a version of ->slave_configure that also takes a queue_limits
+> structure that the caller applies, and thus allows drivers to reconfigure
+> the queue using the atomic queue limits API.
 > 
->  From what I remember, Konrad mentioned that we might not need to 
-> support incomplete or improper DT [1]. 
+> In the long run it should also replace ->slave_configure entirely as
+> there is no need to have two different methods here, and the slave
+> name in addition to being politically charged also has no basis in
+> the SCSI standards or the kernel code.
 
-You still need to make sure that the driver doesn't misbehave on
-malformed input.
+There are two methods with names that are politically charged:
+slave_configure() and slave_alloc(). Shouldn't both be renamed?
 
-> Also since this is close to getting merged, can we take up any changes
-> for Malformed DT handling later given that only one or two devices are
-> present and less likely to be given a malformed DT.
+>   	 * Status: OPTIONAL
+> +	 *
+> +	 * Note: slave_configure is the legacy version, use device_configure for
+> +	 * all new code.
+>   	 */
+> +	int (* device_configure)(struct scsi_device *, struct queue_limits *lim);
+>   	int (* slave_configure)(struct scsi_device *);
 
-No, and I'm a bit disappointed that you're still trying to take short
-cuts to getting these patches merged after I've told you repeatedly that
-that is not how upstream works.
+The name "device_configure" may make people wonder whether that method
+perhaps configures a struct device instance. How about using the name
+"sdev_configure" instead of "device_configure" to make it more clear
+that this method is used to configure a SCSI device?
 
-Fortunately, this is easily fixed and would both simplify the code
-further and reduce the risk of breaking backwards compatibility.
+Thanks,
 
-Just change the logic in dwc3_qcom_find_num_ports() so that it returns 1
-if "dp_hs_phy_1" is missing, and otherwise you determine the number of
-ports by iterating from 2 to DWC3_MAX_PORTS - 1.
+Bart.
 
-Johan
 
