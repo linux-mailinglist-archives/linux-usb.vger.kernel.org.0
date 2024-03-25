@@ -1,112 +1,110 @@
-Return-Path: <linux-usb+bounces-8316-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8317-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B007388AD51
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Mar 2024 19:13:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 830A488AD7D
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Mar 2024 19:16:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 65CD01FA0E51
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Mar 2024 18:13:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3E24E3651B1
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Mar 2024 18:16:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05DDC84A23;
-	Mon, 25 Mar 2024 17:43:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E72F13C3F1;
+	Mon, 25 Mar 2024 17:44:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="yEmOz93X"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Yz8AQU2p"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from 009.lax.mailroute.net (009.lax.mailroute.net [199.89.1.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC7A92F41;
-	Mon, 25 Mar 2024 17:43:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED9D42F37;
+	Mon, 25 Mar 2024 17:44:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711388607; cv=none; b=kOQsjMZA8/Xjt1ZXNWxrtVhjuGRmW4wdh277kOFCMNyAp57cScn3EV/3KaYsiFYMxqNeXdL2ANNlqMkIZwexVib6cTOSGm0b49MfIZkZ+kmovyUG8cVhXIOf/C9T5O7CrH1tQTSmp3P0e8USmhn4Ic5jEsXyBSTsbzgaPovr7XM=
+	t=1711388687; cv=none; b=lkttYXWoL+EYu5uTy9Q/NkrHf6ssQrX/EddInwSXf1Xbzp8YGNiVz+9pE/v1T7KIiusge0pNtyAF2sAFBZ8ocjIaHGx3VVDYPFMfWGnzFrcxpQwGwEswCzzzMZfPut1YWl5aOP7bAJf2LNorMrTL0kk9Fqj+W7I4FSoPjSwvtzo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711388607; c=relaxed/simple;
-	bh=KvNYZd3AQJEKxzKSsUqYfPUgEx64KpoOhil2sUQcMcA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pXtWoyO/Twdc3VXs9Z4ql6e0IjYrX1ESyAUYyCRUQNVZpgHihwCguC7BmIgDNH75Zidhzv1x3ajcTCXXHMUsR/Ph6Fm+IV0+ay3+74ErNNJT20abMzf2Y+XJoR9fnlVQX88A+wwBw54vo9BX/4FL+hMCLKNn0hEtsh9xfgYnOmI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=yEmOz93X; arc=none smtp.client-ip=199.89.1.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
-Received: from localhost (localhost [127.0.0.1])
-	by 009.lax.mailroute.net (Postfix) with ESMTP id 4V3KzK10GMzlgVnN;
-	Mon, 25 Mar 2024 17:43:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:content-type:content-type:in-reply-to
-	:from:from:references:content-language:subject:subject
-	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1711388596; x=1713980597; bh=KvNYZd3AQJEKxzKSsUqYfPUg
-	Ex64KpoOhil2sUQcMcA=; b=yEmOz93X3WhLuQFVhg9ZMT59j9XE2e6lsXqOW6Ih
-	4YZ9MWxEJhHPuUVRU0Rjdt7Q336elfa9splr7SLfyJjSI9pVcCl9BX04/kVBeZ/o
-	g3vJoOUEi0x+CnWWnCOlNYzqCIfF3/cTvuedZ6fU3ivlvXd/cSLjf0oe0jPveTdR
-	j+UwkHN+8WSusmWnp6qKh+QD7BecPL8ricRAdDal5YMsQimlQwT/tUjABYjXzegl
-	fMD7y+tLC5kfFgvZyqN1JO6Upr9mib/yheJtvAgRCPU2uJMjd1lt4QEjy29Dvous
-	AulexnevambS4U/nToOqwZ9QpH5RwPelSv677pGmwl3tJA==
-X-Virus-Scanned: by MailRoute
-Received: from 009.lax.mailroute.net ([127.0.0.1])
- by localhost (009.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id 8WkJ3RETGwdw; Mon, 25 Mar 2024 17:43:16 +0000 (UTC)
-Received: from [100.96.154.173] (unknown [104.132.1.77])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 009.lax.mailroute.net (Postfix) with ESMTPSA id 4V3Kz34YD4zlgTGW;
-	Mon, 25 Mar 2024 17:43:11 +0000 (UTC)
-Message-ID: <26f51e14-0625-4225-aaf0-f4f7bff5c2ba@acm.org>
-Date: Mon, 25 Mar 2024 10:43:09 -0700
+	s=arc-20240116; t=1711388687; c=relaxed/simple;
+	bh=sGxgdgp8IdZweLfej/ZPALfocbt++oorzgjstiDxN2g=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=pnjVkdzfIwECXgDd4Wb2jo83E8JRIg9HDiMkYL3XdPYLRbMdsWpnzpdrBcFk5oYMqtd9swSAGo2c1BQZ09/JkbNF8DJmac7+Qv2kCK9SpcnpI/ZG8EvGKS0O0BEX29LYIEUZ1XI4BgGxRLWXoy0nBlLEyEJaVRCJtp6EK+ysv0c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Yz8AQU2p; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3BF7C43394;
+	Mon, 25 Mar 2024 17:44:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711388686;
+	bh=sGxgdgp8IdZweLfej/ZPALfocbt++oorzgjstiDxN2g=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=Yz8AQU2pf0m8iCdqgpUDqgULidA/gav9A6k8kAFVuOmJpP4CsOW98If+/vkoh05yM
+	 fXhNkOkr2v2lY3vyrYiV6e6RjYGmpbWteHnaJNxqO9WKpyXFfEEJnPK7GuHU0OakQM
+	 jG1La1JOKMR/YS5hZkOfPfJMSkchrTwUFY1/nq9YBHy5m5xMWcTJPbzVzeQyutDfDt
+	 /Kuz9bdAXkt70jMbd/JpGOgzaDvtAqo1X5cdNoRRPOg0IKEWdTOccn4PL5OkOOGcWX
+	 OmxUTE6wLwzfnZ+sUtsSqZbhBdEsePVrp5HVzeYQASol3Gpg7yjb6ZReH7Ql7v3i5K
+	 kW7fhrLJxzkFg==
+From: Mark Brown <broonie@kernel.org>
+To: Bjorn Andersson <andersson@kernel.org>, 
+ Konrad Dybcio <konrad.dybcio@linaro.org>, 
+ Liam Girdwood <lgirdwood@gmail.com>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Wesley Cheng <quic_wcheng@quicinc.com>, 
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Luca Weiss <luca.weiss@fairphone.com>
+Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org, 
+ linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-usb@vger.kernel.org
+In-Reply-To: <20240322-fp4-tcpm-v1-0-c5644099d57b@fairphone.com>
+References: <20240322-fp4-tcpm-v1-0-c5644099d57b@fairphone.com>
+Subject: Re: (subset) [PATCH 0/5] Add TCPM support for PM7250B and
+ Fairphone 4
+Message-Id: <171138868340.327260.16162463727167389208.b4-ty@kernel.org>
+Date: Mon, 25 Mar 2024 17:44:43 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 04/23] scsi: initialize scsi midlayer limits before
- allocating the queue
-Content-Language: en-US
-To: Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
- "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: Damien Le Moal <dlemoal@kernel.org>, Niklas Cassel <cassel@kernel.org>,
- Takashi Sakamoto <o-takashi@sakamocchi.jp>,
- Sathya Prakash <sathya.prakash@broadcom.com>,
- Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
- Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>,
- "Juergen E. Fischer" <fischer@norbit.de>,
- Xiang Chen <chenxiang66@hisilicon.com>,
- HighPoint Linux Team <linux@highpoint-tech.com>,
- Tyrel Datwyler <tyreld@linux.ibm.com>, Brian King <brking@us.ibm.com>,
- Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
- Mike Christie <michael.christie@oracle.com>,
- John Garry <john.g.garry@oracle.com>, Jason Yan <yanaijie@huawei.com>,
- Kashyap Desai <kashyap.desai@broadcom.com>,
- Sumit Saxena <sumit.saxena@broadcom.com>,
- Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
- Chandrakanth patil <chandrakanth.patil@broadcom.com>,
- Jack Wang <jinpu.wang@cloud.ionos.com>, Nilesh Javali <njavali@marvell.com>,
- GR-QLogic-Storage-Upstream@marvell.com,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Alim Akhtar <alim.akhtar@samsung.com>, Avri Altman <avri.altman@wdc.com>,
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- Alan Stern <stern@rowland.harvard.edu>, linux-block@vger.kernel.org,
- linux-ide@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
- MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
- open-iscsi@googlegroups.com, megaraidlinux.pdl@broadcom.com,
- mpi3mr-linuxdrv.pdl@broadcom.com, linux-samsung-soc@vger.kernel.org,
- linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net
-References: <20240324235448.2039074-1-hch@lst.de>
- <20240324235448.2039074-5-hch@lst.de>
-From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20240324235448.2039074-5-hch@lst.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.14-dev
 
-On 3/24/24 16:54, Christoph Hellwig wrote:
-> Turn __scsi_init_queue into scsi_init_limits which initializes
-> queue_limits structure that can be passed to blk_mq_alloc_queue.
+On Fri, 22 Mar 2024 09:01:31 +0100, Luca Weiss wrote:
+> This series adds support for Type-C Port Management on the Fairphone 4
+> which enables USB role switching and orientation switching.
+> 
+> This enables a user for example to plug in a USB stick or a USB keyboard
+> to the Type-C port.
+> 
+> 
+> [...]
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Applied to
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+
+Thanks!
+
+[1/5] dt-bindings: regulator: qcom,usb-vbus-regulator: Add PM7250B compatible
+      commit: 0c5f77f4eaef8ed9fe752d21f40ac471dd511cfc
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
 
