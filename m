@@ -1,97 +1,52 @@
-Return-Path: <linux-usb+bounces-8370-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8371-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF29F88BD64
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 10:15:29 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF82A88BDF0
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 10:36:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5A88B2E48A7
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 09:15:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DCD531C2CBC7
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 09:36:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45BAD4597A;
-	Tue, 26 Mar 2024 09:15:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C25A55D480;
+	Tue, 26 Mar 2024 09:22:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="e3//BtmD";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="ZrMDHEeC";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="e3//BtmD";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="ZrMDHEeC"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="GRnO7qEe"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4805A12E71;
-	Tue, 26 Mar 2024 09:15:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1088C54BF0
+	for <linux-usb@vger.kernel.org>; Tue, 26 Mar 2024 09:22:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711444519; cv=none; b=Yw/r+EvXwpn+BPfCU5fB9z3M8w6vXo84l+trzTG9RFUywmCoJQByEcWap9NbWf5S721z/nwOMi9iDBNsn6Rg4pxigvmn5gpUtGIgJDDnCZHSHkvII+c2I71ghxCS4brKEgceFGcBFXv9bsmPgXZgEYILNHvGYXZXdfNZxlmapb8=
+	t=1711444956; cv=none; b=VBN1FLMBKa04ZeN8wPud/fDzpFra40D7Wa4OL30Fvk2bO5px6MXhj75Erf7inDvqAIy5PP03UWk6c8cGy7YqhryKi/EWwwivvKYj4Kn0KSrBEy0NuKGxnJ4fBOJJXlkfwpw7vPD/rFfTT0uRGsfo1/djClN6t7m5JYEjU/rby9Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711444519; c=relaxed/simple;
-	bh=/w1rMR/RsI7YUGioZ5VYFougOxYezZ5nebqI9JEo7Pg=;
+	s=arc-20240116; t=1711444956; c=relaxed/simple;
+	bh=6mSWMQvCKrkHXni1J4QY1YHn2cOY4eErD6f0NKuLJjA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=K5oeo1mrcoOiQS2aWxk9tPpxcbFy1PfnIM0oYCJu0MVm6G1cxVegLZOa8riBzOThcjSgBvW6KVSxLAvw17uDub1WmLT81DbZX153+sEY0iPgv2K2I6y1EwpjY/2UOXl6pKB8hXVtOTHFT6+7JGCiN9ZiZ1qQGQNhmMTDa7qQs68=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=e3//BtmD; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=ZrMDHEeC; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=e3//BtmD; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=ZrMDHEeC; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap2.dmz-prg2.suse.org (imap2.dmz-prg2.suse.org [10.150.64.98])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 863AA5CAFF;
-	Tue, 26 Mar 2024 09:15:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1711444516; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=KVxLwH7OYog7GQroatyhSHlgdnjAUGhNH65+zOf/pbA=;
-	b=e3//BtmDX//tOSy5JJvz1axljqE5y8Qj2rYdls/SSyA68pOkPSqP5BJR6EzuPZhk1MOwNR
-	rQBxeOTVtNpdF3tLJV03ITzn/6CI57b7yfNDl9K7yplDC290i+4vMe6uS4JJhYhqwr7Uyb
-	0nEbVchAKN9t+k6JZnb6YJkS73ttzow=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1711444516;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=KVxLwH7OYog7GQroatyhSHlgdnjAUGhNH65+zOf/pbA=;
-	b=ZrMDHEeCjYWu8oDySMOH+Cxal45QE5wqJn6vMfdp26jEStDogwMpW6t/N1oKRjkQI1PINf
-	XTS6x9qdR2Ob/hAg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1711444516; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=KVxLwH7OYog7GQroatyhSHlgdnjAUGhNH65+zOf/pbA=;
-	b=e3//BtmDX//tOSy5JJvz1axljqE5y8Qj2rYdls/SSyA68pOkPSqP5BJR6EzuPZhk1MOwNR
-	rQBxeOTVtNpdF3tLJV03ITzn/6CI57b7yfNDl9K7yplDC290i+4vMe6uS4JJhYhqwr7Uyb
-	0nEbVchAKN9t+k6JZnb6YJkS73ttzow=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1711444516;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=KVxLwH7OYog7GQroatyhSHlgdnjAUGhNH65+zOf/pbA=;
-	b=ZrMDHEeCjYWu8oDySMOH+Cxal45QE5wqJn6vMfdp26jEStDogwMpW6t/N1oKRjkQI1PINf
-	XTS6x9qdR2Ob/hAg==
-Received: from imap2.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap2.dmz-prg2.suse.org (Postfix) with ESMTPS id 29CD513587;
-	Tue, 26 Mar 2024 09:15:16 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([10.150.64.162])
-	by imap2.dmz-prg2.suse.org with ESMTPSA
-	id Ry+JBySSAma4AgAAn2gu4w
-	(envelope-from <osalvador@suse.de>); Tue, 26 Mar 2024 09:15:16 +0000
-Date: Tue, 26 Mar 2024 10:16:44 +0100
-From: Oscar Salvador <osalvador@suse.de>
-To: syzbot <syzbot+73c1dfb19c10b7e49777@syzkaller.appspotmail.com>
-Cc: akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org, linux-usb@vger.kernel.org,
-	syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [mm?] usb-testing boot error: WARNING: refcount bug in
- __reset_page_owner
-Message-ID: <ZgKSfNM3lujt38-R@localhost.localdomain>
-References: <000000000000151f4a06148c0966@google.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=rLFrNPrHOaK1aslj2det2GteTy3VVNLylq4Um5ZJUMX6+VmHzKIvEsNFrJujZjO3YI9URs4Qrr1FCmCvljLZhL2xcTGZ0kphBN73ls/RpI3RdALIV0cTDp4pYOfW/PiDGB3UT+ZFEurV3WALr2I54BLu7kgS1JE/lC1QDv6eaTo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=GRnO7qEe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2851FC433C7;
+	Tue, 26 Mar 2024 09:22:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1711444955;
+	bh=6mSWMQvCKrkHXni1J4QY1YHn2cOY4eErD6f0NKuLJjA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=GRnO7qEeqvpt1vr2HyUMJSYTFLQt2j2O0Rr6vYpGHId6sXigKAM4GsoOECt7xyRG0
+	 lGtdEYvvWIOasNbHIwAXBusVY5oM2Er9NO2zeyhJXa0fKpO3C5T5EC+UGAQYOtHdjd
+	 rJhtDSmos02vrEenXY92SJkWHZSwns7Vs9BV+JdI=
+Date: Tue, 26 Mar 2024 10:22:32 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: USB mailing list <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH 2/2] USB: core: Fix deadlock in port "disable" sysfs
+ attribute
+Message-ID: <2024032610-uptown-mammary-f0fb@gregkh>
+References: <604da420-ae8a-4a9e-91a4-2d511ff404fb@rowland.harvard.edu>
+ <f7a8c135-a495-4ce6-bd49-405a45e7ea9a@rowland.harvard.edu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -100,45 +55,38 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <000000000000151f4a06148c0966@google.com>
-Authentication-Results: smtp-out2.suse.de;
-	none
-X-Spam-Level: 
-X-Spam-Score: -0.39
-X-Spamd-Result: default: False [-0.39 / 50.00];
-	 ARC_NA(0.00)[];
-	 RCVD_VIA_SMTP_AUTH(0.00)[];
-	 BAYES_HAM(-0.59)[81.65%];
-	 FROM_HAS_DN(0.00)[];
-	 TO_DN_SOME(0.00)[];
-	 TO_MATCH_ENVRCPT_ALL(0.00)[];
-	 NEURAL_HAM_LONG(-1.00)[-1.000];
-	 TAGGED_RCPT(0.00)[73c1dfb19c10b7e49777];
-	 MIME_GOOD(-0.10)[text/plain];
-	 RCPT_COUNT_FIVE(0.00)[6];
-	 RCVD_COUNT_THREE(0.00)[3];
-	 DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	 NEURAL_HAM_SHORT(-0.20)[-0.998];
-	 FUZZY_BLOCKED(0.00)[rspamd.com];
-	 FROM_EQ_ENVFROM(0.00)[];
-	 MIME_TRACE(0.00)[0:+];
-	 RCVD_TLS_ALL(0.00)[];
-	 SUSPICIOUS_RECIPS(1.50)[];
-	 SUBJECT_HAS_QUESTION(0.00)[]
-X-Spam-Flag: NO
+In-Reply-To: <f7a8c135-a495-4ce6-bd49-405a45e7ea9a@rowland.harvard.edu>
 
-On Tue, Mar 26, 2024 at 01:25:40AM -0700, syzbot wrote:
-> Hello,
+On Fri, Mar 15, 2024 at 01:06:33PM -0400, Alan Stern wrote:
+> The show and store callback routines for the "disable" sysfs attribute
+> file in port.c acquire the device lock for the port's parent hub
+> device.  This can cause problems if another process has locked the hub
+> to remove it or change its configuration:
 > 
-> syzbot found the following issue on:
+> 	Removing the hub or changing its configuration requires the
+> 	hub interface to be removed, which requires the port device
+> 	to be removed, and device_del() waits until all outstanding
+> 	sysfs attribute callbacks for the ports have returned.  The
+> 	lock can't be released until then.
 > 
-...
-> ------------[ cut here ]------------
-> refcount_t: decrement hit 0; leaking memory.
-> WARNING: CPU: 0 PID: 1 at lib/refcount.c:31 refcount_warn_saturate+0x1ed/0x210 lib/refcount.c:31
+> 	But the disable_show() or disable_store() routine can't return
+> 	until after it has acquired the lock.
+> 
+> The resulting deadlock can be avoided by calling
+> sysfs_break_active_protection().  This will cause the sysfs core not
+> to wait for the attribute's callback routine to return, allowing the
+> removal to proceed.  The disadvantage is that after making this call,
+> there is no guarantee that the hub structure won't be deallocated at
+> any moment.  To prevent this, we have to acquire a reference to it
+> first by calling hub_get().
+> 
+> Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+> Cc: <stable@vger.kernel.org>	# Needs the previous patch in this series
 
-This is fixed by [1]
+What "previous patch"?  I don't see this as a series even on
+lore.kernel.org.
 
-[1] https://lore.kernel.org/linux-mm/20240326063036.6242-1-osalvador@suse.de/
+confused,
 
+greg k-h
 
