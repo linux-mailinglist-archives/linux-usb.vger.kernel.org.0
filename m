@@ -1,144 +1,88 @@
-Return-Path: <linux-usb+bounces-8399-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8400-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9546188BFC8
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 11:44:07 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B011788BFCE
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 11:47:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 51D8F2E7EEA
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 10:44:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 322E4B23215
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 10:47:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74FA86AB6;
-	Tue, 26 Mar 2024 10:43:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nfuy0lN/"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9BE563A5;
+	Tue, 26 Mar 2024 10:47:43 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from SHSQR01.spreadtrum.com (mx1.unisoc.com [222.66.158.135])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEB3629A0;
-	Tue, 26 Mar 2024 10:43:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 556933C30;
+	Tue, 26 Mar 2024 10:47:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=222.66.158.135
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711449837; cv=none; b=hElQiJnLtf5m0tSObpbP8q7/0W4X8MEf7qcJAFQUW+bOH4GMonLSisBFGEyDEevNBYKs2j3K4vMq+1IjVq/dahCU6sPfbaFKZkeJMnB2UEoTplWxs45eYVxv5P4KM5B/cafs+Bjz8bCAd2XJlDZp89kyggJkay2/567mCkDdkC4=
+	t=1711450063; cv=none; b=hXZR2TS29rigl8tkouyPnqsRCRcbofknuokl4FjXfAIypn3nocJLTK6PomvmH81of9DW4eC5vkuCkA2roITCPBznrgeJKnl1e4vDtnGHxiRvmEMUHiRdI8NKgtni+jOjs8VlracGpeLkYXD6BX7BUmXHW3qtqgSz51RgpKYVv+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711449837; c=relaxed/simple;
-	bh=vwyF+iRB3lA+0ZCjAOIqFFU72W87k8/58YHoJa8WpLw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HlcWIUdl8TTxxrBA+DM1rv/N9HovJUE9YBGsq/iDWXmkZqrlrRlyPYk+qY08bEm3R+tGEuTWva9uN+3N4rHWnjQkHClL9vbh64LtG0PDzGxeTHzg7QiCS7pO9NQg9ScXBakB87Rk2SAPUjnznwItqiqSUrRU00tx5cycbvNgdog=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nfuy0lN/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66389C433C7;
-	Tue, 26 Mar 2024 10:43:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711449836;
-	bh=vwyF+iRB3lA+0ZCjAOIqFFU72W87k8/58YHoJa8WpLw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nfuy0lN/KkDKyqzc/6Jezrot7iUFD9NrHKfw8jx5XhqWYXw4VTEgWxdF8ZsikQrfG
-	 90McEfcuNo4rsreuwIZZI7U5HkFMULmFC/hM4VAuYElGq5C4xiXGnXzwfN+TON4H6V
-	 nwWWJD6dzlo6+eob9+tLpY9kngamg1oT322hcGqHVdeKEpx+OTyBjdJDB8g+MnF31L
-	 xawQ5PDCIHt4xgFxu1PQewr/PTUgmYk79IHOwCBkw2HElDS3Eod8msriyEEZCw/7Rc
-	 66x8oMX/NVKqNFewcYObhvp/UfVNZZmWyQgUq0huGHEhDhMlgEzl7t82KXmyEfxwwz
-	 KEhKlBv+uVfHQ==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1rp4Hj-000000007jO-0ymj;
-	Tue, 26 Mar 2024 11:44:03 +0100
-Date: Tue, 26 Mar 2024 11:44:03 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Krishna Kurapati <quic_kriskura@quicinc.com>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Rob Herring <robh@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Wesley Cheng <quic_wcheng@quicinc.com>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Felipe Balbi <balbi@kernel.org>, devicetree@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, quic_ppratap@quicinc.com,
-	quic_jackp@quicinc.com, Johan Hovold <johan+linaro@kernel.org>
-Subject: Re: [PATCH v17 7/9] usb: dwc3: qcom: Refactor IRQ handling in glue
- driver
-Message-ID: <ZgKm89rq4D8SqYQL@hovoldconsulting.com>
-References: <20240326102809.2940123-1-quic_kriskura@quicinc.com>
- <20240326102809.2940123-8-quic_kriskura@quicinc.com>
+	s=arc-20240116; t=1711450063; c=relaxed/simple;
+	bh=e8abdu1tcmiI2xK+Ds67Ozww6jto271BJbcS9taJliU=;
+	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=bXwMKDeE1wuTq0gM2iZrdcSKwfV6Y2Hl/pxYYJfmUZAh+xDg8XtbWDyuf5cagLS9oZ78FvZ5TfuZp5PG/Klvq4RI0Tsges5n/q+AYcEyisdg8kGgWcoRIP/xQLu5eF573VBTqQ/WAOZyKW+5Pk1pq+ox9QlO0S8zAldI4veJ1jA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=unisoc.com; spf=pass smtp.mailfrom=unisoc.com; arc=none smtp.client-ip=222.66.158.135
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=unisoc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=unisoc.com
+Received: from dlp.unisoc.com ([10.29.3.86])
+	by SHSQR01.spreadtrum.com with ESMTP id 42QAlIKu022823;
+	Tue, 26 Mar 2024 18:47:18 +0800 (+08)
+	(envelope-from surong.pang@unisoc.com)
+Received: from SHDLP.spreadtrum.com (shmbx06.spreadtrum.com [10.0.1.11])
+	by dlp.unisoc.com (SkyGuard) with ESMTPS id 4V3mfn1MLpz2LsfGh;
+	Tue, 26 Mar 2024 18:45:37 +0800 (CST)
+Received: from shmbx05.spreadtrum.com (10.29.1.56) by shmbx06.spreadtrum.com
+ (10.0.1.11) with Microsoft SMTP Server (TLS) id 15.0.1497.23; Tue, 26 Mar
+ 2024 18:47:16 +0800
+Received: from shmbx05.spreadtrum.com ([fe80::3169:eec0:7a15:2543]) by
+ shmbx05.spreadtrum.com ([fe80::3169:eec0:7a15:2543%16]) with mapi id
+ 15.00.1497.023; Tue, 26 Mar 2024 18:47:16 +0800
+From: =?utf-8?B?5bqe6IuP6I2jIChTdXJvbmcgUGFuZyk=?= <surong.pang@unisoc.com>
+To: Greg KH <gregkh@linuxfoundation.org>
+CC: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        =?utf-8?B?57+f5LqsIChPcnNvbiBaaGFpKQ==?= <Orson.Zhai@unisoc.com>,
+        =?utf-8?B?5YiY5pm65YuHIChaaGl5b25nIExpdSk=?= <Zhiyong.Liu@unisoc.com>,
+        "Surong.Pang@gmail.com" <Surong.Pang@gmail.com>
+Subject: Re: [PATCH] usb: gadget: rndis: add multi packages support for rndis
+Thread-Topic: [PATCH] usb: gadget: rndis: add multi packages support for rndis
+Thread-Index: Adp/akWVC9LH/DiDSWmkHtRpuRTpKg==
+Date: Tue, 26 Mar 2024 10:47:16 +0000
+Message-ID: <9d39b91505c4449f98e8431e2f257f8b@shmbx05.spreadtrum.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-ms-exchange-transport-fromentityheader: Hosted
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240326102809.2940123-8-quic_kriskura@quicinc.com>
+X-MAIL:SHSQR01.spreadtrum.com 42QAlIKu022823
 
-On Tue, Mar 26, 2024 at 03:58:07PM +0530, Krishna Kurapati wrote:
-> On multiport supported controllers, each port has its own DP/DM
-> and SS (if super speed capable) interrupts. As per the bindings,
-> their interrupt names differ from standard ones having "_x" added
-> as suffix (x indicates port number). Identify from the interrupt
-> names whether the controller is a multiport controller or not.
-> Refactor dwc3_qcom_setup_irq() call to parse multiport interrupts
-> along with non-multiport ones accordingly..
-> 
-> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-> Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
->  drivers/usb/dwc3/dwc3-qcom.c | 137 ++++++++++++++++++++++++++---------
->  1 file changed, 103 insertions(+), 34 deletions(-) 
-
-> -static int dwc3_qcom_setup_irq(struct platform_device *pdev)
-> +static int dwc3_qcom_setup_port_irq(struct platform_device *pdev, int port_num, bool is_multiport)
-
-Here you use "port_num", when it's really a (zero-based) port index.
-
-Please change to "port_index".
-
->  {
->  	struct dwc3_qcom *qcom = platform_get_drvdata(pdev);
-> +	const char *irq_name;
->  	int irq;
->  	int ret;
->  
-> -	irq = platform_get_irq_byname_optional(pdev, "qusb2_phy");
-> +	if (is_multiport)
-> +		irq_name = devm_kasprintf(&pdev->dev, GFP_KERNEL, "dp_hs_phy_%d", port_num + 1);
-> +	else
-> +		irq_name = devm_kasprintf(&pdev->dev, GFP_KERNEL, "dp_hs_phy_irq");
-> +	if (!irq_name)
-> +		return -ENOMEM;
-
-> +static int dwc3_qcom_find_num_ports(struct platform_device *pdev)
-> +{
-> +	char irq_name[14];
-> +	int port_index;
-> +	int irq;
-> +
-> +	irq = platform_get_irq_byname_optional(pdev, "dp_hs_phy_1");
-> +	if (irq <= 0)
-> +		return 1;
-> +
-> +	for (port_index = 2; port_index <= DWC3_MAX_PORTS; port_index++) {
-
-And here you use port_index, when it's really a one-based port number.
-
-I explicitly used "port" when we discussed the update here for this
-reason ("port_num" works too).
-
-Please fix this last thing in a v18 and we're good to go.
-
-> +		sprintf(irq_name, "dp_hs_phy_%d", port_index);
-> +
-> +		irq = platform_get_irq_byname_optional(pdev, irq_name);
-> +		if (irq <= 0)
-> +			return port_index - 1;
-> +	}
-> +
-> +	return DWC3_MAX_PORTS;
-> +}
-
-Johan
+RGVhciBHcmVn77yMDQpTaGFyZSBBbmRyb2lkIFBob25lIGludGVybmV0IHRvIFdpbmRvd3MgUEMg
+dmlhIFVTQiBzdGlsbCBuZWVkIHRoZSBybmRpcyBmZWF0dXJlLg0KT0ssIGlmIHJuZGlzIHdpbGwg
+YmUgZGVsZXRlZCBlbnRpcmVseSwgdGhpcyBwYXRjaCBjYW4gYmUgYWJhbmRvbmVkLg0KDQo+IA0K
+PiANCj4gT24gV2VkLCBNYXIgMDYsIDIwMjQgYXQgMDE6NDk6NDlQTSArMDgwMCwgU3Vyb25nIFBh
+bmcgd3JvdGU6DQo+ID4gQXMgbmNtLCBhZ2dlcmdhdGUgbXVsdGkgc2tiIHBhY2thZ2VzIGFuZCB0
+cmFuc2ZlciB0aGVtIGF0IG9uZSBVUkIuDQo+ID4gSW4gVVNCMi4wLCB0aGUgbmV0d29yayB0aHJv
+dWdocHV0IGNhbiBiZSBpbXByb3ZlZCBmcm9tIGFib3V0IDE4TUIvUyB0bw0KPiA+IDM1TUIvUy4N
+Cj4gDQo+IFdoeSBpcyBybmRpcyBzdGlsbCBiZWluZyB1c2VkPyAgSXQncyBhbiBpbnNlY3VyZSBh
+bmQgb2Jzb2xldGUgcHJvdG9jb2wgdGhhdCBzaG91bGQgbm90IGJlIHVzZWQgYXQgYWxsIGFueXdo
+ZXJlLiAgSSBrZWVwIHRyeWluZyB0byBkZWxldGUgaXQNCj4gZW50aXJlbHksIGJ1dCBuZWVkIHRv
+IGdvIGFuZCB3cml0ZSBhbiBhY3RpdmUgZXhwbG9pdCB0byBwcm92ZSB0byBwZW9wbGUganVzdCBo
+b3cgYmFkIGl0IHJlYWxseSBpcyBiZWZvcmUgSSBjYW4gZG8gc28uLi4NCj4gDQo+IEFkZGluZyBt
+b3JlIGZ1bmN0aW9uYWxpdHkgdG8gaXQgaXMgbm90IGEgZ29vZCBpZGVhLCB3aGF0IGlzIHdyb25n
+IHdpdGggdGhlIG90aGVyLCBidWlsdC1pbiwgbmV0d29ya2luZyBwcm90b2NvbHMgaW5zdGVhZD8g
+IFdoeSBhcmUgeW91DQo+IHVzaW5nIHRoaXMgb2xkIG9uZSBzdGlsbCB3aGVuIHRoZXJlIGFyZSBz
+byBtYW55IGJldHRlciBvcHRpb25zIG91dCB0aGVyZT8NCj4gDQo+IHRoYW5rcywNCj4gDQo+IGdy
+ZWcgay1oDQo=
 
