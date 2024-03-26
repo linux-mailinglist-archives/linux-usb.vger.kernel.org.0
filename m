@@ -1,117 +1,109 @@
-Return-Path: <linux-usb+bounces-8427-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8428-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1CA5588C87F
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 17:06:12 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 693CC88C8CD
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 17:16:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C60571F80D77
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 16:06:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3550FB23060
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 16:16:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 123CC13C9DF;
-	Tue, 26 Mar 2024 16:05:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A5B213C9AE;
+	Tue, 26 Mar 2024 16:16:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TzHSi2AP"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="dk3VBKc9"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17D9713C9D3
-	for <linux-usb@vger.kernel.org>; Tue, 26 Mar 2024 16:05:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93ACC13C9B6
+	for <linux-usb@vger.kernel.org>; Tue, 26 Mar 2024 16:16:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711469156; cv=none; b=HfEaCFG2cZ6+ml3tdOZ3C7tQOJxpegQKobLLsqDmK0+gr3tmqIX2X6hxHLtLHVbEZ4A23mESIkx5nbOfzTF52f0gGTD4icO4HUoL2uDdgNXO/h+HpDKuh1k9RxM+/fydpb9vEXIz8kjc+sA8lAamRxuKLXRe06OIYqTEaz66Fg0=
+	t=1711469794; cv=none; b=fCoIZynvw9T8IZNzPx0quITEjel/dxXDc8RbjtvTqW76NuxpXb0f+LcGoEaTsg7j+mBEoH3UCIrLw/z/OY1qVFyzKIqjnEI1xRm9YJcLHasH7gFoAzaK4/7z33ltlvxUc0Ui6BGp8/hH7sRMBSu5eRcZcALUpofH+8Yndyt1E4U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711469156; c=relaxed/simple;
-	bh=VeXxi6qHZQylZGBHh4BKY5FXS27zFr0AFMXg9sxVX2I=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=EM8fO1nAXRUt1LAsTUf9JPJQlRRyi90GsgkOl5iY4ooS8/mOo7z8KNZmdp4T6d46/jHtORPZkOBz8qbyRHmekdcKCTrjpZ9tBLaSPovnCGjzSo6/RTQpnIP8SD3MyzQ5gjOO+JO6LYyasH43IMBo9abPREbLwRnWx51kA961aeA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=TzHSi2AP; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1711469154;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=k0yFV2iWOWXUGcViPgWX13kSZw6Bw/i9IM+nByXHIb4=;
-	b=TzHSi2APgwHU/GYIEjmn7Sj2W2nKqrWroAZQDeAt24uxfLXIgH7ncffWtuuTHNfOKqhgRu
-	kkfrhgYnIYH2WmaZ+R4kTyGk2FdWDtDXQeMyDcqP9OsTznu47az7ivbtkoCYGyYZmpaudk
-	rbBPLjJqoLeU6XEwFhRL3NIlnNFZL0w=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-581-oIgkKUfwNn6PRb1GdqH7fw-1; Tue,
- 26 Mar 2024 12:05:49 -0400
-X-MC-Unique: oIgkKUfwNn6PRb1GdqH7fw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AF23D3815EE8;
-	Tue, 26 Mar 2024 16:05:48 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.39.193.147])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 0B2782022C1E;
-	Tue, 26 Mar 2024 16:05:45 +0000 (UTC)
-From: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
-To: horms@kernel.org
-Cc: dave.stevenson@raspberrypi.com,
-	davem@davemloft.net,
-	edumazet@google.com,
-	jtornosm@redhat.com,
-	kuba@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org,
-	pabeni@redhat.com,
-	stable@vger.kernel.org
-Subject: Re: [PATCH] net: usb: ax88179_178a: avoid the interface always configured as random address
-Date: Tue, 26 Mar 2024 17:05:37 +0100
-Message-ID: <20240326160540.224450-1-jtornosm@redhat.com>
-In-Reply-To: <20240326092459.GG403975@kernel.org>
-References: <20240326092459.GG403975@kernel.org>
+	s=arc-20240116; t=1711469794; c=relaxed/simple;
+	bh=8JqQr82O/WDXuTCV/mAX3xEuzrllWhesmqUjiW3qiVg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=mPcWVRsk0yDfHhQ2g3F9B8kmLrBcY1DrY+UWUyiFK98ToxZjxoDduPwetQy54JEcjDbqQ2qhgzDd/HfW7RlmPfYsJSn6WPaCMJzMEvKa7pi+I2RnAb8LinJg+egEf0g1Uv92dMeaDu3QbttYPHoYm2g3A6ANpg7p7MGFMJu3ZWA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=dk3VBKc9; arc=none smtp.client-ip=209.85.218.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a472f8c6a55so546484366b.0
+        for <linux-usb@vger.kernel.org>; Tue, 26 Mar 2024 09:16:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1711469790; x=1712074590; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=WAxfTyTcPXKUAhCkiadsMZfL4wqHb8g7lbyOozAT2Eo=;
+        b=dk3VBKc9+psIpw+LK2YLyvD3H28Jn+7SZAqGpdxiahWQLNU2trFXAOhz5mjj03ptE8
+         +LKfZj0Ci2e2EVvqcs6CABWR0vcULwQGXh3bGTQpT9+7eEREU+aBOO6R2sSRzqtrYtMt
+         artGPPF4URH+0vU97wX5ZEF/RUw+MZyC33Ubg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711469790; x=1712074590;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WAxfTyTcPXKUAhCkiadsMZfL4wqHb8g7lbyOozAT2Eo=;
+        b=pExaEmP01/DmGa0h2WK//KX8wuspLaYFc/VJqfnjoOxatkYpCxXCDMmL4hH5oMgbe0
+         4eD8ncff39jZXgcM298V1JR1IDVYk3+87Z9qVSoLBBBdHYiwEYDv4nLlVn9XsCJCE5kN
+         7rvQ3+Ig8pHmKSQ4QiXvIA/C/s/fMRNeO9vQGV542tVPZIbkwzo+WZ54vcq+thLcA1ue
+         eoYzvIOdVYFCbXM0T/ciTuW2OAu9F3FnY+Co5wVaq1Vk7kH7jOfMbsgAoZC3iRpbveUN
+         RF3dKBQwoFu8IYZ0d1Bljf4zM74TAhxhbuFcLr/XO5SGRgJDUhVwAtma28pRIfrS9ezp
+         ny/A==
+X-Gm-Message-State: AOJu0Yx79WEtFS5LOHM1iJQB+cbGh3PYs/j4UdUdymL8F5jnLKsT64oZ
+	ThR+/NpEFB4xx7IynYFSC/lvBX6cFvbJ7npQygOxDEUS471c4OukF8PhII2btFVkM3yB9dG8FHa
+	Ie0iMGw==
+X-Google-Smtp-Source: AGHT+IF6/mJSiPzrau7xDETdBZdMGY9oL6GpxiIS6xwuZk5NqDLrdw38IVwAaHInJERL7w0JfVISpA==
+X-Received: by 2002:a17:906:5851:b0:a4a:aaa9:8b3b with SMTP id h17-20020a170906585100b00a4aaaa98b3bmr115412ejs.77.1711469790638;
+        Tue, 26 Mar 2024 09:16:30 -0700 (PDT)
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com. [209.85.218.43])
+        by smtp.gmail.com with ESMTPSA id c22-20020a1709060fd600b00a4dacd6b8b3sm1451641ejk.68.2024.03.26.09.16.30
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Mar 2024 09:16:30 -0700 (PDT)
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a44665605f3so672197566b.2
+        for <linux-usb@vger.kernel.org>; Tue, 26 Mar 2024 09:16:30 -0700 (PDT)
+X-Received: by 2002:a17:906:3610:b0:a47:ae0:160 with SMTP id
+ q16-20020a170906361000b00a470ae00160mr131774ejb.73.1711469789793; Tue, 26 Mar
+ 2024 09:16:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.4
+References: <20240326160342.3588864-2-gregkh@linuxfoundation.org>
+In-Reply-To: <20240326160342.3588864-2-gregkh@linuxfoundation.org>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Tue, 26 Mar 2024 09:16:12 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whpUh+G_DzR1WpgTeELGk2q4fRuFu9BV77XUp7mGX7+oQ@mail.gmail.com>
+Message-ID: <CAHk-=whpUh+G_DzR1WpgTeELGk2q4fRuFu9BV77XUp7mGX7+oQ@mail.gmail.com>
+Subject: Re: [PATCH] USB: gadget: dummy_hcd: switch char * to u8 *
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, Felipe Balbi <balbi@kernel.org>, 
+	Jakob Koschel <jakobkoschel@gmail.com>, Randy Dunlap <rdunlap@infradead.org>, 
+	Ira Weiny <ira.weiny@intel.com>, Alan Stern <stern@rowland.harvard.edu>
+Content-Type: text/plain; charset="UTF-8"
 
-Hello Simon,
-
->> In addition, if mac address can not be read from the driver, a random
->> address is configured again, so it is not necessary to call
->> eth_hw_addr_random from here. Indeed, in this situtatuon, when reset was
->> also executed from bind, this was invalidating the check to configure if the
->> assigned mac address for the interface was random or not.
+On Tue, 26 Mar 2024 at 09:03, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
-> I also agree with your analysis here. However it does seem to be a separate
-> problem. And perhaps warrants a separate patch. I am also wondering
-> if this is more of a clean-up than a fix: does it cause a bug
-> that is observable by users?
-You are right, really it is a separate improvement or simplification.
-Right now, it is not affecting the users and it is not producing any
-problem, just a second random address is generated if there is any problem,
-and this is not necessary, because there is a random address generated
-previously.
-When the extra reset was done during binding operation, as we were modifying
-the pregenerated random address, the check in usbnet_probe was useless.
-Ok, I will split the patch in two to be considered separately, the first
-with the important fix and the second with the commented improvement or
-clean-up. 
+> The function handle_control_request() casts the urb buffer to a char *,
+> and then treats it like a unsigned char buffer when assigning data to
+> it.  On some architectures, "char" is really signed, so let's just
+> properly set this pointer to a u8 to take away any potential problems as
+> that's what is really wanted here.
+[..]
+> Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
 
-> nit: AFAIK, if one arm of a conditional has curly-brackets, then all should.
->     So there is no need to drop them here.
-I didn't know the related criteria, I will do as you say.
+Well, I assume this goes back to the discussions almost two years ago
+that then just led us to use '-funsigned-char' for the kernel.
 
-Thank you
+So the patch is still correct, but it's not like it's strictly
+necessary. I have no idea how this re-surfaced now.
 
-Best regards
-José Ignacio
-
+            Linus
 
