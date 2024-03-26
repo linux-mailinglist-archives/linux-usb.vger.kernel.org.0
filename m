@@ -1,117 +1,100 @@
-Return-Path: <linux-usb+bounces-8341-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8342-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A52788B6C3
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 02:22:46 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD61E88B735
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 03:11:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DC89F1F33E82
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 01:22:45 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 207ACB22CD9
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 02:11:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C822A1CD2F;
-	Tue, 26 Mar 2024 01:22:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDD7A5A10F;
+	Tue, 26 Mar 2024 02:11:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="HdRwkKoK"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="eSdp3gjq"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B85611BF58;
-	Tue, 26 Mar 2024 01:22:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6A6D1804F
+	for <linux-usb@vger.kernel.org>; Tue, 26 Mar 2024 02:11:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711416156; cv=none; b=ikkXb7hPhynqcc4IRFWoviloograo/AJkNPQ3kSLxhVPl13hHiCEMsMr/s0yYz4diWRxBXtbR22xOdqjP0RbiIPCg56HXElUmvRvLpZSu28i3LX+QgHdMyh6rla+FzI9AF4iIRcOMF83aRilWKgkxdwuhMrKmkCSZitj2rSEN1k=
+	t=1711419095; cv=none; b=oX74EpVKgOLcWq6iLOSMStkinqxl47XFzgm0c3A8vgFGtbVT8DNv/iEh/OIlkIQAyx5I+yNq27Iu3i7O+yj/RAh0+1uC/nNBsAFxCWhuakHysf1KtCT8FnGU4e8ne0mGRximk/cKmzhQ9v+x7tiXDfafxkJrnXMEzplJZFZoxHg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711416156; c=relaxed/simple;
-	bh=/zvy1BaXy0FsVN/a8po256aR+SnO3OH7+CH31z0vBiA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=nLYQ8oBRhaeAHCWnSIcMaXE1Ar4ADVucM2+VR5jmsb7Q8dDhvNe8Te3EZ5cVEb7iHUI38WbxS1+04vzEPBOfcnXoe73K2p3O4cs0i6yegDPy/s7WisBh9KCUCwPUaL3pWS3aOTR7lHh2l8MabNex0N6h/lMBBJR48OE3Cvr9Ikw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=HdRwkKoK; arc=none smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 42PLG26f002315;
-	Tue, 26 Mar 2024 01:22:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=corp-2023-11-20;
- bh=N/KeRr2q9pvDKKuCTTv7AYS0SB+2Dro+WiEupeavjcA=;
- b=HdRwkKoKIMr4kaSKtJeivc3TKl13flQwP6RAsm6Ty0dA7Gmc7sfdZ+P1IfZ0WFU13I8L
- qIy6uED2WSdX07bldU20Da2t4kTG+wAJTwm4WSnDZbQpEyN7gBlj5L5OLOQDttcNjTpx
- AYQagGkkG3F9Rrj81nB7KsKLQq4UN7Zl+C8GX6eFpo9+BqdUnQ63iffeIfObTpWMIqZA
- zC2o55KwfJGTUaMKsXuVROxK5zHoa+uW1CJqruC8NyJBi6dIvE+GfCrwav2pkf+ObYtN
- 7czY577tUi3XHSLagTT5hD8ilLAfb1QX+RfXKUUIDKlr0Fl4zBW1ok9nyi251evCVbpZ Ug== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3x1np2c0bu-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 26 Mar 2024 01:22:03 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 42Q140is024714;
-	Tue, 26 Mar 2024 01:22:03 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3x1nh6hfs2-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 26 Mar 2024 01:22:03 +0000
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 42Q1Lx4C002449;
-	Tue, 26 Mar 2024 01:22:02 GMT
-Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3x1nh6hfkw-3;
-	Tue, 26 Mar 2024 01:22:02 +0000
-From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: linux-scsi@vger.kernel.org, "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc: "Martin K . Petersen" <martin.petersen@oracle.com>, jejb@linux.ibm.com,
-        stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
-        usb-storage@lists.one-eyed-alien.net, kernel-dev@igalia.com,
-        kernel@gpiccoli.net,
-        syzbot+c645abf505ed21f931b5@syzkaller.appspotmail.com,
-        stable@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        John Garry <john.g.garry@oracle.com>,
-        Shin'ichiro Kawasaki <shinichiro.kawasaki@wdc.com>
-Subject: Re: [PATCH] scsi: core: Fix unremoved procfs host directory regression
-Date: Mon, 25 Mar 2024 21:21:45 -0400
-Message-ID: <171141606218.2006662.11145964739643960309.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20240313113006.2834799-1-gpiccoli@igalia.com>
-References: <20240313113006.2834799-1-gpiccoli@igalia.com>
+	s=arc-20240116; t=1711419095; c=relaxed/simple;
+	bh=2omgm0oVwmFQY0df3M492JuLNwzHdhr921AZ7TN/Hv4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MdiWvpu3xSBYqXc+6UeVaKAnkB5NlaRQWZgJsHs573NYWOuVGW80vwXKTPIignkaX1CqRZgpgYjlPYJNJUDY9yxr1BvaPdJu8AG510pdVmlDZILvYBSSXwa2lCIjQe2XLRywUamLuuEgnerv4WRRUzwYWjJClkFd/FtRvBB6qAQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=eSdp3gjq; arc=none smtp.client-ip=209.85.219.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-696315c9da5so39419966d6.2
+        for <linux-usb@vger.kernel.org>; Mon, 25 Mar 2024 19:11:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1711419092; x=1712023892; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2omgm0oVwmFQY0df3M492JuLNwzHdhr921AZ7TN/Hv4=;
+        b=eSdp3gjqsDTO93dxhWHaawckcq75zu/wlY9NyaPJcl9ra1K1NYcgesDueqZ2R3MzIc
+         19dP1gVirJ17xEe11y8wYJiRYPnUomJKCIjiW9xVCp2tt5uVfi/bGWuFFjVY2llkXqfJ
+         CnfM/aESEjCUfLwfe6J0MaccHfwLnQ70mbbWA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711419092; x=1712023892;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2omgm0oVwmFQY0df3M492JuLNwzHdhr921AZ7TN/Hv4=;
+        b=tBj9xargcwQKgNJbf+JUT3HUQxW4R8xsrvjZoCZ8bOkqXdeST8nCknfmGzvwhN+ji6
+         Z0OYKE6dlplUw/dvjQUm92zKMndeqN6Kf4PEI7M5mqGuAxhKF9VUmodlpw8pM3DfJYhc
+         4kiz/2nmfekEUDM8x06gCTZP4zQMQLFSigpe8065D2nnyuNFGDQDp2UkFMtses8wvAvq
+         A8Rt7Dqkgve28dbHNJjktC9B9WQWbNJSyep5DrzgbvWYQqLoUPaSeB/M0hl6YPVyraqG
+         CIXbDkFeDdxC0yk2bafnpEmJA3Pe3Bv6Uh/uascisFfn6kiwnNCRPjKr47x8KWHaIW35
+         OnqQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXyCLIDy0useP+aJg4WVHJdds3gL+VPxa7rVfNhasQ2ydDmIHPe70kbKzuBtgdRxXEihnics8NZaV8jSYYFbGa3b8V0ZpKsu4gh
+X-Gm-Message-State: AOJu0Yw/ZzsfbUO18DOcy5ZGo7XXDbfnW9P5a83fPX4GijlMfqUxxP8i
+	1VFwUaKynvs0b2/EQKKORzbFqJFKMy5tF/aUsnKFiAbDFRWXXKd/EF2HsLuj7cqGfOq8zEs1cPZ
+	gJeXBjDgwbc1dSJ9+3b6W2GWqs/twR88b5TgZ
+X-Google-Smtp-Source: AGHT+IFcIOWbn/HGLYRUnQpkj83Ev0HVBfuC4tfZaVnBO+TnfjywB0pWS+oOPTYuoffaX1zwBb9JPwT8JIdQku9O9vk=
+X-Received: by 2002:a05:6214:2681:b0:696:51aa:8a6a with SMTP id
+ gm1-20020a056214268100b0069651aa8a6amr12396926qvb.18.1711419091839; Mon, 25
+ Mar 2024 19:11:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-03-25_26,2024-03-21_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 malwarescore=0
- suspectscore=0 mlxlogscore=843 mlxscore=0 adultscore=0 spamscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2403210000 definitions=main-2403260007
-X-Proofpoint-GUID: PeMcQ7PkllAYRKy9EnMQNAsITpGP4uuC
-X-Proofpoint-ORIG-GUID: PeMcQ7PkllAYRKy9EnMQNAsITpGP4uuC
+References: <20240325-public-ucsi-h-v1-0-7c7e888edc0a@chromium.org> <20240325-public-ucsi-h-v1-2-7c7e888edc0a@chromium.org>
+In-Reply-To: <20240325-public-ucsi-h-v1-2-7c7e888edc0a@chromium.org>
+From: Prashant Malani <pmalani@chromium.org>
+Date: Mon, 25 Mar 2024 19:11:20 -0700
+Message-ID: <CACeCKaehH3Qs8y-W_jsyOdnTYWVzgsGj5_wGujjYT2Sr8xxqkA@mail.gmail.com>
+Subject: Re: [PATCH 2/3] usb: typec: ucsi: Import interface for UCSI transport
+To: Pavan Holla <pholla@chromium.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, 
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 13 Mar 2024 08:21:20 -0300, Guilherme G. Piccoli wrote:
+Hi Pavan,
 
-> Commit fc663711b944 ("scsi: core: Remove the /proc/scsi/${proc_name} directory
-> earlier") fixed a bug related to modules loading/unloading, by adding a
-> call to scsi_proc_hostdir_rm() on scsi_remove_host(). But that led to a
-> potential duplicate call to the hostdir_rm() routine, since it's also
-> called from scsi_host_dev_release(). That triggered a regression report,
-> which was then fixed by commit be03df3d4bfe ("scsi: core: Fix a procfs host
-> directory removal regression"). The fix just dropped the hostdir_rm() call
-> from dev_release().
-> 
-> [...]
+On Mon, Mar 25, 2024 at 4:37=E2=80=AFPM Pavan Holla <pholla@chromium.org> w=
+rote:
+>
+> Import include/linux/usb/ucsi.h and remove any duplicate declarations.
+>
+> Signed-off-by: Pavan Holla <pholla@chromium.org>
 
-Applied to 6.9/scsi-fixes, thanks!
+Can you squash Patch 1/3 and this Patch (2/3)? It sounds like an
+atomic change that doesn't need two patches.
 
-[1/1] scsi: core: Fix unremoved procfs host directory regression
-      https://git.kernel.org/mkp/scsi/c/f23a4d6e0757
+BR,
 
--- 
-Martin K. Petersen	Oracle Linux Engineering
+-Prashant
 
