@@ -1,48 +1,48 @@
-Return-Path: <linux-usb+bounces-8366-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8367-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35A3E88BCB3
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 09:46:42 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D09588BCBE
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 09:47:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C76CA1F39F4D
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 08:46:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B71471F39DBD
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 08:47:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 138C512B82;
-	Tue, 26 Mar 2024 08:46:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AA2410A19;
+	Tue, 26 Mar 2024 08:47:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fW9yzfvL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eVcwwEr9"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B34CEEDB;
-	Tue, 26 Mar 2024 08:46:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E7F3481BA;
+	Tue, 26 Mar 2024 08:47:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711442793; cv=none; b=l8H5/fBvNwx2NlHI1Qd/NPkX+74UB20vUawUsS+LtNUAKbSE/A6Ay3W5+Y+oVLsXtoW9KcT5lMXU0BomR7Hok+gwm/9dvFTpYW3EVSwXeL4gAg1iZV/9jZLhqschgDZaIF8PWg8v37h7b1Wg/AK9akTcquOfApVsEx/YPRont2g=
+	t=1711442820; cv=none; b=GS5ZrUY5dF0hajVuNkvyK3o55wJ0VmZWvhRTahECJNB5Rt4NwfhLxpHqgeUZcgj91r55zP/3Zqd+/WUl40NE5HD9RzGwUNZbjKBotyNlofA7fc3o57Vkzrdy+7QIet2ENeavltEObSEVxRZxN6w/1jDugyj3tyReOMl7da0EJTI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711442793; c=relaxed/simple;
-	bh=u+aZyQYa+tMPYo6GZURLmeeAY6gnUE+FlTJQQr16EjQ=;
+	s=arc-20240116; t=1711442820; c=relaxed/simple;
+	bh=9BZo9doBRlVMp+bRG+0EUYFUIre/Th6Bjxw62kVm1Dc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jul61FPYOKd/rR7xQF7+BjCuLEqzFOZYp6RDgjXfdR31IwOSRWddO6Vi7Ay0YSrXNdRcG0ztEV5ysYbWqGm8BOkBWhaXRa72+vxy7NLpd6utEhkuYRLq9mu3K12mCRUuWXpSY1bIvSLb5VlmvdDhB39IqtwoZh8ds6c17HltPAI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fW9yzfvL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1F01C433F1;
-	Tue, 26 Mar 2024 08:46:29 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=qvizGaTTXSJZ1MulsLvVfGxZrSI99nzNtpTcKHsC4wKTmcelKuFzT/IlLONmmfC8l8Xdd85mCne4TfMRy57aNyq+INlOOMlgprGpHTViPXXWaZT8RP1LTEETQgTp10nhAkMWO2dHAc/KGfpYIdf3uYVNPONv5mRQNNfBYrQdfmY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eVcwwEr9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E806EC433F1;
+	Tue, 26 Mar 2024 08:46:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711442792;
-	bh=u+aZyQYa+tMPYo6GZURLmeeAY6gnUE+FlTJQQr16EjQ=;
+	s=k20201202; t=1711442820;
+	bh=9BZo9doBRlVMp+bRG+0EUYFUIre/Th6Bjxw62kVm1Dc=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=fW9yzfvLq9W807c9iG4auL6tA2HKmi8Nqbn0YbZH0Rj6rTSW9LdnTUMUkHvjWra8x
-	 XI0mdqDXPDDfpGE6Sr6CfV8XjrTmh7MI9OKZviUUE01jwCrkBS78/qryPBbMyZZjxi
-	 5RUd7FoXKCQeWUPlBDM/oiX5+apF3E3eJhfHleiByDBwjGZ63WBVih0OzeKRJZfXFp
-	 jkif2fJ7IbgpAF2d5YfqjWaAZmOaBYzDd3BUnY+ZttSGGEkC/rUxNzuAkxIMzmBH7o
-	 8Fl51wrAm+U81BgOep+BT+0niCCv2v5OGimrmNMKPjlxbankFr81YNXa+vAPE3a/O1
-	 kbXz3LLbUD0iQ==
-Message-ID: <a885b792-6c88-4c01-b17f-6dfb11b8fd0c@kernel.org>
-Date: Tue, 26 Mar 2024 09:46:26 +0100
+	b=eVcwwEr9KiRRy1z2Z5mA1rPTEQ9zZ1U9N2MUlX8o/tonwrESX6VnPF8AS7/BToJqL
+	 t8gSrEP49sT3vAo4okPsfSbVwOoh2WBFd0Jq0JYhTHt0qKWSMNySz8UB2U/YBDrp7O
+	 dR/eJl5Dn3XtFabyjSKy1+cbhZghWiEFGV4O9MpiKJiHbpTcaNXmSmJyc82257vJyr
+	 /R8fQoMO/4GPXFxHTIrp7IY2/iZgza/w+oY8VE+IjWNEqvG+0Xn2WaFFzKL9UFyBI3
+	 0uCXI2N+nC65E5b0Amnw+W/m5K+d/uhBM7uwZCpL8A1nUWbelD2dpF4WL8BYsGzBkQ
+	 qTJrrpUHhVyPw==
+Message-ID: <62b2c29f-ca1a-4131-910b-7b9b62a5577e@kernel.org>
+Date: Tue, 26 Mar 2024 09:46:53 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -50,15 +50,18 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3] platform/chrome: cros_ec_ucsi: Implement UCSI PDC
+Subject: Re: [PATCH v2 3/3] platform/chrome: cros_ec_ucsi: Implement UCSI PDC
  driver
 To: Pavan Holla <pholla@chromium.org>,
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Benson Leung <bleung@chromium.org>, Tzung-Bi Shih <tzungbi@kernel.org>,
+ Guenter Roeck <groeck@chromium.org>
 Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-References: <20240325-public-ucsi-h-v1-0-7c7e888edc0a@chromium.org>
- <20240325-public-ucsi-h-v1-3-7c7e888edc0a@chromium.org>
+ Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+ chrome-platform@lists.linux.dev
+References: <20240325-public-ucsi-h-v2-0-a6d716968bb1@chromium.org>
+ <20240325-public-ucsi-h-v2-3-a6d716968bb1@chromium.org>
 Content-Language: en-US
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -104,15 +107,14 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240325-public-ucsi-h-v1-3-7c7e888edc0a@chromium.org>
+In-Reply-To: <20240325-public-ucsi-h-v2-3-a6d716968bb1@chromium.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 26/03/2024 00:37, Pavan Holla wrote:
+On 26/03/2024 00:42, Pavan Holla wrote:
 > Implementation of transport driver for UCSI. This driver will be used
 > if the ChromeOS EC implements a PPM.
 > 
-
 
 > +static struct platform_driver cros_ucsi_driver = {
 > +	.driver = {
@@ -129,12 +131,9 @@ On 26/03/2024 00:37, Pavan Holla wrote:
 > +MODULE_DESCRIPTION("UCSI driver for ChromeOS EC.");
 > +MODULE_ALIAS("platform:" DRV_NAME);
 
-You should not need MODULE_ALIAS() in normal cases. If you need it,
-usually it means your device ID table is wrong (e.g. misses either
-entries or MODULE_DEVICE_TABLE()). MODULE_ALIAS() is not a substitute
-for incomplete ID table.
+Nothing improved.
 
-Using DRV_NAME here brings even more confusion...
+One patchset per 24h. Allow people to actually review your code.
 
 Best regards,
 Krzysztof
