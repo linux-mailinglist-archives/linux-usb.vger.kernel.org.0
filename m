@@ -1,76 +1,52 @@
-Return-Path: <linux-usb+bounces-8362-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8363-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8B3B88BC60
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 09:29:40 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 753B488BC6D
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 09:30:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 63D8F29EEED
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 08:29:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EA979B22516
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 08:30:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07D8B131BB7;
-	Tue, 26 Mar 2024 08:28:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF42A137746;
+	Tue, 26 Mar 2024 08:29:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QPX+K2s6"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Yiw52Iex"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FDA8134422;
-	Tue, 26 Mar 2024 08:28:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 644F1128392;
+	Tue, 26 Mar 2024 08:29:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711441712; cv=none; b=apgpVcIwBOAzF844+6yhSBortkIurwKa7OmMXkpRUJEFUI+b8NjQ764gQcel7kJ4OlYG2rP0To5+CXYSZ6o5zx4AHee8UMUpjE7mu/4FKEqpxoquSCDKSu5XiRACCSiyfOaGvfnICnT47GIS1Xs4R+Fe4iXTs1TQ7kwb3m/yTHk=
+	t=1711441771; cv=none; b=s3P4zlvPPx2u/LPHy9pdJjYOUseANqWxxRTx+Y1+zhzIa0/Om7kRNl706myqYvwVibUNEy1Uer7rCuZj9wcY53SPq2Lh7aYI69PtPmq8xlxA6uHwXwYSR3TQXWcYbgBwH4hXcMOhQsslYc54Y4UYW11cFdVM1DJ7+Tvr+QVPFUQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711441712; c=relaxed/simple;
-	bh=rAq3xkAVaETYPSPHUg5emdE8mb8m91SeBHFnjLnSNn8=;
+	s=arc-20240116; t=1711441771; c=relaxed/simple;
+	bh=vc6aHwbmE8151ViOOvewkuy6wUpc4nRDbj3fGQOqXjk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SloYujdLCU+fF3FxFixPxdUOMrLqhMGBudM1MO/ZpMoCjGl2GJGdaPabkB66HHKqX+jdtXJZTWxNaGEPQiBIsBMA/v1QyZxmfNNsDHRgPNxq1mEfOkVm0sobCT0qSbIo7wq/iQsI5Fw5CLZMxwc9SK7yHzUf0YgRf3HJnzTAZhw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QPX+K2s6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AC61C43390;
-	Tue, 26 Mar 2024 08:28:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711441712;
-	bh=rAq3xkAVaETYPSPHUg5emdE8mb8m91SeBHFnjLnSNn8=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=ahUvdsOSKa2qhj5WCHasdHN4JUQ87qGUU40A8x2ujYqGWUHKK7LjMEdSf+9mJsWG8YktDQceq3YEnmzfvLCzYm+Y199D2a6KIRMXSKqJ2HSCV+KbDJDmTQ0/BWdH47DZKKgq56MRD7fqysfTUc80J4RtTLgDcxx2JEksng40LBI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Yiw52Iex; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4A20C43390;
+	Tue, 26 Mar 2024 08:29:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1711441770;
+	bh=vc6aHwbmE8151ViOOvewkuy6wUpc4nRDbj3fGQOqXjk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QPX+K2s6Vr6NTDLfB3RrMOcdU+ZZLsM3yi6/UuG1rCLWGYX+tW6sSPLzry0FeTlqg
-	 P/ZWca+hJGB2i/WX4iK9602OM20iNmLSN2gdhbKNT9wIn2yp/uUJy++OrzzRuhRDqs
-	 ggx07RkbJigaK8eTh8Asbbpd29MpB7P34PzZMBU0NzxjJXhXbgvg7/7FZHo/3UTnhK
-	 JcKUrZ8WIA5I0UbhzsY9cEY3gg5rT0w1Stga4RJUAySOJ8nhfubewH1k6a6H283WWC
-	 pyoqRKPvhhYj2tsqznMU3vZqc9g4oP2xVCKmufFZ4UdB+fM6ttcXopv0p6gbxMNZMw
-	 O1nkLix+uYzWA==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1rp2Ag-0000000060q-3Qe3;
-	Tue, 26 Mar 2024 09:28:39 +0100
-Date: Tue, 26 Mar 2024 09:28:38 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Wesley Cheng <quic_wcheng@quicinc.com>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Felipe Balbi <balbi@kernel.org>, devicetree@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, quic_ppratap@quicinc.com,
-	quic_jackp@quicinc.com
-Subject: Re: [PATCH v16 7/9] usb: dwc3: qcom: Refactor IRQ handling in glue
- driver
-Message-ID: <ZgKHNuziNtBhGO9V@hovoldconsulting.com>
-References: <20240307062052.2319851-1-quic_kriskura@quicinc.com>
- <20240307062052.2319851-8-quic_kriskura@quicinc.com>
- <ZgFyukBXIIwZo7v-@hovoldconsulting.com>
- <50926b91-3c61-4dbf-85c9-7558ab96e628@quicinc.com>
- <ZgF6zvaT2OkrbkHK@hovoldconsulting.com>
- <807015d4-c5ed-4e04-9948-fd1ff894a04e@quicinc.com>
- <ZgHUR-Rk-YzqiTtt@hovoldconsulting.com>
- <7b4a6d7f-76ad-471f-a178-dc598fbc0e22@quicinc.com>
+	b=Yiw52Iex+DY8QVYZBLDZNupvVNNxIO8UwjXZQSs5aUlErpuObEkNzjng5zswV2+0N
+	 HBQLQxLmby2tKrf0aNryUXGbUwGTj48gMTaW5ZLytaYvBFUb7g1gQdZaPphm5wVjNo
+	 cxx5K/JTyUAAGb59Yeam7+lKOxMLqgio6xM92pus=
+Date: Tue, 26 Mar 2024 09:29:27 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Pavan Holla <pholla@chromium.org>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+Subject: Re: [PATCH] usb: typec: ucsi: Wait 20ms before retrying reset
+Message-ID: <2024032624-subtitle-crisped-f4f1@gregkh>
+References: <20240325-ucsi-reset-delay-v1-1-d9e183e0f1e6@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -79,57 +55,31 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7b4a6d7f-76ad-471f-a178-dc598fbc0e22@quicinc.com>
+In-Reply-To: <20240325-ucsi-reset-delay-v1-1-d9e183e0f1e6@chromium.org>
 
-On Tue, Mar 26, 2024 at 01:41:52PM +0530, Krishna Kurapati PSSNV wrote:
-> On 3/26/2024 1:15 AM, Johan Hovold wrote:
+On Mon, Mar 25, 2024 at 09:19:43PM +0000, Pavan Holla wrote:
+> The PPM might take time to process reset. Allow 20ms for the reset to
+> complete before issuing another reset.
 > 
-> > Just change the logic in dwc3_qcom_find_num_ports() so that it returns 1
-> > if "dp_hs_phy_1" is missing, and otherwise you determine the number of
-> > ports by iterating from 2 to DWC3_MAX_PORTS - 1.
+> Signed-off-by: Pavan Holla <pholla@chromium.org>
 
-> I made this change and it works. Removed any return value check for the 
-> find_num_ports call as it can return only 1/2/3/4 now.
-> 
+What commit id does this fix?  Does it need to go to older kernels?
+
 > ---
->      irq = platform_get_irq_byname_optional(pdev, "qusb2_phy");
->          if (irq > 0)
->                  return 1;
-> 
->          irq = platform_get_irq_byname_optional(pdev, "dp_hs_phy_irq");
->          if (irq > 0)
->                  return 1;
+> There is a 20ms delay for a reset retry to complete. However, the first
+> reset attempt is expected to complete immediately after an async write
+> of the reset command. This patch adds 20ms between the async write and
+> the CCI read that expects the reset to be complete. The additional delay
+> also allows the PPM to settle after the first reset, which seems to be
+> the intention behind the original 20ms delay ( kernel v4.14 has a comment
+> regarding the same )
 
-As I mentioned above, these two lookups are no longer needed and should
-be removed.
- 
->          irq = platform_get_irq_byname_optional(pdev, "dp_hs_phy_1");
->          if (irq <= 0)
->                  return 1;
+Why was the comment removed in newer kernels?
 
-Just assume it's a single port controller unless "dp_hs_phy_1" is
-present.
- 
->          for (port_index = 1; port_index < DWC3_MAX_PORTS - 1; 
-> port_index++) {
+Where does the magic 20ms number come from?  What about systems that do
+not need that time delay, did things just slow down for them?
 
-I think this would be more readable if you use port (num) as iterator
-(2..DWC3_MAX_PORTS) as you're returning a number of ports.
+thanks,
 
->                  sprintf(irq_name, "dp_hs_phy_%d", port_index + 1);
-
-Then this would use just "port";
-
-> 
->                  irq = platform_get_irq_byname_optional(pdev, irq_name);
->                  if (irq <= 0)
->                          return port_index;
-
-And return "port - 1" here.
-
->          }
-> 
->          return DWC3_MAX_PORTS;
-
-Johan
+greg k-h
 
