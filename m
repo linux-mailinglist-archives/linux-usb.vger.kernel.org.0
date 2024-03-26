@@ -1,158 +1,200 @@
-Return-Path: <linux-usb+bounces-8357-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8358-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D3F588BC0B
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 09:12:18 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CD2788BC36
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 09:25:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BE7CA1C2FCDA
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 08:12:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 27DD31F38DFE
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 08:25:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D3D4134409;
-	Tue, 26 Mar 2024 08:12:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="AGXxRVPG"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C184133998;
+	Tue, 26 Mar 2024 08:25:43 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED75118C38;
-	Tue, 26 Mar 2024 08:12:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61374132C04
+	for <linux-usb@vger.kernel.org>; Tue, 26 Mar 2024 08:25:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711440730; cv=none; b=lE81B2R9qVbnIMi4woLm/xnCvAkaunpgRexiIKdWZIG+5DtsYzCZgH7U4cqeO2liMVfuLufgRBjSdpzeuD2ov8MFqfRCQdXbkkNTuTg/PH2+q11LC4maGzpTkjph18HrbEiK/RLjYWzs4pM8AamevuaSSIELDO3UCW3+w9KARUw=
+	t=1711441543; cv=none; b=oqaHsx8i7mrTG+7hXgAZCLp1kt5Cvc6JBJCX1FuS/9aO81XAre0jHGMNsePnZ9InkZ3ZayhuA3INQEKbC5GINXXUmQHE0+CEK0G1VQCjygPi/VuSnsUoz0Q6QhPbyEfmrjYGGN+o2BUnwh7r3k3o2USHxrlL4+mhUNsK16+1GvI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711440730; c=relaxed/simple;
-	bh=BFDVAFnUc+43+s1CESozz6wdE9YCqo+LSQNQCYQEEq4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=bzw/zOEXFk6vgIVMocozU4ThYylActRE9UGo7hCkivao2AzbBrB3f8jrn29kezwJSRRvltheZkvqcELE/AIRJdwg7xeCa4JpPANpVpIx9Hqrp6qG2EeJXB8D51/KlQ0PUzWBWHjJNIMdBNqUADW1denIXpRinAeM+RSeeES7TAs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=AGXxRVPG; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 42Q43lrK013328;
-	Tue, 26 Mar 2024 08:12:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=K89+wmzn3wsPsL5w7i3MbruOa5IqBekvsiGBON5GpHU=; b=AG
-	XxRVPGItttULZU74CTJMP6OmGLB0PApkaA+UPgbiBrcBmc6TYPFHRApfpZn4dxAV
-	mbUAVjxtC6pD2iTHTzPFHTuqeXFKutFDMn7sOFRC99bjV9TpE2SklZSaShByt6aW
-	JJGZXk7bInMZMam7hmLYrdtxh9xa04nfYCa5uMgJvVgvXjYJptirKcBk2cexmoiO
-	ARQ9aEGZdGv7n85oT4RFJW0sutaM77gvbNTDzxHfoGxsBVw/lngHnnRH5/5h1Omd
-	mleZk4in5VlRHRIu8u9Dzk88mTrdXrFjfJZY/oIRf4VIm1Kl595WNaw+6/8vviFw
-	5bq1JRvqV+iaMnrzaI4g==
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3x3q0n0nup-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 26 Mar 2024 08:12:02 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 42Q8C0kN018610
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 26 Mar 2024 08:12:00 GMT
-Received: from [10.216.25.96] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Tue, 26 Mar
- 2024 01:11:55 -0700
-Message-ID: <7b4a6d7f-76ad-471f-a178-dc598fbc0e22@quicinc.com>
-Date: Tue, 26 Mar 2024 13:41:52 +0530
+	s=arc-20240116; t=1711441543; c=relaxed/simple;
+	bh=IYIJ0ZZtXKZGdV+GfwViVmMENyUaM9HipDtmquOJobQ=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=iCtTwRK+EVpIF1TSz5+XAHq40GT8nveo07CybEhU4IXEL/4Z8ioQ5voFpOEnDhbnZDb9yxV2u0vvW9qyeZNOeSSgGyvQXUwXC5Qy0biVIjHC0TqM5KhjZizV4o/7T5uDru3QvcCcnbuI/we31Zu8N5br8300yEez2t2QkWxMfsw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f197.google.com with SMTP id e9e14a558f8ab-368a3864192so2621965ab.2
+        for <linux-usb@vger.kernel.org>; Tue, 26 Mar 2024 01:25:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711441540; x=1712046340;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fPZTu9sK/SSsF9HtLu81SIhEg9tKCo25fg56Y25baOg=;
+        b=oIQrJhkJ+s+eDq9g58tQO+faNGVcmFvMPTXqAOkKw0xlRF12wYBMeMDwxmLRK9h9tq
+         6PWNX9YYh/2j+NTxiOTgRAH0YKQ/kjoxdCnKiPZXJIeiugTlof03RJvPNj2YSlzJwa6w
+         rwlLmkB7MiNQ70C+P+OwLaZ7bunDv7VJRZX/xNwZlPrI/NX/OwxO4Ulh63DURP8tUXi3
+         ji9yYYeg2JLhDr8vKuSeDKpCtrLU7yZQCKAFBnYXak0YyIJYxgmUO4kuBfSaMLZlAHrl
+         3AovloLYNe7R6jNnVKDfhvB4JSLJ12jfgohQn4Jbiww8UiwXCGC8ePqrF3GoMMS5x9Ch
+         GxZw==
+X-Forwarded-Encrypted: i=1; AJvYcCWhGFiUmXpCXoOeabAGfIGzDyumP1bBC7hO2me7Ei2YfIOt6xazsWi+an3hzZWyg1T7ITmQsFJF6YrFXe1jJEYGcVoFvE/wTW3L
+X-Gm-Message-State: AOJu0YwSDdnVZ2lrlSMS6TxxNg7S+y/dFNnYexPBEQ9xUUJynQcZ08Xq
+	dwio84A8wiKV1/T6H9/KN4Zn/R7jKJ8Bx+H/vEPnXopz8TQxh8WJJd+QGSvz3peotB0zAM8qXsX
+	T6Lv4c5OiYsFzlKsf1gHCCARDgE+9DxJ33VNGPYLRSlsm7A+ZJ92s0eE=
+X-Google-Smtp-Source: AGHT+IFbpzQZ21Inxmsbcny1JXDa7DgvvhXkXH42YTCiZYr1kavzxLnjCrdWORIrUkOCfFQwK+aiIBtfFckkKGIWACh1C0Q5DTjp
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v16 7/9] usb: dwc3: qcom: Refactor IRQ handling in glue
- driver
-To: Johan Hovold <johan@kernel.org>
-CC: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring
-	<robh+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Wesley Cheng
-	<quic_wcheng@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "Greg
- Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Conor Dooley
-	<conor+dt@kernel.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Felipe Balbi
-	<balbi@kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_ppratap@quicinc.com>,
-        <quic_jackp@quicinc.com>
-References: <20240307062052.2319851-1-quic_kriskura@quicinc.com>
- <20240307062052.2319851-8-quic_kriskura@quicinc.com>
- <ZgFyukBXIIwZo7v-@hovoldconsulting.com>
- <50926b91-3c61-4dbf-85c9-7558ab96e628@quicinc.com>
- <ZgF6zvaT2OkrbkHK@hovoldconsulting.com>
- <807015d4-c5ed-4e04-9948-fd1ff894a04e@quicinc.com>
- <ZgHUR-Rk-YzqiTtt@hovoldconsulting.com>
-Content-Language: en-US
-From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <ZgHUR-Rk-YzqiTtt@hovoldconsulting.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 36CckDkS1r-KWMwa0tYKTmWGfEf7tjyw
-X-Proofpoint-ORIG-GUID: 36CckDkS1r-KWMwa0tYKTmWGfEf7tjyw
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-03-26_04,2024-03-21_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=910
- malwarescore=0 phishscore=0 bulkscore=0 spamscore=0 impostorscore=0
- priorityscore=1501 clxscore=1015 mlxscore=0 adultscore=0
- lowpriorityscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2403210001 definitions=main-2403260055
+X-Received: by 2002:a05:6e02:20ce:b0:368:8cf9:9ab5 with SMTP id
+ 14-20020a056e0220ce00b003688cf99ab5mr159226ilq.2.1711441540614; Tue, 26 Mar
+ 2024 01:25:40 -0700 (PDT)
+Date: Tue, 26 Mar 2024 01:25:40 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000151f4a06148c0966@google.com>
+Subject: [syzbot] [mm?] usb-testing boot error: WARNING: refcount bug in __reset_page_owner
+From: syzbot <syzbot+73c1dfb19c10b7e49777@syzkaller.appspotmail.com>
+To: akpm@linux-foundation.org, linux-kernel@vger.kernel.org, 
+	linux-mm@kvack.org, linux-usb@vger.kernel.org, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
+Hello,
 
+syzbot found the following issue on:
 
-On 3/26/2024 1:15 AM, Johan Hovold wrote:
+HEAD commit:    4cece7649650 Linux 6.9-rc1
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=12eea546180000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a2bfc1e92b3816d2
+dashboard link: https://syzkaller.appspot.com/bug?extid=73c1dfb19c10b7e49777
+compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
 
-> Just change the logic in dwc3_qcom_find_num_ports() so that it returns 1
-> if "dp_hs_phy_1" is missing, and otherwise you determine the number of
-> ports by iterating from 2 to DWC3_MAX_PORTS - 1.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/7f5e2f772df3/disk-4cece764.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/bf6c631b116f/vmlinux-4cece764.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/bd864ac23a04/bzImage-4cece764.xz
 
-Hi Johan,
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+73c1dfb19c10b7e49777@syzkaller.appspotmail.com
 
-I made this change and it works. Removed any return value check for the 
-find_num_ports call as it can return only 1/2/3/4 now.
+ACPI: PCI: Interrupt link LNKB configured for IRQ 10
+ACPI: PCI: Interrupt link LNKC configured for IRQ 11
+ACPI: PCI: Interrupt link LNKD configured for IRQ 11
+ACPI: PCI: Interrupt link LNKS configured for IRQ 9
+iommu: Default domain type: Translated
+iommu: DMA domain TLB invalidation policy: lazy mode
+SCSI subsystem initialized
+ACPI: bus type USB registered
+usbcore: registered new interface driver usbfs
+usbcore: registered new interface driver hub
+usbcore: registered new device driver usb
+mc: Linux media interface: v0.10
+videodev: Linux video capture interface: v2.00
+pps_core: LinuxPPS API ver. 1 registered
+pps_core: Software ver. 5.3.6 - Copyright 2005-2007 Rodolfo Giometti <giometti@linux.it>
+PTP clock support registered
+EDAC MC: Ver: 3.0.0
+Advanced Linux Sound Architecture Driver Initialized.
+Bluetooth: Core ver 2.22
+NET: Registered PF_BLUETOOTH protocol family
+Bluetooth: HCI device and connection manager initialized
+Bluetooth: HCI socket layer initialized
+Bluetooth: L2CAP socket layer initialized
+Bluetooth: SCO socket layer initialized
+NET: Registered PF_ATMPVC protocol family
+NET: Registered PF_ATMSVC protocol family
+NetLabel: Initializing
+NetLabel:  domain hash size = 128
+NetLabel:  protocols = UNLABELED CIPSOv4 CALIPSO
+NetLabel:  unlabeled traffic allowed by default
+nfc: nfc_init: NFC Core ver 0.1
+NET: Registered PF_NFC protocol family
+PCI: Using ACPI for IRQ routing
+pci 0000:00:05.0: vgaarb: setting as boot VGA device
+pci 0000:00:05.0: vgaarb: bridge control possible
+pci 0000:00:05.0: vgaarb: VGA device added: decodes=io+mem,owns=io+mem,locks=none
+vgaarb: loaded
+clocksource: Switched to clocksource kvm-clock
+VFS: Disk quotas dquot_6.6.0
+VFS: Dquot-cache hash table entries: 512 (order 0, 4096 bytes)
+TOMOYO: 2.6.0
+Mandatory Access Control activated.
+AppArmor: AppArmor Filesystem Enabled
+pnp: PnP ACPI init
+pnp: PnP ACPI: found 7 devices
+clocksource: acpi_pm: mask: 0xffffff max_cycles: 0xffffff, max_idle_ns: 2085701024 ns
+NET: Registered PF_INET protocol family
+IP idents hash table entries: 131072 (order: 8, 1048576 bytes, linear)
+------------[ cut here ]------------
+refcount_t: decrement hit 0; leaking memory.
+WARNING: CPU: 0 PID: 1 at lib/refcount.c:31 refcount_warn_saturate+0x1ed/0x210 lib/refcount.c:31
+Modules linked in:
+CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.9.0-rc1-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/29/2024
+RIP: 0010:refcount_warn_saturate+0x1ed/0x210 lib/refcount.c:31
+Code: 86 e8 57 23 ca fe 90 0f 0b 90 90 e9 c3 fe ff ff e8 18 fb 03 ff c6 05 33 52 3d 07 01 90 48 c7 c7 00 29 e7 86 e8 34 23 ca fe 90 <0f> 0b 90 90 e9 a0 fe ff ff 48 89 ef e8 b2 d4 55 ff e9 44 fe ff ff
+RSP: 0000:ffffc9000001fba0 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: ffffffff8118c199
+RDX: ffff8881012b0000 RSI: ffffffff8118c1a6 RDI: 0000000000000001
+RBP: ffff888106eecb6c R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000001 R12: ffff888106eecb6c
+R13: 0000000000000000 R14: 00000000016a005a R15: ffff888106885f28
+FS:  0000000000000000(0000) GS:ffff8881f6400000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffff88823ffff000 CR3: 000000000829e000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __refcount_dec include/linux/refcount.h:336 [inline]
+ refcount_dec include/linux/refcount.h:351 [inline]
+ dec_stack_record_count mm/page_owner.c:215 [inline]
+ __reset_page_owner+0x2ea/0x370 mm/page_owner.c:253
+ reset_page_owner include/linux/page_owner.h:25 [inline]
+ free_pages_prepare mm/page_alloc.c:1141 [inline]
+ __free_pages_ok+0x5d0/0xbd0 mm/page_alloc.c:1270
+ make_alloc_exact+0x165/0x260 mm/page_alloc.c:4829
+ alloc_large_system_hash+0x4e0/0x640 mm/mm_init.c:2530
+ inet_hashinfo2_init+0x4b/0xd0 net/ipv4/inet_hashtables.c:1193
+ tcp_init+0xba/0x9f0 net/ipv4/tcp.c:4708
+ inet_init+0x419/0x6f0 net/ipv4/af_inet.c:2029
+ do_one_initcall+0x128/0x700 init/main.c:1238
+ do_initcall_level init/main.c:1300 [inline]
+ do_initcalls init/main.c:1316 [inline]
+ do_basic_setup init/main.c:1335 [inline]
+ kernel_init_freeable+0x69d/0xca0 init/main.c:1548
+ kernel_init+0x1c/0x2b0 init/main.c:1437
+ ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:243
+ </TASK>
+
 
 ---
-     irq = platform_get_irq_byname_optional(pdev, "qusb2_phy");
-         if (irq > 0)
-                 return 1;
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-         irq = platform_get_irq_byname_optional(pdev, "dp_hs_phy_irq");
-         if (irq > 0)
-                 return 1;
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-         irq = platform_get_irq_byname_optional(pdev, "dp_hs_phy_1");
-         if (irq <= 0)
-                 return 1;
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
-         for (port_index = 1; port_index < DWC3_MAX_PORTS - 1; 
-port_index++) {
-                 sprintf(irq_name, "dp_hs_phy_%d", port_index + 1);
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
 
-                 irq = platform_get_irq_byname_optional(pdev, irq_name);
-                 if (irq <= 0)
-                         return port_index;
-         }
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
 
-         return DWC3_MAX_PORTS;
-
----
-
-Let me know if this is fine and I can push out v17.
-
-Regards,
-Krishna,
+If you want to undo deduplication, reply with:
+#syz undup
 
