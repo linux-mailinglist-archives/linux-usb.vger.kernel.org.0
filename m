@@ -1,54 +1,97 @@
-Return-Path: <linux-usb+bounces-8369-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8370-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72D0088BD5E
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 10:13:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id EF29F88BD64
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 10:15:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2B978297803
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 09:13:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5A88B2E48A7
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 09:15:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2339654BCF;
-	Tue, 26 Mar 2024 09:12:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45BAD4597A;
+	Tue, 26 Mar 2024 09:15:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Ga9ido2G"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="e3//BtmD";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="ZrMDHEeC";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="e3//BtmD";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="ZrMDHEeC"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94025535CF;
-	Tue, 26 Mar 2024 09:12:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4805A12E71;
+	Tue, 26 Mar 2024 09:15:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711444362; cv=none; b=BwC+NrfMs5fMKN4NKBdM6A14nwwYKMXjZZh6au7D8XaCl9/TCaGKhK2coOOvZum6X793wc5J7NZtlOcsobCT/sWf7IrAYY7C5vJ4TMytye5pWhe4kweaVEJoaFbx+f4iqrYN3lv6O6VtoJSUIdSSKJ7veu/74q37434sEX7DA5o=
+	t=1711444519; cv=none; b=Yw/r+EvXwpn+BPfCU5fB9z3M8w6vXo84l+trzTG9RFUywmCoJQByEcWap9NbWf5S721z/nwOMi9iDBNsn6Rg4pxigvmn5gpUtGIgJDDnCZHSHkvII+c2I71ghxCS4brKEgceFGcBFXv9bsmPgXZgEYILNHvGYXZXdfNZxlmapb8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711444362; c=relaxed/simple;
-	bh=t58JdC2b/HPnLyTDAhREExcio11Vu5aF7Lgh9dnHC+8=;
+	s=arc-20240116; t=1711444519; c=relaxed/simple;
+	bh=/w1rMR/RsI7YUGioZ5VYFougOxYezZ5nebqI9JEo7Pg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Mb5/IpdNWsDfu9E2ULWxV6HvZVDjSbhwzbFxl+fJJ3SkedVHs+S0IlcXfXdToriG528zz2mXJFeq3mSb5drwq2dVJHjk+xqOCActx/+MdBHO00AyJ6DWhQUH76zpEbo8+Subd/xBi6haGzj5BJGheWSgAn3ZpsMhPn1Zqn4Reg8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Ga9ido2G; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF5F9C433F1;
-	Tue, 26 Mar 2024 09:12:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1711444362;
-	bh=t58JdC2b/HPnLyTDAhREExcio11Vu5aF7Lgh9dnHC+8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Ga9ido2GsoMbBulZG1R5S05bpShG4kiY0CpzVj5Mh6TPPrtrRjbmT/Ot6hS1ZR9tT
-	 3hlFiSxqowAQHZU/0SqNy5sF1xUUY8O1s8DmXp0XnZEZFgBJ0DkVz6SpxzdIjsS/zX
-	 UDn13hXs0z3AOdtrj1y5TIxM7jqf/buHECKPDN9E=
-Date: Tue, 26 Mar 2024 10:12:39 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Pavan Holla <pholla@chromium.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-Subject: Re: [PATCH 1/3] usb: typec: ucsi: Provide interface for UCSI
- transport
-Message-ID: <2024032603-tactful-exes-f2d0@gregkh>
-References: <20240325-public-ucsi-h-v1-0-7c7e888edc0a@chromium.org>
- <20240325-public-ucsi-h-v1-1-7c7e888edc0a@chromium.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=K5oeo1mrcoOiQS2aWxk9tPpxcbFy1PfnIM0oYCJu0MVm6G1cxVegLZOa8riBzOThcjSgBvW6KVSxLAvw17uDub1WmLT81DbZX153+sEY0iPgv2K2I6y1EwpjY/2UOXl6pKB8hXVtOTHFT6+7JGCiN9ZiZ1qQGQNhmMTDa7qQs68=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=e3//BtmD; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=ZrMDHEeC; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=e3//BtmD; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=ZrMDHEeC; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap2.dmz-prg2.suse.org (imap2.dmz-prg2.suse.org [10.150.64.98])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 863AA5CAFF;
+	Tue, 26 Mar 2024 09:15:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1711444516; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=KVxLwH7OYog7GQroatyhSHlgdnjAUGhNH65+zOf/pbA=;
+	b=e3//BtmDX//tOSy5JJvz1axljqE5y8Qj2rYdls/SSyA68pOkPSqP5BJR6EzuPZhk1MOwNR
+	rQBxeOTVtNpdF3tLJV03ITzn/6CI57b7yfNDl9K7yplDC290i+4vMe6uS4JJhYhqwr7Uyb
+	0nEbVchAKN9t+k6JZnb6YJkS73ttzow=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1711444516;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=KVxLwH7OYog7GQroatyhSHlgdnjAUGhNH65+zOf/pbA=;
+	b=ZrMDHEeCjYWu8oDySMOH+Cxal45QE5wqJn6vMfdp26jEStDogwMpW6t/N1oKRjkQI1PINf
+	XTS6x9qdR2Ob/hAg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1711444516; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=KVxLwH7OYog7GQroatyhSHlgdnjAUGhNH65+zOf/pbA=;
+	b=e3//BtmDX//tOSy5JJvz1axljqE5y8Qj2rYdls/SSyA68pOkPSqP5BJR6EzuPZhk1MOwNR
+	rQBxeOTVtNpdF3tLJV03ITzn/6CI57b7yfNDl9K7yplDC290i+4vMe6uS4JJhYhqwr7Uyb
+	0nEbVchAKN9t+k6JZnb6YJkS73ttzow=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1711444516;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=KVxLwH7OYog7GQroatyhSHlgdnjAUGhNH65+zOf/pbA=;
+	b=ZrMDHEeCjYWu8oDySMOH+Cxal45QE5wqJn6vMfdp26jEStDogwMpW6t/N1oKRjkQI1PINf
+	XTS6x9qdR2Ob/hAg==
+Received: from imap2.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap2.dmz-prg2.suse.org (Postfix) with ESMTPS id 29CD513587;
+	Tue, 26 Mar 2024 09:15:16 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([10.150.64.162])
+	by imap2.dmz-prg2.suse.org with ESMTPSA
+	id Ry+JBySSAma4AgAAn2gu4w
+	(envelope-from <osalvador@suse.de>); Tue, 26 Mar 2024 09:15:16 +0000
+Date: Tue, 26 Mar 2024 10:16:44 +0100
+From: Oscar Salvador <osalvador@suse.de>
+To: syzbot <syzbot+73c1dfb19c10b7e49777@syzkaller.appspotmail.com>
+Cc: akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org, linux-usb@vger.kernel.org,
+	syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [mm?] usb-testing boot error: WARNING: refcount bug in
+ __reset_page_owner
+Message-ID: <ZgKSfNM3lujt38-R@localhost.localdomain>
+References: <000000000000151f4a06148c0966@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -57,45 +100,45 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240325-public-ucsi-h-v1-1-7c7e888edc0a@chromium.org>
+In-Reply-To: <000000000000151f4a06148c0966@google.com>
+Authentication-Results: smtp-out2.suse.de;
+	none
+X-Spam-Level: 
+X-Spam-Score: -0.39
+X-Spamd-Result: default: False [-0.39 / 50.00];
+	 ARC_NA(0.00)[];
+	 RCVD_VIA_SMTP_AUTH(0.00)[];
+	 BAYES_HAM(-0.59)[81.65%];
+	 FROM_HAS_DN(0.00)[];
+	 TO_DN_SOME(0.00)[];
+	 TO_MATCH_ENVRCPT_ALL(0.00)[];
+	 NEURAL_HAM_LONG(-1.00)[-1.000];
+	 TAGGED_RCPT(0.00)[73c1dfb19c10b7e49777];
+	 MIME_GOOD(-0.10)[text/plain];
+	 RCPT_COUNT_FIVE(0.00)[6];
+	 RCVD_COUNT_THREE(0.00)[3];
+	 DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	 NEURAL_HAM_SHORT(-0.20)[-0.998];
+	 FUZZY_BLOCKED(0.00)[rspamd.com];
+	 FROM_EQ_ENVFROM(0.00)[];
+	 MIME_TRACE(0.00)[0:+];
+	 RCVD_TLS_ALL(0.00)[];
+	 SUSPICIOUS_RECIPS(1.50)[];
+	 SUBJECT_HAS_QUESTION(0.00)[]
+X-Spam-Flag: NO
 
-On Mon, Mar 25, 2024 at 11:37:28PM +0000, Pavan Holla wrote:
-> The ucsi.h include can be used by driver implementations that
-> provide transport for UCSI commands.
+On Tue, Mar 26, 2024 at 01:25:40AM -0700, syzbot wrote:
+> Hello,
 > 
-> Signed-off-by: Pavan Holla <pholla@chromium.org>
-> ---
->  MAINTAINERS              |  1 +
->  include/linux/usb/ucsi.h | 66 ++++++++++++++++++++++++++++++++++++++++++++++++
->  2 files changed, 67 insertions(+)
+> syzbot found the following issue on:
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index aa3b947fb080..e799d67a8fa5 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -22987,6 +22987,7 @@ F:	Documentation/ABI/testing/sysfs-class-typec
->  F:	Documentation/driver-api/usb/typec.rst
->  F:	drivers/usb/typec/
->  F:	include/linux/usb/typec.h
-> +F:	include/linux/usb/ucsi.h
->  
->  USB TYPEC INTEL PMC MUX DRIVER
->  M:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> diff --git a/include/linux/usb/ucsi.h b/include/linux/usb/ucsi.h
-> new file mode 100644
-> index 000000000000..3ec1db968070
-> --- /dev/null
-> +++ b/include/linux/usb/ucsi.h
-> @@ -0,0 +1,66 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
+...
+> ------------[ cut here ]------------
+> refcount_t: decrement hit 0; leaking memory.
+> WARNING: CPU: 0 PID: 1 at lib/refcount.c:31 refcount_warn_saturate+0x1ed/0x210 lib/refcount.c:31
 
-No copyright line?  I think your employer would not like it if they saw
-that :(
+This is fixed by [1]
 
-Please get review from some internal-to-google developers before
-submitting your next version of this series.
+[1] https://lore.kernel.org/linux-mm/20240326063036.6242-1-osalvador@suse.de/
 
-thanks,
-
-greg k-h
 
