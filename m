@@ -1,122 +1,142 @@
-Return-Path: <linux-usb+bounces-8365-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8366-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C864388BCA8
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 09:41:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 35A3E88BCB3
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 09:46:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 63DCF1F35431
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 08:41:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C76CA1F39F4D
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 08:46:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A01212B82;
-	Tue, 26 Mar 2024 08:41:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 138C512B82;
+	Tue, 26 Mar 2024 08:46:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hC0vCnzR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fW9yzfvL"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F2C13DAC01;
-	Tue, 26 Mar 2024 08:41:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B34CEEDB;
+	Tue, 26 Mar 2024 08:46:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711442489; cv=none; b=DuJvcbGMoCYjnn+UMV2mHz472iokcwfCDO4dP9LRUMjQI74EOJKzyNQnNh74UBa98wSj19WebYvX/F4OqVTDHGXLe6eoz8WtRFI/OavQE+atLX2AfSz/IaVx82mupJn7WFaOq03NTu8afsjs2r+Hbe5JD1GanXGiDzPu1HabaPA=
+	t=1711442793; cv=none; b=l8H5/fBvNwx2NlHI1Qd/NPkX+74UB20vUawUsS+LtNUAKbSE/A6Ay3W5+Y+oVLsXtoW9KcT5lMXU0BomR7Hok+gwm/9dvFTpYW3EVSwXeL4gAg1iZV/9jZLhqschgDZaIF8PWg8v37h7b1Wg/AK9akTcquOfApVsEx/YPRont2g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711442489; c=relaxed/simple;
-	bh=s3Y5LkcJQN20xjSmIYi1tJZcUYC36nkGzb2O3cLJfks=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CGzjaE1080ILAfdDNopuXNMeWfMdDNldPtQDddm4o8iWMNhAb9itChJdzzaBuE8ege/yDAXwWmLFOnkYdIYbXjLftZcq3QVbQ7auWyZcK5131YNCh91V1hpuLs6vIAYzeOcYxHTF4/hqKR8axYzQ0/a2bwpMRruB2jq9Fv/s6ms=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hC0vCnzR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFA52C433C7;
-	Tue, 26 Mar 2024 08:41:28 +0000 (UTC)
+	s=arc-20240116; t=1711442793; c=relaxed/simple;
+	bh=u+aZyQYa+tMPYo6GZURLmeeAY6gnUE+FlTJQQr16EjQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=jul61FPYOKd/rR7xQF7+BjCuLEqzFOZYp6RDgjXfdR31IwOSRWddO6Vi7Ay0YSrXNdRcG0ztEV5ysYbWqGm8BOkBWhaXRa72+vxy7NLpd6utEhkuYRLq9mu3K12mCRUuWXpSY1bIvSLb5VlmvdDhB39IqtwoZh8ds6c17HltPAI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fW9yzfvL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1F01C433F1;
+	Tue, 26 Mar 2024 08:46:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711442489;
-	bh=s3Y5LkcJQN20xjSmIYi1tJZcUYC36nkGzb2O3cLJfks=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hC0vCnzR0lDXbfPmyt935zY387vwAbBeh34M7cQylYiHXqTHcf4OATBDQL0NnZK5H
-	 XWDWmU6MKNlq4I7lNLsoXXtxmlH2kOHs3z76CgX/ChBXlcFNp7M71YuL1da7XVdn35
-	 6w2scdmrbPpeefSxKC+BxCRrkvU3nCNorbV4Kyg3xWspkctp0gQMywhqJWbXHrJ2aK
-	 rZw1Igvl7QaRd4+w+TZG7F4AwfUgzqw2HxAwTKs4tLJDD9RrfnaAh36rbQCVhoIYYT
-	 NoAVz2z2w/6UAuhyziKbydXFP2RQnvPdPpVSoHvyQkPJqcLw0Tu5kzdlxcTCMIMo4v
-	 gT1vCp8w59Ejw==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1rp2ND-00000000635-2rSm;
-	Tue, 26 Mar 2024 09:41:36 +0100
-Date: Tue, 26 Mar 2024 09:41:35 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Johan Hovold <johan+linaro@kernel.org>, linux-usb@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH 0/7] usb: typec: ucsi: fix several issues manifesting on
- Qualcomm platforms
-Message-ID: <ZgKKPyLUr8qoMi9t@hovoldconsulting.com>
-References: <20240313-qcom-ucsi-fixes-v1-0-74d90cb48a00@linaro.org>
- <Zf12vSHvDiFTufLE@hovoldconsulting.com>
- <CAA8EJprAzy41pn7RMtRgbA-3MO8LoMf8UXQqJ3hD-SzHS_=AOg@mail.gmail.com>
+	s=k20201202; t=1711442792;
+	bh=u+aZyQYa+tMPYo6GZURLmeeAY6gnUE+FlTJQQr16EjQ=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=fW9yzfvLq9W807c9iG4auL6tA2HKmi8Nqbn0YbZH0Rj6rTSW9LdnTUMUkHvjWra8x
+	 XI0mdqDXPDDfpGE6Sr6CfV8XjrTmh7MI9OKZviUUE01jwCrkBS78/qryPBbMyZZjxi
+	 5RUd7FoXKCQeWUPlBDM/oiX5+apF3E3eJhfHleiByDBwjGZ63WBVih0OzeKRJZfXFp
+	 jkif2fJ7IbgpAF2d5YfqjWaAZmOaBYzDd3BUnY+ZttSGGEkC/rUxNzuAkxIMzmBH7o
+	 8Fl51wrAm+U81BgOep+BT+0niCCv2v5OGimrmNMKPjlxbankFr81YNXa+vAPE3a/O1
+	 kbXz3LLbUD0iQ==
+Message-ID: <a885b792-6c88-4c01-b17f-6dfb11b8fd0c@kernel.org>
+Date: Tue, 26 Mar 2024 09:46:26 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAA8EJprAzy41pn7RMtRgbA-3MO8LoMf8UXQqJ3hD-SzHS_=AOg@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/3] platform/chrome: cros_ec_ucsi: Implement UCSI PDC
+ driver
+To: Pavan Holla <pholla@chromium.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+References: <20240325-public-ucsi-h-v1-0-7c7e888edc0a@chromium.org>
+ <20240325-public-ucsi-h-v1-3-7c7e888edc0a@chromium.org>
+Content-Language: en-US
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20240325-public-ucsi-h-v1-3-7c7e888edc0a@chromium.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, Mar 25, 2024 at 10:56:21PM +0200, Dmitry Baryshkov wrote:
-> On Fri, 22 Mar 2024 at 14:16, Johan Hovold <johan@kernel.org> wrote:
+On 26/03/2024 00:37, Pavan Holla wrote:
+> Implementation of transport driver for UCSI. This driver will be used
+> if the ChromeOS EC implements a PPM.
+> 
 
-> > I just gave this series a quick spin on my X13s and it seems there are
-> > still some issues that needs to be resolved before merging at least the
-> > final patch in this series:
-> >
-> > [    7.786167] ucsi_glink.pmic_glink_ucsi pmic_glink.ucsi.0: unknown error 0
-> > [    7.786445] ucsi_glink.pmic_glink_ucsi pmic_glink.ucsi.0: UCSI_GET_PDOS failed (-5)
-> > [    7.883493] ucsi_glink.pmic_glink_ucsi pmic_glink.ucsi.0: unknown error 0
-> > [    7.883614] ucsi_glink.pmic_glink_ucsi pmic_glink.ucsi.0: UCSI_GET_PDOS failed (-5)
-> > [    7.905194] ucsi_glink.pmic_glink_ucsi pmic_glink.ucsi.0: unknown error 0
-> > [    7.905295] ucsi_glink.pmic_glink_ucsi pmic_glink.ucsi.0: UCSI_GET_PDOS failed (-5)
-> > [    7.913340] ucsi_glink.pmic_glink_ucsi pmic_glink.ucsi.0: unknown error 0
-> > [    7.913409] ucsi_glink.pmic_glink_ucsi pmic_glink.ucsi.0: UCSI_GET_PDOS failed (-5)
-> 
-> I have traced what is causing these messages. During UCSI startup the
-> ucsi_register_port() function queries for PDOs associated with the
-> on-board USB-C port. This is allowed by the spec. Qualcomm firmware
-> detects that there is no PD-device connected and instead of returning
-> corresponding set of PDOs returns Eerror Indicator set to 1b but then
-> it returns zero error status in response to GET_ERROR_STATUS, causing
-> "unknown error 0" code. I have checked the PPM, it doesn't even have
-> the code to set the error status properly in this case (not to mention
-> that asking for device's PDOs should not be an error, unless the
-> command is inappropriate for the target.
-> 
-> Thus said, I think the driver is behaving correctly. Granted that
-> these messages are harmless, we can ignore them for now. I'll later
-> check if we can update PD information for the device's ports when PD
-> device is attached. I have verified that once the PD device is
-> attached, corresponding GET_PDOS command returns correct set of PD
-> objects. Ccurrently the driver registers usb_power_delivery devices,
-> but with neither source nor sink set of capabilities.
-> 
-> An alternative option is to drop patches 4 and 5, keeping
-> 'NO_PARTNER_PDOS' quirk equivalent to 'don't send GET_PDOS at all'.
-> However I'd like to abstain from this option, since it doesn't allow
-> us to check PD capabilities of the attached device.
-> 
-> Heikki, Johan, WDYT?
 
-Whatever you do, you need to suppress those errors above before enabling
-anything more on sc8280xp (e.g. even if it means adding a quirk to the
-driver).
+> +static struct platform_driver cros_ucsi_driver = {
+> +	.driver = {
+> +		.name = DRV_NAME,
+> +		.pm = &cros_ucsi_pm_ops,
+> +	},
+> +	.probe = cros_ucsi_probe,
+> +	.remove = cros_ucsi_remove,
+> +};
+> +
+> +module_platform_driver(cros_ucsi_driver);
+> +
+> +MODULE_LICENSE("GPL");
+> +MODULE_DESCRIPTION("UCSI driver for ChromeOS EC.");
+> +MODULE_ALIAS("platform:" DRV_NAME);
 
-Johan
+You should not need MODULE_ALIAS() in normal cases. If you need it,
+usually it means your device ID table is wrong (e.g. misses either
+entries or MODULE_DEVICE_TABLE()). MODULE_ALIAS() is not a substitute
+for incomplete ID table.
+
+Using DRV_NAME here brings even more confusion...
+
+Best regards,
+Krzysztof
+
 
