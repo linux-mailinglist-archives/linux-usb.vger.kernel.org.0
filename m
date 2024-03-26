@@ -1,132 +1,138 @@
-Return-Path: <linux-usb+bounces-8440-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8441-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 346CB88D2D8
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Mar 2024 00:35:06 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F09D88D2EB
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Mar 2024 00:48:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D44D91F3EE6A
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 23:35:05 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 81E95B226FA
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 23:48:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7AF513E047;
-	Tue, 26 Mar 2024 23:34:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AA3213E3E8;
+	Tue, 26 Mar 2024 23:48:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="LCt7wlNS"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HlC/T/2L"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ua1-f47.google.com (mail-ua1-f47.google.com [209.85.222.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D810313D8A1
-	for <linux-usb@vger.kernel.org>; Tue, 26 Mar 2024 23:34:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3514A13D8AA;
+	Tue, 26 Mar 2024 23:48:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711496097; cv=none; b=QV5Bc1H2raAzU+fLNJrpZmwq2qjSkTKTwmhSxpUpO2Nb+3Rn5WA8FuWs6sQF2eSVNMPtLD/BEX1VvqU+wGaMER5jCU7xS6h0bMmBJ6F/7bTo2bjEw82E4uhCctS8UJc7xFgHuM0/t0xL37jEcCvzVGi+RlzJiB73p9SBJsF1Q2g=
+	t=1711496890; cv=none; b=Bn3Ee4G0Y81///LD2dVGiTJGBbsUmvIqbZXlQ3OvJUyNcb08HDFFG8tfxPgnl8g8NFsRaIqDWIMdWaB7MnNPgB2MX29LaQ0F0PBkArMhMwl/s+ogE7Zy1t/zZnVlW/BjTtlUthsIEuEqB5Roc1HrWHqbF1c9k9CszDeM1+733gk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711496097; c=relaxed/simple;
-	bh=EwMlcl8PIzr8RhdfN5ZZNNfvQw7deC+B3FnxlLEVjfA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=I/Wap0kgBbslv59M2tt2YOereHfMzgfVMV3YgdAaPz4BLgro8sTgWwRpwb6eXjOpASdDMcS8g3+IzQcIFh+8JYIbjBoflKxPLL92DjGYzviBMgauH/e8iQpTbmlCzckk9FG+mWSjWcf1plE683wh+AF/GXAAyMREbiTd2oFmaqw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=LCt7wlNS; arc=none smtp.client-ip=209.85.222.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-ua1-f47.google.com with SMTP id a1e0cc1a2514c-7e0425e5aa8so2605621241.3
-        for <linux-usb@vger.kernel.org>; Tue, 26 Mar 2024 16:34:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1711496095; x=1712100895; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eYmdJQpGAyKoO561dC+ojA6XOTgi5Uts09PCMGhkelE=;
-        b=LCt7wlNSOzFOXmkyYZmXHFTn4zUtiQyDgCI0wHIF/7tiHLja0NtA4n3bib2Aqv6Dbt
-         9Sg0ziXuGxWgjpYIjzgT965+2rbjLPeHDcA9scB+WtXg3H1DyeTKd4njse7UNMgjUYFy
-         M06DALQ141QmnxHetfMalV2kBcv+FCZen3Jdk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711496095; x=1712100895;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eYmdJQpGAyKoO561dC+ojA6XOTgi5Uts09PCMGhkelE=;
-        b=egwEcDqSwVwSsCh8qN9I5WqrEVCDUyI5zYuOA9qIn4I4d45tK/SzjF6kl7S9RcIa/y
-         XdQlj0sbM5jfksgivXxQoeDR4UmK9FlZrcGD+O9zmbZth9V4HyFz0JsdOCajsgvX8Pwm
-         6WtvdAhB0TquPA3xxWgLBYNNAoGwHTJHO6258tcjE12yRgv87cRtdvvm8ZpSxAqThV9n
-         9qpKbrYlYjtlTlYIJT5X24ZoojKV2jthnL/EImwLfZAXsdz+i8eCiyhZ7VZ4QOQWxBiU
-         lZ5ez2N5asbW9KmamPUR3O7OT81IoxACQkueBLQxGgOs/8MJ64esSZ5S9KSQIlXVqw0/
-         Qshg==
-X-Gm-Message-State: AOJu0YwTLOwm9n3HKfPWFPNe3vEytlNhe9KpipCr1tY3IUIz2dn4Gryk
-	QNCz+Qi/ejxZe9AnRyCBA5ixG1XZvc0Z8PHuoWxRjphyilYL+3fr6RNKNwFmqE13zkZamDU4cnP
-	ltXrss8K/BV/TjctCN3yZi9fcR78pMrr4vFrk
-X-Google-Smtp-Source: AGHT+IGYjBc3zq6N8dmZwkyInQNpMvNhTO0c5xOyM/NeGeB0s1vCmPFyPTk3a/bFYwoBzpSUv1XpLGY9L5izz4Bk1kk=
-X-Received: by 2002:a67:e246:0:b0:476:cf52:e1b7 with SMTP id
- w6-20020a67e246000000b00476cf52e1b7mr2432676vse.28.1711496094788; Tue, 26 Mar
- 2024 16:34:54 -0700 (PDT)
+	s=arc-20240116; t=1711496890; c=relaxed/simple;
+	bh=BM77mfBNZdkLh7yVctCWrczljWfSC5+dBuRPwnQMHnQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GudBACTfuqmZi6oMcOIY9Lt0Qd6wwwoZsixakXYYGRyOTb0IJLZEqDXc3Nh6BVeW2Xf1G/N3KD/+Up828wSTvmraWcqDYh21xq2LzAhDxVSlnvZ7Rb+u51a1l6hlJW7pkaBDNe+KRa0tfk3q31DZARMiB8LffmFoxlJj93vpMLY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HlC/T/2L; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1711496888; x=1743032888;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BM77mfBNZdkLh7yVctCWrczljWfSC5+dBuRPwnQMHnQ=;
+  b=HlC/T/2LEjjpUPVxosuASnBiO+zu3tkJNbzZ3YgSAFngbXOT9msUPXV3
+   mZSAhZqSirK0pd4Y7eoBQzuDbjIx/QW3regscJcQo6E68IA10nzWxZc1x
+   wX0+LEhtGLkZ43zGoPjyb7tlnvUTiq2DvwN95KKgOPClN3XmPf1l+7FWd
+   9szSkKKmMGtr0aVJ9OaOomNDcgzg4DHUFfy/zlUWZRivrNFBPDZVkJanR
+   giwgxSiCvCYSsdMn/3mtbO6g2mBA3GxRZlpvm8tR+TiG88axcs7/qohh6
+   JZ0B4i+rVjn6GtRVNQFndzy0cI4tzi8FMGG81dwJuYdEcNZGISriEYCWd
+   A==;
+X-CSE-ConnectionGUID: WU+/mKBNRuW81BKXJg7EWw==
+X-CSE-MsgGUID: QRb0YfcbQc6MY9WJ83yGeQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11025"; a="6442252"
+X-IronPort-AV: E=Sophos;i="6.07,157,1708416000"; 
+   d="scan'208";a="6442252"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2024 16:48:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,157,1708416000"; 
+   d="scan'208";a="15962273"
+Received: from lkp-server01.sh.intel.com (HELO be39aa325d23) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 26 Mar 2024 16:48:05 -0700
+Received: from kbuild by be39aa325d23 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rpGWR-0000Y4-03;
+	Tue, 26 Mar 2024 23:48:03 +0000
+Date: Wed, 27 Mar 2024 07:47:30 +0800
+From: kernel test robot <lkp@intel.com>
+To: Pavan Holla <pholla@chromium.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+	Pavan Holla <pholla@chromium.org>
+Subject: Re: [PATCH 3/3] platform/chrome: cros_ec_ucsi: Implement UCSI PDC
+ driver
+Message-ID: <202403270732.SwdF4BV2-lkp@intel.com>
+References: <20240325-public-ucsi-h-v1-3-7c7e888edc0a@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240325-ucsi-reset-delay-v1-1-d9e183e0f1e6@chromium.org> <2024032624-subtitle-crisped-f4f1@gregkh>
-In-Reply-To: <2024032624-subtitle-crisped-f4f1@gregkh>
-From: Pavan Holla <pholla@chromium.org>
-Date: Tue, 26 Mar 2024 16:34:44 -0700
-Message-ID: <CAB2FV=4Z1W1HSba50KaB3rR4=Ussb5RWPwUArr0_=3pFwxpAhA@mail.gmail.com>
-Subject: Re: [PATCH] usb: typec: ucsi: Wait 20ms before retrying reset
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240325-public-ucsi-h-v1-3-7c7e888edc0a@chromium.org>
 
-On Tue, Mar 26, 2024 at 1:29=E2=80=AFAM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Mon, Mar 25, 2024 at 09:19:43PM +0000, Pavan Holla wrote:
-> > The PPM might take time to process reset. Allow 20ms for the reset to
-> > complete before issuing another reset.
-> What commit id does this fix?  Does it need to go to older kernels?
+Hi Pavan,
 
-This does not fix any commit. However, the time taken by a CCI read is
-insufficient for a ChromeOS EC and PDC to perform a reset.
+kernel test robot noticed the following build warnings:
 
-> > There is a 20ms delay for a reset retry to complete. However, the first
-> > reset attempt is expected to complete immediately after an async write
-> > of the reset command. This patch adds 20ms between the async write and
-> > the CCI read that expects the reset to be complete. The additional dela=
-y
-> > also allows the PPM to settle after the first reset, which seems to be
-> > the intention behind the original 20ms delay ( kernel v4.14 has a comme=
-nt
-> > regarding the same )
->
-> Why was the comment removed in newer kernels?
+[auto build test WARNING on 4cece764965020c22cff7665b18a012006359095]
 
-The comment was removed when the old UCSI API was removed in
-2ede55468ca8cc236da66579359c2c406d4c1cba
+url:    https://github.com/intel-lab-lkp/linux/commits/Pavan-Holla/usb-typec-ucsi-Provide-interface-for-UCSI-transport/20240326-074003
+base:   4cece764965020c22cff7665b18a012006359095
+patch link:    https://lore.kernel.org/r/20240325-public-ucsi-h-v1-3-7c7e888edc0a%40chromium.org
+patch subject: [PATCH 3/3] platform/chrome: cros_ec_ucsi: Implement UCSI PDC driver
+config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20240327/202403270732.SwdF4BV2-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240327/202403270732.SwdF4BV2-lkp@intel.com/reproduce)
 
-> Where does the magic 20ms number come from?  What about systems that do
-> not need that time delay, did things just slow down for them?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403270732.SwdF4BV2-lkp@intel.com/
 
-I am not sure how 20ms was decided upon. However, UCSI v1.2 has
-MIN_TIME_TO_RESPOND_WITH_BUSY=3D10ms. So, we need to provide at least
-10ms for the PPM to respond with CCI busy. Indeed, this patch slows down ot=
-her
-implementations by 20ms. UCSIv3 also defines a 200ms timeout for PPM_RESET.
+All warnings (new ones prefixed by >>):
 
-Hi Heikki,
+>> drivers/platform/chrome/cros_ec_ucsi.c:224:12: warning: 'cros_ucsi_resume' defined but not used [-Wunused-function]
+     224 | static int cros_ucsi_resume(struct device *dev)
+         |            ^~~~~~~~~~~~~~~~
+>> drivers/platform/chrome/cros_ec_ucsi.c:215:12: warning: 'cros_ucsi_suspend' defined but not used [-Wunused-function]
+     215 | static int cros_ucsi_suspend(struct device *dev)
+         |            ^~~~~~~~~~~~~~~~~
 
-Do you think the right thing to do here is:
-1) poll CCI ( poll duration TBD) for 20ms until busy is set or reset
-is complete.
-2) poll CCI ( poll duration TBD) for 180ms until reset is complete if
-busy was set.
-3) If either 1) or 2) timeout, retry the reset.
 
-If you agree with the approach, please advise a poll duration as well ( 20m=
-s? )
+vim +/cros_ucsi_resume +224 drivers/platform/chrome/cros_ec_ucsi.c
 
-Thanks,
-Pavan
+   214	
+ > 215	static int cros_ucsi_suspend(struct device *dev)
+   216	{
+   217		struct cros_ucsi_data *udata = dev_get_drvdata(dev);
+   218	
+   219		cancel_work_sync(&udata->work);
+   220	
+   221		return 0;
+   222	}
+   223	
+ > 224	static int cros_ucsi_resume(struct device *dev)
+   225	{
+   226		struct cros_ucsi_data *udata = dev_get_drvdata(dev);
+   227	
+   228		return ucsi_resume(udata->ucsi);
+   229	}
+   230	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
