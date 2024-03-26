@@ -1,110 +1,85 @@
-Return-Path: <linux-usb+bounces-8414-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8415-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E39FE88C252
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 13:38:04 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0008E88C4B1
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 15:11:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9F33030087C
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 12:38:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 581C3305951
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 14:11:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33BF26D1C1;
-	Tue, 26 Mar 2024 12:37:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 466A412F5BB;
+	Tue, 26 Mar 2024 14:07:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mdvHh9QT"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="kw+yyoYw"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 870E25C61F;
-	Tue, 26 Mar 2024 12:37:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A307576039;
+	Tue, 26 Mar 2024 14:07:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711456672; cv=none; b=DCqEyysTMvp+9CVRiU3L2wZzT3NI05050RJoNM8E8jiXAdx5jtgGAttW85f/f3a8V/BxTY2a5jrYXf1YeEyz779DdaW22ZYF1BWaTl+YSCJxiIzqItvChOp7qu1a6/8Ht9sREUamAjYnBS/tUHNGyqTFFH/gD6o58leZmYm9fc4=
+	t=1711462051; cv=none; b=m0GnDJFOt2adF9+BuBZmtQKi08QF8odyDwNWJyM7muiUYOhLMIBj1w1WvUG4YCxwzICv0QqZ4p4Ke4jqtX7QOsqNLbLz3CpB+KhZELqcKOjCXFrxki4IjeHKpeySFrBNH265B+HSP83fP9m9Wcejkw5wuRY/D9Ib4ZhCWL+PtMo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711456672; c=relaxed/simple;
-	bh=jd2gqZGgGgy6kOe5uqkgenkEPD/a17w2vZt2MhmvK+U=;
+	s=arc-20240116; t=1711462051; c=relaxed/simple;
+	bh=n8Ai9WT5E8KuQqv9JDpEM96sX6yIfhCvpLz33RE+NGk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=B0O9m/RHwsYsptaOSqn2WUACO8MB3nm+IF01EfgsqEe5GMmM49gbxB6vh5uxoXhBBGHN4VwwBc/tywqFYGWtQAzNbFQBxPh6Ia+D4GNlllXujVmE/gQN04xxdFXtcPTVUnTUT54l8G/n7D6okfbjruOvClZA3H7XBKHzr40h+1g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mdvHh9QT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B0C4C433F1;
-	Tue, 26 Mar 2024 12:37:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711456672;
-	bh=jd2gqZGgGgy6kOe5uqkgenkEPD/a17w2vZt2MhmvK+U=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=pUS6jBuwvHOwsjyjQJkMyMVK6Vfc9fWghH5twc+5xUlRG6SMjujUERW5JQb//X5MrGFjn79cX4Fzi2TMNRe5gC1ecQ/iH1a+Bikvn+6N7uvvlMpKjPsd2cLPvBr8nREXXCDU3wUaFmfrizu/kibg0YkippG/r9ANUTwc9YDgMJU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=kw+yyoYw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2C00C433C7;
+	Tue, 26 Mar 2024 14:07:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1711462050;
+	bh=n8Ai9WT5E8KuQqv9JDpEM96sX6yIfhCvpLz33RE+NGk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mdvHh9QTlaDYmFnILuuqqfgs/z3qoFKLwluyypCFC4a1ApnMMwFfMJFcAd9Xx14u7
-	 VRPyOWG6TTEi9JxJLKw2ALE7Hr7OkBLsepwMrAzAEkNspqnac6BO99v2kNkfp1Oo54
-	 PwqfoP26728U3My5ZZOOCI/4ayH+fjPwiuoyharpgY9NS5pZozqRQeJzEZNSHrNGeb
-	 vFoS90SEjvtZWvb4wYj2Bog4qPQFVlUMUsmTOJjiJhqitrv06F6oZC660oCJedDKNH
-	 2Oq/n8ScI5vErrRn+8siNJeQlSlX8FIsoTnCllaFwZrlZXRJbCz3KBCxCV8CAReQjp
-	 6q+xbiPgMnqPA==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1rp63y-000000005DZ-3apl;
-	Tue, 26 Mar 2024 13:37:59 +0100
-Date: Tue, 26 Mar 2024 13:37:58 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Krishna Kurapati <quic_kriskura@quicinc.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Rob Herring <robh@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Wesley Cheng <quic_wcheng@quicinc.com>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Felipe Balbi <balbi@kernel.org>, devicetree@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, quic_ppratap@quicinc.com,
-	quic_jackp@quicinc.com
-Subject: Re: [PATCH v18 0/9] Add multiport support for DWC3 controllers
-Message-ID: <ZgLBpp4Dn7_Imxp8@hovoldconsulting.com>
-References: <20240326113253.3010447-1-quic_kriskura@quicinc.com>
+	b=kw+yyoYw+oApGop72Rxpvg2dupC+MUZpXR+IknCgqsX+7U4FvJj8mRoUUi8KP8+J9
+	 7Qy+8qs7ZwSe18EzLobohS4lMF5v6akd83jsRr3yVvhUSpFPQpR9fS6yjiYluzaktj
+	 EXzRAlUA6a9KnXbBTfUVGB77Ppnxcjzv3/lfJziQ=
+Date: Tue, 26 Mar 2024 15:07:27 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: =?utf-8?B?5bqe6IuP6I2jIChTdXJvbmcgUGFuZyk=?= <surong.pang@unisoc.com>
+Cc: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	=?utf-8?B?57+f5LqsIChPcnNvbiBaaGFpKQ==?= <Orson.Zhai@unisoc.com>,
+	=?utf-8?B?5YiY5pm65YuHIChaaGl5b25nIExpdSk=?= <Zhiyong.Liu@unisoc.com>,
+	"Surong.Pang@gmail.com" <Surong.Pang@gmail.com>
+Subject: Re: [PATCH] usb: gadget: rndis: add multi packages support for rndis
+Message-ID: <2024032616-dumping-blustery-aeb2@gregkh>
+References: <9d39b91505c4449f98e8431e2f257f8b@shmbx05.spreadtrum.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240326113253.3010447-1-quic_kriskura@quicinc.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <9d39b91505c4449f98e8431e2f257f8b@shmbx05.spreadtrum.com>
 
-On Tue, Mar 26, 2024 at 05:02:44PM +0530, Krishna Kurapati wrote:
-> Currently the DWC3 driver supports only single port controller which
-> requires at most two PHYs ie HS and SS PHYs. There are SoCs that has
-> DWC3 controller with multiple ports that can operate in host mode.
-> Some of the port supports both SS+HS and other port supports only HS
-> mode.
-> 
-> This change primarily refactors the Phy logic in core driver to allow
-> multiport support with Generic Phy's.
-> 
-> Changes have been tested on  QCOM SoC SA8295P which has 4 ports (2
-> are HS+SS capable and 2 are HS only capable).
-> 
-> This series depends on removal of ACPI from DWC3 QCOM wrapper [1].
+On Tue, Mar 26, 2024 at 10:47:16AM +0000, 庞苏荣 (Surong Pang) wrote:
+> Dear Greg，
+> Share Android Phone internet to Windows PC via USB still need the rndis feature.
 
-> [1]: https://lore.kernel.org/all/20240305093216.3814787-1-quic_kriskura@quicinc.com/
+What supported Windows PC still only has rndis and not cdc-ncm support?
+Or the other USB networking driver support built in?  Windows has
+deprecated RNDIS for a good reason, let's not continue to insist on
+using insecure protocols please.
 
-Just to be clear, this dependency is already in 6.9-rc1 and this series
-is ready to be merged.
+> OK, if rndis will be deleted entirely, this patch can be abandoned.
 
-> Krishna Kurapati (9):
->   dt-bindings: usb: Add bindings for multiport properties on DWC3
->     controller
->   usb: dwc3: core: Access XHCI address space temporarily to read port
->     info
->   usb: dwc3: core: Skip setting event buffers for host only controllers
->   usb: dwc3: core: Refactor PHY logic to support Multiport Controller
->   dt-bindings: usb: qcom,dwc3: Add bindings for SC8280 Multiport
->   usb: dwc3: qcom: Add helper function to request wakeup interrupts
->   usb: dwc3: qcom: Refactor IRQ handling in glue driver
->   usb: dwc3: qcom: Enable wakeup for applicable ports of multiport
->   usb: dwc3: qcom: Add multiport suspend/resume support for wrapper
+Eventually, yes, but as is, your patch can't be taken given the quick
+review I already provided.
 
-Johan
+If you can show that there are Windows systems that only have RNDIS
+support, and need this increased speed (i.e. that they can also support
+the speedup), and fix up the other issues, then we can review your new
+submission.  But please provide that proof when you do so.
+
+thanks,
+
+greg k-h
 
