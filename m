@@ -1,125 +1,89 @@
-Return-Path: <linux-usb+bounces-8431-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8430-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B3D288C952
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 17:31:39 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5D3188C94D
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 17:31:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6CBF71C635DD
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 16:31:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9C56F1F678A4
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 16:31:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F4801CAB3;
-	Tue, 26 Mar 2024 16:30:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2805613CC6C;
+	Tue, 26 Mar 2024 16:29:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZyTBAEX+"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="JkAbGBK4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBBED524B1
-	for <linux-usb@vger.kernel.org>; Tue, 26 Mar 2024 16:30:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F1C313CA91
+	for <linux-usb@vger.kernel.org>; Tue, 26 Mar 2024 16:29:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711470605; cv=none; b=smVMeb2bezVwjsixox+vBa3zKxoEOqwnQh/vw6mwIEUj3nll+Lk/txynAEbbmV2yWA9ge8OIB+1y2ExKtzoPKQF9MqVWUU0UhFxBl4ewIwdlgjOXvbMX5xL4FbSYNNg9OpVFfxqth82nb3kv6lEvlag1z6kYFPhbzfGKQl3cQSM=
+	t=1711470589; cv=none; b=AzJ0jsNZ6pLd2zHz85tOAa6wsjOJTUf3tfOTQm0/4BqQB0alS5fpiZ3aHb/AbJGKVk0ggye+Hk051G7wIza4tzCvjKDIlkG1bSlozWsnvwvp5Yq7P2jjT3TnbSr1k58pb3Sfu4IySVy+idUiao+PmowyG0rfMgSrQdXBbbMJ1Kg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711470605; c=relaxed/simple;
-	bh=rjSUXjjrKiWdU5sbS7+AjRgyC6HxieupC43ocaHS1/A=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WOqNyWQVUN+AdcQfBVUB0Z/NUmnPz8ijul/QQb9tbhkRLQEu65nOv3dTA0TEU/JRHKn7CkxDHQxiNQPoN0xDRVydHGFlrvkb8h31lw5by4XAGIO6E1+c46cdxsg4AM9pr2GA3mkfVnMT1nRghxGKkuCiBb/tQxsxanDVPqHmw5I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZyTBAEX+; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1711470601;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=7eFdufef3zYONep2oCLblhXQDLYYjXipt4Q1WaXEK5M=;
-	b=ZyTBAEX+RNhdRROOQXNx3PoU8NbZhFoBrFAMGkKZurA28b7m1DWNsODKho5CdXuOYSa5to
-	U6Qbp8cMUWUUZNL59rjiicojlVj4wKZ+ggwoIL+LYdMOOymOcTo+OiOjdVlWEobMujN1FZ
-	/YuiTtS7TPeLlGDc1EQ5mF7gDUYOcVo=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-600-okaYP1U4PZu-9kpR-wRCZA-1; Tue, 26 Mar 2024 12:29:57 -0400
-X-MC-Unique: okaYP1U4PZu-9kpR-wRCZA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B465380F7E3;
-	Tue, 26 Mar 2024 16:29:56 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.39.193.147])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id D056A1C060D4;
-	Tue, 26 Mar 2024 16:29:53 +0000 (UTC)
-From: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
-To: horms@kernel.org
-Cc: dave.stevenson@raspberrypi.com,
-	davem@davemloft.net,
-	edumazet@google.com,
-	jtornosm@redhat.com,
-	kuba@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org,
-	pabeni@redhat.com,
-	stable@vger.kernel.org
-Subject: [PATCH v2 1/2] net: usb: ax88179_178a: avoid the interface always configured as random address
-Date: Tue, 26 Mar 2024 17:29:43 +0100
-Message-ID: <20240326162943.306577-1-jtornosm@redhat.com>
-In-Reply-To: <20240326092459.GG403975@kernel.org>
-References: <20240326092459.GG403975@kernel.org>
+	s=arc-20240116; t=1711470589; c=relaxed/simple;
+	bh=F/nQxQG4XDNsLPgXO/xkzcIi1zob3Yvqnl/y7yiMPZ4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Y1V34kLr0k6aHq0uDT9ojzngfzCglUOC3Grd5XKCIuG1DDBv4addu9bnhvKwZWaTZTL+nYu1b8uzGxRTaLAUGfSWajCWLZ6gOReTxssvOCRUmV0ID7i8b2fiy5VyEOpbyFSF4oSRvoWdbvOuCrgzS+zCF040VgLWUQxpZk8KgtA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=JkAbGBK4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66E03C433F1;
+	Tue, 26 Mar 2024 16:29:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1711470589;
+	bh=F/nQxQG4XDNsLPgXO/xkzcIi1zob3Yvqnl/y7yiMPZ4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=JkAbGBK4mvQyFav79U44hWS0uWQ42Ol2xvWsZXyZ8A8G6U/+dw30Fgqmo/7HeS0cR
+	 9oUJxOly5V2pDh19w+fvpLzj8QVEgLQlndwR3ORjs3AeUttXjoepg3aqH8VZi9nFwl
+	 nQs5Q76Hcv1l3zTiZ6bVsB6QflwN5GTSMe/Y8CmU=
+Date: Tue, 26 Mar 2024 17:29:45 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-usb@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
+	Jakob Koschel <jakobkoschel@gmail.com>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Ira Weiny <ira.weiny@intel.com>,
+	Alan Stern <stern@rowland.harvard.edu>
+Subject: Re: [PATCH] USB: gadget: dummy_hcd: switch char * to u8 *
+Message-ID: <2024032600-chain-spree-24aa@gregkh>
+References: <20240326160342.3588864-2-gregkh@linuxfoundation.org>
+ <CAHk-=whpUh+G_DzR1WpgTeELGk2q4fRuFu9BV77XUp7mGX7+oQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.7
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=whpUh+G_DzR1WpgTeELGk2q4fRuFu9BV77XUp7mGX7+oQ@mail.gmail.com>
 
-After the commit d2689b6a86b9 ("net: usb: ax88179_178a: avoid two
-consecutive device resets"), reset is not executed from bind operation and
-mac address is not read from the device registers or the devicetree at that
-moment. Since the check to configure if the assigned mac address is random
-or not for the interface, happens after the bind operation from
-usbnet_probe, the interface keeps configured as random address, although the
-address is correctly read and set during open operation (the only reset
-now).
+On Tue, Mar 26, 2024 at 09:16:12AM -0700, Linus Torvalds wrote:
+> On Tue, 26 Mar 2024 at 09:03, Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > The function handle_control_request() casts the urb buffer to a char *,
+> > and then treats it like a unsigned char buffer when assigning data to
+> > it.  On some architectures, "char" is really signed, so let's just
+> > properly set this pointer to a u8 to take away any potential problems as
+> > that's what is really wanted here.
+> [..]
+> > Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
+> 
+> Well, I assume this goes back to the discussions almost two years ago
+> that then just led us to use '-funsigned-char' for the kernel.
 
-In order to keep only one reset for the device and to avoid the interface
-always configured as random address, after reset, configure correctly the
-suitable field from the driver, if the mac address is read successfully from
-the device registers or the devicetree.
+Yes.
 
-cc: stable@vger.kernel.org # 6.6+
-Fixes: d2689b6a86b9 ("net: usb: ax88179_178a: avoid two consecutive device resets")
-Reported-by: Dave Stevenson  <dave.stevenson@raspberrypi.com>
-Signed-off-by: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
----
-V1 -> V2:
-- Split the fix and the improvement in two patches as Simon Horman
-suggests.
+> So the patch is still correct, but it's not like it's strictly
+> necessary. I have no idea how this re-surfaced now.
 
- drivers/net/usb/ax88179_178a.c | 1 +
- 1 file changed, 1 insertion(+)
+It was in my really old patch queue and I noticed it had never been
+updated or merged, so I dug it up and fixed it based on Alan's review.
 
-diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
-index 88e084534853..8ca8ace93d9c 100644
---- a/drivers/net/usb/ax88179_178a.c
-+++ b/drivers/net/usb/ax88179_178a.c
-@@ -1273,6 +1273,7 @@ static void ax88179_get_mac_addr(struct usbnet *dev)
- 
- 	if (is_valid_ether_addr(mac)) {
- 		eth_hw_addr_set(dev->net, mac);
-+		dev->net->addr_assign_type = NET_ADDR_PERM;
- 	} else {
- 		netdev_info(dev->net, "invalid MAC address, using random\n");
- 		eth_hw_addr_random(dev->net);
--- 
-2.44.0
+thanks,
 
+greg k-h
 
