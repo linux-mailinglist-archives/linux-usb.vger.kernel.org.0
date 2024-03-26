@@ -1,55 +1,54 @@
-Return-Path: <linux-usb+bounces-8368-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8369-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22A5788BD53
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 10:10:44 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 72D0088BD5E
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 10:13:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B1A7B1F3E4D5
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 09:10:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2B978297803
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 09:13:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E51F3482E2;
-	Tue, 26 Mar 2024 09:10:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2339654BCF;
+	Tue, 26 Mar 2024 09:12:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="EDrJR779"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Ga9ido2G"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C164481BA
-	for <linux-usb@vger.kernel.org>; Tue, 26 Mar 2024 09:10:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94025535CF;
+	Tue, 26 Mar 2024 09:12:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711444212; cv=none; b=Ahdz8xV6FVucmvoPKEHjJWWcNJcTaeoZeSbW44+MnOMxvN3BsJMIijFDuhKDfjCu/aRfWcv0O11i38ZRMNoByJ98X39zTdrMb18izTjl3QlSodtTCvJ+gS/6t5Q/3CjqG8o0C34knZgqgRH9yJRYE3lU4gJlyxSsjqTnPaCp8nA=
+	t=1711444362; cv=none; b=BwC+NrfMs5fMKN4NKBdM6A14nwwYKMXjZZh6au7D8XaCl9/TCaGKhK2coOOvZum6X793wc5J7NZtlOcsobCT/sWf7IrAYY7C5vJ4TMytye5pWhe4kweaVEJoaFbx+f4iqrYN3lv6O6VtoJSUIdSSKJ7veu/74q37434sEX7DA5o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711444212; c=relaxed/simple;
-	bh=eZZF7KwD8vry5G4OpK5/jAzlu4WDNQnbiIYtQbHDgyY=;
+	s=arc-20240116; t=1711444362; c=relaxed/simple;
+	bh=t58JdC2b/HPnLyTDAhREExcio11Vu5aF7Lgh9dnHC+8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=J69/MP9Rn9RqN/z9WyV64fezupdYniSbnQdy3Px+qHObb4wQ14d76VZsIKIx6HXhltA5Uy5xmsKZI+2A7iN7SfePolKHFpzOyEfTcrOIm8jyCP4tUJ1DYY3JOj7q0izWxeP6xSzDTebeB191GSNq/1BKFNTrGAfprJXyL1MEvHA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=EDrJR779; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9900AC433C7;
-	Tue, 26 Mar 2024 09:10:11 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=Mb5/IpdNWsDfu9E2ULWxV6HvZVDjSbhwzbFxl+fJJ3SkedVHs+S0IlcXfXdToriG528zz2mXJFeq3mSb5drwq2dVJHjk+xqOCActx/+MdBHO00AyJ6DWhQUH76zpEbo8+Subd/xBi6haGzj5BJGheWSgAn3ZpsMhPn1Zqn4Reg8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Ga9ido2G; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF5F9C433F1;
+	Tue, 26 Mar 2024 09:12:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1711444212;
-	bh=eZZF7KwD8vry5G4OpK5/jAzlu4WDNQnbiIYtQbHDgyY=;
+	s=korg; t=1711444362;
+	bh=t58JdC2b/HPnLyTDAhREExcio11Vu5aF7Lgh9dnHC+8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=EDrJR779Z4nVBFkAKGjVxR87efgHvK04rZrMHRZRHC497ieqifZEmdX08ZEmf1jVp
-	 Jplr3eFWUFh37FtQ3SWHGVwHiwUqxMh3iaCRKuiKgT6PcG6vtCwbRG3HNWP4WXLevh
-	 DMhOUahx8wdmS15970nAyUFTklLkQOYkO/B9jaMI=
-Date: Tue, 26 Mar 2024 10:10:08 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Alex Henrie <alexhenrie24@gmail.com>
-Cc: linux-parport@lists.infradead.org, linux-usb@vger.kernel.org,
-	sudipm.mukherjee@gmail.com, johan@kernel.org,
-	daniel@gimpelevich.san-francisco.ca.us, hkzlabnet@gmail.com,
-	reboots@g-cipher.net, mike@trausch.us
-Subject: Re: [PATCH 2/7] usb: serial: mos7720: don't advertise
- PARPORT_MODE_PCSPP
-Message-ID: <2024032652-aerospace-crabmeat-8424@gregkh>
-References: <20240312055350.205878-1-alexhenrie24@gmail.com>
- <20240312055350.205878-2-alexhenrie24@gmail.com>
+	b=Ga9ido2GsoMbBulZG1R5S05bpShG4kiY0CpzVj5Mh6TPPrtrRjbmT/Ot6hS1ZR9tT
+	 3hlFiSxqowAQHZU/0SqNy5sF1xUUY8O1s8DmXp0XnZEZFgBJ0DkVz6SpxzdIjsS/zX
+	 UDn13hXs0z3AOdtrj1y5TIxM7jqf/buHECKPDN9E=
+Date: Tue, 26 Mar 2024 10:12:39 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Pavan Holla <pholla@chromium.org>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+Subject: Re: [PATCH 1/3] usb: typec: ucsi: Provide interface for UCSI
+ transport
+Message-ID: <2024032603-tactful-exes-f2d0@gregkh>
+References: <20240325-public-ucsi-h-v1-0-7c7e888edc0a@chromium.org>
+ <20240325-public-ucsi-h-v1-1-7c7e888edc0a@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -58,16 +57,45 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240312055350.205878-2-alexhenrie24@gmail.com>
+In-Reply-To: <20240325-public-ucsi-h-v1-1-7c7e888edc0a@chromium.org>
 
-On Mon, Mar 11, 2024 at 11:50:27PM -0600, Alex Henrie wrote:
-> Signed-off-by: Alex Henrie <alexhenrie24@gmail.com>
+On Mon, Mar 25, 2024 at 11:37:28PM +0000, Pavan Holla wrote:
+> The ucsi.h include can be used by driver implementations that
+> provide transport for UCSI commands.
+> 
+> Signed-off-by: Pavan Holla <pholla@chromium.org>
 > ---
->  drivers/usb/serial/mos7720.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  MAINTAINERS              |  1 +
+>  include/linux/usb/ucsi.h | 66 ++++++++++++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 67 insertions(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index aa3b947fb080..e799d67a8fa5 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -22987,6 +22987,7 @@ F:	Documentation/ABI/testing/sysfs-class-typec
+>  F:	Documentation/driver-api/usb/typec.rst
+>  F:	drivers/usb/typec/
+>  F:	include/linux/usb/typec.h
+> +F:	include/linux/usb/ucsi.h
+>  
+>  USB TYPEC INTEL PMC MUX DRIVER
+>  M:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> diff --git a/include/linux/usb/ucsi.h b/include/linux/usb/ucsi.h
+> new file mode 100644
+> index 000000000000..3ec1db968070
+> --- /dev/null
+> +++ b/include/linux/usb/ucsi.h
+> @@ -0,0 +1,66 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
 
-For obvious reasons I can't take patches without any changelog text,
-sorry.
+No copyright line?  I think your employer would not like it if they saw
+that :(
+
+Please get review from some internal-to-google developers before
+submitting your next version of this series.
+
+thanks,
 
 greg k-h
 
