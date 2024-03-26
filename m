@@ -1,158 +1,135 @@
-Return-Path: <linux-usb+bounces-8424-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8425-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78FFD88C6A0
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 16:17:15 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DFDD088C6AA
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 16:19:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A800A1C635B5
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 15:17:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9B81A301E36
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 15:19:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 899EE13C67C;
-	Tue, 26 Mar 2024 15:17:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 559CD13C824;
+	Tue, 26 Mar 2024 15:19:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B008m7Vw"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="xzGuM1KZ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B963913C82C
-	for <linux-usb@vger.kernel.org>; Tue, 26 Mar 2024 15:16:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 718A812B82
+	for <linux-usb@vger.kernel.org>; Tue, 26 Mar 2024 15:19:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711466221; cv=none; b=A8tHUrAM5ATb1fZOfgh1RxrdP01InltHWRI91ZXitTDZYH1PCnWS0+QGGZV00KS2KKyRpLI2hncWLl69OuvA4vZEeZBTZXGNJ6k4wmjV5pET7yfL/Z50WSHHTnwY/qmCMiS65H582CEnGLKjU63A/gIt7LO59kzu6uzkkZzZdEM=
+	t=1711466358; cv=none; b=oQtoJRGHrNNNaq0H0eNmwZ+6Oyd5NumaQpbP7yUe6Uj4pou674x+UUykLYz4HHz0IX2/iwIMOK+CJETQ2au/Rzy5F6KceEj4ALOV1JchjQ0YEzt6lyLyIJ7qOvJtY+Gp9Ko59PjtwiKIZxMjvFrJJ8/BcDyn+uri6/FtFvdrjNQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711466221; c=relaxed/simple;
-	bh=Uh39Uy50cW3MqKqA/GjWgxY94ppKdYJhtHJ/8QqFF9w=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=OTQSuvvIn3GbSM5ABopPkn8YQF7F8Hkv8huuIncoHzhVZXvgyKUzTUwZ5BXf9gDFDEihWqXyPnPRh5ixMQMN9kNRBQ48uRqo9aZJfWclE1G8DiR4L1QJCgwucmREdpHAuwAtXIh+hZmQWwFpFa7ePGmSe3dIF6hxXrPcL13PAE8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B008m7Vw; arc=none smtp.client-ip=209.85.210.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-6ea8ee55812so3287017b3a.0
-        for <linux-usb@vger.kernel.org>; Tue, 26 Mar 2024 08:16:59 -0700 (PDT)
+	s=arc-20240116; t=1711466358; c=relaxed/simple;
+	bh=SraOnsE2ZK1vLT3c1NA6VI0uTZIh2ButPyGByZ0auQA=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=Z2CR0BTyKL4ujmYdrRw2ty0GG3gFbD+jkJm+epLvrze0O5FJZ0ULXsOJwa5AZp/sZGzteG1De29oXVp0pDobTXB1jq+BchmWfbaA5Y0cX4eokdiHlwcFsNbKCNftpsau99ED9JVTHhFimBZBAZHHYGECD+6xqiOiD+1MaxndRzg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kyletso.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=xzGuM1KZ; arc=none smtp.client-ip=209.85.214.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kyletso.bounces.google.com
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-1e0a7c699cfso25073805ad.0
+        for <linux-usb@vger.kernel.org>; Tue, 26 Mar 2024 08:19:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711466219; x=1712071019; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tymugleP+KMPqfQ6HdBlFr9cfdnMUYoOvvq4liDig9M=;
-        b=B008m7VwtVOsuZUU35YOtxedUVJ1l8p/6CrHb97Oy2Ub20yY+DYB504ImWwlGeimjr
-         9D4hFeNXPqw2ePEZqB/uH3CP/I0Gt9lXn6Kj7CBRlvdaT5XUbF8n6FsW+nSMoXO3uxAW
-         Ys/xQvSenshpMIBiGtHIGcabwGWdNRRjd01IHW+i0yrwBK+4j1tdKg9FGdD1l/ZyH4Dq
-         qiUGl528V6hIiFlYurg75pE+C1hfu+lM9ij+FJD6uPTJGUc68B2lkAakNQI77vYzwgPn
-         UPJibblUYb+IV+/OGfnKi+qdDTZEj4G5baZkMGQ4TDKT/Kchg5qPSaeX3l7ttDXQ3Urc
-         IBbQ==
+        d=google.com; s=20230601; t=1711466357; x=1712071157; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ZX5Wvd0xktos9WBEJLXysYQZfAByNmYU61XZUR2rboI=;
+        b=xzGuM1KZb0vhUSloPR47tQ+K1gKAwkakkn7KULQBpl+ezMMid8cwKiYLps3KYQ/mkb
+         M9YObxQcmmvWtqZP5szQoh76lZJSwyAqIzpDL2Y9tA6BQJs/C3V/EJ4OMjFTPCWoiM06
+         T6QUHjJ+4ycjMnYqgT+AXChbHKw8REBtDl3W/FNHT4ycjSOVYPF4utEEVd4WheJp0TOe
+         UYqaVS4bWwV/d7yemM+VcU2cHlX4GMO0vBYWPwzp8jFB+Lk0SAUnIpEzVB0xnKBenr7n
+         wbucMQ01UIl4qc0v7EmoxSMbYSalV72LfV0e8U+CNKKNCc0oKDzGl6YArBrPG3xd+DvG
+         RGjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711466219; x=1712071019;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tymugleP+KMPqfQ6HdBlFr9cfdnMUYoOvvq4liDig9M=;
-        b=IXvr5Hwma7gLRfb2VJkI/sJQk5eistH7T8UO59piaEFEOVh7hT/nDogtNiUYazouGI
-         eQ1FbeZM+ZJhKurlH6NPb7/b1+izJmg8zWU0jA3IzB81UwznagpIzqX0luxbR86M7iE6
-         z6zUwrGiE2ibPmQYaZgbTorrlt7E9ouEcRhzPjE3dioOUs6j+2NcdSuJias8AbTSWcE+
-         uK5oFmfO7LIQ+bA3o90wbjdyOxu0BvIUVQr2Sw3Lyn2UWENIjpKXaJVxbs+2Kxk+elWh
-         MbiGA9IdBLfyilOjEPcv20ohHOmgGWDI3PQ+c3Fo/x6Fe3bCuFnKxsUeB+YmU8qekO0M
-         13ww==
-X-Forwarded-Encrypted: i=1; AJvYcCXhTlhCMvepNlKH/mkm2DAdbOGUnca5ZMW8/w89mt4Lc8NgW4QbdgQE32CGYh/QyLCW1Fk67Wyp7k074t6M0juU8eZJRtxBwR+Q
-X-Gm-Message-State: AOJu0Yw2bAQoBmAHOy709gLGMJwD1MUxZPNEx0x/ov3MCjoTWzyMUQrF
-	BtCE4fVm6vnWlyvKvSJvZz31vUI/AHFFp0d8o1vPAXLgYZ/63Ev6
-X-Google-Smtp-Source: AGHT+IE/sR+6HsVDGhaf2JujhiyAKYBElqjSIk4Dznzsk+TOS+oozp9kHrr35TB3i22mXH3jKEvmdg==
-X-Received: by 2002:a05:6a20:6f90:b0:1a3:d60c:d84d with SMTP id gv16-20020a056a206f9000b001a3d60cd84dmr2784725pzb.23.1711466219099;
-        Tue, 26 Mar 2024 08:16:59 -0700 (PDT)
-Received: from petra.lan ([2607:fa18:9ffd::c91])
-        by smtp.gmail.com with ESMTPSA id s3-20020aa78283000000b006e631af9cefsm6073126pfm.62.2024.03.26.08.16.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Mar 2024 08:16:58 -0700 (PDT)
-From: Alex Henrie <alexhenrie24@gmail.com>
-To: linux-parport@lists.infradead.org,
-	linux-usb@vger.kernel.org,
-	sudipm.mukherjee@gmail.com,
-	johan@kernel.org,
-	daniel@gimpelevich.san-francisco.ca.us,
-	hkzlabnet@gmail.com,
-	reboots@g-cipher.net,
-	mike@trausch.us,
-	gregkh@linuxfoundation.org
-Cc: Alex Henrie <alexhenrie24@gmail.com>
-Subject: [PATCH v2 4/4] usb: misc: uss720: check for incompatible versions of the Belkin F5U002
-Date: Tue, 26 Mar 2024 09:07:11 -0600
-Message-ID: <20240326150723.99939-5-alexhenrie24@gmail.com>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20240326150723.99939-1-alexhenrie24@gmail.com>
-References: <20240312055350.205878-4-alexhenrie24@gmail.com>
- <20240326150723.99939-1-alexhenrie24@gmail.com>
+        d=1e100.net; s=20230601; t=1711466357; x=1712071157;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZX5Wvd0xktos9WBEJLXysYQZfAByNmYU61XZUR2rboI=;
+        b=kR9C/aUrwPTPLs+nP8Hdg9ilEUso/4CCHzSNqC4rHUd94gowIlAaR2UBP0ywiUSS4T
+         XuCXIzkWXKGbbn+5o+e8QEzZ2YktC9OzY6MYIxQblgSWnmMQe/HHsNFewDAN3ys06IMf
+         WSqFKBa9Jr5t7vO7DMiMPjkJlZa665NyifR+KNnjhFzLkc0evGp43uEATagN7QCkTM4d
+         S/8RJF6jbOWvb7cLSXJm9SHbu1BO1PNa+H7CHKKDjQ181dboZNgY4NS8VrZQpDzWnA3S
+         3HUVeMpw5wNsmKXc4fScscUXVvq3wIttM/e4s+1pEsMqfTLVF8QEkpCzmL2Sw6DLFaon
+         sT/w==
+X-Forwarded-Encrypted: i=1; AJvYcCU8sTv0degCtJY0WZ99VO2VZatYCnAdDiJfnGcuCx3glq3C5WhhIhOm+BJvurZKlX2MuxlPAuHhKMe4bu1YYqTLQXjZS4KBr7GI
+X-Gm-Message-State: AOJu0YxNhfbbgDvvCLsT9OEi1P6s35yCJwF4ZvbM5qU5Q4MJCDC6Ms/4
+	ekQLUlh5Wu4yUPSAycQra41vgCh6EKVjk0CbqNwjFDosSIsZhFMi+DBcc2mPMHANvYoIKBLPECj
+	5TrnXPA==
+X-Google-Smtp-Source: AGHT+IGpcix9zT2zJgL92BUZCTnJRPGRgLNYsBdbyVdVSZE0L1tCyIxVI05/4rz1JStR/B5emPq+lsM6JUK+
+X-Received: from kyletso-p620lin01.ntc.corp.google.com ([2401:fa00:a7:c:666:5c0e:98a6:f950])
+ (user=kyletso job=sendgmr) by 2002:a17:902:fb43:b0:1e0:9a7:e629 with SMTP id
+ lf3-20020a170902fb4300b001e009a7e629mr206486plb.7.1711466356714; Tue, 26 Mar
+ 2024 08:19:16 -0700 (PDT)
+Date: Tue, 26 Mar 2024 23:19:09 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.44.0.396.g6e790dbe36-goog
+Message-ID: <20240326151909.440275-1-kyletso@google.com>
+Subject: [PATCH v2] usb: typec: tcpm: Correct the PDO counting in pd_set
+From: Kyle Tso <kyletso@google.com>
+To: linux@roeck-us.net, heikki.krogerus@linux.intel.com, 
+	gregkh@linuxfoundation.org
+Cc: badhri@google.com, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	Kyle Tso <kyletso@google.com>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-The incompatible device in my possession has a sticker that says
-"F5U002 Rev 2" and "P80453-B", and lsusb identifies it as
-"050d:0002 Belkin Components IEEE-1284 Controller". There is a bug
-report from 2007 from Michael Trausch who was seeing the exact same
-errors that I saw in 2024 trying to use this cable.
+Off-by-one errors happen because nr_snk_pdo and nr_src_pdo are
+incorrectly added one. The index of the loop is equal to the number of
+PDOs to be updated when leaving the loop and it doesn't need to be added
+one.
 
-Link: https://lore.kernel.org/all/46DE5830.9060401@trausch.us/
-Signed-off-by: Alex Henrie <alexhenrie24@gmail.com>
+When doing the power negotiation, TCPM relies on the "nr_snk_pdo" as
+the size of the local sink PDO array to match the Source capabilities
+of the partner port. If the off-by-one overflow occurs, a wrong RDO
+might be sent and unexpected power transfer might happen such as over
+voltage or over current (than expected).
+
+"nr_src_pdo" is used to set the Rp level when the port is in Source
+role. It is also the array size of the local Source capabilities when
+filling up the buffer which will be sent as the Source PDOs (such as
+in Power Negotiation). If the off-by-one overflow occurs, a wrong Rp
+level might be set and wrong Source PDOs will be sent to the partner
+port. This could potentially cause over current or port resets.
+
+Fixes: cd099cde4ed2 ("usb: typec: tcpm: Support multiple capabilities")
+Cc: stable@vger.kernel.org
+Signed-off-by: Kyle Tso <kyletso@google.com>
 ---
- drivers/usb/misc/uss720.c | 20 +++++++++++++-------
- 1 file changed, 13 insertions(+), 7 deletions(-)
+v1 -> v2:
+- update the commit message (adding the problems this patch solves)
 
-diff --git a/drivers/usb/misc/uss720.c b/drivers/usb/misc/uss720.c
-index 5423da08a467..b26c1d382d59 100644
---- a/drivers/usb/misc/uss720.c
-+++ b/drivers/usb/misc/uss720.c
-@@ -677,7 +677,7 @@ static int uss720_probe(struct usb_interface *intf,
- 	struct parport_uss720_private *priv;
- 	struct parport *pp;
- 	unsigned char reg;
--	int i;
-+	int ret;
- 
- 	dev_dbg(&intf->dev, "probe: vendor id 0x%x, device id 0x%x\n",
- 		le16_to_cpu(usbdev->descriptor.idVendor),
-@@ -688,8 +688,8 @@ static int uss720_probe(struct usb_interface *intf,
- 		usb_put_dev(usbdev);
- 		return -ENODEV;
+ drivers/usb/typec/tcpm/tcpm.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index ae2b6c94482d..2464710ea0c8 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -6855,14 +6855,14 @@ static int tcpm_pd_set(struct typec_port *p, struct usb_power_delivery *pd)
+ 	if (data->sink_desc.pdo[0]) {
+ 		for (i = 0; i < PDO_MAX_OBJECTS && data->sink_desc.pdo[i]; i++)
+ 			port->snk_pdo[i] = data->sink_desc.pdo[i];
+-		port->nr_snk_pdo = i + 1;
++		port->nr_snk_pdo = i;
+ 		port->operating_snk_mw = data->operating_snk_mw;
  	}
--	i = usb_set_interface(usbdev, intf->altsetting->desc.bInterfaceNumber, 2);
--	dev_dbg(&intf->dev, "set interface result %d\n", i);
-+	ret = usb_set_interface(usbdev, intf->altsetting->desc.bInterfaceNumber, 2);
-+	dev_dbg(&intf->dev, "set interface result %d\n", ret);
  
- 	interface = intf->cur_altsetting;
- 
-@@ -728,12 +728,18 @@ static int uss720_probe(struct usb_interface *intf,
- 	set_1284_register(pp, 7, 0x00, GFP_KERNEL);
- 	set_1284_register(pp, 6, 0x30, GFP_KERNEL);  /* PS/2 mode */
- 	set_1284_register(pp, 2, 0x0c, GFP_KERNEL);
--	/* debugging */
--	get_1284_register(pp, 0, &reg, GFP_KERNEL);
-+
-+	/* The Belkin F5U002 Rev 2 P80453-B USB parallel port adapter shares the
-+	 * device ID 050d:0002 with some other device that works with this
-+	 * driver, but it itself does not. Detect and handle the bad cable
-+	 * here. */
-+	ret = get_1284_register(pp, 0, &reg, GFP_KERNEL);
- 	dev_dbg(&intf->dev, "reg: %7ph\n", priv->reg);
-+	if (ret < 0)
-+		return ret;
- 
--	i = usb_find_last_int_in_endpoint(interface, &epd);
--	if (!i) {
-+	ret = usb_find_last_int_in_endpoint(interface, &epd);
-+	if (!ret) {
- 		dev_dbg(&intf->dev, "epaddr %d interval %d\n",
- 				epd->bEndpointAddress, epd->bInterval);
+ 	if (data->source_desc.pdo[0]) {
+ 		for (i = 0; i < PDO_MAX_OBJECTS && data->source_desc.pdo[i]; i++)
+ 			port->snk_pdo[i] = data->source_desc.pdo[i];
+-		port->nr_src_pdo = i + 1;
++		port->nr_src_pdo = i;
  	}
+ 
+ 	switch (port->state) {
 -- 
-2.44.0
+2.44.0.396.g6e790dbe36-goog
 
 
