@@ -1,46 +1,46 @@
-Return-Path: <linux-usb+bounces-8400-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8401-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B011788BFCE
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 11:47:53 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 03EA488BFEE
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 11:53:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 322E4B23215
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 10:47:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3547D1C2A1F5
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 10:53:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9BE563A5;
-	Tue, 26 Mar 2024 10:47:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3ABB4DF60;
+	Tue, 26 Mar 2024 10:53:02 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from SHSQR01.spreadtrum.com (mx1.unisoc.com [222.66.158.135])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 556933C30;
-	Tue, 26 Mar 2024 10:47:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 432065C99;
+	Tue, 26 Mar 2024 10:52:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=222.66.158.135
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711450063; cv=none; b=hXZR2TS29rigl8tkouyPnqsRCRcbofknuokl4FjXfAIypn3nocJLTK6PomvmH81of9DW4eC5vkuCkA2roITCPBznrgeJKnl1e4vDtnGHxiRvmEMUHiRdI8NKgtni+jOjs8VlracGpeLkYXD6BX7BUmXHW3qtqgSz51RgpKYVv+o=
+	t=1711450381; cv=none; b=aEPBO1vvAfMvDiBulMgMJ6eoK5gLS442+QA8iGMCRfWGUfjzX3gJPlAqrgNiC6VcwxkITnBtis+GQI4eLiBMsVm1hu3zdb2XrAgKV2XEMirtyhT6rh/xGaUG6dLsbGjtaoS/swnpG9n9ZkIFitxIKaiEOfJYGTW0ykh4w99rQqI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711450063; c=relaxed/simple;
-	bh=e8abdu1tcmiI2xK+Ds67Ozww6jto271BJbcS9taJliU=;
-	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=bXwMKDeE1wuTq0gM2iZrdcSKwfV6Y2Hl/pxYYJfmUZAh+xDg8XtbWDyuf5cagLS9oZ78FvZ5TfuZp5PG/Klvq4RI0Tsges5n/q+AYcEyisdg8kGgWcoRIP/xQLu5eF573VBTqQ/WAOZyKW+5Pk1pq+ox9QlO0S8zAldI4veJ1jA=
+	s=arc-20240116; t=1711450381; c=relaxed/simple;
+	bh=Go7aUeZIPQV1AB3KkjTSpZ3prin5O2xCjTt1dDlaYZI=;
+	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=u3ISYsus5A0OberVqjN7mNt+2CfZiJc4v+cbcMqPvBMhyWHjmtstqzHv+2p2O1u1X+D57e3yMPBpo4hZTgNZOCFriAntzEH7k/fRte6hr6tL7V8pOrlxeLnDs9sWItWmHCLpZlieLPHETfUI8QwVvPuM4d5do/gR7xhoWK4GWq8=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=unisoc.com; spf=pass smtp.mailfrom=unisoc.com; arc=none smtp.client-ip=222.66.158.135
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=unisoc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=unisoc.com
 Received: from dlp.unisoc.com ([10.29.3.86])
-	by SHSQR01.spreadtrum.com with ESMTP id 42QAlIKu022823;
-	Tue, 26 Mar 2024 18:47:18 +0800 (+08)
+	by SHSQR01.spreadtrum.com with ESMTP id 42QAqlfv029882;
+	Tue, 26 Mar 2024 18:52:47 +0800 (+08)
 	(envelope-from surong.pang@unisoc.com)
-Received: from SHDLP.spreadtrum.com (shmbx06.spreadtrum.com [10.0.1.11])
-	by dlp.unisoc.com (SkyGuard) with ESMTPS id 4V3mfn1MLpz2LsfGh;
-	Tue, 26 Mar 2024 18:45:37 +0800 (CST)
-Received: from shmbx05.spreadtrum.com (10.29.1.56) by shmbx06.spreadtrum.com
- (10.0.1.11) with Microsoft SMTP Server (TLS) id 15.0.1497.23; Tue, 26 Mar
- 2024 18:47:16 +0800
+Received: from SHDLP.spreadtrum.com (shmbx02.spreadtrum.com [10.0.1.204])
+	by dlp.unisoc.com (SkyGuard) with ESMTPS id 4V3mn62WY6z2LsfGk;
+	Tue, 26 Mar 2024 18:51:06 +0800 (CST)
+Received: from shmbx05.spreadtrum.com (10.29.1.56) by SHMBX02.spreadtrum.com
+ (10.0.1.204) with Microsoft SMTP Server (TLS) id 15.0.1497.23; Tue, 26 Mar
+ 2024 18:52:46 +0800
 Received: from shmbx05.spreadtrum.com ([fe80::3169:eec0:7a15:2543]) by
  shmbx05.spreadtrum.com ([fe80::3169:eec0:7a15:2543%16]) with mapi id
- 15.00.1497.023; Tue, 26 Mar 2024 18:47:16 +0800
+ 15.00.1497.023; Tue, 26 Mar 2024 18:52:45 +0800
 From: =?utf-8?B?5bqe6IuP6I2jIChTdXJvbmcgUGFuZyk=?= <surong.pang@unisoc.com>
 To: Greg KH <gregkh@linuxfoundation.org>
 CC: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
@@ -50,9 +50,9 @@ CC: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
         "Surong.Pang@gmail.com" <Surong.Pang@gmail.com>
 Subject: Re: [PATCH] usb: gadget: rndis: add multi packages support for rndis
 Thread-Topic: [PATCH] usb: gadget: rndis: add multi packages support for rndis
-Thread-Index: Adp/akWVC9LH/DiDSWmkHtRpuRTpKg==
-Date: Tue, 26 Mar 2024 10:47:16 +0000
-Message-ID: <9d39b91505c4449f98e8431e2f257f8b@shmbx05.spreadtrum.com>
+Thread-Index: Adp/a7tzqpcaU9L4T8+iYzgAPdl2KQ==
+Date: Tue, 26 Mar 2024 10:52:45 +0000
+Message-ID: <4a9042d738d94d5da1457260185c95d6@shmbx05.spreadtrum.com>
 Accept-Language: zh-CN, en-US
 Content-Language: zh-CN
 X-MS-Has-Attach:
@@ -66,23 +66,19 @@ List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MAIL:SHSQR01.spreadtrum.com 42QAlIKu022823
+X-MAIL:SHSQR01.spreadtrum.com 42QAqlfv029882
 
-RGVhciBHcmVn77yMDQpTaGFyZSBBbmRyb2lkIFBob25lIGludGVybmV0IHRvIFdpbmRvd3MgUEMg
-dmlhIFVTQiBzdGlsbCBuZWVkIHRoZSBybmRpcyBmZWF0dXJlLg0KT0ssIGlmIHJuZGlzIHdpbGwg
-YmUgZGVsZXRlZCBlbnRpcmVseSwgdGhpcyBwYXRjaCBjYW4gYmUgYWJhbmRvbmVkLg0KDQo+IA0K
-PiANCj4gT24gV2VkLCBNYXIgMDYsIDIwMjQgYXQgMDE6NDk6NDlQTSArMDgwMCwgU3Vyb25nIFBh
-bmcgd3JvdGU6DQo+ID4gQXMgbmNtLCBhZ2dlcmdhdGUgbXVsdGkgc2tiIHBhY2thZ2VzIGFuZCB0
-cmFuc2ZlciB0aGVtIGF0IG9uZSBVUkIuDQo+ID4gSW4gVVNCMi4wLCB0aGUgbmV0d29yayB0aHJv
-dWdocHV0IGNhbiBiZSBpbXByb3ZlZCBmcm9tIGFib3V0IDE4TUIvUyB0bw0KPiA+IDM1TUIvUy4N
-Cj4gDQo+IFdoeSBpcyBybmRpcyBzdGlsbCBiZWluZyB1c2VkPyAgSXQncyBhbiBpbnNlY3VyZSBh
-bmQgb2Jzb2xldGUgcHJvdG9jb2wgdGhhdCBzaG91bGQgbm90IGJlIHVzZWQgYXQgYWxsIGFueXdo
-ZXJlLiAgSSBrZWVwIHRyeWluZyB0byBkZWxldGUgaXQNCj4gZW50aXJlbHksIGJ1dCBuZWVkIHRv
-IGdvIGFuZCB3cml0ZSBhbiBhY3RpdmUgZXhwbG9pdCB0byBwcm92ZSB0byBwZW9wbGUganVzdCBo
-b3cgYmFkIGl0IHJlYWxseSBpcyBiZWZvcmUgSSBjYW4gZG8gc28uLi4NCj4gDQo+IEFkZGluZyBt
-b3JlIGZ1bmN0aW9uYWxpdHkgdG8gaXQgaXMgbm90IGEgZ29vZCBpZGVhLCB3aGF0IGlzIHdyb25n
-IHdpdGggdGhlIG90aGVyLCBidWlsdC1pbiwgbmV0d29ya2luZyBwcm90b2NvbHMgaW5zdGVhZD8g
-IFdoeSBhcmUgeW91DQo+IHVzaW5nIHRoaXMgb2xkIG9uZSBzdGlsbCB3aGVuIHRoZXJlIGFyZSBz
-byBtYW55IGJldHRlciBvcHRpb25zIG91dCB0aGVyZT8NCj4gDQo+IHRoYW5rcywNCj4gDQo+IGdy
-ZWcgay1oDQo=
+RGVhciBHcmVnLA0KDQpUaGVzZSB2YWx1ZXMgYXJlIGp1c3QgdXNlZCB0byByZWNvcmRlZCB3YXRl
+ciBtYXNrIG9mIHJlY2VpdmVkIHBhY2thZ2VzIHBlciB0cmFuc2Zlci4NCkp1c3QgdG8gcHJpbnQg
+dGhlIHdhdGVyIG1hc2sgaW5mb3JtYXRpb24sIHRoZXkgY2FuIGJlIGRlbGV0ZWQuDQoNCkFueXdh
+eSwgaWYgcm5kaXMgd2lsbCBiZSBkZWxldGVkIGVudGlyZWx5LCB0aGlzIHBhdGNoIGNhbiBiZSBh
+YmFuZG9uZWQuDQoNCj4gDQo+IA0KPiBPbiBXZWQsIE1hciAwNiwgMjAyNCBhdCAwMTo0OTo0OVBN
+ICswODAwLCBTdXJvbmcgUGFuZyB3cm90ZToNCj4gPiAtLS0gYS9kcml2ZXJzL3VzYi9nYWRnZXQv
+ZnVuY3Rpb24vcm5kaXMuYw0KPiA+ICsrKyBiL2RyaXZlcnMvdXNiL2dhZGdldC9mdW5jdGlvbi9y
+bmRpcy5jDQo+ID4gQEAgLTM5LDYgKzM5LDggQEANCj4gPg0KPiA+ICAjaW5jbHVkZSAicm5kaXMu
+aCINCj4gPg0KPiA+ICtzdGF0aWMgaW50IG1heF9vdXRfcGt0c19wZXJfeGZlcjsNCj4gPiArc3Rh
+dGljIGludCBtYXhfb3V0X3NpemVfcGVyX3hmZXI7DQo+IA0KPiBOb3RlLCB0aGlzIHdpbGwgbm90
+IHdvcmssIHlvdSBjYW4ndCBoYXZlIGRldmljZS1zcGVjaWZpYyB2YXJpYWJsZXMgYXMgYSBzaW5n
+bGUgZW50cnksIG90aGVyd2lzZSBtdWx0aXBsZSBkZXZpY2VzIGF0IHRoZSBzYW1lIHRpbWUgd2ls
+bCBub3QNCj4gd29yayBhdCBhbGwuDQo+IA0KPiB0aGFua3MsDQo+IA0KPiBncmVnIGstaA0K
 
