@@ -1,173 +1,144 @@
-Return-Path: <linux-usb+bounces-8398-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8399-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39AD088BF84
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 11:31:51 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9546188BFC8
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 11:44:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AEB9BB26510
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 10:31:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 51D8F2E7EEA
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Mar 2024 10:44:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E3DB7F7E0;
-	Tue, 26 Mar 2024 10:29:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74FA86AB6;
+	Tue, 26 Mar 2024 10:43:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Jct6hplu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nfuy0lN/"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36D3773533;
-	Tue, 26 Mar 2024 10:29:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEB3629A0;
+	Tue, 26 Mar 2024 10:43:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711448986; cv=none; b=oUfto7VmeI6JnPUnsXhf0pv4z31XcYp8IxpAqgvTNItWKYZTh+O7Mkp8+cupcqVMYGeIq8qTfiBN0bhP9QfQQ6kxo4egPEF5+1QjYSb3JJa1u7TAjGJzUbrMFmmQxxOKSzHcjjho4NxkAqeHGkoD8psYnCx+VmMvZFWpNa4nYMo=
+	t=1711449837; cv=none; b=hElQiJnLtf5m0tSObpbP8q7/0W4X8MEf7qcJAFQUW+bOH4GMonLSisBFGEyDEevNBYKs2j3K4vMq+1IjVq/dahCU6sPfbaFKZkeJMnB2UEoTplWxs45eYVxv5P4KM5B/cafs+Bjz8bCAd2XJlDZp89kyggJkay2/567mCkDdkC4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711448986; c=relaxed/simple;
-	bh=CzpPya17rTt1Zek9UJn68nt2er922OD0kuS2fjisXSc=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=up2P31KK+wImepA1GwMtnPmjc2dmnYQFj3m0TwI+lwa/A6RNlMSMUyCn4oS1ezjcbtwU14YHNca/O23EjM1Ea1QJrxDi1sJDCD+ktkfUCypAGmYpgzA8ZdMxwoIzaPPMuqyHf8IyfW0V3Voj+wRZdKbJh7Adp+/k+I5t+uHt32M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Jct6hplu; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 42Q6Zcxr015198;
-	Tue, 26 Mar 2024 10:29:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	from:to:cc:subject:date:message-id:in-reply-to:references
-	:mime-version:content-transfer-encoding:content-type; s=
-	qcppdkim1; bh=O1jhtF+6LeV7nIcb4IBhtIsdKOL+6JFICh68FWa7Nc4=; b=Jc
-	t6hpluGpH/0IyERK0hDzq2dEn4DLId35Nwtlk9acTzCLgJR3VcsgLDTLUMjp1VX9
-	+YFgYqV6rWe7JA8smY5At7b5u3gpn3DYjDBWLARHlcVuCjtn5ACtqK9Jew1D1o64
-	wu4Aywoxth30L6COSxXVlmkJr/dO8NVEeoELx3Mkb48y5kivw22dlsUBw231epPH
-	tkm1KciYgq1OEMjb7DOOPEGxlni5zpbDN59qVkldxlkbUVyhVDpIMRSip0ZMCcJz
-	CjuTiFW+PZduwFqZ8BRSxdinZDSGc995+7wiT5OTlkOLAU5Ne8GmqcpyXXiSdLOP
-	MR3lO2y1bS8IrQ7UEzeg==
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3x3s7n0mkq-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 26 Mar 2024 10:29:24 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 42QATNvH019504
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 26 Mar 2024 10:29:23 GMT
-Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Tue, 26 Mar 2024 03:29:17 -0700
-From: Krishna Kurapati <quic_kriskura@quicinc.com>
-To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring
-	<robh@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
-        Wesley Cheng
-	<quic_wcheng@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "Greg
- Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Conor Dooley
-	<conor+dt@kernel.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Felipe Balbi
-	<balbi@kernel.org>, Johan Hovold <johan@kernel.org>
-CC: <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_ppratap@quicinc.com>, <quic_jackp@quicinc.com>,
-        Krishna Kurapati
-	<quic_kriskura@quicinc.com>,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH v17 9/9] usb: dwc3: qcom: Add multiport suspend/resume support for wrapper
-Date: Tue, 26 Mar 2024 15:58:09 +0530
-Message-ID: <20240326102809.2940123-10-quic_kriskura@quicinc.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240326102809.2940123-1-quic_kriskura@quicinc.com>
+	s=arc-20240116; t=1711449837; c=relaxed/simple;
+	bh=vwyF+iRB3lA+0ZCjAOIqFFU72W87k8/58YHoJa8WpLw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HlcWIUdl8TTxxrBA+DM1rv/N9HovJUE9YBGsq/iDWXmkZqrlrRlyPYk+qY08bEm3R+tGEuTWva9uN+3N4rHWnjQkHClL9vbh64LtG0PDzGxeTHzg7QiCS7pO9NQg9ScXBakB87Rk2SAPUjnznwItqiqSUrRU00tx5cycbvNgdog=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nfuy0lN/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66389C433C7;
+	Tue, 26 Mar 2024 10:43:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711449836;
+	bh=vwyF+iRB3lA+0ZCjAOIqFFU72W87k8/58YHoJa8WpLw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=nfuy0lN/KkDKyqzc/6Jezrot7iUFD9NrHKfw8jx5XhqWYXw4VTEgWxdF8ZsikQrfG
+	 90McEfcuNo4rsreuwIZZI7U5HkFMULmFC/hM4VAuYElGq5C4xiXGnXzwfN+TON4H6V
+	 nwWWJD6dzlo6+eob9+tLpY9kngamg1oT322hcGqHVdeKEpx+OTyBjdJDB8g+MnF31L
+	 xawQ5PDCIHt4xgFxu1PQewr/PTUgmYk79IHOwCBkw2HElDS3Eod8msriyEEZCw/7Rc
+	 66x8oMX/NVKqNFewcYObhvp/UfVNZZmWyQgUq0huGHEhDhMlgEzl7t82KXmyEfxwwz
+	 KEhKlBv+uVfHQ==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1rp4Hj-000000007jO-0ymj;
+	Tue, 26 Mar 2024 11:44:03 +0100
+Date: Tue, 26 Mar 2024 11:44:03 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Krishna Kurapati <quic_kriskura@quicinc.com>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Rob Herring <robh@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Wesley Cheng <quic_wcheng@quicinc.com>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Felipe Balbi <balbi@kernel.org>, devicetree@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, quic_ppratap@quicinc.com,
+	quic_jackp@quicinc.com, Johan Hovold <johan+linaro@kernel.org>
+Subject: Re: [PATCH v17 7/9] usb: dwc3: qcom: Refactor IRQ handling in glue
+ driver
+Message-ID: <ZgKm89rq4D8SqYQL@hovoldconsulting.com>
 References: <20240326102809.2940123-1-quic_kriskura@quicinc.com>
+ <20240326102809.2940123-8-quic_kriskura@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: KqcLm5xMXE9mP6QZ7WPg-9XLeGkjHZad
-X-Proofpoint-ORIG-GUID: KqcLm5xMXE9mP6QZ7WPg-9XLeGkjHZad
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-03-26_04,2024-03-21_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- malwarescore=0 adultscore=0 suspectscore=0 mlxscore=0 priorityscore=1501
- impostorscore=0 clxscore=1015 phishscore=0 mlxlogscore=999 bulkscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2403210001 definitions=main-2403260071
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240326102809.2940123-8-quic_kriskura@quicinc.com>
 
-Power event IRQ is used for wakeup in cases:
-a) where the controller is super speed capable and missing an
-ss_phy interrupt.
-b) where the GIC is not capable of detecting DP/DM hs phy irq's.
+On Tue, Mar 26, 2024 at 03:58:07PM +0530, Krishna Kurapati wrote:
+> On multiport supported controllers, each port has its own DP/DM
+> and SS (if super speed capable) interrupts. As per the bindings,
+> their interrupt names differ from standard ones having "_x" added
+> as suffix (x indicates port number). Identify from the interrupt
+> names whether the controller is a multiport controller or not.
+> Refactor dwc3_qcom_setup_irq() call to parse multiport interrupts
+> along with non-multiport ones accordingly..
+> 
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+>  drivers/usb/dwc3/dwc3-qcom.c | 137 ++++++++++++++++++++++++++---------
+>  1 file changed, 103 insertions(+), 34 deletions(-) 
 
-Power event IRQ stat register indicates whether high speed phy
-entered and exited L2 successfully during suspend and resume.
-Indicate the same for all ports of multiport.
+> -static int dwc3_qcom_setup_irq(struct platform_device *pdev)
+> +static int dwc3_qcom_setup_port_irq(struct platform_device *pdev, int port_num, bool is_multiport)
 
-Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
----
- drivers/usb/dwc3/dwc3-qcom.c | 22 +++++++++++++++++-----
- 1 file changed, 17 insertions(+), 5 deletions(-)
+Here you use "port_num", when it's really a (zero-based) port index.
 
-diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-index f8d3c9ecf461..2d06f83a4f4b 100644
---- a/drivers/usb/dwc3/dwc3-qcom.c
-+++ b/drivers/usb/dwc3/dwc3-qcom.c
-@@ -52,6 +52,13 @@
- #define APPS_USB_AVG_BW 0
- #define APPS_USB_PEAK_BW MBps_to_icc(40)
- 
-+static const u32 pwr_evnt_irq_stat_reg[DWC3_MAX_PORTS] = {
-+	0x58,
-+	0x1dc,
-+	0x228,
-+	0x238,
-+};
-+
- struct dwc3_qcom_port {
- 	int			qusb2_phy_irq;
- 	int			dp_hs_phy_irq;
-@@ -421,9 +428,11 @@ static int dwc3_qcom_suspend(struct dwc3_qcom *qcom, bool wakeup)
- 	if (qcom->is_suspended)
- 		return 0;
- 
--	val = readl(qcom->qscratch_base + PWR_EVNT_IRQ_STAT_REG);
--	if (!(val & PWR_EVNT_LPM_IN_L2_MASK))
--		dev_err(qcom->dev, "HS-PHY not in L2\n");
-+	for (i = 0; i < qcom->num_ports; i++) {
-+		val = readl(qcom->qscratch_base + pwr_evnt_irq_stat_reg[i]);
-+		if (!(val & PWR_EVNT_LPM_IN_L2_MASK))
-+			dev_err(qcom->dev, "port-%d HS-PHY not in L2\n", i + 1);
-+	}
- 
- 	for (i = qcom->num_clocks - 1; i >= 0; i--)
- 		clk_disable_unprepare(qcom->clks[i]);
-@@ -472,8 +481,11 @@ static int dwc3_qcom_resume(struct dwc3_qcom *qcom, bool wakeup)
- 		dev_warn(qcom->dev, "failed to enable interconnect: %d\n", ret);
- 
- 	/* Clear existing events from PHY related to L2 in/out */
--	dwc3_qcom_setbits(qcom->qscratch_base, PWR_EVNT_IRQ_STAT_REG,
--			  PWR_EVNT_LPM_IN_L2_MASK | PWR_EVNT_LPM_OUT_L2_MASK);
-+	for (i = 0; i < qcom->num_ports; i++) {
-+		dwc3_qcom_setbits(qcom->qscratch_base,
-+				  pwr_evnt_irq_stat_reg[i],
-+				  PWR_EVNT_LPM_IN_L2_MASK | PWR_EVNT_LPM_OUT_L2_MASK);
-+	}
- 
- 	qcom->is_suspended = false;
- 
--- 
-2.34.1
+Please change to "port_index".
 
+>  {
+>  	struct dwc3_qcom *qcom = platform_get_drvdata(pdev);
+> +	const char *irq_name;
+>  	int irq;
+>  	int ret;
+>  
+> -	irq = platform_get_irq_byname_optional(pdev, "qusb2_phy");
+> +	if (is_multiport)
+> +		irq_name = devm_kasprintf(&pdev->dev, GFP_KERNEL, "dp_hs_phy_%d", port_num + 1);
+> +	else
+> +		irq_name = devm_kasprintf(&pdev->dev, GFP_KERNEL, "dp_hs_phy_irq");
+> +	if (!irq_name)
+> +		return -ENOMEM;
+
+> +static int dwc3_qcom_find_num_ports(struct platform_device *pdev)
+> +{
+> +	char irq_name[14];
+> +	int port_index;
+> +	int irq;
+> +
+> +	irq = platform_get_irq_byname_optional(pdev, "dp_hs_phy_1");
+> +	if (irq <= 0)
+> +		return 1;
+> +
+> +	for (port_index = 2; port_index <= DWC3_MAX_PORTS; port_index++) {
+
+And here you use port_index, when it's really a one-based port number.
+
+I explicitly used "port" when we discussed the update here for this
+reason ("port_num" works too).
+
+Please fix this last thing in a v18 and we're good to go.
+
+> +		sprintf(irq_name, "dp_hs_phy_%d", port_index);
+> +
+> +		irq = platform_get_irq_byname_optional(pdev, irq_name);
+> +		if (irq <= 0)
+> +			return port_index - 1;
+> +	}
+> +
+> +	return DWC3_MAX_PORTS;
+> +}
+
+Johan
 
