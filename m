@@ -1,124 +1,128 @@
-Return-Path: <linux-usb+bounces-8470-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8472-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB37988DC9F
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Mar 2024 12:34:42 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C73188E281
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Mar 2024 14:28:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B08F11F2B81F
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Mar 2024 11:34:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EC818290B45
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Mar 2024 13:28:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88FE784D15;
-	Wed, 27 Mar 2024 11:33:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC4D513BC11;
+	Wed, 27 Mar 2024 12:22:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=brixit-nl.20230601.gappssmtp.com header.i=@brixit-nl.20230601.gappssmtp.com header.b="Kc7gveCy"
+	dkim=pass (1024-bit key) header.d=tecnico.ulisboa.pt header.i=@tecnico.ulisboa.pt header.b="u0Q7GKPi"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp1.tecnico.ulisboa.pt (smtp1.tecnico.ulisboa.pt [193.136.128.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BDDE82D8D
-	for <linux-usb@vger.kernel.org>; Wed, 27 Mar 2024 11:33:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E84D172628
+	for <linux-usb@vger.kernel.org>; Wed, 27 Mar 2024 12:21:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.136.128.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711539237; cv=none; b=eHBvNRxd/oCMRjWHaCDYMCPbvZBbdOjMf3s/OsVlHOz2xEpnWE41INAWABIIpmwXYx7ztZwact+xGpBpI3ie36UzoWNFFdJA3wnPQU7iurE0TanBEZc5D3Wv/XgY3WdUCqoe/q11ekkOIMj7PxxufDWy2pRluhQ5rgb3+XmPkl8=
+	t=1711542121; cv=none; b=by1WdszR0qP0i9KQU14lNwWky/h7gcceisHMuAfdbU04xhkdLaGZpJCmX5Tt4Iw19xTxU5x/Fo+0o1Wa/ChhI13Ym1I9RfUtWAQP7Mjrvg155e1CcbrDLjGW5hmIIGCuMRQERRibRmlao3idNG/MzJv3BGByxKrZM1jLaN8z8vU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711539237; c=relaxed/simple;
-	bh=aDg9VQsZHb2bvkz2wfSvA+6KPQPzORiP4CB60k8cjxo=;
-	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type; b=n4qEgJVjSpbwA8LMOV23MXXZFwTJBKFJoK349CGbrM+qAVUM/DUhizUb6A9dL7y7r9KnfnfNPfwVYMZ3FTQkOeHz8FBAeLFfQAWyeH/cl5IZsfU/gcQPhfx9xrjhePFYM2sSTLwPQsQ5T6zSD5K2mMu6K8/84WPbt6EuCZXbSAI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brixit.nl; spf=none smtp.mailfrom=brixit.nl; dkim=pass (2048-bit key) header.d=brixit-nl.20230601.gappssmtp.com header.i=@brixit-nl.20230601.gappssmtp.com header.b=Kc7gveCy; arc=none smtp.client-ip=209.85.208.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brixit.nl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=brixit.nl
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-55a179f5fa1so8443439a12.0
-        for <linux-usb@vger.kernel.org>; Wed, 27 Mar 2024 04:33:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brixit-nl.20230601.gappssmtp.com; s=20230601; t=1711539233; x=1712144033; darn=vger.kernel.org;
-        h=content-transfer-encoding:subject:from:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PZdVzn1VOccM6TAbuNnLSK4C6eC9jetDFNYscga+k5s=;
-        b=Kc7gveCyH5XKkJKWs4SbXYuAlxaO0UTR7SXA8xTxyhcUvswmsWMCP3swPOuHKSFvP+
-         fAqTk2cdxAdFgwMBkpcqR5lc37w2l54a+gGgSxGZ6IlMHAn7YZHRR3Xwp2OP0hxgV1D1
-         9RXnak3GwUC5+uUTiPd05upl615QIBYOqmRagzoSgLO5l9YtfVwhQ49pJvSccpEiJiK7
-         GT1MO+Ydp9gtuUpiOCqC5HzjT8txK14WZY8VXhIEKP3ckdr2N8yVldA/6TPL8OBTznC4
-         rgPpFENG90/4I5fE2h4dds+38RH5yfq7sQ7IL24tIZGoM17UlOVBZBTc094wuc5k/izL
-         YTBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711539233; x=1712144033;
-        h=content-transfer-encoding:subject:from:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=PZdVzn1VOccM6TAbuNnLSK4C6eC9jetDFNYscga+k5s=;
-        b=DRq28wsPESJ1IJmNt0OmFu55v0UVfJmyTyy9expFb7F7rEWH0efppxItED3kczR26G
-         G4FVN2PFtUu1LLkZ/u7P8UpxrvYcnrC/F2Nphljk3nHlAkJTRiWsGHlGHiPb4Nfm0Nhp
-         Okq8+Ux4S9PgBXqvjskyoQqHLMHjp0WSS+hdikhxfHUwQM/Va5+TTaQZpZhHqYx2bflT
-         hFfq7+Tl3PHbLeaRKNJxv9Fb57piiaXz9U91SRMtzW0JGoo+Yl2Lbwn1rTMD6xECLUyA
-         ZMS8305wN+QQMdCuJ4L0YprntZwJV9kWbqv5ZelaC0Eh3D9Lvvz4/BYuRpRVmFYms2RF
-         eM9g==
-X-Gm-Message-State: AOJu0Yz0R5V5WkguA01bDXR5imb/RdCREkFEp7hoQ2ZZVhh8Hsj/9EHR
-	nAe6vUdJQjSjUaz8LfxJErcghkZdO4cD+w74ra9E8evdk6MZAJh8E9G9X5gfN9jFKf7wdWefkdM
-	Z5qU=
-X-Google-Smtp-Source: AGHT+IHD0cq5C34cn/BBubnt5ebOOH5aH0iskwKyOgX/OGINY84REUT4/Twhj58XP+1ft7pcNHUvAw==
-X-Received: by 2002:a17:906:b4e:b0:a47:61cb:35db with SMTP id v14-20020a1709060b4e00b00a4761cb35dbmr777249ejg.10.1711539233116;
-        Wed, 27 Mar 2024 04:33:53 -0700 (PDT)
-Received: from ?IPV6:2a00:bba0:120c:9f00:7afa:53ac:c867:e339? (2a00-bba0-120c-9f00-7afa-53ac-c867-e339.static6.cust.trined.nl. [2a00:bba0:120c:9f00:7afa:53ac:c867:e339])
-        by smtp.gmail.com with ESMTPSA id ap3-20020a17090735c300b00a48f583bee3sm3635580ejc.30.2024.03.27.04.33.52
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Mar 2024 04:33:52 -0700 (PDT)
-Message-ID: <00c4fd45-dc9f-4197-952e-c7c322b6370c@brixit.nl>
-Date: Wed, 27 Mar 2024 12:33:51 +0100
+	s=arc-20240116; t=1711542121; c=relaxed/simple;
+	bh=lkVH+6YHdoA4iYT1IUy+4zufKo6t/7PDPEXy+5yOxnc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Jz1MWyF5+kuMdijMoMiLxe8/49TfJNxA0sECNbeHljiqA7WPvcRCAXA3hYOOME5WkQrjhPC39T8zaXwd4TNmCPUfGVAugyEWrzY+ISa+rZtGprtODMu9rJIFJ5JejVz2Em8qAFSPKqoUkqy/pd+8xzexN68OLvZ59TTPxaUceUc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tecnico.ulisboa.pt; spf=pass smtp.mailfrom=tecnico.ulisboa.pt; dkim=pass (1024-bit key) header.d=tecnico.ulisboa.pt header.i=@tecnico.ulisboa.pt header.b=u0Q7GKPi; arc=none smtp.client-ip=193.136.128.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tecnico.ulisboa.pt
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tecnico.ulisboa.pt
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by smtp1.tecnico.ulisboa.pt (Postfix) with ESMTP id 36902633F00B;
+	Wed, 27 Mar 2024 12:11:51 +0000 (WET)
+X-Virus-Scanned: by amavis-2.13.0 (20230106) (Debian) at tecnico.ulisboa.pt
+Received: from smtp1.tecnico.ulisboa.pt ([127.0.0.1])
+ by localhost (smtp1.tecnico.ulisboa.pt [127.0.0.1]) (amavis, port 10025)
+ with LMTP id B8Tzowf7w7GP; Wed, 27 Mar 2024 12:11:49 +0000 (WET)
+Received: from mail1.tecnico.ulisboa.pt (mail1.ist.utl.pt [193.136.128.10])
+	by smtp1.tecnico.ulisboa.pt (Postfix) with ESMTPS id C7DC6633F004;
+	Wed, 27 Mar 2024 12:11:48 +0000 (WET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tecnico.ulisboa.pt;
+	s=mail; t=1711541509;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+	bh=OFvWDb3iT0xFr2ncRSq04CoUbExvv0SD+VTJL/n4qCY=;
+	b=u0Q7GKPiyk6RbY/VZACQStWu9d6GD26KnG2FDBg3xkd5TU5T5qJ7Gp3x1ULwjwOUpWtcml
+	am/Wq20EOQu/OHQ28rsR1HnAoi6OlcxMVVxVe9xXTetnktKen2v1K1Tpk+XL7lMyiEuRet
+	f7j+HMZhREZI3yLO5RTIUhUGTpiHDPk=
+Received: from diogo-gram.home (unknown [IPv6:2a01:14:8070:dc60:f4e6:62fe:d7f8:e109])
+	(Authenticated sender: ist187313)
+	by mail1.tecnico.ulisboa.pt (Postfix) with ESMTPSA id 9024B360080;
+	Wed, 27 Mar 2024 12:11:47 +0000 (WET)
+Date: Wed, 27 Mar 2024 12:11:42 +0000
+From: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
+To: heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org, 
+	pmalani@chromium.org, jthies@google.com, neil.armstrong@linaro.org, 
+	abhishekpandit@chromium.org, fabrice.gasnier@foss.st.com, linux-usb@vger.kernel.org
+Cc: diogo.ivo@tecnico.ulisboa.pt
+Subject: [PATCH] usb: typec: ucsi: Only enable supported notifications
+Message-ID: <yhz7nq622mbg3rqsyvqz632pc756niagpfbnzayfswhzo7esho@vrdtx5c3hjgx>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: linux-usb@vger.kernel.org
-From: Martijn Braam <martijn@brixit.nl>
-Subject: Using a composite device with kernel drivers and libusb at the same
- time
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-I hope this is an acceptable place to ask this question. I've spend a 
-bit of time reverse-engineering the USB protocol for a subset of 
-Blackmagic Design video mixers and I have made a userspace 
-implementation to make these devices usable in Linux with libusb. This 
-is working great but the roadblock I have that I can't find a reasonable 
-solution for is that these devices also expose an UVC webcam.
+The UCSI specification defines some notifications to be optional for the
+PPM to support. From these only enable the ones the PPM informs us are
+actually supported.
 
-While my control software is active it's not possible to use the UVC 
-webcam functionality of the device because with libusb I have to detach 
-the kernel from the interfaces to make my userspace access work. As far 
-as I can find documented online there's no way to have half a composite 
-device handled by kernel drivers and half with userspace drivers in 
-Linux. It seems to me the only solution is to make a kernel driver to 
-bind to the control interface and have that kernel driver pass-through 
-to userspace somehow with a custom protocol? If that is the case would 
-such a driver even be supported in Linux?
+Signed-off-by: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
+---
+ drivers/usb/typec/ucsi/ucsi.c | 25 +++++++++++++++++++++++--
+ 1 file changed, 23 insertions(+), 2 deletions(-)
 
-For reference the device I'm working has these looks like this:
-
-USB 1-4  [1edb:be55] Blackmagic design Blackmagic Design [serial]
-    Class EF SubClass 02 Protocol 01
-       Interface 0 FF/03/00 Unknown <- Blackmagic USB configuration protocol
-       Interface 1 FF/02/00 Unknown <- Blackmagic USB control protocol 
-(I'm using this with libusb)
-       Interface 2 FF/04/00 Unknown <- Unknown
-       Interface 3 FE/01/01 Unknown <- DFU
-       Interface 4 0E/01/01 Blackmagic Design <- UVC camera
-       Interface 5 0E/02/01 Unknown <- UVC camera
-       Interface 6 01/01/00 Blackmagic Design <- ALSA
-       Interface 7 01/02/00 Unknown <- ALSA
-
-If this is not the right place for this question, then where would the 
-right place be?
-
-Greetings,
-Martijn Braam
+diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+index cf52cb34d285..0c8f3b3a99d6 100644
+--- a/drivers/usb/typec/ucsi/ucsi.c
++++ b/drivers/usb/typec/ucsi/ucsi.c
+@@ -1626,6 +1626,27 @@ static int ucsi_register_port(struct ucsi *ucsi, struct ucsi_connector *con)
+ 	return ret;
+ }
+ 
++static u64 ucsi_get_supported_notifications(struct ucsi *ucsi)
++{
++	u8 features = ucsi->cap.features;
++	u64 ntfy = UCSI_ENABLE_NTFY_ALL;
++
++	if (!(features & UCSI_CAP_ALT_MODE_DETAILS))
++		ntfy &= ~UCSI_ENABLE_NTFY_CAM_CHANGE;
++
++	if (!(features & UCSI_CAP_PDO_DETAILS))
++		ntfy &= ~(UCSI_ENABLE_NTFY_PWR_LEVEL_CHANGE |
++			  UCSI_ENABLE_NTFY_CAP_CHANGE);
++
++	if (!(features & UCSI_CAP_EXT_SUPPLY_NOTIFICATIONS))
++		ntfy &= ~UCSI_ENABLE_NTFY_EXT_PWR_SRC_CHANGE;
++
++	if (!(features & UCSI_CAP_PD_RESET))
++		ntfy &= ~UCSI_ENABLE_NTFY_PD_RESET_COMPLETE;
++
++	return ntfy;
++}
++
+ /**
+  * ucsi_init - Initialize UCSI interface
+  * @ucsi: UCSI to be initialized
+@@ -1679,8 +1700,8 @@ static int ucsi_init(struct ucsi *ucsi)
+ 			goto err_unregister;
+ 	}
+ 
+-	/* Enable all notifications */
+-	ntfy = UCSI_ENABLE_NTFY_ALL;
++	/* Enable all supported notifications */
++	ntfy = ucsi_get_supported_notifications(ucsi);
+ 	command = UCSI_SET_NOTIFICATION_ENABLE | ntfy;
+ 	ret = ucsi_send_command(ucsi, command, NULL, 0);
+ 	if (ret < 0)
+-- 
+2.44.0
 
 
