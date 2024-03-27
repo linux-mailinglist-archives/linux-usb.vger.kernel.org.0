@@ -1,119 +1,386 @@
-Return-Path: <linux-usb+bounces-8444-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8446-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1433A88D3D2
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Mar 2024 02:46:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 18FA288D493
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Mar 2024 03:34:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4649A1C23EB9
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Mar 2024 01:46:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3C0161C2461D
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Mar 2024 02:34:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE80A208A8;
-	Wed, 27 Mar 2024 01:46:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4B0E208A9;
+	Wed, 27 Mar 2024 02:34:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="epBV9ekP"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KAouB8n2"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4D5720334;
-	Wed, 27 Mar 2024 01:46:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F3EE8F6B
+	for <linux-usb@vger.kernel.org>; Wed, 27 Mar 2024 02:34:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711503980; cv=none; b=lWCLfjKrK2qonqUrJLATmhZqYb+cEjwTXrFn20zhTbcDWanb3gEr9FwlVbR/Imof7A95sD24kd9djcYK9ifp1T7k1tZ4ywralPlF7Oj/0ARIz/AtGqMlFsngO0qAuuX66WWjsvkKcvb+x8Xl8jup6DZ2gXVSFq+jnMlY8QiITGs=
+	t=1711506855; cv=none; b=fGaGwRgBWTRgXm3gBdhBO5MlyAOLkxkntsDsOsHzDh0RBAucVq1NhkKLt0LLHdD9tgZBJ8nB78+vVeU12Mam1B5d5n04cAsxujvdwxdWHlVv8Wxvkw+q6djVjnyUWF1dodQUVC22o0In+VelsPL8LS84wAtS4kzs7ESvsxkFezU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711503980; c=relaxed/simple;
-	bh=HlIAUH5uwQqP1NoramiPx0ynaL0jbu+tb/BWx6ErTU0=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kSP6C6qHV7tLHwyz8yh2NnSzMnUKZ6BNDXcdjz+siwlS6mjg6M1S2L3AqCpnfGBGeG0eA6rIu1Eoplk8bYPiAXQEgWvmFvtG3esKyGrWsE1LdQHfSuBdRCGJZ5uURW501HaO+4IJ4CsFA9+9TPWiekJbU1cXiZGA+ikbODkzEeg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=epBV9ekP; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 42R0Wjx8018515;
-	Wed, 27 Mar 2024 01:46:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	date:from:to:cc:subject:message-id:references:mime-version
-	:content-type:in-reply-to; s=qcppdkim1; bh=2MDr1/ScghGWOQiG54TEb
-	6BhdAzXd758M7gz4CJdEzM=; b=epBV9ekPGAFqcEAhNPw5gRd65eqTnxWqqlOv6
-	qwm70QCzQ/35XX51JR8rc39nsU/6WaFtRLQ0F075gDD9rLR0UdMurGI7sK5C36wo
-	f5MM+txynKdmBgD3jAEEIhdncweflFdERaXJPpUzd0S6JkcwvriTUxLabFrTlIGR
-	ZL7y29ffogAoNnbIuk8TR/vDeUaBjzxNGe1rYUDGQyWdZJ5Hh1LX9RZJ/bicizsN
-	Ku7d9RM2q7pEusoTKOxxmKXIHztg0Cn/zjxtPnDQKqkRpA15NTr1ZcJdUZcjM7Zv
-	uicXU0xNBq5CgU5E8G7wzNVnxk1MVWxI3gYxlUxTzPY13Jo3g==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3x477yrb1u-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 27 Mar 2024 01:46:05 +0000 (GMT)
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 42R1k4xe006882
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 27 Mar 2024 01:46:04 GMT
-Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Tue, 26 Mar 2024 18:46:03 -0700
-Date: Tue, 26 Mar 2024 18:46:02 -0700
-From: Bjorn Andersson <quic_bjorande@quicinc.com>
-To: Jameson Thies <jthies@google.com>
-CC: <heikki.krogerus@linux.intel.com>, <linux-usb@vger.kernel.org>,
-        <pmalani@chromium.org>, <bleung@google.com>,
-        <abhishekpandit@chromium.org>, <andersson@kernel.org>,
-        <dmitry.baryshkov@linaro.org>, <fabrice.gasnier@foss.st.com>,
-        <gregkh@linuxfoundation.org>, <hdegoede@redhat.com>,
-        <neil.armstrong@linaro.org>, <rajaram.regupathy@intel.com>,
-        <saranya.gopal@intel.com>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 1/1] usb: typec: ucsi: Check capabilities before cable
- and identity discovery
-Message-ID: <20240327014602.GB2136359@hu-bjorande-lv.qualcomm.com>
-References: <20240315171836.343830-1-jthies@google.com>
- <20240315171836.343830-2-jthies@google.com>
+	s=arc-20240116; t=1711506855; c=relaxed/simple;
+	bh=PqwF2hlYR1XRJ8D5HTX1JNJlU1knoqPIdlQmpXB36i4=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=MZ9UNYxL3FhCWTcuMrMWMnJx5y8WT4qgGVWGG4LN4LhNe6jk1SFcjtDs94raJCUPEAkkdoGLUv9hfWZT1NXs7ga8alCgFgZb8VeKqVDu6Uf9hH1Lm/inp5nv1sdXHI0muM8uDA+OqjjVOU8W/4H3rpNhnV3EIWxWQ6Q+0h/To4s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KAouB8n2; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1711506853; x=1743042853;
+  h=date:from:to:cc:subject:message-id;
+  bh=PqwF2hlYR1XRJ8D5HTX1JNJlU1knoqPIdlQmpXB36i4=;
+  b=KAouB8n2XFW2B3flBvZf1EfFJqkkHdbCkZL0wNcMnM/PJ/6IndR6oA4P
+   QIPzFS8HZPvEQ/UpQvygiHrC/90easPSIQuKe26zAPAo4RDN9ktEefP/9
+   YAxWBH2PGyUe8pQLbrdrGAazqJWN/JvXiclpW2D9euv6ofHlQ+Ekt+0vs
+   aeRE1Nt2y5XubdhUrgvlDp/48qqagfHmV6GlBOtIEANs6XwDmVbKoI7DB
+   TQiOkZ4fvO95m6GuCBbnN9YVGP5OLdoNNb78xnD8gewL6Fh1pWiQYJmEm
+   LTn2vcEwj4nmSDSDqZr95YDcn0epZvttflgVK8pgVeOT8Esxn6GXC2ZVb
+   g==;
+X-CSE-ConnectionGUID: O4/nI4v6QBCDzyy4hya2FA==
+X-CSE-MsgGUID: IZpXH2GYRJC241Mrn+Pp6A==
+X-IronPort-AV: E=McAfee;i="6600,9927,11025"; a="17318862"
+X-IronPort-AV: E=Sophos;i="6.07,157,1708416000"; 
+   d="scan'208";a="17318862"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2024 19:34:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,157,1708416000"; 
+   d="scan'208";a="16536586"
+Received: from lkp-server01.sh.intel.com (HELO be39aa325d23) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 26 Mar 2024 19:34:11 -0700
+Received: from kbuild by be39aa325d23 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rpJ7A-0000fK-25;
+	Wed, 27 Mar 2024 02:34:08 +0000
+Date: Wed, 27 Mar 2024 10:33:21 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Subject: [usb:usb-linus] BUILD SUCCESS WITH WARNING
+ f4d1960764d8a70318b02f15203a1be2b2554ca1
+Message-ID: <202403271016.wkaM6mqZ-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20240315171836.343830-2-jthies@google.com>
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: zC_GlHJK0_LYl76AEeNORxwCfreSz2u3
-X-Proofpoint-ORIG-GUID: zC_GlHJK0_LYl76AEeNORxwCfreSz2u3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-03-26_12,2024-03-21_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- priorityscore=1501 phishscore=0 adultscore=0 mlxscore=0 spamscore=0
- lowpriorityscore=0 malwarescore=0 suspectscore=0 impostorscore=0
- mlxlogscore=783 bulkscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2403210001 definitions=main-2403270010
 
-On Fri, Mar 15, 2024 at 05:18:35PM +0000, Jameson Thies wrote:
-> Check the UCSI_CAP_GET_PD_MESSAGE bit before sending GET_PD_MESSAGE to
-> discover partner and cable identity, check UCSI_CAP_CABLE_DETAILS before
-> sending GET_CABLE_PROPERTY to discover the cable and check
-> UCSI_CAP_ALT_MODE_DETAILS before registering the a cable plug. Additionally,
-> move 8 bits from reserved_1 to features in the ucsi_capability struct. This
-> makes the field 16 bits, still 8 short of the 24 bits allocated for it in
-> UCSI v3.0, but it will not overflow because UCSI only defines 14 bits in
-> bmOptionalFeatures.
-> 
-> Fixes: 38ca416597b0 ("usb: typec: ucsi: Register cables based on GET_CABLE_PROPERTY")
-> Link: https://lore.kernel.org/linux-usb/44e8142f-d9b3-487b-83fe-39deadddb492@linaro.org
-> Suggested-by: Neil Armstrong <neil.armstrong@linaro.org>
-> Signed-off-by: Jameson Thies <jthies@google.com>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
+branch HEAD: f4d1960764d8a70318b02f15203a1be2b2554ca1  USB: core: Fix deadlock in port "disable" sysfs attribute
 
-Thanks you, Jameson, this resolve the regression I ran into on
-qcs6490-rb3gen2 as well.
+Warning reports:
 
-Tested-by: Bjorn Andersson <quic_bjorande@quicinc.com> # QCS6490 Rb3Gen2
+https://lore.kernel.org/oe-kbuild-all/202403270357.JOxdZ2Ri-lkp@intel.com
 
-Regards,
-Bjorn
+Warning: (recently discovered and may have been fixed)
+
+drivers/usb/dwc2/core_intr.c:327: warning: Function parameter or struct member 'remotewakeup' not described in 'dwc2_wakeup_from_lpm_l1'
+
+Warning ids grouped by kconfigs:
+
+gcc_recent_errors
+|-- alpha-allyesconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- arc-allmodconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- arc-allyesconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- arm-allmodconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- arm-allyesconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- arm-randconfig-004-20240327
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- arm64-defconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- csky-allmodconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- csky-allyesconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- csky-randconfig-001-20240327
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- csky-randconfig-002-20240327
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- i386-allmodconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- i386-allyesconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- loongarch-allmodconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- loongarch-allyesconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- loongarch-defconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- m68k-allmodconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- m68k-allyesconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- microblaze-allmodconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- microblaze-allyesconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- mips-allmodconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- mips-allyesconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- nios2-allmodconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- nios2-allyesconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- nios2-randconfig-002-20240327
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- nios2-randconfig-r133-20240327
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- openrisc-allmodconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- openrisc-allyesconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- parisc-allmodconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- parisc-allyesconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- parisc-randconfig-001-20240327
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- parisc-randconfig-002-20240327
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- powerpc-allmodconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- powerpc64-randconfig-002-20240327
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- riscv-randconfig-002-20240327
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- s390-allyesconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- sparc-allmodconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- sparc-allyesconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- sparc-randconfig-001-20240327
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- sparc64-allmodconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- sparc64-allyesconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- sparc64-randconfig-001-20240327
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- um-allyesconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- x86_64-buildonly-randconfig-002-20240327
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- x86_64-randconfig-002-20240327
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- x86_64-randconfig-011-20240327
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- xtensa-allyesconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+`-- xtensa-randconfig-002-20240327
+    `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+clang_recent_errors
+|-- arm-defconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- arm-randconfig-001-20240327
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- arm-randconfig-002-20240327
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- arm-randconfig-003-20240327
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- arm64-allmodconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- arm64-allyesconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- powerpc-allyesconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- powerpc-randconfig-003-20240327
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- riscv-allmodconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- riscv-allyesconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- s390-allmodconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+`-- x86_64-randconfig-005-20240327
+    `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+
+elapsed time: 731m
+
+configs tested: 165
+configs skipped: 3
+
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allmodconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                     nsimosci_hs_defconfig   gcc  
+arc                   randconfig-001-20240327   gcc  
+arc                   randconfig-002-20240327   gcc  
+arm                              allmodconfig   gcc  
+arm                               allnoconfig   clang
+arm                              allyesconfig   gcc  
+arm                                 defconfig   clang
+arm                   randconfig-004-20240327   gcc  
+arm                          sp7021_defconfig   gcc  
+arm64                            allmodconfig   clang
+arm64                             allnoconfig   gcc  
+arm64                            allyesconfig   clang
+arm64                               defconfig   gcc  
+arm64                 randconfig-003-20240327   gcc  
+csky                             allmodconfig   gcc  
+csky                              allnoconfig   gcc  
+csky                             allyesconfig   gcc  
+csky                                defconfig   gcc  
+csky                  randconfig-001-20240327   gcc  
+csky                  randconfig-002-20240327   gcc  
+hexagon                          allmodconfig   clang
+hexagon                           allnoconfig   clang
+hexagon                          allyesconfig   clang
+hexagon                             defconfig   clang
+i386                             allmodconfig   gcc  
+i386                              allnoconfig   gcc  
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-001-20240327   gcc  
+i386         buildonly-randconfig-002-20240327   gcc  
+i386         buildonly-randconfig-003-20240327   clang
+i386         buildonly-randconfig-004-20240327   clang
+i386         buildonly-randconfig-005-20240327   clang
+i386         buildonly-randconfig-006-20240327   clang
+i386                                defconfig   clang
+i386                  randconfig-001-20240327   gcc  
+i386                  randconfig-002-20240327   gcc  
+i386                  randconfig-003-20240327   clang
+i386                  randconfig-004-20240327   gcc  
+i386                  randconfig-005-20240327   clang
+i386                  randconfig-006-20240327   gcc  
+i386                  randconfig-011-20240327   gcc  
+i386                  randconfig-012-20240327   clang
+i386                  randconfig-013-20240327   gcc  
+i386                  randconfig-014-20240327   clang
+i386                  randconfig-015-20240327   gcc  
+i386                  randconfig-016-20240327   clang
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch             randconfig-001-20240327   gcc  
+loongarch             randconfig-002-20240327   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                          atari_defconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                        stmark2_defconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                       allyesconfig   gcc  
+microblaze                          defconfig   gcc  
+mips                              allnoconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                          ath79_defconfig   gcc  
+mips                           ip27_defconfig   gcc  
+nios2                            allmodconfig   gcc  
+nios2                             allnoconfig   gcc  
+nios2                            allyesconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                 randconfig-001-20240327   gcc  
+nios2                 randconfig-002-20240327   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                         allyesconfig   gcc  
+openrisc                            defconfig   gcc  
+openrisc                  or1klitex_defconfig   gcc  
+parisc                           allmodconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc                randconfig-001-20240327   gcc  
+parisc                randconfig-002-20240327   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                          allyesconfig   clang
+powerpc                   microwatt_defconfig   gcc  
+powerpc               randconfig-002-20240327   gcc  
+powerpc                    socrates_defconfig   gcc  
+powerpc                 xes_mpc85xx_defconfig   gcc  
+powerpc64             randconfig-002-20240327   gcc  
+powerpc64             randconfig-003-20240327   gcc  
+riscv                            allmodconfig   clang
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   clang
+riscv                               defconfig   clang
+riscv                 randconfig-002-20240327   gcc  
+s390                             allmodconfig   clang
+s390                              allnoconfig   clang
+s390                             allyesconfig   gcc  
+s390                                defconfig   clang
+s390                  randconfig-002-20240327   gcc  
+sh                               allmodconfig   gcc  
+sh                                allnoconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                                  defconfig   gcc  
+sh                    randconfig-001-20240327   gcc  
+sh                    randconfig-002-20240327   gcc  
+sh                           se7712_defconfig   gcc  
+sparc                            allmodconfig   gcc  
+sparc                             allnoconfig   gcc  
+sparc                               defconfig   gcc  
+sparc                       sparc32_defconfig   gcc  
+sparc                       sparc64_defconfig   gcc  
+sparc64                          allmodconfig   gcc  
+sparc64                          allyesconfig   gcc  
+sparc64                             defconfig   gcc  
+sparc64               randconfig-001-20240327   gcc  
+sparc64               randconfig-002-20240327   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   gcc  
+um                                  defconfig   clang
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   clang
+x86_64                            allnoconfig   clang
+x86_64                           allyesconfig   clang
+x86_64       buildonly-randconfig-001-20240327   gcc  
+x86_64       buildonly-randconfig-002-20240327   gcc  
+x86_64       buildonly-randconfig-003-20240327   gcc  
+x86_64       buildonly-randconfig-004-20240327   clang
+x86_64       buildonly-randconfig-005-20240327   gcc  
+x86_64       buildonly-randconfig-006-20240327   gcc  
+x86_64                              defconfig   gcc  
+x86_64                randconfig-001-20240327   clang
+x86_64                randconfig-002-20240327   gcc  
+x86_64                randconfig-003-20240327   gcc  
+x86_64                randconfig-004-20240327   gcc  
+x86_64                randconfig-005-20240327   clang
+x86_64                randconfig-006-20240327   clang
+x86_64                randconfig-011-20240327   gcc  
+x86_64                randconfig-012-20240327   clang
+x86_64                randconfig-013-20240327   clang
+x86_64                randconfig-014-20240327   clang
+x86_64                randconfig-015-20240327   clang
+x86_64                randconfig-016-20240327   clang
+x86_64                randconfig-071-20240327   gcc  
+x86_64                randconfig-072-20240327   clang
+x86_64                randconfig-073-20240327   clang
+x86_64                randconfig-074-20240327   clang
+x86_64                randconfig-075-20240327   clang
+x86_64                randconfig-076-20240327   clang
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+xtensa                           alldefconfig   gcc  
+xtensa                            allnoconfig   gcc  
+xtensa                       common_defconfig   gcc  
+xtensa                randconfig-001-20240327   gcc  
+xtensa                randconfig-002-20240327   gcc  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
