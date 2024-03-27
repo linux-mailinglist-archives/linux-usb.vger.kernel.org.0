@@ -1,70 +1,70 @@
-Return-Path: <linux-usb+bounces-8449-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8450-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C59D488D565
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Mar 2024 05:16:23 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3ACFD88D571
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Mar 2024 05:17:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 801D629BED9
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Mar 2024 04:16:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A5F461F30B79
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Mar 2024 04:17:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D6D123768;
-	Wed, 27 Mar 2024 04:16:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DFD8249F5;
+	Wed, 27 Mar 2024 04:17:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZgHjPuUT"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OxFcbff6"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00D0E1D52B
-	for <linux-usb@vger.kernel.org>; Wed, 27 Mar 2024 04:16:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3C5223765
+	for <linux-usb@vger.kernel.org>; Wed, 27 Mar 2024 04:17:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711512977; cv=none; b=IHS5YqfF+QiO3mtD+gtXfl3V7pKpp1CiEHa7InMMb82jLOp8Y1ZgtAAvB1cv42x+f9sbWDdfJ7NYwxao8Uldt8fbcGLZ/rPXLJhI/mhFKkQ04aE5CA1OOz57xEa7sz9c0qG8BxGzPTKGJavKb1dcJVvqeACXSpXqrdE6eWmvaXk=
+	t=1711513036; cv=none; b=n60yc+3qbJbIJm5QhVgAcjAlFUJK/La4UA3QTAiOpb6KpWqYeAAamS3rzqLBi0WSWOlkhR38CWNr2DJ+/U2AInBt/gfHviqEuRxN45TLnDl6J//Y2Sbkk89ksifG9hObRWxaNo+0T7Rr5qxuz++ZG51TSIpgpQKeOssQoi/HbaQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711512977; c=relaxed/simple;
-	bh=1mpfd2wnFrXtn5cnBcOOTEAHqg5N+t7l9vXCV1S4whI=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=hzskf6Yc2xUze3hVwwd2Z2b78tvjLBG/PQaA5tbskG4dpNntUPdaXd2MwRqoSBvm7k/hvXm3XpnxV6dNOQRW9Yu3oL2m9fB1U6LAXJlrmZ992/KcPJ2LYoaVy+EadgfbPgyJ1FqBAopOKhnIc8OwAU7GPfrJvQAMIS3mlfjj6x4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZgHjPuUT; arc=none smtp.client-ip=192.198.163.13
+	s=arc-20240116; t=1711513036; c=relaxed/simple;
+	bh=3ozLYo0M7oWEI03Hwt2S097toEro/ZgIl8FQHkPM5pU=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=ms9vBhakLjOc+K3bb/Q8t1rqEEehoV5xH8yoy42wBxhbkDLHb3a40nvtYK+GL2yEqahcOcMj8hg+2657FktWwnwmpkISsmwPP7voY6vtHIJ/EaLk7OoWzLMMYmBj0VzgSRVQN8quZTdUJTyw91Le+46He6OWsqN/ddqR15P1Go4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OxFcbff6; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711512976; x=1743048976;
+  t=1711513035; x=1743049035;
   h=date:from:to:cc:subject:message-id;
-  bh=1mpfd2wnFrXtn5cnBcOOTEAHqg5N+t7l9vXCV1S4whI=;
-  b=ZgHjPuUTCvKdX5EU1vFBfFyNElxzLXacPhyX+SZvPca+FgdGa64bEUnA
-   sNZ7g7lCjJjXOQTwWHwZj31oxC1dr3JmwUCeC5cwuAiCVzB6d/VMmxF/Z
-   7Vy/NQxIvh7s3/1d1zpNcVxIjdT/mP3FnrqmgSNoMNcGawcg6L3+HzEKD
-   /ZKYNPePq7jpZtsZ7hMpyW+tLW/+d2u64yxvc+jrCqzzRUTPDNAIZloWF
-   saqaz2RMKK0dLoRoGdefwIus6tia2ecomrRFH+l7q6g8fTklU7tyJ+mhI
-   X3DsF1RtAqQx7JFuSmsk37hd3UFU5ldBGenlmljJqRKQkZ2hxsumgpx5c
+  bh=3ozLYo0M7oWEI03Hwt2S097toEro/ZgIl8FQHkPM5pU=;
+  b=OxFcbff6kcWSl4H3DKKL5S7sYm+NqgCopotylgyO43ongUNIW02mmRUU
+   QnGFkq+Y1qkGHf1eJVmgUxV2A8/jMk4J2JjVE02Nd6DoH86bF4Al6ViEO
+   z4pHRb8XE0/vTSkDInPHFxjidWbevJ8lqoOC1JGEDUizOTl3Z4Rvg/93E
+   ZvHfo2WsBY+jYYZzuulyTKrWnolBNDAzozeI38NwmnEsDrEllyiEBZlQ7
+   KHpV9j5FIc1e/oOGQ8h/RkuBKQV8XvJQKXlGYWq+XXDp6dYSiAaRp6C29
+   IZGWnrZ8pAlvBEqXSGCcvro4t6+IqGxywntwy2AsuAW4fzASXi1yZlxgg
    Q==;
-X-CSE-ConnectionGUID: ZWte2zfVQZWsCDnvotS7Sg==
-X-CSE-MsgGUID: 3thF8BntQoyyXsT080lCoQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11025"; a="9558442"
+X-CSE-ConnectionGUID: RZ4kDztFQgOyFIB8Zoocog==
+X-CSE-MsgGUID: Qk6NQCzIQyCjA4KcVCj8zA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11025"; a="29070855"
 X-IronPort-AV: E=Sophos;i="6.07,157,1708416000"; 
-   d="scan'208";a="9558442"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2024 21:16:14 -0700
+   d="scan'208";a="29070855"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2024 21:17:15 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,157,1708416000"; 
-   d="scan'208";a="20817728"
+   d="scan'208";a="16026291"
 Received: from lkp-server01.sh.intel.com (HELO be39aa325d23) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 26 Mar 2024 21:16:13 -0700
+  by orviesa010.jf.intel.com with ESMTP; 26 Mar 2024 21:17:12 -0700
 Received: from kbuild by be39aa325d23 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rpKhu-0000k2-2z;
-	Wed, 27 Mar 2024 04:16:10 +0000
-Date: Wed, 27 Mar 2024 12:16:08 +0800
+	id 1rpKit-0000kC-06;
+	Wed, 27 Mar 2024 04:17:11 +0000
+Date: Wed, 27 Mar 2024 12:16:46 +0800
 From: kernel test robot <lkp@intel.com>
 To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
 Cc: linux-usb@vger.kernel.org
-Subject: [usb:gadget_char] BUILD SUCCESS
- 0243ef83005fc837ac0b127a949e4dfd2f80622b
-Message-ID: <202403271205.xbdeCamu-lkp@intel.com>
+Subject: [usb:usb-testing] BUILD SUCCESS WITH WARNING
+ 5e589e59202db9b19b5a4a01c8de78435f86fde1
+Message-ID: <202403271243.SzTCM5WB-lkp@intel.com>
 User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -72,16 +72,27 @@ List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git gadget_char
-branch HEAD: 0243ef83005fc837ac0b127a949e4dfd2f80622b  USB: gadget: dummy_hcd: switch char * to u8 *
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: 5e589e59202db9b19b5a4a01c8de78435f86fde1  usb: misc: onboard_dev: add support for XMOS XVF3500
+
+Warning reports:
+
+https://lore.kernel.org/oe-kbuild-all/202403270819.6h8lCV3J-lkp@intel.com
+
+Warning: (recently discovered and may have been fixed)
+
+kismet: WARNING: unmet direct dependencies detected for DRM_AUX_BRIDGE when selected by TYPEC_MUX_PTN36502
+
+Warning ids grouped by kconfigs:
+
+gcc_recent_errors
+`-- alpha-allnoconfig
+    `-- kismet:WARNING:unmet-direct-dependencies-detected-for-DRM_AUX_BRIDGE-when-selected-by-TYPEC_MUX_PTN36502
 
 elapsed time: 723m
 
 configs tested: 151
 configs skipped: 3
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
 
 tested configs:
 alpha                             allnoconfig   gcc  
