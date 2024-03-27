@@ -1,186 +1,209 @@
-Return-Path: <linux-usb+bounces-8475-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8476-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1C1B88E641
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Mar 2024 15:35:27 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C69A88E6BA
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Mar 2024 15:42:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 214191C2DA52
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Mar 2024 14:35:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9F68E1F2856B
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Mar 2024 14:42:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2909ADDD7;
-	Wed, 27 Mar 2024 13:06:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8DBC13B59D;
+	Wed, 27 Mar 2024 13:24:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="gXo+6lWC"
+	dkim=pass (2048-bit key) header.d=sairon.cz header.i=@sairon.cz header.b="e4W5Mbbf"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
+Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9948B12F5A2
-	for <linux-usb@vger.kernel.org>; Wed, 27 Mar 2024 13:06:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B12312FF78
+	for <linux-usb@vger.kernel.org>; Wed, 27 Mar 2024 13:24:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711544804; cv=none; b=LdzLl+3lMuh1oczwwE7djAu2OKMqYGjgPgm8yp5uri5AKOqY0yof2VVzYmuCtm0Xe4SnPOdWsW/6biEBcTKI8KFvswn7rec2P19+8+JidMkUj/oQOJ7jediA/UkGzvHD5843y6y2yKYGxUgcLqLDUKIh5DOvaaj8FUIZa/J4cys=
+	t=1711545879; cv=none; b=rKmzVHfZsb4Ctf7/SUNduO/OcBE8sOG30A2pki3k87MAua7QRNKKBlhacEWUJQlG7/M2hiKclMhBkLa9r3MuE/XREdCyI/oBBZJ7+wyFNTnVKyI9PZnWIidh+R2gsp5jARs3r2NCJRPl3/uuJ1+B+wW8FUwKj9Yvmpd5uw+ux34=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711544804; c=relaxed/simple;
-	bh=9meHS8Lfdmj3vcUYKfnEr2HZRk3IB/+UZZBUKIbNQc4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tBJizWD22eMy1lKKuzCzWkdp6d/tNKLGxDYlWbv1DP9hpAwMEkhjJDKxWQccY1Nw8loJ6ERy6H/L7VLV6JcTKKv/EdSvMs4dyGxREhp93j08B9bIRrjFH0lrAhEOKcOLoaGGSQoFKPW3da350p77YEJlzcmuqQpyO5nuyb46AO8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=gXo+6lWC; arc=none smtp.client-ip=209.85.167.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-oi1-f171.google.com with SMTP id 5614622812f47-3c3d7e7402dso1110306b6e.1
-        for <linux-usb@vger.kernel.org>; Wed, 27 Mar 2024 06:06:42 -0700 (PDT)
+	s=arc-20240116; t=1711545879; c=relaxed/simple;
+	bh=sK4u1JyrPL0gWSb3KWFe9C6ypVmyXQk2VkY15iFmMjY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Xa2HlnjzNDgVo9gDXQolHdnnsATOtrmXrKpO56h2ZcsRp0AnBIRZ0c1bVpFxu9P3IYTVE3/GV6FUbBjUoGI11jQbr1qqp2z+D8afGD3nhU0n8h8wW802uHXL7T2O8UN4aU5/A8NyWAPuUzQIVDYkTWoKTcg3Nu6Hqf8t0mlyky0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sairon.cz; spf=pass smtp.mailfrom=sairon.cz; dkim=pass (2048-bit key) header.d=sairon.cz header.i=@sairon.cz header.b=e4W5Mbbf; arc=none smtp.client-ip=209.85.208.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sairon.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sairon.cz
+Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2d24a727f78so76429971fa.0
+        for <linux-usb@vger.kernel.org>; Wed, 27 Mar 2024 06:24:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1711544801; x=1712149601; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=26L6xqxxUDbfEZ3xFQJim+vSF6j2wqKdCzVIznj3EeU=;
-        b=gXo+6lWCVepOdNqZw4ARTDC9wBkkgA4QAVHkb3dVKg5YHRB7OlDK0uAzn3/aGmA+TX
-         U1fhKgB7s6eG6SS4nwTIoFcwPU6n8KtSlxwoeCU3b36jAFEVlXIgcJca+G/LVvK4zuB6
-         8j1IEAQdzQgmxQdpR8GAzuPCn/Ib0dS7LaN9cHeLlitpSbU7s/fzlNDHMuR/Rk7ahFuZ
-         bJsTd9jG4C6F44mJKHnS1IRggJsHy34K0c0z4i4f39Vd8BWkqNdIHjeHJaAcnoI0S4Xq
-         396lUJY7u3E8JZEvBJmQ9ATbq+BFkUF8L04OgPsLbr9Nh405tKXQw3I3effaQfI4EeZI
-         Tymw==
+        d=sairon.cz; s=google; t=1711545875; x=1712150675; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=z6utm7a7Re6Wiqpc5NgWio6rQ7rFlgDjaONm7apCUWA=;
+        b=e4W5MbbflzZqJ0dU5uCKd87jp1ubRpi9sLGfeO3r02oEaBwfm5k4RxNZMKAtqPCzfm
+         7gntP7j6h/RU7UOPKA9SPfa7Zli7RHV5KytHSj5+YTQDmanbUpltMmd7o0V8gtGGGhwe
+         M/CocSypxRzNw9eqhpi6HnIqsDH4vJgH9JwzdOfPv+/wte0zub7FBPXzZnTLbruV2E+B
+         Y5JSHv9hkAVbHAvPSnuRIQ/902Et7x7fGlnc46qZVvColtFdMzHV4egOLOIbWQn7tQL4
+         YLrHR2/v9iQPwB9xIaYNxpFILThwzNZWNOaEUzCedA/+uTj8zG/FCdCVJ8ByNjZLTE52
+         udnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711544801; x=1712149601;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=26L6xqxxUDbfEZ3xFQJim+vSF6j2wqKdCzVIznj3EeU=;
-        b=DaZa4QHgHJUKKw1lHdX57WNg3tHViBZ/hkhRKE+1vOdCCAA8CaoQ9755bCQUbkSQUh
-         UD77sO18wOEhDBHAlqacmBDLpaoJD8O2P+Hw4tYz3YVDl6Vnk3LsZVI7QucwFoAn7yzq
-         iE3DnQymLeJ4UJdu9oFLz3qGGB14rObvXxEpsCNGy4ad/5Eg3uYVnKaDbxq+k0EFizAy
-         fsSDaovtPd176y9AT6XkMcZPK5OSOfCH0utLhnMyCYDi14MknfxgO2ndZEK128E9Vl4k
-         FhKU442xhoVatljfalzj7CXySxGLeCZcWtorGvGMDt7HjYHufV8MeRObicALOPwKNHAx
-         49Ug==
-X-Forwarded-Encrypted: i=1; AJvYcCVVOmRjynR171t8fMpYwDSTl0XANFG40bmbAHuuZpOFKtAWZjiSIBJWJJZKhUzAkKLI9Y93+Wca32BTQRAkt/RuBZRU+rZ7wMj/
-X-Gm-Message-State: AOJu0YzYptaiEtSEuqGqqMJ0rEnMPfNXEjQnMyNJJqXqEjDYTZ0lM4CZ
-	I5TRQB3pjO35UqEAJyRTPj7wgTy/sqT/ct5hzvEr+nxN/WBf0RiVV0kowJPYnxatKyXqWEObOvI
-	yNOqD1a5gIvhbOdG/yW31VGaYc5rrK0XSdeFU/Q==
-X-Google-Smtp-Source: AGHT+IGkd4KQCBSemK1UOlDt1i4uRJe5DP56rCpaNIiQl7Bu5pwtJkVUo+MUue/CcsR2gFASVM4UJEu4uIF09h237KM=
-X-Received: by 2002:a05:6808:1242:b0:3c2:2cf8:b8d with SMTP id
- o2-20020a056808124200b003c22cf80b8dmr1105397oiv.55.1711544800029; Wed, 27 Mar
- 2024 06:06:40 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1711545875; x=1712150675;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=z6utm7a7Re6Wiqpc5NgWio6rQ7rFlgDjaONm7apCUWA=;
+        b=atHgZOG6wFKWuKb1SOuaPGjyE4YcR9OIm9kriQfSqA0npdCpJ5RLASHGGHe63dc+zJ
+         MihhTeAPUBzpc2izxmjxD93pvmRwtitCDHTw7p+PG36QmxcTr6eMdmIxt5/h09y/KgBT
+         kKwD/5bDZnRJOJznsTgGnecNBiSbnxpqlAEK/jVIU5b4UB6/m5+MqFZXNiVXF6xGy8gB
+         rEY512f5I6aWPI13OTa4PCBSSSgx3oOKPDUJMoLWQMlxmihbfpT+yVXVg3/TKwl3Nk4X
+         FLKyz5Ri3PYOc94+c19+urqwuilHz9vHvERM8at9LPvMoCFfr1QICFVA2ec54FSSwGbT
+         58Wg==
+X-Forwarded-Encrypted: i=1; AJvYcCUmD/piSFumvzlem4YO8OPKcnFzKzOkyhyXqpRWYg5pvwT3gqp+vqUzM6elPUvvaGUJI0nBuPWSOaqGdk+f0nhdMKLzfh6x4DJC
+X-Gm-Message-State: AOJu0YxYq5s4DbQAKBYxbcp+eZlIjhi5J3cQR+F7hgPXlv8saW/wpe6k
+	HsrSPjnGlemMfs4X9oqqbyCHfJHi3Q8JFcgfS3Qho26N8PYaaWlhasvWfXSJE10=
+X-Google-Smtp-Source: AGHT+IGTzynkBIqcDpsPLyKTUQXtSjSEbSbSBD5cTdpnmo65u6B1II3AYQD+agdiUyzPKAx4ztUZhw==
+X-Received: by 2002:a19:4341:0:b0:515:8bb2:72a2 with SMTP id m1-20020a194341000000b005158bb272a2mr3737599lfj.55.1711545875255;
+        Wed, 27 Mar 2024 06:24:35 -0700 (PDT)
+Received: from [192.168.127.42] (ip-89-103-66-201.bb.vodafone.cz. [89.103.66.201])
+        by smtp.gmail.com with ESMTPSA id h4-20020aa7c944000000b0056bdf694890sm5432854edt.43.2024.03.27.06.24.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Mar 2024 06:24:35 -0700 (PDT)
+Message-ID: <3939f491-4890-4a64-9f41-8c3bf738bbc3@sairon.cz>
+Date: Wed, 27 Mar 2024 14:24:34 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <vuh25ueep3rwcmthlkvhb2avpkqzc6lsbee3qdmerolijq7azq@rwmakgznqvmq>
-In-Reply-To: <vuh25ueep3rwcmthlkvhb2avpkqzc6lsbee3qdmerolijq7azq@rwmakgznqvmq>
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Wed, 27 Mar 2024 15:06:28 +0200
-Message-ID: <CAA8EJpo8rppXZm+-nKMG1LS0V+HCz3g1ajZVY2TmedRnZ9C3JA@mail.gmail.com>
-Subject: Re: [RFC PATCH] usb: typec: ucsi: ack connector change after all
- tasks finish
-To: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
-Cc: heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org, 
-	neil.armstrong@linaro.org, quic_prashk@quicinc.com, 
-	fabrice.gasnier@foss.st.com, saranya.gopal@intel.com, lk@c--e.de, 
-	linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [REGRESSION] Re: [PATCH 0/3] USB: core: Don't overwrite device
+ descriptor during reinitialization
+Content-Language: en-US
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: Greg KH <gregkh@linuxfoundation.org>, Khazhy Kumykov <khazhy@google.com>,
+ USB mailing list <linux-usb@vger.kernel.org>, regressions@lists.linux.dev
+References: <6eadec91-990a-4fbd-8883-8366c4a4d8e4@rowland.harvard.edu>
+ <1e954652-dfb3-4248-beea-b8a449128ff0@sairon.cz>
+ <4c3ab861-0274-409b-aad3-7cfb53dc2308@rowland.harvard.edu>
+ <00f0786b-a9f2-4f73-8d23-3b1fa4c8b77e@sairon.cz>
+ <60def275-5237-48df-b37b-ab886f4ee017@rowland.harvard.edu>
+ <4c2a410b-2997-4a7a-8fd6-2bec819a1c4f@sairon.cz>
+ <4a168b8b-f012-4b36-92bd-83aeb6849410@rowland.harvard.edu>
+ <92d3d802-73df-4ab5-aab4-b2325512e98f@sairon.cz>
+ <8b8e2773-47eb-48f4-b5e8-dcd885ee5c5b@rowland.harvard.edu>
+ <befc1081-e512-4727-a911-f030e1aac626@sairon.cz>
+ <1b2ccaf6-597c-40fe-877a-4ed1fab5261b@rowland.harvard.edu>
+From: =?UTF-8?B?SmFuIMSMZXJtw6Fr?= <sairon@sairon.cz>
+In-Reply-To: <1b2ccaf6-597c-40fe-877a-4ed1fab5261b@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, 27 Mar 2024 at 14:39, Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt> wrote:
->
-> The UCSI specification mentions that when the OPM is notified by the
-> PPM of an asynchronous event it should first send all the commands it
-> needs to get the details of the event and only after acknowledge it by
-> sending ACK_CC_CI with the Connector Change bit set, while the current
-> code sends this ack immediately after scheduling all the partner_tasks.
-> Move this ACK_CC_CI command to the end of all partner_tasks.
->
-> This fixes a problem with some LG Gram laptops where the PPM sometimes
-> notifies the OPM with the Connector Change Indicator field set in the
-> CCI after an ACK_CC_CI command is sent, causing the UCSI stack to check
-> the connector status indefinitely since the EVENT_PENDING bit is already
-> cleared. This causes an interrupt storm and an artificial high load on
-> these platforms.
->
-> It would also be interesting to see if we could take this approach and
-> implement the discussion in [1] regarding sending an ACK_CC_CI command
-> that acks both the command completion and the connector change.
->
-> Signed-off-by: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
->
-> [1]: https://lore.kernel.org/all/20240320073927.1641788-1-lk@c--e.de/
+Hi Alan,
 
-We had similar issue, see
-https://lore.kernel.org/linux-arm-msm/20240313-qcom-ucsi-fixes-v1-1-74d90cb48a00@linaro.org/
+On 19. 03. 24 17:03, Alan Stern wrote:
+> Change the HUB_DEBOUNCE_TIMEOUT value to 4500, the HUB_DEBOUNCE_STEP
+> value to 250 and the HUB_DEBOUNCE_STABLE value to 2000.  That just
+> might give the device enough time to settle down and start working
+> before the computer tries using it.
 
+sorry for the delay, I only managed to test it today. You are right, 
+with the timeouts adjusted, it enumerates fine after a while, without 
+any descriptor read errors or anything like that:
 
-> ---
->  drivers/usb/typec/ucsi/ucsi.c | 27 ++++++++++++++++++++-------
->  1 file changed, 20 insertions(+), 7 deletions(-)
->
-> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> index 0c8f3b3a99d6..b8b39e43aba8 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.c
-> +++ b/drivers/usb/typec/ucsi/ucsi.c
-> @@ -69,6 +69,23 @@ static int ucsi_acknowledge_connector_change(struct ucsi *ucsi)
->         return ucsi->ops->sync_write(ucsi, UCSI_CONTROL, &ctrl, sizeof(ctrl));
->  }
->
-> +static void ucsi_handle_ack_connector_change(struct ucsi_connector *con)
-> +{
-> +       struct ucsi *ucsi = con->ucsi;
-> +       int ret;
-> +
-> +       if (list_empty(&con->partner_tasks)) {
-> +               mutex_lock(&ucsi->ppm_lock);
-> +               ret = ucsi_acknowledge_connector_change(ucsi);
-> +               mutex_unlock(&ucsi->ppm_lock);
-> +
-> +               if (ret)
-> +                       dev_err(ucsi->dev, "%s: ACK failed (%d)", __func__, ret);
-> +
-> +               clear_bit(EVENT_PENDING, &ucsi->flags);
-> +       }
-> +}
-> +
->  static int ucsi_exec_command(struct ucsi *ucsi, u64 command);
->
->  static int ucsi_read_error(struct ucsi *ucsi)
-> @@ -222,6 +239,7 @@ static void ucsi_poll_worker(struct work_struct *work)
->                 list_del(&uwork->node);
->                 mutex_unlock(&con->lock);
->                 kfree(uwork);
-> +               ucsi_handle_ack_connector_change(con);
->                 return;
->         }
->
-> @@ -232,6 +250,7 @@ static void ucsi_poll_worker(struct work_struct *work)
->         } else {
->                 list_del(&uwork->node);
->                 kfree(uwork);
-> +               ucsi_handle_ack_connector_change(con);
->         }
->
->         mutex_unlock(&con->lock);
-> @@ -1215,13 +1234,7 @@ static void ucsi_handle_connector_change(struct work_struct *work)
->         if (con->status.change & UCSI_CONSTAT_CAM_CHANGE)
->                 ucsi_partner_task(con, ucsi_check_altmodes, 1, 0);
->
-> -       clear_bit(EVENT_PENDING, &con->ucsi->flags);
-> -
-> -       mutex_lock(&ucsi->ppm_lock);
-> -       ret = ucsi_acknowledge_connector_change(ucsi);
-> -       mutex_unlock(&ucsi->ppm_lock);
-> -       if (ret)
-> -               dev_err(ucsi->dev, "%s: ACK failed (%d)", __func__, ret);
-> +       ucsi_handle_ack_connector_change(con);
->
->  out_unlock:
->         mutex_unlock(&con->lock);
-> --
-> 2.44.0
->
+[  210.957371] usb 1-1.2: new full-speed USB device number 5 using ehci-pci
+[  211.037728] usb 1-1.2: New USB device found, idVendor=0658, 
+idProduct=0200, bcdDevice= 0.00
+[  211.037747] usb 1-1.2: New USB device strings: Mfr=0, Product=0, 
+SerialNumber=0
+[  211.039764] cdc_acm 1-1.2:1.0: ttyACM0: USB ACM device
+
+If it's worth anything, usbmon trace is attached below. Anyway, do you 
+have any ideas what could be done to make it work without doing any 
+detrimental changes? I was thinking I'll try to reach out to the vendor 
+at this point - they should be aware their device might stop working 
+with recent kernels, and they could explain the quirky behavior, or 
+implement any changes on the firmware side (if it's even possible).
+
+Regards,
+Jan
 
 
--- 
-With best wishes
-Dmitry
+
+ffff888101391300 207454583 C Ii:1:002:1 0:2048 1 = 04
+ffff888101391300 207454617 S Ii:1:002:1 -115:2048 1 <
+ffff88814d461180 207454651 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff88814d461180 207454845 C Ci:1:002:0 0 4 = 01010100
+ffff88814d461180 207454860 S Co:1:002:0 s 23 01 0010 0002 0000 0
+ffff88814d461180 207455110 C Co:1:002:0 0 0
+ffff88814d461180 207455119 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff88814d461180 207455368 C Ci:1:002:0 0 4 = 01010000
+ffff88814d461180 207710110 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff88814d461180 207710378 C Ci:1:002:0 0 4 = 01010000
+ffff88814d461180 207966112 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff88814d461180 207966378 C Ci:1:002:0 0 4 = 01010000
+ffff88814d461180 208222112 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff88814d461180 208222401 C Ci:1:002:0 0 4 = 01010000
+ffff88814d461180 208478109 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff88814d461180 208478561 C Ci:1:002:0 0 4 = 01010000
+ffff88814d461180 208734110 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff88814d461180 208734342 C Ci:1:002:0 0 4 = 01010000
+ffff88814d461180 208990111 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff88814d461180 208990297 C Ci:1:002:0 0 4 = 01010100
+ffff88814d461180 208990317 S Co:1:002:0 s 23 01 0010 0002 0000 0
+ffff888101391300 208990557 C Ii:1:002:1 0:2048 1 = 04
+ffff888101391300 208990574 S Ii:1:002:1 -115:2048 1 <
+ffff88814d461180 208990583 C Co:1:002:0 0 0
+ffff88814d461180 209246112 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff88814d461180 209246405 C Ci:1:002:0 0 4 = 01010000
+ffff88814d461180 209502108 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff88814d461180 209502393 C Ci:1:002:0 0 4 = 01010000
+ffff88814d461180 209758115 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff88814d461180 209758358 C Ci:1:002:0 0 4 = 01010000
+ffff88814d461180 210014113 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff88814d461180 210014318 C Ci:1:002:0 0 4 = 01010000
+ffff88814d461180 210270107 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff88814d461180 210270327 C Ci:1:002:0 0 4 = 01010000
+ffff88814d461180 210526114 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff88814d461180 210526337 C Ci:1:002:0 0 4 = 01010000
+ffff88814d461180 210782106 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff88814d461180 210782340 C Ci:1:002:0 0 4 = 01010000
+ffff88814d461180 211038111 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff88814d461180 211038365 C Ci:1:002:0 0 4 = 01010000
+ffff88814d461180 211038419 S Co:1:002:0 s 23 03 0004 0002 0000 0
+ffff88814d461180 211038621 C Co:1:002:0 0 0
+ffff88814d461180 211050109 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff88814d461180 211050473 C Ci:1:002:0 0 4 = 03011000
+ffff88814d461180 211050508 S Co:1:002:0 s 23 01 0014 0002 0000 0
+ffff88814d461180 211050732 C Co:1:002:0 0 0
+ffff88814d461180 211102145 S Ci:1:000:0 s 80 06 0100 0000 0040 64 <
+ffff88814d461180 211102383 C Ci:1:000:0 0 8 = 12010002 02000008
+ffff88814d461180 211102410 S Co:1:002:0 s 23 03 0004 0002 0000 0
+ffff88814d461180 211102640 C Co:1:002:0 0 0
+ffff88814d461180 211114111 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff88814d461180 211114411 C Ci:1:002:0 0 4 = 03011000
+ffff88814d461180 211114446 S Co:1:002:0 s 23 01 0014 0002 0000 0
+ffff88814d461180 211114667 C Co:1:002:0 0 0
+ffff88814d461180 211166117 S Co:1:000:0 s 00 05 0005 0000 0000 0
+ffff88814d461180 211166509 C Co:1:000:0 0 0
+ffff88814d461240 211180097 S Ci:1:005:0 s 80 06 0100 0000 0012 18 <
+ffff88814d461240 211180460 C Ci:1:005:0 0 18 = 12010002 02000008 
+58060002 00000000 0001
+ffff88814d461240 211180500 S Ci:1:005:0 s 80 06 0600 0000 000a 10 <
+ffff88814d461240 211180722 C Ci:1:005:0 -32 0
+ffff88814d461240 211180989 S Ci:1:005:0 s 80 06 0600 0000 000a 10 <
+ffff88814d461240 211181294 C Ci:1:005:0 -32 0
+ffff88814d461240 211181324 S Ci:1:005:0 s 80 06 0600 0000 000a 10 <
+ffff88814d461240 211181647 C Ci:1:005:0 -32 0
+ffff88814d461240 211181669 S Ci:1:005:0 s 80 06 0200 0000 0009 9 <
+ffff88814d461240 211181972 C Ci:1:005:0 0 9 = 09024300 02010080 32
+ffff88814d461240 211181999 S Ci:1:005:0 s 80 06 0200 0000 0043 67 <
+ffff88814d461240 211182437 C Ci:1:005:0 0 67 = 09024300 02010080 
+32090400 00010202 01000524 00100105 24010001 04240200
+ffff88814d461300 211182850 S Co:1:005:0 s 00 09 0001 0000 0000 0
+ffff88814d461300 211183117 C Co:1:005:0 0 0
+ffff888145f1cb40 211184128 S Co:1:005:0 s 21 20 0000 0000 0007 7 = 
+80250000 000008
+ffff888145f1cb40 211184335 C Co:1:005:0 0 7 >
+ffff888145f1cb40 211184995 S Ci:1:002:0 s a3 00 0000 0002 0004 4 <
+ffff888145f1cb40 211185187 C Ci:1:002:0 0 4 = 03010000
 
