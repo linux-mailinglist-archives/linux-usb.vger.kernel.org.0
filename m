@@ -1,165 +1,136 @@
-Return-Path: <linux-usb+bounces-8464-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8465-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A2B7788D956
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Mar 2024 09:41:47 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C33A88DBC7
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Mar 2024 12:01:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D4D0E1C27145
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Mar 2024 08:41:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E7D871F2BA9E
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Mar 2024 11:01:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BA6C28DBC;
-	Wed, 27 Mar 2024 08:41:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A351752F6B;
+	Wed, 27 Mar 2024 11:01:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="n88nr3Kz";
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="qf3dezZ9"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IgzwqvZU"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E84252DF87
-	for <linux-usb@vger.kernel.org>; Wed, 27 Mar 2024 08:41:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5A3654BC7;
+	Wed, 27 Mar 2024 11:01:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711528904; cv=none; b=EyRuuImGqxrZXYAiGBEOmRevNZ4wF4IBTIgW0WCMXIEka2hT/o14YdQQAvjaFvVPoQCeLmt/JauVViGHawoid6WKzM53PeY4FmTG8JxEolD6p24rKPBGndZX9HnW7/Zy3Pr0fiXDhLf04Req2hqtREUf/k4/xFHX0Q/4UZUAeOY=
+	t=1711537292; cv=none; b=Fih/sPEiV63JhTy2HEYwJb8FQtwBREOMbzFTLxTRdEEZIw67ucKSMSlWoUGR6ocdcRdiLib9BaKSq8OWkrqEqYUPNFjntRO0dDgQNBXt2e6XPqGYpj3itajEj36jlUnSKsGACTGQpuZGhbtuQ/cXqPk/d0d0OmyBcOIcF0ixjM8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711528904; c=relaxed/simple;
-	bh=OYILgdzTINEH3VmskFVu1t5Z0931Bua1N+FYSvPwA48=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=o9Emf6Y9sQIVD4jygEsZX9ja+0h7/nxWUVEcfppjEwo04Aej/x/CNQFw/GSHAFucTO6kyzP0jeDIs67x4fA0BDlmjbASm6s7zxBhOrV/4n2JAr0bJm1+pStJ6oj2AaaZvirHroP49yMQgP7oJFDbeY64y7jBt7qLS9VVA/hpMcY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=n88nr3Kz; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=qf3dezZ9; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: from imap2.dmz-prg2.suse.org (imap2.dmz-prg2.suse.org [10.150.64.98])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id ED02D60107;
-	Wed, 27 Mar 2024 08:41:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1711528900; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=/BYoUifRM9loeqoutl1efNwubnElYr4s/GB+9JfqXX8=;
-	b=n88nr3Kz0I+U4eNACvVmcULLXyqMhq/cYOi9mFlN8ffDDnbAsctDFkrYDYss55+xPGK00R
-	TM4UtYIDlJnJkXQR7v4QjWs9oHdYrjy8vtjDtz+4zUAJocmHL1j58oL1yI7p2SsGke7tij
-	IcD8tPQh5aQ/f03SrLcHZG75V5f76Gc=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1711528899; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=/BYoUifRM9loeqoutl1efNwubnElYr4s/GB+9JfqXX8=;
-	b=qf3dezZ9cYI3agMe3wVVdf9nNTZRhXwoRnofJ2Z6c6wIzjQSpWoDndEvhSBisn1xQ1vxAX
-	EO/YF6VRlriCK/PmeZ8Z1Y7hmz1uFlkrA71aVYG5issLQNV5Rnpdaomq6PJZpyJm1a/xjB
-	DllkTuusfZtytDZf3tv/aAhUneZUWoM=
-Received: from imap2.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap2.dmz-prg2.suse.org (Postfix) with ESMTPS id AC92B13AC5;
-	Wed, 27 Mar 2024 08:41:39 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([10.150.64.162])
-	by imap2.dmz-prg2.suse.org with ESMTPSA
-	id tFqEJ8PbA2a/fAAAn2gu4w
-	(envelope-from <oneukum@suse.com>); Wed, 27 Mar 2024 08:41:39 +0000
-From: Oliver Neukum <oneukum@suse.com>
-To: mathias.nyman@intel.com,
-	gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org
-Cc: Oliver Neukum <oneukum@suse.com>
-Subject: [PATCH] usb: xhci: correct return value in case of STS_HCE
-Date: Wed, 27 Mar 2024 09:41:11 +0100
-Message-ID: <20240327084136.29663-1-oneukum@suse.com>
-X-Mailer: git-send-email 2.44.0
+	s=arc-20240116; t=1711537292; c=relaxed/simple;
+	bh=FeuyH0m9/+zRJP3gPnzf/OHLdiZaQwQgOVM2wU/3j08=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dVcm3HHXQxe8gDJXGyDIyDl5I6OAHQmRBUwG52SXgJHPYQbMfsF58OAgyUUzsM47ClBjHMEyGKQ2QtTzjgRrlKboUTUtns81P45bFoyuIc7KKDg8HUGUOrLwiz3dcgb2LXhbECDehgYYvzj4ok2QWuKT+Ia3fM1jSPC/aFkbBJA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IgzwqvZU; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1711537291; x=1743073291;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=FeuyH0m9/+zRJP3gPnzf/OHLdiZaQwQgOVM2wU/3j08=;
+  b=IgzwqvZUk09aJmPVMtbQ6+YJEjQzZdFlqUlzpddBtQTD29cDR2Ikh5B4
+   IA/PUl/HT4l44XUpzUiH+5oLTnphIUpaOEQ7r3ShsY34T3YghNHeX4iZ/
+   MIvevHQfYxH91jACbqUV53n3VdFBofT5/jcd0tAdE7xxuVlD2LjUBlFpS
+   xAhgilv2rSQMr31nhzGzWksHaKymSr7OlOfifnz/uA8YsdPUQzz6qkKNl
+   FGicgQaFyGhP9VpPcUslWDZYe6F5mVzrFDrQZLb0LF1RQZg8U8dNkYOhW
+   fHpnAbVml9fo9cwAK8nsYuieozqZo0NnmUqpZYZUBg+nnbjTtg53xWOWR
+   g==;
+X-CSE-ConnectionGUID: BXSJ2w1jQhqp/fsgkKmcWA==
+X-CSE-MsgGUID: Xu3m23YvRw2tXgNGSZBgVQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11025"; a="17359807"
+X-IronPort-AV: E=Sophos;i="6.07,158,1708416000"; 
+   d="scan'208";a="17359807"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2024 04:01:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,11025"; a="937074418"
+X-IronPort-AV: E=Sophos;i="6.07,158,1708416000"; 
+   d="scan'208";a="937074418"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 27 Mar 2024 04:01:27 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 27 Mar 2024 13:01:26 +0200
+Date: Wed, 27 Mar 2024 13:01:26 +0200
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Pavan Holla <pholla@chromium.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+Subject: Re: [PATCH] usb: typec: ucsi: Wait 20ms before retrying reset
+Message-ID: <ZgP8hqNXuMdkp7A5@kuha.fi.intel.com>
+References: <20240325-ucsi-reset-delay-v1-1-d9e183e0f1e6@chromium.org>
+ <2024032624-subtitle-crisped-f4f1@gregkh>
+ <CAB2FV=4Z1W1HSba50KaB3rR4=Ussb5RWPwUArr0_=3pFwxpAhA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Authentication-Results: smtp-out2.suse.de;
-	none
-X-Spam-Level: ***
-X-Spam-Score: 3.69
-X-Spamd-Result: default: False [3.69 / 50.00];
-	 ARC_NA(0.00)[];
-	 RCVD_VIA_SMTP_AUTH(0.00)[];
-	 FROM_HAS_DN(0.00)[];
-	 RCPT_COUNT_THREE(0.00)[4];
-	 R_MISSING_CHARSET(2.50)[];
-	 TO_MATCH_ENVRCPT_ALL(0.00)[];
-	 MIME_GOOD(-0.10)[text/plain];
-	 BROKEN_CONTENT_TYPE(1.50)[];
-	 TO_DN_SOME(0.00)[];
-	 NEURAL_HAM_LONG(-1.00)[-1.000];
-	 RCVD_COUNT_THREE(0.00)[3];
-	 DKIM_SIGNED(0.00)[suse.com:s=susede1];
-	 NEURAL_HAM_SHORT(-0.20)[-1.000];
-	 MID_CONTAINS_FROM(1.00)[];
-	 DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email];
-	 FUZZY_BLOCKED(0.00)[rspamd.com];
-	 FROM_EQ_ENVFROM(0.00)[];
-	 MIME_TRACE(0.00)[0:+];
-	 RCVD_TLS_ALL(0.00)[];
-	 BAYES_HAM(-0.01)[48.93%]
-X-Spam-Flag: NO
+In-Reply-To: <CAB2FV=4Z1W1HSba50KaB3rR4=Ussb5RWPwUArr0_=3pFwxpAhA@mail.gmail.com>
 
-If we get STS_HCE we give up on the interrupt, but for the purpose
-of IRQ handling that still counts as ours. We may return IRQ_NONE
-only if we are positive that it wasn't ours. Hence correct the default.
+Hi,
 
-Fixes: 2a25e66d676df ("xhci: print warning when HCE was set")
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
----
- drivers/usb/host/xhci-ring.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+Normally the driver does not retry the reset, so maybe you should just
+say "wait 20ms before reading the CCI after reset", or something like
+that.
 
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index a820ddbff4c7..a8d6d8bb8a3e 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -3133,7 +3133,7 @@ static int xhci_handle_events(struct xhci_hcd *xhci, struct xhci_interrupter *ir
- irqreturn_t xhci_irq(struct usb_hcd *hcd)
- {
- 	struct xhci_hcd *xhci = hcd_to_xhci(hcd);
--	irqreturn_t ret = IRQ_NONE;
-+	irqreturn_t ret = IRQ_HANDLED;
- 	u32 status;
- 
- 	spin_lock(&xhci->lock);
-@@ -3141,12 +3141,13 @@ irqreturn_t xhci_irq(struct usb_hcd *hcd)
- 	status = readl(&xhci->op_regs->status);
- 	if (status == ~(u32)0) {
- 		xhci_hc_died(xhci);
--		ret = IRQ_HANDLED;
- 		goto out;
- 	}
- 
--	if (!(status & STS_EINT))
-+	if (!(status & STS_EINT)) {
-+		ret = IRQ_NONE;
- 		goto out;
-+	}
- 
- 	if (status & STS_HCE) {
- 		xhci_warn(xhci, "WARNING: Host Controller Error\n");
-@@ -3156,7 +3157,6 @@ irqreturn_t xhci_irq(struct usb_hcd *hcd)
- 	if (status & STS_FATAL) {
- 		xhci_warn(xhci, "WARNING: Host System Error\n");
- 		xhci_halt(xhci);
--		ret = IRQ_HANDLED;
- 		goto out;
- 	}
- 
-@@ -3167,7 +3167,6 @@ irqreturn_t xhci_irq(struct usb_hcd *hcd)
- 	 */
- 	status |= STS_EINT;
- 	writel(status, &xhci->op_regs->status);
--	ret = IRQ_HANDLED;
- 
- 	/* This is the handler of the primary interrupter */
- 	xhci_handle_events(xhci, xhci->interrupters[0]);
+The idea here is to give the PPM time to actually update that field
+before reading it, right?
+
+On Tue, Mar 26, 2024 at 04:34:44PM -0700, Pavan Holla wrote:
+> On Tue, Mar 26, 2024 at 1:29 AM Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Mon, Mar 25, 2024 at 09:19:43PM +0000, Pavan Holla wrote:
+> > > The PPM might take time to process reset. Allow 20ms for the reset to
+> > > complete before issuing another reset.
+> > What commit id does this fix?  Does it need to go to older kernels?
+> 
+> This does not fix any commit. However, the time taken by a CCI read is
+> insufficient for a ChromeOS EC and PDC to perform a reset.
+
+Perhaps you could put that to the commit message.
+
+> > > There is a 20ms delay for a reset retry to complete. However, the first
+> > > reset attempt is expected to complete immediately after an async write
+> > > of the reset command. This patch adds 20ms between the async write and
+> > > the CCI read that expects the reset to be complete. The additional delay
+> > > also allows the PPM to settle after the first reset, which seems to be
+> > > the intention behind the original 20ms delay ( kernel v4.14 has a comment
+> > > regarding the same )
+> >
+> > Why was the comment removed in newer kernels?
+> 
+> The comment was removed when the old UCSI API was removed in
+> 2ede55468ca8cc236da66579359c2c406d4c1cba
+> 
+> > Where does the magic 20ms number come from?  What about systems that do
+> > not need that time delay, did things just slow down for them?
+> 
+> I am not sure how 20ms was decided upon. However, UCSI v1.2 has
+> MIN_TIME_TO_RESPOND_WITH_BUSY=10ms. So, we need to provide at least
+> 10ms for the PPM to respond with CCI busy. Indeed, this patch slows down other
+> implementations by 20ms. UCSIv3 also defines a 200ms timeout for PPM_RESET.
+
+It does not slow down other implementations. The delay has always been
+there before the RESET_COMPLETE bit is actually checked.
+
+The change here makes sense to me. Just rewrite the commit message.
+
+thanks,
+
 -- 
-2.44.0
-
+heikki
 
