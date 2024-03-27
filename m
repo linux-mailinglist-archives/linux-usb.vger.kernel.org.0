@@ -1,96 +1,121 @@
-Return-Path: <linux-usb+bounces-8461-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8463-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D240F88D88C
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Mar 2024 09:15:38 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8370F88D92E
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Mar 2024 09:30:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8C98029E639
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Mar 2024 08:15:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3D01D1F2C0A1
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Mar 2024 08:30:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 348872D04E;
-	Wed, 27 Mar 2024 08:15:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0609133993;
+	Wed, 27 Mar 2024 08:30:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="uFSGxBkF"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h7ymIaRJ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B219823D7;
-	Wed, 27 Mar 2024 08:15:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CB632575A
+	for <linux-usb@vger.kernel.org>; Wed, 27 Mar 2024 08:30:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711527331; cv=none; b=MbFuWBW0lYSEAgvDIn3ZrR7RdUFUahLjrvpYOwyLTlhfbXDz1f5KIPfFtKdh/wrRS+QIBdZRUW2fSJjh5umfa53cGo/TcIb3UHUCRJYA/Ul4iZJGSCxY9VvBrxPfTDBTkANv4T7qESMqDkqurQzkreQodIfT+pnma560WgoPncA=
+	t=1711528239; cv=none; b=vFSMIt/GtENkPUW2H4/Kt1LsvMTkY1e4yQ7C/z6Mo9KVm27nr/X8h45/vrVaeqnvj2TO3I3w2GW+5kS035hiOy9JnkUItTnS5hEkIRipbPxsBWYDe9x8ilhlBjMidwNOoCN/HYAjfzgQoMpSmgvdt2ikt9d+KX0WG9/KdZPiKqk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711527331; c=relaxed/simple;
-	bh=xVHaqZ1u760s+2uA6tdl2keH+dzuvpVmNgm8RSxlN50=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MH5ih2EwJ9JxvxmFJGLxfJFnQVx6rVuvT0I0/9HjgY3l6BwV4zFKCjh+pEvHElcBCnObG2a4rK5vVp8wOAOLhVWNgRC8evcwgUA/PvrWMXOuIBh5K7NfdyWSpTffzOGOOn1rjwl31jI0lKwYLEX1kkv24orcvcTkMtBBL5WZ+hc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=uFSGxBkF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2025C433C7;
-	Wed, 27 Mar 2024 08:15:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1711527331;
-	bh=xVHaqZ1u760s+2uA6tdl2keH+dzuvpVmNgm8RSxlN50=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=uFSGxBkFaIMIAEsa4zemQnwPcMOfoNFWZPB+2Ka9mznGd0UGAhY2D69zeimXf6RGX
-	 y5Gx28eXDgyHIrcyobJexzf4puxWw2sk840SLc+c12F6CXH2HlqI4RJk1ozhgzyGlB
-	 1N++CXZZE7EOCtBsPWCzQtOa7OidhTh3LGSxsdNc=
-Date: Wed, 27 Mar 2024 09:15:28 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Norihiko Hama <norihiko.hama@alpsalpine.com>
-Cc: "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"usb-storage@lists.one-eyed-alien.net" <usb-storage@lists.one-eyed-alien.net>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] usb-storage: Optimize scan delay more precisely
-Message-ID: <2024032750-violator-trivial-90a3@gregkh>
-References: <20240327055130.43206-1-Norihiko.Hama@alpsalpine.com>
- <2024032757-surcharge-grime-d3dd@gregkh>
- <TYVPR01MB107814D7A583CB986884AD4B290342@TYVPR01MB10781.jpnprd01.prod.outlook.com>
- <2024032745-transfer-dazzler-2e15@gregkh>
- <TYVPR01MB10781723CBD338DC3EEB5F20590342@TYVPR01MB10781.jpnprd01.prod.outlook.com>
+	s=arc-20240116; t=1711528239; c=relaxed/simple;
+	bh=VNxmY0Y3VuKguQWrw7ik33lgHAGHNQcmO+VGt0bZ7Ps=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XkNhGD0F/BSTtE0zNsFwRdmD57tk0zSp0LM85d27S/eLMYbgMjIZrUSrpZ3pnhKDjEMLKOIYrR87O/fLEuyLIfVyFSbo7un7lIQ0KBEYjupZY6YHghl0NzNv8Oj1Ld8eB3o3+HQdygtTIwKcz7CU/+C5LdtXBZ5yQrcOoYLVtUo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=h7ymIaRJ; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1711528237; x=1743064237;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=VNxmY0Y3VuKguQWrw7ik33lgHAGHNQcmO+VGt0bZ7Ps=;
+  b=h7ymIaRJv46XAzDLVQNtOJm5pVIhjQprj+JSCpYI8bdQ0plnI75cAyQU
+   6BDeix0yoyFibzOEmz3OjERiCW6bxNH5n3v8yhKdwkGfhjQkpyhaZZ1Ja
+   gMPA1aK1sJyeJIhq8tKE5TRXpw2IvoBD+nuhcIrZVvM37sNDuFSAg6Rqr
+   2kQyG+MNdg5xkUM+7w59EqyJUSVo+qleC/RxVoE3j67qIrvEBwZBh9QVf
+   Z89N+cqE+KYjoKJ/7PpodqtDaCAdXKWrCkUQSTELLFfqorV2zusokf7uI
+   X6ZCy+IPocKiv6boGIS3gywSdv5DSTQMtTJzURnwef2jtpW58q+o3LGnR
+   g==;
+X-CSE-ConnectionGUID: LnfAXgYpQnmvEgD0QEdLVw==
+X-CSE-MsgGUID: ib+II55uTMKEqdlhMbD8Mg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11025"; a="10394434"
+X-IronPort-AV: E=Sophos;i="6.07,158,1708416000"; 
+   d="scan'208";a="10394434"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2024 01:30:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,11025"; a="937074046"
+X-IronPort-AV: E=Sophos;i="6.07,158,1708416000"; 
+   d="scan'208";a="937074046"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 27 Mar 2024 01:30:33 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id B8F9F152; Wed, 27 Mar 2024 10:30:32 +0200 (EET)
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Michael Jamet <michael.jamet@intel.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Andreas Noever <andreas.noever@gmail.com>
+Cc: linux-usb@vger.kernel.org,
+	Gil Fine <gil.fine@linux.intel.com>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: [PATCH] thunderbolt: Do not create DisplayPort tunnels on adapters of the same router
+Date: Wed, 27 Mar 2024 10:30:32 +0200
+Message-ID: <20240327083032.1611284-1-mika.westerberg@linux.intel.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <TYVPR01MB10781723CBD338DC3EEB5F20590342@TYVPR01MB10781.jpnprd01.prod.outlook.com>
+Content-Transfer-Encoding: 8bit
 
-On Wed, Mar 27, 2024 at 07:57:52AM +0000, Norihiko Hama wrote:
-> On Wed, Mar 27, 2024 at 07:39:55AM +0000, Norihiko Hama wrote:
-> > > > Sorry, but module parameters are from the 1990's, we will not go back to that if at all possible as it's not easy to maintain and will not work properly for multiple devices.
-> > > >
-> > > > I can understand wanting something between 1 and 0 seconds, but adding yet-another-option isn't probably the best way, sorry.
-> > > 1 second does not meet with performance requirement.
-> >
-> > Who is requiring such a performance requirement?  The USB specification?
-> > Or something else?
-> This is our customer requirement.
+Probably due to a firmware bug Dell TB16 dock announces that one of its
+DisplayPort adapters is actually DP IN. Now this is possible and used
+with some external GPUs but not likely in this case as we are dealing
+with a dock. Anyways the problem is that the driver tries to create a
+DisplayPort tunnel between adapters of the same router which then shows
+to user that there is no picture on the display (because there are no
+available DP OUT adapters on the dock anymore).
 
-If it is impossible to do, why are they making you do it?  :)
+Fix this by not creating DisplayPort tunnels between adapters that are
+on the same router.
 
-> > > I have no good idea except module parameter so that we can maintain backward compatibility but be configurable out of module.
-> > > Do you have any other better solution?
-> > How long do you exactly need to wait?  Why not figure out how long the device takes and if it fails, slowly back off until the full time delay happens and then you can abort?
-> It's IOP issue and difficult to figure out because it depends on device itself.
+Closes: https://gitlab.freedesktop.org/drm/intel/-/issues/10265
+Fixes: 274baf695b08 ("thunderbolt: Add DP IN added last in the head of the list of DP resources")
+Cc: Gil Fine <gil.fine@linux.intel.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+---
+ drivers/thunderbolt/tb.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Agreed.
+diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
+index c5ce7a694b27..360cb95f39aa 100644
+--- a/drivers/thunderbolt/tb.c
++++ b/drivers/thunderbolt/tb.c
+@@ -1801,6 +1801,12 @@ static struct tb_port *tb_find_dp_out(struct tb *tb, struct tb_port *in)
+ 			continue;
+ 		}
+ 
++		/* Needs to be on different routers */
++		if (in->sw == port->sw) {
++			tb_port_dbg(port, "skipping DP OUT on same router\n");
++			continue;
++		}
++
+ 		tb_port_dbg(port, "DP OUT available\n");
+ 
+ 		/*
+-- 
+2.43.0
 
-> I know we have multiple devices with delay_use=0, but then it's recovered and detected by reset after 30s timeout, that is too long than 1 sec.
-
-So how do you know that making this smaller will help?  There are many
-many odd and broken devices out there that take a long time to spin up
-before they are able to be accessed.  That's what that option is there
-for, if you "know" you don't need to wait, you don't have to wait.
-Otherwise you HAVE to wait as you do not know how long things take.
-
-sorry,
-
-greg k-h
 
