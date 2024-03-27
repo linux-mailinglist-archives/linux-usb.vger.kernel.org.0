@@ -1,386 +1,200 @@
-Return-Path: <linux-usb+bounces-8446-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8445-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18FA288D493
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Mar 2024 03:34:19 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8EDEF88D48B
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Mar 2024 03:29:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3C0161C2461D
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Mar 2024 02:34:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9B06DB21DFA
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Mar 2024 02:29:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4B0E208A9;
-	Wed, 27 Mar 2024 02:34:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A39E219FD;
+	Wed, 27 Mar 2024 02:29:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KAouB8n2"
+	dkim=pass (2048-bit key) header.d=alpsalpine.com header.i=@alpsalpine.com header.b="b3KXxCs+"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2134.outbound.protection.outlook.com [40.107.113.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F3EE8F6B
-	for <linux-usb@vger.kernel.org>; Wed, 27 Mar 2024 02:34:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711506855; cv=none; b=fGaGwRgBWTRgXm3gBdhBO5MlyAOLkxkntsDsOsHzDh0RBAucVq1NhkKLt0LLHdD9tgZBJ8nB78+vVeU12Mam1B5d5n04cAsxujvdwxdWHlVv8Wxvkw+q6djVjnyUWF1dodQUVC22o0In+VelsPL8LS84wAtS4kzs7ESvsxkFezU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711506855; c=relaxed/simple;
-	bh=PqwF2hlYR1XRJ8D5HTX1JNJlU1knoqPIdlQmpXB36i4=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=MZ9UNYxL3FhCWTcuMrMWMnJx5y8WT4qgGVWGG4LN4LhNe6jk1SFcjtDs94raJCUPEAkkdoGLUv9hfWZT1NXs7ga8alCgFgZb8VeKqVDu6Uf9hH1Lm/inp5nv1sdXHI0muM8uDA+OqjjVOU8W/4H3rpNhnV3EIWxWQ6Q+0h/To4s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KAouB8n2; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711506853; x=1743042853;
-  h=date:from:to:cc:subject:message-id;
-  bh=PqwF2hlYR1XRJ8D5HTX1JNJlU1knoqPIdlQmpXB36i4=;
-  b=KAouB8n2XFW2B3flBvZf1EfFJqkkHdbCkZL0wNcMnM/PJ/6IndR6oA4P
-   QIPzFS8HZPvEQ/UpQvygiHrC/90easPSIQuKe26zAPAo4RDN9ktEefP/9
-   YAxWBH2PGyUe8pQLbrdrGAazqJWN/JvXiclpW2D9euv6ofHlQ+Ekt+0vs
-   aeRE1Nt2y5XubdhUrgvlDp/48qqagfHmV6GlBOtIEANs6XwDmVbKoI7DB
-   TQiOkZ4fvO95m6GuCBbnN9YVGP5OLdoNNb78xnD8gewL6Fh1pWiQYJmEm
-   LTn2vcEwj4nmSDSDqZr95YDcn0epZvttflgVK8pgVeOT8Esxn6GXC2ZVb
-   g==;
-X-CSE-ConnectionGUID: O4/nI4v6QBCDzyy4hya2FA==
-X-CSE-MsgGUID: IZpXH2GYRJC241Mrn+Pp6A==
-X-IronPort-AV: E=McAfee;i="6600,9927,11025"; a="17318862"
-X-IronPort-AV: E=Sophos;i="6.07,157,1708416000"; 
-   d="scan'208";a="17318862"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2024 19:34:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,157,1708416000"; 
-   d="scan'208";a="16536586"
-Received: from lkp-server01.sh.intel.com (HELO be39aa325d23) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 26 Mar 2024 19:34:11 -0700
-Received: from kbuild by be39aa325d23 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rpJ7A-0000fK-25;
-	Wed, 27 Mar 2024 02:34:08 +0000
-Date: Wed, 27 Mar 2024 10:33:21 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Subject: [usb:usb-linus] BUILD SUCCESS WITH WARNING
- f4d1960764d8a70318b02f15203a1be2b2554ca1
-Message-ID: <202403271016.wkaM6mqZ-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC6F520334;
+	Wed, 27 Mar 2024 02:29:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.113.134
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1711506563; cv=fail; b=J78G+fJ4pp4AP4wsuBZs4TjF/gpcLuYVhzpeC86xDhxxPt4JJqyrd9ctamf5e3he0U1HlL34NIS7to/3ew78t30Tl/9nF/A8aXN3f4WjlCapQMQNzvL9tG1Uju11+YzbQNQc6nTv7kVM3DFE4egKVYAmZECae3J0U/9U1US5rXY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1711506563; c=relaxed/simple;
+	bh=bcSPt0o+R86DMAIyz/4fmPlJuaWr8Db+d/SKKEXBBME=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=n9aDRQh58PybUBBFgNycgHapb1LOYP6eZ8sR3EvFGFQqogyUO/M4xZP1iMLUh3b++WlpPFWwT3Llw1/o6Uz5skf2keiBX5fMiRmuZemmUMpCyQQdX7Ry8ahqo4iZxPWT4gPxkB3HRP8Q+e2dRU769cfv3A5w+QGYmOMi+tXg5IM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alpsalpine.com; spf=pass smtp.mailfrom=alpsalpine.com; dkim=pass (2048-bit key) header.d=alpsalpine.com header.i=@alpsalpine.com header.b=b3KXxCs+; arc=fail smtp.client-ip=40.107.113.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alpsalpine.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpsalpine.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RbpyMUPJoEeyGFRhptpGLhCz+X1xMNyAjN0lzm9dXz3kOGvS5FGncYuNzsSDZ/Op4TuohzqrmRj8ukwKE+fMg4vjTqlcyxcKa2N7GmmLPrbNMZOjaRq5lAiA4EtyqVNqH9H9/buRdUlpvbZnc136UHbYy8vCbdnNW+FiYn+mwYCRh9DyixgQgFdF6eCl4ufP4h/bXzgEq2QsPs+39hYTknZLa7bVQsSGlkutbrJmjbJsuvzw3J1TrRkMBYSKASLBotgdB/8zFpiGi+Ct/ZxQeWrtb96QE4Oj7BnOg/glSr32sjb217zDd5cAwat25dLx6nJVvH6ZRu7VATEg+T+syA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rRAj2StyC12et08+jrHIp9lbg8RjAoGkr8bjdFiCeGo=;
+ b=ikY7Gx4gBpRfesnpy9R9UKERhyPzWjai0TH8ByvZsbohKxGztr9h46N4pzvuUOfyAsJmRoK76zfIoioPm874HHNU9JRfGtKYW4MnAGYX9DcalFGbXxri+StzJD4OhpH80nmINE3+Fw9cFbvD/T+mH8Y8fC3Cow1QhrHc2LsOrYswHohJkUuj5UpMyUfl5klXWV8ARsk9VWB4vu9LIY0BJs+cZUrax8mplrRLpGfMpYeESLoxsmQjUgK6sExQpROng8De4xCc+ojYtFBClQHoi7wqMhQykibRdhTkv23AwXvs105guzZxMZqHcz2NgpIKKglon4ZB/oa5mbmLhRoZyQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=alpsalpine.com; dmarc=pass action=none
+ header.from=alpsalpine.com; dkim=pass header.d=alpsalpine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alpsalpine.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rRAj2StyC12et08+jrHIp9lbg8RjAoGkr8bjdFiCeGo=;
+ b=b3KXxCs+DP8yHtv6YfeZexzdcchvM7zqZQMIV7IZD1N+Erk4aL8k6jqlTdWDWm3w7/k3ekJxVp9381sUEdtuO1aNQUH4lkNjOgKI7lh485GZ1pqRyAz1aFj52N24QUX9ApABIVvx0TQ0L63sv51edJclDU4CWd+9EzJkFbCQzYAoMlUNo3TRfzaTn2GVUadcSmpRjKcoyRut7dHKW0iqA7PASuAE4AezyA91/Xi7+F+4dLgsRh1sr2K0cGnSP39bKJrs6XBSLC++yO9eJlb/IYmnH0QOYrsSbpicPF+d7eEiWaUALh4WkJGjwQng9K/yav/40d0NIR3HrAqonFTb1g==
+Received: from TYVPR01MB10781.jpnprd01.prod.outlook.com
+ (2603:1096:400:2ae::14) by TYWPR01MB10969.jpnprd01.prod.outlook.com
+ (2603:1096:400:395::7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7386.26; Wed, 27 Mar
+ 2024 02:29:16 +0000
+Received: from TYVPR01MB10781.jpnprd01.prod.outlook.com
+ ([fe80::b541:f53c:6306:6e2b]) by TYVPR01MB10781.jpnprd01.prod.outlook.com
+ ([fe80::b541:f53c:6306:6e2b%4]) with mapi id 15.20.7409.031; Wed, 27 Mar 2024
+ 02:29:16 +0000
+From: Norihiko Hama <Norihiko.Hama@alpsalpine.com>
+To: balbi@kernel.org,
+	gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Norihiko Hama <Norihiko.Hama@alpsalpine.com>
+Subject: [PATCH v2] usb: gadget: f_ncm: Fix UAF ncm object at re-bind after usb ep transport error
+Date: Wed, 27 Mar 2024 11:35:50 +0900
+Message-Id: <20240327023550.51214-1-Norihiko.Hama@alpsalpine.com>
+X-Mailer: git-send-email 2.17.1
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-ClientProxiedBy: OS0P286CA0153.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:604:16a::10) To TYVPR01MB10781.jpnprd01.prod.outlook.com
+ (2603:1096:400:2ae::14)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TYVPR01MB10781:EE_|TYWPR01MB10969:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	EU7mViq5Bi2pcI3+xwNi35c2656rGI7s2VGLFFwx8K5NOYP//Xdcm/Pz3YSI7AZUMLrdPxZl1Y9QEKCjMGMlHUmKockKwDgVLT6fqg43/wyXgGyOHstDnhjUjkEhRD1u89mW1mXSzI8jy4lgT/hR+7ULGXtCS8ywDzwi7OSYuY4MTdTFtF/pkshLayqMA/Sar9OF5bkV/DV6wCvP+gp3osjRTyXE0hkXqT22TnsT7ycuIxzLAFO7TLP4WqA3m8BLGVSOB8jEHbixYsvBTKRt6ninPu2qd5558t7+3xwBLE4eOMFyHeczgEDP6sK3YxBKF8knBPpeVQZKGFlR0+8ZwwfxFwefWRpwdzsQsfrveVuw3W0OOJGkNhDv0w6az4fYXElQYN22uux60lIcZxcXg9g1Bvkq1h4Ti6nfNzJk1Pwx//0pF4YrJFKMd8gEzDToGM3+J3R/SK3WE4kJQ+o6h5AgDNz8717HtHyQL8VVFLhElnX87Atc70rpPU26dKMMXgZjGOtJw2+VFsGLlnmwRnEqZtb3Y1jLx7x6KzpB8jmGoUWiXrPUtp9hLP5iu/4iuVUujM1bEhjXcKGf1FWXqN5K/mIEw342PbgR67mhDtAMKlwT13yPMu1tNkJtaBHrNRKqWQUMbAalkALgoMggYzndHU1gePQk0s6MvgDerWy+o/3rA2I5VaUnx3DowKSKGEgyyOUg+CAjI8lOgl3dBw==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYVPR01MB10781.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(52116005)(366007)(1800799015)(376005)(38350700005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?yiC2YxHko/cMDoCdsxfTABZokbbcoKnFZmA3YLA6bMTyAGswhL+6Nct7XT3N?=
+ =?us-ascii?Q?ZmzXu89pw4KXzxg1WAPsVgH61ir9WoiiEc3u141rf4MwBn6egKaB1olPEfwQ?=
+ =?us-ascii?Q?9m2mIsa4SfW1Wu9KlKzui35DwMx7tYx2nd/2n5L61SVdthA16RqIZMLnKaRi?=
+ =?us-ascii?Q?FfX/CSdis+egIZtgeiEwyXo0OAjQW/aszmoKjRRl69u3FoZgT7NMRzOlaMOh?=
+ =?us-ascii?Q?EtNWeNAGgzl4OBVN+tCDT7mn2U/7trgPZHbk+/U+E0CQNCsdgflJlkifsZHA?=
+ =?us-ascii?Q?QALHOjlRDfj+/36sEs4luqa80yZ3WInMUPKt1MQ5vg5YDMLi81696DwJMrhj?=
+ =?us-ascii?Q?YpZwu1qcui0XTmtdMzsvvjh+/iqZmVhR6H6m8LlXwGwDeyo8KW42B4zdeGvj?=
+ =?us-ascii?Q?Vxr4GgvehpdzYDuTIsVwen7uyAbTgf54wCqAS5SXzH/JCaj40Qny0+okksFL?=
+ =?us-ascii?Q?ACCTjAtOOcVaWf/bXuD9+rCjqYAtBMRk8FTPx0+ep6sncani59vn+N8pkSlm?=
+ =?us-ascii?Q?dDu/9LKsdN9SCQPO+c9yHxPd3GhtLRrPmCrcDPczAlt3XfHsQFmIfm/Fzurt?=
+ =?us-ascii?Q?zZABezssPhQfAwLLZirKGq1p/UMMdroLeESyDqbOWCNzlwjvbQIhIDKWVpUh?=
+ =?us-ascii?Q?WEwqJUZmxalJozH1g7aA3/g7cANTNGZh5wIIivAuIwBi4R3XEku1Xa+oVihu?=
+ =?us-ascii?Q?LVvabd8mofER1TiO4f8nJFgBfCfjEvDjVXnPHGSKYRAvwQWEGHgefnEJh0kA?=
+ =?us-ascii?Q?v6I/Q+N40Dy1IcWZjFl8xofp/TdO8e9zRYXqzDDwrETKNpNpqeFpLYUaJAf/?=
+ =?us-ascii?Q?zWUOGe+JlF4elUxbUa27hX6HemJOgYOTYqO6FwDQx8S7/CgYRoE0LnHClMd5?=
+ =?us-ascii?Q?x0zpYxv+RQaxaKKozlg2w5gzQozgcJPdqVHXaNGnw6WjLgFoq+dflcN5Rp9s?=
+ =?us-ascii?Q?Fgh5A1h20OvHtMBVCSiChgEFEx61gn3Stds07jMJ5GmUe+K8FNdLPFcF6MGa?=
+ =?us-ascii?Q?DLxh+mmunWXF1uXKyk/7EgdDOJRPNO8eoUJSdQXKB39fKP+kAv+wNhweiC31?=
+ =?us-ascii?Q?hMvY2YHPJdIf1mPEkNRX6JNjarvZkbGT7hdC3S6i7gGSOav+BnWiFKs1Xlj5?=
+ =?us-ascii?Q?satuK5zfcAovd2ghhyq7n4kE0JLjBLif40YxVL0dBact9L88vKqTBF47FWxP?=
+ =?us-ascii?Q?qVEMsvKJT3auhZJpJne+fabHo59H8eCI7yOBNGGZcjreDbFOmXdkQBAQQjYB?=
+ =?us-ascii?Q?ziZgH4hn4o1ksEyHwv07Zt8kq9HtgZYhmBNAM/pgF5q+VsGouvUoq/3WDacZ?=
+ =?us-ascii?Q?Chaqag5Ky7m3aQ8c94zMslQ7BGwWXWmPQCWLl1JH0ave5SL2j5EoxVlMazoA?=
+ =?us-ascii?Q?gNQd/uB6jOOlSBVLNvK9fZOLGJ4mBCH6s+zlRwPf56c1T0eOUVfmxqCfKxPf?=
+ =?us-ascii?Q?kxUoefV9TmyfflQzTIWjhB4Do9nYQz9w2D8nJTIMGcZx5MPV6tGEiy7yXc0h?=
+ =?us-ascii?Q?IluEUM+RzXWx/marcBhf3KdDKk2u68SsfNaCjypMIevwT/XcUxRiYVyuMhJK?=
+ =?us-ascii?Q?/IFjSYqkvJys1URt5zDJoViuau8AlvQmRsBFEAua?=
+X-OriginatorOrg: alpsalpine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: af0511cd-0944-4012-8a25-08dc4e05b297
+X-MS-Exchange-CrossTenant-AuthSource: TYVPR01MB10781.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Mar 2024 02:29:15.9086
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 57e76998-77bd-4b82-a424-198f46eb2254
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: +AYx2TnEREaKZsqsED2tNBIZG8PPXGt01Y0g9ylmjD5dNoM0zUXWfWWLx+wuNUxnBmrXaJi8DoZN2+aOEap7Aw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYWPR01MB10969
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
-branch HEAD: f4d1960764d8a70318b02f15203a1be2b2554ca1  USB: core: Fix deadlock in port "disable" sysfs attribute
+It seems to be potential issue for long time.
 
-Warning reports:
+When ncm function is working and then stop usb0 interface for link down,
+eth_stop() is called. At this piont, accidentally if usb transport error
+should happen in usb_ep_enable(), 'in_ep' and/or 'out_ep' may not be enabled.
 
-https://lore.kernel.org/oe-kbuild-all/202403270357.JOxdZ2Ri-lkp@intel.com
+After that, ncm_disable() is called to disable for ncm unbind
+but gether_disconnect() is never called since 'in_ep' is not enabled.
 
-Warning: (recently discovered and may have been fixed)
+As the result, ncm object is released in ncm unbind
+but 'dev->port_usb' associated to 'ncm->port' is not NULL.
 
-drivers/usb/dwc2/core_intr.c:327: warning: Function parameter or struct member 'remotewakeup' not described in 'dwc2_wakeup_from_lpm_l1'
+And when ncm bind again to recover netdev, ncm object is reallocated
+but usb0 interface is already associated to previous released ncm object.
 
-Warning ids grouped by kconfigs:
+Therefore, once usb0 interface is up and eth_start_xmit() is called,
+released ncm object is dereferrenced and it might cause use-after-free memory.
 
-gcc_recent_errors
-|-- alpha-allyesconfig
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- arc-allmodconfig
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- arc-allyesconfig
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- arm-allmodconfig
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- arm-allyesconfig
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- arm-randconfig-004-20240327
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- arm64-defconfig
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- csky-allmodconfig
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- csky-allyesconfig
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- csky-randconfig-001-20240327
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- csky-randconfig-002-20240327
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- i386-allmodconfig
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- i386-allyesconfig
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- loongarch-allmodconfig
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- loongarch-allyesconfig
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- loongarch-defconfig
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- m68k-allmodconfig
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- m68k-allyesconfig
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- microblaze-allmodconfig
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- microblaze-allyesconfig
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- mips-allmodconfig
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- mips-allyesconfig
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- nios2-allmodconfig
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- nios2-allyesconfig
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- nios2-randconfig-002-20240327
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- nios2-randconfig-r133-20240327
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- openrisc-allmodconfig
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- openrisc-allyesconfig
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- parisc-allmodconfig
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- parisc-allyesconfig
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- parisc-randconfig-001-20240327
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- parisc-randconfig-002-20240327
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- powerpc-allmodconfig
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- powerpc64-randconfig-002-20240327
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- riscv-randconfig-002-20240327
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- s390-allyesconfig
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- sparc-allmodconfig
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- sparc-allyesconfig
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- sparc-randconfig-001-20240327
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- sparc64-allmodconfig
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- sparc64-allyesconfig
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- sparc64-randconfig-001-20240327
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- um-allyesconfig
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- x86_64-buildonly-randconfig-002-20240327
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- x86_64-randconfig-002-20240327
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- x86_64-randconfig-011-20240327
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- xtensa-allyesconfig
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-`-- xtensa-randconfig-002-20240327
-    `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-clang_recent_errors
-|-- arm-defconfig
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- arm-randconfig-001-20240327
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- arm-randconfig-002-20240327
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- arm-randconfig-003-20240327
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- arm64-allmodconfig
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- arm64-allyesconfig
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- powerpc-allyesconfig
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- powerpc-randconfig-003-20240327
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- riscv-allmodconfig
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- riscv-allyesconfig
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-|-- s390-allmodconfig
-|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
-`-- x86_64-randconfig-005-20240327
-    `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+[function unlink via configfs]
+  usb0: eth_stop dev->port_usb=ffffff9b179c3200
+  --> error happens in usb_ep_enable().
+  NCM: ncm_disable: ncm=ffffff9b179c3200
+  --> no gether_disconnect() since ncm->port.in_ep->enabled is false.
+  NCM: ncm_unbind: ncm unbind ncm=ffffff9b179c3200
+  NCM: ncm_free: ncm free ncm=ffffff9b179c3200   <-- released ncm
 
-elapsed time: 731m
+[function link via configfs]
+  NCM: ncm_alloc: ncm alloc ncm=ffffff9ac4f8a000
+  NCM: ncm_bind: ncm bind ncm=ffffff9ac4f8a000
+  NCM: ncm_set_alt: ncm=ffffff9ac4f8a000 alt=0
+  usb0: eth_open dev->port_usb=ffffff9b179c3200  <-- previous released ncm
+  usb0: eth_start dev->port_usb=ffffff9b179c3200 <--
+  eth_start_xmit()
+  --> dev->wrap()
+  Unable to handle kernel paging request at virtual address dead00000000014f
 
-configs tested: 165
-configs skipped: 3
+This patch addresses the issue by checking if 'ncm->netdev' is not NULL at
+ncm_disable() to call gether_disconnect() to deassociate 'dev->port_usb'.
+It's more reasonable to check 'ncm->netdev' to call gether_connect/disconnect
+rather than check 'ncm->port.in_ep->enabled' since it might not be enabled
+but the gether connection might be established.
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                     nsimosci_hs_defconfig   gcc  
-arc                   randconfig-001-20240327   gcc  
-arc                   randconfig-002-20240327   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   clang
-arm                              allyesconfig   gcc  
-arm                                 defconfig   clang
-arm                   randconfig-004-20240327   gcc  
-arm                          sp7021_defconfig   gcc  
-arm64                            allmodconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                            allyesconfig   clang
-arm64                               defconfig   gcc  
-arm64                 randconfig-003-20240327   gcc  
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-csky                  randconfig-001-20240327   gcc  
-csky                  randconfig-002-20240327   gcc  
-hexagon                          allmodconfig   clang
-hexagon                           allnoconfig   clang
-hexagon                          allyesconfig   clang
-hexagon                             defconfig   clang
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-001-20240327   gcc  
-i386         buildonly-randconfig-002-20240327   gcc  
-i386         buildonly-randconfig-003-20240327   clang
-i386         buildonly-randconfig-004-20240327   clang
-i386         buildonly-randconfig-005-20240327   clang
-i386         buildonly-randconfig-006-20240327   clang
-i386                                defconfig   clang
-i386                  randconfig-001-20240327   gcc  
-i386                  randconfig-002-20240327   gcc  
-i386                  randconfig-003-20240327   clang
-i386                  randconfig-004-20240327   gcc  
-i386                  randconfig-005-20240327   clang
-i386                  randconfig-006-20240327   gcc  
-i386                  randconfig-011-20240327   gcc  
-i386                  randconfig-012-20240327   clang
-i386                  randconfig-013-20240327   gcc  
-i386                  randconfig-014-20240327   clang
-i386                  randconfig-015-20240327   gcc  
-i386                  randconfig-016-20240327   clang
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20240327   gcc  
-loongarch             randconfig-002-20240327   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                          atari_defconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                        stmark2_defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                          ath79_defconfig   gcc  
-mips                           ip27_defconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                 randconfig-001-20240327   gcc  
-nios2                 randconfig-002-20240327   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-openrisc                  or1klitex_defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc                randconfig-001-20240327   gcc  
-parisc                randconfig-002-20240327   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   clang
-powerpc                   microwatt_defconfig   gcc  
-powerpc               randconfig-002-20240327   gcc  
-powerpc                    socrates_defconfig   gcc  
-powerpc                 xes_mpc85xx_defconfig   gcc  
-powerpc64             randconfig-002-20240327   gcc  
-powerpc64             randconfig-003-20240327   gcc  
-riscv                            allmodconfig   clang
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   clang
-riscv                               defconfig   clang
-riscv                 randconfig-002-20240327   gcc  
-s390                             allmodconfig   clang
-s390                              allnoconfig   clang
-s390                             allyesconfig   gcc  
-s390                                defconfig   clang
-s390                  randconfig-002-20240327   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sh                    randconfig-001-20240327   gcc  
-sh                    randconfig-002-20240327   gcc  
-sh                           se7712_defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                               defconfig   gcc  
-sparc                       sparc32_defconfig   gcc  
-sparc                       sparc64_defconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-sparc64               randconfig-001-20240327   gcc  
-sparc64               randconfig-002-20240327   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   gcc  
-um                                  defconfig   clang
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   clang
-x86_64                            allnoconfig   clang
-x86_64                           allyesconfig   clang
-x86_64       buildonly-randconfig-001-20240327   gcc  
-x86_64       buildonly-randconfig-002-20240327   gcc  
-x86_64       buildonly-randconfig-003-20240327   gcc  
-x86_64       buildonly-randconfig-004-20240327   clang
-x86_64       buildonly-randconfig-005-20240327   gcc  
-x86_64       buildonly-randconfig-006-20240327   gcc  
-x86_64                              defconfig   gcc  
-x86_64                randconfig-001-20240327   clang
-x86_64                randconfig-002-20240327   gcc  
-x86_64                randconfig-003-20240327   gcc  
-x86_64                randconfig-004-20240327   gcc  
-x86_64                randconfig-005-20240327   clang
-x86_64                randconfig-006-20240327   clang
-x86_64                randconfig-011-20240327   gcc  
-x86_64                randconfig-012-20240327   clang
-x86_64                randconfig-013-20240327   clang
-x86_64                randconfig-014-20240327   clang
-x86_64                randconfig-015-20240327   clang
-x86_64                randconfig-016-20240327   clang
-x86_64                randconfig-071-20240327   gcc  
-x86_64                randconfig-072-20240327   clang
-x86_64                randconfig-073-20240327   clang
-x86_64                randconfig-074-20240327   clang
-x86_64                randconfig-075-20240327   clang
-x86_64                randconfig-076-20240327   clang
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa                           alldefconfig   gcc  
-xtensa                            allnoconfig   gcc  
-xtensa                       common_defconfig   gcc  
-xtensa                randconfig-001-20240327   gcc  
-xtensa                randconfig-002-20240327   gcc  
+Signed-off-by: Norihiko Hama <Norihiko.Hama@alpsalpine.com>
+---
+ drivers/usb/gadget/function/f_ncm.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/drivers/usb/gadget/function/f_ncm.c b/drivers/usb/gadget/function/f_ncm.c
+index bd095ae569ed..23960cd16463 100644
+--- a/drivers/usb/gadget/function/f_ncm.c
++++ b/drivers/usb/gadget/function/f_ncm.c
+@@ -888,7 +888,7 @@ static int ncm_set_alt(struct usb_function *f, unsigned intf, unsigned alt)
+ 		if (alt > 1)
+ 			goto fail;
+ 
+-		if (ncm->port.in_ep->enabled) {
++		if (ncm->netdev) {
+ 			DBG(cdev, "reset ncm\n");
+ 			ncm->netdev = NULL;
+ 			gether_disconnect(&ncm->port);
+@@ -1365,7 +1365,7 @@ static void ncm_disable(struct usb_function *f)
+ 
+ 	DBG(cdev, "ncm deactivated\n");
+ 
+-	if (ncm->port.in_ep->enabled) {
++	if (ncm->netdev) {
+ 		ncm->netdev = NULL;
+ 		gether_disconnect(&ncm->port);
+ 	}
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.17.1
+
 
