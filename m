@@ -1,103 +1,124 @@
-Return-Path: <linux-usb+bounces-8503-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8504-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E8EC388EB0D
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Mar 2024 17:22:44 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 371B788EB7C
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Mar 2024 17:42:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9E1381F336A9
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Mar 2024 16:22:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E74C72A3814
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Mar 2024 16:42:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF96C1311B6;
-	Wed, 27 Mar 2024 16:22:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr header.b="vSMCQaVH"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5578F12F585;
+	Wed, 27 Mar 2024 16:42:49 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtpfb2-g21.free.fr (smtpfb2-g21.free.fr [212.27.42.10])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EACBE83A0B;
-	Wed, 27 Mar 2024 16:22:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.27.42.10
+Received: from cae.in-ulm.de (cae.in-ulm.de [217.10.14.231])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB28E1C06
+	for <linux-usb@vger.kernel.org>; Wed, 27 Mar 2024 16:42:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.10.14.231
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711556549; cv=none; b=sxcwfFNWRtw+5ePIjGoTIYPF7/Jzh8s/pJa8oVl153xykUYcCoYQpF7MzU5te9YlHsDWN6OmyjCvpuoYF5pBrQ4Mn61ZFAwmrlk6kxd/L+xqH2z4Ua04Dd0cGlFqdTD4a4BsFaS9tF0mnKlQfTfeBtc/onoRSLPVe1cjKIL6Tyo=
+	t=1711557769; cv=none; b=DD51Oeu5QsaL6WTQuaH7RLhh1d6co1izwyTYvD4bY6iv20JFP47zXr46JfXkLh/fimbVE4+Z5tbR/jRVk/oQ6CIudeopBH7ZLdlFleiA24mK4U6565A9DnHwaSX+vn7qdF/CUiujU52c6A3xqiHs8Us6Xh2/YZ83vBanwGhzJVI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711556549; c=relaxed/simple;
-	bh=g9NIYWY7Zqq4Jpe3GVuphoABvUpR98WMNlTO/PqC+cM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=W0+VZwtK9f5Ae2J1rFarexkkZwPR1vpW8002AGfSHYDd7Xed82yj7jzhz/Di+7pHWcGWPlzlI0pbIJfaG5z4y99fRqwAKYIIplpNsaNRvbmAVUo+tiNcdRLsCwvT2nLS/09pfrz9RnXVM88O83NjtRigXMMuIhNyQT+QRzHhPL8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=free.fr; spf=pass smtp.mailfrom=free.fr; dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr header.b=vSMCQaVH; arc=none smtp.client-ip=212.27.42.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=free.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=free.fr
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
-	by smtpfb2-g21.free.fr (Postfix) with ESMTP id 75DD44C8DC;
-	Wed, 27 Mar 2024 17:22:16 +0100 (CET)
-Received: from [IPV6:2a01:e0a:255:1000:f49a:79c4:c3c6:eaf3] (unknown [IPv6:2a01:e0a:255:1000:f49a:79c4:c3c6:eaf3])
-	(Authenticated sender: duncan.sands@free.fr)
-	by smtp5-g21.free.fr (Postfix) with ESMTPSA id A3A9F60142;
-	Wed, 27 Mar 2024 17:20:26 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
-	s=smtp-20201208; t=1711556526;
-	bh=g9NIYWY7Zqq4Jpe3GVuphoABvUpR98WMNlTO/PqC+cM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=vSMCQaVHDvOS+MJTVx5PjO8YOXxmIEoXqqAuvBYuRC535uirpZWCAg3Zcduu9rDtt
-	 KXKCxUyreW9ES5/mQaKWuQmfTpoSpYf8IwCcPc988GMFZvS+1wbAKCcOjbSk3mXiD9
-	 ZK8Hamum4SVmsMBE1c9pxQwBG+dsyo12O4SxF8j/IiVpKDUrPYQJdtKDuV/HWRo3xL
-	 PYIWjDHKv6Iwt5jWnepwy1J7Y+fjiF4JTHXVaKfZ4ukUUftUNKj+3Aem3Jcxh8PUFu
-	 tZQKCHeE4q+71+QXSA4TwBR2eiNJVHnD/WyXCPKNPqsgcwl7VuDNvLoWg/63fz6oE5
-	 pvkLMrw2O9NMA==
-Message-ID: <7297be25-a3c8-4e8b-9a80-ff720ccddc90@free.fr>
-Date: Wed, 27 Mar 2024 17:20:26 +0100
+	s=arc-20240116; t=1711557769; c=relaxed/simple;
+	bh=esyr/376E4zJzAfRWHKNuCNcWr/vPo91L53dL4nhuKo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lSWxK2NttJeJqCTs/Ip5O9WW48Wa5/8pENH1EbRoG3dvtcajMKuGnpoArdalEbQuzR+kuXKkO2yTqq2IHumtlGvjzm72zUoVVI1X+wAAgSDNaAAmgtSHk/evDNuiZpgojoAwgym90S+juMkg400JM85xHG9flR0LbeUC1lEiL10=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c--e.de; spf=pass smtp.mailfrom=c--e.de; arc=none smtp.client-ip=217.10.14.231
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c--e.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=c--e.de
+Received: by cae.in-ulm.de (Postfix, from userid 1000)
+	id 9329414040D; Wed, 27 Mar 2024 17:42:44 +0100 (CET)
+Date: Wed, 27 Mar 2024 17:42:44 +0100
+From: Christian Ehrhardt <lk@c--e.de>
+To: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
+Cc: heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
+	neil.armstrong@linaro.org, quic_prashk@quicinc.com,
+	dmitry.baryshkov@linaro.org, fabrice.gasnier@foss.st.com,
+	saranya.gopal@intel.com, linux-usb@vger.kernel.org
+Subject: Re: [RFC PATCH] usb: typec: ucsi: ack connector change after all
+ tasks finish
+Message-ID: <ZgRMhB96pVgxnMq4@cae.in-ulm.de>
+References: <vuh25ueep3rwcmthlkvhb2avpkqzc6lsbee3qdmerolijq7azq@rwmakgznqvmq>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 4/9] USB: Convert from tasklet to BH workqueue
-To: Allen Pais <apais@linux.microsoft.com>, linux-kernel@vger.kernel.org
-Cc: tj@kernel.org, keescook@chromium.org, vkoul@kernel.org, marcan@marcan.st,
- sven@svenpeter.dev, florian.fainelli@broadcom.com, rjui@broadcom.com,
- sbranden@broadcom.com, paul@crapouillou.net, Eugeniy.Paltsev@synopsys.com,
- manivannan.sadhasivam@linaro.org, vireshk@kernel.org, Frank.Li@nxp.com,
- leoyang.li@nxp.com, zw@zh-kernel.org, wangzhou1@hisilicon.com,
- haijie1@huawei.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
- sean.wang@mediatek.com, matthias.bgg@gmail.com,
- angelogioacchino.delregno@collabora.com, afaerber@suse.de,
- logang@deltatee.com, daniel@zonque.org, haojian.zhuang@gmail.com,
- robert.jarzmik@free.fr, andersson@kernel.org, konrad.dybcio@linaro.org,
- orsonzhai@gmail.com, baolin.wang@linux.alibaba.com, zhang.lyra@gmail.com,
- patrice.chotard@foss.st.com, linus.walleij@linaro.org, wens@csie.org,
- jernej.skrabec@gmail.com, peter.ujfalusi@gmail.com, kys@microsoft.com,
- haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
- jassisinghbrar@gmail.com, mchehab@kernel.org, maintainers@bluecherrydvr.com,
- aubin.constans@microchip.com, ulf.hansson@linaro.org,
- manuel.lauss@gmail.com, mirq-linux@rere.qmqm.pl, jh80.chung@samsung.com,
- oakad@yahoo.com, hayashi.kunihiko@socionext.com, mhiramat@kernel.org,
- brucechang@via.com.tw, HaraldWelte@viatech.com, pierre@ossman.eu,
- stern@rowland.harvard.edu, oneukum@suse.com,
- openipmi-developer@lists.sourceforge.net, dmaengine@vger.kernel.org,
- asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
- linux-rpi-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
- imx@lists.linux.dev, linuxppc-dev@lists.ozlabs.org,
- linux-mediatek@lists.infradead.org, linux-actions@lists.infradead.org,
- linux-arm-msm@vger.kernel.org, linux-riscv@lists.infradead.org,
- linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
- linux-hyperv@vger.kernel.org, linux-rdma@vger.kernel.org,
- linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
- linux-omap@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
- linux-s390@vger.kernel.org, netdev@vger.kernel.org, linux-usb@vger.kernel.org
-References: <20240327160314.9982-1-apais@linux.microsoft.com>
- <20240327160314.9982-5-apais@linux.microsoft.com>
-Content-Language: en-GB
-From: Duncan Sands <duncan.sands@free.fr>
-In-Reply-To: <20240327160314.9982-5-apais@linux.microsoft.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <vuh25ueep3rwcmthlkvhb2avpkqzc6lsbee3qdmerolijq7azq@rwmakgznqvmq>
 
-Hi Allen, the usbatm bits look very reasonable to me.  Unfortunately I don't 
-have the hardware to test any more.  Still, for what it's worth:
 
-Signed-off-by: Duncan Sands <duncan.sands@free.fr>
+Hi,
+
+On Wed, Mar 27, 2024 at 12:39:04PM +0000, Diogo Ivo wrote:
+> The UCSI specification mentions that when the OPM is notified by the
+> PPM of an asynchronous event it should first send all the commands it
+> needs to get the details of the event and only after acknowledge it by
+> sending ACK_CC_CI with the Connector Change bit set, while the current
+> code sends this ack immediately after scheduling all the partner_tasks.
+> Move this ACK_CC_CI command to the end of all partner_tasks.
+> 
+> This fixes a problem with some LG Gram laptops where the PPM sometimes
+> notifies the OPM with the Connector Change Indicator field set in the
+> CCI after an ACK_CC_CI command is sent, causing the UCSI stack to check
+> the connector status indefinitely since the EVENT_PENDING bit is already
+> cleared. This causes an interrupt storm and an artificial high load on
+> these platforms.
+> 
+> It would also be interesting to see if we could take this approach and
+> implement the discussion in [1] regarding sending an ACK_CC_CI command
+> that acks both the command completion and the connector change.
+> 
+> Signed-off-by: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
+> 
+> [1]: https://lore.kernel.org/all/20240320073927.1641788-1-lk@c--e.de/
+> ---
+>  drivers/usb/typec/ucsi/ucsi.c | 27 ++++++++++++++++++++-------
+>  1 file changed, 20 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index 0c8f3b3a99d6..b8b39e43aba8 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -69,6 +69,23 @@ static int ucsi_acknowledge_connector_change(struct ucsi *ucsi)
+>  	return ucsi->ops->sync_write(ucsi, UCSI_CONTROL, &ctrl, sizeof(ctrl));
+>  }
+>  
+> +static void ucsi_handle_ack_connector_change(struct ucsi_connector *con)
+> +{
+> +	struct ucsi *ucsi = con->ucsi;
+> +	int ret;
+> +
+> +	if (list_empty(&con->partner_tasks)) {
+> +		mutex_lock(&ucsi->ppm_lock);
+> +		ret = ucsi_acknowledge_connector_change(ucsi);
+> +		mutex_unlock(&ucsi->ppm_lock);
+> +
+> +		if (ret)
+> +			dev_err(ucsi->dev, "%s: ACK failed (%d)", __func__, ret);
+
+What if a real async connector change event happens here? It can because
+you just cleared the connector change condition. But it will be ignored
+because EVENT_PENDING is still set. In practive the new event might even
+be reported in the CCI along with the completion of the ACK command
+above (without an additional async event).
+
+So the PPM now thinks it reported the event to us and will not send
+an async event again. But we will never check for it because we ignored
+it and the UCSI will be stuck forever.
+
+What UCSI backend (ACPI, CCG, ...) is this?
+
+> +
+> +		clear_bit(EVENT_PENDING, &ucsi->flags);
+> +	}
+> +}
+> +
+>  static int ucsi_exec_command(struct ucsi *ucsi, u64 command);
+
+      regards  Christian
+
 
