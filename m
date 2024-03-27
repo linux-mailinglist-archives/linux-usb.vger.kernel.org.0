@@ -1,189 +1,124 @@
-Return-Path: <linux-usb+bounces-8469-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8470-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D81A88DC6B
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Mar 2024 12:22:18 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB37988DC9F
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Mar 2024 12:34:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 35BB82A2FA5
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Mar 2024 11:22:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B08F11F2B81F
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Mar 2024 11:34:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4F1051C5D;
-	Wed, 27 Mar 2024 11:22:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88FE784D15;
+	Wed, 27 Mar 2024 11:33:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jtI81To/"
+	dkim=pass (2048-bit key) header.d=brixit-nl.20230601.gappssmtp.com header.i=@brixit-nl.20230601.gappssmtp.com header.b="Kc7gveCy"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16ECC29CF8;
-	Wed, 27 Mar 2024 11:22:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BDDE82D8D
+	for <linux-usb@vger.kernel.org>; Wed, 27 Mar 2024 11:33:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711538531; cv=none; b=pNj0KCK3CYYI8K28aXLlxH/dV5L3dAGEyoCauHxUg69foVigdAg5Kv5qzL5Qr7LPk49kKdtJL/n1H4zz4hK7nU7swoG35W3lK/duZBdufU1QsVO7dwZQ0GRCPJrgmgOdYUX6Duca415nGkOyFumkDE01KMVuihLfik0KoC6MgT4=
+	t=1711539237; cv=none; b=eHBvNRxd/oCMRjWHaCDYMCPbvZBbdOjMf3s/OsVlHOz2xEpnWE41INAWABIIpmwXYx7ztZwact+xGpBpI3ie36UzoWNFFdJA3wnPQU7iurE0TanBEZc5D3Wv/XgY3WdUCqoe/q11ekkOIMj7PxxufDWy2pRluhQ5rgb3+XmPkl8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711538531; c=relaxed/simple;
-	bh=J7zAHuGREnCdBItMrYt7Dp5Z+38Lf4Gu8Jhy9frF4P4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Rb3G10UqDpHde7d646buLMqhgg7+gV5w6OUReVpwLNeM8EotwBKqlyRcrWbjqOOcCgbMou+cAsDPl5i+QrhmCarPIbjEpgmFTwyBc5A0eP1DNBZr7jG9z7eM3UF3yMIovJDQAg1DKgrTM4FlcHuU9R6bqEm3jPZ1mVpji1cBRR4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jtI81To/; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711538529; x=1743074529;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=J7zAHuGREnCdBItMrYt7Dp5Z+38Lf4Gu8Jhy9frF4P4=;
-  b=jtI81To/3Js3GMJZvuBSs/taLJz/t2cRUhaI+QznGDjoiIPrRlgb/QFY
-   fPuX31iG5gU8+B6j10yPFTEeufVqsZpas92cFKZYtfhuIT1Yww2St7cwJ
-   gnxrC+Le3xpcoyyHX790j2kNYGnj68GyOeRQ97To0Q78leHGyZiAN9tBB
-   NLs8Ac++4ikUkyy0JuVjg+g48nh0l44qGNeymRjfjEbQ+nBW0n6S7+4X0
-   O7gdm0Z5nFP//RIz26QzJ+A3je8oZ2yKcK3FIR297saJxjLKRmgqK+rsv
-   x/IIyD/E/9j+k5v0HziLfD9Ud9RJ2uDa6Opz+4rog9J8HCZEQE7L3WrRB
-   g==;
-X-CSE-ConnectionGUID: LzhkCbZiSLWIqoufyptVtg==
-X-CSE-MsgGUID: I5fP53PpREOCAoV5JOIiwA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11025"; a="17361966"
-X-IronPort-AV: E=Sophos;i="6.07,158,1708416000"; 
-   d="scan'208";a="17361966"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2024 04:22:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11025"; a="937074467"
-X-IronPort-AV: E=Sophos;i="6.07,158,1708416000"; 
-   d="scan'208";a="937074467"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 27 Mar 2024 04:22:05 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 27 Mar 2024 13:22:04 +0200
-Date: Wed, 27 Mar 2024 13:22:04 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Pavan Holla <pholla@chromium.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Benson Leung <bleung@chromium.org>,
-	Tzung-Bi Shih <tzungbi@kernel.org>,
-	Guenter Roeck <groeck@chromium.org>, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-	chrome-platform@lists.linux.dev
-Subject: Re: [PATCH v2 2/3] usb: typec: ucsi: Import interface for UCSI
- transport
-Message-ID: <ZgQBXFzuZLJcmH4h@kuha.fi.intel.com>
-References: <20240325-public-ucsi-h-v2-0-a6d716968bb1@chromium.org>
- <20240325-public-ucsi-h-v2-2-a6d716968bb1@chromium.org>
+	s=arc-20240116; t=1711539237; c=relaxed/simple;
+	bh=aDg9VQsZHb2bvkz2wfSvA+6KPQPzORiP4CB60k8cjxo=;
+	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type; b=n4qEgJVjSpbwA8LMOV23MXXZFwTJBKFJoK349CGbrM+qAVUM/DUhizUb6A9dL7y7r9KnfnfNPfwVYMZ3FTQkOeHz8FBAeLFfQAWyeH/cl5IZsfU/gcQPhfx9xrjhePFYM2sSTLwPQsQ5T6zSD5K2mMu6K8/84WPbt6EuCZXbSAI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brixit.nl; spf=none smtp.mailfrom=brixit.nl; dkim=pass (2048-bit key) header.d=brixit-nl.20230601.gappssmtp.com header.i=@brixit-nl.20230601.gappssmtp.com header.b=Kc7gveCy; arc=none smtp.client-ip=209.85.208.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brixit.nl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=brixit.nl
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-55a179f5fa1so8443439a12.0
+        for <linux-usb@vger.kernel.org>; Wed, 27 Mar 2024 04:33:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brixit-nl.20230601.gappssmtp.com; s=20230601; t=1711539233; x=1712144033; darn=vger.kernel.org;
+        h=content-transfer-encoding:subject:from:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PZdVzn1VOccM6TAbuNnLSK4C6eC9jetDFNYscga+k5s=;
+        b=Kc7gveCyH5XKkJKWs4SbXYuAlxaO0UTR7SXA8xTxyhcUvswmsWMCP3swPOuHKSFvP+
+         fAqTk2cdxAdFgwMBkpcqR5lc37w2l54a+gGgSxGZ6IlMHAn7YZHRR3Xwp2OP0hxgV1D1
+         9RXnak3GwUC5+uUTiPd05upl615QIBYOqmRagzoSgLO5l9YtfVwhQ49pJvSccpEiJiK7
+         GT1MO+Ydp9gtuUpiOCqC5HzjT8txK14WZY8VXhIEKP3ckdr2N8yVldA/6TPL8OBTznC4
+         rgPpFENG90/4I5fE2h4dds+38RH5yfq7sQ7IL24tIZGoM17UlOVBZBTc094wuc5k/izL
+         YTBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711539233; x=1712144033;
+        h=content-transfer-encoding:subject:from:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=PZdVzn1VOccM6TAbuNnLSK4C6eC9jetDFNYscga+k5s=;
+        b=DRq28wsPESJ1IJmNt0OmFu55v0UVfJmyTyy9expFb7F7rEWH0efppxItED3kczR26G
+         G4FVN2PFtUu1LLkZ/u7P8UpxrvYcnrC/F2Nphljk3nHlAkJTRiWsGHlGHiPb4Nfm0Nhp
+         Okq8+Ux4S9PgBXqvjskyoQqHLMHjp0WSS+hdikhxfHUwQM/Va5+TTaQZpZhHqYx2bflT
+         hFfq7+Tl3PHbLeaRKNJxv9Fb57piiaXz9U91SRMtzW0JGoo+Yl2Lbwn1rTMD6xECLUyA
+         ZMS8305wN+QQMdCuJ4L0YprntZwJV9kWbqv5ZelaC0Eh3D9Lvvz4/BYuRpRVmFYms2RF
+         eM9g==
+X-Gm-Message-State: AOJu0Yz0R5V5WkguA01bDXR5imb/RdCREkFEp7hoQ2ZZVhh8Hsj/9EHR
+	nAe6vUdJQjSjUaz8LfxJErcghkZdO4cD+w74ra9E8evdk6MZAJh8E9G9X5gfN9jFKf7wdWefkdM
+	Z5qU=
+X-Google-Smtp-Source: AGHT+IHD0cq5C34cn/BBubnt5ebOOH5aH0iskwKyOgX/OGINY84REUT4/Twhj58XP+1ft7pcNHUvAw==
+X-Received: by 2002:a17:906:b4e:b0:a47:61cb:35db with SMTP id v14-20020a1709060b4e00b00a4761cb35dbmr777249ejg.10.1711539233116;
+        Wed, 27 Mar 2024 04:33:53 -0700 (PDT)
+Received: from ?IPV6:2a00:bba0:120c:9f00:7afa:53ac:c867:e339? (2a00-bba0-120c-9f00-7afa-53ac-c867-e339.static6.cust.trined.nl. [2a00:bba0:120c:9f00:7afa:53ac:c867:e339])
+        by smtp.gmail.com with ESMTPSA id ap3-20020a17090735c300b00a48f583bee3sm3635580ejc.30.2024.03.27.04.33.52
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Mar 2024 04:33:52 -0700 (PDT)
+Message-ID: <00c4fd45-dc9f-4197-952e-c7c322b6370c@brixit.nl>
+Date: Wed, 27 Mar 2024 12:33:51 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240325-public-ucsi-h-v2-2-a6d716968bb1@chromium.org>
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: linux-usb@vger.kernel.org
+From: Martijn Braam <martijn@brixit.nl>
+Subject: Using a composite device with kernel drivers and libusb at the same
+ time
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Mon, Mar 25, 2024 at 11:42:26PM +0000, Pavan Holla wrote:
-> Import include/linux/usb/ucsi.h and remove any duplicate declarations.
-> 
-> Signed-off-by: Pavan Holla <pholla@chromium.org>
-> ---
->  drivers/usb/typec/ucsi/ucsi.h | 54 +------------------------------------------
->  1 file changed, 1 insertion(+), 53 deletions(-)
+I hope this is an acceptable place to ask this question. I've spend a 
+bit of time reverse-engineering the USB protocol for a subset of 
+Blackmagic Design video mixers and I have made a userspace 
+implementation to make these devices usable in Linux with libusb. This 
+is working great but the roadblock I have that I can't find a reasonable 
+solution for is that these devices also expose an UVC webcam.
 
-I'm pretty sure somebody already told you to merge this into 1/3, so
-why haven't you done that?
+While my control software is active it's not possible to use the UVC 
+webcam functionality of the device because with libusb I have to detach 
+the kernel from the interfaces to make my userspace access work. As far 
+as I can find documented online there's no way to have half a composite 
+device handled by kernel drivers and half with userspace drivers in 
+Linux. It seems to me the only solution is to make a kernel driver to 
+bind to the control interface and have that kernel driver pass-through 
+to userspace somehow with a custom protocol? If that is the case would 
+such a driver even be supported in Linux?
 
+For reference the device I'm working has these looks like this:
 
-> diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
-> index 32daf5f58650..167951538030 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.h
-> +++ b/drivers/usb/typec/ucsi/ucsi.h
-> @@ -10,22 +10,13 @@
->  #include <linux/usb/typec.h>
->  #include <linux/usb/pd.h>
->  #include <linux/usb/role.h>
-> +#include <linux/usb/ucsi.h>
->  #include <asm/unaligned.h>
->  
->  /* -------------------------------------------------------------------------- */
->  
-> -struct ucsi;
-> -struct ucsi_altmode;
->  struct dentry;
->  
-> -/* UCSI offsets (Bytes) */
-> -#define UCSI_VERSION			0
-> -#define UCSI_CCI			4
-> -#define UCSI_CONTROL			8
-> -#define UCSI_MESSAGE_IN			16
-> -#define UCSI_MESSAGE_OUT		32
-> -#define UCSIv2_MESSAGE_OUT		272
-> -
->  /* UCSI versions */
->  #define UCSI_VERSION_1_2	0x0120
->  #define UCSI_VERSION_2_0	0x0200
-> @@ -42,48 +33,6 @@ struct dentry;
->   */
->  #define UCSI_SPEC_REVISION_TO_BCD(_v_)  (((_v_) + 1) << 8)
->  
-> -/* Command Status and Connector Change Indication (CCI) bits */
-> -#define UCSI_CCI_CONNECTOR(_c_)		(((_c_) & GENMASK(7, 1)) >> 1)
-> -#define UCSI_CCI_LENGTH(_c_)		(((_c_) & GENMASK(15, 8)) >> 8)
-> -#define UCSI_CCI_NOT_SUPPORTED		BIT(25)
-> -#define UCSI_CCI_CANCEL_COMPLETE	BIT(26)
-> -#define UCSI_CCI_RESET_COMPLETE		BIT(27)
-> -#define UCSI_CCI_BUSY			BIT(28)
-> -#define UCSI_CCI_ACK_COMPLETE		BIT(29)
-> -#define UCSI_CCI_ERROR			BIT(30)
-> -#define UCSI_CCI_COMMAND_COMPLETE	BIT(31)
-> -
-> -/**
-> - * struct ucsi_operations - UCSI I/O operations
-> - * @read: Read operation
-> - * @sync_write: Blocking write operation
-> - * @async_write: Non-blocking write operation
-> - * @update_altmodes: Squashes duplicate DP altmodes
-> - *
-> - * Read and write routines for UCSI interface. @sync_write must wait for the
-> - * Command Completion Event from the PPM before returning, and @async_write must
-> - * return immediately after sending the data to the PPM.
-> - */
-> -struct ucsi_operations {
-> -	int (*read)(struct ucsi *ucsi, unsigned int offset,
-> -		    void *val, size_t val_len);
-> -	int (*sync_write)(struct ucsi *ucsi, unsigned int offset,
-> -			  const void *val, size_t val_len);
-> -	int (*async_write)(struct ucsi *ucsi, unsigned int offset,
-> -			   const void *val, size_t val_len);
-> -	bool (*update_altmodes)(struct ucsi *ucsi, struct ucsi_altmode *orig,
-> -				struct ucsi_altmode *updated);
-> -};
-> -
-> -struct ucsi *ucsi_create(struct device *dev, const struct ucsi_operations *ops);
-> -void ucsi_destroy(struct ucsi *ucsi);
-> -int ucsi_register(struct ucsi *ucsi);
-> -void ucsi_unregister(struct ucsi *ucsi);
-> -void *ucsi_get_drvdata(struct ucsi *ucsi);
-> -void ucsi_set_drvdata(struct ucsi *ucsi, void *data);
-> -
-> -void ucsi_connector_change(struct ucsi *ucsi, u8 num);
-> -
->  /* -------------------------------------------------------------------------- */
->  
->  /* Commands */
-> @@ -465,7 +414,6 @@ int ucsi_send_command(struct ucsi *ucsi, u64 command,
->  		      void *retval, size_t size);
->  
->  void ucsi_altmode_update_active(struct ucsi_connector *con);
-> -int ucsi_resume(struct ucsi *ucsi);
->  
->  #if IS_ENABLED(CONFIG_POWER_SUPPLY)
->  int ucsi_register_port_psy(struct ucsi_connector *con);
-> 
-> -- 
-> 2.44.0.396.g6e790dbe36-goog
+USB 1-4  [1edb:be55] Blackmagic design Blackmagic Design [serial]
+    Class EF SubClass 02 Protocol 01
+       Interface 0 FF/03/00 Unknown <- Blackmagic USB configuration protocol
+       Interface 1 FF/02/00 Unknown <- Blackmagic USB control protocol 
+(I'm using this with libusb)
+       Interface 2 FF/04/00 Unknown <- Unknown
+       Interface 3 FE/01/01 Unknown <- DFU
+       Interface 4 0E/01/01 Blackmagic Design <- UVC camera
+       Interface 5 0E/02/01 Unknown <- UVC camera
+       Interface 6 01/01/00 Blackmagic Design <- ALSA
+       Interface 7 01/02/00 Unknown <- ALSA
 
--- 
-heikki
+If this is not the right place for this question, then where would the 
+right place be?
+
+Greetings,
+Martijn Braam
+
 
