@@ -1,128 +1,149 @@
-Return-Path: <linux-usb+bounces-8472-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8471-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C73188E281
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Mar 2024 14:28:11 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22EB588E07B
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Mar 2024 13:37:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EC818290B45
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Mar 2024 13:28:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AB7791F286C2
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Mar 2024 12:37:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC4D513BC11;
-	Wed, 27 Mar 2024 12:22:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38B08131E56;
+	Wed, 27 Mar 2024 12:12:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=tecnico.ulisboa.pt header.i=@tecnico.ulisboa.pt header.b="u0Q7GKPi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="flYmHvvP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp1.tecnico.ulisboa.pt (smtp1.tecnico.ulisboa.pt [193.136.128.21])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E84D172628
-	for <linux-usb@vger.kernel.org>; Wed, 27 Mar 2024 12:21:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.136.128.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF6B7149C5F;
+	Wed, 27 Mar 2024 12:12:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711542121; cv=none; b=by1WdszR0qP0i9KQU14lNwWky/h7gcceisHMuAfdbU04xhkdLaGZpJCmX5Tt4Iw19xTxU5x/Fo+0o1Wa/ChhI13Ym1I9RfUtWAQP7Mjrvg155e1CcbrDLjGW5hmIIGCuMRQERRibRmlao3idNG/MzJv3BGByxKrZM1jLaN8z8vU=
+	t=1711541576; cv=none; b=nX4haGnwXIgr4AbMq7C5oGyCb/NZEAVt3iz7b5Uxf+fnNfiOterSumKMMmy2yaTmMKiC8XkA+A/bH9dV46rT36OT4fm8eeew5YqviraFKQypfMUjahFHZi6S5H7oGdu4++HMeA1G16y26mD1349jUfpJ4xYnii3T35Aa8EsRCLo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711542121; c=relaxed/simple;
-	bh=lkVH+6YHdoA4iYT1IUy+4zufKo6t/7PDPEXy+5yOxnc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Jz1MWyF5+kuMdijMoMiLxe8/49TfJNxA0sECNbeHljiqA7WPvcRCAXA3hYOOME5WkQrjhPC39T8zaXwd4TNmCPUfGVAugyEWrzY+ISa+rZtGprtODMu9rJIFJ5JejVz2Em8qAFSPKqoUkqy/pd+8xzexN68OLvZ59TTPxaUceUc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tecnico.ulisboa.pt; spf=pass smtp.mailfrom=tecnico.ulisboa.pt; dkim=pass (1024-bit key) header.d=tecnico.ulisboa.pt header.i=@tecnico.ulisboa.pt header.b=u0Q7GKPi; arc=none smtp.client-ip=193.136.128.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tecnico.ulisboa.pt
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tecnico.ulisboa.pt
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by smtp1.tecnico.ulisboa.pt (Postfix) with ESMTP id 36902633F00B;
-	Wed, 27 Mar 2024 12:11:51 +0000 (WET)
-X-Virus-Scanned: by amavis-2.13.0 (20230106) (Debian) at tecnico.ulisboa.pt
-Received: from smtp1.tecnico.ulisboa.pt ([127.0.0.1])
- by localhost (smtp1.tecnico.ulisboa.pt [127.0.0.1]) (amavis, port 10025)
- with LMTP id B8Tzowf7w7GP; Wed, 27 Mar 2024 12:11:49 +0000 (WET)
-Received: from mail1.tecnico.ulisboa.pt (mail1.ist.utl.pt [193.136.128.10])
-	by smtp1.tecnico.ulisboa.pt (Postfix) with ESMTPS id C7DC6633F004;
-	Wed, 27 Mar 2024 12:11:48 +0000 (WET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tecnico.ulisboa.pt;
-	s=mail; t=1711541509;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-	bh=OFvWDb3iT0xFr2ncRSq04CoUbExvv0SD+VTJL/n4qCY=;
-	b=u0Q7GKPiyk6RbY/VZACQStWu9d6GD26KnG2FDBg3xkd5TU5T5qJ7Gp3x1ULwjwOUpWtcml
-	am/Wq20EOQu/OHQ28rsR1HnAoi6OlcxMVVxVe9xXTetnktKen2v1K1Tpk+XL7lMyiEuRet
-	f7j+HMZhREZI3yLO5RTIUhUGTpiHDPk=
-Received: from diogo-gram.home (unknown [IPv6:2a01:14:8070:dc60:f4e6:62fe:d7f8:e109])
-	(Authenticated sender: ist187313)
-	by mail1.tecnico.ulisboa.pt (Postfix) with ESMTPSA id 9024B360080;
-	Wed, 27 Mar 2024 12:11:47 +0000 (WET)
-Date: Wed, 27 Mar 2024 12:11:42 +0000
-From: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
-To: heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org, 
-	pmalani@chromium.org, jthies@google.com, neil.armstrong@linaro.org, 
-	abhishekpandit@chromium.org, fabrice.gasnier@foss.st.com, linux-usb@vger.kernel.org
-Cc: diogo.ivo@tecnico.ulisboa.pt
-Subject: [PATCH] usb: typec: ucsi: Only enable supported notifications
-Message-ID: <yhz7nq622mbg3rqsyvqz632pc756niagpfbnzayfswhzo7esho@vrdtx5c3hjgx>
+	s=arc-20240116; t=1711541576; c=relaxed/simple;
+	bh=G83QTErL8n2Y76MXQwujf0FzfFPIzjjZ6OxjLFGq1kI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bwHp2rXNBH08Ep2jJ7buvd++I4Y9n6LAO2Dre0zsFOFMlQw/3JP8y8F+Dt1fCZCokgjzzLH8jE2eL1/6n1AlVkMy6O6qxq7WNmaO3+EjzwD5BJtllBb6EzmKDu4QVYSnkvQ4F5koqd6+q8pA9oGw2+7DBpS1pUWEoh2/+s5hKng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=flYmHvvP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5A0AC433F1;
+	Wed, 27 Mar 2024 12:12:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711541576;
+	bh=G83QTErL8n2Y76MXQwujf0FzfFPIzjjZ6OxjLFGq1kI=;
+	h=From:To:Cc:Subject:Date:From;
+	b=flYmHvvPZynlm5lgPXZEH5rKK4nLgRrjVE1Jbz0fDYHevtxgDlOow+NWxVoZbvOOU
+	 NTcNLmPFNGcCtVQX7OKQ/q9mGmUpsZXihLYRRHIZX1Z5vcXT/VhYaaVVOnxrWBV/md
+	 4yBY82npHcodzAe3mLCyhJVcrrdlKWQh0+ypYAj3hyl08LVQ4VjNubb1EfyHSixvYz
+	 3bi8kvgwBZqBzIuuNKBv/spllyj/e5f/77Ss4QwyJu3dglHsA1fvJ3rkgyYefCpX0h
+	 eGsQjTWJvW/KXA8gr93QRC7W7pqPhsKUNr6S1L5Wy6jAh9gI0iCJMhQ3wRqtd5x3aB
+	 uQwHHHWDR2q3Q==
+From: Sasha Levin <sashal@kernel.org>
+To: stable@vger.kernel.org,
+	rogerq@kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: FAILED: Patch "usb: dwc3-am62: fix module unload/reload behavior" failed to apply to 6.1-stable tree
+Date: Wed, 27 Mar 2024 08:12:54 -0400
+Message-ID: <20240327121254.2829897-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Patchwork-Hint: ignore
+X-stable: review
+Content-Transfer-Encoding: 8bit
 
-The UCSI specification defines some notifications to be optional for the
-PPM to support. From these only enable the ones the PPM informs us are
-actually supported.
+The patch below does not apply to the 6.1-stable tree.
+If someone wants it applied there, or to any other stable or longterm
+tree, then please email the backport, including the original git commit
+id to <stable@vger.kernel.org>.
 
-Signed-off-by: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
+Thanks,
+Sasha
+
+------------------ original commit in Linus's tree ------------------
+
+From 6661befe41009c210efa2c1bcd16a5cc4cff8a06 Mon Sep 17 00:00:00 2001
+From: Roger Quadros <rogerq@kernel.org>
+Date: Tue, 27 Feb 2024 11:23:48 +0200
+Subject: [PATCH] usb: dwc3-am62: fix module unload/reload behavior
+
+As runtime PM is enabled, the module can be runtime
+suspended when .remove() is called.
+
+Do a pm_runtime_get_sync() to make sure module is active
+before doing any register operations.
+
+Doing a pm_runtime_put_sync() should disable the refclk
+so no need to disable it again.
+
+Fixes the below warning at module removel.
+
+[   39.705310] ------------[ cut here ]------------
+[   39.710004] clk:162:3 already disabled
+[   39.713941] WARNING: CPU: 0 PID: 921 at drivers/clk/clk.c:1090 clk_core_disable+0xb0/0xb8
+
+We called of_platform_populate() in .probe() so call the
+cleanup function of_platform_depopulate() in .remove().
+Get rid of the now unnnecessary dwc3_ti_remove_core().
+Without this, module re-load doesn't work properly.
+
+Fixes: e8784c0aec03 ("drivers: usb: dwc3: Add AM62 USB wrapper driver")
+Cc: stable@vger.kernel.org # v5.19+
+Signed-off-by: Roger Quadros <rogerq@kernel.org>
+Link: https://lore.kernel.org/r/20240227-for-v6-9-am62-usb-errata-3-0-v4-1-0ada8ddb0767@kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/typec/ucsi/ucsi.c | 25 +++++++++++++++++++++++--
- 1 file changed, 23 insertions(+), 2 deletions(-)
+ drivers/usb/dwc3/dwc3-am62.c | 12 ++----------
+ 1 file changed, 2 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index cf52cb34d285..0c8f3b3a99d6 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -1626,6 +1626,27 @@ static int ucsi_register_port(struct ucsi *ucsi, struct ucsi_connector *con)
+diff --git a/drivers/usb/dwc3/dwc3-am62.c b/drivers/usb/dwc3/dwc3-am62.c
+index 90a587bc29b74..f85603b7f7c5e 100644
+--- a/drivers/usb/dwc3/dwc3-am62.c
++++ b/drivers/usb/dwc3/dwc3-am62.c
+@@ -267,21 +267,14 @@ static int dwc3_ti_probe(struct platform_device *pdev)
  	return ret;
  }
  
-+static u64 ucsi_get_supported_notifications(struct ucsi *ucsi)
-+{
-+	u8 features = ucsi->cap.features;
-+	u64 ntfy = UCSI_ENABLE_NTFY_ALL;
-+
-+	if (!(features & UCSI_CAP_ALT_MODE_DETAILS))
-+		ntfy &= ~UCSI_ENABLE_NTFY_CAM_CHANGE;
-+
-+	if (!(features & UCSI_CAP_PDO_DETAILS))
-+		ntfy &= ~(UCSI_ENABLE_NTFY_PWR_LEVEL_CHANGE |
-+			  UCSI_ENABLE_NTFY_CAP_CHANGE);
-+
-+	if (!(features & UCSI_CAP_EXT_SUPPLY_NOTIFICATIONS))
-+		ntfy &= ~UCSI_ENABLE_NTFY_EXT_PWR_SRC_CHANGE;
-+
-+	if (!(features & UCSI_CAP_PD_RESET))
-+		ntfy &= ~UCSI_ENABLE_NTFY_PD_RESET_COMPLETE;
-+
-+	return ntfy;
-+}
-+
- /**
-  * ucsi_init - Initialize UCSI interface
-  * @ucsi: UCSI to be initialized
-@@ -1679,8 +1700,8 @@ static int ucsi_init(struct ucsi *ucsi)
- 			goto err_unregister;
- 	}
+-static int dwc3_ti_remove_core(struct device *dev, void *c)
+-{
+-	struct platform_device *pdev = to_platform_device(dev);
+-
+-	platform_device_unregister(pdev);
+-	return 0;
+-}
+-
+ static void dwc3_ti_remove(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+ 	struct dwc3_am62 *am62 = platform_get_drvdata(pdev);
+ 	u32 reg;
  
--	/* Enable all notifications */
--	ntfy = UCSI_ENABLE_NTFY_ALL;
-+	/* Enable all supported notifications */
-+	ntfy = ucsi_get_supported_notifications(ucsi);
- 	command = UCSI_SET_NOTIFICATION_ENABLE | ntfy;
- 	ret = ucsi_send_command(ucsi, command, NULL, 0);
- 	if (ret < 0)
+-	device_for_each_child(dev, NULL, dwc3_ti_remove_core);
++	pm_runtime_get_sync(dev);
++	of_platform_depopulate(dev);
+ 
+ 	/* Clear mode valid bit */
+ 	reg = dwc3_ti_readl(am62, USBSS_MODE_CONTROL);
+@@ -289,7 +282,6 @@ static void dwc3_ti_remove(struct platform_device *pdev)
+ 	dwc3_ti_writel(am62, USBSS_MODE_CONTROL, reg);
+ 
+ 	pm_runtime_put_sync(dev);
+-	clk_disable_unprepare(am62->usb2_refclk);
+ 	pm_runtime_disable(dev);
+ 	pm_runtime_set_suspended(dev);
+ }
 -- 
-2.44.0
+2.43.0
+
+
+
 
 
