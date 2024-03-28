@@ -1,116 +1,115 @@
-Return-Path: <linux-usb+bounces-8546-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8547-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0949F890476
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Mar 2024 17:03:43 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C9FD890479
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Mar 2024 17:05:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3A62D1C23A41
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Mar 2024 16:03:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C9509B21FF0
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Mar 2024 16:04:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D97B581AC8;
-	Thu, 28 Mar 2024 16:03:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 121CF12F5BE;
+	Thu, 28 Mar 2024 16:04:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d7+eRdMa"
+	dkim=pass (1024-bit key) header.d=tecnico.ulisboa.pt header.i=@tecnico.ulisboa.pt header.b="uWgNH1G9"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp1.tecnico.ulisboa.pt (smtp1.tecnico.ulisboa.pt [193.136.128.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6002D55E40;
-	Thu, 28 Mar 2024 16:03:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C42918004E
+	for <linux-usb@vger.kernel.org>; Thu, 28 Mar 2024 16:04:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.136.128.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711641817; cv=none; b=i+HJnUktc/7m257GipY/UJ9DNHqGcNyw4M/GXGrseNr4GOI8gkrl7i4xhNqvOpOclCIJJR3el0ATsq5OTKEW4syYu4HopWQwTv0IZB2XB+VFapH7uyxcdSFayV6K3HcmVwoUIqsZ8lzn6SM5v3XqdlixEQ41fEvBBjAg5ZM92VE=
+	t=1711641895; cv=none; b=oU6cY0qXKIewGszQfeijXw62ARMi+rGtx27qMF8lw1DUJByp4pJ48CFksv/asQ4/uP5jrtUnfZaMDacuTLN6wAd2YPL7Wal0Qf9FqPkf9v0FLgJ/LNEB0k1wHg000CBSQL9Nqg1RebLZ58CwSL1qXI1wjGf5MCiF5Nw5cRgIoHw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711641817; c=relaxed/simple;
-	bh=HowEN1J5McZBQqKd59V/2XnrBWjdZT6J3rhINf1YhZA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Ti9Ic4eiuqPxKSP8WEy9NwDGlPcOYhN6s/bl2FrH5S40DBZVcelMo7bSNuzYlBlRJHVYFryfIAht1KtEN/ZJT7MwodBBUJ434fBGBFl0ArebSAz0LzbpWV/2gx45vU4dg91HL7aZn0DOr7ESXQM5W8CMOYfGaR+R2WwbA+y4v7Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d7+eRdMa; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B6AEC433C7;
-	Thu, 28 Mar 2024 16:03:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711641816;
-	bh=HowEN1J5McZBQqKd59V/2XnrBWjdZT6J3rhINf1YhZA=;
-	h=From:Date:Subject:To:Cc:From;
-	b=d7+eRdMaC/gJIqZv/7sLa9yMUgcCWWiAnSt2hs1zg6nDy1XypADpu80mFZayKidsD
-	 MjORDfcfujmpm3fr4yzefN7wMTDyzYQbr0bVfEeLDXKOLLRj5qUQzBATB0INXwoBsH
-	 RmAfu4n3EcWpKlIDDVC86COXXifK40gLWF869RXy+Ukg0yQ6lDVPeHST6d8pHB+G3b
-	 mEPt1MVgKUEjcz0KxsqwJjX0KnNXTLzOqtHIueMLdpaThUT0wJ3A8IYjcepNkkri4C
-	 pJxVC63ATQRy3gENP714kXQwgPDBUurHfJIwSsnMtGp2a1SyrhS+UFwJdJGEgQMNcv
-	 91gb/zKq4hWQw==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Thu, 28 Mar 2024 09:03:20 -0700
-Subject: [PATCH] usb: typec: ptn36502: Only select DRM_AUX_BRIDGE with OF
+	s=arc-20240116; t=1711641895; c=relaxed/simple;
+	bh=MISz/EoQ/v7ePwqZvKtpzcJ45035R5Ed15qc0+lLFvM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cxZk70f7nXHgLUgS+1vl9cXpWb3RNMh2lNCvn9yhImVs5lBv0LyMe0doX7F0Ygj1joeqdUsWwXJur0uGUKFAa0WGXkBZr1a15mFGIe8uwdl+f/Hlcj/7pRSW/RSOfDInM4q31cL4FP++c4Inw4v0oY7qxXelyztUYx1FUJaNJ7E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tecnico.ulisboa.pt; spf=pass smtp.mailfrom=tecnico.ulisboa.pt; dkim=pass (1024-bit key) header.d=tecnico.ulisboa.pt header.i=@tecnico.ulisboa.pt header.b=uWgNH1G9; arc=none smtp.client-ip=193.136.128.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tecnico.ulisboa.pt
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tecnico.ulisboa.pt
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by smtp1.tecnico.ulisboa.pt (Postfix) with ESMTP id 884626003C03;
+	Thu, 28 Mar 2024 16:04:50 +0000 (WET)
+X-Virus-Scanned: by amavis-2.13.0 (20230106) (Debian) at tecnico.ulisboa.pt
+Received: from smtp1.tecnico.ulisboa.pt ([127.0.0.1])
+ by localhost (smtp1.tecnico.ulisboa.pt [127.0.0.1]) (amavis, port 10025)
+ with LMTP id NeUumWbioh8i; Thu, 28 Mar 2024 16:04:48 +0000 (WET)
+Received: from mail1.tecnico.ulisboa.pt (mail1.ist.utl.pt [193.136.128.10])
+	by smtp1.tecnico.ulisboa.pt (Postfix) with ESMTPS id 4DCBB6003C0B;
+	Thu, 28 Mar 2024 16:04:48 +0000 (WET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tecnico.ulisboa.pt;
+	s=mail; t=1711641888;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=EvI81DIWvWDSN/i3VU1xa6wdfKe+x/PMJfL6iHJNDcU=;
+	b=uWgNH1G9LjDC/4Zo3ytw3lAJIFQZJOT7ltVU88x+1OaD7G//Znr3lPBs99sXSFkVJjomZw
+	IAKINoQG4DYyVewSGCy8Td4OzZKEyX1xjyQ8w3o3sl4Bqyo+1Cm484hFUJxVVmg9izbw3O
+	lip/UhQqynM1USA9EtX/Tbbf1CpyK24=
+Received: from diogo-gram.home (unknown [IPv6:2a01:14:8070:dc60:f4e6:62fe:d7f8:e109])
+	(Authenticated sender: ist187313)
+	by mail1.tecnico.ulisboa.pt (Postfix) with ESMTPSA id 82862360073;
+	Thu, 28 Mar 2024 16:04:47 +0000 (WET)
+Date: Thu, 28 Mar 2024 16:04:43 +0000
+From: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
+To: Christian Ehrhardt <lk@c--e.de>
+Cc: heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org, 
+	neil.armstrong@linaro.org, quic_prashk@quicinc.com, dmitry.baryshkov@linaro.org, 
+	fabrice.gasnier@foss.st.com, saranya.gopal@intel.com, linux-usb@vger.kernel.org, 
+	diogo.ivo@tecnico.ulisboa.pt
+Subject: Re: [RFC PATCH] usb: typec: ucsi: ack connector change after all
+ tasks finish
+Message-ID: <nbvsbechvtakxdtsmabtcb4zf2sojmcucv3lhyxe32dgg3z5cy@ljru526jospx>
+References: <vuh25ueep3rwcmthlkvhb2avpkqzc6lsbee3qdmerolijq7azq@rwmakgznqvmq>
+ <ZgRMhB96pVgxnMq4@cae.in-ulm.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240328-fix-ptn36502-drm_aux_bridge-select-v1-1-85552117e26e@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAMeUBWYC/x2N0QrCMAxFf2Xk2UBtrRZ/RWR0S7YFtI50jsHYv
- xt8PHDPPTtUVuEK92YH5VWqfIrB+dRAP+UyMgoZg3f+4oJPOMiG81LCNTqPpO82f7e2UyGbVn5
- xv2AKRAOlHMMtgh3Nymb9I4/ncfwADJW3FHQAAAA=
-To: heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org
-Cc: dmitry.baryshkov@linaro.org, luca.weiss@fairphone.com, 
- linux-usb@vger.kernel.org, patches@lists.linux.dev, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.14-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1775; i=nathan@kernel.org;
- h=from:subject:message-id; bh=HowEN1J5McZBQqKd59V/2XnrBWjdZT6J3rhINf1YhZA=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDGmsU27EHX8z59wLf5GLJ5pmnD/N4Pf5imeWvd71h3eX1
- q34Vvv+ZkcpC4MYF4OsmCJL9WPV44aGc84y3jg1CWYOKxPIEAYuTgGYSO8shv95897N9xN3Vdf+
- Jdd1rsPe8fqHM8Ubwx8vFNV4L6rWFNLN8D/wXu48wch97Vq3HJICN60p3zY/nMFWm/dC/J/VgbY
- CRxkA
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZgRMhB96pVgxnMq4@cae.in-ulm.de>
 
-CONFIG_DRM_AUX_BRIDGE depends on CONFIG_OF but that dependency is not
-included when CONFIG_TYPEC_MUX_PTN36502 selects it, resulting in a
-Kconfig warning when CONFIG_OF is disabled:
+On Wed, Mar 27, 2024 at 05:42:44PM +0100, Christian Ehrhardt wrote:
+> 
+> Hi,
+> 
+> On Wed, Mar 27, 2024 at 12:39:04PM +0000, Diogo Ivo wrote:
+> > 				...
+> > +static void ucsi_handle_ack_connector_change(struct ucsi_connector *con)
+> > +{
+> > +	struct ucsi *ucsi = con->ucsi;
+> > +	int ret;
+> > +
+> > +	if (list_empty(&con->partner_tasks)) {
+> > +		mutex_lock(&ucsi->ppm_lock);
+> > +		ret = ucsi_acknowledge_connector_change(ucsi);
+> > +		mutex_unlock(&ucsi->ppm_lock);
+> > +
+> > +		if (ret)
+> > +			dev_err(ucsi->dev, "%s: ACK failed (%d)", __func__, ret);
+> 
+> What if a real async connector change event happens here? It can because
+> you just cleared the connector change condition. But it will be ignored
+> because EVENT_PENDING is still set. In practive the new event might even
+> be reported in the CCI along with the completion of the ACK command
+> above (without an additional async event).
 
-  WARNING: unmet direct dependencies detected for DRM_AUX_BRIDGE
-    Depends on [n]: HAS_IOMEM [=y] && DRM_BRIDGE [=y] && OF [=n]
-    Selected by [m]:
-    - TYPEC_MUX_PTN36502 [=m] && USB_SUPPORT [=y] && TYPEC [=m] && I2C [=y] && (DRM [=y] || DRM [=y]=n) && DRM_BRIDGE [=y]
+This patch was more to see how this idea would be received so I didn't
+think too much about problems with timings, this would come after but
+yes, you are correct in pointing this out.
 
-Only select CONFIG_DRM_AUX_BRIDGE when CONFIG_DRM_BRIDGE and CONFIG_OF
-are enabled to clear up the warning. This results in no functional
-change because prior to the refactoring that introduces this warning,
-ptn36502_register_bridge() returned 0 when CONFIG_OF was disabled, which
-continues to occur with drm_aux_bridge_register() when
-CONFIG_DRM_AUX_BRIDGE is not enabled.
+> What UCSI backend (ACPI, CCG, ...) is this?
 
-Fixes: 9dc28ea21eb4 ("usb: typec: ptn36502: switch to DRM_AUX_BRIDGE")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- drivers/usb/typec/mux/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/usb/typec/mux/Kconfig b/drivers/usb/typec/mux/Kconfig
-index 4827e86fed6d..ce7db6ad3057 100644
---- a/drivers/usb/typec/mux/Kconfig
-+++ b/drivers/usb/typec/mux/Kconfig
-@@ -60,7 +60,7 @@ config TYPEC_MUX_PTN36502
- 	tristate "NXP PTN36502 Type-C redriver driver"
- 	depends on I2C
- 	depends on DRM || DRM=n
--	select DRM_AUX_BRIDGE if DRM_BRIDGE
-+	select DRM_AUX_BRIDGE if DRM_BRIDGE && OF
- 	select REGMAP_I2C
- 	help
- 	  Say Y or M if your system has a NXP PTN36502 Type-C redriver chip
-
----
-base-commit: ef83531c8e4a5f2fc9c602be7e2a300de1575ee4
-change-id: 20240328-fix-ptn36502-drm_aux_bridge-select-83ddfd8a5375
+It is ACPI.
 
 Best regards,
--- 
-Nathan Chancellor <nathan@kernel.org>
 
+Diogo
 
