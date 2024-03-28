@@ -1,94 +1,110 @@
-Return-Path: <linux-usb+bounces-8628-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8629-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 60FC4890D62
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Mar 2024 23:20:13 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 634D4890DBE
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Mar 2024 23:40:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 174C11F26C46
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Mar 2024 22:20:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9A04029CFA5
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Mar 2024 22:40:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54E2614A092;
-	Thu, 28 Mar 2024 22:08:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17F442E40D;
+	Thu, 28 Mar 2024 22:40:21 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03C59149DF1;
-	Thu, 28 Mar 2024 22:08:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from cae.in-ulm.de (cae.in-ulm.de [217.10.14.231])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C79562206E
+	for <linux-usb@vger.kernel.org>; Thu, 28 Mar 2024 22:40:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.10.14.231
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711663699; cv=none; b=DkmjuLbh3wXtw2kitnctp9LtVGjLfqSwzMt0oCSJz0qK7HrTEHKFJ3psf708Of8WBxPKlzzcXZCM9oedGxvgywI6pv6Hlw0GDm0ph3wjnuGON+fOByD8z0hNWt2bcepcIC5q3qYHDo6lbmEnTdc6FlrYlqCfT26R2kjuYDaz8wM=
+	t=1711665620; cv=none; b=LFfTwzzJ07jQiRxg3dqJX6l2z+FuG4XtLAI7cKuKpt1t6P0S7dW9uani9OW30wZUiDg67aJ8DQXKgIMipou+U0riH/4Q1syVV0E+0kq60456ObO8b2jGeU5Pxkswgs9TpsqbV+ds4AUFikJrpwMYJLPq/SIwzOyfRZFFX6um5lE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711663699; c=relaxed/simple;
-	bh=LLgiLkEII5evsgK2AeBKp1W4Vw206VrKkeb0L7m1FcA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ElCOk//0r2s0J9rqci5S0HCCzyG90qgoK4QwCYMyF1Pxhe5Q+g5PnHBIweZW99cJ8/5Xf9LdK+gCzBXQ4mdBiH/DhtBiXzuZNaS/vfjAbUwPUQwQFTRX5gt7OPq4sYjEe1blL4HH6kxHioTsXsbiStS4vvoOvQ2R8usxJGqlO2U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B7A9C433C7;
-	Thu, 28 Mar 2024 22:08:17 +0000 (UTC)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Date: Thu, 28 Mar 2024 23:06:30 +0100
-Subject: [PATCH 52/52] USB: serial: xsens_mt: drop driver owner
- initialization
+	s=arc-20240116; t=1711665620; c=relaxed/simple;
+	bh=h993KaFZUS4e6tz+/a7jfa76O75xwuYnZaXV0A3xs5o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ikgJ2eQO+5cJxS2peuG5JDgqsS3o3nNsSDuOGP0/9ZXEZn3KFhXr4001tnUxO8IvAxft9lFMu0Zc/EMvqK4GCq8L8VttMstPe5aP5vJBqfTQIAS97nHzbZCWQK8MldKakNpg1M71GNF8BxhuY2g9Zy3aAUewM1OphA/8qbw3+/8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c--e.de; spf=pass smtp.mailfrom=c--e.de; arc=none smtp.client-ip=217.10.14.231
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c--e.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=c--e.de
+Received: by cae.in-ulm.de (Postfix, from userid 1000)
+	id 684B914040D; Thu, 28 Mar 2024 23:40:09 +0100 (CET)
+Date: Thu, 28 Mar 2024 23:40:09 +0100
+From: Christian Ehrhardt <lk@c--e.de>
+To: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
+Cc: heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
+	neil.armstrong@linaro.org, quic_prashk@quicinc.com,
+	dmitry.baryshkov@linaro.org, fabrice.gasnier@foss.st.com,
+	saranya.gopal@intel.com, linux-usb@vger.kernel.org
+Subject: Re: [RFC PATCH] usb: typec: ucsi: ack connector change after all
+ tasks finish
+Message-ID: <ZgXxyWsdA7YML3mR@cae.in-ulm.de>
+References: <vuh25ueep3rwcmthlkvhb2avpkqzc6lsbee3qdmerolijq7azq@rwmakgznqvmq>
+ <ZgREDo9tYAmdBcUc@cae.in-ulm.de>
+ <ynrqweb7hhfkrlvjr6suajq3jpgi4sqexz44qt4chekce7phiw@cyofo73xztdg>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240328-module-owner-usb-serial-v1-52-bc46c9ffbf56@linaro.org>
-References: <20240328-module-owner-usb-serial-v1-0-bc46c9ffbf56@linaro.org>
-In-Reply-To: <20240328-module-owner-usb-serial-v1-0-bc46c9ffbf56@linaro.org>
-To: Johan Hovold <johan@kernel.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=672;
- i=krzysztof.kozlowski@linaro.org; h=from:subject:message-id;
- bh=LLgiLkEII5evsgK2AeBKp1W4Vw206VrKkeb0L7m1FcA=;
- b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBmBenomRGUsL6cULpwOBe0G2bVuRPfxmlAfgNA+
- 2cWHgqoT3aJAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCZgXp6AAKCRDBN2bmhouD
- 1/g2D/9fX5oDeyuAqMHK3i1Su4fUJkok1yK3RHtQTFrpbA1qln3eumD102qFjnVBiHhunYN1mq0
- LBOue/jhu7eFeGMiFLUex6gx7kctOD3Tj4V02cIdV5C8OGwQZmhGAGHexnlDxNMGjYIdqZjY5u+
- QlSDDigE30r7Ydh/ue+6Dr/9kK9G1hDbA8OserSt0wckd+Lyaa/YRtilgupADpmOZGtQSAeN4xl
- nQLQBXTT2q1NKbgT4h6/dUOQ4D6HyMLN7yclKdPFEPmM/Zn4eBUWy2SSVrgU8t35jpHCYQ5hvmy
- Uk4UhTJeQwPIOk09ZC1I9u2q+wcM9M4rRItSJjV6DvW4DDDeljtoe6Xz+9ymq0o088jZnWej3Zl
- TXlOEI4UzjUPQi2ONSfcBgD9vYKleUVmwZIjTQcP76fgfY60hCuYUzfb6qy8+0FjwWSjMjDPjwe
- xuxCugPHIQL8bvqsxNC90xFYF/x7h1nBDLIXZQsBqn5xmSKbtXNgvQk3OS+BWHmn4nb2hGs4Y7F
- L+SyTh0DPfYcv5oeidnTOzDdrF7SG1w+iJ5VQidawuyI3oHprrWic5CdJg/JXGQHd3C+Cp8wilv
- qj1csNu7CL/o9HDe2pUTgXdNLNCM1GZDRRSPaTJA+z3TqBmQ4vFITzK6hNBgB5f/GK1W5Cz8rhu
- SI8fYbC8zRfnfIA==
-X-Developer-Key: i=krzysztof.kozlowski@linaro.org; a=openpgp;
- fpr=9BD07E0E0C51F8D59677B7541B93437D3B41629B
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ynrqweb7hhfkrlvjr6suajq3jpgi4sqexz44qt4chekce7phiw@cyofo73xztdg>
 
-Core in usb_serial_register_drivers() already sets the .owner, so driver
-does not need to.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- drivers/usb/serial/xsens_mt.c | 1 -
- 1 file changed, 1 deletion(-)
+Hi,
 
-diff --git a/drivers/usb/serial/xsens_mt.c b/drivers/usb/serial/xsens_mt.c
-index cf262c9a9638..382b3698c1d5 100644
---- a/drivers/usb/serial/xsens_mt.c
-+++ b/drivers/usb/serial/xsens_mt.c
-@@ -49,7 +49,6 @@ static int xsens_mt_probe(struct usb_serial *serial,
- 
- static struct usb_serial_driver xsens_mt_device = {
- 	.driver = {
--		.owner = THIS_MODULE,
- 		.name = "xsens_mt",
- 	},
- 	.id_table = id_table,
+On Thu, Mar 28, 2024 at 03:42:40PM +0000, Diogo Ivo wrote:
+> On Wed, Mar 27, 2024 at 05:06:38PM +0100, Christian Ehrhardt wrote:
+> > On Wed, Mar 27, 2024 at 12:39:04PM +0000, Diogo Ivo wrote:
+> > > This fixes a problem with some LG Gram laptops where the PPM sometimes
+> > > notifies the OPM with the Connector Change Indicator field set in the
+> > > CCI after an ACK_CC_CI command is sent,causing the UCSI stack to check
+> > > the connector status indefinitely since the EVENT_PENDING bit is already
+> > > cleared. This causes an interrupt storm and an artificial high load on
+> > > these platforms.
+> > 
+> > If the PPM does this for a connector change ACK_CC_CI command it is
+> > IMHO violating the spec (unless there is a _new_ event).
+> 
+> Yes, the problem is exactly that the PPM in these laptops is really not
+> conformant with the spec and moving the command change ACK_CC_CI to the
+> end circumvented the problems in the PPM. If [1] is the way to go then
+> we need some sort of quirk for these devices and I'll have to dig
+> deeper.
 
--- 
-2.34.1
+Just to make this clear: This is not my call to make.
 
+> > When I saw this type of loops the connector change indicator was set
+> > in response to an ACK_CC_CI command for a command (sent by a different
+> > thread for a different connector) between clearing the EVENT_PENDING
+> > bit and acquiring the PPM lock.
+> > 
+> > Can you test if the changes that already are in usb-linus are
+> > sufficient to fix your issues?
+> 
+> I am seeing these problems when addressing one connector only, so other
+> threads for other connectors do not play a role here. I have tested the
+> latest usb-linus with and without your early ack patch set [1] on top
+> and the issue is still not fixed.
+
+There are legitimate reaons why the connector change indicator
+is set in response to a command:
+- If the condition was reported previously it is sticky until
+  cleared.
+- Something else changed on the connector.
+
+For a more complicated device that I have here, there are five
+different connector change events after plugging it in.
+
+I'd like to understand why you run into a loop here.
+Printing the completed command (if any) and the CCI in
+ucsi_acpi_notify() and the details of the connector status in
+ucsi_handle_connector_change() could shed some light on this.
+
+
+> [1]: https://lore.kernel.org/linux-usb/20240327224554.1772525-1-lk@c--e.de/
+
+Best regards   Christian
 
