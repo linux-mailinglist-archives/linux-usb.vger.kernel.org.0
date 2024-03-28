@@ -1,81 +1,77 @@
-Return-Path: <linux-usb+bounces-8521-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8522-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE39D88F590
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Mar 2024 03:52:49 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F27A88F5B0
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Mar 2024 04:05:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9269D1F2F822
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Mar 2024 02:52:49 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D4187B240A8
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Mar 2024 03:05:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20C06225D0;
-	Thu, 28 Mar 2024 02:52:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F11432C853;
+	Thu, 28 Mar 2024 03:04:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alpsalpine.com header.i=@alpsalpine.com header.b="IpxG38lA"
+	dkim=pass (2048-bit key) header.d=alpsalpine.com header.i=@alpsalpine.com header.b="jVoMX0Pl"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2069.outbound.protection.outlook.com [40.107.114.69])
+Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2066.outbound.protection.outlook.com [40.107.114.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53822816;
-	Thu, 28 Mar 2024 02:52:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.114.69
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EAEB32189;
+	Thu, 28 Mar 2024 03:04:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.114.66
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711594360; cv=fail; b=S85lM7GQoFoASNoMvP59eeRBDsL9uOvMwLfIJhVEqQ5OpX2JAY7N32CP/3G/EDkHLwYdY2M/R2AC97MKFz2UxPGl5sxDtS8PCZjSysr6Pendx6ra+NDDmYm/6ZoWsaqA4G+g49a+IO9nWwwNBGgdCXGBUqDFg1Qf4U6ZP6tLo1Q=
+	t=1711595097; cv=fail; b=bDVVxEIcZj4VRUmkBexg131NRXnv4zd5cnEO5T0C2p4N8I+o1agMtxlc8eP3ZZK2d/JLoI02MPcBmAdU4xYpePYGgmu3I7jqrA7snYHbStEDSOeIJenT6y2KCblfSO8xk0ZLMYnOSsenN4zMYgU2sDfoxPy3ki+qUMEd/nIRl0M=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711594360; c=relaxed/simple;
-	bh=ybsx27NoJvyszQOnp2tPwww9ARLuR+T8seHFy4vfLes=;
+	s=arc-20240116; t=1711595097; c=relaxed/simple;
+	bh=BKW3qS+TwUYz1PPd03eDk9VJDaWutyu2MdLzfZhJmN8=;
 	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=Q1ji1bEJECijGzrB2jjdmbt+NGBDO+yJ+ifz1QVJfdF/3q4gna6hcbw0lJjeX07eIJQnzgbATBxmsFPlFTNzKHoimLq19bJ3MCTF4ZBXjhenPYYaHqmNL8UyADK+ouFZ0IEC28MqKvFv3lUvS+gLccvXzPridIzs2S4syk+0YkE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alpsalpine.com; spf=pass smtp.mailfrom=alpsalpine.com; dkim=pass (2048-bit key) header.d=alpsalpine.com header.i=@alpsalpine.com header.b=IpxG38lA; arc=fail smtp.client-ip=40.107.114.69
+	 Content-Type:MIME-Version; b=Cc2i3r4ZZucBB049HZUoEOPptEnsV5psHaYnMmgtgHfot/nJ6BO4wNsZu0PNHCtJZEjgiKxKrlveqP9fvOIcKqNNd5SjlpdNL+4pykAIulwq6MJjUMqm29+dnygsAlXiCJFjKSLCE3Akt6Pjcr2nqCBcGFDCQZ7+I6Cat1TRpUQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alpsalpine.com; spf=pass smtp.mailfrom=alpsalpine.com; dkim=pass (2048-bit key) header.d=alpsalpine.com header.i=@alpsalpine.com header.b=jVoMX0Pl; arc=fail smtp.client-ip=40.107.114.66
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alpsalpine.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpsalpine.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Dcb/Tc8agKexhW5FNtuEv8Ldjt0KjM/UbxEcGFX34j6I1LqsxYx4v+r7rOXat+yog2Q4Sz7gMFHU/Cy8W0ds+jbd0XphWuGu6PgnDVLu6CeOvR0bfogM4MwADCRNKRc7GYajokihfCZ7VkTaYjOTdxk5VHsBlrt2ADckcKB1q3Ei7sp+laahJZCt5jFGlzeBkuUpOmFP/o9DOom6QPa/j9EFO45QkGDaLpuThszN8qM7+1q+ZzywsBqidusYu5bQjilrEqW7m3DUKSShi5zNrWS01iHJu2B6pqoFHWMzRDqLrPcwsUluyr3LZbzU+SYqnnmdnYMTIKtA/+pKinptQg==
+ b=E2EjIkSOk0Q86EhaEzMMtDky0sLZEUlB4SQWwBwRFWPLIrX7tzgTEqfGUbCPed0AnXIag8PyTSGu2W31/rCn7ySa8ToWDCLdWTjn2k5l++BVb5yv94fDG81OC4Msq5vOUtvyvi9+LQHUKwsbV+EMHnrwLDJJlfNBMN5aHkB6mgoxzX0fbWFJF+kMxGv4jV0JireBkBYP++4a5H74mGCHOjntBitRsbP3rwtVw7Ci9WZXqE2Q9Bbn3ZPQsdYs8Glwnp+YqUhHv8Y+wQbgr3+Aw/EIBvo0KgxuEmnm5hSdie9lO6fCBix4a7xxkJY2ag8aSdRSr5/KQgO2v4r3ZhZu0A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UjroXfKuJZthA1F0Z7CbH1CAQfagnEZUaYVtWUriaDA=;
- b=FQtbcWN9m1TamNWQBvMlMm4BQEMPFsZVKa3xUj7jJA542oPn6TMKar0Y2fOWXzKEcAezkDL/Ju58T5wpPWvTtWAbMbK2mro7Sb+p/lIGfIYfMAzcpjyhnGYGVi8mq/MMCPbzU/SNVcM3m0zMqF70uCP2ZM8tDCMs5BJxZ8Vli096MY+oCcUT0xdJFIAVYwe2kJ/lXcrVHUKUSi0IedQtFvwsgvCf6N0xYU3alR5S4J4s5J8RqOKwCvJPv5kmeFuPfaNF1qzbdl8dSmJZgvpQ8rK68XT6MDVuMegBQgKGs0y/ep6K+JStA7MEgg2GePOsNhvS7ITNWg5WMJbU2rC2Iw==
+ bh=BKW3qS+TwUYz1PPd03eDk9VJDaWutyu2MdLzfZhJmN8=;
+ b=K08maiNtefEtlV0LE4OIFiCeS7FmaR9DicDkGNJNs5bc3L/F7aA2VOxlPeyDdThMK0QnKqgUctuMDhD5OHRkcuRDtZrvM0TuTbP1xRZJNWCoxc85WKAguAUG4TKnmxdRwowegB2m9PmEyR2szwnyqJaOI9L52E5ar4NaSoNvGvzVMtqh+Lbcs/oAV40GRwNhfDRa9AMko3FZV3rO3sXdi20VQdjAyApBFcVeppj86rxLgm4yz/X5a+rRQe6yvdk0heDV/X2raUcZN56z0dqtVlR3CgLUfLvIBGD/deImi1T8uqUbFCshHKhmiYIrGttRksXKbt66YdtOKDoj3wsTvw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=alpsalpine.com; dmarc=pass action=none
  header.from=alpsalpine.com; dkim=pass header.d=alpsalpine.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alpsalpine.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UjroXfKuJZthA1F0Z7CbH1CAQfagnEZUaYVtWUriaDA=;
- b=IpxG38lApi3199cAyJz2lUZD07nqW2m036l4e1Ux0r7qxJcyoTfowTY66SHnu51dr7d5NSSwJpWHX+MgbJp2q9iZuWOTe+GDTriKEyeKRIuUmVLDLf6qIYbqZOMazDlCD5IqjTk1um6u3KTxxp7tH55e3j2Cazs8CvFssceM92127mmLFpirAGX8tCFwqfJnPn21THf3vMI0LXH4hlQDpTI8cHHWPLApitLmZYY/ck87hor85CvMsTtE/t23WBUDnzsl6QPB5V2FqRgogimzLaqWjWDVRNbz2mzglTUkuzN6tdrpXVDnBdVst1Jh7BLkEN3BPpQBFJc7dRteFZlhDQ==
+ bh=BKW3qS+TwUYz1PPd03eDk9VJDaWutyu2MdLzfZhJmN8=;
+ b=jVoMX0PliHNnDA/aCa7MTYBjuIMh3QsCuPpM8ptfxys4q4wOqh48LJLn3UNpwiWVAENNR+bTlrZo8lf94P5H3FQfitHUTgGsLLNgmP0G3kOX+slytGOfkIyeeUZjjrg/Ny8iuexFAT7JUoejU24LJdl1PJ/A58OzhE7wPgz6epC5Pb5UCoicjMr5hHxw2yGcCUBJ5H8JQItte/0Zps3Zuu+Ad5XLnwm54PzE/9AU9PrOAFr+an61SyfSkTZmavkJDiqiXX8PSsrhlxb+6KThEKWWLQwYO9fSaK87sSKyjnDAu1xdtsJaU7mKVPxcn2Zq4s9PPvZokLHrIVEXaWwMzA==
 Received: from TYVPR01MB10781.jpnprd01.prod.outlook.com
- (2603:1096:400:2ae::14) by TYWPR01MB10224.jpnprd01.prod.outlook.com
- (2603:1096:400:1e5::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.32; Thu, 28 Mar
- 2024 02:52:35 +0000
+ (2603:1096:400:2ae::14) by OSYPR01MB5432.jpnprd01.prod.outlook.com
+ (2603:1096:604:86::10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.33; Thu, 28 Mar
+ 2024 03:04:47 +0000
 Received: from TYVPR01MB10781.jpnprd01.prod.outlook.com
  ([fe80::b541:f53c:6306:6e2b]) by TYVPR01MB10781.jpnprd01.prod.outlook.com
  ([fe80::b541:f53c:6306:6e2b%4]) with mapi id 15.20.7409.031; Thu, 28 Mar 2024
- 02:52:35 +0000
+ 03:04:47 +0000
 From: Norihiko Hama <norihiko.hama@alpsalpine.com>
-To: Greg KH <gregkh@linuxfoundation.org>
-CC: "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"usb-storage@lists.one-eyed-alien.net"
+To: Alan Stern <stern@rowland.harvard.edu>
+CC: Greg KH <gregkh@linuxfoundation.org>, "linux-usb@vger.kernel.org"
+	<linux-usb@vger.kernel.org>, "usb-storage@lists.one-eyed-alien.net"
 	<usb-storage@lists.one-eyed-alien.net>, "linux-kernel@vger.kernel.org"
 	<linux-kernel@vger.kernel.org>
 Subject: RE: [PATCH] usb-storage: Optimize scan delay more precisely
 Thread-Topic: [PATCH] usb-storage: Optimize scan delay more precisely
-Thread-Index:
- AQHagAnskZ+PrXZ1a0CyN6BGkMIiXrFLFjOAgAAcfLCAAAKHgIAAAT8ggAAHUQCAATOvEA==
-Date: Thu, 28 Mar 2024 02:52:35 +0000
+Thread-Index: AQHagAnskZ+PrXZ1a0CyN6BGkMIiXrFLFjOAgAAcfLCAAG5DgIAA1Sdw
+Date: Thu, 28 Mar 2024 03:04:47 +0000
 Message-ID:
- <TYVPR01MB10781C18C8177783D8DEF7E69903B2@TYVPR01MB10781.jpnprd01.prod.outlook.com>
+ <TYVPR01MB10781AA8B37E147E318597B46903B2@TYVPR01MB10781.jpnprd01.prod.outlook.com>
 References: <20240327055130.43206-1-Norihiko.Hama@alpsalpine.com>
  <2024032757-surcharge-grime-d3dd@gregkh>
  <TYVPR01MB107814D7A583CB986884AD4B290342@TYVPR01MB10781.jpnprd01.prod.outlook.com>
- <2024032745-transfer-dazzler-2e15@gregkh>
- <TYVPR01MB10781723CBD338DC3EEB5F20590342@TYVPR01MB10781.jpnprd01.prod.outlook.com>
- <2024032750-violator-trivial-90a3@gregkh>
-In-Reply-To: <2024032750-violator-trivial-90a3@gregkh>
+ <a446cdf4-3a9b-43d8-b22b-78c20cce2b4f@rowland.harvard.edu>
+In-Reply-To: <a446cdf4-3a9b-43d8-b22b-78c20cce2b4f@rowland.harvard.edu>
 Accept-Language: ja-JP, en-US
 Content-Language: ja-JP
 X-MS-Has-Attach:
@@ -83,54 +79,54 @@ X-MS-TNEF-Correlator:
 authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=alpsalpine.com;
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TYVPR01MB10781:EE_|TYWPR01MB10224:EE_
-x-ms-office365-filtering-correlation-id: 54a2e613-bbc1-416a-9b75-08dc4ed21f37
+x-ms-traffictypediagnostic: TYVPR01MB10781:EE_|OSYPR01MB5432:EE_
+x-ms-office365-filtering-correlation-id: 58dddad0-7a2b-46b6-c61a-08dc4ed3d39f
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
 x-microsoft-antispam-message-info:
- fo8RMfpnV6cl9PlxNBXFUdXUe5MBY3F2KRY4R040oD6Sms8nOHpZJmLSzkxerd0Wn6rVxe7ghdf4QKv4WD/LvaUamhcn7+JluSvmjcpO1+2Vbryh1gmY4nTlsfhvr2eq7ME7NsMA3aKmKi2A1yeXj6MnK0u18KD6BfYrHmxyHDGNQzHTuRLy6NTOadi13nXxeZKgwBIxvuqhxRDIn17OqFwZBhQShnqzLeyp0D90oy3SIPJvlgNAi2L//hcsYoUKFRoLOUn9Vs8KpLYhZg09TD6UwG4ajAD/Sxe0GyCdJhO6AVZTARF9xPjRZEmehT5BX2HXlkNIOmZde0nT7R0Tym8/C42LQJL1dggo2ianipt+uosjrPYO14zBJslHsja+H2wkaQuBRfLYA+GliXh+4kcMbWEJbgPGiSN9SXNoJuSKFa5B/tQGKezTALvqCwJC6uAKcQdwKk/xbL64i7+HqOZywjb0vqmG8oACvcj0b6iXRDRGjy42HFJAa551DOSLHfxHm4OxnQyX3B5sZk6zLMarpkse+r+PxUlJ4mqG9gaPqtoCgZMMUYLL3BUQnHfhgeeZ35JckWyFSa6dS2UHkOvAKAky4kjW+x0Pw0EaG9QXtIkdqENYbetWhIm4P6T/LpO7ioXE1mMQu48uO1zRcptIPuUHnc31I/q1NffILK2N9L7vI++NyFdlZjUEmSuhXdzYdPUH3CFjVQm3Accp+w==
+ dlQRM3Db9y9Ms8wMH+rFvSCMXsAiwXT8FwwjrnFjb/1QNezRc8ZlX1h6rh4i2cMtGFjyFdp+gyKw8ECL3mvjsLf3wpw8zCc2XQGRv5WecRnhyCqX281i6jZVNCQXwX/sWQfJ7Um3nMpZp4qHJBc23Yo7sqJ5QYhEuxG6RS3Ew9IrzxyI4+39EofJsODEzk4xkYaXGEbA1l2V5uwsppW7xc6tLDv7zHAyZZjm1psiqIS3bthcFxyJZ2WK9GOYStS7iIrwQ2f93uytR0VPd8CSjP5L6Vy461nkt3M4zx8XgSB4Y4BE+IeQyXUpRS8NzjL0okO6nWTNwul0Jl0vQFF3rr3QMb3NYCniLWVBljQSuddoc0fRmTOhAhm4XVCMfImNzT2nYLtBAacOmY8R4YPNjC1vsZyKoN0+0WQ6pDVDb+gXEpffMwkmdMWTBE7yyw9h9zrnvnM/dTgYeWTt17rHo5AuKUxeOBvQWCI8TXlleU65x6EEH9I3BR/Z4fXaHrDehWpYOpUrdYlrcEtmTebMLl8GqwDYTUI6PE5uX7zHz+AsCgXviWXsHkmf5y6IjaxCKppZ4UC7mmis1xkteQd9Awl6d6/jw/nTP0JUVVtd3P2cvwAUJrxKQ+/ApIQUfAMhiFjH88/tnkSipK8got8+YhSzn9SbK2z3kdcCsWKny3hdAGKJP8PXlEdYC2HRj5z9FPtIwWnJHcjxG5nLtG2aqDOGjwzMa1W9D40/FV2E0Kg=
 x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:ja;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYVPR01MB10781.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(366007)(1800799015)(38070700009);DIR:OUT;SFP:1101;
+ CIP:255.255.255.255;CTRY:;LANG:ja;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYVPR01MB10781.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(1800799015)(366007)(38070700009);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
 x-ms-exchange-antispam-messagedata-0:
- =?utf-7?B?bTNwVGdGWnh0ckV5NzI2dmxPeXJMSHE5ZG1rR3FCWlN3ZTdWam5RbTh3UVZW?=
- =?utf-7?B?emtsM1h3cXg4NjI5NGlzTWFiSUFGVHZ0bDcrLVBLdC9qY0F5ZzcwL3B4ZjZp?=
- =?utf-7?B?T1cyajB1UW0wOVVxMXVJSlZpRUZVRE5LSWlCSEpYS1BNN0RpOXlUYjBMR3lx?=
- =?utf-7?B?TkNLdmM3enpVR0lSNWlWV0xrN1EvbnR4d29xWXVqbUN0Um5wczdWY1JVbmZl?=
- =?utf-7?B?SUc0NXVScG1UWk1PeUFEL1BvWUhQYkUxKy1KQjBDckRGWU9uN00xM3FjaXBw?=
- =?utf-7?B?Sjc5NURvc1dxekdzWXJKYlVqZWtwbWlnR2VTcXFXM1hsemp4eTJ5ZVZhc3l1?=
- =?utf-7?B?R29ibkxBckFuQ29INDZpNE9TMVdza1d1NzNtL0JWaCstbWl0ZE1GaVpmKy1v?=
- =?utf-7?B?ZVZlSVgrLUhqd1lMd1pxYjBMMVZUakFSdkI4WTZ4aDRJZWJsZXJ5TXpvZlR4?=
- =?utf-7?B?QzU4SGVVbTY2QkVJd0hvR0RHNllxRnA5Ky1iMTFMTXJJUllsUHhleXVJaTJz?=
- =?utf-7?B?dElRTHFRb1JscUo2WTFWaVprZTF5WnNDb04wZGFOTDhBR3ZyU3R5cTRxUFNE?=
- =?utf-7?B?WFpydGtwTnlxMEFDRzJFcHVRZ25CYm9YNlUyQk1YdUU2VXk1aHFmVTlhZEhG?=
- =?utf-7?B?a1dDS0ZLMG1aWVdURGZzbGtBWXBXcFlQUkY3UFRHQVhETXV0N1gwTGZxRFFP?=
- =?utf-7?B?dVM3b0dRTjV4WlpyQmV5aDljNmFySGtReENsSGljTjB5WmNpQ05XTWVCMTFi?=
- =?utf-7?B?YllJOTRKTmFId001SjhtMEFtS3E2elk0OFd1WjQ0WWVKdFZtSXBCVm81aVVn?=
- =?utf-7?B?RkROc1BPdVRodUFTeUsvTmsyOGtEKy0xU1B3cEh2Z00wOHR3R1I0ckJGUEVT?=
- =?utf-7?B?TktVaU9TeWN4ZlkxMTRBcUNlM2VqOGpadHpRYkc3VGh4TTkrLWsxVWVnNmxp?=
- =?utf-7?B?aE5qU0o5Q3ZpbHJaT3VqR2hXbFhKa044b2VwYThpZ3hDdXdHL1N4dGZFNXdk?=
- =?utf-7?B?OWI4U1dIbzREdHFlajJ6MXlOTWJKcFpQR0gzZDE1TVR4L2VJQmpLemJTVGh3?=
- =?utf-7?B?VFpXRHp0SkhwQmlSY0pmc3lVS0t4NVBrdDJPMVhnTDZuT0Nqc0ZNVW1iazE2?=
- =?utf-7?B?UTU2NnlJRzdBRzBtT0ZCWndxNkZrUXJIWWRYZzNlQ3pHY2lsdDBndS8zcUZk?=
- =?utf-7?B?Ky1tekdlN1FxaHVSaUR6eXBNa2lvcGZQOGh0WFZkRndOSmE2VTNCSG55N2Jm?=
- =?utf-7?B?M3NqeU1aT2p5MlhpdzEybystOTZBSGxFZWZwUzlrQzI2czh2MFh2Zy9pRWV3?=
- =?utf-7?B?UW5jd1VwdkRHUTYxd1ZGWGJZaHdmZjd4Ky1DNWJOOTJwSC9vYmEyMXpKMlAv?=
- =?utf-7?B?NkNONlYvRGZhSnRaOXc3WDFOdHVjTTBONk50cHFlUlVZQUVZNzdxQTV6RDMy?=
- =?utf-7?B?cmxKMDNmWXNUckFFSEtjbTZ3c2FVSXJJdWtBZktYZ3JrVjBCZWI4TDkvZnUz?=
- =?utf-7?B?OVFTZVo4dUlXZWVpQ0xYcXlqdU8velE3bzJlVU5TekRuMXBmZmtQMUxhN1ha?=
- =?utf-7?B?SnJFVzk5eEJFMjlZT2dXMnJiREpSVVFzVG5iWFh2ZFdlT2ROaVJJc3dGOFZz?=
- =?utf-7?B?cHc4bjZKNHQxNHlsN2dkcC9vYUdQSlJkTWNaOXFOTURONkUxMUNhKy1pNzdY?=
- =?utf-7?B?V002dFhsVnowaXZLN0h4SGNXS0FXaU8xTVY4UFJUOWozMDBhVG9GVnhseFRt?=
- =?utf-7?B?OE1jY2FpZFlrVmlRYnFHeWVUYi84cWFXNTkrLWpydEErLXM0NFJzQXZKd3c=?=
- =?utf-7?B?Yk8rLXBmQlVuM2Q3U21nRjV4b3ozTHRxdzVBc0U5VmtNamxkT0VDbDQzTWx3?=
- =?utf-7?B?WTFwMmZQQXEveGNVaTN5dW81NmVFUk5STFJVMk81Ky1CdCstL1FMSXBsMnlr?=
- =?utf-7?B?b0JOZDR2bmxXUjRnVTBZQ0N0VTdQWUZ4T3RwTTBNbFRZMistMHRNSk1NRldR?=
- =?utf-7?B?SG1aWW9GS0h3YjZKdmlTT0x5VzV4NUtuWGttZjhvSzFqVWVuYTg1d2Y0REll?=
- =?utf-7?B?dDRjVSstckJvOUd5U0o5NkpGYXZWRHkwZXBSM0wyZmhTb2lIeEM3cGwyU0k2?=
- =?utf-7?B?cGRjZUlTRjlxMGlzYUUwbFFSWlYrLXRqakhpdEYwU2IxanBzZXpBcEY1REdx?=
- =?utf-7?B?WQ==?=
+ =?utf-7?B?b1BNL1Q4QzlnSGFWZVA5c042V1Q3VmZkU3NzckpFZmFlN0cyMFBkS3NJdEU=?=
+ =?utf-7?B?Ky1vNVdHaG1hMHhJNXRRaVNNNSstS29JUElsbGVKd1ZkTHZOZVFvUlpRMFFm?=
+ =?utf-7?B?bXFlWFdWNHJ3MVpXdEtBeTNjaW1QUk9QeHd6TktlVUtRcnVSaDF1bUJ2RHdw?=
+ =?utf-7?B?QkdNM3EwT0lac0Mxa0pGQ1Fpd1VlZk11N3p2cWR2SURkNW1tdDg5bW1qZEdN?=
+ =?utf-7?B?cFJCUlJFRVhnV3VmKy1Fc3BYTEZVb0RWdElpWjUwQ1BBeFZpTGU2MlRNaFVp?=
+ =?utf-7?B?QVQwbW9IQnNTTjg0NmN6NWtOQXBTeHgzUVVnNXBhSSstS3dRallDbGxSZ1hl?=
+ =?utf-7?B?V08vYzVDTE9VU2RWb3hVSDV5NGRYNktIZFhncXBIekpGR0pKZGsvczVtTUR4?=
+ =?utf-7?B?MlR0aEpGZUZOL1R3azNsbzdLTGUrLUc5dTExbm5RNlBFOVkwcWtEUXAyR3E2?=
+ =?utf-7?B?RUVrOWdvRkNNT0Y5QmtNclFENC9NTEVrQlJTNU5xb1hqRnhWeGZrcG1xbWhT?=
+ =?utf-7?B?YnoyakF5UmJyL29YeHdyOXRIdTJlRVQwVFNnUm4yNistR1prYVcwcHpaQUJX?=
+ =?utf-7?B?eVZHaWtrazFxMmlKNGFsa042TTNrNjM2a1lJVlVSSjRNYW12bktvMWlMTTFI?=
+ =?utf-7?B?L3dBb0krLUkzYzFlcDhTRnZFalExdmVGUVdHYndGZ0VEeXNCN1VIUWNHcHBV?=
+ =?utf-7?B?T3lJQTdvcDdEaUFORXJ0Q3FyaDFvQUFiM0NOanUxV2dqTG9ETWNlZGQ4WjRV?=
+ =?utf-7?B?Z1lGdEJlQ3NFN1EwQlhENk9wMEN1bjBPbU5ycFJSa2NDamZHeEJQT04zbGtk?=
+ =?utf-7?B?aFdKaHBhQzd5VmhXaTZScWtGVHBibnd0WjFMQUJ0U2E3NldMTjA2WFJqN2xX?=
+ =?utf-7?B?dnRsTC9hVUdKUlBycEVnKy1jd1BWMnQybmlyOWRhODBvQXVSR2xOZFBCS20=?=
+ =?utf-7?B?Ky0xemx1RnlrNistcmdJZXdOZCstSGJlZXpyR3VPcDJjVW93aFdRWmYxQnFy?=
+ =?utf-7?B?OEs5c2dEeU1HazRjbkcyV3dZcm5pcVNrSXE0cXlZWnNFVTZ4M09UTS9CMGRU?=
+ =?utf-7?B?U1J0SDk0b010V1VkTmJCWThPenZCenliOW5YemY5M1BjNE1KNUY3bUt1dk1C?=
+ =?utf-7?B?Ky1saFNhQTRSQ0doWUFONzdvRnh0YlJzUTJhNElaNTlqd0tsZjZLR1J3SkNX?=
+ =?utf-7?B?M2VMc04vdjROb0tZRzJNbmQ2cE1EV2ZPWjVlKy00dldoaERWNW5jTXNVRVFN?=
+ =?utf-7?B?NkcvSGJIRnJiUWtsYnlHWGtxUk81cVE2VzBoNUN6U2ZqdEgvZEUzdVBZZ0Vh?=
+ =?utf-7?B?c2pxT3kzKy11VUxYc2hEaGt3ZThNUmRTa1JXZ29xeVVVMGJJKy1RQkpkN0N1?=
+ =?utf-7?B?Y21wd252NHY4R1ZncVk3Ky0vQWxMN2pCd2o1U3dhWkhHL0lFbjVFcUcvci9x?=
+ =?utf-7?B?NnF3VzNTTmdBYXMyZjRISjVZU2hJM0hLRm5ZclpvTFlsbTNPSE8zeXk0L1pW?=
+ =?utf-7?B?RFdiM3pQbHl5ejg0NG0wVkxqY21mNystd2kzTUIvc0lnMjllWWlVR09NMWhI?=
+ =?utf-7?B?Z1hRTFJFRmthd3FJbTVOTlVhaXZnaXk5d1lxZ21TbXZsQ1U5bUJOUHlRTnVn?=
+ =?utf-7?B?dVovUk9ua2hlbzBKNkN2c2NaNTY4ZVNMT3NsZUlnTmNxNUlOVXIwZVBFRWhp?=
+ =?utf-7?B?VTRtZWdGZmlZV1pvSTc4eGJ2SWlYUnk1VGdrei9uSVMzNDdaKy1sRnFmUDZR?=
+ =?utf-7?B?NXkyVHN2OWl6cHNwcTNHb1IwbkpWUHRUL0wxZDl4cnE4bXQ2YVlrQ1Z6Ni92?=
+ =?utf-7?B?ODBFWCstekdXMm9qUnU5bWZYU2ZpUVp3VzNOTEpQSm5uMHAySmpBakp1Q2k1?=
+ =?utf-7?B?LzYyNjZsc1NjU29NZlBMVjdJeThkMjVYTlQ4enBqV2tJUGg5S2xCNCstV1pw?=
+ =?utf-7?B?YkJFeTU1OXlER0dhMFU5Q1EzNDBIeDhTaXVFb25LZW5xbXhOZCstNWtSRzU4?=
+ =?utf-7?B?TEw4ZkRtVjQwZTk3MFRZUjcrLUJ6MUFIQmFRNXZuak1NZmhDYWJNZHFUS01q?=
+ =?utf-7?B?elpOVlhSYmc2amdqNWFaNU0wLzI4aUx2N29lRU54ZDhsV3B1S1ZpSGd6ZTEv?=
+ =?utf-7?B?TEFKaXNGZWF0ZWlXVWdmd2NBdEs4cXM1aUlvdUhvU00xd00vU255QlV6bFp2?=
+ =?utf-7?B?UXliOQ==?=
 Content-Type: text/plain; charset="utf-7"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
@@ -142,56 +138,36 @@ MIME-Version: 1.0
 X-OriginatorOrg: alpsalpine.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: TYVPR01MB10781.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 54a2e613-bbc1-416a-9b75-08dc4ed21f37
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Mar 2024 02:52:35.3207
+X-MS-Exchange-CrossTenant-Network-Message-Id: 58dddad0-7a2b-46b6-c61a-08dc4ed3d39f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Mar 2024 03:04:47.4854
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 57e76998-77bd-4b82-a424-198f46eb2254
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: l+3ry7qiVdb7O1/VNUd7/tGPumWC6fHwnzRacdotK791zLor1S34R7Igt9uSy+AmSgFte+XXViwAhZhO53m43g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYWPR01MB10224
+X-MS-Exchange-CrossTenant-userprincipalname: HUEtNeOX1XkNN/oQuIfCuzugno5d2qBfiBPQ7oqbK9VYV7fvxzgYxRyUEevGiw+eNDEUwMxleOCsgDYU/8fR/A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSYPR01MB5432
 
-+AD4- +AD4- On Wed, Mar 27, 2024 at 07:39:55AM +-0000, Norihiko Hama wrote:
-+AD4- +AD4- +AD4- +AD4- +AD4- Sorry, but module parameters are from the 199=
-0's, we will not go back to that if at all possible as it's not easy to mai=
-ntain and will not work properly for multiple devices.
-+AD4- +AD4- +AD4- +AD4- +AD4-
-+AD4- +AD4- +AD4- +AD4- +AD4- I can understand wanting something between 1 =
-and 0 seconds, but adding yet-another-option isn't probably the best way, s=
-orry.
-+AD4- +AD4- +AD4- +AD4- 1 second does not meet with performance requirement=
-.
++AD4- On Wed, Mar 27, 2024 at 07:39:55AM +-0000, Norihiko Hama wrote:
++AD4- +AD4- +AD4- Sorry, but module parameters are from the 1990's, we will=
+ not go back to that if at all possible as it's not easy to maintain and wi=
+ll not work properly for multiple devices.
 +AD4- +AD4- +AD4-
-+AD4- +AD4- +AD4- Who is requiring such a performance requirement?  The USB=
- specification?
-+AD4- +AD4- +AD4- Or something else?
-+AD4- +AD4- This is our customer requirement.
++AD4- +AD4- +AD4- I can understand wanting something between 1 and 0 second=
+s, but adding yet-another-option isn't probably the best way, sorry.
++AD4- +AD4- 1 second does not meet with performance requirement.
++AD4- +AD4- I have no good idea except module parameter so that we can main=
+tain backward compatibility but be configurable out of module.
++AD4- +AD4- Do you have any other better solution?
 +AD4-
-+AD4- If it is impossible to do, why are they making you do it?  :)
++AD4- Can you accomplish what you want with a quirk flag?
 
-It's possible to do because we've changed code to minimize delay by ourselv=
-es,
-Then no issue observed when we configured delay to 100 msec as far as we ha=
-ve tested.
-The background for the requirement, it's important for end user how quickly=
- access to USB drive when it's connected.
-Of course there are a lot of overhead to do that but that's why we would li=
-ke to have a chance to minimize such a constant long delay.
+I think that it's hard to do that because 'quirk' is specified for a device
+but it's difficult to identify the devices to make quirk, especially for fu=
+ture introduced devices.
 
-+AD4- +AD4- I know we have multiple devices with delay+AF8-use+AD0-0, but t=
-hen it's recovered and detected by reset after 30s timeout, that is too lon=
-g than 1 sec.
-+AD4-
-+AD4- So how do you know that making this smaller will help?  There are man=
-y many odd and broken devices out there that take a long time to spin up be=
-fore they are able to be +AD4- accessed.  That's what that option is there =
-for, if you +ACI-know+ACI- you don't need to wait, you don't have to wait.
-+AD4- Otherwise you HAVE to wait as you do not know how long things take.
-
-As previous my comment, we've changed code to minimize delay by ourselves,
-Then no issue observed when we configured delay to 100 msec as far as we ha=
-ve tested.
-Sorry, we have no theoretical proof but I think it's same situation with cu=
-rrent 1 sec delay.
-So we want to have a chance to change such a constant delay.
+Can we change the design of existing 'delay+AF8-use' ?
+For example, 'delay+AF8-use' is 32-bit value and the value +ACI-1000 secs+A=
+CI- does not make sense to set it,
+So if it's set to '1100', it's treated as +ACI-100 / 1000 +AD0- 0.1 sec+ACI=
+-. Is this possible?
 
