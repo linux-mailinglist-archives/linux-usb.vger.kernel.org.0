@@ -1,101 +1,103 @@
-Return-Path: <linux-usb+bounces-8548-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8549-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E63878904BA
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Mar 2024 17:16:16 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8BC088904D3
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Mar 2024 17:18:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 235241C20F5F
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Mar 2024 16:16:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 39082298A2E
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Mar 2024 16:18:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A0BD8121F;
-	Thu, 28 Mar 2024 16:16:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D427681ABE;
+	Thu, 28 Mar 2024 16:18:16 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id 463E112F599
-	for <linux-usb@vger.kernel.org>; Thu, 28 Mar 2024 16:16:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with SMTP id 0B1BA1311B8
+	for <linux-usb@vger.kernel.org>; Thu, 28 Mar 2024 16:18:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711642570; cv=none; b=eppPgqgVyLgZPt5te/6SxTzSv5jKVPIu7d1CSvVlU7pMnM8Vz3oppJM2yr89aWhw3fbq/nlWdgTGlIHnqNO20C/P1CsH3P1K0/a06SuWuR90jnIURszm37oCZBcgZa/CwBqiv1PmOpCUatyB3AejvXo9oO+KyECWAWOoQ2E9WWw=
+	t=1711642696; cv=none; b=jxGSCUcw3IXUoeLFZHWw35LQF7Bbq7NemFsynr4EeAh3GyGzTN0xQa2reapz7wllo/XNMQSfW+mPJJ4+BR5mCyBNruLAfIxGsoO+bSQn7Edz6rspXG0b/9CWGxfHHEqTpVUVVh54EJNIlGXHQb+PqOWFIe4Zk2fmZqeeeSpPXa4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711642570; c=relaxed/simple;
-	bh=WayXfCt51fOj9e3ngoyk9J2ucSskjyn9t2lD/fcCV/k=;
-	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tqvkDXeUkpmk/XZwv7Ax7w98oXizMPha/ASg7kjNYnBT5Kjp1Zw1zxNc60Is6IOPJ6Z4RmhTpGQUsLgdc8rR0sL7FSs9GmjeJhsl0lBCqLorNuTKAm/I8PN9BrsyD3yjmymY7vGw96xITQjnM0vS4m7w8x07DLDRqwp+KZlELdc=
+	s=arc-20240116; t=1711642696; c=relaxed/simple;
+	bh=/KpgnWg969w9kfQ1LtcLkrkYrqm1vt/23nXsUi0UYKE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kCmX4bdJ4pd5jCX+TjR7fMgCXrNeR+a22/Sr7VKdE9Do124hBwaRQCQc05CdVBjxAnResvdq91f4WQHkRDAbcUl+ZuoR8l2ee9/TBFRGDDNW36GV6uxWwVSqDJWOo3JcISAlEovZ76liefmFR89LFKQyjhU6iCfbG6DZ1Pf9Tz8=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
-Received: (qmail 964356 invoked by uid 1000); 28 Mar 2024 12:16:06 -0400
-Date: Thu, 28 Mar 2024 12:16:06 -0400
+Received: (qmail 964417 invoked by uid 1000); 28 Mar 2024 12:18:13 -0400
+Date: Thu, 28 Mar 2024 12:18:13 -0400
 From: Alan Stern <stern@rowland.harvard.edu>
-To: Alexander Dahl <ada@thorsis.com>,
-  Jan =?utf-8?B?xIxlcm3DoWs=?= <sairon@sairon.cz>,
-  Greg KH <gregkh@linuxfoundation.org>, Khazhy Kumykov <khazhy@google.com>,
-  USB mailing list <linux-usb@vger.kernel.org>, regressions@lists.linux.dev
-Subject: Re: [REGRESSION] Re: [PATCH 0/3] USB: core: Don't overwrite device
- descriptor during reinitialization
-Message-ID: <b8aeb235-1f07-4acc-bcf8-0e7344cab291@rowland.harvard.edu>
-References: <60def275-5237-48df-b37b-ab886f4ee017@rowland.harvard.edu>
- <4c2a410b-2997-4a7a-8fd6-2bec819a1c4f@sairon.cz>
- <4a168b8b-f012-4b36-92bd-83aeb6849410@rowland.harvard.edu>
- <92d3d802-73df-4ab5-aab4-b2325512e98f@sairon.cz>
- <8b8e2773-47eb-48f4-b5e8-dcd885ee5c5b@rowland.harvard.edu>
- <befc1081-e512-4727-a911-f030e1aac626@sairon.cz>
- <1b2ccaf6-597c-40fe-877a-4ed1fab5261b@rowland.harvard.edu>
- <3939f491-4890-4a64-9f41-8c3bf738bbc3@sairon.cz>
- <62a33e61-b202-4af5-bb91-96dc87783eb3@rowland.harvard.edu>
- <20240328-fragment-envoy-f2c5bfa5c4ff@thorsis.com>
+To: Matthew Dharm <mdharm-usb@one-eyed-alien.net>
+Cc: Norihiko Hama <norihiko.hama@alpsalpine.com>,
+  Greg KH <gregkh@linuxfoundation.org>,
+  "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+  "usb-storage@lists.one-eyed-alien.net" <usb-storage@lists.one-eyed-alien.net>,
+  "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] usb-storage: Optimize scan delay more precisely
+Message-ID: <2483fb37-8939-4723-ae8d-7a7a7dba3322@rowland.harvard.edu>
+References: <20240327055130.43206-1-Norihiko.Hama@alpsalpine.com>
+ <2024032757-surcharge-grime-d3dd@gregkh>
+ <TYVPR01MB107814D7A583CB986884AD4B290342@TYVPR01MB10781.jpnprd01.prod.outlook.com>
+ <a446cdf4-3a9b-43d8-b22b-78c20cce2b4f@rowland.harvard.edu>
+ <TYVPR01MB10781AA8B37E147E318597B46903B2@TYVPR01MB10781.jpnprd01.prod.outlook.com>
+ <0c99daaf-c727-467f-b8c1-ba8846d8a9ab@rowland.harvard.edu>
+ <CAA6KcBBcpug-rOytgnbb=c4O54m-Pfy=divqp12qOMrgmQrz7w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240328-fragment-envoy-f2c5bfa5c4ff@thorsis.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAA6KcBBcpug-rOytgnbb=c4O54m-Pfy=divqp12qOMrgmQrz7w@mail.gmail.com>
 
-On Thu, Mar 28, 2024 at 04:44:26PM +0100, Alexander Dahl wrote:
-> Hei hei,
+On Thu, Mar 28, 2024 at 08:21:18AM -0700, Matthew Dharm wrote:
+> On Thu, Mar 28, 2024 at 7:51 AM Alan Stern <stern@rowland.harvard.edu> wrote:
+> >
+> > On Thu, Mar 28, 2024 at 03:04:47AM +0000, Norihiko Hama wrote:
+> > > > On Wed, Mar 27, 2024 at 07:39:55AM +0000, Norihiko Hama wrote:
+> > > > > > Sorry, but module parameters are from the 1990's, we will not go back to that if at all possible as it's not easy to maintain and will not work properly for multiple devices.
+> > > > > >
+> > > > > > I can understand wanting something between 1 and 0 seconds, but adding yet-another-option isn't probably the best way, sorry.
+> > > > > 1 second does not meet with performance requirement.
+> > > > > I have no good idea except module parameter so that we can maintain backward compatibility but be configurable out of module.
+> > > > > Do you have any other better solution?
+> > > >
+> > > > Can you accomplish what you want with a quirk flag?
+> > >
+> > > I think that it's hard to do that because 'quirk' is specified for a device
+> > > but it's difficult to identify the devices to make quirk, especially for future introduced devices.
+> > >
+> > > Can we change the design of existing 'delay_use' ?
+> > > For example, 'delay_use' is 32-bit value and the value "1000 secs" does not make sense to set it,
+> > > So if it's set to '1100', it's treated as "100 / 1000 = 0.1 sec". Is this possible?
+> >
+> > Here's an approach that Greg might accept.
+> >
+> > Since we already have a delay_use module parameter, we could add a
+> > delay_use_ms parameter.  The two module parameters would display the
+> > same value, but delay_use_ms would be in milliseconds instead of in
+> > seconds.  (This is similar to what we did for the autosuspend and
+> > autosuspend_delay_ms sysfs attributes.)
 > 
-> following this discussion with some kind of curiosity, because I own
-> such a device and depent on it, but my firmware version does not seem
-> to be affected.  Remarks below.
+> What about just changing the parser on the currently delay_use
+> parameter to accept an optional suffix?  If it's just digits, it is in
+> seconds.  If it ends in "ms", then interpret it as milliseconds.  This
+> would be backwards compatible with existing uses, give you the
+> flexibility you want, avoid adding another modules parameter, and
+> potentially be expandable in the future (if, for some reason, someone
+> wanted microseconds or kiloseconds).
 
-> > The ideal solution would be if the vendor updates the firmware to
-> > prevent the device from turning on its pull-up (thereby telling the
-> > host computer that it is connected to the bus) until it is ready to
-> > operate.  There's no good reason to have that > 1-second period during
-> > which the device claims to be connected but does not work.
-> 
-> As pointed out in the GitHub ticket already:  Firmware update from a
-> users point of view is difficult to impossible.  There's no easy "take
-> the latest firmware" and update and you're done.  It is not clear
-> which tools are necessary, and even worse there are only certain
-> combinations of upgrade paths.  For example upgrading to x.z is only
-> possible from x.x but not from x.y, if I understood it correctly.  And
-> you don't know if you will brick the device or not.  And I'm speaking
-> as an embedded developer.  The ordinary home user is probably not even
-> going to try it.
+A little unconventional, I think (at least, I don't know offhand of any 
+other module parameters or sysfs attributes that work this way), but it 
+would work.
 
-Oh, okay.  Too bad.  Although in many cases, manufacturers tend not to 
-be eager to change their devices' firmwares just to suit Linux users...
-
-> > Another possible solution, a lot less attractive, would be to change
-> > the initialization code in the hub driver so that if it sees the
-> > device disconnect itself from the bus, it restarts the entire
-> > procedure from the beginning.  You'd end up getting a bunch of error
-> > messages during the initial non-working period, just as you do now,
-> > but afterwards the device should be detected and initialized okay.
-> 
-> Is it possible to hook in with some kind of quirk if this device ID is
-> seen on the bus (and wait longer just for this device), or can you
-> only access that after successful init?
-
-The latter, unfortunately.  Before initialization there's no way to 
-communicate with the device.
+Noriko, would you like to write a patch to do this?
 
 Alan Stern
 
