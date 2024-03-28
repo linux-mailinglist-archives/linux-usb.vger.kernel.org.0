@@ -1,152 +1,116 @@
-Return-Path: <linux-usb+bounces-8545-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8546-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6631E8903CE
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Mar 2024 16:47:28 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0949F890476
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Mar 2024 17:03:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 983721C2CAD3
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Mar 2024 15:47:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3A62D1C23A41
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Mar 2024 16:03:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C84612F59C;
-	Thu, 28 Mar 2024 15:44:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D97B581AC8;
+	Thu, 28 Mar 2024 16:03:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=thorsis.com header.i=@thorsis.com header.b="LzR3vONp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d7+eRdMa"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail.thorsis.com (mail.thorsis.com [217.92.40.78])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7F8A7E10B
-	for <linux-usb@vger.kernel.org>; Thu, 28 Mar 2024 15:44:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.92.40.78
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6002D55E40;
+	Thu, 28 Mar 2024 16:03:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711640692; cv=none; b=T621JJHmSRL5KACaUpezlpftaFASBPWi0GP+i3zexT3R8ZfarTqSluvAsQLnhiVhXfDSTzI7iZ9SsEuNA3PUCbKtilmf20LXczHcj3jDp94+qPTKZdoGLYR0Vc0kITDDadcu8fLU/GPhjQxrKQ+0DlU8+Jnnyv4zOsLR6Zc3bH4=
+	t=1711641817; cv=none; b=i+HJnUktc/7m257GipY/UJ9DNHqGcNyw4M/GXGrseNr4GOI8gkrl7i4xhNqvOpOclCIJJR3el0ATsq5OTKEW4syYu4HopWQwTv0IZB2XB+VFapH7uyxcdSFayV6K3HcmVwoUIqsZ8lzn6SM5v3XqdlixEQ41fEvBBjAg5ZM92VE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711640692; c=relaxed/simple;
-	bh=w6qNLCs+96xNFPGAOcDvwHXVvQZnk84ozCzES21NkFc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kVxMsHh4Fh3H/yPnawMBo7S0+c+f/3upAd9Y/eu4P/QVswkP+GWVpEqd5OPIwUQdOuGSKxRPKtJAL4vIroc+mYxHICHXE3Q/bx+X7Ym0BJfhvzI9xAuQnmsnkP+Zwxx/+dkKaMUjh3Szw7vi0Pxii2bIKrWMaVsr0BCPXnbVEiI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=thorsis.com; spf=pass smtp.mailfrom=thorsis.com; dkim=pass (2048-bit key) header.d=thorsis.com header.i=@thorsis.com header.b=LzR3vONp; arc=none smtp.client-ip=217.92.40.78
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=thorsis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=thorsis.com
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 7BA0A148B74A;
-	Thu, 28 Mar 2024 16:44:36 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=thorsis.com; s=dkim;
-	t=1711640677; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=s/r91FUwwJHrHxKsOjkyPhqNpOfWwZ1nY1bTtbZfI1E=;
-	b=LzR3vONpuIhWvC9eP78ACQhezktAOEGEy+hLNhll2MoFx4mcq2nohFSX/D07HQS0Mg+oI0
-	LkTvxTij+XLRuAm3UmEoPaNID90dbkA6LdT6MtbWS0JM22oy4J80Gvh2NR8BerIKll3dtw
-	zF1YMJo0WIAFwYYDpOpy+zs4yLbyTSLAhgrsq5oLNRjcDzUvU0P2A3eGOacI9+fsbU+fJG
-	qQk/Gk/TRnyvXXnViS3osUexsmhRjXaIhbQDx0/YrcZyg5PcTY5ipmtF0RPc3biIbcXdqq
-	6VYcxWETm0n+Vm8eay7ImwaWftKTnjpda1OH3fgAdw80Os9ds9Aoz03x2/Y5rA==
-Date: Thu, 28 Mar 2024 16:44:26 +0100
-From: Alexander Dahl <ada@thorsis.com>
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: Jan =?utf-8?B?xIxlcm3DoWs=?= <sairon@sairon.cz>,
-	Greg KH <gregkh@linuxfoundation.org>,
-	Khazhy Kumykov <khazhy@google.com>,
-	USB mailing list <linux-usb@vger.kernel.org>,
-	regressions@lists.linux.dev
-Subject: Re: [REGRESSION] Re: [PATCH 0/3] USB: core: Don't overwrite device
- descriptor during reinitialization
-Message-ID: <20240328-fragment-envoy-f2c5bfa5c4ff@thorsis.com>
-Mail-Followup-To: Alexander Dahl <ada@thorsis.com>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Jan =?utf-8?B?xIxlcm3DoWs=?= <sairon@sairon.cz>,
-	Greg KH <gregkh@linuxfoundation.org>,
-	Khazhy Kumykov <khazhy@google.com>,
-	USB mailing list <linux-usb@vger.kernel.org>,
-	regressions@lists.linux.dev
-References: <00f0786b-a9f2-4f73-8d23-3b1fa4c8b77e@sairon.cz>
- <60def275-5237-48df-b37b-ab886f4ee017@rowland.harvard.edu>
- <4c2a410b-2997-4a7a-8fd6-2bec819a1c4f@sairon.cz>
- <4a168b8b-f012-4b36-92bd-83aeb6849410@rowland.harvard.edu>
- <92d3d802-73df-4ab5-aab4-b2325512e98f@sairon.cz>
- <8b8e2773-47eb-48f4-b5e8-dcd885ee5c5b@rowland.harvard.edu>
- <befc1081-e512-4727-a911-f030e1aac626@sairon.cz>
- <1b2ccaf6-597c-40fe-877a-4ed1fab5261b@rowland.harvard.edu>
- <3939f491-4890-4a64-9f41-8c3bf738bbc3@sairon.cz>
- <62a33e61-b202-4af5-bb91-96dc87783eb3@rowland.harvard.edu>
+	s=arc-20240116; t=1711641817; c=relaxed/simple;
+	bh=HowEN1J5McZBQqKd59V/2XnrBWjdZT6J3rhINf1YhZA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Ti9Ic4eiuqPxKSP8WEy9NwDGlPcOYhN6s/bl2FrH5S40DBZVcelMo7bSNuzYlBlRJHVYFryfIAht1KtEN/ZJT7MwodBBUJ434fBGBFl0ArebSAz0LzbpWV/2gx45vU4dg91HL7aZn0DOr7ESXQM5W8CMOYfGaR+R2WwbA+y4v7Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d7+eRdMa; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B6AEC433C7;
+	Thu, 28 Mar 2024 16:03:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711641816;
+	bh=HowEN1J5McZBQqKd59V/2XnrBWjdZT6J3rhINf1YhZA=;
+	h=From:Date:Subject:To:Cc:From;
+	b=d7+eRdMaC/gJIqZv/7sLa9yMUgcCWWiAnSt2hs1zg6nDy1XypADpu80mFZayKidsD
+	 MjORDfcfujmpm3fr4yzefN7wMTDyzYQbr0bVfEeLDXKOLLRj5qUQzBATB0INXwoBsH
+	 RmAfu4n3EcWpKlIDDVC86COXXifK40gLWF869RXy+Ukg0yQ6lDVPeHST6d8pHB+G3b
+	 mEPt1MVgKUEjcz0KxsqwJjX0KnNXTLzOqtHIueMLdpaThUT0wJ3A8IYjcepNkkri4C
+	 pJxVC63ATQRy3gENP714kXQwgPDBUurHfJIwSsnMtGp2a1SyrhS+UFwJdJGEgQMNcv
+	 91gb/zKq4hWQw==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Thu, 28 Mar 2024 09:03:20 -0700
+Subject: [PATCH] usb: typec: ptn36502: Only select DRM_AUX_BRIDGE with OF
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <62a33e61-b202-4af5-bb91-96dc87783eb3@rowland.harvard.edu>
-User-Agent: Mutt/2.2.12 (2023-09-09)
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240328-fix-ptn36502-drm_aux_bridge-select-v1-1-85552117e26e@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAMeUBWYC/x2N0QrCMAxFf2Xk2UBtrRZ/RWR0S7YFtI50jsHYv
+ xt8PHDPPTtUVuEK92YH5VWqfIrB+dRAP+UyMgoZg3f+4oJPOMiG81LCNTqPpO82f7e2UyGbVn5
+ xv2AKRAOlHMMtgh3Nymb9I4/ncfwADJW3FHQAAAA=
+To: heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org
+Cc: dmitry.baryshkov@linaro.org, luca.weiss@fairphone.com, 
+ linux-usb@vger.kernel.org, patches@lists.linux.dev, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.14-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1775; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=HowEN1J5McZBQqKd59V/2XnrBWjdZT6J3rhINf1YhZA=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDGmsU27EHX8z59wLf5GLJ5pmnD/N4Pf5imeWvd71h3eX1
+ q34Vvv+ZkcpC4MYF4OsmCJL9WPV44aGc84y3jg1CWYOKxPIEAYuTgGYSO8shv95897N9xN3Vdf+
+ Jdd1rsPe8fqHM8Ubwx8vFNV4L6rWFNLN8D/wXu48wch97Vq3HJICN60p3zY/nMFWm/dC/J/VgbY
+ CRxkA
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-Hei hei,
+CONFIG_DRM_AUX_BRIDGE depends on CONFIG_OF but that dependency is not
+included when CONFIG_TYPEC_MUX_PTN36502 selects it, resulting in a
+Kconfig warning when CONFIG_OF is disabled:
 
-following this discussion with some kind of curiosity, because I own
-such a device and depent on it, but my firmware version does not seem
-to be affected.  Remarks below.
+  WARNING: unmet direct dependencies detected for DRM_AUX_BRIDGE
+    Depends on [n]: HAS_IOMEM [=y] && DRM_BRIDGE [=y] && OF [=n]
+    Selected by [m]:
+    - TYPEC_MUX_PTN36502 [=m] && USB_SUPPORT [=y] && TYPEC [=m] && I2C [=y] && (DRM [=y] || DRM [=y]=n) && DRM_BRIDGE [=y]
 
-Am Wed, Mar 27, 2024 at 10:21:19AM -0400 schrieb Alan Stern:
-> On Wed, Mar 27, 2024 at 02:24:34PM +0100, Jan Čermák wrote:
-> > Hi Alan,
-> > 
-> > On 19. 03. 24 17:03, Alan Stern wrote:
-> > > Change the HUB_DEBOUNCE_TIMEOUT value to 4500, the HUB_DEBOUNCE_STEP
-> > > value to 250 and the HUB_DEBOUNCE_STABLE value to 2000.  That just
-> > > might give the device enough time to settle down and start working
-> > > before the computer tries using it.
-> > 
-> > sorry for the delay, I only managed to test it today. You are right, with
-> > the timeouts adjusted, it enumerates fine after a while, without any
-> > descriptor read errors or anything like that:
-> > 
-> > [  210.957371] usb 1-1.2: new full-speed USB device number 5 using ehci-pci
-> > [  211.037728] usb 1-1.2: New USB device found, idVendor=0658,
-> > idProduct=0200, bcdDevice= 0.00
-> > [  211.037747] usb 1-1.2: New USB device strings: Mfr=0, Product=0,
-> > SerialNumber=0
-> > [  211.039764] cdc_acm 1-1.2:1.0: ttyACM0: USB ACM device
-> 
-> Great!
-> 
-> > If it's worth anything, usbmon trace is attached below. Anyway, do you have
-> > any ideas what could be done to make it work without doing any detrimental
-> > changes? I was thinking I'll try to reach out to the vendor at this point -
-> > they should be aware their device might stop working with recent kernels,
-> > and they could explain the quirky behavior, or implement any changes on the
-> > firmware side (if it's even possible).
-> 
-> The ideal solution would be if the vendor updates the firmware to
-> prevent the device from turning on its pull-up (thereby telling the
-> host computer that it is connected to the bus) until it is ready to
-> operate.  There's no good reason to have that > 1-second period during
-> which the device claims to be connected but does not work.
+Only select CONFIG_DRM_AUX_BRIDGE when CONFIG_DRM_BRIDGE and CONFIG_OF
+are enabled to clear up the warning. This results in no functional
+change because prior to the refactoring that introduces this warning,
+ptn36502_register_bridge() returned 0 when CONFIG_OF was disabled, which
+continues to occur with drm_aux_bridge_register() when
+CONFIG_DRM_AUX_BRIDGE is not enabled.
 
-As pointed out in the GitHub ticket already:  Firmware update from a
-users point of view is difficult to impossible.  There's no easy "take
-the latest firmware" and update and you're done.  It is not clear
-which tools are necessary, and even worse there are only certain
-combinations of upgrade paths.  For example upgrading to x.z is only
-possible from x.x but not from x.y, if I understood it correctly.  And
-you don't know if you will brick the device or not.  And I'm speaking
-as an embedded developer.  The ordinary home user is probably not even
-going to try it.
+Fixes: 9dc28ea21eb4 ("usb: typec: ptn36502: switch to DRM_AUX_BRIDGE")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ drivers/usb/typec/mux/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Another possible solution, a lot less attractive, would be to change
-> the initialization code in the hub driver so that if it sees the
-> device disconnect itself from the bus, it restarts the entire
-> procedure from the beginning.  You'd end up getting a bunch of error
-> messages during the initial non-working period, just as you do now,
-> but afterwards the device should be detected and initialized okay.
+diff --git a/drivers/usb/typec/mux/Kconfig b/drivers/usb/typec/mux/Kconfig
+index 4827e86fed6d..ce7db6ad3057 100644
+--- a/drivers/usb/typec/mux/Kconfig
++++ b/drivers/usb/typec/mux/Kconfig
+@@ -60,7 +60,7 @@ config TYPEC_MUX_PTN36502
+ 	tristate "NXP PTN36502 Type-C redriver driver"
+ 	depends on I2C
+ 	depends on DRM || DRM=n
+-	select DRM_AUX_BRIDGE if DRM_BRIDGE
++	select DRM_AUX_BRIDGE if DRM_BRIDGE && OF
+ 	select REGMAP_I2C
+ 	help
+ 	  Say Y or M if your system has a NXP PTN36502 Type-C redriver chip
 
-Is it possible to hook in with some kind of quirk if this device ID is
-seen on the bus (and wait longer just for this device), or can you
-only access that after successful init?
+---
+base-commit: ef83531c8e4a5f2fc9c602be7e2a300de1575ee4
+change-id: 20240328-fix-ptn36502-drm_aux_bridge-select-83ddfd8a5375
 
-Greets
-Alex
+Best regards,
+-- 
+Nathan Chancellor <nathan@kernel.org>
 
 
