@@ -1,121 +1,124 @@
-Return-Path: <linux-usb+bounces-8531-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8532-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E27CC88FAAC
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Mar 2024 10:06:12 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A199688FC42
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Mar 2024 10:58:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 625F6B21A07
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Mar 2024 09:06:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DC23C1C2514F
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Mar 2024 09:58:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6ABDE5EE8D;
-	Thu, 28 Mar 2024 09:06:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C66CE7BB0A;
+	Thu, 28 Mar 2024 09:57:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OyARpCuB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KXgyvBwN"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C00CF535C8;
-	Thu, 28 Mar 2024 09:06:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4872B1E861;
+	Thu, 28 Mar 2024 09:57:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711616765; cv=none; b=Tyq/uk8xtz6gaYO7alzx2oW/Eo4dYWGoqmO/7k60/6FZJGrj+t499V+wqLcYvhb2cHhTLngNbq4/kGnqXEKnPXPvv3eSZuPiII0K8p+NNhPkTE58ZRv0dPnSqPn5z0AxtJ020drgD2AFF3yfEdRfh+JSO2wd4DFRf7sU7gsKPL4=
+	t=1711619875; cv=none; b=Dvax0G97bfo9bb6+fqCO3Jq9rrh3fHi7dcTr6eS7bP5xHuy0tTWj7eSV8FozglJO9pwc5hclY2TRojkeU7Q5jxguvBtX9sYnO9PdawSPa9Pnjbx1A+ySQl9kcIEv9GmkPoLJEycSpE2VsBgBRHcLD1+6DR8C0IypLxFPKSYEYNQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711616765; c=relaxed/simple;
-	bh=/aSry/tvH4Kn2+KvvLdokxm+tTIRQW4w1k0pfVZBoUA=;
+	s=arc-20240116; t=1711619875; c=relaxed/simple;
+	bh=gAV+gUAqBp1S3zdGcOLRkMbsJPo5TaCr0FKPbsZ46M0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KoIsyhbn2laLtekagNhN/yIMcMuZ6RpCQG2Pwt5XTOapugZFRgIwDk+IFDPEusnkoSmFz13+2wZS/cpmoddsyCzRpLa2gzykffv8zgTI6BLutpIGy4Qr73l8EI8qc40EHPf4fenfIOmd+qM4zSTpiS4Ooo5r2srZd3VRSbKzTWc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OyARpCuB; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711616762; x=1743152762;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/aSry/tvH4Kn2+KvvLdokxm+tTIRQW4w1k0pfVZBoUA=;
-  b=OyARpCuBOUWiKEhSBRf7aQZcS+HxnTQzeF0J1AJgNa/8yPbAvaoV0BcZ
-   I3huY/UdmVh9+PBojjR0pUovGaLYT7RaViN6Exd1ODuDt49i1mtooMtmW
-   dMiRg2xLOzRxQRaBh3u9buABkgqPCeb32aCdXkNDBXP9kzIg11Mw394/y
-   oeBcYXhX+ndgMiopN3RzxgFV41N5wqnMMwfLwcFTRi3BudiWH9PHGUfbp
-   Wvrs0JxUYS3xMmwl/m++Ex6tNQCcTxHUQUwRflOB/Az9PiYV0j+gtsfAx
-   uIZO9XGJYLiGUw8DF3EqJbNnpJCAn5TCt4i5sjry0D4VjpqtxTkZedIj/
-   A==;
-X-CSE-ConnectionGUID: M2i41u7/RSW2hal4xlIKvQ==
-X-CSE-MsgGUID: oIuvPsrqT9iJ3SBYMGqemA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11026"; a="7356546"
-X-IronPort-AV: E=Sophos;i="6.07,161,1708416000"; 
-   d="scan'208";a="7356546"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2024 02:06:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,161,1708416000"; 
-   d="scan'208";a="21079288"
-Received: from lkp-server01.sh.intel.com (HELO be39aa325d23) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 28 Mar 2024 02:06:00 -0700
-Received: from kbuild by be39aa325d23 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rplhu-0001yw-00;
-	Thu, 28 Mar 2024 09:05:58 +0000
-Date: Thu, 28 Mar 2024 17:05:19 +0800
-From: kernel test robot <lkp@intel.com>
-To: Pavan Holla <pholla@chromium.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-	Pavan Holla <pholla@chromium.org>
-Subject: Re: [PATCH 3/3] platform/chrome: cros_ec_ucsi: Implement UCSI PDC
+	 Content-Type:Content-Disposition:In-Reply-To; b=dyyyZbOtVSeupijBzVhmVyrWn8qL0sMTYmq1HtyRCgVjSeW0nsME/6aK8zyq+VIBjgUj4Jtjyb2JGeP7xjutUWtETpUuIE9mD7fzHCGRTFwZWXtLKnNLSRTCQEg5nRZzXw3ZkC2q0MakOkSCMvVYBkfmvOIx/bx7MggLtu8tHew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KXgyvBwN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8482DC43141;
+	Thu, 28 Mar 2024 09:57:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711619875;
+	bh=gAV+gUAqBp1S3zdGcOLRkMbsJPo5TaCr0FKPbsZ46M0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=KXgyvBwNntZvsvohR9Dm+YUIE+XMILsRnEWVZYQ38z496oWWeT55HpERyihmNKCeL
+	 5NkIvQB1YyeF80qtVNVneOnagDmWOiNMG/Cs9SsTLsmsWBszi65yo9Nm/msBWCZCrd
+	 pxDTFHr4wiNgpnZu/Kj17LAVwK+6nvpPZgLXodjaRRHgUEUFMCb/DijwI+Bb/8WtnE
+	 C0WfyQ/LHZ8s1PL0o1axUm+p7O+LNQwA83wlEtwhxXAvTeH072vh+OMkwmGBklJrGv
+	 MXollRy5sBRX0cMQarT9x8nGbTYZyGn8mB57RGKCUD+AFkW/ooZAcBAdYJRguW5IUl
+	 ZrW2Po7qioj3w==
+Date: Thu, 28 Mar 2024 17:57:51 +0800
+From: Tzung-Bi Shih <tzungbi@kernel.org>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Pavan Holla <pholla@chromium.org>, abhishekpandit@chromium.org,
+	bleung@chromium.org, chrome-platform@lists.linux.dev,
+	gregkh@linuxfoundation.org, groeck@chromium.org,
+	heikki.krogerus@linux.intel.com, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] platform/chrome: cros_ec_ucsi: Implement UCSI PDC
  driver
-Message-ID: <202403281639.AVfLPAVm-lkp@intel.com>
-References: <20240325-public-ucsi-h-v1-3-7c7e888edc0a@chromium.org>
+Message-ID: <ZgU_H4zceFlQUz8f@google.com>
+References: <03e1941b-0c8a-450d-9b83-76260817d303@kernel.org>
+ <20240328023233.2568230-1-pholla@chromium.org>
+ <2357d78f-8879-41ca-b0e1-6593400252c8@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240325-public-ucsi-h-v1-3-7c7e888edc0a@chromium.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2357d78f-8879-41ca-b0e1-6593400252c8@kernel.org>
 
-Hi Pavan,
+On Thu, Mar 28, 2024 at 09:36:54AM +0100, Krzysztof Kozlowski wrote:
+> On 28/03/2024 03:32, Pavan Holla wrote:
+> > On Tue, Mar 26, 2024 at 9:59 PM Krzysztof Kozlowski <krzk@kernel.org> wrote:
+> >>
+> >> On 27/03/2024 04:39, Pavan Holla wrote:
+> >>> Hi Krzysztof,
+> >>>
+> >>> Thanks for the review.
+> >>>
+> >>> On Tue, Mar 26, 2024 at 1:47 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
+> >>>> Nothing improved.
+> >>>
+> >>> Yes. I only added maintainers of drivers/platform/chrome in v2. I am
+> >>> still investigating why MODULE_ALIAS() is required.
+> >>
+> >> Heh, I wrote why. You miss ID table.
+> > 
+> > This driver is going to be used by the cros_ec_dev.c MFD. The UCSI device doesn’t
+> > have an ACPI or OF entry, so I am not sure how I can use MODULE_DEVICE_TABLE
+> > here. If I don’t use MODULE_ALIAS(“platform:” DRV_NAME),
+> > https://elixir.bootlin.com/linux/latest/source/drivers/mfd/cros_ec_dev.c#L206
+> > isn’t able to automatically associate the driver with the device at boot.
+> > I haven’t upstreamed the change in cros_ec_dev.c yet, but the code is similar to
+> > existing code for drivers/platform/chrome/cros_usbpd_logger.c. There are many
+> > other occurrences of the same MODULE_ALIAS pattern:
+> 
+> Just open other platform drivers and look how it is done there. Or ask
+> colleagues. There is absolutely no one in entire Chromium/google who
+> ever wrote platform_driver? platform_driver has ID table for matching.
+> 
+> Otherwise how do you expect this to be matched? How your driver is being
+> matched and device bound? By fallback, right? So what is the primary method?
 
-kernel test robot noticed the following build warnings:
+Those platform devices are adding in drivers/mfd/cros_ec_dev.c via
+mfd_add_hotplug_devices().
 
-[auto build test WARNING on 4cece764965020c22cff7665b18a012006359095]
+By looking other use cases of mfd_add_hotplug_devices():
+$ grep -R --files-with-matches mfd_add_hotplug_devices drivers/mfd/
+drivers/mfd/dln2.c
+drivers/mfd/cros_ec_dev.c
+drivers/mfd/viperboard.c
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Pavan-Holla/usb-typec-ucsi-Provide-interface-for-UCSI-transport/20240326-074003
-base:   4cece764965020c22cff7665b18a012006359095
-patch link:    https://lore.kernel.org/r/20240325-public-ucsi-h-v1-3-7c7e888edc0a%40chromium.org
-patch subject: [PATCH 3/3] platform/chrome: cros_ec_ucsi: Implement UCSI PDC driver
-config: x86_64-randconfig-123-20240328 (https://download.01.org/0day-ci/archive/20240328/202403281639.AVfLPAVm-lkp@intel.com/config)
-compiler: gcc-12 (Ubuntu 12.3.0-9ubuntu2) 12.3.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240328/202403281639.AVfLPAVm-lkp@intel.com/reproduce)
+They also have no ID tables and need MODULE_ALIAS().
+- drivers/gpio/gpio-dln2.c
+- drivers/i2c/busses/i2c-dln2.c
+- drivers/spi/spi-dln2.c
+- drivers/iio/adc/dln2-adc.c
+- drivers/gpio/gpio-viperboard.c
+- drivers/i2c/busses/i2c-viperboard.c
+- drivers/iio/adc/viperboard_adc.c
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403281639.AVfLPAVm-lkp@intel.com/
-
-sparse warnings: (new ones prefixed by >>)
->> drivers/platform/chrome/cros_ec_ucsi.c:119:24: sparse: sparse: symbol 'cros_ucsi_ops' was not declared. Should it be static?
-
-vim +/cros_ucsi_ops +119 drivers/platform/chrome/cros_ec_ucsi.c
-
-   118	
- > 119	struct ucsi_operations cros_ucsi_ops = {
-   120		.read = cros_ucsi_read,
-   121		.async_write = cros_ucsi_async_write,
-   122		.sync_write = cros_ucsi_sync_write,
-   123	};
-   124	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+I'm not sure whether using the path results in:
+- Lack of device ID table.
+- Need MODULE_ALIAS().
+in the platform device drivers.  And perhaps it relies on the fallback match?
 
