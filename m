@@ -1,184 +1,179 @@
-Return-Path: <linux-usb+bounces-8560-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8561-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8AF1A89066D
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Mar 2024 17:57:49 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E444189077C
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Mar 2024 18:47:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F0D241F22EEB
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Mar 2024 16:57:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 146201C2556B
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Mar 2024 17:47:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 075FF55C3C;
-	Thu, 28 Mar 2024 16:57:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA5A11311BD;
+	Thu, 28 Mar 2024 17:47:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="tbouiZBJ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MUsNPf2L"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from TY3P286CU002.outbound.protection.outlook.com (mail-japaneastazolkn19011003.outbound.protection.outlook.com [52.103.43.3])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f174.google.com (mail-vk1-f174.google.com [209.85.221.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B338513AF9
-	for <linux-usb@vger.kernel.org>; Thu, 28 Mar 2024 16:57:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.43.3
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711645034; cv=fail; b=LVY24BF0xpcUEuN26hXuDi1JuukxuocMAqmMBp/nFSlFgtPw7oL8LZdPc9Y7o0cG67Yx6obBlRzK8lGhcKU5Hf5UaSt1AU2/JxW+FTo+RE4k8F4wnRNk9wnrQvPv4uyzcMQexzAIY8XxNp8BxV5UEVYkzUeUgm7qUEVj33iC3Pg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711645034; c=relaxed/simple;
-	bh=+qTqw8/h17z8nHtmZ+qAGtyYuOaPU8KGquqBPDOJBOc=;
-	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=sUEuM4JdnuOGHuTMTu2vs830WS1eL7Ut/Ic/DahNwnO+jBLHPzw+Ro1RKF1Eywga6vuN3jtPAwKv3goh2mQHLWse4TFbs6BLht4YSOZOpzSBjHUVpmx4Hs7LmxwLpPgIdsCQ7METXV/j5WBni4zLmmfMAlMw11hKJ2evGVrlAFo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=tbouiZBJ; arc=fail smtp.client-ip=52.103.43.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QgNZvZe2tGPNSwYtqZhoWDPYPCQMn41fJyjacEIlJ0BqboQdnChgHvm/Crq8LPhc4DnOKdGq/u8rA6OaNTahMdSKIVKUVh7jjCRlg6JwDhd8rxd9g78I3YW6bS3S0twM9MxO8PHgx4Ho+4j4C9ozjBF8klsCDYQb6x3QBDjM0lOsQQ5C+CCxXkGwcVm38zj0vTTs+Fcw6HBZqsJU86dtJUkZ384r77f9KRpJ/RC34+jJ1c2okMY4J3vjtC0anUpWep0fazOt2TitW6b5xdZ4ClDsCQY9r0gZGXrhGYghLg4LZv5nkmL0oSIlFfM1tAZS8QAImNNQS6vGaRCKlURqAQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3K7RBB+WxdvijkT4OC2eAMFMQjEMZVwi2HvBseMsyMw=;
- b=M+OA6dgPHtWxtlTcKOLC8xbKKppjj4Sz4ywOjbLt3y10EEpOYIwEiIqzcnajF/bsCR2usiCmfFWxi9SUDyaGANK2G7yDi76dVUQD6h9wK7mSPblYkdvXjNkzOMoj3gfGESWPZGTfyDB/r82dp+g1bJKmbPkUM0lMnBlXQalTVRi4FV45CN07MWjasVE03Tim4+nufHNLd56PdZakFjCjGAKZN9lI+5PcNJzqCybYz5x+hXAkMIqdgDKj0wy+TTvubi5pLIIUDnVwFFdCz3mXF3oUNu7rkHWjWyhRdrCH9n7wiDSHvSLr428HqECjjTQ5IVnWnZw8uHa1eC2J3u2cvA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3K7RBB+WxdvijkT4OC2eAMFMQjEMZVwi2HvBseMsyMw=;
- b=tbouiZBJNOxwRInqpbzfxCwzlCCVBLAHHX6q2PUAl17NfgZJEPOtUvq5+ojar58n5s6x+0Unnp0442BldNbEt+5+AOXAiLeWd/hoLYQjWciNwVZpK1tTqbQRaKJ5KWrXASoAPxQS2yjjfxQgZRCGD+OAolr+DPkLdw+RogbmM/IZPgt1QaQmxDGE2UwyVnZVE5nQVWiH5dvXWeEf/YzDVsUFEjO3oyKPXVreP6upAsPrssn0mpKU4h8H+WK+xYQmEtErZjxUBKN2tpXqOzwl8f2rX9YoQUAnIXrSAzEzclGkLw/RnZX2b3S5RnqhlUMG4QDG/F4BMSiwGvcrFWaWBw==
-Received: from OS3P286MB2213.JPNP286.PROD.OUTLOOK.COM (2603:1096:604:198::12)
- by TYWP286MB1990.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:165::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.32; Thu, 28 Mar
- 2024 16:57:10 +0000
-Received: from OS3P286MB2213.JPNP286.PROD.OUTLOOK.COM
- ([fe80::32e2:35ce:a8dd:623]) by OS3P286MB2213.JPNP286.PROD.OUTLOOK.COM
- ([fe80::32e2:35ce:a8dd:623%6]) with mapi id 15.20.7409.031; Thu, 28 Mar 2024
- 16:57:10 +0000
-From: Cui Alan <AlanCui4080@outlook.com>
-To: Alan Stern <stern@rowland.harvard.edu>, "mathias.nyman@intel.com"
-	<mathias.nyman@intel.com>
-CC: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"kexybiscuit@outlook.com" <kexybiscuit@outlook.com>
-Subject: Re: way to notice user when a device connected to a inappropriate
- port
-Thread-Topic: way to notice user when a device connected to a inappropriate
- port
-Thread-Index: AdqBMAsyIUVKSftLT9+joUQQVsULSQ==
-Date: Thu, 28 Mar 2024 16:57:09 +0000
-Message-ID:
- <OS3P286MB2213ACE7DE8379B900BA1D72AD3B2@OS3P286MB2213.JPNP286.PROD.OUTLOOK.COM>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-tmn: [XjhsVmA/zO8F5Y9cK64UVozFW5jtKV1l]
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: OS3P286MB2213:EE_|TYWP286MB1990:EE_
-x-ms-office365-filtering-correlation-id: 4dc1731a-700a-4def-8ef5-08dc4f481ba8
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info:
- uxHUzdZtM1gwJ/rWpeOKa8NlqhazDlbrt4k18/J79kJcZUoV/J7ri6TExcyWZTWjB6CPpwXeXSpzaYfquX8z8VML/o+5Z/jQlqSCYdX7NA+acAzStrrNtTba6/+XCu9DcF8v3Aq2JwF+czDA2qKxuvLX93/kRY0o6s6d7Xpo0B7Q37adA3t1pJRTmtMaeJ2DZcN/Wn8LzWkmFl3XSX1I5ISc7GOB70lLYeVbwgppL8IHR+JRgEsfaR1tWycuF+XNxOOhn9YQ6wbGQUFij26Cj9iYJgblhFQSq/7S63EAg8ZbpnEtsLGDrMX0mZG074AOgqwInA1HXFKiDDtQAglgetPUQawC/ZweZCeVoXwTIIBMioUbO0IN82f2s+eJ0h3HlQdS+WnFcu1DaajR2vGYVvV7nmUHRPLrUMbzHUSWDUpwstm6FD6qcQI9W4s97SMsL13EFR3GdMHCfx368S+IAk1vuCscmg0afixURhsDTGYnGUCtCEFzd0QS8oIxyyJbREav3fG1OWEQ4dboIj1FaaTlhEki8mZWfhXol9/CC/y2y+xrwECgk2iMR33jVrBR
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?j3kBDP5wwXW9wHJjl8MuefxuvGymqnCOxMDLapIWZjZsN9dB5tqolWjsnpxQ?=
- =?us-ascii?Q?A/bD2Nys+pNsu1t6PcdZzg1ULvONK0u+p4lenOvGmzcfZCEKmmOShvzD77TX?=
- =?us-ascii?Q?4kT826CjybzJCsOqvyS3jNi2xwZzFyAIhyHSW9UG7/V+EBQ+b3u8vpoe6XDz?=
- =?us-ascii?Q?IZhEyK4kBQCWPj8vul6XdJHzV4CEAW0oWYafYQCsLKuAFa3ap3nv1u3g8H3X?=
- =?us-ascii?Q?wIDINp9Jg71lG86HNvu+IP5xsLiu3W0WO3tPUDAJouuFz7yXCXRL/w8witkh?=
- =?us-ascii?Q?EBfFQJP/YqtSdmRssURh/NyD5KcBNTd6QFI5Shc4gxsiu8sYC1XB6Y5Pfqnu?=
- =?us-ascii?Q?fMN5/4UdNiQlbUiFUZMsntvVuDyMh783k10+Z+nPNfh0TVmYVMRrbceNKU5B?=
- =?us-ascii?Q?i//yurPQ5FjZyONkk1vCBmJNsu99vZGrSE4weoCdWfWYVklvuFrKzkVdUZvf?=
- =?us-ascii?Q?2uYKiX1d2YxxjyhCtNMBoTbAz0q8y3QUO72jZeXzVNCdrSFhsVaBjqArHi7/?=
- =?us-ascii?Q?oU/Hevwc78vSQa6Yy6N8ScprcsZ+7LvHri6beeXNJGipkMXdtFYJqOq1i7qV?=
- =?us-ascii?Q?HzFGBspTohjvROPNHGLI1l6+WndaXHr/SeXIWxROxINnS2ET2yxqR+R2c0FE?=
- =?us-ascii?Q?ZYQ+56jsYcBsdCusgBMrMXRufvxarczRGar7kn5Lq4ILGHlbvK8OUHjmeK7s?=
- =?us-ascii?Q?ZvDWRl32KkR+hcnhfJyLzFkXWMlFd3345qPVytdRI2O/t1l6n11+nhwsk5j0?=
- =?us-ascii?Q?IoYpJE7E4IKyn/0AG1pDxXMDtLIVnrWsU3XeDDq6KGyqossPKiVgb2IT2s7s?=
- =?us-ascii?Q?jGa/03KqCgDmHW8uofAAhgnLMh//YfBZm6ipWJEQNwFjvruuR/1tPTXTqxFh?=
- =?us-ascii?Q?vA8Me5agS90ny3AcW0HR9xJd3o2sIcdayRsuz2XF2bZvzaQcr1xjEK38Qi4M?=
- =?us-ascii?Q?9TDd8vd+B3a9IYF5jDQHyI2FUeXO8eU3JdvoOo9OLZREI2mNTXxCabto/7mE?=
- =?us-ascii?Q?mKh33AqeZ+uQjbjzjdtsZfAc32RjdkjnRDlxhP6xngj3jxcrdLEOt9RhixjN?=
- =?us-ascii?Q?7ghN7/YyCjuVAznjzAMF9Ic1lrQ3DhA9qp7TnapiEQ7ECdzB39CNg54NF/OR?=
- =?us-ascii?Q?cycZ1PfdQX9zi+aNNYJMkxL0I4qlgMBw43SQ3DlNHOi8w5+TWKxe7m82McWG?=
- =?us-ascii?Q?reRpNt3ERobWTSNPE1YPgBFqb6frn1e61cKw10F6urEu93snYVtfyV4qbkI?=
- =?us-ascii?Q?=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AD0A128370;
+	Thu, 28 Mar 2024 17:47:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.174
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1711648041; cv=none; b=XAKCScK08pev/G397T6wbBVjFDQDs0QchDKNhkKXlOxurVxNXi7IVr3Yo+uVP1hT84HgHCZIRWjg6fsO/pPP7gDEcrXGfg9znMr6Y7aFkf3PmpJLZpIj7wGBgRVbncdZWFP8x/VnD7VdPPqnUBknJK61m57RNBoQY+rJFUA2QUs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1711648041; c=relaxed/simple;
+	bh=2RJ4UftN8nrBTsBDUrVAd7hn5NaOKJnB1Fl2J9lWRkU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=M4/nI/blH1MF8+2yoP/n1fZ+Ue/1Zx6s/9F0+I9GEGsw21dTfK1ZAwTXK3KCQUbiBITvPcn46h3FwKAgJgYu9OGwaKRpSPSShNzL85kmxOwYRjcvVG/3s5MfwxHtMLZ+KurFtgPiiEtZf2RyPLR4/oeTxD/M/1HRHXjg8tW/f/k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MUsNPf2L; arc=none smtp.client-ip=209.85.221.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vk1-f174.google.com with SMTP id 71dfb90a1353d-4d43d602cd6so385137e0c.0;
+        Thu, 28 Mar 2024 10:47:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1711648038; x=1712252838; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WOul4usuPisehHXyQcZLwgce2H6JwRccYEaJQWtP1Jo=;
+        b=MUsNPf2LdIJPPW0QsF9yWj+TtesSZvxodFKQx4SR1NwzBHA0FZwXBUMhCjEMxw9C2t
+         HhjFYUYs90eF6MJZkELF1PoTcSZqcyg/5bRNddJJv0cS9PWo+4uQ2iSCQaC4XlC8UlRR
+         7egy4uDmdazuOYjKAbr8/w/EJX5F5+Zpd9ah1DVfw25rSA+S4sG4xkMp2StUJJ7b4JHU
+         N7LQMQMNr3dOAfB6CyReNMnb9qVkNTrfAY7khKDxiJa+E6t2DvdnnnTJsNr633HfFdbb
+         ve1ickFoQcPaFy+3G/clglw6CJNhDXstrWbS38QiA1yLB7Lk4oUL2cIVTDzzuTJMxcUx
+         5ujw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711648038; x=1712252838;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WOul4usuPisehHXyQcZLwgce2H6JwRccYEaJQWtP1Jo=;
+        b=FTqdh7Qk9JUJtRMcc6U9AWiJZGvkUNp0voAseEjoQewVGVAc3vTEffGhoAflhGfud8
+         Mfaet/iY/IDEOywdwNGMeKoghpSj02DmYYy0LMkxlZUJvj4G2Sh4lx2cJ5QTkFX/I2XX
+         UgCdGZLQsSArbO2qPmgRxRuSY46aMb07pCqmUGiqi0yZIsk2gBnt96UFMdm98OefxRnz
+         cuvgJdBxWLmtZds2Qak9hzCx+W79SzMd3E7xm4sNbO+/iU3Sd+dR8LSCfqNhCqEIKVBh
+         GCLCesRRD8bh/B5VzuJURvSs7ZXd1fEdCa7c2HaPH3uRbAIE4BCMNKaxaAVEc7wLSqbc
+         lmbQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV2AELX+s3Ri/P1sMvSyKP4y170FcrAHR5R4xijzssxgnT9+w/CF5jlOw3hu9L0uKOh0BgUp8GVe0AcNTWcTdhIMiMgszexhFm423YsTOj9To8G7Kipun2zblgphJwkXs6+xnFOh4JqoWW3bt+6swEwZxtEkgmojS4M5bwCXHFdxo9A7iESoYlxpF/TMFug7qWAuqcEyCVUXRa8VEXgNhRjFHRSj3kTKFu5QWzRLePJ1jtlzstVjVp1UYFjXGGIiXeyChjvNrcPdQYah2RtQqOYvUj1J6T/MP5LLWZnoSyVTNALjJ/R7QPPVJKf51oU7gpyMh5YR5nRKEL8/WXjc3082Lfa6qXNcmUxMuFoQJ94qniYC4XagaGURaDTrQ15tKqw6+K5ha2egriX3IrBYSegT8gN5gczoopOxwRH3RKKS8jjo0uogQCHJ5i9J/5B6KVTKcxqQu9hkR4meUMdVk1umbe7BFpTog+4utMcRX27sIuWDfOZQ1te4rASDtKZGma9Ql6Hm2z3IyHXHY08sHGtSL004EOIWsc/9wglMYvLy5gKmGNQ+Ub+myDLrEBoLDzHVKiRPj90vxFMsm460SY=
+X-Gm-Message-State: AOJu0Yx7+7ACXHzYJTfbS1syhBNOfHroiuYIKQOqusVbIshZNPMgLSaI
+	O+iv3mUT3CfIy15IZD0eRSTn3JEej3LMQ2ey6q9cVscvLqqXMvD2mUbdao+vHw+gyrcq5S2tmDJ
+	PrmEbnyAv3kOMN9yBIA0Z81J+Yok=
+X-Google-Smtp-Source: AGHT+IHhsrATdsPlGDNfn/hR7BQXc3o4d86Rd7NcYHBOy9LUQjNRQoJ0rDqs8OMJuSA4Qyiba22Ugt9rz6m/+ouyIBc=
+X-Received: by 2002:a67:f7c6:0:b0:476:fbbb:14bc with SMTP id
+ a6-20020a67f7c6000000b00476fbbb14bcmr3836850vsp.30.1711648038557; Thu, 28 Mar
+ 2024 10:47:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: OS3P286MB2213.JPNP286.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4dc1731a-700a-4def-8ef5-08dc4f481ba8
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Mar 2024 16:57:09.9671
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYWP286MB1990
+References: <20240327160314.9982-1-apais@linux.microsoft.com>
+ <20240327160314.9982-10-apais@linux.microsoft.com> <9c31b697-3d80-407a-82b3-cfbb19fafb31@arm.com>
+In-Reply-To: <9c31b697-3d80-407a-82b3-cfbb19fafb31@arm.com>
+From: Allen <allen.lkml@gmail.com>
+Date: Thu, 28 Mar 2024 10:47:06 -0700
+Message-ID: <CAOMdWSL9GUkoOOX4LNwMOV24-8xnmFKep15xj8NnmnBss-RYAQ@mail.gmail.com>
+Subject: Re: [PATCH 9/9] mmc: Convert from tasklet to BH workqueue
+To: Christian Loehle <christian.loehle@arm.com>
+Cc: Allen Pais <apais@linux.microsoft.com>, linux-kernel@vger.kernel.org, tj@kernel.org, 
+	keescook@chromium.org, vkoul@kernel.org, marcan@marcan.st, sven@svenpeter.dev, 
+	florian.fainelli@broadcom.com, rjui@broadcom.com, sbranden@broadcom.com, 
+	paul@crapouillou.net, Eugeniy.Paltsev@synopsys.com, 
+	manivannan.sadhasivam@linaro.org, vireshk@kernel.org, Frank.Li@nxp.com, 
+	leoyang.li@nxp.com, zw@zh-kernel.org, wangzhou1@hisilicon.com, 
+	haijie1@huawei.com, shawnguo@kernel.org, s.hauer@pengutronix.de, 
+	sean.wang@mediatek.com, matthias.bgg@gmail.com, 
+	angelogioacchino.delregno@collabora.com, afaerber@suse.de, 
+	logang@deltatee.com, daniel@zonque.org, haojian.zhuang@gmail.com, 
+	robert.jarzmik@free.fr, andersson@kernel.org, konrad.dybcio@linaro.org, 
+	orsonzhai@gmail.com, baolin.wang@linux.alibaba.com, zhang.lyra@gmail.com, 
+	patrice.chotard@foss.st.com, linus.walleij@linaro.org, wens@csie.org, 
+	jernej.skrabec@gmail.com, peter.ujfalusi@gmail.com, kys@microsoft.com, 
+	haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com, 
+	jassisinghbrar@gmail.com, mchehab@kernel.org, maintainers@bluecherrydvr.com, 
+	aubin.constans@microchip.com, ulf.hansson@linaro.org, manuel.lauss@gmail.com, 
+	mirq-linux@rere.qmqm.pl, jh80.chung@samsung.com, oakad@yahoo.com, 
+	hayashi.kunihiko@socionext.com, mhiramat@kernel.org, brucechang@via.com.tw, 
+	HaraldWelte@viatech.com, pierre@ossman.eu, duncan.sands@free.fr, 
+	stern@rowland.harvard.edu, oneukum@suse.com, 
+	openipmi-developer@lists.sourceforge.net, dmaengine@vger.kernel.org, 
+	asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+	linux-rpi-kernel@lists.infradead.org, linux-mips@vger.kernel.org, 
+	imx@lists.linux.dev, linuxppc-dev@lists.ozlabs.org, 
+	linux-mediatek@lists.infradead.org, linux-actions@lists.infradead.org, 
+	linux-arm-msm@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org, 
+	linux-hyperv@vger.kernel.org, linux-rdma@vger.kernel.org, 
+	linux-media@vger.kernel.org, linux-mmc@vger.kernel.org, 
+	linux-omap@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
+	linux-s390@vger.kernel.org, netdev@vger.kernel.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> Sender: Alan Stern <stern@rowland.harvard.edu>=20
-> Mar 29, 2024 at 00:22:10AM +0800
-> Recipient: Cui Alan <AlanCui4080@outlook.com>
-> Cc: inux-usb@vger.kernel.org; kexybiscuit@outlook.com
-> Subject: Re: way to notice user when a device connected to a inappropriat=
-e port
+On Thu, Mar 28, 2024 at 3:16=E2=80=AFAM Christian Loehle
+<christian.loehle@arm.com> wrote:
 >
-> On Thu, Mar 28, 2024 at 03:20:10AM +0000, Cui Alan wrote:
-> > If we can query the capability of the root hub among the whole system,=
-=20
-> > to indicate if kernel should notice userspace that the device is=20
-> > pluged into a inappropriate port. When a port with higher speed and/or =
-more capabilities the device required is available. eg a dp display device =
-on a normal typec even usb 2.0 only, or a superspeed device on a usb 2.0 po=
-rt.
-> > (Windows DID that)
-> >=20
-> > Also some non-standard device only provide a usb superspeed without=20
-> > usb 2.0 even the specifaction says
-> >=20
-> > > 11.3 USB 3.2 Device Support for USB 2.0 USB 3.2 device certification=
-=20
-> > >requirements require support for USB 2.0 for all user attached devices=
-.
-> >=20
-> > I looked up the USB BOS descriptor and found that the field describing =
-the device's speed capabilities is one-hot coded.
-> > So also the device can put a billboard or BOS on usb2.0 to indicate it =
-cannot run on such a port.
-> >=20
-> > struct _SUPER_SPEED_USB_DEVICE_CAPABILITY_DESCRIPTOR
-> > {=20
-> >     BYTE bLength;         =20
-> >     BYTE bDescriptorType; =20
-> >     BYTE bDevCapabilityType;  // ONE HOT BIT CODING!
-> >     BYTE bmAttributes;
-> >     WORD wSpeedsSupported;
-> >     BYTE bFunctionalitySupport;
-> >     BYTE bU1DevExitLat;
-> >     WORD wU2DevExitLat;
-> > }SUPER_SPEED_USB_DEVICE_CAPABILITY_DESCRIPTOR
-> >=20
-> > I search the kernel source, but nothing shows that kernel trying to not=
-ice user or even a pr_info when situations above happened.
->
-> There is a message that gets logged when a high-speed-capable device is p=
-lugged into a USB-1.1 port, but no message when a SuperSpeed-only device is=
- plugged into a USB-2 port.
->
-> Would you like to write a patch that produces such a message?
->
-> Alan Stern
-Excatly, there are two situations I said above " a SuperSpeed-only device p=
-lugged into a USB-2 port." and " a device which supports SuperSpeed plugged=
- into a USB-2 port.".
-Maybe its more secure to ask the XHCI mantaniner before we do that. Looking=
- forward to reply from all of you.
+> On 27/03/2024 16:03, Allen Pais wrote:
+> > The only generic interface to execute asynchronously in the BH context =
+is
+> > tasklet; however, it's marked deprecated and has some design flaws. To
+> > replace tasklets, BH workqueue support was recently added. A BH workque=
+ue
+> > behaves similarly to regular workqueues except that the queued work ite=
+ms
+> > are executed in the BH context.
+> >
+> > This patch converts drivers/infiniband/* from tasklet to BH workqueue.
+> s/infiniband/mmc
 
-Alan Cui
+Will fix it in v2.
+> >
+> > Based on the work done by Tejun Heo <tj@kernel.org>
+> > Branch: https://git.kernel.org/pub/scm/linux/kernel/git/tj/wq.git for-6=
+.10
+> >
+> > Signed-off-by: Allen Pais <allen.lkml@gmail.com>
+> > ---
+> >  drivers/mmc/host/atmel-mci.c                  | 35 ++++-----
+> >  drivers/mmc/host/au1xmmc.c                    | 37 ++++-----
+> >  drivers/mmc/host/cb710-mmc.c                  | 15 ++--
+> >  drivers/mmc/host/cb710-mmc.h                  |  3 +-
+> >  drivers/mmc/host/dw_mmc.c                     | 25 ++++---
+> >  drivers/mmc/host/dw_mmc.h                     |  9 ++-
+> For dw_mmc:
+> Performance numbers look good FWIW.
+> for i in $(seq 0 5); do echo performance > /sys/devices/system/cpu/cpu$i/=
+cpufreq/scaling_governor; done
+> for i in $(seq 0 4); do fio --name=3Dtest --rw=3Drandread --bs=3D4k --run=
+time=3D30 --time_based --filename=3D/dev/mmcblk1 --minimal --numjobs=3D6 --=
+iodepth=3D32 --group_reporting | awk -F ";" '{print $8}'; sleep 30; done
+> Baseline:
+> 1758
+> 1773
+> 1619
+> 1835
+> 1639
+> to:
+> 1743
+> 1643
+> 1860
+> 1638
+> 1872
+> (I'd call that equivalent).
+> This is on a RK3399.
+> I would prefer most of the naming to change from "work" to "workqueue" in=
+ the driver
+> code.
+> Apart from that:
+> Reviewed-by: Christian Loehle <christian.loehle@arm.com>
+> Tested-by: Christian Loehle <christian.loehle@arm.com>
 
+ Thank you very much for testing and the review. Will have your
+concerns addressed in v2.
+
+- Allen
 
