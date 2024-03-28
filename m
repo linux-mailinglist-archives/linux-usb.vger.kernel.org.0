@@ -1,135 +1,118 @@
-Return-Path: <linux-usb+bounces-8542-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8543-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8DDE68902E5
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Mar 2024 16:21:38 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E53A1890317
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Mar 2024 16:32:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 06B78B22214
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Mar 2024 15:21:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 200F41C25F4E
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Mar 2024 15:32:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0023212D74F;
-	Thu, 28 Mar 2024 15:21:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A049B12FB01;
+	Thu, 28 Mar 2024 15:32:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=one-eyed-alien.net header.i=@one-eyed-alien.net header.b="IWSOWC7t"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="D76hPW6n"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62AF7199BC
-	for <linux-usb@vger.kernel.org>; Thu, 28 Mar 2024 15:21:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C069212E1F9
+	for <linux-usb@vger.kernel.org>; Thu, 28 Mar 2024 15:32:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711639293; cv=none; b=rPnQMpl3cXdsjHtZubIIH09ylW+7CDqR6Su3bfexSePatOyMhldjnDofbz+UL84+h47lN0OAsTCGDpdgEHwysZZaaaKA/mrEJuQIwembT18izTaI1szi8qtlqXmZDbfttrA3wSltTWyhbk+EBAA8XbFCL97ptq/75e9xHzAKSrI=
+	t=1711639950; cv=none; b=Pk1GADbOMD+qpq+agTCIZDNYemDCYVZam4EMIS6v1xeeVVFoSfKDg8wlgvuSnr6V54UMXc+elWlR9VN1oHW4Pv42/nvzdfn+R4gswT0Iw/gNyXT19heFV5pwxtpy38BUq9EOUR+/Ls/sJydvc8Mg2e7JFGx/bsiyezq1mk+4xdw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711639293; c=relaxed/simple;
-	bh=wFRhuqAdTsfz8Pb10FUw0xm5RTQ37VsLf8OG1qFhaso=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bWy4vc8EcjQ8TE7PzdwqxyLx88Ue4ATrL364205v06jWVR3K/6myluRoA4Z5bDYzWuO5b9QiR5/bG2+tbnRVYb+3Xlhb48cnRUWFtVXeOsUcMpTKqwERgewxLPk+orUETaEwSMZh7/RYK5rfDAeTCz1YpFMUPrUlKzML8NLrhlg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=one-eyed-alien.net; spf=pass smtp.mailfrom=one-eyed-alien.net; dkim=pass (1024-bit key) header.d=one-eyed-alien.net header.i=@one-eyed-alien.net header.b=IWSOWC7t; arc=none smtp.client-ip=209.85.128.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=one-eyed-alien.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=one-eyed-alien.net
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-60a434ea806so11383137b3.3
-        for <linux-usb@vger.kernel.org>; Thu, 28 Mar 2024 08:21:31 -0700 (PDT)
+	s=arc-20240116; t=1711639950; c=relaxed/simple;
+	bh=MxJfELHb/ZTHQmCUFrKhSwgtmJ0UUkjaK/hhdG86Tbg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=n28WfprBkhd1WdlwL5P1srRh4lVF4cYg4OhJ88bPmV3BdzInJog0l6IuIauMSt3bHQrkJpflFLdenVodB32g7oFBjoV6J+yZ8I8iB37hmXFLPRU3+c+VEve1GNvLeI8gdsKZJwBrGOEtCfB3CCrf9C3Dl+rxSRTkYg7Q7InNzgU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=D76hPW6n; arc=none smtp.client-ip=209.85.167.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-512bde3d197so770642e87.0
+        for <linux-usb@vger.kernel.org>; Thu, 28 Mar 2024 08:32:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=one-eyed-alien.net; s=google; t=1711639290; x=1712244090; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Q7QI/tup+7NJmY+g+0vWh6xzWihOFqUtUifn+JRUGos=;
-        b=IWSOWC7tGjthiurMfF6utREGvb5apnl7SYyoKw2P8WEAp5E76S6Jyb7r2qkZnyOWqi
-         6PJB6oTvHErFEPueonW6KQjmgoNjtufXnAePXEv9NJURlmnUtXt7PjAn15x3/fJ3SGQ0
-         cKVGQ7jiqXnVXK6+y6fDc01WXcpwBKJeTDmaI=
+        d=linaro.org; s=google; t=1711639946; x=1712244746; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lXM/B0D5ELcLLV0Ges/OZ3bWdZ/dJWeP2NzZMjp2T8A=;
+        b=D76hPW6nFroPOzm9ZqZZ2GI1tTIYRhUqFtFUxOjK/lXkgu9E7qw9G53VFEVNlFQM2u
+         G8ccgsfV+c1eBXQc8BFT25jH5rdLoAnCGeUKYUiuXIFQap/BtVCcTOSCjlIrXtcm39Fm
+         F9MtwxUZcYVB9Vaz1/NOy8V88+VoFPmoxz2BHgcjEU1+XtUP64w/OWO0ltzF6YyLCr1D
+         +4GXqjR3PbfLX0Qqo7vuThOFaLrF7st8ZXXXpAIRFU70X4vmBSlPJjQ8GjKmUMrEg/1T
+         U2vl03NUjq0BCQWPptP1Vz8kgPAB9Vd57YikDpYGrRcVs1IZ873Uu+08A9xW1Z2zXtdH
+         yZvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711639290; x=1712244090;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Q7QI/tup+7NJmY+g+0vWh6xzWihOFqUtUifn+JRUGos=;
-        b=YV8ZiV7MBAemTBKDYUXahrT/AImV1rqHWbb2kR/Z+UrT5e15oKBwnR3HlX6b+Uy0UP
-         yLiz0RoLLBz0Cb+bQPd6yeQFKmfW+2Y66xi2X0TEmcDYkVrKYdLFV7W7gC9VboJx18A6
-         HqmBmhydh3UI69Qx58WXkUKJO0j2RNWQSwlSUoFpnNpQLtqVzskiw+5wXZFhqlsxP2t9
-         e6Su66I+zpMhtHRNCJkQ6eyHrHXNmdbKL+COE9z6Z2fTAL1zhiUoiVF9UFxxmao4w1RO
-         RdHxzI5D+BDjHzQX1HMxegHQRyDwuifT74vfEMnfzbev2INPSptk/ONb0XqA3L8Ey/HP
-         j1qQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVazLhPu884/mbt674Wh9k+t2GwmTwcvjLunOYucE2bOP9YqigFhcgmQ1nHQBoD6HkCegoN0RMxNuC/+bHQQ7yN2fhom4L1p1Hv
-X-Gm-Message-State: AOJu0YwxcwkLKYgCN7OmThtqcWrYFqvSpcRNsyTkKSWI+lW/C0FEme3l
-	LofN7OCT1cdZstz+Q/WYhwBhY9NboY4miGNKwTf94U4UeCbOkLSR6sauHcci+MKaKaWoat6ES1f
-	uEsKwbZdoOqO0CaQxXS1qMqV0icuoDrVpH+qsKg==
-X-Google-Smtp-Source: AGHT+IEUMl/1d3R4NEdijxclRpeBOvFNOk/Jgqff22zNPQs9stPAMQDCmf6Lw24zYS1WZOi+T5JxJXkUaCGIRfotNcY=
-X-Received: by 2002:a25:6b4b:0:b0:dbd:120e:f337 with SMTP id
- o11-20020a256b4b000000b00dbd120ef337mr3222617ybm.30.1711639288887; Thu, 28
- Mar 2024 08:21:28 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1711639946; x=1712244746;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lXM/B0D5ELcLLV0Ges/OZ3bWdZ/dJWeP2NzZMjp2T8A=;
+        b=iusM3py/LZKpxzZm8mEYlDVHBCiJFF8y6+fS0va1OnvEdqCVzALBf/UVE4LfpRf7QH
+         G8XKjbfJzC5Ks1AJxNWvTfHs3aY36BEqQvW7HyikAkRYQBSmoiCif36kwbRel9F9G3X3
+         5pZRrcwNEkxaJvty5Qs+MKiXZjl5N0nnMw1K5DPI0c+X5sVd+WfuVpcNUj7cItcBx6VM
+         Nx7xrB3Fe/kLC0L31k04RD2qH+Eo2SLFQ7Hm65VFYFKJG9754RrttY328tz1pWpjIt2Q
+         MWoL2kJhkbzg2KlOFewXvscWE8eAryVro/4Ka8IcaCpX59RV4ThuXxrS7ULYxTe1LDtP
+         VtAg==
+X-Forwarded-Encrypted: i=1; AJvYcCXWbYRg3IF37ZPw851egUDFZpmOiKEBCwLuJCtmoXElWvv+ntz4U9yfb8FTPqVijwLqKH3EBIcTtk+7sAVQdhMGMWpHuLFrQ0oH
+X-Gm-Message-State: AOJu0YyZaLas+oHYkx1m38T7RpizB7dlu27D3DDXvyvLe1p4h5mmbylm
+	r/fC8fA1FjaHXBfcabDyA5iRitzCFR6pM2bqtETev46YbPU5DDVf86bcpHQsbuw=
+X-Google-Smtp-Source: AGHT+IGjkuFmHs+Dy7UnY42ArmjBqrezgKsmPQ7Wh0/do2fY1/2ILRqdBpaOiiniwgbug+NLTvlShw==
+X-Received: by 2002:a05:6512:534:b0:515:a876:68a0 with SMTP id o20-20020a056512053400b00515a87668a0mr2226473lfc.14.1711639945799;
+        Thu, 28 Mar 2024 08:32:25 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a00e:a300::227? (dzyjmhyyyyyyyyyyyykxt-3.rev.dnainternet.fi. [2001:14ba:a00e:a300::227])
+        by smtp.gmail.com with ESMTPSA id j11-20020ac2550b000000b00515a6e4bdbdsm238086lfk.250.2024.03.28.08.32.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Mar 2024 08:32:25 -0700 (PDT)
+Message-ID: <1b040be3-acd7-40dc-bc9b-24ea6d4b8377@linaro.org>
+Date: Thu, 28 Mar 2024 17:32:24 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240327055130.43206-1-Norihiko.Hama@alpsalpine.com>
- <2024032757-surcharge-grime-d3dd@gregkh> <TYVPR01MB107814D7A583CB986884AD4B290342@TYVPR01MB10781.jpnprd01.prod.outlook.com>
- <a446cdf4-3a9b-43d8-b22b-78c20cce2b4f@rowland.harvard.edu>
- <TYVPR01MB10781AA8B37E147E318597B46903B2@TYVPR01MB10781.jpnprd01.prod.outlook.com>
- <0c99daaf-c727-467f-b8c1-ba8846d8a9ab@rowland.harvard.edu>
-In-Reply-To: <0c99daaf-c727-467f-b8c1-ba8846d8a9ab@rowland.harvard.edu>
-From: Matthew Dharm <mdharm-usb@one-eyed-alien.net>
-Date: Thu, 28 Mar 2024 08:21:18 -0700
-Message-ID: <CAA6KcBBcpug-rOytgnbb=c4O54m-Pfy=divqp12qOMrgmQrz7w@mail.gmail.com>
-Subject: Re: [usb-storage] Re: [PATCH] usb-storage: Optimize scan delay more precisely
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: Norihiko Hama <norihiko.hama@alpsalpine.com>, Greg KH <gregkh@linuxfoundation.org>, 
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, 
-	"usb-storage@lists.one-eyed-alien.net" <usb-storage@lists.one-eyed-alien.net>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 3/3] platform/chrome: cros_ec_ucsi: Implement UCSI PDC
+ driver
+To: Pavan Holla <pholla@chromium.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Benson Leung <bleung@chromium.org>, Tzung-Bi Shih <tzungbi@kernel.org>,
+ Guenter Roeck <groeck@chromium.org>
+Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+ chrome-platform@lists.linux.dev
+References: <20240325-public-ucsi-h-v2-0-a6d716968bb1@chromium.org>
+ <20240325-public-ucsi-h-v2-3-a6d716968bb1@chromium.org>
+Content-Language: en-GB
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20240325-public-ucsi-h-v2-3-a6d716968bb1@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, Mar 28, 2024 at 7:51=E2=80=AFAM Alan Stern <stern@rowland.harvard.e=
-du> wrote:
->
-> On Thu, Mar 28, 2024 at 03:04:47AM +0000, Norihiko Hama wrote:
-> > > On Wed, Mar 27, 2024 at 07:39:55AM +0000, Norihiko Hama wrote:
-> > > > > Sorry, but module parameters are from the 1990's, we will not go =
-back to that if at all possible as it's not easy to maintain and will not w=
-ork properly for multiple devices.
-> > > > >
-> > > > > I can understand wanting something between 1 and 0 seconds, but a=
-dding yet-another-option isn't probably the best way, sorry.
-> > > > 1 second does not meet with performance requirement.
-> > > > I have no good idea except module parameter so that we can maintain=
- backward compatibility but be configurable out of module.
-> > > > Do you have any other better solution?
-> > >
-> > > Can you accomplish what you want with a quirk flag?
-> >
-> > I think that it's hard to do that because 'quirk' is specified for a de=
-vice
-> > but it's difficult to identify the devices to make quirk, especially fo=
-r future introduced devices.
-> >
-> > Can we change the design of existing 'delay_use' ?
-> > For example, 'delay_use' is 32-bit value and the value "1000 secs" does=
- not make sense to set it,
-> > So if it's set to '1100', it's treated as "100 / 1000 =3D 0.1 sec". Is =
-this possible?
->
-> Here's an approach that Greg might accept.
->
-> Since we already have a delay_use module parameter, we could add a
-> delay_use_ms parameter.  The two module parameters would display the
-> same value, but delay_use_ms would be in milliseconds instead of in
-> seconds.  (This is similar to what we did for the autosuspend and
-> autosuspend_delay_ms sysfs attributes.)
+On 26/03/2024 01:42, Pavan Holla wrote:
+> Implementation of transport driver for UCSI. This driver will be used
+> if the ChromeOS EC implements a PPM.
+> 
+> Signed-off-by: Pavan Holla <pholla@chromium.org>
+> ---
+>   drivers/platform/chrome/Kconfig                |  14 ++
+>   drivers/platform/chrome/Makefile               |   1 +
+>   drivers/platform/chrome/cros_ec_ucsi.c         | 247 +++++++++++++++++++++++++
+>   include/linux/platform_data/cros_ec_commands.h |  19 ++
 
-What about just changing the parser on the currently delay_use
-parameter to accept an optional suffix?  If it's just digits, it is in
-seconds.  If it ends in "ms", then interpret it as milliseconds.  This
-would be backwards compatible with existing uses, give you the
-flexibility you want, avoid adding another modules parameter, and
-potentially be expandable in the future (if, for some reason, someone
-wanted microseconds or kiloseconds).
+While it's fine to use platform/chrome for platform drivers, please 
+place drivers which have a subsystem into the subsystem dir. I think we 
+don't want to hunt UCSI implementations all over the codebase. Please 
+use drivers/usb/typec/ucsi/ location for your driver. This also removes 
+a need for a global header.
 
-Matt
+-- 
+With best wishes
+Dmitry
+
 
