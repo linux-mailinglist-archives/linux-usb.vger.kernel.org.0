@@ -1,158 +1,209 @@
-Return-Path: <linux-usb+bounces-8566-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8567-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7949E89085E
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Mar 2024 19:32:13 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B4618908D8
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Mar 2024 20:08:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F06A1B22B9D
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Mar 2024 18:32:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9B32D1F240E1
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Mar 2024 19:08:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AFFF137763;
-	Thu, 28 Mar 2024 18:31:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 918C8137911;
+	Thu, 28 Mar 2024 19:08:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QQ+Ol01e"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Rwq9JCbg"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98A3C1327F8;
-	Thu, 28 Mar 2024 18:31:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81E0C1849
+	for <linux-usb@vger.kernel.org>; Thu, 28 Mar 2024 19:08:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711650709; cv=none; b=SMfPpC/Ltxe6Y8bC5SBajqJZrUZLWeDjd2q2tPn0YmZY9VqROns4nCSEjN28OGtBPUoFVC6vNDa/1JN0QcGmhBt6aACp2g2UpXJYEOUrvYNlyQdao53zf+y/wfrcMLfoc7GQcKGxMhctD+J7/mfxBTufds1UkseUkYlu5fDxnxY=
+	t=1711652929; cv=none; b=uvyUb9YrObpkbkNrXGS8x6uFtsb7CBi3IFXdIkS7AXQqhC/AWyeeMkZjkVKewuEfu8wKtMNkYfEsSUBLt3CHlnw3HjHE1s9i8Sp2D0oz6Rmd/ieAnQOl7TtLbbLdMHx/VHNzVqgopOmJ2dGGfEFWJlsAPIzlqbZcOlPsU6JmgdY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711650709; c=relaxed/simple;
-	bh=09Kq07Ctu1YK6YAopY47/y5AlbJwjHjNBMXfeYxKY3s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mc+bmHU7JCh9T2qz/jKyKISblvHUMRyjYOEKwefhMp+SpBo+KEZunCDaUOfyxVqaH2nRtbEFzsaXfY7St2PHPArtNQ18jv3kbP8sMNYjt2B8WRyDhc54G3/LIVhXybYiD9uu0NBwwzc92ifzdPX4yIYM9RzRZUURIOKxpkoXwjk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QQ+Ol01e; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9561C433C7;
-	Thu, 28 Mar 2024 18:31:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711650709;
-	bh=09Kq07Ctu1YK6YAopY47/y5AlbJwjHjNBMXfeYxKY3s=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QQ+Ol01eGrtbmmXmm5UOF8z3YVrAFzrLyUinoyXQOw2oD/3BtgXxtRpcyL6qEGHMi
-	 Fuf1dGmu1+mXVCx0A2v+QG1OZmZa5GwKeTprSp0vXiGl5WvN4w7glf0wb/Ho4jGsI6
-	 A7WhuNfxRZ+SYEDd2EHDavctgY396ec7mZY6h+UmOVbwQhncgmm56Grgtq512eTU0I
-	 juRVEJtAyO8mA2/2SAJmqgsMiWvU8lqDqaMAEVDmDUSGgn+tYLJ7mum23hafaIgM0S
-	 0/cB+mlWradcKD4+nkGPqD1rFiy3Q7s73Qm1b4qRq5IHy2lK358t2WVn9s4EqNJkuF
-	 qXaWYWlrz6OoQ==
-Date: Fri, 29 Mar 2024 00:01:43 +0530
-From: Vinod Koul <vkoul@kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Allen Pais <apais@linux.microsoft.com>, linux-kernel@vger.kernel.org,
-	Tejun Heo <tj@kernel.org>, Kees Cook <keescook@chromium.org>,
-	Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
-	Paul Cercueil <paul@crapouillou.net>, Eugeniy.Paltsev@synopsys.com,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Viresh Kumar <vireshk@kernel.org>, Frank Li <Frank.Li@nxp.com>,
-	Leo Li <leoyang.li@nxp.com>, zw@zh-kernel.org,
-	Zhou Wang <wangzhou1@hisilicon.com>, haijie1@huawei.com,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Sean Wang <sean.wang@mediatek.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
-	logang@deltatee.com, Daniel Mack <daniel@zonque.org>,
-	Haojian Zhuang <haojian.zhuang@gmail.com>,
-	Robert Jarzmik <robert.jarzmik@free.fr>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Orson Zhai <orsonzhai@gmail.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Chunyan Zhang <zhang.lyra@gmail.com>,
-	Patrice Chotard <patrice.chotard@foss.st.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Chen-Yu Tsai <wens@csie.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>, peter.ujfalusi@gmail.com,
-	"K. Y. Srinivasan" <kys@microsoft.com>,
-	Haiyang Zhang <haiyangz@microsoft.com>,
-	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-	Jassi Brar <jassisinghbrar@gmail.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	maintainers@bluecherrydvr.com, aubin.constans@microchip.com,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Manuel Lauss <manuel.lauss@gmail.com>,
-	=?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-	"jh80.chung" <jh80.chung@samsung.com>, oakad@yahoo.com,
-	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>, brucechang@via.com.tw,
-	HaraldWelte@viatech.com, pierre@ossman.eu, duncan.sands@free.fr,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Oliver Neukum <oneukum@suse.com>,
-	openipmi-developer@lists.sourceforge.net, dmaengine@vger.kernel.org,
-	asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-rpi-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-	imx@lists.linux.dev, linuxppc-dev@lists.ozlabs.org,
-	linux-mediatek@lists.infradead.org,
-	linux-actions@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-	linux-riscv@lists.infradead.org, linux-sunxi@lists.linux.dev,
-	linux-tegra@vger.kernel.org, linux-hyperv@vger.kernel.org,
-	linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
-	"linux-mmc @ vger . kernel . org" <linux-mmc@vger.kernel.org>,
-	Linux-OMAP <linux-omap@vger.kernel.org>,
-	Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-	linux-s390@vger.kernel.org, Netdev <netdev@vger.kernel.org>,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH 2/9] dma: Convert from tasklet to BH workqueue
-Message-ID: <ZgW3j1qkLA-QU4iM@matsya>
-References: <20240327160314.9982-1-apais@linux.microsoft.com>
- <20240327160314.9982-3-apais@linux.microsoft.com>
- <ZgUGXTKPVhrA1tam@matsya>
- <2e9257af-c123-406b-a189-eaebeecc1d71@app.fastmail.com>
+	s=arc-20240116; t=1711652929; c=relaxed/simple;
+	bh=U7rLzvNRcM4oAcp2xI8gikC/c8ZLuP8JApORa7jQK84=;
+	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type; b=bEluM6Cd0RL6/TNB9//0Hbr5XTtHUzsYAdH9t74s8WEclQPtcjdjcjqsFYONMahdJjUeOiULM3qwpfpdHve/+AFXkBUt+b/Yec6WjZnaimfcyV2PQ/wQyv5pG2WWmPw/XkJL8UNGQBDgnx1myOKbj69L38dGDjpQu4Yc2xWUFBc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Rwq9JCbg; arc=none smtp.client-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-33ececeb19eso733708f8f.3
+        for <linux-usb@vger.kernel.org>; Thu, 28 Mar 2024 12:08:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1711652926; x=1712257726; darn=vger.kernel.org;
+        h=content-transfer-encoding:subject:from:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0D1Bvk4t0/NOm3xsc+UpwjmIv6aH4RIbR0Z6kD89i98=;
+        b=Rwq9JCbgtRMDkXDNcrsIhrLUZrKE7N3Zv8EfSc3O19E9YFOcm6PIsOUj2SQ4M2UptT
+         R8Ucvj68uqIno6B06qwKXjqsuVwhkOA4nLD5zpvUNijfxW0vFHbgB5gni0TJHZeZDmAH
+         CMSNCk/hTf4hZ6/KrpU+y/Um2JvG56jXIPTXs7+WXMuq8W3UH10eJkHwMKcAJlCTpEj7
+         mOqqWCnhAwlTyoTPw5ql7l+3NCDXgUGvmPFrfG9O69JlEc+lxXKpinYOqHyRCU/mga+k
+         d48evSAhEw3pfv7YVJlkzwOUECTCbE7xR17GM18GDs1ACOnPl+7TNVByFSXFjG5P5LpW
+         vV7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711652926; x=1712257726;
+        h=content-transfer-encoding:subject:from:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=0D1Bvk4t0/NOm3xsc+UpwjmIv6aH4RIbR0Z6kD89i98=;
+        b=XoyG7R13jhYNFyl3VV/uKbmmP+9AQqZ/xOIcjUW7HIoKkt4KAN7jRJPwMnXcmsf/eQ
+         dEkXFIPxd4USQUdtQe88NMTTaG17OmuBkLe8X/bFmQmSpQVE8oitI3bGV249tE/irsIQ
+         k1ReiWmmkt4hfnyDMewVi+EDP1BoxE6WgnjosDUjUA16uz9OCwmFMkjHjywf5DpR8WfD
+         Y2ypXUPWNcmvu+oxUvUykmM9eMWFZBFgvkGvuAejGZdOxn0ZRb30Fxal0JlQBnvS3GJT
+         6K4eGqIj0/DuhzZqrBbWClz9jUMV2Q7F+HorGJkp9GHZZr5x3IewHNtTBZyp+yZSwukH
+         9W1g==
+X-Gm-Message-State: AOJu0YwCcqkeW/B9f+Y+t2dsvstiXZM/cZaJau/blcbQAhhGOU0wCBD9
+	7AoswzvO3E36Gyy/KM9erwgupDpciunA0VHnoFV6tGUqfuq8gWAZsKR926nI
+X-Google-Smtp-Source: AGHT+IEchiL7SE/9CJ9JOZUfHiFeqw/Zc9GCS74Mo1pUSoFXNgFdzGywJniTFfFUTiUUKp/iuI5uAw==
+X-Received: by 2002:adf:e849:0:b0:341:e0fd:4dec with SMTP id d9-20020adfe849000000b00341e0fd4decmr2881058wrn.6.1711652925748;
+        Thu, 28 Mar 2024 12:08:45 -0700 (PDT)
+Received: from [192.168.1.50] ([79.119.240.188])
+        by smtp.gmail.com with ESMTPSA id k17-20020adff5d1000000b00341b7388dafsm2407261wrp.77.2024.03.28.12.08.45
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Mar 2024 12:08:45 -0700 (PDT)
+Message-ID: <f4df8e45-5dc5-4d81-a414-e19a83b71403@gmail.com>
+Date: Thu, 28 Mar 2024 21:08:43 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2e9257af-c123-406b-a189-eaebeecc1d71@app.fastmail.com>
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: linux-usb@vger.kernel.org
+From: Bitterblue Smith <rtl8821cerfe2@gmail.com>
+Subject: Device with two interfaces - what is the probing order?
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 28-03-24, 11:08, Arnd Bergmann wrote:
-> On Thu, Mar 28, 2024, at 06:55, Vinod Koul wrote:
-> > On 27-03-24, 16:03, Allen Pais wrote:
-> >> The only generic interface to execute asynchronously in the BH context is
-> >> tasklet; however, it's marked deprecated and has some design flaws. To
-> >> replace tasklets, BH workqueue support was recently added. A BH workqueue
-> >> behaves similarly to regular workqueues except that the queued work items
-> >> are executed in the BH context.
-> >
-> > Thanks for conversion, am happy with BH alternative as it helps in
-> > dmaengine where we need shortest possible time between tasklet and
-> > interrupt handling to maximize dma performance
-> 
-> I still feel that we want something different for dmaengine,
-> at least in the long run. As we have discussed in the past,
-> the tasklet context in these drivers is what the callbacks
-> from the dma client device is run in, and a lot of these probably
-> want something other than tasklet context, e.g. just call
-> complete() on a client-provided completion structure.
-> 
-> Instead of open-coding the use of the system_bh_wq in each
-> dmaengine, how about we start with a custom WQ_BH
-> specifically for the dmaengine subsystem and wrap them
-> inside of another interface.
-> 
-> Since almost every driver associates the tasklet with the
-> dma_chan, we could go one step further and add the
-> work_queue structure directly into struct dma_chan,
-> with the wrapper operating on the dma_chan rather than
-> the work_queue.
+Hi all,
 
-I think that is very great idea. having this wrapped in dma_chan would
-be very good way as well
+Given a USB Wifi device with two "identical" interfaces,
+in what order are the interfaces probed? Is the order guaranteed?
 
-Am not sure if Allen is up for it :-)
+The driver uses these:
 
--- 
-~Vinod
+static const struct usb_device_id rtl8192d_usb_ids[] = {
+	{
+		.match_flags = USB_DEVICE_ID_MATCH_DEVICE,
+		.idVendor = 0x0bda,
+		.idProduct = 0x8193,
+		.driver_info = (kernel_ulong_t)&rtl92du_hal_cfg
+	},
+	{}
+};
+
+static struct usb_driver rtl8192du_driver = {
+	.name = "rtl8192du",
+	.probe = rtl8192du_probe,
+	.disconnect = rtl_usb_disconnect,
+	.id_table = rtl8192d_usb_ids,
+	.disable_hub_initiated_lpm = 1,
+};
+
+The device looks like this:
+
+Bus 003 Device 004: ID 0bda:8193 Realtek Semiconductor Corp. RTL8192DU 802.11an WLAN Adapter
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               2.00
+  bDeviceClass            0 
+  bDeviceSubClass         0 
+  bDeviceProtocol         0 
+  bMaxPacketSize0        64
+  idVendor           0x0bda Realtek Semiconductor Corp.
+  idProduct          0x8193 RTL8192DU 802.11an WLAN Adapter
+  bcdDevice            0.00
+  iManufacturer           1 Realtek
+  iProduct                2 801.11n NIC
+  iSerial                 3 ...
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x0037
+    bNumInterfaces          2
+    bConfigurationValue     1
+    iConfiguration          0 
+    bmAttributes         0x80
+      (Bus Powered)
+    MaxPower              500mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           2
+      bInterfaceClass       255 Vendor Specific Class
+      bInterfaceSubClass    255 Vendor Specific Subclass
+      bInterfaceProtocol    255 Vendor Specific Protocol
+      iInterface              0 
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x02  EP 2 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        1
+      bAlternateSetting       0
+      bNumEndpoints           2
+      bInterfaceClass       255 Vendor Specific Class
+      bInterfaceSubClass    255 Vendor Specific Subclass
+      bInterfaceProtocol    255 Vendor Specific Protocol
+      iInterface              0 
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x89  EP 9 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x0a  EP 10 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+Device Qualifier (for other device speed):
+  bLength                10
+  bDescriptorType         6
+  bcdUSB               2.00
+  bDeviceClass            0 
+  bDeviceSubClass         0 
+  bDeviceProtocol         0 
+  bMaxPacketSize0        64
+  bNumConfigurations      1
+Device Status:     0x0000
+  (Bus Powered)
 
