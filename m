@@ -1,187 +1,210 @@
-Return-Path: <linux-usb+bounces-8534-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8535-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7D1788FC78
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Mar 2024 11:09:31 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F23B88FC94
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Mar 2024 11:11:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 56D2D1F24933
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Mar 2024 10:09:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A6EB1B2431D
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Mar 2024 10:11:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55B9D7C6C9;
-	Thu, 28 Mar 2024 10:09:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E92CC7C6C1;
+	Thu, 28 Mar 2024 10:11:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="kuMfx8bc";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="E7CyJ3/s"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Ut2E+P5N";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="pTdl7b0X"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from fout6-smtp.messagingengine.com (fout6-smtp.messagingengine.com [103.168.172.149])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A118C53E28;
-	Thu, 28 Mar 2024 10:09:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.149
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711620553; cv=none; b=EnaqEe2QUFIs8TC+WICkGDZbH4V8VpB9vOelr1DsNs9YtqAYOAIa/mBICx9YxJiwnEsxPvQS5vlFEWVUmlAvKQsRXykysudS9WqM7sEUZDvolOSPnv30jAG5PYAtHA2x8d5p0M4iPkY+BywZmg8+n+hp/he8ZVLTlPQr3XoCr1o=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711620553; c=relaxed/simple;
-	bh=rjRj8lT9t8c0kTmFFh6anVK23ZDO/NaAc4KKhIVP/Dg=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=pgza2ybZzsFYyiDRMB00k8z+4gp+4nQ1/S3jErV3GuJ8R3SVhCGZn6iVeaacnIEWLdEE88n1HW1qqaHtFNDNDsP2T97nvLBlcTVTE6YnPn5VsxT50sYycS3D4MZCd64kB66n5ZcCtiHH575KJwjfztDT1XdLN/SnYNC1oghyDb8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=kuMfx8bc; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=E7CyJ3/s; arc=none smtp.client-ip=103.168.172.149
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfout.nyi.internal (Postfix) with ESMTP id 93C1413800CC;
-	Thu, 28 Mar 2024 06:09:10 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Thu, 28 Mar 2024 06:09:10 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm1; t=1711620550; x=1711706950; bh=pYBjGEQadh
-	25rkMc0fkoc5Y7p79L1tP3xKDkS0IogRA=; b=kuMfx8bc1R4WUipcKL3tIzF3N4
-	t3zOBlcnNWDIjDe7ipHZ2vdT8gjFEPI1e+ODQbTkh7dUk5LNLdH719riG/7S23u9
-	309OowkR1D0rX5rjd1oDDkcNZe/zfRVVl/h7s7JfZ0aDU1bPjSm0hIEnzbFG9z5d
-	fZQs/LIhA7ZaDgthlMZZPByr7T+nIaqNafh0zRk/d9JNzTnIwNM75wPeatuGsvJu
-	Vq9S8uOTkkaEMlwp3RXo+JBYMzLwFYLCKo/A1UzzbQWuBCuXekHkJzt6XPQ8TNq0
-	tQYhv/S7h0++y+XLR2ohIzKvK/W4GKBW0sO7O0tHfshYhs7bYX0yHfgvb/2A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm2; t=1711620550; x=1711706950; bh=pYBjGEQadh25rkMc0fkoc5Y7p79L
-	1tP3xKDkS0IogRA=; b=E7CyJ3/sS3/gu76u1633stL9057wQIWYvG9vs6NHo239
-	7KFVH5M+YFwRBpbadfOh0IrOE9j4E7XE2sRBAIPKToAbDSVOK/ax1a0sOrbNo1ee
-	HE2lX3ra68I5G6+wDY65qsdnqLej3HDSJFNyvB6/pL9He2U4fdOMxGYaZ0mva4gx
-	tJF6Lfvk2fEXAm0uFD9oIE3EiQrZhWq8TW2d9nb3vmsns61RTvDrPIxeT4GFvMi/
-	wMG6FliHZtmYgvC6R+hGoAU23GBHUBuECiPfrHriLa5i6tczRd0gr63KSOr/UuG+
-	wWszyTwz22LUBqLfZhgf0rb6euQgm1MTKFDblo6DTg==
-X-ME-Sender: <xms:xEEFZolFPnT81Y-rndenCatO24lANcXwvUAv5AbEcS6B-fVcESzGpg>
-    <xme:xEEFZn3NPqHUVb1AhRyUqb5lXl84u2sw1P5dnDZdhqRie4xQImtwjSJc52BIh0l55
-    tLPsrk9hiHSfeAkQ-U>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrudduledgudduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:xEEFZmok-OCemU4JAF5NU7jOeDZ0210zw_dLM7C15bHf57_OfZn3fQ>
-    <xmx:xEEFZkkp-nxlq4w1XAeOI--fNjf8CgUJC5qdXlw0QOLYa6255LvI2g>
-    <xmx:xEEFZm3uKpGPWEVtVjuP0m1GHYswkywEhk7aH97h7ry4lumVs3mO8w>
-    <xmx:xEEFZrsO4DTwAwnWN8Y9emNtvmcbBvklHjtDyl9-an0DJHfoFqkixQ>
-    <xmx:xkEFZk17tDydakQ4cViz-gWKfkvwjCrZ3ZRO6zwIJ5CzvibKhGcP5g>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id E6410B6008D; Thu, 28 Mar 2024 06:09:07 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-333-gbfea15422e-fm-20240327.001-gbfea1542
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 927657C08C;
+	Thu, 28 Mar 2024 10:11:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1711620662; cv=fail; b=ckEMPBcjQARHcTr321mQlyhtbGntEnpoeYBIvdLTm7IxH+iGaYo66RK1okwBYrYhM2std251NzOrxPY9WOqpnndWKktki55tnE0LuF+C+cXAbOZn76sDMFN6+6fNAw0MOPfacUjHtEEtHlY3K3dSwuwjQ2njPWM1G+lbLrl/Ix0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1711620662; c=relaxed/simple;
+	bh=qM5Dmvsup6HfE2E+4Ybaolxv9ELbKUztVFF/r9DRtz0=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=RxSeErEf1dUXRUGW+MoFlfH+WxbzJJrA08n09jPlRkG+y9pCJZXsnCy4jIlW3xtS57DCH8nboG/FIgXSNb6umQORCIUPfdfwk6jGBXaug0LLMS7YUVw9LV0mAx/msk90AoS1o7cKf11mJ4gpOnQMYJL6r9mwm9B+wIe0ISHFSDU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=Ut2E+P5N; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=pTdl7b0X; arc=fail smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 42S8x2Nv025134;
+	Thu, 28 Mar 2024 10:10:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2023-11-20;
+ bh=qM5Dmvsup6HfE2E+4Ybaolxv9ELbKUztVFF/r9DRtz0=;
+ b=Ut2E+P5N7wCTOFVHSMIHpsy1m1UrGPeemWZDp50TlP9S5Qs3QkDW7BXOjXjv+C5ds1f1
+ +mhQJndWarC7ttRlOecSH/234vG3gn7oVNB0h1lMqx9ZGuR2ScyD6nBmSGoTh3wBYWNZ
+ lwZxlbl8y+JBzgMyHqyj8LYY73w9OsM0QI9RsDa7Tp3PPNt4VccUXGdeh94kf1bC0PKV
+ N2YMBlU0ALy94c+TDY6Sr0qVOfuK26r3ucYOg/SXWrFrYXxBp3qyuB5raLaytD6Dz79k
+ aF+SLMa4MpZ6M+pZOYD7EYmZQzg1lIqN03eYOkVSu4ABitHEgkD4C4M47KK/9XT2oaO6 ng== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3x4cxy2sqv-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 28 Mar 2024 10:10:08 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 42S954pX018161;
+	Thu, 28 Mar 2024 10:10:07 GMT
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2168.outbound.protection.outlook.com [104.47.55.168])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3x1nha060f-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 28 Mar 2024 10:10:06 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HhR/867BLffOHu2a4+4IRVc6kQiOG9KMlt0IiqgKe2PJynm4pDrPy3jTZCa9g8M9dz+w1KfLsVyMx4IRhbMskT8V8Zxh03B1f6pIQKFyT0NZJF+1BHtKMT/M9yCntcXyouYGTCg+LBquxyviRSqU3dISbtpK1LrSr+kkyHZe8a3Axk1XaUgBsusnkEDPrk6bVTqU1uJil9CUzVFrheCvaYqzL7BNDTondbWTzx0f2aZoNI7PmB6RdJ/9CcUB00416lobvpOVS0gZMJKLNQ4DcqwsrR/CBT2uPosrqiZNRlXO3nd2BbIOwXTPwWAiDIOPbHGSPOsj9u1IQ0Gbd6yD5Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qM5Dmvsup6HfE2E+4Ybaolxv9ELbKUztVFF/r9DRtz0=;
+ b=eWc3cvTaYw+U28XZUA4BfEgdxK6izl72ZD/aF7ILXKI07uMGn39gbDvrhcV7HIGP1H8CNcgu7Axzr6FTPKO7kKLgDRdd7qiGSKT/YJrDR+pFYavzvWiWio5BqL0/iOxdD0f/t+A/dxNHj4AihdivuN96ponrXozpyBR28cfHdavnqMPW2FIupxilXXNgRQ7WImPkGqeEkTr8Bisvtx6DQp1F3ZfbBpKrIVeVwc2yi8tTpme9avPOqwQqQ+PePDYINIRVMJ1SLrzknkAV2c5UocivJ91rUgKBv42mtWpniExzm5b4xFfpfjHFf6O+LSNBtO19B6Rluz0vQTWJsmwmWQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qM5Dmvsup6HfE2E+4Ybaolxv9ELbKUztVFF/r9DRtz0=;
+ b=pTdl7b0XD7VdV6SceMHHOUp8tA+ZLUSE90VP6TMa/NXsyrDLX+i95LStjtTilbcZQ2QbJL7aDv9qHdSlNZhnfviPY5VhURIuyk9BT3Bnf/5AFUEut78ZeayUc1UGmXKLnZDVM1K/K7N9/2DxlsU/q5rEVkzWVgr2l8fX48NMhpk=
+Received: from DM6PR10MB4313.namprd10.prod.outlook.com (2603:10b6:5:212::20)
+ by PH7PR10MB7105.namprd10.prod.outlook.com (2603:10b6:510:27f::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.33; Thu, 28 Mar
+ 2024 10:10:03 +0000
+Received: from DM6PR10MB4313.namprd10.prod.outlook.com
+ ([fe80::ae68:7d51:133f:324]) by DM6PR10MB4313.namprd10.prod.outlook.com
+ ([fe80::ae68:7d51:133f:324%4]) with mapi id 15.20.7409.031; Thu, 28 Mar 2024
+ 10:10:03 +0000
+Message-ID: <72f03a03-bc15-44b0-a394-1bb80c884323@oracle.com>
+Date: Thu, 28 Mar 2024 10:09:56 +0000
+User-Agent: Mozilla Thunderbird
+Subject: Re : [PATCH 23/23] block: remove now unused queue limits helpers
+To: Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: Damien Le Moal <dlemoal@kernel.org>, Niklas Cassel <cassel@kernel.org>,
+        Takashi Sakamoto <o-takashi@sakamocchi.jp>,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>,
+        "Juergen E. Fischer" <fischer@norbit.de>,
+        Xiang Chen <chenxiang66@hisilicon.com>,
+        HighPoint Linux Team <linux@highpoint-tech.com>,
+        Tyrel Datwyler <tyreld@linux.ibm.com>, Brian King <brking@us.ibm.com>,
+        Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        Jason Yan
+ <yanaijie@huawei.com>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Sumit Saxena <sumit.saxena@broadcom.com>,
+        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
+        Chandrakanth patil <chandrakanth.patil@broadcom.com>,
+        Jack Wang <jinpu.wang@cloud.ionos.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        GR-QLogic-Storage-Upstream@marvell.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alan Stern <stern@rowland.harvard.edu>, linux-block@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
+        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+        megaraidlinux.pdl@broadcom.com, mpi3mr-linuxdrv.pdl@broadcom.com,
+        linux-samsung-soc@vger.kernel.org, linux-usb@vger.kernel.org,
+        usb-storage@lists.one-eyed-alien.net
+References: <20240324235448.2039074-1-hch@lst.de>
+ <20240324235448.2039074-24-hch@lst.de>
+Content-Language: en-US
+From: John Garry <john.g.garry@oracle.com>
+Organization: Oracle Corporation
+In-Reply-To: <20240324235448.2039074-24-hch@lst.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO4P302CA0036.GBRP302.PROD.OUTLOOK.COM
+ (2603:10a6:600:317::7) To DM6PR10MB4313.namprd10.prod.outlook.com
+ (2603:10b6:5:212::20)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <2e9257af-c123-406b-a189-eaebeecc1d71@app.fastmail.com>
-In-Reply-To: <ZgUGXTKPVhrA1tam@matsya>
-References: <20240327160314.9982-1-apais@linux.microsoft.com>
- <20240327160314.9982-3-apais@linux.microsoft.com> <ZgUGXTKPVhrA1tam@matsya>
-Date: Thu, 28 Mar 2024 11:08:47 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Vinod Koul" <vkoul@kernel.org>, "Allen Pais" <apais@linux.microsoft.com>
-Cc: linux-kernel@vger.kernel.org, "Tejun Heo" <tj@kernel.org>,
- "Kees Cook" <keescook@chromium.org>, "Hector Martin" <marcan@marcan.st>,
- "Sven Peter" <sven@svenpeter.dev>,
- "Florian Fainelli" <florian.fainelli@broadcom.com>,
- "Ray Jui" <rjui@broadcom.com>, "Scott Branden" <sbranden@broadcom.com>,
- "Paul Cercueil" <paul@crapouillou.net>, Eugeniy.Paltsev@synopsys.com,
- "Manivannan Sadhasivam" <manivannan.sadhasivam@linaro.org>,
- "Viresh Kumar" <vireshk@kernel.org>, "Frank Li" <Frank.Li@nxp.com>,
- "Leo Li" <leoyang.li@nxp.com>, zw@zh-kernel.org,
- "Zhou Wang" <wangzhou1@hisilicon.com>, haijie1@huawei.com,
- "Shawn Guo" <shawnguo@kernel.org>,
- "Sascha Hauer" <s.hauer@pengutronix.de>,
- "Sean Wang" <sean.wang@mediatek.com>,
- "Matthias Brugger" <matthias.bgg@gmail.com>,
- "AngeloGioacchino Del Regno" <angelogioacchino.delregno@collabora.com>,
- =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>, logang@deltatee.com,
- "Daniel Mack" <daniel@zonque.org>,
- "Haojian Zhuang" <haojian.zhuang@gmail.com>,
- "Robert Jarzmik" <robert.jarzmik@free.fr>,
- "Bjorn Andersson" <andersson@kernel.org>,
- "Konrad Dybcio" <konrad.dybcio@linaro.org>,
- "Orson Zhai" <orsonzhai@gmail.com>,
- "Baolin Wang" <baolin.wang@linux.alibaba.com>,
- "Chunyan Zhang" <zhang.lyra@gmail.com>,
- "Patrice Chotard" <patrice.chotard@foss.st.com>,
- "Linus Walleij" <linus.walleij@linaro.org>,
- "Chen-Yu Tsai" <wens@csie.org>,
- "Jernej Skrabec" <jernej.skrabec@gmail.com>, peter.ujfalusi@gmail.com,
- "K. Y. Srinivasan" <kys@microsoft.com>,
- "Haiyang Zhang" <haiyangz@microsoft.com>, "Wei Liu" <wei.liu@kernel.org>,
- "Dexuan Cui" <decui@microsoft.com>,
- "Jassi Brar" <jassisinghbrar@gmail.com>,
- "Mauro Carvalho Chehab" <mchehab@kernel.org>,
- maintainers@bluecherrydvr.com, aubin.constans@microchip.com,
- "Ulf Hansson" <ulf.hansson@linaro.org>,
- "Manuel Lauss" <manuel.lauss@gmail.com>,
- =?UTF-8?Q?Micha=C5=82_Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>,
- "jh80.chung" <jh80.chung@samsung.com>, oakad@yahoo.com,
- "Kunihiko Hayashi" <hayashi.kunihiko@socionext.com>,
- "Masami Hiramatsu" <mhiramat@kernel.org>, brucechang@via.com.tw,
- HaraldWelte@viatech.com, pierre@ossman.eu, duncan.sands@free.fr,
- "Alan Stern" <stern@rowland.harvard.edu>,
- "Oliver Neukum" <oneukum@suse.com>,
- openipmi-developer@lists.sourceforge.net, dmaengine@vger.kernel.org,
- asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
- linux-rpi-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
- imx@lists.linux.dev, linuxppc-dev@lists.ozlabs.org,
- linux-mediatek@lists.infradead.org, linux-actions@lists.infradead.org,
- linux-arm-msm@vger.kernel.org, linux-riscv@lists.infradead.org,
- linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
- linux-hyperv@vger.kernel.org, linux-rdma@vger.kernel.org,
- linux-media@vger.kernel.org,
- "linux-mmc @ vger . kernel . org" <linux-mmc@vger.kernel.org>,
- Linux-OMAP <linux-omap@vger.kernel.org>,
- Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
- linux-s390@vger.kernel.org, Netdev <netdev@vger.kernel.org>,
- linux-usb@vger.kernel.org
-Subject: Re: [PATCH 2/9] dma: Convert from tasklet to BH workqueue
-Content-Type: text/plain
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR10MB4313:EE_|PH7PR10MB7105:EE_
+X-MS-Office365-Filtering-Correlation-Id: f0cdbb02-589a-4343-a943-08dc4f0f3c57
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 
+	x7YE5gWF/nxH+HDoPDEl0ZfZCWweZFuJcJkOW1TGvq2ZgwJPnVXLZBYOGVL+ozUnHcZev+VyDp9atByFsbjKwYEiWxfWX1XRrz0QB+yogJ2jIi2jA7Q3V1L3BHUgckFvxeLSkwpitdXae7spVUlchPLbSvQgb+oKg28AyyIIb0PtvLmO21nl/8umLRGV9TVB5CZiV6lPm4pLLUOHnZv3gVUsH74vJblATuFudsfYmgNI3NNGhTU+MtwQPWU/QTSn2nCq64dGd8yGzkxMRjKUixom9cRCF2xwSLH9egB1UxmS9zq+EmoMQpFQ1D6A1/gPq7UD5ui9IYArbkrkKAEKlAmbv3Vczz8UkGiwRiAfVhTH2Tn6H55521MqqZz3EfNLdMFz0zMMJdYiFMbEHb7PsHH+skLaOQ5DRtFmuBnuDqvIHLXDhgPwfj6Nz9cOGLwbpGgjZ63qvx1U4qrMDMvMREnd5vSP/o1vqNx8eSN0eNAtYNnUCrEEHKMjBxBfGy5yb3pcack/DBXufmN2B/4jZI44ez+I1M/vcqXpjn0eK8sN9Wvcz6iDX1aANYk8IWnWxyWTnTOP5TatYA22pGRTiB0AI+thei3nqMJGJCVMK4eWr1JCoOwSx78krRLHPYhjYYoQH8thlDqTGbOxML3UxCRDMUgeEIVsirzjqEae+5g=
+X-Forefront-Antispam-Report: 
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR10MB4313.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(1800799015)(376005)(7416005)(366007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: 
+	=?utf-8?B?L2NLallTeTBZZ0hIWXpvWWFsWUg1ZEh1UWt5bkU3R0hqWGhXNXhTTENpb2R1?=
+ =?utf-8?B?NmRENkhZemZyVWZpeisreHNKV3JNQ1hBV3o2U0RQWXNqbTF5c0dYMzFGcVFm?=
+ =?utf-8?B?U0hnMTIvS0k5RDQ1UVJxOGtQelI3WWJpYzU3NzNqKzRyWVFiajVzc05hUklL?=
+ =?utf-8?B?Yk40V0kwdkJORU5MWTgva2lrNk5wRUFCNk9WMXUzRHFPVDR0VVViNlVrM2Rr?=
+ =?utf-8?B?T3YzWDZPRXZueWpNbEltYVQ3OVZXYm1rTG4xRlcya095aGhyU1FCMFdxZSsx?=
+ =?utf-8?B?RDJQN09ldlFTbGhvUC8xY1pCRDNER0tLUXFTQUR5U1V5NXR1MjdXNUpiWGI0?=
+ =?utf-8?B?RDlVSWNnUk9TcmtCK2J1U2VFYnZCSjcrcDZiM3M2VWN4cjNSTG96aXRPdEJr?=
+ =?utf-8?B?ODF4NnUrNnh1cVFVNG9oaS9PeS9naFA5SGg5dkhIQ2dtZHBlTXBUU2pvVm5h?=
+ =?utf-8?B?S1ZFbnpOMndYVWFYSXMzNlZsVmpicXhqNDU2VEZ3U0RzaUsxdGtZeTBiYmha?=
+ =?utf-8?B?cFJnWTJtWkJoUzNJRU53Y25CUzY2WkZyTEUvSFVQYWQ0SklwaUM1d1ZVSEdY?=
+ =?utf-8?B?ZHFYanRnUnhlVlZ6UVhPRm93QlpXZmprQ2FqT2ZDVGV0OUVDdmU1VjJPdTFp?=
+ =?utf-8?B?TUJKcW13NDhqM2FrZ3oyZUtmR2tUZzQ5bE1IWDdmRFhDTVR6dkI0Q3hiU2hq?=
+ =?utf-8?B?eHlVTUs2YTBYeVJYTUc1Z1kvMWJKT3dhTGR2R2dTY1V5SDlUMithUTdNbTFS?=
+ =?utf-8?B?MDViMmhPOXMzbDlZV04wRm1qT0RpV3p2QW5xYXpuTmJkRnJ0b210bEduVmk3?=
+ =?utf-8?B?Y0pBM2pSek9jZU50SnY0WExRYVdQbVd4bzUrYnNmbnJsNkdmcE9WYUsrMUIx?=
+ =?utf-8?B?V3ZFQUtKZWMwZ3N0eDlRWDh2emVnakNvUG1mbnhuMkVkWTFwdThwM2hiQyts?=
+ =?utf-8?B?OGtTbzNZWE01VXkrNzFsT1dTSGpDc2VVRk56VWFSZUxON0F2MHVOcUpXcGNM?=
+ =?utf-8?B?eEtsbHoxcndHZHUvMU9LZ1piUTZzMXRUTmtPUE9rU2svZlRzbE9kUER5TExv?=
+ =?utf-8?B?RW9nVWpCVnRhb0o4cTd1dmtyYmdBUlJ2STU5QUZETHQyMU1EUFZGWVNrU3Fu?=
+ =?utf-8?B?Um90Ri94eVFBdDA0TWpHZ0ZpckFXM001blNFZmFkcEtYWEJYTHV3eDc2Z0dV?=
+ =?utf-8?B?T0UzUnphZUNJYzMxZEdqTkw2QVluWGtBckxEcTh0WWxWWHZ6Qi9NZ2htRnZW?=
+ =?utf-8?B?ak9rUThkWkRXL0l4cFdpMnFkNW5aZlIyVXFnbW9pT2JVK0hRbzdOeVBoQUVS?=
+ =?utf-8?B?bHAvOGRHV0Jhc002YmswWnl6MTVNTEY0dVh3TW9GK0ZTdnljZ3NLQUpjZjFJ?=
+ =?utf-8?B?QWlsZHFZOXN0bU5DSTIzSDNSOUYvb1RLaEk0WExnV2NvTTBRMGZuekhyaW9D?=
+ =?utf-8?B?OTMwcWFVcXJJajNGOU9GeFlJYXhHc01HNHd1YkJYVENRMlZFM05acUQycjdN?=
+ =?utf-8?B?TW5hRXo3MmlkYlpyUmQyMFFkZ0JkWXlTVkMzbzVYMWZGNmFMSmZtKzQrc1FO?=
+ =?utf-8?B?M21CcXJpMjFhZ1BWbGpsSHNVTG51UlE2WXU0YkpINE1lSVIwQ1c1Z1dGY28r?=
+ =?utf-8?B?M3MvRVErUzk1ZUgwZ1krdHZtZHprV1lmSitwRGppT0lNM1BrSTNRNmRFaG1D?=
+ =?utf-8?B?U0RpOU45UjFPM1BWeG5NY2VaRW81ZGh0MWtzUWE3ZElpTHJyaTdUOW5nTmRV?=
+ =?utf-8?B?NU51aC9EbGw2Q3BUZTZpQTk2clR3eUs3aytkMDBvRWZHMHErVm45SE9CSFdm?=
+ =?utf-8?B?RDloTWxiL2pkd01ENHJwT0JKdDZSUS9iaXBaUGlyQkQ1WWZSbUtQN2Evem5M?=
+ =?utf-8?B?SUg2ZVQ4YzhISjhaaEJMZkpNZnNMdkZjRVNnRUZJQjNJdnFBQnJiYi9YZlJq?=
+ =?utf-8?B?NWx0eDN2UGp2d29WRGJHZHdvdk1RakRCZURJMjlDdTZtOWZJSDBlSUxPc3Fx?=
+ =?utf-8?B?OXdRNS9vck5lVWh2U2lDdUx6VGl2YWlMbmg2SFYrREEwVkM5L3BBUVBsQllz?=
+ =?utf-8?B?N1VIODR1dWJXSWx3Yi9HT0xYRlZmd2dJMThBM2Z3Y3MwQnJ1OWlGQWZ1dkdS?=
+ =?utf-8?B?VW1jb3phS0lRTzJFTzZNbWkrdmxBZU9CRzR3OXcxbjZLTThOMkJKREZRRWhl?=
+ =?utf-8?B?dlE9PQ==?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
+	jPtexSpjTn4+mYwciDM2WioVycpbOxpFcHQi7D/ke+QoexWFYbO3+3P1ZiJLWeDwur8UDPY3t1oA73dD20PRWeQcu9guznO89F5x3ZEWEKRa5uYjlyFiEkD764iN2ps9KD2HmlsZGDKuCcoMm9tjkJ3boQ/rwScQvEN9ZGPxsLtDsHmbmNCO0nfb935oZq6c6rrZJiTL4SxQVasNhCAOvBINvKA4xVxYZpKW+fiP4gIk2o2CYhEWHPEdxoIHfH2Ltw5s/nQNE9MBs6s9CQxWPI/1++QWjFJjcRqQRsnvm6KbXWuCbKvQYrku5sR7Q8JjAMWDQRT1wBsGzmnCxTexbfbS1+U8VlHo0/uaiXmh6woNcWPUc5sOHiu3rEhWbQ8KQlY5Nd2P4/6L8hzEKaI+kN6PHVVRBLuxjI4/LBXoI5sjLu30KcID8ldPKt7AV3D7pL0QigIRhciS1AdrGAHWW7+V206rYuqmMACL9yrBo8mmkIKh140vL0ylQzvC/BG4fwLXEtrs20NxBhjioQ+OQYPZytgdGYu946AcZjjeECy2VHBUB+cF5y/x1BZpKKCe0vDm5RpzRS5ZajuSr3rkU2Z5Rcs4gyxW5g8RB/mg8rE=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f0cdbb02-589a-4343-a943-08dc4f0f3c57
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR10MB4313.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Mar 2024 10:10:03.7887
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: +VzZAMp4XOdpvAk4y7npueQzAvlCurIopq2EUEbDZueuBeGf1dU8TfMmIvPv1am+ym2+xNxhGOa4pAF8kfyjxg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR10MB7105
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-03-28_10,2024-03-27_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 malwarescore=0
+ suspectscore=0 mlxlogscore=999 mlxscore=0 adultscore=0 spamscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2403210000 definitions=main-2403280068
+X-Proofpoint-ORIG-GUID: H12af_13klj4_BH02sb3Yu4cpyUBC73T
+X-Proofpoint-GUID: H12af_13klj4_BH02sb3Yu4cpyUBC73T
 
-On Thu, Mar 28, 2024, at 06:55, Vinod Koul wrote:
-> On 27-03-24, 16:03, Allen Pais wrote:
->> The only generic interface to execute asynchronously in the BH context is
->> tasklet; however, it's marked deprecated and has some design flaws. To
->> replace tasklets, BH workqueue support was recently added. A BH workqueue
->> behaves similarly to regular workqueues except that the queued work items
->> are executed in the BH context.
->
-> Thanks for conversion, am happy with BH alternative as it helps in
-> dmaengine where we need shortest possible time between tasklet and
-> interrupt handling to maximize dma performance
-
-I still feel that we want something different for dmaengine,
-at least in the long run. As we have discussed in the past,
-the tasklet context in these drivers is what the callbacks
-from the dma client device is run in, and a lot of these probably
-want something other than tasklet context, e.g. just call
-complete() on a client-provided completion structure.
-
-Instead of open-coding the use of the system_bh_wq in each
-dmaengine, how about we start with a custom WQ_BH
-specifically for the dmaengine subsystem and wrap them
-inside of another interface.
-
-Since almost every driver associates the tasklet with the
-dma_chan, we could go one step further and add the
-work_queue structure directly into struct dma_chan,
-with the wrapper operating on the dma_chan rather than
-the work_queue.
-
-      Arnd
+Reviewed-by: John Garry <john.g.garry@oracle.com>
 
