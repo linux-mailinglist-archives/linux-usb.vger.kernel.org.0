@@ -1,48 +1,61 @@
-Return-Path: <linux-usb+bounces-8529-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8530-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF5E388FA0F
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Mar 2024 09:37:07 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC60B88FA9F
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Mar 2024 10:02:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E11A51C2477B
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Mar 2024 08:37:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 53F1B1F225CA
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Mar 2024 09:02:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75138535C2;
-	Thu, 28 Mar 2024 08:37:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lupZT1Jl"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B44359B6A;
+	Thu, 28 Mar 2024 09:02:49 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA4353C0B;
-	Thu, 28 Mar 2024 08:37:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E6B45024E;
+	Thu, 28 Mar 2024 09:02:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711615021; cv=none; b=KjSCuVBJCVKMtsVGL0xUCqskqR8uZxINX50ug+r481eaoXPEUZJiNuL7WelxD6+IoTE8hCLDKqMvbpuFRP4Za8VgDjYTgIJB1Sn4HCUd6TxpndTgoDD7wEsZXcTgXhI5vhdnBV0RVkGdiNcOGLMncbrN0ulKSvO9/ASPhNzzOZI=
+	t=1711616568; cv=none; b=eneVz9lrttgX0QqePcc+GcAF15mxMaTgfEHfR21ZEysLq54xeQBwWC5fvYIgfW0gRJ+AR+q8IegjqWGO1oNoqf3pD5ayLdIvfQivlm4l0uXj5KYPIq2F+p0hnOi64K95TJ6JZlSJa4HOBhb8CrwZXQnYOcVWCGrRs1DI8cmfAn4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711615021; c=relaxed/simple;
-	bh=pQ0Z/1fvUJQAFvUUpnPSlvRpsJ3lppAr/NdE+hsgNcU=;
+	s=arc-20240116; t=1711616568; c=relaxed/simple;
+	bh=xXKAKa461tS7heJrO1tiCk3yWmnxZb0FebuFA1FpwBY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CP8vfZt8k0UOKIIkbIQqTD0EVdsEDUfiRgWYSM2lVaj9YEBtqFrYccl35iHI2iiyOJHbYTzeIZhD1Q4mbbLZjm4bgmXipV8pzbzyA663tUQ1VNB/LLkYfHsRNSGv56n9qi6RyYoVcA1RMfFvBFcC75Rq4v5Nluy56Q3LaG8smJI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lupZT1Jl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B2C3C433C7;
-	Thu, 28 Mar 2024 08:36:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711615020;
-	bh=pQ0Z/1fvUJQAFvUUpnPSlvRpsJ3lppAr/NdE+hsgNcU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=lupZT1JlPuP1ilpJhosL6cl7hni63sRE+AfQnihj8wYlUIm4xdaKLUi6FesTXpeRo
-	 RNbkB51GA47aG4/FkETacEcIbj4ahPJuLzNr/OAdNCBSicwoUh7lkSqgh8PgHn2bBU
-	 G7aQzncZpDzwnxWKhoRl0LvB+ZNmQto8ayB7C5v1tIhFhu4zqtasv6NhEfeFM1tx6P
-	 1bAJfGohQk0Cl9KvpbjtchqVysWQiQeQ3seMwH1is4bczsF/hhBgCQo4rdT9+XS0tR
-	 VNE3hMIF9Snom/pYplefQ6H1oaVSKFj+WAl7IS1xG4Zw5MrYLK3f1ZV3bIworL4NmC
-	 8Mp7FCh3aivaw==
-Message-ID: <2357d78f-8879-41ca-b0e1-6593400252c8@kernel.org>
-Date: Thu, 28 Mar 2024 09:36:54 +0100
+	 In-Reply-To:Content-Type; b=P7/zz4PAf1qUIquPZnQoxIlfrII7VK0JM6KpwsJqls+ubg3YUW0ti6PdlsjnFl6D+wp7283qMncxYcQHfe947AfdILbiaVp8gxIlXLysLZHJTtHJ/92m2ffsxRO1AIPjbu9oqi/8Ngjgb7/7b/urYC/vbLtMB0JZS1/2oDr+YaU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-56c4ca65dc6so795866a12.1;
+        Thu, 28 Mar 2024 02:02:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711616565; x=1712221365;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9bqYXlCwIs2wM5lxl+u/GBLyORU2sWUj1TtKfTDIg6o=;
+        b=n2HYUwQ0HERc6rsn6DeiD89NfvtL6sloFypSDnKFWBS7HLPczqDL9p7VYshnTug+eC
+         rYKlIrxubHI+QhAkCmzYV23jHXah2pRgcQSfJfnIq6+1b/1n2ppVCIH+N8ybQXIFKpxG
+         SbufMR5D+ARxKSX3Qs3lgCyT9up1NpwDnZ1zEazC28eQPCIibife0283DndOwsPVOS7w
+         +DL0BOkhCOCEce/kY6MI9UGW9pVBvMxXJ58nGSFj16QCngbTRABYH3rgRTCiSoSCUnl4
+         VtmBPdVcJk7YEW68FNbwhkaciaRDd9+238T2KbhYvxUXeP72naFIL5IgHuUC6yUOT9OJ
+         Krug==
+X-Forwarded-Encrypted: i=1; AJvYcCUrNAlE6+I0tlpUWabqmBrIVjlDsnYfaBt0AKRu7ieYXuOl42lNTd53KHkt0fclXiB9oOwBRdILOpO38iFHoPgewRiZhOc5V+tjLpE6FlMKHOsNIsMUzB1x6oCyFP76+Z/eKGRqSL4v749dz7trXw/zfRD+a5+rqI/rQ08iN1++
+X-Gm-Message-State: AOJu0Yz+Zj7di3JMqkne1fXgoRSiQvzRDAnHMV6TRPyAbRmZ1JyEzW7P
+	wRuJrXMOssInEwopsYQZbOYhSsK2K/vdJNRj8oGxburgEGBYt/c+
+X-Google-Smtp-Source: AGHT+IFOjI652gqr39QAfZc8oGELUdiRXBh3F8C3zUj/MqRmHFhhviBXstnTYlinyXx660dJ5OkYvw==
+X-Received: by 2002:a50:d604:0:b0:568:231e:5e9f with SMTP id x4-20020a50d604000000b00568231e5e9fmr1537821edi.26.1711616565282;
+        Thu, 28 Mar 2024 02:02:45 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:69? ([2a0b:e7c0:0:107::aaaa:69])
+        by smtp.gmail.com with ESMTPSA id t35-20020a056402242300b0056c2d0052c0sm578654eda.60.2024.03.28.02.02.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Mar 2024 02:02:44 -0700 (PDT)
+Message-ID: <f9f0fb8b-2261-452c-878d-8b0f831bdf5d@kernel.org>
+Date: Thu, 28 Mar 2024 10:02:43 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -50,97 +63,109 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/3] platform/chrome: cros_ec_ucsi: Implement UCSI PDC
- driver
-To: Pavan Holla <pholla@chromium.org>
-Cc: abhishekpandit@chromium.org, bleung@chromium.org,
- chrome-platform@lists.linux.dev, gregkh@linuxfoundation.org,
- groeck@chromium.org, heikki.krogerus@linux.intel.com,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, tzungbi@kernel.org
-References: <03e1941b-0c8a-450d-9b83-76260817d303@kernel.org>
- <20240328023233.2568230-1-pholla@chromium.org>
+Subject: Re: [PATCH] usb: gadget: u_serial: Add null pointer checks after
+ RX/TX submission
+To: Kuen-Han Tsai <khtsai@google.com>, Greg KH <gregkh@linuxfoundation.org>
+Cc: quic_prashk@quicinc.com, stern@rowland.harvard.edu,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ stable@vger.kernel.org
+References: <20240116141801.396398-1-khtsai@google.com>
+ <02bec7b8-7754-4b9d-84ae-51621d6aa7ec@kernel.org>
+ <2024012724-chirpy-google-51bb@gregkh>
+ <CAKzKK0oEO5_-CBKvYSw4DKY4Wp5UPrrt1ehBFRd79idy7FsUuQ@mail.gmail.com>
+ <CAKzKK0pmswLnGa8zabp_wo=6BcvCd9DR368FCJ5mcpZ38i4Jdw@mail.gmail.com>
 Content-Language: en-US
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20240328023233.2568230-1-pholla@chromium.org>
-Content-Type: text/plain; charset=UTF-8
+From: Jiri Slaby <jirislaby@kernel.org>
+Autocrypt: addr=jirislaby@kernel.org; keydata=
+ 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
+In-Reply-To: <CAKzKK0pmswLnGa8zabp_wo=6BcvCd9DR368FCJ5mcpZ38i4Jdw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 28/03/2024 03:32, Pavan Holla wrote:
-> On Tue, Mar 26, 2024 at 9:59 PM Krzysztof Kozlowski <krzk@kernel.org> wrote:
->>
->> On 27/03/2024 04:39, Pavan Holla wrote:
->>> Hi Krzysztof,
->>>
->>> Thanks for the review.
->>>
->>> On Tue, Mar 26, 2024 at 1:47 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
->>>> Nothing improved.
->>>
->>> Yes. I only added maintainers of drivers/platform/chrome in v2. I am
->>> still investigating why MODULE_ALIAS() is required.
->>
->> Heh, I wrote why. You miss ID table.
+On 08. 03. 24, 12:47, Kuen-Han Tsai wrote:
+> Hi Greg & Jiri,
 > 
-> This driver is going to be used by the cros_ec_dev.c MFD. The UCSI device doesn’t
-> have an ACPI or OF entry, so I am not sure how I can use MODULE_DEVICE_TABLE
-> here. If I don’t use MODULE_ALIAS(“platform:” DRV_NAME),
-> https://elixir.bootlin.com/linux/latest/source/drivers/mfd/cros_ec_dev.c#L206
-> isn’t able to automatically associate the driver with the device at boot.
-> I haven’t upstreamed the change in cros_ec_dev.c yet, but the code is similar to
-> existing code for drivers/platform/chrome/cros_usbpd_logger.c. There are many
-> other occurrences of the same MODULE_ALIAS pattern:
+> On Sun, Jan 28, 2024 at 9:29 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+>>
+>> On Thu, Jan 18, 2024 at 10:27:54AM +0100, Jiri Slaby wrote:
+>>> On 16. 01. 24, 15:16, Kuen-Han Tsai wrote:
+>>>> Commit ffd603f21423 ("usb: gadget: u_serial: Add null pointer check in
+>>>> gs_start_io") adds null pointer checks to gs_start_io(), but it doesn't
+>>>> fully fix the potential null pointer dereference issue. While
+>>>> gserial_connect() calls gs_start_io() with port_lock held, gs_start_rx()
+>>>> and gs_start_tx() release the lock during endpoint request submission.
+>>>> This creates a window where gs_close() could set port->port_tty to NULL,
+>>>> leading to a dereference when the lock is reacquired.
+>>>>
+>>>> This patch adds a null pointer check for port->port_tty after RX/TX
+>>>> submission, and removes the initial null pointer check in gs_start_io()
+>>>> since the caller must hold port_lock and guarantee non-null values for
+>>>> port_usb and port_tty.
+>>>
+>>> Or you switch to tty_port refcounting and need not fiddling with this at all
+>>> ;).
+>>
+>> I agree, Kuen-Han, why not do that instead?
+> 
+> The u_serial driver has already maintained the usage count of a TTY
+> structure for open and close. While the driver tracks the usage count
+> via open/close, it doesn't fully eliminate race conditions. Below are
+> two potential scenarios:
+> 
+> Case 1 (Observed):
+> 1. gs_open() sets usage count to 1.
+> 2. gserial_connect(), gs_start_io(), and gs_start_rx() execute in
+> sequence (lock held).
+> 3. Lock released, usb_ep_queue() called.
+> 4. In parallel, gs_close() executes, sees count of 1, clears TTY, releases lock.
+> 5. Original thread resumes in gs_start_rx(), potentially leading to
+> kernel panic on an invalid TTY.
 
-Just open other platform drivers and look how it is done there. Or ask
-colleagues. There is absolutely no one in entire Chromium/google who
-ever wrote platform_driver? platform_driver has ID table for matching.
+If it used refcounting -- tty_port_tty_get(), how comes?
 
-Otherwise how do you expect this to be matched? How your driver is being
-matched and device bound? By fallback, right? So what is the primary method?
-
-Best regards,
-Krzysztof
+thanks,
+-- 
+js
+suse labs
 
 
