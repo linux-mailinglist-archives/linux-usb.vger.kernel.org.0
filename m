@@ -1,247 +1,184 @@
-Return-Path: <linux-usb+bounces-8559-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8560-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB577890664
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Mar 2024 17:56:47 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8AF1A89066D
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Mar 2024 17:57:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 10AC61F273CF
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Mar 2024 16:56:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F0D241F22EEB
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Mar 2024 16:57:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCAB85338D;
-	Thu, 28 Mar 2024 16:56:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 075FF55C3C;
+	Thu, 28 Mar 2024 16:57:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=wolfvision.net header.i=@wolfvision.net header.b="k8VGRsL3"
+	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="tbouiZBJ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2134.outbound.protection.outlook.com [40.107.20.134])
+Received: from TY3P286CU002.outbound.protection.outlook.com (mail-japaneastazolkn19011003.outbound.protection.outlook.com [52.103.43.3])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9412A40842;
-	Thu, 28 Mar 2024 16:56:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.20.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B338513AF9
+	for <linux-usb@vger.kernel.org>; Thu, 28 Mar 2024 16:57:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.43.3
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711644974; cv=fail; b=uCAoyf4Su/B+lGyDa8KeFnuhRDb/Ebmn9ZP2eEh/C7tn+gud+xeMGn0ZYNN824vtZLPNZGcrQKwkInUs5X8oxvpOoqJ2Q1emTf3iyeSpew/PrJrqPA6bF+0kPjxEYo/p8VDm9AwJP94kqNb6uEXr1UnMxYYTPKc8N91lR023g3s=
+	t=1711645034; cv=fail; b=LVY24BF0xpcUEuN26hXuDi1JuukxuocMAqmMBp/nFSlFgtPw7oL8LZdPc9Y7o0cG67Yx6obBlRzK8lGhcKU5Hf5UaSt1AU2/JxW+FTo+RE4k8F4wnRNk9wnrQvPv4uyzcMQexzAIY8XxNp8BxV5UEVYkzUeUgm7qUEVj33iC3Pg=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711644974; c=relaxed/simple;
-	bh=EP/47rbtwXoLrEu+2KhY1GcZMkqPqw0L8TmuyFVtP1k=;
-	h=From:Date:Subject:Content-Type:Message-Id:References:In-Reply-To:
-	 To:Cc:MIME-Version; b=Z8BeFZRPJbjw6PPQfKjDrGlWanX8Ncp++A6QoX7VD8Gb5a6pTuDOHY/F/Prd894rSk5YhmcavHLm4bStw6bBI2tqfkDhdj8dn5Uyxw0XCba8NTjgmrTXHdCcXusN3vjVJyW9XRKHv4fH2ssrXCF6TND+AgGSTZtPEXyA9OiYbbw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wolfvision.net; spf=pass smtp.mailfrom=wolfvision.net; dkim=pass (1024-bit key) header.d=wolfvision.net header.i=@wolfvision.net header.b=k8VGRsL3; arc=fail smtp.client-ip=40.107.20.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wolfvision.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wolfvision.net
+	s=arc-20240116; t=1711645034; c=relaxed/simple;
+	bh=+qTqw8/h17z8nHtmZ+qAGtyYuOaPU8KGquqBPDOJBOc=;
+	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=sUEuM4JdnuOGHuTMTu2vs830WS1eL7Ut/Ic/DahNwnO+jBLHPzw+Ro1RKF1Eywga6vuN3jtPAwKv3goh2mQHLWse4TFbs6BLht4YSOZOpzSBjHUVpmx4Hs7LmxwLpPgIdsCQ7METXV/j5WBni4zLmmfMAlMw11hKJ2evGVrlAFo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=tbouiZBJ; arc=fail smtp.client-ip=52.103.43.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=c8Wn1NC0x+f2muNdoeleCejMXeO4AZixcpYXAu1s0zNC2olx8zGLRoYMc63Ztb8cmFtGJGpRKfpfhgPGMZ0RZomnWyaH+yNf6aGLP2V+/3QiQUZzxsHVXE6kJY6o9Rt/bAEL/35IVqgMzhtC8xdZGglv1uRPBFw1vTSN75LuwviP0FFNmaLKc2Il6S36Ps664Z6t+kXn27/m+NvJU6v0mNzNHgWE6c6/Hcnh/ABwPtWJEGsG6SxLAi8NDWaMuyTtsHhSeQ5UxG/BsadYSN5uVSRQNsDGAw88zS+zQDpepXdCu2XfL0IHEh7y3RWlUNYn4gFf+mAaJlUIQeQgFvuCIg==
+ b=QgNZvZe2tGPNSwYtqZhoWDPYPCQMn41fJyjacEIlJ0BqboQdnChgHvm/Crq8LPhc4DnOKdGq/u8rA6OaNTahMdSKIVKUVh7jjCRlg6JwDhd8rxd9g78I3YW6bS3S0twM9MxO8PHgx4Ho+4j4C9ozjBF8klsCDYQb6x3QBDjM0lOsQQ5C+CCxXkGwcVm38zj0vTTs+Fcw6HBZqsJU86dtJUkZ384r77f9KRpJ/RC34+jJ1c2okMY4J3vjtC0anUpWep0fazOt2TitW6b5xdZ4ClDsCQY9r0gZGXrhGYghLg4LZv5nkmL0oSIlFfM1tAZS8QAImNNQS6vGaRCKlURqAQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BQkZk6sE6iUSJbrS/5nH9d92T33fcpDM7u/sEGH9Af0=;
- b=WYusvR6LpDpkbVHYXvQQK/evohshiJ0EsDI72r0XdFTsvzLAvmklpUlGn8rEqgzSKo+iG3sBF3kp8Kj9AX38une/B/cSi6ya4QNzD/mKaKtqcWLBscEAeWj005Nx6gRKSYDChkWvcYmFPt8O9hEr8v0WpBjQVnolzTd4ID7cq874G91vaZKmX/fPhNwN30kvu78lGf3m5U/UffZNA/k5qnbAk4Jze8fj4h91C0EaTt6bu1aUCfwUC2D82FL/2GTPpLCDhqfW7CVJa9K8V6OVhMRP+AbvwHIVM6SGKmM7bs5CGUvCXvD0cdOfMY49dpp08OyXuS7WQu0EYYqpYTko5Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wolfvision.net; dmarc=pass action=none
- header.from=wolfvision.net; dkim=pass header.d=wolfvision.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
- s=selector2;
+ bh=3K7RBB+WxdvijkT4OC2eAMFMQjEMZVwi2HvBseMsyMw=;
+ b=M+OA6dgPHtWxtlTcKOLC8xbKKppjj4Sz4ywOjbLt3y10EEpOYIwEiIqzcnajF/bsCR2usiCmfFWxi9SUDyaGANK2G7yDi76dVUQD6h9wK7mSPblYkdvXjNkzOMoj3gfGESWPZGTfyDB/r82dp+g1bJKmbPkUM0lMnBlXQalTVRi4FV45CN07MWjasVE03Tim4+nufHNLd56PdZakFjCjGAKZN9lI+5PcNJzqCybYz5x+hXAkMIqdgDKj0wy+TTvubi5pLIIUDnVwFFdCz3mXF3oUNu7rkHWjWyhRdrCH9n7wiDSHvSLr428HqECjjTQ5IVnWnZw8uHa1eC2J3u2cvA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BQkZk6sE6iUSJbrS/5nH9d92T33fcpDM7u/sEGH9Af0=;
- b=k8VGRsL3KReBrG1Eg8MPJ0oILh60Zls6YAH7xfuAWjMyv42xD+FhCp8oPArLWYZV5VVrfrDxTs1lrtndMZFUaPE0Krhi3aqAcTtkXK2/YwkgAmYhUDX9bbHrz45Rzo1Wm8EhC67+VDdWbHVxzIDnjUlxjlaF07x5KcclOpdntpk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=wolfvision.net;
-Received: from VE1PR08MB4974.eurprd08.prod.outlook.com (2603:10a6:803:111::15)
- by VI1PR08MB10147.eurprd08.prod.outlook.com (2603:10a6:800:1ce::10) with
+ bh=3K7RBB+WxdvijkT4OC2eAMFMQjEMZVwi2HvBseMsyMw=;
+ b=tbouiZBJNOxwRInqpbzfxCwzlCCVBLAHHX6q2PUAl17NfgZJEPOtUvq5+ojar58n5s6x+0Unnp0442BldNbEt+5+AOXAiLeWd/hoLYQjWciNwVZpK1tTqbQRaKJ5KWrXASoAPxQS2yjjfxQgZRCGD+OAolr+DPkLdw+RogbmM/IZPgt1QaQmxDGE2UwyVnZVE5nQVWiH5dvXWeEf/YzDVsUFEjO3oyKPXVreP6upAsPrssn0mpKU4h8H+WK+xYQmEtErZjxUBKN2tpXqOzwl8f2rX9YoQUAnIXrSAzEzclGkLw/RnZX2b3S5RnqhlUMG4QDG/F4BMSiwGvcrFWaWBw==
+Received: from OS3P286MB2213.JPNP286.PROD.OUTLOOK.COM (2603:1096:604:198::12)
+ by TYWP286MB1990.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:165::5) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.31; Thu, 28 Mar
- 2024 16:56:04 +0000
-Received: from VE1PR08MB4974.eurprd08.prod.outlook.com
- ([fe80::9e35:6de9:e4fc:843f]) by VE1PR08MB4974.eurprd08.prod.outlook.com
- ([fe80::9e35:6de9:e4fc:843f%7]) with mapi id 15.20.7409.031; Thu, 28 Mar 2024
- 16:56:04 +0000
-From: Javier Carrasco <javier.carrasco@wolfvision.net>
-Date: Thu, 28 Mar 2024 17:55:52 +0100
-Subject: [PATCH RESEND 2/2] usb: typec: tipd: fix event checking for
- tps6598x
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240328-tps6598x_fix_event_handling-v1-2-502721ff705b@wolfvision.net>
-References: <20240328-tps6598x_fix_event_handling-v1-0-502721ff705b@wolfvision.net>
-In-Reply-To: <20240328-tps6598x_fix_event_handling-v1-0-502721ff705b@wolfvision.net>
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Abdel Alkuor <abdelalkuor@geotab.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Javier Carrasco <javier.carrasco@wolfvision.net>, stable@vger.kernel.org
-X-Mailer: b4 0.14-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1711644963; l=3256;
- i=javier.carrasco@wolfvision.net; s=20240320; h=from:subject:message-id;
- bh=EP/47rbtwXoLrEu+2KhY1GcZMkqPqw0L8TmuyFVtP1k=;
- b=8lqg4QI0D+qgSGB7iKPFemwfcPJahXRzr+h/P4sIfh9OYf1XOdPNBB9KOcVZk0B9Ll3cLR7RH
- S1X42L35aT+BhOPhSwGNZJaYMekCcbLoOdfn1/Rufu7KeZ7boAPYJhq
-X-Developer-Key: i=javier.carrasco@wolfvision.net; a=ed25519;
- pk=Vxk2/0sGIxM8rsKnceszFuSuHVfQwa1Yo8+is7BX2nY=
-X-ClientProxiedBy: VI1PR07CA0136.eurprd07.prod.outlook.com
- (2603:10a6:802:16::23) To VE1PR08MB4974.eurprd08.prod.outlook.com
- (2603:10a6:803:111::15)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.32; Thu, 28 Mar
+ 2024 16:57:10 +0000
+Received: from OS3P286MB2213.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::32e2:35ce:a8dd:623]) by OS3P286MB2213.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::32e2:35ce:a8dd:623%6]) with mapi id 15.20.7409.031; Thu, 28 Mar 2024
+ 16:57:10 +0000
+From: Cui Alan <AlanCui4080@outlook.com>
+To: Alan Stern <stern@rowland.harvard.edu>, "mathias.nyman@intel.com"
+	<mathias.nyman@intel.com>
+CC: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"kexybiscuit@outlook.com" <kexybiscuit@outlook.com>
+Subject: Re: way to notice user when a device connected to a inappropriate
+ port
+Thread-Topic: way to notice user when a device connected to a inappropriate
+ port
+Thread-Index: AdqBMAsyIUVKSftLT9+joUQQVsULSQ==
+Date: Thu, 28 Mar 2024 16:57:09 +0000
+Message-ID:
+ <OS3P286MB2213ACE7DE8379B900BA1D72AD3B2@OS3P286MB2213.JPNP286.PROD.OUTLOOK.COM>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-tmn: [XjhsVmA/zO8F5Y9cK64UVozFW5jtKV1l]
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: OS3P286MB2213:EE_|TYWP286MB1990:EE_
+x-ms-office365-filtering-correlation-id: 4dc1731a-700a-4def-8ef5-08dc4f481ba8
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ uxHUzdZtM1gwJ/rWpeOKa8NlqhazDlbrt4k18/J79kJcZUoV/J7ri6TExcyWZTWjB6CPpwXeXSpzaYfquX8z8VML/o+5Z/jQlqSCYdX7NA+acAzStrrNtTba6/+XCu9DcF8v3Aq2JwF+czDA2qKxuvLX93/kRY0o6s6d7Xpo0B7Q37adA3t1pJRTmtMaeJ2DZcN/Wn8LzWkmFl3XSX1I5ISc7GOB70lLYeVbwgppL8IHR+JRgEsfaR1tWycuF+XNxOOhn9YQ6wbGQUFij26Cj9iYJgblhFQSq/7S63EAg8ZbpnEtsLGDrMX0mZG074AOgqwInA1HXFKiDDtQAglgetPUQawC/ZweZCeVoXwTIIBMioUbO0IN82f2s+eJ0h3HlQdS+WnFcu1DaajR2vGYVvV7nmUHRPLrUMbzHUSWDUpwstm6FD6qcQI9W4s97SMsL13EFR3GdMHCfx368S+IAk1vuCscmg0afixURhsDTGYnGUCtCEFzd0QS8oIxyyJbREav3fG1OWEQ4dboIj1FaaTlhEki8mZWfhXol9/CC/y2y+xrwECgk2iMR33jVrBR
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?j3kBDP5wwXW9wHJjl8MuefxuvGymqnCOxMDLapIWZjZsN9dB5tqolWjsnpxQ?=
+ =?us-ascii?Q?A/bD2Nys+pNsu1t6PcdZzg1ULvONK0u+p4lenOvGmzcfZCEKmmOShvzD77TX?=
+ =?us-ascii?Q?4kT826CjybzJCsOqvyS3jNi2xwZzFyAIhyHSW9UG7/V+EBQ+b3u8vpoe6XDz?=
+ =?us-ascii?Q?IZhEyK4kBQCWPj8vul6XdJHzV4CEAW0oWYafYQCsLKuAFa3ap3nv1u3g8H3X?=
+ =?us-ascii?Q?wIDINp9Jg71lG86HNvu+IP5xsLiu3W0WO3tPUDAJouuFz7yXCXRL/w8witkh?=
+ =?us-ascii?Q?EBfFQJP/YqtSdmRssURh/NyD5KcBNTd6QFI5Shc4gxsiu8sYC1XB6Y5Pfqnu?=
+ =?us-ascii?Q?fMN5/4UdNiQlbUiFUZMsntvVuDyMh783k10+Z+nPNfh0TVmYVMRrbceNKU5B?=
+ =?us-ascii?Q?i//yurPQ5FjZyONkk1vCBmJNsu99vZGrSE4weoCdWfWYVklvuFrKzkVdUZvf?=
+ =?us-ascii?Q?2uYKiX1d2YxxjyhCtNMBoTbAz0q8y3QUO72jZeXzVNCdrSFhsVaBjqArHi7/?=
+ =?us-ascii?Q?oU/Hevwc78vSQa6Yy6N8ScprcsZ+7LvHri6beeXNJGipkMXdtFYJqOq1i7qV?=
+ =?us-ascii?Q?HzFGBspTohjvROPNHGLI1l6+WndaXHr/SeXIWxROxINnS2ET2yxqR+R2c0FE?=
+ =?us-ascii?Q?ZYQ+56jsYcBsdCusgBMrMXRufvxarczRGar7kn5Lq4ILGHlbvK8OUHjmeK7s?=
+ =?us-ascii?Q?ZvDWRl32KkR+hcnhfJyLzFkXWMlFd3345qPVytdRI2O/t1l6n11+nhwsk5j0?=
+ =?us-ascii?Q?IoYpJE7E4IKyn/0AG1pDxXMDtLIVnrWsU3XeDDq6KGyqossPKiVgb2IT2s7s?=
+ =?us-ascii?Q?jGa/03KqCgDmHW8uofAAhgnLMh//YfBZm6ipWJEQNwFjvruuR/1tPTXTqxFh?=
+ =?us-ascii?Q?vA8Me5agS90ny3AcW0HR9xJd3o2sIcdayRsuz2XF2bZvzaQcr1xjEK38Qi4M?=
+ =?us-ascii?Q?9TDd8vd+B3a9IYF5jDQHyI2FUeXO8eU3JdvoOo9OLZREI2mNTXxCabto/7mE?=
+ =?us-ascii?Q?mKh33AqeZ+uQjbjzjdtsZfAc32RjdkjnRDlxhP6xngj3jxcrdLEOt9RhixjN?=
+ =?us-ascii?Q?7ghN7/YyCjuVAznjzAMF9Ic1lrQ3DhA9qp7TnapiEQ7ECdzB39CNg54NF/OR?=
+ =?us-ascii?Q?cycZ1PfdQX9zi+aNNYJMkxL0I4qlgMBw43SQ3DlNHOi8w5+TWKxe7m82McWG?=
+ =?us-ascii?Q?reRpNt3ERobWTSNPE1YPgBFqb6frn1e61cKw10F6urEu93snYVtfyV4qbkI?=
+ =?us-ascii?Q?=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VE1PR08MB4974:EE_|VI1PR08MB10147:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4d23f9f2-2756-4542-5e9e-08dc4f47f472
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	GaUu8npF+VXeGU4TsVqiQUI2GvGj3w7Y3ImgsvgoLaFOYz5uSb3I8WGeoaXKtRwdWzGrzon9CswIM6iDhIff81+//ZQHxtjNXdVXBHq6wtyWu3TDsyNoABYPDKBy4cmTI/++N3pq6b6JJCrNtT+gnwNm2UJszcyoPzd8pQgI0oQA86pFcvbkUa+uUBsJ8LWFd5anbLT1s5rL7zy69iz/WXi5SDIvmDW7MUdjvXMJIbl3bmplEhn6YrjB1jsQ3GDgqn4lZphwXkHtLoh2j3itVXVCL0zWCUGFxQR5J28MGWMCxqgListt1ITUBEZur/xhJ0SmXv+KXBkRf0iCQRzQy7ThAiXa670QuzO4Ff7TpSdAsSnXnlBH+SC9sFKvU3BFjmt0JbwvV1SMO6w72O9wEKETYbmCQVLeGux20Xf5zcsf42eH1gqzORuylXBDuhaWuNE7ob4lIInvpogl2N5CyWAFXLNPT/bNXzFyE0l2yiIo/QCC+CcR3EzfMoMrKuuIicKoeiJmcFJhhGyKbc1vNzvM/7PQk49e58GiHaJw6JrDK5pVLoIWP/hXT7SVkjDV2Sb/NPwSZDKH3e03JPAi99r2wkjwaQakkY0vVISEy8dFM6N4eqiOjiWHLQd8JoTquR0BDmUBILfgzpWYtIk2vumo66PoPuBceWooRFt43ajuBZPgVVy/raEEqORqqu/omFj8crCLD8PK8aVTmMy7+w==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR08MB4974.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366007)(376005)(1800799015)(52116005)(38350700005);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?akFyMTFvcGNTcFRsVXZNSG1FRUxEUWtPYmNhZk5PY2hyaElObmlmOUlOUHF1?=
- =?utf-8?B?aVU5bG5EbVhTamJDTTJMenZVSTIxWFN3UTZpWmVnRHBBUnUwSDhtK09ZaFZs?=
- =?utf-8?B?a0RXWW5IVFpwMWFYYTViUzNzMEMveTNTRmFEdThka3Vpci9TQWdhTlJHTC9Z?=
- =?utf-8?B?VDNteGhJVzhZUXRFblZrL1daK09jYUFkNnViMEF4Y2tJdjJSUnF6YUFaWm5s?=
- =?utf-8?B?Rkk4UkgyaENsS2svL0Fkd3dmUThOSEdaejRldGZuV3pQSUM3OU0zRDY2cVRx?=
- =?utf-8?B?QUN4ZUR0TzMxcUE0K3pNWlBpbEI4L1UydmEzZGFrMXNiOHVPVnFWMW9vRnUx?=
- =?utf-8?B?VFM4SzB1MGllN084SGpXWXZUYU4vWkF6SmJKd0NlZEo0WjE2L3RxTjQwaitk?=
- =?utf-8?B?cjhNWWYzWGxoQlkxeFFyU3NHZGVZTzRQRlJZWnRYU1Nkdm8xTE1aL1pEN2I3?=
- =?utf-8?B?RXh2N2hoODAyZkVaM0FtM3VRcStyMEY4alovMForZitOVzMwUHhCa2ptbmdU?=
- =?utf-8?B?eXV2WEVKTmM3YXBmNlR1RVlGU3VzV1pENlF1TS9jM3lpZnB0a2prZ2dmOXFk?=
- =?utf-8?B?TytnSmhJRlIrdktHdUErL2RodFpiclRoUE5YMGJDVEFBR2x2VFZpMEpRMzI1?=
- =?utf-8?B?Mnp6U3AvL3JCRUJQUHVPVmR5bGdUMzl3L3dXMkdzWmg3SXV1Z2JHOXZoYzdF?=
- =?utf-8?B?dG5icWRueC9iTGRmMUhxZkVwUitKRTZPWHk1ajh4YjFLMkhUZnNMTHpPdEVo?=
- =?utf-8?B?UlNqWTd4N0M1TjZGZ1F2cDJuTEdnUnFJSE50TUNBOU4xcHVuZnd5WW5FN0hM?=
- =?utf-8?B?NW5ldXhtTWJxOXQxbUJzUEpTbXF3UFpNY0VhZUhHV3NkYzAvTldaTDZzayth?=
- =?utf-8?B?WllrSTljMkFxVkIrUUJhcW1zaFBxMENNdzNpQUNOTnp0WnBQaWN3eWpRUWxz?=
- =?utf-8?B?eVpiWTZmUm5lSlZoSnVBUVBrN3JhYmtXQmY2SDlrbEh4SFVHbmY4cFZBcGtI?=
- =?utf-8?B?Ym5lMmxPOFJ5U2x4VFAvUGFpNHp4ZGNLU1ZDQzQvMlhVcW4wYWZHaDBxay9s?=
- =?utf-8?B?RDFTK0RHbnBlUktaR3d2NDhBK1RKYnNyNUVTc0s2WVZJL05hc2hVSXNScmVN?=
- =?utf-8?B?TVNZYUk0R0Ywajh3dHJDNnZHdXVpYlE2L3lhaTRxMG5WeTVHYlJXWVc3Qm9C?=
- =?utf-8?B?c0FrSmxYUTMxTUNLYTRsTmFGblRFZElDV0pZSnQyeUxqRW04dk9Ma3VsNk5s?=
- =?utf-8?B?eXRRMG42Q2ltQUlKOWJaWlB4VmxETUM4WWNnSDA4aDgwS0daMUNjcWloNkYv?=
- =?utf-8?B?QTNFRXc3Rmhqclk3bkhXWHNSRmhHZmhZZ3MrZUVxS21HY1h4aTJtNi9tUUty?=
- =?utf-8?B?MkZMRTFJd01aVXFyTFhWbFF2ZHFZcmNKQW9VUmQwY0JoRGR1YlNOZmFDTG5I?=
- =?utf-8?B?enJFRFhVTzBrUGlvWHk1L2ppU3lwcGtYNzVVRlh1WHVOSWJrdlA1VEtDOXVE?=
- =?utf-8?B?eFlibmh6K1ZaYWF1bGsra2xpbSt5V1JzWUlFSDdYOTB4My9Ea3VCVkZ6d1Mw?=
- =?utf-8?B?NkZFeUhNRVBaaXVYOGdkMng5UGVlZ1ZKMlMza1VLbW1NUU91UmRBTVVtc1lO?=
- =?utf-8?B?Q3VKQ053NzE1TXBjVTMvUk5UMFJYVzhkQkJrVDRHQnpFRW1XU1d3cVFPNmRk?=
- =?utf-8?B?S1RKY0Y4U3Brbjdqc1pHeWRrRjdsVlF5QWhiV21kUGFVNCtXaFlJMUgxYUpR?=
- =?utf-8?B?SGUzU1RiSVR3ajZTTFFuZlRXcDF4MWlsa21IUFovQjllUGZrcnVjcTArWkV5?=
- =?utf-8?B?U1VBRWJtWGRXNENEa0RpZHVRQXduZFJwZGZoNGJ0QVA5cjNrQWo5OVluWEFv?=
- =?utf-8?B?aFZLRHYra3F4MVk0Z2FsRHluR1lMLytNdlk3WStOQjRub2xYeEtOMmlKRFZJ?=
- =?utf-8?B?a21mUU1VYUhrZllqZFZwa3RQcXlwNjF4WHlHWUw1ZHp2ZTh3ekhWNlJvdzB2?=
- =?utf-8?B?VnQyczJwcU4rckJzU0p6ZFRVaVhHeUZWYWlOcWFSSXRvSkVvdy8vTS95UFdr?=
- =?utf-8?B?bDFjVmhxeTZVUTRqcjMzQjlydCtTUTRSdXA1eEduOXRQU3NKNmFqREEwbkh3?=
- =?utf-8?B?NVkrMTZvQjRIZ0ROc0VOeFNSNFRicW5UeGlVUVYxZ3ZkYi9ndCtpTUJGcFV6?=
- =?utf-8?Q?/11EJgkxL3mcCvsITHtSq+A=3D?=
-X-OriginatorOrg: wolfvision.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4d23f9f2-2756-4542-5e9e-08dc4f47f472
-X-MS-Exchange-CrossTenant-AuthSource: VE1PR08MB4974.eurprd08.prod.outlook.com
+X-OriginatorOrg: outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Mar 2024 16:56:04.3799
+X-MS-Exchange-CrossTenant-AuthSource: OS3P286MB2213.JPNP286.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4dc1731a-700a-4def-8ef5-08dc4f481ba8
+X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Mar 2024 16:57:09.9671
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: dhdyC7EGQRT4K9hEG6cRHNymtW5NRlDkROSGmiM1vehvLXJTl70rTNQTw9/JYZbumO+R4M7VBmh/1EdTxsRofmtkrZmhrgLW9w33nKsIkKo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR08MB10147
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYWP286MB1990
 
-The current interrupt service routine of the tps6598x only reads the
-first 64 bits of the INT_EVENT1 and INT_EVENT2 registers, which means
-that any event above that range will be ignored, leaving interrupts
-unattended. Moreover, those events will not be cleared, and the device
-will keep the interrupt enabled.
+> Sender: Alan Stern <stern@rowland.harvard.edu>=20
+> Mar 29, 2024 at 00:22:10AM +0800
+> Recipient: Cui Alan <AlanCui4080@outlook.com>
+> Cc: inux-usb@vger.kernel.org; kexybiscuit@outlook.com
+> Subject: Re: way to notice user when a device connected to a inappropriat=
+e port
+>
+> On Thu, Mar 28, 2024 at 03:20:10AM +0000, Cui Alan wrote:
+> > If we can query the capability of the root hub among the whole system,=
+=20
+> > to indicate if kernel should notice userspace that the device is=20
+> > pluged into a inappropriate port. When a port with higher speed and/or =
+more capabilities the device required is available. eg a dp display device =
+on a normal typec even usb 2.0 only, or a superspeed device on a usb 2.0 po=
+rt.
+> > (Windows DID that)
+> >=20
+> > Also some non-standard device only provide a usb superspeed without=20
+> > usb 2.0 even the specifaction says
+> >=20
+> > > 11.3 USB 3.2 Device Support for USB 2.0 USB 3.2 device certification=
+=20
+> > >requirements require support for USB 2.0 for all user attached devices=
+.
+> >=20
+> > I looked up the USB BOS descriptor and found that the field describing =
+the device's speed capabilities is one-hot coded.
+> > So also the device can put a billboard or BOS on usb2.0 to indicate it =
+cannot run on such a port.
+> >=20
+> > struct _SUPER_SPEED_USB_DEVICE_CAPABILITY_DESCRIPTOR
+> > {=20
+> >     BYTE bLength;         =20
+> >     BYTE bDescriptorType; =20
+> >     BYTE bDevCapabilityType;  // ONE HOT BIT CODING!
+> >     BYTE bmAttributes;
+> >     WORD wSpeedsSupported;
+> >     BYTE bFunctionalitySupport;
+> >     BYTE bU1DevExitLat;
+> >     WORD wU2DevExitLat;
+> > }SUPER_SPEED_USB_DEVICE_CAPABILITY_DESCRIPTOR
+> >=20
+> > I search the kernel source, but nothing shows that kernel trying to not=
+ice user or even a pr_info when situations above happened.
+>
+> There is a message that gets logged when a high-speed-capable device is p=
+lugged into a USB-1.1 port, but no message when a SuperSpeed-only device is=
+ plugged into a USB-2 port.
+>
+> Would you like to write a patch that produces such a message?
+>
+> Alan Stern
+Excatly, there are two situations I said above " a SuperSpeed-only device p=
+lugged into a USB-2 port." and " a device which supports SuperSpeed plugged=
+ into a USB-2 port.".
+Maybe its more secure to ask the XHCI mantaniner before we do that. Looking=
+ forward to reply from all of you.
 
-This issue has been observed while attempting to load patches, and the
-'ReadyForPatch' field (bit 81) of INT_EVENT1 was set.
-
-Read the complete INT_EVENT registers to handle all interrupts generated
-by the device in a similar fashion to what is already done for the
-tps25750.
-
-Fixes: 0a4c005bd171 ("usb: typec: driver for TI TPS6598x USB Power Delivery controllers")
-Cc: stable@vger.kernel.org
-Signed-off-by: Javier Carrasco <javier.carrasco@wolfvision.net>
----
- drivers/usb/typec/tipd/core.c | 31 ++++++++++++++++++-------------
- 1 file changed, 18 insertions(+), 13 deletions(-)
-
-diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-index 7c2f01344860..308748d6cae6 100644
---- a/drivers/usb/typec/tipd/core.c
-+++ b/drivers/usb/typec/tipd/core.c
-@@ -637,48 +637,53 @@ static irqreturn_t tps25750_interrupt(int irq, void *data)
- static irqreturn_t tps6598x_interrupt(int irq, void *data)
- {
- 	struct tps6598x *tps = data;
--	u64 event1 = 0;
--	u64 event2 = 0;
-+	u64 event1[2] = { };
-+	u64 event2[2] = { };
- 	u32 status;
- 	int ret;
- 
- 	mutex_lock(&tps->lock);
- 
--	ret = tps6598x_read64(tps, TPS_REG_INT_EVENT1, &event1);
--	ret |= tps6598x_read64(tps, TPS_REG_INT_EVENT2, &event2);
-+	ret = tps6598x_block_read(tps, TPS_REG_INT_EVENT1, event1, 11);
- 	if (ret) {
--		dev_err(tps->dev, "%s: failed to read events\n", __func__);
-+		dev_err(tps->dev, "%s: failed to read event1\n", __func__);
- 		goto err_unlock;
- 	}
--	trace_tps6598x_irq(event1, event2);
-+	ret = tps6598x_block_read(tps, TPS_REG_INT_EVENT2, event2, 11);
-+	if (ret) {
-+		dev_err(tps->dev, "%s: failed to read event2\n", __func__);
-+		goto err_unlock;
-+	}
-+	trace_tps6598x_irq(event1[0], event2[0]);
- 
--	if (!(event1 | event2))
-+	if (!(event1[0] | event1[1] | event2[0] | event2[1]))
- 		goto err_unlock;
- 
- 	if (!tps6598x_read_status(tps, &status))
- 		goto err_clear_ints;
- 
--	if ((event1 | event2) & TPS_REG_INT_POWER_STATUS_UPDATE)
-+	if ((event1[0] | event2[0]) & TPS_REG_INT_POWER_STATUS_UPDATE)
- 		if (!tps6598x_read_power_status(tps))
- 			goto err_clear_ints;
- 
--	if ((event1 | event2) & TPS_REG_INT_DATA_STATUS_UPDATE)
-+	if ((event1[0] | event2[0]) & TPS_REG_INT_DATA_STATUS_UPDATE)
- 		if (!tps6598x_read_data_status(tps))
- 			goto err_clear_ints;
- 
- 	/* Handle plug insert or removal */
--	if ((event1 | event2) & TPS_REG_INT_PLUG_EVENT)
-+	if ((event1[0] | event2[0]) & TPS_REG_INT_PLUG_EVENT)
- 		tps6598x_handle_plug_event(tps, status);
- 
- err_clear_ints:
--	tps6598x_write64(tps, TPS_REG_INT_CLEAR1, event1);
--	tps6598x_write64(tps, TPS_REG_INT_CLEAR2, event2);
-+	tps6598x_block_write(tps, TPS_REG_INT_CLEAR1, event1, 11);
-+	tps6598x_block_write(tps, TPS_REG_INT_CLEAR2, event2, 11);
- 
- err_unlock:
- 	mutex_unlock(&tps->lock);
- 
--	if (event1 | event2)
-+	if (event1[0] | event1[1] | event2[0] | event2[1])
- 		return IRQ_HANDLED;
-+
- 	return IRQ_NONE;
- }
- 
-
--- 
-2.40.1
+Alan Cui
 
 
