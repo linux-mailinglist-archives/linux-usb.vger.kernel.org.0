@@ -1,119 +1,142 @@
-Return-Path: <linux-usb+bounces-8657-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8658-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D39D1891F2C
-	for <lists+linux-usb@lfdr.de>; Fri, 29 Mar 2024 15:59:38 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id DBE13892011
+	for <lists+linux-usb@lfdr.de>; Fri, 29 Mar 2024 16:16:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1139A1C26925
-	for <lists+linux-usb@lfdr.de>; Fri, 29 Mar 2024 14:59:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5F545B2B77E
+	for <lists+linux-usb@lfdr.de>; Fri, 29 Mar 2024 14:59:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 943C513A89E;
-	Fri, 29 Mar 2024 12:53:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A797D13CA94;
+	Fri, 29 Mar 2024 12:53:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lh0m+edF"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="xx1Qa20K"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7312413AA31
-	for <linux-usb@vger.kernel.org>; Fri, 29 Mar 2024 12:53:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CA1E1CAA6
+	for <linux-usb@vger.kernel.org>; Fri, 29 Mar 2024 12:53:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711716804; cv=none; b=UvSVoSZkg2uyg1g5gJbbiyzEvrC9I+g65bOhJ8SmPhDF0j5MJx6Nwa+mwkkpPP/lEQguOjo+AfxkXiSHubozmEXGNHszOpnvnLpfpi0KbLtGshlrVn+o45O1hSh7Oy9ec0GnoGGvWo9fG5h4zOcVK1Sck6yPoFcM6fv4Mtzipng=
+	t=1711716837; cv=none; b=LoNBzailAgKm9Dc1CIsBb3O1dQArx0cCN2tupEauQJ2nLaqRnyXJSPY/7wYHLJzmPL1oGqloakJnVfCN2O/z0HX/DATiSKUWwAws9+y8Y0RhReI+OFxPTsJfx5j0m8LWjQGnq+T8IJ+7htclrWs7HpoVJpieeFotbFeD4q4WnLo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711716804; c=relaxed/simple;
-	bh=lDZ3yFBrOvom7GnxCtNEzylmxgArV09Cn+KF+cIBtBk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PQy0VAP4aIrR1kim8ZUalEiGh6EdQlJ6IjrumK0dwydnXV+UdWhJ9XfFSvNQ9Yf8z5wvks2EthZjh7WnsaKoIEUhnSffo1t35u87ZJm47bfB0Zf83PIKa752k+hS75GNmpE8PNR1nCYWwbuLccxQQly3qTYUrVE+fUaqBt2ml5k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lh0m+edF; arc=none smtp.client-ip=209.85.218.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a4e0e3ef357so262717666b.2
-        for <linux-usb@vger.kernel.org>; Fri, 29 Mar 2024 05:53:22 -0700 (PDT)
+	s=arc-20240116; t=1711716837; c=relaxed/simple;
+	bh=UsSlr2DfmOF/BtL79NIGofPlpt4lDrgJKpftKL7JDDI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=J05KwvYwlmKBZchF/ib0APhBoNYkHL+TI9l2DSgcF87SvhIZQPjxUOHBzE5GG7Em/9b7AryGEi0ezZ2kzUOR1QwL5vrbdmbwIMYBDWaEbtjyGLxxgwCnwhrrgDbg7wT1P2JHTI7TIGQsZSKCNyjna8bqNIz8LYOQBmjL/DzJpcE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=xx1Qa20K; arc=none smtp.client-ip=209.85.219.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-dcbef31a9dbso1363022276.1
+        for <linux-usb@vger.kernel.org>; Fri, 29 Mar 2024 05:53:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711716801; x=1712321601; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wqmeaanRrv70KrX+f6VF9Jc+mdIFTxL5kmoWDsT7HCU=;
-        b=lh0m+edFhth8xi6ClakFkZlNdVoGctYqSDe4JuOzka6NZqKv5MBetW9pFC/51FjME9
-         21Y4vUxGvkDITThbWSpTsBOz8PwMCpzCxKKWVUpLCBWZwLRRQAqvb+kOhDtQRv9xYUP4
-         +ouempR3e8T6S1enSwepAQIHj6dAMP3JptPZhY9Ne4KAomln/TxnV9El71bZQBMWfoWv
-         bu8XRJq1Nt9OarGPgQjXwxGll2JqbkHSLGlmUZOQkR5gDQ5RcV53y45iZSkHKv1YIh0B
-         1WbyrkdG5nbexnOiML7QdLJvQGWWZKnFFomp+FBCfciDOASQuG0ZU7pPZ4fcLKPEZA8n
-         B7IQ==
+        d=linaro.org; s=google; t=1711716833; x=1712321633; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=NyDnNSvCJUp05VCQqo3677K6CevG5jtaaiUaNI9UR+M=;
+        b=xx1Qa20KQGb1Gf4AovVMHQnR/0+zE2BThA1nMVYx8ld5frjNSyOUOUdZYNgUY4l8Lf
+         fyJjdsv8v6I6RtyCgPjifp/mEj4JgxZJ4YK9PQoXwQn/0WT9Zj9LPpMjw1i9DThLauH5
+         j1V97wHgknPR9it6h7c+kY3KDCTeTaiRIb4uNOrxi2adamp+TKGIlpC3P+fSX7WeEtWx
+         SDqwumj+SZqC0pI2uuiFeuJOJ3PRvaDh06qHdRAxqFUuHz9/SVvkfxPqT7gLjdKk3GCu
+         FQF9bDH91TAfVsJ1tz15GFAWWaSa781e9GgYq6xu2U/cjXaVwFC9Jg4CtjTvrwuvb59Z
+         NURg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711716801; x=1712321601;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wqmeaanRrv70KrX+f6VF9Jc+mdIFTxL5kmoWDsT7HCU=;
-        b=pT2GT6xpQe7RxF7syO80BRTcNaezVqpvHhsHWuH6dpVA9m2tILRwlyCWsfnjaT1h+Q
-         ZYs50AFtGDi6JvnX6W5PdIEBAL14s5lKWwdT0hYeQbKwikVaOFcDWitqVHBdl/x+nlz6
-         UaN3uFFPAROzbM8DJZHaeH8KhxV0biwPb/YISe7k/UU5NkLjZN3MJlKNlabJg2SwzPL+
-         JyJyBzkTgMOHvC5RHKY03NOA3EJXr7x+9oRq8IFqTSFDGsI6zQ5bVipva1ckBF4yJjXP
-         gI89PgMwd0fjrXA5C9irGvEQl+DiyUi6GMUWlpsO06v/YO8TMg9smbL/aUaaJ2WwHQfJ
-         S8cQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXzS4cpr/uw9BAR7wTz70Z0zKQyEr71drkQCQboF3FT6ha9T7V0HT3drZsoDBFMkNGmF7h691VWS4piMskKPA5T4dr3lxfTJZBQ
-X-Gm-Message-State: AOJu0YxsFJ/zZ4TtjGfpoYnbzvzVxBKOqZURC7L1wKUC+fFPB6u014Sn
-	mIorHib903gOu2MKTJ7EDGEeGTxi43lY5N8mIVkR4UOnFJ7pWw2xMIjqdxEM
-X-Google-Smtp-Source: AGHT+IE/m2VAb8y14bLIT+7oEDU9QeelHaHTE001Vkw0H/9Haf3Q6h9CgOSawMqw7b8Sk7bCPS7mrg==
-X-Received: by 2002:a17:906:1744:b0:a4e:2d7d:3fd5 with SMTP id d4-20020a170906174400b00a4e2d7d3fd5mr1693942eje.1.1711716800652;
-        Fri, 29 Mar 2024 05:53:20 -0700 (PDT)
-Received: from [192.168.1.50] ([79.119.240.188])
-        by smtp.gmail.com with ESMTPSA id m16-20020a170906581000b00a4a3807929esm1898519ejq.119.2024.03.29.05.53.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Mar 2024 05:53:20 -0700 (PDT)
-Message-ID: <e6c9366f-dc9e-4b2c-82bc-ee13a1f7a62d@gmail.com>
-Date: Fri, 29 Mar 2024 14:53:18 +0200
+        d=1e100.net; s=20230601; t=1711716833; x=1712321633;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NyDnNSvCJUp05VCQqo3677K6CevG5jtaaiUaNI9UR+M=;
+        b=tajMwnBptc14S+kaUrujlQSf1pWLF22MEPVgWiMrkEqUqPWhNMjmVxl8zl54ubcInm
+         ua9xEv4tIl8mjb4J3oJyQTGyloWce55076yiQWvPw6EpTmLIfV7VStaV/KydzxrXUSeL
+         5Fey/qwWEK7MANAvdwojJ4svrYw7gaFYQwotV3SvX92eyG94KT1GI8HaLvikJjXJSPCS
+         36yEtzswO5CMg+qPN3OQmVl85SxcZp/IKMTP0IJOgAeOkviY1I/Ryyncrzvy656H10im
+         t3Cnz/EHAiHh4Y/oQWNgJT1JvVoTYlYFU0TU4zk66V54aTtHIkldmW6uR87QbsYyAqak
+         EEpw==
+X-Forwarded-Encrypted: i=1; AJvYcCW6RiTPMXuhignmdEa5WY17jz9MbYRLbdP3Zkns6bKRFuZYxa4L60TvXkr6EgfwIM9wR5vqr261ozECqayBmM21HyJNvgeRhj9S
+X-Gm-Message-State: AOJu0YxpwGXtcMuo2Ues7fsvsbuxpr9gah5c0kj68dOAgq7Y58er/MDT
+	7W7+7Y9XBTrO8EZ39Nx7vTNHA7OP9FcXNduZNabLwKURGfxNCwzNSSYJ6Pvf8l1ctaayn6FcDvU
+	hwR1r+xNt9h5Dl3qua08MskN53mf3UIcxLO8Z3g==
+X-Google-Smtp-Source: AGHT+IFunI+UQDVGnWmv0F7IWNGm07qzq1TQ+0vfx7aJ3z/R1MeKDke21gd7kwJEbmHQGGRWljZRqkClNo4ONptPYGw=
+X-Received: by 2002:a25:6c8a:0:b0:dc6:c2b2:c039 with SMTP id
+ h132-20020a256c8a000000b00dc6c2b2c039mr2259417ybc.41.1711716833190; Fri, 29
+ Mar 2024 05:53:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Device with two interfaces - what is the probing order?
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org
-References: <f4df8e45-5dc5-4d81-a414-e19a83b71403@gmail.com>
- <8bc3a7ae-bf8a-486e-946b-ff75ef2ac727@rowland.harvard.edu>
- <77a2f290-2f63-42d8-a6d2-25840049beca@gmail.com>
- <2024032907-smokeless-imperial-f3f9@gregkh>
-Content-Language: en-US
-From: Bitterblue Smith <rtl8821cerfe2@gmail.com>
-In-Reply-To: <2024032907-smokeless-imperial-f3f9@gregkh>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20240329071948.3101882-1-quic_kriskura@quicinc.com>
+In-Reply-To: <20240329071948.3101882-1-quic_kriskura@quicinc.com>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date: Fri, 29 Mar 2024 14:53:42 +0200
+Message-ID: <CAA8EJpqx+VFW8z6oG=+pnhPN97Q3R6z+ygf85Uspve-9syQsUw@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/2] Add gpio-usb-c-connector compatible
+To: Krishna Kurapati <quic_kriskura@quicinc.com>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Rob Herring <robh@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Miquel Raynal <miquel.raynal@bootlin.com>, Guenter Roeck <linux@roeck-us.net>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Kyle Tso <kyletso@google.com>, 
+	Fabrice Gasnier <fabrice.gasnier@foss.st.com>, 
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>, u.kleine-koenig@pengutronix.de, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, devicetree@vger.kernel.org, 
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	quic_ppratap@quicinc.com, quic_jackp@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
 
-On 29/03/2024 13:47, Greg KH wrote:
-> On Fri, Mar 29, 2024 at 01:36:18PM +0200, Bitterblue Smith wrote:
->> On 28/03/2024 22:05, Alan Stern wrote:
->>> On Thu, Mar 28, 2024 at 09:08:43PM +0200, Bitterblue Smith wrote:
->>>> Hi all,
->>>>
->>>> Given a USB Wifi device with two "identical" interfaces,
->>>> in what order are the interfaces probed? Is the order guaranteed?
->>>
->>> They are probed in the order that they are listed in the 
->>> Get-Config-Descriptor output.  But this is not guaranteed.
->>>
->>> Alan Stern
->>
->> Is it guaranteed that they are probed one at a time, not in parallel?
-> 
-> Yes, all USB probes are in sequence.
-> 
->> Oh, and what about the disconnect function? Is that guaranteed to be called not in parallel?
-> 
-> Yes.
-> 
-> hope this helps,
-> 
-> greg k-h
+On Fri, 29 Mar 2024 at 09:20, Krishna Kurapati
+<quic_kriskura@quicinc.com> wrote:
+>
+> QDU1000 IDP [1] has a Type-c connector and supports USB 3.0.
+> However it relies on usb-conn-gpio driver to read the vbus and id
+> gpio's and provide role switch. However the driver currently has
+> only gpio-b-connector compatible present in ID table. Adding that
+> in DT would mean that the device supports Type-B connector and not
+> Type-c connector. Thanks to Dmitry Baryshkov for pointing it out [2].
 
-That's very helpful. Thank you both.
+USB-B connector is pretty simple, it really has just an ID pin and
+VBUS input, which translates to two GPIOs being routed from the
+_connector_ itself.
+
+USB-C is much more complicated, it has two CC pins and a VBus power
+pin. It is not enough just to measure CC pin levels. Moreover,
+properly handling USB 3.0 inside a USB-C connector requires a separate
+'orientation' signal to tell the host which two lanes must be used for
+the USB SS signals. Thus it is no longer possible to route just two
+pins from the connector to the SoC.
+
+Having all that in mind, I suspect that you are not describing your
+hardware properly. I suppose that you have a Type-C port controller /
+redriver / switch, which handles CC lines communication and then
+provides ID / VBUS signals to the host. In such a case, please
+describe this TCPC in the DT file and use its compatible string
+instead of "gpio-c-connector".
+
+>
+> This series intends to add that compatible in driver and bindings
+> so that it can be used in QDU1000 IDP DT.
+>
+> [1]: https://lore.kernel.org/all/20240319091020.15137-3-quic_kbajaj@quicinc.com/
+> [2]: https://lore.kernel.org/all/CAA8EJprXPvji8TgZu1idH7y4GtHtD4VmQABFBcRt-9BQaCberg@mail.gmail.com/
+>
+> Krishna Kurapati (2):
+>   dt-bindings: connector: Add gpio-usb-c-connector compatible
+>   usb: common: usb-conn-gpio: Update ID table to add usb-c connector
+>
+>  Documentation/devicetree/bindings/connector/usb-connector.yaml | 3 +++
+>  drivers/usb/common/usb-conn-gpio.c                             | 1 +
+>  2 files changed, 4 insertions(+)
+>
+> --
+> 2.34.1
+>
+
+
+--
+With best wishes
+Dmitry
 
