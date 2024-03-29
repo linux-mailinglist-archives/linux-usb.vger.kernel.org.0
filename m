@@ -1,98 +1,120 @@
-Return-Path: <linux-usb+bounces-8634-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8635-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68F6D891143
-	for <lists+linux-usb@lfdr.de>; Fri, 29 Mar 2024 03:07:54 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2AF589136F
+	for <lists+linux-usb@lfdr.de>; Fri, 29 Mar 2024 06:56:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 22BA428CDA6
-	for <lists+linux-usb@lfdr.de>; Fri, 29 Mar 2024 02:07:53 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4CAF7B22DB9
+	for <lists+linux-usb@lfdr.de>; Fri, 29 Mar 2024 05:56:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0277E1E504;
-	Fri, 29 Mar 2024 01:58:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40A0D3D388;
+	Fri, 29 Mar 2024 05:56:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TYoVUGka"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="sylAsleB"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 807B5A95E
-	for <linux-usb@vger.kernel.org>; Fri, 29 Mar 2024 01:58:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3DEA3B1AB
+	for <linux-usb@vger.kernel.org>; Fri, 29 Mar 2024 05:56:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711677482; cv=none; b=M0HCqiOAb3vKZ683bmngrbQ19xYWJUNWsbnpw1w8RvvDfi/Q7gmzPX75vQJE4xEaP/E9AKcZ0VMEuTmGMUPm+/y81cjWdqL3rX+GA18FSMCb8Xa7LXxMW2oUw2wS7VSZZ5WkGIGXs5+/dQ6e7GXtXUhbWPTISQp4fNIA0yx250g=
+	t=1711691777; cv=none; b=hmeb4Udlli1+ZQOIWDSHQrxGPUz9XQL9LaGpfqXSvfMM4PuTkTtwpqh2+nNp02E+/N0ri/Dn+LJT1YxQzOinS/7lrz1KXgvqGmfQQqbrI1sGTNp4d8wUpHsd17+Egri3lOtHkFFyuQ7dmeEba0kBn3VomVBEP+5oE65BDR1dTh8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711677482; c=relaxed/simple;
-	bh=7qb2qN6QE0vlup589yQen5LN2By30KJY8vF+2rRmWYk=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ntkK8nVqG+DhnScGv1Ua4+aesKO3jm8l0oYBDM1C10Q+N2Gh6L/uLE289YHRJNISdsJgeiY4q3LmIwAf1t8JPOhONWSrbXbu0//589S2hJWA8JirFH2XySngXKhDcwbzpBELk4sY/LOEoxJaheen1X7zo9S5jVn3jZxU2zpV24M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TYoVUGka; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 16189C43394
-	for <linux-usb@vger.kernel.org>; Fri, 29 Mar 2024 01:58:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711677482;
-	bh=7qb2qN6QE0vlup589yQen5LN2By30KJY8vF+2rRmWYk=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=TYoVUGkaLIUXRR/BxausMmCXn6zJvi2j3oBF9PeA36eYVKshzWEFbbsmU8AedOgzA
-	 1pejsruqNX7Em2/S7lAmVF8pPQOuIzdDBTqLEttjuS/ijmy2fVouIVA5EMwy1HpmCh
-	 L1L7OqzlO+fIigWhbU2mk5IaESdmbUmt6eplH/1HiYsMldjhsN7v14738WqYlPWaa2
-	 bGXzNeDxzLCgpE51EiaWsN3S2Jr/mjt3fpBEjMFmpXOnm/kCDlU2KBLUujZyKZ7DVp
-	 Ys3ethd5KL2kDjDWKRJi9J63roqKg0gezTpjCw+xi0se1XiuzNdubFjb/sdvdInfXk
-	 jP0Z4doiUBT3w==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 02CD9C4332E; Fri, 29 Mar 2024 01:58:01 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 218656] Regression: Update from 6.8.1 to 6.8.2 breaks E50 DAC
-Date: Fri, 29 Mar 2024 01:58:01 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: vaxerskiofficial@gmail.com
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: DISTRO_KERNEL
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_status resolution
-Message-ID: <bug-218656-208809-7AesWwDgtT@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218656-208809@https.bugzilla.kernel.org/>
-References: <bug-218656-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1711691777; c=relaxed/simple;
+	bh=I6gb3mouBEmAFWwdt7bCZ0uEsJC1XXBgedFnEv3UMV4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=O0/Acl7oogzx0lOROkDIK+jbIWJ9S4mp9FXh+MtWKhg8CAuidethSjwR/u2u7UjIHivpTaib9UrLBHQL/oHQ2AGqOqzLNxCQ9cSuto4FEKbPF6oRkag8Ojvam+rRE39Y15DIHtx0M3okzWTH9Qc6ZoWY8M4YvHtqWPqpJy1KWK8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=sylAsleB; arc=none smtp.client-ip=209.85.128.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-61444fb1d2bso1873367b3.3
+        for <linux-usb@vger.kernel.org>; Thu, 28 Mar 2024 22:56:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1711691775; x=1712296575; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=2dkJ/eB3NE7gH7tgLxZzt30oH7th5QfRjoRtkA4jvFo=;
+        b=sylAsleBhCd7XU52STkKnCfojR5GokLfwMmmNU/nOCnePdSp5kpaZlHnDvvoz/ZzTB
+         f30qGEM8naNXu6/aV1JSNY0z+YtpQObZ++tcRJGXgLX7odn7CLRpT28u/GEQTKLG0hHY
+         ZJaSCRL9+BPblab3UCEjXLjf9oaRLIkQkgkBZw2MIQNS3ilFE6OHcXIfk+jxc6PVJxCN
+         lHBIMgmETZu3nRcSSuL+efnMVakwznhpYyUfsyzetXVyUHRqQbYnqgZ0eNg9TQjPNWEt
+         aBEAhPchjrnW/bQD+ao6LOAG+osNZuHVGp3mYUTgtIlRCPuZjFiZ0Bd4XTdEk+yoh9W5
+         h5lA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711691775; x=1712296575;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2dkJ/eB3NE7gH7tgLxZzt30oH7th5QfRjoRtkA4jvFo=;
+        b=qrZpj+4/GxYHDA9Y6iQ3J05p+llqaLdVOjkNJdS5I+y/U1NWQYtckcmiCcKYgMTwyX
+         1awYw0NDbA5GaEQghOS7YzjJOhgzurQIjdPqu+V1zkRr8lkUgJcuu8p1Rm4pTiHoTsuI
+         P1/vudXgFqfjZ7E77rJjI6D55jQ12FpTaAeVYnRlou19YCsk4DHsHTb0rT2faqMs9yrS
+         favemw+ws7DWFwl9pBLjoTli7A3WrYhpQEj04ERLN/O45RDRn46aHKvoxBUqbVoHhW9S
+         6QwbAc83KxT+GYSxQht2OCVaQYA1ZkU7T8B26RFZABzZc6IZTWlZM3jyMyqylLKnYpTL
+         ppuw==
+X-Forwarded-Encrypted: i=1; AJvYcCUufVPT1OkITpDikAbRY162WC21b6YU4qhJciUL3XqgkBK+UHJ0bkOsL793CoxXfdt82DL46hNipPtBI2C6MMooxxoBHFYQluRq
+X-Gm-Message-State: AOJu0YzE41kKWwFotDeujQR5/RfQWlIqx8H7838wDKuZ9w1J/qchad/H
+	07+lURI9csV7Gp0t63cRmzL6zTi8Z+SXnE9IRve3pGRckq8OHLNnrgu+nrGERqR9S5BifcmpAdZ
+	jCCvC1FKMy8jG1WOHPstjPIe42F6npF9pVOM3mw==
+X-Google-Smtp-Source: AGHT+IHHPjLY3QHFoCuxDon1afxB+hpjMxW50BARoEUlh5RXsRY1+R/40uIOSlea3+3DGKzjg7tBBEkp0xqTH57xTwo=
+X-Received: by 2002:a25:6f89:0:b0:dc7:465d:c06d with SMTP id
+ k131-20020a256f89000000b00dc7465dc06dmr1354548ybc.28.1711691775003; Thu, 28
+ Mar 2024 22:56:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20240327224554.1772525-1-lk@c--e.de>
+In-Reply-To: <20240327224554.1772525-1-lk@c--e.de>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date: Fri, 29 Mar 2024 07:56:03 +0200
+Message-ID: <CAA8EJppvmaFN1Q5neVSU76gApxm55YfwmxRg=1Z85LcdDEW+og@mail.gmail.com>
+Subject: Re: [PATCH 0/3] usb: typec: ucsi: Ack connector change early
+To: "Christian A. Ehrhardt" <lk@c--e.de>
+Cc: linux-kernel@vger.kernel.org, Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>, 
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Prashant Malani <pmalani@chromium.org>, 
+	Jameson Thies <jthies@google.com>, Abhishek Pandit-Subedi <abhishekpandit@chromium.org>, 
+	Neil Armstrong <neil.armstrong@linaro.org>, 
+	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@pengutronix.de>, 
+	=?UTF-8?Q?Samuel_=C4=8Cavoj?= <samuel@cavoj.net>, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218656
+On Thu, 28 Mar 2024 at 00:46, Christian A. Ehrhardt <lk@c--e.de> wrote:
+>
+> As briefly discussed here
+>   https://lore.kernel.org/lkml/Zf1XUrG1UbVJWzoz@kuha.fi.intel.com/
+> acknowledge connector change events along with the first command
+> in ucsi_handle_connector_change(). The connector lock should be
+> sufficient to protect the rest of the function and the partner
+> tasks.
+>
+> This allows us to remove the Dell quirk in ucsi_acpi.c.
+> Additionally, this reduces the number of commands that are sent
+> with an un-acknowleged connector change event.
+>
+> Christian A. Ehrhardt (3):
+>   usb: typec: ucsi: Stop abuse of bit definitions from ucsi.h
+>   usb: typec: ucsi: Never send a lone connector change ack
+>   usb: typec: ucsi_acpi: Remove Dell quirk
+>
+>  drivers/usb/typec/ucsi/ucsi.c         | 48 ++++++++++-------------
+>  drivers/usb/typec/ucsi/ucsi.h         |  2 -
+>  drivers/usb/typec/ucsi/ucsi_acpi.c    | 56 ++-------------------------
+>  drivers/usb/typec/ucsi/ucsi_stm32g0.c |  1 +
+>  4 files changed, 25 insertions(+), 82 deletions(-)
 
-vaxerskiofficial@gmail.com changed:
+Tested-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org> #
+SM8450-HDK, sc8180x-primus
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |DISTRO_KERNEL
 
---- Comment #1 from vaxerskiofficial@gmail.com ---
-I'm sorry apparently Arch pushed some magical update to the same kernel ver=
-sion
-shortly after my report and it's fixed. Sorry for wasting time.
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+-- 
+With best wishes
+Dmitry
 
