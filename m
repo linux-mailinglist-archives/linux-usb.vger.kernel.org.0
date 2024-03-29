@@ -1,144 +1,216 @@
-Return-Path: <linux-usb+bounces-8661-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8662-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3BB4A8920EB
-	for <lists+linux-usb@lfdr.de>; Fri, 29 Mar 2024 16:51:47 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A85D892185
+	for <lists+linux-usb@lfdr.de>; Fri, 29 Mar 2024 17:21:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B7E3BB21971
-	for <lists+linux-usb@lfdr.de>; Fri, 29 Mar 2024 15:37:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BA1C6288D87
+	for <lists+linux-usb@lfdr.de>; Fri, 29 Mar 2024 16:21:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 535631C0DF8;
-	Fri, 29 Mar 2024 15:37:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB5222033E;
+	Fri, 29 Mar 2024 16:21:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FXnc6BHr"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="UZDwbE7I"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7A8912B6C;
-	Fri, 29 Mar 2024 15:37:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AE8985623
+	for <linux-usb@vger.kernel.org>; Fri, 29 Mar 2024 16:21:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711726662; cv=none; b=TYne7pCX2N0yr3vEE6EJizoZXgQegnokVXT3eZeM4KbHrSBUKCVWOuw2V/OG2pvyok1r7Sz82bdRNll1zsOF2YTzyRsKMqQwnC3MHmAHD1Q5RGURv7duji5wcEu0PZhPutGOalmdKXgjtOLdt8ZcrYay5KCr1SG2TfBuI/pXiWY=
+	t=1711729274; cv=none; b=pI5M9Os5X0tB7STQ6zmUsLguIHqHz3k2INFQpgpmzcnyxRtL22/t3XiyF9J6qF/bdhccvWwQY9kmFqoq8ZnlQH6+fPXQIRqTPfl0GZhOVw5P7QZ1W/jbcwwKqatcTmtvPrW6P2g/ebH84/Vbl5S8GBqk6qYqDie4YBZV2LATzrw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711726662; c=relaxed/simple;
-	bh=3eocDvaP72RBhExznA65cm2zXjY3YiQvcbcAn357qAM=;
+	s=arc-20240116; t=1711729274; c=relaxed/simple;
+	bh=dcSFld6UCTdTL/5vjYeiOxLyFOuvbsJONzbcmxgsYaI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IWhQjJlDVavNKVwpCpFvGFkXrdsXtrRaQcD922mCfIRjG9hXPMkgRbWo4RKBQ/0wHsS3I34Vp5aaVtE3gMgJN1zKfpZVKhahWkPvgsZr4jQoJMWU3cJWHhQX8xltJW9U5reKzdjJfk9IESD8YGdABpwvFF4G7bxZ+YRX76GLIhg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FXnc6BHr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1E5DC433C7;
-	Fri, 29 Mar 2024 15:37:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711726661;
-	bh=3eocDvaP72RBhExznA65cm2zXjY3YiQvcbcAn357qAM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FXnc6BHrnsmfkSrVn8YC/mv9IPF1gCGYMrjdzSWCWUa1auw49flR5dqcLBoGU3NuF
-	 ZIO+0H4JZOD/y4Kmhyr6AFc0MBd8MSL3JuvThYxHpjrnwd0qnD95PJdr3h49IkTvjg
-	 7dZBIcpO16MgbmkWWqO8uUQq8fhYtcY5o8tKaiKImZqKHdYCuX2jMGUPfebROcyTZO
-	 Q53Zin/3DTd04ObJPnMtxYSY2sGGJiW4qUSkM9QiTv1Ows+gsYkks+P7hOrubJob6P
-	 lcvplV11kG73m/vgLZZ58tnVT50nCmdEkjfBEjmJ2B1LEBiD0Ln8ANjT+ysQeNIXJ8
-	 xF0s5Ae8F0hug==
-Date: Fri, 29 Mar 2024 15:37:35 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Krishna Kurapati <quic_kriskura@quicinc.com>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Rob Herring <robh@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Bjorn Helgaas <bhelgaas@google.com>, Kyle Tso <kyletso@google.com>,
-	Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=EyZkvayJim9ZTplnFnuWUu60C7elRUlteYc1xYmdOh8IaLHAIuZL+8lC/euCstLdw9pYsYSY86y7MQOOKVR4tFQ39eycnS54e/cuqg5QM5kCUThYRQ/aZF2fzTz4dnFxOyhRv5gIxcZTf7paSCgMdBX/JjaekA6XFkAQVGLaWjI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=UZDwbE7I; arc=none smtp.client-ip=209.85.167.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-515d55ab035so78012e87.2
+        for <linux-usb@vger.kernel.org>; Fri, 29 Mar 2024 09:21:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1711729270; x=1712334070; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=9TdQntOQdC+RwwerKG1DtWz7PRsJo1psWkBJYy0GaAE=;
+        b=UZDwbE7IKUwpGHw3U6rPNsQqmHtlWTUNVhqRUcwhfvaiDlwGT0wny7injIO+/yG7ik
+         6uWUm5hv3giwQ1E4ivlYo+kYGF98vAuYLSVEi9J6jmlTz1FNnWpgm4fig3yu9NAQIYJU
+         U6b3mXrrRqkGF1jaF68YNpmi21j5PdwDAkoTabD4r0mYIXH3WH6ICJvJ0MqYp+riq3OV
+         PoNLx2ZeK8Z0zOKmO737xFQMPzoaY9eptTVo02YaiXQBwQXN0D8MxVSZAEctSt6R/qnk
+         pBSYHy/wmyxBi7X3iZveMkVL9l8NhMQ4CbqQFoHDDJcOs9ERux48pIhbwXGJG2IUEtIh
+         opTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711729270; x=1712334070;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9TdQntOQdC+RwwerKG1DtWz7PRsJo1psWkBJYy0GaAE=;
+        b=dtXN8tdYdkZvN4eiR+TZ3a1xi4cOyYrV5yYYXi4ljhsCC+dJvZadjbitN9tlBad2Fq
+         V7HLayR9V2qx3rkVpYtpIwVgnzzfozb0dR5oGAi7JEpwpRcbZADZK6DsgwYPQKq+949q
+         5yH0nI6UtcN8DLiP9R8FqiiROANmf0ieF6wwDRoR1gAmOGA8dxMf8rDtx3Sk+MyEmL/I
+         EsH+HqGVNGbgooyBS1Gtz36nQdddiikLgr7gE88CcZeGTl8lsS8/BM+dBBDuzStXX28Y
+         xvDRCAqPKi3di47RZ0/dhUG8hfTZHpHklas0wNQnKTI3V8RGGdid2k+2/8Ipe8qT83vG
+         FnYw==
+X-Forwarded-Encrypted: i=1; AJvYcCVXqUC4a7wGrUPqoE4207hhlnxgHz7mRn1iL/VJByahK0SStTTZZmnayzFJX8hhzj/AQfM0xJyWIJWferQjy/sb+Iv5l9me6JsQ
+X-Gm-Message-State: AOJu0Yz1rlBY7lCcqhrnzX1OG4s5b/kUu7ANhQDeTnTRqMz6S35cT6hl
+	V/vAKTMf9eylxtv8rz7iSBzvGC9u1VnCpAWzFp6FPEQ0GMdZGBAk6Vd38wRU2Ac=
+X-Google-Smtp-Source: AGHT+IGYcvpSz7jI5yxeagCBVOiO2Xfh0dOk6NVOG3vgeY7eKDGqNcF+bUdJzGLSflCAfgeQkL2bjw==
+X-Received: by 2002:a19:2d4c:0:b0:513:ed0f:36c9 with SMTP id t12-20020a192d4c000000b00513ed0f36c9mr2085718lft.45.1711729270454;
+        Fri, 29 Mar 2024 09:21:10 -0700 (PDT)
+Received: from eriador.lumag.spb.ru (dzyjmhyyyyyyyyyyyykxt-3.rev.dnainternet.fi. [2001:14ba:a00e:a300::227])
+        by smtp.gmail.com with ESMTPSA id z10-20020ac25dea000000b00515d4457ff9sm87172lfq.89.2024.03.29.09.21.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Mar 2024 09:21:10 -0700 (PDT)
+Date: Fri, 29 Mar 2024 18:21:08 +0200
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: "Christian A. Ehrhardt" <lk@c--e.de>
+Cc: linux-kernel@vger.kernel.org,
 	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	u.kleine-koenig@pengutronix.de,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, quic_ppratap@quicinc.com,
-	quic_jackp@quicinc.com
-Subject: Re: [RFC PATCH 1/2] dt-bindings: connector: Add gpio-usb-c-connector
- compatible
-Message-ID: <20240329-worrisome-grasp-c70b2af9105b@spud>
-References: <20240329071948.3101882-1-quic_kriskura@quicinc.com>
- <20240329071948.3101882-2-quic_kriskura@quicinc.com>
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Prashant Malani <pmalani@chromium.org>,
+	Jameson Thies <jthies@google.com>,
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
+	Samuel =?utf-8?B?xIxhdm9q?= <samuel@cavoj.net>,
+	linux-usb@vger.kernel.org, Kenneth Crudup <kenny@panix.com>
+Subject: Re: [PATCH 2/5] usb: typec: ucsi: Check for notifications after init
+Message-ID: <ZgbqdBd1OiWgDN-_@eriador.lumag.spb.ru>
+References: <20240320073927.1641788-1-lk@c--e.de>
+ <20240320073927.1641788-3-lk@c--e.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="uFYv4NM+KoKHxWIC"
-Content-Disposition: inline
-In-Reply-To: <20240329071948.3101882-2-quic_kriskura@quicinc.com>
-
-
---uFYv4NM+KoKHxWIC
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20240320073927.1641788-3-lk@c--e.de>
 
-On Fri, Mar 29, 2024 at 12:49:47PM +0530, Krishna Kurapati wrote:
-> QDU1000 IDP [1] has a Type-c connector and supports USB 3.0.
-> However it relies on usb-conn-gpio driver to read the vbus and id
-> gpio's and provide role switch. However the driver currently has
-> only gpio-b-connector compatible present in ID table. Adding that
-> in DT would mean that the device supports Type-B connector and not
-> Type-c connector.
->=20
-> Add gpio-usb-c-connector compatible to the driver to support such
-> cases.
-
-This is not a driver. Bindings commit messages should talk about the
-hardware they're supporting, not about drivers.
-
->=20
-> [1]: https://lore.kernel.org/all/20240319091020.15137-3-quic_kbajaj@quici=
-nc.com/
->=20
-> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+On Wed, Mar 20, 2024 at 08:39:23AM +0100, Christian A. Ehrhardt wrote:
+> The completion notification for the final SET_NOTIFICATION_ENABLE
+> command during initialization can include a connector change
+> notification.  However, at the time this completion notification is
+> processed, the ucsi struct is not ready to handle this notification.
+> As a result the notification is ignored and the controller
+> never sends an interrupt again.
+> 
+> Re-check CCI for a pending connector state change after
+> initialization is complete. Adjust the corresponding debug
+> message accordingly.
+> 
+> Fixes: 71a1fa0df2a3 ("usb: typec: ucsi: Store the notification mask")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Christian A. Ehrhardt <lk@c--e.de>
 > ---
->  Documentation/devicetree/bindings/connector/usb-connector.yaml | 3 +++
->  1 file changed, 3 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/connector/usb-connector.ya=
-ml b/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> index fb216ce68bb3..2af27793c639 100644
-> --- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> +++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> @@ -30,6 +30,9 @@ properties:
->            - const: samsung,usb-connector-11pin
->            - const: usb-b-connector
-> =20
-> +      - items:
-> +          - const: gpio-usb-c-connector
-
-This is over complicated, just needs to be "- const: gpio-usb-c-connector"
-
-Thanks,
-Conor.
-
+>  drivers/usb/typec/ucsi/ucsi.c | 10 +++++++++-
+>  1 file changed, 9 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index 8a6645ffd938..dceeed207569 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -1237,7 +1237,7 @@ void ucsi_connector_change(struct ucsi *ucsi, u8 num)
+>  	struct ucsi_connector *con = &ucsi->connector[num - 1];
+>  
+>  	if (!(ucsi->ntfy & UCSI_ENABLE_NTFY_CONNECTOR_CHANGE)) {
+> -		dev_dbg(ucsi->dev, "Bogus connector change event\n");
+> +		dev_dbg(ucsi->dev, "Early connector change event\n");
+>  		return;
+>  	}
+>  
+> @@ -1636,6 +1636,7 @@ static int ucsi_init(struct ucsi *ucsi)
+>  {
+>  	struct ucsi_connector *con, *connector;
+>  	u64 command, ntfy;
+> +	u32 cci;
+>  	int ret;
+>  	int i;
+>  
+> @@ -1688,6 +1689,13 @@ static int ucsi_init(struct ucsi *ucsi)
+>  
+>  	ucsi->connector = connector;
+>  	ucsi->ntfy = ntfy;
 > +
->    reg:
->      maxItems: 1
-> =20
-> --=20
-> 2.34.1
->=20
+> +	ret = ucsi->ops->read(ucsi, UCSI_CCI, &cci, sizeof(cci));
+> +	if (ret)
+> +		return ret;
+> +	if (UCSI_CCI_CONNECTOR(READ_ONCE(cci)))
+> +		ucsi_connector_change(ucsi, cci);
+> +
 
---uFYv4NM+KoKHxWIC
-Content-Type: application/pgp-signature; name="signature.asc"
+I think this leaves place for the race. With this patchset + "Ack
+connector change early" in place Neil triggered the following backtrace
+on sm8550 HDK while testing my UCSI-qcom-fixes patchset:
+What happens:
 
------BEGIN PGP SIGNATURE-----
+[   10.421640] write: 00000000: 05 00 e7 db 00 00 00 00
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZgbgPwAKCRB4tDGHoIJi
-0hs5APwLYBIyg1CBbwmd1i3CIR/+JuoYmz6qiCnxRLnOPFrm8wEA9XPaqdnvAPH+
-OPEf/VJ23+e4l/uaxevEitWieixpzQA=
-=v0XQ
------END PGP SIGNATURE-----
+SET_NOTIFICATION_ENABLE
 
---uFYv4NM+KoKHxWIC--
+[   10.432359] read: 00000000: 10 01 00 00 00 00 00 80 00 00 00 00 00 00 00 00
+[   10.469553] read: 00000010: 04 58 29 20 00 00 00 00 00 00 00 00 00 03 30 01
+[   10.476783] read: 00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+[   10.489552] notify: 00000000: 00 00 00 80
+
+COMMAND_COMPLETE
+
+[   10.494194] read: 00000000: 10 01 00 00 00 00 00 80 00 00 00 00 00 00 00 00
+[   10.501370] read: 00000010: 04 58 29 20 00 00 00 00 00 00 00 00 00 03 30 01
+[   10.508578] read: 00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+[   10.515757] write: 00000000: 04 00 02 00 00 00 00 00
+
+ACK_CC_CI(command completed)
+
+[   10.521100] read: 00000000: 10 01 00 00 00 00 00 20 00 00 00 00 00 00 00 00
+[   10.528363] read: 00000010: 04 58 29 20 00 00 00 00 00 00 00 00 00 03 30 01
+[   10.535603] read: 00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+[   10.549549] notify: 00000000: 00 00 00 20
+
+ACK_COMPLETE
+
+[Here ucsi->connector and ucsi->ntfy are being set by ucsi_init()
+
+[   10.566654] read: 00000010: 04 58 29 20 00 00 00 00 00 00 00 00 00 03 30 01
+[   10.593553] notify: 00000000: 02 00 00 20
+
+Event with CONNECTION_CHANGE. It also schedules connector_change work,
+because ucsi->ntfy is already set
+
+[   10.595796] read: 00000000: 10 01 00 00 02 00 00 20 00 00 00 00 00 00 00 00
+[   10.595798] read: 00000010: 04 58 29 20 00 00 00 00 00 00 00 00 00 03 30 01
+[   10.595799] read: 00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+
+The CCI read coming from ucsi_init()
+
+[   10.595807] ------------[ cut here ]------------
+[   10.595808] WARNING: CPU: 6 PID: 101 at kernel/workqueue.c:2384 __queue_work+0x374/0x474
+
+[skipped the register dump]
+
+[   10.595953]  __queue_work+0x374/0x474
+[   10.595956]  queue_work_on+0x68/0x84
+[   10.595959]  ucsi_connector_change+0x54/0x88 [typec_ucsi]
+[   10.595963]  ucsi_init_work+0x834/0x85c [typec_ucsi]
+[   10.595968]  process_one_work+0x148/0x29c
+[   10.595971]  worker_thread+0x2fc/0x40c
+[   10.595974]  kthread+0x110/0x114
+[   10.595978]  ret_from_fork+0x10/0x20
+[   10.595985] ---[ end trace 0000000000000000 ]---
+
+Warning, because the work is already scheduled.
+
+
+>  	return 0;
+>  
+>  err_unregister:
+> -- 
+> 2.40.1
+> 
 
