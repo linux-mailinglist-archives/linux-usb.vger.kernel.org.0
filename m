@@ -1,219 +1,203 @@
-Return-Path: <linux-usb+bounces-8665-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8666-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F253E8927D2
-	for <lists+linux-usb@lfdr.de>; Sat, 30 Mar 2024 00:29:35 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9DAC28929F3
+	for <lists+linux-usb@lfdr.de>; Sat, 30 Mar 2024 10:14:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 524ABB21BF6
-	for <lists+linux-usb@lfdr.de>; Fri, 29 Mar 2024 23:29:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2907D1F21BED
+	for <lists+linux-usb@lfdr.de>; Sat, 30 Mar 2024 09:14:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A054813E413;
-	Fri, 29 Mar 2024 23:29:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 841FEFC03;
+	Sat, 30 Mar 2024 09:13:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="fJM2RB/W"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Dr+wzPEV"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77A3D13D627;
-	Fri, 29 Mar 2024 23:29:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38F04F9FF;
+	Sat, 30 Mar 2024 09:13:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711754963; cv=none; b=mznyCDOY6fdg0ivDbI7EMyqvUsoI5qKF41XLWttz4zx1oiL+K0NnXLfObhQjf835aT3pu2ESkwT3iYeUM3tGG5u2cExrG5/Kr2SPbC9F4G2KDuXU9rp95tsl9Y2CyOQzeeSZDxSpl9nmqCjxOEtSbOpUUj3K3y19/aSMrSqGYwA=
+	t=1711790030; cv=none; b=lXU7Ekz5ncEDY/O9Boxjk5W+HMOOIeuSlYhhKi0CBZ/qUPspQ6Olg6S1qxV01F6VpVfqpKXOjrPe2Z8z7TFdsQlZXBRmwUkDtFdBlBvmasbPLpNDSdZ2YaeSuLkpWruig/HewhILtxGlhwVA3FWgdXK+pKVdSaek6zpCLqFzqhM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711754963; c=relaxed/simple;
-	bh=FljFVK0LWL0DBJZBpjYAK+fE0M46Xdu18dgr3xy1rEo=;
+	s=arc-20240116; t=1711790030; c=relaxed/simple;
+	bh=zZiTRe3m3NLbb+/Qp3yvgOHwujhfgKPzWdst81UulPs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=dYAQLLPR9yo5Bq+IMd0Ytl4vq08KZFY+AMwXNyrp4S8ibws10sKXLftPR4ySrASianfxXiFWx91hOmDuxDlbDgu5gSpBD35DbOqat2tvgCJY0tFY6zml31O+UO5N1bQjI6lkG9eeP9d86Y3FhO23VYgYo4srgBInANJiqgdx/Wk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=fJM2RB/W; arc=none smtp.client-ip=205.220.180.131
+	 In-Reply-To:Content-Type; b=AMVPkQvKsvsggWlW2CXCR3/fJ8JDxZVGvlQ+uI3gMzYJx0cgJieHXKtCyJhx8DIgKz2I6NJcfqSkXX/cLd+lNtKDc0ulcDcP7hKb8701hkd1v3sYeB2zC3pOuZjAs8SXPxjDDCR5nl2cCijUt/VrjzdrY8Pu+y6/5LfYcG5zJ4c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Dr+wzPEV; arc=none smtp.client-ip=205.220.180.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 42TNMHWS018441;
-	Fri, 29 Mar 2024 23:28:58 GMT
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 42U8lmLF013098;
+	Sat, 30 Mar 2024 09:13:18 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
 	message-id:date:mime-version:subject:to:cc:references:from
 	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=bI0G/uiG1h+1qLw6ZNxCnhLtyJ0F1AJmbQvh02bXtl4=; b=fJ
-	M2RB/WcQeiFYW5p/LrMXn0AtrzeYVmHZAdhFbZBrKs56Zl935Ns2CAOTiQ19konP
-	ZHksVSvI/AU5VlhxumAJtyHtBonJQBemKB1Mc5HOk2c/WtDKxo700ifs7uCo47Yn
-	DVdTRNsB2L70s6ymNLOdlurLYszmmat6RmUkCuuHqiEESsnuuqD0QQFHk+1xOG1k
-	fsZZsDTzhfGUV7VbCe+QfpP95dCs/LuMV5fZB25zKFYRhqz+KZZY5wIVCPzrRGfv
-	HAkgK4b6x7oiFxDHDZoD6n9l7iAeT3KPDVRCoopxXMIntKj0dXbxqcW9JqkuDAmx
-	uZq85+Z6/RvSTKTs2Xvg==
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3x60wd8w6q-1
+	qcppdkim1; bh=FhEb9K/BxdRk2okMHgeAtJuKVJhrSJebpoCQp1OmvdQ=; b=Dr
+	+wzPEVwH7l3fpu5u9f0GQkCoTKNTSvm9ud24uR2CqFOkLT4jY/d1iNvdwK/gfikA
+	MVhUZA/vXCcPd4tqHknfRWldfxOHAqyiz5eHDY6o9ua2iLkpneM0VwUkFef4KtIy
+	U76UI5UQbdeDzKGxOMkDfKlOTNJF+2pAlDraJK+JPGlm7wz72lr+WCKpAiJnevvd
+	AsZZeF9BI0+wrycErZrjVIPFubolxEwYTO2hFV1YfbVds5kmhSLIc/DAHr3IEz6o
+	OvuEROLpFpa9K8qKLd1ckvoNCx3cPtZcgvR3dija5av+XnoW/vg93pm/vQbx4a36
+	JZq1TgXVwPzht7KwoTIw==
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3x683s0vc1-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 29 Mar 2024 23:28:57 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 42TNSuWx013284
+	Sat, 30 Mar 2024 09:13:18 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 42U9DHR2016503
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 29 Mar 2024 23:28:56 GMT
-Received: from [10.110.26.53] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Fri, 29 Mar
- 2024 16:28:55 -0700
-Message-ID: <4ee6a5e4-0cad-ae44-2b42-d1b03c64f467@quicinc.com>
-Date: Fri, 29 Mar 2024 16:28:49 -0700
+	Sat, 30 Mar 2024 09:13:17 GMT
+Received: from [10.216.59.24] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Sat, 30 Mar
+ 2024 02:13:11 -0700
+Message-ID: <6f2df222-36d4-468e-99a7-9c48fae85aa9@quicinc.com>
+Date: Sat, 30 Mar 2024 14:43:07 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH v18 00/41] Introduce QC USB SND audio offloading support
-To: <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
-        <perex@perex.cz>, <conor+dt@kernel.org>, <corbet@lwn.net>,
-        <lgirdwood@gmail.com>, <andersson@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <gregkh@linuxfoundation.org>,
-        <Thinh.Nguyen@synopsys.com>, <broonie@kernel.org>,
-        <bgoswami@quicinc.com>, <tiwai@suse.com>, <robh+dt@kernel.org>,
-        <konrad.dybcio@linaro.org>
-CC: <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-sound@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>
-References: <20240228013619.29758-1-quic_wcheng@quicinc.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 0/2] Add gpio-usb-c-connector compatible
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC: Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        "Miquel
+ Raynal" <miquel.raynal@bootlin.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Bjorn Helgaas" <bhelgaas@google.com>, Kyle Tso <kyletso@google.com>,
+        Fabrice
+ Gasnier <fabrice.gasnier@foss.st.com>,
+        Heikki Krogerus
+	<heikki.krogerus@linux.intel.com>,
+        <u.kleine-koenig@pengutronix.de>,
+        AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+        <devicetree@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_ppratap@quicinc.com>,
+        <quic_jackp@quicinc.com>
+References: <20240329071948.3101882-1-quic_kriskura@quicinc.com>
+ <CAA8EJpqx+VFW8z6oG=+pnhPN97Q3R6z+ygf85Uspve-9syQsUw@mail.gmail.com>
 Content-Language: en-US
-From: Wesley Cheng <quic_wcheng@quicinc.com>
-In-Reply-To: <20240228013619.29758-1-quic_wcheng@quicinc.com>
+From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <CAA8EJpqx+VFW8z6oG=+pnhPN97Q3R6z+ygf85Uspve-9syQsUw@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: pMgXXbMWyru5-yP8KYxdhCnYAu_wDKrv
-X-Proofpoint-ORIG-GUID: pMgXXbMWyru5-yP8KYxdhCnYAu_wDKrv
+X-Proofpoint-GUID: w9l_gJ3vqg3mZzBvIWmjhsf3kITwbXlG
+X-Proofpoint-ORIG-GUID: w9l_gJ3vqg3mZzBvIWmjhsf3kITwbXlG
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-03-29_13,2024-03-28_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=999
- malwarescore=0 spamscore=0 lowpriorityscore=0 impostorscore=0 mlxscore=0
- phishscore=0 clxscore=1011 bulkscore=0 suspectscore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2403210001
- definitions=main-2403290208
+ definitions=2024-03-30_05,2024-03-28_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 adultscore=0 impostorscore=0 spamscore=0 suspectscore=0
+ lowpriorityscore=0 mlxlogscore=999 clxscore=1015 phishscore=0 mlxscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2403210001 definitions=main-2403300075
 
-Hi,
 
-On 2/27/2024 5:35 PM, Wesley Cheng wrote:
-> Several Qualcomm based chipsets can support USB audio offloading to a
-> dedicated audio DSP, which can take over issuing transfers to the USB
-> host controller.  The intention is to reduce the load on the main
-> processors in the SoC, and allow them to be placed into lower power modes.
-> There are several parts to this design:
->    1. Adding ASoC binding layer
->    2. Create a USB backend for Q6DSP
->    3. Introduce XHCI interrupter support
->    4. Create vendor ops for the USB SND driver
+
+On 3/29/2024 6:23 PM, Dmitry Baryshkov wrote:
+> On Fri, 29 Mar 2024 at 09:20, Krishna Kurapati
+> <quic_kriskura@quicinc.com> wrote:
+>>
+>> QDU1000 IDP [1] has a Type-c connector and supports USB 3.0.
+>> However it relies on usb-conn-gpio driver to read the vbus and id
+>> gpio's and provide role switch. However the driver currently has
+>> only gpio-b-connector compatible present in ID table. Adding that
+>> in DT would mean that the device supports Type-B connector and not
+>> Type-c connector. Thanks to Dmitry Baryshkov for pointing it out [2].
 > 
->        USB                          |            ASoC
-> --------------------------------------------------------------------
->                                     |  _________________________
->                                     | |sm8250 platform card     |
->                                     | |_________________________|
->                                     |         |           |
->                                     |      ___V____   ____V____
->                                     |     |Q6USB   | |Q6AFE    |
->                                     |     |"codec" | |"cpu"    |
->                                     |     |________| |_________|
->                                     |         ^  ^        ^
->                                     |         |  |________|
->                                     |      ___V____    |
->                                     |     |SOC-USB |   |
->     ________       ________               |        |   |
->    |USB SND |<--->|QC offld|<------------>|________|   |
->    |(card.c)|     |        |<----------                |
->    |________|     |________|___     | |                |
->        ^               ^       |    | |    ____________V_________
->        |               |       |    | |   |APR/GLINK             |
->     __ V_______________V_____  |    | |   |______________________|
->    |USB SND (endpoint.c)     | |    | |              ^
->    |_________________________| |    | |              |
->                ^               |    | |   ___________V___________
->                |               |    | |->|audio DSP              |
->     ___________V_____________  |    |    |_______________________|
->    |XHCI HCD                 |<-    |
->    |_________________________|      |
+> USB-B connector is pretty simple, it really has just an ID pin and
+> VBUS input, which translates to two GPIOs being routed from the
+> _connector_ itself.
 > 
+> USB-C is much more complicated, it has two CC pins and a VBus power
+> pin. It is not enough just to measure CC pin levels. Moreover,
+> properly handling USB 3.0 inside a USB-C connector requires a separate
+> 'orientation' signal to tell the host which two lanes must be used for
+> the USB SS signals. Thus it is no longer possible to route just two
+> pins from the connector to the SoC.
 > 
-> Adding ASoC binding layer:
-> soc-usb: Intention is to treat a USB port similar to a headphone jack.
-> The port is always present on the device, but cable/pin status can be
-> enabled/disabled.  Expose mechanisms for USB backend ASoC drivers to
-> communicate with USB SND.
-> 
-> Create a USB backend for Q6DSP:
-> q6usb: Basic backend driver that will be responsible for maintaining the
-> resources needed to initiate a playback stream using the Q6DSP.  Will
-> be the entity that checks to make sure the connected USB audio device
-> supports the requested PCM format.  If it does not, the PCM open call will
-> fail, and userpsace ALSA can take action accordingly.
-> 
-> Introduce XHCI interrupter support:
-> XHCI HCD supports multiple interrupters, which allows for events to be routed
-> to different event rings.  This is determined by "Interrupter Target" field
-> specified in Section "6.4.1.1 Normal TRB" of the XHCI specification.
-> 
-> Events in the offloading case will be routed to an event ring that is assigned
-> to the audio DSP.
-> 
-> Create vendor ops for the USB SND driver:
-> qc_audio_offload: This particular driver has several components associated
-> with it:
-> - QMI stream request handler
-> - XHCI interrupter and resource management
-> - audio DSP memory management
-> 
-> When the audio DSP wants to enable a playback stream, the request is first
-> received by the ASoC platform sound card.  Depending on the selected route,
-> ASoC will bring up the individual DAIs in the path.  The Q6USB backend DAI
-> will send an AFE port start command (with enabling the USB playback path), and
-> the audio DSP will handle the request accordingly.
-> 
-> Part of the AFE USB port start handling will have an exchange of control
-> messages using the QMI protocol.  The qc_audio_offload driver will populate the
-> buffer information:
-> - Event ring base address
-> - EP transfer ring base address
-> 
-> and pass it along to the audio DSP.  All endpoint management will now be handed
-> over to the DSP, and the main processor is not involved in transfers.
-> 
-> Overall, implementing this feature will still expose separate sound card and PCM
-> devices for both the platorm card and USB audio device:
->   0 [SM8250MTPWCD938]: sm8250 - SM8250-MTP-WCD9380-WSA8810-VA-D
->                        SM8250-MTP-WCD9380-WSA8810-VA-DMIC
->   1 [Audio          ]: USB-Audio - USB Audio
->                        Generic USB Audio at usb-xhci-hcd.1.auto-1.4, high speed
-> 
-> This is to ensure that userspace ALSA entities can decide which route to take
-> when executing the audio playback.  In the above, if card#1 is selected, then
-> USB audio data will take the legacy path over the USB PCM drivers, etc...
-> 
-> This feature was validated using:
-> - tinymix: set/enable the multimedia path to route to USB backend
-> - tinyplay: issue playback on platform card
-> 
-> Changelog
-> --------------------------------------------
-> Changes in v18:
-> - Rebased to usb-next, which merged in part of the series.  Removed these patches.
-> - Reworked Kconfigs for the ASoC USB related components from QCOM Q6DSP drivers
->    to keep dependencies in place for SoC USB and USB SND.
-> - Removed the repurposing of the stop ep sync API into existing XHCI operations.
->    This will be solely used by the XHCI sideband for now.
+> Having all that in mind, I suspect that you are not describing your
+> hardware properly. I suppose that you have a Type-C port controller /
+> redriver / switch, which handles CC lines communication and then
+> provides ID / VBUS signals to the host. In such a case, please
+> describe this TCPC in the DT file and use its compatible string
+> instead of "gpio-c-connector".
 > 
 
-Wanted to give a friendly ping to see if there were any more 
-concerns/feedback about this series before I submit a new revision that 
-rebases to the latest kernel codebase?
+Hi Dmitry,
 
-Thanks
-Wesley Cheng
+  My bad. I must have provided more details of the HW.
+
+  I presume you are referring to addition of a connector node, type-c 
+switch, pmic-glink and other remote endpoints like in other SoC's like 
+SM8450/ SM8550/ SM8650.
+
+  This HW is slightly different. It has a Uni Phy for Super speed and 
+hence no DP.
+
+  For orientation switching, on mobile SoC's, there is a provision for 
+orientation gpio given in pmic-glink node and is handled in ucsi_glink 
+driver. But on this version of HW, there is a USB-C Switch with its own 
+firmware taking care of orientation switching. It takes 8 SS Lines and 2 
+CC lines coming from connector as input and gives out 4 SS Lines (SS 
+TX1/TX2 RX1/RX2) as output which go to the SoC. So orientation switch is 
+done by the USB-C-switch in between and it automatically routes 
+appropriate active SS Lane from connector to the SoC.
+
+  As usual like in other targets, the DP and DM lines from type-c 
+connector go to the SoC directly.
+
+  To handle role switch, the VBUS and ID Pin connections are given to 
+SoC as well. There is a vbus controller regulator present to provide 
+vbus to connected peripherals in host mode.
+
+  There is no PPM entity (ADSP in mobile SoC's) and no UCSI involved 
+here. Hence we rely on usb-conn-gpio to read the vbus/id and switch 
+roles accordingly.
+
+  Hope this answers the query as to why we wanted to use usb-conn-gpio 
+and why we were trying to add a new compatible.
+
+Regards,
+Krishna,
+
+>>
+>> This series intends to add that compatible in driver and bindings
+>> so that it can be used in QDU1000 IDP DT.
+>>
+>> [1]: https://lore.kernel.org/all/20240319091020.15137-3-quic_kbajaj@quicinc.com/
+>> [2]: https://lore.kernel.org/all/CAA8EJprXPvji8TgZu1idH7y4GtHtD4VmQABFBcRt-9BQaCberg@mail.gmail.com/
+>>
+>> Krishna Kurapati (2):
+>>    dt-bindings: connector: Add gpio-usb-c-connector compatible
+>>    usb: common: usb-conn-gpio: Update ID table to add usb-c connector
+>>
+>>   Documentation/devicetree/bindings/connector/usb-connector.yaml | 3 +++
+>>   drivers/usb/common/usb-conn-gpio.c                             | 1 +
+>>   2 files changed, 4 insertions(+)
+>>
+>> --
+>> 2.34.1
+>>
+> 
+> 
+> --
+> With best wishes
+> Dmitry
 
