@@ -1,203 +1,171 @@
-Return-Path: <linux-usb+bounces-8666-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8667-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9DAC28929F3
-	for <lists+linux-usb@lfdr.de>; Sat, 30 Mar 2024 10:14:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id AF3BE892B30
+	for <lists+linux-usb@lfdr.de>; Sat, 30 Mar 2024 13:26:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2907D1F21BED
-	for <lists+linux-usb@lfdr.de>; Sat, 30 Mar 2024 09:14:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 669AE1F229AD
+	for <lists+linux-usb@lfdr.de>; Sat, 30 Mar 2024 12:26:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 841FEFC03;
-	Sat, 30 Mar 2024 09:13:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD324381C8;
+	Sat, 30 Mar 2024 12:25:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Dr+wzPEV"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ZlR1Q+yO"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38F04F9FF;
-	Sat, 30 Mar 2024 09:13:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32AD93717B;
+	Sat, 30 Mar 2024 12:25:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711790030; cv=none; b=lXU7Ekz5ncEDY/O9Boxjk5W+HMOOIeuSlYhhKi0CBZ/qUPspQ6Olg6S1qxV01F6VpVfqpKXOjrPe2Z8z7TFdsQlZXBRmwUkDtFdBlBvmasbPLpNDSdZ2YaeSuLkpWruig/HewhILtxGlhwVA3FWgdXK+pKVdSaek6zpCLqFzqhM=
+	t=1711801556; cv=none; b=POt1aFf+IfZbu8zcdQgpoAGI7rhKf81N0M07DnDVLhUyB154egc7AkiXGymo3rTAQKUc8Dpoc8ZoNn/Zu/A5QQk5pBUiKnKajQWYzs4YpzAuhBc/KkZ/CG1KG+gUA1dBjkJCyn3a+dOu0vk5tS3pLE29cpfRyW4QX0Zki7WDGAE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711790030; c=relaxed/simple;
-	bh=zZiTRe3m3NLbb+/Qp3yvgOHwujhfgKPzWdst81UulPs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=AMVPkQvKsvsggWlW2CXCR3/fJ8JDxZVGvlQ+uI3gMzYJx0cgJieHXKtCyJhx8DIgKz2I6NJcfqSkXX/cLd+lNtKDc0ulcDcP7hKb8701hkd1v3sYeB2zC3pOuZjAs8SXPxjDDCR5nl2cCijUt/VrjzdrY8Pu+y6/5LfYcG5zJ4c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Dr+wzPEV; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 42U8lmLF013098;
-	Sat, 30 Mar 2024 09:13:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=FhEb9K/BxdRk2okMHgeAtJuKVJhrSJebpoCQp1OmvdQ=; b=Dr
-	+wzPEVwH7l3fpu5u9f0GQkCoTKNTSvm9ud24uR2CqFOkLT4jY/d1iNvdwK/gfikA
-	MVhUZA/vXCcPd4tqHknfRWldfxOHAqyiz5eHDY6o9ua2iLkpneM0VwUkFef4KtIy
-	U76UI5UQbdeDzKGxOMkDfKlOTNJF+2pAlDraJK+JPGlm7wz72lr+WCKpAiJnevvd
-	AsZZeF9BI0+wrycErZrjVIPFubolxEwYTO2hFV1YfbVds5kmhSLIc/DAHr3IEz6o
-	OvuEROLpFpa9K8qKLd1ckvoNCx3cPtZcgvR3dija5av+XnoW/vg93pm/vQbx4a36
-	JZq1TgXVwPzht7KwoTIw==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3x683s0vc1-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 30 Mar 2024 09:13:18 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 42U9DHR2016503
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 30 Mar 2024 09:13:17 GMT
-Received: from [10.216.59.24] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Sat, 30 Mar
- 2024 02:13:11 -0700
-Message-ID: <6f2df222-36d4-468e-99a7-9c48fae85aa9@quicinc.com>
-Date: Sat, 30 Mar 2024 14:43:07 +0530
+	s=arc-20240116; t=1711801556; c=relaxed/simple;
+	bh=0XRUml01rr7gdHFQJBRFu9sqyJtGjnt+AjcaOvI9Ow8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=C6I8YTMQnisk+3LeAnpMitXysplAT0izwqyV0uAiZwy19sFscdI9ghhAG+EtbfguT97VG40Iuq718Mb3sFkCP0r+c+eO15uvN9Nulwl8arbkrTA4Z+C1aQPawlsfA01Vnf3sJ3dBOvLao+f5l/xivTy26mKE/qnN/2M814NjETM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ZlR1Q+yO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 495B6C433C7;
+	Sat, 30 Mar 2024 12:25:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1711801555;
+	bh=0XRUml01rr7gdHFQJBRFu9sqyJtGjnt+AjcaOvI9Ow8=;
+	h=Date:From:To:Cc:Subject:From;
+	b=ZlR1Q+yOMTjd7fPLYM4LhKvc/1peFbyPEG55fMuO2wroER6jqsmWkPa5ePWvFoRsM
+	 PQDs1u/qi/DRhKfK7AwRBDRvp7tU3O47koQrQ3nAmg7gQ4MOImuxDb/qEBSSro9Unw
+	 1YhEywWTlFygFAg1nzkIcmEfHU5FZw7ANjbpv/DU=
+Date: Sat, 30 Mar 2024 13:25:52 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB driver fixes for 6.9-rc2
+Message-ID: <ZggE0HwcSJTQzE0D@kroah.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 0/2] Add gpio-usb-c-connector compatible
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC: Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski
-	<krzysztof.kozlowski+dt@linaro.org>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        "Miquel
- Raynal" <miquel.raynal@bootlin.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Bjorn Helgaas" <bhelgaas@google.com>, Kyle Tso <kyletso@google.com>,
-        Fabrice
- Gasnier <fabrice.gasnier@foss.st.com>,
-        Heikki Krogerus
-	<heikki.krogerus@linux.intel.com>,
-        <u.kleine-koenig@pengutronix.de>,
-        AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-        <devicetree@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_ppratap@quicinc.com>,
-        <quic_jackp@quicinc.com>
-References: <20240329071948.3101882-1-quic_kriskura@quicinc.com>
- <CAA8EJpqx+VFW8z6oG=+pnhPN97Q3R6z+ygf85Uspve-9syQsUw@mail.gmail.com>
-Content-Language: en-US
-From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <CAA8EJpqx+VFW8z6oG=+pnhPN97Q3R6z+ygf85Uspve-9syQsUw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: w9l_gJ3vqg3mZzBvIWmjhsf3kITwbXlG
-X-Proofpoint-ORIG-GUID: w9l_gJ3vqg3mZzBvIWmjhsf3kITwbXlG
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-03-30_05,2024-03-28_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 adultscore=0 impostorscore=0 spamscore=0 suspectscore=0
- lowpriorityscore=0 mlxlogscore=999 clxscore=1015 phishscore=0 mlxscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2403210001 definitions=main-2403300075
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+The following changes since commit 4cece764965020c22cff7665b18a012006359095:
 
+  Linux 6.9-rc1 (2024-03-24 14:10:05 -0700)
 
-On 3/29/2024 6:23 PM, Dmitry Baryshkov wrote:
-> On Fri, 29 Mar 2024 at 09:20, Krishna Kurapati
-> <quic_kriskura@quicinc.com> wrote:
->>
->> QDU1000 IDP [1] has a Type-c connector and supports USB 3.0.
->> However it relies on usb-conn-gpio driver to read the vbus and id
->> gpio's and provide role switch. However the driver currently has
->> only gpio-b-connector compatible present in ID table. Adding that
->> in DT would mean that the device supports Type-B connector and not
->> Type-c connector. Thanks to Dmitry Baryshkov for pointing it out [2].
-> 
-> USB-B connector is pretty simple, it really has just an ID pin and
-> VBUS input, which translates to two GPIOs being routed from the
-> _connector_ itself.
-> 
-> USB-C is much more complicated, it has two CC pins and a VBus power
-> pin. It is not enough just to measure CC pin levels. Moreover,
-> properly handling USB 3.0 inside a USB-C connector requires a separate
-> 'orientation' signal to tell the host which two lanes must be used for
-> the USB SS signals. Thus it is no longer possible to route just two
-> pins from the connector to the SoC.
-> 
-> Having all that in mind, I suspect that you are not describing your
-> hardware properly. I suppose that you have a Type-C port controller /
-> redriver / switch, which handles CC lines communication and then
-> provides ID / VBUS signals to the host. In such a case, please
-> describe this TCPC in the DT file and use its compatible string
-> instead of "gpio-c-connector".
-> 
+are available in the Git repository at:
 
-Hi Dmitry,
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.9-rc2
 
-  My bad. I must have provided more details of the HW.
+for you to fetch changes up to f4d1960764d8a70318b02f15203a1be2b2554ca1:
 
-  I presume you are referring to addition of a connector node, type-c 
-switch, pmic-glink and other remote endpoints like in other SoC's like 
-SM8450/ SM8550/ SM8650.
+  USB: core: Fix deadlock in port "disable" sysfs attribute (2024-03-26 15:02:28 +0100)
 
-  This HW is slightly different. It has a Uni Phy for Super speed and 
-hence no DP.
+----------------------------------------------------------------
+USB Fixes for 6.9-rc2
 
-  For orientation switching, on mobile SoC's, there is a provision for 
-orientation gpio given in pmic-glink node and is handled in ucsi_glink 
-driver. But on this version of HW, there is a USB-C Switch with its own 
-firmware taking care of orientation switching. It takes 8 SS Lines and 2 
-CC lines coming from connector as input and gives out 4 SS Lines (SS 
-TX1/TX2 RX1/RX2) as output which go to the SoC. So orientation switch is 
-done by the USB-C-switch in between and it automatically routes 
-appropriate active SS Lane from connector to the SoC.
+Here are a bunch of small USB fixes for reported problems and
+regressions for 6.9-rc2.  Included in here are:
+  - deadlock fixes for long-suffering issues
+  - USB phy driver revert for reported problem
+  - typec fixes for reported problems
+  - duplicate id in dwc3 dropped
+  - dwc2 driver fixes
+  - udc driver warning fix
+  - cdc-wdm race bugfix
+  - other tiny USB bugfixes
 
-  As usual like in other targets, the DP and DM lines from type-c 
-connector go to the SoC directly.
+All of these have been in linux-next this past week with no reported
+issues.
 
-  To handle role switch, the VBUS and ID Pin connections are given to 
-SoC as well. There is a vbus controller regulator present to provide 
-vbus to connected peripherals in host mode.
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-  There is no PPM entity (ADSP in mobile SoC's) and no UCSI involved 
-here. Hence we rely on usb-conn-gpio to read the vbus/id and switch 
-roles accordingly.
+----------------------------------------------------------------
+Alan Stern (3):
+      USB: core: Fix deadlock in usb_deauthorize_interface()
+      USB: core: Add hub_get() and hub_put() routines
+      USB: core: Fix deadlock in port "disable" sysfs attribute
 
-  Hope this answers the query as to why we wanted to use usb-conn-gpio 
-and why we were trying to add a new compatible.
+Alexander Stein (1):
+      Revert "usb: phy: generic: Get the vbus supply"
 
-Regards,
-Krishna,
+Christian A. Ehrhardt (5):
+      usb: typec: ucsi: Clear EVENT_PENDING under PPM lock
+      usb: typec: ucsi: Check for notifications after init
+      usb: typec: ucsi: Ack unsupported commands
+      usb: typec: ucsi_acpi: Refactor and fix DELL quirk
+      usb: typec: ucsi: Clear UCSI_CCI_RESET_COMPLETE before reset
 
->>
->> This series intends to add that compatible in driver and bindings
->> so that it can be used in QDU1000 IDP DT.
->>
->> [1]: https://lore.kernel.org/all/20240319091020.15137-3-quic_kbajaj@quicinc.com/
->> [2]: https://lore.kernel.org/all/CAA8EJprXPvji8TgZu1idH7y4GtHtD4VmQABFBcRt-9BQaCberg@mail.gmail.com/
->>
->> Krishna Kurapati (2):
->>    dt-bindings: connector: Add gpio-usb-c-connector compatible
->>    usb: common: usb-conn-gpio: Update ID table to add usb-c connector
->>
->>   Documentation/devicetree/bindings/connector/usb-connector.yaml | 3 +++
->>   drivers/usb/common/usb-conn-gpio.c                             | 1 +
->>   2 files changed, 4 insertions(+)
->>
->> --
->> 2.34.1
->>
-> 
-> 
-> --
-> With best wishes
-> Dmitry
+Heikki Krogerus (1):
+      usb: dwc3: pci: Drop duplicate ID
+
+Jameson Thies (1):
+      usb: typec: ucsi: Check capabilities before cable and identity discovery
+
+Krishna Kurapati (1):
+      usb: typec: ucsi: Fix race between typec_switch and role_switch
+
+Kyle Tso (3):
+      usb: typec: tcpm: Correct port source pdo array in pd_set callback
+      usb: typec: tcpm: Update PD of Type-C port upon pd_set
+      usb: typec: Return size of buffer if pd_set operation succeeds
+
+Minas Harutyunyan (5):
+      usb: dwc2: host: Fix hibernation flow
+      usb: dwc2: host: Fix remote wakeup from hibernation
+      usb: dwc2: host: Fix ISOC flow in DDMA mode
+      usb: dwc2: gadget: Fix exiting from clock gating
+      usb: dwc2: gadget: LPM flow fix
+
+Oliver Neukum (1):
+      usb: cdc-wdm: close race between read and workqueue
+
+Thinh Nguyen (1):
+      usb: dwc3: Properly set system wakeup
+
+Weitao Wang (1):
+      USB: UAS: return ENODEV when submit urbs fail with device not attached
+
+Xu Yang (1):
+      usb: typec: tcpm: fix double-free issue in tcpm_port_unregister_pd()
+
+Yongzhi Liu (1):
+      usb: misc: ljca: Fix double free in error handling path
+
+yuan linyu (1):
+      usb: udc: remove warning when queue disabled ep
+
+ drivers/usb/class/cdc-wdm.c         |  6 ++-
+ drivers/usb/core/hub.c              | 23 +++++++---
+ drivers/usb/core/hub.h              |  2 +
+ drivers/usb/core/port.c             | 38 ++++++++++++++--
+ drivers/usb/core/sysfs.c            | 16 +++++--
+ drivers/usb/dwc2/core.h             | 14 ++++++
+ drivers/usb/dwc2/core_intr.c        | 72 +++++++++++++++++++----------
+ drivers/usb/dwc2/gadget.c           | 10 +++++
+ drivers/usb/dwc2/hcd.c              | 49 ++++++++++++++++----
+ drivers/usb/dwc2/hcd_ddma.c         | 17 ++++---
+ drivers/usb/dwc2/hw.h               |  2 +-
+ drivers/usb/dwc2/platform.c         |  2 +-
+ drivers/usb/dwc3/core.c             |  2 +
+ drivers/usb/dwc3/core.h             |  2 +
+ drivers/usb/dwc3/dwc3-pci.c         |  2 -
+ drivers/usb/dwc3/gadget.c           | 10 +++++
+ drivers/usb/dwc3/host.c             | 11 +++++
+ drivers/usb/gadget/udc/core.c       |  4 +-
+ drivers/usb/misc/usb-ljca.c         | 22 ++++-----
+ drivers/usb/phy/phy-generic.c       |  7 ---
+ drivers/usb/storage/uas.c           | 28 ++++++------
+ drivers/usb/typec/class.c           |  7 ++-
+ drivers/usb/typec/tcpm/tcpm.c       |  6 +--
+ drivers/usb/typec/ucsi/ucsi.c       | 90 +++++++++++++++++++++++++++++--------
+ drivers/usb/typec/ucsi/ucsi.h       |  5 ++-
+ drivers/usb/typec/ucsi/ucsi_acpi.c  | 71 +++++++++++++----------------
+ drivers/usb/typec/ucsi/ucsi_glink.c | 14 ++++++
+ 27 files changed, 374 insertions(+), 158 deletions(-)
 
