@@ -1,332 +1,174 @@
-Return-Path: <linux-usb+bounces-8694-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8695-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E0CF894239
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Apr 2024 18:50:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7BBAD894250
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Apr 2024 18:52:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8DFA51F22A0C
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Apr 2024 16:50:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9F2421C21819
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Apr 2024 16:52:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DE8448CE0;
-	Mon,  1 Apr 2024 16:50:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45AEE4F88B;
+	Mon,  1 Apr 2024 16:51:23 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 603FB4653C
-	for <linux-usb@vger.kernel.org>; Mon,  1 Apr 2024 16:50:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0728E4D137
+	for <linux-usb@vger.kernel.org>; Mon,  1 Apr 2024 16:51:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711990235; cv=none; b=etnd95agutxxgWBTcXyFlGn26SQ6RcE6ZtjXhl1T8GHOFr1enwN1/cAa5QF9RVCk1GZXb3zFtPdAVNWeKV6OBkht65SbmrPEjKwjXoKGHvITprzAei+FCBREjCNNCVxNWEshuYqBPr4KjhGZNS+6xNKSRl+ncA9d4K/tBg2JW2o=
+	t=1711990282; cv=none; b=AmV91WVWLFcgihMK27gyQq/foGiGJTlloET983pv1WC/KU9vhMtSLHD7y5+YHAQTOppF5RJL3zdeGM0LBzaZiDkb/v7j07Xc7k8cXwzwz4NRJ85Y59uIybDNTv0v8Ye6E6Cs290Uj+Gd4ft4KjjBM/vbZfX87dW+UvByZwm442s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711990235; c=relaxed/simple;
-	bh=bZXcFJJP+773blryEuHSCEo+hf2b81ll8AoGEz6Jtbk=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=G/HFAn2v7tjizwDAQ3BIgUbIZhVRcaAAlXvwatWYE5EikhxYdRXRWYSfe0TdRc9G6q1S2LGtICEYQRnT1+Ipy0znYvS34kolPT6p91gFxzebLa7Hz42yL/MlLvM50P9UIWY7lzDl682Tc3KmuLQrMsRf4DLKKVWtEaWPUMmipoM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.198
+	s=arc-20240116; t=1711990282; c=relaxed/simple;
+	bh=b134JAC77FMnO5VxlSudPyxdcglNfx4NfOslCHwS9aI=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=fRXJMyBjOoMkiI+VW0K05OgIwlR8kPAy5WeBcJf2thlIHIa2Co2yvwD6vcwV6zMmDjUGhdJQuXvUN+rmK1pdYY+oL3PLk4LqNQepWMVw5YnlD31dg97nBwqiFVS9hBA+fy8vpz2PIz57wu31SDAAY5tqNlQmZ1dXeaJkvMF2p/U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.72
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f198.google.com with SMTP id e9e14a558f8ab-368ab41f0b8so42826945ab.0
-        for <linux-usb@vger.kernel.org>; Mon, 01 Apr 2024 09:50:33 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-7cc01445f6bso491350739f.3
+        for <linux-usb@vger.kernel.org>; Mon, 01 Apr 2024 09:51:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711990232; x=1712595032;
+        d=1e100.net; s=20230601; t=1711990280; x=1712595080;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=S01sG59m3tk+kToJdb3TFv3qbuOhbOI54TKa1NiTKuE=;
-        b=GKdrOVRMX/n30vJm33dmavcWHkA6k1XIv5CrltOFBwLnKqkWYEjjghJxly7uQyv1v4
-         Rnim5wxzxfZLmYTlLyhdWtGYpgEQAsBDzBKONPsg03YcNpdaEAAxJGjd9E6tX32wMfxi
-         lLGTm+yR5hF1i+4QWCwQAPOOj5M3mZGPpe1DCZhM7Nb8Cr6SHu19aaG8nDC1nnyDt8fP
-         C7HQtFsSrcI0Nfjzr135EDd34q99dAD0fEgrsqwWMmkCuzGZANRjYLRXx0Bmb258+fsl
-         6w0NCamQP4Zy0DSOrnNi77DN8IcsHD2tWyvYbfXdnzBcdthNzXGuOzIvMrGC4fv35Gqb
-         IYKg==
-X-Forwarded-Encrypted: i=1; AJvYcCW94V0YKzhHHmkThkZ1//scb1OLLo+TxX3cRF2ls86W+FC5zMbBdYcEFjhNKKVQ2eXlAlAARPP6FFiF+RngosXiKUQ8TNDZjI1Q
-X-Gm-Message-State: AOJu0YwEebwt1+EVCRjlzvkSjD8q9aXFiIPFP1O2/Tcr49YC3rWK6acS
-	XRTdwP9w+V/2eMs1F+oKHlHkAu4OvsiCepNo+N0TsIBugaxAwClEw/88NcMQ9JBB7X8juG3LeIR
-	ksHXGJ7+L7KBqZuAS7DbAMQ5Y4sKa8aN/+x/QVNPEEDF2QNMIfywIAOM=
-X-Google-Smtp-Source: AGHT+IHRX1iLcLhoPsbzNejwXoIDpAUVSisDhR4sra6Z51Yh1GOWCdtaxdxB71U8TmizSDJ9s/1guyKzxhQiY4VWS9X2sShOhq3L
+        bh=vkvjymxxg5wlu7KGiYlh9jDRJahjKEj0y/WHqrnneu0=;
+        b=JldOJ8CStTt7Mv+RSHEbhfUm3yWkZkxDQ7wUA7qssocNIAmWXCuEo84MuXCo8J6vTI
+         yIZuHLp+nyvcaGFDr8cbtnFv9rqc0et0lp8+UGcwENjyZKwqaJI9/RrLfucX1YZrTMB8
+         LZ1OmbTALjmYlk+3tmKLaFIIMBO2jTHmlGH6BAR15uCyBoAvNqqaUPm0q5oQLdPLu4Jq
+         exXSDtwslb3dBTb2uubaq7KwLkZp/8EwVMfbN54OWber4Y57sUAJSJb+NV1M5YjklF4W
+         cSiXQyZrEnP1l3fF+4Cm6VLzlXbIyldBcoDkMpLHAMwETdjHkZnt+Li58ueXov6+S3L0
+         bH9Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVnH9h5I0gY+/rYuXNbeptK9uVt/vE6H5Eh4MoPa7yi50IVmjeGj9a5/y36sx1QFWm8AuksDWXiPwlY83ADqSoPOKu9pVRFk8GG
+X-Gm-Message-State: AOJu0YzGBUmbgVBYLriLDKNBJwYR/3LqRlit4ISdKejeOHpgogPz5PpL
+	c0L/C1vtN+MCJhv17OTUQF1e/gRQ7fisrnm58op+P+ZkupD5fOJAMJZx1If3W2lM/P+Z5CbCnFc
+	6PzWIGT6gYSTb1P2znsyUdAF80Tg+r53xr/GVe1X1XCF7FMYg+/sBB5g=
+X-Google-Smtp-Source: AGHT+IHuZEWF0jczVQEcF2HgEW+9ZuUksHzQYEfFom9Q8LAyfWKK2icbujwxHY3HN0STsFrW/OMRYE0qXziSWD3zwHJdN1v4R5Yj
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:188a:b0:369:bc79:92dd with SMTP id
- o10-20020a056e02188a00b00369bc7992ddmr165476ilu.0.1711990232614; Mon, 01 Apr
- 2024 09:50:32 -0700 (PDT)
-Date: Mon, 01 Apr 2024 09:50:32 -0700
+X-Received: by 2002:a05:6602:2c90:b0:7cc:8980:5ae4 with SMTP id
+ i16-20020a0566022c9000b007cc89805ae4mr551496iow.2.1711990280332; Mon, 01 Apr
+ 2024 09:51:20 -0700 (PDT)
+Date: Mon, 01 Apr 2024 09:51:20 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ac924c06150bc9eb@google.com>
-Subject: [syzbot] [usb?] KASAN: slab-use-after-free Write in
- usb_anchor_suspend_wakeups (2)
-From: syzbot <syzbot+9a3c54f52bd1edbd975f@syzkaller.appspotmail.com>
-To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Message-ID: <00000000000084b18706150bcca5@google.com>
+Subject: [syzbot] [usb?] [sound?] KMSAN: uninit-value in line6_pod_process_message
+From: syzbot <syzbot+7fb05ccf7b3d2f9617b3@syzkaller.appspotmail.com>
+To: linux-kernel@vger.kernel.org, linux-sound@vger.kernel.org, 
+	linux-usb@vger.kernel.org, perex@perex.cz, syzkaller-bugs@googlegroups.com, 
+	tiwai@suse.com
 Content-Type: text/plain; charset="UTF-8"
 
 Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    480e035fc4c7 Merge tag 'drm-next-2024-03-13' of https://gi..
+HEAD commit:    486291a0e624 Merge tag 'drm-fixes-2024-03-30' of https://g..
 git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=150cb7fd180000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=1e5b814e91787669
-dashboard link: https://syzkaller.appspot.com/bug?extid=9a3c54f52bd1edbd975f
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=13ab1129180000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=e2599baf258ef795
+dashboard link: https://syzkaller.appspot.com/bug?extid=7fb05ccf7b3d2f9617b3
 compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10bd9dd9180000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1244fe29180000
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1299932d180000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1101e52d180000
 
 Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/5f73b6ef963d/disk-480e035f.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/46c949396aad/vmlinux-480e035f.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/e3b4d0f5a5f8/bzImage-480e035f.xz
+disk image: https://storage.googleapis.com/syzbot-assets/ea2c2e416c4f/disk-486291a0.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/83fdaf5e5783/vmlinux-486291a0.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/1f674430b191/bzImage-486291a0.xz
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+9a3c54f52bd1edbd975f@syzkaller.appspotmail.com
+Reported-by: syzbot+7fb05ccf7b3d2f9617b3@syzkaller.appspotmail.com
 
-BUG: KASAN: slab-use-after-free in instrument_atomic_read_write include/linux/instrumented.h:96 [inline]
-BUG: KASAN: slab-use-after-free in atomic_inc include/linux/atomic/atomic-instrumented.h:435 [inline]
-BUG: KASAN: slab-use-after-free in usb_anchor_suspend_wakeups+0x28/0x40 drivers/usb/core/urb.c:927
-Write of size 4 at addr ffff888078ad2910 by task kworker/1:2/1146
-
-CPU: 1 PID: 1146 Comm: kworker/1:2 Not tainted 6.8.0-syzkaller-08073-g480e035fc4c7 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/27/2024
-Workqueue: usb_hub_wq hub_event
-Call Trace:
- <IRQ>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x241/0x360 lib/dump_stack.c:114
- print_address_description mm/kasan/report.c:377 [inline]
- print_report+0x169/0x550 mm/kasan/report.c:488
- kasan_report+0x143/0x180 mm/kasan/report.c:601
- kasan_check_range+0x282/0x290 mm/kasan/generic.c:189
- instrument_atomic_read_write include/linux/instrumented.h:96 [inline]
- atomic_inc include/linux/atomic/atomic-instrumented.h:435 [inline]
- usb_anchor_suspend_wakeups+0x28/0x40 drivers/usb/core/urb.c:927
- __usb_hcd_giveback_urb+0x25c/0x530 drivers/usb/core/hcd.c:1637
- dummy_timer+0x8aa/0x3220 drivers/usb/gadget/udc/dummy_hcd.c:1987
- call_timer_fn+0x17e/0x600 kernel/time/timer.c:1792
- expire_timers kernel/time/timer.c:1843 [inline]
- __run_timers kernel/time/timer.c:2408 [inline]
- __run_timer_base+0x66a/0x8e0 kernel/time/timer.c:2419
- run_timer_base kernel/time/timer.c:2428 [inline]
- run_timer_softirq+0xb7/0x170 kernel/time/timer.c:2438
- __do_softirq+0x2bc/0x943 kernel/softirq.c:554
+=====================================================
+BUG: KMSAN: uninit-value in line6_pod_process_message+0x72f/0x7b0 sound/usb/line6/pod.c:201
+ line6_pod_process_message+0x72f/0x7b0 sound/usb/line6/pod.c:201
+ line6_data_received+0x5db/0x7e0 sound/usb/line6/driver.c:317
+ __usb_hcd_giveback_urb+0x508/0x770 drivers/usb/core/hcd.c:1648
+ usb_hcd_giveback_urb+0x157/0x720 drivers/usb/core/hcd.c:1732
+ dummy_timer+0xd93/0x6b10 drivers/usb/gadget/udc/dummy_hcd.c:1987
+ call_timer_fn+0x49/0x580 kernel/time/timer.c:1793
+ expire_timers kernel/time/timer.c:1844 [inline]
+ __run_timers kernel/time/timer.c:2418 [inline]
+ __run_timer_base+0x84e/0xe90 kernel/time/timer.c:2429
+ run_timer_base kernel/time/timer.c:2438 [inline]
+ run_timer_softirq+0x3a/0x70 kernel/time/timer.c:2448
+ __do_softirq+0x1c0/0x7d7 kernel/softirq.c:554
  invoke_softirq kernel/softirq.c:428 [inline]
- __irq_exit_rcu+0xf2/0x1c0 kernel/softirq.c:633
- irq_exit_rcu+0x9/0x30 kernel/softirq.c:645
+ __irq_exit_rcu kernel/softirq.c:633 [inline]
+ irq_exit_rcu+0x6a/0x130 kernel/softirq.c:645
  instr_sysvec_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1043 [inline]
- sysvec_apic_timer_interrupt+0xa6/0xc0 arch/x86/kernel/apic/apic.c:1043
- </IRQ>
- <TASK>
- asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:702
-RIP: 0010:__sanitizer_cov_trace_pc+0x0/0x70 kernel/kcov.c:200
-Code: 89 fb e8 23 00 00 00 48 8b 3d 6c fc 1b 0c 48 89 de 5b e9 23 fb 57 00 0f 1f 00 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 <f3> 0f 1e fa 48 8b 04 24 65 48 8b 0c 25 80 d0 03 00 65 8b 15 20 db
-RSP: 0018:ffffc900051c6f40 EFLAGS: 00000286
-RAX: 0000000000000000 RBX: 0000000080000000 RCX: 0000000000000001
-RDX: ffff888022de0000 RSI: 0000000080000000 RDI: 0000000000000000
-RBP: ffffc900051c7020 R08: ffffffff8140ade5 R09: ffffffff8140a8df
-R10: 0000000000000003 R11: ffff888022de0000 R12: ffffc900051c7768
-R13: dffffc0000000000 R14: ffffc900051c0000 R15: ffffc900051c7770
- unwind_next_frame+0x1e82/0x2a00 arch/x86/kernel/unwind_orc.c:672
- arch_stack_walk+0x151/0x1b0 arch/x86/kernel/stacktrace.c:25
- stack_trace_save+0x118/0x1d0 kernel/stacktrace.c:122
- kasan_save_stack mm/kasan/common.c:47 [inline]
- kasan_save_track+0x3f/0x80 mm/kasan/common.c:68
- kasan_save_free_info+0x40/0x50 mm/kasan/generic.c:579
- poison_slab_object+0xa6/0xe0 mm/kasan/common.c:240
- __kasan_slab_free+0x37/0x60 mm/kasan/common.c:256
- kasan_slab_free include/linux/kasan.h:184 [inline]
- slab_free_hook mm/slub.c:2106 [inline]
- slab_free mm/slub.c:4280 [inline]
- kmem_cache_free+0x102/0x2b0 mm/slub.c:4344
- kernfs_put+0x2a4/0x420 fs/kernfs/dir.c:569
- kernfs_remove_by_name_ns+0xe4/0x160 fs/kernfs/dir.c:1686
- kernfs_remove_by_name include/linux/kernfs.h:623 [inline]
- remove_files fs/sysfs/group.c:28 [inline]
- sysfs_remove_group+0xfe/0x2b0 fs/sysfs/group.c:292
- sysfs_remove_groups+0x54/0xb0 fs/sysfs/group.c:316
- device_remove drivers/base/dd.c:564 [inline]
- __device_release_driver drivers/base/dd.c:1272 [inline]
- device_release_driver_internal+0x45a/0x7c0 drivers/base/dd.c:1295
- bus_remove_device+0x34f/0x420 drivers/base/bus.c:574
- device_del+0x581/0xa30 drivers/base/core.c:3828
- usb_disable_device+0x3bf/0x850 drivers/usb/core/message.c:1416
- usb_disconnect+0x340/0x950 drivers/usb/core/hub.c:2267
- hub_port_connect drivers/usb/core/hub.c:5323 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5623 [inline]
- port_event drivers/usb/core/hub.c:5783 [inline]
- hub_event+0x1e62/0x50f0 drivers/usb/core/hub.c:5865
- process_one_work kernel/workqueue.c:3254 [inline]
- process_scheduled_works+0xa00/0x1770 kernel/workqueue.c:3335
- worker_thread+0x86d/0xd70 kernel/workqueue.c:3416
- kthread+0x2f0/0x390 kernel/kthread.c:388
- ret_from_fork+0x4b/0x80 arch/x86/kernel/process.c:147
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:243
- </TASK>
+ sysvec_apic_timer_interrupt+0x83/0x90 arch/x86/kernel/apic/apic.c:1043
+ asm_sysvec_apic_timer_interrupt+0x1f/0x30 arch/x86/include/asm/idtentry.h:702
+ native_safe_halt arch/x86/include/asm/irqflags.h:48 [inline]
+ arch_safe_halt arch/x86/include/asm/irqflags.h:86 [inline]
+ acpi_safe_halt+0x25/0x30 drivers/acpi/processor_idle.c:112
+ acpi_idle_do_entry+0x22/0x40 drivers/acpi/processor_idle.c:573
+ acpi_idle_enter+0xa1/0xc0 drivers/acpi/processor_idle.c:707
+ cpuidle_enter_state+0xcb/0x250 drivers/cpuidle/cpuidle.c:267
+ cpuidle_enter+0x7f/0xf0 drivers/cpuidle/cpuidle.c:388
+ call_cpuidle kernel/sched/idle.c:155 [inline]
+ cpuidle_idle_call kernel/sched/idle.c:236 [inline]
+ do_idle+0x551/0x750 kernel/sched/idle.c:332
+ cpu_startup_entry+0x65/0x80 kernel/sched/idle.c:430
+ rest_init+0x1e8/0x260 init/main.c:732
+ start_kernel+0x927/0xa70 init/main.c:1074
+ x86_64_start_reservations+0x2e/0x30 arch/x86/kernel/head64.c:507
+ x86_64_start_kernel+0x98/0xa0 arch/x86/kernel/head64.c:488
+ common_startup_64+0x12c/0x137
 
-Allocated by task 5137:
- kasan_save_stack mm/kasan/common.c:47 [inline]
- kasan_save_track+0x3f/0x80 mm/kasan/common.c:68
- poison_kmalloc_redzone mm/kasan/common.c:370 [inline]
- __kasan_kmalloc+0x98/0xb0 mm/kasan/common.c:387
- kasan_kmalloc include/linux/kasan.h:211 [inline]
- kmalloc_trace+0x1db/0x360 mm/slub.c:3997
- kmalloc include/linux/slab.h:628 [inline]
- kzalloc include/linux/slab.h:749 [inline]
- usbtmc_open+0x93/0x890 drivers/usb/class/usbtmc.c:175
- usb_open+0x225/0x300 drivers/usb/core/file.c:47
- chrdev_open+0x5b0/0x630 fs/char_dev.c:414
- do_dentry_open+0x907/0x15a0 fs/open.c:955
- do_open fs/namei.c:3642 [inline]
- path_openat+0x2860/0x3240 fs/namei.c:3799
- do_filp_open+0x235/0x490 fs/namei.c:3826
- do_sys_openat2+0x13e/0x1d0 fs/open.c:1406
- do_sys_open fs/open.c:1421 [inline]
- __do_sys_openat fs/open.c:1437 [inline]
- __se_sys_openat fs/open.c:1432 [inline]
- __x64_sys_openat+0x247/0x2a0 fs/open.c:1432
- do_syscall_64+0xfb/0x240
- entry_SYSCALL_64_after_hwframe+0x6d/0x75
-
-Freed by task 5137:
- kasan_save_stack mm/kasan/common.c:47 [inline]
- kasan_save_track+0x3f/0x80 mm/kasan/common.c:68
- kasan_save_free_info+0x40/0x50 mm/kasan/generic.c:579
- poison_slab_object+0xa6/0xe0 mm/kasan/common.c:240
- __kasan_slab_free+0x37/0x60 mm/kasan/common.c:256
- kasan_slab_free include/linux/kasan.h:184 [inline]
- slab_free_hook mm/slub.c:2106 [inline]
- slab_free mm/slub.c:4280 [inline]
- kfree+0x14a/0x380 mm/slub.c:4390
- usbtmc_release+0x24f/0x280 drivers/usb/class/usbtmc.c:261
- __fput+0x429/0x8a0 fs/file_table.c:422
- task_work_run+0x24f/0x310 kernel/task_work.c:180
- ptrace_notify+0x2d2/0x380 kernel/signal.c:2404
- ptrace_report_syscall include/linux/ptrace.h:415 [inline]
- ptrace_report_syscall_exit include/linux/ptrace.h:477 [inline]
- syscall_exit_work+0xbd/0x170 kernel/entry/common.c:167
- syscall_exit_to_user_mode_prepare kernel/entry/common.c:194 [inline]
- __syscall_exit_to_user_mode_work kernel/entry/common.c:199 [inline]
- syscall_exit_to_user_mode+0x273/0x360 kernel/entry/common.c:212
- do_syscall_64+0x10a/0x240 arch/x86/entry/common.c:89
- entry_SYSCALL_64_after_hwframe+0x6d/0x75
-
-The buggy address belongs to the object at ffff888078ad2800
- which belongs to the cache kmalloc-1k of size 1024
-The buggy address is located 272 bytes inside of
- freed 1024-byte region [ffff888078ad2800, ffff888078ad2c00)
-
-The buggy address belongs to the physical page:
-page:ffffea0001e2b400 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x78ad0
-head:ffffea0001e2b400 order:3 entire_mapcount:0 nr_pages_mapped:0 pincount:0
-flags: 0xfff00000000840(slab|head|node=0|zone=1|lastcpupid=0x7ff)
-page_type: 0xffffffff()
-raw: 00fff00000000840 ffff888014c41dc0 dead000000000122 0000000000000000
-raw: 0000000000000000 0000000000100010 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 3, migratetype Unmovable, gfp_mask 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 5132, tgid 5130 (syz-executor105), ts 66677139821, free_ts 66671264188
- set_page_owner include/linux/page_owner.h:31 [inline]
- post_alloc_hook+0x1ea/0x210 mm/page_alloc.c:1533
- prep_new_page mm/page_alloc.c:1540 [inline]
- get_page_from_freelist+0x33ea/0x3580 mm/page_alloc.c:3311
- __alloc_pages+0x256/0x680 mm/page_alloc.c:4569
- __alloc_pages_node include/linux/gfp.h:238 [inline]
- alloc_pages_node include/linux/gfp.h:261 [inline]
- alloc_slab_page+0x5f/0x160 mm/slub.c:2175
- allocate_slab mm/slub.c:2338 [inline]
- new_slab+0x84/0x2f0 mm/slub.c:2391
- ___slab_alloc+0xc73/0x1260 mm/slub.c:3525
- __slab_alloc mm/slub.c:3610 [inline]
- __slab_alloc_node mm/slub.c:3663 [inline]
- slab_alloc_node mm/slub.c:3835 [inline]
- kmalloc_trace+0x269/0x360 mm/slub.c:3992
- kmalloc include/linux/slab.h:628 [inline]
- kzalloc include/linux/slab.h:749 [inline]
- usbtmc_open+0x93/0x890 drivers/usb/class/usbtmc.c:175
- usb_open+0x225/0x300 drivers/usb/core/file.c:47
- chrdev_open+0x5b0/0x630 fs/char_dev.c:414
- do_dentry_open+0x907/0x15a0 fs/open.c:955
- do_open fs/namei.c:3642 [inline]
- path_openat+0x2860/0x3240 fs/namei.c:3799
- do_filp_open+0x235/0x490 fs/namei.c:3826
- do_sys_openat2+0x13e/0x1d0 fs/open.c:1406
- do_sys_open fs/open.c:1421 [inline]
- __do_sys_openat fs/open.c:1437 [inline]
- __se_sys_openat fs/open.c:1432 [inline]
- __x64_sys_openat+0x247/0x2a0 fs/open.c:1432
- do_syscall_64+0xfb/0x240
-page last free pid 5138 tgid 5134 stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1140 [inline]
- free_unref_page_prepare+0x968/0xa90 mm/page_alloc.c:2346
- free_unref_page+0x37/0x3f0 mm/page_alloc.c:2486
- discard_slab mm/slub.c:2437 [inline]
- __put_partials+0xeb/0x130 mm/slub.c:2906
- put_cpu_partial+0x17c/0x250 mm/slub.c:2981
- __slab_free+0x2ea/0x3d0 mm/slub.c:4151
- qlink_free mm/kasan/quarantine.c:163 [inline]
- qlist_free_all+0x5e/0xc0 mm/kasan/quarantine.c:179
- kasan_quarantine_reduce+0x14f/0x170 mm/kasan/quarantine.c:286
- __kasan_slab_alloc+0x23/0x80 mm/kasan/common.c:322
- kasan_slab_alloc include/linux/kasan.h:201 [inline]
- slab_post_alloc_hook mm/slub.c:3798 [inline]
+Uninit was created at:
+ slab_post_alloc_hook mm/slub.c:3804 [inline]
  slab_alloc_node mm/slub.c:3845 [inline]
- kmem_cache_alloc+0x174/0x340 mm/slub.c:3852
- getname_flags+0xbd/0x4f0 fs/namei.c:139
- do_sys_openat2+0xd2/0x1d0 fs/open.c:1400
- do_sys_open fs/open.c:1421 [inline]
- __do_sys_openat fs/open.c:1437 [inline]
- __se_sys_openat fs/open.c:1432 [inline]
- __x64_sys_openat+0x247/0x2a0 fs/open.c:1432
- do_syscall_64+0xfb/0x240
- entry_SYSCALL_64_after_hwframe+0x6d/0x75
+ kmalloc_trace+0x578/0xba0 mm/slub.c:3992
+ kmalloc include/linux/slab.h:628 [inline]
+ line6_init_cap_control+0x4f1/0x770 sound/usb/line6/driver.c:700
+ line6_probe+0xeae/0x1120 sound/usb/line6/driver.c:797
+ pod_probe+0x79/0x90 sound/usb/line6/pod.c:522
+ usb_probe_interface+0xd6f/0x1350 drivers/usb/core/driver.c:399
+ really_probe+0x4db/0xd90 drivers/base/dd.c:656
+ __driver_probe_device+0x2ab/0x5d0 drivers/base/dd.c:798
+ driver_probe_device+0x72/0x890 drivers/base/dd.c:828
+ __device_attach_driver+0x568/0x9e0 drivers/base/dd.c:956
+ bus_for_each_drv+0x403/0x620 drivers/base/bus.c:457
+ __device_attach+0x3c1/0x650 drivers/base/dd.c:1028
+ device_initial_probe+0x32/0x40 drivers/base/dd.c:1077
+ bus_probe_device+0x3dc/0x5c0 drivers/base/bus.c:532
+ device_add+0x1475/0x1c90 drivers/base/core.c:3705
+ usb_set_configuration+0x31c9/0x38d0 drivers/usb/core/message.c:2210
+ usb_generic_driver_probe+0x109/0x2a0 drivers/usb/core/generic.c:254
+ usb_probe_device+0x3a7/0x690 drivers/usb/core/driver.c:294
+ really_probe+0x4db/0xd90 drivers/base/dd.c:656
+ __driver_probe_device+0x2ab/0x5d0 drivers/base/dd.c:798
+ driver_probe_device+0x72/0x890 drivers/base/dd.c:828
+ __device_attach_driver+0x568/0x9e0 drivers/base/dd.c:956
+ bus_for_each_drv+0x403/0x620 drivers/base/bus.c:457
+ __device_attach+0x3c1/0x650 drivers/base/dd.c:1028
+ device_initial_probe+0x32/0x40 drivers/base/dd.c:1077
+ bus_probe_device+0x3dc/0x5c0 drivers/base/bus.c:532
+ device_add+0x1475/0x1c90 drivers/base/core.c:3705
+ usb_new_device+0x15ff/0x2470 drivers/usb/core/hub.c:2643
+ hub_port_connect drivers/usb/core/hub.c:5512 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5652 [inline]
+ port_event drivers/usb/core/hub.c:5812 [inline]
+ hub_event+0x4ff8/0x72d0 drivers/usb/core/hub.c:5894
+ process_one_work kernel/workqueue.c:3254 [inline]
+ process_scheduled_works+0xa81/0x1bd0 kernel/workqueue.c:3335
+ worker_thread+0xea5/0x1560 kernel/workqueue.c:3416
+ kthread+0x3e2/0x540 kernel/kthread.c:388
+ ret_from_fork+0x6d/0x90 arch/x86/kernel/process.c:147
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:243
 
-Memory state around the buggy address:
- ffff888078ad2800: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff888078ad2880: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->ffff888078ad2900: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                         ^
- ffff888078ad2980: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff888078ad2a00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
-----------------
-Code disassembly (best guess):
-   0:	89 fb                	mov    %edi,%ebx
-   2:	e8 23 00 00 00       	call   0x2a
-   7:	48 8b 3d 6c fc 1b 0c 	mov    0xc1bfc6c(%rip),%rdi        # 0xc1bfc7a
-   e:	48 89 de             	mov    %rbx,%rsi
-  11:	5b                   	pop    %rbx
-  12:	e9 23 fb 57 00       	jmp    0x57fb3a
-  17:	0f 1f 00             	nopl   (%rax)
-  1a:	90                   	nop
-  1b:	90                   	nop
-  1c:	90                   	nop
-  1d:	90                   	nop
-  1e:	90                   	nop
-  1f:	90                   	nop
-  20:	90                   	nop
-  21:	90                   	nop
-  22:	90                   	nop
-  23:	90                   	nop
-  24:	90                   	nop
-  25:	90                   	nop
-  26:	90                   	nop
-  27:	90                   	nop
-  28:	90                   	nop
-  29:	90                   	nop
-* 2a:	f3 0f 1e fa          	endbr64 <-- trapping instruction
-  2e:	48 8b 04 24          	mov    (%rsp),%rax
-  32:	65 48 8b 0c 25 80 d0 	mov    %gs:0x3d080,%rcx
-  39:	03 00
-  3b:	65                   	gs
-  3c:	8b                   	.byte 0x8b
-  3d:	15                   	.byte 0x15
-  3e:	20 db                	and    %bl,%bl
+CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.9.0-rc1-syzkaller-00274-g486291a0e624 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/27/2024
+=====================================================
 
 
 ---
