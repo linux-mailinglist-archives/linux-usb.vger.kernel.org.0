@@ -1,154 +1,130 @@
-Return-Path: <linux-usb+bounces-8696-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8697-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F77E8945DF
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Apr 2024 22:11:28 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA1618945FE
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Apr 2024 22:33:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B8BD91F2218A
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Apr 2024 20:11:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 278911C21BD3
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Apr 2024 20:33:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EC5F53E0C;
-	Mon,  1 Apr 2024 20:11:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EDFE50271;
+	Mon,  1 Apr 2024 20:32:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="AKmcHhhW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from cae.in-ulm.de (cae.in-ulm.de [217.10.14.231])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2F263D9E;
-	Mon,  1 Apr 2024 20:11:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.10.14.231
+Received: from mail-vs1-f47.google.com (mail-vs1-f47.google.com [209.85.217.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2805E2A1BF
+	for <linux-usb@vger.kernel.org>; Mon,  1 Apr 2024 20:32:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712002280; cv=none; b=Il0Eysg8vU3BjpMS8EHqJKx1iqlT/YxnPqZuvX2GMr/3JgYc08s59tcOlChTIsGFi65HhzN9XtbuB74iEnpxIkxnYKcITpVVa1XlJ5FixhU42I0PQk/XIvm8i6Z4mAZL17EXq+vBTS1/8W+c1LTb9CZ35kp04moF0Y9OqTgitdU=
+	t=1712003573; cv=none; b=c4csC7eRXZ2tKNQLriJOxo/SGaknK2K3p/0p32XzYmieBeni0hx1fMZbuDWPuXx+NSPeTBCx9NTJpOSR4T+aAiYLqkYt9mJ/Kg3ZDXw9p1OlGBwH38yXMtqTue2JRz6rbopCNrSXeAJlLE6wrSgBqrSycdiTqDXHXh91QM7BEuU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712002280; c=relaxed/simple;
-	bh=mTjSvBAb6pXJhpMPHUFNtRHrMSDKZAtpuNulj6i8YiI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Bl8l3dzyNkCTI8nTBxgGLRi7vFPXO78rgK+wJHvW7/gIlLDqXTEqCmvsor2iDRXjMG/I6fcKbyWUAUQuz29HDZ8ObJlLkZwQP6XugdRNm2+wbCYJFa4FSd71xBdgOkBQOr1l7VEjn1FRFSGy+RTwp8XMwsZ8Z9cI9yCHKEZ9WJk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c--e.de; spf=pass smtp.mailfrom=c--e.de; arc=none smtp.client-ip=217.10.14.231
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c--e.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=c--e.de
-Received: by cae.in-ulm.de (Postfix, from userid 1000)
-	id 566CE140246; Mon,  1 Apr 2024 22:11:08 +0200 (CEST)
-Date: Mon, 1 Apr 2024 22:11:08 +0200
-From: "Christian A. Ehrhardt" <lk@c--e.de>
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: linux-kernel@vger.kernel.org,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Prashant Malani <pmalani@chromium.org>,
-	Jameson Thies <jthies@google.com>,
-	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
-	Samuel =?utf-8?B?xIxhdm9q?= <samuel@cavoj.net>,
-	linux-usb@vger.kernel.org, Kenneth Crudup <kenny@panix.com>
-Subject: Re: [PATCH 2/5] usb: typec: ucsi: Check for notifications after init
-Message-ID: <ZgsU3HsfDJzjPCWA@cae.in-ulm.de>
-References: <20240320073927.1641788-1-lk@c--e.de>
- <20240320073927.1641788-3-lk@c--e.de>
- <ZgbqdBd1OiWgDN-_@eriador.lumag.spb.ru>
+	s=arc-20240116; t=1712003573; c=relaxed/simple;
+	bh=WlWF4sZthTybsqjHZ3Wo3dh3Wr4y3oJSrsc10FAPues=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=NxO9bWG/2RRuF6yUU2/VmrTHtYmG9vUNhXv3pPZpDzd82s988KVZu6jQ39xdgfel/O53G+/Oia487HGOc/pBF3slFBub9/feqfhzZXJZ7Tca5D61Sz3YRwb2clZevwAH14JujRS7QQ1jkO1Bbuyep4PCSswc3sZYxkrnPw/gz9k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=AKmcHhhW; arc=none smtp.client-ip=209.85.217.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-vs1-f47.google.com with SMTP id ada2fe7eead31-4788939769fso157357137.1
+        for <linux-usb@vger.kernel.org>; Mon, 01 Apr 2024 13:32:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1712003571; x=1712608371; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WlWF4sZthTybsqjHZ3Wo3dh3Wr4y3oJSrsc10FAPues=;
+        b=AKmcHhhWDMsQ+7vp/S1IgPhqwTgKRW1EL9voEr26+4ZuTfAv8IiQO+jz3oZLRMHbfB
+         LS4BYnE20RySCks+AlE3cQ3rZiOadp9w/mWxAGaKtXBT1mGE3G/jtFb9fswth3W2E86V
+         n3IK70UmPvnSKOhBFs7RN/KBYs0D2yWIITHBE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712003571; x=1712608371;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WlWF4sZthTybsqjHZ3Wo3dh3Wr4y3oJSrsc10FAPues=;
+        b=pziaJ/MEOKDXKh4v7/TOuYoMMOojr09/qOKHEK5IhQ9JosmER7BZl8wZikSbtDxt75
+         FsveGAOukULCTiWXGWuiHAk9d/OlMBy5cgVMlZ2P+N+B49EEbyAm+ZSTZHQ+GzhvvbnF
+         SwdEJsK98hkJq2a2TQ/+Wf46n/ArW5CwsJa2Bhsb+zpCwewvgahg6uSovZASL+IrlByl
+         fZHLpOn1CMkXgZ9nw/ZEhUzyXk/MI3rLUHjwpEMBfxR0Dl8m07cirP2+9SvaEOhAu3Uw
+         j/HpMyZQ4L71nQKuZYIy5aj/BKGLxe1Uv1TfISLM3L9XLh7ol52yrPczGmtgSrdOJvSV
+         IDSA==
+X-Forwarded-Encrypted: i=1; AJvYcCUOmK+UxV/YF5Z06FIN5AeC5ehAB6D6EGw0BBsbEQetlpdnLLjS1vKc/Xrs27O3YIs0EyzV/jp+X2qjGd38MKsfhUVDMTRlOd5t
+X-Gm-Message-State: AOJu0YxPajvJUfHdPvwUDIErWekK95zydpdhNVpwFF6FuAeVHssRGdCc
+	RvRcPXg2GECgTibgO5NEAjHeEfSTqP04oBSrCXIDlu9BYtswSitd+4YBIiog4vWhzAKTqV8VzHj
+	VqPvCYyhDJVeEFhPyArUx12FZrnuVXrgZVuE2
+X-Google-Smtp-Source: AGHT+IEBUFuHC1uovMRbuGkUNY7LgsBGowAQKo3d4i+4cDqZFxwCT/kL8PqtYC40kciKNJcNDSxwr9+UZ8+Pke79mBc=
+X-Received: by 2002:a05:6102:3bc4:b0:478:2f66:f641 with SMTP id
+ a4-20020a0561023bc400b004782f66f641mr7884700vsv.34.1712003570896; Mon, 01 Apr
+ 2024 13:32:50 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZgbqdBd1OiWgDN-_@eriador.lumag.spb.ru>
+References: <20240325-public-ucsi-h-v2-0-a6d716968bb1@chromium.org>
+ <20240325-public-ucsi-h-v2-3-a6d716968bb1@chromium.org> <1b040be3-acd7-40dc-bc9b-24ea6d4b8377@linaro.org>
+ <CAB2FV=614YLrsj6yPxRd1uVsF4n3EabLoXwL1Mtrk9Eg+5Mo9g@mail.gmail.com> <CAA8EJprn_95+ZnwmAHEQpQjQqZ5-Na1pj32TCY5BFMt7Uv7eWA@mail.gmail.com>
+In-Reply-To: <CAA8EJprn_95+ZnwmAHEQpQjQqZ5-Na1pj32TCY5BFMt7Uv7eWA@mail.gmail.com>
+From: Pavan Holla <pholla@chromium.org>
+Date: Mon, 1 Apr 2024 13:32:14 -0700
+Message-ID: <CAB2FV=56z2dRYWNWf7Cbr+ubygO1TRgZzg-RqFzZeByx+tBehA@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] platform/chrome: cros_ec_ucsi: Implement UCSI PDC driver
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>, Benson Leung <bleung@chromium.org>, 
+	Tzung-Bi Shih <tzungbi@kernel.org>, Guenter Roeck <groeck@chromium.org>, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, 
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>, chrome-platform@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Fri, Mar 29, 2024 at 8:13=E2=80=AFAM Dmitry Baryshkov
+<dmitry.baryshkov@linaro.org> wrote:
+>
+> On Fri, 29 Mar 2024 at 17:09, Pavan Holla <pholla@chromium.org> wrote:
+> >
+> > Hi Dmitry,
+> >
+> > Thanks for the review.
+> >
+> > On Thu, Mar 28, 2024 at 8:32=E2=80=AFAM Dmitry Baryshkov
+> > <dmitry.baryshkov@linaro.org> wrote:
+> > > While it's fine to use platform/chrome for platform drivers, please
+> > > place drivers which have a subsystem into the subsystem dir. I think =
+we
+> > > don't want to hunt UCSI implementations all over the codebase. Please
+> > > use drivers/usb/typec/ucsi/ location for your driver. This also remov=
+es
+> > > a need for a global header.
+> >
+> > I agree with your assessment that drivers/usb/typec/ucsi/ is a good
+> > location for the driver currently. However, the driver is still in
+> > early stages of development. We may have to account for PDC/ EC quirks
+> > (we have multiple vendors), add FW update functionality outside the
+> > UCSI spec, or add PDC logging functionality. While I'd like to write
+> > separate drivers for those, some of this functionality will need to
+> > acquire a lock over communication to the PDC. Even if I were to write
+> > separate drivers for new functionality related to the PDC, maybe it's
+> > better for all ChromeOS PDC related drivers to reside in the same
+> > location. I am not sure what form this driver will take in the near
+> > future, thus I would prefer to keep it in platform/chrome. Maybe
+> > cros_ec_ucsi isn't the best name here, cros_ec_pdc probably conveys
+> > the intention better.
+>
+> In such a case please consider using auxilliary device bus or MFD
+> cells to describe pdc / ucsi relationship. See how this is handled for
+> pmic-glink / ucsi_glink.
+> The drivers/platform should really be limited to simple drivers, which
+> don't have a better place. Otherwise it becomes a nightmare to handle
+> driver changes (this applies not only to the UCSI but also to other
+> drivers which have their own subsystem tree).
 
-Hi,
-
-On Fri, Mar 29, 2024 at 06:21:08PM +0200, Dmitry Baryshkov wrote:
-> On Wed, Mar 20, 2024 at 08:39:23AM +0100, Christian A. Ehrhardt wrote:
-> > The completion notification for the final SET_NOTIFICATION_ENABLE
-> > command during initialization can include a connector change
-> > notification.  However, at the time this completion notification is
-> > processed, the ucsi struct is not ready to handle this notification.
-> > As a result the notification is ignored and the controller
-> > never sends an interrupt again.
-> > 
-> > Re-check CCI for a pending connector state change after
-> > initialization is complete. Adjust the corresponding debug
-> > message accordingly.
-> > 
-> > Fixes: 71a1fa0df2a3 ("usb: typec: ucsi: Store the notification mask")
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Christian A. Ehrhardt <lk@c--e.de>
-> > ---
-> >  drivers/usb/typec/ucsi/ucsi.c | 10 +++++++++-
-> >  1 file changed, 9 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> > index 8a6645ffd938..dceeed207569 100644
-> > --- a/drivers/usb/typec/ucsi/ucsi.c
-> > +++ b/drivers/usb/typec/ucsi/ucsi.c
-> > @@ -1237,7 +1237,7 @@ void ucsi_connector_change(struct ucsi *ucsi, u8 num)
-> >  	struct ucsi_connector *con = &ucsi->connector[num - 1];
-> >  
-> >  	if (!(ucsi->ntfy & UCSI_ENABLE_NTFY_CONNECTOR_CHANGE)) {
-> > -		dev_dbg(ucsi->dev, "Bogus connector change event\n");
-> > +		dev_dbg(ucsi->dev, "Early connector change event\n");
-> >  		return;
-> >  	}
-> >  
-> > @@ -1636,6 +1636,7 @@ static int ucsi_init(struct ucsi *ucsi)
-> >  {
-> >  	struct ucsi_connector *con, *connector;
-> >  	u64 command, ntfy;
-> > +	u32 cci;
-> >  	int ret;
-> >  	int i;
-> >  
-> > @@ -1688,6 +1689,13 @@ static int ucsi_init(struct ucsi *ucsi)
-> >  
-> >  	ucsi->connector = connector;
-> >  	ucsi->ntfy = ntfy;
-> > +
-> > +	ret = ucsi->ops->read(ucsi, UCSI_CCI, &cci, sizeof(cci));
-> > +	if (ret)
-> > +		return ret;
-> > +	if (UCSI_CCI_CONNECTOR(READ_ONCE(cci)))
-> > +		ucsi_connector_change(ucsi, cci);
-> > +
-> 
-> I think this leaves place for the race. With this patchset + "Ack
-> connector change early" in place Neil triggered the following backtrace
-> on sm8550 HDK while testing my UCSI-qcom-fixes patchset:
-
-Sorry, but this seems to be a brown paper bag change.
-- The READ_ONCE is bogus and a remnant of a prevoius verion of the
-  change.
-- Calling ->read should probably be done with the PPM lock held.
-- The argument to ucsi_connector_change() must be
-  UCSI_CCI_CONNECTOR(cci) instead of the plain cci.
-I'll send a fix.
-
-> What happens:
-[ ... ]
-> 
-> [   10.595807] ------------[ cut here ]------------
-> [   10.595808] WARNING: CPU: 6 PID: 101 at kernel/workqueue.c:2384 __queue_work+0x374/0x474
-> 
-> [skipped the register dump]
-> 
-> [   10.595953]  __queue_work+0x374/0x474
-> [   10.595956]  queue_work_on+0x68/0x84
-> [   10.595959]  ucsi_connector_change+0x54/0x88 [typec_ucsi]
-> [   10.595963]  ucsi_init_work+0x834/0x85c [typec_ucsi]
-> [   10.595968]  process_one_work+0x148/0x29c
-> [   10.595971]  worker_thread+0x2fc/0x40c
-> [   10.595974]  kthread+0x110/0x114
-> [   10.595978]  ret_from_fork+0x10/0x20
-> [   10.595985] ---[ end trace 0000000000000000 ]---
-> 
-> Warning, because the work is already scheduled.
-
-No, the reason is the wrong connector number. Scheduling a work that
-is already scheduled is fine.
-
-Best regards
-Christian
-
+Thanks for the pointers. I will move the driver to drivers/usb/typec/ucsi/
 
