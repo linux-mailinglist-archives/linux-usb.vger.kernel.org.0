@@ -1,181 +1,162 @@
-Return-Path: <linux-usb+bounces-8707-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8708-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FC5E894CCB
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Apr 2024 09:45:54 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E3039894D2E
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Apr 2024 10:09:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A93351F226F4
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Apr 2024 07:45:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8E37F282FAF
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Apr 2024 08:09:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41AF93BBDF;
-	Tue,  2 Apr 2024 07:45:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF20A3D962;
+	Tue,  2 Apr 2024 08:09:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aMQPio9Q"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01BA632C8B
-	for <linux-usb@vger.kernel.org>; Tue,  2 Apr 2024 07:45:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16C843D544;
+	Tue,  2 Apr 2024 08:09:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712043948; cv=none; b=Epoly+x3P3XSzupbX8ul9btWMxskZP/PE2uAFoQetmdMhoGFldVa5GaVmfRbJ7F+Mvme/g2+tijGI2EpWWekYRkkYbgHCv5Uq6ryhRwZV9HxrOwvAlgMYQTIz3aocy02Yz7qgdhJoY+00TY6lh6Uf3X/I/fzGfNsGDxH/hqMQn0=
+	t=1712045371; cv=none; b=E2AL/h9y3/aJQt2564/7BRxb5GXPm5Glmp5fXfUZu/3z+/WJOHEP/dPeUK4/YFIK2wgV0ey18C5UiAQyJ39vvn2M41fBwCnt6ecASRqYjiu6RIl8sumb53OA9vujuzxBelgk/YLDqLLL8tphzrgFWLPpALeX/dtwDWf1pGQF7ng=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712043948; c=relaxed/simple;
-	bh=02Np2Unu6MKBlZRtrWjjygleS60SrXcYakfvNlObZnY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gDlYHeU71TKZW8oCbxM+3nYFkrVPbBvpgqdroghMH1yuKQ8UsC9MlIkFFGegjiSi1EMPQjwvnemuACJBUvu9o4CwmNnvvwG/jC8QDwQ3OIHareQ51uYY1cH0AertkHpNUHwTaob6+xqbvXjBlfogSRfuehbxj3WI2OgAP2WIlYE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1rrYpz-0007gk-Gk; Tue, 02 Apr 2024 09:45:43 +0200
-Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1rrYpz-009wE5-1g; Tue, 02 Apr 2024 09:45:43 +0200
-Received: from mgr by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1rrYpy-00Ak1T-39;
-	Tue, 02 Apr 2024 09:45:42 +0200
-Date: Tue, 2 Apr 2024 09:45:42 +0200
-From: Michael Grzeschik <mgr@pengutronix.de>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Daniel Scally <dan.scally@ideasonboard.com>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: uvc: Improve error checking and tagging
-Message-ID: <Zgu3pkbaQztXxrmc@pengutronix.de>
-References: <20240324-uvc-gadget-errorcheck-v1-1-5538c57bbeba@pengutronix.de>
- <2024032622-canine-fragility-39db@gregkh>
+	s=arc-20240116; t=1712045371; c=relaxed/simple;
+	bh=ZzCmfLlRmQWAd8BZFDzu2/Q5ZhppnoVamII+p9EovOo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=AJnqqI30NOC2bqsO9iWnm9XcRDhjYXNBLIh9VBmTVj6J42k2D1gYujcoZjoO8XlfIVMPxw04hOGwT1GDgiB4JfGrtHSLOnaiu0s54zuMib2WvlW0cLOXDcsD5C5ytbwxnYWgqpk27tVCIjdiE/UFlcBG1ccgAYkTNj19jMadjfo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aMQPio9Q; arc=none smtp.client-ip=209.85.215.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-5d8b887bb0cso3973967a12.2;
+        Tue, 02 Apr 2024 01:09:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712045369; x=1712650169; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aPabVevQpgCOqyU7yl6aNZ4AREaAFhD+eH9lVYEoxAU=;
+        b=aMQPio9QYPO4Rgct2mAlylee3sOKH+jOqV8cuELnQLrGaoM2MmGBeOtdah8eiBduRm
+         CPTMT/T/KHrdrK2zlpgNWxsZEwBxeEPX+VdRREEAIXAng3+2RwVo6svD3+fdedR7q4w1
+         AS2Y0F5Bl6N9FA0Pd9KnK7GTa7L7lcco9bUXuZ35c4a1fPALq9hN4TB19FyEwXxwcbdB
+         2qj07SOxLlvosp+6p9drilE8enhJus71Lh0qBdk+hkkeBCPIW8mu5QS8MNbRL8XMK9pR
+         DHojccyICA5QKCypd9/fqHkvxT8O3YYt9hDm0tqbNCR3huNUb291Cm8UzFd8hV49NqmP
+         RIUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712045369; x=1712650169;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aPabVevQpgCOqyU7yl6aNZ4AREaAFhD+eH9lVYEoxAU=;
+        b=ae3xNjvvDBhqZ4Ead4TIvxE5/7NcbWYPtZJqZGzpTLKyz8crmYjBolbrFdOO3XzgBE
+         6dZ81psVJm7UjbsjfHQ9frjCt2tSAt5IKlsgao/Mp5beYhLcXXulwFnciyVwFjI/fQqN
+         Od2bECa2DIcRcSoOT9/NsWyQ5KCbiWd3kg+qqCLWLZf3pS9Kr/LNVewk/VRrmHpHCkor
+         1MwT0rkTtCBwcP6A4sPupDDzQ6+a69bmLF48r1p6knoyJRptItAIm2RbxrW1Wsp6QNNA
+         FEWYG+k3xv8VnJrcMqaiW3dohqYb9xOBK0bfxoCvnDWQdKQdg129ZIjwOu5rxjTRDWct
+         kJiA==
+X-Forwarded-Encrypted: i=1; AJvYcCVM88iCWFZYkUDzlTKf16ZCHIm/jN854IhUZKgPWy4Kl9i5aeocmjj6iS+pgx3EqBE6boQLg293rnDl+ASLJI9pwFqPOlUSsRB9
+X-Gm-Message-State: AOJu0YzsDBVZHYu2P+VcJx5CLU2UH1DQ4wtfi4k5wwmAY+iLTqckEFQD
+	zSYxVJeG2wjOg1Kiahu6kCZNO2ttjBc46YycGvDDSLqfpgPW6v2QzkyXH8YL
+X-Google-Smtp-Source: AGHT+IHTP2mpj+NEMTTvSo0+EkhBbGLzl0pC82IDkvx3xKRk8pK6f7Cd2YOdQRnbzDY/SCssbK8CaQ==
+X-Received: by 2002:a05:6a20:3d0b:b0:1a7:2463:ae3b with SMTP id y11-20020a056a203d0b00b001a72463ae3bmr405372pzi.7.1712045369408;
+        Tue, 02 Apr 2024 01:09:29 -0700 (PDT)
+Received: from [192.168.43.30] ([1.47.155.123])
+        by smtp.googlemail.com with ESMTPSA id e14-20020a170902784e00b001e010c1628fsm10524655pln.124.2024.04.02.01.09.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 Apr 2024 01:09:28 -0700 (PDT)
+Message-ID: <64053ff1-c447-45c5-ba87-e85307143dd4@gmail.com>
+Date: Tue, 2 Apr 2024 15:09:12 +0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="2JtGlwc2haZV7U3k"
-Content-Disposition: inline
-In-Reply-To: <2024032622-canine-fragility-39db@gregkh>
-X-Sent-From: Pengutronix Hildesheim
-X-URL: http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] USB: serial: option: add Lonsung U8300/U9300 product
+ Update the USB serial option driver to support Longsung U8300/U9300.
+To: Coia Prant <coiaprant@gmail.com>, linux-usb@vger.kernel.org,
+ Johan Hovold <johan@kernel.org>
+Cc: stable@vger.kernel.org
+References: <20240402073451.1751984-1-coiaprant@gmail.com>
+Content-Language: en-US
+From: Lars Melin <larsm17@gmail.com>
+In-Reply-To: <20240402073451.1751984-1-coiaprant@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
+On 2024-04-02 14:34, Coia Prant wrote:
+> ID 1c9e:9b05 OMEGA TECHNOLOGY (U8300)
+> ID 1c9e:9b3c OMEGA TECHNOLOGY (U9300)
+> 
+> U8300
+>   /: Bus
+>      |__ Port 1: Dev 3, If 0, Class=Vendor Specific Class, Driver=option, 480M (Debug)
+>          ID 1c9e:9b05 OMEGA TECHNOLOGY
+>      |__ Port 1: Dev 3, If 1, Class=Vendor Specific Class, Driver=option, 480M (Modem / AT)
+>          ID 1c9e:9b05 OMEGA TECHNOLOGY
+>      |__ Port 1: Dev 3, If 2, Class=Vendor Specific Class, Driver=option, 480M (AT)
+>          ID 1c9e:9b05 OMEGA TECHNOLOGY
+>      |__ Port 1: Dev 3, If 3, Class=Vendor Specific Class, Driver=option, 480M (AT / Pipe / PPP)
+>          ID 1c9e:9b05 OMEGA TECHNOLOGY
+>      |__ Port 1: Dev 3, If 4, Class=Vendor Specific Class, Driver=qmi_wwan, 480M (NDIS / GobiNet / QMI WWAN)
+>          ID 1c9e:9b05 OMEGA TECHNOLOGY
+>      |__ Port 1: Dev 3, If 5, Class=Vendor Specific Class, Driver=, 480M (ADB)
+>          ID 1c9e:9b05 OMEGA TECHNOLOGY
+> 
+> U9300
+>   /: Bus
+>      |__ Port 1: Dev 3, If 0, Class=Vendor Specific Class, Driver=, 480M (ADB)
+>          ID 1c9e:9b3c OMEGA TECHNOLOGY
+>      |__ Port 1: Dev 3, If 1, Class=Vendor Specific Class, Driver=option, 480M (Modem / AT)
+>          ID 1c9e:9b3c OMEGA TECHNOLOGY
+>      |__ Port 1: Dev 3, If 2, Class=Vendor Specific Class, Driver=option, 480M (AT)
+>          ID 1c9e:9b3c OMEGA TECHNOLOGY
+>      |__ Port 1: Dev 3, If 3, Class=Vendor Specific Class, Driver=option, 480M (AT / Pipe / PPP)
+>          ID 1c9e:9b3c OMEGA TECHNOLOGY
+>      |__ Port 1: Dev 3, If 4, Class=Vendor Specific Class, Driver=qmi_wwan, 480M (NDIS / GobiNet / QMI WWAN)
+>          ID 1c9e:9b3c OMEGA TECHNOLOGY
+> 
+> Tested successfully using Modem Manager on U9300.
+> Tested successfully AT commands using If=1, If=2 and If=3 on U9300.
+> 
+> Signed-off-by: Coia Prant <coiaprant@gmail.com>
+> Cc: stable@vger.kernel.org
+> ---
+>   drivers/usb/serial/option.c | 8 ++++++++
+>   1 file changed, 8 insertions(+)
+> 
+> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+> index 55a65d941ccb..27a116901459 100644
+> --- a/drivers/usb/serial/option.c
+> +++ b/drivers/usb/serial/option.c
+> @@ -412,6 +412,10 @@ static void option_instat_callback(struct urb *urb);
+>    */
+>   #define LONGCHEER_VENDOR_ID			0x1c9e
+>   
+> +/* Longsung products */
+> +#define LONGSUNG_U8300_PRODUCT_ID		0x9b05
+> +#define LONGSUNG_U9300_PRODUCT_ID		0x9b3c
+> +
+>   /* 4G Systems products */
+>   /* This one was sold as the VW and Skoda "Carstick LTE" */
+>   #define FOUR_G_SYSTEMS_PRODUCT_CARSTICK_LTE	0x7605
+> @@ -2054,6 +2058,10 @@ static const struct usb_device_id option_ids[] = {
+>   	  .driver_info = RSVD(4) },
+>   	{ USB_DEVICE(LONGCHEER_VENDOR_ID, ZOOM_PRODUCT_4597) },
+>   	{ USB_DEVICE(LONGCHEER_VENDOR_ID, IBALL_3_5G_CONNECT) },
+> +	{ USB_DEVICE(LONGCHEER_VENDOR_ID, LONGSUNG_U8300_PRODUCT_ID),
+> +	  .driver_info = RSVD(4) | RSVD(5) },
+> +	{ USB_DEVICE(LONGCHEER_VENDOR_ID, LONGSUNG_U9300_PRODUCT_ID),
+> +	  .driver_info = RSVD(0) | RSVD(4) },
+>   	{ USB_DEVICE(HAIER_VENDOR_ID, HAIER_PRODUCT_CE100) },
+>   	{ USB_DEVICE_AND_INTERFACE_INFO(HAIER_VENDOR_ID, HAIER_PRODUCT_CE81B, 0xff, 0xff, 0xff) },
+>   	/* Pirelli  */
 
---2JtGlwc2haZV7U3k
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Reviewed-by Lars Melin (larsm17@gmail.com
 
-On Tue, Mar 26, 2024 at 10:32:48AM +0100, Greg Kroah-Hartman wrote:
->On Mon, Mar 25, 2024 at 12:32:30AM +0100, Michael Grzeschik wrote:
->> Right now after one transfer was completed with EXDEV the currently
->> encoded frame will get the UVC_STREAM_ERR tag attached. Since the
->> complete and encode path are handling separate requests from different
->> threads, there is no direct correspondence between the missed transfer
->> of one request and the currently encoded request which might already
->> belong to an completely different frame.
->>
->> When queueing requests into the hardware by calling ep_queue the
->> underlying ringbuffer of the usb driver will be filled. However when
->> one of these requests will have some issue while transfer the hardware
->> will trigger an interrupt but will continue transferring the pending
->> requests in the ringbuffer. This interrupt-latency will make it
->> impossible to react in time to tag the fully enqueued frame with the
->> UVC_STREAM_ERR in the header.
->>
->> This patch is also addressing this particular issue by delaying the
->> transmit of the EOF/ERR tagged header by waiting for the last enqueued
->> buffer of the frame to be completed. This way it is possible to react to
->> send the EOF/ERR tag depending on the whole frame transfer status.
->>
->> As this is patch is adding latency to the enqueuing path of the frames
->> we make this errorcheck optional by adding an extra module parameter.
->>
->> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
->> ---
->>  drivers/usb/gadget/function/f_uvc.c     |  4 ++
->>  drivers/usb/gadget/function/uvc.h       |  3 ++
->>  drivers/usb/gadget/function/uvc_video.c | 69 ++++++++++++++++++++++++++=
-+++----
->>  3 files changed, 68 insertions(+), 8 deletions(-)
->>
->> diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/fu=
-nction/f_uvc.c
->> index 929666805bd23..6a7ca8ccaf360 100644
->> --- a/drivers/usb/gadget/function/f_uvc.c
->> +++ b/drivers/usb/gadget/function/f_uvc.c
->> @@ -33,6 +33,10 @@ unsigned int uvc_gadget_trace_param;
->>  module_param_named(trace, uvc_gadget_trace_param, uint, 0644);
->>  MODULE_PARM_DESC(trace, "Trace level bitmask");
->>
->> +bool uvc_gadget_errorcheck_param =3D true;
->> +module_param_named(errorcheck, uvc_gadget_errorcheck_param, bool, 0644);
->> +MODULE_PARM_DESC(errorcheck, "Check and mark errors in the transfer of =
-a frame");
->
->I really really really really hate adding new module parameters as they
->do not scale nor work properly for multiple devices and really, it's not
->the 1990's anymore.
->
->Any way to make this debugging thing part of a debugfs interface or
->worst case, a sysfs entry instead?
->
->Or why not just make it a tracing thing instead?
->
->But wait, you are fixing a real issue here, why is it an option at all?
->Shouldn't this always be the case and the driver should always recover
->in this way?  Why would you not want this to be the default and only way
->it operates?
-
-Yes and no. I added the thange to be optional, since it is changing
-the amount of frames we will be able to transfer at once. However
-I have another set of changes in the queue, that is also taking
-the expected size and fps into the account of requst_size and
-therefor the real amount of bandwidth. That will indirectly will have
-the same result.
-
-So this makes the option obsolete anyway. I will remove it in v2.
-
-Thanks,
-Michael
-
---=20
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
-
---2JtGlwc2haZV7U3k
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmYLt6AACgkQC+njFXoe
-LGQDFA//ZEzkUt+XkbeH5Ka2jUMzVXYUzU9ravHwPbjN4Bd588pR8IF8robmvILh
-OZxabh6CRTejfuEi5CwO9QwsFvKe9ijdVWUI7e+ddXShJYk9sLB3ti0euEJnGCz3
-LB5hM1mVPt7hEiJ545P+Lo4ouO6yQ4ZPQ3+ft8gF6Evvy9F+XQLJtrHjdFr6+cfd
-n5bOR/T2W9pTdNUYhCv/W4T2OmD6VNcIukIDdflOyLuwuowcjD4RiPVouLVO9Zei
-xKUlcGeET7hEgtZCzuTBo+0w4nBqb3Sun4NviswI0HcgjGhjwKP9tSsHx3nsWqos
-FqddhmEcrVvH4ULvqVeaxECcQu/vlSEuUT/44zsq728qBD/7lWa0ihVP4XZIdYjc
-GePtRHoKVUytdUAX6ngt/fc4ghv6bPPsIRN7FdeUjiTY2h1TzXaY1Ci6etX3mXMn
-Ym42njbPP1UnDFQbnnaun1WF6n03gUzucn14ootLNBJXO43rN0FqoYH0YC9TQxBl
-kU0z0mgtritE5FeY9makA18BtfmaSnWsaqRVGp1RqezDsP6V6XuW79BlwEtxONZX
-a3GQIPiayR9ltvWN5Glpe9i3XQ94G+7HpnDeeorUh50iEmfNHNRTqs+nBw1PSrKr
-ShE5fhujLVdG0u5DpM0Tvb7LqyZZdNIsGVOF/BWqMgk43kaMQXI=
-=6ApB
------END PGP SIGNATURE-----
-
---2JtGlwc2haZV7U3k--
+added the maintainer to the recipient list
 
