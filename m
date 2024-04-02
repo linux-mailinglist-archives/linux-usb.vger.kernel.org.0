@@ -1,162 +1,184 @@
-Return-Path: <linux-usb+bounces-8708-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8709-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3039894D2E
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Apr 2024 10:09:37 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F020894D8A
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Apr 2024 10:32:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8E37F282FAF
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Apr 2024 08:09:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6CD4E1C20BFE
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Apr 2024 08:32:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF20A3D962;
-	Tue,  2 Apr 2024 08:09:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F5512EAF7;
+	Tue,  2 Apr 2024 08:31:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aMQPio9Q"
+	dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b="MPya0UeM"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16C843D544;
-	Tue,  2 Apr 2024 08:09:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
+Received: from mail-177132.yeah.net (mail-177132.yeah.net [123.58.177.132])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCCD31E4A1;
+	Tue,  2 Apr 2024 08:31:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=123.58.177.132
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712045371; cv=none; b=E2AL/h9y3/aJQt2564/7BRxb5GXPm5Glmp5fXfUZu/3z+/WJOHEP/dPeUK4/YFIK2wgV0ey18C5UiAQyJ39vvn2M41fBwCnt6ecASRqYjiu6RIl8sumb53OA9vujuzxBelgk/YLDqLLL8tphzrgFWLPpALeX/dtwDWf1pGQF7ng=
+	t=1712046716; cv=none; b=jDtKWGEz1l7/oljiECPKeCTz05p0t3yIVOx1ihepnV7gu+uiHRt6Agyr/jxkSchRxqHODJP9Gmox+UVa7ZoqcLi+wJS9Nkk5aWSnk8ywnWGLLHmNTZjQP2gbpYp9TmNSbo/0gNWSChhHMnmANHRuEzM7rkGV++7W5d3PbJ9t0LM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712045371; c=relaxed/simple;
-	bh=ZzCmfLlRmQWAd8BZFDzu2/Q5ZhppnoVamII+p9EovOo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AJnqqI30NOC2bqsO9iWnm9XcRDhjYXNBLIh9VBmTVj6J42k2D1gYujcoZjoO8XlfIVMPxw04hOGwT1GDgiB4JfGrtHSLOnaiu0s54zuMib2WvlW0cLOXDcsD5C5ytbwxnYWgqpk27tVCIjdiE/UFlcBG1ccgAYkTNj19jMadjfo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aMQPio9Q; arc=none smtp.client-ip=209.85.215.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-5d8b887bb0cso3973967a12.2;
-        Tue, 02 Apr 2024 01:09:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712045369; x=1712650169; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aPabVevQpgCOqyU7yl6aNZ4AREaAFhD+eH9lVYEoxAU=;
-        b=aMQPio9QYPO4Rgct2mAlylee3sOKH+jOqV8cuELnQLrGaoM2MmGBeOtdah8eiBduRm
-         CPTMT/T/KHrdrK2zlpgNWxsZEwBxeEPX+VdRREEAIXAng3+2RwVo6svD3+fdedR7q4w1
-         AS2Y0F5Bl6N9FA0Pd9KnK7GTa7L7lcco9bUXuZ35c4a1fPALq9hN4TB19FyEwXxwcbdB
-         2qj07SOxLlvosp+6p9drilE8enhJus71Lh0qBdk+hkkeBCPIW8mu5QS8MNbRL8XMK9pR
-         DHojccyICA5QKCypd9/fqHkvxT8O3YYt9hDm0tqbNCR3huNUb291Cm8UzFd8hV49NqmP
-         RIUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712045369; x=1712650169;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aPabVevQpgCOqyU7yl6aNZ4AREaAFhD+eH9lVYEoxAU=;
-        b=ae3xNjvvDBhqZ4Ead4TIvxE5/7NcbWYPtZJqZGzpTLKyz8crmYjBolbrFdOO3XzgBE
-         6dZ81psVJm7UjbsjfHQ9frjCt2tSAt5IKlsgao/Mp5beYhLcXXulwFnciyVwFjI/fQqN
-         Od2bECa2DIcRcSoOT9/NsWyQ5KCbiWd3kg+qqCLWLZf3pS9Kr/LNVewk/VRrmHpHCkor
-         1MwT0rkTtCBwcP6A4sPupDDzQ6+a69bmLF48r1p6knoyJRptItAIm2RbxrW1Wsp6QNNA
-         FEWYG+k3xv8VnJrcMqaiW3dohqYb9xOBK0bfxoCvnDWQdKQdg129ZIjwOu5rxjTRDWct
-         kJiA==
-X-Forwarded-Encrypted: i=1; AJvYcCVM88iCWFZYkUDzlTKf16ZCHIm/jN854IhUZKgPWy4Kl9i5aeocmjj6iS+pgx3EqBE6boQLg293rnDl+ASLJI9pwFqPOlUSsRB9
-X-Gm-Message-State: AOJu0YzsDBVZHYu2P+VcJx5CLU2UH1DQ4wtfi4k5wwmAY+iLTqckEFQD
-	zSYxVJeG2wjOg1Kiahu6kCZNO2ttjBc46YycGvDDSLqfpgPW6v2QzkyXH8YL
-X-Google-Smtp-Source: AGHT+IHTP2mpj+NEMTTvSo0+EkhBbGLzl0pC82IDkvx3xKRk8pK6f7Cd2YOdQRnbzDY/SCssbK8CaQ==
-X-Received: by 2002:a05:6a20:3d0b:b0:1a7:2463:ae3b with SMTP id y11-20020a056a203d0b00b001a72463ae3bmr405372pzi.7.1712045369408;
-        Tue, 02 Apr 2024 01:09:29 -0700 (PDT)
-Received: from [192.168.43.30] ([1.47.155.123])
-        by smtp.googlemail.com with ESMTPSA id e14-20020a170902784e00b001e010c1628fsm10524655pln.124.2024.04.02.01.09.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Apr 2024 01:09:28 -0700 (PDT)
-Message-ID: <64053ff1-c447-45c5-ba87-e85307143dd4@gmail.com>
-Date: Tue, 2 Apr 2024 15:09:12 +0700
+	s=arc-20240116; t=1712046716; c=relaxed/simple;
+	bh=Z/qLSoyxcqYY45vOcGBrjpYcFtcLiSmPOnablfSkfFc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=u4nFl0wJ7nackUfbxWllGcq+NOECgaj9sYJ9NggUplbGDmy4GN+IsWSe/ceg8h5WBOg6y02fOAS13Jc6zA0yEGk8IL+hCATaQD3e7o8OC40f/VaW9Y3hdd+ZVpTAllsQ96XAG5Jn/BJHLIFJmp9YPm02Zyp4tJfbrcVCiIypYmE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net; spf=pass smtp.mailfrom=yeah.net; dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b=MPya0UeM; arc=none smtp.client-ip=123.58.177.132
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yeah.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yeah.net;
+	s=s110527; h=Date:From:Subject:Message-ID:MIME-Version:
+	Content-Type; bh=apDFZqziJ/YmD7Ot7Oe3WRkx6S7TtVnUEW5HigajFNQ=;
+	b=MPya0UeM93328C53lUb1OqxrBn1MIbsPSHF2ROH7rduicC9q5sWhS3XxMlyaRg
+	SYc71SweFvwm6blXbyMfulQq1QJqg3Vlly6w8VKH06Lq4WvbcR3Zi4M2sckJ7Vgn
+	algtmVHN6I+ViYDjDlS8LcAQlGXAUR9MWLOA3KxUyg/6s=
+Received: from dragon (unknown [223.68.79.243])
+	by smtp2 (Coremail) with SMTP id C1UQrAAnjxhOwgtmy4WnAg--.42039S3;
+	Tue, 02 Apr 2024 16:31:12 +0800 (CST)
+Date: Tue, 2 Apr 2024 16:31:10 +0800
+From: Shawn Guo <shawnguo2@yeah.net>
+To: Xu Yang <xu.yang_2@nxp.com>
+Cc: gregkh@linuxfoundation.org, robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+	conor+dt@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+	festevam@gmail.com, linux-imx@nxp.com, peter.chen@kernel.org,
+	jun.li@nxp.com, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	imx@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v10 02/11] arm64: dts: imx8ulp: add usb nodes
+Message-ID: <ZgvCTgB4lp0F83Kn@dragon>
+References: <20240321081439.541799-1-xu.yang_2@nxp.com>
+ <20240321081439.541799-2-xu.yang_2@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] USB: serial: option: add Lonsung U8300/U9300 product
- Update the USB serial option driver to support Longsung U8300/U9300.
-To: Coia Prant <coiaprant@gmail.com>, linux-usb@vger.kernel.org,
- Johan Hovold <johan@kernel.org>
-Cc: stable@vger.kernel.org
-References: <20240402073451.1751984-1-coiaprant@gmail.com>
-Content-Language: en-US
-From: Lars Melin <larsm17@gmail.com>
-In-Reply-To: <20240402073451.1751984-1-coiaprant@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240321081439.541799-2-xu.yang_2@nxp.com>
+X-CM-TRANSID:C1UQrAAnjxhOwgtmy4WnAg--.42039S3
+X-Coremail-Antispam: 1Uf129KBjvJXoWxGF1kArWrtFy8JFWfJr1kKrg_yoW5CF1rp3
+	4DGFZ5Wr48ur17KFWYvF1qkF95JayrCF95ZF1ay3y8tr9F934Ut340q3ZYgr15Zr4xZw4a
+	qFn3WF1fKF1qvw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jrhL8UUUUU=
+X-CM-SenderInfo: pvkd40hjxrjqh1hdxhhqhw/1tbiFRG0ZV6NnBkz1gAAsm
 
-On 2024-04-02 14:34, Coia Prant wrote:
-> ID 1c9e:9b05 OMEGA TECHNOLOGY (U8300)
-> ID 1c9e:9b3c OMEGA TECHNOLOGY (U9300)
+On Thu, Mar 21, 2024 at 04:14:30PM +0800, Xu Yang wrote:
+> Add USB nodes on i.MX8ULP platform which has 2 USB controllers.
 > 
-> U8300
->   /: Bus
->      |__ Port 1: Dev 3, If 0, Class=Vendor Specific Class, Driver=option, 480M (Debug)
->          ID 1c9e:9b05 OMEGA TECHNOLOGY
->      |__ Port 1: Dev 3, If 1, Class=Vendor Specific Class, Driver=option, 480M (Modem / AT)
->          ID 1c9e:9b05 OMEGA TECHNOLOGY
->      |__ Port 1: Dev 3, If 2, Class=Vendor Specific Class, Driver=option, 480M (AT)
->          ID 1c9e:9b05 OMEGA TECHNOLOGY
->      |__ Port 1: Dev 3, If 3, Class=Vendor Specific Class, Driver=option, 480M (AT / Pipe / PPP)
->          ID 1c9e:9b05 OMEGA TECHNOLOGY
->      |__ Port 1: Dev 3, If 4, Class=Vendor Specific Class, Driver=qmi_wwan, 480M (NDIS / GobiNet / QMI WWAN)
->          ID 1c9e:9b05 OMEGA TECHNOLOGY
->      |__ Port 1: Dev 3, If 5, Class=Vendor Specific Class, Driver=, 480M (ADB)
->          ID 1c9e:9b05 OMEGA TECHNOLOGY
+> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
 > 
-> U9300
->   /: Bus
->      |__ Port 1: Dev 3, If 0, Class=Vendor Specific Class, Driver=, 480M (ADB)
->          ID 1c9e:9b3c OMEGA TECHNOLOGY
->      |__ Port 1: Dev 3, If 1, Class=Vendor Specific Class, Driver=option, 480M (Modem / AT)
->          ID 1c9e:9b3c OMEGA TECHNOLOGY
->      |__ Port 1: Dev 3, If 2, Class=Vendor Specific Class, Driver=option, 480M (AT)
->          ID 1c9e:9b3c OMEGA TECHNOLOGY
->      |__ Port 1: Dev 3, If 3, Class=Vendor Specific Class, Driver=option, 480M (AT / Pipe / PPP)
->          ID 1c9e:9b3c OMEGA TECHNOLOGY
->      |__ Port 1: Dev 3, If 4, Class=Vendor Specific Class, Driver=qmi_wwan, 480M (NDIS / GobiNet / QMI WWAN)
->          ID 1c9e:9b3c OMEGA TECHNOLOGY
-> 
-> Tested successfully using Modem Manager on U9300.
-> Tested successfully AT commands using If=1, If=2 and If=3 on U9300.
-> 
-> Signed-off-by: Coia Prant <coiaprant@gmail.com>
-> Cc: stable@vger.kernel.org
 > ---
->   drivers/usb/serial/option.c | 8 ++++++++
->   1 file changed, 8 insertions(+)
+> Changes in v2:
+>  - no changes
+> Changes in v3:
+>  - no changes
+> Changes in v4:
+>  - no changes
+> Changes in v5:
+>  - no changes
+> Changes in v6:
+>  - drop usbphy aliases
+> Changes in v7:
+>  - no changes
+> Changes in v8:
+>  - no changes
+> Changes in v9:
+>  - no changes
+> Changes in v10:
+>  - no changes
+> ---
+>  arch/arm64/boot/dts/freescale/imx8ulp.dtsi | 62 ++++++++++++++++++++++
+>  1 file changed, 62 insertions(+)
 > 
-> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-> index 55a65d941ccb..27a116901459 100644
-> --- a/drivers/usb/serial/option.c
-> +++ b/drivers/usb/serial/option.c
-> @@ -412,6 +412,10 @@ static void option_instat_callback(struct urb *urb);
->    */
->   #define LONGCHEER_VENDOR_ID			0x1c9e
->   
-> +/* Longsung products */
-> +#define LONGSUNG_U8300_PRODUCT_ID		0x9b05
-> +#define LONGSUNG_U9300_PRODUCT_ID		0x9b3c
+> diff --git a/arch/arm64/boot/dts/freescale/imx8ulp.dtsi b/arch/arm64/boot/dts/freescale/imx8ulp.dtsi
+> index c4a0082f30d3..7da9461a5745 100644
+> --- a/arch/arm64/boot/dts/freescale/imx8ulp.dtsi
+> +++ b/arch/arm64/boot/dts/freescale/imx8ulp.dtsi
+> @@ -472,6 +472,68 @@ usdhc2: mmc@298f0000 {
+>  				status = "disabled";
+>  			};
+>  
+> +			usbotg1: usb@29900000 {
+> +				compatible = "fsl,imx8ulp-usb", "fsl,imx7ulp-usb", "fsl,imx6ul-usb";
+> +				reg = <0x29900000 0x200>;
+> +				interrupts = <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>;
+> +				clocks = <&pcc4 IMX8ULP_CLK_USB0>;
+> +				power-domains = <&scmi_devpd IMX8ULP_PD_USB0>;
+> +				phys = <&usbphy1>;
+> +				fsl,usbmisc = <&usbmisc1 0>;
+> +				ahb-burst-config = <0x0>;
+> +				tx-burst-size-dword = <0x8>;
+> +				rx-burst-size-dword = <0x8>;
+> +				status = "disabled";
+> +			};
 > +
->   /* 4G Systems products */
->   /* This one was sold as the VW and Skoda "Carstick LTE" */
->   #define FOUR_G_SYSTEMS_PRODUCT_CARSTICK_LTE	0x7605
-> @@ -2054,6 +2058,10 @@ static const struct usb_device_id option_ids[] = {
->   	  .driver_info = RSVD(4) },
->   	{ USB_DEVICE(LONGCHEER_VENDOR_ID, ZOOM_PRODUCT_4597) },
->   	{ USB_DEVICE(LONGCHEER_VENDOR_ID, IBALL_3_5G_CONNECT) },
-> +	{ USB_DEVICE(LONGCHEER_VENDOR_ID, LONGSUNG_U8300_PRODUCT_ID),
-> +	  .driver_info = RSVD(4) | RSVD(5) },
-> +	{ USB_DEVICE(LONGCHEER_VENDOR_ID, LONGSUNG_U9300_PRODUCT_ID),
-> +	  .driver_info = RSVD(0) | RSVD(4) },
->   	{ USB_DEVICE(HAIER_VENDOR_ID, HAIER_PRODUCT_CE100) },
->   	{ USB_DEVICE_AND_INTERFACE_INFO(HAIER_VENDOR_ID, HAIER_PRODUCT_CE81B, 0xff, 0xff, 0xff) },
->   	/* Pirelli  */
+> +			usbmisc1: usbmisc@29900200 {
+> +				compatible = "fsl,imx8ulp-usbmisc", "fsl,imx7d-usbmisc",
+> +						"fsl,imx6q-usbmisc";
+> +				#index-cells = <1>;
+> +				reg = <0x29900200 0x200>;
 
-Reviewed-by Lars Melin (larsm17@gmail.com
+Could you move 'reg' above so that it's after compatible?
 
-added the maintainer to the recipient list
+> +				status = "disabled";
+> +			};
+> +
+> +			usbphy1: usb-phy@29910000 {
+> +				compatible = "fsl,imx8ulp-usbphy", "fsl,imx7ulp-usbphy";
+> +				reg = <0x29910000 0x10000>;
+> +				interrupts = <GIC_SPI 104 IRQ_TYPE_LEVEL_HIGH>;
+> +				clocks = <&pcc4 IMX8ULP_CLK_USB0_PHY>;
+> +				#phy-cells = <0>;
+> +				status = "disabled";
+> +			};
+> +
+> +			usbotg2: usb@29920000 {
+> +				compatible = "fsl,imx8ulp-usb", "fsl,imx7ulp-usb", "fsl,imx6ul-usb";
+> +				reg = <0x29920000 0x200>;
+> +				interrupts = <GIC_SPI 105 IRQ_TYPE_LEVEL_HIGH>;
+> +				clocks = <&pcc4 IMX8ULP_CLK_USB1>;
+> +				power-domains = <&scmi_devpd IMX8ULP_PD_USDHC2_USB1>;
+> +				phys = <&usbphy2>;
+> +				fsl,usbmisc = <&usbmisc2 0>;
+> +				ahb-burst-config = <0x0>;
+> +				tx-burst-size-dword = <0x8>;
+> +				rx-burst-size-dword = <0x8>;
+> +				status = "disabled";
+> +			};
+> +
+> +			usbmisc2: usbmisc@29920200 {
+> +				compatible = "fsl,imx8ulp-usbmisc", "fsl,imx7d-usbmisc",
+> +						"fsl,imx6q-usbmisc";
+> +				#index-cells = <1>;
+> +				reg = <0x29920200 0x200>;
+
+Ditto
+
+Shawn
+
+> +				status = "disabled";
+> +			};
+> +
+> +			usbphy2: usb-phy@29930000 {
+> +				compatible = "fsl,imx8ulp-usbphy", "fsl,imx7ulp-usbphy";
+> +				reg = <0x29930000 0x10000>;
+> +				interrupts = <GIC_SPI 106 IRQ_TYPE_LEVEL_HIGH>;
+> +				clocks = <&pcc4 IMX8ULP_CLK_USB1_PHY>;
+> +				#phy-cells = <0>;
+> +				status = "disabled";
+> +			};
+> +
+>  			fec: ethernet@29950000 {
+>  				compatible = "fsl,imx8ulp-fec", "fsl,imx6ul-fec", "fsl,imx6q-fec";
+>  				reg = <0x29950000 0x10000>;
+> -- 
+> 2.34.1
+> 
+
 
