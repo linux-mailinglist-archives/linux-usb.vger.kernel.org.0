@@ -1,213 +1,151 @@
-Return-Path: <linux-usb+bounces-8740-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8741-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5360B895293
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Apr 2024 14:10:28 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4979B8952E5
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Apr 2024 14:25:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0979C1F24A29
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Apr 2024 12:10:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EC9E1281814
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Apr 2024 12:25:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3BEC75813;
-	Tue,  2 Apr 2024 12:09:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1420879B8E;
+	Tue,  2 Apr 2024 12:25:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="hy8FKegc"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Y/PM2lOG"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 667A9757EA
-	for <linux-usb@vger.kernel.org>; Tue,  2 Apr 2024 12:09:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66D5077F22
+	for <linux-usb@vger.kernel.org>; Tue,  2 Apr 2024 12:25:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712059773; cv=none; b=R2FQhOZIr0HY25S0Vcc3wba2vSrcy9uqwJt8qYTM7pem2lrVFwHR8mfrF3gy3I48ZE+rBWE40oJgPbnn4fl7XN5PjdO685UAz/3eH00BKdfc8X213tjD0j9qmNCdrDbFLOqHviDYMUhwOhDoIndc/eR3I0oyvNR7bdcLaJLCez4=
+	t=1712060730; cv=none; b=SBA/CeLGEMQ6CWjxd/dt2iVB0jSjo2AOmNd6+YJ4fs1H5++61l4CpiFfcdhEmN8SuztlFhZ2KlqRNXXyRu3Ny+YagWOz04zVsAvEriV3IK7oITzMrANEtnA7eakzHXnVKZntZgW2AFyFWSLhKc83vaNl+IlfXcfXd0ow+sBQli8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712059773; c=relaxed/simple;
-	bh=ahRMcLkjFExP99f5A5yoUFbXddpWpyopk22CXBLQ9xI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=B7ZvqMDCzkfps5Vm/UyHQv2V7wxrzBgwkhxtvYjQQzdvOH7XJJCMUH6dcBRDrIDYI2rCtgNOMz/hE1jr6X1f/vR6LfbhTssWboImUAmWJwEnRonpV2awxrfzwb7mf8LvtueVPWRxquQG1FI32jvlA79KJ1zIQx1mQ9g/BCEd5Gc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=hy8FKegc; arc=none smtp.client-ip=209.85.210.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-ot1-f52.google.com with SMTP id 46e09a7af769-6e8a1b8cf28so973315a34.1
-        for <linux-usb@vger.kernel.org>; Tue, 02 Apr 2024 05:09:31 -0700 (PDT)
+	s=arc-20240116; t=1712060730; c=relaxed/simple;
+	bh=p/UeUz6BQzzlTj362U5Q+0hUyUg483V1OKi+HLKX4OI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=IlgsdJBnSfLU0SEyPu4bAAAYflQPXtlv9i1V07Eu+M81XnVXrmu0pr+DDOqyXWmql5Djx5tfsE7cGqJ8zACZy8te9EGhuGgLh4uBwG5QUbueS6iD7Kjd7sExNiRaH0EUZarNq75cINw8o/3IJrupeEjK1jSZogf3mio7KcN5xos=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Y/PM2lOG; arc=none smtp.client-ip=209.85.219.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-dcc80d6004bso4623478276.0
+        for <linux-usb@vger.kernel.org>; Tue, 02 Apr 2024 05:25:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1712059770; x=1712664570; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=j5rFxrXL2P+kdAdamW3tYXEeRPfGn55Rv8VJMgZBhXg=;
-        b=hy8FKegcCoCS4rcGDmq2D7ojkfRcfgHQs+ZMiLSxXUzOfx2U8Lububh1Mg/tCE01Sf
-         CLtrM+4VK7EA0dRtpJs9S2Gvdz/pSNI2rJqkI8EbZTL2ZMkTaFraKB+Kevu9wJEXDv+8
-         A5bNSViI1jesLx4cieOVHefUL4fakz0zauMxQ=
+        d=linaro.org; s=google; t=1712060727; x=1712665527; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XYDEIQksW8zQ45WbeyUEVn5ldQ4luRyFOVVyheFSkHo=;
+        b=Y/PM2lOGfwWISYEdLESt2KTtPtlHr8yg1/CGBA9FdtQYocQGHfZ+cW0YX8gg6woOzV
+         GW2SDVi0/W3ULE54zcjGLCvAVZmtCbh3VTBP3+tIbEtfDVbLhIKmqb1+a4TsXXIi5Yzk
+         SmHdUNPRN3zFBd10rSJY/qlNyGVwoVukAF36q+yItox15kUXELlUSRxcl8Mpdx9vLxmG
+         OY2lC+VOGMvXLQpb+r8L51QY+HHC99dDGGT3DX0N/M8WeSY9BE+U/oYh+6bWOLo9Abss
+         DlybL2mtVJawsbxg5WOsIutmwfbaMVxbHlwZxE2sF43N12B5PAMcfpnEeYIqUQTLlbrm
+         fqRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712059770; x=1712664570;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=j5rFxrXL2P+kdAdamW3tYXEeRPfGn55Rv8VJMgZBhXg=;
-        b=YpnuvizYY0QPu+luJIsQunuz7kF20gcGHbqrw0cYcZ5NYhbbVnTSApyvCH686A6XZ0
-         Iiggeh7QtuTJ5lUG/43Lx/ytXl37QfnoNy3YbqMfGu7Asmm0WrHjkAoG9H/EMk4dsJ1E
-         BfnheOLEyCRNXyYFet8Z1IfArGaH2sNApV8ZQgCvivombXuZ+8uaJBXUBDJmv4I63t3S
-         hOK5S7z0w8Xw/oDz5zxUIUZMXbq5JUu13KaMhduBHw9O5R3TFaaW3kFED4YQgtdrBQ1F
-         Q8kRSt2R0K0KbuURjPBCeV0oXryjAA2Hxis3CihSvYHJax/qWmdjn1BVEZepwZrvhRDF
-         3jLg==
-X-Gm-Message-State: AOJu0YxMQnRmwnIH7ziSKEYOD/3c/CwB9AEt7xslVdXHCd5IuRW4ME5J
-	La9MBdZjlfoW/2FjybZwWAiGV1uFebRVN6fNjYJ+j0ATW5YBvidOt+Wvv//3JA==
-X-Google-Smtp-Source: AGHT+IF0N+GkNk9od58Bnsg5BIymhK0X9MmZ/yo2fBafw081AKnRmBo1/1M9LLtSJyRF5cVRDTdOsA==
-X-Received: by 2002:a9d:6c8f:0:b0:6e6:c811:4891 with SMTP id c15-20020a9d6c8f000000b006e6c8114891mr13403540otr.29.1712059770483;
-        Tue, 02 Apr 2024 05:09:30 -0700 (PDT)
-Received: from denia.c.googlers.com (188.173.86.34.bc.googleusercontent.com. [34.86.173.188])
-        by smtp.gmail.com with ESMTPSA id r9-20020a056214124900b00698f0a22f5csm4396702qvv.130.2024.04.02.05.09.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Apr 2024 05:09:30 -0700 (PDT)
-From: Ricardo Ribalda <ribalda@chromium.org>
-Date: Tue, 02 Apr 2024 12:09:29 +0000
-Subject: [PATCH v5] media: ucvideo: Add quirk for Logitech Rally Bar
+        d=1e100.net; s=20230601; t=1712060727; x=1712665527;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XYDEIQksW8zQ45WbeyUEVn5ldQ4luRyFOVVyheFSkHo=;
+        b=eQufwX50u87enXbAvAaTt6/9YFTmB1mvcANAxrxq0xDvizzygcpOhMOiLcFywt/Lww
+         yxHXgZl51mvt53gKu3iy3Mlurzjelo6Ijs+LmP4ElgZsfdbWk2Brylc84uYyU1wp7tTg
+         Q8I8J+UHhmL9+Y89720VjjaTRmGFk1eJKBDfzhAXbayPBYKKcr+oOG5+jWYTsKzjTl0B
+         RnGnC1WoCke9HmHQnHc0aUtBFZNVJ6xL1TF4VWI8Bxw/iiGlFYQ1nLfqhVURVYLcXlpg
+         xybLf/m06w/rGA4bIQ75lVgU/1DbZLL1wHcZ7gek3hMRbGdDhUypmcGOtV7poBJzw61j
+         lQKQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWdroNAcfnsAyu4wQ5Mzv2tW/vtXzV4K8Cs8143UyzucdgNoTIWC46F8+u9z4WqMFIUhExwwqh/cFkr6hY47QiJcLYi8mx3euLp
+X-Gm-Message-State: AOJu0Yyd+jjI+U/0ZvlhXi2CcYKpNTOBklgQ9kOj8Dg/bV+UzO4aEPH9
+	mVU/O/JcyBoq14AVk2xg0rl2BUNxxqLotU+wkVEj9QeKWWSVOPGHc7TP/0v4nK8KUz/HKByoPuM
+	czfx8WEri23fkIg0fDzMXH746e0OiZ5foMfRUsg==
+X-Google-Smtp-Source: AGHT+IFUrSspS0uEXi4Mtdf0lWq2f6Bt6/664idaePnQ5n7gs/Aofr4lkRbBJPYECBaOux5ZgxpPBc0T/C/GsKmHDRA=
+X-Received: by 2002:a5b:104:0:b0:dcc:ec02:38b0 with SMTP id
+ 4-20020a5b0104000000b00dccec0238b0mr8733778ybx.64.1712060727251; Tue, 02 Apr
+ 2024 05:25:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240402-rallybar-v5-1-7bdd0fbc51f7@chromium.org>
-X-B4-Tracking: v=1; b=H4sIAHj1C2YC/3XMwQrCMAzG8VeRnq00WVo3T76HeMi66ArqpNPhG
- Ht3O0EYMo9fyO8/qFZikFbtVoOK0oU2NLc07HqlfM23s+hQpa3QYAaIqCNfLn3JUUPhxXhHlRW
- n0vs9yim8PqnDMe06tI8m9p9yB9N1IdKBBp1jiUxVBsad9r6OzTU8r5smntXU6fCfxWRtTkXlk
- AsLtGCzryUDZm6zZA2XUGy9EDMuWJrbfGYpWd6SNY5ACMofO47jG+LFC/dXAQAA
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
- Alan Stern <stern@rowland.harvard.edu>, 
- Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-media@vger.kernel.org, stable@vger.kernel.org, 
- Oliver Neukum <oneukum@suse.com>, Devinder Khroad <dkhroad@logitech.com>, 
- Sergey Senozhatsky <senozhatsky@chromium.org>, 
- Ricardo Ribalda <ribalda@chromium.org>
-X-Mailer: b4 0.12.4
+References: <20240327160314.9982-1-apais@linux.microsoft.com> <20240327160314.9982-3-apais@linux.microsoft.com>
+In-Reply-To: <20240327160314.9982-3-apais@linux.microsoft.com>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Tue, 2 Apr 2024 14:25:15 +0200
+Message-ID: <CACRpkdaSBGe0EFm1gK-7qPK4e6T2H1dxFXjhJqO2hWCm1-bNdA@mail.gmail.com>
+Subject: Re: [PATCH 2/9] dma: Convert from tasklet to BH workqueue
+To: Allen Pais <apais@linux.microsoft.com>
+Cc: linux-kernel@vger.kernel.org, tj@kernel.org, keescook@chromium.org, 
+	vkoul@kernel.org, marcan@marcan.st, sven@svenpeter.dev, 
+	florian.fainelli@broadcom.com, rjui@broadcom.com, sbranden@broadcom.com, 
+	paul@crapouillou.net, Eugeniy.Paltsev@synopsys.com, 
+	manivannan.sadhasivam@linaro.org, vireshk@kernel.org, Frank.Li@nxp.com, 
+	leoyang.li@nxp.com, zw@zh-kernel.org, wangzhou1@hisilicon.com, 
+	haijie1@huawei.com, shawnguo@kernel.org, s.hauer@pengutronix.de, 
+	sean.wang@mediatek.com, matthias.bgg@gmail.com, 
+	angelogioacchino.delregno@collabora.com, afaerber@suse.de, 
+	logang@deltatee.com, daniel@zonque.org, haojian.zhuang@gmail.com, 
+	robert.jarzmik@free.fr, andersson@kernel.org, konrad.dybcio@linaro.org, 
+	orsonzhai@gmail.com, baolin.wang@linux.alibaba.com, zhang.lyra@gmail.com, 
+	patrice.chotard@foss.st.com, wens@csie.org, jernej.skrabec@gmail.com, 
+	peter.ujfalusi@gmail.com, kys@microsoft.com, haiyangz@microsoft.com, 
+	wei.liu@kernel.org, decui@microsoft.com, jassisinghbrar@gmail.com, 
+	mchehab@kernel.org, maintainers@bluecherrydvr.com, 
+	aubin.constans@microchip.com, ulf.hansson@linaro.org, manuel.lauss@gmail.com, 
+	mirq-linux@rere.qmqm.pl, jh80.chung@samsung.com, oakad@yahoo.com, 
+	hayashi.kunihiko@socionext.com, mhiramat@kernel.org, brucechang@via.com.tw, 
+	HaraldWelte@viatech.com, pierre@ossman.eu, duncan.sands@free.fr, 
+	stern@rowland.harvard.edu, oneukum@suse.com, 
+	openipmi-developer@lists.sourceforge.net, dmaengine@vger.kernel.org, 
+	asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+	linux-rpi-kernel@lists.infradead.org, linux-mips@vger.kernel.org, 
+	imx@lists.linux.dev, linuxppc-dev@lists.ozlabs.org, 
+	linux-mediatek@lists.infradead.org, linux-actions@lists.infradead.org, 
+	linux-arm-msm@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org, 
+	linux-hyperv@vger.kernel.org, linux-rdma@vger.kernel.org, 
+	linux-media@vger.kernel.org, linux-mmc@vger.kernel.org, 
+	linux-omap@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
+	linux-s390@vger.kernel.org, netdev@vger.kernel.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Logitech Rally Bar devices, despite behaving as UVC cameras, have a
-different power management system that the other cameras from Logitech.
+Hi Allen,
 
-USB_QUIRK_RESET_RESUME is applied to all the UVC cameras from Logitech
-at the usb core. Unfortunately, USB_QUIRK_RESET_RESUME causes undesired
-USB disconnects in the Rally Bar that make them completely unusable.
+thanks for your patch!
 
-There is an open discussion about if we should fix this in the core or
-add a quirk in the UVC driver. In order to enable this hardware, let's
-land this patch first, and we can revert it later if there is a
-different conclusion.
+On Wed, Mar 27, 2024 at 5:03=E2=80=AFPM Allen Pais <apais@linux.microsoft.c=
+om> wrote:
 
-Fixes: e387ef5c47dd ("usb: Add USB_QUIRK_RESET_RESUME for all Logitech UVC webcams")
-Cc:  <stable@vger.kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Alan Stern <stern@rowland.harvard.edu>
-Cc: Oliver Neukum <oneukum@suse.com>
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Reviewed-by: Devinder Khroad <dkhroad@logitech.com>
-Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
----
-Tested with a Rallybar Mini with an Acer Chromebook Spin 513
----
-Changes in v5:
-- Update commit message to describe that this is a temp solution.
-- Link to v4: https://lore.kernel.org/r/20240108-rallybar-v4-1-a7450641e41b@chromium.org
+> The only generic interface to execute asynchronously in the BH context is
+> tasklet; however, it's marked deprecated and has some design flaws. To
+> replace tasklets, BH workqueue support was recently added. A BH workqueue
+> behaves similarly to regular workqueues except that the queued work items
+> are executed in the BH context.
+>
+> This patch converts drivers/dma/* from tasklet to BH workqueue.
+>
+> Based on the work done by Tejun Heo <tj@kernel.org>
+> Branch: git://git.kernel.org/pub/scm/linux/kernel/git/tj/wq.git for-6.10
+>
+> Signed-off-by: Allen Pais <allen.lkml@gmail.com>
+(...)
+> diff --git a/drivers/dma/ste_dma40.c b/drivers/dma/ste_dma40.c
+(...)
+>         if (d40c->pending_tx)
+> -               tasklet_schedule(&d40c->tasklet);
+> +               queue_work(system_bh_wq, &d40c->work);
 
-Changes in v4:
-- Include Logi Rally Bar Huddle (Thanks Kyle!)
-- Link to v3: https://lore.kernel.org/r/20240102-rallybar-v3-1-0ab197ce4aa2@chromium.org
+Why is "my" driver not allowed to use system_bh_highpri_wq?
 
-Changes in v3:
-- Move quirk to uvc driver
-- Link to v2: https://lore.kernel.org/r/20231222-rallybar-v2-1-5849d62a9514@chromium.org
+I can't see the reasoning between some drivers using system_bh_wq
+and others being highpri?
 
-Changes in v2:
-- Add Fixes tag
-- Add UVC maintainer as Cc
-- Link to v1: https://lore.kernel.org/r/20231222-rallybar-v1-1-82b2a4d3106f@chromium.org
----
- drivers/media/usb/uvc/uvc_driver.c | 30 ++++++++++++++++++++++++++++++
- drivers/media/usb/uvc/uvcvideo.h   |  1 +
- 2 files changed, 31 insertions(+)
+Given the DMA usecase I would expect them all to be high prio.
 
-diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-index 08fcd2ffa727b..9663bcac68438 100644
---- a/drivers/media/usb/uvc/uvc_driver.c
-+++ b/drivers/media/usb/uvc/uvc_driver.c
-@@ -14,6 +14,7 @@
- #include <linux/module.h>
- #include <linux/slab.h>
- #include <linux/usb.h>
-+#include <linux/usb/quirks.h>
- #include <linux/usb/uvc.h>
- #include <linux/videodev2.h>
- #include <linux/vmalloc.h>
-@@ -2233,6 +2234,8 @@ static int uvc_probe(struct usb_interface *intf,
- 	}
- 
- 	uvc_dbg(dev, PROBE, "UVC device initialized\n");
-+	if (dev->quirks & UVC_QUIRK_FORCE_RESUME)
-+		udev->quirks &= ~USB_QUIRK_RESET_RESUME;
- 	usb_enable_autosuspend(udev);
- 	return 0;
- 
-@@ -2574,6 +2577,33 @@ static const struct usb_device_id uvc_ids[] = {
- 	  .bInterfaceSubClass	= 1,
- 	  .bInterfaceProtocol	= 0,
- 	  .driver_info		= UVC_INFO_QUIRK(UVC_QUIRK_RESTORE_CTRLS_ON_INIT) },
-+	/* Logitech Rally Bar Huddle */
-+	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
-+				| USB_DEVICE_ID_MATCH_INT_INFO,
-+	  .idVendor		= 0x046d,
-+	  .idProduct		= 0x087c,
-+	  .bInterfaceClass	= USB_CLASS_VIDEO,
-+	  .bInterfaceSubClass	= 1,
-+	  .bInterfaceProtocol	= 0,
-+	  .driver_info		= UVC_INFO_QUIRK(UVC_QUIRK_FORCE_RESUME) },
-+	/* Logitech Rally Bar */
-+	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
-+				| USB_DEVICE_ID_MATCH_INT_INFO,
-+	  .idVendor		= 0x046d,
-+	  .idProduct		= 0x089b,
-+	  .bInterfaceClass	= USB_CLASS_VIDEO,
-+	  .bInterfaceSubClass	= 1,
-+	  .bInterfaceProtocol	= 0,
-+	  .driver_info		= UVC_INFO_QUIRK(UVC_QUIRK_FORCE_RESUME) },
-+	/* Logitech Rally Bar Mini */
-+	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
-+				| USB_DEVICE_ID_MATCH_INT_INFO,
-+	  .idVendor		= 0x046d,
-+	  .idProduct		= 0x08d3,
-+	  .bInterfaceClass	= USB_CLASS_VIDEO,
-+	  .bInterfaceSubClass	= 1,
-+	  .bInterfaceProtocol	= 0,
-+	  .driver_info		= UVC_INFO_QUIRK(UVC_QUIRK_FORCE_RESUME) },
- 	/* Chicony CNF7129 (Asus EEE 100HE) */
- 	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
- 				| USB_DEVICE_ID_MATCH_INT_INFO,
-diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-index 6fb0a78b1b009..fa59a21d2a289 100644
---- a/drivers/media/usb/uvc/uvcvideo.h
-+++ b/drivers/media/usb/uvc/uvcvideo.h
-@@ -73,6 +73,7 @@
- #define UVC_QUIRK_FORCE_Y8		0x00000800
- #define UVC_QUIRK_FORCE_BPP		0x00001000
- #define UVC_QUIRK_WAKE_AUTOSUSPEND	0x00002000
-+#define UVC_QUIRK_FORCE_RESUME		0x00004000
- 
- /* Format flags */
- #define UVC_FMT_FLAG_COMPRESSED		0x00000001
-
----
-base-commit: c0f65a7c112b3cfa691cead54bcf24d6cc2182b5
-change-id: 20231222-rallybar-19ce0c64d5e6
-
-Best regards,
--- 
-Ricardo Ribalda <ribalda@chromium.org>
-
+Yours,
+Linus Walleij
 
