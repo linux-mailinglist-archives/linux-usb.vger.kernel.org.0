@@ -1,74 +1,78 @@
-Return-Path: <linux-usb+bounces-8724-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8725-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3AEFE895014
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Apr 2024 12:30:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 072EA895077
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Apr 2024 12:40:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E41E51F245AC
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Apr 2024 10:30:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B0BB11F219B1
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Apr 2024 10:40:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60D165D471;
-	Tue,  2 Apr 2024 10:29:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A00D5F466;
+	Tue,  2 Apr 2024 10:38:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kTWzZDq0"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UVAmjj7K"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF2F75B698;
-	Tue,  2 Apr 2024 10:29:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 055825D468;
+	Tue,  2 Apr 2024 10:38:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712053793; cv=none; b=OA7WgTfOSM47UDG+CwHkMWmZZHp9QeaMG13D1vXPk21XqLjfbkRQ9mCCymr27S/mOLGc6FhHc/9CRjw0z2lTkKhDN/aU67NHEeangfakE/AiYtC7GJkTjsN5gy66bAoCyy5dMks2B/TG6s7UWPZVh3zrExdyqK2uzdT8sGQKYHA=
+	t=1712054328; cv=none; b=afQnkouzKJUJaqed6qMP2BaVtaHMQbGjaOC9J3qyvE5tkCIbbcdkrvdv2YV3hodOoRliilMynNt/RXBvHDiuZxFX5JsGdASNnYbRmoaH7Sw0HMPPlPWYVN3SWesNQ8tnxoY+kDMs8vP8gKMHzo5dSToHOsTWqvBHLSQOz96mAlE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712053793; c=relaxed/simple;
-	bh=oIiOFD4tOsDcXxfhOViTyo9H+o3zw8XySy+NN8JBh9U=;
+	s=arc-20240116; t=1712054328; c=relaxed/simple;
+	bh=7KyO2JQO+KqWbpINOu308OaZUHEEE3om6QPwZYpGRQk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GJkLgmr7JQVFiSFqc4cDmNSl7Miq9DPhbwJu+eQP1hIkfmW3nNow3WmPY2V0ecj+Ev2V4MY+mVArrmc3SJS1lL9KheXqRO2bvIktxFPmpQ35DBuvOlWylMdCGKekWs054QZVF2tPSFaTfzHZ/AgKdiRfwNj8fMkzYPerZOJ3/OQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kTWzZDq0; arc=none smtp.client-ip=192.198.163.19
+	 Content-Type:Content-Disposition:In-Reply-To; b=nTfcYrO6YnPHIGCyTr2FtvrZcHBnVV1uNLLQ1LOARUr+SKNHvd5T9mNPtWAxZToN+rAiuMoDWj95T1L9HLRvxYDUJSLAhOQdqOx00FCSH7+iTVBnq5DrkRsmCbdMjOM45Rhloc5xZ32pVy8/kyzclccjpMenhSMA0zAWZcUdmeA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UVAmjj7K; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712053792; x=1743589792;
+  t=1712054327; x=1743590327;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=oIiOFD4tOsDcXxfhOViTyo9H+o3zw8XySy+NN8JBh9U=;
-  b=kTWzZDq0K3SCWX9z9jt950SpCDLE/j36PRJkZncfuXzZhOwyPOuRQEUQ
-   3PJYNAcoyiHZqORB5MAymM0RFrMIZkAfLsTsoxJcexmveh+VVQzceoNXi
-   qCT4kHn4FcFJAqn/apD1wluUDG1KdoP891SHdmpINECFpcE949KUjg9lR
-   udHM9Y5QJChGQ9kStExh04jlvUYchIwzmzY647CUyJlOKG4twCvADCXx/
-   9e/O5OFDlRCrgAKGOQTL22kU4iw8VUofduIx5luzRH23yHKAU20vUaZW0
-   /bmzIAmHfw7GkhG1DwVsdjNb7RcHwM2kUSXoTkZUso+iht33rmu1JhbOt
-   w==;
-X-CSE-ConnectionGUID: DP+Xt5nZRR6pcas6Wz3r5A==
-X-CSE-MsgGUID: DBVrAvh+QruDidARgCZNZQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11031"; a="7085043"
+  bh=7KyO2JQO+KqWbpINOu308OaZUHEEE3om6QPwZYpGRQk=;
+  b=UVAmjj7Kucn72xqLTaGnh+SipWFZmSHpd0fcHvznE9fycmZdgDfhtw0y
+   5P/gMScnk8gjJOH8Bt43JL7BhEcFWQVbykN9rIdfatsLpaVWjskT4yoqu
+   gnWAjtA3qDb42PtUCmX9SJ3Bp+ItEmsAFNdYiR55Ov09H222/tC8Ho5w7
+   NmyVYWps+t0WH4UsV/RiMmN13KC33BfqQsp3+/gDHslTPXMmWBFxgYlud
+   G1qFj0LmX7Uv901I4DgcNHiaKAr4/n8G7M1xnxQ/PiCCHA8MmJLhE9Umi
+   DAWiUG9ppvKXKnirbaDw9rPt8Iz/L1DR6CO9UV7HsrIo5n9mWTChhi/yk
+   A==;
+X-CSE-ConnectionGUID: D694rBfpQc+V1QsB78kGVQ==
+X-CSE-MsgGUID: HkmAWCmUQ028YIfMmclewg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11031"; a="7085580"
 X-IronPort-AV: E=Sophos;i="6.07,174,1708416000"; 
-   d="scan'208";a="7085043"
+   d="scan'208";a="7085580"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2024 03:29:51 -0700
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2024 03:38:46 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11031"; a="937083293"
+X-IronPort-AV: E=McAfee;i="6600,9927,11031"; a="937083295"
 X-IronPort-AV: E=Sophos;i="6.07,174,1708416000"; 
-   d="scan'208";a="937083293"
+   d="scan'208";a="937083295"
 Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 02 Apr 2024 03:29:48 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 02 Apr 2024 13:29:47 +0300
-Date: Tue, 2 Apr 2024 13:29:47 +0300
+  by fmsmga001.fm.intel.com with SMTP; 02 Apr 2024 03:38:42 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 02 Apr 2024 13:38:42 +0300
+Date: Tue, 2 Apr 2024 13:38:42 +0300
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Javier Carrasco <javier.carrasco@wolfvision.net>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Abdel Alkuor <abdelalkuor@geotab.com>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH RESEND 2/2] usb: typec: tipd: fix event checking for
- tps6598x
-Message-ID: <ZgveG5Ly3mw0O0eo@kuha.fi.intel.com>
-References: <20240328-tps6598x_fix_event_handling-v1-0-502721ff705b@wolfvision.net>
- <20240328-tps6598x_fix_event_handling-v1-2-502721ff705b@wolfvision.net>
+	Guenter Roeck <linux@roeck-us.net>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Johan Hovold <johan+linaro@kernel.org>, linux-usb@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v2 04/11] usb: typec: ucsi: always register a link to USB
+ PD device
+Message-ID: <ZgvgMtvUc1dq9/ks@kuha.fi.intel.com>
+References: <20240329-qcom-ucsi-fixes-v2-0-0f5d37ed04db@linaro.org>
+ <20240329-qcom-ucsi-fixes-v2-4-0f5d37ed04db@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -77,110 +81,51 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240328-tps6598x_fix_event_handling-v1-2-502721ff705b@wolfvision.net>
+In-Reply-To: <20240329-qcom-ucsi-fixes-v2-4-0f5d37ed04db@linaro.org>
 
-On Thu, Mar 28, 2024 at 05:55:52PM +0100, Javier Carrasco wrote:
-> The current interrupt service routine of the tps6598x only reads the
-> first 64 bits of the INT_EVENT1 and INT_EVENT2 registers, which means
-> that any event above that range will be ignored, leaving interrupts
-> unattended. Moreover, those events will not be cleared, and the device
-> will keep the interrupt enabled.
+On Fri, Mar 29, 2024 at 08:15:36AM +0200, Dmitry Baryshkov wrote:
+> UCSI driver will attempt to set a USB PD device only if it was able to
+> read PDOs from the firmware. This results in suboptimal behaviour, since
+> the PD device will be created anyway. Move calls to
+> typec_port_set_usb_power_delivery() out of conditional code and call it
+> after reading capabilities.
 > 
-> This issue has been observed while attempting to load patches, and the
-> 'ReadyForPatch' field (bit 81) of INT_EVENT1 was set.
-> 
-> Read the complete INT_EVENT registers to handle all interrupts generated
-> by the device in a similar fashion to what is already done for the
-> tps25750.
-> 
-> Fixes: 0a4c005bd171 ("usb: typec: driver for TI TPS6598x USB Power Delivery controllers")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Javier Carrasco <javier.carrasco@wolfvision.net>
+> Fixes: b04e1747fbcc ("usb: typec: ucsi: Register USB Power Delivery Capabilities")
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
 > ---
->  drivers/usb/typec/tipd/core.c | 31 ++++++++++++++++++-------------
->  1 file changed, 18 insertions(+), 13 deletions(-)
+>  drivers/usb/typec/ucsi/ucsi.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-> index 7c2f01344860..308748d6cae6 100644
-> --- a/drivers/usb/typec/tipd/core.c
-> +++ b/drivers/usb/typec/tipd/core.c
-> @@ -637,48 +637,53 @@ static irqreturn_t tps25750_interrupt(int irq, void *data)
->  static irqreturn_t tps6598x_interrupt(int irq, void *data)
->  {
->  	struct tps6598x *tps = data;
-> -	u64 event1 = 0;
-> -	u64 event2 = 0;
-> +	u64 event1[2] = { };
-> +	u64 event2[2] = { };
->  	u32 status;
->  	int ret;
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index 7666142d8bbb..d1a45ce7f660 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -1569,7 +1569,6 @@ static int ucsi_register_port(struct ucsi *ucsi, struct ucsi_connector *con)
+>  		}
 >  
->  	mutex_lock(&tps->lock);
->  
-> -	ret = tps6598x_read64(tps, TPS_REG_INT_EVENT1, &event1);
-> -	ret |= tps6598x_read64(tps, TPS_REG_INT_EVENT2, &event2);
-> +	ret = tps6598x_block_read(tps, TPS_REG_INT_EVENT1, event1, 11);
-
-This is not going to work with the older TI PD controllers.
-
-The lenght of these registers is 8 bytes on the older TI PD
-controllers (TPS65981, TPS65982, etc.). I think we need to split this
-function.
-
->  	if (ret) {
-> -		dev_err(tps->dev, "%s: failed to read events\n", __func__);
-> +		dev_err(tps->dev, "%s: failed to read event1\n", __func__);
->  		goto err_unlock;
+>  		con->port_source_caps = pd_cap;
+> -		typec_port_set_usb_power_delivery(con->port, con->pd);
 >  	}
-> -	trace_tps6598x_irq(event1, event2);
-> +	ret = tps6598x_block_read(tps, TPS_REG_INT_EVENT2, event2, 11);
-> +	if (ret) {
-> +		dev_err(tps->dev, "%s: failed to read event2\n", __func__);
-> +		goto err_unlock;
-> +	}
-> +	trace_tps6598x_irq(event1[0], event2[0]);
 >  
-> -	if (!(event1 | event2))
-> +	if (!(event1[0] | event1[1] | event2[0] | event2[1]))
->  		goto err_unlock;
+>  	memset(&pd_caps, 0, sizeof(pd_caps));
+> @@ -1586,9 +1585,10 @@ static int ucsi_register_port(struct ucsi *ucsi, struct ucsi_connector *con)
+>  		}
 >  
->  	if (!tps6598x_read_status(tps, &status))
->  		goto err_clear_ints;
+>  		con->port_sink_caps = pd_cap;
+> -		typec_port_set_usb_power_delivery(con->port, con->pd);
+>  	}
 >  
-> -	if ((event1 | event2) & TPS_REG_INT_POWER_STATUS_UPDATE)
-> +	if ((event1[0] | event2[0]) & TPS_REG_INT_POWER_STATUS_UPDATE)
->  		if (!tps6598x_read_power_status(tps))
->  			goto err_clear_ints;
->  
-> -	if ((event1 | event2) & TPS_REG_INT_DATA_STATUS_UPDATE)
-> +	if ((event1[0] | event2[0]) & TPS_REG_INT_DATA_STATUS_UPDATE)
->  		if (!tps6598x_read_data_status(tps))
->  			goto err_clear_ints;
->  
->  	/* Handle plug insert or removal */
-> -	if ((event1 | event2) & TPS_REG_INT_PLUG_EVENT)
-> +	if ((event1[0] | event2[0]) & TPS_REG_INT_PLUG_EVENT)
->  		tps6598x_handle_plug_event(tps, status);
->  
->  err_clear_ints:
-> -	tps6598x_write64(tps, TPS_REG_INT_CLEAR1, event1);
-> -	tps6598x_write64(tps, TPS_REG_INT_CLEAR2, event2);
-> +	tps6598x_block_write(tps, TPS_REG_INT_CLEAR1, event1, 11);
-> +	tps6598x_block_write(tps, TPS_REG_INT_CLEAR2, event2, 11);
->  
->  err_unlock:
->  	mutex_unlock(&tps->lock);
->  
-> -	if (event1 | event2)
-> +	if (event1[0] | event1[1] | event2[0] | event2[1])
->  		return IRQ_HANDLED;
+> +	typec_port_set_usb_power_delivery(con->port, con->pd);
 > +
->  	return IRQ_NONE;
->  }
->  
+>  	/* Alternate modes */
+>  	ret = ucsi_register_altmodes(con, UCSI_RECIPIENT_CON);
+>  	if (ret) {
 > 
 > -- 
-> 2.40.1
+> 2.39.2
 
 -- 
 heikki
