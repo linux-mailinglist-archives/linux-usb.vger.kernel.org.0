@@ -1,220 +1,154 @@
-Return-Path: <linux-usb+bounces-8705-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8706-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22655894BD4
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Apr 2024 08:51:27 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 37037894CB3
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Apr 2024 09:35:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A3D9A1F22CE5
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Apr 2024 06:51:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CB63C1F2236D
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Apr 2024 07:35:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F366B2DF84;
-	Tue,  2 Apr 2024 06:51:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E05583B2A8;
+	Tue,  2 Apr 2024 07:35:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="itmq4zk2";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="dcSgenen"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NoQBjMRE"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from mail-oi1-f195.google.com (mail-oi1-f195.google.com [209.85.167.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D038414AAD;
-	Tue,  2 Apr 2024 06:51:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0534639AD5;
+	Tue,  2 Apr 2024 07:35:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712040678; cv=none; b=j4n+YOElSpvUdYEO6BUtyVU6Ya5VYdjifC1akwQdtTV9FOA5v+A+0iT9Cv6mAx4224aTEHY0NgvLb2ssQtn49X9VG0j9bxbTl/dKVm9CMsqItASCt/1otEAVMaIDkBxD7O/4TFSUjPTXQfc3CPsTt0b5QeGvPtbLuO+CsG6nfo4=
+	t=1712043307; cv=none; b=cjEwywfoHi3ft8Nf6Ha9GOsacMjvrCC0NM9Op5NKg7w9zO7S9zGKL9Ha0xqfKzP16vndLprlmJ3a5jXuAVEFj1MhS1mXxWYyL93yhMGFVqi3clhC7jNYtAbjKhW4zkGAobOW7AGoL6ec2CHNRwtC2NlwlleJCwx1t1HZxNtZwAI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712040678; c=relaxed/simple;
-	bh=7qOiZVEO4yMr7Y/rT6+JwhH6j9puH5V5BFv+Jf88PmU=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=kJGOnQecGFsSIgYP40lDt61L8x5OVwj6/RkMOAnBx8sgLRUo44poDK6/PsLFFdTSOKsEVuQY5w2DOizl1IQ5rocJjboYynptOj9plVzJMDUs8rnIDYGM0CVTP0Zr5gh0xj7+PSlSI5ks0fOgXR+CDXKvtLXsqXwJhRvGZJOi1E0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=itmq4zk2; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=dcSgenen; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap2.dmz-prg2.suse.org (imap2.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:98])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id E2F3F20CFA;
-	Tue,  2 Apr 2024 06:51:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1712040674; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=nh5J8aQQpLo5ckADtp1KCYffB1xaWfrVFf026Vcg7uY=;
-	b=itmq4zk2LsYY/D92NJRoZvrmRgmeqTaJoSzHnmLggRvK0aE4H36A/fcaxtca2UjXYhlIfm
-	yKzEnnJE3MIvJOWOTlYbyNkUBqrpc0y1H/d/OgUEfcoXz7Vkio+k1ItoiiuGZCQutCV97Q
-	Je2uhrJIvAHBByQi3FpClyAwe0YW2Jc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1712040674;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=nh5J8aQQpLo5ckADtp1KCYffB1xaWfrVFf026Vcg7uY=;
-	b=dcSgenen/AOGm90VuZwQfZ+OCN7+CwSnQ3mMtkgpwCXjuHBJtEZbLoSm4c5TCT0BRuZ23F
-	cH9VRcbKS3o0K6Dw==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=none
-Received: from imap2.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap2.dmz-prg2.suse.org (Postfix) with ESMTPS id A35E013357;
-	Tue,  2 Apr 2024 06:51:14 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap2.dmz-prg2.suse.org with ESMTPSA
-	id XFOCJuKqC2b2QQAAn2gu4w
-	(envelope-from <tiwai@suse.de>); Tue, 02 Apr 2024 06:51:14 +0000
-Date: Tue, 02 Apr 2024 08:51:19 +0200
-Message-ID: <87o7ass1eg.wl-tiwai@suse.de>
-From: Takashi Iwai <tiwai@suse.de>
-To: Edward Adam Davis <eadavis@qq.com>
-Cc: syzbot+7fb05ccf7b3d2f9617b3@syzkaller.appspotmail.com,
-	linux-kernel@vger.kernel.org,
-	linux-sound@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	perex@perex.cz,
-	syzkaller-bugs@googlegroups.com,
-	tiwai@suse.com
-Subject: Re: [PATCH] ALSA: line6: fix uninit-value in line6_pod_process_message
-In-Reply-To: <tencent_44291B84257ABAB7BB7B33C49E0E1BC74B08@qq.com>
-References: <00000000000084b18706150bcca5@google.com>
-	<tencent_44291B84257ABAB7BB7B33C49E0E1BC74B08@qq.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+	s=arc-20240116; t=1712043307; c=relaxed/simple;
+	bh=13f1vZXQHVq4J8AmiMAuubtiIHKKSYIGdDHBjVBzyes=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=cuk2Ht1ZBuduYjQdpDvKxSlL3e7JP5wXsDqZF66ne9bmnd2dONauw9awvzyKCYDeozdAg00q4wz9eBedwPJ+gA3GzQSgX8LT9CDWj8HC5QZ1ik4LT+pBb/14gpKhh4aXm2zYyp4UqXlc2gmu1WAv9J80igBbbMA9jeVK1bRU3QY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NoQBjMRE; arc=none smtp.client-ip=209.85.167.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oi1-f195.google.com with SMTP id 5614622812f47-3c4e99e7fa9so183041b6e.0;
+        Tue, 02 Apr 2024 00:35:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712043304; x=1712648104; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=NXRteeqp249vsJd2xu5LjSl3FeQmBLsla/5iDTkWRgQ=;
+        b=NoQBjMRE6GXORH457fMxlE9i+ACbahWZJcNRbzllpPD0QEYb8/Zh7XVRkEUuhEKY/D
+         uNn1e5T9HNj63+Cuehf9qpHpXOfFn1A2X84Gdvxd+kKjJbn53xUxttbeNTBk57stApAt
+         j3/oHV8VWCArOduMVq/fOUWhxWFNzxWJOgLMqgYlMkS8C8r+Mj43kC2QR78P6bO9wVxQ
+         Z6iPc2l6D1tTufqFqH7GnxBDHvgSoTMrJPGwhKZuGiK3f4mWbnkdzeHYWio9dLU0WYyE
+         kP2FzRq1HCBdgnUjBj4EyN5W0U5MDHxPnskLmAm8JTgb01BvOr88GhbBlqTm3Qk6C+PB
+         AsOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712043304; x=1712648104;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NXRteeqp249vsJd2xu5LjSl3FeQmBLsla/5iDTkWRgQ=;
+        b=WBjJuIXL+ssph7dpnm0RH3WgFAVmBEVnM5BQckLecCWPbx479NtzEeNuBJQqIA0crR
+         VPDKEAZGiC+03eBtHlw9I/ppFEEwGnnkLqPU1MeNBRToSdnqRvFz0PHjJ0W8lVWxCq65
+         FFpwUUcXGDftdGj+L5yKgWqznyinW9O2kozo9WrNlUcrCnFpXLPyZLrjtHj6umBDVrjM
+         DlGTAL0VCf57tWweOJ/s6On29PrMGjg1JrUDg8hmD2kGC/+GC8TVQH2ivtG8y8gRTDGQ
+         3LsF4OvX9t3fnIJqSYATzxpQf1cZ/jTmqDW2JzuZlxAqABVsMdYGBh2Zkap5RypZlsFe
+         sqlQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVMmJVI7jKxcD0TE7TWBdAr9mNp+x+xplzC2fEA+xkhBeh3GJ9XlPWS0aAJHtIbdQaUz31cjCbVR16qLJwVYTH14hxEKHg1
+X-Gm-Message-State: AOJu0Yy3tV13t/tpjfuHVRrNtv19J6jaitAmc5P35NLsgdPsjMknXNh8
+	BJFxmkSQZHWa3xETgLWnxCnkHdlYZHVyFVo1ErB5WaPMPYcQgQCIqlFm0EIAJIbxPR7qJPaLfA=
+	=
+X-Google-Smtp-Source: AGHT+IEreF5XyZ7JEK/4g3eL1zkgouL5q1wF7+6YBNBAxr0pHRvw+bxDlZPvFxhK0FqSCxMRVihIFw==
+X-Received: by 2002:a05:6870:790f:b0:229:ffdf:f929 with SMTP id hg15-20020a056870790f00b00229ffdff929mr5728801oab.10.1712043304517;
+        Tue, 02 Apr 2024 00:35:04 -0700 (PDT)
+Received: from localhost.localdomain ([2604:abc0:1234:22::2])
+        by smtp.gmail.com with ESMTPSA id ld5-20020a0568702b0500b0022e69a4cc30sm367608oab.18.2024.04.02.00.35.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Apr 2024 00:35:04 -0700 (PDT)
+From: Coia Prant <coiaprant@gmail.com>
+To: linux-usb@vger.kernel.org
+Cc: Coia Prant <coiaprant@gmail.com>,
+	stable@vger.kernel.org
+Subject: [PATCH 1/2] USB: serial: option: add Lonsung U8300/U9300 product Update the USB serial option driver to support Longsung U8300/U9300.
+Date: Tue,  2 Apr 2024 00:34:51 -0700
+Message-Id: <20240402073451.1751984-1-coiaprant@gmail.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Score: -0.11
-X-Spamd-Bar: /
-X-Spam-Flag: NO
-X-Spamd-Result: default: False [-0.11 / 50.00];
-	 RCVD_VIA_SMTP_AUTH(0.00)[];
-	 RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	 TO_DN_SOME(0.00)[];
-	 RCVD_COUNT_THREE(0.00)[3];
-	 MX_GOOD(-0.01)[];
-	 NEURAL_HAM_SHORT(-0.20)[-1.000];
-	 RCPT_COUNT_SEVEN(0.00)[8];
-	 FREEMAIL_TO(0.00)[qq.com];
-	 FROM_EQ_ENVFROM(0.00)[];
-	 R_DKIM_NA(2.20)[];
-	 MIME_TRACE(0.00)[0:+];
-	 BAYES_HAM(-3.00)[100.00%];
-	 ARC_NA(0.00)[];
-	 FROM_HAS_DN(0.00)[];
-	 FREEMAIL_ENVRCPT(0.00)[qq.com];
-	 TO_MATCH_ENVRCPT_ALL(0.00)[];
-	 TAGGED_RCPT(0.00)[7fb05ccf7b3d2f9617b3];
-	 MIME_GOOD(-0.10)[text/plain];
-	 NEURAL_HAM_LONG(-1.00)[-1.000];
-	 DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	 MID_CONTAINS_FROM(1.00)[];
-	 DBL_BLOCKED_OPENRESOLVER(0.00)[qq.com:email,appspotmail.com:email];
-	 FUZZY_BLOCKED(0.00)[rspamd.com];
-	 RCVD_IN_DNSWL_HI(-0.50)[2a07:de40:b281:106:10:150:64:167:received];
-	 RCVD_TLS_ALL(0.00)[];
-	 SUSPICIOUS_RECIPS(1.50)[];
-	 RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:98:from]
-X-Spam-Level: 
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Rspamd-Queue-Id: E2F3F20CFA
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Tue, 02 Apr 2024 08:47:24 +0200,
-Edward Adam Davis wrote:
-> 
-> [Syzbot reported]
-> BUG: KMSAN: uninit-value in line6_pod_process_message+0x72f/0x7b0 sound/usb/line6/pod.c:201
->  line6_pod_process_message+0x72f/0x7b0 sound/usb/line6/pod.c:201
->  line6_data_received+0x5db/0x7e0 sound/usb/line6/driver.c:317
->  __usb_hcd_giveback_urb+0x508/0x770 drivers/usb/core/hcd.c:1648
->  usb_hcd_giveback_urb+0x157/0x720 drivers/usb/core/hcd.c:1732
->  dummy_timer+0xd93/0x6b10 drivers/usb/gadget/udc/dummy_hcd.c:1987
->  call_timer_fn+0x49/0x580 kernel/time/timer.c:1793
->  expire_timers kernel/time/timer.c:1844 [inline]
->  __run_timers kernel/time/timer.c:2418 [inline]
->  __run_timer_base+0x84e/0xe90 kernel/time/timer.c:2429
->  run_timer_base kernel/time/timer.c:2438 [inline]
->  run_timer_softirq+0x3a/0x70 kernel/time/timer.c:2448
->  __do_softirq+0x1c0/0x7d7 kernel/softirq.c:554
->  invoke_softirq kernel/softirq.c:428 [inline]
->  __irq_exit_rcu kernel/softirq.c:633 [inline]
->  irq_exit_rcu+0x6a/0x130 kernel/softirq.c:645
->  instr_sysvec_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1043 [inline]
->  sysvec_apic_timer_interrupt+0x83/0x90 arch/x86/kernel/apic/apic.c:1043
->  asm_sysvec_apic_timer_interrupt+0x1f/0x30 arch/x86/include/asm/idtentry.h:702
->  native_safe_halt arch/x86/include/asm/irqflags.h:48 [inline]
->  arch_safe_halt arch/x86/include/asm/irqflags.h:86 [inline]
->  acpi_safe_halt+0x25/0x30 drivers/acpi/processor_idle.c:112
->  acpi_idle_do_entry+0x22/0x40 drivers/acpi/processor_idle.c:573
->  acpi_idle_enter+0xa1/0xc0 drivers/acpi/processor_idle.c:707
->  cpuidle_enter_state+0xcb/0x250 drivers/cpuidle/cpuidle.c:267
->  cpuidle_enter+0x7f/0xf0 drivers/cpuidle/cpuidle.c:388
->  call_cpuidle kernel/sched/idle.c:155 [inline]
->  cpuidle_idle_call kernel/sched/idle.c:236 [inline]
->  do_idle+0x551/0x750 kernel/sched/idle.c:332
->  cpu_startup_entry+0x65/0x80 kernel/sched/idle.c:430
->  rest_init+0x1e8/0x260 init/main.c:732
->  start_kernel+0x927/0xa70 init/main.c:1074
->  x86_64_start_reservations+0x2e/0x30 arch/x86/kernel/head64.c:507
->  x86_64_start_kernel+0x98/0xa0 arch/x86/kernel/head64.c:488
->  common_startup_64+0x12c/0x137
-> 
-> Uninit was created at:
->  slab_post_alloc_hook mm/slub.c:3804 [inline]
->  slab_alloc_node mm/slub.c:3845 [inline]
->  kmalloc_trace+0x578/0xba0 mm/slub.c:3992
->  kmalloc include/linux/slab.h:628 [inline]
->  line6_init_cap_control+0x4f1/0x770 sound/usb/line6/driver.c:700
->  line6_probe+0xeae/0x1120 sound/usb/line6/driver.c:797
->  pod_probe+0x79/0x90 sound/usb/line6/pod.c:522
->  usb_probe_interface+0xd6f/0x1350 drivers/usb/core/driver.c:399
->  really_probe+0x4db/0xd90 drivers/base/dd.c:656
->  __driver_probe_device+0x2ab/0x5d0 drivers/base/dd.c:798
->  driver_probe_device+0x72/0x890 drivers/base/dd.c:828
->  __device_attach_driver+0x568/0x9e0 drivers/base/dd.c:956
->  bus_for_each_drv+0x403/0x620 drivers/base/bus.c:457
->  __device_attach+0x3c1/0x650 drivers/base/dd.c:1028
->  device_initial_probe+0x32/0x40 drivers/base/dd.c:1077
->  bus_probe_device+0x3dc/0x5c0 drivers/base/bus.c:532
->  device_add+0x1475/0x1c90 drivers/base/core.c:3705
->  usb_set_configuration+0x31c9/0x38d0 drivers/usb/core/message.c:2210
->  usb_generic_driver_probe+0x109/0x2a0 drivers/usb/core/generic.c:254
->  usb_probe_device+0x3a7/0x690 drivers/usb/core/driver.c:294
->  really_probe+0x4db/0xd90 drivers/base/dd.c:656
->  __driver_probe_device+0x2ab/0x5d0 drivers/base/dd.c:798
->  driver_probe_device+0x72/0x890 drivers/base/dd.c:828
->  __device_attach_driver+0x568/0x9e0 drivers/base/dd.c:956
->  bus_for_each_drv+0x403/0x620 drivers/base/bus.c:457
->  __device_attach+0x3c1/0x650 drivers/base/dd.c:1028
->  device_initial_probe+0x32/0x40 drivers/base/dd.c:1077
->  bus_probe_device+0x3dc/0x5c0 drivers/base/bus.c:532
->  device_add+0x1475/0x1c90 drivers/base/core.c:3705
->  usb_new_device+0x15ff/0x2470 drivers/usb/core/hub.c:2643
->  hub_port_connect drivers/usb/core/hub.c:5512 [inline]
->  hub_port_connect_change drivers/usb/core/hub.c:5652 [inline]
->  port_event drivers/usb/core/hub.c:5812 [inline]
->  hub_event+0x4ff8/0x72d0 drivers/usb/core/hub.c:5894
->  process_one_work kernel/workqueue.c:3254 [inline]
->  process_scheduled_works+0xa81/0x1bd0 kernel/workqueue.c:3335
->  worker_thread+0xea5/0x1560 kernel/workqueue.c:3416
->  kthread+0x3e2/0x540 kernel/kthread.c:388
->  ret_from_fork+0x6d/0x90 arch/x86/kernel/process.c:147
->  ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:243
-> [Fix]
-> Let's clear all the content of the buffer message during alloc.
-> 
-> Reported-and-tested-by: syzbot+7fb05ccf7b3d2f9617b3@syzkaller.appspotmail.com
-> Signed-off-by: Edward Adam Davis <eadavis@qq.com>
+ID 1c9e:9b05 OMEGA TECHNOLOGY (U8300)
+ID 1c9e:9b3c OMEGA TECHNOLOGY (U9300)
 
-A fix already submitted in https://lore.kernel.org/r/20240402063628.26609-1-tiwai@suse.de
+U8300
+ /: Bus
+    |__ Port 1: Dev 3, If 0, Class=Vendor Specific Class, Driver=option, 480M (Debug)
+        ID 1c9e:9b05 OMEGA TECHNOLOGY
+    |__ Port 1: Dev 3, If 1, Class=Vendor Specific Class, Driver=option, 480M (Modem / AT)
+        ID 1c9e:9b05 OMEGA TECHNOLOGY
+    |__ Port 1: Dev 3, If 2, Class=Vendor Specific Class, Driver=option, 480M (AT)
+        ID 1c9e:9b05 OMEGA TECHNOLOGY
+    |__ Port 1: Dev 3, If 3, Class=Vendor Specific Class, Driver=option, 480M (AT / Pipe / PPP)
+        ID 1c9e:9b05 OMEGA TECHNOLOGY
+    |__ Port 1: Dev 3, If 4, Class=Vendor Specific Class, Driver=qmi_wwan, 480M (NDIS / GobiNet / QMI WWAN)
+        ID 1c9e:9b05 OMEGA TECHNOLOGY
+    |__ Port 1: Dev 3, If 5, Class=Vendor Specific Class, Driver=, 480M (ADB)
+        ID 1c9e:9b05 OMEGA TECHNOLOGY
 
+U9300
+ /: Bus
+    |__ Port 1: Dev 3, If 0, Class=Vendor Specific Class, Driver=, 480M (ADB)
+        ID 1c9e:9b3c OMEGA TECHNOLOGY
+    |__ Port 1: Dev 3, If 1, Class=Vendor Specific Class, Driver=option, 480M (Modem / AT)
+        ID 1c9e:9b3c OMEGA TECHNOLOGY
+    |__ Port 1: Dev 3, If 2, Class=Vendor Specific Class, Driver=option, 480M (AT)
+        ID 1c9e:9b3c OMEGA TECHNOLOGY
+    |__ Port 1: Dev 3, If 3, Class=Vendor Specific Class, Driver=option, 480M (AT / Pipe / PPP)
+        ID 1c9e:9b3c OMEGA TECHNOLOGY
+    |__ Port 1: Dev 3, If 4, Class=Vendor Specific Class, Driver=qmi_wwan, 480M (NDIS / GobiNet / QMI WWAN)
+        ID 1c9e:9b3c OMEGA TECHNOLOGY
 
-thanks,
+Tested successfully using Modem Manager on U9300.
+Tested successfully AT commands using If=1, If=2 and If=3 on U9300.
 
-Takashi
+Signed-off-by: Coia Prant <coiaprant@gmail.com>
+Cc: stable@vger.kernel.org
+---
+ drivers/usb/serial/option.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index 55a65d941ccb..27a116901459 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -412,6 +412,10 @@ static void option_instat_callback(struct urb *urb);
+  */
+ #define LONGCHEER_VENDOR_ID			0x1c9e
+ 
++/* Longsung products */
++#define LONGSUNG_U8300_PRODUCT_ID		0x9b05
++#define LONGSUNG_U9300_PRODUCT_ID		0x9b3c
++
+ /* 4G Systems products */
+ /* This one was sold as the VW and Skoda "Carstick LTE" */
+ #define FOUR_G_SYSTEMS_PRODUCT_CARSTICK_LTE	0x7605
+@@ -2054,6 +2058,10 @@ static const struct usb_device_id option_ids[] = {
+ 	  .driver_info = RSVD(4) },
+ 	{ USB_DEVICE(LONGCHEER_VENDOR_ID, ZOOM_PRODUCT_4597) },
+ 	{ USB_DEVICE(LONGCHEER_VENDOR_ID, IBALL_3_5G_CONNECT) },
++	{ USB_DEVICE(LONGCHEER_VENDOR_ID, LONGSUNG_U8300_PRODUCT_ID),
++	  .driver_info = RSVD(4) | RSVD(5) },
++	{ USB_DEVICE(LONGCHEER_VENDOR_ID, LONGSUNG_U9300_PRODUCT_ID),
++	  .driver_info = RSVD(0) | RSVD(4) },
+ 	{ USB_DEVICE(HAIER_VENDOR_ID, HAIER_PRODUCT_CE100) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(HAIER_VENDOR_ID, HAIER_PRODUCT_CE81B, 0xff, 0xff, 0xff) },
+ 	/* Pirelli  */
+-- 
+2.39.2
+
 
