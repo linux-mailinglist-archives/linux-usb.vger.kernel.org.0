@@ -1,123 +1,81 @@
-Return-Path: <linux-usb+bounces-8733-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8734-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4FC3895173
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Apr 2024 13:08:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2E1E89517C
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Apr 2024 13:10:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9048A28518D
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Apr 2024 11:08:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 82CAB1F23CB6
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Apr 2024 11:10:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 218A160BB6;
-	Tue,  2 Apr 2024 11:07:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1417065BD1;
+	Tue,  2 Apr 2024 11:10:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="g7YnfbpY"
+	dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net header.b="xHcrk9dh"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from aposti.net (aposti.net [89.234.176.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79BA459176;
-	Tue,  2 Apr 2024 11:07:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE8EF60DEA;
+	Tue,  2 Apr 2024 11:10:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.234.176.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712056078; cv=none; b=pCydAWHXtX/WMJl3QtC8NKahSv4AF0IlpDN3eiMbePj2Jv52KYLU+K/zIcXH/ySP3QLRNRP5y+p9sHor2+8I0z47GmomJeRudkPqznQxTgKwrGTNXvFq8ozI95nf1xdDzEdyCaovf+QDIbAfXfhmTEfjVuRx3O9oCQO7Lnrh1jk=
+	t=1712056207; cv=none; b=EPCOE8RQ4ovu9dXIPJiDM9f8kqa0UbYuKsXZ4kfMcVEg+jslle9CeCzQqou9rkuozWTBLabrcqJDYITvcpUq196AbJn7W0yR+NYVLnAi3EbcITbikQDS6wTHi23LvRREAdFxwlEanOlC2MtjsfJi1lCP9NRcAaxGY95tzOy8JKg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712056078; c=relaxed/simple;
-	bh=ozasLjnG9pB7ik3kFxEJQG3wN6hrqhNa18GbPPH0O2E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mgULO3cNfrICLBMxe1I8xbOBZb5Xw9jQ9dW4rKnOG5gSMw3Hk52eY3yz9WfEQkAYGjLho+sjnr2+jU8I/S/iIfp8XGXXWkleF/SvwIMjekCYzkzB9teNSYPWtmG/6Ir5RpK+HKu1c9PTvzOuMgPN8ShGIxaB6Zn0K5vtpHz9o9Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=g7YnfbpY; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712056077; x=1743592077;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ozasLjnG9pB7ik3kFxEJQG3wN6hrqhNa18GbPPH0O2E=;
-  b=g7YnfbpYfjbNmOBdxzP36TyZNi4W3mrxkHlVNAPei7Ktpt0k3ItG/+rI
-   C/9/moZnEAhROoTsEYRpvQ8K3h939SnGJL52hfCal5QuuRB0UGinvrTE3
-   CgoI6l4XH1X4AI28fb70OAU7Ne3Buk4B5yD7/1N4zZqrZEb3e/N57HoOu
-   akO826XrM2C1cvubdXm64A1OowSDRijZxal2vNlAg+kEjaxr52pOT1auN
-   Ig/8skU1BlYU24DFxSpf2RA8wAlCMW1J7zVqiA1qhNnC6r4SEzgwd01nV
-   V+oFwPJGYvBT6p8+xcspSYhQpGYgkIt8Fa5FAc2UUPuy4R0ciRaoF0r5m
-   A==;
-X-CSE-ConnectionGUID: rMWwye6gQI+46HjSLWxy8w==
-X-CSE-MsgGUID: +wOVNUFiSzeGid9KJMt2Rg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11031"; a="17790311"
-X-IronPort-AV: E=Sophos;i="6.07,174,1708416000"; 
-   d="scan'208";a="17790311"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2024 04:07:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11031"; a="937083357"
-X-IronPort-AV: E=Sophos;i="6.07,174,1708416000"; 
-   d="scan'208";a="937083357"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 02 Apr 2024 04:07:52 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 02 Apr 2024 14:07:51 +0300
-Date: Tue, 2 Apr 2024 14:07:51 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Johan Hovold <johan+linaro@kernel.org>, linux-usb@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v2 11/11] soc: qcom: pmic_glink: enable UCSI on sc8180x
-Message-ID: <ZgvnB24F0PcPY10J@kuha.fi.intel.com>
-References: <20240329-qcom-ucsi-fixes-v2-0-0f5d37ed04db@linaro.org>
- <20240329-qcom-ucsi-fixes-v2-11-0f5d37ed04db@linaro.org>
+	s=arc-20240116; t=1712056207; c=relaxed/simple;
+	bh=jgpgoq/QTgIKErhMo7+aVkeA14DdQgDE837Qa3gLBKs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rzF5mr2if/igi/sRXdMWcIy+ZkOsEC+TqNptkq7xhIdiIUvS+rzrtssiK/pG6KtfSeGk5UE9XjxSCobLy3av7T1cPntlyTn6JSpaTPiQrOHx+IGspoUFEg9dgMqklQiF6FUqKq8RU06DEfiAEfBjczKJW6KnghXpqtijEUMwtas=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crapouillou.net; spf=pass smtp.mailfrom=crapouillou.net; dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net header.b=xHcrk9dh; arc=none smtp.client-ip=89.234.176.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crapouillou.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crapouillou.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+	s=mail; t=1712056197;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=9qjDrVhPABDqcButy64rrklBE4MPlj4eblWi/uVSPtc=;
+	b=xHcrk9dhMFWjShvEyQC94PfUCBu0ubhIl3Rs6L2ICTtjLNaVd0ronZkDkZM/BWAWFOv8g8
+	Yyu19L/qDFf8gJxbzCB6+zQ7ewCvhWX+lBr1tEzV5u8vzjMCLJjGVZ3EsDuaT4C24vhuo5
+	aJLkXWDFCIXUSipX2n1Ipoo0qfrxFj8=
+From: Paul Cercueil <paul@crapouillou.net>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+	Daniel Vetter <daniel.vetter@ffwll.ch>,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Paul Cercueil <paul@crapouillou.net>
+Subject: [PATCH 0/2][5.9-rc] USB FunctionFS DMABUF interface fixes
+Date: Tue,  2 Apr 2024 13:09:49 +0200
+Message-ID: <20240402110951.16376-1-paul@crapouillou.net>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240329-qcom-ucsi-fixes-v2-11-0f5d37ed04db@linaro.org>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Mar 29, 2024 at 08:15:43AM +0200, Dmitry Baryshkov wrote:
-> Now as all UCSI issues have been fixed, enable UCSI subdevice on the
-> Qualcomm SC8180X platform.
-> 
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Hi Greg,
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Here are two patches that address issues that were noticed by Christian
+when reviewing the very similar IIO DMABUF interface (but the FunctionFS
+patchset was already merged at that point).
 
-> ---
->  drivers/soc/qcom/pmic_glink.c | 4 ----
->  1 file changed, 4 deletions(-)
-> 
-> diff --git a/drivers/soc/qcom/pmic_glink.c b/drivers/soc/qcom/pmic_glink.c
-> index e5a591733a0f..c2f71d393bbb 100644
-> --- a/drivers/soc/qcom/pmic_glink.c
-> +++ b/drivers/soc/qcom/pmic_glink.c
-> @@ -334,15 +334,11 @@ static void pmic_glink_remove(struct platform_device *pdev)
->  	mutex_unlock(&__pmic_glink_lock);
->  }
->  
-> -static const unsigned long pmic_glink_sc8180x_client_mask = BIT(PMIC_GLINK_CLIENT_BATT) |
-> -							    BIT(PMIC_GLINK_CLIENT_ALTMODE);
-> -
->  static const unsigned long pmic_glink_sm8450_client_mask = BIT(PMIC_GLINK_CLIENT_BATT) |
->  							   BIT(PMIC_GLINK_CLIENT_ALTMODE) |
->  							   BIT(PMIC_GLINK_CLIENT_UCSI);
->  
->  static const struct of_device_id pmic_glink_of_match[] = {
-> -	{ .compatible = "qcom,sc8180x-pmic-glink", .data = &pmic_glink_sc8180x_client_mask },
->  	{ .compatible = "qcom,pmic-glink", .data = &pmic_glink_sm8450_client_mask },
->  	{}
->  };
-> 
-> -- 
-> 2.39.2
+Based on 5.9-rc2.
+
+Cheers,
+-Paul
+
+Paul Cercueil (2):
+  usb: gadget: functionfs: Fix inverted DMA fence direction
+  usb: gadget: functionfs: Wait for fences before enqueueing DMABUF
+
+ drivers/usb/gadget/function/f_fs.c | 29 ++++++++++++++++-------------
+ 1 file changed, 16 insertions(+), 13 deletions(-)
 
 -- 
-heikki
+2.43.0
+
 
