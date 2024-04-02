@@ -1,58 +1,57 @@
-Return-Path: <linux-usb+bounces-8711-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8712-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0BEE2894DB8
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Apr 2024 10:37:10 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4417F894DC0
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Apr 2024 10:41:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A0D021F226E0
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Apr 2024 08:37:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 755691C21B55
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Apr 2024 08:41:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D9132EAF7;
-	Tue,  2 Apr 2024 08:36:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0609145BF9;
+	Tue,  2 Apr 2024 08:41:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uJz3ajES"
+	dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b="S28paQVY"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB3E93E479;
-	Tue,  2 Apr 2024 08:36:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from mail-177131.yeah.net (mail-177131.yeah.net [123.58.177.131])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 832D126292;
+	Tue,  2 Apr 2024 08:41:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=123.58.177.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712046991; cv=none; b=IVlcZZYK39gEznzCud9uQsGd4hGQ1ukNre/vtgNZHm2KDrDhTiskpwGCu6jJdkJ8BL4yxhewpN0S6JlByDsa5odKKAngyEsHYdr0bm4hGrLztgkR0dwbn2j8EEs1/13Tni6ilnFPGE/1AnLrqApknVp1MgqmHp/0j92cFESkfTM=
+	t=1712047294; cv=none; b=PePCMtsJh4SQNgUGfDYUglAfYAjNFNRAjVndrwszU7s5+Sjj2Gq4mq2bdU07ETt1IiUqDE+BlEz2DUpz2Qn3ZrPokUJl8gJ4be04HuQsYBWMeOkZi5Q5QxX/MMlIHR3bVK6HybN0Fw6DefmpuYxA+YsGopICotjE9x03yr6xYzo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712046991; c=relaxed/simple;
-	bh=Tgjd0CDwYwOTXcNopkSwsdl4O9xxv3uVMD5zmI8KlHM=;
+	s=arc-20240116; t=1712047294; c=relaxed/simple;
+	bh=LrphTuKV4ZIvZiuC5JKV4IKb7oZU17EWpzajzeuN4Lk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VxX4xBxpf4cfc961MvvjCpeMiol2I2bZOlcIbrxcyOLS1qMiFj81WfD9RGeCIhCbX+qsHu/Jh/8jdprhY9qyY/Jm/B7AKb5t2WKMqeNqFuz7pBtY4M/9vBcAxqZeL4OLvRelBD/yHye8xgFO4ysOoJBMRFFFKNdzXdpLGmYibdI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uJz3ajES; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67BCEC433C7;
-	Tue,  2 Apr 2024 08:36:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712046990;
-	bh=Tgjd0CDwYwOTXcNopkSwsdl4O9xxv3uVMD5zmI8KlHM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=uJz3ajESb40xBrf+1zV6Sn4eiV/xZGz/G0W0aOjo4/7hyNzePO/10G/U2oCX2SQvw
-	 PkOlI7CXfsHEZko1vOGid16innOTsdNIxFOD7Ua+lauJ/wumnyMTPjIAJQylOogbHb
-	 eqtpmdLNUaoJeLBJQIvYuj+ZL7xj6veAL99zTsXQm0Y3BHJ9yocjSrqlsD+dhNsUXm
-	 L1yJ2gKMWabQD5OiGL/OV9Ny818LP1ylcIzSH7zYcHChV+4EID8lhnAobTZ3fGOy4h
-	 5ttOCdSs2FVlfIQTB0mB5/edC+iXwXBaW6KwsR7gFJn08+aNxwADYdNSkFiRQba/H8
-	 AvLIcyLBQcYMQ==
-Date: Tue, 2 Apr 2024 09:36:26 +0100
-From: Simon Horman <horms@kernel.org>
-To: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org,
-	Dave Stevenson <dave.stevenson@raspberrypi.com>
-Subject: Re: [PATCH net v3] net: usb: ax88179_178a: avoid the interface
- always configured as random address
-Message-ID: <20240402083626.GN26556@kernel.org>
-References: <20240401082004.7412-1-jtornosm@redhat.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=RTbNf1+6jgCTDlVz5i/FMdiA/OTn8S0I9LjxHPWnXK/bbDmqRZga2QeuFS5/ev1ixI7wQ/snKIFrDfM4r33wbppFmFlZNDrb87t5RupOrF1+kqUc5UXQ6ajcExLLdkDQ3Ha2niBtpBbkBWLWdyo1FoGr70cjP4hKB4Wjeu/UJUY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net; spf=pass smtp.mailfrom=yeah.net; dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b=S28paQVY; arc=none smtp.client-ip=123.58.177.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yeah.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yeah.net;
+	s=s110527; h=Date:From:Subject:Message-ID:MIME-Version:
+	Content-Type; bh=cys5+eM5CZq+KFTK926auz0DzKUjBIgHsX+A5iFp8mU=;
+	b=S28paQVYMO1kFONPu9j8xhJulwMH9qZO+h7WELsKbdDqH9Jm8rq+gPbnZHg7B3
+	Upk2HT9VaaHTKwIvJ9OnNOzNqQFcAg79RF1+LWcFStfCp9xZrsWgUbI09gZIK2RH
+	NTDjWFzSDTM7/ybMMl+qoH2El9douD+qeHJ6ZOvPgNIms=
+Received: from dragon (unknown [223.68.79.243])
+	by smtp1 (Coremail) with SMTP id ClUQrAD3X3JdxAtmjb2iAQ--.9262S3;
+	Tue, 02 Apr 2024 16:39:59 +0800 (CST)
+Date: Tue, 2 Apr 2024 16:39:57 +0800
+From: Shawn Guo <shawnguo2@yeah.net>
+To: Xu Yang <xu.yang_2@nxp.com>
+Cc: gregkh@linuxfoundation.org, robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+	conor+dt@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+	festevam@gmail.com, linux-imx@nxp.com, peter.chen@kernel.org,
+	jun.li@nxp.com, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	imx@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v10 08/11] arm64: dts: imx93: add usb nodes
+Message-ID: <ZgvEXZTOHUv+GGeH@dragon>
+References: <20240321081439.541799-1-xu.yang_2@nxp.com>
+ <20240321081439.541799-8-xu.yang_2@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -61,37 +60,130 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240401082004.7412-1-jtornosm@redhat.com>
+In-Reply-To: <20240321081439.541799-8-xu.yang_2@nxp.com>
+X-CM-TRANSID:ClUQrAD3X3JdxAtmjb2iAQ--.9262S3
+X-Coremail-Antispam: 1Uf129KBjvJXoWxWw17Gr15WrW3ur4DCw4fGrg_yoW5Kr4Upa
+	srCrZ3GrWIqr1I9FWaqFnYk3yrJas5Ga929F42q340ywn3Wa42q3WxKFnxWr48Xr4fZw4a
+	yF45Xr18K3ZFyaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07j2JP_UUUUU=
+X-CM-SenderInfo: pvkd40hjxrjqh1hdxhhqhw/1tbiFR+0ZV6NnBk55AAAsQ
 
-On Mon, Apr 01, 2024 at 10:19:50AM +0200, Jose Ignacio Tornos Martinez wrote:
-> After the commit d2689b6a86b9 ("net: usb: ax88179_178a: avoid two
-> consecutive device resets"), reset is not executed from bind operation and
-> mac address is not read from the device registers or the devicetree at that
-> moment. Since the check to configure if the assigned mac address is random
-> or not for the interface, happens after the bind operation from
-> usbnet_probe, the interface keeps configured as random address, although the
-> address is correctly read and set during open operation (the only reset
-> now).
+On Thu, Mar 21, 2024 at 04:14:36PM +0800, Xu Yang wrote:
+> There are 2 USB controllers on i.MX93. Add them.
 > 
-> In order to keep only one reset for the device and to avoid the interface
-> always configured as random address, after reset, configure correctly the
-> suitable field from the driver, if the mac address is read successfully from
-> the device registers or the devicetree.
+> Acked-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com> # TQMa9352LA/CA
+> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
 > 
-> cc: stable@vger.kernel.org # 6.6+
-> Fixes: d2689b6a86b9 ("net: usb: ax88179_178a: avoid two consecutive device resets")
-> Reported-by: Dave Stevenson  <dave.stevenson@raspberrypi.com>
-> Signed-off-by: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
 > ---
-> v3:
->   - Send the patch separately to net.
-> v2:
->   - Split the fix and the improvement in two patches as Simon Horman
-> suggests.
-> v1: https://lore.kernel.org/netdev/20240325173155.671807-1-jtornosm@redhat.com/
+> Changes in v2:
+>  - fix format as suggested by Alexander
+>  - change compatible from fsl,imx8mm-usb to fsl,imx93-usb
+> Changes in v3:
+>  - replace deprecated fsl,usbphy with phys as suggested by Alexander
+>  - reorder nodes
+> Changes in v4:
+>  - fix the alignment
+> Changes in v5:
+>  - rename usb_wakeup_clk to usb_wakeup
+> Changes in v6:
+>  - rename usb_ctrl_root_clk to usb_ctrl_root
+> Changes in v7:
+>  - no changes
+> Changes in v8:
+>  - no changes
+> Changes in v9:
+>  - no changes
+> Changes in v10:
+>  - no changes
+> ---
+>  arch/arm64/boot/dts/freescale/imx93.dtsi | 58 ++++++++++++++++++++++++
+>  1 file changed, 58 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/freescale/imx93.dtsi b/arch/arm64/boot/dts/freescale/imx93.dtsi
+> index 8f2e7c42ad6e..4a7efccb4f67 100644
+> --- a/arch/arm64/boot/dts/freescale/imx93.dtsi
+> +++ b/arch/arm64/boot/dts/freescale/imx93.dtsi
+> @@ -183,6 +183,20 @@ mqs2: mqs2 {
+>  		status = "disabled";
+>  	};
+>  
+> +	usbphynop1: usbphynop1 {
+> +		compatible = "usb-nop-xceiv";
+> +		#phy-cells = <0>;
+> +		clocks = <&clk IMX93_CLK_USB_PHY_BURUNIN>;
+> +		clock-names = "main_clk";
+> +	};
+> +
+> +	usbphynop2: usbphynop2 {
+> +		compatible = "usb-nop-xceiv";
+> +		#phy-cells = <0>;
+> +		clocks = <&clk IMX93_CLK_USB_PHY_BURUNIN>;
+> +		clock-names = "main_clk";
+> +	};
+> +
+>  	soc@0 {
+>  		compatible = "simple-bus";
+>  		#address-cells = <1>;
+> @@ -1167,6 +1181,50 @@ media_blk_ctrl: system-controller@4ac10000 {
+>  			status = "disabled";
+>  		};
+>  
+> +		usbotg1: usb@4c100000 {
+> +			compatible = "fsl,imx93-usb", "fsl,imx7d-usb", "fsl,imx27-usb";
+> +			reg = <0x4c100000 0x200>;
+> +			interrupts = <GIC_SPI 187 IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&clk IMX93_CLK_USB_CONTROLLER_GATE>,
+> +				 <&clk IMX93_CLK_HSIO_32K_GATE>;
+> +			clock-names = "usb_ctrl_root", "usb_wakeup";
+> +			assigned-clocks = <&clk IMX93_CLK_HSIO>;
+> +			assigned-clock-parents = <&clk IMX93_CLK_SYS_PLL_PFD1_DIV2>;
+> +			assigned-clock-rates = <133000000>;
+> +			phys = <&usbphynop1>;
+> +			fsl,usbmisc = <&usbmisc1 0>;
+> +			status = "disabled";
+> +		};
+> +
+> +		usbmisc1: usbmisc@4c100200 {
+> +			compatible = "fsl,imx8mm-usbmisc", "fsl,imx7d-usbmisc",
+> +				     "fsl,imx6q-usbmisc";
+> +			reg = <0x4c100200 0x200>;
+> +			#index-cells = <1>;
 
-Thanks for the updates.
+Do we still need this '#index-cells' property?  I see it's being marked
+as deprecated in bindings doc.
 
-Reviewed-by: Simon Horman <horms@kernel.org>
+Shawn
+
+> +		};
+> +
+> +		usbotg2: usb@4c200000 {
+> +			compatible = "fsl,imx93-usb", "fsl,imx7d-usb", "fsl,imx27-usb";
+> +			reg = <0x4c200000 0x200>;
+> +			interrupts = <GIC_SPI 188 IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&clk IMX93_CLK_USB_CONTROLLER_GATE>,
+> +				 <&clk IMX93_CLK_HSIO_32K_GATE>;
+> +			clock-names = "usb_ctrl_root", "usb_wakeup";
+> +			assigned-clocks = <&clk IMX93_CLK_HSIO>;
+> +			assigned-clock-parents = <&clk IMX93_CLK_SYS_PLL_PFD1_DIV2>;
+> +			assigned-clock-rates = <133000000>;
+> +			phys = <&usbphynop2>;
+> +			fsl,usbmisc = <&usbmisc2 0>;
+> +			status = "disabled";
+> +		};
+> +
+> +		usbmisc2: usbmisc@4c200200 {
+> +			compatible = "fsl,imx8mm-usbmisc", "fsl,imx7d-usbmisc",
+> +				     "fsl,imx6q-usbmisc";
+> +			reg = <0x4c200200 0x200>;
+> +			#index-cells = <1>;
+> +		};
+> +
+>  		ddr-pmu@4e300dc0 {
+>  			compatible = "fsl,imx93-ddr-pmu";
+>  			reg = <0x4e300dc0 0x200>;
+> -- 
+> 2.34.1
+> 
 
 
