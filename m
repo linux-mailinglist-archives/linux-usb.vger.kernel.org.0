@@ -1,64 +1,64 @@
-Return-Path: <linux-usb+bounces-8726-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8727-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35350895083
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Apr 2024 12:41:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 38F9C895092
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Apr 2024 12:42:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DD94F1F215FD
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Apr 2024 10:41:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A29D11F22ADB
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Apr 2024 10:42:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F23B15FDB3;
-	Tue,  2 Apr 2024 10:40:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB72C5FBA1;
+	Tue,  2 Apr 2024 10:41:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Oa+x4i9P"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="c6hW7+dg"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF0554F897;
-	Tue,  2 Apr 2024 10:40:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C42905B699;
+	Tue,  2 Apr 2024 10:41:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712054417; cv=none; b=lM8t07uBmkNobX5y1rbUlpHdlobePlCByO8fQrOCVZTIuXSfd/btPOhLTWqzTxplakDqgL51RerZk1wgcQ5uwkSachxUv9hjS384gKqmdMiGgNbwZ8cdX4irYzUtB2k+MwjFK+vYR4Lafo3+3SJ2q3V8Zq7rWHdsQXV4mJ6u8A4=
+	t=1712054506; cv=none; b=ZV+PuuHuje3GfIR6IdGGMPQqsJuUHdx8pMPh6WNqlWQZX0qO3zSckyZyg5DlBhJeF9krfLpUmTWSWGg32INB0rXIEge5yHRy0UoiMvQtS96d6u7K+VrxjdzjcrTDyoCY4VR4KzqgtUTuDtgjG9NyVb3Urn9a7sbI2IwF0Ewfbgk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712054417; c=relaxed/simple;
-	bh=znHWUavCj46z2XKYldokx9ecmiWhHaeLqUlAqoDEUQw=;
+	s=arc-20240116; t=1712054506; c=relaxed/simple;
+	bh=xz8TeTlZ7k9gVxNTL5sHUkvoUdQo+W3RkEeetP3KNKY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oi9RVqUnZ2L9iIJBbWpkOkjzZ0r94uVjmJegGDS5ZU4DfcVWX2ID3Fy2TAgQMVSeC6CYanEynSgjQ7tGkV09hbVvbncCInpch5phTPGJcFDmxaofIk2iTIO7vTtxZI5RQ44+1g7JdPoNXxYpvCkGvs3VEYQaQmdQhPlzGzpUHI4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Oa+x4i9P; arc=none smtp.client-ip=192.198.163.19
+	 Content-Type:Content-Disposition:In-Reply-To; b=qh6zyMppZb2Ce3OqIq/18WBpXzSIH3pq/jyAGm5Sg+0f0Kyl6DsaaATu5cXjzmp5MdmqdSDtQqxQJ7IKgxLZHvBu8P/9/tGSXheSxO9uNYuLmQg7Dyh02zkE1oppNGajbrgi/ZBda+AChmjKy0FM/HDx3pVKBJeMozA/ranT/v4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=c6hW7+dg; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712054416; x=1743590416;
+  t=1712054505; x=1743590505;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=znHWUavCj46z2XKYldokx9ecmiWhHaeLqUlAqoDEUQw=;
-  b=Oa+x4i9PPq872rBr7bYLT3XvhAesQ6SWje28+zvHuT8dZo8RNXA+ijuH
-   fJZ8iKaigM5SuwBkU8atGmtl3112f7XtdrCjPexxbLyJ3EKE+qfU1kS5v
-   w8BBAsAcsIq1vAFhBgKGNnjt/IOE23+KF6bQvQFZYX/eZOIbUtcaFfBOr
-   xXXWOIsOQjcNBZHhL3BsxWxJilLoSaTgYI0Y1NUmkHOBDmUtOz63bA0VN
-   xtC9ERl3KFQgDuZMhjMKoQmp+XPDMWcColc29vCI3O7805f5Kq3IYTwj/
-   +7xMt1hzUjbt68R9dJK8o86IiV5OeDoarSnBr2TtIcR8HISTudDtHAdz2
-   Q==;
-X-CSE-ConnectionGUID: 4HsBUxDFQwaX422FnzJ4EQ==
-X-CSE-MsgGUID: 5Cdc5OMCShC9lKm7y9jGjw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11031"; a="7085669"
+  bh=xz8TeTlZ7k9gVxNTL5sHUkvoUdQo+W3RkEeetP3KNKY=;
+  b=c6hW7+dgWtpETo13qOPe6Uu8WALXvdfzyDtmR7I5aEH2ymZNRTcwkt0z
+   Q491Cjn0TMGVVdd93VXhPbY0SnJYt/+OSYP22pbTfmtJsWskc2yBNkeMO
+   4u11YxRfNIfx7xcjBTbbO65GrrvLlbqtGrhTaRGq/tVY24sUH6F78ueVe
+   vGHLXe/BnPRp8TRNV3w0EoVriqdHPAuTAGqEe6ZeZbzObqEOjwxJCf+ae
+   w80CotyWthvXy/CmeIPDisWf/jD7ThEh0AV5Gen/XSRutQoSieDoVKcsv
+   skwk3Guy6rynqj5arwgeHPBuD9k3Jio1h7MUWj543kLPB5uMU/APH/4vN
+   w==;
+X-CSE-ConnectionGUID: fCu13WNFTcuiRHLdN77bPA==
+X-CSE-MsgGUID: 3hfx4oj5SrCabHyfpIsqfw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11031"; a="7085813"
 X-IronPort-AV: E=Sophos;i="6.07,174,1708416000"; 
-   d="scan'208";a="7085669"
+   d="scan'208";a="7085813"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2024 03:40:15 -0700
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2024 03:41:44 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11031"; a="937083296"
+X-IronPort-AV: E=McAfee;i="6600,9927,11031"; a="937083314"
 X-IronPort-AV: E=Sophos;i="6.07,174,1708416000"; 
-   d="scan'208";a="937083296"
+   d="scan'208";a="937083314"
 Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 02 Apr 2024 03:40:11 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 02 Apr 2024 13:40:11 +0300
-Date: Tue, 2 Apr 2024 13:40:11 +0300
+  by fmsmga001.fm.intel.com with SMTP; 02 Apr 2024 03:41:40 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 02 Apr 2024 13:41:40 +0300
+Date: Tue, 2 Apr 2024 13:41:40 +0300
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -68,11 +68,10 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Konrad Dybcio <konrad.dybcio@linaro.org>,
 	Johan Hovold <johan+linaro@kernel.org>, linux-usb@vger.kernel.org,
 	linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v2 05/11] usb: typec: ucsi: simplify partner's PD caps
- registration
-Message-ID: <Zgvgi2yC5P9XaIZa@kuha.fi.intel.com>
+Subject: Re: [PATCH v2 06/11] usb: typec: ucsi: extract code to read PD caps
+Message-ID: <Zgvg5Fr/Hwn7JIqx@kuha.fi.intel.com>
 References: <20240329-qcom-ucsi-fixes-v2-0-0f5d37ed04db@linaro.org>
- <20240329-qcom-ucsi-fixes-v2-5-0f5d37ed04db@linaro.org>
+ <20240329-qcom-ucsi-fixes-v2-6-0f5d37ed04db@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -81,59 +80,151 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240329-qcom-ucsi-fixes-v2-5-0f5d37ed04db@linaro.org>
+In-Reply-To: <20240329-qcom-ucsi-fixes-v2-6-0f5d37ed04db@linaro.org>
 
-On Fri, Mar 29, 2024 at 08:15:37AM +0200, Dmitry Baryshkov wrote:
-> In a way similar to the previous commit, move
-> typec_partner_set_usb_power_delivery() to be called after reading the PD
-> caps. This also removes calls to
-> usb_power_delivery_unregister_capabilities() from the error path. Keep
-> all capabilities registered until they are cleared by
-> ucsi_unregister_partner_pdos().
+On Fri, Mar 29, 2024 at 08:15:38AM +0200, Dmitry Baryshkov wrote:
+> Extract function to read PDOs from the port and set PD capabilities
+> accordingly.
 > 
-> Fixes: b04e1747fbcc ("usb: typec: ucsi: Register USB Power Delivery Capabilities")
 > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
 Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
 > ---
->  drivers/usb/typec/ucsi/ucsi.c | 14 +-------------
->  1 file changed, 1 insertion(+), 13 deletions(-)
+>  drivers/usb/typec/ucsi/ucsi.c | 85 ++++++++++++++++---------------------------
+>  1 file changed, 32 insertions(+), 53 deletions(-)
 > 
 > diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> index d1a45ce7f660..35366b1a3d78 100644
+> index 35366b1a3d78..18b2e4ffc57e 100644
 > --- a/drivers/usb/typec/ucsi/ucsi.c
 > +++ b/drivers/usb/typec/ucsi/ucsi.c
-> @@ -826,12 +826,6 @@ static int ucsi_register_partner_pdos(struct ucsi_connector *con)
->  			return PTR_ERR(cap);
->  
->  		con->partner_source_caps = cap;
-> -
-> -		ret = typec_partner_set_usb_power_delivery(con->partner, con->partner_pd);
-> -		if (ret) {
-> -			usb_power_delivery_unregister_capabilities(con->partner_source_caps);
-> -			return ret;
-> -		}
->  	}
->  
->  	ret = ucsi_get_pdos(con, TYPEC_SINK, 1, caps.pdo);
-> @@ -846,15 +840,9 @@ static int ucsi_register_partner_pdos(struct ucsi_connector *con)
->  			return PTR_ERR(cap);
->  
->  		con->partner_sink_caps = cap;
-> -
-> -		ret = typec_partner_set_usb_power_delivery(con->partner, con->partner_pd);
-> -		if (ret) {
-> -			usb_power_delivery_unregister_capabilities(con->partner_sink_caps);
-> -			return ret;
-> -		}
->  	}
->  
-> -	return 0;
-> +	return typec_partner_set_usb_power_delivery(con->partner, con->partner_pd);
+> @@ -677,6 +677,26 @@ static int ucsi_get_src_pdos(struct ucsi_connector *con)
+>  	return ret;
 >  }
 >  
->  static void ucsi_unregister_partner_pdos(struct ucsi_connector *con)
+> +static struct usb_power_delivery_capabilities *ucsi_get_pd_caps(struct ucsi_connector *con,
+> +								enum typec_role role,
+> +								bool is_partner)
+> +{
+> +	struct usb_power_delivery_capabilities_desc pd_caps;
+> +	int ret;
+> +
+> +	ret = ucsi_get_pdos(con, role, is_partner, pd_caps.pdo);
+> +	if (ret <= 0)
+> +		return ERR_PTR(ret);
+> +
+> +	if (ret < PDO_MAX_OBJECTS)
+> +		pd_caps.pdo[ret] = 0;
+> +
+> +	pd_caps.role = role;
+> +
+> +	return usb_power_delivery_register_capabilities(is_partner ? con->partner_pd : con->pd,
+> +							&pd_caps);
+> +}
+> +
+>  static int ucsi_read_identity(struct ucsi_connector *con, u8 recipient,
+>  			      u8 offset, u8 bytes, void *resp)
+>  {
+> @@ -804,9 +824,7 @@ static int ucsi_check_altmodes(struct ucsi_connector *con)
+>  static int ucsi_register_partner_pdos(struct ucsi_connector *con)
+>  {
+>  	struct usb_power_delivery_desc desc = { con->ucsi->cap.pd_version };
+> -	struct usb_power_delivery_capabilities_desc caps;
+>  	struct usb_power_delivery_capabilities *cap;
+> -	int ret;
+>  
+>  	if (con->partner_pd)
+>  		return 0;
+> @@ -815,32 +833,17 @@ static int ucsi_register_partner_pdos(struct ucsi_connector *con)
+>  	if (IS_ERR(con->partner_pd))
+>  		return PTR_ERR(con->partner_pd);
+>  
+> -	ret = ucsi_get_pdos(con, TYPEC_SOURCE, 1, caps.pdo);
+> -	if (ret > 0) {
+> -		if (ret < PDO_MAX_OBJECTS)
+> -			caps.pdo[ret] = 0;
+> -
+> -		caps.role = TYPEC_SOURCE;
+> -		cap = usb_power_delivery_register_capabilities(con->partner_pd, &caps);
+> -		if (IS_ERR(cap))
+> -			return PTR_ERR(cap);
+> -
+> -		con->partner_source_caps = cap;
+> -	}
+> -
+> -	ret = ucsi_get_pdos(con, TYPEC_SINK, 1, caps.pdo);
+> -	if (ret > 0) {
+> -		if (ret < PDO_MAX_OBJECTS)
+> -			caps.pdo[ret] = 0;
+> +	cap = ucsi_get_pd_caps(con, TYPEC_SOURCE, true);
+> +	if (IS_ERR(cap))
+> +	    return PTR_ERR(cap);
+>  
+> -		caps.role = TYPEC_SINK;
+> +	con->partner_source_caps = cap;
+>  
+> -		cap = usb_power_delivery_register_capabilities(con->partner_pd, &caps);
+> -		if (IS_ERR(cap))
+> -			return PTR_ERR(cap);
+> +	cap = ucsi_get_pd_caps(con, TYPEC_SINK, true);
+> +	if (IS_ERR(cap))
+> +	    return PTR_ERR(cap);
+>  
+> -		con->partner_sink_caps = cap;
+> -	}
+> +	con->partner_sink_caps = cap;
+>  
+>  	return typec_partner_set_usb_power_delivery(con->partner, con->partner_pd);
+>  }
+> @@ -1463,7 +1466,6 @@ static struct fwnode_handle *ucsi_find_fwnode(struct ucsi_connector *con)
+>  static int ucsi_register_port(struct ucsi *ucsi, struct ucsi_connector *con)
+>  {
+>  	struct usb_power_delivery_desc desc = { ucsi->cap.pd_version};
+> -	struct usb_power_delivery_capabilities_desc pd_caps;
+>  	struct usb_power_delivery_capabilities *pd_cap;
+>  	struct typec_capability *cap = &con->typec_cap;
+>  	enum typec_accessory *accessory = cap->accessory;
+> @@ -1544,36 +1546,13 @@ static int ucsi_register_port(struct ucsi *ucsi, struct ucsi_connector *con)
+>  
+>  	con->pd = usb_power_delivery_register(ucsi->dev, &desc);
+>  
+> -	ret = ucsi_get_pdos(con, TYPEC_SOURCE, 0, pd_caps.pdo);
+> -	if (ret > 0) {
+> -		if (ret < PDO_MAX_OBJECTS)
+> -			pd_caps.pdo[ret] = 0;
+> -
+> -		pd_caps.role = TYPEC_SOURCE;
+> -		pd_cap = usb_power_delivery_register_capabilities(con->pd, &pd_caps);
+> -		if (IS_ERR(pd_cap)) {
+> -			ret = PTR_ERR(pd_cap);
+> -			goto out;
+> -		}
+> -
+> +	pd_cap = ucsi_get_pd_caps(con, TYPEC_SOURCE, false);
+> +	if (!IS_ERR(pd_cap))
+>  		con->port_source_caps = pd_cap;
+> -	}
+> -
+> -	memset(&pd_caps, 0, sizeof(pd_caps));
+> -	ret = ucsi_get_pdos(con, TYPEC_SINK, 0, pd_caps.pdo);
+> -	if (ret > 0) {
+> -		if (ret < PDO_MAX_OBJECTS)
+> -			pd_caps.pdo[ret] = 0;
+> -
+> -		pd_caps.role = TYPEC_SINK;
+> -		pd_cap = usb_power_delivery_register_capabilities(con->pd, &pd_caps);
+> -		if (IS_ERR(pd_cap)) {
+> -			ret = PTR_ERR(pd_cap);
+> -			goto out;
+> -		}
+>  
+> +	pd_cap = ucsi_get_pd_caps(con, TYPEC_SINK, false);
+> +	if (!IS_ERR(pd_cap))
+>  		con->port_sink_caps = pd_cap;
+> -	}
+>  
+>  	typec_port_set_usb_power_delivery(con->port, con->pd);
+>  
 > 
 > -- 
 > 2.39.2
