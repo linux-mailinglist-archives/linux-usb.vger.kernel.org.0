@@ -1,97 +1,110 @@
-Return-Path: <linux-usb+bounces-8716-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8717-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 08208894F9E
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Apr 2024 12:10:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A6A24894FA2
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Apr 2024 12:11:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9D55F1F2593C
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Apr 2024 10:10:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C9DEF1C21229
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Apr 2024 10:11:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6A7A5CDC9;
-	Tue,  2 Apr 2024 10:10:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87D075A117;
+	Tue,  2 Apr 2024 10:10:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LVHaQ0ak"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TFm6dblF"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C36AB5A4E9
-	for <linux-usb@vger.kernel.org>; Tue,  2 Apr 2024 10:10:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99D1755E72;
+	Tue,  2 Apr 2024 10:10:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712052625; cv=none; b=jz0/WBlTiWfwIIl9oAY5es9TYjOE0i/9PCsqXM1mROp3iCT3XaSyPIEfnQ/RVizIdyBxJfRJzPmuMA3mS7bQ5cYk84Q8TDAPPE5fbvFOp0+O8DUppS05rViFLP5YYkhAzvjdmHTVXqzdzZ9tKCQM4hRByfmOCSb1Y1mAzHvRm8I=
+	t=1712052658; cv=none; b=PRdkadZQsxGiAOu2I+RI5JDfTgFuv2iP0Lc8n/+oPQGMIAo4l/cDj+0xd3kwKcJoX3C6d4e8KwZyN2nt9BTDqOJDgFmkNyP6ggrv2I4288PkzSJmHke/VOXF6UFfTpkk3SXsuSgMoccsozJDMGDA/+Fhj6fg26ikcBYcvkDwinc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712052625; c=relaxed/simple;
-	bh=5+D22n6NjEK7V57SzA0mqDqWK4xcaRAH+sKuXTPM2n8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=T+vTlWcVr30is9Phwo+FqKsQyWoPak7BnOJJQrnbCYtlujRTd9v09onKIgO7j12QY2H1jNdTIWST3rN2NccaL/VWosoeMnIIrkpbA5lBmi4olDRdbtj27UEV61/+boBbhie1JKQHeaPNQdrHbDHg6AZi8eHYwJt5atatNniW/aM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LVHaQ0ak; arc=none smtp.client-ip=198.175.65.10
+	s=arc-20240116; t=1712052658; c=relaxed/simple;
+	bh=JeZSu8B31jDUOjALAzuYLuNiUkxwby08+7uq9G+Ehlk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VnHtf9fiQhRoeab10Tqu3QgnV6bv6egHnuonlCzHGDCMnySHkbdrwMzcZdERFHlhYllzYBIm1Y+BnW5qY6SMUBXzH1c+VCGbFl0ajcRaxp0jK+mcpIg+8b04tW2VCoon1PUaSdu4tQgr21sm9tdpXUKlD4YvDpBzaHCa8+z0s1k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TFm6dblF; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712052624; x=1743588624;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=5+D22n6NjEK7V57SzA0mqDqWK4xcaRAH+sKuXTPM2n8=;
-  b=LVHaQ0akIHkya4dye36zAhF7aV4WZ22d3dsDws8jj7qn5QzMwrLTiv2Q
-   q15Bwz4nD5g170MEU4/OM+6JcvV4mk6vlZICMqtQaXqXFTcaK9P9sekFc
-   XDPuX045yV8GglHGAHCK4ALEcaePW9u//iW674JAgktwmVlg5CNtL7zmY
-   Z+7GUQwF9Mm7yoEMWkKAd2q4OyYnReN3eGUQmCYLCUaXtuwgTlffAJkCT
-   DWeKdFXd165wSbkRDQTsINRsc9Xeb1wlBKjq/kDZAMrtu6jJ5kx2ejy9z
-   Zj/eh6uYh6A/yPiplmA1+dZX21COxl7frNVXQuIfUMs4azUBYrp5aJCW2
-   g==;
-X-CSE-ConnectionGUID: Jn04nvFXR1ysgYeZKO1AGw==
-X-CSE-MsgGUID: lS3fmoQNSZ2mfZzOHvSAQQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11031"; a="24669913"
+  t=1712052657; x=1743588657;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=JeZSu8B31jDUOjALAzuYLuNiUkxwby08+7uq9G+Ehlk=;
+  b=TFm6dblFuKvXNI2AO/PaizDiV8P2CGy9h6Mg5S8bBmcudwiXPPcvXgc6
+   EC1pqgpSEa5O4YseuCbzXrqtk5877mgrp4INZHCyLoTAZlER9mN/amMIq
+   dUuTnwFnkD+xf6adzUNt393rZprFFZCVO2jY/bI+q7dXcva6avjQQWB/B
+   S+he155+RGfid1QpJ5WuZTL887QOSiHH7Yps3i/25S0N0AURcLEzgRI1Z
+   EYZU/uGMwXVpEFvJGmEVMDOvYwE+VL3PoTJeW0m0f+eKjY/+vDrnuzkFG
+   IXQfcloRo4DsbXlAF0rd3AJtOp3iVnSwx+4+FNwb3Qd0uSUZ+mU0Q1HWi
+   Q==;
+X-CSE-ConnectionGUID: sagVaCdmRXOedEriNaOw3g==
+X-CSE-MsgGUID: EHxVxZ/MQwmyon7hZahAhA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11031"; a="24669953"
 X-IronPort-AV: E=Sophos;i="6.07,174,1708416000"; 
-   d="scan'208";a="24669913"
+   d="scan'208";a="24669953"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2024 03:10:24 -0700
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2024 03:10:56 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11031"; a="937083265"
+X-IronPort-AV: E=McAfee;i="6600,9927,11031"; a="937083266"
 X-IronPort-AV: E=Sophos;i="6.07,174,1708416000"; 
-   d="scan'208";a="937083265"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 02 Apr 2024 03:10:21 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id 9DC4228A; Tue,  2 Apr 2024 13:10:20 +0300 (EEST)
-Date: Tue, 2 Apr 2024 13:10:20 +0300
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: linux-usb@vger.kernel.org
-Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
-	Michael Jamet <michael.jamet@intel.com>,
-	Lukas Wunner <lukas@wunner.de>,
-	Andreas Noever <andreas.noever@gmail.com>,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	Sanath S <Sanath.S@amd.com>
-Subject: [ANNOUNCE] Thunderbolt/USB4 debugging tools
-Message-ID: <20240402101020.GP112498@black.fi.intel.com>
+   d="scan'208";a="937083266"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 02 Apr 2024 03:10:52 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 02 Apr 2024 13:10:51 +0300
+Date: Tue, 2 Apr 2024 13:10:51 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Ran Wang <ran.wang_1@nxp.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] usb: phy: fsl-usb: drop driver owner assignment
+Message-ID: <ZgvZq6DIr1jTbezG@kuha.fi.intel.com>
+References: <20240327174609.519252-1-krzysztof.kozlowski@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240327174609.519252-1-krzysztof.kozlowski@linaro.org>
 
-Hi all,
+On Wed, Mar 27, 2024 at 06:46:08PM +0100, Krzysztof Kozlowski wrote:
+> Core in platform_driver_register() already sets the .owner, so driver
+> does not need to.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-This is mostly for the folks developing and testing Thunderbolt/USB4
-driver side of things but may be useful for others too. Not intented to
-replace anything we already have for the regular user stack.
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-In summary this is a collection of small tools that provide bit more
-user friendly access to the sysfs/debugfs/tracefs interfaces made
-available by the driver. Mainly useful for debugging issues around the
-software connection manager parts of the driver (although some of these
-work with the firmware connection manager too). We have been using this
-internally for a while.
+> ---
+>  drivers/usb/phy/phy-fsl-usb.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/usb/phy/phy-fsl-usb.c b/drivers/usb/phy/phy-fsl-usb.c
+> index 79617bb0a70e..1ebbf189a535 100644
+> --- a/drivers/usb/phy/phy-fsl-usb.c
+> +++ b/drivers/usb/phy/phy-fsl-usb.c
+> @@ -1005,7 +1005,6 @@ struct platform_driver fsl_otg_driver = {
+>  	.remove_new = fsl_otg_remove,
+>  	.driver = {
+>  		.name = driver_name,
+> -		.owner = THIS_MODULE,
+>  	},
+>  };
+>  
+> -- 
+> 2.34.1
 
-The repository can be found here:
-
-  https://github.com/intel/tbtools
+-- 
+heikki
 
