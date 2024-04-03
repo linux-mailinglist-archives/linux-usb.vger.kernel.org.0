@@ -1,103 +1,96 @@
-Return-Path: <linux-usb+bounces-8831-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8832-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D975896F9B
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 14:57:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8DD5A897008
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 15:17:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DC00BB24C05
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 12:57:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 440A32913E1
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 13:17:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41E80147C9C;
-	Wed,  3 Apr 2024 12:55:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5625147C94;
+	Wed,  3 Apr 2024 13:17:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UA4wnkc5"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78580146D41;
-	Wed,  3 Apr 2024 12:55:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.95.11.211
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8873141991
+	for <linux-usb@vger.kernel.org>; Wed,  3 Apr 2024 13:17:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712148944; cv=none; b=OQCQcaSLxmLsTkSm3dsoSNFyvAtmObkqGY96LOuIqDuv8kgJQ3gCHsZY5v4UVUy4oKlPFUGAz+446+FQW29Qx2zjMmEUrYCVebq7NcEnCOPDvYrx1PIEoJg2ieoJ1fe5CmYxm3bG+eLjesAlgdyaSmotF1lFN2mLhaot+cmQVkw=
+	t=1712150228; cv=none; b=qETd9VeA4q/1ubTej5QrZPuZq7LGHY1JqPEGc2x02WFW2B4pqLsYM2kesqkZ152K4N1o/rj9UkmeFZ/QmU5LVLV8zZSBpVox0w/zIqBBni5VK3XoSX3ARdgme4TR5O+qsBHiDg1KnxNCK6Z9KGDiRpgI6mEXshzW/s9IDABTn/M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712148944; c=relaxed/simple;
-	bh=kLg5w+VhnMZXw4r2H5fTrv+slAsLxDCRcGAC3HKHuaA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Wwv66IqElOrgKjPOaYiwXCWuEKKI3GajvYmQx/A/2hN60z5JQ5tPDDvcFYlSU0Jn9mRkLe1GBORxLFzeZ/0NXwJLdo9bdAyDB05CoKQ40DlERb1+yoWbO1/0L8H0hXsbRhlxTt/jAN0StT5RNB1ALPKFDbEO+tYwvAdZUiEX15E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de; spf=pass smtp.mailfrom=lst.de; arc=none smtp.client-ip=213.95.11.211
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lst.de
-Received: by verein.lst.de (Postfix, from userid 2407)
-	id 965EC68D05; Wed,  3 Apr 2024 14:55:35 +0200 (CEST)
-Date: Wed, 3 Apr 2024 14:55:35 +0200
-From: Christoph Hellwig <hch@lst.de>
-To: Hannes Reinecke <hare@suse.de>
-Cc: Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	Damien Le Moal <dlemoal@kernel.org>,
-	Niklas Cassel <cassel@kernel.org>,
-	Takashi Sakamoto <o-takashi@sakamocchi.jp>,
-	Sathya Prakash <sathya.prakash@broadcom.com>,
-	Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-	Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>,
-	"Juergen E. Fischer" <fischer@norbit.de>,
-	Xiang Chen <chenxiang66@hisilicon.com>,
-	HighPoint Linux Team <linux@highpoint-tech.com>,
-	Tyrel Datwyler <tyreld@linux.ibm.com>,
-	Brian King <brking@us.ibm.com>, Lee Duncan <lduncan@suse.com>,
-	Chris Leech <cleech@redhat.com>,
-	Mike Christie <michael.christie@oracle.com>,
-	John Garry <john.g.garry@oracle.com>,
-	Jason Yan <yanaijie@huawei.com>,
-	Kashyap Desai <kashyap.desai@broadcom.com>,
-	Sumit Saxena <sumit.saxena@broadcom.com>,
-	Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
-	Chandrakanth patil <chandrakanth.patil@broadcom.com>,
-	Jack Wang <jinpu.wang@cloud.ionos.com>,
-	Nilesh Javali <njavali@marvell.com>,
-	GR-QLogic-Storage-Upstream@marvell.com,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Avri Altman <avri.altman@wdc.com>,
-	Bart Van Assche <bvanassche@acm.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Alan Stern <stern@rowland.harvard.edu>, linux-block@vger.kernel.org,
-	linux-ide@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
-	MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
-	megaraidlinux.pdl@broadcom.com, mpi3mr-linuxdrv.pdl@broadcom.com,
-	linux-samsung-soc@vger.kernel.org, linux-usb@vger.kernel.org,
-	usb-storage@lists.one-eyed-alien.net
-Subject: Re: [PATCH 11/23] megaraid_sas: switch to using ->device_configure
-Message-ID: <20240403125535.GC19332@lst.de>
-References: <20240402130645.653507-1-hch@lst.de> <20240402130645.653507-12-hch@lst.de> <9f555953-6b41-4962-8f43-339326e30d6a@suse.de>
+	s=arc-20240116; t=1712150228; c=relaxed/simple;
+	bh=bot/LqakO244Ke5ijpewUEVhIF8TPVQB8mcNvJ2IOvE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=RYpNNgloPQXrDig55HJ57NJ0kP1nDqO5nWexYyNkWZLabIYQGt3zZdHDyHAprMizo0aFj6r+Nze2WjGrJzyK/mkBFJC7NKWOE5H32TWYHFrvKZHkEZRm74dp+yMqy+sdBMrgzYmOLqmq3HACw+sjMz/sNh0NC+OcGpKXno3av1g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=UA4wnkc5; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1712150225;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=bot/LqakO244Ke5ijpewUEVhIF8TPVQB8mcNvJ2IOvE=;
+	b=UA4wnkc5aByShpRcMfGCgM7T7S7eBcQaMvVu6kNY1k4Pf8BQsPTokLh72z9LoDMLDkLYsV
+	VzrZ+o1poqW7fMbSXxy87ZueSLkoCw5+MzncumcxsbcAljO8qAzLf+5f9HJF1nCJP/5zlC
+	QXY9GmouSmPcMfeNUSlkEHoqkOhyGo0=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-588-YK5XOmpXMaOJLF38S5V0nw-1; Wed,
+ 03 Apr 2024 09:17:04 -0400
+X-MC-Unique: YK5XOmpXMaOJLF38S5V0nw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7C9DF1C631C0;
+	Wed,  3 Apr 2024 13:17:03 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.39.193.197])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id CA260C017A0;
+	Wed,  3 Apr 2024 13:16:59 +0000 (UTC)
+From: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+To: kuba@kernel.org
+Cc: dave.stevenson@raspberrypi.com,
+	davem@davemloft.net,
+	edumazet@google.com,
+	horms@kernel.org,
+	jtornosm@redhat.com,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org,
+	pabeni@redhat.com,
+	stable@vger.kernel.org
+Subject: Re: [PATCH net v3] net: usb: ax88179_178a: avoid the interface always configured as random address
+Date: Wed,  3 Apr 2024 15:16:33 +0200
+Message-ID: <20240403131654.344732-1-jtornosm@redhat.com>
+In-Reply-To: <20240402183012.119f1511@kernel.org>
+References: <20240402183012.119f1511@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9f555953-6b41-4962-8f43-339326e30d6a@suse.de>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+Content-Type: text/plain; charset=y
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.8
 
-On Wed, Apr 03, 2024 at 09:06:12AM +0200, Hannes Reinecke wrote:
->> +	lim->virt_boundary_mask = mr_nvme_pg_size - 1;
->>     	blk_queue_flag_set(QUEUE_FLAG_NOMERGES, sdev->request_queue);
->> -	blk_queue_virt_boundary(sdev->request_queue, mr_nvme_pg_size - 1);
->>   }
-> That now looks odd.
-> We're taking great pains to have everything in queue_limits and avoid 
-> having to use the request_queue directly, yet this one call we're missing.
-> Wouldn't it make sense to move that into queue_limits, too?
+Hello Jakub,
 
-The queue flags are in the queue, so there is no way to set them
-through the limits.  I plan to eventually split out actual features
-and move them to the limits from the blk-mq internal state flags.
+You are right, good catch.
+For all the cases, the mac address is going to be stored in the chip registers just in case (original behavior), and if the mac address was invalid the first time, a random one will be stored, so that when the mac address is read again from the chip registers will be a locally administered address (random).
+I will complete as you say.
 
-That being said QUEUE_FLAG_NOMERGES is a really weird one and drivers
-shouldn't really be messing with it at all..
+Thanks
+
+Best regards
+José Ignacio
 
 
