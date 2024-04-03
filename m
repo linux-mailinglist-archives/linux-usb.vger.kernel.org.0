@@ -1,405 +1,241 @@
-Return-Path: <linux-usb+bounces-8879-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8880-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7AC1C8978B2
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 20:58:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B616E897A4F
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 23:02:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 80E931C25444
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 18:58:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6B59028A38C
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 21:02:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1B1D154BE3;
-	Wed,  3 Apr 2024 18:58:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49BB3156649;
+	Wed,  3 Apr 2024 21:02:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="SLFh/veX"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="StA5MxiQ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10EFD153BF0
-	for <linux-usb@vger.kernel.org>; Wed,  3 Apr 2024 18:58:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25FE1156257;
+	Wed,  3 Apr 2024 21:02:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712170719; cv=none; b=C2SNe6+n+7g7r1z8DpGhcxOCAHkvrbNw7fXBzW5pBAPpZYLUPJU/YSRbiUejVZzfvIk6e6MvGcvk3Wdm1QJOCbW3H9jterbDLVSBuJOade4NqvfztWLFyA7FYLYRpGnXVhoqT0WXB6IM5z5h7fr7d7fF1iIlvv33imveSFpGSfo=
+	t=1712178122; cv=none; b=NTgXG5BrAdXF64roXiOKdokG+yJcCmkpx8OLZK0tlQsvjsgOiu3Ema9sgcGOIk/VJ0IkZ7XECc1ct21VnkWxtXORzQawq+HXpK4MPG0T5WgMK7L22dXIxAE8eIH+GaQvG9XJbrAGYKxB++R5RTi8+3iBh/fgIgN51cK/KrxauC4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712170719; c=relaxed/simple;
-	bh=z5kp0Ir1X7PQhsD6XqcQiHFGZUfx8+EambfTBz6amK8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rqnFD4+/GEU6C0Q6M9uuVlG2dn+raEIE71pgx7OAjT04BAHE+5/k957cJ1PgXqT4GrLNHjyvJYUbp7Z2EQnLPoQwXAzoQQiO6/AKTdoCnFKu8gcvfkIRTgU5wCy+v4klwOfi9WWW6cO4AJWpwWj4WZ5JNrxUXfnGNVtsBmdfTZk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=SLFh/veX; arc=none smtp.client-ip=209.85.167.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-513ccc70a6dso311875e87.1
-        for <linux-usb@vger.kernel.org>; Wed, 03 Apr 2024 11:58:36 -0700 (PDT)
+	s=arc-20240116; t=1712178122; c=relaxed/simple;
+	bh=O+d2xhIV/lOT3xIrFWGLYtJgVKqXI4zkXFR3u+3IDeU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=flgdoglO5YRPUtkAH9fihqYv+RNYZ/V9U2qyEo0M8z1mOZImR6adcgotGUEyCoqLOu5j7jjsf3+5oNjH9nrqNG/Gk0rH8+w/hG/M2xf/HQqxTveoSbBrnqVytF/dd42O5quaqRJ6MSfXGJWNnW2OwjKokTFplowxiu6CEVltKbg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=StA5MxiQ; arc=none smtp.client-ip=209.85.208.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-56c583f5381so378737a12.1;
+        Wed, 03 Apr 2024 14:02:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1712170715; x=1712775515; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=jbCEmoAXQSoy+gmJ/h1Pv+grKRrCvijIfIFTJN6iWwU=;
-        b=SLFh/veXcPOgn1A+m9OOC1LHSicE7KsPZMHQ8YnznJJfjPiqGYaZBpnCCn/HAoLD8o
-         dyZwyokKk94+5sdjSOfYZ7dxeVLXEXbBISOCXMltKYdFuLB/i+ct4P8Adyd8p9OE9QBn
-         p/ENb1HWDTDbn3fpZg2p/GCX6vZM1SOpHNanCHEhE133V0d7Drmo58jz+ynlUEGtruO3
-         9VMioECstKA7cBrx1edEPAlDwa5isbjA8EzxqSv6/G79T03HLLwKS1hUWIdXftmSsoep
-         nl9Ja7qPNOr2jxAifxk1clsm/wDQWGK54bTo2HDIh1BNd50KNAcPeeTu4VAhZg+BEjp2
-         IciA==
+        d=gmail.com; s=20230601; t=1712178119; x=1712782919; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=miuXJJywSWsMiyEU6SyFk+idteSJTItU5lhbjToBFIY=;
+        b=StA5MxiQtJc6EfeF2UhrPYrRftmzuokoSxZ4CdqUCfGgxGG0k8a1HtX/C8BIhyxZhH
+         iI6M7GQp634JnABgoralWEVA1VelD8ZdsdkncsllPvxhWL7vABc6o7FXTJ6Q2Ru7UZSS
+         eQ+/cc5UtAo2wNMhh+98jj9SsKY2lYsHacOUoH/aUcLV7NgsSbbvcLve/JTk+KKWi/8Y
+         WEROAoDTydeRPDmhk+uhYTiFf5bMuVyFRT46Pk/Kk+yZ6E09IClyABMJDvx3ryVgUaTA
+         PPg5sSzcDq2FpY8KeQ3TpHY1xXkR49yy8j2lEL+KViwDNz0gQs4AChGKfIjvl57M29Lz
+         gVog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712170715; x=1712775515;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jbCEmoAXQSoy+gmJ/h1Pv+grKRrCvijIfIFTJN6iWwU=;
-        b=mL0gpUf/CnipOXgem8AVpXiO3AzUfdY6QQguCIbVwAhRMXHrTPZDE+CSwjPH5AuP6p
-         9ObmCVDOG1S8Gfv9EFJ3s4q4v9wL7E0zPV+I3OKoKc7kirQ8l5TR3GEhqtFVly6cqKV3
-         ZpzZH2Qgmya3G3hWNxQV+rr859+isFHTylWj8zsFmcJnL/9OMEfPxFZBiQE9wwqaMrbw
-         JOXL9jWVzL/TUJV5h99KII7wkf722qjDx0vhEpvum5apQ+VuTyx/TRLqAo7Y2cDoOxLn
-         CtZpOpLmgfQWD89XG+wIZeNMjp4uUDkoyCsZc4VlSANKutxs9KK3PymzOpb/35V2AzwB
-         KRYQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUX3HEMQ09SASihPaBPyS3nJ2iE/8sJTrCD6VVqb/tEg/fT/7X3JrFFRerzbhZ1zARvkOBY/CZsNnuOehVjuO6PfXN7wErNLjej
-X-Gm-Message-State: AOJu0Yy1UaIOaLFv43mG/3X5dWcqh9A8V+1m4/UqqBxhuqOnLvo1vJrA
-	DHExy2f19JvDYfIBNG0sNbtKo4lXQXd4VtT7LwAWAlViW8UIl2xd8mRcpcJwi5s=
-X-Google-Smtp-Source: AGHT+IHV2FCr/d7LmQjGGvHQAdt0ufgpgfRSgUZ5tgSQCuSPN0lzz2FVBKBmeSSfpyaJsgUxMtLczg==
-X-Received: by 2002:ac2:4c1a:0:b0:515:b0be:3a42 with SMTP id t26-20020ac24c1a000000b00515b0be3a42mr319997lfq.33.1712170715108;
-        Wed, 03 Apr 2024 11:58:35 -0700 (PDT)
-Received: from eriador.lumag.spb.ru (dzyjmhyyyyyyyyyyyykxt-3.rev.dnainternet.fi. [2001:14ba:a00e:a300::227])
-        by smtp.gmail.com with ESMTPSA id e6-20020ac24e06000000b00516a302f32asm1219653lfr.132.2024.04.03.11.58.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Apr 2024 11:58:34 -0700 (PDT)
-Date: Wed, 3 Apr 2024 21:58:33 +0300
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: Pavan Holla <pholla@chromium.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>, Benson Leung <bleung@chromium.org>, 
-	Tzung-Bi Shih <tzungbi@kernel.org>, Guenter Roeck <groeck@chromium.org>, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>, chrome-platform@lists.linux.dev
-Subject: Re: [PATCH v3 2/2] usb: typec: ucsi: Implement ChromeOS UCSI driver
-Message-ID: <3ezjocthsigo3t746slmgzffnmpxw7wwf3s535basiaf2qy6io@7ocxva6ndsbt>
-References: <20240403-public-ucsi-h-v3-0-f848e18c8ed2@chromium.org>
- <20240403-public-ucsi-h-v3-2-f848e18c8ed2@chromium.org>
+        d=1e100.net; s=20230601; t=1712178119; x=1712782919;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=miuXJJywSWsMiyEU6SyFk+idteSJTItU5lhbjToBFIY=;
+        b=RrE2VBbTfpKGxaZSrQRXPvjiOq3wEHfqDKBAExUhAIRnS6IGIg3R84Q96pz6euZmrT
+         kVkFog1IrD70jW+nl0z9RK01vxdMN+FlszXy1q8TTephjVWnLcP8VsTdY1SuvDX6KA72
+         TXLOw0UL9I16SAS/vNOko/zVbQm0M1aYdvEhKL4kGjWcxf+n7tF66/Ch4T8V8uOxR1yA
+         G4AL17wVYv2TjbJ2IDYxl9QMexYMR47DYCAa2x1BijJrxOFmWC80BXQr+Ybl5sUkt203
+         V3enbDJSz0SIZ4ppoeE4GPL8/kYsgUvNTLfpRtDO7+dDsWyXQ5UklexQSo01IBoy6S/z
+         Mvzw==
+X-Forwarded-Encrypted: i=1; AJvYcCXLyrEmYtapuDeVQcbUGd17QOs7zSMm/3yMcAomkPWVOcAywxf5PtUmfBgbqQ+lWyboP7eLw6lOwYxDiZ9UOfU0oDuC2Zwc18CqyuGoVLS0/nztcBujaQxaW8u3GcgzNhEp0lAyotoD
+X-Gm-Message-State: AOJu0YwFkEpcmDiWgQGHVp9h0/d0kqogHhRsFe7QQQ3Zhuop1OiqhYby
+	fBSVMH4H+jJQ20+lubbgj+BcefhCWWKXYwfg91061ipWQ2CRLnDy
+X-Google-Smtp-Source: AGHT+IEfK5FrL2/8WlOMh0OUYK6oLciySXh0EcWx/gaeCdrYNeRGlcxcLDl/wk6fFRR0/eHpk/UKUA==
+X-Received: by 2002:a50:aad4:0:b0:56b:aa17:813a with SMTP id r20-20020a50aad4000000b0056baa17813amr590848edc.21.1712178119266;
+        Wed, 03 Apr 2024 14:01:59 -0700 (PDT)
+Received: from ?IPV6:2a02:a466:68ed:1:a930:c891:41c1:3154? (2a02-a466-68ed-1-a930-c891-41c1-3154.fixed6.kpn.net. [2a02:a466:68ed:1:a930:c891:41c1:3154])
+        by smtp.gmail.com with ESMTPSA id n24-20020a05640204d800b0056c5d0c932bsm7271178edw.53.2024.04.03.14.01.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 Apr 2024 14:01:58 -0700 (PDT)
+Message-ID: <aeee83d8-dee3-42ed-b705-988b17800721@gmail.com>
+Date: Wed, 3 Apr 2024 23:01:58 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240403-public-ucsi-h-v3-2-f848e18c8ed2@chromium.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4] usb: gadget: u_ether: Replace netif_stop_queue with
+ netif_device_detach
+To: Ferry Toth <fntoth@gmail.com>, Hardik Gajjar <hgajjar@de.adit-jv.com>,
+ Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc: gregkh@linuxfoundation.org, s.hauer@pengutronix.de, jonathanh@nvidia.com,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ quic_linyyuan@quicinc.com, paul@crapouillou.net, quic_eserrao@quicinc.com,
+ erosca@de.adit-jv.com
+References: <20231006153808.9758-1-hgajjar@de.adit-jv.com>
+ <20231006155646.12938-1-hgajjar@de.adit-jv.com>
+ <ZaQS5x-XK08Jre6I@smile.fi.intel.com>
+ <20240115132720.GA98840@vmlxhi-118.adit-jv.com>
+ <f25283fc-4550-4725-960b-2ea783fd62e1@gmail.com>
+Content-Language: en-US
+From: Ferry Toth <fntoth@gmail.com>
+In-Reply-To: <f25283fc-4550-4725-960b-2ea783fd62e1@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Apr 03, 2024 at 06:05:22PM +0000, Pavan Holla wrote:
-> Implementation of a UCSI transport driver for ChromeOS.
-> This driver will be loaded if the ChromeOS EC implements a PPM.
-> 
-> Signed-off-by: Pavan Holla <pholla@chromium.org>
-> ---
->  drivers/usb/typec/ucsi/Kconfig        |  13 ++
->  drivers/usb/typec/ucsi/Makefile       |   1 +
->  drivers/usb/typec/ucsi/cros_ec_ucsi.c | 245 ++++++++++++++++++++++++++++++++++
->  3 files changed, 259 insertions(+)
-> 
-> diff --git a/drivers/usb/typec/ucsi/Kconfig b/drivers/usb/typec/ucsi/Kconfig
-> index bdcb1764cfae..4dceb14a66ee 100644
-> --- a/drivers/usb/typec/ucsi/Kconfig
-> +++ b/drivers/usb/typec/ucsi/Kconfig
-> @@ -69,4 +69,17 @@ config UCSI_PMIC_GLINK
->  	  To compile the driver as a module, choose M here: the module will be
->  	  called ucsi_glink.
->  
-> +config CROS_EC_UCSI
-> +	tristate "UCSI Driver for ChromeOS EC"
-> +	depends on MFD_CROS_EC_DEV
-> +	depends on CROS_USBPD_NOTIFY
-> +	depends on !EXTCON_TCSS_CROS_EC
-> +	default MFD_CROS_EC_DEV
-> +	help
-> +	  This driver enables UCSI support for a ChromeOS EC. The EC is
-> +	  expected to implement a PPM.
-> +
-> +	  To compile the driver as a module, choose M here: the module
-> +	  will be called cros_ec_ucsi.
-> +
->  endif
-> diff --git a/drivers/usb/typec/ucsi/Makefile b/drivers/usb/typec/ucsi/Makefile
-> index b4679f94696b..cb336eee055c 100644
-> --- a/drivers/usb/typec/ucsi/Makefile
-> +++ b/drivers/usb/typec/ucsi/Makefile
-> @@ -21,3 +21,4 @@ obj-$(CONFIG_UCSI_ACPI)			+= ucsi_acpi.o
->  obj-$(CONFIG_UCSI_CCG)			+= ucsi_ccg.o
->  obj-$(CONFIG_UCSI_STM32G0)		+= ucsi_stm32g0.o
->  obj-$(CONFIG_UCSI_PMIC_GLINK)		+= ucsi_glink.o
-> +obj-$(CONFIG_CROS_EC_UCSI)		+= cros_ec_ucsi.o
-> diff --git a/drivers/usb/typec/ucsi/cros_ec_ucsi.c b/drivers/usb/typec/ucsi/cros_ec_ucsi.c
-> new file mode 100644
-> index 000000000000..dd46b46d430f
-> --- /dev/null
-> +++ b/drivers/usb/typec/ucsi/cros_ec_ucsi.c
-> @@ -0,0 +1,245 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * UCSI driver for ChromeOS EC
-> + *
-> + * Copyright 2024 Google LLC.
-> + */
-> +
-> +#include <linux/container_of.h>
-> +#include <linux/dev_printk.h>
-> +#include <linux/mod_devicetable.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_data/cros_ec_commands.h>
-> +#include <linux/platform_data/cros_usbpd_notify.h>
-> +#include <linux/platform_data/cros_ec_proto.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/slab.h>
-> +#include <linux/wait.h>
-> +
-> +#include "ucsi.h"
-> +
-> +#define DRV_NAME "cros-ec-ucsi"
-> +
-> +#define MAX_EC_DATA_SIZE 256
-> +#define WRITE_TMO_MS 500
-> +
-> +struct cros_ucsi_data {
-> +	struct device *dev;
-> +	struct ucsi *ucsi;
-> +
-> +	struct cros_ec_device *ec;
-> +	struct notifier_block nb;
-> +	struct work_struct work;
-> +
-> +	struct completion complete;
-> +	unsigned long flags;
-> +};
-> +
-> +static int cros_ucsi_read(struct ucsi *ucsi, unsigned int offset, void *val,
-> +			  size_t val_len)
-> +{
-> +	struct cros_ucsi_data *udata = ucsi_get_drvdata(ucsi);
-> +	struct ec_params_ucsi_ppm_get req = {
-> +		.offset = offset,
-> +		.size = val_len,
-> +	};
-> +	int ret;
-> +
-> +	if (val_len > MAX_EC_DATA_SIZE) {
-> +		dev_err(udata->dev, "Can't read %zu bytes. Too big.", val_len);
-> +		return -EINVAL;
-> +	}
-> +
-> +	ret = cros_ec_cmd(udata->ec, 0, EC_CMD_UCSI_PPM_GET,
-> +			  &req, sizeof(req), val, val_len);
-> +	if (ret < 0) {
-> +		dev_warn(udata->dev, "Failed to send EC message UCSI_PPM_GET: error=%d", ret);
-> +		return ret;
-> +	}
-> +	return 0;
-> +}
-> +
-> +static int cros_ucsi_async_write(struct ucsi *ucsi, unsigned int offset,
-> +				 const void *val, size_t val_len)
-> +{
-> +	struct cros_ucsi_data *udata = ucsi_get_drvdata(ucsi);
-> +	uint8_t ec_buffer[MAX_EC_DATA_SIZE + sizeof(struct ec_params_ucsi_ppm_set)];
-> +	struct ec_params_ucsi_ppm_set *req = (struct ec_params_ucsi_ppm_set *)ec_buffer;
-> +	int ret = 0;
-> +
-> +	if (val_len > MAX_EC_DATA_SIZE) {
-> +		dev_err(udata->dev, "Can't write %zu bytes. Too big.", val_len);
+Hi,
 
-I think it's better be written as
+Op 15-01-2024 om 21:10 schreef Ferry Toth:
+> Hi,
+>
+> Op 15-01-2024 om 14:27 schreef Hardik Gajjar:
+>> On Sun, Jan 14, 2024 at 06:59:19PM +0200, Andy Shevchenko wrote:
+>>> +Cc: Ferry.
+>>>
+>>> On Fri, Oct 06, 2023 at 05:56:46PM +0200, Hardik Gajjar wrote:
+>>>> This patch replaces the usage of netif_stop_queue with 
+>>>> netif_device_detach
+>>>> in the u_ether driver. The netif_device_detach function not only 
+>>>> stops all
+>>>> tx queues by calling netif_tx_stop_all_queues but also marks the 
+>>>> device as
+>>>> removed by clearing the __LINK_STATE_PRESENT bit.
+>>>>
+>>>> This change helps notify user space about the disconnection of the 
+>>>> device
+>>>> more effectively, compared to netif_stop_queue, which only stops a 
+>>>> single
+>>>> transmit queue.
+>>>
+>>> This change effectively broke my USB ether setup.
+>>>
+>>> git bisect start
+>>> # status: waiting for both good and bad commits
+>>> # good: [1f24458a1071f006e3f7449c08ae0f12af493923] Merge tag 
+>>> 'tty-6.7-rc1' of 
+>>> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty
+>>> git bisect good 1f24458a1071f006e3f7449c08ae0f12af493923
+>>> # status: waiting for bad commit, 1 good commit known
+>>> # bad: [2c40c1c6adab90ee4660caf03722b3a3ec67767b] Merge tag 
+>>> 'usb-6.7-rc1' of 
+>>> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb
+>>> git bisect bad 2c40c1c6adab90ee4660caf03722b3a3ec67767b
+>>> # bad: [17d6b82d2d6d467149874b883cdba844844b996d] usb/usbip: fix 
+>>> wrong data added to platform device
+>>> git bisect bad 17d6b82d2d6d467149874b883cdba844844b996d
+>>> # good: [ba6b83a910b6d8a9379bda55cbf06cb945473a96] usb: xhci-mtk: 
+>>> add a bandwidth budget table
+>>> git bisect good ba6b83a910b6d8a9379bda55cbf06cb945473a96
+>>> # good: [dddc00f255415b826190cfbaa5d6dbc87cd9ded1] Revert "usb: 
+>>> gadget: uvc: cleanup request when not in correct state"
+>>> git bisect good dddc00f255415b826190cfbaa5d6dbc87cd9ded1
+>>> # bad: [8f999ce60ea3d47886b042ef1f22bb184b6e9c59] USB: typec: 
+>>> tps6598x: Refactor tps6598x port registration
+>>> git bisect bad 8f999ce60ea3d47886b042ef1f22bb184b6e9c59
+>>> # bad: [f49449fbc21e7e9550a5203902d69c8ae7dfd918] usb: gadget: 
+>>> u_ether: Replace netif_stop_queue with netif_device_detach
+>>> git bisect bad f49449fbc21e7e9550a5203902d69c8ae7dfd918
+>>> # good: [97475763484245916735a1aa9a3310a01d46b008] USB: usbip: fix 
+>>> stub_dev hub disconnect
+>>> git bisect good 97475763484245916735a1aa9a3310a01d46b008
+>>> # good: [0f5aa1b01263b8b621bc4f031a1f2983ef8517b7] usb: usbtest: fix 
+>>> a type promotion bug
+>>> git bisect good 0f5aa1b01263b8b621bc4f031a1f2983ef8517b7
+>>> # first bad commit: [f49449fbc21e7e9550a5203902d69c8ae7dfd918] usb: 
+>>> gadget: u_ether: Replace netif_stop_queue with netif_device_detach
+>>>
+>>> Note, revert indeed helps. Should I send a revert?
+>>>
+>>> I use configfs to setup USB EEM function and it worked till this 
+>>> commit.
+>>> If needed, I can share my scripts, but I believe it's not needed as 
+>>> here
+>>> we see a clear regression.
+>>>
+>>> -- 
+>>> With Best Regards,
+>>> Andy Shevchenko
+>>>
+>>>
+>>
+>> Without this patch, there may be a potential crash in a race 
+>> condition, as __LINK_STATE_PRESENT is monitored at many places in the 
+>> Network stack to determine the status of the link.
+>>
+>> Could you please provide details on how this patch affects your 
+>> functionality? Are you experiencing connection problems or data 
+>> transfer interruptions?
+>
+> In my case on mrfld (Intel Edison Arduino) using configfs with this 
+> patch no config from host through dhcp is received. Manual setting 
+> correct ipv4 addr / mask / gw still no connection.
+>
+>> Instead of reverting this patch, consider trying the upcoming patch 
+>> (soon to be available in the mainline) to see if it resolves your issue.
+>>
+>> https://lore.kernel.org/lkml/2023122900-commence-agenda-db2c@gregkh/T/#m36a812d3f1e5d744ee32381f6ae4185940b376de 
+>>
+>
+> This patch works for me with v6.7.0.
 
-if (WARN_ON_ONCE(val_len > MAX_EC_DATA_SIZE))
-	return -EINVAL;
+I need to revisit this. The patch in this topic landed in v6.7.0-rc1 
+(f49449fbc21e) and breaks the gadget mrfld (Intel Edison Arduino) and 
+other platforms as well.
 
-Same applies to reading.
+The mentioned fix "usb: gadget: u_ether: Re-attach netif device to 
+mirror detachment*" * has landed in v6.8.0-rc1 (76c945730). What it does 
+fix: I am able to make a USB EEM function again.
 
-> +		return -EINVAL;
-> +	}
-> +
-> +	memset(req, 0, sizeof(ec_buffer));
-> +	req->offset = offset;
-> +	memcpy(req->data, val, val_len);
-> +	ret = cros_ec_cmd(udata->ec, 0, EC_CMD_UCSI_PPM_SET,
-> +			  req, sizeof(struct ec_params_ucsi_ppm_set) + val_len, NULL, 0);
-> +
-> +	if (ret < 0) {
-> +		dev_warn(udata->dev, "Failed to send EC message UCSI_PPM_SET: error=%d", ret);
-> +		return ret;
-> +	}
-> +	return 0;
-> +}
-> +
-> +static int cros_ucsi_sync_write(struct ucsi *ucsi, unsigned int offset,
-> +				const void *val, size_t val_len)
-> +{
-> +	struct cros_ucsi_data *udata = ucsi_get_drvdata(ucsi);
-> +	bool ack = UCSI_COMMAND(*(u64 *)val) == UCSI_ACK_CC_CI;
-> +	int ret;
-> +
-> +	if (ack)
-> +		set_bit(ACK_PENDING, &udata->flags);
-> +	else
-> +		set_bit(COMMAND_PENDING, &udata->flags);
-> +
-> +	ret = cros_ucsi_async_write(ucsi, offset, val, val_len);
-> +	if (ret)
-> +		goto out;
-> +
-> +	if (!wait_for_completion_timeout(&udata->complete, WRITE_TMO_MS))
-> +		ret = -ETIMEDOUT;
-> +
-> +out:
-> +	if (ack)
-> +		clear_bit(ACK_PENDING, &udata->flags);
-> +	else
-> +		clear_bit(COMMAND_PENDING, &udata->flags);
-> +	return ret;
-> +}
-> +
-> +struct ucsi_operations cros_ucsi_ops = {
-> +	.read = cros_ucsi_read,
-> +	.async_write = cros_ucsi_async_write,
-> +	.sync_write = cros_ucsi_sync_write,
-> +};
-> +
-> +static void cros_ucsi_work(struct work_struct *work)
-> +{
-> +	struct cros_ucsi_data *udata = container_of(work, struct cros_ucsi_data, work);
-> +	u32 cci;
-> +	int ret;
-> +
-> +	ret = cros_ucsi_read(udata->ucsi, UCSI_CCI, &cci, sizeof(cci));
-> +	if (ret)
-> +		return;
-> +
-> +	if (UCSI_CCI_CONNECTOR(cci))
-> +		ucsi_connector_change(udata->ucsi, UCSI_CCI_CONNECTOR(cci));
-> +
-> +	if (cci & UCSI_CCI_ACK_COMPLETE && test_bit(ACK_PENDING, &udata->flags))
-> +		complete(&udata->complete);
-> +	if (cci & UCSI_CCI_COMMAND_COMPLETE &&
-> +	    test_bit(COMMAND_PENDING, &udata->flags))
-> +		complete(&udata->complete);
-> +}
-> +
-> +static int cros_ucsi_event(struct notifier_block *nb,
-> +			   unsigned long host_event, void *_notify)
-> +{
-> +	struct cros_ucsi_data *udata = container_of(nb, struct cros_ucsi_data, nb);
-> +
-> +	if (!(host_event & PD_EVENT_PPM))
-> +		return NOTIFY_OK;
-> +
-> +	dev_dbg(udata->dev, "UCSI notification received");
-> +	flush_work(&udata->work);
-> +	schedule_work(&udata->work);
-> +
-> +	return NOTIFY_OK;
-> +}
-> +
-> +static int cros_ucsi_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct cros_ec_dev *ec_data = dev_get_drvdata(dev->parent);
-> +	struct cros_ucsi_data *udata;
-> +	int ret;
-> +
-> +	udata = devm_kzalloc(dev, sizeof(*udata), GFP_KERNEL);
-> +	if (!udata)
-> +		return -ENOMEM;
-> +
-> +	udata->dev = dev;
-> +
-> +	udata->ec = ec_data->ec_dev;
-> +	if (!udata->ec) {
-> +		dev_err(dev, "couldn't find parent EC device\n");
-> +		return -ENODEV;
-> +	}
-> +
-> +	platform_set_drvdata(pdev, udata);
-> +
-> +	INIT_WORK(&udata->work, cros_ucsi_work);
-> +	init_completion(&udata->complete);
-> +
-> +	udata->ucsi = ucsi_create(udata->dev, &cros_ucsi_ops);
-> +	if (IS_ERR(udata->ucsi)) {
-> +		dev_err(dev, "failed to allocate UCSI instance\n");
-> +		return PTR_ERR(udata->ucsi);
-> +	}
-> +
-> +	ucsi_set_drvdata(udata->ucsi, udata);
-> +
-> +	ret = ucsi_register(udata->ucsi);
-> +	if (ret) {
-> +		ucsi_destroy(udata->ucsi);
-> +		return ret;
-> +	}
-> +
-> +	udata->nb.notifier_call = cros_ucsi_event;
-> +	return cros_usbpd_register_notify(&udata->nb);
+However, now a hidden issue appears. With mrfld there is an external 
+switch to easily switch between host and device mode.
 
-I think you should register notifier before calling ucsi_register().
-Otherwise you have a window when the UCSI can attempt to communitcate
-with the hardware, but it will not get its notifications.
+What is not fixed:
 
-> +}
-> +
-> +static int cros_ucsi_remove(struct platform_device *dev)
-> +{
-> +	struct cros_ucsi_data *udata = platform_get_drvdata(dev);
-> +
-> +	ucsi_unregister(udata->ucsi);
-> +	ucsi_destroy(udata->ucsi);
-> +	return 0;
-> +}
-> +
-> +static int __maybe_unused cros_ucsi_suspend(struct device *dev)
-> +{
-> +	struct cros_ucsi_data *udata = dev_get_drvdata(dev);
-> +
-> +	cancel_work_sync(&udata->work);
-> +
-> +	return 0;
-> +}
-> +
-> +static int __maybe_unused cros_ucsi_resume(struct device *dev)
-> +{
-> +	struct cros_ucsi_data *udata = dev_get_drvdata(dev);
-> +
-> +	return ucsi_resume(udata->ucsi);
-> +}
-> +
-> +static SIMPLE_DEV_PM_OPS(cros_ucsi_pm_ops, cros_ucsi_suspend,
-> +			 cros_ucsi_resume);
-> +
-> +static const struct platform_device_id cros_ec_ucsi_id[] = {
-> +	{ "cros-ec-ucsi"},
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(platform, cros_ec_ucsi_id);
-> +
-> +static struct platform_driver cros_ucsi_driver = {
-> +	.driver = {
-> +		.name = DRV_NAME,
-> +		.pm = &cros_ucsi_pm_ops,
-> +	},
-> +	.id_table = cros_ec_ucsi_id,
-> +	.probe = cros_ucsi_probe,
-> +	.remove = cros_ucsi_remove,
-> +};
-> +
-> +module_platform_driver(cros_ucsi_driver);
-> +
-> +MODULE_LICENSE("GPL");
-> +MODULE_DESCRIPTION("UCSI driver for ChromeOS EC");
-> 
-> -- 
-> 2.44.0.478.gd926399ef9-goog
-> 
+- when in device mode and unplugging/plugging the cable when using 
+`ifconfig usb0` the line "usb0: 
+flags=4163<UP,BROADCAST,RUNNING,MULTICAST>" changes to "usb0: 
+flags=4099<UP,BROADCAST,MULTICAST>" as is supposed to, the route table 
+is updated and the dir `/sys/class/net/usb0` exists and in the dir `cat 
+carrier*` shows the carrier up and down counts. This is the expected 
+behavior.
 
--- 
-With best wishes
-Dmitry
+- when in device mode and switching to host mode `ifconfig usb0` 
+continues to show "RUNNING", the route table is not modified and the dir 
+`/sys/class/net/usb0` no longer exists.
+
+- switching to device mode again, USB EEM works fine, no changes to 
+RUNNING or the route table happen and the dir `/sys/class/net/usb0` 
+still is non- existing.
+
+- unplugging/plugging the cable in device mode after this does not 
+restore the original situation.
+
+This behavior I tested on v6.9.0-rc2 (with a few unrelated but essential 
+patches on top) and bisected back to this patch in v6.70-rc1.
+
+It seems `netif_device_detach` does not completely clean up as expected 
+and `netif_device_attach` does not completely rebuild.
+
+I am wondering if on other platforms this can be reproduced? If so, inho 
+it would be best to revert the both patches until the issue is resolved.
+
+Thanks,
+
+Ferry
+
+>> Thanks,
+>> Hardik
+>
 
