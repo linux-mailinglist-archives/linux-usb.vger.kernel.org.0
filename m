@@ -1,55 +1,77 @@
-Return-Path: <linux-usb+bounces-8828-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8829-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E7E7896D51
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 12:53:42 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 31F59896F6D
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 14:53:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 03EF11F2C6E0
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 10:53:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C75BC1F29A5D
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 12:53:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5DEB13B2A2;
-	Wed,  3 Apr 2024 10:53:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HR4EShQ0"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52D761482FE;
+	Wed,  3 Apr 2024 12:51:25 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28F9E136989;
-	Wed,  3 Apr 2024 10:53:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79DDA1482E1;
+	Wed,  3 Apr 2024 12:51:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.95.11.211
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712141614; cv=none; b=bYNwmp3mUKf1J++azYE0+YIhyvBdGdGeZ1XXIcBsuJbBTeLuhjmftAVsnHNvQ6jxGHtE2OS3KTKA7dkPdCfa+CtjEsUa3Ne3oYsKiK405C79yT9dEMM1cWgpM/xv8C+NYNy9dkalwCAqYPOOXkNQCz+W5jZes+l1LyI4wJF4FBM=
+	t=1712148685; cv=none; b=Q5qzi4JZej61xCM8tarOjMd7tLC3zc61Y90H6HwA299vTa0cmS31ZbSl18ZQvF1CuXC8JIZ8RW4xVPm6/4D1ETOW46YhK4CUODhf8yCgyy7FfzdoMzpdO0PqA3PSe7kvNhNBQzX5Y82pl1Uy2LGL27upV34y/s7dkgrMtNe9yrc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712141614; c=relaxed/simple;
-	bh=XNkWOejlRvAWF/q7Y6PYYLar1zGH/eI6IrEyzeOd7FA=;
+	s=arc-20240116; t=1712148685; c=relaxed/simple;
+	bh=CgSXcFQFrSihOoQEs9+0mpaB+A0EeYhWLs6ajpOaRXA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JEzCjqrEQgErMVE6NnTXZmJFhvfe3TYHZMiHQXO0o9Mbh3Cx2r7XZPZ6h7FZIvyImtbfFLeBH2hAQiJeabIrdJanEbuloIbyYwoddike9R/36//EdgEMoIKYoOAwcRygqD2v7ao4jIq5KtD1nYzyS8KpznP9D/Td8EWZavqHeJA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HR4EShQ0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F24EC433C7;
-	Wed,  3 Apr 2024 10:53:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712141613;
-	bh=XNkWOejlRvAWF/q7Y6PYYLar1zGH/eI6IrEyzeOd7FA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=HR4EShQ0qslBmYvKmyDNwZAUhom9DkwwLZEjPqSOI4fGbC6JrmcArAHS3tcKtC98X
-	 UcdJZ/rb1fYgS3YFBLni6FiQKw8Lgf9blU6Y1tWBKgMnqU2XJsZA5kdcAxnBwpkgLJ
-	 SCCBA1WOUdBbtk+JBXi/o5G3NGWLvSWJMscFBOE82OGwTlcp5OJPLRliWngjrTqfsH
-	 D/Z5R+bO6bWndop3x1R+dUt6ozrv2yWEOZ0dvNdsiC4bFzf/rWyTVX1ZOpET5uPJV0
-	 yU039ZDDeLSG31GTgbNThnyUGwlXHErZF+EA1YG7VmvUtNRJD7xNXYE20jNH+JC93D
-	 9u+ssRRfC7xsw==
-Date: Wed, 3 Apr 2024 11:53:29 +0100
-From: Simon Horman <horms@kernel.org>
-To: Yi Yang <yiyang13@huawei.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org, wangweiyang2@huawei.com
-Subject: Re: [PATCH -next] net: usb: asix: Add check for usbnet_get_endpoints
-Message-ID: <20240403105329.GV26556@kernel.org>
-References: <20240402113048.873130-1-yiyang13@huawei.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZKOO/i4z5Xkd8dfIlTslABedttyxPTCqR3vkSRedFpNnusl6DYycyUtZrlFY/q2xnSROG7HorD21iQuV7ooWL6x2tBGo4+YOCqho5WL5IQGutLXm/EYMzo/5vGDR4r7W8KzYOtbn6up2HkKuawyV7fGe7oWlRVnIQo1YGziqHH8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de; spf=pass smtp.mailfrom=lst.de; arc=none smtp.client-ip=213.95.11.211
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lst.de
+Received: by verein.lst.de (Postfix, from userid 2407)
+	id 574DA68D05; Wed,  3 Apr 2024 14:51:17 +0200 (CEST)
+Date: Wed, 3 Apr 2024 14:51:16 +0200
+From: Christoph Hellwig <hch@lst.de>
+To: John Garry <john.g.garry@oracle.com>
+Cc: Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	Damien Le Moal <dlemoal@kernel.org>,
+	Niklas Cassel <cassel@kernel.org>,
+	Takashi Sakamoto <o-takashi@sakamocchi.jp>,
+	Sathya Prakash <sathya.prakash@broadcom.com>,
+	Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+	Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>,
+	"Juergen E. Fischer" <fischer@norbit.de>,
+	Xiang Chen <chenxiang66@hisilicon.com>,
+	HighPoint Linux Team <linux@highpoint-tech.com>,
+	Tyrel Datwyler <tyreld@linux.ibm.com>,
+	Brian King <brking@us.ibm.com>, Lee Duncan <lduncan@suse.com>,
+	Chris Leech <cleech@redhat.com>,
+	Mike Christie <michael.christie@oracle.com>,
+	Jason Yan <yanaijie@huawei.com>,
+	Kashyap Desai <kashyap.desai@broadcom.com>,
+	Sumit Saxena <sumit.saxena@broadcom.com>,
+	Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
+	Chandrakanth patil <chandrakanth.patil@broadcom.com>,
+	Jack Wang <jinpu.wang@cloud.ionos.com>,
+	Nilesh Javali <njavali@marvell.com>,
+	GR-QLogic-Storage-Upstream@marvell.com,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Avri Altman <avri.altman@wdc.com>,
+	Bart Van Assche <bvanassche@acm.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Alan Stern <stern@rowland.harvard.edu>, linux-block@vger.kernel.org,
+	linux-ide@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
+	MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+	megaraidlinux.pdl@broadcom.com, mpi3mr-linuxdrv.pdl@broadcom.com,
+	linux-samsung-soc@vger.kernel.org, linux-usb@vger.kernel.org,
+	usb-storage@lists.one-eyed-alien.net
+Subject: Re: [PATCH 01/23] block: add a helper to cancel atomic queue limit
+ updates
+Message-ID: <20240403125116.GA19332@lst.de>
+References: <20240402130645.653507-1-hch@lst.de> <20240402130645.653507-2-hch@lst.de> <fd99a58b-37c4-45dd-a738-cd2b49341c70@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -58,109 +80,17 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240402113048.873130-1-yiyang13@huawei.com>
+In-Reply-To: <fd99a58b-37c4-45dd-a738-cd2b49341c70@oracle.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 
-On Tue, Apr 02, 2024 at 11:30:48AM +0000, Yi Yang wrote:
-> Add check for usbnet_get_endpoints() and return the error if it fails
-> in order to transfer the error.
-> 
-> Signed-off-by: Yi Yang <yiyang13@huawei.com>
+On Wed, Apr 03, 2024 at 08:38:42AM +0100, John Garry wrote:
+>> + */
+>> +static inline void queue_limits_cancel_update(struct request_queue *q)
+>
+> Just curious, why no __releases() annotation, like what we have in 
+> queue_limits_commit_update()?
 
-Hi,
+Mostly because sparse doesn't seem to actually need it on inline
+functins.  At least I don't seem to get a sparse warning without it.
 
-I am wondering if this is a fix for a user-visible problem and as such
-should:
-1. Be targeted at net
-2. Have a Fixes tag
-3. CC stable
-
-See: https://docs.kernel.org/process/maintainer-netdev.html
-
-> ---
->  drivers/net/usb/asix_devices.c | 20 +++++++++++++-------
->  1 file changed, 13 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
-> index f7cff58fe044..11417ed86d9e 100644
-> --- a/drivers/net/usb/asix_devices.c
-> +++ b/drivers/net/usb/asix_devices.c
-> @@ -230,7 +230,9 @@ static int ax88172_bind(struct usbnet *dev, struct usb_interface *intf)
->  	int i;
->  	unsigned long gpio_bits = dev->driver_info->data;
->  
-> -	usbnet_get_endpoints(dev,intf);
-> +	ret = usbnet_get_endpoints(dev, intf);
-> +	if (ret)
-> +		goto out;
->  
->  	/* Toggle the GPIOs in a manufacturer/model specific way */
->  	for (i = 2; i >= 0; i--) {
-> @@ -834,7 +836,9 @@ static int ax88772_bind(struct usbnet *dev, struct usb_interface *intf)
->  
->  	dev->driver_priv = priv;
->  
-> -	usbnet_get_endpoints(dev, intf);
-> +	ret = usbnet_get_endpoints(dev, intf);
-> +	if (ret)
-> +		goto mdio_err;
->  
->  	/* Maybe the boot loader passed the MAC address via device tree */
->  	if (!eth_platform_get_mac_address(&dev->udev->dev, buf)) {
-> @@ -858,7 +862,7 @@ static int ax88772_bind(struct usbnet *dev, struct usb_interface *intf)
->  		if (ret < 0) {
->  			netdev_dbg(dev->net, "Failed to read MAC address: %d\n",
->  				   ret);
-> -			return ret;
-> +			goto mdio_err;
->  		}
->  	}
->  
-
-The two hunks above do not seem related to the subject of the patch, but
-rather separate cleanups. So I think they should not be part of this patch.
-Instead they could be a separate patch, targeted at net-next.  (FWIIW, I
-would go the other way and drop the mdio_err label from this function.)
-
-> @@ -871,7 +875,7 @@ static int ax88772_bind(struct usbnet *dev, struct usb_interface *intf)
->  
->  	ret = asix_read_phy_addr(dev, true);
->  	if (ret < 0)
-> -		return ret;
-> +		goto mdio_err;
->  
->  	priv->phy_addr = ret;
->  	priv->embd_phy = ((priv->phy_addr & 0x1f) == AX_EMBD_PHY_ADDR);
-> @@ -880,7 +884,7 @@ static int ax88772_bind(struct usbnet *dev, struct usb_interface *intf)
->  			    &priv->chipcode, 0);
->  	if (ret < 0) {
->  		netdev_dbg(dev->net, "Failed to read STATMNGSTS_REG: %d\n", ret);
-> -		return ret;
-> +		goto mdio_err;
->  	}
->  
->  	priv->chipcode &= AX_CHIPCODE_MASK;
-> @@ -895,7 +899,7 @@ static int ax88772_bind(struct usbnet *dev, struct usb_interface *intf)
->  	ret = priv->reset(dev, 0);
->  	if (ret < 0) {
->  		netdev_dbg(dev->net, "Failed to reset AX88772: %d\n", ret);
-> -		return ret;
-> +		goto mdio_err;
->  	}
->  
->  	/* Asix framing packs multiple eth frames into a 2K usb bulk transfer */
-> @@ -1258,7 +1262,9 @@ static int ax88178_bind(struct usbnet *dev, struct usb_interface *intf)
->  	int ret;
->  	u8 buf[ETH_ALEN] = {0};
->  
-> -	usbnet_get_endpoints(dev,intf);
-> +	ret = usbnet_get_endpoints(dev, intf);
-> +	if (ret)
-> +		return ret;
->  
->  	/* Get the MAC address */
->  	ret = asix_read_cmd(dev, AX_CMD_READ_NODE_ID, 0, 0, ETH_ALEN, buf, 0);
-> -- 
-> 2.25.1
-> 
-> 
 
