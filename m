@@ -1,116 +1,228 @@
-Return-Path: <linux-usb+bounces-8794-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8795-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F37289654E
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 09:06:18 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A3F2896557
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 09:06:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DDD73284402
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 07:06:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DAC641F2325D
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 07:06:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9DE255E74;
-	Wed,  3 Apr 2024 07:06:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AEF45646D;
+	Wed,  3 Apr 2024 07:06:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zsqgg+cE"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="szckVdgs";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="eG2x1N0U"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29933537F0;
-	Wed,  3 Apr 2024 07:06:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78E7B59B6C;
+	Wed,  3 Apr 2024 07:06:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712127964; cv=none; b=BlE70Kv0Elqe0ZFkDacP3h63PRIbqvH9m5oZ/fyln/NW/g8Eui4EmXrAY27q0vjdRwEOTj20cjrtq9uAiaUL409hpvy/iq/JJeZ0aanrNlzmahNPWYlre1dV/r9veRFuwAPhZ5W05EqkLFBB+9hHN8x24ap7TLJQK57BhnvYJ0E=
+	t=1712127981; cv=none; b=IJZVYbXbVuf7h4aCJIRTWopQLQTYW6mvfhp5+pgAOKxq7Gk9yz2mKZSv1/MffXoyqwwidhD8hFXiV4uEC7uUw82iuhjco4MCqVbsKmF+mRGa1gmK2iqXvtmWWeqzPhSDRmAHGEkex3fNYV/x3zIe16rdQmQpWg/K8H4ZW7DNBZY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712127964; c=relaxed/simple;
-	bh=pLe1zO2KxOqFTC50hG8lKBdb2ln2PJxOAj1b7Rg2kIo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oTVPmI+gCqivxOYQG33m8qN03maXDy7hoqs0Kf5WEU9fG3eEMpxKvTSHl7DkzEuE1BIbME4RxYJ7CtTKaSXgjVeFZ7cppwMpgo6HhT34d+xc0H8hJu4iyBfOmYk3uLR6c2YnMMjdapU5mZOBdztUm3LgZaqj5nkYAPw900vmjfE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zsqgg+cE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECE52C433F1;
-	Wed,  3 Apr 2024 07:06:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712127964;
-	bh=pLe1zO2KxOqFTC50hG8lKBdb2ln2PJxOAj1b7Rg2kIo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Zsqgg+cEZQMPJJMhRULn+C1BAygbh1Jo+iW/fdyZq38BLsH1GQlSSiLdKKVmIubdl
-	 JPv/ktx6eD1Fer7jBzWejLrYpKWe5qGj9woXlvdU6gTT5yazsOjInI65kTaSR1KriK
-	 4Z9uUD/QhThZzfY5cjtpOda9SCsMu/xiQpe8iGWXHmjPOn2q5mcKYWSLjcWTzyUq2k
-	 g8suoptVxiw0vnVB8qX1rRlWfOD6qKassulNDmKmBcfB/nLz++BhhN9G0QTvEN67tN
-	 5neo1wSUKQsZLRPIyF2tlXPl3wGkbuz3Cl2opHP29bv/13s4Iz5eaFyJaiJQjboQtD
-	 kBMHljPftTyBw==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1rruhA-000000007BG-01yh;
-	Wed, 03 Apr 2024 09:06:04 +0200
-Date: Wed, 3 Apr 2024 09:06:04 +0200
-From: Johan Hovold <johan@kernel.org>
-To: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Rob Herring <robh@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Wesley Cheng <quic_wcheng@quicinc.com>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Conor Dooley <conor+dt@kernel.org>, Felipe Balbi <balbi@kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"quic_ppratap@quicinc.com" <quic_ppratap@quicinc.com>,
-	"quic_jackp@quicinc.com" <quic_jackp@quicinc.com>,
-	Johan Hovold <johan+linaro@kernel.org>
-Subject: Re: [PATCH v18 2/9] usb: dwc3: core: Access XHCI address space
- temporarily to read port info
-Message-ID: <Zgz_3AspRRfYqOwZ@hovoldconsulting.com>
-References: <20240326113253.3010447-1-quic_kriskura@quicinc.com>
- <20240326113253.3010447-3-quic_kriskura@quicinc.com>
- <20240402233218.5kngtj56qellnrmo@synopsys.com>
- <39010f95-b08f-4a57-b3af-f34eb1069865@quicinc.com>
+	s=arc-20240116; t=1712127981; c=relaxed/simple;
+	bh=huDHheKMY5U475bzaGJTBzo8Q4KK113xdOgQZbqtBQA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DOu0DSCHrPAxEuEVCnvgMksebFalG15UkHj0YIG5IHtHv6hrI9ZT4adMMg2FOMBxf+UDEAtpYfLN1Bn6FF69MCv016L+DDzw80fbwcHQBU/KWRsa/I0Wp1WfRjH5ZqdtULJ3BtGzBlgwk64ChY5mCRArhd4ZVmDP76qz2PN6z60=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=szckVdgs; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=eG2x1N0U; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap2.dmz-prg2.suse.org (imap2.dmz-prg2.suse.org [10.150.64.98])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 3C3725C3A6;
+	Wed,  3 Apr 2024 07:06:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1712127976; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=wIvsQfFIhfnJPerBO+JoS38ScrQ+EYMMEjWxZ5bIlsM=;
+	b=szckVdgs7Bt9xjOjcM+YeKNSSn9qcJJPOOUGp4y+B0vEbB7f6iHdH7AkW5pLSQnefHaHRL
+	ODNiErxXCjNWqMGtXNjQmdAAcy4TdTGFxSJtYPsnc1O+t/txm14uLbNOvMcmi7LPxS0m3g
+	aunKNQehXdktYBG/s6QdjhrDhdBP7f4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1712127976;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=wIvsQfFIhfnJPerBO+JoS38ScrQ+EYMMEjWxZ5bIlsM=;
+	b=eG2x1N0Ux9i7YH334r9nHzv3GUkooSAe1Sfgtc4HJ45jmgk9eLpN7s4aaDNvXpCe+xylyG
+	NIRrPgCWlBul+tBQ==
+Authentication-Results: smtp-out2.suse.de;
+	none
+Received: from imap2.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap2.dmz-prg2.suse.org (Postfix) with ESMTPS id A476913357;
+	Wed,  3 Apr 2024 07:06:14 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap2.dmz-prg2.suse.org with ESMTPSA
+	id MvFsJub/DGZnEAAAn2gu4w
+	(envelope-from <hare@suse.de>); Wed, 03 Apr 2024 07:06:14 +0000
+Message-ID: <9f555953-6b41-4962-8f43-339326e30d6a@suse.de>
+Date: Wed, 3 Apr 2024 09:06:12 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <39010f95-b08f-4a57-b3af-f34eb1069865@quicinc.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 11/23] megaraid_sas: switch to using ->device_configure
+Content-Language: en-US
+To: Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+ "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: Damien Le Moal <dlemoal@kernel.org>, Niklas Cassel <cassel@kernel.org>,
+ Takashi Sakamoto <o-takashi@sakamocchi.jp>,
+ Sathya Prakash <sathya.prakash@broadcom.com>,
+ Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+ Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>,
+ "Juergen E. Fischer" <fischer@norbit.de>,
+ Xiang Chen <chenxiang66@hisilicon.com>,
+ HighPoint Linux Team <linux@highpoint-tech.com>,
+ Tyrel Datwyler <tyreld@linux.ibm.com>, Brian King <brking@us.ibm.com>,
+ Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
+ Mike Christie <michael.christie@oracle.com>,
+ John Garry <john.g.garry@oracle.com>, Jason Yan <yanaijie@huawei.com>,
+ Kashyap Desai <kashyap.desai@broadcom.com>,
+ Sumit Saxena <sumit.saxena@broadcom.com>,
+ Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
+ Chandrakanth patil <chandrakanth.patil@broadcom.com>,
+ Jack Wang <jinpu.wang@cloud.ionos.com>, Nilesh Javali <njavali@marvell.com>,
+ GR-QLogic-Storage-Upstream@marvell.com,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Alim Akhtar <alim.akhtar@samsung.com>, Avri Altman <avri.altman@wdc.com>,
+ Bart Van Assche <bvanassche@acm.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+ Alan Stern <stern@rowland.harvard.edu>, linux-block@vger.kernel.org,
+ linux-ide@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
+ MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+ megaraidlinux.pdl@broadcom.com, mpi3mr-linuxdrv.pdl@broadcom.com,
+ linux-samsung-soc@vger.kernel.org, linux-usb@vger.kernel.org,
+ usb-storage@lists.one-eyed-alien.net
+References: <20240402130645.653507-1-hch@lst.de>
+ <20240402130645.653507-12-hch@lst.de>
+From: Hannes Reinecke <hare@suse.de>
+In-Reply-To: <20240402130645.653507-12-hch@lst.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [-3.29 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	XM_UA_NO_VERSION(0.01)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	ARC_NA(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[42];
+	MIME_TRACE(0.00)[0:+];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap2.dmz-prg2.suse.org:rdns,imap2.dmz-prg2.suse.org:helo,suse.de:email,lst.de:email]
+X-Spam-Score: -3.29
+X-Spam-Level: 
+X-Spam-Flag: NO
 
-On Wed, Apr 03, 2024 at 10:54:25AM +0530, Krishna Kurapati PSSNV wrote:
- 
-> >> +static int dwc3_read_port_info(struct dwc3 *dwc)
-> >> +{
-> >> +	void __iomem *base;
-> >> +	u8 major_revision;
-> >> +	u32 offset;
-> >> +	u32 val;
-> >> +
-> >> +	/*
-> >> +	 * Remap xHCI address space to access XHCI ext cap regs since it is
-> >> +	 * needed to get information on number of ports present.
-> >> +	 */
-> >> +	base = ioremap(dwc->xhci_resources[0].start,
-> >> +		       resource_size(&dwc->xhci_resources[0]));
-> >> +	if (IS_ERR(base))
-> >> +		return PTR_ERR(base);
-> > 
-> > Looks like you forgot to address some of the comments you said you'd
-> > update previously if you submit a new version to the series.
-> > 
-> > [*] https://lore.kernel.org/linux-usb/af73110d-e13e-4183-af11-aed869ac0a31@quicinc.com/
-> > 
+On 4/2/24 15:06, Christoph Hellwig wrote:
+> Switch to the ->device_configure method instead of ->slave_configure
+> and update the block limits on the passed in queue_limits instead
+> of using the per-limit accessors.
 > 
-> Apologies. I agree. I was too much focused on acpi removal and interrupt 
-> cleanup, I forgot the last comment you gave.
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> Reviewed-by: Damien Le Moal <dlemoal@kernel.org>
+> ---
+>   drivers/scsi/megaraid/megaraid_sas.h        |  2 +-
+>   drivers/scsi/megaraid/megaraid_sas_base.c   | 29 ++++++++++++---------
+>   drivers/scsi/megaraid/megaraid_sas_fusion.c |  3 ++-
+>   3 files changed, 20 insertions(+), 14 deletions(-)
 > 
-> Can I send in a separate patch for this ?
+> diff --git a/drivers/scsi/megaraid/megaraid_sas.h b/drivers/scsi/megaraid/megaraid_sas.h
+> index 56624cbf7fa5e7..5680c6cdb22193 100644
+> --- a/drivers/scsi/megaraid/megaraid_sas.h
+> +++ b/drivers/scsi/megaraid/megaraid_sas.h
+> @@ -2701,7 +2701,7 @@ int megasas_get_ctrl_info(struct megasas_instance *instance);
+>   int
+>   megasas_sync_pd_seq_num(struct megasas_instance *instance, bool pend);
+>   void megasas_set_dynamic_target_properties(struct scsi_device *sdev,
+> -					   bool is_target_prop);
+> +		struct queue_limits *lim, bool is_target_prop);
+>   int megasas_get_target_prop(struct megasas_instance *instance,
+>   			    struct scsi_device *sdev);
+>   void megasas_get_snapdump_properties(struct megasas_instance *instance);
+> diff --git a/drivers/scsi/megaraid/megaraid_sas_base.c b/drivers/scsi/megaraid/megaraid_sas_base.c
+> index 3d4f13da1ae873..def0d905b6d9e3 100644
+> --- a/drivers/scsi/megaraid/megaraid_sas_base.c
+> +++ b/drivers/scsi/megaraid/megaraid_sas_base.c
+> @@ -1888,7 +1888,7 @@ static struct megasas_instance *megasas_lookup_instance(u16 host_no)
+>   * Returns void
+>   */
+>   void megasas_set_dynamic_target_properties(struct scsi_device *sdev,
+> -					   bool is_target_prop)
+> +		struct queue_limits *lim, bool is_target_prop)
+>   {
+>   	u16 pd_index = 0, ld;
+>   	u32 device_id;
+> @@ -1915,8 +1915,10 @@ void megasas_set_dynamic_target_properties(struct scsi_device *sdev,
+>   			return;
+>   		raid = MR_LdRaidGet(ld, local_map_ptr);
+>   
+> -		if (raid->capability.ldPiMode == MR_PROT_INFO_TYPE_CONTROLLER)
+> -			blk_queue_update_dma_alignment(sdev->request_queue, 0x7);
+> +		if (raid->capability.ldPiMode == MR_PROT_INFO_TYPE_CONTROLLER) {
+> +			if (lim)
+> +				lim->dma_alignment = 0x7;
+> +		}
+>   
+>   		mr_device_priv_data->is_tm_capable =
+>   			raid->capability.tmCapable;
+> @@ -1967,7 +1969,8 @@ void megasas_set_dynamic_target_properties(struct scsi_device *sdev,
+>    *
+>    */
+>   static inline void
+> -megasas_set_nvme_device_properties(struct scsi_device *sdev, u32 max_io_size)
+> +megasas_set_nvme_device_properties(struct scsi_device *sdev,
+> +		struct queue_limits *lim, u32 max_io_size)
+>   {
+>   	struct megasas_instance *instance;
+>   	u32 mr_nvme_pg_size;
+> @@ -1976,10 +1979,10 @@ megasas_set_nvme_device_properties(struct scsi_device *sdev, u32 max_io_size)
+>   	mr_nvme_pg_size = max_t(u32, instance->nvme_page_size,
+>   				MR_DEFAULT_NVME_PAGE_SIZE);
+>   
+> -	blk_queue_max_hw_sectors(sdev->request_queue, (max_io_size / 512));
+> +	lim->max_hw_sectors = max_io_size / 512;
+> +	lim->virt_boundary_mask = mr_nvme_pg_size - 1;
+>   
+>   	blk_queue_flag_set(QUEUE_FLAG_NOMERGES, sdev->request_queue);
+> -	blk_queue_virt_boundary(sdev->request_queue, mr_nvme_pg_size - 1);
+>   }
+That now looks odd.
+We're taking great pains to have everything in queue_limits and avoid 
+having to use the request_queue directly, yet this one call we're missing.
+Wouldn't it make sense to move that into queue_limits, too?
 
-The series has not been merged yet so you can address both issues in a
-v19. Perhaps wait a day or two in case Thinh has further comments.
+Cheers,
 
-Johan
+Hannes
+-- 
+Dr. Hannes Reinecke                  Kernel Storage Architect
+hare@suse.de                                +49 911 74053 688
+SUSE Software Solutions GmbH, Frankenstr. 146, 90461 Nürnberg
+HRB 36809 (AG Nürnberg), GF: I. Totev, A. McDonald, W. Knoblich
+
 
