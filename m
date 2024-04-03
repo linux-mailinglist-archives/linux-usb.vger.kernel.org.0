@@ -1,126 +1,405 @@
-Return-Path: <linux-usb+bounces-8878-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8879-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 366348977D9
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 20:10:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7AC1C8978B2
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 20:58:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 685571C210C8
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 18:10:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 80E931C25444
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 18:58:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E43A15383A;
-	Wed,  3 Apr 2024 18:10:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1B1D154BE3;
+	Wed,  3 Apr 2024 18:58:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="SLFh/veX"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C57CF1534E6;
-	Wed,  3 Apr 2024 18:10:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.154.21.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10EFD153BF0
+	for <linux-usb@vger.kernel.org>; Wed,  3 Apr 2024 18:58:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712167826; cv=none; b=jbE26ftL9CC4M0QPifkvzUy0WsxOeV4OKG3ynEG8LKFh99sMdB30ZQVRqMdy5l4psg0DCexNXp+ltBJ/EbEzGUqetuSbevCoUIfQFUSL7zG4d62pVQ3AV9Mwm9Dk2iXo9+0IDO4bXtIMdi5qj5NRrnbjtW6ke1JZYENb+9/oF0k=
+	t=1712170719; cv=none; b=C2SNe6+n+7g7r1z8DpGhcxOCAHkvrbNw7fXBzW5pBAPpZYLUPJU/YSRbiUejVZzfvIk6e6MvGcvk3Wdm1QJOCbW3H9jterbDLVSBuJOade4NqvfztWLFyA7FYLYRpGnXVhoqT0WXB6IM5z5h7fr7d7fF1iIlvv33imveSFpGSfo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712167826; c=relaxed/simple;
-	bh=qfxMNQ3oAv6Ey3qWHOduRuntmEUDmzlDBJDhK71hVjg=;
-	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=EjhML/5fx6gkjEGM2/4x3Ec5vzKGk8nC5ndLnkhD40bMyXtvYvRWSvuEuq4kOPHBj2RaDQzPghYOeqcqauw8R6pCKnLrJuevTzBbW6fDwMcROKYVj5LHo08PC/UDewCOuiXhl4WJz5AtmwmDogfVL4bxY5renbTYS4CqEuqN1rs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=omp.ru; spf=pass smtp.mailfrom=omp.ru; arc=none smtp.client-ip=90.154.21.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=omp.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=omp.ru
-Received: from [192.168.1.105] (178.176.79.246) by msexch01.omp.ru
- (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1258.12; Wed, 3 Apr
- 2024 21:10:10 +0300
-Subject: Re: [PATCH AUTOSEL 6.8 02/28] usb: storage: sddr55: fix sloppy typing
- in sddr55_{read|write}_data()
-To: Sasha Levin <sashal@kernel.org>, <linux-kernel@vger.kernel.org>,
-	<stable@vger.kernel.org>
-CC: Karina Yankevich <k.yankevich@omp.ru>, Alan Stern
-	<stern@rowland.harvard.edu>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	<linux-usb@vger.kernel.org>, <usb-storage@lists.one-eyed-alien.net>
-References: <20240403171656.335224-1-sashal@kernel.org>
- <20240403171656.335224-2-sashal@kernel.org>
-From: Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <cc6ee73c-fdb7-46bd-4f02-f342db846e4e@omp.ru>
-Date: Wed, 3 Apr 2024 21:10:10 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+	s=arc-20240116; t=1712170719; c=relaxed/simple;
+	bh=z5kp0Ir1X7PQhsD6XqcQiHFGZUfx8+EambfTBz6amK8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rqnFD4+/GEU6C0Q6M9uuVlG2dn+raEIE71pgx7OAjT04BAHE+5/k957cJ1PgXqT4GrLNHjyvJYUbp7Z2EQnLPoQwXAzoQQiO6/AKTdoCnFKu8gcvfkIRTgU5wCy+v4klwOfi9WWW6cO4AJWpwWj4WZ5JNrxUXfnGNVtsBmdfTZk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=SLFh/veX; arc=none smtp.client-ip=209.85.167.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-513ccc70a6dso311875e87.1
+        for <linux-usb@vger.kernel.org>; Wed, 03 Apr 2024 11:58:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1712170715; x=1712775515; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=jbCEmoAXQSoy+gmJ/h1Pv+grKRrCvijIfIFTJN6iWwU=;
+        b=SLFh/veXcPOgn1A+m9OOC1LHSicE7KsPZMHQ8YnznJJfjPiqGYaZBpnCCn/HAoLD8o
+         dyZwyokKk94+5sdjSOfYZ7dxeVLXEXbBISOCXMltKYdFuLB/i+ct4P8Adyd8p9OE9QBn
+         p/ENb1HWDTDbn3fpZg2p/GCX6vZM1SOpHNanCHEhE133V0d7Drmo58jz+ynlUEGtruO3
+         9VMioECstKA7cBrx1edEPAlDwa5isbjA8EzxqSv6/G79T03HLLwKS1hUWIdXftmSsoep
+         nl9Ja7qPNOr2jxAifxk1clsm/wDQWGK54bTo2HDIh1BNd50KNAcPeeTu4VAhZg+BEjp2
+         IciA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712170715; x=1712775515;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jbCEmoAXQSoy+gmJ/h1Pv+grKRrCvijIfIFTJN6iWwU=;
+        b=mL0gpUf/CnipOXgem8AVpXiO3AzUfdY6QQguCIbVwAhRMXHrTPZDE+CSwjPH5AuP6p
+         9ObmCVDOG1S8Gfv9EFJ3s4q4v9wL7E0zPV+I3OKoKc7kirQ8l5TR3GEhqtFVly6cqKV3
+         ZpzZH2Qgmya3G3hWNxQV+rr859+isFHTylWj8zsFmcJnL/9OMEfPxFZBiQE9wwqaMrbw
+         JOXL9jWVzL/TUJV5h99KII7wkf722qjDx0vhEpvum5apQ+VuTyx/TRLqAo7Y2cDoOxLn
+         CtZpOpLmgfQWD89XG+wIZeNMjp4uUDkoyCsZc4VlSANKutxs9KK3PymzOpb/35V2AzwB
+         KRYQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUX3HEMQ09SASihPaBPyS3nJ2iE/8sJTrCD6VVqb/tEg/fT/7X3JrFFRerzbhZ1zARvkOBY/CZsNnuOehVjuO6PfXN7wErNLjej
+X-Gm-Message-State: AOJu0Yy1UaIOaLFv43mG/3X5dWcqh9A8V+1m4/UqqBxhuqOnLvo1vJrA
+	DHExy2f19JvDYfIBNG0sNbtKo4lXQXd4VtT7LwAWAlViW8UIl2xd8mRcpcJwi5s=
+X-Google-Smtp-Source: AGHT+IHV2FCr/d7LmQjGGvHQAdt0ufgpgfRSgUZ5tgSQCuSPN0lzz2FVBKBmeSSfpyaJsgUxMtLczg==
+X-Received: by 2002:ac2:4c1a:0:b0:515:b0be:3a42 with SMTP id t26-20020ac24c1a000000b00515b0be3a42mr319997lfq.33.1712170715108;
+        Wed, 03 Apr 2024 11:58:35 -0700 (PDT)
+Received: from eriador.lumag.spb.ru (dzyjmhyyyyyyyyyyyykxt-3.rev.dnainternet.fi. [2001:14ba:a00e:a300::227])
+        by smtp.gmail.com with ESMTPSA id e6-20020ac24e06000000b00516a302f32asm1219653lfr.132.2024.04.03.11.58.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Apr 2024 11:58:34 -0700 (PDT)
+Date: Wed, 3 Apr 2024 21:58:33 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Pavan Holla <pholla@chromium.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>, Benson Leung <bleung@chromium.org>, 
+	Tzung-Bi Shih <tzungbi@kernel.org>, Guenter Roeck <groeck@chromium.org>, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>, chrome-platform@lists.linux.dev
+Subject: Re: [PATCH v3 2/2] usb: typec: ucsi: Implement ChromeOS UCSI driver
+Message-ID: <3ezjocthsigo3t746slmgzffnmpxw7wwf3s535basiaf2qy6io@7ocxva6ndsbt>
+References: <20240403-public-ucsi-h-v3-0-f848e18c8ed2@chromium.org>
+ <20240403-public-ucsi-h-v3-2-f848e18c8ed2@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20240403171656.335224-2-sashal@kernel.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
- (10.188.4.12)
-X-KSE-ServerInfo: msexch01.omp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 6.1.0, Database issued on: 04/03/2024 17:51:55
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 0
-X-KSE-AntiSpam-Info: Lua profiles 184562 [Apr 03 2024]
-X-KSE-AntiSpam-Info: Version: 6.1.0.4
-X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
-X-KSE-AntiSpam-Info: LuaCore: 14 0.3.14
- 5a0c43d8a1c3c0e5b0916cc02a90d4b950c01f96
-X-KSE-AntiSpam-Info: {rep_avail}
-X-KSE-AntiSpam-Info: {Tracking_uf_ne_domains}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info:
-	lore.kernel.org:7.1.1;omp.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2
-X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.79.246
-X-KSE-AntiSpam-Info: Rate: 0
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
- smtp.mailfrom=omp.ru;dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 04/03/2024 17:56:00
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 4/3/2024 3:47:00 PM
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240403-public-ucsi-h-v3-2-f848e18c8ed2@chromium.org>
 
-On 4/3/24 8:16 PM, Sasha Levin wrote:
+On Wed, Apr 03, 2024 at 06:05:22PM +0000, Pavan Holla wrote:
+> Implementation of a UCSI transport driver for ChromeOS.
+> This driver will be loaded if the ChromeOS EC implements a PPM.
+> 
+> Signed-off-by: Pavan Holla <pholla@chromium.org>
+> ---
+>  drivers/usb/typec/ucsi/Kconfig        |  13 ++
+>  drivers/usb/typec/ucsi/Makefile       |   1 +
+>  drivers/usb/typec/ucsi/cros_ec_ucsi.c | 245 ++++++++++++++++++++++++++++++++++
+>  3 files changed, 259 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/ucsi/Kconfig b/drivers/usb/typec/ucsi/Kconfig
+> index bdcb1764cfae..4dceb14a66ee 100644
+> --- a/drivers/usb/typec/ucsi/Kconfig
+> +++ b/drivers/usb/typec/ucsi/Kconfig
+> @@ -69,4 +69,17 @@ config UCSI_PMIC_GLINK
+>  	  To compile the driver as a module, choose M here: the module will be
+>  	  called ucsi_glink.
+>  
+> +config CROS_EC_UCSI
+> +	tristate "UCSI Driver for ChromeOS EC"
+> +	depends on MFD_CROS_EC_DEV
+> +	depends on CROS_USBPD_NOTIFY
+> +	depends on !EXTCON_TCSS_CROS_EC
+> +	default MFD_CROS_EC_DEV
+> +	help
+> +	  This driver enables UCSI support for a ChromeOS EC. The EC is
+> +	  expected to implement a PPM.
+> +
+> +	  To compile the driver as a module, choose M here: the module
+> +	  will be called cros_ec_ucsi.
+> +
+>  endif
+> diff --git a/drivers/usb/typec/ucsi/Makefile b/drivers/usb/typec/ucsi/Makefile
+> index b4679f94696b..cb336eee055c 100644
+> --- a/drivers/usb/typec/ucsi/Makefile
+> +++ b/drivers/usb/typec/ucsi/Makefile
+> @@ -21,3 +21,4 @@ obj-$(CONFIG_UCSI_ACPI)			+= ucsi_acpi.o
+>  obj-$(CONFIG_UCSI_CCG)			+= ucsi_ccg.o
+>  obj-$(CONFIG_UCSI_STM32G0)		+= ucsi_stm32g0.o
+>  obj-$(CONFIG_UCSI_PMIC_GLINK)		+= ucsi_glink.o
+> +obj-$(CONFIG_CROS_EC_UCSI)		+= cros_ec_ucsi.o
+> diff --git a/drivers/usb/typec/ucsi/cros_ec_ucsi.c b/drivers/usb/typec/ucsi/cros_ec_ucsi.c
+> new file mode 100644
+> index 000000000000..dd46b46d430f
+> --- /dev/null
+> +++ b/drivers/usb/typec/ucsi/cros_ec_ucsi.c
+> @@ -0,0 +1,245 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * UCSI driver for ChromeOS EC
+> + *
+> + * Copyright 2024 Google LLC.
+> + */
+> +
+> +#include <linux/container_of.h>
+> +#include <linux/dev_printk.h>
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_data/cros_ec_commands.h>
+> +#include <linux/platform_data/cros_usbpd_notify.h>
+> +#include <linux/platform_data/cros_ec_proto.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/slab.h>
+> +#include <linux/wait.h>
+> +
+> +#include "ucsi.h"
+> +
+> +#define DRV_NAME "cros-ec-ucsi"
+> +
+> +#define MAX_EC_DATA_SIZE 256
+> +#define WRITE_TMO_MS 500
+> +
+> +struct cros_ucsi_data {
+> +	struct device *dev;
+> +	struct ucsi *ucsi;
+> +
+> +	struct cros_ec_device *ec;
+> +	struct notifier_block nb;
+> +	struct work_struct work;
+> +
+> +	struct completion complete;
+> +	unsigned long flags;
+> +};
+> +
+> +static int cros_ucsi_read(struct ucsi *ucsi, unsigned int offset, void *val,
+> +			  size_t val_len)
+> +{
+> +	struct cros_ucsi_data *udata = ucsi_get_drvdata(ucsi);
+> +	struct ec_params_ucsi_ppm_get req = {
+> +		.offset = offset,
+> +		.size = val_len,
+> +	};
+> +	int ret;
+> +
+> +	if (val_len > MAX_EC_DATA_SIZE) {
+> +		dev_err(udata->dev, "Can't read %zu bytes. Too big.", val_len);
+> +		return -EINVAL;
+> +	}
+> +
+> +	ret = cros_ec_cmd(udata->ec, 0, EC_CMD_UCSI_PPM_GET,
+> +			  &req, sizeof(req), val, val_len);
+> +	if (ret < 0) {
+> +		dev_warn(udata->dev, "Failed to send EC message UCSI_PPM_GET: error=%d", ret);
+> +		return ret;
+> +	}
+> +	return 0;
+> +}
+> +
+> +static int cros_ucsi_async_write(struct ucsi *ucsi, unsigned int offset,
+> +				 const void *val, size_t val_len)
+> +{
+> +	struct cros_ucsi_data *udata = ucsi_get_drvdata(ucsi);
+> +	uint8_t ec_buffer[MAX_EC_DATA_SIZE + sizeof(struct ec_params_ucsi_ppm_set)];
+> +	struct ec_params_ucsi_ppm_set *req = (struct ec_params_ucsi_ppm_set *)ec_buffer;
+> +	int ret = 0;
+> +
+> +	if (val_len > MAX_EC_DATA_SIZE) {
+> +		dev_err(udata->dev, "Can't write %zu bytes. Too big.", val_len);
 
-> From: Karina Yankevich <k.yankevich@omp.ru>
-> 
-> [ Upstream commit d6429a3555fb29f380c5841a12f5ac3f7444af03 ]
-> 
-> In sddr55_{read|write}_data(), the address variables are needlessly typed
-> as *unsigned long* -- which is 32-bit type on the 32-bit arches and 64-bit
-> type on the 64-bit arches; those variables' value should fit into just 3
-> command bytes and consists of 10-bit block # (or at least the max block #
-> seems to be 1023) and 4-/5-bit page # within a block, so 32-bit *unsigned*
-> *int* type should be more than enough...
-> 
-> Found by Linux Verification Center (linuxtesting.org) with the Svace static
-> analysis tool.
-> 
-> [Sergey: rewrote the patch subject/description]
-> 
-> Signed-off-by: Karina Yankevich <k.yankevich@omp.ru>
-> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
-> Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
-> Link: https://lore.kernel.org/r/4c9485f2-0bfc-591b-bfe7-2059289b554e@omp.ru
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
+I think it's better be written as
 
-[...]
+if (WARN_ON_ONCE(val_len > MAX_EC_DATA_SIZE))
+	return -EINVAL;
 
-   I doubt this is worth pulling into the stable kernels, it
-does not fix any serious issue...
+Same applies to reading.
 
-MBR, Sergey
+> +		return -EINVAL;
+> +	}
+> +
+> +	memset(req, 0, sizeof(ec_buffer));
+> +	req->offset = offset;
+> +	memcpy(req->data, val, val_len);
+> +	ret = cros_ec_cmd(udata->ec, 0, EC_CMD_UCSI_PPM_SET,
+> +			  req, sizeof(struct ec_params_ucsi_ppm_set) + val_len, NULL, 0);
+> +
+> +	if (ret < 0) {
+> +		dev_warn(udata->dev, "Failed to send EC message UCSI_PPM_SET: error=%d", ret);
+> +		return ret;
+> +	}
+> +	return 0;
+> +}
+> +
+> +static int cros_ucsi_sync_write(struct ucsi *ucsi, unsigned int offset,
+> +				const void *val, size_t val_len)
+> +{
+> +	struct cros_ucsi_data *udata = ucsi_get_drvdata(ucsi);
+> +	bool ack = UCSI_COMMAND(*(u64 *)val) == UCSI_ACK_CC_CI;
+> +	int ret;
+> +
+> +	if (ack)
+> +		set_bit(ACK_PENDING, &udata->flags);
+> +	else
+> +		set_bit(COMMAND_PENDING, &udata->flags);
+> +
+> +	ret = cros_ucsi_async_write(ucsi, offset, val, val_len);
+> +	if (ret)
+> +		goto out;
+> +
+> +	if (!wait_for_completion_timeout(&udata->complete, WRITE_TMO_MS))
+> +		ret = -ETIMEDOUT;
+> +
+> +out:
+> +	if (ack)
+> +		clear_bit(ACK_PENDING, &udata->flags);
+> +	else
+> +		clear_bit(COMMAND_PENDING, &udata->flags);
+> +	return ret;
+> +}
+> +
+> +struct ucsi_operations cros_ucsi_ops = {
+> +	.read = cros_ucsi_read,
+> +	.async_write = cros_ucsi_async_write,
+> +	.sync_write = cros_ucsi_sync_write,
+> +};
+> +
+> +static void cros_ucsi_work(struct work_struct *work)
+> +{
+> +	struct cros_ucsi_data *udata = container_of(work, struct cros_ucsi_data, work);
+> +	u32 cci;
+> +	int ret;
+> +
+> +	ret = cros_ucsi_read(udata->ucsi, UCSI_CCI, &cci, sizeof(cci));
+> +	if (ret)
+> +		return;
+> +
+> +	if (UCSI_CCI_CONNECTOR(cci))
+> +		ucsi_connector_change(udata->ucsi, UCSI_CCI_CONNECTOR(cci));
+> +
+> +	if (cci & UCSI_CCI_ACK_COMPLETE && test_bit(ACK_PENDING, &udata->flags))
+> +		complete(&udata->complete);
+> +	if (cci & UCSI_CCI_COMMAND_COMPLETE &&
+> +	    test_bit(COMMAND_PENDING, &udata->flags))
+> +		complete(&udata->complete);
+> +}
+> +
+> +static int cros_ucsi_event(struct notifier_block *nb,
+> +			   unsigned long host_event, void *_notify)
+> +{
+> +	struct cros_ucsi_data *udata = container_of(nb, struct cros_ucsi_data, nb);
+> +
+> +	if (!(host_event & PD_EVENT_PPM))
+> +		return NOTIFY_OK;
+> +
+> +	dev_dbg(udata->dev, "UCSI notification received");
+> +	flush_work(&udata->work);
+> +	schedule_work(&udata->work);
+> +
+> +	return NOTIFY_OK;
+> +}
+> +
+> +static int cros_ucsi_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct cros_ec_dev *ec_data = dev_get_drvdata(dev->parent);
+> +	struct cros_ucsi_data *udata;
+> +	int ret;
+> +
+> +	udata = devm_kzalloc(dev, sizeof(*udata), GFP_KERNEL);
+> +	if (!udata)
+> +		return -ENOMEM;
+> +
+> +	udata->dev = dev;
+> +
+> +	udata->ec = ec_data->ec_dev;
+> +	if (!udata->ec) {
+> +		dev_err(dev, "couldn't find parent EC device\n");
+> +		return -ENODEV;
+> +	}
+> +
+> +	platform_set_drvdata(pdev, udata);
+> +
+> +	INIT_WORK(&udata->work, cros_ucsi_work);
+> +	init_completion(&udata->complete);
+> +
+> +	udata->ucsi = ucsi_create(udata->dev, &cros_ucsi_ops);
+> +	if (IS_ERR(udata->ucsi)) {
+> +		dev_err(dev, "failed to allocate UCSI instance\n");
+> +		return PTR_ERR(udata->ucsi);
+> +	}
+> +
+> +	ucsi_set_drvdata(udata->ucsi, udata);
+> +
+> +	ret = ucsi_register(udata->ucsi);
+> +	if (ret) {
+> +		ucsi_destroy(udata->ucsi);
+> +		return ret;
+> +	}
+> +
+> +	udata->nb.notifier_call = cros_ucsi_event;
+> +	return cros_usbpd_register_notify(&udata->nb);
+
+I think you should register notifier before calling ucsi_register().
+Otherwise you have a window when the UCSI can attempt to communitcate
+with the hardware, but it will not get its notifications.
+
+> +}
+> +
+> +static int cros_ucsi_remove(struct platform_device *dev)
+> +{
+> +	struct cros_ucsi_data *udata = platform_get_drvdata(dev);
+> +
+> +	ucsi_unregister(udata->ucsi);
+> +	ucsi_destroy(udata->ucsi);
+> +	return 0;
+> +}
+> +
+> +static int __maybe_unused cros_ucsi_suspend(struct device *dev)
+> +{
+> +	struct cros_ucsi_data *udata = dev_get_drvdata(dev);
+> +
+> +	cancel_work_sync(&udata->work);
+> +
+> +	return 0;
+> +}
+> +
+> +static int __maybe_unused cros_ucsi_resume(struct device *dev)
+> +{
+> +	struct cros_ucsi_data *udata = dev_get_drvdata(dev);
+> +
+> +	return ucsi_resume(udata->ucsi);
+> +}
+> +
+> +static SIMPLE_DEV_PM_OPS(cros_ucsi_pm_ops, cros_ucsi_suspend,
+> +			 cros_ucsi_resume);
+> +
+> +static const struct platform_device_id cros_ec_ucsi_id[] = {
+> +	{ "cros-ec-ucsi"},
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(platform, cros_ec_ucsi_id);
+> +
+> +static struct platform_driver cros_ucsi_driver = {
+> +	.driver = {
+> +		.name = DRV_NAME,
+> +		.pm = &cros_ucsi_pm_ops,
+> +	},
+> +	.id_table = cros_ec_ucsi_id,
+> +	.probe = cros_ucsi_probe,
+> +	.remove = cros_ucsi_remove,
+> +};
+> +
+> +module_platform_driver(cros_ucsi_driver);
+> +
+> +MODULE_LICENSE("GPL");
+> +MODULE_DESCRIPTION("UCSI driver for ChromeOS EC");
+> 
+> -- 
+> 2.44.0.478.gd926399ef9-goog
+> 
+
+-- 
+With best wishes
+Dmitry
 
