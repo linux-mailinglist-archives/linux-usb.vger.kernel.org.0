@@ -1,171 +1,201 @@
-Return-Path: <linux-usb+bounces-8782-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8783-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D1888963C6
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 07:05:26 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 80C958963F6
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 07:25:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BFC9CB230DB
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 05:05:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AE4CE1C2286B
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 05:25:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0767F46444;
-	Wed,  3 Apr 2024 05:05:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92039482DA;
+	Wed,  3 Apr 2024 05:24:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="bU4IHYY1"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="gQRGGJUB"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBB043FE37;
-	Wed,  3 Apr 2024 05:05:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.25
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04D8E645;
+	Wed,  3 Apr 2024 05:24:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712120715; cv=none; b=YrXZwX0qk5GYwC9ZTL8met826Kjqt2PMUJ0ldGync45SjOOLrJqEWZUgfooK2ufoGhS1WaZuBtwCJv6MyullKMduQElLAm7UEIVT5+h6Q309GpFucABIq2TJf/PhcSKTuPQEhuK0SQrlYf0LG+Kv58TmYxj5DCjZhz351wWEGDk=
+	t=1712121895; cv=none; b=GOS7b1rcEwPFhSNUrCpVdaNIOdS0Rx2AR4ij+nicb9OCg71zkV61YGgisIaOZwwl3SNdR1J4+NKV9J8yE8/8m3Az9YebrpfaszoMEZl1+bt0dEoyh3u9OZyzsKtnCMeeChSsBSKub2Ci/6JIca1B/u1Cy9z2JXe7dOqEW0bZhuk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712120715; c=relaxed/simple;
-	bh=JcHYotXRRV1MqcPELi+vORTrZSc6KnEZ0kSwZKLhDvQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
-	 Content-Type:References; b=HyrpWcPw1gllRlELjNho/qsWgCstOvhnmkNfbEcgWpyNUMkRdiYR3PJS2+/xD7qY9Mghz7ibDArSJra/Sjh4VwotXJBx9hBe6uWFJDqGCXD8+28lDG0xtgxu+FoFhDJggki2+icoo6ejiarfXqS6U25vzIsFtY4VEqsGrYeFO6I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=bU4IHYY1; arc=none smtp.client-ip=203.254.224.25
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
-	by mailout2.samsung.com (KnoxPortal) with ESMTP id 20240403050510epoutp02853d2b02a644c5237f17d3a2ff1f4a8d~CrLcTIlQQ0562305623epoutp02i;
-	Wed,  3 Apr 2024 05:05:10 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20240403050510epoutp02853d2b02a644c5237f17d3a2ff1f4a8d~CrLcTIlQQ0562305623epoutp02i
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1712120710;
-	bh=HBVnHnFiaSeakBuX5QW6q4GFFtBNcnBXqAJmCexHKlg=;
-	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-	b=bU4IHYY1SfvZak/PDdnfH7ok7k5LVBhm5ve/uskvXLdHPYhWHFs23VYo44sLsPOX7
-	 APcf4yNsgFgJ22PdaZYtBiPsOowmVz4Ae0sTFBjxrWkAqzR0WzflAT2KTQRxDL8YwG
-	 0ZSKDS3NPVPgFY4OMxv+KIVfjx43yEGLp2UCJd6w=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-	epcas5p4.samsung.com (KnoxPortal) with ESMTP id
-	20240403050509epcas5p403dd7ebe021271f903400e1c396af10f~CrLbNnpAk0822708227epcas5p4D;
-	Wed,  3 Apr 2024 05:05:09 +0000 (GMT)
-Received: from epsmges5p1new.samsung.com (unknown [182.195.38.178]) by
-	epsnrtp4.localdomain (Postfix) with ESMTP id 4V8XkC68WJz4x9Px; Wed,  3 Apr
-	2024 05:05:07 +0000 (GMT)
-Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
-	epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	BB.26.09666.383EC066; Wed,  3 Apr 2024 14:05:07 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-	epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
-	20240403050507epcas5p2af93e8855bc0d5d18f54c47f8d7252e5~CrLZCgT1j1997219972epcas5p2J;
-	Wed,  3 Apr 2024 05:05:07 +0000 (GMT)
-Received: from epsmgmc1p1new.samsung.com (unknown [182.195.42.40]) by
-	epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-	20240403050507epsmtrp1bd94e3a21b1b18ee4c74b0bde18aeb70~CrLZA8rX80314003140epsmtrp1e;
-	Wed,  3 Apr 2024 05:05:07 +0000 (GMT)
-X-AuditID: b6c32a49-cefff700000025c2-d0-660ce3831133
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-	epsmgmc1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	5C.64.07541.283EC066; Wed,  3 Apr 2024 14:05:06 +0900 (KST)
-Received: from [107.122.11.51] (unknown [107.122.11.51]) by
-	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20240403050500epsmtip28e7bcd4a3801345fd12b86c84d7d1fb4~CrLTKkC3d1682616826epsmtip2C;
-	Wed,  3 Apr 2024 05:05:00 +0000 (GMT)
-Message-ID: <6ea60c2c-9dba-43e5-e91f-30c833146499@samsung.com>
-Date: Wed, 3 Apr 2024 10:34:59 +0530
+	s=arc-20240116; t=1712121895; c=relaxed/simple;
+	bh=Du0hVYDdHGGGFDiDuT8htJ0z77Z7XYzY9/952kknj2A=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=JpbSymFtcFFLz1Gkc6ev/47fINUv6DPvTVaXpyRl6wZyBMQ7AYUj6MnYfTGuIW1dLPShOjr8QfDKzN4mv0uEIb43DsQg3530V9qmNBkRkhFkzDE+NQT9FwLpufVX3P+ORn6xL/0sBy0kYUbe0Xz2Xv8cXV6BeS6Sx19JQ3EF9lg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=gQRGGJUB; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 4332l8Ul006839;
+	Wed, 3 Apr 2024 05:24:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=2Wc/XbMDySl7R/TtBB5r3KsAe9bMPmhTTdW6c2sQWGI=; b=gQ
+	RGGJUBpduVpOwFaNd8HSBNq91NXpI6QaEiaDkOchfyz89Dp35ypuSOP5YaEpSWjn
+	PHdaiJUeqeJXeKcxB30wIsQVvtPffw82cdr5EFWHQr12wWYvKfmbcRFAs3N6oDuC
+	8J3EKyuWLOiim8UXgTwDHMCz4jkd9CxmfuoVgX6IG65A3XHkwI1oPyliNt/1iGVA
+	5v/IVI9iLueCB6MyIt3lmFo3RIaLkgaN7zOjJ1oJAJJ6mJ76SdKLISyqBDPIsuRs
+	B5xKzjx0X1a6099PiBwLx4V7Tc9EThnWYdBv5n9EvJJwj1DYnjYZmvHv1PBZ5vrK
+	LnX+ZQnpdD7LgD5fTJlw==
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3x8ua70jnk-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 03 Apr 2024 05:24:35 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 4335OYnn017242
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 3 Apr 2024 05:24:34 GMT
+Received: from [10.216.63.221] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Tue, 2 Apr 2024
+ 22:24:28 -0700
+Message-ID: <39010f95-b08f-4a57-b3af-f34eb1069865@quicinc.com>
+Date: Wed, 3 Apr 2024 10:54:25 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0)
-	Gecko/20100101 Thunderbird/91.13.1
-Subject: Re: [PATCH 01/23] block: add a helper to cancel atomic queue limit
- updates
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v18 2/9] usb: dwc3: core: Access XHCI address space
+ temporarily to read port info
 Content-Language: en-US
-To: Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>, "Martin K.
- Petersen" <martin.petersen@oracle.com>
-Cc: Damien Le Moal <dlemoal@kernel.org>, Niklas Cassel <cassel@kernel.org>,
-	Takashi Sakamoto <o-takashi@sakamocchi.jp>, Sathya Prakash
-	<sathya.prakash@broadcom.com>, Sreekanth Reddy
-	<sreekanth.reddy@broadcom.com>, Suganath Prabu Subramani
-	<suganath-prabu.subramani@broadcom.com>, "Juergen E. Fischer"
-	<fischer@norbit.de>, Xiang Chen <chenxiang66@hisilicon.com>, HighPoint Linux
-	Team <linux@highpoint-tech.com>, Tyrel Datwyler <tyreld@linux.ibm.com>,
-	Brian King <brking@us.ibm.com>, Lee Duncan <lduncan@suse.com>, Chris Leech
-	<cleech@redhat.com>, Mike Christie <michael.christie@oracle.com>, John Garry
-	<john.g.garry@oracle.com>, Jason Yan <yanaijie@huawei.com>, Kashyap Desai
-	<kashyap.desai@broadcom.com>, Sumit Saxena <sumit.saxena@broadcom.com>,
-	Shivasharan S <shivasharan.srikanteshwara@broadcom.com>, Chandrakanth patil
-	<chandrakanth.patil@broadcom.com>, Jack Wang <jinpu.wang@cloud.ionos.com>,
-	Nilesh Javali <njavali@marvell.com>, GR-QLogic-Storage-Upstream@marvell.com,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Alim Akhtar
-	<alim.akhtar@samsung.com>, Avri Altman <avri.altman@wdc.com>, Bart Van
-	Assche <bvanassche@acm.org>, Krzysztof Kozlowski
-	<krzysztof.kozlowski@linaro.org>, Alan Stern <stern@rowland.harvard.edu>,
-	linux-block@vger.kernel.org, linux-ide@vger.kernel.org,
-	linux1394-devel@lists.sourceforge.net, MPT-FusionLinux.pdl@broadcom.com,
-	linux-scsi@vger.kernel.org, megaraidlinux.pdl@broadcom.com,
-	mpi3mr-linuxdrv.pdl@broadcom.com, linux-samsung-soc@vger.kernel.org,
-	linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net
-From: Kanchan Joshi <joshi.k@samsung.com>
-In-Reply-To: <20240402130645.653507-2-hch@lst.de>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring
+	<robh@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
+        Wesley Cheng
+	<quic_wcheng@quicinc.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "Greg
+ Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Conor Dooley
+	<conor+dt@kernel.org>, Felipe Balbi <balbi@kernel.org>,
+        Johan Hovold
+	<johan@kernel.org>,
+        "devicetree@vger.kernel.org"
+	<devicetree@vger.kernel.org>,
+        "linux-arm-msm@vger.kernel.org"
+	<linux-arm-msm@vger.kernel.org>,
+        "linux-usb@vger.kernel.org"
+	<linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>,
+        "quic_ppratap@quicinc.com"
+	<quic_ppratap@quicinc.com>,
+        "quic_jackp@quicinc.com"
+	<quic_jackp@quicinc.com>,
+        Johan Hovold <johan+linaro@kernel.org>
+References: <20240326113253.3010447-1-quic_kriskura@quicinc.com>
+ <20240326113253.3010447-3-quic_kriskura@quicinc.com>
+ <20240402233218.5kngtj56qellnrmo@synopsys.com>
+From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <20240402233218.5kngtj56qellnrmo@synopsys.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA01Te0xTZxTfd297W4gslwrhgz9m18yIKI9qqZ8bqJmP3YUlc0wnmpnawYUq
-	ULo+Nuai6xQEKkopY2oZohQRRGQ4W8qE2SKPoPIQsDiG8iiQ8XASnS60YlZo3fzny++c73fO
-	7zxy2DjHwQpi75cqablUnMIjvBmmmyuDQ4/alyRGGNqC0fBZE4Em5+4RqOpBHoGKKjIB+nF2
-	Dket2gocjRYPMlC/rQ+giWwDjoZvbETTR2ow9LiuEkNHDTUEqqxqwZCxfA6gbocZIEtJJxM1
-	ThtZaKarCUONA6tQq3kUQ6e7fsPQ8X4zgUrLM3H0pMzIQEeqJ5noYttLDLXOX8HRvO4+E2ls
-	B1HxtBpDvfMaBsq/UIWjn88OMNBUxlp05tk4C2md3QSauPM5yn6ag6OTZ9sJVGLfgUobcvBN
-	IVRvXwylH+ogKM1YKYNyjuXilL24lkVlND9iUr0dKurqpRyCGrQ1EJS21AKoG8WXWZT2QgVG
-	XT/31PX8riaogvN3cWq0uRbfHrgnOUpCixNoOZeWxqcl7JcmRfNiPhVtFkUKI/ih/PVoHY8r
-	FafS0bwtH20P3bY/xTVlHvcrcYrK5douVih44Rui5GkqJc2VpCmU0TxalpAiE8jCFOJUhUqa
-	FCalle/yIyLWRLqI+5IlTuMAU9aFpec+1BFqoMM0wIsNSQE8f+8FrgHebA55HcDHBY+ZbuMJ
-	gN/fvO4xngPY1z9IvAq59qwPuD8aAbT3X8TcxiMAbxdexhdYPuQG2GG+z9AANptBvgMbJzlu
-	ty9sPzPGWMD+ZDyc01gWky4ld8Kn5dZFjJMBcGCsZLE+P1IFnWXji/lxsmEJ1A5YmQs5CXIl
-	7C5QLXC8SD5s+aPOE7sM1j36abEfSLZ7w8KRGaa76i3QOTHqwUvhVNs1lhsHwcm8Yx4cD3vO
-	dHoGo4T2BqsHb4SZt/LwBV3cpVvza7hb6014wjmGLbgh6QOzj3Hc7LfhQ924RykAjpwu82AK
-	Dqu1hHtUVQA6psqBFnD1r41F/1r7+tfa0f+vfA4wLoFAWqZITaIVkTK+lP76v4XHp6VeBYtH
-	GPKhGTwYng1rAhgbNAHIxnl+PnMxXokcnwTxNwdpeZpIrkqhFU0g0rWefDzIPz7NdcVSpYgv
-	WB8hEAqFgvVrhXxegM90ZnECh0wSK+lkmpbR8ldxGNsrSI1pAify7NRFx1CsZJ9IovPNzx6U
-	fzIUOuOYmYqlSixf/FDYk3X6vfCPvQzLIlcntlita1YX4rvqM3z/lM06dsuIF9wTgz2VK9q3
-	bVq3XJKdbMwdatx7aGlccFN/T7Qt5yDSq805cfgvB6ynlEOJI3vB1i/rr7y1YnVu8bPd5/r8
-	75huLSnSGe6ZDHu+tRw/+dfDklh2QMEH6WWCw3kipeNUzJrOhoKA3Oq2Xe/fshkzLSfDY5ov
-	sNSzvbYDqeW3lz/f/E9LtZ/5kN/L4c2m2tz0KGtgYn3cG8KRPMN3gVneouoTdaptHfNh7fkr
-	Xh7OsLdsLbq7M8tUm77q789SjIYdYbErh3gMhUTMD8HlCvG/O81uAg0FAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Sf1DTdRjH+3y/3303di6/TYkPZBFQdwoJLj3vqUur68TvhXdlWVcW5WJf
-	kGKTNldokSiu2PRig8sbUxiMQOYUkHOw5JeSkHQQEHPYRCQYyI84EI5iEbsYqzv+ee71vJ/n
-	/TzPH4+AFPfywgSpisOcUiFNi6SFVO2PkeGbs4fXJG8Z2ACDRbU0jHtv0WC7m0vD2QoNgjMz
-	XhLa9BUkDBX2U9DnciIYzSklYbD5RZg8UUXAdJ2VgOzSKhqstlYC7OVeBN1/OxBcM//Cg8ZJ
-	Ox/+6GohoNEdA22OIQKMXU0EnOpz0GAp15Aw+72dghOXxnlw/icfAW1LlSQs5d3mgc51FAon
-	swjoXdJRYCizkVBd5KZg4uRWKJgf4YN+sZuG0Y73IWdOS8K3Re00mIf3gaVBS74UzfY6E1jT
-	vU6a1XksFLvoOU2yw4WX+ezJG1M8trdTzdZc0NJsv6uBZvWWa4htLrzIZ/VlFQRbXzy3HH7L
-	otn8kh6SHbpxmXw9dL/wBRmXlvoZp4zbeUB4cNHu5qV3ERmnB/LoLJRH6FCQADPb8JV5J/Kz
-	mKlHuHhEFtBDcLZrgR/gddjqu88P9EwiPDrD87OI2Yk7HbcpHRIIKOYp3DguDsiP4PYCD+Xn
-	YCYJj/9jWLGuY97Cc+XXaT+Ty+PdHvPKCesZNc71GZdZuKy3rcEXNVcofyJmbAi3aJsI/wKa
-	2YS789V+QxAjwa136v4btB3r7DoU4HBcN3WO1COxadUdplX7TKssplWWYkRdQKFcukqeIk+S
-	pEsU3OexKqlcpVakxCYdkteglb+L3uhAA2ZfbAsiBKgFYQEZuV7kTQhKFotk0iNHOeWhD5Xq
-	NE7Vgh4TUJEhIonxrEzMpEgPc59wXDqn/L9KCILCsoioPa5a9YJnJDF0uzD0yBtV0w2Ljphb
-	xqqFYPHWDb/GbLZbyrXvffrk/R3xd6xrH01+IsfRRF3a4SubEXzxe/MuLEmwfXfzce9DXOLd
-	qLVhz+XP9rMZB0Ly9Ve3jQ1klX3ZuvHlV+czx3ZZRNZ7SxM9SJRc0PfX2N5jzzyt+0auHfjo
-	+LMdgyXJmVMZH6tLO5wGrcI5Hj/VbHg3P+qH6qvBDwrfju3vemdT3O69lbh4Nrch++HnZ7rM
-	vHpLtW/ig5/Dv1K8prku1yZmOv/cp6JFEfszwnebRdOZ3lc0JR2GiPjUzAdsz5tbEnTaCdmp
-	iNbpmmPHe91x5zWVX1My+7kRd2j7TWMkpToolUSTSpX0X1F7cdTmAwAA
-X-CMS-MailID: 20240403050507epcas5p2af93e8855bc0d5d18f54c47f8d7252e5
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20240402130741epcas5p2b14c5c7f4ed5999a0b8816f9d007ca08
-References: <20240402130645.653507-1-hch@lst.de>
-	<CGME20240402130741epcas5p2b14c5c7f4ed5999a0b8816f9d007ca08@epcas5p2.samsung.com>
-	<20240402130645.653507-2-hch@lst.de>
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: XSgbQFluxKfjXYTIj7h0H3Llybu0LODQ
+X-Proofpoint-GUID: XSgbQFluxKfjXYTIj7h0H3Llybu0LODQ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-04-03_04,2024-04-01_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
+ lowpriorityscore=0 bulkscore=0 mlxlogscore=999 priorityscore=1501
+ clxscore=1015 adultscore=0 suspectscore=0 mlxscore=0 spamscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2403210001 definitions=main-2404030034
 
-On 4/2/2024 6:36 PM, Christoph Hellwig wrote:
-> Drivers might have to perform complex actions to determine queue limits,
-> and those might fail.  Add a helper to cancel a queue limit update
-> that can be called in those cases.
+
+
+On 4/3/2024 5:02 AM, Thinh Nguyen wrote:
+> On Tue, Mar 26, 2024, Krishna Kurapati wrote:
+>> All DWC3 Multi Port controllers that exist today only support host mode.
+>> Temporarily map XHCI address space for host-only controllers and parse
+>> XHCI Extended Capabilities registers to read number of usb2 ports and
+>> usb3 ports present on multiport controller. Each USB Port is at least HS
+>> capable.
+>>
+>> The port info for usb2 and usb3 phy are identified as num_usb2_ports
+>> and num_usb3_ports. The intention is as follows:
+>>
+>> Wherever we need to perform phy operations like:
+>>
+>> LOOP_OVER_NUMBER_OF_AVAILABLE_PORTS()
+>> {
+>> 	phy_set_mode(dwc->usb2_generic_phy[i], PHY_MODE_USB_HOST);
+>> 	phy_set_mode(dwc->usb3_generic_phy[i], PHY_MODE_USB_HOST);
+>> }
+>>
+>> If number of usb2 ports is 3, loop can go from index 0-2 for
+>> usb2_generic_phy. If number of usb3-ports is 2, we don't know for sure,
+>> if the first 2 ports are SS capable or some other ports like (2 and 3)
+>> are SS capable. So instead, num_usb2_ports is used to loop around all
+>> phy's (both hs and ss) for performing phy operations. If any
+>> usb3_generic_phy turns out to be NULL, phy operation just bails out.
+>> num_usb3_ports is used to modify GUSB3PIPECTL registers while setting up
+>> phy's as we need to know how many SS capable ports are there for this.
+>>
+>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+>> Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
+>> ---
+>>   drivers/usb/dwc3/core.c | 61 +++++++++++++++++++++++++++++++++++++++++
+>>   drivers/usb/dwc3/core.h |  5 ++++
+>>   2 files changed, 66 insertions(+)
+>>
+>> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+>> index 3e55838c0001..fab7664c12c0 100644
+>> --- a/drivers/usb/dwc3/core.c
+>> +++ b/drivers/usb/dwc3/core.c
+>> @@ -39,6 +39,7 @@
+>>   #include "io.h"
+>>   
+>>   #include "debug.h"
+>> +#include "../host/xhci-ext-caps.h"
+>>   
+>>   #define DWC3_DEFAULT_AUTOSUSPEND_DELAY	5000 /* ms */
+>>   
+>> @@ -1879,10 +1880,56 @@ static int dwc3_get_clocks(struct dwc3 *dwc)
+>>   	return 0;
+>>   }
+>>   
+>> +static int dwc3_read_port_info(struct dwc3 *dwc)
+>> +{
+>> +	void __iomem *base;
+>> +	u8 major_revision;
+>> +	u32 offset;
+>> +	u32 val;
+>> +
+>> +	/*
+>> +	 * Remap xHCI address space to access XHCI ext cap regs since it is
+>> +	 * needed to get information on number of ports present.
+>> +	 */
+>> +	base = ioremap(dwc->xhci_resources[0].start,
+>> +		       resource_size(&dwc->xhci_resources[0]));
+>> +	if (IS_ERR(base))
+>> +		return PTR_ERR(base);
 > 
-> Signed-off-by: Christoph Hellwig<hch@lst.de>
+> Looks like you forgot to address some of the comments you said you'd
+> update previously if you submit a new version to the series.
+> 
+> [*] https://lore.kernel.org/linux-usb/af73110d-e13e-4183-af11-aed869ac0a31@quicinc.com/
+> 
 
-Reviewed-by: Kanchan Joshi <joshi.k@samsung.com>
+Apologies. I agree. I was too much focused on acpi removal and interrupt 
+cleanup, I forgot the last comment you gave.
+
+Can I send in a separate patch for this ?
+
+Regards,
+Krishna,
 
