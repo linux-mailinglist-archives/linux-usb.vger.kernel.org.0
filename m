@@ -1,59 +1,58 @@
-Return-Path: <linux-usb+bounces-8857-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8858-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C7DD8976CA
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 19:33:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E99DA8976D0
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 19:34:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BDCFC1C29163
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 17:33:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A4C2828929A
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 17:34:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83CD715F3E3;
-	Wed,  3 Apr 2024 17:19:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37E7915FA61;
+	Wed,  3 Apr 2024 17:19:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X4J3pXvH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FF4/ZhxP"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0484F15382D;
-	Wed,  3 Apr 2024 17:19:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADA6415F414;
+	Wed,  3 Apr 2024 17:19:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712164752; cv=none; b=Khk43NEkBiHU4R7gf2J+9K0oeoAYWYg1miGEeN1XR07FZnc77M/vCUG1P/V6xjKZGrOc1ceOt9NYX7OqNjoD7Fd7XhW70lC1YDWhuxpxiMhJju1KvvBGwQLyjyyjpRPaP+TGLSimCtgLbWub323yxBxGiYLXAB0/G9i7glFXs/M=
+	t=1712164757; cv=none; b=UrhiYb3BqCv28u9DPhQPrKqpCUl8ss/wlI737NEykmzTOmls/wOzyk0C4k0IlFo7MDfZ2+afLFAunS8ZVbBSJUIt9yEG4shidvHkkmB6qIFN7iN3WeZouJDtCIaxELJwLuPjSBUL779XtwhS2KT+dds3w4VNBEdetZK7JOy10Zc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712164752; c=relaxed/simple;
-	bh=eH6n/XrrBzShozVSMmjhzduWadISNU3nrGIZ3CDYUjo=;
+	s=arc-20240116; t=1712164757; c=relaxed/simple;
+	bh=3b+INcSJJSJUy/25aCdkSPAGlKJnV28mox/F4ybfhy0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Nklatk1OxDj/YOgWMY/0aeOd3iga/y76jWAI5X+PFECt002hdBgJJZJG+O4fdE/UZnBxedrFPJhS5JBLjb6FnRbhhM7nx6j1wB4MGkCr0qlCo3+8RS3o7P8t2ME8Fa5wh7CYFW/0dgbfd63PwnZ2yieigxErTb1IsoenkGtImio=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X4J3pXvH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A94EFC433F1;
-	Wed,  3 Apr 2024 17:19:10 +0000 (UTC)
+	 MIME-Version; b=bQCsniwwykKaxG7hDHfDac5eTes04RH9NHQz58WOCEkjH+vC9YbAnlZcqGvnFhuiy2qKSWQpiTBQyU808reXkbR0qHA7ta8gpxE2pOXHILx2dyyA+Ul78XF1HQsq7gfqldyRxpNhdeEmyS5VuzUH8AagLxVi/qw+95UQ+NC2KpY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FF4/ZhxP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B48CC43390;
+	Wed,  3 Apr 2024 17:19:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712164751;
-	bh=eH6n/XrrBzShozVSMmjhzduWadISNU3nrGIZ3CDYUjo=;
+	s=k20201202; t=1712164757;
+	bh=3b+INcSJJSJUy/25aCdkSPAGlKJnV28mox/F4ybfhy0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=X4J3pXvHIbwxi7a2uV67ynx4/MbvF0rRaZSvvhq2KiJtubMSubh+kPsszhSZZtY+F
-	 btQBslG3B2chB97rWpe+QmYV4L9y9ld89ZbaEBJCU6/BFYqZTFhJaJq7yS6MSfJ5Ck
-	 bZVaF01K4RSdL1a4E61fgqgAGSGpy0zY8dTzGiTzJ0kgqeCxfGo3PbJp0X9JwkSTYX
-	 FwPsSfvuYbfFuuEbJbFUKhTz6slgAMLPN48n0yuCuHcyKfIzAduwHp0j0tKAsojwmj
-	 21A41SV0X+r4QuxyI+5kTfR8/0PxnlqkNR6IeFc6wBKog+FB9XjYfDyhyUs00Nyiyh
-	 80RXFY4XO2RfA==
+	b=FF4/ZhxPDzaN1JD1rYooKmIRmPjhkb3MkBd28kz6FO1VtemW3n/HY1zdpO0n7Ysvz
+	 OouhC6vN3WTQSzUGdNF9Du2g3kJxB6LAbi90s3a82y0GmdlvTO9mFFWdKvdbGXEAl0
+	 odPCQ6nKMCuW1KJXahYRyfKtqZUl3nVntsShdIbVw93HUzDxEyA2cJeU6LhRSWoEMx
+	 2DyUSsLKMB13B/Q/wGqhrZ0HosC+K5i/GV2JNXPoKrG1/RS94/uOnTEpdYOGQLuyya
+	 f7B3Gnw4jziuKP44sUGxK+0UzM7QbEf8REoWtyv84H+iUExSvVCZuj0VY2itySYmWw
+	 WGbGa1jLXuTsg==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Karina Yankevich <k.yankevich@omp.ru>,
-	Sergey Shtylyov <s.shtylyov@omp.ru>,
-	Alan Stern <stern@rowland.harvard.edu>,
+Cc: Michael Grzeschik <m.grzeschik@pengutronix.de>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Sasha Levin <sashal@kernel.org>,
-	linux-usb@vger.kernel.org,
-	usb-storage@lists.one-eyed-alien.net
-Subject: [PATCH AUTOSEL 6.1 02/15] usb: storage: sddr55: fix sloppy typing in sddr55_{read|write}_data()
-Date: Wed,  3 Apr 2024 13:18:46 -0400
-Message-ID: <20240403171909.345570-2-sashal@kernel.org>
+	laurent.pinchart@ideasonboard.com,
+	dan.scally@ideasonboard.com,
+	linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.1 04/15] usb: gadget: uvc: mark incomplete frames with UVC_STREAM_ERR
+Date: Wed,  3 Apr 2024 13:18:48 -0400
+Message-ID: <20240403171909.345570-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240403171909.345570-1-sashal@kernel.org>
 References: <20240403171909.345570-1-sashal@kernel.org>
@@ -68,54 +67,37 @@ X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.1.84
 Content-Transfer-Encoding: 8bit
 
-From: Karina Yankevich <k.yankevich@omp.ru>
+From: Michael Grzeschik <m.grzeschik@pengutronix.de>
 
-[ Upstream commit d6429a3555fb29f380c5841a12f5ac3f7444af03 ]
+[ Upstream commit 2a3b7af120477d0571b815ccb8600cafd5ebf02f ]
 
-In sddr55_{read|write}_data(), the address variables are needlessly typed
-as *unsigned long* -- which is 32-bit type on the 32-bit arches and 64-bit
-type on the 64-bit arches; those variables' value should fit into just 3
-command bytes and consists of 10-bit block # (or at least the max block #
-seems to be 1023) and 4-/5-bit page # within a block, so 32-bit *unsigned*
-*int* type should be more than enough...
+If an frame was transmitted incomplete to the host, we set the
+UVC_STREAM_ERR bit in the header for the last request that is going
+to be queued. This way the host will know that it should drop the
+frame instead of trying to display the corrupted content.
 
-Found by Linux Verification Center (linuxtesting.org) with the Svace static
-analysis tool.
-
-[Sergey: rewrote the patch subject/description]
-
-Signed-off-by: Karina Yankevich <k.yankevich@omp.ru>
-Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
-Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
-Link: https://lore.kernel.org/r/4c9485f2-0bfc-591b-bfe7-2059289b554e@omp.ru
+Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+Link: https://lore.kernel.org/r/20240214-uvc-error-tag-v1-2-37659a3877fe@pengutronix.de
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/storage/sddr55.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/usb/gadget/function/uvc_video.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/usb/storage/sddr55.c b/drivers/usb/storage/sddr55.c
-index 15dc25801cdcc..0aa079405d23c 100644
---- a/drivers/usb/storage/sddr55.c
-+++ b/drivers/usb/storage/sddr55.c
-@@ -196,7 +196,7 @@ static int sddr55_read_data(struct us_data *us,
- 	unsigned char *buffer;
+diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
+index e81865978299c..be48d5ab17c7b 100644
+--- a/drivers/usb/gadget/function/uvc_video.c
++++ b/drivers/usb/gadget/function/uvc_video.c
+@@ -35,6 +35,9 @@ uvc_video_encode_header(struct uvc_video *video, struct uvc_buffer *buf,
  
- 	unsigned int pba;
--	unsigned long address;
-+	unsigned int address;
+ 	data[1] = UVC_STREAM_EOH | video->fid;
  
- 	unsigned short pages;
- 	unsigned int len, offset;
-@@ -316,7 +316,7 @@ static int sddr55_write_data(struct us_data *us,
- 
- 	unsigned int pba;
- 	unsigned int new_pba;
--	unsigned long address;
-+	unsigned int address;
- 
- 	unsigned short pages;
- 	int i;
++	if (video->queue.flags & UVC_QUEUE_DROP_INCOMPLETE)
++		data[1] |= UVC_STREAM_ERR;
++
+ 	if (video->queue.buf_used == 0 && ts.tv_sec) {
+ 		/* dwClockFrequency is 48 MHz */
+ 		u32 pts = ((u64)ts.tv_sec * USEC_PER_SEC + ts.tv_nsec / NSEC_PER_USEC) * 48;
 -- 
 2.43.0
 
