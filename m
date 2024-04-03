@@ -1,75 +1,63 @@
-Return-Path: <linux-usb+bounces-8807-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8808-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A1F5896605
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 09:18:58 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 23F6789669C
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 09:36:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CBC421C21CFF
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 07:18:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 553AB1C25435
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 07:36:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C7EC58AAC;
-	Wed,  3 Apr 2024 07:18:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D38E61699;
+	Wed,  3 Apr 2024 07:33:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="He1V0bFo";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="hplba8ka"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="iV76gXcb"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B588A33997;
-	Wed,  3 Apr 2024 07:18:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32FF082D7C;
+	Wed,  3 Apr 2024 07:33:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712128728; cv=none; b=jgGnWo89HkdplvkVTdKSJvakK3iZHzTYAyiZ33GrKnaLNyxBL42i3ppYPNzBimDtOXwFNtHWkuwe68ZtY7vBW+1Dxuai9hXJGaldul+V2A7vKykO3o62FpEQSfzNL8TtgjuATzeayEc3nXmyHg/lx0LIjBzISdbNiIh/utiBBU8=
+	t=1712129618; cv=none; b=VekOKK46ISUV0z0exHFGBu2X9tMI/3JSEDzrf73VBa7s1FsuzfzjLKeC0nhG1ZqgZbTfSr84ao2qhxPFmhcRuh2ibl7G7/ErIvSpiv82sK/MW5jOvQp+ZouHpGwaKuuZ+a2AA6mG1Wa6LlTxXyWaiq7Ilne4H/W2nuVhco/8Vvs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712128728; c=relaxed/simple;
-	bh=2NMbbel6yVSWjNfAFqJd8bsh8/57efJNZF8QLioJjYY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=B5cshY8hQSyvrYIL5JEMyt9qQubYOouWze5mcOS2WYaA6iQEm3tFWqZoJ1ASAM9IqYnG5R4ApgEovI2KszqLUxNG4PtFQfNqXQK2ZTA8wlOSGLwFNC+pXVHGQSnaXDEioOKEwsRpkYU8ycXG/5QyCUveVoowJBCMoBqmSFO9xRM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=He1V0bFo; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=hplba8ka; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap2.dmz-prg2.suse.org (imap2.dmz-prg2.suse.org [10.150.64.98])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 2330935042;
-	Wed,  3 Apr 2024 07:18:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1712128724; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=i909qCo6sAW+mQAG+W4SgHUJRSbwXuiYxcq1jgblK0E=;
-	b=He1V0bFoftNE00jGt7RRzwsGjn57Nwzoud+AJgKez3sxH50dPnd3v5uK29Aq4WZOd8Nzx9
-	Mq7tlUUU/WyHARWBFAJs/L67iqE6YtMhiw5XgqdjmhAwhFsUvSSXkEev5Ws7p1bc7y0DEh
-	2/xhiT2rZAQU4VNZ8HMyW7FyFAkil2A=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1712128724;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=i909qCo6sAW+mQAG+W4SgHUJRSbwXuiYxcq1jgblK0E=;
-	b=hplba8kayCoW5KOiA/Wa7JfBZKCIMvqpXamBE6UafzcWZIOHwyhrtx4pbTo/URdrHhR5pC
-	3vSoW7E38/a6xaBQ==
-Authentication-Results: smtp-out1.suse.de;
-	none
-Received: from imap2.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap2.dmz-prg2.suse.org (Postfix) with ESMTPS id 047181331E;
-	Wed,  3 Apr 2024 07:18:40 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap2.dmz-prg2.suse.org with ESMTPSA
-	id IHBXNtACDWYlEQAAn2gu4w
-	(envelope-from <hare@suse.de>); Wed, 03 Apr 2024 07:18:40 +0000
-Message-ID: <c7d2a479-521d-4724-a238-f1de881750a9@suse.de>
-Date: Wed, 3 Apr 2024 09:18:40 +0200
+	s=arc-20240116; t=1712129618; c=relaxed/simple;
+	bh=A/OR6DO71iCj8J60e0zgSTpWmgsrZqjY3mHCSsVS3Y8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=dVAL+lr3z2FNzy5PXfaRYajskUpU8KbBIDtgFeSIMjYJQts5kvyMy1V4jQ7AZrQxbQ2dlTOkROxexQIbMVNU521NSj3hnP/Bedc0Ons4rFN5E57Rc5LaQuEcjS4dxOeyt5NNE+Pb2k3VpDAFkMH1OjfwLJOw0/8aM59w1qAsvIg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=iV76gXcb; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 4334dt9q013313;
+	Wed, 3 Apr 2024 07:33:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=+Jw9NbToDRM5ffmq/HmPeRrtpdoCyhAFrW68RwEoAh8=; b=iV
+	76gXcbODyTAEhYpCAF3yVID3NTVT6vNT3VFf4qT0sd8UbZCDsck0OlfNxNpfIkFP
+	QkV/h95eyGtvqNV9VKIrtpHWgh3/Kx8dLNQqbcv9VXiD5VVDR7iU1MdMZ+99ktuf
+	+LfXag/eXd9uVSduXaBWxZJorYFacTmS5XBzNNYfV1v2jNz1r+n0eXwbbJgIX+Z/
+	gmaJL+ujz8uhsMy9Kk4KRzQPDRdPW7HtgtF3iueFn9nAHY6VZMMmPDJ3YMPKdnJI
+	ev2WbsOaJlGZ8nkrX5CHyasnlhcxWjR+Ai1VyDl5Pqe94SjLBEDBuRhpJPadLnpj
+	8/Swf/53OtItQlswyMXw==
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3x8xrx0er5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 03 Apr 2024 07:33:31 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 4337XUI1021948
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 3 Apr 2024 07:33:30 GMT
+Received: from [10.216.63.221] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 3 Apr 2024
+ 00:33:24 -0700
+Message-ID: <c30811e6-2a1e-4b26-8b94-7c67000b8568@quicinc.com>
+Date: Wed, 3 Apr 2024 13:03:21 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -77,89 +65,104 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 23/23] block: remove now unused queue limits helpers
+Subject: Re: [PATCH v18 2/9] usb: dwc3: core: Access XHCI address space
+ temporarily to read port info
+To: Johan Hovold <johan@kernel.org>
+CC: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        "Bjorn
+ Andersson" <andersson@kernel.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>,
+        Conor Dooley <conor+dt@kernel.org>, "Felipe
+ Balbi" <balbi@kernel.org>,
+        "devicetree@vger.kernel.org"
+	<devicetree@vger.kernel.org>,
+        "linux-arm-msm@vger.kernel.org"
+	<linux-arm-msm@vger.kernel.org>,
+        "linux-usb@vger.kernel.org"
+	<linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>,
+        "quic_ppratap@quicinc.com"
+	<quic_ppratap@quicinc.com>,
+        "quic_jackp@quicinc.com"
+	<quic_jackp@quicinc.com>,
+        Johan Hovold <johan+linaro@kernel.org>
+References: <20240326113253.3010447-1-quic_kriskura@quicinc.com>
+ <20240326113253.3010447-3-quic_kriskura@quicinc.com>
+ <20240402233218.5kngtj56qellnrmo@synopsys.com>
+ <39010f95-b08f-4a57-b3af-f34eb1069865@quicinc.com>
+ <Zgz_3AspRRfYqOwZ@hovoldconsulting.com>
 Content-Language: en-US
-To: Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
- "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: Damien Le Moal <dlemoal@kernel.org>, Niklas Cassel <cassel@kernel.org>,
- Takashi Sakamoto <o-takashi@sakamocchi.jp>,
- Sathya Prakash <sathya.prakash@broadcom.com>,
- Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
- Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>,
- "Juergen E. Fischer" <fischer@norbit.de>,
- Xiang Chen <chenxiang66@hisilicon.com>,
- HighPoint Linux Team <linux@highpoint-tech.com>,
- Tyrel Datwyler <tyreld@linux.ibm.com>, Brian King <brking@us.ibm.com>,
- Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
- Mike Christie <michael.christie@oracle.com>,
- John Garry <john.g.garry@oracle.com>, Jason Yan <yanaijie@huawei.com>,
- Kashyap Desai <kashyap.desai@broadcom.com>,
- Sumit Saxena <sumit.saxena@broadcom.com>,
- Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
- Chandrakanth patil <chandrakanth.patil@broadcom.com>,
- Jack Wang <jinpu.wang@cloud.ionos.com>, Nilesh Javali <njavali@marvell.com>,
- GR-QLogic-Storage-Upstream@marvell.com,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Alim Akhtar <alim.akhtar@samsung.com>, Avri Altman <avri.altman@wdc.com>,
- Bart Van Assche <bvanassche@acm.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- Alan Stern <stern@rowland.harvard.edu>, linux-block@vger.kernel.org,
- linux-ide@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
- MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
- megaraidlinux.pdl@broadcom.com, mpi3mr-linuxdrv.pdl@broadcom.com,
- linux-samsung-soc@vger.kernel.org, linux-usb@vger.kernel.org,
- usb-storage@lists.one-eyed-alien.net
-References: <20240402130645.653507-1-hch@lst.de>
- <20240402130645.653507-24-hch@lst.de>
-From: Hannes Reinecke <hare@suse.de>
-In-Reply-To: <20240402130645.653507-24-hch@lst.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Score: -3.16
-X-Spamd-Result: default: False [-3.16 / 50.00];
-	 ARC_NA(0.00)[];
-	 RCVD_VIA_SMTP_AUTH(0.00)[];
-	 XM_UA_NO_VERSION(0.01)[];
-	 FROM_HAS_DN(0.00)[];
-	 TO_DN_SOME(0.00)[];
-	 TO_MATCH_ENVRCPT_ALL(0.00)[];
-	 BAYES_HAM(-1.87)[94.28%];
-	 MIME_GOOD(-0.10)[text/plain];
-	 NEURAL_HAM_LONG(-1.00)[-1.000];
-	 RCVD_COUNT_THREE(0.00)[3];
-	 DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	 NEURAL_HAM_SHORT(-0.20)[-0.999];
-	 RCPT_COUNT_TWELVE(0.00)[42];
-	 DBL_BLOCKED_OPENRESOLVER(0.00)[acm.org:email,suse.de:email,lst.de:email];
-	 FUZZY_BLOCKED(0.00)[rspamd.com];
-	 FROM_EQ_ENVFROM(0.00)[];
-	 MIME_TRACE(0.00)[0:+];
-	 RCVD_TLS_ALL(0.00)[];
-	 MID_RHS_MATCH_FROM(0.00)[]
-X-Spam-Level: 
-X-Spam-Flag: NO
+From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <Zgz_3AspRRfYqOwZ@hovoldconsulting.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 0TmoQqVEfHcWGL7ekMy2hSYiQF2HMnKF
+X-Proofpoint-ORIG-GUID: 0TmoQqVEfHcWGL7ekMy2hSYiQF2HMnKF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-04-03_06,2024-04-01_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
+ spamscore=0 adultscore=0 bulkscore=0 suspectscore=0 lowpriorityscore=0
+ phishscore=0 impostorscore=0 priorityscore=1501 mlxscore=0 mlxlogscore=875
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2403210001
+ definitions=main-2404030050
 
-On 4/2/24 15:06, Christoph Hellwig wrote:
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> Reviewed-by: Bart Van Assche <bvanassche@acm.org>
-> Reviewed-by: John Garry <john.g.garry@oracle.com>
-> Reviewed-by: Damien Le Moal <dlemoal@kernel.org>
-> ---
->   block/blk-settings.c           | 245 ---------------------------------
->   drivers/s390/block/dasd_eckd.c |   6 +-
->   include/linux/blkdev.h         |  13 --
->   include/linux/mmc/host.h       |   4 +-
->   4 files changed, 5 insertions(+), 263 deletions(-)
+
+
+On 4/3/2024 12:36 PM, Johan Hovold wrote:
+> On Wed, Apr 03, 2024 at 10:54:25AM +0530, Krishna Kurapati PSSNV wrote:
+>   
+>>>> +static int dwc3_read_port_info(struct dwc3 *dwc)
+>>>> +{
+>>>> +	void __iomem *base;
+>>>> +	u8 major_revision;
+>>>> +	u32 offset;
+>>>> +	u32 val;
+>>>> +
+>>>> +	/*
+>>>> +	 * Remap xHCI address space to access XHCI ext cap regs since it is
+>>>> +	 * needed to get information on number of ports present.
+>>>> +	 */
+>>>> +	base = ioremap(dwc->xhci_resources[0].start,
+>>>> +		       resource_size(&dwc->xhci_resources[0]));
+>>>> +	if (IS_ERR(base))
+>>>> +		return PTR_ERR(base);
+>>>
+>>> Looks like you forgot to address some of the comments you said you'd
+>>> update previously if you submit a new version to the series.
+>>>
+>>> [*] https://lore.kernel.org/linux-usb/af73110d-e13e-4183-af11-aed869ac0a31@quicinc.com/
+>>>
+>>
+>> Apologies. I agree. I was too much focused on acpi removal and interrupt
+>> cleanup, I forgot the last comment you gave.
+>>
+>> Can I send in a separate patch for this ?
 > 
-Reviewed-by: Hannes Reinecke <hare@suse.de>
+> The series has not been merged yet so you can address both issues in a
+> v19. Perhaps wait a day or two in case Thinh has further comments.
+> 
 
-Cheers,
+Sure Johan.
 
-Hannes
--- 
-Dr. Hannes Reinecke                  Kernel Storage Architect
-hare@suse.de                                +49 911 74053 688
-SUSE Software Solutions GmbH, Frankenstr. 146, 90461 Nürnberg
-HRB 36809 (AG Nürnberg), GF: I. Totev, A. McDonald, W. Knoblich
+Also after making the following two changes:
 
+1. Rename dwc3_read_port_info(...) to dwc3_get_num_ports(...)
+2. Changing "if (IS_ERR(base))" to "if (!base)"
+
+Can I still retain your RB tag ?
+
+Regards,
+Krishna,
 
