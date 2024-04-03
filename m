@@ -1,61 +1,62 @@
-Return-Path: <linux-usb+bounces-8852-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8865-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3817897802
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 20:17:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id AF1E489783F
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 20:29:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 54FC3B31A9B
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 17:29:22 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 15539B33A69
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 17:38:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 878AD159211;
-	Wed,  3 Apr 2024 17:18:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDBD116C68B;
+	Wed,  3 Apr 2024 17:19:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cZN/uooR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MPX2/GBu"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3F701591FC;
-	Wed,  3 Apr 2024 17:18:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4940516C459;
+	Wed,  3 Apr 2024 17:19:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712164705; cv=none; b=kcrmK0uMh8ybYhAabWY3HW3lyWMBBU81TVcjq33rloQiKya7QH+zW+4rP+RmbiI1tR1ubs1IB812RLwdTgBbQs71OJgT88t7F12KXdDzOZAs/O1jKsogjsFzHJebsM+xts8BYDCLNdEFGzf4XtJF1B7odSAAZiult3CV/xpc6qg=
+	t=1712164793; cv=none; b=IB3n9z/sS6nAJGCCzpRcwq8vsJppRKQgxmliY6BsxpYeynZEBc8NSs1fkcQ7XU4ArMw+v2pBdKjIhshxJn2xr5TILfzvozFtKzO9hg6gw/vGiEFFXo/wCkSYBEb+Ftg+JqnVqN6SsRvbugF+8PHQ3n7L96i7aYqvXsVR2EUS/2A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712164705; c=relaxed/simple;
-	bh=AeKmAdl4pViMytfg9tD4t0EtqD9ZeJOer8TWoZ6U40Y=;
+	s=arc-20240116; t=1712164793; c=relaxed/simple;
+	bh=cxFHtwCOC32ukJTfuk0w2xaUECzsrt/GTn2WtXZd2DY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SMlEwDkC13wYkm6J3sbx/eFAYUSgFpI6QPj918VrbSymLkN/qL5/Td6QktlifguaFuQIhyv9989aKQqWhTWb7n1oA7wYYoQgD+iDfsb0u515EqVM+YC8vkxJg9xyvn6swNSrocj9QNGLhNAbg8LFQeDXTvBinyUlm3vH4j1mrKM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cZN/uooR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C76BC433F1;
-	Wed,  3 Apr 2024 17:18:23 +0000 (UTC)
+	 MIME-Version; b=pCayemufMmVw9m6AiZ/SK7k4I+6bvPgCpsaXJxWR1aUyH4JUdPHUIioHN2f6e29kFikzGaqMyvMzAoXFVRm6VrjowZnDMxs+gWd6qi0/TgAVcjGm7Eoe7SeILvjhnRNUpqZsIpQkeewGWP1VD8wURGxRBNKzL5a665ts5f6kzzg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MPX2/GBu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28DF8C433F1;
+	Wed,  3 Apr 2024 17:19:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712164704;
-	bh=AeKmAdl4pViMytfg9tD4t0EtqD9ZeJOer8TWoZ6U40Y=;
+	s=k20201202; t=1712164793;
+	bh=cxFHtwCOC32ukJTfuk0w2xaUECzsrt/GTn2WtXZd2DY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=cZN/uooRg2oXjvJhvvTlBvTmcDW7V1EtxPQcPyexRgT9D55kxapqMBGuaq8qicooi
-	 MMRWyEuK/KMJJeGv6eqL9nzG9SZWcvBwYBKzMhIYnV90dm47saTQgGbxxfGKNLNFbF
-	 B6+gQv2Dt6Mp5CprpWzNBdgIrPoIOHPfpyg+C8AQ+l7F8pDIsuS6yn2DhIvq3+oXv8
-	 1tNWsPlPtZea1+dieH0r4fIdslHqpwcoy7xeSZoKgGK4jCeSkTbS2fb4hsprSNe3b+
-	 uVU290Zcphv4RwWXniKDHSV/ibseceftZ1YGx3hLET5AE7uo//rFlH17nczpTy6wal
-	 YM9eeu+g0YGIQ==
+	b=MPX2/GBuNBZR30M8VFIk6e+fBb2865NA5uPLXgsLcOgKJSD2ALyQs2kg2uf4nDrCF
+	 /WU4we1IIK/djUcAtZx87dYjhxWGsxBpfjgZNHx+DPeEtizvdKXqOXtMyImWfIGI9x
+	 FCrYO9huEhmoabT2pXGo2J2fvlUNJXsjU4laqXF9uWufZRUPTN96OScO7XMlxdqmMf
+	 yFLqPMN5MV4E3cKcCMH+GdBz8b2Pt1VfQsGoPvYCoLb2dkpRcP3aIXl0tFVIaI8xJb
+	 aUt4A1tMDOKRp2Hf08bnhXARSWPoJeLW4ix6mTkx7DTynmY7tZ8FDuKNxKxLsq5u01
+	 ZE2r+145aRFQg==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Michael Grzeschik <m.grzeschik@pengutronix.de>,
+Cc: Colin Ian King <colin.i.king@gmail.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Sasha Levin <sashal@kernel.org>,
-	laurent.pinchart@ideasonboard.com,
-	dan.scally@ideasonboard.com,
-	linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.6 05/20] usb: gadget: uvc: mark incomplete frames with UVC_STREAM_ERR
-Date: Wed,  3 Apr 2024 13:17:46 -0400
-Message-ID: <20240403171815.342668-5-sashal@kernel.org>
+	nathan@kernel.org,
+	u.kleine-koenig@pengutronix.de,
+	linux-usb@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH AUTOSEL 5.15 4/8] usb: sl811-hcd: only defined function checkdone if QUIRK2 is defined
+Date: Wed,  3 Apr 2024 13:19:37 -0400
+Message-ID: <20240403171945.350716-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240403171815.342668-1-sashal@kernel.org>
-References: <20240403171815.342668-1-sashal@kernel.org>
+In-Reply-To: <20240403171945.350716-1-sashal@kernel.org>
+References: <20240403171945.350716-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -64,40 +65,48 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.6.24
+X-stable-base: Linux 5.15.153
 Content-Transfer-Encoding: 8bit
 
-From: Michael Grzeschik <m.grzeschik@pengutronix.de>
+From: Colin Ian King <colin.i.king@gmail.com>
 
-[ Upstream commit 2a3b7af120477d0571b815ccb8600cafd5ebf02f ]
+[ Upstream commit 12f371e2b6cb4b79c788f1f073992e115f4ca918 ]
 
-If an frame was transmitted incomplete to the host, we set the
-UVC_STREAM_ERR bit in the header for the last request that is going
-to be queued. This way the host will know that it should drop the
-frame instead of trying to display the corrupted content.
+Function checkdone is only required if QUIRK2 is defined, so add
+appropriate #if / #endif around the function.
 
-Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
-Link: https://lore.kernel.org/r/20240214-uvc-error-tag-v1-2-37659a3877fe@pengutronix.de
+Cleans up clang scan build warning:
+drivers/usb/host/sl811-hcd.c:588:18: warning: unused function
+'checkdone' [-Wunused-function]
+
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+Link: https://lore.kernel.org/r/20240307111351.1982382-1-colin.i.king@gmail.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/gadget/function/uvc_video.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/usb/host/sl811-hcd.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
-index 91af3b1ef0d41..281e75027b344 100644
---- a/drivers/usb/gadget/function/uvc_video.c
-+++ b/drivers/usb/gadget/function/uvc_video.c
-@@ -35,6 +35,9 @@ uvc_video_encode_header(struct uvc_video *video, struct uvc_buffer *buf,
+diff --git a/drivers/usb/host/sl811-hcd.c b/drivers/usb/host/sl811-hcd.c
+index 825ff67273102..d3de9f47552d0 100644
+--- a/drivers/usb/host/sl811-hcd.c
++++ b/drivers/usb/host/sl811-hcd.c
+@@ -585,6 +585,7 @@ done(struct sl811 *sl811, struct sl811h_ep *ep, u8 bank)
+ 		finish_request(sl811, ep, urb, urbstat);
+ }
  
- 	data[1] = UVC_STREAM_EOH | video->fid;
++#ifdef QUIRK2
+ static inline u8 checkdone(struct sl811 *sl811)
+ {
+ 	u8	ctl;
+@@ -616,6 +617,7 @@ static inline u8 checkdone(struct sl811 *sl811)
+ #endif
+ 	return irqstat;
+ }
++#endif
  
-+	if (video->queue.flags & UVC_QUEUE_DROP_INCOMPLETE)
-+		data[1] |= UVC_STREAM_ERR;
-+
- 	if (video->queue.buf_used == 0 && ts.tv_sec) {
- 		/* dwClockFrequency is 48 MHz */
- 		u32 pts = ((u64)ts.tv_sec * USEC_PER_SEC + ts.tv_nsec / NSEC_PER_USEC) * 48;
+ static irqreturn_t sl811h_irq(struct usb_hcd *hcd)
+ {
 -- 
 2.43.0
 
