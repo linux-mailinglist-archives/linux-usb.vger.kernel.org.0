@@ -1,127 +1,147 @@
-Return-Path: <linux-usb+bounces-8812-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8813-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1BF5F896859
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 10:22:26 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE452896882
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 10:26:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C8C70289D24
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 08:22:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 63FD51F22C42
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 08:26:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A51AF6F076;
-	Wed,  3 Apr 2024 08:11:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDDBC811F7;
+	Wed,  3 Apr 2024 08:17:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KA2BvgOZ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GPnQP6tW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B00F13FD7E;
-	Wed,  3 Apr 2024 08:11:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4494D6D1BC
+	for <linux-usb@vger.kernel.org>; Wed,  3 Apr 2024 08:17:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712131881; cv=none; b=tzMb6HW6q+vRMHyyypMM7q7AtxV0/igkzveFSR+oX+ZgtNdzQ2bzOR+UGSfKbUH9qhxQgz27N8JSwKhpzD2c/OAcOzQqZ/UuqjG66RU359x1C+u9oEasLGq3hIiP3t4KKldZxbCSA+rFHS0rjtldY4qONBuxOu3TF5MMG67Fip0=
+	t=1712132239; cv=none; b=k+uPI/JtVVj8KGlpbKSn2CP7U2lhrZybnAIs2Nt1IhowUfu/PEZFzZ2TNck4LiHoiqWpw4DbQjvUop/o69wPqZ7KN84eV0ay53NzZFCGOdLxUyJAYJhjjb3vMK4nTR5ux3OgwM+3FalVhgCAdERRXmIlbZocilyGlYIqpU5VFEQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712131881; c=relaxed/simple;
-	bh=0liwis3knuJplIlsLI48oLG63cRfb9QsB+onh6JK9F0=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=qd+fXwYgisTj935RvDXOzJQifb+k24in4rC1nl6zvRQo10Dlt4UvCI92zL1C0jg0nWw5ztUflz7XbOgVLTlN6Q0YNn1ejlvau4RNGUsW4RQQGjTMhoYg2fPemLv8J41FChR4m4ANBIAEP8weOD3q6Aayysp74SoEkFL+UFsOqiQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KA2BvgOZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CCDDC433C7;
-	Wed,  3 Apr 2024 08:11:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712131880;
-	bh=0liwis3knuJplIlsLI48oLG63cRfb9QsB+onh6JK9F0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=KA2BvgOZ0aKADiJYSLZEt38u+ZxvwcPS5kbp9hKULRkrMO30PMZkChHNsikGdAPSZ
-	 a4fT2buKxH39mNkm+K3hGG6YhApMU1tf+Pk3MYGngKqYCXkbjwETYFG3pPDdEI7Bym
-	 lqTXztk2Y495V4EqJQ7TXXN37sIsRumgW3wyA/ao2JjdJrIBQZGY6qQSiZIKewOWyN
-	 pvaPlJVASLhLMBJ3MyWl8GmjN7Yip72P137ky2jfTjB7xkl1KNNIT/HACG9tRlkrSy
-	 gMlm/mD5ZJZ3bR7bhh/pL+K9zNAbDXUHqGwzAiZMqu8MuPRlw5AB/jnm3O50fdvmPZ
-	 DvRo3K+1oIfdw==
-From: Arnd Bergmann <arnd@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-	Aaro Koskinen <aaro.koskinen@iki.fi>,
-	linux-usb@vger.kernel.org
-Subject: [PATCH 25/34] usb: gadget: omap_udc: remove unused variable
-Date: Wed,  3 Apr 2024 10:06:43 +0200
-Message-Id: <20240403080702.3509288-26-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240403080702.3509288-1-arnd@kernel.org>
-References: <20240403080702.3509288-1-arnd@kernel.org>
+	s=arc-20240116; t=1712132239; c=relaxed/simple;
+	bh=Ye+i/FfZE9pCJ9TvhMprGJIpmDSYa8oJEzHGJHGlEIk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=T+Fvu8K4hWathOGY5UkGz8puYFZe8kzUbd8uM8SNh0mQaW7Kydbn42Ygjb6QhLwE8W8FoijuYeoKEZs9aZHasWGPlbxA1uuHGnAqgxdMczoOor/+9SwF6bwbg2tkx7PY37qApEBUDEiREDGNS1qhdfKdOrFoCF8wdV4Q7VfE6SI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GPnQP6tW; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1712132237; x=1743668237;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Ye+i/FfZE9pCJ9TvhMprGJIpmDSYa8oJEzHGJHGlEIk=;
+  b=GPnQP6tWOk+6syi81LbVsPpZx5qZnXkum2B/2z7H2pU8AQbl/RquvCFh
+   2If4zybbf7OWnQZPYb+QR5EHJGHFh1Hy1bK1uL2S/CeSjP1SkiCe5dGaU
+   w1ck/ACuJ74ymkQHYdJBQZQTYrQrw0e2cekVKs33eyoiso3swU750bq1v
+   1lyFV0QqGJFBATQfEKjSjG6D35wGb6p8xQX7uUWm0iPNC0kbStU1CEHva
+   yC0QecOyiB85gi4jbxf4uaRSwf6brpGqz2fzDxUknxICKDafyMlELvq/S
+   M2hsQ0F2m7iZyIljcE/Oi5IULb08ZFaGuU2LE3q3o2Mtw5Kx9hWd1VYYk
+   g==;
+X-CSE-ConnectionGUID: AorA02ozQT2lPIjwmlPkiQ==
+X-CSE-MsgGUID: +/65H3k/SSaawpQRXqflKA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11032"; a="7217135"
+X-IronPort-AV: E=Sophos;i="6.07,176,1708416000"; 
+   d="scan'208";a="7217135"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2024 01:17:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,11032"; a="937084554"
+X-IronPort-AV: E=Sophos;i="6.07,176,1708416000"; 
+   d="scan'208";a="937084554"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmsmga001.fm.intel.com with ESMTP; 03 Apr 2024 01:17:15 -0700
+Message-ID: <f4426285-9ca5-fc66-3d24-fd826dcbd21d@linux.intel.com>
+Date: Wed, 3 Apr 2024 11:19:02 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.13.0
+Subject: Re: [PATCH 2/9] xhci: replace real & fake port with pointer to root
+ hub port
+Content-Language: en-US
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+ "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+ Niklas Neronin <niklas.neronin@intel.com>
+References: <20240229141438.619372-1-mathias.nyman@linux.intel.com>
+ <20240229141438.619372-3-mathias.nyman@linux.intel.com>
+ <20240402005007.klv2ij727fkz7rpd@synopsys.com>
+ <7726873f-940f-fe88-f065-2ef23edd3ab1@linux.intel.com>
+ <20240402231333.6cqttc34udx5nzhu@synopsys.com>
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <20240402231333.6cqttc34udx5nzhu@synopsys.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: Arnd Bergmann <arnd@arndb.de>
+On 3.4.2024 2.13, Thinh Nguyen wrote:
+> On Tue, Apr 02, 2024, Mathias Nyman wrote:
+>> Hi Thinh
+>>
+>> On 2.4.2024 3.50, Thinh Nguyen wrote:
+>>> Hi Mathias,
+>>>
+>>> We're getting a NULL pointer dereference bug for this patch. To
+>>> reproduce this, just unload and reload the xhci driver while a device is
+>>> connected. It may take a few times to hit the issue.
+>>>
+>> how about this:
+>>
+>> diff --git a/drivers/usb/host/xhci-trace.h b/drivers/usb/host/xhci-trace.h
+>> index 1740000d54c2..5762564b9d73 100644
+>> --- a/drivers/usb/host/xhci-trace.h
+>> +++ b/drivers/usb/host/xhci-trace.h
+>> @@ -172,8 +172,7 @@ DECLARE_EVENT_CLASS(xhci_log_free_virt_dev,
+>>                  __field(void *, vdev)
+>>                  __field(unsigned long long, out_ctx)
+>>                  __field(unsigned long long, in_ctx)
+>> -               __field(int, hcd_portnum)
+>> -               __field(int, hw_portnum)
+>> +               __field(int, slot_id)
+>>                  __field(u16, current_mel)
+>>          ),
+>> @@ -181,13 +180,12 @@ DECLARE_EVENT_CLASS(xhci_log_free_virt_dev,
+>>                  __entry->vdev = vdev;
+>>                  __entry->in_ctx = (unsigned long long) vdev->in_ctx->dma;
+>>                  __entry->out_ctx = (unsigned long long) vdev->out_ctx->dma;
+>> -               __entry->hcd_portnum = (int) vdev->rhub_port->hcd_portnum;
+>> -               __entry->hw_portnum = (int) vdev->rhub_port->hw_portnum;
+>> +               __entry->slot_id = (int) vdev->slot_id;
+>>                  __entry->current_mel = (u16) vdev->current_mel;
+>>                  ),
+>> -       TP_printk("vdev %p ctx %llx | %llx hcd_portnum %d hw_portnum %d current_mel %d",
+>> -               __entry->vdev, __entry->in_ctx, __entry->out_ctx,
+>> -               __entry->hcd_portnum, __entry->hw_portnum, __entry->current_mel
+>> +       TP_printk("vdev %p slot %d ctx %llx | %llx current_mel %d",
+>> +               __entry->vdev, __entry->slot_id, __entry->in_ctx,
+>> +               __entry->out_ctx, __entry->current_mel
+>>          )
+>>   );
+> 
+> That looks good to me. Can you submit the change?
 
-The driver_desc variable is only used in some configurations:
+yes, I'll submit the change
 
-drivers/usb/gadget/udc/omap_udc.c:113:19: error: unused variable 'driver_desc' [-Werror,-Wunused-const-variable]
+> 
+> On an unrelated note, often we have to debug xHCI driver on a system
+> with multiple xHCI controllers. I'm not sure if there's a good way to
+> filter the xHCI tracepoints to a specific controller? I needed to print
+> the devname for each tracepoint just to get around this, which doesn't
+> seem like a great solution. Any idea?
 
-Since there is only ever one user of it, just open-code the string in place
-and remove the global variable and the macro behind it. This also helps
-grep for the MODULE_DESCRIPTION string.
+I'm facing similar debugging issues, I'll look into it.
 
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/usb/gadget/udc/omap_udc.c | 10 +++-------
- 1 file changed, 3 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/usb/gadget/udc/omap_udc.c b/drivers/usb/gadget/udc/omap_udc.c
-index f90eeecf27de..e13b8ec8ef8a 100644
---- a/drivers/usb/gadget/udc/omap_udc.c
-+++ b/drivers/usb/gadget/udc/omap_udc.c
-@@ -56,7 +56,6 @@
- /* ISO too */
- #define	USE_ISO
- 
--#define	DRIVER_DESC	"OMAP UDC driver"
- #define	DRIVER_VERSION	"4 October 2004"
- 
- #define OMAP_DMA_USB_W2FC_TX0		29
-@@ -110,7 +109,6 @@ MODULE_PARM_DESC(use_dma, "enable/disable DMA");
- 
- 
- static const char driver_name[] = "omap_udc";
--static const char driver_desc[] = DRIVER_DESC;
- 
- /*-------------------------------------------------------------------------*/
- 
-@@ -2299,13 +2297,11 @@ static int proc_udc_show(struct seq_file *s, void *_)
- 
- 	spin_lock_irqsave(&udc->lock, flags);
- 
--	seq_printf(s, "%s, version: " DRIVER_VERSION
-+	seq_printf(s, "OMAP UDC driver, version: " DRIVER_VERSION
- #ifdef	USE_ISO
- 		" (iso)"
- #endif
--		"%s\n",
--		driver_desc,
--		use_dma ?  " (dma)" : "");
-+		"%s\n", use_dma ?  " (dma)" : "");
- 
- 	tmp = omap_readw(UDC_REV) & 0xff;
- 	seq_printf(s,
-@@ -2994,6 +2990,6 @@ static struct platform_driver udc_driver = {
- 
- module_platform_driver(udc_driver);
- 
--MODULE_DESCRIPTION(DRIVER_DESC);
-+MODULE_DESCRIPTION("OMAP UDC driver");
- MODULE_LICENSE("GPL");
- MODULE_ALIAS("platform:omap_udc");
--- 
-2.39.2
+Thanks
+Mathias
 
 
