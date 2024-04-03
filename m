@@ -1,69 +1,68 @@
-Return-Path: <linux-usb+bounces-8826-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8827-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78B5B896CFC
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 12:45:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 097EB896D12
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 12:46:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9B59D1C27B85
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 10:45:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3B1721C26685
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 10:46:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC002141987;
-	Wed,  3 Apr 2024 10:44:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E6A4139CF3;
+	Wed,  3 Apr 2024 10:46:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kqv1XO6/"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lc4xMIj/"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51062433AD;
-	Wed,  3 Apr 2024 10:44:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8F43137C47;
+	Wed,  3 Apr 2024 10:46:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712141045; cv=none; b=QwQkDKjuEpZIjMHB4hFsekh9sDjEm2qDVGS3PGldb+tpyFiLK6me9IQ5nqZYGmN10Tgxi1sYs0U+KUahsZeB2KAstV/H1ET42yiZKdMndfFidGNZ0LodpsqtX6ht8W5ADM1FUEwAJviKfPVnjxbGZY/qtiAqo4OPkyIOsyXIPA8=
+	t=1712141166; cv=none; b=jY2/rt7GR58JOqIm7VG0e7kajBB5hVnI24f6X7U/RRgwX/6EVNg1c6lEUz0K0uz4GIm62ofDb50wsAjuDkf6wWdJKmLnUIdPAuh/PfjUZA52Ivkp+PF86LqW3FGU/+rLf72JD8t87vZKBiJm0fFgWO82KKHER905s8Dq85HQ7dE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712141045; c=relaxed/simple;
-	bh=gFVgV8VnIJkjPewJOuua6XWcrrzgQB0ahlVwO9D7s08=;
+	s=arc-20240116; t=1712141166; c=relaxed/simple;
+	bh=J14sLh9bFuqxnc7SY8mcH1I46NF5bOyBXqn1GfbFCjU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CLZTZEAIiPlG7IFzkF/Thh6LBMffTh4O4w/6/GbaCwgjtJDROVwVSmu2ujYn2/bJ7DW/QqsaHNKn/wxj0VjXkgxYuCPSHxteEAl+KQZCvF6ghWH1iDzleU4dVxsjjsl96KaFqp1kaToNx0j2b0y3/EoaYHu3O8z2UgeNppBHLSU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kqv1XO6/; arc=none smtp.client-ip=192.198.163.13
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZO1iSE1N+G1lgHWDAfDnNoy2s5RMej+eMuGuI05pg19nYEBAVmQNnM+BQolLYVXk3DR98FVf72WeWhxsYSXdk9O7CYadH52G4qzzzyQFAVO7brdRMmpBspWjFOtl/sbbbtn3yJr0YW/mIYGFcjt0TiuuiMQ9BIyUQFrnsIva5R8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lc4xMIj/; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712141044; x=1743677044;
+  t=1712141163; x=1743677163;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=gFVgV8VnIJkjPewJOuua6XWcrrzgQB0ahlVwO9D7s08=;
-  b=kqv1XO6/jE3QAq96Y1dUPF/V+hncVfDZ0b5boI8aDShPnewRZWYD+NSQ
-   0R6P+OfMHGq0+PpmhY7B6FJa/VAzGDQrqP97oGyR4KtS76cHg61ipEKMi
-   yq9rj1VkxLJsmE+eycT01nqQ00urIb8h7d5NQ+1trS02hkiYPLALn7p5b
-   msn6htThA84T0RAieeMlX8MERozl6aLrUlunsHjeViIVc8BUD42oyDNCq
-   SPXdR8/3LkH3Zu6II49saTCV2fvwR5d7v86A983dMIiOQOVa+OcQjJz7K
-   u7iPr3rD+EeUx1TApUHYdu/yxlWjUH4lDOzy0LDT24qGkdz4ZGoah4LYs
+  bh=J14sLh9bFuqxnc7SY8mcH1I46NF5bOyBXqn1GfbFCjU=;
+  b=lc4xMIj/ErGGynXfSfPP0BdJdiQFl/17qLNnIvfU8AbxYiTCME1nlShc
+   aooSh+7uRyuiuZ1yiYT1JOuRwvEOM5LTBinKJqA58fw97b4353rlFndpQ
+   mGYDxnUNzvOtorVrqBzt/0TPOwm/KunAkQehJSXDcas/2MaC069jfZosn
+   ixGgMi9R00o9U0n13+Mv1p4jhNaCiTfhcQAPY0pbdb5WhfRX4nbMEXVtd
+   LS88l/t26c0q8jsn1XDPatEHKPBoIW+trAwvmjp8HkoBoxtd1x/LaeiS6
+   FTfTKQU1WsetOZ7CYpyt2gv2uU+YJm9Xfmj2MrwofY6ZukD4poJ4unzcv
    A==;
-X-CSE-ConnectionGUID: m/gP52CeSF6dal/sMK+SqA==
-X-CSE-MsgGUID: SLHEopTtS9yYtBrRqcrIog==
-X-IronPort-AV: E=McAfee;i="6600,9927,11032"; a="10331690"
+X-CSE-ConnectionGUID: tpbvA0bOSlaq5P6GCgT0DA==
+X-CSE-MsgGUID: L786OjHCREqIcLOnuY+oaQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11032"; a="10332529"
 X-IronPort-AV: E=Sophos;i="6.07,177,1708416000"; 
-   d="scan'208";a="10331690"
+   d="scan'208";a="10332529"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2024 03:40:50 -0700
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2024 03:42:31 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11032"; a="937084845"
+X-IronPort-AV: E=McAfee;i="6600,9927,11032"; a="937084846"
 X-IronPort-AV: E=Sophos;i="6.07,177,1708416000"; 
-   d="scan'208";a="937084845"
+   d="scan'208";a="937084846"
 Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 03 Apr 2024 03:40:45 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 03 Apr 2024 13:40:45 +0300
-Date: Wed, 3 Apr 2024 13:40:45 +0300
+  by fmsmga001.fm.intel.com with SMTP; 03 Apr 2024 03:42:26 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 03 Apr 2024 13:42:26 +0300
+Date: Wed, 3 Apr 2024 13:42:26 +0300
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To: "Christian A. Ehrhardt" <lk@c--e.de>
 Cc: linux-kernel@vger.kernel.org,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, stable@kernel.org,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Prashant Malani <pmalani@chromium.org>,
 	Jameson Thies <jthies@google.com>,
@@ -72,10 +71,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
 	Samuel =?utf-8?B?xIxhdm9q?= <samuel@cavoj.net>,
 	linux-usb@vger.kernel.org
-Subject: Re: [PATCH 3/3] usb: typec: ucsi_acpi: Remove Dell quirk
-Message-ID: <Zg0yLXfVa0wmA2GZ@kuha.fi.intel.com>
-References: <20240327224554.1772525-1-lk@c--e.de>
- <20240327224554.1772525-4-lk@c--e.de>
+Subject: Re: [PATCH] usb: typec: ucsi: Fix connector check on init
+Message-ID: <Zg0yksaQaGy+ZOaI@kuha.fi.intel.com>
+References: <20240401210515.1902048-1-lk@c--e.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -84,105 +82,44 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240327224554.1772525-4-lk@c--e.de>
+In-Reply-To: <20240401210515.1902048-1-lk@c--e.de>
 
-On Wed, Mar 27, 2024 at 11:45:54PM +0100, Christian A. Ehrhardt wrote:
-> The Dell quirk from ucsi_acpi.c. The quirk is no longer
-> necessary as we no longer send lone connector change acks.
+On Mon, Apr 01, 2024 at 11:05:15PM +0200, Christian A. Ehrhardt wrote:
+> Fix issues when initially checking for a connector change:
+> - Use the correct connector number not the entire CCI.
+> - Call ->read under the PPM lock.
+> - Remove a bogus READ_ONCE.
 > 
+> Fixes: 808a8b9e0b87 ("usb: typec: ucsi: Check for notifications after init")
+> Cc: stable@kernel.org
 > Signed-off-by: Christian A. Ehrhardt <lk@c--e.de>
 
 Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
 > ---
->  drivers/usb/typec/ucsi/ucsi_acpi.c | 53 +-----------------------------
->  1 file changed, 1 insertion(+), 52 deletions(-)
+>  drivers/usb/typec/ucsi/ucsi.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/usb/typec/ucsi/ucsi_acpi.c b/drivers/usb/typec/ucsi/ucsi_acpi.c
-> index cc03a49c589c..8d112c3edae5 100644
-> --- a/drivers/usb/typec/ucsi/ucsi_acpi.c
-> +++ b/drivers/usb/typec/ucsi/ucsi_acpi.c
-> @@ -23,7 +23,6 @@ struct ucsi_acpi {
->  	void *base;
->  	struct completion complete;
->  	unsigned long flags;
-> -#define UCSI_ACPI_SUPPRESS_EVENT	0
->  #define UCSI_ACPI_COMMAND_PENDING	1
->  #define UCSI_ACPI_ACK_PENDING		2
->  	guid_t guid;
-> @@ -129,49 +128,6 @@ static const struct ucsi_operations ucsi_zenbook_ops = {
->  	.async_write = ucsi_acpi_async_write
->  };
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index 31d8a46ae5e7..bd6ae92aa39e 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -1736,11 +1736,13 @@ static int ucsi_init(struct ucsi *ucsi)
+>  	ucsi->connector = connector;
+>  	ucsi->ntfy = ntfy;
 >  
-> -/*
-> - * Some Dell laptops don't like ACK commands with the
-> - * UCSI_ACK_CONNECTOR_CHANGE but not the UCSI_ACK_COMMAND_COMPLETE
-> - * bit set. To work around this send a dummy command and bundle the
-> - * UCSI_ACK_CONNECTOR_CHANGE with the UCSI_ACK_COMMAND_COMPLETE
-> - * for the dummy command.
-> - */
-> -static int
-> -ucsi_dell_sync_write(struct ucsi *ucsi, unsigned int offset,
-> -		     const void *val, size_t val_len)
-> -{
-> -	struct ucsi_acpi *ua = ucsi_get_drvdata(ucsi);
-> -	u64 cmd = *(u64 *)val;
-> -	u64 dummycmd = UCSI_GET_CAPABILITY;
-> -	int ret;
-> -
-> -	if (cmd == (UCSI_ACK_CC_CI | UCSI_ACK_CONNECTOR_CHANGE)) {
-> -		cmd |= UCSI_ACK_COMMAND_COMPLETE;
-> -
-> -		/*
-> -		 * The UCSI core thinks it is sending a connector change ack
-> -		 * and will accept new connector change events. We don't want
-> -		 * this to happen for the dummy command as its response will
-> -		 * still report the very event that the core is trying to clear.
-> -		 */
-> -		set_bit(UCSI_ACPI_SUPPRESS_EVENT, &ua->flags);
-> -		ret = ucsi_acpi_sync_write(ucsi, UCSI_CONTROL, &dummycmd,
-> -					   sizeof(dummycmd));
-> -		clear_bit(UCSI_ACPI_SUPPRESS_EVENT, &ua->flags);
-> -
-> -		if (ret < 0)
-> -			return ret;
-> -	}
-> -
-> -	return ucsi_acpi_sync_write(ucsi, UCSI_CONTROL, &cmd, sizeof(cmd));
-> -}
-> -
-> -static const struct ucsi_operations ucsi_dell_ops = {
-> -	.read = ucsi_acpi_read,
-> -	.sync_write = ucsi_dell_sync_write,
-> -	.async_write = ucsi_acpi_async_write
-> -};
-> -
->  static const struct dmi_system_id ucsi_acpi_quirks[] = {
->  	{
->  		.matches = {
-> @@ -180,12 +136,6 @@ static const struct dmi_system_id ucsi_acpi_quirks[] = {
->  		},
->  		.driver_data = (void *)&ucsi_zenbook_ops,
->  	},
-> -	{
-> -		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-> -		},
-> -		.driver_data = (void *)&ucsi_dell_ops,
-> -	},
->  	{ }
->  };
->  
-> @@ -199,8 +149,7 @@ static void ucsi_acpi_notify(acpi_handle handle, u32 event, void *data)
+> +	mutex_lock(&ucsi->ppm_lock);
+>  	ret = ucsi->ops->read(ucsi, UCSI_CCI, &cci, sizeof(cci));
+> +	mutex_unlock(&ucsi->ppm_lock);
 >  	if (ret)
->  		return;
->  
-> -	if (UCSI_CCI_CONNECTOR(cci) &&
-> -	    !test_bit(UCSI_ACPI_SUPPRESS_EVENT, &ua->flags))
+>  		return ret;
+> -	if (UCSI_CCI_CONNECTOR(READ_ONCE(cci)))
+> -		ucsi_connector_change(ucsi, cci);
 > +	if (UCSI_CCI_CONNECTOR(cci))
->  		ucsi_connector_change(ua->ucsi, UCSI_CCI_CONNECTOR(cci));
+> +		ucsi_connector_change(ucsi, UCSI_CCI_CONNECTOR(cci));
 >  
->  	if (cci & UCSI_CCI_ACK_COMPLETE &&
+>  	return 0;
+>  
 > -- 
 > 2.40.1
 
