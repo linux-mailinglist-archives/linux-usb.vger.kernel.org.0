@@ -1,59 +1,64 @@
-Return-Path: <linux-usb+bounces-8842-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8843-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E6748976DE
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 19:35:00 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 803FB897658
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 19:20:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E2516B2D014
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 17:19:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 32F8B1F2B23E
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 17:20:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 349D7153572;
-	Wed,  3 Apr 2024 17:16:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0F7115625A;
+	Wed,  3 Apr 2024 17:17:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y6P8eJXE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c+YDDRVg"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A749D152E18;
-	Wed,  3 Apr 2024 17:16:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4234915624A;
+	Wed,  3 Apr 2024 17:17:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712164618; cv=none; b=F4Ggoc/bwRaD/nY/VcUkTxxVQA6+sRIuyFtKtj7K76sAakXIl2Ml4nwhE8h5WOit5f33L6AueZk1P1hqcUbeE5mVuVLn1wlziY6DI5WOzqpzAlC3bCHuT56qp2IibE4NbW9cvBX1iNoRcBGSp/BV7YFTfVyEylLDdqUCY+8U8K4=
+	t=1712164629; cv=none; b=KgjIZ4fJ5xzTpI0gdVuHeKRMpdQWaIUCl8JyLdTL4E/ngHNYuUtIxCYCWKT1rOav0IHYunx0lcf0BXBTND3m+5eRo+xneK/mDJYa1d/OmVnQbkXy5EnvlA6K5H1YAhOOcf7MH9MzvLXymQpk7xlIknBrLoESpQgsiu2rFhyFSbk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712164618; c=relaxed/simple;
-	bh=eH6n/XrrBzShozVSMmjhzduWadISNU3nrGIZ3CDYUjo=;
+	s=arc-20240116; t=1712164629; c=relaxed/simple;
+	bh=Zn5wn0kqoMoJLsOdJkyiiiLhytKrNfn+abfwEXBjxww=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ob1srrOqWBtCX57fJiC2DPh0urfWa2gCT4J1aDy7s+YXZ+bRU3tfCUQbQb+DSBndpvuMVmdxAdrRJKhZUROwCsdtv+7wK7Eu35aeweGOmJ+zEm1Uae7Go1HlYB9Cx8kAaWLsVEff2EADVGcAcpOFiNo1M45L/YkSdFWoEXEP3sU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y6P8eJXE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BC7BC43390;
-	Wed,  3 Apr 2024 17:16:57 +0000 (UTC)
+	 MIME-Version; b=RJVfaj37HQP/ndPLaAn7RWjo4/jXNw+tWKYPdZBevUX0M8f5Qmoe9GwdqK1xwYv5uQBl8eYfTU3iJDcjd+Kta3y+YszKtDw9Ysg6QhsKniRC7WqYLdsZ/ukMvgXqfR1NyPloHLpdobFXot1sM6Bnvw38LlyFYll+jEgo6qH+WvI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c+YDDRVg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9188C433F1;
+	Wed,  3 Apr 2024 17:17:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712164618;
-	bh=eH6n/XrrBzShozVSMmjhzduWadISNU3nrGIZ3CDYUjo=;
+	s=k20201202; t=1712164629;
+	bh=Zn5wn0kqoMoJLsOdJkyiiiLhytKrNfn+abfwEXBjxww=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Y6P8eJXE+SwVOWAzmioX0cUqXe1PUbnObn17dt88nRHYBGedO6Fdqr5CEW8UaLsa3
-	 CvfUHO3mtnFfCH5PlMmIncw3yPnGXfaFGn+qRshJvhdOApnTwibHfEhoOB1v4foyxW
-	 CiO/3VhmIzRlv5Za1Se1q36kZCQco/DzYk0Qln7X4McL51KclYBpBrWiXes9Dv9w8t
-	 zs4Be3+M2JYOkdkAYdd/rjRHi17+J/ELIpr5JXB+SXSAgIM3DxitZTDjnYs79GygTN
-	 xXlerlrzIK4zNbD0nqoGGLG+5zZq0Ckmu0eOpXFLoTzBX1AurG3cLSOEnJ8uabxMV+
-	 DnzsAFMP9/F4Q==
+	b=c+YDDRVgJXkMkMfs6lex0yPFbZNN25dtT7xmgLE8XtpHcPAPQ7MzQXBH/zMt2E/cT
+	 XQZEtNknIUJiaq7khVBmmb0/KQ56ZFcS3M3C3bDYeTI3XU2jrU8uccMew0n36Zdcu7
+	 g4G9z9ZfqlvAK66YuwHURsihQf6XkEV5vubU8YdXJiIui9hFJdUSvPRZ6BxQj2cw2l
+	 Bk3X7hPE6HjOV5Xv0dv4RACu43ICiT7D0n5y4hPa/TQOunymaDf6tHmzqtAZurZpG5
+	 fXJrVSkgLm7vyVW14t6C0zTJtvpxqxiigK4c3vyva6u0DKT4d2J4r8fuu/jXOmeuYP
+	 HJO+tYtyYobGQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Karina Yankevich <k.yankevich@omp.ru>,
-	Sergey Shtylyov <s.shtylyov@omp.ru>,
-	Alan Stern <stern@rowland.harvard.edu>,
+Cc: Luca Weiss <luca.weiss@fairphone.com>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Sasha Levin <sashal@kernel.org>,
-	linux-usb@vger.kernel.org,
-	usb-storage@lists.one-eyed-alien.net
-Subject: [PATCH AUTOSEL 6.8 02/28] usb: storage: sddr55: fix sloppy typing in sddr55_{read|write}_data()
-Date: Wed,  3 Apr 2024 13:16:04 -0400
-Message-ID: <20240403171656.335224-2-sashal@kernel.org>
+	neil.armstrong@linaro.org,
+	herve.codina@bootlin.com,
+	robh@kernel.org,
+	minhuadotchen@gmail.com,
+	quic_kriskura@quicinc.com,
+	johan+linaro@kernel.org,
+	linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.8 06/28] usb: typec: ucsi: Add qcm6490-pmic-glink as needing PDOS quirk
+Date: Wed,  3 Apr 2024 13:16:08 -0400
+Message-ID: <20240403171656.335224-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240403171656.335224-1-sashal@kernel.org>
 References: <20240403171656.335224-1-sashal@kernel.org>
@@ -68,54 +73,35 @@ X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.8.3
 Content-Transfer-Encoding: 8bit
 
-From: Karina Yankevich <k.yankevich@omp.ru>
+From: Luca Weiss <luca.weiss@fairphone.com>
 
-[ Upstream commit d6429a3555fb29f380c5841a12f5ac3f7444af03 ]
+[ Upstream commit 88bae831f3810e02c9c951233c7ee662aa13dc2c ]
 
-In sddr55_{read|write}_data(), the address variables are needlessly typed
-as *unsigned long* -- which is 32-bit type on the 32-bit arches and 64-bit
-type on the 64-bit arches; those variables' value should fit into just 3
-command bytes and consists of 10-bit block # (or at least the max block #
-seems to be 1023) and 4-/5-bit page # within a block, so 32-bit *unsigned*
-*int* type should be more than enough...
+The QCM6490 Linux Android firmware needs this workaround as well. Add it
+to the list.
 
-Found by Linux Verification Center (linuxtesting.org) with the Svace static
-analysis tool.
-
-[Sergey: rewrote the patch subject/description]
-
-Signed-off-by: Karina Yankevich <k.yankevich@omp.ru>
-Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
-Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
-Link: https://lore.kernel.org/r/4c9485f2-0bfc-591b-bfe7-2059289b554e@omp.ru
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+Link: https://lore.kernel.org/r/20240208-fp5-pmic-glink-v2-2-4837d4abd5a4@fairphone.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/storage/sddr55.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/usb/typec/ucsi/ucsi_glink.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/usb/storage/sddr55.c b/drivers/usb/storage/sddr55.c
-index 15dc25801cdcc..0aa079405d23c 100644
---- a/drivers/usb/storage/sddr55.c
-+++ b/drivers/usb/storage/sddr55.c
-@@ -196,7 +196,7 @@ static int sddr55_read_data(struct us_data *us,
- 	unsigned char *buffer;
+diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c b/drivers/usb/typec/ucsi/ucsi_glink.c
+index faccc942b381b..932e7bf694473 100644
+--- a/drivers/usb/typec/ucsi/ucsi_glink.c
++++ b/drivers/usb/typec/ucsi/ucsi_glink.c
+@@ -298,6 +298,7 @@ static void pmic_glink_ucsi_destroy(void *data)
+ }
  
- 	unsigned int pba;
--	unsigned long address;
-+	unsigned int address;
- 
- 	unsigned short pages;
- 	unsigned int len, offset;
-@@ -316,7 +316,7 @@ static int sddr55_write_data(struct us_data *us,
- 
- 	unsigned int pba;
- 	unsigned int new_pba;
--	unsigned long address;
-+	unsigned int address;
- 
- 	unsigned short pages;
- 	int i;
+ static const struct of_device_id pmic_glink_ucsi_of_quirks[] = {
++	{ .compatible = "qcom,qcm6490-pmic-glink", .data = (void *)UCSI_NO_PARTNER_PDOS, },
+ 	{ .compatible = "qcom,sc8180x-pmic-glink", .data = (void *)UCSI_NO_PARTNER_PDOS, },
+ 	{ .compatible = "qcom,sc8280xp-pmic-glink", .data = (void *)UCSI_NO_PARTNER_PDOS, },
+ 	{ .compatible = "qcom,sm8350-pmic-glink", .data = (void *)UCSI_NO_PARTNER_PDOS, },
 -- 
 2.43.0
 
