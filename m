@@ -1,79 +1,55 @@
-Return-Path: <linux-usb+bounces-8827-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8828-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 097EB896D12
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 12:46:53 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E7E7896D51
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 12:53:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3B1721C26685
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 10:46:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 03EF11F2C6E0
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 10:53:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E6A4139CF3;
-	Wed,  3 Apr 2024 10:46:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5DEB13B2A2;
+	Wed,  3 Apr 2024 10:53:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lc4xMIj/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HR4EShQ0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8F43137C47;
-	Wed,  3 Apr 2024 10:46:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28F9E136989;
+	Wed,  3 Apr 2024 10:53:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712141166; cv=none; b=jY2/rt7GR58JOqIm7VG0e7kajBB5hVnI24f6X7U/RRgwX/6EVNg1c6lEUz0K0uz4GIm62ofDb50wsAjuDkf6wWdJKmLnUIdPAuh/PfjUZA52Ivkp+PF86LqW3FGU/+rLf72JD8t87vZKBiJm0fFgWO82KKHER905s8Dq85HQ7dE=
+	t=1712141614; cv=none; b=bYNwmp3mUKf1J++azYE0+YIhyvBdGdGeZ1XXIcBsuJbBTeLuhjmftAVsnHNvQ6jxGHtE2OS3KTKA7dkPdCfa+CtjEsUa3Ne3oYsKiK405C79yT9dEMM1cWgpM/xv8C+NYNy9dkalwCAqYPOOXkNQCz+W5jZes+l1LyI4wJF4FBM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712141166; c=relaxed/simple;
-	bh=J14sLh9bFuqxnc7SY8mcH1I46NF5bOyBXqn1GfbFCjU=;
+	s=arc-20240116; t=1712141614; c=relaxed/simple;
+	bh=XNkWOejlRvAWF/q7Y6PYYLar1zGH/eI6IrEyzeOd7FA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZO1iSE1N+G1lgHWDAfDnNoy2s5RMej+eMuGuI05pg19nYEBAVmQNnM+BQolLYVXk3DR98FVf72WeWhxsYSXdk9O7CYadH52G4qzzzyQFAVO7brdRMmpBspWjFOtl/sbbbtn3yJr0YW/mIYGFcjt0TiuuiMQ9BIyUQFrnsIva5R8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lc4xMIj/; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712141163; x=1743677163;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=J14sLh9bFuqxnc7SY8mcH1I46NF5bOyBXqn1GfbFCjU=;
-  b=lc4xMIj/ErGGynXfSfPP0BdJdiQFl/17qLNnIvfU8AbxYiTCME1nlShc
-   aooSh+7uRyuiuZ1yiYT1JOuRwvEOM5LTBinKJqA58fw97b4353rlFndpQ
-   mGYDxnUNzvOtorVrqBzt/0TPOwm/KunAkQehJSXDcas/2MaC069jfZosn
-   ixGgMi9R00o9U0n13+Mv1p4jhNaCiTfhcQAPY0pbdb5WhfRX4nbMEXVtd
-   LS88l/t26c0q8jsn1XDPatEHKPBoIW+trAwvmjp8HkoBoxtd1x/LaeiS6
-   FTfTKQU1WsetOZ7CYpyt2gv2uU+YJm9Xfmj2MrwofY6ZukD4poJ4unzcv
-   A==;
-X-CSE-ConnectionGUID: tpbvA0bOSlaq5P6GCgT0DA==
-X-CSE-MsgGUID: L786OjHCREqIcLOnuY+oaQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11032"; a="10332529"
-X-IronPort-AV: E=Sophos;i="6.07,177,1708416000"; 
-   d="scan'208";a="10332529"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2024 03:42:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11032"; a="937084846"
-X-IronPort-AV: E=Sophos;i="6.07,177,1708416000"; 
-   d="scan'208";a="937084846"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 03 Apr 2024 03:42:26 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 03 Apr 2024 13:42:26 +0300
-Date: Wed, 3 Apr 2024 13:42:26 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: "Christian A. Ehrhardt" <lk@c--e.de>
-Cc: linux-kernel@vger.kernel.org,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, stable@kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Prashant Malani <pmalani@chromium.org>,
-	Jameson Thies <jthies@google.com>,
-	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
-	Samuel =?utf-8?B?xIxhdm9q?= <samuel@cavoj.net>,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: ucsi: Fix connector check on init
-Message-ID: <Zg0yksaQaGy+ZOaI@kuha.fi.intel.com>
-References: <20240401210515.1902048-1-lk@c--e.de>
+	 Content-Type:Content-Disposition:In-Reply-To; b=JEzCjqrEQgErMVE6NnTXZmJFhvfe3TYHZMiHQXO0o9Mbh3Cx2r7XZPZ6h7FZIvyImtbfFLeBH2hAQiJeabIrdJanEbuloIbyYwoddike9R/36//EdgEMoIKYoOAwcRygqD2v7ao4jIq5KtD1nYzyS8KpznP9D/Td8EWZavqHeJA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HR4EShQ0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F24EC433C7;
+	Wed,  3 Apr 2024 10:53:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712141613;
+	bh=XNkWOejlRvAWF/q7Y6PYYLar1zGH/eI6IrEyzeOd7FA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=HR4EShQ0qslBmYvKmyDNwZAUhom9DkwwLZEjPqSOI4fGbC6JrmcArAHS3tcKtC98X
+	 UcdJZ/rb1fYgS3YFBLni6FiQKw8Lgf9blU6Y1tWBKgMnqU2XJsZA5kdcAxnBwpkgLJ
+	 SCCBA1WOUdBbtk+JBXi/o5G3NGWLvSWJMscFBOE82OGwTlcp5OJPLRliWngjrTqfsH
+	 D/Z5R+bO6bWndop3x1R+dUt6ozrv2yWEOZ0dvNdsiC4bFzf/rWyTVX1ZOpET5uPJV0
+	 yU039ZDDeLSG31GTgbNThnyUGwlXHErZF+EA1YG7VmvUtNRJD7xNXYE20jNH+JC93D
+	 9u+ssRRfC7xsw==
+Date: Wed, 3 Apr 2024 11:53:29 +0100
+From: Simon Horman <horms@kernel.org>
+To: Yi Yang <yiyang13@huawei.com>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org, wangweiyang2@huawei.com
+Subject: Re: [PATCH -next] net: usb: asix: Add check for usbnet_get_endpoints
+Message-ID: <20240403105329.GV26556@kernel.org>
+References: <20240402113048.873130-1-yiyang13@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -82,47 +58,109 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240401210515.1902048-1-lk@c--e.de>
+In-Reply-To: <20240402113048.873130-1-yiyang13@huawei.com>
 
-On Mon, Apr 01, 2024 at 11:05:15PM +0200, Christian A. Ehrhardt wrote:
-> Fix issues when initially checking for a connector change:
-> - Use the correct connector number not the entire CCI.
-> - Call ->read under the PPM lock.
-> - Remove a bogus READ_ONCE.
+On Tue, Apr 02, 2024 at 11:30:48AM +0000, Yi Yang wrote:
+> Add check for usbnet_get_endpoints() and return the error if it fails
+> in order to transfer the error.
 > 
-> Fixes: 808a8b9e0b87 ("usb: typec: ucsi: Check for notifications after init")
-> Cc: stable@kernel.org
-> Signed-off-by: Christian A. Ehrhardt <lk@c--e.de>
+> Signed-off-by: Yi Yang <yiyang13@huawei.com>
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Hi,
+
+I am wondering if this is a fix for a user-visible problem and as such
+should:
+1. Be targeted at net
+2. Have a Fixes tag
+3. CC stable
+
+See: https://docs.kernel.org/process/maintainer-netdev.html
 
 > ---
->  drivers/usb/typec/ucsi/ucsi.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+>  drivers/net/usb/asix_devices.c | 20 +++++++++++++-------
+>  1 file changed, 13 insertions(+), 7 deletions(-)
 > 
-> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> index 31d8a46ae5e7..bd6ae92aa39e 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.c
-> +++ b/drivers/usb/typec/ucsi/ucsi.c
-> @@ -1736,11 +1736,13 @@ static int ucsi_init(struct ucsi *ucsi)
->  	ucsi->connector = connector;
->  	ucsi->ntfy = ntfy;
+> diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
+> index f7cff58fe044..11417ed86d9e 100644
+> --- a/drivers/net/usb/asix_devices.c
+> +++ b/drivers/net/usb/asix_devices.c
+> @@ -230,7 +230,9 @@ static int ax88172_bind(struct usbnet *dev, struct usb_interface *intf)
+>  	int i;
+>  	unsigned long gpio_bits = dev->driver_info->data;
 >  
-> +	mutex_lock(&ucsi->ppm_lock);
->  	ret = ucsi->ops->read(ucsi, UCSI_CCI, &cci, sizeof(cci));
-> +	mutex_unlock(&ucsi->ppm_lock);
->  	if (ret)
->  		return ret;
-> -	if (UCSI_CCI_CONNECTOR(READ_ONCE(cci)))
-> -		ucsi_connector_change(ucsi, cci);
-> +	if (UCSI_CCI_CONNECTOR(cci))
-> +		ucsi_connector_change(ucsi, UCSI_CCI_CONNECTOR(cci));
+> -	usbnet_get_endpoints(dev,intf);
+> +	ret = usbnet_get_endpoints(dev, intf);
+> +	if (ret)
+> +		goto out;
 >  
->  	return 0;
+>  	/* Toggle the GPIOs in a manufacturer/model specific way */
+>  	for (i = 2; i >= 0; i--) {
+> @@ -834,7 +836,9 @@ static int ax88772_bind(struct usbnet *dev, struct usb_interface *intf)
 >  
-> -- 
-> 2.40.1
+>  	dev->driver_priv = priv;
+>  
+> -	usbnet_get_endpoints(dev, intf);
+> +	ret = usbnet_get_endpoints(dev, intf);
+> +	if (ret)
+> +		goto mdio_err;
+>  
+>  	/* Maybe the boot loader passed the MAC address via device tree */
+>  	if (!eth_platform_get_mac_address(&dev->udev->dev, buf)) {
+> @@ -858,7 +862,7 @@ static int ax88772_bind(struct usbnet *dev, struct usb_interface *intf)
+>  		if (ret < 0) {
+>  			netdev_dbg(dev->net, "Failed to read MAC address: %d\n",
+>  				   ret);
+> -			return ret;
+> +			goto mdio_err;
+>  		}
+>  	}
+>  
 
--- 
-heikki
+The two hunks above do not seem related to the subject of the patch, but
+rather separate cleanups. So I think they should not be part of this patch.
+Instead they could be a separate patch, targeted at net-next.  (FWIIW, I
+would go the other way and drop the mdio_err label from this function.)
+
+> @@ -871,7 +875,7 @@ static int ax88772_bind(struct usbnet *dev, struct usb_interface *intf)
+>  
+>  	ret = asix_read_phy_addr(dev, true);
+>  	if (ret < 0)
+> -		return ret;
+> +		goto mdio_err;
+>  
+>  	priv->phy_addr = ret;
+>  	priv->embd_phy = ((priv->phy_addr & 0x1f) == AX_EMBD_PHY_ADDR);
+> @@ -880,7 +884,7 @@ static int ax88772_bind(struct usbnet *dev, struct usb_interface *intf)
+>  			    &priv->chipcode, 0);
+>  	if (ret < 0) {
+>  		netdev_dbg(dev->net, "Failed to read STATMNGSTS_REG: %d\n", ret);
+> -		return ret;
+> +		goto mdio_err;
+>  	}
+>  
+>  	priv->chipcode &= AX_CHIPCODE_MASK;
+> @@ -895,7 +899,7 @@ static int ax88772_bind(struct usbnet *dev, struct usb_interface *intf)
+>  	ret = priv->reset(dev, 0);
+>  	if (ret < 0) {
+>  		netdev_dbg(dev->net, "Failed to reset AX88772: %d\n", ret);
+> -		return ret;
+> +		goto mdio_err;
+>  	}
+>  
+>  	/* Asix framing packs multiple eth frames into a 2K usb bulk transfer */
+> @@ -1258,7 +1262,9 @@ static int ax88178_bind(struct usbnet *dev, struct usb_interface *intf)
+>  	int ret;
+>  	u8 buf[ETH_ALEN] = {0};
+>  
+> -	usbnet_get_endpoints(dev,intf);
+> +	ret = usbnet_get_endpoints(dev, intf);
+> +	if (ret)
+> +		return ret;
+>  
+>  	/* Get the MAC address */
+>  	ret = asix_read_cmd(dev, AX_CMD_READ_NODE_ID, 0, 0, ETH_ALEN, buf, 0);
+> -- 
+> 2.25.1
+> 
+> 
 
