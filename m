@@ -1,63 +1,75 @@
-Return-Path: <linux-usb+bounces-8783-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8784-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80C958963F6
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 07:25:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 13C388964BD
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 08:45:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AE4CE1C2286B
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 05:25:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7FCC01F22D56
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 06:45:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92039482DA;
-	Wed,  3 Apr 2024 05:24:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 024F953811;
+	Wed,  3 Apr 2024 06:45:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="gQRGGJUB"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="tVS3D1pq";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="0l2uULvN"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04D8E645;
-	Wed,  3 Apr 2024 05:24:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07B6443AC2;
+	Wed,  3 Apr 2024 06:45:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712121895; cv=none; b=GOS7b1rcEwPFhSNUrCpVdaNIOdS0Rx2AR4ij+nicb9OCg71zkV61YGgisIaOZwwl3SNdR1J4+NKV9J8yE8/8m3Az9YebrpfaszoMEZl1+bt0dEoyh3u9OZyzsKtnCMeeChSsBSKub2Ci/6JIca1B/u1Cy9z2JXe7dOqEW0bZhuk=
+	t=1712126710; cv=none; b=EFeP2dNlavoYAyTUglX+Wk6qDGeDjPTnYGaNf/OL89ltBHXOaXysUdzVqFsf3kVb3XGfwiUoHNxu7d2gxazYKnVA+f7idgmVBQJsj2iMU1/uZmLOHPYFfCra6DhnrQ2KG2eDq7ys14mEqYzilN+rIV0YpyHHQpd0od1hLDrBShg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712121895; c=relaxed/simple;
-	bh=Du0hVYDdHGGGFDiDuT8htJ0z77Z7XYzY9/952kknj2A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=JpbSymFtcFFLz1Gkc6ev/47fINUv6DPvTVaXpyRl6wZyBMQ7AYUj6MnYfTGuIW1dLPShOjr8QfDKzN4mv0uEIb43DsQg3530V9qmNBkRkhFkzDE+NQT9FwLpufVX3P+ORn6xL/0sBy0kYUbe0Xz2Xv8cXV6BeS6Sx19JQ3EF9lg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=gQRGGJUB; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 4332l8Ul006839;
-	Wed, 3 Apr 2024 05:24:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=2Wc/XbMDySl7R/TtBB5r3KsAe9bMPmhTTdW6c2sQWGI=; b=gQ
-	RGGJUBpduVpOwFaNd8HSBNq91NXpI6QaEiaDkOchfyz89Dp35ypuSOP5YaEpSWjn
-	PHdaiJUeqeJXeKcxB30wIsQVvtPffw82cdr5EFWHQr12wWYvKfmbcRFAs3N6oDuC
-	8J3EKyuWLOiim8UXgTwDHMCz4jkd9CxmfuoVgX6IG65A3XHkwI1oPyliNt/1iGVA
-	5v/IVI9iLueCB6MyIt3lmFo3RIaLkgaN7zOjJ1oJAJJ6mJ76SdKLISyqBDPIsuRs
-	B5xKzjx0X1a6099PiBwLx4V7Tc9EThnWYdBv5n9EvJJwj1DYnjYZmvHv1PBZ5vrK
-	LnX+ZQnpdD7LgD5fTJlw==
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3x8ua70jnk-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 03 Apr 2024 05:24:35 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 4335OYnn017242
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 3 Apr 2024 05:24:34 GMT
-Received: from [10.216.63.221] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Tue, 2 Apr 2024
- 22:24:28 -0700
-Message-ID: <39010f95-b08f-4a57-b3af-f34eb1069865@quicinc.com>
-Date: Wed, 3 Apr 2024 10:54:25 +0530
+	s=arc-20240116; t=1712126710; c=relaxed/simple;
+	bh=yutpkvQHS3SJb4aBXKBMw3brtfdJOeqCwHsZ+UFYcs0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=A5IHuaMRc+cQHtawswgKHKADdsVl5v4cHS8CZ+Sv8qv10TT2u5n59dhr+MhorQTuJYQeCOaUwFwqyaEN40ccqnqyYPX7S0VUru/HaCT+V7OXWc/18yruIWycG3hTQcXmif/VEG0H1re296ky0MLyNgNFGKpzWHR+7vnldTLelFA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=tVS3D1pq; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=0l2uULvN; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap2.dmz-prg2.suse.org (imap2.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:98])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 320F85C8E4;
+	Wed,  3 Apr 2024 06:45:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1712126707; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=GoXPoAqyZWmKcmyarXlQ8kclO+8GvosQ+cJjkyThP0E=;
+	b=tVS3D1pqdJkeIp4Cpj0X4m9wpkk9tkENqMWXgHOOkpkQRpPDSyzLgiqS3YS43a3ZEFsRVc
+	sYDcdp9UMokE1sUmZyHWLWuxNRse0V0Wugx78b2hNkNipe4YVWyCIr7RL713VwoTLh3e0L
+	bg7QCsyvvJafcbLyZfj1RrwN01ZiaPE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1712126707;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=GoXPoAqyZWmKcmyarXlQ8kclO+8GvosQ+cJjkyThP0E=;
+	b=0l2uULvNr0WomFL5o7dP/HZ9b3ENh97vzY3OXT+QMpLsFhFf9+q1QfysqT5xwSc1yLxlA8
+	gPHAvnX5R68WA3Dw==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=none
+Received: from imap2.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap2.dmz-prg2.suse.org (Postfix) with ESMTPS id B09D613357;
+	Wed,  3 Apr 2024 06:45:03 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap2.dmz-prg2.suse.org with ESMTPSA
+	id WLF6Ju/6DGb8CAAAn2gu4w
+	(envelope-from <hare@suse.de>); Wed, 03 Apr 2024 06:45:03 +0000
+Message-ID: <ba789f1c-d822-492b-bd73-22b6e003c930@suse.de>
+Date: Wed, 3 Apr 2024 08:45:03 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -65,137 +77,96 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v18 2/9] usb: dwc3: core: Access XHCI address space
- temporarily to read port info
+Subject: Re: [PATCH 01/23] block: add a helper to cancel atomic queue limit
+ updates
 Content-Language: en-US
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring
-	<robh@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
-        Wesley Cheng
-	<quic_wcheng@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "Greg
- Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Conor Dooley
-	<conor+dt@kernel.org>, Felipe Balbi <balbi@kernel.org>,
-        Johan Hovold
-	<johan@kernel.org>,
-        "devicetree@vger.kernel.org"
-	<devicetree@vger.kernel.org>,
-        "linux-arm-msm@vger.kernel.org"
-	<linux-arm-msm@vger.kernel.org>,
-        "linux-usb@vger.kernel.org"
-	<linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>,
-        "quic_ppratap@quicinc.com"
-	<quic_ppratap@quicinc.com>,
-        "quic_jackp@quicinc.com"
-	<quic_jackp@quicinc.com>,
-        Johan Hovold <johan+linaro@kernel.org>
-References: <20240326113253.3010447-1-quic_kriskura@quicinc.com>
- <20240326113253.3010447-3-quic_kriskura@quicinc.com>
- <20240402233218.5kngtj56qellnrmo@synopsys.com>
-From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <20240402233218.5kngtj56qellnrmo@synopsys.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: XSgbQFluxKfjXYTIj7h0H3Llybu0LODQ
-X-Proofpoint-GUID: XSgbQFluxKfjXYTIj7h0H3Llybu0LODQ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-04-03_04,2024-04-01_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
- lowpriorityscore=0 bulkscore=0 mlxlogscore=999 priorityscore=1501
- clxscore=1015 adultscore=0 suspectscore=0 mlxscore=0 spamscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2403210001 definitions=main-2404030034
+To: Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+ "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: Damien Le Moal <dlemoal@kernel.org>, Niklas Cassel <cassel@kernel.org>,
+ Takashi Sakamoto <o-takashi@sakamocchi.jp>,
+ Sathya Prakash <sathya.prakash@broadcom.com>,
+ Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+ Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>,
+ "Juergen E. Fischer" <fischer@norbit.de>,
+ Xiang Chen <chenxiang66@hisilicon.com>,
+ HighPoint Linux Team <linux@highpoint-tech.com>,
+ Tyrel Datwyler <tyreld@linux.ibm.com>, Brian King <brking@us.ibm.com>,
+ Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
+ Mike Christie <michael.christie@oracle.com>,
+ John Garry <john.g.garry@oracle.com>, Jason Yan <yanaijie@huawei.com>,
+ Kashyap Desai <kashyap.desai@broadcom.com>,
+ Sumit Saxena <sumit.saxena@broadcom.com>,
+ Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
+ Chandrakanth patil <chandrakanth.patil@broadcom.com>,
+ Jack Wang <jinpu.wang@cloud.ionos.com>, Nilesh Javali <njavali@marvell.com>,
+ GR-QLogic-Storage-Upstream@marvell.com,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Alim Akhtar <alim.akhtar@samsung.com>, Avri Altman <avri.altman@wdc.com>,
+ Bart Van Assche <bvanassche@acm.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+ Alan Stern <stern@rowland.harvard.edu>, linux-block@vger.kernel.org,
+ linux-ide@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
+ MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+ megaraidlinux.pdl@broadcom.com, mpi3mr-linuxdrv.pdl@broadcom.com,
+ linux-samsung-soc@vger.kernel.org, linux-usb@vger.kernel.org,
+ usb-storage@lists.one-eyed-alien.net
+References: <20240402130645.653507-1-hch@lst.de>
+ <20240402130645.653507-2-hch@lst.de>
+From: Hannes Reinecke <hare@suse.de>
+In-Reply-To: <20240402130645.653507-2-hch@lst.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Spam-Flag: NO
+X-Rspamd-Action: no action
+X-Spamd-Result: default: False [-0.50 / 50.00];
+	BAYES_HAM(-0.20)[71.28%];
+	NEURAL_HAM_SHORT(-0.20)[-0.993];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	XM_UA_NO_VERSION(0.01)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:98:from];
+	MIME_TRACE(0.00)[0:+];
+	ARC_NA(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[42];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:98:from];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_DN_SOME(0.00)[];
+	R_DKIM_NA(0.00)[];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap2.dmz-prg2.suse.org:rdns,imap2.dmz-prg2.suse.org:helo,suse.de:email]
+X-Spam-Level: 
+X-Spam-Score: -0.50
+X-Spamd-Bar: /
+X-Rspamd-Queue-Id: 320F85C8E4
 
-
-
-On 4/3/2024 5:02 AM, Thinh Nguyen wrote:
-> On Tue, Mar 26, 2024, Krishna Kurapati wrote:
->> All DWC3 Multi Port controllers that exist today only support host mode.
->> Temporarily map XHCI address space for host-only controllers and parse
->> XHCI Extended Capabilities registers to read number of usb2 ports and
->> usb3 ports present on multiport controller. Each USB Port is at least HS
->> capable.
->>
->> The port info for usb2 and usb3 phy are identified as num_usb2_ports
->> and num_usb3_ports. The intention is as follows:
->>
->> Wherever we need to perform phy operations like:
->>
->> LOOP_OVER_NUMBER_OF_AVAILABLE_PORTS()
->> {
->> 	phy_set_mode(dwc->usb2_generic_phy[i], PHY_MODE_USB_HOST);
->> 	phy_set_mode(dwc->usb3_generic_phy[i], PHY_MODE_USB_HOST);
->> }
->>
->> If number of usb2 ports is 3, loop can go from index 0-2 for
->> usb2_generic_phy. If number of usb3-ports is 2, we don't know for sure,
->> if the first 2 ports are SS capable or some other ports like (2 and 3)
->> are SS capable. So instead, num_usb2_ports is used to loop around all
->> phy's (both hs and ss) for performing phy operations. If any
->> usb3_generic_phy turns out to be NULL, phy operation just bails out.
->> num_usb3_ports is used to modify GUSB3PIPECTL registers while setting up
->> phy's as we need to know how many SS capable ports are there for this.
->>
->> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
->> Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
->> ---
->>   drivers/usb/dwc3/core.c | 61 +++++++++++++++++++++++++++++++++++++++++
->>   drivers/usb/dwc3/core.h |  5 ++++
->>   2 files changed, 66 insertions(+)
->>
->> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
->> index 3e55838c0001..fab7664c12c0 100644
->> --- a/drivers/usb/dwc3/core.c
->> +++ b/drivers/usb/dwc3/core.c
->> @@ -39,6 +39,7 @@
->>   #include "io.h"
->>   
->>   #include "debug.h"
->> +#include "../host/xhci-ext-caps.h"
->>   
->>   #define DWC3_DEFAULT_AUTOSUSPEND_DELAY	5000 /* ms */
->>   
->> @@ -1879,10 +1880,56 @@ static int dwc3_get_clocks(struct dwc3 *dwc)
->>   	return 0;
->>   }
->>   
->> +static int dwc3_read_port_info(struct dwc3 *dwc)
->> +{
->> +	void __iomem *base;
->> +	u8 major_revision;
->> +	u32 offset;
->> +	u32 val;
->> +
->> +	/*
->> +	 * Remap xHCI address space to access XHCI ext cap regs since it is
->> +	 * needed to get information on number of ports present.
->> +	 */
->> +	base = ioremap(dwc->xhci_resources[0].start,
->> +		       resource_size(&dwc->xhci_resources[0]));
->> +	if (IS_ERR(base))
->> +		return PTR_ERR(base);
+On 4/2/24 15:06, Christoph Hellwig wrote:
+> Drivers might have to perform complex actions to determine queue limits,
+> and those might fail.  Add a helper to cancel a queue limit update
+> that can be called in those cases.
 > 
-> Looks like you forgot to address some of the comments you said you'd
-> update previously if you submit a new version to the series.
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> ---
+>   include/linux/blkdev.h | 13 +++++++++++++
+>   1 file changed, 13 insertions(+)
 > 
-> [*] https://lore.kernel.org/linux-usb/af73110d-e13e-4183-af11-aed869ac0a31@quicinc.com/
-> 
+Reviewed-by: Hannes Reinecke <hare@suse.de>
 
-Apologies. I agree. I was too much focused on acpi removal and interrupt 
-cleanup, I forgot the last comment you gave.
+Cheers,
 
-Can I send in a separate patch for this ?
+Hannes
+-- 
+Dr. Hannes Reinecke                  Kernel Storage Architect
+hare@suse.de                                +49 911 74053 688
+SUSE Software Solutions GmbH, Frankenstr. 146, 90461 Nürnberg
+HRB 36809 (AG Nürnberg), GF: I. Totev, A. McDonald, W. Knoblich
 
-Regards,
-Krishna,
 
