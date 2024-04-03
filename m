@@ -1,74 +1,75 @@
-Return-Path: <linux-usb+bounces-8822-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8823-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6FD42896C31
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 12:24:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5885B896C57
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 12:28:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 255031F2731B
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 10:24:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 894D91C22E51
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 10:28:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 793A113774B;
-	Wed,  3 Apr 2024 10:24:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34C0913E3EF;
+	Wed,  3 Apr 2024 10:26:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kVrtIds9"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ov7o+Abw"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70143259C;
-	Wed,  3 Apr 2024 10:24:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 521A313DDB6;
+	Wed,  3 Apr 2024 10:26:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712139892; cv=none; b=EzYaMPDfsvpYY8kykEzqmD1DE1lBYUlMhGT2YHHmlmiNZJBFcuV9863cy+WM3BuUmAnjDZGP9AHC7tWLfhSGH8IabUyWl4W14whKnCNB0uS+EmB1dp8GFCBucbFXZtriW/vWhISUpqkst7TZWvKqHRMl7kb/Il9ma2ZY0Ldh2TQ=
+	t=1712139983; cv=none; b=tvBKcMWTaO1fDk98V1S9JPbTUmcSJrWDttUE75lTiBISENz8sOZ7guSD4ky2tqVs/CpRgY7QHX395Ck9qmNCFp+QSn6JeBKnAgZXZ9M87A19OWc7rPXuGpIs9m70AG7KqHcwDb7ee8GKiR9H6ppf9fDW1mNHwNG3lwYzNhARPh8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712139892; c=relaxed/simple;
-	bh=ESt8CZC/Qd2eEHRQmlwIpFHD3SOwTUjqLs41t4VZMsQ=;
+	s=arc-20240116; t=1712139983; c=relaxed/simple;
+	bh=uvNwH5AhBZRtd1Efkm5wZZSPyGfV9X51E6xAbQSgfX8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=R9UMFrNGITbGpLWJzjAgOSu99x7Hfcv7U2G2JFFx0FCVedFmkQszpNtNBJA+T9xrs6h8rXIGum1oOpoTqAhrKS/1gGohfuZR5c1oKmeb55mOA77Z5jMKjzz0e1Epg6Kfi/wlU5NmAdpmkrT3RhHDbEo4sJboCySSdJ6+WxqpjNc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kVrtIds9; arc=none smtp.client-ip=198.175.65.21
+	 Content-Type:Content-Disposition:In-Reply-To; b=rsdi2fJsHzYzY4DKZ0AyAbAHr/tiMDeNPfhZgS2DX4RDF7yRfTyo2pdahFhjkkSUs/1qhA8s4zmI3n1YCnnSC6XmBdtJ2KuoHSphNbFEAWhwGQGNr/W9RKDMeG5cvdVbM+FjxEg1XPQdj43McCON8yt9YhJ+1iL8irW7rP942wc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ov7o+Abw; arc=none smtp.client-ip=198.175.65.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712139890; x=1743675890;
+  t=1712139982; x=1743675982;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=ESt8CZC/Qd2eEHRQmlwIpFHD3SOwTUjqLs41t4VZMsQ=;
-  b=kVrtIds9BKpFmlLpTWnKbdKsN7/055CsbdT9NLMUy82QflRZB4xPcU6i
-   g35itYOp9g+f8ealeMdUvBKSRi5/KkFZqwcM1w1Lcby4mukp8pOqPfaN9
-   Hq+Slpf7uo50WshknxDSLH+PfpFYWrVxMt7DavY8FSwLoovriqLuMMrtO
-   3ySHlBH5Et/quztDBoTwmXzOh8OeL6Erl/yAkb1xqdP4DtiYJA6BCXNbZ
-   PfcrryBgWkWcX3whNNTAYOyHjTZrRPc52Q81ceWrAhTVW4H65fvy7VHIN
-   EhRZNETk1Qy1JxWmqphxuJ1ZoObt+GUIYKQ4Lhs0bag3rzSrt+TiSkp2M
+  bh=uvNwH5AhBZRtd1Efkm5wZZSPyGfV9X51E6xAbQSgfX8=;
+  b=Ov7o+AbwwjdyFK29sjbufrRU6K/4YUlbP78JXW/SE7rlrjQRGET43vWW
+   8VKnzX2TKQQBcC4hNUcEyHsEFtoNTGzDKNjsF/2OM4Fr0+IGVGr4IR35v
+   DEy21VzBMTkRWGjc+ZNgMJiMwv0TTJlALoQV7sPuS2yPKze6FjQ/F/vNf
+   mzZCJscBXvbo6JwNRIwJWC50KilvZZIJWp2kHOTFCbS1TkbFHmkwAW3T5
+   L5bJL5PucwhxJcS2FSQzLpteG/W0ecnpl51WzF2oxH6Xnh/dTzOFt1SSO
+   zFEZpwUuX9noCA7QpIjm3NjSlNB0KEhkXNOouVBblxBOeu0Mo+JQWKvd4
    A==;
-X-CSE-ConnectionGUID: yqti+/tdQS+o3Dbb8qrvWA==
-X-CSE-MsgGUID: wzI0/46kTniFkeBQgW6c9w==
-X-IronPort-AV: E=McAfee;i="6600,9927,11032"; a="7282964"
+X-CSE-ConnectionGUID: T3SuE+qqSC6Arvc0hpGW+A==
+X-CSE-MsgGUID: 7Q5xrgK/QY+fqUb9VG/66Q==
+X-IronPort-AV: E=McAfee;i="6600,9927,11032"; a="7283162"
 X-IronPort-AV: E=Sophos;i="6.07,177,1708416000"; 
-   d="scan'208";a="7282964"
+   d="scan'208";a="7283162"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2024 03:24:49 -0700
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2024 03:26:21 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11032"; a="937084818"
+X-IronPort-AV: E=McAfee;i="6600,9927,11032"; a="937084819"
 X-IronPort-AV: E=Sophos;i="6.07,177,1708416000"; 
-   d="scan'208";a="937084818"
+   d="scan'208";a="937084819"
 Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 03 Apr 2024 03:24:46 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 03 Apr 2024 13:24:45 +0300
-Date: Wed, 3 Apr 2024 13:24:45 +0300
+  by fmsmga001.fm.intel.com with SMTP; 03 Apr 2024 03:26:19 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 03 Apr 2024 13:26:18 +0300
+Date: Wed, 3 Apr 2024 13:26:18 +0300
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To: Krzysztof Kozlowski <krzk@kernel.org>
 Cc: Ran Wang <ran.wang_1@nxp.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	linux-usb@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] usb: typec: nvidia: drop driver owner assignment
-Message-ID: <Zg0ubZ9P9sCVLOrX@kuha.fi.intel.com>
+Subject: Re: [PATCH v2 3/3] usb: typec: displayport: drop driver owner
+ assignment
+Message-ID: <Zg0uyrXJVzGirRkY@kuha.fi.intel.com>
 References: <20240331091737.19836-1-krzk@kernel.org>
- <20240331091737.19836-2-krzk@kernel.org>
+ <20240331091737.19836-3-krzk@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -77,9 +78,9 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240331091737.19836-2-krzk@kernel.org>
+In-Reply-To: <20240331091737.19836-3-krzk@kernel.org>
 
-On Sun, Mar 31, 2024 at 11:17:36AM +0200, Krzysztof Kozlowski wrote:
+On Sun, Mar 31, 2024 at 11:17:37AM +0200, Krzysztof Kozlowski wrote:
 > Core in typec_altmode_register_driver() already sets the .owner, so
 > driver does not need to.
 > 
@@ -90,23 +91,23 @@ Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 > ---
 > 
 > Changes in v2:
-> 1. None
+> 1. New patch
 > ---
->  drivers/usb/typec/altmodes/nvidia.c | 1 -
+>  drivers/usb/typec/altmodes/displayport.c | 1 -
 >  1 file changed, 1 deletion(-)
 > 
-> diff --git a/drivers/usb/typec/altmodes/nvidia.c b/drivers/usb/typec/altmodes/nvidia.c
-> index c36769736405..fe70b36f078f 100644
-> --- a/drivers/usb/typec/altmodes/nvidia.c
-> +++ b/drivers/usb/typec/altmodes/nvidia.c
-> @@ -35,7 +35,6 @@ static struct typec_altmode_driver nvidia_altmode_driver = {
->  	.remove = nvidia_altmode_remove,
+> diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
+> index 038dc51f429d..596cd4806018 100644
+> --- a/drivers/usb/typec/altmodes/displayport.c
+> +++ b/drivers/usb/typec/altmodes/displayport.c
+> @@ -802,7 +802,6 @@ static struct typec_altmode_driver dp_altmode_driver = {
+>  	.remove = dp_altmode_remove,
 >  	.driver = {
->  		.name = "typec_nvidia",
+>  		.name = "typec_displayport",
 > -		.owner = THIS_MODULE,
+>  		.dev_groups = displayport_groups,
 >  	},
 >  };
->  module_typec_altmode_driver(nvidia_altmode_driver);
 > -- 
 > 2.34.1
 
