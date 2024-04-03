@@ -1,62 +1,62 @@
-Return-Path: <linux-usb+bounces-8850-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8851-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6EECA89766D
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 19:23:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A87289769A
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 19:28:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A10C31C29030
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 17:23:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C9CF2292F91
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Apr 2024 17:28:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 669D7156F58;
-	Wed,  3 Apr 2024 17:17:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D23E158DA6;
+	Wed,  3 Apr 2024 17:18:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FGadNGHx"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ubtzwpn1"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9730156F4B;
-	Wed,  3 Apr 2024 17:17:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91BD0158D95;
+	Wed,  3 Apr 2024 17:18:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712164649; cv=none; b=IoBX5al+b9kNXeUCB4ZPJhPmUrVo0E3JlQg8UZ+0qoTZI6T6xNawxb3yR8dwRn0Y75mKG4iGL67SZwBemyfLSy1+eh2IhcTOFJuT76phNajKCrREHMXt7Bvwx7kTJKJ0+v1noq7GTfqPvu6jbbOhieH1vbDjS1M5rg0ftzj6ZfY=
+	t=1712164697; cv=none; b=NlgC2weJeoplNp+ilsA0ORNR8RxEm+3DYr439B9M6hUAr8nkVvM+7MUnoaOsGifaaw84/7Bj5ALF5uvRJ3ioWAydvR7qSRRtnqXBFr14OwQabqgzrVBcXMA6OkXfrRB+4RMBFXeEHiByTkcKVZ6cag4kfpcgSONqGwHiGfd6huo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712164649; c=relaxed/simple;
-	bh=Ju0dCUBj7c1xHR7bdmc+deBQzJoteCBjACIm80EKbcM=;
+	s=arc-20240116; t=1712164697; c=relaxed/simple;
+	bh=eH6n/XrrBzShozVSMmjhzduWadISNU3nrGIZ3CDYUjo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=P7i0BrL6uw8KWYDmpK+YUkDsG+VbhPiQt6JtKsA7K1H91NX0W/YJUSL+GKp90WzwmyZVjTWlpSoZsigejA/u3EiXMRMNF2BNUDL0YTF3rNxyIB/UTm3romueATCrWjiaAtYPw9gpogUBz4EGjLK0jrED6XAdFmyZ3SvjXbQG2Xo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FGadNGHx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75F02C433F1;
-	Wed,  3 Apr 2024 17:17:27 +0000 (UTC)
+	 MIME-Version; b=U741qLgSxkKBQn+hnlV42QSQLhFwdIKDpJOeMFfrWzjA4hv5zXwxi+kS/OBbm4cNWxpHKsG988HZDauFIy2fNBAmml9W1iTzjcJM7NRBLGCa1vIR1cYaUuP+hzTAtNmAA3QCjP5iysldYJdnPfS528bTn6Hscu9tkraCVhIwXE8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ubtzwpn1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78F9BC433A6;
+	Wed,  3 Apr 2024 17:18:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712164648;
-	bh=Ju0dCUBj7c1xHR7bdmc+deBQzJoteCBjACIm80EKbcM=;
+	s=k20201202; t=1712164697;
+	bh=eH6n/XrrBzShozVSMmjhzduWadISNU3nrGIZ3CDYUjo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=FGadNGHx0XMTKC88wNKWzFds6VitESNtZiXw4r4OQdweBKZPGmDNAUvP9YecU4skn
-	 +TNysV4tei5fW8IS9uJ4dy+UgxzKJ2UaiQRM4Y3F21SwlG6gLxrCdeZYUs+jhKqXMK
-	 BWkEndMgZFoM2+7Xbw+OID7xOkOCiQmBHFwtK1bcXxqhlZvK8CMQfCl0fbTTxlBYKQ
-	 2CJ8BsEA3of66HnSSEjnnWTbVctlJVVTGtwhxitb4+Co2TJynMiCIsgncCWsCPPjVz
-	 eqnve55d/4Jjbxmp5v9nQW1qMwRVrm0NYyKs2493Xc69imgueoxIIwuUnE+sIHPtym
-	 cxNJzhJ3+I9WA==
+	b=Ubtzwpn1CtA4m5ia7l6xnNHoaffaaeehbAo84fE0Dxs5wgfqeT90Het2GXUbQMy/8
+	 nsVgA25Hzk/BfrvCWMv3u8Nf7L4hGU4byQ1aKW4dl7661GSMW6WNyiFKBK3X4i7uam
+	 tzNDndhiHizFxhCL/k1RsdjUcXlcvZGUW+yVszFwdTE0hRH0U0+ZytS6QQ+V3Iay3l
+	 ufFZZuu64deFDdiLCTgmAc7gWcgMNYl/duaDyEY/auf9zpI7bggaPbVB8NekPo+Chn
+	 LIPtiJgNjk/wZoRmw+LDTjgPFlGrjHeofev+DJ9hmC56zCVzeguQMxr5H8VD6j72Wk
+	 XnWEnZGi6qxYw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Colin Ian King <colin.i.king@gmail.com>,
+Cc: Karina Yankevich <k.yankevich@omp.ru>,
+	Sergey Shtylyov <s.shtylyov@omp.ru>,
+	Alan Stern <stern@rowland.harvard.edu>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Sasha Levin <sashal@kernel.org>,
-	nathan@kernel.org,
-	u.kleine-koenig@pengutronix.de,
 	linux-usb@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.8 14/28] usb: sl811-hcd: only defined function checkdone if QUIRK2 is defined
-Date: Wed,  3 Apr 2024 13:16:16 -0400
-Message-ID: <20240403171656.335224-14-sashal@kernel.org>
+	usb-storage@lists.one-eyed-alien.net
+Subject: [PATCH AUTOSEL 6.6 02/20] usb: storage: sddr55: fix sloppy typing in sddr55_{read|write}_data()
+Date: Wed,  3 Apr 2024 13:17:43 -0400
+Message-ID: <20240403171815.342668-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240403171656.335224-1-sashal@kernel.org>
-References: <20240403171656.335224-1-sashal@kernel.org>
+In-Reply-To: <20240403171815.342668-1-sashal@kernel.org>
+References: <20240403171815.342668-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -65,48 +65,57 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.8.3
+X-stable-base: Linux 6.6.24
 Content-Transfer-Encoding: 8bit
 
-From: Colin Ian King <colin.i.king@gmail.com>
+From: Karina Yankevich <k.yankevich@omp.ru>
 
-[ Upstream commit 12f371e2b6cb4b79c788f1f073992e115f4ca918 ]
+[ Upstream commit d6429a3555fb29f380c5841a12f5ac3f7444af03 ]
 
-Function checkdone is only required if QUIRK2 is defined, so add
-appropriate #if / #endif around the function.
+In sddr55_{read|write}_data(), the address variables are needlessly typed
+as *unsigned long* -- which is 32-bit type on the 32-bit arches and 64-bit
+type on the 64-bit arches; those variables' value should fit into just 3
+command bytes and consists of 10-bit block # (or at least the max block #
+seems to be 1023) and 4-/5-bit page # within a block, so 32-bit *unsigned*
+*int* type should be more than enough...
 
-Cleans up clang scan build warning:
-drivers/usb/host/sl811-hcd.c:588:18: warning: unused function
-'checkdone' [-Wunused-function]
+Found by Linux Verification Center (linuxtesting.org) with the Svace static
+analysis tool.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-Link: https://lore.kernel.org/r/20240307111351.1982382-1-colin.i.king@gmail.com
+[Sergey: rewrote the patch subject/description]
+
+Signed-off-by: Karina Yankevich <k.yankevich@omp.ru>
+Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
+Link: https://lore.kernel.org/r/4c9485f2-0bfc-591b-bfe7-2059289b554e@omp.ru
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/host/sl811-hcd.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/usb/storage/sddr55.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/host/sl811-hcd.c b/drivers/usb/host/sl811-hcd.c
-index 0956495bba575..2b871540bb500 100644
---- a/drivers/usb/host/sl811-hcd.c
-+++ b/drivers/usb/host/sl811-hcd.c
-@@ -585,6 +585,7 @@ done(struct sl811 *sl811, struct sl811h_ep *ep, u8 bank)
- 		finish_request(sl811, ep, urb, urbstat);
- }
+diff --git a/drivers/usb/storage/sddr55.c b/drivers/usb/storage/sddr55.c
+index 15dc25801cdcc..0aa079405d23c 100644
+--- a/drivers/usb/storage/sddr55.c
++++ b/drivers/usb/storage/sddr55.c
+@@ -196,7 +196,7 @@ static int sddr55_read_data(struct us_data *us,
+ 	unsigned char *buffer;
  
-+#ifdef QUIRK2
- static inline u8 checkdone(struct sl811 *sl811)
- {
- 	u8	ctl;
-@@ -616,6 +617,7 @@ static inline u8 checkdone(struct sl811 *sl811)
- #endif
- 	return irqstat;
- }
-+#endif
+ 	unsigned int pba;
+-	unsigned long address;
++	unsigned int address;
  
- static irqreturn_t sl811h_irq(struct usb_hcd *hcd)
- {
+ 	unsigned short pages;
+ 	unsigned int len, offset;
+@@ -316,7 +316,7 @@ static int sddr55_write_data(struct us_data *us,
+ 
+ 	unsigned int pba;
+ 	unsigned int new_pba;
+-	unsigned long address;
++	unsigned int address;
+ 
+ 	unsigned short pages;
+ 	int i;
 -- 
 2.43.0
 
