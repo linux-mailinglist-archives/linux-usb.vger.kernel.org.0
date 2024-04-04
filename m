@@ -1,220 +1,120 @@
-Return-Path: <linux-usb+bounces-8947-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8948-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9458C898DA4
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Apr 2024 20:01:05 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E195898DE3
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Apr 2024 20:26:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DFDAAB29BD9
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Apr 2024 18:01:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8606E1C239AD
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Apr 2024 18:26:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6483E12FB3A;
-	Thu,  4 Apr 2024 18:00:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="PJu7yEYN"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFEC9130ACA;
+	Thu,  4 Apr 2024 18:26:40 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B68E12B95
-	for <linux-usb@vger.kernel.org>; Thu,  4 Apr 2024 18:00:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.176
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id B4E83130486
+	for <linux-usb@vger.kernel.org>; Thu,  4 Apr 2024 18:26:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712253654; cv=none; b=RXOoJhiiexLToseovEech9ehaq3jbo5Ya4hADv+cwCVgjmUXPnSECAO7racDzIjYAhNR1HIQIZV68cqduc5f41Ys7J1M1HV2YdSUoAkmFkVg079XEA/YPHFiZg12aLhdnZgfUuN3urtMwguZFCdikgXcnzxPdPV3u68ZiwiAJEU=
+	t=1712255200; cv=none; b=TalOvVh0Dt8551b3pilFifZ4gdC+rvujXi+hSl5HNMUV+8CyilerJ/JEJjprQ6GsDXCXJz0eHMt6PI5PD6ypQ2YjKBuG5kDZh1kSIyES2jtqnguWShts8SP3Aywm/k6bHvNZJNF0kdCZ/h5mo+A2v8eEhrfJhqmYrcKQzP+wvI0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712253654; c=relaxed/simple;
-	bh=8i9lD1082HlTW7L8l7PDfunKHQG6xnh5Rkq/dOV1DGA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=QV6Dt2xHkLWkZOrDV7ptzUF1yWmZ2tkNQRRZHfMEi8DlMV44zfC1tyH2oNStb2WHTFqb0sFFujE0Qvnu1Bs60YgzrDaO+vjWiKu8vI8zH4EZo9E3NCZxLV/y8wOp8tQnjI7470Fwa9Fli16j+YgU178LIYA+bdG6DswBKkStGc0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=PJu7yEYN; arc=none smtp.client-ip=209.85.160.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-43107ccd7b9so6466191cf.3
-        for <linux-usb@vger.kernel.org>; Thu, 04 Apr 2024 11:00:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1712253651; x=1712858451; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=eW6Ut/fw1eGESzWpDoiTGmn7OMtXM3kSDS/x7RatDPw=;
-        b=PJu7yEYNk3KqTw1bbGYxbGY5CEBTJduVGVNS4jL3XcnatYMQFo1WhaOxJjlJBc/w47
-         WPJo5AiEnlWhsA8CCzScA8+boPJKCKDPNnORFvDHphusoPTctUriQyS+xxqnb4Ad+Bzj
-         Q2Hea+ycRFaXjMy2CgrwhBWiImq/Kl961709A=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712253651; x=1712858451;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eW6Ut/fw1eGESzWpDoiTGmn7OMtXM3kSDS/x7RatDPw=;
-        b=fFUzQRDGkfwq3Z6XJ+GguIJ3zSlzxqb0MUN6SKnugPKjSojLf680u1elc63ndAxRyS
-         sXFLIq18FsppyQeq7aJLwzFjSRbWtNsG8yWg77lTPFqBq1VwO5JhxtUXqFn9/R0BDITA
-         wbbGaQw6/bQ110NiifzYIyY3f1GzJC7IMQ5SRnufGiSc5PJ0OhTBvEXMAylMWmMBCfZF
-         8O/PrRlnR2gsT8jhkErFSM5Wj5cA1+a2NYDGUONXFXYbNp0r826xVqJy+CFZHYAoAN+s
-         mHcKJO41bJL5MIdQ6fWgFYjx/1foNTSDD2hMU4WugCuIra4qWofFR/eeJCxw4zukPHk5
-         Pz+g==
-X-Gm-Message-State: AOJu0YwmSUGwfZa/9JDeKxuvqXfdEc2X1gjHSHQN0QkO1+4rh7tQn5j2
-	ovXxlF/w+YbYlBdjWyHbeSrmMuhJfjAPCFrApNAvaUokG9TxutaRZ//5mt4aqQ==
-X-Google-Smtp-Source: AGHT+IFfGtC4jZ50T09wLazeGDqgzXOVUXT6T5H8//nsyVwVVzCVYZ23/iHcHbbRp3uOEqkarB+J0g==
-X-Received: by 2002:ac8:5cc6:0:b0:432:d303:9ec with SMTP id s6-20020ac85cc6000000b00432d30309ecmr3529186qta.52.1712253651024;
-        Thu, 04 Apr 2024 11:00:51 -0700 (PDT)
-Received: from denia.c.googlers.com (188.173.86.34.bc.googleusercontent.com. [34.86.173.188])
-        by smtp.gmail.com with ESMTPSA id ea3-20020a05622a5b0300b004315aa3d5d7sm7900282qtb.0.2024.04.04.11.00.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Apr 2024 11:00:50 -0700 (PDT)
-From: Ricardo Ribalda <ribalda@chromium.org>
-Date: Thu, 04 Apr 2024 18:00:49 +0000
-Subject: [PATCH v6] media: uvcvideo: Add quirk for Logitech Rally Bar
+	s=arc-20240116; t=1712255200; c=relaxed/simple;
+	bh=jqYMRm7SAbbfCk4uBDe4qlaTk6tIsW2QffwttJ6sznU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=M3If8iAer/CFiB0uA6mCiCTrMA09Amcl7drffQE+0I4xZlQQ5g72ZJvrNVoy0oSo9Uh15pk9HaNAtbGdX1e7QmshDAXZavJCJxlbRW1XPbZT9y7BuMBN3zRnqvUv2HXp0+fsnhiSEReeHSIUhWPK6Nie7rJg4QNrwiOpqT6bHpE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
+Received: (qmail 15729 invoked by uid 1000); 4 Apr 2024 14:26:32 -0400
+Date: Thu, 4 Apr 2024 14:26:32 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Anand Moon <linux.amoon@gmail.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+  Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+  Alim Akhtar <alim.akhtar@samsung.com>,
+  Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+  Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
+  linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
+  linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/6] usb: ehci-exynos: Switch from CONFIG_PM guards to
+ pm_ptr()
+Message-ID: <3c3ddbb2-142b-4b3d-a5af-5188f46f0a77@rowland.harvard.edu>
+References: <20240404071350.4242-1-linux.amoon@gmail.com>
+ <20240404071350.4242-3-linux.amoon@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240404-rallybar-v6-1-6d67bb6b69af@chromium.org>
-X-B4-Tracking: v=1; b=H4sIANDqDmYC/3XNQW7CMBCF4asgr2vkmYydpCvugboY2xNiCUjlQ
- FSEcvcapIq0Spdv5O/3XY2Sk4zqfXNXWaY0puFchnvbqNDz+SA6xbIVGqwAEXXm4/HmOWtog5j
- gKFpxqjz/zNKlr2dq/1F2n8bLkG/P8gSP60pkAg26QY9MsQLjul3o83BK19N2yAf16Ez4n8Vib
- UNtdMitBVqx1Y8lA2Zpq2INe2jrIMSMK5aWtllYKpZrssYRCIFfsfZl6de/ttjax2g6Hyx09R8
- 7z/M3A+CGEJMBAAA=
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
- Alan Stern <stern@rowland.harvard.edu>, 
- Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-media@vger.kernel.org, stable@vger.kernel.org, 
- Oliver Neukum <oneukum@suse.com>, Devinder Khroad <dkhroad@logitech.com>, 
- Sergey Senozhatsky <senozhatsky@chromium.org>, 
- Ricardo Ribalda <ribalda@chromium.org>
-X-Mailer: b4 0.12.4
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240404071350.4242-3-linux.amoon@gmail.com>
 
-Logitech Rally Bar devices, despite behaving as UVC cameras, have a
-different power management system that the other cameras from Logitech.
+On Thu, Apr 04, 2024 at 12:43:18PM +0530, Anand Moon wrote:
+> Use the new PM macros for the suspend and resume functions to be
+> automatically dropped by the compiler when CONFIG_PM are disabled,
+> without having to use #ifdef guards. If CONFIG_PM unused,
+> they will simply be discarded by the compiler.
+> 
+> Signed-off-by: Anand Moon <linux.amoon@gmail.com>
+> ---
+> v2: add __maybe_unused to suspend/resume functions in case CONFIG_PM is
+> disabled.
+>     dropped RUNTIME_PM_OPS
+> ---
 
-USB_QUIRK_RESET_RESUME is applied to all the UVC cameras from Logitech
-at the usb core. Unfortunately, USB_QUIRK_RESET_RESUME causes undesired
-USB disconnects in the Rally Bar that make them completely unusable.
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
-There is an open discussion about if we should fix this in the core or
-add a quirk in the UVC driver. In order to enable this hardware, let's
-land this patch first, and we can revert it later if there is a
-different conclusion.
-
-Fixes: e387ef5c47dd ("usb: Add USB_QUIRK_RESET_RESUME for all Logitech UVC webcams")
-Cc:  <stable@vger.kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Alan Stern <stern@rowland.harvard.edu>
-Cc: Oliver Neukum <oneukum@suse.com>
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Reviewed-by: Devinder Khroad <dkhroad@logitech.com>
-Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
----
-Tested with a Rallybar Mini with an Acer Chromebook Spin 513
----
-Changes in v6: Thanks Laurent
-- Fix subject line.
-- Move quirk before device init message.
-- Link to v5: https://lore.kernel.org/r/20240402-rallybar-v5-1-7bdd0fbc51f7@chromium.org
-
-Changes in v5:
-- Update commit message to describe that this is a temp solution.
-- Link to v4: https://lore.kernel.org/r/20240108-rallybar-v4-1-a7450641e41b@chromium.org
-
-Changes in v4:
-- Include Logi Rally Bar Huddle (Thanks Kyle!)
-- Link to v3: https://lore.kernel.org/r/20240102-rallybar-v3-1-0ab197ce4aa2@chromium.org
-
-Changes in v3:
-- Move quirk to uvc driver
-- Link to v2: https://lore.kernel.org/r/20231222-rallybar-v2-1-5849d62a9514@chromium.org
-
-Changes in v2:
-- Add Fixes tag
-- Add UVC maintainer as Cc
-- Link to v1: https://lore.kernel.org/r/20231222-rallybar-v1-1-82b2a4d3106f@chromium.org
----
- drivers/media/usb/uvc/uvc_driver.c | 31 +++++++++++++++++++++++++++++++
- drivers/media/usb/uvc/uvcvideo.h   |  1 +
- 2 files changed, 32 insertions(+)
-
-diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-index 08fcd2ffa727b..1b4fb9f46bc83 100644
---- a/drivers/media/usb/uvc/uvc_driver.c
-+++ b/drivers/media/usb/uvc/uvc_driver.c
-@@ -14,6 +14,7 @@
- #include <linux/module.h>
- #include <linux/slab.h>
- #include <linux/usb.h>
-+#include <linux/usb/quirks.h>
- #include <linux/usb/uvc.h>
- #include <linux/videodev2.h>
- #include <linux/vmalloc.h>
-@@ -2232,6 +2233,9 @@ static int uvc_probe(struct usb_interface *intf,
- 		goto error;
- 	}
- 
-+	if (dev->quirks & UVC_QUIRK_FORCE_RESUME)
-+		udev->quirks &= ~USB_QUIRK_RESET_RESUME;
-+
- 	uvc_dbg(dev, PROBE, "UVC device initialized\n");
- 	usb_enable_autosuspend(udev);
- 	return 0;
-@@ -2574,6 +2578,33 @@ static const struct usb_device_id uvc_ids[] = {
- 	  .bInterfaceSubClass	= 1,
- 	  .bInterfaceProtocol	= 0,
- 	  .driver_info		= UVC_INFO_QUIRK(UVC_QUIRK_RESTORE_CTRLS_ON_INIT) },
-+	/* Logitech Rally Bar Huddle */
-+	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
-+				| USB_DEVICE_ID_MATCH_INT_INFO,
-+	  .idVendor		= 0x046d,
-+	  .idProduct		= 0x087c,
-+	  .bInterfaceClass	= USB_CLASS_VIDEO,
-+	  .bInterfaceSubClass	= 1,
-+	  .bInterfaceProtocol	= 0,
-+	  .driver_info		= UVC_INFO_QUIRK(UVC_QUIRK_FORCE_RESUME) },
-+	/* Logitech Rally Bar */
-+	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
-+				| USB_DEVICE_ID_MATCH_INT_INFO,
-+	  .idVendor		= 0x046d,
-+	  .idProduct		= 0x089b,
-+	  .bInterfaceClass	= USB_CLASS_VIDEO,
-+	  .bInterfaceSubClass	= 1,
-+	  .bInterfaceProtocol	= 0,
-+	  .driver_info		= UVC_INFO_QUIRK(UVC_QUIRK_FORCE_RESUME) },
-+	/* Logitech Rally Bar Mini */
-+	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
-+				| USB_DEVICE_ID_MATCH_INT_INFO,
-+	  .idVendor		= 0x046d,
-+	  .idProduct		= 0x08d3,
-+	  .bInterfaceClass	= USB_CLASS_VIDEO,
-+	  .bInterfaceSubClass	= 1,
-+	  .bInterfaceProtocol	= 0,
-+	  .driver_info		= UVC_INFO_QUIRK(UVC_QUIRK_FORCE_RESUME) },
- 	/* Chicony CNF7129 (Asus EEE 100HE) */
- 	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
- 				| USB_DEVICE_ID_MATCH_INT_INFO,
-diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-index 6fb0a78b1b009..fa59a21d2a289 100644
---- a/drivers/media/usb/uvc/uvcvideo.h
-+++ b/drivers/media/usb/uvc/uvcvideo.h
-@@ -73,6 +73,7 @@
- #define UVC_QUIRK_FORCE_Y8		0x00000800
- #define UVC_QUIRK_FORCE_BPP		0x00001000
- #define UVC_QUIRK_WAKE_AUTOSUSPEND	0x00002000
-+#define UVC_QUIRK_FORCE_RESUME		0x00004000
- 
- /* Format flags */
- #define UVC_FMT_FLAG_COMPRESSED		0x00000001
-
----
-base-commit: c0f65a7c112b3cfa691cead54bcf24d6cc2182b5
-change-id: 20231222-rallybar-19ce0c64d5e6
-
-Best regards,
--- 
-Ricardo Ribalda <ribalda@chromium.org>
-
+>  drivers/usb/host/ehci-exynos.c | 11 +++--------
+>  1 file changed, 3 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/usb/host/ehci-exynos.c b/drivers/usb/host/ehci-exynos.c
+> index f00bfd0b13dc..4cfde1af32be 100644
+> --- a/drivers/usb/host/ehci-exynos.c
+> +++ b/drivers/usb/host/ehci-exynos.c
+> @@ -236,8 +236,7 @@ static void exynos_ehci_remove(struct platform_device *pdev)
+>  	usb_put_hcd(hcd);
+>  }
+>  
+> -#ifdef CONFIG_PM
+> -static int exynos_ehci_suspend(struct device *dev)
+> +static int __maybe_unused exynos_ehci_suspend(struct device *dev)
+>  {
+>  	struct usb_hcd *hcd = dev_get_drvdata(dev);
+>  	struct exynos_ehci_hcd *exynos_ehci = to_exynos_ehci(hcd);
+> @@ -256,7 +255,7 @@ static int exynos_ehci_suspend(struct device *dev)
+>  	return rc;
+>  }
+>  
+> -static int exynos_ehci_resume(struct device *dev)
+> +static int __maybe_unused exynos_ehci_resume(struct device *dev)
+>  {
+>  	struct usb_hcd *hcd = dev_get_drvdata(dev);
+>  	struct exynos_ehci_hcd *exynos_ehci = to_exynos_ehci(hcd);
+> @@ -279,10 +278,6 @@ static int exynos_ehci_resume(struct device *dev)
+>  	ehci_resume(hcd, false);
+>  	return 0;
+>  }
+> -#else
+> -#define exynos_ehci_suspend	NULL
+> -#define exynos_ehci_resume	NULL
+> -#endif
+>  
+>  static const struct dev_pm_ops exynos_ehci_pm_ops = {
+>  	.suspend	= exynos_ehci_suspend,
+> @@ -303,7 +298,7 @@ static struct platform_driver exynos_ehci_driver = {
+>  	.shutdown	= usb_hcd_platform_shutdown,
+>  	.driver = {
+>  		.name	= "exynos-ehci",
+> -		.pm	= &exynos_ehci_pm_ops,
+> +		.pm	= pm_ptr(&exynos_ehci_pm_ops),
+>  		.of_match_table = of_match_ptr(exynos_ehci_match),
+>  	}
+>  };
+> -- 
+> 2.44.0
+> 
 
