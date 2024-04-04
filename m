@@ -1,69 +1,69 @@
-Return-Path: <linux-usb+bounces-8897-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8898-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1FAD89817F
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Apr 2024 08:33:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F344898187
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Apr 2024 08:34:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 45915288656
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Apr 2024 06:33:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D8A6C287F3E
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Apr 2024 06:34:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E41A72574F;
-	Thu,  4 Apr 2024 06:32:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBDF12E62E;
+	Thu,  4 Apr 2024 06:34:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VS32xUXx"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H2NP+i3z"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
+Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 168BD18E20;
-	Thu,  4 Apr 2024 06:32:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 033311CFB9;
+	Thu,  4 Apr 2024 06:34:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712212376; cv=none; b=FACBeK5TzJbHTE6IRS/23ULK24qHZ7RlTe/VFg24xaBudPS2ThFl4MFFoKsb6rCjtUx+JDkn7ABnYiyaR/jpjju12vzVgd5mQto8CZMd9VdWjCZO9q+JJEbY3En/QLlObTuu25Jl2lWSI6W5nUMk9ydEHsyFMUqcpuK1ZC1H960=
+	t=1712212467; cv=none; b=Xd90+nWBbrRRWycT/FapeeW/oOqX7A2BB2L1dge8wfH5hVY1HIlIGAVSeq7Pu1ZUuGSYyJ7gmvzKptG4Kf5AI6n3Pu7jYwK+XG7vQ6hLf9L9GcnVvFU2qGuBcf7UK4BySjVyrNeTc/zZqt8yvI6IHKJ2qFefWJd9Rdx1APv6pOU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712212376; c=relaxed/simple;
-	bh=vGyu7fArGU4JqjHwRSLDh9Z8nvuwqu3kgPuqkn+WkM4=;
+	s=arc-20240116; t=1712212467; c=relaxed/simple;
+	bh=FHp7gwfHIb6KDlNgXICkQODBQ/9hhhpvocf9u5mF+BU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HUGUBsSUUWsYjfWf8cu1iVCYxaQECzcPke1yXuStXPQbieqen+ohJkfrR6GZIkRcamTn+fcsGQ0fXt2lKuGhRNQBpo9TYPnT2R8lEIYOLek4NgX3B3apQygKQaE2JrxpF4G+7z2hYmy1jBm/cQxfYyZviTAIrqAZkmgmlwlxEAY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VS32xUXx; arc=none smtp.client-ip=209.85.161.54
+	 To:Cc:Content-Type; b=vC4nvBCLyoCxsI1JnMHw8beakARiCeZwZkjXCXeFzEq92PIwXf0n1tv0jkd54FplWRfkM2vZvIR3t14JGyTB61TwhWndhIiT0GnNYtF3ulXB3AzhSkNcTvJAXLg04QXTUBivkGNabxlC5TLHbJl+MempW9HBafCSGLZnZ0GTsm8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H2NP+i3z; arc=none smtp.client-ip=209.85.161.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-5a49261093cso318641eaf.3;
-        Wed, 03 Apr 2024 23:32:54 -0700 (PDT)
+Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-5a4a14c52fcso387224eaf.1;
+        Wed, 03 Apr 2024 23:34:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712212374; x=1712817174; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1712212465; x=1712817265; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Pj7mtPwxXeiOI90eJ23PpfoAYasKt78w/08LA9L6e0M=;
-        b=VS32xUXxZ2y08hQMWM8Nj+1Vdb+EmngZJovUgBhsilB0SNPeW35vk75CG8IAHSeNwA
-         0vNxE2utES5GY7p0oixZZyYt49aae6qtpr6tvebEJrRM+85fo2VwbygMVwGOCNyG7m0T
-         UIZhofkBOdp+l3mfupIYIFdtcEh1C+jeRFgESjMUEVd/yTDh5jj60ql081XTRAM7Be/C
-         khvcey+7U/p2OrF8ZyKe5UAZGEl2geNvDXgir6vScgDkLjb5yw6mepAzUU2MkTw54qY4
-         998Kk8iABXymHOnErufiMvIYaX0RB1yJZezem8V/UybQTR7NxW+ffGwBGRGbR/boU0M9
-         Hhtg==
+        bh=tQhelsDTj1UznWewSHonFFvxGfv5FQP2z0tCUi3eH7Q=;
+        b=H2NP+i3z0l2wEIbkD+ZAXeSyNAAMr6Jb3K+g1kVKBUL3WzRrhkYVNieONpz3+hqS+3
+         G/QZso9uYVywRewRWeZr4mA+HVxziC2ww2HFBSXePsly+sJs+a/DISOqQ7j+zb4PDW9p
+         McrxPG4Y5X3CWCP5PHhAIPPN3NmeTlaRt+V6Z60qwDqX6kNK9RIAoTSTFs1baYW7i8Zs
+         oMCLJW8044vouFu86dzUB3RLiIGJjMGr1sR6m4VXl2uNBlrXEwCHXRjWVom8MAMtvZie
+         AgpLwihcqmkUQx3//KrvCbHcQO6xJooipB7j1o1Gz+YylnM79XakchCn3T6se5/1DScv
+         H0Wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712212374; x=1712817174;
+        d=1e100.net; s=20230601; t=1712212465; x=1712817265;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Pj7mtPwxXeiOI90eJ23PpfoAYasKt78w/08LA9L6e0M=;
-        b=pnQ7fsxBktHad0fqWf/gc7iHUI7MN86EDynv4rXSQ9i0UarpnQYxNvxsBadK2T2g2X
-         nekfKKXLPT12MvMlWu0HxBq6ybZCJkdgH3fjUd6sl2iQQc86V7Y1atMiJSUjMEjE00Eu
-         Apw2ZVYZiZ7thi8pJr63Bo81Q1UUKtOJJeAuwqcAjj3s1UXuieTgoyyUru15aAVRbgtB
-         SH1QIwWRmI0CRn+WO/QtSBpkBOYDuGc0DWrvrk8wIKAqZWge5MT0T6eg1x+mG55AzrZl
-         0jMwaipmcJowL9R8VyN1uvfybzHsTOvficnfKwb6HAAWoesPACw1x4099KoCNUDwNj2n
-         YBSg==
-X-Forwarded-Encrypted: i=1; AJvYcCVMSmkILP6ItqQgUMIdykxSPJ2caJdzm1g8GsGTQT7aCNkKd/tgcS2vTdpomAFGOBIARyLRRuVtm1/SS2UAlBUNAztCu8swJ0ntOIjmbwxR+iFv1qcZbAs7jrCoMlCkdgeArpf4Miivhu5ks/M/Nc+aD054G3XJhDPvFSWN3E+OA9lf7A==
-X-Gm-Message-State: AOJu0YygkSFY5O1q/l5+itI+aqJYvcVBoT58rd+UHsjCaMG7SjcMQ5IF
-	ULODZ9CT/JCQZ21Bl8+MuqlZQIFQABOhSklKSxZjxP2jD2plGe6EN9/kOTiAI1UxF0Ibb/6kI5F
-	CbI64h9nv7+gNvhvH02e+SD19FZ8=
-X-Google-Smtp-Source: AGHT+IFU298ki3F3ZIF233kDIl2xjoKCe2Kx7EDWtmHBMuzJsoYktNQbuUmvSvqD56FK9wSDx2qlDBlYsnmJPqqGGrg=
-X-Received: by 2002:a4a:e911:0:b0:5a7:afa0:4a0f with SMTP id
- bx17-20020a4ae911000000b005a7afa04a0fmr1532139oob.8.1712212374215; Wed, 03
- Apr 2024 23:32:54 -0700 (PDT)
+        bh=tQhelsDTj1UznWewSHonFFvxGfv5FQP2z0tCUi3eH7Q=;
+        b=HFw9cxp0MQYVPl9U//Qg7ZixxgQ7HUOi19fSPjmPTf0HpDrWwq6Btzh0B5213GJs1v
+         hg6z3M1uv07cE6QqrSR25W/rJGyrpYGuGNkfzeY6P5nj6d+FWkHX8++oiCw0K7EZ9x1V
+         5f8zlpObtY/+1GC8iAjbIRos0/xuN/Ixxkuusx/CHVCYqxylsOYZcv4BEB3BjBYkz7Uy
+         bK2wRF/xr9s1+wtC0xIjEVtoN4nsSLy1118e9JRpDDw6cH1ynmPql41UHLHmtJSh1F/e
+         cyckDAkN/zrbhd3P7+feui8O6RTjJJONXjtj6mctjbUnHZUc1LWiBj68jPMhnRT1KoG9
+         Rk0Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWa8s6NOyby0oe3KhyfDlIYrHnzWBFxOlVXZPirafokPHr3FQ9j+Echx++WdqmDzNBwxplm9+KgQN2fvkD5YqcJo/q4h01EVg4UQkWTw7KUdIUHCImhOKGaJGnwDJT025qPtzc1DZQgLINZ5JcE2OM/otzEYu4Ma2G3KIAm+Aae3QkXow==
+X-Gm-Message-State: AOJu0YxLxNcTRUz0L37O4ZGNKyRY9Q9LjuZgQqlfnGdP/dPbMMpkgEOs
+	/iFHoGLQ4EDSUOBAXqq4algW1tZ/dUuUmrRHUVotZAfMpIYF1GhSL67ksX8qHDj6wxhJdMg+dWD
+	pkOV8tj/ShMJVUMKXJ3fLTZeEMBZoVUI8
+X-Google-Smtp-Source: AGHT+IEsuEN+i0n5eZx7glAwKTp1CRGVOa+m4T3Vrw7L0OzIBSke73D8YUDUXutRJgKSqj+TavU7BaByldSY86uphMc=
+X-Received: by 2002:a05:6820:260c:b0:5a5:2553:5036 with SMTP id
+ cy12-20020a056820260c00b005a525535036mr1454823oob.9.1712212465090; Wed, 03
+ Apr 2024 23:34:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -78,11 +78,12 @@ References: <20231204144429.45197-1-linux.amoon@gmail.com> <21673bfd-bb87-4c7d-a
  <8f28ea77-b3d0-445e-8d8e-80f980775f89@linaro.org> <CANAwSgRLORHb6qiHWRBR0tMbYB=O=gwatuGhk72SwZyhYMopCw@mail.gmail.com>
  <d2962ffb-badd-44a6-bdcc-53e15d4a4379@linaro.org> <CANAwSgSpuh-+HFYg2UTgX27SHFyCBddV46MgKakiSCOtFX4+aw@mail.gmail.com>
  <436ed6a4-2ed9-47bc-bcc9-18a52b1a791b@linaro.org> <CANAwSgS8ip+FvuvgusjNwnVL5Z68PRmEdwfQxhst_ZoVZFoFNw@mail.gmail.com>
- <CANAwSgSftb3KkXvzNyGGixVtK8SWcOYjxO9WWpLt-B3mf_B6tg@mail.gmail.com> <194aa24c-2763-47e2-8ccc-1637d299c1ba@linaro.org>
-In-Reply-To: <194aa24c-2763-47e2-8ccc-1637d299c1ba@linaro.org>
+ <CANAwSgSftb3KkXvzNyGGixVtK8SWcOYjxO9WWpLt-B3mf_B6tg@mail.gmail.com>
+ <194aa24c-2763-47e2-8ccc-1637d299c1ba@linaro.org> <CANAwSgR4zwoHUZRFmbjV9Z5kX9P_bU=HjkUokZm3eNStPXwwOw@mail.gmail.com>
+In-Reply-To: <CANAwSgR4zwoHUZRFmbjV9Z5kX9P_bU=HjkUokZm3eNStPXwwOw@mail.gmail.com>
 From: Anand Moon <linux.amoon@gmail.com>
-Date: Thu, 4 Apr 2024 12:02:38 +0530
-Message-ID: <CANAwSgR4zwoHUZRFmbjV9Z5kX9P_bU=HjkUokZm3eNStPXwwOw@mail.gmail.com>
+Date: Thu, 4 Apr 2024 12:04:09 +0530
+Message-ID: <CANAwSgTTpJ5wiwGFHmkUTX9zyzCYaRh=2bGPBo6H8KFznmksxw@mail.gmail.com>
 Subject: Re: [PATCH v6 1/2] dt-bindings: usb: Add the binding example for the
  Genesys Logic GL3523 hub
 To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
@@ -94,64 +95,73 @@ Cc: Rob Herring <robh@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.or
 	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Hi,
+Hi Krzysztof,
 
-On Thu, 4 Apr 2024 at 11:42, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
+On Thu, 4 Apr 2024 at 12:02, Anand Moon <linux.amoon@gmail.com> wrote:
 >
-> On 04/04/2024 06:27, Anand Moon wrote:
-> > Hi Krzysztof,
+> Hi,
+>
+> On Thu, 4 Apr 2024 at 11:42, Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
 > >
-> > On Tue, 12 Dec 2023 at 18:47, Anand Moon <linux.amoon@gmail.com> wrote:
-> >>
-> >> Hi Krzysztof,
-> >>
-> >> On Tue, 12 Dec 2023 at 18:39, Krzysztof Kozlowski
-> >> <krzysztof.kozlowski@linaro.org> wrote:
-> >>>
-> >>> On 12/12/2023 13:51, Anand Moon wrote:
-> >>>> Hi Krzysztof,
-> >>>>
-> >>>> On Tue, 12 Dec 2023 at 17:22, Krzysztof Kozlowski
-> >>>> <krzysztof.kozlowski@linaro.org> wrote:
-> >>>>>
-> >>>>> On 12/12/2023 12:37, Anand Moon wrote:
-> >>>>>>
-> >>>>>> Here is the list of warnings I observed with this patch
-> >>>>>>
-> >>>>>>   DTC_CHK Documentation/devicetree/bindings/usb/nvidia,tegra186-xusb.example.dtb
-> >>>>>> /home/amoon/mainline/linux-amlogic-6.y-devel/Documentation/devicetree/bindings/usb/usb-device.example.dtb:
-> >>>>>> hub@1: 'vdd-supply' is a required property
-> >>>>>
-> >>>>> You always require the property, but it is not valid for some devices.
-> >>>>> Just require it only where it is applicable (in if:then: clause).
-> >>>>>
-> >>>> I had already done this check many times before.
-> >>>
-> >>> I don't ask you to check. I ask you to change the code.
-> >>>
-> >> I have tried this and it's not working for me.
-> >>
-> >>>> my v6 original patch was doing the same and it passed all the tests
-> >>>> but since I updated the required field it not parsing correctly.
-> >>>
-> >>> Your original v6 patch was different. I don't understand what you are
-> >>> trying to achieve. Or rather: how is it different, that my simple advice
-> >>> above does not work for you  (as in the past you reply with some really
-> >>> unrelated sentence).
-> >>>
-> >> Ok, It's my poor English grammar, thanks for your review comments.
-> >>
-> >>> Best regards,
-> >>> Krzysztof
-> >>>
+> > On 04/04/2024 06:27, Anand Moon wrote:
+> > > Hi Krzysztof,
+> > >
+> > > On Tue, 12 Dec 2023 at 18:47, Anand Moon <linux.amoon@gmail.com> wrote:
+> > >>
+> > >> Hi Krzysztof,
+> > >>
+> > >> On Tue, 12 Dec 2023 at 18:39, Krzysztof Kozlowski
+> > >> <krzysztof.kozlowski@linaro.org> wrote:
+> > >>>
+> > >>> On 12/12/2023 13:51, Anand Moon wrote:
+> > >>>> Hi Krzysztof,
+> > >>>>
+> > >>>> On Tue, 12 Dec 2023 at 17:22, Krzysztof Kozlowski
+> > >>>> <krzysztof.kozlowski@linaro.org> wrote:
+> > >>>>>
+> > >>>>> On 12/12/2023 12:37, Anand Moon wrote:
+> > >>>>>>
+> > >>>>>> Here is the list of warnings I observed with this patch
+> > >>>>>>
+> > >>>>>>   DTC_CHK Documentation/devicetree/bindings/usb/nvidia,tegra186-xusb.example.dtb
+> > >>>>>> /home/amoon/mainline/linux-amlogic-6.y-devel/Documentation/devicetree/bindings/usb/usb-device.example.dtb:
+> > >>>>>> hub@1: 'vdd-supply' is a required property
+> > >>>>>
+> > >>>>> You always require the property, but it is not valid for some devices.
+> > >>>>> Just require it only where it is applicable (in if:then: clause).
+> > >>>>>
+> > >>>> I had already done this check many times before.
+> > >>>
+> > >>> I don't ask you to check. I ask you to change the code.
+> > >>>
+> > >> I have tried this and it's not working for me.
+> > >>
+> > >>>> my v6 original patch was doing the same and it passed all the tests
+> > >>>> but since I updated the required field it not parsing correctly.
+> > >>>
+> > >>> Your original v6 patch was different. I don't understand what you are
+> > >>> trying to achieve. Or rather: how is it different, that my simple advice
+> > >>> above does not work for you  (as in the past you reply with some really
+> > >>> unrelated sentence).
+> > >>>
+> > >> Ok, It's my poor English grammar, thanks for your review comments.
+> > >>
+> > >>> Best regards,
+> > >>> Krzysztof
+> > >>>
+> > >
+> > > Any reason this device tree binding got removed,I cannot find this file
+> > > Can not find the commit which removed this file.
 > >
-> > Any reason this device tree binding got removed,I cannot find this file
-> > Can not find the commit which removed this file.
->
-> Use git log.
->
-> Best regards,
-> Krzysztof
->
+> > Use git log.
+> >
+
+I got confused with the file name and my local changes.
+
+> > Best regards,
+> > Krzysztof
+> >
+Thanks
+-Anand
 
