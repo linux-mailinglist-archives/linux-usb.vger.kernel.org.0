@@ -1,50 +1,82 @@
-Return-Path: <linux-usb+bounces-8938-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8939-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 110BB898C5D
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Apr 2024 18:40:44 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 116E5898C65
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Apr 2024 18:42:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BFA62288B7E
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Apr 2024 16:40:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 423951C2172E
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Apr 2024 16:42:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A04EE1F95A;
-	Thu,  4 Apr 2024 16:40:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3219D1CA8B;
+	Thu,  4 Apr 2024 16:41:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WKLxKWaX"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iggpkPB0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8FDE1862F;
-	Thu,  4 Apr 2024 16:40:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26C681C6AF;
+	Thu,  4 Apr 2024 16:41:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712248831; cv=none; b=romiO2weP2/j95tXaNA69XYswfJi50pogK6crRKceovu1lAzE4k8zHV4lJJgTtY0e9J8uuZfQQzXm/0vWJCjSVBmgNuuJJ7G3ZQeEcPKbTSZzuogXSmIo2r7zGEC4AxMt1qfd3WbhzZ3NKkeQGLJ4I8gtRQjIla6TXG9El/qVP8=
+	t=1712248908; cv=none; b=FyDK5T+96Jc6RcupcZ/RAEdg+YPevI6IYjzCbC80fPlszF8XrJug/774lEjLemUHaPNPx7SGJS1DBL6VKYNeYgQaEx4/m53X5VYNkZZrjdqZxuEppVaDaxZTWVsCYV1e/sA6Nn1OucalMialRL3VWHsY9z9lmzq8zHG6WgLawws=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712248831; c=relaxed/simple;
-	bh=NDcTO6ryp12wsBd5oIpZdw/H8fCBPwWYXGzE2tqxxKY=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=oMuReSzieOzlB0et3VqGeSPJjV7uFjrjX8eWeNa693pf4azAdtn6E4460uisfO1OCGQjbzp7KLrEQZZsJQS6hRTjhd0F34QSkaeNPqVUrP/VNi6Gmw+l/18b4tvw6KAgb2nenMbxTbAK0c0tFK9g9Cg/FBIfLKz7Z9ztvLtVnVw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WKLxKWaX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A58D9C43394;
-	Thu,  4 Apr 2024 16:40:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712248830;
-	bh=NDcTO6ryp12wsBd5oIpZdw/H8fCBPwWYXGzE2tqxxKY=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=WKLxKWaXvC/da1X4T1YzNj/Sf8tuEo4IosuZssveerUwuwdlgIfynCX0A+8gX/koC
-	 ChnaFk9SYl667aFTjq0JtoLQV02haVv6wLXKpKlso+p8sVRT068j/24GU/qojbZQPw
-	 pFyuBeuB+fh23sZjYyxAtrTYLWt0gHMMn33v0T4A4bQ9HpzT74oFRbjPmdQANviBLq
-	 n4Dx0xc08IXabJXvUiEPn439wfPpWHRpyi8n/ZsRJETdKtfHwYweIw4GCNed6I81LQ
-	 qiORyGPHUK7nK/aQaSa+s3Bp3NjA+NlJ42uXCPvIgrNaRA1z70m0o9ddPb/0dsaUCP
-	 U/k1E8hVVE6oQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 94697D9A155;
-	Thu,  4 Apr 2024 16:40:30 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1712248908; c=relaxed/simple;
+	bh=xkAVjtlxvl6Lk9vMGY3Al4wPhonWzXqqcR3D/GDcytM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=dTHjq8LBccmFfDelglyhdXMgyKhkOvyrx1Ed/KX2Ks9+RGkUC2VnngCkO3VlxeXsNPjdaIm4dCu8VUXDjm+B6BM+a8u8EBEcjs5vwuYfWRwVkISgNaBpyLmXms898xjUmMyD6heqZbGVvjpE/XwtnFMkrDOwPpF2UNcrLEteRZI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iggpkPB0; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1e0e89faf47so3035315ad.1;
+        Thu, 04 Apr 2024 09:41:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712248906; x=1712853706; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=BRydtaGCEtU6C2jPZzNOrIpYyTJCBJSa2+2D+RooaRU=;
+        b=iggpkPB0NgSGsgoNRjFam3VMcVx0g6PBD+yDVtfFWVwgCc9aumoR1Ch5CcOpG86Dma
+         0Ud8FasKKnyan+xawJRvRt0SBkUvnZDjJXV6DSlQpo5TlHXc4txfLzsdCRPO5diUaZWQ
+         ro/pXLqX5JvKuNXQ7aRXxfCQO9EBUnebNVfYuHh7A8dLWzrK4vqInmdUcuPzDPSH/Bhr
+         e+LT5sIbyX7yz1FQSu2VE0nArOrIVjJ+MLHSYn7SN/7DrOfxqjNpBdlAYV2kgapcXDeL
+         zKos2dxfb8aPzUuRcZ4z1J3C5wB6ToYApWl9E7oxC4/jWuqiykNI2wo690VQNxWDAGdF
+         MDLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712248906; x=1712853706;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BRydtaGCEtU6C2jPZzNOrIpYyTJCBJSa2+2D+RooaRU=;
+        b=KjAJRaQie0k+Qw/oZzj2TzvwySPQmeQfYN1aliPIplYay9/shv+0V3u7kjakqmbDEd
+         e8qhJAlGrOijGQ3FxPt4m/00Ya8x1lNf8QRuSaBoPEf3T++atUzQrfBkXX3k8bAsXw/7
+         KCOE4Ae2CRjDPjQN7MkO96Wjk4mV1rpMnymxPk4sS4pxC/P7LO7i0RPaYxpplSCTVLjn
+         /5jgwneiQIhODWCdbdDX5qBvGO1N5GjrbNEyu/n+Bg90Nvepuec9090zMh5aMn5+2a+D
+         deJM9x6qqUg0AtHJLQhsqv7yt2ivSnMJ8e2/r13OGJ+VJVSFNnS0sMe1S8iTziKPqDcL
+         0MaQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXMblP1xetwJLs+69qLlI7XVOWB0QbOu/LMm1qubHZiSYSLEPZiUKn/kWsIpWuUK08FC9d2QueUbwpobTCmeV8/PHQdzhiZ8xEPMNNeKfNmR8Cx6o+Vsnm1+Gwso0GoNvsl9WCj+w==
+X-Gm-Message-State: AOJu0YzxRrn+Da7T27G0dY/VDolvUQGzqiIsgX26Ed6M9wwKWZGxo164
+	X/bouDGYCsx3lMvVgFIcatbMgnma/6qv+mpQGPdJNfzFQMNG8o0tifJluHZm
+X-Google-Smtp-Source: AGHT+IE0D+ZL45vK9ZgNxgLa4HEyfm7+JD7z3l7MVdPH2KTrX7mAS2dq1j01RCxtWoCjmoQo4SgUaw==
+X-Received: by 2002:a17:903:1c5:b0:1dd:5a49:7a98 with SMTP id e5-20020a17090301c500b001dd5a497a98mr3031863plh.3.1712248906266;
+        Thu, 04 Apr 2024 09:41:46 -0700 (PDT)
+Received: from fabio-Precision-3551.. ([2804:14c:485:4b61:9c:998:79c7:d666])
+        by smtp.gmail.com with ESMTPSA id h21-20020a170902f7d500b001e2814e08b9sm5495480plw.32.2024.04.04.09.41.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Apr 2024 09:41:45 -0700 (PDT)
+From: Fabio Estevam <festevam@gmail.com>
+To: gregkh@linuxfoundation.org
+Cc: robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	Fabio Estevam <festevam@denx.de>
+Subject: [PATCH] dt-bindings: usb: Document the Microchip USB2514 hub
+Date: Thu,  4 Apr 2024 13:41:40 -0300
+Message-Id: <20240404164140.662361-1-festevam@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -52,45 +84,77 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v4] net: usb: ax88179_178a: avoid the interface always
- configured as random address
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <171224883060.6883.2513876662318355261.git-patchwork-notify@kernel.org>
-Date: Thu, 04 Apr 2024 16:40:30 +0000
-References: <20240403132158.344838-1-jtornosm@redhat.com>
-In-Reply-To: <20240403132158.344838-1-jtornosm@redhat.com>
-To: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
-Cc: kuba@kernel.org, dave.stevenson@raspberrypi.com, davem@davemloft.net,
- edumazet@google.com, horms@kernel.org, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, netdev@vger.kernel.org, pabeni@redhat.com,
- stable@vger.kernel.org
 
-Hello:
+From: Fabio Estevam <festevam@denx.de>
 
-This patch was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+Document the Microchip USB2514, USB2412, and USB2417 USB hubs.
 
-On Wed,  3 Apr 2024 15:21:58 +0200 you wrote:
-> After the commit d2689b6a86b9 ("net: usb: ax88179_178a: avoid two
-> consecutive device resets"), reset is not executed from bind operation and
-> mac address is not read from the device registers or the devicetree at that
-> moment. Since the check to configure if the assigned mac address is random
-> or not for the interface, happens after the bind operation from
-> usbnet_probe, the interface keeps configured as random address, although the
-> address is correctly read and set during open operation (the only reset
-> now).
-> 
-> [...]
+Signed-off-by: Fabio Estevam <festevam@denx.de>
+---
+ .../bindings/usb/microchip,usb2514.yaml       | 53 +++++++++++++++++++
+ 1 file changed, 53 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/usb/microchip,usb2514.yaml
 
-Here is the summary with links:
-  - [net,v4] net: usb: ax88179_178a: avoid the interface always configured as random address
-    https://git.kernel.org/netdev/net/c/2e91bb99b9d4
-
-You are awesome, thank you!
+diff --git a/Documentation/devicetree/bindings/usb/microchip,usb2514.yaml b/Documentation/devicetree/bindings/usb/microchip,usb2514.yaml
+new file mode 100644
+index 000000000000..8df7a5adfbe8
+--- /dev/null
++++ b/Documentation/devicetree/bindings/usb/microchip,usb2514.yaml
+@@ -0,0 +1,53 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/usb/microchip,usb2514.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Microchip USB2514 Hub Controller
++
++maintainers:
++  - Fabio Estevam <festevam@gmail.com>
++
++properties:
++  compatible:
++    enum:
++      - usb424,2412
++      - usb424,2514
++      - usb424,2417
++
++  reg: true
++
++  reset-gpios:
++    description: GPIO connected to the RESET_N pin.
++
++  vdd-supply:
++    description: 3.3V power supply.
++
++  clocks:
++    description: External 24MHz clock connected to the CLKIN pin.
++
++required:
++  - compatible
++  - reg
++
++unevaluatedProperties: true
++
++examples:
++  - |
++    #include <dt-bindings/clock/imx6qdl-clock.h>
++    #include <dt-bindings/gpio/gpio.h>
++
++    usb {
++        dr_mode = "host";
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        hub@1 {
++          compatible = "usb424,2514";
++          reg = <1>;
++          clocks = <&clks IMX6QDL_CLK_CKO>;
++          reset-gpios = <&gpio7 12 GPIO_ACTIVE_LOW>;
++          vdd-supply = <&reg_3v3_hub>;
++        };
++    };
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.34.1
 
 
