@@ -1,238 +1,205 @@
-Return-Path: <linux-usb+bounces-8882-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8883-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E987897D11
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Apr 2024 02:30:05 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id ADF8F897D18
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Apr 2024 02:31:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 812B91C219F8
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Apr 2024 00:29:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 23D2D1F25AD5
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Apr 2024 00:31:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C8551848;
-	Thu,  4 Apr 2024 00:29:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84772468E;
+	Thu,  4 Apr 2024 00:31:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b="RHrX7EEk";
-	dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b="TuClmjxu";
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=synopsys.com header.i=@synopsys.com header.b="Mm3YDk7a"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="f7wE4mZK"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-00230701.pphosted.com (mx0a-00230701.pphosted.com [148.163.156.19])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6DE2634;
-	Thu,  4 Apr 2024 00:29:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=148.163.156.19
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712190593; cv=fail; b=K76PrGtGvHwNrHlhwiJqxWw46HgUxc80LnRmgGwn1XmCTmKJh6AYIA7AYJlIXUisUzRc66OncvGGNaQckN7+jQf3gL+Lmexq2aMOUg7QisXNR6HQN4McgTJx1SyjLpGlcwMLha2SVV451uHFq9yMPa5VQ6+h/piNVWV412W7IlA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712190593; c=relaxed/simple;
-	bh=alPrxsl0tx/bnJekPrIG8f596FvEBqk0Wj/Wm7qqURo=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=HOZeLHMbYh6aiBnDl2uk41VZw1Gv5YoLgqZUZViFS/V8VVXZ8ZTRdS3RrWFrcP9QkMimWp1GWJUGhVw0QJRvWOeYPpNh3YPCvdJouAD60bNq8J+RMYbyiQm4cfwuW6U4nWZCj9yohxsbL4GVUQeO9CAJiCnYENqq6bLbXf+re6M=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=synopsys.com; spf=pass smtp.mailfrom=synopsys.com; dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b=RHrX7EEk; dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b=TuClmjxu; dkim=fail (1024-bit key) header.d=synopsys.com header.i=@synopsys.com header.b=Mm3YDk7a reason="signature verification failed"; arc=fail smtp.client-ip=148.163.156.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=synopsys.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=synopsys.com
-Received: from pps.filterd (m0297266.ppops.net [127.0.0.1])
-	by mx0a-00230701.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 433Nshtn014786;
-	Wed, 3 Apr 2024 17:29:37 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com; h=
-	from:to:cc:subject:date:message-id:references:in-reply-to
-	:content-type:content-id:content-transfer-encoding:mime-version;
-	 s=pfptdkimsnps; bh=alPrxsl0tx/bnJekPrIG8f596FvEBqk0Wj/Wm7qqURo=; b=
-	RHrX7EEkUkKPZdpVj9M1ZKGSli+9MlubrrYsRq7UAKYh4WMmeLjHTq+PNbaBQrHi
-	QdCJmPZQ4OvcyTUueZeH/tShmy6pG/i1YpjgCQPyIeAcNXWCyb0H8cXVI4sC7GhF
-	qN7Ai+QA1J7v+B7A1iNan4rBIWtQcbdiIVjp9JHd2xBk0De2ZxqV5OD2imhNz0Xf
-	3LqvQ3fLXvoFsMrSbuj5TqtINSW1BwO+z/EWa1pELvpSioFEmqbBEVrQ9W53hw7Z
-	GY4n+mIidEYkhiYPbPIpup4NrbATW2jq6DxLYfjhqyBIJ5r+aLGZhW9OtZbfT1uZ
-	vcD6B74yKgaANzWmRYjh9A==
-Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com [149.117.73.133])
-	by mx0a-00230701.pphosted.com (PPS) with ESMTPS id 3x9en3gh8t-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 03 Apr 2024 17:29:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-	t=1712190561; bh=alPrxsl0tx/bnJekPrIG8f596FvEBqk0Wj/Wm7qqURo=;
-	h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-	b=TuClmjxuqRepNZ7chyIOsiyHLK0MqptdTnO1vpWAANjQCy/C+qLurdquxwkumYjpz
-	 qR3n0Wd172MunkyHR1g3Qk7r9bFpAwR90AwDXYAS+NQhpVj/T2vAOnbXee5JX7/UEz
-	 SR5ORv8ecPjcTq5trKTVyqMEDz8CzM7WNE2CeU1XSLRp3D90aCqVxp7kpuGCPdW3qR
-	 94vyDE7mNmrms2QnCpjNxwlwk7PQjo+EbgZ5SnOC6VUj6+dd9f2bgJgr0qHrFqtozt
-	 yO07gvL7/ro98xTcRBkO6DikWCKox8Ay7sgvaAvyz0Gl9Ko2tP6ZO9s2KWzIb6+fmE
-	 RHJHl0vWIthzw==
-Received: from mailhost.synopsys.com (badc-mailhost3.synopsys.com [10.192.0.81])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits)
-	 client-signature RSA-PSS (2048 bits))
-	(Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
-	by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id E1C0E40540;
-	Thu,  4 Apr 2024 00:29:20 +0000 (UTC)
-Received: from o365relay-in.synopsys.com (us03-o365relay1.synopsys.com [10.4.161.137])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-	(Client CN "o365relay-in.synopsys.com", Issuer "Entrust Certification Authority - L1K" (verified OK))
-	by mailhost.synopsys.com (Postfix) with ESMTPS id 318E2A00AA;
-	Thu,  4 Apr 2024 00:29:19 +0000 (UTC)
-Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
-Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=synopsys.com
-Authentication-Results: o365relay-in.synopsys.com;
-	dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.a=rsa-sha256 header.s=selector1 header.b=Mm3YDk7a;
-	dkim-atps=neutral
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2168.outbound.protection.outlook.com [104.47.59.168])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(Client CN "mail.protection.outlook.com", Issuer "DigiCert Cloud Services CA-1" (verified OK))
-	by o365relay-in.synopsys.com (Postfix) with ESMTPS id 1405D4055F;
-	Thu,  4 Apr 2024 00:29:18 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iYveboN+PPxT0TTcR7jYZA6fHCJBUC2TrXnKfDh9CHPvXgoKzXeCwmP5DQ/JZycn7vy6O2mnhJ0Mm5KGnVXmcoiC14+xfsUjTxsFmt2yU1tfkxzky7d15R4vA8Pmu+NskpFWwPPoFqNwBi6mlDDZNA+/3YZyHQ0n8iCflLg8kF/uTvkJYRAvORbngjGKgXCrfDsyhIiGewjgHiEBBofEV49a9gyI6Sl5ToscGTJ3cxtRZzxna/zaRmkG9GPkLZUWRaLGvaqLzTcy1EiVjyIurgb9jqOPVe0rYO7QwVn4trkPnYass5D2vJCC/dsgagjhcUO/TtDHzb+nRlVEajy1TQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=alPrxsl0tx/bnJekPrIG8f596FvEBqk0Wj/Wm7qqURo=;
- b=e3KvaWIh9V27RriGOiatXqT/BfA2GTyCu0Zm8DK1zNIO6jhaJDAQaElpSixF+RXZTSEmCgup4ovh6pJV07SMwaCxD57j9+U/v2vVoG8rg6VOPuWu1C0XAYe6pj+d8h/5WrzAeBwr8ZuHMJfyQ8QNy9nxVgCYyPTnow01EvraUp4giygaJUPm0nHyx9OHWl3+LnPfNPzzYqJjdZCOMcWZuZfsRnDwHGOaMK1EsCfKnLBXiFfLb36Jln8NrwdezGpruVz2N1yPx7gPxTCFRshVNb3uDBANA9aG19J+E4O5eskHn7h6iP2Tk4opfQA9lM1mdU7xQPgkqSKLoMBbnMMHbg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
- dkim=pass header.d=synopsys.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=alPrxsl0tx/bnJekPrIG8f596FvEBqk0Wj/Wm7qqURo=;
- b=Mm3YDk7a0JmfiKLQoDJgf2yRnJp6cSnFZx0hIUdbWtcAsHUmcy0fKn5m9X48inQAiewrfOQYRIbZWBQq6UQzUA80lQBAc35TDaMruxtQrAmS/FOve3eCBR7kNgoWVGBiZmE9oIdAIfdC/GPwrqDI1Sdm2UFNiiJvDHtRvxgdkY4=
-Received: from LV2PR12MB5990.namprd12.prod.outlook.com (2603:10b6:408:170::16)
- by BL3PR12MB6644.namprd12.prod.outlook.com (2603:10b6:208:3b1::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.46; Thu, 4 Apr
- 2024 00:29:15 +0000
-Received: from LV2PR12MB5990.namprd12.prod.outlook.com
- ([fe80::c87:4fbe:a367:419c]) by LV2PR12MB5990.namprd12.prod.outlook.com
- ([fe80::c87:4fbe:a367:419c%3]) with mapi id 15.20.7409.042; Thu, 4 Apr 2024
- 00:29:14 +0000
-X-SNPS-Relay: synopsys.com
-From: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC: Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org"
-	<linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] usb: dwc3: gadget: check drained isoc ep
-Thread-Topic: [PATCH v2] usb: dwc3: gadget: check drained isoc ep
-Thread-Index: AQHahUf+Fjbt0R5rsESCdAPrKfiIcbFVmhGAgAADmgCAAaX5AA==
-Date: Thu, 4 Apr 2024 00:29:14 +0000
-Message-ID: <20240404002906.wk6xbz2wp2tf2xwn@synopsys.com>
-References: 
- <20240307-dwc3-gadget-complete-irq-v2-1-8c5e9b35f7b9@pengutronix.de>
- <20240402230555.xgt5uilc42diyr4m@synopsys.com>
- <20240402231848.4hzzrxegjrcmdab2@synopsys.com>
-In-Reply-To: <20240402231848.4hzzrxegjrcmdab2@synopsys.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: LV2PR12MB5990:EE_|BL3PR12MB6644:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 
- tIGlBzgGY9+ViTgpvMmfuwekGw719MlDkBWvJa/fWM8P8Cde9ggi3LoNWEItydlZ7nsl7W9fkfZSRCgfV+qICbLtmQ/CskvVNw/KP1qn150Nhb0kYAVfv54Hrrk9bxmI1rCicgPPbQf9XzmGhFIBIb6kVal8Jm7RkkI/kYtoEwIuFile5LoZ765Ew4MuRL309a1rm1rGfiTvFgDbLvA+pLlQa3fhPgjSvxQlKeJYDOEtjcHgiFnjZGd2s7T6SxoI973Kz79T2wNZBJ0PCAqYfZcE86gOrzH7hC65SCHWlLm3Xx6/YVKNsyQdvG6vvS99iALspcMtFsAvg8H0+qv78JdYh9yZM0CWg8b2rROvuvmnPxmpKp6cQxj359ZQMQXt8RL+Ul1+TegmIbPFTlNBuMZgV+uDEEmv8hfCC40DH7rc0vufkmCQSys9MtkJeTIlWg9ClQWySEhxUZPjN7RbdE+TB0YskedaTxNm4vLmwlmfDAOeqKszSaHi+h6VXdX5joE4CDghlPDDWRGKykPbajjvb49o5uuth4OO4ht9iq0TAYxBfG0CSTpdo3Pa7fFe2H4SNGvCr/PjmSeL7CdBp8GC+lFqtaGdo4ZINy0tBhDUDu6ZFixIi4R6vVe1Kg9y3mUbz0ZVIeJ8C3czJfWfkTD1LCo7MM4M6yJvJQ071mo=
-x-forefront-antispam-report: 
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5990.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(1800799015)(366007);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: 
- =?utf-8?B?SU9Lb0c0L0tsZ2hjVXU3am51ZDIva0I2VjdJeXlpY3poY0pCcUZNOTVFMGFz?=
- =?utf-8?B?NGU4WTZXakNyY0pzUGpCQVNsa0l4dHBzbGFSbzZ6QVNhNmF1cjRUcFZGSXVu?=
- =?utf-8?B?UU9NZFdJTGM5V0RrVzlvTDZna0FxMTgrdmgxOE02M3dtSFJtRGE5dExpcVFh?=
- =?utf-8?B?Y3l6UE5STSt1LzZNWmZ6UlU1Qk5jNEQ1b1M4SVhMSldCNTlsUDBrRWJKeCtp?=
- =?utf-8?B?aEhOLzRxeEMvdlQ5MmdsVGJvL3QraXJxWnJBNngvVVdtaVovMGNyMUNWYUI4?=
- =?utf-8?B?K2pqb0xhNWVQMkEwTDJCNE9wa0pObkI5QTg4WERhRzhsNUVKaHdJWG1ZeENZ?=
- =?utf-8?B?N1lacmQxMkx1YTRXdmR4VzRncHNGb01aR1VGTzZJNXc0anRzZ1ora1RyQjB0?=
- =?utf-8?B?ZjNlVnpTUVNkVmVxallGcXhDczllT0srS2NrOVhRUEVMQ0tScGxia0Zab09X?=
- =?utf-8?B?NTZoZWNTd3cwZTR4dDdmNXVGV2lBdWV4eTRJVzdma0RnT0RuVlpUdUljVEY3?=
- =?utf-8?B?alRhbmx3bXJtQXJqMWpFRWRnVHJTU0Z6ZjdjWG1LdlkxUHZOZ2x4dlZOSkx6?=
- =?utf-8?B?K3c0VGJhYUJ3U3F2ZVRBSHJuZExNTjAya2tkTUM1QkJlTTFUZXFIUjB5c2p6?=
- =?utf-8?B?TWxrSk5RaE51QzFlVWI1SWFkRmVSZVdjR3BHaFgxeXhpNUY2TEN2ekt6Z3Qr?=
- =?utf-8?B?MXJlSDRqWGpEYlMyZThmSkFxa01wV1Rta2VRVlVPdFRRK2RLTG1tWHlmV0lR?=
- =?utf-8?B?MVlQNE1zYm43QzZDRkVPU1o0alh4ZW55RVV5NDhXS013aGhoZzB5TVcxa1Ez?=
- =?utf-8?B?RXMyK3g4WXVMRVp2dzdhYStNODZOU1pUWWpIL2lCanNHTnZ6UkVFN001VFdp?=
- =?utf-8?B?U1ExTTVIdjdIRmFaSGJJWm52Q2dFTU9EQk4vdCsxME9venIvZUE4ZjliUFNx?=
- =?utf-8?B?b3BTWVNBVkJxUWFsVXZSTURReENVaTVad2g5R3N3czJtcVpOZnVvWk9VaVpP?=
- =?utf-8?B?MEw1VEVQVVdqNGNLZG83SnJPRG9oZ3FmVE5xZlNrSFR0VjRmZmZzaVRjb0xQ?=
- =?utf-8?B?ZXZBMEp2NkFySk9mVUdiUm9hYXE5cGdYMTZuYzZ3V1RzeUxpdThpQS9GTmJQ?=
- =?utf-8?B?Q2hVYmpVVmNiZytHNkdFK2hQdm9aamQ2a3lOTG01RXJRQTJ6Z3BUSXBrK1BS?=
- =?utf-8?B?QkoySkZrSHpSR1pCNFJtT0RSaE02cU5mSGZhU1NZRmdNSjEwOUUvaG1kYWhD?=
- =?utf-8?B?OEZvRWV6aWtFcVgyNDJXU2F5eFdzb3gvQ0FQdTl2RGZ3S09tNU1pT1dUWlRt?=
- =?utf-8?B?RkgwK1JNQjBZSG9PMDdYSC9zMFJGcGs4VUhreVB3OXRnb1VrVVVBTm1LU0JJ?=
- =?utf-8?B?cU1HVlBIbWs4eW5vYXpJbmpyYWZFZG9ydkhDZTRLdEhvSU1kTlJ1Z2hHNzFF?=
- =?utf-8?B?ZnQwM3lvN3Qydy8rUFUrWlFaSVlXenZrWnFta2ZxVStDdHZGbzNLSXdBWmhk?=
- =?utf-8?B?RmZ1eEkxOEZRZHJJMTB2OEhBZ3duWTB3ZWhwdXVBUkN3VUR3S2JxZkk3UUFV?=
- =?utf-8?B?S3VLTVVDT3p6RXZ2L3g4Qi9zRXcvTEd2T0lPTG53Y1ZXZER6WmIzVEpDOUxp?=
- =?utf-8?B?cW0wQXI0bXhGRkw2ZDhXczAyMCtMODF3SndnaDUwT0kzOTQ5MEt0ZGYvUGlx?=
- =?utf-8?B?dUJNTUhhd3dsVmlDSmVNVnB0SXpHM1RTNUlXOWRZN3hzZEhBMkNId2x3QVJ3?=
- =?utf-8?B?bmdxaE5CdDZLeGhldCtESDV4M3FTQWRzMy9WYk9UbEp5TU8ydHRQNnljZERF?=
- =?utf-8?B?SGV2T2pYSGp4WWc2bjBSakg1SFNiLzMwSmE2d0wycjA4L1JRMFo3L0VTTFpR?=
- =?utf-8?B?clRrQXFiQzVPck9aNkFtbXRaSDNBVm9TS0ZTNkx3UVFHcEwxeXMweW9HVGNk?=
- =?utf-8?B?cnUyaDR2L2FpbHh6RTlVaEh0bnlQSk8vL0o2V3RaQSsxdTBlOFgzYk5jeWlF?=
- =?utf-8?B?bHRQQjZ2Q00yYTNCRUw4VXZROGxwcXVENmdwRmVteCtva2lXK2tQVTVvcHdT?=
- =?utf-8?B?OFlqK09PRlk1Ujk1TDJMN1JLTVU5a1FmZ3lrQlRQVHB2OC95MnhJNGxsNmU3?=
- =?utf-8?Q?nnW1ozSRtkHcigbyeGVgghF3E?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <DDD104CDD8D90441A8E1F96D79CB1878@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD3357492;
+	Thu,  4 Apr 2024 00:31:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1712190672; cv=none; b=nSl7bt2ukT72iYg/3PtkEGQmXOv82Ez2/NXDNuxPAb+4ooyGskNtit7ECc8UR3Z9+rsFssXz8/OBr0czQ6ZG1zeoJcVBlqRsc+cbnYY5ickPCLjaH3fRSTcI/amiatXMioqmvDPR4PFf9YXUjnaNOEVi9ns4U1hEW1Zzg/Cp+po=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1712190672; c=relaxed/simple;
+	bh=AZBccU90Y33RDjvsClTnnyoP7eIFc3Od90wpBG4Bv+E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OEzB2Zm+8ydcgOhHeKG6LUgO16+F3VPgmm17ZwmY2bUndOJagN/UuLqb5+y4AGvo6M0assRH5/R1FuO8EPjU6ve3NQVcSQTXfAhM/4U1p/BzTf8HqYpTVHf7+n8I/03scjMpFNQCKKmywoP1ZJhv9tvedtjJRr6Ii5SlbjUwLMc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=f7wE4mZK; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 384413A3;
+	Thu,  4 Apr 2024 02:30:29 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1712190629;
+	bh=AZBccU90Y33RDjvsClTnnyoP7eIFc3Od90wpBG4Bv+E=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=f7wE4mZKlqguDlnDg7J2uj/iDMoKo8Bz3L4JezNgiM3Og0SM64hPVjMHhdTG/1mY1
+	 vN6ITSvQFL7+mM3kX7Kljj3Lem5C2sdQB1GtXpT1DHfLIgR8AQGFTPQF7LLT0VGIlj
+	 tG6IlkBmORmRX5YixCc89w/6GZr/+B8KcBwBVau0=
+Date: Thu, 4 Apr 2024 03:30:55 +0300
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Ricardo Ribalda <ribalda@chromium.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-media@vger.kernel.org, stable@vger.kernel.org,
+	Oliver Neukum <oneukum@suse.com>,
+	Devinder Khroad <dkhroad@logitech.com>,
+	Sergey Senozhatsky <senozhatsky@chromium.org>
+Subject: Re: [PATCH v5] media: ucvideo: Add quirk for Logitech Rally Bar
+Message-ID: <20240404003055.GD23803@pendragon.ideasonboard.com>
+References: <20240402-rallybar-v5-1-7bdd0fbc51f7@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
-	nxVEfgGbMGQqrmPsA9ceTiFUuQUtAPTVH/SkBol+M7fQbUGSwGUXoA4SSuTmYYJyjYtR/FJ/WtN87EvnQ2mOBQNQEfP5Bs7KQ+8i4n/j6dACNfmksy5AZaXc3wGwzBPH/6sGECgYGayUhqS75GixTbns75i6VGiTNmaSw+Mg0CMlmLmDbD8N8ztRCWYj9UdYorld66K9XOHSgH58zYyuvwPKsd786PYD7iQA4lG6wsX1Y15r2OyDaH/YpmKj8k86jCc6tU6bRnbTa0v2TkSovKfVG2whMp2V9pwwt4Gpk1n3qHpcBFMjCEIgYfeI9wU3Y8kAVuC8k6mGP1T5S4JHYjml0KhfrUtSKpofcvtCRqUI5hXMmNkB28620tpaYPIWjU58xkYQaGB3mYk/gPHizK/6sKPZXGJoycKAmqgpG1qvqqzoLRpTyJVw7adBgQMAWCWf+UQLnW1v+KUQ07MdvDsoSZdmxzJKH/R/mX7u28SXwU0uR8cQKfrk3HS5/uIXTcuoWbgT3B97Nno8nY77j+EirUQH+BkK3rVTrAPcCRIjM/FoXHwz0/0zxB1X8OQSN/8tqUo/NxD+2ZUJSKULy3Ij61iTrv0xYExea/4HcGkEnnwpC/KnUCYBc1ooZ04T60kM3mw4BQNNLCI6TyMb9A==
-X-OriginatorOrg: synopsys.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5990.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 170c0dab-f261-4f1f-0e73-08dc543e41d9
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Apr 2024 00:29:14.8689
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: yE/yxUlhDjhALdVk7GvNcJXSZzHaGfD7G689AFvBgoAt+atOVe2hOe/Z+xpreNOle5vmpRdaxVTsFV1i3O9iIQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR12MB6644
-X-Proofpoint-GUID: HwFl9xOy2umFdKtZXugedtTQLD2Dm4Cw
-X-Proofpoint-ORIG-GUID: HwFl9xOy2umFdKtZXugedtTQLD2Dm4Cw
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-04-03_25,2024-04-03_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_active_cloned_notspam policy=outbound_active_cloned score=0
- spamscore=0 clxscore=1015 lowpriorityscore=0 phishscore=0 mlxlogscore=585
- suspectscore=0 bulkscore=0 adultscore=0 impostorscore=0 priorityscore=1501
- mlxscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2404010003 definitions=main-2404040001
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20240402-rallybar-v5-1-7bdd0fbc51f7@chromium.org>
 
-T24gVHVlLCBBcHIgMDIsIDIwMjQsIFRoaW5oIE5ndXllbiB3cm90ZToNCj4gT24gVHVlLCBBcHIg
-MDIsIDIwMjQsIFRoaW5oIE5ndXllbiB3cm90ZToNCj4gPiBNeSBjb25jZXJuIGhlcmUgaXMgZm9y
-IHRoZSBjYXNlIHdoZXJlIHRyYW5zZmVyX2luX2ZsaWdodCA9PSB0cnVlIGFuZA0KPiANCj4gSSBt
-ZWFuIHRyYW5zZmVyX2luX2ZsaWdodCA9PSBmYWxzZQ0KPiANCj4gPiBsaXN0X2VtcHR5KHN0YXJ0
-ZWRfbGlzdCkgPT0gZmFsc2UuIFRoYXQgbWVhbnMgdGhhdCB0aGUgcmVxdWVzdHMgaW4gdGhlDQo+
-ID4gc3RhcnRlZF9saXN0IGFyZSBjb21wbGV0ZWQgYnV0IGFyZSBub3QgZ2l2ZW4gYmFjayB0byB0
-aGUgZ2FkZ2V0IGRyaXZlci4NCj4gPiANCj4gPiBTaW5jZSB0aGV5IHJlbWFpbmVkIGluIHRoZSBz
-dGFydGVkX2xpc3QsIHRoZXkgd2lsbCBiZSByZXN1Ym1pdHRlZCBhZ2Fpbg0KPiA+IG9uIHRoZSBu
-ZXh0IHVzYl9lcF9xdWV1ZS4gV2UgbWF5IHNlbmQgZHVwbGljYXRlIHRyYW5zZmVycyByaWdodD8N
-Cg0KQWN0dWFsbHksIHNpbmNlIHRoZSByZXF1ZXN0cyBhcmUgY29tcGxldGVkLCB0aGUgSFdPIGJp
-dHMgYXJlIGNsZWFyZWQsDQpub3RoaW5nIGlzIHN1Ym1pdHRlZCBhbmQgbm8gZHVwbGljYXRlLiBC
-dXQgc2luY2UgdGhlIHJlcXVlc3RzIGFyZSBub3QNCmdpdmVuIGJhY2sgeWV0IGZyb20gdGhlIHN0
-YXJ0ZWRfbGlzdCwgdGhlbiB0aGUgbmV4dCBTdGFydF9UcmFuc2Zlcg0KY29tbWFuZCB3aWxsIGJl
-Z2luIHdpdGggdGhlIFRSQiBhZGRyZXNzIG9mIHRoZSBjb21wbGV0ZWQgcmVxdWVzdA0KKEhXTz0w
-KSwgdGhlIGNvbnRyb2xsZXIgbWF5IG5vdCBwcm9jZXNzIHRoZSBuZXh0IFRSQnMuIEhhdmUgeW91
-IHRlc3RlZA0KdGhpcyBzY2VuYXJpbz8NCg0KPiA+IA0KPiA+IFlvdSBjYW4gdHJ5IHRvIGNsZWFu
-dXAgcmVxdWVzdHMgaW4gdGhlIHN0YXJ0ZWRfbGlzdCwgYnV0IHlvdSBuZWVkIHRvIGJlDQo+ID4g
-Y2FyZWZ1bCB0byBtYWtlIHN1cmUgeW91J3JlIG5vdCBvdXQgb2Ygc3luYyB3aXRoIHRoZSB0cmFu
-c2ZlciBjb21wbGV0aW9uDQo+ID4gZXZlbnRzIGFuZCBuZXcgcmVxdWVzdHMgZnJvbSBnYWRnZXQg
-ZHJpdmVyLg0KPiA+IA0KDQpXYXMgdGhlIHByb2JsZW0geW91IGVuY291bnRlciBkdWUgdG8gbm9f
-aW50ZXJydXB0IHNldHRpbmdzIHdoZXJlIHRoZQ0KaXQgd2FzIHNldCB0byB0aGUgbGFzdCByZXF1
-ZXN0IG9mIHRoZSB1dmMgZGF0YSBwdW1wPw0KDQppZiB0aGF0J3MgdGhlIGNhc2UsIGNhbiBVVkMg
-ZnVuY3Rpb24gZHJpdmVyIG1ha2Ugc3VyZSB0byBub3Qgc2V0DQpub19pbnRlcnJ1cHQgdG8gdGhl
-IGxhc3QgcmVxdWVzdCBvZiB0aGUgZGF0YSBwdW1wIGZyb20gdGhlIFVWQz8NCg0KVGhhbmtzLA0K
-VGhpbmg=
+Hi Ricardo,
+
+Thank you for the patch.
+
+On Tue, Apr 02, 2024 at 12:09:29PM +0000, Ricardo Ribalda wrote:
+> Logitech Rally Bar devices, despite behaving as UVC cameras, have a
+> different power management system that the other cameras from Logitech.
+> 
+> USB_QUIRK_RESET_RESUME is applied to all the UVC cameras from Logitech
+> at the usb core. Unfortunately, USB_QUIRK_RESET_RESUME causes undesired
+> USB disconnects in the Rally Bar that make them completely unusable.
+> 
+> There is an open discussion about if we should fix this in the core or
+> add a quirk in the UVC driver. In order to enable this hardware, let's
+> land this patch first, and we can revert it later if there is a
+> different conclusion.
+> 
+> Fixes: e387ef5c47dd ("usb: Add USB_QUIRK_RESET_RESUME for all Logitech UVC webcams")
+> Cc:  <stable@vger.kernel.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Alan Stern <stern@rowland.harvard.edu>
+> Cc: Oliver Neukum <oneukum@suse.com>
+> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Reviewed-by: Devinder Khroad <dkhroad@logitech.com>
+> Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> ---
+> Tested with a Rallybar Mini with an Acer Chromebook Spin 513
+> ---
+> Changes in v5:
+> - Update commit message to describe that this is a temp solution.
+> - Link to v4: https://lore.kernel.org/r/20240108-rallybar-v4-1-a7450641e41b@chromium.org
+> 
+> Changes in v4:
+> - Include Logi Rally Bar Huddle (Thanks Kyle!)
+> - Link to v3: https://lore.kernel.org/r/20240102-rallybar-v3-1-0ab197ce4aa2@chromium.org
+> 
+> Changes in v3:
+> - Move quirk to uvc driver
+> - Link to v2: https://lore.kernel.org/r/20231222-rallybar-v2-1-5849d62a9514@chromium.org
+> 
+> Changes in v2:
+> - Add Fixes tag
+> - Add UVC maintainer as Cc
+> - Link to v1: https://lore.kernel.org/r/20231222-rallybar-v1-1-82b2a4d3106f@chromium.org
+> ---
+>  drivers/media/usb/uvc/uvc_driver.c | 30 ++++++++++++++++++++++++++++++
+>  drivers/media/usb/uvc/uvcvideo.h   |  1 +
+>  2 files changed, 31 insertions(+)
+> 
+> diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+> index 08fcd2ffa727b..9663bcac68438 100644
+> --- a/drivers/media/usb/uvc/uvc_driver.c
+> +++ b/drivers/media/usb/uvc/uvc_driver.c
+> @@ -14,6 +14,7 @@
+>  #include <linux/module.h>
+>  #include <linux/slab.h>
+>  #include <linux/usb.h>
+> +#include <linux/usb/quirks.h>
+>  #include <linux/usb/uvc.h>
+>  #include <linux/videodev2.h>
+>  #include <linux/vmalloc.h>
+> @@ -2233,6 +2234,8 @@ static int uvc_probe(struct usb_interface *intf,
+>  	}
+>  
+>  	uvc_dbg(dev, PROBE, "UVC device initialized\n");
+> +	if (dev->quirks & UVC_QUIRK_FORCE_RESUME)
+
+The quirk isn't really about forcing resume, but about not resetting on
+resume. Can we name it UVC_QUIRK_NO_RESET_RESUME ?
+
+> +		udev->quirks &= ~USB_QUIRK_RESET_RESUME;
+
+Let's move this before the uvc_dbg().
+
+With that, the patch looks good to me. I can apply those changes
+locally if you don't want to submit a v6.
+
+>  	usb_enable_autosuspend(udev);
+>  	return 0;
+>  
+> @@ -2574,6 +2577,33 @@ static const struct usb_device_id uvc_ids[] = {
+>  	  .bInterfaceSubClass	= 1,
+>  	  .bInterfaceProtocol	= 0,
+>  	  .driver_info		= UVC_INFO_QUIRK(UVC_QUIRK_RESTORE_CTRLS_ON_INIT) },
+> +	/* Logitech Rally Bar Huddle */
+> +	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
+> +				| USB_DEVICE_ID_MATCH_INT_INFO,
+> +	  .idVendor		= 0x046d,
+> +	  .idProduct		= 0x087c,
+> +	  .bInterfaceClass	= USB_CLASS_VIDEO,
+> +	  .bInterfaceSubClass	= 1,
+> +	  .bInterfaceProtocol	= 0,
+> +	  .driver_info		= UVC_INFO_QUIRK(UVC_QUIRK_FORCE_RESUME) },
+> +	/* Logitech Rally Bar */
+> +	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
+> +				| USB_DEVICE_ID_MATCH_INT_INFO,
+> +	  .idVendor		= 0x046d,
+> +	  .idProduct		= 0x089b,
+> +	  .bInterfaceClass	= USB_CLASS_VIDEO,
+> +	  .bInterfaceSubClass	= 1,
+> +	  .bInterfaceProtocol	= 0,
+> +	  .driver_info		= UVC_INFO_QUIRK(UVC_QUIRK_FORCE_RESUME) },
+> +	/* Logitech Rally Bar Mini */
+> +	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
+> +				| USB_DEVICE_ID_MATCH_INT_INFO,
+> +	  .idVendor		= 0x046d,
+> +	  .idProduct		= 0x08d3,
+> +	  .bInterfaceClass	= USB_CLASS_VIDEO,
+> +	  .bInterfaceSubClass	= 1,
+> +	  .bInterfaceProtocol	= 0,
+> +	  .driver_info		= UVC_INFO_QUIRK(UVC_QUIRK_FORCE_RESUME) },
+>  	/* Chicony CNF7129 (Asus EEE 100HE) */
+>  	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
+>  				| USB_DEVICE_ID_MATCH_INT_INFO,
+> diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
+> index 6fb0a78b1b009..fa59a21d2a289 100644
+> --- a/drivers/media/usb/uvc/uvcvideo.h
+> +++ b/drivers/media/usb/uvc/uvcvideo.h
+> @@ -73,6 +73,7 @@
+>  #define UVC_QUIRK_FORCE_Y8		0x00000800
+>  #define UVC_QUIRK_FORCE_BPP		0x00001000
+>  #define UVC_QUIRK_WAKE_AUTOSUSPEND	0x00002000
+> +#define UVC_QUIRK_FORCE_RESUME		0x00004000
+>  
+>  /* Format flags */
+>  #define UVC_FMT_FLAG_COMPRESSED		0x00000001
+> 
+> ---
+> base-commit: c0f65a7c112b3cfa691cead54bcf24d6cc2182b5
+> change-id: 20231222-rallybar-19ce0c64d5e6
+
+-- 
+Regards,
+
+Laurent Pinchart
 
