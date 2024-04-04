@@ -1,129 +1,152 @@
-Return-Path: <linux-usb+bounces-8934-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8935-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D98FA8988F3
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Apr 2024 15:39:54 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E01989893E
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Apr 2024 15:52:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 83AB01F22DB8
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Apr 2024 13:39:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CA2FB1C21037
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Apr 2024 13:52:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CE6E128376;
-	Thu,  4 Apr 2024 13:39:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56B17128818;
+	Thu,  4 Apr 2024 13:52:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UhqP0hek"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DvJfP5QZ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79EA885644
-	for <linux-usb@vger.kernel.org>; Thu,  4 Apr 2024 13:39:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A73C1272A3;
+	Thu,  4 Apr 2024 13:52:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712237989; cv=none; b=Ip3rkS9+UJh7WuMVAdGvzkPvX8pMjmx+lI1Guy+nDjtJs9pjPWZ486FKLfgXwYhU/pBmIPjMXE1ysly0mht7bOddDPBeIFxK2cq0J4+9lpYKUYyrDUMUfAhHOHfYLwBP3vkwDaXUU6ywU36OzKxKagOZqZJ9Ke7MyUyD+4ZLebw=
+	t=1712238747; cv=none; b=gP49IoTKajXGWrHYvP/C9pz3S9QPGbZQltkqZd+87tMATlBUGz4Yuilxp8FWx1CYyRNjKGTodTpbGs49MgZYBM1kkJwkJmeijZdeGW9Rk/ED7JNmJmZXNMYtiT9Q79MsTwknK2uq0JYR/vtHhr/MXLQiUD9+1W2DCxxAsLrxFgQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712237989; c=relaxed/simple;
-	bh=iYftZ0+LaPHkXuNAZXjn3s5QsFloR9tJTymonE9sXXc=;
+	s=arc-20240116; t=1712238747; c=relaxed/simple;
+	bh=SyaoC9dGTnAAIwvKQL5lKilmQfKt1cUMZ3Uwe9zaSWA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hg4ZlJsme6XEnlIJJgtnOj8Fjnf/IwgWiDeqpUTGmH0oSKUEeuA8X0qKREjjxbIaKVhZ9Fw9E/FM/ffEwTpXZTselqDS+V2jG3Ei1FX5+eA895tdw7JZM9RgnJrxxHwUn/iCwsktu1aQlqUI9A511cjAfM8/PcSlyiNTbUKlyeU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=UhqP0hek; arc=none smtp.client-ip=209.85.167.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-516c3e0e8d7so2656e87.0
-        for <linux-usb@vger.kernel.org>; Thu, 04 Apr 2024 06:39:47 -0700 (PDT)
+	 To:Cc:Content-Type; b=b/WWR2xCuJkQHH+ZOFKS3zcRwhT5RNtu5PJ1wHG0l/ZAHyeIPV9JyTwvrTpr4tiauuMUnmzrPJAGzzjjwEERVFZypj/nkqFu8sQv1pHiGaPujqaXqJLlu+bbSBrFMScWPdL+F5GCAsn6cXdtEFcXYDDcB6pebKiCrWN5Ytva0CY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DvJfP5QZ; arc=none smtp.client-ip=209.85.161.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-5a9d93ed063so345255eaf.0;
+        Thu, 04 Apr 2024 06:52:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1712237986; x=1712842786; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Gxf/q8h91wmoUfIFbo/DD5ZINeNSkiIb7XwE7dW0D3U=;
-        b=UhqP0hek6RwkawX9aIu/e37M+UcewsMlPLaELM3CC2eHTKJ2VQ0V97L1KSO+LqBwTb
-         T9rhU6Jqch8/gcUMM1PNs/dJEYznvDMxAMH9V7KVWuE1EBY1qqTgLfV7iyy9puAOdr2o
-         l83DLuK+3WATOh7bxUVLnVW0cAyr0t6PFP5NOue6fiByp+HPLCAPdd+FJiyWnUiE5QZY
-         VvhyUWAwuLjuFgS3Zgef2UBECgJxVPfgfLivH4CXPbNqKloBFy34Zw23HN0KONtItnli
-         TiyEgJ7kMOv3KyGRC2xKSLKoZLm5sMjFtunpIiyDkdvfsJqt0hfzP14NRF2rRRD9mpMS
-         oKlw==
+        d=gmail.com; s=20230601; t=1712238745; x=1712843545; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Jn4qrU+tBprHqhbcKEnAjUZjtZ7L2LhdcfMRoTh6EAo=;
+        b=DvJfP5QZkUfHdb1tUHjTJ2ZgUhjyXE7vf2znYG6ZX1753H1ET7nQ/SpYvZJJDM0xQn
+         8hfrn2VKFUZwezaUQieL8pcf/Te0FJJYkUSvmsHlUtOW1eCBu6UQdaV7Mjo67kZud3Nx
+         HGxuWJyHin1t52cLJbfxWRgERiQjhj2Mj80IpBJlyn+p0Ek0p3NBMT71yDY73HYVXvGY
+         Aqi9XvXBms8NytmwDjelCSS4nJgAv0YkE+0AnLeNgp+ZlhvfR0oqmHU1wS2IGkAhbf2r
+         jA6dxyZfN1HwNx3wDwSC/BInI+OqHkAMzpWAbOREJZafUYtvH5STFreFY1Du5Wo1AqW+
+         ZSBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712237986; x=1712842786;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Gxf/q8h91wmoUfIFbo/DD5ZINeNSkiIb7XwE7dW0D3U=;
-        b=BYMTCQKSLj7I99d76z9OdAVeV94tscPu3gpIe9mU4xZuA7kTdB1x1DgtiCdM+WBpsR
-         3zz8seXQPVYOb0iDChr8VS+YjOeoCTRgArROCmoVXddK+0Qfwm6wKr9HpSZVw1sWRdqj
-         VFykCp/LNj5ZtQ3mfwpC+w4Ic4HtXdgFxcKAFAiAxP8uNftDQ3PaJK6E4nR8MVZ4uLkA
-         4Fxz54ZlwAR0iknXfC50HzAQ6Qb41Sa27w0INkO65svOvlN/ccDbsyLbUXwq1XcPWLfA
-         TASj940CaLmhSYvRg1FWctrkQdB354DLHaGUS6PUe1G+viaRHSaix//vxY8bELIxnvzf
-         W6ew==
-X-Forwarded-Encrypted: i=1; AJvYcCWMTGPmhkcrivuhse7HsU4uT5XCzH1p0APiYoqvow+G+/RCcg+c0etmMlp+ABVyjTUL7WH9yZLsX5NaBDdmGUo36Tm9t6jLwoHR
-X-Gm-Message-State: AOJu0YypxHsDGgS23CXMGfsH8ZCDb5fd9yRV8rWMYpBXIWOpbTNfkzir
-	qaWbcfQ0SDyxXHXQtGBeFWHFn62U+L0zL1rA5yEeoFtPSwSXvtxRubHaPoq5huRKawFX7xdRPrm
-	KCDbmc09u3NAg37IcQ4MwFjEPZ3086ykx2DDv
-X-Google-Smtp-Source: AGHT+IElGgGjrp6smPidvhQnabJPU523EKuFysRr6L+HxagQCbtXvtU6HkkMq6zk6+k9bk8gS2Z2FjLv1dPU/IQLrhQ=
-X-Received: by 2002:a19:9108:0:b0:515:c2ad:6cac with SMTP id
- t8-20020a199108000000b00515c2ad6cacmr54444lfd.7.1712237985332; Thu, 04 Apr
- 2024 06:39:45 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1712238745; x=1712843545;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Jn4qrU+tBprHqhbcKEnAjUZjtZ7L2LhdcfMRoTh6EAo=;
+        b=m2lLdmb917YBLoLe+fDINTLpmSgj1YCfR7j9pBgzuxL9WuCZU2ww6rzf+OtyPBNtO1
+         hLcTkwtG7qTKd/eDdEXR9eLaMI0Uoe5O8SWTCfxBtbwgoGHxS4gbtw0Td/txX2nOpmF+
+         Ef4shL8hidyl81xL66wBHx+e72jHnqu3Gt3y0+F++E/9VrokaQeNVtWFMOXlC/q7W4l/
+         Ds2Af1tzaCEPN67v3oiwai67IHY3R2dYu/mOF5EYZfVGjlzI5mhmpQ34f4vjQyKrIQMz
+         Q1Nhq7NHA4ylLbdyi9ron8MTFlnLgMMt01vzQkIIe8ENCmS9AijcSpN3nkKwr3rRBxc0
+         rxRw==
+X-Forwarded-Encrypted: i=1; AJvYcCXm87J2kWeuyEdVg6y5gObqzZjRV/ZLjQfF9doL2kdDBNn+Wf4AfjV46ZIVNlS/WIsn8LYjpI80VjTv7d/J0Q+9YF6jSHI6Bn9YMRyITCjOgzCS7gkmk3b+VZhMvj3HA5ffRqJjHWbT7CSr3aIIpwQntF4N9Y+e6/j1yORgfyqvrnzB0h5TIOLEWbU=
+X-Gm-Message-State: AOJu0YxQbf7TbuhV7WWUcUXWdPr0/wMW1zNJi6rDzvfwb1bNzUbNpO0n
+	+k9bmfaYR/UZ5bOgmqlh2+AOBQSBC0ee1O5s2U2PnHt66r5HYYtZRivuNWRJT9MMt1SWIRw8d7i
+	c7DTijCgFXrVHF2J91WlWLyXXmXk=
+X-Google-Smtp-Source: AGHT+IFWQpzRCjm7/583y1xcVxsmai/Zw151/uyWqhl68ZTJzk8QXI/NJYa2aT2TnSuca/lXGucPFQgiQc6pJzWxQSA=
+X-Received: by 2002:a05:6820:2614:b0:5a4:5526:1740 with SMTP id
+ cy20-20020a056820261400b005a455261740mr1164843oob.2.1712238744855; Thu, 04
+ Apr 2024 06:52:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240326151909.440275-1-kyletso@google.com> <2024040417-ice-decal-b37e@gregkh>
-In-Reply-To: <2024040417-ice-decal-b37e@gregkh>
-From: Kyle Tso <kyletso@google.com>
-Date: Thu, 4 Apr 2024 21:39:28 +0800
-Message-ID: <CAGZ6i=28pf2DARJ_23Bmtx4W8LEb2f_rW_Y9ziyi85txkajvGw@mail.gmail.com>
-Subject: Re: [PATCH v2] usb: typec: tcpm: Correct the PDO counting in pd_set
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: linux@roeck-us.net, heikki.krogerus@linux.intel.com, badhri@google.com, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	stable@vger.kernel.org
+References: <20240404071350.4242-1-linux.amoon@gmail.com> <20240404071350.4242-2-linux.amoon@gmail.com>
+ <2024040442-subscript-detective-8d12@gregkh>
+In-Reply-To: <2024040442-subscript-detective-8d12@gregkh>
+From: Anand Moon <linux.amoon@gmail.com>
+Date: Thu, 4 Apr 2024 19:22:08 +0530
+Message-ID: <CANAwSgTpvrUY_H4Q4TzZWF+z-B=rGM1ny9B-pgSZ3dKCn-mXrA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/6] usb: ehci-exynos: Use devm_clk_get_enabled() helpers
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Alan Stern <stern@rowland.harvard.edu>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>, Johan Hovold <johan@kernel.org>, 
+	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 4, 2024 at 9:22=E2=80=AFPM Greg KH <gregkh@linuxfoundation.org>=
- wrote:
+Hi Greg,
+
+On Thu, 4 Apr 2024 at 18:30, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
-> On Tue, Mar 26, 2024 at 11:19:09PM +0800, Kyle Tso wrote:
-> > Off-by-one errors happen because nr_snk_pdo and nr_src_pdo are
-> > incorrectly added one. The index of the loop is equal to the number of
-> > PDOs to be updated when leaving the loop and it doesn't need to be adde=
-d
-> > one.
+> On Thu, Apr 04, 2024 at 12:43:17PM +0530, Anand Moon wrote:
+> > The devm_clk_get_enabled() helpers:
+> >     - call devm_clk_get()
+> >     - call clk_prepare_enable() and register what is needed in order to
+> >      call clk_disable_unprepare() when needed, as a managed resource.
 > >
-> > When doing the power negotiation, TCPM relies on the "nr_snk_pdo" as
-> > the size of the local sink PDO array to match the Source capabilities
-> > of the partner port. If the off-by-one overflow occurs, a wrong RDO
-> > might be sent and unexpected power transfer might happen such as over
-> > voltage or over current (than expected).
+> > This simplifies the code and avoids the calls to clk_disable_unprepare().
 > >
-> > "nr_src_pdo" is used to set the Rp level when the port is in Source
-> > role. It is also the array size of the local Source capabilities when
-> > filling up the buffer which will be sent as the Source PDOs (such as
-> > in Power Negotiation). If the off-by-one overflow occurs, a wrong Rp
-> > level might be set and wrong Source PDOs will be sent to the partner
-> > port. This could potentially cause over current or port resets.
+> > While at it, use dev_err_probe consistently, and use its return value
+> > to return the error code.
 > >
-> > Fixes: cd099cde4ed2 ("usb: typec: tcpm: Support multiple capabilities")
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Kyle Tso <kyletso@google.com>
+> > Signed-off-by: Anand Moon <linux.amoon@gmail.com>
 > > ---
-> > v1 -> v2:
-> > - update the commit message (adding the problems this patch solves)
+> > V2: drop the clk_disable_unprepare in suspend/resume functions
+> >     fix the usb_put_hcd return before the devm_clk_get_enabled
+> > ---
+> >  drivers/usb/host/ehci-exynos.c | 19 +++++--------------
+> >  1 file changed, 5 insertions(+), 14 deletions(-)
 > >
-> >  drivers/usb/typec/tcpm/tcpm.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > diff --git a/drivers/usb/host/ehci-exynos.c b/drivers/usb/host/ehci-exynos.c
+> > index f644b131cc0b..f00bfd0b13dc 100644
+> > --- a/drivers/usb/host/ehci-exynos.c
+> > +++ b/drivers/usb/host/ehci-exynos.c
+> > @@ -159,20 +159,15 @@ static int exynos_ehci_probe(struct platform_device *pdev)
+> >
+> >       err = exynos_ehci_get_phy(&pdev->dev, exynos_ehci);
+> >       if (err)
+> > -             goto fail_clk;
+> > -
+> > -     exynos_ehci->clk = devm_clk_get(&pdev->dev, "usbhost");
+> > +             goto fail_io;
+> >
+> > +     exynos_ehci->clk = devm_clk_get_enabled(&pdev->dev, "usbhost");
+> >       if (IS_ERR(exynos_ehci->clk)) {
+> > -             dev_err(&pdev->dev, "Failed to get usbhost clock\n");
+> > -             err = PTR_ERR(exynos_ehci->clk);
+> > -             goto fail_clk;
+> > +             usb_put_hcd(hcd);
+> > +             return dev_err_probe(&pdev->dev, PTR_ERR(exynos_ehci->clk),
+> > +                               "Failed to get usbhost clock\n");
 >
-> This fails to apply to my usb-linus branch :(
+> Why is this logic changed?
 >
-> Can you rebase and resend?
+> If you want to call dev_err_probe(), that's great, but do NOT mix it up
+> with a commit that does something totally different.
+>
+> When you say something like "while at it" in a changelog text, that is a
+> HUGE hint that it needs to be a separate commit.  Because of that reason
+> alone, I can't take these, you know better :(
 >
 > thanks,
 >
+
+Ok, I will improve the commit message relevant to the code changes.
+
 > greg k-h
 
-Just sent v3
+Thanks
+-Anand
 
