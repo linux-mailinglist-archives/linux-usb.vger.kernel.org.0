@@ -1,214 +1,150 @@
-Return-Path: <linux-usb+bounces-8884-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8885-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ADB67897D1C
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Apr 2024 02:33:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D9CA897E34
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Apr 2024 06:27:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5DD5C286E80
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Apr 2024 00:33:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AE2EE28AEEB
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Apr 2024 04:27:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1648B4C9F;
-	Thu,  4 Apr 2024 00:32:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6592C288DB;
+	Thu,  4 Apr 2024 04:27:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="lKtE8no3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iroVsgtK"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F409423CE;
-	Thu,  4 Apr 2024 00:32:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74B66101E6;
+	Thu,  4 Apr 2024 04:27:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712190771; cv=none; b=iltiJ2cETMJ6NrOfVA7TRWm8PxuCV/cs0m9qubT25EmLVlPSlFpsW6ZtSSbxgw+bewKKsgrunoSbfIXP/6jbpGMtYirqs4GQs1sDYR9nq24Lwkhkp68VtFDz2WaA9FV9WgUTYrDN+bCzgBApH4Rjz9vrE9Sg1Gov0XcgNTyp8Po=
+	t=1712204856; cv=none; b=VhdIvtHfOs5YXOJHKPbAr3zOHd7i+VLfaAiUxMRhczLgGpRg0WGECp7b+EqYK96BXO0pkuEPTgB6sowKh9q4nYPDUtGI44M65dYKVOsSyI9oc2seDVsajExbPdPZiGc7URikRz6nZpcM0cCius5CYDdAbmNCQrmjvEtY6tIPhW8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712190771; c=relaxed/simple;
-	bh=v6ELGC0wWuhzAcp7TF7tSfRbebnHs2P8lRKexVxuir4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nZjLr3Q68DVqlkv9G+uBargNpmM0tyJCzj+G1t8Qw8FlTWGyqsaX+TdQTtt8BedDE9gOtVvM/78y3+bklqi8AvVXMXw002hksupYejFkPntxwEhUB48OdCHsLF9Wwi3sDwYmOHWTPdMQyRwM/nKn9CnWYmVmpDevwBDnBH5+bFE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=lKtE8no3; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
-Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 83ED5CCC;
-	Thu,  4 Apr 2024 02:32:10 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1712190730;
-	bh=v6ELGC0wWuhzAcp7TF7tSfRbebnHs2P8lRKexVxuir4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lKtE8no3H6w862RIl8SSijlaCBm4Rhdr+FVHmYpPNYT9yV4AXVedYzvjniRQsujMP
-	 0eg+kpZavOg5jYrBp7mOBkXG23aXFyDkg1jY3jReEQtPPqoonFtPCHP2t0CMZkOjXO
-	 mCFby0GhUHfZO0x8va4VjW3PpdZPnj/3i7wbCoDw=
-Date: Thu, 4 Apr 2024 03:32:37 +0300
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Ricardo Ribalda <ribalda@chromium.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-media@vger.kernel.org, stable@vger.kernel.org,
-	Oliver Neukum <oneukum@suse.com>,
-	Devinder Khroad <dkhroad@logitech.com>,
-	Sergey Senozhatsky <senozhatsky@chromium.org>
-Subject: Re: [PATCH v5] media: ucvideo: Add quirk for Logitech Rally Bar
-Message-ID: <20240404003237.GE23803@pendragon.ideasonboard.com>
-References: <20240402-rallybar-v5-1-7bdd0fbc51f7@chromium.org>
- <20240404003055.GD23803@pendragon.ideasonboard.com>
+	s=arc-20240116; t=1712204856; c=relaxed/simple;
+	bh=9GCKDit7IM2ObL3AQTrHgktI46ZunWxbzR9/oDBunyQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=WTJXRhkwCEhS7ftw6hzXnB7jLPG6E0+EwBy0JgVzg8cb76imc5xd/9AXsWVcWPAdbCaVXdUVZcCWSbzgZVLpUobiScSCKE6Jn0vXDUw+RfQpLv8/TVch/DV+/1S9yKBz1jbwNl3OKHh/XxOCS5jYRwTxKPqz8OtIXPVYJanqn0c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iroVsgtK; arc=none smtp.client-ip=209.85.161.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-5a56a5f597dso342643eaf.2;
+        Wed, 03 Apr 2024 21:27:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712204854; x=1712809654; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=WWP5RAoFT0kiTo+qfZyglyrEgEHCHG1QIQ9F/lt7B8E=;
+        b=iroVsgtKGv79j4hU/NrvS6bv3fkZDcSu2d2ClY5M57dfC9YxJuasHiqQtJFFnD1vmT
+         /2BPFkeQhS+1At/r8eu/SBJP/gRXoCu45r26b7heopHm66zqGo1/vwFLz3FS+7BviytJ
+         va+7jRtfiHRsmPtaWeEpmgiwQax5muaoJGfRtQDhJ4CZ84Lp5kP7kKhuk/ALkpzmcj0d
+         j3mz/iThC0LL8nSgMZNAf7yG+FaD/DgFg8FV389Dww8E0C2z/Wp089VLlYmpOgniKmJC
+         EAzheaFaA9xD4cJsM8qTcCZg8okw1SCR+QVMqWYEprPQAk0YgMQ8Tfeq39uXBFMBO60J
+         qBqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712204854; x=1712809654;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WWP5RAoFT0kiTo+qfZyglyrEgEHCHG1QIQ9F/lt7B8E=;
+        b=C53bfcovyFNacgN3TNmP7F1lHsNGxS3Bp56xzPxiWm61X/1wWGWh0dTa/d6Us4V8Pq
+         /KmedVVsojBXpd4BF4kBk9RKOtJmezqbA/LNy7PoqbMw/lsYMjnRFgEtEKiL8bbu6AYN
+         P9zFNXdp1oxrLmLuuzTHR78cgtlhZMKqjEH2chKVw4N9p3sVwStYOn6y6tfJEx1T7rq2
+         6SY6p9Ik8t+eOU8PaEPoe35ipjM4rgipc4rOeLGPQH7j4cmi2ah0JAyD6wCgesiD/w9n
+         xnKH5rzK1TpgVTGHS8/aizTtShRiupNSqy5lSxPgJLgzqu1H35/0ET3mb77nvWT3bpJr
+         dqrA==
+X-Forwarded-Encrypted: i=1; AJvYcCWGMuJxDy6ZMSSHhZyRpEG02B6pE+gWEfw41GtSjozgNMIFn3vg/GPKeT4X4g3d18Z/Q3sBTDC/hKhZcn/Bq1mYbGVlnTxDe57T5XaVL5SNq4z6FLRr8QRWMfwWwavQGPKzPeSGqV1Dhd7pvPXUF5H13JfglKWSL/k5yURcprNl9X0aZA==
+X-Gm-Message-State: AOJu0Yz2OvnVoqGP1X1BmUAYSN0sB34yiXvKw7N2QPgWhC3KZmuTknMp
+	6Ap83Rqz9FycThCSq5K+DLzxWIjPPlrtREPQ2t326lG3RLpt/oF05Qj75buDgvhVEZL91Fs/MtK
+	7UDJN8KPMqNazAhWZc2d93134USA=
+X-Google-Smtp-Source: AGHT+IFwojGdn5TFA69NQKI8EHFePsm+grycDmM/kwemTgKo/lxJRDpk6nDdoeK1+VDGtXqMUJ0Dsn4FbyEFO4nF0nc=
+X-Received: by 2002:a05:6820:2012:b0:5a5:639a:2faa with SMTP id
+ by18-20020a056820201200b005a5639a2faamr1825200oob.2.1712204854408; Wed, 03
+ Apr 2024 21:27:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240404003055.GD23803@pendragon.ideasonboard.com>
+References: <20231204144429.45197-1-linux.amoon@gmail.com> <20231204144429.45197-2-linux.amoon@gmail.com>
+ <20231206135311.GA2043711-robh@kernel.org> <CANAwSgTS0ZSFPv4x803pCLEpjH5imh8vEoWpbiJRH14Sy3GZww@mail.gmail.com>
+ <21673bfd-bb87-4c7d-a53f-337c263f3a00@linaro.org> <CANAwSgSo37B0zg-xjrmqndSZ5SbyB3m27_wRsqqN9WTONooeiw@mail.gmail.com>
+ <604e653d-c1e2-45c7-b121-8a6b4be5c6bb@linaro.org> <CANAwSgRB=XWo2-40rDru=Zy277-kgGNjozJ8Lxnxgv_4ABB-kg@mail.gmail.com>
+ <1a78d453-62a2-410a-a40f-1ff0c2b62e86@linaro.org> <CANAwSgTy4N7Q8e0OQLsFRkRDWksTSbkOetKQGygaqsQ8++U1_g@mail.gmail.com>
+ <2e688f4e-11d7-4f8e-b8ec-58f4a97304a8@linaro.org> <CANAwSgQstkS-SDaV2hj0fimt7vgfEgOT_x4efshZ6sZQ0gWSEA@mail.gmail.com>
+ <8f28ea77-b3d0-445e-8d8e-80f980775f89@linaro.org> <CANAwSgRLORHb6qiHWRBR0tMbYB=O=gwatuGhk72SwZyhYMopCw@mail.gmail.com>
+ <d2962ffb-badd-44a6-bdcc-53e15d4a4379@linaro.org> <CANAwSgSpuh-+HFYg2UTgX27SHFyCBddV46MgKakiSCOtFX4+aw@mail.gmail.com>
+ <436ed6a4-2ed9-47bc-bcc9-18a52b1a791b@linaro.org> <CANAwSgS8ip+FvuvgusjNwnVL5Z68PRmEdwfQxhst_ZoVZFoFNw@mail.gmail.com>
+In-Reply-To: <CANAwSgS8ip+FvuvgusjNwnVL5Z68PRmEdwfQxhst_ZoVZFoFNw@mail.gmail.com>
+From: Anand Moon <linux.amoon@gmail.com>
+Date: Thu, 4 Apr 2024 09:57:18 +0530
+Message-ID: <CANAwSgSftb3KkXvzNyGGixVtK8SWcOYjxO9WWpLt-B3mf_B6tg@mail.gmail.com>
+Subject: Re: [PATCH v6 1/2] dt-bindings: usb: Add the binding example for the
+ Genesys Logic GL3523 hub
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Rob Herring <robh@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Icenowy Zheng <uwu@icenowy.me>, Neil Armstrong <neil.armstrong@linaro.org>, 
+	linux-amlogic@lists.infradead.org, Conor Dooley <conor.dooley@microchip.com>, 
+	linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-One more thing, s/ucvideo/uvcvideo/ in the subject line.
+Hi Krzysztof,
 
-On Thu, Apr 04, 2024 at 03:30:57AM +0300, Laurent Pinchart wrote:
-> Hi Ricardo,
-> 
-> Thank you for the patch.
-> 
-> On Tue, Apr 02, 2024 at 12:09:29PM +0000, Ricardo Ribalda wrote:
-> > Logitech Rally Bar devices, despite behaving as UVC cameras, have a
-> > different power management system that the other cameras from Logitech.
-> > 
-> > USB_QUIRK_RESET_RESUME is applied to all the UVC cameras from Logitech
-> > at the usb core. Unfortunately, USB_QUIRK_RESET_RESUME causes undesired
-> > USB disconnects in the Rally Bar that make them completely unusable.
-> > 
-> > There is an open discussion about if we should fix this in the core or
-> > add a quirk in the UVC driver. In order to enable this hardware, let's
-> > land this patch first, and we can revert it later if there is a
-> > different conclusion.
-> > 
-> > Fixes: e387ef5c47dd ("usb: Add USB_QUIRK_RESET_RESUME for all Logitech UVC webcams")
-> > Cc:  <stable@vger.kernel.org>
-> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Cc: Alan Stern <stern@rowland.harvard.edu>
-> > Cc: Oliver Neukum <oneukum@suse.com>
-> > Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Reviewed-by: Devinder Khroad <dkhroad@logitech.com>
-> > Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
-> > Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> > ---
-> > Tested with a Rallybar Mini with an Acer Chromebook Spin 513
-> > ---
-> > Changes in v5:
-> > - Update commit message to describe that this is a temp solution.
-> > - Link to v4: https://lore.kernel.org/r/20240108-rallybar-v4-1-a7450641e41b@chromium.org
-> > 
-> > Changes in v4:
-> > - Include Logi Rally Bar Huddle (Thanks Kyle!)
-> > - Link to v3: https://lore.kernel.org/r/20240102-rallybar-v3-1-0ab197ce4aa2@chromium.org
-> > 
-> > Changes in v3:
-> > - Move quirk to uvc driver
-> > - Link to v2: https://lore.kernel.org/r/20231222-rallybar-v2-1-5849d62a9514@chromium.org
-> > 
-> > Changes in v2:
-> > - Add Fixes tag
-> > - Add UVC maintainer as Cc
-> > - Link to v1: https://lore.kernel.org/r/20231222-rallybar-v1-1-82b2a4d3106f@chromium.org
-> > ---
-> >  drivers/media/usb/uvc/uvc_driver.c | 30 ++++++++++++++++++++++++++++++
-> >  drivers/media/usb/uvc/uvcvideo.h   |  1 +
-> >  2 files changed, 31 insertions(+)
-> > 
-> > diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-> > index 08fcd2ffa727b..9663bcac68438 100644
-> > --- a/drivers/media/usb/uvc/uvc_driver.c
-> > +++ b/drivers/media/usb/uvc/uvc_driver.c
-> > @@ -14,6 +14,7 @@
-> >  #include <linux/module.h>
-> >  #include <linux/slab.h>
-> >  #include <linux/usb.h>
-> > +#include <linux/usb/quirks.h>
-> >  #include <linux/usb/uvc.h>
-> >  #include <linux/videodev2.h>
-> >  #include <linux/vmalloc.h>
-> > @@ -2233,6 +2234,8 @@ static int uvc_probe(struct usb_interface *intf,
-> >  	}
-> >  
-> >  	uvc_dbg(dev, PROBE, "UVC device initialized\n");
-> > +	if (dev->quirks & UVC_QUIRK_FORCE_RESUME)
-> 
-> The quirk isn't really about forcing resume, but about not resetting on
-> resume. Can we name it UVC_QUIRK_NO_RESET_RESUME ?
-> 
-> > +		udev->quirks &= ~USB_QUIRK_RESET_RESUME;
-> 
-> Let's move this before the uvc_dbg().
-> 
-> With that, the patch looks good to me. I can apply those changes
-> locally if you don't want to submit a v6.
-> 
-> >  	usb_enable_autosuspend(udev);
-> >  	return 0;
-> >  
-> > @@ -2574,6 +2577,33 @@ static const struct usb_device_id uvc_ids[] = {
-> >  	  .bInterfaceSubClass	= 1,
-> >  	  .bInterfaceProtocol	= 0,
-> >  	  .driver_info		= UVC_INFO_QUIRK(UVC_QUIRK_RESTORE_CTRLS_ON_INIT) },
-> > +	/* Logitech Rally Bar Huddle */
-> > +	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
-> > +				| USB_DEVICE_ID_MATCH_INT_INFO,
-> > +	  .idVendor		= 0x046d,
-> > +	  .idProduct		= 0x087c,
-> > +	  .bInterfaceClass	= USB_CLASS_VIDEO,
-> > +	  .bInterfaceSubClass	= 1,
-> > +	  .bInterfaceProtocol	= 0,
-> > +	  .driver_info		= UVC_INFO_QUIRK(UVC_QUIRK_FORCE_RESUME) },
-> > +	/* Logitech Rally Bar */
-> > +	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
-> > +				| USB_DEVICE_ID_MATCH_INT_INFO,
-> > +	  .idVendor		= 0x046d,
-> > +	  .idProduct		= 0x089b,
-> > +	  .bInterfaceClass	= USB_CLASS_VIDEO,
-> > +	  .bInterfaceSubClass	= 1,
-> > +	  .bInterfaceProtocol	= 0,
-> > +	  .driver_info		= UVC_INFO_QUIRK(UVC_QUIRK_FORCE_RESUME) },
-> > +	/* Logitech Rally Bar Mini */
-> > +	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
-> > +				| USB_DEVICE_ID_MATCH_INT_INFO,
-> > +	  .idVendor		= 0x046d,
-> > +	  .idProduct		= 0x08d3,
-> > +	  .bInterfaceClass	= USB_CLASS_VIDEO,
-> > +	  .bInterfaceSubClass	= 1,
-> > +	  .bInterfaceProtocol	= 0,
-> > +	  .driver_info		= UVC_INFO_QUIRK(UVC_QUIRK_FORCE_RESUME) },
-> >  	/* Chicony CNF7129 (Asus EEE 100HE) */
-> >  	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
-> >  				| USB_DEVICE_ID_MATCH_INT_INFO,
-> > diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-> > index 6fb0a78b1b009..fa59a21d2a289 100644
-> > --- a/drivers/media/usb/uvc/uvcvideo.h
-> > +++ b/drivers/media/usb/uvc/uvcvideo.h
-> > @@ -73,6 +73,7 @@
-> >  #define UVC_QUIRK_FORCE_Y8		0x00000800
-> >  #define UVC_QUIRK_FORCE_BPP		0x00001000
-> >  #define UVC_QUIRK_WAKE_AUTOSUSPEND	0x00002000
-> > +#define UVC_QUIRK_FORCE_RESUME		0x00004000
-> >  
-> >  /* Format flags */
-> >  #define UVC_FMT_FLAG_COMPRESSED		0x00000001
-> > 
-> > ---
-> > base-commit: c0f65a7c112b3cfa691cead54bcf24d6cc2182b5
-> > change-id: 20231222-rallybar-19ce0c64d5e6
-> 
-> -- 
-> Regards,
-> 
-> Laurent Pinchart
+On Tue, 12 Dec 2023 at 18:47, Anand Moon <linux.amoon@gmail.com> wrote:
+>
+> Hi Krzysztof,
+>
+> On Tue, 12 Dec 2023 at 18:39, Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+> >
+> > On 12/12/2023 13:51, Anand Moon wrote:
+> > > Hi Krzysztof,
+> > >
+> > > On Tue, 12 Dec 2023 at 17:22, Krzysztof Kozlowski
+> > > <krzysztof.kozlowski@linaro.org> wrote:
+> > >>
+> > >> On 12/12/2023 12:37, Anand Moon wrote:
+> > >>>
+> > >>> Here is the list of warnings I observed with this patch
+> > >>>
+> > >>>   DTC_CHK Documentation/devicetree/bindings/usb/nvidia,tegra186-xusb.example.dtb
+> > >>> /home/amoon/mainline/linux-amlogic-6.y-devel/Documentation/devicetree/bindings/usb/usb-device.example.dtb:
+> > >>> hub@1: 'vdd-supply' is a required property
+> > >>
+> > >> You always require the property, but it is not valid for some devices.
+> > >> Just require it only where it is applicable (in if:then: clause).
+> > >>
+> > > I had already done this check many times before.
+> >
+> > I don't ask you to check. I ask you to change the code.
+> >
+> I have tried this and it's not working for me.
+>
+> > > my v6 original patch was doing the same and it passed all the tests
+> > > but since I updated the required field it not parsing correctly.
+> >
+> > Your original v6 patch was different. I don't understand what you are
+> > trying to achieve. Or rather: how is it different, that my simple advice
+> > above does not work for you  (as in the past you reply with some really
+> > unrelated sentence).
+> >
+> Ok, It's my poor English grammar, thanks for your review comments.
+>
+> > Best regards,
+> > Krzysztof
+> >
 
--- 
-Regards,
+Any reason this device tree binding got removed,I cannot find this file
+Can not find the commit which removed this file.
 
-Laurent Pinchart
+[0] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/usb?h=v6.9-rc2
+
+Thanks
+-Anand
 
