@@ -1,118 +1,113 @@
-Return-Path: <linux-usb+bounces-8949-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8950-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D90F0898DE6
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Apr 2024 20:27:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id BA4CE898FC7
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Apr 2024 22:45:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 155841C24704
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Apr 2024 18:27:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E5FCD1C22C93
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Apr 2024 20:45:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E17B0130A76;
-	Thu,  4 Apr 2024 18:27:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7060F13B7A1;
+	Thu,  4 Apr 2024 20:45:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="OGHQ9Otk"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id 0CE9D130486
-	for <linux-usb@vger.kernel.org>; Thu,  4 Apr 2024 18:27:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
+Received: from mail-vk1-f170.google.com (mail-vk1-f170.google.com [209.85.221.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84A1513A890
+	for <linux-usb@vger.kernel.org>; Thu,  4 Apr 2024 20:45:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712255228; cv=none; b=a01EXmpmVKgVq+lLSgQpg9zUPRiJTKNs1ocLlr+i/j8dnK+kwxQ4qqMfq78xrgmYVOVdt1KREHD/0JE4rwDRqB9GyLXkmy5HLH6eUhSktigpA61Q7CiJDHGceLOvjViq5HWImgJgtkotR+sL+JpyiNaBomowC7s7YyVhnFEcjvg=
+	t=1712263508; cv=none; b=mRswI9F63B7fMECk32WMvqMI8BdMYe+wY+YDbbM1E21SFbzGhEyECI9zYHoxSBm+BsC7vqz4u+memAiPmkZcXxDrl1Z1NBriVlHY7zNpuzRut5ncxvOz+ZWeOcSR8aTccxWArL9LToU/mTieoXYh+wt0TI1pI+6Ti6t+xbBK2hY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712255228; c=relaxed/simple;
-	bh=I6jRZ854ecCgWY95SZlS6zIp0tbz6PMCpLeBKuhM+TI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=f8YrHVi2A4e25m2Jy+rdlHE9x7q/cn3GeqMLVY28wrdcXIH1WwL+rZ0ol30j6LYQWwNlLwnML18bbWTGUvcM/6uXjRbluXtzkQAOZYfjwXR6tJA5pvxN1CmFweq4KsipjgD6KkO14PFmCiOakymtutmKPpMT/0tDDNN3qTCHEWA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
-Received: (qmail 15760 invoked by uid 1000); 4 Apr 2024 14:27:06 -0400
-Date: Thu, 4 Apr 2024 14:27:06 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Anand Moon <linux.amoon@gmail.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-  Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-  Alim Akhtar <alim.akhtar@samsung.com>,
-  Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-  Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
-  linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
-  linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 4/6] usb: ohci-exynos: Switch from CONFIG_PM guards to
- pm_ptr()
-Message-ID: <6a29e005-8a35-46be-bfe5-57818b02af16@rowland.harvard.edu>
-References: <20240404071350.4242-1-linux.amoon@gmail.com>
- <20240404071350.4242-5-linux.amoon@gmail.com>
+	s=arc-20240116; t=1712263508; c=relaxed/simple;
+	bh=4UO1VMYWun6t0P6nH+mG+xdFydZVyE+pOaRYVYx4yog=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PRMsZlP42Et94xpdCAfFPHRd76oKxtKGjv77uLoDcUmU6bYKo9sbw5Km8K7rJdbzgxxShrz0a6S38FqKB3ZnX+0e9HB4E1BP1pQXed2CmX0klS1+AkFBGn9PDxxhZsFxmZBt6j/sSN3nB0jOP3kizcf3TY+zPsVzj5nXrHHwsRY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=OGHQ9Otk; arc=none smtp.client-ip=209.85.221.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-vk1-f170.google.com with SMTP id 71dfb90a1353d-4d47000f875so520358e0c.2
+        for <linux-usb@vger.kernel.org>; Thu, 04 Apr 2024 13:45:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1712263505; x=1712868305; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KF8FNJKbIf/Wqy3NgLHLUIDfVpXMUebZHQXlpWQnHwE=;
+        b=OGHQ9Otk51j3QkwxtNFs3R5EmKGoHTZB6h4lLf0rwEowgUeyMnIIhevJ5+qcroer9t
+         FQQWNmLgX1L+7qAqFa5L5aHmcDr2uIc4nUYPOYj7prGRk+fdrC5awWKBSQUfFtlaS0G/
+         MkmFjoqOOTOnslZKxXdxi6SnBKrGOto2s8lTw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712263505; x=1712868305;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KF8FNJKbIf/Wqy3NgLHLUIDfVpXMUebZHQXlpWQnHwE=;
+        b=ZNylMn0rGbKbbONbc56uCkSKQIABuUI+zIhZY0urTJDLpPdzimKkKlHioD4/sWit88
+         DWOFf3pIVZmLtLZpH22kVo2GJAHvUv6iF3jZBlXVQJBAZxL+kZ0sFouFJiwFsMjDWrv3
+         jWYs1YWNDcGhXd7IKFwO6ycNW3N+wB3kPaPPjBWCnlvslZyoik25nMI52lnCO93R9uS7
+         vOHXA+2AR2AVfQKQ5Ph+jlctnxzf2qpTjdLkbUKD/anpAP8jtIPxWOLY4DaVTJ4fc5DD
+         t6jGlxoLQ0VoFbt0KxzQLaYBVHKIy/oo4drPa8EMF19/AZZVysG9Sg3I5lpHVApDjG/E
+         bhwg==
+X-Forwarded-Encrypted: i=1; AJvYcCUUn9WPmv6dW6/dJ1tzU5M04EbDLv5qHrSgfyBjTdup7tXmwVvK2sMVafu5dJyYnLFQvqCEcbAcGyc388JD0o0Ci6gfob7jiIX/
+X-Gm-Message-State: AOJu0YxE2PQiE9bom0HZlXNMzAiYtt4JdGuXxDWOn2ic9JdwKqeWzuta
+	a+ukVJXhTVJ+D54A1N/IyfM+/06aEFSXbyvfQMXisJyQUbMbheu+DJcRV5CC4Zg6K+hdCHzF9cd
+	BlmXzcxg/K9jKhnlrSug69tCAxnHaO/hywavR
+X-Google-Smtp-Source: AGHT+IE1aT12rSJQsk49m0s1WDAmGtg1boyflA0mWV27eiMvdQWflqasXIA0kULyhEfYJsr1EVtT0Cfl08bXuJZCc+c=
+X-Received: by 2002:a1f:f2c6:0:b0:4d3:3adc:b639 with SMTP id
+ q189-20020a1ff2c6000000b004d33adcb639mr3392151vkh.6.1712263505418; Thu, 04
+ Apr 2024 13:45:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240404071350.4242-5-linux.amoon@gmail.com>
+References: <20240403-public-ucsi-h-v3-0-f848e18c8ed2@chromium.org>
+ <20240403-public-ucsi-h-v3-2-f848e18c8ed2@chromium.org> <3ezjocthsigo3t746slmgzffnmpxw7wwf3s535basiaf2qy6io@7ocxva6ndsbt>
+ <2024040449-average-foyer-defa@gregkh>
+In-Reply-To: <2024040449-average-foyer-defa@gregkh>
+From: Pavan Holla <pholla@chromium.org>
+Date: Thu, 4 Apr 2024 13:44:29 -0700
+Message-ID: <CAB2FV=4TQZwM6bRSeBhieqU2H8yxt3NWsey55a5my_i1La0fJQ@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] usb: typec: ucsi: Implement ChromeOS UCSI driver
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>, Benson Leung <bleung@chromium.org>, 
+	Tzung-Bi Shih <tzungbi@kernel.org>, Guenter Roeck <groeck@chromium.org>, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, 
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>, chrome-platform@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 04, 2024 at 12:43:20PM +0530, Anand Moon wrote:
-> Use the new PM macros for the suspend and resume functions to be
-> automatically dropped by the compiler when CONFIG_PM are disabled,
-> without having to use #ifdef guards. If CONFIG_PM unused,
-> they will simply be discarded by the compiler.
-> 
-> Signed-off-by: Anand Moon <linux.amoon@gmail.com>
-> ---
-> v2: new changes in this series.
-> ---
+On Thu, Apr 4, 2024 at 6:07=E2=80=AFAM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Wed, Apr 03, 2024 at 09:58:33PM +0300, Dmitry Baryshkov wrote:
+> > I think it's better be written as
+> >
+> > if (WARN_ON_ONCE(val_len > MAX_EC_DATA_SIZE))
+> >       return -EINVAL;
+>
+> So if you trigger this, you just rebooted all boxes that have
+> panic-on-warn enabled (hint, the HUGE majority in quantity of Linux
+> systems out there.)
+>
+> So don't do that, just handle it like this.
+>
+> BUT, if this can be triggered by userspace, do NOT use dev_err() as that
+> will just allow userspace to flood the kernel log.
+>
+> Pavan, who calls this?  If userspace, this needs to be fixed.  If it's
+> only a kernel driver, it's fine as-is.
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
+This code is only called by a kernel driver.
 
->  drivers/usb/host/ohci-exynos.c | 11 +++--------
->  1 file changed, 3 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/usb/host/ohci-exynos.c b/drivers/usb/host/ohci-exynos.c
-> index 85d04ae0ae40..3e647e0b341d 100644
-> --- a/drivers/usb/host/ohci-exynos.c
-> +++ b/drivers/usb/host/ohci-exynos.c
-> @@ -212,8 +212,7 @@ static void exynos_ohci_shutdown(struct platform_device *pdev)
->  		hcd->driver->shutdown(hcd);
->  }
->  
-> -#ifdef CONFIG_PM
-> -static int exynos_ohci_suspend(struct device *dev)
-> +static int __maybe_unused exynos_ohci_suspend(struct device *dev)
->  {
->  	struct usb_hcd *hcd = dev_get_drvdata(dev);
->  	struct exynos_ohci_hcd *exynos_ohci = to_exynos_ohci(hcd);
-> @@ -230,7 +229,7 @@ static int exynos_ohci_suspend(struct device *dev)
->  	return 0;
->  }
->  
-> -static int exynos_ohci_resume(struct device *dev)
-> +static int __maybe_unused exynos_ohci_resume(struct device *dev)
->  {
->  	struct usb_hcd *hcd			= dev_get_drvdata(dev);
->  	struct exynos_ohci_hcd *exynos_ohci	= to_exynos_ohci(hcd);
-> @@ -249,10 +248,6 @@ static int exynos_ohci_resume(struct device *dev)
->  
->  	return 0;
->  }
-> -#else
-> -#define exynos_ohci_suspend	NULL
-> -#define exynos_ohci_resume	NULL
-> -#endif
->  
->  static const struct ohci_driver_overrides exynos_overrides __initconst = {
->  	.extra_priv_size =	sizeof(struct exynos_ohci_hcd),
-> @@ -277,7 +272,7 @@ static struct platform_driver exynos_ohci_driver = {
->  	.shutdown	= exynos_ohci_shutdown,
->  	.driver = {
->  		.name	= "exynos-ohci",
-> -		.pm	= &exynos_ohci_pm_ops,
-> +		.pm	= pm_ptr(&exynos_ohci_pm_ops),
->  		.of_match_table	= of_match_ptr(exynos_ohci_match),
->  	}
->  };
-> -- 
-> 2.44.0
-> 
+Thanks,
+Pavan
 
