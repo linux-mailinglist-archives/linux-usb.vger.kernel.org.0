@@ -1,75 +1,75 @@
-Return-Path: <linux-usb+bounces-8912-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8913-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 968A08982CC
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Apr 2024 10:05:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 642AF8982D5
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Apr 2024 10:07:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0D30E1F22C88
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Apr 2024 08:05:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E1AFA1F27016
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Apr 2024 08:07:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 839A56EB7A;
-	Thu,  4 Apr 2024 08:04:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C9FF67752;
+	Thu,  4 Apr 2024 08:07:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Hi1rzrOp"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="yRBZ9hmj"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED2D86BFCF
-	for <linux-usb@vger.kernel.org>; Thu,  4 Apr 2024 08:04:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31CFA5C919
+	for <linux-usb@vger.kernel.org>; Thu,  4 Apr 2024 08:07:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712217896; cv=none; b=jRjsBMNy+6SNZtETAEE3yy0J5D8GexPShFBhn5KkNCILdw0vZrHXg9CcVzQDuvHsgVEtJQJPn+A3P5gP4FtroKKODP/s6h/VqNZxUs6pkDJaJ/7VO2Y/MXR2xoE9g5RlY/RFuxRVP0b8MfqXzA47V5SzIJUKOzzaWoxazsPHM0E=
+	t=1712218054; cv=none; b=mk51H6GeuW4RZaBqMkniVdi9xSPX5Isx0vgqFw5blTvIfHwQbqk7/8w00kOncxFc2eNZLWjYD8wvAaO+R165iMnftrBJqLn81Uv2kAvwpJcnDPLRNs3JrJD5/7/1/poi5zqR09D9E28r8yd1MeYsN1y6vQ4TL+apwNFFBDZGFpI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712217896; c=relaxed/simple;
-	bh=KNYxvFJYXoWRu/+uOkrbBRzvRbbI6L12DQyHCnufcB0=;
+	s=arc-20240116; t=1712218054; c=relaxed/simple;
+	bh=FUyUXwFhDB1woilQzI42oNSlwR0worgsUnu152hRI5U=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rhDoS0tNzFqQ9a1chOVR4jL/tcmy1eaWqxOgc/x2hN5aavueZ/Z26zCnXUo4812E9WmoeAXs7iunLOr73H7lpaMyeroAF1wVEwX/WypcZl3Sp3QzeqWoJAVGDiwpKDyblnqqwN068/I21+YJoZrIedRRZRws5nigSGZf7IjMmIA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Hi1rzrOp; arc=none smtp.client-ip=209.85.218.41
+	 In-Reply-To:Content-Type; b=r7cSkMBhI15gyDogH+Nc97ePv5hKcAYt1Ch4ZXf4vNxJ47uAmewyi9DuoCHY8DfOW16qbGN6XHGgOlPeFIrfUoW6Ap1uV9HAGRB/zCR9KmoMnk4XS/KL778BK6JmOQ3HU4Y114X3NoalAxC7v8KrH3T9E/9L6GJOQLshbqqLxrY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=yRBZ9hmj; arc=none smtp.client-ip=209.85.218.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a4644bde1d4so93120766b.3
-        for <linux-usb@vger.kernel.org>; Thu, 04 Apr 2024 01:04:52 -0700 (PDT)
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a4e62f3e63dso80651266b.0
+        for <linux-usb@vger.kernel.org>; Thu, 04 Apr 2024 01:07:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1712217891; x=1712822691; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1712218050; x=1712822850; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=wcaH9vepF+Ltu58WkYmkLPVSGIlRNFXKUIujqsaErZY=;
-        b=Hi1rzrOpqjwOIvG9MZF7KpdMNlUY+rMgbBX2julzkzbIZWbDIYHlVL+BHDnjOSOslo
-         sw3tnebdglVpRyVSUOAleeiupzMO/xMYXar7hAfOOUdjHAuXpl7WmAq+nVCBK+MLSH8Y
-         tk8nVo3W3QsAmD5Kb4lsWcNsXm38NVrtjuP3KCZCsPxg1WqR21kdkliD9cfT72c/pKhU
-         lAbmAOrFhfDndDXVQWoAuce3CVmviSpfu6rlbLdIV8GoxwaXQlCTRKABJo8eoXnTyHQQ
-         68n8fUC0eC6RdMp7L9844dpGqR4hvWTCOWbQ64pTw/c4+uDW8x1ZOntn+uKcGVQyy0dp
-         0CTg==
+        bh=dCTUAhZJFbzQDyd/4w6lsOOlLiMl8pEzapP9VBzi7qE=;
+        b=yRBZ9hmjifjcKUkG5HuzE8uvtKV1lcOJ7xIoYYSay6nouvyhDl09Q3f44xl3a3QHuv
+         /4C/I524/6JUK+bAo1XpiWpR74Dhdvk/gjO5vwbnQjceiEcl6ApvQ5A6su92SA1fPyDx
+         /E8h1dRusoaMkVn3rL2eTu3fVitRKIDm8m6M333zg7huF2LYM8YqoCJL/vwT4Bzbgji2
+         K01pqw7fiYtGd+cNG5sVhH8b+MXbNikFVPxXahCGVOD1ZSTR6iaNH+7hUn2qw+3DjnQq
+         ri6cr8FFNh+gSkrPkhfqVhubcPNrn6xKflPqlNRUqUQSFTw/7u9jGLxJ8gmjVAabLLfO
+         Spdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712217891; x=1712822691;
+        d=1e100.net; s=20230601; t=1712218050; x=1712822850;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wcaH9vepF+Ltu58WkYmkLPVSGIlRNFXKUIujqsaErZY=;
-        b=xOSDaW4j/F/e5AJpE+LmGnoUIf7IUjT6MhO9bgum9Y4BZ1s+zSOH6O3V6uMlMg2MZk
-         FnBzE9vjKxEwMQxPap26oLQsjrQau5aonHbfTPlEblv2lam2z8vsLVNmNlwjhgkr2HcN
-         WbHAPCElSlTGHFNYFKAhuP++nTH5gjq6LkBxkso6Uy/WeTiJDv5T8ynyCgg5UPNT8Dz2
-         +GzrdKZacckoiwtlqNdg8gVtMkLiyKQIldJjywiUto/AQgD0UxyRgT+aaCm/8K1IQ0Mn
-         pYKa9scBhtKOYwWVCe8dk/KkgvsAlFPCwo9Qe7042oo7XsqEIyqE6pfv9yWrCndrFy7t
-         a8Sg==
-X-Forwarded-Encrypted: i=1; AJvYcCXHJZcssHfe8uOgPKpyT0JG4qCpnZ38GhnzMixHUeJwEXjQ8ILWzus6bwK9YDU/h5WLNw7RULnChqt76r3KHL903eP33auZjI6b
-X-Gm-Message-State: AOJu0YxExe1qHN8t4b0bKVd8O++YEud1j40AhbrpyGeV91uXW+xwBo//
-	1LxHx0nYlsXEeHfkUK+EcWTSNDW3KgvgvMH1TwXlSZ02ORHba2vKr8KJRpv9r/Y=
-X-Google-Smtp-Source: AGHT+IGdGll2OVTQrzOUNpFtKjGnITOkrIL9R6rmlNbWzUhTVNFEVGiGh39Cy3aAnYwpV9PwqbUrxw==
-X-Received: by 2002:a17:906:349b:b0:a4e:8b31:1f43 with SMTP id g27-20020a170906349b00b00a4e8b311f43mr1042574ejb.14.1712217891302;
-        Thu, 04 Apr 2024 01:04:51 -0700 (PDT)
+        bh=dCTUAhZJFbzQDyd/4w6lsOOlLiMl8pEzapP9VBzi7qE=;
+        b=H27TNtFxy+KVb2pWsBIJZAe557DzHKNNfHp9z2D/3KxyX9jyss+PoXMnUxNJnCiNh1
+         gK0cgAwz4FgUAvXlwemvCJGp6/nswC2SCZnLMUuaciiy6a28XPo/HHOTF0SJQn1kdRSO
+         xaz5EdEGEwU4Yuu9vEOcGU5jEeNCnj4ho3ZUdfezccGeWcFXPNc9MZUfDylMH6nn8L7V
+         K0FyMeSsUmehesia+x7eQ2wAsO1VarAHMwQnXHSukrE23Mi28NqUlMrEALs+Icb7WjoL
+         NG+XSjrAVmFO9MGTFjk5yOVl8YNmcBW6Bk5CRdfqxjEVfJKI3WaXwZIz3M0gEr5DWrVg
+         AUnQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVb/AoA+4SsmqUUMwqUQ6PIK4/LMS6JQzW+u0zEsgUKBskKz1Ooh0rjtGZ0R4ikOvgmNS2SSdWWj0h3vG68ECOI8PLkIw4LQA8H
+X-Gm-Message-State: AOJu0Yzs098lRVh0J+QeJedH1mCgByHI/dX0oCorzvrITPD0J7fASKfG
+	CSrp6LJ1jQciaIvGcYgUy9EGCvOCMP2i2CQII1GGnxSRHzPE2AXaW6kQQf+BhNw=
+X-Google-Smtp-Source: AGHT+IGqeZwfGX52j9azQa0nCOGmXL/fBRyDHbnuxWaSuZOTA7FEg5wiMKsZSXMNOhAtOp/trwFeFQ==
+X-Received: by 2002:a17:907:bb95:b0:a46:de64:c479 with SMTP id xo21-20020a170907bb9500b00a46de64c479mr1021624ejc.69.1712218050380;
+        Thu, 04 Apr 2024 01:07:30 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.223.16])
-        by smtp.gmail.com with ESMTPSA id i15-20020a170906090f00b00a4e5866448bsm5727745ejd.155.2024.04.04.01.04.49
+        by smtp.gmail.com with ESMTPSA id 27-20020a170906311b00b00a4ea1167a52sm1746165ejx.25.2024.04.04.01.07.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Apr 2024 01:04:50 -0700 (PDT)
-Message-ID: <e44e6138-6da7-4242-8831-dc80c40826f6@linaro.org>
-Date: Thu, 4 Apr 2024 10:04:49 +0200
+        Thu, 04 Apr 2024 01:07:29 -0700 (PDT)
+Message-ID: <f16e1280-8f7e-40a7-ab45-9acaeb3e90cb@linaro.org>
+Date: Thu, 4 Apr 2024 10:07:27 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -77,20 +77,24 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 5/6] usb: dwc3: exynos: Use
- devm_regulator_bulk_get_enable() helper function
-To: Anand Moon <linux.amoon@gmail.com>
-Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+Subject: Re: [PATCH v19 2/9] usb: dwc3: core: Access XHCI address space
+ temporarily to read port info
+To: Johan Hovold <johan@kernel.org>,
+ Krishna Kurapati <quic_kriskura@quicinc.com>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Rob Herring <robh@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
+ Wesley Cheng <quic_wcheng@quicinc.com>,
+ Konrad Dybcio <konrad.dybcio@linaro.org>,
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Alim Akhtar <alim.akhtar@samsung.com>,
- Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
- Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20240404071350.4242-1-linux.amoon@gmail.com>
- <20240404071350.4242-6-linux.amoon@gmail.com>
- <d6d5f6d4-1d34-4d42-9afc-822a014063dd@linaro.org>
- <CANAwSgSe37Pn062enCLd39P+RXU1VCZugyz7oDRafpnU1FyN1w@mail.gmail.com>
+ Conor Dooley <conor+dt@kernel.org>, Thinh Nguyen
+ <Thinh.Nguyen@synopsys.com>, Felipe Balbi <balbi@kernel.org>,
+ devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ quic_ppratap@quicinc.com, quic_jackp@quicinc.com,
+ Johan Hovold <johan+linaro@kernel.org>
+References: <20240404051229.3082902-1-quic_kriskura@quicinc.com>
+ <20240404051229.3082902-3-quic_kriskura@quicinc.com>
+ <Zg5VDnbaaBXJyRjV@hovoldconsulting.com>
 Content-Language: en-US
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
@@ -137,56 +141,41 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <CANAwSgSe37Pn062enCLd39P+RXU1VCZugyz7oDRafpnU1FyN1w@mail.gmail.com>
+In-Reply-To: <Zg5VDnbaaBXJyRjV@hovoldconsulting.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 04/04/2024 09:38, Anand Moon wrote:
-> Hi Krzysztof,
+On 04/04/2024 09:21, Johan Hovold wrote:
+> On Thu, Apr 04, 2024 at 10:42:22AM +0530, Krishna Kurapati wrote:
+>  
+>> +static int dwc3_get_num_ports(struct dwc3 *dwc)
+>> +{
+>> +	void __iomem *base;
+>> +	u8 major_revision;
+>> +	u32 offset;
+>> +	u32 val;
+>> +
+>> +	/*
+>> +	 * Remap xHCI address space to access XHCI ext cap regs since it is
+>> +	 * needed to get information on number of ports present.
+>> +	 */
+>> +	base = ioremap(dwc->xhci_resources[0].start,
+>> +		       resource_size(&dwc->xhci_resources[0]));
+>> +	if (!base)
+>> +		return PTR_ERR(base);
 > 
-> On Thu, 4 Apr 2024 at 12:53, Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> On 04/04/2024 09:13, Anand Moon wrote:
->>> Use devm_regulator_bulk_get_enable() instead of open coded
->>> 'devm_regulator_get(), regulator_enable(), regulator_disable().
->>
->> I fail to see how did you replace open-coded suspend/resume paths.
->>
->>>
->>> Signed-off-by: Anand Moon <linux.amoon@gmail.com>
->>> ---
->>> V2: no changes, did not find any regression in pm suspend/resume.
->>
->> No, that's not equivalent code. No explanation in commit msg.
->>
->> You already got comments on this and nothing improved. You just entirely
->> ignored received comments. That's not how it works.
->>
->> I don't think you understand the code and Linux driver model. This patch
->> repeats several previous attempts with similar issues: no logic behind a
->> change.
->>
->> NAK.
+> This is obviously still broken. You need to update the return value as
+> well.
 > 
-> devm_regulator_get_enable and devm_regulator_bulk_get_enable
-> both remove the dependency from the driver to handle the regulator_enabled
-> and regulator_disabled. ie this removes the regulator from the driver structure.
+> Fix in v20.
 
-Not true. Please do not paste some generic knowledge and assume reviewer
-knows it. Instead provide proof.
+If one patchset reaches 20 versions, I think it is time to stop and
+really think from the beginning, why issues keep appearing and reviewers
+are still not happy.
 
-> 
-> Since these functions set devm_add_action to disable the regulator when the
-> resource is not used.
-> 
->      ret = devm_add_action(dev, devm_regulator_bulk_disable, devres);
->      if (!ret)
->                return 0;
-
-Listen, you already got comments on this at v1. Address previous
-comments instead of repeating something unrelated. We should not have
-the same discussion twice.
+Maybe you did not perform extensive internal review, which you are
+encouraged to by your own internal policies, AFAIR. Before posting next
+version, please really get some internal review first.
 
 Best regards,
 Krzysztof
