@@ -1,121 +1,158 @@
-Return-Path: <linux-usb+bounces-8964-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8965-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D1CD8995D9
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Apr 2024 08:50:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BF03C89966C
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Apr 2024 09:21:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 27546286DED
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Apr 2024 06:50:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F0FC81C21410
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Apr 2024 07:21:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B01B28DD7;
-	Fri,  5 Apr 2024 06:49:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GcN9OhNq"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B791033CFC;
+	Fri,  5 Apr 2024 07:21:15 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F10BC2557A;
-	Fri,  5 Apr 2024 06:49:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED70C33CF1
+	for <linux-usb@vger.kernel.org>; Fri,  5 Apr 2024 07:21:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712299797; cv=none; b=fVX5ugiaR7j81W/eO0ovqlNiAqP3z+3KjohzhysxRQEk00XT5A41RuBLAZWOdciEsIRO1CFXkoGQuQBEOJg3PDByhEmsWZ5xOX2EYK5jUfGeiSYxC1No31ueRP/aKuEfq5WCm1NDyM27WRi3YfIgGROvIRxn59XqXu1iB4/ctYs=
+	t=1712301675; cv=none; b=UrAPWG9HUluCX5qs+V62XszbvwLuKv2AFaF+xQ66AD5dtVZuq9fmn2figlzbBzej/zdnYWOX4l81BYXGxNdR6mjdnwuW+VtxxEBngA+o2rKnm2GkJxBal4KAaQr9LyOZbuFxv0L2IsaHrLLwqCs6Htumdguh+nNNiZ0OrSxfLcQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712299797; c=relaxed/simple;
-	bh=pM5eyZ6ngQNS72PsWbWA/pEt9fJ2yCxrs53GYxHbrvI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cQj7HaPvW5sGllPkXQ51inXjCb+vxVaE9o/H4FNtgb2GJeo434oSTywjbd9wN4bcICvbunW9nyZyw6wrFa3hfdK/q6YqP/sFAQlslVfVN2ZUzBNhP13o1JyPP9OaOcnQ41yUVeQB6rRrMRGOKDbeLuoOXcy29BMC127+GWCS5ek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GcN9OhNq; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712299796; x=1743835796;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=pM5eyZ6ngQNS72PsWbWA/pEt9fJ2yCxrs53GYxHbrvI=;
-  b=GcN9OhNq/TZ5ZMoxa4x86i7JO6ewKpJpQEHWdxuQ29tmxyp5qDDbWgYj
-   NAvg/+JVd/9gUq4EAPGcZMVk3sxd3KNfnSQaM9psI9SuM0FBq33oXIYOv
-   QaXiXqIsptyDKTLgQentGNM539HaWHUuhdhU1v6I62FBzo0wVL6HYc4kG
-   NcUqMpd959JVbQMjFty8er9xfimn3kVgMshAd/Iu+ZFq5QB19JVfH1naZ
-   GcqFpBaPWXpv6A+AyB/LtcX5DomE3HDQr0Beew2+5BHJECEZoeGwGzJaa
-   7ZyfDss7H4vy9zfAAaCBVOKQY8anZ2D2JLg5qLiShSSXQzkSiiF3iSBOE
-   w==;
-X-CSE-ConnectionGUID: kYLUhW6QTPimlfPCOXGN5Q==
-X-CSE-MsgGUID: M+i4ae5VQ+Ssl51iDt6ObQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11034"; a="30090098"
-X-IronPort-AV: E=Sophos;i="6.07,180,1708416000"; 
-   d="scan'208";a="30090098"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2024 23:49:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11034"; a="937087429"
-X-IronPort-AV: E=Sophos;i="6.07,180,1708416000"; 
-   d="scan'208";a="937087429"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 04 Apr 2024 23:49:52 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 05 Apr 2024 09:49:51 +0300
-Date: Fri, 5 Apr 2024 09:49:51 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Javier Carrasco <javier.carrasco@wolfvision.net>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Abdel Alkuor <abdelalkuor@geotab.com>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH RESEND 2/2] usb: typec: tipd: fix event checking for
- tps6598x
-Message-ID: <Zg+fD6w1MykCsEe6@kuha.fi.intel.com>
-References: <20240328-tps6598x_fix_event_handling-v1-0-502721ff705b@wolfvision.net>
- <20240328-tps6598x_fix_event_handling-v1-2-502721ff705b@wolfvision.net>
- <ZgveG5Ly3mw0O0eo@kuha.fi.intel.com>
- <b6bf7f8e-7d46-4b70-930c-9483f13fd80a@wolfvision.net>
+	s=arc-20240116; t=1712301675; c=relaxed/simple;
+	bh=rq0ub4HQWbS8WRYOtmnvbSqcOyc5iY6cPnnlDfYTMfY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=gTQUQpZsVB3VT+32xpTBaCkiVwb/9GY6qvtiX3YKiqsemdH1dG56hyHxJAe6YrDX6XfK2gb+sZHHkoZt19RmA7d+KC4+wsWvsKYIjZg1fMuJJnnHno6sNGpz86q21HOfS+DZeHFBt38ClwrTOLvqSV9BoN9L9KBkl3J7AdD82+o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rsdsU-0002so-2H; Fri, 05 Apr 2024 09:20:46 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rsdsS-00AWlk-VL; Fri, 05 Apr 2024 09:20:44 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rsdsS-00FNeT-2q;
+	Fri, 05 Apr 2024 09:20:44 +0200
+From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Li Yang <leoyang.li@nxp.com>,
+	Shawn Guo <shawnguo@kernel.org>,
+	linux-arm-kernel@lists.infradead.org,
+	Zhang Wei <zw@zh-kernel.org>,
+	linuxppc-dev@lists.ozlabs.org,
+	netdev@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	kernel@pengutronix.de
+Subject: [PATCH] MAINTAINERS: Drop Li Yang as their email address stopped working
+Date: Fri,  5 Apr 2024 09:20:41 +0200
+Message-ID: <20240405072042.697182-2-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b6bf7f8e-7d46-4b70-930c-9483f13fd80a@wolfvision.net>
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2657; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=rq0ub4HQWbS8WRYOtmnvbSqcOyc5iY6cPnnlDfYTMfY=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBmD6ZKkY6yppGrhNNyOtWlNH+4elKIHpdGAEr5v tStHRrc2RuJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZg+mSgAKCRCPgPtYfRL+ TsouB/47cqGkwC5L5mRT5uk5aAdbTfA7NN4ZTXF31ggFYif4zOhNk8lB2NZ3sV+ZCEMsrhJGQ1W 0qiy1Ak+QnRSVm96815mssAhzxCJwRqoBjEutLPScymOxs+/UwHn+tCnFP1MtdXOXD06Ku2VBFW OsQZOiaIdqiCahqDK4m0l/AR1MkEmVRFO1o3rgBlYWZlUlKQiJpxXsVPEwHQuUyvnFnfBMARMpu lG6OI1Dz/hBSHifIc2YNmkmFPSpDoe3G0PQjzIfLBjCr1fuvsnNS1NIhwCSHG70iCJlU7rVqPap AznBlkkLLwJFbPSLW+liIiMfw+DCkSPQStmpHQkvMRB3no4r
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
-On Wed, Apr 03, 2024 at 10:55:29AM +0200, Javier Carrasco wrote:
-> >> -	ret = tps6598x_read64(tps, TPS_REG_INT_EVENT1, &event1);
-> >> -	ret |= tps6598x_read64(tps, TPS_REG_INT_EVENT2, &event2);
-> >> +	ret = tps6598x_block_read(tps, TPS_REG_INT_EVENT1, event1, 11);
-> > 
-> > This is not going to work with the older TI PD controllers.
-> > 
-> > The lenght of these registers is 8 bytes on the older TI PD
-> > controllers (TPS65981, TPS65982, etc.). I think we need to split this
-> > function.
-> > 
-> 
-> That is a good point. I had a look at the older TI PD controllers and I
-> agree with you that we should split the function to cover both register
-> lengths separately.
-> 
-> I was thinking about adding a new compatible for the newer PD
-> controllers (tps65987 and tps65988), keeping the current tps6598x for
-> the older ones as well as backwards compatibility. But backwards
-> compatibility would also mean that flags beyond the first 8 bytes would
-> be ignored.
-> 
-> On the other hand, the upper flags are only relevant for firmware
-> updates, so we could check those (i.e. read 11 bytes) if a firmware was
-> provided via "firmware-name", and ignore them (i.e. read 8 bytes) otherwise.
-> 
-> Other ideas or improvements to mine are more than welcome.
+When sending a patch to (among others) Li Yang the nxp MTA replied that
+the address doesn't exist and so the mail couldn't be delivered. The
+error code was 550, so at least technically that's not a temporal issue.
 
-I don't have any good ideas. On ACPI platforms the same device ID may
-be used with all of these, so we should actually try to figure out the
-version from registers like VID, DID and Version (if they are
-available).
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+---
+Hello,
 
-thanks,
+I added the affected maintainers and lists to Cc:, maybe someone there
+knows if this issue is only temporal?
 
+@Greg: Given that I noticed the non-existing address when sending an usb
+patch, I suggest you care for application of this patch (iff it should
+be applied now). If Li Yang disappeared indeed, I'd prefer to drop the
+contact from MAINTAINERS early to not give wrong expectations to
+contributors.
+
+Best regards
+Uwe
+
+ MAINTAINERS | 11 +++--------
+ 1 file changed, 3 insertions(+), 8 deletions(-)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 7c121493f43d..be19aad15045 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -2191,7 +2191,6 @@ N:	mxs
+ 
+ ARM/FREESCALE LAYERSCAPE ARM ARCHITECTURE
+ M:	Shawn Guo <shawnguo@kernel.org>
+-M:	Li Yang <leoyang.li@nxp.com>
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+ S:	Maintained
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git
+@@ -8523,7 +8522,6 @@ S:	Maintained
+ F:	drivers/video/fbdev/fsl-diu-fb.*
+ 
+ FREESCALE DMA DRIVER
+-M:	Li Yang <leoyang.li@nxp.com>
+ M:	Zhang Wei <zw@zh-kernel.org>
+ L:	linuxppc-dev@lists.ozlabs.org
+ S:	Maintained
+@@ -8688,10 +8686,9 @@ F:	drivers/soc/fsl/qe/tsa.h
+ F:	include/dt-bindings/soc/cpm1-fsl,tsa.h
+ 
+ FREESCALE QUICC ENGINE UCC ETHERNET DRIVER
+-M:	Li Yang <leoyang.li@nxp.com>
+ L:	netdev@vger.kernel.org
+ L:	linuxppc-dev@lists.ozlabs.org
+-S:	Maintained
++S:	Orphan
+ F:	drivers/net/ethernet/freescale/ucc_geth*
+ 
+ FREESCALE QUICC ENGINE UCC HDLC DRIVER
+@@ -8708,10 +8705,9 @@ S:	Maintained
+ F:	drivers/tty/serial/ucc_uart.c
+ 
+ FREESCALE SOC DRIVERS
+-M:	Li Yang <leoyang.li@nxp.com>
+ L:	linuxppc-dev@lists.ozlabs.org
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+-S:	Maintained
++S:	Orphan
+ F:	Documentation/devicetree/bindings/misc/fsl,dpaa2-console.yaml
+ F:	Documentation/devicetree/bindings/soc/fsl/
+ F:	drivers/soc/fsl/
+@@ -8745,10 +8741,9 @@ F:	Documentation/devicetree/bindings/sound/fsl,qmc-audio.yaml
+ F:	sound/soc/fsl/fsl_qmc_audio.c
+ 
+ FREESCALE USB PERIPHERAL DRIVERS
+-M:	Li Yang <leoyang.li@nxp.com>
+ L:	linux-usb@vger.kernel.org
+ L:	linuxppc-dev@lists.ozlabs.org
+-S:	Maintained
++S:	Orphan
+ F:	drivers/usb/gadget/udc/fsl*
+ 
+ FREESCALE USB PHY DRIVER
+
+base-commit: c85af715cac0a951eea97393378e84bb49384734
 -- 
-heikki
+2.43.0
+
 
