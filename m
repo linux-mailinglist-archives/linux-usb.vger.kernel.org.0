@@ -1,210 +1,122 @@
-Return-Path: <linux-usb+bounces-8971-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8972-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 019A6899780
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Apr 2024 10:04:59 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 522928997B9
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Apr 2024 10:25:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2568D1C21C55
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Apr 2024 08:04:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0CCD4283BE6
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Apr 2024 08:25:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3CA9144D28;
-	Fri,  5 Apr 2024 08:04:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DEFE146A97;
+	Fri,  5 Apr 2024 08:24:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A4U22bbT"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RmGv+mTD"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 365E0144D24;
-	Fri,  5 Apr 2024 08:04:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DD92146A66
+	for <linux-usb@vger.kernel.org>; Fri,  5 Apr 2024 08:24:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712304291; cv=none; b=J06fxz85HqcnGLN0uTM6KA2IRR/VXq+ENEy30oAonl8k9tbWWA9ipSfAOsykMPFrrcDXii1rBbo0GKkGVnVNjGa6I9ShRO5DIYdd6e3TTf2vX9rGdJdP2gMGXBwyHhVO1j2/4sFJ/F0fkE4s9VsorfA40SaNi0Lhj7LyJTSYVUQ=
+	t=1712305489; cv=none; b=G8hdjgETtleurTmiCuNK2YWAkZzLh+4docfbaOgOKK8C3qj0+ka3BM5s7Dv1D4QwllfPRlDGKx7f6rdLJTDxaPRpiPJsmiCqPXuLmCCmjWV599faL3JPDZWFrZLgkiPiie3QqLJ5MgjGO632TnBwHSjhFKuGDmh9+LjMe7Zaz1U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712304291; c=relaxed/simple;
-	bh=c0LkwmvSHMlRpLdHO0hREWTP589I0lIinpLEAKQxt0E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SPrqyZvpooaKrt4WqRZSAXDheYc24Dgd2H/HkxyEGHMFeLbLz9NpsahGu5p9tyk11aV0m7wQ2EFi5bkChZM7kU7jJG4GmOK3hi1uzfFWKkI9GooZvAXZb0oeF/WJnfMVBGL6RXYL9XpCDZFsguexJMGhl8v9YEbGP0WI8bYxsB0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A4U22bbT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08F37C433C7;
-	Fri,  5 Apr 2024 08:04:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712304290;
-	bh=c0LkwmvSHMlRpLdHO0hREWTP589I0lIinpLEAKQxt0E=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=A4U22bbTg3WVNLU/BRer47MTlfnCmpFviRskEIvVSrwNgP28WvtRyj+r8DuHydbf/
-	 NoxKqChaUOEIxON2Z1UTrTIZyPyFWx+CptFNa0VVHYI24cBD4/qlxx6hQcsoD5Ma+M
-	 bl73oUAFGKyWiFVtgTiuqT14ebCsw1aHw2qWIQCNXUlawpVW0OfyKGlQx2rhGWu5ce
-	 V5w5iWs383eobmbidmdYvr4l0I7vQBlDXkP3XkkDuZ5xZ6+omww9zXWS4TW1d5WVQZ
-	 1JVXu9G1sVH5kNxUAlqtcJq5VlLYIdXmpRWOvy1kgy0mO+MMU3sXW2jd4i4jAtWh0t
-	 YSaKSslQoO1Ng==
-Message-ID: <5741de00-11a0-4163-bfc2-a22c1995c96d@kernel.org>
-Date: Fri, 5 Apr 2024 10:04:44 +0200
+	s=arc-20240116; t=1712305489; c=relaxed/simple;
+	bh=2L3CGX7OqkPmTsK6TECnNjWBwH73l9NqbMPNMtYIP0o=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=aYPRYnFYCYLugJyVKcMZZrezvDpujQg3kBDRwBnTHuC2PktDqZnhgc58fMdmqpmLbzhxOaOR0CACjTBk6yjXniltGZtR63eZ7OlDO97NJebXaK2ktHvHBkvk3EHxePZtJs/AxBcl3ZUszJhRzMvUrjO7STSQQyvUghclHnJ8so8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RmGv+mTD; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1712305486;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=C5I/NTVTKh0Md5yW/gn8T1xGvsFGQXYIProl8xxAsRQ=;
+	b=RmGv+mTD7UoxUrlYKeVOFTqNI2dMG+dreR4iOlkoJoofkh7VpYnP9Fkh+N9YYG5cAYCpM8
+	pyRQBntjfXchHgqXvJvHcI9zUI+7N3fnlw8Vft0F4A/EimigWscyHMFEYBgcv5yXGRW2OX
+	tcI0GQkqVCtRVfFAMgfcDzC/CJuQpbc=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-397-Gyk7UQUqN5SvoK_fJKmb7A-1; Fri,
+ 05 Apr 2024 04:24:42 -0400
+X-MC-Unique: Gyk7UQUqN5SvoK_fJKmb7A-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DAB481C0432F;
+	Fri,  5 Apr 2024 08:24:41 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.39.193.88])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 8E448111F3C6;
+	Fri,  5 Apr 2024 08:24:39 +0000 (UTC)
+From: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+To: kuba@kernel.org
+Cc: davem@davemloft.net,
+	edumazet@google.com,
+	horms@kernel.org,
+	jtornosm@redhat.com,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org,
+	pabeni@redhat.com
+Subject: [PATCH net-next v4] net: usb: ax88179_178a: non necessary second random mac address
+Date: Fri,  5 Apr 2024 10:24:31 +0200
+Message-ID: <20240405082431.8329-1-jtornosm@redhat.com>
+In-Reply-To: <20240402183237.2eb8398a@kernel.org>
+References: <20240402183237.2eb8398a@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] dt-bindings: usb: Document the Microchip USB2514 hub
-To: Fabio Estevam <festevam@gmail.com>, gregkh@linuxfoundation.org
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
- linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
- Fabio Estevam <festevam@denx.de>
-References: <20240404164140.662361-1-festevam@gmail.com>
-Content-Language: en-US
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20240404164140.662361-1-festevam@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.3
 
-On 04/04/2024 18:41, Fabio Estevam wrote:
-> From: Fabio Estevam <festevam@denx.de>
-> 
-> Document the Microchip USB2514, USB2412, and USB2417 USB hubs.
+If the mac address can not be read from the device registers or the
+devicetree, a random address is generated, but this was already done from
+usbnet_probe, so it is not necessary to call eth_hw_addr_random from here
+again to generate another random address.
 
-There is 2514b already. Why it cannot be there? Is the existing file
-only for I2C interface and here you add on-board-hub approach interface?
+Indeed, when reset was also executed from bind, generate another random mac
+address invalidated the check from usbnet_probe to configure if the assigned
+mac address for the interface was random or not, because it is comparing
+with the initial generated random address. Now, with only a reset from open
+operation, it is just a harmless simplification.
 
-If so, mention it briefly in commit msg (one sentence is enough).
+Signed-off-by: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+---
+v4:
+  - Context diff due to first patch modification.
+v3:
+  - Send the patch separately to net-next and remove fixes and stable tags.
+v2:
+  - Split the fix and the improvement in two patches and keep curly-brackets
+as Simon Horman suggests.
+v1: https://lore.kernel.org/netdev/20240325173155.671807-1-jtornosm@redhat.com/
 
+ drivers/net/usb/ax88179_178a.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-> 
-> Signed-off-by: Fabio Estevam <festevam@denx.de>
-> ---
->  .../bindings/usb/microchip,usb2514.yaml       | 53 +++++++++++++++++++
->  1 file changed, 53 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/microchip,usb2514.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/microchip,usb2514.yaml b/Documentation/devicetree/bindings/usb/microchip,usb2514.yaml
-> new file mode 100644
-> index 000000000000..8df7a5adfbe8
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/microchip,usb2514.yaml
-> @@ -0,0 +1,53 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/usb/microchip,usb2514.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Microchip USB2514 Hub Controller
-> +
-> +maintainers:
-> +  - Fabio Estevam <festevam@gmail.com>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - usb424,2412
-> +      - usb424,2514
-> +      - usb424,2417
-
-Please keep the list ordered.
-
-> +
-> +  reg: true
-> +
-> +  reset-gpios:
-> +    description: GPIO connected to the RESET_N pin.
-> +
-> +  vdd-supply:
-> +    description: 3.3V power supply.
-> +
-> +  clocks:
-> +    description: External 24MHz clock connected to the CLKIN pin.
-
-maxItems.
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +unevaluatedProperties: true
-
-No, this must be false.
-
-This does not make really sense. You miss $ref... and when you do not
-have $ref you should use additionalProperties: false. Open existing
-bindings for device of the same class.
-
-
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/imx6qdl-clock.h>
-> +    #include <dt-bindings/gpio/gpio.h>
-> +
-> +    usb {
-> +        dr_mode = "host";
-
-Drop property, it's kind of expected/obvious and we want to limit
-chances schema will complain about something unrelated to your device.
-
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        hub@1 {
-> +          compatible = "usb424,2514";
-
-Inconsistent indentation. Use 4 spaces for example indentation.
-
-> +          reg = <1>;
-> +          clocks = <&clks IMX6QDL_CLK_CKO>;
-> +          reset-gpios = <&gpio7 12 GPIO_ACTIVE_LOW>;
-> +          vdd-supply = <&reg_3v3_hub>;
-> +        };
-> +    };
-
-Best regards,
-Krzysztof
+diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
+index a9c418890a1c..69169842fa2f 100644
+--- a/drivers/net/usb/ax88179_178a.c
++++ b/drivers/net/usb/ax88179_178a.c
+@@ -1277,7 +1277,6 @@ static void ax88179_get_mac_addr(struct usbnet *dev)
+ 			dev->net->addr_assign_type = NET_ADDR_PERM;
+ 	} else {
+ 		netdev_info(dev->net, "invalid MAC address, using random\n");
+-		eth_hw_addr_random(dev->net);
+ 	}
+ 
+ 	ax88179_write_cmd(dev, AX_ACCESS_MAC, AX_NODE_ID, ETH_ALEN, ETH_ALEN,
+-- 
+2.44.0
 
 
