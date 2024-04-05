@@ -1,122 +1,121 @@
-Return-Path: <linux-usb+bounces-8972-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8974-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 522928997B9
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Apr 2024 10:25:27 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4F378999AE
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Apr 2024 11:38:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0CCD4283BE6
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Apr 2024 08:25:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1043BB20E62
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Apr 2024 09:38:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DEFE146A97;
-	Fri,  5 Apr 2024 08:24:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3507A161328;
+	Fri,  5 Apr 2024 09:38:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RmGv+mTD"
+	dkim=pass (2048-bit key) header.d=rere.qmqm.pl header.i=@rere.qmqm.pl header.b="ZcrcoLqs"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from rere.qmqm.pl (rere.qmqm.pl [91.227.64.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DD92146A66
-	for <linux-usb@vger.kernel.org>; Fri,  5 Apr 2024 08:24:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4CAC15FA9C;
+	Fri,  5 Apr 2024 09:38:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.227.64.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712305489; cv=none; b=G8hdjgETtleurTmiCuNK2YWAkZzLh+4docfbaOgOKK8C3qj0+ka3BM5s7Dv1D4QwllfPRlDGKx7f6rdLJTDxaPRpiPJsmiCqPXuLmCCmjWV599faL3JPDZWFrZLgkiPiie3QqLJ5MgjGO632TnBwHSjhFKuGDmh9+LjMe7Zaz1U=
+	t=1712309901; cv=none; b=AkwXRnRMetJ0L9IbHlnUlbm/I0PKkqbVheFMD6/h7gGzzCCEy3N0M6MCj5zef/kgVgDLuYdVbDKvVZa2ntxLYmVOH9+UNCMoJUCM5lDHULesMw/QG1A4N4mKQkWQ1JBmToVuVKemW8967bjjTRSDQiUl8coDx2ZJP5dEQov/leg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712305489; c=relaxed/simple;
-	bh=2L3CGX7OqkPmTsK6TECnNjWBwH73l9NqbMPNMtYIP0o=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aYPRYnFYCYLugJyVKcMZZrezvDpujQg3kBDRwBnTHuC2PktDqZnhgc58fMdmqpmLbzhxOaOR0CACjTBk6yjXniltGZtR63eZ7OlDO97NJebXaK2ktHvHBkvk3EHxePZtJs/AxBcl3ZUszJhRzMvUrjO7STSQQyvUghclHnJ8so8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RmGv+mTD; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1712305486;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=C5I/NTVTKh0Md5yW/gn8T1xGvsFGQXYIProl8xxAsRQ=;
-	b=RmGv+mTD7UoxUrlYKeVOFTqNI2dMG+dreR4iOlkoJoofkh7VpYnP9Fkh+N9YYG5cAYCpM8
-	pyRQBntjfXchHgqXvJvHcI9zUI+7N3fnlw8Vft0F4A/EimigWscyHMFEYBgcv5yXGRW2OX
-	tcI0GQkqVCtRVfFAMgfcDzC/CJuQpbc=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-397-Gyk7UQUqN5SvoK_fJKmb7A-1; Fri,
- 05 Apr 2024 04:24:42 -0400
-X-MC-Unique: Gyk7UQUqN5SvoK_fJKmb7A-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DAB481C0432F;
-	Fri,  5 Apr 2024 08:24:41 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.39.193.88])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 8E448111F3C6;
-	Fri,  5 Apr 2024 08:24:39 +0000 (UTC)
-From: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
-To: kuba@kernel.org
-Cc: davem@davemloft.net,
-	edumazet@google.com,
-	horms@kernel.org,
-	jtornosm@redhat.com,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org,
-	pabeni@redhat.com
-Subject: [PATCH net-next v4] net: usb: ax88179_178a: non necessary second random mac address
-Date: Fri,  5 Apr 2024 10:24:31 +0200
-Message-ID: <20240405082431.8329-1-jtornosm@redhat.com>
-In-Reply-To: <20240402183237.2eb8398a@kernel.org>
-References: <20240402183237.2eb8398a@kernel.org>
+	s=arc-20240116; t=1712309901; c=relaxed/simple;
+	bh=gui0f6MViE5zSAEEOcDKHdPoDszSctiaYWprNP7GSNc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TYx9XDMOKHsxsxgpErRPS/ygvPDzCeAlZTHPD8jU6Un/vl7oitKkIppyqtOYrexLuq9vY46aMb/YVGm7xn8ldd+hst08TGbqT5Eu4ZsNBxcPdZveBtSAApHlqy+wE0mswPrfmKn1k9Vlu1n6YEW+MMhGa8Dopk6yoUAbjF5ae08=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=rere.qmqm.pl; spf=pass smtp.mailfrom=rere.qmqm.pl; dkim=pass (2048-bit key) header.d=rere.qmqm.pl header.i=@rere.qmqm.pl header.b=ZcrcoLqs; arc=none smtp.client-ip=91.227.64.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=rere.qmqm.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rere.qmqm.pl
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
+	t=1712309337; bh=gui0f6MViE5zSAEEOcDKHdPoDszSctiaYWprNP7GSNc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ZcrcoLqsz/zzlMruWf44PYk75DueBejOUyr1Eh31EyaZcoY7ODel3t0vFK51sQutC
+	 YY7dBqw6x5FiEghmAZFtz/zTJMGq5GtkEocuVfbQcN9BDPuRIei5HZ4DdjLpHxZ7+6
+	 E7lgHaOaQ5/+P2XOh5i4UPTyYivuDu5pF+wIovDfOhmC0jyS7Po0jdQpgN6Tw+kWcU
+	 BR21bYeWeQT2EX7dHW/mtmIf4RbdkqX5exTxh2367mA4o2zBmZSc7BFV4XrNkiEptZ
+	 Q5SBD2Ru9xBFkYUfXpcQGRwkKRKwaEBGta6Gar0WuqKpV+3lBKaNoDOSXQIouXFRPP
+	 Bq/roRR1X1cQQ==
+Received: from remote.user (localhost [127.0.0.1])
+	by rere.qmqm.pl (Postfix) with ESMTPSA id 4V9tTX48kvz8B;
+	Fri,  5 Apr 2024 11:28:48 +0200 (CEST)
+X-Virus-Status: Clean
+X-Virus-Scanned: clamav-milter 1.0.3 at mail
+Date: Fri, 5 Apr 2024 11:28:47 +0200
+From: =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
+To: Allen Pais <apais@linux.microsoft.com>
+Cc: linux-kernel@vger.kernel.org, tj@kernel.org, keescook@chromium.org,
+	vkoul@kernel.org, marcan@marcan.st, sven@svenpeter.dev,
+	florian.fainelli@broadcom.com, rjui@broadcom.com,
+	sbranden@broadcom.com, paul@crapouillou.net,
+	Eugeniy.Paltsev@synopsys.com, manivannan.sadhasivam@linaro.org,
+	vireshk@kernel.org, Frank.Li@nxp.com, leoyang.li@nxp.com,
+	zw@zh-kernel.org, wangzhou1@hisilicon.com, haijie1@huawei.com,
+	shawnguo@kernel.org, s.hauer@pengutronix.de, sean.wang@mediatek.com,
+	matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+	afaerber@suse.de, logang@deltatee.com, daniel@zonque.org,
+	haojian.zhuang@gmail.com, robert.jarzmik@free.fr,
+	andersson@kernel.org, konrad.dybcio@linaro.org, orsonzhai@gmail.com,
+	baolin.wang@linux.alibaba.com, zhang.lyra@gmail.com,
+	patrice.chotard@foss.st.com, linus.walleij@linaro.org,
+	wens@csie.org, jernej.skrabec@gmail.com, peter.ujfalusi@gmail.com,
+	kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+	decui@microsoft.com, jassisinghbrar@gmail.com, mchehab@kernel.org,
+	maintainers@bluecherrydvr.com, aubin.constans@microchip.com,
+	ulf.hansson@linaro.org, manuel.lauss@gmail.com,
+	jh80.chung@samsung.com, oakad@yahoo.com,
+	hayashi.kunihiko@socionext.com, mhiramat@kernel.org,
+	brucechang@via.com.tw, HaraldWelte@viatech.com, pierre@ossman.eu,
+	duncan.sands@free.fr, stern@rowland.harvard.edu, oneukum@suse.com,
+	openipmi-developer@lists.sourceforge.net, dmaengine@vger.kernel.org,
+	asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	linux-rpi-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+	imx@lists.linux.dev, linuxppc-dev@lists.ozlabs.org,
+	linux-mediatek@lists.infradead.org,
+	linux-actions@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+	linux-riscv@lists.infradead.org, linux-sunxi@lists.linux.dev,
+	linux-tegra@vger.kernel.org, linux-hyperv@vger.kernel.org,
+	linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
+	linux-mmc@vger.kernel.org, linux-omap@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org, linux-s390@vger.kernel.org,
+	netdev@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 9/9] mmc: Convert from tasklet to BH workqueue
+Message-ID: <Zg_ET2XmZM_Id_Ad@qmqm.qmqm.pl>
+References: <20240327160314.9982-1-apais@linux.microsoft.com>
+ <20240327160314.9982-10-apais@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-2
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.3
+In-Reply-To: <20240327160314.9982-10-apais@linux.microsoft.com>
 
-If the mac address can not be read from the device registers or the
-devicetree, a random address is generated, but this was already done from
-usbnet_probe, so it is not necessary to call eth_hw_addr_random from here
-again to generate another random address.
+On Wed, Mar 27, 2024 at 04:03:14PM +0000, Allen Pais wrote:
+> The only generic interface to execute asynchronously in the BH context is
+> tasklet; however, it's marked deprecated and has some design flaws. To
+> replace tasklets, BH workqueue support was recently added. A BH workqueue
+> behaves similarly to regular workqueues except that the queued work items
+> are executed in the BH context.
+> 
+> This patch converts drivers/infiniband/* from tasklet to BH workqueue.
+> 
+> Based on the work done by Tejun Heo <tj@kernel.org>
+> Branch: https://git.kernel.org/pub/scm/linux/kernel/git/tj/wq.git for-6.10
+> 
+> Signed-off-by: Allen Pais <allen.lkml@gmail.com>
+> ---
+[...]
+>  drivers/mmc/host/cb710-mmc.c                  | 15 ++--
+>  drivers/mmc/host/cb710-mmc.h                  |  3 +-
+[...]
 
-Indeed, when reset was also executed from bind, generate another random mac
-address invalidated the check from usbnet_probe to configure if the assigned
-mac address for the interface was random or not, because it is comparing
-with the initial generated random address. Now, with only a reset from open
-operation, it is just a harmless simplification.
-
-Signed-off-by: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
----
-v4:
-  - Context diff due to first patch modification.
-v3:
-  - Send the patch separately to net-next and remove fixes and stable tags.
-v2:
-  - Split the fix and the improvement in two patches and keep curly-brackets
-as Simon Horman suggests.
-v1: https://lore.kernel.org/netdev/20240325173155.671807-1-jtornosm@redhat.com/
-
- drivers/net/usb/ax88179_178a.c | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
-index a9c418890a1c..69169842fa2f 100644
---- a/drivers/net/usb/ax88179_178a.c
-+++ b/drivers/net/usb/ax88179_178a.c
-@@ -1277,7 +1277,6 @@ static void ax88179_get_mac_addr(struct usbnet *dev)
- 			dev->net->addr_assign_type = NET_ADDR_PERM;
- 	} else {
- 		netdev_info(dev->net, "invalid MAC address, using random\n");
--		eth_hw_addr_random(dev->net);
- 	}
- 
- 	ax88179_write_cmd(dev, AX_ACCESS_MAC, AX_NODE_ID, ETH_ALEN, ETH_ALEN,
--- 
-2.44.0
-
+Acked-by: Micha³ Miros³aw <mirq-linux@rere.qmqm.pl>
 
