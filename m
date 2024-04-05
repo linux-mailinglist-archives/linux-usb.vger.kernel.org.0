@@ -1,77 +1,76 @@
-Return-Path: <linux-usb+bounces-8963-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8964-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D5BD8995B9
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Apr 2024 08:44:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D1CD8995D9
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Apr 2024 08:50:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 37EAD285916
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Apr 2024 06:44:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 27546286DED
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Apr 2024 06:50:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A4802421D;
-	Fri,  5 Apr 2024 06:44:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B01B28DD7;
+	Fri,  5 Apr 2024 06:49:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GcN9OhNq"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 014B921A04;
-	Fri,  5 Apr 2024 06:44:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.95.11.211
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F10BC2557A;
+	Fri,  5 Apr 2024 06:49:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712299481; cv=none; b=LLlKGmYOlaXfNKXWpKojbMTe+kdfEIH42+4LyQVQZZJVF04CbqLlOOfMwcRj7CEScwGgKyz33VhE8zlsg3Cg2miKPQKXbGLKJp15XmXTtEswUODM5m80tEB6dfu4p5X0EJuYidT55O9m4bWgPRw5nu0Bg3WiGZ7hd3aId+jmn+Y=
+	t=1712299797; cv=none; b=fVX5ugiaR7j81W/eO0ovqlNiAqP3z+3KjohzhysxRQEk00XT5A41RuBLAZWOdciEsIRO1CFXkoGQuQBEOJg3PDByhEmsWZ5xOX2EYK5jUfGeiSYxC1No31ueRP/aKuEfq5WCm1NDyM27WRi3YfIgGROvIRxn59XqXu1iB4/ctYs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712299481; c=relaxed/simple;
-	bh=WhnoNMtKGvaKllIOSSzlTyEx+z1DHR/8RKuRMzGQEaU=;
+	s=arc-20240116; t=1712299797; c=relaxed/simple;
+	bh=pM5eyZ6ngQNS72PsWbWA/pEt9fJ2yCxrs53GYxHbrvI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cP48j0LXSjpkUmwk+b0D+5t3uFgG3qrdA4uBYgoTiROiiyVQA0/1TMsyBcbL9+JBUiRWkIXa1+xbcCK5F12cU4BeFNHyDWRUtpc5M8RpwVHVlxgtKH0UKBN5wsg7mg0e6lcE2swXDDBb7V/eMKG14QCopB5+XOmIoiSLu9Bq6rE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de; spf=pass smtp.mailfrom=lst.de; arc=none smtp.client-ip=213.95.11.211
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lst.de
-Received: by verein.lst.de (Postfix, from userid 2407)
-	id 31C4A68D07; Fri,  5 Apr 2024 08:44:36 +0200 (CEST)
-Date: Fri, 5 Apr 2024 08:44:36 +0200
-From: Christoph Hellwig <hch@lst.de>
-To: Bart Van Assche <bvanassche@acm.org>
-Cc: Hannes Reinecke <hare@suse.de>, Christoph Hellwig <hch@lst.de>,
-	Jens Axboe <axboe@kernel.dk>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	Damien Le Moal <dlemoal@kernel.org>,
-	Niklas Cassel <cassel@kernel.org>,
-	Takashi Sakamoto <o-takashi@sakamocchi.jp>,
-	Sathya Prakash <sathya.prakash@broadcom.com>,
-	Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-	Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>,
-	"Juergen E. Fischer" <fischer@norbit.de>,
-	Xiang Chen <chenxiang66@hisilicon.com>,
-	HighPoint Linux Team <linux@highpoint-tech.com>,
-	Tyrel Datwyler <tyreld@linux.ibm.com>,
-	Brian King <brking@us.ibm.com>, Lee Duncan <lduncan@suse.com>,
-	Chris Leech <cleech@redhat.com>,
-	Mike Christie <michael.christie@oracle.com>,
-	John Garry <john.g.garry@oracle.com>,
-	Jason Yan <yanaijie@huawei.com>,
-	Kashyap Desai <kashyap.desai@broadcom.com>,
-	Sumit Saxena <sumit.saxena@broadcom.com>,
-	Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
-	Chandrakanth patil <chandrakanth.patil@broadcom.com>,
-	Jack Wang <jinpu.wang@cloud.ionos.com>,
-	Nilesh Javali <njavali@marvell.com>,
-	GR-QLogic-Storage-Upstream@marvell.com,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Avri Altman <avri.altman@wdc.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Alan Stern <stern@rowland.harvard.edu>, linux-block@vger.kernel.org,
-	linux-ide@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
-	MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
-	megaraidlinux.pdl@broadcom.com, mpi3mr-linuxdrv.pdl@broadcom.com,
-	linux-samsung-soc@vger.kernel.org, linux-usb@vger.kernel.org,
-	usb-storage@lists.one-eyed-alien.net
-Subject: Re: [PATCH 12/23] mpt3sas: switch to using ->device_configure
-Message-ID: <20240405064436.GF3480@lst.de>
-References: <20240402130645.653507-1-hch@lst.de> <20240402130645.653507-13-hch@lst.de> <031d6f0c-7d94-4adc-b194-929dbfe80c6b@suse.de> <9aa90db8-fcc4-414f-a4e3-ee33ff78fb2d@acm.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=cQj7HaPvW5sGllPkXQ51inXjCb+vxVaE9o/H4FNtgb2GJeo434oSTywjbd9wN4bcICvbunW9nyZyw6wrFa3hfdK/q6YqP/sFAQlslVfVN2ZUzBNhP13o1JyPP9OaOcnQ41yUVeQB6rRrMRGOKDbeLuoOXcy29BMC127+GWCS5ek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GcN9OhNq; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1712299796; x=1743835796;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=pM5eyZ6ngQNS72PsWbWA/pEt9fJ2yCxrs53GYxHbrvI=;
+  b=GcN9OhNq/TZ5ZMoxa4x86i7JO6ewKpJpQEHWdxuQ29tmxyp5qDDbWgYj
+   NAvg/+JVd/9gUq4EAPGcZMVk3sxd3KNfnSQaM9psI9SuM0FBq33oXIYOv
+   QaXiXqIsptyDKTLgQentGNM539HaWHUuhdhU1v6I62FBzo0wVL6HYc4kG
+   NcUqMpd959JVbQMjFty8er9xfimn3kVgMshAd/Iu+ZFq5QB19JVfH1naZ
+   GcqFpBaPWXpv6A+AyB/LtcX5DomE3HDQr0Beew2+5BHJECEZoeGwGzJaa
+   7ZyfDss7H4vy9zfAAaCBVOKQY8anZ2D2JLg5qLiShSSXQzkSiiF3iSBOE
+   w==;
+X-CSE-ConnectionGUID: kYLUhW6QTPimlfPCOXGN5Q==
+X-CSE-MsgGUID: M+i4ae5VQ+Ssl51iDt6ObQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11034"; a="30090098"
+X-IronPort-AV: E=Sophos;i="6.07,180,1708416000"; 
+   d="scan'208";a="30090098"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2024 23:49:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,11034"; a="937087429"
+X-IronPort-AV: E=Sophos;i="6.07,180,1708416000"; 
+   d="scan'208";a="937087429"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 04 Apr 2024 23:49:52 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 05 Apr 2024 09:49:51 +0300
+Date: Fri, 5 Apr 2024 09:49:51 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Javier Carrasco <javier.carrasco@wolfvision.net>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Abdel Alkuor <abdelalkuor@geotab.com>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH RESEND 2/2] usb: typec: tipd: fix event checking for
+ tps6598x
+Message-ID: <Zg+fD6w1MykCsEe6@kuha.fi.intel.com>
+References: <20240328-tps6598x_fix_event_handling-v1-0-502721ff705b@wolfvision.net>
+ <20240328-tps6598x_fix_event_handling-v1-2-502721ff705b@wolfvision.net>
+ <ZgveG5Ly3mw0O0eo@kuha.fi.intel.com>
+ <b6bf7f8e-7d46-4b70-930c-9483f13fd80a@wolfvision.net>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -80,13 +79,43 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <9aa90db8-fcc4-414f-a4e3-ee33ff78fb2d@acm.org>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+In-Reply-To: <b6bf7f8e-7d46-4b70-930c-9483f13fd80a@wolfvision.net>
 
-On Thu, Apr 04, 2024 at 10:17:15AM -0700, Bart Van Assche wrote:
-> Another possibility is to remove all code from drivers that sets
-> QUEUE_FLAG_NOMERGES.
+On Wed, Apr 03, 2024 at 10:55:29AM +0200, Javier Carrasco wrote:
+> >> -	ret = tps6598x_read64(tps, TPS_REG_INT_EVENT1, &event1);
+> >> -	ret |= tps6598x_read64(tps, TPS_REG_INT_EVENT2, &event2);
+> >> +	ret = tps6598x_block_read(tps, TPS_REG_INT_EVENT1, event1, 11);
+> > 
+> > This is not going to work with the older TI PD controllers.
+> > 
+> > The lenght of these registers is 8 bytes on the older TI PD
+> > controllers (TPS65981, TPS65982, etc.). I think we need to split this
+> > function.
+> > 
+> 
+> That is a good point. I had a look at the older TI PD controllers and I
+> agree with you that we should split the function to cover both register
+> lengths separately.
+> 
+> I was thinking about adding a new compatible for the newer PD
+> controllers (tps65987 and tps65988), keeping the current tps6598x for
+> the older ones as well as backwards compatibility. But backwards
+> compatibility would also mean that flags beyond the first 8 bytes would
+> be ignored.
+> 
+> On the other hand, the upper flags are only relevant for firmware
+> updates, so we could check those (i.e. read 11 bytes) if a firmware was
+> provided via "firmware-name", and ignore them (i.e. read 8 bytes) otherwise.
+> 
+> Other ideas or improvements to mine are more than welcome.
 
-That is probably the right thing to do.  Not for this series, though :)
+I don't have any good ideas. On ACPI platforms the same device ID may
+be used with all of these, so we should actually try to figure out the
+version from registers like VID, DID and Version (if they are
+available).
 
+thanks,
+
+-- 
+heikki
 
