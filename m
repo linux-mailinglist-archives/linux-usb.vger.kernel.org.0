@@ -1,113 +1,166 @@
-Return-Path: <linux-usb+bounces-8950-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8951-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA4CE898FC7
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Apr 2024 22:45:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE7BE8992CD
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Apr 2024 03:26:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E5FCD1C22C93
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Apr 2024 20:45:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5D51A1F272A4
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Apr 2024 01:26:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7060F13B7A1;
-	Thu,  4 Apr 2024 20:45:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C217C142;
+	Fri,  5 Apr 2024 01:26:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="OGHQ9Otk"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="aCIGYXMU"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-vk1-f170.google.com (mail-vk1-f170.google.com [209.85.221.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84A1513A890
-	for <linux-usb@vger.kernel.org>; Thu,  4 Apr 2024 20:45:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C23D7484;
+	Fri,  5 Apr 2024 01:25:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712263508; cv=none; b=mRswI9F63B7fMECk32WMvqMI8BdMYe+wY+YDbbM1E21SFbzGhEyECI9zYHoxSBm+BsC7vqz4u+memAiPmkZcXxDrl1Z1NBriVlHY7zNpuzRut5ncxvOz+ZWeOcSR8aTccxWArL9LToU/mTieoXYh+wt0TI1pI+6Ti6t+xbBK2hY=
+	t=1712280359; cv=none; b=DcVF3FEqRhWcMfG4XtadDYIfUn0LHiV5DyTdKnJqQGgXSRV/RkFh2lGwxZKnw+C3vVfCHJCZjYrb6zP/MXDbzFwCeXv2MAfOJI19pE9zNDrhDtnlMy6Q0op7LVQidHteBOYlWWHImataZZSnZD8MZ5CHQTWJ3Ppr25suf3fngJ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712263508; c=relaxed/simple;
-	bh=4UO1VMYWun6t0P6nH+mG+xdFydZVyE+pOaRYVYx4yog=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PRMsZlP42Et94xpdCAfFPHRd76oKxtKGjv77uLoDcUmU6bYKo9sbw5Km8K7rJdbzgxxShrz0a6S38FqKB3ZnX+0e9HB4E1BP1pQXed2CmX0klS1+AkFBGn9PDxxhZsFxmZBt6j/sSN3nB0jOP3kizcf3TY+zPsVzj5nXrHHwsRY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=OGHQ9Otk; arc=none smtp.client-ip=209.85.221.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-vk1-f170.google.com with SMTP id 71dfb90a1353d-4d47000f875so520358e0c.2
-        for <linux-usb@vger.kernel.org>; Thu, 04 Apr 2024 13:45:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1712263505; x=1712868305; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KF8FNJKbIf/Wqy3NgLHLUIDfVpXMUebZHQXlpWQnHwE=;
-        b=OGHQ9Otk51j3QkwxtNFs3R5EmKGoHTZB6h4lLf0rwEowgUeyMnIIhevJ5+qcroer9t
-         FQQWNmLgX1L+7qAqFa5L5aHmcDr2uIc4nUYPOYj7prGRk+fdrC5awWKBSQUfFtlaS0G/
-         MkmFjoqOOTOnslZKxXdxi6SnBKrGOto2s8lTw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712263505; x=1712868305;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KF8FNJKbIf/Wqy3NgLHLUIDfVpXMUebZHQXlpWQnHwE=;
-        b=ZNylMn0rGbKbbONbc56uCkSKQIABuUI+zIhZY0urTJDLpPdzimKkKlHioD4/sWit88
-         DWOFf3pIVZmLtLZpH22kVo2GJAHvUv6iF3jZBlXVQJBAZxL+kZ0sFouFJiwFsMjDWrv3
-         jWYs1YWNDcGhXd7IKFwO6ycNW3N+wB3kPaPPjBWCnlvslZyoik25nMI52lnCO93R9uS7
-         vOHXA+2AR2AVfQKQ5Ph+jlctnxzf2qpTjdLkbUKD/anpAP8jtIPxWOLY4DaVTJ4fc5DD
-         t6jGlxoLQ0VoFbt0KxzQLaYBVHKIy/oo4drPa8EMF19/AZZVysG9Sg3I5lpHVApDjG/E
-         bhwg==
-X-Forwarded-Encrypted: i=1; AJvYcCUUn9WPmv6dW6/dJ1tzU5M04EbDLv5qHrSgfyBjTdup7tXmwVvK2sMVafu5dJyYnLFQvqCEcbAcGyc388JD0o0Ci6gfob7jiIX/
-X-Gm-Message-State: AOJu0YxE2PQiE9bom0HZlXNMzAiYtt4JdGuXxDWOn2ic9JdwKqeWzuta
-	a+ukVJXhTVJ+D54A1N/IyfM+/06aEFSXbyvfQMXisJyQUbMbheu+DJcRV5CC4Zg6K+hdCHzF9cd
-	BlmXzcxg/K9jKhnlrSug69tCAxnHaO/hywavR
-X-Google-Smtp-Source: AGHT+IE1aT12rSJQsk49m0s1WDAmGtg1boyflA0mWV27eiMvdQWflqasXIA0kULyhEfYJsr1EVtT0Cfl08bXuJZCc+c=
-X-Received: by 2002:a1f:f2c6:0:b0:4d3:3adc:b639 with SMTP id
- q189-20020a1ff2c6000000b004d33adcb639mr3392151vkh.6.1712263505418; Thu, 04
- Apr 2024 13:45:05 -0700 (PDT)
+	s=arc-20240116; t=1712280359; c=relaxed/simple;
+	bh=VxNzn9NzUzbYGOkFQsAjckg4Rrz38PKu14VlBGuKaPw=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Mp9nXFExocriKMULA37FGeVOkd/8wo+DZQ7CimgtLZZdiZJVEz6ErG7qTuNHq8pGjfHSPzBReaRpVxn9K/NnAVjtPzkVAe8iDBy04nugbLyAw6JwG+To1YpqRHIUfCg26wFK+/wcCcymAkmze28on8ArakqRM5L33KRdTKrXQTo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=aCIGYXMU; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 4350oPk3007803;
+	Fri, 5 Apr 2024 01:25:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	date:from:to:cc:subject:message-id:references:mime-version
+	:content-type:in-reply-to; s=qcppdkim1; bh=O5dtNG1z2cvTQQaBaWNF2
+	qI0ydnL32rMZCbAqJKz7O4=; b=aCIGYXMUtcLAYxyc7NGn1fX/Vnf5LDCK3yKMM
+	Qzc31yat8acZy0xBrqkSEQXfLuBiBaIAa34CCGlUQ/7mRxkDNCkHuATFrgAwArk8
+	2rkO7WWtvGfeRJ6wpHWjGrltmbCVPi8LZ/5V7qQx+cutnqkdmE9ZmFlzOISg0Vwh
+	0jTr7IGeCl5uh1Syjx6ZG/R9JylJU1ffuj+ChXg9KDjWRbrCgkCcEUce0+L+GDYr
+	HrTSYaBOk0FyRIavIOtpZr88MLV/UeVXyfpiPLkvzVkFCQZI+5276j5aWQeEUwfb
+	iFfeyjP9+mg7jENdaiuR+8BEQB9ie4oLkWuNXpT7kBm1kn4uw==
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3x9en0jwdt-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 05 Apr 2024 01:25:50 +0000 (GMT)
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 4351PnDl026050
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 5 Apr 2024 01:25:49 GMT
+Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.4; Thu, 4 Apr 2024 18:25:49 -0700
+Date: Thu, 4 Apr 2024 18:25:48 -0700
+From: Bjorn Andersson <quic_bjorande@quicinc.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Johan Hovold
+	<johan@kernel.org>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>,
+        "Krzysztof
+ Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring
+	<robh@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
+        Wesley Cheng
+	<quic_wcheng@quicinc.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "Conor
+ Dooley" <conor+dt@kernel.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Felipe Balbi <balbi@kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_ppratap@quicinc.com>,
+        <quic_jackp@quicinc.com>, Johan Hovold <johan+linaro@kernel.org>
+Subject: Re: [PATCH v19 2/9] usb: dwc3: core: Access XHCI address space
+ temporarily to read port info
+Message-ID: <Zg9THGBRuppfw4y+@hu-bjorande-lv.qualcomm.com>
+References: <20240404051229.3082902-1-quic_kriskura@quicinc.com>
+ <20240404051229.3082902-3-quic_kriskura@quicinc.com>
+ <Zg5VDnbaaBXJyRjV@hovoldconsulting.com>
+ <f16e1280-8f7e-40a7-ab45-9acaeb3e90cb@linaro.org>
+ <2024040455-sitting-dictator-170c@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240403-public-ucsi-h-v3-0-f848e18c8ed2@chromium.org>
- <20240403-public-ucsi-h-v3-2-f848e18c8ed2@chromium.org> <3ezjocthsigo3t746slmgzffnmpxw7wwf3s535basiaf2qy6io@7ocxva6ndsbt>
- <2024040449-average-foyer-defa@gregkh>
-In-Reply-To: <2024040449-average-foyer-defa@gregkh>
-From: Pavan Holla <pholla@chromium.org>
-Date: Thu, 4 Apr 2024 13:44:29 -0700
-Message-ID: <CAB2FV=4TQZwM6bRSeBhieqU2H8yxt3NWsey55a5my_i1La0fJQ@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] usb: typec: ucsi: Implement ChromeOS UCSI driver
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>, Benson Leung <bleung@chromium.org>, 
-	Tzung-Bi Shih <tzungbi@kernel.org>, Guenter Roeck <groeck@chromium.org>, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, 
-	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>, chrome-platform@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <2024040455-sitting-dictator-170c@gregkh>
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: vG80GPtb9uPykzBRJzi3geUKM6jy9qO7
+X-Proofpoint-GUID: vG80GPtb9uPykzBRJzi3geUKM6jy9qO7
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-04-04_22,2024-04-04_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ clxscore=1011 impostorscore=0 adultscore=0 priorityscore=1501 phishscore=0
+ mlxscore=0 bulkscore=0 mlxlogscore=999 spamscore=0 malwarescore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2404010003 definitions=main-2404050009
 
-On Thu, Apr 4, 2024 at 6:07=E2=80=AFAM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Wed, Apr 03, 2024 at 09:58:33PM +0300, Dmitry Baryshkov wrote:
-> > I think it's better be written as
-> >
-> > if (WARN_ON_ONCE(val_len > MAX_EC_DATA_SIZE))
-> >       return -EINVAL;
->
-> So if you trigger this, you just rebooted all boxes that have
-> panic-on-warn enabled (hint, the HUGE majority in quantity of Linux
-> systems out there.)
->
-> So don't do that, just handle it like this.
->
-> BUT, if this can be triggered by userspace, do NOT use dev_err() as that
-> will just allow userspace to flood the kernel log.
->
-> Pavan, who calls this?  If userspace, this needs to be fixed.  If it's
-> only a kernel driver, it's fine as-is.
+On Thu, Apr 04, 2024 at 02:58:29PM +0200, Greg Kroah-Hartman wrote:
+> On Thu, Apr 04, 2024 at 10:07:27AM +0200, Krzysztof Kozlowski wrote:
+> > On 04/04/2024 09:21, Johan Hovold wrote:
+> > > On Thu, Apr 04, 2024 at 10:42:22AM +0530, Krishna Kurapati wrote:
+> > >  
+> > >> +static int dwc3_get_num_ports(struct dwc3 *dwc)
+> > >> +{
+> > >> +	void __iomem *base;
+> > >> +	u8 major_revision;
+> > >> +	u32 offset;
+> > >> +	u32 val;
+> > >> +
+> > >> +	/*
+> > >> +	 * Remap xHCI address space to access XHCI ext cap regs since it is
+> > >> +	 * needed to get information on number of ports present.
+> > >> +	 */
+> > >> +	base = ioremap(dwc->xhci_resources[0].start,
+> > >> +		       resource_size(&dwc->xhci_resources[0]));
+> > >> +	if (!base)
+> > >> +		return PTR_ERR(base);
+> > > 
+> > > This is obviously still broken. You need to update the return value as
+> > > well.
+> > > 
+> > > Fix in v20.
+> > 
+> > If one patchset reaches 20 versions, I think it is time to stop and
+> > really think from the beginning, why issues keep appearing and reviewers
+> > are still not happy.
+> > 
+> > Maybe you did not perform extensive internal review, which you are
+> > encouraged to by your own internal policies, AFAIR. Before posting next
+> > version, please really get some internal review first.
+> 
+> Also get those internal reviewers to sign-off on the commits and have
+> that show up when you post them next.  That way they are also
+> responsible for this patchset, it's not fair that they are making you do
+> all the work here :)
+> 
 
-This code is only called by a kernel driver.
+I like this idea and I'm open to us changing our way of handling this.
 
-Thanks,
-Pavan
+But unless such internal review brings significant input to the
+development I'd say a s-o-b would take the credit from the actual
+author.
+
+We've discussed a few times about carrying Reviewed-by et al from the
+internal reviews, but as maintainer I dislike this because I'd have no
+way to know if a r-b on vN means the patch was reviewed, or if it was
+just "accidentally" carried from v(N-1).
+But it might be worth this risk, is this something you think would be
+appropriate?
+
+Regards,
+Bjorn
 
