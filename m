@@ -1,127 +1,144 @@
-Return-Path: <linux-usb+bounces-8954-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8955-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A6A86899408
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Apr 2024 06:12:56 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1AF3789948F
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Apr 2024 06:45:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D0FBE1C2573A
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Apr 2024 04:12:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9EEA5B25F3D
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Apr 2024 04:45:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 052D91C687;
-	Fri,  5 Apr 2024 04:12:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36D1E224CC;
+	Fri,  5 Apr 2024 04:44:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alextjam.es header.i=@alextjam.es header.b="aF8vnGgh";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="BU+TzWR+"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Kl3pFkAp"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from wfout1-smtp.messagingengine.com (wfout1-smtp.messagingengine.com [64.147.123.144])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21DE2E546
-	for <linux-usb@vger.kernel.org>; Fri,  5 Apr 2024 04:12:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.144
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94A2DC138;
+	Fri,  5 Apr 2024 04:44:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712290370; cv=none; b=mDEEGaamA6w0iLj3/KaHqKku4Fhy2TwfYmoZViyo9C6OL8zNUXDVm+FTODZFHFP3875/buaW0QclALPOpAJMp8H+qWVvyA8bFPRiCxrP/n4XgicAScikPGtOqxsLZQgeulLEV7DHEQ5T7JHViAPjo9BRlclkwx+9KXwB8EKLUAw=
+	t=1712292245; cv=none; b=Wc2dqQHT1Hg39cy0GRCRKAXJFcRtzfVZhQjNV64vRuTzVmWfSbHFabvzvysPfp21kqPGb5pnbTnH6phzgP1C5EcJUoHekMDEicjb+uOeWxbtxGtkyKEvLBSqjsaf2WndfnvNjvrNky6vOOEnFcHlAffmuM0+w0175P0rkShs5KI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712290370; c=relaxed/simple;
-	bh=67Id1kJ37uJQ0YfWr8yaOuICLBeSQtvN6WzB8CIUz1Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=sirzqq6uTqVdsR9755v35sOExK6sBbYX0SO+hJj6K7LxtfJgR/MdS5d1Qqf8c3gm+uXa8Wrqq6jykDbDO2ycrqWuJOLv6IiMjabLKOA0ppUzQnch9fBfhOPorcShp3CcY3UAFIMc4GXd3XoQwrFiIpOGf1yHPvTEGYUJSZRB2hg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=alextjam.es; spf=pass smtp.mailfrom=alextjam.es; dkim=pass (2048-bit key) header.d=alextjam.es header.i=@alextjam.es header.b=aF8vnGgh; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=BU+TzWR+; arc=none smtp.client-ip=64.147.123.144
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=alextjam.es
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alextjam.es
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailfout.west.internal (Postfix) with ESMTP id C1FC41C0009E;
-	Fri,  5 Apr 2024 00:12:46 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Fri, 05 Apr 2024 00:12:47 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alextjam.es; h=
-	cc:cc:content-transfer-encoding:content-type:date:date:from:from
-	:in-reply-to:message-id:mime-version:reply-to:subject:subject:to
-	:to; s=fm3; t=1712290366; x=1712376766; bh=j9f9fgXE/goO6cs2O2x7K
-	PATRksFTc6bvY8ODQTAKcI=; b=aF8vnGghyNpaYQIBehCETogodkTXn4GRPj7NL
-	LFDgc2EV6NY0FCApaSxVlX+LFJGnECA1rorOb3Nm3bxvprLj+AE79lxjJnZH2Xrm
-	uoYPn0sP0YcfNxILNqQb+KPIr+khIdJHQfYkIfpn+Y66H+agkycIj/U3K4LM5oK0
-	UqAawYyqgmP4V0bgV8hBGirYdcI6/Q6Xm4spw7giWQFFMc9yFapRgBg36d9r3BMF
-	JDE2vy+sQCXHxLO/JhovxA173ZcPVU7MopOiU/qdAlYkWGJ7vKM/NsJaTx9tZbin
-	7jXhtfkzpMuNvTCv+Pz7h3W66cRC3VF4CKYPhmlAgvqruxJOQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:message-id:mime-version:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm2; t=1712290366; x=1712376766; bh=j9f9fgXE/goO6cs2O2x7KPATRksF
-	Tc6bvY8ODQTAKcI=; b=BU+TzWR+1eKictsVJQpHa5FZ1bZi/PYAMBkoFaMe9MrA
-	TcRd0Q+QxhR8O20IhgGMH+6oZnNFu1Akh1GwGCKF47f1XnPa7pchB4GlzSH1WppC
-	UpSH4HL9ulJDOlMB7oQg3nDoDwpqMPPAnpmHjwRw41NY33+7l783+j88VNaplzI1
-	XSAcf6HELjsGajw1XQKHOHEXNHPKci5HGINAjaquHYr7pIuwn+mCCmGKp+iVkqob
-	XXzhydawqMobCWRYgml8fBkuvfngpWK8tNopWVLWwnsqmNRR5prjMCSZ9NBwOBy+
-	9XetPHni4MPRIsOi1nQzVBYSUzUYyW8u3+XcmZB72w==
-X-ME-Sender: <xms:PXoPZtI5rHiZWFWL2F_thXtzYEAxXZmspzt0Mw5rhHFOQI34znf0zQ>
-    <xme:PXoPZpJm1c47IQc3Ym6ua-FUhLzkspZCytFAPE6oX1kKbHCjAo68JjAK0hdbHp74l
-    RWUlWJ1LzpFbZQc0Nw>
-X-ME-Received: <xmr:PXoPZlsw_OwCmmkNkRMIg9XlALrLKVkV1Nn4mh3_seS4ygskHCsxiJXCCH4vegGVoA1kFTaXJ4c>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrudefledgkeduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomheptehlvgigucfl
-    rghmvghsuceoghhithesrghlvgigthhjrghmrdgvsheqnecuggftrfgrthhtvghrnhepfe
-    ffieehkeffffeifedtieehvddtjeegkeeigeejvdejgedugfdthedvveevgefhnecuvehl
-    uhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhithesrghlvg
-    igthhjrghmrdgvsh
-X-ME-Proxy: <xmx:PXoPZubEmT2rKN0uRH_0ALbhyryBmWNR-TQ_U6tkOqhUzgoaM_FFcA>
-    <xmx:PXoPZkY-q5UMsYVoq8GoyL5B__S2RFNyzUcpdBfQGGofgGWwPPPkeA>
-    <xmx:PXoPZiAESzGTrlExDqQ_H9T2RHAyiHwz6ZTtSTfvE-9952bgr6zUvw>
-    <xmx:PXoPZiYTw2IMJ7rlMOXgtPUEjE5Gql3O9L-x7JB4iYeD9QqIYTJNwQ>
-    <xmx:PnoPZk65jVu8xK_YtLio2-ZhlYfzOp5HnqXp1LDox2FsUOl1iITQl37_>
-Feedback-ID: i584946e0:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 5 Apr 2024 00:12:45 -0400 (EDT)
-From: Alex James <git@alextjam.es>
-To: linux-usb@vger.kernel.org
-Cc: Andreas Noever <andreas.noever@gmail.com>,
-	Michael Jamet <michael.jamet@intel.com>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	Yehezkel Bernat <YehezkelShB@gmail.com>,
-	Alex James <git@alextjam.es>
-Subject: [PATCH] drivers/thunderbolt: Enable NVM upgrade support on Intel Maple Ridge
-Date: Thu,  4 Apr 2024 23:11:52 -0500
-Message-ID: <20240405041152.38324-1-git@alextjam.es>
-X-Mailer: git-send-email 2.44.0
+	s=arc-20240116; t=1712292245; c=relaxed/simple;
+	bh=nP5LSoPmz6tMExekbFggHQmASZ3xuQAUPcPQ6315p7c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XwG8jG8IPX2Ly9u4vL0/TKrq1aEgisam1CDtXprbgkuiqb07AYMuwBAwmn/jkmfj9Q5muuJi0TaQpg5bdkRDOePE4RSxQaaQUKrGji/x1IDJutzjnvWUvAa7019pTdKMPQX1Ayn7BlwWBgR+KnHbMRajrVmPVgl+QJ99SVeeDJg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Kl3pFkAp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B1DFC433F1;
+	Fri,  5 Apr 2024 04:44:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1712292245;
+	bh=nP5LSoPmz6tMExekbFggHQmASZ3xuQAUPcPQ6315p7c=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Kl3pFkAptITw2b7BMS4ccJYJ2GNDXaJVO9O2I+YNvsiM4STCe/AskFJrIQiE8WtpP
+	 xcSI6CknCzHADaD8kDSEBWy3SgeAMTngU2YKd79J8ItyAAgzk6tqee3uDuv79S5pGO
+	 LlRwKqADyKQhOzkI6QSxHbDPYcBRKhwCn9LulNRg=
+Date: Fri, 5 Apr 2024 06:43:56 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Bjorn Andersson <quic_bjorande@quicinc.com>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Johan Hovold <johan@kernel.org>,
+	Krishna Kurapati <quic_kriskura@quicinc.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Rob Herring <robh@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Wesley Cheng <quic_wcheng@quicinc.com>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Felipe Balbi <balbi@kernel.org>, devicetree@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, quic_ppratap@quicinc.com,
+	quic_jackp@quicinc.com, Johan Hovold <johan+linaro@kernel.org>
+Subject: Re: [PATCH v19 2/9] usb: dwc3: core: Access XHCI address space
+ temporarily to read port info
+Message-ID: <2024040558-undercut-sandbar-7ffc@gregkh>
+References: <20240404051229.3082902-1-quic_kriskura@quicinc.com>
+ <20240404051229.3082902-3-quic_kriskura@quicinc.com>
+ <Zg5VDnbaaBXJyRjV@hovoldconsulting.com>
+ <f16e1280-8f7e-40a7-ab45-9acaeb3e90cb@linaro.org>
+ <2024040455-sitting-dictator-170c@gregkh>
+ <Zg9THGBRuppfw4y+@hu-bjorande-lv.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Zg9THGBRuppfw4y+@hu-bjorande-lv.qualcomm.com>
 
-Intel Maple Ridge supports NVM firmware upgrade with the same flows used
-on previous discrete Thunderbolt contollers from Intel (such as Titan
-Ridge). Advertise NVM upgrade support for Maple Ridge in icm_probe() to
-expose the corresponding files in /sys/bus/thunderbolt. The NVM firmware
-process was successfully tested on a system with a JHL8540 controller
-(ASUS ProArt Z790-CREATOR).
+On Thu, Apr 04, 2024 at 06:25:48PM -0700, Bjorn Andersson wrote:
+> On Thu, Apr 04, 2024 at 02:58:29PM +0200, Greg Kroah-Hartman wrote:
+> > On Thu, Apr 04, 2024 at 10:07:27AM +0200, Krzysztof Kozlowski wrote:
+> > > On 04/04/2024 09:21, Johan Hovold wrote:
+> > > > On Thu, Apr 04, 2024 at 10:42:22AM +0530, Krishna Kurapati wrote:
+> > > >  
+> > > >> +static int dwc3_get_num_ports(struct dwc3 *dwc)
+> > > >> +{
+> > > >> +	void __iomem *base;
+> > > >> +	u8 major_revision;
+> > > >> +	u32 offset;
+> > > >> +	u32 val;
+> > > >> +
+> > > >> +	/*
+> > > >> +	 * Remap xHCI address space to access XHCI ext cap regs since it is
+> > > >> +	 * needed to get information on number of ports present.
+> > > >> +	 */
+> > > >> +	base = ioremap(dwc->xhci_resources[0].start,
+> > > >> +		       resource_size(&dwc->xhci_resources[0]));
+> > > >> +	if (!base)
+> > > >> +		return PTR_ERR(base);
+> > > > 
+> > > > This is obviously still broken. You need to update the return value as
+> > > > well.
+> > > > 
+> > > > Fix in v20.
+> > > 
+> > > If one patchset reaches 20 versions, I think it is time to stop and
+> > > really think from the beginning, why issues keep appearing and reviewers
+> > > are still not happy.
+> > > 
+> > > Maybe you did not perform extensive internal review, which you are
+> > > encouraged to by your own internal policies, AFAIR. Before posting next
+> > > version, please really get some internal review first.
+> > 
+> > Also get those internal reviewers to sign-off on the commits and have
+> > that show up when you post them next.  That way they are also
+> > responsible for this patchset, it's not fair that they are making you do
+> > all the work here :)
+> > 
+> 
+> I like this idea and I'm open to us changing our way of handling this.
+> 
+> But unless such internal review brings significant input to the
+> development I'd say a s-o-b would take the credit from the actual
+> author.
 
-Signed-off-by: Alex James <git@alextjam.es>
----
- drivers/thunderbolt/icm.c | 1 +
- 1 file changed, 1 insertion(+)
+It does not do that at all.  It provides proof that someone else has
+reviewed it and agrees with it.  Think of it as a "path of blame" for
+when things go bad (i.e. there is a bug in the submission.)  Putting
+your name on it makes you take responsibility if that happens.
 
-diff --git a/drivers/thunderbolt/icm.c b/drivers/thunderbolt/icm.c
-index baf10d099c77..7859bccc592d 100644
---- a/drivers/thunderbolt/icm.c
-+++ b/drivers/thunderbolt/icm.c
-@@ -2532,6 +2532,7 @@ struct tb *icm_probe(struct tb_nhi *nhi)
- 
- 	case PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_2C_NHI:
- 	case PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_4C_NHI:
-+		icm->can_upgrade_nvm = true;
- 		icm->is_supported = icm_tgl_is_supported;
- 		icm->get_mode = icm_ar_get_mode;
- 		icm->driver_ready = icm_tr_driver_ready;
--- 
-2.44.0
+> We've discussed a few times about carrying Reviewed-by et al from the
+> internal reviews, but as maintainer I dislike this because I'd have no
+> way to know if a r-b on vN means the patch was reviewed, or if it was
+> just "accidentally" carried from v(N-1).
+> But it might be worth this risk, is this something you think would be
+> appropriate?
 
+For some companies we REQUIRE this to happen due to low-quality
+submissions and waste of reviewer's time.  Based on the track record
+here for some of these patchsets, hopefully it doesn't become a
+requirement for this company as well :)
+
+thanks,
+
+greg k-h
 
