@@ -1,121 +1,288 @@
-Return-Path: <linux-usb+bounces-8974-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8973-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4F378999AE
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Apr 2024 11:38:54 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 63E5189997F
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Apr 2024 11:33:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1043BB20E62
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Apr 2024 09:38:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1A3F4283BC8
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Apr 2024 09:33:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3507A161328;
-	Fri,  5 Apr 2024 09:38:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFC3015FD1D;
+	Fri,  5 Apr 2024 09:32:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rere.qmqm.pl header.i=@rere.qmqm.pl header.b="ZcrcoLqs"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K4W193bs"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from rere.qmqm.pl (rere.qmqm.pl [91.227.64.183])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4CAC15FA9C;
-	Fri,  5 Apr 2024 09:38:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.227.64.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C58D15FCE2;
+	Fri,  5 Apr 2024 09:32:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712309901; cv=none; b=AkwXRnRMetJ0L9IbHlnUlbm/I0PKkqbVheFMD6/h7gGzzCCEy3N0M6MCj5zef/kgVgDLuYdVbDKvVZa2ntxLYmVOH9+UNCMoJUCM5lDHULesMw/QG1A4N4mKQkWQ1JBmToVuVKemW8967bjjTRSDQiUl8coDx2ZJP5dEQov/leg=
+	t=1712309576; cv=none; b=lTYUzwQyQ0RHzqUSM/Z5ylTPfKWOQxADgv/ksgdPtaAerMZbS9uV7knt1AIukH3HA0n75CIl3E4nCr59l1IrhIp/Ij8ltRbslX+j+ElAsXFvwiFQYSRqboAirP0kwybpbt/6wkOPKiQ5P+NVx4FlJZK28Ls+WhKn1eSoDBlstY8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712309901; c=relaxed/simple;
-	bh=gui0f6MViE5zSAEEOcDKHdPoDszSctiaYWprNP7GSNc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TYx9XDMOKHsxsxgpErRPS/ygvPDzCeAlZTHPD8jU6Un/vl7oitKkIppyqtOYrexLuq9vY46aMb/YVGm7xn8ldd+hst08TGbqT5Eu4ZsNBxcPdZveBtSAApHlqy+wE0mswPrfmKn1k9Vlu1n6YEW+MMhGa8Dopk6yoUAbjF5ae08=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=rere.qmqm.pl; spf=pass smtp.mailfrom=rere.qmqm.pl; dkim=pass (2048-bit key) header.d=rere.qmqm.pl header.i=@rere.qmqm.pl header.b=ZcrcoLqs; arc=none smtp.client-ip=91.227.64.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=rere.qmqm.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rere.qmqm.pl
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
-	t=1712309337; bh=gui0f6MViE5zSAEEOcDKHdPoDszSctiaYWprNP7GSNc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZcrcoLqsz/zzlMruWf44PYk75DueBejOUyr1Eh31EyaZcoY7ODel3t0vFK51sQutC
-	 YY7dBqw6x5FiEghmAZFtz/zTJMGq5GtkEocuVfbQcN9BDPuRIei5HZ4DdjLpHxZ7+6
-	 E7lgHaOaQ5/+P2XOh5i4UPTyYivuDu5pF+wIovDfOhmC0jyS7Po0jdQpgN6Tw+kWcU
-	 BR21bYeWeQT2EX7dHW/mtmIf4RbdkqX5exTxh2367mA4o2zBmZSc7BFV4XrNkiEptZ
-	 Q5SBD2Ru9xBFkYUfXpcQGRwkKRKwaEBGta6Gar0WuqKpV+3lBKaNoDOSXQIouXFRPP
-	 Bq/roRR1X1cQQ==
-Received: from remote.user (localhost [127.0.0.1])
-	by rere.qmqm.pl (Postfix) with ESMTPSA id 4V9tTX48kvz8B;
-	Fri,  5 Apr 2024 11:28:48 +0200 (CEST)
-X-Virus-Status: Clean
-X-Virus-Scanned: clamav-milter 1.0.3 at mail
-Date: Fri, 5 Apr 2024 11:28:47 +0200
-From: =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
-To: Allen Pais <apais@linux.microsoft.com>
-Cc: linux-kernel@vger.kernel.org, tj@kernel.org, keescook@chromium.org,
-	vkoul@kernel.org, marcan@marcan.st, sven@svenpeter.dev,
-	florian.fainelli@broadcom.com, rjui@broadcom.com,
-	sbranden@broadcom.com, paul@crapouillou.net,
-	Eugeniy.Paltsev@synopsys.com, manivannan.sadhasivam@linaro.org,
-	vireshk@kernel.org, Frank.Li@nxp.com, leoyang.li@nxp.com,
-	zw@zh-kernel.org, wangzhou1@hisilicon.com, haijie1@huawei.com,
-	shawnguo@kernel.org, s.hauer@pengutronix.de, sean.wang@mediatek.com,
-	matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
-	afaerber@suse.de, logang@deltatee.com, daniel@zonque.org,
-	haojian.zhuang@gmail.com, robert.jarzmik@free.fr,
-	andersson@kernel.org, konrad.dybcio@linaro.org, orsonzhai@gmail.com,
-	baolin.wang@linux.alibaba.com, zhang.lyra@gmail.com,
-	patrice.chotard@foss.st.com, linus.walleij@linaro.org,
-	wens@csie.org, jernej.skrabec@gmail.com, peter.ujfalusi@gmail.com,
-	kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-	decui@microsoft.com, jassisinghbrar@gmail.com, mchehab@kernel.org,
-	maintainers@bluecherrydvr.com, aubin.constans@microchip.com,
-	ulf.hansson@linaro.org, manuel.lauss@gmail.com,
-	jh80.chung@samsung.com, oakad@yahoo.com,
-	hayashi.kunihiko@socionext.com, mhiramat@kernel.org,
-	brucechang@via.com.tw, HaraldWelte@viatech.com, pierre@ossman.eu,
-	duncan.sands@free.fr, stern@rowland.harvard.edu, oneukum@suse.com,
-	openipmi-developer@lists.sourceforge.net, dmaengine@vger.kernel.org,
-	asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-rpi-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-	imx@lists.linux.dev, linuxppc-dev@lists.ozlabs.org,
-	linux-mediatek@lists.infradead.org,
-	linux-actions@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-	linux-riscv@lists.infradead.org, linux-sunxi@lists.linux.dev,
-	linux-tegra@vger.kernel.org, linux-hyperv@vger.kernel.org,
-	linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
-	linux-mmc@vger.kernel.org, linux-omap@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org, linux-s390@vger.kernel.org,
-	netdev@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 9/9] mmc: Convert from tasklet to BH workqueue
-Message-ID: <Zg_ET2XmZM_Id_Ad@qmqm.qmqm.pl>
-References: <20240327160314.9982-1-apais@linux.microsoft.com>
- <20240327160314.9982-10-apais@linux.microsoft.com>
+	s=arc-20240116; t=1712309576; c=relaxed/simple;
+	bh=FSGBi+YfdydBGkRK5pkIkzuF1U805TqHDXm+o2pKfv0=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Rv2BlUps8pYgSlO71B/g21tdrCz/IbFvPe0XqdM/sM3OIwx2yG9l/Am59AOyTTu1+FGwFO4B8oQpZjbVFlyG+v2m+kpukyd1Fmwua8fKZdXv4LSfbQbOEvCuRiPm6vm8G0LXQquHcnVW5vILUvKnT+EsC2pLq7A+sZNmbmdNiTo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K4W193bs; arc=none smtp.client-ip=209.85.208.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-56c404da0ebso2948963a12.0;
+        Fri, 05 Apr 2024 02:32:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712309573; x=1712914373; darn=vger.kernel.org;
+        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Fp1NiEWvKucXYaZqCRpLFr2R2EuZQk4B8FjI5zW5+7Y=;
+        b=K4W193bsQR4M4ohTeNqqLCcz3hyxKu5Zml4zz+WEP49F5Rcqt+FlAGPW93z5qpkGml
+         TY9/UC00D1tYLo1wOwWsHjeg+3Z+RRmMbRZKz9LtFikXLMiIAvs2hCuewBPrdGR8E1NZ
+         spfZUndEeGngc/Ac3ypPqbxtN15UxN0KG9ymLh6UCN/IIEWSsFecm6tgmyH6wIkbKsq6
+         aQoRZ04duXGlZLpW5k3mVj/4oOeFafSBsPT9Ov5V6KFpsJaBeckltmsQuGsuTLfr8DD+
+         Adz/Ulk1ok29FPy78UqAo21ndPYQhCZ+WKOM0x5Lddja7AcqJAcOQTKfKPh4K9O20mSg
+         Or3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712309573; x=1712914373;
+        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Fp1NiEWvKucXYaZqCRpLFr2R2EuZQk4B8FjI5zW5+7Y=;
+        b=cGEzSujFXxdVBBNiAwe6pfj+c9/u+cuY7dRC6EHwF05kIKiCNX3QTPI5zElRSdoL5Z
+         B9Wa/T4f8HVX3ng//94YqvO6PSj6NPPRhpHYqIj06p0HGf0BMaTJ2d7f26Srte+96AoE
+         f4ycadXFn7R6HpZFDi2K5lbMK6z5RCPRCRn+AAppRyR4dZLQlt8xa/BMk7fTmqAbkRQX
+         KkPFvh3eqHa/GsM0h4v1agew2hm61BEvQVLtRR7UJOxQ3E2FM/NITmy/nxrWwI2stlAI
+         n3PqX/PaXrWyvIH7wbeHcyvcXjA2l00qmlCEFgIxFMcbfM4rRjezluQ2rDxoLutJNd//
+         RD/Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUmeb7/j9Gmbw/t9idojvzHrnmdHuLT46kC0QrjvU0tL8I6JzYQpmOY0KiJl/QWPaLiglGgXF+a9OKKjFyK5+mP7rql0gM24g8YjM11
+X-Gm-Message-State: AOJu0Ywqm5yn3HBWt5vwF3f8UTQV7cQ+GIqkH8Y3ehgGt2VEQ/cbC2uP
+	JbB2TLfdRJfHYOK5hIH0hn/yu75th+L93UC6jbqzVXfzSteRVpVd
+X-Google-Smtp-Source: AGHT+IFMcSfTlYZvAOYL5ZYCNFf4SlAShdw7sui3vPUh9mag9NiY8FXda0nLgRX5jcfEBV5JAN4g7g==
+X-Received: by 2002:a17:906:c104:b0:a4e:174f:a913 with SMTP id do4-20020a170906c10400b00a4e174fa913mr1037820ejc.58.1712309572482;
+        Fri, 05 Apr 2024 02:32:52 -0700 (PDT)
+Received: from foxbook (bfi147.neoplus.adsl.tpnet.pl. [83.28.46.147])
+        by smtp.gmail.com with ESMTPSA id ky23-20020a170907779700b00a4e2dc1283asm627529ejc.50.2024.04.05.02.32.51
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Fri, 05 Apr 2024 02:32:52 -0700 (PDT)
+Date: Fri, 5 Apr 2024 11:32:47 +0200
+From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
+To: Paul Menzel <pmenzel@molgen.mpg.de>
+Cc: linux-usb@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>, LKML
+ <linux-kernel@vger.kernel.org>
+Subject: Re: xhci_hcd 0000:00:14.0: ERROR Transfer event TRB DMA ptr not
+ part of current TD ep_index 1 comp_code 1
+Message-ID: <20240405113247.743e34b2@foxbook>
+In-Reply-To: <58bca6f2-797a-4e20-a476-2294309afdd5@molgen.mpg.de>
+References: <58bca6f2-797a-4e20-a476-2294309afdd5@molgen.mpg.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-2
+Content-Type: multipart/mixed; boundary="MP_/w03htzOCUP+RUl2PSrSjOlE"
+
+--MP_/w03htzOCUP+RUl2PSrSjOlE
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240327160314.9982-10-apais@linux.microsoft.com>
 
-On Wed, Mar 27, 2024 at 04:03:14PM +0000, Allen Pais wrote:
-> The only generic interface to execute asynchronously in the BH context is
-> tasklet; however, it's marked deprecated and has some design flaws. To
-> replace tasklets, BH workqueue support was recently added. A BH workqueue
-> behaves similarly to regular workqueues except that the queued work items
-> are executed in the BH context.
-> 
-> This patch converts drivers/infiniband/* from tasklet to BH workqueue.
-> 
-> Based on the work done by Tejun Heo <tj@kernel.org>
-> Branch: https://git.kernel.org/pub/scm/linux/kernel/git/tj/wq.git for-6.10
-> 
-> Signed-off-by: Allen Pais <allen.lkml@gmail.com>
-> ---
-[...]
->  drivers/mmc/host/cb710-mmc.c                  | 15 ++--
->  drivers/mmc/host/cb710-mmc.h                  |  3 +-
-[...]
+Hi,
 
-Acked-by: Micha³ Miros³aw <mirq-linux@rere.qmqm.pl>
+> On a Dell XPS 13 9360/0596KF, BIOS 2.21.0 06/02/2022 with Debian 
+> sid/unstable, at least Linux 6.8-rc7 and 6.9-rc1+ log the error
+> below, when unplugging a USB headset from the USB Type A port of the
+> laptop.
+Can you reproduce this on other computers or with other USB devices?
+(I just tested a few random audio dongles on my PC, nothing happens).
+
+Is there any kernel version known to be free of this problem?
+
+>      xhci_hcd 0000:00:14.0: ERROR Transfer event TRB DMA ptr not part
+> of current TD ep_index 1 comp_code 1
+>      xhci_hcd 0000:00:14.0: Looking for event-dma 0000000128897080 
+> trb-start 0000000128897090 trb-end 0000000128897090 seg-start 
+> 0000000128897000 seg-end 0000000128897ff0
+This looks like the xHCI driver freed data structures related to a USB
+transfer concurrently with the hardware executing this transfer. It's
+a bad thing which should never happen, but sometimes it does because of
+bugs in USB controllers or the driver.
+
+Can you run patched kernels on the affected laptop? I attach a patch
+I used to track down similar issues on UVC webcams. It doesn't fix
+anything, but adds some dmesg noise which may be helpful in figuring
+out what goes wrong. The patch should work on v6.9-rc1 or -rc2.
+
+Regards,
+Michal
+
+--MP_/w03htzOCUP+RUl2PSrSjOlE
+Content-Type: text/x-patch
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment; filename=xhci-noise.patch
+
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index 52278afea94b..6472b2554ed3 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -843,11 +843,16 @@ static void xhci_unmap_td_bounce_buffer(struct xhci_hcd *xhci,
+ 	seg->bounce_offs = 0;
+ }
+ 
+-static int xhci_td_cleanup(struct xhci_hcd *xhci, struct xhci_td *td,
+-			   struct xhci_ring *ep_ring, int status)
++static int __xhci_td_cleanup(struct xhci_hcd *xhci, struct xhci_td *td,
++			   struct xhci_ring *ep_ring, int status, const char *from)
+ {
+ 	struct urb *urb = NULL;
+ 
++	ep_ring->cleanup_first_dma = xhci_trb_virt_to_dma(ep_ring->deq_seg, td->first_trb);
++	ep_ring->cleanup_last_dma = xhci_trb_virt_to_dma(ep_ring->deq_seg, td->last_trb);
++	ep_ring->cleanup_status = status;
++	ep_ring->cleanup_from = from;
++
+ 	/* Clean up the endpoint's TD list */
+ 	urb = td->urb;
+ 
+@@ -891,6 +896,8 @@ static int xhci_td_cleanup(struct xhci_hcd *xhci, struct xhci_td *td,
+ 	return 0;
+ }
+ 
++#define xhci_td_cleanup(xhci, td, ep_ring, status) __xhci_td_cleanup(xhci, td, ep_ring, status, __func__)
++
+ 
+ /* Complete the cancelled URBs we unlinked from td_list. */
+ static void xhci_giveback_invalidated_tds(struct xhci_virt_ep *ep)
+@@ -2179,6 +2186,15 @@ static int finish_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
+ 		     u32 trb_comp_code)
+ {
+ 	struct xhci_ep_ctx *ep_ctx;
++	struct urb_priv *urb_priv;
++	struct usb_iso_packet_descriptor *frame;
++
++	urb_priv = td->urb->hcpriv;
++	frame = &td->urb->iso_frame_desc[urb_priv->num_tds_done];
++
++	if (ep_ring->interesting)
++		xhci_info(xhci, "finish_td td_status %d comp_code %d frame_status %d frame_actual_length %d\n",
++				td->status, trb_comp_code, frame->status, frame->actual_length);
+ 
+ 	ep_ctx = xhci_get_ep_ctx(xhci, ep->vdev->out_ctx, ep->ep_index);
+ 
+@@ -2391,12 +2407,17 @@ static int process_isoc_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
+ 	short_framestatus = td->urb->transfer_flags & URB_SHORT_NOT_OK ?
+ 		-EREMOTEIO : 0;
+ 
++	if (ep_ring->interesting)
++		xhci_info(xhci, "process_isoc_td requested %u ep_trb_len %u remaining %u\n", requested, ep_trb_len, remaining);
++
+ 	/* handle completion code */
+ 	switch (trb_comp_code) {
+ 	case COMP_SUCCESS:
+ 		/* Don't overwrite status if TD had an error, see xHCI 4.9.1 */
+-		if (td->error_mid_td)
++		if (td->error_mid_td) {
++			xhci_info(xhci, "Got SUCCESS after mid TD error\n");
+ 			break;
++		}
+ 		if (remaining) {
+ 			frame->status = short_framestatus;
+ 			if (xhci->quirks & XHCI_TRUST_TX_LENGTH)
+@@ -2462,7 +2483,7 @@ static int process_isoc_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
+ finish_td:
+ 	/* Don't give back TD yet if we encountered an error mid TD */
+ 	if (td->error_mid_td && ep_trb != td->last_trb) {
+-		xhci_dbg(xhci, "Error mid isoc TD, wait for final completion event\n");
++		xhci_info(xhci, "Error mid isoc TD, wait for final completion event\n");
+ 		td->urb_length_set = true;
+ 		return 0;
+ 	}
+@@ -2597,6 +2618,10 @@ static int handle_tx_event(struct xhci_hcd *xhci,
+ 	trb_comp_code = GET_COMP_CODE(le32_to_cpu(event->transfer_len));
+ 	ep_trb_dma = le64_to_cpu(event->buffer);
+ 
++	bool interesting = trb_comp_code != COMP_SUCCESS && trb_comp_code != COMP_SHORT_PACKET;
++	if (interesting)
++		xhci_info(xhci, "handle_tx_event interesting ep_trb_dma %llx comp_code %d slot %u ep %d", ep_trb_dma, trb_comp_code, slot_id, ep_index);
++
+ 	ep = xhci_get_virt_ep(xhci, slot_id, ep_index);
+ 	if (!ep) {
+ 		xhci_err(xhci, "ERROR Invalid Transfer event\n");
+@@ -2640,6 +2665,10 @@ static int handle_tx_event(struct xhci_hcd *xhci,
+ 		}
+ 	}
+ 
++	if (!interesting && ep_ring->interesting)
++		xhci_info(xhci, "handle_tx_event uninteresting ep_trb_dma %llx comp_code %d slot %u ep %d", ep_trb_dma, trb_comp_code, slot_id, ep_index);
++	ep_ring->interesting |= interesting;
++
+ 	/* Count current td numbers if ep->skip is set */
+ 	if (ep->skip)
+ 		td_num += list_count_nodes(&ep_ring->td_list);
+@@ -2831,6 +2860,12 @@ static int handle_tx_event(struct xhci_hcd *xhci,
+ 		ep_seg = trb_in_td(xhci, td->start_seg, td->first_trb,
+ 				td->last_trb, ep_trb_dma, false);
+ 
++		if (ep_ring->interesting)
++			xhci_info(xhci, "handle_tx_event first_trb %llx last_trb %llx ep_seg %llx\n",
++					xhci_trb_virt_to_dma(ep_ring->deq_seg, td->first_trb),
++					xhci_trb_virt_to_dma(ep_ring->deq_seg, td->last_trb),
++					ep_seg? ep_seg->dma: -1);
++
+ 		/*
+ 		 * Skip the Force Stopped Event. The event_trb(event_dma) of FSE
+ 		 * is not in the current TD pointed by ep_ring->dequeue because
+@@ -2880,7 +2915,7 @@ static int handle_tx_event(struct xhci_hcd *xhci,
+ 						   td_next->last_trb, ep_trb_dma, false);
+ 				if (ep_seg) {
+ 					/* give back previous TD, start handling new */
+-					xhci_dbg(xhci, "Missing TD completion event after mid TD error\n");
++					xhci_info(xhci, "Missing TD completion event after mid TD error\n");
+ 					ep_ring->dequeue = td->last_trb;
+ 					ep_ring->deq_seg = td->last_trb_seg;
+ 					inc_deq(xhci, ep_ring);
+@@ -2898,9 +2933,14 @@ static int handle_tx_event(struct xhci_hcd *xhci,
+ 					trb_comp_code);
+ 				trb_in_td(xhci, td->start_seg, td->first_trb,
+ 					  td->last_trb, ep_trb_dma, true);
++				xhci_info(xhci, "last xhci_td_cleanup: first_dma %llx last_dma %llx status %d from %s\n",
++						ep_ring->cleanup_first_dma, ep_ring->cleanup_last_dma,
++						ep_ring->cleanup_status, ep_ring->cleanup_from);
++				ep_ring->interesting = true;
+ 				return -ESHUTDOWN;
+ 			}
+ 		}
++
+ 		if (trb_comp_code == COMP_SHORT_PACKET)
+ 			ep_ring->last_td_was_short = true;
+ 		else
+@@ -2958,6 +2998,8 @@ static int handle_tx_event(struct xhci_hcd *xhci,
+ 	 */
+ 	} while (handling_skipped_tds);
+ 
++	ep_ring->interesting = interesting;
++
+ 	return 0;
+ 
+ err_out:
+diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+index 6f4bf98a6282..1e6ccb644279 100644
+--- a/drivers/usb/host/xhci.h
++++ b/drivers/usb/host/xhci.h
+@@ -1360,7 +1360,12 @@ struct xhci_ring {
+ 	unsigned int		bounce_buf_len;
+ 	enum xhci_ring_type	type;
+ 	bool			last_td_was_short;
++	bool			interesting;
+ 	struct radix_tree_root	*trb_address_map;
++	dma_addr_t		cleanup_first_dma;
++	dma_addr_t		cleanup_last_dma;
++	const char		*cleanup_from;
++	int			cleanup_status;
+ };
+ 
+ struct xhci_erst_entry {
+
+--MP_/w03htzOCUP+RUl2PSrSjOlE--
 
