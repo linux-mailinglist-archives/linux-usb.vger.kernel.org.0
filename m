@@ -1,288 +1,283 @@
-Return-Path: <linux-usb+bounces-8973-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8975-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 63E5189997F
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Apr 2024 11:33:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 35626899A19
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Apr 2024 11:58:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1A3F4283BC8
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Apr 2024 09:33:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 545681C209EE
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Apr 2024 09:58:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFC3015FD1D;
-	Fri,  5 Apr 2024 09:32:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4785C16087B;
+	Fri,  5 Apr 2024 09:57:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K4W193bs"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z0qMdLw9"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C58D15FCE2;
-	Fri,  5 Apr 2024 09:32:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF2FD1607BC
+	for <linux-usb@vger.kernel.org>; Fri,  5 Apr 2024 09:57:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712309576; cv=none; b=lTYUzwQyQ0RHzqUSM/Z5ylTPfKWOQxADgv/ksgdPtaAerMZbS9uV7knt1AIukH3HA0n75CIl3E4nCr59l1IrhIp/Ij8ltRbslX+j+ElAsXFvwiFQYSRqboAirP0kwybpbt/6wkOPKiQ5P+NVx4FlJZK28Ls+WhKn1eSoDBlstY8=
+	t=1712311063; cv=none; b=bRVKs0jjMkWNNYR0KGHJl8oijfRhtFG9eDBi0U6ntu9rXU9NALYYuvw39Disvf1dyz8jojhugyhXqhRJiWcWb0mAx9UC403oqinO2VdBXlIGhPhG7YuA3j+EYAXOCU1LF5xGpLqOv/R+IxZYPZTqF4iR96b8OUT7CFSnhqIGlCI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712309576; c=relaxed/simple;
-	bh=FSGBi+YfdydBGkRK5pkIkzuF1U805TqHDXm+o2pKfv0=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Rv2BlUps8pYgSlO71B/g21tdrCz/IbFvPe0XqdM/sM3OIwx2yG9l/Am59AOyTTu1+FGwFO4B8oQpZjbVFlyG+v2m+kpukyd1Fmwua8fKZdXv4LSfbQbOEvCuRiPm6vm8G0LXQquHcnVW5vILUvKnT+EsC2pLq7A+sZNmbmdNiTo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K4W193bs; arc=none smtp.client-ip=209.85.208.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-56c404da0ebso2948963a12.0;
-        Fri, 05 Apr 2024 02:32:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712309573; x=1712914373; darn=vger.kernel.org;
-        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Fp1NiEWvKucXYaZqCRpLFr2R2EuZQk4B8FjI5zW5+7Y=;
-        b=K4W193bsQR4M4ohTeNqqLCcz3hyxKu5Zml4zz+WEP49F5Rcqt+FlAGPW93z5qpkGml
-         TY9/UC00D1tYLo1wOwWsHjeg+3Z+RRmMbRZKz9LtFikXLMiIAvs2hCuewBPrdGR8E1NZ
-         spfZUndEeGngc/Ac3ypPqbxtN15UxN0KG9ymLh6UCN/IIEWSsFecm6tgmyH6wIkbKsq6
-         aQoRZ04duXGlZLpW5k3mVj/4oOeFafSBsPT9Ov5V6KFpsJaBeckltmsQuGsuTLfr8DD+
-         Adz/Ulk1ok29FPy78UqAo21ndPYQhCZ+WKOM0x5Lddja7AcqJAcOQTKfKPh4K9O20mSg
-         Or3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712309573; x=1712914373;
-        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Fp1NiEWvKucXYaZqCRpLFr2R2EuZQk4B8FjI5zW5+7Y=;
-        b=cGEzSujFXxdVBBNiAwe6pfj+c9/u+cuY7dRC6EHwF05kIKiCNX3QTPI5zElRSdoL5Z
-         B9Wa/T4f8HVX3ng//94YqvO6PSj6NPPRhpHYqIj06p0HGf0BMaTJ2d7f26Srte+96AoE
-         f4ycadXFn7R6HpZFDi2K5lbMK6z5RCPRCRn+AAppRyR4dZLQlt8xa/BMk7fTmqAbkRQX
-         KkPFvh3eqHa/GsM0h4v1agew2hm61BEvQVLtRR7UJOxQ3E2FM/NITmy/nxrWwI2stlAI
-         n3PqX/PaXrWyvIH7wbeHcyvcXjA2l00qmlCEFgIxFMcbfM4rRjezluQ2rDxoLutJNd//
-         RD/Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUmeb7/j9Gmbw/t9idojvzHrnmdHuLT46kC0QrjvU0tL8I6JzYQpmOY0KiJl/QWPaLiglGgXF+a9OKKjFyK5+mP7rql0gM24g8YjM11
-X-Gm-Message-State: AOJu0Ywqm5yn3HBWt5vwF3f8UTQV7cQ+GIqkH8Y3ehgGt2VEQ/cbC2uP
-	JbB2TLfdRJfHYOK5hIH0hn/yu75th+L93UC6jbqzVXfzSteRVpVd
-X-Google-Smtp-Source: AGHT+IFMcSfTlYZvAOYL5ZYCNFf4SlAShdw7sui3vPUh9mag9NiY8FXda0nLgRX5jcfEBV5JAN4g7g==
-X-Received: by 2002:a17:906:c104:b0:a4e:174f:a913 with SMTP id do4-20020a170906c10400b00a4e174fa913mr1037820ejc.58.1712309572482;
-        Fri, 05 Apr 2024 02:32:52 -0700 (PDT)
-Received: from foxbook (bfi147.neoplus.adsl.tpnet.pl. [83.28.46.147])
-        by smtp.gmail.com with ESMTPSA id ky23-20020a170907779700b00a4e2dc1283asm627529ejc.50.2024.04.05.02.32.51
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Fri, 05 Apr 2024 02:32:52 -0700 (PDT)
-Date: Fri, 5 Apr 2024 11:32:47 +0200
-From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
-To: Paul Menzel <pmenzel@molgen.mpg.de>
-Cc: linux-usb@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>, LKML
- <linux-kernel@vger.kernel.org>
-Subject: Re: xhci_hcd 0000:00:14.0: ERROR Transfer event TRB DMA ptr not
- part of current TD ep_index 1 comp_code 1
-Message-ID: <20240405113247.743e34b2@foxbook>
-In-Reply-To: <58bca6f2-797a-4e20-a476-2294309afdd5@molgen.mpg.de>
-References: <58bca6f2-797a-4e20-a476-2294309afdd5@molgen.mpg.de>
+	s=arc-20240116; t=1712311063; c=relaxed/simple;
+	bh=macVZJuHDyqVpQo30sr87zeNvhPQX1Xr9l7NNo5F91Y=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=Av8KIs9qkuyF7Ie76XMC9w5EPPXRzYkleZmRfEoPlnXtJcr3McMVQTSXdTAq09Ka1ra6fPrVMj7e9vEUy9CvT+j6HMxKOI5whAKQ+ZHf23BsQKDNl3e1huVTJ0SZ4gBrcfhRvwlD9WwK4T92zrTRJbVqNtum9SAZrPLwoSeYfTc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Z0qMdLw9; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1712311062; x=1743847062;
+  h=date:from:to:cc:subject:message-id;
+  bh=macVZJuHDyqVpQo30sr87zeNvhPQX1Xr9l7NNo5F91Y=;
+  b=Z0qMdLw905f8gOE72la7bJPGHI572L4rwOgTpfXhOFklt5FADepdDGuG
+   ZQ246TnmiVei/UuGQmypEZVvgbRcBLugMgvHaINmPP/hEB0O0I5VBSm0B
+   PAbxxrG9Xs7VVFPg2CoeqJAQVnAHQ1+ydEfIa8QyL+qriCdQ0we6X+Luf
+   Sv+QPvBGJbMUPh6JT/9vrJm5xQJjoxI+C4XwplpTecxvvRV8mCNJYy815
+   rK7rOTCEPkerGcfVqhtxIetuTEH0mn1vGbM7JUvbrlqZjE3goBQXIoigO
+   jsF4xl3Bmwjh+Lffr7pI1ru6dXjFuFCrvD2Dy/q7jWH/HauM6MeZkyiQX
+   g==;
+X-CSE-ConnectionGUID: N/ON1ESBT4CGjKD7nEJrsA==
+X-CSE-MsgGUID: CVXmE5b6Qt6vT6EuTBgxww==
+X-IronPort-AV: E=McAfee;i="6600,9927,11034"; a="7479548"
+X-IronPort-AV: E=Sophos;i="6.07,181,1708416000"; 
+   d="scan'208";a="7479548"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2024 02:57:41 -0700
+X-CSE-ConnectionGUID: 52X/HaDoTf6UzEA2y6U3nQ==
+X-CSE-MsgGUID: tS1nexEdQp6wI+FBUgezqQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,181,1708416000"; 
+   d="scan'208";a="19219493"
+Received: from lkp-server01.sh.intel.com (HELO e61807b1d151) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 05 Apr 2024 02:57:40 -0700
+Received: from kbuild by e61807b1d151 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rsgKH-00027S-2B;
+	Fri, 05 Apr 2024 09:57:37 +0000
+Date: Fri, 05 Apr 2024 17:56:59 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ 3295f1b866bfbcabd625511968e8a5c541f9ab32
+Message-ID: <202404051757.N16AXT9J-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="MP_/w03htzOCUP+RUl2PSrSjOlE"
 
---MP_/w03htzOCUP+RUl2PSrSjOlE
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: 3295f1b866bfbcabd625511968e8a5c541f9ab32  usb: misc: uss720: check for incompatible versions of the Belkin F5U002
 
-Hi,
+elapsed time: 1110m
 
-> On a Dell XPS 13 9360/0596KF, BIOS 2.21.0 06/02/2022 with Debian 
-> sid/unstable, at least Linux 6.8-rc7 and 6.9-rc1+ log the error
-> below, when unplugging a USB headset from the USB Type A port of the
-> laptop.
-Can you reproduce this on other computers or with other USB devices?
-(I just tested a few random audio dongles on my PC, nothing happens).
+configs tested: 190
+configs skipped: 3
 
-Is there any kernel version known to be free of this problem?
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
->      xhci_hcd 0000:00:14.0: ERROR Transfer event TRB DMA ptr not part
-> of current TD ep_index 1 comp_code 1
->      xhci_hcd 0000:00:14.0: Looking for event-dma 0000000128897080 
-> trb-start 0000000128897090 trb-end 0000000128897090 seg-start 
-> 0000000128897000 seg-end 0000000128897ff0
-This looks like the xHCI driver freed data structures related to a USB
-transfer concurrently with the hardware executing this transfer. It's
-a bad thing which should never happen, but sometimes it does because of
-bugs in USB controllers or the driver.
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allmodconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                         haps_hs_defconfig   gcc  
+arc                     haps_hs_smp_defconfig   gcc  
+arc                        nsim_700_defconfig   gcc  
+arc                   randconfig-001-20240405   gcc  
+arc                   randconfig-002-20240405   gcc  
+arm                              allmodconfig   gcc  
+arm                               allnoconfig   clang
+arm                              allyesconfig   gcc  
+arm                                 defconfig   clang
+arm                            hisi_defconfig   gcc  
+arm                           imxrt_defconfig   clang
+arm                             mxs_defconfig   clang
+arm                   randconfig-001-20240405   gcc  
+arm                   randconfig-002-20240405   clang
+arm                   randconfig-003-20240405   gcc  
+arm                   randconfig-004-20240405   clang
+arm                           tegra_defconfig   gcc  
+arm                           u8500_defconfig   gcc  
+arm                        vexpress_defconfig   gcc  
+arm                         vf610m4_defconfig   gcc  
+arm64                            allmodconfig   clang
+arm64                             allnoconfig   gcc  
+arm64                            allyesconfig   clang
+arm64                               defconfig   gcc  
+arm64                 randconfig-001-20240405   gcc  
+arm64                 randconfig-002-20240405   gcc  
+arm64                 randconfig-003-20240405   gcc  
+arm64                 randconfig-004-20240405   gcc  
+csky                             allmodconfig   gcc  
+csky                              allnoconfig   gcc  
+csky                             allyesconfig   gcc  
+csky                                defconfig   gcc  
+csky                  randconfig-001-20240405   gcc  
+csky                  randconfig-002-20240405   gcc  
+hexagon                          allmodconfig   clang
+hexagon                           allnoconfig   clang
+hexagon                          allyesconfig   clang
+hexagon                             defconfig   clang
+hexagon               randconfig-001-20240405   clang
+hexagon               randconfig-002-20240405   clang
+i386                             allmodconfig   gcc  
+i386                              allnoconfig   gcc  
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-001-20240405   gcc  
+i386         buildonly-randconfig-002-20240405   gcc  
+i386         buildonly-randconfig-003-20240405   clang
+i386         buildonly-randconfig-004-20240405   gcc  
+i386         buildonly-randconfig-005-20240405   clang
+i386         buildonly-randconfig-006-20240405   clang
+i386                                defconfig   clang
+i386                  randconfig-001-20240405   clang
+i386                  randconfig-002-20240405   gcc  
+i386                  randconfig-003-20240405   clang
+i386                  randconfig-004-20240405   clang
+i386                  randconfig-005-20240405   clang
+i386                  randconfig-006-20240405   gcc  
+i386                  randconfig-011-20240405   clang
+i386                  randconfig-012-20240405   gcc  
+i386                  randconfig-013-20240405   gcc  
+i386                  randconfig-014-20240405   gcc  
+i386                  randconfig-015-20240405   gcc  
+i386                  randconfig-016-20240405   clang
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch             randconfig-001-20240405   gcc  
+loongarch             randconfig-002-20240405   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                       allyesconfig   gcc  
+microblaze                          defconfig   gcc  
+mips                              allnoconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                            gpr_defconfig   clang
+mips                malta_qemu_32r6_defconfig   gcc  
+mips                           xway_defconfig   clang
+nios2                            allmodconfig   gcc  
+nios2                             allnoconfig   gcc  
+nios2                            allyesconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                 randconfig-001-20240405   gcc  
+nios2                 randconfig-002-20240405   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                         allyesconfig   gcc  
+openrisc                            defconfig   gcc  
+parisc                           allmodconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc                generic-32bit_defconfig   gcc  
+parisc                randconfig-001-20240405   gcc  
+parisc                randconfig-002-20240405   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                          allyesconfig   clang
+powerpc                    ge_imp3a_defconfig   gcc  
+powerpc                     powernv_defconfig   gcc  
+powerpc               randconfig-001-20240405   clang
+powerpc               randconfig-002-20240405   clang
+powerpc               randconfig-003-20240405   clang
+powerpc                         wii_defconfig   gcc  
+powerpc64             randconfig-001-20240405   gcc  
+powerpc64             randconfig-002-20240405   gcc  
+powerpc64             randconfig-003-20240405   clang
+riscv                            allmodconfig   clang
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   clang
+riscv                               defconfig   clang
+riscv                 randconfig-001-20240405   clang
+riscv                 randconfig-002-20240405   gcc  
+s390                             allmodconfig   clang
+s390                              allnoconfig   clang
+s390                             allyesconfig   gcc  
+s390                          debug_defconfig   gcc  
+s390                                defconfig   clang
+s390                  randconfig-001-20240405   clang
+s390                  randconfig-002-20240405   gcc  
+s390                       zfcpdump_defconfig   clang
+sh                               allmodconfig   gcc  
+sh                                allnoconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                                  defconfig   gcc  
+sh                             espt_defconfig   gcc  
+sh                            hp6xx_defconfig   gcc  
+sh                    randconfig-001-20240405   gcc  
+sh                    randconfig-002-20240405   gcc  
+sh                          sdk7786_defconfig   gcc  
+sh                        sh7757lcr_defconfig   gcc  
+sparc                            allmodconfig   gcc  
+sparc                             allnoconfig   gcc  
+sparc                               defconfig   gcc  
+sparc64                          allmodconfig   gcc  
+sparc64                          allyesconfig   gcc  
+sparc64                             defconfig   gcc  
+sparc64               randconfig-001-20240405   gcc  
+sparc64               randconfig-002-20240405   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   gcc  
+um                                  defconfig   clang
+um                             i386_defconfig   gcc  
+um                    randconfig-001-20240405   gcc  
+um                    randconfig-002-20240405   clang
+um                           x86_64_defconfig   clang
+x86_64                            allnoconfig   clang
+x86_64                           allyesconfig   clang
+x86_64       buildonly-randconfig-001-20240405   clang
+x86_64       buildonly-randconfig-002-20240405   clang
+x86_64       buildonly-randconfig-003-20240405   gcc  
+x86_64       buildonly-randconfig-004-20240405   gcc  
+x86_64       buildonly-randconfig-005-20240405   clang
+x86_64       buildonly-randconfig-006-20240405   clang
+x86_64                              defconfig   gcc  
+x86_64                randconfig-001-20240405   clang
+x86_64                randconfig-002-20240405   clang
+x86_64                randconfig-003-20240405   clang
+x86_64                randconfig-004-20240405   gcc  
+x86_64                randconfig-005-20240405   clang
+x86_64                randconfig-006-20240405   gcc  
+x86_64                randconfig-011-20240405   clang
+x86_64                randconfig-012-20240405   gcc  
+x86_64                randconfig-013-20240405   gcc  
+x86_64                randconfig-014-20240405   clang
+x86_64                randconfig-015-20240405   gcc  
+x86_64                randconfig-016-20240405   gcc  
+x86_64                randconfig-071-20240405   gcc  
+x86_64                randconfig-072-20240405   gcc  
+x86_64                randconfig-073-20240405   gcc  
+x86_64                randconfig-074-20240405   gcc  
+x86_64                randconfig-075-20240405   gcc  
+x86_64                randconfig-076-20240405   gcc  
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+xtensa                            allnoconfig   gcc  
+xtensa                  audio_kc705_defconfig   gcc  
+xtensa                  nommu_kc705_defconfig   gcc  
+xtensa                randconfig-001-20240405   gcc  
+xtensa                randconfig-002-20240405   gcc  
 
-Can you run patched kernels on the affected laptop? I attach a patch
-I used to track down similar issues on UVC webcams. It doesn't fix
-anything, but adds some dmesg noise which may be helpful in figuring
-out what goes wrong. The patch should work on v6.9-rc1 or -rc2.
-
-Regards,
-Michal
-
---MP_/w03htzOCUP+RUl2PSrSjOlE
-Content-Type: text/x-patch
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment; filename=xhci-noise.patch
-
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 52278afea94b..6472b2554ed3 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -843,11 +843,16 @@ static void xhci_unmap_td_bounce_buffer(struct xhci_hcd *xhci,
- 	seg->bounce_offs = 0;
- }
- 
--static int xhci_td_cleanup(struct xhci_hcd *xhci, struct xhci_td *td,
--			   struct xhci_ring *ep_ring, int status)
-+static int __xhci_td_cleanup(struct xhci_hcd *xhci, struct xhci_td *td,
-+			   struct xhci_ring *ep_ring, int status, const char *from)
- {
- 	struct urb *urb = NULL;
- 
-+	ep_ring->cleanup_first_dma = xhci_trb_virt_to_dma(ep_ring->deq_seg, td->first_trb);
-+	ep_ring->cleanup_last_dma = xhci_trb_virt_to_dma(ep_ring->deq_seg, td->last_trb);
-+	ep_ring->cleanup_status = status;
-+	ep_ring->cleanup_from = from;
-+
- 	/* Clean up the endpoint's TD list */
- 	urb = td->urb;
- 
-@@ -891,6 +896,8 @@ static int xhci_td_cleanup(struct xhci_hcd *xhci, struct xhci_td *td,
- 	return 0;
- }
- 
-+#define xhci_td_cleanup(xhci, td, ep_ring, status) __xhci_td_cleanup(xhci, td, ep_ring, status, __func__)
-+
- 
- /* Complete the cancelled URBs we unlinked from td_list. */
- static void xhci_giveback_invalidated_tds(struct xhci_virt_ep *ep)
-@@ -2179,6 +2186,15 @@ static int finish_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
- 		     u32 trb_comp_code)
- {
- 	struct xhci_ep_ctx *ep_ctx;
-+	struct urb_priv *urb_priv;
-+	struct usb_iso_packet_descriptor *frame;
-+
-+	urb_priv = td->urb->hcpriv;
-+	frame = &td->urb->iso_frame_desc[urb_priv->num_tds_done];
-+
-+	if (ep_ring->interesting)
-+		xhci_info(xhci, "finish_td td_status %d comp_code %d frame_status %d frame_actual_length %d\n",
-+				td->status, trb_comp_code, frame->status, frame->actual_length);
- 
- 	ep_ctx = xhci_get_ep_ctx(xhci, ep->vdev->out_ctx, ep->ep_index);
- 
-@@ -2391,12 +2407,17 @@ static int process_isoc_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
- 	short_framestatus = td->urb->transfer_flags & URB_SHORT_NOT_OK ?
- 		-EREMOTEIO : 0;
- 
-+	if (ep_ring->interesting)
-+		xhci_info(xhci, "process_isoc_td requested %u ep_trb_len %u remaining %u\n", requested, ep_trb_len, remaining);
-+
- 	/* handle completion code */
- 	switch (trb_comp_code) {
- 	case COMP_SUCCESS:
- 		/* Don't overwrite status if TD had an error, see xHCI 4.9.1 */
--		if (td->error_mid_td)
-+		if (td->error_mid_td) {
-+			xhci_info(xhci, "Got SUCCESS after mid TD error\n");
- 			break;
-+		}
- 		if (remaining) {
- 			frame->status = short_framestatus;
- 			if (xhci->quirks & XHCI_TRUST_TX_LENGTH)
-@@ -2462,7 +2483,7 @@ static int process_isoc_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
- finish_td:
- 	/* Don't give back TD yet if we encountered an error mid TD */
- 	if (td->error_mid_td && ep_trb != td->last_trb) {
--		xhci_dbg(xhci, "Error mid isoc TD, wait for final completion event\n");
-+		xhci_info(xhci, "Error mid isoc TD, wait for final completion event\n");
- 		td->urb_length_set = true;
- 		return 0;
- 	}
-@@ -2597,6 +2618,10 @@ static int handle_tx_event(struct xhci_hcd *xhci,
- 	trb_comp_code = GET_COMP_CODE(le32_to_cpu(event->transfer_len));
- 	ep_trb_dma = le64_to_cpu(event->buffer);
- 
-+	bool interesting = trb_comp_code != COMP_SUCCESS && trb_comp_code != COMP_SHORT_PACKET;
-+	if (interesting)
-+		xhci_info(xhci, "handle_tx_event interesting ep_trb_dma %llx comp_code %d slot %u ep %d", ep_trb_dma, trb_comp_code, slot_id, ep_index);
-+
- 	ep = xhci_get_virt_ep(xhci, slot_id, ep_index);
- 	if (!ep) {
- 		xhci_err(xhci, "ERROR Invalid Transfer event\n");
-@@ -2640,6 +2665,10 @@ static int handle_tx_event(struct xhci_hcd *xhci,
- 		}
- 	}
- 
-+	if (!interesting && ep_ring->interesting)
-+		xhci_info(xhci, "handle_tx_event uninteresting ep_trb_dma %llx comp_code %d slot %u ep %d", ep_trb_dma, trb_comp_code, slot_id, ep_index);
-+	ep_ring->interesting |= interesting;
-+
- 	/* Count current td numbers if ep->skip is set */
- 	if (ep->skip)
- 		td_num += list_count_nodes(&ep_ring->td_list);
-@@ -2831,6 +2860,12 @@ static int handle_tx_event(struct xhci_hcd *xhci,
- 		ep_seg = trb_in_td(xhci, td->start_seg, td->first_trb,
- 				td->last_trb, ep_trb_dma, false);
- 
-+		if (ep_ring->interesting)
-+			xhci_info(xhci, "handle_tx_event first_trb %llx last_trb %llx ep_seg %llx\n",
-+					xhci_trb_virt_to_dma(ep_ring->deq_seg, td->first_trb),
-+					xhci_trb_virt_to_dma(ep_ring->deq_seg, td->last_trb),
-+					ep_seg? ep_seg->dma: -1);
-+
- 		/*
- 		 * Skip the Force Stopped Event. The event_trb(event_dma) of FSE
- 		 * is not in the current TD pointed by ep_ring->dequeue because
-@@ -2880,7 +2915,7 @@ static int handle_tx_event(struct xhci_hcd *xhci,
- 						   td_next->last_trb, ep_trb_dma, false);
- 				if (ep_seg) {
- 					/* give back previous TD, start handling new */
--					xhci_dbg(xhci, "Missing TD completion event after mid TD error\n");
-+					xhci_info(xhci, "Missing TD completion event after mid TD error\n");
- 					ep_ring->dequeue = td->last_trb;
- 					ep_ring->deq_seg = td->last_trb_seg;
- 					inc_deq(xhci, ep_ring);
-@@ -2898,9 +2933,14 @@ static int handle_tx_event(struct xhci_hcd *xhci,
- 					trb_comp_code);
- 				trb_in_td(xhci, td->start_seg, td->first_trb,
- 					  td->last_trb, ep_trb_dma, true);
-+				xhci_info(xhci, "last xhci_td_cleanup: first_dma %llx last_dma %llx status %d from %s\n",
-+						ep_ring->cleanup_first_dma, ep_ring->cleanup_last_dma,
-+						ep_ring->cleanup_status, ep_ring->cleanup_from);
-+				ep_ring->interesting = true;
- 				return -ESHUTDOWN;
- 			}
- 		}
-+
- 		if (trb_comp_code == COMP_SHORT_PACKET)
- 			ep_ring->last_td_was_short = true;
- 		else
-@@ -2958,6 +2998,8 @@ static int handle_tx_event(struct xhci_hcd *xhci,
- 	 */
- 	} while (handling_skipped_tds);
- 
-+	ep_ring->interesting = interesting;
-+
- 	return 0;
- 
- err_out:
-diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index 6f4bf98a6282..1e6ccb644279 100644
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -1360,7 +1360,12 @@ struct xhci_ring {
- 	unsigned int		bounce_buf_len;
- 	enum xhci_ring_type	type;
- 	bool			last_td_was_short;
-+	bool			interesting;
- 	struct radix_tree_root	*trb_address_map;
-+	dma_addr_t		cleanup_first_dma;
-+	dma_addr_t		cleanup_last_dma;
-+	const char		*cleanup_from;
-+	int			cleanup_status;
- };
- 
- struct xhci_erst_entry {
-
---MP_/w03htzOCUP+RUl2PSrSjOlE--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
