@@ -1,194 +1,115 @@
-Return-Path: <linux-usb+bounces-8984-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8985-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1332B89A4E2
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Apr 2024 21:27:27 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E20689A537
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Apr 2024 21:51:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1CC36B2392A
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Apr 2024 19:27:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BC68F283CB1
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Apr 2024 19:51:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 078DE172BDB;
-	Fri,  5 Apr 2024 19:27:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61B5017334E;
+	Fri,  5 Apr 2024 19:51:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="cfu4urZC"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g/kq2vIh"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CF54171E66;
-	Fri,  5 Apr 2024 19:27:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A49FA17167F;
+	Fri,  5 Apr 2024 19:50:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712345233; cv=none; b=W5QNx6JFrt1b1PbmFMcuIGuykkQgiGDCfFRdYonVARCNnsvhduurhoE4JPsxKyhARutSivRv74p6MCXWmH8L2WJX9gSn7HGeFSaIyLuZiHHzNMJhELCgBNxTYbB6y3fGWx8HX2AJwL97ci9BncNw0Lky4I2jcRbuGHnZdmf1vAk=
+	t=1712346661; cv=none; b=EDJyCOgfdDaKMZwwJrVio96OB7Bn0EsKDahqQN2fCrQj/6+pZht0KRcxV8i1u/S0pfZg1L2eZr1xpJYvxDjm63C0/mGCcrYq5LWCyCsOmucNX4vE6wMqcH2RKQesGDARSxipFSElmGmOjRQrex4nDYjKJIAnU9XsRBMm+wnc0DI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712345233; c=relaxed/simple;
-	bh=9MAfNCdXjZ7MvFy1sX8jZnS5coKpSmbLX2zwmqg5sD4=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=n545azt62r2hTROpe41UJjFw88WGNny+AbHNnhqk3fHtuI0DHE1SZ9+I2dQ1hH/UpmD7zIbKsevm8QnB+YgOWzAAC+wP+xKHloujNcvNBjvfAQWGmKatSn1lfhgGPL1P/fioVQQRppOXYw9abh1mGODYCGeHu6cMAZm/RquxZnI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=cfu4urZC; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 435JBQpG024733;
-	Fri, 5 Apr 2024 19:27:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	date:from:to:cc:subject:message-id:references:mime-version
-	:content-type:in-reply-to; s=qcppdkim1; bh=3le9rQCxMCB8AWK5g1sXl
-	Gm8iA0NlfByaP1nbQYaYj4=; b=cfu4urZCZDxK95lbj6Wt+VD0hC+E58GlpOrpM
-	U861cLAdLfnke9yRhgVk8Nm1XXVNcBofNq1DUxACkQYRKQcdrIgWd6hJ4icfHk7X
-	b0S+qG2dd3TkmUcwxv9nSMFPwkM5WyTW45ToSMRuIoQXMnEkaHV7S0BRYZwLmeIU
-	P7TrzGsR5RYCLrLAbCOd7PbcWbN4GTSkA1lAjwF5g5EZ4gqHdhpH7JjBCvgHDHDl
-	p9eLsL7gtlaXk9BChpvj0oEAD245Y2/t0fRAf8q6RA2kcwBkXFGY/bZAnSw4o4LI
-	Y6iF4Ka3uRuaeOtX0smQhcfeAN2YQSz+X2gJ+LIjr0mqPKABQ==
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xa4ejae5d-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 05 Apr 2024 19:27:05 +0000 (GMT)
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 435JR4XD003171
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 5 Apr 2024 19:27:04 GMT
-Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.4; Fri, 5 Apr 2024 12:27:03 -0700
-Date: Fri, 5 Apr 2024 12:27:02 -0700
-From: Bjorn Andersson <quic_bjorande@quicinc.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Johan Hovold
-	<johan@kernel.org>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>,
-        "Krzysztof
- Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring
-	<robh@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
-        Wesley Cheng
-	<quic_wcheng@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "Conor
- Dooley" <conor+dt@kernel.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Felipe Balbi <balbi@kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_ppratap@quicinc.com>,
-        <quic_jackp@quicinc.com>, Johan Hovold <johan+linaro@kernel.org>
-Subject: Re: [PATCH v19 2/9] usb: dwc3: core: Access XHCI address space
- temporarily to read port info
-Message-ID: <ZhBQhvieHGtMOSEz@hu-bjorande-lv.qualcomm.com>
-References: <20240404051229.3082902-1-quic_kriskura@quicinc.com>
- <20240404051229.3082902-3-quic_kriskura@quicinc.com>
- <Zg5VDnbaaBXJyRjV@hovoldconsulting.com>
- <f16e1280-8f7e-40a7-ab45-9acaeb3e90cb@linaro.org>
- <2024040455-sitting-dictator-170c@gregkh>
- <Zg9THGBRuppfw4y+@hu-bjorande-lv.qualcomm.com>
- <2024040558-undercut-sandbar-7ffc@gregkh>
+	s=arc-20240116; t=1712346661; c=relaxed/simple;
+	bh=sXc+Xujowt+5AorOt5TyuNImN9/Mwwb2LKUzeqHkFiA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=WYnYzbS5JQuEEy0a71tQ9bgFrl7Wmq7kpWBBt4JzEbS46nGVzSnesgulNwNRAPad9YxYxz4Nnjsf7QLghfoQw1BtF+tMMUuSSPsnvt2QiZAZRCSQU1VWD+8qwKrtQcetC4RW0n+77xqOVe/P8RzmE1IDhfoEXeI+v9WnE629dlQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g/kq2vIh; arc=none smtp.client-ip=209.85.216.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2a2d37b8c4fso510431a91.1;
+        Fri, 05 Apr 2024 12:50:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712346659; x=1712951459; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wu7FXkYKhNByOhKVW18rWhEudbVzX2aW/UZiggMJp20=;
+        b=g/kq2vIhe+wJlA+lj73eecEvHSLnTCpxtEYAQwLxtXSCXGG172R9n0y9+7Ns/+ZNEn
+         YGDq0/T9buspZ7/dOotuZ1xG+Plzm/QbHn8ie4LxKHXHeJ/A6uqeZimOzrBJmbSjSOc/
+         gUTjaK1eL1bim3ylnnjQfLo42sdK+Vxcxci70TxESg8IX7MFZqG0UxXJLP4YxYpx4nn7
+         WuJYwSYKkYXUEoC4LwW8gz2KuM7hmC9vr7Tcr8AeqDzytNCJcCSvvuqWaXEQXQrAUdxA
+         87nCD0PutiENBMIjMwHYuPtFTZU9BECa9MXwPMJ4509EOQH7YcpWXNrVvjA6SO2BkleQ
+         NV6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712346659; x=1712951459;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wu7FXkYKhNByOhKVW18rWhEudbVzX2aW/UZiggMJp20=;
+        b=swVacEPy05mkIFiVH+s8yuxjt5u0cCkw0755NPG+d20yevxX8YouB5ci6IHRybg5Ta
+         h40+0bOK3wGBfSEreL8TO1jidSXBJdJRvSMs8sOAX5+GEK+/ogSnDYsbxmXunT365eA+
+         A6tIIgKSqMoYtnYGIkv48GUwn00WW9qh02M1+rCeEDmm9ON0k9u0c3LgSZb8/2gMIBZO
+         wvMjUs7btq+Hu88vxnCUrMEQRDyU5LSwM6o9LipLvo6UWmp7JQfoa8J4JJVL0oNU8/j+
+         amZq2hS4EBzwQilT+SWdR/8xrek2/wD/25eBAz1Zr8UiGav870ZEaXNwT4RAq3I9igpz
+         KyeA==
+X-Forwarded-Encrypted: i=1; AJvYcCWNCIK8zF1hvP+Al7F5QiKcjAckfqHBdpB7nwZMWUhp7ci4vg6IwGlWpnIeKvFZDIaAOmUMdYcEPXWuiTzA+ydPGczm1LxPwheUsqzAlyqQndhZJLmKh/1rHGWrxw6g1++dQKq4yA==
+X-Gm-Message-State: AOJu0Yy5yc7Gubh/QTwzVjVGddENn/fqUoOEQ5+4IjkdYOaYa0yjJ6mX
+	Hf33ONePKjFSRxO1VYdmTdUePxY+OEzbeMMuqcFYDX2RmFziHtFnD1gvOTlK
+X-Google-Smtp-Source: AGHT+IGhe0VhnqoPmmUpkCRmghPZb1LfBjehS57Yu5iOq+PFfd4hdswGKjprReGmmWLkukGk9HmXbQ==
+X-Received: by 2002:a17:90a:7448:b0:2a2:6757:1de0 with SMTP id o8-20020a17090a744800b002a267571de0mr2327182pjk.4.1712346658840;
+        Fri, 05 Apr 2024 12:50:58 -0700 (PDT)
+Received: from fabio-Precision-3551.. ([2804:14c:485:4b61:1a99:dd72:cf95:e04])
+        by smtp.gmail.com with ESMTPSA id a21-20020a17090abe1500b002a09b929f88sm1879012pjs.9.2024.04.05.12.50.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Apr 2024 12:50:58 -0700 (PDT)
+From: Fabio Estevam <festevam@gmail.com>
+To: gregkh@linuxfoundation.org
+Cc: robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	Fabio Estevam <festevam@denx.de>
+Subject: [PATCH] dt-bindings: usb: hx3: Remove unneeded dr_mode
+Date: Fri,  5 Apr 2024 16:50:51 -0300
+Message-Id: <20240405195051.945474-1-festevam@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <2024040558-undercut-sandbar-7ffc@gregkh>
-X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: qXIF4YI4Svza1UT6WakBYlWAM40FTP_m
-X-Proofpoint-GUID: qXIF4YI4Svza1UT6WakBYlWAM40FTP_m
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-04-05_21,2024-04-05_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- phishscore=0 clxscore=1015 adultscore=0 mlxlogscore=999 malwarescore=0
- impostorscore=0 spamscore=0 mlxscore=0 lowpriorityscore=0 bulkscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2404010003 definitions=main-2404050137
+Content-Transfer-Encoding: 8bit
 
-On Fri, Apr 05, 2024 at 06:43:56AM +0200, Greg Kroah-Hartman wrote:
-> On Thu, Apr 04, 2024 at 06:25:48PM -0700, Bjorn Andersson wrote:
-> > On Thu, Apr 04, 2024 at 02:58:29PM +0200, Greg Kroah-Hartman wrote:
-> > > On Thu, Apr 04, 2024 at 10:07:27AM +0200, Krzysztof Kozlowski wrote:
-> > > > On 04/04/2024 09:21, Johan Hovold wrote:
-> > > > > On Thu, Apr 04, 2024 at 10:42:22AM +0530, Krishna Kurapati wrote:
-> > > > >  
-> > > > >> +static int dwc3_get_num_ports(struct dwc3 *dwc)
-> > > > >> +{
-> > > > >> +	void __iomem *base;
-> > > > >> +	u8 major_revision;
-> > > > >> +	u32 offset;
-> > > > >> +	u32 val;
-> > > > >> +
-> > > > >> +	/*
-> > > > >> +	 * Remap xHCI address space to access XHCI ext cap regs since it is
-> > > > >> +	 * needed to get information on number of ports present.
-> > > > >> +	 */
-> > > > >> +	base = ioremap(dwc->xhci_resources[0].start,
-> > > > >> +		       resource_size(&dwc->xhci_resources[0]));
-> > > > >> +	if (!base)
-> > > > >> +		return PTR_ERR(base);
-> > > > > 
-> > > > > This is obviously still broken. You need to update the return value as
-> > > > > well.
-> > > > > 
-> > > > > Fix in v20.
-> > > > 
-> > > > If one patchset reaches 20 versions, I think it is time to stop and
-> > > > really think from the beginning, why issues keep appearing and reviewers
-> > > > are still not happy.
-> > > > 
-> > > > Maybe you did not perform extensive internal review, which you are
-> > > > encouraged to by your own internal policies, AFAIR. Before posting next
-> > > > version, please really get some internal review first.
-> > > 
-> > > Also get those internal reviewers to sign-off on the commits and have
-> > > that show up when you post them next.  That way they are also
-> > > responsible for this patchset, it's not fair that they are making you do
-> > > all the work here :)
-> > > 
-> > 
-> > I like this idea and I'm open to us changing our way of handling this.
-> > 
-> > But unless such internal review brings significant input to the
-> > development I'd say a s-o-b would take the credit from the actual
-> > author.
-> 
-> It does not do that at all.  It provides proof that someone else has
-> reviewed it and agrees with it.  Think of it as a "path of blame" for
-> when things go bad (i.e. there is a bug in the submission.)  Putting
-> your name on it makes you take responsibility if that happens.
-> 
+From: Fabio Estevam <festevam@denx.de>
 
-Right, this is why I like your idea.
+It is expected that the USB controller works in host mode
+to have the USB hub operational.
 
-But as s-o-b either builds a trail of who handled the patch, or reflects
-that it was co-authored by multiple people, I don't think either one
-properly reflects reality.
+Remove such unneeded property from the devicetree example.
 
-> > We've discussed a few times about carrying Reviewed-by et al from the
-> > internal reviews, but as maintainer I dislike this because I'd have no
-> > way to know if a r-b on vN means the patch was reviewed, or if it was
-> > just "accidentally" carried from v(N-1).
-> > But it might be worth this risk, is this something you think would be
-> > appropriate?
-> 
-> For some companies we REQUIRE this to happen due to low-quality
-> submissions and waste of reviewer's time.  Based on the track record
-> here for some of these patchsets, hopefully it doesn't become a
-> requirement for this company as well :)
-> 
+Signed-off-by: Fabio Estevam <festevam@denx.de>
+---
+ Documentation/devicetree/bindings/usb/cypress,hx3.yaml | 1 -
+ 1 file changed, 1 deletion(-)
 
-Interesting, I was under the impression that we (maintainers) didn't
-want such internally originating tags.
+diff --git a/Documentation/devicetree/bindings/usb/cypress,hx3.yaml b/Documentation/devicetree/bindings/usb/cypress,hx3.yaml
+index 28096619a882..e44e88d993d0 100644
+--- a/Documentation/devicetree/bindings/usb/cypress,hx3.yaml
++++ b/Documentation/devicetree/bindings/usb/cypress,hx3.yaml
+@@ -51,7 +51,6 @@ examples:
+     #include <dt-bindings/gpio/gpio.h>
+ 
+     usb {
+-        dr_mode = "host";
+         #address-cells = <1>;
+         #size-cells = <0>;
+ 
+-- 
+2.34.1
 
-If that's not the case, then I'd be happy to adjust our internal
-guidelines.
-
-Regards,
-Bjorn
 
