@@ -1,166 +1,281 @@
-Return-Path: <linux-usb+bounces-8951-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8952-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE7BE8992CD
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Apr 2024 03:26:09 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 80AB38992FF
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Apr 2024 04:10:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5D51A1F272A4
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Apr 2024 01:26:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9EC021C21BE3
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Apr 2024 02:09:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C217C142;
-	Fri,  5 Apr 2024 01:26:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1129FFBF6;
+	Fri,  5 Apr 2024 02:09:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="aCIGYXMU"
+	dkim=pass (2048-bit key) header.d=alpsalpine.com header.i=@alpsalpine.com header.b="CeZ3VXKR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2133.outbound.protection.outlook.com [40.107.113.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C23D7484;
-	Fri,  5 Apr 2024 01:25:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712280359; cv=none; b=DcVF3FEqRhWcMfG4XtadDYIfUn0LHiV5DyTdKnJqQGgXSRV/RkFh2lGwxZKnw+C3vVfCHJCZjYrb6zP/MXDbzFwCeXv2MAfOJI19pE9zNDrhDtnlMy6Q0op7LVQidHteBOYlWWHImataZZSnZD8MZ5CHQTWJ3Ppr25suf3fngJ0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712280359; c=relaxed/simple;
-	bh=VxNzn9NzUzbYGOkFQsAjckg4Rrz38PKu14VlBGuKaPw=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Mp9nXFExocriKMULA37FGeVOkd/8wo+DZQ7CimgtLZZdiZJVEz6ErG7qTuNHq8pGjfHSPzBReaRpVxn9K/NnAVjtPzkVAe8iDBy04nugbLyAw6JwG+To1YpqRHIUfCg26wFK+/wcCcymAkmze28on8ArakqRM5L33KRdTKrXQTo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=aCIGYXMU; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 4350oPk3007803;
-	Fri, 5 Apr 2024 01:25:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	date:from:to:cc:subject:message-id:references:mime-version
-	:content-type:in-reply-to; s=qcppdkim1; bh=O5dtNG1z2cvTQQaBaWNF2
-	qI0ydnL32rMZCbAqJKz7O4=; b=aCIGYXMUtcLAYxyc7NGn1fX/Vnf5LDCK3yKMM
-	Qzc31yat8acZy0xBrqkSEQXfLuBiBaIAa34CCGlUQ/7mRxkDNCkHuATFrgAwArk8
-	2rkO7WWtvGfeRJ6wpHWjGrltmbCVPi8LZ/5V7qQx+cutnqkdmE9ZmFlzOISg0Vwh
-	0jTr7IGeCl5uh1Syjx6ZG/R9JylJU1ffuj+ChXg9KDjWRbrCgkCcEUce0+L+GDYr
-	HrTSYaBOk0FyRIavIOtpZr88MLV/UeVXyfpiPLkvzVkFCQZI+5276j5aWQeEUwfb
-	iFfeyjP9+mg7jENdaiuR+8BEQB9ie4oLkWuNXpT7kBm1kn4uw==
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3x9en0jwdt-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 05 Apr 2024 01:25:50 +0000 (GMT)
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 4351PnDl026050
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 5 Apr 2024 01:25:49 GMT
-Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.4; Thu, 4 Apr 2024 18:25:49 -0700
-Date: Thu, 4 Apr 2024 18:25:48 -0700
-From: Bjorn Andersson <quic_bjorande@quicinc.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Johan Hovold
-	<johan@kernel.org>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>,
-        "Krzysztof
- Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring
-	<robh@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
-        Wesley Cheng
-	<quic_wcheng@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "Conor
- Dooley" <conor+dt@kernel.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Felipe Balbi <balbi@kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_ppratap@quicinc.com>,
-        <quic_jackp@quicinc.com>, Johan Hovold <johan+linaro@kernel.org>
-Subject: Re: [PATCH v19 2/9] usb: dwc3: core: Access XHCI address space
- temporarily to read port info
-Message-ID: <Zg9THGBRuppfw4y+@hu-bjorande-lv.qualcomm.com>
-References: <20240404051229.3082902-1-quic_kriskura@quicinc.com>
- <20240404051229.3082902-3-quic_kriskura@quicinc.com>
- <Zg5VDnbaaBXJyRjV@hovoldconsulting.com>
- <f16e1280-8f7e-40a7-ab45-9acaeb3e90cb@linaro.org>
- <2024040455-sitting-dictator-170c@gregkh>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C24128EC;
+	Fri,  5 Apr 2024 02:09:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.113.133
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1712282993; cv=fail; b=iSfa0YCB8MknSmj5BUfdCQkHVTGeH9wTbeFFER31u18VflCuULapn3n+cf9wHekxruxjQgOuKUdkIRjWuONaNW6C4BLdJBZyAN3fXMR5HKw8GGOslNQmTE4okos/6SLMsQ5VK6SIHwwI0i1L8EH+faWZNFpPzdrSsQ3A6Yxzlls=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1712282993; c=relaxed/simple;
+	bh=nfNKK4R9Ilm8/f5kp7TOtsoOvCGeii9/DscmWDSq49E=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=GQlW3rd6ZPd1O4eiOlvasZcT5JA09zhiPRiX1TuVVcSod4UwlBpUdx27PrejBQN9BmIu2IYDILNeA5UO40IkM1P+VVWiaDJ3gUNlDtaFBOL5KWE90NICR5PC7//K+vadfAglzj4QbMfVSuqq5A8puCXuijmx3JxnPos3SHlRWNg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alpsalpine.com; spf=pass smtp.mailfrom=alpsalpine.com; dkim=pass (2048-bit key) header.d=alpsalpine.com header.i=@alpsalpine.com header.b=CeZ3VXKR; arc=fail smtp.client-ip=40.107.113.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alpsalpine.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpsalpine.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Cjzb9acy605pou2HKdMSiE/35Exv0QK6YQeSe1jlYHCKIBje2D4WTdJaD6BVLlgxFgYAH1aFKGvy0sgf3Gz9HNZB3LZfeQKTcGu8CHHibzU+qIYIvh5lIMV4BFYiIDE5zKB329G+s6mTNWz5jKdUPbLY7RhdjklOMGIXpit0h+CsK3qRCFweoSEzv1khCs/ERAMWQ4+2elL48fT4y5GiLl1OLPFiXNBj9snW1Y37a664pXB1ZM1uXHvZawgjXGb3u/UKYDl/MB9qrgr7hf3ZKHx0e+avK1hijf4F9sGtnda5WE6iWixBX8UcSic+b3ylZ5LwGs+7Z3pRbPQCa6OkDw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ADzFUyDCVU57rKOPiguDTxNErXg/pv/LfMC26d+/oDk=;
+ b=YuVdwLeIuFGBldOUAngc84Dbr9zMGR8M3ogPeXbygzA1bcL8cy4FTPR2PuJ1UO0bLtvfG1rT7csZNnG+Efqe1lkSEPL7UFlnRz1WlRFngsOFCQaBZuE8vtqMu57pGA+H/LcBXeLwmgFlQCIYgekmb1AxvK4m/2ubk4eadhhVbH6PUrO66uGeMpxJPNCXHiB9JWLxIsZyDSPersvA4PhVqA7yTTlz/EmYIJ+w80/u0qyyLhtGuYi+teFBXlWpbXOqRct2PNxI8TXQeqdAfv57lLHgZhzXHq/0fB09DOj4qJNVtOSlgtYrXwyaB3V/mozbfOWtCzHc+Q2uPkBk3wz1wg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=alpsalpine.com; dmarc=pass action=none
+ header.from=alpsalpine.com; dkim=pass header.d=alpsalpine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alpsalpine.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ADzFUyDCVU57rKOPiguDTxNErXg/pv/LfMC26d+/oDk=;
+ b=CeZ3VXKR1M7x9bcsLl40+HIJXAJAEIsbQS4fZ0M+/jRIXhr5dggtvdVZBKFd7TJ7D7U/eijSYefqRN8CQZ7NHnM+ld8r0R8B+2EY5VWkxE9O8clPD9VRXzn6UunYxTeJ41X4Zl22dldF3aAV+2xctc8QP+xlBaY/EAY3TYklTUYJHIADucYqp53Ro0pJI59TLaNFUVSyiI4nxdM8/P8RuzRQnzW21/D+VdJb9Q2aPn32VasQG3AAIeIbaGOqBoIN2zAYMDyevXwEbTdhwUwFN7ftWoAigDq+EFU0dfiiWh2KjxTxVEFRiUv3ZjEPsRvT4LNabAsG3QSmJhPrVdCNVw==
+Received: from TYVPR01MB10781.jpnprd01.prod.outlook.com
+ (2603:1096:400:2ae::14) by OSAPR01MB7325.jpnprd01.prod.outlook.com
+ (2603:1096:604:11c::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.46; Fri, 5 Apr
+ 2024 02:09:48 +0000
+Received: from TYVPR01MB10781.jpnprd01.prod.outlook.com
+ ([fe80::b541:f53c:6306:6e2b]) by TYVPR01MB10781.jpnprd01.prod.outlook.com
+ ([fe80::b541:f53c:6306:6e2b%4]) with mapi id 15.20.7409.042; Fri, 5 Apr 2024
+ 02:09:48 +0000
+From: Norihiko Hama <Norihiko.Hama@alpsalpine.com>
+To: stern@rowland.harvard.edu,
+	mdharm-usb@one-eyed-alien.net,
+	gregkh@linuxfoundation.org,
+	corbet@lwn.net,
+	linux-doc@vger.kernel.org,
+	-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	usb-storage@lists.one-eyed-alien.net
+Cc: Norihiko Hama <Norihiko.Hama@alpsalpine.com>
+Subject: [PATCH v2] usb-storage: Optimize scan delay more precisely
+Date: Fri,  5 Apr 2024 11:16:07 +0900
+Message-Id: <20240405021607.12902-1-Norihiko.Hama@alpsalpine.com>
+X-Mailer: git-send-email 2.17.1
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-ClientProxiedBy: TYCP286CA0247.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:400:456::18) To TYVPR01MB10781.jpnprd01.prod.outlook.com
+ (2603:1096:400:2ae::14)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <2024040455-sitting-dictator-170c@gregkh>
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: vG80GPtb9uPykzBRJzi3geUKM6jy9qO7
-X-Proofpoint-GUID: vG80GPtb9uPykzBRJzi3geUKM6jy9qO7
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-04-04_22,2024-04-04_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- clxscore=1011 impostorscore=0 adultscore=0 priorityscore=1501 phishscore=0
- mlxscore=0 bulkscore=0 mlxlogscore=999 spamscore=0 malwarescore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2404010003 definitions=main-2404050009
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TYVPR01MB10781:EE_|OSAPR01MB7325:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	N9bus4Kaf8dSi4Vkpun15K5ti1LLO3exIQxcSh7RekxxeSYBOxIF8Zr4w7VCAY96mz4CejQ47RAwmAtZOBmtH3g9X+yBzafz0OmlDgohV0RZY3Z+grysoLbHja557f8e7AUuL2odmLSZb1hVjJ3TUjuGP+4ihHsXetDUReXsQZOGitYK0yRy6SLNGWygDq/vX4LCEsbkPhKLC7CwlL2pNScc5fbIvEJh1KtDlWk+6Za4reCYCmwWyeOmTHcLYE6SjWGaOhTyktKLXF87wL1N8Sq9qB/O1oIHn/EHzrGsGyHsBT4ZxRZGB98fBURYS8R7P3RrOWsY6nCY+s3WMaVUkgqMHOJ7W6TFcVIR7eeP8C7gChys0QEM8kudtyRoXpAxIdLqwQ9XTj+0SER4aa5c1E5JCfUze8AzORHUKdZOXyGtWDVjiPte9mnyHXp0SXFxcSd3BzqB+HOH8/EmK1CGI7+b7aNgAuxzRBmFlZqHpENTFGqzgJ5twOQO8Zb8Jn4Jk1IyYPv0udyA4JxxWpfe1SKkSnup2QfYbh5DXxx2WRSwiPhrS8Rthjmx+Lgfaxl4nWjSXCbxHrC8HdqvQKYWhGA36HJhxKsf+Z28GI8tLSnIeSqu+LlVYsHKpTdEWTlMd3ixjr+pi5v2PhKOiqGFUCCda85HBX5ogTlN5RbPFeCNTihGbW5bPMFWEkRf/IUusM/YZIKVR4oyVpm1KQ3N9q/95IYGMciv225jq+qofrk=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYVPR01MB10781.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366007)(52116005)(376005)(1800799015)(38350700005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?yezclXiKLY5F5XGJArk9tt8uxSKPDXAZyKtboMJyvaQAau2ZpVGihc+LZq7i?=
+ =?us-ascii?Q?GG+00IZ5i2O6ZQBE2eBnotwKOnzc79tqvyQZ5Zd3Socsb0sNCXBx+dQhyxvJ?=
+ =?us-ascii?Q?MlzSSeYReKefJhgDgX+mRAt2pKySQ0nDmHZdzKATERPUFabNR3EsQejHD5Uj?=
+ =?us-ascii?Q?gjwNa1GAGRewfzQgO4XkDL62jZdIRF/aXZdQ/WEtQC2jQ/Zl5ZbEOHkjJwDm?=
+ =?us-ascii?Q?u2A740dmSxj9pdaZdJNTAjkMTHgJDB7AQ1lNBTFnm7BmjBdsmGb+yLns6B1Z?=
+ =?us-ascii?Q?U6nkjzNgIxr/7T62nCA20QQc+mXh1qCIJvCKFhEvUhAxj2TCd6YCJwW0AWaA?=
+ =?us-ascii?Q?MNpHHceCIrHI0rGh0RHozuSBhI8qo8ZVRD7QQ6cGytjQFms9J/a/ZX+AC7gj?=
+ =?us-ascii?Q?X0stbphwCoh1e1ocuAhtphtlQwc5/JRSiTqN4w4mPiJpbVpE5FIfZQZtuWOF?=
+ =?us-ascii?Q?QWFeSYAbiwNctc8kp7uYoXVBtRcn/NXBZeoK/e/RUD9CxXQ08EKV1TRA/h3S?=
+ =?us-ascii?Q?2eH8w5nkXhEyPQ0HuJ4/EjLtH4QTvhZVSi28bP9fNkU6FPXyKbIOxrMOSJ9U?=
+ =?us-ascii?Q?Hj3+3hSEsiT7qkGCIO1dMqes0v+9Cu5CqkgINIWuo05Whd3Zn61W+0hrIt5u?=
+ =?us-ascii?Q?ytCKyA2+PO3qT0ORUR83ZlZKh2Ase32L5jvSvLZenWx/MF7hPgSSFiUfbySD?=
+ =?us-ascii?Q?DGXK0494XTS3EczSReVsYTPI4gQBSog+gKdVlzAkwswxl7bUwhNvP4u0U3E+?=
+ =?us-ascii?Q?KL0gWuP+Xg8f1RMBGfkl6lexLjvN5UWwxqxLOG5YgKuuQErOSWJ9d8u9XebE?=
+ =?us-ascii?Q?dWMxqI/emXCeprQcV5IP0cFKyqfWgoLKvj9f+ZgIuU4gzT8ECZ+yXkN+9VhJ?=
+ =?us-ascii?Q?prEDQbQjZTCrDjl9R+SYkHYWZAJ0mTR6KLnfisRGHjMCFFDveA3+V0z2mBuO?=
+ =?us-ascii?Q?5n0UoTTY0b+82ILm09QOytBn9SI8IYFj2hoQlgFATHb0lYosvQZekQTytWfj?=
+ =?us-ascii?Q?ZgWwEMyCBmFRh9cMRONh/1qqC+JN5o05NhJDGaxuAXHcZwGAHrzMSwruVVwo?=
+ =?us-ascii?Q?n+VpLDmO5A3CYnBpVZtRc+BtQZftdfbLHi8dWRpNEwXIKiiUGruBe40tyQkP?=
+ =?us-ascii?Q?39saLCZc0pkOj0uvtecGrfTVry8dtYMjrveUeBOG9iWkLXezQQA6ViYfVKtq?=
+ =?us-ascii?Q?EqcrG7tXi3KEupCj2jC6Ir+0iQIlzCFi1ZeBjvKLfOHS8TFTQzH1OjRmJ+69?=
+ =?us-ascii?Q?muzq5A5q2qE7QHiOSl4g4M8eFHgum86c6O277qvjiAg1lmju+YSrdiwvhHKr?=
+ =?us-ascii?Q?92PCoitSZpP5R2B03naNMT8Q5MIZMhKsefihq+T30Ux5FwqVCSzfUogFcx3u?=
+ =?us-ascii?Q?5odqtXXS+yXRkm0/s1wPdPFE29JN9Jep2dKsMrd31OVYkrw5HibLKrU6gUeB?=
+ =?us-ascii?Q?XF4heCJ2RzFv74laeC6Nt51iYzeQGa6yFXGZ7prekNkl0MAGaAlVl8Wpypwi?=
+ =?us-ascii?Q?az2220lDZuhgkzOGjOI+6hszlmPAxa+pUDhJh+qXPZJ3zXUTTZRFz3BT1oUZ?=
+ =?us-ascii?Q?tWjizLxFqA+gfNANhck70xLViI8QREd+hDqZHcjj?=
+X-OriginatorOrg: alpsalpine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c7d9d64f-ddca-448e-7c24-08dc5515781b
+X-MS-Exchange-CrossTenant-AuthSource: TYVPR01MB10781.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Apr 2024 02:09:47.9301
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 57e76998-77bd-4b82-a424-198f46eb2254
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: OvGxd/whC8Ohg+mCIn16IJd9oXZe+IVIq16/l+67iUMpeA4WxvvSkVAwnWd6WJkH6OjFxsDS3G63HUduWth1eA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSAPR01MB7325
 
-On Thu, Apr 04, 2024 at 02:58:29PM +0200, Greg Kroah-Hartman wrote:
-> On Thu, Apr 04, 2024 at 10:07:27AM +0200, Krzysztof Kozlowski wrote:
-> > On 04/04/2024 09:21, Johan Hovold wrote:
-> > > On Thu, Apr 04, 2024 at 10:42:22AM +0530, Krishna Kurapati wrote:
-> > >  
-> > >> +static int dwc3_get_num_ports(struct dwc3 *dwc)
-> > >> +{
-> > >> +	void __iomem *base;
-> > >> +	u8 major_revision;
-> > >> +	u32 offset;
-> > >> +	u32 val;
-> > >> +
-> > >> +	/*
-> > >> +	 * Remap xHCI address space to access XHCI ext cap regs since it is
-> > >> +	 * needed to get information on number of ports present.
-> > >> +	 */
-> > >> +	base = ioremap(dwc->xhci_resources[0].start,
-> > >> +		       resource_size(&dwc->xhci_resources[0]));
-> > >> +	if (!base)
-> > >> +		return PTR_ERR(base);
-> > > 
-> > > This is obviously still broken. You need to update the return value as
-> > > well.
-> > > 
-> > > Fix in v20.
-> > 
-> > If one patchset reaches 20 versions, I think it is time to stop and
-> > really think from the beginning, why issues keep appearing and reviewers
-> > are still not happy.
-> > 
-> > Maybe you did not perform extensive internal review, which you are
-> > encouraged to by your own internal policies, AFAIR. Before posting next
-> > version, please really get some internal review first.
-> 
-> Also get those internal reviewers to sign-off on the commits and have
-> that show up when you post them next.  That way they are also
-> responsible for this patchset, it's not fair that they are making you do
-> all the work here :)
-> 
+Current storage scan delay is reduced by the following old commit.
 
-I like this idea and I'm open to us changing our way of handling this.
+a4a47bc03fe5 ("Lower USB storage settling delay to something more reasonable")
 
-But unless such internal review brings significant input to the
-development I'd say a s-o-b would take the credit from the actual
-author.
+It means that delay is at least 'one second', or zero with delay_use=0.
+'one second' is still long delay especially for embedded system but
+when delay_use is set to 0 (no delay), still error observed on some USB drives.
 
-We've discussed a few times about carrying Reviewed-by et al from the
-internal reviews, but as maintainer I dislike this because I'd have no
-way to know if a r-b on vN means the patch was reviewed, or if it was
-just "accidentally" carried from v(N-1).
-But it might be worth this risk, is this something you think would be
-appropriate?
+So delay_use should not be set to 0 but 'one second' is quite long.
+Especially for embedded system, it's important for end user
+how quickly access to USB drive when it's connected.
+That's why we have a chance to minimize such a constant long delay.
 
-Regards,
-Bjorn
+This patch optimizes scan delay more precisely
+to minimize delay time but not to have any problems on USB drives
+by extending module parameter 'delay_use' in milliseconds internally.
+The parameter 'delay_use' is changed to be parsed as 3 decimal point value
+if it has digit values with '.'.
+It makes the range of value to 1 / 1000 in internal 32-bit value
+but it's still enough to set the delay time.
+By default, delay time is 'one second' for backward compatibility.
+
+For example, it seems to be good by changing delay_use=0.1,
+that is 100 millisecond delay without issues for most USB pen drives.
+
+Signed-off-by: Norihiko Hama <Norihiko.Hama@alpsalpine.com>
+---
+ .../admin-guide/kernel-parameters.txt         | 10 +++
+ drivers/usb/storage/usb.c                     | 69 +++++++++++++++++--
+ 2 files changed, 75 insertions(+), 4 deletions(-)
+
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 561d0dd776c7..ae1eb5988706 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -6190,6 +6190,16 @@
+ 	usb-storage.delay_use=
+ 			[UMS] The delay in seconds before a new device is
+ 			scanned for Logical Units (default 1).
++			To specify more precise delay, supports 3 decimal point.
++			The range of decimal point is in milliseconds,
++			hence the minimum value is "0.001".
++			Example:
++				delay_use=1
++					1 second delay
++				delay_use=0.1
++					0.1 second delay
++				delay_use=2.55
++					2.55 second elay
+ 
+ 	usb-storage.quirks=
+ 			[UMS] A list of quirks entries to supplement or
+diff --git a/drivers/usb/storage/usb.c b/drivers/usb/storage/usb.c
+index 90aa9c12ffac..f63e53464dda 100644
+--- a/drivers/usb/storage/usb.c
++++ b/drivers/usb/storage/usb.c
+@@ -41,6 +41,7 @@
+ #include <linux/kthread.h>
+ #include <linux/mutex.h>
+ #include <linux/utsname.h>
++#include <linux/ctype.h>
+ 
+ #include <scsi/scsi.h>
+ #include <scsi/scsi_cmnd.h>
+@@ -67,9 +68,69 @@ MODULE_AUTHOR("Matthew Dharm <mdharm-usb@one-eyed-alien.net>");
+ MODULE_DESCRIPTION("USB Mass Storage driver for Linux");
+ MODULE_LICENSE("GPL");
+ 
+-static unsigned int delay_use = 1;
+-module_param(delay_use, uint, S_IRUGO | S_IWUSR);
+-MODULE_PARM_DESC(delay_use, "seconds to delay before using a new device");
++static unsigned int delay_use = 1 * MSEC_PER_SEC;
++
++static int delay_use_set(const char *s, const struct kernel_param *kp)
++{
++	unsigned long long delay_ms = 0;
++	int scale = MSEC_PER_SEC;
++	const char *p = skip_spaces(s);
++
++	if (!isdigit(*p))
++		return -EINVAL;
++
++	while (isdigit(*p)) {
++		delay_ms *= 10;
++		delay_ms += scale * (*p++ - '0');
++		if (delay_ms != (unsigned int)delay_ms)
++			return -ERANGE;
++	}
++
++	if (*p == '.' && isdigit(*(p + 1))) {
++		p++;
++		while (isdigit(*p)) {
++			scale /= 10;
++			if (scale == 0)
++				return -EINVAL;
++			delay_ms += scale * (*p++ - '0');
++			if (delay_ms != (unsigned int)delay_ms)
++				return -ERANGE;
++		}
++	}
++	if (*p == '\n')
++		p++;
++	if (*p)
++		return -EINVAL;
++
++	*((unsigned int *)kp->arg) = delay_ms;
++	return 0;
++}
++
++static int delay_use_get(char *s, const struct kernel_param *kp)
++{
++	unsigned int delay_ms = *((unsigned int *)kp->arg);
++	unsigned int rem = do_div(delay_ms, MSEC_PER_SEC);
++	int len;
++	char buf[16];
++
++	len = scnprintf(buf, sizeof(buf), "%d", delay_ms);
++	if (rem) {
++		len += scnprintf(buf + len, sizeof(buf) - len, ".%03d", rem);
++		while (buf[len - 1] == '0') {
++			buf[len - 1] = '\0';
++			if (--len <= 1)
++				break;
++		}
++	}
++	return scnprintf(s, PAGE_SIZE, "%s\n", buf);
++}
++
++static const struct kernel_param_ops delay_use_ops = {
++	.set = delay_use_set,
++	.get = delay_use_get,
++};
++module_param_cb(delay_use, &delay_use_ops, &delay_use, 0644);
++MODULE_PARM_DESC(delay_use, "time to delay before using a new device");
+ 
+ static char quirks[128];
+ module_param_string(quirks, quirks, sizeof(quirks), S_IRUGO | S_IWUSR);
+@@ -1066,7 +1127,7 @@ int usb_stor_probe2(struct us_data *us)
+ 	if (delay_use > 0)
+ 		dev_dbg(dev, "waiting for device to settle before scanning\n");
+ 	queue_delayed_work(system_freezable_wq, &us->scan_dwork,
+-			delay_use * HZ);
++			msecs_to_jiffies(delay_use));
+ 	return 0;
+ 
+ 	/* We come here if there are any problems */
+-- 
+2.17.1
+
 
