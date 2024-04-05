@@ -1,89 +1,97 @@
-Return-Path: <linux-usb+bounces-8968-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8969-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8762A89971C
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Apr 2024 09:56:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CE4C899775
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Apr 2024 10:03:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4104B2831D7
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Apr 2024 07:56:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 25591283FEF
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Apr 2024 08:03:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE20F143860;
-	Fri,  5 Apr 2024 07:56:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CC0314658F;
+	Fri,  5 Apr 2024 08:02:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="0BoBP0SN"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="LwKM9jOc"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7EA913CAA6;
-	Fri,  5 Apr 2024 07:56:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF6A6144303;
+	Fri,  5 Apr 2024 08:02:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712303773; cv=none; b=tFdEDWZTnrwv07FNBbHkM7l3fkolD1AcZMo9ckHqia7+3rOBhwa8MNu9tIpCkOda4EPYdw1PtbI08gWXY+UpHoAxWhNYsy7vrAgMBpeBpUd+H5sqdHIbARqePpgsB52W29cmRO8g4waJKRQWdZX5cy6HABTr9736Ul/NmFoLDpU=
+	t=1712304156; cv=none; b=hX9KM14w75N/OfuiTr0K0HqNKpBJN+7UAA+3AaWi1wW9iXXj2mB+IbhAMO2FoZG4vgi+lyQW+4ygr7J3cfQF3jnI0B1y3o5d1KSgHUny5wo8vz7KI4IpEXEo++mh1LuMNSCp7ipA/64LlZ6l6WQ2MZIaZg2cqvDjkOqHxOmziiA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712303773; c=relaxed/simple;
-	bh=UOvIIKmubenoyIw9JeU3732AeboKAgBMh0mZzQYZxGQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gXBEjuEoMq1IPeECk2l+EaBxMPMNrv9RWb7UaTToyVMfOuiWhQoAQtjtEBlHQpL1UZzYRFI8z5EuRtfd4o9ty13XNFLc/75SEn6C0r5xCT5hrcyhD+yR4z2fkbPunU7HZQlVhyICJ6jvNXFAJ8I8WLGhHGlUH7nJu2YRFSwaIA4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=0BoBP0SN; arc=none smtp.client-ip=46.235.227.194
+	s=arc-20240116; t=1712304156; c=relaxed/simple;
+	bh=BIJJgcRPxOpdBOEXKKQxyUXL5a66OYCr71+nyRJdHFg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=S+bT0F0Rnk+1t9dKbZJXXroTY/N91XslP7fw3U5kESj17ivP2h3q7JXaD1h16Mmi+u14lU81eDlGTIdn6jhaqIB3T9ZTRIWT3nnRLo7gfYIwRCljeVoYvqr9LsaW/cOvzBxhTYR3LlONpdwgFhG3lruRcfx1KuOsthja++lHWa4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=LwKM9jOc; arc=none smtp.client-ip=46.235.227.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1712303770;
-	bh=UOvIIKmubenoyIw9JeU3732AeboKAgBMh0mZzQYZxGQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=0BoBP0SN3xyOSmoRd6ZAVyJHv09U/lfB/m4fS0Fepa1f8LTE8l4OO/c2NALN7h/M+
-	 0u6d0MZv/6lufVG2VtrncNdoh7aktpnLR+YRgYLjQmAunwtceZ2mTBq8xvI/WgA8P7
-	 oDXtLYpblaS6udJzMYMSmXdct14ZFitjCsVax1JCFZxKqp2BQ3jTQT9f0yjrUcKmvj
-	 4fW3O6lmj8oHl09se36A0c5dsVfz74XOebsBQe6cPkmgbUOZwqH5pdGCq2vXyTc7zt
-	 nug9HaRomM28NbtlNb3WpcDOD46uUJolnTN8v/cVCyE+4DRWER3hAclVkS6U+/y1cV
-	 vehpQVY8Z+G6Q==
-Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	s=mail; t=1712304153;
+	bh=BIJJgcRPxOpdBOEXKKQxyUXL5a66OYCr71+nyRJdHFg=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=LwKM9jOcy1Roo/sCfot9ELPKgmvolRaeCN2gfOZl0NyPLHqLR3482d0j99EitCR5k
+	 oPOtRBhlup8UW+g35dgqXQnhNA0hObLqXoHtkxJVPouVbLIAaUMckLJQOk4MhlVcNA
+	 LqPaW21xljHfZZ7A36SXEGqPx6qwBOHgi8qK2LcMRcIOP6ZJ01FLbeG3kVC2wikEEG
+	 y07GthI5oxFe0kpDPxKYqfBrO6pjZSOfn6+EDgDDii8aFXFDUygev8avN5jFs69oF6
+	 QHVtHqB8XdQ+umltX2au62D/14B8I79OEHWBhJq81wSqxIdvOKY6dO9xh14qnFJh0S
+	 8c+NzSqfyTvcw==
+Received: from IcarusMOD.eternityproject.eu (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: kholk11)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 60865378212D;
-	Fri,  5 Apr 2024 07:56:09 +0000 (UTC)
-Message-ID: <dab837f9-a36e-43a4-94c3-00876140dfe9@collabora.com>
-Date: Fri, 5 Apr 2024 09:56:08 +0200
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 0C067378212D;
+	Fri,  5 Apr 2024 08:02:31 +0000 (UTC)
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+To: Matthias Brugger <matthias.bgg@gmail.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	=?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
+Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Chunfeng Yun <chunfeng.yun@mediatek.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Daniel Golle <daniel@makrotopia.org>,
+	linux-usb@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	=?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
+Subject: Re: (subset) [PATCH 1/2] dt-bindings: usb: mtk-xhci: add compatible for MT7988
+Date: Fri,  5 Apr 2024 10:02:25 +0200
+Message-ID: <171230395357.52952.4394849084208817868.b4-ty@collabora.com>
+X-Mailer: git-send-email 2.44.0
+In-Reply-To: <20240213130044.1976-1-zajec5@gmail.com>
+References: <20240213130044.1976-1-zajec5@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] arm64: dts: mediatek: mt7988: add XHCI controllers
-To: =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
- Matthias Brugger <matthias.bgg@gmail.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>
-Cc: Chunfeng Yun <chunfeng.yun@mediatek.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Daniel Golle <daniel@makrotopia.org>, linux-usb@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-References: <20240213130044.1976-1-zajec5@gmail.com>
- <20240213130044.1976-2-zajec5@gmail.com>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Content-Language: en-US
-In-Reply-To: <20240213130044.1976-2-zajec5@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-Il 13/02/24 14:00, Rafał Miłecki ha scritto:
+On Tue, 13 Feb 2024 14:00:43 +0100, Rafał Miłecki wrote:
 > From: Rafał Miłecki <rafal@milecki.pl>
 > 
-> Add bindings of two on-SoC XHCI controllers.
+> MT7988 SoC contains two on-SoC XHCI controllers. Add proper binding.
 > 
-> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+> 
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Applied to v6.9-next/dts64, thanks!
 
+[2/2] arm64: dts: mediatek: mt7988: add XHCI controllers
+      commit: 4ee20d528b0487f879f789e010fe2269bc1b2f71
+
+Cheers,
+Angelo
 
 
