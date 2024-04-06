@@ -1,301 +1,386 @@
-Return-Path: <linux-usb+bounces-8989-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8990-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46C5D89A8B1
-	for <lists+linux-usb@lfdr.de>; Sat,  6 Apr 2024 05:41:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9FF6089A8BF
+	for <lists+linux-usb@lfdr.de>; Sat,  6 Apr 2024 05:55:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AE12E1F2229D
-	for <lists+linux-usb@lfdr.de>; Sat,  6 Apr 2024 03:41:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DE47E283352
+	for <lists+linux-usb@lfdr.de>; Sat,  6 Apr 2024 03:55:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6615D18029;
-	Sat,  6 Apr 2024 03:40:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDC1118029;
+	Sat,  6 Apr 2024 03:55:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GB0o8yJ/"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e0PDzLQO"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49054748A;
-	Sat,  6 Apr 2024 03:40:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BEA3208B0
+	for <linux-usb@vger.kernel.org>; Sat,  6 Apr 2024 03:55:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712374853; cv=none; b=b+/7N7fcTiP2HxG6uf+TdPbDzGLvCRPpILS06P5N9QRLQJAsaUmwAoN4AvubeipQu9NLhhiA2PWRNY2e5LmI4wfrNrQ5A5QnXy/Ensouv/tSrDKPGtPj2Xc3JPwUkSxaX03XS+r018l9EfGNUnRZapS5k0u0ZGvbKo5QNVewtYU=
+	t=1712375721; cv=none; b=MrqmqQhSmL2q91mcCkOM2kZd+NSH2D0nfJlK+qD4f55/QgMU5eLV1G6QtWX74jy9IVynD/KwvAocYLW2sEyh7RaRTJgMHYrzn93rK8fC/AbUNS/UXhmu5dicGEBShFaLbytTByFuAMnjOIy5dNMdGaYYqU/37t5lxfTsdP7wa1E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712374853; c=relaxed/simple;
-	bh=fQhbBYgvlFJhxC2fgWO0l181XEV5w24LKQY3UtjtSms=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YgAeabTBAgSsaNWOGzr0wFOPGqY//0HvCuSi0DZa2X9dSfGz/pGO1hffKtCA5UR7ygnlvQ6NcF/5CU5ouK4yp0De8rbIGkQKIE6P5I3NRiWUUGh6OdfvX6gLXdhmG2TQLaSWPvlNQAMLsHCKmtn2253o42sVe/AR6s7dx4wYs64=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GB0o8yJ/; arc=none smtp.client-ip=209.85.161.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-5a4a102145fso1588356eaf.3;
-        Fri, 05 Apr 2024 20:40:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712374850; x=1712979650; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ic+H1jVNRiumOWViKZ0FH1mJ+2YxrtGRlxLAyKK4bv8=;
-        b=GB0o8yJ/s8Pa1xhFMR2UpXU+xDu+deBaz7hR07jnsN2oLqTMpMGhwuOAQfLvN3pGqz
-         1bLLGh+JxqMd6i/HZxuDWU3f6wm2D1xBi9JyJynWtdlEE7wHBYN+1+9ZAguuNcZf8g82
-         tLqz2UkbnG2kMaVbflDU3eV96NA8H7O/OdmcXUBf36fxTQR9QUUe/sfPrV9r30J9atRV
-         66G/63bbj36LqbOAeYCZCqTpMkRZQbHS3wAHGLMYAydjeuf/q7hD/gvvPC5B+/bHujKQ
-         hhmU7Fn7C8iA4rJpe9PM52pnsPGfNuP7Ymt39yuHgf4fSVamKCHrXSejZNtQt7rRKaST
-         eZ0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712374850; x=1712979650;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ic+H1jVNRiumOWViKZ0FH1mJ+2YxrtGRlxLAyKK4bv8=;
-        b=Y5LNwdkWUx8xI75gEc1AVzwak3ySp3nBra/vovS0S6tEbV02cOkGf4j0OG4oCFz9xp
-         QSSU+GmT3RpSj11yKTstGK3K0vpTKbVO9KeoIYx4zG56hFeAHqcRftRexNLgx1G5DJw4
-         5bWIwTihxiolTKarS5mrNJ++S/shea4Gjej8+4ApMDKyyxLFt9oLj6isgDmY55Q4SDRi
-         qjup9xDqkMYqI2ssKNucjN6YOz7aj2jlacZXAUdHD3t3+OsKIpj2guiDmdS8Yam2vd5T
-         z46QQyeAZKBY017ekykvALeczcb7BcYAi6xml8mrVnFUnSKrSjeJgpryyR8CyyQnO/z5
-         JsFg==
-X-Forwarded-Encrypted: i=1; AJvYcCWmOaZuDJcKqGGujAi5rDpJsdcR6JRIHYm9yutxmaRAbMUG6/yFCMOOL9cdPGmz+0vMlaUTwZXQgDLo33J6pgXfcJJ6C8h+XkMJ8K2yT9eR0DALXPfFMOoJCo4OijZD0ziy5FPOTlTFRXKEfmUG0a7LxLTfrvqCgyhX/rE22o5nOfn6UWRMbylPL2o=
-X-Gm-Message-State: AOJu0YxPtNypam1y1xnrBba5URXv3eUoeU096XjmNsGiOy9Gvqiy5zR9
-	SrZ3IitK/jcfxZA+JtcBT1555qamVuW8xskupkw3xzDafrQ/mCTPy63C86awIVcw3/p11Pm1ThW
-	5zv9oq29GrchWqjYAxcjjtNN3EV8=
-X-Google-Smtp-Source: AGHT+IHWz0FRPPACv18MmUwj/7uHKl/npVhvDlqK4A4iuxxWfd7/TIGmMKkNf+K6csmXpsAnTDphANZC1koc5LqtIjU=
-X-Received: by 2002:a05:6820:2707:b0:5a7:c78c:cd67 with SMTP id
- db7-20020a056820270700b005a7c78ccd67mr3840905oob.5.1712374850277; Fri, 05 Apr
- 2024 20:40:50 -0700 (PDT)
+	s=arc-20240116; t=1712375721; c=relaxed/simple;
+	bh=bq/IEl0lTbYXvy1kiSVHQUUdGjKB8GXvCLKp5fu58YM=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=ihnfcvf4fQSdS1gjz0JLKLk2yzSpGfs2G1TVqPdio21ZEHZstYLkygZa6V6z4qoCrGJIrCyA+ibyRUdYnmsb6QXyMfpQpIHz1PE6qglKe2XV0lOs98QdzRrmpqgLSCAmb7/ZPLuiYCVNzQIFixbOMS+xNjZD+eis87v36r7fdmY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=e0PDzLQO; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1712375719; x=1743911719;
+  h=date:from:to:cc:subject:message-id;
+  bh=bq/IEl0lTbYXvy1kiSVHQUUdGjKB8GXvCLKp5fu58YM=;
+  b=e0PDzLQOzV/9r9HduFsq+W6OSCrcjGf39ffEVc7YPnIJJ9HOt2J3DPTC
+   IELefH+d5jC4vBcMz6bgud0MKOmbV4vrMKYAgNA2R3ymGeAdoKiFH65FB
+   1avJcSsYon+twBE8o16xzbNACm/LLcnFCjyDye6LZlQKb1wUc8HjtU2cR
+   4VkpgxjdfM+bDZKoCnc/WmMYd7BqpeN+RfWkqixjEL43fZ1ZWLy6v+KOe
+   vZnKOSJ9S8ivbGWIG+34PQgE4xyTDgrI8tOJ3yPWLWnFyhzfuZrK96hHB
+   JCQC9js8n4/44Q1bDIIni5RW4KQr8AymSD34eB/JdThArPNnDTqCS8bQh
+   A==;
+X-CSE-ConnectionGUID: B0eGcXrqTtOkLDEJwd8kYg==
+X-CSE-MsgGUID: UGP6aYZdRMa+iYUANGJgQA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11035"; a="19153438"
+X-IronPort-AV: E=Sophos;i="6.07,182,1708416000"; 
+   d="scan'208";a="19153438"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2024 20:55:18 -0700
+X-CSE-ConnectionGUID: HK8aOmGsRqm+M5FtWCFv9w==
+X-CSE-MsgGUID: ikiokSalSBaN5nr2gFw4Hg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,182,1708416000"; 
+   d="scan'208";a="19382547"
+Received: from lkp-server01.sh.intel.com (HELO e61807b1d151) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 05 Apr 2024 20:55:17 -0700
+Received: from kbuild by e61807b1d151 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rsx98-00034W-2q;
+	Sat, 06 Apr 2024 03:55:14 +0000
+Date: Sat, 06 Apr 2024 11:54:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Subject: [usb:usb-linus] BUILD SUCCESS
+ d464dac47260a33add5a206fd3289ec1216e8435
+Message-ID: <202404061113.pJESLqLD-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240301193831.3346-1-linux.amoon@gmail.com> <20240301193831.3346-4-linux.amoon@gmail.com>
- <52158bf6-16fe-4ce2-b9b6-bbc6550a6e14@wanadoo.fr> <CANAwSgTCaSSMN2QCw5fr=RBp0WwWaLuebzQDO=scnABNFNctJQ@mail.gmail.com>
- <e85ad80f-af7d-4eaf-9d14-dff13451f7e5@wanadoo.fr> <CANAwSgRrOw+6MHLPDP8RwLwzwB1EVGBTovtR2ChhqR3b5uWowA@mail.gmail.com>
- <CANAwSgQk10=K6Z5OzvT3OUncfr6BWyx7oH2JKN5CJAnS+uO7QQ@mail.gmail.com> <ed5153e1-f4de-4268-a9d0-e74b779d2587@wanadoo.fr>
-In-Reply-To: <ed5153e1-f4de-4268-a9d0-e74b779d2587@wanadoo.fr>
-From: Anand Moon <linux.amoon@gmail.com>
-Date: Sat, 6 Apr 2024 09:10:34 +0530
-Message-ID: <CANAwSgQDFgjSD70k8_ZU-Ck9HQD5gF7F8BEvDePPj3KMqVrXzg@mail.gmail.com>
-Subject: Re: [PATCH v1 3/4] usb: dwc3: exynos: Use devm_regulator_bulk_get_enable()
- helper function
-To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
-	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi Christophe
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
+branch HEAD: d464dac47260a33add5a206fd3289ec1216e8435  usb: gadget: fsl: Initialize udc before using it
 
-On Fri, 5 Apr 2024 at 21:42, Christophe JAILLET
-<christophe.jaillet@wanadoo.fr> wrote:
->
-> Le 05/04/2024 =C3=A0 08:10, Anand Moon a =C3=A9crit :
-> >   Hi Christophe, Krzysztof,
-> >
-> > On Mon, 4 Mar 2024 at 17:16, Anand Moon <linux.amoon@gmail.com> wrote:
-> >>
-> >> Hi Christophe,
-> >>
-> >> On Sun, 3 Mar 2024 at 00:07, Christophe JAILLET
-> >> <christophe.jaillet@wanadoo.fr> wrote:
-> >>>
-> >>> Le 02/03/2024 =C3=A0 17:48, Anand Moon a =C3=A9crit :
-> >>>> Hi Christophe,
-> >>>>
-> >>>> On Sat, 2 Mar 2024 at 21:20, Christophe JAILLET
-> >>>> <christophe.jaillet@wanadoo.fr> wrote:
-> >>>>>
-> >>>>> Le 01/03/2024 =C3=A0 20:38, Anand Moon a =C3=A9crit :
-> >>>>>> Use devm_regulator_bulk_get_enable() instead of open coded
-> >>>>>> 'devm_regulator_get(), regulator_enable(), regulator_disable().
-> >>>>>>
-> >>>>>> Signed-off-by: Anand Moon <linux.amoon@gmail.com>
-> >>>>>> ---
-> >>>>>>     drivers/usb/dwc3/dwc3-exynos.c | 49 +++-----------------------=
---------
-> >>>>>>     1 file changed, 4 insertions(+), 45 deletions(-)
-> >>>>>>
-> >>>>>> diff --git a/drivers/usb/dwc3/dwc3-exynos.c b/drivers/usb/dwc3/dwc=
-3-exynos.c
-> >>>>>> index 5d365ca51771..7c77f3c69825 100644
-> >>>>>> --- a/drivers/usb/dwc3/dwc3-exynos.c
-> >>>>>> +++ b/drivers/usb/dwc3/dwc3-exynos.c
-> >>>>>> @@ -32,9 +32,6 @@ struct dwc3_exynos {
-> >>>>>>         struct clk              *clks[DWC3_EXYNOS_MAX_CLOCKS];
-> >>>>>>         int                     num_clks;
-> >>>>>>         int                     suspend_clk_idx;
-> >>>>>> -
-> >>>>>> -     struct regulator        *vdd33;
-> >>>>>> -     struct regulator        *vdd10;
-> >>>>>>     };
-> >>>>>>
-> >>>>>>     static int dwc3_exynos_probe(struct platform_device *pdev)
-> >>>>>> @@ -44,6 +41,7 @@ static int dwc3_exynos_probe(struct platform_dev=
-ice *pdev)
-> >>>>>>         struct device_node      *node =3D dev->of_node;
-> >>>>>>         const struct dwc3_exynos_driverdata *driver_data;
-> >>>>>>         int                     i, ret;
-> >>>>>> +     static const char * const regulators[] =3D { "vdd33", "vdd10=
-" };
-> >>>>>>
-> >>>>>>         exynos =3D devm_kzalloc(dev, sizeof(*exynos), GFP_KERNEL);
-> >>>>>>         if (!exynos)
-> >>>>>> @@ -78,27 +76,9 @@ static int dwc3_exynos_probe(struct platform_de=
-vice *pdev)
-> >>>>>>         if (exynos->suspend_clk_idx >=3D 0)
-> >>>>>>                 clk_prepare_enable(exynos->clks[exynos->suspend_cl=
-k_idx]);
-> >>>>>>
-> >>>>>> -     exynos->vdd33 =3D devm_regulator_get(dev, "vdd33");
-> >>>>>> -     if (IS_ERR(exynos->vdd33)) {
-> >>>>>> -             ret =3D PTR_ERR(exynos->vdd33);
-> >>>>>> -             goto vdd33_err;
-> >>>>>> -     }
-> >>>>>> -     ret =3D regulator_enable(exynos->vdd33);
-> >>>>>> -     if (ret) {
-> >>>>>> -             dev_err(dev, "Failed to enable VDD33 supply\n");
-> >>>>>> -             goto vdd33_err;
-> >>>>>> -     }
-> >>>>>> -
-> >>>>>> -     exynos->vdd10 =3D devm_regulator_get(dev, "vdd10");
-> >>>>>> -     if (IS_ERR(exynos->vdd10)) {
-> >>>>>> -             ret =3D PTR_ERR(exynos->vdd10);
-> >>>>>> -             goto vdd10_err;
-> >>>>>> -     }
-> >>>>>> -     ret =3D regulator_enable(exynos->vdd10);
-> >>>>>> -     if (ret) {
-> >>>>>> -             dev_err(dev, "Failed to enable VDD10 supply\n");
-> >>>>>> -             goto vdd10_err;
-> >>>>>> -     }
-> >>>>>> +     ret =3D devm_regulator_bulk_get_enable(dev, ARRAY_SIZE(regul=
-ators), regulators);
-> >>>>>> +     if (ret)
-> >>>>>> +             return dev_err_probe(dev, ret, "Failed to enable reg=
-ulators\n");
-> >>>>>>
-> >>>>>>         if (node) {
-> >>>>>>                 ret =3D of_platform_populate(node, NULL, NULL, dev=
-);
-> >>>>>> @@ -115,10 +95,6 @@ static int dwc3_exynos_probe(struct platform_d=
-evice *pdev)
-> >>>>>>         return 0;
-> >>>>>>
-> >>>>>>     populate_err:
-> >>>>>> -     regulator_disable(exynos->vdd10);
-> >>>>>> -vdd10_err:
-> >>>>>> -     regulator_disable(exynos->vdd33);
-> >>>>>> -vdd33_err:
-> >>>>>>         for (i =3D exynos->num_clks - 1; i >=3D 0; i--)
-> >>>>>>                 clk_disable_unprepare(exynos->clks[i]);
-> >>>>>>
-> >>>>>> @@ -140,9 +116,6 @@ static void dwc3_exynos_remove(struct platform=
-_device *pdev)
-> >>>>>>
-> >>>>>>         if (exynos->suspend_clk_idx >=3D 0)
-> >>>>>>                 clk_disable_unprepare(exynos->clks[exynos->suspend=
-_clk_idx]);
-> >>>>>> -
-> >>>>>> -     regulator_disable(exynos->vdd33);
-> >>>>>> -     regulator_disable(exynos->vdd10);
-> >>>>>>     }
-> >>>>>>
-> >>>>>>     static const struct dwc3_exynos_driverdata exynos5250_drvdata =
-=3D {
-> >>>>>> @@ -196,9 +169,6 @@ static int dwc3_exynos_suspend(struct device *=
-dev)
-> >>>>>>         for (i =3D exynos->num_clks - 1; i >=3D 0; i--)
-> >>>>>>                 clk_disable_unprepare(exynos->clks[i]);
-> >>>>>>
-> >>>>>> -     regulator_disable(exynos->vdd33);
-> >>>>>> -     regulator_disable(exynos->vdd10);
-> >>>>>
-> >>>>> Hi,
-> >>>>>
-> >>>>> Same here, I don't think that removing regulator_[en|dis]able from =
-the
-> >>>>> suspend and resume function is correct.
-> >>>>>
-> >>>>> The goal is to stop some hardware when the system is suspended, in =
-order
-> >>>>> to save some power.
-> >>>> Ok,
-> >>>>>
-> >>>>> Why did you removed it?
-> >>>>
-> >>>> As per the description of the function  devm_regulator_bulk_get_enab=
-le
-> >>>>
-> >>>> * This helper function allows drivers to get several regulator
-> >>>>    * consumers in one operation with management, the regulators will
-> >>>>    * automatically be freed when the device is unbound.  If any of t=
-he
-> >>>>    * regulators cannot be acquired then any regulators that were
-> >>>>    * allocated will be freed before returning to the caller.
-> >>>
-> >>> The code in suspend/resume is not about freeing some resources. It is
-> >>> about enabling/disabling some hardware to save some power.
-> >>>
-> >>> Think to the probe/remove functions as the software in the kernel tha=
-t
-> >>> knows how to handle some hardawre, and the suspend/resume as the on/o=
-ff
-> >>> button to power-on and off the electrical chips.
-> >>>
-> >>> When the system is suspended, the software is still around. But some
-> >>> hardware can be set in a low consumption mode to save some power.
-> >>>
-> >>> IMHO, part of the code you removed changed this behaviour and increas=
-e
-> >>> the power consumption when the system is suspended.
-> >>>
-> >>
-> >> You are correct, I have changed the regulator API from
-> >> devm_regulator_get_enable to devm_regulator_bulk_get_enable
-> >> which changes this behavior.
-> >> I will fix it in the next version.
-> >>
-> >>> CJ
-> >
-> > I could not find any example in the kernel to support
-> > devm_regulator_bulk_disable
-> > but here is my modified file.
-> >
-> > If you have any suggestions for this plz let me know.
->
-> I don't think that your approach is correct, and I don't think that the
-> proposed patch does what you expect it to do.
->
-> Calling a devm_ function in suspend/resume functions looks really
-> strange to me and is likely broken.
->
-> Especially here, devm_regulator_bulk_get_enable() in the resume function
-> allocates some memory that is not freed in
-> devm_regulator_bulk_disable(), because the API is not designed to work
-> like that. So this could generate a kind of memory leak.
->
->
-> *I think that the code is good enough as-is*, but if you really want to
-> change something, maybe:
->     - devm_regulator_get()+regulator_enable() in the probe could be
-> changed to devm_regulator_get_enable()
->     - the resume/suspend function should be left as-is with
-> regulator_disable()/regulator_ensable()
->     - remove regulator_disable() from the error handling path of the
-> probe and from the remove function.
->
-> I *think* it would work.
->
+Warning ids grouped by kconfigs:
 
-Thanks OK, I will test this and update in the next version. .
+gcc_recent_errors
+|-- alpha-allyesconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- arc-allmodconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- arc-allyesconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- arm-allmodconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- arm-allyesconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- arm64-defconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- csky-allmodconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- csky-allyesconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- i386-allmodconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- i386-allyesconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- i386-buildonly-randconfig-002-20240405
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- loongarch-allmodconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- loongarch-defconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- m68k-allmodconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- m68k-allyesconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- microblaze-allmodconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- microblaze-allyesconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- mips-allyesconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- nios2-allmodconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- nios2-allyesconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- openrisc-allyesconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- parisc-allmodconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- parisc-allyesconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- powerpc-allmodconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- s390-allyesconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- sparc-allmodconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- sparc64-allmodconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- sparc64-allyesconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+`-- um-allyesconfig
+    `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+clang_recent_errors
+|-- arm-defconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- hexagon-allmodconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- hexagon-allyesconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- i386-buildonly-randconfig-003-20240405
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- i386-randconfig-004-20240405
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+`-- s390-allmodconfig
+    `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
 
-> CJ
+elapsed time: 1286m
 
-Thanks
--Anand
+configs tested: 218
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allmodconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                         haps_hs_defconfig   gcc  
+arc                        nsim_700_defconfig   gcc  
+arc                   randconfig-001-20240405   gcc  
+arc                   randconfig-001-20240406   gcc  
+arc                   randconfig-002-20240405   gcc  
+arc                   randconfig-002-20240406   gcc  
+arm                              allmodconfig   gcc  
+arm                               allnoconfig   clang
+arm                              allyesconfig   gcc  
+arm                                 defconfig   clang
+arm                            hisi_defconfig   gcc  
+arm                        multi_v5_defconfig   gcc  
+arm                   randconfig-001-20240405   gcc  
+arm                   randconfig-003-20240405   gcc  
+arm                   randconfig-003-20240406   gcc  
+arm                   randconfig-004-20240406   gcc  
+arm64                            allmodconfig   clang
+arm64                             allnoconfig   gcc  
+arm64                            allyesconfig   clang
+arm64                               defconfig   gcc  
+arm64                 randconfig-001-20240405   gcc  
+arm64                 randconfig-002-20240405   gcc  
+arm64                 randconfig-003-20240405   gcc  
+arm64                 randconfig-004-20240405   gcc  
+csky                             allmodconfig   gcc  
+csky                              allnoconfig   gcc  
+csky                             allyesconfig   gcc  
+csky                                defconfig   gcc  
+csky                  randconfig-001-20240405   gcc  
+csky                  randconfig-001-20240406   gcc  
+csky                  randconfig-002-20240405   gcc  
+csky                  randconfig-002-20240406   gcc  
+hexagon                          allmodconfig   clang
+hexagon                           allnoconfig   clang
+hexagon                          allyesconfig   clang
+hexagon                             defconfig   clang
+i386                             allmodconfig   gcc  
+i386                              allnoconfig   gcc  
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-001-20240405   gcc  
+i386         buildonly-randconfig-001-20240406   clang
+i386         buildonly-randconfig-002-20240405   gcc  
+i386         buildonly-randconfig-002-20240406   clang
+i386         buildonly-randconfig-003-20240405   clang
+i386         buildonly-randconfig-004-20240405   gcc  
+i386         buildonly-randconfig-004-20240406   clang
+i386         buildonly-randconfig-005-20240405   clang
+i386         buildonly-randconfig-006-20240405   clang
+i386         buildonly-randconfig-006-20240406   clang
+i386                                defconfig   clang
+i386                  randconfig-001-20240405   clang
+i386                  randconfig-001-20240406   clang
+i386                  randconfig-002-20240405   gcc  
+i386                  randconfig-003-20240405   clang
+i386                  randconfig-003-20240406   clang
+i386                  randconfig-004-20240405   clang
+i386                  randconfig-004-20240406   clang
+i386                  randconfig-005-20240405   clang
+i386                  randconfig-005-20240406   clang
+i386                  randconfig-006-20240405   gcc  
+i386                  randconfig-011-20240405   clang
+i386                  randconfig-011-20240406   clang
+i386                  randconfig-012-20240405   gcc  
+i386                  randconfig-012-20240406   clang
+i386                  randconfig-013-20240405   gcc  
+i386                  randconfig-013-20240406   clang
+i386                  randconfig-014-20240405   gcc  
+i386                  randconfig-015-20240405   gcc  
+i386                  randconfig-015-20240406   clang
+i386                  randconfig-016-20240405   clang
+i386                  randconfig-016-20240406   clang
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                        allyesconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch             randconfig-001-20240405   gcc  
+loongarch             randconfig-001-20240406   gcc  
+loongarch             randconfig-002-20240405   gcc  
+loongarch             randconfig-002-20240406   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                       allyesconfig   gcc  
+microblaze                          defconfig   gcc  
+mips                             allmodconfig   gcc  
+mips                              allnoconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                           ip27_defconfig   gcc  
+mips                malta_qemu_32r6_defconfig   gcc  
+nios2                            allmodconfig   gcc  
+nios2                             allnoconfig   gcc  
+nios2                            allyesconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                 randconfig-001-20240405   gcc  
+nios2                 randconfig-001-20240406   gcc  
+nios2                 randconfig-002-20240405   gcc  
+nios2                 randconfig-002-20240406   gcc  
+openrisc                         allmodconfig   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                         allyesconfig   gcc  
+openrisc                            defconfig   gcc  
+parisc                           allmodconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc                generic-32bit_defconfig   gcc  
+parisc                randconfig-001-20240405   gcc  
+parisc                randconfig-001-20240406   gcc  
+parisc                randconfig-002-20240405   gcc  
+parisc                randconfig-002-20240406   gcc  
+parisc64                            defconfig   gcc  
+powerpc                    adder875_defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                          allyesconfig   clang
+powerpc                    ge_imp3a_defconfig   gcc  
+powerpc                     powernv_defconfig   gcc  
+powerpc               randconfig-003-20240406   gcc  
+powerpc64             randconfig-001-20240405   gcc  
+powerpc64             randconfig-001-20240406   gcc  
+powerpc64             randconfig-002-20240405   gcc  
+powerpc64             randconfig-002-20240406   gcc  
+powerpc64             randconfig-003-20240406   gcc  
+riscv                            allmodconfig   clang
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   clang
+riscv                               defconfig   clang
+riscv                 randconfig-001-20240406   gcc  
+riscv                 randconfig-002-20240405   gcc  
+riscv                 randconfig-002-20240406   gcc  
+s390                             allmodconfig   clang
+s390                              allnoconfig   clang
+s390                             allyesconfig   gcc  
+s390                          debug_defconfig   gcc  
+s390                                defconfig   clang
+s390                  randconfig-001-20240406   gcc  
+s390                  randconfig-002-20240405   gcc  
+s390                  randconfig-002-20240406   gcc  
+sh                               allmodconfig   gcc  
+sh                                allnoconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                                  defconfig   gcc  
+sh                             espt_defconfig   gcc  
+sh                            hp6xx_defconfig   gcc  
+sh                               j2_defconfig   gcc  
+sh                    randconfig-001-20240405   gcc  
+sh                    randconfig-001-20240406   gcc  
+sh                    randconfig-002-20240405   gcc  
+sh                    randconfig-002-20240406   gcc  
+sh                      rts7751r2d1_defconfig   gcc  
+sh                          sdk7786_defconfig   gcc  
+sh                           se7343_defconfig   gcc  
+sh                             sh03_defconfig   gcc  
+sh                            titan_defconfig   gcc  
+sparc                            allmodconfig   gcc  
+sparc                             allnoconfig   gcc  
+sparc                            allyesconfig   gcc  
+sparc                               defconfig   gcc  
+sparc64                          allmodconfig   gcc  
+sparc64                          allyesconfig   gcc  
+sparc64                             defconfig   gcc  
+sparc64               randconfig-001-20240405   gcc  
+sparc64               randconfig-001-20240406   gcc  
+sparc64               randconfig-002-20240405   gcc  
+sparc64               randconfig-002-20240406   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   gcc  
+um                                  defconfig   clang
+um                             i386_defconfig   gcc  
+um                    randconfig-001-20240405   gcc  
+um                    randconfig-002-20240406   gcc  
+um                           x86_64_defconfig   clang
+x86_64                            allnoconfig   clang
+x86_64                           allyesconfig   clang
+x86_64       buildonly-randconfig-002-20240406   gcc  
+x86_64       buildonly-randconfig-003-20240405   gcc  
+x86_64       buildonly-randconfig-004-20240405   gcc  
+x86_64       buildonly-randconfig-004-20240406   gcc  
+x86_64       buildonly-randconfig-005-20240406   gcc  
+x86_64                              defconfig   gcc  
+x86_64                randconfig-001-20240406   gcc  
+x86_64                randconfig-003-20240406   gcc  
+x86_64                randconfig-004-20240405   gcc  
+x86_64                randconfig-006-20240405   gcc  
+x86_64                randconfig-011-20240406   gcc  
+x86_64                randconfig-012-20240405   gcc  
+x86_64                randconfig-013-20240405   gcc  
+x86_64                randconfig-014-20240406   gcc  
+x86_64                randconfig-015-20240405   gcc  
+x86_64                randconfig-015-20240406   gcc  
+x86_64                randconfig-016-20240405   gcc  
+x86_64                randconfig-071-20240405   gcc  
+x86_64                randconfig-072-20240405   gcc  
+x86_64                randconfig-073-20240405   gcc  
+x86_64                randconfig-074-20240405   gcc  
+x86_64                randconfig-075-20240405   gcc  
+x86_64                randconfig-076-20240405   gcc  
+x86_64                randconfig-076-20240406   gcc  
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+xtensa                            allnoconfig   gcc  
+xtensa                           allyesconfig   gcc  
+xtensa                  nommu_kc705_defconfig   gcc  
+xtensa                randconfig-001-20240405   gcc  
+xtensa                randconfig-001-20240406   gcc  
+xtensa                randconfig-002-20240405   gcc  
+xtensa                randconfig-002-20240406   gcc  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
