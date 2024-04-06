@@ -1,165 +1,143 @@
-Return-Path: <linux-usb+bounces-8987-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-8988-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id F200989A76A
-	for <lists+linux-usb@lfdr.de>; Sat,  6 Apr 2024 00:52:17 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2CC2989A87B
+	for <lists+linux-usb@lfdr.de>; Sat,  6 Apr 2024 04:49:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E9CD61C22BC2
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Apr 2024 22:52:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 566D81C2108A
+	for <lists+linux-usb@lfdr.de>; Sat,  6 Apr 2024 02:49:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 990492E84E;
-	Fri,  5 Apr 2024 22:52:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00AF5134C4;
+	Sat,  6 Apr 2024 02:49:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iki.fi header.i=@iki.fi header.b="qtCsLErb"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jUHAg9fp"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [185.185.170.37])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 402A18493;
-	Fri,  5 Apr 2024 22:52:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=185.185.170.37
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712357530; cv=pass; b=A8lfwy/IVmqVz9/5Zx6cqQQYCjAF16Ltutg7qTIzx8W82avjLRSSTFE3suc6dRCfallQCMmOUJjsfIowFOR2qXkMmIEmhTEEJdQecKaRV01rIpUP9oDeYEOWVJZA/xteBoATxVfTw260FZNiyjaXiEj1eJ+IsnsDkFk+wCj9uvQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712357530; c=relaxed/simple;
-	bh=lVQpT7gI287yNLOwb11WSr+wtqsVWgldED1z01tKlC4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nerhwI8YdKS1kzaE54yaNfNZhUyOubzc0l0qP7dCYUIK7NWCsyIzGlXc7elfB49AKneIcmnw0pcl+7ONrrmSaEugQkX+UxkkbaBcK3isl8mO05yxFrZyQxuN+Hwm4CXuc9hKcUxUmBwFvVTREh1QhEYgemkbQYj1dw2Q2IZY4cs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi; spf=pass smtp.mailfrom=iki.fi; dkim=pass (2048-bit key) header.d=iki.fi header.i=@iki.fi header.b=qtCsLErb; arc=pass smtp.client-ip=185.185.170.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iki.fi
-Received: from darkstar.musicnaut.iki.fi (85-76-140-31-nat.elisa-mobile.fi [85.76.140.31])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: aaro.koskinen)
-	by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4VBDJG3kNQz49Pyv;
-	Sat,  6 Apr 2024 01:51:58 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
-	t=1712357519;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=gckUrz0SCu+XWRQEriuA9onZvEGRZT/0z4oi09P0YBA=;
-	b=qtCsLErbZKlye03rorfIetGaEeNJr63lq8aWC6/iveF94671aq142WwvY3GVaN65tSnZSj
-	aio3fQPVEHdtQd/kmNK+pDByFHBhVUuCtJUbpEyQ9SsXjENm6sn2KDNJxGE+kPP5kc27dq
-	H+pnKPTJXztumc+HUy2IdwkUfGVmE3hrkhwi8NYacsO/K1mO0ZOtCG3onPwy/dFkwa3z0M
-	Y3jOG0CHtJPeHT97YfVilDF+9gpNHOj0e4sEOYmYOZ5t0myvddiG1nYmshx30fTYeEZ2Jc
-	5LRKYVmAzQzJ+Wmtpl62wIxC5ClhnJPvl5fG3aSUViOlgdCyQqNmUCYMc2C56g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-	s=lahtoruutu; t=1712357519;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=gckUrz0SCu+XWRQEriuA9onZvEGRZT/0z4oi09P0YBA=;
-	b=gR3YYVQl90krkVAJ1MeIUChwNjIlVMOM4rGfEv93+OOUaOOt/gHBGuKw/sst3v7dRFr8Dh
-	DdyphVM4RIqPeuUC9CGmdVz31QEl4c/F7OeH8TKBBl35DqbGykAwq3XvV4ETjGka+8usRx
-	+zNmq/E1GP76FWgpcbHqlsftQ0ScEdRDDJ1sk2P9UoQvHjIMlENsgHNtKY8rYi6Tw2KJ0o
-	q0SxtX8o3eJgOt406boEsWxZcRE2LgoFbXBCrxDUGUO/l0PbIyCTC1bCKa/UCjCv5b2Omp
-	2ziVBp3ThEhTx/rUCpesMjpgG69bNRsyCCUDjd4pCQePz7S1QsTJaED49EQ6VA==
-ARC-Authentication-Results: i=1;
-	ORIGINATING;
-	auth=pass smtp.auth=aaro.koskinen smtp.mailfrom=aaro.koskinen@iki.fi
-ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1712357519; a=rsa-sha256;
-	cv=none;
-	b=PXEDLBrdndcHLfdKhGNBLLOeNx1Wf47bcQHesWXdNTTKdO7w12lPjmW6MA5O0ealH/s1IJ
-	43zt8nTPhKneBpQ6DIs1+VpazCtQFmJq9Xvihcvdb40v6okYu22pSYgaLgkeC4VpqsEkiS
-	syQ08EzmcQ/0gjv7D8F1NdNHOjy9AwkadPyzd/pxww8DYP0xcquBjqqfv48LLoAo2m3lNS
-	9BQw0DeROzOr8GsfNaiwHRl8rEVm1nB7irB5+MUYsjuUt2728cRdD3UJT1DQVyhL6r/Pp7
-	Kmy2p6lXCUDNwRa9gsHX/kBy6hos6EzgcUI+1TIH7dpnnLznLkYRLpcXXUih6Q==
-Date: Sat, 6 Apr 2024 01:51:56 +0300
-From: Aaro Koskinen <aaro.koskinen@iki.fi>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: linux-kernel@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH 25/34] usb: gadget: omap_udc: remove unused variable
-Message-ID: <20240405225156.GE91663@darkstar.musicnaut.iki.fi>
-References: <20240403080702.3509288-1-arnd@kernel.org>
- <20240403080702.3509288-26-arnd@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19EDB748A;
+	Sat,  6 Apr 2024 02:49:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.54
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1712371785; cv=none; b=t0yEgt0O7m+s8SK4coxrzSQKT6h1DTnDHDeSMqJs2yMRrHQXuhtw2P4crsrjH3X1Xmm3SbXbfgZPtrNuzAwOcENg2Yj+guQF8icJ6X3T5yCY9P1knAO5xgssA7tJF7nt1xR4bxknw9HAHNPZ5zGbM157Sf5IwvouYRctewFbP/4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1712371785; c=relaxed/simple;
+	bh=A09mONBJ+iQN0Aw24fomMHxPe22XFN2PHAOTkXu0xuQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SWZMRO57klBGf4JcpyWzB3QytctuVdoeRoys3amzOkPcvx5oVtIrrVXDYmZOgZi6mI5jgyvzZsgU3e5IEmsVvU9k4xKLUwx+xKPapkhph7hFvRYMq01pfXqxqeNAJJRwUxCCmWCvzgqDEkGlRjLujKF6SSFR/hTk3M+IZEbPnVo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jUHAg9fp; arc=none smtp.client-ip=209.85.161.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-5a4f608432bso1752776eaf.2;
+        Fri, 05 Apr 2024 19:49:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712371783; x=1712976583; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=w5ujRaHA5VATDiuhfq590DYcU4neBIRjVwQ6U7oUACQ=;
+        b=jUHAg9fphvR8vmetdtUtK6jfxjVV72C1oYpDn8xVKCDik3YBJ9PR8Gk9Ms1yQcVLPE
+         AV0y9C7QlH2+KsUX4U/9Hl5PGu+q9ZFRszpB+9QCeCc4aZtBXxW22d3ER5Icr9lb4k7P
+         8w0WWWZm18Fod6ZZApT3/7B40LBakHXivs6TZmwwIJAVfg1GhN0d3AwOzKVpfChlzbWA
+         Lnkcvad2Ijs2w0r2GhfImsz1S+bqCo3EWk7pWE1X/O7NZgbfUHMafRWQSFhxPBn3T16A
+         PkH1vRjQQTCHfot9F6hUQvZC1FG6e9fZUOgwK9ukO8M39F8vtCxrycvGrlt68xwjoyIR
+         4aKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712371783; x=1712976583;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=w5ujRaHA5VATDiuhfq590DYcU4neBIRjVwQ6U7oUACQ=;
+        b=TMSgBc+0o5EVfs5oRWgFJyovDz84R0GAkbUxaNW4Ib/Ged9juVeXBQqTEQJA8DNT2Q
+         IxygGDNBTwQ6izP7rjS8EajrQZRs8p3JRBpUlMZRZdpiQdMZVWfAKTlnCjWh9S8/Is5u
+         3PWUPLIjdz846rlbS2q1FH3pUZ2o5iFYj95XaDZn4jMy+GJMdW0Q2JjH2biIF2Y7aazi
+         tHH6LZ/RryGFkmW5i1B/DD0H5GDW5AAbcPE55YIbm/qn2z4JSnvwNqpLlkX693LEoOw0
+         Bh4yuuf8m6ITicdx1sjE303wO/VKb9Y+S1MXVhyWVNe/ywiapIEN6lXQ2xws224dH+Is
+         53Aw==
+X-Gm-Message-State: AOJu0YzKBW1u7tybHjtT7ZAFyP4DL62Gnf6N6sbRvmBHWZXapLXeor3p
+	6ig3l5kxcnYar9W9LI+E+yeW+dAR1tbeUUMkd/hzeVZJbzuCWdQSBXxKgdT1NuY=
+X-Google-Smtp-Source: AGHT+IFNc5kXWtQj21j6h2K8CVznxdxDTZr8pXjwemXOTlUDxdX/pqmIrubXfyGlL7YJWZe7/1R0Eg==
+X-Received: by 2002:a05:6808:16a4:b0:3c3:9b96:9f3f with SMTP id bb36-20020a05680816a400b003c39b969f3fmr3465835oib.58.1712371782961;
+        Fri, 05 Apr 2024 19:49:42 -0700 (PDT)
+Received: from my-computer.uh.edu ([129.7.0.144])
+        by smtp.googlemail.com with ESMTPSA id i20-20020aca2b14000000b003c3d1b47532sm467321oik.49.2024.04.05.19.49.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Apr 2024 19:49:42 -0700 (PDT)
+From: Andrew Ballance <andrewjballance@gmail.com>
+To: linux-kernel@vger.kernel.org
+Cc: linux-usb@vger.kernel.org,
+	gregkh@linuxfoundation.org,
+	Thinh.Nguyen@synopsys.com,
+	linux-kernel-mentees@lists.linuxfoundation.org,
+	skhan@linuxfoundation.org,
+	Andrew Ballance <andrewjballance@gmail.com>
+Subject: [PATCH] usb/dwc3: replace of_node_put with __free
+Date: Fri,  5 Apr 2024 21:48:38 -0500
+Message-ID: <20240406024838.537630-1-andrewjballance@gmail.com>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240403080702.3509288-26-arnd@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-Hi,
+this relaces instances of of_node_put with __free(device_node)
+in drivers/usb/dwc3/core.c
 
-On Wed, Apr 03, 2024 at 10:06:43AM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> The driver_desc variable is only used in some configurations:
-> 
-> drivers/usb/gadget/udc/omap_udc.c:113:19: error: unused variable 'driver_desc' [-Werror,-Wunused-const-variable]
-> 
-> Since there is only ever one user of it, just open-code the string in place
-> and remove the global variable and the macro behind it. This also helps
-> grep for the MODULE_DESCRIPTION string.
-> 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Andrew Ballance <andrewjballance@gmail.com>
+---
+ drivers/usb/dwc3/core.c | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
 
-Acked-by: Aaro Koskinen <aaro.koskinen@iki.fi>
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index 31684cdaaae3..795a572d46cf 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -1762,7 +1762,7 @@ static void dwc3_check_params(struct dwc3 *dwc)
+ static struct extcon_dev *dwc3_get_extcon(struct dwc3 *dwc)
+ {
+ 	struct device *dev = dwc->dev;
+-	struct device_node *np_phy;
++	struct device_node *np_phy __free(device_node);
+ 	struct extcon_dev *edev = NULL;
+ 	const char *name;
+ 
+@@ -1797,14 +1797,12 @@ static struct extcon_dev *dwc3_get_extcon(struct dwc3 *dwc)
+ 	 */
+ 	np_phy = of_parse_phandle(dev->of_node, "phys", 0);
+ 	if (of_graph_is_present(np_phy)) {
+-		struct device_node *np_conn;
++		struct device_node *np_conn __free(device_node);
+ 
+ 		np_conn = of_graph_get_remote_node(np_phy, -1, -1);
+ 		if (np_conn)
+ 			edev = extcon_find_edev_by_node(np_conn);
+-		of_node_put(np_conn);
+ 	}
+-	of_node_put(np_phy);
+ 
+ 	return edev;
+ }
+@@ -1915,14 +1913,13 @@ static int dwc3_probe(struct platform_device *pdev)
+ 	dwc_res.start += DWC3_GLOBALS_REGS_START;
+ 
+ 	if (dev->of_node) {
+-		struct device_node *parent = of_get_parent(dev->of_node);
++		struct device_node *parent __free(device_node) = of_get_parent(dev->of_node);
+ 
+ 		if (of_device_is_compatible(parent, "realtek,rtd-dwc3")) {
+ 			dwc_res.start -= DWC3_GLOBALS_REGS_START;
+ 			dwc_res.start += DWC3_RTK_RTD_GLOBALS_REGS_START;
+ 		}
+ 
+-		of_node_put(parent);
+ 	}
+ 
+ 	regs = devm_ioremap_resource(dev, &dwc_res);
+-- 
+2.44.0
 
-A.
-
-> ---
->  drivers/usb/gadget/udc/omap_udc.c | 10 +++-------
->  1 file changed, 3 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/udc/omap_udc.c b/drivers/usb/gadget/udc/omap_udc.c
-> index f90eeecf27de..e13b8ec8ef8a 100644
-> --- a/drivers/usb/gadget/udc/omap_udc.c
-> +++ b/drivers/usb/gadget/udc/omap_udc.c
-> @@ -56,7 +56,6 @@
->  /* ISO too */
->  #define	USE_ISO
->  
-> -#define	DRIVER_DESC	"OMAP UDC driver"
->  #define	DRIVER_VERSION	"4 October 2004"
->  
->  #define OMAP_DMA_USB_W2FC_TX0		29
-> @@ -110,7 +109,6 @@ MODULE_PARM_DESC(use_dma, "enable/disable DMA");
->  
->  
->  static const char driver_name[] = "omap_udc";
-> -static const char driver_desc[] = DRIVER_DESC;
->  
->  /*-------------------------------------------------------------------------*/
->  
-> @@ -2299,13 +2297,11 @@ static int proc_udc_show(struct seq_file *s, void *_)
->  
->  	spin_lock_irqsave(&udc->lock, flags);
->  
-> -	seq_printf(s, "%s, version: " DRIVER_VERSION
-> +	seq_printf(s, "OMAP UDC driver, version: " DRIVER_VERSION
->  #ifdef	USE_ISO
->  		" (iso)"
->  #endif
-> -		"%s\n",
-> -		driver_desc,
-> -		use_dma ?  " (dma)" : "");
-> +		"%s\n", use_dma ?  " (dma)" : "");
->  
->  	tmp = omap_readw(UDC_REV) & 0xff;
->  	seq_printf(s,
-> @@ -2994,6 +2990,6 @@ static struct platform_driver udc_driver = {
->  
->  module_platform_driver(udc_driver);
->  
-> -MODULE_DESCRIPTION(DRIVER_DESC);
-> +MODULE_DESCRIPTION("OMAP UDC driver");
->  MODULE_LICENSE("GPL");
->  MODULE_ALIAS("platform:omap_udc");
-> -- 
-> 2.39.2
-> 
 
