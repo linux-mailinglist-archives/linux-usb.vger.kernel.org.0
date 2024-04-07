@@ -1,74 +1,74 @@
-Return-Path: <linux-usb+bounces-9007-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9008-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D15789B3D4
-	for <lists+linux-usb@lfdr.de>; Sun,  7 Apr 2024 21:32:13 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F9C989B40A
+	for <lists+linux-usb@lfdr.de>; Sun,  7 Apr 2024 22:52:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C85D11C20E54
-	for <lists+linux-usb@lfdr.de>; Sun,  7 Apr 2024 19:32:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A94ADB20CD9
+	for <lists+linux-usb@lfdr.de>; Sun,  7 Apr 2024 20:52:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 164773D988;
-	Sun,  7 Apr 2024 19:32:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2096C3D0BD;
+	Sun,  7 Apr 2024 20:51:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="B/zEKiSd"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MPhfTzm6"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 047C83D3AC
-	for <linux-usb@vger.kernel.org>; Sun,  7 Apr 2024 19:32:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A13361DFF2;
+	Sun,  7 Apr 2024 20:51:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712518325; cv=none; b=coVl/a4SWdskUIwNWuPopUkf3RfgS4f2yevGMg/8odwoucOI2jWnZulvem6utjp1ig/MiDcASDvToSp5Ot4yXIkZHIRvJKjsVWtz+GHWuVNFS0KlhSjEDUtIn3OxyqOpy/xusl2Iqg9eOJOlkedFp34twQQPks10F6Xrs6VBMkU=
+	t=1712523117; cv=none; b=rxQWImiy+C7tZ/sd4ZNCy0c3Q1DvfAbnCc/13EhSSKCZxJ9xB3KANIFEqA3Q/TsU6yKUl2G29pTdYmjnhrO6pLSapgObkS9nU8rTvYFS1ZjIRPvgiu0eC4Kabm/FyE2jm1ucJXGDfbrFzRa8i+Szmlf9yGj2h7FDYLsZX38rXIM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712518325; c=relaxed/simple;
-	bh=54i7tPfHaBIpN+pRMkBLaE8r9/vY3iGtE8mQf/9PNys=;
+	s=arc-20240116; t=1712523117; c=relaxed/simple;
+	bh=S8bA1qYXwEaZja36zVKgL/OSjbM1L06ThbIrA8qgTXU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KFHOlug7or+p6SxG9Cnv8VyAnXyF4o5uzblCw0S/H4QE+V2iqLQzAymhA7RHStu1TS3xbaBo9ZAMSvGA0XFkwYXV5KXb6w0BSST4oZkq8+vefQ6qalOzcFS0PcLkJeiXIAsFaH9Qwh7JqhQ3rGUqaic2oRsC37Z5/P0VpImcIIQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=B/zEKiSd; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4166d6dab3dso1931915e9.0
-        for <linux-usb@vger.kernel.org>; Sun, 07 Apr 2024 12:32:03 -0700 (PDT)
+	 In-Reply-To:Content-Type; b=b55PIsHzwX1ahqI0Rvcne5/4JyUvlRU4j8V12/3imWEK4Kx1t6UmMtGi+5Pxda5Dw52RWE7kTl+aIO3H5BC//5JseCAHEGRoi8nrFz/wfEDANo+Uvbwd9ft15x0vDulUtsozo2fSTHiF8rkD7bcigu8rA+RhbVxxMuSvBH5rCpY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MPhfTzm6; arc=none smtp.client-ip=209.85.167.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-516d6898bebso2265761e87.3;
+        Sun, 07 Apr 2024 13:51:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1712518322; x=1713123122; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=gmail.com; s=20230601; t=1712523114; x=1713127914; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=MZrhXovmX2pkJmHm1RyzDo75MIZ4Fr5A/qwgibhsNVk=;
-        b=B/zEKiSdlW0HMoyJDn3nRz/mupZQVSt0jKmHz1w51nHOaELfscic0tgcUZgJmcO7Pe
-         gFeQgPHD0dmtGJjOaMZi1j+map9zxUeBHNvFScScueOxGk2+seWwynQ1PbdZm197nQWx
-         CKxbLstWS9nwzEgZbX7fND+GxCd5siqZ2hWuOJAgQhwBiKBUdwDAN29qDslcnRmB2lVC
-         UE0rQ7BJCsbnSxbLeGQLNfAGSzhh4BR68wEC0Emw4VRPZB0y0QV+FJx9OyniV0Ca1qnA
-         2wtpPkSIR79WBCeaex1uHyc3uqE2hgye6Vy5HEh9OL6YPqP+NIGkhxEU05RZMtfhY4UO
-         zrsw==
+        bh=8/6W4QF2DX7LV1stD18ZSFVSpYGUbnlXl9aexisM+X4=;
+        b=MPhfTzm6812vsBKRXa5Tyz9I2hZqU8w654yV9rqPLyllvef7+RkZobZlYiQtAkwgXJ
+         T87r7ONc06bxChQ4PywgIpLpN5PxAOKDcM45fIXzBnBoTQg1uurDLpLDiQmKSK8H57Ow
+         UxJ1qgiOLSYKFZf0Ti2GCLa5jKzVCJ7LDntNuk3q2nBBBH+eDOm75YJRKOMSTiXOofhV
+         o9pCxBiFhawoUoGHILpAyGhTrNMzjk+E13WghMuZf3L3ObVsBM71UTQPyjhocgq4NitS
+         8cTWYsobrRgcDDOtu/95sPnUg/VKPM3TKOyHN2ldL150i6NIQYH07utplObsZCuaQZ1Y
+         G5Iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712518322; x=1713123122;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1712523114; x=1713127914;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MZrhXovmX2pkJmHm1RyzDo75MIZ4Fr5A/qwgibhsNVk=;
-        b=LeEmfDQjqRBKSJO0lcf6o6DQiRklZFWqToQhNrgYxPreD6Ts0J+3RMJ0xZDqKcb0wf
-         PR4n3R1B/ranZbEKJNtAB206M+QzX/85UP03LXRoFTTI1tVdNi2odvEpfd1DdBzAdCqJ
-         XhZX9bdEqgIMmq0jZ2Fa2SGOZ5MF4fwrF/ssQcwQWJSO/Kcr93Ney4whmg8vBfjjk9Bf
-         uxtCLKEF1jeRtO1V3VRAC4mih52r/ohcuKhpbqKX+qbsWdcbH5xNWOM1i0cjKAqRBb2R
-         ar/aR8ta9MMk6n9ZTG67w3r4FTRn9Wr6Uftql332itfipp1DtwE1/Unj7QE7RCIXHmzX
-         yWRg==
-X-Forwarded-Encrypted: i=1; AJvYcCWB8wHO8ScprV0oGEdV9KNIC5En6AmRx2j1C01/EYBKlvgH92D0sGWECZhzdW1aKwm/1rJvkYw2Xn6wsotj4UI4JvHDNyytahXy
-X-Gm-Message-State: AOJu0YxShCV6FEechzfnQt6SLrNLR88J9G5DGqgd2H5hqEG+P2537qe4
-	yshxpI8jBvCoufWzmAONOZQs2ND0rTQi0xVLb2dsy9F+2pXQE2PVnrrtq7cVM4Y=
-X-Google-Smtp-Source: AGHT+IEgW2dJnqjQ0m1gkRuqandK0mxDnrYAKBZAPVDNQkYt5AlfNzoXXsJSZr5MpCXSrYxp7U2j6w==
-X-Received: by 2002:a05:600c:1e1c:b0:416:6bd7:cd88 with SMTP id ay28-20020a05600c1e1c00b004166bd7cd88mr595041wmb.8.1712518322330;
-        Sun, 07 Apr 2024 12:32:02 -0700 (PDT)
-Received: from [192.168.0.102] ([176.61.106.68])
-        by smtp.gmail.com with ESMTPSA id jg1-20020a05600ca00100b00414688af147sm13990151wmb.20.2024.04.07.12.32.01
+        bh=8/6W4QF2DX7LV1stD18ZSFVSpYGUbnlXl9aexisM+X4=;
+        b=unPShrjO270GbO0OwCmE0a78vDMQbDkL/alDcSj/cRYLJ/27Cd/dfmb9rT7IVgsvhR
+         by9SNmnFuCD+1tb/CtaZmLp7LsXc4ksQ4CNGOjpA+AJHg/l51Rvw57uxViasmoAt3KbH
+         LMlD0OaxyIaFUC5RrUJmChjkLsGb5O/KKeFNvNrcPN+ixmtLNbmfUg1gjBhkIrDHkD6z
+         2X/ua1VsW7//B6qOmLN8JTLIdm1UA0orR/ZRJm8frnPIPSFsTB3Rg8sUuZXri9I9rYM4
+         QrGECapHp/kDbJQn3LBdBo4T40TQYN27lzOnOZGMZa31YFzJvuuPWbV6DTkex3t+lRKD
+         PmFw==
+X-Forwarded-Encrypted: i=1; AJvYcCX/Go8eA6jv2SfSIGUqQQDuQu7l9YjFRtanGa1EfXbEj24D3+5MrpFgs+Al/aTkSZZ6vO7/n/Iu0mtrWhiK6Jp1NEwH42t02mCfPG61T6uBXzArahe/CislYYh/F0BY94zPQcBhHdyL
+X-Gm-Message-State: AOJu0Yw0Pcy5fLSmIHTQuOALgfj8UwZRvuE3r1SDNbqj3rERGkk0vmFu
+	7v0VWpS8u28rOTE0RnZjmPAVE42YlOcNpGMXXXiuX9qbYoOHcplc
+X-Google-Smtp-Source: AGHT+IESKjXaQeewabqSoHdOdhrx/U2YxlITd9L1EXsRsrm1l4ERwwX7NUCmvaSxslYDUdm0M/Zulw==
+X-Received: by 2002:a05:6512:3e17:b0:513:5dc3:9ebb with SMTP id i23-20020a0565123e1700b005135dc39ebbmr6407450lfv.4.1712523113313;
+        Sun, 07 Apr 2024 13:51:53 -0700 (PDT)
+Received: from ?IPV6:2a02:a466:68ed:1:6ac4:af9:58dd:395a? (2a02-a466-68ed-1-6ac4-af9-58dd-395a.fixed6.kpn.net. [2a02:a466:68ed:1:6ac4:af9:58dd:395a])
+        by smtp.gmail.com with ESMTPSA id c22-20020ac24156000000b00516c9c999aesm910187lfi.251.2024.04.07.13.51.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 07 Apr 2024 12:32:01 -0700 (PDT)
-Message-ID: <c9948be1-4700-4aa5-9a63-10dc215fcff7@linaro.org>
-Date: Sun, 7 Apr 2024 20:32:00 +0100
+        Sun, 07 Apr 2024 13:51:52 -0700 (PDT)
+Message-ID: <321e908e-0d10-4e36-8dc4-6997c73fe2eb@gmail.com>
+Date: Sun, 7 Apr 2024 22:51:51 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -76,38 +76,203 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: typec: qcom-pmic-typec: split HPD bridge alloc and
- registration
+Subject: Re: [PATCH v4] usb: gadget: u_ether: Replace netif_stop_queue with
+ netif_device_detach
+To: Hardik Gajjar <hgajjar@de.adit-jv.com>
+Cc: Andy Shevchenko <andriy.shevchenko@intel.com>,
+ gregkh@linuxfoundation.org, s.hauer@pengutronix.de, jonathanh@nvidia.com,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ quic_linyyuan@quicinc.com, paul@crapouillou.net, quic_eserrao@quicinc.com,
+ erosca@de.adit-jv.com
+References: <20231006153808.9758-1-hgajjar@de.adit-jv.com>
+ <20231006155646.12938-1-hgajjar@de.adit-jv.com>
+ <ZaQS5x-XK08Jre6I@smile.fi.intel.com>
+ <20240115132720.GA98840@vmlxhi-118.adit-jv.com>
+ <f25283fc-4550-4725-960b-2ea783fd62e1@gmail.com>
+ <aeee83d8-dee3-42ed-b705-988b17800721@gmail.com>
+ <20240405113855.GA121923@vmlxhi-118.adit-jv.com>
 Content-Language: en-US
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
- Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konrad.dybcio@linaro.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org, Caleb Connolly <caleb.connolly@linaro.org>,
- Johan Hovold <johan+linaro@kernel.org>
-References: <20240405-qc-pmic-typec-hpd-split-v1-1-363daafb3c36@linaro.org>
- <c1899fae-8669-485a-95bd-0e76738a1187@linaro.org>
- <CAA8EJppBE8xdmc6zQ2VLLPSzmtNq-+03H5skqbnLmLZ8AqSBfw@mail.gmail.com>
-From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <CAA8EJppBE8xdmc6zQ2VLLPSzmtNq-+03H5skqbnLmLZ8AqSBfw@mail.gmail.com>
+From: Ferry Toth <fntoth@gmail.com>
+In-Reply-To: <20240405113855.GA121923@vmlxhi-118.adit-jv.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 07/04/2024 16:08, Dmitry Baryshkov wrote:
-> Basically, if for some reason (e.g. because the TCPM returns an error
-> to one of the start functions) the drm_bridge is destroyed, the DRM
-> driver isn't notified about the event. It still keeps the pointer to
-> the bridge pointer and can access freed memory afterwards.
+Hi
 
-Hmm, my concern/question is about the TCPM code triggered by an IRQ 
-firing here, racing with the bridge code.
+Op 05-04-2024 om 13:38 schreef Hardik Gajjar:
+> On Wed, Apr 03, 2024 at 11:01:58PM +0200, Ferry Toth wrote:
+>> Hi,
+>>
+>> Op 15-01-2024 om 21:10 schreef Ferry Toth:
+>>> Hi,
+>>>
+>>> Op 15-01-2024 om 14:27 schreef Hardik Gajjar:
+>>>> On Sun, Jan 14, 2024 at 06:59:19PM +0200, Andy Shevchenko wrote:
+>>>>> +Cc: Ferry.
+>>>>>
+>>>>> On Fri, Oct 06, 2023 at 05:56:46PM +0200, Hardik Gajjar wrote:
+>>>>>> This patch replaces the usage of netif_stop_queue with
+>>>>>> netif_device_detach
+>>>>>> in the u_ether driver. The netif_device_detach function not
+>>>>>> only stops all
+>>>>>> tx queues by calling netif_tx_stop_all_queues but also marks
+>>>>>> the device as
+>>>>>> removed by clearing the __LINK_STATE_PRESENT bit.
+>>>>>>
+>>>>>> This change helps notify user space about the disconnection
+>>>>>> of the device
+>>>>>> more effectively, compared to netif_stop_queue, which only
+>>>>>> stops a single
+>>>>>> transmit queue.
+>>>>> This change effectively broke my USB ether setup.
+>>>>>
+>>>>> git bisect start
+>>>>> # status: waiting for both good and bad commits
+>>>>> # good: [1f24458a1071f006e3f7449c08ae0f12af493923] Merge tag
+>>>>> 'tty-6.7-rc1' of
+>>>>> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty
+>>>>> git bisect good 1f24458a1071f006e3f7449c08ae0f12af493923
+>>>>> # status: waiting for bad commit, 1 good commit known
+>>>>> # bad: [2c40c1c6adab90ee4660caf03722b3a3ec67767b] Merge tag
+>>>>> 'usb-6.7-rc1' of
+>>>>> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb
+>>>>> git bisect bad 2c40c1c6adab90ee4660caf03722b3a3ec67767b
+>>>>> # bad: [17d6b82d2d6d467149874b883cdba844844b996d] usb/usbip: fix
+>>>>> wrong data added to platform device
+>>>>> git bisect bad 17d6b82d2d6d467149874b883cdba844844b996d
+>>>>> # good: [ba6b83a910b6d8a9379bda55cbf06cb945473a96] usb:
+>>>>> xhci-mtk: add a bandwidth budget table
+>>>>> git bisect good ba6b83a910b6d8a9379bda55cbf06cb945473a96
+>>>>> # good: [dddc00f255415b826190cfbaa5d6dbc87cd9ded1] Revert "usb:
+>>>>> gadget: uvc: cleanup request when not in correct state"
+>>>>> git bisect good dddc00f255415b826190cfbaa5d6dbc87cd9ded1
+>>>>> # bad: [8f999ce60ea3d47886b042ef1f22bb184b6e9c59] USB: typec:
+>>>>> tps6598x: Refactor tps6598x port registration
+>>>>> git bisect bad 8f999ce60ea3d47886b042ef1f22bb184b6e9c59
+>>>>> # bad: [f49449fbc21e7e9550a5203902d69c8ae7dfd918] usb: gadget:
+>>>>> u_ether: Replace netif_stop_queue with netif_device_detach
+>>>>> git bisect bad f49449fbc21e7e9550a5203902d69c8ae7dfd918
+>>>>> # good: [97475763484245916735a1aa9a3310a01d46b008] USB: usbip:
+>>>>> fix stub_dev hub disconnect
+>>>>> git bisect good 97475763484245916735a1aa9a3310a01d46b008
+>>>>> # good: [0f5aa1b01263b8b621bc4f031a1f2983ef8517b7] usb: usbtest:
+>>>>> fix a type promotion bug
+>>>>> git bisect good 0f5aa1b01263b8b621bc4f031a1f2983ef8517b7
+>>>>> # first bad commit: [f49449fbc21e7e9550a5203902d69c8ae7dfd918]
+>>>>> usb: gadget: u_ether: Replace netif_stop_queue with
+>>>>> netif_device_detach
+>>>>>
+>>>>> Note, revert indeed helps. Should I send a revert?
+>>>>>
+>>>>> I use configfs to setup USB EEM function and it worked till this
+>>>>> commit.
+>>>>> If needed, I can share my scripts, but I believe it's not needed
+>>>>> as here
+>>>>> we see a clear regression.
+>>>>>
+>>>>> -- 
+>>>>> With Best Regards,
+>>>>> Andy Shevchenko
+>>>>>
+>>>>>
+>>>> Without this patch, there may be a potential crash in a race
+>>>> condition, as __LINK_STATE_PRESENT is monitored at many places in
+>>>> the Network stack to determine the status of the link.
+>>>>
+>>>> Could you please provide details on how this patch affects your
+>>>> functionality? Are you experiencing connection problems or data
+>>>> transfer interruptions?
+>>> In my case on mrfld (Intel Edison Arduino) using configfs with this
+>>> patch no config from host through dhcp is received. Manual setting
+>>> correct ipv4 addr / mask / gw still no connection.
+>>>
+>>>> Instead of reverting this patch, consider trying the upcoming patch
+>>>> (soon to be available in the mainline) to see if it resolves your
+>>>> issue.
+>>>>
+>>>> https://urldefense.proofpoint.com/v2/url?u=https-3A__lore.kernel.org_lkml_2023122900-2Dcommence-2Dagenda-2Ddb2c-40gregkh_T_-23m36a812d3f1e5d744ee32381f6ae4185940b376de&d=DwICaQ&c=euGZstcaTDllvimEN8b7jXrwqOf-v5A_CdpgnVfiiMM&r=SAhjP5GOmrADp1v_EE5jWoSuMlYCIt9gKduw-DCBPLs&m=4g6EtvkKKfp8YYHpU196b2HzQxCMgsAhuo8pFng3X4TCWdcOVEUCug2-l2hRfLyV&s=t82wZAFwm2FTSaacgsmSpZWvWEa89jN8GX-okIJrwFw&e=
+>>>>
+>>> This patch works for me with v6.7.0.
+>> I need to revisit this. The patch in this topic landed in v6.7.0-rc1
+>> (f49449fbc21e) and breaks the gadget mrfld (Intel Edison Arduino) and other
+>> platforms as well.
+>>
+>> The mentioned fix "usb: gadget: u_ether: Re-attach netif device to mirror
+>> detachment*" * has landed in v6.8.0-rc1 (76c945730). What it does fix: I am
+>> able to make a USB EEM function again.
+>>
+>> However, now a hidden issue appears. With mrfld there is an external switch
+>> to easily switch between host and device mode.
+>>
+>> What is not fixed:
+>>
+>> - when in device mode and unplugging/plugging the cable when using `ifconfig
+>> usb0` the line "usb0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>" changes to
+>> "usb0: flags=4099<UP,BROADCAST,MULTICAST>" as is supposed to, the route
+>> table is updated and the dir `/sys/class/net/usb0` exists and in the dir
+>> `cat carrier*` shows the carrier up and down counts. This is the expected
+>> behavior.
+>>
+>> - when in device mode and switching to host mode `ifconfig usb0` continues
+>> to show "RUNNING", the route table is not modified and the dir
+>> `/sys/class/net/usb0` no longer exists.
+>>
+>> - switching to device mode again, USB EEM works fine, no changes to RUNNING
+>> or the route table happen and the dir `/sys/class/net/usb0` still is non-
+>> existing.
+>>
+>> - unplugging/plugging the cable in device mode after this does not restore
+>> the original situation.
+>>
+>> This behavior I tested on v6.9.0-rc2 (with a few unrelated but essential
+>> patches on top) and bisected back to this patch in v6.70-rc1.
+>>
+>> It seems `netif_device_detach` does not completely clean up as expected and
+>> `netif_device_attach` does not completely rebuild.
+>>
+>> I am wondering if on other platforms this can be reproduced? If so, inho it
+>> would be best to revert the both patches until the issue is resolved.
+>>
+>> Thanks,
+>>
+>> Ferry
+> I'm wondering why the /sys/class/net/usb0 directory is being removed when the network interface is still available.
+> This behavior seems not correct.
 
-If you're happy you've reasoned about that and it won't happen, then 
-apply the ACK with the commit log fixed alone.
+Exactly. And this didn't happen before the 2 patches.
 
----
-bod
+To be precise: /sys/class/net/usb0 is not removed and it is a link, the 
+link target 
+/sys/devices/pci0000:00/0000:00:11.0/dwc3.0.auto/gadget.0/net/usb0 no 
+longer exists
+
+> The gether_cleanup function should remove the interface along with the associated kobject,
+> and this function should only be called during the unloading of the driver or deleting the gadget.
+> Could you please confirm whether any of your custom modifications are removing the net interface kobject?
+
+As far as know not. I have one tusb1210 (usb phy) and 2 dwc3 patches, 
+nothing related to gadgets or net.
+
+For reference, patches are here: 
+https://github.com/htot/meta-intel-edison/tree/nanbield/meta-intel-edison-bsp/recipes-kernel/linux/files
+
+0001-phy-ti-tusb1210-write-to-scratch-on-power-on.patch
+
+0001a-usb-dwc3-core-Fix-dwc3_core_soft_reset-before-anythi.patch
+
+044-REVERTME-usb-dwc3-gadget-skip-endpoints-ep-18-in-out.patch
+
+Seems (just guessing) gether_cleanup is being called due to the switch 
+to host mode, but cleanup only partly succeeds. Now I'm finding I can 
+make the net interface disappear with `ip link set dev usb0 down` and 
+the broken link goes away by destroying the gadget in configfs.
+
+Is that intentional? Do I need to tear down the gadgets in reverse order 
+as on create when switching to host mode? That would be new.
+
+What happens when you trigger a switch to host mode without actually 
+unplugging your cable?
+
+>>>> Thanks,
+>>>> Hardik
 
