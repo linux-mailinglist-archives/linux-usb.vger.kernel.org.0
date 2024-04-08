@@ -1,177 +1,94 @@
-Return-Path: <linux-usb+bounces-9035-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9036-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA8B389BCA1
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Apr 2024 12:04:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C26A89BCBA
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Apr 2024 12:11:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CE41D1C214DF
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Apr 2024 10:04:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BE65C1C21736
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Apr 2024 10:11:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76006535D1;
-	Mon,  8 Apr 2024 10:04:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B77452F85;
+	Mon,  8 Apr 2024 10:10:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="V1m9DY18"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Dgj9G9WP";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="bopQl6Di"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 144A84EB3D;
-	Mon,  8 Apr 2024 10:04:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E57E52F62;
+	Mon,  8 Apr 2024 10:10:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712570662; cv=none; b=GDwaMx5d0F2vD5YytD5yojIKNSI4sCYDBkB7rRrfLlUvaxKThN1M8hK5PpXaY1lHLRCUgton/htXO+D4TeDVO8JdYOQ4nf/oU7qWKGXYnkW5zTfpVvsKzdClp6gMeNqmeQ6uFVCTIrv/PpYrnKTe+vvY5lHw7WN5rNa7uOUXx5M=
+	t=1712571053; cv=none; b=IL0XfR3w5hIH5Bt09pTw05nyd7iJrhv6SkBahhgCTJ77yCFlqKRZ8/dNMp8gRD4zzIyZp9/wa5VFyQjA9NL+Ub40rInJpZeJBWsc+SWUIkGqYLbf0fPZUHzvE6G3ukTlXNTRkUAvniwhHThyG6OlrSjeIe2kb4BOyw41rz7/opM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712570662; c=relaxed/simple;
-	bh=7Um93ynodoKWvmi4hudSQ6ODRbJB2kpvSRbso69Gbb0=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Message-ID:
-	 Content-Type:MIME-Version; b=NKjnsSbiRp4IZpjZe1msAQqMNApu96BxB5dCVMfisWNM3jfA1oZKRdgmBehRABZki2inWVx4zkNEsAycXXR8NRqZkCPqhSq7audkvpgZCo36byNGOnFGbrBFRS5oev5ka3ebc7UjI48SJVTk8FxjMLSHYj3AnS4jlacRaDOtLOg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=V1m9DY18; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 4389vTLC024196;
-	Mon, 8 Apr 2024 10:03:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : reply-to : in-reply-to : references : message-id : content-type
- : content-transfer-encoding : mime-version; s=pp1;
- bh=WGRw+wpQ+8BkQKcdJ/jvqWzRkTuOQNEebcPy5PQD4Kw=;
- b=V1m9DY18uGHMz8vh9IxAKCdhy2XzRwg7vXDe5eU16f5nEfVNyFSH2bkwzlSGAU2+MppO
- 4KiihhZ6Fk01FJPzdXSR1BLEuGht8lFKOYZkgyQ+XDX6d86NzlDgaIq0J9qJC+jfnfB7
- aEeGTfrHV1qJLbUVw7VwF0wJD3GQGVNebGmuEEwqhBLJ9iqNw/OPA1h1UuFrYBwI63SP
- L8QiPE5Ov/+xNvSEFsQF6+fJ779nZgk/JgjuEZ8d5Yw4SPP9YYyN9phnIKPRv8VXU/FC
- LdWtpshSMMqQ0phdyUamMRN3ZDDlZNvPvkSzaRMK+nFo6z+Im4121GSQHwYWxTP0de2t 7g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3xceda00e7-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 08 Apr 2024 10:03:21 +0000
-Received: from m0353727.ppops.net (m0353727.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 438A3KAu002830;
-	Mon, 8 Apr 2024 10:03:20 GMT
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3xceda00e4-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 08 Apr 2024 10:03:20 +0000
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 4387uZ0H019096;
-	Mon, 8 Apr 2024 10:03:18 GMT
-Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3xbh3yym76-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 08 Apr 2024 10:03:18 +0000
-Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
-	by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 438A3FKl53084522
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 8 Apr 2024 10:03:18 GMT
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id D2E1D58058;
-	Mon,  8 Apr 2024 10:03:15 +0000 (GMT)
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id F35F85806B;
-	Mon,  8 Apr 2024 10:03:10 +0000 (GMT)
-Received: from ltc.linux.ibm.com (unknown [9.5.196.140])
-	by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Mon,  8 Apr 2024 10:03:10 +0000 (GMT)
-Date: Mon, 08 Apr 2024 12:03:10 +0200
-From: Harald Freudenberger <freude@linux.ibm.com>
-To: Allen Pais <apais@linux.microsoft.com>
-Cc: linux-kernel@vger.kernel.org, tj@kernel.org, keescook@chromium.org,
-        vkoul@kernel.org, marcan@marcan.st, sven@svenpeter.dev,
-        florian.fainelli@broadcom.com, rjui@broadcom.com,
-        sbranden@broadcom.com, paul@crapouillou.net,
-        Eugeniy.Paltsev@synopsys.com, manivannan.sadhasivam@linaro.org,
-        vireshk@kernel.org, Frank.Li@nxp.com, leoyang.li@nxp.com,
-        zw@zh-kernel.org, wangzhou1@hisilicon.com, haijie1@huawei.com,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, sean.wang@mediatek.com,
-        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
-        afaerber@suse.de, logang@deltatee.com, daniel@zonque.org,
-        haojian.zhuang@gmail.com, robert.jarzmik@free.fr, andersson@kernel.org,
-        konrad.dybcio@linaro.org, orsonzhai@gmail.com,
-        baolin.wang@linux.alibaba.com, zhang.lyra@gmail.com,
-        patrice.chotard@foss.st.com, linus.walleij@linaro.org, wens@csie.org,
-        jernej.skrabec@gmail.com, peter.ujfalusi@gmail.com, kys@microsoft.com,
-        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
-        jassisinghbrar@gmail.com, mchehab@kernel.org,
-        maintainers@bluecherrydvr.com, aubin.constans@microchip.com,
-        ulf.hansson@linaro.org, manuel.lauss@gmail.com,
-        mirq-linux@rere.qmqm.pl, jh80.chung@samsung.com, oakad@yahoo.com,
-        hayashi.kunihiko@socionext.com, mhiramat@kernel.org,
-        brucechang@via.com.tw, HaraldWelte@viatech.com, pierre@ossman.eu,
-        duncan.sands@free.fr, stern@rowland.harvard.edu, oneukum@suse.com,
-        openipmi-developer@lists.sourceforge.net, dmaengine@vger.kernel.org,
-        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-        linux-rpi-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        imx@lists.linux.dev, linuxppc-dev@lists.ozlabs.org,
-        linux-mediatek@lists.infradead.org, linux-actions@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-s390@vger.kernel.org, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, Holger Dengler <dengler@linux.ibm.com>
-Subject: Re: [PATCH 7/9] s390: Convert from tasklet to BH workqueue
-Reply-To: freude@linux.ibm.com
-Mail-Reply-To: freude@linux.ibm.com
-In-Reply-To: <20240327160314.9982-8-apais@linux.microsoft.com>
-References: <20240327160314.9982-1-apais@linux.microsoft.com>
- <20240327160314.9982-8-apais@linux.microsoft.com>
-Message-ID: <702594ec5852c482f96cfcf84a02cab2@linux.ibm.com>
-X-Sender: freude@linux.ibm.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: vcJ1PwKFq1RysBO3jh1OFUS_rcqMuAYv
-X-Proofpoint-ORIG-GUID: X3ilzQ7TzOIWEyFQfqPrw-z8aSdSkVVd
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+	s=arc-20240116; t=1712571053; c=relaxed/simple;
+	bh=B4rQPE94P3aujXloU7ftUrVf3lGbBt4puGB/YdeaHFE=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=NG+vGfvyLR13LHUzR/VRSyoWUxarBo1kRvz6cDR7hnIEBDvsBIFbzQwusnI5nd8nJTbClvLtnQGeH8PdV48YPay+/ZiXs/qqsbqO4JMX9O1KYJ842yrKlaAic3qppOLUsNyLs4YQDJPc6CErv5b/GSN9snK9ATdX4LzU67CUU24=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Dgj9G9WP; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=bopQl6Di; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: Anna-Maria Behnsen <anna-maria@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1712571050;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=xkuYcuI16dURy3oTi3zJG28xJKQbdmrLBH1vWgCz7x8=;
+	b=Dgj9G9WP+bSK4rMhObFtbYpfW3CFTns2hMp3/BQguAFyiSjW1iQtIuI8IpUCxbRGLY4QeA
+	wQKd9N6rp8cUhxhRiqYqle5RHZQ8XfvNaj8dH9WHrSN27OiakWWGSnZ4bqJ5f0x3m4/RNm
+	/3opUAUF+miN9IcFbZuk6GRO7bDqLifIdm4bdz3VtT88Bfu/KDruhbTq7BdUwRVbO+TxSY
+	2utdmpQLGWbB6kv3I7oMLONLHEWSU9mkwq8us5aXfd24FfhMMYFcIFMZrfnaZRIrHnT7Pw
+	XpAgE0VMLlPKnamLGzal8TUGwUt6omzUqQFoxb0GI/o33G3hP6MJ5OBcwzaGKQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1712571050;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=xkuYcuI16dURy3oTi3zJG28xJKQbdmrLBH1vWgCz7x8=;
+	b=bopQl6Di5DcfSGRbP1aL9LcUvKPgxqp13SEfcMBYNoI23bxRusn+QEJpJJFgvuaxqs8Krr
+	dXW7ADwb9gkvKjBQ==
+To: Paul Menzel <pmenzel@molgen.mpg.de>, Frederic Weisbecker
+ <frederic@kernel.org>, Ingo Molnar <mingo@kernel.org>, Thomas Gleixner
+ <tglx@linutronix.de>
+Cc: LKML <linux-kernel@vger.kernel.org>, linux-usb@vger.kernel.org
+Subject: Re: NOHZ tick-stop error: local softirq work is pending, handler
+ #08!!! on Dell XPS 13 9360
+In-Reply-To: <354a2690-9bbf-4ccb-8769-fa94707a9340@molgen.mpg.de>
+References: <354a2690-9bbf-4ccb-8769-fa94707a9340@molgen.mpg.de>
+Date: Mon, 08 Apr 2024 12:10:49 +0200
+Message-ID: <87o7ak411y.fsf@somnus>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-04-08_08,2024-04-05_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=918
- lowpriorityscore=0 bulkscore=0 spamscore=0 adultscore=0 priorityscore=1501
- malwarescore=0 phishscore=0 impostorscore=0 clxscore=1011 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2404010000
- definitions=main-2404080077
+Content-Type: text/plain
 
-On 2024-03-27 17:03, Allen Pais wrote:
-> The only generic interface to execute asynchronously in the BH context 
-> is
-> tasklet; however, it's marked deprecated and has some design flaws. To
-> replace tasklets, BH workqueue support was recently added. A BH 
-> workqueue
-> behaves similarly to regular workqueues except that the queued work 
-> items
-> are executed in the BH context.
-> 
-> This patch converts drivers/infiniband/* from tasklet to BH workqueue.
-> 
-> Based on the work done by Tejun Heo <tj@kernel.org>
-> Branch: https://git.kernel.org/pub/scm/linux/kernel/git/tj/wq.git 
-> for-6.10
-> 
-> Note: Not tested. Please test/review.
-> 
-> Signed-off-by: Allen Pais <allen.lkml@gmail.com>
-> ---
-> ...
->  drivers/s390/crypto/ap_bus.c           | 24 +++++++-------
->  drivers/s390/crypto/ap_bus.h           |  2 +-
->  drivers/s390/crypto/zcrypt_msgtype50.c |  2 +-
->  drivers/s390/crypto/zcrypt_msgtype6.c  |  4 +--
-> ...
+Hi Paul,
 
-Applied and tested the s390 AP bus and zcrypt part of the patch.
-Works fine, a sniff test did not show any problems.
-Thanks for your work.
+Paul Menzel <pmenzel@molgen.mpg.de> writes:
 
-Reviewed-by: Harald Freudenberger <freude@linux.ibm.com>
+> Dear Linux folks,
+>
+>
+> On Dell XPS 13 9360/0596KF, BIOS 2.21.0 06/02/2022, with Linux 6.9-rc2+ 
+> built from commit b1e6ec0a0fd0 (Merge tag 'docs-6.9-fixes' of 
+> git://git.lwn.net/linux) the external USB-C adapter Dell DA300 stopped 
+> working (only the Ethernet port was used). Linux logged:
+
+thanks for the report. Can you please provide a trace beside the dmesg
+output? The following trace events should be enabled (via kernel command
+line):
+
+trace_event=timer:*,timer_migration:*,sched:sched_switch,sched:sched_wakeup,sched:sched_process_hang,irq:softirq_entry,irq:softirq_raise,irq:softirq_exit
+
+Thanks,
+
+	Anna-Maria
 
