@@ -1,63 +1,64 @@
-Return-Path: <linux-usb+bounces-9059-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9060-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4D5E89BFD6
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Apr 2024 15:03:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F24F89BFD9
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Apr 2024 15:03:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 71012285D9A
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Apr 2024 13:03:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 496C7283AFD
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Apr 2024 13:03:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A28667BAEC;
-	Mon,  8 Apr 2024 13:01:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 860C77BB13;
+	Mon,  8 Apr 2024 13:01:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DmsY9/4P"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Vi1PKeDR"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 867F36CDA8
-	for <linux-usb@vger.kernel.org>; Mon,  8 Apr 2024 13:01:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 838E37BAF7
+	for <linux-usb@vger.kernel.org>; Mon,  8 Apr 2024 13:01:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712581288; cv=none; b=YOkbMWmg1kLs4IqiJ7YlIYvRY+UbjaR6qrBSjpzw1KOU0yQ5dGJMip+U50DwB30UJwsmAfedVe4suU5YGQdLATeOT06pNGVWvks3u+BmYD8bYqidmYxhtn2EREZjskNjCt+2GFu9/xPl+Or/KzcUIGuwC0VI0PtieCMOxzMWoSI=
+	t=1712581290; cv=none; b=dxY1be96d2gMImAY29d9m5gpgkPG43WOCt5ijrhzIJwUH/843FrUccrwhemkDP9aP0LkM69OA/ZArFnAOHzG7pdGNXnMdv6N1+0Zvi2us+tmx52eo2V+J/wIWWGG5JuZG31Mk+cxJpgSljRwdLWgi53d72gpaloe6pUCkgzF7vQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712581288; c=relaxed/simple;
-	bh=onkmaoZvkauW8Q4MGh3eVchFeNAmDaYgmCBvXuFcIGE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KHmSI3ArpHRhtuKgkphw59u24t6/cCgZUtx5nVGMZZJZ8v6cQ7n+j2QRut0bFotl+KTPLhETuO0t6ZhfOVFh/YGKJXD15ecjuDNT86OOcELMpvCZ+PZpFNr14ylCdbky7neGIIJq5V6cijuHZ6i+kgbt+lhBMFq5JJcUO8fLu2M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DmsY9/4P; arc=none smtp.client-ip=192.198.163.12
+	s=arc-20240116; t=1712581290; c=relaxed/simple;
+	bh=WswkIFO0ig2Sn6KRG1ink79eLsSAWWf8lE3yZEvy9sg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=NYDHHL9Rr587feqtPMJ7hq/d7/nmDwGjxPtq8mpCA9YeTHRNJ9KYiUueze88U8Hb/yqgEnZRw6nk4ixfSc0PR1uqWgpIjVjwABPSr2FTY30P5qbdM15nwUam71s6qHefXmaKQqgOI6/RKZw6LDRVDnh6F9pKLYfiTkLtTov01So=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Vi1PKeDR; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712581286; x=1744117286;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=onkmaoZvkauW8Q4MGh3eVchFeNAmDaYgmCBvXuFcIGE=;
-  b=DmsY9/4PUeBnv9CqrC3OJolvsHdFiwvpyAkX7PLM4eXaMS1s6qCKftmN
-   vNK1X81BiN9/FClkUNRWBcBcchLuyDjng4CJl9iCwZzeKPEcthmKh8+ww
-   3GTFpds+xTkRBxX1pgLDh6LO2AV7liFYTLelfAKQI9Jl0JPtDhglTVrw/
-   sgDg6e7p3eYJ6eL6BlUxh/5njEp+IT5U75qKSsmviuVGMObau4l3LlEgI
-   9kBePzGmt2BJryupQN2WSR3odupaR3QLmdRocKNsuqobhi1FyOVz7Nfap
-   KqciKI7UJjX6mVeofoUwgilhz28iwaKFS2GEeuYkCuJAg7GwYxzzVojDU
-   g==;
-X-CSE-ConnectionGUID: MUS65IcYRHW87DwxT/fu+w==
-X-CSE-MsgGUID: p8dRn+lCT9mAGwf2iPy0Yg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11038"; a="11630688"
+  t=1712581288; x=1744117288;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=WswkIFO0ig2Sn6KRG1ink79eLsSAWWf8lE3yZEvy9sg=;
+  b=Vi1PKeDR5LazMAwUGvMEN/7YeWCjl6RaI2xZA9df2tc2sDwR2HfKjZOc
+   5OJN/cVS4W1nJwixiwPD1vwUkRqGOdORzbo8+gXFDveExc7yHYnx4aLps
+   FBpBtTov6b3UMAHU7q4C61Sy6svZTlpkj3PvEJ3n/etm1lFoT+0uvNi7s
+   MwAJXcicxrS+GZ2ZIZOeKhRmoIMMtI8+T4b5ukGlYWJ1EMNGYDg3JdjGw
+   v2AyuGXDKDdBPGld1YgwdBk/IfSljQ3YnKkfKeleBZYA2VWtCcjmftNIA
+   T8DMOFY3z8J/boPotLSJ7QYhRhHFP2lYeCkK0YvK+SSuiMSMHHWgULukg
+   w==;
+X-CSE-ConnectionGUID: PsI3ZKJLQe+Oi4wu6QKPvw==
+X-CSE-MsgGUID: yag0as7CSY6bJtTjTxVN6g==
+X-IronPort-AV: E=McAfee;i="6600,9927,11038"; a="11630689"
 X-IronPort-AV: E=Sophos;i="6.07,186,1708416000"; 
-   d="scan'208";a="11630688"
+   d="scan'208";a="11630689"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
   by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2024 06:00:35 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11037"; a="937091483"
+X-IronPort-AV: E=McAfee;i="6600,9927,11037"; a="937091485"
 X-IronPort-AV: E=Sophos;i="6.07,186,1708416000"; 
-   d="scan'208";a="937091483"
+   d="scan'208";a="937091485"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 08 Apr 2024 06:00:32 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 08 Apr 2024 06:00:33 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id CF6B924D; Mon,  8 Apr 2024 16:00:31 +0300 (EEST)
+	id DEFAD194; Mon,  8 Apr 2024 16:00:31 +0300 (EEST)
 From: Mika Westerberg <mika.westerberg@linux.intel.com>
 To: Yehezkel Bernat <YehezkelShB@gmail.com>,
 	Michael Jamet <michael.jamet@intel.com>,
@@ -66,10 +67,12 @@ To: Yehezkel Bernat <YehezkelShB@gmail.com>,
 Cc: Gil Fine <gil.fine@linux.intel.com>,
 	linux-usb@vger.kernel.org,
 	Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH 1/2] thunderbolt: Fix calculation of consumed USB3 bandwidth on a path
-Date: Mon,  8 Apr 2024 16:00:30 +0300
-Message-ID: <20240408130031.51616-1-mika.westerberg@linux.intel.com>
+Subject: [PATCH 2/2] thunderbolt: Allow USB3 bandwidth to be lower than maximum supported
+Date: Mon,  8 Apr 2024 16:00:31 +0300
+Message-ID: <20240408130031.51616-2-mika.westerberg@linux.intel.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240408130031.51616-1-mika.westerberg@linux.intel.com>
+References: <20240408130031.51616-1-mika.westerberg@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -80,51 +83,71 @@ Content-Transfer-Encoding: 8bit
 
 From: Gil Fine <gil.fine@linux.intel.com>
 
-Currently, when setup a new USB3 tunnel that is starting from downstream USB3
-adapter of first depth router (or deeper), to upstream USB3 adapter of a second
-depth router (or deeper), we calculate consumed bandwidth. For this calculation
-we take into account first USB3 tunnel consumed bandwidth while we shouldn't,
-because we just recalculating the first USB3 tunnel allocated bandwidth.
-
-Fix that, so that more bandwidth is available for the new USB3 tunnel being
-setup.
-
-While there, fix the kernel-doc to decribe more accurately the purpose of the
-function.
+Currently USB3 tunnel setup fails if USB4 link available bandwidth is too low
+to allow USB3 Maximum Supported Link Rate. In reality, this limitation is not
+needed, and may cause failure of USB3 tunnel establishment, if USB4 link
+available bandwidth is lower than USB3 Maximum Supported Link Rate. E.g. if we
+connect to USB4 v1 host router, a USB4 v1 device router, via 10 Gb/s cable.
+Hence, here we discard this limitation, and now we only limit USB3 bandwidth
+allocation to be not higher than 90% of USB3 Max Supported Link Rate (for first
+USB3 tunnel only).
 
 Signed-off-by: Gil Fine <gil.fine@linux.intel.com>
 Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 ---
- drivers/thunderbolt/tb.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ drivers/thunderbolt/tunnel.c | 25 ++++++++++---------------
+ 1 file changed, 10 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
-index 3e44c78ac409..10e719dd837c 100644
---- a/drivers/thunderbolt/tb.c
-+++ b/drivers/thunderbolt/tb.c
-@@ -498,8 +498,9 @@ static struct tb_tunnel *tb_find_first_usb3_tunnel(struct tb *tb,
-  * @consumed_down: Consumed downstream bandwidth (Mb/s)
-  *
-  * Calculates consumed USB3 and PCIe bandwidth at @port between path
-- * from @src_port to @dst_port. Does not take tunnel starting from
-- * @src_port and ending from @src_port into account.
-+ * from @src_port to @dst_port. Does not take USB3 tunnel starting from
-+ * @src_port and ending on @src_port into account because that bandwidth is
-+ * already included in as part of the "first hop" USB3 tunnel.
-  */
- static int tb_consumed_usb3_pcie_bandwidth(struct tb *tb,
- 					   struct tb_port *src_port,
-@@ -514,8 +515,8 @@ static int tb_consumed_usb3_pcie_bandwidth(struct tb *tb,
- 	*consumed_up = *consumed_down = 0;
+diff --git a/drivers/thunderbolt/tunnel.c b/drivers/thunderbolt/tunnel.c
+index cb6609a56a03..fdc5e8e12ca8 100644
+--- a/drivers/thunderbolt/tunnel.c
++++ b/drivers/thunderbolt/tunnel.c
+@@ -2064,26 +2064,21 @@ struct tb_tunnel *tb_tunnel_alloc_usb3(struct tb *tb, struct tb_port *up,
+ {
+ 	struct tb_tunnel *tunnel;
+ 	struct tb_path *path;
+-	int max_rate = 0;
++	int max_rate;
  
- 	tunnel = tb_find_first_usb3_tunnel(tb, src_port, dst_port);
--	if (tunnel && tunnel->src_port != src_port &&
--	    tunnel->dst_port != dst_port) {
-+	if (tunnel && !tb_port_is_usb3_down(src_port) &&
-+	    !tb_port_is_usb3_up(dst_port)) {
- 		int ret;
+-	/*
+-	 * Check that we have enough bandwidth available for the new
+-	 * USB3 tunnel.
+-	 */
+-	if (max_up > 0 || max_down > 0) {
++	if (!tb_route(down->sw) && (max_up > 0 || max_down > 0)) {
++		/*
++		 * For USB3 isochronous transfers, we allow bandwidth which is
++		 * not higher than 90% of maximum supported bandwidth by USB3
++		 * adapters.
++		 */
+ 		max_rate = tb_usb3_max_link_rate(down, up);
+ 		if (max_rate < 0)
+ 			return NULL;
  
- 		ret = tb_tunnel_consumed_bandwidth(tunnel, consumed_up,
+-		/* Only 90% can be allocated for USB3 isochronous transfers */
+ 		max_rate = max_rate * 90 / 100;
+-		tb_port_dbg(up, "required bandwidth for USB3 tunnel %d Mb/s\n",
++		tb_port_dbg(up, "maximum required bandwidth for USB3 tunnel %d Mb/s\n",
+ 			    max_rate);
+-
+-		if (max_rate > max_up || max_rate > max_down) {
+-			tb_port_warn(up, "not enough bandwidth for USB3 tunnel\n");
+-			return NULL;
+-		}
+ 	}
+ 
+ 	tunnel = tb_tunnel_alloc(tb, 2, TB_TUNNEL_USB3);
+@@ -2115,8 +2110,8 @@ struct tb_tunnel *tb_tunnel_alloc_usb3(struct tb *tb, struct tb_port *up,
+ 	tunnel->paths[TB_USB3_PATH_UP] = path;
+ 
+ 	if (!tb_route(down->sw)) {
+-		tunnel->allocated_up = max_rate;
+-		tunnel->allocated_down = max_rate;
++		tunnel->allocated_up = min(max_rate, max_up);
++		tunnel->allocated_down = min(max_rate, max_down);
+ 
+ 		tunnel->init = tb_usb3_init;
+ 		tunnel->consumed_bandwidth = tb_usb3_consumed_bandwidth;
 -- 
 2.43.0
 
