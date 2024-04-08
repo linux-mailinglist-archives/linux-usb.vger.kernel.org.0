@@ -1,109 +1,101 @@
-Return-Path: <linux-usb+bounces-9027-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9028-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24DD289B8F9
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Apr 2024 09:47:18 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB0ED89B958
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Apr 2024 09:54:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3C9611C221C8
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Apr 2024 07:47:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A4CFD281757
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Apr 2024 07:54:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC6494176B;
-	Mon,  8 Apr 2024 07:43:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 465C638DF2;
+	Mon,  8 Apr 2024 07:49:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="w2XAAWod"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B2043C489
-	for <linux-usb@vger.kernel.org>; Mon,  8 Apr 2024 07:43:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE96138DEC
+	for <linux-usb@vger.kernel.org>; Mon,  8 Apr 2024 07:49:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712562197; cv=none; b=bSS0nmAMLMqUKZS+zv3JXz+KLp3n71Z86A+aONNb0N2Goqx/OdBsuih5ktdUAZ3X+4IWgAiJ1ukinRDtIY5UkpiGtiG+h1doG6aZhIVRPNOI9sx6WXD57CXSxWwySeNJQgcH9C7R4m2ySrorSDzkWZsgg6EC/FeasNAylTnT93U=
+	t=1712562588; cv=none; b=iGD2diFyMJ2Xj6YW0lmSifdGe8Ah0VOcP0v9TLdqL5EfaVJDStl6h102Gxtz78+M/yo276ouKrp5l6jsCImvPaL6mgFT00j/VaVbVqmnUwSClMituZ34Sj3414ivltTq7gkk+d9z7ZYQd6GzzLSzLvJge+fBS4r4OcJhvtFAZaE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712562197; c=relaxed/simple;
-	bh=F9lZ5xpFdq7EGLEX91lMdfTvpLrwdTPZesguOV+jWqI=;
+	s=arc-20240116; t=1712562588; c=relaxed/simple;
+	bh=CfXkCQjOYbBcIsKSAALWc4xDDdSVOag1GrRr/QPtLEs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LCnetjC9/tJiZDBdE2z1GQDJ31Bk8vjMsrL+L0uBi4LulXcgB6l36mg1QHVNoQ1zTgAAE0Wwu3z8U1xzn35wKlICvk29Wffxod69MTK1w5gCm2if+8WHxejaUJY5ovOn41/VLFKi2vVUAWCNUYWYVEom4n9f0iEtONRzvY2UEV4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rtjep-0003xj-Rt; Mon, 08 Apr 2024 09:43:11 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rtjep-00B4Ir-Aa; Mon, 08 Apr 2024 09:43:11 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rtjep-00G41v-0k;
-	Mon, 08 Apr 2024 09:43:11 +0200
-Date: Mon, 8 Apr 2024 09:43:11 +0200
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: netdev@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, Li Yang <leoyang.li@nxp.com>, Zhang Wei <zw@zh-kernel.org>, 
-	kernel@pengutronix.de, Shawn Guo <shawnguo@kernel.org>, 
-	linux-arm-kernel@lists.infradead.org
-Subject: Zhang Wei also unreachable working
-Message-ID: <zj6uueuu4c2vpjgg23r2lmqlleg4o6uxn4b7xlegcios23ifx5@ttom2yzyke2h>
-References: <20240405072042.697182-2-u.kleine-koenig@pengutronix.de>
+	 Content-Type:Content-Disposition:In-Reply-To; b=I33933ng8zi3UnXsAiV/eu4Ku0rfuRz+bP6HxuXvURmSHWBLAxECtQgiLwdXMtGyPru5EV+ucFkhZdPRgSFaj3kHsR9Sb0yd5pGP1RivsC75GZ+CondvSUCtbD+4WO/nkFF+iS38ASgS57a/9DA+0bkDpowidYQkduwvnrxficE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=w2XAAWod; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1E51C43394;
+	Mon,  8 Apr 2024 07:49:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1712562588;
+	bh=CfXkCQjOYbBcIsKSAALWc4xDDdSVOag1GrRr/QPtLEs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=w2XAAWoduTHQF51z9GDYKSscPJTiknHrqBg7bISpalsoEsDHWwMx7X5tYWlaoznga
+	 8mSgnZft5ksoaF7deqoxEO/js/dXzTB2ERcetZu105wtu52HOOhtvwf6dFsy8rw4Jc
+	 LaY1Lg3EiruNt0t1xO7NSV5cKEwOoFmQu+94Dp1s=
+Date: Mon, 8 Apr 2024 09:49:45 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+Cc: Dan Carpenter <dan.carpenter@linaro.org>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [bug report] usb: dwc2: host: Fix ISOC flow in DDMA mode
+Message-ID: <2024040834-ethically-rumble-701f@gregkh>
+References: <ab2cc5d9-3fc9-43a2-abe8-a20338bdcd02@moroto.mountain>
+ <3a1e01ca-a491-2739-e47c-6a71b610f400@synopsys.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="mrcj7cuohzw5kahh"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240405072042.697182-2-u.kleine-koenig@pengutronix.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+In-Reply-To: <3a1e01ca-a491-2739-e47c-6a71b610f400@synopsys.com>
 
+On Mon, Apr 08, 2024 at 06:04:42AM +0000, Minas Harutyunyan wrote:
+> Hi Greg,
+> 
+> On 4/5/24 14:09, Dan Carpenter wrote:
+> > Hello Minas Harutyunyan,
+> > 
+> > This is a semi-automatic email about new static checker warnings.
+> > 
+> > Commit b258e4268850 ("usb: dwc2: host: Fix ISOC flow in DDMA mode")
+> > from Mar 13, 2024, leads to the following Smatch complaint:
+> > 
+> >      drivers/usb/dwc2/hcd_ddma.c:874 dwc2_cmpl_host_isoc_dma_desc()
+> >      warn: variable dereferenced before check 'qtd->urb' (see line 870)
+> > 
+> > drivers/usb/dwc2/hcd_ddma.c
+> >     869		u16 frame_desc_idx;
+> >     870		struct urb *usb_urb = qtd->urb->priv;
+> >                                        ^^^^^^^^^^
+> > The patch adds a dereference
+> > 
+> >     871		u16 remain = 0;
+> >     872		int rc = 0;
+> >     873	
+> >     874		if (!qtd->urb)
+> >                      ^^^^^^^^^
+> > The existing check is too late now
+> > 
+> >     875			return -EINVAL;
+> >     876	
+> > 
+> > regards,
+> > dan carpenter
+> 
+> Should I send new version of this patch or should develop fixup patch to 
+> be applied to "usb-linus" branch?
 
---mrcj7cuohzw5kahh
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+A fixup patch please, I can not rebase this tree.
 
-On Fri, Apr 05, 2024 at 09:20:41AM +0200, Uwe Kleine-K=F6nig wrote:
-> -M:	Li Yang <leoyang.li@nxp.com>
->  M:	Zhang Wei <zw@zh-kernel.org>
+thanks,
 
-This address of Zhang Wei doesn't seem to work either.
-
-zh-kernel.org doesn't have an MX in DNS, the host behind its A entry
-doesn't react to pings and connection attempts to tcp port 25 time out.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---mrcj7cuohzw5kahh
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmYToA4ACgkQj4D7WH0S
-/k65PAgAlzOGcV34Muztc48A4sK3thMx4xmK2GT3dLVR5K1QiaydY2gSBO8onaei
-iZPOJGypivVIWUqaBhsuuZmBAnqvSeQ2b1NvKlq/8APDmqPz6igTYdS9vTIxp26C
-VcIFqbqkQXNp2KIXgpktaZfOvAAZpwIN3w23tGgHDgRgTh57KvvDssMuOlbu181v
-G5flqP4+LXYZKkDWMmQbEpkwktRdZk1sfQxJaTTQYVuY1ByaNncw9hzCrMCqL8WO
-bXGl7J+ClwXN0kLXZCkNlCRWvTrPMFrZAlvSnLY+H7STK3Zpmxh+LeAtAHxwYTFN
-+GXJHCHxAemst04lXyi5pyCzibQ1Cg==
-=XE4m
------END PGP SIGNATURE-----
-
---mrcj7cuohzw5kahh--
+greg k-h
 
