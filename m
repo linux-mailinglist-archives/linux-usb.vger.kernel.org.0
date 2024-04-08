@@ -1,150 +1,288 @@
-Return-Path: <linux-usb+bounces-9086-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9087-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7574E89CC2E
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Apr 2024 21:06:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D92489CC5F
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Apr 2024 21:24:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E28CF1F2475D
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Apr 2024 19:06:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8AC381F25162
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Apr 2024 19:24:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A3FD145B0B;
-	Mon,  8 Apr 2024 19:05:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4B04145B3F;
+	Mon,  8 Apr 2024 19:24:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hjLWBhcr"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HpgY4653"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A86C1F51B;
-	Mon,  8 Apr 2024 19:05:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACEB81448E2
+	for <linux-usb@vger.kernel.org>; Mon,  8 Apr 2024 19:24:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712603150; cv=none; b=hGkSF4qsL4Yjk3ErQ3oyZUgNLx/iJ1qxeJUMp9eCezP+Pt5/mtTBt8B6AXcMmQ+dljOlMhZjOVnBbsTYNYkNJ90kJ7i1MjvL2o+IVf75YYnW6JQ8HfXLhEXxU8WBn9TFj2vNOxEr3GbC7tfUF4VBXDReiPSkUy6yZLFjskGA2zE=
+	t=1712604285; cv=none; b=RY1+pjRonn7ajEiARLQxhGHypA8x6d/gwj578tFUGYv/sa42I3CRhyHua6wtaCn24+sUQjpcQcKdRYcHiq+wlaRTuGWRqThjngHTtkjIa/PGosRVV3gH0UV3MxeDny7Tr/Dk+ga/+KW8lfaZAyesq7nCwKC8agHh30mJXgniFyM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712603150; c=relaxed/simple;
-	bh=8wFmekVOmu53+cf/lm5FpsFUvsp6gbs1zrZK0Pl2s60=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=GUE2yvHrckFBHmIAxKgwACZIPC0706Sk3MsCSUoEenHUExCbffGzOWZOhgxuqV1V4jSZI583syhu1kh6bcMJKyzdtRTTTxNYeyLU+isKYSwPufu9S3vuEK+YTN2RF1/cNsh7/NlQmAHIRucgnZl3xdJ2YVPEoCpy0u3nvlcMK70=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hjLWBhcr; arc=none smtp.client-ip=209.85.167.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-516dc51bb72so2809244e87.1;
-        Mon, 08 Apr 2024 12:05:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712603147; x=1713207947; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Qucr3ZG4rBrwezBMSwb49mxeKQa8nls3JKt/ZN46Wsw=;
-        b=hjLWBhcrfZWp3eeAC3Le8+0TNYctmveePDYuSdAb+MjdDnb/s+xdr18hkLxhNddx7n
-         ZrHJIVOMWJQVI2JCmHL8m6t1hG9SGp1+Q60+fQwhYfBaPUT/Ig+gzem7x87x00nWmQWa
-         hnzc70fhk+NwJe6pQzPE9+LROBhgelw/Tg0PExyZVCH0AXKUv8W1WxFK1BYgSOKXV7lF
-         yJ2qNCFQlP9Qc52P3yHSPBGzHnPoW1UmA4Y34B5UYOHXLsQkXlbUZ+c8JV11mCZ7OGVb
-         Sd5nrxKvMmZ+EcEZDuDO9lZerDRfQMSvQ4oUWhOvlin9UhSxF7FnE4z7FQj6JsLmUkfe
-         DZdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712603147; x=1713207947;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Qucr3ZG4rBrwezBMSwb49mxeKQa8nls3JKt/ZN46Wsw=;
-        b=kfMs/kwNE6Tzf6hnK3aaTi5GI6OS3XPkjLCb3mMIvr4lrhfx3PQ0SnwCekC4ifts4z
-         GbbbRZ3OY+MIlPb4v5J92Sk6a8RPMYqwjZU5ojaqr8ZuVR0jkF0f0e9rFO+EpleWBDoI
-         nKNG/+H+rSbe24OWiMvz1XxUls5izKr9ho2gbhDQVPQ3B/ioOuiVXEI5YNEHuOvLW/fi
-         2YG9IruGeZVGHVBgnYOVyizocy41dClcIdBLMGGkf1eEg63d1Dc3enHHiYXRM3kt7dTm
-         GkDi7eFzf2AMoPJfNFph/SdaQegM0K0VKDqi8IGJrmxmIPB/cEueZJt3qVxj0c23fOoc
-         Aatw==
-X-Forwarded-Encrypted: i=1; AJvYcCWVdXdM/McPbXg3oOkjoX3LSbvjCLm2ymyqOoltI0pIGBxLHE9y/+Bh4OQHxE18q/QEilLUK2fZhPIGofyyImeL+WxTAmWV0rO1M57TbjoS4C1GROVIS3o33Me0ZHEtw7M4E5jQoMXO
-X-Gm-Message-State: AOJu0YwEfiVrL0Qf6vlW3bkexiHP3EFAO3Kw8xNGdVZqzMWCmMr8ZIjA
-	6bOauc+nnbXHNwbFx3BMajX7r0lmg6AnHvTmn7kYd1KnVS0iGjtIgKucv1Bh/5Q=
-X-Google-Smtp-Source: AGHT+IFS6YdWF/r3zdQOLFUz3U9xCyj7XabMaoBTsrZUAlosxvGR85IjG7BnK0xafqIAIIfyaajI4A==
-X-Received: by 2002:ac2:5edb:0:b0:513:23be:e924 with SMTP id d27-20020ac25edb000000b0051323bee924mr6455959lfq.59.1712603146362;
-        Mon, 08 Apr 2024 12:05:46 -0700 (PDT)
-Received: from foxbook (acgm220.neoplus.adsl.tpnet.pl. [83.9.240.220])
-        by smtp.gmail.com with ESMTPSA id m15-20020aa7c48f000000b0056b0af78d80sm4452867edq.34.2024.04.08.12.05.45
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Mon, 08 Apr 2024 12:05:45 -0700 (PDT)
-Date: Mon, 8 Apr 2024 21:05:41 +0200
-From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: Paul Menzel <pmenzel@molgen.mpg.de>, Mathias Nyman
- <mathias.nyman@intel.com>, LKML <linux-kernel@vger.kernel.org>,
- linux-usb@vger.kernel.org
-Subject: Re: xhci_hcd 0000:00:14.0: ERROR Transfer event TRB DMA ptr not
- part of current TD ep_index 1 comp_code 1
-Message-ID: <20240408210541.771253ff@foxbook>
-In-Reply-To: <1f64af9a-0618-a7da-4acc-f043b6580308@linux.intel.com>
-References: <58bca6f2-797a-4e20-a476-2294309afdd5@molgen.mpg.de>
-	<20240405113247.743e34b2@foxbook>
-	<7090d3af-18ce-40e1-8ac2-bf18152e5c4a@molgen.mpg.de>
-	<20240406183659.3daf4fa0@foxbook>
-	<c57f2116-8c42-44fb-9c32-6115ad88f914@molgen.mpg.de>
-	<20240407142542.036fb02f@foxbook>
-	<1f64af9a-0618-a7da-4acc-f043b6580308@linux.intel.com>
+	s=arc-20240116; t=1712604285; c=relaxed/simple;
+	bh=V3erAYThP67GTuIDWg+Gg3vlWoDrdVsLLwmTFD2pmXU=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=KHcD8WvI/D6tXD5ZRWX95JImg/pf4RsE27Q4hk1mzaJBAT9Ny2OQ1Xof2tqzf0mYTSWJJZnYBXWrVES7FYIulcBWrp52iw4YSG25WMMDWMrbfoZEQzHSk0xhO2YCZ20MTADG0tWs5d/M/cdCHhOHueMEHpY8Rp8kQwNN1eAxle4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HpgY4653; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1712604283; x=1744140283;
+  h=date:from:to:cc:subject:message-id;
+  bh=V3erAYThP67GTuIDWg+Gg3vlWoDrdVsLLwmTFD2pmXU=;
+  b=HpgY4653PAUguXtavxjrutt0xmdkwq00iSfvuyIhNEcvN5ESkFrn7a4j
+   Yh1XRV/fbabXAmIlIbhb+B0dtsdDonTHnhNHAq332a5LKZGN0qW23FB9D
+   tZqsf8oRU2MkVbiXCrJ9yRxtJXPGthV4GAu9qlASE8OmPDK+uQA+cosEp
+   Dl6KAHe4S2rMy9GOgK6Uqyke9t8Ob2+/wkdqOZ++w8xSHgmsxgTDQh2X7
+   0tnup0ikIBM5yJBjdhzQZ2Hse9/y/SvpyOyEmmn3ET37bjgH5ktGINpB4
+   MyaWhn280PQH69iiKFgW7UYJdjeUHZEPD41r8XqyR+aU2iRiflnDUgGyf
+   g==;
+X-CSE-ConnectionGUID: 4o563s6fRuKjKs3mf/JZbQ==
+X-CSE-MsgGUID: 3mF44KUgRZOxC414yF3cTA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11038"; a="33304730"
+X-IronPort-AV: E=Sophos;i="6.07,187,1708416000"; 
+   d="scan'208";a="33304730"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2024 12:24:03 -0700
+X-CSE-ConnectionGUID: nkEK/PYYR3evFE8ylZDNDQ==
+X-CSE-MsgGUID: vis32rYOSrS3MYBh+OrVFg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,187,1708416000"; 
+   d="scan'208";a="24683824"
+Received: from lkp-server01.sh.intel.com (HELO e61807b1d151) ([10.239.97.150])
+  by orviesa003.jf.intel.com with ESMTP; 08 Apr 2024 12:24:02 -0700
+Received: from kbuild by e61807b1d151 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rtub1-0005Rd-0p;
+	Mon, 08 Apr 2024 19:23:59 +0000
+Date: Tue, 09 Apr 2024 03:23:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: linux-usb@vger.kernel.org
+Subject: [westeri-thunderbolt:next] BUILD SUCCESS
+ 9a966517a83090ee3e26e9a93a92523e2358c5b3
+Message-ID: <202404090309.agxwz32L-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
 
-> It's also possible this TD/TRB was cancelled due to the disconnect.
-> Could be that even if driver removes the TD from the list and cleans
-> out the TRB from the ring buffer (turns TRB to no-op) hardware may
-> have read ahead and cached the TRB, and process it anyway.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git next
+branch HEAD: 9a966517a83090ee3e26e9a93a92523e2358c5b3  thunderbolt: Enable NVM upgrade support on Intel Maple Ridge
 
-I thought about it, but my debug patch says that the missing TD was
-freed by finish_td(), which is called on TDs considered completed by
-hardware. A cancelled TD would show giveback_invalidated_tds().
+elapsed time: 795m
 
+configs tested: 195
+configs skipped: 4
 
-Anyway, we now have new information from the reporter. My v2 patch
-keeps a log of the last five events processed on each transfer ring
-and dumps the log on TRB mismatch errors.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Unfortunately, it looks like the host controller is broken and signals
-completion of those transfers twice. The log below shows two distinct
-events for TRB 32959a1c0 and that the coresponding TD has just been
-freed by finish_td().
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allmodconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                   randconfig-001-20240408   gcc  
+arc                   randconfig-002-20240408   gcc  
+arc                    vdk_hs38_smp_defconfig   gcc  
+arm                              allmodconfig   gcc  
+arm                               allnoconfig   clang
+arm                              allyesconfig   gcc  
+arm                                 defconfig   clang
+arm                       imx_v4_v5_defconfig   clang
+arm                         lpc32xx_defconfig   clang
+arm                            mmp2_defconfig   gcc  
+arm                        multi_v7_defconfig   gcc  
+arm                          pxa910_defconfig   gcc  
+arm                             pxa_defconfig   gcc  
+arm                   randconfig-001-20240408   clang
+arm                   randconfig-002-20240408   clang
+arm                   randconfig-003-20240408   clang
+arm                   randconfig-004-20240408   clang
+arm                         s3c6400_defconfig   gcc  
+arm                           sama5_defconfig   gcc  
+arm                          sp7021_defconfig   gcc  
+arm                    vt8500_v6_v7_defconfig   gcc  
+arm                         wpcm450_defconfig   gcc  
+arm64                            alldefconfig   gcc  
+arm64                            allmodconfig   clang
+arm64                             allnoconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                 randconfig-001-20240408   clang
+arm64                 randconfig-002-20240408   clang
+arm64                 randconfig-003-20240408   gcc  
+arm64                 randconfig-004-20240408   gcc  
+csky                             allmodconfig   gcc  
+csky                              allnoconfig   gcc  
+csky                             allyesconfig   gcc  
+csky                                defconfig   gcc  
+csky                  randconfig-001-20240408   gcc  
+csky                  randconfig-002-20240408   gcc  
+hexagon                          allmodconfig   clang
+hexagon                           allnoconfig   clang
+hexagon                          allyesconfig   clang
+hexagon                             defconfig   clang
+hexagon               randconfig-001-20240408   clang
+hexagon               randconfig-002-20240408   clang
+i386                             allmodconfig   gcc  
+i386                              allnoconfig   gcc  
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-001-20240408   gcc  
+i386         buildonly-randconfig-002-20240408   gcc  
+i386         buildonly-randconfig-003-20240408   gcc  
+i386         buildonly-randconfig-004-20240408   clang
+i386         buildonly-randconfig-005-20240408   clang
+i386         buildonly-randconfig-006-20240408   gcc  
+i386                                defconfig   clang
+i386                  randconfig-001-20240408   clang
+i386                  randconfig-002-20240408   clang
+i386                  randconfig-003-20240408   clang
+i386                  randconfig-004-20240408   clang
+i386                  randconfig-005-20240408   gcc  
+i386                  randconfig-006-20240408   clang
+i386                  randconfig-011-20240408   clang
+i386                  randconfig-012-20240408   gcc  
+i386                  randconfig-013-20240408   clang
+i386                  randconfig-014-20240408   gcc  
+i386                  randconfig-015-20240408   gcc  
+i386                  randconfig-016-20240408   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                        allyesconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch             randconfig-001-20240408   gcc  
+loongarch             randconfig-002-20240408   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                         amcore_defconfig   gcc  
+m68k                                defconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                       allyesconfig   gcc  
+microblaze                          defconfig   gcc  
+microblaze                      mmu_defconfig   gcc  
+mips                             allmodconfig   gcc  
+mips                              allnoconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                      pic32mzda_defconfig   gcc  
+nios2                             allnoconfig   gcc  
+nios2                            allyesconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                 randconfig-001-20240408   gcc  
+nios2                 randconfig-002-20240408   gcc  
+openrisc                         allmodconfig   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                         allyesconfig   gcc  
+openrisc                            defconfig   gcc  
+openrisc                    or1ksim_defconfig   gcc  
+parisc                           allmodconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc                generic-32bit_defconfig   gcc  
+parisc                randconfig-001-20240408   gcc  
+parisc                randconfig-002-20240408   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                          allyesconfig   clang
+powerpc                          g5_defconfig   gcc  
+powerpc                 mpc834x_itx_defconfig   clang
+powerpc               randconfig-001-20240408   gcc  
+powerpc               randconfig-002-20240408   clang
+powerpc               randconfig-003-20240408   gcc  
+powerpc64             randconfig-001-20240408   clang
+powerpc64             randconfig-002-20240408   gcc  
+powerpc64             randconfig-003-20240408   clang
+riscv                            allmodconfig   clang
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   clang
+riscv                               defconfig   clang
+riscv                 randconfig-001-20240408   clang
+riscv                 randconfig-002-20240408   clang
+s390                             allmodconfig   clang
+s390                              allnoconfig   clang
+s390                             allyesconfig   gcc  
+s390                                defconfig   clang
+s390                  randconfig-001-20240408   clang
+s390                  randconfig-002-20240408   gcc  
+sh                               allmodconfig   gcc  
+sh                                allnoconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                                  defconfig   gcc  
+sh                    randconfig-001-20240408   gcc  
+sh                    randconfig-002-20240408   gcc  
+sh                           se7722_defconfig   gcc  
+sh                   sh7724_generic_defconfig   gcc  
+sh                        sh7785lcr_defconfig   gcc  
+sh                            shmin_defconfig   gcc  
+sh                             shx3_defconfig   gcc  
+sh                          urquell_defconfig   gcc  
+sparc                            allmodconfig   gcc  
+sparc                             allnoconfig   gcc  
+sparc                            allyesconfig   gcc  
+sparc                               defconfig   gcc  
+sparc64                          allmodconfig   gcc  
+sparc64                          allyesconfig   gcc  
+sparc64                             defconfig   gcc  
+sparc64               randconfig-001-20240408   gcc  
+sparc64               randconfig-002-20240408   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   gcc  
+um                                  defconfig   clang
+um                             i386_defconfig   gcc  
+um                    randconfig-001-20240408   clang
+um                    randconfig-002-20240408   clang
+um                           x86_64_defconfig   clang
+x86_64                            allnoconfig   clang
+x86_64                           allyesconfig   clang
+x86_64       buildonly-randconfig-001-20240408   clang
+x86_64       buildonly-randconfig-002-20240408   clang
+x86_64       buildonly-randconfig-003-20240408   clang
+x86_64       buildonly-randconfig-004-20240408   clang
+x86_64       buildonly-randconfig-005-20240408   clang
+x86_64       buildonly-randconfig-006-20240408   clang
+x86_64                              defconfig   gcc  
+x86_64                randconfig-001-20240408   gcc  
+x86_64                randconfig-002-20240408   clang
+x86_64                randconfig-003-20240408   clang
+x86_64                randconfig-004-20240408   clang
+x86_64                randconfig-005-20240408   clang
+x86_64                randconfig-006-20240408   gcc  
+x86_64                randconfig-011-20240408   clang
+x86_64                randconfig-012-20240408   clang
+x86_64                randconfig-013-20240408   gcc  
+x86_64                randconfig-014-20240408   clang
+x86_64                randconfig-015-20240408   clang
+x86_64                randconfig-016-20240408   clang
+x86_64                randconfig-071-20240408   gcc  
+x86_64                randconfig-072-20240408   clang
+x86_64                randconfig-073-20240408   clang
+x86_64                randconfig-074-20240408   gcc  
+x86_64                randconfig-075-20240408   gcc  
+x86_64                randconfig-076-20240408   clang
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+xtensa                            allnoconfig   gcc  
+xtensa                           allyesconfig   gcc  
+xtensa                  audio_kc705_defconfig   gcc  
+xtensa                randconfig-001-20240408   gcc  
+xtensa                randconfig-002-20240408   gcc  
 
-[33819.676314] usb 1-2: USB disconnect, device number 7
-[33819.676331] usb 1-2: unregistering device
-[33819.676347] usb 1-2: unregistering interface 1-2:1.0
-[33819.677861] xhci_hcd 0000:00:14.0: ERROR Transfer event TRB DMA ptr not part of current TD ep_index 1 comp_code 1
-[33819.677886] xhci_hcd 0000:00:14.0: Looking for event-dma 000000032959a1c0 trb-start 000000032959a1d0 trb-end 000000032959a1d0 seg-start 000000032959a000 seg-end 000000032959aff0
-[33819.677902] xhci_hcd 0000:00:14.0: last xhci_td_cleanup: first_dma 32959a1c0 last_dma 32959a1c0 status -115 from finish_td
-[33819.677915] xhci_hcd 0000:00:14.0: handle_tx_event log -4: event ffff9e19c38eb1f0 ep_trb_dma 32959a190 comp_code 1 len 0 slot 6 ep 1
-[33819.677925] xhci_hcd 0000:00:14.0: handle_tx_event log -3: event ffff9e19c38eb200 ep_trb_dma 32959a1a0 comp_code 1 len 0 slot 6 ep 1
-[33819.677934] xhci_hcd 0000:00:14.0: handle_tx_event log -2: event ffff9e19c38eb220 ep_trb_dma 32959a1b0 comp_code 1 len 0 slot 6 ep 1
-[33819.677941] xhci_hcd 0000:00:14.0: handle_tx_event log -1: event ffff9e19c38eb230 ep_trb_dma 32959a1c0 comp_code 1 len 0 slot 6 ep 1
-[33819.677949] xhci_hcd 0000:00:14.0: handle_tx_event log  0: event ffff9e19c38eb260 ep_trb_dma 32959a1c0 comp_code 1 len 0 slot 6 ep 1
-
-At this point we have set the "interesting" flag on this transfer ring,
-so the handling of the next event is logged. We observe TD 32959a1d0
-completing normally here.
-
-[33819.677965] xhci_hcd 0000:00:14.0: handle_tx_event event ffff9e19c38eb270 ep_trb_dma 32959a1d0 comp_code 1 len 0 slot 6 ep 1
-[33819.677979] xhci_hcd 0000:00:14.0: handle_tx_event event ffff9e19c38eb270 first_trb 32959a1d0 last_trb 32959a1d0 ep_seg 32959a000
-[33819.677993] xhci_hcd 0000:00:14.0: process_isoc_td event ffff9e19c38eb270 requested 192 ep_trb_len 192 remaining 0
-[33819.678004] xhci_hcd 0000:00:14.0: finish_td td_status -115 comp_code 1 frame_status 0 frame_actual_length 192
-
-And then we get a TRB mismatch error on this same TD.
-The dumped log shows duplicate events once again.
-
-[33819.678022] xhci_hcd 0000:00:14.0: ERROR Transfer event TRB DMA ptr not part of current TD ep_index 1 comp_code 1
-[33819.678034] xhci_hcd 0000:00:14.0: Looking for event-dma 000000032959a1d0 trb-start 000000032959a1e0 trb-end 000000032959a1e0 seg-start 000000032959a000 seg-end 000000032959aff0
-[33819.678047] xhci_hcd 0000:00:14.0: last xhci_td_cleanup: first_dma 32959a1d0 last_dma 32959a1d0 status -115 from finish_td
-[33819.678058] xhci_hcd 0000:00:14.0: handle_tx_event log -4: event ffff9e19c38eb220 ep_trb_dma 32959a1b0 comp_code 1 len 0 slot 6 ep 1
-[33819.678066] xhci_hcd 0000:00:14.0: handle_tx_event log -3: event ffff9e19c38eb230 ep_trb_dma 32959a1c0 comp_code 1 len 0 slot 6 ep 1
-[33819.678074] xhci_hcd 0000:00:14.0: handle_tx_event log -2: event ffff9e19c38eb260 ep_trb_dma 32959a1c0 comp_code 1 len 0 slot 6 ep 1
-[33819.678082] xhci_hcd 0000:00:14.0: handle_tx_event log -1: event ffff9e19c38eb270 ep_trb_dma 32959a1d0 comp_code 1 len 0 slot 6 ep 1
-[33819.678089] xhci_hcd 0000:00:14.0: handle_tx_event log  0: event ffff9e19c38eb280 ep_trb_dma 32959a1d0 comp_code 1 len 0 slot 6 ep 1
-
-Regards,
-Michal
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
