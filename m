@@ -1,63 +1,64 @@
-Return-Path: <linux-usb+bounces-9053-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9052-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A2E789BF0C
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Apr 2024 14:36:06 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9082489BF0B
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Apr 2024 14:36:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0E25A2858E0
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Apr 2024 12:36:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4C0AD285813
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Apr 2024 12:36:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E8286CDA6;
-	Mon,  8 Apr 2024 12:35:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E8006BB21;
+	Mon,  8 Apr 2024 12:35:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZKjKbazM"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OOp1RuwJ"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0419D657BC
-	for <linux-usb@vger.kernel.org>; Mon,  8 Apr 2024 12:35:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 094572D638
+	for <linux-usb@vger.kernel.org>; Mon,  8 Apr 2024 12:35:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712579758; cv=none; b=YXHubaxMjkGFNeToiUSxNjl79C9urT7u4GMbqC9C9egauDB8aXfTORb/ZutyDvTC01ulx7B2QgmXKhgw1U85rFVKSYFQ1XSn9ylwKLUQJmywCA+C3mfCQwzuWjnqUamgRXm5kSwsbkko6VMDqCn0JschYKz2kq/BpJAoTrAWOwc=
+	t=1712579755; cv=none; b=u5Z6II1PqiLNO5o3VGji834Xn0IeXWv9BhI1vPJDnH5lNyZiMUzL2nrtwmgAhywjRb25e1QW1/mkcYd66akJYoCaepvvGnQZEapPhC/eGXx2mDOu3Dfmkr1GyPBFvtqsCJLuASvgRYx1qA+vTzpdKjMZhDmU01Ouy53BPptLvFo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712579758; c=relaxed/simple;
-	bh=tcQY+L65bmhF7UovNVosDQjsP9ILz3Rb1zWcHkLKa78=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=od/nzi2ZVmb+QR8K4KqJTAPBAd2Y/YsYgaJ8JHYct7wWT5+y2+kNEcuMMZG/24XveYRpdqsdAVK1/SjtdnUCnURp5ZCSqrlK7IjouQF2+gtQwIIjtyvvqxdqpfOJ/Kj3zFyWBc1Ypc0S1YNNbHuMjZVUNNUIVJiQhO/E/CAh3FI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZKjKbazM; arc=none smtp.client-ip=192.198.163.17
+	s=arc-20240116; t=1712579755; c=relaxed/simple;
+	bh=onkmaoZvkauW8Q4MGh3eVchFeNAmDaYgmCBvXuFcIGE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=aHrLILvWDhpOEiyxOQtr6lJiHTO3eCdfX1IXNC337LnDdZ8zWeyVe6hTe/qAygrUWr4VWKra5vOVC+ljsvvTDE+Z7f72geSX3MeSi9E8esNPfYngVYx688YheFCAT9s6t+D5plNPMvZ6Kz4+dmDy1bgdp/oYDoDEWLewQiCRxgc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OOp1RuwJ; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712579756; x=1744115756;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=tcQY+L65bmhF7UovNVosDQjsP9ILz3Rb1zWcHkLKa78=;
-  b=ZKjKbazMP1+13pTmDVpyoGAZqL06AFmrhLgIHH4WKibZuironqrLsGgn
-   vn85ui8nDEnr0UZIoQBYkEPDaGlRIyK035ZcZam9R25BkhxlQQRvdeKde
-   2zP5PcTebobQ5kikMF8qyYqzmOaKBuIUXYd5vIuw2ra6wYSOoZeMEr/2R
-   ytFXST+nRh5BHty9FQ7uU29drLT/bPFgqtvNe7A+Jx8g0gltp6scWZOii
-   SN4QUGdh8HbhPfs5e1yNqvThd6+tlgB0XYAy0fJp5pt3Xq13U134/U5FS
-   aA2zzI2uDqxxmXEHQBf/g4pkt22NwjpbpIG1PNmdxj03ten6QhOeHDZ9v
-   A==;
-X-CSE-ConnectionGUID: cRReRcmJQmO92WCJdRdVBA==
-X-CSE-MsgGUID: q/NJ17GpRzW1pjQUQybV6w==
-X-IronPort-AV: E=McAfee;i="6600,9927,11037"; a="7720373"
+  t=1712579754; x=1744115754;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=onkmaoZvkauW8Q4MGh3eVchFeNAmDaYgmCBvXuFcIGE=;
+  b=OOp1RuwJCJ810UjFAw24ChtD34xr+4aDAOix8sAz40a7u/cvno7yYOnJ
+   A1CmrsWmwRreOILSFfYp0ocrsqNoCHJrIVWH2kK0qbv7pICX1EZCqWHcO
+   i964kz+/lHPyKZmgpxxoAIUhM5mnfMGZCQ8DJ/NiCIABdAXvPJ67evojQ
+   qPTLiVyT0DORwP0s016PY6wroR7a3OqLDh2oHw+WaeZNNdxFAJ1UScxhl
+   ltU2svUMv6G48K4FwWeLBBsDVsMcm2yS9/WtuH/bzVi5V3gkAt06Jtn+i
+   mWAVVFht1KKEiDkdVi5Y6/cuQO7cEwrrKnc+PLivg9M+u3MO37L2uyXyK
+   w==;
+X-CSE-ConnectionGUID: VKP5oxTTSYOfDaEjONcX3w==
+X-CSE-MsgGUID: C1ndScmGT1KBPboa3jgyXw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11037"; a="7720370"
 X-IronPort-AV: E=Sophos;i="6.07,186,1708416000"; 
-   d="scan'208";a="7720373"
+   d="scan'208";a="7720370"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
   by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2024 05:35:53 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11037"; a="937091338"
+X-IronPort-AV: E=McAfee;i="6600,9927,11037"; a="937091336"
 X-IronPort-AV: E=Sophos;i="6.07,186,1708416000"; 
-   d="scan'208";a="937091338"
+   d="scan'208";a="937091336"
 Received: from black.fi.intel.com ([10.237.72.28])
   by fmsmga001.fm.intel.com with ESMTP; 08 Apr 2024 05:35:51 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id 2CA89194; Mon,  8 Apr 2024 15:35:50 +0300 (EEST)
+	id 401AD12C; Mon,  8 Apr 2024 15:35:50 +0300 (EEST)
 From: Mika Westerberg <mika.westerberg@linux.intel.com>
 To: Yehezkel Bernat <YehezkelShB@gmail.com>,
 	Michael Jamet <michael.jamet@intel.com>,
@@ -66,10 +67,12 @@ To: Yehezkel Bernat <YehezkelShB@gmail.com>,
 Cc: Gil Fine <gil.fine@linux.intel.com>,
 	linux-usb@vger.kernel.org,
 	Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH 1/2] thunderbolt: Avoid notify PM core about runtime PM resume
-Date: Mon,  8 Apr 2024 15:35:49 +0300
-Message-ID: <20240408123550.4178338-1-mika.westerberg@linux.intel.com>
+Subject: [PATCH 2/2] thunderbolt: Fix calculation of consumed USB3 bandwidth on a path
+Date: Mon,  8 Apr 2024 15:35:50 +0300
+Message-ID: <20240408123550.4178338-2-mika.westerberg@linux.intel.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240408123550.4178338-1-mika.westerberg@linux.intel.com>
+References: <20240408123550.4178338-1-mika.westerberg@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -80,158 +83,51 @@ Content-Transfer-Encoding: 8bit
 
 From: Gil Fine <gil.fine@linux.intel.com>
 
-Currently we notify PM core about occurred wakes after any resume. This
-is not actually needed after resume from runtime suspend. Hence, notify
-PM core about occurred wakes only after resume from system sleep. Also,
-if the wake occurred in USB4 router upstream port, we don't notify the
-PM core about it since it is not actually needed and can cause
-unexpected autowake (e.g. if /sys/power/wakeup_count is used).
+Currently, when setup a new USB3 tunnel that is starting from downstream USB3
+adapter of first depth router (or deeper), to upstream USB3 adapter of a second
+depth router (or deeper), we calculate consumed bandwidth. For this calculation
+we take into account first USB3 tunnel consumed bandwidth while we shouldn't,
+because we just recalculating the first USB3 tunnel allocated bandwidth.
 
-While there add the missing kernel-doc for tb_switch_resume().
+Fix that, so that more bandwidth is available for the new USB3 tunnel being
+setup.
+
+While there, fix the kernel-doc to decribe more accurately the purpose of the
+function.
 
 Signed-off-by: Gil Fine <gil.fine@linux.intel.com>
-Cc: stable@vger.kernel.org
 Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 ---
- drivers/thunderbolt/switch.c | 27 +++++++++++++++++++++++++--
- drivers/thunderbolt/tb.c     |  4 ++--
- drivers/thunderbolt/tb.h     |  3 ++-
- drivers/thunderbolt/usb4.c   | 13 +++++++------
- 4 files changed, 36 insertions(+), 11 deletions(-)
+ drivers/thunderbolt/tb.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
-index 4edfd6e34e31..326433df5880 100644
---- a/drivers/thunderbolt/switch.c
-+++ b/drivers/thunderbolt/switch.c
-@@ -3448,7 +3448,26 @@ static int tb_switch_set_wake(struct tb_switch *sw, unsigned int flags)
- 	return tb_lc_set_wake(sw, flags);
- }
- 
--int tb_switch_resume(struct tb_switch *sw)
-+static void tb_switch_check_wakes(struct tb_switch *sw)
-+{
-+	if (device_may_wakeup(&sw->dev)) {
-+		if (tb_switch_is_usb4(sw))
-+			usb4_switch_check_wakes(sw);
-+	}
-+}
-+
-+/**
-+ * tb_switch_resume() - Resume a switch after sleep
-+ * @sw: Switch to resume
-+ * @runtime: Is this resume from runtime suspend or system sleep
-+ *
-+ * Resumes and re-enumerates router (and all its children), if still plugged
-+ * after suspend. Don't enumerate device router whose UID was changed during
-+ * suspend. If this is resume from system sleep, notifies PM core about the
-+ * wakes occurred during suspend. Disables all wakes, except USB4 wake of
-+ * upstream port for USB4 routers that shall be always enabled.
-+ */
-+int tb_switch_resume(struct tb_switch *sw, bool runtime)
- {
- 	struct tb_port *port;
- 	int err;
-@@ -3497,6 +3516,9 @@ int tb_switch_resume(struct tb_switch *sw)
- 	if (err)
- 		return err;
- 
-+	if (!runtime)
-+		tb_switch_check_wakes(sw);
-+
- 	/* Disable wakes */
- 	tb_switch_set_wake(sw, 0);
- 
-@@ -3526,7 +3548,8 @@ int tb_switch_resume(struct tb_switch *sw)
- 			 */
- 			if (tb_port_unlock(port))
- 				tb_port_warn(port, "failed to unlock port\n");
--			if (port->remote && tb_switch_resume(port->remote->sw)) {
-+			if (port->remote &&
-+			    tb_switch_resume(port->remote->sw, runtime)) {
- 				tb_port_warn(port,
- 					     "lost during suspend, disconnecting\n");
- 				tb_sw_set_unplugged(port->remote->sw);
 diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
-index 360cb95f39aa..3e44c78ac409 100644
+index 3e44c78ac409..10e719dd837c 100644
 --- a/drivers/thunderbolt/tb.c
 +++ b/drivers/thunderbolt/tb.c
-@@ -2942,7 +2942,7 @@ static int tb_resume_noirq(struct tb *tb)
- 	if (!tb_switch_is_usb4(tb->root_switch))
- 		tb_switch_reset(tb->root_switch);
+@@ -498,8 +498,9 @@ static struct tb_tunnel *tb_find_first_usb3_tunnel(struct tb *tb,
+  * @consumed_down: Consumed downstream bandwidth (Mb/s)
+  *
+  * Calculates consumed USB3 and PCIe bandwidth at @port between path
+- * from @src_port to @dst_port. Does not take tunnel starting from
+- * @src_port and ending from @src_port into account.
++ * from @src_port to @dst_port. Does not take USB3 tunnel starting from
++ * @src_port and ending on @src_port into account because that bandwidth is
++ * already included in as part of the "first hop" USB3 tunnel.
+  */
+ static int tb_consumed_usb3_pcie_bandwidth(struct tb *tb,
+ 					   struct tb_port *src_port,
+@@ -514,8 +515,8 @@ static int tb_consumed_usb3_pcie_bandwidth(struct tb *tb,
+ 	*consumed_up = *consumed_down = 0;
  
--	tb_switch_resume(tb->root_switch);
-+	tb_switch_resume(tb->root_switch, false);
- 	tb_free_invalid_tunnels(tb);
- 	tb_free_unplugged_children(tb->root_switch);
- 	tb_restore_children(tb->root_switch);
-@@ -3068,7 +3068,7 @@ static int tb_runtime_resume(struct tb *tb)
- 	struct tb_tunnel *tunnel, *n;
+ 	tunnel = tb_find_first_usb3_tunnel(tb, src_port, dst_port);
+-	if (tunnel && tunnel->src_port != src_port &&
+-	    tunnel->dst_port != dst_port) {
++	if (tunnel && !tb_port_is_usb3_down(src_port) &&
++	    !tb_port_is_usb3_up(dst_port)) {
+ 		int ret;
  
- 	mutex_lock(&tb->lock);
--	tb_switch_resume(tb->root_switch);
-+	tb_switch_resume(tb->root_switch, true);
- 	tb_free_invalid_tunnels(tb);
- 	tb_restore_children(tb->root_switch);
- 	list_for_each_entry_safe(tunnel, n, &tcm->tunnel_list, list)
-diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
-index feed8ecaf712..18aae4ccaed5 100644
---- a/drivers/thunderbolt/tb.h
-+++ b/drivers/thunderbolt/tb.h
-@@ -827,7 +827,7 @@ int tb_switch_configuration_valid(struct tb_switch *sw);
- int tb_switch_add(struct tb_switch *sw);
- void tb_switch_remove(struct tb_switch *sw);
- void tb_switch_suspend(struct tb_switch *sw, bool runtime);
--int tb_switch_resume(struct tb_switch *sw);
-+int tb_switch_resume(struct tb_switch *sw, bool runtime);
- int tb_switch_reset(struct tb_switch *sw);
- int tb_switch_wait_for_bit(struct tb_switch *sw, u32 offset, u32 bit,
- 			   u32 value, int timeout_msec);
-@@ -1288,6 +1288,7 @@ static inline bool tb_switch_is_usb4(const struct tb_switch *sw)
- 	return usb4_switch_version(sw) > 0;
- }
- 
-+void usb4_switch_check_wakes(struct tb_switch *sw);
- int usb4_switch_setup(struct tb_switch *sw);
- int usb4_switch_configuration_valid(struct tb_switch *sw);
- int usb4_switch_read_uid(struct tb_switch *sw, u64 *uid);
-diff --git a/drivers/thunderbolt/usb4.c b/drivers/thunderbolt/usb4.c
-index 9860b49d7a2b..78b06e922fda 100644
---- a/drivers/thunderbolt/usb4.c
-+++ b/drivers/thunderbolt/usb4.c
-@@ -155,7 +155,13 @@ static inline int usb4_switch_op_data(struct tb_switch *sw, u16 opcode,
- 				tx_dwords, rx_data, rx_dwords);
- }
- 
--static void usb4_switch_check_wakes(struct tb_switch *sw)
-+/**
-+ * usb4_switch_check_wakes() - Check for wakes and notify PM core about them
-+ * @sw: Router whose wakes to check
-+ *
-+ * Checks wakes occurred during suspend and notify the PM core about them.
-+ */
-+void usb4_switch_check_wakes(struct tb_switch *sw)
- {
- 	bool wakeup_usb4 = false;
- 	struct usb4_port *usb4;
-@@ -163,9 +169,6 @@ static void usb4_switch_check_wakes(struct tb_switch *sw)
- 	bool wakeup = false;
- 	u32 val;
- 
--	if (!device_may_wakeup(&sw->dev))
--		return;
--
- 	if (tb_route(sw)) {
- 		if (tb_sw_read(sw, &val, TB_CFG_SWITCH, ROUTER_CS_6, 1))
- 			return;
-@@ -244,8 +247,6 @@ int usb4_switch_setup(struct tb_switch *sw)
- 	u32 val = 0;
- 	int ret;
- 
--	usb4_switch_check_wakes(sw);
--
- 	if (!tb_route(sw))
- 		return 0;
- 
+ 		ret = tb_tunnel_consumed_bandwidth(tunnel, consumed_up,
 -- 
 2.43.0
 
