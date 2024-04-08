@@ -1,131 +1,109 @@
-Return-Path: <linux-usb+bounces-9026-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9027-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 32CD289B82D
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Apr 2024 09:15:54 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 24DD289B8F9
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Apr 2024 09:47:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E2AF128393D
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Apr 2024 07:15:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3C9611C221C8
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Apr 2024 07:47:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7254522F19;
-	Mon,  8 Apr 2024 07:15:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Zah+m34p"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC6494176B;
+	Mon,  8 Apr 2024 07:43:17 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 898A725761;
-	Mon,  8 Apr 2024 07:15:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B2043C489
+	for <linux-usb@vger.kernel.org>; Mon,  8 Apr 2024 07:43:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712560547; cv=none; b=E/6XX8mMqFckMHgAgWKw2mfLw0+HMoDJ4pnnfR6T0bpJUssMBb37wXPLKoTa7Im8BAn7SklA3f4sQHfVeOxVUL1icUmuwAhgRToAMRdUmZMt8AnjomQFZEPgbSmtyRLOVR3JdCjNiVoUFusmR7/g0a5g1D5AU38TlYicAcOWt4k=
+	t=1712562197; cv=none; b=bSS0nmAMLMqUKZS+zv3JXz+KLp3n71Z86A+aONNb0N2Goqx/OdBsuih5ktdUAZ3X+4IWgAiJ1ukinRDtIY5UkpiGtiG+h1doG6aZhIVRPNOI9sx6WXD57CXSxWwySeNJQgcH9C7R4m2ySrorSDzkWZsgg6EC/FeasNAylTnT93U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712560547; c=relaxed/simple;
-	bh=wfBI0w2ix2dYMyVPgP0IE0+1KgiAiSMym15kBzlE+OM=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:From:Subject:
-	 In-Reply-To:Content-Type; b=ns4zDvQk/ePJsymgs2NMpfu/5LSEHaFR34Z2UqQhHwwnAlNLSOQKARo9vD6EZs47monumBF8Vpul80Krp9veP5JQ0TEVYDXjlmuX9v52VysR7wbIXK4YFvET8KBCglouhicCtgxMtOnAZ+PMWk2H9nEf9iz9HmbGW1UmhZ1V84M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Zah+m34p; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712560545; x=1744096545;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=wfBI0w2ix2dYMyVPgP0IE0+1KgiAiSMym15kBzlE+OM=;
-  b=Zah+m34p/0ICxFjDEMGmVBdCDOhXtOyhSmPqnJi38NF8H+FICffpw6tx
-   oYfCnvPhLUz2Czxgoy5RCXn6BB4SDMO15im3iHJDgKENfFGrVp1x4e28F
-   1jt/knTUCHeleBAnGhTVOLh+0GhtuLtowZRX6B+VV01tujhsXCsd4UwrP
-   2b9MIvCHKuR92ekdR0dagSGWNb7hvK19tW1CNqxE239yoGS4ydVVO0T0d
-   GnVpVQaQeQnisUzOkZwwrZ1+p/0BXAV2gsDlY0WlsAHUQtXZL7jnZwpFK
-   fnCn2Bw+VNMF/z/oZ8EcNsC7JsIwWy+R3Hv3+LA5OnGo/ju4kt1ceycRa
-   Q==;
-X-CSE-ConnectionGUID: 12evUH+ASCW3LOwcH28DAw==
-X-CSE-MsgGUID: xkvrBBI4TFeALn6BhJyMMQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11037"; a="8007779"
-X-IronPort-AV: E=Sophos;i="6.07,186,1708416000"; 
-   d="scan'208";a="8007779"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2024 00:15:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11037"; a="937090989"
-X-IronPort-AV: E=Sophos;i="6.07,186,1708416000"; 
-   d="scan'208";a="937090989"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmsmga001.fm.intel.com with ESMTP; 08 Apr 2024 00:15:27 -0700
-Message-ID: <1f64af9a-0618-a7da-4acc-f043b6580308@linux.intel.com>
-Date: Mon, 8 Apr 2024 10:17:15 +0300
+	s=arc-20240116; t=1712562197; c=relaxed/simple;
+	bh=F9lZ5xpFdq7EGLEX91lMdfTvpLrwdTPZesguOV+jWqI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LCnetjC9/tJiZDBdE2z1GQDJ31Bk8vjMsrL+L0uBi4LulXcgB6l36mg1QHVNoQ1zTgAAE0Wwu3z8U1xzn35wKlICvk29Wffxod69MTK1w5gCm2if+8WHxejaUJY5ovOn41/VLFKi2vVUAWCNUYWYVEom4n9f0iEtONRzvY2UEV4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rtjep-0003xj-Rt; Mon, 08 Apr 2024 09:43:11 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rtjep-00B4Ir-Aa; Mon, 08 Apr 2024 09:43:11 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rtjep-00G41v-0k;
+	Mon, 08 Apr 2024 09:43:11 +0200
+Date: Mon, 8 Apr 2024 09:43:11 +0200
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: netdev@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, Li Yang <leoyang.li@nxp.com>, Zhang Wei <zw@zh-kernel.org>, 
+	kernel@pengutronix.de, Shawn Guo <shawnguo@kernel.org>, 
+	linux-arm-kernel@lists.infradead.org
+Subject: Zhang Wei also unreachable working
+Message-ID: <zj6uueuu4c2vpjgg23r2lmqlleg4o6uxn4b7xlegcios23ifx5@ttom2yzyke2h>
+References: <20240405072042.697182-2-u.kleine-koenig@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.13.0
-Content-Language: en-US
-To: =?UTF-8?Q?Micha=c5=82_Pecio?= <michal.pecio@gmail.com>,
- Paul Menzel <pmenzel@molgen.mpg.de>
-Cc: Mathias Nyman <mathias.nyman@intel.com>,
- LKML <linux-kernel@vger.kernel.org>, linux-usb@vger.kernel.org
-References: <58bca6f2-797a-4e20-a476-2294309afdd5@molgen.mpg.de>
- <20240405113247.743e34b2@foxbook>
- <7090d3af-18ce-40e1-8ac2-bf18152e5c4a@molgen.mpg.de>
- <20240406183659.3daf4fa0@foxbook>
- <c57f2116-8c42-44fb-9c32-6115ad88f914@molgen.mpg.de>
- <20240407142542.036fb02f@foxbook>
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: xhci_hcd 0000:00:14.0: ERROR Transfer event TRB DMA ptr not part
- of current TD ep_index 1 comp_code 1
-In-Reply-To: <20240407142542.036fb02f@foxbook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="mrcj7cuohzw5kahh"
+Content-Disposition: inline
+In-Reply-To: <20240405072042.697182-2-u.kleine-koenig@pengutronix.de>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
-On 7.4.2024 15.25, Michał Pecio wrote:
-> This (and the absence of any earlier errors on the endpoint) looks
-> like the hardware may be confirming a "successful" transfer twice or
-> the driver may be processing one such confirmation twice.
 
-It's also possible this TD/TRB was cancelled due to the disconnect.
-Could be that even if driver removes the TD from the list and cleans out the TRB
-from the ring buffer (turns TRB to no-op) hardware may have read ahead and cached the TRB,
-and process it anyway.
+--mrcj7cuohzw5kahh
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> 
-> [   94.088594] usb 1-2: USB disconnect, device number 8
-> [   94.089370] xhci_hcd 0000:00:14.0: ERROR Transfer event TRB DMA ptr not part of current TD ep_index 1 comp_code 1
-> [   94.089403] xhci_hcd 0000:00:14.0: Looking for event-dma 00000001250310f0 trb-start 0000000125031100 trb-end 0000000125031100 seg-start 0000000125031000 seg-end 0000000125031ff0
-> [   94.089427] xhci_hcd 0000:00:14.0: last xhci_td_cleanup: first_dma 1250310f0 last_dma 1250310f0 status -115 from finish_td
-> 
-> (I say "successful" but it really isn't - the device is no longer
-> listening. But there is no delivery confirmation on isochronous OUT
-> endpoints so the xHC doesn't suspect anything.)
-> 
-> Could you try again with this updated debug patch to get more info?
+On Fri, Apr 05, 2024 at 09:20:41AM +0200, Uwe Kleine-K=F6nig wrote:
+> -M:	Li Yang <leoyang.li@nxp.com>
+>  M:	Zhang Wei <zw@zh-kernel.org>
 
-Would also be helpful to add xhci dynamic debug and xhci tracing (two separate logs)
-These will show in detail everything that is going on.
+This address of Zhang Wei doesn't seem to work either.
 
-Steps:
+zh-kernel.org doesn't have an MX in DNS, the host behind its A entry
+doesn't react to pings and connection attempts to tcp port 25 time out.
 
-mount -t debugfs none /sys/kernel/debug
-echo 'module xhci_hcd =p' >/sys/kernel/debug/dynamic_debug/control
-echo 'module usbcore =p' >/sys/kernel/debug/dynamic_debug/control
-echo 81920 > /sys/kernel/debug/tracing/buffer_size_kb
-echo 1 > /sys/kernel/debug/tracing/events/xhci-hcd/enable
-echo 1 > /sys/kernel/debug/tracing/tracing_on
-< Reproduce issue >
-Send output of dmesg
-Send content of /sys/kernel/debug/tracing/trace
+Best regards
+Uwe
 
-please copy the /sys/kernel/debug/tracing/trace file somewhere as soon
-as possible after reproducing the issue. It grows fast.
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-Thanks
-Mathias
+--mrcj7cuohzw5kahh
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmYToA4ACgkQj4D7WH0S
+/k65PAgAlzOGcV34Muztc48A4sK3thMx4xmK2GT3dLVR5K1QiaydY2gSBO8onaei
+iZPOJGypivVIWUqaBhsuuZmBAnqvSeQ2b1NvKlq/8APDmqPz6igTYdS9vTIxp26C
+VcIFqbqkQXNp2KIXgpktaZfOvAAZpwIN3w23tGgHDgRgTh57KvvDssMuOlbu181v
+G5flqP4+LXYZKkDWMmQbEpkwktRdZk1sfQxJaTTQYVuY1ByaNncw9hzCrMCqL8WO
+bXGl7J+ClwXN0kLXZCkNlCRWvTrPMFrZAlvSnLY+H7STK3Zpmxh+LeAtAHxwYTFN
++GXJHCHxAemst04lXyi5pyCzibQ1Cg==
+=XE4m
+-----END PGP SIGNATURE-----
+
+--mrcj7cuohzw5kahh--
 
