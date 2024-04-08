@@ -1,52 +1,60 @@
-Return-Path: <linux-usb+bounces-9028-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9029-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB0ED89B958
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Apr 2024 09:54:52 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 306E089B9F1
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Apr 2024 10:14:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A4CFD281757
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Apr 2024 07:54:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 61D7B1C2210A
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Apr 2024 08:14:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 465C638DF2;
-	Mon,  8 Apr 2024 07:49:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0317D2E41C;
+	Mon,  8 Apr 2024 08:13:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="w2XAAWod"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mdzQmQxM"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE96138DEC
-	for <linux-usb@vger.kernel.org>; Mon,  8 Apr 2024 07:49:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7506B3BBC4;
+	Mon,  8 Apr 2024 08:13:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712562588; cv=none; b=iGD2diFyMJ2Xj6YW0lmSifdGe8Ah0VOcP0v9TLdqL5EfaVJDStl6h102Gxtz78+M/yo276ouKrp5l6jsCImvPaL6mgFT00j/VaVbVqmnUwSClMituZ34Sj3414ivltTq7gkk+d9z7ZYQd6GzzLSzLvJge+fBS4r4OcJhvtFAZaE=
+	t=1712564013; cv=none; b=OlLyDbj6j5vJcZULKJEOSSRTj7jFZNvwhB1EtprQkcO2GVg7DCzlwKGeVbGnebkQ58jX9V4tMNWU72FLe6kIgTJb9syNKNXnPCj1pupRTmFvPWej/YphW3c3h2lUKRA0pamrIEhtMx45yomzqMuDfoS8Zqrshw9M60WD7toRsF0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712562588; c=relaxed/simple;
-	bh=CfXkCQjOYbBcIsKSAALWc4xDDdSVOag1GrRr/QPtLEs=;
+	s=arc-20240116; t=1712564013; c=relaxed/simple;
+	bh=WEeMAl5Iqj9tc9Ix7uKHT60HGpMM9PPE3v/6L9yJzao=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=I33933ng8zi3UnXsAiV/eu4Ku0rfuRz+bP6HxuXvURmSHWBLAxECtQgiLwdXMtGyPru5EV+ucFkhZdPRgSFaj3kHsR9Sb0yd5pGP1RivsC75GZ+CondvSUCtbD+4WO/nkFF+iS38ASgS57a/9DA+0bkDpowidYQkduwvnrxficE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=w2XAAWod; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1E51C43394;
-	Mon,  8 Apr 2024 07:49:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1712562588;
-	bh=CfXkCQjOYbBcIsKSAALWc4xDDdSVOag1GrRr/QPtLEs=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=pBHhzZh9lZ2loQLnAFwo8aREkm+eZ1JZH5vOdkvaCqfehGcGRHRHVfmy2dGuX6D9n6DziAHvfYqgHuSZxF1FYGhccmIT63bhHhW+dRmcvnbxz8oSMtmPsMgXaZNIcn0s/E4kXxA1C7ZyNNogFDS8GiyxFcHWcwbECzMbFD79fyY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mdzQmQxM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98782C433C7;
+	Mon,  8 Apr 2024 08:13:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712564013;
+	bh=WEeMAl5Iqj9tc9Ix7uKHT60HGpMM9PPE3v/6L9yJzao=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=w2XAAWoduTHQF51z9GDYKSscPJTiknHrqBg7bISpalsoEsDHWwMx7X5tYWlaoznga
-	 8mSgnZft5ksoaF7deqoxEO/js/dXzTB2ERcetZu105wtu52HOOhtvwf6dFsy8rw4Jc
-	 LaY1Lg3EiruNt0t1xO7NSV5cKEwOoFmQu+94Dp1s=
-Date: Mon, 8 Apr 2024 09:49:45 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-Cc: Dan Carpenter <dan.carpenter@linaro.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [bug report] usb: dwc2: host: Fix ISOC flow in DDMA mode
-Message-ID: <2024040834-ethically-rumble-701f@gregkh>
-References: <ab2cc5d9-3fc9-43a2-abe8-a20338bdcd02@moroto.mountain>
- <3a1e01ca-a491-2739-e47c-6a71b610f400@synopsys.com>
+	b=mdzQmQxMMKcFpmq+QHRoh7bB4ojP9CvdolrCbac8NlQjgC0AgDFJKDy6I8NTOM9Ph
+	 oUNcpZh/iWSbpVTpwPiSfdyKoxUhOLLXY2/m3KMRwOzqc3K1eqmz2S5B9WEoAKohlw
+	 4lv29wk/bZKGvsC2eZTTB0c9lSBETOZX+oXTTFwa8tmaceY22/VbShFETOtZOoUEgw
+	 tHfutXUmKc+Nis+CJ1yg0tcvs23id8XqnrHGFbftn4BQJk6sIP+kyAakKX8/8NONlw
+	 5WxBkjgKBighBPwJ9MxymQ3uB1bliUMxGaHW4/ie98whDPhx+uZG59Up8asGN2FvIv
+	 0IGDbJ2X0m8qA==
+Date: Mon, 8 Apr 2024 16:13:29 +0800
+From: Tzung-Bi Shih <tzungbi@kernel.org>
+To: Pavan Holla <pholla@chromium.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Benson Leung <bleung@chromium.org>,
+	Guenter Roeck <groeck@chromium.org>, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+	chrome-platform@lists.linux.dev
+Subject: Re: [PATCH v3 2/2] usb: typec: ucsi: Implement ChromeOS UCSI driver
+Message-ID: <ZhOnKWcNllls6gdA@google.com>
+References: <20240403-public-ucsi-h-v3-0-f848e18c8ed2@chromium.org>
+ <20240403-public-ucsi-h-v3-2-f848e18c8ed2@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -55,47 +63,75 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3a1e01ca-a491-2739-e47c-6a71b610f400@synopsys.com>
+In-Reply-To: <20240403-public-ucsi-h-v3-2-f848e18c8ed2@chromium.org>
 
-On Mon, Apr 08, 2024 at 06:04:42AM +0000, Minas Harutyunyan wrote:
-> Hi Greg,
-> 
-> On 4/5/24 14:09, Dan Carpenter wrote:
-> > Hello Minas Harutyunyan,
-> > 
-> > This is a semi-automatic email about new static checker warnings.
-> > 
-> > Commit b258e4268850 ("usb: dwc2: host: Fix ISOC flow in DDMA mode")
-> > from Mar 13, 2024, leads to the following Smatch complaint:
-> > 
-> >      drivers/usb/dwc2/hcd_ddma.c:874 dwc2_cmpl_host_isoc_dma_desc()
-> >      warn: variable dereferenced before check 'qtd->urb' (see line 870)
-> > 
-> > drivers/usb/dwc2/hcd_ddma.c
-> >     869		u16 frame_desc_idx;
-> >     870		struct urb *usb_urb = qtd->urb->priv;
-> >                                        ^^^^^^^^^^
-> > The patch adds a dereference
-> > 
-> >     871		u16 remain = 0;
-> >     872		int rc = 0;
-> >     873	
-> >     874		if (!qtd->urb)
-> >                      ^^^^^^^^^
-> > The existing check is too late now
-> > 
-> >     875			return -EINVAL;
-> >     876	
-> > 
-> > regards,
-> > dan carpenter
-> 
-> Should I send new version of this patch or should develop fixup patch to 
-> be applied to "usb-linus" branch?
+On Wed, Apr 03, 2024 at 06:05:22PM +0000, Pavan Holla wrote:
+> Implementation of a UCSI transport driver for ChromeOS.
+> This driver will be loaded if the ChromeOS EC implements a PPM.
 
-A fixup patch please, I can not rebase this tree.
+How this driver get probed?  From drivers/mfd/cros_ec_dev.c?  If so, there is
+no "cros-ec-ucsi" in the MFD driver yet.
 
-thanks,
+> diff --git a/drivers/usb/typec/ucsi/cros_ec_ucsi.c b/drivers/usb/typec/ucsi/cros_ec_ucsi.c
+> [...]
+> +static int cros_ucsi_async_write(struct ucsi *ucsi, unsigned int offset,
+> +				 const void *val, size_t val_len)
+> +{
+> +	struct cros_ucsi_data *udata = ucsi_get_drvdata(ucsi);
+> +	uint8_t ec_buffer[MAX_EC_DATA_SIZE + sizeof(struct ec_params_ucsi_ppm_set)];
+> +	struct ec_params_ucsi_ppm_set *req = (struct ec_params_ucsi_ppm_set *)ec_buffer;
+> +	int ret = 0;
 
-greg k-h
+The initialization is redundant.  `ret` will be overridden soon.
+
+> +	if (val_len > MAX_EC_DATA_SIZE) {
+> +		dev_err(udata->dev, "Can't write %zu bytes. Too big.", val_len);
+> +		return -EINVAL;
+> +	}
+> +
+> +	memset(req, 0, sizeof(ec_buffer));
+
+The `memset` is redundant.
+
+> +	req->offset = offset;
+> +	memcpy(req->data, val, val_len);
+> +	ret = cros_ec_cmd(udata->ec, 0, EC_CMD_UCSI_PPM_SET,
+> +			  req, sizeof(struct ec_params_ucsi_ppm_set) + val_len, NULL, 0);
+
+`sizeof(*req)`.
+
+> +static int cros_ucsi_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> [...]
+> +	udata->ucsi = ucsi_create(udata->dev, &cros_ucsi_ops);
+
+`dev`.
+
+> [...]
+> +static const struct platform_device_id cros_ec_ucsi_id[] = {
+
+To be consistent with other symbols, consider either:
+- s/cros_ec_/cros_/ for the symbol.
+or
+- s/cros_ucsi_/cros_ec_ucsi_/g for echoing the file name.
+
+> +	{ "cros-ec-ucsi"},
+
+The driver has declared DRV_NAME, use it.  `{ DRV_NAME, 0 },`.
+
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(platform, cros_ec_ucsi_id);
+
+Ditto.
+
+> +static struct platform_driver cros_ucsi_driver = {
+> +	.driver = {
+> +		.name = DRV_NAME,
+> +		.pm = &cros_ucsi_pm_ops,
+> +	},
+> +	.id_table = cros_ec_ucsi_id,
+
+Ditto.
 
