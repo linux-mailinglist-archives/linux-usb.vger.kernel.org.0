@@ -1,154 +1,146 @@
-Return-Path: <linux-usb+bounces-9060-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9061-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F24F89BFD9
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Apr 2024 15:03:25 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0801389C015
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Apr 2024 15:05:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 496C7283AFD
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Apr 2024 13:03:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9DF3D1F24B13
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Apr 2024 13:05:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 860C77BB13;
-	Mon,  8 Apr 2024 13:01:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C9E07D09D;
+	Mon,  8 Apr 2024 13:04:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Vi1PKeDR"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="V6V/JtZx"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 838E37BAF7
-	for <linux-usb@vger.kernel.org>; Mon,  8 Apr 2024 13:01:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3768C7D07C
+	for <linux-usb@vger.kernel.org>; Mon,  8 Apr 2024 13:04:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712581290; cv=none; b=dxY1be96d2gMImAY29d9m5gpgkPG43WOCt5ijrhzIJwUH/843FrUccrwhemkDP9aP0LkM69OA/ZArFnAOHzG7pdGNXnMdv6N1+0Zvi2us+tmx52eo2V+J/wIWWGG5JuZG31Mk+cxJpgSljRwdLWgi53d72gpaloe6pUCkgzF7vQ=
+	t=1712581479; cv=none; b=sGHoFiTVOvrt3VGxXYjddCjKKYwqn2vYLxVGzM4N0wHLrP5h+EN/p0CPSvgbOQOV8khso2liud0aHKEdP+GnpoatXi/Cdz10kr5/93xOqLr82wdbjYEjInvrdUZsPaiuXmZkVsGN+NOxqaCeH4rn0znHR7KjksDIDItXV4MPGQ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712581290; c=relaxed/simple;
-	bh=WswkIFO0ig2Sn6KRG1ink79eLsSAWWf8lE3yZEvy9sg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NYDHHL9Rr587feqtPMJ7hq/d7/nmDwGjxPtq8mpCA9YeTHRNJ9KYiUueze88U8Hb/yqgEnZRw6nk4ixfSc0PR1uqWgpIjVjwABPSr2FTY30P5qbdM15nwUam71s6qHefXmaKQqgOI6/RKZw6LDRVDnh6F9pKLYfiTkLtTov01So=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Vi1PKeDR; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712581288; x=1744117288;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=WswkIFO0ig2Sn6KRG1ink79eLsSAWWf8lE3yZEvy9sg=;
-  b=Vi1PKeDR5LazMAwUGvMEN/7YeWCjl6RaI2xZA9df2tc2sDwR2HfKjZOc
-   5OJN/cVS4W1nJwixiwPD1vwUkRqGOdORzbo8+gXFDveExc7yHYnx4aLps
-   FBpBtTov6b3UMAHU7q4C61Sy6svZTlpkj3PvEJ3n/etm1lFoT+0uvNi7s
-   MwAJXcicxrS+GZ2ZIZOeKhRmoIMMtI8+T4b5ukGlYWJ1EMNGYDg3JdjGw
-   v2AyuGXDKDdBPGld1YgwdBk/IfSljQ3YnKkfKeleBZYA2VWtCcjmftNIA
-   T8DMOFY3z8J/boPotLSJ7QYhRhHFP2lYeCkK0YvK+SSuiMSMHHWgULukg
-   w==;
-X-CSE-ConnectionGUID: PsI3ZKJLQe+Oi4wu6QKPvw==
-X-CSE-MsgGUID: yag0as7CSY6bJtTjTxVN6g==
-X-IronPort-AV: E=McAfee;i="6600,9927,11038"; a="11630689"
-X-IronPort-AV: E=Sophos;i="6.07,186,1708416000"; 
-   d="scan'208";a="11630689"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2024 06:00:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11037"; a="937091485"
-X-IronPort-AV: E=Sophos;i="6.07,186,1708416000"; 
-   d="scan'208";a="937091485"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 08 Apr 2024 06:00:33 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id DEFAD194; Mon,  8 Apr 2024 16:00:31 +0300 (EEST)
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Yehezkel Bernat <YehezkelShB@gmail.com>,
-	Michael Jamet <michael.jamet@intel.com>,
-	Lukas Wunner <lukas@wunner.de>,
-	Andreas Noever <andreas.noever@gmail.com>
-Cc: Gil Fine <gil.fine@linux.intel.com>,
-	linux-usb@vger.kernel.org,
-	Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH 2/2] thunderbolt: Allow USB3 bandwidth to be lower than maximum supported
-Date: Mon,  8 Apr 2024 16:00:31 +0300
-Message-ID: <20240408130031.51616-2-mika.westerberg@linux.intel.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240408130031.51616-1-mika.westerberg@linux.intel.com>
-References: <20240408130031.51616-1-mika.westerberg@linux.intel.com>
+	s=arc-20240116; t=1712581479; c=relaxed/simple;
+	bh=7bpRSGGPDQCS7wFqBB78vDQoO6pcgett9EASBZ5btWM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kreP4RidDVCafM9ON+lTX0bKbHmRKGg4K8B/LbDCemu8J0gEf9f2nJbDR/Hqj0Z9R0dnNY7Gw8p6HzMqH6LIfxejjfl0HHYIj9wA14KIsswvcqvKSvebWSEde1E7uuviajZi1plsS2CSz0AbviVlJOvLg2uojKVGmYlxrb0x1mk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=V6V/JtZx; arc=none smtp.client-ip=209.85.160.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-43477091797so344171cf.1
+        for <linux-usb@vger.kernel.org>; Mon, 08 Apr 2024 06:04:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1712581477; x=1713186277; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TVioy9EMNQnc5SXcQapeY7Z9K+iAa8Z5L7a/jg+l4cY=;
+        b=V6V/JtZxF+/LndpdhRmbOuo/U1EUSxttljOGzrE+EYarMRJhqEEIgiDu4CsM1Rtzgc
+         Bn4ku4kJdDrpz3KiK4Ie+zt0mKIB/PTxj5/LDT9Ijr4jydu/cCGGmGNhnaAEtyqn3Jqx
+         OAsgszri7Xgg4E4q5vSKJ9TK8odjahLuUIrdoUIicGTlf2snFgCpWJEfYItZSkk8JmhW
+         hb72eE2ANh9jW4ca6uH5jCx20bmxaOPzi2kTZcLWCovCiW0lri6J0lOWG46jNZTnsU+a
+         /TakSItP2mKngyv4cbTTctHtPLKHRhaE5+J++vrA6fe4dtZ76iWAL2f/rtjUOOJGTvJJ
+         Z67w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712581477; x=1713186277;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TVioy9EMNQnc5SXcQapeY7Z9K+iAa8Z5L7a/jg+l4cY=;
+        b=DY5p0QulYULwwdR8YYxvcYbdwSgAnYUcEW8wfB1eDGuRellbQEWSLD4A8L2Yq9PlnL
+         dynUBqjdMM0IwWPUt6c3kg0+oifwzVvZ2aB+aPTirdwFYxZfj7EsZ2bHxehuZB2RJoEW
+         b9aQD1mAGoZGL3iT8ZkXEtI8i5bARGCzK/HMWlqQXD9Sgf4z0bkkj5+XMOsIj5nSNgWc
+         d5FApZBH7rxxH2aBA7LtZ2WjHi6LlUfEgeGNNN3WUpK6Zb05dulcs16msX69ms8b2zr0
+         XCampRsh4/Q6vcsNOHzyaOC00upkGlaRUBPSlbu1tTgml81mQ50sInNXCQikwMKpnyVN
+         Aong==
+X-Forwarded-Encrypted: i=1; AJvYcCX67AVNTKBTMqjq9BRwHJak44xMnWpcmma+8VgBvvn7K/q9tbykyefPleVfPbGDmZBJpmLaTLdxLGrPBRf6uFpxRqldZWqXQoXG
+X-Gm-Message-State: AOJu0YwWLTYSL0dbXZy/BrgRF3YusMj+HB5EO2C51Wd0/weSoqWqTleO
+	ah0SpyEc5GHdT6tvwp2b15c2Ov5YIIqZ8uR5p5jUSnEYY6resHfi0dNAj1bnzpVFXhM3Dl8qb9v
+	8xq1vXUq0CJdIHi9IYogpP+gnS9LiGW6K1MFL
+X-Google-Smtp-Source: AGHT+IFZaV9W1guyCiCFvlxL0Tuf2HLr1fiYCHIb/nvtokprZt499aOhX2wlCRAmDZ6qHpx8t/vS6dcU4G703dCeYVM=
+X-Received: by 2002:a05:622a:4812:b0:434:7bb9:f231 with SMTP id
+ fb18-20020a05622a481200b004347bb9f231mr343464qtb.12.1712581476934; Mon, 08
+ Apr 2024 06:04:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240403-public-ucsi-h-v3-0-f848e18c8ed2@chromium.org>
+ <20240403-public-ucsi-h-v3-2-f848e18c8ed2@chromium.org> <3ezjocthsigo3t746slmgzffnmpxw7wwf3s535basiaf2qy6io@7ocxva6ndsbt>
+ <2024040449-average-foyer-defa@gregkh> <oi3bwdyvyaezpmyxfdtsbiwwprxi2ufc3hlzoz23d5rxdkperl@cxpd7enatg7h>
+ <2024040422-ripcord-bladder-bdda@gregkh>
+In-Reply-To: <2024040422-ripcord-bladder-bdda@gregkh>
+From: Guenter Roeck <groeck@google.com>
+Date: Mon, 8 Apr 2024 06:04:22 -0700
+Message-ID: <CABXOdTeqz5Kza5tYXbCdTyPT66xtezai4C5TFkqmOpQc+1r8Xg@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] usb: typec: ucsi: Implement ChromeOS UCSI driver
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, Pavan Holla <pholla@chromium.org>, 
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>, Benson Leung <bleung@chromium.org>, 
+	Tzung-Bi Shih <tzungbi@kernel.org>, Guenter Roeck <groeck@chromium.org>, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, 
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>, chrome-platform@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Gil Fine <gil.fine@linux.intel.com>
+On Thu, Apr 4, 2024 at 6:30=E2=80=AFAM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+[ ... ]
 
-Currently USB3 tunnel setup fails if USB4 link available bandwidth is too low
-to allow USB3 Maximum Supported Link Rate. In reality, this limitation is not
-needed, and may cause failure of USB3 tunnel establishment, if USB4 link
-available bandwidth is lower than USB3 Maximum Supported Link Rate. E.g. if we
-connect to USB4 v1 host router, a USB4 v1 device router, via 10 Gb/s cable.
-Hence, here we discard this limitation, and now we only limit USB3 bandwidth
-allocation to be not higher than 90% of USB3 Max Supported Link Rate (for first
-USB3 tunnel only).
+> > > > if (WARN_ON_ONCE(val_len > MAX_EC_DATA_SIZE))
+> > > >   return -EINVAL;
+> > >
+> > > So if you trigger this, you just rebooted all boxes that have
+> > > panic-on-warn enabled (hint, the HUGE majority in quantity of Linux
+> > > systems out there.)
+> > >
+> > > So don't do that, just handle it like this.
+> >
+> > Does that mean that we should not use WARN at all? What is the best
+> > current practice for WARN usage?
+>
+> To never use it.  Handle the issue and recover properly.
+>
+> > I'm asking because for me this looks like a perfect usecase. If I were
+> > at the positiion of the driver developer, I'd like to know the whole
+> > path leading to the bad call, not just the fact that the function was
+> > called with the buffer being too big.
+>
+> Then use ftrace if you are a driver developer, don't crash users boxes
+> please.
+>
+> If you REALLY need a traceback, then provide that, but do NOT use WARN()
+> for just normal debugging calls that you want to leave around in the
+> system for users to trip over.
+>
 
-Signed-off-by: Gil Fine <gil.fine@linux.intel.com>
-Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
----
- drivers/thunderbolt/tunnel.c | 25 ++++++++++---------------
- 1 file changed, 10 insertions(+), 15 deletions(-)
+That is not common practice.
 
-diff --git a/drivers/thunderbolt/tunnel.c b/drivers/thunderbolt/tunnel.c
-index cb6609a56a03..fdc5e8e12ca8 100644
---- a/drivers/thunderbolt/tunnel.c
-+++ b/drivers/thunderbolt/tunnel.c
-@@ -2064,26 +2064,21 @@ struct tb_tunnel *tb_tunnel_alloc_usb3(struct tb *tb, struct tb_port *up,
- {
- 	struct tb_tunnel *tunnel;
- 	struct tb_path *path;
--	int max_rate = 0;
-+	int max_rate;
- 
--	/*
--	 * Check that we have enough bandwidth available for the new
--	 * USB3 tunnel.
--	 */
--	if (max_up > 0 || max_down > 0) {
-+	if (!tb_route(down->sw) && (max_up > 0 || max_down > 0)) {
-+		/*
-+		 * For USB3 isochronous transfers, we allow bandwidth which is
-+		 * not higher than 90% of maximum supported bandwidth by USB3
-+		 * adapters.
-+		 */
- 		max_rate = tb_usb3_max_link_rate(down, up);
- 		if (max_rate < 0)
- 			return NULL;
- 
--		/* Only 90% can be allocated for USB3 isochronous transfers */
- 		max_rate = max_rate * 90 / 100;
--		tb_port_dbg(up, "required bandwidth for USB3 tunnel %d Mb/s\n",
-+		tb_port_dbg(up, "maximum required bandwidth for USB3 tunnel %d Mb/s\n",
- 			    max_rate);
--
--		if (max_rate > max_up || max_rate > max_down) {
--			tb_port_warn(up, "not enough bandwidth for USB3 tunnel\n");
--			return NULL;
--		}
- 	}
- 
- 	tunnel = tb_tunnel_alloc(tb, 2, TB_TUNNEL_USB3);
-@@ -2115,8 +2110,8 @@ struct tb_tunnel *tb_tunnel_alloc_usb3(struct tb *tb, struct tb_port *up,
- 	tunnel->paths[TB_USB3_PATH_UP] = path;
- 
- 	if (!tb_route(down->sw)) {
--		tunnel->allocated_up = max_rate;
--		tunnel->allocated_down = max_rate;
-+		tunnel->allocated_up = min(max_rate, max_up);
-+		tunnel->allocated_down = min(max_rate, max_down);
- 
- 		tunnel->init = tb_usb3_init;
- 		tunnel->consumed_bandwidth = tb_usb3_consumed_bandwidth;
--- 
-2.43.0
+$ git grep WARN_ON drivers/gpu | wc
+   3004   11999  246545
+$ git grep WARN_ON drivers/net/ | wc
+   3679   14564  308230
+$ git grep WARN_ON drivers/net/wireless | wc
+   1985    8112  166081
 
+We get hundreds of thousands of reports with warning backtraces from
+Chromebooks in the field _every single day_. Most of those are from
+drm and wireless subsystems. We even had to scale back the percentage
+of reported warning backtraces because the large volume overwhelmed
+the reporting system. When approached about it, developers usually
+respond with "this backtrace is absolutely necessary", but nothing
+ever happens to fix the reported problems. In practice, they are just
+ignored.
+
+This means that any system using drm or wireless interfaces just can
+not really enable panic-on-warn because that would crash the system
+all the time.
+
+Guenter
 
