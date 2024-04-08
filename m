@@ -1,133 +1,166 @@
-Return-Path: <linux-usb+bounces-9083-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9084-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F34589CA1E
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Apr 2024 18:55:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 76D6789CA82
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Apr 2024 19:12:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0E3CDB25D8C
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Apr 2024 16:55:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9B7791C24294
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Apr 2024 17:12:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30732142E7A;
-	Mon,  8 Apr 2024 16:55:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DA1B14388A;
+	Mon,  8 Apr 2024 17:12:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="XsgXaK3B"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id BB5111428F5
-	for <linux-usb@vger.kernel.org>; Mon,  8 Apr 2024 16:55:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7855142E9F
+	for <linux-usb@vger.kernel.org>; Mon,  8 Apr 2024 17:12:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712595321; cv=none; b=M2OhKzLWBFFL/6r8Tvnn33LgVtKSLxR5GJSoJ1DeQhCHeZ5RGxWHD5OAAnWsFZZcK4uMMcAmtt00G11ZNFvdVsl33pBWb95zIgfA0FNEGy0irX1S4rRuxQleBOR9tw6Cp+Un3BTM9oknJlHFagUNPz9fobrWfZsri3pEkL+m1Ak=
+	t=1712596341; cv=none; b=VrwCPapqcDzogZ4cGRsmZIcTTg1+Y0Zlp6CYfxa3vUPkJOmFoQQUqMfFc3nun0W0oSSU/da31awM+TH64Qxz/VbC1HdrePNpXbkR2siN8XppPuE06ym+ZOfMQzaFq3nCedhJch8CyoUxhagv54TnxLU89pNuGm/sHgzl22JuirA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712595321; c=relaxed/simple;
-	bh=zzYor1ygm+f5N8H2iM4wmYWeRLb5WKInz+glyCWOYAc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=jjtcW/q7x5BD+/E98U1GunZTAs6BOXwo7yyCZOQf0nzk+zSzeUlbTNhP+ojR2OUkCryXWxmjSdzhkpz6eoXj6pmEOibmAbuVfaN4hrunXQNs/G8ri2q0xxftUxzO/uNHFpVrwEs8lSE/7kKmvgspM5ElDyjr9/n3qYppBwFVDH0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
-Received: (qmail 140201 invoked by uid 1000); 8 Apr 2024 12:55:13 -0400
-Date: Mon, 8 Apr 2024 12:55:13 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Jiri Kosina <jikos@kernel.org>,
-  Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc: linux-input@vger.kernel.org, USB mailing list <linux-usb@vger.kernel.org>
-Subject: Re: INFO: rcu detected stall in hub_event
-Message-ID: <ade3bb13-e612-49a6-ace2-bf6eeca93f8e@rowland.harvard.edu>
+	s=arc-20240116; t=1712596341; c=relaxed/simple;
+	bh=oJ9mT+vwINWrYV759TkgfgMbkpyg67bL62cpIdVNlF8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MOxEZy+ENGvSKL3mFsYfjwSxiv40L02MQw8DQoXWBdPzhUeEtSPpToWpHgNkot2H+JvBkojtxKVr9+PtZ5w39tSwGlF/9yERtnYipNCnfubEIJxEYP2bx24lU0TyWG1E34VFHcv0rOGnTDfrZsET9eqgBA0ZSc+AZ7OLiq8bq2g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=XsgXaK3B; arc=none smtp.client-ip=209.85.167.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-516d47ce662so5521328e87.1
+        for <linux-usb@vger.kernel.org>; Mon, 08 Apr 2024 10:12:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1712596338; x=1713201138; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=T8TRMrj5ggtPr7yueS0y7TsmLoLHnTwJgZ1LoVKqCBE=;
+        b=XsgXaK3BWIHwpxfooljCkxPs3MoOdtZhpSKU6RE6g+jKcBUPHDOetLcAoN43Y+uZCh
+         l9slml0lqf69WkmW1j1BnvaUWsn/mU/4gA/DtZaxrNM75Qfnbrqxwmwy7Zw29jQmU4Dh
+         X4WEA6two1XsP7YTDlj6nmqT40o1dhIMd/1uFkjfp1LG4R3QxIB+VH6poMid2m6I7PqO
+         IpO2ySm0BiRZnlQvvwTw9m2pfP4IslTrRFoWhFCa0qRXAg/99OuYrh5T4vv/8Zj9cPU9
+         5qYD9GvqYHkTIONS6+pCmHKURt5UwHLoAcPI3sTX94cUucZwAVtLIjO4fttlrAhdxoap
+         xF4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712596338; x=1713201138;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=T8TRMrj5ggtPr7yueS0y7TsmLoLHnTwJgZ1LoVKqCBE=;
+        b=VmUbw0al8DP3G3M9jxTw7GC+P3GZk2zRaxlSbXO/5GhotPmIrMQY10UdmRSHs22S/k
+         mc4P6AEHSZ2tzOcEXDICAg/zVfeQoP1sGD83YsQX+rX5+5oBMWQlRB2eksFmKl3VnzjX
+         HVks75MKjpgNyTmeEyUc9rJCwZHlObw48W6CIJ3hu2S4F8WGMqYDhRol2uc9NEB3Ono/
+         VULihHSFny8TX4waOBT2Kc4MgLDUgBjxafcNdIgUE9FE//FK/wGL3k/17gTeaOKUwFOy
+         r+EMkdmKKZ/WRGLCry5d3jdrgTqw7PgxwE8SOIlvUEAzaGn/5aawbmWD7ftcbewJYW3O
+         4okg==
+X-Forwarded-Encrypted: i=1; AJvYcCVu70fhoTgF4dFEWu/CWEikxHvdt+cRK7xCCvORF/0dfgLFDi4PWnFmbwaBAqLF//hj/6VfVR9FdJzY9CBjsM6svpOimE75fiGS
+X-Gm-Message-State: AOJu0YzDBdjOujp68mvCv/M3k0/ww3pU4bAPiKP2kUB6oExa70F8TupP
+	dn5LcYg8D0fdr4KdZBiW8t9BwuOWyg8yBo/RGmjJSjGTndFm4N6sYJZ0pjvbHLc=
+X-Google-Smtp-Source: AGHT+IHfa69MVbZoX1KR17DtI3oUMVnY5gNXSX0c37nh4zmNkLTwhqWTjIaOwFa2GYGnzTRLv8lHXQ==
+X-Received: by 2002:a05:6512:52b:b0:516:c1b9:316b with SMTP id o11-20020a056512052b00b00516c1b9316bmr8096374lfc.15.1712596338037;
+        Mon, 08 Apr 2024 10:12:18 -0700 (PDT)
+Received: from eriador.lumag.spb.ru (dzyjmhyyyyyyyyyyyykxt-3.rev.dnainternet.fi. [2001:14ba:a00e:a300::227])
+        by smtp.gmail.com with ESMTPSA id k6-20020ac257c6000000b00515cfc0e324sm1231930lfo.237.2024.04.08.10.12.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Apr 2024 10:12:17 -0700 (PDT)
+Date: Mon, 8 Apr 2024 20:12:16 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Guenter Roeck <groeck@google.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Pavan Holla <pholla@chromium.org>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+	Benson Leung <bleung@chromium.org>, Tzung-Bi Shih <tzungbi@kernel.org>, 
+	Guenter Roeck <groeck@chromium.org>, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>, chrome-platform@lists.linux.dev
+Subject: Re: [PATCH v3 2/2] usb: typec: ucsi: Implement ChromeOS UCSI driver
+Message-ID: <txdq6cmnep2zokrwykdsnpho3k76pangzxbv7ydxpdnyohczxo@2jc4cyakrmez>
+References: <20240403-public-ucsi-h-v3-0-f848e18c8ed2@chromium.org>
+ <20240403-public-ucsi-h-v3-2-f848e18c8ed2@chromium.org>
+ <3ezjocthsigo3t746slmgzffnmpxw7wwf3s535basiaf2qy6io@7ocxva6ndsbt>
+ <2024040449-average-foyer-defa@gregkh>
+ <oi3bwdyvyaezpmyxfdtsbiwwprxi2ufc3hlzoz23d5rxdkperl@cxpd7enatg7h>
+ <2024040422-ripcord-bladder-bdda@gregkh>
+ <CABXOdTeqz5Kza5tYXbCdTyPT66xtezai4C5TFkqmOpQc+1r8Xg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Pine.LNX.4.44L0.1912091318210.1462-100000@iolanthe.rowland.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CABXOdTeqz5Kza5tYXbCdTyPT66xtezai4C5TFkqmOpQc+1r8Xg@mail.gmail.com>
 
-Jiri and Benjamin:
-
-Tracking down an old syzbot report from over four years ago (but still 
-not closed out!) led me to this email thread.  It turned out there were 
-two separate bugs involved, one of which has since been fixed.  I don't 
-remember the issues very well, so here's a copy of what I wrote back 
-then:
-
-On Mon, 09 Dec 2019, Alan Stern wrote:
-
->  The big problem is that the parser assumes all usages will
-> belong to a collection.
+On Mon, Apr 08, 2024 at 06:04:22AM -0700, Guenter Roeck wrote:
+> On Thu, Apr 4, 2024 at 6:30 AM Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> [ ... ]
 > 
-> There's also a second, smaller bug: hid_apply_multipler() assumes every
-> Resolution Multiplier control is associated with a Logical Collection
-> (i.e., there's no way the routine can ever set multiplier_collection to
-> NULL) even though there's a big quotation from the HID Usage Table
-> manual at the start of the function saying that they don't have to be.  
-> This bug can be fixed easily, though.
+> > > > > if (WARN_ON_ONCE(val_len > MAX_EC_DATA_SIZE))
+> > > > >   return -EINVAL;
+> > > >
+> > > > So if you trigger this, you just rebooted all boxes that have
+> > > > panic-on-warn enabled (hint, the HUGE majority in quantity of Linux
+> > > > systems out there.)
+> > > >
+> > > > So don't do that, just handle it like this.
+> > >
+> > > Does that mean that we should not use WARN at all? What is the best
+> > > current practice for WARN usage?
+> >
+> > To never use it.  Handle the issue and recover properly.
+> >
+> > > I'm asking because for me this looks like a perfect usecase. If I were
+> > > at the positiion of the driver developer, I'd like to know the whole
+> > > path leading to the bad call, not just the fact that the function was
+> > > called with the buffer being too big.
+> >
+> > Then use ftrace if you are a driver developer, don't crash users boxes
+> > please.
+> >
+> > If you REALLY need a traceback, then provide that, but do NOT use WARN()
+> > for just normal debugging calls that you want to leave around in the
+> > system for users to trip over.
+> >
 > 
-> The first bug is more troublesome.  hid_add_usage() explicitly sets the 
-> parser->local.collection_index[] entry to 0 if the current collection 
-> stack is empty.  But there's no way to distinguish this 0 from a 
-> genuine index value that happens to point to the first collection!
+> That is not common practice.
 > 
-> So what should happen when a usage appears outside of all collections?  
-> Is it a bug in the report descriptor (the current code suggests that it 
-> is not)?
+> $ git grep WARN_ON drivers/gpu | wc
+>    3004   11999  246545
+> $ git grep WARN_ON drivers/net/ | wc
+>    3679   14564  308230
+> $ git grep WARN_ON drivers/net/wireless | wc
+>    1985    8112  166081
 > 
-> Or should we use a different sentinel value for the collection_index[]
-> entry, one that cannot be confused with a genuine value, such as
-> UINT_MAX?
+> We get hundreds of thousands of reports with warning backtraces from
+> Chromebooks in the field _every single day_. Most of those are from
+> drm and wireless subsystems. We even had to scale back the percentage
+> of reported warning backtraces because the large volume overwhelmed
+> the reporting system. When approached about it, developers usually
+> respond with "this backtrace is absolutely necessary", but nothing
+> ever happens to fix the reported problems. In practice, they are just
+> ignored.
 
-Syzbot tested a proposed patch:
+That's sad.
 
-On Tue, 26 Nov 2019, syzbot wrote:
+> 
+> This means that any system using drm or wireless interfaces just can
+> not really enable panic-on-warn because that would crash the system
+> all the time.
 
-> Hello,
->
-> syzbot has tested the proposed patch and the reproducer did not trigger
-> crash:
->
-> Reported-and-tested-by:
-> syzbot+ec5f884c4a135aa0dbb9@syzkaller.appspotmail.com
+And this is good from my point of view. If I remember correctly,
+initially panic-on-warn was added to simplify debugging of the warnings
+rather than to disallow using WARN_ON(). The system is not supposed to
+continue running after BUG(), so panic/reset on BUG is a safe approach.
+But the WARN is different. It means that the system was able to cope
+with it. And as such there is no need to panic. Whoever enabled
+panic-on-warn is doing a strange thing from my POV.
 
-Here is the patch that syzbot tested:
-
- drivers/hid/hid-core.c |    5 +++++
- 1 file changed, 5 insertions(+)
-
-Index: usb-devel/drivers/hid/hid-core.c
-===================================================================
---- usb-devel.orig/drivers/hid/hid-core.c
-+++ usb-devel/drivers/hid/hid-core.c
-@@ -1057,6 +1057,8 @@ static void hid_apply_multiplier(struct
- 	while (multiplier_collection->parent_idx != -1 &&
- 	       multiplier_collection->type != HID_COLLECTION_LOGICAL)
- 		multiplier_collection = &hid->collection[multiplier_collection->parent_idx];
-+	if (multiplier_collection->type != HID_COLLECTION_LOGICAL)
-+		multiplier_collection = NULL;
- 
- 	effective_multiplier = hid_calculate_multiplier(hid, multiplier);
- 
-@@ -1191,6 +1193,9 @@ int hid_open_report(struct hid_device *d
- 	}
- 	device->collection_size = HID_DEFAULT_NUM_COLLECTIONS;
- 
-+	/* Needed for usages before the first collection */
-+	device->collection[0].parent_idx = -1;
-+
- 	ret = -EINVAL;
- 	while ((start = fetch_item(start, end, &item)) != NULL) {
- 
-
-The second hunk, addressing the first bug described above, was 
-implemented in commit ea427a222d8b ("HID: core: Fix deadloop in 
-hid_apply_multiplier.") in 2023.  But the first hunk, addressing the 
-second bug, is still outstanding.
-
-You guys undoubtedly understand this code much better than I do.  Is the 
-first hunk in this patch still required?  Is it a correct fix for 
-handling Resolution Multiplier controls not associated with any Logical 
-Collection?
-
-Alan Stern
+-- 
+With best wishes
+Dmitry
 
