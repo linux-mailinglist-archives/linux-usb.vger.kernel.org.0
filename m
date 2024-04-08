@@ -1,182 +1,311 @@
-Return-Path: <linux-usb+bounces-9032-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9033-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C8AD89BBD6
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Apr 2024 11:35:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5740089BC8E
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Apr 2024 12:02:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B00B41F230D2
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Apr 2024 09:35:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0DAF92831B0
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Apr 2024 10:02:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 233AB4CE0E;
-	Mon,  8 Apr 2024 09:34:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51E54524DE;
+	Mon,  8 Apr 2024 10:02:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="HAJzuBNs"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AliY2OXz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DBA46FBF;
-	Mon,  8 Apr 2024 09:34:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2694C5339B;
+	Mon,  8 Apr 2024 10:02:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712568877; cv=none; b=moryqkQcdiLEyK5K/K0brse4E7NuIOAIs72Vcr2hRccHwapNo0bVxf/LooN+Is6OPV4/XGfRpFOkqExVOASIKK7XkFVtW9I4aroRLKfXD6WO/VisXs2O3AAvI/5RHGWEmrDlXvLEIu5JscDxzs5SPYYrkiE/dFCszzL2xLhhiKQ=
+	t=1712570544; cv=none; b=F/2Fq+3ek+LN0Mmd+89K2pjPW1eR7/03E7rys6XviahpyQ8CzpM7JSDuUcxeM1l++Uj5l5xJ/MgfHqvwRu5CTTpLhZuPtLaG2PiGQ9FSIwtIz/uNZIl3v8hZz4gHXGxJNBk+wBK69tCP2PPNxbaFO21mvE+a/6Qeg+Ht1/tQ9Ds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712568877; c=relaxed/simple;
-	bh=frFJy5Iffrice8TATlhPSbyjdDx4lsgbTrENNwTKGyA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=i8XH5rCxRcD6cvrNJh51X1W+DFIp+m0dwXIkt1nQpdW44mpJQb9LtDJVWUF8xXk7ptt0DkJKhmNmC/emYf+cvuln0Yt8aSa37tx6AX6EvBIOfaEf/4NbQdHJQAYLxeC32T4Iy+oxwGxmyI1NrK5hnle7lKvHcv5TXF7H71XzDdw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=HAJzuBNs; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 4389674X018763;
-	Mon, 8 Apr 2024 09:33:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=pp1; bh=HRb08lOvL/RkQcGPtpnIO47HiV3JbnaC5Kla4WlkdPg=;
- b=HAJzuBNsO2JwyXcSUPA5KKjMXoa85ATgDBDMdlUVrWrD4LTczUD9Nzq1exAuSBYIXiod
- e0MbeFjiTJ8BhZHNrUhGGDzWKY8EITc7XduqdLDZ5GctKya+kVyoKq/IkOu0SedUx2z5
- pQp8LeJGmQfs2CM+LTbmD/KJRvxg9VmuuBuJ1NKV4C1xxrojFpma6UqwA03Fy2zslw5J
- vQkdyyQm/5xiBkjpSpVWZG0r2JfzA51m5ovZNnFXMysbeE8Tuv+bGvb6/0yFAENxHcVu
- qAKQ1mFWZTC2QuNZ6UtiF13rTIvo2INwrArwDWHsJE6MYCmUQBSAMU8Fvb7Q48Tb74E1 6A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3xcahageb0-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 08 Apr 2024 09:33:21 +0000
-Received: from m0353723.ppops.net (m0353723.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 4389WAD8027701;
-	Mon, 8 Apr 2024 09:33:20 GMT
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3xcahageav-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 08 Apr 2024 09:33:20 +0000
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 4388CHai022664;
-	Mon, 8 Apr 2024 09:33:19 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3xbhqnqanr-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 08 Apr 2024 09:33:19 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4389XFRb40632662
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 8 Apr 2024 09:33:17 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id E7ADC2004B;
-	Mon,  8 Apr 2024 09:33:14 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 43F2D20040;
-	Mon,  8 Apr 2024 09:33:11 +0000 (GMT)
-Received: from osiris (unknown [9.171.19.167])
-	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Mon,  8 Apr 2024 09:33:11 +0000 (GMT)
-Date: Mon, 8 Apr 2024 11:33:09 +0200
-From: Heiko Carstens <hca@linux.ibm.com>
-To: Allen Pais <apais@linux.microsoft.com>
-Cc: linux-kernel@vger.kernel.org, tj@kernel.org, keescook@chromium.org,
-        vkoul@kernel.org, marcan@marcan.st, sven@svenpeter.dev,
-        florian.fainelli@broadcom.com, rjui@broadcom.com,
-        sbranden@broadcom.com, paul@crapouillou.net,
-        Eugeniy.Paltsev@synopsys.com, manivannan.sadhasivam@linaro.org,
-        vireshk@kernel.org, Frank.Li@nxp.com, leoyang.li@nxp.com,
-        zw@zh-kernel.org, wangzhou1@hisilicon.com, haijie1@huawei.com,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, sean.wang@mediatek.com,
-        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
-        afaerber@suse.de, logang@deltatee.com, daniel@zonque.org,
-        haojian.zhuang@gmail.com, robert.jarzmik@free.fr, andersson@kernel.org,
-        konrad.dybcio@linaro.org, orsonzhai@gmail.com,
-        baolin.wang@linux.alibaba.com, zhang.lyra@gmail.com,
-        patrice.chotard@foss.st.com, linus.walleij@linaro.org, wens@csie.org,
-        jernej.skrabec@gmail.com, peter.ujfalusi@gmail.com, kys@microsoft.com,
-        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
-        jassisinghbrar@gmail.com, mchehab@kernel.org,
-        maintainers@bluecherrydvr.com, aubin.constans@microchip.com,
-        ulf.hansson@linaro.org, manuel.lauss@gmail.com,
-        mirq-linux@rere.qmqm.pl, jh80.chung@samsung.com, oakad@yahoo.com,
-        hayashi.kunihiko@socionext.com, mhiramat@kernel.org,
-        brucechang@via.com.tw, HaraldWelte@viatech.com, pierre@ossman.eu,
-        duncan.sands@free.fr, stern@rowland.harvard.edu, oneukum@suse.com,
-        openipmi-developer@lists.sourceforge.net, dmaengine@vger.kernel.org,
-        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-        linux-rpi-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        imx@lists.linux.dev, linuxppc-dev@lists.ozlabs.org,
-        linux-mediatek@lists.infradead.org, linux-actions@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-s390@vger.kernel.org, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 7/9] s390: Convert from tasklet to BH workqueue
-Message-ID: <20240408093309.9447-A-hca@linux.ibm.com>
-References: <20240327160314.9982-1-apais@linux.microsoft.com>
- <20240327160314.9982-8-apais@linux.microsoft.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240327160314.9982-8-apais@linux.microsoft.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: iEx_GL3tt0mvzHnM4XY0RznJTIWn8Sle
-X-Proofpoint-GUID: YubKogQl91W9lviSSqhJG7ZeEe8HfK38
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+	s=arc-20240116; t=1712570544; c=relaxed/simple;
+	bh=G0ku0dDFdTLc1pYqQSxUGgaQIlylzP539QExCGqMIzk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Vjgw5ynr8hWpGHtAZIaKy5UdKn/k3J4WSXID9AZ0a4wP19dPfyS3cxqjt9G+wbxlIOjE/RxYCn7FU2A2CgkqJncywdcWBe8V2zqs2CR+mQNwD/RxFBCuY/Ls9DXcbM+blk24dmMxtbplEibbBEcfL9MmkLBTzymmHYH2xnZs4GY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AliY2OXz; arc=none smtp.client-ip=209.85.160.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-22edb0ca19bso2071419fac.2;
+        Mon, 08 Apr 2024 03:02:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712570542; x=1713175342; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PPEmMPD9A+hZEcFAt1PdPzHj0S7+4U/Ump7cFa0dIPw=;
+        b=AliY2OXzoJZYps1a/PkvLY+MsS4eja4OpveLMbdA+77tDLqidy0Gks+TsS3F5Cnl00
+         zS9joIVnv48jkvBAy1NazStsB+u9o43ni8R9kfXu4kBG/wt2tWzljKS9rE+pKMUVT3LD
+         TZ0r53h9N/iLbwxVk9pHKPHkzu2Q4F570Jx7x5OzMijBFVJsWKoDiaj6l+/FeuABnlZU
+         dLkVSR+X7+C9kalsRwN69G3Mx7JTQFJ4dC6FrUEpv3Ak7cfI/Pef7kQjQ1S/gyiyUvvI
+         x3NiZqVJ6qUX1cDBypM2nP6izIIo4SUzNVKhVujfZpk6geWxMCRKnU/SbRQB5tqYGszN
+         bOGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712570542; x=1713175342;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PPEmMPD9A+hZEcFAt1PdPzHj0S7+4U/Ump7cFa0dIPw=;
+        b=QWj12NREEMV02+X1lFznevWhJ3LDDPeifSTeJ4YsYtc+iXg0SpvTflKIINdN2Abkpt
+         ECmBG4pWqnE25Wdm8vHMVf1FEa+/KhttNR6soAIubB9RzDe6nMV1Gnr84fQ+1YEaTLkF
+         Dli6hKzFlgIKAD4fdeOeEN16nfEhdPPe+CFgy4vdas8e9UDC/wNb0DP0jt3kEcrqXrU5
+         ccOMLETejRmuSx//4TOAyEA7xCBSFwoP3qBbFd5tBHBJf8Nx4tFqZOo1T7CbjrxjNOL2
+         oNdLSDLHOlvmhD4mFiUJIR0aL2c47A2UllqiTVkguI02BmzWc3IDmYdE1xDtf1xhlOau
+         ieAQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUsk/+TwXEjjJ6vW4k00w3s4PrieN6A27l0f8ALh4gvUCA70iQ4JatvgTnhsrkHaVSZ1uSNbBFvgmLn96+vWS+2PYzd/CpZiNQo2Jor20BAvRFi7UPYFtuW3vS103bQlKD4/XPD2LF+IK40o/Yr/ObNpkSWMVMRuStYtOQCnxd6q3Mujx0SHlkBjF0=
+X-Gm-Message-State: AOJu0YxJonxgH4YYq+PvO5sWp/LmGv08h+6n5Vkbe5ZFVrgq6w1jAZ4J
+	KfF0QSuHUgEmMY6M5b/rJXSu4rQcfihBSqGqI5egv3Vq9udnB1BJ4JPOpt5l5PasPa4PR3MtvhH
+	5mZmr4iYb2pn3ttjEs06P8WiT+E0=
+X-Google-Smtp-Source: AGHT+IEmpFRODcH4mOqBevHssvRTSi09L5ZlGtdmOwaxO0NzU0IoOHDQYE5m0GIfABZy5itcHhOErpFNTK2Kf3HzlBk=
+X-Received: by 2002:a05:6870:3927:b0:221:bcde:29cc with SMTP id
+ b39-20020a056870392700b00221bcde29ccmr9107148oap.21.1712570542235; Mon, 08
+ Apr 2024 03:02:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-04-08_07,2024-04-05_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- priorityscore=1501 malwarescore=0 clxscore=1011 phishscore=0
- lowpriorityscore=0 impostorscore=0 mlxscore=0 adultscore=0 spamscore=0
- bulkscore=0 mlxlogscore=816 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2404010000 definitions=main-2404080073
+References: <20240301193831.3346-1-linux.amoon@gmail.com> <20240301193831.3346-4-linux.amoon@gmail.com>
+ <52158bf6-16fe-4ce2-b9b6-bbc6550a6e14@wanadoo.fr> <CANAwSgTCaSSMN2QCw5fr=RBp0WwWaLuebzQDO=scnABNFNctJQ@mail.gmail.com>
+ <e85ad80f-af7d-4eaf-9d14-dff13451f7e5@wanadoo.fr> <CANAwSgRrOw+6MHLPDP8RwLwzwB1EVGBTovtR2ChhqR3b5uWowA@mail.gmail.com>
+ <CANAwSgQk10=K6Z5OzvT3OUncfr6BWyx7oH2JKN5CJAnS+uO7QQ@mail.gmail.com> <ed5153e1-f4de-4268-a9d0-e74b779d2587@wanadoo.fr>
+In-Reply-To: <ed5153e1-f4de-4268-a9d0-e74b779d2587@wanadoo.fr>
+From: Anand Moon <linux.amoon@gmail.com>
+Date: Mon, 8 Apr 2024 15:32:06 +0530
+Message-ID: <CANAwSgQ6_bxpKmanPwXvKEQJ0p7AvwTs3on9ubOegaDn3nkdxw@mail.gmail.com>
+Subject: Re: [PATCH v1 3/4] usb: dwc3: exynos: Use devm_regulator_bulk_get_enable()
+ helper function
+To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
+	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Mar 27, 2024 at 04:03:12PM +0000, Allen Pais wrote:
-> The only generic interface to execute asynchronously in the BH context is
-> tasklet; however, it's marked deprecated and has some design flaws. To
-> replace tasklets, BH workqueue support was recently added. A BH workqueue
-> behaves similarly to regular workqueues except that the queued work items
-> are executed in the BH context.
-> 
-> This patch converts drivers/infiniband/* from tasklet to BH workqueue.
-> 
-> Based on the work done by Tejun Heo <tj@kernel.org>
-> Branch: https://git.kernel.org/pub/scm/linux/kernel/git/tj/wq.git for-6.10
+Hi Christophe,
 
-I guess this dependency is a hard requirement due to commit 134874e2eee9
-("workqueue: Allow cancel_work_sync() and disable_work() from atomic contexts
-on BH work items")?
+On Fri, 5 Apr 2024 at 21:42, Christophe JAILLET
+<christophe.jaillet@wanadoo.fr> wrote:
+>
+> Le 05/04/2024 =C3=A0 08:10, Anand Moon a =C3=A9crit :
+> >   Hi Christophe, Krzysztof,
+> >
+> > On Mon, 4 Mar 2024 at 17:16, Anand Moon <linux.amoon@gmail.com> wrote:
+> >>
+> >> Hi Christophe,
+> >>
+> >> On Sun, 3 Mar 2024 at 00:07, Christophe JAILLET
+> >> <christophe.jaillet@wanadoo.fr> wrote:
+> >>>
+> >>> Le 02/03/2024 =C3=A0 17:48, Anand Moon a =C3=A9crit :
+> >>>> Hi Christophe,
+> >>>>
+> >>>> On Sat, 2 Mar 2024 at 21:20, Christophe JAILLET
+> >>>> <christophe.jaillet@wanadoo.fr> wrote:
+> >>>>>
+> >>>>> Le 01/03/2024 =C3=A0 20:38, Anand Moon a =C3=A9crit :
+> >>>>>> Use devm_regulator_bulk_get_enable() instead of open coded
+> >>>>>> 'devm_regulator_get(), regulator_enable(), regulator_disable().
+> >>>>>>
+> >>>>>> Signed-off-by: Anand Moon <linux.amoon@gmail.com>
+> >>>>>> ---
+> >>>>>>     drivers/usb/dwc3/dwc3-exynos.c | 49 +++-----------------------=
+--------
+> >>>>>>     1 file changed, 4 insertions(+), 45 deletions(-)
+> >>>>>>
+> >>>>>> diff --git a/drivers/usb/dwc3/dwc3-exynos.c b/drivers/usb/dwc3/dwc=
+3-exynos.c
+> >>>>>> index 5d365ca51771..7c77f3c69825 100644
+> >>>>>> --- a/drivers/usb/dwc3/dwc3-exynos.c
+> >>>>>> +++ b/drivers/usb/dwc3/dwc3-exynos.c
+> >>>>>> @@ -32,9 +32,6 @@ struct dwc3_exynos {
+> >>>>>>         struct clk              *clks[DWC3_EXYNOS_MAX_CLOCKS];
+> >>>>>>         int                     num_clks;
+> >>>>>>         int                     suspend_clk_idx;
+> >>>>>> -
+> >>>>>> -     struct regulator        *vdd33;
+> >>>>>> -     struct regulator        *vdd10;
+> >>>>>>     };
+> >>>>>>
+> >>>>>>     static int dwc3_exynos_probe(struct platform_device *pdev)
+> >>>>>> @@ -44,6 +41,7 @@ static int dwc3_exynos_probe(struct platform_dev=
+ice *pdev)
+> >>>>>>         struct device_node      *node =3D dev->of_node;
+> >>>>>>         const struct dwc3_exynos_driverdata *driver_data;
+> >>>>>>         int                     i, ret;
+> >>>>>> +     static const char * const regulators[] =3D { "vdd33", "vdd10=
+" };
+> >>>>>>
+> >>>>>>         exynos =3D devm_kzalloc(dev, sizeof(*exynos), GFP_KERNEL);
+> >>>>>>         if (!exynos)
+> >>>>>> @@ -78,27 +76,9 @@ static int dwc3_exynos_probe(struct platform_de=
+vice *pdev)
+> >>>>>>         if (exynos->suspend_clk_idx >=3D 0)
+> >>>>>>                 clk_prepare_enable(exynos->clks[exynos->suspend_cl=
+k_idx]);
+> >>>>>>
+> >>>>>> -     exynos->vdd33 =3D devm_regulator_get(dev, "vdd33");
+> >>>>>> -     if (IS_ERR(exynos->vdd33)) {
+> >>>>>> -             ret =3D PTR_ERR(exynos->vdd33);
+> >>>>>> -             goto vdd33_err;
+> >>>>>> -     }
+> >>>>>> -     ret =3D regulator_enable(exynos->vdd33);
+> >>>>>> -     if (ret) {
+> >>>>>> -             dev_err(dev, "Failed to enable VDD33 supply\n");
+> >>>>>> -             goto vdd33_err;
+> >>>>>> -     }
+> >>>>>> -
+> >>>>>> -     exynos->vdd10 =3D devm_regulator_get(dev, "vdd10");
+> >>>>>> -     if (IS_ERR(exynos->vdd10)) {
+> >>>>>> -             ret =3D PTR_ERR(exynos->vdd10);
+> >>>>>> -             goto vdd10_err;
+> >>>>>> -     }
+> >>>>>> -     ret =3D regulator_enable(exynos->vdd10);
+> >>>>>> -     if (ret) {
+> >>>>>> -             dev_err(dev, "Failed to enable VDD10 supply\n");
+> >>>>>> -             goto vdd10_err;
+> >>>>>> -     }
+> >>>>>> +     ret =3D devm_regulator_bulk_get_enable(dev, ARRAY_SIZE(regul=
+ators), regulators);
+> >>>>>> +     if (ret)
+> >>>>>> +             return dev_err_probe(dev, ret, "Failed to enable reg=
+ulators\n");
+> >>>>>>
+> >>>>>>         if (node) {
+> >>>>>>                 ret =3D of_platform_populate(node, NULL, NULL, dev=
+);
+> >>>>>> @@ -115,10 +95,6 @@ static int dwc3_exynos_probe(struct platform_d=
+evice *pdev)
+> >>>>>>         return 0;
+> >>>>>>
+> >>>>>>     populate_err:
+> >>>>>> -     regulator_disable(exynos->vdd10);
+> >>>>>> -vdd10_err:
+> >>>>>> -     regulator_disable(exynos->vdd33);
+> >>>>>> -vdd33_err:
+> >>>>>>         for (i =3D exynos->num_clks - 1; i >=3D 0; i--)
+> >>>>>>                 clk_disable_unprepare(exynos->clks[i]);
+> >>>>>>
+> >>>>>> @@ -140,9 +116,6 @@ static void dwc3_exynos_remove(struct platform=
+_device *pdev)
+> >>>>>>
+> >>>>>>         if (exynos->suspend_clk_idx >=3D 0)
+> >>>>>>                 clk_disable_unprepare(exynos->clks[exynos->suspend=
+_clk_idx]);
+> >>>>>> -
+> >>>>>> -     regulator_disable(exynos->vdd33);
+> >>>>>> -     regulator_disable(exynos->vdd10);
+> >>>>>>     }
+> >>>>>>
+> >>>>>>     static const struct dwc3_exynos_driverdata exynos5250_drvdata =
+=3D {
+> >>>>>> @@ -196,9 +169,6 @@ static int dwc3_exynos_suspend(struct device *=
+dev)
+> >>>>>>         for (i =3D exynos->num_clks - 1; i >=3D 0; i--)
+> >>>>>>                 clk_disable_unprepare(exynos->clks[i]);
+> >>>>>>
+> >>>>>> -     regulator_disable(exynos->vdd33);
+> >>>>>> -     regulator_disable(exynos->vdd10);
+> >>>>>
+> >>>>> Hi,
+> >>>>>
+> >>>>> Same here, I don't think that removing regulator_[en|dis]able from =
+the
+> >>>>> suspend and resume function is correct.
+> >>>>>
+> >>>>> The goal is to stop some hardware when the system is suspended, in =
+order
+> >>>>> to save some power.
+> >>>> Ok,
+> >>>>>
+> >>>>> Why did you removed it?
+> >>>>
+> >>>> As per the description of the function  devm_regulator_bulk_get_enab=
+le
+> >>>>
+> >>>> * This helper function allows drivers to get several regulator
+> >>>>    * consumers in one operation with management, the regulators will
+> >>>>    * automatically be freed when the device is unbound.  If any of t=
+he
+> >>>>    * regulators cannot be acquired then any regulators that were
+> >>>>    * allocated will be freed before returning to the caller.
+> >>>
+> >>> The code in suspend/resume is not about freeing some resources. It is
+> >>> about enabling/disabling some hardware to save some power.
+> >>>
+> >>> Think to the probe/remove functions as the software in the kernel tha=
+t
+> >>> knows how to handle some hardawre, and the suspend/resume as the on/o=
+ff
+> >>> button to power-on and off the electrical chips.
+> >>>
+> >>> When the system is suspended, the software is still around. But some
+> >>> hardware can be set in a low consumption mode to save some power.
+> >>>
+> >>> IMHO, part of the code you removed changed this behaviour and increas=
+e
+> >>> the power consumption when the system is suspended.
+> >>>
+> >>
+> >> You are correct, I have changed the regulator API from
+> >> devm_regulator_get_enable to devm_regulator_bulk_get_enable
+> >> which changes this behavior.
+> >> I will fix it in the next version.
+> >>
+> >>> CJ
+> >
+> > I could not find any example in the kernel to support
+> > devm_regulator_bulk_disable
+> > but here is my modified file.
+> >
+> > If you have any suggestions for this plz let me know.
+>
+> I don't think that your approach is correct, and I don't think that the
+> proposed patch does what you expect it to do.
+>
+> Calling a devm_ function in suspend/resume functions looks really
+> strange to me and is likely broken.
+>
+> Especially here, devm_regulator_bulk_get_enable() in the resume function
+> allocates some memory that is not freed in
+> devm_regulator_bulk_disable(), because the API is not designed to work
+> like that. So this could generate a kind of memory leak.
+>
+>
+> *I think that the code is good enough as-is*, but if you really want to
+> change something, maybe:
+>     - devm_regulator_get()+regulator_enable() in the probe could be
+> changed to devm_regulator_get_enable()
+>     - the resume/suspend function should be left as-is with
+> regulator_disable()/regulator_ensable()
+>     - remove regulator_disable() from the error handling path of the
+> probe and from the remove function.
+>
+> I *think* it would work.
+>
+No devm_regulator_get_enable use the same logic as
+devm_regulator_bulk_get_enable
+to enable the regulator.
 
-> ---
->  drivers/s390/block/dasd.c              | 42 ++++++++++++------------
->  drivers/s390/block/dasd_int.h          | 10 +++---
->  drivers/s390/char/con3270.c            | 27 ++++++++--------
->  drivers/s390/crypto/ap_bus.c           | 24 +++++++-------
->  drivers/s390/crypto/ap_bus.h           |  2 +-
->  drivers/s390/crypto/zcrypt_msgtype50.c |  2 +-
->  drivers/s390/crypto/zcrypt_msgtype6.c  |  4 +--
->  drivers/s390/net/ctcm_fsms.c           |  4 +--
->  drivers/s390/net/ctcm_main.c           | 15 ++++-----
->  drivers/s390/net/ctcm_main.h           |  5 +--
->  drivers/s390/net/ctcm_mpc.c            | 12 +++----
->  drivers/s390/net/ctcm_mpc.h            |  7 ++--
->  drivers/s390/net/lcs.c                 | 26 +++++++--------
->  drivers/s390/net/lcs.h                 |  2 +-
->  drivers/s390/net/qeth_core_main.c      |  2 +-
->  drivers/s390/scsi/zfcp_qdio.c          | 45 +++++++++++++-------------
->  drivers/s390/scsi/zfcp_qdio.h          |  9 +++---
->  17 files changed, 117 insertions(+), 121 deletions(-)
+[0] https://elixir.bootlin.com/linux/latest/source/drivers/regulator/devres=
+.c#L126
 
-I'm asking since this patch comes with multiple compile errors. Probably due
-to lack of cross compiler tool chain on your side.
+So as of now I am dropping the changes on the regulator in this patch serie=
+s.
 
-If the above wouldn't be a hard dependency I'd say we could take those parts
-of your patch which are fine into the s390 tree for 6.10, fix the rest, and
-schedule that as well for 6.10 via the s390 tree.
+> CJ
+>
+Thanks for your inputs.
+
+Thanks
+
+-Anand
 
