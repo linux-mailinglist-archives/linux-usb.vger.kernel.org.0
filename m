@@ -1,64 +1,75 @@
-Return-Path: <linux-usb+bounces-9074-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9059-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB0B889C5F2
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Apr 2024 16:03:00 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4D5E89BFD6
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Apr 2024 15:03:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 155761C239C1
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Apr 2024 14:03:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 71012285D9A
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Apr 2024 13:03:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F9BD7C0A9;
-	Mon,  8 Apr 2024 14:02:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A28667BAEC;
+	Mon,  8 Apr 2024 13:01:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="VwoytcoU"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DmsY9/4P"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C75657BB15;
-	Mon,  8 Apr 2024 14:02:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 867F36CDA8
+	for <linux-usb@vger.kernel.org>; Mon,  8 Apr 2024 13:01:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712584937; cv=none; b=MSc0IWjNUwL7i9koJPCgC1h5XZUqCSjhQFnaXnYDyyIoO2kPYJdtXwDbmJZc33QhHiqVUzprW9Aa3JjH9Dsi8rA2W6wj6E8iCMvjemPOfZ5S+9YNdtM0suiKIY5X7IIXod0EVsXFKausHNz/jMwtK2bJQUtGdYAmPLRr4DBS+J0=
+	t=1712581288; cv=none; b=YOkbMWmg1kLs4IqiJ7YlIYvRY+UbjaR6qrBSjpzw1KOU0yQ5dGJMip+U50DwB30UJwsmAfedVe4suU5YGQdLATeOT06pNGVWvks3u+BmYD8bYqidmYxhtn2EREZjskNjCt+2GFu9/xPl+Or/KzcUIGuwC0VI0PtieCMOxzMWoSI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712584937; c=relaxed/simple;
-	bh=/iO3pfCa9DaPOYswZfHEDY68Art7tG8bb7yGnumGSWE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=iqH7vBR+4zPdzylBJCktBokuHLxx70UK5BPU++n88e6L8vAYWyjYmYHYRylGOqIXnq1iOS0Rdss6S94b6zlvo/9gkHz1TcIYUWSsWRqp6j1ufNrnc9muiR4u3GZ3Kq/7Q0hmWauwD6VbrZNAhsruygjwf9ppQaJoB/dzt13ed1M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=VwoytcoU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F631C433F1;
-	Mon,  8 Apr 2024 14:02:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1712584937;
-	bh=/iO3pfCa9DaPOYswZfHEDY68Art7tG8bb7yGnumGSWE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=VwoytcoUiAPJECIga3gEEtZWbZ1ieUnmZeVdwFSRkdbmqr9hfMuORF6UgB4I0V5l6
-	 +uLKTpuDPH8lVfEt085uQfIhfhhiZZrxpjjHsiI/8zZPeRBdTjQGkZ2BDARkdmmLt9
-	 yUsCJPYjOjB4bxtQESWNSo8DMazQYe+Ii4s4BgMA=
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: stable@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	patches@lists.linux.dev,
+	s=arc-20240116; t=1712581288; c=relaxed/simple;
+	bh=onkmaoZvkauW8Q4MGh3eVchFeNAmDaYgmCBvXuFcIGE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KHmSI3ArpHRhtuKgkphw59u24t6/cCgZUtx5nVGMZZJZ8v6cQ7n+j2QRut0bFotl+KTPLhETuO0t6ZhfOVFh/YGKJXD15ecjuDNT86OOcELMpvCZ+PZpFNr14ylCdbky7neGIIJq5V6cijuHZ6i+kgbt+lhBMFq5JJcUO8fLu2M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DmsY9/4P; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1712581286; x=1744117286;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=onkmaoZvkauW8Q4MGh3eVchFeNAmDaYgmCBvXuFcIGE=;
+  b=DmsY9/4PUeBnv9CqrC3OJolvsHdFiwvpyAkX7PLM4eXaMS1s6qCKftmN
+   vNK1X81BiN9/FClkUNRWBcBcchLuyDjng4CJl9iCwZzeKPEcthmKh8+ww
+   3GTFpds+xTkRBxX1pgLDh6LO2AV7liFYTLelfAKQI9Jl0JPtDhglTVrw/
+   sgDg6e7p3eYJ6eL6BlUxh/5njEp+IT5U75qKSsmviuVGMObau4l3LlEgI
+   9kBePzGmt2BJryupQN2WSR3odupaR3QLmdRocKNsuqobhi1FyOVz7Nfap
+   KqciKI7UJjX6mVeofoUwgilhz28iwaKFS2GEeuYkCuJAg7GwYxzzVojDU
+   g==;
+X-CSE-ConnectionGUID: MUS65IcYRHW87DwxT/fu+w==
+X-CSE-MsgGUID: p8dRn+lCT9mAGwf2iPy0Yg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11038"; a="11630688"
+X-IronPort-AV: E=Sophos;i="6.07,186,1708416000"; 
+   d="scan'208";a="11630688"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2024 06:00:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,11037"; a="937091483"
+X-IronPort-AV: E=Sophos;i="6.07,186,1708416000"; 
+   d="scan'208";a="937091483"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 08 Apr 2024 06:00:32 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id CF6B924D; Mon,  8 Apr 2024 16:00:31 +0300 (EEST)
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Michael Jamet <michael.jamet@intel.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Andreas Noever <andreas.noever@gmail.com>
+Cc: Gil Fine <gil.fine@linux.intel.com>,
 	linux-usb@vger.kernel.org,
-	Johannes Thumshirn <johannes.thumshirn@wdc.com>,
-	Hannes Reinecke <hare@suse.de>,
-	Himanshu Madhani <himanshu.madhani@oracle.com>,
-	Oliver Neukum <oneukum@suse.com>,
-	Bart Van Assche <bvanassche@acm.org>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 607/690] scsi: usb: Stop using the SCSI pointer
-Date: Mon,  8 Apr 2024 14:57:53 +0200
-Message-ID: <20240408125421.592860359@linuxfoundation.org>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20240408125359.506372836@linuxfoundation.org>
-References: <20240408125359.506372836@linuxfoundation.org>
-User-Agent: quilt/0.67
-X-stable: review
-X-Patchwork-Hint: ignore
+	Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: [PATCH 1/2] thunderbolt: Fix calculation of consumed USB3 bandwidth on a path
+Date: Mon,  8 Apr 2024 16:00:30 +0300
+Message-ID: <20240408130031.51616-1-mika.westerberg@linux.intel.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -67,221 +78,54 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-5.15-stable review patch.  If anyone has any objections, please let me know.
+From: Gil Fine <gil.fine@linux.intel.com>
 
-------------------
+Currently, when setup a new USB3 tunnel that is starting from downstream USB3
+adapter of first depth router (or deeper), to upstream USB3 adapter of a second
+depth router (or deeper), we calculate consumed bandwidth. For this calculation
+we take into account first USB3 tunnel consumed bandwidth while we shouldn't,
+because we just recalculating the first USB3 tunnel allocated bandwidth.
 
-From: Bart Van Assche <bvanassche@acm.org>
+Fix that, so that more bandwidth is available for the new USB3 tunnel being
+setup.
 
-[ Upstream commit 5dfcf1ad933fe877cb44e9fb7a661dfc22190101 ]
+While there, fix the kernel-doc to decribe more accurately the purpose of the
+function.
 
-Set scsi_host_template.cmd_size instead of using the SCSI pointer for
-storing driver-private data. Change the type of the argument of
-uas_add_work() from struct uas_cmd_info * into struct scsi_cmnd * because
-it is easier to convert a SCSI command pointer into a uas_cmd_info pointer
-than the other way around.
-
-This patch prepares for removal of the SCSI pointer from struct scsi_cmnd.
-
-Link: https://lore.kernel.org/r/20220218195117.25689-46-bvanassche@acm.org
-Cc: linux-usb@vger.kernel.org
-Reviewed-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
-Reviewed-by: Hannes Reinecke <hare@suse.de>
-Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Acked-by: Oliver Neukum <oneukum@suse.com>
-Signed-off-by: Bart Van Assche <bvanassche@acm.org>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Stable-dep-of: cd5432c71235 ("USB: UAS: return ENODEV when submit urbs fail with device not attached")
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Gil Fine <gil.fine@linux.intel.com>
+Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 ---
- drivers/usb/storage/uas.c | 43 ++++++++++++++++++---------------------
- 1 file changed, 20 insertions(+), 23 deletions(-)
+ drivers/thunderbolt/tb.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/usb/storage/uas.c b/drivers/usb/storage/uas.c
-index 774d18907f472..d11a9481f6d00 100644
---- a/drivers/usb/storage/uas.c
-+++ b/drivers/usb/storage/uas.c
-@@ -113,7 +113,7 @@ static void uas_do_work(struct work_struct *work)
- 			continue;
- 
- 		cmnd = devinfo->cmnd[i];
--		cmdinfo = (void *)&cmnd->SCp;
-+		cmdinfo = scsi_cmd_priv(cmnd);
- 
- 		if (!(cmdinfo->state & IS_IN_WORK_LIST))
- 			continue;
-@@ -139,10 +139,9 @@ static void uas_scan_work(struct work_struct *work)
- 	dev_dbg(&devinfo->intf->dev, "scan complete\n");
- }
- 
--static void uas_add_work(struct uas_cmd_info *cmdinfo)
-+static void uas_add_work(struct scsi_cmnd *cmnd)
- {
--	struct scsi_pointer *scp = (void *)cmdinfo;
--	struct scsi_cmnd *cmnd = container_of(scp, struct scsi_cmnd, SCp);
-+	struct uas_cmd_info *cmdinfo = scsi_cmd_priv(cmnd);
- 	struct uas_dev_info *devinfo = cmnd->device->hostdata;
- 
- 	lockdep_assert_held(&devinfo->lock);
-@@ -163,7 +162,7 @@ static void uas_zap_pending(struct uas_dev_info *devinfo, int result)
- 			continue;
- 
- 		cmnd = devinfo->cmnd[i];
--		cmdinfo = (void *)&cmnd->SCp;
-+		cmdinfo = scsi_cmd_priv(cmnd);
- 		uas_log_cmd_state(cmnd, __func__, 0);
- 		/* Sense urbs were killed, clear COMMAND_INFLIGHT manually */
- 		cmdinfo->state &= ~COMMAND_INFLIGHT;
-@@ -200,15 +199,14 @@ static void uas_sense(struct urb *urb, struct scsi_cmnd *cmnd)
- static void uas_log_cmd_state(struct scsi_cmnd *cmnd, const char *prefix,
- 			      int status)
- {
--	struct uas_cmd_info *ci = (void *)&cmnd->SCp;
--	struct uas_cmd_info *cmdinfo = (void *)&cmnd->SCp;
-+	struct uas_cmd_info *ci = scsi_cmd_priv(cmnd);
- 
- 	if (status == -ENODEV) /* too late */
- 		return;
- 
- 	scmd_printk(KERN_INFO, cmnd,
- 		    "%s %d uas-tag %d inflight:%s%s%s%s%s%s%s%s%s%s%s%s ",
--		    prefix, status, cmdinfo->uas_tag,
-+		    prefix, status, ci->uas_tag,
- 		    (ci->state & SUBMIT_STATUS_URB)     ? " s-st"  : "",
- 		    (ci->state & ALLOC_DATA_IN_URB)     ? " a-in"  : "",
- 		    (ci->state & SUBMIT_DATA_IN_URB)    ? " s-in"  : "",
-@@ -231,7 +229,7 @@ static void uas_free_unsubmitted_urbs(struct scsi_cmnd *cmnd)
- 	if (!cmnd)
- 		return;
- 
--	cmdinfo = (void *)&cmnd->SCp;
-+	cmdinfo = scsi_cmd_priv(cmnd);
- 
- 	if (cmdinfo->state & SUBMIT_CMD_URB)
- 		usb_free_urb(cmdinfo->cmd_urb);
-@@ -245,7 +243,7 @@ static void uas_free_unsubmitted_urbs(struct scsi_cmnd *cmnd)
- 
- static int uas_try_complete(struct scsi_cmnd *cmnd, const char *caller)
- {
--	struct uas_cmd_info *cmdinfo = (void *)&cmnd->SCp;
-+	struct uas_cmd_info *cmdinfo = scsi_cmd_priv(cmnd);
- 	struct uas_dev_info *devinfo = (void *)cmnd->device->hostdata;
- 
- 	lockdep_assert_held(&devinfo->lock);
-@@ -263,13 +261,13 @@ static int uas_try_complete(struct scsi_cmnd *cmnd, const char *caller)
- static void uas_xfer_data(struct urb *urb, struct scsi_cmnd *cmnd,
- 			  unsigned direction)
- {
--	struct uas_cmd_info *cmdinfo = (void *)&cmnd->SCp;
-+	struct uas_cmd_info *cmdinfo = scsi_cmd_priv(cmnd);
- 	int err;
- 
- 	cmdinfo->state |= direction | SUBMIT_STATUS_URB;
- 	err = uas_submit_urbs(cmnd, cmnd->device->hostdata);
- 	if (err) {
--		uas_add_work(cmdinfo);
-+		uas_add_work(cmnd);
- 	}
- }
- 
-@@ -329,7 +327,7 @@ static void uas_stat_cmplt(struct urb *urb)
- 	}
- 
- 	cmnd = devinfo->cmnd[idx];
--	cmdinfo = (void *)&cmnd->SCp;
-+	cmdinfo = scsi_cmd_priv(cmnd);
- 
- 	if (!(cmdinfo->state & COMMAND_INFLIGHT)) {
- 		uas_log_cmd_state(cmnd, "unexpected status cmplt", 0);
-@@ -394,7 +392,7 @@ static void uas_stat_cmplt(struct urb *urb)
- static void uas_data_cmplt(struct urb *urb)
- {
- 	struct scsi_cmnd *cmnd = urb->context;
--	struct uas_cmd_info *cmdinfo = (void *)&cmnd->SCp;
-+	struct uas_cmd_info *cmdinfo = scsi_cmd_priv(cmnd);
- 	struct uas_dev_info *devinfo = (void *)cmnd->device->hostdata;
- 	struct scsi_data_buffer *sdb = &cmnd->sdb;
- 	unsigned long flags;
-@@ -446,7 +444,7 @@ static struct urb *uas_alloc_data_urb(struct uas_dev_info *devinfo, gfp_t gfp,
- 				      enum dma_data_direction dir)
- {
- 	struct usb_device *udev = devinfo->udev;
--	struct uas_cmd_info *cmdinfo = (void *)&cmnd->SCp;
-+	struct uas_cmd_info *cmdinfo = scsi_cmd_priv(cmnd);
- 	struct urb *urb = usb_alloc_urb(0, gfp);
- 	struct scsi_data_buffer *sdb = &cmnd->sdb;
- 	unsigned int pipe = (dir == DMA_FROM_DEVICE)
-@@ -468,7 +466,7 @@ static struct urb *uas_alloc_sense_urb(struct uas_dev_info *devinfo, gfp_t gfp,
- 				       struct scsi_cmnd *cmnd)
- {
- 	struct usb_device *udev = devinfo->udev;
--	struct uas_cmd_info *cmdinfo = (void *)&cmnd->SCp;
-+	struct uas_cmd_info *cmdinfo = scsi_cmd_priv(cmnd);
- 	struct urb *urb = usb_alloc_urb(0, gfp);
- 	struct sense_iu *iu;
- 
-@@ -496,7 +494,7 @@ static struct urb *uas_alloc_cmd_urb(struct uas_dev_info *devinfo, gfp_t gfp,
- {
- 	struct usb_device *udev = devinfo->udev;
- 	struct scsi_device *sdev = cmnd->device;
--	struct uas_cmd_info *cmdinfo = (void *)&cmnd->SCp;
-+	struct uas_cmd_info *cmdinfo = scsi_cmd_priv(cmnd);
- 	struct urb *urb = usb_alloc_urb(0, gfp);
- 	struct command_iu *iu;
- 	int len;
-@@ -558,7 +556,7 @@ static struct urb *uas_submit_sense_urb(struct scsi_cmnd *cmnd, gfp_t gfp)
- static int uas_submit_urbs(struct scsi_cmnd *cmnd,
- 			   struct uas_dev_info *devinfo)
- {
--	struct uas_cmd_info *cmdinfo = (void *)&cmnd->SCp;
-+	struct uas_cmd_info *cmdinfo = scsi_cmd_priv(cmnd);
- 	struct urb *urb;
- 	int err;
- 
-@@ -638,12 +636,10 @@ static int uas_queuecommand_lck(struct scsi_cmnd *cmnd,
- {
- 	struct scsi_device *sdev = cmnd->device;
- 	struct uas_dev_info *devinfo = sdev->hostdata;
--	struct uas_cmd_info *cmdinfo = (void *)&cmnd->SCp;
-+	struct uas_cmd_info *cmdinfo = scsi_cmd_priv(cmnd);
- 	unsigned long flags;
- 	int idx, err;
- 
--	BUILD_BUG_ON(sizeof(struct uas_cmd_info) > sizeof(struct scsi_pointer));
--
- 	/* Re-check scsi_block_requests now that we've the host-lock */
- 	if (cmnd->device->host->host_self_blocked)
- 		return SCSI_MLQUEUE_DEVICE_BUSY;
-@@ -713,7 +709,7 @@ static int uas_queuecommand_lck(struct scsi_cmnd *cmnd,
- 			spin_unlock_irqrestore(&devinfo->lock, flags);
- 			return SCSI_MLQUEUE_DEVICE_BUSY;
- 		}
--		uas_add_work(cmdinfo);
-+		uas_add_work(cmnd);
- 	}
- 
- 	devinfo->cmnd[idx] = cmnd;
-@@ -731,7 +727,7 @@ static DEF_SCSI_QCMD(uas_queuecommand)
+diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
+index 3e44c78ac409..10e719dd837c 100644
+--- a/drivers/thunderbolt/tb.c
++++ b/drivers/thunderbolt/tb.c
+@@ -498,8 +498,9 @@ static struct tb_tunnel *tb_find_first_usb3_tunnel(struct tb *tb,
+  * @consumed_down: Consumed downstream bandwidth (Mb/s)
+  *
+  * Calculates consumed USB3 and PCIe bandwidth at @port between path
+- * from @src_port to @dst_port. Does not take tunnel starting from
+- * @src_port and ending from @src_port into account.
++ * from @src_port to @dst_port. Does not take USB3 tunnel starting from
++ * @src_port and ending on @src_port into account because that bandwidth is
++ * already included in as part of the "first hop" USB3 tunnel.
   */
- static int uas_eh_abort_handler(struct scsi_cmnd *cmnd)
- {
--	struct uas_cmd_info *cmdinfo = (void *)&cmnd->SCp;
-+	struct uas_cmd_info *cmdinfo = scsi_cmd_priv(cmnd);
- 	struct uas_dev_info *devinfo = (void *)cmnd->device->hostdata;
- 	struct urb *data_in_urb = NULL;
- 	struct urb *data_out_urb = NULL;
-@@ -911,6 +907,7 @@ static struct scsi_host_template uas_host_template = {
- 	.this_id = -1,
- 	.skip_settle_delay = 1,
- 	.dma_boundary = PAGE_SIZE - 1,
-+	.cmd_size = sizeof(struct uas_cmd_info),
- };
+ static int tb_consumed_usb3_pcie_bandwidth(struct tb *tb,
+ 					   struct tb_port *src_port,
+@@ -514,8 +515,8 @@ static int tb_consumed_usb3_pcie_bandwidth(struct tb *tb,
+ 	*consumed_up = *consumed_down = 0;
  
- #define UNUSUAL_DEV(id_vendor, id_product, bcdDeviceMin, bcdDeviceMax, \
+ 	tunnel = tb_find_first_usb3_tunnel(tb, src_port, dst_port);
+-	if (tunnel && tunnel->src_port != src_port &&
+-	    tunnel->dst_port != dst_port) {
++	if (tunnel && !tb_port_is_usb3_down(src_port) &&
++	    !tb_port_is_usb3_up(dst_port)) {
+ 		int ret;
+ 
+ 		ret = tb_tunnel_consumed_bandwidth(tunnel, consumed_up,
 -- 
 2.43.0
-
-
 
 
