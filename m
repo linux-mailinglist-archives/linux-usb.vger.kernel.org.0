@@ -1,146 +1,239 @@
-Return-Path: <linux-usb+bounces-9061-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9062-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0801389C015
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Apr 2024 15:05:46 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CC5689C301
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Apr 2024 15:38:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9DF3D1F24B13
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Apr 2024 13:05:45 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 47447B2B4B0
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Apr 2024 13:30:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C9E07D09D;
-	Mon,  8 Apr 2024 13:04:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EF357D3E3;
+	Mon,  8 Apr 2024 13:27:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="V6V/JtZx"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="fw5bN7P4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3768C7D07C
-	for <linux-usb@vger.kernel.org>; Mon,  8 Apr 2024 13:04:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16F957CF29
+	for <linux-usb@vger.kernel.org>; Mon,  8 Apr 2024 13:27:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712581479; cv=none; b=sGHoFiTVOvrt3VGxXYjddCjKKYwqn2vYLxVGzM4N0wHLrP5h+EN/p0CPSvgbOQOV8khso2liud0aHKEdP+GnpoatXi/Cdz10kr5/93xOqLr82wdbjYEjInvrdUZsPaiuXmZkVsGN+NOxqaCeH4rn0znHR7KjksDIDItXV4MPGQ8=
+	t=1712582826; cv=none; b=M+Iwag7ocWyBJ4EK4FCYdKl7J4llDIY7uuKJjueNpb1T6TlUYJ88ydJhSKnc5pci5hZoWX8Qix8RR0WP15YkDM2c7ElbmhoMOnMgYhK8W4rQZPn9A6U6DGtez+VXHa3QBs3ZxrrJhXkn8Nt3rJvY0GtB4Y8Ixqu83UV7uW3k4B4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712581479; c=relaxed/simple;
-	bh=7bpRSGGPDQCS7wFqBB78vDQoO6pcgett9EASBZ5btWM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kreP4RidDVCafM9ON+lTX0bKbHmRKGg4K8B/LbDCemu8J0gEf9f2nJbDR/Hqj0Z9R0dnNY7Gw8p6HzMqH6LIfxejjfl0HHYIj9wA14KIsswvcqvKSvebWSEde1E7uuviajZi1plsS2CSz0AbviVlJOvLg2uojKVGmYlxrb0x1mk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=V6V/JtZx; arc=none smtp.client-ip=209.85.160.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-43477091797so344171cf.1
-        for <linux-usb@vger.kernel.org>; Mon, 08 Apr 2024 06:04:37 -0700 (PDT)
+	s=arc-20240116; t=1712582826; c=relaxed/simple;
+	bh=irNNoFJZO1Gz1+eRkFAf0ZYdvMxb4fZry5HvMmVnPXM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=kmW6rMCrlYLEvwfnzQvhAVh2n9fh/G7cS17sz9yJX51s1tF8nrSMI079zJ3klItEccOZk640YhUOidtLQPKSZy3ZhrKtIfvXf1XEP6u6vKAn6xAI28VTND/58s5NeAHIiRwsqjusy1pz6hOtZwOoRJG1GQz+ascyKYhGxn/k6eo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=fw5bN7P4; arc=none smtp.client-ip=209.85.218.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a51d05c50b2so156961666b.0
+        for <linux-usb@vger.kernel.org>; Mon, 08 Apr 2024 06:27:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1712581477; x=1713186277; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TVioy9EMNQnc5SXcQapeY7Z9K+iAa8Z5L7a/jg+l4cY=;
-        b=V6V/JtZxF+/LndpdhRmbOuo/U1EUSxttljOGzrE+EYarMRJhqEEIgiDu4CsM1Rtzgc
-         Bn4ku4kJdDrpz3KiK4Ie+zt0mKIB/PTxj5/LDT9Ijr4jydu/cCGGmGNhnaAEtyqn3Jqx
-         OAsgszri7Xgg4E4q5vSKJ9TK8odjahLuUIrdoUIicGTlf2snFgCpWJEfYItZSkk8JmhW
-         hb72eE2ANh9jW4ca6uH5jCx20bmxaOPzi2kTZcLWCovCiW0lri6J0lOWG46jNZTnsU+a
-         /TakSItP2mKngyv4cbTTctHtPLKHRhaE5+J++vrA6fe4dtZ76iWAL2f/rtjUOOJGTvJJ
-         Z67w==
+        d=linaro.org; s=google; t=1712582822; x=1713187622; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=TiZX3mVFBF7BLHgtOUkl0S2NrftfNbyBEoRd4uLMG+Q=;
+        b=fw5bN7P4KoIuJNNTvm/PcT8sRUSSUdr4SWHQst0KCOQ6AgMpxkNPcHeYgp/CxJo/Yy
+         9M4f9mQn1uJl3VJMgmG7nMUWaCplJc6a+6MPnkiw9uLxfoBqWYDtQYQvZrXdiWRUJ9Bc
+         mzQ3Y25vzU/kl+gGjyFogJI5kadcUshzr9jBtI/z4TTqXzZJ78f20kqygO7cOuwGGcQ8
+         LAQc4VdrnVToTZMZsmjCzCLor2Vg//m0gzKb+Uvp/GZs9cK4BF1w4/pwv+asG3qi4Bbv
+         8jqdLlcJnZOQB6HW2CdZG6+YufJuapMt9tc/py1pMsLCE9MnoeOVmzL2nGMDGQtrtYJu
+         HKDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712581477; x=1713186277;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TVioy9EMNQnc5SXcQapeY7Z9K+iAa8Z5L7a/jg+l4cY=;
-        b=DY5p0QulYULwwdR8YYxvcYbdwSgAnYUcEW8wfB1eDGuRellbQEWSLD4A8L2Yq9PlnL
-         dynUBqjdMM0IwWPUt6c3kg0+oifwzVvZ2aB+aPTirdwFYxZfj7EsZ2bHxehuZB2RJoEW
-         b9aQD1mAGoZGL3iT8ZkXEtI8i5bARGCzK/HMWlqQXD9Sgf4z0bkkj5+XMOsIj5nSNgWc
-         d5FApZBH7rxxH2aBA7LtZ2WjHi6LlUfEgeGNNN3WUpK6Zb05dulcs16msX69ms8b2zr0
-         XCampRsh4/Q6vcsNOHzyaOC00upkGlaRUBPSlbu1tTgml81mQ50sInNXCQikwMKpnyVN
-         Aong==
-X-Forwarded-Encrypted: i=1; AJvYcCX67AVNTKBTMqjq9BRwHJak44xMnWpcmma+8VgBvvn7K/q9tbykyefPleVfPbGDmZBJpmLaTLdxLGrPBRf6uFpxRqldZWqXQoXG
-X-Gm-Message-State: AOJu0YwWLTYSL0dbXZy/BrgRF3YusMj+HB5EO2C51Wd0/weSoqWqTleO
-	ah0SpyEc5GHdT6tvwp2b15c2Ov5YIIqZ8uR5p5jUSnEYY6resHfi0dNAj1bnzpVFXhM3Dl8qb9v
-	8xq1vXUq0CJdIHi9IYogpP+gnS9LiGW6K1MFL
-X-Google-Smtp-Source: AGHT+IFZaV9W1guyCiCFvlxL0Tuf2HLr1fiYCHIb/nvtokprZt499aOhX2wlCRAmDZ6qHpx8t/vS6dcU4G703dCeYVM=
-X-Received: by 2002:a05:622a:4812:b0:434:7bb9:f231 with SMTP id
- fb18-20020a05622a481200b004347bb9f231mr343464qtb.12.1712581476934; Mon, 08
- Apr 2024 06:04:36 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1712582822; x=1713187622;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TiZX3mVFBF7BLHgtOUkl0S2NrftfNbyBEoRd4uLMG+Q=;
+        b=aHDzVGOAq7jkhQE8qMpgO427gWovN8S8pIU6AzW5ayhfrHMMW7i5b1UbM/cXeXIjfw
+         49lg/d+nW6VkT5p0N3vDiVHBuQs7CqFH80rM6pEeA1DYwIzGhX/eQKOpPxoWjT1a4qrF
+         fOi/BNu/Y6xEJZ+N/p+LWN2QrDfqgpVhHPbs3PKWq0Z98oAmTrIIDEYT9qLiXt8d7nf1
+         CTPeuCWcxVycLnr8V8PyMQZnOAb4Zn/Nqyi/gqtHw0vXAbevoYH5P8aVqvA5Z0hmg55g
+         3NILlPBv2uzeuaZAs1FCImOYbKM5qPBkKCQfKBOSujJOeckj3MuWpRASQJMAa7gxn9Q6
+         O6iA==
+X-Forwarded-Encrypted: i=1; AJvYcCVO0FRFTimYN87G4Sre6J1FzG/RJIFcPnuU3Hlhzf5heKTbTeAgGivUK2++KIChYLivW2DlN3Qg9wg001+1oZmjgR9joH40E3wt
+X-Gm-Message-State: AOJu0YzART7MA9ha6d60UNNxfV5Up7gwJ1LfH0SjlVMqX2LtoX7WTBPC
+	msRvKfALR8DVp6aAEKkp/2KwrWUOKyVGcsT5BYvMeppSLP6uXq/EWsCwtFKXnC0=
+X-Google-Smtp-Source: AGHT+IEJj9yKQD6yiMMokwJ/A3E08HGTwQ18dwUwQSVxyuMUaUFGzXP8AXIG+S//bXb32FuaipcRvg==
+X-Received: by 2002:a17:907:7ba2:b0:a51:b0e1:863b with SMTP id ne34-20020a1709077ba200b00a51b0e1863bmr6049600ejc.1.1712582822321;
+        Mon, 08 Apr 2024 06:27:02 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.223.16])
+        by smtp.gmail.com with ESMTPSA id jy23-20020a170907763700b00a4ea0479235sm4453870ejc.107.2024.04.08.06.27.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Apr 2024 06:27:01 -0700 (PDT)
+Message-ID: <1502383c-9caf-4362-8bd6-ed719a304f08@linaro.org>
+Date: Mon, 8 Apr 2024 15:27:00 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240403-public-ucsi-h-v3-0-f848e18c8ed2@chromium.org>
- <20240403-public-ucsi-h-v3-2-f848e18c8ed2@chromium.org> <3ezjocthsigo3t746slmgzffnmpxw7wwf3s535basiaf2qy6io@7ocxva6ndsbt>
- <2024040449-average-foyer-defa@gregkh> <oi3bwdyvyaezpmyxfdtsbiwwprxi2ufc3hlzoz23d5rxdkperl@cxpd7enatg7h>
- <2024040422-ripcord-bladder-bdda@gregkh>
-In-Reply-To: <2024040422-ripcord-bladder-bdda@gregkh>
-From: Guenter Roeck <groeck@google.com>
-Date: Mon, 8 Apr 2024 06:04:22 -0700
-Message-ID: <CABXOdTeqz5Kza5tYXbCdTyPT66xtezai4C5TFkqmOpQc+1r8Xg@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] usb: typec: ucsi: Implement ChromeOS UCSI driver
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, Pavan Holla <pholla@chromium.org>, 
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>, Benson Leung <bleung@chromium.org>, 
-	Tzung-Bi Shih <tzungbi@kernel.org>, Guenter Roeck <groeck@chromium.org>, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, 
-	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>, chrome-platform@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCHv3 1/2] dt-bindings: usb: typec: anx7688: start a binding
+ document
+To: =?UTF-8?Q?Ond=C5=99ej_Jirman?= <megi@xff.cz>, Pavel Machek
+ <pavel@ucw.cz>, phone-devel@vger.kernel.org,
+ kernel list <linux-kernel@vger.kernel.org>, fiona.klute@gmx.de,
+ martijn@brixit.nl, samuel@sholland.org, heikki.krogerus@linux.intel.com,
+ gregkh@linuxfoundation.org, linux-usb@vger.kernel.org, robh+dt@kernel.org,
+ krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org
+References: <ZhPMHdt6r/4D99Zg@duo.ucw.cz>
+ <ab9affc8-de68-4ec9-bdfc-02131191bc3a@linaro.org>
+ <ZhPTTxI4oTF3pgrk@duo.ucw.cz>
+ <e7841ad2-fa3d-442d-804d-51f12e05c234@linaro.org>
+ <e6vvuttix5k5fioy7q44ick5wj6u5gleh7mht36s4zjjcym7vy@bziejyohtc4b>
+ <7976e254-ed1e-406d-870b-1ecdc4b1e23c@linaro.org>
+ <uoo7xltbfx7u6iai7urj3wez7cwotokxt6lwjhff57xbljusqn@fr2xejnrlak7>
+Content-Language: en-US
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <uoo7xltbfx7u6iai7urj3wez7cwotokxt6lwjhff57xbljusqn@fr2xejnrlak7>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Thu, Apr 4, 2024 at 6:30=E2=80=AFAM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
-[ ... ]
+On 08/04/2024 14:48, Ondřej Jirman wrote:
+> On Mon, Apr 08, 2024 at 01:59:12PM GMT, Krzysztof Kozlowski wrote:
+>> On 08/04/2024 13:52, Ondřej Jirman wrote:
+>>> On Mon, Apr 08, 2024 at 01:24:03PM GMT, Krzysztof Kozlowski wrote:
+>>>> On 08/04/2024 13:21, Pavel Machek wrote:
+>>>>> Hi!
+>>>>>
+>>>>>>> Add binding for anx7688 usb type-c bridge. I don't have a datasheet,
+>>>>>>> but I did best I could.
+>>>>>>>
+>>>>>>> Signed-off-by: Pavel Machek <pavel@ucw.cz>
+>>>>>>
+>>>>>> ...
+>>>>>>
+>>>>>>> +  cabledet-gpios:
+>>>>>>> +    maxItems: 1
+>>>>>>> +    description: GPIO controlling CABLE_DET (C3) pin.
+>>>>>>> +
+>>>>>>> +  avdd10-supply:
+>>>>>>> +    description: 1.0V power supply going to AVDD10 (A4, ...) pins
+>>>>>>> +
+>>>>>>> +  dvdd10-supply:
+>>>>>>> +    description: 1.0V power supply going to DVDD10 (D6, ...) pins
+>>>>>>> +
+>>>>>>> +  avdd18-supply:
+>>>>>>> +    description: 1.8V power supply going to AVDD18 (E3, ...) pins
+>>>>>>> +
+>>>>>>> +  dvdd18-supply:
+>>>>>>> +    description: 1.8V power supply going to DVDD18 (G4, ...) pins
+>>>>>>> +
+>>>>>>> +  avdd33-supply:
+>>>>>>> +    description: 3.3V power supply going to AVDD33 (C4, ...) pins
+>>>>>>> +
+>>>>>>> +  i2c-supply: true
+>>>>>>> +  vconn-supply: true
+>>>>>>
+>>>>>> There are no such supplies like i2c and vconn on the schematics.
+>>>>>>
+>>>>>> I think this represents some other part of component which was added
+>>>>>> here only for convenience.
+>>>>>
+>>>>> Can you give me pointer to documentation you are looking at?
+>>>>
+>>>> The schematics you linked in the document at the beginning. Page 13. Do
+>>>> you see these pins there? I saw only VCONN1_EN, but that's not a supply.
+>>>
+>>> The supply is U1308.
+>>
+>> That's not a supply to anx7688.
+> 
+> Yeah, I understand where the confusion is. The driver is not for anx7688 chip
+> really. The driver is named anx7688, but that's mostly a historical accident at
+> this point.
+> 
+> I guess there can be a driver for anx7688 chip that can directly use the chip's
+> resources from the host by directly manipulating its registers and implementing
+> type-c functionality via eg. Linux's TCPM or TCPCI stack, etc. (eg. like
+> fusb302 driver, or various tcpci subdrivers).
+> 
+> But in this case the chip is driven by an optional on-chip microcontroller's
+> firmware and *this driver* is specifically for *the Type-C port on Pinephone*
 
-> > > > if (WARN_ON_ONCE(val_len > MAX_EC_DATA_SIZE))
-> > > >   return -EINVAL;
-> > >
-> > > So if you trigger this, you just rebooted all boxes that have
-> > > panic-on-warn enabled (hint, the HUGE majority in quantity of Linux
-> > > systems out there.)
-> > >
-> > > So don't do that, just handle it like this.
-> >
-> > Does that mean that we should not use WARN at all? What is the best
-> > current practice for WARN usage?
->
-> To never use it.  Handle the issue and recover properly.
->
-> > I'm asking because for me this looks like a perfect usecase. If I were
-> > at the positiion of the driver developer, I'd like to know the whole
-> > path leading to the bad call, not just the fact that the function was
-> > called with the buffer being too big.
->
-> Then use ftrace if you are a driver developer, don't crash users boxes
-> please.
->
-> If you REALLY need a traceback, then provide that, but do NOT use WARN()
-> for just normal debugging calls that you want to leave around in the
-> system for users to trip over.
->
+We do not talk here about the driver, but bindings, so hardware.
 
-That is not common practice.
+> and serves as an integration driver for quite a bunch of things that need to
+> work together on Pinephone for all of the Type-C port's features to operate
+> reasonably well (and one of those is some communication with anx7688 firmware
+> that we use, and enabling power to this chip and other things as appropriate,
+> based on the communication from the firmware).
 
-$ git grep WARN_ON drivers/gpu | wc
-   3004   11999  246545
-$ git grep WARN_ON drivers/net/ | wc
-   3679   14564  308230
-$ git grep WARN_ON drivers/net/wireless | wc
-   1985    8112  166081
+That's still looking like putting board design into particular device
+binding.
 
-We get hundreds of thousands of reports with warning backtraces from
-Chromebooks in the field _every single day_. Most of those are from
-drm and wireless subsystems. We even had to scale back the percentage
-of reported warning backtraces because the large volume overwhelmed
-the reporting system. When approached about it, developers usually
-respond with "this backtrace is absolutely necessary", but nothing
-ever happens to fix the reported problems. In practice, they are just
-ignored.
+> 
+> It handles the specific needs of the Pinephone's Type-C implementation, all of
+> its quirks (of which there are many over several HW revisions) that can't be
+> handled by the particular implementation of on-chip microcontroller firmware
+> directly and need host side interaction.
+> 
+> In an ideal world, many of the things this driver handles would be handled by
+> embedded microcontroller on the board (like it is with some RK3399 based Google
+> devices), but Pinephone has no such thing and this glue needs to be implemented
+> somewhere in the kernel.
 
-This means that any system using drm or wireless interfaces just can
-not really enable panic-on-warn because that would crash the system
-all the time.
+You might need multiple schemas, because this is for anx7688, not for
+Pinephone type-c implementation.
 
-Guenter
+However I still do not see yet a limitation of DTS requiring stuffing
+some other properties into anx7688 or creating some other, virtual entity.
+
+
+Best regards,
+Krzysztof
+
 
