@@ -1,136 +1,238 @@
-Return-Path: <linux-usb+bounces-9051-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9053-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3383089BEB4
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Apr 2024 14:14:48 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A2E789BF0C
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Apr 2024 14:36:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6A3F8B22A5A
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Apr 2024 12:14:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0E25A2858E0
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Apr 2024 12:36:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65F3F6A35D;
-	Mon,  8 Apr 2024 12:14:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E8286CDA6;
+	Mon,  8 Apr 2024 12:35:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="stfBO71f"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZKjKbazM"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9CC76A33B;
-	Mon,  8 Apr 2024 12:14:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0419D657BC
+	for <linux-usb@vger.kernel.org>; Mon,  8 Apr 2024 12:35:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712578476; cv=none; b=Zow68kSzT+c/OYyaS4bvFbkEL4AEgtrku76OH4xMjJsrBxPLK89tx5d5fOYOVv3Z+VzCv+WSI5Zlk8fLUlcpsBzWPon4/geVi1oB0iCQJ8/jJLAYAAr0OWaUUhE/akiS4L1qMnUvBWmZAOACQYFZbyOU2RMh7NsTAhNBqaYELzs=
+	t=1712579758; cv=none; b=YXHubaxMjkGFNeToiUSxNjl79C9urT7u4GMbqC9C9egauDB8aXfTORb/ZutyDvTC01ulx7B2QgmXKhgw1U85rFVKSYFQ1XSn9ylwKLUQJmywCA+C3mfCQwzuWjnqUamgRXm5kSwsbkko6VMDqCn0JschYKz2kq/BpJAoTrAWOwc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712578476; c=relaxed/simple;
-	bh=x+FsxZWRAjPjLs6UXRrQ4jbrSYbaGPFtemQodRNwj0Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QomQLE1AM9x+TbfurQJuR2Kr/ZvQY/H22PmAAhjvpQ+okUMW+FQEN9g7+hPQ5wkRCSBTvDEXWk44iu+8sQqsxn+bW9+VJWTAcW1FXBWxRe53RknSs18V1mGuLxEjAQoVy4yXIK3FCVv5gzxf61oKK8aIPL8mwqQ4GErYFkVfI1c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=stfBO71f; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CE6FC433C7;
-	Mon,  8 Apr 2024 12:14:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712578475;
-	bh=x+FsxZWRAjPjLs6UXRrQ4jbrSYbaGPFtemQodRNwj0Q=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=stfBO71fztxYkHI6vQb0jBV0kkAT+9xNUYlPLhYKidsvrIigy4SLLrRQrckt/8Ovw
-	 /xMaqUilw8ZVL/gTLnwzb+gETQokd2aLRtEJa57lwprg50osIy3lj1OGAeewn24yM3
-	 kom4j8UtMNnJmq2jM1IbJMp4AGA6hx2yDi2WJYp2hHyEBagjcLYSniK1GRc6Uqq67f
-	 1ghx88gA6ywGh94lZdWi03fvYNNtBQKZJiWYIV+tDQFI28zLcnzYDl4yabYGJ8CQWk
-	 iDcJvIv2DlSNv63+RcelicnrMEBP7Y3AfiZFY4czY3UdHyoJRlcJS6/7/mHlcGCjlv
-	 9dAXU6vYEo5hA==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1rtntN-000000002B9-0kG0;
-	Mon, 08 Apr 2024 14:14:29 +0200
-Date: Mon, 8 Apr 2024 14:14:29 +0200
-From: Johan Hovold <johan@kernel.org>
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Caleb Connolly <caleb.connolly@linaro.org>
-Subject: Re: [PATCH v2] usb: typec: qcom-pmic-typec: split HPD bridge alloc
- and registration
-Message-ID: <ZhPfpaEx9fV61Y_3@hovoldconsulting.com>
-References: <20240408-qc-pmic-typec-hpd-split-v2-1-1704f5321b73@linaro.org>
- <ZhOYpHXz6t0fkzZ2@hovoldconsulting.com>
- <2ejpom6ykci6o7d7luwa2ao4stpm24aoyi66aoncxcqcwgidxz@gcsqvpb3s7nr>
- <ZhPYjXjX3LcCMhyh@hovoldconsulting.com>
- <CAA8EJprJn-sq1Xb9E0bJD814CepKPzsD=xCFAKFeCGjj2Tv9Dg@mail.gmail.com>
+	s=arc-20240116; t=1712579758; c=relaxed/simple;
+	bh=tcQY+L65bmhF7UovNVosDQjsP9ILz3Rb1zWcHkLKa78=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=od/nzi2ZVmb+QR8K4KqJTAPBAd2Y/YsYgaJ8JHYct7wWT5+y2+kNEcuMMZG/24XveYRpdqsdAVK1/SjtdnUCnURp5ZCSqrlK7IjouQF2+gtQwIIjtyvvqxdqpfOJ/Kj3zFyWBc1Ypc0S1YNNbHuMjZVUNNUIVJiQhO/E/CAh3FI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZKjKbazM; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1712579756; x=1744115756;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=tcQY+L65bmhF7UovNVosDQjsP9ILz3Rb1zWcHkLKa78=;
+  b=ZKjKbazMP1+13pTmDVpyoGAZqL06AFmrhLgIHH4WKibZuironqrLsGgn
+   vn85ui8nDEnr0UZIoQBYkEPDaGlRIyK035ZcZam9R25BkhxlQQRvdeKde
+   2zP5PcTebobQ5kikMF8qyYqzmOaKBuIUXYd5vIuw2ra6wYSOoZeMEr/2R
+   ytFXST+nRh5BHty9FQ7uU29drLT/bPFgqtvNe7A+Jx8g0gltp6scWZOii
+   SN4QUGdh8HbhPfs5e1yNqvThd6+tlgB0XYAy0fJp5pt3Xq13U134/U5FS
+   aA2zzI2uDqxxmXEHQBf/g4pkt22NwjpbpIG1PNmdxj03ten6QhOeHDZ9v
+   A==;
+X-CSE-ConnectionGUID: cRReRcmJQmO92WCJdRdVBA==
+X-CSE-MsgGUID: q/NJ17GpRzW1pjQUQybV6w==
+X-IronPort-AV: E=McAfee;i="6600,9927,11037"; a="7720373"
+X-IronPort-AV: E=Sophos;i="6.07,186,1708416000"; 
+   d="scan'208";a="7720373"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2024 05:35:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,11037"; a="937091338"
+X-IronPort-AV: E=Sophos;i="6.07,186,1708416000"; 
+   d="scan'208";a="937091338"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 08 Apr 2024 05:35:51 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id 2CA89194; Mon,  8 Apr 2024 15:35:50 +0300 (EEST)
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Michael Jamet <michael.jamet@intel.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Andreas Noever <andreas.noever@gmail.com>
+Cc: Gil Fine <gil.fine@linux.intel.com>,
+	linux-usb@vger.kernel.org,
+	Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: [PATCH 1/2] thunderbolt: Avoid notify PM core about runtime PM resume
+Date: Mon,  8 Apr 2024 15:35:49 +0300
+Message-ID: <20240408123550.4178338-1-mika.westerberg@linux.intel.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAA8EJprJn-sq1Xb9E0bJD814CepKPzsD=xCFAKFeCGjj2Tv9Dg@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Apr 08, 2024 at 02:48:44PM +0300, Dmitry Baryshkov wrote:
-> On Mon, 8 Apr 2024 at 14:44, Johan Hovold <johan@kernel.org> wrote:
-> >
-> > On Mon, Apr 08, 2024 at 01:49:48PM +0300, Dmitry Baryshkov wrote:
-> > > On Mon, Apr 08, 2024 at 09:11:32AM +0200, Johan Hovold wrote:
-> > > > On Mon, Apr 08, 2024 at 04:06:40AM +0300, Dmitry Baryshkov wrote:
-> > > > > If a probe function returns -EPROBE_DEFER after creating another device
-> > > > > there is a change of ending up in a probe deferral loop, (see commit
-> > > > > fbc35b45f9f6 ("Add documentation on meaning of -EPROBE_DEFER").
-> > > > >
-> > > > > In order to prevent such probe-defer loops caused by qcom-pmic-typec
-> > > > > driver, use the API added by Johan Hovold and move HPD bridge
-> > > > > registration to the end of the probe function.
-> > > >
-> > > > You should be more specific here: which function called after
-> > > > qcom_pmic_typec_probe() can trigger a probe deferral?
-> > > >
-> > > > I doubt that applies to tcpm->port_start() and tcpm->pdphy_start() in
-> > > > which case the bridge should be added before those calls unless there
-> > > > are other reasons for not doing so, which then also should be mentioned.
-> > > >
-> > > > I suspect the trouble is with tcpm_register_port(), but please spell
-> > > > that out and mention in which scenarios that function may return
-> > > > -EPROBE_DEFER.
-> > >
-> > > The probe loop comes from from tcpm_register_port(), you are right.
-> > > However then putting bridge registration before the _start() functions
-> > > is also incorrect as this will be prone to use-after-free errors that
-> > > you have fixed in pmic-glink.
-> >
-> > You obviously have to mention that in the commit message as that is a
-> > separate change and also one that looks broken as you're now registering
-> > resources after the device has gone "live".
-> 
-> No. I'm registering a child device rather than a resource.
+From: Gil Fine <gil.fine@linux.intel.com>
 
-There's no difference. You're registering a resource for someone else to
-consume.
+Currently we notify PM core about occurred wakes after any resume. This
+is not actually needed after resume from runtime suspend. Hence, notify
+PM core about occurred wakes only after resume from system sleep. Also,
+if the wake occurred in USB4 router upstream port, we don't notify the
+PM core about it since it is not actually needed and can cause
+unexpected autowake (e.g. if /sys/power/wakeup_count is used).
 
-And it's not obvious that this does not lead to missed events, etc. in
-this case.
+While there add the missing kernel-doc for tb_switch_resume().
 
-> > So you also need to explain why you think that is safe, if it should be
-> > done at all. You're essentially just papering over a DRM bug in the
-> > unlikely event that probe fails.
-> 
-> Unfortunately, as pointed out by Reported-by, Caleb has actually hit
-> the probe failure loop.
+Signed-off-by: Gil Fine <gil.fine@linux.intel.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+---
+ drivers/thunderbolt/switch.c | 27 +++++++++++++++++++++++++--
+ drivers/thunderbolt/tb.c     |  4 ++--
+ drivers/thunderbolt/tb.h     |  3 ++-
+ drivers/thunderbolt/usb4.c   | 13 +++++++------
+ 4 files changed, 36 insertions(+), 11 deletions(-)
 
-The probe loop is probably real, I don't don't doubt that, but you
-still need to explain when tcpm_register_port() can return
--EPROBE_DEFER.
+diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
+index 4edfd6e34e31..326433df5880 100644
+--- a/drivers/thunderbolt/switch.c
++++ b/drivers/thunderbolt/switch.c
+@@ -3448,7 +3448,26 @@ static int tb_switch_set_wake(struct tb_switch *sw, unsigned int flags)
+ 	return tb_lc_set_wake(sw, flags);
+ }
+ 
+-int tb_switch_resume(struct tb_switch *sw)
++static void tb_switch_check_wakes(struct tb_switch *sw)
++{
++	if (device_may_wakeup(&sw->dev)) {
++		if (tb_switch_is_usb4(sw))
++			usb4_switch_check_wakes(sw);
++	}
++}
++
++/**
++ * tb_switch_resume() - Resume a switch after sleep
++ * @sw: Switch to resume
++ * @runtime: Is this resume from runtime suspend or system sleep
++ *
++ * Resumes and re-enumerates router (and all its children), if still plugged
++ * after suspend. Don't enumerate device router whose UID was changed during
++ * suspend. If this is resume from system sleep, notifies PM core about the
++ * wakes occurred during suspend. Disables all wakes, except USB4 wake of
++ * upstream port for USB4 routers that shall be always enabled.
++ */
++int tb_switch_resume(struct tb_switch *sw, bool runtime)
+ {
+ 	struct tb_port *port;
+ 	int err;
+@@ -3497,6 +3516,9 @@ int tb_switch_resume(struct tb_switch *sw)
+ 	if (err)
+ 		return err;
+ 
++	if (!runtime)
++		tb_switch_check_wakes(sw);
++
+ 	/* Disable wakes */
+ 	tb_switch_set_wake(sw, 0);
+ 
+@@ -3526,7 +3548,8 @@ int tb_switch_resume(struct tb_switch *sw)
+ 			 */
+ 			if (tb_port_unlock(port))
+ 				tb_port_warn(port, "failed to unlock port\n");
+-			if (port->remote && tb_switch_resume(port->remote->sw)) {
++			if (port->remote &&
++			    tb_switch_resume(port->remote->sw, runtime)) {
+ 				tb_port_warn(port,
+ 					     "lost during suspend, disconnecting\n");
+ 				tb_sw_set_unplugged(port->remote->sw);
+diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
+index 360cb95f39aa..3e44c78ac409 100644
+--- a/drivers/thunderbolt/tb.c
++++ b/drivers/thunderbolt/tb.c
+@@ -2942,7 +2942,7 @@ static int tb_resume_noirq(struct tb *tb)
+ 	if (!tb_switch_is_usb4(tb->root_switch))
+ 		tb_switch_reset(tb->root_switch);
+ 
+-	tb_switch_resume(tb->root_switch);
++	tb_switch_resume(tb->root_switch, false);
+ 	tb_free_invalid_tunnels(tb);
+ 	tb_free_unplugged_children(tb->root_switch);
+ 	tb_restore_children(tb->root_switch);
+@@ -3068,7 +3068,7 @@ static int tb_runtime_resume(struct tb *tb)
+ 	struct tb_tunnel *tunnel, *n;
+ 
+ 	mutex_lock(&tb->lock);
+-	tb_switch_resume(tb->root_switch);
++	tb_switch_resume(tb->root_switch, true);
+ 	tb_free_invalid_tunnels(tb);
+ 	tb_restore_children(tb->root_switch);
+ 	list_for_each_entry_safe(tunnel, n, &tcm->tunnel_list, list)
+diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
+index feed8ecaf712..18aae4ccaed5 100644
+--- a/drivers/thunderbolt/tb.h
++++ b/drivers/thunderbolt/tb.h
+@@ -827,7 +827,7 @@ int tb_switch_configuration_valid(struct tb_switch *sw);
+ int tb_switch_add(struct tb_switch *sw);
+ void tb_switch_remove(struct tb_switch *sw);
+ void tb_switch_suspend(struct tb_switch *sw, bool runtime);
+-int tb_switch_resume(struct tb_switch *sw);
++int tb_switch_resume(struct tb_switch *sw, bool runtime);
+ int tb_switch_reset(struct tb_switch *sw);
+ int tb_switch_wait_for_bit(struct tb_switch *sw, u32 offset, u32 bit,
+ 			   u32 value, int timeout_msec);
+@@ -1288,6 +1288,7 @@ static inline bool tb_switch_is_usb4(const struct tb_switch *sw)
+ 	return usb4_switch_version(sw) > 0;
+ }
+ 
++void usb4_switch_check_wakes(struct tb_switch *sw);
+ int usb4_switch_setup(struct tb_switch *sw);
+ int usb4_switch_configuration_valid(struct tb_switch *sw);
+ int usb4_switch_read_uid(struct tb_switch *sw, u64 *uid);
+diff --git a/drivers/thunderbolt/usb4.c b/drivers/thunderbolt/usb4.c
+index 9860b49d7a2b..78b06e922fda 100644
+--- a/drivers/thunderbolt/usb4.c
++++ b/drivers/thunderbolt/usb4.c
+@@ -155,7 +155,13 @@ static inline int usb4_switch_op_data(struct tb_switch *sw, u16 opcode,
+ 				tx_dwords, rx_data, rx_dwords);
+ }
+ 
+-static void usb4_switch_check_wakes(struct tb_switch *sw)
++/**
++ * usb4_switch_check_wakes() - Check for wakes and notify PM core about them
++ * @sw: Router whose wakes to check
++ *
++ * Checks wakes occurred during suspend and notify the PM core about them.
++ */
++void usb4_switch_check_wakes(struct tb_switch *sw)
+ {
+ 	bool wakeup_usb4 = false;
+ 	struct usb4_port *usb4;
+@@ -163,9 +169,6 @@ static void usb4_switch_check_wakes(struct tb_switch *sw)
+ 	bool wakeup = false;
+ 	u32 val;
+ 
+-	if (!device_may_wakeup(&sw->dev))
+-		return;
+-
+ 	if (tb_route(sw)) {
+ 		if (tb_sw_read(sw, &val, TB_CFG_SWITCH, ROUTER_CS_6, 1))
+ 			return;
+@@ -244,8 +247,6 @@ int usb4_switch_setup(struct tb_switch *sw)
+ 	u32 val = 0;
+ 	int ret;
+ 
+-	usb4_switch_check_wakes(sw);
+-
+ 	if (!tb_route(sw))
+ 		return 0;
+ 
+-- 
+2.43.0
 
-But the point is, you don't have to register the bridge after *starting*
-the port to fix the probe loop. You're doing that for other,
-questionable reasons and you don't explain why in the commit message so
-that others can evaluate your reasoning.
-
-Johan
 
