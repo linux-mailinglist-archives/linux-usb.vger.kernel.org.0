@@ -1,171 +1,74 @@
-Return-Path: <linux-usb+bounces-9196-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9200-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2627D89E4E2
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Apr 2024 23:25:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 074C789E514
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Apr 2024 23:42:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D031D283F6E
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Apr 2024 21:25:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 352151C21D3F
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Apr 2024 21:42:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BD60158A0B;
-	Tue,  9 Apr 2024 21:25:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC2E1158A2D;
+	Tue,  9 Apr 2024 21:42:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j8oIrGlv"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2DBC158A03
-	for <linux-usb@vger.kernel.org>; Tue,  9 Apr 2024 21:25:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B6E3158A09;
+	Tue,  9 Apr 2024 21:42:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712697905; cv=none; b=gGhWCJ90YMgaD2OVCb7nzdQLOhulCksWrGlYkPID6IJN6G3e3M3AEaHP+qetcmvQDhiPBa3/ieNRCuF+am/fO+4+Qe2bCIu7lJlDHao6Adh8I0vzdQnAwKQOgEaZQ4MjZ33atsiBzTS5d1Jg6VKlN71lHYryL90QhImQXXFRVeg=
+	t=1712698926; cv=none; b=S6ziQvZwSYySoOKHHs0eV9UzdVJLYk0Cz2DW4XcZtMOv1dcjQcKiP1PNsq4eJYRElbqcPdB0wEg2TrVNzJcqPdP+Bv+g5rIkiBby4th/Bq+YRXAYkiE/USeajJo2aRbFkIHuPi6MZLX4dB9Xg9texltS1Tyz0BDIH2i2RTf70ow=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712697905; c=relaxed/simple;
-	bh=6TmMXgCfd8u3hiqGzGhPNGk2tjA7rmKiDfupaGxCdqY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=G2SYRLYoSWvFlswFfBHVWIRyExaQ+xASkKc6387ZMH2IKTsX1dqnUaRo289ZlqpfI4tF5IlXPZFKJkjLgv46/tDyEM5PzhHb1qpTgnqpT0xED9HkCAbwa/jidl32sXTbiY7MTGiA6+cD+45GKnmIMA2AXU0vPp2oBKr6AaNEat0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <m.grzeschik@pengutronix.de>)
-	id 1ruIxf-00081a-FR; Tue, 09 Apr 2024 23:24:59 +0200
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <m.grzeschik@pengutronix.de>)
-	id 1ruIxe-00BNAg-RD; Tue, 09 Apr 2024 23:24:58 +0200
-Received: from localhost ([::1] helo=dude04.red.stw.pengutronix.de)
-	by dude04.red.stw.pengutronix.de with esmtp (Exim 4.96)
-	(envelope-from <m.grzeschik@pengutronix.de>)
-	id 1ruIxe-00FQKu-2U;
-	Tue, 09 Apr 2024 23:24:58 +0200
-From: Michael Grzeschik <m.grzeschik@pengutronix.de>
-Date: Tue, 09 Apr 2024 23:24:59 +0200
-Subject: [PATCH 3/3] usb: gadget: uvc: set req_size and n_requests based on
- the frame interval
+	s=arc-20240116; t=1712698926; c=relaxed/simple;
+	bh=5I1KP0MI3m2b78fWq623tWUuBU2WB1RVyh5tQpUvABU=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=YMr+gSgIqomYrUtQj0MEA0bHAvzJWne4nryAsFj0zNeRTRvu/u+XqMN7nkcFS0P9MJgXM3t1LpU5X8oqYwfA0ie1dDItpUjK+vFx8W+iyCy65XCOAW581DMDAlNPFpyjI98JF7uaFTE0gMM415UwWrCWTwEfGRDlrzgIHMZkBX4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j8oIrGlv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CDA6C433F1;
+	Tue,  9 Apr 2024 21:42:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712698925;
+	bh=5I1KP0MI3m2b78fWq623tWUuBU2WB1RVyh5tQpUvABU=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=j8oIrGlvoDxbi3j/516Cm5YFo5s1GnfkJb2iZ5gV5X0luxOT0mDFAkkJ6A6SGne37
+	 VRsGjGqN2tLqC/uOIioWPZ1od9drdbGbuxES53flCNRPlL4+3RIEvcF3v8OcL5dZa+
+	 7DKfuXDL/CBiQ3C6aqOTbzLRtmeIGVjzmJYd4Qqk0611B9yw8PFWuBjblVahoQzpqa
+	 uIiqA10UlwOQVhQF7QV+6GKHxfKgWyGhKI3YvpeQL0GjJ9EgKFD+1xgUyxnnynfGjR
+	 W35hiPfk8M/x5RCdtlGiZbEi/38cdXV6uVmAlDYQvd7SLba4U+ikLKFPQ1wmu5OsVU
+	 23MrTtMBmhFxw==
+Date: Tue, 9 Apr 2024 14:42:04 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= <u.kleine-koenig@pengutronix.de>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Li Yang
+ <leoyang.li@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
+ linux-arm-kernel@lists.infradead.org, Zhang Wei <zw@zh-kernel.org>,
+ linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org,
+ linux-usb@vger.kernel.org, kernel@pengutronix.de
+Subject: Re: [PATCH] MAINTAINERS: Drop Li Yang as their email address
+ stopped working
+Message-ID: <20240409144204.00cc76ce@kernel.org>
+In-Reply-To: <20240405072042.697182-2-u.kleine-koenig@pengutronix.de>
+References: <20240405072042.697182-2-u.kleine-koenig@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240403-uvc_request_length_by_interval-v1-3-9436c4716233@pengutronix.de>
-References: <20240403-uvc_request_length_by_interval-v1-0-9436c4716233@pengutronix.de>
-In-Reply-To: <20240403-uvc_request_length_by_interval-v1-0-9436c4716233@pengutronix.de>
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
- Daniel Scally <dan.scally@ideasonboard.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Michael Grzeschik <m.grzeschik@pengutronix.de>
-X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3029;
- i=m.grzeschik@pengutronix.de; h=from:subject:message-id;
- bh=6TmMXgCfd8u3hiqGzGhPNGk2tjA7rmKiDfupaGxCdqY=;
- b=owEBbQKS/ZANAwAKAb9pWET5cfSrAcsmYgBmFbIq8jorVF6Ra+5mJRuXSj4fgO1Wmk6Jc6g/c
- z+9XExEyRiJAjMEAAEKAB0WIQQV2+2Fpbqd6fvv0Gi/aVhE+XH0qwUCZhWyKgAKCRC/aVhE+XH0
- q5GlD/41zsRHDlttuBY8aTSvLZ4Z0E1s/v6sAlwkr0KEtGGKpkobKgX9bZCSmG5EuXbud/1PdK9
- AnvGzCML8QinMlVgbW4RcH9C8u0zi7fTSrA8Nf5BHxkltxPBB/WU2OGndNhIRcuhpIESPeSoFR2
- aNn20ut0OoIbWvm+Pijn+23AZrPzbKrUgEzciMpXUxgsga4TrHIl+mJ7tj9ZLX4D1+tBcgiigr+
- nKNPRlmm6tlGYif/y783CXHNAOcVbDwKqXwoI5Y5eeSUt5piG2RlFdjM37RiBZHpIDczQ6k16jl
- 2Qy5tsiuPmb9uK4mEDkj172k2X3bx0uYy4c2mYHl9mRSVrdc6enW8qjgvHdN4j0YOJPR2yLAiXj
- hyhzb5qso8uE7zzhvkbepVhofltCmsElEV+0szV1Lauk8j+2qnh7Boyk+z6rqx2XA2pKByDinrW
- /QvZ0XuZkIuRScFwu2N+HBmj4fslYLU00HIXLBloxX9PlKSfX+7iIoKHS84xAt85AOR2oTSRH8U
- u2uaNtsmmJOgYxxe7bdHaeGo8FhAj8WgZOpICOLEzcnNBk4aRD5+UoPMyR8uR09RI2e5UyfselM
- ycriv1tooV00FjvjGXF9TxVrtMGXUHVan14u5p3ARSn/PgNRI3gO3FSgoVDo4PgdwwK7/+j6nSq
- UNTpkS1XxCJSKJw==
-X-Developer-Key: i=m.grzeschik@pengutronix.de; a=openpgp;
- fpr=957BC452CE953D7EA60CF4FC0BE9E3157A1E2C64
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: m.grzeschik@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-With the information of the interval frame length it is now possible to
-calculate the number of usb requests by the frame duration. Based on the
-request size and the imagesize we calculate the actual size per request.
-This has calculation has the benefit that the frame data is equally
-distributed over all allocated requests.
+On Fri,  5 Apr 2024 09:20:41 +0200 Uwe Kleine-K=C3=B6nig wrote:
+> When sending a patch to (among others) Li Yang the nxp MTA replied that
+> the address doesn't exist and so the mail couldn't be delivered. The
+> error code was 550, so at least technically that's not a temporal issue.
+>=20
+> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
 
-We keep the current req_size calculation as a fallback, if the interval
-callbacks did not set the interval property.
-
-Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
----
- drivers/usb/gadget/function/uvc_queue.c | 28 +++++++++++++++++++++-------
- drivers/usb/gadget/function/uvc_video.c |  2 +-
- 2 files changed, 22 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/usb/gadget/function/uvc_queue.c b/drivers/usb/gadget/function/uvc_queue.c
-index ce51643fc4639..cd8a9793aa72e 100644
---- a/drivers/usb/gadget/function/uvc_queue.c
-+++ b/drivers/usb/gadget/function/uvc_queue.c
-@@ -44,7 +44,7 @@ static int uvc_queue_setup(struct vb2_queue *vq,
- {
- 	struct uvc_video_queue *queue = vb2_get_drv_priv(vq);
- 	struct uvc_video *video = container_of(queue, struct uvc_video, queue);
--	unsigned int req_size;
-+	unsigned int req_size, max_req_size;
- 	unsigned int nreq;
- 
- 	if (*nbuffers > UVC_MAX_VIDEO_BUFFERS)
-@@ -54,15 +54,29 @@ static int uvc_queue_setup(struct vb2_queue *vq,
- 
- 	sizes[0] = video->imagesize;
- 
--	req_size = video->ep->maxpacket
-+	nreq = DIV_ROUND_UP(video->interval, video->ep->desc->bInterval * 1250);
-+
-+	req_size = DIV_ROUND_UP(sizes[0], nreq);
-+
-+	max_req_size = video->ep->maxpacket
- 		 * max_t(unsigned int, video->ep->maxburst, 1)
- 		 * (video->ep->mult);
- 
--	/* We divide by two, to increase the chance to run
--	 * into fewer requests for smaller framesizes.
--	 */
--	nreq = DIV_ROUND_UP(DIV_ROUND_UP(sizes[0], 2), req_size);
--	nreq = clamp(nreq, 4U, 64U);
-+	if (!req_size) {
-+		req_size = max_req_size;
-+
-+		/* We divide by two, to increase the chance to run
-+		 * into fewer requests for smaller framesizes.
-+		 */
-+		nreq = DIV_ROUND_UP(DIV_ROUND_UP(sizes[0], 2), req_size);
-+		nreq = clamp(nreq, 4U, 64U);
-+	} else if (req_size > max_req_size) {
-+		/* The prepared interval length and expected buffer size
-+		 * is not possible to stream with the currently configured
-+		 * isoc bandwidth
-+		 */
-+		return -EINVAL;
-+	}
- 
- 	video->req_size = req_size;
- 	video->uvc_num_requests = nreq;
-diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
-index 95bb64e16f3da..d197c46e93fb4 100644
---- a/drivers/usb/gadget/function/uvc_video.c
-+++ b/drivers/usb/gadget/function/uvc_video.c
-@@ -304,7 +304,7 @@ static int uvcg_video_usb_req_queue(struct uvc_video *video,
- 		 */
- 		if (list_empty(&video->req_free) || ureq->last_buf ||
- 			!(video->req_int_count %
--			DIV_ROUND_UP(video->uvc_num_requests, 4))) {
-+			clamp(DIV_ROUND_UP(video->uvc_num_requests, 4), 4U, 16U))) {
- 			video->req_int_count = 0;
- 			req->no_interrupt = 0;
- 		} else {
-
--- 
-2.39.2
-
+FWIW it's eaac25d026a1 in net, thanks!
 
