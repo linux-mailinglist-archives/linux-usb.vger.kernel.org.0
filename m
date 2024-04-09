@@ -1,75 +1,75 @@
-Return-Path: <linux-usb+bounces-9109-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9110-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0777289D274
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Apr 2024 08:30:18 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7623889D2C3
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Apr 2024 08:58:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 390521C2113A
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Apr 2024 06:30:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 31F6E28466F
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Apr 2024 06:58:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEDA042046;
-	Tue,  9 Apr 2024 06:30:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C67AE77620;
+	Tue,  9 Apr 2024 06:58:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EzVT0OsL"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MDyIUb7f"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EB1A1DFC4;
-	Tue,  9 Apr 2024 06:30:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DDD542046;
+	Tue,  9 Apr 2024 06:58:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712644210; cv=none; b=UTWsQYTyuxneIJ8o7pY9LQqqE60fAaue44k72NkIUkYyGBw3Z68K2Fe79Pgq3I3jnhYz7mSVYMUY+KAKq96HokmsBMZLf1mB6wFfo8sHSFuZ3RQSWkiZB+ghrFXjD/4FHBCpOIQ2ytVHVWTIAkf1+vjyCGudDyv1KMYQACrZvRg=
+	t=1712645916; cv=none; b=ed9QeQHfuNDqEaZ46fIgic9Ku2bXiDvOkErUK+bAnGjasGh7XzVo/LpcATJp1opFEfcxW5vyMMGwuZ5dLLgZmgRK6HRWluGjqgPjf1MjLbrUKmC2EqqbvEu/r44JfUqt0+8mrY0+sBIrSoNtqEobotqkCIZwCmN/RpKBbWnW+nk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712644210; c=relaxed/simple;
-	bh=y4XqJdFt7y1AyYebuwpEgYd69/uTnJh6qyQOlVWNtTY=;
+	s=arc-20240116; t=1712645916; c=relaxed/simple;
+	bh=RNDQ/WAShIYxQ56ytQsVbdot0whnV2CuqsOaiBNW8ws=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YTdoaqESPKRgBviIfti2nl/SJvK6FSUYAT/YS1fMB8OaDDKOGHHkQg20f1tPDY1GD2+wsQRcgmEbSdJE8qWpN/sq2ZkBPh2J7N6ZbJV3njxPgwAwkfqfrqw60GCHrVnKHwWlZUjjV9ZE+iMCJQPvBv3pIa3nzhppPTf6zW8ZXks=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EzVT0OsL; arc=none smtp.client-ip=198.175.65.16
+	 Content-Type:Content-Disposition:In-Reply-To; b=sgVnRRzdAIORv0a1YjwHu2h5R2/Pn8PnZ6/lmuAs4r6ZHPkcZVEYGhKht+fr1wW70S/42eC+eBIfoO8sfmxKAKO+imsXfkmEzwVFVONIZYJqTWhTSadXSPERzUBr6yaELf1n9eZz6EJe9kJDwb4VeIqUaUmbohgp37AmexJ49zI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MDyIUb7f; arc=none smtp.client-ip=198.175.65.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712644209; x=1744180209;
+  t=1712645915; x=1744181915;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=y4XqJdFt7y1AyYebuwpEgYd69/uTnJh6qyQOlVWNtTY=;
-  b=EzVT0OsLyZFoSIWBchJIEGLiOyL4EXuL48HngcRTRmKBkH0O89+zTt7n
-   R7YGScrX9XICUsZMBQ+eRZUK5vL1d5RET19WUpIJBOdulMnjpQm6+u62Z
-   oNuez6IkFi4NYtue/o12bvb0IHpukWeMhkN+OPXG+rHGCDA4jHvK4IG87
-   Ya+oJflQwkx+RIvDpDz4XAGrdw8wG3uqyC9XrB0Z2koQVWHXcyAiE1r1s
-   t95GwQwqAWwTWGwfKYHRKMlrsn9MlF7FgVEPeInONAKPSM4fFmwbvo2D1
-   vi5XiETrj132w3y4H8MN8gWkODTRfYMe74ccVNM7u21bdqtn2+BJxPCi9
-   A==;
-X-CSE-ConnectionGUID: OK8KBrloRNGZVn8wKb/FhA==
-X-CSE-MsgGUID: qUR03+ISSWujYc3IP6hkYw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11038"; a="8069501"
+  bh=RNDQ/WAShIYxQ56ytQsVbdot0whnV2CuqsOaiBNW8ws=;
+  b=MDyIUb7foURLaC/W5B/KUhZkIKmm6JZzqY+a+cfTx4nda32Qkd8QZyZx
+   XP4t4SmTZcRH2p1P776ODn1LOWQUx1z6yQMyH4flzmI5DGkXvcVuZA4fr
+   QiDAI3NRiajRGZ3BurQOEqzXCn59FLVZAGPMjYAesBHaw9VpgoPJWgQXc
+   +RdZAXDWXk39MiKOMjmxNOg5P9ccsiW1v+ztoUPRIQaIaoxTF/7RPvU5+
+   K1mrvKm9RY5D4djM7PxI1pqWOoh5MS1Tu+Nk1wEUbskh9ZB/z19czod+n
+   CVA0NMgtnmO4NCFufIO2XCm+f/nSLNFPz9sapqtb+V1Hg5TciYf5Efma1
+   g==;
+X-CSE-ConnectionGUID: Yz0MeUhDTVqWFykSLjh5vA==
+X-CSE-MsgGUID: IDYoI1rdSHCHaN/E2mChrQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11038"; a="8071295"
 X-IronPort-AV: E=Sophos;i="6.07,188,1708416000"; 
-   d="scan'208";a="8069501"
+   d="scan'208";a="8071295"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2024 23:30:08 -0700
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2024 23:58:34 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11038"; a="937093067"
+X-IronPort-AV: E=McAfee;i="6600,9927,11038"; a="937093086"
 X-IronPort-AV: E=Sophos;i="6.07,188,1708416000"; 
-   d="scan'208";a="937093067"
+   d="scan'208";a="937093086"
 Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 08 Apr 2024 23:30:05 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 09 Apr 2024 09:30:04 +0300
-Date: Tue, 9 Apr 2024 09:30:04 +0300
+  by fmsmga001.fm.intel.com with SMTP; 08 Apr 2024 23:58:31 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 09 Apr 2024 09:58:30 +0300
+Date: Tue, 9 Apr 2024 09:58:30 +0300
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Neil Armstrong <neil.armstrong@linaro.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH 3/3] usb: typec: ucsi_glink: drop special handling for
- CCI_BUSY
-Message-ID: <ZhTgbOYigUBucwNY@kuha.fi.intel.com>
-References: <20240408-qcom-ucsi-fixes-bis-v1-0-716c145ca4b1@linaro.org>
- <20240408-qcom-ucsi-fixes-bis-v1-3-716c145ca4b1@linaro.org>
+	linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/5] usb: typec: ucsi: add callback for connector status
+ updates
+Message-ID: <ZhTnFq4yuUHK83eM@kuha.fi.intel.com>
+References: <20240408-ucsi-orient-aware-v1-0-95a74a163a10@linaro.org>
+ <20240408-ucsi-orient-aware-v1-1-95a74a163a10@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -78,60 +78,80 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240408-qcom-ucsi-fixes-bis-v1-3-716c145ca4b1@linaro.org>
+In-Reply-To: <20240408-ucsi-orient-aware-v1-1-95a74a163a10@linaro.org>
 
-On Mon, Apr 08, 2024 at 04:04:17AM +0300, Dmitry Baryshkov wrote:
-> Newer Qualcomm platforms (sm8450+) successfully handle busy state and
-> send the Command Completion after sending the Busy state. Older devices
-> have firmware bug and can not continue after sending the CCI_BUSY state,
-> but the command that leads to CCI_BUSY is already forbidden by the
-> NO_PARTNER_PDOS quirk.
+On Mon, Apr 08, 2024 at 07:30:49AM +0300, Dmitry Baryshkov wrote:
+> Allow UCSI glue driver to perform addtional work to update connector
+> status. For example, it might check the cable orientation.  This call is
+> performed after reading new connector statatus, so the platform driver
+> can peek at new connection status bits.
 > 
-> Follow other UCSI glue drivers and drop special handling for CCI_BUSY
-> event. Let the UCSI core properly handle this state.
+> The callback is called both when registering the port and when the
+> connector change event is being handled.
 > 
 > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-
-One minor nitpick below, but feel free to ignore that one.
-
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
 > ---
->  drivers/usb/typec/ucsi/ucsi_glink.c | 8 +++-----
->  1 file changed, 3 insertions(+), 5 deletions(-)
+>  drivers/usb/typec/ucsi/ucsi.c | 6 ++++++
+>  drivers/usb/typec/ucsi/ucsi.h | 3 +++
+>  2 files changed, 9 insertions(+)
 > 
-> diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c b/drivers/usb/typec/ucsi/ucsi_glink.c
-> index 9ffea20020e7..b91d2d15d7d9 100644
-> --- a/drivers/usb/typec/ucsi/ucsi_glink.c
-> +++ b/drivers/usb/typec/ucsi/ucsi_glink.c
-> @@ -176,7 +176,8 @@ static int pmic_glink_ucsi_sync_write(struct ucsi *__ucsi, unsigned int offset,
->  	left = wait_for_completion_timeout(&ucsi->sync_ack, 5 * HZ);
->  	if (!left) {
->  		dev_err(ucsi->dev, "timeout waiting for UCSI sync write response\n");
-> -		ret = -ETIMEDOUT;
-> +		/* return 0 here and let core UCSI code handle the CCI_BUSY */
-> +		ret = 0;
->  	} else if (ucsi->sync_val) {
->  		dev_err(ucsi->dev, "sync write returned: %d\n", ucsi->sync_val);
->  	}
-> @@ -243,10 +244,7 @@ static void pmic_glink_ucsi_notify(struct work_struct *work)
->  		ucsi_connector_change(ucsi->ucsi, con_num);
->  	}
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index 3106e69050cd..7ad544c968e4 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -1199,6 +1199,9 @@ static void ucsi_handle_connector_change(struct work_struct *work)
 >  
-> -	if (ucsi->sync_pending && cci & UCSI_CCI_BUSY) {
-> -		ucsi->sync_val = -EBUSY;
-> -		complete(&ucsi->sync_ack);
-> -	} else if (ucsi->sync_pending &&
-> +	if (ucsi->sync_pending &&
->  		   (cci & (UCSI_CCI_ACK_COMPLETE | UCSI_CCI_COMMAND_COMPLETE))) {
-
-Looks like you forgot to fix the alignment.
-
->  		complete(&ucsi->sync_ack);
+>  	trace_ucsi_connector_change(con->num, &con->status);
+>  
+> +	if (ucsi->ops->connector_status)
+> +		ucsi->ops->connector_status(con);
+> +
+>  	role = !!(con->status.flags & UCSI_CONSTAT_PWR_DIR);
+>  
+>  	if (con->status.change & UCSI_CONSTAT_POWER_DIR_CHANGE) {
+> @@ -1588,6 +1591,9 @@ static int ucsi_register_port(struct ucsi *ucsi, struct ucsi_connector *con)
 >  	}
-> 
-> -- 
-> 2.39.2
+>  	ret = 0; /* ucsi_send_command() returns length on success */
+>  
+> +	if (ucsi->ops->connector_status)
+> +		ucsi->ops->connector_status(con);
+> +
+>  	switch (UCSI_CONSTAT_PARTNER_TYPE(con->status.flags)) {
+>  	case UCSI_CONSTAT_PARTNER_TYPE_UFP:
+>  	case UCSI_CONSTAT_PARTNER_TYPE_CABLE_AND_UFP:
+> diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
+> index 2caf2969668c..6599fbd09bee 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.h
+> +++ b/drivers/usb/typec/ucsi/ucsi.h
+> @@ -53,12 +53,14 @@ struct dentry;
+>  #define UCSI_CCI_ERROR			BIT(30)
+>  #define UCSI_CCI_COMMAND_COMPLETE	BIT(31)
+>  
+> +struct ucsi_connector;
+
+Let's keep the forward declarations in one place. Please move that to
+the beginning of the file where the other forward declarations are.
+
+thanks,
+
+>  /**
+>   * struct ucsi_operations - UCSI I/O operations
+>   * @read: Read operation
+>   * @sync_write: Blocking write operation
+>   * @async_write: Non-blocking write operation
+>   * @update_altmodes: Squashes duplicate DP altmodes
+> + * @connector_status: Updates connector status, called holding connector lock
+>   *
+>   * Read and write routines for UCSI interface. @sync_write must wait for the
+>   * Command Completion Event from the PPM before returning, and @async_write must
+> @@ -73,6 +75,7 @@ struct ucsi_operations {
+>  			   const void *val, size_t val_len);
+>  	bool (*update_altmodes)(struct ucsi *ucsi, struct ucsi_altmode *orig,
+>  				struct ucsi_altmode *updated);
+> +	void (*connector_status)(struct ucsi_connector *con);
+>  };
+>  
+>  struct ucsi *ucsi_create(struct device *dev, const struct ucsi_operations *ops);
 
 -- 
 heikki
