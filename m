@@ -1,118 +1,115 @@
-Return-Path: <linux-usb+bounces-9195-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9199-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26BB489E388
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Apr 2024 21:29:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD3F489E4E5
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Apr 2024 23:25:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 57D941C2168E
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Apr 2024 19:29:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6D7A51F22A63
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Apr 2024 21:25:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88FBB15746E;
-	Tue,  9 Apr 2024 19:26:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8854B158D6D;
+	Tue,  9 Apr 2024 21:25:06 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from cae.in-ulm.de (cae.in-ulm.de [217.10.14.231])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EE94157E9C;
-	Tue,  9 Apr 2024 19:26:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.10.14.231
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2D53158A02
+	for <linux-usb@vger.kernel.org>; Tue,  9 Apr 2024 21:25:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712690797; cv=none; b=akoxJrUKGb7s3AuPiCgL0lghTWGjA06TZGi3O4hZuQBrDS3/srBr2xYYR0+xTIQg6KjjMvAZjNMKaPOvXrfLpBFYRERQntdLnNqQXx2nAPrpfVfzBLVhWQ3Eits5BiD4TuJA4DsReiWOjjVsB+1QvqOOv6Nfft+G6k9EfbiJiZg=
+	t=1712697906; cv=none; b=ZgbjfJYOlXyRlsdMz1R5ZO6YaxxgPJz2HyWybpwdPMB54ZeFFNHArI21bQNO8YGM4TcbxEQBAuzq4bJTtvK8rYxP0SjGCPDHMtc/sKdUAl4nWTnmz9HDHLYDx9ogWamiMtZZ+zxTq1hAWjKa+0alomN0VJr064NIKiPMp06HSNk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712690797; c=relaxed/simple;
-	bh=LSz9VcksS3I44HIeB0srZE2FQPGtzmVVAAOs5a4k/3o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KPEPI9WID78nqrgl4NXuA+FG1/Y2s+9wtDbir90pXqyWAHsS44X3m/FY4zP4LMwV1aBGjAst5UG00iEl/J75IfmTk+ypAbCfaIS62HpIZign637d2L/EPJAX8xCHXUGa7y+8YqCNW8CeOFwsmUQiqlBzw8Er7QkfBMWuq0ZM6Ak=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c--e.de; spf=pass smtp.mailfrom=c--e.de; arc=none smtp.client-ip=217.10.14.231
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c--e.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=c--e.de
-Received: by cae.in-ulm.de (Postfix, from userid 1000)
-	id E3CE4140562; Tue,  9 Apr 2024 21:26:25 +0200 (CEST)
-Date: Tue, 9 Apr 2024 21:26:25 +0200
-From: "Christian A. Ehrhardt" <lk@c--e.de>
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] usb: typec: ucsi_glink: drop special handling for
- CCI_BUSY
-Message-ID: <ZhWWYQMluJCvYFKF@cae.in-ulm.de>
-References: <20240409-qcom-ucsi-fixes-bis-v2-0-6d3a09faec90@linaro.org>
- <20240409-qcom-ucsi-fixes-bis-v2-3-6d3a09faec90@linaro.org>
+	s=arc-20240116; t=1712697906; c=relaxed/simple;
+	bh=BXSDolwWzU5tAWjmREDmfTdkudqshVOcwopesXpiiLw=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=XPcSZpthHi+q4DQeDHRG1vukNyu0AYeTr0xQCOpiD+h0Aaao8+VYXDCfeTtKV65W4Tn3J6xCxMKX8KyxgIOEUSptl62ImWlTJmCGHU1COONjRjlHCkKGPmG1FBZSMPFB8hMjoyk7hXe/8Wqxv7aDwkA7kVWDaXPzoQ2Tq4GkrwI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <m.grzeschik@pengutronix.de>)
+	id 1ruIxf-00081b-FR; Tue, 09 Apr 2024 23:24:59 +0200
+Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <m.grzeschik@pengutronix.de>)
+	id 1ruIxe-00BNAf-R4; Tue, 09 Apr 2024 23:24:58 +0200
+Received: from localhost ([::1] helo=dude04.red.stw.pengutronix.de)
+	by dude04.red.stw.pengutronix.de with esmtp (Exim 4.96)
+	(envelope-from <m.grzeschik@pengutronix.de>)
+	id 1ruIxe-00FQKu-2R;
+	Tue, 09 Apr 2024 23:24:58 +0200
+From: Michael Grzeschik <m.grzeschik@pengutronix.de>
+Subject: [PATCH 0/3] usb: gadget: uvc: allocate requests based on frame
+ interval length and buffersize
+Date: Tue, 09 Apr 2024 23:24:56 +0200
+Message-Id: <20240403-uvc_request_length_by_interval-v1-0-9436c4716233@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240409-qcom-ucsi-fixes-bis-v2-3-6d3a09faec90@linaro.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIACiyFWYC/x2NywrCMBAAf6Xs2UBsq1V/RSTksW0XwqqbB0rpv
+ xs8zhxmNkgohAlu3QaClRI9ucHx0IFfLS+oKDSGXvejHvWgSvVG8F0wZRORl7wa9zXEGaXaqOy
+ EczhdpnA9D9AiziZUTiz7tWW4xNjkS3Cmz/96f+z7D/EVBJKFAAAA
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
+ Daniel Scally <dan.scally@ideasonboard.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Michael Grzeschik <m.grzeschik@pengutronix.de>
+X-Mailer: b4 0.12.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1061;
+ i=m.grzeschik@pengutronix.de; h=from:subject:message-id;
+ bh=BXSDolwWzU5tAWjmREDmfTdkudqshVOcwopesXpiiLw=;
+ b=owEBbQKS/ZANAwAKAb9pWET5cfSrAcsmYgBmFbIpHaFNod1WQlhnldeCskg5hmmieH2EkxFzp
+ FyRMtNS/2WJAjMEAAEKAB0WIQQV2+2Fpbqd6fvv0Gi/aVhE+XH0qwUCZhWyKQAKCRC/aVhE+XH0
+ qzIAEADCiH8P3Z9MDcX2+X8cFt7JEd/bYDEkkmp6aDKGKge65CvUKi5XCy/3B3N45610qbSNWlD
+ uAgYUOGeyARI165tSAc61FRS2jyMApjjdh5qPBMOyKFzzLcfk9XwAvysSWUDGc7oGDOxvTANRxW
+ sCZw944vxOd9nMDPIQzioOhhtScIhwyva1m8fqe8HMln5NKUfp9j1yrmGtPXlCfXca0jzgz+fw6
+ juYtOhpQHv76+2tsVbv7bbs4GuJ0V6n+g0DPIi7U5cdOb9WLvDOlF+KNVvKAFLeoQ0KptpcsQbZ
+ wrGi463NMgH91ikBStP03B5vtmtwB+7OLk+Chm3UNw6dPEkrmxbFHRCcl4JSO2e/+smw+HiCMlQ
+ PO/mErKCtNXCBvxvZDZoQ9TvzIKGfo1XcNrpcDqMZZ3cHpGTdU6QKm1ipmUJjRgdp0O6JVgH+YP
+ 6GgeJe3FASut5Qk04RcKVcGD1h31gImlhDLLBP1CR/44ryG3Mnmx8+/ZkESpx1FEOhxKwYWTUHH
+ qAjRfy4iIl58bMdKqD/dnxBsgBShPwbAw33NEiJrDbSBAoNxTPHT1wwnwFQPSurFPUdCowfUstp
+ WF9tpEyRAI49W4s7SBLsS9jRAVeSTo8HrbqWzAYFyrYPhT68eoL8CsujBM5braGaxY3/+gMBclv
+ nM5Knp1ysIkDPAA==
+X-Developer-Key: i=m.grzeschik@pengutronix.de; a=openpgp;
+ fpr=957BC452CE953D7EA60CF4FC0BE9E3157A1E2C64
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: m.grzeschik@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
+This patch series is improving the size calculation and allocation
+of the uvc requests. Using the currenlty setup frame duration of the
+stream it is possible to calculate the number of requests based on the
+interval length.
 
-Hi Dmitry,
+Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+---
+Michael Grzeschik (3):
+      usb: gadget: function: uvc: set req_size once when the vb2 queue is calculated
+      usb: gadget: uvc: add g_parm and s_parm for frame interval
+      usb: gadget: uvc: set req_size and n_requests based on the frame interval
 
-On Tue, Apr 09, 2024 at 06:29:18PM +0300, Dmitry Baryshkov wrote:
-> Newer Qualcomm platforms (sm8450+) successfully handle busy state and
-> send the Command Completion after sending the Busy state. Older devices
-> have firmware bug and can not continue after sending the CCI_BUSY state,
-> but the command that leads to CCI_BUSY is already forbidden by the
-> NO_PARTNER_PDOS quirk.
-> 
-> Follow other UCSI glue drivers and drop special handling for CCI_BUSY
-> event. Let the UCSI core properly handle this state.
-> 
-> Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> ---
->  drivers/usb/typec/ucsi/ucsi_glink.c | 10 ++++------
->  1 file changed, 4 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c b/drivers/usb/typec/ucsi/ucsi_glink.c
-> index 9ffea20020e7..fe9b951f5228 100644
-> --- a/drivers/usb/typec/ucsi/ucsi_glink.c
-> +++ b/drivers/usb/typec/ucsi/ucsi_glink.c
-> @@ -176,7 +176,8 @@ static int pmic_glink_ucsi_sync_write(struct ucsi *__ucsi, unsigned int offset,
->  	left = wait_for_completion_timeout(&ucsi->sync_ack, 5 * HZ);
->  	if (!left) {
->  		dev_err(ucsi->dev, "timeout waiting for UCSI sync write response\n");
-> -		ret = -ETIMEDOUT;
-> +		/* return 0 here and let core UCSI code handle the CCI_BUSY */
-> +		ret = 0;
->  	} else if (ucsi->sync_val) {
->  		dev_err(ucsi->dev, "sync write returned: %d\n", ucsi->sync_val);
->  	}
-> @@ -243,11 +244,8 @@ static void pmic_glink_ucsi_notify(struct work_struct *work)
->  		ucsi_connector_change(ucsi->ucsi, con_num);
->  	}
->  
-> -	if (ucsi->sync_pending && cci & UCSI_CCI_BUSY) {
-> -		ucsi->sync_val = -EBUSY;
-> -		complete(&ucsi->sync_ack);
-> -	} else if (ucsi->sync_pending &&
-> -		   (cci & (UCSI_CCI_ACK_COMPLETE | UCSI_CCI_COMMAND_COMPLETE))) {
-> +	if (ucsi->sync_pending &&
-> +	    (cci & (UCSI_CCI_ACK_COMPLETE | UCSI_CCI_COMMAND_COMPLETE))) {
->  		complete(&ucsi->sync_ack);
->  	}
->  }
-
-This handling of the command completion turned out to be racy in
-the ACPI case: If a normal command was sent one should wait for
-UCSI_CCI_COMMAND_COMPLETE only. In case of an UCSI_ACK_CC_CI
-command the completion is indicated by UCSI_CCI_ACK_COMPLETE.
-
-While not directly related, a port of this 
-    https://lore.kernel.org/all/20240121204123.275441-3-lk@c--e.de/
-would nicely fit into this series.
-
-I don't have the hardware to do this myself.
-
+ drivers/usb/gadget/function/uvc.h       |  1 +
+ drivers/usb/gadget/function/uvc_queue.c | 30 ++++++++++++++-----
+ drivers/usb/gadget/function/uvc_v4l2.c  | 52 +++++++++++++++++++++++++++++++++
+ drivers/usb/gadget/function/uvc_video.c | 17 ++---------
+ 4 files changed, 79 insertions(+), 21 deletions(-)
+---
+base-commit: 3295f1b866bfbcabd625511968e8a5c541f9ab32
+change-id: 20240403-uvc_request_length_by_interval-a7efd587d963
 
 Best regards,
-Christian
+-- 
+Michael Grzeschik <m.grzeschik@pengutronix.de>
 
 
