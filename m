@@ -1,158 +1,113 @@
-Return-Path: <linux-usb+bounces-9110-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9111-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7623889D2C3
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Apr 2024 08:58:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B0EF89D39A
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Apr 2024 09:57:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 31F6E28466F
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Apr 2024 06:58:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 449E82841CC
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Apr 2024 07:57:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C67AE77620;
-	Tue,  9 Apr 2024 06:58:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAFAB7D3F4;
+	Tue,  9 Apr 2024 07:57:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MDyIUb7f"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="YmAM6foS";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="QspW2m+w"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DDD542046;
-	Tue,  9 Apr 2024 06:58:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFD8A7D3E0;
+	Tue,  9 Apr 2024 07:57:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712645916; cv=none; b=ed9QeQHfuNDqEaZ46fIgic9Ku2bXiDvOkErUK+bAnGjasGh7XzVo/LpcATJp1opFEfcxW5vyMMGwuZ5dLLgZmgRK6HRWluGjqgPjf1MjLbrUKmC2EqqbvEu/r44JfUqt0+8mrY0+sBIrSoNtqEobotqkCIZwCmN/RpKBbWnW+nk=
+	t=1712649461; cv=none; b=OlJLPmYmJRggtSxkbNEA4Ipqmv2BE+f+DCjJfXFrOayvAdWaoBFFKqldLutp38C+X5okLo1mEXOK+Yf9361pzc5+troRjVPVwVialplv7m0hhuJxBdaXoFf83nC3yoybN4hLlgfhHoSrSfmyXdX4Yu2fdA63SLb+BhN5maPv/zI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712645916; c=relaxed/simple;
-	bh=RNDQ/WAShIYxQ56ytQsVbdot0whnV2CuqsOaiBNW8ws=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sgVnRRzdAIORv0a1YjwHu2h5R2/Pn8PnZ6/lmuAs4r6ZHPkcZVEYGhKht+fr1wW70S/42eC+eBIfoO8sfmxKAKO+imsXfkmEzwVFVONIZYJqTWhTSadXSPERzUBr6yaELf1n9eZz6EJe9kJDwb4VeIqUaUmbohgp37AmexJ49zI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MDyIUb7f; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712645915; x=1744181915;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=RNDQ/WAShIYxQ56ytQsVbdot0whnV2CuqsOaiBNW8ws=;
-  b=MDyIUb7foURLaC/W5B/KUhZkIKmm6JZzqY+a+cfTx4nda32Qkd8QZyZx
-   XP4t4SmTZcRH2p1P776ODn1LOWQUx1z6yQMyH4flzmI5DGkXvcVuZA4fr
-   QiDAI3NRiajRGZ3BurQOEqzXCn59FLVZAGPMjYAesBHaw9VpgoPJWgQXc
-   +RdZAXDWXk39MiKOMjmxNOg5P9ccsiW1v+ztoUPRIQaIaoxTF/7RPvU5+
-   K1mrvKm9RY5D4djM7PxI1pqWOoh5MS1Tu+Nk1wEUbskh9ZB/z19czod+n
-   CVA0NMgtnmO4NCFufIO2XCm+f/nSLNFPz9sapqtb+V1Hg5TciYf5Efma1
-   g==;
-X-CSE-ConnectionGUID: Yz0MeUhDTVqWFykSLjh5vA==
-X-CSE-MsgGUID: IDYoI1rdSHCHaN/E2mChrQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11038"; a="8071295"
-X-IronPort-AV: E=Sophos;i="6.07,188,1708416000"; 
-   d="scan'208";a="8071295"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2024 23:58:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11038"; a="937093086"
-X-IronPort-AV: E=Sophos;i="6.07,188,1708416000"; 
-   d="scan'208";a="937093086"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 08 Apr 2024 23:58:31 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 09 Apr 2024 09:58:30 +0300
-Date: Tue, 9 Apr 2024 09:58:30 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/5] usb: typec: ucsi: add callback for connector status
- updates
-Message-ID: <ZhTnFq4yuUHK83eM@kuha.fi.intel.com>
-References: <20240408-ucsi-orient-aware-v1-0-95a74a163a10@linaro.org>
- <20240408-ucsi-orient-aware-v1-1-95a74a163a10@linaro.org>
+	s=arc-20240116; t=1712649461; c=relaxed/simple;
+	bh=3iLCOHZGZxn8caX6nvkzqjZa1OPo1B0x90mnVg5jlAM=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=Qc5ka/YiZLJnbXFEuvXfl+wAoluwPbYtFc6dOq9pUSXCSNRg61UaaCIeuxeM8humv2MXGBZRdKUCZH4IpGBb7fAbMo6ReRm7sN3ZoI4Y7PCO3k3nNetXiQmB5th5Dkf40r8OidAqTYDV0ZQQLFo++WUfPfnc1KzRhZ2rUr1qKt0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=YmAM6foS; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=QspW2m+w; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: Anna-Maria Behnsen <anna-maria@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1712649451;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=xQSgeM4AOh1vk8otimsz4IR1mQP8l+71QrIomYISZaA=;
+	b=YmAM6foSsh41RBsiuQ7RGikoc9sXx4Grz6IpkysyTC9S3yJo0vpKQlV2r2oAsoXfKYzN0X
+	vEmUqjKoVLtNmIOU3T+dbpyn2wB9NjCV58+PUvtbAF5BnMdjlC6R8juXtra1ZQZTEp3D3D
+	vkP5/ivTvFf0OV8evuxyeb1L3yRtvSlEcpjfbwjlLrZ4ub5kBfHTu0AZun9rQaVLaivEXv
+	Zr6JAw45bi2IuRM7RX+09Ty/AXc+onbPm/seHPZ/mIvRlMmiCPNeVmqAfRrmb3HxkyoZrd
+	pU0hbVPxn7uzC2cBsOlFMEOW/NY1rj27kDAmVCxBx/srayyZpjbssWL1quIITA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1712649451;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=xQSgeM4AOh1vk8otimsz4IR1mQP8l+71QrIomYISZaA=;
+	b=QspW2m+wUvK5rhD/Km6upKLw9mUpFDsNeceaZzlosSny3PVGGlynwtv6G9P6bzqTNV1heM
+	QGIpuzCO3dOVWyBg==
+To: Paul Menzel <pmenzel@molgen.mpg.de>
+Cc: Frederic Weisbecker <frederic@kernel.org>, Ingo Molnar
+ <mingo@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, LKML
+ <linux-kernel@vger.kernel.org>, linux-usb@vger.kernel.org
+Subject: Re: NOHZ tick-stop error: local softirq work is pending, handler
+ #08!!! on Dell XPS 13 9360
+In-Reply-To: <256fdb2e-9b83-4837-bd31-0c34e4267c31@molgen.mpg.de>
+References: <354a2690-9bbf-4ccb-8769-fa94707a9340@molgen.mpg.de>
+ <87o7ak411y.fsf@somnus>
+ <256fdb2e-9b83-4837-bd31-0c34e4267c31@molgen.mpg.de>
+Date: Tue, 09 Apr 2024 09:57:31 +0200
+Message-ID: <87sezv7ytw.fsf@somnus>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240408-ucsi-orient-aware-v1-1-95a74a163a10@linaro.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Apr 08, 2024 at 07:30:49AM +0300, Dmitry Baryshkov wrote:
-> Allow UCSI glue driver to perform addtional work to update connector
-> status. For example, it might check the cable orientation.  This call is
-> performed after reading new connector statatus, so the platform driver
-> can peek at new connection status bits.
-> 
-> The callback is called both when registering the port and when the
-> connector change event is being handled.
-> 
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> ---
->  drivers/usb/typec/ucsi/ucsi.c | 6 ++++++
->  drivers/usb/typec/ucsi/ucsi.h | 3 +++
->  2 files changed, 9 insertions(+)
-> 
-> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> index 3106e69050cd..7ad544c968e4 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.c
-> +++ b/drivers/usb/typec/ucsi/ucsi.c
-> @@ -1199,6 +1199,9 @@ static void ucsi_handle_connector_change(struct work_struct *work)
->  
->  	trace_ucsi_connector_change(con->num, &con->status);
->  
-> +	if (ucsi->ops->connector_status)
-> +		ucsi->ops->connector_status(con);
-> +
->  	role = !!(con->status.flags & UCSI_CONSTAT_PWR_DIR);
->  
->  	if (con->status.change & UCSI_CONSTAT_POWER_DIR_CHANGE) {
-> @@ -1588,6 +1591,9 @@ static int ucsi_register_port(struct ucsi *ucsi, struct ucsi_connector *con)
->  	}
->  	ret = 0; /* ucsi_send_command() returns length on success */
->  
-> +	if (ucsi->ops->connector_status)
-> +		ucsi->ops->connector_status(con);
-> +
->  	switch (UCSI_CONSTAT_PARTNER_TYPE(con->status.flags)) {
->  	case UCSI_CONSTAT_PARTNER_TYPE_UFP:
->  	case UCSI_CONSTAT_PARTNER_TYPE_CABLE_AND_UFP:
-> diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
-> index 2caf2969668c..6599fbd09bee 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.h
-> +++ b/drivers/usb/typec/ucsi/ucsi.h
-> @@ -53,12 +53,14 @@ struct dentry;
->  #define UCSI_CCI_ERROR			BIT(30)
->  #define UCSI_CCI_COMMAND_COMPLETE	BIT(31)
->  
-> +struct ucsi_connector;
+Paul Menzel <pmenzel@molgen.mpg.de> writes:
 
-Let's keep the forward declarations in one place. Please move that to
-the beginning of the file where the other forward declarations are.
+> Dear Anna-Maria,
+>
+>
+> Thank you for your response.
+>
+>
+> Am 08.04.24 um 12:10 schrieb Anna-Maria Behnsen:
+>
+>> Paul Menzel writes:
+>
+>>> On Dell XPS 13 9360/0596KF, BIOS 2.21.0 06/02/2022, with Linux 6.9-rc2+
+>>> built from commit b1e6ec0a0fd0 (Merge tag 'docs-6.9-fixes' of
+>>> git://git.lwn.net/linux) the external USB-C adapter Dell DA300 stopped
+>>> working (only the Ethernet port was used). Linux logged:
+>>=20
+>> thanks for the report. Can you please provide a trace beside the dmesg
+>> output? The following trace events should be enabled (via kernel command
+>> line):
+>>=20
+>> trace_event=3Dtimer:*,timer_migration:*,sched:sched_switch,sched:sched_w=
+akeup,sched:sched_process_hang,irq:softirq_entry,irq:softirq_raise,irq:soft=
+irq_exit
+> Unfortunately I haven=E2=80=99t been able to reproduce it until now. Shou=
+ld it=20
+> happen again, I am going to try your suggestion.
+>
 
-thanks,
+Thanks for letting me know.
 
->  /**
->   * struct ucsi_operations - UCSI I/O operations
->   * @read: Read operation
->   * @sync_write: Blocking write operation
->   * @async_write: Non-blocking write operation
->   * @update_altmodes: Squashes duplicate DP altmodes
-> + * @connector_status: Updates connector status, called holding connector lock
->   *
->   * Read and write routines for UCSI interface. @sync_write must wait for the
->   * Command Completion Event from the PPM before returning, and @async_write must
-> @@ -73,6 +75,7 @@ struct ucsi_operations {
->  			   const void *val, size_t val_len);
->  	bool (*update_altmodes)(struct ucsi *ucsi, struct ucsi_altmode *orig,
->  				struct ucsi_altmode *updated);
-> +	void (*connector_status)(struct ucsi_connector *con);
->  };
->  
->  struct ucsi *ucsi_create(struct device *dev, const struct ucsi_operations *ops);
+Thanks,
 
--- 
-heikki
+	Anna-Maria
+
 
