@@ -1,113 +1,136 @@
-Return-Path: <linux-usb+bounces-9111-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9112-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B0EF89D39A
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Apr 2024 09:57:51 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D5CD89D3C0
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Apr 2024 10:05:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 449E82841CC
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Apr 2024 07:57:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BE53F1C20E8F
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Apr 2024 08:05:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAFAB7D3F4;
-	Tue,  9 Apr 2024 07:57:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58B5C7E107;
+	Tue,  9 Apr 2024 08:05:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="YmAM6foS";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="QspW2m+w"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CDs2tXkF"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFD8A7D3E0;
-	Tue,  9 Apr 2024 07:57:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2561269DF4;
+	Tue,  9 Apr 2024 08:05:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712649461; cv=none; b=OlJLPmYmJRggtSxkbNEA4Ipqmv2BE+f+DCjJfXFrOayvAdWaoBFFKqldLutp38C+X5okLo1mEXOK+Yf9361pzc5+troRjVPVwVialplv7m0hhuJxBdaXoFf83nC3yoybN4hLlgfhHoSrSfmyXdX4Yu2fdA63SLb+BhN5maPv/zI=
+	t=1712649914; cv=none; b=MZ9M3qhR7IrQWJ4HDnM/TOJ4Y8ETI08XhKUA7/bUVKaR1hHEOJl5OzqlnkonTh0HhElxYqPMzxPoY/tJhnVbqgOSqeZEMSzkNSTXMEJHRrfNgw+i2ApGD5T9jHcpfQK53oJ8CalHVTQtaEeB0+E+3GPsslTuRsRQxdX0XD9+Prg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712649461; c=relaxed/simple;
-	bh=3iLCOHZGZxn8caX6nvkzqjZa1OPo1B0x90mnVg5jlAM=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=Qc5ka/YiZLJnbXFEuvXfl+wAoluwPbYtFc6dOq9pUSXCSNRg61UaaCIeuxeM8humv2MXGBZRdKUCZH4IpGBb7fAbMo6ReRm7sN3ZoI4Y7PCO3k3nNetXiQmB5th5Dkf40r8OidAqTYDV0ZQQLFo++WUfPfnc1KzRhZ2rUr1qKt0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=YmAM6foS; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=QspW2m+w; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Anna-Maria Behnsen <anna-maria@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1712649451;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=xQSgeM4AOh1vk8otimsz4IR1mQP8l+71QrIomYISZaA=;
-	b=YmAM6foSsh41RBsiuQ7RGikoc9sXx4Grz6IpkysyTC9S3yJo0vpKQlV2r2oAsoXfKYzN0X
-	vEmUqjKoVLtNmIOU3T+dbpyn2wB9NjCV58+PUvtbAF5BnMdjlC6R8juXtra1ZQZTEp3D3D
-	vkP5/ivTvFf0OV8evuxyeb1L3yRtvSlEcpjfbwjlLrZ4ub5kBfHTu0AZun9rQaVLaivEXv
-	Zr6JAw45bi2IuRM7RX+09Ty/AXc+onbPm/seHPZ/mIvRlMmiCPNeVmqAfRrmb3HxkyoZrd
-	pU0hbVPxn7uzC2cBsOlFMEOW/NY1rj27kDAmVCxBx/srayyZpjbssWL1quIITA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1712649451;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=xQSgeM4AOh1vk8otimsz4IR1mQP8l+71QrIomYISZaA=;
-	b=QspW2m+wUvK5rhD/Km6upKLw9mUpFDsNeceaZzlosSny3PVGGlynwtv6G9P6bzqTNV1heM
-	QGIpuzCO3dOVWyBg==
-To: Paul Menzel <pmenzel@molgen.mpg.de>
-Cc: Frederic Weisbecker <frederic@kernel.org>, Ingo Molnar
- <mingo@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, LKML
- <linux-kernel@vger.kernel.org>, linux-usb@vger.kernel.org
-Subject: Re: NOHZ tick-stop error: local softirq work is pending, handler
- #08!!! on Dell XPS 13 9360
-In-Reply-To: <256fdb2e-9b83-4837-bd31-0c34e4267c31@molgen.mpg.de>
-References: <354a2690-9bbf-4ccb-8769-fa94707a9340@molgen.mpg.de>
- <87o7ak411y.fsf@somnus>
- <256fdb2e-9b83-4837-bd31-0c34e4267c31@molgen.mpg.de>
-Date: Tue, 09 Apr 2024 09:57:31 +0200
-Message-ID: <87sezv7ytw.fsf@somnus>
+	s=arc-20240116; t=1712649914; c=relaxed/simple;
+	bh=G+z6oXhYsSEPNHieDlTJJ1G7pqLswl3Dl4SmhdePMOI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iwBnOjte7kp4oKz9rsUvLmaaJ2tJkZa8yxydGdRj0i//RfFOHd43HGAqOhhwQq/AhUPuAqTgg5dufo9msZgjOX5EKwCPdLGg3IgKn5nhA+ZAV//J85zTpMQAvGlnfPF4OYeIBWgS3abRWIwLJpoqS5YKsrf7ucl0reODNRp5u5U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CDs2tXkF; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1712649913; x=1744185913;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=G+z6oXhYsSEPNHieDlTJJ1G7pqLswl3Dl4SmhdePMOI=;
+  b=CDs2tXkF/JVs7GNPSTsGW/tFAFOvKR7obcGfgW65h5JBms8pgC4l725s
+   NqaO1mYRFSPvirDbxkzNWbqCj8HxUIX7Awf8nNRa78MNY4kNClg6vAzic
+   iHusndGoXYeG1ZoAdhqTYgmW4EgzVm2033IXExQw8xL6fF2Q4eOY8wfut
+   HpNuXhxLoSXgRaPFON69ZjJK+bdLB6NxGtu9nyhYyKaetm/2TX8KmL5v3
+   7I7dtOl3ceEBuRe8Ql0lveUcBuBFMI2UacWk5Cc43pRzEBMssD6UuO6sm
+   n7s06bGKPB/YhDTB16GLapWKi/Mq6i4wnT8V+uB3M+Ev/O4Cw/CYkhdvv
+   g==;
+X-CSE-ConnectionGUID: S4KLZgVmQOWI6sofC/m13A==
+X-CSE-MsgGUID: M0qE0d3QTfmrX4mZCxpwtg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11038"; a="11750101"
+X-IronPort-AV: E=Sophos;i="6.07,189,1708416000"; 
+   d="scan'208";a="11750101"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2024 01:05:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,11038"; a="937093185"
+X-IronPort-AV: E=Sophos;i="6.07,189,1708416000"; 
+   d="scan'208";a="937093185"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 09 Apr 2024 01:05:09 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 09 Apr 2024 11:05:09 +0300
+Date: Tue, 9 Apr 2024 11:05:09 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/5] usb: typec: ucsi: make it orientation-aware
+Message-ID: <ZhT2tUFHinglhQu5@kuha.fi.intel.com>
+References: <20240408-ucsi-orient-aware-v1-0-95a74a163a10@linaro.org>
+ <20240408-ucsi-orient-aware-v1-4-95a74a163a10@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240408-ucsi-orient-aware-v1-4-95a74a163a10@linaro.org>
 
-Paul Menzel <pmenzel@molgen.mpg.de> writes:
+Hi Dmitry,
 
-> Dear Anna-Maria,
->
->
-> Thank you for your response.
->
->
-> Am 08.04.24 um 12:10 schrieb Anna-Maria Behnsen:
->
->> Paul Menzel writes:
->
->>> On Dell XPS 13 9360/0596KF, BIOS 2.21.0 06/02/2022, with Linux 6.9-rc2+
->>> built from commit b1e6ec0a0fd0 (Merge tag 'docs-6.9-fixes' of
->>> git://git.lwn.net/linux) the external USB-C adapter Dell DA300 stopped
->>> working (only the Ethernet port was used). Linux logged:
->>=20
->> thanks for the report. Can you please provide a trace beside the dmesg
->> output? The following trace events should be enabled (via kernel command
->> line):
->>=20
->> trace_event=3Dtimer:*,timer_migration:*,sched:sched_switch,sched:sched_w=
-akeup,sched:sched_process_hang,irq:softirq_entry,irq:softirq_raise,irq:soft=
-irq_exit
-> Unfortunately I haven=E2=80=99t been able to reproduce it until now. Shou=
-ld it=20
-> happen again, I am going to try your suggestion.
->
+On Mon, Apr 08, 2024 at 07:30:52AM +0300, Dmitry Baryshkov wrote:
+> The UCSI 1.0 is not orientation aware. Only UCSI 2.0 has added
+> orientation status to GET_CONNECTOR_STATUS data. However the glue code
+> can be able to detect cable orientation on its own (and report it via
+> corresponding typec API). Add a flag to let UCSI mark registered ports
+> as orientation aware.
+> 
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> ---
+>  drivers/usb/typec/ucsi/ucsi.c | 2 ++
+>  drivers/usb/typec/ucsi/ucsi.h | 1 +
+>  2 files changed, 3 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index 7ad544c968e4..6f5adc335980 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -1551,6 +1551,8 @@ static int ucsi_register_port(struct ucsi *ucsi, struct ucsi_connector *con)
+>  	cap->svdm_version = SVDM_VER_2_0;
+>  	cap->prefer_role = TYPEC_NO_PREFERRED_ROLE;
+>  
+> +	cap->orientation_aware = !!(ucsi->quirks & UCSI_ORIENTATION_AWARE);
+> +
+>  	if (con->cap.op_mode & UCSI_CONCAP_OPMODE_AUDIO_ACCESSORY)
+>  		*accessory++ = TYPEC_ACCESSORY_AUDIO;
+>  	if (con->cap.op_mode & UCSI_CONCAP_OPMODE_DEBUG_ACCESSORY)
+> diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
+> index 6599fbd09bee..e92be45e4c1c 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.h
+> +++ b/drivers/usb/typec/ucsi/ucsi.h
+> @@ -410,6 +410,7 @@ struct ucsi {
+>  	unsigned long quirks;
+>  #define UCSI_NO_PARTNER_PDOS	BIT(0)	/* Don't read partner's PDOs */
+>  #define UCSI_DELAY_DEVICE_PDOS	BIT(1)	/* Reading PDOs fails until the parter is in PD mode */
+> +#define UCSI_ORIENTATION_AWARE	BIT(2)	/* UCSI is orientation aware */
 
-Thanks for letting me know.
+You are not using that flag anywhere in this series. But why would
+orientation need a "quirk" in the first place?
 
-Thanks,
+I'm not sure where you are going with this, but please try to avoid
+the quirk flags in general in this driver rather than considering them
+as the first way of solving things. Use them only as the last resort.
 
-	Anna-Maria
+I don't want this driver to end up like xhci and some other drivers,
+where refactoring is almost impossible because every place is full of
+conditions checking the quirks, and where in worst case a quirk meant
+to solve a problem on one hardware causes problems on another.
 
+thanks,
+
+-- 
+heikki
 
