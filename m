@@ -1,313 +1,137 @@
-Return-Path: <linux-usb+bounces-9122-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9123-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A412289D795
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Apr 2024 13:04:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id F286E89D7BE
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Apr 2024 13:20:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 625B3288F87
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Apr 2024 11:04:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AD457283578
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Apr 2024 11:20:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C9198593D;
-	Tue,  9 Apr 2024 11:04:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B99E86131;
+	Tue,  9 Apr 2024 11:20:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ucw.cz header.i=@ucw.cz header.b="DlxH/Fna"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZUOi5ZuL"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF501811E9;
-	Tue,  9 Apr 2024 11:04:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.255.230.98
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 263D18563F;
+	Tue,  9 Apr 2024 11:20:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712660665; cv=none; b=Q6zuMhK64D7vou+2qr5pL69YbNAN+KVPIRh49V4QZPJxI1B998kD0Td/3jeu6hdSoGmBWYYfd0/rcCUjKDhagPq/QG58oruOpbEdUBEsEAPzR0S+7cmQ/MFmOaGbIKutkMiMY+fCVp90TsMF8ybcn5JNvDTdH2AU+Rxq5HMFnNo=
+	t=1712661626; cv=none; b=athfG+dH3wg1bli2Z60zKT9OvbgMTatjzcQkFp66JddfEw12AxFQwoh7PrztwbIQFtvJRYegXPG3776izvdx7DEmODS8UDdmBqnOztWwc385njzx+5EivzWvJEKE6DTKz9UCgtyRZJgqGLMaPz436TXN5arZacHMNKon0zwooTw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712660665; c=relaxed/simple;
-	bh=qqf5a/EY02zPcDiutgF2yPSaWnzOls7BMpdi+ctjzRA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MXD5jXt+6aub2rD07p4vLwsf1Mil9EBq096RtvpIGIoBQYum0GLpD1OaP1DGN/SCL+d/UTTcu/PNQDTw6up+h1FFdfcnEZutHNvV4kdg0ojwH445N2UBzwMoMNGqegMeQE1xn23wUgOGafY8vjqI7Ak8+TSXMP3yyBjfJEoLWKs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ucw.cz; spf=pass smtp.mailfrom=ucw.cz; dkim=pass (1024-bit key) header.d=ucw.cz header.i=@ucw.cz header.b=DlxH/Fna; arc=none smtp.client-ip=46.255.230.98
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ucw.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ucw.cz
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-	id F22911C007B; Tue,  9 Apr 2024 13:04:12 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
-	t=1712660653;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=RZ+v7gDWnIHLHrKpLguqCMBP/+unrvR2yYCVCES/Tcw=;
-	b=DlxH/Fnam4Xic6XHXP9QYSXq49VMSvA6hQBciBC7KWYICbyYBdNUEKvuBe3ehgJ2ALQ4MX
-	+NkMcDnSIZUlcCqVLVekfxblhZ38WIJhVsq4lF2y3JMTWBkAkiwLgFBGNBkrEos9L7k76P
-	F3pweM24Mt5N9Iz+SIMc9W5J2IQIwY8=
-Date: Tue, 9 Apr 2024 13:04:12 +0200
-From: Pavel Machek <pavel@ucw.cz>
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: phone-devel@vger.kernel.org, kernel list <linux-kernel@vger.kernel.org>,
-	fiona.klute@gmx.de, martijn@brixit.nl, samuel@sholland.org,
-	gregkh@linuxfoundation.org, linux-usb@vger.kernel.org, megi@xff.cz
-Subject: Re: [PATCHv3 2/2] usb: typec: anx7688: Add driver for ANX7688 USB-C
- HDMI bridge
-Message-ID: <ZhUgrNwRYoaV1AIJ@duo.ucw.cz>
-References: <ZhPMHdt6r/4D99Zg@duo.ucw.cz>
- <ZhPM4XU8ttsFftBd@duo.ucw.cz>
- <ZhUQ6kzV5ARlkfPC@kuha.fi.intel.com>
+	s=arc-20240116; t=1712661626; c=relaxed/simple;
+	bh=91UpDteffSdyg8FH2DDrKcFH4H9dq42CgEub79FQGEY=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:From:Subject:
+	 In-Reply-To:Content-Type; b=Mmauo0KfPCTiHZ/WWWqDtGPWwBcObEEZYxs64LtgRS1uK1OXhWbXr0JluvHXZbDlf61/wXFT3p9CTBvQ4GF9EX/S/DikV4I2Xi/z+obZq+g7HQQUnSVOXBtnrEcrbQ7ifOXvXTLN/X2qiYK0hD54/H4e21TxVLTikeCTOWINUrw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZUOi5ZuL; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1712661624; x=1744197624;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=91UpDteffSdyg8FH2DDrKcFH4H9dq42CgEub79FQGEY=;
+  b=ZUOi5ZuL7V0m+96U0jJxW5EoFdSD4A0zSN8bIcK+uAwnjpTmCPp3Fyit
+   FxCq3wxoWMC9prDfz22/gZIOFciCyzwQQbsf2dHkT0+5m1HNnSjbDuL8t
+   qza8zhx01+mzLY/LxNwmcathOmfDw5Hzb7/GBqOkxodOEyou7fM562vRw
+   ESMiFDWyRBHvshh9LRaohHiMiVAL5JaL1P6+ICX+E39sy4CwFB4cBetu4
+   SWYrtHUITIFyOjU8uqJNHVGiB2C/LhIxRrGG9lxA4uztq4Ytl4fdatU4U
+   xMHjtZ6kgJ48dfNqAYqoW6a/sGs8VTTe6d05BXqbok+iwucnIyILJU83L
+   Q==;
+X-CSE-ConnectionGUID: 9UELNt9pTj+mzcWUP0U9tA==
+X-CSE-MsgGUID: rcuY2B98THaNTR3YGD6EWQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11038"; a="8127095"
+X-IronPort-AV: E=Sophos;i="6.07,189,1708416000"; 
+   d="scan'208";a="8127095"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2024 04:20:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,11038"; a="937093297"
+X-IronPort-AV: E=Sophos;i="6.07,189,1708416000"; 
+   d="scan'208";a="937093297"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmsmga001.fm.intel.com with ESMTP; 09 Apr 2024 04:20:21 -0700
+Message-ID: <82113c7d-0405-ba11-94d9-5673593cec50@linux.intel.com>
+Date: Tue, 9 Apr 2024 14:22:10 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="e3VgoD62Ejch02x1"
-Content-Disposition: inline
-In-Reply-To: <ZhUQ6kzV5ARlkfPC@kuha.fi.intel.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.13.0
+Content-Language: en-US
+To: =?UTF-8?Q?Micha=c5=82_Pecio?= <michal.pecio@gmail.com>
+Cc: Paul Menzel <pmenzel@molgen.mpg.de>,
+ Mathias Nyman <mathias.nyman@intel.com>, LKML
+ <linux-kernel@vger.kernel.org>, linux-usb@vger.kernel.org,
+ Niklas Neronin <niklas.neronin@linux.intel.com>
+References: <58bca6f2-797a-4e20-a476-2294309afdd5@molgen.mpg.de>
+ <20240405113247.743e34b2@foxbook>
+ <7090d3af-18ce-40e1-8ac2-bf18152e5c4a@molgen.mpg.de>
+ <20240406183659.3daf4fa0@foxbook>
+ <c57f2116-8c42-44fb-9c32-6115ad88f914@molgen.mpg.de>
+ <20240407142542.036fb02f@foxbook>
+ <1f64af9a-0618-a7da-4acc-f043b6580308@linux.intel.com>
+ <20240408210541.771253ff@foxbook>
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: xhci_hcd 0000:00:14.0: ERROR Transfer event TRB DMA ptr not part
+ of current TD ep_index 1 comp_code 1
+In-Reply-To: <20240408210541.771253ff@foxbook>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
+On 8.4.2024 22.05, Michał Pecio wrote:
+>> It's also possible this TD/TRB was cancelled due to the disconnect.
+>> Could be that even if driver removes the TD from the list and cleans
+>> out the TRB from the ring buffer (turns TRB to no-op) hardware may
+>> have read ahead and cached the TRB, and process it anyway.
+> 
+> I thought about it, but my debug patch says that the missing TD was
+> freed by finish_td(), which is called on TDs considered completed by
+> hardware. A cancelled TD would show giveback_invalidated_tds().
+> 
+> 
+> Anyway, we now have new information from the reporter. My v2 patch
+> keeps a log of the last five events processed on each transfer ring
+> and dumps the log on TRB mismatch errors.
+> 
+> Unfortunately, it looks like the host controller is broken and signals
+> completion of those transfers twice. The log below shows two distinct
+> events for TRB 32959a1c0 and that the coresponding TD has just been
+> freed by finish_td().
 
---e3VgoD62Ejch02x1
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The trace confirms this, we get double completion events for several Isoc TRBs.
+These double completions are seen after a transaction error on the same device (different endpoint).
 
-Hi!
+Transfer events for TRB ..a1c0 twice, with a transaction error in between:
+  <idle>-0       [000] d.h2. 33819.709897: xhci_handle_event: EVENT: TRB 000000032959a1c0 status 'Success' len 0 slot 6 ep 2 type 'Transfer Event' flags e:c
+  <idle>-0       [000] d.h2. 33819.709904: xhci_handle_event: EVENT: TRB 000000041547d010 status 'USB Transaction Error' len 4 slot 6 ep 15 type 'Transfer Event' flags e:c
+  systemd-journal-395     [000] d.H1. 33819.711886: xhci_handle_event: EVENT: TRB 000000032959a1c0 status 'Success' len 0 slot 6 ep 2 type 'Transfer Event' flags e:c
 
-> > This is driver for ANX7688 USB-C HDMI, with flashing and debugging
-> > features removed. ANX7688 is rather criticial piece on PinePhone,
-> > there's no display and no battery charging without it.
-> >=20
-> > There's likely more work to be done here, but having basic support
-> > in mainline is needed to be able to work on the other stuff
-> > (networking, cameras, power management).
-> >=20
-> > Signed-off-by: Ondrej Jirman <megi@xff.cz>
-> > Co-developed-by: Martijn Braam <martijn@brixit.nl>
-> > Co-developed-by: Samuel Holland <samuel@sholland.org>
-> > Signed-off-by: Pavel Machek <pavel@ucw.cz>
->=20
-> Just couple of quick comments below - I did not have time to go over
-> this very thoroughly, but I think you need to make a new version in
-> any case because of comments in 1/2.
+Transfer events for TRB ..a1d0 twice (the next TRB)
+  systemd-journal-395     [000] d.H1. 33819.712001: xhci_handle_event: EVENT: TRB 000000032959a1d0 status 'Success' len 0 slot 6 ep 2 type 'Transfer Event' flags e:c
+  systemd-journal-395     [000] d.H1. 33819.712059: xhci_handle_event: EVENT: TRB 000000032959a1d0 status 'Success' len 0 slot 6 ep 2 type 'Transfer Event' flags e:c
 
-Yes, there will be new version.
+Transfer events for TRB ..a1e0 twice
+  systemd-journal-395     [000] d.H1. 33819.712139: xhci_handle_event: EVENT: TRB 000000032959a1e0 status 'Success' len 0 slot 6 ep 2 type 'Transfer Event' flags e:c
+  systemd-journal-395     [000] d.h1. 33819.712871: xhci_handle_event: EVENT: TRB 000000032959a1e0 status 'Success' len 0 slot 6 ep 2 type 'Transfer Event' flags e:c
 
-There is ton of sleep primitives, and existing ones are okay. I can
-change everything to fdelay or whatever primitive-of-the-day is, but
-I'd rather not do pointless changes.
+etc..
 
-You can ask for major changes, or complain about extra newlines, but
-doing both in the same email does not make sense.
+Driver can cope with these extra events, but if this is common we should
+probably handle it silently and not concern users with that ERROR message.
 
-> Btw, Co-developed-by comes before Signed-off-by I think.
+We are actually at the moment looking at improving handle_tx_event() with
+Niklas (cc), and will take this into consideration.
 
-I believe this order is fine, too.
-
-> > +++ b/drivers/usb/typec/anx7688.c
-> > @@ -0,0 +1,1830 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * ANX7688 USB-C HDMI bridge/PD driver
-> > + *
-> > + * Warning, this driver is somewhat PinePhone specific.
->=20
-> So why not split this into core part and PinePhone specific glue
-> part?
-
-Potentially a lot of work I can't really test and would rather not do.
-
-> > +	struct delayed_work work;
-> > +	struct timer_list work_timer;
-> > +
-> > +	struct mutex lock;
->=20
-> Undocumented lock.
-
-This is simple driver. How do you expect me to document it? Protects
-this data structure, not exactly uncommon.
-
-> > +
-> > +	/* wait for power to stabilize and release reset */
-> > +	msleep(10);
-> > +	gpiod_set_value(anx7688->gpio_reset, 0);
-> > +	usleep_range(2, 4);
->=20
-> Why not just use usleep_range() in both cases.
-
-It does not really make code any better. Can do if you insist.
-
-> > +static int anx7688_connect(struct anx7688 *anx7688)
-> > +{
-> > +	struct typec_partner_desc desc =3D {};
-> > +	int ret, i;
-> > +	u8 fw[2];
-> > +	const u8 dp_snk_identity[16] =3D {
-> > +		0x00, 0x00, 0x00, 0xec,	/* id header */
-> > +		0x00, 0x00, 0x00, 0x00,	/* cert stat */
-> > +		0x00, 0x00, 0x00, 0x00,	/* product type */
-> > +		0x39, 0x00, 0x00, 0x51	/* alt mode adapter */
-> > +	};
-> > +	const u8 svid[4] =3D {
-> > +		0x00, 0x00, 0x01, 0xff,
-> > +	};
->=20
-> Why not get those from DT?
-
-Are you sure it belongs to the DT (and that DT people will agree)?
-
-> > +	u32 caps[8];
-> > +
-> > +	dev_dbg(anx7688->dev, "cable inserted\n");
-> > +
-> > +	anx7688->last_status =3D -1;
-> > +	anx7688->last_cc_status =3D -1;
-> > +	anx7688->last_dp_state =3D -1;
-> > +
-> > +	msleep(10);
->=20
-> Please make a comment here why you have to wait, and use
-> usleep_range().
-
-/* Dunno because working code does that and waiting for hardware to
-settle down after cable insertion kind of looks like a good thing */
-
-I did not write the driver, and there's no good documentation for this
-chip. I can try to invent something, but...
-
-> > +	i =3D 0;
-> > +	while (1) {
-> > +		ret =3D anx7688_reg_read(anx7688, ANX7688_REG_EEPROM_LOAD_STATUS0);
-> > +
-> > +		if (ret >=3D 0 && (ret & ANX7688_EEPROM_FW_LOADED) =3D=3D ANX7688_EE=
-PROM_FW_LOADED) {
-> > +			dev_dbg(anx7688->dev, "eeprom0 =3D 0x%02x\n", ret);
-> > +			dev_dbg(anx7688->dev, "fw loaded after %d ms\n", i * 10);
-> > +			break;
-> > +		}
-> > +
-> > +		if (i > 99) {
-> > +			set_bit(ANX7688_F_FW_FAILED, anx7688->flags);
-> > +			dev_err(anx7688->dev,
-> > +				"boot firmware load failed (you may need to flash FW to anx7688 fi=
-rst)\n");
-> > +			ret =3D -ETIMEDOUT;
-> > +			goto err_vconoff;
-> > +		}
-> > +		msleep(5);
-> > +		i++;
-> > +	}
->=20
-> You need to use something like time_is_after_jiffies() here instead of
-> a counter.
-
-Well, this works as well, but yes, I agree here.
-
-> > +	ret =3D i2c_smbus_read_i2c_block_data(anx7688->client,
-> > +					    ANX7688_REG_FW_VERSION1, 2, fw);
-> > +	if (ret < 0) {
-> > +		dev_err(anx7688->dev, "failed to read firmware version\n");
-> > +		goto err_vconoff;
-> > +	}
-> > +
-> > +	dev_dbg(anx7688->dev, "OCM firmware loaded (version 0x%04x)\n",
-> > +		 fw[1] | fw[0] << 8);
-> > +
-> > +	/* Unmask interrupts */
-> > +	ret =3D anx7688_reg_write(anx7688, ANX7688_REG_STATUS_INT, 0);
-> > +	if (ret)
-> > +		goto err_vconoff;
-> > +
-> > +	ret =3D anx7688_reg_write(anx7688, ANX7688_REG_STATUS_INT_MASK, ~ANX7=
-688_SOFT_INT_MASK);
-> > +	if (ret)
-> > +		goto err_vconoff;
-> > +
-> > +	ret =3D anx7688_reg_write(anx7688, ANX7688_REG_IRQ_EXT_SOURCE2, 0xff);
-> > +	if (ret)
-> > +		goto err_vconoff;
-> > +
-> > +	ret =3D anx7688_reg_write(anx7688, ANX7688_REG_IRQ_EXT_MASK2, (u8)~AN=
-X7688_IRQ2_SOFT_INT);
-> > +	if (ret)
-> > +		goto err_vconoff;
-> > +
-> > +	/* time to turn off vbus after cc disconnect (unit is 4 ms) */
-> > +	ret =3D anx7688_reg_write(anx7688, ANX7688_REG_VBUS_OFF_DELAY_TIME, 1=
-00 / 4);
-> > +	if (ret)
-> > +		goto err_vconoff;
-> > +
-> > +	/* 300ms (unit is 2 ms) */
-> > +	ret =3D anx7688_reg_write(anx7688, ANX7688_REG_TRY_UFP_TIMER, 300 / 2=
-);
-> > +	if (ret)
-> > +		goto err_vconoff;
-> > +
-> > +	/* maximum voltage in 100 mV units */
-> > +	ret =3D anx7688_reg_write(anx7688, ANX7688_REG_MAX_VOLTAGE, 50); /* 5=
- V */
-> > +	if (ret)
-> > +		goto err_vconoff;
-> > +
-> > +	/* min/max power in 500 mW units */
-> > +	ret =3D anx7688_reg_write(anx7688, ANX7688_REG_MAX_POWER, 15 * 2); /*=
- 15 W */
-> > +	if (ret)
-> > +		goto err_vconoff;
-> > +
-> > +	ret =3D anx7688_reg_write(anx7688, ANX7688_REG_MIN_POWER, 1);  /* 0.5=
- W */
-> > +	if (ret)
-> > +		goto err_vconoff;
-> > +
-> > +	/* auto_pd, try.src, try.sink, goto safe 5V */
-> > +	ret =3D anx7688_reg_write(anx7688, ANX7688_REG_FEATURE_CTRL, 0x1e & ~=
-BIT(2)); // disable try_src
->=20
-> Those two comments are obscure.
-
-I hoped they make sense to someone familiar with the area. Can't do
-much better than remove them.
-
-> This function seems to have lot of hard coded information above.
-> Shouldn't much of that come from DT?
-
-You tell me, I suppose you seen some similar drivers.
-
-> Please note that if you have that PinePhone specific glue driver, you
-> can get much of the hard coded information from there, if getting the
-> information from DT is not an option for what ever reason.
-
-Thanks for review.
-
-Could you trim the parts of email you are not replying to?
-
-Do you see any other major problems?
-
-Do you have any idea if this chip is used elsewhere? I do not have any
-other hardware with anx7688, so I won't be able to test it elsewhere,
-and if there are no other users, having specific driver should not be
-a problem for anyone. If there's other user, well, there's chance they
-have docs and can help.
-
-How would you envision the split? Do you have any other driver that
-could be used as an example? Is someone else putting them in the
-device tree?
-
-Best regards,
-								Pavel
---=20
-People of Russia, stop Putin before his war on Ukraine escalates.
-
---e3VgoD62Ejch02x1
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCZhUgrAAKCRAw5/Bqldv6
-8tdbAJ9whsn5MtGDbYUeie+RE5DcrfiBTQCfd0dzide5IWF2ZejjVK++2UM1z+Q=
-=UoGp
------END PGP SIGNATURE-----
-
---e3VgoD62Ejch02x1--
+Thanks
+Mathias
 
