@@ -1,145 +1,150 @@
-Return-Path: <linux-usb+bounces-9219-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9220-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D275489EF51
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Apr 2024 11:57:05 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC0D189F0F2
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Apr 2024 13:32:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 54C3AB226D2
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Apr 2024 09:57:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 299DB1C2255E
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Apr 2024 11:32:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 704831591FB;
-	Wed, 10 Apr 2024 09:56:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E99F61598FF;
+	Wed, 10 Apr 2024 11:32:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NLZqv/oX"
+	dkim=pass (1024-bit key) header.d=xff.cz header.i=@xff.cz header.b="gwayz7mQ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from vps.xff.cz (vps.xff.cz [195.181.215.36])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 779421591E1
-	for <linux-usb@vger.kernel.org>; Wed, 10 Apr 2024 09:56:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C2031598EB;
+	Wed, 10 Apr 2024 11:32:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.181.215.36
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712742993; cv=none; b=HfxG8V1cs+LHjrPPAOAglbslAdeOQVamTxnfSz7+mohICtnlZ8Pxoe78rwZ3FUnIBK0MmR+7PSbsrJNGhHLOMX33Ci+zq5bltGZPq9/sqzsgFcKKbnWtc6UoxpJrWHwqEQGMoBDpdDE9O8KqD+37+1Fx9LVv/UJ+5dlUM8Ve+fU=
+	t=1712748753; cv=none; b=CK6bwO0hX3okxx9ovTN56kj4Bs2HdHysQamAKWF6ysdAifmfWJGz4WRIvXcE/5WwoOEv9bpz6Azs6e0VCTs7xRPpTMd4C/XGuwI5aQZiWFXuUhLwa0viRg22jIf+AIOU32QLyhT4JUO4Oasf+qcGJKq1cls8Dwutk/1LESERW14=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712742993; c=relaxed/simple;
-	bh=6RyjuDcWsZO20Mdq+RG05EtCrq1VHou3GzobE5FL86k=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tasjaK0UlGlgHVuGR4SvW1hxzJP2Ou9wGHDqdT1Do2bWwbbTmFzai6IwpIBLFEiy98ELYZeuQMVjfgKmuuY7Nwcx8ujVOq744egjj8V5DZVnuQ1TLk1qjkwg/EvUzocbSt4hyi463/kWfjZ/gy0Gh1UbSpIodLynaOF6Kdok4Jo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NLZqv/oX; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1712742990;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=GpBfMhS04qgT23TOMbDyVoHFEuB0U5xK3Cly3cM2U5g=;
-	b=NLZqv/oXUNTYHKvmcGuXfhGk3KATpfAQ+uAdgkXtuFMMe9Z3lXlWAww8eB8bsoICS5N59R
-	crJM0KLGIDDWMltuZOXYwqZf1Aqen4sqJdyEHAs5EaHxpUgxBsgdk6W1xA4KKa2XQYqJpp
-	aDDxTr4mWrjFhcDlWySUP3FAq9pglHY=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-511-LXAg-BT_NdmBkTKRCBGFEg-1; Wed,
- 10 Apr 2024 05:56:24 -0400
-X-MC-Unique: LXAg-BT_NdmBkTKRCBGFEg-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 80ECC1C4C381;
-	Wed, 10 Apr 2024 09:56:23 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.39.192.244])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 170DA2166B34;
-	Wed, 10 Apr 2024 09:56:19 +0000 (UTC)
-From: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
-To: davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>,
-	stable@vger.kernel.org,
-	Jarkko Palviainen <jarkko.palviainen@gmail.com>
-Subject: [PATCH] net: usb: ax88179_178a: avoid writing the mac address before first reading
-Date: Wed, 10 Apr 2024 11:55:49 +0200
-Message-ID: <20240410095603.502566-1-jtornosm@redhat.com>
+	s=arc-20240116; t=1712748753; c=relaxed/simple;
+	bh=VG85eirFHChd1svVi0CFPjLxBM2ZZf5eSOZGPm4+ZWk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OrNXOVm4KuKCRYfC6AD5jBdsv/xMX5cyk5k4UNIS1chwuyTF5yxZTu3M4p6ciWw3ZBpuyI5BWvGsX3Nt6XaL8IKNRx9JxCFifdg+Gtz6chxTgenk0vlEnfgGtbWyQsQUILwfxdazFQZIRnQs5wGd/gdkD2RJg6hJLQCmbVtngME=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xff.cz; spf=pass smtp.mailfrom=xff.cz; dkim=pass (1024-bit key) header.d=xff.cz header.i=@xff.cz header.b=gwayz7mQ; arc=none smtp.client-ip=195.181.215.36
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xff.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xff.cz
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xff.cz; s=mail;
+	t=1712748747; bh=VG85eirFHChd1svVi0CFPjLxBM2ZZf5eSOZGPm4+ZWk=;
+	h=Date:From:To:Cc:Subject:X-My-GPG-KeyId:References:From;
+	b=gwayz7mQmP3mruRQtN/CjRosweQBlw/ZKVLEFtWkVFZxOiaYBVAaZwxx+DalbBqIb
+	 gW9N2yjfhAc8hgZoee13SS65u2oyBAVCmaEk2l9OryW2AmPpRL555w2BFMNPksFSe9
+	 hQMvb3Y2R7vsku4+jJ5aPM+v92fmULPsSpwP9GWM=
+Date: Wed, 10 Apr 2024 13:32:26 +0200
+From: =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Pavel Machek <pavel@ucw.cz>, 
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>, phone-devel@vger.kernel.org, 
+	kernel list <linux-kernel@vger.kernel.org>, fiona.klute@gmx.de, martijn@brixit.nl, samuel@sholland.org, 
+	gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCHv3 2/2] usb: typec: anx7688: Add driver for ANX7688 USB-C
+ HDMI bridge
+Message-ID: <2panrf3dgpwkwywf4vv676tjlbdqpzjb75vpfhiohabhrxc6h2@tmouy7prgikm>
+Mail-Followup-To: =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>, 
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, Pavel Machek <pavel@ucw.cz>, 
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>, phone-devel@vger.kernel.org, 
+	kernel list <linux-kernel@vger.kernel.org>, fiona.klute@gmx.de, martijn@brixit.nl, samuel@sholland.org, 
+	gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
+X-My-GPG-KeyId: EBFBDDE11FB918D44D1F56C1F9F0A873BE9777ED
+ <https://xff.cz/key.txt>
+References: <ZhPMHdt6r/4D99Zg@duo.ucw.cz>
+ <ZhPM4XU8ttsFftBd@duo.ucw.cz>
+ <ZhUQ6kzV5ARlkfPC@kuha.fi.intel.com>
+ <ZhUgrNwRYoaV1AIJ@duo.ucw.cz>
+ <4q7o5vb26ibkbvqal5nn4kdnc32rrajhtszrf4fnuisnlfcsg5@6322saeu7qoe>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4q7o5vb26ibkbvqal5nn4kdnc32rrajhtszrf4fnuisnlfcsg5@6322saeu7qoe>
 
-After the commit d2689b6a86b9 ("net: usb: ax88179_178a: avoid two
-consecutive device resets"), reset operation, in which the default mac
-address from the device is read, is not executed from bind operation and
-the random address, that is pregenerated just in case, is direclty written
-the first time in the device, so the default one from the device is not
-even read. This writing is not dangerous because is volatile and the
-default mac address is not missed.
+On Tue, Apr 09, 2024 at 06:35:50PM GMT, Dmitry Baryshkov wrote:
+> On Tue, Apr 09, 2024 at 01:04:12PM +0200, Pavel Machek wrote:
+> > Hi!
+> > 
+> > > > This is driver for ANX7688 USB-C HDMI, with flashing and debugging
+> > > > features removed. ANX7688 is rather criticial piece on PinePhone,
+> > > > there's no display and no battery charging without it.
+> > > > 
+> > > > There's likely more work to be done here, but having basic support
+> > > > in mainline is needed to be able to work on the other stuff
+> > > > (networking, cameras, power management).
+> > > > 
+> > > > Signed-off-by: Ondrej Jirman <megi@xff.cz>
+> > > > Co-developed-by: Martijn Braam <martijn@brixit.nl>
+> > > > Co-developed-by: Samuel Holland <samuel@sholland.org>
+> > > > Signed-off-by: Pavel Machek <pavel@ucw.cz>
+> > > 
+> > > Just couple of quick comments below - I did not have time to go over
+> > > this very thoroughly, but I think you need to make a new version in
+> > > any case because of comments in 1/2.
+> > 
+> 
+> [skipped]
+> 
+> > 
+> > > > +static int anx7688_connect(struct anx7688 *anx7688)
+> > > > +{
+> > > > +	struct typec_partner_desc desc = {};
+> > > > +	int ret, i;
+> > > > +	u8 fw[2];
+> > > > +	const u8 dp_snk_identity[16] = {
+> > > > +		0x00, 0x00, 0x00, 0xec,	/* id header */
+> > > > +		0x00, 0x00, 0x00, 0x00,	/* cert stat */
+> > > > +		0x00, 0x00, 0x00, 0x00,	/* product type */
+> > > > +		0x39, 0x00, 0x00, 0x51	/* alt mode adapter */
+> > > > +	};
+> > > > +	const u8 svid[4] = {
+> > > > +		0x00, 0x00, 0x01, 0xff,
+> > > > +	};
+> > > 
+> > > Why not get those from DT?
+> > 
+> > Are you sure it belongs to the DT (and that DT people will agree)?
+> 
+> From Documentation/devicetree/bindings/connector/usb-connector.yaml:
+> 
+>             altmodes {
+>                 displayport {
+>                     svid = /bits/ 16 <0xff01>;
+>                     vdo = <0x00001c46>;
+>                 };
+>             };
+> 
+> BTW, I don't see the VDO for the DP altmode in your code. Maybe I missed
+> it at a quick glance.
 
-In order to avoid this, do not allow writing a mac address directly into
-the device, if the default mac address from the device has not been read
-yet.
+VDO is set via TYPE_DP_SNK_CFG message to the firmware. There may be some
+default in the firmware which matches Pinephone receptacle configuration.
 
-cc: stable@vger.kernel.org # 6.6+
-Fixes: d2689b6a86b9 ("net: usb: ax88179_178a: avoid two consecutive device resets")
-Reported-by: Jarkko Palviainen <jarkko.palviainen@gmail.com>
-Signed-off-by: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
----
- drivers/net/usb/ax88179_178a.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+I guess the driver can send the VDO value from DT after firmware is
+initialized. Other values can be set in DT too, but extreme care needs to
+ne take, because firmware has some bugs, which cause it to request
+high voltage from PD PSU when it's in fact not part of PDO, potentially
+destroying the device. So I'd rather not expose at least PDOs in DT to random
+unsuspecting DT users who just copy paste and edit DT without reading the driver
+code or some obscure notes somewhere.
 
-diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
-index 69169842fa2f..650bb7b6badf 100644
---- a/drivers/net/usb/ax88179_178a.c
-+++ b/drivers/net/usb/ax88179_178a.c
-@@ -174,6 +174,7 @@ struct ax88179_data {
- 	u32 wol_supported;
- 	u32 wolopts;
- 	u8 disconnecting;
-+	u8 mac_address_read;
- };
- 
- struct ax88179_int_data {
-@@ -969,9 +970,12 @@ static int ax88179_change_mtu(struct net_device *net, int new_mtu)
- static int ax88179_set_mac_addr(struct net_device *net, void *p)
- {
- 	struct usbnet *dev = netdev_priv(net);
-+	struct ax88179_data *ax179_data = dev->driver_priv;
- 	struct sockaddr *addr = p;
- 	int ret;
- 
-+	if (!ax179_data->mac_address_read)
-+		return -EAGAIN;
- 	if (netif_running(net))
- 		return -EBUSY;
- 	if (!is_valid_ether_addr(addr->sa_data))
-@@ -1256,6 +1260,7 @@ static int ax88179_led_setting(struct usbnet *dev)
- 
- static void ax88179_get_mac_addr(struct usbnet *dev)
- {
-+	struct ax88179_data *ax179_data = dev->driver_priv;
- 	u8 mac[ETH_ALEN];
- 
- 	memset(mac, 0, sizeof(mac));
-@@ -1281,6 +1286,9 @@ static void ax88179_get_mac_addr(struct usbnet *dev)
- 
- 	ax88179_write_cmd(dev, AX_ACCESS_MAC, AX_NODE_ID, ETH_ALEN, ETH_ALEN,
- 			  dev->net->dev_addr);
-+
-+	ax179_data->mac_address_read = 1;
-+	netdev_info(dev->net, "MAC address: %pM\n", dev->net->dev_addr);
- }
- 
- static int ax88179_bind(struct usbnet *dev, struct usb_interface *intf)
--- 
-2.44.0
+kind regards,
+	o.
 
+> > 
+> > > > +	u32 caps[8];
+> > > > +
+> 
+> 
+> -- 
+> With best wishes
+> Dmitry
 
