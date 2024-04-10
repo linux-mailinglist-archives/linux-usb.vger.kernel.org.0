@@ -1,136 +1,145 @@
-Return-Path: <linux-usb+bounces-9218-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9219-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED22189EF11
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Apr 2024 11:46:19 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D275489EF51
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Apr 2024 11:57:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A71541F21F06
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Apr 2024 09:46:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 54C3AB226D2
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Apr 2024 09:57:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13E2A155A21;
-	Wed, 10 Apr 2024 09:46:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 704831591FB;
+	Wed, 10 Apr 2024 09:56:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nMFOBT6x"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NLZqv/oX"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07209125CD;
-	Wed, 10 Apr 2024 09:46:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 779421591E1
+	for <linux-usb@vger.kernel.org>; Wed, 10 Apr 2024 09:56:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712742370; cv=none; b=YOymUHFXrQNcfD2aBGKxJ5FmMQPCiBS/G/gBvZ0gf4CwL1WncWugOV6YiLox98SdAEyDdcz25wS5ejVZ2vT1e/7BFrZS49V2Ge91c/rL1XKK009ZhFoH1Iy1iu2tekNcBacQw85xUIxyTllR4XkizKKPrfSL9cubYXLZeNubl9w=
+	t=1712742993; cv=none; b=HfxG8V1cs+LHjrPPAOAglbslAdeOQVamTxnfSz7+mohICtnlZ8Pxoe78rwZ3FUnIBK0MmR+7PSbsrJNGhHLOMX33Ci+zq5bltGZPq9/sqzsgFcKKbnWtc6UoxpJrWHwqEQGMoBDpdDE9O8KqD+37+1Fx9LVv/UJ+5dlUM8Ve+fU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712742370; c=relaxed/simple;
-	bh=2Q+KRTHpRgdRUsUD7FxZmGhMQwfpvVD7f1DhqQpdJSk=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Yeb/cr2aSoECa+193f50G+gZbQPflyGWWdtwGRplqo/+7uRyyVf/V/bWgCNGvPtXrheGaVYc8xFwA0E5nA9k/kBVr8ix5HaApqBSIBUQSUbKKvUC1JKK+oZN3mfMa4r7af6lyVvm4EdC3nOkCf7h1yEL4bhkz65XCjRZHbeamxM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nMFOBT6x; arc=none smtp.client-ip=209.85.208.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-56bdf81706aso8668653a12.2;
-        Wed, 10 Apr 2024 02:46:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712742367; x=1713347167; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2Q+KRTHpRgdRUsUD7FxZmGhMQwfpvVD7f1DhqQpdJSk=;
-        b=nMFOBT6xMub3+Uhz1NeIKvQb4C0fHwt2HvIfz6T2vnOuHGPv/ZMpwHm5KamC86N+3j
-         NLsXQOJSCjNyXjbQd5zbaVdg6FoiCpxoRAT+iSgeZHWOaewj2wMcjEAA8t5Mm9bUUF2c
-         8bqe0lbLiSF304g5Pa4xO9FYouK8gV7rVFhOf4yVtdzCERpq7Hs48sgD52rQrtH2h2jq
-         ms/FaMpGWrTNZsGKROO72JYr7oy9xPzUHkkygxp+ZSqLtatUtK6hRnDTQxsazjooSk/u
-         ub6N6bw9S/DW4cFBXmZH1etpf9PTCIfnWGzYUuPOrS6t8EoI7LDcT2MytLnbxIS4jQSB
-         ny7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712742367; x=1713347167;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2Q+KRTHpRgdRUsUD7FxZmGhMQwfpvVD7f1DhqQpdJSk=;
-        b=ZsxTaJbGZPcKJm3nbw6e/8DQ15h/q0tHwiZfewb4u4/RHUXL2YU3lDyStTaAomHuzs
-         cKD3rKZnDfgqUh+OrJ8TCG5n6A9xUCoe9QV9/3+O2ZPC+Yb280Yqr1ROYtdUo4MXTsCh
-         dlrq0XPFlG4e5VqQEQPu+4WJ/X6OLsOngixo2SQMzq5jPetQyyCK32Xl3Qi1PaSlRxsC
-         1y/xImsKzdx0z3ob1Tgb0PbPiJAfiVC7lVeP7GLeKmLn2EpootT8bOuncg3vTznwCkPX
-         TWLbqGgBtgIxsM+mwqfSAxmna62eJ9LK0syh/FKj3utAT5mzaG129/dfKSLElcyPHkSH
-         AWvw==
-X-Forwarded-Encrypted: i=1; AJvYcCWY94Cvq1kNadSdqZxIKdL8K0OhqS8HmWf7UUe2+4ceIxeZMWr8J01pys5WKcO0CvoHTw+jaqT3BwBclveJZIhD8E4y4mFncjB0gbNFvqkODXhsv0m5dASLFNDDC3lQK35YSZUErE9z
-X-Gm-Message-State: AOJu0Yy1p9ci1f84cxI+3Xc91KH8gVx4XUm/GergNR5bGGt6fVCe6wv2
-	hdM1rdxarYeCSegT1L1UntHQK6Qjzc7PiIeWrO7sEYg4VNpcXTuy
-X-Google-Smtp-Source: AGHT+IGWl6bnDupDikFXTK6BY6vxUeZtVZq0+rKCvusjW/N/joJZ4+thYc4Ul5yN3JS0TSPZzg6spw==
-X-Received: by 2002:a17:907:9496:b0:a51:d0e6:57ff with SMTP id dm22-20020a170907949600b00a51d0e657ffmr1533222ejc.45.1712742366938;
-        Wed, 10 Apr 2024 02:46:06 -0700 (PDT)
-Received: from foxbook (acgm220.neoplus.adsl.tpnet.pl. [83.9.240.220])
-        by smtp.gmail.com with ESMTPSA id dr19-20020a170907721300b00a4a33cfe593sm6729694ejc.39.2024.04.10.02.46.05
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Wed, 10 Apr 2024 02:46:06 -0700 (PDT)
-Date: Wed, 10 Apr 2024 11:46:01 +0200
-From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: Paul Menzel <pmenzel@molgen.mpg.de>, Mathias Nyman
- <mathias.nyman@intel.com>, LKML <linux-kernel@vger.kernel.org>,
- linux-usb@vger.kernel.org, Niklas Neronin <niklas.neronin@linux.intel.com>
-Subject: Re: xhci_hcd 0000:00:14.0: ERROR Transfer event TRB DMA ptr not
- part of current TD ep_index 1 comp_code 1
-Message-ID: <20240410114601.0e25a46d@foxbook>
-In-Reply-To: <82113c7d-0405-ba11-94d9-5673593cec50@linux.intel.com>
-References: <58bca6f2-797a-4e20-a476-2294309afdd5@molgen.mpg.de>
-	<20240405113247.743e34b2@foxbook>
-	<7090d3af-18ce-40e1-8ac2-bf18152e5c4a@molgen.mpg.de>
-	<20240406183659.3daf4fa0@foxbook>
-	<c57f2116-8c42-44fb-9c32-6115ad88f914@molgen.mpg.de>
-	<20240407142542.036fb02f@foxbook>
-	<1f64af9a-0618-a7da-4acc-f043b6580308@linux.intel.com>
-	<20240408210541.771253ff@foxbook>
-	<82113c7d-0405-ba11-94d9-5673593cec50@linux.intel.com>
+	s=arc-20240116; t=1712742993; c=relaxed/simple;
+	bh=6RyjuDcWsZO20Mdq+RG05EtCrq1VHou3GzobE5FL86k=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tasjaK0UlGlgHVuGR4SvW1hxzJP2Ou9wGHDqdT1Do2bWwbbTmFzai6IwpIBLFEiy98ELYZeuQMVjfgKmuuY7Nwcx8ujVOq744egjj8V5DZVnuQ1TLk1qjkwg/EvUzocbSt4hyi463/kWfjZ/gy0Gh1UbSpIodLynaOF6Kdok4Jo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NLZqv/oX; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1712742990;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=GpBfMhS04qgT23TOMbDyVoHFEuB0U5xK3Cly3cM2U5g=;
+	b=NLZqv/oXUNTYHKvmcGuXfhGk3KATpfAQ+uAdgkXtuFMMe9Z3lXlWAww8eB8bsoICS5N59R
+	crJM0KLGIDDWMltuZOXYwqZf1Aqen4sqJdyEHAs5EaHxpUgxBsgdk6W1xA4KKa2XQYqJpp
+	aDDxTr4mWrjFhcDlWySUP3FAq9pglHY=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-511-LXAg-BT_NdmBkTKRCBGFEg-1; Wed,
+ 10 Apr 2024 05:56:24 -0400
+X-MC-Unique: LXAg-BT_NdmBkTKRCBGFEg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 80ECC1C4C381;
+	Wed, 10 Apr 2024 09:56:23 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.39.192.244])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 170DA2166B34;
+	Wed, 10 Apr 2024 09:56:19 +0000 (UTC)
+From: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+To: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>,
+	stable@vger.kernel.org,
+	Jarkko Palviainen <jarkko.palviainen@gmail.com>
+Subject: [PATCH] net: usb: ax88179_178a: avoid writing the mac address before first reading
+Date: Wed, 10 Apr 2024 11:55:49 +0200
+Message-ID: <20240410095603.502566-1-jtornosm@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.6
 
-> Driver can cope with these extra events, but if this is common we
-> should probably handle it silently and not concern users with that
-> ERROR message.
+After the commit d2689b6a86b9 ("net: usb: ax88179_178a: avoid two
+consecutive device resets"), reset operation, in which the default mac
+address from the device is read, is not executed from bind operation and
+the random address, that is pregenerated just in case, is direclty written
+the first time in the device, so the default one from the device is not
+even read. This writing is not dangerous because is volatile and the
+default mac address is not missed.
 
-The error message in itself is harmless, it means the driver gets an
-event it doesn't know how to handle and ignores it. Further events are
-processed normally (in this specific case).
+In order to avoid this, do not allow writing a mac address directly into
+the device, if the default mac address from the device has not been read
+yet.
 
-What's problematic is that the controller is apparently still working
-on a TD which the driver considers to be finished already. The driver
-can overwrite the TD and reuse its data buffer for other transfers,
-while the hardware may still need the original TD for proper operation
-and, if we are very unlucky, could attempt DMA to/from the data buffer,
-causing data corruption or information leak to a malicious USB dongle.
+cc: stable@vger.kernel.org # 6.6+
+Fixes: d2689b6a86b9 ("net: usb: ax88179_178a: avoid two consecutive device resets")
+Reported-by: Jarkko Palviainen <jarkko.palviainen@gmail.com>
+Signed-off-by: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+---
+ drivers/net/usb/ax88179_178a.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-For all we know, Paul's buggy chipset may not only be confirming the
-transfer twice, but really performing it twice for some stupid reason.
+diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
+index 69169842fa2f..650bb7b6badf 100644
+--- a/drivers/net/usb/ax88179_178a.c
++++ b/drivers/net/usb/ax88179_178a.c
+@@ -174,6 +174,7 @@ struct ax88179_data {
+ 	u32 wol_supported;
+ 	u32 wolopts;
+ 	u8 disconnecting;
++	u8 mac_address_read;
+ };
+ 
+ struct ax88179_int_data {
+@@ -969,9 +970,12 @@ static int ax88179_change_mtu(struct net_device *net, int new_mtu)
+ static int ax88179_set_mac_addr(struct net_device *net, void *p)
+ {
+ 	struct usbnet *dev = netdev_priv(net);
++	struct ax88179_data *ax179_data = dev->driver_priv;
+ 	struct sockaddr *addr = p;
+ 	int ret;
+ 
++	if (!ax179_data->mac_address_read)
++		return -EAGAIN;
+ 	if (netif_running(net))
+ 		return -EBUSY;
+ 	if (!is_valid_ether_addr(addr->sa_data))
+@@ -1256,6 +1260,7 @@ static int ax88179_led_setting(struct usbnet *dev)
+ 
+ static void ax88179_get_mac_addr(struct usbnet *dev)
+ {
++	struct ax88179_data *ax179_data = dev->driver_priv;
+ 	u8 mac[ETH_ALEN];
+ 
+ 	memset(mac, 0, sizeof(mac));
+@@ -1281,6 +1286,9 @@ static void ax88179_get_mac_addr(struct usbnet *dev)
+ 
+ 	ax88179_write_cmd(dev, AX_ACCESS_MAC, AX_NODE_ID, ETH_ALEN, ETH_ALEN,
+ 			  dev->net->dev_addr);
++
++	ax179_data->mac_address_read = 1;
++	netdev_info(dev->net, "MAC address: %pM\n", dev->net->dev_addr);
+ }
+ 
+ static int ax88179_bind(struct usbnet *dev, struct usb_interface *intf)
+-- 
+2.44.0
 
-
-> We are actually at the moment looking at improving handle_tx_event()
-> with Niklas (cc), and will take this into consideration.
-
-Given the number of bugs so far, maybe it would make sense to count
-transfer ring slots of the last completed TD as still "in use" until
-the next TD is known to at least begin executing.
-
-Unfortunately, "quarantining" URB data buffers in similar manner would
-be harder AFAIK.
-
-I recently found one more bug of this kind: the Etron EJ168 controller
-produces two events for failed single-TRB isochronous IN transfers -
-one event indicating the failure, and then a "success". The full extent
-of the bug (does it affect OUT or non-isoch, what happens on multi-TRB)
-is unknown because the controller is very prone to crashing under my
-workloads, which doesn't help debugging.
-
-Regards,
-Michal
 
