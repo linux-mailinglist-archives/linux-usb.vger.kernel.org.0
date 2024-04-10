@@ -1,205 +1,167 @@
-Return-Path: <linux-usb+bounces-9223-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9224-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A7E9F89F3AF
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Apr 2024 15:08:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4586389FD73
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Apr 2024 18:53:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BD042B29471
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Apr 2024 13:08:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 008F2286B67
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Apr 2024 16:53:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 164CC15D5CE;
-	Wed, 10 Apr 2024 13:08:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E81317B513;
+	Wed, 10 Apr 2024 16:53:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hxXs8VVu"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M0LhBut/"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2E5369DF4
-	for <linux-usb@vger.kernel.org>; Wed, 10 Apr 2024 13:08:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7858517B501;
+	Wed, 10 Apr 2024 16:52:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712754488; cv=none; b=Bkl6hWs6j9Yq0q54EJljW7rkv8rD3uCpOVQKe0FTwr6vlpUl3La8jzyeJNGUV5iFCSvG4Dh7ESLkfMNkzV/z5985KwYf3q9lMqt5zoVYev7oPT4tWO3l4jn5r5QJK6TqUmKaWpAboOah3ZZizVVo+mmLIwXL6nSo6SWtDxxBUEU=
+	t=1712767980; cv=none; b=G12Thz0FD/hvuGh93hoRb4hYNbMw1pxSCKbadkTs5CfeYJPSsxZBuzd6gq8OS24CdKvdiKJqWjCeLQj8l9YIm5z/Cp015aB+s2L4VHxtaj00HBCb9IZ6d/S1xHu9DPRlnnapMki+Ep1WggoPT1r5/Ezozs2lyEpNGYmN/QZLQxA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712754488; c=relaxed/simple;
-	bh=KoPJT4VMIe9JUf+3egOVRd6FIPWgCunxnHlwllw9JK4=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=VpxB5phpArdWK476d3t3d1BAcJRSBiWrbh5S0Wdj8/BB1Klx+QKe1HpYjmVH6bqKMEwn71gCbX42r+gHhVlmpcfFR5muAKGE93YS9H1KRMQoMnQ3PyCRy+eriBcGtW2zAw1yDn+sMyPxrzFBq+xxf//94UBGWb3DU7FpT5lgD2s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hxXs8VVu; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712754487; x=1744290487;
-  h=date:from:to:cc:subject:message-id;
-  bh=KoPJT4VMIe9JUf+3egOVRd6FIPWgCunxnHlwllw9JK4=;
-  b=hxXs8VVuhHLsqUMq3BfaPtam6mLdlU0d4ddkT4C9S+ESwxeqkXV8GvBv
-   5DR4Oj1Zvr3HNrE1d5RT5Y0SiIGLHG+4XOfWTNWxTGtEKVXkKj3IQWTw6
-   69ATEb5shXjILBoX8va2OoneEf1xp1ev7LW+/T7F4En8U74cBM+D+Cj5M
-   o4UJnp/tEifYqXLb89xocLXZtP+PbNl9vg/y0aDcfv4vB9gZnkBDauppI
-   vrnWN8ZnbSSL61Co40PfEKg36KqeukA+/pG+DA05CIasbBx1NXRUGi3ZK
-   5SRypiCuu1lv9u4RfBYO3wHsVpN874fFZ3rgwLH0UyIaFKL0nB44mOi1T
-   A==;
-X-CSE-ConnectionGUID: fQcQtkf/SHyHX0slhnW0fg==
-X-CSE-MsgGUID: 0DxJKHUKRUCafkVeCF0Odw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11039"; a="8684851"
-X-IronPort-AV: E=Sophos;i="6.07,190,1708416000"; 
-   d="scan'208";a="8684851"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2024 06:08:06 -0700
-X-CSE-ConnectionGUID: cm6mgo6cQC+jIHgwsAhzpg==
-X-CSE-MsgGUID: +pSjU18pTRCXy2yP9LdNUA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,190,1708416000"; 
-   d="scan'208";a="25329514"
-Received: from lkp-server01.sh.intel.com (HELO e61807b1d151) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 10 Apr 2024 06:08:05 -0700
-Received: from kbuild by e61807b1d151 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ruXgI-0007R9-2o;
-	Wed, 10 Apr 2024 13:08:02 +0000
-Date: Wed, 10 Apr 2024 21:07:24 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- 1a395af9d53c6240bf7799abc43b4dc292ca9dd0
-Message-ID: <202404102122.atbVKRxn-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1712767980; c=relaxed/simple;
+	bh=fK29KdVynk9C7SWeqbVe0dVCapcWLfjSXa++Xi1xlqw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Q6FG0Cj/8it4wotvXKzwSUbRfHf67QhhmwOTa0KyYku+/LgVhI9UUXvBU06D9/Zf023x94pB6GFg36789/WgDvupGLYwwQgfVxX0kxXcs9lmTSJMzsxiPDuyQSlsCDJPIrU9Fetsrg0ijFrp7Bfsuynrm3wTyu1R9yZnqkTOb2w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M0LhBut/; arc=none smtp.client-ip=209.85.210.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-6ecfeefe94cso27413b3a.0;
+        Wed, 10 Apr 2024 09:52:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712767977; x=1713372777; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5R/StqwNvnLNfNHVrdYriOCSIktxINMdwb5WzUGl08E=;
+        b=M0LhBut/Z7lDHGEewsBXdEzEou8VY1NcZzbrdNd/GdOnerZWTF6N7cebFIBOVP6yGs
+         IH9BK5IF7Upxeja6VfdiXiZNOOvm8Dh+MxIrpU0RTSi8jL9nnH+SmPVUnSROvuGnFgXd
+         Ydt2mQ4hNh7KcbzlxyvC8p6aXS02jeQ9eMQtcDvrRSuLNFq94hx9+qc6m29D8CPkIy1H
+         spxU+vnt5t10e1Oo4apWystM6F3FQ9CwcS9ZyJygg5Z5W+lliJJm6pHhdmd3PZM1O7F4
+         N6VDapvgEbJ4c2EBc7+ZcoIqfSFunz6mvg/gjQkNriVF2f4GgDRpqTMJctvWfW3YCEL3
+         Cbmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712767977; x=1713372777;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5R/StqwNvnLNfNHVrdYriOCSIktxINMdwb5WzUGl08E=;
+        b=mUMCvMPS8fCV39YdLm3mx9/Cl0du0t2hmUMecX+mWmJe0bFdf+0SPOOia9tSP0jaGw
+         dtFQRxn5uE/z45QyeJv4nQup1rtxatJL/EEMPSm8Wz835dLcMg3DhZP9HaJa4p3BoGBm
+         rZVq90M1CxF3qyh9Bckt+lNyFkKeymtso9JwlfH+eZPIWfxioPwzoKsih56H7Uf8BgCK
+         k4w0PIRCyBtOpb8z8F5h4b8CNvyXWF6jZmSadYiZ/M2Y/CkI+WP9FARu/vy3JXsx3EcP
+         dXI5POmVipPj6aLwj/90PHq4cTeypzaVwhV00yjJNxR3XSPSiK7f9KZph17idHO7Kcv+
+         FvVg==
+X-Forwarded-Encrypted: i=1; AJvYcCWB2zVt9NRX0+5+px0OnZkwKtXt+mrzkrpwLw1BjDoPYsxyUv9cIjUUtHKWoTXuIKaLMZOvVpmn1y/rJf5qazzy38+gKHDeV6Q+bIi6+4qxqV0jeTrS4YXl1UWObuuox4IZ3HJEv3xF
+X-Gm-Message-State: AOJu0Yw3eORGruytIT/p0fMa84kERp4IA76NtQBrK8MDaUndSpOkiYfe
+	wLZbOYArMSVCzTEHc9CRj3DDXeYQIZf+p62jN+j0gZELM2vXlrPn
+X-Google-Smtp-Source: AGHT+IGcx6aUAQtFgOSPaMf0SHayjy6jPe5cMIV0GuzAty9GvNNAwtcqMy76BcK+Kd+Xg0eItUVhgg==
+X-Received: by 2002:a05:6a20:f392:b0:1a7:9e84:dc51 with SMTP id qr18-20020a056a20f39200b001a79e84dc51mr270051pzb.7.1712767976602;
+        Wed, 10 Apr 2024 09:52:56 -0700 (PDT)
+Received: from dev.. ([2402:e280:214c:86:a922:cbeb:dc9d:2266])
+        by smtp.gmail.com with ESMTPSA id d6-20020a63fd06000000b005dc4806ad7dsm10235330pgh.40.2024.04.10.09.52.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Apr 2024 09:52:56 -0700 (PDT)
+From: R SUNDAR <prosunofficial@gmail.com>
+To: heikki.krogerus@linux.intel.com,
+	gregkh@linuxfoundation.org,
+	dmitry.baryshkov@linaro.org,
+	neil.armstrong@linaro.org,
+	christophe.jaillet@wanadoo.fr,
+	u.kleine-koenig@pengutronix.de
+Cc: skhan@linuxfoundation.org,
+	javier.carrasco.cruz@gmail.com,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	R SUNDAR <prosunofficial@gmail.com>,
+	Julia Lawall <julia.lawall@inria.fr>
+Subject: [PATCH] usb: typec: mux: replace of_node_put() with __free [linux-next]
+Date: Wed, 10 Apr 2024 22:22:22 +0530
+Message-Id: <20240410165222.5192-1-prosunofficial@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: 1a395af9d53c6240bf7799abc43b4dc292ca9dd0  usb: typec: ucsi_glink: drop special handling for CCI_BUSY
+use the new cleanup magic to replace of_node_put() with
+__free(device_node) marking to auto release and to simplify the error
+paths.
 
-elapsed time: 1281m
+Suggested-by: Julia Lawall <julia.lawall@inria.fr>
+Signed-off-by: R SUNDAR <prosunofficial@gmail.com>
+---
+ drivers/usb/typec/mux/nb7vpq904m.c | 25 ++++++++-----------------
+ 1 file changed, 8 insertions(+), 17 deletions(-)
 
-configs tested: 112
-configs skipped: 3
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   clang
-arm                              allyesconfig   gcc  
-arm                                 defconfig   clang
-arm64                            allmodconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                            allyesconfig   clang
-arm64                               defconfig   gcc  
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-hexagon                          allmodconfig   clang
-hexagon                           allnoconfig   clang
-hexagon                          allyesconfig   clang
-hexagon                             defconfig   clang
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-001-20240410   gcc  
-i386         buildonly-randconfig-002-20240410   clang
-i386         buildonly-randconfig-003-20240410   clang
-i386         buildonly-randconfig-004-20240410   clang
-i386         buildonly-randconfig-005-20240410   gcc  
-i386         buildonly-randconfig-006-20240410   gcc  
-i386                                defconfig   clang
-i386                  randconfig-001-20240410   clang
-i386                  randconfig-002-20240410   clang
-i386                  randconfig-003-20240410   gcc  
-i386                  randconfig-004-20240410   gcc  
-i386                  randconfig-005-20240410   gcc  
-i386                  randconfig-006-20240410   clang
-i386                  randconfig-011-20240410   clang
-i386                  randconfig-012-20240410   clang
-i386                  randconfig-013-20240410   gcc  
-i386                  randconfig-014-20240410   clang
-i386                  randconfig-015-20240410   gcc  
-i386                  randconfig-016-20240410   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                        allyesconfig   gcc  
-loongarch                           defconfig   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-openrisc                         allmodconfig   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   clang
-riscv                            allmodconfig   clang
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   clang
-riscv                               defconfig   clang
-s390                             allmodconfig   clang
-s390                              allnoconfig   clang
-s390                             allyesconfig   gcc  
-s390                                defconfig   clang
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   gcc  
-um                                  defconfig   clang
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   clang
-x86_64                            allnoconfig   clang
-x86_64                           allyesconfig   clang
-x86_64                              defconfig   gcc  
-x86_64                           rhel-8.3-bpf   gcc  
-x86_64                          rhel-8.3-func   gcc  
-x86_64                    rhel-8.3-kselftests   gcc  
-x86_64                         rhel-8.3-kunit   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa                            allnoconfig   gcc  
-xtensa                           allyesconfig   gcc  
-
+diff --git a/drivers/usb/typec/mux/nb7vpq904m.c b/drivers/usb/typec/mux/nb7vpq904m.c
+index b17826713753..72ec9ef3ac58 100644
+--- a/drivers/usb/typec/mux/nb7vpq904m.c
++++ b/drivers/usb/typec/mux/nb7vpq904m.c
+@@ -315,29 +315,27 @@ static const int supported_data_lane_mapping[][DATA_LANES_COUNT] = {
+ 
+ static int nb7vpq904m_parse_data_lanes_mapping(struct nb7vpq904m *nb7)
+ {
+-	struct device_node *ep;
+ 	u32 data_lanes[4];
+ 	int ret, i, j;
+-
+-	ep = of_graph_get_endpoint_by_regs(nb7->client->dev.of_node, 1, 0);
++	struct device_node *ep __free(device_node) =
++		of_graph_get_endpoint_by_regs(nb7->client->dev.of_node, 1, 0);
+ 
+ 	if (ep) {
+ 		ret = of_property_count_u32_elems(ep, "data-lanes");
+ 		if (ret == -EINVAL)
+ 			/* Property isn't here, consider default mapping */
+-			goto out_done;
++			return 0;
+ 		if (ret < 0)
+-			goto out_error;
++			return ret;
+ 
+ 		if (ret != DATA_LANES_COUNT) {
+ 			dev_err(&nb7->client->dev, "expected 4 data lanes\n");
+-			ret = -EINVAL;
+-			goto out_error;
++			return -EINVAL;
+ 		}
+ 
+ 		ret = of_property_read_u32_array(ep, "data-lanes", data_lanes, DATA_LANES_COUNT);
+ 		if (ret)
+-			goto out_error;
++			return ret;
+ 
+ 		for (i = 0; i < ARRAY_SIZE(supported_data_lane_mapping); i++) {
+ 			for (j = 0; j < DATA_LANES_COUNT; j++) {
+@@ -358,18 +356,11 @@ static int nb7vpq904m_parse_data_lanes_mapping(struct nb7vpq904m *nb7)
+ 			break;
+ 		default:
+ 			dev_err(&nb7->client->dev, "invalid data lanes mapping\n");
+-			ret = -EINVAL;
+-			goto out_error;
++			return -EINVAL;
+ 		}
+ 	}
+ 
+-out_done:
+-	ret = 0;
+-
+-out_error:
+-	of_node_put(ep);
+-
+-	return ret;
++	return 0;
+ }
+ 
+ static int nb7vpq904m_probe(struct i2c_client *client)
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.34.1
+
 
