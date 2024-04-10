@@ -1,154 +1,98 @@
-Return-Path: <linux-usb+bounces-9212-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9213-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0AA8E89EC63
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Apr 2024 09:41:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4A6789ECBA
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Apr 2024 09:53:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 913A5B2370F
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Apr 2024 07:41:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 11E371C20F7C
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Apr 2024 07:53:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B178D13D287;
-	Wed, 10 Apr 2024 07:41:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAFE013D501;
+	Wed, 10 Apr 2024 07:53:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jxj2FA5V"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from cae.in-ulm.de (cae.in-ulm.de [217.10.14.231])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16B2E53E00;
-	Wed, 10 Apr 2024 07:41:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.10.14.231
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2643213C904
+	for <linux-usb@vger.kernel.org>; Wed, 10 Apr 2024 07:53:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712734905; cv=none; b=quOLI4Pxdyp6IpSzpqWTlLKWoZYiAFjoBgA+kGh5LfcdA1PDu6MX/wI80wxA9/WpAHWKOQayap4eTS2iQb6DU6QlIV/peAmgvPm28s0uuJD2RWkigoH3a8BIu+2Jqr5psUElEv+Bn1oXXqjyoaBBvzTj0m8wKC5wbPWgFPPv7cI=
+	t=1712735614; cv=none; b=Q/od+rnFbAo55NrYajJ9JSUSzlzJUBL3mWfyKER5KppdYHRoB/NJYN9GBWz2alVq6gKoGtNckjsx9Na0G0vhQdaH1NKPToq7MH3BhpWm1WRPP7xYp8al/vR8K9drj58AoTEiCSBo+Wkmv1swyiU36EoBmJhf3ipY3DTcNiJWG/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712734905; c=relaxed/simple;
-	bh=kWiFrLwu4of9a6CZEkiRvrLXBxbvVCraLpNjKjlu+kA=;
+	s=arc-20240116; t=1712735614; c=relaxed/simple;
+	bh=c+beXtPMxxW9tQusZU+7EqzDUwvfnzbDCCUkQMVBo0g=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fECDYBk3IMdv2KX/yRHWpyLSigkGD+wiZhwPLrieQ0Hz6v9vLPkCCpv3McIMd4rTOuC9XK8LMHSeUvOegREAULwu/CyBZdzvAoyi8oVqWXrkG0iQNtyB8AHGtGVcgniemSddNkYtBsADFOsuT75rQuZ6PYVWoqb5f1t5R0zTTAE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c--e.de; spf=pass smtp.mailfrom=c--e.de; arc=none smtp.client-ip=217.10.14.231
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c--e.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=c--e.de
-Received: by cae.in-ulm.de (Postfix, from userid 1000)
-	id 28A9C140562; Wed, 10 Apr 2024 09:41:39 +0200 (CEST)
-Date: Wed, 10 Apr 2024 09:41:39 +0200
-From: "Christian A. Ehrhardt" <lk@c--e.de>
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] usb: typec: ucsi_glink: drop special handling for
- CCI_BUSY
-Message-ID: <ZhZCsyeXa093OZnR@cae.in-ulm.de>
-References: <20240409-qcom-ucsi-fixes-bis-v2-0-6d3a09faec90@linaro.org>
- <20240409-qcom-ucsi-fixes-bis-v2-3-6d3a09faec90@linaro.org>
- <ZhWWYQMluJCvYFKF@cae.in-ulm.de>
- <CAA8EJprTbtTSkZ18dejEgvhJOEQKQiwpE+6JkbHiO4H-yeKuhg@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=eXUso2/PNn5T4f72J49SoW0OOXKfbHMYyZgwbR/2MUbO0GLfX72IzzsPVS1jQH8q/v5Ioms145EH+bIevpu/4aEQEoxHuQDreELQXYy4Q4dol2yBxPvnBoPfinOuyHs3emScDGfRkXLaADu4RG4bws18xgjDLjIXWfjnJfiHd9U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jxj2FA5V; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1712735613; x=1744271613;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=c+beXtPMxxW9tQusZU+7EqzDUwvfnzbDCCUkQMVBo0g=;
+  b=jxj2FA5V0yl1FqkqvEsmdl5Xc6dhTAJGnZf6OoDdEupmvtedR5DwvY14
+   YRww9R+kOv5FSkWDHfot/OGZZ+VSWClDkmsyhuZ7ziakNEXT/PDd6bYlW
+   S4li/QH3R/xMGNe6+oczIUU/2opiD7OXjgWiYSOJgCUBVeEc9BlOSzSCg
+   t6jE05kARzK3kUq346yBkJDSZji40bmLoPee2+4V+Hkp7PqHT67czHa0N
+   /uCApXmCWH6SRUAkOP6NcLqnSc3m199XeiAN9ILKi/L+crL7+zqhUlhqk
+   fBIbntmoTE8MV1UrWyjHErmHy2jlkmgBY++onHEbCqogNIRla++ChWo8M
+   Q==;
+X-CSE-ConnectionGUID: IkPL8/QyQkybhKN8oFXEJw==
+X-CSE-MsgGUID: JMZ2SO2ISJWRbSoBkl+Gpg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11039"; a="18648001"
+X-IronPort-AV: E=Sophos;i="6.07,190,1708416000"; 
+   d="scan'208";a="18648001"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2024 00:53:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,11039"; a="937094666"
+X-IronPort-AV: E=Sophos;i="6.07,190,1708416000"; 
+   d="scan'208";a="937094666"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 10 Apr 2024 00:53:30 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id 8FF24169; Wed, 10 Apr 2024 10:53:29 +0300 (EEST)
+Date: Wed, 10 Apr 2024 10:53:29 +0300
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Michael Jamet <michael.jamet@intel.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Andreas Noever <andreas.noever@gmail.com>
+Cc: Gil Fine <gil.fine@linux.intel.com>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 1/2] thunderbolt: Fix wake configurations after device
+ unplug
+Message-ID: <20240410075329.GY112498@black.fi.intel.com>
+References: <20240408124803.12329-1-mika.westerberg@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAA8EJprTbtTSkZ18dejEgvhJOEQKQiwpE+6JkbHiO4H-yeKuhg@mail.gmail.com>
+In-Reply-To: <20240408124803.12329-1-mika.westerberg@linux.intel.com>
 
-
-Hi Dmitry,
-
-On Wed, Apr 10, 2024 at 01:58:58AM +0300, Dmitry Baryshkov wrote:
-> On Tue, 9 Apr 2024 at 22:26, Christian A. Ehrhardt <lk@c--e.de> wrote:
-> >
-> >
-> > Hi Dmitry,
-> >
-> > On Tue, Apr 09, 2024 at 06:29:18PM +0300, Dmitry Baryshkov wrote:
-> > > Newer Qualcomm platforms (sm8450+) successfully handle busy state and
-> > > send the Command Completion after sending the Busy state. Older devices
-> > > have firmware bug and can not continue after sending the CCI_BUSY state,
-> > > but the command that leads to CCI_BUSY is already forbidden by the
-> > > NO_PARTNER_PDOS quirk.
-> > >
-> > > Follow other UCSI glue drivers and drop special handling for CCI_BUSY
-> > > event. Let the UCSI core properly handle this state.
-> > >
-> > > Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > > ---
-> > >  drivers/usb/typec/ucsi/ucsi_glink.c | 10 ++++------
-> > >  1 file changed, 4 insertions(+), 6 deletions(-)
-> > >
-> > > diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c b/drivers/usb/typec/ucsi/ucsi_glink.c
-> > > index 9ffea20020e7..fe9b951f5228 100644
-> > > --- a/drivers/usb/typec/ucsi/ucsi_glink.c
-> > > +++ b/drivers/usb/typec/ucsi/ucsi_glink.c
-> > > @@ -176,7 +176,8 @@ static int pmic_glink_ucsi_sync_write(struct ucsi *__ucsi, unsigned int offset,
-> > >       left = wait_for_completion_timeout(&ucsi->sync_ack, 5 * HZ);
-> > >       if (!left) {
-> > >               dev_err(ucsi->dev, "timeout waiting for UCSI sync write response\n");
-> > > -             ret = -ETIMEDOUT;
-> > > +             /* return 0 here and let core UCSI code handle the CCI_BUSY */
-> > > +             ret = 0;
-> > >       } else if (ucsi->sync_val) {
-> > >               dev_err(ucsi->dev, "sync write returned: %d\n", ucsi->sync_val);
-> > >       }
-> > > @@ -243,11 +244,8 @@ static void pmic_glink_ucsi_notify(struct work_struct *work)
-> > >               ucsi_connector_change(ucsi->ucsi, con_num);
-> > >       }
-> > >
-> > > -     if (ucsi->sync_pending && cci & UCSI_CCI_BUSY) {
-> > > -             ucsi->sync_val = -EBUSY;
-> > > -             complete(&ucsi->sync_ack);
-> > > -     } else if (ucsi->sync_pending &&
-> > > -                (cci & (UCSI_CCI_ACK_COMPLETE | UCSI_CCI_COMMAND_COMPLETE))) {
-> > > +     if (ucsi->sync_pending &&
-> > > +         (cci & (UCSI_CCI_ACK_COMPLETE | UCSI_CCI_COMMAND_COMPLETE))) {
-> > >               complete(&ucsi->sync_ack);
-> > >       }
-> > >  }
-> >
-> > This handling of the command completion turned out to be racy in
-> > the ACPI case: If a normal command was sent one should wait for
-> > UCSI_CCI_COMMAND_COMPLETE only. In case of an UCSI_ACK_CC_CI
-> > command the completion is indicated by UCSI_CCI_ACK_COMPLETE.
-> >
-> > While not directly related, a port of this
-> >     https://lore.kernel.org/all/20240121204123.275441-3-lk@c--e.de/
-> > would nicely fit into this series.
+On Mon, Apr 08, 2024 at 03:48:02PM +0300, Mika Westerberg wrote:
+> From: Gil Fine <gil.fine@linux.intel.com>
 > 
-> Ack, I'll take a look.
+> Currently we don't configure correctly the wake events after unplug of device
+> router. What can happen is that the downstream ports of host router will be
+> configured to wake on: USB4-wake and wake-on-disconnect, but not on
+> wake-on-connect. This may cause the later plugged device not to wake the
+> domain and fail in enumeration. Fix this by clearing downstream port's "USB4
+> Port is Configured" bit, after unplug of a device router.
+> 
+> Signed-off-by: Gil Fine <gil.fine@linux.intel.com>
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 
-Thanks.
-
-> However... I can not stop but notice that CCG and STM32 glue drivers
-> use the same old approach as we do. Which probably means that they
-> might have the same issue.
-
-I did ping the ccg people wrt. this but they have a different
-workaround that saves them at least most of the time, so I let
-this drop.
-
-> Could you please consider pulling up that
-> code into the UCSI driver? Maybe the low-level code really should just
-> read/write the messages, leaving all completions and CCI parsing to
-> the core layer?
-
-I did consider that but one of the ideas behind the new API for
-UCSI backends was that backends can send commands (e.g. as part of
-a quirk) even in the middle of a ->sync_write() call. Currently,
-I don't really see how to combine this with completion handling
-in the UCSI core.
-
-> > I don't have the hardware to do this myself.
-
-I did propose other changes to the API with little respone here:
-    https://lore.kernel.org/all/20240218222039.822040-1-lk@c--e.de/
-That could possibly be extended to achieve this. But again, that
-would require testers for all the backends.
-
-
-Best regards,
-Christian
-
+Both applied to thunderbolt.git/fixes.
 
