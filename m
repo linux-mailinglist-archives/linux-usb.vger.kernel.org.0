@@ -1,235 +1,236 @@
-Return-Path: <linux-usb+bounces-9205-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9206-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9B7889E8DB
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Apr 2024 06:28:18 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB7B589E920
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Apr 2024 06:41:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7585C1F26186
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Apr 2024 04:28:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6FD9A283086
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Apr 2024 04:41:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A563D30B;
-	Wed, 10 Apr 2024 04:28:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C1A010A3B;
+	Wed, 10 Apr 2024 04:41:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="hIHHOS9H"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BE6EC133;
-	Wed, 10 Apr 2024 04:28:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.95.11.211
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FD5BC8E0;
+	Wed, 10 Apr 2024 04:41:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712723288; cv=none; b=fqIn1HYnMbyEiqPDZEuOpJ8uWacdYOPDu1KyaZSvI9jUOJQdnSO85zET5fQlt/hz9i85e2GjRn60x7LCfJWjvkRC/7w6EiBe6bmt1xdmrKixF49u3+hT7t/UyZbYyuUSAniv/IsPf+O5Pz/FOmhE8Ehex3zWS8WH1AB+l+cF4dw=
+	t=1712724079; cv=none; b=Wsyk5qWG8Vk4+k3+J8/pM5R5NS6kIc9OWZmL6Ry9TpHoYP/Ud+0akN3h/50N3YJ+ZRMYUD0Fs1MYjX+homH9zr8XTWcYhB/5pL7AdmmTUhlIp62TEtKr9cb92AFexcUZJMOcXV7pMEnAyr6NxS+lFzG5p8SwdgDL1kcGO58cZRY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712723288; c=relaxed/simple;
-	bh=z/jqM+Nozr12l0j3GTGXAPcnX631MSpZSqli2WsZ0bQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JhIYlfRq2mjOJufTUI7K+JCIYIjO0CJC/6M+/4Hva69VvB2Dz9r28Klyk4Oce0LX3SbMUvG43uA/EERcFDMZU1cPpryw+IVH7PzjK8CGjguRPtO6COtgpoRc0dQ4JRL5qYBwVbVh3bybui50fMpueV0rCzf2ggG37LGE0VNVeUU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de; spf=pass smtp.mailfrom=lst.de; arc=none smtp.client-ip=213.95.11.211
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lst.de
-Received: by verein.lst.de (Postfix, from userid 2407)
-	id B385B68BEB; Wed, 10 Apr 2024 06:27:59 +0200 (CEST)
-Date: Wed, 10 Apr 2024 06:27:59 +0200
-From: Christoph Hellwig <hch@lst.de>
-To: Jens Axboe <axboe@kernel.dk>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: Damien Le Moal <dlemoal@kernel.org>, Niklas Cassel <cassel@kernel.org>,
-	Takashi Sakamoto <o-takashi@sakamocchi.jp>,
-	Sathya Prakash <sathya.prakash@broadcom.com>,
-	Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-	Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>,
-	"Juergen E. Fischer" <fischer@norbit.de>,
-	Xiang Chen <chenxiang66@hisilicon.com>,
-	HighPoint Linux Team <linux@highpoint-tech.com>,
-	Tyrel Datwyler <tyreld@linux.ibm.com>,
-	Brian King <brking@us.ibm.com>, Lee Duncan <lduncan@suse.com>,
-	Chris Leech <cleech@redhat.com>,
-	Mike Christie <michael.christie@oracle.com>,
-	John Garry <john.g.garry@oracle.com>,
-	Jason Yan <yanaijie@huawei.com>,
-	Kashyap Desai <kashyap.desai@broadcom.com>,
-	Sumit Saxena <sumit.saxena@broadcom.com>,
-	Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
-	Chandrakanth patil <chandrakanth.patil@broadcom.com>,
-	Jack Wang <jinpu.wang@cloud.ionos.com>,
-	Nilesh Javali <njavali@marvell.com>,
-	GR-QLogic-Storage-Upstream@marvell.com,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Avri Altman <avri.altman@wdc.com>,
-	Bart Van Assche <bvanassche@acm.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Alan Stern <stern@rowland.harvard.edu>, linux-block@vger.kernel.org,
-	linux-ide@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
-	MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
-	megaraidlinux.pdl@broadcom.com, mpi3mr-linuxdrv.pdl@broadcom.com,
-	linux-samsung-soc@vger.kernel.org, linux-usb@vger.kernel.org,
-	usb-storage@lists.one-eyed-alien.net,
-	Hannes Reinecke <hare@suse.de>
-Subject: [PATCH 21/23 v3.1] mpi3mr: switch to using ->device_configure
-Message-ID: <20240410042759.GA2637@lst.de>
-References: <20240409143748.980206-1-hch@lst.de> <20240409143748.980206-22-hch@lst.de>
+	s=arc-20240116; t=1712724079; c=relaxed/simple;
+	bh=CvANhkT3bjU8SGaWUSOMNC3pInbPa0QZUBUNA+Qsi5I=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=reK4I6KMmmh66XZM6MaxZoozsi3LBf9QbHwQoJAyho0yv20LdaJGIShaR5BzEY4XaISD1iMESJDTKW0MX1czhwVicPn5Dz2dZGV3N2kyoj3fU67d8fOv14mJ6MmGK6euePxmYi0fXr483L1VEX96SeGl+NxVF+O4KNauX1iEK98=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=hIHHOS9H; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 43A3VNlw031961;
+	Wed, 10 Apr 2024 04:41:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=vJX8hXgmI1cP9JeYXDNUwqcy/x7F81wYrlGr7moQXUA=; b=hI
+	HHOS9HM6rxBD1rl75le+W0C4UZfPIzHVPfwv2q9aqatEFsOU60I7ybphe+cjJcGw
+	8PKJMfzLuokD5b+HmFxoLj1GKVUQdFXns2Z+w5rXazHrfJJYJTKZ3CXWQZbCTlfi
+	/pyYC/0Kj4GIGLIjCxRrV/Xs842wCWsAvZ05e6W16tH827CTfnIOsfHjBeIg8oqG
+	1nGwtWvhHJby8dwu65d/CdDFjGch6hkTMEH7ZSxq04Kh5XkE3xUT0DuX9rQzfl/U
+	sguyVWSLpMuUgWXh/15PQT6Yivb/dAg9IsxPxlC1ZllI3zQX1JYGmw+buq0UUR2D
+	DNlN6eCocMueQqE3Clug==
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xdjxh8axt-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 10 Apr 2024 04:41:04 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 43A4f3hH008190
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 10 Apr 2024 04:41:03 GMT
+Received: from [10.216.60.187] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Tue, 9 Apr 2024
+ 21:40:57 -0700
+Message-ID: <60e569d7-0d63-4b62-b666-1dd7919c8af2@quicinc.com>
+Date: Wed, 10 Apr 2024 10:10:54 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240409143748.980206-22-hch@lst.de>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v20 4/9] usb: dwc3: core: Refactor PHY logic to support
+ Multiport Controller
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring
+	<robh@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
+        Wesley Cheng
+	<quic_wcheng@quicinc.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "Greg
+ Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Conor Dooley
+	<conor+dt@kernel.org>, Felipe Balbi <balbi@kernel.org>,
+        Johan Hovold
+	<johan@kernel.org>,
+        "devicetree@vger.kernel.org"
+	<devicetree@vger.kernel.org>,
+        "linux-arm-msm@vger.kernel.org"
+	<linux-arm-msm@vger.kernel.org>,
+        "linux-usb@vger.kernel.org"
+	<linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>,
+        "quic_ppratap@quicinc.com"
+	<quic_ppratap@quicinc.com>,
+        "quic_jackp@quicinc.com"
+	<quic_jackp@quicinc.com>,
+        Johan Hovold <johan+linaro@kernel.org>
+References: <20240408132925.1880571-1-quic_kriskura@quicinc.com>
+ <20240408132925.1880571-5-quic_kriskura@quicinc.com>
+ <20240409011046.zgjqvhewldch3snu@synopsys.com>
+ <3ab9badd-2cf6-4fe0-aaf0-d08614418968@quicinc.com>
+ <20240409181342.wmjvi6rwtxphnv3z@synopsys.com>
+Content-Language: en-US
+From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <20240409181342.wmjvi6rwtxphnv3z@synopsys.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: d1lbR0JK5Ly33FsAvkn7ErNTNFCqjUpY
+X-Proofpoint-GUID: d1lbR0JK5Ly33FsAvkn7ErNTNFCqjUpY
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-04-09_12,2024-04-09_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1015
+ suspectscore=0 priorityscore=1501 impostorscore=0 malwarescore=0
+ spamscore=0 mlxscore=0 bulkscore=0 mlxlogscore=999 lowpriorityscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2404010003 definitions=main-2404100032
 
-Switch to the ->device_configure method instead of ->slave_configure
-and update the block limits on the passed in queue_limits instead
-of using the per-limit accessors.
 
-Note that mpi3mr also updates the limits from an event handler that
-iterates all SCSI devices.  This is also updated to use the
-queue_limits, but the complete locking of this path probably means
-it already is completely broken and needs a proper audit.
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
-Reviewed-by: Damien Le Moal <dlemoal@kernel.org>
-Reviewed-by: Hannes Reinecke <hare@suse.de>
----
+On 4/9/2024 11:43 PM, Thinh Nguyen wrote:
+> On Tue, Apr 09, 2024, Krishna Kurapati PSSNV wrote:
+>>
+>>
+>> On 4/9/2024 6:41 AM, Thinh Nguyen wrote:
+>>> On Mon, Apr 08, 2024, Krishna Kurapati wrote:
+>>>> Currently the DWC3 driver supports only single port controller
+>>>> which requires at least one HS PHY and at most one SS PHY.
+>>>>
+>>>> But the DWC3 USB controller can be connected to multiple ports and
+>>>> each port can have their own PHYs. Each port of the multiport
+>>>> controller can either be HS+SS capable or HS only capable
+>>>> Proper quantification of them is required to modify GUSB2PHYCFG
+>>>> and GUSB3PIPECTL registers appropriately.
+>>>>
+>>>> Add support for detecting, obtaining and configuring PHYs supported
+>>>> by a multiport controller. Limit support to multiport controllers
+>>>> with up to four ports for now (e.g. as needed for SC8280XP).
+>>>>
+>>>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+>>>> Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
+>>>> ---
+>>>>    drivers/usb/dwc3/core.c | 251 ++++++++++++++++++++++++++++------------
+>>>>    drivers/usb/dwc3/core.h |  14 ++-
+>>>>    drivers/usb/dwc3/drd.c  |  15 ++-
+>>>>    3 files changed, 193 insertions(+), 87 deletions(-)
+>>>>
+>>>
+>>> <snip>
+>>>
+>>>> @@ -1937,6 +2020,10 @@ static int dwc3_get_num_ports(struct dwc3 *dwc)
+>>>>    	iounmap(base);
+>>>> +	if (dwc->num_usb2_ports > DWC3_MAX_PORTS ||
+>>>> +	    dwc->num_usb3_ports > DWC3_MAX_PORTS)
+>>>> +		return -ENOMEM;
+>>>
+>>> This should be -EINVAL.
+>>>
+>>>> +
+>>>>    	return 0;
+>>>>    }
+>>>
+>>> <snip>
+>>>
+>>>> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+>>>> index 341e4c73cb2e..df2e111aa848 100644
+>>>> --- a/drivers/usb/dwc3/core.h
+>>>> +++ b/drivers/usb/dwc3/core.h
+>>>> @@ -33,6 +33,12 @@
+>>>>    #include <linux/power_supply.h>
+>>>> +/*
+>>>> + * Maximum number of ports currently supported for multiport
+>>>> + * controllers.
+>>>
+>>> This macro here is being used per USB2 vs USB3 ports rather than USB2 +
+>>> USB3, unlike the xHCI MAXPORTS. You can clarify in the comment and
+>>> rename the macro to avoid any confusion. You can also create 2 separate
+>>> macros for number of USB2 and USB3 ports even if they share the same
+>>> value.
+>>>
+>>> As noted[*], we support have different max number of usb2 ports vs usb3
+>>> ports. I would suggest splitting the macros.
+>>>
+>>
+>> Hi Thinh,
+>>
+>>   This macro was intended only to identify how many USB2 (or USB3) Phy's were
+>> serviced/operated by this driver, not how many logical ports present (like
+> 
+> That's not what you described in the comment right above the macro...
+> 
+>> in xHCI). I don't think it would be confusing currently given that it is
+>> only used to identify number of generic phy instances to allocate and not
+>> used for any other purpose. Once the num_usb2_ports and num_usb3_ports are
+>> read by get_num_ports(...) call, they directly indicate how many ports are
+> 
+> Those fields are clear. But for DWC3_MAX_PORTS, based on the name and
+> comment of the macro, it's not clear.
+> 
+>> HS and SS respectively. Keeping the same in mind, I returned ENOMEM above
+>> (as you mentioned) because we don't allocate more than DWC3_MAX_PORTS and if
+>> the number of hs or ss ports is more than that, we simply return ENOMEM
+>> saying the driver doesn't support operating those many phy's.
+> 
+> The error code -ENOMEM indicates out of memory failure. The check
+> condition dwc->num_usb2_ports > DWC3_MAX_PORTS indicates invalid config.
+> There's no allocation in that check.
+> 
+>>
+>>> [*] https://urldefense.com/v3/__https://lore.kernel.org/linux-usb/20230801013031.ft3zpoatiyfegmh6@synopsys.com/__;!!A4F2R9G_pg!azHqgm92ENkFQrpv6Fhs6PCe210VGOAIrsuGFhrgmfaor8N_kWLu6rxkPpbeCBTLL4NbUpOWlQ0ufmP9DFwO9iFc0XdSEg$
+>>>
+>>>> + */
+>>>> +#define DWC3_MAX_PORTS 4
+>>>> +
+>>>>
+>>>
+>>> But it's not a big issue whether you decided to push a new version or a
+>>> create a separate patch for the comments above. Here's my Ack:
+>>>
+>>
+>> Since this is not a bug, I would prefer to make a separate patch to rename
+>> the macros. (If that is fine).
+>>
+> 
+> That is fine with me. Thanks for your effort pursuing and continue
+> working on this series.
+> 
 
-Changes since v3:
-  - fіx a mismerge in the last rebase
+Thanks Thinh. If there are no other issues, I will wait till Greg picks 
+the series up. Thanks for the reviews throughout the series.
 
- drivers/scsi/mpi3mr/mpi3mr_os.c | 73 ++++++++++++++-------------------
- 1 file changed, 30 insertions(+), 43 deletions(-)
-
-diff --git a/drivers/scsi/mpi3mr/mpi3mr_os.c b/drivers/scsi/mpi3mr/mpi3mr_os.c
-index 5f975e0db38831..71f2c62db11174 100644
---- a/drivers/scsi/mpi3mr/mpi3mr_os.c
-+++ b/drivers/scsi/mpi3mr/mpi3mr_os.c
-@@ -986,6 +986,25 @@ static int mpi3mr_change_queue_depth(struct scsi_device *sdev,
- 	return retval;
- }
- 
-+static void mpi3mr_configure_nvme_dev(struct mpi3mr_tgt_dev *tgt_dev,
-+		struct queue_limits *lim)
-+{
-+	u8 pgsz = tgt_dev->dev_spec.pcie_inf.pgsz ? : MPI3MR_DEFAULT_PGSZEXP;
-+
-+	lim->max_hw_sectors = tgt_dev->dev_spec.pcie_inf.mdts / 512;
-+	lim->virt_boundary_mask = (1 << pgsz) - 1;
-+}
-+
-+static void mpi3mr_configure_tgt_dev(struct mpi3mr_tgt_dev *tgt_dev,
-+		struct queue_limits *lim)
-+{
-+	if (tgt_dev->dev_type == MPI3_DEVICE_DEVFORM_PCIE &&
-+	    (tgt_dev->dev_spec.pcie_inf.dev_info &
-+	     MPI3_DEVICE0_PCIE_DEVICE_INFO_TYPE_MASK) ==
-+			MPI3_DEVICE0_PCIE_DEVICE_INFO_TYPE_NVME_DEVICE)
-+		mpi3mr_configure_nvme_dev(tgt_dev, lim);
-+}
-+
- /**
-  * mpi3mr_update_sdev - Update SCSI device information
-  * @sdev: SCSI device reference
-@@ -1001,31 +1020,17 @@ static void
- mpi3mr_update_sdev(struct scsi_device *sdev, void *data)
- {
- 	struct mpi3mr_tgt_dev *tgtdev;
-+	struct queue_limits lim;
- 
- 	tgtdev = (struct mpi3mr_tgt_dev *)data;
- 	if (!tgtdev)
- 		return;
- 
- 	mpi3mr_change_queue_depth(sdev, tgtdev->q_depth);
--	switch (tgtdev->dev_type) {
--	case MPI3_DEVICE_DEVFORM_PCIE:
--		/*The block layer hw sector size = 512*/
--		if ((tgtdev->dev_spec.pcie_inf.dev_info &
--		    MPI3_DEVICE0_PCIE_DEVICE_INFO_TYPE_MASK) ==
--		    MPI3_DEVICE0_PCIE_DEVICE_INFO_TYPE_NVME_DEVICE) {
--			blk_queue_max_hw_sectors(sdev->request_queue,
--			    tgtdev->dev_spec.pcie_inf.mdts / 512);
--			if (tgtdev->dev_spec.pcie_inf.pgsz == 0)
--				blk_queue_virt_boundary(sdev->request_queue,
--				    ((1 << MPI3MR_DEFAULT_PGSZEXP) - 1));
--			else
--				blk_queue_virt_boundary(sdev->request_queue,
--				    ((1 << tgtdev->dev_spec.pcie_inf.pgsz) - 1));
--		}
--		break;
--	default:
--		break;
--	}
-+
-+	lim = queue_limits_start_update(sdev->request_queue);
-+	mpi3mr_configure_tgt_dev(tgtdev, &lim);
-+	WARN_ON_ONCE(queue_limits_commit_update(sdev->request_queue, &lim));
- }
- 
- /**
-@@ -4393,15 +4398,17 @@ static void mpi3mr_target_destroy(struct scsi_target *starget)
- }
- 
- /**
-- * mpi3mr_slave_configure - Slave configure callback handler
-+ * mpi3mr_device_configure - Slave configure callback handler
-  * @sdev: SCSI device reference
-+ * @lim: queue limits
-  *
-  * Configure queue depth, max hardware sectors and virt boundary
-  * as required
-  *
-  * Return: 0 always.
-  */
--static int mpi3mr_slave_configure(struct scsi_device *sdev)
-+static int mpi3mr_device_configure(struct scsi_device *sdev,
-+		struct queue_limits *lim)
- {
- 	struct scsi_target *starget;
- 	struct Scsi_Host *shost;
-@@ -4432,28 +4439,8 @@ static int mpi3mr_slave_configure(struct scsi_device *sdev)
- 	sdev->eh_timeout = MPI3MR_EH_SCMD_TIMEOUT;
- 	blk_queue_rq_timeout(sdev->request_queue, MPI3MR_SCMD_TIMEOUT);
- 
--	switch (tgt_dev->dev_type) {
--	case MPI3_DEVICE_DEVFORM_PCIE:
--		/*The block layer hw sector size = 512*/
--		if ((tgt_dev->dev_spec.pcie_inf.dev_info &
--		    MPI3_DEVICE0_PCIE_DEVICE_INFO_TYPE_MASK) ==
--		    MPI3_DEVICE0_PCIE_DEVICE_INFO_TYPE_NVME_DEVICE) {
--			blk_queue_max_hw_sectors(sdev->request_queue,
--			    tgt_dev->dev_spec.pcie_inf.mdts / 512);
--			if (tgt_dev->dev_spec.pcie_inf.pgsz == 0)
--				blk_queue_virt_boundary(sdev->request_queue,
--				    ((1 << MPI3MR_DEFAULT_PGSZEXP) - 1));
--			else
--				blk_queue_virt_boundary(sdev->request_queue,
--				    ((1 << tgt_dev->dev_spec.pcie_inf.pgsz) - 1));
--		}
--		break;
--	default:
--		break;
--	}
--
-+	mpi3mr_configure_tgt_dev(tgt_dev, lim);
- 	mpi3mr_tgtdev_put(tgt_dev);
--
- 	return retval;
- }
- 
-@@ -4921,7 +4908,7 @@ static const struct scsi_host_template mpi3mr_driver_template = {
- 	.queuecommand			= mpi3mr_qcmd,
- 	.target_alloc			= mpi3mr_target_alloc,
- 	.slave_alloc			= mpi3mr_slave_alloc,
--	.slave_configure		= mpi3mr_slave_configure,
-+	.device_configure		= mpi3mr_device_configure,
- 	.target_destroy			= mpi3mr_target_destroy,
- 	.slave_destroy			= mpi3mr_slave_destroy,
- 	.scan_finished			= mpi3mr_scan_finished,
--- 
-2.39.2
-
+Regards,
+Krishna,
 
