@@ -1,198 +1,154 @@
-Return-Path: <linux-usb+bounces-9211-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9212-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D2B689EBDF
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Apr 2024 09:27:14 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0AA8E89EC63
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Apr 2024 09:41:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E6852281E23
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Apr 2024 07:27:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 913A5B2370F
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Apr 2024 07:41:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F21613CF9B;
-	Wed, 10 Apr 2024 07:27:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="M5pXvUxr"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B178D13D287;
+	Wed, 10 Apr 2024 07:41:45 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2265FDDC1
-	for <linux-usb@vger.kernel.org>; Wed, 10 Apr 2024 07:27:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+Received: from cae.in-ulm.de (cae.in-ulm.de [217.10.14.231])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16B2E53E00;
+	Wed, 10 Apr 2024 07:41:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.10.14.231
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712734027; cv=none; b=BPiLt2wW/Z08K4KsaWRXUjKQyUbuDpJlTy8NGxSQ8Q6XuOPNwszqel2bk2tMiv1su1v15xdbJfxaER13D3bPt1IXZSpu1b8XrhObw1jgvt1oUVnMbpUGRLHuOwFv2lE+xMmSBGK9T1uWrGEMMwqqR8OBm8yEN/mX5D6pp+N14NE=
+	t=1712734905; cv=none; b=quOLI4Pxdyp6IpSzpqWTlLKWoZYiAFjoBgA+kGh5LfcdA1PDu6MX/wI80wxA9/WpAHWKOQayap4eTS2iQb6DU6QlIV/peAmgvPm28s0uuJD2RWkigoH3a8BIu+2Jqr5psUElEv+Bn1oXXqjyoaBBvzTj0m8wKC5wbPWgFPPv7cI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712734027; c=relaxed/simple;
-	bh=kbTUGekNcumuE0JP93SeZKNvpUyU0+2KkheoNGzqnw8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=O2KBRN3RPJch+2A3mIJkyosocmDjZJAnWz7ws5EvNhdcJX8EiR/X4J7Dnn8xt7L3HoJyOmF43U5IL0IeCQmMNNElSf4CxNzrEvjvtu6fhi16KskFLylxeUR8fszfO/87PS0slEKtOHu3SNu3V8f8x0nGDeSJt30iaoQs43SahEM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=M5pXvUxr; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-41699bbfb91so41925e9.0
-        for <linux-usb@vger.kernel.org>; Wed, 10 Apr 2024 00:27:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1712734024; x=1713338824; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pPqlx7BmYYQRrHwdFpEcKrs3wYCOOp0IuBOu6np/GUM=;
-        b=M5pXvUxrj7KE0m6xxN+sVcC4a+HAtyQr+Q55bPVLzP+ng4V/W9st/nVawiYhmS4BAY
-         JeZuq3I/05KElP5AcKYDc+iOdyV5iNHtpgGhxPryIFbhCJQYsAZyoQxCHH8jha/FAhrI
-         ydIMSb0q6EEiiIqna6Bnz8pUNxdl2+tUzRUesCPAcxBQiInXdS4Qai8BVzhj2tqIrTMY
-         ex5DC5kz6VaV4wntyR8RPdQK/gODFwH/RVYC4UnxEsvt9KuEEYIwQ+9ykdfaOwDJvPnk
-         0OeoR4R/HOOM23L2stu1h45ihDaEYYMjguRHSimk8BfhbQbgTeQq2Ls980YQF3j9nni+
-         LzDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712734024; x=1713338824;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pPqlx7BmYYQRrHwdFpEcKrs3wYCOOp0IuBOu6np/GUM=;
-        b=jT9YXyuaOiu08bZfYP9nWRzE1xFJfd61NK8syXeGoQEft/Hpfm6Zty2GIzS1HgxWpl
-         3UB3yDzO5l8Z/we+eJjbwlFE2SOp/9Dpn1gPY8jlSLQtP99HIl3JArNzEtyWCcWVKK0h
-         T9sCHiMQAi6SD0OEJjP/0kbtHmHu4MeT2mOhEVapo3y7cByNnpDSPEY7tCEcAfnanw4u
-         7lssj69JboR1mDaW9UnVZQ8R8ubaiS9cxfJ8jfbrZKlPvlTGApjQjhA5N6s85824l7Rl
-         Qu7s6J9nc5tG6ETZTElT4PkdeGtUkhQvBflyAKWBFRlqWGTbKUk4SixC+1NyZXnK9hvI
-         cQXA==
-X-Forwarded-Encrypted: i=1; AJvYcCWgi27GVSXYEy1Whszpkju5/4vxa4ggwBVSo9MleS1rnVP7G3TnA0ceNNKvFkEsaBXUTliANANkfIWoE4ExkerG98VuTbJ+w/aD
-X-Gm-Message-State: AOJu0YxshUo8hjqURK5rxUNpNbShUmC6nx0Y0ZnaMQplGjMGtu8SGNzA
-	1tKKSnBIJ0TVZHjD/aR24WIv2Xn9KZxQHXVtT8KNDFjHLxBJOYAIE0/qznAYCDCKiPBZchUiIkg
-	2hE3nVmIj8R2e8C31LvmY1BeUwhzVfplMMD9+hYCHogFaPa7qjLRXnWM=
-X-Google-Smtp-Source: AGHT+IHEZ656PFyJo55eH+SvyyFTU5QIl75hwIQr7KlrDN2EIMWnZAUbcj2ioWKER3bUrt2gpRpgFlgbbn2FiCYBEY4=
-X-Received: by 2002:a05:600c:5113:b0:414:daa3:c192 with SMTP id
- o19-20020a05600c511300b00414daa3c192mr138732wms.0.1712734024167; Wed, 10 Apr
- 2024 00:27:04 -0700 (PDT)
+	s=arc-20240116; t=1712734905; c=relaxed/simple;
+	bh=kWiFrLwu4of9a6CZEkiRvrLXBxbvVCraLpNjKjlu+kA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fECDYBk3IMdv2KX/yRHWpyLSigkGD+wiZhwPLrieQ0Hz6v9vLPkCCpv3McIMd4rTOuC9XK8LMHSeUvOegREAULwu/CyBZdzvAoyi8oVqWXrkG0iQNtyB8AHGtGVcgniemSddNkYtBsADFOsuT75rQuZ6PYVWoqb5f1t5R0zTTAE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c--e.de; spf=pass smtp.mailfrom=c--e.de; arc=none smtp.client-ip=217.10.14.231
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c--e.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=c--e.de
+Received: by cae.in-ulm.de (Postfix, from userid 1000)
+	id 28A9C140562; Wed, 10 Apr 2024 09:41:39 +0200 (CEST)
+Date: Wed, 10 Apr 2024 09:41:39 +0200
+From: "Christian A. Ehrhardt" <lk@c--e.de>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] usb: typec: ucsi_glink: drop special handling for
+ CCI_BUSY
+Message-ID: <ZhZCsyeXa093OZnR@cae.in-ulm.de>
+References: <20240409-qcom-ucsi-fixes-bis-v2-0-6d3a09faec90@linaro.org>
+ <20240409-qcom-ucsi-fixes-bis-v2-3-6d3a09faec90@linaro.org>
+ <ZhWWYQMluJCvYFKF@cae.in-ulm.de>
+ <CAA8EJprTbtTSkZ18dejEgvhJOEQKQiwpE+6JkbHiO4H-yeKuhg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <3042f847ff904b4dd4e4cf66a1b9df470e63439e.1707441690.git.Thinh.Nguyen@synopsys.com>
-In-Reply-To: <3042f847ff904b4dd4e4cf66a1b9df470e63439e.1707441690.git.Thinh.Nguyen@synopsys.com>
-From: Manan Aurora <maurora@google.com>
-Date: Wed, 10 Apr 2024 12:56:50 +0530
-Message-ID: <CAJnM4-xYjmYUa4ePaYG3P8O3CYCWOMJwF=e7D1Pv8vvk6pBtNw@mail.gmail.com>
-Subject: Re: [PATCH] Revert "usb: dwc3: Support EBC feature of DWC_usb31"
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, John Youn <John.Youn@synopsys.com>, 
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, Will McVicker <willmcvicker@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAA8EJprTbtTSkZ18dejEgvhJOEQKQiwpE+6JkbHiO4H-yeKuhg@mail.gmail.com>
 
-Hi Thinh,
 
-I'm working on a patch to bring EBC support back, I had a doubt
-regarding some of the required corrections though (inlined)
+Hi Dmitry,
 
-Please take a look and advise, I'll proceed accordingly.
+On Wed, Apr 10, 2024 at 01:58:58AM +0300, Dmitry Baryshkov wrote:
+> On Tue, 9 Apr 2024 at 22:26, Christian A. Ehrhardt <lk@c--e.de> wrote:
+> >
+> >
+> > Hi Dmitry,
+> >
+> > On Tue, Apr 09, 2024 at 06:29:18PM +0300, Dmitry Baryshkov wrote:
+> > > Newer Qualcomm platforms (sm8450+) successfully handle busy state and
+> > > send the Command Completion after sending the Busy state. Older devices
+> > > have firmware bug and can not continue after sending the CCI_BUSY state,
+> > > but the command that leads to CCI_BUSY is already forbidden by the
+> > > NO_PARTNER_PDOS quirk.
+> > >
+> > > Follow other UCSI glue drivers and drop special handling for CCI_BUSY
+> > > event. Let the UCSI core properly handle this state.
+> > >
+> > > Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> > > ---
+> > >  drivers/usb/typec/ucsi/ucsi_glink.c | 10 ++++------
+> > >  1 file changed, 4 insertions(+), 6 deletions(-)
+> > >
+> > > diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c b/drivers/usb/typec/ucsi/ucsi_glink.c
+> > > index 9ffea20020e7..fe9b951f5228 100644
+> > > --- a/drivers/usb/typec/ucsi/ucsi_glink.c
+> > > +++ b/drivers/usb/typec/ucsi/ucsi_glink.c
+> > > @@ -176,7 +176,8 @@ static int pmic_glink_ucsi_sync_write(struct ucsi *__ucsi, unsigned int offset,
+> > >       left = wait_for_completion_timeout(&ucsi->sync_ack, 5 * HZ);
+> > >       if (!left) {
+> > >               dev_err(ucsi->dev, "timeout waiting for UCSI sync write response\n");
+> > > -             ret = -ETIMEDOUT;
+> > > +             /* return 0 here and let core UCSI code handle the CCI_BUSY */
+> > > +             ret = 0;
+> > >       } else if (ucsi->sync_val) {
+> > >               dev_err(ucsi->dev, "sync write returned: %d\n", ucsi->sync_val);
+> > >       }
+> > > @@ -243,11 +244,8 @@ static void pmic_glink_ucsi_notify(struct work_struct *work)
+> > >               ucsi_connector_change(ucsi->ucsi, con_num);
+> > >       }
+> > >
+> > > -     if (ucsi->sync_pending && cci & UCSI_CCI_BUSY) {
+> > > -             ucsi->sync_val = -EBUSY;
+> > > -             complete(&ucsi->sync_ack);
+> > > -     } else if (ucsi->sync_pending &&
+> > > -                (cci & (UCSI_CCI_ACK_COMPLETE | UCSI_CCI_COMMAND_COMPLETE))) {
+> > > +     if (ucsi->sync_pending &&
+> > > +         (cci & (UCSI_CCI_ACK_COMPLETE | UCSI_CCI_COMMAND_COMPLETE))) {
+> > >               complete(&ucsi->sync_ack);
+> > >       }
+> > >  }
+> >
+> > This handling of the command completion turned out to be racy in
+> > the ACPI case: If a normal command was sent one should wait for
+> > UCSI_CCI_COMMAND_COMPLETE only. In case of an UCSI_ACK_CC_CI
+> > command the completion is indicated by UCSI_CCI_ACK_COMPLETE.
+> >
+> > While not directly related, a port of this
+> >     https://lore.kernel.org/all/20240121204123.275441-3-lk@c--e.de/
+> > would nicely fit into this series.
+> 
+> Ack, I'll take a look.
 
-Regards,
-Manan
+Thanks.
 
-On Fri, Feb 9, 2024 at 6:55=E2=80=AFAM Thinh Nguyen <Thinh.Nguyen@synopsys.=
-com> wrote:
->
-> This reverts commit 398aa9a7e77cf23c2a6f882ddd3dcd96f21771dc.
->
-> The update to the gadget API to support EBC feature is incomplete. It's
-> missing at least the following:
->  * New usage documentation
-I will address this
->  * Gadget capability check
->  * Condition for the user to check how many and which endpoints can be
->    used as "fifo_mode"
-The easiest option seems to be to add a new function that lets users
-specifically request
-fifo_mode endpoints eg: usb_fifo_mode_ep_autoconfig_ss
-This function will cover ensuring that the device supports
-fifo_endpoints and returning a suitable
-endpoint (if available) and NULL otherwise. This can be indicated by
-adding a new bit to
-the existing ep_caps  structure.
-Does this seem like an acceptable solution?
+> However... I can not stop but notice that CCG and STM32 glue drivers
+> use the same old approach as we do. Which probably means that they
+> might have the same issue.
 
->  * Description of how it can affect completed request (e.g. dwc3 won't
->    update TRB on completion -- ie. how it can affect request's actual
->    length report)
-I will remove the NO_WB bit for the EBC endpoint and leave it up to
-the user to enable/disable this
->
-> Let's revert this until it's ready.
->
-> Fixes: 398aa9a7e77c ("usb: dwc3: Support EBC feature of DWC_usb31")
-> Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-> ---
->  drivers/usb/dwc3/core.h    | 1 -
->  drivers/usb/dwc3/gadget.c  | 6 ------
->  drivers/usb/dwc3/gadget.h  | 2 --
->  include/linux/usb/gadget.h | 1 -
->  4 files changed, 10 deletions(-)
->
-> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-> index df544ec730d2..2255fc94c8ef 100644
-> --- a/drivers/usb/dwc3/core.h
-> +++ b/drivers/usb/dwc3/core.h
-> @@ -376,7 +376,6 @@
->  /* Global HWPARAMS4 Register */
->  #define DWC3_GHWPARAMS4_HIBER_SCRATCHBUFS(n)   (((n) & (0x0f << 13)) >> =
-13)
->  #define DWC3_MAX_HIBER_SCRATCHBUFS             15
-> -#define DWC3_EXT_BUFF_CONTROL          BIT(21)
->
->  /* Global HWPARAMS6 Register */
->  #define DWC3_GHWPARAMS6_BCSUPPORT              BIT(14)
-> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> index 564976b3e2b9..4c8dd6724678 100644
-> --- a/drivers/usb/dwc3/gadget.c
-> +++ b/drivers/usb/dwc3/gadget.c
-> @@ -673,12 +673,6 @@ static int dwc3_gadget_set_ep_config(struct dwc3_ep =
-*dep, unsigned int action)
->                 params.param1 |=3D DWC3_DEPCFG_BINTERVAL_M1(bInterval_m1)=
-;
->         }
->
-> -       if (dep->endpoint.fifo_mode) {
-> -               if (!(dwc->hwparams.hwparams4 & DWC3_EXT_BUFF_CONTROL))
-> -                       return -EINVAL;
-> -               params.param1 |=3D DWC3_DEPCFG_EBC_HWO_NOWB | DWC3_DEPCFG=
-_USE_EBC;
-> -       }
-> -
->         return dwc3_send_gadget_ep_cmd(dep, DWC3_DEPCMD_SETEPCONFIG, &par=
-ams);
->  }
->
-> diff --git a/drivers/usb/dwc3/gadget.h b/drivers/usb/dwc3/gadget.h
-> index fd7a4e94397e..55a56cf67d73 100644
-> --- a/drivers/usb/dwc3/gadget.h
-> +++ b/drivers/usb/dwc3/gadget.h
-> @@ -26,8 +26,6 @@ struct dwc3;
->  #define DWC3_DEPCFG_XFER_NOT_READY_EN  BIT(10)
->  #define DWC3_DEPCFG_FIFO_ERROR_EN      BIT(11)
->  #define DWC3_DEPCFG_STREAM_EVENT_EN    BIT(13)
-> -#define DWC3_DEPCFG_EBC_HWO_NOWB       BIT(14)
-> -#define DWC3_DEPCFG_USE_EBC            BIT(15)
->  #define DWC3_DEPCFG_BINTERVAL_M1(n)    (((n) & 0xff) << 16)
->  #define DWC3_DEPCFG_STREAM_CAPABLE     BIT(24)
->  #define DWC3_DEPCFG_EP_NUMBER(n)       (((n) & 0x1f) << 25)
-> diff --git a/include/linux/usb/gadget.h b/include/linux/usb/gadget.h
-> index a771ccc038ac..6532beb587b1 100644
-> --- a/include/linux/usb/gadget.h
-> +++ b/include/linux/usb/gadget.h
-> @@ -236,7 +236,6 @@ struct usb_ep {
->         unsigned                max_streams:16;
->         unsigned                mult:2;
->         unsigned                maxburst:5;
-> -       unsigned                fifo_mode:1;
->         u8                      address;
->         const struct usb_endpoint_descriptor    *desc;
->         const struct usb_ss_ep_comp_descriptor  *comp_desc;
->
-> base-commit: 88bae831f3810e02c9c951233c7ee662aa13dc2c
-> --
-> 2.28.0
+I did ping the ccg people wrt. this but they have a different
+workaround that saves them at least most of the time, so I let
+this drop.
+
+> Could you please consider pulling up that
+> code into the UCSI driver? Maybe the low-level code really should just
+> read/write the messages, leaving all completions and CCI parsing to
+> the core layer?
+
+I did consider that but one of the ideas behind the new API for
+UCSI backends was that backends can send commands (e.g. as part of
+a quirk) even in the middle of a ->sync_write() call. Currently,
+I don't really see how to combine this with completion handling
+in the UCSI core.
+
+> > I don't have the hardware to do this myself.
+
+I did propose other changes to the API with little respone here:
+    https://lore.kernel.org/all/20240218222039.822040-1-lk@c--e.de/
+That could possibly be extended to achieve this. But again, that
+would require testers for all the backends.
+
+
+Best regards,
+Christian
+
 
