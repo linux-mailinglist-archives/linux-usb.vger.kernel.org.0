@@ -1,220 +1,153 @@
-Return-Path: <linux-usb+bounces-9248-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9249-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0256C8A0A09
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Apr 2024 09:38:43 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A39FA8A0A8C
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Apr 2024 09:51:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 833E51F21438
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Apr 2024 07:38:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C68FD1C218F8
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Apr 2024 07:51:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C42D13F45C;
-	Thu, 11 Apr 2024 07:35:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB14B13EFE5;
+	Thu, 11 Apr 2024 07:50:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b="NyK6FcWt"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T1H4B7mv"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E66713E896
-	for <linux-usb@vger.kernel.org>; Thu, 11 Apr 2024 07:35:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCEDF13DB87;
+	Thu, 11 Apr 2024 07:50:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712820938; cv=none; b=o8g/9IsSx/Nc7zob5iaeDXtq6OVEwfDzwjGTzOZ/SkFbFLKfX2vv/qHqRRI1kck5gP+6ni4UjyG+fFxvA+ql3uK9tHOc1sHs23vnfh6bGrE0zX74Nd+r7DLT3J4x5NtAGkycHJ16yWm2WbYixTPizfIVnCZaYYtsvUYKApZ4urY=
+	t=1712821850; cv=none; b=f0aL+nSsKT16jbuMLzK9ty6hj6GzjkvhonOjVhB2007l704l5sypb5a+RwOBZpcl2AtkVQnIhLe7hubyctJYthNUR+d6KKk+I5VqFM9iLMflTOUCac/fGzlDJpqQZoDDL4zTytoq2oEnxQm59pwsIYE2Lql2xoi5bUuYn0QHgOc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712820938; c=relaxed/simple;
-	bh=DY/4DerGRBb0QqlGFg3p8xcWt1msP7cUgXqVJUnYvXc=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:
-	 References:In-Reply-To; b=vGM6/RCRbBPSPMJsxDv41sygEG9ULZ2ouc23PCbImkATxyYfFFCNF2PMlC+BTTXdu6NsY5oB1myG64/xa1GeIAaGUuR3gJ2hSWT+ntnGxgYxXrxzEjYgi/G45mcfQJAYL61Q+W76vvIBjlWb8Wbof74QHxOAQ9nCn01OPL11hRw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fairphone.com; spf=pass smtp.mailfrom=fairphone.com; dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b=NyK6FcWt; arc=none smtp.client-ip=209.85.218.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fairphone.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fairphone.com
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a521fd786beso40358166b.3
-        for <linux-usb@vger.kernel.org>; Thu, 11 Apr 2024 00:35:34 -0700 (PDT)
+	s=arc-20240116; t=1712821850; c=relaxed/simple;
+	bh=pdVktPD1yKhN7I+JfwoX3bAIkQMjWyw/MGQ3Z5ejs0c=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=UDtr7UZUIjwKZ4F3BQ09IYxt52xqLTBszl/IuV/DS0/n5GRip3dglTNcL9Pv+StE2dM4xM8ipClnee2q4whDOsVfI+jHeLoX2vnS435UdR46cZ/13ft3OFd3hSn/FsC+wkDXBoMuQ70U4QdhcADMrOWGNUMxw3yfIbpMMzraWeI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T1H4B7mv; arc=none smtp.client-ip=209.85.160.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-22ed075a629so3253233fac.3;
+        Thu, 11 Apr 2024 00:50:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair; t=1712820933; x=1713425733; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=T6le4foaS4XgBxBuhSj2wdSogbCI/OVt2IshAL3V9iQ=;
-        b=NyK6FcWt0EzWRAequ4sa63Pg2xVrqW4O0obtT4qkxjrr6fvyfEiYYFA2+4EwMFym6E
-         xTufs3pUbiLhYgf6FySExnRoqTu62tcZBwsnnHl2hcYz8tsEQ6N1ja8CrsUpskASrmpb
-         wWrLpvSfPoIC8T6EK6EmZuQr13VKsVcO+88NlSyozf0mVDSTgIi6fNAFMUtqkn50mVAU
-         isHAaYeWcSJZbClWOMGGOZFMP0WHJL5u1cnOW3QhsF089T3voDd5Q1fkvwv+HUJWnsoZ
-         r5aDM6oH6U9NbH+slc8EizWZdfTW0xLCP27JdrjA61/JtJ4Qd2pELQIf65gU2sY6KI9Q
-         5gbw==
+        d=gmail.com; s=20230601; t=1712821848; x=1713426648; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=K1N7MYojLeI98ykv2u1nfElF4/8RvWc4Po+NQoLUVVw=;
+        b=T1H4B7mvIDxtqf4VkJ1Mte1y7oUYnYJYEiS0X9glaAu96OtwNgbgmW4aloG19Lx2/F
+         NemZR9KJAPu2o7qchLc78Sb+rb7JHOUFrt1sEB0q5P0ltRY935eiOt0PH23o4fdZeQvb
+         ZXkLoQwqNd7Tw2S8o/GYP1AvBRg2UTX9Xqza4SZHrY1JDlSK3d3jxqyBByaqz4dHwwh/
+         XljgzlIwV6OBuYQ1miia92kcx0ppOMY8tLCnX6rfWNnI1ZGcn2bakzJxhg38+mHy/RxW
+         zSTL/uOjqdN1knpo1YewAkS15R27p8BqkliVTKjohnzIQgdmGsRMxu/O0tcAZ4EpFd28
+         81bQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712820933; x=1713425733;
-        h=in-reply-to:references:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=T6le4foaS4XgBxBuhSj2wdSogbCI/OVt2IshAL3V9iQ=;
-        b=bC0kfdfHQrBTqp8xKDKxGYqMchv8NMj8noVJ+vz+oAt0lPKPcLn0ym12PcEUPlgd71
-         FR2Z/xW5/ogKyyLsBDVuedDCOd6XPzNCsFvU6Hd5q4T1utLvUzgK8CQ3ZywBWIuvKX6h
-         nLmoPq3EMwt5d3DeenjHXtGbmWPneyQoKcMngEdViEQKGcqA1ZWI/F9y0UQtGHcGd41S
-         oQesTSxEh4whzmfFmbbRQepuIQN84HLAmSNru2uGx6chYDYk501+DCKAlRbX//F4osKL
-         wiDqc7oD9D72961t+YEz4SW0tfIT5+HUxqFtaZEUnXo40k06bpA+Pr8eApJFP/8Rpunj
-         D7zA==
-X-Forwarded-Encrypted: i=1; AJvYcCVDGqD5P05u3cZ+SzGKkb3qJNvx13cxxEalVTV1OQlfEuClAPOWVaEMcUe9OQi52uKnUjySjJBZuPFhzTB5mhiwWidT9uMYFWY4
-X-Gm-Message-State: AOJu0Yw8Nh23ksStK6dNc+H21ZPHjfigtbpvRDFT5oW2fTc3skdl2jy9
-	80S4PL5mDGF7wNy/HP+Hf6QMjcWgzMOzt9S9DyDFVhVBRsVbw039z4BRmruzOQY=
-X-Google-Smtp-Source: AGHT+IEVtEqpCy5E3AYRD1SF9Km0TxRNvi4IhzO3AHxvY8mwuLDPLS8kdDC3zgHw+qXSvVoFbdptWw==
-X-Received: by 2002:a17:906:b1d7:b0:a4e:5c23:f776 with SMTP id bv23-20020a170906b1d700b00a4e5c23f776mr3208301ejb.37.1712820932974;
-        Thu, 11 Apr 2024 00:35:32 -0700 (PDT)
-Received: from localhost (144-178-202-138.static.ef-service.nl. [144.178.202.138])
-        by smtp.gmail.com with ESMTPSA id bm15-20020a170906c04f00b00a46d9966ff8sm488113ejb.147.2024.04.11.00.35.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Apr 2024 00:35:32 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1712821848; x=1713426648;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=K1N7MYojLeI98ykv2u1nfElF4/8RvWc4Po+NQoLUVVw=;
+        b=msJe2TicDQ+xnSrhLXfInYbwUyIG+quAfCHXbgmqxELjDeaLUQ48jyczgnDxyWJulz
+         7D9N3Z1oNt0eoYnszIPzA2EMX+jwjf+PjWnJebAj5eZyqt0hNPgGp4GgIcbo3O2Gx4l1
+         bVzl8ehI82PS6dBDbycsK3zFMdIT8AW6vYNXfPM/V2YIDs0Pbt5roZ8Lq3W1Unz6nX1J
+         DYZ6OLV+96yBQn720mae0nHuAeBedFc3NNzseuTgP6vafCc56yPlZZGBalOPXKTjbu2H
+         UpMT/MvuMUONpIwXvgTewtUW2ttyXpz3mEGc73zDm4CvGrlH8x01XvgZPLJoaNPRJ7Pr
+         dB3Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUajGbBZCrNuqEBeiA+T2L0eevhIYUwkesdVx5URA6f1yb+eLeuDm1pljLCbBHYHPgl+wpV98YhIsq6htOID0IrgoafDEbwHmwbjTd2dJcN50A20VrPFTcEv7fcXuAuXw8FaGUZ+iJzvIauIVKfbMvN5zTXJ8nrRf2SUTbEcEt+v1Qg/M+dTEMzgq8=
+X-Gm-Message-State: AOJu0Yw5bMswWCqR0a5aoX78ggGYIQqUQyUe1CGpwMsJ3GJyo3+X3EUv
+	2qMSduy3q1EagQSp/Gy8R0igU67ohJYoHGWDGg2ESk5LjHQ4BCJdZPS5LtQE5mFs93y0WdoIg1e
+	WyyIbO0gifzWmxbZgeITD7v9C4j4=
+X-Google-Smtp-Source: AGHT+IGMkAAJtDvRmLGqE3O84KzubcqbUdORj7yi/0mwOx+0/MYwJB+MptRR3G6k5wFtj6uNdbUybb4yeh+d+N1r+EE=
+X-Received: by 2002:a05:6870:f6a5:b0:233:3085:e55c with SMTP id
+ el37-20020a056870f6a500b002333085e55cmr3215251oab.53.1712821847796; Thu, 11
+ Apr 2024 00:50:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 11 Apr 2024 09:35:32 +0200
-Message-Id: <D0H4CHG4KSRF.10Z6DOI8PORI8@fairphone.com>
-Subject: Re: [PATCH v2] dt-bindings: usb: add common Type-C USB Switch
- schema
-From: "Luca Weiss" <luca.weiss@fairphone.com>
-To: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>, "Greg
- Kroah-Hartman" <gregkh@linuxfoundation.org>, "Rob Herring"
- <robh+dt@kernel.org>, "Krzysztof Kozlowski"
- <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley" <conor+dt@kernel.org>,
- "Bjorn Andersson" <andersson@kernel.org>, "Konrad Dybcio"
- <konrad.dybcio@linaro.org>, "Neil Armstrong" <neil.armstrong@linaro.org>,
- <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>
-X-Mailer: aerc 0.17.0
-References: <20240122094406.32198-1-krzysztof.kozlowski@linaro.org>
- <D0H3VE6RLM2I.MK2NT1P9N02O@fairphone.com>
- <051c6e44-4844-48b9-846d-cf9b81611415@linaro.org>
-In-Reply-To: <051c6e44-4844-48b9-846d-cf9b81611415@linaro.org>
+MIME-Version: 1.0
+References: <20240404071350.4242-1-linux.amoon@gmail.com> <20240404071350.4242-7-linux.amoon@gmail.com>
+ <20240409015352.ocpjbgxrx636jmk4@synopsys.com> <CANAwSgQtfOG9FSygNMsNfgdmxsr-HyvyqaYr=UXE2UC_mxKJQA@mail.gmail.com>
+ <20240410232623.6gaupt6t725hhype@synopsys.com>
+In-Reply-To: <20240410232623.6gaupt6t725hhype@synopsys.com>
+From: Anand Moon <linux.amoon@gmail.com>
+Date: Thu, 11 Apr 2024 13:20:31 +0530
+Message-ID: <CANAwSgS-oD86obNUHcjAwfD+3v6VyWidTezwtihJBOC8VWHPjg@mail.gmail.com>
+Subject: Re: [PATCH v2 6/6] usb: dwc3: exynos: Switch from CONFIG_PM_SLEEP
+ guards to pm_sleep_ptr()
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>, Johan Hovold <johan@kernel.org>, 
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, 
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
+	"linux-samsung-soc@vger.kernel.org" <linux-samsung-soc@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu Apr 11, 2024 at 9:25 AM CEST, Krzysztof Kozlowski wrote:
-> On 11/04/2024 09:13, Luca Weiss wrote:
-> > On Mon Jan 22, 2024 at 10:44 AM CET, Krzysztof Kozlowski wrote:
-> >> Several bindings implement parts of Type-C USB orientation and mode
-> >> switching, and retiming.  Keep definition of such properties in one
-> >> place, new usb-switch schema, to avoid duplicate defines.
-> >>
-> >> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> >>
-> >> ---
-> >>
-> >> Changes in v2:
-> >> 1. Fix language typos handle->handler (Luca)
-> >> 2. Drop debugging left-over (Luca)
-> >> ---
-> >>  .../devicetree/bindings/usb/fcs,fsa4480.yaml  | 12 ++--
-> >>  .../devicetree/bindings/usb/gpio-sbu-mux.yaml | 12 ++--
-> >>  .../devicetree/bindings/usb/nxp,ptn36502.yaml | 12 ++--
-> >>  .../bindings/usb/onnn,nb7vpq904m.yaml         | 13 ++--
-> >>  .../bindings/usb/qcom,wcd939x-usbss.yaml      | 12 ++--
-> >>  .../devicetree/bindings/usb/usb-switch.yaml   | 67 ++++++++++++++++++=
-+
-> >>  6 files changed, 92 insertions(+), 36 deletions(-)
-> >>  create mode 100644 Documentation/devicetree/bindings/usb/usb-switch.y=
-aml
-> >>
-> >> diff --git a/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml b/=
-Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml
-> >> index f9410eb76a62..8b25b9a01ced 100644
-> >> --- a/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml
-> >> +++ b/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml
-> >> @@ -27,13 +27,8 @@ properties:
-> >>    vcc-supply:
-> >>      description: power supply (2.7V-5.5V)
-> >> =20
-> >> -  mode-switch:
-> >> -    description: Flag the port as possible handle of altmode switchin=
-g
-> >> -    type: boolean
-> >> -
-> >> -  orientation-switch:
-> >> -    description: Flag the port as possible handler of orientation swi=
-tching
-> >> -    type: boolean
-> >> +  mode-switch: true
-> >> +  orientation-switch: true
-> >> =20
-> >>    port:
-> >>      $ref: /schemas/graph.yaml#/$defs/port-base
-> >> @@ -79,6 +74,9 @@ required:
-> >>    - reg
-> >>    - port
-> >> =20
-> >> +allOf:
-> >> +  - $ref: usb-switch.yaml#
-> >> +
-> >>  additionalProperties: false
-> >> =20
-> >>  examples:
-> >=20
-> > Hi Krzysztof,
-> >=20
-> > This patch seems to break validation for fsa4480 if data-lanes is set i=
-n
-> > the endpoint like the following
-> >=20
-> > diff --git a/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml b/D=
-ocumentation/devicetree/bindings/usb/fcs,fsa4480.yaml
-> > index f9410eb76a62..3aa03fd65556 100644
-> > --- a/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml
-> > +++ b/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml
-> > @@ -102,6 +102,7 @@ examples:
-> >            port {
-> >              fsa4480_ept: endpoint {
-> >                remote-endpoint =3D <&typec_controller>;
-> > +              data-lanes =3D <0 1>;
-> >              };
-> >            };
-> >          };
-> >=20
-> > Similar to how it's already used on qcom/qcm6490-fairphone-fp5.dts
-> >=20
-> > I'm guessing the 'port' definition in the common schema somehow
-> > disallows the fsa4480 schema from describing it further?
+Hi Thinh,
+
+On Thu, 11 Apr 2024 at 04:56, Thinh Nguyen <Thinh.Nguyen@synopsys.com> wrote:
 >
-> There is no such code in qcm6490-fairphone-fp5.dts. There was no such
-> code in the example of fsa4480 when I was testing my changes (and
-> examples should be complete), so this did not pop up.
-
-Right, I'm sorry this is just out-of-tree for now, I've forgotten this.
-There's some dependency chain with some unsupported DSC configuration in
-DPU for now that blocks upstreaming this.
-
-My tree with these patches is here if you want to take a look:
-https://github.com/sc7280-mainline/linux/blob/sc7280-6.8.y/arch/arm64/boot/=
-dts/qcom/qcm6490-fairphone-fp5.dts#L628
-
+> On Wed, Apr 10, 2024, Anand Moon wrote:
+> > Hi Thinh,
+> >
+> > On Tue, 9 Apr 2024 at 07:24, Thinh Nguyen <Thinh.Nguyen@synopsys.com> wrote:
+> > >
+> > > On Thu, Apr 04, 2024, Anand Moon wrote:
+> > > > Use the new PM macros for the suspend and resume functions to be
+> > > > automatically dropped by the compiler when CONFIG_PM_SLEEP are disabled,
+> > > > without having to use #ifdef guards. If CONFIG_PM_SLEEP unused,
+> > > > they will simply be discarded by the compiler.
+> > > >
+> > > > Signed-off-by: Anand Moon <linux.amoon@gmail.com>
+> > > > ---
+> > > > v2: add __maybe_unused to suspend/resume functions in case CONFIG_PM is
+> > > >    disabled.
+> > >
+> > > The compiler discards the code, yet we still need __maybe_unused?
+> > >
+> > Earlier version had not added this since but I removed the
+> > guard.CONFIG_PM_SLEEP.
+> > added __maybe_unused just to safeguard the function.
+> >
+> > I have tried to build with config by disabling CONFIG_PM and CONFIG_PM_SLEEP
+> > but could get the warning compilation by adding flag W=1
+> > -Werror=unused-function.
+> >
 >
-> You right, new schema does not allow extending the port. However the
-> true question is, why muxing happens on the port to the SoC controller?
-> The graph in commit msg fad89aa14 shows it happens on the side of the
-> connector.
+> <snip>
 >
-> Looks like fsa4480 mixes connector with the controller.
-
-Could be honestly.. I trust you with knowing better how the ports are
-supposed to work.
-
-The property is for telling the fsa4480 driver that essentially the
-hardware is wired up the reverse way. So with this info the driver can
-handle the orientation switching correctly.
-
-There's another layer to this as explained in the patches there that the
-OCP96011 essentially works reversed compared to FSA4480, that's why it's
-all a bit of a mess.
-
-Regards
-Luca
-
+> >
+> > But since these CONFIG_PM and CONFIG_PM_SLEEP cannot be disabled,
+> > I am not getting any warning related to these functions.
+> >
+> > Do you want me to remove __maybe_unused ?
+> >
 >
-> Best regards,
-> Krzysztof
+> The warning was there as expected. You should to use it along with
+> DEFINE_SIMPLE_DEV_PM_OPS(). Let me know if you still see the same
+> warning.
+>
 
+But the warnings are related to the following macros
+
+#define PTR_IF(cond, ptr) ((cond) ? (ptr) : NULL)
+
+#define pm_ptr(_ptr) PTR_IF(IS_ENABLED(CONFIG_PM), (_ptr))
+#define pm_sleep_ptr(_ptr) PTR_IF(IS_ENABLED(CONFIG_PM_SLEEP), (_ptr))
+
+So if we can disable CONFIG_PM and CONFIG_PM_SLEEP options
+the relevant function with the above macro will be set to NULL.
+in this case, the compiler will discard the function in SET_SYSTEM_SLEEP_PM_OPS
+
+> BR,
+> Thinh
+
+Thanks
+-Anand
 
