@@ -1,123 +1,108 @@
-Return-Path: <linux-usb+bounces-9285-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9286-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B91FB8A1CCF
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Apr 2024 19:57:05 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5089C8A1E59
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Apr 2024 20:33:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E524A1C21D12
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Apr 2024 17:57:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ED394B37872
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Apr 2024 18:02:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4ECCC1BED82;
-	Thu, 11 Apr 2024 16:39:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VGFLnbXP"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F253B1C8FC2;
+	Thu, 11 Apr 2024 16:47:12 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 390524437C;
-	Thu, 11 Apr 2024 16:39:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B3C417742;
+	Thu, 11 Apr 2024 16:47:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712853573; cv=none; b=DLl92851+LmQ3kfF/TAd+OQX57fIM9ZkV3C/N3AoBK3Tw3t2K+VuqNcu4W2WUM9cy4yKDqABgz5ff1nWLHPaDtmvi5ZOgV4bv2JVJ4sASPFkRftDf3MGd26wgplzptpuhzDRpV7XA5YWdF/G/NfUGB5I1GcpmVTXW9rlpBLCMew=
+	t=1712854032; cv=none; b=eCe7w8t7E7AIorwlqRDKSk9qAQXfzdMdStyDBsrZRrUoS12ofyeSCSIBlHlLzNN0ewE+AucVhVOZ65E/U+U0I+IjrY6UQlRsFC9XwTfgGKhm8DvjEjgjV9HQGxLrUkOHh2u+TCbeaQlCCv0o0kWi/kMVQF6iNBjUtTI92zFA4oY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712853573; c=relaxed/simple;
-	bh=FWunoAUN7z21xQA7WEUzBqvQaEPNfNMcpOGAEBJBDyU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dBPNLPrGdWTzntaSUCnXdWo2RAwblCgFQLdQZUgM/IYrDE+NuaNVn93FCbzKXw4pPiWtEds8nIJzj+FUnpBmo7FMLgyV82dCFeYB1dMkQ/U/ajVQoLtJ0oAyAzE/9pzqV+Sow8JNplcW1YyWriVl0PkwUZ89jV8kwXvZHTHuDQA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VGFLnbXP; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712853572; x=1744389572;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=FWunoAUN7z21xQA7WEUzBqvQaEPNfNMcpOGAEBJBDyU=;
-  b=VGFLnbXPN+YvVdmkBOUc9ZrN7X4B6YNsliNzBnim4CMaWQPnmOM0F5fE
-   pxY1zfBTz2n/MtWMAAMN8sHzn/o0t1BUHA4KKE3SbH7vpOSxEP+Y3Yp8u
-   Zw6LzTKMXqvlUrFlgcFrwpryarh4ry0S1s+vFN0LAo5S313Fp/8XWuaQm
-   eU7lxyDwvlEcW53hX+Rgn3Lr7zl3393APXsmsGxJN2vclkbCXmX4BN83w
-   iDqqF5dmsuXT6YTymRTETUPAyfATHj0Vdmxqj7MPyFsKx0tCKQMdyuNzM
-   2W9g0EpDBH+hLRXIFHK2x7SPO7FLEUrNREE71faiViwZ/vchKxxRwxpY1
-   w==;
-X-CSE-ConnectionGUID: nZZQsQCGT9iXQ0HQ11kkGQ==
-X-CSE-MsgGUID: nlyGdgEyTlqc4zsrx4BW+Q==
-X-IronPort-AV: E=McAfee;i="6600,9927,11041"; a="8454390"
-X-IronPort-AV: E=Sophos;i="6.07,193,1708416000"; 
-   d="scan'208";a="8454390"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2024 09:39:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11041"; a="915467127"
-X-IronPort-AV: E=Sophos;i="6.07,193,1708416000"; 
-   d="scan'208";a="915467127"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2024 09:39:27 -0700
-Received: from andy by smile with local (Exim 4.97)
-	(envelope-from <andriy.shevchenko@intel.com>)
-	id 1ruxSP-00000003PUu-0iqP;
-	Thu, 11 Apr 2024 19:39:25 +0300
-Date: Thu, 11 Apr 2024 19:39:24 +0300
-From: Andy Shevchenko <andriy.shevchenko@intel.com>
-To: Hardik Gajjar <hgajjar@de.adit-jv.com>
-Cc: Ferry Toth <fntoth@gmail.com>, gregkh@linuxfoundation.org,
-	s.hauer@pengutronix.de, jonathanh@nvidia.com,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	quic_linyyuan@quicinc.com, paul@crapouillou.net,
-	quic_eserrao@quicinc.com, erosca@de.adit-jv.com
-Subject: Re: [PATCH v4] usb: gadget: u_ether: Replace netif_stop_queue with
- netif_device_detach
-Message-ID: <ZhgSPCq6sVejRjbj@smile.fi.intel.com>
-References: <20231006153808.9758-1-hgajjar@de.adit-jv.com>
- <20231006155646.12938-1-hgajjar@de.adit-jv.com>
- <ZaQS5x-XK08Jre6I@smile.fi.intel.com>
- <20240115132720.GA98840@vmlxhi-118.adit-jv.com>
- <f25283fc-4550-4725-960b-2ea783fd62e1@gmail.com>
- <aeee83d8-dee3-42ed-b705-988b17800721@gmail.com>
- <20240405113855.GA121923@vmlxhi-118.adit-jv.com>
- <321e908e-0d10-4e36-8dc4-6997c73fe2eb@gmail.com>
- <ZhbOZsp-XHemVhQz@smile.fi.intel.com>
- <20240411142637.GA110162@vmlxhi-118.adit-jv.com>
+	s=arc-20240116; t=1712854032; c=relaxed/simple;
+	bh=RyVOe6pCtx0/g7zEV7rXDdHduJWvub6mOy5PsGRPM7I=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=F19ALh1GPErHZEv2/sM1gzjxiGaJwgidBP760MyPmwd11340edpTzWwOqKntP6vhuujpvOfia4IaL2150ArNqPVsegYUTOqy+/U7sZZ6NUm6WgfkXzCdaZMhqNZNTkTvfthzXPEIF3RdIel66IK1v3Z3HfM60kzJ0wQvuFy3CfA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=provod.works; spf=pass smtp.mailfrom=provod.works; arc=none smtp.client-ip=185.226.149.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=provod.works
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=provod.works
+Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
+	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <me@provod.works>)
+	id 1ruxZs-002Jw4-5h; Thu, 11 Apr 2024 18:47:08 +0200
+Received: from [10.9.9.73] (helo=submission02.runbox)
+	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
+	(envelope-from <me@provod.works>)
+	id 1ruxZm-0004Du-KJ; Thu, 11 Apr 2024 18:47:02 +0200
+Received: by submission02.runbox with esmtpsa  [Authenticated ID (959450)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.93)
+	id 1ruxZl-00BPCo-2M; Thu, 11 Apr 2024 18:47:01 +0200
+From: Ivan Avdeev <me@provod.works>
+To: laurent.pinchart@ideasonboard.com,
+	dan.scally@ideasonboard.com,
+	gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Ivan Avdeev <me@provod.works>
+Subject: [PATCH] usb: gadget: uvc: use correct buffer size when parsing configfs lists
+Date: Thu, 11 Apr 2024 12:46:16 -0400
+Message-ID: <20240411164616.4130163-1-me@provod.works>
+X-Mailer: git-send-email 2.43.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240411142637.GA110162@vmlxhi-118.adit-jv.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
 
-On Thu, Apr 11, 2024 at 04:26:37PM +0200, Hardik Gajjar wrote:
-> On Wed, Apr 10, 2024 at 08:37:42PM +0300, Andy Shevchenko wrote:
-> > On Sun, Apr 07, 2024 at 10:51:51PM +0200, Ferry Toth wrote:
-> > > Op 05-04-2024 om 13:38 schreef Hardik Gajjar:
+This commit fixes uvc gadget support on 32-bit platforms.
 
-...
+Commit 0df28607c5cb ("usb: gadget: uvc: Generalise helper functions for
+reuse") introduced a helper function __uvcg_iter_item_entries() to aid
+with parsing lists of items on configfs attributes stores. This function
+is a generalization of another very similar function, which used a
+stack-allocated temporary buffer of fixed size for each item in the list
+and used the sizeof() operator to check for potential buffer overruns.
+The new function was changed to allocate the now variably sized temp
+buffer on heap, but wasn't properly updated to also check for max buffer
+size using the computed size instead of sizeof() operator.
 
-> > > Exactly. And this didn't happen before the 2 patches.
-> > > 
-> > > To be precise: /sys/class/net/usb0 is not removed and it is a link, the link
-> > > target /sys/devices/pci0000:00/0000:00:11.0/dwc3.0.auto/gadget.0/net/usb0 no
-> > > longer exists
-> 
-> So, it means that the /sys/class/net/usb0 is present, but the symlink is
-> broken. In that case, the dwc3 driver should recreate the device, and the
-> symlink should become active again
-> I have the dwc3 IP base usb controller, Let me check with this patch and
-> share result here.  May be we need some fix in dwc3
+As a result, the maximum item size was 7 (plus null terminator) on
+64-bit platforms, and 3 on 32-bit ones. While 7 is accidentally just
+barely enough, 3 is definitely too small for some of UVC configfs
+attributes. For example, dwFrameInteval, specified in 100ns units,
+usually has 6-digit item values, e.g. 166666 for 60fps.
 
-It's quite possible, please test on your side.
-We are happy to test any fixes if you come up with.
+Fixes: 0df28607c5cb ("usb: gadget: uvc: Generalise helper functions for reuse")
+Signed-off-by: Ivan Avdeev <me@provod.works>
+---
+ drivers/usb/gadget/function/uvc_configfs.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/drivers/usb/gadget/function/uvc_configfs.c b/drivers/usb/gadget/function/uvc_configfs.c
+index 7e704b2bcfd1..a4377df612f5 100644
+--- a/drivers/usb/gadget/function/uvc_configfs.c
++++ b/drivers/usb/gadget/function/uvc_configfs.c
+@@ -92,10 +92,10 @@ static int __uvcg_iter_item_entries(const char *page, size_t len,
+ 
+ 	while (pg - page < len) {
+ 		i = 0;
+-		while (i < sizeof(buf) && (pg - page < len) &&
++		while (i < bufsize && (pg - page < len) &&
+ 		       *pg != '\0' && *pg != '\n')
+ 			buf[i++] = *pg++;
+-		if (i == sizeof(buf)) {
++		if (i == bufsize) {
+ 			ret = -EINVAL;
+ 			goto out_free_buf;
+ 		}
+
+base-commit: 2c71fdf02a95b3dd425b42f28fd47fb2b1d22702
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.43.2
 
 
