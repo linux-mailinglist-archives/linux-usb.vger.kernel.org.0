@@ -1,217 +1,233 @@
-Return-Path: <linux-usb+bounces-9246-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9247-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F4B98A098F
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Apr 2024 09:19:49 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D66308A09AD
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Apr 2024 09:26:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CA1A72850C2
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Apr 2024 07:19:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 038361C22150
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Apr 2024 07:26:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 842A113DDCF;
-	Thu, 11 Apr 2024 07:19:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A52E513E89F;
+	Thu, 11 Apr 2024 07:25:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R6S9BVeZ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="IAsiio4o"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49D0213B5B0;
-	Thu, 11 Apr 2024 07:19:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 410D513DBB1
+	for <linux-usb@vger.kernel.org>; Thu, 11 Apr 2024 07:25:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712819981; cv=none; b=XCGYT8Kc/VsrAbI3XKEjkT9qaQim7NwFluHVJfGufYWSaKy4OFUNGPn/zPwsaoJ99iSvmC9wPwEV/z5QzIMZjGKiiB8/Gjc7MPNPXqxT8kP4wCp+AhejNL+BZVCzi42MxIp0kCYFGKcCNovYWqO+HlAleCcC5v9iqLzsg/gQ6Tk=
+	t=1712820332; cv=none; b=pYawx8HjEban8A99+U0qEqnJFuxPZOmtfDpc2avsiaFy9ppGwHOj0QlJOlSbiaaoqs7WIobFGTSulJ9vtGWLTVvLkRYUwwQtYbcrt3sFe9TzFHFtiHFd7npkgXmUe4soOGiFuUAHKkhr/BYBZ97wAkVgDXmgn8ol+/InleerL1Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712819981; c=relaxed/simple;
-	bh=OEtV35vaVID4JjOKCTYuJ+CqRcwd+a4K+zPK2GiqyMg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OnjTC7Z3w/IBSwKprI5dp7hmTu6sNyEwpzbmeMYuLjlVUDVq79/BV2PtdQAJJ/6/CIMQewFffgwfCo31QHO2/c8KzPHuuo8gYveqYSalf4Msbb6YKkK13UC/Eg/Ch2hFkEDpL/p8Bx8lc8HkeSl4svxEvYnM8UQ2L4Tc5p74J9Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R6S9BVeZ; arc=none smtp.client-ip=209.85.218.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a52140ea1b5so159114366b.1;
-        Thu, 11 Apr 2024 00:19:38 -0700 (PDT)
+	s=arc-20240116; t=1712820332; c=relaxed/simple;
+	bh=h4dFsYtnlN8ZUYzMeIJnNwkAeG3dqWQK76oIMf60zOg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=s4Cn4debxxyB7ZrguOQNZ2x5ACGF8MlO/8tHegY6Xc6R2PVhl5PejCu/wSEMUF0qBD5OGRRu/ehj2pR8E/VTkV/7APMnL0CeWlXxiC3xQPwBnbX5y+S/yWgU5aPHcRzkwoAS4HbNw785Slm6cHaoGYVJA1XYyW0NSMaCX9GAy0A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=IAsiio4o; arc=none smtp.client-ip=209.85.221.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-3465921600dso1529285f8f.3
+        for <linux-usb@vger.kernel.org>; Thu, 11 Apr 2024 00:25:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712819977; x=1713424777; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wH5zcgsELbzNmlnnzMYGJW4WkIm6tIFidEHq2GOj6Fs=;
-        b=R6S9BVeZNhXPjkbXyK5phW4RHeyUV+j/3rbvdQI7u+7WthPp2bN64dLFEwbbpzgBbb
-         d5x662VZStrnMV7ks5YE5ciwq6k1VOjjocSRa+/qGg0YbKsF4QmiXSGefXRKt5ei75Vs
-         CQl4ET+3vBiHzdf6+yKD9ETfHZUAlvJQ4mwjTBM2c2ygCRL80v3szPvMjB9OmI1snG5+
-         0fOiW7j8jRj20656PwkmJlrJanx4A5GrgsryxD1o/GcPmzJWYvj9DEz0j4NmpK7j/jdD
-         KIafl60CyG4m2kmF/sfoK3Dl/p4KVWtYI5K1ofQxcCqOt47h/oUMRdiDf1+5GcmpWdTY
-         ecqw==
+        d=linaro.org; s=google; t=1712820328; x=1713425128; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=9zwE2+Q5g17pW6wKSw7re4stV4qmExBkSpcgkO2N+1Q=;
+        b=IAsiio4oYOe5rDh1z4GldBPE57RaYejmAA5gSM8IrZi9eLsagZG/rvT6yoDXDhfbJU
+         OOsMG+MVLMLaSTM5c0fXq2TsOoivgUUPy956UYkj0x1rPV0cQCYn8h5ojeaOHsn+Kl60
+         W2/FJxwe54JJmtOFeQfP2m8sh5AtG1FeBzFsKL8KtZWIiUMn8NNfDW5SGN1o6R1sA1FQ
+         2TF2p4LlPN+t2OPYwUhiPhaaP9Uv1HBOhb9sQxWxJi0gpj6vEDEEL7FSy5W0Rtmq9o9S
+         F9GcRxYCjAzlvhwjKhuzxNjLvZ9s8obeCRca60EsEFIZ2uZ69RlGFtd82/uZa6loukO5
+         uaWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712819977; x=1713424777;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wH5zcgsELbzNmlnnzMYGJW4WkIm6tIFidEHq2GOj6Fs=;
-        b=qjlvTALbdcc9++w9vbOXxxX4pJMC6CYaivH8yUX29af/aAOp7tIl4N+Ix3pNq3KOm6
-         tmA9IrMIpxCHvHhOvFC8WSIaVmy+VMlOnjofVE1e47srcJDSSQUI2KRRDgCgx2XKnflP
-         L7ZRjvjImnRGKKzI5z0xJrDlqIz5jMW9tEfWFcrZzfcG0sLds6ezyNplxX9EEz/uBHQQ
-         ZEaJfJk6zN5VxYAsur4O5gIeaSTWiAo7zzacnCi4rMvWWM+2qxc6Qz6YeuXhTZXmaCw/
-         z20QAZhG+NcGO/ygIPndedrwAmZeFX1dwJMXb8u8fwJEKxuJr/Q016FhDNaCGxbITVvD
-         AdyA==
-X-Forwarded-Encrypted: i=1; AJvYcCXAGAIoVoB13762ZyGP5Z0poU3wZjDLBSSKWb7s/uTTww7AarSawhQJGbkjubYSSghVN5lxhY5ma61kEfW89MxJoIb3puaGZAny
-X-Gm-Message-State: AOJu0YwLEbD6wj5r+YEwComA772S0e6/JGNMypY7TeapAgA2qBhOE1di
-	0r+MgCuijP+bdpQNosbU7XYG8TaMhDKaH8XxWfNNrbKwcFhU94ifKrToKAIcFE2FKp9k4tyBlxC
-	CL7BXtJtAoujSXifRkb62J0aEBeQ=
-X-Google-Smtp-Source: AGHT+IHs08EJ1Ow6JiaSkwTgaC/KpYV9Pj8lajSkYqdvicO7tPHw1NwYZzUBRHe06IkCsd5+aVKbiyt0wIopU6xKiac=
-X-Received: by 2002:a17:907:7205:b0:a4e:4278:8a01 with SMTP id
- dr5-20020a170907720500b00a4e42788a01mr3804417ejc.11.1712819977200; Thu, 11
- Apr 2024 00:19:37 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1712820328; x=1713425128;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9zwE2+Q5g17pW6wKSw7re4stV4qmExBkSpcgkO2N+1Q=;
+        b=Cs7r0qiZoOkzp3pQh6H5zN077EmDX9akSe9FJz1AGeLxNA+ToxyZRKiO+rwOZUELLT
+         avPYkbJpO4fGuXq7I/8WE/AeQCTxpEODVwh8gQMNgg5ZBiyK/kaQ7UOXspKCbIH3xgx/
+         vhS1fS0mSWM1yY61qxLrV3F2akWmMRnxP6KQArvPtwfnUAAiwYUwNGtvWEBdBlLwlRXD
+         ImSmjPhPtpqM1QBokjKXHZ+eWdaDuGQ2SzTUtZO+cU1P+Dydm+pzF21isvreiPXNHw/l
+         WKS6LN64NwD4yh7H8OvXUhv4NSvqjQ73R40u04M0Zn1Xltn2f3Ndm9KHuNyNRzAzZ8mZ
+         2krA==
+X-Forwarded-Encrypted: i=1; AJvYcCUrPugEchATk6lDZcr1fkYfeCDZfrONKkw0cCyEwLM+drUZiyY0sc3XcWNuBbiy1IMnLCQoU44+FC2UXDGdIjHXhleWRkdD0Ewh
+X-Gm-Message-State: AOJu0Yy2TNwbeNCKhT3SRISEhWAECV2nR36AKnaooQS69QmPOY/ITwcV
+	kbqH6OAyS7kShvjCgc0RSXz+5Pe8LQCO8ZHZgpBMCoAgHVqBDmeHYq8zPaiUEZs=
+X-Google-Smtp-Source: AGHT+IHorrDqbK9zt/IoHlc21hKNjB613X7hy+TtL6kaGHau0izWH/4cPFxd84HwbzhID2FR+rKNSw==
+X-Received: by 2002:a5d:6d4e:0:b0:346:72f4:c805 with SMTP id k14-20020a5d6d4e000000b0034672f4c805mr2713947wri.66.1712820327621;
+        Thu, 11 Apr 2024 00:25:27 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.223.16])
+        by smtp.gmail.com with ESMTPSA id u13-20020a5d434d000000b00346bda84bf9sm816474wrr.78.2024.04.11.00.25.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 Apr 2024 00:25:27 -0700 (PDT)
+Message-ID: <051c6e44-4844-48b9-846d-cf9b81611415@linaro.org>
+Date: Thu, 11 Apr 2024 09:25:25 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAEkJfYON+ry7xPx=AiLR9jzUNT+i_Va68ACajOC3HoacOfL1ig@mail.gmail.com>
- <2024041125-anemic-decorated-52aa@gregkh>
-In-Reply-To: <2024041125-anemic-decorated-52aa@gregkh>
-From: Sam Sun <samsun1006219@gmail.com>
-Date: Thu, 11 Apr 2024 15:19:25 +0800
-Message-ID: <CAEkJfYPBjBbHX0Nt4Pxg3orPfZzRGjYhgZKGphoO5+Pskso7hQ@mail.gmail.com>
-Subject: Re: [Linux kernel bug] general protection fault in disable_store
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	Alan Stern <stern@rowland.harvard.edu>, swboyd@chromium.org, ricardo@marliere.net, 
-	hkallweit1@gmail.com, heikki.krogerus@linux.intel.com, 
-	mathias.nyman@linux.intel.com, royluo@google.com, 
-	syzkaller-bugs@googlegroups.com, xrivendell7@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] dt-bindings: usb: add common Type-C USB Switch schema
+To: Luca Weiss <luca.weiss@fairphone.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konrad.dybcio@linaro.org>,
+ Neil Armstrong <neil.armstrong@linaro.org>, linux-usb@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org
+References: <20240122094406.32198-1-krzysztof.kozlowski@linaro.org>
+ <D0H3VE6RLM2I.MK2NT1P9N02O@fairphone.com>
+Content-Language: en-US
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <D0H3VE6RLM2I.MK2NT1P9N02O@fairphone.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Apr 11, 2024 at 2:58=E2=80=AFPM Greg KH <gregkh@linuxfoundation.org=
-> wrote:
->
-> On Thu, Apr 11, 2024 at 02:52:27PM +0800, Sam Sun wrote:
-> > Dear developers and maintainers,
-> >
-> > We encountered a general protection fault in function disable_store.
-> > It is tested against the latest upstream linux (tag 6.9-rc3). C repro
-> > and kernel config are attached to this email. Kernel crash log is
-> > listed below.
-> > ```
-> > general protection fault, probably for non-canonical address
-> > 0xdffffc0000000000: 0000 [#1] PREEMPT SMP KASAN
-> > KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
-> > CPU: 1 PID: 9459 Comm: syz-executor414 Not tainted 6.7.0-rc7 #2
-> > Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04=
-/01/2014
-> > RIP: 0010:disable_store+0xd0/0x3d0 drivers/usb/core/port.c:88
-> > Code: 02 00 00 4c 8b 75 40 4d 8d be 58 ff ff ff 4c 89 ff e8 a4 20 fa
-> > ff 48 89 c2 48 89 c5 48 b8 00 00 00 00 00 fc ff df 48 c1 ea 03 <80> 3c
-> > 02 00 0f 85 b0 02 00 00 48 8b 45 00 48 8d bb 34 05 00 00 48
-> > RSP: 0018:ffffc90006e3fc08 EFLAGS: 00010246
-> > RAX: dffffc0000000000 RBX: ffff88801d4d4008 RCX: ffffffff86706be8
-> > RDX: 0000000000000000 RSI: ffffffff86706c4d RDI: 0000000000000005
-> > RBP: 0000000000000000 R08: 0000000000000005 R09: 0000000000000000
-> > R10: 0000000000000000 R11: 0000000000000000 R12: 1ffff92000dc7f85
-> > R13: ffff88810f4bfb18 R14: ffff88801d4d10a8 R15: ffff88801d4d1000
-> > FS:  00007fa0af71b640(0000) GS:ffff888135c00000(0000) knlGS:00000000000=
-00000
-> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > CR2: 00007fa0af71a4b8 CR3: 0000000022f5f000 CR4: 0000000000750ef0
-> > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > PKRU: 55555554
-> > Call Trace:
-> >  <TASK>
-> >  dev_attr_store+0x54/0x80 drivers/base/core.c:2366
-> >  sysfs_kf_write+0x114/0x170 fs/sysfs/file.c:136
-> >  kernfs_fop_write_iter+0x337/0x500 fs/kernfs/file.c:334
-> >  call_write_iter include/linux/fs.h:2020 [inline]
-> >  new_sync_write fs/read_write.c:491 [inline]
-> >  vfs_write+0x96a/0xd80 fs/read_write.c:584
-> >  ksys_write+0x122/0x250 fs/read_write.c:637
-> >  do_syscall_x64 arch/x86/entry/common.c:52 [inline]
-> >  do_syscall_64+0x40/0x110 arch/x86/entry/common.c:83
-> >  entry_SYSCALL_64_after_hwframe+0x63/0x6b
-> > RIP: 0033:0x7fa0aff9ee1f
-> > Code: 89 54 24 18 48 89 74 24 10 89 7c 24 08 e8 a9 f4 02 00 48 8b 54
-> > 24 18 48 8b 74 24 10 41 89 c0 8b 7c 24 08 b8 01 00 00 00 0f 05 <48> 3d
-> > 00 f0 ff ff 77 31 44 89 c7 48 89 44 24 08 e8 ec f4 02 00 48
-> > RSP: 002b:00007fa0af71a460 EFLAGS: 00000293 ORIG_RAX: 0000000000000001
-> > RAX: ffffffffffffffda RBX: 00000000ffffffff RCX: 00007fa0aff9ee1f
-> > RDX: 0000000000000004 RSI: 00007fa0af71acc0 RDI: 0000000000000005
-> > RBP: 0000000000000005 R08: 0000000000000000 R09: 00007fffdb6af2cf
-> > R10: 0000000000000000 R11: 0000000000000293 R12: 00007fa0af71acc0
-> > R13: 000000000000006e R14: 00007fa0aff613d0 R15: 00007fa0af6fb000
-> >  </TASK>
-> > Modules linked in:
-> > ---[ end trace 0000000000000000 ]---
-> > RIP: 0010:disable_store+0xd0/0x3d0 drivers/usb/core/port.c:88
-> > Code: 02 00 00 4c 8b 75 40 4d 8d be 58 ff ff ff 4c 89 ff e8 a4 20 fa
-> > ff 48 89 c2 48 89 c5 48 b8 00 00 00 00 00 fc ff df 48 c1 ea 03 <80> 3c
-> > 02 00 0f 85 b0 02 00 00 48 8b 45 00 48 8d bb 34 05 00 00 48
-> > RSP: 0018:ffffc90006e3fc08 EFLAGS: 00010246
-> > RAX: dffffc0000000000 RBX: ffff88801d4d4008 RCX: ffffffff86706be8
-> > RDX: 0000000000000000 RSI: ffffffff86706c4d RDI: 0000000000000005
-> > RBP: 0000000000000000 R08: 0000000000000005 R09: 0000000000000000
-> > R10: 0000000000000000 R11: 0000000000000000 R12: 1ffff92000dc7f85
-> > R13: ffff88810f4bfb18 R14: ffff88801d4d10a8 R15: ffff88801d4d1000
-> > FS:  00007fa0af71b640(0000) GS:ffff888063a00000(0000) knlGS:00000000000=
-00000
-> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > CR2: 000055d23050c460 CR3: 0000000022f5f000 CR4: 0000000000750ef0
-> > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > PKRU: 55555554
-> > ----------------
-> > Code disassembly (best guess):
-> >    0:    02 00                    add    (%rax),%al
-> >    2:    00 4c 8b 75              add    %cl,0x75(%rbx,%rcx,4)
-> >    6:    40                       rex
-> >    7:    4d 8d be 58 ff ff ff     lea    -0xa8(%r14),%r15
-> >    e:    4c 89 ff                 mov    %r15,%rdi
-> >   11:    e8 a4 20 fa ff           call   0xfffa20ba
-> >   16:    48 89 c2                 mov    %rax,%rdx
-> >   19:    48 89 c5                 mov    %rax,%rbp
-> >   1c:    48 b8 00 00 00 00 00     movabs $0xdffffc0000000000,%rax
-> >   23:    fc ff df
-> >   26:    48 c1 ea 03              shr    $0x3,%rdx
-> > * 2a:    80 3c 02 00              cmpb   $0x0,(%rdx,%rax,1) <--
-> > trapping instruction
-> >   2e:    0f 85 b0 02 00 00        jne    0x2e4
-> >   34:    48 8b 45 00              mov    0x0(%rbp),%rax
-> >   38:    48 8d bb 34 05 00 00     lea    0x534(%rbx),%rdi
-> >   3f:    48                       rex.W
-> > ```
-> > We analyzed the root cause of this bug. When calling disable_store()
-> > in drivers/usb/core/port.c, if function authorized_store() is calling
-> > usb_deauthorized_device() concurrently, the usb_interface will be
-> > removed by usb_disable_device. However, in function disable_store,
-> > usb_hub_to_struct_hub() would try to deref interface, causing
-> > nullptr-deref. We also tested other functions in
-> > drivers/usb/core/port.c. So far we haven't found a similar problem.
-> >
-> > If you have any questions, please contact us.
-> >
-> > Reported by Yue Sun <samsun1006219@gmail.com>
-> > Reported by xingwei lee <xrivendell7@gmail.com>
->
-> Do you have a proposed patch to fix this as you have a way to easily
-> test this?
->
-> thanks,
->
-> greg k-h
+On 11/04/2024 09:13, Luca Weiss wrote:
+> On Mon Jan 22, 2024 at 10:44 AM CET, Krzysztof Kozlowski wrote:
+>> Several bindings implement parts of Type-C USB orientation and mode
+>> switching, and retiming.  Keep definition of such properties in one
+>> place, new usb-switch schema, to avoid duplicate defines.
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>
+>> ---
+>>
+>> Changes in v2:
+>> 1. Fix language typos handle->handler (Luca)
+>> 2. Drop debugging left-over (Luca)
+>> ---
+>>  .../devicetree/bindings/usb/fcs,fsa4480.yaml  | 12 ++--
+>>  .../devicetree/bindings/usb/gpio-sbu-mux.yaml | 12 ++--
+>>  .../devicetree/bindings/usb/nxp,ptn36502.yaml | 12 ++--
+>>  .../bindings/usb/onnn,nb7vpq904m.yaml         | 13 ++--
+>>  .../bindings/usb/qcom,wcd939x-usbss.yaml      | 12 ++--
+>>  .../devicetree/bindings/usb/usb-switch.yaml   | 67 +++++++++++++++++++
+>>  6 files changed, 92 insertions(+), 36 deletions(-)
+>>  create mode 100644 Documentation/devicetree/bindings/usb/usb-switch.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml b/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml
+>> index f9410eb76a62..8b25b9a01ced 100644
+>> --- a/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml
+>> +++ b/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml
+>> @@ -27,13 +27,8 @@ properties:
+>>    vcc-supply:
+>>      description: power supply (2.7V-5.5V)
+>>  
+>> -  mode-switch:
+>> -    description: Flag the port as possible handle of altmode switching
+>> -    type: boolean
+>> -
+>> -  orientation-switch:
+>> -    description: Flag the port as possible handler of orientation switching
+>> -    type: boolean
+>> +  mode-switch: true
+>> +  orientation-switch: true
+>>  
+>>    port:
+>>      $ref: /schemas/graph.yaml#/$defs/port-base
+>> @@ -79,6 +74,9 @@ required:
+>>    - reg
+>>    - port
+>>  
+>> +allOf:
+>> +  - $ref: usb-switch.yaml#
+>> +
+>>  additionalProperties: false
+>>  
+>>  examples:
+> 
+> Hi Krzysztof,
+> 
+> This patch seems to break validation for fsa4480 if data-lanes is set in
+> the endpoint like the following
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml b/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml
+> index f9410eb76a62..3aa03fd65556 100644
+> --- a/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml
+> +++ b/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml
+> @@ -102,6 +102,7 @@ examples:
+>            port {
+>              fsa4480_ept: endpoint {
+>                remote-endpoint = <&typec_controller>;
+> +              data-lanes = <0 1>;
+>              };
+>            };
+>          };
+> 
+> Similar to how it's already used on qcom/qcm6490-fairphone-fp5.dts
+> 
+> I'm guessing the 'port' definition in the common schema somehow
+> disallows the fsa4480 schema from describing it further?
 
-I am glad to help, but I am afraid I don't have a proposed patch
-currently. This bug is a bit tricky, since the child device (usb port)
-is trying to get its parent device (usb interface) while its
-grandparent device (usb device) is trying to delete it (usb
-interface). I need to further look into the locks to see which lock
-should I grab to avoid deadlock or introducing other problems. I will
-try my best but there is no guarantee. Hope someone who knows usb
-subsystem better could fix this.
+There is no such code in qcm6490-fairphone-fp5.dts. There was no such
+code in the example of fsa4480 when I was testing my changes (and
+examples should be complete), so this did not pop up.
 
-Best Regards,
-Yue
+You right, new schema does not allow extending the port. However the
+true question is, why muxing happens on the port to the SoC controller?
+The graph in commit msg fad89aa14 shows it happens on the side of the
+connector.
+
+Looks like fsa4480 mixes connector with the controller.
+
+Best regards,
+Krzysztof
+
 
