@@ -1,101 +1,199 @@
-Return-Path: <linux-usb+bounces-9267-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9270-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8914A8A1721
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Apr 2024 16:28:01 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 468668A1804
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Apr 2024 17:01:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E6217281BAC
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Apr 2024 14:27:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6B4E21C224A9
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Apr 2024 15:01:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87F9414F128;
-	Thu, 11 Apr 2024 14:27:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="djIbvibv"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F138C134BF;
+	Thu, 11 Apr 2024 15:01:17 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout-u-107.mailbox.org (mout-u-107.mailbox.org [80.241.59.207])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E88C414F103
-	for <linux-usb@vger.kernel.org>; Thu, 11 Apr 2024 14:27:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 137DA134BE;
+	Thu, 11 Apr 2024 15:01:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.59.207
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712845651; cv=none; b=Ve/PnVDlIFoZnDEXeF1wYlDCPRPt5QT++nx0kHMoSX/rJBG6it937X+T9/AjHEJdJWcAguGOdiXV2pQM2EGB+mhHrh2C8BqfEwizEwHNF1/1alEGuUDvKYyezvWKYPtnMACjLIpuanF1cky0bMD/Gtpp2eW6TsIlOjhvy53ZbQE=
+	t=1712847677; cv=none; b=gZwz9o8UvnfvQYfu04jDRV0mIrSUfwwRwK+pd45vzbZtPQMPetq2jOpXYJB6iiyBD++pBJwX6KKBEzV4d6uAr7M2o5bbBv+nZbFW5whJvquazkZ6r4kR1OfWPKnQUFE3tRpoNsqG9T2qg+cRGUkSOG6r+PLPg8Cuw1mMh2Q2AUM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712845651; c=relaxed/simple;
-	bh=7SnslGUWPGiRrtugkuJstyDRVVGJEJGLeQCkmLXs+/o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Yt/FcV+Ofj6/+tLW1eYktagQZjYa/mTo9PH5y5cq3RMD/P1YXp5YvPjW++UfM3t9s4eTtw+hZyKvNXG4aFlHoiVzAr+GPtXXzJIcG77Z42+NJSH0UtDrCjKTYp7i670ysEZEEN12SGse7HTfB+18/FCeK2jmSiMpyCxh1cIjWAY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=djIbvibv; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-417d42dd5a4so5231095e9.1
-        for <linux-usb@vger.kernel.org>; Thu, 11 Apr 2024 07:27:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1712845647; x=1713450447; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rkEbmA6F130v+4m3HDCO7eqBS624jAKjQM4UyvdRGso=;
-        b=djIbvibv3kizCN2dpoTh3jxfss+UmjVvjlDivEXzXIES4uU9s5ujc9JbcNJIziCY+8
-         zGwLn0PoucXIJ203VZek4zNkZ1yX7PkjMyj+DfAfbJPE1sYVY66Er5huYFRd1zma4NJ2
-         fzZZLasrN8nDWPplndlfIqt4xyVV37NWQ7bPhEhjSqrWrNAwrABA1ofJQMBdi0Fk2vFs
-         ztT2vO/ygKgYRgQYP3Gstu6j35jJS9n0vI0BeG5gxIK8mCKW4oU4RnHfb9t+kLYTTwUp
-         yP0qeBY9JLNv5uXEt5+M/kZKNhh1TxVRIsNyWVpsAQI3ewJcLbG9/EWepXnFbGGia+5i
-         B8SQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712845647; x=1713450447;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rkEbmA6F130v+4m3HDCO7eqBS624jAKjQM4UyvdRGso=;
-        b=Y7Xuk3i0bE1GsjnRLJK/WTGxhYiSz1bfZusKa8vXue9FmCPNBc+vjWBNNMB5JQIT9V
-         DJ/t3O2iZZu56KjdXxRSBttdvViRjvtcZE7kEDdtbQJOrNhgXrk/jdRV6qbvTcPA+Rc6
-         upgIxgkiXcXrt1ZRHLZbFgZ28WrrzCWwPDvFFxioS6IDAL88WNj4S2e4KtljeM+AYk+J
-         k6WNfNM7kWZohPykGtYjuMhXHNghMeg2HlaakgMCri/Y365uDJDrVk0dBoSUOwapAkQ2
-         dR/IzE/70V7l3aTkQY7OPKbwBHrHPDAOvhbB+LEv3fz/HfFs46rJbYmCThGr34oBX2Qc
-         YD6g==
-X-Gm-Message-State: AOJu0YwFr/lNNJY7QY7srI4Mqpk6vy5yf5hskpYgH37C+b0BvuIBsb/w
-	BSb/mkcND0Xj0Tj2tvVR92Pw8cwggTn3R0TjuawKYDFIDIhnE4lsPUBtYLrxVH0=
-X-Google-Smtp-Source: AGHT+IF+P3f8VM1hFwymxo/VGyB/AtHZrxsIvFDUVI4211xXC/EXHdpjpy5vTxJ/0kyCT9o+oE3AGA==
-X-Received: by 2002:a05:600c:3b93:b0:416:b5e6:d31e with SMTP id n19-20020a05600c3b9300b00416b5e6d31emr4862162wms.4.1712845647315;
-        Thu, 11 Apr 2024 07:27:27 -0700 (PDT)
-Received: from ?IPV6:2001:a61:1366:6801:d8:8490:cf1a:3274? ([2001:a61:1366:6801:d8:8490:cf1a:3274])
-        by smtp.gmail.com with ESMTPSA id fk7-20020a05600c0cc700b00417c434a340sm2489437wmb.21.2024.04.11.07.27.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Apr 2024 07:27:27 -0700 (PDT)
-Message-ID: <4c761c2f-76b7-490e-ad1c-ecf1376aab74@suse.com>
-Date: Thu, 11 Apr 2024 16:27:26 +0200
+	s=arc-20240116; t=1712847677; c=relaxed/simple;
+	bh=4Ukjqm4Uw1XkLoSWFdID5VT/BDuOQuEsIMIYWMR4nv0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=mfe7+5HXi0F1HQoKrjuu7hvR/YXEcAeaH6SwfMX6RFRTcyzRzpHZ0Comenrxz4AcFNoSfiAvfKjO32XqCsM+DgUZgO4tWjRjKtPxEEeF++oJofXgnyJcyfg/3h2+bSRImksUOVnroJ+aYLTAAhGnqdQwRhZEsEQBnZ3b9R4WvR8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=permerror (bad message/signature format); arc=none smtp.client-ip=80.241.59.207
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:b231:465::2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-u-107.mailbox.org (Postfix) with ESMTPS id 4VFjMf6XX8z9svy;
+	Thu, 11 Apr 2024 16:51:58 +0200 (CEST)
+From: Marcello Sylvester Bauer <email@web.codeaurora.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Marcello Sylvester Bauer <sylv@sylv.io>,
+	Marcello Sylvester Bauer <marcello.bauer@9elements.com>,
+	=?UTF-8?q?Matthias=20St=C3=B6ckl?= <matthias.stoeckl@secunet.com>,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v1 1/2] usb: gadget: dummy_hcd: Switch to hrtimer transfer scheduler
+Date: Thu, 11 Apr 2024 16:51:28 +0200
+Message-ID: <57a1c2180ff74661600e010c234d1dbaba1d0d46.1712843963.git.sylv@sylv.io>
+In-Reply-To: <cover.1712843963.git.sylv@sylv.io>
+References: <cover.1712843963.git.sylv@sylv.io>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC 1/6] usb: usb_parse_endpoint ignore reserved bits
-To: Greg KH <greg@kroah.com>, Oliver Neukum <oneukum@suse.com>
-Cc: linux-usb@vger.kernel.org
-References: <20240411124722.17343-1-oneukum@suse.com>
- <20240411124722.17343-2-oneukum@suse.com>
- <2024041115-aging-mankind-e69e@gregkh>
-Content-Language: en-US
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <2024041115-aging-mankind-e69e@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 4VFjMf6XX8z9svy
 
-On 11.04.24 16:11, Greg KH wrote:
-> On Thu, Apr 11, 2024 at 02:42:59PM +0200, Oliver Neukum wrote:
->> We have to ignore the higher bits in bEndpointAddress
-> 
-> Why?
+From: Marcello Sylvester Bauer <sylv@sylv.io>
 
-Because if we do not, we are breaking compatibility with all future
-standards that use those bits in backwards compatible manner.
+The dummy_hcd transfer scheduler assumes that the internal kernel timer
+frequency is set to 1000Hz to give a polling interval of 1ms. Reducing
+the timer frequency will result in an anti-proportional reduction in
+transfer performance. Switch to a hrtimer to decouple this association.
 
-	Regards
-		Oliver
+Signed-off-by: Marcello Sylvester Bauer <marcello.bauer@9elements.com>
+Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+---
+ drivers/usb/gadget/udc/dummy_hcd.c | 35 +++++++++++++++++-------------
+ 1 file changed, 20 insertions(+), 15 deletions(-)
+
+diff --git a/drivers/usb/gadget/udc/dummy_hcd.c b/drivers/usb/gadget/udc/dummy_hcd.c
+index 0953e1b5c030..dab559d8ee8c 100644
+--- a/drivers/usb/gadget/udc/dummy_hcd.c
++++ b/drivers/usb/gadget/udc/dummy_hcd.c
+@@ -30,7 +30,7 @@
+ #include <linux/slab.h>
+ #include <linux/errno.h>
+ #include <linux/init.h>
+-#include <linux/timer.h>
++#include <linux/hrtimer.h>
+ #include <linux/list.h>
+ #include <linux/interrupt.h>
+ #include <linux/platform_device.h>
+@@ -240,7 +240,7 @@ enum dummy_rh_state {
+ struct dummy_hcd {
+ 	struct dummy			*dum;
+ 	enum dummy_rh_state		rh_state;
+-	struct timer_list		timer;
++	struct hrtimer			timer;
+ 	u32				port_status;
+ 	u32				old_status;
+ 	unsigned long			re_timeout;
+@@ -1301,8 +1301,8 @@ static int dummy_urb_enqueue(
+ 		urb->error_count = 1;		/* mark as a new urb */
+ 
+ 	/* kick the scheduler, it'll do the rest */
+-	if (!timer_pending(&dum_hcd->timer))
+-		mod_timer(&dum_hcd->timer, jiffies + 1);
++	if (!hrtimer_active(&dum_hcd->timer))
++		hrtimer_start(&dum_hcd->timer, ms_to_ktime(1), HRTIMER_MODE_REL);
+ 
+  done:
+ 	spin_unlock_irqrestore(&dum_hcd->dum->lock, flags);
+@@ -1323,7 +1323,7 @@ static int dummy_urb_dequeue(struct usb_hcd *hcd, struct urb *urb, int status)
+ 	rc = usb_hcd_check_unlink_urb(hcd, urb, status);
+ 	if (!rc && dum_hcd->rh_state != DUMMY_RH_RUNNING &&
+ 			!list_empty(&dum_hcd->urbp_list))
+-		mod_timer(&dum_hcd->timer, jiffies);
++		hrtimer_start(&dum_hcd->timer, ns_to_ktime(0), HRTIMER_MODE_REL);
+ 
+ 	spin_unlock_irqrestore(&dum_hcd->dum->lock, flags);
+ 	return rc;
+@@ -1777,7 +1777,7 @@ static int handle_control_request(struct dummy_hcd *dum_hcd, struct urb *urb,
+  * drivers except that the callbacks are invoked from soft interrupt
+  * context.
+  */
+-static void dummy_timer(struct timer_list *t)
++static enum hrtimer_restart dummy_timer(struct hrtimer *t)
+ {
+ 	struct dummy_hcd	*dum_hcd = from_timer(dum_hcd, t, timer);
+ 	struct dummy		*dum = dum_hcd->dum;
+@@ -1808,8 +1808,6 @@ static void dummy_timer(struct timer_list *t)
+ 		break;
+ 	}
+ 
+-	/* FIXME if HZ != 1000 this will probably misbehave ... */
+-
+ 	/* look at each urb queued by the host side driver */
+ 	spin_lock_irqsave(&dum->lock, flags);
+ 
+@@ -1817,7 +1815,7 @@ static void dummy_timer(struct timer_list *t)
+ 		dev_err(dummy_dev(dum_hcd),
+ 				"timer fired with no URBs pending?\n");
+ 		spin_unlock_irqrestore(&dum->lock, flags);
+-		return;
++		return HRTIMER_NORESTART;
+ 	}
+ 	dum_hcd->next_frame_urbp = NULL;
+ 
+@@ -1995,10 +1993,12 @@ static void dummy_timer(struct timer_list *t)
+ 		dum_hcd->udev = NULL;
+ 	} else if (dum_hcd->rh_state == DUMMY_RH_RUNNING) {
+ 		/* want a 1 msec delay here */
+-		mod_timer(&dum_hcd->timer, jiffies + msecs_to_jiffies(1));
++		hrtimer_start(&dum_hcd->timer, ms_to_ktime(1), HRTIMER_MODE_REL);
+ 	}
+ 
+ 	spin_unlock_irqrestore(&dum->lock, flags);
++
++	return HRTIMER_NORESTART;
+ }
+ 
+ /*-------------------------------------------------------------------------*/
+@@ -2387,7 +2387,7 @@ static int dummy_bus_resume(struct usb_hcd *hcd)
+ 		dum_hcd->rh_state = DUMMY_RH_RUNNING;
+ 		set_link_state(dum_hcd);
+ 		if (!list_empty(&dum_hcd->urbp_list))
+-			mod_timer(&dum_hcd->timer, jiffies);
++			hrtimer_start(&dum_hcd->timer, ns_to_ktime(0), HRTIMER_MODE_REL);
+ 		hcd->state = HC_STATE_RUNNING;
+ 	}
+ 	spin_unlock_irq(&dum_hcd->dum->lock);
+@@ -2465,7 +2465,8 @@ static DEVICE_ATTR_RO(urbs);
+ 
+ static int dummy_start_ss(struct dummy_hcd *dum_hcd)
+ {
+-	timer_setup(&dum_hcd->timer, dummy_timer, 0);
++	hrtimer_init(&dum_hcd->timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
++	dum_hcd->timer.function = dummy_timer;
+ 	dum_hcd->rh_state = DUMMY_RH_RUNNING;
+ 	dum_hcd->stream_en_ep = 0;
+ 	INIT_LIST_HEAD(&dum_hcd->urbp_list);
+@@ -2494,7 +2495,8 @@ static int dummy_start(struct usb_hcd *hcd)
+ 		return dummy_start_ss(dum_hcd);
+ 
+ 	spin_lock_init(&dum_hcd->dum->lock);
+-	timer_setup(&dum_hcd->timer, dummy_timer, 0);
++	hrtimer_init(&dum_hcd->timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
++	dum_hcd->timer.function = dummy_timer;
+ 	dum_hcd->rh_state = DUMMY_RH_RUNNING;
+ 
+ 	INIT_LIST_HEAD(&dum_hcd->urbp_list);
+@@ -2513,8 +2515,11 @@ static int dummy_start(struct usb_hcd *hcd)
+ 
+ static void dummy_stop(struct usb_hcd *hcd)
+ {
+-	device_remove_file(dummy_dev(hcd_to_dummy_hcd(hcd)), &dev_attr_urbs);
+-	dev_info(dummy_dev(hcd_to_dummy_hcd(hcd)), "stopped\n");
++	struct dummy_hcd	*dum_hcd = hcd_to_dummy_hcd(hcd);
++
++	hrtimer_cancel(&dum_hcd->timer);
++	device_remove_file(dummy_dev(dum_hcd), &dev_attr_urbs);
++	dev_info(dummy_dev(dum_hcd), "stopped\n");
+ }
+ 
+ /*-------------------------------------------------------------------------*/
+-- 
+2.44.0
+
 
