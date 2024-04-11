@@ -1,121 +1,133 @@
-Return-Path: <linux-usb+bounces-9272-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9273-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5944C8A18A3
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Apr 2024 17:27:49 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF2BF8A18BF
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Apr 2024 17:31:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 08066B23122
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Apr 2024 15:26:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 943A91F24883
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Apr 2024 15:31:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4F5D18042;
-	Thu, 11 Apr 2024 15:22:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sylv.io header.i=@sylv.io header.b="069+bgEC"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E22FF14A9F;
+	Thu, 11 Apr 2024 15:31:23 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [80.241.56.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DBA517C7C;
-	Thu, 11 Apr 2024 15:22:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.171
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id 8CD2613FF6
+	for <linux-usb@vger.kernel.org>; Thu, 11 Apr 2024 15:31:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712848977; cv=none; b=OqabqelkyRmbTDn8woKAXKcbAhHotmbrj5Hx8J0sV6yUjjgXi1nt/1iRbvOwGxlxVCNZgS9hl0KsiVsdsEQ/FEpb9vlOsPOtKNYu51KFd2qo8xFG+b3TzTbkUc/ys+zxYJK5xgN3PyQodaDzbugQEkOBZv9kuM0dC8AWByXI+zc=
+	t=1712849483; cv=none; b=PkDw33Oz3wJsp/SqkITHG5VuxixNVflc3VeKw8e75AXJ2X72kzw1Bcuzkczw9oKE5RZGS+yPHRiBANGKadaYPMiXL0ABbx26ITo6JC4Ar4ZD7ms+ibfmuaDm46rBz+hWsty0W1qIKs4D8dqoxfWm2MIcxIq2ce6Kw1ywyoaVCXs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712848977; c=relaxed/simple;
-	bh=GA/EpIVJhg4UwhBlutCAi1ERwtVhQc+L+Av7WARSGa0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=AnNxtyc3YRkFseu4apQR1BHipyWaN278xu9RoGf/EdUKI/4O96BnSxuwZG3j3ojFWabs1wdy1v9Fv30eg/pYAkY7QzZ3saadJuJiRAUr9OdwIlPXZ20Hk/eK8Usi+jNC9IA7aYX533x3zepx5ELGVw/8FI/7puNrpTBpVoIqazY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sylv.io; spf=pass smtp.mailfrom=sylv.io; dkim=pass (2048-bit key) header.d=sylv.io header.i=@sylv.io header.b=069+bgEC; arc=none smtp.client-ip=80.241.56.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sylv.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sylv.io
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [10.196.197.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4VFk3H6nCdz9stD;
-	Thu, 11 Apr 2024 17:22:51 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sylv.io; s=MBO0001;
-	t=1712848971;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=amXjS7ISzkPiYpAuOxGm5Oj5qH9FcCS+4Rp1Y2la0yk=;
-	b=069+bgECrr4UjYsUMHQiI8kUAVroyfAL+yfoUqXFrBqbuZV1OgC8l8yeg3qYoZtHLOTFye
-	dqL0UE6OPcMFo1Phg81iyg9WpYw/tGKZ7MfIEiVxmfx9A7isZ1JJdvKrJ84E5eXZqG6Qnk
-	jXi3TOF1maw0rrX8Jip3+Gh/p3P/HAb9rXOncE8XT0Hz5mJHZga7HQq4NNwGOlr31x7df4
-	jZ/xI+OXFSKhnd0HO3GIVklL1rC6xFs4vXcX6YXCdiJN8neQrEi1YYoaMDDmRMIMofVdKA
-	5Tn9MuDR0sDYq2IBvwCF5R4p0oPF9Z4ax5MFS+ePEbpjG1BduASkPodKA7ESzg==
-From: Marcello Sylvester Bauer <sylv@sylv.io>
-To: linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Marcello Sylvester Bauer <marcello.bauer@9elements.com>,
-	Matthias Stoeckl <matthias.stoeckl@secunet.com>,
-	Uwe Kleine-Koenig <u.kleine-koenig@pengutronix.de>,
-	Marcello Sylvester Bauer <sylv@sylv.io>
-Subject: [PATCH v1 2/2] usb: gadget: dummy_hcd: Set transfer interval to 1 microframe
-Date: Thu, 11 Apr 2024 17:22:11 +0200
-Message-ID: <6295dbb84ca76884551df9eb157cce569377a22c.1712843963.git.sylv@sylv.io>
-In-Reply-To: <cover.1712843963.git.sylv@sylv.io>
-References: <cover.1712843963.git.sylv@sylv.io>
+	s=arc-20240116; t=1712849483; c=relaxed/simple;
+	bh=LV3XxHklggyH1m5MNwe1hhpT3rkIrYb8jHihU8HACXM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Pn3FY8W/rajX4kBBfTyf2RMG1gNKoQ5ISrBYRksb6HS9b9pjadJgvfRs4mchrtzMviFycJSgZvLdjQTyI577mbhWDsfsdQ34H+WCc3MDe2aylekrL/uSULoXCMrFdFgFVdIWWNAnuEjUckeI+zi5QX3VDScfxwFA8JfW1JXe23o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
+Received: (qmail 248476 invoked by uid 1000); 11 Apr 2024 11:24:39 -0400
+Date: Thu, 11 Apr 2024 11:24:39 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Sam Sun <samsun1006219@gmail.com>
+Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+  Greg KH <gregkh@linuxfoundation.org>, swboyd@chromium.org,
+  ricardo@marliere.net, hkallweit1@gmail.com, heikki.krogerus@linux.intel.com,
+  mathias.nyman@linux.intel.com, royluo@google.com,
+  syzkaller-bugs@googlegroups.com, xrivendell7@gmail.com
+Subject: Re: [Linux kernel bug] general protection fault in disable_store
+Message-ID: <92fe8e95-bc01-4d7d-9678-8cfc55cc4a7b@rowland.harvard.edu>
+References: <CAEkJfYON+ry7xPx=AiLR9jzUNT+i_Va68ACajOC3HoacOfL1ig@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEkJfYON+ry7xPx=AiLR9jzUNT+i_Va68ACajOC3HoacOfL1ig@mail.gmail.com>
 
-Currently, the transfer polling interval is set to 1ms, which is the
-frame rate of full-speed and low-speed USB. The USB 2.0 specification
-introduces microframes (125 microseconds) to improve the timing
-precision of data transfers.
+On Thu, Apr 11, 2024 at 02:52:27PM +0800, Sam Sun wrote:
+> Dear developers and maintainers,
+> 
+> We encountered a general protection fault in function disable_store.
+> It is tested against the latest upstream linux (tag 6.9-rc3). C repro
+> and kernel config are attached to this email. Kernel crash log is
+> listed below.
+> ```
+> general protection fault, probably for non-canonical address
+> 0xdffffc0000000000: 0000 [#1] PREEMPT SMP KASAN
+> KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
+> CPU: 1 PID: 9459 Comm: syz-executor414 Not tainted 6.7.0-rc7 #2
+> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
+> RIP: 0010:disable_store+0xd0/0x3d0 drivers/usb/core/port.c:88
+> Code: 02 00 00 4c 8b 75 40 4d 8d be 58 ff ff ff 4c 89 ff e8 a4 20 fa
+> ff 48 89 c2 48 89 c5 48 b8 00 00 00 00 00 fc ff df 48 c1 ea 03 <80> 3c
+> 02 00 0f 85 b0 02 00 00 48 8b 45 00 48 8d bb 34 05 00 00 48
+> RSP: 0018:ffffc90006e3fc08 EFLAGS: 00010246
+> RAX: dffffc0000000000 RBX: ffff88801d4d4008 RCX: ffffffff86706be8
+> RDX: 0000000000000000 RSI: ffffffff86706c4d RDI: 0000000000000005
+> RBP: 0000000000000000 R08: 0000000000000005 R09: 0000000000000000
+> R10: 0000000000000000 R11: 0000000000000000 R12: 1ffff92000dc7f85
+> R13: ffff88810f4bfb18 R14: ffff88801d4d10a8 R15: ffff88801d4d1000
+> FS:  00007fa0af71b640(0000) GS:ffff888135c00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007fa0af71a4b8 CR3: 0000000022f5f000 CR4: 0000000000750ef0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> PKRU: 55555554
 
-Reducing the transfer interval to 1 microframe increases data throughput
-for high-speed and super-speed USB communication
+> ----------------
+> Code disassembly (best guess):
+>    0:    02 00                    add    (%rax),%al
+>    2:    00 4c 8b 75              add    %cl,0x75(%rbx,%rcx,4)
+>    6:    40                       rex
+>    7:    4d 8d be 58 ff ff ff     lea    -0xa8(%r14),%r15
+>    e:    4c 89 ff                 mov    %r15,%rdi
+>   11:    e8 a4 20 fa ff           call   0xfffa20ba
+>   16:    48 89 c2                 mov    %rax,%rdx
+>   19:    48 89 c5                 mov    %rax,%rbp
+>   1c:    48 b8 00 00 00 00 00     movabs $0xdffffc0000000000,%rax
+>   23:    fc ff df
+>   26:    48 c1 ea 03              shr    $0x3,%rdx
+> * 2a:    80 3c 02 00              cmpb   $0x0,(%rdx,%rax,1) <--
+> trapping instruction
+>   2e:    0f 85 b0 02 00 00        jne    0x2e4
+>   34:    48 8b 45 00              mov    0x0(%rbp),%rax
+>   38:    48 8d bb 34 05 00 00     lea    0x534(%rbx),%rdi
+>   3f:    48                       rex.W
+> ```
+> We analyzed the root cause of this bug. When calling disable_store()
+> in drivers/usb/core/port.c, if function authorized_store() is calling
+> usb_deauthorized_device() concurrently, the usb_interface will be
+> removed by usb_disable_device. However, in function disable_store,
+> usb_hub_to_struct_hub() would try to deref interface, causing
+> nullptr-deref. We also tested other functions in
+> drivers/usb/core/port.c. So far we haven't found a similar problem.
 
-Signed-off-by: Marcello Sylvester Bauer <marcello.bauer@9elements.com>
-Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
----
- drivers/usb/gadget/udc/dummy_hcd.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+I don't see how this explanation could be correct.  disable_store() is a 
+sysfs attribute file for the port device, so when it is called the port 
+device structure must still be registered.  The interface structure 
+doesn't get removed until after usb_disable_device() calls device_del(), 
+which won't return until hub_disconnect() returns, which won't happen 
+until after the port devices are unregistered, which doesn't happen 
+until disable_store() calls sysfs_break_active_protection(), which is 
+after the call to usb_hub_to_struct_hub().
 
-diff --git a/drivers/usb/gadget/udc/dummy_hcd.c b/drivers/usb/gadget/udc/dummy_hcd.c
-index dab559d8ee8c..f37b0d8386c1 100644
---- a/drivers/usb/gadget/udc/dummy_hcd.c
-+++ b/drivers/usb/gadget/udc/dummy_hcd.c
-@@ -50,6 +50,8 @@
- #define POWER_BUDGET	500	/* in mA; use 8 for low-power port testing */
- #define POWER_BUDGET_3	900	/* in mA */
- 
-+#define DUMMY_TIMER_INT_NSECS	125000 /* 1 microframe */
-+
- static const char	driver_name[] = "dummy_hcd";
- static const char	driver_desc[] = "USB Host+Gadget Emulator";
- 
-@@ -1302,7 +1304,7 @@ static int dummy_urb_enqueue(
- 
- 	/* kick the scheduler, it'll do the rest */
- 	if (!hrtimer_active(&dum_hcd->timer))
--		hrtimer_start(&dum_hcd->timer, ms_to_ktime(1), HRTIMER_MODE_REL);
-+		hrtimer_start(&dum_hcd->timer, ns_to_ktime(DUMMY_TIMER_INT_NSECS), HRTIMER_MODE_REL);
- 
-  done:
- 	spin_unlock_irqrestore(&dum_hcd->dum->lock, flags);
-@@ -1993,7 +1995,7 @@ static enum hrtimer_restart dummy_timer(struct hrtimer *t)
- 		dum_hcd->udev = NULL;
- 	} else if (dum_hcd->rh_state == DUMMY_RH_RUNNING) {
- 		/* want a 1 msec delay here */
--		hrtimer_start(&dum_hcd->timer, ms_to_ktime(1), HRTIMER_MODE_REL);
-+		hrtimer_start(&dum_hcd->timer, ns_to_ktime(DUMMY_TIMER_INT_NSECS), HRTIMER_MODE_REL);
- 	}
- 
- 	spin_unlock_irqrestore(&dum->lock, flags);
--- 
-2.44.0
+Can you do a little extra debugging to find out exactly which C 
+statement causes the trap?  The disassembly above indicates the trap 
+happens during a compare against 0 inside disable_store() -- not inside 
+usb_hub_to_struct_hub().  Can you figure out which comparison that is?
 
+Alan Stern
+
+> If you have any questions, please contact us.
+> 
+> Reported by Yue Sun <samsun1006219@gmail.com>
+> Reported by xingwei lee <xrivendell7@gmail.com>
+> 
+> Best Regards,
+> Yue
 
