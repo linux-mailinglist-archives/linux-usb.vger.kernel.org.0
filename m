@@ -1,172 +1,387 @@
-Return-Path: <linux-usb+bounces-9243-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9244-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D028C8A08FB
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Apr 2024 08:59:16 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 431618A096B
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Apr 2024 09:13:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8450A284242
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Apr 2024 06:59:15 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 49F47B289D1
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Apr 2024 07:13:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B43213DBA7;
-	Thu, 11 Apr 2024 06:58:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B399513DDD0;
+	Thu, 11 Apr 2024 07:13:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="IyMZwl5F"
+	dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b="Rq+9B/eE"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93E7013DDBD;
-	Thu, 11 Apr 2024 06:58:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3761E13DDAA
+	for <linux-usb@vger.kernel.org>; Thu, 11 Apr 2024 07:13:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712818726; cv=none; b=miFS3s5dflOXqGYzBH/GxG2ShE9gk5K4krNfUvZtvkdMEuUBwwt7oaH0MfRZ/vTIVYS5xzZlD75A+bBAw96SNxeJ3IC6LVVI6pD5GhTrT1dabAEnGYPTb8QZO4y1EgVE1HRSxJoaYBDfcbVl7DKPylwm07Ulzy9gEVjOT3mFZec=
+	t=1712819597; cv=none; b=a+i1Sk2UXN+LBwtjEIDLoOq/JcA+F4tKwd359ucsUOYqN135AoxMB7SFJdRsl4wSPIz+6wdEfXEYYYO6tK34L/oo1UeISJoWQyHB9v3GcneWEAjiqRZcfvymsJ9q9Xe6IVD05dPfNhc7hDoUtSWM/FlGZJxMUjfy4TTUK/6rfw4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712818726; c=relaxed/simple;
-	bh=LMM+ez524Aboe2mGPKwqNrGqAQc9aK5c4yyXY0LCoss=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Hx77fKP/wdyQ7m8Jjb2AfmiW1BDctESpH9LIGJeqMdiQKGWoopWzr8aqFHVXcJW2VBvqiRIxw/XZXooNW2IQidmEw/ffla8mlpk8zv4fSyoJq3zbpkiNDY2XDAnlW/4T983N0hktrT1JRQbqWXt7hlz1TrXXOks/q/Vrn3LwHIc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=IyMZwl5F; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA2E5C433F1;
-	Thu, 11 Apr 2024 06:58:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1712818726;
-	bh=LMM+ez524Aboe2mGPKwqNrGqAQc9aK5c4yyXY0LCoss=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=IyMZwl5FpJTPzEbw308SeJc3Ty8Un2aBddHUk/JLXbiBBH165npc4RDa4iuNxYX6h
-	 nzWXejLUWk9e59IKjl7fGYFQtb8GyPsUMMhhJTSB+BQPagt73nRfUNaw7ETL10RZq+
-	 upjX3vcsrNeDu1CXU8PxaOAc8UmjPzrbvybMUhVM=
-Date: Thu, 11 Apr 2024 08:58:43 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Sam Sun <samsun1006219@gmail.com>
-Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	Alan Stern <stern@rowland.harvard.edu>, swboyd@chromium.org,
-	ricardo@marliere.net, hkallweit1@gmail.com,
-	heikki.krogerus@linux.intel.com, mathias.nyman@linux.intel.com,
-	royluo@google.com, syzkaller-bugs@googlegroups.com,
-	xrivendell7@gmail.com
-Subject: Re: [Linux kernel bug] general protection fault in disable_store
-Message-ID: <2024041125-anemic-decorated-52aa@gregkh>
-References: <CAEkJfYON+ry7xPx=AiLR9jzUNT+i_Va68ACajOC3HoacOfL1ig@mail.gmail.com>
+	s=arc-20240116; t=1712819597; c=relaxed/simple;
+	bh=0ezShjubPfyqqfET0cKMfGNJ1KOyAHFPa4/ZQHuNViI=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:
+	 References:In-Reply-To; b=knou4hrRchUzV3wftm7Esy0CguqH8As2tI7qPMzT+IPF7RJ0OJ6XIaFfPqqi5SLxopWH7KEC6azQFYNeir8TXjH26Af20RphticHhGp+ZcGD/M1/vSHF/lC75ajZye4UAkMac7sBGIBvPBQPghoqRQJiImC8tGkFVD+v7QhsYcI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fairphone.com; spf=pass smtp.mailfrom=fairphone.com; dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b=Rq+9B/eE; arc=none smtp.client-ip=209.85.218.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fairphone.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fairphone.com
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a519e1b0e2dso801271766b.2
+        for <linux-usb@vger.kernel.org>; Thu, 11 Apr 2024 00:13:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fairphone.com; s=fair; t=1712819593; x=1713424393; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LrbBAtH1jVxXi0Y7F3AAKpCddxZL6g6UJ6sMsXaG4hc=;
+        b=Rq+9B/eEE7oKPYdYrPdDdBA9cX7j/4jW1EJjtb0LWLpOLBxVVip3b2RU894qTfV5Lc
+         jnxkpqJ6QgaHoW/hTCnS3WQvo6q1lC/KilNCrOkZ61ID53WwBb8ggBk5rpsjpf2yBER4
+         cSUJ838za6a2fPgPfLqTrs6fXLzu8t+DjoG8ibUyDgag6XbbrBarKLPiS1IayGyRCoEe
+         LT8RIlJM89Ay+EvF6DvYMcHlsURSZ2uBWKakQP8TD/Ay5Xlu1u1ehuSN0q0CkztGstn5
+         pVkPn033PGMlBjELMKz3AwMLS/yelDXz0e5WBauqpeqbOpsf09Y5Y9agVQMFS6S4D7Z+
+         PR6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712819593; x=1713424393;
+        h=in-reply-to:references:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=LrbBAtH1jVxXi0Y7F3AAKpCddxZL6g6UJ6sMsXaG4hc=;
+        b=XlsgbGVjjx6VgmzZ3TcemmfgB/4HUwMB9Xbn0iRe+gq5WjGMHOgxXa44u06HZ98zLJ
+         6YsAhNYSjmmaOusvkQUcpgb9SP4LW7uEBwMCuuAfWVyzn95LFRmOVOiOHf0Os1PqOvWD
+         z/H+3+laTE5DBp6RP2q99mt+AnYsU4yHS8v8iLfoza7j2NlzPcWDQaAQkJKPwPJAlrdr
+         oOkK+H6YcQZCVPMmbnja32K3YWVgsLpdRUF1sK+EhZZz4l1+LcMVLztjLDQqAPY0yiLb
+         aXLXj+P235OGwxp5FDWxs2PBqUSmqOI2cu5N78b0aa0eFWQMroq3jmkA3SjJcaa5tjoD
+         mTjQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXYWYQNFrIFCkSctt3wjohXWe5oRjpnH/P9ZWRYULbX+upJx3vkHisBSUsq4iGboxAnORaAAO7c5lW20cIeiSBuHLKRHrR2LWfJ
+X-Gm-Message-State: AOJu0YycF2at8pSzLV2V2/GwS374eqwBlMrDeBE7sr0lhYoYIiGxHQPI
+	3eHR7FzCG4wbRKBO6wg3E/JVp5/Iq9q7EWEAiX575m0V8Yj0j2O9Adx0/d9wr1gM12+61XsYDIw
+	X
+X-Google-Smtp-Source: AGHT+IFqYhtJ2dBQM8qdyDDimGAJt9zOkhn/4khwtuivcKq/3IG/EsJL5J1H0EcrxhlxUadOzCQBDg==
+X-Received: by 2002:a17:906:11cf:b0:a52:143c:1901 with SMTP id o15-20020a17090611cf00b00a52143c1901mr2424383eja.22.1712819593496;
+        Thu, 11 Apr 2024 00:13:13 -0700 (PDT)
+Received: from localhost (144-178-202-138.static.ef-service.nl. [144.178.202.138])
+        by smtp.gmail.com with ESMTPSA id r18-20020a170906549200b00a4e98679e7dsm469635ejo.87.2024.04.11.00.13.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 Apr 2024 00:13:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEkJfYON+ry7xPx=AiLR9jzUNT+i_Va68ACajOC3HoacOfL1ig@mail.gmail.com>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 11 Apr 2024 09:13:12 +0200
+Message-Id: <D0H3VE6RLM2I.MK2NT1P9N02O@fairphone.com>
+Subject: Re: [PATCH v2] dt-bindings: usb: add common Type-C USB Switch
+ schema
+From: "Luca Weiss" <luca.weiss@fairphone.com>
+To: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>, "Greg
+ Kroah-Hartman" <gregkh@linuxfoundation.org>, "Rob Herring"
+ <robh+dt@kernel.org>, "Krzysztof Kozlowski"
+ <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley" <conor+dt@kernel.org>,
+ "Bjorn Andersson" <andersson@kernel.org>, "Konrad Dybcio"
+ <konrad.dybcio@linaro.org>, "Neil Armstrong" <neil.armstrong@linaro.org>,
+ <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>
+X-Mailer: aerc 0.17.0
+References: <20240122094406.32198-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20240122094406.32198-1-krzysztof.kozlowski@linaro.org>
 
-On Thu, Apr 11, 2024 at 02:52:27PM +0800, Sam Sun wrote:
-> Dear developers and maintainers,
-> 
-> We encountered a general protection fault in function disable_store.
-> It is tested against the latest upstream linux (tag 6.9-rc3). C repro
-> and kernel config are attached to this email. Kernel crash log is
-> listed below.
-> ```
-> general protection fault, probably for non-canonical address
-> 0xdffffc0000000000: 0000 [#1] PREEMPT SMP KASAN
-> KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
-> CPU: 1 PID: 9459 Comm: syz-executor414 Not tainted 6.7.0-rc7 #2
-> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
-> RIP: 0010:disable_store+0xd0/0x3d0 drivers/usb/core/port.c:88
-> Code: 02 00 00 4c 8b 75 40 4d 8d be 58 ff ff ff 4c 89 ff e8 a4 20 fa
-> ff 48 89 c2 48 89 c5 48 b8 00 00 00 00 00 fc ff df 48 c1 ea 03 <80> 3c
-> 02 00 0f 85 b0 02 00 00 48 8b 45 00 48 8d bb 34 05 00 00 48
-> RSP: 0018:ffffc90006e3fc08 EFLAGS: 00010246
-> RAX: dffffc0000000000 RBX: ffff88801d4d4008 RCX: ffffffff86706be8
-> RDX: 0000000000000000 RSI: ffffffff86706c4d RDI: 0000000000000005
-> RBP: 0000000000000000 R08: 0000000000000005 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000000 R12: 1ffff92000dc7f85
-> R13: ffff88810f4bfb18 R14: ffff88801d4d10a8 R15: ffff88801d4d1000
-> FS:  00007fa0af71b640(0000) GS:ffff888135c00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007fa0af71a4b8 CR3: 0000000022f5f000 CR4: 0000000000750ef0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> PKRU: 55555554
-> Call Trace:
->  <TASK>
->  dev_attr_store+0x54/0x80 drivers/base/core.c:2366
->  sysfs_kf_write+0x114/0x170 fs/sysfs/file.c:136
->  kernfs_fop_write_iter+0x337/0x500 fs/kernfs/file.c:334
->  call_write_iter include/linux/fs.h:2020 [inline]
->  new_sync_write fs/read_write.c:491 [inline]
->  vfs_write+0x96a/0xd80 fs/read_write.c:584
->  ksys_write+0x122/0x250 fs/read_write.c:637
->  do_syscall_x64 arch/x86/entry/common.c:52 [inline]
->  do_syscall_64+0x40/0x110 arch/x86/entry/common.c:83
->  entry_SYSCALL_64_after_hwframe+0x63/0x6b
-> RIP: 0033:0x7fa0aff9ee1f
-> Code: 89 54 24 18 48 89 74 24 10 89 7c 24 08 e8 a9 f4 02 00 48 8b 54
-> 24 18 48 8b 74 24 10 41 89 c0 8b 7c 24 08 b8 01 00 00 00 0f 05 <48> 3d
-> 00 f0 ff ff 77 31 44 89 c7 48 89 44 24 08 e8 ec f4 02 00 48
-> RSP: 002b:00007fa0af71a460 EFLAGS: 00000293 ORIG_RAX: 0000000000000001
-> RAX: ffffffffffffffda RBX: 00000000ffffffff RCX: 00007fa0aff9ee1f
-> RDX: 0000000000000004 RSI: 00007fa0af71acc0 RDI: 0000000000000005
-> RBP: 0000000000000005 R08: 0000000000000000 R09: 00007fffdb6af2cf
-> R10: 0000000000000000 R11: 0000000000000293 R12: 00007fa0af71acc0
-> R13: 000000000000006e R14: 00007fa0aff613d0 R15: 00007fa0af6fb000
->  </TASK>
-> Modules linked in:
-> ---[ end trace 0000000000000000 ]---
-> RIP: 0010:disable_store+0xd0/0x3d0 drivers/usb/core/port.c:88
-> Code: 02 00 00 4c 8b 75 40 4d 8d be 58 ff ff ff 4c 89 ff e8 a4 20 fa
-> ff 48 89 c2 48 89 c5 48 b8 00 00 00 00 00 fc ff df 48 c1 ea 03 <80> 3c
-> 02 00 0f 85 b0 02 00 00 48 8b 45 00 48 8d bb 34 05 00 00 48
-> RSP: 0018:ffffc90006e3fc08 EFLAGS: 00010246
-> RAX: dffffc0000000000 RBX: ffff88801d4d4008 RCX: ffffffff86706be8
-> RDX: 0000000000000000 RSI: ffffffff86706c4d RDI: 0000000000000005
-> RBP: 0000000000000000 R08: 0000000000000005 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000000 R12: 1ffff92000dc7f85
-> R13: ffff88810f4bfb18 R14: ffff88801d4d10a8 R15: ffff88801d4d1000
-> FS:  00007fa0af71b640(0000) GS:ffff888063a00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 000055d23050c460 CR3: 0000000022f5f000 CR4: 0000000000750ef0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> PKRU: 55555554
-> ----------------
-> Code disassembly (best guess):
->    0:    02 00                    add    (%rax),%al
->    2:    00 4c 8b 75              add    %cl,0x75(%rbx,%rcx,4)
->    6:    40                       rex
->    7:    4d 8d be 58 ff ff ff     lea    -0xa8(%r14),%r15
->    e:    4c 89 ff                 mov    %r15,%rdi
->   11:    e8 a4 20 fa ff           call   0xfffa20ba
->   16:    48 89 c2                 mov    %rax,%rdx
->   19:    48 89 c5                 mov    %rax,%rbp
->   1c:    48 b8 00 00 00 00 00     movabs $0xdffffc0000000000,%rax
->   23:    fc ff df
->   26:    48 c1 ea 03              shr    $0x3,%rdx
-> * 2a:    80 3c 02 00              cmpb   $0x0,(%rdx,%rax,1) <--
-> trapping instruction
->   2e:    0f 85 b0 02 00 00        jne    0x2e4
->   34:    48 8b 45 00              mov    0x0(%rbp),%rax
->   38:    48 8d bb 34 05 00 00     lea    0x534(%rbx),%rdi
->   3f:    48                       rex.W
-> ```
-> We analyzed the root cause of this bug. When calling disable_store()
-> in drivers/usb/core/port.c, if function authorized_store() is calling
-> usb_deauthorized_device() concurrently, the usb_interface will be
-> removed by usb_disable_device. However, in function disable_store,
-> usb_hub_to_struct_hub() would try to deref interface, causing
-> nullptr-deref. We also tested other functions in
-> drivers/usb/core/port.c. So far we haven't found a similar problem.
-> 
-> If you have any questions, please contact us.
-> 
-> Reported by Yue Sun <samsun1006219@gmail.com>
-> Reported by xingwei lee <xrivendell7@gmail.com>
+On Mon Jan 22, 2024 at 10:44 AM CET, Krzysztof Kozlowski wrote:
+> Several bindings implement parts of Type-C USB orientation and mode
+> switching, and retiming.  Keep definition of such properties in one
+> place, new usb-switch schema, to avoid duplicate defines.
+>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>
+> ---
+>
+> Changes in v2:
+> 1. Fix language typos handle->handler (Luca)
+> 2. Drop debugging left-over (Luca)
+> ---
+>  .../devicetree/bindings/usb/fcs,fsa4480.yaml  | 12 ++--
+>  .../devicetree/bindings/usb/gpio-sbu-mux.yaml | 12 ++--
+>  .../devicetree/bindings/usb/nxp,ptn36502.yaml | 12 ++--
+>  .../bindings/usb/onnn,nb7vpq904m.yaml         | 13 ++--
+>  .../bindings/usb/qcom,wcd939x-usbss.yaml      | 12 ++--
+>  .../devicetree/bindings/usb/usb-switch.yaml   | 67 +++++++++++++++++++
+>  6 files changed, 92 insertions(+), 36 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/usb/usb-switch.yaml
+>
+> diff --git a/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml b/Doc=
+umentation/devicetree/bindings/usb/fcs,fsa4480.yaml
+> index f9410eb76a62..8b25b9a01ced 100644
+> --- a/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml
+> +++ b/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml
+> @@ -27,13 +27,8 @@ properties:
+>    vcc-supply:
+>      description: power supply (2.7V-5.5V)
+> =20
+> -  mode-switch:
+> -    description: Flag the port as possible handle of altmode switching
+> -    type: boolean
+> -
+> -  orientation-switch:
+> -    description: Flag the port as possible handler of orientation switch=
+ing
+> -    type: boolean
+> +  mode-switch: true
+> +  orientation-switch: true
+> =20
+>    port:
+>      $ref: /schemas/graph.yaml#/$defs/port-base
+> @@ -79,6 +74,9 @@ required:
+>    - reg
+>    - port
+> =20
+> +allOf:
+> +  - $ref: usb-switch.yaml#
+> +
+>  additionalProperties: false
+> =20
+>  examples:
 
-Do you have a proposed patch to fix this as you have a way to easily
-test this?
+Hi Krzysztof,
 
-thanks,
+This patch seems to break validation for fsa4480 if data-lanes is set in
+the endpoint like the following
 
-greg k-h
+diff --git a/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml b/Docum=
+entation/devicetree/bindings/usb/fcs,fsa4480.yaml
+index f9410eb76a62..3aa03fd65556 100644
+--- a/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml
++++ b/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml
+@@ -102,6 +102,7 @@ examples:
+           port {
+             fsa4480_ept: endpoint {
+               remote-endpoint =3D <&typec_controller>;
++              data-lanes =3D <0 1>;
+             };
+           };
+         };
+
+Similar to how it's already used on qcom/qcm6490-fairphone-fp5.dts
+
+I'm guessing the 'port' definition in the common schema somehow
+disallows the fsa4480 schema from describing it further?
+
+Regards
+Luca
+
+
+> diff --git a/Documentation/devicetree/bindings/usb/gpio-sbu-mux.yaml b/Do=
+cumentation/devicetree/bindings/usb/gpio-sbu-mux.yaml
+> index d3b2b666ec2a..88e1607cf053 100644
+> --- a/Documentation/devicetree/bindings/usb/gpio-sbu-mux.yaml
+> +++ b/Documentation/devicetree/bindings/usb/gpio-sbu-mux.yaml
+> @@ -33,13 +33,8 @@ properties:
+>    vcc-supply:
+>      description: power supply
+> =20
+> -  mode-switch:
+> -    description: Flag the port as possible handle of altmode switching
+> -    type: boolean
+> -
+> -  orientation-switch:
+> -    description: Flag the port as possible handler of orientation switch=
+ing
+> -    type: boolean
+> +  mode-switch: true
+> +  orientation-switch: true
+> =20
+>    port:
+>      $ref: /schemas/graph.yaml#/properties/port
+> @@ -54,6 +49,9 @@ required:
+>    - orientation-switch
+>    - port
+> =20
+> +allOf:
+> +  - $ref: usb-switch.yaml#
+> +
+>  additionalProperties: false
+> =20
+>  examples:
+> diff --git a/Documentation/devicetree/bindings/usb/nxp,ptn36502.yaml b/Do=
+cumentation/devicetree/bindings/usb/nxp,ptn36502.yaml
+> index eee548ac1abe..d805dde80796 100644
+> --- a/Documentation/devicetree/bindings/usb/nxp,ptn36502.yaml
+> +++ b/Documentation/devicetree/bindings/usb/nxp,ptn36502.yaml
+> @@ -20,13 +20,8 @@ properties:
+>    vdd18-supply:
+>      description: Power supply for VDD18 pin
+> =20
+> -  retimer-switch:
+> -    description: Flag the port as possible handle of SuperSpeed signals =
+retiming
+> -    type: boolean
+> -
+> -  orientation-switch:
+> -    description: Flag the port as possible handler of orientation switch=
+ing
+> -    type: boolean
+> +  orientation-switch: true
+> +  retimer-switch: true
+> =20
+>    ports:
+>      $ref: /schemas/graph.yaml#/properties/ports
+> @@ -49,6 +44,9 @@ required:
+>    - compatible
+>    - reg
+> =20
+> +allOf:
+> +  - $ref: usb-switch.yaml#
+> +
+>  additionalProperties: false
+> =20
+>  examples:
+> diff --git a/Documentation/devicetree/bindings/usb/onnn,nb7vpq904m.yaml b=
+/Documentation/devicetree/bindings/usb/onnn,nb7vpq904m.yaml
+> index c0201da002f6..589914d22bf2 100644
+> --- a/Documentation/devicetree/bindings/usb/onnn,nb7vpq904m.yaml
+> +++ b/Documentation/devicetree/bindings/usb/onnn,nb7vpq904m.yaml
+> @@ -21,14 +21,8 @@ properties:
+>      description: power supply (1.8V)
+> =20
+>    enable-gpios: true
+> -
+> -  retimer-switch:
+> -    description: Flag the port as possible handle of SuperSpeed signals =
+retiming
+> -    type: boolean
+> -
+> -  orientation-switch:
+> -    description: Flag the port as possible handler of orientation switch=
+ing
+> -    type: boolean
+> +  orientation-switch: true
+> +  retimer-switch: true
+> =20
+>    ports:
+>      $ref: /schemas/graph.yaml#/properties/ports
+> @@ -95,6 +89,9 @@ required:
+>    - compatible
+>    - reg
+> =20
+> +allOf:
+> +  - $ref: usb-switch.yaml#
+> +
+>  additionalProperties: false
+> =20
+>  examples:
+> diff --git a/Documentation/devicetree/bindings/usb/qcom,wcd939x-usbss.yam=
+l b/Documentation/devicetree/bindings/usb/qcom,wcd939x-usbss.yaml
+> index 7ddfd3313a18..96346723f3e9 100644
+> --- a/Documentation/devicetree/bindings/usb/qcom,wcd939x-usbss.yaml
+> +++ b/Documentation/devicetree/bindings/usb/qcom,wcd939x-usbss.yaml
+> @@ -35,13 +35,8 @@ properties:
+>    vdd-supply:
+>      description: USBSS VDD power supply
+> =20
+> -  mode-switch:
+> -    description: Flag the port as possible handle of altmode switching
+> -    type: boolean
+> -
+> -  orientation-switch:
+> -    description: Flag the port as possible handler of orientation switch=
+ing
+> -    type: boolean
+> +  mode-switch: true
+> +  orientation-switch: true
+> =20
+>    ports:
+>      $ref: /schemas/graph.yaml#/properties/ports
+> @@ -63,6 +58,9 @@ required:
+>    - reg
+>    - ports
+> =20
+> +allOf:
+> +  - $ref: usb-switch.yaml#
+> +
+>  additionalProperties: false
+> =20
+>  examples:
+> diff --git a/Documentation/devicetree/bindings/usb/usb-switch.yaml b/Docu=
+mentation/devicetree/bindings/usb/usb-switch.yaml
+> new file mode 100644
+> index 000000000000..da76118e73a5
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/usb-switch.yaml
+> @@ -0,0 +1,67 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/usb/usb-switch.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: USB Orientation and Mode Switches Common Properties
+> +
+> +maintainers:
+> +  - Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> +
+> +description:
+> +  Common properties for devices handling USB mode and orientation switch=
+ing.
+> +
+> +properties:
+> +  mode-switch:
+> +    description: Possible handler of altmode switching
+> +    type: boolean
+> +
+> +  orientation-switch:
+> +    description: Possible handler of orientation switching
+> +    type: boolean
+> +
+> +  retimer-switch:
+> +    description: Possible handler of SuperSpeed signals retiming
+> +    type: boolean
+> +
+> +  port:
+> +    $ref: /schemas/graph.yaml#/properties/port
+> +    description:
+> +      A port node to link the device to a TypeC controller for the purpo=
+se of
+> +      handling altmode muxing and orientation switching.
+> +
+> +  ports:
+> +    $ref: /schemas/graph.yaml#/properties/ports
+> +    properties:
+> +      port@0:
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +        description:
+> +          Super Speed (SS) Output endpoint to the Type-C connector
+> +
+> +      port@1:
+> +        $ref: /schemas/graph.yaml#/$defs/port-base
+> +        description:
+> +          Super Speed (SS) Input endpoint from the Super-Speed PHY
+> +        unevaluatedProperties: false
+> +
+> +        properties:
+> +          endpoint:
+> +            $ref: /schemas/graph.yaml#/$defs/endpoint-base
+> +            unevaluatedProperties: false
+> +            properties:
+> +              data-lanes:
+> +                $ref: /schemas/types.yaml#/definitions/uint32-array
+> +                minItems: 1
+> +                maxItems: 8
+> +                uniqueItems: true
+> +                items:
+> +                  maximum: 8
+> +
+> +oneOf:
+> +  - required:
+> +      - port
+> +  - required:
+> +      - ports
+> +
+> +additionalProperties: true
+
 
