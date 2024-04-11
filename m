@@ -1,216 +1,203 @@
-Return-Path: <linux-usb+bounces-9289-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9290-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D14E28A1FD1
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Apr 2024 21:59:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D45078A1FF1
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Apr 2024 22:13:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5F1801F22A7B
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Apr 2024 19:59:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8A8E4288A1A
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Apr 2024 20:13:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C5E517BD8;
-	Thu, 11 Apr 2024 19:59:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94CF417C7F;
+	Thu, 11 Apr 2024 20:13:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="e61DVOrd"
+	dkim=pass (1024-bit key) header.d=wolfvision.net header.i=@wolfvision.net header.b="CQZVRskc"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on2099.outbound.protection.outlook.com [40.107.7.99])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09AF317C61
-	for <linux-usb@vger.kernel.org>; Thu, 11 Apr 2024 19:59:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712865581; cv=none; b=WC9iyEoTDl6lPYTk13N/NxkFnO8DN4kXcJwClae3YqaFxXcEgRrAEB2Rh+OWw4k96YARjuNFvQDpqUrbpp1Q2UcZoNGeHZkYBx3sMr1chCoN5GaEDGeRDTH4EjAil94Kbw8mjfsnDNaljntOQnAwiOPnomTO6iYWTjyEwdLDjOA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712865581; c=relaxed/simple;
-	bh=uhtySGVK5A6+vHp5UrGYLuo5kUbyFoALPVif91nqwuc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=IZUFjyEhHyZONL5yJGtHBa2KAz/ZrZ2HYCICUbO28VJ6gDSmuga5fHHBuctHKN4CNs7pPnnzTbix+HRUGZsFgtoPLp+CzXG5pWWopNDCKIt3hqIuz5j5fTDMLtvfAUpz1TUtHnhXcxLug/HKVn3fizM005Oy6s7SnxKGhsF/HMA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=e61DVOrd; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-417f7dd6f6cso440615e9.1
-        for <linux-usb@vger.kernel.org>; Thu, 11 Apr 2024 12:59:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1712865578; x=1713470378; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=Iwn+JX8xlhjGnXsfpBzohHUIfjRXih/t5ZCgll+Ab1M=;
-        b=e61DVOrdec3IWMoxUsnQnjS5QMpThRxoM+v64JmlGAFOfRoT2F1fR5LLq7pla4ADVd
-         db2alSNCnHesNyQNKn1n+0dmuHQOi94shYRx5ufIuCSnMhWUcapVm3QK0RgiDZGTVa1u
-         36MufoUf6p8UwVabZMLRDqxoJGZxD++hVJksFuFWI4SyTplQwKxvKAt6pMJxcjU7grW6
-         xXI2m0j1I4nfioxKi9ji0tL4b1sa1+SxLPIZa/EKkOteVqDkPgyV9CMGkb4m5WLYVrP5
-         6Ugq70imZCsSbD0gZ/oQAii57w0QVT8CtSBhDlt9sKif8jGQKpIbkpMJNC8c5Ttzy6vs
-         534w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712865578; x=1713470378;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Iwn+JX8xlhjGnXsfpBzohHUIfjRXih/t5ZCgll+Ab1M=;
-        b=NgMulxslB1U3WDQBP0X/JT1toJvVNQEriX/DqES4IWoXK7DsG71eIhxc3Kltw4/DZV
-         IIZZuo3Wonvm0rvwjpQEdYqaheqpkSQERACcZJW5Mqe5SWsAlsKIUn0QcH2jaLSINten
-         ggDIjud6Pho3jCjQgRn8joyNXxMFxhB8dQaHf8A5uNPB20VEylJZoYL/fNz1ksJ8rgBY
-         KTw6zVXXqfFw/OkEvxoQWwh6962DHWBmz/F4PfGw5c0X4HLV+DTG4g16lycSpq39JPGs
-         xGICh+zyemNSBw+1F/h2YZdsA7YbqsOQB122J2s3S2K4KrPzcA9avd+EE2fKvLjY4SyU
-         YQJA==
-X-Forwarded-Encrypted: i=1; AJvYcCVB8rP1YfQNzSjRsP1ty/9k4y0EiKaoxjS+Nyg6yik46MugSZimdAo+asRZsDDn3tMrLqqsnc75LNufNLoM48eQQGDAZO0gPFXA
-X-Gm-Message-State: AOJu0Yw4BNHbc78vnojZ7ixGkllRRDs86b8WQL0Tzur/G0BuwI+i/4eE
-	FcZ6b7nuZqHWwgWfeYwbJLftiyj2raA2zknp59RMMtgx28jcm+UQo04T+fknv4Y=
-X-Google-Smtp-Source: AGHT+IE299GS0PEcChuZMfJ6a0ihE/WSAW/jfcW48vAeQ5Mexi1AiT8WGDQD65/ia01rcTRpzoiqkg==
-X-Received: by 2002:a5d:4743:0:b0:33e:8b93:87c6 with SMTP id o3-20020a5d4743000000b0033e8b9387c6mr420612wrs.42.1712865578120;
-        Thu, 11 Apr 2024 12:59:38 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.223.16])
-        by smtp.gmail.com with ESMTPSA id c12-20020a5d4ccc000000b00343f662327bsm2496475wrt.77.2024.04.11.12.59.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Apr 2024 12:59:37 -0700 (PDT)
-Message-ID: <025d268f-96d0-49fa-9a67-f80ab81ed102@linaro.org>
-Date: Thu, 11 Apr 2024 21:59:35 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58B6C175A6;
+	Thu, 11 Apr 2024 20:13:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.7.99
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1712866396; cv=fail; b=mlSJt7YTKzT3SYPIVVsEFr744AAn1gpceI4hKXr0mBO4RLFnrvdfe6U5cExPVK/kZqgC5e0WYobj7h3DK0hppTdtbdLNedCi5EM+D8svQ0TkBIRAH+srV0td3UN5asJuLBBazts46h5zkj/bVU1JSTqTiRmLhDC4LZ2OPbEfqkU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1712866396; c=relaxed/simple;
+	bh=UwlonlGFlPdqNJLv6wkxxNuAkV4ptILf8Ga7rIXaiKI=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=oSV57xOzSFwSoGVPG6nEEM7BWaH0JS3nsxy4t+Jps9IJ5Vn6KAek7violizly0Utk2sB+e6lXpLmKqMlhhm8kRrQGc++OcCZ+F6hH/ICUy2iZTZmxwWdsz89i9GDZQS09wmUHAteeQa17zUi6N/gTsrnbs7aWZXDnUe8qXfcO7Y=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wolfvision.net; spf=pass smtp.mailfrom=wolfvision.net; dkim=pass (1024-bit key) header.d=wolfvision.net header.i=@wolfvision.net header.b=CQZVRskc; arc=fail smtp.client-ip=40.107.7.99
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wolfvision.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wolfvision.net
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Y1dKN+4NlS4uqv7YB5X83McWYLdGRioK0zU/upS1gOvL1TLro+QGR7NfHKqNW2WeuvxzssGETGSAhhqIun2/eC/O8XbD6FoqkildZC/hT/Dwwyi106m/DJ4e3S98mWBbbVyARiasu22f0DflInX0Dm3RvTlbwpoxTYqSCxEVGJTYZ8VLJ6QSbS3GwrxYhuZAqIwm/cTveABQtL3MlyijJVBLWG08TeqjyrnL/XRIaAcwBSNYO4zbxoZoswuLJm9N4j7vbrwnFZXN1G1IvkrsGSIY/L/+tCVCnnYWRq1h9HOEJLvdLUoZbCXdr/pxnMopRvZ5a3/c0sQ4sThLHQiDxA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rMrRfeWqVUCYHP3ITC4wkP9iDR2o4VSOBh55jFFJOcQ=;
+ b=EZmCb1Qgxoq9yqca2xXgxsKE4vHD6mlPfZKe2wNdSm3vPOmHHVfvSVPfDRqtFufFg9ZciupAR0Ded+SlAn5Gf0pH6bSQ24LfBqUQk2eib0KiXJW3n5Ew7pXBiFUSSkqSFzC/4ZHTjD7/xaSm1KN8yR2XD8YR8rHvlWehYuLS3Lit9/rmuGpy2/WsTsrZTR05Q4l7fLmgV6QBxGpRpERfC4eO76To8h8qn2UP/KTyDC8n68XYKsmwtXeChnhg/6f0yYx6nu/Pj1vH+wM8ohOqFOL8Ohom2e+6I58zXhiOZGezx8DOvNYvYxhW+1klJQ7nOE3b8Ey8WhIOZZC9s+uzuQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wolfvision.net; dmarc=pass action=none
+ header.from=wolfvision.net; dkim=pass header.d=wolfvision.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rMrRfeWqVUCYHP3ITC4wkP9iDR2o4VSOBh55jFFJOcQ=;
+ b=CQZVRskcl6BSqEjsrHTtf24zahej83Hzfi2WVvkP9dLKlnhBO+eWuVDjN4smRdLjmQZqCKWtTlINd/3qpnx5GwO82+MTbyp21NP4B3ft7muBA4vtteSKvmsw15UItYI0zxOTQtr9BAuah7HSzp2H04XlKH/X1KA7AUZ0DoVGu98=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=wolfvision.net;
+Received: from VE1PR08MB4974.eurprd08.prod.outlook.com (2603:10a6:803:111::15)
+ by DB8PR08MB5307.eurprd08.prod.outlook.com (2603:10a6:10:114::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.46; Thu, 11 Apr
+ 2024 20:13:10 +0000
+Received: from VE1PR08MB4974.eurprd08.prod.outlook.com
+ ([fe80::9e35:6de9:e4fc:843f]) by VE1PR08MB4974.eurprd08.prod.outlook.com
+ ([fe80::9e35:6de9:e4fc:843f%7]) with mapi id 15.20.7409.042; Thu, 11 Apr 2024
+ 20:13:10 +0000
+Message-ID: <d7ec1064-b82c-4721-853a-06b5710fdffa@wolfvision.net>
+Date: Thu, 11 Apr 2024 22:13:08 +0200
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RESEND 2/2] usb: typec: tipd: fix event checking for
+ tps6598x
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Abdel Alkuor <abdelalkuor@geotab.com>, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <20240328-tps6598x_fix_event_handling-v1-0-502721ff705b@wolfvision.net>
+ <20240328-tps6598x_fix_event_handling-v1-2-502721ff705b@wolfvision.net>
+ <ZgveG5Ly3mw0O0eo@kuha.fi.intel.com>
+ <b6bf7f8e-7d46-4b70-930c-9483f13fd80a@wolfvision.net>
+ <Zg+fD6w1MykCsEe6@kuha.fi.intel.com>
+Content-Language: en-US, de-AT
+From: Javier Carrasco <javier.carrasco@wolfvision.net>
+In-Reply-To: <Zg+fD6w1MykCsEe6@kuha.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: VE1PR03CA0013.eurprd03.prod.outlook.com
+ (2603:10a6:802:a0::25) To VE1PR08MB4974.eurprd08.prod.outlook.com
+ (2603:10a6:803:111::15)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCHv3 1/2] dt-bindings: usb: typec: anx7688: start a binding
- document
-To: =?UTF-8?Q?Ond=C5=99ej_Jirman?= <megi@xff.cz>, Pavel Machek
- <pavel@ucw.cz>, phone-devel@vger.kernel.org,
- kernel list <linux-kernel@vger.kernel.org>, fiona.klute@gmx.de,
- martijn@brixit.nl, samuel@sholland.org, heikki.krogerus@linux.intel.com,
- gregkh@linuxfoundation.org, linux-usb@vger.kernel.org, robh+dt@kernel.org,
- krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org
-References: <ZhPMHdt6r/4D99Zg@duo.ucw.cz>
- <ab9affc8-de68-4ec9-bdfc-02131191bc3a@linaro.org>
- <ZhPTTxI4oTF3pgrk@duo.ucw.cz>
- <e7841ad2-fa3d-442d-804d-51f12e05c234@linaro.org>
- <e6vvuttix5k5fioy7q44ick5wj6u5gleh7mht36s4zjjcym7vy@bziejyohtc4b>
- <7976e254-ed1e-406d-870b-1ecdc4b1e23c@linaro.org>
- <uoo7xltbfx7u6iai7urj3wez7cwotokxt6lwjhff57xbljusqn@fr2xejnrlak7>
- <1502383c-9caf-4362-8bd6-ed719a304f08@linaro.org>
- <vbo7bacecuagu4qzrr6tsdh4qlejrv7ia67yylf6ay4u7qnwge@kqj27bun2m7d>
- <97f2d38d-c863-4c76-91f1-52cd250759d7@linaro.org>
- <ounfv3vgg2esvxk2cxckeqyy52mghiyps2rszh7sf5poryyjzs@ftumsalmthza>
-Content-Language: en-US
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <ounfv3vgg2esvxk2cxckeqyy52mghiyps2rszh7sf5poryyjzs@ftumsalmthza>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VE1PR08MB4974:EE_|DB8PR08MB5307:EE_
+X-MS-Office365-Filtering-Correlation-Id: e0bf64eb-64c9-4963-21b8-08dc5a63cf15
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	j35TLhLdJoeH8PaJxPKG3X+tEikgaIXvUVaZ1P6+LMqlxOW0sAx8xk+nv2tRbXBn9qbH4uejmgW4Jo5epqNWQxAGe5KT9++FoYpFxUJ7O/uK8JyRrIjw7TGlhpXTYRegSSevmQPQFF2kvQSCdUYwpXnkG1KUZw5azosQraRsAfnOHkSRcOxWt1yPtLOlH4nT15BsX/omUfYN84QS1ptRa7JCWmQPIZmB+fv6fPFAMQOvlaCmGjD59vuazrDGXGku07cTFYGfbB+JW9t+9i6WwYhQK4hm61IAr6Um4o6rUN18kTkwkwfMpGPS50jZHcBsFlcJD0aaa01dPJ5t+xsYgLWzR1BopydsDHVVTapLJLEVT36/e9YEqy1oZkjtGbbSDXQz+Nsb881dHtutcKPVxVVWT1rYi90201xN6lnqWvmB0tuCWRYj7S1HEN755BnNPndm1Tk+wnxYmna9zJ7vLyFeEyGR+DAjyptn67bdqKK+E6kH6jxAv/Lp7sv7UJ2kUeEReLr4Iuf/WkWy9PoxDfAUOQ/bHxTJWDSrnjW23EgKVzBoBRBdoAyPA7h2+s5XAcMWbgtnAw8gMTFmzFQcrg90To6zKHPld6o055glN8I=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR08MB4974.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(1800799015)(376005)(366007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?RWI3VmIwcy9LejdhTFpONUJ0Y3lSS2hyY3Q4dFpMY2Rwbnl5QnV2am50SUMx?=
+ =?utf-8?B?cEoyc0RRMklCdDJRQzNJU2kvMExYZzFnWVJGenkvZjJPUjg3cExJN094L1VP?=
+ =?utf-8?B?eHBneFVEMVVVOXlXbGhPZ2xiMG1zTStQUDNOcjdrYjRVZ2Q0RUQ3RDdTd29Z?=
+ =?utf-8?B?SUNPa0FCRElvL1dRYVhYTlRGT3BqSzFjcFZOb1hsTFF5MG42UE1hcnB0OVIx?=
+ =?utf-8?B?RWRnWFlkaStLc0dSQzhtOWJkY0tqRlQwcWNTQnliRk5GK2d4dlFtYnhDRUJJ?=
+ =?utf-8?B?SVcvZk5BdFl4SlRZQnAvdE1MV1NPSVp0VkMveXR1bGxUdUlLcS81WFp4aS9P?=
+ =?utf-8?B?UXh2ckFkL3Jzak96b3RCQVpHTzdrV2lVQVFobFZ2cEw0Vzc4MjZDelplMUdm?=
+ =?utf-8?B?TkVOUStHZTdFZm9seUVTU1VVYlNPNGFoaHlnbTVJR0pURUFmMU1LaXBzbkRh?=
+ =?utf-8?B?RlB1bUNmM1VuMzhHdmJDbWNPMDhjTHJISUtyei8zSlR5b29SaFV3TWdqSUYy?=
+ =?utf-8?B?TU1BTmdkQWtocGdzZllJS0hIaTNnVk5Cd0VqSjJiQVpKT0x4NTNRaU5FQnJv?=
+ =?utf-8?B?dG5vaTZJN1kraUlnWVY1ZTRjemxXMUlVeGR6U00yckt0aUtwM2U1c1RrN1lT?=
+ =?utf-8?B?dldQQVhWVTJSMzhsVndSSjZhdTJQWk5CS2NQejk2aCsvbHp3NGxhT3hndnlM?=
+ =?utf-8?B?Rk1GSEYyYlZ5bFNyMWZteUkrRy9mRUpId3ptNnhockdrZ25GWjE1VythRWpy?=
+ =?utf-8?B?cERLM0t3eWJpVW5JS3VaOS9RSnNVcjNRRlgrekduMGdmQmkwenl4dmw0a1Ra?=
+ =?utf-8?B?Yi9BSFVZNHBOTTBxZjdtS1VKNEMyaXh4NURYaHlvYUEyMmVDOS92N2VIOTJH?=
+ =?utf-8?B?dUZtVTdKT0ppK0pJSzk2NUhKbVlmbkxJQUpUaDNkeEN2UmovbXUxamt0NExa?=
+ =?utf-8?B?NFk3MXd6ZkY5UWFESzVVdXBPTnNVQ2M3NTNzOWVQVU9TVStVYUtRdkpuOTJP?=
+ =?utf-8?B?Mk1CbGVzVmdDbzFwbEljdW44eXVoUCthTTJ0eVRBVHVjTzRuOVB1WXpzTnlC?=
+ =?utf-8?B?VFNNSms2ek1LZVJVQmVFV08xTVpORWU0NVdtSFZGcE5iZzVGSkd4eXZMOTdS?=
+ =?utf-8?B?NGNWK0JrZ2RRZXBVZUVUN1IrUFp4REZVcWZJQjZFWmtFZ0JHQXZGUEdDT2o1?=
+ =?utf-8?B?ZDRiUjB4dTZRY2RCa0Q1V1NwNVkzTGMxSWZkcy9DcEVDU1BFcURvcG5Zait5?=
+ =?utf-8?B?R1pNSHRTNWphdmVrZmxTZVRzOGlIeEt2OGI2Z3R1L2gzb0JZUUtQZTZtQjRB?=
+ =?utf-8?B?bDdBRzk1WjI1QVJHVGJBdjZDTmhHT3Z3RXpFdlJEMk9uYUtPenFrZmpYUFVZ?=
+ =?utf-8?B?Vlg3L1VlNkVWN3VYRnJkYVFqVUpxWTRUbUVRR2hsVHM0WFovNFB0NlZQSmVt?=
+ =?utf-8?B?M3kzSUoyVm1QN2s4S3g1MXVjMnFwRWZtNnFtcjhzajRrTG1VZVQyNVNLeHZm?=
+ =?utf-8?B?RmhEczV3TFhpeDdPWTg0d2VhWldFV3hybEtHUHVsemFWbWVYdm1wc0t6YU80?=
+ =?utf-8?B?RlYrRGxaSE84MlQrWWhFVFQvTHNscVZwcFU4YkJmeHRjTmxCYzVlcm95RXI2?=
+ =?utf-8?B?dmtsd1A3RHVCOUJOdzdYVjFGVm1sRFhsS1NHc09BRlNnTUp0VlRuV0hOVjRt?=
+ =?utf-8?B?cHF4ZXVlc2VuTGc3Szd0MGtIQ1JpeGl0d0J2RjBVWWIrOXFYeEp3YkhuNVJL?=
+ =?utf-8?B?amJnckdyUmx0aUxyanE0T29QV2tQbGpOZWt4OVB5NTFVUGRHd0pvUkJTSm9j?=
+ =?utf-8?B?Y2IzcnNyQ0VZUUw4dGRJUEoxcHJlanBsZ29qNVUxSU5jY0pTRllHLzNUNmVJ?=
+ =?utf-8?B?ZXh4aFNQdmVIaVF2OTNpQlVVUlUvcGl2R09GSm1ROUJnSDAwa29oTTZhZnkz?=
+ =?utf-8?B?YUN5dUNGNVpML24ycnF6ZlRjRGlCQzJuY0RKSXU2bks0NlRKR0E3ZHdzNHBB?=
+ =?utf-8?B?dVN4T1VPcno4VFJsQndMeGkzOHJSNXo1TUVlQzY2SmdsUzB6UmtCRTNkMzcy?=
+ =?utf-8?B?WWZ6Um5HK3lzL0V4Q3kvb0Z1VVBWYU8wczdqVjNxOUt5NmFWb3BEVWUxQTJM?=
+ =?utf-8?B?bldHT3owQnFRditiQkI2dXp6OG13bjF1a1hmQmNleFozOGtyVWVhb3Y1OVFR?=
+ =?utf-8?B?WUE9PQ==?=
+X-OriginatorOrg: wolfvision.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: e0bf64eb-64c9-4963-21b8-08dc5a63cf15
+X-MS-Exchange-CrossTenant-AuthSource: VE1PR08MB4974.eurprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Apr 2024 20:13:10.3755
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: LyczT6U79Yn5a2m+7QXR/0khM3bEcjZkQlRXSmwIzk9+gcDmzaDP1ZKvoMPCmucGth4bdtN4PWN4KnnLEsTyr9d5CafCnW1+3W3uUu+U2cU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR08MB5307
 
-On 10/04/2024 04:20, Ondřej Jirman wrote:
-> On Mon, Apr 08, 2024 at 10:12:30PM GMT, Krzysztof Kozlowski wrote:
->> On 08/04/2024 17:17, Ondřej Jirman wrote:
+On 4/5/24 08:49, Heikki Krogerus wrote:
+> On Wed, Apr 03, 2024 at 10:55:29AM +0200, Javier Carrasco wrote:
+>>>> -	ret = tps6598x_read64(tps, TPS_REG_INT_EVENT1, &event1);
+>>>> -	ret |= tps6598x_read64(tps, TPS_REG_INT_EVENT2, &event2);
+>>>> +	ret = tps6598x_block_read(tps, TPS_REG_INT_EVENT1, event1, 11);
 >>>
->>> Now for things to not fail during suspend/resume based on PM callbacks
->>> invocation order, anx7688 driver needs to enable this regulator too, as long
->>> as it needs it.
+>>> This is not going to work with the older TI PD controllers.
+>>>
+>>> The lenght of these registers is 8 bytes on the older TI PD
+>>> controllers (TPS65981, TPS65982, etc.). I think we need to split this
+>>> function.
+>>>
 >>
->> No, the I2C bus driver needs to manage it. Not one individual I2C
->> device. Again, why anx7688 is specific? If you next phone has anx8867,
->> using different driver, you also add there i2c-supply? And if it is
->> nxp,ptn5100 as well?
-> 
-> Yes, that could work, if I2C core would manage this.
-
-Either I don't understand about which I2C regulator you speak or this is
-not I2C core regulator. This is a regulator to be managed by the I2C
-controller, not by I2C core.
-
-
-> 
->>>
->>> I can put bus-supply to I2C controller node, and read it from the ANX7688 driver
->>> I guess, by going up a DT node. Whether that's going to be acceptable, I don't
->>> know. 
->>>
->>>
->>> VCONN regulator I don't know where else to put either. It doesn't seem to belong
->>> anywhere. It's not something directly connected to Type-C connector, so
->>> not part of connector bindings, and there's nothing else I can see, other
->>> than anx7688 device which needs it for core functionality.
+>> That is a good point. I had a look at the older TI PD controllers and I
+>> agree with you that we should split the function to cover both register
+>> lengths separately.
 >>
->> That sounds like a GPIO, not regulator. anx7688 has GPIOs, right? On
->> Pinephone they go to regulator, but on FooPhone also using anx7688 they
->> go somewhere else, so why this anx7688 assumes this is a regulator?
+>> I was thinking about adding a new compatible for the newer PD
+>> controllers (tps65987 and tps65988), keeping the current tps6598x for
+>> the older ones as well as backwards compatibility. But backwards
+>> compatibility would also mean that flags beyond the first 8 bytes would
+>> be ignored.
+>>
+>> On the other hand, the upper flags are only relevant for firmware
+>> updates, so we could check those (i.e. read 11 bytes) if a firmware was
+>> provided via "firmware-name", and ignore them (i.e. read 8 bytes) otherwise.
+>>
+>> Other ideas or improvements to mine are more than welcome.
 > 
-> CC1/CC2_VCONN control pins are "GPIO" of anx7688, sort of. They have fixed
-> purpose of switching external 5V regulator output to one of the CC pins
-> on type-c port. I don't care what other purpose with some other firmware
-> someone puts to those pins. It's irrelevant to the use case of anx7688
-> as a type-c controller/HDMI bridge, which we're describing here.
+> I don't have any good ideas. On ACPI platforms the same device ID may
+> be used with all of these, so we should actually try to figure out the
+> version from registers like VID, DID and Version (if they are
+> available).
 > 
-> VCONN regulator is an actual GPIO controlled regulator on the board, and
-> needs to be controlled by the anx7688 driver. So that CC1/CC2_VCONN control
-> pins driven by the firmware actually do what they're supposed to do.
-> 
-> Not sure why it would be a business of anything else but anx7688 driver
-> enabling this regulator, because only this driver knows and cares about this.
-> If some other board doesn't have the need to manually enable the regulator, or
-> doesn't have the regulator, it can simply be optional.
-> 
-> There are also some other funky supplies in the bindings, that are not connected
-> to the chip in any way, but need to be controlled by the driver:
-> 
-> +  vbus-supply: true
-> +  vbus-in-supply: true
-
-Yeah, the vconn looks reasonable. Just provide description of the
-supply, so it will be obvious.
-
+> thanks,
 > 
 
+VID and DID can be modified by the application firmware, but there is a
+byte in the Version register we can use for this. According to TI[1], it
+is guaranteed that the older TI PD controllers (TPS65981/2/6) will
+always deliver AB = 0x00 when reading from the Version register, which
+is 4 bytes long formatted like this: ABXX.YY.ZZ. The newer PD
+controllers (TPS65987/8) will return either AB = 0xF7 (DH parts) or AB =
+0xF9 (DK parts).
 
+We can add some simple logic to read 8 bytes if AB is 0x00, which could
+be the default as well, and 11 bytes otherwise.
 
-Best regards,
-Krzysztof
+Link:
+https://e2e.ti.com/support/power-management-group/power-management/f/power-management-forum/1346521/tps65987d-register-command-to-distinguish-between-tps6591-2-6-and-tps65987-8
+[1]
 
+Thanks for your feedback and best regards,
+Javier Carrasco
 
