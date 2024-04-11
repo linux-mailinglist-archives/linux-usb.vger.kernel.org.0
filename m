@@ -1,108 +1,84 @@
-Return-Path: <linux-usb+bounces-9286-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9287-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5089C8A1E59
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Apr 2024 20:33:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7BA178A1DF5
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Apr 2024 20:22:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ED394B37872
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Apr 2024 18:02:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ABAD71C22BA3
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Apr 2024 18:22:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F253B1C8FC2;
-	Thu, 11 Apr 2024 16:47:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8682084A53;
+	Thu, 11 Apr 2024 17:36:40 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B3C417742;
-	Thu, 11 Apr 2024 16:47:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id B5D3F84A45
+	for <linux-usb@vger.kernel.org>; Thu, 11 Apr 2024 17:36:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712854032; cv=none; b=eCe7w8t7E7AIorwlqRDKSk9qAQXfzdMdStyDBsrZRrUoS12ofyeSCSIBlHlLzNN0ewE+AucVhVOZ65E/U+U0I+IjrY6UQlRsFC9XwTfgGKhm8DvjEjgjV9HQGxLrUkOHh2u+TCbeaQlCCv0o0kWi/kMVQF6iNBjUtTI92zFA4oY=
+	t=1712857000; cv=none; b=NEUlBZYUHHAbFEgGjpdERhtTosSb7BmOVfYftlTF34KZ5GShxzqxW96c3yx+oN+lR4r++FopL/vDglXMmT5l2WtT8UnyQPnSdW+8VMFhlEyLH3tBDXHNQDnrwwgB3KWaLp76a/z/fiZ2wD7ZrvK1KM2vgWScLz5VJHazqFU9gWE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712854032; c=relaxed/simple;
-	bh=RyVOe6pCtx0/g7zEV7rXDdHduJWvub6mOy5PsGRPM7I=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=F19ALh1GPErHZEv2/sM1gzjxiGaJwgidBP760MyPmwd11340edpTzWwOqKntP6vhuujpvOfia4IaL2150ArNqPVsegYUTOqy+/U7sZZ6NUm6WgfkXzCdaZMhqNZNTkTvfthzXPEIF3RdIel66IK1v3Z3HfM60kzJ0wQvuFy3CfA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=provod.works; spf=pass smtp.mailfrom=provod.works; arc=none smtp.client-ip=185.226.149.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=provod.works
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=provod.works
-Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
-	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.93)
-	(envelope-from <me@provod.works>)
-	id 1ruxZs-002Jw4-5h; Thu, 11 Apr 2024 18:47:08 +0200
-Received: from [10.9.9.73] (helo=submission02.runbox)
-	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
-	(envelope-from <me@provod.works>)
-	id 1ruxZm-0004Du-KJ; Thu, 11 Apr 2024 18:47:02 +0200
-Received: by submission02.runbox with esmtpsa  [Authenticated ID (959450)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.93)
-	id 1ruxZl-00BPCo-2M; Thu, 11 Apr 2024 18:47:01 +0200
-From: Ivan Avdeev <me@provod.works>
-To: laurent.pinchart@ideasonboard.com,
-	dan.scally@ideasonboard.com,
-	gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Ivan Avdeev <me@provod.works>
-Subject: [PATCH] usb: gadget: uvc: use correct buffer size when parsing configfs lists
-Date: Thu, 11 Apr 2024 12:46:16 -0400
-Message-ID: <20240411164616.4130163-1-me@provod.works>
-X-Mailer: git-send-email 2.43.2
+	s=arc-20240116; t=1712857000; c=relaxed/simple;
+	bh=4nPq1J2OZpncP95+u16MxaN1Cq3sf992Yj0ysHslu2s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ryITtAaEyePH5CwlJBbujCpV8ucjtFZ4v3fpHXOb7T19SOXLpl3aii4P6Gnl1ic8roa2pW9xmMF8Kn9N5havdo1IxTfAK3dyM3ifNfB7NCOFIBsonciLspvtLcSVTGYkvznc9ZZJQlc/xAIzc24k5OyvLFJWpc2yO63SwICcjzo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
+Received: (qmail 253031 invoked by uid 1000); 11 Apr 2024 13:36:36 -0400
+Date: Thu, 11 Apr 2024 13:36:36 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Oliver Neukum <oneukum@suse.com>
+Cc: linux-usb@vger.kernel.org
+Subject: Re: [RFC 2/6] usb: avoid overrunning a buffer in usb_parse_interface
+Message-ID: <556d3e81-2d4c-4c55-9536-56a8a2ccf3e7@rowland.harvard.edu>
+References: <20240411124722.17343-1-oneukum@suse.com>
+ <20240411124722.17343-3-oneukum@suse.com>
+ <05af3e08-362f-424c-96e1-2965c55b7212@rowland.harvard.edu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <05af3e08-362f-424c-96e1-2965c55b7212@rowland.harvard.edu>
 
-This commit fixes uvc gadget support on 32-bit platforms.
+On Thu, Apr 11, 2024 at 11:39:01AM -0400, Alan Stern wrote:
+> On Thu, Apr 11, 2024 at 02:43:00PM +0200, Oliver Neukum wrote:
+> > We must not touch bDescriptorType if it is not within our buffer.
+> > To guarantee that we have to be sure the first two bytes of the
+> > descriptor are within the buffer.
+> > 
+> > Signed-off-by: Oliver Neukum <oneukum@suse.com>
+> > ---
+> >  drivers/usb/core/config.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/usb/core/config.c b/drivers/usb/core/config.c
+> > index c7056b123d46..5891652b6202 100644
+> > --- a/drivers/usb/core/config.c
+> > +++ b/drivers/usb/core/config.c
+> > @@ -575,7 +575,7 @@ static int usb_parse_interface(struct device *ddev, int cfgno,
+> >  
+> >  	/* Parse all the endpoint descriptors */
+> >  	n = 0;
+> > -	while (size > 0) {
+> > +	while (size >= sizeof(struct usb_descriptor_header)) { /* minimum length to get bDescriptorType */
+> >  		if (((struct usb_descriptor_header *) buffer)->bDescriptorType
+> >  		     == USB_DT_INTERFACE)
+> >  			break;
+> 
+> I would omit the comment (the point seems pretty obvious even though I 
+> never noticed it before), but there's nothing wrong with having it.
+> 
+> Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
 
-Commit 0df28607c5cb ("usb: gadget: uvc: Generalise helper functions for
-reuse") introduced a helper function __uvcg_iter_item_entries() to aid
-with parsing lists of items on configfs attributes stores. This function
-is a generalization of another very similar function, which used a
-stack-allocated temporary buffer of fixed size for each item in the list
-and used the sizeof() operator to check for potential buffer overruns.
-The new function was changed to allocate the now variably sized temp
-buffer on heap, but wasn't properly updated to also check for max buffer
-size using the computed size instead of sizeof() operator.
+I take this back.  The checks performed by usb_parse_configuration() 
+make this unnecessary.
 
-As a result, the maximum item size was 7 (plus null terminator) on
-64-bit platforms, and 3 on 32-bit ones. While 7 is accidentally just
-barely enough, 3 is definitely too small for some of UVC configfs
-attributes. For example, dwFrameInteval, specified in 100ns units,
-usually has 6-digit item values, e.g. 166666 for 60fps.
-
-Fixes: 0df28607c5cb ("usb: gadget: uvc: Generalise helper functions for reuse")
-Signed-off-by: Ivan Avdeev <me@provod.works>
----
- drivers/usb/gadget/function/uvc_configfs.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/usb/gadget/function/uvc_configfs.c b/drivers/usb/gadget/function/uvc_configfs.c
-index 7e704b2bcfd1..a4377df612f5 100644
---- a/drivers/usb/gadget/function/uvc_configfs.c
-+++ b/drivers/usb/gadget/function/uvc_configfs.c
-@@ -92,10 +92,10 @@ static int __uvcg_iter_item_entries(const char *page, size_t len,
- 
- 	while (pg - page < len) {
- 		i = 0;
--		while (i < sizeof(buf) && (pg - page < len) &&
-+		while (i < bufsize && (pg - page < len) &&
- 		       *pg != '\0' && *pg != '\n')
- 			buf[i++] = *pg++;
--		if (i == sizeof(buf)) {
-+		if (i == bufsize) {
- 			ret = -EINVAL;
- 			goto out_free_buf;
- 		}
-
-base-commit: 2c71fdf02a95b3dd425b42f28fd47fb2b1d22702
--- 
-2.43.2
-
+Alan Stern
 
