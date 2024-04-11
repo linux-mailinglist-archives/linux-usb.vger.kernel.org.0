@@ -1,112 +1,77 @@
-Return-Path: <linux-usb+bounces-9278-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9279-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9BBE28A1A67
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Apr 2024 18:51:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 180CA8A1B45
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Apr 2024 19:27:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 534C91F27F6D
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Apr 2024 16:51:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C66E3286930
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Apr 2024 17:27:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCD10481CD;
-	Thu, 11 Apr 2024 15:40:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="MynCAshF"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8929D77624;
+	Thu, 11 Apr 2024 15:57:23 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94B3047F60
-	for <linux-usb@vger.kernel.org>; Thu, 11 Apr 2024 15:40:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id 744C82BD06
+	for <linux-usb@vger.kernel.org>; Thu, 11 Apr 2024 15:57:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712850017; cv=none; b=nXr7Rv8aWWbjwb/fPAGbihd+p62pVuZE+v3pDYih4LAGNBNEO58MYq3D8A2AVoxst8cP0aBFzdo1gxWvHwQrI2hynohuZ2OSpkGZ0MWMnoxX5VgKdwhasDrfDnjTAjQEAAWANsjbGJn6pW05lBuZKiK/m7Ao/CvmYutTTAXDnhk=
+	t=1712851043; cv=none; b=VSvVTqVdz2IcgpJ7Fua3kQQJ/jwaK7Lh9DyHAlpXH/7YkOhok/XtbPvsAaIaCIRlfR2hjV4cA/mn0nrT5GYM0Hg6XlRndiwXkeBJGaiTtDVpYHkbTYn1qWVeR0Lx4qkiEwEofNIrvnmYmo2gLcPfzWbFLEfauDsaYYsvj71UYg8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712850017; c=relaxed/simple;
-	bh=INK0I2VgPHeoEjFFDqD4XL2fVdTPxVMXuHs9KgH60kw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=J/G+8X1/AUBkybI7vf8SWtUxcE6QfcTPQgQI6U9vwfVdIXAC6aEScmTb9PKrFdXth+9NtT2wS0HhEJbBGe2clhAF4DOI8vPwJpU1SJnTIi0IlLNNqAEjerRw//1fmCZEq6DrmQnsLbuyHUKMPgKcjStWETQ5Sfyt1r8P5PdL26o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=MynCAshF; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-417d0194703so166075e9.0
-        for <linux-usb@vger.kernel.org>; Thu, 11 Apr 2024 08:40:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1712850013; x=1713454813; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WvhIQSr6A6FqEDfrLHrzJYQMf0rTMc825zvGxqB0hho=;
-        b=MynCAshFoRMz1RStctmBMqoLnB9N+KLU4fU7snsRY+mFIG926LhyD+m+cyAaCi4Plw
-         Lyi+o7j96hNuv16hPu1zsW//+WtMaJZ1R25dfzlHpF7RgakzlpgQcHe4qem3bg86zMNb
-         EJi+ojI6LBJVn1odw5hGVm91SrFEreQ6TPvoCcV2XI7mBxH8ee/UPvUSev7Lmorr1uKJ
-         jtQENWsTIk0I+DkwoODFlynYtEVhqeTC1+s8ewib3dIPHppNn7/XfNKjXflarTE7vjEU
-         kBmf9HvRlxASl8rhjTfLuviyreigOSpiBt1rfBxTBRsaC1S9weF8N99JSenFLcoHs4pb
-         qezQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712850013; x=1713454813;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WvhIQSr6A6FqEDfrLHrzJYQMf0rTMc825zvGxqB0hho=;
-        b=Va0PexjKY4pw5FlX0SsV/on1Y2SNnTjo5Vpikr/cSRNova1etwwHelKbGc5j42CLop
-         ZqKqabFvx1ZQIT8645nschYlgMsamehKgDqB+bWRNox0VP9yX+rnmGjXnbbWLI2IIlOU
-         YcC0E8XIdefzVFtF9GS4A/FE0hipBBtEjgcOOvQZVRH1TUdY11ouAISEAzzQQC2YhG85
-         Tm/g+ufkdXpdVogCO8PRQEt9LUeqXrlh9YKz2hGaEYbhrXlZcBXNxvIY67euEudBnlNe
-         /V+X3bB/4ua3wtX4wZjNcaY4crcaS4fR/cnRU7nJ8k2Bd/4lZErgufgGTlh9bcm1Yrlu
-         jd7w==
-X-Gm-Message-State: AOJu0YyZrjGYijYKIiTwzLGnVOcOtZ6V20UlZtuD7h7nHZwW7meGp3N3
-	tYFaCwh4kwTXLfAzCpFxMAxCtIg4cxrCI3yDjE/SpP+/RZ4c97wYwHrun1d+yb8=
-X-Google-Smtp-Source: AGHT+IFf6u9XeEP2YIZFiNXbD7CofMSBEwJEnjfHLLIAMwXeckyZSbmmvM66WpjilcP4hj8b/5aofg==
-X-Received: by 2002:a05:600c:5025:b0:416:389d:3844 with SMTP id n37-20020a05600c502500b00416389d3844mr132931wmr.11.1712850012820;
-        Thu, 11 Apr 2024 08:40:12 -0700 (PDT)
-Received: from ?IPV6:2001:a61:1366:6801:d8:8490:cf1a:3274? ([2001:a61:1366:6801:d8:8490:cf1a:3274])
-        by smtp.gmail.com with ESMTPSA id u14-20020a05600c19ce00b004162bac1393sm2656197wmq.43.2024.04.11.08.40.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Apr 2024 08:40:12 -0700 (PDT)
-Message-ID: <f67e75bf-b367-4c00-bdd0-d0b8dff30245@suse.com>
-Date: Thu, 11 Apr 2024 17:40:11 +0200
+	s=arc-20240116; t=1712851043; c=relaxed/simple;
+	bh=EAxYRJ0OyAMfhG9rDQzT3GCvJSOGfjCCsn61Ac2Cx7E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=INZoFcdkqqP8Wlf96boFAq/60IPAIG9EXUUgd8/hSSrseiq5cpqfxVwk+OH65+EUSAEI9H7ipfOurXnWNt6OuLJdIc1ACigNMzsOWiMNPSYjXiJHTeyKIZ/aqKiOtR5bHjkE9H1zFlnzwPztcPQRvk91xCjgCPrjTTuJjohgKe0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
+Received: (qmail 249502 invoked by uid 1000); 11 Apr 2024 11:57:20 -0400
+Date: Thu, 11 Apr 2024 11:57:20 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Oliver Neukum <oneukum@suse.com>
+Cc: linux-usb@vger.kernel.org
+Subject: Re: [RFC 3/6] usb: usb_parse_endpoint needs to guard against short
+ descriptors
+Message-ID: <c248cb9a-8072-4269-b4af-f84798c749e0@rowland.harvard.edu>
+References: <20240411124722.17343-1-oneukum@suse.com>
+ <20240411124722.17343-4-oneukum@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC 1/6] usb: usb_parse_endpoint ignore reserved bits
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: linux-usb@vger.kernel.org
-References: <20240411124722.17343-1-oneukum@suse.com>
- <20240411124722.17343-2-oneukum@suse.com>
- <3257a17c-cb38-4cc1-94ca-3e6dc4bb5d88@rowland.harvard.edu>
-Content-Language: en-US
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <3257a17c-cb38-4cc1-94ca-3e6dc4bb5d88@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240411124722.17343-4-oneukum@suse.com>
 
-
-
-On 11.04.24 17:35, Alan Stern wrote:
-> On Thu, Apr 11, 2024 at 02:42:59PM +0200, Oliver Neukum wrote:
->> We have to ignore the higher bits in bEndpointAddress
+On Thu, Apr 11, 2024 at 02:43:01PM +0200, Oliver Neukum wrote:
+> If a malicious device gives us a descriptor of zero length
+> we'll go into an infinite loop. We have to check and do
+> a hard bailout.
+> If we get a descriptor of length < 2 we'll parse the next
+> descriptor as part of the current descriptor. We need to check.
 > 
-> Mention that these bits are reserved.  That's why we ought to ignore
-> them.
+> Signed-off-by: Oliver Neukum <oneukum@suse.com>
+> ---
+>  drivers/usb/core/config.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/usb/core/config.c b/drivers/usb/core/config.c
+> index 5891652b6202..050cd5066ccf 100644
+> --- a/drivers/usb/core/config.c
+> +++ b/drivers/usb/core/config.c
+> @@ -265,6 +265,9 @@ static int usb_parse_endpoint(struct device *ddev, int cfgno,
+>  	const unsigned short *maxpacket_maxes;
+>  
+>  	d = (struct usb_endpoint_descriptor *) buffer;
+> +	if (d->bLength < sizeof(struct usb_descriptor_header)) /* this amounts to sabotage */
+> +		return -EINVAL;
 
-OK
+Your 6/6 patch should guarantee that this can never happen.  Then this 
+check won't be needed.
 
-> Also, this is not really an example of hardening; it's more like
-> future-proofing the code.  The existing code will work fine with a
-> malicious device; your real concern is about possible changes to the
-> spec in the future.
-
-It seemed to me like a vector for a DoS, but in hindsight, yes I'll
-take it out of the series.
-
-	Regards
-		Oliver
-
+Alan Stern
 
