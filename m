@@ -1,70 +1,214 @@
-Return-Path: <linux-usb+bounces-9313-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9314-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 040DC8A31AF
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Apr 2024 16:58:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D9188A33D5
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Apr 2024 18:27:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B4378282867
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Apr 2024 14:58:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9CFBB1F22CBE
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Apr 2024 16:27:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E09D1482F0;
-	Fri, 12 Apr 2024 14:58:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1476114A0A2;
+	Fri, 12 Apr 2024 16:26:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hpXCTOHd"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id A44B2182DF
-	for <linux-usb@vger.kernel.org>; Fri, 12 Apr 2024 14:58:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E21CD149C7A;
+	Fri, 12 Apr 2024 16:26:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712933919; cv=none; b=RFJDjfzy061m0jfou+9fbQ0eXN43+aGjXQ0LCb0Q3TC9wVdAPYkd8zNd53j34rftlFvLTzNgiSMiTBIB+u4vrZfvlA61UDuOmGjShfYOV3nvhJIrqoqvU/pO1wMZv1UGPROIlusedo4/6uXbE4ldT8eIhD5Kyw937kq4Qxf+Op8=
+	t=1712939182; cv=none; b=Rfsu9VD2iNOrRg1BnrLe427yYyRF+s6teewj6sLbwVuADatrjkjx4iqnncNBKaHA7r4Ik/UacLRvlDxJPIj2u+uLh9VBf+zGPVy+Ie4uhcUm7MwfLbD+53Vtcu498DtENnfV5CXSDohXyAK3I4JjA7RswmP96hcE5k+op86f2Vo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712933919; c=relaxed/simple;
-	bh=04ykC2yq1lC/0hBfCtPKjfa7diXWxuJwzYkmrjfwWJY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O1VnQjEQLSZ2peqRiojMBEonevrJ+0XzvJnO7/Y8eJEnvydtUQLUxYlzhI2evBRKrS2a81bjExDxlHd6m0L3pmt3Pc+koUr6p0lSSYEFa2FtTdTsoxDG5xrRbAAZzdloejhZT6iS+omQ74LhCaLGY4MKGQfRK5ZbCK5bkjoJAnA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
-Received: (qmail 36889 invoked by uid 1000); 12 Apr 2024 10:58:36 -0400
-Date: Fri, 12 Apr 2024 10:58:36 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Anand Moon <linux.amoon@gmail.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-  Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-  Alim Akhtar <alim.akhtar@samsung.com>,
-  Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-  Johan Hovold <johan@kernel.org>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-  linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-  linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/5] usb: ehci-exynos: Use devm_clk_get_enabled()
- helpers
-Message-ID: <d5a36d41-22b2-4970-ad17-adcb60a34506@rowland.harvard.edu>
-References: <20240412142317.5191-1-linux.amoon@gmail.com>
- <20240412142317.5191-2-linux.amoon@gmail.com>
+	s=arc-20240116; t=1712939182; c=relaxed/simple;
+	bh=U+YWaM+j4UuQyut7B3+N2UnJU+GDXIKNdsx/erJ8ups=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=IoUMPL9kBaWeTgZIOmd/a/oHr/Hwmdp8cicFGYN5DcY/noDtH5PBaIsC88qNiXGxn2a0spMuwvy9AaGnEHY+s6LOgunxfEvd/xCV5HjqTJftDSKkMEOJv58mjOg7ETjkVb367QP2c++oq8Qg2cWaQI9qAxjiqYB1w3Sm+HXImXg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hpXCTOHd; arc=none smtp.client-ip=209.85.208.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-565c6cf4819so3726198a12.1;
+        Fri, 12 Apr 2024 09:26:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712939179; x=1713543979; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7S5rYRAIdwELL1njRKzrVzsrzJoQnchOez5tsdfUvaI=;
+        b=hpXCTOHdJfRFu+r8x1w3WX/GlQ6ChYRnTrsd8JQzpeHZjCiYDSogoS9B5ouzPfrVRb
+         UFHlM/3Sh+UW+2Py0x58DEFoST4gZHWQXnuxmilRMfRLCeC1QHwfh3rWr0YsKW9CtphT
+         2Ib5wUoEEoJ9coI1o6JwIxZ2Waxmq9uLXSCigk3xgg9NPZd14mC+5meVw8atmDG7+c7+
+         UfFX+eCMwro8UePmewm/eKr3AoAC2aGN9jXEajA0VbRqfuiwMf8xhph9yCVyYpaqxeSB
+         WDFO2bZTedXUxrO4t3GWgud0URF6Xb7NhXz7S4kxTimA6fZbX28pt0dieLW6PWs5LRIG
+         dj9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712939179; x=1713543979;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7S5rYRAIdwELL1njRKzrVzsrzJoQnchOez5tsdfUvaI=;
+        b=PN5wtSGN7L9wPmf03nbAG/Mi6hLkUIvklpz3iONyD6lgm4m72VadNROobwTFXVFPgQ
+         BKs4yRn1xKQyNTtMkPbX8UrCkHQngfCxTAj0HHdTRuhWnXLkaATn8OSdRykc0UlyhizZ
+         DcAV2Ze2TiRAW9hzq+WVWmPYtMv92WFuoPU+60+X0xJcZ8iYbcrAg0Tvpx4pJV29EuXy
+         3sfwLplzwQn46GdPcpRdLIvOqMIaBQXLN985iDZfpuBC2ebqlDN1dLc1ZqiOYgyCkMvl
+         /yYz108s2L2Wv2i8YBwXx29/KJi0S+WJ6B+ADYGtqaGGkNouWDXK5O9HUy8B0KZ91q/s
+         n/xQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUsHZKQlVJWyX+V/Yz1KOzOUudeoItgPBGUlNXn0HJAqk+t4VGrOQhTTQbZ5r5zv9z7V8uJdQwJzflz5QVvCJr26bKnx8XGqBus
+X-Gm-Message-State: AOJu0YwfLagYlI/kn1Ie3Q25ywBL9jvcgTyzCtxpc+4hRJsnJVlOWQ7l
+	rRhOgLQeCS44l0bbtzDtDlvRBkw09o7wwI79CCg6sv3PKAdl/zQCVXG9Brw7508R5SIGktOu9cl
+	8liaRmMYfWjq/GbeoAdEZkB2XhwA=
+X-Google-Smtp-Source: AGHT+IFtsWE4u2myVJNDdXFTPZxZyeTY/cqwP7h2PooKBdw+iLcodyBMcYwspj3CY0TwSvh5JKJYgeCOyJhpLN4xhMY=
+X-Received: by 2002:a17:906:5604:b0:a52:3e27:b5a8 with SMTP id
+ f4-20020a170906560400b00a523e27b5a8mr866580ejq.1.1712939178996; Fri, 12 Apr
+ 2024 09:26:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240412142317.5191-2-linux.amoon@gmail.com>
+References: <CAEkJfYON+ry7xPx=AiLR9jzUNT+i_Va68ACajOC3HoacOfL1ig@mail.gmail.com>
+ <92fe8e95-bc01-4d7d-9678-8cfc55cc4a7b@rowland.harvard.edu>
+ <CAEkJfYORHKO16xT3DCS04JFzkquz6oZ5CdC2USJ5-c0WihAMXg@mail.gmail.com> <45e246ab-01e8-40b7-8ede-b47957df0d7b@rowland.harvard.edu>
+In-Reply-To: <45e246ab-01e8-40b7-8ede-b47957df0d7b@rowland.harvard.edu>
+From: Sam Sun <samsun1006219@gmail.com>
+Date: Sat, 13 Apr 2024 00:26:07 +0800
+Message-ID: <CAEkJfYMjO+vMBGPcaLa51gjeKxFAJBrSa0t_iJUtauQD3DaK8w@mail.gmail.com>
+Subject: Re: [Linux kernel bug] general protection fault in disable_store
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	Greg KH <gregkh@linuxfoundation.org>, swboyd@chromium.org, ricardo@marliere.net, 
+	hkallweit1@gmail.com, heikki.krogerus@linux.intel.com, 
+	mathias.nyman@linux.intel.com, royluo@google.com, 
+	syzkaller-bugs@googlegroups.com, xrivendell7@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Apr 12, 2024 at 07:52:50PM +0530, Anand Moon wrote:
-> The devm_clk_get_enabled() helpers:
->     - call devm_clk_get()
->     - call clk_prepare_enable() and register what is needed in order to
->      call clk_disable_unprepare() when needed, as a managed resource.
-> 
-> This simplifies the code and avoids the calls to clk_disable_unprepare().
-> 
-> Signed-off-by: Anand Moon <linux.amoon@gmail.com>
-> ---
+On Fri, Apr 12, 2024 at 10:40=E2=80=AFPM Alan Stern <stern@rowland.harvard.=
+edu> wrote:
+>
+> On Fri, Apr 12, 2024 at 09:08:12PM +0800, Sam Sun wrote:
+> > Sorry for the mistake I made when debugging this bug. Now I have more
+> > information about it. Disassembly of function disable_store() in the
+> > latest upstream kernel is listed below.
+> > ```
+> > Dump of assembler code for function disable_store:
+> >    ...
+> >    0xffffffff86e907eb <+187>:   lea    -0x8(%r14),%r12
+> >    0xffffffff86e907ef <+191>:   mov    (%rbx),%rax
+> >    0xffffffff86e907f2 <+194>:   mov    %rax,0x20(%rsp)
+> >    0xffffffff86e907f7 <+199>:   lea    -0xa8(%rax),%rdi
+> >    0xffffffff86e907fe <+206>:   mov    %rdi,0x18(%rsp)
+> >    0xffffffff86e90803 <+211>:   call   0xffffffff86e20220
+> > <usb_hub_to_struct_hub>
+> >    0xffffffff86e90808 <+216>:   mov    %rax,%rbx
+> >    0xffffffff86e9080b <+219>:   shr    $0x3,%rax
+> >    0xffffffff86e9080f <+223>:   movabs $0xdffffc0000000000,%rcx
+> >    0xffffffff86e90819 <+233>:   cmpb   $0x0,(%rax,%rcx,1)
+> >    0xffffffff86e9081d <+237>:   je     0xffffffff86e90827 <disable_stor=
+e+247>
+> >    0xffffffff86e9081f <+239>:   mov    %rbx,%rdi
+> >    0xffffffff86e90822 <+242>:   call   0xffffffff81eeb0b0
+> > <__asan_report_load8_noabort>
+> >    0xffffffff86e90827 <+247>:   lea    0x60(%rsp),%rsi
+> >    ...
+> > ```
+> > The cmpb in disable_store()<+233> is generated by KASAN to check the
+> > shadow memory status. If equals 0, which means the load 8 is valid,
+> > pass the KASAN check. However, this time rax is 0, so it first
+> > triggers general protection fault, since 0xdffffc0000000000 is not a
+> > valid address. rax contains the return address of function
+> > usb_hub_to_struct_hub(), in this case is a NULL.
+> >
+> > In function usb_hub_to_struct_hub(), I checked hdev and its sub
+> > domains, and they are not NULL. Is it possible that
+> > usb_deauthorized_device() set
+> > hdev->actconfig->interface[0]->dev.driver_data to NULL? I cannot
+> > confirm that since every time I try to breakpoint the code it crashes
+> > differently.
+>
+> I suspect the usb_hub_to_struct_hub() call is racing with the
+> spinlock-protected region in hub_disconnect() (in hub.c).
+>
+> > If there is any other thing I could help, please let me know.
+>
+> Try the patch below.  It should eliminate that race, which hopefully
+> will fix the problem.
+>
+> Alan Stern
+>
+>
+>
+> Index: usb-devel/drivers/usb/core/hub.c
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> --- usb-devel.orig/drivers/usb/core/hub.c
+> +++ usb-devel/drivers/usb/core/hub.c
+> @@ -72,6 +72,9 @@
+>   * change to USB_STATE_NOTATTACHED even when the semaphore isn't held. *=
+/
+>  static DEFINE_SPINLOCK(device_state_lock);
+>
+> +/* Protect hdev->maxchild and hub's intfdata */
+> +static DEFINE_SPINLOCK(hub_state_lock);
+> +
+>  /* workqueue to process hub events */
+>  static struct workqueue_struct *hub_wq;
+>  static void hub_event(struct work_struct *work);
+> @@ -152,9 +155,13 @@ static inline char *portspeed(struct usb
+>  /* Note that hdev or one of its children must be locked! */
+>  struct usb_hub *usb_hub_to_struct_hub(struct usb_device *hdev)
+>  {
+> -       if (!hdev || !hdev->actconfig || !hdev->maxchild)
+> -               return NULL;
+> -       return usb_get_intfdata(hdev->actconfig->interface[0]);
+> +       struct usb_hub *hub =3D NULL;
+> +
+> +       spin_lock_irq(&hub_state_lock);
+> +       if (hdev && hdev->actconfig && hdev->maxchild)
+> +               hub =3D usb_get_intfdata(hdev->actconfig->interface[0]);
+> +       spin_unlock_irq(&hub_state_lock);
+> +       return hub;
+>  }
+>
+>  int usb_device_supports_lpm(struct usb_device *udev)
+> @@ -1714,7 +1721,9 @@ static int hub_configure(struct usb_hub
+>                         break;
+>                 }
+>         }
+> +       spin_lock_irq(&hub_state_lock);
+>         hdev->maxchild =3D i;
+> +       spin_unlock_irq(&hub_state_lock);
+>         for (i =3D 0; i < hdev->maxchild; i++) {
+>                 struct usb_port *port_dev =3D hub->ports[i];
+>
+> @@ -1790,9 +1799,11 @@ static void hub_disconnect(struct usb_in
+>
+>         /* Avoid races with recursively_mark_NOTATTACHED() */
+>         spin_lock_irq(&device_state_lock);
+> +       spin_lock(&hub_state_lock);
+>         port1 =3D hdev->maxchild;
+>         hdev->maxchild =3D 0;
+>         usb_set_intfdata(intf, NULL);
+> +       spin_unlock(&hub_state_lock);
+>         spin_unlock_irq(&device_state_lock);
+>
+>         for (; port1 > 0; --port1)
+>
 
-For patches 1 - 4:
+I applied this patch and tried to execute several times, no more
+kernel core dump in my environment. I think this bug is fixed by the
+patch. But I do have one more question about it. Since it is a data
+race bug, it has reproducibility issues originally. How can I confirm
+if a racy bug is fixed by test? This kind of bug might still have a
+race window but is harder to trigger. Just curious, not for this
+patch. I think this patch eliminates the racy window.
 
-Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
+Best,
+Yue
 
