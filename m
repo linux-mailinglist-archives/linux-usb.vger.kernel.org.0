@@ -1,78 +1,97 @@
-Return-Path: <linux-usb+bounces-9297-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9298-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DBE8B8A23E9
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Apr 2024 04:51:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 826AB8A241B
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Apr 2024 05:00:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9626D28392E
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Apr 2024 02:51:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B38061C21D97
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Apr 2024 03:00:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1844F12B79;
-	Fri, 12 Apr 2024 02:51:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE02715491;
+	Fri, 12 Apr 2024 03:00:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DR1JybLc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RlrcimFQ"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8660310A24;
-	Fri, 12 Apr 2024 02:51:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EC9D134B2;
+	Fri, 12 Apr 2024 03:00:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712890291; cv=none; b=cTdtLjies0HM1o7W065hzqwRNAroa9E8ighN8tL6rMw9r77tfdF4eON+fOLaWO1JyXdvpfm8ST9ccZwWjsr0EBVoB84pugvzT8npX/vwKFLf7eqjZ+BeWhYmK7GYcZ2h9s/D3lqXoHABJvNrxOQFfAJnR0uE4VmS3geQs2tIdyk=
+	t=1712890830; cv=none; b=R9Zsiik4ssI/Ik8vNdZat7mIt4rPPegcu7lW33GfxvRtP8qMuW72N9NLH93cbDEv4Y6sbgZJzerE5FXnBf6nN2VmXlgrA7OV4AphVMeOmlKqHb7PRZYrOzqz8EMlL5VRSBNMfuKOaXKKTp148ZeX3gERpFZRXfbGfcTmK1JouqU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712890291; c=relaxed/simple;
-	bh=JLSsFNuTS/XXGmjbgOU7MixG+Yt1/H2zmieyO7GGxMM=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Vba3NiOkNuzxsOrp1MRPPtGHfNeHdfEcjsQctn/gRV+jjcFdj/4Xme3jf3de7VC43TnHvLnVDGalG+CNU9u30M/2S4QPoDBppFOQKuRDC1gPwmwLsENoA3mdmmSWoFrtugc0jaiRlWXv8n7ALFslfDYSbJXtalVm8ZLuLNkOTVE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DR1JybLc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CC69C072AA;
-	Fri, 12 Apr 2024 02:51:30 +0000 (UTC)
+	s=arc-20240116; t=1712890830; c=relaxed/simple;
+	bh=xgQp/R0CH63gDutvRq7lxt37zWTokqFaNm+/NVS0NVY=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=Ix9rM/ttsebEJ7MTROMXvYRtQ8cpfL2No76zHLbJ0DSKqFwZsU8uWv+0TmnqRqiKpNTR01tIVAcwhAG2zwXsce9xK9D2waxhBLYgc3R/XVBlHVcFqs4vvuQx+Mxgvm/V8u0GAtiV0jqXgXnzsrYJT00ohmGqDUzBZC6uMZ2Xsq0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RlrcimFQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D0753C113CE;
+	Fri, 12 Apr 2024 03:00:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712890291;
-	bh=JLSsFNuTS/XXGmjbgOU7MixG+Yt1/H2zmieyO7GGxMM=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=DR1JybLcJI6E78CFpFQm2BDyx0OIXKm6fZPwjr/Nyu6Md+FqcBBemwL02ZZXqNM8+
-	 vgpDDW0pNaRRuMvuACSYt8A6NM+INoBUuZ3drApLMfJIY95lUdTzao7+ILFfmlA8IF
-	 dcLhGhwlkl4V9Cq6Cbya2+JdL0DaUQw7aL64oo24elKNDw43JvJC5a5fYz01EQpzut
-	 uouWdN0wfAYtRo8rUPxa8J420UVZFiaMeVn2hBZQ2HIybPqRsOH1WrvUhosiZ7oiXc
-	 cS69wqM+hR8W18Sm+FyH4irMAw+0I7ztNyXe/oC/ljPD45+/68E6LERrwJtyWnTiky
-	 gssoMX5k6Y5cw==
-Date: Thu, 11 Apr 2024 19:51:29 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
-Cc: davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
- linux-usb@vger.kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, stable@vger.kernel.org, Jarkko Palviainen
- <jarkko.palviainen@gmail.com>
-Subject: Re: [PATCH] net: usb: ax88179_178a: avoid writing the mac address
- before first reading
-Message-ID: <20240411195129.69ff2bac@kernel.org>
-In-Reply-To: <20240410095603.502566-1-jtornosm@redhat.com>
-References: <20240410095603.502566-1-jtornosm@redhat.com>
+	s=k20201202; t=1712890829;
+	bh=xgQp/R0CH63gDutvRq7lxt37zWTokqFaNm+/NVS0NVY=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=RlrcimFQylvNQpfFXiWOhGYAhm6ZIeKw5VwC6Q33ypikmnxXIdFnzI6kSaRN448q4
+	 GAO9v/YLFK16yOCbygQhxellsj/JanrMgWAk3bLflPOFQHxMhkI7CkuMSJOk2ehW2+
+	 fg3aZU4L3cfyW6I60+s27F4Nf4ZpAO3hX5bAmosEeYeXpq4PRSywbwezN/kVrAWK3g
+	 pnUIAeeb54GmyMJtK6PYB0q4oDKMa3Qufwr+X3SZHA/QRaqgOFIFxrHBRd0mPg7sKj
+	 itH6Dv5fOPnKqNmPMxVyKCb+l6Bj9K8BcifesQQKF6IQUkElmscUhL8EkpmK1b2smJ
+	 RfZDitqe1hcOA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BDF23C4339F;
+	Fri, 12 Apr 2024 03:00:29 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next 1/2] net: usb: qmi_wwan: Leverage core stats
+ allocator
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <171289082977.20467.4450257396019552508.git-patchwork-notify@kernel.org>
+Date: Fri, 12 Apr 2024 03:00:29 +0000
+References: <20240409133307.2058099-1-leitao@debian.org>
+In-Reply-To: <20240409133307.2058099-1-leitao@debian.org>
+To: Breno Leitao <leitao@debian.org>
+Cc: kuba@kernel.org, davem@davemloft.net, pabeni@redhat.com,
+ edumazet@google.com, bjorn@mork.no, oneukum@suse.com,
+ linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+ linux-usb@vger.kernel.org
 
-On Wed, 10 Apr 2024 11:55:49 +0200 Jose Ignacio Tornos Martinez wrote:
-> After the commit d2689b6a86b9 ("net: usb: ax88179_178a: avoid two
-> consecutive device resets"), reset operation, in which the default mac
-> address from the device is read, is not executed from bind operation and
-> the random address, that is pregenerated just in case, is direclty written
-> the first time in the device, so the default one from the device is not
-> even read. This writing is not dangerous because is volatile and the
-> default mac address is not missed.
+Hello:
 
-AFAICT the reset is synchronous to resume, right?
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-I think you can use netif_device_detach() and netif_device_attach()
-to prevent getting called while suspended.
+On Tue,  9 Apr 2024 06:33:05 -0700 you wrote:
+> With commit 34d21de99cea9 ("net: Move {l,t,d}stats allocation to core and
+> convert veth & vrf"), stats allocation could be done on net core
+> instead of in this driver.
+> 
+> With this new approach, the driver doesn't have to bother with error
+> handling (allocation failure checking, making sure free happens in the
+> right spot, etc). This is core responsibility now.
+> 
+> [...]
+
+Here is the summary with links:
+  - [net-next,1/2] net: usb: qmi_wwan: Leverage core stats allocator
+    https://git.kernel.org/netdev/net-next/c/8959bf2acfbc
+  - [net-next,2/2] net: usb: qmi_wwan: Remove generic .ndo_get_stats64
+    https://git.kernel.org/netdev/net-next/c/3cddfeca9f02
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
 
