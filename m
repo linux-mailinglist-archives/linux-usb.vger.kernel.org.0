@@ -1,138 +1,174 @@
-Return-Path: <linux-usb+bounces-9301-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9302-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70B268A259E
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Apr 2024 07:19:08 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 88E578A25BE
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Apr 2024 07:33:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2BCCE284800
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Apr 2024 05:19:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4024128436D
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Apr 2024 05:33:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94B9A1B96E;
-	Fri, 12 Apr 2024 05:18:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B76D1B968;
+	Fri, 12 Apr 2024 05:32:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="aOInRbYw"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DzjNtb/9"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1839E1F619;
-	Fri, 12 Apr 2024 05:18:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81B2D2F4A;
+	Fri, 12 Apr 2024 05:32:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712899123; cv=none; b=p1tpxEi8KlXTzEUP2gDU+PBNPfqowQcrjDxVGu63pNOr6xmi2yR3xDrlni4soJ1ku5C5qNje920sLVE/mKUI9q9gQm4sjQzh5cg8vsJhTQQk1KBQTfEePksQJiKJdVoLOJ9FUzkq7r6WwQRmJhpX1x0LqSOuKDNZpVwVviI1a7c=
+	t=1712899974; cv=none; b=MMrFrf3oLzH++NAi5CNi+1i4EL2xeq2Z8rZebwshjuPUi3dSOyr1OVNVwIHwjJo/+AK4sYTlofDrN82ZNivf8FLgamHio4pZqBfG3W9ZPaB1jrPViMT4NxfkUwh2omymc9aa0NiGkc+txisoCAHOC71gXNJznBnZGUkWDPvpIJ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712899123; c=relaxed/simple;
-	bh=4wqTxoZFHiWRIlPPIHGTjlolEmrgei5d04Xo/JlN0go=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Wrivz/lYLeE6wxRIGeWWikS1FiR0Jt0IiUuSO9upwXStfFdABhTV/5ACjWAbEpek8WmjFtkLQbg7v0lIzxs6vow4d3g4FfOktemeSwmhXgP52MwxgF8iUsqlfGkBj39wAShREv20YAoSJsVYPiRdYesTy9fQidpOfeLv35RPJjE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=aOInRbYw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33ADDC2BBFC;
-	Fri, 12 Apr 2024 05:18:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1712899122;
-	bh=4wqTxoZFHiWRIlPPIHGTjlolEmrgei5d04Xo/JlN0go=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=aOInRbYwcY73F+9XzxfeawyYGu3hSjC4p32UJ3k+cLbqQ6ALnD+/pTkngXODLnbhX
-	 IAURGE0AROPtapKw1AWf5OvVrHzn9bL3N+lL2yZRJr9bNBrmi5fig4c+Oy/THCl01R
-	 t9VHgsqEOQynEAScuTJOGA4Pz+9cD18PRIqcMVmU=
-Date: Fri, 12 Apr 2024 07:18:39 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Ivan Avdeev <me@provod.works>
-Cc: laurent.pinchart@ideasonboard.com, dan.scally@ideasonboard.com,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: uvc: use correct buffer size when parsing
- configfs lists
-Message-ID: <2024041230-preaching-ranger-66fe@gregkh>
-References: <20240411164616.4130163-1-me@provod.works>
+	s=arc-20240116; t=1712899974; c=relaxed/simple;
+	bh=LeNIrOB+CpAK7CxcmRCtZ/nGX+ykzuZDuTvsE5OrGig=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=mAahegin/6LROLWBbEwbmt6ztltnrf3tIqhjQhMv87Vg3TCM2Pbg4O9wzaAJN0R4SiCGrjujH+iJixPn6hrvkLaiTWI8qMRKmKL+lg8XuV0Zi3Bf+uMUjU/sUyJE8Fq2xBTtVsL+lfR7S2FbyUyJnauN7tAEZmgwaqlpar6ROb8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DzjNtb/9; arc=none smtp.client-ip=209.85.160.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-22f078f1aecso337090fac.3;
+        Thu, 11 Apr 2024 22:32:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712899972; x=1713504772; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=fkZu08swlbXArXRtRYpF1By2zsiAltvNt7vYo8OheZo=;
+        b=DzjNtb/9r8uBmn0XtLUUsSrtAlZpmgyBJMR3rFOp5wN0Hj4ujnG4chWNls8KkmnaQj
+         yjoThp0+I+uJAIaXszJXxnQgm1Xs6DczuTqaFxLuZt4VTG6lHki8fvdHeTkZRcxXsDpV
+         E/ERa9Qmzoqg8Z8QHRt1cXibtUFKMOyw5Ky+d7ewFFH1+Q1sBSenYc1lPgI58gaHXggQ
+         eF2pJtQQaUDEmVUwIpt3jYX3NNCxCGqFbPWD8lnxmX+3c9BJw+vxuKDDm+ypSi/Fkl8w
+         BFtgcTArdDmKGHJsSWf0LSndmF9Yad0NswOIBuTNGMGHrLfLvx/i/ea6nE3s47MdFb7k
+         kQ7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712899972; x=1713504772;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fkZu08swlbXArXRtRYpF1By2zsiAltvNt7vYo8OheZo=;
+        b=Wei5x8V+q2PzAvv0jBNHq66UcV/W3Ftwj6qKkcfpQZTWPGC+YnHokgqPp4v2Fq6aWA
+         eNadqRoFrEc0KFplr/SCd9mm+RelvC7PjZDt42XezD0D3VDdCSJwxk1F4c+pw28vlSaP
+         0Gm4OQwZRYhzKtzz5gYPa/ZseLdLAuAZIWGgBV5Esru4igBlOY5z8vXE7cbnILLAPnxL
+         FGgBVorbew7hy27I8Rw0HCVOWM4P3SXPg4JoX2InvbtyEMErT15hm8PmftpL3It6oqoo
+         v27EGenL4UMP0lAslAcvmd7DYh4a+FLs+tfwd5yWzSUSpLG37uhosBEyNsUdXqb89t83
+         20Pg==
+X-Forwarded-Encrypted: i=1; AJvYcCUj4+ttmP1nZDb3uLgFWaDDUfLbP0jRjSpU76e4/F4KD7tA9zJvFMYO7Fyg1XV7DsDyb0fINsd5+P8LUOuBfB0zAQ7k1o0ggbBrd9ZdvQhB8cIvdl+blOgtcYqztagZkWjdBg65cz7qoNCxBxmnuAGJzVO/cMWM5neH9D1mvzNyoa8AIXToBWZQsoE=
+X-Gm-Message-State: AOJu0YycGaaCK988cki+xlGGyEdNix++RimhcZjC+9I9Rj6sWTzKLA9P
+	ddTzNevV5fmCd0OoaxOV1CuRiKphoGkD1xs82zbSTkHvPENZLsh29T3CBHMzwhLLS3a8+MjE/0m
+	4i6bIODdbBN2W42F7A5py4NNE1Lo=
+X-Google-Smtp-Source: AGHT+IF9dzD7iLtCdJgQlA0hmX0ZC0Y2NZnlWJhk8sfa1PdAr4szU8KjtOK7wGmL9qXZMMl5km6aDaJISu2aQjiKKz0=
+X-Received: by 2002:a05:6870:611f:b0:22e:c4d1:4844 with SMTP id
+ s31-20020a056870611f00b0022ec4d14844mr1666786oae.18.1712899972566; Thu, 11
+ Apr 2024 22:32:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240411164616.4130163-1-me@provod.works>
+References: <20240404071350.4242-1-linux.amoon@gmail.com> <20240404071350.4242-7-linux.amoon@gmail.com>
+ <20240409015352.ocpjbgxrx636jmk4@synopsys.com> <CANAwSgQtfOG9FSygNMsNfgdmxsr-HyvyqaYr=UXE2UC_mxKJQA@mail.gmail.com>
+ <20240410232623.6gaupt6t725hhype@synopsys.com> <CANAwSgS-oD86obNUHcjAwfD+3v6VyWidTezwtihJBOC8VWHPjg@mail.gmail.com>
+ <20240411222145.rkjz3cfzudjfnkdt@synopsys.com>
+In-Reply-To: <20240411222145.rkjz3cfzudjfnkdt@synopsys.com>
+From: Anand Moon <linux.amoon@gmail.com>
+Date: Fri, 12 Apr 2024 11:02:36 +0530
+Message-ID: <CANAwSgQDGUzYO8+wAFonCo4zZZ5s94uDiHi+jLGK4EtULZaDXw@mail.gmail.com>
+Subject: Re: [PATCH v2 6/6] usb: dwc3: exynos: Switch from CONFIG_PM_SLEEP
+ guards to pm_sleep_ptr()
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>, Johan Hovold <johan@kernel.org>, 
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, 
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
+	"linux-samsung-soc@vger.kernel.org" <linux-samsung-soc@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Apr 11, 2024 at 12:46:16PM -0400, Ivan Avdeev wrote:
-> This commit fixes uvc gadget support on 32-bit platforms.
-> 
-> Commit 0df28607c5cb ("usb: gadget: uvc: Generalise helper functions for
-> reuse") introduced a helper function __uvcg_iter_item_entries() to aid
-> with parsing lists of items on configfs attributes stores. This function
-> is a generalization of another very similar function, which used a
-> stack-allocated temporary buffer of fixed size for each item in the list
-> and used the sizeof() operator to check for potential buffer overruns.
-> The new function was changed to allocate the now variably sized temp
-> buffer on heap, but wasn't properly updated to also check for max buffer
-> size using the computed size instead of sizeof() operator.
-> 
-> As a result, the maximum item size was 7 (plus null terminator) on
-> 64-bit platforms, and 3 on 32-bit ones. While 7 is accidentally just
-> barely enough, 3 is definitely too small for some of UVC configfs
-> attributes. For example, dwFrameInteval, specified in 100ns units,
-> usually has 6-digit item values, e.g. 166666 for 60fps.
-> 
-> Fixes: 0df28607c5cb ("usb: gadget: uvc: Generalise helper functions for reuse")
-> Signed-off-by: Ivan Avdeev <me@provod.works>
-> ---
->  drivers/usb/gadget/function/uvc_configfs.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/function/uvc_configfs.c b/drivers/usb/gadget/function/uvc_configfs.c
-> index 7e704b2bcfd1..a4377df612f5 100644
-> --- a/drivers/usb/gadget/function/uvc_configfs.c
-> +++ b/drivers/usb/gadget/function/uvc_configfs.c
-> @@ -92,10 +92,10 @@ static int __uvcg_iter_item_entries(const char *page, size_t len,
->  
->  	while (pg - page < len) {
->  		i = 0;
-> -		while (i < sizeof(buf) && (pg - page < len) &&
-> +		while (i < bufsize && (pg - page < len) &&
->  		       *pg != '\0' && *pg != '\n')
->  			buf[i++] = *pg++;
-> -		if (i == sizeof(buf)) {
-> +		if (i == bufsize) {
->  			ret = -EINVAL;
->  			goto out_free_buf;
->  		}
-> 
-> base-commit: 2c71fdf02a95b3dd425b42f28fd47fb2b1d22702
-> -- 
-> 2.43.2
-> 
-> 
+Hi Thinh,
 
-Hi,
+On Fri, 12 Apr 2024 at 03:52, Thinh Nguyen <Thinh.Nguyen@synopsys.com> wrote:
+>
+> On Thu, Apr 11, 2024, Anand Moon wrote:
+> > Hi Thinh,
+> >
+> > On Thu, 11 Apr 2024 at 04:56, Thinh Nguyen <Thinh.Nguyen@synopsys.com> wrote:
+> > >
+> > > On Wed, Apr 10, 2024, Anand Moon wrote:
+> > > > Hi Thinh,
+> > > >
+> > > > On Tue, 9 Apr 2024 at 07:24, Thinh Nguyen <Thinh.Nguyen@synopsys.com> wrote:
+> > > > >
+> > > > > On Thu, Apr 04, 2024, Anand Moon wrote:
+> > > > > > Use the new PM macros for the suspend and resume functions to be
+> > > > > > automatically dropped by the compiler when CONFIG_PM_SLEEP are disabled,
+> > > > > > without having to use #ifdef guards. If CONFIG_PM_SLEEP unused,
+> > > > > > they will simply be discarded by the compiler.
+> > > > > >
+> > > > > > Signed-off-by: Anand Moon <linux.amoon@gmail.com>
+> > > > > > ---
+> > > > > > v2: add __maybe_unused to suspend/resume functions in case CONFIG_PM is
+> > > > > >    disabled.
+> > > > >
+> > > > > The compiler discards the code, yet we still need __maybe_unused?
+> > > > >
+> > > > Earlier version had not added this since but I removed the
+> > > > guard.CONFIG_PM_SLEEP.
+> > > > added __maybe_unused just to safeguard the function.
+> > > >
+> > > > I have tried to build with config by disabling CONFIG_PM and CONFIG_PM_SLEEP
+> > > > but could get the warning compilation by adding flag W=1
+> > > > -Werror=unused-function.
+> > > >
+> > >
+> > > <snip>
+> > >
+> > > >
+> > > > But since these CONFIG_PM and CONFIG_PM_SLEEP cannot be disabled,
+> > > > I am not getting any warning related to these functions.
+> > > >
+> > > > Do you want me to remove __maybe_unused ?
+> > > >
+> > >
+> > > The warning was there as expected. You should to use it along with
+> > > DEFINE_SIMPLE_DEV_PM_OPS(). Let me know if you still see the same
+> > > warning.
+> > >
+> >
+> > But the warnings are related to the following macros
+> >
+> > #define PTR_IF(cond, ptr) ((cond) ? (ptr) : NULL)
+> >
+> > #define pm_ptr(_ptr) PTR_IF(IS_ENABLED(CONFIG_PM), (_ptr))
+> > #define pm_sleep_ptr(_ptr) PTR_IF(IS_ENABLED(CONFIG_PM_SLEEP), (_ptr))
+> >
+> > So if we can disable CONFIG_PM and CONFIG_PM_SLEEP options
+> > the relevant function with the above macro will be set to NULL.
+> > in this case, the compiler will discard the function in SET_SYSTEM_SLEEP_PM_OPS
+> >
+>
+> There are differences if you use SET_SYSTEM_SLEEP_PM_OPS vs the new
+> macro. It's noted in this commit:
+>
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=1a3c7bb088266fa2db017be299f91f1c1894c857
+>
+> Please try it out.
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+Thank you very much for this input
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+I will drop the __maybe_unused from my patch series.
+and switch to use DEFINE_SIMPLE_DEV_PM_OPS macro
+for suspend resume functions
 
-- You have marked a patch with a "Fixes:" tag for a commit that is in an
-  older released kernel, yet you do not have a cc: stable line in the
-  signed-off-by area at all, which means that the patch will not be
-  applied to any older kernel releases.  To properly fix this, please
-  follow the documented rules in the
-  Documentation/process/stable-kernel-rules.rst file for how to resolve
-  this.
+>
+> Thanks,
+> Thinh
 
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
+Thanks
+-Anand
 
