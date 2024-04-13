@@ -1,138 +1,125 @@
-Return-Path: <linux-usb+bounces-9318-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9319-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F3898A3B10
-	for <lists+linux-usb@lfdr.de>; Sat, 13 Apr 2024 07:09:03 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 266608A3BDF
+	for <lists+linux-usb@lfdr.de>; Sat, 13 Apr 2024 11:18:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D6736285A7A
-	for <lists+linux-usb@lfdr.de>; Sat, 13 Apr 2024 05:09:01 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7FB34B216DE
+	for <lists+linux-usb@lfdr.de>; Sat, 13 Apr 2024 09:18:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 099BC1C6A0;
-	Sat, 13 Apr 2024 05:08:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAC4F2C189;
+	Sat, 13 Apr 2024 09:17:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QBDZWn3N"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ECF8S3BW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 117EA33EE;
-	Sat, 13 Apr 2024 05:08:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E25CA1CABD;
+	Sat, 13 Apr 2024 09:17:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712984936; cv=none; b=od6E46t5l5cBrloapfUu+zBEfh4yXO2GHuZW50V8maQVZMeNJMicIncwYnX/TeJ2YcJz3m02FmNUQx36dyLpo5F14JSC+eVqWiI/iXNRDbiguurVgfRInceVI9Ufbn3lB3vpbfwQqzrLCMNfpCiZwpFOZxJVs6nI6svP9SAI4Rs=
+	t=1712999875; cv=none; b=Yt2GNW4dj6ZwjIPmoWvwTUKWfUbGpcIlQbBq1nJul629rgxcflDr7oh3DifBPJBM/qz5VljNdUvYr5cKSxZ1gF5U2D8iMX97Xfa31hgfXy+xR+G1MRMuth1avQQOdMzvQq+aAjCFgH7Wrq1rvu8NiD77uTDlFe2czDMPBOocGkA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712984936; c=relaxed/simple;
-	bh=bIQsW1CPYkILDa5kQaHHU3RJyOH+XS4wmaA2E+aT+gg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=aGtySnda3HXTF1kqAck8Ia3pVe9vYHWlgNdLlASHZ3Gv3EURGL8knZefTL9cmitp4xKJ9BRPV8sFAWgHsPMg+GCekgR4aHV+llYMzn3NAqQ6xJ5NRGlP5BgLIn5MmVnzHrmhjNnD4pEqwGJI2Hga34Kn2K7pgpaJ2//Aq4Fwugw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QBDZWn3N; arc=none smtp.client-ip=209.85.218.44
+	s=arc-20240116; t=1712999875; c=relaxed/simple;
+	bh=wRNMwDiQIl7U6AyLLbQ9gUlDqOSjb+gZG5zBDbEdpAQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=FhHeSf7IIu1AVVEXLwC07hPbz7xFe46DELGY/EK5ofq0dht1Gj/vAqmdHiIBRsyrQRoURC8ghbw7Xnx97UG3ysoXagjB5TwX7mbpUV4c4LuWCOAjrugB5BQMH34Jea5VVoGJ3MidPYE5pOuZdQnaki/qV57vAzzQI/X0CREcH6s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ECF8S3BW; arc=none smtp.client-ip=209.85.208.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-a46a7208eedso211990766b.0;
-        Fri, 12 Apr 2024 22:08:54 -0700 (PDT)
+Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-2da08b07157so18341961fa.1;
+        Sat, 13 Apr 2024 02:17:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712984933; x=1713589733; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1712999872; x=1713604672; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5qvXKC5wSDQIOCusiNuNNePSI2BJ5XEbrAPDJxd5/Tg=;
-        b=QBDZWn3N5Cn24lucqpOa/n4BaFh0xdHWx5P6f5kP6HCI4vMXIE4RgMitKTOxMW721H
-         peXLcue3e3zRoz0irLGVEL/niRWBB7RGfsTMQ1ea9lRjagpid39bJrWKsW9oAqbEVkpT
-         lXw2x9p1nmaDY8B7l5sw761mP/XJGYnFHXS9WLuunGIqPsrCRNEdn3Y30eNnH+L259zA
-         9LB5uqE4M7E+lihqJCdbAoGhRZ55JFXhB7ToddpTlccEccpWOxhDCRKNDSF5/P3kBoRy
-         K8v4nxbUky3i0GZWPeIzXSbWyJyUTLpl3vngACrYuXgTf1sysYh62J7+z7yz+COVHy2X
-         jVGQ==
+        bh=FprEdCtwRuo2/5Chsw2LoMvecKwl1NWN0nipJJWRa7E=;
+        b=ECF8S3BWCva+yiJ2r/W2bQzWic3J6pS8rfo5evXtiB5DVS3Edt45+rRGMqNvoC9Hw7
+         MUtiAOURDqF7er+zuSl56jGVVcIR0D79icSsuvnmQj5ukAwYCtsta3L8cjwFeYE2kJLP
+         Qq5zUXV5UQSV/bO42hyL5GGNbSEWwutG2p04DrwHNPtydqAYSj1p7D/L56U8iTsGviP0
+         ABtMIrLfKb5Dnm4Ffy7KO6ZFiC/ZfNr6SSIB1tw2XJdwndKxehUGMxAzWA5+aAK6schG
+         Gi0vLUDhIcZ7342v268NCAxgZrsh55QrQrCdPdJ5n+sMcQFsPSHcM+OLIZx21R67L1vE
+         IWjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712984933; x=1713589733;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1712999872; x=1713604672;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5qvXKC5wSDQIOCusiNuNNePSI2BJ5XEbrAPDJxd5/Tg=;
-        b=Ah6qovWUQH9rbjy5Y4MM/NY1izPZ7iulcEiQXPpBUfAGPMv6/JZImtb01TPs+LIhmH
-         vrSB8O4uNGa7LzhOTKBi666wH23GXs1Bxzgo2PXW5ohBuWEPPPhWuKfG9Gvm5hqMk43h
-         FUr7NmcovBP71oafBo3gh4uU6AZWjm613TX0QEm8YTSjHQmKQM2Ufh91ihzJyTEaN6zV
-         HGI5f2ctb6afTgSuj7vgeKfLi794MZDBk/TOjFk/GdVuUrPI/+sbC/5umvgu6rXiD71H
-         vY7S9jRkDr94XJeS6sRlMkL0+thYJ48rpiilZAON7FU7QUnRKkhgIoFmQtNir/1vDny0
-         6RaA==
-X-Forwarded-Encrypted: i=1; AJvYcCXZT6RtHHCYwcRmGhcX8aWLck+X+27ZbkLIXArhZ0Xcwdp6tqJYioB15J9GWlUypGTqmpWm7eVRqAvSzGEkBui1LYTG4qkmBxXv
-X-Gm-Message-State: AOJu0Yyo2ghs4pJCEzTjJxpQ9q1sJM59F/7IjIZw9Wua82ZChdaR01YC
-	zhjgXJURwgNs0YeuGVnrAV/wjI8t+WYrQKl0XeMkSslRrY89P3P69E+58dfYFn505Fhn5DgqpHi
-	ikTihoMlp5By1FSiiWpySvQqMf2k=
-X-Google-Smtp-Source: AGHT+IGKh+RYfATy6954GShJF3v9DULsqxBJRKGAlWRfY+c+BZC6LNV9ggXTF4m1a4bWYQWdBYzOINYKMo4T+B8lvtI=
-X-Received: by 2002:a17:906:d54c:b0:a51:a09c:16a5 with SMTP id
- cr12-20020a170906d54c00b00a51a09c16a5mr2907887ejc.23.1712984933012; Fri, 12
- Apr 2024 22:08:53 -0700 (PDT)
+        bh=FprEdCtwRuo2/5Chsw2LoMvecKwl1NWN0nipJJWRa7E=;
+        b=K3+xkyk83zEBD2/9dUHXBIR5qPmg9mrshqqDabRD+u+8TTmxfogHnSvySKL2+cUfkB
+         SRLkjCNH0wTLMCvH094wixbnR/eAdUrmRBCZRRQEATP6mE6fuZbXMh2FZqPtOs/RXd+Q
+         Y7v5g+dwpVEdZG0tjjQ1BjdCatYuHO8H4/zxS0MS+zyCp47oKIlwVF/ZCzfKGuVqisBP
+         kmx5GiiuKLNca42OGgPRCoEj5HZ3vcVIvKmC9iMSdpyiaBz3m/J7TV2/42ZjzIEVmbwO
+         QjqC1q223HLW2ThuaTpbu9EKbkktYo5WpCLxSMF/llicvT5VaEDtFr/vFPB7edK8bKva
+         KOVw==
+X-Forwarded-Encrypted: i=1; AJvYcCXuMkyzWoNk52s/UyvgFmPUdeG0mEDryIlTtF5yqb1scLqNZXi/lbUfGhSJVpdz8Tj14WnCNpQFTClck9O/6XYAQIl9r5OzgO7r9wteQe8MgUV6v7MP+df/+nlKOfbIhLUJ9t9yatKs
+X-Gm-Message-State: AOJu0YzoaIsiDWva3Jj1OTn7uF8ZXfpO9+sP+iRp4KZE4VVcS1MRQQYh
+	ShuXcpukwdKD35LREIhaI0nTLhFNCQHYx6Y8w+n/RPeH1b3KjkHG
+X-Google-Smtp-Source: AGHT+IExR290cPBeWjD3hksC6EFfjbaKR9t2qJiYmoeyx3bC+LFUi42XhP4I/wP547zW8LI2gp04Yg==
+X-Received: by 2002:a2e:9b8e:0:b0:2d4:676b:f591 with SMTP id z14-20020a2e9b8e000000b002d4676bf591mr3621367lji.45.1712999871741;
+        Sat, 13 Apr 2024 02:17:51 -0700 (PDT)
+Received: from foxbook (bfi40.neoplus.adsl.tpnet.pl. [83.28.46.40])
+        by smtp.gmail.com with ESMTPSA id k11-20020a170906578b00b00a51be2b75f3sm2751673ejq.35.2024.04.13.02.17.50
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Sat, 13 Apr 2024 02:17:51 -0700 (PDT)
+Date: Sat, 13 Apr 2024 11:17:46 +0200
+From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
+To: Paul Menzel <pmenzel@molgen.mpg.de>
+Cc: Mathias Nyman <mathias.nyman@linux.intel.com>, Mathias Nyman
+ <mathias.nyman@intel.com>, LKML <linux-kernel@vger.kernel.org>,
+ linux-usb@vger.kernel.org, Niklas Neronin <niklas.neronin@linux.intel.com>
+Subject: Re: xhci_hcd 0000:00:14.0: ERROR Transfer event TRB DMA ptr not
+ part of current TD ep_index 1 comp_code 1
+Message-ID: <20240413111746.059dd4b7@foxbook>
+In-Reply-To: <fca78115-209f-4090-b83b-acc684484587@molgen.mpg.de>
+References: <58bca6f2-797a-4e20-a476-2294309afdd5@molgen.mpg.de>
+	<20240405113247.743e34b2@foxbook>
+	<7090d3af-18ce-40e1-8ac2-bf18152e5c4a@molgen.mpg.de>
+	<20240406183659.3daf4fa0@foxbook>
+	<c57f2116-8c42-44fb-9c32-6115ad88f914@molgen.mpg.de>
+	<20240407142542.036fb02f@foxbook>
+	<1f64af9a-0618-a7da-4acc-f043b6580308@linux.intel.com>
+	<20240408210541.771253ff@foxbook>
+	<82113c7d-0405-ba11-94d9-5673593cec50@linux.intel.com>
+	<fca78115-209f-4090-b83b-acc684484587@molgen.mpg.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAEkJfYON+ry7xPx=AiLR9jzUNT+i_Va68ACajOC3HoacOfL1ig@mail.gmail.com>
- <92fe8e95-bc01-4d7d-9678-8cfc55cc4a7b@rowland.harvard.edu>
- <CAEkJfYORHKO16xT3DCS04JFzkquz6oZ5CdC2USJ5-c0WihAMXg@mail.gmail.com>
- <45e246ab-01e8-40b7-8ede-b47957df0d7b@rowland.harvard.edu>
- <CAEkJfYMjO+vMBGPcaLa51gjeKxFAJBrSa0t_iJUtauQD3DaK8w@mail.gmail.com> <69a6f4c9-6470-40d1-99f1-aaf532497d02@rowland.harvard.edu>
-In-Reply-To: <69a6f4c9-6470-40d1-99f1-aaf532497d02@rowland.harvard.edu>
-From: Sam Sun <samsun1006219@gmail.com>
-Date: Sat, 13 Apr 2024 13:08:41 +0800
-Message-ID: <CAEkJfYNJyyGhR9AAWc0V7o8i6pmS+OB=KSbh6XqVWAAGetS9hA@mail.gmail.com>
-Subject: Re: [Linux kernel bug] general protection fault in disable_store
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	Greg KH <gregkh@linuxfoundation.org>, swboyd@chromium.org, ricardo@marliere.net, 
-	hkallweit1@gmail.com, heikki.krogerus@linux.intel.com, 
-	mathias.nyman@linux.intel.com, royluo@google.com, 
-	syzkaller-bugs@googlegroups.com, xrivendell7@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Sat, Apr 13, 2024 at 2:11=E2=80=AFAM Alan Stern <stern@rowland.harvard.e=
-du> wrote:
->
-> On Sat, Apr 13, 2024 at 12:26:07AM +0800, Sam Sun wrote:
-> > On Fri, Apr 12, 2024 at 10:40=E2=80=AFPM Alan Stern <stern@rowland.harv=
-ard.edu> wrote:
-> > > I suspect the usb_hub_to_struct_hub() call is racing with the
-> > > spinlock-protected region in hub_disconnect() (in hub.c).
-> > >
-> > > > If there is any other thing I could help, please let me know.
-> > >
-> > > Try the patch below.  It should eliminate that race, which hopefully
-> > > will fix the problem.
->
-> > I applied this patch and tried to execute several times, no more
-> > kernel core dump in my environment. I think this bug is fixed by the
-> > patch. But I do have one more question about it. Since it is a data
-> > race bug, it has reproducibility issues originally. How can I confirm
-> > if a racy bug is fixed by test? This kind of bug might still have a
-> > race window but is harder to trigger. Just curious, not for this
-> > patch. I think this patch eliminates the racy window.
->
-> If you don't what what is racing, then testing cannot prove that a race
-> is eliminated.  However, if you do know where a race occurs then it's
-> easy to see how mutual exclusion can prevent the race from happening.
->
-> In this case the bug might have had a different cause, something other
-> than a race between usb_hub_to_struct_hub() and hub_disconnect().  If
-> that's so then testing this patch would not be a definite proof that the
-> bug is gone.  But if that race _is_ the cause of the bug then this patch
-> will fix it -- you can see that just by reading the code with no need
-> for testing.
->
-> Besides, the patch is needed in any case because that race certainly
-> _can_ occur.  And maybe not only on this pathway.
->
+> Thank you for the detailed analysis. Excuse my ignorance, but do you 
+> have an idea, what this Sennheiser USB headset does differently than 
+> other USB devices?
+It uses isochronous out transfers, which off the top of my head are
+almost only used for audio playback in the real world.
 
-Thanks for explaining! I will check the related code next time.
+However, I don't know what it is doing differently from your other USB
+headset. A few random hypotheses:
+- the other is not a "full speed" device (but it most likely is)
+- you haven't tried enough times to reproduce the bug
+- you have some software which automatically starts playback to the
+  Sennheiser when it's connected, but not to the other headset
+- different playback format and different USB packet size, although
+  192B/ms corresponds to 16 bit 48kHz stereo - the most comomn format.
 
-> May I add your "Reported-and-tested-by:" to the patch?
 
-Sure, thanks for your help!
+As for your bugzilla comment and the list of other TRB mismatch errors
+on linux-hardware - yes, these things happen due to a variety of bugs
+in host controllers and the driver. They are not all the same bug and
+they can't be analyzed or fixed if people don't report them and don't
+cooperate in debugging. These messages alone don't provide information
+about what specifically went wrong and under which circumstances.
 
-Best Regards,
-Yue
+
+Regards,
+Michal
 
