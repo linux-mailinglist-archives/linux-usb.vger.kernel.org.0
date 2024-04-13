@@ -1,125 +1,275 @@
-Return-Path: <linux-usb+bounces-9319-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9320-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 266608A3BDF
-	for <lists+linux-usb@lfdr.de>; Sat, 13 Apr 2024 11:18:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73ACD8A3CA0
+	for <lists+linux-usb@lfdr.de>; Sat, 13 Apr 2024 13:32:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7FB34B216DE
-	for <lists+linux-usb@lfdr.de>; Sat, 13 Apr 2024 09:18:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 00A621F22074
+	for <lists+linux-usb@lfdr.de>; Sat, 13 Apr 2024 11:32:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAC4F2C189;
-	Sat, 13 Apr 2024 09:17:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FE783FB94;
+	Sat, 13 Apr 2024 11:31:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ECF8S3BW"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="xqvkhgCb"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E25CA1CABD;
-	Sat, 13 Apr 2024 09:17:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DA3B3839A
+	for <linux-usb@vger.kernel.org>; Sat, 13 Apr 2024 11:31:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712999875; cv=none; b=Yt2GNW4dj6ZwjIPmoWvwTUKWfUbGpcIlQbBq1nJul629rgxcflDr7oh3DifBPJBM/qz5VljNdUvYr5cKSxZ1gF5U2D8iMX97Xfa31hgfXy+xR+G1MRMuth1avQQOdMzvQq+aAjCFgH7Wrq1rvu8NiD77uTDlFe2czDMPBOocGkA=
+	t=1713007916; cv=none; b=HUdBGMSzxupQBp0dIJiPp1dB0ZEEq/Tk1EjsKxJP9pERk57RGsXNJ9iJuu43rZzRyRyJfHaGjjz1T2IvoAQIvUcgle+FZi0StigkvLc/lp0+VqjhYhVhBm6XkoYWaO1n192QS/gAYjHDTKj3+g85bI3T3H0ZDvmeYUpZ6vjO9po=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712999875; c=relaxed/simple;
-	bh=wRNMwDiQIl7U6AyLLbQ9gUlDqOSjb+gZG5zBDbEdpAQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=FhHeSf7IIu1AVVEXLwC07hPbz7xFe46DELGY/EK5ofq0dht1Gj/vAqmdHiIBRsyrQRoURC8ghbw7Xnx97UG3ysoXagjB5TwX7mbpUV4c4LuWCOAjrugB5BQMH34Jea5VVoGJ3MidPYE5pOuZdQnaki/qV57vAzzQI/X0CREcH6s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ECF8S3BW; arc=none smtp.client-ip=209.85.208.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-2da08b07157so18341961fa.1;
-        Sat, 13 Apr 2024 02:17:53 -0700 (PDT)
+	s=arc-20240116; t=1713007916; c=relaxed/simple;
+	bh=6vRirpLmOtZE6DSzDNXVb1uJuDEiPhA+CYx6M9zr3yk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=MgYY/IyBQoeLlp59GNaEvY5YkdMtcjKME5qTsaxjE2gvaILBqpG7IdMdCw7fYFKoQ5CcQ6rWGwLZXQ1TtfjB8mm7UQE0Vb5iNyUBHbE9wVwhFRXebu0HXBDZ91swA6ZFrK71iSJh/HGoH9peu4ndEu3agMCRvYgIezCffoMDuu8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=xqvkhgCb; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-41551500a7eso10785635e9.2
+        for <linux-usb@vger.kernel.org>; Sat, 13 Apr 2024 04:31:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712999872; x=1713604672; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FprEdCtwRuo2/5Chsw2LoMvecKwl1NWN0nipJJWRa7E=;
-        b=ECF8S3BWCva+yiJ2r/W2bQzWic3J6pS8rfo5evXtiB5DVS3Edt45+rRGMqNvoC9Hw7
-         MUtiAOURDqF7er+zuSl56jGVVcIR0D79icSsuvnmQj5ukAwYCtsta3L8cjwFeYE2kJLP
-         Qq5zUXV5UQSV/bO42hyL5GGNbSEWwutG2p04DrwHNPtydqAYSj1p7D/L56U8iTsGviP0
-         ABtMIrLfKb5Dnm4Ffy7KO6ZFiC/ZfNr6SSIB1tw2XJdwndKxehUGMxAzWA5+aAK6schG
-         Gi0vLUDhIcZ7342v268NCAxgZrsh55QrQrCdPdJ5n+sMcQFsPSHcM+OLIZx21R67L1vE
-         IWjA==
+        d=linaro.org; s=google; t=1713007913; x=1713612713; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=jPKejXRsNRWTCZp534abFGDNN1elivq5IZpRnxY77II=;
+        b=xqvkhgCbB5Dei71gImhGQCUM72Yc1WJQG+BaNxCu/gAWBejgqERGccsU8SRQVKyNGf
+         wU8/Gdhd5Pqaht+XMNcyDRRkXKAaGpO5dx6m267BFYEsW/UwYrTFVh48BGfTOW4NH9+R
+         D5T1pDbNe4OgDCk8732GYXArvD1AkWmKT4+m53QMQRflFPFr60Nsu/xMWXTYLSU/QtGt
+         jlWZAM/OqmZMofsTYsfw1LiPvUyeSNw8t6XpW+y0WStix5ibh73L0dXI7UhZdDcGWLkb
+         uN7kVcO1VNQ24zLNyH6Um8/mn0LJHX/rBeL6p1+bxAgFTVlfWUphci7wxwSQ/y0QHI6V
+         r8VQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712999872; x=1713604672;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FprEdCtwRuo2/5Chsw2LoMvecKwl1NWN0nipJJWRa7E=;
-        b=K3+xkyk83zEBD2/9dUHXBIR5qPmg9mrshqqDabRD+u+8TTmxfogHnSvySKL2+cUfkB
-         SRLkjCNH0wTLMCvH094wixbnR/eAdUrmRBCZRRQEATP6mE6fuZbXMh2FZqPtOs/RXd+Q
-         Y7v5g+dwpVEdZG0tjjQ1BjdCatYuHO8H4/zxS0MS+zyCp47oKIlwVF/ZCzfKGuVqisBP
-         kmx5GiiuKLNca42OGgPRCoEj5HZ3vcVIvKmC9iMSdpyiaBz3m/J7TV2/42ZjzIEVmbwO
-         QjqC1q223HLW2ThuaTpbu9EKbkktYo5WpCLxSMF/llicvT5VaEDtFr/vFPB7edK8bKva
-         KOVw==
-X-Forwarded-Encrypted: i=1; AJvYcCXuMkyzWoNk52s/UyvgFmPUdeG0mEDryIlTtF5yqb1scLqNZXi/lbUfGhSJVpdz8Tj14WnCNpQFTClck9O/6XYAQIl9r5OzgO7r9wteQe8MgUV6v7MP+df/+nlKOfbIhLUJ9t9yatKs
-X-Gm-Message-State: AOJu0YzoaIsiDWva3Jj1OTn7uF8ZXfpO9+sP+iRp4KZE4VVcS1MRQQYh
-	ShuXcpukwdKD35LREIhaI0nTLhFNCQHYx6Y8w+n/RPeH1b3KjkHG
-X-Google-Smtp-Source: AGHT+IExR290cPBeWjD3hksC6EFfjbaKR9t2qJiYmoeyx3bC+LFUi42XhP4I/wP547zW8LI2gp04Yg==
-X-Received: by 2002:a2e:9b8e:0:b0:2d4:676b:f591 with SMTP id z14-20020a2e9b8e000000b002d4676bf591mr3621367lji.45.1712999871741;
-        Sat, 13 Apr 2024 02:17:51 -0700 (PDT)
-Received: from foxbook (bfi40.neoplus.adsl.tpnet.pl. [83.28.46.40])
-        by smtp.gmail.com with ESMTPSA id k11-20020a170906578b00b00a51be2b75f3sm2751673ejq.35.2024.04.13.02.17.50
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Sat, 13 Apr 2024 02:17:51 -0700 (PDT)
-Date: Sat, 13 Apr 2024 11:17:46 +0200
-From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
-To: Paul Menzel <pmenzel@molgen.mpg.de>
-Cc: Mathias Nyman <mathias.nyman@linux.intel.com>, Mathias Nyman
- <mathias.nyman@intel.com>, LKML <linux-kernel@vger.kernel.org>,
- linux-usb@vger.kernel.org, Niklas Neronin <niklas.neronin@linux.intel.com>
-Subject: Re: xhci_hcd 0000:00:14.0: ERROR Transfer event TRB DMA ptr not
- part of current TD ep_index 1 comp_code 1
-Message-ID: <20240413111746.059dd4b7@foxbook>
-In-Reply-To: <fca78115-209f-4090-b83b-acc684484587@molgen.mpg.de>
-References: <58bca6f2-797a-4e20-a476-2294309afdd5@molgen.mpg.de>
-	<20240405113247.743e34b2@foxbook>
-	<7090d3af-18ce-40e1-8ac2-bf18152e5c4a@molgen.mpg.de>
-	<20240406183659.3daf4fa0@foxbook>
-	<c57f2116-8c42-44fb-9c32-6115ad88f914@molgen.mpg.de>
-	<20240407142542.036fb02f@foxbook>
-	<1f64af9a-0618-a7da-4acc-f043b6580308@linux.intel.com>
-	<20240408210541.771253ff@foxbook>
-	<82113c7d-0405-ba11-94d9-5673593cec50@linux.intel.com>
-	<fca78115-209f-4090-b83b-acc684484587@molgen.mpg.de>
+        d=1e100.net; s=20230601; t=1713007913; x=1713612713;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jPKejXRsNRWTCZp534abFGDNN1elivq5IZpRnxY77II=;
+        b=FzK627Tu0QeyUpbZHbq0HE9G1AgmlDvi53++rH7hmM810wFhMmRwrZ4fSJGKJWFCLZ
+         2bu2zwvPRw+h9NlG/aS8g9odPCO09BfnLk83K8/jq0rjDHpi99IX8dbSeKsX0vy6hisw
+         CIsHNW8BOhmJr+F7d7Q9PXnA8uenE2csZyE0GoK4Q9Osd+bMGB2srbSdhCuIYfa2GKHx
+         OmGEkS3qvVZ8dda3I/2yeu87CLDp5jb7yoxoiQdhRaE6GyYOUXam21rQzxN1TBBt4mEL
+         CGZuhelqB8eW6zWQErVmm9DUqyrfH0xO10QrFfpdu+f57hcKLKx4HSwJpl6tKZHIoVwY
+         ZC9Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUo2jWeRjcOwlmMl0LkbyGk3ZTdBdWA7+NcxABaYQNGyapTpMkG3GwQ49z61ADrfrtNLCklzawTrUFSpS7MIYfFSxliiVXQWsj8
+X-Gm-Message-State: AOJu0YzPgn2tARtTJQiW6zdbfM7AxdpKElIxRiZbQykB2sOsxvkmo+DJ
+	OdY/K5VxSksOp2ZlCA+JhejzKqViYRXRNapYCXxkTyX2LpaxqHHvahIsJ4McWKg=
+X-Google-Smtp-Source: AGHT+IFrj1MEO41CdpgEcMXqRlJ/NqperVPSOegO5lcM62YTMMpGA3HhgfCAq6ykf90EkkM8idlhEw==
+X-Received: by 2002:a05:600c:5493:b0:416:a0a9:213e with SMTP id iv19-20020a05600c549300b00416a0a9213emr3259942wmb.13.1713007912884;
+        Sat, 13 Apr 2024 04:31:52 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.223.16])
+        by smtp.gmail.com with ESMTPSA id o4-20020a05600c4fc400b004170e0aff7asm11455864wmq.35.2024.04.13.04.31.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 13 Apr 2024 04:31:52 -0700 (PDT)
+Message-ID: <07210bf0-b262-422a-ae97-83efb9cbe6de@linaro.org>
+Date: Sat, 13 Apr 2024 13:31:50 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] dt-bindings: usb: add common Type-C USB Switch schema
+To: Luca Weiss <luca.weiss@fairphone.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konrad.dybcio@linaro.org>,
+ Neil Armstrong <neil.armstrong@linaro.org>, linux-usb@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+References: <20240122094406.32198-1-krzysztof.kozlowski@linaro.org>
+ <D0H3VE6RLM2I.MK2NT1P9N02O@fairphone.com>
+ <051c6e44-4844-48b9-846d-cf9b81611415@linaro.org>
+ <D0H4CHG4KSRF.10Z6DOI8PORI8@fairphone.com>
+Content-Language: en-US
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <D0H4CHG4KSRF.10Z6DOI8PORI8@fairphone.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-> Thank you for the detailed analysis. Excuse my ignorance, but do you 
-> have an idea, what this Sennheiser USB headset does differently than 
-> other USB devices?
-It uses isochronous out transfers, which off the top of my head are
-almost only used for audio playback in the real world.
+On 11/04/2024 09:35, Luca Weiss wrote:
+> On Thu Apr 11, 2024 at 9:25 AM CEST, Krzysztof Kozlowski wrote:
+>> On 11/04/2024 09:13, Luca Weiss wrote:
+>>> On Mon Jan 22, 2024 at 10:44 AM CET, Krzysztof Kozlowski wrote:
+>>>> Several bindings implement parts of Type-C USB orientation and mode
+>>>> switching, and retiming.  Keep definition of such properties in one
+>>>> place, new usb-switch schema, to avoid duplicate defines.
+>>>>
+>>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>>>
+>>>> ---
+>>>>
+>>>> Changes in v2:
+>>>> 1. Fix language typos handle->handler (Luca)
+>>>> 2. Drop debugging left-over (Luca)
+>>>> ---
+>>>>  .../devicetree/bindings/usb/fcs,fsa4480.yaml  | 12 ++--
+>>>>  .../devicetree/bindings/usb/gpio-sbu-mux.yaml | 12 ++--
+>>>>  .../devicetree/bindings/usb/nxp,ptn36502.yaml | 12 ++--
+>>>>  .../bindings/usb/onnn,nb7vpq904m.yaml         | 13 ++--
+>>>>  .../bindings/usb/qcom,wcd939x-usbss.yaml      | 12 ++--
+>>>>  .../devicetree/bindings/usb/usb-switch.yaml   | 67 +++++++++++++++++++
+>>>>  6 files changed, 92 insertions(+), 36 deletions(-)
+>>>>  create mode 100644 Documentation/devicetree/bindings/usb/usb-switch.yaml
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml b/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml
+>>>> index f9410eb76a62..8b25b9a01ced 100644
+>>>> --- a/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml
+>>>> +++ b/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml
+>>>> @@ -27,13 +27,8 @@ properties:
+>>>>    vcc-supply:
+>>>>      description: power supply (2.7V-5.5V)
+>>>>  
+>>>> -  mode-switch:
+>>>> -    description: Flag the port as possible handle of altmode switching
+>>>> -    type: boolean
+>>>> -
+>>>> -  orientation-switch:
+>>>> -    description: Flag the port as possible handler of orientation switching
+>>>> -    type: boolean
+>>>> +  mode-switch: true
+>>>> +  orientation-switch: true
+>>>>  
+>>>>    port:
+>>>>      $ref: /schemas/graph.yaml#/$defs/port-base
+>>>> @@ -79,6 +74,9 @@ required:
+>>>>    - reg
+>>>>    - port
+>>>>  
+>>>> +allOf:
+>>>> +  - $ref: usb-switch.yaml#
+>>>> +
+>>>>  additionalProperties: false
+>>>>  
+>>>>  examples:
+>>>
+>>> Hi Krzysztof,
+>>>
+>>> This patch seems to break validation for fsa4480 if data-lanes is set in
+>>> the endpoint like the following
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml b/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml
+>>> index f9410eb76a62..3aa03fd65556 100644
+>>> --- a/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml
+>>> +++ b/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml
+>>> @@ -102,6 +102,7 @@ examples:
+>>>            port {
+>>>              fsa4480_ept: endpoint {
+>>>                remote-endpoint = <&typec_controller>;
+>>> +              data-lanes = <0 1>;
+>>>              };
+>>>            };
+>>>          };
+>>>
+>>> Similar to how it's already used on qcom/qcm6490-fairphone-fp5.dts
+>>>
+>>> I'm guessing the 'port' definition in the common schema somehow
+>>> disallows the fsa4480 schema from describing it further?
+>>
+>> There is no such code in qcm6490-fairphone-fp5.dts. There was no such
+>> code in the example of fsa4480 when I was testing my changes (and
+>> examples should be complete), so this did not pop up.
+> 
+> Right, I'm sorry this is just out-of-tree for now, I've forgotten this.
+> There's some dependency chain with some unsupported DSC configuration in
+> DPU for now that blocks upstreaming this.
+> 
+> My tree with these patches is here if you want to take a look:
+> https://github.com/sc7280-mainline/linux/blob/sc7280-6.8.y/arch/arm64/boot/dts/qcom/qcm6490-fairphone-fp5.dts#L628
 
-However, I don't know what it is doing differently from your other USB
-headset. A few random hypotheses:
-- the other is not a "full speed" device (but it most likely is)
-- you haven't tried enough times to reproduce the bug
-- you have some software which automatically starts playback to the
-  Sennheiser when it's connected, but not to the other headset
-- different playback format and different USB packet size, although
-  192B/ms corresponds to 16 bit 48kHz stereo - the most comomn format.
+I think fsa4480 schema is incomplete. I looked at HDK8450 board diagram
+and fsa4480 sits between and connects:
+1. Type-c connector
+2. USB phy or controller
+3. DisplayPort controller for altmode
+
+I think nxp,ptn36502 is done correctly. You need three ports and
+data-lanes would be on only one of them. usb-switch.yaml schema is ready
+for this and assumes data-lanes will be on (2) above.
+
+> 
+>>
+>> You right, new schema does not allow extending the port. However the
+>> true question is, why muxing happens on the port to the SoC controller?
+>> The graph in commit msg fad89aa14 shows it happens on the side of the
+>> connector.
+>>
+>> Looks like fsa4480 mixes connector with the controller.
+> 
+> Could be honestly.. I trust you with knowing better how the ports are
+> supposed to work.
+> 
+> The property is for telling the fsa4480 driver that essentially the
+> hardware is wired up the reverse way. So with this info the driver can
+> handle the orientation switching correctly.
+> 
+> There's another layer to this as explained in the patches there that the
+> OCP96011 essentially works reversed compared to FSA4480, that's why it's
+> all a bit of a mess.
+
+Maybe Bjorn, Dmitry or Neil have some more ideas how this should look
+like, but as of now to me it feels we should add "ports" property and
+move there to port@1 the data-lanes part of fsa schema.
+
+Driver then should check whether there is port or ports and use
+ports->port@1 in the latter case.
 
 
-As for your bugzilla comment and the list of other TRB mismatch errors
-on linux-hardware - yes, these things happen due to a variety of bugs
-in host controllers and the driver. They are not all the same bug and
-they can't be analyzed or fixed if people don't report them and don't
-cooperate in debugging. These messages alone don't provide information
-about what specifically went wrong and under which circumstances.
+Best regards,
+Krzysztof
 
-
-Regards,
-Michal
 
