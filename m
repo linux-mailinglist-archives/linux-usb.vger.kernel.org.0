@@ -1,76 +1,54 @@
-Return-Path: <linux-usb+bounces-9341-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9343-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4AACB8A48B8
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Apr 2024 09:08:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 412638A48F4
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Apr 2024 09:24:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AA1C6B244E3
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Apr 2024 07:08:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B800CB24B12
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Apr 2024 07:24:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 798BE225D4;
-	Mon, 15 Apr 2024 07:08:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B87F12C84F;
+	Mon, 15 Apr 2024 07:24:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AiZjjIvz"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="YsrohwnI"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DBAC2206E;
-	Mon, 15 Apr 2024 07:08:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1060622EF3
+	for <linux-usb@vger.kernel.org>; Mon, 15 Apr 2024 07:24:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713164902; cv=none; b=jCFd3isSJktev2coGhRBHuPwZeak07dzprvTBOX6WX6dNqG8089rrck+Xto/i8UFF9ye1lOJ8q0C7ku6CMyiPXGFdgQEENXhHOi82ngngcEVfQNLPQRae1PDleP8Lj4gHuGek7LBaYaCqnueJSpFZJhGHxlGczzcIjmUFTA6wbs=
+	t=1713165848; cv=none; b=Mx7hsOyGIu3cpYfKoaqVKw8RB3AKFlPJXjzrEo466X57ue1tYVezWUd+hHnf1no15c8bzOo6owuCN7/HEWPh+7ZNjntNkNTG6Wr1k6bNOe5L28rp0vXTLRhExEQ11mYrO85ootnoH9X4peQVkoSA4l3rOZBJqlyQfSlj805uJZU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713164902; c=relaxed/simple;
-	bh=Q/P5yjZRfoVZ5TbI1Low1FH019cQT1sVEhcJzOofFNk=;
+	s=arc-20240116; t=1713165848; c=relaxed/simple;
+	bh=mtjuzYWTXjNt/TKS737D7L/iYneAHm1BA72FWWJzu9Q=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=adQRPnbeT3dXG/YYsvdvIZBvcahGlZC5CWEVlC0oK8XLQGi8OBf1g2ClPuf/REMU2Mh+aJXsJM4QtlEf5lZ6Q9Q28Kj4+on3z4v880MEd5DzNO6MhazCtCVywMoqx7wfxF/KJyJgsxFpSA2lj4CS+rGUvjEYO2R/DcfUkwOrzQQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AiZjjIvz; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1713164900; x=1744700900;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Q/P5yjZRfoVZ5TbI1Low1FH019cQT1sVEhcJzOofFNk=;
-  b=AiZjjIvzJsSBuotRNaOiJ9zDtSkbDFGz69i9kE4wfLQtrCxa7Euzw3yx
-   6KeCbf9vYOEoCdoFZxQLe3t6FJRWWMcm5smi8MGafdK/nB/mZXinn+oIK
-   8Q0Fp87fSFNtpEv3VNFlOOsHQDIT32RajmAEgLAl1rlkVzKyQY2pIAIID
-   KM+FaVRKS5X38+dFPZRHeNfPc3yt/faZ/BtfD1HIrYAhwLrgBmvCsupN3
-   Y/yi0B6JPKqx0PJ06salFeZJttWEYxzrCvU1qa8BurFAeXIUZKevmqICt
-   OepNx2XtThclRpqg9cI7iVfQNiLOtkAJDI+cTunHATu9UH7xDiLOtOY54
-   g==;
-X-CSE-ConnectionGUID: HUtQlt1lSnKvrmZUikn10g==
-X-CSE-MsgGUID: wO/V/RRRS26fha7rgK7GGQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11044"; a="8757306"
-X-IronPort-AV: E=Sophos;i="6.07,202,1708416000"; 
-   d="scan'208";a="8757306"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2024 00:08:19 -0700
-X-CSE-ConnectionGUID: 5TndEbYoR/qSGU2hMzMHvA==
-X-CSE-MsgGUID: nMUEnbp9TFOlkwtOfc81Bg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,202,1708416000"; 
-   d="scan'208";a="22242361"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by orviesa006.jf.intel.com with SMTP; 15 Apr 2024 00:08:16 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 15 Apr 2024 10:08:15 +0300
-Date: Mon, 15 Apr 2024 10:08:15 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 5/5] usb: typec: ucsi: glink: set orientation aware if
- supported
-Message-ID: <ZhzSX0z7Ofl0I93+@kuha.fi.intel.com>
-References: <20240411-ucsi-orient-aware-v2-0-d4b1cb22a33f@linaro.org>
- <20240411-ucsi-orient-aware-v2-5-d4b1cb22a33f@linaro.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=dJCxzTvrmzQkos5NEWGoCAX+VHoKcr4fLrsXgeDkSYGaxUJ3HOn9N/+Rsvv6OPlZurhu6f4yAikUO4qNCcWYop9MqKMKOLT6k5Aj1M0XkG1AavubIkU5uGmwhqQ27IvnQ+yKPAqFp2VGioed3BEL1w+z1LcpAZ7IxpqqH9XPC6c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=YsrohwnI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35B0CC113CC;
+	Mon, 15 Apr 2024 07:24:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1713165847;
+	bh=mtjuzYWTXjNt/TKS737D7L/iYneAHm1BA72FWWJzu9Q=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=YsrohwnI4wUPZs4apN2BLtrNfm26SAeq3gbnrTUF5VUBUstwHr2y7Bcsj5UUF9S9s
+	 IN6eUeS7zLXp5Iiot0E3FSVpSaEsBzKnw0x/c2yd2r+jA9OIgKC/+Gw3dW1NMedN/U
+	 ca2wkYPSucycAgZRCA/g3+9f4aSZ2WY0rt6x5JNw=
+Date: Mon, 15 Apr 2024 09:24:04 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Michael Jamet <michael.jamet@intel.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	linux-usb@vger.kernel.org
+Subject: Re: [GIT PULL] USB4/Thunderbolt fixes for v6.9-rc5
+Message-ID: <2024041557-lagged-oxymoron-96bb@gregkh>
+References: <20240415061749.GF112498@black.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -79,55 +57,20 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240411-ucsi-orient-aware-v2-5-d4b1cb22a33f@linaro.org>
+In-Reply-To: <20240415061749.GF112498@black.fi.intel.com>
 
-On Thu, Apr 11, 2024 at 07:49:57AM +0300, Dmitry Baryshkov wrote:
-> If the PMIC-GLINK device has orientation GPIOs declared, then it will
-> report connection orientation. In this case set the flag to mark
-> registered ports as orientation-aware.
+On Mon, Apr 15, 2024 at 09:17:49AM +0300, Mika Westerberg wrote:
+> Hi Greg,
 > 
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
-> ---
->  drivers/usb/typec/ucsi/ucsi_glink.c | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
+> The following changes since commit 39cd87c4eb2b893354f3b850f916353f2658ae6f:
 > 
-> diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c b/drivers/usb/typec/ucsi/ucsi_glink.c
-> index d279e2cf9bba..f7546bb488c3 100644
-> --- a/drivers/usb/typec/ucsi/ucsi_glink.c
-> +++ b/drivers/usb/typec/ucsi/ucsi_glink.c
-> @@ -186,6 +186,17 @@ static int pmic_glink_ucsi_sync_write(struct ucsi *__ucsi, unsigned int offset,
->  	return ret;
->  }
->  
-> +static void pmic_glink_ucsi_update_connector(struct ucsi_connector *con)
-> +{
-> +	struct pmic_glink_ucsi *ucsi = ucsi_get_drvdata(con->ucsi);
-> +	int i;
-> +
-> +	for (i = 0; i < PMIC_GLINK_MAX_PORTS; i++) {
-> +		if (ucsi->port_orientation[i])
-> +			con->typec_cap.orientation_aware = true;
-> +	}
-> +}
-> +
->  static void pmic_glink_ucsi_connector_status(struct ucsi_connector *con)
->  {
->  	struct pmic_glink_ucsi *ucsi = ucsi_get_drvdata(con->ucsi);
-> @@ -208,6 +219,7 @@ static const struct ucsi_operations pmic_glink_ucsi_ops = {
->  	.read = pmic_glink_ucsi_read,
->  	.sync_write = pmic_glink_ucsi_sync_write,
->  	.async_write = pmic_glink_ucsi_async_write,
-> +	.update_connector = pmic_glink_ucsi_update_connector,
->  	.connector_status = pmic_glink_ucsi_connector_status,
->  };
->  
+>   Linux 6.9-rc2 (2024-03-31 14:32:39 -0700)
 > 
-> -- 
-> 2.39.2
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git tags/thunderbolt-for-v6.9-rc5
 
--- 
-heikki
+Pulled and pushed out, thanks.
+
+greg k-h
 
