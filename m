@@ -1,195 +1,107 @@
-Return-Path: <linux-usb+bounces-9363-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9364-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C62CB8A536F
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Apr 2024 16:27:42 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 93A5B8A557D
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Apr 2024 16:47:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E88491C20DD5
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Apr 2024 14:27:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 33E4B1F21EC1
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Apr 2024 14:47:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B39FD7EF0C;
-	Mon, 15 Apr 2024 14:26:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 528C8446AF;
+	Mon, 15 Apr 2024 14:47:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VDMGhHjD"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cM11Mufs"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oa1-f68.google.com (mail-oa1-f68.google.com [209.85.160.68])
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF7867E576;
-	Mon, 15 Apr 2024 14:26:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97C002119;
+	Mon, 15 Apr 2024 14:47:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713191205; cv=none; b=soe/HuLFa7JjbOvkspPZEC578S1Xfd36cYQEMK9y7/VyfcasVcOcXdlaFXfRrdWZ60qbFw70ayYg8V87uaqK6eSFuLNNv1PGSmvFOrtXzz02fpdkhwlzKAo2tG+mIbXjphv+Czvzc3lfF0m1cg2NPbFVtIzBf2R6cPkG7tfBLj0=
+	t=1713192426; cv=none; b=U7IDVQ3iBe0vi5GZ+1TyurtLxVVAtcACvp5TGN33pneuWlY47dNFOLUSkANIjVpInpjrEfFgWYmTGCHUw6PIWQnAZtO7G9HcRz/188K7uO76zovK2zvNCBVDrNLiPXim8gtXOAPKWIEYgWcZn7PzUAANC7VD/JoC5rxwhRO39y8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713191205; c=relaxed/simple;
-	bh=r3eeg0tRuPV/h8aAd6D4ldP3XRPreq4TA3tAEs4iVdU=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=UUoGeTi/CjoZm2kq4mIlBJAAcyn9v88t9MI6Uxlp8wmKRjkCEhI3QvRI9t3tE6Hj0jJhWef3LoQtZtLTiAC0tRWIb3H2XzBu/cqSVULXQN/WtrtfcAR17yfrXfx3680lqHl6v8p4HnnDeW9yk2p5W2uz2IOD9qA4XXLUkT3fmZY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VDMGhHjD; arc=none smtp.client-ip=209.85.160.68
+	s=arc-20240116; t=1713192426; c=relaxed/simple;
+	bh=LQnlQplIIBRFAb0IYpzcEDhNW33rDEzU1FwDYMkl/BA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=i+qFd1LD9GGZoby5BrgQjY751z8HobfTZhFI9kupJXtMPbNDEbWE6MsufyQVR4ybIoGGzD3k73HSP/h7elIf3y3W3WJdKUnVIE9UmcqakmNsSzQ/+PWk/hkAXJfWlmsdtPeY46D+84YZ+fotYZfCYhACj4ly8pauwwtNvqI6mUg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cM11Mufs; arc=none smtp.client-ip=209.85.128.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f68.google.com with SMTP id 586e51a60fabf-23335730db1so1982601fac.2;
-        Mon, 15 Apr 2024 07:26:43 -0700 (PDT)
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-6153d85053aso25502197b3.0;
+        Mon, 15 Apr 2024 07:47:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713191203; x=1713796003; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=qHlOC6Ow5eV/sTYTAeVpjV+5HwS0SfY4RsP3nOtgDzs=;
-        b=VDMGhHjDGFyWPrbAddan1MiEoJjTk6/52EMRIMIRm8YONPNnDrxKtoe5/DME9HWzG6
-         8KX0O2n+8a+4ly/MaFvjRk+/jpMmiewgSae5GsN0CJsTSgJJc5CNZhXzY8u3CXWPXoFd
-         7pqagucqgEnNpj1kqOhF1Xj5iq7GTNiOQPV6HwEzOoQWYmgFSyJ6fzZH1PQe/Aofz7os
-         uqpETgSwQs992Xo21iZthzgrK99+vrUIzDatOmfIeBX/5ImD6cnz+ojRh6aNHt7UykpV
-         mThIzZ1K40VcMEo81QDZKkgHxKhpl1mkngprx8AKrDahxdVj3f8tuLAFYba+CwoZg3JV
-         j+dA==
+        d=gmail.com; s=20230601; t=1713192424; x=1713797224; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LQnlQplIIBRFAb0IYpzcEDhNW33rDEzU1FwDYMkl/BA=;
+        b=cM11MufsfW7HxQkJRpYXF7vMnpbK7pxcHv+SPiK/GHW9Os1OJWLlNAofSGUETJMALh
+         aG1OeOWNiAMXGMsKWif/WnfVwT01pRSdry0w5zZfElENDa9aJ7oXeWMYXXV4Kbhez6+Z
+         HTBofnQKP8hBTi/MqhlZHSKCvfkYK4HbI/CU4p/Jta+01eBtWPobUhsLltrrYTG+xcJA
+         dKIP2vh3kJCrY7Qf290QO4IsxzIE19zJ8TXAgSn6HC7YSKBl2MYEmUIZ47XyVcDo/Dha
+         NmG3eTYww/AexEKZHFMI4mCSNt38Ukayq89Td4QuVUEjQnoo9f/1/VEXtmbtYAGrC0kS
+         lH9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713191203; x=1713796003;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qHlOC6Ow5eV/sTYTAeVpjV+5HwS0SfY4RsP3nOtgDzs=;
-        b=mMA35IUVPFoSRa5EjWrmLf8drV8h3Xl7oFkpK/XwOstvVayGAh5lnHpSNgxf+/cE4U
-         gZkLNpMOr1Cxk9JxV0nqi1FWdLS/kchsniqjM0yZy7e0KDV3e77+8UyF7QU6VrMEViGI
-         SZ0o8klQrge255xgTMViGyqKjEUzlNLW+srvocy4KKNbkuzITFSzy3XitYxOPk+rkc6L
-         2Qqdh9CY7lQzWw5H+oJhs7uiq4azRzpwK7kD5uzb4JIxY+hxEPv3tZD8G74dDk9Mu0N/
-         6XtVE+VG2pGwwnIhryQx/R2Yvcy+bcmmSBOAvckTtroMpbqcNZCthF9IB3z14y5cYXH0
-         J4bA==
-X-Forwarded-Encrypted: i=1; AJvYcCWdFfqvHyJq+ZQRAZ8qZ7ojwqXBeXCA3Lgb7/jEVeO8CQ+7a1xdKNzZG2SPD68ZmReMK8Oqz4P4Y0WdOSXxOabSv4Jsac7F4VToi+fh6XG7n73xaIekf9CexHvJRoXVuxG/
-X-Gm-Message-State: AOJu0Yxjn7pwPg+91bBYDPmIEIwK4LEkUy4RbQDqozcqjgYTHR0JUajJ
-	/nK7IHjTEWYPZkP3UyNdhu1kHKr4G0vAxTTYFGtXgM6O7ovvVFFprS/o/R+KjEjP6g==
-X-Google-Smtp-Source: AGHT+IHw33scVYOySwVtnSvcdDIXpD6BlOFtpnrf0VXfn1mQpOqnS7Zrq9lXN02SmCfO9dAZnkEkwA==
-X-Received: by 2002:a05:6870:d606:b0:22e:ce2e:4506 with SMTP id a6-20020a056870d60600b0022ece2e4506mr11880218oaq.37.1713191202668;
-        Mon, 15 Apr 2024 07:26:42 -0700 (PDT)
-Received: from localhost.localdomain ([2604:abc0:1234:22::2])
-        by smtp.gmail.com with ESMTPSA id we2-20020a056871a60200b0022e0804def3sm2271091oab.22.2024.04.15.07.26.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Apr 2024 07:26:42 -0700 (PDT)
-From: Coia Prant <coiaprant@gmail.com>
-To: netdev@vger.kernel.org
-Cc: Coia Prant <coiaprant@gmail.com>,
-	stable@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: [PATCH 2/2 v3] net: usb: qmi_wwan: add Lonsung U8300/U9300 product
-Date: Mon, 15 Apr 2024 07:26:38 -0700
-Message-Id: <20240415142638.1756966-1-coiaprant@gmail.com>
-X-Mailer: git-send-email 2.39.2
+        d=1e100.net; s=20230601; t=1713192424; x=1713797224;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LQnlQplIIBRFAb0IYpzcEDhNW33rDEzU1FwDYMkl/BA=;
+        b=sER7CbeW5vb0ByF3J/Oo6BWUKlez5HeojUhOEiF7+zm2eTkIeH3YL+kYZKZfj8tjQP
+         qMnu2r4emTCmLe2KeJtXhe8ndgmWS8Mwd1++0T6rOrjPxgLWm2gtR+7+XVhWWXnBuAMw
+         SzGYJO4vB6TH2Sj5H+EwwHDIC1h8BupCs/S9IJ8aql+ONt9gB4XgcJ9nhaBYQoDeheMm
+         kqphjgMvKrHBjBh42O/E12AmSMxb7/YhmxQiJkPJ27NEk+Sa9PrZP2Glhw5XHda9o465
+         uHG1ngBEnyQU7qcx56YZsdRfYKTnMDB5xCi7cVoxIYvp3As3WQAkOF8ggGA7h9g5jEMw
+         J3qw==
+X-Forwarded-Encrypted: i=1; AJvYcCUBIGPcLpE/YynWyDnir7Bx7Vh+Rpm9JVqQhKfkwz9VXd1XLvFTcoDDMVJcsxvbps2sIPVk+kvo9Fdxvo3ljMHMi+biVY5/8PzQfHBO0B7Vie+WeSAGazOJ3/iFDCUlrncOQoK0KrbZXGmRH0SLMh/gTArn8dI1lqahhfylQsVY
+X-Gm-Message-State: AOJu0YyRauFEIP2JaG44veU5NlFm9DID8AirDrYGjYk5elhVVBU1ax2C
+	QI6bv8D054nZ8GeieZc3vW9I6xlcg0HdLq7Ju1mc30yZX1B+eFbm1ZIhlC74zxJ/mIDoJyRLhuh
+	jYo/JrTX++jxpEFOU66Kakv2JUB0=
+X-Google-Smtp-Source: AGHT+IEpvLnj2DUE80Kfafaw7YdWuVb0xXdSf+ODoqEdIXs15rBq/iDZit7+SzDXZI1cdRv7j77yTlC7Hco/5gX03q8=
+X-Received: by 2002:a0d:f2c1:0:b0:61a:d02e:8aa with SMTP id
+ b184-20020a0df2c1000000b0061ad02e08aamr2481865ywf.34.1713192424058; Mon, 15
+ Apr 2024 07:47:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240312062913.12723-1-gch981213@gmail.com> <ZhzNM_zouHPLdvBz@hovoldconsulting.com>
+In-Reply-To: <ZhzNM_zouHPLdvBz@hovoldconsulting.com>
+From: Chuanhong Guo <gch981213@gmail.com>
+Date: Mon, 15 Apr 2024 22:46:52 +0800
+Message-ID: <CAJsYDVK+Qy-w_Aa9_ns4zZutBJx1HTxm0467chHh0XkLb-4_tg@mail.gmail.com>
+Subject: Re: [PATCH] USB: serial: option: add support for Fibocom FM650/FG650
+To: Johan Hovold <johan@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, stable@vger.kernel.org, 
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Update the net usb qmi_wwan driver to support Longsung U8300/U9300.
-Enabling DTR on this modem was necessary to ensure stable operation.
+Hello!
 
-For U8300
+On Mon, Apr 15, 2024 at 2:46=E2=80=AFPM Johan Hovold <johan@kernel.org> wro=
+te:
+>
+> On Tue, Mar 12, 2024 at 02:29:12PM +0800, Chuanhong Guo wrote:
+> > Fibocom FM650/FG650 are 5G modems with ECM/NCM/RNDIS/MBIM modes.
 
-Interface 4 is used by for QMI interface in stock firmware of U8300, the
-router which uses U8300 modem. Free the interface up, to rebind it to
-qmi_wwan driver.
-Interface 5 is used by for ADB interface in stock firmware of U8300, the
-router which uses U8300 modem. Free the interface up.
-The proper configuration is:
+In all 4 modes, the first serial port is the AT console while the other 3
+appear to be diagnostic interfaces for dumping modem logs.
 
-Interface mapping is:
-0: unknown (Debug), 1: AT (Modem), 2: AT, 3: PPP (NDIS / Pipe), 4: QMI, 5: ADB
+> > This patch adds support to all 4 modes.
+>
+> Can you please say something here about what each port (in each mode) is
+> used for?
 
-T:  Bus=05 Lev=01 Prnt=03 Port=02 Cnt=01 Dev#=  4 Spd=480 MxCh= 0
-D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-P:  Vendor=1c9e ProdID=9b05 Rev=03.18
-S:  Manufacturer=Android
-S:  Product=Android
-C:  #Ifs= 6 Cfg#= 1 Atr=80 MxPwr=500mA
-I:  If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:  If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-I:  If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-I:  If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-I:  If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
-E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=89(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
-I:  If#= 5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
-E:  Ad=06(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=8a(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+Do I need to send a v2 for this?
 
-For U9300
-
-Interface 1 is used by for ADB interface in stock firmware of U9300, the
-router which uses U9300 modem. Free the interface up.
-Interface 4 is used by for QMI interface in stock firmware of U9300, the
-router which uses U9300 modem. Free the interface up, to rebind it to
-qmi_wwan driver.
-The proper configuration is:
-
-Interface mapping is:
-0: ADB, 1: AT (Modem), 2: AT, 3: PPP (NDIS / Pipe), 4: QMI
-
-Note: Interface 3 of some models of the U9300 series can send AT commands.
-
-T:  Bus=05 Lev=01 Prnt=05 Port=04 Cnt=01 Dev#=  6 Spd=480 MxCh= 0
-D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-P:  Vendor=1c9e ProdID=9b3c Rev=03.18
-S:  Manufacturer=Android
-S:  Product=Android
-C:  #Ifs= 5 Cfg#= 1 Atr=80 MxPwr=500mA
-I:  If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
-E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:  If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-I:  If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-I:  If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-I:  If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
-E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=89(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
-
-Tested successfully using Modem Manager on U9300.
-Tested successfully using qmicli on U9300.
-
-Signed-off-by: Coia Prant <coiaprant@gmail.com>
-Cc: stable@vger.kernel.org
-Cc: linux-usb@vger.kernel.org
----
- drivers/net/usb/qmi_wwan.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-index e2e181378f41..3dd8a2e24837 100644
---- a/drivers/net/usb/qmi_wwan.c
-+++ b/drivers/net/usb/qmi_wwan.c
-@@ -1380,6 +1380,8 @@ static const struct usb_device_id products[] = {
- 	{QMI_FIXED_INTF(0x1c9e, 0x9801, 3)},	/* Telewell TW-3G HSPA+ */
- 	{QMI_FIXED_INTF(0x1c9e, 0x9803, 4)},	/* Telewell TW-3G HSPA+ */
- 	{QMI_FIXED_INTF(0x1c9e, 0x9b01, 3)},	/* XS Stick W100-2 from 4G Systems */
-+	{QMI_QUIRK_SET_DTR(0x1c9e, 0x9b05, 4)},	/* Longsung U8300 */
-+	{QMI_QUIRK_SET_DTR(0x1c9e, 0x9b3c, 4)},	/* Longsung U9300 */
- 	{QMI_FIXED_INTF(0x0b3c, 0xc000, 4)},	/* Olivetti Olicard 100 */
- 	{QMI_FIXED_INTF(0x0b3c, 0xc001, 4)},	/* Olivetti Olicard 120 */
- 	{QMI_FIXED_INTF(0x0b3c, 0xc002, 4)},	/* Olivetti Olicard 140 */
--- 
-2.39.2
-
+--=20
+Regards,
+Chuanhong Guo
 
