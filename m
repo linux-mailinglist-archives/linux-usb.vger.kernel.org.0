@@ -1,140 +1,77 @@
-Return-Path: <linux-usb+bounces-9365-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9366-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F66B8A5582
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Apr 2024 16:47:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A1BCC8A5968
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Apr 2024 19:48:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F10B51F229EA
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Apr 2024 14:47:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5C2F128577D
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Apr 2024 17:48:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12CD374400;
-	Mon, 15 Apr 2024 14:47:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B37D4137763;
+	Mon, 15 Apr 2024 17:48:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oQ+aDlYJ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id A45482119
-	for <linux-usb@vger.kernel.org>; Mon, 15 Apr 2024 14:47:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 235E776033;
+	Mon, 15 Apr 2024 17:48:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713192467; cv=none; b=TYViVaihpVIVOFeY5Xxn4bKHgaPunEmWPUpF/QA9R3oy+IQ21FkP3TLVGTK2ukE0HqGIw0vWLyxcrrCokM9XsW5fVFMaHmSF3oEO4pPVep4rJJ3fdiaNhRQqiz7nC9FJCjNZruTANq8xHXHn2N0btWJG/CGznBwoRlhMTwAZZE8=
+	t=1713203284; cv=none; b=ktR1gCu0nn7Kj1I8z3cCHRtBf6zadHvHSfQOwF7V1YGux91pbNxFSp/GeBJVRU8VBcqgGJiUUJV2Bhkg6ladx4F5no79DDMbCuJCLocl4I55h++sn+yC2RdfHl6e1O7cBbely1u2DN6cM6LnfTrzuNoaUv0m5biSMMqi2qPnQoI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713192467; c=relaxed/simple;
-	bh=m4Kte0giezl+If8hqhuQU7p0YsRvGoGX4kkW0p3OyhE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Iuu50bZg6OF/Ju2f/7kyukt5wtH6B1JhdB98xMPnwW0qVL+lET4SfYlxIjE/sS2MJ5qAQgNsM9elpzu5CVseSu3kHBoUkf1FiFc+9XP2GicxfFZza2vEXg70l2HoHFq9XoIcHQp/zk89+Z6BmucMuvSFAsSQMs9oHexuXicynh4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
-Received: (qmail 127300 invoked by uid 1000); 15 Apr 2024 10:47:37 -0400
-Date: Mon, 15 Apr 2024 10:47:37 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Sam Sun <samsun1006219@gmail.com>
-Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-  Greg KH <gregkh@linuxfoundation.org>, swboyd@chromium.org,
-  ricardo@marliere.net, hkallweit1@gmail.com, heikki.krogerus@linux.intel.com,
-  mathias.nyman@linux.intel.com, royluo@google.com,
-  syzkaller-bugs@googlegroups.com, xrivendell7@gmail.com
-Subject: Re: [Linux kernel bug] general protection fault in disable_store
-Message-ID: <5704ac63-5e5b-416c-a2a1-57528e76a02f@rowland.harvard.edu>
-References: <CAEkJfYON+ry7xPx=AiLR9jzUNT+i_Va68ACajOC3HoacOfL1ig@mail.gmail.com>
- <92fe8e95-bc01-4d7d-9678-8cfc55cc4a7b@rowland.harvard.edu>
- <CAEkJfYORHKO16xT3DCS04JFzkquz6oZ5CdC2USJ5-c0WihAMXg@mail.gmail.com>
- <45e246ab-01e8-40b7-8ede-b47957df0d7b@rowland.harvard.edu>
- <CAEkJfYMjO+vMBGPcaLa51gjeKxFAJBrSa0t_iJUtauQD3DaK8w@mail.gmail.com>
- <69a6f4c9-6470-40d1-99f1-aaf532497d02@rowland.harvard.edu>
- <CAEkJfYNJyyGhR9AAWc0V7o8i6pmS+OB=KSbh6XqVWAAGetS9hA@mail.gmail.com>
+	s=arc-20240116; t=1713203284; c=relaxed/simple;
+	bh=aPShdw2DP64iiJ1YwOdHPMtTmJVIyo36jyERNxM2Bmg=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=CcsweLFYknOvxwJxDR9a5j+v0AqQReF9bGitqWxeoWET2mcpTkblZ+y92H+KQ0cEg3Gl8L72FJvz5uxyiua/VlFFgrKZHRw2JtwemqL5t0JXjPNaopn8s1lbyA7p+V3BDjsSbxAa6fCmZWOBfWe5WaBN+L9qmuUpEPWQ/sNHzrs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oQ+aDlYJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EFD6C2BD11;
+	Mon, 15 Apr 2024 17:48:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713203283;
+	bh=aPShdw2DP64iiJ1YwOdHPMtTmJVIyo36jyERNxM2Bmg=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=oQ+aDlYJ1RtNc+up9pT4B1jjw8AsUys3NmpGqycmvUIfKkjGlKdNvZe6dUfEu4gpn
+	 yTkctKYIR+V8pbXG/tzzvvrUpA+A2zvfHijap2aJmfjnQ8sV1GU30FRF0yJowywL8f
+	 r+lLchMCMd2Nd6U6Rno0GYqsBuOdAa+dO9iFjZvfnjC++NWzuCxAE/bN+1QLvV2eMT
+	 mG2l0QAB8wxaGyobPG7e7tl4JlOmNpitdmTugO5FuCK8ZiTi/qgZB2sNBzn5NYMqW0
+	 dVnbh/Cdw05PVRy/jm0htwbycd+TIp1G0/P/edWhX5d2FMKQQGasMJk2laN7cDNENx
+	 6325l6N7xrq8A==
+Date: Mon, 15 Apr 2024 10:48:02 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+Cc: davem@davemloft.net, edumazet@google.com, jarkko.palviainen@gmail.com,
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ netdev@vger.kernel.org, pabeni@redhat.com, stable@vger.kernel.org
+Subject: Re: [PATCH] net: usb: ax88179_178a: avoid writing the mac address
+ before first reading
+Message-ID: <20240415104802.6765bcdb@kernel.org>
+In-Reply-To: <20240415072735.6135-1-jtornosm@redhat.com>
+References: <20240411195129.69ff2bac@kernel.org>
+	<20240415072735.6135-1-jtornosm@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEkJfYNJyyGhR9AAWc0V7o8i6pmS+OB=KSbh6XqVWAAGetS9hA@mail.gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Sat, Apr 13, 2024 at 01:08:41PM +0800, Sam Sun wrote:
-> On Sat, Apr 13, 2024 at 2:11 AM Alan Stern <stern@rowland.harvard.edu> wrote:
-> >
-> > On Sat, Apr 13, 2024 at 12:26:07AM +0800, Sam Sun wrote:
-> > > On Fri, Apr 12, 2024 at 10:40 PM Alan Stern <stern@rowland.harvard.edu> wrote:
-> > > > I suspect the usb_hub_to_struct_hub() call is racing with the
-> > > > spinlock-protected region in hub_disconnect() (in hub.c).
-> > > >
-> > > > > If there is any other thing I could help, please let me know.
-> > > >
-> > > > Try the patch below.  It should eliminate that race, which hopefully
-> > > > will fix the problem.
-> >
-> > > I applied this patch and tried to execute several times, no more
-> > > kernel core dump in my environment. I think this bug is fixed by the
-> > > patch. But I do have one more question about it. Since it is a data
-> > > race bug, it has reproducibility issues originally. How can I confirm
-> > > if a racy bug is fixed by test? This kind of bug might still have a
-> > > race window but is harder to trigger. Just curious, not for this
-> > > patch. I think this patch eliminates the racy window.
-> >
-> > If you don't what what is racing, then testing cannot prove that a race
-> > is eliminated.  However, if you do know where a race occurs then it's
-> > easy to see how mutual exclusion can prevent the race from happening.
-> >
-> > In this case the bug might have had a different cause, something other
-> > than a race between usb_hub_to_struct_hub() and hub_disconnect().  If
-> > that's so then testing this patch would not be a definite proof that the
-> > bug is gone.  But if that race _is_ the cause of the bug then this patch
-> > will fix it -- you can see that just by reading the code with no need
-> > for testing.
-> >
-> > Besides, the patch is needed in any case because that race certainly
-> > _can_ occur.  And maybe not only on this pathway.
-> >
-> 
-> Thanks for explaining! I will check the related code next time.
-> 
-> > May I add your "Reported-and-tested-by:" to the patch?
-> 
-> Sure, thanks for your help!
+On Mon, 15 Apr 2024 09:27:32 +0200 Jose Ignacio Tornos Martinez wrote:
+> The issue happened at the initialization stage. At that moment, during
+> normal rtnl_setlink call, the mac address is set and written in the device
+> registers, but since the reset was not commanded previously, the mac
+> address is not read from the device and without that, it always has the
+> random address that is pre-generated just in case. 
+> After this, during open operation, the reset is commanded and the mac
+> address is read, but as the device registers were modified, it reads the
+> pregenerated random mac address and not the default mac address for the
+> device.
 
-Actually, I've got a completely different patch which I think will fix 
-the problem you encountered.  Instead of using mutual exclusion to 
-avoid the race, it prevents the two routines from being called at the 
-same time so the race can't occur in the first place.  It also should 
-guarantee the usb_hub_to_struct_hub() doesn't return NULL when 
-disable_store() calls it.
-
-Can you try the patch below, instead of (not along with) the first 
-patch?  Thanks.
-
-Alan Stern
-
-
-
-Index: usb-devel/drivers/usb/core/hub.c
-===================================================================
---- usb-devel.orig/drivers/usb/core/hub.c
-+++ usb-devel/drivers/usb/core/hub.c
-@@ -1788,16 +1788,15 @@ static void hub_disconnect(struct usb_in
- 
- 	mutex_lock(&usb_port_peer_mutex);
- 
-+	for (port1 = hdev->maxchild; port1 > 0; --port1)
-+		usb_hub_remove_port_device(hub, port1);
-+
- 	/* Avoid races with recursively_mark_NOTATTACHED() */
- 	spin_lock_irq(&device_state_lock);
--	port1 = hdev->maxchild;
- 	hdev->maxchild = 0;
- 	usb_set_intfdata(intf, NULL);
- 	spin_unlock_irq(&device_state_lock);
- 
--	for (; port1 > 0; --port1)
--		usb_hub_remove_port_device(hub, port1);
--
- 	mutex_unlock(&usb_port_peer_mutex);
- 
- 	if (hub->hdev->speed == USB_SPEED_HIGH)
-
+Oh, I see, why don't we issue the reset and probe time, then?
 
