@@ -1,107 +1,160 @@
-Return-Path: <linux-usb+bounces-9334-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9335-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44B358A4879
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Apr 2024 08:56:52 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7EB2E8A487F
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Apr 2024 08:57:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 64506B22E22
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Apr 2024 06:56:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B035E1C211B8
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Apr 2024 06:57:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DCD71EEE0;
-	Mon, 15 Apr 2024 06:55:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C8F3200D5;
+	Mon, 15 Apr 2024 06:57:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JLkCROF2"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UhHWN/fS"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ACAC3FB9F
-	for <linux-usb@vger.kernel.org>; Mon, 15 Apr 2024 06:55:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 920A522339;
+	Mon, 15 Apr 2024 06:57:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713164133; cv=none; b=Eef9223640kErVGEFEQWzV41eFmyNt3WVLJw3N/Lo61C/yymqHLmDg28+8cxBHXXdOf6FdtuHKZ4jUoKJ9/0g9IIHMzkfQ7G+h84JetmbrSZpf0CWbkm47yL4SQYVTtHUXgJTEjfhHk6zHhj/Asc+CWZDMB2uWYAgw35tKuNAjs=
+	t=1713164267; cv=none; b=i43o8jlnNuPgxa1b52DrrtJ+9VA5HcGQZJL8OiPh883cXRGnHyjrEgMOgT85aEZNR0b1+mDlACExFswAIW6M2FZvSGQd1MBjUWlbA3TWsDbIFILHCSmaVGD/xNxXZpTCjZNrQdIjg3HRTNG1LtlVFhpXoxiicN3GZv6MSc63hgo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713164133; c=relaxed/simple;
-	bh=aRYPer9wiK72Gx5TWtF96vBdJRGX98YQARuqhMGab8k=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uE/iJzTrre6GHddIwWFhZ9BPmk24bqAKXjZeuJ6I/eOICBaPeAXXDQmUntkzFaK4fq8RLocJu9kSufR6QFI+0tZ19XeLqhTpC7NfJR7Rc+lsXurFfNkZx1Qao6FPZiSSqyEj4pRtFdpicoEu2/2cfq6RZryEAI9aB4Xf5x/2sfk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JLkCROF2; arc=none smtp.client-ip=198.175.65.20
+	s=arc-20240116; t=1713164267; c=relaxed/simple;
+	bh=l/5ikTUlCuGMYa+EP5RPrvI2YkQPp2fXN7lr6jPgAes=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nVdy3o+V/OG3Et/Gv/biAjDBv/KeyUcJgmP0BWsu3h4wqxHq4FRu0Hs88fA3+Il7WoswxmUwgMpmnM5o36rkKN86jC+Rh1CU3RMqcWktWcVPIsrA5xSu3Ji1UOeEtXmTMCy+MdsNw17mfeKa9L6Hxj62+4xqNN3UKz3U1ErNAhs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UhHWN/fS; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1713164132; x=1744700132;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=aRYPer9wiK72Gx5TWtF96vBdJRGX98YQARuqhMGab8k=;
-  b=JLkCROF2tk7AuhDS0hBDsNhmURVBszpsDP3E4l59yviLEgzUdRvWGf4v
-   omz95vztZaQGskvsI7mOrLxk48JADpzNQab1kEmMCZuW4Sz9Uwqe9wKxI
-   Qko5hBLpCHrwg9IiFJQnPZ3VOewdqGYf8gsrzFiQMFhwZyyKEdEJEOlDE
-   /RoCU/87zWWQBupSgbLn0Uw1avdsnxrD/mRqnZJkO4Kkhc+xTr5xynj0A
-   iLsIBrdx9PxLmnrFqVCRJ0FQr5Go4NAvSZQAAM8g/KNIVCvTD1MpG/mPx
-   rbxelpmOcJD2O051RS91GrPy/5UdcDLNv/G3wXWdBoL52HqLRH62t396s
-   Q==;
-X-CSE-ConnectionGUID: Zb4t95Z9QF6OTZ3IC8nYxA==
-X-CSE-MsgGUID: T3uHWd0bRqu+MTZzxUvhMg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11044"; a="8373177"
+  t=1713164265; x=1744700265;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=l/5ikTUlCuGMYa+EP5RPrvI2YkQPp2fXN7lr6jPgAes=;
+  b=UhHWN/fS1Wph3+xF/dRu1LuXvYZTpmla2p+4YGsjIM9q10WWu/Vlb1MT
+   LlqtyLoQDO3fMt4CoMa2oe0g7b9oxbCnkfZfBT2kWT8Nz2htm+FvmWS8x
+   UGCmyHhoWrbZj13SEX7AYDMkwNumBjJ2rxD3y+qgy41gI7Vlg9TqUvL3i
+   8X05fsFe4ckPk04kQW/iZbNnrb0XJFzhnr8D0MXFAExOIps2MfJGbtPbb
+   MXQ4WQ2X12+dFkubcPBlH2QqqV/JiIcfQqkbyJkVpFGOyOiGShXMMkoUm
+   Ug+IYkRLNFcfwqPgti9JVF3N+WE9EiAU7QgS/46s8pnkAq5ybp6acFCEu
+   w==;
+X-CSE-ConnectionGUID: WkqBpKeSQb2kDd1salqHVw==
+X-CSE-MsgGUID: ae+opybOTBenKN77ZgUrAQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11044"; a="12314998"
 X-IronPort-AV: E=Sophos;i="6.07,202,1708416000"; 
-   d="scan'208";a="8373177"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2024 23:55:31 -0700
-X-CSE-ConnectionGUID: mvU4uF73SEuZu3x2SR0Qjw==
-X-CSE-MsgGUID: odi2cTb7SP6Ku3warIDvBA==
+   d="scan'208";a="12314998"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2024 23:57:45 -0700
+X-CSE-ConnectionGUID: X+lfE9tNT46Ge5WTo6sBHw==
+X-CSE-MsgGUID: NUC9EHOjQ2GzK59pRUztmw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,202,1708416000"; 
-   d="scan'208";a="59262764"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa001.jf.intel.com with ESMTP; 14 Apr 2024 23:55:30 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id 88D2B21A; Mon, 15 Apr 2024 09:55:28 +0300 (EEST)
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: linux-usb@vger.kernel.org
-Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
-	Michael Jamet <michael.jamet@intel.com>,
-	Lukas Wunner <lukas@wunner.de>,
-	Andreas Noever <andreas.noever@gmail.com>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH] thunderbolt: Use correct error code with ERROR_NOT_SUPPORTED
-Date: Mon, 15 Apr 2024 09:55:28 +0300
-Message-ID: <20240415065528.576769-1-mika.westerberg@linux.intel.com>
-X-Mailer: git-send-email 2.43.0
+   d="scan'208";a="21910448"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmviesa007.fm.intel.com with SMTP; 14 Apr 2024 23:57:42 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 15 Apr 2024 09:57:41 +0300
+Date: Mon, 15 Apr 2024 09:57:41 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/5] usb: typec: ucsi: add callback for connector
+ status updates
+Message-ID: <ZhzP5bQe6zw1jmlu@kuha.fi.intel.com>
+References: <20240411-ucsi-orient-aware-v2-0-d4b1cb22a33f@linaro.org>
+ <20240411-ucsi-orient-aware-v2-1-d4b1cb22a33f@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240411-ucsi-orient-aware-v2-1-d4b1cb22a33f@linaro.org>
 
-We check for -EOPNOTSUPP but tb_xdp_handle_error() translated it to
--ENOTSUPP instead which is dealt as "transient" error and retried after
-a while. Fix this so that we bail out early when the other side clearly
-tells us it is does not support this.
+On Thu, Apr 11, 2024 at 07:49:53AM +0300, Dmitry Baryshkov wrote:
+> Allow UCSI glue driver to perform addtional work to update connector
+> status. For example, it might check the cable orientation.  This call is
+> performed after reading new connector statatus, so the platform driver
+> can peek at new connection status bits.
+> 
+> The callback is called both when registering the port and when the
+> connector change event is being handled.
+> 
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
----
- drivers/thunderbolt/xdomain.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-diff --git a/drivers/thunderbolt/xdomain.c b/drivers/thunderbolt/xdomain.c
-index 940ae97987ff..11a50c86a1e4 100644
---- a/drivers/thunderbolt/xdomain.c
-+++ b/drivers/thunderbolt/xdomain.c
-@@ -250,7 +250,7 @@ static int tb_xdp_handle_error(const struct tb_xdp_error_response *res)
- 	case ERROR_UNKNOWN_DOMAIN:
- 		return -EIO;
- 	case ERROR_NOT_SUPPORTED:
--		return -ENOTSUPP;
-+		return -EOPNOTSUPP;
- 	case ERROR_NOT_READY:
- 		return -EAGAIN;
- 	default:
+> ---
+>  drivers/usb/typec/ucsi/ucsi.c | 6 ++++++
+>  drivers/usb/typec/ucsi/ucsi.h | 3 +++
+>  2 files changed, 9 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index 3106e69050cd..7ad544c968e4 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -1199,6 +1199,9 @@ static void ucsi_handle_connector_change(struct work_struct *work)
+>  
+>  	trace_ucsi_connector_change(con->num, &con->status);
+>  
+> +	if (ucsi->ops->connector_status)
+> +		ucsi->ops->connector_status(con);
+> +
+>  	role = !!(con->status.flags & UCSI_CONSTAT_PWR_DIR);
+>  
+>  	if (con->status.change & UCSI_CONSTAT_POWER_DIR_CHANGE) {
+> @@ -1588,6 +1591,9 @@ static int ucsi_register_port(struct ucsi *ucsi, struct ucsi_connector *con)
+>  	}
+>  	ret = 0; /* ucsi_send_command() returns length on success */
+>  
+> +	if (ucsi->ops->connector_status)
+> +		ucsi->ops->connector_status(con);
+> +
+>  	switch (UCSI_CONSTAT_PARTNER_TYPE(con->status.flags)) {
+>  	case UCSI_CONSTAT_PARTNER_TYPE_UFP:
+>  	case UCSI_CONSTAT_PARTNER_TYPE_CABLE_AND_UFP:
+> diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
+> index 2caf2969668c..3e1241e38f3c 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.h
+> +++ b/drivers/usb/typec/ucsi/ucsi.h
+> @@ -16,6 +16,7 @@
+>  
+>  struct ucsi;
+>  struct ucsi_altmode;
+> +struct ucsi_connector;
+>  struct dentry;
+>  
+>  /* UCSI offsets (Bytes) */
+> @@ -59,6 +60,7 @@ struct dentry;
+>   * @sync_write: Blocking write operation
+>   * @async_write: Non-blocking write operation
+>   * @update_altmodes: Squashes duplicate DP altmodes
+> + * @connector_status: Updates connector status, called holding connector lock
+>   *
+>   * Read and write routines for UCSI interface. @sync_write must wait for the
+>   * Command Completion Event from the PPM before returning, and @async_write must
+> @@ -73,6 +75,7 @@ struct ucsi_operations {
+>  			   const void *val, size_t val_len);
+>  	bool (*update_altmodes)(struct ucsi *ucsi, struct ucsi_altmode *orig,
+>  				struct ucsi_altmode *updated);
+> +	void (*connector_status)(struct ucsi_connector *con);
+>  };
+>  
+>  struct ucsi *ucsi_create(struct device *dev, const struct ucsi_operations *ops);
+> 
+> -- 
+> 2.39.2
+
 -- 
-2.43.0
-
+heikki
 
