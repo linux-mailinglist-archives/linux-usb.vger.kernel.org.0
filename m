@@ -1,125 +1,112 @@
-Return-Path: <linux-usb+bounces-9336-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9331-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B9CA8A4883
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Apr 2024 08:58:21 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF8DD8A4867
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Apr 2024 08:53:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AC9361C22475
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Apr 2024 06:58:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5E56FB228C8
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Apr 2024 06:53:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53F30200DE;
-	Mon, 15 Apr 2024 06:58:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8D8E1F951;
+	Mon, 15 Apr 2024 06:53:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mork.no header.i=@mork.no header.b="JQknEPZT"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YtJZCmX4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from dilbert.mork.no (dilbert.mork.no [65.108.154.246])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45D8E1EB5E;
-	Mon, 15 Apr 2024 06:58:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.108.154.246
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F9DF1EB30;
+	Mon, 15 Apr 2024 06:53:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713164293; cv=none; b=K3dCU8LaIDgWHf6M9sIHWYi4EHMmFK/smduol/wDDyncY/G2KGWYTU3ebD3DxtDb/+Lp5TBODqDY4197t79djYxOgpmb9ce0Qg3rwE/F7zbeLXGoLVEFsyBSVLIcA1o8/cUNjb5ArWnsU7vJciPhT1P1M/toGzdsU4/TX4ZinyM=
+	t=1713163996; cv=none; b=UKXrZZSbiMrzY6WdzlzO85VDdhpwszv6HjdF+Rem8A7W7+FLhPoQa9dMjIE+K16iex2fJLpCNWwYoDrtHBYxcNXPQYuclFTUmgmcnCK55AcWzoUmW51tOs6n/yPTw4O4fXRaK3jqG1XEsG41sOHBXCkbXJvMrhVzZIdd6N/uRdE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713164293; c=relaxed/simple;
-	bh=5dQYE555WyWLOIGjnlUIwdBPsURAhH1u3CUIqS7Bd6I=;
-	h=From:To:Cc:Subject:References:Date:In-Reply-To:Message-ID:
-	 MIME-Version:Content-Type; b=rOneibs6YXWWZ4y354xHIn3It2FW49vtmnDk8wB/RnX2zgg0w4AWSaVpW6VHEKyxeLFx3S4niRnQ2eXX0/teYXFoEW1k64MCxbgQlzQ1vgP9VOMBqsVSoy8fKXfX5l8TLEsPbJKwTRpdh7OaOoAHGq8we2yNyWDyoLt03NRpqPQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mork.no; spf=pass smtp.mailfrom=miraculix.mork.no; dkim=pass (1024-bit key) header.d=mork.no header.i=@mork.no header.b=JQknEPZT; arc=none smtp.client-ip=65.108.154.246
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mork.no
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=miraculix.mork.no
-Received: from canardo.dyn.mork.no ([IPv6:2a01:799:10da:6900:0:0:0:1])
-	(authenticated bits=0)
-	by dilbert.mork.no (8.17.1.9/8.17.1.9) with ESMTPSA id 43F6lJGr265481
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
-	Mon, 15 Apr 2024 07:47:21 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-	t=1713163639; bh=ptLbaXHFz1SjMcJUxVZ1MKPDLiUChee6AAW1Ax7maBk=;
-	h=From:To:Cc:Subject:References:Date:Message-ID:From;
-	b=JQknEPZTeGKCD2KEeFUG9yDA2PEETWkDp9Ntu7+q6E1u0TzswuRdN3XgTIhipVnA6
-	 QW2Ld+vLwa/dFtImLTm4CN4QB8mucwg/Yt6d4Yc9vf5HVbwpxqHAEiNWrlLNVIdt6e
-	 a9quzffcyP60fDXlYkxUBpD/36Hfg0+7jTsjU6LA=
-Received: from miraculix.mork.no ([IPv6:2a01:799:10da:690a:d43d:737:5289:b66f])
-	(authenticated bits=0)
-	by canardo.dyn.mork.no (8.17.1.9/8.17.1.9) with ESMTPSA id 43F6lJwZ367339
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
-	Mon, 15 Apr 2024 08:47:19 +0200
-Received: (nullmailer pid 17569 invoked by uid 1000);
-	Mon, 15 Apr 2024 06:47:19 -0000
-From: =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-To: Aleksander Morgado <aleksandermj@chromium.org>
-Cc: oneukum@suse.com, linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
-        linux@roeck-us.net, linux-kernel@vger.kernel.org,
-        ejcaruso@chromium.org
-Subject: Re: [PATCH] usb: cdc-wdm: close race between read and workqueue
-Organization: m
-References: <385a3519-b45d-48c5-a6fd-a3fdb6bec92f@chromium.org>
-Date: Mon, 15 Apr 2024 08:47:19 +0200
-In-Reply-To: <385a3519-b45d-48c5-a6fd-a3fdb6bec92f@chromium.org> (Aleksander
-	Morgado's message of "Mon, 15 Apr 2024 05:42:06 +0000")
-Message-ID: <87mspvi0lk.fsf@miraculix.mork.no>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+	s=arc-20240116; t=1713163996; c=relaxed/simple;
+	bh=9Soc2Qo07sCZ8eMWp3+CQGUdGqKuLqNVP7Qq79vmnQc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=alhRzQM6lLIOAQe5oiGpcctAOebSVF+l5yOFrseyguBvtSKx9/w7iHHK1EmDxsLNU4eXw21pjxjL/cqmHcg4Ts7LKGLmgKNkbTA1kgMd+HDPnM/5xt/Avrzbn3BzbZU4iJef7cXsU69cAGeQZ/MQDvFDCYWHUq2Rj3Mvoc/DMr4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YtJZCmX4; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1713163995; x=1744699995;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=9Soc2Qo07sCZ8eMWp3+CQGUdGqKuLqNVP7Qq79vmnQc=;
+  b=YtJZCmX4C8CJQPQBheS28pbm/Y9dyKCKu2a+8QSchXozREGlLDolMoNi
+   8FBjhNRiYMv/b6TFH5Jq1Hv5hNnugHan2XyddeRVPM4m6ooLMmNKLmpZu
+   PabeFRz+7cc0ljcspQVU9jpoN9iw929f2ovVSOa138sgyIw8SLedLp/Xf
+   Q6g4dQ93M+5ldIN9A6wl2ZcMuzoApbK/nPXWOdY7Gs11rD3floPe3XDbn
+   eBUvGHGitmVDLmFmdlm13nppDcT2bMGQj2zS/hU2nC43pZLG6T4mmfRDp
+   VJ4cJJ+2fP7wFIoDD4zDXJDiYr2kCFysw/14H3e+oDsOriOC+czvt8n39
+   w==;
+X-CSE-ConnectionGUID: Nd36ad9VQXGT2c+VE8af1A==
+X-CSE-MsgGUID: h/iqeO82SjmlMH5ubC7T0Q==
+X-IronPort-AV: E=McAfee;i="6600,9927,11044"; a="12381350"
+X-IronPort-AV: E=Sophos;i="6.07,202,1708416000"; 
+   d="scan'208";a="12381350"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2024 23:53:15 -0700
+X-CSE-ConnectionGUID: fLzT8YWXS2e79o7jH8xqmQ==
+X-CSE-MsgGUID: pkQyKVBiSoKT56q5LbaPYw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,202,1708416000"; 
+   d="scan'208";a="21806539"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmviesa010.fm.intel.com with SMTP; 14 Apr 2024 23:53:12 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 15 Apr 2024 09:53:10 +0300
+Date: Mon, 15 Apr 2024 09:53:10 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: gregkh@linuxfoundation.org, dmitry.baryshkov@linaro.org,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	kernel@collabora.com
+Subject: Re: [PATCH] usb: typec: mux: it5205: Fix ChipID value typo
+Message-ID: <ZhzOx2oQZMnyTgb/@kuha.fi.intel.com>
+References: <20240409113646.305105-1-angelogioacchino.delregno@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Virus-Scanned: clamav-milter 1.0.3 at canardo
-X-Virus-Status: Clean
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240409113646.305105-1-angelogioacchino.delregno@collabora.com>
 
-Aleksander Morgado <aleksandermj@chromium.org> writes:
-> On 3/14/24 11:50, Oliver Neukum wrote:
->> wdm_read() cannot race with itself. However, in
->> service_outstanding_interrupt() it can race with the
->> workqueue, which can be triggered by error handling.
->> Hence we need to make sure that the WDM_RESPONDING
->> flag is not just only set but tested.
->> Fixes: afba937e540c9 ("USB: CDC WDM driver")
->> Signed-off-by: Oliver Neukum <oneukum@suse.com>
->
-> We are not aware of all the details involved in this patch, but we had
-> to revert it in all the different ChromeOS kernel versions where we
-> had it cherry-picked, because it broke the MBIM communication with the
-> Intel XMM based Fibocomm L850 modem. Other modems shipped in
-> Chromebooks like the QC based Fibocomm FM101 don't seem to be
-> affected.
->
-> Attached is an example output of mbimcli talking directly to the
-> cdc-wdm port (i.e. without ModemManager or the mbim-proxy). In the
-> example, we are receiving a bunch of different messages from previous
-> mbimcli runs. Looking at the timestamps, it looks as if we only
-> receive a message right after we have sent one, e.g. after each "open
-> request" we end up receiving responses for requests sent in earlier
-> runs; or something along those lines.
->
-> Is this bad behavior of this specific modem chipset, and if so, how
-> can we workaround it? If you need any additional information or help
-> to test new patches, let us know.
+On Tue, Apr 09, 2024 at 01:36:46PM +0200, AngeloGioacchino Del Regno wrote:
+> The ChipID bytes are read in inverse order: invert the ChipID value
+> defined as IT5205FN_CHIP_ID and used for validating the same.
+> 
+> Fixes: 41fe9ea1696c ("usb: typec: mux: Add ITE IT5205 Alternate Mode Passive MUX driver")
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-I'm not sure I understand what problem that patch is supposed to fix.
-Which means that everything I write could be completely wrong...
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-But to me it looks like the described issue is exactly what you should
-expect if that change ever triggers.  I believe we must resubmit the
-urb from service_outstanding_interrupt(). That's why it was added. See
-the explanation Robert wrote when introducing it:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/d=
-rivers/usb/class/cdc-wdm.c?id=3Dc1da59dad0ebd3f9bd238f3fff82b1f7ffda7829
+> ---
+>  drivers/usb/typec/mux/it5205.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/typec/mux/it5205.c b/drivers/usb/typec/mux/it5205.c
+> index 5535932e42cd..4357cc67a867 100644
+> --- a/drivers/usb/typec/mux/it5205.c
+> +++ b/drivers/usb/typec/mux/it5205.c
+> @@ -22,7 +22,7 @@
+>  #include <linux/usb/typec_mux.h>
+>  
+>  #define IT5205_REG_CHIP_ID(x)	(0x4 + (x))
+> -#define IT5205FN_CHIP_ID	0x35323035 /* "5205" */
+> +#define IT5205FN_CHIP_ID	0x35303235 /* "5025" -> "5205" */
+>  
+>  /* MUX power down register */
+>  #define IT5205_REG_MUXPDR        0x10
+> -- 
+> 2.44.0
 
-As for the XMM behaviour: it's been a long time since I tried any of
-those, but AFAIR one the major differences compared to Qualcomm was the
-strict queue handling in the firmware.  This caused a number of problems
-where the cdc-wdm driver wanted to skip a message for some reason.  So
-I'm not surprised that a bug like this is triggered by one of those
-modems. That's probably the only thing they are good for :-)
-
-
-
-Bj=C3=B8rn
+-- 
+heikki
 
