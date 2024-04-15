@@ -1,73 +1,59 @@
-Return-Path: <linux-usb+bounces-9331-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9332-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF8DD8A4867
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Apr 2024 08:53:27 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B5FFE8A486A
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Apr 2024 08:53:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5E56FB228C8
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Apr 2024 06:53:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 220D1B22E75
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Apr 2024 06:53:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8D8E1F951;
-	Mon, 15 Apr 2024 06:53:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E72191F5E6;
+	Mon, 15 Apr 2024 06:53:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YtJZCmX4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VTubb2UE"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F9DF1EB30;
-	Mon, 15 Apr 2024 06:53:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B8311EB36;
+	Mon, 15 Apr 2024 06:53:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713163996; cv=none; b=UKXrZZSbiMrzY6WdzlzO85VDdhpwszv6HjdF+Rem8A7W7+FLhPoQa9dMjIE+K16iex2fJLpCNWwYoDrtHBYxcNXPQYuclFTUmgmcnCK55AcWzoUmW51tOs6n/yPTw4O4fXRaK3jqG1XEsG41sOHBXCkbXJvMrhVzZIdd6N/uRdE=
+	t=1713164029; cv=none; b=jY+rIjk9LPs7liDwulkBFxVc59L/tDjlDlaqJhaokED2qV5lI0o3to4tSBxtFzAjtESbyXaNyylnqZ79+1Vr40fwMoj8vhfpCy1q6i2C08Xn/XztRaCtmFDLRzBJU2Y6X3bEdLo9iDYcbrF06vx0hy0pS+ozGl8jhZX5qqcF99c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713163996; c=relaxed/simple;
-	bh=9Soc2Qo07sCZ8eMWp3+CQGUdGqKuLqNVP7Qq79vmnQc=;
+	s=arc-20240116; t=1713164029; c=relaxed/simple;
+	bh=gJH7c72oR+IyKtC4jk+rhP58fP5HmbqZlgRE4iVaT30=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=alhRzQM6lLIOAQe5oiGpcctAOebSVF+l5yOFrseyguBvtSKx9/w7iHHK1EmDxsLNU4eXw21pjxjL/cqmHcg4Ts7LKGLmgKNkbTA1kgMd+HDPnM/5xt/Avrzbn3BzbZU4iJef7cXsU69cAGeQZ/MQDvFDCYWHUq2Rj3Mvoc/DMr4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YtJZCmX4; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1713163995; x=1744699995;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9Soc2Qo07sCZ8eMWp3+CQGUdGqKuLqNVP7Qq79vmnQc=;
-  b=YtJZCmX4C8CJQPQBheS28pbm/Y9dyKCKu2a+8QSchXozREGlLDolMoNi
-   8FBjhNRiYMv/b6TFH5Jq1Hv5hNnugHan2XyddeRVPM4m6ooLMmNKLmpZu
-   PabeFRz+7cc0ljcspQVU9jpoN9iw929f2ovVSOa138sgyIw8SLedLp/Xf
-   Q6g4dQ93M+5ldIN9A6wl2ZcMuzoApbK/nPXWOdY7Gs11rD3floPe3XDbn
-   eBUvGHGitmVDLmFmdlm13nppDcT2bMGQj2zS/hU2nC43pZLG6T4mmfRDp
-   VJ4cJJ+2fP7wFIoDD4zDXJDiYr2kCFysw/14H3e+oDsOriOC+czvt8n39
-   w==;
-X-CSE-ConnectionGUID: Nd36ad9VQXGT2c+VE8af1A==
-X-CSE-MsgGUID: h/iqeO82SjmlMH5ubC7T0Q==
-X-IronPort-AV: E=McAfee;i="6600,9927,11044"; a="12381350"
-X-IronPort-AV: E=Sophos;i="6.07,202,1708416000"; 
-   d="scan'208";a="12381350"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2024 23:53:15 -0700
-X-CSE-ConnectionGUID: fLzT8YWXS2e79o7jH8xqmQ==
-X-CSE-MsgGUID: pkQyKVBiSoKT56q5LbaPYw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,202,1708416000"; 
-   d="scan'208";a="21806539"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmviesa010.fm.intel.com with SMTP; 14 Apr 2024 23:53:12 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 15 Apr 2024 09:53:10 +0300
-Date: Mon, 15 Apr 2024 09:53:10 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: gregkh@linuxfoundation.org, dmitry.baryshkov@linaro.org,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	kernel@collabora.com
-Subject: Re: [PATCH] usb: typec: mux: it5205: Fix ChipID value typo
-Message-ID: <ZhzOx2oQZMnyTgb/@kuha.fi.intel.com>
-References: <20240409113646.305105-1-angelogioacchino.delregno@collabora.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=GI77oQDbwhNYRrLkhV4lRMRHWpswTiv6IelgRg95R+kGF0MPMDvA08nBDz2VroLySAbIefh8QG5V7IdwxULk+852kJoqo44d9Na3r4huqSfq7a8RV2ijKQje3eXUwHsdqIka3JKXUllYa7XM9STLlWbGw4aAZiJEHp7IZqE8yd4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VTubb2UE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAD8AC113CC;
+	Mon, 15 Apr 2024 06:53:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713164029;
+	bh=gJH7c72oR+IyKtC4jk+rhP58fP5HmbqZlgRE4iVaT30=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VTubb2UEi5QBv6chWiaakROMh8HPOuQX2NjlfikKnBSbg2c7DTRyGDttg2MwdIe/L
+	 WUKIFocwmpjpX1XCdsUBX79bBtwLSLxS24DwbJKcunnphjfH/U+xfWHO/Woi3++dEw
+	 Sl3ggHvRqV0q9LDrUpPxbtW/DTnJfa/dzwTJq/YFw46AsYYOIiD+t8NJVQtj0D6g+G
+	 atQd5289hiHNngOepmi8lWna+qB69CrgVKvkLjzcuETBUgj30OslMJDHSD1PKwoS1F
+	 nNNjFYrRWFF9mjarb6OEB2u56o4robySvz/zxt8S32Xrh0WUFGXor4ZqjT/noJQLrv
+	 e4mbmoWEqDTlg==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1rwGDq-000000004lA-2Jo9;
+	Mon, 15 Apr 2024 08:53:46 +0200
+Date: Mon, 15 Apr 2024 08:53:46 +0200
+From: Johan Hovold <johan@kernel.org>
+To: Lars Melin <larsm17@gmail.com>, Coia Prant <coiaprant@gmail.com>
+Cc: linux-usb@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH 1/2] USB: serial: option: add Lonsung U8300/U9300 product
+ Update the USB serial option driver to support Longsung U8300/U9300.
+Message-ID: <ZhzO-re7GMmI5fbP@hovoldconsulting.com>
+References: <20240402073451.1751984-1-coiaprant@gmail.com>
+ <64053ff1-c447-45c5-ba87-e85307143dd4@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -76,37 +62,42 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240409113646.305105-1-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <64053ff1-c447-45c5-ba87-e85307143dd4@gmail.com>
 
-On Tue, Apr 09, 2024 at 01:36:46PM +0200, AngeloGioacchino Del Regno wrote:
-> The ChipID bytes are read in inverse order: invert the ChipID value
-> defined as IT5205FN_CHIP_ID and used for validating the same.
+On Tue, Apr 02, 2024 at 03:09:12PM +0700, Lars Melin wrote:
+> On 2024-04-02 14:34, Coia Prant wrote:
+
+You're Subject is missing two newline characters to separate the commit
+summary from the commit message.
+
+> > ID 1c9e:9b05 OMEGA TECHNOLOGY (U8300)
+> > ID 1c9e:9b3c OMEGA TECHNOLOGY (U9300)
+> > 
+> > U8300
+> >   /: Bus
+> >      |__ Port 1: Dev 3, If 0, Class=Vendor Specific Class, Driver=option, 480M (Debug)
+> >          ID 1c9e:9b05 OMEGA TECHNOLOGY
+> >      |__ Port 1: Dev 3, If 1, Class=Vendor Specific Class, Driver=option, 480M (Modem / AT)
+> >          ID 1c9e:9b05 OMEGA TECHNOLOGY
+> >      |__ Port 1: Dev 3, If 2, Class=Vendor Specific Class, Driver=option, 480M (AT)
+> >          ID 1c9e:9b05 OMEGA TECHNOLOGY
+> >      |__ Port 1: Dev 3, If 3, Class=Vendor Specific Class, Driver=option, 480M (AT / Pipe / PPP)
+> >          ID 1c9e:9b05 OMEGA TECHNOLOGY
+> >      |__ Port 1: Dev 3, If 4, Class=Vendor Specific Class, Driver=qmi_wwan, 480M (NDIS / GobiNet / QMI WWAN)
+> >          ID 1c9e:9b05 OMEGA TECHNOLOGY
+> >      |__ Port 1: Dev 3, If 5, Class=Vendor Specific Class, Driver=, 480M (ADB)
+> >          ID 1c9e:9b05 OMEGA TECHNOLOGY
+
+Could please use the more condensed output of the usb-devices command
+(for both devices) which is better suited for a commit message?
+
+> Reviewed-by Lars Melin (larsm17@gmail.com
 > 
-> Fixes: 41fe9ea1696c ("usb: typec: mux: Add ITE IT5205 Alternate Mode Passive MUX driver")
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> added the maintainer to the recipient list
 
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Thanks for reviewing, Lars.
 
-> ---
->  drivers/usb/typec/mux/it5205.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/typec/mux/it5205.c b/drivers/usb/typec/mux/it5205.c
-> index 5535932e42cd..4357cc67a867 100644
-> --- a/drivers/usb/typec/mux/it5205.c
-> +++ b/drivers/usb/typec/mux/it5205.c
-> @@ -22,7 +22,7 @@
->  #include <linux/usb/typec_mux.h>
->  
->  #define IT5205_REG_CHIP_ID(x)	(0x4 + (x))
-> -#define IT5205FN_CHIP_ID	0x35323035 /* "5205" */
-> +#define IT5205FN_CHIP_ID	0x35303235 /* "5025" -> "5205" */
->  
->  /* MUX power down register */
->  #define IT5205_REG_MUXPDR        0x10
-> -- 
-> 2.44.0
+Coia, you can include Lars's Reviewed-by tag when you send a v2.
 
--- 
-heikki
+Johan
 
