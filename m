@@ -1,138 +1,158 @@
-Return-Path: <linux-usb+bounces-9340-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9342-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 007BA8A489C
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Apr 2024 09:03:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B5E838A48BA
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Apr 2024 09:09:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A8B131F22BFB
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Apr 2024 07:03:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6D1D8283EE8
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Apr 2024 07:09:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0312208BA;
-	Mon, 15 Apr 2024 07:03:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 080E9208BA;
+	Mon, 15 Apr 2024 07:09:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HRqh85a6"
+	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="mO4RTlz0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from out203-205-221-190.mail.qq.com (out203-205-221-190.mail.qq.com [203.205.221.190])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FEE21EEE0;
-	Mon, 15 Apr 2024 07:03:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B43871F951
+	for <linux-usb@vger.kernel.org>; Mon, 15 Apr 2024 07:09:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.190
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713164623; cv=none; b=SRnzKovXGZQzvZCTulISWDaHGgRmEIIAOHlKeCGr7rQAA2Zzcq4eRBcm/3lJ6MipAEH5NRn7feyFDIcSyb8n1wcxuQYR4Tkxw1psW8FGTNZZY7boFTkt1IaWEWl0X9qNO77qk+kmlPcOoMhHuMsGl3jMP6Hrsp7VvZv9yJihwvg=
+	t=1713164987; cv=none; b=PM9PXOpr0bM5WhN0rj54zhzOS5TqJRvh0SNFGPGJzXClwSyZiIhil3n/aplKV2KpL/PZ6xo+Q0bQ9J1bH6XoeGy5lVAMU3MExxGJ4gQhc+8dNHInUO9fWmF5fRdG3O3TfdncNYKr7grMus8KNPG2ay6Crbcxv/S7YIDBUaKJ1m4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713164623; c=relaxed/simple;
-	bh=KC35dCKpRK62iLfVMAKtkgEhq5jZFRZj3hQ5vv+ZEnA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RrgNHNde+XM2ieSYfhWxafNGZK1enphEPmsw2URHqeMvNBJvRoyjgVfXiAt1u1wQqSq9Z4+r5yf4VE5h71B0SGn/q6SGgEy4ww+JJF4mg8d4YsPTYTixJDYNWPk0+M3G/ili3aK3hGk8ynr2SREiZE94s3smsw2g7BHk9uY3Vg0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HRqh85a6; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1713164618; x=1744700618;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=KC35dCKpRK62iLfVMAKtkgEhq5jZFRZj3hQ5vv+ZEnA=;
-  b=HRqh85a6NmXEJDfPm+q34h/VNrSxm5/cU6iYyLXS0H14+GktftPT5d3j
-   drwuBpxiV8W1PkGjw7+9aITGxOAWey6h6RkYrJqlx7DbjL25QZfvXJYrJ
-   rHyFueR4dl4brI72VdcMH5BHVu69aHhWRZ36OK7X4ns0CA+1pKhiZFxRm
-   NDwAA4j8b2rU9WME+ADzdFw0WOIT5UnLFZv3ht+h1HY/o0CCsvHUJByW7
-   a/+KxstPTKllFHRB45woNcWvI8xTGDnrLO2+ZP4rHSV/eE6rxvpFy5xlD
-   AA89Uagc8pzPor83Fq3kqFc69mQrQ6U+9HxkdyVV+Wq4cf3mi0f42RaoO
-   w==;
-X-CSE-ConnectionGUID: o5FqpNTESH+IB0xMfWq2AA==
-X-CSE-MsgGUID: kgciskv5Tbil6rwMIIhz5Q==
-X-IronPort-AV: E=McAfee;i="6600,9927,11044"; a="8756701"
-X-IronPort-AV: E=Sophos;i="6.07,202,1708416000"; 
-   d="scan'208";a="8756701"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2024 00:03:37 -0700
-X-CSE-ConnectionGUID: djRIw1aXRlGtMm58iYC+eg==
-X-CSE-MsgGUID: AHrMH6nETnOo7RKOav5w0Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,202,1708416000"; 
-   d="scan'208";a="22240866"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by orviesa006.jf.intel.com with SMTP; 15 Apr 2024 00:03:35 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 15 Apr 2024 10:03:34 +0300
-Date: Mon, 15 Apr 2024 10:03:34 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 4/5] usb: typec: ucsi: add update_connector callback
-Message-ID: <ZhzRRhjWhyjR07Tg@kuha.fi.intel.com>
-References: <20240411-ucsi-orient-aware-v2-0-d4b1cb22a33f@linaro.org>
- <20240411-ucsi-orient-aware-v2-4-d4b1cb22a33f@linaro.org>
+	s=arc-20240116; t=1713164987; c=relaxed/simple;
+	bh=MyBx2xi+yqq9/vz5fa11a4hemweBLiuQup1HrVyEoEA=;
+	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=dwNmy0RXZNKKq5JTMNXpcmIlEYpeBYYC7DMXEBStjBPLIjKJsU2HouyNwOniXnMgfz+RNV5lqJzPKi44Bc3l4ElQc+vbRXnwlOEPIgLDe8CRUwJJkpNgKvWr694FDUGhjAJbDVpuLNu/zvVYYsHql5RuHCUpN2rLRIcGSbPIGSs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=mO4RTlz0; arc=none smtp.client-ip=203.205.221.190
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+	s=s201512; t=1713164675;
+	bh=q6VkBjWMMo5S79MJ57BQXd8i5ccGUTUebSVqJa0/8Qs=;
+	h=From:To:Cc:Subject:Date;
+	b=mO4RTlz0pi0echw3rRaOsrpQqt3rzh3kGAtl2rIAQjxJnga/Ny0g2UUCGBiZVbcfY
+	 oWDE5ZtB2w6K+VIB7aZ/AWGPRvHt6F6QDvAHZW6/OD0BSU9oiIvujnAou2pK9xdznx
+	 RQCR6/LzRR7D2ZhN7gqHM45W9RrzDcWV+Pa8192I=
+Received: from quectel.localdomain ([220.180.239.55])
+	by newxmesmtplogicsvrsza30-0.qq.com (NewEsmtp) with SMTP
+	id 11F1C84D; Mon, 15 Apr 2024 15:04:31 +0800
+X-QQ-mid: xmsmtpt1713164671tw0p8p28p
+Message-ID: <tencent_D5A28A22C0345D2A4B1EE89E1FD5E0C0B007@qq.com>
+X-QQ-XMAILINFO: MyIXMys/8kCtq0kmnhT1CUixI5Bl5mcP3KLjbB7lSuBFJJGCoOnce7UTF3FtoT
+	 HA2BFUUrIPOWc/LbaJoQEjbRsK5xV0zmTigBWMhwUaim7WpeUcGAlh065rOcb30mFRYFM33zfCOT
+	 4ZHUBVs8tIfX187yp25c7KUOB0xkwfwgjCJinlFuRSGc5o8bL2U6jQ2wOKC4DabUVDyD9O/c5YB6
+	 WsqAU3S/IKwWQt0+H2ybVn1wXF79UM8BNTot7w07WNgKWYf3k+JAmefUQ8xh0cxCVJw4p1N1ufy8
+	 gVXpq6oGh48PJbhuhp6WjUbF0Tv3LpTs8VSRlDm6Cgw8Xd6LhGorsZrl/q1MKLCkvcBgU05/ydyR
+	 LQsSgYQ8M22jGT/4FQ3Pnq6yWlP+t5HhlXmEQcYFxP7ks0uxlPICRe9mhx2guaGz0pS9i6x18sQS
+	 YSF3Ek6/07EFcE55adQLZy60zFcM7XlECembexHKYK5V0fqgnVQXyvj0WDe3SWIO7lSPSI8yf8ib
+	 Ap5MfwhVGhyntAqIJ9w6t0+Hiv5K2ykOD6TLFyaafGqdwUYckCWuxbg4HDbzpimo+YhY6973luWO
+	 DyJqnMJRocPpKh9KyTm9pjotvUthKD9FnaC/8LJar53wNGwNm+g4+Z5NekmuReOSF895FQ92TZHs
+	 NElIG07f90O6XiH7G4SBJllR7b1GvOFuKiUP8dKth78IXV88Z5/SnanMQ/F8efonNBiVuT/jWZ70
+	 8DEH855Bc6DAsphaJ25fKMvBcg4G1VuzrFz7g2zqD7uy/fGp0NwSLK13OzUF4Go+/yxi8Q1rTCvE
+	 +eIy96pECCzR9gr+B308T+GRKeKWeeBbVDvETU90D3WhdfZWjiwkNiuh+FVeAe5Y19J3YmFVahfZ
+	 nh0zsovsYnDWPnoQTjcWg2oL9Wr6XiVTPnQlzxQphpyaENNMICKvwZaEm1tBaQbaPDeDAVFAcYo4
+	 wYsLCLSlVP0lxmugoMIHRKDMAboiO44bgP6DXPplSLBSU9a+frhA==
+X-QQ-XMRINFO: M/715EihBoGSf6IYSX1iLFg=
+From: Jerry Meng <jerry-meng@foxmail.com>
+To: johan@kernel.org,
+	gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	Jerry Meng <jerry-meng@foxmail.com>
+Subject: [PATCH V2] USB: serial: option: support Quectel EM060K sub-models
+Date: Mon, 15 Apr 2024 15:04:29 +0800
+X-OQ-MSGID: <20240415070429.15106-1-jerry-meng@foxmail.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240411-ucsi-orient-aware-v2-4-d4b1cb22a33f@linaro.org>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Apr 11, 2024 at 07:49:56AM +0300, Dmitry Baryshkov wrote:
-> Add a callback to allow glue drivers to update the connector before
-> registering corresponding power supply and Type-C port. In particular
-> this is useful if glue drivers want to touch the connector's Type-C
-> capabilities structure.
-> 
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+EM060K_129, EM060K_12a, EM060K_12b and EM0060K_12c are EM060K's sub-models,
+having the same name "Quectel EM060K-GL" and the same interface layout.
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+MBIM + GNSS + DIAG + NMEA + AT + QDSS + DPL
 
-> ---
->  drivers/usb/typec/ucsi/ucsi.c | 3 +++
->  drivers/usb/typec/ucsi/ucsi.h | 2 ++
->  2 files changed, 5 insertions(+)
-> 
-> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> index 7ad544c968e4..57e73b823a4c 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.c
-> +++ b/drivers/usb/typec/ucsi/ucsi.c
-> @@ -1559,6 +1559,9 @@ static int ucsi_register_port(struct ucsi *ucsi, struct ucsi_connector *con)
->  	cap->driver_data = con;
->  	cap->ops = &ucsi_ops;
->  
-> +	if (ucsi->ops->update_connector)
-> +		ucsi->ops->update_connector(con);
-> +
->  	ret = ucsi_register_port_psy(con);
->  	if (ret)
->  		goto out;
-> diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
-> index 3e1241e38f3c..c4d103db9d0f 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.h
-> +++ b/drivers/usb/typec/ucsi/ucsi.h
-> @@ -60,6 +60,7 @@ struct dentry;
->   * @sync_write: Blocking write operation
->   * @async_write: Non-blocking write operation
->   * @update_altmodes: Squashes duplicate DP altmodes
-> + * @update_connector: Update connector capabilities before registering
->   * @connector_status: Updates connector status, called holding connector lock
->   *
->   * Read and write routines for UCSI interface. @sync_write must wait for the
-> @@ -75,6 +76,7 @@ struct ucsi_operations {
->  			   const void *val, size_t val_len);
->  	bool (*update_altmodes)(struct ucsi *ucsi, struct ucsi_altmode *orig,
->  				struct ucsi_altmode *updated);
-> +	void (*update_connector)(struct ucsi_connector *con);
->  	void (*connector_status)(struct ucsi_connector *con);
->  };
->  
-> 
-> -- 
-> 2.39.2
+T:  Bus=03 Lev=01 Prnt=01 Port=01 Cnt=02 Dev#=  8 Spd=480  MxCh= 0
+D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=2c7c ProdID=0129 Rev= 5.04
+S:  Manufacturer=Quectel
+S:  Product=Quectel EM060K-GL
+S:  SerialNumber=f6fa08b6
+C:* #Ifs= 8 Cfg#= 1 Atr=a0 MxPwr=500mA
+A:  FirstIf#= 0 IfCount= 2 Cls=02(comm.) Sub=0e Prot=00
+I:* If#= 0 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=0e Prot=00 Driver=cdc_mbim
+E:  Ad=81(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
+I:  If#= 1 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+I:* If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+E:  Ad=8e(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=0f(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 2 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
+E:  Ad=82(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
+I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=40 Driver=option
+E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 6 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=70 Driver=(none)
+E:  Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 7 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=80 Driver=(none)
+E:  Ad=8f(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 
+Signed-off-by: Jerry Meng <jerry-meng@foxmail.com>
+---
+V1 -> V2: no changes. resend this patch to cc linux-usb@vger.kernel.org
+
+ drivers/usb/serial/option.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index 55a65d941..ff3999356 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -255,6 +255,10 @@ static void option_instat_callback(struct urb *urb);
+ #define QUECTEL_PRODUCT_EM061K_LMS		0x0124
+ #define QUECTEL_PRODUCT_EC25			0x0125
+ #define QUECTEL_PRODUCT_EM060K_128		0x0128
++#define QUECTEL_PRODUCT_EM060K_129		0x0129
++#define QUECTEL_PRODUCT_EM060K_12a		0x012a
++#define QUECTEL_PRODUCT_EM060K_12b		0x012b
++#define QUECTEL_PRODUCT_EM060K_12c		0x012c
+ #define QUECTEL_PRODUCT_EG91			0x0191
+ #define QUECTEL_PRODUCT_EG95			0x0195
+ #define QUECTEL_PRODUCT_BG96			0x0296
+@@ -1218,6 +1222,18 @@ static const struct usb_device_id option_ids[] = {
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM060K_128, 0xff, 0xff, 0x30) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM060K_128, 0xff, 0x00, 0x40) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM060K_128, 0xff, 0xff, 0x40) },
++	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM060K_129, 0xff, 0xff, 0x30) },
++	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM060K_129, 0xff, 0x00, 0x40) },
++	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM060K_129, 0xff, 0xff, 0x40) },
++	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM060K_12a, 0xff, 0xff, 0x30) },
++	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM060K_12a, 0xff, 0x00, 0x40) },
++	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM060K_12a, 0xff, 0xff, 0x40) },
++	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM060K_12b, 0xff, 0xff, 0x30) },
++	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM060K_12b, 0xff, 0x00, 0x40) },
++	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM060K_12b, 0xff, 0xff, 0x40) },
++	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM060K_12c, 0xff, 0xff, 0x30) },
++	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM060K_12c, 0xff, 0x00, 0x40) },
++	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM060K_12c, 0xff, 0xff, 0x40) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM061K_LCN, 0xff, 0xff, 0x30) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM061K_LCN, 0xff, 0x00, 0x40) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM061K_LCN, 0xff, 0xff, 0x40) },
 -- 
-heikki
+2.25.1
+
 
