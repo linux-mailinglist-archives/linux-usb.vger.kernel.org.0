@@ -1,124 +1,104 @@
-Return-Path: <linux-usb+bounces-9349-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9350-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3F968A4A9E
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Apr 2024 10:43:06 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8EB628A4AE6
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Apr 2024 10:54:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 848521F24B5D
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Apr 2024 08:43:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4A6E2281D80
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Apr 2024 08:54:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58D9E383BE;
-	Mon, 15 Apr 2024 08:42:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39E6E3B297;
+	Mon, 15 Apr 2024 08:54:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="dCoAEPLg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LNOp/XEF"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB1903BBF4
-	for <linux-usb@vger.kernel.org>; Mon, 15 Apr 2024 08:42:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4A073DBB3;
+	Mon, 15 Apr 2024 08:54:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713170566; cv=none; b=OpUG8W4PHFkPAEx0fxQoqlmH1aVVFcJhF3XGCOPK1CzL1BStXV9En8wP3zgR4owxgrseWBDjmXEs3yqe7mf1OnvWbAR27SkeL6M8UrAaE76WAHwZlzGSX93r4PtmmdS5GM/+Eu4jhG9b3xBBgG3jjKfpCP5Pf0OYYE6Tikp9dPo=
+	t=1713171262; cv=none; b=YBfAbVwxi3/nR9AXM4erIJXTrqhe0ulszYuEBAcj4hCOtQufOIZaZo8EcX7pZlGiDGwCAh/eUDO0xHDuMRx99bkh40fRJVVBQ1oqyIB9aStOcyEswjdmL+Mwgc92EyVNeHwTDTNdLA5NL8xYb3+72QmRbr1w7GbmYeeuZKm7DJU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713170566; c=relaxed/simple;
-	bh=lsNA25Hve1uKuZ0Fo31C4L3iCmQ0dq1xxEBRYOkQj3Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Qsqi99j6AmT86uPdyxLlYqESXKOg0TroaM6t9ZZZl/0MeQT/FKZaSePrhkEgjU368YwBCTfXHI1D+qRlyReouCLGljqOrtQxQV6M1sl3fcIJ9lG58ErHVIqJIVUgb1Ws+yT2C7zjharrIPZg0lbUC8NEE9hRmQXOkUe0vCPLNdM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=dCoAEPLg; arc=none smtp.client-ip=209.85.218.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a5252e5aa01so196487466b.1
-        for <linux-usb@vger.kernel.org>; Mon, 15 Apr 2024 01:42:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1713170563; x=1713775363; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=k1cz5najN+xwuJfZkkj9Amv0HLnPLbSM95zuUMKQZGI=;
-        b=dCoAEPLg0JhE8Azdmt9LMtQjIVhxTrTPz3JVVRT/khIuy7UUuHaqnUXfBBPBFwhyVx
-         srsjGixNEXYnSWrAkXCgpJnlhxDc5ohO6MuMvdyuPljD/+VVQ/j/+BDVra0v7YZOYrRK
-         NDhJrxMbpRI/0tm8hMxLxCxwy2VomqykCEAEkIBINqsTSj/R036vubI/AEGK+uIZPNBV
-         aIfBbWPsXWdphm93aS1xkT3TgkGAc8h4TWQ6COreyDdt4mdL/T09KQO1TOwPFLJPKDSI
-         +QtcUORC9Y9gk+S8H6QSg/kDZjF0Q35eiBhQUNXVxzIwSY5y7doiabVGLtQz9c6BV0YB
-         orXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713170563; x=1713775363;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=k1cz5najN+xwuJfZkkj9Amv0HLnPLbSM95zuUMKQZGI=;
-        b=OOIgzix55K04hd+iJu2U4u5mJCRIUI+OJviWy/5dy1+/ZH/FbkVmRejPQRQ173tnVI
-         Cln3YifLLGpkbiEZuCm8wE8y4IBtjj8ENoB34wcKwH5vHDMWL1ta70xY2mtUDagvZemN
-         D24I9LuEIVLr069gOTiH6NySEHuo947aCiFD6cK58eDgcCsd3A6hlnrJQVVH4R2pJkWQ
-         ECiZEYcTZXzeshq2+OGwVstWVk/liHfLtEV5bvsCIBI3oelEFP532Rclwsxr2Q8Q8ZNE
-         aDtXTOqiOnpgiAOj/2dKMgSUonxjbfNFWiK8klbpD7+5CPmVrEK05pYHExE4k33xqeqa
-         8PgQ==
-X-Gm-Message-State: AOJu0YxMeNmw2LD2Q83CTrnq7yh5t42LpU4fICSYKS0C9YbgW8rLpT1I
-	5zIgazJSnOdI4x1xogbzwnIeUDGWf3948UrOXaxrUERB05xCQS2QgBqpEP2sMypk5dyjTHSQ5H5
-	h
-X-Google-Smtp-Source: AGHT+IGxmdMCD68BdG5qehJC80yGzVw2DjtHoP/u2mDoWGEYMTcotqFXQdRUe34dZrNc2lZtBY5u4Q==
-X-Received: by 2002:a17:906:3756:b0:a55:3240:ba3b with SMTP id e22-20020a170906375600b00a553240ba3bmr264616ejc.8.1713170563090;
-        Mon, 15 Apr 2024 01:42:43 -0700 (PDT)
-Received: from ?IPV6:2001:a61:1366:6801:d8:8490:cf1a:3274? ([2001:a61:1366:6801:d8:8490:cf1a:3274])
-        by smtp.gmail.com with ESMTPSA id b24-20020a17090630d800b00a4e781bd30dsm5167412ejb.24.2024.04.15.01.42.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Apr 2024 01:42:42 -0700 (PDT)
-Message-ID: <6133bcab-ae0f-48f2-b223-2b74082a0552@suse.com>
-Date: Mon, 15 Apr 2024 10:42:41 +0200
+	s=arc-20240116; t=1713171262; c=relaxed/simple;
+	bh=d9f0zzycMk8FolwGEZh4k9sAUmS3fGw0FkwVSzCwe20=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pKKniEzSpXbfUKxge4uhn5TmVlJryMB5DMYm4jTWqNuwU7JcJRLPU6S8sh+mmgqcEPziV3lp5M7r53dvqkMBe/jbSXl2G5x8T858J5bwfUeLFE6QgnSCGVLXCB2BvWOCu1VylkxPO+aPq6ous0GAvQPDKlqNedmEV4deZ66lBts=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LNOp/XEF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AD59C113CC;
+	Mon, 15 Apr 2024 08:54:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713171262;
+	bh=d9f0zzycMk8FolwGEZh4k9sAUmS3fGw0FkwVSzCwe20=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=LNOp/XEFmMwN2clilfH0hFvFqUH0Q13JXuuVhayJhpaC3PujkYT0TLUGeAt/9PmAU
+	 Uj+tiv4pAFAHMlBrGG+eczeXpCjJE3VizCn1DUfA5tdqHAt7Z7QIUcl9Ct0BcX6Qeu
+	 8zo1z2fVJFr9qJSyNJh1i/EvfcEom61bwq7xtDq9Ktowt/0XHqf1VF7TjVDAq1n+zI
+	 Xg5O9e8LE48JcofmTSTzllqYCvVZn3lnzLZoG4BN8WLUML/tAVRU3iL/fz/+Q7IeP1
+	 pWQ7VpKL9IrgDXgcftIy+4nRI7Lwtk3bDWsunwKY1ppOMT1sD3Q4xf/CP+S6VZLZbv
+	 72fVwat/wd2jw==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1rwI6W-000000007XJ-08eY;
+	Mon, 15 Apr 2024 10:54:20 +0200
+Date: Mon, 15 Apr 2024 10:54:20 +0200
+From: Johan Hovold <johan@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 00/52] USB: store owner from modules with
+ usb_serial_register_drivers()
+Message-ID: <ZhzrPA1wP7bER6Pi@hovoldconsulting.com>
+References: <20240328-module-owner-usb-serial-v1-0-bc46c9ffbf56@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: cdc-wdm: close race between read and workqueue
-To: Aleksander Morgado <aleksandermj@chromium.org>, oneukum@suse.com,
- bjorn@mork.no
-Cc: linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
- linux@roeck-us.net, linux-kernel@vger.kernel.org, ejcaruso@chromium.org
-References: <20240314115132.3907-1-oneukum () suse ! com>
- <385a3519-b45d-48c5-a6fd-a3fdb6bec92f@chromium.org>
-Content-Language: en-US
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <385a3519-b45d-48c5-a6fd-a3fdb6bec92f@chromium.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240328-module-owner-usb-serial-v1-0-bc46c9ffbf56@linaro.org>
 
+On Thu, Mar 28, 2024 at 11:05:38PM +0100, Krzysztof Kozlowski wrote:
+> Merging
+> =======
+> All further patches depend on the first patch.
+> 
+> Description
+> ===========
+> This is going to be a bit of a patch-bomb, but with trivial patches, so
+> I think it is still acceptable. If it is too much, apologies and I will
+> solve it.
 
+No, sending 51 trivial one-line cleanup patches like this is not
+acceptable.
 
-On 15.04.24 07:42, Aleksander Morgado wrote:
+This is just one logical change so squash them all into one patch for
+the entire subsystem (i.e. this series should contain two patches).
 
-Hi,
+> Modules registering driver with usb_serial_register_drivers() might
+> forget to set .owner field.
+> 
+> Solve the problem by moving this task away from the drivers to the core
+> amba bus code, just like we did for platform_driver in commit
 
-> We are not aware of all the details involved in this patch,
+"amba" copy pasta.
 
-I had gotten bug reports about resubmitting an active URB.
+> 9447057eaff8 ("platform_device: use a macro instead of
+> platform_driver_register").
 
-> but we had to revert it in all the different ChromeOS kernel versions where we had it cherry-picked, because it broke the MBIM communication with the Intel XMM based Fibocomm L850 modem. > Other modems shipped in Chromebooks like the QC based Fibocomm FM101 don't seem to be affected.
+> Krzysztof Kozlowski (52):
+>       USB: serial: store owner from modules with usb_serial_register_drivers()
+>       USB: serial: aircable: drop driver owner initialization
+...
+>       USB: serial: xsens_mt: drop driver owner initialization
 
-That is odd.
+>  53 files changed, 12 insertions(+), 75 deletions(-)
 
-> Attached is an example output of mbimcli talking directly to the cdc-wdm port (i.e. without ModemManager or the mbim-proxy).
-
-Could you provide a working example, that is with another chipset? And, most important, dmesg for both cases with
-the log level set to maximum?
-
-> In the example, we are receiving a bunch of different messages from previous mbimcli runs. Looking at the timestamps, it looks as if we only receive a message right after we have sent one, e.g. after each "open request" we end up receiving responses for requests sent in earlier runs; or something along those lines.
-
-It looks like you are hitting the race later than my bug reporters, which means
-that the submission works and we do not overwrite the buffer.
-  
-> Is this bad behavior of this specific modem chipset, and if so, how can we workaround it? If you need any additional information or help to test new patches, let us know.
-
-Generally losing data is bad, so I cannot readily tell.
-Please provide data for the working case.
-
-	Regards
-		Oliver
-
+Johan
 
