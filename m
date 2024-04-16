@@ -1,157 +1,161 @@
-Return-Path: <linux-usb+bounces-9409-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9410-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 872288A7593
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Apr 2024 22:29:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B8908A7795
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Apr 2024 00:15:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 430A1282224
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Apr 2024 20:29:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 89A291C20D81
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Apr 2024 22:15:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CAEE13A3EE;
-	Tue, 16 Apr 2024 20:29:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2B3E132813;
+	Tue, 16 Apr 2024 22:15:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="YqOe4wcl"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Z6VAnayR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 829641386B3;
-	Tue, 16 Apr 2024 20:29:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B231284DF3
+	for <linux-usb@vger.kernel.org>; Tue, 16 Apr 2024 22:14:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713299377; cv=none; b=kWu1R0FzLXtvyFY85dFPCeA5gm9H1yiQN4sPyn6NCjqCjI6CIsFUS+6lvoQFWOX09kmUGUeyGDmlkMGJDok9x46/rLeRjyz5kZpPJbUBBnqhyAihM4vi6cVMIohvIMc0NCRbEhuE7LIn4zPXNepJ3tuHLW730GvJnoJNV68kC7s=
+	t=1713305700; cv=none; b=SFRhCrHxSBb62i3MzVMQt2HXarUo1SoihRdZe6a5DTXHmvXahqhGJm4EqHfaWjU187hZjZKJ5BH3D8HK0MOp63vhmguNRIr7iAV/jP2F/TDtluBO6sn3dLNsWJGbID1HqaMx+QSPg+S2xil8wFpEiLQe1xJKJgTzShnyDAHRajY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713299377; c=relaxed/simple;
-	bh=6HEyKo5kYiZdTNIX2x7F5vCVAgpWMKUXk3egaK3++qs=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=nXRpGGOp1YSJktI0lxsmaaCkPsEHnZ6VNau7oPxtuE7Ir98/j/hYZL2z3p3GfG1Bja7G2EKZ9xRcDnb5Q5U1ftE23izHYIgvJn4lHplhKzE/T/0y0UoaEpytaMknBmq+f5nS4L8GJmB7aGSoVpZF/YTf7GAjNueCMN7Yg5ym5F4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=none smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=YqOe4wcl; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=debian.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:Content-Type:MIME-Version:Message-ID:
-	Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
-	Content-Description:In-Reply-To:References;
-	bh=sPGwBRQWRFRHvSklFGqm1QGyqC8ZPElQNUgAaD314Nw=; b=YqOe4wclWS3JbHyZ7COM1M6eTj
-	F8wAx+o54pfUFxnEI+ubSOBBIqAzVq37pgxB5DqAAsbCXnRA33IGwTU2deot6kUpYaCvqbKGWh8JW
-	HyhomG1yAU4RCBji1N88kC2c0HLYm51wrVTSZ8jPnuZgh95HTaUV+uGgNGsIGa6eXDrtj7U3RXr5U
-	mEekgJcmX3wzjurUXHmg0WEc0FhDg82ibHD/PqJ1LsnFCT7auLTCB9CLedTurK7unbnBKBdo41/Y/
-	W6fQvUr3sPKjp2/PEtlFYFr/jXROEJq018QHXBP4jTGflfSNRSkTGrVwX41xusQv5NGyBrc/RfjTC
-	lwUfX48Q==;
-Received: from authenticated user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.94.2)
-	(envelope-from <carnil@debian.org>)
-	id 1rwpQU-006b1s-NS; Tue, 16 Apr 2024 20:29:12 +0000
-Received: by eldamar.lan (Postfix, from userid 1000)
-	id 6A96BBE2EE8; Tue, 16 Apr 2024 22:29:09 +0200 (CEST)
-Date: Tue, 16 Apr 2024 22:29:09 +0200
-From: Salvatore Bonaccorso <carnil@debian.org>
-To: linux-usb@vger.kernel.org, regressions@lists.linux.dev,
-	roland@debian.org, stable@vger.kernel.org
-Cc: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>,
-	Herb Wei <weihao.bj@ieisystem.com>,
-	Jakub Kicinski <kuba@kernel.org>, Sasha Levin <sashal@kernel.org>,
-	Dave Stevenson <dave.stevenson@raspberrypi.com>,
-	Simon Horman <horms@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [Regression] USB ethernet AX88179 broken usb ethernet names
-Message-ID: <Zh7flXvNdDfattD9@eldamar.lan>
+	s=arc-20240116; t=1713305700; c=relaxed/simple;
+	bh=z9Avo/Qwfxh9NPL8RnNtkuXSmnYuHyjH21+i7xoKwb4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=TlJsvITD7ScARwQieqsWJDXsQebRSvpfJvdmavf003KoOitYb+kiO80kXp8BNvwxTROVFx2PHHPlw7ro7CfceYLmbB4KO061f+eCIbrSiVnTEr5tJFPPA/fdpifCf2PUHtnCbQcqX4maWWqaBsIO/vexoCxX99O3lZuyr7M/XKU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Z6VAnayR; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 43GFQtTh027114;
+	Tue, 16 Apr 2024 22:14:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=ZADB8bi7U0SV3PW3RhoW4/vZ1PwjVpBBuzZtpYaRqio=; b=Z6
+	VAnayR3Uri7rx+WRe1gs5H5SraIYk+fKpDajUZLh1470lJ3YZ7osfUdQnez+8A7M
+	rsJ9fEArS8BmO3XxUpnVrW4Esf9NQBUfqEEJgaQYIZ04kHIl0hJwu4uhcfuVS+za
+	iQ75fOvBhAwEBAh+6hEv0lpLv1koA28Pv9X65Nu7TlIfSpf4pFP23KwyJPg9hVu1
+	IU+/hgSls/2sMCc2aEgd+UlIWiDz1oHiu60PyoiZmZx2DxajfsQyFRXRqrHUARWN
+	udfucIeHx2jSxFnC2elrSyBd6aLjM1EcOkWP4ML28TOCKa/DzlVmA3DxY9fySx6N
+	QpxsCcrS3SsOAlP3qJhQ==
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xhuys1aka-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 16 Apr 2024 22:14:54 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 43GMEd45005552
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 16 Apr 2024 22:14:39 GMT
+Received: from [10.110.96.64] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 16 Apr
+ 2024 15:14:39 -0700
+Message-ID: <d695a439-2cc6-8847-b1f1-10756257db6f@quicinc.com>
+Date: Tue, 16 Apr 2024 15:14:34 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Debian-User: carnil
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: usb: dwc3: gadget performance insight
+Content-Language: en-US
+To: "Grossman, Jake" <Jacob.Grossman@drs.com>,
+        "Thinh.Nguyen@synopsys.com"
+	<Thinh.Nguyen@synopsys.com>
+CC: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "Krebs, Charles"
+	<Charles.Krebs@drs.com>,
+        "Hardee, Hayden M" <Hayden.Hardee@drs.com>
+References: <PH1P110MB1489614D2BD4B34E66B9A3208334A@PH1P110MB1489.NAMP110.PROD.OUTLOOK.COM>
+ <PH1P110MB148961B015C6ABB24C2E03538308A@PH1P110MB1489.NAMP110.PROD.OUTLOOK.COM>
+From: Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <PH1P110MB148961B015C6ABB24C2E03538308A@PH1P110MB1489.NAMP110.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: bt_7CDBjFhZ87gZReOgWPutXWW17YVgv
+X-Proofpoint-GUID: bt_7CDBjFhZ87gZReOgWPutXWW17YVgv
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-04-16_18,2024-04-16_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ impostorscore=0 priorityscore=1501 mlxscore=0 lowpriorityscore=0
+ malwarescore=0 phishscore=0 bulkscore=0 suspectscore=0 spamscore=0
+ clxscore=1011 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2404010003 definitions=main-2404160144
 
-Hi,
+Hi Jake,
 
-Roland Rosenfeld reported in Debian a regression after the update to
-the 6.1.85 based kernel, with his USB ethernet device not anymore
-able to use the usb ethernet names.
+On 4/16/2024 7:20 AM, Grossman, Jake wrote:
+> Hello,
+> 
+> We’re trying to operate a USB gadget backed by the DWC3 core on an iMX8 
+> processor, but we are seeing issues with performance.
+> 
+> As a comparison, utilizing iperf3 to benchmark, we are able to see 
+> ~230Mbit/s with an RNDIS gadget, and ~900Mbit/s with a hardware 
+> USB-to-Ethernet peripheral.
+> 
 
-https://bugs.debian.org/1069082
+Might help to also mention the USB to Ethernet adapter that is being 
+used in your comparison as well, since some vendors may have some 
+enhanced optimizations such as data aggregation, etc...
 
-it is somehow linked to the already reported regression
-https://lore.kernel.org/regressions/ZhFl6xueHnuVHKdp@nuc/ but has
-another aspect. I'm quoting his original report:
+Also, what direction are you getting these numbers in? (ie USB IN or OUT 
+transfers)
 
-> Dear Maintainer,
+> Looking at the output of perf, we are seeing that with all of the gadget 
+> drivers (RNDIS, UVC, ACM), there is significant time spent spinning in 
+> an IRQ context that does not occur with the hardware peripheral. This 
+> seems like it might be related to the interrupt handler as described 
+> here: https://docs.kernel.org/usb/dwc3.html 
+> <https://docs.kernel.org/usb/dwc3.html>.
 > 
-> when upgrading from 6.1.76-1 to 6.1.85-1 my USB ethernet device
->  ID 0b95:1790 ASIX Electronics Corp. AX88179 Gigabit Ethernet
-> is no longer named enx00249bXXXXXX but eth0.
-> 
-> I see the following in dmsg:
-> 
-> [    1.484345] usb 4-5: Manufacturer: ASIX Elec. Corp.
-> [    1.484661] usb 4-5: SerialNumber: 0000249BXXXXXX
-> [    1.496312] ax88179_178a 4-5:1.0 eth0: register 'ax88179_178a' at usb-0000:00:14.0-5, ASIX AX88179 USB 3.0 Gigabit Ethernet, d2:60:4c:YY:YY:YY
-> [    1.497746] usbcore: registered new interface driver ax88179_178a
-> 
-> Unplugging and plugging again does not solve the issue, but the
-> interface still is named eth0.
-> 
-> Maybe it has to do with the following commit from
-> https://cdn.kernel.org/pub/linux/kernel/v6.x/ChangeLog-6.1.85
-> 
-> commit fc77240f6316d17fc58a8881927c3732b1d75d51
-> Author: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
-> Date:   Wed Apr 3 15:21:58 2024 +0200
-> 
->     net: usb: ax88179_178a: avoid the interface always configured as random address
-> 
->     commit 2e91bb99b9d4f756e92e83c4453f894dda220f09 upstream.
-> 
->     After the commit d2689b6a86b9 ("net: usb: ax88179_178a: avoid two
->     consecutive device resets"), reset is not executed from bind operation and
->     mac address is not read from the device registers or the devicetree at that
->     moment. Since the check to configure if the assigned mac address is random
->     or not for the interface, happens after the bind operation from
->     usbnet_probe, the interface keeps configured as random address, although the
->     address is correctly read and set during open operation (the only reset
->     now).
-> 
->     In order to keep only one reset for the device and to avoid the interface
->     always configured as random address, after reset, configure correctly the
->     suitable field from the driver, if the mac address is read successfully from
->     the device registers or the devicetree. Take into account if a locally
->     administered address (random) was previously stored.
-> 
->     cc: stable@vger.kernel.org # 6.6+
->     Fixes: d2689b6a86b9 ("net: usb: ax88179_178a: avoid two consecutive device resets")
->     Reported-by: Dave Stevenson  <dave.stevenson@raspberrypi.com>
->     Signed-off-by: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
->     Reviewed-by: Simon Horman <horms@kernel.org>
->     Link: https://lore.kernel.org/r/20240403132158.344838-1-jtornosm@redhat.com
->     Signed-off-by: Jakub Kicinski <kuba@kernel.org>
->     Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> 
-> Seems, that I'm not alone with this issue, there are also reports in
-> https://www.reddit.com/r/debian/comments/1c304xn/linuximageamd64_61851_usb_link_interface_names/
-> and https://infosec.space/@topher/112276500329020316
-> 
-> 
-> All other (pci based) network interfaces still use there static names
-> (enp0s25, enp2s0, enp3s0), only the usb ethernet name is broken with
-> the new kernel.
-> 
-> Greetings
-> Roland
+>  1. We have not yet acquired technical documentation regarding the DWC3
+>     module.  Do you have a list of the DWC3 commands that have high
+>     latency (~1ms)?
 
-Roland confirmed that reverting both fc77240f6316 ("net: usb:
-ax88179_178a: avoid the interface always configured as random
-address") and 5c4cbec5106d ("net: usb: ax88179_178a: avoid two
-consecutive device resets") fixes the problem.
+DWC3 gadget nowadays utilizes the updatexfer command compared to ages 
+ago where it would only queue with startxfer after every xfernotready 
+event.  That shift definitely optimized how the SW can update the 
+controller on when new TRBs are submitted to the endpoint's TRB ring if 
+a transfer is already in progress.
 
-Confirmation: https://bugs.debian.org/1069082#27
+>  2. Do you believe that implementing a per endpoint IRQ framework will
+>     resolve the large disparity in performance?  If not, do you have any
+>     insight into what the root cause might be?
+> 
 
-Regards,
-Salvatore
+Honestly, based on previous throughput debug, most of the problems were 
+at the function driver level less so from the UDC.  I'll echo what Greg 
+says about RNDIS, and say that, along with the security concerns, it 
+isn't the most optimized function for IP data transfers.  In my 
+experience the NCM class w/ packet framing will result in much better 
+numbers than the default RNDIS configuration, as allowing data 
+aggregation will lessen the number of interrupts per IP packet.
+
+Thinh will probably have some more comments, but just sharing my two 
+cents :).  Might be good to get some more details on the above before we 
+can guide you in the right direction.
+
+
+Thanks
+Wesley Cheng
+
+> Thank you for your time and insight,
+> 
+> Jake Grossman
+> 
 
