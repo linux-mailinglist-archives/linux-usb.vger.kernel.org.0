@@ -1,115 +1,130 @@
-Return-Path: <linux-usb+bounces-9398-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9399-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0FF078A6F01
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Apr 2024 16:52:12 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BEB008A6F1D
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Apr 2024 16:57:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B97671F21335
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Apr 2024 14:52:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7AECE282FCB
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Apr 2024 14:57:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B122132C38;
-	Tue, 16 Apr 2024 14:50:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E909512F598;
+	Tue, 16 Apr 2024 14:57:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="vC5cP3gH"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="nJnfgvXY"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
+Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A54F212FF9B
-	for <linux-usb@vger.kernel.org>; Tue, 16 Apr 2024 14:49:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D948512F59A
+	for <linux-usb@vger.kernel.org>; Tue, 16 Apr 2024 14:57:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713279000; cv=none; b=dwnN3TwHy/bU6Qn7Q3qQo/+0mZesChuKynesA24fTL0SZwl6I+sBHdMvNo2Qs+RrP8PyUwZrVt4EdildPw8x43I56KN9xbq0wzE/MdslARhrtB2d1WkGAXAH5SCI6MVAjI82yChA1Vyn+mTmoNF2Yr7l4REBc+o6E/2bluMA6GQ=
+	t=1713279441; cv=none; b=uDdOZQGogEd0gxQyFEJ11XpMSWWVa4biYLF6c7A6A0mAcWUZt9q77am1+cj9nqTHTONs6Hbq2UJTTNZFz7fc3FuGHphzVAw7r28+Dpb7Gc2V3hF2bdd20t3VyaldTjDkjl+q/ZkMy+BFPEN13CAbhUfJW9wwO46aXuLrT0fCP0g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713279000; c=relaxed/simple;
-	bh=3u9Sa7giDgPt1Wvl9jEHgyYRd2FVkBY5rzmWZa3BbG4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uHoFYmU+SGJJsLjaFNz8J14cIZkzakms405jqDjfFZ2CiYHjoGK7drWoFXcyEKn2EqSyryEH7CzeaRKdmhdQDzcQQksMmlv7dUzF0LemYO2oT1YYv4yDR/z88ZfdUtTW+7FDM5syJs7sR0kFHSUQFpfIU1uu8CviHSHlZmvX5WQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=vC5cP3gH; arc=none smtp.client-ip=209.85.219.181
+	s=arc-20240116; t=1713279441; c=relaxed/simple;
+	bh=FrbIB/Z1SqzQ5A58Zqk4S74k2lIPrqfaXr5V7n8jcz8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FxtxuvN0jzOKOO8ACKcKF1g5Yj6pvsJcvzVqRH+RBsyfu8L0nAj+Knpk3s3YHwPKIyG5b+TqaPPm8vOmw8vj8baKG4LwnLlUAgP3QsdTLoUHleMeXC+6IdusnI1gTjbcBnzMqwZkmfm1mAeZF+7Tr12y6axhReokyul0eZ0Vhyk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=nJnfgvXY; arc=none smtp.client-ip=209.85.208.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-dc236729a2bso4331732276.0
-        for <linux-usb@vger.kernel.org>; Tue, 16 Apr 2024 07:49:58 -0700 (PDT)
+Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2dac77cdf43so16206311fa.2
+        for <linux-usb@vger.kernel.org>; Tue, 16 Apr 2024 07:57:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1713278997; x=1713883797; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=qJzGnOg1SHKsRCJmdbwuM9RJK+vob+tb6vu88judbOk=;
-        b=vC5cP3gHToBZy30b/F1+l33Y23Zj4TQil2fSr7OpOEEKXZpfAa1IjRZsMc6OiQh9pJ
-         xyd8+5NdqyKJ8wniYTrIeIRi8voZmTWw2huFADFFkMVPr2gac8chBeP8RprQy+OY8G5I
-         B+rHQF3aKAkH/S3brxY3/j/q5jrisNjr6c2gcG5n7g5h0HTCEEhLYl3PFe6EXasT5ZHu
-         ghaBR6bMf+j3K5VcoVHjHwHJGzwbLN43EghB5kT/rxEUCBHbTspiDDMHJcpNLIhwsMbq
-         9WSpFvi0mgNEi8pLqrtpisJG/mixYzoB5G7BXbS+O6irqtrdwZK9G6IXxzvNqnKw/dmc
-         D5Dg==
+        d=linaro.org; s=google; t=1713279438; x=1713884238; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Or5aD0vHhofq4hU9WI0SfKr5R6BUi9ScTzvy6tmm1s4=;
+        b=nJnfgvXYS2KiiYDk3B4MOcAJV6Vr6/Ewz6Q1ng1pT1foFIkEd2WO69nl5dENFiWmr2
+         JjGAmnjvYK/HEyzPEn+iBFU8PZMIW5kJvjnXRuah/SwCFhRCcP0qDF2uQAaPDsYujQda
+         lPV1yGhoUChQB9oMDtyvwS9ouWnzrHK4fNyJgcdYmyjIMmMyoKI00NYtP24N7gqmqeYM
+         H3YmLQr4V/UFy/zVGzdcqEVwsWXrKdApyjG7FAkbp2rgHSWBxgA1ZsLLzGzSxrgTmFQT
+         uLkQAYE1WDqqz4uPOHyULhyh5cHn8rSaLNtHznIoDYYIHqf11ymUt5H5vsa3PWJ/vNgR
+         6AjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713278997; x=1713883797;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qJzGnOg1SHKsRCJmdbwuM9RJK+vob+tb6vu88judbOk=;
-        b=PjgtsA7XvPFIczJ/8VO/ACHB0D8kXwQVnPYSm7mQ/WdV2RDRMRoeYbl5jWvMTLd1+n
-         XVKoTtMe9ju849O6WevoyXS2vQEf7vNN4SsWOYKH3SNbnbA2bW+kPkXKPV1tBSx8S3Tv
-         hhKIk+2W59CC1l8aJb3AxRToOf0qOmO9ikG5sLfZMbaC781OqEIxlmYpDpYxasgcFolt
-         UE+liOIZ9aE9eQJDxFebinPeCWAxjI58CSDmG4p6nSyW7H5DkDMT/dkgXFsUvbwjsV08
-         fP4dLbEUS0n6uzSLBOB7lGru/whAOVZIXsXw1Y84X2RAlt3PKO/l8AfF65zUsiLEjQLK
-         nb8w==
-X-Forwarded-Encrypted: i=1; AJvYcCUXvr9VGDgq9TiDEqBV/zgHZfyNjHtDKsSyHTBGifs6SjhIsw1SLflMdP+xwh99etD0aoxtUSSeLdETiLsORKWcHpbEb9gpBTdE
-X-Gm-Message-State: AOJu0YzIVTpMrLAi3fIazrsT82FcFs/ILAVLsFa1jS283EDsQVmwmroO
-	E7WDXKM8Z69AY/39iWyjBNBeBmRdWDo3GEz8arXZ1MO86zrzSlWtq8hWisN+XouhR+PzWLfNYXU
-	JT5VqwgYwh7d+ma8hV7vymwOA+RtyKz0+E3+k8It1EYWbjQvn
-X-Google-Smtp-Source: AGHT+IENg3f4q4qDx4Uo22QWVhG5m/PHgSy1nPplO90P/inGp0NQFhD+3BgUC9UMslfVeoHnbLKK/wtJ+SfdgTeRyHU=
-X-Received: by 2002:a25:74c5:0:b0:dc7:464c:e979 with SMTP id
- p188-20020a2574c5000000b00dc7464ce979mr12879999ybc.28.1713278997544; Tue, 16
- Apr 2024 07:49:57 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1713279438; x=1713884238;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Or5aD0vHhofq4hU9WI0SfKr5R6BUi9ScTzvy6tmm1s4=;
+        b=TQXEkPOyp8yu6+zE0Ls/VnPcAe+JJQWH4dzGaKcigchGmGzqd1HkbdkXa9d+hdad3o
+         yQj2c9sEC477XpBKDDhMnKLYhrqc4wxaJnY61IcybB0j2hr4uEipSu+HW8ZRSZF/sS4x
+         aPMN3DzCjvJfoFkFa41PjbSHuVyjmXc4ROJjghfpEuyMkMsIgbtiF9ak1vW/uANeh2S3
+         EN8lf6xR+iG10w0XP0av1/Xm6gTKW7mFjTdCpH7bgNiH+jh04cnpDFgTRXSOvT1JjSts
+         Prri1A9LkUHYppUa9GeYZx5Ga2RVaDFtYP6gk7r0NkADs6FNFSj1qAGZwnr7dggd9OwQ
+         r4UA==
+X-Forwarded-Encrypted: i=1; AJvYcCUIn3NDro3Q/GhM4flrXBw4WJvkhTuTKgeEpraRVLnPJHxzH2CRJ52nNqDYVy3GD10xmDMdSBzarlfdvMpVK2CvWKStkBKUwr9g
+X-Gm-Message-State: AOJu0YyhGX01VzlIXjUOx9GOm4mX+/ORACOWmvIArmP17Qv+fYqRpvGI
+	lV9k8eeSd6lUSp54mUEM4RPW09xlafQOx1lxrHc2Q/I/HMNxSw24kmZw+KbpuL0=
+X-Google-Smtp-Source: AGHT+IGhqmzkNdrX2UMlDS36AtNuOAiCapJDE/OBBjeoP4TRH2M/KqKJkejU4T3zaLkL6u2UP2FCAg==
+X-Received: by 2002:a2e:700e:0:b0:2d8:9fd7:859a with SMTP id l14-20020a2e700e000000b002d89fd7859amr8397471ljc.34.1713279438013;
+        Tue, 16 Apr 2024 07:57:18 -0700 (PDT)
+Received: from [172.30.205.49] (UNUSED.212-182-62-129.lubman.net.pl. [212.182.62.129])
+        by smtp.gmail.com with ESMTPSA id o21-20020a2e90d5000000b002d86641176esm1571846ljg.32.2024.04.16.07.57.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Apr 2024 07:57:17 -0700 (PDT)
+Message-ID: <66cd0d96-7576-4f70-b4da-b8d518253763@linaro.org>
+Date: Tue, 16 Apr 2024 16:57:15 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/8] usb: typec: altmode: add low level altmode
+ configuration helper
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Neil Armstrong <neil.armstrong@linaro.org>,
+ Bjorn Andersson <andersson@kernel.org>, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
 References: <20240416-ucsi-glink-altmode-v1-0-890db00877ac@linaro.org>
- <20240416-ucsi-glink-altmode-v1-3-890db00877ac@linaro.org> <1545d3fb-88f3-44e7-b981-610df6bdf6f7@linaro.org>
-In-Reply-To: <1545d3fb-88f3-44e7-b981-610df6bdf6f7@linaro.org>
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Tue, 16 Apr 2024 17:49:46 +0300
-Message-ID: <CAA8EJpom1vnbjqOU6gD89TdZxDBzY_3upgrdvmXyJLA1tsDBvw@mail.gmail.com>
-Subject: Re: [PATCH 3/8] usb: typec: ucsi: glink: check message data sizes
-To: Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Neil Armstrong <neil.armstrong@linaro.org>, 
-	Bjorn Andersson <andersson@kernel.org>, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-
-On Tue, 16 Apr 2024 at 17:33, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->
->
->
-> On 4/16/24 04:20, Dmitry Baryshkov wrote:
-> > The driver gets data from the DSP firmware. Sanitize data size before
-> > reading corresponding message structures.
-> >
-> > Fixes: 62b5412b1f4a ("usb: typec: ucsi: add PMIC Glink UCSI driver")
-> > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > ---
->
-> I think more backstory would be beneficial here.. Does this happen often?
-> What are the consequences? What are the causes? Can there be one-off invalid
-> messages, or does that mean the firwmare has entered some unstable state?
->
-> And I suppose, if answer to the last question is "unstable state", are we
-> doing something incorrectly in Linux that causes it to happen?
-
-No. I haven't seen such cases. However as we are getting the data from
-external entity which don't control, we should check that the messages
-conform to what we are expecting.
+ <20240416-ucsi-glink-altmode-v1-2-890db00877ac@linaro.org>
+ <c129b349-dfaa-4b10-9b8c-6098d04b9373@linaro.org>
+ <CAA8EJpqH2_ENE6am=m9dtwk_+_Vbc4pZG9=Y_4-b-p0fKQ4sBg@mail.gmail.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <CAA8EJpqH2_ENE6am=m9dtwk_+_Vbc4pZG9=Y_4-b-p0fKQ4sBg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
 
 
--- 
-With best wishes
-Dmitry
+On 4/16/24 16:48, Dmitry Baryshkov wrote:
+> On Tue, 16 Apr 2024 at 17:32, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+>>
+>>
+>>
+>> On 4/16/24 04:20, Dmitry Baryshkov wrote:
+>>> In some obscure cases (Qualcomm PMIC Glink) altmode is completely
+>>> handled by the firmware. Linux does not get proper partner altmode info.
+>>> Instead we get the notification once the altmode is negotiated and
+>>> entered (or left). However even in such a case the driver has to switch
+>>> board components (muxes, switches and retimers) according to the altmode
+>>> selected by the hardware.
+>>>
+>>> We can not use existing typec_altmode_enter() / typec_altmode_exit() /
+>>> typec_altmode_notify() functions in such a case, since there is no
+>>> corresponding partner's altmode instance.
+>>>
+>>> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+>>> ---
+>>
+>> Should this now be called from e.g. typec_almode_notify to limit
+>> duplication?
+> 
+> typec_altmode_notify works only if there is an altmode->partner (which
+> we don't have with pmic-glink).
+
+Yes and this seems to be an excerpt from these functions, should they
+now drop that code and call this function instead, so as not to have
+it in the tree twice?
+
+Konrad
 
