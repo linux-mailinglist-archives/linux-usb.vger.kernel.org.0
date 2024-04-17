@@ -1,140 +1,172 @@
-Return-Path: <linux-usb+bounces-9423-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9424-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01BE98A7EEA
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Apr 2024 10:59:11 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D28F98A8183
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Apr 2024 12:59:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1A90E1C20B4A
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Apr 2024 08:59:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 11886B24101
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Apr 2024 10:59:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B84CA137C33;
-	Wed, 17 Apr 2024 08:55:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7990D13C832;
+	Wed, 17 Apr 2024 10:59:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="iQSY//vB"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Uq4QSnok"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBCAA126F0A
-	for <linux-usb@vger.kernel.org>; Wed, 17 Apr 2024 08:55:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4647913C68E;
+	Wed, 17 Apr 2024 10:59:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713344143; cv=none; b=DD06a6K2msG4uY2MwVdFsTJHtb8J46YVP1WCehl/EXbhQ/5kzJ1A7b74S+KTaHN6L9IRh4F+Qv356EE6eQ/yczZWwJbsMpcGrmBpCeDstleiZtS55ZFE205GwUY09SEYomulojone15wprgiqMXZfVrmtnBkTNjmzPWJ1eUKsO0=
+	t=1713351587; cv=none; b=jg5j8YayOeqUPsbhkou2MGd3glP1pb6e9wyoP1kGeET8g9yb8HvpXprz7UH8xZCts56L7hen9bmOEJ6gPSMp8+DR9UA4JoM9B2v1GleWNPLwQaAA6gh5H0FvVWtEZls236RTWx7RDMKwtNymtM6PEmcUMo/VH4puXHbZ0ZUHVRM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713344143; c=relaxed/simple;
-	bh=3KtL8v+/z1deeegmlCslJhNyGqs44qnUNBL+H3cQXis=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=oNjbFdKu9oaZwttw4btf00JwwBZOtCldBzw+uM865KGpi9xd3D+cqCJuArIsqEZpBrF1pSlPeK2kXyzD8+F9wrMOqzK8q8uNyWhY9L5Q7+BcN90c8l5WNRatpmunZSMHVFqNUPqenNrSV+uGCrtnsuK59oiwS4r3fGUn5Y7WDPI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=iQSY//vB; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1713344140;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=pQ0sSQeAADn6AXaSn6AcvMvh/Ro6ED1iNBV8xbxjGO0=;
-	b=iQSY//vBmZpmsW7XfUHZmjxLR2grgzlaczugctNAaTVbCM4cLuX6+to2TYvHXV4jHycTZg
-	Gx9curBRdpZtxvGZw18W3e4RXq0naH/HmA8E3KOl4ueoLYFeMO2/HCsBpV8ZmVrRzTUQEd
-	u80viDj6imJWVZAdLH++aClKLcCjSCM=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-512-VBJASLQmOlWdBbek0Y9VbQ-1; Wed,
- 17 Apr 2024 04:55:39 -0400
-X-MC-Unique: VBJASLQmOlWdBbek0Y9VbQ-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id ABD9C1C4C394;
-	Wed, 17 Apr 2024 08:55:38 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.39.193.59])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 2F55A492BC7;
-	Wed, 17 Apr 2024 08:55:36 +0000 (UTC)
-From: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
-To: davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>,
-	stable@vger.kernel.org,
-	Jarkko Palviainen <jarkko.palviainen@gmail.com>
-Subject: [PATCH v2] net: usb: ax88179_178a: avoid writing the mac address before first reading
-Date: Wed, 17 Apr 2024 10:55:13 +0200
-Message-ID: <20240417085524.219532-1-jtornosm@redhat.com>
+	s=arc-20240116; t=1713351587; c=relaxed/simple;
+	bh=cmU7FEP7+gAfzRzY/2Uj0ANcSi3jAqVqok2HMkjHbBM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=H8EQXvV2koxbCV6P08syBcYRBJXodg86xA0NNa4nH1nRshSgzK3kBoh0IQYtTNfL4VQWMtkW7p8+/m3Z0cJgD1iTvjzXritYOttgb0M6yG4UayGmi/iABIJVu1ks96ZD/ZRUZ52q4gnfNa0l1LtrfDt1ndyfcOsJSKDwqTwOosg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Uq4QSnok; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1713351585; x=1744887585;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=cmU7FEP7+gAfzRzY/2Uj0ANcSi3jAqVqok2HMkjHbBM=;
+  b=Uq4QSnokd3AgLu3KcZUoLUDqvSNM8ZUzwFCQnZ0almyqpAfNtmHtyi73
+   3GbzUG33cronnuvgy5Xt3PkSRQSaPsQ+1RSFrBVL7yVXn580BNKuljxWk
+   Os8sxjo/Zr1p096lbbmTaq2fklty4qjmPTtwh8lsJ41+w8MRM/GNA6Oja
+   ocTEIM0cwHtz18gy67dutmFHAE55RJG/I/yx1ZGqCCSgxV7U3If4r7EgR
+   LmcHdUXLhFlEpkle023kXPo7LTExfFF2///AbNoNv0hp6hp9dexCA4idb
+   TTI6x8ape8HzNqnphdCs3SAtfkLCRTRq3wYF2lHdLJPhofB7d4+aWBrcc
+   Q==;
+X-CSE-ConnectionGUID: 5ubGJBziQaSixqqXfuN2vw==
+X-CSE-MsgGUID: 7EFvZxg+QD2CwP4Utym7mw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11046"; a="9386635"
+X-IronPort-AV: E=Sophos;i="6.07,209,1708416000"; 
+   d="scan'208";a="9386635"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2024 03:59:45 -0700
+X-CSE-ConnectionGUID: oIreVgWaRwGJG3OUgyr3KA==
+X-CSE-MsgGUID: nRymCCveRBqshFKixxFmeA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,209,1708416000"; 
+   d="scan'208";a="53541746"
+Received: from unknown (HELO 23c141fc0fd8) ([10.239.97.151])
+  by orviesa002.jf.intel.com with ESMTP; 17 Apr 2024 03:59:43 -0700
+Received: from kbuild by 23c141fc0fd8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rx30p-0006Vq-0Z;
+	Wed, 17 Apr 2024 10:59:35 +0000
+Date: Wed, 17 Apr 2024 18:58:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Mathias Nyman <mathias.nyman@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, John Youn <John.Youn@synopsys.com>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH 1/2] usb: xhci-plat: Don't include xhci.h
+Message-ID: <202404171847.XPIgGzM6-lkp@intel.com>
+References: <900465dc09f1c8e12c4df98d625b9985965951a8.1713310411.git.Thinh.Nguyen@synopsys.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.9
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <900465dc09f1c8e12c4df98d625b9985965951a8.1713310411.git.Thinh.Nguyen@synopsys.com>
 
-After the commit d2689b6a86b9 ("net: usb: ax88179_178a: avoid two
-consecutive device resets"), reset operation, in which the default mac
-address from the device is read, is not executed from bind operation and
-the random address, that is pregenerated just in case, is direclty written
-the first time in the device, so the default one from the device is not
-even read. This writing is not dangerous because is volatile and the
-default mac address is not missed.
+Hi Thinh,
 
-In order to avoid this and keep the simplification to have only one
-reset and reduce the delays, restore the reset from bind operation and
-remove the reset that is commanded from open operation. The behavior is
-the same but everything is ready for usbnet_probe.
+kernel test robot noticed the following build errors:
 
-Tested with ASIX AX88179 USB Gigabit Ethernet devices.
-Restore the old behavior for the rest of possible devices because I don't
-have the hardware to test.
+[auto build test ERROR on 3d122e6d27e417a9fa91181922743df26b2cd679]
 
-cc: stable@vger.kernel.org # 6.6+
-Fixes: d2689b6a86b9 ("net: usb: ax88179_178a: avoid two consecutive device resets")
-Reported-by: Jarkko Palviainen <jarkko.palviainen@gmail.com>
-Signed-off-by: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
----
-v2:
-  - Restore reset from bind operation to avoid problems with usbnet_probe.
-v1: https://lore.kernel.org/netdev/20240410095603.502566-1-jtornosm@redhat.com/
+url:    https://github.com/intel-lab-lkp/linux/commits/Thinh-Nguyen/usb-xhci-plat-Don-t-include-xhci-h/20240417-074220
+base:   3d122e6d27e417a9fa91181922743df26b2cd679
+patch link:    https://lore.kernel.org/r/900465dc09f1c8e12c4df98d625b9985965951a8.1713310411.git.Thinh.Nguyen%40synopsys.com
+patch subject: [PATCH 1/2] usb: xhci-plat: Don't include xhci.h
+config: arc-allmodconfig (https://download.01.org/0day-ci/archive/20240417/202404171847.XPIgGzM6-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240417/202404171847.XPIgGzM6-lkp@intel.com/reproduce)
 
- drivers/net/usb/ax88179_178a.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404171847.XPIgGzM6-lkp@intel.com/
 
-diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
-index 69169842fa2f..a493fde1af3f 100644
---- a/drivers/net/usb/ax88179_178a.c
-+++ b/drivers/net/usb/ax88179_178a.c
-@@ -1316,6 +1316,8 @@ static int ax88179_bind(struct usbnet *dev, struct usb_interface *intf)
- 
- 	netif_set_tso_max_size(dev->net, 16384);
- 
-+	ax88179_reset(dev);
-+
- 	return 0;
- }
- 
-@@ -1694,7 +1696,6 @@ static const struct driver_info ax88179_info = {
- 	.unbind = ax88179_unbind,
- 	.status = ax88179_status,
- 	.link_reset = ax88179_link_reset,
--	.reset = ax88179_reset,
- 	.stop = ax88179_stop,
- 	.flags = FLAG_ETHER | FLAG_FRAMING_AX,
- 	.rx_fixup = ax88179_rx_fixup,
-@@ -1707,7 +1708,6 @@ static const struct driver_info ax88178a_info = {
- 	.unbind = ax88179_unbind,
- 	.status = ax88179_status,
- 	.link_reset = ax88179_link_reset,
--	.reset = ax88179_reset,
- 	.stop = ax88179_stop,
- 	.flags = FLAG_ETHER | FLAG_FRAMING_AX,
- 	.rx_fixup = ax88179_rx_fixup,
+All errors (new ones prefixed by >>):
+
+   drivers/usb/host/xhci-rzv2m.c: In function 'xhci_rzv2m_init_quirk':
+>> drivers/usb/host/xhci-rzv2m.c:21:33: error: invalid use of undefined type 'struct usb_hcd'
+      21 |         struct device *dev = hcd->self.controller;
+         |                                 ^~
+>> drivers/usb/host/xhci-rzv2m.c:23:32: error: invalid use of undefined type 'struct device'
+      23 |         rzv2m_usb3drd_reset(dev->parent, true);
+         |                                ^~
+   drivers/usb/host/xhci-rzv2m.c: In function 'xhci_rzv2m_start':
+   drivers/usb/host/xhci-rzv2m.c:32:16: error: invalid use of undefined type 'struct usb_hcd'
+      32 |         if (hcd->regs) {
+         |                ^~
+>> drivers/usb/host/xhci-rzv2m.c:34:26: error: implicit declaration of function 'readl' [-Werror=implicit-function-declaration]
+      34 |                 int_en = readl(hcd->regs + RZV2M_USB3_INTEN);
+         |                          ^~~~~
+   drivers/usb/host/xhci-rzv2m.c:34:35: error: invalid use of undefined type 'struct usb_hcd'
+      34 |                 int_en = readl(hcd->regs + RZV2M_USB3_INTEN);
+         |                                   ^~
+>> drivers/usb/host/xhci-rzv2m.c:14:33: error: implicit declaration of function 'BIT' [-Werror=implicit-function-declaration]
+      14 | #define RZV2M_USB3_INT_XHC_ENA  BIT(0)
+         |                                 ^~~
+   drivers/usb/host/xhci-rzv2m.c:16:34: note: in expansion of macro 'RZV2M_USB3_INT_XHC_ENA'
+      16 | #define RZV2M_USB3_INT_ENA_VAL  (RZV2M_USB3_INT_XHC_ENA \
+         |                                  ^~~~~~~~~~~~~~~~~~~~~~
+   drivers/usb/host/xhci-rzv2m.c:35:27: note: in expansion of macro 'RZV2M_USB3_INT_ENA_VAL'
+      35 |                 int_en |= RZV2M_USB3_INT_ENA_VAL;
+         |                           ^~~~~~~~~~~~~~~~~~~~~~
+>> drivers/usb/host/xhci-rzv2m.c:36:17: error: implicit declaration of function 'writel' [-Werror=implicit-function-declaration]
+      36 |                 writel(int_en, hcd->regs + RZV2M_USB3_INTEN);
+         |                 ^~~~~~
+   drivers/usb/host/xhci-rzv2m.c:36:35: error: invalid use of undefined type 'struct usb_hcd'
+      36 |                 writel(int_en, hcd->regs + RZV2M_USB3_INTEN);
+         |                                   ^~
+   cc1: some warnings being treated as errors
+
+
+vim +21 drivers/usb/host/xhci-rzv2m.c
+
+c52c9acc415eb6 Biju Das 2023-01-21  13  
+c52c9acc415eb6 Biju Das 2023-01-21 @14  #define RZV2M_USB3_INT_XHC_ENA	BIT(0)
+c52c9acc415eb6 Biju Das 2023-01-21  15  #define RZV2M_USB3_INT_HSE_ENA	BIT(2)
+c52c9acc415eb6 Biju Das 2023-01-21  16  #define RZV2M_USB3_INT_ENA_VAL	(RZV2M_USB3_INT_XHC_ENA \
+c52c9acc415eb6 Biju Das 2023-01-21  17  				 | RZV2M_USB3_INT_HSE_ENA)
+c52c9acc415eb6 Biju Das 2023-01-21  18  
+c52c9acc415eb6 Biju Das 2023-01-21  19  int xhci_rzv2m_init_quirk(struct usb_hcd *hcd)
+c52c9acc415eb6 Biju Das 2023-01-21  20  {
+c52c9acc415eb6 Biju Das 2023-01-21 @21  	struct device *dev = hcd->self.controller;
+c52c9acc415eb6 Biju Das 2023-01-21  22  
+c52c9acc415eb6 Biju Das 2023-01-21 @23  	rzv2m_usb3drd_reset(dev->parent, true);
+c52c9acc415eb6 Biju Das 2023-01-21  24  
+c52c9acc415eb6 Biju Das 2023-01-21  25  	return 0;
+c52c9acc415eb6 Biju Das 2023-01-21  26  }
+c52c9acc415eb6 Biju Das 2023-01-21  27  
+c52c9acc415eb6 Biju Das 2023-01-21  28  void xhci_rzv2m_start(struct usb_hcd *hcd)
+c52c9acc415eb6 Biju Das 2023-01-21  29  {
+c52c9acc415eb6 Biju Das 2023-01-21  30  	u32 int_en;
+c52c9acc415eb6 Biju Das 2023-01-21  31  
+c52c9acc415eb6 Biju Das 2023-01-21  32  	if (hcd->regs) {
+c52c9acc415eb6 Biju Das 2023-01-21  33  		/* Interrupt Enable */
+c52c9acc415eb6 Biju Das 2023-01-21 @34  		int_en = readl(hcd->regs + RZV2M_USB3_INTEN);
+c52c9acc415eb6 Biju Das 2023-01-21  35  		int_en |= RZV2M_USB3_INT_ENA_VAL;
+c52c9acc415eb6 Biju Das 2023-01-21 @36  		writel(int_en, hcd->regs + RZV2M_USB3_INTEN);
+
 -- 
-2.44.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
