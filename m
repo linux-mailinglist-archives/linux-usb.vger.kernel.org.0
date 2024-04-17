@@ -1,94 +1,180 @@
-Return-Path: <linux-usb+bounces-9430-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9431-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D96738A85E1
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Apr 2024 16:24:02 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 246A28A8732
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Apr 2024 17:14:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 717FF1F21ACB
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Apr 2024 14:24:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 79622B23A05
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Apr 2024 15:14:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 246D41411EE;
-	Wed, 17 Apr 2024 14:23:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07E701487CF;
+	Wed, 17 Apr 2024 15:14:00 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id CAAED12FF9E
-	for <linux-usb@vger.kernel.org>; Wed, 17 Apr 2024 14:23:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
+Received: from hi1smtp01.de.adit-jv.com (smtp1.de.adit-jv.com [93.241.18.167])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 741A2146D5E;
+	Wed, 17 Apr 2024 15:13:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.241.18.167
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713363834; cv=none; b=KiJskKQtsru4U+jZBKHGYHfSM7h3PDXXKys2mxWI3WJEXdimmiDyrKoU4M+cidgBPVX3FukfCZGRFr9tFGwT6VRnNuThFJiWl5dmGNv8YgvukP2hN4bzugbvKchdTXlxPJ88L7BFul6eeOWi/2YsV5poOJyPlhrBy6IsAMwUmr0=
+	t=1713366839; cv=none; b=RCkt7url/1F6NTS6ZpoOJPEh+jTJc3HwBmmKCl0mf44Hd82fQ9GMTbGJQ2wuouv1ybKkJiY5EO4k2q8ry0askvtt1gZMmuFCpLj+mZl6vimEsvgbuErrVvPMSkols+KyRPvHJ9zBVkhu1HiaVa3HeM6SWQWDBVsRok4hSetYhKw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713363834; c=relaxed/simple;
-	bh=cxUQhRnqHadkF6BkpNtuin2PtIpnIK0xeBndPTSzJT4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SBthdGfjaz3g9iEaor5pzwyTstuV5qqaRSZ+BLtS4YN+vNf1Xz7ASsOA0oe1B1/7VCLSjlue+0LGvKxt+oMCamSekUJE+HerRYspfo3+Kw6OqO/Ku9gUzRRDM9HbmzNZvqJfBBvdnzwqB3wBgxMmsYs3+PM3Hxp6gvfSzpGfEa8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
-Received: (qmail 201056 invoked by uid 1000); 17 Apr 2024 10:23:51 -0400
-Date: Wed, 17 Apr 2024 10:23:51 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Sam Sun <samsun1006219@gmail.com>
-Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-  Greg KH <gregkh@linuxfoundation.org>, swboyd@chromium.org,
-  ricardo@marliere.net, hkallweit1@gmail.com, heikki.krogerus@linux.intel.com,
-  mathias.nyman@linux.intel.com, royluo@google.com,
-  syzkaller-bugs@googlegroups.com, xrivendell7@gmail.com
-Subject: Re: [Linux kernel bug] general protection fault in disable_store
-Message-ID: <de997acf-300a-4592-87c5-024171d19c29@rowland.harvard.edu>
-References: <92fe8e95-bc01-4d7d-9678-8cfc55cc4a7b@rowland.harvard.edu>
- <CAEkJfYORHKO16xT3DCS04JFzkquz6oZ5CdC2USJ5-c0WihAMXg@mail.gmail.com>
- <45e246ab-01e8-40b7-8ede-b47957df0d7b@rowland.harvard.edu>
- <CAEkJfYMjO+vMBGPcaLa51gjeKxFAJBrSa0t_iJUtauQD3DaK8w@mail.gmail.com>
- <69a6f4c9-6470-40d1-99f1-aaf532497d02@rowland.harvard.edu>
- <CAEkJfYNJyyGhR9AAWc0V7o8i6pmS+OB=KSbh6XqVWAAGetS9hA@mail.gmail.com>
- <5704ac63-5e5b-416c-a2a1-57528e76a02f@rowland.harvard.edu>
- <CAEkJfYMSwuikpBJudOaFYrxgf9e=_O4nig6sTPLLAtpdEKQuyQ@mail.gmail.com>
- <5f3526a6-6ede-4181-a4ff-076e022cfb49@rowland.harvard.edu>
- <CAEkJfYMPQJn+kYzxFwwix3fwKeu3aAdYKgp+Ksvq=o4CoTXEWQ@mail.gmail.com>
+	s=arc-20240116; t=1713366839; c=relaxed/simple;
+	bh=ReJbikJ2kepuUijelUZQhkZwPh2q88Pj0bpQ80tCjGE=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZTpXsLN9TLz37Q+nspuwaXbvX3xIRAbGqJrBeh6hvF5vkGgEfsGhdnBf2dpyZXX/Q5PUwxCn1MchkdgTtvELmmYd3IayOYOCpQjdsT145DtWSNvMRUyA/RYhNUfMNGQq5jMPDTVBxv8XIdQMQizgZN1prwxP4/hsxvCuXg6qHGg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=de.adit-jv.com; spf=pass smtp.mailfrom=de.adit-jv.com; arc=none smtp.client-ip=93.241.18.167
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=de.adit-jv.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=de.adit-jv.com
+Received: from hi2exch02.adit-jv.com (hi2exch02.adit-jv.com [10.72.92.28])
+	by hi1smtp01.de.adit-jv.com (Postfix) with ESMTP id 68F0D5203A7;
+	Wed, 17 Apr 2024 17:13:47 +0200 (CEST)
+Received: from vmlxhi-118.adit-jv.com (10.72.93.77) by hi2exch02.adit-jv.com
+ (10.72.92.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.37; Wed, 17 Apr
+ 2024 17:13:47 +0200
+Date: Wed, 17 Apr 2024 17:13:42 +0200
+From: Hardik Gajjar <hgajjar@de.adit-jv.com>
+To: Andy Shevchenko <andriy.shevchenko@intel.com>
+CC: Ferry Toth <fntoth@gmail.com>, Hardik Gajjar <hgajjar@de.adit-jv.com>,
+	<gregkh@linuxfoundation.org>, <s.hauer@pengutronix.de>,
+	<jonathanh@nvidia.com>, <linux-usb@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <quic_linyyuan@quicinc.com>,
+	<paul@crapouillou.net>, <quic_eserrao@quicinc.com>, <erosca@de.adit-jv.com>
+Subject: Re: [PATCH v4] usb: gadget: u_ether: Replace netif_stop_queue with
+ netif_device_detach
+Message-ID: <20240417151342.GA56989@vmlxhi-118.adit-jv.com>
+References: <20240115132720.GA98840@vmlxhi-118.adit-jv.com>
+ <f25283fc-4550-4725-960b-2ea783fd62e1@gmail.com>
+ <aeee83d8-dee3-42ed-b705-988b17800721@gmail.com>
+ <20240405113855.GA121923@vmlxhi-118.adit-jv.com>
+ <321e908e-0d10-4e36-8dc4-6997c73fe2eb@gmail.com>
+ <ZhbOZsp-XHemVhQz@smile.fi.intel.com>
+ <20240411142637.GA110162@vmlxhi-118.adit-jv.com>
+ <ZhgSPCq6sVejRjbj@smile.fi.intel.com>
+ <be8904bd-71ea-4ae1-b0bc-9170461fd0d9@gmail.com>
+ <Zh6BsK8F3gCzGJfE@smile.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEkJfYMPQJn+kYzxFwwix3fwKeu3aAdYKgp+Ksvq=o4CoTXEWQ@mail.gmail.com>
+In-Reply-To: <Zh6BsK8F3gCzGJfE@smile.fi.intel.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: hi2exch02.adit-jv.com (10.72.92.28) To
+ hi2exch02.adit-jv.com (10.72.92.28)
 
-On Wed, Apr 17, 2024 at 03:39:02PM +0800, Sam Sun wrote:
-> On Wed, Apr 17, 2024 at 12:35 AM Alan Stern <stern@rowland.harvard.edu> wrote:
-> > It turns out that patch is no good.  The reason is mentioned in the
-> > changelog for commit 543d7784b07f ("USB: fix race between hub_disconnect
-> > and recursively_mark_NOTATTACHED"); it says that the port devices have to
-> > be removed _after_ maxchild has been set to 0.
-> >
+On Tue, Apr 16, 2024 at 04:48:32PM +0300, Andy Shevchenko wrote:
+> On Thu, Apr 11, 2024 at 10:52:36PM +0200, Ferry Toth wrote:
+> > Op 11-04-2024 om 18:39 schreef Andy Shevchenko:
+> > > On Thu, Apr 11, 2024 at 04:26:37PM +0200, Hardik Gajjar wrote:
+> > > > On Wed, Apr 10, 2024 at 08:37:42PM +0300, Andy Shevchenko wrote:
+> > > > > On Sun, Apr 07, 2024 at 10:51:51PM +0200, Ferry Toth wrote:
+> > > > > > Op 05-04-2024 om 13:38 schreef Hardik Gajjar:
 > 
-> I checked the commit you mentioned. Maybe your first fix is all we
-> need to fix the problem? At least no race would occur for
-> hdev->maxchild and usb_set_intfdata().
+> ...
+> 
+> > > > > > Exactly. And this didn't happen before the 2 patches.
+> > > > > > 
+> > > > > > To be precise: /sys/class/net/usb0 is not removed and it is a link, the link
+> > > > > > target /sys/devices/pci0000:00/0000:00:11.0/dwc3.0.auto/gadget.0/net/usb0 no
+> > > > > > longer exists
+> > > > So, it means that the /sys/class/net/usb0 is present, but the symlink is
+> > > > broken. In that case, the dwc3 driver should recreate the device, and the
+> > > > symlink should become active again
+> > 
+> > Yes, on first enabling gadget (when device mode is activated):
+> > 
+> > root@yuna:~# ls /sys/devices/pci0000:00/0000:00:11.0/dwc3.0.auto/gadget.0/
+> > driver  net  power  sound  subsystem  suspended  uevent
+> > 
+> > Then switching to host mode:
+> > 
+> > root@yuna:~# ls /sys/devices/pci0000:00/0000:00:11.0/dwc3.0.auto/gadget.0/
+> > ls: cannot access
+> > '/sys/devices/pci0000:00/0000:00:11.0/dwc3.0.auto/gadget.0/': No such file
+> > or directory
+> > 
+> > Then back to device mode:
+> > 
+> > root@yuna:~# ls /sys/devices/pci0000:00/0000:00:11.0/dwc3.0.auto/gadget.0/
+> > driver  power  sound  subsystem  suspended  uevent
+> > 
+> > net is missing. But, network functions:
+> > 
+> > root@yuna:~# ping 10.42.0.1
+> > PING 10.42.0.1 (10.42.0.1): 56 data bytes
+> > 
+> > Mass storage device is created and removed each time as expected.
+> 
+> So, what's the conclusion? Shall we move towards revert of those two changes?
 
-No, the first patch won't help, even though it passed your testing.  The 
-race it eliminates is a harmless one -- or at least, it's harmless in 
-this context.  If usb_hub_to_struct_hub() sees bad values for 
-hdev->maxchild or usb_get_intfdata(), it will simply return NULL.  But 
-this can happen even with the first patch applied, if the user tries to 
-access disable_store() during the brief time between when hdev->maxchild 
-is set to 0 and when the port devices are removed.
 
-The true fix is simply to check whether the return value from 
-usb_hub_to_struct_hub() is NULL, which is what this patch does.
+As promised, I have the tested the this patch with the dwc3 gadget. I could not reproduce
+the issue. 
 
-> I applied this patch and it also can fix the warning. I am not sure
-> which one is better.
+I can see the usb0 exist all the time and accessible regardless of the role switching of the USB mode (peripheral <-> host)
 
-I'm quite sure that this one is better.  I will submit it shortly, with 
-your Tested-by:.
+Following are the logs:
+//Host to device
 
-Thanks a lot; the work you have done on this has been a big help.
+console:/sys/bus/platform/devices/a800000.ssusb # echo "peripheral" > mode
+console:/sys/bus/platform/devices/a800000.ssusb # ls a800000.dwc3/gadget/net/
+usb0
 
-Alan Stern
+//device to host
+console:/sys/bus/platform/devices/a800000.ssusb # echo "host" > mode
+console:/sys/bus/platform/devices/a800000.ssusb # ls a800000.dwc3/gadget/net/
+usb0
+s a800000.dwc3/gadget/net/usb0                                                <
+addr_assign_type    duplex             phys_port_name
+addr_len            flags              phys_switch_id
+address             gro_flush_timeout  power
+broadcast           ifalias            proto_down
+carrier             ifindex            queues
+carrier_changes     iflink             speed
+carrier_down_count  link_mode          statistics
+carrier_up_count    mtu                subsystem
+dev_id              name_assign_type   tx_queue_len
+dev_port            netdev_group       type
+device              operstate          uevent
+dormant             phys_port_id       waiting_for_supplier
+console:/sys/bus/platform/devices/a800000.ssusb # ifconfig -a usb0
+usb0      Link encap:Ethernet  HWaddr 3a:8b:63:97:1a:9a
+          BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 TX bytes:0
+
+console:/sys/bus/platform/devices/a800000.ssusb #
+
+I strongly advise against reverting the patch solely based on the observed issue of removing the /sys/class/net/usb0 directory while the usb0 interface remains available. 
+Instead, I recommend enabling FTRACE to trace the functions involved and identify which faulty call is responsible for removing usb0.
+
+According to current kernel architecture of u_ether driver, only gether_cleanup should remove the usb0 interface along with its kobject and sysfs interface.
+I suggest sharing the analysis here to understand why this practice is not followed in your use case or driver ?
+
+I am curious why the driver was developed without adhering to the kernel's gadget architecture.
+
+> 
+> > > > I have the dwc3 IP base usb controller, Let me check with this patch and
+> > > > share result here.  May be we need some fix in dwc3
+> > Would have been nice if someone could test on other controller as well. But
+> > another instance of dwc3 is also very welcome.
+> > > It's quite possible, please test on your side.
+> > > We are happy to test any fixes if you come up with.
+> 
+> -- 
+> With Best Regards,
+> Andy Shevchenko
+> 
+> 
 
