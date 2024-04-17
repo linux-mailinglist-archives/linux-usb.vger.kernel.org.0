@@ -1,144 +1,94 @@
-Return-Path: <linux-usb+bounces-9429-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9430-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4878E8A85CE
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Apr 2024 16:18:39 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D96738A85E1
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Apr 2024 16:24:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7309A1C20D5B
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Apr 2024 14:18:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 717FF1F21ACB
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Apr 2024 14:24:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C9E51411F6;
-	Wed, 17 Apr 2024 14:18:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 246D41411EE;
+	Wed, 17 Apr 2024 14:23:55 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 497021411CF;
-	Wed, 17 Apr 2024 14:18:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id CAAED12FF9E
+	for <linux-usb@vger.kernel.org>; Wed, 17 Apr 2024 14:23:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713363509; cv=none; b=OOf+g1t3UMwaBP0FGQDIyM+627Rdbgkj2SQjsaB2g3/MIwZ4YwrJn+7ikMvz0/HuhtNVoKblCUKnp5pUR8ISlCkZj1dtPbzac1k9RxQhEMBhe1GTG+h3YsPq1yBxMrrjUuAnzDCodwnlmnGeIholhST3IlJCxW4eVA1r7zLjbd8=
+	t=1713363834; cv=none; b=KiJskKQtsru4U+jZBKHGYHfSM7h3PDXXKys2mxWI3WJEXdimmiDyrKoU4M+cidgBPVX3FukfCZGRFr9tFGwT6VRnNuThFJiWl5dmGNv8YgvukP2hN4bzugbvKchdTXlxPJ88L7BFul6eeOWi/2YsV5poOJyPlhrBy6IsAMwUmr0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713363509; c=relaxed/simple;
-	bh=WaC2druakjJV+zFjmdeikwA3CiyuPhwF8v+9yEn8j10=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZpTsN9n1YIFznBF/oxG2wioPwUme4TkhyapOjjXiUs+jJTjZAiPckSDufJewJXP04sokyqCYiXzDMVNhfCVFnaNs/qhTPWX16d3Q1JWnbrYh9c5/TajJkqBLIK2JxhMtTAHdxee0QHDwtFcyolxA22gO+BFDBjrRV4J0LnjFul4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-61af74a010aso17307637b3.0;
-        Wed, 17 Apr 2024 07:18:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713363504; x=1713968304;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=avO898yqsUcNC4lZWFklgBAuRw3SczTcgwrfOeGT8Mg=;
-        b=Ncm2Yga1n56LP7oXyhMsBNhPxWhbDQSEYBs8ULP+V9Odr+RKmvYIUObx/wyL6ptUir
-         vBCaxqYyEZ2fURyhssqDHNIGKvNe4pQubEgyiEvk2EWfW9TX+xJWla37U5tW8mfCUYC2
-         GnjHtf9gHYMA6KvG9PMSmh9iM4rDptoQFIJWJKdWU/Q3s83FviT5mCJAZ80iaUcR2zXm
-         ctgP2t/1SxlafP6Hf0tR6FxNHtEhRfUjEwlDPf9fTmh1n+DoJEmfJS7VACMsMEh/wr2b
-         9zcbPhSZPkdEFLsnNCGBySOTwATza+O+01tgmBetzcaTm8d1Z4OoU0VtfHG820beSmBP
-         VITQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVSkGuH7Bdkez58ADtazhBuXlKENhvGJxNT4YQ3wjmi4pfZlnFev4+98tkjvqAFgqy/MASHnJVBUe4m70pUidsX91ML7wIB7ZCyueZmbBR4pMirqkHkezbhVe5ujY/idpenaiub1hkwUBubRFqSaBbPql/1OaYf2txi2bihEvYw7yG5UqHOeodf4FW+E/6/hHiG9rsV0xeEgwprE/2425XWJgvjMRD4LzhVP3D0wWJzdGJqN3FbIIcLg4sToWD0hs+yCAvttsdyV9sj0XSZARPWwHqkl0WaJP7NK5S1WPvZOJReDwIC4z92
-X-Gm-Message-State: AOJu0YzGCjhrCmJSG4im9P3cdJY8gQTvd0tG44uyQyx8YI+lQoRjyOZt
-	jeFr8pnJGIvUMtbc6qv2Q6cM9X0IUIGSm+k6Tn77TtbLfImle0DVktx29RAv+jA=
-X-Google-Smtp-Source: AGHT+IFNO9uc2PTPZrzIN0HtgGbUW+GpsqSP8Iw4/SFGdULVtPKSlG1+gVUNT/iY40JpD87PHMZWGA==
-X-Received: by 2002:a05:690c:d1b:b0:61b:123e:7210 with SMTP id cn27-20020a05690c0d1b00b0061b123e7210mr1232006ywb.40.1713363503429;
-        Wed, 17 Apr 2024 07:18:23 -0700 (PDT)
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com. [209.85.219.180])
-        by smtp.gmail.com with ESMTPSA id jf4-20020a05690c700400b0061129ac87fcsm2976926ywb.113.2024.04.17.07.18.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Apr 2024 07:18:23 -0700 (PDT)
-Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-de45d4ca525so55953276.0;
-        Wed, 17 Apr 2024 07:18:22 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUsKjbTmAezX/6x3516iFFJ8JJ1Ek8ovhwn5lHF7UI7NriWn6QKXZ9lYeTSseyxUw39gVPS1Ius+N6BQ5WSaWvJwdLAi6aCXsk5AlcGJi5XKU+NPrz5b5wVVAj2BTaB+gmF6/uSsJ6JXX4Gj/oxYmpoNIa3h8F1sULE9k7eRpa8mSUG/zAdC3LZXqsoCdKpCWoCpMYf1soi3igM960If8T5pFNOMP7/tlMLfpOaXvI+odT3cpaRBvhoCMXSYdd5Ti7ZcmLYrRr91VQ6u/l81gLboQ5qSCHv8ENaVYYQmvapHaFk2mMd5xSh
-X-Received: by 2002:a81:ff02:0:b0:618:94a6:6ca1 with SMTP id
- k2-20020a81ff02000000b0061894a66ca1mr10536616ywn.27.1713363502402; Wed, 17
- Apr 2024 07:18:22 -0700 (PDT)
+	s=arc-20240116; t=1713363834; c=relaxed/simple;
+	bh=cxUQhRnqHadkF6BkpNtuin2PtIpnIK0xeBndPTSzJT4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SBthdGfjaz3g9iEaor5pzwyTstuV5qqaRSZ+BLtS4YN+vNf1Xz7ASsOA0oe1B1/7VCLSjlue+0LGvKxt+oMCamSekUJE+HerRYspfo3+Kw6OqO/Ku9gUzRRDM9HbmzNZvqJfBBvdnzwqB3wBgxMmsYs3+PM3Hxp6gvfSzpGfEa8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
+Received: (qmail 201056 invoked by uid 1000); 17 Apr 2024 10:23:51 -0400
+Date: Wed, 17 Apr 2024 10:23:51 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Sam Sun <samsun1006219@gmail.com>
+Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+  Greg KH <gregkh@linuxfoundation.org>, swboyd@chromium.org,
+  ricardo@marliere.net, hkallweit1@gmail.com, heikki.krogerus@linux.intel.com,
+  mathias.nyman@linux.intel.com, royluo@google.com,
+  syzkaller-bugs@googlegroups.com, xrivendell7@gmail.com
+Subject: Re: [Linux kernel bug] general protection fault in disable_store
+Message-ID: <de997acf-300a-4592-87c5-024171d19c29@rowland.harvard.edu>
+References: <92fe8e95-bc01-4d7d-9678-8cfc55cc4a7b@rowland.harvard.edu>
+ <CAEkJfYORHKO16xT3DCS04JFzkquz6oZ5CdC2USJ5-c0WihAMXg@mail.gmail.com>
+ <45e246ab-01e8-40b7-8ede-b47957df0d7b@rowland.harvard.edu>
+ <CAEkJfYMjO+vMBGPcaLa51gjeKxFAJBrSa0t_iJUtauQD3DaK8w@mail.gmail.com>
+ <69a6f4c9-6470-40d1-99f1-aaf532497d02@rowland.harvard.edu>
+ <CAEkJfYNJyyGhR9AAWc0V7o8i6pmS+OB=KSbh6XqVWAAGetS9hA@mail.gmail.com>
+ <5704ac63-5e5b-416c-a2a1-57528e76a02f@rowland.harvard.edu>
+ <CAEkJfYMSwuikpBJudOaFYrxgf9e=_O4nig6sTPLLAtpdEKQuyQ@mail.gmail.com>
+ <5f3526a6-6ede-4181-a4ff-076e022cfb49@rowland.harvard.edu>
+ <CAEkJfYMPQJn+kYzxFwwix3fwKeu3aAdYKgp+Ksvq=o4CoTXEWQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240214215756.6530-1-mario.limonciello@amd.com>
- <20240214215756.6530-4-mario.limonciello@amd.com> <Zc1JEg5mC0ww_BeU@intel.com>
- <9831e9bc-d55f-4a72-950a-684a757af59c@amd.com> <Zc5cPjpNZydqKeS8@intel.com> <ecbaadf9-dfa1-46af-9a7e-cfd7aa1120be@amd.com>
-In-Reply-To: <ecbaadf9-dfa1-46af-9a7e-cfd7aa1120be@amd.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Wed, 17 Apr 2024 16:18:10 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdV1XYpu3JeP3W-dZpO8kmN75XckuPRnw2zLW-ZqD4634g@mail.gmail.com>
-Message-ID: <CAMuHMdV1XYpu3JeP3W-dZpO8kmN75XckuPRnw2zLW-ZqD4634g@mail.gmail.com>
-Subject: Re: [PATCH v6 3/5] drm: Add support to get EDID from ACPI
-To: Mario Limonciello <mario.limonciello@amd.com>
-Cc: =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>, 
-	Daniel Vetter <daniel@ffwll.ch>, Jani Nikula <jani.nikula@linux.intel.com>, 
-	Alex Deucher <alexander.deucher@amd.com>, Hans de Goede <hdegoede@redhat.com>, 
-	"open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>, amd-gfx@lists.freedesktop.org, 
-	"open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>, linux-fbdev@vger.kernel.org, 
-	nouveau@lists.freedesktop.org, intel-gfx@lists.freedesktop.org, 
-	platform-driver-x86@vger.kernel.org, intel-xe@lists.freedesktop.org, 
-	linux-renesas-soc@vger.kernel.org, 
-	"open list:ACPI" <linux-acpi@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>, 
-	Melissa Wen <mwen@igalia.com>, Mark Pearson <mpearson-lenovo@squebb.ca>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEkJfYMPQJn+kYzxFwwix3fwKeu3aAdYKgp+Ksvq=o4CoTXEWQ@mail.gmail.com>
 
-Hi Mario,
-
-On Thu, Feb 15, 2024 at 8:04=E2=80=AFPM Mario Limonciello
-<mario.limonciello@amd.com> wrote:
-> On 2/15/2024 12:47, Ville Syrj=C3=A4l=C3=A4 wrote:
-> > On Thu, Feb 15, 2024 at 12:20:56PM -0600, Mario Limonciello wrote:
-> >> On 2/14/2024 17:13, Ville Syrj=C3=A4l=C3=A4 wrote:
-> >>> On Wed, Feb 14, 2024 at 03:57:54PM -0600, Mario Limonciello wrote:
-> >>>> --- a/include/drm/drm_connector.h
-> >>>> +++ b/include/drm/drm_connector.h
-> >>>> @@ -1886,6 +1886,12 @@ struct drm_connector {
-> >>>>
-> >>>>            /** @hdr_sink_metadata: HDR Metadata Information read fro=
-m sink */
-> >>>>            struct hdr_sink_metadata hdr_sink_metadata;
-> >>>> +
-> >>>> +  /**
-> >>>> +   * @acpi_edid_allowed: Get the EDID from the BIOS, if available.
-> >>>> +   * This is only applicable to eDP and LVDS displays.
-> >>>> +   */
-> >>>> +  bool acpi_edid_allowed;
-> >>>
-> >>> Aren't there other bools/small stuff in there for tighter packing?
-> >>
-> >> Does the compiler automatically do the packing if you put bools nearby
-> >> in a struct?  If so; TIL.
+On Wed, Apr 17, 2024 at 03:39:02PM +0800, Sam Sun wrote:
+> On Wed, Apr 17, 2024 at 12:35 AM Alan Stern <stern@rowland.harvard.edu> wrote:
+> > It turns out that patch is no good.  The reason is mentioned in the
+> > changelog for commit 543d7784b07f ("USB: fix race between hub_disconnect
+> > and recursively_mark_NOTATTACHED"); it says that the port devices have to
+> > be removed _after_ maxchild has been set to 0.
 > >
-> > Yes. Well, depends on the types and their alignment requirements
-> > of course, and/or whether you specified __packed or not.
-> >
-> > You can use 'pahole' to find the holes in structures.
->
-> Thanks!  I don't see a __packed attribute on struct drm_connector, but
-> I'll put it near by other bools in case that changes in the future.
+> 
+> I checked the commit you mentioned. Maybe your first fix is all we
+> need to fix the problem? At least no race would occur for
+> hdev->maxchild and usb_set_intfdata().
 
-FTR, don't add __packed unless you have a very good reason to do so.
-With __packed, the compiler will emit multiple byte-accesses to
-access multi-byte integrals on platforms that do not support unaligned
-memory access.
+No, the first patch won't help, even though it passed your testing.  The 
+race it eliminates is a harmless one -- or at least, it's harmless in 
+this context.  If usb_hub_to_struct_hub() sees bad values for 
+hdev->maxchild or usb_get_intfdata(), it will simply return NULL.  But 
+this can happen even with the first patch applied, if the user tries to 
+access disable_store() during the brief time between when hdev->maxchild 
+is set to 0 and when the port devices are removed.
 
-Gr{oetje,eeting}s,
+The true fix is simply to check whether the return value from 
+usb_hub_to_struct_hub() is NULL, which is what this patch does.
 
-                        Geert
+> I applied this patch and it also can fix the warning. I am not sure
+> which one is better.
 
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
+I'm quite sure that this one is better.  I will submit it shortly, with 
+your Tested-by:.
 
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+Thanks a lot; the work you have done on this has been a big help.
+
+Alan Stern
 
