@@ -1,157 +1,170 @@
-Return-Path: <linux-usb+bounces-9427-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9428-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A4A898A8258
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Apr 2024 13:49:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E14748A8377
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Apr 2024 14:52:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D5D911C2277C
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Apr 2024 11:49:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 071CC1C21E74
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Apr 2024 12:52:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7744E13CF88;
-	Wed, 17 Apr 2024 11:49:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0618013D285;
+	Wed, 17 Apr 2024 12:52:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ru9R4vdv"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="C6RqUAwY"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FB5AAD48
-	for <linux-usb@vger.kernel.org>; Wed, 17 Apr 2024 11:49:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE39813CFA6
+	for <linux-usb@vger.kernel.org>; Wed, 17 Apr 2024 12:52:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713354575; cv=none; b=O5UmvJSRbdM1RSZamKpbcBlxt2EnQXFrNqcnM8DyfkFp8cUvjNn9x7XAt9JYAWtF9yQ01Nq5wwYP+fNUki/QKTJtTEP+3tvHuovXfJcOozfl/l1q9HkGqpjIXIm81GpVNBHwzYrQAYbHt0Q/oXhpL9quvbfPuFRreF0SA/7fPR0=
+	t=1713358362; cv=none; b=ITVOf4NCzYuJxlE+nvLhPYTMex9r93rAHGMOmA4oGyghuui+DR5hksS0VhQWU8YOuKy+64Ndid8fk6i4TrBLcdb7wwO6TOPSSWaaw8HQoDBM6dnR6mz7sHJt/lutVwFMc/Mv5AdBDdJwrPF4Cu4L4l1lzbjcBedIsAYfZMN1D9c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713354575; c=relaxed/simple;
-	bh=ClJidy8Ue7FH3S+CcJ6CcfjM4DE+NE8HOLwf1T5krV4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eqlN73f8MbxxzYwqmOfArx1qEQbpP30cH3kKVcCVeiA9HRMjlhOAyESN/SyoebVjo7iooVEY5ndMrmbxN9wfBh+5kKur8GFgy9PDDBsEk+G6GP2OJ1a0IsJkqONwowgfGacgriqnbHbxc5wcdDx9XO/PLn4W1QIyjOI9vBs7DzA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ru9R4vdv; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-418426e446bso55745e9.1
-        for <linux-usb@vger.kernel.org>; Wed, 17 Apr 2024 04:49:32 -0700 (PDT)
+	s=arc-20240116; t=1713358362; c=relaxed/simple;
+	bh=djbmwNqV1T+fIz55LlQUHZgjFsDZ7gV93lfvX92UUkU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=jUrCG/N4fpCIhuFSCOuuBzIPvWm+LjQfs8HzdjJjtzrct+sWpAv9f1cudyGarHpg7jcRJoz52fZZrDxetsqSHLOQqy0YN4+yLejvz/m5Ajm0/JpwFvH6Ou85Wp1sWkIWCdTILJjwDvyijIv3hcfq7CEVQ2ndFajyn00c42eIYnE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=C6RqUAwY; arc=none smtp.client-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-56e48d0a632so8605790a12.2
+        for <linux-usb@vger.kernel.org>; Wed, 17 Apr 2024 05:52:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1713354571; x=1713959371; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ROcY5xU6WLoO9x6w2II6RlDDMynjPhmXGBiDF2pK2dw=;
-        b=ru9R4vdvg2JGhdNBrmMzmyRVXQFcv9kXuisBSRxxjKBeLwMVcz265ja5l3OdhfaZKr
-         Ynrs1pwl8DE+TosdRfpntu2M4csUgWdJzVIcGFa9R5KBrlYJbH1jperadfVITwj2kyTr
-         153RnnQBY6ooSKwsk5z2dLawmmGCoVpjxHCxoBX6MtbpDyiVEBNrL8ddrJNjCpsrJLxl
-         rwG5wT8LhBMFfXitFLVfsT+LNcg1J0j0tq7o1de5WTiF67B3m8lixGqOAgO8R3XxoCNR
-         bO2qchd6lzTpFB10mKS/WUTBvf5X7pp8LBaod5xzq11mT6ZVWIqDlF/bJivMewytSwAO
-         ip9w==
+        d=linaro.org; s=google; t=1713358359; x=1713963159; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4QX8RCn4elswJrshCxrb7GwmrnHcmx33dwi2t+0ZG/s=;
+        b=C6RqUAwY75I6zHgx6sYt4mb34lOtN6chRTIMpY5q3f6EOQv0vGrvpKBroqEhmEsX3H
+         +vLktp9R9bnOuJg4FelWss3nq+aJqLEdD1C7t8rX/pQHm3LMHOk6uyApdfVkgbo0GY3N
+         ITAU/OEvf2dIkD8d7OkP+5RNTxtXCO/D6uCjq7jcJJS5tvsttCgqcLb80p6RGEBgSTqF
+         5q2mH+NA1v8UaO1gd1FxNWv/+rWkjNo4jLXbq4j9Av91MgTjKTT5RHSa3AbBSpp+vWZU
+         04Vu8UKDewxwYP7DRH0p3uureKNlqXwUW1pfPXubclrwwArxqiyYcBbCZ+02mjm8HG1B
+         8T9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713354571; x=1713959371;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ROcY5xU6WLoO9x6w2II6RlDDMynjPhmXGBiDF2pK2dw=;
-        b=Qe3i3GtceasuPyZ0kua5amTL0IV/6GgbwSKZjnWQa/1DbyKr4CgUShoeWPAlX2+Otg
-         pH57bXChXQJf+9X2oqzemh3t3nlQS8qyF8fnD+6fewa4BqJjtjqGublPlGOhCDafcLRY
-         8gY9Q1Wlkcul66YY2KdxMTxS/zwpiLP9n3z14z7RTdux8iSvLnqnzdctLdtKkVR5cJzG
-         qzH/SCKLB1vONFKPxf8aMsgcY6cqH0g9wr/rFxtSHja8B5SpLtgRdvPyrVmu1HMcXHBn
-         /WdWo2Ayc/JHxWjymdrmuro5La/NnwEWO0ZTz+kjbmTwpiaddGWyWapKtcGsGHoig8od
-         K1TA==
-X-Forwarded-Encrypted: i=1; AJvYcCUIOCajrlh/s9gOcVabuiGM6jTw0CiGJeO86RVzXgFkEw7xITtTMtzPV2+Jf0MlSgIAnJjZcyYzqr4Z0HCfzYppg8GaH7eV5wj8
-X-Gm-Message-State: AOJu0YwG8fYcS8BjGkIBkB8KnUN9wKthh/tEGOWOXrMACPqa0GnxVN/a
-	KJFQQkHKXoD0WndWXbLJ2dGuq0sYtH74+ZCGmATwzXZgOGcYHc1AP/+p+zt5tLwC8wLkWuIxgla
-	DgsvLHyQwbWbJPDtOqgZocyIBAOoXv9v3CE/n
-X-Google-Smtp-Source: AGHT+IFkOgXrHXToLFJwFBCxpG45TpWK+XOckeYp8njxhDbDTqWND4VRrcd+DJdJpfa+LGdRg0rFqadzmvgrA/lmUvE=
-X-Received: by 2002:a05:600c:1c06:b0:416:bc07:a3c9 with SMTP id
- j6-20020a05600c1c0600b00416bc07a3c9mr186474wms.6.1713354570572; Wed, 17 Apr
- 2024 04:49:30 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1713358359; x=1713963159;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4QX8RCn4elswJrshCxrb7GwmrnHcmx33dwi2t+0ZG/s=;
+        b=ggI4HBm3aYImBOAWtUV/zLNSXNFQCcsDyDHdk3eKsdVO4svA3kjdv/MnPBoBsFONAn
+         kiDJxGHjq6KpP8UVc5GuvjDAXIuJGHs8bHJS3L1NMbKP84WH+dMX/2EsK6fxNGc8i3lh
+         Ywcw1Y5+a87IDnwEpyTq3BVEY1ro8JWCfjsGEY8QSGSBLLwdEE3YwjxiyrYB0CAvvXMW
+         iH2v4YbIuNffImZ0AKSoW0PLJvQ+oolJF/yLXueLMmh9PZonyWqlqIKURJOTDYLTntjb
+         UeK5KOIunjZx+MVGXyIS0G/BOtBw15Jfe2NBpFP040nQr35pVqGQbLtD19Ez/la9MY1Q
+         Z20w==
+X-Gm-Message-State: AOJu0Yx5Dzkk2/FIZaKJlPlfYj5QhN0aWOkgLEq1PRPsqY7V2yaILc82
+	Vs4KKUi4qJnhbpeJp94UMBn2pGYLUrr8t7pG/ISmqyOhsFIPTxzGGPJVJwrohv/98mYvtfLJUMM
+	0
+X-Google-Smtp-Source: AGHT+IH6NbVg3OaTVcHg1EKwubIgE/tScXiADmzL/JK53F4ylrot4xtE/HFlRfWZw28pL9BO3BrKIw==
+X-Received: by 2002:a50:cd9a:0:b0:56e:232f:e4a with SMTP id p26-20020a50cd9a000000b0056e232f0e4amr14816801edi.6.1713358358578;
+        Wed, 17 Apr 2024 05:52:38 -0700 (PDT)
+Received: from localhost ([102.222.70.76])
+        by smtp.gmail.com with ESMTPSA id es20-20020a056402381400b0056fe4dff5e3sm7201068edb.60.2024.04.17.05.52.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Apr 2024 05:52:38 -0700 (PDT)
+Date: Wed, 17 Apr 2024 15:52:34 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: gil.fine@linux.intel.com
+Cc: linux-usb@vger.kernel.org
+Subject: [bug report] thunderbolt: Allow USB3 bandwidth to be lower than
+ maximum supported
+Message-ID: <6289898b-cd63-4fb8-906a-1b6977321af9@moroto.mountain>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <3042f847ff904b4dd4e4cf66a1b9df470e63439e.1707441690.git.Thinh.Nguyen@synopsys.com>
- <CAJnM4-xYjmYUa4ePaYG3P8O3CYCWOMJwF=e7D1Pv8vvk6pBtNw@mail.gmail.com> <20240411002156.tlyqofiw7erfq7eo@synopsys.com>
-In-Reply-To: <20240411002156.tlyqofiw7erfq7eo@synopsys.com>
-From: Manan Aurora <maurora@google.com>
-Date: Wed, 17 Apr 2024 17:19:16 +0530
-Message-ID: <CAJnM4-zq47f_1NWAfoKpm1Z56UTKjcCrMrjVunMC-3JO=cnLyw@mail.gmail.com>
-Subject: Re: [PATCH] Revert "usb: dwc3: Support EBC feature of DWC_usb31"
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, John Youn <John.Youn@synopsys.com>, 
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, Will McVicker <willmcvicker@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Thu, Apr 11, 2024 at 5:52=E2=80=AFAM Thinh Nguyen <Thinh.Nguyen@synopsys=
-.com> wrote:
->
->
-> On Wed, Apr 10, 2024, Manan Aurora wrote:
-> > Hi Thinh,
-> >
-> > I'm working on a patch to bring EBC support back, I had a doubt
-> > regarding some of the required corrections though (inlined)
-> >
-> > Please take a look and advise, I'll proceed accordingly.
-> >
->
-> >
-> > On Fri, Feb 9, 2024 at 6:55=E2=80=AFAM Thinh Nguyen <Thinh.Nguyen@synop=
-sys.com> wrote:
-> > >
-> > > This reverts commit 398aa9a7e77cf23c2a6f882ddd3dcd96f21771dc.
-> > >
-> > > The update to the gadget API to support EBC feature is incomplete. It=
-'s
-> > > missing at least the following:
-> > >  * New usage documentation
-> > I will address this
-> > >  * Gadget capability check
-> > >  * Condition for the user to check how many and which endpoints can b=
-e
-> > >    used as "fifo_mode"
->
-> > The easiest option seems to be to add a new function that lets users
-> > specifically request
-> > fifo_mode endpoints eg: usb_fifo_mode_ep_autoconfig_ss
-> > This function will cover ensuring that the device supports
-> > fifo_endpoints and returning a suitable
-> > endpoint (if available) and NULL otherwise. This can be indicated by
-> > adding a new bit to
-> > the existing ep_caps  structure.
-> > Does this seem like an acceptable solution?
->
-> That sounds fine to me. For the naming, perhaps just name it as EBC for
-> External Buffer Control and provide proper description in documentation.
-> "fifo_mode" may not be clear.
->
-> Maybe usb_ep_autoconfig_ss_with_ebc()?
->
-> How are you planning to implement the above function? Are you going to
-> apply the DWC_usb3x specific requirements directly or implement
-> gadget_ops->match_ep() to properly return the right endpoint base on the
-> endpoint desc? As you're aware, EBC is only applicable to non-streams
-> bulk only. Also it doesn't apply to full-speed.
-The issue with implementing match_ep is that the API doesn't let us
-specify that
-an EBC endpoint is desired. What about adding a new function to usb_gadget_=
-ops?
-Then we could apply IP-specific restrictions in one place.
+Hello Gil Fine,
 
-Speed can be enforced when we attempt to configure the EP
-(config_ep_by_speed etc)
+Commit 25d905d2b819 ("thunderbolt: Allow USB3 bandwidth to be lower
+than maximum supported") from Feb 12, 2024 (linux-next), leads to the
+following Smatch static checker warning:
 
->
-> >
-> > >  * Description of how it can affect completed request (e.g. dwc3 won'=
-t
-> > >    update TRB on completion -- ie. how it can affect request's actual
-> > >    length report)
-> > I will remove the NO_WB bit for the EBC endpoint and leave it up to
-> > the user to enable/disable this
->
-> Thanks,
-> Thinh
+	drivers/thunderbolt/tunnel.c:2113 tb_tunnel_alloc_usb3()
+	error: uninitialized symbol 'max_rate'.
+
+drivers/thunderbolt/tunnel.c
+    2061 struct tb_tunnel *tb_tunnel_alloc_usb3(struct tb *tb, struct tb_port *up,
+    2062                                        struct tb_port *down, int max_up,
+    2063                                        int max_down)
+    2064 {
+    2065         struct tb_tunnel *tunnel;
+    2066         struct tb_path *path;
+    2067         int max_rate;
+    2068 
+    2069         if (!tb_route(down->sw) && (max_up > 0 || max_down > 0)) {
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The patch adds this condition.  If both of these are <= 0 then
+max_rate is uninitialized.
+
+    2070                 /*
+    2071                  * For USB3 isochronous transfers, we allow bandwidth which is
+    2072                  * not higher than 90% of maximum supported bandwidth by USB3
+    2073                  * adapters.
+    2074                  */
+    2075                 max_rate = tb_usb3_max_link_rate(down, up);
+    2076                 if (max_rate < 0)
+    2077                         return NULL;
+    2078 
+    2079                 max_rate = max_rate * 90 / 100;
+    2080                 tb_port_dbg(up, "maximum required bandwidth for USB3 tunnel %d Mb/s\n",
+    2081                             max_rate);
+    2082         }
+    2083 
+    2084         tunnel = tb_tunnel_alloc(tb, 2, TB_TUNNEL_USB3);
+    2085         if (!tunnel)
+    2086                 return NULL;
+    2087 
+    2088         tunnel->activate = tb_usb3_activate;
+    2089         tunnel->src_port = down;
+    2090         tunnel->dst_port = up;
+    2091         tunnel->max_up = max_up;
+    2092         tunnel->max_down = max_down;
+    2093 
+    2094         path = tb_path_alloc(tb, down, TB_USB3_HOPID, up, TB_USB3_HOPID, 0,
+    2095                              "USB3 Down");
+    2096         if (!path) {
+    2097                 tb_tunnel_free(tunnel);
+    2098                 return NULL;
+    2099         }
+    2100         tb_usb3_init_path(path);
+    2101         tunnel->paths[TB_USB3_PATH_DOWN] = path;
+    2102 
+    2103         path = tb_path_alloc(tb, up, TB_USB3_HOPID, down, TB_USB3_HOPID, 0,
+    2104                              "USB3 Up");
+    2105         if (!path) {
+    2106                 tb_tunnel_free(tunnel);
+    2107                 return NULL;
+    2108         }
+    2109         tb_usb3_init_path(path);
+    2110         tunnel->paths[TB_USB3_PATH_UP] = path;
+    2111 
+    2112         if (!tb_route(down->sw)) {
+--> 2113                 tunnel->allocated_up = min(max_rate, max_up);
+                                                    ^^^^^^^^
+    2114                 tunnel->allocated_down = min(max_rate, max_down);
+                                                      ^^^^^^^^
+Uninitialized.
+
+    2115 
+    2116                 tunnel->init = tb_usb3_init;
+    2117                 tunnel->consumed_bandwidth = tb_usb3_consumed_bandwidth;
+    2118                 tunnel->release_unused_bandwidth =
+    2119                         tb_usb3_release_unused_bandwidth;
+    2120                 tunnel->reclaim_available_bandwidth =
+    2121                         tb_usb3_reclaim_available_bandwidth;
+    2122         }
+    2123 
+    2124         return tunnel;
+    2125 }
+
+regards,
+dan carpenter
 
