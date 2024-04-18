@@ -1,49 +1,49 @@
-Return-Path: <linux-usb+bounces-9440-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9441-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 85ADC8A90AE
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Apr 2024 03:30:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B46E8A9103
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Apr 2024 04:10:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D67FF28316A
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Apr 2024 01:30:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 95B0B1C20EDD
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Apr 2024 02:10:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FD773A1C7;
-	Thu, 18 Apr 2024 01:30:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2ADB24EB32;
+	Thu, 18 Apr 2024 02:10:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FgkRsR9d"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pQfN4635"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D584779E1;
-	Thu, 18 Apr 2024 01:30:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A8253A1B6;
+	Thu, 18 Apr 2024 02:10:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713403829; cv=none; b=aau1tKDD8CkKdq0VTzMkUI8vAEV8XacYUYij8+/Fu9dsCvlpqCDPZprZmMJ1ofbZU9tVJwPy0h7S0L4FcMNviORQFZhJZCWxVHgIuH4h+1iQEoURqxjeXlkGrQtk+5jFwuYdICKrHsDlIMHzyNDzBighzavYiz8HhMU6tEoiQQY=
+	t=1713406228; cv=none; b=WnKatNzlkuSQNWeeXEkgeku6pfpI1Ji3dPcOItbmpmxtCbHyFQ0bHq9X1A5VPs8xAI7hEk8ygrdK50kX0abjWGjDpdXXLIxE4kN/+jEEK7S+Nyl7X5+I95tSV4YpW2MSo2HhmWCQmWQchRO07JXo/g69hd5F3Ey86hNuyo9RzK0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713403829; c=relaxed/simple;
-	bh=gZOT/mOu2CyMDoG/ag0UuuhYX4Sj3DH7kUHqY72aNOo=;
+	s=arc-20240116; t=1713406228; c=relaxed/simple;
+	bh=1NyEoWFlnIZwCKkRFjuPR5qYJO8RuWrIDtqwc7X6idA=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=iNRsZqPslfcTvNaw5kB30r2QZM5lLjhNQGx4tiEUqLGCAbMKSIRNhQhiECOpevMRho7bLHrlweGDwZ1vlGZPjZJuE5WLAs+3fMHoXt5N0hCQLdD4zW/Rq9t3Wa/IQNnvVd6xJZOA8kcCjvabR6atY4fcRLtRo9XmbLo1YcbsV38=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FgkRsR9d; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7777BC2BD11;
-	Thu, 18 Apr 2024 01:30:29 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=YpgyB/hXcbKDpnvhFVADNfJhZaluX0vZJ8NFeb3+FDbju6YpQhMjrNnN/DpGo3vNnhcMeXUijGZra7pEJjyg3DJqdsbxYgybSHVasa0TG/huArCd00pjzZJg6xZfVDAs8erwX8X46hYCXu1mwFD14koVS1o6VmHyWGmS0a1+TLo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pQfN4635; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 43580C32781;
+	Thu, 18 Apr 2024 02:10:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713403829;
-	bh=gZOT/mOu2CyMDoG/ag0UuuhYX4Sj3DH7kUHqY72aNOo=;
+	s=k20201202; t=1713406228;
+	bh=1NyEoWFlnIZwCKkRFjuPR5qYJO8RuWrIDtqwc7X6idA=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=FgkRsR9dWmawSa+lnBNBzm7D5ZM9RlrEERfvyTaUHRx/3rWYNT0Q8O8cZvmCQAYJI
-	 m/F7LaRFVd4roG2p6Bpd3t8ibrTf7ke9/7lTm5M2j8R7WWmhgAJ21zW9m4t/t9WLEv
-	 w2cScYoGJM3m+/uHE0Py9Yg5Ct99El7TsOmElrO8ZyHpFvN2jvgMLxzHVEVaRSgiXo
-	 efrbo/t2d6i1G1nwRKr9hy6bd/dRys/4Af9/wnMDI1UtCN+8W8budnEZTFzUwPL0xa
-	 R9pDdKiZHvSl6ESvQE9eSlPrK0X7K552vSqzZM24EZ2QEt/s18ncUpQ2z3oO9pZKTl
-	 iUSO1jhT7aI2w==
+	b=pQfN4635WdxeOrE8SpYLCKp9+Kkm+SSt3bxqVS/xIMAjfzULXu4K3xi7aldjH6dJe
+	 NbOBlRnRamq88p+gh5OgwJfTeudhOELvcdK95AAwxX/cUIPMXx+gMBckxkBbMcdR5e
+	 lVEkoO/GyE6c3e/AJOFxb1IbkNvgT0LLw5Trf2gla1bIbankZ7Xxe4zl7LE+pX5d4T
+	 DI2oPLUWzGCeTMzK8rBw/HB3LoaXwks//dhrMDo47UESj4+xi80uEhF4CFCeORuBHd
+	 TAgsSscOy5O86JM7Gyy4M8yB6S/scigQrWw7UWlOIcZq28VSVZCHgFe5IchwVGuS+6
+	 qtL693ATrSEKQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5BCFEC43619;
-	Thu, 18 Apr 2024 01:30:29 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3224FC4361A;
+	Thu, 18 Apr 2024 02:10:28 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -52,41 +52,36 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 1/2 v3] USB: serial: option: add Lonsung U8300/U9300 product
+Subject: Re: [PATCH] net:usb:qmi_wwan: support Rolling modules
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <171340382937.22183.3670134253557534621.git-patchwork-notify@kernel.org>
-Date: Thu, 18 Apr 2024 01:30:29 +0000
-References: <20240415142625.1756740-1-coiaprant@gmail.com>
-In-Reply-To: <20240415142625.1756740-1-coiaprant@gmail.com>
-To: Coia Prant <coiaprant@gmail.com>
-Cc: linux-usb@vger.kernel.org, larsm17@gmail.com, stable@vger.kernel.org,
- netdev@vger.kernel.org
+ <171340622820.10413.13640952951998586061.git-patchwork-notify@kernel.org>
+Date: Thu, 18 Apr 2024 02:10:28 +0000
+References: <20240416120713.24777-1-vanillanwang@163.com>
+In-Reply-To: <20240416120713.24777-1-vanillanwang@163.com>
+To: Vanillan Wang <vanillanwang@163.com>
+Cc: bjorn@mork.no, davem@davemloft.net, kuba@kernel.org,
+ netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org
 
 Hello:
 
-This series was applied to netdev/net-next.git (main)
+This patch was applied to netdev/net.git (main)
 by Jakub Kicinski <kuba@kernel.org>:
 
-On Mon, 15 Apr 2024 07:26:25 -0700 you wrote:
-> Update the USB serial option driver to support Longsung U8300/U9300.
+On Tue, 16 Apr 2024 20:07:13 +0800 you wrote:
+> Update the qmi_wwan driver support for the Rolling
+> LTE modules.
 > 
-> For U8300
-> 
-> Interface 4 is used by for QMI interface in stock firmware of U8300, the
-> router which uses U8300 modem. Free the interface up, to rebind it to
-> qmi_wwan driver.
-> Interface 5 is used by for ADB interface in stock firmware of U8300, the
-> router which uses U8300 modem. Free the interface up.
-> The proper configuration is:
+> - VID:PID 33f8:0104, RW101-GL for laptop debug M.2 cards(with RMNET
+> interface for /Linux/Chrome OS)
+> 0x0104: RMNET, diag, at, pipe
 > 
 > [...]
 
 Here is the summary with links:
-  - [1/2,v3] USB: serial: option: add Lonsung U8300/U9300 product
-    (no matching commit)
-  - [2/2,v3] net: usb: qmi_wwan: add Lonsung U8300/U9300 product
-    https://git.kernel.org/netdev/net-next/c/bc1b7f02c8fe
+  - net:usb:qmi_wwan: support Rolling modules
+    https://git.kernel.org/netdev/net/c/d362046021ea
 
 You are awesome, thank you!
 -- 
