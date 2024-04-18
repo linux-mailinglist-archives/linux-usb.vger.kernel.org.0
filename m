@@ -1,132 +1,132 @@
-Return-Path: <linux-usb+bounces-9464-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9465-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C69FB8AA031
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Apr 2024 18:36:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73B4A8AA051
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Apr 2024 18:45:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7C5E52840BE
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Apr 2024 16:36:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8C7B01C225B4
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Apr 2024 16:45:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84ECE16F8EC;
-	Thu, 18 Apr 2024 16:35:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A25916F8F7;
+	Thu, 18 Apr 2024 16:45:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=biamp.com header.i=@biamp.com header.b="aZSXFH31";
-	dkim=pass (2048-bit key) header.d=biamp.com header.i=@biamp.com header.b="EKQ0IQrL"
+	dkim=pass (2048-bit key) header.d=biamp.com header.i=@biamp.com header.b="OCui5yak";
+	dkim=pass (2048-bit key) header.d=biamp.com header.i=@biamp.com header.b="OgLX9iTa"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0068d901.pphosted.com (mx0a-0068d901.pphosted.com [205.220.168.35])
+Received: from mx0b-0068d901.pphosted.com (mx0b-0068d901.pphosted.com [205.220.180.35])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22A5C146D6F
-	for <linux-usb@vger.kernel.org>; Thu, 18 Apr 2024 16:35:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.168.35
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4566C16078D
+	for <linux-usb@vger.kernel.org>; Thu, 18 Apr 2024 16:45:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.180.35
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713458115; cv=fail; b=t/ZfXEtLVFCiIUsROwlim1pACsFZk5TFTELPDh/CaAyLVoJw4lVciXIxvsDS3zEHgEy6AMaqlZkWmG/tZClioP3+b3BdoB/gdl97HMJdgto7zLlN8f3CHnmNUIxxA8K9JqjWjcKdtv05jYWbkAyxMxt7ezOmNU0cMfFAbeWaaz8=
+	t=1713458719; cv=fail; b=qZ1/4QWief74hWfZRGpIyjxf/pwihiQ4QG13grBICD6rsFIPWabSYe3xu9eXOiXVcV3qPF8ic333n2L8+x9Q56VWO7+NEH7n/yk/vWIlmiSg/kere0iMM322dCUe8fj7HKJf/n8DLpRim3+2SXEaOq6Atp539S5X9V1OtbWGvJM=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713458115; c=relaxed/simple;
-	bh=DHEmQLoqwQixB5pGeEIYdol4myZa1wiN+0kCOeZTpoo=;
-	h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version; b=ULyc+HtyUGDeGl4IFEEQV66P+fYBGlIDtpCk24n8SJh8TkGQ1iWTZZaflOYN1UG8RAFeH9zsYvHqyUB0KVo+IP28OOoz9Xm7Ob2jeafxTyv4TMvyoIbp0i6umQmMJr2L/Mz2cb1G521vnZ0Yfe+TRa8PohurUQ/irwSfjShEVJU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=biamp.com; spf=pass smtp.mailfrom=biamp.com; dkim=pass (2048-bit key) header.d=biamp.com header.i=@biamp.com header.b=aZSXFH31; dkim=pass (2048-bit key) header.d=biamp.com header.i=@biamp.com header.b=EKQ0IQrL; arc=fail smtp.client-ip=205.220.168.35
+	s=arc-20240116; t=1713458719; c=relaxed/simple;
+	bh=vs76Vv5FwW2EkP/jexkeMOJtcJ3bNSVW74GxaPohhhQ=;
+	h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version; b=NAjXtskmF/ATYodqXePs0AhCp7DSJc0+cepnGFUaAPnPej3j12UO74gHwzarn9d5IJDwA76JaOh95BivluECROzyfL1eODJEowxIPQtuvhGFs4xk7DVmOL2xiJFl4R7wlVA1HpNdsriIeAHf6ZDhWa7sW5KbJJ5NnMn1/s+TOOo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=biamp.com; spf=pass smtp.mailfrom=biamp.com; dkim=pass (2048-bit key) header.d=biamp.com header.i=@biamp.com header.b=OCui5yak; dkim=pass (2048-bit key) header.d=biamp.com header.i=@biamp.com header.b=OgLX9iTa; arc=fail smtp.client-ip=205.220.180.35
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=biamp.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=biamp.com
-Received: from pps.filterd (m0278264.ppops.net [127.0.0.1])
-	by mx0b-0068d901.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 43IB22B7007442
-	for <linux-usb@vger.kernel.org>; Thu, 18 Apr 2024 09:35:12 -0700
+Received: from pps.filterd (m0278265.ppops.net [127.0.0.1])
+	by mx0b-0068d901.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 43I6vnSY020874
+	for <linux-usb@vger.kernel.org>; Thu, 18 Apr 2024 09:45:17 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=biamp.com; h=
 	from:to:subject:date:message-id:content-type
-	:content-transfer-encoding:mime-version; s=proofpoint; bh=SM7KlA
-	pvK4QcCyWPRXcw/e0Wk5+OSLJYXgKHbqLstdM=; b=aZSXFH31CxkC7QVyjfw8VS
-	HTUbS+2L637Fh73m7c3Hgws5uEIKccttEWkfrQfIl6417zGp5FQTKGbfHjLEEPjO
-	4EiN5FcD9kLB3gXlrT0d7LFA5vNLabJtl+lPktIvLaOGtoax0++079UrBbjhyGiZ
-	yQ/6bouFVruhp3a7Z1lDWDZMfsl3gaa94T89B3Xv8xyLCvU4In7xnZnYq402FQov
-	MMQD/t75MRZn91lyPY2s1EhAr/g//wLiUXudSOzscm1LVT4RWeRPO9k1feTmq9ZI
-	DsuJRjrD7wDVTb0jmhz33gSvd+cfQaRj/4ffPvdzNMO4YWZqqRCFQk04kNbT39PA
+	:content-transfer-encoding:mime-version; s=proofpoint; bh=VqE4uL
+	yZk0p3dIOAVQhM9alQZYBioiOZu7h+yqA9FUI=; b=OCui5yakIzkMFuDmFgZ9QG
+	TjwsURy1Ij/qrCA5SI6vu7SyoIIHdEbxFXZRfIXYNxwxb6CdVwqZ48RRylWBVrAd
+	wxVkdNgVNAawcx0uWaXIl2i/5kTeIEDciW+VMuH2gE15SIajwXvbC+pcbynuzbQH
+	uz2WDgCZ7UoTFfLw2i4rQOg7OYJeckeIv0tDXq0Fp67Sl16UTFacCckHLhoUDAW/
+	YxjIkH9BxDPd6R+nTMRHGLbqW/j6PdMjaE0WHz+yD7nFuD5ZJAAoFnyKpGqOghVT
+	VnKcUGM5MQbb/Nr5287p7ntcTyTZpmoGLHzFpNY64MOBpZBucJZ3y/nqg5SlOegQ
 	==
-Received: from nam02-sn1-obe.outbound.protection.outlook.com (mail-sn1nam02lp2040.outbound.protection.outlook.com [104.47.57.40])
-	by mx0b-0068d901.pphosted.com (PPS) with ESMTPS id 3xg09r3eht-1
+Received: from nam02-bn1-obe.outbound.protection.outlook.com (mail-bn1nam02lp2041.outbound.protection.outlook.com [104.47.51.41])
+	by mx0b-0068d901.pphosted.com (PPS) with ESMTPS id 3xg40v3d5n-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Thu, 18 Apr 2024 09:35:11 -0700 (PDT)
+	for <linux-usb@vger.kernel.org>; Thu, 18 Apr 2024 09:45:16 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=T15/GX7oVIH/D14mgGZO1yG5QGzdlkRu7Rf52y3ZLtMEbj40y+xYG42vnQfQrRoq4Z4V+bfv0i/MHl1kN7rEfeRf1B0ylpl+x3XmYcsx9llMvlO/9xck7msqLmtI5pRJNiLFqaYNH36gk2JZTEjxfotGXm9FyNb8Q1XaoRjI1qWNot9T6jVU1vLWSbMicAobPUevFjG3XSyQk3GJllcImwGD9bhT4fGJnWto3TBr3xs4vND699yXpgFO04nqyOclWYSl3oKFxcGirSZHTXJeMYcQjJ3yaAWJH3X7yOsfH923gVIo2N+bSEH773uClgKNUawc4/YeKqx6S6Z8ywM+FQ==
+ b=RYELFN7QFi06b7r0q/IYoigrnHmCAz+TqR7uGxnzqiuB82Vl2pOh0wkYzhXcD0y/MF5kVfnIfblnRiwMZ6+eRmcSwuuZxS2Ac4ueALRt/dYzKeIDPFmNAt8LFnMPckJUOjFj3MqWsZQNX2PJNbyBygbhVYs3vVs/bUf6SjYBJcBm5x1Kxim/4kdhQETYRmiPV7aXSwCrpCy0C7QLbv2G+ojm+IQGjrUa21FqijGxhE182Jbju/prrcsROkzH6faCUK6KMhNEPCh1p6XV3rox82TcOecNc0crk6DKyYoIZ0RFgODnnzN2bsmgOREwsrcA+b9nVDVjWJh3ahQDKf0rxA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SM7KlApvK4QcCyWPRXcw/e0Wk5+OSLJYXgKHbqLstdM=;
- b=McihSsYgM4Yg3WbpjUvAqaSmftgtIJLYuhEKlqiGoyym+HFSX1vC8hOAHeQkahanzSzvdIeyqApqKaWuJlA8+8yl1VK+xFD/qLIRbTylJbF6LVD6OzhrSFuA1Jy9kJd1GccAQNChkFvPJQDnVmhS4JTuAiseGWlgUvEsog3EBhEXmQFSf6CMppQPzLQrOKzoDbGquOYD6AfZluNSYWSCKr0dp1wnmYqXFJwIHjK81GrVQXj0gtFatg5qM4nwCVOkEf+WBtvokT9oO/qG/iaECRpQZr3ezV8hdt6ebZhgfnhn71WkSDikAAUlQS3poloz4LqpiKY/chBnKixEK2R8TA==
+ bh=VqE4uLyZk0p3dIOAVQhM9alQZYBioiOZu7h+yqA9FUI=;
+ b=BKRyZ6h0zLXwAZuaiOlE2w6JmncakcatjWLinwOXvHcYiZb2+wSF+6OxqXx1X4mDycsP2dGgzn8cD9P0BIgFLMM7m68sxfLjWUrK3m10AHqwQIk2+BwpOCx1qG0g4cTU2gSh9irgl5OSCLvCP7MsWUoZP3ASXUZKmx+rWukCuSO7Bg1q70WDWAS5Zbj7s4KoIJtcigCnaLTtyLFYv0k8nLsvwoIF/kcd6ITNajCO6KsYB3meEHNiCBPb4OpM3689gjuc1p3ia1aiBW5+O44mUP0XV2dgmKLP5i2RJiBFi3PruxezNX+X7+lRsdu4e8ItRAdyTWLXuV/FQYKuBu7P7g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=biamp.com; dmarc=pass action=none header.from=biamp.com;
  dkim=pass header.d=biamp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=biamp.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SM7KlApvK4QcCyWPRXcw/e0Wk5+OSLJYXgKHbqLstdM=;
- b=EKQ0IQrLpzvE+1QRbG6O4U+NeTYFPgvXpJfBA9LfIgfzlf2gJ0ZT5/+k94liiCQFYoyouae0Sa5S/km4ldMfJS/ViocQo6rQNfc/hJXmaOJGVsnR99p7agHPNJ5ySZqj062hlKWWYogo7gyf8qoFJ8EM4aBuCh3mKlPbmyEbuBnpBWf1OdfBMmPOjRPdjSZnHw56qz4NDTWVZOidpB5hNwvUFLrLZC4MVFe7EAulTE1WsRTAtn1HznFPJm8+RfTSG9BC6N1X702PNeK6GXlE+F2cB5Q+/NFU3jH5g3Njnsrfq2Sb9ht/mJ+2Rup8ABo4HGNFrEnQtriaV+FwdNwxmw==
+ bh=VqE4uLyZk0p3dIOAVQhM9alQZYBioiOZu7h+yqA9FUI=;
+ b=OgLX9iTaCZ3hv6r1QuP45uC1GK6p6V5fxA4uvAfccmDzPSO9F6Xcd4ZY+Amh2midBa1jDb89BwJNbEvo0tff4KwVz65cmWrhPTug3e7OsIOsvKHI4H7OqyevlpR55arXZa0RXt4Wuc1RKPaFqcfo6YoisteVuMMYn1Y2pC4LyKqx1CbBr0VRlkufxdF3pyGfHpbhKkU1esrEQlTT5s7I1EUmn7/OXtnEjUW04Df4CsqGp/yz96zHNV2XLXJ672xPF5e+00sA3JknhB3jKEnLqYs2WXgijUgu7pFf0SaG/VT3/+KvlysRbzdpKzPW6nJvwv75HVjFwT2Szm6ewE4I1A==
 Received: from CO1PR17MB5419.namprd17.prod.outlook.com (2603:10b6:303:ec::17)
- by BY1PR17MB6831.namprd17.prod.outlook.com (2603:10b6:a03:524::16) with
+ by SJ0PR17MB4741.namprd17.prod.outlook.com (2603:10b6:a03:376::23) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7472.39; Thu, 18 Apr
- 2024 16:35:07 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7452.50; Thu, 18 Apr
+ 2024 16:45:12 +0000
 Received: from CO1PR17MB5419.namprd17.prod.outlook.com
  ([fe80::f48:ee61:a81b:d555]) by CO1PR17MB5419.namprd17.prod.outlook.com
  ([fe80::f48:ee61:a81b:d555%4]) with mapi id 15.20.7472.037; Thu, 18 Apr 2024
- 16:35:07 +0000
+ 16:45:12 +0000
 From: Chris Wulff <Chris.Wulff@biamp.com>
 To: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: [PATCH] usb: gadget: u_audio: Fix race condition use of controls
-  after free during gadget unbind.
-Thread-Topic: [PATCH] usb: gadget: u_audio: Fix race condition use of controls
-  after free during gadget unbind.
-Thread-Index: AQHaka4lVhUzwnyW8kqaey/gOsvPVg==
-Date: Thu, 18 Apr 2024 16:35:07 +0000
+Subject: [PATCH v2] usb: gadget: f_fs: Fix a race condition when processing
+ setup  packets.
+Thread-Topic: [PATCH v2] usb: gadget: f_fs: Fix a race condition when
+ processing setup  packets.
+Thread-Index: AQHaka9eU89Zqk/XPk+xKvM9jFa6Yw==
+Date: Thu, 18 Apr 2024 16:45:12 +0000
 Message-ID: 
- <CO1PR17MB54190B898057616EEB3F9E51E10E2@CO1PR17MB5419.namprd17.prod.outlook.com>
+ <CO1PR17MB541952EE4072214813CB05C8E10E2@CO1PR17MB5419.namprd17.prod.outlook.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 msip_labels: 
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CO1PR17MB5419:EE_|BY1PR17MB6831:EE_
-x-ms-office365-filtering-correlation-id: 6077b95d-85b2-4fea-79ef-08dc5fc581ea
+x-ms-traffictypediagnostic: CO1PR17MB5419:EE_|SJ0PR17MB4741:EE_
+x-ms-office365-filtering-correlation-id: 8c7a6483-7074-4685-383c-08dc5fc6eabc
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
 x-microsoft-antispam-message-info: 
- SjMCNGeiLPF3dZ0w4FHMz2E/NPa54YwpnTtXVJT74nNkJc/Rt5TuUkhclElXS7kHpcZExTdhNcCOXjOcD1rn5S7c1dtphZ0QL2resWeIlOtu4MjID6ngVaLBq60eh1LVUer+ZdCGQKvZYvCA7lA7t6anbkyjmwdjz/dN+oh2BSv8i6zemK/x8K/HNRC/QKLkl1RmVymStxmkcystvMoy6IUKeI84uHeD/5RTK6aXcWsBHNVUFsMMxnUXMECn0Oqu5zdITsH4fp/P5YdP1mU7Bx9ddmWuTHU8xM3mpmeatgeUYALulhYXxvfti2VEKkCkAxePHuK8VyXXxYW9OYIgOurN3b1TOWf9MRO/cM/JvegqNwcx/2gzAXydrQoZIFhNmkFB5wxekwt38HjBVxEcmKVLVFneTE2iH1qgFobghyp0/YaC4IU1ZMxWU172IS24vAZ7x6mihKZR7EFidGuxjAqnKKDBY2JHAW8lSR8VYOXx1HqGC66+dKZhIxOhlvkcq/nU3+UTp/rc2yRbWyW1/bxb0k9d3+cKzHE7HaGiG8Gx5Ed+dqD6rn1ero2TpRKRrTpJxlOMJSE90hh3s2iC61u3AbpnUZsoYuof3a6T+YUIoetk0iD9KdjB4/25DijZse+fJJkyStAzTbmfJyEky9+b71ilxm/em0IHdZgwDAyx5uTlTh0pk/fnq5Tsao3NiPbJmKjfhS0K6XI+vbTyFbLvEyDq1kLToPRHF+VezOI=
+ yBAwub47ICeegUJXBEPCFN0UTYh+CFMTRNwGZct+cCjxpddVZh6p31Cs4eD7nOKWs3zUddHxBJHjHJ4mMyztvCiizkpnrntjZpAqSKjGORSrCEICv6yfCiEI/NZjMA4EhlkNwBH7vNmKiTQFAmLJB/u13LXUDiBnAVFH5sZ4CSqE2TcWbo9Ig/TTdSeanTujs4+ctj3hBmVwLX3gw26smNNOKan+tjbf1XR5gfHuh49DAFmgDu2CXtjK7V3bunDI32699dLF0p+46mVVVDsgPf/Cr14v0z66nA2/NPC+o7DS+bfXTj7/AFXoJFnTsCBlQLf0eLuRQkcytNtpV7PjKKseZTVXXYFYQqzaYKnNFTJ+yzCIviiwhqZtn1HLVoF0GofliWnMLeGI0IX6JIog4WztKfjI2L38ATl56oo1JtBpLut/hTqMqtQttMlsYheTHrpvxL/Xj4Rpaajo34F2w5mCf9tLk0EK8Hok0kzZIrZS2yrn55IHGJGHsf++oubHXu2mkoSONBuyYdDiVMVH/7Y7vvwEBY/pmOdW0RAEuZWZY4EKKql39FyUZx4y8pmsiTV8IjnbTBRVaBtRO5RzWaPs9pNRa01YRoEd9zs7ILo5Q/p9Mt6VZwliuE/XPwGayVbCrIshrtkGb41PEsfxSITczdOfxi2PPq6C7kfR1gARnCWhllj3JvyyRjdP1xP5aClPfPNUNTpAdYvVdkhNaXhdXMkUn9PsREI+lBQKHP4=
 x-forefront-antispam-report: 
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR17MB5419.namprd17.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(366007)(1800799015)(38070700009);DIR:OUT;SFP:1102;
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR17MB5419.namprd17.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366007)(1800799015)(376005)(38070700009);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
 x-ms-exchange-antispam-messagedata-0: 
- =?iso-8859-1?Q?HOLQ3G2LXiW7iVyMclikx6DlUW5UvB46MffsGlWlEwAJNaOhIVLtA5rxAO?=
- =?iso-8859-1?Q?LTegRCRmfxI7mFDSlDZ71SXKJSUdzpvD9otFEjN7A7Su5vn/9eOIOi7tGd?=
- =?iso-8859-1?Q?gMIlVSnVPcI1YeTYRvrMIXC1Y1jQ/cQN+1hBR7yLcvho66OycaLeFmuMkS?=
- =?iso-8859-1?Q?Cnw2qCLqnQqfzhvfbTCZq3OrmRZhOV+t9Aa3TejiH+BKfh5AhX2xMRuv92?=
- =?iso-8859-1?Q?BFzHmwikOSKO5NVdYPJMrzXbjCCBcO1e6T0MdyjVT1+P0E+9QKR7my2sxO?=
- =?iso-8859-1?Q?tk1JYuJqj46hlsys+d/Y5hgByJ6FNzUUkHCcp6jsqrfqlQLfYziXtXHDnM?=
- =?iso-8859-1?Q?Ei8i5tONMVv+r5GrAArThHq8ojCiMniOF6wfGe/ohX0UcWTtd1u5GZ7nxR?=
- =?iso-8859-1?Q?mxJSo0CFAguny568d6QfxsA9hOxtKu7kb5/S9ARp02RkLLl4dTPNkIBtiy?=
- =?iso-8859-1?Q?FR0d4nEfz+eMfbEigwPooeRhSpCejMlsB705oVFXSLt5boHTFnVw3bIisQ?=
- =?iso-8859-1?Q?AeANe9ihhmO+86Yp7BxY5DVvDR/R0yM7E/nbJE3u36qxDDj+nsaJiAZQyn?=
- =?iso-8859-1?Q?1Wvcm3uCiEW74okaVwV3XXUNjKpY26a8lYOBMnZRVCm6d5anOTVPwtgmWq?=
- =?iso-8859-1?Q?ovOTusy1JcXrCw7ldoOaGDJMSkJfmHR/Vk8814A/iSZmkpvtpslwc/CY1r?=
- =?iso-8859-1?Q?4BZ7C/Ei0bGrnZ6B29c2XXcm1zb4KOjk4vsQDGw30dQAA4MzjN0/3uMBWI?=
- =?iso-8859-1?Q?D+elU51PRqlONqxp4Px/WuRuoMkKGAmgp6xH2zIbzNR4oK7tpNdKTTCt78?=
- =?iso-8859-1?Q?97iF6UZjdNDFfGyqdZFMJqi0FwMfLNlpnwJ/PkYJZY5fbqk4ucRWjWXBrl?=
- =?iso-8859-1?Q?60orMr0E0U8j7wsXTeEX6nhWZGY5WKgGld6BiWaKqRhppJUmcIb4xwhLo0?=
- =?iso-8859-1?Q?WGn5McmE3tpMOQZA6aEDIYNnfb3bwDzTdBdsw90piODFACprxwYptcAZdZ?=
- =?iso-8859-1?Q?ib/N1ONkk8KfIFakUugF7OPmAxdQ8ZmbOt+4zYdtNDyLlhUpDOPYrrIvVF?=
- =?iso-8859-1?Q?l/RetSMmDZ+7BvyuB1DTVsTRGBA/ujbnASntzLnvo3jDnPpy5cEGuok2Gu?=
- =?iso-8859-1?Q?3ZVoCa4cKW3vFZ8tFA6sqP7I8pyWmtPvlqpprFeOHoICAs2jW8O0Y8FGG5?=
- =?iso-8859-1?Q?xd6iPwv0vXShdM1JdyGGzcMFwn8huMjdPZlK4jiCreF7SahbeZggnA48d/?=
- =?iso-8859-1?Q?6CcDzFdmX/+qjjKx0mKV2sS6ZkQ2LZ+WPWrY+EAdh4rEFuhVsXQ4ECWVgl?=
- =?iso-8859-1?Q?mnSRHUTYW4mpST0LFuMqpslU9DyObdj48tWg5jz9BQfVTuEbtMX0pca6zh?=
- =?iso-8859-1?Q?f8TZq6pZIvoO2cIE6qWfo4iJjoFd554Mdpl7P9KnoVnS1ZuWJeiw20Cgim?=
- =?iso-8859-1?Q?huDtu3m697+1dxdWv6zCFlYmeOz6JW8xMp8yzvk7+aO+npUrAz22LYS3jI?=
- =?iso-8859-1?Q?fg+bUO8UnYXQP+bCc5YAw5nPHO1f7ByJvbC+6i6PO1vTbZ6MrrCqIz4gbw?=
- =?iso-8859-1?Q?mQkHSXSGZDZ/ED/y2c/8Ika3lqSRiEFucuXqtdIffmZwI+HD1V4CiBFQs5?=
- =?iso-8859-1?Q?iiyPXmsfSxpuolQ51UWz5Weix8WfgHGSRe?=
+ =?iso-8859-1?Q?r0mMyyl4FutBZdJEHhpw0g2n6vaIJ2QYhcR0wfERxAwhQN6qxUUF49L3io?=
+ =?iso-8859-1?Q?f6sV0ZW1/sHBEJJD+08joLntmXo664hSKz3uwaLf3LL1KtANTw7DcJejjC?=
+ =?iso-8859-1?Q?UrDJ/1E3isa6tQPnLF84QOzeVxltPs/OfwYrCDZ4xDlPs1ymoX7tK4XPTX?=
+ =?iso-8859-1?Q?1THd0KtZ1t/LaAdBmJCr/SPNn24xpZ3WGm561K+YySyiUFRgciHomk7xyj?=
+ =?iso-8859-1?Q?rUEqPPS4L+fyHABda2HOn1IC0WjdFPj3gyDDoo1Uw1Ss8MjU8bQNq+895S?=
+ =?iso-8859-1?Q?lbCPqjwVj5Aw23lezkQEpNbkl6hjV833GjM3dtuH+kxWpjIP9ztzuUlqTc?=
+ =?iso-8859-1?Q?bCrcbR0jAG0uOXjGtnygSF+CvLI/kudSQLHrFJ0XBdstMN/ccDHr8iZskQ?=
+ =?iso-8859-1?Q?Xd1L7Rt62cwbdJn92uKVrJjaruZFInQyhUtazXkQa/Gf9MaBVmZGaAEbKv?=
+ =?iso-8859-1?Q?/JoX7Yr+59dvBRfXR3zKqXMwKq7wMXmcryikUncWkADCh5XXlhykRUZ9QL?=
+ =?iso-8859-1?Q?akf8wsJmrpFxmFiOsiqPRSbTBOSn9BL5cqmHt2BmGhW7ObOPb/iqDFYglM?=
+ =?iso-8859-1?Q?QwQy/yqgUqZX2qYXOr3U8Xs2hgWgTElh53GLZXyZrXJdhRUir4sJZ+PCfO?=
+ =?iso-8859-1?Q?icKohtP9ZhYq6TZE4hSSutFNtJIHtt7DGhxPfrvc9zRWW9CmwqHt3IViKq?=
+ =?iso-8859-1?Q?jNvHT2iRusVclE7mLqZZnqFUUr9FdmMNcv4T+sP70F7nN42lpMkG1EmXxp?=
+ =?iso-8859-1?Q?zYHZM4b/bbW45x4LccQ7HIroIxcilPxEFjww9JY3Ctt5a9aBpjL2MzGFk0?=
+ =?iso-8859-1?Q?tFQX07KIb+Ae4voiaEEo4PYyZFns1vaV2c1l1CrNekme9Q0wMbhgI7Q+W3?=
+ =?iso-8859-1?Q?MWORai4bCCfnnm/ld+koVk6TJJmUz/FChgLV5/flw3ghIWuYeFBAr8cBKh?=
+ =?iso-8859-1?Q?Ps6J0mnsNsO2LctRznuN8mKIaY0SUg8ErYYEwKL1/BluiHJrj9tWJO1FBV?=
+ =?iso-8859-1?Q?1AZGS0axpPazk85xEBYrm4ew68EpkHl13LUqAFJxHHQtW9z8qPxQEAJjUz?=
+ =?iso-8859-1?Q?81JXwV/nzrWlRZRMBnNVdXpvGIKWcSVCmVIw/cEyhxGqeLKNmQJDQl68qM?=
+ =?iso-8859-1?Q?mzt7Cmxo5BxPeoDbgEY6GT0Eop0t7bJn/Pq80khthng82jQ9t9dATXnG6H?=
+ =?iso-8859-1?Q?9t3qQvhTgwIi5uG0M0e9xgPrRBMRIU8PEtF2bJ30t+xsi5bYpGUKzCAlbT?=
+ =?iso-8859-1?Q?py5+A3YeZMGiN32nR4y2lpNX/5AheSjdTmFBLwD6BB5FMrN1f0G/oxWj+G?=
+ =?iso-8859-1?Q?1PPIxLwuCfP8yIfOSrIxyaPGjMIyDJjesZhJ7BVGe1lfI1m9hQtG2YfLzi?=
+ =?iso-8859-1?Q?Xnr4f6XoTOpgnYqtnwomINfSj1FqFSStuvDBPluPFEul2ayulTgD2W2v/t?=
+ =?iso-8859-1?Q?s3CSHWnB0DFM4zYy63jDTgyNHE0jejCFjZ46ahefsDhRyK10/xV4V8lLSr?=
+ =?iso-8859-1?Q?ZoGUtz7adVNIS3LXX36tvInRgrDZloEHHnBaLZkpuo/4o8K2Jh1DtHNbaO?=
+ =?iso-8859-1?Q?0Y9eiYgQKvAdy8GwdzPRdXjVxuzA91sDSyuhLV88+nvDGFV20LFoAqhE3B?=
+ =?iso-8859-1?Q?wPqgxTEDALGpJDTSCvqk+zDpuhI0eHiVHG?=
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
@@ -138,167 +138,44 @@ MIME-Version: 1.0
 X-OriginatorOrg: biamp.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: CO1PR17MB5419.namprd17.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6077b95d-85b2-4fea-79ef-08dc5fc581ea
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Apr 2024 16:35:07.2206
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8c7a6483-7074-4685-383c-08dc5fc6eabc
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Apr 2024 16:45:12.5657
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 341ac572-066c-46f6-bf06-b2d0c7ddf1be
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: qrk6VfFOTdWt9stYataPweKcXHo8iPWW72K8yIip2qKoFtQq0ioRjKH+u4ZYHZUxcJWFJwoQlSmjKmdCWGKshw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY1PR17MB6831
-X-Proofpoint-ORIG-GUID: mqEoGXxA5-jDKgBrFH9kuaulD1WoJ7Cr
-X-Proofpoint-GUID: mqEoGXxA5-jDKgBrFH9kuaulD1WoJ7Cr
+X-MS-Exchange-CrossTenant-userprincipalname: B0a6o6+eCJ65+RN2McnuMAVqK8DL9stO16R/Ik+d2K8IwkO2ChM6M6vFX8FShGDm6ZwrdkM0PlAhmbJdZaKOcg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR17MB4741
+X-Proofpoint-GUID: IAmQ_cBwORai1r02mjpvDOtjMfG4pGgC
+X-Proofpoint-ORIG-GUID: IAmQ_cBwORai1r02mjpvDOtjMfG4pGgC
 
-Hang on to the control IDs instead of pointers since those are correctly ha=
-ndled with locks.=0A=
-Prevent use of the uac data structure after it has been freed.=0A=
-Mark the endpoint as disabled sooner so that freed requests aren't used.=0A=
+If the USB driver passes a pointer into the TRB buffer for creq, this=0A=
+buffer can be overwritten with the status response as soon as the event=0A=
+is queued. This can make the final check return USB_GADGET_DELAYED_STATUS=
+=0A=
+when it shouldn't. Instead use the stored wLength.=0A=
 =0A=
 Signed-off-by: Chris Wulff <chris.wulff@biamp.com>=0A=
 ---=0A=
- drivers/usb/gadget/function/u_audio.c | 31 ++++++++++++++++-----------=0A=
- 1 file changed, 19 insertions(+), 12 deletions(-)=0A=
+v2: Added signoff=0A=
 =0A=
-diff --git a/drivers/usb/gadget/function/u_audio.c b/drivers/usb/gadget/fun=
-ction/u_audio.c=0A=
-index 4a42574b4a7f..bcae95472455 100644=0A=
---- a/drivers/usb/gadget/function/u_audio.c=0A=
-+++ b/drivers/usb/gadget/function/u_audio.c=0A=
-@@ -57,13 +57,13 @@ struct uac_rtd_params {=0A=
+ drivers/usb/gadget/function/f_fs.c | 2 +-=0A=
+ 1 file changed, 1 insertion(+), 1 deletion(-)=0A=
+=0A=
+diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/functi=
+on/f_fs.c=0A=
+index bffbc1dc651f..8d72acf9a760 100644=0A=
+--- a/drivers/usb/gadget/function/f_fs.c=0A=
++++ b/drivers/usb/gadget/function/f_fs.c=0A=
+@@ -3803,7 +3803,7 @@ static int ffs_func_setup(struct usb_function *f,=0A=
+ 	__ffs_event_add(ffs, FUNCTIONFS_SETUP);=0A=
+ 	spin_unlock_irqrestore(&ffs->ev.waitq.lock, flags);=0A=
  =0A=
-   /* Volume/Mute controls and their state */=0A=
-   int fu_id; /* Feature Unit ID */=0A=
--  struct snd_kcontrol *snd_kctl_volume;=0A=
--  struct snd_kcontrol *snd_kctl_mute;=0A=
-+  struct snd_ctl_elem_id snd_kctl_volume_id;=0A=
-+  struct snd_ctl_elem_id snd_kctl_mute_id;=0A=
-   s16 volume_min, volume_max, volume_res;=0A=
-   s16 volume;=0A=
-   int mute;=0A=
- =0A=
--	struct snd_kcontrol *snd_kctl_rate; /* read-only current rate */=0A=
-+	struct snd_ctl_elem_id snd_kctl_rate_id; /* read-only current rate */=0A=
- 	int srate; /* selected samplerate */=0A=
- 	int active; /* playback/capture running */=0A=
- =0A=
-@@ -447,6 +447,8 @@ static inline void free_ep(struct uac_rtd_params *prm, =
-struct usb_ep *ep)=0A=
- 	if (!prm->ep_enabled)=0A=
- 		return;=0A=
- =0A=
-+	prm->ep_enabled =3D false;=0A=
-+=0A=
- 	audio_dev =3D uac->audio_dev;=0A=
- 	params =3D &audio_dev->params;=0A=
- =0A=
-@@ -464,8 +466,6 @@ static inline void free_ep(struct uac_rtd_params *prm, =
-struct usb_ep *ep)=0A=
- 		}=0A=
- 	}=0A=
- =0A=
--	prm->ep_enabled =3D false;=0A=
--=0A=
- 	if (usb_ep_disable(ep))=0A=
- 		dev_err(uac->card->dev, "%s:%d Error!\n", __func__, __LINE__);=0A=
+-	return creq->wLength =3D=3D 0 ? USB_GADGET_DELAYED_STATUS : 0;=0A=
++	return ffs->ev.setup.wLength =3D=3D 0 ? USB_GADGET_DELAYED_STATUS : 0;=0A=
  }=0A=
-@@ -494,14 +494,13 @@ static inline void free_ep_fback(struct uac_rtd_param=
-s *prm, struct usb_ep *ep)=0A=
- static void set_active(struct uac_rtd_params *prm, bool active)=0A=
- {=0A=
- 	// notifying through the Rate ctrl=0A=
--	struct snd_kcontrol *kctl =3D prm->snd_kctl_rate;=0A=
- 	unsigned long flags;=0A=
  =0A=
- 	spin_lock_irqsave(&prm->lock, flags);=0A=
- 	if (prm->active !=3D active) {=0A=
- 		prm->active =3D active;=0A=
- 		snd_ctl_notify(prm->uac->card, SNDRV_CTL_EVENT_MASK_VALUE,=0A=
--				&kctl->id);=0A=
-+				&prm->snd_kctl_rate_id);=0A=
- 	}=0A=
- 	spin_unlock_irqrestore(&prm->lock, flags);=0A=
- }=0A=
-@@ -792,6 +791,9 @@ int u_audio_set_volume(struct g_audio *audio_dev, int p=
-layback, s16 val)=0A=
- 	unsigned long flags;=0A=
- 	int change =3D 0;=0A=
- =0A=
-+	if (!uac)=0A=
-+		return 0;=0A=
-+=0A=
- 	if (playback)=0A=
- 		prm =3D &uac->p_prm;=0A=
- 	else=0A=
-@@ -807,7 +809,7 @@ int u_audio_set_volume(struct g_audio *audio_dev, int p=
-layback, s16 val)=0A=
- =0A=
- 	if (change)=0A=
- 		snd_ctl_notify(uac->card, SNDRV_CTL_EVENT_MASK_VALUE,=0A=
--				&prm->snd_kctl_volume->id);=0A=
-+				&prm->snd_kctl_volume_id);=0A=
- =0A=
- 	return 0;=0A=
- }=0A=
-@@ -840,6 +842,9 @@ int u_audio_set_mute(struct g_audio *audio_dev, int pla=
-yback, int val)=0A=
- 	int change =3D 0;=0A=
- 	int mute;=0A=
- =0A=
-+	if (!uac)=0A=
-+		return 0;=0A=
-+=0A=
- 	if (playback)=0A=
- 		prm =3D &uac->p_prm;=0A=
- 	else=0A=
-@@ -856,7 +861,7 @@ int u_audio_set_mute(struct g_audio *audio_dev, int pla=
-yback, int val)=0A=
- =0A=
- 	if (change)=0A=
- 		snd_ctl_notify(uac->card, SNDRV_CTL_EVENT_MASK_VALUE,=0A=
--			       &prm->snd_kctl_mute->id);=0A=
-+			       &prm->snd_kctl_mute_id);=0A=
- =0A=
- 	return 0;=0A=
- }=0A=
-@@ -1331,7 +1336,7 @@ int g_audio_setup(struct g_audio *g_audio, const char=
- *pcm_name,=0A=
- 			err =3D snd_ctl_add(card, kctl);=0A=
- 			if (err < 0)=0A=
- 				goto snd_fail;=0A=
--			prm->snd_kctl_mute =3D kctl;=0A=
-+			prm->snd_kctl_mute_id =3D kctl->id;=0A=
- 			prm->mute =3D 0;=0A=
- 		}=0A=
- =0A=
-@@ -1359,7 +1364,7 @@ int g_audio_setup(struct g_audio *g_audio, const char=
- *pcm_name,=0A=
- 			err =3D snd_ctl_add(card, kctl);=0A=
- 			if (err < 0)=0A=
- 				goto snd_fail;=0A=
--			prm->snd_kctl_volume =3D kctl;=0A=
-+			prm->snd_kctl_volume_id =3D kctl->id;=0A=
- 			prm->volume =3D fu->volume_max;=0A=
- 			prm->volume_max =3D fu->volume_max;=0A=
- 			prm->volume_min =3D fu->volume_min;=0A=
-@@ -1383,7 +1388,7 @@ int g_audio_setup(struct g_audio *g_audio, const char=
- *pcm_name,=0A=
- 		err =3D snd_ctl_add(card, kctl);=0A=
- 		if (err < 0)=0A=
- 			goto snd_fail;=0A=
--		prm->snd_kctl_rate =3D kctl;=0A=
-+		prm->snd_kctl_rate_id =3D kctl->id;=0A=
- 	}=0A=
- =0A=
- 	strscpy(card->driver, card_name, sizeof(card->driver));=0A=
-@@ -1420,6 +1425,8 @@ void g_audio_cleanup(struct g_audio *g_audio)=0A=
- 		return;=0A=
- =0A=
- 	uac =3D g_audio->uac;=0A=
-+	g_audio->uac =3D NULL;=0A=
-+=0A=
- 	card =3D uac->card;=0A=
- 	if (card)=0A=
- 		snd_card_free_when_closed(card);=0A=
+ static bool ffs_func_req_match(struct usb_function *f,=0A=
 -- =0A=
 2.34.1=0A=
 =0A=
