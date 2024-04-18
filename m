@@ -1,42 +1,59 @@
-Return-Path: <linux-usb+bounces-9457-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9458-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A47C98A9E14
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Apr 2024 17:13:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F08D98A9E19
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Apr 2024 17:15:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5BD5A1F21900
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Apr 2024 15:13:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2CD271C21CC9
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Apr 2024 15:15:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D14F16C69F;
-	Thu, 18 Apr 2024 15:13:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0236716C453;
+	Thu, 18 Apr 2024 15:15:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MoOIP3z3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id B4C9C16C444
-	for <linux-usb@vger.kernel.org>; Thu, 18 Apr 2024 15:13:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FF6715F321
+	for <linux-usb@vger.kernel.org>; Thu, 18 Apr 2024 15:15:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713453203; cv=none; b=FBVSkOBGgIg4Stu22l4PBolA6EsGGIlnfxQkBrhCM7w2hMkwx6aClE/5hvckohfm4+XGM5BzFJSLFofOPdlAzm2WUpGS1zao4S3oOKfPte/dvy95Yu+y4B/V1ow0IUsPzhbPkV+6MpKsykd0aSLsN9pgkhukeCmKpODRk1MDgn0=
+	t=1713453354; cv=none; b=owSkHYuKyLWRh1lHoErDNm1Zfz4Gvndwy4DeEYedp33s/A0hMThZljb6QHF/ls+kI6uQBJ2dHE0w9AD+FUcmpwmZZnJR8LgyF4TsfsU89Txvi+tJjVXdQdlFZLzu3XmFPKakTx1VIbYSCfu/fngkZde+7LLxvWDjfsCGyuamAwE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713453203; c=relaxed/simple;
-	bh=r6kqHgkmyW3NKurDe2u0ve6z/pT9x5lRwxVQkKAlOuY=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=eMoYl8MNmNuTZMXAGSRgth12JIx0hpgaxPp3eGCMSCamohHzU6V1T/7ujkHyzR5DjF2Ty2ayGy1d2E/StpL+kFZ/S/GZzaGy8juf3UUYdrJpi7+qn8vEszwRlj9Oqt36zk3LAMaqx9rcSBClpHDCtTawcPGN/nyvLiXIHtCF7Ag=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
-Received: (qmail 242604 invoked by uid 1000); 18 Apr 2024 11:13:13 -0400
-Date: Thu, 18 Apr 2024 11:13:13 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: Yue Sun <samsun1006219@gmail.com>, xingwei lee <xrivendell7@gmail.com>,
-  Michael Grzeschik <m.grzeschik@pengutronix.de>,
-  syzkaller-bugs@googlegroups.com,
-  USB mailing list <linux-usb@vger.kernel.org>
-Subject: [PATCH] USB: core: Fix access violation during port device removal
-Message-ID: <393aa580-15a5-44ca-ad3b-6462461cd313@rowland.harvard.edu>
+	s=arc-20240116; t=1713453354; c=relaxed/simple;
+	bh=90mWMLrsC55n2/mzXx6T7dBxQW+Ea8EuUOYXXSdtC6o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BJrGxzo3qs29IancQhucgVlo7vFHTFo3horzvnRc3yrla9ep4Sk2ip3m5FR2XqYrva+2lbc+tA37r0Cd57ae7FONv39MSfdM33MY/G6sG+0rMx7pKtT0i+3eeHUW0h9Ywm0TmzNKOimviGmNFQw7n1mb1YsxeGF+lqk60Ybpupg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MoOIP3z3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B03AC113CC;
+	Thu, 18 Apr 2024 15:15:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713453354;
+	bh=90mWMLrsC55n2/mzXx6T7dBxQW+Ea8EuUOYXXSdtC6o=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=MoOIP3z3X6PnKeb7Ts8f5g6BCmVMpjXdfGcfldlu3M4RjIca9NB9Gr3OFL6TKDiaj
+	 UZioSiCb98BL0ToNTDqkmKyEdXLTjRynYHcZv3D3IMWxeXFAOuByvtnhZnbQbHKUp1
+	 gR9iEORn14bgHF25Eu9MzScNSb+K/DX0xVYuFE3vQdSpp8Quqgryf8+kgpf0f6eoqb
+	 qpIjVG3jAoIdze2Csw8dd8s0hGAM7DyOZ3GwJdgPnv6xPqGHnVvjAfDjiRYPda6LdL
+	 /3M81xUICIrZ+pz7cJMiybp15MoN2vJTjHL8cb4wZcgLx9cQc35p7kM+YjGKYayii2
+	 Pm6yuJBhP1Wsw==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1rxTUT-000000001o9-0e5z;
+	Thu, 18 Apr 2024 17:15:57 +0200
+Date: Thu, 18 Apr 2024 17:15:57 +0200
+From: Johan Hovold <johan@kernel.org>
+To: Daniele Palmas <dnlplm@gmail.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH 1/1] USB: serial: option: add Telit FN920C04 rmnet
+ compositions
+Message-ID: <ZiE5Le7NtW_J2Dy9@hovoldconsulting.com>
+References: <20240418113430.4138714-1-dnlplm@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -45,67 +62,12 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240418113430.4138714-1-dnlplm@gmail.com>
 
-Testing with KASAN and syzkaller revealed a bug in port.c:disable_store():
-usb_hub_to_struct_hub() can return NULL if the hub that the port belongs to
-is concurrently removed, but the function does not check for this
-possibility before dereferencing the returned value.
+On Thu, Apr 18, 2024 at 01:34:30PM +0200, Daniele Palmas wrote:
+> Add the following Telit FN920C04 compositions:
 
-It turns out that the first dereference is unnecessary, since hub->intfdev
-is the parent of the port device, so it can be changed easily.  Adding a 
-check for hub == NULL prevents further problems.
+Thanks, Daniele. Now applied.
 
-The same bug exists in the disable_show() routine, and it can be fixed the
-same way.
-
-Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-Reported-and-tested-by: Yue Sun <samsun1006219@gmail.com>
-Reported-by: xingwei lee <xrivendell7@gmail.com>
-Link: https://lore.kernel.org/linux-usb/CAEkJfYON+ry7xPx=AiLR9jzUNT+i_Va68ACajOC3HoacOfL1ig@mail.gmail.com/
-Fixes: f061f43d7418 ("usb: hub: port: add sysfs entry to switch port power")
-CC: Michael Grzeschik <m.grzeschik@pengutronix.de>
-CC: stable@vger.kernel.org
-
----
-
- drivers/usb/core/port.c |    8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
-
-Index: usb-devel/drivers/usb/core/port.c
-===================================================================
---- usb-devel.orig/drivers/usb/core/port.c
-+++ usb-devel/drivers/usb/core/port.c
-@@ -51,13 +51,15 @@ static ssize_t disable_show(struct devic
- 	struct usb_port *port_dev = to_usb_port(dev);
- 	struct usb_device *hdev = to_usb_device(dev->parent->parent);
- 	struct usb_hub *hub = usb_hub_to_struct_hub(hdev);
--	struct usb_interface *intf = to_usb_interface(hub->intfdev);
-+	struct usb_interface *intf = to_usb_interface(dev->parent);
- 	int port1 = port_dev->portnum;
- 	u16 portstatus, unused;
- 	bool disabled;
- 	int rc;
- 	struct kernfs_node *kn;
- 
-+	if (!hub)
-+		return -ENODEV;
- 	hub_get(hub);
- 	rc = usb_autopm_get_interface(intf);
- 	if (rc < 0)
-@@ -101,12 +103,14 @@ static ssize_t disable_store(struct devi
- 	struct usb_port *port_dev = to_usb_port(dev);
- 	struct usb_device *hdev = to_usb_device(dev->parent->parent);
- 	struct usb_hub *hub = usb_hub_to_struct_hub(hdev);
--	struct usb_interface *intf = to_usb_interface(hub->intfdev);
-+	struct usb_interface *intf = to_usb_interface(dev->parent);
- 	int port1 = port_dev->portnum;
- 	bool disabled;
- 	int rc;
- 	struct kernfs_node *kn;
- 
-+	if (!hub)
-+		return -ENODEV;
- 	rc = kstrtobool(buf, &disabled);
- 	if (rc)
- 		return rc;
+Johan
 
