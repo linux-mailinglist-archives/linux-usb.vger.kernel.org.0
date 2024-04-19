@@ -1,107 +1,111 @@
-Return-Path: <linux-usb+bounces-9479-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9480-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 541928AAD17
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Apr 2024 12:51:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A9198AAD71
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Apr 2024 13:10:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 102292828D6
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Apr 2024 10:51:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CCB7D1F2214F
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Apr 2024 11:10:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E5B780020;
-	Fri, 19 Apr 2024 10:51:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C353811FB;
+	Fri, 19 Apr 2024 11:10:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AO7j/KNH"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gBZR1faA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 197087C08E
-	for <linux-usb@vger.kernel.org>; Fri, 19 Apr 2024 10:51:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 992B88005E
+	for <linux-usb@vger.kernel.org>; Fri, 19 Apr 2024 11:10:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713523908; cv=none; b=N7liZ/5HTk9AmbywiHTnpvbkg4bMETxab4hQbxthaNKDicXvugdjjDq1j75vnwOTeVySeTC8vd8KTcrQcZUEqwoLsP3SYcm9QfZC93QFQzzZgeS+x+7GlFBewPj7m+m21euEmic1RHb2jAV3OZYlQPaRtUTIb60FLczLiZKKYGM=
+	t=1713525029; cv=none; b=MUukJMf1TfDpgCLxX5GQd9QdA2dkUNJQbV35qGL+s6DcoqPVyNQ62zsvDhzXzQRrNQc9mYo4qgQDoaCFDv1q/MKNaBdxDs2ijTkCfb2/LsB3xMgNNbOxJKd9PEK4CbUa3vU3ssVLM3UftccSIV/kPeHKDBJ8PH/agzde+fHOJ3Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713523908; c=relaxed/simple;
-	bh=dFyHypi3fCWbOOiffrcxHv6Z9PTGTzZ5d913NFU0WKc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NJLvYmedxE6kMoRrjGNCDvtxKZtqFQ8ZngAkSI6GiOiR6JFNVdXiTs3PDpPBpBO2GVBjxQf7I7D7f+KXVmokyOWEwaqRV2ERYHwMLKLtHIj9c55iPpshiky4q24KwOvCx8mFL3K3T1DFbPQ0VB2t/njBRAaQVvW79FizXjph82s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AO7j/KNH; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1713523908; x=1745059908;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=dFyHypi3fCWbOOiffrcxHv6Z9PTGTzZ5d913NFU0WKc=;
-  b=AO7j/KNHUP1fxBiyHVK5obsM0gwZwxYxVJgNC1mW6Gq2OAw6Oq0f/qa1
-   2GRNvCOlR2IDwMYJuZGW+H0Hv2rCPAi4nLH4x3+dzVojdxR367+aVub2r
-   4gXrlkxmSQ/8jnTIA7qBN5H1A9GL2rtEs8opY5Lnrc0eG04dhCUIm6ekX
-   9aNvaQXdLg4l0YmcWTZkjDcWiwEG6kIgYFYzkYnnGmcho9foMzt2iJSHI
-   EwUDvxnqBPSY9UoBgrqy2VkOhD7agvfcc+q3CHHF6WOu+es7DUPtrQlBq
-   mx/v08P6pU51d8VZyUhp4EyvMtM8IYEfxkTK2hTb+KL+0tEi+HpV1yZ0F
-   Q==;
-X-CSE-ConnectionGUID: dMGHN+sSSDqC+i7gGeMY1A==
-X-CSE-MsgGUID: 9T6vq84yRuyXuPnPLuGpBA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11047"; a="20260384"
-X-IronPort-AV: E=Sophos;i="6.07,213,1708416000"; 
-   d="scan'208";a="20260384"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2024 03:51:47 -0700
-X-CSE-ConnectionGUID: uDc2fWqXSzGB5iO9j0mOGA==
-X-CSE-MsgGUID: INH6Zfa2QleMQ+MfVlgmUA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,213,1708416000"; 
-   d="scan'208";a="23324875"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa009.fm.intel.com with ESMTP; 19 Apr 2024 03:51:44 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id 57AEC18F; Fri, 19 Apr 2024 13:51:43 +0300 (EEST)
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: linux-usb@vger.kernel.org
-Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
-	Michael Jamet <michael.jamet@intel.com>,
-	Lukas Wunner <lukas@wunner.de>,
-	Andreas Noever <andreas.noever@gmail.com>,
-	Rajaram Regupathy <rajaram.regupathy@intel.com>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH] thunderbolt: There are only 5 basic router registers in pre-USB4 routers
-Date: Fri, 19 Apr 2024 13:51:43 +0300
-Message-ID: <20240419105143.3777873-1-mika.westerberg@linux.intel.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1713525029; c=relaxed/simple;
+	bh=4Mfzr1V6BFWHxC7o7yqVo53Mcbn4awlE5eUpGg/8hRU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=AL+Si6mO7E75LjZyDypAhM27iFqpAiTfoV3fq4/Q8kGn/J1XBH0DX/Zr4VBTsm3q+v1PikakJGA4SHEs6bGDyDvC2zpXnD9Qrg99GbRSLeJq3dZ7pW36yNc5s+4vN1jCDJLdhHfd2VYK5ohbtiW1lpol1i2tUjqOoLRGsGz+Vzg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gBZR1faA; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1713525026;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=GAl4uBdr7zjiQsXmmQYRw/OPYh/GNIIDVhDzRB8Ef+g=;
+	b=gBZR1faAFEkBaZ3EsJtBs4J+nKfaFVpmdlHCJH8eXqj8iG+w3OEUVnGjt69G25uZXKK7nV
+	Kjf9XX5vq77zlH8ZZOn29AxPL4b1DjQ+pSzyUP1B324fNrLFe80+BQ4V23SaHmtYx9p5s5
+	jdshKf/VMqHtzADrq7r+G/K0iWJzvhw=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-282-DUeJI6ypPuW1duhBzGTpNA-1; Fri,
+ 19 Apr 2024 07:10:24 -0400
+X-MC-Unique: DUeJI6ypPuW1duhBzGTpNA-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CDE9C1C2CDE0;
+	Fri, 19 Apr 2024 11:10:23 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.39.192.250])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 5DF881121313;
+	Fri, 19 Apr 2024 11:10:20 +0000 (UTC)
+From: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+To: jtornosm@redhat.com
+Cc: carnil@debian.org,
+	dave.stevenson@raspberrypi.com,
+	gregkh@linuxfoundation.org,
+	horms@kernel.org,
+	kuba@kernel.org,
+	linux-usb@vger.kernel.org,
+	regressions@lists.linux.dev,
+	roland@debian.org,
+	sashal@kernel.org,
+	stable@vger.kernel.org,
+	weihao.bj@ieisystem.com
+Subject: Re: [Regression] USB ethernet AX88179 broken usb ethernet names    
+Date: Fri, 19 Apr 2024 13:10:16 +0200
+Message-ID: <20240419111019.133748-1-jtornosm@redhat.com>
+In-Reply-To: <20240417071113.7082-1-jtornosm@redhat.com>
+References: <20240417071113.7082-1-jtornosm@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.3
 
-Intel pre-USB4 routers only have ROUTER_CS_0 up to ROUTER_CS_4 and it
-immediately follows the TMU router registers. Correct this accordingly.
+Hello Salvatore,
 
-Reported-by: Rajaram Regupathy <rajaram.regupathy@intel.com>
-Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
----
- drivers/thunderbolt/debugfs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Fix is there:
+https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git/commit/?id=56f78615bcb1
+And now in linux.
 
-diff --git a/drivers/thunderbolt/debugfs.c b/drivers/thunderbolt/debugfs.c
-index e324cd899719..193e9dfc983b 100644
---- a/drivers/thunderbolt/debugfs.c
-+++ b/drivers/thunderbolt/debugfs.c
-@@ -1346,7 +1346,7 @@ static int switch_basic_regs_show(struct tb_switch *sw, struct seq_file *s)
- 	if (tb_switch_is_usb4(sw))
- 		dwords = ARRAY_SIZE(data);
- 	else
--		dwords = 7;
-+		dwords = 5;
- 
- 	ret = tb_sw_read(sw, data, TB_CFG_SWITCH, 0, dwords);
- 	if (ret)
--- 
-2.43.0
+I have successfully tested it with ubuntu, installing the latest linux
+upstream kernel:
+
+$ lsb_release -a
+No LSB modules are available.
+Distributor ID:	Ubuntu
+Description:	Ubuntu 22.04.4 LTS
+Release:	22.04
+Codename:	jammy
+$ uname -a
+Linux unbuntu-test 6.9.0-rc4+ #8 SMP PREEMPT_DYNAMIC Fri Apr 19 11:59:17 CEST 2024 x86_64 x86_64 x86_64 GNU/Linux
+$ sudo dmesg | grep ax88
+[    3.848935] ax88179_178a 1-9:1.0 eth0: register 'ax88179_178a' at usb-0000:00:14.0-9, ASIX AX88179 USB 3.0 Gigabit Ethernet, aa:20:18:10:09:63
+[    3.848956] usbcore: registered new interface driver ax88179_178a
+[    3.854332] ax88179_178a 1-9:1.0 enxaa2018100963: renamed from eth0
+
+Best regards
+José Ignacio
 
 
