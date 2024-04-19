@@ -1,78 +1,81 @@
-Return-Path: <linux-usb+bounces-9489-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9490-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB3788AB652
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Apr 2024 23:17:06 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E17B8AB655
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Apr 2024 23:17:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ED99E1C20826
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Apr 2024 21:17:05 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6ECD9B21742
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Apr 2024 21:17:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F13CF42AB3;
-	Fri, 19 Apr 2024 21:17:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71EEF7FBDA;
+	Fri, 19 Apr 2024 21:17:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ojdTzgMg"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Mjhy+zI4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 343BE107B2
-	for <linux-usb@vger.kernel.org>; Fri, 19 Apr 2024 21:16:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B660F37719
+	for <linux-usb@vger.kernel.org>; Fri, 19 Apr 2024 21:17:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713561420; cv=none; b=L298NoF+HLBgf1T624gnHBGLdiPKRVgRgA7UxEjyx8PeJwYZ0OTpb8cNmcCh0ZgYzL5SLHC2lkEwoddxNl5m9hfrSMcH8lARr7oPE9qwnxUgj697tQxg+A2A1Sp7VauRqo4G5xQpX0ARNmKny8g0V4EWlcPWg6pd6xf2zGsXEAI=
+	t=1713561446; cv=none; b=O+s1kK2KLB1vz06tWs8wZ5nbNX8jvNjIRYzyoxW0hYGOkk9H+I0yvw3NiViVI9jdwBrudEomeLOqdA8viw4/Hb65fYn+Ug3zrSQgNLag34pbRgb9zXcLh0TzePwGUcm9mtECKGAmXn6jYwdCetOjYP8WYnI0GKLxX0HO9BWcXjQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713561420; c=relaxed/simple;
-	bh=bJMl96BXd7Fcmqs2yLxX7XV6jZ8I2SETuRHX5I79h/Y=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=Ni1QzThQ+RdbHX+dZ8EZQNf6AwilbI+OQLd/VupHeDRdwxKpprxlGA87qsuZNxlHOU1qDNQQAl4QoyaKzEnxb3wyeaEiuPAiywgOR0haFw5vDt+ojNs55O82eJGporLVe4t49rOxNybCiZ6vkYuaBapjYNOvu54moCUMlvvUNJw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jthies.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ojdTzgMg; arc=none smtp.client-ip=209.85.219.201
+	s=arc-20240116; t=1713561446; c=relaxed/simple;
+	bh=mDPHK69wYhyI1FfUABhwE1NgNhFXTJrMPiHHx9d6gvg=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=ifbo2D/5rbR0b8vGHngMb7F7Vkm6NmwSRF6K0lmMfu9btXhr6jOVRo0m4PYa4Ea1knwdFLRR2OnzEQWJXKp+9bAp79dJC4KKhSiXNZKhzM0GMR+iIbNFHZgOnHWOWj2aCb7TvfgzU5S9Gkb5jMw6XDKwwKp9heWYw8CBRBCuiw8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jthies.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Mjhy+zI4; arc=none smtp.client-ip=209.85.128.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jthies.bounces.google.com
-Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-de45dba157dso4565495276.1
-        for <linux-usb@vger.kernel.org>; Fri, 19 Apr 2024 14:16:58 -0700 (PDT)
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-618596c23b4so45412747b3.0
+        for <linux-usb@vger.kernel.org>; Fri, 19 Apr 2024 14:17:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1713561418; x=1714166218; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=jfW324GVea+1ib21HzTSsw48Lyt5jRPQcBMMMk4fg5o=;
-        b=ojdTzgMgNMfQHPyN1Fr9v+PGXjZYEFEuw7QV2MOPaZ6EuOTilndbFk1kY6U4l1C+qt
-         umQWsLGi84eZ9SRrBvQacg+PlVcPm9EoK14436T7D0axb2hRkllZvEmsnerp41UgV3xp
-         EIhX+SXIYxtI+zOhYyw7JZlQUAh9cgj7ejTrigJwSjLC+Omi/w0y1eaWuGnWcUpUDRFE
-         tIJjLS1nNapmqqd59AZ0lobjgY3AhXbpx6tjatcjrxhEWXVCMj3i4YX03K+33yuedX7+
-         5XDJKmNLULX5GLmui/1wpNVoXlfFGJGwWRlBzNYngXmpdSCWSTp0chVRw7G7JfNdaW/h
-         oEmg==
+        d=google.com; s=20230601; t=1713561444; x=1714166244; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=yBGw6IRcjqsdbe4TcZZGUlH3L2LlDwYUaWDl/kHQI0E=;
+        b=Mjhy+zI4n+5UHQVACxUUQEfizihQpF8CIH5v6Yp7TqdsNItAinR81bXl2SKwuh6AAS
+         ahsKzxJjCQjk5OVd+lLs1fS85OL8Wet+C8QVfZ850H/29ZmhQOMDo9mjZJclezF/P4ZJ
+         76VOgZtA4KgUV5OtU31YIySuD2ShlkWB5cZTK9Z3Q0vKabxehBudAkIqy42IAYU9sNzf
+         Yo/AMNnh5hwCwwV8LUe3ag//Hwmw5etuKEeaZIy50A9OgqkTukvx3CHCPPqs+miHaaHL
+         88kbHDqatNcqVJgIcrv7CGXkdh9/y8O6Ws1h0XoJxYyLgDa/vdmK7fwgFKhFX5xKK09G
+         3qUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713561418; x=1714166218;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jfW324GVea+1ib21HzTSsw48Lyt5jRPQcBMMMk4fg5o=;
-        b=oHnSk0MW4IIUJEwADv3Ukbk9m3XKH5CgHrKIlr3Vsr7gr5anXCVNgtKBmffrIP3T9J
-         7JAG+d71fh89ToC6qPCinLtSgspy2BnRT6AGYNHIUDO1fJrwi/780M5RD13y4pUTA1JC
-         iWIsMvEEVODmt2xbnBmy5oCpOIXztKTm2b/onJ6MDUGKP31xLwrx/Dy3E7xiNoQC8hCm
-         yDTxn5id9nwKT21qcymVYWTT2PbaeCZji2P8spKTIh0L9YJJCbP2EleksGbzncAK8enP
-         crDoDq0QcfYG112/SAFK6C88pjSQnb7SbK6VY0Uw7zW922pxgit+Lu8IMOkTFY28lGlJ
-         vYlQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUMAJ3x6jju9whoKUMcWYCtkgoi87bh1BSQcDFAr55rHgOFZmYI7Zc127kOVfDzVBiKIrp3Gaaxb8h+cQT3afM7rxT4c6B5YYSE
-X-Gm-Message-State: AOJu0Yy7VtU9OnwhpHSr/kshz/LjBYplFBk4GALi4yy7Ee81jkpUS532
-	Uf+xM12L7ENx15dOEL70Rhc0UqMB4R3wEWvih784ezOgPvoW1mhkP4UnONhd8v8nX0iGKRBXjNe
-	Qkw==
-X-Google-Smtp-Source: AGHT+IGAINjRLDY/NhYxY44MhrmawjhbwznQN2FlhlwcGn+GJxcFB+KKhotvf1x8ZknWYc19PfSQHkwXg3E=
+        d=1e100.net; s=20230601; t=1713561444; x=1714166244;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yBGw6IRcjqsdbe4TcZZGUlH3L2LlDwYUaWDl/kHQI0E=;
+        b=kJlhBvYjOxBDO3JpHk0eP53AZNjBid4gufdvBken1C8dKXrioBywvSTnIaLMlyQH4M
+         bSrRcnsfgLcs+0vvjjSt7TE89kEFTBjiiuD7B3TkbBRs+zvp9XJmNdHVs9wuUqdjmZ6b
+         Re3GK0cp7FfFxgUnQ1NvZyva8nOeUIagfJUu9rVDdN+qJg2Cny9/3UrKHaxI5k3Lqm1y
+         eWX7ff8AFS35621rh91sCe87LkicHHGYNHRvci/k0q6C/b4Twc9D99PsDXGPG3Gv12YL
+         3KfSsSiiykZsILgOKpw2LHgza3bhORjON3lOW3OuRwLv1YRoVJEzw0fK47KmxUgg1z3i
+         qcHg==
+X-Forwarded-Encrypted: i=1; AJvYcCXazan+8bDszncmeDg3O4XjdVVHM/gNrMlINoHqnbaf8XznnsYyBsJ349bgjh/09FN1ValvX0eqWu5t5GCBOfcpkhs1FLehaOA5
+X-Gm-Message-State: AOJu0YwJuG8dU1bV1yk+uN1k7LG7ia1LzKY2DMg21+6MOAAvs8ctWLV6
+	imInsk+irPp1Mok9qwa7LL+s/bJ5+thw4gm7OcYjpIZC/tfYAhiPI0/QpbXmYorlm0dz/vMAT+A
+	CfQ==
+X-Google-Smtp-Source: AGHT+IHa/iUoYwwQNUd/ge6xGKK/Ez6VGJcdqFLzOtFRhJjk1L3/bnWCMW/ccXo73fFLE030j4quwTpOTK0=
 X-Received: from jthies.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:23db])
- (user=jthies job=sendgmr) by 2002:a05:6902:1884:b0:dc6:b813:5813 with SMTP id
- cj4-20020a056902188400b00dc6b8135813mr264420ybb.9.1713561418084; Fri, 19 Apr
- 2024 14:16:58 -0700 (PDT)
-Date: Fri, 19 Apr 2024 21:16:46 +0000
+ (user=jthies job=sendgmr) by 2002:a0d:dac3:0:b0:61b:4d3:2dd6 with SMTP id
+ c186-20020a0ddac3000000b0061b04d32dd6mr503421ywe.6.1713561443742; Fri, 19 Apr
+ 2024 14:17:23 -0700 (PDT)
+Date: Fri, 19 Apr 2024 21:16:47 +0000
+In-Reply-To: <20240419211650.2657096-1-jthies@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
+References: <20240419211650.2657096-1-jthies@google.com>
 X-Mailer: git-send-email 2.44.0.769.g3c40516874-goog
-Message-ID: <20240419211650.2657096-1-jthies@google.com>
-Subject: [PATCH v1 0/4] usb: typec: ucsi: Update UCSI alternate mode
+Message-ID: <20240419211650.2657096-2-jthies@google.com>
+Subject: [PATCH v1 1/4] usb: typec: ucsi: Fix null deref in trace
 From: Jameson Thies <jthies@google.com>
 To: heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org
 Cc: jthies@google.com, pmalani@chromium.org, bleung@google.com, 
@@ -83,47 +86,30 @@ Cc: jthies@google.com, pmalani@chromium.org, bleung@google.com,
 	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Hi Heikki,
+From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
 
-This series appliess some changes to the UCSI driver to help support AP
-driven alternate mode entry. This includes...
+ucsi_register_altmode checks IS_ERR on returned pointer and treats
+NULL as valid. This results in a null deref when
+trace_ucsi_register_altmode is called.
 
-1. An update to the altmode sysfs group after registration to make
-"active" writable.
-2. A change to the ucsi_partner_task delay when queuing
-ucsi_check_altmodes to prevent it from running before other discovery
-functions.
-3. An update to always define a number of alternate modes for partners
-and plugs.
+Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+---
+ drivers/usb/typec/ucsi/ucsi.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Not related to AP driven altmode entry, there is an additional fix for a
-null derefrence in this series.
-
-I tested the series on a ChromeOS v6.8 kernel merged with usb-testing.
-That build had some additinal patches to enable a PPM in ChromeOS. Let
-me know if you have any questions.
-
-Thanks,
-Jameson
-
-Abhishek Pandit-Subedi (2):
-  usb: typec: ucsi: Fix null deref in trace
-  usb: typec: Update sysfs when setting ops
-
-Jameson Thies (2):
-  usb: typec: ucsi: Delay alternate mode discovery
-  usb: typec: ucsi: Always set number of alternate modes
-
- drivers/usb/typec/altmodes/displayport.c |  2 +-
- drivers/usb/typec/class.c                | 18 +++++++++++++++++-
- drivers/usb/typec/ucsi/displayport.c     |  2 +-
- drivers/usb/typec/ucsi/ucsi.c            | 18 +++++++++++++-----
- drivers/usb/typec/ucsi/ucsi.h            |  2 +-
- include/linux/usb/typec.h                |  3 +++
- 6 files changed, 36 insertions(+), 9 deletions(-)
-
-
-base-commit: 684e9f5f97eb4b7831298ffad140d5c1d426ff27
+diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
+index c4d103db9d0f8..c663dce0659ee 100644
+--- a/drivers/usb/typec/ucsi/ucsi.h
++++ b/drivers/usb/typec/ucsi/ucsi.h
+@@ -496,7 +496,7 @@ ucsi_register_displayport(struct ucsi_connector *con,
+ 			  bool override, int offset,
+ 			  struct typec_altmode_desc *desc)
+ {
+-	return NULL;
++	return ERR_PTR(-EOPNOTSUPP);
+ }
+ 
+ static inline void
 -- 
 2.44.0.769.g3c40516874-goog
 
