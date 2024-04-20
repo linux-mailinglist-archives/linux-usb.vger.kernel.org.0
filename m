@@ -1,75 +1,55 @@
-Return-Path: <linux-usb+bounces-9507-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9508-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10BEE8ABB65
-	for <lists+linux-usb@lfdr.de>; Sat, 20 Apr 2024 13:31:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DEF9C8ABBAE
+	for <lists+linux-usb@lfdr.de>; Sat, 20 Apr 2024 15:16:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7C0461F213F6
-	for <lists+linux-usb@lfdr.de>; Sat, 20 Apr 2024 11:31:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8DEE71F212E9
+	for <lists+linux-usb@lfdr.de>; Sat, 20 Apr 2024 13:16:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24E7229CF0;
-	Sat, 20 Apr 2024 11:31:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 770741E86C;
+	Sat, 20 Apr 2024 13:16:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="uVqX/oD1"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="b7NmpL2p"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.web.de (mout.web.de [212.227.17.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02A851B809
-	for <linux-usb@vger.kernel.org>; Sat, 20 Apr 2024 11:31:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1681D2563;
+	Sat, 20 Apr 2024 13:16:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713612668; cv=none; b=qvYdSJF+Mae8uEl1sWiqQGsAAJkbiGrC92OO4Alis1s9h5kafSpveRL1SRrVs0nXv96BBBWD3W6F07ecwuNyDP+suN84f9xyBqpZYiumKVmEX4KuJoIthegFtLkngVe36OY7rdanxH+Z7oPrkVzgn7jybLwJdjueVG28AdaOFqw=
+	t=1713618969; cv=none; b=iJtEt68i42qwcOHnR+4dkalqEbCWuP0jOjX+AUCHh2hTPQ9I/KAhihfDQ7Mh+xhnznSlktMEexYfiel7JxCQaJOQcbwARzbWO61n2nGlvPySj+hczkGtaJ5ZzeAEwj00ezPFCecQFamj5e77AJN6FJAAeybiuzCIECsqu9IRN9c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713612668; c=relaxed/simple;
-	bh=pawPlGAegmUcbHOz9d1bltyJzb5yP4n4W4h5P5ZnyJA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aX8INvBpKpP6iZWC542ntvByeVn7CXF0sDU6V2cR8WnuJlJuYAGuZgH84GCDW7h2uAMQICDhW/fM/DndcWt4kVgkIhdaw0C+LQeLBM06nfeg2oLOITlZi6oundjG/yrD6Lsyqz7MTXZ2ZHNa654q1ru1zM5x6/Mn6mNvGA02yyY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=uVqX/oD1; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-419c8c314d4so7005605e9.0
-        for <linux-usb@vger.kernel.org>; Sat, 20 Apr 2024 04:31:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1713612665; x=1714217465; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=juH++PmotbDBKPrtgNOyCREifYMeAZx5cOkMx0r15I4=;
-        b=uVqX/oD16IySV79kxGJSDp41PuJa0UmW/a/L8hS4ImoNFBNm9V9+gd0BUar32naxxn
-         WqCcv40AQcd+jdz1CBK3ORkqt1mSUrbGcwGotATJwsay1BxupUuNuJCZRiAv47hm8+TU
-         TevM6dmV2N6QSbnGgvWc9JnYhPLn5xFtaL+6FGre9NU4UToIrT91cgNayBODJeEfHt2Q
-         eiMcVCED3WF/MLOM0UBZigxH/CgC5riIIk9TeBYSQJq5g99NSjoZfOJTmLEjXqmhG9Dc
-         5WEDZ44LP+ofrafn8h6Ht4Ct9HlsOehE7AgSW8DWNn3KALt2WsO2n+xdRPES0EI0GVFw
-         H+Ew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713612665; x=1714217465;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=juH++PmotbDBKPrtgNOyCREifYMeAZx5cOkMx0r15I4=;
-        b=VVfkxeRG+N3ELWeFVIG/K3nfcuGEXU8SCGNcpu9Lv2j7JfVbQAnJ6AYaH33LWHbxZu
-         qfHpfjdzTzMm7S6CgKwrcM5NPD90lRmzO6WT2WZtJjihH64zhgn2/isocjvP1aQFMRCg
-         SgTkPyMIpX07EExh5ORqmHuW1Gn5hjqfZoiauzUaYkSDMsxKPPnOvHvguFaDFmWbIUEm
-         8dfnVrEgYjdM/XI8Qu9IYjoT6Deh8ryXziPezlzCYNcyRtkh83F35oKK5TLoWwO0m1rV
-         WvQOTCPD0knVKZYGrcPhpAmSrkxtTHdMVD2UAwvWegj/GtyW9mgPSyIwjpXzccpKahkt
-         aH+w==
-X-Forwarded-Encrypted: i=1; AJvYcCXVLU0Ev+3SbgNfa9CovMvz1P6sYlpZN72k5VwiYh2Xu02qj5DPlvZFCuFpGoJfizPze2LD/MHcSYnt3rNZtHWYXquV28KVVhee
-X-Gm-Message-State: AOJu0Yz4B6Gi2FpR6bPPWmDEi16uyHiWIuHYKsCWF/K7NJ0xodHVNsh/
-	IJh9O+8xX+CvgADbPwfbDIw/8NQBqs/mzMdjBOSIXX6fTaAuguBN3DvaaDy6QRI=
-X-Google-Smtp-Source: AGHT+IEpQxOwPl01GAZYfLQXS5h7m+Das6WRfoys9gwq53gGo43TGH0uMgnPLs6RMT7q5Qc1Ri4NFw==
-X-Received: by 2002:a05:600c:5489:b0:419:a1c:8fe1 with SMTP id iv9-20020a05600c548900b004190a1c8fe1mr3328386wmb.38.1713612665269;
-        Sat, 20 Apr 2024 04:31:05 -0700 (PDT)
-Received: from [10.236.36.88] ([88.128.88.151])
-        by smtp.gmail.com with ESMTPSA id j10-20020adfff8a000000b0034335f13570sm6594513wrr.116.2024.04.20.04.31.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 20 Apr 2024 04:31:04 -0700 (PDT)
-Message-ID: <3ca24a3d-e7e0-4f68-9a6f-ebaf83079ebe@linaro.org>
-Date: Sat, 20 Apr 2024 13:31:03 +0200
+	s=arc-20240116; t=1713618969; c=relaxed/simple;
+	bh=FT0t9HE1rL9H9A5o8oALgJBDzziSpKtzAEmi3ZmQPQI=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
+	 In-Reply-To:Content-Type; b=RNnWdZRSs0M9clP4p+qdzRfZGu5RyuEbf2aHLyC0NFM+Dl1DscOgnZvm15c8kThR065UPnfwHEUjb4myfKsEJopSLag+xQqwYlOGm4FDp0iOuz9kkvujBCXgs0bZuC6PL+Oi72oT5EMyfTfBwAnP0MRgr54WKk+oWjqaJRRRnXc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=b7NmpL2p; arc=none smtp.client-ip=212.227.17.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1713618937; x=1714223737; i=markus.elfring@web.de;
+	bh=FT0t9HE1rL9H9A5o8oALgJBDzziSpKtzAEmi3ZmQPQI=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
+	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 cc:content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=b7NmpL2p3KCnnc7yZjWSMP7LEmvQrWmdL/1xCLAmzm1gqzS6qBreXqlkzb0qp7BY
+	 Rad7pexfjAibdoh55HuNPGpNTHK7Up98IJgWh2Kfpk3JGjJC+JIDAlkvzmz9sctop
+	 PlwV/VgZxWEY2J4A6REZKWr/IIbthMvwkdUcBnFx++sP8vf413316i7F3p0imUWsS
+	 PZ3x0kfOqjUhMMrPvv0lgqOHXfqKMRNGcWsIl23C9ccna40zdn9EgP8WSisj3S/b3
+	 qm0BxyKgrlUdZmdiMnjdipIWEm1nDpMsOpPt8+0ujn0jyDDXPIFuA3bWXCMMNxA+P
+	 rSPFB2mS/WnWo2bkvQ==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.85.95]) by smtp.web.de (mrweb106
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1MqIB7-1sRwvi06q3-00n772; Sat, 20
+ Apr 2024 15:15:37 +0200
+Message-ID: <aa12c80c-9769-424a-ba2b-8c0f68b1c1e6@web.de>
+Date: Sat, 20 Apr 2024 15:15:16 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -77,111 +57,55 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v21 5/9] dt-bindings: usb: qcom,dwc3: Add bindings for
- SC8280 Multiport
-To: Krishna Kurapati <quic_kriskura@quicinc.com>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Rob Herring <robh@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
- Wesley Cheng <quic_wcheng@quicinc.com>,
- Konrad Dybcio <konrad.dybcio@linaro.org>,
+To: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+ linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Jameson Thies <jthies@google.com>
+Cc: LKML <linux-kernel@vger.kernel.org>, Benson Leung <bleung@google.com>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+ Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Conor Dooley <conor+dt@kernel.org>, Thinh Nguyen
- <Thinh.Nguyen@synopsys.com>, Felipe Balbi <balbi@kernel.org>,
- Johan Hovold <johan@kernel.org>
-Cc: devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- quic_ppratap@quicinc.com, quic_jackp@quicinc.com,
- Bjorn Andersson <quic_bjorande@quicinc.com>
-References: <20240420044901.884098-1-quic_kriskura@quicinc.com>
- <20240420044901.884098-6-quic_kriskura@quicinc.com>
-Content-Language: en-US
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20240420044901.884098-6-quic_kriskura@quicinc.com>
+ Hans de Goede <hdegoede@redhat.com>,
+ Neil Armstrong <neil.armstrong@linaro.org>,
+ Rajaram Regupathy <rajaram.regupathy@intel.com>,
+ Saranya Gopal <saranya.gopal@intel.com>
+References: <20240419211650.2657096-2-jthies@google.com>
+Subject: Re: [PATCH 1/4] usb: typec: ucsi: Fix null deref in trace
+Content-Language: en-GB
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <20240419211650.2657096-2-jthies@google.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:qEkpwmTHHNClAQiyVH7IIo+1fbIub7wek8hkarYTnw/srysoz5k
+ FWCmqIdoeSWXqIduQee46hRETP3p4iClMdW7GLg12lgnSoQyYAnvKJ0a1FsaKbr7V0JqVpi
+ zrTMd2/hMewDGPEX7cqNO5UvLgCim6bR52ciBEgk8s13HR7Dl85rX2YLfAAUZTzP10ugJyf
+ 6jhjvxVYMJpfQq4kPioTQ==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:bQJae6an96A=;Fp4WHDmZ9c/qvFFF+YpBx6n+1b6
+ F09OD4Toyato74mg7EXqV9BEXI06hViIh00mBVxC/J+LNAnkU6ehTxAKHFuD1kl0a2AfV+Vw9
+ SjqStQFE5AUZEadHUEVFwVwFYsWuo+ZQjO023V/5Tp1NeKI72Ehm8CY41BLQsLT/XmQoxZ8+x
+ 5bpLTWHIu6OzXPxpvSp5K3iTSoVdWPvCamN5pxHCbv7kpmADb4l/CYN0cqPThuZcpmeO4Uvxf
+ 1Kbmmg+f4orcM1wzOvCr1Hbw791lmLAIfhV9Wkh1PXK9Pzr1sG1PHz9dzW5X/DvFqYT5i+fCI
+ wcFID7gcNoGEtBZOMFARHCzUnG3TxuBD0zASjtQv6KAXt1nglRcJFmGrvAYxANfxwglxXWku1
+ KeWstBdzwSVxlNVPbOB5dbjmt1ejWlJuusIOQXk+KwW3nq8U9oewnarbqWqznAxyYCgSw1JPY
+ a9U8xsQ6MJ8RdDC/BDBLde/KCEBJZtY3d0bG4uLNtvUyvjUVUsqqHP7uJDdmswYI/yJn9jPqo
+ EchINxYZdeY59i9jWZX3vCBC1r+v6HTWimVe9F/9JnMke0ouVopFfmjzffatTbvd2/SjexByc
+ ktEqoSdEFk1LH6jpNpuYRXONHyXURDsxuGFhnTRvFSok60FPKa+YuA77QR8yId1pSLf3Lf3dz
+ rSmCpSCqZ9Adppx8D6XfzexnCEtQyX8JraCoQQsnD1rqyI/CbMLgrj7eMPEbbKbMPm8yjoQrB
+ fLSCwvGHrXgWSWjBTO800ZEbRgl5Huv3YYrpf7lyp2M5YmMjnovs+fFeCu/oU8sbqRpp8246k
+ oBdu1oLYKYVugPabk5g8bdqJtowYff0UZH4N3Hpp9KbEQ=
 
-On 20/04/2024 06:48, Krishna Kurapati wrote:
-> Add the compatible string for SC8280 Multiport USB controller from
-> Qualcomm.
-> 
-> There are 4 power event interrupts supported by this controller
-> (one for each port of multiport controller). Add all the 4 as
-> non-optional interrupts for SC8280XP-MP
-> 
-> Also each port of multiport has one DP and one DM IRQ. Add all DP/DM
-> IRQs related to 4 ports of SC8280XP Teritiary controller.
-> 
-> Also added SuperSpeed PHY interrupt for both Superspeed ports.
-> 
-> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-> Reviewed-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+> ucsi_register_altmode checks IS_ERR on returned pointer and treats
+> NULL as valid. This results in a null deref when
+> trace_ucsi_register_altmode is called.
 
-v21 and suddenly you drop tags requiring everyone to re-review this. I
-do not think this process is working. I will not re-review this.
+I find that the change description can be improved further.
+Is another imperative wording desirable?
 
-This is a friendly reminder during the review process.
+Can it be nicer to use the term =E2=80=9Cdereference=E2=80=9D for the fina=
+l commit message?
 
-It looks like you received a tag and forgot to add it.
-
-If you do not know the process, here is a short explanation:
-Please add Acked-by/Reviewed-by/Tested-by tags when posting new
-versions, under or above your Signed-off-by tag. Tag is "received", when
-provided in a message replied to you on the mailing list. Tools like b4
-can help here. However, there's no need to repost patches *only* to add
-the tags. The upstream maintainer will do that for tags received on the
-version they apply.
-
-https://elixir.bootlin.com/linux/v6.5-rc3/source/Documentation/process/submitting-patches.rst#L577
-
-If a tag was not added on purpose, please state why and what changed.
-
-
-
-Best regards,
-Krzysztof
-
+Regards,
+Markus
 
