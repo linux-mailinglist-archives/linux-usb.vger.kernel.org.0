@@ -1,180 +1,309 @@
-Return-Path: <linux-usb+bounces-9504-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9505-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 832408AB9BD
-	for <lists+linux-usb@lfdr.de>; Sat, 20 Apr 2024 06:52:58 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C04CF8AB9EA
+	for <lists+linux-usb@lfdr.de>; Sat, 20 Apr 2024 07:51:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3AA972813F7
-	for <lists+linux-usb@lfdr.de>; Sat, 20 Apr 2024 04:52:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D49E71C20906
+	for <lists+linux-usb@lfdr.de>; Sat, 20 Apr 2024 05:51:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B71A41236;
-	Sat, 20 Apr 2024 04:50:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC5DEFBEF;
+	Sat, 20 Apr 2024 05:51:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="nLuSpm4k"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kc3csXPD"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FB673F8D6;
-	Sat, 20 Apr 2024 04:50:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41CC92563
+	for <linux-usb@vger.kernel.org>; Sat, 20 Apr 2024 05:51:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713588622; cv=none; b=Xb9kxCSjx25lVgzYgfiv0kWeC0g1W6O29OJX4zhFJiO2V6qe0m0lJInvHCVWe0P5I6X6+UXn+JnERb/tLR3lQzsVi0G3UUFPvuN03Phi15A7eB1EBXANPbPq/Rozn7LPC1HCyo3AlefUhNAVpRSG7hUr1cJOoMDRbm40VTQ4jcs=
+	t=1713592290; cv=none; b=mlIgsZ4lFPn0ANwtel8RzA+TikvgX9vje3RJwgDiuw0yhlvFxYarxRgSYeCMGIhok9fm2NjJctbKXf/d/aQF5wJf8eSTEI3dZUy+z/E1IZzbNhL4Kh1WsJCcU4evCdhbmm/KtMMx7TEY0SZxp+2vY7BtkNq2rf8BoQFD+j8gnb8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713588622; c=relaxed/simple;
-	bh=YVkIw7DgewVq3TVr3KbyecW8Zew7ckYFRjU2pFfUQ5Y=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=FqqPb4AVmudr3k8YSP6gBPbZdh/TwvXtIiBVsA7peIksQGHDEnOEj+TRFvHvhWREgXx7TOPXlbgWLBl1/xC2T9lDqv5l2levT7KauX7mWZEXsVZX+qLNInDxS7hBRr2oU0cYe0bQ/Ny+t2sqO9HsCFkjpTln0SxUvaeydz+sJOM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=nLuSpm4k; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 43K4ncjJ004636;
-	Sat, 20 Apr 2024 04:50:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	from:to:cc:subject:date:message-id:in-reply-to:references
-	:mime-version:content-transfer-encoding:content-type; s=
-	qcppdkim1; bh=8eFsn6tci9SXWkk51b18J8sHwR83J9tUKFJVQ+MA0P0=; b=nL
-	uSpm4k4Ti76TZ9jMht4/Sb+YMJM4/6KaSjm9P4DYhVYf7utzPe+tyy6OjWNr5RLi
-	kHeGNCi2F7gCXBXM5AP6Mm2uzcCQoN7V8X4zsoc515rsCTt+lwmUdo4/i6nV/XPN
-	Kvk3jMDBcA0kslKVK5Yxv91OVUUb2Otw+WZcVmmO/GO6NHmebl5n9FtAmYZnmnEu
-	5ceTWyqlH8WuGs75SJU0O32rYYx+AzkwsNJEkMe6a3WrNd2/iqJWZ8O5EguSYTXk
-	aTOd2r6lGL2eOk+Q9iUfqHjUcmWNRSiyy6OCii5EAPLg1OQl06NXbplJUwfpR6uj
-	nAiweqNGYauuNEOdHkJQ==
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xm6vr80bx-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 20 Apr 2024 04:50:16 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 43K4oFmH001910
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 20 Apr 2024 04:50:15 GMT
-Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Fri, 19 Apr 2024 21:50:10 -0700
-From: Krishna Kurapati <quic_kriskura@quicinc.com>
-To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring
-	<robh@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
-        Wesley Cheng
-	<quic_wcheng@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "Greg
- Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Conor Dooley
-	<conor+dt@kernel.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Felipe Balbi
-	<balbi@kernel.org>, Johan Hovold <johan@kernel.org>
-CC: <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_ppratap@quicinc.com>, <quic_jackp@quicinc.com>,
-        Krishna Kurapati
-	<quic_kriskura@quicinc.com>,
-        Bjorn Andersson <quic_bjorande@quicinc.com>
-Subject: [PATCH v21 9/9] usb: dwc3: qcom: Add multiport suspend/resume support for wrapper
-Date: Sat, 20 Apr 2024 10:19:01 +0530
-Message-ID: <20240420044901.884098-10-quic_kriskura@quicinc.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240420044901.884098-1-quic_kriskura@quicinc.com>
-References: <20240420044901.884098-1-quic_kriskura@quicinc.com>
+	s=arc-20240116; t=1713592290; c=relaxed/simple;
+	bh=cLeVLvwBA74q4fDk7fAQ4JK2hwYk96xndb2tfwPH14g=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=ZMd/S9MtODCU/hFb8uAEeAEB5EPN3eHioGwJrdAjuyP22RiOOlbgRfCxqcq4nDJaCLdOnxaCaebku3XnIZRrG/FYM9/o6FtMvRTg12CGjY43JzYC/V4nP1u3Dl2TqFBieOG+Avj16ug9NQTVhilfL1majMR6mpoNHx2TLlbO0y8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kc3csXPD; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1713592288; x=1745128288;
+  h=date:from:to:cc:subject:message-id;
+  bh=cLeVLvwBA74q4fDk7fAQ4JK2hwYk96xndb2tfwPH14g=;
+  b=kc3csXPD0cXzvC/HreCvHw1uxqLNDiRGDHa2XihWamT/Jxzx8cee2EI6
+   ahCKnaFynFsTs7/PQ8QnlBv9jOIFCTHMlLlWDTIt1wf+sT01dCw6LsCjF
+   Zo4Fak03lXrljmofZJGPy0f+ou8xHUMYcugwDz0270448rtbp80D7XiJj
+   D7Z3bwALcqiw9jBxJM4qnUP5GefGyrTt9eFp1/vudLOEiR99uIHk49w+y
+   xKqj8rVF8M8FvqQ2Xw143pdku1iRKRSqUS6Q+hSUU3FADphsu3711X6ss
+   WZVv8w3vx+55mFCn5tJXlTq5Ufhh3NRCvVlrZ2SkLXKusz+8L3LQySINY
+   g==;
+X-CSE-ConnectionGUID: 1QYOjKh5RIqIFmzHX1q7XQ==
+X-CSE-MsgGUID: qfi2V6dNQSqdGkkshI44MQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11049"; a="9425834"
+X-IronPort-AV: E=Sophos;i="6.07,215,1708416000"; 
+   d="scan'208";a="9425834"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2024 22:51:28 -0700
+X-CSE-ConnectionGUID: PnX573rfQGSAmdbDgXl0RA==
+X-CSE-MsgGUID: 6zMH5Q76Ti2d0s+4IovSxw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,215,1708416000"; 
+   d="scan'208";a="28188083"
+Received: from unknown (HELO 23c141fc0fd8) ([10.239.97.151])
+  by fmviesa004.fm.intel.com with ESMTP; 19 Apr 2024 22:51:26 -0700
+Received: from kbuild by 23c141fc0fd8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ry3dE-000AlY-19;
+	Sat, 20 Apr 2024 05:51:24 +0000
+Date: Sat, 20 Apr 2024 13:51:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Subject: [usb:usb-linus] BUILD SUCCESS
+ 7a9a304069810c0c5296b851f228f8966d3a030e
+Message-ID: <202404201314.TvdANAU6-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: donBu3u2KTyfVvakkFL0V6vnNhkSaxxF
-X-Proofpoint-ORIG-GUID: donBu3u2KTyfVvakkFL0V6vnNhkSaxxF
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-04-20_03,2024-04-19_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 bulkscore=0
- malwarescore=0 lowpriorityscore=0 priorityscore=1501 suspectscore=0
- mlxlogscore=909 impostorscore=0 phishscore=0 clxscore=1015 adultscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2404010003 definitions=main-2404200032
 
-Power event IRQ is used for wakeup either when the controller is
-SuperSpeed capable but is missing an SuperSpeed PHY interrupt, or when
-the GIC is not capable of detecting DP/DM High-Speed PHY interrupts.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
+branch HEAD: 7a9a304069810c0c5296b851f228f8966d3a030e  Merge tag 'usb-serial-6.9-rc5' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus
 
-The Power event IRQ stat register indicates whether the High-Speed
-phy entered and exited L2 successfully during suspend and resume.
-Indicate the same for all ports of a multiport controller.
+Warning ids grouped by kconfigs:
 
-Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-Reviewed-by: Bjorn Andersson <quic_bjorande@quicinc.com>
----
- drivers/usb/dwc3/dwc3-qcom.c | 23 +++++++++++++++++------
- 1 file changed, 17 insertions(+), 6 deletions(-)
+gcc_recent_errors
+|-- alpha-allyesconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- arc-allmodconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- arc-allyesconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- arc-randconfig-002-20240420
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- arm-allmodconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- arm-allyesconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- arm64-defconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- csky-allmodconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- csky-allyesconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- csky-randconfig-001-20240420
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- i386-allmodconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- i386-allyesconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- loongarch-allmodconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- loongarch-defconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- loongarch-randconfig-001-20240420
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- m68k-allmodconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- m68k-allyesconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- microblaze-allmodconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- microblaze-allyesconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- mips-allyesconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- nios2-allmodconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- nios2-allyesconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- openrisc-allyesconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- parisc-allmodconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- parisc-allyesconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- powerpc-allmodconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- powerpc-randconfig-001-20240420
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- powerpc64-randconfig-002-20240420
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- s390-allyesconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- sparc-allmodconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- sparc-randconfig-002-20240420
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- sparc64-allmodconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- sparc64-allyesconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+`-- um-allyesconfig
+    `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+clang_recent_errors
+|-- arm-defconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- arm-randconfig-003-20240420
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- arm64-allmodconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- hexagon-allmodconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- hexagon-allyesconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- powerpc-allyesconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- powerpc-randconfig-002-20240420
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- powerpc-randconfig-003-20240420
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- riscv-allmodconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+|-- riscv-allyesconfig
+|   `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
+`-- s390-allmodconfig
+    `-- drivers-usb-dwc2-core_intr.c:warning:Function-parameter-or-struct-member-remotewakeup-not-described-in-dwc2_wakeup_from_lpm_l1
 
-diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-index b6f13bb14e2c..88fb6706a18d 100644
---- a/drivers/usb/dwc3/dwc3-qcom.c
-+++ b/drivers/usb/dwc3/dwc3-qcom.c
-@@ -36,7 +36,6 @@
- #define PIPE3_PHYSTATUS_SW			BIT(3)
- #define PIPE_UTMI_CLK_DIS			BIT(8)
- 
--#define PWR_EVNT_IRQ_STAT_REG			0x58
- #define PWR_EVNT_LPM_IN_L2_MASK			BIT(4)
- #define PWR_EVNT_LPM_OUT_L2_MASK		BIT(5)
- 
-@@ -55,6 +54,13 @@
- /* Qualcomm SoCs with multiport support has up to 4 ports */
- #define DWC3_QCOM_MAX_PORTS	4
- 
-+static const u32 pwr_evnt_irq_stat_reg[DWC3_QCOM_MAX_PORTS] = {
-+	0x58,
-+	0x1dc,
-+	0x228,
-+	0x238,
-+};
-+
- struct dwc3_qcom_port {
- 	int			qusb2_phy_irq;
- 	int			dp_hs_phy_irq;
-@@ -424,9 +430,11 @@ static int dwc3_qcom_suspend(struct dwc3_qcom *qcom, bool wakeup)
- 	if (qcom->is_suspended)
- 		return 0;
- 
--	val = readl(qcom->qscratch_base + PWR_EVNT_IRQ_STAT_REG);
--	if (!(val & PWR_EVNT_LPM_IN_L2_MASK))
--		dev_err(qcom->dev, "HS-PHY not in L2\n");
-+	for (i = 0; i < qcom->num_ports; i++) {
-+		val = readl(qcom->qscratch_base + pwr_evnt_irq_stat_reg[i]);
-+		if (!(val & PWR_EVNT_LPM_IN_L2_MASK))
-+			dev_err(qcom->dev, "port-%d HS-PHY not in L2\n", i + 1);
-+	}
- 
- 	for (i = qcom->num_clocks - 1; i >= 0; i--)
- 		clk_disable_unprepare(qcom->clks[i]);
-@@ -475,8 +483,11 @@ static int dwc3_qcom_resume(struct dwc3_qcom *qcom, bool wakeup)
- 		dev_warn(qcom->dev, "failed to enable interconnect: %d\n", ret);
- 
- 	/* Clear existing events from PHY related to L2 in/out */
--	dwc3_qcom_setbits(qcom->qscratch_base, PWR_EVNT_IRQ_STAT_REG,
--			  PWR_EVNT_LPM_IN_L2_MASK | PWR_EVNT_LPM_OUT_L2_MASK);
-+	for (i = 0; i < qcom->num_ports; i++) {
-+		dwc3_qcom_setbits(qcom->qscratch_base,
-+				  pwr_evnt_irq_stat_reg[i],
-+				  PWR_EVNT_LPM_IN_L2_MASK | PWR_EVNT_LPM_OUT_L2_MASK);
-+	}
- 
- 	qcom->is_suspended = false;
- 
+elapsed time: 934m
+
+configs tested: 121
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allmodconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                   randconfig-001-20240420   gcc  
+arc                   randconfig-002-20240420   gcc  
+arm                              allmodconfig   gcc  
+arm                               allnoconfig   clang
+arm                              allyesconfig   gcc  
+arm                                 defconfig   clang
+arm                   randconfig-001-20240420   gcc  
+arm                   randconfig-002-20240420   gcc  
+arm                   randconfig-003-20240420   clang
+arm                   randconfig-004-20240420   gcc  
+arm64                            allmodconfig   clang
+arm64                             allnoconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                 randconfig-001-20240420   clang
+arm64                 randconfig-002-20240420   clang
+arm64                 randconfig-003-20240420   gcc  
+arm64                 randconfig-004-20240420   clang
+csky                             allmodconfig   gcc  
+csky                              allnoconfig   gcc  
+csky                             allyesconfig   gcc  
+csky                                defconfig   gcc  
+csky                  randconfig-001-20240420   gcc  
+csky                  randconfig-002-20240420   gcc  
+hexagon                          allmodconfig   clang
+hexagon                           allnoconfig   clang
+hexagon                          allyesconfig   clang
+hexagon                             defconfig   clang
+hexagon               randconfig-001-20240420   clang
+hexagon               randconfig-002-20240420   clang
+i386                             allmodconfig   gcc  
+i386                              allnoconfig   gcc  
+i386                             allyesconfig   gcc  
+i386                                defconfig   clang
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch             randconfig-001-20240420   gcc  
+loongarch             randconfig-002-20240420   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                       allyesconfig   gcc  
+microblaze                          defconfig   gcc  
+mips                              allnoconfig   gcc  
+mips                             allyesconfig   gcc  
+nios2                            allmodconfig   gcc  
+nios2                             allnoconfig   gcc  
+nios2                            allyesconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                 randconfig-001-20240420   gcc  
+nios2                 randconfig-002-20240420   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                         allyesconfig   gcc  
+openrisc                            defconfig   gcc  
+parisc                           allmodconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc                randconfig-001-20240420   gcc  
+parisc                randconfig-002-20240420   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                          allyesconfig   clang
+powerpc               randconfig-001-20240420   gcc  
+powerpc               randconfig-002-20240420   clang
+powerpc               randconfig-003-20240420   clang
+powerpc64             randconfig-001-20240420   clang
+powerpc64             randconfig-002-20240420   gcc  
+powerpc64             randconfig-003-20240420   gcc  
+riscv                            allmodconfig   clang
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   clang
+riscv                               defconfig   clang
+riscv                 randconfig-001-20240420   clang
+riscv                 randconfig-002-20240420   gcc  
+s390                             allmodconfig   clang
+s390                              allnoconfig   clang
+s390                             allyesconfig   gcc  
+s390                                defconfig   clang
+s390                  randconfig-001-20240420   clang
+s390                  randconfig-002-20240420   gcc  
+sh                               allmodconfig   gcc  
+sh                                allnoconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                                  defconfig   gcc  
+sh                    randconfig-001-20240420   gcc  
+sh                    randconfig-002-20240420   gcc  
+sparc                            allmodconfig   gcc  
+sparc                             allnoconfig   gcc  
+sparc                               defconfig   gcc  
+sparc64                          allmodconfig   gcc  
+sparc64                          allyesconfig   gcc  
+sparc64                             defconfig   gcc  
+sparc64               randconfig-001-20240420   gcc  
+sparc64               randconfig-002-20240420   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   gcc  
+um                                  defconfig   clang
+um                             i386_defconfig   gcc  
+um                    randconfig-001-20240420   clang
+um                    randconfig-002-20240420   gcc  
+um                           x86_64_defconfig   clang
+x86_64                            allnoconfig   clang
+x86_64                           allyesconfig   clang
+x86_64                              defconfig   gcc  
+x86_64                          rhel-8.3-rust   clang
+xtensa                            allnoconfig   gcc  
+xtensa                randconfig-001-20240420   gcc  
+xtensa                randconfig-002-20240420   gcc  
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
