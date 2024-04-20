@@ -1,112 +1,195 @@
-Return-Path: <linux-usb+bounces-9517-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9518-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C6578ABC87
-	for <lists+linux-usb@lfdr.de>; Sat, 20 Apr 2024 19:08:02 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 76F898ABD18
+	for <lists+linux-usb@lfdr.de>; Sat, 20 Apr 2024 22:47:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C79A5281663
-	for <lists+linux-usb@lfdr.de>; Sat, 20 Apr 2024 17:08:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0DF7C1F211C5
+	for <lists+linux-usb@lfdr.de>; Sat, 20 Apr 2024 20:47:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 758FF2E3E5;
-	Sat, 20 Apr 2024 17:07:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E44BE481CD;
+	Sat, 20 Apr 2024 20:47:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="M6bC9itG"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from relay.hostedemail.com (smtprelay0016.hostedemail.com [216.40.44.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEE47219E2;
-	Sat, 20 Apr 2024 17:07:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C38D5205E01
+	for <linux-usb@vger.kernel.org>; Sat, 20 Apr 2024 20:47:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713632875; cv=none; b=o1W79Encsxrm9uOSsb1hAsV4NL1qC78MqZZvEuCmVrNc7+ERYNwFZW8cly9+fCUtLCd46PMnhraWGByCkQuK8XWbICj5/XC2jB2xOlh8acusSAwsp0LGXYxwKnkTcbKONZvtwkq5fiUucsLfI7FP+fAQ85yuCyOW7KR7eoDJgwk=
+	t=1713646060; cv=none; b=rAAL4h+co9aFLpCKNTV0wVOR1LSKJY4nbj5SPSfNpRXd6XvTPEsEKRqB7sgb5R2Q5Sdep449pv/HX6L8jvg/VkgUwks9RxsYCpgNgIwa7l5lV1PPNlnKEe7fxatoFNBTzYd64gp60WTDBwpNPU6mCYeApp6rs+yFmzO1Xb76d6I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713632875; c=relaxed/simple;
-	bh=VRHiUA97gVKh2xnjyQ3bmP94uBKbQMCXUFaDLvl8IRw=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=gGcxtQApTpxLxASqLN3DDJMf1Ts1ACbGEvBNvZw1noWc40uFoEGec5BA84Sx4Uft5TCVym0RotqRxA+p4IpuAJHAtDZG5ZtfApxWLQ6jCCGeUSV3PzVxyjg82yHWAH9L4EecfFXgUFnXWh86ldJHCIHBgyq4cZiMLFoA92hrJDE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=perches.com; spf=pass smtp.mailfrom=perches.com; arc=none smtp.client-ip=216.40.44.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=perches.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=perches.com
-Received: from omf10.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay01.hostedemail.com (Postfix) with ESMTP id F18171C0533;
-	Sat, 20 Apr 2024 17:07:50 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf10.hostedemail.com (Postfix) with ESMTPA id 24ACB2F;
-	Sat, 20 Apr 2024 17:07:48 +0000 (UTC)
-Message-ID: <a51f703d4f8dc3b0917002c520ea6608ac642b75.camel@perches.com>
-Subject: Re: [PATCH v2] remove indentation for common path [linux-next]
-From: Joe Perches <joe@perches.com>
-To: sundar <prosunofficial@gmail.com>, heikki.krogerus@linux.intel.com, 
-	gregkh@linuxfoundation.org, neil.armstrong@linaro.org, 
-	dmitry.baryshkov@linaro.org, u.kleine-koenig@pengutronix.de, 
-	christophe.jaillet@wanadoo.fr
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	skhan@linuxfoundation.org, javier.carrasco.cruz@gmail.com
-Date: Sat, 20 Apr 2024 10:07:47 -0700
-In-Reply-To: <20240420164927.15290-1-prosunofficial@gmail.com>
-References: <20240420164927.15290-1-prosunofficial@gmail.com>
-Content-Type: text/markdown; charset="ISO-8859-1"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
+	s=arc-20240116; t=1713646060; c=relaxed/simple;
+	bh=nAX4qtsNUWhy1uiAgeSRQF1UqmwuPnkAS2XUGJmyi4U=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Mw9T5EDDGVfHIzDbsn+HL81JCChJMNVOuIdUpoS0l98uFqUw18U20+5P3XRW7g1japDSwpxecBQE4V5snFgX8t4vlXEuKxf88Z5OsTG7OJ+5MezjdlxbJJ9+w+O9vbVck07ChQ0PESmfL9VtBZVAs0Z0K0opDkLA9qNLxnACJeM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=M6bC9itG; arc=none smtp.client-ip=209.85.210.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ot1-f42.google.com with SMTP id 46e09a7af769-6eb77e56b20so1946657a34.3
+        for <linux-usb@vger.kernel.org>; Sat, 20 Apr 2024 13:47:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1713646057; x=1714250857; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=kb/bevCZdlKe2zh21irqMcJQYjEy0O/ZCeu3ucaLGIQ=;
+        b=M6bC9itGHIEIvgg7Rk3e+m6FR7UADyUUOfdwnC0xT+8EOzQ3SvhnFWkkP7nT1DaZn+
+         XV/SQyjAxoGFW2rCpz8YDR9cu48+95zgTe1ZOLBy7/HG+gCwQAOca7Cs+4sJwjHesSX5
+         4ASExXETyu/4/7UEgAzuTC0BhrIIeFKdbm+8fClUJEoL56j89Az2CiQWZchxeCftJ+9h
+         dAq12ID49Ev9AZGeNIHSjZMEKVYHobBu/66ZYDNWExFaBKBULlToK9Rc5mFWdG4Z5vlo
+         UK5Ep2D0R0vvc7b8tznICiJY6UIHwXFYRQx8DQwvRRj4cHIMA/YVI0DLz3sR+RQhxXkN
+         imhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713646057; x=1714250857;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kb/bevCZdlKe2zh21irqMcJQYjEy0O/ZCeu3ucaLGIQ=;
+        b=ucYCOtxf/b3wTD9fQmocKBWHEnG2ADYecUSY7+5THclu7aTbPyybluiiDVWLaPjUiz
+         bGZr7RUbW3uJDqUXR5trBgp0tDLcGtvFYpBSHjeQrciPhTBLlRnTutOsmcvZ6sUV1CDC
+         Hd1X8pGy3cjXGRUXqZKt8PMp/V4MtW7h60yT4/DpjGv1IPxrtYPZEM45mnJWgPEDT9aL
+         WrQIsKXL7t/vhvVUbnmoDO4N/pqsJVswabaOGB7MKq1bIiYfqmQZPu0T738cdn1YWZQi
+         aYe/kGzLcP+KPZudVGXqZlvcwiyiZOR9Sdi/Ysr8yEUoL90H/zN8QvYfCp0VUBDZM1Z8
+         UISg==
+X-Forwarded-Encrypted: i=1; AJvYcCX00qmXEVG6tcu084imSfAtVBmFIUPB/KXGwkFK5zhvhe32TgyR7Vc1Dw7exZLBPL+GtrqPLd3TrOM4pLe3GN34eBOJgJWfPwJc
+X-Gm-Message-State: AOJu0YwlIsmdmvqY65eJZ2E75gdaTbDY9kndkz4LnXAI7fXWxpgk75RI
+	48aY/4hWOO8D/n/mDYbeWw6lVAdIzk2k1vTXbz2R4EdZoaL6JcCi7cQwAb3SPlV1UgoizolzI8p
+	LC7ycFd2VH92kY0OtjVYaDCoGsQjcYlSy/B8IdQ==
+X-Google-Smtp-Source: AGHT+IG262rt420pNwzY8AZsDmczVXNlMCTF70H6EVqdZNolfSDASIpwbTO50b8BEaku8NlH8ubL3mViPrkfZfXmm38=
+X-Received: by 2002:a05:6808:10ca:b0:3c6:be9:f4f9 with SMTP id
+ s10-20020a05680810ca00b003c60be9f4f9mr8118471ois.28.1713646056797; Sat, 20
+ Apr 2024 13:47:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Rspamd-Server: rspamout06
-X-Rspamd-Queue-Id: 24ACB2F
-X-Stat-Signature: qmakgitgei14sankbxgqug8etbjhsjgy
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX18Vb69p4R+rwa3/I17YCltIOGlNW2xZAqA=
-X-HE-Tag: 1713632868-839488
-X-HE-Meta: U2FsdGVkX19NYi9CfavpNt+nn8erIK/wv6gOjWAV73QVevcjJUwFW9DFv4qmo9yYnqXklQVdtK1TJjBKQ9hqaosLrJlXfZb4ue3jc077erl28xEKiqGqJkGnGqkt33yaBP03DBiBlkxZascifD+RuWauNdfVazgom61N43LaD6oHkgc/7x7Yr0n66Ya0yk2fca0zBYn3L7W92HYkEWX/vSXRMVyd/Emzr3bYnb/+dKqVV2IL/bQbGjH2ffvkw3MlMYwNIqiq/dVHRL40mJlpBW7gbfeM/xZlInAIYsrKduI9OdN8XIdeoQsB8Qj/sKN+
+References: <20240420164927.15290-1-prosunofficial@gmail.com>
+In-Reply-To: <20240420164927.15290-1-prosunofficial@gmail.com>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date: Sat, 20 Apr 2024 23:47:25 +0300
+Message-ID: <CAA8EJpqnZPVG6swW6T3YjG-ekinyYeif6SqardH0O_0puJn8Xg@mail.gmail.com>
+Subject: Re: [PATCH v2] remove indentation for common path [linux-next]
+To: sundar <prosunofficial@gmail.com>
+Cc: heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org, 
+	neil.armstrong@linaro.org, u.kleine-koenig@pengutronix.de, 
+	christophe.jaillet@wanadoo.fr, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, skhan@linuxfoundation.org, 
+	javier.carrasco.cruz@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Sat, 2024-04-20 at 22:19 +0530, sundar wrote:
+On Sat, 20 Apr 2024 at 19:49, sundar <prosunofficial@gmail.com> wrote:
+>
+> Added check if pointer is null and removed indentation for common path
+>
+> Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: sundar <prosunofficial@gmail.com>
+> ---
+>
+> Fixed nitpicks in code according to comments received on other patch.
+>
+> https://lore.kernel.org/all/2024041103-doornail-professor-7c1e@gregkh/
+>
+> goal is to get rid of of_node_put,but sending this patch first to do one
+> thing at a time.
+>
+> Changes since v1 - fixed the typo error for spell from identation to
+> indentation
+>
+> v1 patch link - https://lore.kernel.org/all/20240420145522.15018-1-prosunofficial@gmail.com/
+>
+>  drivers/usb/typec/mux/nb7vpq904m.c | 49 +++++++++++++++---------------
+>  1 file changed, 25 insertions(+), 24 deletions(-)
+>
+> diff --git a/drivers/usb/typec/mux/nb7vpq904m.c b/drivers/usb/typec/mux/nb7vpq904m.c
+> index b17826713753..fe0257840dd5 100644
+> --- a/drivers/usb/typec/mux/nb7vpq904m.c
+> +++ b/drivers/usb/typec/mux/nb7vpq904m.c
+> @@ -321,35 +321,37 @@ static int nb7vpq904m_parse_data_lanes_mapping(struct nb7vpq904m *nb7)
+>
+>         ep = of_graph_get_endpoint_by_regs(nb7->client->dev.of_node, 1, 0);
+>
+> -       if (ep) {
+> -               ret = of_property_count_u32_elems(ep, "data-lanes");
+> -               if (ret == -EINVAL)
+> -                       /* Property isn't here, consider default mapping */
+> -                       goto out_done;
+> -               if (ret < 0)
+> -                       goto out_error;
+> -
+> -               if (ret != DATA_LANES_COUNT) {
+> -                       dev_err(&nb7->client->dev, "expected 4 data lanes\n");
+> -                       ret = -EINVAL;
+> -                       goto out_error;
+> -               }
+> +       if (!ep)
+> +               return 0;
+>
+> -               ret = of_property_read_u32_array(ep, "data-lanes", data_lanes, DATA_LANES_COUNT);
+> -               if (ret)
+> -                       goto out_error;
+> +       ret = of_property_count_u32_elems(ep, "data-lanes");
+> +       if (ret == -EINVAL)
+> +               /* Property isn't here, consider default mapping */
+> +               goto out_done;
+> +       if (ret < 0)
+> +               goto out_error;
+> +
+> +       if (ret != DATA_LANES_COUNT) {
+> +               dev_err(&nb7->client->dev, "expected 4 data lanes\n");
+> +               ret = -EINVAL;
+> +               goto out_error;
+> +       }
+>
+> -               for (i = 0; i < ARRAY_SIZE(supported_data_lane_mapping); i++) {
+> -                       for (j = 0; j < DATA_LANES_COUNT; j++) {
+> -                               if (data_lanes[j] != supported_data_lane_mapping[i][j])
+> -                                       break;
+> -                       }
+> +       ret = of_property_read_u32_array(ep, "data-lanes", data_lanes, DATA_LANES_COUNT);
+> +       if (ret)
+> +               goto out_error;
+>
+> -                       if (j == DATA_LANES_COUNT)
+> +       for (i = 0; i < ARRAY_SIZE(supported_data_lane_mapping); i++) {
+> +               for (j = 0; j < DATA_LANES_COUNT; j++) {
+> +                       if (data_lanes[j] != supported_data_lane_mapping[i][j])
+>                                 break;
+>                 }
+>
+> -               switch (i) {
+> +               if (j == DATA_LANES_COUNT)
+> +                       break;
+> +       }
+> +
+> +       switch (i) {
+>                 case NORMAL_LANE_MAPPING:
 
-> ```
-Added check if pointer is null and removed indentation for common path
-```
+switch-cases should also be shifted one level to the left, see
+Documentation/process/coding-style.rst
 
-[]
-
-> ```
-diff --git a/drivers/usb/typec/mux/nb7vpq904m.c b/drivers/usb/typec/mux/nb7=
-vpq904m.c
-```
-
-[]
-
-> ```
-@@ -321,35 +321,37 @@ static int nb7vpq904m_parse_data_lanes_mapping(struct=
- nb7vpq904m *nb7)
-=20
- 	ep =3D of_graph_get_endpoint_by_regs(nb7->client->dev.of_node, 1, 0);
-=20
--	if (ep) {
--		ret =3D of_property_count_u32_elems(ep, "data-lanes");
--		if (ret =3D=3D -EINVAL)
--			/* Property isn't here, consider default mapping */
--			goto out_done;
--		if (ret < 0)
--			goto out_error;
--
--		if (ret !=3D DATA_LANES_COUNT) {
--			dev_err(&nb7->client->dev, "expected 4 data lanes\n");
--			ret =3D -EINVAL;
--			goto out_error;
--		}
-+	if (!ep)
-+		return 0;
-```
+>                         break;
+>                 case INVERT_LANE_MAPPING:
+> @@ -360,7 +362,6 @@ static int nb7vpq904m_parse_data_lanes_mapping(struct nb7vpq904m *nb7)
+>                         dev_err(&nb7->client->dev, "invalid data lanes mapping\n");
+>                         ret = -EINVAL;
+>                         goto out_error;
+> -               }
+>         }
+>
+>  out_done:
+> --
+> 2.34.1
+>
 
 
-Not equivalent code as the out_error:
-
-	of_node_put(ep);
-
-isn't done
-
-
+-- 
+With best wishes
+Dmitry
 
