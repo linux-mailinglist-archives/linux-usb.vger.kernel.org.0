@@ -1,52 +1,74 @@
-Return-Path: <linux-usb+bounces-9514-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9515-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7678D8ABC6A
-	for <lists+linux-usb@lfdr.de>; Sat, 20 Apr 2024 18:23:36 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7CC1D8ABC74
+	for <lists+linux-usb@lfdr.de>; Sat, 20 Apr 2024 18:43:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 33604281B14
-	for <lists+linux-usb@lfdr.de>; Sat, 20 Apr 2024 16:23:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DF687B20F11
+	for <lists+linux-usb@lfdr.de>; Sat, 20 Apr 2024 16:43:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E1633A1C2;
-	Sat, 20 Apr 2024 16:23:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A786F1EA74;
+	Sat, 20 Apr 2024 16:43:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="g/CqKTHZ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AvhU0K0i"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFA7B3232;
-	Sat, 20 Apr 2024 16:23:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0225F7F;
+	Sat, 20 Apr 2024 16:43:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713630210; cv=none; b=KBm6TCgf5gfzgbz8A+VnC0B17iBV2RCe3elocn4xOwQMyeed2f5OmKAm4CFUlmEG0q5AWN5gBgxZbloiyZ4AIDWtlvPcyq4CrewX20xVVfLG0DkZ5u3CsKaMA1OWHeVf1alUgd/EGOTAvF9xIBIId3xNkUK3gj/4/6mbrmYdBJs=
+	t=1713631430; cv=none; b=dQRyp2lp4Q/Iyow54yKkiVuqfZuB/OQoJuXf0Rl5yIL5EyLMHDBs0YidSYb2WCrLbx1l2fz9Uz3zu4Crzu+Y+xBsbgTRmPe100X44s0CKkeRxJzFBtEskwx2+hCMwJ67127uiXku72AiWXcZg4kYyI3A3RIf9vC2iH6RUoxmF9M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713630210; c=relaxed/simple;
-	bh=RLT258sp7GalJDrLQyBpaZMCCZHtEkxZf0okYYefj4w=;
+	s=arc-20240116; t=1713631430; c=relaxed/simple;
+	bh=RVzFOdid7vonSEiYoTYTKg19n8GyJlUWp7TjiCFOFoM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=it7yMRsZtIeUhDVTYd+YmkAHAik19DXMAYF8hAZF7I77OmGtSNuSmr3e9qgtzjSkEndK72GrEd1mmb2UW2/KafiSz/HAH1jhee3tNA2Q9eeF/9g/3t0vQ6OwyWn8eaOvKo1+pgJ+KFDmwLI8XzZ9T3A20jSgar5u+I2uluQ2q/o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=g/CqKTHZ; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=XlyVr8ONFYpRf1VAWEncT5rB6E0YQsLA4SRkK7H7fh8=; b=g/CqKTHZztOlN1ER+/hEaENzrf
-	uR6JpsTAf9iRs7u15dlaaj+JHu6cTbK4lefKrkt6wUcT7t3bw1OenoR7oow7NranK7oQulmA5jRFn
-	ZdJjRjCs/DImvPtZBDTfNpmgeKuh+3Q2ErjNNkzo6QeHOL0wcOwgPYNqGmuD3i9ANogCK5QPvLuPp
-	XyoOXsDfxRd7iJTSZz1fzbHpTLZc4yLSzRpa2OIYWHgjZAyyEYt6uKl7E8eDoLx7b4U4qO7apeCsk
-	u2yOc+e1/LNzuV7E78b59/K/dbs6B6n3PQ0EhqtU70Iw5gWiRYlEaYcXIp1l01YPWxm+FUrMOomdi
-	Nxeet0hA==;
-Received: from [50.53.4.147] (helo=[192.168.254.15])
-	by bombadil.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1ryDUs-00000008nkw-2mDV;
-	Sat, 20 Apr 2024 16:23:26 +0000
-Message-ID: <04af9ead-8ef6-477e-98ad-c458e72f3108@infradead.org>
-Date: Sat, 20 Apr 2024 09:23:23 -0700
+	 In-Reply-To:Content-Type; b=KdYBWIlhUZ1TlMTSzFn+Ov+kPIigrFtrVrlp3ThlV202/L1i0Djv/eGDFPnnkxge3hr/OraCYFNS994cmdHJXJ3/ojizQWcmHCdTbqUNyfZ5YKUS4SoGU8ln1UfSLPvz9uVY+NjsWZkxFBoSkafrRVITiPnn8P98uEAu+EBFSiw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AvhU0K0i; arc=none smtp.client-ip=209.85.210.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-6edc61d0ff6so3062291b3a.2;
+        Sat, 20 Apr 2024 09:43:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1713631428; x=1714236228; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kvYdXMP13MGyiW1mVJY4N9cxjffCsKZfWU34WoKhsJ0=;
+        b=AvhU0K0iuIU28o5lkGDLzB9Ul0mTiXQSd9PNJoOA8kZPnlOhYr0hnLGxUt52T2BIo1
+         t0zhI8Zl1p3GvZ/nhyw3eCSPcwjuVkgSNZz3qVIM/c7e6JFTQd5CtTeTAzlvXNzV2V25
+         kraodc3hYwLyqxMrbvciS5ecw5M3afsVqnMnWcenCCWuj9QN/JByiNCmNdDb4bcsOd7b
+         cUe3w7O8k3XIDvz31cPqPOb/nweDERQQgZVYbmfuIgFqAQ2AY0Ix3okwxUWnr36oHif9
+         3VIKQM3IisTqA/Em5FCaXxqmA+24sJaOaKRMrvttXLlFcJUJPbHPutub8qXIPO6lDwtr
+         w73w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713631428; x=1714236228;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kvYdXMP13MGyiW1mVJY4N9cxjffCsKZfWU34WoKhsJ0=;
+        b=tHtu/WefQwPA4DDGOcnQNgd8gJ/gGHwCdqndd1ICofd0yPwog3R1QbkITt/VGaSFLy
+         qpfJfmsaSsL9ynQZNpdau80ePpaNLfhmAQ9F1VmUGSEfX1vqj7pyDpmlryxP9k5Aj/mx
+         LnxyHclmCuNImdCA3gzcWa8cCDYTe7OjP9A7KMYElGXlK3Z+KJ5mDC1z0FhvG36o5roh
+         sKISogpmWg0SraZWc1opnnXAndL3W1eCed9cuiTnlGF49OTbh9H4vXrD7ItUtEQnuwM2
+         9U4MY/rc6TFfsrX9y1BDgkgChSkFeYsrtYXZHe9ZmVwbEXMz0ylAQ9cmiZrb0fbAMNtX
+         agkg==
+X-Forwarded-Encrypted: i=1; AJvYcCWWtFFOYkSeEdCfi4sUti0gxMPIWfp8f/ZAQhaVEU1y3hhrq8JDh6AMNHBvVQRAFSXb/OLiOMZBS2T2NNoxoDmkUA97aTif/0Ke1caN
+X-Gm-Message-State: AOJu0Yx2uwIMP/XOPjhrr2i6D7IabfdLf+ke/c8qp6IKq5qwh+UFF53x
+	eEsuqWhg1gqvWtqcM3jFF9pluM7qBGLTwexmHXCo6HK5DeceV2m1
+X-Google-Smtp-Source: AGHT+IEBSLyjv69VE+HU94ZPJbY/HZQ5H2D4QeogLPtoXMThpPB3ay6ErZ8nDJzzbB0kDbsjK2SxEA==
+X-Received: by 2002:a05:6a00:2e8f:b0:6ea:86f2:24fb with SMTP id fd15-20020a056a002e8f00b006ea86f224fbmr8138625pfb.25.1713631428164;
+        Sat, 20 Apr 2024 09:43:48 -0700 (PDT)
+Received: from ?IPV6:2402:e280:214c:86:2549:4e11:d9ed:4a8a? ([2402:e280:214c:86:2549:4e11:d9ed:4a8a])
+        by smtp.gmail.com with ESMTPSA id p5-20020a634f45000000b005f05c88c149sm4939930pgl.71.2024.04.20.09.43.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 20 Apr 2024 09:43:47 -0700 (PDT)
+Message-ID: <7123a3b3-687a-4e8b-a59c-d3475c2a784f@gmail.com>
+Date: Sat, 20 Apr 2024 22:13:43 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -55,7 +77,7 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH] remove identation for common path
-To: "sundar.R" <prosunofficial@gmail.com>, heikki.krogerus@linux.intel.com,
+To: Randy Dunlap <rdunlap@infradead.org>, heikki.krogerus@linux.intel.com,
  gregkh@linuxfoundation.org, neil.armstrong@linaro.org,
  dmitry.baryshkov@linaro.org, u.kleine-koenig@pengutronix.de,
  christophe.jaillet@wanadoo.fr
@@ -63,22 +85,25 @@ Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
  skhan@linuxfoundation.org, javier.carrasco.cruz@gmail.com
 References: <20240420145522.15018-1-prosunofficial@gmail.com>
  <98f301b5-0161-467a-be2f-d2554a2265a1@gmail.com>
+ <04af9ead-8ef6-477e-98ad-c458e72f3108@infradead.org>
 Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <98f301b5-0161-467a-be2f-d2554a2265a1@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+From: sundar <prosunofficial@gmail.com>
+In-Reply-To: <04af9ead-8ef6-477e-98ad-c458e72f3108@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
+On 20/04/24 21:53, Randy Dunlap wrote:
+> 
+> 
+> On 4/20/24 7:59 AM, sundar.R wrote:
+>> On 20/04/24 20:25, sundar wrote:
+>>> Added check if pointer is null and removed identation for common path
+> 
+> In Subject and the line above, spell "indentation".
+> 
+Thanks for pointing it out. will fix the typo error.
+And send the updated version.
 
-
-On 4/20/24 7:59 AM, sundar.R wrote:
-> On 20/04/24 20:25, sundar wrote:
->> Added check if pointer is null and removed identation for common path
-
-In Subject and the line above, spell "indentation".
-
--- 
-#Randy
-https://people.kernel.org/tglx/notes-about-netiquette
-https://subspace.kernel.org/etiquette.html
+Thanks,
+Sundar
 
