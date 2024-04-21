@@ -1,206 +1,117 @@
-Return-Path: <linux-usb+bounces-9521-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9522-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1BF9E8ABE44
-	for <lists+linux-usb@lfdr.de>; Sun, 21 Apr 2024 03:17:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 16CF58ABE4C
+	for <lists+linux-usb@lfdr.de>; Sun, 21 Apr 2024 03:28:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3EBF9B20EBE
-	for <lists+linux-usb@lfdr.de>; Sun, 21 Apr 2024 01:17:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6EBC9B20E49
+	for <lists+linux-usb@lfdr.de>; Sun, 21 Apr 2024 01:28:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 922601FB2;
-	Sun, 21 Apr 2024 01:17:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gS2923b5"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96DA11FA4;
+	Sun, 21 Apr 2024 01:28:00 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay.hostedemail.com (smtprelay0014.hostedemail.com [216.40.44.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C660C17E9;
-	Sun, 21 Apr 2024 01:17:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFB931373;
+	Sun, 21 Apr 2024 01:27:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713662228; cv=none; b=PmicV1S0xPyD5DY24sfg9fA7Y1QOqG18/EeHfZ5mU9+jFpSMc59orX3cFmB0xaYVDzSjjSVqUPJ/GMUxco+BIlp6VLsVsupYti+UtaoUQMDH7Wn9NrxqIpO4FCAWZ4UabIPIoH9C78dqdZfHo8bv8ZHkNJW2M+Z8Jo7hIcSIpWo=
+	t=1713662880; cv=none; b=ShonlKslQhVYkz8siDuHXWlb5pLWJRyjBmOZ56ZiDXqvbVXkWXpaJO161eOYDQXxJPAf6XJY8+6Z73XkDPNNk8O29Fcu0cySnLvVEsPot4LBLzCPqMBNCgi3x/mYzeBZrOiJYtz6ifZhfUr1ELBck0kl9xxkvcNNxSD40kh7S0U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713662228; c=relaxed/simple;
-	bh=bf87LTTfzpmwA9Io9J4bIwl/FQzv77/RTk/Waflp9xM=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Foh911q+xyp1VMMJahZiyTm3oKz886BTdz++bBoHV97gNtC1f9yM/Lqi/4UAOIfXnFO497zGn+7v4yr4FZqJU3SA3P0AtJHUvTBkyELcQpB3wC3LU3pCwJy9cqkwvKoWwmy96cBctPqT5nncEEh9Jsgr5o5l06hmaUTwVtRFHQQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gS2923b5; arc=none smtp.client-ip=209.85.215.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-5e4f79007ffso2106329a12.2;
-        Sat, 20 Apr 2024 18:17:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713662226; x=1714267026; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=2kfxX0gAblsNTcir2Fbcwrw/oNkxvMTFC1t5qDh73Yw=;
-        b=gS2923b51nyZtzBhPpUw5g3can21oVGkswiYt84KLM1kEbZe3ZclQC4qu0RZW99DOU
-         zEZbq2Itf9gnpuhAvQtgSaS2+uXXxB27ZJlpgKZnIGmRAQl4O+Gc1Dhvjd53xDgjXLAf
-         j+RsgCvHZR48IWD0PwE5D+a0VM04Jr/2p1qeTKMkJubnPOnbVYxCWfdP5MdpUWeytDwl
-         WcHVrELCoZyq9NFBhmp+FNCnRT6C43oHVAvSB2ght8C8UUWdYO/N/vYMqXspG8Nbw7ta
-         4qS6g3ycZh3eVKS9v4vB+RW0MxZN9bzsQRy/ksZgywhyc9rShxDrz2/quKDoCCd3nJ3G
-         +A1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713662226; x=1714267026;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2kfxX0gAblsNTcir2Fbcwrw/oNkxvMTFC1t5qDh73Yw=;
-        b=UjlSPS/IoSLqou5t2/qO690rAzAKIdSJ9RVFR2Gv89nUkmVmem01Y8EcxyKnf8mYQN
-         tmh6EOLzGAPkCvqR6ixmtod9OMk2MIu1DXeCeFHG8xYy6MMakAamr0Mqz/494snt4HpH
-         U43ALbWTjQ9mRTL6b0XDTsVDEIuMp8LTKZahkMuUQSfmhwLqFZ+uUcPN5KKmNqIELqWt
-         OPQ+UgDKJRMGiI2hjUad/l7d1DV7XuWBYZFT4DpvE0pGgtbQAsN1bFhbFnTYaDqR+Hbx
-         dkLmvRV/OcepXybvtge71s2Q8DdXEOzbQJt6K1qSPk3vr4dC6/1KSYezs+PflpjKEwOq
-         wf0A==
-X-Forwarded-Encrypted: i=1; AJvYcCWvuMOrWd0YYfTc1Xf+68dkmbg3UXF6O2yYJjSZ2q+J9m6Bgt0+H6zeaFsV+D+GTQuKQBB/nUBknUcmbSDictCq2iUmEG3kxkzo3SKT
-X-Gm-Message-State: AOJu0Ywwi6xIuRCOLnzect2mlhSm2zF13OOdMkanGWtsoej2NOpFVabS
-	lTPR0JnUJvPeSUcP2ABP3B6afPmvkM66O220mBiBjWbU2Ue6Bft2
-X-Google-Smtp-Source: AGHT+IG3vHCUVwo/lxVBJMFijFA+8ZG4hmmvuU9hInLpvKUPnmf3PYj/8zFKnOrw2ks9E/8V1l2bhA==
-X-Received: by 2002:a17:902:f542:b0:1e4:3386:349f with SMTP id h2-20020a170902f54200b001e43386349fmr8668141plf.51.1713662226013;
-        Sat, 20 Apr 2024 18:17:06 -0700 (PDT)
-Received: from kernel.. ([2402:e280:214c:86:9255:6017:dc77:4c93])
-        by smtp.gmail.com with ESMTPSA id mq8-20020a170902fd4800b001e23fcdebe9sm5608583plb.98.2024.04.20.18.17.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 20 Apr 2024 18:17:05 -0700 (PDT)
-From: sundar <prosunofficial@gmail.com>
-To: heikki.krogerus@linux.intel.com,
-	gregkh@linuxfoundation.org,
-	neil.armstrong@linaro.org,
-	dmitry.baryshkov@linaro.org,
-	u.kleine-koenig@pengutronix.de,
+	s=arc-20240116; t=1713662880; c=relaxed/simple;
+	bh=vFRK9h+5k+ZVFw7k1Zs8oDgehYtBauqWEnk9WLUMUC8=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=OgaICpwrYcHP6V7ESaIVhAF8/q+09rxbVW9j5n8MOhNhI7ejQGEkyXSfSBiBzac+GQcseRPUm9F43zyYf2DaPGsMMOVA/l/TbR/hPKZUBGqKK/IcXxNqtmTIAziTl4lONM47oykZDG4B616XDI6pMI6WJRERmLHeAcKDxim96ig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=perches.com; spf=pass smtp.mailfrom=perches.com; arc=none smtp.client-ip=216.40.44.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=perches.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=perches.com
+Received: from omf08.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay03.hostedemail.com (Postfix) with ESMTP id 7299EA070F;
+	Sun, 21 Apr 2024 01:27:48 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf08.hostedemail.com (Postfix) with ESMTPA id 84AD520026;
+	Sun, 21 Apr 2024 01:27:45 +0000 (UTC)
+Message-ID: <c24dc77d4c339d1b1ba4a76cf7c365d970cfca41.camel@perches.com>
+Subject: Re: [PATCH v2] remove indentation for common path [linux-next]
+From: Joe Perches <joe@perches.com>
+To: sundar <prosunofficial@gmail.com>, heikki.krogerus@linux.intel.com, 
+	gregkh@linuxfoundation.org, neil.armstrong@linaro.org, 
+	dmitry.baryshkov@linaro.org, u.kleine-koenig@pengutronix.de, 
 	christophe.jaillet@wanadoo.fr
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	skhan@linuxfoundation.org,
-	javier.carrasco.cruz@gmail.com,
-	sundar <prosunofficial@gmail.com>
-Subject: [PATCH v3] usb: typec: mux: remove indentation for common path [linux-next]
-Date: Sun, 21 Apr 2024 06:46:47 +0530
-Message-Id: <20240421011647.3027-1-prosunofficial@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	skhan@linuxfoundation.org, javier.carrasco.cruz@gmail.com
+Date: Sat, 20 Apr 2024 18:27:44 -0700
+In-Reply-To: <b6f3d628-077e-486a-97f2-267324a76e9c@gmail.com>
+References: <20240420164927.15290-1-prosunofficial@gmail.com>
+	 <a51f703d4f8dc3b0917002c520ea6608ac642b75.camel@perches.com>
+	 <b6f3d628-077e-486a-97f2-267324a76e9c@gmail.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 84AD520026
+X-Stat-Signature: mioty8ocidms19zdhjpkx3hob4ci8buy
+X-Rspamd-Server: rspamout01
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX18w+iwXIEr/hC5cNcQUEvVgTEdhIRawB/o=
+X-HE-Tag: 1713662865-243079
+X-HE-Meta: U2FsdGVkX19JHw36O2wr43FqbDqzmzqY8/buZSTBJF/qvlUJLz9iKI3b7sDHmmHBhvGNi0cYnf7aCGuxxH1LlDv6O4r+IaNC3TBFUOYqAyr1FDCu0syWDmg+sLmRK8My4doE2bQZQ15rDI2fd63vL0B2P9hceDDlRW0lwJcrtsrjdNxn0hIDnlQNVLARYKiaqf9JoFIpZt38AGW5QcweXFsyrYfn1y83bdgk0etgjnSM6dlohgHk9T4b4xBhq8WhbrsrzYLAy/boeAqpMreRB/chepm4V59czDhWEhnZS0trbsey6NYOKxugcaHBydgQ
 
-Added check if pointer is null and removed indentation for common path
+On Sun, 2024-04-21 at 06:13 +0530, sundar wrote:
+> On 20/04/24 22:37, Joe Perches wrote:
+> > On Sat, 2024-04-20 at 22:19 +0530, sundar wrote:
+> >=20
+> >=20
+> > > ```
+> > @@ -321,35 +321,37 @@ static int nb7vpq904m_parse_data_lanes_mapping(st=
+ruct nb7vpq904m *nb7)
+> >  =20
+> >   	ep =3D of_graph_get_endpoint_by_regs(nb7->client->dev.of_node, 1, 0)=
+;
+> >  =20
+> > -	if (ep) {
+> > -		ret =3D of_property_count_u32_elems(ep, "data-lanes");
+> > -		if (ret =3D=3D -EINVAL)
+> > -			/* Property isn't here, consider default mapping */
+> > -			goto out_done;
+> > -		if (ret < 0)
+> > -			goto out_error;
+> > -
+> > -		if (ret !=3D DATA_LANES_COUNT) {
+> > -			dev_err(&nb7->client->dev, "expected 4 data lanes\n");
+> > -			ret =3D -EINVAL;
+> > -			goto out_error;
+> > -		}
+> > +	if (!ep)
+> > +		return 0;
+> > ```
+> >=20
+> >=20
+> > Not equivalent code as the out_error:
+> >=20
+> > 	of_node_put(ep);
+> >=20
+> > isn't done
+> >=20
+> >=20
+>=20
+> Hi joe perches,
+>=20
+> If ep is null,  I believe we dont need to call of_node_put.  Because=20
+> passing null pointer to of_node_put() make no difference.
+>=20
+> In of_node_put() definition, if pointer is null, there is no operation.
+>=20
 
-Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: sundar <prosunofficial@gmail.com>
----
-
-Fixed nitpicks in code according to comments received on other patch.
-
-https://lore.kernel.org/all/2024041103-doornail-professor-7c1e@gregkh/
-
-Goal is to get rid of of_node_put,but sending this patch first to do one
-thing at a time.
-
-Changes since v1 - fixed the typo error for spell from identation to
-indentation
-
-Changes since v2 - Shifted the indentation to one level left for the
-switch cases as per coding style.
-
-v1 patch link - https://lore.kernel.org/all/20240420145522.15018-1-prosunofficial@gmail.com/
-v2 patch link - https://lore.kernel.org/linux-usb/20240420164927.15290-1-prosunofficial@gmail.com/
-
- drivers/usb/typec/mux/nb7vpq904m.c | 68 +++++++++++++++---------------
- 1 file changed, 34 insertions(+), 34 deletions(-)
-
-diff --git a/drivers/usb/typec/mux/nb7vpq904m.c b/drivers/usb/typec/mux/nb7vpq904m.c
-index b17826713753..f7a00b388876 100644
---- a/drivers/usb/typec/mux/nb7vpq904m.c
-+++ b/drivers/usb/typec/mux/nb7vpq904m.c
-@@ -320,47 +320,47 @@ static int nb7vpq904m_parse_data_lanes_mapping(struct nb7vpq904m *nb7)
- 	int ret, i, j;
- 
- 	ep = of_graph_get_endpoint_by_regs(nb7->client->dev.of_node, 1, 0);
-+	if (!ep)
-+		return 0;
- 
--	if (ep) {
--		ret = of_property_count_u32_elems(ep, "data-lanes");
--		if (ret == -EINVAL)
--			/* Property isn't here, consider default mapping */
--			goto out_done;
--		if (ret < 0)
--			goto out_error;
--
--		if (ret != DATA_LANES_COUNT) {
--			dev_err(&nb7->client->dev, "expected 4 data lanes\n");
--			ret = -EINVAL;
--			goto out_error;
--		}
--
--		ret = of_property_read_u32_array(ep, "data-lanes", data_lanes, DATA_LANES_COUNT);
--		if (ret)
--			goto out_error;
-+	ret = of_property_count_u32_elems(ep, "data-lanes");
-+	if (ret == -EINVAL)
-+		/* Property isn't here, consider default mapping */
-+		goto out_done;
-+	if (ret < 0)
-+		goto out_error;
-+
-+	if (ret != DATA_LANES_COUNT) {
-+		dev_err(&nb7->client->dev, "expected 4 data lanes\n");
-+		ret = -EINVAL;
-+		goto out_error;
-+	}
- 
--		for (i = 0; i < ARRAY_SIZE(supported_data_lane_mapping); i++) {
--			for (j = 0; j < DATA_LANES_COUNT; j++) {
--				if (data_lanes[j] != supported_data_lane_mapping[i][j])
--					break;
--			}
-+	ret = of_property_read_u32_array(ep, "data-lanes", data_lanes, DATA_LANES_COUNT);
-+	if (ret)
-+		goto out_error;
- 
--			if (j == DATA_LANES_COUNT)
-+	for (i = 0; i < ARRAY_SIZE(supported_data_lane_mapping); i++) {
-+		for (j = 0; j < DATA_LANES_COUNT; j++) {
-+			if (data_lanes[j] != supported_data_lane_mapping[i][j])
- 				break;
- 		}
- 
--		switch (i) {
--		case NORMAL_LANE_MAPPING:
--			break;
--		case INVERT_LANE_MAPPING:
--			nb7->swap_data_lanes = true;
--			dev_info(&nb7->client->dev, "using inverted data lanes mapping\n");
-+		if (j == DATA_LANES_COUNT)
- 			break;
--		default:
--			dev_err(&nb7->client->dev, "invalid data lanes mapping\n");
--			ret = -EINVAL;
--			goto out_error;
--		}
-+	}
-+
-+	switch (i) {
-+	case NORMAL_LANE_MAPPING:
-+		break;
-+	case INVERT_LANE_MAPPING:
-+		nb7->swap_data_lanes = true;
-+		dev_info(&nb7->client->dev, "using inverted data lanes mapping\n");
-+		break;
-+	default:
-+		dev_err(&nb7->client->dev, "invalid data lanes mapping\n");
-+		ret = -EINVAL;
-+		goto out_error;
- 	}
- 
- out_done:
--- 
-2.34.1
+Fine, but you should explain that in the changelog
+and not make reviewers look it up.
 
 
