@@ -1,55 +1,48 @@
-Return-Path: <linux-usb+bounces-9523-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9524-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E84998ABEAF
-	for <lists+linux-usb@lfdr.de>; Sun, 21 Apr 2024 08:37:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 173F98ABEE1
+	for <lists+linux-usb@lfdr.de>; Sun, 21 Apr 2024 11:37:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A7816B20CC7
-	for <lists+linux-usb@lfdr.de>; Sun, 21 Apr 2024 06:37:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B798C1F210BB
+	for <lists+linux-usb@lfdr.de>; Sun, 21 Apr 2024 09:37:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E47DFD2FE;
-	Sun, 21 Apr 2024 06:37:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="w0o5Tkaz"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E4CB101DE;
+	Sun, 21 Apr 2024 09:37:28 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 417773232;
-	Sun, 21 Apr 2024 06:37:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from cae.in-ulm.de (cae.in-ulm.de [217.10.14.231])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1429C625;
+	Sun, 21 Apr 2024 09:37:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.10.14.231
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713681456; cv=none; b=p8RznX+ErWhCO8qOizSU61T0MMZFqwsa4mfIEZGb/Y3PTbIvgg+ib3HBE0AuwdCpA/IFxpV9vBoJWuciR9nuPK25IL06cODnfj8cKy81W8A06W/ev9w0bBvsZTU5pH5GU9/ljTJAo0vMIwa54RXHAOLMm/yEuccJS9nlLeD9VwQ=
+	t=1713692248; cv=none; b=nRXqMLcUazcaHwkCieANqM0gR5VbcYKkLTEsatC780P0ji+NCnpfD4ysZG8K5Heyfw3fQQdF9m+q1jsDFBgBR53qw8DvGje2r87zU21+t+lCGDLtlZI2Es81Sy5jL5g0lkJVhVxomeJygo3NY7fJDbm/2Jt3hiF59xeNmW6Bf/w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713681456; c=relaxed/simple;
-	bh=wm32zSJnxIx+mTfYm0WIFmhVPlrSiGKpBbBskUNBm00=;
+	s=arc-20240116; t=1713692248; c=relaxed/simple;
+	bh=gRcDq0NrGX6/1/kSuxwyYx9WNXiEK2e2hJwS1DZI4W8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hgUZXz5xzEbelWsYzph8FC7tuEUd12+JE9PXAjTKsyLxZMl5wlmXDqj8wpWj/gKJQP+hfPNPSzw1TxorMXTYKvUrFIgkEXMBFRLj9phRjxHqgCuxA7M3uTcQEaoiEpB8lo4TlGrMCWMaYIKojh6qmKp8Ph7+r6TpxWIwC6LZOpk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=w0o5Tkaz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32181C113CE;
-	Sun, 21 Apr 2024 06:37:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1713681455;
-	bh=wm32zSJnxIx+mTfYm0WIFmhVPlrSiGKpBbBskUNBm00=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=w0o5Tkaz5ez7Ajvz6MN4Wxpc0CdOjLKbIcPVaAqPWpoc4eK5AJu54b3IeEFUmVaeG
-	 WgPOoVCgUSxFSYnLCZLzLmTtKiO9JbGXKG9PkeWmluBwRm4a+oVxlR2neRJJ+ePhYo
-	 w8tY0Wk75a8m1po/yPv+yh11EqjJJtOxRQgxZ0dQ=
-Date: Sun, 21 Apr 2024 08:37:31 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: sundar <prosunofficial@gmail.com>
-Cc: heikki.krogerus@linux.intel.com, neil.armstrong@linaro.org,
-	dmitry.baryshkov@linaro.org, u.kleine-koenig@pengutronix.de,
-	christophe.jaillet@wanadoo.fr, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, skhan@linuxfoundation.org,
-	javier.carrasco.cruz@gmail.com
-Subject: Re: [PATCH v3] usb: typec: mux: remove indentation for common path
- [linux-next]
-Message-ID: <2024042151-tingle-bronzing-983c@gregkh>
-References: <20240421011647.3027-1-prosunofficial@gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=AqnG689eUA0qZwsuDfN0iNg6zJm5nuPzckzf7o0hE/LHYzUns07UWmJ42dZ0jVa05jjAX6wkZaxcCyk4WCl6rNHbLfBFDz4Jvvm/Zl4xnBF2r01XliudsecbcG0au8Ju2sbYu1dHnqlhfMI5DYlkM5kWibkbm7Yqc4Gm8uLvjYQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c--e.de; spf=pass smtp.mailfrom=c--e.de; arc=none smtp.client-ip=217.10.14.231
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c--e.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=c--e.de
+Received: by cae.in-ulm.de (Postfix, from userid 1000)
+	id 715C014026B; Sun, 21 Apr 2024 11:30:17 +0200 (CEST)
+Date: Sun, 21 Apr 2024 11:30:17 +0200
+From: "Christian A. Ehrhardt" <lk@c--e.de>
+To: Jameson Thies <jthies@google.com>
+Cc: heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
+	pmalani@chromium.org, bleung@google.com,
+	abhishekpandit@chromium.org, andersson@kernel.org,
+	dmitry.baryshkov@linaro.org, fabrice.gasnier@foss.st.com,
+	gregkh@linuxfoundation.org, hdegoede@redhat.com,
+	neil.armstrong@linaro.org, rajaram.regupathy@intel.com,
+	saranya.gopal@intel.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/4] usb: typec: ucsi: Fix null deref in trace
+Message-ID: <ZiTcqZYS53ITwNLy@cae.in-ulm.de>
+References: <20240419211650.2657096-1-jthies@google.com>
+ <20240419211650.2657096-2-jthies@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -58,53 +51,48 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240421011647.3027-1-prosunofficial@gmail.com>
+In-Reply-To: <20240419211650.2657096-2-jthies@google.com>
 
-On Sun, Apr 21, 2024 at 06:46:47AM +0530, sundar wrote:
-> Added check if pointer is null and removed indentation for common path
+
+Hi Jameson,
+
+On Fri, Apr 19, 2024 at 09:16:47PM +0000, Jameson Thies wrote:
+> From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
 > 
-> Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Signed-off-by: sundar <prosunofficial@gmail.com>
+> ucsi_register_altmode checks IS_ERR on returned pointer and treats
+> NULL as valid. This results in a null deref when
+> trace_ucsi_register_altmode is called.
+> 
+> Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
 > ---
+>  drivers/usb/typec/ucsi/ucsi.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
+> diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
+> index c4d103db9d0f8..c663dce0659ee 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.h
+> +++ b/drivers/usb/typec/ucsi/ucsi.h
+> @@ -496,7 +496,7 @@ ucsi_register_displayport(struct ucsi_connector *con,
+>  			  bool override, int offset,
+>  			  struct typec_altmode_desc *desc)
+>  {
+> -	return NULL;
+> +	return ERR_PTR(-EOPNOTSUPP);
+>  }
 
-Hi,
+Hm. This does not look correct to me. Ignoring trace the old code
+would have returned success if displayport is not compiled in and
+all altmodes (except for display port) would be registered.
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+With your code ucsi_register_altmodes will always fail and abort
+altmode registration if it finds a displayport altmode and
+CONFIG_TYPEC_DP_ALTMODE is not set. I don't think this is what we want.
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+Maybe it is better to guard the trace call with an if?
 
-- You did not specify a description of why the patch is needed, or
-  possibly, any description at all, in the email body.  Please read the
-  section entitled "The canonical patch format" in the kernel file,
-  Documentation/process/submitting-patches.rst for what is needed in
-  order to properly describe the change.
+Am I missing something?
 
-- You did not write a descriptive Subject: for the patch, allowing Greg,
-  and everyone else, to know what this patch is all about.  Please read
-  the section entitled "The canonical patch format" in the kernel file,
-  Documentation/process/submitting-patches.rst for what a proper
-  Subject: line should look like.
+Best regards,
+Christian
 
-- It looks like you did not use your "real" name for the patch on either
-  the Signed-off-by: line, or the From: line (both of which have to
-  match).  Please read the kernel file,
-  Documentation/process/submitting-patches.rst for how to do this
-  correctly.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
 
