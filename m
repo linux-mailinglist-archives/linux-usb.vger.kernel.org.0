@@ -1,86 +1,181 @@
-Return-Path: <linux-usb+bounces-9529-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9530-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 359048ABEF2
-	for <lists+linux-usb@lfdr.de>; Sun, 21 Apr 2024 12:27:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 486D08ABF13
+	for <lists+linux-usb@lfdr.de>; Sun, 21 Apr 2024 13:36:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A5EB0B20B2F
-	for <lists+linux-usb@lfdr.de>; Sun, 21 Apr 2024 10:27:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 04E62281059
+	for <lists+linux-usb@lfdr.de>; Sun, 21 Apr 2024 11:36:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4849810A1E;
-	Sun, 21 Apr 2024 10:27:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38D89111AD;
+	Sun, 21 Apr 2024 11:36:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="rBzbDuLc"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="tsqqbXWb"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3E8011185
-	for <linux-usb@vger.kernel.org>; Sun, 21 Apr 2024 10:27:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BB27205E18;
+	Sun, 21 Apr 2024 11:36:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713695248; cv=none; b=qCOITNG06czLekHjgqcpX81s559vNqFCFfaHnid5rL1W5l0Qu5JoTdkgatSpAVXq6amIBYA2pHa/9VaeJy/1ASA2X7Xy9PDYEpAdK+HXqnviaZ72L3qQ2O8x/Xmf4nG54anVrTgFfKqJqCs306orR5SwBKZkg2S2NnGIIYL5d3s=
+	t=1713699378; cv=none; b=KE7Glf8KzmC05wnhd7KvhgZfpOOMjyIVImHwMX/Iq+X5dIgSkx68CKTA+zkfWuRJ3UW/hqzoJdYV6RuszO5RSLSjgW6pj+5RL5FhfIp4K1cwljop2KJCbgNFl0mFDPMoyUX5xLtV/KnxVw2NzLvFG7MOzEuxPxGCQ2G1Qo0VepM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713695248; c=relaxed/simple;
-	bh=oHlmXx2QbntVnooWeWD4hBHP7wUybAGAuSlpSI3q2zs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=clGCf+EXU3A7JAYnSk22euiMyW5ci5s/8XHjOUvnzP0iGc9iWHCZqQLBN25kF7uEcmvANIT7UlvM2nBXBzQjSejXehacDmDBwGACWfWfJ2hyu+lXUu3RZX9oAv3S38uJU8eoKXvdVYQXpMp9JzudMAZBtDd73J5e7HWD8cHIIdU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=rBzbDuLc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECA9AC113CE;
-	Sun, 21 Apr 2024 10:27:27 +0000 (UTC)
+	s=arc-20240116; t=1713699378; c=relaxed/simple;
+	bh=gzbUQsZaoeyIpw/FMjHcyR+/W/UJIM3nsyCRxswYcJk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Uz3DgM8fZEqTe5IxVhhjGNv+fXaBx1Eei5gmBySIBppDH2ufaxkRX5Arl3mspPIIn4bI8SBj544cmLU9BMyCdUuelGNdQsY9ELJkIgq45554ckwogLOephTd731VUMNdIBeX8CgfCch1bWfQCp5r+2o4BEuHf9iVYmOaiuJ8K04=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=tsqqbXWb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7F85C113CE;
+	Sun, 21 Apr 2024 11:36:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1713695248;
-	bh=oHlmXx2QbntVnooWeWD4hBHP7wUybAGAuSlpSI3q2zs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=rBzbDuLccofL1DM/buRjmpMWjzZuh3/Xd81wLr6gUcXsZEHQYVQjUemyqpnzKp8wB
-	 UtDEpwjC++UsE1lIyESWrL7q0xW8N7vnMTbaWCPIVMsUPqftZcuXhOR0dixk09JYV7
-	 Ehny098IDsmTbrqbkUel3O3t1ElEsf5QNNP4GYg8=
-Date: Sun, 21 Apr 2024 12:27:25 +0200
+	s=korg; t=1713699378;
+	bh=gzbUQsZaoeyIpw/FMjHcyR+/W/UJIM3nsyCRxswYcJk=;
+	h=Date:From:To:Cc:Subject:From;
+	b=tsqqbXWbtMw2Vz91lVZmyM2JQbCU2ZCfFE5fWp1RuDzgWOqcRz1hrtckikwfv5sdw
+	 K91FF/NMxsRaLWk+/IBH+hkBy5cOAxxhIfbEr9vRY4fs6mS8slxsUTNFXlAOVmiUbq
+	 gfcMbZ1vmHmqZ/LZBQrWgoDMwDayB7Ehoc0+z/A0=
+Date: Sun, 21 Apr 2024 13:36:15 +0200
 From: Greg KH <gregkh@linuxfoundation.org>
-To: Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: linux-usb@vger.kernel.org, Yehezkel Bernat <YehezkelShB@gmail.com>,
-	Michael Jamet <michael.jamet@intel.com>,
-	Lukas Wunner <lukas@wunner.de>,
-	Andreas Noever <andreas.noever@gmail.com>,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	Sanath S <Sanath.S@amd.com>
-Subject: Re: [ANNOUNCE] Thunderbolt/USB4 debugging tools
-Message-ID: <2024042110-oat-juicy-e599@gregkh>
-References: <20240402101020.GP112498@black.fi.intel.com>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB / Thunderbolt driver fixes for 6.9-rc5
+Message-ID: <ZiT6LyZvHAwg7Vye@kroah.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20240402101020.GP112498@black.fi.intel.com>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Apr 02, 2024 at 01:10:20PM +0300, Mika Westerberg wrote:
-> Hi all,
-> 
-> This is mostly for the folks developing and testing Thunderbolt/USB4
-> driver side of things but may be useful for others too. Not intented to
-> replace anything we already have for the regular user stack.
-> 
-> In summary this is a collection of small tools that provide bit more
-> user friendly access to the sysfs/debugfs/tracefs interfaces made
-> available by the driver. Mainly useful for debugging issues around the
-> software connection manager parts of the driver (although some of these
-> work with the firmware connection manager too). We have been using this
-> internally for a while.
-> 
-> The repository can be found here:
-> 
->   https://github.com/intel/tbtools
-> 
+The following changes since commit 39cd87c4eb2b893354f3b850f916353f2658ae6f:
 
+  Linux 6.9-rc2 (2024-03-31 14:32:39 -0700)
 
-Very cool, thanks for the link!
+are available in the Git repository at:
 
-greg k-h
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.9-rc5
+
+for you to fetch changes up to 7a9a304069810c0c5296b851f228f8966d3a030e:
+
+  Merge tag 'usb-serial-6.9-rc5' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus (2024-04-19 16:07:18 +0200)
+
+----------------------------------------------------------------
+USB / Thunderbolt driver fixes for 6.9-rc5
+
+Here are some small USB and Thunderbolt driver fixes for 6.9-rc5.
+Included in here are:
+  - MAINTAINER file update for invalid email address
+  - usb-serial device id updates
+  - typec driver fixes
+  - thunderbolt / usb4 driver fixes
+  - usb core shutdown fixes
+  - cdc-wdm driver revert for reported problem in -rc1
+  - usb gadget driver fixes
+  - xhci driver fixes
+
+All of these have been in linux-next for a while with no reported
+problems.
+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+AngeloGioacchino Del Regno (1):
+      usb: typec: mux: it5205: Fix ChipID value typo
+
+Christian A. Ehrhardt (1):
+      usb: typec: ucsi: Fix connector check on init
+
+Chuanhong Guo (1):
+      USB: serial: option: add support for Fibocom FM650/FG650
+
+Coia Prant (1):
+      USB: serial: option: add Lonsung U8300/U9300 product
+
+Daniele Palmas (1):
+      USB: serial: option: add Telit FN920C04 rmnet compositions
+
+Fabio Estevam (1):
+      usb: misc: onboard_usb_hub: Disable the USB hub clock on failure
+
+Gil Fine (2):
+      thunderbolt: Fix wake configurations after device unplug
+      thunderbolt: Avoid notify PM core about runtime PM resume
+
+Greg Kroah-Hartman (3):
+      Merge tag 'thunderbolt-for-v6.9-rc5' of git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt into usb-linus
+      Revert "usb: cdc-wdm: close race between read and workqueue"
+      Merge tag 'usb-serial-6.9-rc5' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus
+
+Jerry Meng (1):
+      USB: serial: option: support Quectel EM060K sub-models
+
+Kai-Heng Feng (1):
+      usb: Disable USB3 LPM at shutdown
+
+Krzysztof Kozlowski (1):
+      usb: phy: MAINTAINERS: mark Freescale USB PHY as orphaned
+
+Kyle Tso (1):
+      usb: typec: tcpm: Correct the PDO counting in pd_set
+
+Mathias Nyman (1):
+      xhci: Fix root hub port null pointer dereference in xhci tracepoints
+
+Mika Westerberg (1):
+      thunderbolt: Do not create DisplayPort tunnels on adapters of the same router
+
+Minas Harutyunyan (1):
+      usb: dwc2: host: Fix dereference issue in DDMA completion flow.
+
+Norihiko Hama (1):
+      usb: gadget: f_ncm: Fix UAF ncm object at re-bind after usb ep transport error
+
+Oliver Neukum (1):
+      usb: xhci: correct return value in case of STS_HCE
+
+Paul Cercueil (2):
+      usb: gadget: functionfs: Fix inverted DMA fence direction
+      usb: gadget: functionfs: Wait for fences before enqueueing DMABUF
+
+Thinh Nguyen (1):
+      usb: dwc3: ep0: Don't reset resource alloc flag
+
+Uwe Kleine-König (2):
+      usb: gadget: fsl: Initialize udc before using it
+      MAINTAINERS: Drop Li Yang as their email address stopped working
+
+Vanillan Wang (1):
+      USB: serial: option: add Rolling RW101-GL and RW135-GL support
+
+bolan wang (1):
+      USB: serial: option: add Fibocom FM135-GL variants
+
+ MAINTAINERS                           | 14 +++-------
+ drivers/thunderbolt/switch.c          | 50 ++++++++++++++++++++++++++++-------
+ drivers/thunderbolt/tb.c              | 10 +++++--
+ drivers/thunderbolt/tb.h              |  3 ++-
+ drivers/thunderbolt/usb4.c            | 13 ++++-----
+ drivers/usb/class/cdc-wdm.c           |  6 +----
+ drivers/usb/core/port.c               |  4 ++-
+ drivers/usb/dwc2/hcd_ddma.c           |  4 ++-
+ drivers/usb/dwc3/ep0.c                |  3 ++-
+ drivers/usb/gadget/function/f_fs.c    | 29 +++++++++++---------
+ drivers/usb/gadget/function/f_ncm.c   |  4 +--
+ drivers/usb/gadget/udc/fsl_udc_core.c |  5 ++--
+ drivers/usb/host/xhci-ring.c          |  9 +++----
+ drivers/usb/host/xhci-trace.h         | 12 ++++-----
+ drivers/usb/misc/onboard_usb_hub.c    |  6 ++++-
+ drivers/usb/serial/option.c           | 40 ++++++++++++++++++++++++++++
+ drivers/usb/typec/mux/it5205.c        |  2 +-
+ drivers/usb/typec/tcpm/tcpm.c         |  4 +--
+ drivers/usb/typec/ucsi/ucsi.c         |  6 +++--
+ 19 files changed, 151 insertions(+), 73 deletions(-)
 
