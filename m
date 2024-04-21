@@ -1,117 +1,110 @@
-Return-Path: <linux-usb+bounces-9522-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9523-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16CF58ABE4C
-	for <lists+linux-usb@lfdr.de>; Sun, 21 Apr 2024 03:28:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E84998ABEAF
+	for <lists+linux-usb@lfdr.de>; Sun, 21 Apr 2024 08:37:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6EBC9B20E49
-	for <lists+linux-usb@lfdr.de>; Sun, 21 Apr 2024 01:28:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A7816B20CC7
+	for <lists+linux-usb@lfdr.de>; Sun, 21 Apr 2024 06:37:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96DA11FA4;
-	Sun, 21 Apr 2024 01:28:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E47DFD2FE;
+	Sun, 21 Apr 2024 06:37:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="w0o5Tkaz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from relay.hostedemail.com (smtprelay0014.hostedemail.com [216.40.44.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFB931373;
-	Sun, 21 Apr 2024 01:27:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 417773232;
+	Sun, 21 Apr 2024 06:37:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713662880; cv=none; b=ShonlKslQhVYkz8siDuHXWlb5pLWJRyjBmOZ56ZiDXqvbVXkWXpaJO161eOYDQXxJPAf6XJY8+6Z73XkDPNNk8O29Fcu0cySnLvVEsPot4LBLzCPqMBNCgi3x/mYzeBZrOiJYtz6ifZhfUr1ELBck0kl9xxkvcNNxSD40kh7S0U=
+	t=1713681456; cv=none; b=p8RznX+ErWhCO8qOizSU61T0MMZFqwsa4mfIEZGb/Y3PTbIvgg+ib3HBE0AuwdCpA/IFxpV9vBoJWuciR9nuPK25IL06cODnfj8cKy81W8A06W/ev9w0bBvsZTU5pH5GU9/ljTJAo0vMIwa54RXHAOLMm/yEuccJS9nlLeD9VwQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713662880; c=relaxed/simple;
-	bh=vFRK9h+5k+ZVFw7k1Zs8oDgehYtBauqWEnk9WLUMUC8=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=OgaICpwrYcHP6V7ESaIVhAF8/q+09rxbVW9j5n8MOhNhI7ejQGEkyXSfSBiBzac+GQcseRPUm9F43zyYf2DaPGsMMOVA/l/TbR/hPKZUBGqKK/IcXxNqtmTIAziTl4lONM47oykZDG4B616XDI6pMI6WJRERmLHeAcKDxim96ig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=perches.com; spf=pass smtp.mailfrom=perches.com; arc=none smtp.client-ip=216.40.44.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=perches.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=perches.com
-Received: from omf08.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay03.hostedemail.com (Postfix) with ESMTP id 7299EA070F;
-	Sun, 21 Apr 2024 01:27:48 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf08.hostedemail.com (Postfix) with ESMTPA id 84AD520026;
-	Sun, 21 Apr 2024 01:27:45 +0000 (UTC)
-Message-ID: <c24dc77d4c339d1b1ba4a76cf7c365d970cfca41.camel@perches.com>
-Subject: Re: [PATCH v2] remove indentation for common path [linux-next]
-From: Joe Perches <joe@perches.com>
-To: sundar <prosunofficial@gmail.com>, heikki.krogerus@linux.intel.com, 
-	gregkh@linuxfoundation.org, neil.armstrong@linaro.org, 
-	dmitry.baryshkov@linaro.org, u.kleine-koenig@pengutronix.de, 
-	christophe.jaillet@wanadoo.fr
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	skhan@linuxfoundation.org, javier.carrasco.cruz@gmail.com
-Date: Sat, 20 Apr 2024 18:27:44 -0700
-In-Reply-To: <b6f3d628-077e-486a-97f2-267324a76e9c@gmail.com>
-References: <20240420164927.15290-1-prosunofficial@gmail.com>
-	 <a51f703d4f8dc3b0917002c520ea6608ac642b75.camel@perches.com>
-	 <b6f3d628-077e-486a-97f2-267324a76e9c@gmail.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
+	s=arc-20240116; t=1713681456; c=relaxed/simple;
+	bh=wm32zSJnxIx+mTfYm0WIFmhVPlrSiGKpBbBskUNBm00=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hgUZXz5xzEbelWsYzph8FC7tuEUd12+JE9PXAjTKsyLxZMl5wlmXDqj8wpWj/gKJQP+hfPNPSzw1TxorMXTYKvUrFIgkEXMBFRLj9phRjxHqgCuxA7M3uTcQEaoiEpB8lo4TlGrMCWMaYIKojh6qmKp8Ph7+r6TpxWIwC6LZOpk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=w0o5Tkaz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32181C113CE;
+	Sun, 21 Apr 2024 06:37:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1713681455;
+	bh=wm32zSJnxIx+mTfYm0WIFmhVPlrSiGKpBbBskUNBm00=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=w0o5Tkaz5ez7Ajvz6MN4Wxpc0CdOjLKbIcPVaAqPWpoc4eK5AJu54b3IeEFUmVaeG
+	 WgPOoVCgUSxFSYnLCZLzLmTtKiO9JbGXKG9PkeWmluBwRm4a+oVxlR2neRJJ+ePhYo
+	 w8tY0Wk75a8m1po/yPv+yh11EqjJJtOxRQgxZ0dQ=
+Date: Sun, 21 Apr 2024 08:37:31 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: sundar <prosunofficial@gmail.com>
+Cc: heikki.krogerus@linux.intel.com, neil.armstrong@linaro.org,
+	dmitry.baryshkov@linaro.org, u.kleine-koenig@pengutronix.de,
+	christophe.jaillet@wanadoo.fr, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, skhan@linuxfoundation.org,
+	javier.carrasco.cruz@gmail.com
+Subject: Re: [PATCH v3] usb: typec: mux: remove indentation for common path
+ [linux-next]
+Message-ID: <2024042151-tingle-bronzing-983c@gregkh>
+References: <20240421011647.3027-1-prosunofficial@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Rspamd-Queue-Id: 84AD520026
-X-Stat-Signature: mioty8ocidms19zdhjpkx3hob4ci8buy
-X-Rspamd-Server: rspamout01
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX18w+iwXIEr/hC5cNcQUEvVgTEdhIRawB/o=
-X-HE-Tag: 1713662865-243079
-X-HE-Meta: U2FsdGVkX19JHw36O2wr43FqbDqzmzqY8/buZSTBJF/qvlUJLz9iKI3b7sDHmmHBhvGNi0cYnf7aCGuxxH1LlDv6O4r+IaNC3TBFUOYqAyr1FDCu0syWDmg+sLmRK8My4doE2bQZQ15rDI2fd63vL0B2P9hceDDlRW0lwJcrtsrjdNxn0hIDnlQNVLARYKiaqf9JoFIpZt38AGW5QcweXFsyrYfn1y83bdgk0etgjnSM6dlohgHk9T4b4xBhq8WhbrsrzYLAy/boeAqpMreRB/chepm4V59czDhWEhnZS0trbsey6NYOKxugcaHBydgQ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240421011647.3027-1-prosunofficial@gmail.com>
 
-On Sun, 2024-04-21 at 06:13 +0530, sundar wrote:
-> On 20/04/24 22:37, Joe Perches wrote:
-> > On Sat, 2024-04-20 at 22:19 +0530, sundar wrote:
-> >=20
-> >=20
-> > > ```
-> > @@ -321,35 +321,37 @@ static int nb7vpq904m_parse_data_lanes_mapping(st=
-ruct nb7vpq904m *nb7)
-> >  =20
-> >   	ep =3D of_graph_get_endpoint_by_regs(nb7->client->dev.of_node, 1, 0)=
-;
-> >  =20
-> > -	if (ep) {
-> > -		ret =3D of_property_count_u32_elems(ep, "data-lanes");
-> > -		if (ret =3D=3D -EINVAL)
-> > -			/* Property isn't here, consider default mapping */
-> > -			goto out_done;
-> > -		if (ret < 0)
-> > -			goto out_error;
-> > -
-> > -		if (ret !=3D DATA_LANES_COUNT) {
-> > -			dev_err(&nb7->client->dev, "expected 4 data lanes\n");
-> > -			ret =3D -EINVAL;
-> > -			goto out_error;
-> > -		}
-> > +	if (!ep)
-> > +		return 0;
-> > ```
-> >=20
-> >=20
-> > Not equivalent code as the out_error:
-> >=20
-> > 	of_node_put(ep);
-> >=20
-> > isn't done
-> >=20
-> >=20
->=20
-> Hi joe perches,
->=20
-> If ep is null,  I believe we dont need to call of_node_put.  Because=20
-> passing null pointer to of_node_put() make no difference.
->=20
-> In of_node_put() definition, if pointer is null, there is no operation.
->=20
+On Sun, Apr 21, 2024 at 06:46:47AM +0530, sundar wrote:
+> Added check if pointer is null and removed indentation for common path
+> 
+> Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: sundar <prosunofficial@gmail.com>
+> ---
+> 
 
-Fine, but you should explain that in the changelog
-and not make reviewers look it up.
+Hi,
 
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
+
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- You did not specify a description of why the patch is needed, or
+  possibly, any description at all, in the email body.  Please read the
+  section entitled "The canonical patch format" in the kernel file,
+  Documentation/process/submitting-patches.rst for what is needed in
+  order to properly describe the change.
+
+- You did not write a descriptive Subject: for the patch, allowing Greg,
+  and everyone else, to know what this patch is all about.  Please read
+  the section entitled "The canonical patch format" in the kernel file,
+  Documentation/process/submitting-patches.rst for what a proper
+  Subject: line should look like.
+
+- It looks like you did not use your "real" name for the patch on either
+  the Signed-off-by: line, or the From: line (both of which have to
+  match).  Please read the kernel file,
+  Documentation/process/submitting-patches.rst for how to do this
+  correctly.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot
 
