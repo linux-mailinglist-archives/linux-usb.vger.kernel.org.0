@@ -1,81 +1,81 @@
-Return-Path: <linux-usb+bounces-9533-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9534-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D2FE48ABF3E
-	for <lists+linux-usb@lfdr.de>; Sun, 21 Apr 2024 14:59:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D9A98ABF53
+	for <lists+linux-usb@lfdr.de>; Sun, 21 Apr 2024 15:48:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5CFA0B21354
-	for <lists+linux-usb@lfdr.de>; Sun, 21 Apr 2024 12:59:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DFEE81F21826
+	for <lists+linux-usb@lfdr.de>; Sun, 21 Apr 2024 13:48:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BDF014F70;
-	Sun, 21 Apr 2024 12:58:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F80F16426;
+	Sun, 21 Apr 2024 13:48:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="Y2tQHT9z"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EF2mIRBm"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from out203-205-251-66.mail.qq.com (out203-205-251-66.mail.qq.com [203.205.251.66])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70FD412E6A;
-	Sun, 21 Apr 2024 12:58:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.251.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8404625
+	for <linux-usb@vger.kernel.org>; Sun, 21 Apr 2024 13:48:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713704334; cv=none; b=VTKQw4Vd/a6JIhKmtzGbyD3JSjh1sFnWARm/eu6W1kdNWWQJ2d8pSTkhAcH9iKrH9f2U0gy0OZMSePLOTQ9kOKaGHekGTa5Bq209UtrKhUiiwl9yALFHsqIrhVWAEtp4ZqPa+RbYlBckGn44xl48xQU/nic6B/VKi4xwKruoVvU=
+	t=1713707286; cv=none; b=lNbAZlF4yubWGv8zbGY4woa/L/0ZYSoJeVeGPKSxuW1dBOtdlkdx3KIlj+XVpnfu2p6CF1f4+YHBoUHfkd+m/5XqUTw7V/BMlsYtP8dVFpB1WzDH9xDHLv6sQqIjGKFEV15poIZYKVIhpFC6lfJp+p2hFi51sFv76JmROKaDlBE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713704334; c=relaxed/simple;
-	bh=NVxRoRPRimApQYLL+SiZLTJ3GwIVnEopHPufJImejG8=;
-	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version; b=a++FMHl54nxVRMgZz7gE3K/d8fvMgs5Qg6i/JPZXatyEUCzBAyXSJ0q611iLM4Q2Ru18ut9wvPwlvvqLx/ymJKnP65bUjzBV5FJi2haDPx0Z+bL0kfUZLzlnqbwREc9GyXthxPGgOabgCAAJqkF91X6eKGs76S2//1GVEhLdmuE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cyyself.name; spf=none smtp.mailfrom=cyyself.name; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=Y2tQHT9z; arc=none smtp.client-ip=203.205.251.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cyyself.name
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cyyself.name
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-	t=1713704029; bh=Oid0/2+ncbfbBpARfu+QMrQ+JfMw2YqRGSqME5w6tAU=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=Y2tQHT9zzQCX7cNwNGXG89m4/wTe/78DKsmLrtWoi7V1NH/fhIfbjTSmc4JPhHxPO
-	 KMHgiM6/7J2Cer23fOz9QncBttXV/FRREgb1csHQ7dD5qOKNaHLSoGLfEZ35FB0Rrz
-	 WIDscc7qlmLYaNsHyB1Adezihhz1zSGRDBPprxEg=
-Received: from cyy-pc.lan ([240e:379:2264:6200:aa04:7d36:395a:da35])
-	by newxmesmtplogicsvrsza10-0.qq.com (NewEsmtp) with SMTP
-	id D6B1C271; Sun, 21 Apr 2024 20:53:43 +0800
-X-QQ-mid: xmsmtpt1713704026tyjhfqvqz
-Message-ID: <tencent_AD84B436C2F31108B66B4739D6E306C5E80A@qq.com>
-X-QQ-XMAILINFO: NMGzQWUSIfvTF2H89VCD5B7DlQMjdlBiz4ngf34c+hz0HuyiJ+FkP71jdACfwi
-	 Re+X3AAMqp/wxVLWMqLChc4Wifkbxnp3//Tde0b1j4bfQOUOEAXuUe4RjmxsYYtDWsnqYOtsseN4
-	 pnr/rX+sPq1AGW16QiQOqUpXqzVmrBfdLsho8crjAK6Xo4Y2wBMxgxU0Sg08Dmppo/9C6JTftFli
-	 qEzItM5Z/wFSqohRUzIfgPNB3qlQOWbLjv23iWRY0gsfmr7bJF2pZucQr8V5odlUGwKGfHmWQwt/
-	 RNozxGpfoZbT8xxp471ItP77hofEXg/K+aA42FJWAN0L1HbbVTM2YioUaVJcigMlTNqkTWnoYn+K
-	 gnskcNCgfiVG8/O6mbP34GT6+Zo5Ftv1lSMCoQJ6U9VPXkrGuZw4KPofx8jMDTC7ylAyz/7T6eKT
-	 xu2pY/Ht3nvf4yh2t5vB7R34zVxAUJkuQKLrsJ7aydJr4PWQ7hwzfPVSROuaPR4MQklXrhqoqoDJ
-	 TG60ZbfziMtm2ljVUcnJmMyNlxXjVlTVvhtdkVSn2Rl7e0U7KikTJVOtezEbfHMdgH1OQIa12ho0
-	 ctEFSOlHluBsuL+nU+9TyAaLjDlO4RWqp7dIGnghdy5BrPsQPnGKbU01rT+6yA2pSB14lLeHw6Po
-	 SN9k0UJ/D0qxswyRPPBh85twKsjPWwOfXfuCiuxtfpzUdm1q6DRbxN5eilEOW4OmthwuaWO4F737
-	 bJnNF8ULJymrKOQJQyqsI3Om0qKYMarOi8WdUMuFCAoXJcYAuvT5q749lmi6g57bB9Jn2oM15dxG
-	 oEK2UsOPB6ZRoTDVwlX/JaGAc5Du+ug7T5mwoHS5Os7ketYJizhE+QIxevA2d1LtignjzTM6cn21
-	 6A7/RUcUpanX2ZRUDSf/sNh3sO2RCngysjitPERLJq8ZTkUaBJG8LhBtMBa1E6DVJ0hoApnO3wdd
-	 0vmWBoNKD6Xwyod1bI7yTgltkaTmgpWQ1t/CnmniVzFJtAPgT78Ui9AmQJqle97E4xIWtNilMPhq
-	 Rs3jP+Pi05dvYxJdmcL1XjdqiIHOqg5v0YzdbfDgh2WWFj21fi
-X-QQ-XMRINFO: OWPUhxQsoeAVDbp3OJHYyFg=
-From: Yangyu Chen <cyy@cyyself.name>
-To: linux-riscv@lists.infradead.org
-Cc: Conor Dooley <conor@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Rob Herring <robh@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Yangyu Chen <cyy@cyyself.name>
-Subject: [PATCH v1 2/2] riscv: dts: add usb nodes for Canaan Kendryte K230 SoCs
-Date: Sun, 21 Apr 2024 20:53:30 +0800
-X-OQ-MSGID: <20240421125330.1039774-2-cyy@cyyself.name>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <tencent_E9B853316D217B8D1E7CDF8288DA5E8ED908@qq.com>
-References: <tencent_E9B853316D217B8D1E7CDF8288DA5E8ED908@qq.com>
+	s=arc-20240116; t=1713707286; c=relaxed/simple;
+	bh=kUDI9MsZDUY15FIULV8ZS07bkFaF37Bu65yCM7qkZQ8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CZs9oWJ8LsFh8gL6veIOi9/eEREcRsbyzQ7Kdhx0DEKzzQ/zBIlZ5h+55yq8R5MdsfGecEUEOQ6XX88nyIzde9Y4zm+xq0fuqdksL6q3tmZAk7LYeH09xvYFKVIt/Qsmu5V5N3T7oy83aUMWuNke6fVdDWwApH+vemMd9jCk1qA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EF2mIRBm; arc=none smtp.client-ip=209.85.210.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-6ecec796323so3669954b3a.3
+        for <linux-usb@vger.kernel.org>; Sun, 21 Apr 2024 06:48:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1713707285; x=1714312085; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=BtrAXLfzcekpGywEsVXzskw6iAF5Jyh4FT9yCUxGY/U=;
+        b=EF2mIRBmLh+I+Qs2AwO3L//NIsxX98w5GCP8TxbLi1+oJ8SYY9kw+2R5eDGH2Srmav
+         dptAIiTvJKhqXf8L6W4kg/2LoOq3a7NMatqKAVhL7t1/q32jRIAp6V+qbhDkuxXMTLKk
+         mlR2uDr6QIqt3zHmf6ASnYcSV/CmtZfelfh3iuFPOE+XWfHa6k9n7EGCwYc1UVdxSHb6
+         PoQsNGry8xF+4PRx009Nx6F39uaU/ORj+ucnlEQj/1PpH6ok4reQMGyoTY9o245iLZps
+         DZeTS1KYh1wedNku4Npl7yWkBLj1cNPF9vzbitZnLUyLazsReobZlIlK38bHAFX/DlhF
+         F+mw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713707285; x=1714312085;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BtrAXLfzcekpGywEsVXzskw6iAF5Jyh4FT9yCUxGY/U=;
+        b=bMhawiC2PWyuOxZZCMtM1WWBkeHJj9wnE+Ru0BE3/v0mszNzlVhCI641EXMKIOX02B
+         4LMxWZpuQpty9vIomkGJrGUoSXE3VF36tfVAy6q/UYQWfLP65ZL6ksQCCXRiFJu5Ms/H
+         7OPDmm9TDvoNthHiu6Tv+t3+bMEyK+e/w0bQE4fQpigu2F2rO3PSUL/WKVmdxyqKSuzL
+         MEZg0E5YW+/VYZMXcqCQw/XbowMj0VBhmDONhw7i4lPH3vCC9Ex9uGYN3harZwyTHRoZ
+         zVCKKhSLWGYoU5QMsqK9DFaPg9+ZUkfApGlmCr18eVhK9c79ycyDCcXm+gWtVJzjx4MP
+         MChg==
+X-Forwarded-Encrypted: i=1; AJvYcCWAx99yDIEK5hLtLFNrApJWpNQOZjUb15INHmMgT91/2FTsCB2ktJhqO0gwDYGbhwU+A0bMKqFY5mLy02ExijdbwBF4M8U7jQDt
+X-Gm-Message-State: AOJu0YyNmhVff/fxc3LkWN0CWpoRXBaI3U8i/pWBtI+9uimiRZ4HKtQ3
+	tcBR36Kt7mwJOo2RowTVmlOe49EN/G3m9cSdK+RGIZomlr5XRxBo
+X-Google-Smtp-Source: AGHT+IGW9QxSAi8oUw/YWJKluzRMVvr3a5hC8LGuiawhSrKfcbe4zvTzZiBi0c1UzvTRT2hIxO4W5A==
+X-Received: by 2002:a05:6a20:6a09:b0:1a7:58ca:cdf3 with SMTP id p9-20020a056a206a0900b001a758cacdf3mr11408126pzk.8.1713707284928;
+        Sun, 21 Apr 2024 06:48:04 -0700 (PDT)
+Received: from localhost.localdomain ([113.30.217.222])
+        by smtp.gmail.com with ESMTPSA id o13-20020a056a001b4d00b006e6c733bde9sm6175043pfv.155.2024.04.21.06.48.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 21 Apr 2024 06:48:04 -0700 (PDT)
+From: Anand Moon <linux.amoon@gmail.com>
+To: 
+Cc: Anand Moon <linux.amoon@gmail.com>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	Johan Hovold <johan@kernel.org>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	linux-usb@vger.kernel.org
+Subject: [PATCH v4 0/5] Use new helper function for clock and PM macro
+Date: Sun, 21 Apr 2024 19:17:29 +0530
+Message-ID: <20240421134752.2652-1-linux.amoon@gmail.com>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -84,67 +84,52 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This patch adds USB nodes for Canaan Kendryte K230 SoCs. The fifo
-parameters are taken from factory dts [1]. For the clock parameter, we use
-a dummy node here as we don't know the actual clock this IP connected
-inside the SoC chip, and it doesn't matter after reviewing the dwc2 driver
-code, which will not read the clock frequency but only use the binding to
-turn the clock on or off to save power.
+using new helper functions for dev resources for clock and PM
+to simplify the code changes.
 
-[1] https://github.com/kendryte/k230_sdk/blob/v1.5/src/little/linux/arch/riscv/boot/dts/kendryte/k230.dtsi
+Addressed some review comments.
 
-Signed-off-by: Yangyu Chen <cyy@cyyself.name>
----
- arch/riscv/boot/dts/canaan/k230.dtsi | 29 ++++++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+v4: Add Reviewed-by:  Alan Stern  For patches 1 - 4:
+    Add Acked-by: Thinh Nguyen For patch 5
+    Fix rephase commit messaeg for patch 2 and 4
+    Fix some typo in the commit messagee
 
-diff --git a/arch/riscv/boot/dts/canaan/k230.dtsi b/arch/riscv/boot/dts/canaan/k230.dtsi
-index 95c1a3d8fb11..2311fb7f7127 100644
---- a/arch/riscv/boot/dts/canaan/k230.dtsi
-+++ b/arch/riscv/boot/dts/canaan/k230.dtsi
-@@ -65,6 +65,13 @@ apb_clk: apb-clk-clock {
- 		#clock-cells = <0>;
- 	};
- 
-+	clk_dummy: clock-dummy {
-+		compatible = "fixed-clock";
-+		clock-frequency = <0>;
-+		clock-output-names = "clk_dummy";
-+		#clock-cells = <0>;
-+	};
-+
- 	soc {
- 		compatible = "simple-bus";
- 		interrupt-parent = <&plic>;
-@@ -138,5 +145,27 @@ uart4: serial@91404000 {
- 			reg-shift = <2>;
- 			status = "disabled";
- 		};
-+
-+		usb0: usb@91500000 {
-+			compatible = "canaan,k230-otg", "snps,dwc2";
-+			reg = <0x0 0x91500000 0x0 0x40000>;
-+			interrupts = <173 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&clk_dummy>;
-+			clock-names = "otg";
-+			g-rx-fifo-size = <512>;
-+			g-np-tx-fifo-size = <64>;
-+			g-tx-fifo-size = <512 1024 64 64 64 64>;
-+		};
-+
-+		usb1: usb@91540000 {
-+			compatible = "canaan,k230-otg", "snps,dwc2";
-+			reg = <0x0 0x91540000 0x0 0x40000>;
-+			interrupts = <174 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&clk_dummy>;
-+			clock-names = "otg";
-+			g-rx-fifo-size = <512>;
-+			g-np-tx-fifo-size = <64>;
-+			g-tx-fifo-size = <512 1024 64 64 64 64>;
-+		};
- 	};
- };
+v3 changes:
+1 Use  new DEFINE_SIMPLE_DEV_PM_OPS macro for PM operations
+  Thanks to Thinh Nguyen for your inputs.
+  so I have to update the $subject and commit messagee with using new
+  macro.
+
+2 Drop the dev_err_probe in return to simplify the error for clocks.
+
+3 Dop the devm_regulator_bulk_get_enable patch.
+
+Tests on Odroid XU4 and Odroid U3.
+found no regression with suspend resume functionality.
+
+Previous changes:
+V3: https://lore.kernel.org/all/20240412142317.5191-6-linux.amoon@gmail.com/
+
+V2: https://lore.kernel.org/all/20240404071350.4242-3-linux.amoon@gmail.com/
+
+V1: https://patchwork.kernel.org/project/linux-samsung-soc/patch/20240301193831.3346-2-linux.amoon@gmail.com/
+
+Thanks
+-Anand
+
+Anand Moon (5):
+  usb: ehci-exynos: Use devm_clk_get_enabled() helpers
+  usb: ehci-exynos: Use DEFINE_SIMPLE_DEV_PM_OPS for PM functions
+  usb: ohci-exynos: Use devm_clk_get_enabled() helpers
+  usb: ohci-exynos: Use DEFINE_SIMPLE_DEV_PM_OPS for PM functions
+  usb: dwc3: exynos: Use DEFINE_SIMPLE_DEV_PM_OPS for PM functions
+
+ drivers/usb/dwc3/dwc3-exynos.c | 13 +++----------
+ drivers/usb/host/ehci-exynos.c | 27 ++++++---------------------
+ drivers/usb/host/ohci-exynos.c | 27 ++++++---------------------
+ 3 files changed, 15 insertions(+), 52 deletions(-)
+
 -- 
-2.43.0
+2.44.0
 
 
