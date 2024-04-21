@@ -1,159 +1,208 @@
-Return-Path: <linux-usb+bounces-9539-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9540-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF9FF8ABF67
-	for <lists+linux-usb@lfdr.de>; Sun, 21 Apr 2024 15:49:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A2C68ABF7B
+	for <lists+linux-usb@lfdr.de>; Sun, 21 Apr 2024 16:03:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0DA861C20FE9
-	for <lists+linux-usb@lfdr.de>; Sun, 21 Apr 2024 13:49:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B96571F21820
+	for <lists+linux-usb@lfdr.de>; Sun, 21 Apr 2024 14:03:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4607E1863B;
-	Sun, 21 Apr 2024 13:49:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F36E179A7;
+	Sun, 21 Apr 2024 14:03:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Tx6zQLop"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="cq7ZSLcG"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87D411C29F;
-	Sun, 21 Apr 2024 13:48:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A93C175AE
+	for <linux-usb@vger.kernel.org>; Sun, 21 Apr 2024 14:03:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713707339; cv=none; b=HaIH67yBmeXRY/KqGy6tnDHKsBZzW6zWT/ubVefid1ChRAGJfaewdJ6hUIy6573IBqBdG5p+MefNOhyw2VQLw/xiKdbep26eaHEkm6X7DsQOXMxhMxTIDA1/TodivtND3S4dOVGWESoqtW/YgImF73f4Dr7wW3QPsVdWMwoOX6I=
+	t=1713708212; cv=none; b=nTbI6n/S5SdvPf9ZBEdD8De5AwZX1tp19gKdheTOvBhCZ4CyaB7z8tyEud2mCAmzBt6kP1PxIvjNYIz+T2RleES1wSK8411XrByehxGW5wZsBwSAkie9XA2NW5Nt6POAobhhs5DXMUZHFvyyrjPpUIJSwp/QGfMXrni8d+J2xvY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713707339; c=relaxed/simple;
-	bh=Y9jIyElOMp31XHXfaCIVTLoMyn8wDqkA34DCh0awnvg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=oinBLTiDXDSL14ka0l2Wwo3jnqvCtylnFqAL4PBSWjpu8v9kykt1SHouYi50v8PXPOnaGryhzVy0xKmaEu9SmP4OW6WWLnc67eYIXBxlYVeMJCGM37hTULXWAGTSFq2er5Jj7qImGxoUTvBZSacIhowaZV+8/S4el5/yGj73URk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Tx6zQLop; arc=none smtp.client-ip=209.85.210.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-6ed627829e6so4016303b3a.1;
-        Sun, 21 Apr 2024 06:48:58 -0700 (PDT)
+	s=arc-20240116; t=1713708212; c=relaxed/simple;
+	bh=t4LTkonD4i06Ex7cZRKGZh5MSInx3YygrGIzRDI+Mh0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NhTgngHzli4uxT3otnnsZlWSTRISa56CZfyyh5iPPKH7Wwr/OcPDLGsA0LmbPqvPypX2aC2/crtwwNqkXwJRAhUrxRIKfl0GiC3Y99fuqyxZYGUn8e7XCLp5vptHDAVokRa/zsP0uwdSO9I453vvNWhPhQQ1Ht5t/1mi1ZV6sNI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=cq7ZSLcG; arc=none smtp.client-ip=209.85.208.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-56e56ee8d5cso4566034a12.2
+        for <linux-usb@vger.kernel.org>; Sun, 21 Apr 2024 07:03:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713707338; x=1714312138; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vAq3AHvWEQFsKDgpu//rdmbRIcBJ6dLOs4RYotedEeg=;
-        b=Tx6zQLopnJkmPQeroWlWtNHVVFP4NZSBfP+CV8kfhhmDeB5pPfh86sFz43FOO2aISl
-         XJTWhIZfwNCaOkV2JxSB/2Kp+VhB75CX9bx6BKzccB/UQIs9VbqfZqX/0kRCLZI7S7de
-         1kYvhPh7MD0zc+G0sCCoA3hTEVug8jK9sr32IderaCqZbHWQlMVKHj1+WeK5OVwqvEub
-         w/8kdSAi/gHHtRQl7pOjxM+AWWeszXFVnZxxIcZ/t9SvUAsba0Z31snoQylO1yqNJYwk
-         jEbr5W9XuDPRAkedjdSKip6agfJy6E9G/Fq9xE61GzYGSEkpV6ehzcltkglaRFpMyQ8o
-         FQWw==
+        d=linaro.org; s=google; t=1713708209; x=1714313009; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=DTW/CJQ4s88DVa55ELjYpLvZW6dhOyn4d4BvCYkVK9Y=;
+        b=cq7ZSLcG23SrXZmSripEbgotIXnb14vMeFk8J3ogudpYrpX8sMImB3/3kXSdNeh9v4
+         yCyIlP3wwf/1qVUFN3DttFtL2e2x/l40sWhO43nItAPyOgZIkWJxxupwBn6pffJ0wLbG
+         7OIJozie1JS6DSu0gg9L12UNivMsf/0QC6Hi2jGA5bRLjzXo3jiKjjr3iu6IKxYAk8cp
+         PfnK30jYpRtd9FEsjRHkepDvu0bYVQHvv6hnglM/fyaYU914ijcgpKOl8ZqrVtoOCoPc
+         i0QkXVIfSRhZNN9Tv7tmyFLSTk4rxVXVNtcmsdF1qYqN24kwsdVJfKYig3HweRRfsmGJ
+         U/ww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713707338; x=1714312138;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vAq3AHvWEQFsKDgpu//rdmbRIcBJ6dLOs4RYotedEeg=;
-        b=e7WmupRFU921uCvrnLtLYigQJ76w4ESoOd539E3UsTxfLxXaF3uwMChEG6DjEVel1u
-         +7zNAyhPws//rtzlmsk08S0crhs6hm+w/cx/NCiwm6c4M/gekCNid2R9knP+LWoxFNjK
-         ONnney3Fkyrpm1TGV63XZaCQksTSkUiyZAsgTmA3i0g4c6J1PG3A3b6PTIVAYn1zOfDU
-         1Ms+8pXFNl+8RLOSgUJvhQRcgeFCytIDYsRRBFSTmR6CjQ9ECdlfYF7mM4oLGGzHefQ2
-         DEbV982YhVTkRakN2VCFzVSZvdJddNueg6VKz6wfYJW75/U8sDZjUFp7zDlMusxKhr7r
-         aFMA==
-X-Forwarded-Encrypted: i=1; AJvYcCXBoWA/ya0WcTFFIkn0PToMHCKCDmSfMcUZlCYdc8gitb9a9cltQdTNFUeeW0n2LZGrjnctEazVcXTX3k2vY4BaFLpddiahJKl9I2rN6IC8ZILkt0KUPx4atRRZg3TQx+mwo8Iof6BTgkUgRe11bk41Gv/nHKMCDZ8XKDWCPkABxqjssY6e49zRIiU=
-X-Gm-Message-State: AOJu0YyCEZsUT7bnWOzw+I5Su3m60xozxW/ku7Umyc7FMvOqv8b3BN/i
-	cjYU97miwnm2SWuS68ImMsFe0HPisaoHEj2OFFBle++cKmKtq2wn
-X-Google-Smtp-Source: AGHT+IFqFGNGrYSxduO+G3kiUy/CR5IuQrcVEgPwVltGpWh2slVvuWUY98I8IosXloAx10/SaETCIw==
-X-Received: by 2002:aa7:8883:0:b0:6ea:bf1c:9dfd with SMTP id z3-20020aa78883000000b006eabf1c9dfdmr10512702pfe.27.1713707337795;
-        Sun, 21 Apr 2024 06:48:57 -0700 (PDT)
-Received: from localhost.localdomain ([113.30.217.222])
-        by smtp.gmail.com with ESMTPSA id o13-20020a056a001b4d00b006e6c733bde9sm6175043pfv.155.2024.04.21.06.48.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 Apr 2024 06:48:57 -0700 (PDT)
-From: Anand Moon <linux.amoon@gmail.com>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>
-Cc: Anand Moon <linux.amoon@gmail.com>,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	Johan Hovold <johan@kernel.org>,
-	linux-usb@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v4 5/5] usb: dwc3: exynos: Use DEFINE_SIMPLE_DEV_PM_OPS for PM functions
-Date: Sun, 21 Apr 2024 19:17:34 +0530
-Message-ID: <20240421134752.2652-6-linux.amoon@gmail.com>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20240421134752.2652-1-linux.amoon@gmail.com>
-References: <20240421134752.2652-1-linux.amoon@gmail.com>
+        d=1e100.net; s=20230601; t=1713708209; x=1714313009;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DTW/CJQ4s88DVa55ELjYpLvZW6dhOyn4d4BvCYkVK9Y=;
+        b=HDpN9ZFrltTfK+71Cse/0KgyxIoZe7oi0SBkn44f9lXbkkTCs5sYBfBsLFvCR9dgnE
+         bCv/bFcynGep3V/uFomVllXwvaxlLqZnOkTi0cHGYR860n1yu96Eynqf4gTDL+xG6A1G
+         D8DdnK7l7F2embXM8nDLzAkicOZZ2ifOgAQDu7QmN+1b8t3qaOIYyMgqaMxxxMM/uhOE
+         AYuPwfB3qL84wdSRGWMPJXM/JhJFZ3ezWdkbn/8dgk4eDk8BNuJElT1PFmB2+W0oTCJl
+         vGBuaYbBZgsvYH55rknx4MA/ZekqqYlXHZtfppbksSs5qo2AvgiT/+c1D8hgRxMsT9ry
+         8W1w==
+X-Forwarded-Encrypted: i=1; AJvYcCX8VTOxh3txosp2qfZRBCBg38bXfHcKdqJqfs2UbYfwAe8dJrrWw9XbXlF3pKHbNhVQzNYaGDROCCaSBL8rEGmpeg1y8zd4qfuH
+X-Gm-Message-State: AOJu0YwzjHk+Ji8C4vRsRxn6AdMuqo793hlGL/m14WiIQRzS4HRFcDyh
+	dL4chX9Z5YaGdehTDdpUCdPIkaPw2g4T4Eg76V2HGk6Vj/a//4swrE5fkG1mNQE=
+X-Google-Smtp-Source: AGHT+IEbBYYmKJn5bzeTvWfcW2l/wHJTBjpKqiCdGf182vrNU/MwXM6wS5bCcbDD74qJFnFVN5U2dw==
+X-Received: by 2002:aa7:c702:0:b0:571:fc5d:dbab with SMTP id i2-20020aa7c702000000b00571fc5ddbabmr1780010edq.7.1713708209411;
+        Sun, 21 Apr 2024 07:03:29 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.223.16])
+        by smtp.gmail.com with ESMTPSA id fi5-20020a056402550500b0056e598155fasm4360037edb.64.2024.04.21.07.03.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 21 Apr 2024 07:03:28 -0700 (PDT)
+Message-ID: <4e03d84e-490f-4054-a175-94e769770b37@linaro.org>
+Date: Sun, 21 Apr 2024 16:03:27 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v21 5/9] dt-bindings: usb: qcom,dwc3: Add bindings for
+ SC8280 Multiport
+To: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Bjorn Andersson <andersson@kernel.org>
+Cc: devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Rob Herring <robh@kernel.org>, Wesley Cheng <quic_wcheng@quicinc.com>,
+ quic_ppratap@quicinc.com, quic_jackp@quicinc.com,
+ Bjorn Andersson <quic_bjorande@quicinc.com>,
+ Konrad Dybcio <konrad.dybcio@linaro.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Conor Dooley <conor+dt@kernel.org>, Thinh Nguyen
+ <Thinh.Nguyen@synopsys.com>, Johan Hovold <johan@kernel.org>,
+ Felipe Balbi <balbi@kernel.org>
+References: <20240420044901.884098-1-quic_kriskura@quicinc.com>
+ <20240420044901.884098-6-quic_kriskura@quicinc.com>
+ <3ca24a3d-e7e0-4f68-9a6f-ebaf83079ebe@linaro.org>
+ <7034e026-5c50-4c65-ba78-e9c73f4a276a@quicinc.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Content-Language: en-US
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <7034e026-5c50-4c65-ba78-e9c73f4a276a@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-This macro has the advantage over SET_SYSTEM_SLEEP_PM_OPS that we
-don't have to care about when the functions are actually used.
+On 20/04/2024 15:53, Krishna Kurapati PSSNV wrote:
+> 
+> 
+> On 4/20/2024 5:01 PM, Krzysztof Kozlowski wrote:
+>> On 20/04/2024 06:48, Krishna Kurapati wrote:
+>>> Add the compatible string for SC8280 Multiport USB controller from
+>>> Qualcomm.
+>>>
+>>> There are 4 power event interrupts supported by this controller
+>>> (one for each port of multiport controller). Add all the 4 as
+>>> non-optional interrupts for SC8280XP-MP
+>>>
+>>> Also each port of multiport has one DP and one DM IRQ. Add all DP/DM
+>>> IRQs related to 4 ports of SC8280XP Teritiary controller.
+>>>
+>>> Also added SuperSpeed PHY interrupt for both Superspeed ports.
+>>>
+>>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+>>> Reviewed-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+>>
+>> v21 and suddenly you drop tags requiring everyone to re-review this. I
+>> do not think this process is working. I will not re-review this.
+>>
+>> This is a friendly reminder during the review process.
+>>
+>> It looks like you received a tag and forgot to add it.
+>>
+>> If you do not know the process, here is a short explanation:
+>> Please add Acked-by/Reviewed-by/Tested-by tags when posting new
+>> versions, under or above your Signed-off-by tag. Tag is "received", when
+>> provided in a message replied to you on the mailing list. Tools like b4
+>> can help here. However, there's no need to repost patches *only* to add
+>> the tags. The upstream maintainer will do that for tags received on the
+>> version they apply.
+>>
+>> https://elixir.bootlin.com/linux/v6.5-rc3/source/Documentation/process/submitting-patches.rst#L577
+>>
+>> If a tag was not added on purpose, please state why and what changed.
+>>
+>>
+> 
+> Hi Krzysztof,
+> 
+>   There was a commit text change to fix minor nits:
+>   -> One minor spell check: /s/oen/one
+>   -> minor nits like: /s/ss/SuperSpeed
+> 
+>   So removed the tags and requested for a review.
+>   "Updated commit text in patches 2/5/6."
 
-Also make use of pm_sleep_ptr() to discard all PM_SLEEP related
-stuff if CONFIG_PM_SLEEP isn't enabled.
 
-Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Signed-off-by: Anand Moon <linux.amoon@gmail.com>
----
-v4 Fix typo in commit message SIMPLE_DEV_PM_OPS to
-       SET_SYSTEM_SLEEP_PM_OPS
-   Add Acked by Thinh Nguyen
+Did you read the doc I linked? I am pretty sure I linked it many times
+before as well...
 
-v3: fix using new DEFINE_SIMPLE_DEV_PM_OPS PM macro hence
-    change the $subject and the commit message
 
-v2: add __maybe_unused to suspend/resume functions in case CONFIG_PM
-   is disabled.
----
- drivers/usb/dwc3/dwc3-exynos.c | 13 +++----------
- 1 file changed, 3 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/usb/dwc3/dwc3-exynos.c b/drivers/usb/dwc3/dwc3-exynos.c
-index 5d365ca51771..3427522a7c6a 100644
---- a/drivers/usb/dwc3/dwc3-exynos.c
-+++ b/drivers/usb/dwc3/dwc3-exynos.c
-@@ -187,7 +187,6 @@ static const struct of_device_id exynos_dwc3_match[] = {
- };
- MODULE_DEVICE_TABLE(of, exynos_dwc3_match);
- 
--#ifdef CONFIG_PM_SLEEP
- static int dwc3_exynos_suspend(struct device *dev)
- {
- 	struct dwc3_exynos *exynos = dev_get_drvdata(dev);
-@@ -230,14 +229,8 @@ static int dwc3_exynos_resume(struct device *dev)
- 	return 0;
- }
- 
--static const struct dev_pm_ops dwc3_exynos_dev_pm_ops = {
--	SET_SYSTEM_SLEEP_PM_OPS(dwc3_exynos_suspend, dwc3_exynos_resume)
--};
--
--#define DEV_PM_OPS	(&dwc3_exynos_dev_pm_ops)
--#else
--#define DEV_PM_OPS	NULL
--#endif /* CONFIG_PM_SLEEP */
-+static DEFINE_SIMPLE_DEV_PM_OPS(dwc3_exynos_dev_pm_ops,
-+				dwc3_exynos_suspend, dwc3_exynos_resume);
- 
- static struct platform_driver dwc3_exynos_driver = {
- 	.probe		= dwc3_exynos_probe,
-@@ -245,7 +238,7 @@ static struct platform_driver dwc3_exynos_driver = {
- 	.driver		= {
- 		.name	= "exynos-dwc3",
- 		.of_match_table = exynos_dwc3_match,
--		.pm	= DEV_PM_OPS,
-+		.pm	= pm_sleep_ptr(&dwc3_exynos_dev_pm_ops),
- 	},
- };
- 
--- 
-2.44.0
+Best regards,
+Krzysztof
 
 
