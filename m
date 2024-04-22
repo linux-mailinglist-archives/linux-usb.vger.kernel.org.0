@@ -1,51 +1,51 @@
-Return-Path: <linux-usb+bounces-9552-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9553-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4D9F8AC4D4
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Apr 2024 09:12:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A85328AC51E
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Apr 2024 09:16:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5406E1F21F12
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Apr 2024 07:12:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 095881F2225A
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Apr 2024 07:16:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2430150280;
-	Mon, 22 Apr 2024 07:10:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EA09537FB;
+	Mon, 22 Apr 2024 07:12:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jj1BMdGR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TZJ5mDS3"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CAC148CF2;
-	Mon, 22 Apr 2024 07:10:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC6FF4CDE0;
+	Mon, 22 Apr 2024 07:12:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713769839; cv=none; b=IWhwdpJNULj9w/ah0jtWxy3ziRMdAVhvf9csFef7nTWPxswC2ttDr7fu5NmxX1IlLNpd0scMAE1rdd2Lhkx+HG9z/q9v7DQY5DZ1X3hFlZsgGfyWdjdMZO/WlTmQi/YYlh50u1quWy2f8bbCiENpc6xpCsIR1QDzepdHdwt2/kI=
+	t=1713769970; cv=none; b=o1WU9vT7C2g6lzYt8fJMvaxHbhP8ahKai8m5Hslt0uaCfGW53XQIoeLYqUJV5GhjQyHEILdCtRu4jCQAFewaTHb+dRtwc0ncNBgf9ad8xcJl8/8h1rbF/g4OwWtjBrCGDeio+Ns1FMoUlOHOJIRo7G34zFePTPfge7AN/Q/18Gc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713769839; c=relaxed/simple;
-	bh=KFsVNGLXwmalWCExiI1bfO6IRb+bF09aXGJFizeOp2o=;
+	s=arc-20240116; t=1713769970; c=relaxed/simple;
+	bh=nANodsRQh0SlHeZ8TSIrbcrOjTmp+PFztQpd3BDIO14=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=e3+EB1+Yf8NPTqpYcJsIRLAdAp7G1ljprXLthk8sglgKDVI2OfMGtwWydfSQH9nelbRAFF58bemN6eh+e7nZrz4GAHwGTbuR3r0jfrNoHad5CNMx0ZRTKxocm3Kt4Mr2ppfTVOqP5ZfBV7iwIGr/jQHmoKMsrLyJHAqMu8vKSnA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jj1BMdGR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DABEEC113CC;
-	Mon, 22 Apr 2024 07:10:38 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=cfZ2nMVeVQTcMyHtqCz3rxFHQGkRV4Ec3Lrck7CWIKd+T94YAGv1hL1kQRHAUYe9BlL3/YUJGobIfFyo1m4/y2v1amGUwGkMwNmo4Ibn64hsaA9VYQgR3DkKO9+1a1FM7ucPrAFT7CnsNr3GFjVZa+XPy0RpwO9fGKQ1CDWe/2k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TZJ5mDS3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8733AC113CC;
+	Mon, 22 Apr 2024 07:12:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713769838;
-	bh=KFsVNGLXwmalWCExiI1bfO6IRb+bF09aXGJFizeOp2o=;
+	s=k20201202; t=1713769969;
+	bh=nANodsRQh0SlHeZ8TSIrbcrOjTmp+PFztQpd3BDIO14=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Jj1BMdGR1FrmoIsUKIUW9iBgDUt/xXxF3tllfdOwY4sI5jrPEPE0EuKLsTJNY1/jI
-	 qqaKK2dCBfFrh2ZouMdmvsjTywEhjw0Tp1aXnj2Vba1EE94AlTZCeto2KdMcs7iuta
-	 3OY8E4UWjGeqyCIt12BnUZnwhRbVOhp/WGwDg8VeeIRz2QOSiXcsznprm6s9Fugo/L
-	 Tv4sVXFifVn33gtoI68Mbj6hKIq32j313P2GTUzUOm4uHUHKkIivrM5oqvkzVhQXOp
-	 3berZULi6Zi+BjfzP3t/AwguZ9e7uvjBCuLScNG2KzAoifIjhvZCiHquglQ2bfVcav
-	 JQX8QH/ZKIjgQ==
+	b=TZJ5mDS3iZ8u6A5zh5olpA/0K2TLwjGCpzxN0Mf5pT2v2r0Ie4SOHFmUsPR5IsOJd
+	 9jiLXxE1NPVOjroAZ5qhhc9b3aR4fNrsSzXL4K26LSfSAhl4zSjqL5Vs0zhH4SOqk9
+	 diNXtpXrlpoJQYiBNV7Us+P2XuewFO8AsEn3N4dpATEkJiJHKA2jzGEc+FTQ0qSJle
+	 xoygOIoS9SDB68PAjdokKwlm9X/kCyHwbbknw89DqLKKy4IgP82UsQBa+9h+a1INir
+	 +j2FZiQcJKvrU/Uqj2xSeiyeqargBYg9rPG9p4x0vmocGMAISkHDtWEauANWN84/OT
+	 ofoPc9re+XSOA==
 Received: from johan by xi.lan with local (Exim 4.97.1)
 	(envelope-from <johan@kernel.org>)
-	id 1rynou-000000002ZM-3EbG;
-	Mon, 22 Apr 2024 09:10:33 +0200
-Date: Mon, 22 Apr 2024 09:10:32 +0200
+	id 1rynr2-000000002b5-0sv2;
+	Mon, 22 Apr 2024 09:12:44 +0200
+Date: Mon, 22 Apr 2024 09:12:44 +0200
 From: Johan Hovold <johan@kernel.org>
 To: Krishna Kurapati <quic_kriskura@quicinc.com>
 Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -60,11 +60,11 @@ Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
 	linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
 	linux-kernel@vger.kernel.org, quic_ppratap@quicinc.com,
 	quic_jackp@quicinc.com, Bjorn Andersson <quic_bjorande@quicinc.com>
-Subject: Re: [PATCH v21 4/9] usb: dwc3: core: Refactor PHY logic to support
- Multiport Controller
-Message-ID: <ZiYNaJ8rwz6DXUGT@hovoldconsulting.com>
+Subject: Re: [PATCH v21 5/9] dt-bindings: usb: qcom,dwc3: Add bindings for
+ SC8280 Multiport
+Message-ID: <ZiYN7F9i50CNtotG@hovoldconsulting.com>
 References: <20240420044901.884098-1-quic_kriskura@quicinc.com>
- <20240420044901.884098-5-quic_kriskura@quicinc.com>
+ <20240420044901.884098-6-quic_kriskura@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -73,21 +73,20 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240420044901.884098-5-quic_kriskura@quicinc.com>
+In-Reply-To: <20240420044901.884098-6-quic_kriskura@quicinc.com>
 
-On Sat, Apr 20, 2024 at 10:18:56AM +0530, Krishna Kurapati wrote:
-> Currently the DWC3 driver supports only single port controller
-> which requires at least one HS PHY and at most one SS PHY.
+On Sat, Apr 20, 2024 at 10:18:57AM +0530, Krishna Kurapati wrote:
+> Add the compatible string for SC8280 Multiport USB controller from
+> Qualcomm.
 > 
-> But the DWC3 USB controller can be connected to multiple ports and
-> each port can have their own PHYs. Each port of the multiport
-> controller can either be HS+SS capable or HS only capable
-> Proper quantification of them is required to modify GUSB2PHYCFG
-> and GUSB3PIPECTL registers appropriately.
+> There are 4 power event interrupts supported by this controller
+> (one for each port of multiport controller). Add all the 4 as
+> non-optional interrupts for SC8280XP-MP
 > 
-> DWC3 multiport controllers are capable to service at most 15 High Speed
-> PHYs and 4 Supser Speed PHYs. Add support for detecting, obtaining and
-> configuring PHYs supported by a multiport controller.
+> Also each port of multiport has one DP and one DM IRQ. Add all DP/DM
+> IRQs related to 4 ports of SC8280XP Teritiary controller.
+> 
+> Also added SuperSpeed PHY interrupt for both Superspeed ports.
 > 
 > Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
 > Reviewed-by: Bjorn Andersson <quic_bjorande@quicinc.com>
