@@ -1,104 +1,110 @@
-Return-Path: <linux-usb+bounces-9559-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9560-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id ACDE18AC5B8
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Apr 2024 09:40:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 74F418AC62F
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Apr 2024 10:00:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3E882B210E0
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Apr 2024 07:40:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7FE1A1C21707
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Apr 2024 08:00:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 416404D584;
-	Mon, 22 Apr 2024 07:40:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39CAB4E1CE;
+	Mon, 22 Apr 2024 08:00:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="be+2sgZy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QJlhhTkL"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6B4C4AEFE;
-	Mon, 22 Apr 2024 07:40:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE4CF4D599;
+	Mon, 22 Apr 2024 08:00:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713771618; cv=none; b=klxtUydSbd/s+NzBr4e5EzTaohNtguHHkNhixB9ZtnNJ5vf2G5HHC+TYwprWGJzu3VNV2uBHYhkcbmpVQ+27EAZjQDmrJFr1LHQl6X4H01i8H5UcrRuaSVXZseOm9Ej8vwnflvCrN8W6HOSSym9I5lk7rKREjoZlw7E/YOAoKjM=
+	t=1713772828; cv=none; b=lpx3MNDGRq7rFZNCddJqLMshI4qNHhCReAzej8+AEU8Z2eRaob+olJh0lRNbUO56Fo1x3Mq2xYmvfmjglDN7e0pnU7yyxxQga8j5sHGePhS6lGZUONQHM2mrzNjFho0QzLDy8DCOVGVWEaoTfdR34Zb9wPbk6kia46s38/ZwV2w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713771618; c=relaxed/simple;
-	bh=3p99fopQtEIZdwt4QoUoj1J66fCCoXwK2F+w8THHEDw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=US8REULLmLjnXah2y1JAa9QmN4eGzCwRdxGu45LwE7brA7AYKrcKsijNAZVrAyKCUlffTOBMgO2l50lu00EVh2lCH89p5GILD6BB/B9g95+CimeO6it9pjmHYIPv4SDQbH0wfMEYenx/vINOfDWyk9R3NC26u0RNhjzl9uw4SMg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=be+2sgZy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24630C32782;
-	Mon, 22 Apr 2024 07:40:18 +0000 (UTC)
+	s=arc-20240116; t=1713772828; c=relaxed/simple;
+	bh=DIJSir2e9d7gAvs2+NXv5bOOT63Gd84ASBtFZmOPwg4=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=SruJKBSEXJs2oSq3iCBRx4Zgelhraq+ODzi5hO3BZlz9y9DKTjV78i2OtTYQwwZIGWkT+SLDn3fXnHnb2xIWAmBTxCiWE1x7kEe/vufeNXSSNpTh8NNEUhWNBcZ6Iz2cfrgWQas6zzJwJ/SEx+vAQPS36fJGfsd8DokfMtqP7ZM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QJlhhTkL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 34CADC3277B;
+	Mon, 22 Apr 2024 08:00:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713771618;
-	bh=3p99fopQtEIZdwt4QoUoj1J66fCCoXwK2F+w8THHEDw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=be+2sgZyy0L9gj3jytR1FK4MPVcb9ZLAlfHqWiaDH7MC4Lv1TbfuZNnnQaeJXzSZv
-	 VPHF9h4aN6Z2iBy+sngyZ1gUkYzcdWzXF2DDPdmyWuYre+Jj3UXzrlT8FyKu08X7rW
-	 yS1r9jiHUi9nQktfDfFasCRtfbpQ312zdzaxS9UlKo0xZDtGtW41bSd/35A/izdQYu
-	 x0t8G3zXHIHRm1t0r9bm6PF04q4jzxJWKPGKNKt02oE+lOrZaQcuIgjovS7XbdYYsP
-	 dFoP1wc6+awLNV6Zi4orHWfIeQv1vRQGlmRIr1KuNv9/FlGhV+BREGyto0eZgAt+Eg
-	 GPuUJSkueLFCA==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1ryoHc-00000000487-0cmS;
-	Mon, 22 Apr 2024 09:40:12 +0200
-Date: Mon, 22 Apr 2024 09:40:12 +0200
-From: Johan Hovold <johan@kernel.org>
-To: Krishna Kurapati <quic_kriskura@quicinc.com>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Rob Herring <robh@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Wesley Cheng <quic_wcheng@quicinc.com>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Felipe Balbi <balbi@kernel.org>, devicetree@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, quic_ppratap@quicinc.com,
-	quic_jackp@quicinc.com
-Subject: Re: [PATCH v21 0/9] Add multiport support for DWC3 controllers
-Message-ID: <ZiYUXCHGlUKSnXXM@hovoldconsulting.com>
-References: <20240420044901.884098-1-quic_kriskura@quicinc.com>
+	s=k20201202; t=1713772828;
+	bh=DIJSir2e9d7gAvs2+NXv5bOOT63Gd84ASBtFZmOPwg4=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=QJlhhTkLUK2mxI08mYXViMtCrh8oYmZ3HcLOYmO206M+5SnwvgwV6yOke7QPKZdY6
+	 fKBhmVDX8Si9hALbaqFFqaclQXPLc4wIN9YHtmG+RxfegBtO/LQc4ASa1J7scSj5Lp
+	 bbvseqn09W3+Ry9ko9Kg80sDiyWoIqluRXiuQXb8rxvtQMk4mNG3x/0DeNadfq4+2C
+	 7CXDSx2tjBV5cffGEHudgL1jZw1mtNqPTr+vRnAENXVOcH+3fqoglgahAl7+gmXqWW
+	 xRQiCkzwqycAgWv1romkDwJsrvwcrF2iMIaQI602rd08lQrKV2/UN236VuOflSymD3
+	 TgU5p5q/eLP2g==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 21A01C433A2;
+	Mon, 22 Apr 2024 08:00:28 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240420044901.884098-1-quic_kriskura@quicinc.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net 1/1] net: usb: qmi_wwan: add Telit FN920C04 compositions
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <171377282813.8584.10156649860787123159.git-patchwork-notify@kernel.org>
+Date: Mon, 22 Apr 2024 08:00:28 +0000
+References: <20240418111207.4138126-1-dnlplm@gmail.com>
+In-Reply-To: <20240418111207.4138126-1-dnlplm@gmail.com>
+To: Daniele Palmas <dnlplm@gmail.com>
+Cc: bjorn@mork.no, davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+ edumazet@google.com, netdev@vger.kernel.org, linux-usb@vger.kernel.org
 
-On Sat, Apr 20, 2024 at 10:18:52AM +0530, Krishna Kurapati wrote:
+Hello:
 
-> Krishna Kurapati (9):
->   dt-bindings: usb: Add bindings for multiport properties on DWC3
->     controller
->   usb: dwc3: core: Access XHCI address space temporarily to read port
->     info
->   usb: dwc3: core: Skip setting event buffers for host only controllers
->   usb: dwc3: core: Refactor PHY logic to support Multiport Controller
->   dt-bindings: usb: qcom,dwc3: Add bindings for SC8280 Multiport
->   usb: dwc3: qcom: Add helper function to request wakeup interrupts
->   usb: dwc3: qcom: Refactor IRQ handling in glue driver
->   usb: dwc3: qcom: Enable wakeup for applicable ports of multiport
->   usb: dwc3: qcom: Add multiport suspend/resume support for wrapper
+This patch was applied to netdev/net.git (main)
+by David S. Miller <davem@davemloft.net>:
 
-Verified that the finger print reader on the Lenovo ThinkPad X13s works
-with this series (and not yet merged devicetree changes). 
+On Thu, 18 Apr 2024 13:12:07 +0200 you wrote:
+> Add the following Telit FN920C04 compositions:
+> 
+> 0x10a0: rmnet + tty (AT/NMEA) + tty (AT) + tty (diag)
+> T:  Bus=03 Lev=01 Prnt=03 Port=06 Cnt=01 Dev#=  5 Spd=480  MxCh= 0
+> D:  Ver= 2.01 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+> P:  Vendor=1bc7 ProdID=10a0 Rev=05.15
+> S:  Manufacturer=Telit Cinterion
+> S:  Product=FN920
+> S:  SerialNumber=92c4c4d8
+> C:  #Ifs= 4 Cfg#= 1 Atr=e0 MxPwr=500mA
+> I:  If#= 0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=50 Driver=qmi_wwan
+> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=82(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
+> I:  If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=60 Driver=option
+> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+> I:  If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+> I:  If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+> E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> 
+> [...]
 
-Not sure when or why, but the error message I previously reported seeing
-during suspend is now also gone:
+Here is the summary with links:
+  - [net,1/1] net: usb: qmi_wwan: add Telit FN920C04 compositions
+    https://git.kernel.org/netdev/net/c/0b8fe5bd7324
 
-	dwc3-qcom a4f8800.usb: HS-PHY2 not in L2
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Tested-by: Johan Hovold <johan+linaro@kernel.org>
 
-Thanks for sticking with it, Krishna.
-
-Johan
 
