@@ -1,178 +1,161 @@
-Return-Path: <linux-usb+bounces-9545-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9546-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B58CE8AC21E
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Apr 2024 01:25:52 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C6FE8AC28C
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Apr 2024 03:37:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6A86B2811BA
-	for <lists+linux-usb@lfdr.de>; Sun, 21 Apr 2024 23:25:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1404B1F21154
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Apr 2024 01:37:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEAF345BE7;
-	Sun, 21 Apr 2024 23:25:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25B634683;
+	Mon, 22 Apr 2024 01:37:08 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from CHN02-SH0-obe.outbound.protection.partner.outlook.cn (mail-sh0chn02on2132.outbound.protection.partner.outlook.cn [139.219.146.132])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9CBE8825
-	for <linux-usb@vger.kernel.org>; Sun, 21 Apr 2024 23:25:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713741945; cv=none; b=f/L6F+1ilxLew2UeeqASlA3xjfGGuCF1hqBlQCo69/vz2s9BZvFMlu0jjZSmNlZYWHjx5rcpnyzD9LMhMqJGUypuIzPDMB7VUw8rPY7jHE3lxpeH049yRVuuWUEbVsXW17nnBh8cTHg4NygMqSSFGlm+Hfl+pXq5yj/aP+wRmSI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713741945; c=relaxed/simple;
-	bh=g02USyEcC1+iNhTXFa90KVmi/4EzyCN+DpO7X/RqC/8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=Heh4v2vMZLW3zN9VSJzP1IQTRmpA7zkw7jk2R51U5T0N3dqCEOYMGhnc4uWxjrPmw17o9ymbCoEwJLAD8WYJTZYlQlk36/Rglj6dK8Z5iv0viQvChRLipz71kp0WU1n3Cqv7nNTk3YvCCIKneQ25apRWSV0vGVMaGm3coP+sSX4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1rygYt-0006Ce-W7; Mon, 22 Apr 2024 01:25:32 +0200
-Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1rygYt-00DaWd-Dk; Mon, 22 Apr 2024 01:25:31 +0200
-Received: from mgr by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1rygYt-006Yvm-0y;
-	Mon, 22 Apr 2024 01:25:31 +0200
-Date: Mon, 22 Apr 2024 01:25:31 +0200
-From: Michael Grzeschik <mgr@pengutronix.de>
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Daniel Scally <dan.scally@ideasonboard.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Avichal Rakesh <arakesh@google.com>,
-	Jayant Chowdhary <jchowdhary@google.com>, etalvala@google.com
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] usb: gadget: uvc: allocate requests based on frame
- interval length and buffersize
-Message-ID: <ZiWga5Kqno1ICv97@pengutronix.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8CEC1109;
+	Mon, 22 Apr 2024 01:37:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=139.219.146.132
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1713749827; cv=fail; b=CAWnJ+PY6pxHslPvXZ0K9C5zrFwNVLRDrdHATUx0ORkKVhIaix9brbGoCpSqB4MP3glISCTjUgjquY0/R9Tn35Fq6ibWf6GOA51ysE9XXkJDhcFrFVPHNlGcXwUvLDKji4fZJ20iPwcbeQorAAMRBz6hcamoFa8RmDp0Ev4C0Co=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1713749827; c=relaxed/simple;
+	bh=m9EaUIsiOMcIGATi0/CEZAGAFl03tC15eaZdXjNMkxg=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=Ybzi80DubhYQat6kAdhxR/AazcK38qb3zYirzfMIgMoDJCU3YmATLX+fL1xJkixZrIqkfbttidByDG+Kl9BA6uDQjQ2Szhlyazl+zr7n0kok78LrjFi4AIqyLxnBmR2Uvmn1vbucT6HfqzEFXcpxRwvILwHMQ1XZOJr3mBaLLsk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com; spf=pass smtp.mailfrom=starfivetech.com; arc=fail smtp.client-ip=139.219.146.132
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=starfivetech.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bQjmbm4h7VJyLaXqWt65/ASdZWL5bczQr+P9qq63hRhNZPG4TzF0JEKf/o2/pmASxVpkBw77bCene+3uH5NFiI1snYVOzlZlTExFiSf15xWrX56cbxdhsWkkeOIsFl1ofnMnYGS/4oKKklbW26/e7lC/5TcK/hPDJSjJF0nZ8aG6m6/pnMJWExuCCFeLsc41JprW9DOi6oX8C718Tz4qbxn5kPhPZHSv3soC9FjE5YMGiPgiI7aoGVtR5BBinb1Zxvb20KsnxhoyYWV6DZ9qO+DR0wyp0KcKJfOCBcxTPY1O/g5Cq9d/PkcoOzpo4XNNtC12UUwluJynQJpX69ZPbg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LxHlCI12nXeVMbEctzvS7WxO/8uLRaRlpA6GwNn1+9Y=;
+ b=ZcYzj7NVy5souCUVgHxeL58aNdquV8/x5gRZoLUZBUxisme9HMvCHiBHN4Pk+IWzsyQBnA/RCIViMreLFoottLYVL2EG2ZM0Ig8hfWMQbybrKOr5xVICd1acDe0YLsPUX20BrvhqfXfI45dCtWFF4WIgS0XongfIS+lFqXp40kE0vhOBtGNt4IKa7QcI/vYvzYDOxRHnI5ZL3/CuVPrhh0cFIZgjYin3jWJf3mQewklNNl7l9cQvIosJtk8tdMbpV+MZHmbExqvV6b6IEjHyQUcrTTHWuC+xQJU6hOAddqsiRWybqavb9+oKuErZqq/aCIhaFu5NIW1kdELN8I1Tpw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=starfivetech.com; dmarc=pass action=none
+ header.from=starfivetech.com; dkim=pass header.d=starfivetech.com; arc=none
+Received: from SHXPR01MB0863.CHNPR01.prod.partner.outlook.cn
+ (2406:e500:c311:25::15) by SHXPR01MB0736.CHNPR01.prod.partner.outlook.cn
+ (2406:e500:c311:26::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7249.41; Mon, 22 Apr
+ 2024 01:21:07 +0000
+Received: from SHXPR01MB0863.CHNPR01.prod.partner.outlook.cn
+ ([fe80::a137:b8e5:8a0e:ca9f]) by
+ SHXPR01MB0863.CHNPR01.prod.partner.outlook.cn ([fe80::a137:b8e5:8a0e:ca9f%5])
+ with mapi id 15.20.7472.044; Mon, 22 Apr 2024 01:21:07 +0000
+From: Minda Chen <minda.chen@starfivetech.com>
+To: Krishna Kurapati <quic_kriskura@quicinc.com>, Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>, Rob Herring <robh@kernel.org>, Bjorn
+ Andersson <andersson@kernel.org>, Wesley Cheng <quic_wcheng@quicinc.com>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>, Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>, Conor Dooley <conor+dt@kernel.org>, Thinh
+ Nguyen <Thinh.Nguyen@synopsys.com>, Felipe Balbi <balbi@kernel.org>, Johan
+ Hovold <johan@kernel.org>
+CC: "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"quic_ppratap@quicinc.com" <quic_ppratap@quicinc.com>,
+	"quic_jackp@quicinc.com" <quic_jackp@quicinc.com>
+Subject: Re: [PATCH v21 0/9] Add multiport support for DWC3 controllers
+Thread-Topic: [PATCH v21 0/9] Add multiport support for DWC3 controllers
+Thread-Index: AQHakt5cTCGj6o4U1kO+Ia5MuXnVybFzgPUA
+Date: Mon, 22 Apr 2024 01:21:07 +0000
+Message-ID:
+ <SHXPR01MB0863AA6AE7B391F26EF882ADE612A@SHXPR01MB0863.CHNPR01.prod.partner.outlook.cn>
+References: <20240420044901.884098-1-quic_kriskura@quicinc.com>
+In-Reply-To: <20240420044901.884098-1-quic_kriskura@quicinc.com>
+Accept-Language: en-US
+Content-Language: zh-CN
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=starfivetech.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SHXPR01MB0863:EE_|SHXPR01MB0736:EE_
+x-ms-office365-filtering-correlation-id: 636e2538-c519-4436-6794-08dc626a7c4d
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ J6IoKXT0XCmAwz39gPfxDeUmb4lH3UhO9oh/1633yqM9pmi7of4dM5P47FTBZyNO+6v+zMwshF8z1T5qfojR5+OYaenGLXhmfuPfo54HuNeG7W9Ye7YU9o6v6nd+byK17P0BMGHgq+9a8SZxcGRGPRae6Rwj0BRUksLew8uhpDXh650GmdyEvETzm7m3MqmIbyLpIC7yo3o8gc5mtUd2Ki+5Zppj18K6og2vO6WoC88HdR8/TTszjDioccJ+CLb9KxOZEUP/wNovPwtJ5GD4YZVyAf9cUxgh6CLAK1+afJPZd8R8NlLD/OA+Bvf3BcCZjD41jB7dj//LtU5ym1TxGXv0V50f85Qqighzqi87AQX9kRAgV2VvvETeOCeQCmolHOdp4oyQPhcA5co+XyJtZ+j1n2CO9z9uRvuRfJtxVkUyI3txT6c0gKV00QF+NyYZ8o+f+WiXiwFJWDdkxYbPSxyBx1mlrgDSxc+/e0LmPbwc+Hkm/AzgfUzqpX3miSwwNaSHgyvzEUruFS2GDwSho7x652u4f44kNdCbUUixbJU+UeYr3H+ZjqgkKaaC+u7yR+BcYl+YuftGnCA82NRql2wsFpaslSsrKcTlIQ1gkOSv87qdTkWpmqHQa2bbCpdIEDaxKnLXAkXaSZQ/75Cl7Q==
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SHXPR01MB0863.CHNPR01.prod.partner.outlook.cn;PTR:;CAT:NONE;SFS:(13230031)(7416005)(366007)(1800799015)(41320700004)(38070700009)(921011);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?QFNuAqupuMnInnESsjm7vCjx/ZfiLiMNtwZxm/HOd0Ow/tfMlQWRm5GNMlaY?=
+ =?us-ascii?Q?F0FeLTBq+gGVwqo98VBo2aDax+wbziVW/5XFuKAofNw2v3P4e2guW3zYWdYg?=
+ =?us-ascii?Q?OtTdJ2TklP1ZK/Cfvh8BdXmS0h2M3c9HGhoh0DLTjrIj99NeP4GFQQm0lA6c?=
+ =?us-ascii?Q?329mGTEZUtPeJimdSKe5BZgQlLeayC9q7HBIwJ1+QPu1PIPrK7jCC6hN4IsY?=
+ =?us-ascii?Q?Nni+Br24XZ4SueFBX+UvNzo0elBHIXkLPVjf+Z7Lt8mv1LVrZbLUP6oBEWWG?=
+ =?us-ascii?Q?ITbOiGMxGR+wi4PoofZFMzWqxIggXyadt0Soafa8XwDgjmU4SrX4IMJE6NtB?=
+ =?us-ascii?Q?pr4BkQMGuweBMcCOSZukDr+3ijBNGU7rzvwWPiVbK85F25VXme3rASOml4Ko?=
+ =?us-ascii?Q?2mSIOv9VGTw1FnKUBjJJaCpddaPFU/yHDzjQS3OLaVsaK5nhrmC2E2CpUjwX?=
+ =?us-ascii?Q?fgKrI62iv2NoUxBB8N6hYAVh5SWQF8Bm8f2W8M/BNOH8wm2iPh8DFm55gf4U?=
+ =?us-ascii?Q?46MIBgXEQXQnc18h3anCUeGmrYv/h2y9I4CW9GJGOagvJNyCatUrHrFcCjeV?=
+ =?us-ascii?Q?IfkgBTdzAmmvbg6kEWbBHXfjQ5SclZaiR5M351BjCCMQfIssJideqE2N5FVi?=
+ =?us-ascii?Q?RaEINGcRKuChVK3zN27icQ4g7kuWo4IhsflXJEoS23K/wq4jCqKqSZHtHpjK?=
+ =?us-ascii?Q?E5cyqP3gMuDZQMKviJcqvTfk2JEAaoapnDZl4tbBrJSOnvV+6NA/CzfrVr8J?=
+ =?us-ascii?Q?BgjhCenPu0m45zHi6jnjSC2/Frc8zcYLMzz0AoOQ12Ach7lB0o4LdEHqVb4J?=
+ =?us-ascii?Q?8xMAYkGgg3KV0Wy6lJodGlqc0TKrCBAfS4u9piFHfsUZYusHlKiy3UEeQMJR?=
+ =?us-ascii?Q?kEhOu76gM6pBOtCGNG/2U6HBj2zzD/x6wi3qE6qe9gfTrnd27xhxtSxeuQgd?=
+ =?us-ascii?Q?JHQaXNrlD4dk0riVCz9SM/MV1SqN+wmTX9V+jh7h87+6O0fwu1JCqx0drwAt?=
+ =?us-ascii?Q?CeXGHNlHeg+UiGEZgcMctEbmcc+u3MX/m0bhW9rG73U1uBrToQaUp+kwSQiF?=
+ =?us-ascii?Q?76OrCfwIWMPl9/aaNqSSW99JtMPPm8RsHWypCihfBgXLv4y4/YR0oe6Aymwm?=
+ =?us-ascii?Q?DnTPCABCz9+evjAkUU2LqHKFgqMCru3sjKzTF19UREZ+MC4G5xh2kU6BwrgW?=
+ =?us-ascii?Q?7ttwBK6ylHAljXpvU5u84YvEp0dDVB9VGJGb0P724dOP2SjmcvuAdMPKo8it?=
+ =?us-ascii?Q?YQXwYDV2ChXDQhC953vMKKKS9L2f27s6ZUTqvQJckRukNx9nByU/eCeeYYYt?=
+ =?us-ascii?Q?BU9q+1OpN2KzKez3UCWClCDNd5ZaSlYJAfMs6YJmL982ds1W16XXF/Wbp7Zk?=
+ =?us-ascii?Q?C7uGZNXW9zmCMa2OJrtjKSpioE3Gn6gaBHMVSFXRV+zRo6rb/M1x09lWBmev?=
+ =?us-ascii?Q?A3A38NNkYF2nLB3HdHAJAPwLEnfkg54+Ed86bWQgwy/8CZxD9XXxxC7ucu8w?=
+ =?us-ascii?Q?ahgunKBXg64yvTyNKc6pbDoaDMo40oirQJELV9bkhHB6MLW43nsU/5ma4Qoa?=
+ =?us-ascii?Q?A0cdsNYGA2vTlT4b2NkGMftG2eehivVrGYkd8v9/FFWpnZC+czQKa07GqjyN?=
+ =?us-ascii?Q?ag=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="RVp748n/zLiKJVp9"
-Content-Disposition: inline
-In-Reply-To: <20240403-uvc_request_length_by_interval-v1-0-9436c4716233@pengutronix.de>
-X-Sent-From: Pengutronix Hildesheim
-X-URL: http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+X-OriginatorOrg: starfivetech.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SHXPR01MB0863.CHNPR01.prod.partner.outlook.cn
+X-MS-Exchange-CrossTenant-Network-Message-Id: 636e2538-c519-4436-6794-08dc626a7c4d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Apr 2024 01:21:07.1212
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 06fe3fa3-1221-43d3-861b-5a4ee687a85c
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 2rg02vXBpY1MTOBP0Bq//MWwKI6z+EYiq0wP9qYDKSVY814loPDHRUJr6Oa/sys0DnBoNbUA+ou1UMMOfQHvmaAVUiOz3KLRPI3uQayBDBs=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SHXPR01MB0736
 
-
---RVp748n/zLiKJVp9
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Tue, Apr 09, 2024 at 11:24:56PM +0200, Michael Grzeschik wrote:
->This patch series is improving the size calculation and allocation
->of the uvc requests. Using the currenlty setup frame duration of the
->stream it is possible to calculate the number of requests based on the
->interval length.
-
-The basic concept here is right. But unfortunatly we found out that
-together with Patch [1] and the current zero length request pump
-mechanism [2] and [3] this is not working as expected.
-
-The conclusion that we can not queue more than one frame at once into
-the hw led to [1]. The current implementation of zero length reqeusts
-which will be queued while we are waiting for the frame to finish
-transferring will enlarge the frame duration. Since every zero-length
-request is still taking up at least one frame interval of 125 us.
-
-This longer frameduration of each enqueued will therefor decrease the
-absolut framerate.
-
-Therefor to properly make those patches work, we will have to get rid of
-the zero length pump mechanism again and make sure that the whole
-business logic of what to be queued and when will only be done in the
-pump worker. It is possible to let the dwc3 udc run dry, as we are
-actively waiting for the frame to finish, the last request in the
-prepared and started list will stop the current dwc3 stream and therfor
-no underruns will occur with the next ep_queue.
-
-Also keeping the prepared list and doing the preparation in any case
-of the pump worker is still a good point we need to keep.
-
-With all these pending patches the whole uvc saga of underruns and
-flickering videostreams should come to an end=E2=84=A2.
-
-I already started with this but would be happy to see Avichal and others
-to review the patches when they are ready in my eyes.
-
-mgr
-
-[1] https://lore.kernel.org/all/20240324-uvc-gadget-errorcheck-v1-1-5538c57=
-bbeba@pengutronix.de/
-[2] https://lore.kernel.org/all/99384044-0d14-4ebe-9109-8a5557e64449@google=
-=2Ecom/
-[3] https://lore.kernel.org/all/20230508231103.1621375-1-arakesh@google.com/
-
->Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
->---
->Michael Grzeschik (3):
->      usb: gadget: function: uvc: set req_size once when the vb2 queue is =
-calculated
->      usb: gadget: uvc: add g_parm and s_parm for frame interval
->      usb: gadget: uvc: set req_size and n_requests based on the frame int=
-erval
->
-> drivers/usb/gadget/function/uvc.h       |  1 +
-> drivers/usb/gadget/function/uvc_queue.c | 30 ++++++++++++++-----
-> drivers/usb/gadget/function/uvc_v4l2.c  | 52 ++++++++++++++++++++++++++++=
-+++++
-> drivers/usb/gadget/function/uvc_video.c | 17 ++---------
-> 4 files changed, 79 insertions(+), 21 deletions(-)
->---
->base-commit: 3295f1b866bfbcabd625511968e8a5c541f9ab32
->change-id: 20240403-uvc_request_length_by_interval-a7efd587d963
->
->Best regards,
->--=20
->Michael Grzeschik <m.grzeschik@pengutronix.de>
->
->
-
---=20
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
-
---RVp748n/zLiKJVp9
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmYloGYACgkQC+njFXoe
-LGTcgxAAzcVaC4p7RcAcVHQyo4iW2vQUTr028TAv07eisV9cgjCvfsPzIYBQiUAU
-7ghV3IrtYczqqtH9HkeFFfq250TuhpeFQ29P2dgcCeynyfm5hQIvoM8UGtBjP+Eo
-YkmR+3HCHgRJE3ruRnmv++EHrrdEEQ+gAptncb5HOOZvCUrtqoNTYb2Tc2ybkOgn
-uVp9wP2Q6kTH1TxgYvqowksRhUF99v+fD9zU1wvU/uvervcsEi7CaIX+1GWnWI91
-sx92A9/QvW4eutFoOIhETJupdokrHjT1xOye3CT73Q8fOPYH4GJrQe/g6xDoUE/K
-eiTzu6ULp8Gm/7/pCCmpSAHKRUjokGqAx/c3KwwZTlkbVvqkNYHq6LRWxfGGXBJB
-dZwKGnHTFnMdV/j3QecElyX8rmrN9RPBGa9q4Kdm3gW9xE0PoPG9TgZF59P0qWAX
-fpjXsq29g0VhX0VBH1MoQ+miNQFb9219s5yjXa4OKJP+/ay6izOVd0jBZaK9bjt+
-gBgj11zrryeMrBTdeBZLdtAftYuTClEN4eCc+bCgg6ql389rwOQT7EB8HiFbSPzN
-zwCd01GrENwaZ/VeKqR80wzSSgc2xsm8Uyus1msAoCXGUFBl1P0pw31Pkqi8k6g4
-MBuIqlaW9nnb0mJHM18V2HkJCtA6Z29KrVCSjODIoxSHO/mKlww=
-=najE
------END PGP SIGNATURE-----
-
---RVp748n/zLiKJVp9--
+>=20
+> Currently the DWC3 driver supports only single port controller which requ=
+ires at
+> most two PHYs ie HS and SS PHYs. There are SoCs that has
+> DWC3 controller with multiple ports that can operate in host mode.
+> Some of the port supports both SS+HS and other port supports only HS mode=
+.
+>=20
+> This change primarily refactors the Phy logic in core driver to allow mul=
+tiport
+> support with Generic Phy's.
+>=20
+> The DWC3 controller supports up to 15 High-Speed phys and 4 SuperSpeed ph=
+ys.
+> The multiport controller in Qualcomm SA8295P is paired with two High-Spee=
+d +
+> SuperSpeed and two High-Speed-only ports. It is assumed that the N
+> SuperSpeed PHYs are paired with the first N High-Speed PHYs.
+>=20
+Hi All, Thinh
+Can DW multiple port host patches be (patch 1-4) accepted first?  Other mul=
+tiport
+vendor will use this.
 
