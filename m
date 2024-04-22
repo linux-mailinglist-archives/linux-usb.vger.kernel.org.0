@@ -1,179 +1,216 @@
-Return-Path: <linux-usb+bounces-9570-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9571-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B73958ACC48
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Apr 2024 13:49:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E8B08ACCAF
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Apr 2024 14:21:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 17A47285B1D
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Apr 2024 11:49:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DAF041F20F69
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Apr 2024 12:21:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 771FA146A76;
-	Mon, 22 Apr 2024 11:49:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C43E1474D7;
+	Mon, 22 Apr 2024 12:21:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m8qcjZiV"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FYUtjvIO"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB9D614430B;
-	Mon, 22 Apr 2024 11:49:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD03C4F213;
+	Mon, 22 Apr 2024 12:21:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713786563; cv=none; b=CjYmcppY28vweXztc8FW3qFeKQB5K3/4+UvDxiJlmkCq9mlNLzSNE1u8qW/j3ouBJjcM7CvzSr444fnWB6iQiVwb+7eeIa5XfFsBK6gYEp/QHon7CH/G2mQsmWMsIughkdjKbABVgYc6+fe/bCK9zaKK+mKbqepfUh4zyPpLz40=
+	t=1713788498; cv=none; b=D62nv4xaWJhBRiDFzLQcstpJgqyOqyAIBD/1wDhuhSjoPEdeSZEO1LU+6sHfghsY2KeyWmrna5VrJSEGWefmxkaH35oKrSkspZsCMGlATx9c/1RJmu4o3zH9uSSorL08s+QwtmlOgquBC32ZhClY2L1Rq1PPH1q7S+I3Yf7EcqA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713786563; c=relaxed/simple;
-	bh=oa565rT+yJwur5f64+QWMUWJjWDSTlu51r9yAsnO/cQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=abXfnzhG+LxQePJoFI+srhBUmSjcylVrA/YFTPJXZ9P0srBgMhenDhxruYUkP86fpeXtAFnm2MDpyf+q9dnfWV13cGfw0hk3kwwfkfTKLpdeEVgQEs9K54j4CJc4UpzGVUuUBqZYyBC/nBxtB6VV1Mfba/K/wJXel/3vP3Z+iOI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m8qcjZiV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D9FFC113CC;
-	Mon, 22 Apr 2024 11:49:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713786562;
-	bh=oa565rT+yJwur5f64+QWMUWJjWDSTlu51r9yAsnO/cQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=m8qcjZiVMZwPzvsf/mGXDqRPN4LEorVGqL4g0TIW9H14oLT4yTLWqhN9QnS9O1nHp
-	 508wVaDH45H+yaJPYmRBjOljKpuNDFWMtr9bvWFSvznl6wTTnwGRDi0EtMYiiwokO3
-	 9NF4lkONdtckxwDw1RPHwEuS2YOr3ZsrRZ8zy1Kkjw2sHvr97EQPK9PUX9lO6LuWQH
-	 Ak07BoSkLMkB/16OIhGgc8OYNF86v08Pnk4m0K9Hracf9EyBUjd0yVdLwD1Msd5RTw
-	 kbtvA6u3nSrqI+e5f55Dasuhc6tzvEX0HFYEahZKknuWPaf4ALDx1qklxXlV+JC4QD
-	 3bUCdEwxXJtVA==
-Message-ID: <0b6bf7b9-f9c6-40c4-a166-7bdd4984b023@kernel.org>
-Date: Mon, 22 Apr 2024 13:49:17 +0200
+	s=arc-20240116; t=1713788498; c=relaxed/simple;
+	bh=6e4WeTSzc6V1+UM7MstEVWVILvZqnGppW/NAEheEo6s=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GXxB8KYb5LXfN4Px3rVBkJqCJAt/nyvosu6DgVFLsAcgwXbibz8MIZDogmGPLfMYRs01+mpmCmprgLaRJrjDfU49WmM2LQZtu7pXsdvgjoKOTo6ro6TyzHo9m0xUyp/DDHul7OUWNwXn3wHtU7NZ32wW3o6i60XbR6BgFGben14=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FYUtjvIO; arc=none smtp.client-ip=209.85.210.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-6ecee1f325bso3460357b3a.2;
+        Mon, 22 Apr 2024 05:21:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1713788496; x=1714393296; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=fHFimgB5kEy6t7d1qdH8Mcr+f0+kBTAsDg+MeGo/6Ls=;
+        b=FYUtjvIOpTIRVAn8VuVbU+tKP8PMGuox0KVnAmaWDOyfx4DtLg9/O+Q/KDdsBc+BG4
+         bu1BawRO34yzRck3pQAgEsS5r7TcFOUN6mnJd7VORCIac+8SOKgZyMzaLVgyn0U7mQEt
+         BMvrqrtG5HzM0KqwUXW1APuFI00wgCEe4L2OMxyJqN34qWfgXlvXhosKEIafmqfA8x9K
+         +2AFFZ6bUucTlp0bdgUCT5VxUk7KDqsUaRmXizmX8sZ2vWuU1qqQWVXG5YTmbYrEb/8l
+         eSxPYqdlWRRGgtCDO29AZMWI+E/cUGNOkw9XN92L2Acma0vtKVRav7hSfDpTQ6J8M1jh
+         +yIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713788496; x=1714393296;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fHFimgB5kEy6t7d1qdH8Mcr+f0+kBTAsDg+MeGo/6Ls=;
+        b=g4uHLNagcK9S4gIcbLxRP8Z6Xz0laARC6h6KdmFd38NlxUOzf8upY3En41JjWDqr8C
+         VqzZxD1qrzFwwH1uUNdUtjvxRjksFLUm6pifxwnojv93VcjnTWK/IWlKcyyQ791MB68I
+         mKrrwcExGRUkjPwcDqma7MoRUiKYbjmn2R3ytmoE41jjth4292QHyF9i5qaacCspTQ+Z
+         j8PjkvEXwVV0QwSBmWjIzrlkyRjUqH5WuLx23Tezr1uAZ5AVwDDztlsnojJg0vw1McnU
+         srhd1NBWmCkmcT2kiLVUYcDWiO4Cq91qHDnrXq+jOXH26CNK+YrUpSh2J25CYpI9Y8+Z
+         Q7ZQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXOvckObA4Qbqin3Bq8XWDq6unY/mmz7I+4t5yp+DFBl1sxkr/pn3SwDsxmx75zStaRPi7o7XBqLNcx0KhoW5V1JKqJBpBvw0lsnoSBH4ShbuydIVyKOfEFlT3omusEEVxgAibywe5IKa83h6J/9qaiAIlfJaYw9LewHBnGO5TRBsDfug==
+X-Gm-Message-State: AOJu0Yx72Wafp9i1tM+/flMI53rYdbDVxfLlpE2lGEJ3jV2joWm63zBT
+	0b3UosBg7VwBKygswe1zxgyCmFCWrutbwhTMWxzDsmj8rB+QINMMMEd5YFtWLKI=
+X-Google-Smtp-Source: AGHT+IFf2lmAmdU4GdqyVIyO2RxXOcMTop445nSPeQud3cT1HcSq6iZhTqDJVb2YGz5pLihFViOAgw==
+X-Received: by 2002:a05:6a20:8409:b0:1a9:6c42:77f5 with SMTP id c9-20020a056a20840900b001a96c4277f5mr15819360pzd.59.1713788495926;
+        Mon, 22 Apr 2024 05:21:35 -0700 (PDT)
+Received: from localhost (ec2-3-111-32-5.ap-south-1.compute.amazonaws.com. [3.111.32.5])
+        by smtp.gmail.com with UTF8SMTPSA id ey3-20020a056a0038c300b006ead618c010sm7664034pfb.192.2024.04.22.05.21.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Apr 2024 05:21:35 -0700 (PDT)
+From: Mohammad Shehar Yaar Tausif <sheharyaar48@gmail.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Cc: Mohammad Shehar Yaar Tausif <sheharyaar48@gmail.com>,
+	linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v3] dt-bindings: usb: uhci: convert to dt schema
+Date: Mon, 22 Apr 2024 17:51:23 +0530
+Message-ID: <20240422122125.455781-1-sheharyaar48@gmail.com>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] dt-bindings: usb: uhci: convert to dt schema
-To: Mohammad Shehar Yaar Tausif <sheharyaar48@gmail.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>
-Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20240422093706.324115-1-sheharyaar48@gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
- cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
- JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
- gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
- J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
- NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
- BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
- vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
- Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
- TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
- S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
- FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJgPO8PBQkUX63hAAoJEBuTQ307
- QWKbBn8P+QFxwl7pDsAKR1InemMAmuykCHl+XgC0LDqrsWhAH5TYeTVXGSyDsuZjHvj+FRP+
- gZaEIYSw2Yf0e91U9HXo3RYhEwSmxUQ4Fjhc9qAwGKVPQf6YuQ5yy6pzI8brcKmHHOGrB3tP
- /MODPt81M1zpograAC2WTDzkICfHKj8LpXp45PylD99J9q0Y+gb04CG5/wXs+1hJy/dz0tYy
- iua4nCuSRbxnSHKBS5vvjosWWjWQXsRKd+zzXp6kfRHHpzJkhRwF6ArXi4XnQ+REnoTfM5Fk
- VmVmSQ3yFKKePEzoIriT1b2sXO0g5QXOAvFqB65LZjXG9jGJoVG6ZJrUV1MVK8vamKoVbUEe
- 0NlLl/tX96HLowHHoKhxEsbFzGzKiFLh7hyboTpy2whdonkDxpnv/H8wE9M3VW/fPgnL2nPe
- xaBLqyHxy9hA9JrZvxg3IQ61x7rtBWBUQPmEaK0azW+l3ysiNpBhISkZrsW3ZUdknWu87nh6
- eTB7mR7xBcVxnomxWwJI4B0wuMwCPdgbV6YDUKCuSgRMUEiVry10xd9KLypR9Vfyn1AhROrq
- AubRPVeJBf9zR5UW1trJNfwVt3XmbHX50HCcHdEdCKiT9O+FiEcahIaWh9lihvO0ci0TtVGZ
- MCEtaCE80Q3Ma9RdHYB3uVF930jwquplFLNF+IBCn5JRzsFNBFVDXDQBEADNkrQYSREUL4D3
- Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
- MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
- OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
- GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
- 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
- YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
- 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
- BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
- JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
- 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
- YpsFAmA872oFCRRflLYACgkQG5NDfTtBYpvScw/9GrqBrVLuJoJ52qBBKUBDo4E+5fU1bjt0
- Gv0nh/hNJuecuRY6aemU6HOPNc2t8QHMSvwbSF+Vp9ZkOvrM36yUOufctoqON+wXrliEY0J4
- ksR89ZILRRAold9Mh0YDqEJc1HmuxYLJ7lnbLYH1oui8bLbMBM8S2Uo9RKqV2GROLi44enVt
- vdrDvo+CxKj2K+d4cleCNiz5qbTxPUW/cgkwG0lJc4I4sso7l4XMDKn95c7JtNsuzqKvhEVS
- oic5by3fbUnuI0cemeizF4QdtX2uQxrP7RwHFBd+YUia7zCcz0//rv6FZmAxWZGy5arNl6Vm
- lQqNo7/Poh8WWfRS+xegBxc6hBXahpyUKphAKYkah+m+I0QToCfnGKnPqyYIMDEHCS/RfqA5
- t8F+O56+oyLBAeWX7XcmyM6TGeVfb+OZVMJnZzK0s2VYAuI0Rl87FBFYgULdgqKV7R7WHzwD
- uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
- 7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
- 5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240422093706.324115-1-sheharyaar48@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 22/04/2024 11:37, Mohammad Shehar Yaar Tausif wrote:
-> Convert USB UHCI bindings to DT schema.
+Convert USB UHCI bindings to DT schema. Documenting aspeed compatibles
+and missing properties. Adding aspeed/generic-uhci example and fix previous
+incorrect example.
 
-Please mention changes from pure conversion, so documenting aspeed
-compatibles and missing properties.
+Signed-off-by: Mohammad Shehar Yaar Tausif <sheharyaar48@gmail.com>
+---
+Changes 
+v1->v2:
+- add aspeed compatible and deprecated platform-uhci compatible
+v2->v3:
+- fix property declaration and if-then-else block
+- add generic-uhci example and fix prev incorrect example
 
-> 
-> Signed-off-by: Mohammad Shehar Yaar Tausif <sheharyaar48@gmail.com>
-> ---
+v2 patch : https://lore.kernel.org/all/20240422093706.324115-1-sheharyaar48@gmail.com
+v1 patch : https://lore.kernel.org/all/20240420142108.76984-1-sheharyaar48@gmail.com
+---
+ .../devicetree/bindings/usb/usb-uhci.txt      | 18 -----
+ .../devicetree/bindings/usb/usb-uhci.yaml     | 72 +++++++++++++++++++
+ 2 files changed, 72 insertions(+), 18 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/usb/usb-uhci.txt
+ create mode 100644 Documentation/devicetree/bindings/usb/usb-uhci.yaml
 
-...
-
-...
-
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +
-> +if:
-
-This should be under allOf
-
-> +  properties:
-> +    compatible:
-> +      contains:
-> +        const: generic-uhci
-> +then:
-> +  allOf:
-> +    - $ref: usb-hcd.yaml
-
-This is confusing. Aspeed is not different here.
-
-> +  if:
-> +    properties:
-> +      compatible:
-> +        contains:
-> +          enum:
-> +            - aspeed,ast2400-uhci
-> +            - aspeed,ast2500-uhci
-> +            - aspeed,ast2600-uhci
-> +  then:
-> +    properties:
-> +      '#ports':
-> +        $ref: /schemas/types.yaml#/definitions/uint32
-
-And the #ports property looks valid for generic-ahci. Why do you think
-it is not valid?
-
-
-> +      clocks:
-> +        maxItems: 1
-
-Define properties top-level.
-
-> +    required:
-> +      - clocks
-
-This looks required for generic-uhci as well. Why did you put it only
-for aspeed?
-
-
-Best regards,
-Krzysztof
+diff --git a/Documentation/devicetree/bindings/usb/usb-uhci.txt b/Documentation/devicetree/bindings/usb/usb-uhci.txt
+deleted file mode 100644
+index d1702eb2c8bd..000000000000
+--- a/Documentation/devicetree/bindings/usb/usb-uhci.txt
++++ /dev/null
+@@ -1,18 +0,0 @@
+-Generic Platform UHCI Controller
+------------------------------------------------------
+-
+-Required properties:
+-- compatible : "generic-uhci" (deprecated: "platform-uhci")
+-- reg : Should contain 1 register ranges(address and length)
+-- interrupts : UHCI controller interrupt
+-
+-additionally the properties from usb-hcd.yaml (in the current directory) are
+-supported.
+-
+-Example:
+-
+-	uhci@d8007b00 {
+-		compatible = "generic-uhci";
+-		reg = <0xd8007b00 0x200>;
+-		interrupts = <43>;
+-	};
+diff --git a/Documentation/devicetree/bindings/usb/usb-uhci.yaml b/Documentation/devicetree/bindings/usb/usb-uhci.yaml
+new file mode 100644
+index 000000000000..fc4f0174640c
+--- /dev/null
++++ b/Documentation/devicetree/bindings/usb/usb-uhci.yaml
+@@ -0,0 +1,72 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/usb/usb-uhci.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Generic Platform UHCI Controller
++
++maintainers:
++  - Greg Kroah-Hartman <gregkh@linuxfoundation.org>
++
++properties:
++  compatible:
++    oneOf:
++      - const: generic-uhci
++      - const: platform-uhci
++        deprecated: true
++      - items:
++          - enum:
++              - aspeed,ast2400-uhci
++              - aspeed,ast2500-uhci
++              - aspeed,ast2600-uhci
++          - const: generic-uhci
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  '#ports':
++    $ref: /schemas/types.yaml#/definitions/uint32
++
++  clocks:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - interrupts
++
++allOf:
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: generic-uhci
++    then:
++      $ref: usb-hcd.yaml
++      required:
++        - clocks
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    uhci@d8007b00 {
++        compatible = "platform-uhci";
++        reg = <0xd8007b00 0x200>;
++        interrupts = <43>;
++    };
++  - |
++    #include <dt-bindings/clock/aspeed-clock.h>
++
++    usb@1e6b0000 {
++        compatible = "aspeed,ast2500-uhci", "generic-uhci";
++        reg = <0x1e6b0000 0x100>;
++        interrupts = <14>;
++        #ports = <2>;
++        clocks = <&syscon ASPEED_CLK_GATE_USBUHCICLK>;
++    };
++...
+-- 
+2.44.0
 
 
