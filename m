@@ -1,183 +1,179 @@
-Return-Path: <linux-usb+bounces-9569-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9570-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A02428ACC22
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Apr 2024 13:38:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B73958ACC48
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Apr 2024 13:49:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5C5FC2849A0
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Apr 2024 11:38:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 17A47285B1D
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Apr 2024 11:49:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 478E8146A77;
-	Mon, 22 Apr 2024 11:38:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 771FA146A76;
+	Mon, 22 Apr 2024 11:49:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PXc8L1p3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m8qcjZiV"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2A531465A2;
-	Mon, 22 Apr 2024 11:38:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB9D614430B;
+	Mon, 22 Apr 2024 11:49:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713785889; cv=none; b=u6KUQSqC40A+odhSSZ78zzVm37wccRNQ9a6JsHhhPDPhSgjZWSPuhDB/QXqtkb7kBedgNPHtbe2f8ay3S+4liA6TC/Fh7DtKvqpmpsD4OWk6cyJPV3GY8ZJw4af5UXCDMFTLWKtElqIgkiMtwTQAuxG0+Y9Aazxj4PAagotwla4=
+	t=1713786563; cv=none; b=CjYmcppY28vweXztc8FW3qFeKQB5K3/4+UvDxiJlmkCq9mlNLzSNE1u8qW/j3ouBJjcM7CvzSr444fnWB6iQiVwb+7eeIa5XfFsBK6gYEp/QHon7CH/G2mQsmWMsIughkdjKbABVgYc6+fe/bCK9zaKK+mKbqepfUh4zyPpLz40=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713785889; c=relaxed/simple;
-	bh=EZYhNhz96eKHn2cEDh2N0ULGq94X/lfU2OLdeurzxwg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EWeT+zlf6jn+zvyoWR0eVZm41ZeAxIdfnkbPScvQ3/UQMRpdLUCSBQDex5zoWuSaCMOk/5skZB+dfejwaT/qMkbwzuX9d8vLLkEVKd0E6uzHGBpRhNLrJ7FeJAHTvdNCW6jhdK49mfrK2aZJTKDjhnKsOyKxwntWbFc4RyUWsR8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PXc8L1p3; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1713785888; x=1745321888;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EZYhNhz96eKHn2cEDh2N0ULGq94X/lfU2OLdeurzxwg=;
-  b=PXc8L1p3IVK9Sv5JkLWWLNJOAO0vAiF4D/w+xLBLOW3AVOL3jwlAy6Zq
-   +JqVdXG/2+VE+Kc9RMy47DowBviHOowT7blYSh+m9HTcGU20jZwxDT+p4
-   ++0LMWcd3JvkwrlL/EunD90nGuDgEtDtEQay8qvSDzlhvRWWFcY6LFnyR
-   Ge4Rusazspa0/Sa2Pe/PN0sQhM3p4jQ8m+M9PTUjjXIHqDtHGI5WNvdXs
-   YQGo45wPRLgZn472YlO/WEMTOJOmHLeF8X+jI4V2naW+i+3ry4Th5Pr2Q
-   eLLtnLTlFuT7zw8AstPtYJvhJz6P21+bScYpF58ELYZfEIYDLU+aPkqni
-   A==;
-X-CSE-ConnectionGUID: /OOzS0u8R5yg+EfiHBxVCQ==
-X-CSE-MsgGUID: NjBFy074R+GTf63hAc8a0A==
-X-IronPort-AV: E=McAfee;i="6600,9927,11051"; a="13093187"
-X-IronPort-AV: E=Sophos;i="6.07,220,1708416000"; 
-   d="scan'208";a="13093187"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2024 04:38:07 -0700
-X-CSE-ConnectionGUID: AzfJOScRSk+rvG5OBKfSNg==
-X-CSE-MsgGUID: T/dk9JejQBuZbswcv6UCQQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,220,1708416000"; 
-   d="scan'208";a="28665225"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by orviesa003.jf.intel.com with SMTP; 22 Apr 2024 04:38:02 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 22 Apr 2024 14:38:01 +0300
-Date: Mon, 22 Apr 2024 14:38:01 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Jameson Thies <jthies@google.com>
-Cc: linux-usb@vger.kernel.org, pmalani@chromium.org, bleung@google.com,
-	abhishekpandit@chromium.org, andersson@kernel.org,
-	dmitry.baryshkov@linaro.org, fabrice.gasnier@foss.st.com,
-	gregkh@linuxfoundation.org, hdegoede@redhat.com,
-	neil.armstrong@linaro.org, rajaram.regupathy@intel.com,
-	saranya.gopal@intel.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 2/4] usb: typec: Update sysfs when setting ops
-Message-ID: <ZiZMGZxqKDpWUSqk@kuha.fi.intel.com>
-References: <20240419211650.2657096-1-jthies@google.com>
- <20240419211650.2657096-3-jthies@google.com>
+	s=arc-20240116; t=1713786563; c=relaxed/simple;
+	bh=oa565rT+yJwur5f64+QWMUWJjWDSTlu51r9yAsnO/cQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=abXfnzhG+LxQePJoFI+srhBUmSjcylVrA/YFTPJXZ9P0srBgMhenDhxruYUkP86fpeXtAFnm2MDpyf+q9dnfWV13cGfw0hk3kwwfkfTKLpdeEVgQEs9K54j4CJc4UpzGVUuUBqZYyBC/nBxtB6VV1Mfba/K/wJXel/3vP3Z+iOI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m8qcjZiV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D9FFC113CC;
+	Mon, 22 Apr 2024 11:49:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713786562;
+	bh=oa565rT+yJwur5f64+QWMUWJjWDSTlu51r9yAsnO/cQ=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=m8qcjZiVMZwPzvsf/mGXDqRPN4LEorVGqL4g0TIW9H14oLT4yTLWqhN9QnS9O1nHp
+	 508wVaDH45H+yaJPYmRBjOljKpuNDFWMtr9bvWFSvznl6wTTnwGRDi0EtMYiiwokO3
+	 9NF4lkONdtckxwDw1RPHwEuS2YOr3ZsrRZ8zy1Kkjw2sHvr97EQPK9PUX9lO6LuWQH
+	 Ak07BoSkLMkB/16OIhGgc8OYNF86v08Pnk4m0K9Hracf9EyBUjd0yVdLwD1Msd5RTw
+	 kbtvA6u3nSrqI+e5f55Dasuhc6tzvEX0HFYEahZKknuWPaf4ALDx1qklxXlV+JC4QD
+	 3bUCdEwxXJtVA==
+Message-ID: <0b6bf7b9-f9c6-40c4-a166-7bdd4984b023@kernel.org>
+Date: Mon, 22 Apr 2024 13:49:17 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240419211650.2657096-3-jthies@google.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] dt-bindings: usb: uhci: convert to dt schema
+To: Mohammad Shehar Yaar Tausif <sheharyaar48@gmail.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>
+Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20240422093706.324115-1-sheharyaar48@gmail.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20240422093706.324115-1-sheharyaar48@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, Apr 19, 2024 at 09:16:48PM +0000, Jameson Thies wrote:
-> From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+On 22/04/2024 11:37, Mohammad Shehar Yaar Tausif wrote:
+> Convert USB UHCI bindings to DT schema.
+
+Please mention changes from pure conversion, so documenting aspeed
+compatibles and missing properties.
+
 > 
-> When adding altmode ops, update the sysfs group so that visibility is
-> also recalculated.
-> 
-> Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
+> Signed-off-by: Mohammad Shehar Yaar Tausif <sheharyaar48@gmail.com>
 > ---
->  drivers/usb/typec/altmodes/displayport.c |  2 +-
->  drivers/usb/typec/class.c                | 18 +++++++++++++++++-
->  drivers/usb/typec/ucsi/displayport.c     |  2 +-
->  include/linux/usb/typec.h                |  3 +++
->  4 files changed, 22 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
-> index 596cd4806018b..92cc1b1361208 100644
-> --- a/drivers/usb/typec/altmodes/displayport.c
-> +++ b/drivers/usb/typec/altmodes/displayport.c
-> @@ -746,7 +746,7 @@ int dp_altmode_probe(struct typec_altmode *alt)
->  	dp->alt = alt;
->  
->  	alt->desc = "DisplayPort";
-> -	alt->ops = &dp_altmode_ops;
-> +	typec_altmode_set_ops(alt, &dp_altmode_ops);
->  
->  	if (plug) {
->  		plug->desc = "Displayport";
-> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-> index 9610e647a8d48..9262fcd4144f8 100644
-> --- a/drivers/usb/typec/class.c
-> +++ b/drivers/usb/typec/class.c
-> @@ -467,6 +467,22 @@ static const struct attribute_group *typec_altmode_groups[] = {
->  	NULL
->  };
->  
-> +/**
-> + * typec_altmode_set_ops - Set ops for altmode
-> + * @adev: Handle to the alternate mode
-> + * @ops: Ops for the alternate mode
-> + *
-> + * After setting ops, attribute visiblity needs to be refreshed if the alternate
-> + * mode can be activated.
-> + */
-> +void typec_altmode_set_ops(struct typec_altmode *adev,
-> +			   const struct typec_altmode_ops *ops)
-> +{
-> +	adev->ops = ops;
-> +	sysfs_update_group(&adev->dev.kobj, &typec_altmode_group);
-> +}
-> +EXPORT_SYMBOL_GPL(typec_altmode_set_ops);
-> +
->  static int altmode_id_get(struct device *dev)
->  {
->  	struct ida *ids;
-> @@ -2317,7 +2333,7 @@ void typec_port_register_altmodes(struct typec_port *port,
->  			continue;
->  		}
->  
-> -		alt->ops = ops;
-> +		typec_altmode_set_ops(alt, ops);
->  		typec_altmode_set_drvdata(alt, drvdata);
->  		altmodes[index] = alt;
->  		index++;
-> diff --git a/drivers/usb/typec/ucsi/displayport.c b/drivers/usb/typec/ucsi/displayport.c
-> index d9d3c91125ca8..eb7b8d6e47d00 100644
-> --- a/drivers/usb/typec/ucsi/displayport.c
-> +++ b/drivers/usb/typec/ucsi/displayport.c
-> @@ -337,7 +337,7 @@ struct typec_altmode *ucsi_register_displayport(struct ucsi_connector *con,
->  	dp->con = con;
->  	dp->alt = alt;
->  
-> -	alt->ops = &ucsi_displayport_ops;
-> +	typec_altmode_set_ops(alt, &ucsi_displayport_ops);
->  	typec_altmode_set_drvdata(alt, dp);
->  
->  	return alt;
-> diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
-> index b35b427561ab5..549275f8ac1b3 100644
-> --- a/include/linux/usb/typec.h
-> +++ b/include/linux/usb/typec.h
-> @@ -167,6 +167,9 @@ struct typec_port *typec_altmode2port(struct typec_altmode *alt);
->  
->  void typec_altmode_update_active(struct typec_altmode *alt, bool active);
->  
-> +void typec_altmode_set_ops(struct typec_altmode *alt,
-> +			   const struct typec_altmode_ops *ops);
-> +
->  enum typec_plug_index {
->  	TYPEC_PLUG_SOP_P,
->  	TYPEC_PLUG_SOP_PP,
-> -- 
-> 2.44.0.769.g3c40516874-goog
 
--- 
-heikki
+...
+
+...
+
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +
+> +if:
+
+This should be under allOf
+
+> +  properties:
+> +    compatible:
+> +      contains:
+> +        const: generic-uhci
+> +then:
+> +  allOf:
+> +    - $ref: usb-hcd.yaml
+
+This is confusing. Aspeed is not different here.
+
+> +  if:
+> +    properties:
+> +      compatible:
+> +        contains:
+> +          enum:
+> +            - aspeed,ast2400-uhci
+> +            - aspeed,ast2500-uhci
+> +            - aspeed,ast2600-uhci
+> +  then:
+> +    properties:
+> +      '#ports':
+> +        $ref: /schemas/types.yaml#/definitions/uint32
+
+And the #ports property looks valid for generic-ahci. Why do you think
+it is not valid?
+
+
+> +      clocks:
+> +        maxItems: 1
+
+Define properties top-level.
+
+> +    required:
+> +      - clocks
+
+This looks required for generic-uhci as well. Why did you put it only
+for aspeed?
+
+
+Best regards,
+Krzysztof
+
 
