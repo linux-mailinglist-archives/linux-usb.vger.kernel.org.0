@@ -1,79 +1,77 @@
-Return-Path: <linux-usb+bounces-9568-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9569-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D27D8ACBDD
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Apr 2024 13:20:28 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A02428ACC22
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Apr 2024 13:38:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3417AB251C1
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Apr 2024 11:20:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5C5FC2849A0
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Apr 2024 11:38:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3A171465AD;
-	Mon, 22 Apr 2024 11:20:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 478E8146A77;
+	Mon, 22 Apr 2024 11:38:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="klOLCA3C"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PXc8L1p3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05D0926AE6;
-	Mon, 22 Apr 2024 11:20:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2A531465A2;
+	Mon, 22 Apr 2024 11:38:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713784817; cv=none; b=IvYlw1SFmJrNdCDScLVKeOTP6d7aU/CYBFgQWVT5Wzuwxnn9UUaVl4y0ZpV+z6646eOv6ysaYBF4Yu4v1P6Pk7HLl064HvaHj+Ka71gKZXJtmorwvdz84j23eCYKTaalm/kgHVyftlC7VIM5p+k4AHx8L8ODAgVbSZjoO+hrPMg=
+	t=1713785889; cv=none; b=u6KUQSqC40A+odhSSZ78zzVm37wccRNQ9a6JsHhhPDPhSgjZWSPuhDB/QXqtkb7kBedgNPHtbe2f8ay3S+4liA6TC/Fh7DtKvqpmpsD4OWk6cyJPV3GY8ZJw4af5UXCDMFTLWKtElqIgkiMtwTQAuxG0+Y9Aazxj4PAagotwla4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713784817; c=relaxed/simple;
-	bh=peJlaEP3npLkD0x6snY34z5YAN5kJtFZrZZcayWj6tU=;
+	s=arc-20240116; t=1713785889; c=relaxed/simple;
+	bh=EZYhNhz96eKHn2cEDh2N0ULGq94X/lfU2OLdeurzxwg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Rd2XVfFPgmL6E21HWWInvLJgvEaLL9tl74f4SL2E4b0WyThmNhVa9Y4d9g50SkWb60sCUaIKaFiDU37WNZzRyVQlceojVt3vgKKf61FJciGKVMPNJDihBFzLjePERQFI98CrL4HXamhHGZu7HDp+JfakcNeCG5cgQW2M0otxank=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=klOLCA3C; arc=none smtp.client-ip=198.175.65.10
+	 Content-Type:Content-Disposition:In-Reply-To; b=EWeT+zlf6jn+zvyoWR0eVZm41ZeAxIdfnkbPScvQ3/UQMRpdLUCSBQDex5zoWuSaCMOk/5skZB+dfejwaT/qMkbwzuX9d8vLLkEVKd0E6uzHGBpRhNLrJ7FeJAHTvdNCW6jhdK49mfrK2aZJTKDjhnKsOyKxwntWbFc4RyUWsR8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PXc8L1p3; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1713784816; x=1745320816;
+  t=1713785888; x=1745321888;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=peJlaEP3npLkD0x6snY34z5YAN5kJtFZrZZcayWj6tU=;
-  b=klOLCA3CQKuOhXq4yAnOgvEdhT+ZQlxqviJLI8bGdmLW+JjQccITDrs4
-   wv3cv5N+YG39Jv+Zcy7rYOQcLbCXAytXFs1IEXGN94hY02rV6DmheaN2H
-   XoqAOney1gYdg2zt79cc3oRNd/eHXpChmglTC5hmbzDhLVTElarmAJAWd
-   0bUHdfv2fZ58tAp6KJh8gGjVsR4S3PvyiLg3ZV0obEElNaHv94oIAjnPG
-   aSocdy101jOddTjcojxM15Wwh4FcA5DoteJEvgFyNCmHxkRU0likOK7TM
-   5ssXofZhh6HriSih5WFBGRn+Ee8Bx87LpflJtKue45gYy31MaS9NGiJtn
-   g==;
-X-CSE-ConnectionGUID: f6X4ND2USwqEPyYO2opvTw==
-X-CSE-MsgGUID: Q3mA5KnDQTqKiMRsuvVwBA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11051"; a="26767058"
+  bh=EZYhNhz96eKHn2cEDh2N0ULGq94X/lfU2OLdeurzxwg=;
+  b=PXc8L1p3IVK9Sv5JkLWWLNJOAO0vAiF4D/w+xLBLOW3AVOL3jwlAy6Zq
+   +JqVdXG/2+VE+Kc9RMy47DowBviHOowT7blYSh+m9HTcGU20jZwxDT+p4
+   ++0LMWcd3JvkwrlL/EunD90nGuDgEtDtEQay8qvSDzlhvRWWFcY6LFnyR
+   Ge4Rusazspa0/Sa2Pe/PN0sQhM3p4jQ8m+M9PTUjjXIHqDtHGI5WNvdXs
+   YQGo45wPRLgZn472YlO/WEMTOJOmHLeF8X+jI4V2naW+i+3ry4Th5Pr2Q
+   eLLtnLTlFuT7zw8AstPtYJvhJz6P21+bScYpF58ELYZfEIYDLU+aPkqni
+   A==;
+X-CSE-ConnectionGUID: /OOzS0u8R5yg+EfiHBxVCQ==
+X-CSE-MsgGUID: NjBFy074R+GTf63hAc8a0A==
+X-IronPort-AV: E=McAfee;i="6600,9927,11051"; a="13093187"
 X-IronPort-AV: E=Sophos;i="6.07,220,1708416000"; 
-   d="scan'208";a="26767058"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2024 04:20:15 -0700
-X-CSE-ConnectionGUID: LGv1o4TXRsqQ7yYIlkrABw==
-X-CSE-MsgGUID: v7aEHxwfTd+40JFgQyNS1A==
+   d="scan'208";a="13093187"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2024 04:38:07 -0700
+X-CSE-ConnectionGUID: AzfJOScRSk+rvG5OBKfSNg==
+X-CSE-MsgGUID: T/dk9JejQBuZbswcv6UCQQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,220,1708416000"; 
-   d="scan'208";a="23955616"
+   d="scan'208";a="28665225"
 Received: from kuha.fi.intel.com ([10.237.72.185])
-  by orviesa009.jf.intel.com with SMTP; 22 Apr 2024 04:20:12 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 22 Apr 2024 14:20:11 +0300
-Date: Mon, 22 Apr 2024 14:20:11 +0300
+  by orviesa003.jf.intel.com with SMTP; 22 Apr 2024 04:38:02 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 22 Apr 2024 14:38:01 +0300
+Date: Mon, 22 Apr 2024 14:38:01 +0300
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Johan Hovold <johan+linaro@kernel.org>
-Cc: Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] usb: typec: qcom-pmic: fix pdphy start() error
- handling
-Message-ID: <ZiZH69N6xou4UXhR@kuha.fi.intel.com>
-References: <20240418145730.4605-1-johan+linaro@kernel.org>
- <20240418145730.4605-3-johan+linaro@kernel.org>
+To: Jameson Thies <jthies@google.com>
+Cc: linux-usb@vger.kernel.org, pmalani@chromium.org, bleung@google.com,
+	abhishekpandit@chromium.org, andersson@kernel.org,
+	dmitry.baryshkov@linaro.org, fabrice.gasnier@foss.st.com,
+	gregkh@linuxfoundation.org, hdegoede@redhat.com,
+	neil.armstrong@linaro.org, rajaram.regupathy@intel.com,
+	saranya.gopal@intel.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 2/4] usb: typec: Update sysfs when setting ops
+Message-ID: <ZiZMGZxqKDpWUSqk@kuha.fi.intel.com>
+References: <20240419211650.2657096-1-jthies@google.com>
+ <20240419211650.2657096-3-jthies@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -82,60 +80,103 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240418145730.4605-3-johan+linaro@kernel.org>
+In-Reply-To: <20240419211650.2657096-3-jthies@google.com>
 
-On Thu, Apr 18, 2024 at 04:57:30PM +0200, Johan Hovold wrote:
-> Move disabling of the vdd-pdphy supply to the start() function which
-> enabled it for symmetry and to make sure that it is disabled as intended
-> in all error paths of pmic_typec_pdphy_reset() (i.e. not just when
-> qcom_pmic_typec_pdphy_enable() fails).
+On Fri, Apr 19, 2024 at 09:16:48PM +0000, Jameson Thies wrote:
+> From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
 > 
-> Fixes: a4422ff22142 ("usb: typec: qcom: Add Qualcomm PMIC Type-C driver")
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> When adding altmode ops, update the sysfs group so that visibility is
+> also recalculated.
+> 
+> Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
 
 Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
 > ---
->  drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c | 11 +++++++----
->  1 file changed, 7 insertions(+), 4 deletions(-)
+>  drivers/usb/typec/altmodes/displayport.c |  2 +-
+>  drivers/usb/typec/class.c                | 18 +++++++++++++++++-
+>  drivers/usb/typec/ucsi/displayport.c     |  2 +-
+>  include/linux/usb/typec.h                |  3 +++
+>  4 files changed, 22 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
-> index 6560f4fc98d5..5b7f52b74a40 100644
-> --- a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
-> +++ b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
-> @@ -475,10 +475,8 @@ static int qcom_pmic_typec_pdphy_enable(struct pmic_typec_pdphy *pmic_typec_pdph
+> diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
+> index 596cd4806018b..92cc1b1361208 100644
+> --- a/drivers/usb/typec/altmodes/displayport.c
+> +++ b/drivers/usb/typec/altmodes/displayport.c
+> @@ -746,7 +746,7 @@ int dp_altmode_probe(struct typec_altmode *alt)
+>  	dp->alt = alt;
 >  
->  	qcom_pmic_typec_pdphy_reset_off(pmic_typec_pdphy);
->  done:
-> -	if (ret) {
-> -		regulator_disable(pmic_typec_pdphy->vdd_pdphy);
-> +	if (ret)
->  		dev_err(dev, "pdphy_enable fail %d\n", ret);
-> -	}
+>  	alt->desc = "DisplayPort";
+> -	alt->ops = &dp_altmode_ops;
+> +	typec_altmode_set_ops(alt, &dp_altmode_ops);
 >  
->  	return ret;
->  }
-> @@ -524,12 +522,17 @@ static int qcom_pmic_typec_pdphy_start(struct pmic_typec *tcpm,
+>  	if (plug) {
+>  		plug->desc = "Displayport";
+> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+> index 9610e647a8d48..9262fcd4144f8 100644
+> --- a/drivers/usb/typec/class.c
+> +++ b/drivers/usb/typec/class.c
+> @@ -467,6 +467,22 @@ static const struct attribute_group *typec_altmode_groups[] = {
+>  	NULL
+>  };
 >  
->  	ret = pmic_typec_pdphy_reset(pmic_typec_pdphy);
->  	if (ret)
-> -		return ret;
-> +		goto err_disable_vdd_pdhy;
->  
->  	for (i = 0; i < pmic_typec_pdphy->nr_irqs; i++)
->  		enable_irq(pmic_typec_pdphy->irq_data[i].irq);
->  
->  	return 0;
+> +/**
+> + * typec_altmode_set_ops - Set ops for altmode
+> + * @adev: Handle to the alternate mode
+> + * @ops: Ops for the alternate mode
+> + *
+> + * After setting ops, attribute visiblity needs to be refreshed if the alternate
+> + * mode can be activated.
+> + */
+> +void typec_altmode_set_ops(struct typec_altmode *adev,
+> +			   const struct typec_altmode_ops *ops)
+> +{
+> +	adev->ops = ops;
+> +	sysfs_update_group(&adev->dev.kobj, &typec_altmode_group);
+> +}
+> +EXPORT_SYMBOL_GPL(typec_altmode_set_ops);
 > +
-> +err_disable_vdd_pdhy:
-> +	regulator_disable(pmic_typec_pdphy->vdd_pdphy);
-> +
-> +	return ret;
->  }
+>  static int altmode_id_get(struct device *dev)
+>  {
+>  	struct ida *ids;
+> @@ -2317,7 +2333,7 @@ void typec_port_register_altmodes(struct typec_port *port,
+>  			continue;
+>  		}
 >  
->  static void qcom_pmic_typec_pdphy_stop(struct pmic_typec *tcpm)
+> -		alt->ops = ops;
+> +		typec_altmode_set_ops(alt, ops);
+>  		typec_altmode_set_drvdata(alt, drvdata);
+>  		altmodes[index] = alt;
+>  		index++;
+> diff --git a/drivers/usb/typec/ucsi/displayport.c b/drivers/usb/typec/ucsi/displayport.c
+> index d9d3c91125ca8..eb7b8d6e47d00 100644
+> --- a/drivers/usb/typec/ucsi/displayport.c
+> +++ b/drivers/usb/typec/ucsi/displayport.c
+> @@ -337,7 +337,7 @@ struct typec_altmode *ucsi_register_displayport(struct ucsi_connector *con,
+>  	dp->con = con;
+>  	dp->alt = alt;
+>  
+> -	alt->ops = &ucsi_displayport_ops;
+> +	typec_altmode_set_ops(alt, &ucsi_displayport_ops);
+>  	typec_altmode_set_drvdata(alt, dp);
+>  
+>  	return alt;
+> diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
+> index b35b427561ab5..549275f8ac1b3 100644
+> --- a/include/linux/usb/typec.h
+> +++ b/include/linux/usb/typec.h
+> @@ -167,6 +167,9 @@ struct typec_port *typec_altmode2port(struct typec_altmode *alt);
+>  
+>  void typec_altmode_update_active(struct typec_altmode *alt, bool active);
+>  
+> +void typec_altmode_set_ops(struct typec_altmode *alt,
+> +			   const struct typec_altmode_ops *ops);
+> +
+>  enum typec_plug_index {
+>  	TYPEC_PLUG_SOP_P,
+>  	TYPEC_PLUG_SOP_PP,
 > -- 
-> 2.43.2
+> 2.44.0.769.g3c40516874-goog
 
 -- 
 heikki
