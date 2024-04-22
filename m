@@ -1,292 +1,212 @@
-Return-Path: <linux-usb+bounces-9577-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9578-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D6A408AD085
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Apr 2024 17:23:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EAAEA8AD352
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Apr 2024 19:33:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4477FB21A45
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Apr 2024 15:23:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A1C432833DE
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Apr 2024 17:33:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F3D1152E1F;
-	Mon, 22 Apr 2024 15:23:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB9C9153BEC;
+	Mon, 22 Apr 2024 17:33:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jQw5bpIE"
+	dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b="YYbnLcqM"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51D45152E1D
-	for <linux-usb@vger.kernel.org>; Mon, 22 Apr 2024 15:23:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C7C91509AB;
+	Mon, 22 Apr 2024 17:33:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.237.130.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713799383; cv=none; b=bTv0K7zY/RzD/w0/gP9CKtZdYDC9shupJAwMIzY6a/7RAC/LsUKloaTpCY6DkRtdtSV+oe16DWVtv7Wh2rxbiAMjgp4Lp2XVCcx9R+0OVUuZEGscJz1IzBJLRg7gh1pW4GAjOS69iizFHdNbHzHeY3zXDBYp+DsaIwwgEyjJvVM=
+	t=1713807206; cv=none; b=eUC/u+UCIQ28CabLDV4vkD2xwcB68Gf3qTvcGHbj6mnTj1Yeku73AvxN+Fx68druffXyhQksC+12KLgjXJHeOPcPPTB4J/VlD5+NeJg8gp4dMz8K5/Kz0FrkIfgiapGkWLpFjHcFbUvDL1iuNA8RGm/eCrqNqi2Y8V1hlNum4SU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713799383; c=relaxed/simple;
-	bh=Wrq2FY2zLnIrPEkDumetUyWCevLG168o+veXdsJ3oYE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RgNGZPIZaiq7UZBRxO+vE0e56vLOSr8vJQngWMfCvaoYJcNEF0aBoDV8Gu405rXkiCdKnDKtEeFoivDu4oafvpiooUdt/2SGuUyXN09xeAquXvZeBWJvGPq0y5+V0bPq8dE8QxKTVWbnfHpqyrOQCsynn8FhPqscqvBPNOY80MQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=jQw5bpIE; arc=none smtp.client-ip=209.85.219.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-de45d4ca525so4499718276.0
-        for <linux-usb@vger.kernel.org>; Mon, 22 Apr 2024 08:23:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1713799380; x=1714404180; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=H49d5wg6b03lJ7C3k9uG4OXg+mNjiFzDv8QLMVLBemE=;
-        b=jQw5bpIE0p9aU2jm1kfJ2vTPk/opLoE9MDNoi7SFfHBH2wPbgRRL0+/mEhh8N94ilO
-         iwWQDiD/FbpiKvrPhgHHCCOWosBqa9x6/VKuJQOmYLarw6Co2zD9S7HLYUd95khS2Sqv
-         nITgCA+iWCViBKrRQdi/jkFejGMnbl0w0GTH0PGRin1wFNg8I/vKQxdTIolBjZ1YvSFm
-         53zbSyVKxpTkid+IVXJMiRjoJBHroYwhsMdkXdIK61cI8avcfrrF7DQsEA2BDpL3lMpT
-         uW4bIPkCT6rJ0E5YZl5rW99681pRizvqE6pj2YTQbBgxxJqL/wjvNMSiKHjOup1uO/Cz
-         ejtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713799380; x=1714404180;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=H49d5wg6b03lJ7C3k9uG4OXg+mNjiFzDv8QLMVLBemE=;
-        b=M3vwKYoLq3VSwsWXzktdyMWpGwPNMNSv1TKiutQMiQGpX5yOzrUTCRiIZ1odm8G515
-         jOxvW5ywFL+2OvNwk9QqzWmfLEfLarPST1mh1s0M/O88jIZGSsYAr58fupYdjzxHHJJV
-         DhPSXP6RI+E23Li3rRA5BydvceuT7Q13fOWQFbRWK8SdiJo4SmFWrfKQmKAV3B6aHCgR
-         kwq4zXbDh1ZWHrrxIrON9bbBcBB+Ee1snq1bWsoVtjWHXfToxWvqMOIf6TTzNIdgBY7k
-         7LOjUZYtNjZySB+MoHjBdVIOfNuQpzPzjYw7vuiUnvw5ri5WoBXB5eV/PtRBacDjvDrz
-         Eodg==
-X-Forwarded-Encrypted: i=1; AJvYcCWZUUBKa3uGl42TOiax9hbV38rfR1mjnQPFgFHFqDegwDBAeo7EvwUL6Y8eno09WHsMjIl+HNw64iTXum9csZHYePMv+lCJ5/UM
-X-Gm-Message-State: AOJu0Yx3fIPh9W0g21jqde1lA7eRF925muVATGxpLDU8MitnSJaeEim1
-	6xanT8LBJ268jEmE3rD1Wwh71f+kKOU4LlzOb9tTnWablxRTUz5FFIxFlM3YQPiGfYjW8HmFH8v
-	2AXA3HNIaYp8Qu/tIBk1nxEQ5NU9L+BaMRtNlwg==
-X-Google-Smtp-Source: AGHT+IGvjDpakTVXulryQs11vXQ+nvpmucg042VWFjr8BwSv+KjHoQyGhHw+EPl15xSE7OqXMj40JwK1OaDhgNUuqFs=
-X-Received: by 2002:a25:9343:0:b0:de4:7831:919 with SMTP id
- g3-20020a259343000000b00de478310919mr9864357ybo.38.1713799380128; Mon, 22 Apr
- 2024 08:23:00 -0700 (PDT)
+	s=arc-20240116; t=1713807206; c=relaxed/simple;
+	bh=8+YgznOFk9u7FjaYZS0smLzN3+j9Gq7etE74g8obpWw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=dY/5T3sj2yVLncRuD5n7tvAImD0LLioT0+Nkya1j6mfcUXmykSChZLOYSqun1Ae8oukVCDKMZ/iwV+tgj86KSUzSLJ8mLlRoUGG2bPQ8ptLqN/0c8m1KhXadqFzqDiUbH129kft1dDEnvUI3WxR/D2NsHDaP7Su29XMFwSTpkas=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info; spf=pass smtp.mailfrom=leemhuis.info; dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b=YYbnLcqM; arc=none smtp.client-ip=80.237.130.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leemhuis.info
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=leemhuis.info; s=he214686; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:Reply-To:MIME-Version:Date:
+	Message-ID:From:Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:
+	Content-Type:Content-Transfer-Encoding:Content-ID:Content-Description:
+	In-Reply-To:References; bh=XQry8EBSDpmzoKS2wPZgyq0GbPcHk+YW9cRs48Z1C6U=;
+	t=1713807204; x=1714239204; b=YYbnLcqMr1vwNIXyuQXSfLs2QS0UHqPLksgEC6mOTcuphRk
+	CUzSJOxXwegnsPQ/7wAP1M1fe75CVKdG75MhXK+H9w+f1x8ypFGz0u5fezT9hoh3S1Bk4/d4u+dHT
+	HgosmQn2GrzrN3Y7aULDKLp0iFIUWxNt5RoTIHrNNsJ8g1dninZiHZQi8DWek+ieeHbpeJ2ZB2e+h
+	yRBTBLaW3gzzRgJDn7uGl9WejDZUzQ8bJL3a0WxTjhjXu23VRP7mFfMUpQkpi09h6p0RlSmHcBRGp
+	KOINu4mvr4q4l0/X1OyzV3qe7ZUFfmlEcF3ZCwtlEmaa0vMj5r9jm8cWP0qph3Kg==;
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+	id 1ryxXe-0007wR-A7; Mon, 22 Apr 2024 19:33:22 +0200
+Message-ID: <8a4a7f9e-a191-4301-93f8-9694aa14e42f@leemhuis.info>
+Date: Mon, 22 Apr 2024 19:33:21 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240416-ucsi-glink-altmode-v1-0-890db00877ac@linaro.org>
- <20240416-ucsi-glink-altmode-v1-7-890db00877ac@linaro.org>
- <ZiZC/l9nOmzWx+j6@kuha.fi.intel.com> <46fktwtp3xers6tcpov3qo4zswptvajewsdltm45zbz2kmmpzp@cthu6ylttup3>
- <ZiZ8El4779l0W1Ig@kuha.fi.intel.com>
-In-Reply-To: <ZiZ8El4779l0W1Ig@kuha.fi.intel.com>
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Mon, 22 Apr 2024 18:22:49 +0300
-Message-ID: <CAA8EJppLAMFwp6T+7u8N3PVaEPR7JDg1Te8a2fodqPVjsvbM-Q@mail.gmail.com>
-Subject: Re: [PATCH 7/8] usb: typec: ucsi: glink: merge pmic_glink_altmode driver
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Neil Armstrong <neil.armstrong@linaro.org>, 
-	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-msm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+Subject: Re: Regression due to 59cf44575456 ("USB: core: Fix oversight in
+ SuperSpeed initialization")
+To: Alan Stern <stern@rowland.harvard.edu>, Oliver Neukum <oneukum@suse.com>
+Cc: USB list <linux-usb@vger.kernel.org>, Takashi Iwai <tiwai@suse.de>,
+ Linux kernel regressions list <regressions@lists.linux.dev>
+References: <9efbd569-7059-4575-983f-0ea30df41871@suse.com>
+ <78eaec78-663a-428b-b80e-68c398a8f5f7@rowland.harvard.edu>
+From: "Linux regression tracking (Thorsten Leemhuis)"
+ <regressions@leemhuis.info>
+Content-Language: en-US, de-DE
+In-Reply-To: <78eaec78-663a-428b-b80e-68c398a8f5f7@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1713807204;162381f1;
+X-HE-SMSGID: 1ryxXe-0007wR-A7
 
-On Mon, 22 Apr 2024 at 18:02, Heikki Krogerus
-<heikki.krogerus@linux.intel.com> wrote:
->
-> Hi Dmitry,
->
-> On Mon, Apr 22, 2024 at 03:45:22PM +0300, Dmitry Baryshkov wrote:
-> > On Mon, Apr 22, 2024 at 01:59:10PM +0300, Heikki Krogerus wrote:
-> > > Hi Dmitry,
-> > >
-> > > On Tue, Apr 16, 2024 at 05:20:56AM +0300, Dmitry Baryshkov wrote:
-> > > > Move handling of USB Altmode to the ucsi_glink driver. This way the
-> > > > altmode is properly registered in the Type-C framework, the altmode
-> > > > handlers can use generic typec calls, the UCSI driver can use
-> > > > orientation information from altmode messages and vice versa, the
-> > > > altmode handlers can use GPIO-based orientation inormation from UCSI
-> > > > GLINK driver.
-> > > >
-> > > > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > > > ---
-> > > >  drivers/soc/qcom/Makefile             |   1 -
-> > > >  drivers/soc/qcom/pmic_glink_altmode.c | 546 ----------------------------------
-> > > >  drivers/usb/typec/ucsi/ucsi_glink.c   | 495 ++++++++++++++++++++++++++++--
-> > > >  3 files changed, 475 insertions(+), 567 deletions(-)
-> > > >
-> >
-> > [skipped the patch]
-> >
-> > > > +
-> > > > +static void pmic_glink_ucsi_register_altmode(struct ucsi_connector *con)
-> > > > +{
-> > > > + static const u8 all_assignments = BIT(DP_PIN_ASSIGN_C) | BIT(DP_PIN_ASSIGN_D) |
-> > > > +                      BIT(DP_PIN_ASSIGN_E);
-> > > > + struct typec_altmode_desc desc;
-> > > > + struct typec_altmode *alt;
-> > > > +
-> > > > + mutex_lock(&con->lock);
-> > > > +
-> > > > + if (con->port_altmode[0])
-> > > > +         goto out;
-> > > > +
-> > > > + memset(&desc, 0, sizeof(desc));
-> > > > + desc.svid = USB_TYPEC_DP_SID;
-> > > > + desc.mode = USB_TYPEC_DP_MODE;
-> > > > +
-> > > > + desc.vdo = DP_CAP_CAPABILITY(DP_CAP_DFP_D);
-> > > > +
-> > > > + /* We can't rely on the firmware with the capabilities. */
-> > > > + desc.vdo |= DP_CAP_DP_SIGNALLING(0) | DP_CAP_RECEPTACLE;
-> > > > +
-> > > > + /* Claiming that we support all pin assignments */
-> > > > + desc.vdo |= all_assignments << 8;
-> > > > + desc.vdo |= all_assignments << 16;
-> > > > +
-> > > > + alt = typec_port_register_altmode(con->port, &desc);
-> > >
-> > >         alt = ucsi_register_displayport(con, 0, 0, &desc);
-> >
-> > Note, the existing UCSI displayport AltMode driver depends on the UCSI
-> > actually handling the altomode. It needs a partner, etc.
-> >
-> > > You need to export that function, but that should not be a problem:
-> > >
-> > > diff --git a/drivers/usb/typec/ucsi/displayport.c b/drivers/usb/typec/ucsi/displayport.c
-> > > index d9d3c91125ca..f2754d7b5876 100644
-> > > --- a/drivers/usb/typec/ucsi/displayport.c
-> > > +++ b/drivers/usb/typec/ucsi/displayport.c
-> > > @@ -315,11 +315,13 @@ struct typec_altmode *ucsi_register_displayport(struct ucsi_connector *con,
-> > >         struct ucsi_dp *dp;
-> > >
-> > >         /* We can't rely on the firmware with the capabilities. */
-> > > -       desc->vdo |= DP_CAP_DP_SIGNALLING(0) | DP_CAP_RECEPTACLE;
-> > > +       if (!desc->vdo) {
-> > > +               desc->vdo = DP_CAP_DP_SIGNALLING(0) | DP_CAP_RECEPTACLE;
-> > >
-> > > -       /* Claiming that we support all pin assignments */
-> > > -       desc->vdo |= all_assignments << 8;
-> > > -       desc->vdo |= all_assignments << 16;
-> > > +               /* Claiming that we support all pin assignments */
-> > > +               desc->vdo |= all_assignments << 8;
-> > > +               desc->vdo |= all_assignments << 16;
-> > > +       }
-> > >
-> > >         alt = typec_port_register_altmode(con->port, desc);
-> > >         if (IS_ERR(alt))
-> > > @@ -342,3 +344,4 @@ struct typec_altmode *ucsi_register_displayport(struct ucsi_connector *con,
-> > >
-> > >         return alt;
-> > >  }
-> > > +EXPORT_SYMBOL_GPL(ucsi_register_displayport);
-> > >
-> > > <snip>
-> > >
-> > > > +static void pmic_glink_ucsi_set_state(struct ucsi_connector *con,
-> > > > +                               struct pmic_glink_ucsi_port *port)
-> > > > +{
-> > > > + struct typec_displayport_data dp_data = {};
-> > > > + struct typec_altmode *altmode = NULL;
-> > > > + unsigned long flags;
-> > > > + void *data = NULL;
-> > > > + int mode;
-> > > > +
-> > > > + spin_lock_irqsave(&port->lock, flags);
-> > > > +
-> > > > + if (port->svid == USB_SID_PD) {
-> > > > +         mode = TYPEC_STATE_USB;
-> > > > + } else if (port->svid == USB_TYPEC_DP_SID && port->mode == DPAM_HPD_OUT) {
-> > > > +         mode = TYPEC_STATE_SAFE;
-> > > > + } else if (port->svid == USB_TYPEC_DP_SID) {
-> > > > +         altmode = find_altmode(con, port->svid);
-> > > > +         if (!altmode) {
-> > > > +                 dev_err(con->ucsi->dev, "altmode woth SVID 0x%04x not found\n",
-> > > > +                         port->svid);
-> > > > +                 spin_unlock_irqrestore(&port->lock, flags);
-> > > > +                 return;
-> > > > +         }
-> > > > +
-> > > > +         mode = TYPEC_MODAL_STATE(port->mode - DPAM_HPD_A);
-> > > > +
-> > > > +         dp_data.status = DP_STATUS_ENABLED;
-> > > > +         dp_data.status |= DP_STATUS_CON_DFP_D;
-> > > > +         if (port->hpd_state)
-> > > > +                 dp_data.status |= DP_STATUS_HPD_STATE;
-> > > > +         if (port->hpd_irq)
-> > > > +                 dp_data.status |= DP_STATUS_IRQ_HPD;
-> > > > +         dp_data.conf = DP_CONF_SET_PIN_ASSIGN(port->mode - DPAM_HPD_A);
-> > > > +
-> > > > +         data = &dp_data;
-> > > > + } else {
-> > > > +         dev_err(con->ucsi->dev, "Unsupported SVID 0x%04x\n", port->svid);
-> > > > +         spin_unlock_irqrestore(&port->lock, flags);
-> > > > +         return;
-> > > > + }
-> > > > +
-> > > > + spin_unlock_irqrestore(&port->lock, flags);
-> > > > +
-> > > > + if (altmode)
-> > > > +         typec_altmode_set_port(altmode, mode, data);
-> > >
-> > > So if the port altmode is using the ucsi_displayport_ops, you can
-> > > simply register the partner altmode here instead. That should
-> > > guarantee that it'll bind to the DP altmode driver which will take
-> > > care of typec_altmode_enter() etc.
-> >
-> > In our case the altmode is unfortunately completely hidden inside the
-> > firmware. It is not exported via the native UCSI interface. Even if I
-> > plug the DP dongle, there is no partner / altmode being reported by the
-> > PPM. All DP events are reported via additional GLINK messages.
->
-> I understand that there is no alt mode being reported, but I assumed
-> that there is a notification about connections.
+Hi, Thorsten here, the Linux kernel's regression tracker. Top-posting
+for once, to make this easily accessible to everyone.
 
-Yes, there is a notification.
+Is anyone still working on fixing below regression? From here it looks
+stalled, but I might have missed something.
 
->
-> If that's not the case, then you need to use this code path to
-> register the partner device as well I think. The partner really has to
-> be registered somehow.
->
-> > The goal is to use the core Type-C altmode handling, while keeping UCSI
-> > out of the altmode business.
-> >
-> > This allows the core to handle switches / muxes / retimers, report the
-> > altmode to the userspace via sysfs, keep the link between the DP part of
-> > the stack and the typec port, but at the same time we don't get errors
-> > from UCSI because of the PPM reporting unsupported commands, etc.
->
-> I understand, and just to be clear, I don't have a problem with
-> bypassing UCSI. But that does not mean you can skip the alt mode
-> registration.
->
-> The primary purpose of drivers/usb/typec/ucsi/displayport.c is to
-> emulate the partner DP alt mode device a little so that the actual DP
-> alt mode driver drivers/usb/typec/altmodes/displayport.c is happy. The
-> altmode driver will then make sure that all the muxes, switches and
-> what have you, are configured as they should, and more importantly,
-> make sure the DP alt mode is exposed to the user space exactly the
-> same way as it's exposed on all the other systems.
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
 
-Ack. I'll take a look at implementing it this way. If it works, then
-it becomes even easier.
+#regzbot poke
 
-A bit of justification from my side. I was comparing this
-implementation with the Lenovo p53s laptop. Running 6.7 kernel, I see
-two Type-C ports. They register altmodes, etc. However for the DP
-partner (Lenovo USB-C dock) I only get the partner device, there are
-no altmodes of the partner. /sys/bus/typec/devices/ is empty. The DP
-works perfectly despite not having the typec device. But maybe it's
-just some i915's extension or platform hack.
-
-> There are a couple of UCSI commands that are being used there yes, but
-> by modifying it so that those UCSI commands are executed conditionally
-> - by checking the ALT_MODE_DETAILS feature - you should be able to use
-> it also in this case.
->
-> You really need to register the partner alt mode(s) one way or the
-> other in any case, and the partner device itself you absolutely must
-> register. The user space interface needs to be consistent.
-
-Ack
-
--- 
-With best wishes
-Dmitry
+On 09.04.24 16:56, Alan Stern wrote:
+> On Tue, Apr 09, 2024 at 03:49:01PM +0200, Oliver Neukum wrote:
+>> Hi,
+>>
+>> with the following device:
+>>
+>> Bus 002 Device 002: ID fb5d:0001 BHYVE HID Tablet
+>> Device Descriptor:
+>>   bLength                18
+>>   bDescriptorType         1
+>>   bcdUSB               3.00
+>>   bDeviceClass            0
+>>   bDeviceSubClass         0
+>>   bDeviceProtocol         0
+>>   bMaxPacketSize0         8
+> 
+> A USB-3 device, running at SuperSpeed with its bMaxPacketSize0 set to 8 
+> instead of 9?  Presumably this thing never received a USB certification.  
+> Does the packaging use the USB logo?
+> 
+>>   idVendor           0xfb5d
+>>   idProduct          0x0001
+>>   bcdDevice            0.00
+>>   iManufacturer           1 BHYVE
+>>   iProduct                2 HID Tablet
+>>   iSerial                 3 01
+>>   bNumConfigurations      1
+> 
+> Why on earth would an HID tablet need to run at SuperSpeed?
+> 
+>> Binary Object Store Descriptor:
+>>   bLength                 5
+>>   bDescriptorType        15
+>>   wTotalLength       0x000f
+>>   bNumDeviceCaps          1
+>>   SuperSpeed USB Device Capability:
+>>     bLength                10
+>>     bDescriptorType        16
+>>     bDevCapabilityType      3
+>>     bmAttributes         0x00
+>>     wSpeedsSupported   0x0008
+>>       Device can operate at SuperSpeed (5Gbps)
+>>     bFunctionalitySupport   3
+>>       Lowest fully-functional device speed is SuperSpeed (5Gbps)
+>>     bU1DevExitLat          10 micro seconds
+>>     bU2DevExitLat          32 micro seconds
+> 
+> A tablet not capable of running at any speed below 5 Gbps?
+> 
+>> we are getting a regression on enumeration. It used to work with the
+>> code prior to your patch. Takashi is proposing the attached fixed.
+>> It looks like we are a bit too restrictive and should just try.
+>>
+>> 	Regards
+>> 		Oliver
+> 
+>> From: Takashi Iwai <tiwai@suse.de>
+>> Subject: [PATCH] USB: hub: Workaround for buggy max packet size with super
+>>  speed
+>> Patch-mainline: Not yet, testing
+>> References: bsc#1220569
+>>
+>> Signed-off-by: Takashi Iwai <tiwai@suse.de>
+>>
+>> ---
+>>  drivers/usb/core/hub.c | 13 ++++++++++---
+>>  1 file changed, 10 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+>> index e38a4124f610..64193effc456 100644
+>> --- a/drivers/usb/core/hub.c
+>> +++ b/drivers/usb/core/hub.c
+>> @@ -4830,7 +4830,7 @@ hub_port_init(struct usb_hub *hub, struct usb_device *udev, int port1,
+>>  	const char		*driver_name;
+>>  	bool			do_new_scheme;
+>>  	const bool		initial = !dev_descr;
+>> -	int			maxp0;
+>> +	int			maxp0, ep0_maxp;
+>>  	struct usb_device_descriptor	*buf, *descr;
+>>  
+>>  	buf = kmalloc(GET_DESCRIPTOR_BUFSIZE, GFP_NOIO);
+>> @@ -5070,7 +5070,8 @@ hub_port_init(struct usb_hub *hub, struct usb_device *udev, int port1,
+>>  		else
+>>  			i = 0;		/* Invalid */
+>>  	}
+>> -	if (usb_endpoint_maxp(&udev->ep0.desc) == i) {
+>> +	ep0_maxp = usb_endpoint_maxp(&udev->ep0.desc);
+>> +	if (ep0_maxp == i) {
+> 
+> This variable looks like it was left over from earlier testing.  It's 
+> not really needed.
+> 
+>>  		;	/* Initial ep0 maxpacket guess is right */
+>>  	} else if ((udev->speed == USB_SPEED_FULL ||
+>>  				udev->speed == USB_SPEED_HIGH) &&
+>> @@ -5082,9 +5083,15 @@ hub_port_init(struct usb_hub *hub, struct usb_device *udev, int port1,
+>>  			dev_warn(&udev->dev, "Using ep0 maxpacket: %d\n", i);
+>>  		udev->ep0.desc.wMaxPacketSize = cpu_to_le16(i);
+>>  		usb_ep0_reinit(udev);
+>> +	} else if (udev->speed >= USB_SPEED_SUPER && initial) {
+>> +		/* FIXME: should be more restrictive? */
+>> +		/* Initial guess is wrong; use the descriptor's value */
+>> +		dev_warn(&udev->dev, "Using ep0 maxpacket: %d\n", i);
+>> +		udev->ep0.desc.wMaxPacketSize = cpu_to_le16(i);
+>> +		usb_ep0_reinit(udev);
+> 
+> This could be merged with the previous case fairly easily.
+> 
+>>  	} else {
+>>  		/* Initial guess is wrong and descriptor's value is invalid */
+>> -		dev_err(&udev->dev, "Invalid ep0 maxpacket: %d\n", maxp0);
+>> +		dev_err(&udev->dev, "Invalid ep0 maxpacket: %d, expected %d\n", maxp0, ep0_maxp);
+> 
+> This also looks like a remnant from earlier testing.
+> 
+> Alan Stern
+> 
+>>  		retval = -EMSGSIZE;
+>>  		goto fail;
+>>  	}
+>> -- 
+>> 2.35.3
+>>
+> 
 
