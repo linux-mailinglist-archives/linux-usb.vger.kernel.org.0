@@ -1,145 +1,164 @@
-Return-Path: <linux-usb+bounces-9562-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9563-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 643598AC6BB
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Apr 2024 10:20:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 017A48AC873
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Apr 2024 11:08:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DBAD8B220BA
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Apr 2024 08:20:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9453E1F22F0E
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Apr 2024 09:08:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC8B054747;
-	Mon, 22 Apr 2024 08:18:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D603213B580;
+	Mon, 22 Apr 2024 09:06:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="UCoVhh62"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D7E8502B6;
-	Mon, 22 Apr 2024 08:18:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FF265380C;
+	Mon, 22 Apr 2024 09:06:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713773930; cv=none; b=KTm7pF/s+L1x4s93exkltT3gtWTwvsrb5ODXQhDqV1rnnAEQ3cC/R1o07e8mV5kWKUt9/m0P52Y/SpCWQmj49+zfMhBkfvGYS8rXuoFDEqNLwia2T6OS19rsiHEZugkH98ZHKaimpuWC36p45qdtEJ9VWGvZGdRVj/5IXH1HAes=
+	t=1713776773; cv=none; b=GFlLts0JVfNT459BSINvoMQ5USDZJlUHlSMTtWRjRrDbz6Af8zUwRfonltYU1IKBn8qKiN/qmcVkOxa/yoex3QUCgT5SV6sJ7/UAiduobbkpG67pkVthinYIlZAwnqFPhqik7cauhYKtzq6tocfiCnyhl3Cj3GJ1SLSXSYFuZLg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713773930; c=relaxed/simple;
-	bh=1R0QdiqBkh2lDI1KZWlD4yhHxXvFKtuxtuwBOw/ITOE=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=a+EoWro1vSYv/ZNn5sKp0LrXGEJL9PtjzaARAm/t9y97X+8es7AW8AXSONV2Xlw2Idw0f5RRs3eFRU0usNcj/3jgG7LtGO7qZ0wpNGQ6XH/onCZ8zFLmgWDArikSSFqCwco1GtxsJ9hEpRRlWDQsvNe7S4QvMQlAie6SNuX1T30=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au; spf=pass smtp.mailfrom=ellerman.id.au; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ellerman.id.au
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VNJ6g0Nzdz4x1R;
-	Mon, 22 Apr 2024 18:18:35 +1000 (AEST)
-From: Michael Ellerman <patch-notifications@ellerman.id.au>
-To: linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Damien Le Moal <dlemoal@kernel.org>, Jiri Kosina <jikos@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Corey Minyard <minyard@acm.org>, Peter Huewe <peterhuewe@gmx.de>,
-	Jarkko Sakkinen <jarkko@kernel.org>, Tero Kristo <kristo@kernel.org>,
-	Stephen Boyd <sboyd@kernel.org>, Ian Abbott <abbotti@mev.co.uk>,
-	H Hartley Sweeten <hsweeten@visionengravers.com>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	Len Brown <lenb@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
-	John Allen <john.allen@amd.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Vinod Koul <vkoul@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Moritz Fischer <mdf@kernel.org>, Liviu Dudau <liviu.dudau@arm.com>,
-	Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Michael Hennerich <michael.hennerich@analog.com>,
-	Peter Rosin <peda@axentia.se>, Lars-Peter Clausen <lars@metafoo.de>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Markuss Broks <markuss.broks@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Lee Jones <lee@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
-	Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-	Iyappan Subramanian <iyappan@os.amperecomputing.com>,
-	Yisen Zhuang <yisen.zhuang@huawei.com>,
-	Stanislaw Gruszka <stf_xl@wp.pl>, Kalle Valo <kvalo@kernel.org>,
-	Sebastian Reichel <sre@kernel.org>, Tony Lindgren <tony@atomide.com>,
-	Mark Brown <broonie@kernel.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Xiang Chen <chenxiang66@hisilicon.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Vaibhav Hiremath <hvaibhav.linux@gmail.com>,
-	Alex Elder <elder@kernel.org>, Jiri Slaby <jirislaby@kernel.org>,
-	Jacky Huang <ychuang3@nuvoton.com>, Helge Deller <deller@gmx.de>,
-	Christoph Hellwig <hch@lst.de>, Robin Murphy <robin.murphy@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Kees Cook <keescook@chromium.org>,
-	Trond Myklebust <trond.myklebust@hammerspace.com>,
-	Anna Schumaker <anna@kernel.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>, Takashi Iwai <tiwai@suse.com>,
-	linuxppc-dev@lists.ozlabs.org, linux-ide@vger.kernel.org,
-	openipmi-developer@lists.sourceforge.net,
-	linux-integrity@vger.kernel.org, linux-omap@vger.kernel.org,
-	linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org,
-	linux-efi@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	linux-fpga@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	linux-input@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-iio@vger.kernel.org, linux-stm32@st-md-mailman.stormr,
-	eply.com@web.codeaurora.org, linux-arm-kernel@lists.infradead.org,
-	netdev@vger.kernel.org, linux-leds@vger.kernel.org,
-	linux-wireless@vger.kernel.org, linux-rtc@vger.kernel.org,
-	linux-scsi@vger.kernel.org, linux-spi@vger.kernel.org,
-	linux-amlogic@lists.infradead.org,
-	linux-rockchip@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org, greybus-dev@lists.linaro.org,
-	linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
-	iommu@lists.linux.dev, linux-trace-kernel@vger.kernel.org,
-	kasan-dev@googlegroups.com, linux-hardening@vger.kernel.org,
-	linux-nfs@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	alsa-devel@alsa-project.org, linux-sound@vger.kernel.org
-In-Reply-To: <20240403080702.3509288-1-arnd@kernel.org>
-References: <20240403080702.3509288-1-arnd@kernel.org>
-Subject: Re: (subset) [PATCH 00/34] address all -Wunused-const warnings
-Message-Id: <171377378377.1025456.1313405994816400451.b4-ty@ellerman.id.au>
-Date: Mon, 22 Apr 2024 18:16:23 +1000
+	s=arc-20240116; t=1713776773; c=relaxed/simple;
+	bh=HjoZwO0t3poPJXRnLwuO9E7uwKecjJ9WRcXiAnkgUtg=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=jSfCufZvIsvpoBy9m87G78MaRYEdUj6KDWGGE7V94SnRVk0fygKmwLDijeW2f1WTk527yhjpuAXYQCRANDnXnDR0PSJoedz3kdwX8OQ/uLpIR5JsZIV7jT7AtUqBMurXa/iZI/ZZrmMKVBCeIeTKgX/cFvwWnoP7i7ORyr0DvOE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=UCoVhh62; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 43M6Uh4V015751;
+	Mon, 22 Apr 2024 09:05:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	from:to:cc:subject:date:message-id:mime-version
+	:content-transfer-encoding:content-type; s=qcppdkim1; bh=Vk16qoA
+	6fUZ55RxZHqTWBTIzqm8TdwxNPsT3R8UDqwQ=; b=UCoVhh62GLYw6IbL3xHVhO9
+	IfDt6i+sqPg2ePtzURAa6ae4pJ7XhvoJiwStwwfuGwQXyZTQqK2eXFPGogidfBlN
+	aziw8SN25AEApCLikJSeulail5ft7yJZH5pMJ1gl0zGuTzejhFjmBDlapcm1mdv0
+	jus/DzAcSrA/yA8B2eIKy269OeR7msE1PzD/T2H9SJDakY39PrsnGDUd1wKx37vY
+	jCLc70jCSKTD18nCxzaCRn61VtKvupqnY+/2MWsQDpJjQ17n46sIRZO3bKRAmWvH
+	MuxYxK/iZkolq/q7W9nnDtdPjXyhmsO1WmXmwr7971wnXDCcAFiLdELIz134xlA=
+	=
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xned0gs7d-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 22 Apr 2024 09:05:59 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 43M95wVJ008426
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 22 Apr 2024 09:05:58 GMT
+Received: from hu-prashk-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Mon, 22 Apr 2024 02:05:55 -0700
+From: Prashanth K <quic_prashk@quicinc.com>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>
+CC: Wesley Cheng <quic_wcheng@quicinc.com>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, Prashanth K <quic_prashk@quicinc.com>
+Subject: [RFC PATCH] usb: dwc3: Poll CMDACT after issuing EndXfer command
+Date: Mon, 22 Apr 2024 14:35:39 +0530
+Message-ID: <20240422090539.3986723-1-quic_prashk@quicinc.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: nI3NPhOl3YzYZxs41TLb5YrC_fbIZNdV
+X-Proofpoint-GUID: nI3NPhOl3YzYZxs41TLb5YrC_fbIZNdV
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-04-22_07,2024-04-19_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 phishscore=0
+ mlxlogscore=521 mlxscore=0 suspectscore=0 adultscore=0 lowpriorityscore=0
+ malwarescore=0 impostorscore=0 spamscore=0 bulkscore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2404010003
+ definitions=main-2404220038
 
-On Wed, 03 Apr 2024 10:06:18 +0200, Arnd Bergmann wrote:
-> Compilers traditionally warn for unused 'static' variables, but not
-> if they are constant. The reason here is a custom for C++ programmers
-> to define named constants as 'static const' variables in header files
-> instead of using macros or enums.
-> 
-> In W=1 builds, we get warnings only static const variables in C
-> files, but not in headers, which is a good compromise, but this still
-> produces warning output in at least 30 files. These warnings are
-> almost all harmless, but also trivial to fix, and there is no
-> good reason to warn only about the non-const variables being unused.
-> 
-> [...]
+Currently DWC3 controller revisions 3.10a and later supports
+GUCTL[14: Rst_actbitlater] bit which allows polling CMDACT bit
+to know whether ENDXFER command is completed. Other revisions
+wait 1ms for ENDXFER completion after issuing the command.
 
-Applied to powerpc/next.
+Consider a case where an IN request was queued, and parallelly
+soft_disconnect was called (due to ffs_epfile_release). This
+eventually calls stop_active_transfer with IOC cleared, hence
+send_gadget_ep_cmd() skips waiting for CMDACT cleared during
+endxfer. For DWC3 controllers with revisions >= 310a, we don't
+forcefully wait for 1ms either, and we proceed by unmapping the
+requests. If ENDXFER didn't complete by this time, it leads to
+SMMU faults since the controller would still be accessing those
+requests.
 
-[01/34] powerpc/fsl-soc: hide unused const variable
-        https://git.kernel.org/powerpc/c/01acaf3aa75e1641442cc23d8fe0a7bb4226efb1
+DWC3 databook specifies that CMDACT bit can be polled to check
+completion of the EndXfer. Hence use it in stop_active_transfer
+to know whether the ENDXFER got completed.
 
-cheers
+Section 3.2.2.7 Command 8: End Transfer (DEPENDXFER)
+Note: If GUCTL2[Rst_actbitlater] is set, Software can poll the
+completion of the End  Transfer command by polling the command
+active bit to be cleared to 0.
+
+Fixes: b353eb6dc285 ("usb: dwc3: gadget: Skip waiting for CMDACT cleared during endxfer")
+Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
+---
+ drivers/usb/dwc3/gadget.c | 22 ++++++++++++++++++++--
+ 1 file changed, 20 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 4df2661f6675..acb54c48451f 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -1701,8 +1701,8 @@ static int __dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force, bool int
+ {
+ 	struct dwc3 *dwc = dep->dwc;
+ 	struct dwc3_gadget_ep_cmd_params params;
+-	u32 cmd;
+-	int ret;
++	u32 cmd, reg;
++	int ret, retries = 500;
+ 
+ 	cmd = DWC3_DEPCMD_ENDTRANSFER;
+ 	cmd |= force ? DWC3_DEPCMD_HIPRI_FORCERM : 0;
+@@ -1726,6 +1726,24 @@ static int __dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force, bool int
+ 	if (!interrupt) {
+ 		if (!DWC3_IP_IS(DWC3) || DWC3_VER_IS_PRIOR(DWC3, 310A))
+ 			mdelay(1);
++		else {
++			/*
++			 * ENDXFER polling is available on version 3.10a and later of
++			 * the DWC3 controller (This is enabled by setting GUCTL2[14])
++			 */
++			do {
++				reg = dwc3_readl(dep->regs, DWC3_DEPCMD);
++				if (!(reg & DWC3_DEPCMD_CMDACT))
++					break;
++				udelay(2);
++			} while (--retries);
++
++			if (!retries && (dwc->ep0state != EP0_SETUP_PHASE)) {
++				dep->flags |= DWC3_EP_DELAY_STOP;
++				return -ETIMEDOUT;
++			}
++		}
++
+ 		dep->flags &= ~DWC3_EP_TRANSFER_STARTED;
+ 	} else if (!ret) {
+ 		dep->flags |= DWC3_EP_END_TRANSFER_PENDING;
+-- 
+2.25.1
+
 
