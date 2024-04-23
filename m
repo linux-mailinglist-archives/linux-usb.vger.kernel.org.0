@@ -1,138 +1,89 @@
-Return-Path: <linux-usb+bounces-9644-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9636-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26B6E8AE525
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Apr 2024 13:58:45 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 289948AE3F3
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Apr 2024 13:31:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D425C28706D
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Apr 2024 11:58:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4E497B218E3
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Apr 2024 11:31:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D93C14C581;
-	Tue, 23 Apr 2024 11:42:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 914AE7E58E;
+	Tue, 23 Apr 2024 11:31:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RRhYq85D"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="LFyBtinU"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFBB114BF8B;
-	Tue, 23 Apr 2024 11:42:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B2EB762E8
+	for <linux-usb@vger.kernel.org>; Tue, 23 Apr 2024 11:31:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713872530; cv=none; b=F/0Jq1sU5P+TY+r833pkoqiawLUZg42GvmeoyMaBnJqpuj8AssA3ZOXnmsxU9YxuHx/Mwl9LuBaP4VClxYrzcyAhAObpryzJuEZ/8ccOh0nSbhhDSU4Nel7lHFUif1AQEccf/N8lRpcGcAiJ0UwQuvJIvnMXGNZJdDslxcK8yGM=
+	t=1713871888; cv=none; b=YtRIhGlJ82W+hmOu+8sw0tfd1c6sIsrgMgXpdq7murrTL9nRpGBNmYDfaaIE/uRo5YRLQxrM8A9EZsWbX2Flhg96nP6bwvOPfB0E+27tVWe2A3n4nKeVTZP8CQKQxFnPnN71izmWUkXcIphjqH1o/U63NOb24MN6vZQmNmF9SRI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713872530; c=relaxed/simple;
-	bh=4xatCGuHGLqZax6DdkckXQorsV++62erOzujYkCsy4M=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jSAqxLp2IRoFq8atHiv6RqNDh2LiYI6tbdHPR2OttxvFDw8EegQeaMs+uXAbb+GvgkjIjuNAWWY5lidg3m2GP/5TvsZEOnoWeaeYYJa0M1C9aRNHpxEE4JPGohjSiZabmp3eWnjSjmSuTJ5rABAZ5dE7SBrn1nrMU0schM5FBTk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RRhYq85D; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CB7CC116B1;
-	Tue, 23 Apr 2024 11:42:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713872530;
-	bh=4xatCGuHGLqZax6DdkckXQorsV++62erOzujYkCsy4M=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=RRhYq85DjhOpOxMG0VJwwynMq3anphrKISgK01I3nlHYG2sSbS2G3icIacogP4DGH
-	 jCVFHXrasftB/6dnBo/55EgsVSPg373IWGrtd5OKCmVwFrDW+Ib2k+goVYlsIs1vu8
-	 CvI/zrufJw//pLRgcfGbLBbDTXDAxdeUWY231ueKEjxA6G7e+9Eo2Rgedt3vspS7Cq
-	 vXFuyayxLzvMN6YUrbFtR3g4d8i+LHlf75MG+9OsVlC463rKSHyZSgCAQxk8BnOOJA
-	 iwBzGtWjgtxMWxswfl/g6TedhSiwjCDf0j6Ls5oigNUyg7+ti4d65Zg7R5wHDr/ov/
-	 3WSIWXTXyRDnQ==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Vanillan Wang <vanillanwang@163.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Sasha Levin <sashal@kernel.org>,
-	bjorn@mork.no,
-	davem@davemloft.net,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	netdev@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 7/7] net:usb:qmi_wwan: support Rolling modules
-Date: Tue, 23 Apr 2024 07:03:17 -0400
-Message-ID: <20240423110318.1659628-7-sashal@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240423110318.1659628-1-sashal@kernel.org>
-References: <20240423110318.1659628-1-sashal@kernel.org>
+	s=arc-20240116; t=1713871888; c=relaxed/simple;
+	bh=VyxlUtuDZtjJe0QjL6M2KeAfKaTc2qDe65cYnDIHI+Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YfAhjwLt8M+i32ER+qrTIgMEVtka8G5VHGwR/s4mB/wkah20O3gqtVPdODbgBWdu4iPdQvn9DkHRdJWvTS0nxiXk6Sw7ZEXBz/MemwsGuNfiKxs2YUttt60JpJ7uTeRleyfp7C8/mui8ga4fjUcjARY/YYi3NcOBQ+qlbshXeks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=LFyBtinU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B47E5C116B1;
+	Tue, 23 Apr 2024 11:31:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1713871887;
+	bh=VyxlUtuDZtjJe0QjL6M2KeAfKaTc2qDe65cYnDIHI+Q=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=LFyBtinUkBiCkt8J/cd7E756DjfIeOdNu73GHKhWtJmlBmtlnwWZtg44JyeaWkFBP
+	 Kf7xSHzZg2DUkix1NmnDKN1lXWecvbfOUxhyTtxQXul2P5EsS+Js3p9KVElFDDL+1N
+	 NSZunjPdjjSqsV2N3Q9DDQz02i13tXUNeKmoeiTM=
+Date: Tue, 23 Apr 2024 13:31:18 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: bugzilla-daemon@kernel.org
+Cc: linux-usb@vger.kernel.org
+Subject: Re: [Bug 218762] New: USB string order in dmesg
+Message-ID: <2024042351-county-proven-e8a7@gregkh>
+References: <bug-218762-208809@https.bugzilla.kernel.org/>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 4.19.312
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bug-218762-208809@https.bugzilla.kernel.org/>
 
-From: Vanillan Wang <vanillanwang@163.com>
+On Mon, Apr 22, 2024 at 07:34:17PM +0000, bugzilla-daemon@kernel.org wrote:
+> Is there any good reason why the code
+> https://github.com/torvalds/linux/blob/c85af715cac0a951eea97393378e84bb49384734/drivers/usb/core/hub.c#L2361
+> is declaring string (show_string) values in a different order than they are
+> specified in dev_info?
+> 
+>         dev_info(&udev->dev,
+>                 "New USB device strings: Mfr=%d, Product=%d,
+> SerialNumber=%d\n",
+>                 udev->descriptor.iManufacturer,
+>                 udev->descriptor.iProduct,
+>                 udev->descriptor.iSerialNumber);
+>         show_string(udev, "Product", udev->product);
+>         show_string(udev, "Manufacturer", udev->manufacturer);
+>         show_string(udev, "SerialNumber", udev->serial);
+> 
+> 
+> Now
+> usb 4-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+> usb 4-1: Product: BM5100ADW series
+> usb 4-1: Manufacturer: Pantum
+> usb 4-1: SerialNumber: CK1A8823765
+> 
+> Expected
+> usb 4-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+> usb 4-1: Manufacturer: Pantum
+> usb 4-1: Product: BM5100ADW series
+> usb 4-1: SerialNumber: CK1A8823765
 
-[ Upstream commit d362046021ea122309da8c8e0b6850c792ca97b5 ]
-
-Update the qmi_wwan driver support for the Rolling
-LTE modules.
-
-- VID:PID 33f8:0104, RW101-GL for laptop debug M.2 cards(with RMNET
-interface for /Linux/Chrome OS)
-0x0104: RMNET, diag, at, pipe
-
-Here are the outputs of usb-devices:
-T:  Bus=04 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  2 Spd=5000 MxCh= 0
-D:  Ver= 3.20 Cls=00(>ifc ) Sub=00 Prot=00 MxPS= 9 #Cfgs=  1
-P:  Vendor=33f8 ProdID=0104 Rev=05.04
-S:  Manufacturer=Rolling Wireless S.a.r.l.
-S:  Product=Rolling Module
-S:  SerialNumber=ba2eb033
-C:  #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=896mA
-I:  If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-E:  Ad=01(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=81(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:  If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-E:  Ad=02(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=82(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-I:  If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-E:  Ad=03(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=84(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-I:  If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=40 Driver=option
-E:  Ad=04(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=86(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-I:  If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=50 Driver=qmi_wwan
-E:  Ad=0f(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=88(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
-E:  Ad=8e(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:  If#= 5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=usbfs
-E:  Ad=05(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=89(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-
-Signed-off-by: Vanillan Wang <vanillanwang@163.com>
-Link: https://lore.kernel.org/r/20240416120713.24777-1-vanillanwang@163.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/net/usb/qmi_wwan.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-index f787b9a4f9a9e..b4d436f985cfb 100644
---- a/drivers/net/usb/qmi_wwan.c
-+++ b/drivers/net/usb/qmi_wwan.c
-@@ -1383,6 +1383,7 @@ static const struct usb_device_id products[] = {
- 	{QMI_FIXED_INTF(0x0489, 0xe0b5, 0)},	/* Foxconn T77W968 LTE with eSIM support*/
- 	{QMI_FIXED_INTF(0x2692, 0x9025, 4)},    /* Cellient MPL200 (rebranded Qualcomm 05c6:9025) */
- 	{QMI_QUIRK_SET_DTR(0x1546, 0x1342, 4)},	/* u-blox LARA-L6 */
-+	{QMI_QUIRK_SET_DTR(0x33f8, 0x0104, 4)}, /* Rolling RW101 RMNET */
- 
- 	/* 4. Gobi 1000 devices */
- 	{QMI_GOBI1K_DEVICE(0x05c6, 0x9212)},	/* Acer Gobi Modem Device */
--- 
-2.43.0
-
+No specific reaason, just has always been that way for 20+ years and no
+one has noticed.
 
