@@ -1,165 +1,290 @@
-Return-Path: <linux-usb+bounces-9672-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9673-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B72DB8AFC7E
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Apr 2024 01:18:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 26D658AFC80
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Apr 2024 01:23:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E919A1C21B7F
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Apr 2024 23:18:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9E71828416E
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Apr 2024 23:23:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59DF238DC0;
-	Tue, 23 Apr 2024 23:18:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4746C3D0D5;
+	Tue, 23 Apr 2024 23:23:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="0sgLI8c/"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ahClngsK"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5DC710949
-	for <linux-usb@vger.kernel.org>; Tue, 23 Apr 2024 23:18:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E3A010949
+	for <linux-usb@vger.kernel.org>; Tue, 23 Apr 2024 23:23:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713914303; cv=none; b=ZwV3EblINRe9qV1kGkXTcOZtdaIAe0PKlkl30dIPtVJYFpyxuhqNoKCpBeLiYjredI+PJ4G1FHmsrqkrU8IIgg5jfEJwNBZ/l+f0QCuFapU99+mouckU2hGmzt27AO0NGDzHHRkSK2hRlwQp4mytNEmpmEHnnyDTH8ZGsiRypG0=
+	t=1713914607; cv=none; b=T0lCjT+hRAImmhw22JQBX7+Vr0uMSMNf4/Qwp/zu+1mN7lflMx4USrlrGSbHMVYIGdAAtNuXQM5eTCpcSmmynDC7i9qaufs/rg+QhDxsqvpFnlzkVhMVoBX+ASMkATlu+M61DcauMEIdq5fOKV1AWZ3nXVOdEM60iHMFYWcTGeM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713914303; c=relaxed/simple;
-	bh=6F0KVj4/jwez6wU+QVulLBchaZ65eHHZPh+B8e0A06s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YFWyYXpnRIAU8NJWM8dt3IB1xrdB1JTI7HUkWoccgOYzY+02wW/b1/4Y9cA1frwQzGtPZUw3MmL3e49EaEFx5A9cGhvIMYWBKCUXsWkvY9Ki7UkLhA6H8/H6VRuUIdDcnQO+SOf5+2A2ZZLqyQhBX+8UFPTtSUOP6J0Eb1bwSCI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=0sgLI8c/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39294C116B1;
-	Tue, 23 Apr 2024 23:18:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1713914303;
-	bh=6F0KVj4/jwez6wU+QVulLBchaZ65eHHZPh+B8e0A06s=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=0sgLI8c/cU9ttAWdCTE2Sz47yv/L+2vZe2I+f3SDG6oqfkOAatv1WEjAda+iRjqXZ
-	 uuysOjmDFIHrjS6JwBnGe8EZHrflu/L9WWycKHsefUoF/L+FT/mkxiI2gF0QNhKqqZ
-	 SSFElYOVNG3sg33UH1NIqdI+go+vifFsvr/ISfIs=
-Date: Tue, 23 Apr 2024 16:18:13 -0700
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Chris Wulff <Chris.Wulff@biamp.com>
-Cc: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH] usb: gadget: u_audio: Fix race condition use of controls
- after free during gadget unbind.
-Message-ID: <2024042346-pastime-platonic-7e28@gregkh>
-References: <CO1PR17MB54190B898057616EEB3F9E51E10E2@CO1PR17MB5419.namprd17.prod.outlook.com>
+	s=arc-20240116; t=1713914607; c=relaxed/simple;
+	bh=II2LKmMUfRHGigyBM+0jUGosvYh7g+30IT9IX31JEaQ=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=PMrTQL9wcjQfccEGAgRlb4J7UDyuaxdoifV8bDKXMH+u72xLcx1vTFs6TX3zIF/L5fm1BaE7pazRFYzjXmSdHz7zsyTIgfDzeWIlLqGu1AAkC+N09PiQw1a1Yq4kKfh7YkpgXQ8YfQ6dCG/Ip99Q+/tqnPdc1DJnH5tLwB+iNCI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ahClngsK; arc=none smtp.client-ip=209.85.210.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-6f103b541aeso3327394b3a.3
+        for <linux-usb@vger.kernel.org>; Tue, 23 Apr 2024 16:23:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1713914605; x=1714519405; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=4fPhPzodWoubukPurArJ2bR3IF59JD7l2DLF4hJrn6Q=;
+        b=ahClngsKDxob+1QlGxi0FH3PNCBUWpyN+FxvuJqvsrLkkN9we/+PzukmF+JOP8LPLt
+         qP9BJriyLAzCfKogKTj3soFz7ZSstZaV31F6DxNEDMTecKTzIu78+xc6Jc+B93X75UoJ
+         hk6S2rqinLeQqtgxYBhfvvYCyW8HG+MCZNyQpd3knH9M2ZNVWAD5TyxSXw7k6vHDWzil
+         CIByFcSETurP284VPXoFzkwrqnO+jRMWQUtIM1781pjt47E7i46r49tgC4u6MdkojAME
+         htTCbCCGnGnKnmJUWtGNmtSp/5VCt+Jyoxhi6bTNNDjWhwH8HmQU3dU7CXdKC6qUq33I
+         fSxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713914605; x=1714519405;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4fPhPzodWoubukPurArJ2bR3IF59JD7l2DLF4hJrn6Q=;
+        b=m/S6FBRiETtgWM0KMVQGfxkN1qpggpsbFrh/uHjg3ceRC1oZeZ6t1clRYyjz7E+pSn
+         iIKKHxyhw0MPtdcKATHqpndtPke54kyDHd0vW/mbqe46Vi0TurNU+h9plQXoa2yIH5tG
+         ERqMOKtn+GlygL7nR84MUTt6sizia4V8tHGqk/tI1m00gc6aWRE3XL44TJjTpo6ISLRT
+         ZFHLLJA8T7dW4AVQx2KbO31vpaFeO4W0GyUgZdjEJmIsb6Mww4J24WsG4C/xxzl61G24
+         IkXyWUSjCGYUr0Z8s8MvvBA7cIIEsxkzaVBEOBxvYDqg2DamkwzBVRK6H4YleVLaxus9
+         OzLQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXa9DFkpz6b3d7TJXMt7tv66ZdhQKUAsx+tqOEI51dMs9wDwTczlmV7O9crIjgQ5JIAyIrA4Xqil3bzprU7p8YaPxLolVMKIYP7
+X-Gm-Message-State: AOJu0Yw5jF9ofJGnnjledOUB2N95vkhOcQ1I+RVWM9b+OsK7cV/N4wh4
+	H2AjMUShcmmr4s40T7Y3d5etwErw9D82O2O3TiOaNV4SkOfQJx9j7NUANMWGBA==
+X-Google-Smtp-Source: AGHT+IHDSnAUGUcp3QRYoc9NHEyJSzo74CTkXVzfh+xkMWtkpyZ6YRXrTu69zOQPSoUR8e69dghRiQ==
+X-Received: by 2002:a05:6a00:4f87:b0:6ea:b1f5:1134 with SMTP id ld7-20020a056a004f8700b006eab1f51134mr1291341pfb.27.1713914605197;
+        Tue, 23 Apr 2024 16:23:25 -0700 (PDT)
+Received: from [192.168.60.239] (159.21.83.34.bc.googleusercontent.com. [34.83.21.159])
+        by smtp.gmail.com with ESMTPSA id p52-20020a056a0026f400b006ede45680a6sm10169011pfw.59.2024.04.23.16.23.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Apr 2024 16:23:24 -0700 (PDT)
+Message-ID: <17192e0f-7f18-49ae-96fc-71054d46f74a@google.com>
+Date: Tue, 23 Apr 2024 16:23:23 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CO1PR17MB54190B898057616EEB3F9E51E10E2@CO1PR17MB5419.namprd17.prod.outlook.com>
+User-Agent: Mozilla Thunderbird
+From: Avichal Rakesh <arakesh@google.com>
+Subject: Re: [PATCH 0/3] usb: gadget: uvc: allocate requests based on frame
+ interval length and buffersize
+To: Michael Grzeschik <mgr@pengutronix.de>
+Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+ Daniel Scally <dan.scally@ideasonboard.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Jayant Chowdhary <jchowdhary@google.com>, etalvala@google.com,
+ Michael Riesch <michael.riesch@wolfvision.net>,
+ Thinh Nguyen <Thinh.Nguyen@synopsys.com>, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <ZiWga5Kqno1ICv97@pengutronix.de>
+ <dcad0089-4105-44bc-a2b4-3cfc6f44164b@google.com>
+ <ZifEvUi9-E8M4dp8@pengutronix.de>
+Content-Language: en-US
+In-Reply-To: <ZifEvUi9-E8M4dp8@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Thu, Apr 18, 2024 at 04:35:07PM +0000, Chris Wulff wrote:
-> Hang on to the control IDs instead of pointers since those are correctly handled with locks.
-> Prevent use of the uac data structure after it has been freed.
-> Mark the endpoint as disabled sooner so that freed requests aren't used.
 
-Nit, please wrap your changelog text at 72 columns.  running
-scripts/checkpatch.pl should show this.
+
+On 4/23/24 07:25, Michael Grzeschik wrote:
+> Ccing:
+> 
+> Michael Riesch <michael.riesch@wolfvision.net>
+> Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+> 
+> On Mon, Apr 22, 2024 at 05:21:09PM -0700, Avichal Rakesh wrote:
+>> On 4/21/24 16:25, Michael Grzeschik wrote:
+>>> On Tue, Apr 09, 2024 at 11:24:56PM +0200, Michael Grzeschik wrote:
+>>>> This patch series is improving the size calculation and allocation
+>>>> of the uvc requests. Using the currenlty setup frame duration of the
+>>>> stream it is possible to calculate the number of requests based on the
+>>>> interval length.
+>>>
+>>> The basic concept here is right. But unfortunatly we found out that
+>>> together with Patch [1] and the current zero length request pump
+>>> mechanism [2] and [3] this is not working as expected.
+>>>
+>>> The conclusion that we can not queue more than one frame at once into
+>>> the hw led to [1]. The current implementation of zero length reqeusts
+>>> which will be queued while we are waiting for the frame to finish
+>>> transferring will enlarge the frame duration. Since every zero-length
+>>> request is still taking up at least one frame interval of 125 us.
+>>
+>> I haven't taken a super close look at your patches, so please feel free
+>> to correct me if I am misunderstanding something.
+>>
+>> It looks like the goal of the patches is to determine a better number
+>> and size of usb_requests from the given framerate such that we send exactly
+>> nreqs requests per frame where nreqs is determined to be the exact number
+>> of requests that can be sent in one frame interval?
+> 
+> It does not need to be the exact time, actually it may not be exact.
+> Scattering the data over all requests would not leave any headroom for
+> any latencies or overhead.
+
+IIUC, patch 3/3 sets the number of requests to frameinterval / 125 us, 
+which gives us the number of requests we can send in exactly one frame interval, 
+and then sets the size of the request as max framesize / nreq, which means the 
+frames will be evenly divided up into all available requests (with a little
+fuzz factor here and there).
+
+This effectively means that (assuming no other delays) one frame will take
+~one frameinterval to be transmitted?
 
 > 
-> Signed-off-by: Chris Wulff <chris.wulff@biamp.com>
-
-What commit id does this fix?
-
-> ---
->  drivers/usb/gadget/function/u_audio.c | 31 ++++++++++++++++-----------
->  1 file changed, 19 insertions(+), 12 deletions(-)
+>> As the logic stands, we need some 0-length requests to be circulating to
+>> ensure that we don't miss ISOC deadlines. The current logic unconditionally
+>> sends half of all allocated requests to be circulated.
+>>
+>> With those two things in mind, this means than video_pump can at encode
+>> at most half a frame in one go, and then has to wait for complete
+>> callbacks to come in. In such cases, the theoretical worst case for
+>> encode time is
+>> 125us * (number of requests needed per frame / 2) + scheduling delays
+>> as after the first half of the frame has been encoded, the video_pump
+>> thread will have to wait 125us for each of the zero length requests to
+>> be returned.
+>>
+>> The underlying assumption behind the "queue 0-length requests" approach
+>> was that video_pump encodes the frames in as few requests as possible
+>> and that there are spare requests to maintain a pressure on the
+>> ISOC queue without hindering the video_pump thread, and unfortunately
+>> it seems like patch 3/3 is breaking both of them?
 > 
-> diff --git a/drivers/usb/gadget/function/u_audio.c b/drivers/usb/gadget/function/u_audio.c
-> index 4a42574b4a7f..bcae95472455 100644
-> --- a/drivers/usb/gadget/function/u_audio.c
-> +++ b/drivers/usb/gadget/function/u_audio.c
-> @@ -57,13 +57,13 @@ struct uac_rtd_params {
->  
->    /* Volume/Mute controls and their state */
->    int fu_id; /* Feature Unit ID */
-> -  struct snd_kcontrol *snd_kctl_volume;
-> -  struct snd_kcontrol *snd_kctl_mute;
-> +  struct snd_ctl_elem_id snd_kctl_volume_id;
-> +  struct snd_ctl_elem_id snd_kctl_mute_id;
->    s16 volume_min, volume_max, volume_res;
->    s16 volume;
->    int mute;
+> Right.
+> 
+>> Assuming my understanding of your patches is correct, my question
+>> is: Why do we want to spread the frame uniformly over the requests
+>> instead of encoding it in as few requests as possible. Spreading
+>> the frame over more requests artificially increases the encode time
+>> required by video_pump, and AFAICT there is no real benefit to it?
+> 
+> Thinh gave me the advise that it is better to use the isoc stream
+> constantly filled. Rather then streaming big amounts of data in the
+> beginning of an frameinterval and having then a lot of spare time
+> where the bandwidth is completely unsused.
+> 
+> In our reallife scenario streaming big requests had the impact, that
+> the dwc3 core could not keep up with reading the amount of data
+> from the memory bus, as the bus is already under heavy load. When the
+> HW was then not able to transfer the requested and actually available
+> amount of data in the interval, the hw did give us the usual missed
+> interrupt answer.
+> 
+> Using smaller requests solved the problem here, as it really was
+> unnecessary to stress the memory and usb bus in the beginning as
+> we had enough headroom in the temporal domain.
 
-No tabs?  Odd.  Not your fault, just a meta-comment.
+Ah, I see. This was not a consideration, and it makes sense if USB
+bus is under contention from a few different streams. So the solution
+seems to be to spread the frame of as many requests as we can transmit 
+in one frameinterval?
 
->  
-> -	struct snd_kcontrol *snd_kctl_rate; /* read-only current rate */
-> +	struct snd_ctl_elem_id snd_kctl_rate_id; /* read-only current rate */
->  	int srate; /* selected samplerate */
->  	int active; /* playback/capture running */
->  
-> @@ -447,6 +447,8 @@ static inline void free_ep(struct uac_rtd_params *prm, struct usb_ep *ep)
->  	if (!prm->ep_enabled)
->  		return;
->  
-> +	prm->ep_enabled = false;
-> +
->  	audio_dev = uac->audio_dev;
->  	params = &audio_dev->params;
->  
-> @@ -464,8 +466,6 @@ static inline void free_ep(struct uac_rtd_params *prm, struct usb_ep *ep)
->  		}
->  	}
->  
-> -	prm->ep_enabled = false;
-> -
->  	if (usb_ep_disable(ep))
->  		dev_err(uac->card->dev, "%s:%d Error!\n", __func__, __LINE__);
->  }
-> @@ -494,14 +494,13 @@ static inline void free_ep_fback(struct uac_rtd_params *prm, struct usb_ep *ep)
->  static void set_active(struct uac_rtd_params *prm, bool active)
->  {
->  	// notifying through the Rate ctrl
-> -	struct snd_kcontrol *kctl = prm->snd_kctl_rate;
->  	unsigned long flags;
->  
->  	spin_lock_irqsave(&prm->lock, flags);
->  	if (prm->active != active) {
->  		prm->active = active;
->  		snd_ctl_notify(prm->uac->card, SNDRV_CTL_EVENT_MASK_VALUE,
-> -				&kctl->id);
-> +				&prm->snd_kctl_rate_id);
->  	}
->  	spin_unlock_irqrestore(&prm->lock, flags);
->  }
-> @@ -792,6 +791,9 @@ int u_audio_set_volume(struct g_audio *audio_dev, int playback, s16 val)
->  	unsigned long flags;
->  	int change = 0;
->  
-> +	if (!uac)
-> +		return 0;
-> +
->  	if (playback)
->  		prm = &uac->p_prm;
->  	else
-> @@ -807,7 +809,7 @@ int u_audio_set_volume(struct g_audio *audio_dev, int playback, s16 val)
->  
->  	if (change)
->  		snd_ctl_notify(uac->card, SNDRV_CTL_EVENT_MASK_VALUE,
-> -				&prm->snd_kctl_volume->id);
-> +				&prm->snd_kctl_volume_id);
->  
->  	return 0;
->  }
-> @@ -840,6 +842,9 @@ int u_audio_set_mute(struct g_audio *audio_dev, int playback, int val)
->  	int change = 0;
->  	int mute;
->  
-> +	if (!uac)
-> +		return 0;
+As an experiment, while we wait for others to respond, could you try 
+doubling (or 2.5x'ing to be extra safe) the number of requests allocated
+by patch 3/3 without changing the request's buffer size? 
 
-How can this happen?  Is this a separate fix?  Or the same issue?
+It won't help with the error reporting but should help with ensuring
+that frames are sent out in one frameinterval with little to no
+0-length requests between them.
 
-thanks,
+The idea is that video_pump will have enough requests available to fully 
+encode the frame in one burst, and another frame's worth of request will be 
+re-added to req_free list for video_pump to fill up in the time that the next 
+frame comes in.
 
-greg k-h
+> 
+> Which then led to the conclusion that the number of needed requests
+> per image frame interval is calculatable since we know the usb
+> interval length.
+> 
+> @Thinh: Correct me if I am saying something wrong here.
+> 
+>>> Therefor to properly make those patches work, we will have to get rid of
+>>> the zero length pump mechanism again and make sure that the whole
+>>> business logic of what to be queued and when will only be done in the
+>>> pump worker. It is possible to let the dwc3 udc run dry, as we are
+>>> actively waiting for the frame to finish, the last request in the
+>>> prepared and started list will stop the current dwc3 stream and  for
+>>> no underruns will occur with the next ep_queue.
+>>
+>> One thing to note here: The reason we moved to queuing 0-length requests
+>> from complete callback was because even with realtime priority, video_pump
+>> thread doesn't always meet the ISOC queueing cadence. I think stopping and
+>> starting the stream was briefly discussed in our initial discussion in
+>> https://lore.kernel.org/all/20230419001143.pdxflhzyecf4kvee@synopsys.com/
+>> and Thinh mentioned that dwc3 controller does it if it detects an underrun,
+>> but I am not sure if starting and stopping an ISOC stream is good practice.
+> 
+> The realtime latency aspect is not an issue anymore if we ensure that we
+> always keep only one frame in the hw ring buffer. When the pump worker
+> ensure that it will always run through one full frame the scheduler has
+> no chance to break our running dwc3 stream. Since the pump is running
+> under a while(1) this should be possible.
+
+I'll wait for your patch to see, but are you saying that we should have the 
+pump worker busy spinning  when there are no frames available? Cameras cannot
+produce frames fast enough for video_pump to be constantly encoding frames. 
+IIRC, "encoding" a frame to usb_requests took less than a ms or two on my 
+device, and frame interval is 33ms for a 30fps stream, so the CPU would be
+busy spinning for ~30ms which is an unreasonable time for a CPU to be
+idling.
+
+> 
+> Also with the request amount precalculation we can always encode the
+> whole frame into all available requests and don't have to wait for
+> requests to be available again.
+> 
+> Together with the latest knowladge about the underlying hw we even need to only
+> keep one frame in the HW ring buffer. Since we have some interrupt latency,
+> keeping more frames in the ring buffer, would mean that we are not able to tag
+> the currently streamed frame properly as errornous if the dwc3 hw ring buffer
+> is already telling the host some data about the next frame. And as we already
+> need to wait for the end of the frame to finish, based on the assumption that
+> only one frame is enqueued in the ring buffer the hw will stop the stream and
+> the next requst will start a new stream. So there will no missed underruns be
+> happening.
+> 
+> So the main fact here is, that telling the host some status about a
+> frame in the past is impossible! Therefor the first request of the next
+> hw stream need to be the one that is telling the Host if the previous frame
+> is ment to be drawn or not.
+
+This is a fair point, but the timing on this becomes a little difficult if 
+the frame is sent over the entire frameinterval. If we wait for the entire 
+frame to be transmitted, then we have 125us between the last request of a 
+frame being transmitted and the first request of the next frame being 
+queued. The userspace app producing the frames will have timing variations
+larger than 125us, so we cannot rely on a frame being available exactly as
+one frame is fully transmitted, or of us being notified of transmission
+status by the time the next frame comes in.
+
+> 
+>> Someone better versed in USB protocol can probably confirm, but it seems
+>> somewhat hacky to stop the ISOC stream at the end of the frame and restart
+>> with the next frame.
+> 
+> All I know is that the HW mechanism that is reading from the trb ring buffer is
+> started or stopped I don't know if really the ISOC stream is stopped and
+> restarted here or what that means on the real wire. And if so, I am unsure if
+> that is really a problem or not. Thinh?
+
+Oh? That's great! If the controller can keep the ISOC stream from underruning
+without the gadget feeding it 0-length requests, then we can simplify the 
+gadget side implementation quite a bit!
+
+
+Regards,
+Avi.
 
