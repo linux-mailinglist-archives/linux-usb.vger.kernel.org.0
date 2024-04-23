@@ -1,175 +1,166 @@
-Return-Path: <linux-usb+bounces-9627-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9628-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E2EA8ADB15
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Apr 2024 02:27:17 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A29D18ADBA2
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Apr 2024 03:43:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B14331F25328
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Apr 2024 00:27:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C65731C212C9
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Apr 2024 01:43:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71F25262BD;
-	Tue, 23 Apr 2024 00:21:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 084C4168B8;
+	Tue, 23 Apr 2024 01:43:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="kP3fzSzw"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XsE/uXQC"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D3F3225DD
-	for <linux-usb@vger.kernel.org>; Tue, 23 Apr 2024 00:21:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D3A117997;
+	Tue, 23 Apr 2024 01:43:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713831674; cv=none; b=IEwhUmuuCeSjCVK9SkSqOTf8gqg3DPOLoJk2TdhxDWOduyWPbewlH8sSbJVlcbyYvp5swRSYVqxhZwaaIuSwFuJBzeOiblFJMB584j8AJMth7rrM/jwl5QjoSvuqu1aq5aLILz6KmBH/o/tszYLM3DTLFkDGruiLyP5tqttceqs=
+	t=1713836609; cv=none; b=odbXiXUaO20omOUlYpylUMWCiiqTMn73zfZHZstLlWycv8M2D7+TXlHogU31sFIuRGNAVtzC83ETM1R59D0BW8a9Gmu5KhXstjqm3VASxyTnTv50O3IwkBtLsDcjliTh1J/l3+WkvkEYP7BhPSS6SkyvuWin1maibe4Q6QMrZVs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713831674; c=relaxed/simple;
-	bh=Mq7zkVwuUWQUc3aqR0kHon2b1Y3jeAOIT/AyxJRdiwo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CycmY/eGzeqx53nJOAwEPueRaOmtZlHA8XGbSdBvLSqeugvsYwIz75tkiU/oGwE75BU+0o6sVzbi0+AkCyGz/jHDzqH6PVEQfkDIAz5C9CGmwdTau9BnQh8LJF+yfirn+30IDsJ0/ZcfiTz7hD4C0xcygBNhdaD/WKMzFQORIhM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=kP3fzSzw; arc=none smtp.client-ip=209.85.216.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-2a2d248a2e1so4199285a91.0
-        for <linux-usb@vger.kernel.org>; Mon, 22 Apr 2024 17:21:12 -0700 (PDT)
+	s=arc-20240116; t=1713836609; c=relaxed/simple;
+	bh=ufSwTEYdLjNh53VNo5n/InjNNNfWiz9aDd8WKQpIqGA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pjtpURaZbt/FLiMvF/DGXYDKVZIbtZVvUrfc/zB/OUdOT4jD4mIwGlPg5qUEUblWr+aonFf5LODzVtaPGTTe491ix/MN5fGfzJCdl0pCqQP6/7xbRIXPvOoMEDQgyhYuTmtMITAoKUFkYtVJxXbboMrigownT5n2f6s33U5ZPqI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XsE/uXQC; arc=none smtp.client-ip=209.85.210.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-6f30f69a958so1020782b3a.1;
+        Mon, 22 Apr 2024 18:43:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1713831672; x=1714436472; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DG8SmujVrV3/d/wJYkV3HtACiwFGKad7/vEWNJwjogg=;
-        b=kP3fzSzwCG2SNGIAJMG9E/D9L3QDfIxnnFE2pKbnYggRWlS+D3rOudAw+PZvUHvbvj
-         NbET6SuMCIxipk82oigO3JL6YDAN6gin0qMBw48GLLoV9wJ8iBnLnuwdPBnOSNeQvLSD
-         OL2nWXiXfwsMBcfAXiSzQHdXMOCoUhVUEGys4CT4TpD+KYwXFuqgbn+J6asYBp1OPbHC
-         nB+MtWIWhVRN4hJcUZV7qhViwR98OsXxOLzdvGE6HWhgX6rpB0CjuDuHyzOvoLpHI08o
-         CdkzyDt89p501r0sNZh7nstVz1jGkoQ6o/e6BIajNulMyQqXmrwcXMef8JcD9y3y93Xw
-         Yvug==
+        d=gmail.com; s=20230601; t=1713836607; x=1714441407; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=FVv9MGjbF3k+4QlXe6bHKBL0yNq+kWVhwIIKL4GtREU=;
+        b=XsE/uXQCN/6TG3l6T2DX0NeV+bTHIV4vN+5qaVPSmiL15rpKSg9yS0IXnscWg7K+wL
+         HpYmTOP6J623lV1IYfQIG+gE4yS6kWmwCdBmOgyrZ/xY9pYJZBJ3zcPQIjgwB2iQQPtj
+         tQMWSOg2Baj29JIUNhPiGIfoyqBN17FCepd85Xd02FOxOOwvPo33CldHBwIHjlDwlLQQ
+         8hC/LBbXsHOj/VXOfO1bNJvRJuKhwcobhyCbgCZDyPv0XKUebgNL9x3ZnTR3/biYBEO7
+         QZ/4Msd1/0qpNHRm5iriju4LzQJ18V8613YVXsKqqQC0QvZKFL1BqLl0C76cgtmas9Z6
+         Q1/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713831672; x=1714436472;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DG8SmujVrV3/d/wJYkV3HtACiwFGKad7/vEWNJwjogg=;
-        b=RmSMy0+FX+RndpsWxvXS7UuWs2Yi/unVa60w2zgyVuYHrWWqSvB+uRWE4BOPRD2MQZ
-         2ELGLRxySMOVeSpFeuVsPXLbHzV8FR2SWrBQSappi8uFtlCqsSHqNo0246RSr56cZ/mK
-         t/ivwMomh2oN/e7MUObSDrr/1xl7cayoodExcNKh8yyPk10O3EgqjkdiPR8dPbInNjuD
-         95OE3dwJJ7h/R155xDaopjwtflvtktaCgBx8AxFLGdfazVRdRdQ8aYQ7MON9CUnKgMto
-         57Atxy/0ETzONEybyCmmjfoU8AVRFJXlUT6iRCl743JdT/NkvSxAJLI2nHVDUxkBy0ZX
-         WPuA==
-X-Gm-Message-State: AOJu0Yz+GuA65NuGN4W53Cz1Lg4HgPOTcjHr09CkNTkpxJryG4YGMeM1
-	Pdj8doLae+IygTijN0/KvfaS7Nw20NeXJKFSpG3cd9Kp9tecsi6xvB+3SbNCJg==
-X-Google-Smtp-Source: AGHT+IHqwgHn6S6UmdxbjnxXq2IU+YdXC2dWUxmKJAEkcTK34z2/d1ak6pzKMxau9YV1GJzPxXsWpw==
-X-Received: by 2002:a17:90a:c68c:b0:2a2:fec9:1bbd with SMTP id n12-20020a17090ac68c00b002a2fec91bbdmr1478299pjt.17.1713831671463;
-        Mon, 22 Apr 2024 17:21:11 -0700 (PDT)
-Received: from [192.168.60.239] (159.21.83.34.bc.googleusercontent.com. [34.83.21.159])
-        by smtp.gmail.com with ESMTPSA id ns5-20020a17090b250500b002a5f44353d2sm10207982pjb.7.2024.04.22.17.21.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Apr 2024 17:21:11 -0700 (PDT)
-Message-ID: <dcad0089-4105-44bc-a2b4-3cfc6f44164b@google.com>
-Date: Mon, 22 Apr 2024 17:21:09 -0700
+        d=1e100.net; s=20230601; t=1713836607; x=1714441407;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FVv9MGjbF3k+4QlXe6bHKBL0yNq+kWVhwIIKL4GtREU=;
+        b=LZ+lEhQFLS0zvfNvkBRewpF652PwiAbvvmBEEuMnmV5A0+yZmrNTEALjwEPayIcYXL
+         jdbzHzqC66ptkcmYLev4Tt6dCXIhg90syaRmVbMJW6lHb2Fs+UQC9iF8yCAn1V1ubaJb
+         oibqp5logYVxPJvXMLPXRcyOUVuFEF3D+DUkw6zMfj5k4YpyCkmWGD5I/9zsQaZHSjya
+         YhKFiCY/IGmOMuKjPIkI4UlnhC67r9evbdSqsWPv7WWxGOXF7PAdP0r4Jym3OloUqSL6
+         8dIKtfudwY1ATS3zPkSKbVe7mrVdTN8/zZZP2cePIQrCCRREq6PmXMNL9kfn2mNBzgvi
+         XP5g==
+X-Forwarded-Encrypted: i=1; AJvYcCWYJ6ZF7rt1lgZeO2TYI44322++PrkkhU6GNd+u/7qVx0qW2nrp9EVStb/fAMLxqpLZHdiwV/wwplp02ISLmVypABII5Vhk4yArHdplCZ6Wmm9eG2M/QNlMfpcQWTWohSj7fT5/R6RivOpcQZiwiawPeelCBhzc+l6tUH7xfNDqT2BgXf62PcW/cDAPWFMWZhiZk97O31RGSuYN0sE+G4J+dRWYBQIY1NET0lJhAmKeZxX20RW8Lps5L1HCVg==
+X-Gm-Message-State: AOJu0YzgXcvTuy0HRNjSOQlqi3WrO/w04DhcsKEwEvwwhweOQncUOTs0
+	HtA4L+sAorouIUeXqnm1hCTLU9wHNt/lazxJHsbhU52mVNysTlf2
+X-Google-Smtp-Source: AGHT+IHNvVbE9cA2XCQLQKjnl3qgdgnVkMyNXB6fh5i88nUQTMFnT4C4mWly1ZAKH13pWuCwaxCS8g==
+X-Received: by 2002:a05:6a00:1950:b0:6ec:fe38:d94 with SMTP id s16-20020a056a00195000b006ecfe380d94mr14924140pfk.33.1713836607279;
+        Mon, 22 Apr 2024 18:43:27 -0700 (PDT)
+Received: from archie.me ([103.124.138.155])
+        by smtp.gmail.com with ESMTPSA id gj14-20020a056a00840e00b006ed93e7ef22sm8471175pfb.39.2024.04.22.18.43.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Apr 2024 18:43:26 -0700 (PDT)
+Received: by archie.me (Postfix, from userid 1000)
+	id 6C2B718688A48; Tue, 23 Apr 2024 08:43:23 +0700 (WIB)
+Date: Tue, 23 Apr 2024 08:43:23 +0700
+From: Bagas Sanjaya <bagasdotme@gmail.com>
+To: Wesley Cheng <quic_wcheng@quicinc.com>, srinivas.kandagatla@linaro.org,
+	mathias.nyman@intel.com, perex@perex.cz, conor+dt@kernel.org,
+	corbet@lwn.net, lgirdwood@gmail.com, andersson@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
+	Thinh.Nguyen@synopsys.com, broonie@kernel.org, bgoswami@quicinc.com,
+	tiwai@suse.com, robh@kernel.org, konrad.dybcio@linaro.org
+Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-sound@vger.kernel.org, linux-usb@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, linux-doc@vger.kernel.org,
+	alsa-devel@alsa-project.org
+Subject: Re: [PATCH v19 41/41] ASoC: doc: Add documentation for SOC USB
+Message-ID: <ZicSOzE8KyaYGi0v@archie.me>
+References: <20240422224906.15868-1-quic_wcheng@quicinc.com>
+ <20240422224906.15868-42-quic_wcheng@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/3] usb: gadget: uvc: allocate requests based on frame
- interval length and buffersize
-To: Michael Grzeschik <mgr@pengutronix.de>,
- Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
- Daniel Scally <dan.scally@ideasonboard.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Jayant Chowdhary <jchowdhary@google.com>, etalvala@google.com
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <ZiWga5Kqno1ICv97@pengutronix.de>
-Content-Language: en-US
-From: Avichal Rakesh <arakesh@google.com>
-In-Reply-To: <ZiWga5Kqno1ICv97@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20240422224906.15868-42-quic_wcheng@quicinc.com>
 
+On Mon, Apr 22, 2024 at 03:49:06PM -0700, Wesley Cheng wrote:
+> +.. code-block:: rst
+> +
+> +int snd_soc_usb_setup_offload_jack(struct snd_soc_component *component,
+> +					struct snd_soc_jack *jack)
+> +..
 
+You forget to indent snd_soc_usb_setup_offload_jack() prototype:
 
-On 4/21/24 16:25, Michael Grzeschik wrote:
-> On Tue, Apr 09, 2024 at 11:24:56PM +0200, Michael Grzeschik wrote:
->> This patch series is improving the size calculation and allocation
->> of the uvc requests. Using the currenlty setup frame duration of the
->> stream it is possible to calculate the number of requests based on the
->> interval length.
-> 
-> The basic concept here is right. But unfortunatly we found out that
-> together with Patch [1] and the current zero length request pump
-> mechanism [2] and [3] this is not working as expected.
-> 
-> The conclusion that we can not queue more than one frame at once into
-> the hw led to [1]. The current implementation of zero length reqeusts
-> which will be queued while we are waiting for the frame to finish
-> transferring will enlarge the frame duration. Since every zero-length
-> request is still taking up at least one frame interval of 125 us.
+---- >8 ----
+diff --git a/Documentation/sound/soc/usb.rst b/Documentation/sound/soc/usb.rst
+index 3f7c3ef6a0c03c..0b6da0be9f317f 100644
+--- a/Documentation/sound/soc/usb.rst
++++ b/Documentation/sound/soc/usb.rst
+@@ -218,8 +218,8 @@ state.
+ 
+ .. code-block:: rst
+ 
+-int snd_soc_usb_setup_offload_jack(struct snd_soc_component *component,
+-					struct snd_soc_jack *jack)
++        int snd_soc_usb_setup_offload_jack(struct snd_soc_component *component,
++        					struct snd_soc_jack *jack)
+ ..
+ 
+   - ``component``: ASoC component to add the jack
 
-I haven't taken a super close look at your patches, so please feel free
-to correct me if I am misunderstanding something.
+> +USB Offload Playback Route Select Kcontrol
+> +-----------------------------------
 
-It looks like the goal of the patches is to determine a better number
-and size of usb_requests from the given framerate such that we send exactly
-nreqs requests per frame where nreqs is determined to be the exact number 
-of requests that can be sent in one frame interval?
+USB offload playback heading underlines are not long enough to cover heading
+titles, so I have to extend them:
 
-As the logic stands, we need some 0-length requests to be circulating to
-ensure that we don't miss ISOC deadlines. The current logic unconditionally
-sends half of all allocated requests to be circulated.
+---- >8 ----
+diff --git a/Documentation/sound/soc/usb.rst b/Documentation/sound/soc/usb.rst
+index 0b6da0be9f317f..5e0e9fad131b24 100644
+--- a/Documentation/sound/soc/usb.rst
++++ b/Documentation/sound/soc/usb.rst
+@@ -482,7 +482,7 @@ into the physical USB port and enumerated.  The kcontrols are defined as:
+     kcontrol exposed by the platform card.
+ 
+ USB Offload Playback Route Select Kcontrol
+------------------------------------
++------------------------------------------
+ In order to allow for vendor specific implementations on audio offloading device
+ selection, the SOC USB layer exposes the following:
+ 
+@@ -545,7 +545,7 @@ along to the external DSP.
+ 
+ 
+ USB Offload Playback Route Status
+--------------------
++---------------------------------
+ SOC USB exposes APIs for keeping track of the offloading state, and expects this
+ to be maintained by the BE DAI link that created/added the SOC USB device.
+ 
+@@ -573,7 +573,7 @@ When executing the kcontrol get callback, it will loop across the active_list ar
+ and report to the application for active USB sound card and USB PCM device indexes.
+ 
+ USB Offload Playback Capable Card
+--------------------------------
++---------------------------------
+ USB sound also creates a kcontrol for applications to help determine which platform
+ sound card USB offloading is linked to.  This will allow applications to further
+ query the platform sound card for specific information about the current USB offload
 
-With those two things in mind, this means than video_pump can at encode
-at most half a frame in one go, and then has to wait for complete 
-callbacks to come in. In such cases, the theoretical worst case for 
-encode time is  
-125us * (number of requests needed per frame / 2) + scheduling delays
-as after the first half of the frame has been encoded, the video_pump
-thread will have to wait 125us for each of the zero length requests to
-be returned.
+Thanks.
 
-The underlying assumption behind the "queue 0-length requests" approach
-was that video_pump encodes the frames in as few requests as possible
-and that there are spare requests to maintain a pressure on the 
-ISOC queue without hindering the video_pump thread, and unfortunately
-it seems like patch 3/3 is breaking both of them?
-
-Assuming my understanding of your patches is correct, my question 
-is: Why do we want to spread the frame uniformly over the requests
-instead of encoding it in as few requests as possible. Spreading
-the frame over more requests artificially increases the encode time
-required by video_pump, and AFAICT there is no real benefit to it?
-
-> Therefor to properly make those patches work, we will have to get rid of
-> the zero length pump mechanism again and make sure that the whole
-> business logic of what to be queued and when will only be done in the
-> pump worker. It is possible to let the dwc3 udc run dry, as we are
-> actively waiting for the frame to finish, the last request in the
-> prepared and started list will stop the current dwc3 stream and therf> no underruns will occur with the next ep_queue.
-
-One thing to note here: The reason we moved to queuing 0-length requests
-from complete callback was because even with realtime priority, video_pump
-thread doesn't always meet the ISOC queueing cadence. I think stopping and
-starting the stream was briefly discussed in our initial discussion in 
-https://lore.kernel.org/all/20230419001143.pdxflhzyecf4kvee@synopsys.com/
-and Thinh mentioned that dwc3 controller does it if it detects an underrun,
-but I am not sure if starting and stopping an ISOC stream is good practice.
-Someone better versed in USB protocol can probably confirm, but it seems
-somewhat hacky to stop the ISOC stream at the end of the frame and restart
-with the next frame. 
-
-> With all these pending patches the whole uvc saga of underruns and
-> flickering videostreams should come to an end™.
-
-This would indeed be nice!
-
-> 
-> I already started with this but would be happy to see Avichal and others
-> to review the patches when they are ready in my eyes.
-
-Of course!
-
-- Avi.
+-- 
+An old man doll... just what I always wanted! - Clara
 
