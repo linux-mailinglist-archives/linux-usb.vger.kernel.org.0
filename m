@@ -1,222 +1,163 @@
-Return-Path: <linux-usb+bounces-9649-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9650-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 562098AEA2C
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Apr 2024 17:06:26 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 344558AEAD7
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Apr 2024 17:20:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0D6B9287F8C
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Apr 2024 15:06:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 57AB81C20C4E
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Apr 2024 15:20:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B78713C661;
-	Tue, 23 Apr 2024 15:06:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19E9313E3FE;
+	Tue, 23 Apr 2024 15:18:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ap7xUb7H"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="E1wpsgM3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 969B0134CC2;
-	Tue, 23 Apr 2024 15:05:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7AFF13E020
+	for <linux-usb@vger.kernel.org>; Tue, 23 Apr 2024 15:18:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713884763; cv=none; b=W+lpA9brKm/iyO69ZpunjPpLj5U+pVYYkCouM9CktQBu7+T1G8Js5NK8+obpNlfC3LSMEntMhPSXq0W6wbZLs7b0PAvWOvPIX+3uDWJV0wOCQZUuSXMysRgCD0oA/0MNlbojDkOo7J/ipAirzAQU29mlZk0SsXfvHUme0ZfSjKo=
+	t=1713885518; cv=none; b=MnQGlX/xumQ1jLeqy8cVXa5ODHusaKxbMJIXBIn3m5qrRCB/hsbyvmfI2qGZkUK+ol7SIBtVdt0qNpQJtC/76fnaIiwRu+FQYBRUCoDENVdD6UXBRrAAf8+4BnkCPCQRBrfb5dKxPiSl/CIRNM1gQi2OpgG+e/JumxQrocJhG2M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713884763; c=relaxed/simple;
-	bh=c1YQiuI+aSkLs5EilLhcs3Z49GczY6uW8zvV0s+0ZEc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mrk/HjqwKO1ZK6moS6kXPGuVRPV0//kHHN7K6z2+hpl3yxB6p9VUMblg9N4CN9zM+fhcTLeu7XfPeVXz0Fbg23bCJK+spcPV5gy1HWW5h0ygzjE+zOm7EsjGF/tENCH0apJq1vY3e+FwgfrlEankK5yenA3QNH8jq04wLIemxzA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ap7xUb7H; arc=none smtp.client-ip=209.85.210.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-6ed112c64beso4992472b3a.1;
-        Tue, 23 Apr 2024 08:05:58 -0700 (PDT)
+	s=arc-20240116; t=1713885518; c=relaxed/simple;
+	bh=XYG2QNO6YqfnXZsrhhpcAhYkSb1oPjT8GnOKwiKgNKQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MRR+a3hDuYA9Uf+XckLGrRMcHt3cgvvNm3ZChCj7GS5K0UwsY4T2wScOYbiLnKD9fIOJPf0P/GeFNnMArPmQ6ftwNhJNqjTnkmklODA155PDTHjy0peEh0/FKfrN7Xi5UbYk2F/s2eR6i0f/57MysYNCMzTe/XgYieFGc8bfTcA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=E1wpsgM3; arc=none smtp.client-ip=209.85.208.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2d858501412so79113901fa.0
+        for <linux-usb@vger.kernel.org>; Tue, 23 Apr 2024 08:18:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713884758; x=1714489558; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=cSiLT8rGn/DUAMlTsyuIcVEZ7KNG3BkMo6PmY1zTuJA=;
-        b=ap7xUb7HFqIAJ7/56Gea282ealKItiwGkf6C6CVaZQo4iwUw/zF2H7xpfmuxgB8fd3
-         fh+yifZjUIIxZXPz+EmCeq4i/nV/56bNRn22jmEOfZirV1tP2sfkjLXjiZOIrBVpNqq7
-         I8OgsXGDVjRSLdSkTYjNDlKNYDkLQFgPcCQnPxuhz0LtUEXPE1Wh28J0DylxfMoctE8T
-         MPCVOkT1AOw5fmUQtvzU7zSW0haLqi2nlBp9NfaupJN7EQ1JMupq8Sclel1n4lVY8AW3
-         A5HXxVX/iV34Hz/GqfXl31ijnWUTMgmxRqI6rHl0xQFjmCLs3pd5qkZKlums9FkD4GuA
-         ZUOg==
+        d=linaro.org; s=google; t=1713885515; x=1714490315; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=JKIjbUsgxy3/tNIq+MEZrr4f0H6IRWNYpVSuU9q6xD4=;
+        b=E1wpsgM3mm7bJjnhLvAHQaq4xXZn131l8O7DpW2FU/1lPrQmNdFQpzFn5Aap8oEr2w
+         xYYU+yD9CmiSMLy6Plr3uOoQUl1Thft1DxRvll8ssdKVOI+mxcvpfRlnARb7s81/Nwha
+         AtF8EJRAgucq74yqycwR+m9umDZII45ofwZoC6cckbyhHdnbWKPySLt6SaOmPV/BRZyd
+         QWvYOR3kuLG8tel28zV4czSbk7BKERFl7kYDlLg0clC4Zl3KLWYtOrSuazQCtR7y/Ydw
+         V0xp3P37alWANsFPN77riqY0wr0R/vSIY0U4FFESVotb9hWdH9uxqrhEOXOzJdU6H3k2
+         2qtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713884758; x=1714489558;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1713885515; x=1714490315;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=cSiLT8rGn/DUAMlTsyuIcVEZ7KNG3BkMo6PmY1zTuJA=;
-        b=vAfD8Ga3+HadUmjvKmMSnBcYcD52TRKL0K82aPU/4VzEkrFo+ebbp02ZbzjJYV0ZCP
-         N6MBiCKUsblmX0NvnvY/nYxPcsXl+cwA/PmA63+h5aS3qrpt/kDjALfJk0Kh0hUPDRdn
-         3cSGmlebnuk3iFnmF78BN7EDY5l69R6U/qZ2nQqJXpt6c3ENVD6fGFU29pZoZKyjgE3O
-         ehQxuDZ2KeNMEw9UmXPlsBX/HhfJZq1xtxJApSSAEjxwhoyC/g7TQtZM8kKVR0PRrQMc
-         23+fBu22nGk6Y7an8CGqvltyYwShrS55hWmdFqE/2nWfPuZ8IxOK8oQhHG0jrPI9VsCZ
-         fEUg==
-X-Forwarded-Encrypted: i=1; AJvYcCVFexX6NPPjwLtFd9qRQF2fEi1reugii17QeYh3AI9wa6FwAebZNkWZkyrJQLwwY9EnlilMJbgDfuyeJpk4G9FoFFDTPl7oGxPQM0b66WjLW8NNbjRFf2wCOc1BWkuUgqANzXqjvE7huEl+K5Fe2uH0XYoufMMN3HDOAv/eJrJ8G2OOfw==
-X-Gm-Message-State: AOJu0YygZLDlr+Gy3c0K7xjLTKEGY0/oQZh+ZWyiDJw+hQ9uDBPgR/ex
-	hDpFc9kq8ov6pLsb8C/f84zn7V6x6RKLxk8E78uPasmT0wX2gb0NR9YzykqwDqk=
-X-Google-Smtp-Source: AGHT+IHYglb1gDlfjysIQShA+h/0ERVm859A1Kwe/GAK/vhX5AYcQXn/bUJHrimTMjCaOROr/lexPA==
-X-Received: by 2002:a05:6a21:33a9:b0:1a9:4570:2d3b with SMTP id yy41-20020a056a2133a900b001a945702d3bmr14252832pzb.7.1713884757641;
-        Tue, 23 Apr 2024 08:05:57 -0700 (PDT)
-Received: from localhost (ec2-3-111-32-5.ap-south-1.compute.amazonaws.com. [3.111.32.5])
-        by smtp.gmail.com with UTF8SMTPSA id g22-20020a056a000b9600b006edf7be92c2sm9708701pfj.72.2024.04.23.08.05.54
+        bh=JKIjbUsgxy3/tNIq+MEZrr4f0H6IRWNYpVSuU9q6xD4=;
+        b=B+rZ0fMJgp4hmaWvoOnF6otU2yI2PGYkuhMUXOTA9QBQNTAUQZs5lE1OcGnhWphJp8
+         3cb3McH9Nh/PWS6c+ZnLNcEgGDEmOCl+uXvBVpbAYcgUg4fbbnEtPCgioYruER5cE3dV
+         H+GcLXc6vT2znmPa5zy/p38hWwC2H2CUIA7/rugvT+SYCY5KKyZcSN1tQrqelZGP6WPT
+         d+d4HIr9f2hj6GYBkudrgIrVZw7o+b5xxRyDMIvpVLtNRiNzqaCuBJvSXyAELzQzhwAe
+         MudOt39LNWIgz7Y337TnE3HMIInkQRZodrcGzuKpV5YRmRHas+VQ5pN0c7oRGAhlfaXC
+         +Yvw==
+X-Gm-Message-State: AOJu0YxRLt3PKKMqZBcYk0KeXlJIJvr/d8XGg5tc3YaCFaizLSf1mTcp
+	Tt038pcu4rpxcLd+GWaqPhpd9WpcRRqMudaSVcbEWohoPblsEuyKXqXBUaBdHu4=
+X-Google-Smtp-Source: AGHT+IFCSFHPSy/Vj6nwpXpzfQn7qQPUjIl813fbivQ6NQbkaJ9fwKv1h23OgE4wIzRd4uGX6r4g7w==
+X-Received: by 2002:a19:e01c:0:b0:51b:812:3c87 with SMTP id x28-20020a19e01c000000b0051b08123c87mr4738767lfg.39.1713885514793;
+        Tue, 23 Apr 2024 08:18:34 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.223.16])
+        by smtp.gmail.com with ESMTPSA id m18-20020a1709060d9200b00a5561456fa8sm7148280eji.21.2024.04.23.08.18.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Apr 2024 08:05:57 -0700 (PDT)
-From: Mohammad Shehar Yaar Tausif <sheharyaar48@gmail.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>
-Cc: Mohammad Shehar Yaar Tausif <sheharyaar48@gmail.com>,
-	linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v4] dt-bindings: usb: uhci: convert to dt schema
-Date: Tue, 23 Apr 2024 20:35:48 +0530
-Message-ID: <20240423150550.91055-1-sheharyaar48@gmail.com>
-X-Mailer: git-send-email 2.44.0
+        Tue, 23 Apr 2024 08:18:34 -0700 (PDT)
+Message-ID: <1065c1f9-8149-4fae-8fd2-72bda0b5288f@linaro.org>
+Date: Tue, 23 Apr 2024 17:18:33 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4] dt-bindings: usb: uhci: convert to dt schema
+To: Mohammad Shehar Yaar Tausif <sheharyaar48@gmail.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>
+Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20240423150550.91055-1-sheharyaar48@gmail.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Content-Language: en-US
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20240423150550.91055-1-sheharyaar48@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Convert USB UHCI bindings to DT schema. Documenting aspeed compatibles
-and missing properties. Adding aspeed/generic-uhci example and fixing
-nodename for the original example.
+On 23/04/2024 17:05, Mohammad Shehar Yaar Tausif wrote:
+> Convert USB UHCI bindings to DT schema. Documenting aspeed compatibles
+> and missing properties. Adding aspeed/generic-uhci example and fixing
+> nodename for the original example.
+> 
+> Signed-off-by: Mohammad Shehar Yaar Tausif <sheharyaar48@gmail.com>
+> ---
+> Changes 
+> v3->v4:
+> - fix previous incorrect use of if-then block and original example
+> v2->v3:
+> - fix property declaration and if-then-else block
+> - add generic-uhci example and fix prev incorrect example
+> v1->v2:
+> - add aspeed compatible and deprecated platform-uhci compatible
+> 
+> v3 patch : https://lore.kernel.org/all/20240422122125.455781-1-sheharyaar48@gmail.com
+> v2 patch : https://lore.kernel.org/all/20240422093706.324115-1-sheharyaar48@gmail.com
+> v1 patch : https://lore.kernel.org/all/20240420142108.76984-1-sheharyaar48@gmail.
 
-Signed-off-by: Mohammad Shehar Yaar Tausif <sheharyaar48@gmail.com>
----
-Changes 
-v3->v4:
-- fix previous incorrect use of if-then block and original example
-v2->v3:
-- fix property declaration and if-then-else block
-- add generic-uhci example and fix prev incorrect example
-v1->v2:
-- add aspeed compatible and deprecated platform-uhci compatible
 
-v3 patch : https://lore.kernel.org/all/20240422122125.455781-1-sheharyaar48@gmail.com
-v2 patch : https://lore.kernel.org/all/20240422093706.324115-1-sheharyaar48@gmail.com
-v1 patch : https://lore.kernel.org/all/20240420142108.76984-1-sheharyaar48@gmail.com
----
- .../devicetree/bindings/usb/usb-uhci.txt      | 18 -----
- .../devicetree/bindings/usb/usb-uhci.yaml     | 75 +++++++++++++++++++
- 2 files changed, 75 insertions(+), 18 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/usb/usb-uhci.txt
- create mode 100644 Documentation/devicetree/bindings/usb/usb-uhci.yaml
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-diff --git a/Documentation/devicetree/bindings/usb/usb-uhci.txt b/Documentation/devicetree/bindings/usb/usb-uhci.txt
-deleted file mode 100644
-index d1702eb2c8bd..000000000000
---- a/Documentation/devicetree/bindings/usb/usb-uhci.txt
-+++ /dev/null
-@@ -1,18 +0,0 @@
--Generic Platform UHCI Controller
-------------------------------------------------------
--
--Required properties:
--- compatible : "generic-uhci" (deprecated: "platform-uhci")
--- reg : Should contain 1 register ranges(address and length)
--- interrupts : UHCI controller interrupt
--
--additionally the properties from usb-hcd.yaml (in the current directory) are
--supported.
--
--Example:
--
--	uhci@d8007b00 {
--		compatible = "generic-uhci";
--		reg = <0xd8007b00 0x200>;
--		interrupts = <43>;
--	};
-diff --git a/Documentation/devicetree/bindings/usb/usb-uhci.yaml b/Documentation/devicetree/bindings/usb/usb-uhci.yaml
-new file mode 100644
-index 000000000000..d8336f72dc1f
---- /dev/null
-+++ b/Documentation/devicetree/bindings/usb/usb-uhci.yaml
-@@ -0,0 +1,75 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/usb/usb-uhci.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Generic Platform UHCI Controller
-+
-+maintainers:
-+  - Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - const: generic-uhci
-+      - const: platform-uhci
-+        deprecated: true
-+      - items:
-+          - enum:
-+              - aspeed,ast2400-uhci
-+              - aspeed,ast2500-uhci
-+              - aspeed,ast2600-uhci
-+          - const: generic-uhci
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  '#ports':
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+
-+  clocks:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+
-+allOf:
-+  - $ref: usb-hcd.yaml
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: generic-uhci
-+    then:
-+      required:
-+        - clocks
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/aspeed-clock.h>
-+
-+    usb@d8007b00 {
-+        compatible = "generic-uhci";
-+        reg = <0xd8007b00 0x200>;
-+        interrupts = <43>;
-+        clocks = <&syscon ASPEED_CLK_GATE_USBUHCICLK>;
-+    };
-+  - |
-+    #include <dt-bindings/clock/aspeed-clock.h>
-+
-+    usb@1e6b0000 {
-+        compatible = "aspeed,ast2500-uhci", "generic-uhci";
-+        reg = <0x1e6b0000 0x100>;
-+        interrupts = <14>;
-+        #ports = <2>;
-+        clocks = <&syscon ASPEED_CLK_GATE_USBUHCICLK>;
-+    };
-+...
--- 
-2.44.0
+Best regards,
+Krzysztof
 
 
