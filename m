@@ -1,142 +1,133 @@
-Return-Path: <linux-usb+bounces-9666-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9667-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 259608AF7E5
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Apr 2024 22:20:10 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 945598AF7F8
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Apr 2024 22:25:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 57CB31C21F1F
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Apr 2024 20:20:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C10AEB26A04
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Apr 2024 20:25:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A2C9142651;
-	Tue, 23 Apr 2024 20:19:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 271AB1428F7;
+	Tue, 23 Apr 2024 20:25:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="pKZsi91W"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="PDeb47Cv"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99A41142654
-	for <linux-usb@vger.kernel.org>; Tue, 23 Apr 2024 20:19:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 671C15B1E3
+	for <linux-usb@vger.kernel.org>; Tue, 23 Apr 2024 20:25:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713903590; cv=none; b=EV3S9H7A9IisEBq0HQJvnhsMsj+0kADiDBdZr1+X94C1Qvsr2vqXE15C7i7ICNXblIhL6XUDmY3+kKYvC9lm6WO1UZO1lQDr6u8l9LSJpglcK7litI/kXNi05pRvCYj1tY3sTQrcd7uBArZpfauiwt35tvydrKfvpOzu13fjQ0Y=
+	t=1713903928; cv=none; b=og/nE1z5aJYkS5YOcjbGqHQdx/+x1ZsZ8UAsfBVa3KTXqT3VaPXx8YDVZVVDaegCZPl6TURvvhiLJC5xDIzQ6GP7mz7N/FuknVsbaAOXiwjVLPfr8hLz0INEivmnwujx/q5Ghs1GnMnipPiyMVU59X6mMapSAHqAFmsLRmTo8VU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713903590; c=relaxed/simple;
-	bh=O9JbCQMTsEdc3RpE8YdCk//UJvo94xhIq8ZtAtz4OjI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=KysDJJZ5h+xe1UvYzfvgIfa6BLdrob3ne0STu1R+gkwBqg6BNdb0t5MELTWM0JJ+2E/XFGgfsP+D54D+5oYd8xemV5RqjdNjms6EEQZ0RVM+I3YToZ6Jl2jxc0Ol8UnrFX7dnTDcUGw0woY+ryQFkNz4HvZmqfoukR0J+DW53wg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=pKZsi91W; arc=none smtp.client-ip=209.85.221.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-343e46ec237so5132963f8f.2
-        for <linux-usb@vger.kernel.org>; Tue, 23 Apr 2024 13:19:48 -0700 (PDT)
+	s=arc-20240116; t=1713903928; c=relaxed/simple;
+	bh=ox9VAXUigA+jjojvWTyN+ep9mL1aYjavByEeOcIfuGg=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=HPvTA3NMLD6PNnStGncJH2PvhRD2Zq3Q/pgEbNJmEGS3K/Mi9egr5OJGDcegDqlUz1JOi+n/XjCULOv+zFrJPGYfsbf27ES+JSmTK3jDa2Wy6pxdhN73kiiDCvN/5Rg0gx2cyNUC4aqDF8GX+l5F6N7TvIMHYoyL8r3p+C2S4l0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--rdbabiera.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=PDeb47Cv; arc=none smtp.client-ip=209.85.210.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--rdbabiera.bounces.google.com
+Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-6ed25ed4a5fso8203882b3a.1
+        for <linux-usb@vger.kernel.org>; Tue, 23 Apr 2024 13:25:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1713903587; x=1714508387; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=p4vOKvRCallk5kGR2Wbh/Tn3Hl0el0YNKiGA9haFVMA=;
-        b=pKZsi91WahOATcShIiLRcHGwCci1BbOrkGYAufPHUTR7oNzmUOFKcKticDQ+nh4fds
-         h+6G0FcdyFAeBWUQXhkx6+U4B5sEV2JueVpkTHtDYpFDmkTepdmAVglEShWb5K2Q/wFc
-         VNwmwXHoy+/wXZ1ezD4Myq/sdo6TUaQGpo46JKoLqo+CSxZHRiMYEIGZp5Mevtgw1CH1
-         DOa4QP1rzoODvjg8O0o0nxEDuLROF6hh1GIXoO4IZrrgreN9e7KD1TkTfc4m45FHEZuP
-         rb5l7ZpG59kuEwLh5ngUjLpgaCKfhEyAzML1pqa30JQ7aCqdryLFmQHDNu7OrSDKGW4H
-         j0pQ==
+        d=google.com; s=20230601; t=1713903927; x=1714508727; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=+x5iDgWl9U76E7JTEROvvperMnBi6gM+ns0FOdEhwWM=;
+        b=PDeb47CvuhSlYEoDaSNWCYAxVZ4ZduPVLM0WgX+KjR3vf5e9Bz1SXx1XgVSa5oWIt3
+         5UI1iIow+24NOxuv6u34TWTM5aHFr7Nc8uRHN70ikMo9LSmku4ZYer26T70FAwyrRJYa
+         +aARBY3o+Vc7/CIG16pw5Dm0XBB1I4hnlKFLnVoU9NsXCTMmffeLpAzt6a+fw1Uy1EP9
+         QVJdapyAUWYXLM29K0NHIw5UtHQmejjT8bEDr1LU0muhFbUMph5KgH+StYHLTJ4oMHYT
+         gxDZDPh73SeNiQphJF2dNySy/TLbooTVEof+KohNg9hjNd0+JkO9ON/OyKuu8NwbAWEb
+         huhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713903587; x=1714508387;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=p4vOKvRCallk5kGR2Wbh/Tn3Hl0el0YNKiGA9haFVMA=;
-        b=uGyxFFpi04QyyIf9FekX97mLc1FKLftZZ3hdHpF9wlHbpVOu8oyT0Vdg/X9a2zQbMs
-         GBWOyav8O/dQjIxcuXPtMm3Dst9MDaHXwj46B+562n0ocSkT4hyTievsp6aibdk1Wdxa
-         HbEZELfGmiBWkxGALI3ARyG2EFgMoC6lVCQNs6mXYMljFGPwDvAWZTS8cHCYHSdn+Wh/
-         k2SJc+LWeNmzP7X5MPN7p9Btmzvl0ZV+EMx3KlEFH4z7it8GnrvaKxjdamFX4neN7Y84
-         0MmsL6N/vFJY+6N20OZGUIIG9AHWWmyIar+O86/OVhQRtCwpmpqNQh7B6v26QijxxxI3
-         lzRQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVhu/uVvLBIP+uKt+Xm8/uZQD0+NB+kaoMMtQugZHRKgtoDvwP7NBqfJU3vAy4MptYLfK9ZQSQ6M1gXaq+oCd15QsQIgLyG/j1r
-X-Gm-Message-State: AOJu0YwPeFkEdOidujilLdAVBl2ytIJBCsep7IOUS8WtRvN+3Zou5tyV
-	flvA2xmqFv4VHAhO0Os4dLvZfoU5esV0MgUoBY+qbWcnmh/fas1SDyfKF+zJsJU=
-X-Google-Smtp-Source: AGHT+IFY+ITgeee3a+C5KSYNk4HM3XF4Psq3axU8IwvLxAQYs6W6bvgmAlGVlqcAphnYYBlae8wbfQ==
-X-Received: by 2002:adf:cc85:0:b0:34a:75f1:c36c with SMTP id p5-20020adfcc85000000b0034a75f1c36cmr179194wrj.61.1713903587154;
-        Tue, 23 Apr 2024 13:19:47 -0700 (PDT)
-Received: from puffmais.c.googlers.com (8.239.204.35.bc.googleusercontent.com. [35.204.239.8])
-        by smtp.gmail.com with ESMTPSA id i7-20020a1709061e4700b00a52244ab819sm7552431ejj.170.2024.04.23.13.19.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Apr 2024 13:19:46 -0700 (PDT)
-From: =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
-Date: Tue, 23 Apr 2024 21:19:46 +0100
-Subject: [PATCH 2/2] usb: dwc3: exynos: add support for Google Tensor gs101
+        d=1e100.net; s=20230601; t=1713903927; x=1714508727;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+x5iDgWl9U76E7JTEROvvperMnBi6gM+ns0FOdEhwWM=;
+        b=rQeM2H+7kSMaUvrj84hhEQQ+ZXciFwJPVu46stm8abkUjtSL1TA57AClBh/bg2H8Qk
+         3tueqeYTI9CTEnunuZrpvyCwExH2UAnQtuTQEbHIpl1wexM8Bb3xSf21fl4AQofmZRR3
+         1U0/VldsfLnCYeDfTBOBhagIFN1Yx5lMxi1zHsh7eF9LJP7uF1WrRs+3FLhEMu7DnZMG
+         W6+/b/WOHyDgFroxAqQJ+bROHO1JTQXEnUMRjbPxbAgJ2Ij7qoCkLo5oztHVlQVt2dVs
+         3rpQBgFL4gMNHf7IgRsYbKnhB/inY0qjFXxEitYq21yR633C5Z6r0nYAyvyySeXK8P/i
+         E/xQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUMjDwStlSIStM6QjrfscqGayaesACFfVwNTvPIRDiNwqhwVV8uZ2rn/ovN0e3LLhBKE5Qlo6IHIzDfItmy4ocKwkR8dMTbuLbF
+X-Gm-Message-State: AOJu0Yxz/oMVm/5sJ/MZwpw06hw9882tYk8wsVOurFPpbUr5ctnC80qp
+	Exww8YvbpYpEuv5Znb5Fg8/TmDt9xXul/53w+27IfFLpMn14ltSQTYkJ6Z1XRwL44qspnLWan8l
+	MrSVFaec5QnMKzQ==
+X-Google-Smtp-Source: AGHT+IGy54gh192OWnTT1/mgf6BEr5zH1TDmmYBKUzhfxK4cKLDWdYnQuDMdUw4+5o6vdIS7FhNAVGpuHD2hswI=
+X-Received: from rdbabiera.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:18a8])
+ (user=rdbabiera job=sendgmr) by 2002:a05:6a00:2449:b0:6ea:baf6:57a3 with SMTP
+ id d9-20020a056a00244900b006eabaf657a3mr101005pfj.6.1713903926598; Tue, 23
+ Apr 2024 13:25:26 -0700 (PDT)
+Date: Tue, 23 Apr 2024 20:23:57 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20240423-usb-dwc3-gs101-v1-2-2f331f88203f@linaro.org>
-References: <20240423-usb-dwc3-gs101-v1-0-2f331f88203f@linaro.org>
-In-Reply-To: <20240423-usb-dwc3-gs101-v1-0-2f331f88203f@linaro.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
- Peter Griffin <peter.griffin@linaro.org>, 
- Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>, 
- Tudor Ambarus <tudor.ambarus@linaro.org>, 
- Will McVicker <willmcvicker@google.com>, Roy Luo <royluo@google.com>, 
- kernel-team@android.com, linux-usb@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org, 
- =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
-X-Mailer: b4 0.12.4
+Mime-Version: 1.0
+X-Developer-Key: i=rdbabiera@google.com; a=openpgp; fpr=639A331F1A21D691815CE090416E17CA2BBBD5C8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1832; i=rdbabiera@google.com;
+ h=from:subject; bh=ox9VAXUigA+jjojvWTyN+ep9mL1aYjavByEeOcIfuGg=;
+ b=owGbwMvMwCFW0bfok0KS4TbG02pJDGkaEnf2cOyuzJq7cf3jQNdXt+/dl/jGeLJm3uqdz3KnH
+ 1hxp5DfvqOUhUGMg0FWTJFF1z/P4MaV1C1zOGuMYeawMoEMYeDiFICJnNrDyNBbNSFUOWObzo5T
+ N0qYb/jeuBgR/yrfcndavdJ1T+cbMw0ZGSa2BX37LCTf9FlIJvN70rPIr30f1ScWXnvN+JRhRgp jEQMA
+X-Mailer: git-send-email 2.44.0.769.g3c40516874-goog
+Message-ID: <20240423202356.3372314-2-rdbabiera@google.com>
+Subject: [PATCH v1] usb: typec: tcpm: enforce ready state when queueing alt
+ mode vdm
+From: RD Babiera <rdbabiera@google.com>
+To: linux@roeck-us.net, heikki.krogerus@linux.intel.com, 
+	gregkh@linuxfoundation.org, hdegoede@redhat.com
+Cc: badhri@google.com, linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	RD Babiera <rdbabiera@google.com>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-The Exynos-based Google Tensor gs101 SoC has a DWC3 compatible USB
-controller and can reuse the existing Exynos glue. Add the
-google,gs101-dwusb3 compatible and associated driver data. Four clocks
-are required for USB for this SoC:
-    * bus clock
-    * suspend clock
-    * Link interface AXI clock
-    * Link interface APB clock
+Before sending Enter Mode for an Alt Mode, there is a gap between Discover
+Modes and the Alt Mode driver queueing the Enter Mode VDM for the port
+partner to send a message to the port.
 
-Signed-off-by: André Draszik <andre.draszik@linaro.org>
+If this message results in unregistering Alt Modes such as in a DR_SWAP,
+then the following deadlock can occur with respect to the DisplayPort Alt
+Mode driver:
+1. The DR_SWAP state holds port->lock. Unregistering the Alt Mode driver
+results in a cancel_work_sync() that waits for the current dp_altmode_work
+to finish.
+2. dp_altmode_work makes a call to tcpm_altmode_enter. The deadlock occurs
+because tcpm_queue_vdm_unlock attempts to hold port->lock.
+
+Before attempting to grab the lock, ensure that the port is in a state
+vdm_run_state_machine can run in. Alt Mode unregistration will not occur
+in these states.
+
+Fixes: 03eafcfb60c0 ("usb: typec: tcpm: Add tcpm_queue_vdm_unlocked() helper")
+Cc: stable@vger.kernel.org
+Signed-off-by: RD Babiera <rdbabiera@google.com>
 ---
- drivers/usb/dwc3/dwc3-exynos.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/usb/typec/tcpm/tcpm.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/usb/dwc3/dwc3-exynos.c b/drivers/usb/dwc3/dwc3-exynos.c
-index 3427522a7c6a..9a6e988d165a 100644
---- a/drivers/usb/dwc3/dwc3-exynos.c
-+++ b/drivers/usb/dwc3/dwc3-exynos.c
-@@ -169,6 +169,12 @@ static const struct dwc3_exynos_driverdata exynos850_drvdata = {
- 	.suspend_clk_idx = -1,
- };
- 
-+static const struct dwc3_exynos_driverdata gs101_drvdata = {
-+	.clk_names = { "bus_early", "susp_clk", "link_aclk", "link_pclk" },
-+	.num_clks = 4,
-+	.suspend_clk_idx = 1,
-+};
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index c26fb70c3ec6..6fa1601ac259 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -1564,6 +1564,10 @@ static void tcpm_queue_vdm(struct tcpm_port *port, const u32 header,
+ static void tcpm_queue_vdm_unlocked(struct tcpm_port *port, const u32 header,
+ 				    const u32 *data, int cnt, enum tcpm_transmit_type tx_sop_type)
+ {
++	if (port->state != SRC_READY && port->state != SNK_READY &&
++	    port->state != SRC_VDM_IDENTITY_REQUEST)
++		return;
 +
- static const struct of_device_id exynos_dwc3_match[] = {
- 	{
- 		.compatible = "samsung,exynos5250-dwusb3",
-@@ -182,6 +188,9 @@ static const struct of_device_id exynos_dwc3_match[] = {
- 	}, {
- 		.compatible = "samsung,exynos850-dwusb3",
- 		.data = &exynos850_drvdata,
-+	}, {
-+		.compatible = "google,gs101-dwusb3",
-+		.data = &gs101_drvdata,
- 	}, {
- 	}
- };
+ 	mutex_lock(&port->lock);
+ 	tcpm_queue_vdm(port, header, data, cnt, TCPC_TX_SOP);
+ 	mutex_unlock(&port->lock);
 
+base-commit: 684e9f5f97eb4b7831298ffad140d5c1d426ff27
 -- 
 2.44.0.769.g3c40516874-goog
 
