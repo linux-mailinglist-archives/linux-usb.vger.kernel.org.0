@@ -1,323 +1,213 @@
-Return-Path: <linux-usb+bounces-9655-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9656-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DFFCB8AEB41
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Apr 2024 17:38:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C2FE8AF4F2
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Apr 2024 19:06:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 951DB286780
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Apr 2024 15:38:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8F7AD1C21DF7
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Apr 2024 17:06:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9F9213C90D;
-	Tue, 23 Apr 2024 15:38:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A67F213DDDF;
+	Tue, 23 Apr 2024 17:04:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ivitera.com header.i=@ivitera.com header.b="ePgXwi/o";
-	dkim=pass (1024-bit key) header.d=ivitera.com header.i=@ivitera.com header.b="T3+/EzQ/"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Wh7azEsE"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.ivitera.com (smtp.ivitera.com [88.101.85.59])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A760C17BA8;
-	Tue, 23 Apr 2024 15:38:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=88.101.85.59
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 950281411F4
+	for <linux-usb@vger.kernel.org>; Tue, 23 Apr 2024 17:04:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713886729; cv=none; b=YNeXDGc37VUq9fByXNVRf/Qk+0PA0WFhRE7Qs3SjZu5nAoKdEA/mdJTnc9NBisWgdomEFc3Mp34dGpT0R+q+O9lglRf2GYG9f20+vmw9FU2tnNsjY1IYDI0i0ZaJjR+knikzwFiuMFgGN1abyFS+SAyPd+lzf1Xo3zVSdJmmV2Q=
+	t=1713891862; cv=none; b=P2iGviF1ey2lrbGdJpALQ87v/99Nx50f552CVXRkSMNWWUQq0R3Jwd7GxSUfHzhvwTwfheIULNBykEAlywtWldJ4nNnb9+UIU/jLzAi3epAsNyl6QQn92JzQXXSj1L/0wvOatosDHODlz7uFDuO+3hHkWgLNiccObvvI90UVtK8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713886729; c=relaxed/simple;
-	bh=754LNpWY3p/VinRZDlx6gnvMkrj403nIYbqQ+FtzmKY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nx4CU4gyPVRbjjdmEivR13poZUzb8WBuH5YUdANxTR4HnsguaLNtmepf2Y3s0afi0w/TkP4+aKZB+4vSp0/XJYW33ZRaIUfQWEA28HTsWBWjBU3l4rsHGfQ0NbPgvc0TZbH5PjkjJFSgbgxNHOxPLkpHmf53UnQOddKuZUc72UI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ivitera.com; spf=pass smtp.mailfrom=ivitera.com; dkim=pass (1024-bit key) header.d=ivitera.com header.i=@ivitera.com header.b=ePgXwi/o; dkim=pass (1024-bit key) header.d=ivitera.com header.i=@ivitera.com header.b=T3+/EzQ/; arc=none smtp.client-ip=88.101.85.59
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ivitera.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ivitera.com
-Received: from localhost (localhost [127.0.0.1])
-	by smtp.ivitera.com (Postfix) with ESMTP id 6958616F320;
-	Tue, 23 Apr 2024 17:38:37 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-	t=1713886717; bh=754LNpWY3p/VinRZDlx6gnvMkrj403nIYbqQ+FtzmKY=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ePgXwi/oENFskoUGY99HYqyvZpqKwcZvJ1KN7Twmvd2XQHRzgstBwSgnmFqtD2TuE
-	 vkpTtbKxR/yDN3ZQt96m8rZm4qUyzvpZhgTkhFj/UvqiKqtbNpPmKJlNGupU0yt835
-	 sMVIZ96x7zQrhuZSk4s+ISbhMUnwoZk9wYXVWZB4=
-Received: from smtp.ivitera.com ([127.0.0.1])
-	by localhost (localhost [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kkTkIymvUJHu; Tue, 23 Apr 2024 17:38:36 +0200 (CEST)
-Received: from [192.168.105.22] (dustin.pilsfree.net [81.201.58.138])
-	(Authenticated sender: pavel)
-	by smtp.ivitera.com (Postfix) with ESMTPSA id 931C016F701;
-	Tue, 23 Apr 2024 17:38:36 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-	t=1713886716; bh=754LNpWY3p/VinRZDlx6gnvMkrj403nIYbqQ+FtzmKY=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=T3+/EzQ/AfNS3Vi4aq4AeU/DlFGZim9DICF9JPUmslM1XgGeBcpcilkjAJi52XY0J
-	 xmTgElYLDhCDPPSTLIrkDBAMpOWqb17x4wavG5wxbDQGMTa9NWU8LFrdOIB2gco91m
-	 uIga6jEGCoqWRDsp4q8xxwqr16X7VDcP+9cZBQCY=
-Message-ID: <c9928edb-8b2d-1948-40b8-c16e34cea3e2@ivitera.com>
-Date: Tue, 23 Apr 2024 17:38:36 +0200
+	s=arc-20240116; t=1713891862; c=relaxed/simple;
+	bh=t0Nd3XqdKOMx+Uwl8w+wtEyYR8rsAJTB/EFiBUB87DA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=QbHeDCwuuK8FpJjLusSNmJ3vhn/whR2erMPrZXzBDjHxwOX3vEPEGibZYnrLS5BnGngpeqzQA8rYef8XSRlHUAlRqY4NM1WOkH0fzcTKx/C+th3crhBJ9VHYAmwNKyp8xC15edoh69wXKhChLUMM3Ikp5sBSiQ7OeyyboiQPv3k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Wh7azEsE; arc=none smtp.client-ip=209.85.210.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-6eddff25e4eso5029451b3a.3
+        for <linux-usb@vger.kernel.org>; Tue, 23 Apr 2024 10:04:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1713891860; x=1714496660; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=pHqxdX0YvtEsoi1Rs3ueWXjO84yq8D38zpVlIYbumb0=;
+        b=Wh7azEsErJQu4cFZ4idLUMPJWw6Q6QOvdyAJ6+2aR1HFdImq0oWc+ljUOb7TdRfg3D
+         4gkcoLJhZ0vZd5Z1m2mIzeox1yUzPm6xOPx7jZi7zKMWuXxownQmR9vtBM8Qo3KVjMuy
+         i4xR/Gt2GWObm20sbEZV4tt25PhRKOUb6nYpOhOtmQyJo4XmHY28bQKJkwlcrzJoYSxf
+         Ir+mcqFdwp7T+/BBiEnjYolWPeSEUiiHIhQiJoL3DxnpVcLurbHqQjgRDrc22HIkmKoI
+         2zBedh5mTqUJxJGDXLOjIJ0kJPLK43iabuzuAyoZVorLsWgCQbjeJ28PJ8VMjn6eY7zw
+         GXWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713891860; x=1714496660;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pHqxdX0YvtEsoi1Rs3ueWXjO84yq8D38zpVlIYbumb0=;
+        b=qXxKd5nFtFKr045siGEC7vjvokW9ethzhK87EtcIERGWyhRlxRR28pnU/QU7Op9CyX
+         lOiQXYaobeM5IlpeHkRID4IAORTykdRenwkMQ/IHbNbWpl4OQN/OzsKR6wzV6WzK/tMS
+         BkFjOJTH18mfQZrthIPl+kwHdWdNeqog1UYty4T3Cn7I4xiQl3dkBZojWsjGB3DI2Fm7
+         MWDKJySjktjlDjTzg+TZxlkKesFMYRGthTIN+a5IQZjBUk6cazxyD9f+EcC6g1M5Ksk3
+         574fIt3O5hCxVT/E44o7hWpYjT7q1cujG/IAsS0O3nR6JsTJG0BpIk32rCdFJ/OGWLOX
+         9rpw==
+X-Forwarded-Encrypted: i=1; AJvYcCU6NNB3OPW7ZdGbqN6CcGvzeqONRwePq1GmxNgWj8Wl99B/6V7Y7M8TyUPRvH0Ub1UUHMxb+tVXju9eLv+iuVkRQtQO5aE++Q3M
+X-Gm-Message-State: AOJu0YwJ/ZOZ6tGWpgjXuikzJkjb3kcBofea40PGulvQTCTXLGjJIz91
+	PAd6guYbdoxp6wupAon9v01m66O4geHc80XBqkGM988whVqe+2/i
+X-Google-Smtp-Source: AGHT+IExxiXD8KBtKwDmcZcDlgu3XgxY9OqQUa+zINLjizKRF7HM9y9/a2QPmno1yBMllHz7U//GrA==
+X-Received: by 2002:a05:6a21:78a5:b0:1a9:c436:c904 with SMTP id bf37-20020a056a2178a500b001a9c436c904mr15816486pzc.10.1713891859642;
+        Tue, 23 Apr 2024 10:04:19 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id kr3-20020a056a004b4300b006ed26aa0ae6sm9841652pfb.54.2024.04.23.10.04.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Apr 2024 10:04:18 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Tue, 23 Apr 2024 10:04:17 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org, Gerd Hoffmann <kraxel@redhat.com>,
+	qemu-devel@nongnu.org
+Subject: Problems (timeouts) when testing usb-ohci with qemu
+Message-ID: <4664cf39-5dfe-4557-959d-149640ca36e1@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH v2] usb: gadget: f_uac2: Expose all string descriptors
- through configfs.
-Content-Language: en-US
-To: Chris Wulff <Chris.Wulff@biamp.com>,
- "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- James Gruber <jimmyjgruber@gmail.com>, Lee Jones <lee@kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>
-References: <CO1PR17MB54195BE778868AFDFE2DCB36E1112@CO1PR17MB5419.namprd17.prod.outlook.com>
-From: Pavel Hofman <pavel.hofman@ivitera.com>
-In-Reply-To: <CO1PR17MB54195BE778868AFDFE2DCB36E1112@CO1PR17MB5419.namprd17.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+Hi,
 
-On 23. 04. 24 16:09, Chris Wulff wrote:
-> This makes all string descriptors configurable for the UAC2 gadget
-> so the user can configure names of terminals/controls/alt modes.
-> 
-> Signed-off-by: Chris Wulff <chris.wulff@biamp.com>
-> ---
-> v2: Improved naming of parameters to be mode user friendly. Added documentation.
-> v1: https://lore.kernel.org/linux-usb/CO1PR17MB5419B50F94A0014647542931E10D2@CO1PR17MB5419.namprd17.prod.outlook.com/
-> 
->  .../ABI/testing/configfs-usb-gadget-uac2      | 13 +++
->  Documentation/usb/gadget-testing.rst          | 13 +++
->  drivers/usb/gadget/function/f_uac2.c          | 80 +++++++++++++++----
->  drivers/usb/gadget/function/u_uac2.h          | 17 +++-
->  4 files changed, 105 insertions(+), 18 deletions(-)
-> 
-> diff --git a/Documentation/ABI/testing/configfs-usb-gadget-uac2 b/Documentation/ABI/testing/configfs-usb-gadget-uac2
-> index a2bf4fd82a5b..250f8eeb8eab 100644
-> --- a/Documentation/ABI/testing/configfs-usb-gadget-uac2
-> +++ b/Documentation/ABI/testing/configfs-usb-gadget-uac2
-> @@ -35,6 +35,19 @@ Description:
->  		req_number		the number of pre-allocated requests
->  					for both capture and playback
->  		function_name		name of the interface
-> +		if_ctrl_name		topology control name
-> +		clksrc_in_name		input clock name
-> +		clksrc_out_name		output clock name
-> +		p_it_name		playback input terminal name
-> +		p_ot_name		playback output terminal name
-> +		p_fu_name		playback function unit name
-> +		p_alt0_name		playback alt mode 0 name
-> +		p_alt1_name		playback alt mode 1 name
+when testing usb-ohci with qemu's pci-ohci emulation, I keep getting
+random usb interface timeouts. Sometimes the usb_hub_wq times out.
 
-Nacked-by: Pavel Hofman <pavel.hofman@ivitera.com>
+[    9.555666] Waiting for root device /dev/sda...
+[   62.452625] INFO: task kworker/0:2:42 blocked for more than 30 seconds.
+[   62.453036]       Tainted: G                 N 6.9.0-rc1-00305-geae7a41d2233 #1
+[   62.453393] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+[   62.453778] task:kworker/0:2     state:D stack:0     pid:42    tgid:42    ppid:2      flags:0x00000000
+[   62.454700] Workqueue: usb_hub_wq hub_event
+[   62.455137] Call Trace:
+[   62.455416] [<c0b47836>] __schedule+0x35c/0xe00
+[   62.455708] [<c0b4830c>] schedule+0x32/0x178
+[   62.455906] [<c07da782>] usb_kill_urb+0xa8/0xda
+[   62.456220] [<c07db53c>] usb_start_wait_urb+0xca/0xe2
+[   62.456441] [<c07db5ee>] usb_control_msg+0x9a/0x102
+[   62.456648] [<c07d3970>] hub_port_init+0x5de/0xb40
+[   62.456851] [<c07d67fe>] hub_event+0xb90/0x1364
+[   62.457049] [<c002ead6>] process_one_work+0x200/0x564
 
-I am not sure adding a numbered parameter for every additional alt mode
-is a way to go for the future. I am not that much concerned about UAC1,
-but IMO (at least) in UAC2 the configuration method should be flexible
-for more alt setttings. I can see use cases with many more altsettings.
+Sometimes there is an i/o scheduling timeout such as
 
-My proposal for adding more alt settings
-https://lore.kernel.org/linux-usb/35be4668-58d3-894a-72cf-de1afaacae45@ivitera.com/
-suggested using lists to existing parameters where each item would
-correspond to the alt setting of the same index (+1). That would allow
-using more altsettings easily, without having to add parameters to the
-source code and adding configfs params. I received no feedback. I do not
-push the param list proposal, but I am convinced an acceptable solution
-should be discussed thoroughly by the UAC2 gadget stakeholders.
+[    6.361811] Run /sbin/init as init process
+[   93.167039] INFO: task kworker/u4:0:10 blocked for more than 30 seconds.
+[   93.167715]       Tainted: G                 N 6.9.0-rc5-00036-gaece0dd54838 #4
+[   93.168169] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+[   93.168607] task:kworker/u4:0    state:D stack:0     pid:10    tgid:10    ppid:2      flags:0x00000000
+[   93.169602] Workqueue: scsi_tmf_0 scmd_eh_abort_handler
+[   93.170278] Call Trace:
+[   93.170584] [<c0b3a70e>] __schedule+0x358/0xd4e
+[   93.170904] [<c0b3b136>] schedule+0x32/0x166
+[   93.171161] [<c0b41d6c>] schedule_timeout+0xd8/0x10a
+[   93.171420] [<c0b3ba0e>] __wait_for_common+0xce/0x1ce
+[   93.171604] [<c0b3bb2a>] wait_for_completion+0x1c/0x24
+[   93.171716] [<c0810a70>] command_abort_matching.part.0+0x38/0x52
+[   93.171841] [<c0810ac0>] command_abort+0x36/0x70
+[   93.171946] [<c06970a4>] scmd_eh_abort_handler+0xa6/0x192
+...
 
-I am afraid that once p_alt1_name/c_alt1_name params are accepted, there
-will be no way back because subsequent removal of configfs params could
-be viewed as a regression for users.
+This is not a new problem; I have seen it forever. Recently I spent some
+time trying to understand the problem and found that the linux driver does
+not always handle all ohci interupts. Since the interrupt is shared and
+thus level triggered, that means that interrupts are still pending when
+ohci_irq() exits. The interrupt core in Linux does not re-enter the
+interrupt handler, presumably because it is marked as shared interrupt
+and returns that the interrupt has been handled.
 
-Thanks a lot for considering,
+I found two possible fixes for the problem. One essentially mirrors the
+code from ehci_irq(), the other adds a (bad) kludge into qemu. Both "fix"
+or work around the problem.
 
-Pavel.
+Question is: What is actually wrong ? Something in the generic interrupt
+handling code in Linux, something in the Linux usb-ohci driver, or
+something in qemu ? Any idea how a proper fix might look like ?
 
-> +		c_it_name		capture input terminal name
-> +		c_ot_name		capture output terminal name
-> +		c_fu_name		capture functional unit name
-> +		c_alt0_name		capture alt mode 0 name
-> +		c_alt1_name		capture alt mode 1 name
->  		c_terminal_type		code of the capture terminal type
->  		p_terminal_type		code of the playback terminal type>  		=====================	=======================================
-> diff --git a/Documentation/usb/gadget-testing.rst b/Documentation/usb/gadget-testing.rst
-> index b086c7ab72f0..1a11d3b3bb88 100644
-> --- a/Documentation/usb/gadget-testing.rst
-> +++ b/Documentation/usb/gadget-testing.rst
-> @@ -765,6 +765,19 @@ The uac2 function provides these attributes in its function directory:
->  	req_number       the number of pre-allocated request for both capture
->  	                 and playback
->  	function_name    name of the interface
-> +	if_ctrl_name     topology control name
-> +	clksrc_in_name   input clock name
-> +	clksrc_out_name  output clock name
-> +	p_it_name        playback input terminal name
-> +	p_ot_name        playback output terminal name
-> +	p_fu_name        playback function unit name
-> +	p_alt0_name      playback alt mode 0 name
-> +	p_alt1_name      playback alt mode 1 name
-> +	c_it_name        capture input terminal name
-> +	c_ot_name        capture output terminal name
-> +	c_fu_name        capture functional unit name
-> +	c_alt0_name      capture alt mode 0 name
-> +	c_alt1_name      capture alt mode 1 name
->  	c_terminal_type  code of the capture terminal type
->  	p_terminal_type  code of the playback terminal type
->  	================ ====================================================
-> diff --git a/drivers/usb/gadget/function/f_uac2.c b/drivers/usb/gadget/function/f_uac2.c
-> index 383f6854cfec..5ca7ecdb6e60 100644
-> --- a/drivers/usb/gadget/function/f_uac2.c
-> +++ b/drivers/usb/gadget/function/f_uac2.c
-> @@ -104,25 +104,10 @@ enum {
->  	STR_AS_OUT_ALT1,
->  	STR_AS_IN_ALT0,
->  	STR_AS_IN_ALT1,
-> +	NUM_STR_DESCRIPTORS,
->  };
->  
-> -static struct usb_string strings_fn[] = {
-> -	/* [STR_ASSOC].s = DYNAMIC, */
-> -	[STR_IF_CTRL].s = "Topology Control",
-> -	[STR_CLKSRC_IN].s = "Input Clock",
-> -	[STR_CLKSRC_OUT].s = "Output Clock",
-> -	[STR_USB_IT].s = "USBH Out",
-> -	[STR_IO_IT].s = "USBD Out",
-> -	[STR_USB_OT].s = "USBH In",
-> -	[STR_IO_OT].s = "USBD In",
-> -	[STR_FU_IN].s = "Capture Volume",
-> -	[STR_FU_OUT].s = "Playback Volume",
-> -	[STR_AS_OUT_ALT0].s = "Playback Inactive",
-> -	[STR_AS_OUT_ALT1].s = "Playback Active",
-> -	[STR_AS_IN_ALT0].s = "Capture Inactive",
-> -	[STR_AS_IN_ALT1].s = "Capture Active",
-> -	{ },
-> -};
-> +static struct usb_string strings_fn[NUM_STR_DESCRIPTORS + 1] = {};
->  
->  static const char *const speed_names[] = {
->  	[USB_SPEED_UNKNOWN] = "UNKNOWN",
-> @@ -1049,6 +1034,21 @@ afunc_bind(struct usb_configuration *cfg, struct usb_function *fn)
->  		return ret;
->  
->  	strings_fn[STR_ASSOC].s = uac2_opts->function_name;
-> +	strings_fn[STR_IF_CTRL].s = uac2_opts->if_ctrl_name;
-> +	strings_fn[STR_CLKSRC_IN].s = uac2_opts->clksrc_in_name;
-> +	strings_fn[STR_CLKSRC_OUT].s = uac2_opts->clksrc_out_name;
-> +
-> +	strings_fn[STR_USB_IT].s = uac2_opts->p_it_name;
-> +	strings_fn[STR_IO_OT].s = uac2_opts->p_ot_name;
-> +	strings_fn[STR_FU_OUT].s = uac2_opts->p_fu_name;
-> +	strings_fn[STR_AS_OUT_ALT0].s = uac2_opts->p_alt0_name;
-> +	strings_fn[STR_AS_OUT_ALT1].s = uac2_opts->p_alt1_name;
-> +
-> +	strings_fn[STR_IO_IT].s = uac2_opts->c_it_name;
-> +	strings_fn[STR_USB_OT].s = uac2_opts->c_ot_name;
-> +	strings_fn[STR_FU_IN].s = uac2_opts->c_fu_name;
-> +	strings_fn[STR_AS_IN_ALT0].s = uac2_opts->c_alt0_name;
-> +	strings_fn[STR_AS_IN_ALT1].s = uac2_opts->c_alt1_name;
->  
->  	us = usb_gstrings_attach(cdev, fn_strings, ARRAY_SIZE(strings_fn));
->  	if (IS_ERR(us))
-> @@ -2097,10 +2097,26 @@ UAC2_ATTRIBUTE(s16, c_volume_max);
->  UAC2_ATTRIBUTE(s16, c_volume_res);
->  UAC2_ATTRIBUTE(u32, fb_max);
->  UAC2_ATTRIBUTE_STRING(function_name);
-> +UAC2_ATTRIBUTE_STRING(if_ctrl_name);
-> +UAC2_ATTRIBUTE_STRING(clksrc_in_name);
-> +UAC2_ATTRIBUTE_STRING(clksrc_out_name);
-> +
-> +UAC2_ATTRIBUTE_STRING(p_it_name);
-> +UAC2_ATTRIBUTE_STRING(p_ot_name);
-> +UAC2_ATTRIBUTE_STRING(p_fu_name);
-> +UAC2_ATTRIBUTE_STRING(p_alt0_name);
-> +UAC2_ATTRIBUTE_STRING(p_alt1_name);
-> +
-> +UAC2_ATTRIBUTE_STRING(c_it_name);
-> +UAC2_ATTRIBUTE_STRING(c_ot_name);
-> +UAC2_ATTRIBUTE_STRING(c_fu_name);
-> +UAC2_ATTRIBUTE_STRING(c_alt0_name);
-> +UAC2_ATTRIBUTE_STRING(c_alt1_name);
->  
->  UAC2_ATTRIBUTE(s16, p_terminal_type);
->  UAC2_ATTRIBUTE(s16, c_terminal_type);
->  
-> +
->  static struct configfs_attribute *f_uac2_attrs[] = {
->  	&f_uac2_opts_attr_p_chmask,
->  	&f_uac2_opts_attr_p_srate,
-> @@ -2127,6 +2143,21 @@ static struct configfs_attribute *f_uac2_attrs[] = {
->  	&f_uac2_opts_attr_c_volume_res,
->  
->  	&f_uac2_opts_attr_function_name,
-> +	&f_uac2_opts_attr_if_ctrl_name,
-> +	&f_uac2_opts_attr_clksrc_in_name,
-> +	&f_uac2_opts_attr_clksrc_out_name,
-> +
-> +	&f_uac2_opts_attr_p_it_name,
-> +	&f_uac2_opts_attr_p_ot_name,
-> +	&f_uac2_opts_attr_p_fu_name,
-> +	&f_uac2_opts_attr_p_alt0_name,
-> +	&f_uac2_opts_attr_p_alt1_name,
-> +
-> +	&f_uac2_opts_attr_c_it_name,
-> +	&f_uac2_opts_attr_c_ot_name,
-> +	&f_uac2_opts_attr_c_fu_name,
-> +	&f_uac2_opts_attr_c_alt0_name,
-> +	&f_uac2_opts_attr_c_alt1_name,
->  
->  	&f_uac2_opts_attr_p_terminal_type,
->  	&f_uac2_opts_attr_c_terminal_type,
-> @@ -2188,6 +2219,21 @@ static struct usb_function_instance *afunc_alloc_inst(void)
->  	opts->fb_max = FBACK_FAST_MAX;
->  
->  	scnprintf(opts->function_name, sizeof(opts->function_name), "Source/Sink");
-> +	scnprintf(opts->if_ctrl_name, sizeof(opts->if_ctrl_name), "Topology Control");
-> +	scnprintf(opts->clksrc_in_name, sizeof(opts->clksrc_in_name), "Input Clock");
-> +	scnprintf(opts->clksrc_out_name, sizeof(opts->clksrc_out_name), "Output Clock");
-> +
-> +	scnprintf(opts->p_it_name, sizeof(opts->p_it_name), "USBH Out");
-> +	scnprintf(opts->p_ot_name, sizeof(opts->p_ot_name), "USBD In");
-> +	scnprintf(opts->p_fu_name, sizeof(opts->p_fu_name), "Playback Volume");
-> +	scnprintf(opts->p_alt0_name, sizeof(opts->p_alt0_name), "Playback Inactive");
-> +	scnprintf(opts->p_alt1_name, sizeof(opts->p_alt1_name), "Playback Active");
-> +
-> +	scnprintf(opts->c_it_name, sizeof(opts->c_it_name), "USBD Out");
-> +	scnprintf(opts->c_ot_name, sizeof(opts->c_ot_name), "USBH In");
-> +	scnprintf(opts->c_fu_name, sizeof(opts->c_fu_name), "Capture Volume");
-> +	scnprintf(opts->c_alt0_name, sizeof(opts->c_alt0_name), "Capture Inactive");
-> +	scnprintf(opts->c_alt1_name, sizeof(opts->c_alt1_name), "Capture Active");
->  
->  	opts->p_terminal_type = UAC2_DEF_P_TERM_TYPE;
->  	opts->c_terminal_type = UAC2_DEF_C_TERM_TYPE;
-> diff --git a/drivers/usb/gadget/function/u_uac2.h b/drivers/usb/gadget/function/u_uac2.h
-> index 5e81bdd6c5fb..e697d35a1759 100644
-> --- a/drivers/usb/gadget/function/u_uac2.h
-> +++ b/drivers/usb/gadget/function/u_uac2.h
-> @@ -68,7 +68,22 @@ struct f_uac2_opts {
->  	int				fb_max;
->  	bool			bound;
->  
-> -	char			function_name[32];
-> +	char			function_name[USB_MAX_STRING_LEN];
-> +	char			if_ctrl_name[USB_MAX_STRING_LEN];
-> +	char			clksrc_in_name[USB_MAX_STRING_LEN];
-> +	char			clksrc_out_name[USB_MAX_STRING_LEN];
-> +
-> +	char			p_it_name[USB_MAX_STRING_LEN];
-> +	char			p_ot_name[USB_MAX_STRING_LEN];
-> +	char			p_fu_name[USB_MAX_STRING_LEN];
-> +	char			p_alt0_name[USB_MAX_STRING_LEN];
-> +	char			p_alt1_name[USB_MAX_STRING_LEN];
-> +
-> +	char			c_it_name[USB_MAX_STRING_LEN];
-> +	char			c_ot_name[USB_MAX_STRING_LEN];
-> +	char			c_fu_name[USB_MAX_STRING_LEN];
-> +	char			c_alt0_name[USB_MAX_STRING_LEN];
-> +	char			c_alt1_name[USB_MAX_STRING_LEN];
->  
->  	s16				p_terminal_type;
->  	s16				c_terminal_type;
+Thanks,
+Guenter
+
+---
+Linux hack:
+
+diff --git a/drivers/usb/host/ohci-hcd.c b/drivers/usb/host/ohci-hcd.c
+index 4f9982ecfb58..48d523e71ea0 100644
+--- a/drivers/usb/host/ohci-hcd.c
++++ b/drivers/usb/host/ohci-hcd.c
+@@ -883,6 +883,7 @@ static irqreturn_t ohci_irq (struct usb_hcd *hcd)
+ 	 * optimization of checking the LSB of hcca->done_head; it doesn't
+ 	 * work on all systems (edge triggering for OHCI can be a factor).
+ 	 */
++retry:
+ 	ints = ohci_readl(ohci, &regs->intrstatus);
+ 
+ 	/* Check for an all 1's result which is a typical consequence
+@@ -982,6 +983,14 @@ static irqreturn_t ohci_irq (struct usb_hcd *hcd)
+ 	}
+ 	spin_unlock(&ohci->lock);
+ 
++	ints = ohci_readl(ohci, &regs->intrstatus);
++	ints &= ohci_readl(ohci, &regs->intrenable);
++	if (ints) {
++		pr_err("######## Interrupts still pending 0x%x mask 0x%x\n", ints,
++		       ohci_readl(ohci, &regs->intrenable));
++		goto retry;
++	}
++
+ 	return IRQ_HANDLED;
+ }
+
+---
+qemu hack:
+
+ hw/usb/hcd-ohci.c | 11 +++++++++++
+ hw/usb/hcd-ohci.h |  1 +
+ 2 files changed, 12 insertions(+)
+
+diff --git a/hw/usb/hcd-ohci.c b/hw/usb/hcd-ohci.c
+index fc8fc91a1d..99e52ad13a 100644
+--- a/hw/usb/hcd-ohci.c
++++ b/hw/usb/hcd-ohci.c
+@@ -267,6 +267,10 @@ static inline void ohci_intr_update(OHCIState *ohci)
+         (ohci->intr_status & ohci->intr))
+         level = 1;
+ 
++    if (level && ohci->level)
++        qemu_set_irq(ohci->irq, 0);
++
++    ohci->level = level;
+     qemu_set_irq(ohci->irq, level);
+ }
+ 
+diff --git a/hw/usb/hcd-ohci.h b/hw/usb/hcd-ohci.h
+index e1827227ac..6f82e72bd9 100644
+--- a/hw/usb/hcd-ohci.h
++++ b/hw/usb/hcd-ohci.h
+@@ -52,6 +52,7 @@ struct OHCIState {
+     uint32_t ctl, status;
+     uint32_t intr_status;
+     uint32_t intr;
++    int level;
+ 
+     /* memory pointer partition */
+     uint32_t hcca;
+-- 
+2.39.2
+
 
