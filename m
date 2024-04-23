@@ -1,76 +1,75 @@
-Return-Path: <linux-usb+bounces-9665-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9666-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BDE368AF7E2
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Apr 2024 22:20:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 259608AF7E5
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Apr 2024 22:20:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EEDC91C21B8A
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Apr 2024 20:20:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 57CB31C21F1F
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Apr 2024 20:20:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29E98142E64;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A2C9142651;
 	Tue, 23 Apr 2024 20:19:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ZqqOFXh9"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="pKZsi91W"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36BD1142649
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99A41142654
 	for <linux-usb@vger.kernel.org>; Tue, 23 Apr 2024 20:19:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713903589; cv=none; b=TfUD6ftCEp6sD1BfWcWfsUcc7tAYkFA2O3E8FdHTKg0bgPfA4pQAxXZytJvjXMeoVTIiXkazvuycI/Hf+SraAI6Dt8l9ex38FeMZ+mjdQ5V7cW03Cku9UjQrpxNvDqyugsYuiTjrik1Pv61PoYdjkwYzENt3HWjn5l7YWZwCqz4=
+	t=1713903590; cv=none; b=EV3S9H7A9IisEBq0HQJvnhsMsj+0kADiDBdZr1+X94C1Qvsr2vqXE15C7i7ICNXblIhL6XUDmY3+kKYvC9lm6WO1UZO1lQDr6u8l9LSJpglcK7litI/kXNi05pRvCYj1tY3sTQrcd7uBArZpfauiwt35tvydrKfvpOzu13fjQ0Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713903589; c=relaxed/simple;
-	bh=3CzwqGzDuhmrqft8+3cpPppE4Eh6d7hkdadYYz33FRg=;
+	s=arc-20240116; t=1713903590; c=relaxed/simple;
+	bh=O9JbCQMTsEdc3RpE8YdCk//UJvo94xhIq8ZtAtz4OjI=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=g0NI07zLO9T31i1tWjEskSI9obOgOonzXhGsAkGx/h/LNSLiNYdV1Pgf9Y4mu63m/tvLggUGYeioVL1aGaj9Wv1whsJfnwWBfN+dTd4HinC5Pdnp54UDbluCk8pX8TvHcr1YjNYOxKuW1jBXkS3QDxGAnR5vdkti0eRNpnMrp5s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ZqqOFXh9; arc=none smtp.client-ip=209.85.221.44
+	 In-Reply-To:To:Cc; b=KysDJJZ5h+xe1UvYzfvgIfa6BLdrob3ne0STu1R+gkwBqg6BNdb0t5MELTWM0JJ+2E/XFGgfsP+D54D+5oYd8xemV5RqjdNjms6EEQZ0RVM+I3YToZ6Jl2jxc0Ol8UnrFX7dnTDcUGw0woY+ryQFkNz4HvZmqfoukR0J+DW53wg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=pKZsi91W; arc=none smtp.client-ip=209.85.221.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-343d7ff2350so4566518f8f.0
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-343e46ec237so5132963f8f.2
         for <linux-usb@vger.kernel.org>; Tue, 23 Apr 2024 13:19:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google; t=1713903587; x=1714508387; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=rZh4v0xh3rOUzx0lgDgNEZWx3gWz2MaFaaSz5XXw27A=;
-        b=ZqqOFXh9/AbTkJ6PmLdhr3OIzWE2oKYsAi3VzEUqQh9pPVXFKi/ox5kjBU5hw/REQV
-         0oBveYl6Sc6O3mPhINAAULrddynsyS6hzAHnCp6eqLA71xeqnQlYiakWeFIn4+t7xFmF
-         KDBkY4kaAXgvzTlUQiR1ZpEZCu3LqIGvI3b5+Wq6QEp5cxdfYX2NX6CO7kjLl/WwJJs+
-         PLyFccwHKDrUhMLF+qWZmeUH77fTGOHd5Szmbhz6GtzsRDFBUdfLjrO5exwB6bdO2aQW
-         38IFB9KIEUiI+m4On+8XpaxqhCZ1qXqI5PzumKKkftfqyFcDO/cTpzGxrUmdqEw9yWje
-         uKmA==
+        bh=p4vOKvRCallk5kGR2Wbh/Tn3Hl0el0YNKiGA9haFVMA=;
+        b=pKZsi91WahOATcShIiLRcHGwCci1BbOrkGYAufPHUTR7oNzmUOFKcKticDQ+nh4fds
+         h+6G0FcdyFAeBWUQXhkx6+U4B5sEV2JueVpkTHtDYpFDmkTepdmAVglEShWb5K2Q/wFc
+         VNwmwXHoy+/wXZ1ezD4Myq/sdo6TUaQGpo46JKoLqo+CSxZHRiMYEIGZp5Mevtgw1CH1
+         DOa4QP1rzoODvjg8O0o0nxEDuLROF6hh1GIXoO4IZrrgreN9e7KD1TkTfc4m45FHEZuP
+         rb5l7ZpG59kuEwLh5ngUjLpgaCKfhEyAzML1pqa30JQ7aCqdryLFmQHDNu7OrSDKGW4H
+         j0pQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20230601; t=1713903587; x=1714508387;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=rZh4v0xh3rOUzx0lgDgNEZWx3gWz2MaFaaSz5XXw27A=;
-        b=EM+41ltFNlNcqUlXVFe9AmHUCl4EAJYCjS73X5NdYr7apyt5WKF2FR5xhldlKn9bJW
-         E2fKV1ZZDfVPGET76rOZ+FRG5Vzn4xFOqMETa6Z2JKT+XUGu64rTB6FeyZQ2cvMADtOk
-         0XESKFLgExBXChrOOW5F91pgr0wxaayrhal0+f4lzhcJ4j1gZPkLF8ydrHdPEr9HDMjM
-         6ZMRTcJ65ksNjAAQ1hZSeO97pZN7z0J/sWsEW/75ibkFpK5n5nbhmVKuLUJ5Qj9yFF/V
-         B7w3ySEgJF26K21BEiLIdc8EU32Wb7snAG6Vx9Rn5R4VsSAFEaaQ4I79CPBfPQk2nFgB
-         gM8A==
-X-Forwarded-Encrypted: i=1; AJvYcCWQ9IURnFQnnQxo8nQmQJEQ2O6QRnR06EHXXJDYKk3BqHatBZA7FldjhbOdfyJCQ8dEIA13O4UgOMTdTMK2somxgFb6wII5oruS
-X-Gm-Message-State: AOJu0YwYVrIVFGqjcczgXZzvb77RqHaV86yFNbJMUzUzf5oaVLgkzCcJ
-	7CMW4ZlaBoLSihsZjcPHMIHNOP2Gr76VqHZ0TE82PY0F39obOMjFsJ+2vOsfSG8=
-X-Google-Smtp-Source: AGHT+IEVk8IdQBDdbt+6eUNjL8ZwuM4GtjoAlH1F78ZTMRMT6v62264S4wc8kya9gMioEKJPj3KZJA==
-X-Received: by 2002:adf:f18f:0:b0:347:2055:f49e with SMTP id h15-20020adff18f000000b003472055f49emr183121wro.33.1713903586677;
-        Tue, 23 Apr 2024 13:19:46 -0700 (PDT)
+        bh=p4vOKvRCallk5kGR2Wbh/Tn3Hl0el0YNKiGA9haFVMA=;
+        b=uGyxFFpi04QyyIf9FekX97mLc1FKLftZZ3hdHpF9wlHbpVOu8oyT0Vdg/X9a2zQbMs
+         GBWOyav8O/dQjIxcuXPtMm3Dst9MDaHXwj46B+562n0ocSkT4hyTievsp6aibdk1Wdxa
+         HbEZELfGmiBWkxGALI3ARyG2EFgMoC6lVCQNs6mXYMljFGPwDvAWZTS8cHCYHSdn+Wh/
+         k2SJc+LWeNmzP7X5MPN7p9Btmzvl0ZV+EMx3KlEFH4z7it8GnrvaKxjdamFX4neN7Y84
+         0MmsL6N/vFJY+6N20OZGUIIG9AHWWmyIar+O86/OVhQRtCwpmpqNQh7B6v26QijxxxI3
+         lzRQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVhu/uVvLBIP+uKt+Xm8/uZQD0+NB+kaoMMtQugZHRKgtoDvwP7NBqfJU3vAy4MptYLfK9ZQSQ6M1gXaq+oCd15QsQIgLyG/j1r
+X-Gm-Message-State: AOJu0YwPeFkEdOidujilLdAVBl2ytIJBCsep7IOUS8WtRvN+3Zou5tyV
+	flvA2xmqFv4VHAhO0Os4dLvZfoU5esV0MgUoBY+qbWcnmh/fas1SDyfKF+zJsJU=
+X-Google-Smtp-Source: AGHT+IFY+ITgeee3a+C5KSYNk4HM3XF4Psq3axU8IwvLxAQYs6W6bvgmAlGVlqcAphnYYBlae8wbfQ==
+X-Received: by 2002:adf:cc85:0:b0:34a:75f1:c36c with SMTP id p5-20020adfcc85000000b0034a75f1c36cmr179194wrj.61.1713903587154;
+        Tue, 23 Apr 2024 13:19:47 -0700 (PDT)
 Received: from puffmais.c.googlers.com (8.239.204.35.bc.googleusercontent.com. [35.204.239.8])
         by smtp.gmail.com with ESMTPSA id i7-20020a1709061e4700b00a52244ab819sm7552431ejj.170.2024.04.23.13.19.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Tue, 23 Apr 2024 13:19:46 -0700 (PDT)
 From: =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
-Date: Tue, 23 Apr 2024 21:19:45 +0100
-Subject: [PATCH 1/2] dt-bindings: usb: samsung,exynos-dwc3: add gs101
- compatible
+Date: Tue, 23 Apr 2024 21:19:46 +0100
+Subject: [PATCH 2/2] usb: dwc3: exynos: add support for Google Tensor gs101
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -79,7 +78,7 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20240423-usb-dwc3-gs101-v1-1-2f331f88203f@linaro.org>
+Message-Id: <20240423-usb-dwc3-gs101-v1-2-2f331f88203f@linaro.org>
 References: <20240423-usb-dwc3-gs101-v1-0-2f331f88203f@linaro.org>
 In-Reply-To: <20240423-usb-dwc3-gs101-v1-0-2f331f88203f@linaro.org>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
@@ -97,50 +96,46 @@ Cc: Krzysztof Kozlowski <krzk@kernel.org>,
 X-Mailer: b4 0.12.4
 
 The Exynos-based Google Tensor gs101 SoC has a DWC3 compatible USB
-controller and can reuse the existing Exynos glue. Update the dt schema
-to include the google,gs101-dwusb3 compatible for it.
+controller and can reuse the existing Exynos glue. Add the
+google,gs101-dwusb3 compatible and associated driver data. Four clocks
+are required for USB for this SoC:
+    * bus clock
+    * suspend clock
+    * Link interface AXI clock
+    * Link interface APB clock
 
 Signed-off-by: André Draszik <andre.draszik@linaro.org>
 ---
- .../devicetree/bindings/usb/samsung,exynos-dwc3.yaml   | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ drivers/usb/dwc3/dwc3-exynos.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml b/Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml
-index 1ade99e85ba8..2b3430cebe99 100644
---- a/Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml
-+++ b/Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml
-@@ -12,6 +12,7 @@ maintainers:
- properties:
-   compatible:
-     enum:
-+      - google,gs101-dwusb3
-       - samsung,exynos5250-dwusb3
-       - samsung,exynos5433-dwusb3
-       - samsung,exynos7-dwusb3
-@@ -55,6 +56,23 @@ required:
-   - vdd33-supply
+diff --git a/drivers/usb/dwc3/dwc3-exynos.c b/drivers/usb/dwc3/dwc3-exynos.c
+index 3427522a7c6a..9a6e988d165a 100644
+--- a/drivers/usb/dwc3/dwc3-exynos.c
++++ b/drivers/usb/dwc3/dwc3-exynos.c
+@@ -169,6 +169,12 @@ static const struct dwc3_exynos_driverdata exynos850_drvdata = {
+ 	.suspend_clk_idx = -1,
+ };
  
- allOf:
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: google,gs101-dwusb3
-+    then:
-+      properties:
-+        clocks:
-+          minItems: 4
-+          maxItems: 4
-+        clock-names:
-+          items:
-+            - const: bus_early
-+            - const: susp_clk
-+            - const: link_aclk
-+            - const: link_pclk
++static const struct dwc3_exynos_driverdata gs101_drvdata = {
++	.clk_names = { "bus_early", "susp_clk", "link_aclk", "link_pclk" },
++	.num_clks = 4,
++	.suspend_clk_idx = 1,
++};
 +
-   - if:
-       properties:
-         compatible:
+ static const struct of_device_id exynos_dwc3_match[] = {
+ 	{
+ 		.compatible = "samsung,exynos5250-dwusb3",
+@@ -182,6 +188,9 @@ static const struct of_device_id exynos_dwc3_match[] = {
+ 	}, {
+ 		.compatible = "samsung,exynos850-dwusb3",
+ 		.data = &exynos850_drvdata,
++	}, {
++		.compatible = "google,gs101-dwusb3",
++		.data = &gs101_drvdata,
+ 	}, {
+ 	}
+ };
 
 -- 
 2.44.0.769.g3c40516874-goog
