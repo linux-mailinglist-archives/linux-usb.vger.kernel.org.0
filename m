@@ -1,259 +1,222 @@
-Return-Path: <linux-usb+bounces-9648-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9649-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 560908AE968
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Apr 2024 16:25:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 562098AEA2C
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Apr 2024 17:06:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0D84228A241
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Apr 2024 14:25:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0D6B9287F8C
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Apr 2024 15:06:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B26A13B290;
-	Tue, 23 Apr 2024 14:25:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B78713C661;
+	Tue, 23 Apr 2024 15:06:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ap7xUb7H"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3F7D135414
-	for <linux-usb@vger.kernel.org>; Tue, 23 Apr 2024 14:25:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 969B0134CC2;
+	Tue, 23 Apr 2024 15:05:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713882313; cv=none; b=Y2ItNhdu9lJgANnRaQS0pB0U56t1IT8pnDY8yQGluF3BmD2LLABF296n1zL51VW2z+pMZB6PKKuTZY3QU2DS2QSQLR5aD85d6nv/70fh6UTna11HSXbc9S+cxoQP/28ol2l6JmVsSzZagjkwdqtwabokxVn24fJS0pk2O/jpdEY=
+	t=1713884763; cv=none; b=W+lpA9brKm/iyO69ZpunjPpLj5U+pVYYkCouM9CktQBu7+T1G8Js5NK8+obpNlfC3LSMEntMhPSXq0W6wbZLs7b0PAvWOvPIX+3uDWJV0wOCQZUuSXMysRgCD0oA/0MNlbojDkOo7J/ipAirzAQU29mlZk0SsXfvHUme0ZfSjKo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713882313; c=relaxed/simple;
-	bh=8gqjlT+NAG/LnNUmirvpIEfJgjj4C/RuZXZoY7Tx8z8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=etY/2xY8IM+56oYxiXdCziCuLaO9UTw1C214ZvJDUicS6TnSxVKuohQDqMlzM4da/XBPn9Ws6lzIkV7cxi53YDwBDpxB4ZIRGKCXgP5xxrb/u/S6gVEKuq4wUeLsxSbZtaG0dJdZwFIWfK4DXCUji6o0zT9gE5v4TwterpjwtPo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1rzH4x-0000NU-CJ; Tue, 23 Apr 2024 16:25:03 +0200
-Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1rzH4w-00DuYX-09; Tue, 23 Apr 2024 16:25:02 +0200
-Received: from mgr by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1rzH4v-009uDa-2u;
-	Tue, 23 Apr 2024 16:25:01 +0200
-Date: Tue, 23 Apr 2024 16:25:01 +0200
-From: Michael Grzeschik <mgr@pengutronix.de>
-To: Avichal Rakesh <arakesh@google.com>
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Daniel Scally <dan.scally@ideasonboard.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jayant Chowdhary <jchowdhary@google.com>, etalvala@google.com,
-	Michael Riesch <michael.riesch@wolfvision.net>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>, linux-usb@vger.kernel.org,
+	s=arc-20240116; t=1713884763; c=relaxed/simple;
+	bh=c1YQiuI+aSkLs5EilLhcs3Z49GczY6uW8zvV0s+0ZEc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mrk/HjqwKO1ZK6moS6kXPGuVRPV0//kHHN7K6z2+hpl3yxB6p9VUMblg9N4CN9zM+fhcTLeu7XfPeVXz0Fbg23bCJK+spcPV5gy1HWW5h0ygzjE+zOm7EsjGF/tENCH0apJq1vY3e+FwgfrlEankK5yenA3QNH8jq04wLIemxzA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ap7xUb7H; arc=none smtp.client-ip=209.85.210.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-6ed112c64beso4992472b3a.1;
+        Tue, 23 Apr 2024 08:05:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1713884758; x=1714489558; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=cSiLT8rGn/DUAMlTsyuIcVEZ7KNG3BkMo6PmY1zTuJA=;
+        b=ap7xUb7HFqIAJ7/56Gea282ealKItiwGkf6C6CVaZQo4iwUw/zF2H7xpfmuxgB8fd3
+         fh+yifZjUIIxZXPz+EmCeq4i/nV/56bNRn22jmEOfZirV1tP2sfkjLXjiZOIrBVpNqq7
+         I8OgsXGDVjRSLdSkTYjNDlKNYDkLQFgPcCQnPxuhz0LtUEXPE1Wh28J0DylxfMoctE8T
+         MPCVOkT1AOw5fmUQtvzU7zSW0haLqi2nlBp9NfaupJN7EQ1JMupq8Sclel1n4lVY8AW3
+         A5HXxVX/iV34Hz/GqfXl31ijnWUTMgmxRqI6rHl0xQFjmCLs3pd5qkZKlums9FkD4GuA
+         ZUOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713884758; x=1714489558;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cSiLT8rGn/DUAMlTsyuIcVEZ7KNG3BkMo6PmY1zTuJA=;
+        b=vAfD8Ga3+HadUmjvKmMSnBcYcD52TRKL0K82aPU/4VzEkrFo+ebbp02ZbzjJYV0ZCP
+         N6MBiCKUsblmX0NvnvY/nYxPcsXl+cwA/PmA63+h5aS3qrpt/kDjALfJk0Kh0hUPDRdn
+         3cSGmlebnuk3iFnmF78BN7EDY5l69R6U/qZ2nQqJXpt6c3ENVD6fGFU29pZoZKyjgE3O
+         ehQxuDZ2KeNMEw9UmXPlsBX/HhfJZq1xtxJApSSAEjxwhoyC/g7TQtZM8kKVR0PRrQMc
+         23+fBu22nGk6Y7an8CGqvltyYwShrS55hWmdFqE/2nWfPuZ8IxOK8oQhHG0jrPI9VsCZ
+         fEUg==
+X-Forwarded-Encrypted: i=1; AJvYcCVFexX6NPPjwLtFd9qRQF2fEi1reugii17QeYh3AI9wa6FwAebZNkWZkyrJQLwwY9EnlilMJbgDfuyeJpk4G9FoFFDTPl7oGxPQM0b66WjLW8NNbjRFf2wCOc1BWkuUgqANzXqjvE7huEl+K5Fe2uH0XYoufMMN3HDOAv/eJrJ8G2OOfw==
+X-Gm-Message-State: AOJu0YygZLDlr+Gy3c0K7xjLTKEGY0/oQZh+ZWyiDJw+hQ9uDBPgR/ex
+	hDpFc9kq8ov6pLsb8C/f84zn7V6x6RKLxk8E78uPasmT0wX2gb0NR9YzykqwDqk=
+X-Google-Smtp-Source: AGHT+IHYglb1gDlfjysIQShA+h/0ERVm859A1Kwe/GAK/vhX5AYcQXn/bUJHrimTMjCaOROr/lexPA==
+X-Received: by 2002:a05:6a21:33a9:b0:1a9:4570:2d3b with SMTP id yy41-20020a056a2133a900b001a945702d3bmr14252832pzb.7.1713884757641;
+        Tue, 23 Apr 2024 08:05:57 -0700 (PDT)
+Received: from localhost (ec2-3-111-32-5.ap-south-1.compute.amazonaws.com. [3.111.32.5])
+        by smtp.gmail.com with UTF8SMTPSA id g22-20020a056a000b9600b006edf7be92c2sm9708701pfj.72.2024.04.23.08.05.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Apr 2024 08:05:57 -0700 (PDT)
+From: Mohammad Shehar Yaar Tausif <sheharyaar48@gmail.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Cc: Mohammad Shehar Yaar Tausif <sheharyaar48@gmail.com>,
+	linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] usb: gadget: uvc: allocate requests based on frame
- interval length and buffersize
-Message-ID: <ZifEvUi9-E8M4dp8@pengutronix.de>
-References: <ZiWga5Kqno1ICv97@pengutronix.de>
- <dcad0089-4105-44bc-a2b4-3cfc6f44164b@google.com>
+Subject: [PATCH v4] dt-bindings: usb: uhci: convert to dt schema
+Date: Tue, 23 Apr 2024 20:35:48 +0530
+Message-ID: <20240423150550.91055-1-sheharyaar48@gmail.com>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="pAYe3sblKvwSCo0F"
-Content-Disposition: inline
-In-Reply-To: <dcad0089-4105-44bc-a2b4-3cfc6f44164b@google.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL: http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+Content-Transfer-Encoding: 8bit
 
+Convert USB UHCI bindings to DT schema. Documenting aspeed compatibles
+and missing properties. Adding aspeed/generic-uhci example and fixing
+nodename for the original example.
 
---pAYe3sblKvwSCo0F
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Mohammad Shehar Yaar Tausif <sheharyaar48@gmail.com>
+---
+Changes 
+v3->v4:
+- fix previous incorrect use of if-then block and original example
+v2->v3:
+- fix property declaration and if-then-else block
+- add generic-uhci example and fix prev incorrect example
+v1->v2:
+- add aspeed compatible and deprecated platform-uhci compatible
 
-Ccing:
+v3 patch : https://lore.kernel.org/all/20240422122125.455781-1-sheharyaar48@gmail.com
+v2 patch : https://lore.kernel.org/all/20240422093706.324115-1-sheharyaar48@gmail.com
+v1 patch : https://lore.kernel.org/all/20240420142108.76984-1-sheharyaar48@gmail.com
+---
+ .../devicetree/bindings/usb/usb-uhci.txt      | 18 -----
+ .../devicetree/bindings/usb/usb-uhci.yaml     | 75 +++++++++++++++++++
+ 2 files changed, 75 insertions(+), 18 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/usb/usb-uhci.txt
+ create mode 100644 Documentation/devicetree/bindings/usb/usb-uhci.yaml
 
-Michael Riesch <michael.riesch@wolfvision.net>
-Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+diff --git a/Documentation/devicetree/bindings/usb/usb-uhci.txt b/Documentation/devicetree/bindings/usb/usb-uhci.txt
+deleted file mode 100644
+index d1702eb2c8bd..000000000000
+--- a/Documentation/devicetree/bindings/usb/usb-uhci.txt
++++ /dev/null
+@@ -1,18 +0,0 @@
+-Generic Platform UHCI Controller
+------------------------------------------------------
+-
+-Required properties:
+-- compatible : "generic-uhci" (deprecated: "platform-uhci")
+-- reg : Should contain 1 register ranges(address and length)
+-- interrupts : UHCI controller interrupt
+-
+-additionally the properties from usb-hcd.yaml (in the current directory) are
+-supported.
+-
+-Example:
+-
+-	uhci@d8007b00 {
+-		compatible = "generic-uhci";
+-		reg = <0xd8007b00 0x200>;
+-		interrupts = <43>;
+-	};
+diff --git a/Documentation/devicetree/bindings/usb/usb-uhci.yaml b/Documentation/devicetree/bindings/usb/usb-uhci.yaml
+new file mode 100644
+index 000000000000..d8336f72dc1f
+--- /dev/null
++++ b/Documentation/devicetree/bindings/usb/usb-uhci.yaml
+@@ -0,0 +1,75 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/usb/usb-uhci.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Generic Platform UHCI Controller
++
++maintainers:
++  - Greg Kroah-Hartman <gregkh@linuxfoundation.org>
++
++properties:
++  compatible:
++    oneOf:
++      - const: generic-uhci
++      - const: platform-uhci
++        deprecated: true
++      - items:
++          - enum:
++              - aspeed,ast2400-uhci
++              - aspeed,ast2500-uhci
++              - aspeed,ast2600-uhci
++          - const: generic-uhci
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  '#ports':
++    $ref: /schemas/types.yaml#/definitions/uint32
++
++  clocks:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - interrupts
++
++allOf:
++  - $ref: usb-hcd.yaml
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: generic-uhci
++    then:
++      required:
++        - clocks
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/aspeed-clock.h>
++
++    usb@d8007b00 {
++        compatible = "generic-uhci";
++        reg = <0xd8007b00 0x200>;
++        interrupts = <43>;
++        clocks = <&syscon ASPEED_CLK_GATE_USBUHCICLK>;
++    };
++  - |
++    #include <dt-bindings/clock/aspeed-clock.h>
++
++    usb@1e6b0000 {
++        compatible = "aspeed,ast2500-uhci", "generic-uhci";
++        reg = <0x1e6b0000 0x100>;
++        interrupts = <14>;
++        #ports = <2>;
++        clocks = <&syscon ASPEED_CLK_GATE_USBUHCICLK>;
++    };
++...
+-- 
+2.44.0
 
-On Mon, Apr 22, 2024 at 05:21:09PM -0700, Avichal Rakesh wrote:
->On 4/21/24 16:25, Michael Grzeschik wrote:
->> On Tue, Apr 09, 2024 at 11:24:56PM +0200, Michael Grzeschik wrote:
->>> This patch series is improving the size calculation and allocation
->>> of the uvc requests. Using the currenlty setup frame duration of the
->>> stream it is possible to calculate the number of requests based on the
->>> interval length.
->>
->> The basic concept here is right. But unfortunatly we found out that
->> together with Patch [1] and the current zero length request pump
->> mechanism [2] and [3] this is not working as expected.
->>
->> The conclusion that we can not queue more than one frame at once into
->> the hw led to [1]. The current implementation of zero length reqeusts
->> which will be queued while we are waiting for the frame to finish
->> transferring will enlarge the frame duration. Since every zero-length
->> request is still taking up at least one frame interval of 125 us.
->
->I haven't taken a super close look at your patches, so please feel free
->to correct me if I am misunderstanding something.
->
->It looks like the goal of the patches is to determine a better number
->and size of usb_requests from the given framerate such that we send exactly
->nreqs requests per frame where nreqs is determined to be the exact number
->of requests that can be sent in one frame interval?
-
-It does not need to be the exact time, actually it may not be exact.
-Scattering the data over all requests would not leave any headroom for
-any latencies or overhead.
-
->As the logic stands, we need some 0-length requests to be circulating to
->ensure that we don't miss ISOC deadlines. The current logic unconditionally
->sends half of all allocated requests to be circulated.
->
->With those two things in mind, this means than video_pump can at encode
->at most half a frame in one go, and then has to wait for complete
->callbacks to come in. In such cases, the theoretical worst case for
->encode time is
->125us * (number of requests needed per frame / 2) + scheduling delays
->as after the first half of the frame has been encoded, the video_pump
->thread will have to wait 125us for each of the zero length requests to
->be returned.
->
->The underlying assumption behind the "queue 0-length requests" approach
->was that video_pump encodes the frames in as few requests as possible
->and that there are spare requests to maintain a pressure on the
->ISOC queue without hindering the video_pump thread, and unfortunately
->it seems like patch 3/3 is breaking both of them?
-
-Right.
-
->Assuming my understanding of your patches is correct, my question
->is: Why do we want to spread the frame uniformly over the requests
->instead of encoding it in as few requests as possible. Spreading
->the frame over more requests artificially increases the encode time
->required by video_pump, and AFAICT there is no real benefit to it?
-
-Thinh gave me the advise that it is better to use the isoc stream
-constantly filled. Rather then streaming big amounts of data in the
-beginning of an frameinterval and having then a lot of spare time
-where the bandwidth is completely unsused.
-
-In our reallife scenario streaming big requests had the impact, that
-the dwc3 core could not keep up with reading the amount of data
-=66rom the memory bus, as the bus is already under heavy load. When the
-HW was then not able to transfer the requested and actually available
-amount of data in the interval, the hw did give us the usual missed
-interrupt answer.
-
-Using smaller requests solved the problem here, as it really was
-unnecessary to stress the memory and usb bus in the beginning as
-we had enough headroom in the temporal domain.
-
-Which then led to the conclusion that the number of needed requests
-per image frame interval is calculatable since we know the usb
-interval length.
-
-@Thinh: Correct me if I am saying something wrong here.
-
->> Therefor to properly make those patches work, we will have to get rid of
->> the zero length pump mechanism again and make sure that the whole
->> business logic of what to be queued and when will only be done in the
->> pump worker. It is possible to let the dwc3 udc run dry, as we are
->> actively waiting for the frame to finish, the last request in the
->> prepared and started list will stop the current dwc3 stream and  for
->> no underruns will occur with the next ep_queue.
->
->One thing to note here: The reason we moved to queuing 0-length requests
->from complete callback was because even with realtime priority, video_pump
->thread doesn't always meet the ISOC queueing cadence. I think stopping and
->starting the stream was briefly discussed in our initial discussion in
->https://lore.kernel.org/all/20230419001143.pdxflhzyecf4kvee@synopsys.com/
->and Thinh mentioned that dwc3 controller does it if it detects an underrun,
->but I am not sure if starting and stopping an ISOC stream is good practice.
-
-The realtime latency aspect is not an issue anymore if we ensure that we
-always keep only one frame in the hw ring buffer. When the pump worker
-ensure that it will always run through one full frame the scheduler has
-no chance to break our running dwc3 stream. Since the pump is running
-under a while(1) this should be possible.
-
-Also with the request amount precalculation we can always encode the
-whole frame into all available requests and don't have to wait for
-requests to be available again.
-
-Together with the latest knowladge about the underlying hw we even need to =
-only
-keep one frame in the HW ring buffer. Since we have some interrupt latency,
-keeping more frames in the ring buffer, would mean that we are not able to =
-tag
-the currently streamed frame properly as errornous if the dwc3 hw ring buff=
-er
-is already telling the host some data about the next frame. And as we alrea=
-dy
-need to wait for the end of the frame to finish, based on the assumption th=
-at
-only one frame is enqueued in the ring buffer the hw will stop the stream a=
-nd
-the next requst will start a new stream. So there will no missed underruns =
-be
-happening.
-
-So the main fact here is, that telling the host some status about a
-frame in the past is impossible! Therefor the first request of the next
-hw stream need to be the one that is telling the Host if the previous frame
-is ment to be drawn or not.
-
->Someone better versed in USB protocol can probably confirm, but it seems
->somewhat hacky to stop the ISOC stream at the end of the frame and restart
->with the next frame.
-
-All I know is that the HW mechanism that is reading from the trb ring buffe=
-r is
-started or stopped I don't know if really the ISOC stream is stopped and
-restarted here or what that means on the real wire. And if so, I am unsure =
-if
-that is really a problem or not. Thinh?
-
-Regards,
-Michael
-
---=20
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
-
---pAYe3sblKvwSCo0F
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmYnxLcACgkQC+njFXoe
-LGTxWw/7BgPauuaLsObgielou/Vbj4cuMoFf/sDUjtHTPxs//knIZdN5OJQGvtSA
-p3j21QhhVZCG/vaa7luIRV9VLAo6ZlkAWZDFpYa+D2P9e4MnsMsZ7DA7lTqm00Vj
-4GDf9AmXk69ENwWWcGZRru/tz4MIhBdXsIBa0dHzLtzyY8PMHH6ltg7s81Kg6+Uw
-DVBCD8P2FdMcFqrik8sIG+hY34xodoX5MsMQPMvy/ZQzjMbQ1tkzwAQIx6a76uZ1
-gMN28swzpk+jypHshExpUwMlNaIh1R3HeVTHPuZySYEvenxjIJhaD01MGsub8LKz
-0neONyQVVkkrS804Dzqi3+jyaOaFxvHLaJlkcjKEWh2MfaDB77WCcnL3ikqjSYxW
-5Hmzwy94NVKPy+WxZ1peUP+SnxfiE0iXQ1M0D3+TXLx7WXdxco0Zqtbn5ZeedDuJ
-s8pkp8IjmacGP1xEEZHjxUg6TVkSXNEoXChdSwwRAICnpg1Y+6X9gwC36bnkUjst
-VEHhuOst39Ir2VWg+p/e3Yz3JMaJ/hOhZK6rMG8Uxdf/urdmYe1B5HI5cNpcTZAK
-S3bwJ09suo8l7KVMDV1swxPOKWdGIYrJo1zbCGQHm5lJvo91SnOaLrOZBPH8bZw7
-hDqVPEb3LM2QaxrddaXobjVN1sLQobYkJKCgIHRrL9p5khpLVno=
-=uJCa
------END PGP SIGNATURE-----
-
---pAYe3sblKvwSCo0F--
 
