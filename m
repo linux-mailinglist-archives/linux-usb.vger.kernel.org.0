@@ -1,122 +1,161 @@
-Return-Path: <linux-usb+bounces-9637-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9645-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1FBD8AE3F4
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Apr 2024 13:31:37 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B655B8AE856
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Apr 2024 15:38:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8A97C287B61
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Apr 2024 11:31:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E7FBE1C21377
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Apr 2024 13:38:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A8DD7F7EB;
-	Tue, 23 Apr 2024 11:31:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="q9UX1odz"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAC05136658;
+	Tue, 23 Apr 2024 13:38:00 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04206762E8
-	for <linux-usb@vger.kernel.org>; Tue, 23 Apr 2024 11:31:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C17B18E28
+	for <linux-usb@vger.kernel.org>; Tue, 23 Apr 2024 13:37:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713871890; cv=none; b=TxSaP+/f79lBMTh1keBVCr/IKNw2EQF/2qD1zcQ4Syl21fwfB1zIw9zJYuvSM35IFCZ0ZfyhU8jqWX5XjcD3KwNlmEAnnH0vtCgSZ6XqfXXw+iEEdiTGC0BWuPJ79DdVUiVPdCsvsq4B1vBtw42WQU9vViovWDTnopKUBLUUMNQ=
+	t=1713879480; cv=none; b=DriNOR4PcvbFWfXclucPvd1GHU+VlWD/WjtEEwdvhFXsuQGB5UiTw/rUr/rrV924g5AhMGYu20/Axx9Nzlvm8aUT/6baNUS/cnE+ojjNDY/fUywPyAPNwrwSLq85bvz72TyI3TWKsGl6KZABhEW7fV1LSPSBoPME387SB8ymhIc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713871890; c=relaxed/simple;
-	bh=KGwYg5BpmageNP69p5k5pjwekZpsf7obfz4foiLeXhY=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=AixQ/1xemTjzIrvKRR1kVi9z8F0WXylk3J4IPj1uLdMUMrX4yMnKuGZ712y4Fy0SXFjKBrVp/D4RY7qqnIr+uQYEsgjuzTRIFw5p0Sq4/Kv1oRF1rjlLCXsdlTzT1P7+CvGLe23YAaBOQNVsfqEOvYrdyN0W+0YbI4UIocB+jWQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=q9UX1odz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 803FBC3277B
-	for <linux-usb@vger.kernel.org>; Tue, 23 Apr 2024 11:31:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713871889;
-	bh=KGwYg5BpmageNP69p5k5pjwekZpsf7obfz4foiLeXhY=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=q9UX1odz/0PEFVdn3Mpre9+60Ui0ASENhC2tf3yosQwxWjZXlcLTkZVm53VMMQu18
-	 8xs8Sfmuuq9B3r7YSwpXqEbtB4/xRb48Uq8tBehpfh9uFL9bXs4fsrMxPMS99oDZg3
-	 zdnsv3Rz/oJYm2LHr0BAQMvb4iH2arLypDI6ANQq/wNKV4V2167PdoX5A10pcwFFo/
-	 UT+8JJ0lNxrWp2ZU7WfkF42nj/67P+MQeW9kFK355aNY9mc00NS7mf6Zl2Q/P+SfjC
-	 Uws1Ho8A7t1aOdm/O4p86AD30/oK0D+h5ETeXdm99dZdEE3piAATTgee3xmnefy6VU
-	 hzylCRlCgBzKw==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 6F6C9C43230; Tue, 23 Apr 2024 11:31:29 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 218762] USB string order in dmesg
-Date: Tue, 23 Apr 2024 11:31:29 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: enhancement
-X-Bugzilla-Who: gregkh@linuxfoundation.org
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-218762-208809-f5OjYoZYXs@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218762-208809@https.bugzilla.kernel.org/>
-References: <bug-218762-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1713879480; c=relaxed/simple;
+	bh=69jnoKvvCDmMn/lAjGuLECv91VIAAt67LYlGv0q5hNI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Z3sE4bl6Taf+MuTz/Hx3G6amBQlbOkEP7Nqi5DF3kZEdpUD/Q3WU7DI0B68z9mG5HBmBinxsL9sK/XSZNXe2tyBc62PRsQDMygBQp6gZwbyCCCjHavIUaiMipwFk0ty2mkWNrK3ZgH3bt59254y4hfAhY1Zxo6ghAk5gHOe1Tqg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mgr@pengutronix.de>)
+	id 1rzGLJ-0000Fg-JC; Tue, 23 Apr 2024 15:37:53 +0200
+Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <mgr@pengutronix.de>)
+	id 1rzGLI-00Du9u-IJ; Tue, 23 Apr 2024 15:37:52 +0200
+Received: from mgr by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <mgr@pengutronix.de>)
+	id 1rzGLI-009tVB-1Z;
+	Tue, 23 Apr 2024 15:37:52 +0200
+Date: Tue, 23 Apr 2024 15:37:52 +0200
+From: Michael Grzeschik <mgr@pengutronix.de>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] usb: dwc3: gadget: check drained isoc ep
+Message-ID: <Zie5sN473m2rgNTK@pengutronix.de>
+References: <20240307-dwc3-gadget-complete-irq-v2-1-8c5e9b35f7b9@pengutronix.de>
+ <20240402230555.xgt5uilc42diyr4m@synopsys.com>
+ <20240402231848.4hzzrxegjrcmdab2@synopsys.com>
+ <20240404002906.wk6xbz2wp2tf2xwn@synopsys.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="M6Szu+DUfPV4wPeQ"
+Content-Disposition: inline
+In-Reply-To: <20240404002906.wk6xbz2wp2tf2xwn@synopsys.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL: http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mgr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218762
 
---- Comment #1 from gregkh@linuxfoundation.org ---
-On Mon, Apr 22, 2024 at 07:34:17PM +0000, bugzilla-daemon@kernel.org wrote:
-> Is there any good reason why the code
+--M6Szu+DUfPV4wPeQ
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi Thinh,
+
+On Thu, Apr 04, 2024 at 12:29:14AM +0000, Thinh Nguyen wrote:
+>On Tue, Apr 02, 2024, Thinh Nguyen wrote:
+>> On Tue, Apr 02, 2024, Thinh Nguyen wrote:
+>> > My concern here is for the case where transfer_in_flight =3D=3D true a=
+nd
+>>
+>> I mean transfer_in_flight =3D=3D false
+>>
+>> > list_empty(started_list) =3D=3D false. That means that the requests in=
+ the
+>> > started_list are completed but are not given back to the gadget driver.
+>> >
+>> > Since they remained in the started_list, they will be resubmitted again
+>> > on the next usb_ep_queue. We may send duplicate transfers right?
 >
-> https://github.com/torvalds/linux/blob/c85af715cac0a951eea97393378e84bb49=
-384734/drivers/usb/core/hub.c#L2361
-> is declaring string (show_string) values in a different order than they a=
-re
-> specified in dev_info?
->=20
->         dev_info(&udev->dev,
->                 "New USB device strings: Mfr=3D%d, Product=3D%d,
-> SerialNumber=3D%d\n",
->                 udev->descriptor.iManufacturer,
->                 udev->descriptor.iProduct,
->                 udev->descriptor.iSerialNumber);
->         show_string(udev, "Product", udev->product);
->         show_string(udev, "Manufacturer", udev->manufacturer);
->         show_string(udev, "SerialNumber", udev->serial);
->=20
->=20
-> Now
-> usb 4-1: New USB device strings: Mfr=3D1, Product=3D2, SerialNumber=3D3
-> usb 4-1: Product: BM5100ADW series
-> usb 4-1: Manufacturer: Pantum
-> usb 4-1: SerialNumber: CK1A8823765
->=20
-> Expected
-> usb 4-1: New USB device strings: Mfr=3D1, Product=3D2, SerialNumber=3D3
-> usb 4-1: Manufacturer: Pantum
-> usb 4-1: Product: BM5100ADW series
-> usb 4-1: SerialNumber: CK1A8823765
+>Actually, since the requests are completed, the HWO bits are cleared,
+>nothing is submitted and no duplicate. But since the requests are not
+>given back yet from the started_list, then the next Start_Transfer
+>command will begin with the TRB address of the completed request
+>(HWO=3D0), the controller may not process the next TRBs. Have you tested
+>this scenario?
+>
+>> >
+>> > You can try to cleanup requests in the started_list, but you need to be
+>> > careful to make sure you're not out of sync with the transfer completi=
+on
+>> > events and new requests from gadget driver.
+>> >
+>
+>Was the problem you encounter due to no_interrupt settings where the
+>it was set to the last request of the uvc data pump?
+>
+>if that's the case, can UVC function driver make sure to not set
+>no_interrupt to the last request of the data pump from the UVC?
 
-No specific reaason, just has always been that way for 20+ years and no
-one has noticed.
+Actually no. What I want to do is to ensure that the dwc3 stream
+is stopped when the hardware was drained. Which is a valid point
+in my case. Since we are actually potentially enqueueing new request
+in the complete handler, be it zero length or real transfers.
+
+Calling kick_transfer on an drained hw will absolutely run into
+missed isocs if the irq thread was called late. We saw this on real hardwar=
+e,
+where another irq_thread was scheduled with the same priority as the
+dwc3 irq_thread but was running so long that the HW was running dry in
+between the hw irq and the actual dwc3_irq_thread run.
+
+Michael
 
 --=20
-You may reply to this email to add a comment.
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+--M6Szu+DUfPV4wPeQ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmYnuawACgkQC+njFXoe
+LGT/DxAAwz6KulNc5KIUpueaEMu7WCq3l/4Bf+MoO37W9b1F8VVNE2jwZaLn/8iO
+rYUEIyJ6yqeiB4PrT3oBUwmqXQ39xMzzPqeFYwNA9WOa9e2vBVNE9ZesNpZVra/Q
+uNEoMVN56nWz2kIRLhl5egV5t96GGQMI4zi6UQx8OHXK6zKbhJcNh5zrDZT6gbRi
+X2MDOKF2TS9jrJK8TyU+gtbyjPdcrgmKfhv/XYmk3KaMBnVMx9EFoevQ+n2Vl6Nn
+51qkbjEooQ4uma+IitEI6tLjaytCOq57JPkMOUqArzXyhDyAhzmo8Lj0RDAhfFus
+TFk1TP6ee30tT4+Wvn6x8zD4FdOwqhYhaDfqRhmwdTGuAZ4bjGbsYhn/IT3PSNGF
+VyA1XiBqd+aqqBoxqTqMUChZ/uXjxqnJSjryCdwkNjHbxxkjoA9WWPE3QyBZXewn
+oEKaNC7G34SiyqubGuLinDBD9Q6gbtNSxCSxCdAEOWKUfI6NVjwr9Dve7dhpTlAu
+EqfJJu+Ittz3kB5qddDV43OVc7tpv2Tl6t04gyIuiNyoWxY0InHVJUhYW8hXFle7
+EaRn10m7ApNsKmF3Xmixw1uO6qp/Op4F2lvFIgNgkOowrm+zLWUULeR8RFx/HvWR
+b5cfRa47S0aUYmloKE93BoH7hN5S/JQ8fNzT+C3ljMr/eL3cEt0=
+=kvaR
+-----END PGP SIGNATURE-----
+
+--M6Szu+DUfPV4wPeQ--
 
