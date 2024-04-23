@@ -1,79 +1,58 @@
-Return-Path: <linux-usb+bounces-9660-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9662-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C833A8AF633
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Apr 2024 20:03:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 88AB08AF6BB
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Apr 2024 20:40:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B7F2E28F6E2
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Apr 2024 18:03:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3E3E628B247
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Apr 2024 18:40:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63EC51411DF;
-	Tue, 23 Apr 2024 18:02:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2413613CA9A;
+	Tue, 23 Apr 2024 18:40:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ravnborg.org header.i=@ravnborg.org header.b="tiXjiwul";
-	dkim=permerror (0-bit key) header.d=ravnborg.org header.i=@ravnborg.org header.b="HfWeE/u/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q71Nv3DW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailrelay3-1.pub.mailoutpod3-cph3.one.com (mailrelay3-1.pub.mailoutpod3-cph3.one.com [46.30.211.242])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 557D713E040
-	for <linux-usb@vger.kernel.org>; Tue, 23 Apr 2024 18:02:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.30.211.242
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CE731CD39;
+	Tue, 23 Apr 2024 18:40:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713895356; cv=none; b=AoxBh/BOmXYLemu1y2rAhq4UVCGxu5D3ei2xvLXSDhJoyv17YHmJsNaLxpu4n8hpmpXlrPe8uo4PlkKsQin7uWGA2utsynkxUplwSK0qtBnxTFDAWzuD6++fybMHYINEnPr18WsldzfzvnGIL9n+X2IrnuYnw4cT2mzXkMkoL6I=
+	t=1713897613; cv=none; b=kDGYEIzo2yL2eP5JCmoieTN/CYh/W6pe/ZZFemowCKj/wEVZOCs6HBI7M9J8SbTZBmfrx2SgSHJekWXPfWiQ1xdMOajJxJEb0uczzwoEKnc2RLcP2ZMpUXqh5jzfmKfOwyEahM+6n8/q/rQmMtwBm3cqkFpHju2Eu0YS6S61Tcc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713895356; c=relaxed/simple;
-	bh=mmtsBmibN1yGrAOOBOq7tt4DhIUx2MTlpkSj1eOKU5s=;
-	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oMypfB5gLAq/QHJYiy2r9qAqxY8JZqr6BzCFP0t/x/Fz1SyVJVnvq1/q1wtAbIcckrQYxCw8bSIIWKcZcF5M7lqpnKNJG/kQTb7ZXvDe3p48pl6e+0pv3svZzV2RV6W5+74hP4GEs2U66dUgNQ82hoOSiR5x77+E6QLPpwwtjh8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ravnborg.org; spf=none smtp.mailfrom=ravnborg.org; dkim=pass (2048-bit key) header.d=ravnborg.org header.i=@ravnborg.org header.b=tiXjiwul; dkim=permerror (0-bit key) header.d=ravnborg.org header.i=@ravnborg.org header.b=HfWeE/u/; arc=none smtp.client-ip=46.30.211.242
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ravnborg.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ravnborg.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=ravnborg.org; s=rsa1;
-	h=in-reply-to:content-type:mime-version:references:message-id:subject:to:from:
-	 date:from;
-	bh=QCtZv2hKR4TC2H8Xchi6BYje0EdwUJ959Ulh1BBi7BU=;
-	b=tiXjiwulObS5EhcPzBhcVI2b7lyYjbhyrN+eScXsvRPf4CNWM0mzep8evt/KlX081DuECo1DQzvk1
-	 wh1MmubDWKPpi1oCcXnnTeTwWGiaHZvyWX54QHWQETldd7n02Dy7XeAZxJXbF62UeR4Y8ovwmTG2h/
-	 zR7q3kIBfD44p/kz90excP2SMKqNX3fsDfoQhA9jSaZsFcdlhVIn9hXhLQ0zTkmC0yJhb1xUrfO8nr
-	 97Y/6MTQX2EPS+R3oWPQM8B+4lRwr4FvsPIelDz4z87plAov9qBeXcBLWVtOs9U2guU+NGPpN8TE/F
-	 JPgrGgj1BwmyI3XjPqR/8abBf7BSYHg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
-	d=ravnborg.org; s=ed1;
-	h=in-reply-to:content-type:mime-version:references:message-id:subject:to:from:
-	 date:from;
-	bh=QCtZv2hKR4TC2H8Xchi6BYje0EdwUJ959Ulh1BBi7BU=;
-	b=HfWeE/u/gBKw47N8oqIKQ7L5OJBjREBgJDf8mNUmiG3dJJPOazjw4Bgsd5yuaEF2d3z7H8kD48Zbl
-	 QMi8vYgAQ==
-X-HalOne-ID: 9dd17742-019b-11ef-8cb9-5166eb5bc2d3
-Received: from ravnborg.org (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
-	by mailrelay3.pub.mailoutpod3-cph3.one.com (Halon) with ESMTPSA
-	id 9dd17742-019b-11ef-8cb9-5166eb5bc2d3;
-	Tue, 23 Apr 2024 18:02:26 +0000 (UTC)
-Date: Tue, 23 Apr 2024 20:02:16 +0200
-From: Sam Ravnborg <sam@ravnborg.org>
-To: "David S. Miller" <davem@davemloft.net>,
-	Arnd Bergmann <arnd@kernel.org>,
-	Andreas Larsson <andreas@gaisler.com>, Helge Deller <deller@gmx.de>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	Mark Cave-Ayland <mark.cave-ayland@ilande.co.uk>,
-	Kjetil Oftedal <oftedal@gmail.com>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-	sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, linux-sound@vger.kernel.org
-Subject: Re: [PATCH v2 00/28] sparc32: sunset sun4m and sun4d
-Message-ID: <20240423180216.GA906720@ravnborg.org>
-References: <20240309-sunset-v2-0-f09912574d2c@ravnborg.org>
+	s=arc-20240116; t=1713897613; c=relaxed/simple;
+	bh=ThM0dkHUHd9BFq7Itl11tNeAKPWyMMKwFqpa1Ol1kFk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CkKG+Cm7PXD6Y0Mdkbc7eXz70cslSAwrfkSWZJECLBKAr5WEX0iQKSWom0TCWn6U3fMkvGFOLbD0kgoMZOIvEV2gx+Au+0+H1kb7Y5nrVEy9zeyeccrUwj3ZkYKTDq48XAMjjNh0iuEY82U64H+Ukx4CKblEz8AkSjz3d++CK+U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q71Nv3DW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F2F0C116B1;
+	Tue, 23 Apr 2024 18:40:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713897613;
+	bh=ThM0dkHUHd9BFq7Itl11tNeAKPWyMMKwFqpa1Ol1kFk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Q71Nv3DWdZB5OeZUeWla7WxgboDD/bWp3ZWM5sNlfUrPMJQCQ2DuaXsbNxRDn89+o
+	 TJbjlroBpTCOS7HqI8MlnrQY8GK//mc100ChzwnGL/hrOKa+3rikfVLBqpSC9AQZbC
+	 qje6Er1tztJ8N/D/JhjfD8EM6BgK9lgJJ4tnvWaIVnh9emuHQ113dfgdLCR9l/jzxS
+	 fyzTSjmIwYwFhSN5zOJNYsZxgr09Q+zZ4cxExYenCsGce9A+8u6XjGlcNK1gr7T0di
+	 VN939SBTagn1ZutMmOVY5c1TA27Gaj8lHtQ+fU4w38B1Nnto9pQ3OUBzjNi7tmdwj2
+	 l0VQJdVCO9Rdw==
+Date: Tue, 23 Apr 2024 19:40:08 +0100
+From: Simon Horman <horms@kernel.org>
+To: Eric Dumazet <edumazet@google.com>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	netdev@vger.kernel.org, eric.dumazet@gmail.com,
+	shironeko <shironeko@tesaguri.club>,
+	Jose Alonso <joalonsof@gmail.com>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH net] net: usb: ax88179_178a: stop lying about
+ skb->truesize
+Message-ID: <20240423184008.GZ42092@kernel.org>
+References: <20240421193828.1966195-1-edumazet@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -82,43 +61,26 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240309-sunset-v2-0-f09912574d2c@ravnborg.org>
+In-Reply-To: <20240421193828.1966195-1-edumazet@google.com>
 
-Hi Andreas,
+On Sun, Apr 21, 2024 at 07:38:28PM +0000, Eric Dumazet wrote:
+> Some usb drivers try to set small skb->truesize and break
+> core networking stacks.
+> 
+> In this patch, I removed one of the skb->truesize overide.
+> 
+> I also replaced one skb_clone() by an allocation of a fresh
+> and small skb, to get minimally sized skbs, like we did
+> in commit 1e2c61172342 ("net: cdc_ncm: reduce skb truesize
+> in rx path")
+> 
+> Fixes: f8ebb3ac881b ("net: usb: ax88179_178a: Fix packet receiving")
+> Reported-by: shironeko <shironeko@tesaguri.club>
+> Closes: https://lore.kernel.org/netdev/c110f41a0d2776b525930f213ca9715c@tesaguri.club/
+> Signed-off-by: Eric Dumazet <edumazet@google.com>
+> Cc: Jose Alonso <joalonsof@gmail.com>
+> Cc: linux-usb@vger.kernel.org
 
-On Sat, Mar 09, 2024 at 07:15:21PM +0100, Sam Ravnborg via B4 Relay wrote:
-> This is the second attempt to sunset sun4m and sun4d.
-> See [1] for the inital attempt.
-> 
-> The sun4m and sun4d parts of the kernel have seen no real interest
-> for several years now. Last time a few people surfaced, but it was
-> either due to a personal project or for nostalgic reasons.
-> It is time to let go and drop the parts of sparc32 that in reality
-> are not in use.
-> 
-> LEON from Frontgrade Gaisler is the only real user of sparc32,
-> and this patchset reduces sparc32 to what is required by LEON.
-> 
-> The defconfig is first adapted to the one used by Gaisler.
-> Then the patches removes sun4m and sun4d specific
-> implementations such as small drivers, SMP support, IRQ suppor etc.
-> 
-> Removing sun4m and sun4d support allowed removal of the run time
-> patching of the code as well as a lot of assembler code.
-> The result is a much cleaner assembler code that is easier to
-> understand and thus maintain and extend.
-> 
-> Changes in v2:
->   - Rebased on top of Andreas' for-next branch
->   - Collected ack's
->   - Added patch to remove cpuid patching (Andreas)
->   - Run-time testing using qemu (Andreas, Mark Cave-Ayland)
+Reviewed-by: Simon Horman <horms@kernel.org>
 
-Please let me know if you expect me to rebase this on for-next.
-I have not yet tried if there are merge conflicts but can take a look in
-a some days if required.
-
-That is assuming you agree with the sunset of the sun platforms...
-
-	Sam
 
