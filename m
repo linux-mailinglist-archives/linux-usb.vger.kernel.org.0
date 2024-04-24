@@ -1,76 +1,76 @@
-Return-Path: <linux-usb+bounces-9742-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9743-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D088B8B1671
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Apr 2024 00:51:05 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 844588B16AD
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Apr 2024 00:59:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 00F481C238B2
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Apr 2024 22:51:05 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7CECEB2668D
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Apr 2024 22:59:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5BF816E886;
-	Wed, 24 Apr 2024 22:50:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B70916EC07;
+	Wed, 24 Apr 2024 22:59:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h1I3OVeZ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FufFf1N1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAB5E155A50;
-	Wed, 24 Apr 2024 22:50:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D733157465;
+	Wed, 24 Apr 2024 22:59:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713999057; cv=none; b=p9QndaSBpCKjFmXiKaBHw+e9sSfnD0NNrFFe4C3PMynxAYZk/0SXg3pgWhNuGwuU4SsB/X7TjQdwRe/m/OlzHDlX+2cH0KetrTod5cLwuUWcsBuJU7ATN95yo6pX+Lf7V1jtAps5X7/NuP+WTnKvd7N5r3v4d10HpHMNKUgzqs4=
+	t=1713999580; cv=none; b=Uh/kYo1I5jNe5p8la93pujZN3PQ6Uf1UwWFw7neK7GpUBkvgftHXqR0mPxd+k94i8NiqvKvsVFvYlsZlXyMUZjr6WHhdvqYc5szYQojqAVzG4d9atteFsaOGfhz9Qh2W94HfiiArbVOixrULlMf6HTLXQseZYvx7SZaxU30Uve0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713999057; c=relaxed/simple;
-	bh=Ox2MB4MghcFgvvTU8MNU/H0/Uh51SmnpR/MUHfC8VJI=;
+	s=arc-20240116; t=1713999580; c=relaxed/simple;
+	bh=TUPqPpdBn1SWgpFfIfffbMTiilIpsXJXS3hXQQIU+2g=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=o1HpnIzNBr4x8MIjFdp8haYEO0nrKXqTI8hR+9hlyD29IzXkdeFe+itjVfDE6mjbuZOfzS31smclh1HhBpnPvDuqNUkPWbjnLS9Yxksr+T+SNk3Rf5MUzJoankM2xWeI5QcDSkW6hi8W4cequG2yeoJwL4XbcsyExZzzLC9HEyg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h1I3OVeZ; arc=none smtp.client-ip=209.85.210.182
+	 In-Reply-To:Content-Type; b=eJcQBmFO4CympGuiiTwOgl8463D6pVFsZToug2CZ2HfhYd/1TuQFmpIt9qsurHS1uvaP2iC5bUu7qsfogNsJA7A7cIKE9RLfxv2/LrcKMGQ196FOoGurSIR1+LO3SxlMpeUtFB6LOUgwhhE+/LGjNe2YdVYA4dR03ViGwXJHIXk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FufFf1N1; arc=none smtp.client-ip=209.85.215.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-6eced6fd98aso436418b3a.0;
-        Wed, 24 Apr 2024 15:50:55 -0700 (PDT)
+Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-5dcc4076c13so331972a12.0;
+        Wed, 24 Apr 2024 15:59:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713999055; x=1714603855; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1713999579; x=1714604379; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q2ABtMQID9pHiN7MdMijywVVKrrWz6KRhscU6sKi0tY=;
-        b=h1I3OVeZS97+P73E3Uo/Jd7PrBTkTmZA2u6qv4FWIEUd7K3f0UHU4KJKwI10Gws0Fx
-         qiCNBi2+tNU96MUX7UR8fEceQAmBtI0jQZr0VHe7j90v1aL3SwdNoglkKkFpgPRo3WR2
-         tYm+/eyvB7/PDdpzgUxUm903GnQL92QVAwG2LEq7zj+OcplzSnl7XsQEGoa95+TmMdLL
-         vTcaM3iwNfM0NA+VoW96S4n2kYu19o8SUB1qPpEGiCrlm+pZto517kcU/1JMlcSKQx1W
-         kQ6wo4nr0jP7k2Hw7QHmnRtRqkP3DTYHdCOAmRD4UPtcAVGraqoTjl89stE3Bw3m1UMj
-         TTNg==
+        bh=qrHIvTMhZKru6VMpwqyvF3yCr/0CzPX1v0J6Prvp98A=;
+        b=FufFf1N11R0mZyq2tdcR2u8+xiHtvJpQ1df1c3X1+WSKhzKPg1w1BmCLVFKLSIzMAz
+         oFFUloG8Lfwb5YRciGfvRDIdwBCFNH0PygCeiPtLST+ThHxxf5cbYbQWGH4hcKmZIdVh
+         hntTtb88lVG4izzKrTN0Uo2qmg8/MueTyCORWdTNDePyhSFXhky6brEGY6feHXDR4o8T
+         JPO5pViB92xPa06u8uyWevdL7ArP364a0F/Cd9jvZ+e7zXKkrZBA9g7wyII/EusNykvL
+         ekPwlAZWL2JKsNL7wW/Fnm64zh0eabmx0RnpyPdGa725vY2KCwvBsvspziB8RWIEXeLp
+         JMPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713999055; x=1714603855;
+        d=1e100.net; s=20230601; t=1713999579; x=1714604379;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Q2ABtMQID9pHiN7MdMijywVVKrrWz6KRhscU6sKi0tY=;
-        b=jvvhChr5dvSdohiPQRM0CNQcbatKMUGxQYWmTIoAttKSkaJkPSEg6iwZQwZtxPJp/a
-         hCbkwTtHLBsE/A2QatHvR6HiDsiYUSwRo2g44+MYCSCphbqFOcrOz2LleisxENaflu2v
-         3/mwrrnfvpdwpumBBb1sMZNaVKD3Z8y8hj5ngEQKG9D5wsZeSQbBAbQildG/HubvpvJ2
-         Yu7Hmho0o4pRXTqDt9NrXxP3ms1aRXsk1ku/hbu9tqF4+TrKm5Q6sfnY239G0bWh1WgV
-         1quGHUeuZumjCcSXGH38TnLnIguxyZlL2dsHRdJtPntOMkeFdAZxUljyyydt1IHLJXk1
-         LNYA==
-X-Forwarded-Encrypted: i=1; AJvYcCV2ZIGQLSXI2Pi1+e5gRnnR/i5JTpHBvEaOQHgh8aWiNDgZ61h472UPUyfniBA6lOnUIVUuVQtvPy2rhlsRvZM3NQP0ZBF1fD2b4kgYAJzA0kNIFTWzAmqUidWV1GfokVKh8hV2aN7/
-X-Gm-Message-State: AOJu0YwvbFtbYtBZnHLHxKCtJMpqPp7dB6oaHmlvR3bIm9pcmHpzJNke
-	AAdQLLIJZyOhG+6UCX5YkfTchVrAqTiTDZlIJY8uQsdnXVmHzHFA
-X-Google-Smtp-Source: AGHT+IEOt2fq+BRQBbCAPRy7XK8QjrQ7hgTraUDyl1D8Ctwd/JqCleJi3utMFbw4cPjizQ9ubPAn+w==
-X-Received: by 2002:a05:6a00:2e1a:b0:6ea:e841:5889 with SMTP id fc26-20020a056a002e1a00b006eae8415889mr6050205pfb.33.1713999055300;
-        Wed, 24 Apr 2024 15:50:55 -0700 (PDT)
+        bh=qrHIvTMhZKru6VMpwqyvF3yCr/0CzPX1v0J6Prvp98A=;
+        b=A/he1L3QdJMnXuOpxCJfUg9/QZu/zKdbdT42zCGSIvAs1vFwtLNJsubzYaNCZpgsIg
+         SikEnV+/kNtteTc1/4EV/5oCYzqkKANAkdl8Nj2+04hv6mbNw5MZnM6n7Sz96lYBUlaP
+         NviIBp/nPRimtd4xAsl+0uSeKVv4PdLnvjzSocYCzTfl2c7FiE5suvhEkbOLnalF68At
+         FEIn7X0CAaVq8TVhAf83qQDapXi4LIQkmZGQr8m+6PehccI8YkaYh4KGPrTzT1xnOUM1
+         MVq3BbJ3pHGkRKNOY+6EgVuQEgjb1DSoca3sKsRzghvTk4BX263aEMyzEh23FCbQqsSa
+         ZCag==
+X-Forwarded-Encrypted: i=1; AJvYcCU4Gsy5DWrFHxHmUyGHPhniRntmPcf8a+OdIm8goyJ9V/haiWG8p2/iqDpsoeGBzlWme0xByw3O2YDBxOWNEOZI9rMhAaPV8EhEOwpU
+X-Gm-Message-State: AOJu0YxEPectHk/Gg/sJuZWT8gTCa2Ygmt4cjlc17UQi761gwPoeoZTl
+	3WwQEQL72p3oIWVCKx9hWV2QuTXPCpaoOJ8zH20P4BLxaD0l1jTK
+X-Google-Smtp-Source: AGHT+IFApEN8tGpNqafqjSqQ9bQEWpsZtZexin+ASeOW4YlI40lGn98RmLXOSxraCtHZKsKuLZoDzg==
+X-Received: by 2002:a05:6a20:d48f:b0:1a7:48de:b2a4 with SMTP id im15-20020a056a20d48f00b001a748deb2a4mr1935336pzb.6.1713999578699;
+        Wed, 24 Apr 2024 15:59:38 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b13-20020a056a000ccd00b006e6c61b264bsm11934743pfv.32.2024.04.24.15.50.54
+        by smtp.gmail.com with ESMTPSA id h6-20020a056a00170600b006e6b180d87asm11948597pfc.35.2024.04.24.15.59.37
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Apr 2024 15:50:54 -0700 (PDT)
+        Wed, 24 Apr 2024 15:59:38 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <eb4a61e9-ff00-459e-a6b5-63dae17ff83d@roeck-us.net>
-Date: Wed, 24 Apr 2024 15:50:53 -0700
+Message-ID: <9b9599c8-2689-48be-a569-660e5f51b329@roeck-us.net>
+Date: Wed, 24 Apr 2024 15:59:36 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -79,12 +79,13 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v2] usb: ohci: Prevent missed ohci interrupts
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Alan Stern <stern@rowland.harvard.edu>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
  Gerd Hoffmann <kraxel@redhat.com>
 References: <20240424195951.3749388-1-linux@roeck-us.net>
  <0a29cc85-a79e-476d-aae6-0a054aad2e90@rowland.harvard.edu>
+ <2024042441-salutary-finishing-f54d@gregkh>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -130,43 +131,42 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <0a29cc85-a79e-476d-aae6-0a054aad2e90@rowland.harvard.edu>
+In-Reply-To: <2024042441-salutary-finishing-f54d@gregkh>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 4/24/24 15:30, Alan Stern wrote:
-> On Wed, Apr 24, 2024 at 12:59:51PM -0700, Guenter Roeck wrote:
->> Testing ohci functionality with qemu's pci-ohci emulation often results
->> in ohci interface stalls, resulting in hung task timeouts.
+On 4/24/24 15:49, Greg Kroah-Hartman wrote:
+> On Wed, Apr 24, 2024 at 06:30:06PM -0400, Alan Stern wrote:
+>> On Wed, Apr 24, 2024 at 12:59:51PM -0700, Guenter Roeck wrote:
+>>> Testing ohci functionality with qemu's pci-ohci emulation often results
+>>> in ohci interface stalls, resulting in hung task timeouts.
+>>>
+>>> The problem is caused by lost interrupts between the emulation and the
+>>> Linux kernel code. Additional interrupts raised while the ohci interrupt
+>>> handler in Linux is running and before the handler clears the interrupt
+>>> status are not handled. The fix for a similar problem in ehci suggests
+>>> that the problem is likely caused by edge-triggered MSI interrupts. See
+>>> commit 0b60557230ad ("usb: ehci: Prevent missed ehci interrupts with
+>>> edge-triggered MSI") for details.
+>>>
+>>> Ensure that the ohci interrupt code handles all pending interrupts before
+>>> returning to solve the problem.
+>>>
+>>> Cc: Gerd Hoffmann <kraxel@redhat.com>
+>>> Fixes: 306c54d0edb6 ("usb: hcd: Try MSI interrupts on PCI devices")
+>>> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+>>> ---
+>>> v2: Only repeat if the interface is still active
 >>
->> The problem is caused by lost interrupts between the emulation and the
->> Linux kernel code. Additional interrupts raised while the ohci interrupt
->> handler in Linux is running and before the handler clears the interrupt
->> status are not handled. The fix for a similar problem in ehci suggests
->> that the problem is likely caused by edge-triggered MSI interrupts. See
->> commit 0b60557230ad ("usb: ehci: Prevent missed ehci interrupts with
->> edge-triggered MSI") for details.
+>> Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
 >>
->> Ensure that the ohci interrupt code handles all pending interrupts before
->> returning to solve the problem.
->>
->> Cc: Gerd Hoffmann <kraxel@redhat.com>
->> Fixes: 306c54d0edb6 ("usb: hcd: Try MSI interrupts on PCI devices")
->> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
->> ---
->> v2: Only repeat if the interface is still active
+>> Greg might insist that the patch be CC'ed to stable@vger.kernel.org since
+>> it contains a Fixes: tag.
 > 
-> Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
-> 
-> Greg might insist that the patch be CC'ed to stable@vger.kernel.org since
-> it contains a Fixes: tag.
-> 
+> I'll add that by hand, no worries.
 
-Sure, I'll be happy to send v3 and add it if he wants me to do that.
-I never know if I should add it myself or if this is supposed to be
-a maintainer privilege.
+Thanks!
 
-Thanks,
 Guenter
 
 
