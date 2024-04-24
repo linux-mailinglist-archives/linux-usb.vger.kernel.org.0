@@ -1,65 +1,186 @@
-Return-Path: <linux-usb+bounces-9719-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9720-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC69C8B0D69
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Apr 2024 16:58:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1DAA78B0D9D
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Apr 2024 17:08:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7F6AD1F22C67
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Apr 2024 14:58:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 93E141F277F7
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Apr 2024 15:08:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D2A015EFA1;
-	Wed, 24 Apr 2024 14:58:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C5AF15F40B;
+	Wed, 24 Apr 2024 15:07:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="aFOrYjsM";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="sk+50SbF";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="aFOrYjsM";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="sk+50SbF"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id 7B2AB15ECDE
-	for <linux-usb@vger.kernel.org>; Wed, 24 Apr 2024 14:58:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7508915F32D
+	for <linux-usb@vger.kernel.org>; Wed, 24 Apr 2024 15:07:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713970722; cv=none; b=CHhMNvuQVo502uko6nhgVV2NMwEQ+NFgbZUbJgtoMkGl/gzSObFNDrmHlgWdnu9vPO3IrHqYFn/c7/vgjZiZgbsf5TufUqjzgvk72XH4pQCnAli1l2cc8tmD2bMClHyjuF5hJ3AeDs6dSVP07flgXQQDqD83kaDHKJ9Gouw6PYM=
+	t=1713971257; cv=none; b=Z2Out4gCdLpR59u1fh0bIlZy0aoMYKzxEBRuwhg54KLJJOv7adMeZkiEbpJgtzmbNAobc42wZqIAYr5GFNN1DbK7gxxcTbP9MmlWfu50CwfYsUmac0A0ngKJVt65XkYa//IioVnmKjtJTgIZMle1kxXxVcimfAtZkENt2Qmf6To=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713970722; c=relaxed/simple;
-	bh=ke0g6uownmljC0XA5VR2r33zqHWAonjQKaaVhUfRp9M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=luNjRnorIwmV2waEnfvHJkdJ9XmSXbEp1KSy5/MCER3bCo799WfSE9iY+Z6wH/yomzbuMPZ/f35K8pRQkBmOB7uvnhxjdsltPOkkER/XME7FXVpq2oramS/TNQ5PaQfGXuVvWxfsC347HgEBYuLUU+f6DfC5yzrVH41rkORHyss=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
-Received: (qmail 453580 invoked by uid 1000); 24 Apr 2024 10:58:40 -0400
-Date: Wed, 24 Apr 2024 10:58:40 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Norihiko Hama <Norihiko.Hama@alpsalpine.com>
-Cc: gregkh@linuxfoundation.org, corbet@lwn.net, linux-doc@vger.kernel.org,
-  linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-  usb-storage@lists.one-eyed-alien.net
-Subject: Re: [PATCH v4] usb-storage: Optimize scan delay more precisely
-Message-ID: <515c273c-9bb0-4830-a3a5-e9a485356434@rowland.harvard.edu>
-References: <20240424013134.17307-1-Norihiko.Hama@alpsalpine.com>
- <c06aaaa1-a2af-47c6-a615-602f2c70de86@rowland.harvard.edu>
+	s=arc-20240116; t=1713971257; c=relaxed/simple;
+	bh=3IBe9viglU7k+uyNy6dqsLwL+gYOYoFxevmRGlZRmRo=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=kPwIhot1+q723iFwn8iX8NBQ1NrZIzHeB4AG7O8n4jqhGNWKUUw4BLlilkcF9jT84oq4ErM6ptNwuI0nZJF9+Uz4os5QoDu1CwzODShEG29e8Uj7JmwFFlhEnFHct9gAzky3Hd5mWRPXvwqN0hrbW2hOSf/fnqkL/RNEw4nHicU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=aFOrYjsM; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=sk+50SbF; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=aFOrYjsM; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=sk+50SbF; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 6924F3E865;
+	Wed, 24 Apr 2024 15:07:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1713971252; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=UVmGUi++k1/gvTUhmFye/eKFdYCn8pI+jh7gUYNB/Ns=;
+	b=aFOrYjsMmS6MXHZhNYOl1xDOAJrGCSeRuCVUURoee4NOstHX/Cpqj+dr9wh9Hx1x5C5Q57
+	LLALQMyLrYgmR0rl02qyUiocaD2LD8PfLHadKKUTxpAkuPr9wConaSUvWFvKpwkW4AucxP
+	xJvrBKD2/y7vL4OqTc0AP6kHOZZBAHA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1713971252;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=UVmGUi++k1/gvTUhmFye/eKFdYCn8pI+jh7gUYNB/Ns=;
+	b=sk+50SbFZMfB5qAisiSYKnDj1s6M4TEB858wYNDisyt/lnXlXTkQ5CUmeraOcDh1aHnF+D
+	g/t0TDfALkv0pEAA==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=aFOrYjsM;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=sk+50SbF
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1713971252; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=UVmGUi++k1/gvTUhmFye/eKFdYCn8pI+jh7gUYNB/Ns=;
+	b=aFOrYjsMmS6MXHZhNYOl1xDOAJrGCSeRuCVUURoee4NOstHX/Cpqj+dr9wh9Hx1x5C5Q57
+	LLALQMyLrYgmR0rl02qyUiocaD2LD8PfLHadKKUTxpAkuPr9wConaSUvWFvKpwkW4AucxP
+	xJvrBKD2/y7vL4OqTc0AP6kHOZZBAHA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1713971252;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=UVmGUi++k1/gvTUhmFye/eKFdYCn8pI+jh7gUYNB/Ns=;
+	b=sk+50SbFZMfB5qAisiSYKnDj1s6M4TEB858wYNDisyt/lnXlXTkQ5CUmeraOcDh1aHnF+D
+	g/t0TDfALkv0pEAA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 4CE8C13690;
+	Wed, 24 Apr 2024 15:07:32 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([10.150.64.162])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id 03vIDjQgKWb6IQAAD6G6ig
+	(envelope-from <tiwai@suse.de>); Wed, 24 Apr 2024 15:07:32 +0000
+Date: Wed, 24 Apr 2024 17:07:42 +0200
+Message-ID: <877cgmdcjl.wl-tiwai@suse.de>
+From: Takashi Iwai <tiwai@suse.de>
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: Takashi Iwai <tiwai@suse.de>,
+	Linux regressions mailing list <regressions@lists.linux.dev>,
+	Oliver Neukum <oneukum@suse.com>,
+	USB list <linux-usb@vger.kernel.org>
+Subject: Re: Regression due to 59cf44575456 ("USB: core: Fix oversight in SuperSpeed initialization")
+In-Reply-To: <5744adbf-c6ab-454e-bcd7-33a7ca85bf7c@rowland.harvard.edu>
+References: <9efbd569-7059-4575-983f-0ea30df41871@suse.com>
+	<78eaec78-663a-428b-b80e-68c398a8f5f7@rowland.harvard.edu>
+	<8a4a7f9e-a191-4301-93f8-9694aa14e42f@leemhuis.info>
+	<673939a1-b07a-457e-9fa6-cf6166fdff03@rowland.harvard.edu>
+	<8734rdjj4n.wl-tiwai@suse.de>
+	<ea0b171b-7ee7-4141-b334-28f637fc6b03@rowland.harvard.edu>
+	<87bk5zdtqs.wl-tiwai@suse.de>
+	<bb7f94de-d520-4995-bb95-f3188be55f03@rowland.harvard.edu>
+	<87a5lidemj.wl-tiwai@suse.de>
+	<5744adbf-c6ab-454e-bcd7-33a7ca85bf7c@rowland.harvard.edu>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c06aaaa1-a2af-47c6-a615-602f2c70de86@rowland.harvard.edu>
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Level: 
+X-Spamd-Result: default: False [-3.51 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_CONTAINS_FROM(1.00)[];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FROM_HAS_DN(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[5];
+	RCVD_COUNT_TWO(0.00)[2];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_DN_ALL(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_TRACE(0.00)[suse.de:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,suse.de:dkim,suse.com:url]
+X-Rspamd-Action: no action
+X-Rspamd-Queue-Id: 6924F3E865
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spam-Flag: NO
+X-Spam-Score: -3.51
 
-On Wed, Apr 24, 2024 at 10:51:57AM -0400, Alan Stern wrote:
-> On Wed, Apr 24, 2024 at 10:31:34AM +0900, Norihiko Hama wrote:
-> > +			Example:
-> > +				delay_use=2.567
+On Wed, 24 Apr 2024 16:56:53 +0200,
+Alan Stern wrote:
 > 
-> This could go on the previous line.
+> On Wed, Apr 24, 2024 at 04:22:44PM +0200, Takashi Iwai wrote:
+> > On Wed, 24 Apr 2024 16:14:23 +0200,
+> > Alan Stern wrote:
+> > > 
+> > > On Wed, Apr 24, 2024 at 10:56:11AM +0200, Takashi Iwai wrote:
+> > > > On Tue, 23 Apr 2024 21:29:27 +0200,
+> > > > Alan Stern wrote:
+> > > > > 
+> > > > > On Mon, Apr 22, 2024 at 09:24:24PM +0200, Takashi Iwai wrote:
+> > > > > > As posted in another mail, it's a virtualized environment.
+> > > > > > Details are found in the original bug report
+> > > > > >   https://bugzilla.suse.com/show_bug.cgi?id=1220569
+> > > > > 
+> > > > > Hmmm.  If this is a virtualized device, isn't the best solution to fix the 
+> > > > > emulation code for the device so that it presents a valid descriptor?
+> > > > 
+> > > > Honestly speaking, I don't know, but it smells like a hard way.  After
+> > > > all, we brought some regression of the previously (even casually /
+> > > > unintended) working "device"...
+> > > 
+> > > Still, it would be good to report the incorrect descriptor to the package's 
+> > > maintainer.
+> > 
+> > Well, it's no Linux package.
 > 
-> 			Example:  delay_use = 2.567
+> Doesn't matter.  Bugs should always be reported when possible, for any kind 
+> of package.  Especially after you spent so much time and effort to track 
+> this one down.
+> 
+> The fact that xz isn't specifically a Windows package didn't prevent Andres 
+> Freund from reporting the recent backdoor problem.
 
-Oops, this shouldn't have the extra spaces around the '=' sign.
+Yeah, sure.  Any people can report to https://bhyve.npulse.net/
 
-			Example:  delay_use=2.567
 
-Alan Stern
+Takashi
 
