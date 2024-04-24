@@ -1,86 +1,93 @@
-Return-Path: <linux-usb+bounces-9712-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9713-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8AD678B0961
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Apr 2024 14:25:55 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 013948B0A4D
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Apr 2024 15:02:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 29C171F251BD
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Apr 2024 12:25:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4F077B2186D
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Apr 2024 13:02:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82E3515B15C;
-	Wed, 24 Apr 2024 12:25:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 350C415ADBC;
+	Wed, 24 Apr 2024 13:02:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="T+pZxPMT"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JdmiWux2"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B44F115ADB9;
-	Wed, 24 Apr 2024 12:25:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2D4B15A4B0
+	for <linux-usb@vger.kernel.org>; Wed, 24 Apr 2024 13:02:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713961509; cv=none; b=D+WaFE+t6VVyUbHUMtwmfQr4roEKlYlmUBkFE/6DuCUXkxJ8CXXQWrcMLsxUcs4UH1cvNm+6LYu9HLiKIL+8kd+7QSvTteQxp5SwKIW0MlWQ8v1Ko8ijtyfyqK9PrJAGFRpAm4sNRpUwKXwEd0ye06rRvtmbVVxNxOy+pfdEDw4=
+	t=1713963733; cv=none; b=d5jYq37jBuRxNGS6fmJtN4DTSh1BZ0a257i4bCElIvKxDC72jlK4z4Je8k/43C5Np2EKuD5Iad/AjCfFJzr3Zolekz6gBlgDy/yGkYFkXlLGhxa64dG94ogDn17XaxcA1CiGJaU+tsfjYjWw57AGpTMcax9rXP/C7gTMzRMJFco=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713961509; c=relaxed/simple;
-	bh=7N9zaq+fh6hkDAZtKbiYdRGTKyy5REZxp/vM+zQ6Oog=;
+	s=arc-20240116; t=1713963733; c=relaxed/simple;
+	bh=67iQI8p12cPIwv221E2K0AnYsoCsaQfHOrgrpqMRgIo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nGv7dXKfLC+IcX4hn3A1GRVLk2SpOOucnTzx8HLKutaO7TmZa4FB7NJqp60CBIGRizHb0VE+AbwGENcjd3XLAjJxEj9DLlJfxr23kGCV8M84ITww1nswY5/n6MMIXp7A1hU+SxrR4ylO+cnX4iGbXf9gNqGj517fq0+V1WbtTOc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=T+pZxPMT; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=m8alY3fa2sJa6yVCEcEPZwb9co2W5cHvOIKKJ6aN1ME=; b=T+pZxPMT6xPGxZuB/lBXI7ALq4
-	9F8g+e+ZHRbwpmeSfjiyXhuusemOcPJm9Qq33awPEEz4SnbT0zTPi0egvGjBotn9vIHbkDQJytqNl
-	NOZ6/vy8Llk60eeQFRCZuBdS5ITH61f5sl/XX68XjSQ6oyPy+ECXITtErt5ii+MBABX8=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1rzbg6-00DoNw-JI; Wed, 24 Apr 2024 14:24:46 +0200
-Date: Wed, 24 Apr 2024 14:24:46 +0200
-From: Andrew Lunn <andrew@lunn.ch>
-To: Hariprasad Kelam <hkelam@marvell.com>
-Cc: Ma Ke <make_ruc2021@163.com>,
-	"davem@davemloft.net" <davem@davemloft.net>,
-	"edumazet@google.com" <edumazet@google.com>,
-	"kuba@kernel.org" <kuba@kernel.org>,
-	"pabeni@redhat.com" <pabeni@redhat.com>,
-	"jtornosm@redhat.com" <jtornosm@redhat.com>,
-	"horms@kernel.org" <horms@kernel.org>,
-	"hkallweit1@gmail.com" <hkallweit1@gmail.com>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] net: usb: ax88179_178a: Add check for
- usbnet_get_endpoints()
-Message-ID: <fb62c1d9-02ed-4b39-9fcc-f7f69b5fc024@lunn.ch>
-References: <20240424065634.1870027-1-make_ruc2021@163.com>
- <PH0PR18MB44743F344613BBD8D3E8398FDE102@PH0PR18MB4474.namprd18.prod.outlook.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=nTg5ZPBGEEI9XO71z+O+Vab5xzZci1X+jRm7GPuEYUWwIWgvCw1Ky6OEY9J6DuJNReACSZis4ZXstf4Y0D5t4ee3BWUVJ+3iL9hF0RymjA/h7Y1ujlSDIpWnzrvMIKxH46LFQ7UuXtMS9iupapefspqP9wgBiBdWDR/okH8mRP0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JdmiWux2; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1713963729; x=1745499729;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=67iQI8p12cPIwv221E2K0AnYsoCsaQfHOrgrpqMRgIo=;
+  b=JdmiWux2xYST/7OsCItsFUsi8RhHVe6litYIn8ryelG1CUhUMQ6nTWOI
+   Rz7ZPOzPEjIHf80c2MOnMm/uQzRUYx4uwzic8qZg7wcdSuZeCiG5+OEj3
+   XKbw7CYU1XlIY0gXtAJI+YHkvSowAwepmNx1HgZg8qESqqCOUn5kPW2E5
+   5UTZiP6aAhKnELoc9Dv09JZ8PZUKqo2exL4eanSSG6DYRww+d5RqFoSv1
+   CFrgeVg4thkHI/SD34ksJ8dKI4+1XVsNJ42hbMyvx94jvBw0wI6kTg7G2
+   Z4p8PQKjeHkW1jhmxCM3e2sS3dHiHQOvNSVoVcn8w6U6xHYsRYOYPxIbv
+   Q==;
+X-CSE-ConnectionGUID: LAAMkgG4SoWwZ4V8S4B2Pg==
+X-CSE-MsgGUID: xTnyzdk5T6K77SUJfHWNbQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11054"; a="9702657"
+X-IronPort-AV: E=Sophos;i="6.07,226,1708416000"; 
+   d="scan'208";a="9702657"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2024 06:02:08 -0700
+X-CSE-ConnectionGUID: cGURsQhWQZuUdw0vtkyFrw==
+X-CSE-MsgGUID: DOGf9N5pToy7EapL19xGXA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,226,1708416000"; 
+   d="scan'208";a="55658912"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orviesa002.jf.intel.com with ESMTP; 24 Apr 2024 06:01:01 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id AC57B136; Wed, 24 Apr 2024 16:00:59 +0300 (EEST)
+Date: Wed, 24 Apr 2024 16:00:59 +0300
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: linux-usb@vger.kernel.org
+Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Michael Jamet <michael.jamet@intel.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Rajaram Regupathy <rajaram.regupathy@intel.com>
+Subject: Re: [PATCH] thunderbolt: There are only 5 basic router registers in
+ pre-USB4 routers
+Message-ID: <20240424130059.GF112498@black.fi.intel.com>
+References: <20240419105143.3777873-1-mika.westerberg@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <PH0PR18MB44743F344613BBD8D3E8398FDE102@PH0PR18MB4474.namprd18.prod.outlook.com>
+In-Reply-To: <20240419105143.3777873-1-mika.westerberg@linux.intel.com>
 
-> Nit: please include  patch change log, below link required info
-> https://docs.kernel.org/process/submitting-patches.html
+On Fri, Apr 19, 2024 at 01:51:43PM +0300, Mika Westerberg wrote:
+> Intel pre-USB4 routers only have ROUTER_CS_0 up to ROUTER_CS_4 and it
+> immediately follows the TMU router registers. Correct this accordingly.
+> 
+> Reported-by: Rajaram Regupathy <rajaram.regupathy@intel.com>
+> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 
-Also, please wait at least 24 hours before submitting new versions,
-even when the previous version is completely broken and does not
-compile:
-
-https://patchwork.kernel.org/project/netdevbpf/patch/20240424011454.1554088-1-make_ruc2021@163.com/
-
-https://www.kernel.org/doc/html/latest/process/maintainer-netdev.html
-
-	Andrew
+Applied to thunderbolt.git/next.
 
