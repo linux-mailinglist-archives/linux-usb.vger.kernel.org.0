@@ -1,211 +1,221 @@
-Return-Path: <linux-usb+bounces-9707-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9708-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 574478B051E
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Apr 2024 10:56:13 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 398648B0548
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Apr 2024 11:05:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0E2DB286D26
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Apr 2024 08:56:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4B22BB25A5D
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Apr 2024 09:05:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B3A1158A1D;
-	Wed, 24 Apr 2024 08:56:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A48B158DB9;
+	Wed, 24 Apr 2024 09:04:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="zrYsDkbh";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="lrm5U1x1";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="zrYsDkbh";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="lrm5U1x1"
+	dkim=pass (1024-bit key) header.d=marvell.com header.i=@marvell.com header.b="UvwPowPP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74FF0157468
-	for <linux-usb@vger.kernel.org>; Wed, 24 Apr 2024 08:56:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713948968; cv=none; b=WTPV496jer4U4akJ2qLiKDvctWYhRl9asBBFzAPhsRe8kVzPMX0JIKOQsKM3DUhNYtCKo4viqnsVJrNkqjk4QMG5QbkI6kSUoXXadFFBz4obOK18O+C2rZ1duqOBQY0QRHqEVHVbus3p+TUPGfmW8liRxyBj0BgoC4CV6Jv5gK8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713948968; c=relaxed/simple;
-	bh=fW9dtU9EvLsvMfBLExE7W5wnUxHbOc4p878m3NHnhaU=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=skIfIyMNBCu+VjFHYPl0pI0fxTnGVFI13BxLWVqG4DQXO5q1/4Xynmhy7wQv22rQqyT87v5RuTmihbBB160EckqZSlUWydZth5KioEafb3tHSr4G1a7W26ZJdk5r/mqIedoyX6AQuW5xypsbnqioCvkc9iMlFGxiEloc+BoPBWA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=zrYsDkbh; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=lrm5U1x1; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=zrYsDkbh; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=lrm5U1x1; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 0E2AB2207B;
-	Wed, 24 Apr 2024 08:56:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1713948962; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=P4jhrOjUXMi4L68sOb83OwZw0U9BrZMnPEkBveoFfzM=;
-	b=zrYsDkbhAdVAoSC71s+vwjhLti5Z2SrEelLLT9+FuuM9AXmnqfQPy9OWsOrJ4MFewliBpL
-	DsR4rh2vWyHzOs1FdsFz7+kmmTk+E7ZGLzYjip6U1Ey+INDNCfnJo9p9JRDDgPQVrfrHeI
-	mg1LfHMqSO9IZ95A6XETn215cN+wYbo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1713948962;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=P4jhrOjUXMi4L68sOb83OwZw0U9BrZMnPEkBveoFfzM=;
-	b=lrm5U1x1G252pPOJtSkPrC+PTUlP/fiC+Qdy86sXVqPr10eGOL0FEZ9sceGzaHrHeDq4J+
-	f0riM8kecu/sNwCg==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=zrYsDkbh;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=lrm5U1x1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1713948962; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=P4jhrOjUXMi4L68sOb83OwZw0U9BrZMnPEkBveoFfzM=;
-	b=zrYsDkbhAdVAoSC71s+vwjhLti5Z2SrEelLLT9+FuuM9AXmnqfQPy9OWsOrJ4MFewliBpL
-	DsR4rh2vWyHzOs1FdsFz7+kmmTk+E7ZGLzYjip6U1Ey+INDNCfnJo9p9JRDDgPQVrfrHeI
-	mg1LfHMqSO9IZ95A6XETn215cN+wYbo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1713948962;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=P4jhrOjUXMi4L68sOb83OwZw0U9BrZMnPEkBveoFfzM=;
-	b=lrm5U1x1G252pPOJtSkPrC+PTUlP/fiC+Qdy86sXVqPr10eGOL0FEZ9sceGzaHrHeDq4J+
-	f0riM8kecu/sNwCg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id A811913690;
-	Wed, 24 Apr 2024 08:56:01 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([10.150.64.162])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id el7GJyHJKGaSLwAAD6G6ig
-	(envelope-from <tiwai@suse.de>); Wed, 24 Apr 2024 08:56:01 +0000
-Date: Wed, 24 Apr 2024 10:56:11 +0200
-Message-ID: <87bk5zdtqs.wl-tiwai@suse.de>
-From: Takashi Iwai <tiwai@suse.de>
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: Takashi Iwai <tiwai@suse.de>,
-	Linux regressions mailing list <regressions@lists.linux.dev>,
-	Oliver Neukum <oneukum@suse.com>,
-	USB list <linux-usb@vger.kernel.org>
-Subject: Re: Regression due to 59cf44575456 ("USB: core: Fix oversight in SuperSpeed initialization")
-In-Reply-To: <ea0b171b-7ee7-4141-b334-28f637fc6b03@rowland.harvard.edu>
-References: <9efbd569-7059-4575-983f-0ea30df41871@suse.com>
-	<78eaec78-663a-428b-b80e-68c398a8f5f7@rowland.harvard.edu>
-	<8a4a7f9e-a191-4301-93f8-9694aa14e42f@leemhuis.info>
-	<673939a1-b07a-457e-9fa6-cf6166fdff03@rowland.harvard.edu>
-	<8734rdjj4n.wl-tiwai@suse.de>
-	<ea0b171b-7ee7-4141-b334-28f637fc6b03@rowland.harvard.edu>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C481D158D7F;
+	Wed, 24 Apr 2024 09:04:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=67.231.148.174
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1713949480; cv=fail; b=QeNafAAObPav5Zse1XO94yUCjJkvERwGUUW1/jaTGcN0eFZcQ68wyZs07nLKZ1mHDUtTrLbAq2jCtt+jtMJOCvi2rMul9m5G1MJGLOnpGMPkzj/hWiKxshzNpAj7Z/j5iVQpQ5L+G0HxV2bFON5LxRUC2qgPD38+E/q5YJteU+M=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1713949480; c=relaxed/simple;
+	bh=OjVKo1eHTy0ktO9BdyvrCaxhYDqVIX8HQxf3NcGmMLU=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=cYgnAMj6jJYmAW1zukiRX9EFLtIkZlxwg7WZ2WCPE2pAbvGfAivPZHNU7A4fssJLeKC1nncyLK13U6O+9aVQbvtCEMHw0XQAXGVrPFoQe9RSmheCbNiaoYXeXv+6cMNlKnxq+YfA21X+AmKINFHyNM8dr4KSKLtW76ZxH+Ca7bc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (1024-bit key) header.d=marvell.com header.i=@marvell.com header.b=UvwPowPP; arc=fail smtp.client-ip=67.231.148.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+	by mx0a-0016f401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 43O0lEFQ019475;
+	Wed, 24 Apr 2024 02:04:24 -0700
+Received: from nam02-bn1-obe.outbound.protection.outlook.com (mail-bn1nam02lp2041.outbound.protection.outlook.com [104.47.51.41])
+	by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3xpgpgu66j-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 24 Apr 2024 02:04:24 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UwsModg8tElNZLigtymwABQIWlYrBLdv5JTJEAiN/88aT5+F8g/v/jWe+HoAKE5BsBpm5V0rGMfw9/djBQsz4T7g7/QagkKDMa8XzQsI1BrnPVbCJgsKaoDA8ITW3J04muZeQNcm+3+6ExWi6asEWhIIkwnOjZWbzAS/bK+OozFlI2uizEqjtHUt/wtvZUJmetIJyLxbkvYpKzneYqtUWHGbcj0nQnvvhv4jcAr2yFUxF6xrpmpqfgECTEwW6un6DzanqpUKlbT1RUw95gCSujxV4m3nci8pUk1hOHHs1qZVaG+wWuKrZXPTF5pyVAxgHLjYYmbs884UaL8dqUAWYg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0ZVsehhAFnepasVj6dBc6TYmw7NiFpXLT8iu/uqZmkM=;
+ b=L+xUwrRRsvoBR5dKWXk6hPOKZF1oHmLH/6hIRxGEX4xHjanRKuPVRgDw0mth0Tv5GmyBsA3gGhDI93iyDmJIVgL0NM2cx0TpuH5tRdE8YPJ29WLEUwszRKnhe/VTc8RT3GqYI0+QbYaQM3+t7x+f9k306pv+RIHrPupTXSTtJjWOMGhe11GtS6S5Eu/Zyq2PTuWhScWSBHgS/tKUq74dXWUXNW+RG3nqwn8LaK21O1yUroBCnq1HpBS+TZupDsW0lphL1oCTzLAKL0hlaGHcGTsT3c73YQIYpqRsiojRhoy3fu5waIovSJnrpV80sPc/QfcVYsp+x/kblmMC60j9GA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=marvell.com; dmarc=pass action=none header.from=marvell.com;
+ dkim=pass header.d=marvell.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0ZVsehhAFnepasVj6dBc6TYmw7NiFpXLT8iu/uqZmkM=;
+ b=UvwPowPPWJ0fJlKqzC8WPFAkIz4FMP5tmg3eSdHjnf92SOmBRF8SrJe/JeJ6GvC0H7SJtfCkPu8OzOkBXNu5cBawM5aL7CYbsI1tDL78If07OFL7atYr8bSGu48UhzPTHURzD6bCZgpOq9sCvFlAQQUYWZLBMxt1zfbxbXFLZj4=
+Received: from PH0PR18MB4474.namprd18.prod.outlook.com (2603:10b6:510:ea::22)
+ by SN4PR18MB4840.namprd18.prod.outlook.com (2603:10b6:806:21f::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7472.44; Wed, 24 Apr
+ 2024 09:04:21 +0000
+Received: from PH0PR18MB4474.namprd18.prod.outlook.com
+ ([fe80::eeed:4f:2561:f916]) by PH0PR18MB4474.namprd18.prod.outlook.com
+ ([fe80::eeed:4f:2561:f916%5]) with mapi id 15.20.7452.049; Wed, 24 Apr 2024
+ 09:04:21 +0000
+From: Hariprasad Kelam <hkelam@marvell.com>
+To: Hayes Wang <hayeswang@realtek.com>, "kuba@kernel.org" <kuba@kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>
+CC: "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "nic_swsd@realtek.com"
+	<nic_swsd@realtek.com>,
+        "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org"
+	<linux-usb@vger.kernel.org>
+Subject: [PATCH net-next] r8152: replace dev_info with dev_dbg for loading
+ firmware
+Thread-Topic: [PATCH net-next] r8152: replace dev_info with dev_dbg for
+ loading firmware
+Thread-Index: AQHaliZl1cms0fPnZ0yLRIDtVcUivw==
+Date: Wed, 24 Apr 2024 09:04:21 +0000
+Message-ID: 
+ <PH0PR18MB447451E4C0CECE275218336CDE102@PH0PR18MB4474.namprd18.prod.outlook.com>
+References: <20240424084532.159649-1-hayeswang@realtek.com>
+In-Reply-To: <20240424084532.159649-1-hayeswang@realtek.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH0PR18MB4474:EE_|SN4PR18MB4840:EE_
+x-ms-office365-filtering-correlation-id: 98437201-c9b7-4aad-dbb4-08dc643d8811
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 
+ =?us-ascii?Q?K1uzWGK0LtregRwiXqzdrXnm6Vb87CD7PlmejOoWn4UA+/XhsqDJkMYIryyh?=
+ =?us-ascii?Q?5QzU6UT5TM8CLHBKjJC01vuaMsyKXN2IGh9gUB4MBwvSwC6oyGXoduHRzwLt?=
+ =?us-ascii?Q?qiY6xgI+f59upxBQD5MZox/m6ABOBDleYhraoVwk8BsWc0CKypRGDDsDNjYh?=
+ =?us-ascii?Q?ZHuALzsbExR/4V5K8KRTjTrVtB+0Dc0pddnZGxkYbM2KcqoVUrz7IYBBs/RI?=
+ =?us-ascii?Q?KsVt0ExBPujiP/Ky5tJLUFqaE+zyXnXzGg68qPcGwIMZSdIkZFEp21cGOXqV?=
+ =?us-ascii?Q?e54cG4nf5D2lD4fAXt0Eiu1EmCRYnNNjbbuGcEcmb1LuhNh9xM1nrrvGSrgr?=
+ =?us-ascii?Q?GWbUbs7JlHRk42m3chswgAL8yysKdgz7oBJREDhbpMvm8AGU00w4MPfN9QC8?=
+ =?us-ascii?Q?Dg9/yJmPN0N5PH3CwZUQ1+gQWhNqSlXqTL9G2kc29FCIIcrEJz2dU+h+5JF1?=
+ =?us-ascii?Q?10x86b1WAnpcf0zKdiOQ9tn8gzZ0266PXQCnbrGZBjR3OAd5+C8EQNumwr9V?=
+ =?us-ascii?Q?cOTTIOcwTjzJFcmqCdy8Th3obr0cqCDLyQKKwDQpkJvSwdxkiSjLzU83fTEi?=
+ =?us-ascii?Q?Je93aTjrTlH6pIa5POOo8uI5EGAzuK05fXZh4WJPgvl6N/2SEQLMb6Bo4ftX?=
+ =?us-ascii?Q?JCntpjPkaPwVLZ7FB0Nd1lGboXRlzEwEOGiW7GZv1vfkWcuDUjDcpZe04Awk?=
+ =?us-ascii?Q?7AeTudbQ2TfXiHzowlpixTlrGRqyqowWSMQmohxgMGIvh/fH0oBIiVu+sh8J?=
+ =?us-ascii?Q?ti7CW5x8f0nkpsX9jCgxT+mE5lxnvnrkoLHSs9/UvOGdLYo2ey1qMG4Zr07W?=
+ =?us-ascii?Q?5jHdkwp+qjhGRP9+0/9eyZnQwpw0RDcJva7cDB6rwt2+JKukAFbaY4d8TzQc?=
+ =?us-ascii?Q?WFnpVzLW2KTNi89DEYt2YgSa6Xe3yF/OHyVLKufc54a6s6NE/mX83QEGXbkf?=
+ =?us-ascii?Q?lt4VFpYfuL2OdCRmfnxHaW2urUsxRf2ppor4K5Z9Hv/NeqCzp7pv0slDJcy4?=
+ =?us-ascii?Q?96M7Qlpkqtusc8vPlzrpCziYtJGzJiU3COZEVVe9tVp/t5NjfuNAwtzotWCW?=
+ =?us-ascii?Q?5pjsVehXXazkt0uc3914m6vFt608ctOJRVxx04MEsWKlgBEkmYDE+cS7FckZ?=
+ =?us-ascii?Q?eXgeHgu3rMl9hn/bJPjJo3f5TAR3yGigqVq/R79Uq2hug3nixOOpxBer2Zv1?=
+ =?us-ascii?Q?4rclEBY+C6XpN7H9z8bPomsa0k2pRwTwbm5xKUH1uncSA9A7cvIOzfjCgMqO?=
+ =?us-ascii?Q?IfxfdSCLm3kl+/mug/4AfiOeYXAtFXDX0tQNtaS1h2SUkCh8W5GikKyMhhyF?=
+ =?us-ascii?Q?etW8hdGuteSAwvnn9vyEy4kxAW6N5nj48ELWhMzKa1ykVQ=3D=3D?=
+x-forefront-antispam-report: 
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR18MB4474.namprd18.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(1800799015)(366007)(38070700009);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: 
+ =?us-ascii?Q?/p/ZCG0b68zbSafxw+eYS0xELa6PQ0jkwkP1jGXasKikdL2tMJbBF/uF7lLe?=
+ =?us-ascii?Q?yL5bges+DTQXmZTZyoyWXLmc0iHndEYzscw5XtgN/RjnqQT+cFCp8xQMm3il?=
+ =?us-ascii?Q?Bs4f/NYXy1ICsO3MAid7UqIWW6ItZy4bNtC/jK7Od+jVyM09DMWYNQrJq+Yt?=
+ =?us-ascii?Q?UsvElFT9/OpQR6AlQhm0K0iLRYhp5+Z/QHEuMBHXsEBeC7T0UkpwfBGHheAl?=
+ =?us-ascii?Q?Ol1yqD5k7IIC0YAZVu6eD0vBrqnotzr7pvCSS97F7rzrrvezPexQQXAuhboY?=
+ =?us-ascii?Q?/U+nYxlGJTEGvMnk3+KLa2DKiPEWQVOnGN5vmHYb0KfMtRDPZFsdcIptQxQC?=
+ =?us-ascii?Q?ej8qt53CT1JXr38UMM9qkcIrIapHQJRTBox82ZXUAMXUovTVvBmfJKvTuMt6?=
+ =?us-ascii?Q?lj6r6vZwNk6GOZeWGr0oWeX6HQ0k4Too17lSVO9UsRuTMiK2fxS3BBinhOOp?=
+ =?us-ascii?Q?xK19encz0uRNYX7BiHChIC9m9twYcpR1R1ZAKuX+klwfAJgS76GTUJGSFQeA?=
+ =?us-ascii?Q?8AQENysOs7T5nF6R9LOrZOufVIvhhUxG9z1PfZ4QXrulvHkSH/AVW3CDMa4E?=
+ =?us-ascii?Q?NncCrXP4ZqAmil5i+01ZQxAKvJlvN+wwFwbmj6g4SRwD206UGQFQFcgoqZ7t?=
+ =?us-ascii?Q?VPeq+x0SKzIrHWkeHJmunapTD9NYWfRdue67/55pOY3TiADSbhevJnquqAjR?=
+ =?us-ascii?Q?mKUNSmAXi8IRPG6CI88s9WqfMMjEgauY3srmLoue5ecpCpNMF1Sfin0muHaj?=
+ =?us-ascii?Q?PPhuttkRnNddIDmd89v4VZIKIMUludyXGgCHX1BvJ+DzzMuZsv3cDlZLU3Y5?=
+ =?us-ascii?Q?+ltyWMBVu9Omp2pWFcKr9qWH4P88TmuNriCeYKld6cYoUr6/LGzhfvoSKmcc?=
+ =?us-ascii?Q?S267sKpdOb32VHVObcqD0SY8X15bqYu5MVOqhks3KqwPKFdlGdrBkqv738Vx?=
+ =?us-ascii?Q?N11bCwyUcwg9kT1bd8P75vPewhyXpVuZTs/Rx8QAZld2Djjsrfn5S/0UrtCq?=
+ =?us-ascii?Q?z7fL3z257KCO9flmHz8IJm4hmcmJ4qJiv0j0XgdM00GX3hfzfZ+ZERiE7ami?=
+ =?us-ascii?Q?NtNFOhCgxOD7QaSFci2YurF07Djwi/B6xpGuipgukneOvk2o7/vSIibpqvAK?=
+ =?us-ascii?Q?xMjgxWjpSw9oWzi8JFV1TTESI2ONwRpiHSrCVejGwVEbxySbG+BQmTvpxnhm?=
+ =?us-ascii?Q?JHpd282zOGPHtaZzFCm4t8XEFLx7oQSlKGFE9S28RZmA68lln/Q2XV9k5C1F?=
+ =?us-ascii?Q?HsOlBWKurFRP0Py+v00RPkl9QKjLq3yT5vJtruLpZzO9X1Tdn06IOBiw3PII?=
+ =?us-ascii?Q?yW8TRuRzWKqbn5PMkyg68ZMDLRYpDFYgbSUk17QRKfEfSz6IaHEGFx6lE8bL?=
+ =?us-ascii?Q?BnIOe97XE78F4DVGvCXPZij1RsiZL6NORtp3qNxv/T/hC+aXyHtfbXCC2Zon?=
+ =?us-ascii?Q?R4iev2ejS9VBd8Llx2MO0CWqmzWuXX9TlmYTVBfK4bJ3kYQfK27iN4pwWFYt?=
+ =?us-ascii?Q?9EgPGGM4IJet3rML78oQtPJM8yYRR6MQp8FzIxP98r63hMZgCW5P6jD3w18r?=
+ =?us-ascii?Q?TTPQBuzEisMawAH4e9Y=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Level: 
-X-Spamd-Result: default: False [-5.51 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	DWL_DNSWL_MED(-2.00)[suse.de:dkim];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	MIME_TRACE(0.00)[0:+];
-	ARC_NA(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,suse.com:url,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns];
-	TO_DN_ALL(0.00)[];
-	DKIM_TRACE(0.00)[suse.de:+]
-X-Rspamd-Action: no action
-X-Rspamd-Queue-Id: 0E2AB2207B
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spam-Flag: NO
-X-Spam-Score: -5.51
-
-On Tue, 23 Apr 2024 21:29:27 +0200,
-Alan Stern wrote:
-> 
-> On Mon, Apr 22, 2024 at 09:24:24PM +0200, Takashi Iwai wrote:
-> > On Mon, 22 Apr 2024 20:03:46 +0200,
-> > Alan Stern wrote:
-> > > 
-> > > On Mon, Apr 22, 2024 at 07:33:21PM +0200, Linux regression tracking (Thorsten Leemhuis) wrote:
-> > > > Hi, Thorsten here, the Linux kernel's regression tracker. Top-posting
-> > > > for once, to make this easily accessible to everyone.
-> > > > 
-> > > > Is anyone still working on fixing below regression? From here it looks
-> > > > stalled, but I might have missed something.
-> > > 
-> > > I've been waiting to hear back from Oliver or Takashi.  A revised patch 
-> > > taking my comments into account would be welcome; it should be a very 
-> > > small change (just one or two lines of code).
-> > 
-> > As posted in another mail, it's a virtualized environment.
-> > Details are found in the original bug report
-> >   https://bugzilla.suse.com/show_bug.cgi?id=1220569
-> 
-> Hmmm.  If this is a virtualized device, isn't the best solution to fix the 
-> emulation code for the device so that it presents a valid descriptor?
-
-Honestly speaking, I don't know, but it smells like a hard way.  After
-all, we brought some regression of the previously (even casually /
-unintended) working "device"...
+MIME-Version: 1.0
+X-OriginatorOrg: marvell.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR18MB4474.namprd18.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 98437201-c9b7-4aad-dbb4-08dc643d8811
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Apr 2024 09:04:21.8082
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: G4+yl7aQGSZJe21zATGt5mfmZjzgeZkluWHt+cuqI79EHYODO8pdRfNf/nqDOy1dsLq2knmQ82LAUH7PomVKbA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN4PR18MB4840
+X-Proofpoint-GUID: o5CSDZNjTWb9L7ZXWEEUP86Uu9gJYhJR
+X-Proofpoint-ORIG-GUID: o5CSDZNjTWb9L7ZXWEEUP86Uu9gJYhJR
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1011,Hydra:6.0.650,FMLib:17.11.176.26
+ definitions=2024-04-24_06,2024-04-23_02,2023-05-22_02
 
 
-> > About the patch change: I appreciate if you cook it rather by
-> > yourself since I'm not 100% sure what you suggested.  I can
-> > provide the reporter a test kernel with the patch for confirmation, of
-> > course.
-> 
-> Here's a condensed version of the patch you wrote.  But I would prefer not 
-> to add this to the kernel if the problem can be fixed somewhere else.
 
-Thanks, I asked the report for testing the patch now.
+> Someone complains the message appears continuously. This occurs because
+> the device is woken from UPS mode, and the driver re-loads the firmware.
+>=20
+> When the device enters runtime suspend and cable is unplugged, the device
+> would enter UPS mode. If the runtime resume occurs, and the device is
+> woken from UPS mode, the driver has to re-load the firmware and causes th=
+e
+> message. If someone wakes the device continuously, the message would be
+> shown continuously, too. Use dev_dbg to avoid it.
+>=20
+> Note that, the function could be called before register_netdev(), so I do=
+n't use
+> netif_info() or netif_dbg().
+>=20
+> Signed-off-by: Hayes Wang <hayeswang@realtek.com>
+> ---
+>  drivers/net/usb/r8152.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c index
+> 5d6aeb086fc7..51e9f5b2dccf 100644
+> --- a/drivers/net/usb/r8152.c
+> +++ b/drivers/net/usb/r8152.c
+> @@ -5274,7 +5274,7 @@ static void rtl8152_apply_firmware(struct r8152 *tp=
+,
+> bool power_cut)
+>=20
+>  	rtl_reset_ocp_base(tp);
+>  	strscpy(rtl_fw->version, fw_hdr->version, RTL_VER_SIZE);
+> -	dev_info(&tp->intf->dev, "load %s successfully\n", rtl_fw->version);
+> +	dev_dbg(&tp->intf->dev, "load %s successfully\n", rtl_fw->version);
+Since enabling dev_dbg involves re-compiling kernel if CONFIG_DYNAMIC_DEBUG=
+ not enabled,
+ Does it make sense to use  "dev_info_ratelimited" here.
 
+Thanks,
+Hariprasad k
+>  }
+>=20
+>  static void rtl8152_release_firmware(struct r8152 *tp)
+> --
+> 2.44.0
+>=20
 
-thanks,
-
-Takashi
-
-> 
-> Alan Stern
-> 
-> 
-> 
-> Index: usb-devel/drivers/usb/core/hub.c
-> ===================================================================
-> --- usb-devel.orig/drivers/usb/core/hub.c
-> +++ usb-devel/drivers/usb/core/hub.c
-> @@ -5110,9 +5110,10 @@ hub_port_init(struct usb_hub *hub, struc
->  	}
->  	if (usb_endpoint_maxp(&udev->ep0.desc) == i) {
->  		;	/* Initial ep0 maxpacket guess is right */
-> -	} else if ((udev->speed == USB_SPEED_FULL ||
-> +	} else if (((udev->speed == USB_SPEED_FULL ||
->  				udev->speed == USB_SPEED_HIGH) &&
-> -			(i == 8 || i == 16 || i == 32 || i == 64)) {
-> +			(i == 8 || i == 16 || i == 32 || i == 64)) ||
-> +			(udev->speed >= USB_SPEED_SUPER && i > 0)) {
->  		/* Initial guess is wrong; use the descriptor's value */
->  		if (udev->speed == USB_SPEED_FULL)
->  			dev_dbg(&udev->dev, "ep0 maxpacket = %d\n", i);
-> 
 
