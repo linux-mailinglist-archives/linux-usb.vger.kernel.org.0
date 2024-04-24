@@ -1,254 +1,193 @@
-Return-Path: <linux-usb+bounces-9696-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9697-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D68E58B00A3
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Apr 2024 06:41:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5EFF48B00C9
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Apr 2024 07:04:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 49DBDB21870
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Apr 2024 04:41:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CACDE1F23C89
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Apr 2024 05:04:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3227D152E04;
-	Wed, 24 Apr 2024 04:41:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BF2A1552FC;
+	Wed, 24 Apr 2024 05:04:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JJSlXTeR"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UhumiuNE"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D59AB85C59
-	for <linux-usb@vger.kernel.org>; Wed, 24 Apr 2024 04:40:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81181154BFB
+	for <linux-usb@vger.kernel.org>; Wed, 24 Apr 2024 05:04:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713933660; cv=none; b=Pm6vJCVsaU4iF9c3TaZgEe7QViX+djlnMLUOJ2CmA7Z1/4Lacz+X2ukVAHtLU+vUo13tRVJ+It4eUQV738NucVZmQSPYbykFQz5Zl70tbYMnjWCtEKVjAM9QqEBEhkkMu4G5TKdXDUU9p+ajmIYzDl4K4wyMjjpdHb1Js+oSZjM=
+	t=1713935056; cv=none; b=ndfK1LXEiBPuFaX3na1LG8PIqpsG4PD40+2qWvUKzZAfmKG/QNkZZ5yKssApOr+DLGZvuM4/GkhCkQALvSJJq7b5LI7ZHcen9rHJJcXU+bIcMPcpzxqKnTwmz2ToRoaukoG0YdInk7nh8t6G6lgQCesmKEVYcKZWkssgc3emTX4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713933660; c=relaxed/simple;
-	bh=ByIu6XpqHYqZXA7m0sZwxAFlRo+GJEkc36w6K4/ZM24=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=f94/2bnJjixhTN80hPdPu3ZhCk4LYdRNa8Rs6Wm6WkQzmkRavwCXKXD+kdYMvS/0aaI1UeWi1Z/ILz3//Fii820bsrli+R0ggl/vDMjKskpEjekBOVIqf3eEKZvUAF64XS+KZK/xieg7HKvIQ4p/16ueODmXpVAleanHDPhwG0g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JJSlXTeR; arc=none smtp.client-ip=192.198.163.15
+	s=arc-20240116; t=1713935056; c=relaxed/simple;
+	bh=w2s6+GD9x0ESMek+h6hNKm6/PRiAeMHcEF/lndj+Gl4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=YcPnlc/eJQg82s6zeUqkbwPH3Pxw1ZMjmmnZ/kNS7E1g3Yzk3UNkHEFtTopshlfmqpbX7po0VWsIVgCGEeENpeXn7crCTWCzJgRgSHaERq/cD/Ig+7pv0BtXWlMv72dPrrnwrUliHAIOjVfl7hs74ibRqZC+dd281xrIdNFoRQk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UhumiuNE; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1713933659; x=1745469659;
-  h=date:from:to:cc:subject:message-id;
-  bh=ByIu6XpqHYqZXA7m0sZwxAFlRo+GJEkc36w6K4/ZM24=;
-  b=JJSlXTeRX6s8R8U4ZgD/BHVtkvmT9ujzadulKHoc9D0zhaQOPnVT+Iei
-   RCdCPNUw7RTun9KeS61L8hz8A++e1zxzFXUoDEjMFqzR6/1wNtfKqXts5
-   2a9dwCGz5BQ3gTTd+uf361wn37Q8CopJZQ0s9TL78qeWTZim0mZGXniWf
-   S7GE9lskrCYdkH+Czuy5WREcVF85vhe5NXja+0kHCsrw5wkegnYFKvbLV
-   sxRN4pqJOYhDUXpvlsoSXBQbplHVakP/3wwyiOM8AZfN6nNGR4jlULSHD
-   tfbLw0FeME/0Cq450mVczFLonTZTwpSU8Ft6lMdjmqlV7Y5tLXVzWaF4H
+  t=1713935055; x=1745471055;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=w2s6+GD9x0ESMek+h6hNKm6/PRiAeMHcEF/lndj+Gl4=;
+  b=UhumiuNEWA+90oXvv6vLgcREwOUDhyO7aCYxYmfdsnLt/uV+vMnuS4VM
+   A/b5JWFJXz/M/FIfzm1hfJvDr7j/6jrINdzldHGFEexfISZrWjVjDDHvQ
+   Nuk9KOl1v268UEzDg4K1NshAvt4E2WiR2ttbGqHPoz+o6vi78kI9/MBJN
+   YbMfWSfRCBWQicQKqpP/P9FFsgEkMfBrfA+PCtlnfhGcv1UpaGCyHQABh
+   JJl0o6d9ZH9kFTVnr1KVdvVPOsgUBWk4UfrfImQSxzsRAVlNHGr5lBdxp
+   srlSzi9vhz0LlqRKK9QC1mrVk9B/fjwNACnI1WMzrLuiTs8zLa7fDnplC
    A==;
-X-CSE-ConnectionGUID: zLwPDHoNTima5T8A03mx6g==
-X-CSE-MsgGUID: REr1wDGaSu+ZsBpFVP2QSQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11053"; a="9711700"
+X-CSE-ConnectionGUID: t5+AHNhcTsWvxHru3F5SSw==
+X-CSE-MsgGUID: ur7uzWGyQt6rmB+AenUyRA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11053"; a="9398361"
 X-IronPort-AV: E=Sophos;i="6.07,225,1708416000"; 
-   d="scan'208";a="9711700"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2024 21:40:58 -0700
-X-CSE-ConnectionGUID: 5v6bxUuJSW6KDhyhB2Wt4w==
-X-CSE-MsgGUID: M22yQyVmTL6HY8/NNkoqlw==
+   d="scan'208";a="9398361"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2024 22:03:59 -0700
+X-CSE-ConnectionGUID: +ps7u2rFRuWzagZBEl+dBg==
+X-CSE-MsgGUID: UK52IAAeTiiDvECd1DQR/w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,225,1708416000"; 
-   d="scan'208";a="24586243"
+   d="scan'208";a="24625373"
 Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 23 Apr 2024 21:40:57 -0700
+  by fmviesa006.fm.intel.com with ESMTP; 23 Apr 2024 22:03:57 -0700
 Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rzURD-0000rc-00;
-	Wed, 24 Apr 2024 04:40:55 +0000
-Date: Wed, 24 Apr 2024 12:40:19 +0800
+	id 1rzUnT-0000si-1c;
+	Wed, 24 Apr 2024 05:03:55 +0000
+Date: Wed, 24 Apr 2024 13:03:07 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Subject: [usb:usb-next] BUILD SUCCESS
- 0d31ea587709216d88183fe4ca0c8aba5e0205b8
-Message-ID: <202404241216.4SdxRFJX-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+To: Krishna Kurapati <quic_kriskura@quicinc.com>
+Cc: oe-kbuild-all@lists.linux.dev, linux-usb@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Johan Hovold <johan+linaro@kernel.org>
+Subject: [usb:usb-testing 7/12] drivers/usb/dwc3/core.c:1482:69: warning:
+ '%d' directive output may be truncated writing between 1 and 11 bytes into a
+ region of size 4
+Message-ID: <202404241215.Mib19Cu7-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-next
-branch HEAD: 0d31ea587709216d88183fe4ca0c8aba5e0205b8  Merge 6.9-rc5 into usb-next
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+head:   a160e1202ca318a85c70cf5831f172cc79a24c57
+commit: 846b4bacf2d48212f271fc1ef7488bcdf2c75bcb [7/12] usb: dwc3: core: Refactor PHY logic to support Multiport Controller
+config: s390-allyesconfig (https://download.01.org/0day-ci/archive/20240424/202404241215.Mib19Cu7-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240424/202404241215.Mib19Cu7-lkp@intel.com/reproduce)
 
-elapsed time: 996m
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404241215.Mib19Cu7-lkp@intel.com/
 
-configs tested: 163
-configs skipped: 3
+All warnings (new ones prefixed by >>):
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+   drivers/usb/dwc3/core.c: In function 'dwc3_core_get_phy':
+>> drivers/usb/dwc3/core.c:1482:69: warning: '%d' directive output may be truncated writing between 1 and 11 bytes into a region of size 4 [-Wformat-truncation=]
+    1482 |                         snprintf(phy_name, sizeof(phy_name),  "usb2-%d", i);
+         |                                                                     ^~
+   drivers/usb/dwc3/core.c:1482:63: note: directive argument in the range [-2147483641, 254]
+    1482 |                         snprintf(phy_name, sizeof(phy_name),  "usb2-%d", i);
+         |                                                               ^~~~~~~~~
+   drivers/usb/dwc3/core.c:1482:25: note: 'snprintf' output between 7 and 17 bytes into a destination of size 9
+    1482 |                         snprintf(phy_name, sizeof(phy_name),  "usb2-%d", i);
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/usb/dwc3/core.c:1499:68: warning: '%d' directive output may be truncated writing between 1 and 11 bytes into a region of size 4 [-Wformat-truncation=]
+    1499 |                         snprintf(phy_name, sizeof(phy_name), "usb3-%d", i);
+         |                                                                    ^~
+   drivers/usb/dwc3/core.c:1499:62: note: directive argument in the range [-2147483641, 254]
+    1499 |                         snprintf(phy_name, sizeof(phy_name), "usb3-%d", i);
+         |                                                              ^~~~~~~~~
+   drivers/usb/dwc3/core.c:1499:25: note: 'snprintf' output between 7 and 17 bytes into a destination of size 9
+    1499 |                         snprintf(phy_name, sizeof(phy_name), "usb3-%d", i);
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                   randconfig-001-20240424   gcc  
-arc                   randconfig-002-20240424   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   clang
-arm                              allyesconfig   gcc  
-arm                                 defconfig   clang
-arm                          gemini_defconfig   clang
-arm                       imx_v6_v7_defconfig   clang
-arm                   milbeaut_m10v_defconfig   clang
-arm                             pxa_defconfig   gcc  
-arm                   randconfig-001-20240424   gcc  
-arm                   randconfig-002-20240424   gcc  
-arm                   randconfig-003-20240424   gcc  
-arm64                            alldefconfig   gcc  
-arm64                            allmodconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                            allyesconfig   clang
-arm64                               defconfig   gcc  
-arm64                 randconfig-002-20240424   gcc  
-arm64                 randconfig-003-20240424   gcc  
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-csky                  randconfig-001-20240424   gcc  
-csky                  randconfig-002-20240424   gcc  
-hexagon                          allmodconfig   clang
-hexagon                           allnoconfig   clang
-hexagon                          allyesconfig   clang
-hexagon                             defconfig   clang
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-001-20240423   clang
-i386         buildonly-randconfig-002-20240423   clang
-i386         buildonly-randconfig-003-20240423   gcc  
-i386         buildonly-randconfig-004-20240423   clang
-i386         buildonly-randconfig-005-20240423   clang
-i386         buildonly-randconfig-006-20240423   gcc  
-i386                                defconfig   clang
-i386                  randconfig-001-20240423   gcc  
-i386                  randconfig-002-20240423   gcc  
-i386                  randconfig-003-20240423   clang
-i386                  randconfig-004-20240423   gcc  
-i386                  randconfig-004-20240424   clang
-i386                  randconfig-005-20240423   clang
-i386                  randconfig-006-20240423   clang
-i386                  randconfig-011-20240423   gcc  
-i386                  randconfig-011-20240424   clang
-i386                  randconfig-012-20240423   clang
-i386                  randconfig-013-20240423   clang
-i386                  randconfig-013-20240424   clang
-i386                  randconfig-014-20240423   gcc  
-i386                  randconfig-014-20240424   clang
-i386                  randconfig-015-20240423   gcc  
-i386                  randconfig-015-20240424   clang
-i386                  randconfig-016-20240423   clang
-i386                  randconfig-016-20240424   clang
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20240424   gcc  
-loongarch             randconfig-002-20240424   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                        stmark2_defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                         bigsur_defconfig   gcc  
-mips                          malta_defconfig   gcc  
-mips                       rbtx49xx_defconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                 randconfig-001-20240424   gcc  
-nios2                 randconfig-002-20240424   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc                randconfig-001-20240424   gcc  
-parisc                randconfig-002-20240424   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   clang
-powerpc                 canyonlands_defconfig   clang
-powerpc                       holly_defconfig   clang
-powerpc               randconfig-002-20240424   gcc  
-powerpc               randconfig-003-20240424   gcc  
-powerpc64             randconfig-001-20240424   gcc  
-powerpc64             randconfig-002-20240424   gcc  
-powerpc64             randconfig-003-20240424   gcc  
-riscv                            allmodconfig   clang
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   clang
-riscv                               defconfig   clang
-riscv                 randconfig-001-20240424   gcc  
-s390                             allmodconfig   clang
-s390                              allnoconfig   clang
-s390                             allyesconfig   gcc  
-s390                                defconfig   clang
-s390                  randconfig-001-20240424   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                        apsh4ad0a_defconfig   gcc  
-sh                                  defconfig   gcc  
-sh                        edosk7705_defconfig   gcc  
-sh                    randconfig-001-20240424   gcc  
-sh                    randconfig-002-20240424   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-sparc64               randconfig-001-20240424   gcc  
-sparc64               randconfig-002-20240424   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   gcc  
-um                                  defconfig   clang
-um                             i386_defconfig   gcc  
-um                    randconfig-001-20240424   gcc  
-um                           x86_64_defconfig   clang
-x86_64                            allnoconfig   clang
-x86_64                           allyesconfig   clang
-x86_64       buildonly-randconfig-001-20240424   clang
-x86_64       buildonly-randconfig-002-20240424   clang
-x86_64                              defconfig   gcc  
-x86_64                randconfig-001-20240424   clang
-x86_64                randconfig-002-20240424   clang
-x86_64                randconfig-005-20240424   clang
-x86_64                randconfig-006-20240424   clang
-x86_64                randconfig-011-20240424   clang
-x86_64                randconfig-015-20240424   clang
-x86_64                randconfig-071-20240424   clang
-x86_64                randconfig-072-20240424   clang
-x86_64                randconfig-074-20240424   clang
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa                            allnoconfig   gcc  
-xtensa                  cadence_csp_defconfig   gcc  
-xtensa                randconfig-001-20240424   gcc  
-xtensa                randconfig-002-20240424   gcc  
+
+vim +1482 drivers/usb/dwc3/core.c
+
+  1445	
+  1446	static int dwc3_core_get_phy(struct dwc3 *dwc)
+  1447	{
+  1448		struct device		*dev = dwc->dev;
+  1449		struct device_node	*node = dev->of_node;
+  1450		char phy_name[9];
+  1451		int ret;
+  1452		int i;
+  1453	
+  1454		if (node) {
+  1455			dwc->usb2_phy = devm_usb_get_phy_by_phandle(dev, "usb-phy", 0);
+  1456			dwc->usb3_phy = devm_usb_get_phy_by_phandle(dev, "usb-phy", 1);
+  1457		} else {
+  1458			dwc->usb2_phy = devm_usb_get_phy(dev, USB_PHY_TYPE_USB2);
+  1459			dwc->usb3_phy = devm_usb_get_phy(dev, USB_PHY_TYPE_USB3);
+  1460		}
+  1461	
+  1462		if (IS_ERR(dwc->usb2_phy)) {
+  1463			ret = PTR_ERR(dwc->usb2_phy);
+  1464			if (ret == -ENXIO || ret == -ENODEV)
+  1465				dwc->usb2_phy = NULL;
+  1466			else
+  1467				return dev_err_probe(dev, ret, "no usb2 phy configured\n");
+  1468		}
+  1469	
+  1470		if (IS_ERR(dwc->usb3_phy)) {
+  1471			ret = PTR_ERR(dwc->usb3_phy);
+  1472			if (ret == -ENXIO || ret == -ENODEV)
+  1473				dwc->usb3_phy = NULL;
+  1474			else
+  1475				return dev_err_probe(dev, ret, "no usb3 phy configured\n");
+  1476		}
+  1477	
+  1478		for (i = 0; i < dwc->num_usb2_ports; i++) {
+  1479			if (dwc->num_usb2_ports == 1)
+  1480				snprintf(phy_name, sizeof(phy_name), "usb2-phy");
+  1481			else
+> 1482				snprintf(phy_name, sizeof(phy_name),  "usb2-%d", i);
+  1483	
+  1484			dwc->usb2_generic_phy[i] = devm_phy_get(dev, phy_name);
+  1485			if (IS_ERR(dwc->usb2_generic_phy[i])) {
+  1486				ret = PTR_ERR(dwc->usb2_generic_phy[i]);
+  1487				if (ret == -ENOSYS || ret == -ENODEV)
+  1488					dwc->usb2_generic_phy[i] = NULL;
+  1489				else
+  1490					return dev_err_probe(dev, ret, "failed to lookup phy %s\n",
+  1491								phy_name);
+  1492			}
+  1493		}
+  1494	
+  1495		for (i = 0; i < dwc->num_usb3_ports; i++) {
+  1496			if (dwc->num_usb3_ports == 1)
+  1497				snprintf(phy_name, sizeof(phy_name), "usb3-phy");
+  1498			else
+  1499				snprintf(phy_name, sizeof(phy_name), "usb3-%d", i);
+  1500	
+  1501			dwc->usb3_generic_phy[i] = devm_phy_get(dev, phy_name);
+  1502			if (IS_ERR(dwc->usb3_generic_phy[i])) {
+  1503				ret = PTR_ERR(dwc->usb3_generic_phy[i]);
+  1504				if (ret == -ENOSYS || ret == -ENODEV)
+  1505					dwc->usb3_generic_phy[i] = NULL;
+  1506				else
+  1507					return dev_err_probe(dev, ret, "failed to lookup phy %s\n",
+  1508								phy_name);
+  1509			}
+  1510		}
+  1511	
+  1512		return 0;
+  1513	}
+  1514	
 
 -- 
 0-DAY CI Kernel Test Service
