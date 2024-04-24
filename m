@@ -1,289 +1,103 @@
-Return-Path: <linux-usb+bounces-9704-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9705-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 08F548B04A5
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Apr 2024 10:45:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id BA9608B04B1
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Apr 2024 10:46:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B516A281E7F
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Apr 2024 08:45:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 77E592838ED
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Apr 2024 08:46:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BD57158A06;
-	Wed, 24 Apr 2024 08:45:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="XVftnutz"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22E8F158A0B;
+	Wed, 24 Apr 2024 08:46:17 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88224157E9B;
-	Wed, 24 Apr 2024 08:45:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64E62156C78;
+	Wed, 24 Apr 2024 08:46:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.75.126.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713948304; cv=none; b=H5yA4PC8Tdbc+uFqvfrOu/ga6+Of+/cX4ZETjbbsYKVYBt9iO3Qgifr2GSiy7fgbYBI27hZ8bpvb13Xx/ZIlLZ8V8bCkkoGSzKfYG8C1zE4OL/wvMkgBACpmvEayUQy58xRziKx7uxjEQMKiWqd45DFrYzSsRyxpprw2fduyJoE=
+	t=1713948376; cv=none; b=utzmTM9j8kTdXUzfqJWbluYc2Cl47ybMxTr6u4TEFmWOE/LxyOQndaTDSU2VXOo+y1/DbwKfvCm77pgqad8gEaG6EqOIvfYUdNSJaiKhKmO9frN7ik4r4VvXmmlj7Q/+TRtZdpuez7xUkEH0ne1Sag51VhWALGcOYTbR5ITQgGk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713948304; c=relaxed/simple;
-	bh=m6mPgGR3XU4U9ytPY5b8+9BmtF5hVjUzrdM+TlTLqvw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=D4DWiY3ecd7+1NMhQFRG4a5nrcZkQ4Quh35mQOkQ5RStrdurfxlDabog9OHVJxg5tHjkG9GOe/aAAgDvdnhlsTyoo/qPkH3vLB4UMGUt3CUxjQi/OdneCTOEB1dpYWex2YhXiiw6bLvXWAoEPpyAniUtnHv6xqBcKSrxR5ymSEs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=XVftnutz; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 43O6Wwsi002725;
-	Wed, 24 Apr 2024 08:44:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=qlhC4LA3WR9b0s8i7i7LeULjyk7Shhr2cVGV9FtwGWQ=; b=XV
-	ftnutzfgnLwSOg2pmA7z6lzo0+WKICXjOGaWUp5lLnLu2cJwRle+9M10bAsURAdm
-	2+Spoi11jPGAFvHEOnL+ltXkv7Ic8WtYJVnEdt4uDkMkWMwsyf0Uq6vkX6CZmJ8F
-	jI3BipjRPk+heSMsoKxO5Tw27gKXqQ34/ceodcDcvecoCX4/LFJ27yzUHDg5oF49
-	Hg6amhN0EXFhPVNUCQqbTt0ie4HK1vmioDwNhOHUutnI6ekcSXq/Dz9yrUA1ZjTs
-	RVF+z3U3KUk8iDhe9G4Oa2FDJ8F3BA3rY+nU/4Xj18j12X17rz3Fs4NJG1lQL2og
-	aACoLAq/mi4wS3EiNgqQ==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xpv9e0bbh-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 24 Apr 2024 08:44:59 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 43O8iwgN026882
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 24 Apr 2024 08:44:58 GMT
-Received: from [10.218.35.239] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 24 Apr
- 2024 01:44:55 -0700
-Message-ID: <168904cd-4806-0473-085d-43df45efba65@quicinc.com>
-Date: Wed, 24 Apr 2024 14:14:28 +0530
+	s=arc-20240116; t=1713948376; c=relaxed/simple;
+	bh=U9WEx/BCuYxzfID62sP6/0+vS8kW5OxyjS0bTYk41Zk=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=MDeBm+6dx0PNOxgdbct24BpKCQ9F/JB7HkgbjLUTAk3QvYQF6b+uAyfgizg4MHxn3Vo5Rpxcc21Z1g8cjceQ+/Jpo3pFzfBoIhtBLs9tcZHn9bISKjMZfadIqd70hKW8uoN80hkWeZoqoKYK0OHMkcpMrCNS8QPADGp0NpQSbcg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=realtek.com; spf=pass smtp.mailfrom=realtek.com; arc=none smtp.client-ip=211.75.126.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=realtek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=realtek.com
+X-SpamFilter-By: ArmorX SpamTrap 5.78 with qID 43O8jun572217172, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+	by rtits2.realtek.com.tw (8.15.2/2.95/5.92) with ESMTPS id 43O8jun572217172
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 24 Apr 2024 16:45:56 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.35; Wed, 24 Apr 2024 16:45:56 +0800
+Received: from fc38.realtek.com.tw (172.22.228.98) by RTEXMBS04.realtek.com.tw
+ (172.21.6.97) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Wed, 24 Apr
+ 2024 16:45:55 +0800
+From: Hayes Wang <hayeswang@realtek.com>
+To: <kuba@kernel.org>, <davem@davemloft.net>
+CC: <netdev@vger.kernel.org>, <nic_swsd@realtek.com>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        Hayes Wang
+	<hayeswang@realtek.com>
+Subject: [PATCH net-next] r8152: replace dev_info with dev_dbg for loading firmware
+Date: Wed, 24 Apr 2024 16:45:32 +0800
+Message-ID: <20240424084532.159649-1-hayeswang@realtek.com>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [RFC PATCH] usb: dwc3: Poll CMDACT after issuing EndXfer command
-Content-Language: en-US
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wesley Cheng
-	<quic_wcheng@quicinc.com>,
-        "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org"
-	<linux-usb@vger.kernel.org>
-References: <20240422090539.3986723-1-quic_prashk@quicinc.com>
- <20240424013342.5itkoewx7jdonyk4@synopsys.com>
-From: Prashanth K <quic_prashk@quicinc.com>
-In-Reply-To: <20240424013342.5itkoewx7jdonyk4@synopsys.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: Tk-3iSxN75HC3TZlHHcU3bi9P02sl4pT
-X-Proofpoint-ORIG-GUID: Tk-3iSxN75HC3TZlHHcU3bi9P02sl4pT
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1011,Hydra:6.0.650,FMLib:17.11.176.26
- definitions=2024-04-24_06,2024-04-23_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 malwarescore=0
- suspectscore=0 phishscore=0 adultscore=0 impostorscore=0 clxscore=1015
- spamscore=0 priorityscore=1501 mlxlogscore=663 lowpriorityscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2404010003 definitions=main-2404240037
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: RTEXH36505.realtek.com.tw (172.21.6.25) To
+ RTEXMBS04.realtek.com.tw (172.21.6.97)
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
 
+Someone complains the message appears continuously. This occurs
+because the device is woken from UPS mode, and the driver re-loads
+the firmware.
 
+When the device enters runtime suspend and cable is unplugged, the
+device would enter UPS mode. If the runtime resume occurs, and the
+device is woken from UPS mode, the driver has to re-load the firmware
+and causes the message. If someone wakes the device continuously, the
+message would be shown continuously, too. Use dev_dbg to avoid it.
 
-On 24-04-24 07:03 am, Thinh Nguyen wrote:
-> On Mon, Apr 22, 2024, Prashanth K wrote:
->> Currently DWC3 controller revisions 3.10a and later supports
-> 
-> DWC3 -> DWC_usb3 to highlight not being DWC_usb31 and DWC_usb32.
-> 
->> GUCTL[14: Rst_actbitlater] bit which allows polling CMDACT bit
-> 
-> GUCTL -> GUCTL2
-> 
->> to know whether ENDXFER command is completed. Other revisions
->> wait 1ms for ENDXFER completion after issuing the command.
->>
->> Consider a case where an IN request was queued, and parallelly
->> soft_disconnect was called (due to ffs_epfile_release). This
->> eventually calls stop_active_transfer with IOC cleared, hence
->> send_gadget_ep_cmd() skips waiting for CMDACT cleared during
->> endxfer. For DWC3 controllers with revisions >= 310a, we don't
->> forcefully wait for 1ms either, and we proceed by unmapping the
->> requests. If ENDXFER didn't complete by this time, it leads to
->> SMMU faults since the controller would still be accessing those
->> requests.
->>
->> DWC3 databook specifies that CMDACT bit can be polled to check
->> completion of the EndXfer. Hence use it in stop_active_transfer
->> to know whether the ENDXFER got completed.
->>
->> Section 3.2.2.7 Command 8: End Transfer (DEPENDXFER)
->> Note: If GUCTL2[Rst_actbitlater] is set, Software can poll the
->> completion of the End  Transfer command by polling the command
->> active bit to be cleared to 0.
->>
->> Fixes: b353eb6dc285 ("usb: dwc3: gadget: Skip waiting for CMDACT cleared during endxfer")
->> Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
->> ---
->>   drivers/usb/dwc3/gadget.c | 22 ++++++++++++++++++++--
->>   1 file changed, 20 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
->> index 4df2661f6675..acb54c48451f 100644
->> --- a/drivers/usb/dwc3/gadget.c
->> +++ b/drivers/usb/dwc3/gadget.c
->> @@ -1701,8 +1701,8 @@ static int __dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force, bool int
->>   {
->>   	struct dwc3 *dwc = dep->dwc;
->>   	struct dwc3_gadget_ep_cmd_params params;
->> -	u32 cmd;
->> -	int ret;
->> +	u32 cmd, reg;
->> +	int ret, retries = 500;
-> 
-> Please separate variable declarations per line.
-> 
->>   
->>   	cmd = DWC3_DEPCMD_ENDTRANSFER;
->>   	cmd |= force ? DWC3_DEPCMD_HIPRI_FORCERM : 0;
->> @@ -1726,6 +1726,24 @@ static int __dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force, bool int
->>   	if (!interrupt) {
->>   		if (!DWC3_IP_IS(DWC3) || DWC3_VER_IS_PRIOR(DWC3, 310A))
->>   			mdelay(1);
->> +		else {
->> +			/*
->> +			 * ENDXFER polling is available on version 3.10a and later of
-> 
-> Try to note the IP along with version (eg. DWC_usb3 v3.10a).
-> 
-Will update all of the above in next patch.
+Note that, the function could be called before register_netdev(), so I
+don't use netif_info() or netif_dbg().
 
->> +			 * the DWC3 controller (This is enabled by setting GUCTL2[14])
-> 
-> Did we check to know that we set GUCTL2.Rst_actbitlater to start
-> polling for CMDACT?
-GUCTL2[14] is set only for DWC3_usb3 controllers prior to version 310a, 
-because the register is not available for other versions/revisions.
+Signed-off-by: Hayes Wang <hayeswang@realtek.com>
+---
+ drivers/net/usb/r8152.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-dwc3/core.c - dwc3_core_init()
-	/*
-	 * ENDXFER polling is available on version 3.10a and later of
-	 * the DWC_usb3 controller. It is NOT available in the
-	 * DWC_usb31 controller.
-	 */
-	if (DWC3_VER_IS_WITHIN(DWC3, 310A, ANY)) {
-		reg = dwc3_readl(dwc->regs, DWC3_GUCTL2);
-		reg |= DWC3_GUCTL2_RST_ACTBITLATER;
-		dwc3_writel(dwc->regs, DWC3_GUCTL2, reg);
-	}
+diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+index 5d6aeb086fc7..51e9f5b2dccf 100644
+--- a/drivers/net/usb/r8152.c
++++ b/drivers/net/usb/r8152.c
+@@ -5274,7 +5274,7 @@ static void rtl8152_apply_firmware(struct r8152 *tp, bool power_cut)
+ 
+ 	rtl_reset_ocp_base(tp);
+ 	strscpy(rtl_fw->version, fw_hdr->version, RTL_VER_SIZE);
+-	dev_info(&tp->intf->dev, "load %s successfully\n", rtl_fw->version);
++	dev_dbg(&tp->intf->dev, "load %s successfully\n", rtl_fw->version);
+ }
+ 
+ static void rtl8152_release_firmware(struct r8152 *tp)
+-- 
+2.44.0
 
-Hence the we have added the CMDACT polling in else case of the following 
-check in __dwc3_stop_active_transfer().
-
-if (!DWC3_IP_IS(DWC3) || DWC3_VER_IS_PRIOR(DWC3, 310A))
-
-> 
->> +			 */
->> +			do {
->> +				reg = dwc3_readl(dep->regs, DWC3_DEPCMD);
->> +				if (!(reg & DWC3_DEPCMD_CMDACT))
->> +					break;
->> +				udelay(2);
-> 
-> udelay of 2 is really small. Try at least 200us.
-Agreed, Will make it 200us with 5 retries. I'm not really sure how many 
-retries we need here. I just made the aggregate to 1ms since we use 1ms 
-delay for other revisions.
-> 
->> +			} while (--retries);
->> +
->> +			if (!retries && (dwc->ep0state != EP0_SETUP_PHASE)) {
->> +				dep->flags |= DWC3_EP_DELAY_STOP;
->> +				return -ETIMEDOUT;
->> +			}
->> +		}
->> +
->>   		dep->flags &= ~DWC3_EP_TRANSFER_STARTED;
->>   	} else if (!ret) {
->>   		dep->flags |= DWC3_EP_END_TRANSFER_PENDING;
->> -- 
->> 2.25.1
->>
-> 
-> Did you observe issues with DWC_usb31? How much longer did your setup
-> need to complete End Transfer command?
-> 
-The problem here is that we are immediately unmapping the request after 
-issuing the ENDXER, we aren't waiting for the completion unlike other 
-commands.
-
-90.872628:    dbg_send_ep_cmd: ep1in: cmd 'End Transfer' [30c08] params 
-00000000 00000000 00000000 --> status: UNKNOWN
-90.872652:    dbg_ep_queue: ep1in: req 937bc75c length 0/1069 zsI ==> -108
-
- From the above traces, we can we see that the time gap between 
-send_ep_cmd and dequeue/unmap is 24us, which is pretty small.
-And immediately we got an smmu fault (since ENDXFER didn't complete in 
-this 24us time-frame). I dumped the DWC3 regs and saw that cmdact was 
-not cleared for ep1in which means the cmd never got completed.
-
-90.873360:    [DEPCMD(3): 0xc83c	0x00030C08]
---> CMDACT (bit10) still set.
-
-> I would prefer a solution that applies for all IPs. Do you observe any
-> impact should we increase the mdelay()? I don't expect much impact since
-> this should only happen during endpoint disbling, which is not a common
-> operation.
-> 
-I checked the following comments in dwc3_stop_active_transfer(), since 
-we don't use IOC for ENDXFER, we are use CMDACT polling on revisions 
-which supports it, other revisions uses delay of 1ms instead.
-
-But currently for DWC3_usb3 >= 310a, we don't poll cmdact (even though 
-it supports it) nor we wait 1ms for command completion. For me waiting 
-1ms was also helping, but that doesn't guarantee the  command completion 
-though (we just assume that it gets completed by that time).
-
-	 * As of IP version 3.10a of the DWC_usb3 IP, the controller
-	 * supports a mode to work around the above limitation. The
-	 * software can poll the CMDACT bit in the DEPCMD register
-	 * after issuing a EndTransfer command. This mode is enabled
-	 * by writing GUCTL2[14]. This polling is already done in the
-	 * dwc3_send_gadget_ep_cmd() function so if the mode is
-	 * enabled, the EndTransfer command will have completed upon
-	 * returning from this function.
-	 *
-	 * This mode is NOT available on the DWC_usb31 IP.  In this
-	 * case, if the IOC bit is not set, then delay by 1ms
-	 * after issuing the EndTransfer command.  This allows for the
-	 * controller to handle the command completely before DWC3
-	 * remove requests attempts to unmap USB request buffers.
-
-But anyways I conducted a small experiment to calculate the ENDXFER cmd 
-completion, added traces before writing to DEPCMD and immediately polled 
-for the CMDACT to get cleared. Observed that it takes 10-15us on average 
-(checked on DWC3_REVISION_310A), but these are the best case scenarios.
-
-191.623016: dwc3_writel: addr xx offset 000c value 00040c08 - write to 
-DEPCMD
-191.623027: dwc3_readl: addr xx offset 000c value 00040808 -- CMACT cleared
-191.623076: dwc3_gadget_ep_cmd: ep2out: cmd 'End Transfer' [40c08] 
-params 00000000 00000000 00000000 --> status: Successful
-.
-191.623425: dwc3_writel: addr xx offset 000c value 00070c08
-191.623436: dwc3_readl: addr xx offset 000c value 00070808
-191.623483: dwc3_gadget_ep_cmd: ep3in: cmd 'End Transfer' [70c08] params 
-00000000 00000000 00000000 --> status: Successful
-
-Thanks,
-Prashanth K
 
