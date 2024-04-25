@@ -1,72 +1,78 @@
-Return-Path: <linux-usb+bounces-9780-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9781-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD7EA8B291A
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Apr 2024 21:40:44 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E0A398B2A24
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Apr 2024 22:51:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8F431285583
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Apr 2024 19:40:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6AF95B21791
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Apr 2024 20:51:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C785415251C;
-	Thu, 25 Apr 2024 19:40:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E407D153824;
+	Thu, 25 Apr 2024 20:51:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="nT4RwQjZ"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=smtpservice.net header.i=@smtpservice.net header.b="ozr3NaZ8";
+	dkim=pass (2048-bit key) header.d=cchtml.com header.i=@cchtml.com header.b="WWyujRXI";
+	dkim=pass (1024-bit key) header.d=cchtml.com header.i=@cchtml.com header.b="a0tNfM3W"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+Received: from a1i757.smtp2go.com (a1i757.smtp2go.com [43.228.186.245])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CBAA152515
-	for <linux-usb@vger.kernel.org>; Thu, 25 Apr 2024 19:40:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D573939ADD
+	for <linux-usb@vger.kernel.org>; Thu, 25 Apr 2024 20:51:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=43.228.186.245
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714074041; cv=none; b=frYBN3VQ2jDEnvAPlGj49OrALCxluAlH2V8jQ0I8l2eJDYYmxxUQIY/kzKVPYNO54Bj2k+Y6XezanlQd0+Ek+bhXcxy7HugYTGwXczmUj8kZNc+2uh/t2OHgZ/O8zrlLE3XFrVg4L4gnX8pjM+YT59OjjTEOEzsvQIJfXOrifw4=
+	t=1714078277; cv=none; b=AvUdqtcb9OaE1x4WWrXcj3aPYTRxqTDSW1YfnEKnFo4exPGKzY/rTaeaqeuYMeuTGUojNAmm8uFh+VErWMRAwmstlWpyavJUAHPe0vJzHm42RKFUDlx2y+P/uKIrLbNwUs8ETNMwela4KRdO87IgF+SQyQ7k94t4C+LH8hQYyPE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714074041; c=relaxed/simple;
-	bh=NxRn6wwHeZl2W6m95OUrYBSMLuu68n9JunWUCNzxpKY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
-	 Content-Type:References; b=A28AKOJypOwQSFTqURPy5GDWQxEpiVGYK/p7LNDxvob2LHQGCTDdiMX4PjKluyr5iH5/tQjq0n90V49s/qntDSCZEKSY37okXZaBdYSr/YJ4SypnBtnEwrf9tTogo8SZTiqcskJZgWQlrpVfBZjUXvlDoG75UJdHhJj0b+aNmWI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=nT4RwQjZ; arc=none smtp.client-ip=210.118.77.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20240425194035euoutp026a1b2d0cb2829f38b6ddc4bb30ba0724~JnUDjtjha2348623486euoutp02k
-	for <linux-usb@vger.kernel.org>; Thu, 25 Apr 2024 19:40:35 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20240425194035euoutp026a1b2d0cb2829f38b6ddc4bb30ba0724~JnUDjtjha2348623486euoutp02k
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1714074035;
-	bh=+ve4YzZPSzdZ+iyibvf0yaqAhYlUh+0zk0V42/Z+YIg=;
-	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-	b=nT4RwQjZLbNKK3ZXH8LXA+L749MfFdKG9pEfyQ68SB1/pZDi4aIlVBXooQyu2TVg8
-	 qHZgZHzS0Kno0EI6VuLpcSHLJUAeN3qp3YrV3+nKVj9FE4b6qwk87ccn6i6mHEqtq0
-	 Ec1CD4srUUuUu106509GC4eX+jE9RG4kLsDwgFmc=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-	20240425194034eucas1p10c61dbd2c10c7bb4da3435267dc04cf7~JnUC0H6uU1754517545eucas1p1K;
-	Thu, 25 Apr 2024 19:40:34 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-	eusmges3new.samsung.com (EUCPMTA) with SMTP id 3C.01.09620.2B1BA266; Thu, 25
-	Apr 2024 20:40:34 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-	20240425194033eucas1p2c1e98d1c55c970e246087e2dab180e84~JnUCPRHI62101121011eucas1p2T;
-	Thu, 25 Apr 2024 19:40:33 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-	eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-	20240425194033eusmtrp227da945401031d3afe99d684284ef0d5~JnUCOzDG_2742827428eusmtrp2U;
-	Thu, 25 Apr 2024 19:40:33 +0000 (GMT)
-X-AuditID: cbfec7f5-d31ff70000002594-a2-662ab1b26f49
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-	eusmgms2.samsung.com (EUCPMTA) with SMTP id 70.AF.09010.1B1BA266; Thu, 25
-	Apr 2024 20:40:33 +0100 (BST)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20240425194033eusmtip17d3bc8e97a0af5fefdf5d9fdf2bcd9d2~JnUB2lUxd1368613686eusmtip1X;
-	Thu, 25 Apr 2024 19:40:33 +0000 (GMT)
-Message-ID: <21ea292a-b1d1-43e2-92ab-9f1f63aaf729@samsung.com>
-Date: Thu, 25 Apr 2024 21:40:32 +0200
+	s=arc-20240116; t=1714078277; c=relaxed/simple;
+	bh=/k/S6WOKrQUvHCOGUr8t4WgqnLGJ/YsyjH7FPnHT6Rs=;
+	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type; b=fC4KaGVcQigdOx5PtRmeHPkZPR1c6Z5a9mQoCc1RxciGGwNhKtHTwwEdSiRb7skHJ0fveheFMFtCR9s/JTAmWhtGZevgRy5w4HbjmuT9LGHHkcd6i7NrUPVHBt0S5+z+LL8Hp+dcLU5MNBkR6KzR0mg24mtikg2JnXx1UQK1dew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cchtml.com; spf=pass smtp.mailfrom=em608870.cchtml.com; dkim=pass (2048-bit key) header.d=smtpservice.net header.i=@smtpservice.net header.b=ozr3NaZ8; dkim=pass (2048-bit key) header.d=cchtml.com header.i=@cchtml.com header.b=WWyujRXI; dkim=pass (1024-bit key) header.d=cchtml.com header.i=@cchtml.com header.b=a0tNfM3W; arc=none smtp.client-ip=43.228.186.245
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cchtml.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=em608870.cchtml.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=smtpservice.net; s=md1t20.a1-4.dyn; x=1714079175; h=Feedback-ID:
+	X-Smtpcorp-Track:Subject:From:To:Date:Message-ID:Reply-To:Sender:
+	List-Unsubscribe; bh=9OZ+Maw+FEUms3tVvD1nUlRX77OK6HR0UuSXK0CEPAA=; b=ozr3NaZ8
+	DZY7YmAdKx9F9AXbDVWyfzSQIspS1FFtF9e8Fjm9Su9NUNd3JSjnuxoKcJ5TFowL4j9ccAiG/ETtx
+	5u4XnJ6G0eocGxYJ1WjMSf+8kN890L+tJuRfAIFsuiYPlY7UxByYSqpiaM3i4lZ6Vdbkv2ROTTufi
+	Uh8jpWMjwW8F/5p8+Bxx8QG5vKBI20QTq0+aVvUMwrbMuKE55hMYF1RIBOqyS9KOdbwTkyMoWJIZa
+	sh0xWFa1IO2tLPjNlEKVjikwLUNtt2L2NosC3VuQJrGKoMEH/VvUtIUxE5tH3oErpnBvvDKny4vHI
+	J3B9Sj5L/MkppeNHEtxxDVOYjw==;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cchtml.com;
+ i=@cchtml.com; q=dns/txt; s=s608870; t=1714078275; h=from : subject :
+ to : message-id : date;
+ bh=9OZ+Maw+FEUms3tVvD1nUlRX77OK6HR0UuSXK0CEPAA=;
+ b=WWyujRXIFMfHRSLIT0YB1BQ7y59GmkqMVMxKL229JApAv4tb5f0PSFSvjyVAhm/45Gw+K
+ 4FStEIdoLUbMZy1QcouxavnT11U5AnJu8oyA4yO6oJxeBr3vCKsrus8Ie2+j7QMJKj/5aF7
+ 5a6EuoOhkhNwk97sdw9rBkWJRXjIQTyBtAj+02eTJ/dTW4tpcbrOQ1MYuYmNQj+hlj2uzOx
+ NrVY22B1ES38C2uiUXcaBAC6oEF/WfmxRcEbQeq6BakVyzlwBk0+k8cJaWxwHduDQhbiXzK
+ PgR8B92ya+xrGmkRBqEyVheSJ9hGwwW9Ud1bFOuRKRdjAKv78E7w1qIqI9Qw==
+Received: from [10.45.79.170] (helo=SmtpCorp) by smtpcorp.com with esmtpsa
+ (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+ (Exim 4.94.2-S2G) (envelope-from <mike@cchtml.com>)
+ id 1s063l-bePAXi-2S
+ for linux-usb@vger.kernel.org; Thu, 25 Apr 2024 20:51:13 +0000
+Received: from [10.145.240.152] (helo=cchtml.com) by smtpcorp.com with esmtpsa
+ (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+ (Exim 4.97-S2G) (envelope-from <mike@cchtml.com>)
+ id 1s063k-FnQW0hPqUFo-JQpu for linux-usb@vger.kernel.org;
+ Thu, 25 Apr 2024 20:51:12 +0000
+Received: from [10.0.0.10] (unknown [10.0.0.10])
+ by cchtml.com (Postfix) with ESMTPSA id C4AE5F6045A
+ for <linux-usb@vger.kernel.org>; Thu, 25 Apr 2024 15:51:11 -0500 (CDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 cchtml.com C4AE5F6045A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cchtml.com;
+ s=balthasar; t=1714078271;
+ bh=9OZ+Maw+FEUms3tVvD1nUlRX77OK6HR0UuSXK0CEPAA=;
+ h=Date:To:From:Subject:From;
+ b=a0tNfM3W12Nx/0fCWo1j9OYinpQgDLkZtbcVlOukiZiq18kIfEUlx9R8How6t+4CY
+ 7lXJfHM4x6JRBumzKr0jcJiDnUr/xSM8DgduVR5Y1KoaGJzUhtUUZN/VeILlTZ6S/m
+ KpI8fqj8dRhRz98yVFNEOTS6kyWZLXXj+H7V98ks=
+Message-ID: <365a9ed8-0b77-4bb6-85b5-e088f0c2c36b@cchtml.com>
+Date: Thu, 25 Apr 2024 15:51:10 -0500
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -74,136 +80,37 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: chipidea: move ci_ulpi_init after the phy
- initialization
-To: Michael Grzeschik <m.grzeschik@pengutronix.de>, Peter Chen
-	<peter.chen@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+To: linux-usb@vger.kernel.org
 Content-Language: en-US
-From: Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <20240328-chipidea-phy-misc-v1-1-907d9de5d4df@pengutronix.de>
+From: Michael Cronenworth <mike@cchtml.com>
+Subject: No SuperSpeedPlus on AMD X570S motherboard
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupnleLIzCtJLcpLzFFi42LZduzned1NG7XSDE5PF7ZoXryezeLyrjls
-	FouWtTJbbGm7wmTxa/8mFgdWj02rOtk89s9dw+7R/9fA4/MmuQCWKC6blNSczLLUIn27BK6M
-	tfvPMxbMEK34umAFcwNjj2AXIyeHhICJxIkDPYxdjFwcQgIrGCXaF11ih3C+MEqsP7oGKvOZ
-	UWLC2V5WmJYNS59CVS1nlNg18RAbhPORUWLb7ktgVbwCdhJnZr1lBrFZBFQlGp8/YIKIC0qc
-	nPmEBcQWFZCXuH9rBjuILSwQInF51RmwQSICnYwS21u+ADVzcDALWEv83JcPUsMsIC5x68l8
-	sDlsAoYSXW+72EBsTgEvie9Nr1khauQltr+dwwwyR0LgBIfEzS0bmCHOdpG4NHs9lC0s8er4
-	FnYIW0bi/06QoSAN7YwSC37fh3ImMEo0PL/FCFFlLXHn3C82iIs0Jdbv0ocIO0qsbL3MDhKW
-	EOCTuPFWEOIIPolJ26YzQ4R5JTrahCCq1SRmHV8Ht/bghUvMExiVZiEFyywkb85C8s4shL0L
-	GFlWMYqnlhbnpqcWG+ellusVJ+YWl+al6yXn525iBKaZ0/+Of93BuOLVR71DjEwcjIcYJTiY
-	lUR4b37USBPiTUmsrEotyo8vKs1JLT7EKM3BoiTOq5oinyokkJ5YkpqdmlqQWgSTZeLglGpg
-	kj/PK7vd4ZWx9Q3BOdMPLriXN+VkXX3ulkM/xZzvzr7VdMZ37sNTZ7IjCvYIbldbktL98NTs
-	Ci2xvtTntrWCbm3hErZr9sUu3/xa82jb5xR77zmCi+6n5bzazSDFcpBFSoFvr9WG5FXhctGb
-	OIJaljeK/OnkNZr49N2NeL+rInnL1sw6bPJasGLS3dJHCzb/DujcsX1yUFix4r/rCxIkOJcb
-	Xbl1Oud89JWL0qdLVV/7SnbkZTTqlHve/LVHvq/0LH9balSjzfnLOzJaBQ5sdJvv4p0Wuvq0
-	walDG8z38PcouBxVDWfWMf5t7bqKx1tJ0tRKqZjlM3N+TPAlf/PW31/OXV7n6CUVZrFs4ey7
-	SizFGYmGWsxFxYkAegJTe6IDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrAIsWRmVeSWpSXmKPExsVy+t/xu7obN2qlGWz+pGnRvHg9m8XlXXPY
-	LBYta2W22NJ2hcni1/5NLA6sHptWdbJ57J+7ht2j/6+Bx+dNcgEsUXo2RfmlJakKGfnFJbZK
-	0YYWRnqGlhZ6RiaWeobG5rFWRqZK+nY2Kak5mWWpRfp2CXoZa/efZyyYIVrxdcEK5gbGHsEu
-	Rk4OCQETiQ1Ln7J3MXJxCAksZZS4v2MOI0RCRuLktAZWCFtY4s+1LjaIoveMErfez2ADSfAK
-	2EmcmfWWGcRmEVCVaHz+gAkiLihxcuYTFhBbVEBe4v6tGewgtrBAiMTlVWfABokIdDNKrNjX
-	CLSBg4NZwFri5758kBohAU+J/qcQi5kFxCVuPZkPNpNNwFCi620X2F5OAS+J702voWrMJLq2
-	djFC2PIS29/OYZ7AKDQLyRmzkIyahaRlFpKWBYwsqxhFUkuLc9Nzi430ihNzi0vz0vWS83M3
-	MQKjatuxn1t2MK589VHvECMTB+MhRgkOZiUR3psfNdKEeFMSK6tSi/Lji0pzUosPMZoCw2Ii
-	s5Rocj4wrvNK4g3NDEwNTcwsDUwtzYyVxHk9CzoShQTSE0tSs1NTC1KLYPqYODilGphi9ix/
-	PfMGA/97uePT+evNtIK3sFYfvFivW3fzdu/J2u3rO716f9qqd0+55OAoubdlkgRj776I71sW
-	ZJ1TNDBr3762eY3+PtPg7dcyZ0gf7J60appK4/UiP5d6n6J19+cuL9foOB0R9MB7ZsHKuZEM
-	xW9S5lZtZ5qZfsHwvk2RmSyPd6XZ4pxP1W8WuWpF8ebc1C+o3ff89dII7dLtqbzm9w98PK5h
-	edt5cdCDlACFilfCn6s+lr3ZcDFQu/EHc3e9wkwNIVeZVxc2fqp4EH+z6XNSuBDDdHfmFVO1
-	HT7fsWIXYqqMX9gzy7Jrve7ibyvPsZpOv+cdnB+8eP6ltz18r7iWvzJ4+PDr6opv4TeUWIoz
-	Eg21mIuKEwEY5nfmMwMAAA==
-X-CMS-MailID: 20240425194033eucas1p2c1e98d1c55c970e246087e2dab180e84
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20240425194033eucas1p2c1e98d1c55c970e246087e2dab180e84
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20240425194033eucas1p2c1e98d1c55c970e246087e2dab180e84
-References: <20240328-chipidea-phy-misc-v1-1-907d9de5d4df@pengutronix.de>
-	<CGME20240425194033eucas1p2c1e98d1c55c970e246087e2dab180e84@eucas1p2.samsung.com>
+X-Smtpcorp-Track: JJLxTqxy0qEF.UzC9HjOrnSBt.nN6srQd8QTC
+Feedback-ID: 608870m:608870aW9PzKj:608870s8j6r_ec8n
+X-Report-Abuse: Please forward a copy of this message, including all headers,
+ to <abuse-report@smtp2go.com>
 
-Dear All,
+Hi,
 
-On 02.04.2024 08:23, Michael Grzeschik wrote:
-> The function ci_usb_phy_init is already handling the
-> hw_phymode_configure path which is also only possible after we have
-> a valid phy. So we move the ci_ulpi_init after the phy initialization
-> to be really sure to be able to communicate with the ulpi phy.
->
-> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+I have just noticed after two years of ownership that my reported speeds for two 
+different USB 3.2 Gen 2 (10Gbit) devices are reporting as connected at 5Gbit. I do 
+not recall that I checked the speeds in the past two years so I am uncertain if it 
+ever worked at Plus speed.
 
-This patch landed in linux-next some time ago as commit 22ffd399e6e7 
-("usb: chipidea: move ci_ulpi_init after the phy initialization"). 
-Unfortunately it breaks host USB operation on DragonBoard410c 
-(arch/arm64/boot/dts/qcom/apq8016-sbc.dts). There is no error nor 
-warning in the kernel log besides the information about deferred probe 
-on the chipidea controller:
+Motherboard: Gigabyte X570SI AORUS PRO AX
+Kernel: 6.8.7
+OS: Fedora 40
 
-platform ci_hdrc.0: deferred probe pending: (reason unknown)
+There is one USB-A 3.2 Gen2 port and one USB-C Gen2 port on the back panel. Both 
+ports report SuperSpeed only (5Gbit) when SuperSpeedPlus devices are plugged into them.
 
-Tomorrow I will try to investigate which operation during driver probe 
-triggers it. If there is anything else to check that might help fixing 
-this issue, let me know.
+Windows 10 shows both ports can work at SuperSpeedPlus 10Gbit speed with the USB 
+Device Tree Viewer tool.
 
-> ---
->   drivers/usb/chipidea/core.c | 8 ++++----
->   drivers/usb/chipidea/ulpi.c | 5 -----
->   2 files changed, 4 insertions(+), 9 deletions(-)
->
-> diff --git a/drivers/usb/chipidea/core.c b/drivers/usb/chipidea/core.c
-> index 835bf2428dc6e..bada13f704b62 100644
-> --- a/drivers/usb/chipidea/core.c
-> +++ b/drivers/usb/chipidea/core.c
-> @@ -1084,10 +1084,6 @@ static int ci_hdrc_probe(struct platform_device *pdev)
->   		return -ENODEV;
->   	}
->   
-> -	ret = ci_ulpi_init(ci);
-> -	if (ret)
-> -		return ret;
-> -
->   	if (ci->platdata->phy) {
->   		ci->phy = ci->platdata->phy;
->   	} else if (ci->platdata->usb_phy) {
-> @@ -1142,6 +1138,10 @@ static int ci_hdrc_probe(struct platform_device *pdev)
->   		goto ulpi_exit;
->   	}
->   
-> +	ret = ci_ulpi_init(ci);
-> +	if (ret)
-> +		return ret;
-> +
->   	ci->hw_bank.phys = res->start;
->   
->   	ci->irq = platform_get_irq(pdev, 0);
-> diff --git a/drivers/usb/chipidea/ulpi.c b/drivers/usb/chipidea/ulpi.c
-> index dfec07e8ae1d2..89fb51e2c3ded 100644
-> --- a/drivers/usb/chipidea/ulpi.c
-> +++ b/drivers/usb/chipidea/ulpi.c
-> @@ -68,11 +68,6 @@ int ci_ulpi_init(struct ci_hdrc *ci)
->   	if (ci->platdata->phy_mode != USBPHY_INTERFACE_MODE_ULPI)
->   		return 0;
->   
-> -	/*
-> -	 * Set PORTSC correctly so we can read/write ULPI registers for
-> -	 * identification purposes
-> -	 */
-> -	hw_phymode_configure(ci);
->   
->   	ci->ulpi_ops.read = ci_ulpi_read;
->   	ci->ulpi_ops.write = ci_ulpi_write;
->
-> ---
-> base-commit: 5bab5dc780c9ed0c69fc2f828015532acf4a7848
-> change-id: 20240328-chipidea-phy-misc-b3f2bc814784
->
-> Best regards,
+Is there anything that could I do to fix this for Linux?
 
-Best regards
--- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
+Thanks,
+Michael
 
 
