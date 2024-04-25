@@ -1,172 +1,185 @@
-Return-Path: <linux-usb+bounces-9745-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9746-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 101ED8B179E
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Apr 2024 02:00:45 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 837828B18A8
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Apr 2024 03:58:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7C6351F2553F
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Apr 2024 00:00:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9A758B26DB6
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Apr 2024 01:58:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99E30F9F0;
-	Thu, 25 Apr 2024 00:00:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17DF111711;
+	Thu, 25 Apr 2024 01:58:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="iMjaJ6VT"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="i/VqEWwE"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADE9E3D6A
-	for <linux-usb@vger.kernel.org>; Thu, 25 Apr 2024 00:00:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0065B10A22;
+	Thu, 25 Apr 2024 01:58:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714003238; cv=none; b=D9lTnFrEDhe3UMXXNCAgzGKYdqD3OGojL49+UWIqvtHAHf5ohqPfjW8H5hvZpxL74jnvEMUKcef4qNnFr7c3VOoFEjH1zaENkw25ArTFjf0p+xyQB1scpsBPC0S2UyxXY/5UrcLIzxte/j9xYY1bYlOzQbMdw4kgdE5LHyEocFo=
+	t=1714010290; cv=none; b=HzlecLodwPXE/d90PkzKFWa3yEs6PWYcU6qX5eVebTN7EXDa+4BVDfWSRg7or33wkEhVGZCKBrSekG/NZEtiNdhvOeKi7FrCOnJkyQv+j8mV5fWAdDXxdcKE2U2Tenh5pBdi/L0fKI54j4F7jrvVU/ZW6LO1CujXCx7BHvSNzNY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714003238; c=relaxed/simple;
-	bh=MBEImIE/uf/WSqljiC9XbZNccgouCdO8Skm4a/1yecU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FL6TucjJcrMBJCutl8iUe66FHcRIpDrfx9rfHg//ifogySs6wA+kzBMMPILJzUoaggRcEYpUY8sos2hXuUAq//Ydc9qyv3ioKWVCGSq+qF1+skhRq5SIDLhHmWw/hpWY0wevCtrWZRdLs5sxlIKThkbP/vQHMBRH4vjbKYGEPwY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=iMjaJ6VT; arc=none smtp.client-ip=209.85.219.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-db4364ecd6aso524745276.2
-        for <linux-usb@vger.kernel.org>; Wed, 24 Apr 2024 17:00:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1714003236; x=1714608036; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8amuByFemR4m00/qLVXHYywQQB/OO/nQVwREqVEGLXs=;
-        b=iMjaJ6VTO6QzBbOQsShcIZdpJmlk8p0WE6lBOGeIXijjWg21TZNxSSEjouFgrCHR3V
-         KdJgCbTU7BhnXmnkWbkwaN+KSWrK4nLLEAmdNaf10GzBKNCayf7g9TzihSAjx6DM2Jg8
-         8P6BL08ndLUmnsvJgXsYzAHRr1ysx7eAOlDxM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714003236; x=1714608036;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8amuByFemR4m00/qLVXHYywQQB/OO/nQVwREqVEGLXs=;
-        b=QkmGiGK4FSREpmho53yy8MUDjzSefm1Gw2lMrFkUjVr4ygGeafbKFIvyc+NXmYfhRM
-         ADum6gXezYfRHWvMTUBzrizO4Bxi6ZdB3SIQ5hzccRjYnCwohOCdQtdZJus+SVPUP8Wf
-         alN7Goo0FXXCe4f/ng1fjpOMIGe90HPJWGhnaQgYiSxbdPm1I+LayVRw95nX72f+fRgl
-         llslsjgXpjz5+0m8Fwbhp82QnGC3VbMjf4wmnIbw4uPBcLQDbK0i8L45EukjvjELEHgd
-         aaNEmGEbeBLdZgTvuM6KK0C9nTlGFKqcjjiKepkI8oW2k6lMOwfnSuiWxrZo/wd/8/6N
-         E++A==
-X-Forwarded-Encrypted: i=1; AJvYcCXgSX985T6JXXZ7rNT1MJhQYEFcxmnfRxFHiLU7suXMs2fCc8I9TRexNLIJoJyAI64NvhxXtypeY56wGefv5PDk/IznLNF6MKzo
-X-Gm-Message-State: AOJu0Yw1TpcWMjXBtOt13kVD/MkePClLtbdn8e1qv55AH+Yzqrd28BA/
-	Z8UZK6HfrHoNB1ezqL/lljDDuBXT3nmGG3HSPcU48l1rjOELyCwSB3w+H5HAspn4e6t7dCzaWTI
-	/29w4L60A2a1Yk9WKKDiFXogkMz0RyR61xk2F
-X-Google-Smtp-Source: AGHT+IH7S3Ay2JrJHBsmbPvnAj1QI5yAXv3Ej/lVdIrjvv1IozZI+l3zW9bj/sSEleLf2fkzcVwUwR3dmow/4Hn/FWc=
-X-Received: by 2002:a25:26d2:0:b0:dcf:b5b7:c72 with SMTP id
- m201-20020a2526d2000000b00dcfb5b70c72mr4116337ybm.0.1714003235737; Wed, 24
- Apr 2024 17:00:35 -0700 (PDT)
+	s=arc-20240116; t=1714010290; c=relaxed/simple;
+	bh=FijTadZiQvDrmRmd9+9OK33UEMFnjAkJBXsNPUVx/aQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=WwzFXYaU1nn9SysZIgw6Se1hfG+tQbuN8J693wqOVpykE+R06Ex3jlF1dSeWy30H/BiZzEUSByUFYQqEPW+68Unnnk7VegjbRikzWJqQ7WAqlWmNapeWlZmlZvuThhFdnitW312ZupBN8W3GGnQz60F4dXrDhSYNyLNiHBsM99g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=i/VqEWwE; arc=none smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 43P0hpPi011500;
+	Thu, 25 Apr 2024 01:57:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=corp-2023-11-20;
+ bh=y/IH+dwowyXx6zFMUjLoi6/J7l1DbgA6+TyLeUVYpow=;
+ b=i/VqEWwE+g5lzFaBBrTlaXsQFPJyDPqRZPji2f5GhbtfrkOLHZ1jfE6gj/rf/Kg+itLU
+ qEc8qL/svVJAjWPDTb9Esiq2SnH2Zk1xMJ512efPHJvFRJpvGxTb9TvYNsxJiZMeQDcq
+ 6ckEEpBbksQXGjZM7QTmcg4ZqKCtYGjJ7SJ+JRBBaMTqxozYt7FSDGKzRA4ZvZzzSFyM
+ eYtHjAqBc0U+zL7oOAefbKpLddshEk+sucL/Dhz0XSAmqlGaHJLOBN70svY3/QemTxaJ
+ 6z1S5anqXzjRWJ2SUN2M+2qwTVc2SVpzYaG6hfukVIzJ64BJUZ9GUMHTwATUmJumCJ6S IA== 
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3xm5ausg4x-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 25 Apr 2024 01:57:15 +0000
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 43P0Sks8025252;
+	Thu, 25 Apr 2024 01:57:15 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3xm45fyh23-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 25 Apr 2024 01:57:14 +0000
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 43P1vCuP009586;
+	Thu, 25 Apr 2024 01:57:13 GMT
+Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3xm45fyh1b-3;
+	Thu, 25 Apr 2024 01:57:13 +0000
+From: "Martin K. Petersen" <martin.petersen@oracle.com>
+To: Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>
+Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Damien Le Moal <dlemoal@kernel.org>, Niklas Cassel <cassel@kernel.org>,
+        Takashi Sakamoto <o-takashi@sakamocchi.jp>,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>,
+        "Juergen E. Fischer" <fischer@norbit.de>,
+        Xiang Chen <chenxiang66@hisilicon.com>,
+        HighPoint Linux Team <linux@highpoint-tech.com>,
+        Tyrel Datwyler <tyreld@linux.ibm.com>, Brian King <brking@us.ibm.com>,
+        Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        John Garry <john.g.garry@oracle.com>, Jason Yan <yanaijie@huawei.com>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Sumit Saxena <sumit.saxena@broadcom.com>,
+        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
+        Chandrakanth patil <chandrakanth.patil@broadcom.com>,
+        Jack Wang <jinpu.wang@cloud.ionos.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        GR-QLogic-Storage-Upstream@marvell.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alan Stern <stern@rowland.harvard.edu>, linux-block@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
+        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+        megaraidlinux.pdl@broadcom.com, mpi3mr-linuxdrv.pdl@broadcom.com,
+        linux-samsung-soc@vger.kernel.org, linux-usb@vger.kernel.org,
+        usb-storage@lists.one-eyed-alien.net
+Subject: Re: convert SCSI to atomic queue limits, part 1 (v3)
+Date: Wed, 24 Apr 2024 21:57:02 -0400
+Message-ID: <171362345502.571343.9746199181827642774.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.44.0
+In-Reply-To: <20240409143748.980206-1-hch@lst.de>
+References: <20240409143748.980206-1-hch@lst.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240424014821.4154159-1-jthies@google.com> <20240424014821.4154159-2-jthies@google.com>
- <CAA8EJpq_DujhwoJ87Cg4gZ4LNdPu4i93EQ0VeKrCJPkeDj9ThQ@mail.gmail.com>
-In-Reply-To: <CAA8EJpq_DujhwoJ87Cg4gZ4LNdPu4i93EQ0VeKrCJPkeDj9ThQ@mail.gmail.com>
-From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-Date: Wed, 24 Apr 2024 17:00:24 -0700
-Message-ID: <CANFp7mVGYhMYXdCGEJQ9GoqB-kpk4UquUWEcvqVnRFMrih+R9Q@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] usb: typec: ucsi: Fix null deref in trace
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: Jameson Thies <jthies@google.com>, heikki.krogerus@linux.intel.com, 
-	linux-usb@vger.kernel.org, pmalani@chromium.org, bleung@google.com, 
-	andersson@kernel.org, fabrice.gasnier@foss.st.com, gregkh@linuxfoundation.org, 
-	hdegoede@redhat.com, neil.armstrong@linaro.org, rajaram.regupathy@intel.com, 
-	saranya.gopal@intel.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1011,Hydra:6.0.650,FMLib:17.11.176.26
+ definitions=2024-04-25_01,2024-04-24_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxlogscore=999
+ mlxscore=0 phishscore=0 spamscore=0 malwarescore=0 adultscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2404010000 definitions=main-2404250012
+X-Proofpoint-ORIG-GUID: USRSK6KOfQ5vH9L6gr8AM_aaScaBYiB0
+X-Proofpoint-GUID: USRSK6KOfQ5vH9L6gr8AM_aaScaBYiB0
 
-On Tue, Apr 23, 2024 at 7:06=E2=80=AFPM Dmitry Baryshkov
-<dmitry.baryshkov@linaro.org> wrote:
->
-> On Wed, 24 Apr 2024 at 04:48, Jameson Thies <jthies@google.com> wrote:
-> >
-> > From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-> >
-> > ucsi_register_altmode checks IS_ERR on returned pointer and treats
-> > NULL as valid. This results in a null deref when
-> > trace_ucsi_register_altmode is called. Return an error from
-> > ucsi_register_displayport when it is not supported and register the
-> > altmode with typec_port_register_altmode.
-> >
-> > Reviewed-by: Jameson Thies <jthies@google.com>
-> > Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-> > ---
-> > Changes in V2:
-> > - Checks for error response from ucsi_register_displayport when
-> > registering DisplayPort alternate mode.
-> >
-> >  drivers/usb/typec/ucsi/ucsi.c | 3 +++
-> >  drivers/usb/typec/ucsi/ucsi.h | 2 +-
-> >  2 files changed, 4 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucs=
-i.c
-> > index cb52e7b0a2c5c..f3b413f94fd28 100644
-> > --- a/drivers/usb/typec/ucsi/ucsi.c
-> > +++ b/drivers/usb/typec/ucsi/ucsi.c
-> > @@ -361,6 +361,9 @@ static int ucsi_register_altmode(struct ucsi_connec=
-tor *con,
-> >                 switch (desc->svid) {
-> >                 case USB_TYPEC_DP_SID:
-> >                         alt =3D ucsi_register_displayport(con, override=
-, i, desc);
-> > +                       if (IS_ERR(alt) && PTR_ERR(alt) =3D=3D -EOPNOTS=
-UPP)
->
-> This makes it ignore EOPNOTSUPP if it is returned by the non-stub
-> implementation. I think the current state is actually better than the
-> implementation found in this patch. I'd suggest adding a comment to
-> ucsi_register_displayport() stub instead.
+On Tue, 09 Apr 2024 16:37:25 +0200, Christoph Hellwig wrote:
 
-So originally on my system, I didn't have the displayport driver
-config enabled. My expectation was that the alt-mode would show up but
-would not be controllable (like all other alt-modes without drivers).
-What ends up happening is that no alt-mode shows up and trying to
-enable the trace crashes.
+> this series converts the SCSI midlayer and LLDDs to use atomic queue limits
+> API.  It is pretty straight forward, except for the mpt3mr driver which
+> does really weird and probably already broken things by setting limits
+> from unlocked device iteration callbacks.
+> 
+> I will probably defer the (more complicated) ULD changes to the next
+> merge window as they would heavily conflict with Damien's zone write
+> plugging series.  With that the series could go in through the SCSI
+> tree if Jens' ACKs the core block layer bits.
+> 
+> [...]
 
-When the displayport support isn't there, I think it should just be
-enumerated as a normal, unsupported alt-mode.
+Applied to 6.10/scsi-queue, thanks!
 
+[01/23] block: add a helper to cancel atomic queue limit updates
+        https://git.kernel.org/mkp/scsi/c/293066264fb4
+[02/23] bsg: pass queue_limits to bsg_setup_queue
+        https://git.kernel.org/mkp/scsi/c/4373d2ecca7f
+[03/23] mpi3mr: pass queue_limits to bsg_setup_queue
+        https://git.kernel.org/mkp/scsi/c/9042fb6d2c08
+[04/23] scsi: initialize scsi midlayer limits before allocating the queue
+        https://git.kernel.org/mkp/scsi/c/afd53a3d8528
+[05/23] scsi_transport_fc: add a max_bsg_segments field to struct fc_function_template
+        https://git.kernel.org/mkp/scsi/c/7eaae991c30d
+[06/23] scsi: add a no_highmem flag to struct Scsi_Host
+        https://git.kernel.org/mkp/scsi/c/6248d7f7714f
+[07/23] scsi: add a dma_alignment field to the host and host template
+        https://git.kernel.org/mkp/scsi/c/5b7dfbeff92a
+[08/23] ufs-exynos: move setting the the dma alignment to the init method
+        https://git.kernel.org/mkp/scsi/c/67144d3c58b4
+[09/23] scsi: use the atomic queue limits API in scsi_add_lun
+        https://git.kernel.org/mkp/scsi/c/693a1e8cbe12
+[10/23] scsi: add a device_configure method to the host template
+        https://git.kernel.org/mkp/scsi/c/b7eefcf11f3f
+[11/23] megaraid_sas: switch to using ->device_configure
+        https://git.kernel.org/mkp/scsi/c/b57089d32c2c
+[12/23] mpt3sas: switch to using ->device_configure
+        https://git.kernel.org/mkp/scsi/c/8c9289e66be6
+[13/23] sbp2: switch to using ->device_configure
+        https://git.kernel.org/mkp/scsi/c/c1f99322fc84
+[14/23] hptiop: switch to using ->device_configure
+        https://git.kernel.org/mkp/scsi/c/f65eb761f811
+[15/23] ipr: switch to using ->device_configure
+        https://git.kernel.org/mkp/scsi/c/c8bc8392b2bc
+[16/23] pmcraid: switch to using ->device_configure
+        https://git.kernel.org/mkp/scsi/c/9ca2dc2f0701
+[17/23] usb-storage: switch to using ->device_configure
+        https://git.kernel.org/mkp/scsi/c/70a7949335e5
+[18/23] sata_nv: switch to using ->device_configure
+        https://git.kernel.org/mkp/scsi/c/3cfedd59cd55
+[19/23] pata_macio: switch to using ->device_configure
+        https://git.kernel.org/mkp/scsi/c/a92041bd5f15
+[20/23] libata: switch to using ->device_configure
+        https://git.kernel.org/mkp/scsi/c/a25a9c85d17f
+[21/23] mpi3mr: switch to using ->device_configure
+        https://git.kernel.org/mkp/scsi/c/310887f688f7
+[21/23] mpi3mr: switch to using ->device_configure
+        https://git.kernel.org/mkp/scsi/c/30efd3823f2c
+[23/23] block: remove now unused queue limits helpers
+        https://git.kernel.org/mkp/scsi/c/ec84ca4025c0
 
-
->
-> > +                               alt =3D typec_port_register_altmode(con=
-->port, desc);
-> > +
-> >                         break;
-> >                 case USB_TYPEC_NVIDIA_VLINK_SID:
-> >                         if (desc->vdo =3D=3D USB_TYPEC_NVIDIA_VLINK_DBG=
-_VDO)
-> > diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucs=
-i.h
-> > index c4d103db9d0f8..c663dce0659ee 100644
-> > --- a/drivers/usb/typec/ucsi/ucsi.h
-> > +++ b/drivers/usb/typec/ucsi/ucsi.h
-> > @@ -496,7 +496,7 @@ ucsi_register_displayport(struct ucsi_connector *co=
-n,
-> >                           bool override, int offset,
-> >                           struct typec_altmode_desc *desc)
-> >  {
-> > -       return NULL;
-> > +       return ERR_PTR(-EOPNOTSUPP);
-> >  }
-> >
-> >  static inline void
-> > --
-> > 2.44.0.769.g3c40516874-goog
-> >
->
->
-> --
-> With best wishes
-> Dmitry
+-- 
+Martin K. Petersen	Oracle Linux Engineering
 
