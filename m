@@ -1,185 +1,299 @@
-Return-Path: <linux-usb+bounces-9746-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9747-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 837828B18A8
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Apr 2024 03:58:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4CA1B8B18B5
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Apr 2024 03:59:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9A758B26DB6
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Apr 2024 01:58:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6BB241C210E4
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Apr 2024 01:59:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17DF111711;
-	Thu, 25 Apr 2024 01:58:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2C03101F7;
+	Thu, 25 Apr 2024 01:59:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="i/VqEWwE"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="S+7xvA4Q"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0065B10A22;
-	Thu, 25 Apr 2024 01:58:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 294AF101D4
+	for <linux-usb@vger.kernel.org>; Thu, 25 Apr 2024 01:59:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714010290; cv=none; b=HzlecLodwPXE/d90PkzKFWa3yEs6PWYcU6qX5eVebTN7EXDa+4BVDfWSRg7or33wkEhVGZCKBrSekG/NZEtiNdhvOeKi7FrCOnJkyQv+j8mV5fWAdDXxdcKE2U2Tenh5pBdi/L0fKI54j4F7jrvVU/ZW6LO1CujXCx7BHvSNzNY=
+	t=1714010381; cv=none; b=D4/Cn6kRG2RQg0sWM9eSN68P1KHeRM4HPMPI253FE6Xa1EHcG6p6kbhxXUp1XC+jA6LnxJSN+tTubgHr1sDKVluag36xZUeRHdkGijWxQd0CkM4IWAc9iCeBtZEukrFeTxCah6u5lM4xoH5ykL5N0YfFXPEVmHC4MYJMA/PKoDA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714010290; c=relaxed/simple;
-	bh=FijTadZiQvDrmRmd9+9OK33UEMFnjAkJBXsNPUVx/aQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=WwzFXYaU1nn9SysZIgw6Se1hfG+tQbuN8J693wqOVpykE+R06Ex3jlF1dSeWy30H/BiZzEUSByUFYQqEPW+68Unnnk7VegjbRikzWJqQ7WAqlWmNapeWlZmlZvuThhFdnitW312ZupBN8W3GGnQz60F4dXrDhSYNyLNiHBsM99g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=i/VqEWwE; arc=none smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 43P0hpPi011500;
-	Thu, 25 Apr 2024 01:57:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=corp-2023-11-20;
- bh=y/IH+dwowyXx6zFMUjLoi6/J7l1DbgA6+TyLeUVYpow=;
- b=i/VqEWwE+g5lzFaBBrTlaXsQFPJyDPqRZPji2f5GhbtfrkOLHZ1jfE6gj/rf/Kg+itLU
- qEc8qL/svVJAjWPDTb9Esiq2SnH2Zk1xMJ512efPHJvFRJpvGxTb9TvYNsxJiZMeQDcq
- 6ckEEpBbksQXGjZM7QTmcg4ZqKCtYGjJ7SJ+JRBBaMTqxozYt7FSDGKzRA4ZvZzzSFyM
- eYtHjAqBc0U+zL7oOAefbKpLddshEk+sucL/Dhz0XSAmqlGaHJLOBN70svY3/QemTxaJ
- 6z1S5anqXzjRWJ2SUN2M+2qwTVc2SVpzYaG6hfukVIzJ64BJUZ9GUMHTwATUmJumCJ6S IA== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3xm5ausg4x-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 25 Apr 2024 01:57:15 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 43P0Sks8025252;
-	Thu, 25 Apr 2024 01:57:15 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3xm45fyh23-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 25 Apr 2024 01:57:14 +0000
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 43P1vCuP009586;
-	Thu, 25 Apr 2024 01:57:13 GMT
-Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3xm45fyh1b-3;
-	Thu, 25 Apr 2024 01:57:13 +0000
-From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>
-Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Damien Le Moal <dlemoal@kernel.org>, Niklas Cassel <cassel@kernel.org>,
-        Takashi Sakamoto <o-takashi@sakamocchi.jp>,
-        Sathya Prakash <sathya.prakash@broadcom.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>,
-        "Juergen E. Fischer" <fischer@norbit.de>,
-        Xiang Chen <chenxiang66@hisilicon.com>,
-        HighPoint Linux Team <linux@highpoint-tech.com>,
-        Tyrel Datwyler <tyreld@linux.ibm.com>, Brian King <brking@us.ibm.com>,
-        Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        John Garry <john.g.garry@oracle.com>, Jason Yan <yanaijie@huawei.com>,
-        Kashyap Desai <kashyap.desai@broadcom.com>,
-        Sumit Saxena <sumit.saxena@broadcom.com>,
-        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
-        Chandrakanth patil <chandrakanth.patil@broadcom.com>,
-        Jack Wang <jinpu.wang@cloud.ionos.com>,
-        Nilesh Javali <njavali@marvell.com>,
-        GR-QLogic-Storage-Upstream@marvell.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alan Stern <stern@rowland.harvard.edu>, linux-block@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
-        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
-        megaraidlinux.pdl@broadcom.com, mpi3mr-linuxdrv.pdl@broadcom.com,
-        linux-samsung-soc@vger.kernel.org, linux-usb@vger.kernel.org,
-        usb-storage@lists.one-eyed-alien.net
-Subject: Re: convert SCSI to atomic queue limits, part 1 (v3)
-Date: Wed, 24 Apr 2024 21:57:02 -0400
-Message-ID: <171362345502.571343.9746199181827642774.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20240409143748.980206-1-hch@lst.de>
-References: <20240409143748.980206-1-hch@lst.de>
+	s=arc-20240116; t=1714010381; c=relaxed/simple;
+	bh=UQbvhl271OQ7zbnD+wpmX012S31QhWXAgXtkq0mKgxQ=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=UPXwbDcTlFUI8rpPQkatuGCuKzdpamg+PjSYhy2+qTt5Kcw++3OipDsaFKmEZsswVP7P8rKsfZ2+vnHfulXNlTkYSr/P3g+HEvjSokDsZzGZKcnhzIgdOksDlgpQ+sIrZkXhi2HZdsuEmpAT/iwbBtwEMH9bdExVNihy5Obg9H4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=S+7xvA4Q; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1714010380; x=1745546380;
+  h=date:from:to:cc:subject:message-id;
+  bh=UQbvhl271OQ7zbnD+wpmX012S31QhWXAgXtkq0mKgxQ=;
+  b=S+7xvA4QFNk+0N+v/GqOQCOzOTCkfVgHQ3dLfc981tlX3IJV/DyMJlkL
+   A/qn7h+J+TLQ9sMt/CE6ClBx149WMeeZVJ80Nl43m3MQSecCPnNw05LCp
+   ZIGiYXTuvPt/UCUKvy/41MAekSCm+fcuwYRjMmLTe4pI58m0IWg6EVvJE
+   Y6EfX99TmnE53kI7WPZ8Rv+jiK6f0hzWcVAOTLfdS6Bq85HbMBCwQ2QoE
+   tYk7d0XwDiJzOgGJYuPzJ7jOpPVxf1HYVSlmKUZ79ZlsTkxZPpR2ae3XB
+   14Vu+vLLJvxNjCoElfzfpOpRQZYIEWXUBqcXTX0SrJ+6drJqasm2stGiK
+   A==;
+X-CSE-ConnectionGUID: Gu/G7Wz8TYaQBSeoBeRmsA==
+X-CSE-MsgGUID: fincpb32Rt+0GmusahEsOg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11054"; a="13458797"
+X-IronPort-AV: E=Sophos;i="6.07,227,1708416000"; 
+   d="scan'208";a="13458797"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2024 18:59:39 -0700
+X-CSE-ConnectionGUID: rrM2zpABTyyebadoVnxHTg==
+X-CSE-MsgGUID: tsfawD5IQRSC+rVwBdnBCg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,227,1708416000"; 
+   d="scan'208";a="24860779"
+Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 24 Apr 2024 18:59:37 -0700
+Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rzoOd-0001qO-05;
+	Thu, 25 Apr 2024 01:59:35 +0000
+Date: Thu, 25 Apr 2024 09:59:14 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS WITH WARNING
+ a160e1202ca318a85c70cf5831f172cc79a24c57
+Message-ID: <202404250910.wVhCpyiX-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1011,Hydra:6.0.650,FMLib:17.11.176.26
- definitions=2024-04-25_01,2024-04-24_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxlogscore=999
- mlxscore=0 phishscore=0 spamscore=0 malwarescore=0 adultscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2404010000 definitions=main-2404250012
-X-Proofpoint-ORIG-GUID: USRSK6KOfQ5vH9L6gr8AM_aaScaBYiB0
-X-Proofpoint-GUID: USRSK6KOfQ5vH9L6gr8AM_aaScaBYiB0
 
-On Tue, 09 Apr 2024 16:37:25 +0200, Christoph Hellwig wrote:
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: a160e1202ca318a85c70cf5831f172cc79a24c57  usb: dwc3: qcom: Add multiport suspend/resume support for wrapper
 
-> this series converts the SCSI midlayer and LLDDs to use atomic queue limits
-> API.  It is pretty straight forward, except for the mpt3mr driver which
-> does really weird and probably already broken things by setting limits
-> from unlocked device iteration callbacks.
-> 
-> I will probably defer the (more complicated) ULD changes to the next
-> merge window as they would heavily conflict with Damien's zone write
-> plugging series.  With that the series could go in through the SCSI
-> tree if Jens' ACKs the core block layer bits.
-> 
-> [...]
+Warning reports:
 
-Applied to 6.10/scsi-queue, thanks!
+https://lore.kernel.org/oe-kbuild-all/202404241215.Mib19Cu7-lkp@intel.com
 
-[01/23] block: add a helper to cancel atomic queue limit updates
-        https://git.kernel.org/mkp/scsi/c/293066264fb4
-[02/23] bsg: pass queue_limits to bsg_setup_queue
-        https://git.kernel.org/mkp/scsi/c/4373d2ecca7f
-[03/23] mpi3mr: pass queue_limits to bsg_setup_queue
-        https://git.kernel.org/mkp/scsi/c/9042fb6d2c08
-[04/23] scsi: initialize scsi midlayer limits before allocating the queue
-        https://git.kernel.org/mkp/scsi/c/afd53a3d8528
-[05/23] scsi_transport_fc: add a max_bsg_segments field to struct fc_function_template
-        https://git.kernel.org/mkp/scsi/c/7eaae991c30d
-[06/23] scsi: add a no_highmem flag to struct Scsi_Host
-        https://git.kernel.org/mkp/scsi/c/6248d7f7714f
-[07/23] scsi: add a dma_alignment field to the host and host template
-        https://git.kernel.org/mkp/scsi/c/5b7dfbeff92a
-[08/23] ufs-exynos: move setting the the dma alignment to the init method
-        https://git.kernel.org/mkp/scsi/c/67144d3c58b4
-[09/23] scsi: use the atomic queue limits API in scsi_add_lun
-        https://git.kernel.org/mkp/scsi/c/693a1e8cbe12
-[10/23] scsi: add a device_configure method to the host template
-        https://git.kernel.org/mkp/scsi/c/b7eefcf11f3f
-[11/23] megaraid_sas: switch to using ->device_configure
-        https://git.kernel.org/mkp/scsi/c/b57089d32c2c
-[12/23] mpt3sas: switch to using ->device_configure
-        https://git.kernel.org/mkp/scsi/c/8c9289e66be6
-[13/23] sbp2: switch to using ->device_configure
-        https://git.kernel.org/mkp/scsi/c/c1f99322fc84
-[14/23] hptiop: switch to using ->device_configure
-        https://git.kernel.org/mkp/scsi/c/f65eb761f811
-[15/23] ipr: switch to using ->device_configure
-        https://git.kernel.org/mkp/scsi/c/c8bc8392b2bc
-[16/23] pmcraid: switch to using ->device_configure
-        https://git.kernel.org/mkp/scsi/c/9ca2dc2f0701
-[17/23] usb-storage: switch to using ->device_configure
-        https://git.kernel.org/mkp/scsi/c/70a7949335e5
-[18/23] sata_nv: switch to using ->device_configure
-        https://git.kernel.org/mkp/scsi/c/3cfedd59cd55
-[19/23] pata_macio: switch to using ->device_configure
-        https://git.kernel.org/mkp/scsi/c/a92041bd5f15
-[20/23] libata: switch to using ->device_configure
-        https://git.kernel.org/mkp/scsi/c/a25a9c85d17f
-[21/23] mpi3mr: switch to using ->device_configure
-        https://git.kernel.org/mkp/scsi/c/310887f688f7
-[21/23] mpi3mr: switch to using ->device_configure
-        https://git.kernel.org/mkp/scsi/c/30efd3823f2c
-[23/23] block: remove now unused queue limits helpers
-        https://git.kernel.org/mkp/scsi/c/ec84ca4025c0
+Warning: (recently discovered and may have been fixed)
+
+drivers/usb/dwc3/core.c:1482:69: warning: '%d' directive output may be truncated writing between 1 and 11 bytes into a region of size 4 [-Wformat-truncation=]
+
+Warning ids grouped by kconfigs:
+
+gcc_recent_errors
+|-- alpha-allmodconfig
+|   `-- drivers-usb-dwc3-core.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size
+|-- alpha-allyesconfig
+|   `-- drivers-usb-dwc3-core.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size
+|-- arm-allmodconfig
+|   `-- drivers-usb-dwc3-core.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size
+|-- arm-allyesconfig
+|   `-- drivers-usb-dwc3-core.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size
+|-- arm-randconfig-001-20240424
+|   `-- drivers-usb-dwc3-core.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size
+|-- arm64-randconfig-003-20240424
+|   `-- drivers-usb-dwc3-core.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size
+|-- csky-allmodconfig
+|   `-- drivers-usb-dwc3-core.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size
+|-- csky-allyesconfig
+|   `-- drivers-usb-dwc3-core.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size
+|-- loongarch-allmodconfig
+|   `-- drivers-usb-dwc3-core.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size
+|-- loongarch-allyesconfig
+|   `-- drivers-usb-dwc3-core.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size
+|-- microblaze-allmodconfig
+|   `-- drivers-usb-dwc3-core.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size
+|-- microblaze-allyesconfig
+|   `-- drivers-usb-dwc3-core.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size
+|-- openrisc-allyesconfig
+|   `-- drivers-usb-dwc3-core.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size
+|-- parisc-allmodconfig
+|   `-- drivers-usb-dwc3-core.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size
+|-- parisc-allyesconfig
+|   `-- drivers-usb-dwc3-core.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size
+|-- powerpc-allmodconfig
+|   `-- drivers-usb-dwc3-core.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size
+|-- s390-allyesconfig
+|   `-- drivers-usb-dwc3-core.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size
+|-- sparc-allmodconfig
+|   `-- drivers-usb-dwc3-core.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size
+|-- sparc-allyesconfig
+|   `-- drivers-usb-dwc3-core.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size
+|-- sparc64-allmodconfig
+|   `-- drivers-usb-dwc3-core.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size
+|-- sparc64-allyesconfig
+|   `-- drivers-usb-dwc3-core.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size
+`-- x86_64-randconfig-073-20240424
+    `-- drivers-usb-dwc3-core.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size
+
+elapsed time: 1353m
+
+configs tested: 153
+configs skipped: 3
+
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allmodconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                   randconfig-001-20240424   gcc  
+arc                   randconfig-002-20240424   gcc  
+arm                              allmodconfig   gcc  
+arm                               allnoconfig   clang
+arm                              allyesconfig   gcc  
+arm                                 defconfig   clang
+arm                       netwinder_defconfig   gcc  
+arm                   randconfig-001-20240424   gcc  
+arm                   randconfig-002-20240424   gcc  
+arm                   randconfig-003-20240424   gcc  
+arm                   randconfig-004-20240424   clang
+arm                           sama5_defconfig   gcc  
+arm                           spitz_defconfig   gcc  
+arm64                            allmodconfig   clang
+arm64                             allnoconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                 randconfig-001-20240424   clang
+arm64                 randconfig-002-20240424   gcc  
+arm64                 randconfig-003-20240424   gcc  
+arm64                 randconfig-004-20240424   clang
+csky                             allmodconfig   gcc  
+csky                              allnoconfig   gcc  
+csky                             allyesconfig   gcc  
+csky                                defconfig   gcc  
+csky                  randconfig-001-20240424   gcc  
+csky                  randconfig-002-20240424   gcc  
+hexagon                          allmodconfig   clang
+hexagon                           allnoconfig   clang
+hexagon                          allyesconfig   clang
+hexagon                             defconfig   clang
+i386                             allmodconfig   gcc  
+i386                              allnoconfig   gcc  
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-001-20240424   gcc  
+i386         buildonly-randconfig-002-20240424   gcc  
+i386         buildonly-randconfig-003-20240424   gcc  
+i386         buildonly-randconfig-004-20240424   gcc  
+i386         buildonly-randconfig-005-20240424   gcc  
+i386         buildonly-randconfig-006-20240424   gcc  
+i386                                defconfig   clang
+i386                  randconfig-001-20240424   gcc  
+i386                  randconfig-002-20240424   gcc  
+i386                  randconfig-003-20240424   gcc  
+i386                  randconfig-004-20240424   clang
+i386                  randconfig-005-20240424   gcc  
+i386                  randconfig-006-20240424   gcc  
+i386                  randconfig-011-20240424   clang
+i386                  randconfig-012-20240424   gcc  
+i386                  randconfig-013-20240424   clang
+i386                  randconfig-014-20240424   clang
+i386                  randconfig-015-20240424   clang
+i386                  randconfig-016-20240424   clang
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                        m5407c3_defconfig   gcc  
+m68k                          multi_defconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                       allyesconfig   gcc  
+microblaze                          defconfig   gcc  
+mips                              allnoconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                           ci20_defconfig   clang
+mips                            gpr_defconfig   clang
+mips                          malta_defconfig   gcc  
+mips                  maltasmvp_eva_defconfig   gcc  
+nios2                            allmodconfig   gcc  
+nios2                             allnoconfig   gcc  
+nios2                            allyesconfig   gcc  
+nios2                               defconfig   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                         allyesconfig   gcc  
+openrisc                            defconfig   gcc  
+parisc                           allmodconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                          allyesconfig   clang
+powerpc                      mgcoge_defconfig   clang
+powerpc                 mpc8313_rdb_defconfig   gcc  
+riscv                            allmodconfig   clang
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   clang
+riscv                               defconfig   clang
+s390                             allmodconfig   clang
+s390                              allnoconfig   clang
+s390                             allyesconfig   gcc  
+s390                                defconfig   clang
+sh                               allmodconfig   gcc  
+sh                                allnoconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                         ap325rxa_defconfig   gcc  
+sh                         apsh4a3a_defconfig   gcc  
+sh                                  defconfig   gcc  
+sh                          r7780mp_defconfig   gcc  
+sh                          rsk7269_defconfig   gcc  
+sparc                            allmodconfig   gcc  
+sparc                             allnoconfig   gcc  
+sparc                               defconfig   gcc  
+sparc64                          allmodconfig   gcc  
+sparc64                          allyesconfig   gcc  
+sparc64                             defconfig   gcc  
+um                               alldefconfig   clang
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   gcc  
+um                                  defconfig   clang
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   clang
+x86_64                            allnoconfig   clang
+x86_64                           allyesconfig   clang
+x86_64       buildonly-randconfig-001-20240424   clang
+x86_64       buildonly-randconfig-002-20240424   clang
+x86_64       buildonly-randconfig-003-20240424   gcc  
+x86_64       buildonly-randconfig-004-20240424   gcc  
+x86_64       buildonly-randconfig-005-20240424   gcc  
+x86_64       buildonly-randconfig-006-20240424   gcc  
+x86_64                              defconfig   gcc  
+x86_64                randconfig-001-20240424   clang
+x86_64                randconfig-002-20240424   clang
+x86_64                randconfig-003-20240424   gcc  
+x86_64                randconfig-004-20240424   gcc  
+x86_64                randconfig-005-20240424   clang
+x86_64                randconfig-006-20240424   clang
+x86_64                randconfig-011-20240424   clang
+x86_64                randconfig-012-20240424   gcc  
+x86_64                randconfig-013-20240424   gcc  
+x86_64                randconfig-014-20240424   gcc  
+x86_64                randconfig-015-20240424   clang
+x86_64                randconfig-016-20240424   gcc  
+x86_64                randconfig-071-20240424   clang
+x86_64                randconfig-072-20240424   clang
+x86_64                randconfig-073-20240424   gcc  
+x86_64                randconfig-074-20240424   clang
+x86_64                randconfig-075-20240424   gcc  
+x86_64                randconfig-076-20240424   gcc  
+x86_64                          rhel-8.3-rust   clang
+xtensa                            allnoconfig   gcc  
 
 -- 
-Martin K. Petersen	Oracle Linux Engineering
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
