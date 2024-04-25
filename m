@@ -1,146 +1,169 @@
-Return-Path: <linux-usb+bounces-9749-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9750-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA2D88B19BE
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Apr 2024 05:55:59 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9731F8B19D0
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Apr 2024 06:12:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DBC141C211A8
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Apr 2024 03:55:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A2D36B23FD0
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Apr 2024 04:12:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 332D12B9DE;
-	Thu, 25 Apr 2024 03:55:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 154352D60A;
+	Thu, 25 Apr 2024 04:11:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="MU+Gu4oM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uIeap/ho"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 633658468;
-	Thu, 25 Apr 2024 03:55:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9017C1AACB
+	for <linux-usb@vger.kernel.org>; Thu, 25 Apr 2024 04:11:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714017352; cv=none; b=PG6g+5ll1pzRsPSzkltk6Go3lI+XCF+gTpUlHm13Td145nvzapH0aV8BSgTI6bgMNpl9g6s0y2fmALJ/12cV/tp8Oe1e+A5q9xf1S87BO+7anjFfwO13n0xkYz59m2mN0cXW6k/sTWSbmIcrf8jKvKGkP8yUWMBrLxuFvp1IqG4=
+	t=1714018315; cv=none; b=T7b1QAK+lrpNfBhakYLnPC+S2u3VZv+zY3WFa6EJMqziBkHn+suzas6bkQWAAd3mp+WztVOo4cYTS3aPWJUDe7y0K0ca6D8I4pHr5+dV+16FgFeFr0DP4XSwuofYXT7snRUz5f2ysKPJzqWsA/yNaCv2xaglhf7r4Jq9vsZOT7A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714017352; c=relaxed/simple;
-	bh=hEBhp3aA+qmWAFzbPmNzxTz2dCevz5xEmpYM2xZURXk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=E4uy+fbR3EA3SKSe70NHl8NFuZ79E5ADsWflFV8clrEVN7ffQszr2qMdZuUMf8VE4DQVVYY1bv4imueBZ7seBkbZCP678ot9C9amq79mSJsdC5DAyY9zF/jUts3TJuDMuAvgf2vWJfi2BGPq6Ht6j054jIkAFdE3Tj95MWij9EQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=MU+Gu4oM; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 43P3I4xB013632;
-	Thu, 25 Apr 2024 03:55:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=EjulsxaA/iLKcO8IMu1Nnol3u4Ujnd7ckOcRYxy8ve0=; b=MU
-	+Gu4oMU+R6u3By2CqVhzkUmDPUVQac/qy+STeMqIgfc6JJi+GxyrK6gZUN1/MYCR
-	C10trD5wIEpToOMc/i1m8x3tmwmTl3Sb5sjUQ5qlsVuoTKyA/aUMvlwcxXlokiPJ
-	KWzClVek3FscLIBl7a5430f3wURg0ZxNdXII3pWuIBjM+3Ijb4DP7no2n/9iqhGV
-	DvO4e6PNaYxrLpmhXEk7Haf3CCnoD81P8zrB5Ow4GQeB6HmO1j8rK30rC2IGfpC9
-	P3VOu9VMhHIDQit+wKLpvlExI+nqtTu3yCBifprZkFdkBJjCZhtAlXxRRQwZ0tB+
-	SUuF0jGa7oh7LCvrOnvw==
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xqenmr49w-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 25 Apr 2024 03:55:48 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 43P3tlmI006147
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 25 Apr 2024 03:55:47 GMT
-Received: from [10.218.35.239] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 24 Apr
- 2024 20:55:45 -0700
-Message-ID: <f90ddc4e-f3da-3dbf-6414-7852698b6bb3@quicinc.com>
-Date: Thu, 25 Apr 2024 09:25:42 +0530
+	s=arc-20240116; t=1714018315; c=relaxed/simple;
+	bh=zYLo7hoMVGbyW1Y2/TqQsMqqLA4lK3os57LglumLMcE=;
+	h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version; b=Zv/+X/oceGDmQp175c2EGJC8zBDEQNxwCZf1jjUi3hglf8gl9RwoPtlOnhR30hRCkF2ejJcfvS5tpa7YC2Ng9N0cPlZCYEUcV4JCvs8sgyOIRPjzclMeeIl5PgoEz02rZq5QoA2qzKZIj3bMSVagH2xLGszmhErtsWtGK/HETkM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uIeap/ho; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1194BC113CC
+	for <linux-usb@vger.kernel.org>; Thu, 25 Apr 2024 04:11:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1714018315;
+	bh=zYLo7hoMVGbyW1Y2/TqQsMqqLA4lK3os57LglumLMcE=;
+	h=From:To:Subject:Date:From;
+	b=uIeap/ho8FDOgZqt4Ab1VSffHDfWKBxvxyG4ZMQco7JDnxaDprJWAEt6f5Av1cTSg
+	 ESEooPmMB/aivZMSj0Dm57fkMTmLvSTq9dF2rgBca1YMlrt+jo1I6cK58e/fybmYXy
+	 bmQLOR1uc6umVF1S4OQ06yP5x/1Xy2dNfoE/ZZncDz6Sq2LbgxxF57f5AA3LOdd3qO
+	 42oBexjU6UFoG4bkXzYDFrAX42Jpgs5HjoKoup12dSYGsvptpJKtyfnS+ZWyIFL2mx
+	 bIeiEkHaGKHOO82hwn424yFyNHeMbX4JQ4FRkogD9qu/hleaKnuAQ89eQDECD2CaPr
+	 uB8f41cQRpZsw==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id EF4D9C433DE; Thu, 25 Apr 2024 04:11:54 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 218773] New: device not initialized
+Date: Thu, 25 Apr 2024 04:11:54 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: roman.gruber@gmx.at
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
+ op_sys bug_status bug_severity priority component assigned_to reporter
+ cf_regression
+Message-ID: <bug-218773-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [RFC PATCH] usb: dwc3: Poll CMDACT after issuing EndXfer command
-Content-Language: en-US
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wesley Cheng
-	<quic_wcheng@quicinc.com>,
-        "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org"
-	<linux-usb@vger.kernel.org>
-References: <20240422090539.3986723-1-quic_prashk@quicinc.com>
- <20240424013342.5itkoewx7jdonyk4@synopsys.com>
- <168904cd-4806-0473-085d-43df45efba65@quicinc.com>
- <20240424223618.utauunrz7nud5wfi@synopsys.com>
-From: Prashanth K <quic_prashk@quicinc.com>
-In-Reply-To: <20240424223618.utauunrz7nud5wfi@synopsys.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: KnAmfMbjZNeXBw9m5Ex7Ob8Nxoe50088
-X-Proofpoint-ORIG-GUID: KnAmfMbjZNeXBw9m5Ex7Ob8Nxoe50088
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1011,Hydra:6.0.650,FMLib:17.11.176.26
- definitions=2024-04-25_02,2024-04-24_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
- lowpriorityscore=0 clxscore=1015 adultscore=0 malwarescore=0
- suspectscore=0 priorityscore=1501 mlxlogscore=966 bulkscore=0 mlxscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2404010003 definitions=main-2404250026
+
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218773
+
+            Bug ID: 218773
+           Summary: device not initialized
+           Product: Drivers
+           Version: 2.5
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: high
+          Priority: P3
+         Component: USB
+          Assignee: drivers_usb@kernel-bugs.kernel.org
+          Reporter: roman.gruber@gmx.at
+        Regression: No
+
+This is kina a longterm old bug which is 10 years old
+
+Cold Boot
+
+Where is my mouse?=20
+connected via ASUS X670-P Prime Mainboard -> usb cable -> Monitor ASUS PA27=
+8QV
+-> USB Mouse
+
+Sienna_Cichlid /home/roman # lsusb
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 001 Device 002: ID 05dc:a410 Lexar Media, Inc. JumpDrive 128MB/256MB
+Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 003 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 003 Device 002: ID 8087:0032 Intel Corp. AX210 Bluetooth
+Bus 003 Device 003: ID 0b05:19af ASUSTek Computer, Inc. AURA LED Controller
+Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 005 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 005 Device 002: ID 2516:014f Cooler Master Co., Ltd. CK351 Gaming Optic=
+al
+Switch Keyboard
+Bus 006 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 007 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 007 Device 002: ID 05e3:0610 Genesys Logic, Inc. Hub
+Bus 007 Device 007: ID 0763:410c M-Audio AIR 192 6
+Bus 008 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 009 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 010 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
 
 
+replug cable / oh mouse is here ...=20
+i3wm / Xorg-Server Running / openrc ...
+could open already vivaldi browser, terminal and other stuff. The X Server =
+was
+fully functional and also the shell was working and also the keyboard was
+already working.
 
-On 25-04-24 04:06 am, Thinh Nguyen wrote:
-> 
-> Thanks for the data.
-> 
-> Ok, I remember now why we did what we did. I just notice the Fixes
-> commit you tag: b353eb6dc285 ("usb: dwc3: gadget: Skip waiting for
-> CMDACT cleared during endxfer")
-> 
-> I forgot that at one point we skip CMDACT for End Transfer command.
-> Let's not poll for CMDACT for End Transfer command and unconditionally
-> wait 1ms. Otherwise we may run into the issue being stuck with CMDACT
-> again while SETUP packet is not DMA out again. 1ms should be plenty of
-> time for the End Transfer command to complete.
-> 
-> It should look like this:
-> 
-> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> index f94f68f1e7d2..dad30c6ab19d 100644
-> --- a/drivers/usb/dwc3/gadget.c
-> +++ b/drivers/usb/dwc3/gadget.c
-> @@ -1724,8 +1724,7 @@ static int __dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force, bool int
->          dep->resource_index = 0;
->   
->          if (!interrupt) {
-> -               if (!DWC3_IP_IS(DWC3) || DWC3_VER_IS_PRIOR(DWC3, 310A))
-> -                       mdelay(1);
-> +               mdelay(1);
->                  dep->flags &= ~DWC3_EP_TRANSFER_STARTED;
->          } else if (!ret) {
->                  dep->flags |= DWC3_EP_END_TRANSFER_PENDING;
-> 
-> Thanks,
-> Thinh
-> 
-> Ps. also please Cc stable.
-Thanks for the suggestion, I had tried 1ms initially when encountering 
-the issue and it was helping. Then I thought that CMDACT polling was 
-better approach. But anyways I echo you, having common solution for all 
-controller revisions is the cleaner way. I'll send V2 with mdelay(1).
+Sienna_Cichlid /home/roman # lsusb
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 001 Device 002: ID 05dc:a410 Lexar Media, Inc. JumpDrive 128MB/256MB
+Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 003 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 003 Device 002: ID 8087:0032 Intel Corp. AX210 Bluetooth
+Bus 003 Device 003: ID 0b05:19af ASUSTek Computer, Inc. AURA LED Controller
+Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 005 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 005 Device 002: ID 2516:014f Cooler Master Co., Ltd. CK351 Gaming Optic=
+al
+Switch Keyboard
+Bus 006 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 007 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 007 Device 002: ID 05e3:0610 Genesys Logic, Inc. Hub
+Bus 007 Device 007: ID 0763:410c M-Audio AIR 192 6
+Bus 007 Device 008: ID 093a:2533 Pixart Imaging, Inc. Gaming Mouse
+Bus 008 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 009 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 010 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
 
-Thanks again,
-Prashanth K
+
+Sienna_Cichlid /home/roman # uname -a
+Linux Sienna_Cichlid 6.8.6-gentoo_15_04_2024 #1 SMP PREEMPT Mon Apr 15 05:2=
+8:26
+CEST 2024 x86_64 AMD Ryzen 5 7600X 6-Core Processor AuthenticAMD GNU/Linux
+
+
+Happens regularly with different kernel version, since I own that hardware
+April 2023.
+
+USB Devices not properly found / working / especially mice is a very old bug
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
