@@ -1,186 +1,107 @@
-Return-Path: <linux-usb+bounces-9778-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9779-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2994F8B27D4
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Apr 2024 20:05:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 63BD98B2912
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Apr 2024 21:36:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 951FE1F218AB
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Apr 2024 18:05:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0D2441F23E7D
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Apr 2024 19:36:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9FFB14EC64;
-	Thu, 25 Apr 2024 18:05:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE99F15252D;
+	Thu, 25 Apr 2024 19:36:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="SBPi6X7j"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from cae.in-ulm.de (cae.in-ulm.de [217.10.14.231])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B464514E2F6
-	for <linux-usb@vger.kernel.org>; Thu, 25 Apr 2024 18:05:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.10.14.231
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4676B14B06B;
+	Thu, 25 Apr 2024 19:36:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714068338; cv=none; b=I69tmVEGxv4QifxhZjsOrg6fq4v+/hCFjZtszujmQurHctYqYpbHqgbntbw2bzLJmqirhVRFv+cS43b8Zm/e+QxrbZwuYFbNlYt3+zD9keelkmE8hKzuw+SBdbaU9RlG+DwA4CtOD6apKS1ikFWdGfx0bXwK8RKxrC7IMWzZ77s=
+	t=1714073763; cv=none; b=a330YUQH1yJzvm1DpdNQUK9Aa2EkgvGJo1GwIQXnCER9hnAqvilidwqCuXJdChc017AnSbeU9LTsN0yECCjJKyxqrimwGkZY+f4R3//91LemfVpj8+Qc9ohRnX8k9MVn9fr29q7hUQt6Lacc1/j4Jff/9ZuwIL2p4qoiioGpGX4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714068338; c=relaxed/simple;
-	bh=/qpW0WpE+I4oI0iSh/Ad28v73NXe/peKSTyIUKb8NXU=;
+	s=arc-20240116; t=1714073763; c=relaxed/simple;
+	bh=3XoAGM27SwQ826jd9GUf1h0gsd40woJCFWyFu1z9JSM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eWISCynZBmBRjCP7KoD0QIrEw2XMd9oyywQaNT5SJAIM0WiaoTYb41GILxPYKI9rCqDe8wBrfcRlX49Wm9Yymefshu8sIUdOTtbDUsekCteVPjzHQvC5FxXcO7z/H8iIxsIqqGQ3fmLk/g0Drs3Hoqly9ftnjZprmMRJ/nffLCo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c--e.de; spf=pass smtp.mailfrom=c--e.de; arc=none smtp.client-ip=217.10.14.231
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c--e.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=c--e.de
-Received: by cae.in-ulm.de (Postfix, from userid 1000)
-	id 8C69614055B; Thu, 25 Apr 2024 20:05:30 +0200 (CEST)
-Date: Thu, 25 Apr 2024 20:05:30 +0200
-From: Christian Ehrhardt <lk@c--e.de>
-To: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
-Cc: heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
-	neil.armstrong@linaro.org, quic_prashk@quicinc.com,
-	dmitry.baryshkov@linaro.org, fabrice.gasnier@foss.st.com,
-	saranya.gopal@intel.com, linux-usb@vger.kernel.org
-Subject: Re: [RFC PATCH] usb: typec: ucsi: ack connector change after all
- tasks finish
-Message-ID: <Ziqbata1wYNCadu+@cae.in-ulm.de>
-References: <vuh25ueep3rwcmthlkvhb2avpkqzc6lsbee3qdmerolijq7azq@rwmakgznqvmq>
- <ZgREDo9tYAmdBcUc@cae.in-ulm.de>
- <ynrqweb7hhfkrlvjr6suajq3jpgi4sqexz44qt4chekce7phiw@cyofo73xztdg>
- <ZgXxyWsdA7YML3mR@cae.in-ulm.de>
- <vvhn5le253djrcr6u2ksmphupgc4dot3x66hx53fpnhwbhqyma@hku4qvogc6at>
+	 Content-Type:Content-Disposition:In-Reply-To; b=CQFLRCN45POl9UVNQ0vuaSo77oDnveROknvduRIPHpQsaiMnUnBf8WNTNdM5jIHrWGGIhVtcVOw0kskQUnddiiuIaYTpO/Z2scnCg7AZs9uRst3BOP4hvuFhDVInMjKgFa07mB/jXwN67xeummu20UM8JwsA+dueJ0KybVcWVqI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=SBPi6X7j; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C083FC113CC;
+	Thu, 25 Apr 2024 19:36:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1714073763;
+	bh=3XoAGM27SwQ826jd9GUf1h0gsd40woJCFWyFu1z9JSM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=SBPi6X7j3mS1YlotJ7b5PyR7HNJpWtrX4axZQaYWSCVAzbvETHjpFDskeMugy8QT4
+	 9zlvonL4E9oTlrOfzM0rdRb6+3MrU46UkPNnsc4i9zCayVX8sV2j4rntEi7Em52lnK
+	 9Z0TjRUVViu6DWWLRW8OuqcIt7jVvj1loE8/8Ig8=
+Date: Thu, 25 Apr 2024 12:35:53 -0700
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Markus Elfring <Markus.Elfring@web.de>
+Cc: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+	linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Jameson Thies <jthies@google.com>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Benson Leung <bleung@google.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Prashant Malani <pmalani@chromium.org>,
+	Rajaram Regupathy <rajaram.regupathy@intel.com>,
+	Saranya Gopal <saranya.gopal@intel.com>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>
+Subject: Re: [PATCH v2 1/4] usb: typec: ucsi: Fix null deref in trace
+Message-ID: <2024042547-shimmy-guileless-c7f2@gregkh>
+References: <20240424014821.4154159-2-jthies@google.com>
+ <6e028bfa-9063-42ac-b40f-cf17a81c2af2@web.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <vvhn5le253djrcr6u2ksmphupgc4dot3x66hx53fpnhwbhqyma@hku4qvogc6at>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <6e028bfa-9063-42ac-b40f-cf17a81c2af2@web.de>
 
- 
-Hi Diogo,
+On Thu, Apr 25, 2024 at 10:51:53AM +0200, Markus Elfring wrote:
+> …
+> > ucsi_register_altmode checks IS_ERR on returned pointer and treats
+> > NULL as valid. This results in a null deref when
+> > trace_ucsi_register_altmode is called.
+> …
+> 
+> Can it be nicer to use the term “null pointer dereference” for
+> the commit message here?
+> 
+> Regards,
+> Markus
 
-On Wed, Apr 24, 2024 at 12:23:19PM +0100, Diogo Ivo wrote:
-> Hi Christian, sorry for the late reply!
-> 
-> On Thu, Mar 28, 2024 at 11:40:09PM +0100, Christian Ehrhardt wrote:
-> > 
-> > On Thu, Mar 28, 2024 at 03:42:40PM +0000, Diogo Ivo wrote:
-> > > On Wed, Mar 27, 2024 at 05:06:38PM +0100, Christian Ehrhardt wrote:
-> > > > On Wed, Mar 27, 2024 at 12:39:04PM +0000, Diogo Ivo wrote:
-> > > > > This fixes a problem with some LG Gram laptops where the PPM sometimes
-> > > > > notifies the OPM with the Connector Change Indicator field set in the
-> > > > > CCI after an ACK_CC_CI command is sent,causing the UCSI stack to check
-> > > > > the connector status indefinitely since the EVENT_PENDING bit is already
-> > > > > cleared. This causes an interrupt storm and an artificial high load on
-> > > > > these platforms.
-> > > > 
-> > > > If the PPM does this for a connector change ACK_CC_CI command it is
-> > > > IMHO violating the spec (unless there is a _new_ event).
-> > > > When I saw this type of loops the connector change indicator was set
-> > > > in response to an ACK_CC_CI command for a command (sent by a different
-> > > > thread for a different connector) between clearing the EVENT_PENDING
-> > > > bit and acquiring the PPM lock.
-> > 
-> > There are legitimate reaons why the connector change indicator
-> > is set in response to a command:
-> > - If the condition was reported previously it is sticky until
-> >   cleared.
-> > - Something else changed on the connector.
-> > 
-> > For a more complicated device that I have here, there are five
-> > different connector change events after plugging it in.
-> > 
-> > I'd like to understand why you run into a loop here.
-> > Printing the completed command (if any) and the CCI in
-> > ucsi_acpi_notify() and the details of the connector status in
-> > ucsi_handle_connector_change() could shed some light on this.
-> 
-> You are correct, my initial conclusions were not the cause of the issue.
-> After digging a bit more with your ACK early patch set [1] applied the initial
-> connector changes in CCI are meaningful:
-> 
-> /* Connect charge here */
-> 
-> [88248.531077] ucsi_acpi_notify: CCI: 20000002
-> [88248.531084] scheduling connector change
-> [88248.531094] COMMAND: 10012
-> [88248.690705] ucsi_acpi_notify: CCI: 80000902
-> [88248.705038] ucsi_acpi_notify: CCI: 80000902
-> [88248.769716] MESSAGE_IN: 0 294024
-> [88248.769721] COMMAND: 30004
-> [88248.905117] ucsi_acpi_notify: CCI: 20000002
-> [88248.905122] scheduling connector change
-> [88248.905238] COMMAND: 10012
-> [88248.921032] ucsi_acpi_notify: CCI: 20000002
-> [88249.052045] ucsi_acpi_notify: CCI: 80000902
-> [88249.094680] ucsi_acpi_notify: CCI: 80000902
-> [88249.113033] MESSAGE_IN: 1 42851545402b0a44
-> [88249.113036] COMMAND: 30004
-> [88249.234930] ucsi_acpi_notify: CCI: 20000000
-> 
-> as the reply to GET_CONNECTOR_STATUS changes.
-> 
-> Turns out the problematic command seems to be the GET_PDOS for the
-> source PDOs of the partner. After testing with multiple chargers and
-> hubs we always have this pattern:
-> 
-> [88249.235144] COMMAND: 700810010
-> [88249.431015] ucsi_acpi_notify: CCI: 80001000
-> [88249.444510] ucsi_acpi_notify: CCI: 80001000
-> [88249.474162] MESSAGE_IN: 641450004b12c 2d12c0801912c
-> [88249.474164] COMMAND: 20004
-> [88249.569839] ucsi_acpi_notify: CCI: 20000002
-> [88249.569843] scheduling connector change
-> [88249.569878] COMMAND: 604810010
-> [88249.694744] ucsi_acpi_notify: CCI: 80000002
-> [88249.756603] ucsi_acpi_notify: CCI: 80000002
-> [88249.772341] MESSAGE_IN: 0 0
-> [88249.772343] COMMAND: 20004
-> [88249.796672] ucsi_acpi_notify: CCI: 80000002
-> [88249.932743] ucsi_acpi_notify: CCI: 20000000
-> 		...
-> [88250.229964] COMMAND: 10012
-> [88250.341815] ucsi_acpi_notify: CCI: 80000900
-> [88250.385756] ucsi_acpi_notify: CCI: 80000900
-> [88250.404292] MESSAGE_IN: 1 42851545402b0060
-> 
-> And the next time we check the partner source PDOS we get the same,
-> 
-> [88251.126928] COMMAND: 10012
-> [88251.316607] ucsi_acpi_notify: CCI: 80000900
-> [88251.330743] ucsi_acpi_notify: CCI: 80000900
-> [88251.358123] MESSAGE_IN: 1 42851545402b0000
-> [88251.358125] COMMAND: 20004
-> [88251.474957] ucsi_acpi_notify: CCI: 20000000
-> [88251.475109] COMMAND: 700810010
-> [88251.636812] ucsi_acpi_notify: CCI: 80001000
-> [88251.695686] ucsi_acpi_notify: CCI: 80001000
-> [88251.709026] MESSAGE_IN: 641450004b12c 2d12c0801912c
-> [88251.709028] COMMAND: 20004
-> [88251.827071] ucsi_acpi_notify: CCI: 20000002
-> [88251.827075] scheduling connector change
-> [88251.827189] COMMAND: 604810010
-> [88251.974138] ucsi_acpi_notify: CCI: 80000002
-> [88252.034895] ucsi_acpi_notify: CCI: 80000002
-> [88252.054572] ucsi_acpi_notify: CCI: 80000002
-> [88252.067847] MESSAGE_IN: 0 0
-> [88252.067849] COMMAND: 20004
-> [88252.197648] ucsi_acpi_notify: CCI: 20000000
-> 
-> which then leads to the infinite loop. I have checked that we always get
-> the same PDOs and nothing else is changing, leading me to believe that
-> this change is not meaningful. The only thing that is changes are bits 5
-> and 6 of the GET_CONNECTOR_STATUS reply that follows the GET_PDOS
-> command.
+Hi,
 
-If I understand your debug output correctly, each call to GET_PDOS
-triggers a connector state change event. However, that event seems
-to go away in CCI. In the connector status some changed bits remain.
-These changed bits will cause us to re-read the PDOs resulting in
-an infinite loop.
+This is the semi-friendly patch-bot of Greg Kroah-Hartman.
 
-If this is about correct, I guess the simplest way to fix this would
-be to enable the UCSI_NO_PARTNER_PDOS quirk for affected devices.
+Markus, you seem to have sent a nonsensical or otherwise pointless
+review comment to a patch submission on a Linux kernel developer mailing
+list.  I strongly suggest that you not do this anymore.  Please do not
+bother developers who are actively working to produce patches and
+features with comments that, in the end, are a waste of time.
 
+Patch submitter, please ignore Markus's suggestion; you do not need to
+follow it at all.  The person/bot/AI that sent it is being ignored by
+almost all Linux kernel maintainers for having a persistent pattern of
+behavior of producing distracting and pointless commentary, and
+inability to adapt to feedback.  Please feel free to also ignore emails
+from them.
 
-Best regards,
-Christian
+thanks,
+
+greg k-h's patch email bot
 
