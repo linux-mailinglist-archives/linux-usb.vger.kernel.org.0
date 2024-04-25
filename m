@@ -1,82 +1,82 @@
-Return-Path: <linux-usb+bounces-9767-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9768-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A4D48B1EFB
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Apr 2024 12:17:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 870A08B1F05
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Apr 2024 12:20:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C81E51F25771
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Apr 2024 10:17:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3F00D1F22729
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Apr 2024 10:20:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 802B8126F05;
-	Thu, 25 Apr 2024 10:17:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44C7A8663A;
+	Thu, 25 Apr 2024 10:20:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="oy+eKMjh"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ox8ZjBmf"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oo1-f49.google.com (mail-oo1-f49.google.com [209.85.161.49])
+Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 648CE86626
-	for <linux-usb@vger.kernel.org>; Thu, 25 Apr 2024 10:17:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6410686ADB
+	for <linux-usb@vger.kernel.org>; Thu, 25 Apr 2024 10:20:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714040249; cv=none; b=KgPBQ+YoZQBZ7O0DbqHe5sK3Z1u6XPDiu21nm/hsUpT6IRORF/GU8sfx5jCb2ptAzmXD6ecO8THyWxDkYp/Jf7M+ZsblHooOxWhiS1Zl+0yriyQ/r5C5AENld2oc57EIFjLipyLFpw6Bl99EIn60jXQ4ix5A9/jGQWN5bwxia9A=
+	t=1714040422; cv=none; b=jQWOgHtHEI9LJLZVVWql8PZ4Mq/QiRDmZ5FOC9qgfj0Zl9oW4bzmdohuk6H+/UZ2GSQxpOXVxwnwmtdHDckXnwiaDuOsdk/1poTPGJGjC64OMGti/2Z9Kp3tbOiVPyIbJx/D5RH0TxEvoHFjA2qtdpihDbqVpqprdaWFa3NfyuA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714040249; c=relaxed/simple;
-	bh=BPeJNPgeuu5yEfnxBU92okYv01EBLJ2vMEzm8JSUpts=;
+	s=arc-20240116; t=1714040422; c=relaxed/simple;
+	bh=coFlk6vpPoKDKE/eIhdn/SGcytlX8UEWgALPdd7bzSA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oIkp90pqu0GbQvGU+VL/2oOVgS5HcDaHbelpMIYbJkZ/wtsVVtqcKb2dIT09V7pY5ZgdnaWjSOIWQD3xLWOYCSjr7RTz3B6BgOvF7cP6b+YzYyZCrWIewS75V+2QFMC1xP6nt9GkZDGjU6zu1pWFeL5Hmv967nv50UzRDIdIsjo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=oy+eKMjh; arc=none smtp.client-ip=209.85.161.49
+	 To:Cc:Content-Type; b=VhMqaPc8NJ9l9KJw9R75Pl7Ziu8SMKSxWVAQ5yKnvj7l0df7AhgOJ2p8Gsl/xmdIodPnRv1BL2MC94agmoCDE9uimJDHAjDkijtRukyRcXZgncI4DdsUbN54qwvs/9yRbcF7C5ubZ2M5dN4HRnV83Tx6GXCj0wrnlL4ZmTecB7s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ox8ZjBmf; arc=none smtp.client-ip=209.85.161.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-5af2358c7e5so469043eaf.0
-        for <linux-usb@vger.kernel.org>; Thu, 25 Apr 2024 03:17:26 -0700 (PDT)
+Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-5a9ec68784cso487775eaf.2
+        for <linux-usb@vger.kernel.org>; Thu, 25 Apr 2024 03:20:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1714040245; x=1714645045; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1714040420; x=1714645220; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=6fgWl3/LS6xcTJ1My1IOi3hltkpdLJpEDvFYJw1KZLA=;
-        b=oy+eKMjhLlRSjIcb30pEN4R7ya29RGHbBagREnBGXUVYzonkCTxEuxPUGoOe1/jJ2I
-         i3iHcMXnc1Uix8dpw7iXDkjMzJU6j1kKwqmx4nX5EwwPJwFzbED6ZngUAhAcOJgKaxL6
-         Xqkr1n1HyjUuQfKiUh+aJHZFMOg+9ABtRRhqd9vH2HioBkShVE4wOHj8jqhgjnRHBTgT
-         EZ0rJo76U1FLvctqif4uZwf4bxD7nendzevtMeHd3Xom8uP0rFLHjCAOijCKQCSKtaji
-         oZ3iGQYPvBfggg40vffxa+NWj6IDnPnrws12CzaNdb0KQp1g75xQ9reJoskBEJE4we0Z
-         UoEA==
+        bh=nRSofvBWjZnGCZ5wbNW26krjGAh8HH8TfOlAU+v/yzI=;
+        b=ox8ZjBmfO9AOovTLTWvrjxlwhgBGPybbXZNvExFbbjE+a375pKjhEViUTzvodj0WMA
+         H2lDOAQyGJQIRi68ZlOONtnGVVFaiZm2/T+0er1Vf2YGkS+C2AP4wSWRYYgzB/+8hTOQ
+         LsXwyG8gn5a7PrXC1k6OXjdUXcZlV89cqEsz8wM/d/Jiqgdw8z2eFVrLF8P9cBJoSOFu
+         334DsL+H5moQo5MU32uxpGI2wgWrGKSBnWB9ryC2UgSpoWl6qYwUiBuhbL4UA2zqjeWg
+         Zhbz2W3K5sC0q+DqF/0iVW+G1aqFQtXpVeJ2WHFtsWoilsOBIQx+GTRh6DXhC7GJJWIF
+         mY6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714040245; x=1714645045;
+        d=1e100.net; s=20230601; t=1714040420; x=1714645220;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=6fgWl3/LS6xcTJ1My1IOi3hltkpdLJpEDvFYJw1KZLA=;
-        b=Jxdyb/t9qFigbjQ7jDvW3wCW1eOgLiMBEOis9esiU3phHKKjMY2xuh2vK4kwMlegee
-         c8BlB+pLuj5JpPVKI2YCUcICh73KnAKLSW7Ie1TaW1SDyPTMBqQ3VRtJmppf6t95c8BF
-         5Z09/QBriYyUuNRcTTc/p737bFbG3QWfxPuV7RXKD0JjDuPE8NBsDV3vJmfR0gO3Lpbf
-         Pg7bXMOTpfJvFHSwQanfTO03WIvvewJGnBZOtzLIPRMr9p6ZkJdLLT8tsLnyfjlwXzSC
-         B548FJTS1pEw2Ahfa6r7yB5ZSA+MK7XCFTmpLocOPxeg4Ojb92/CBmBt6jxYwouxDd+B
-         J5+A==
-X-Forwarded-Encrypted: i=1; AJvYcCV+Z32/R+Wbq2QLfFxPmmn3hPO3fzlQ5Hwl/U10aLxdyTII3E+/CwR27XLmhmAp03Qr7pdMO8w9KTxMPfo+XfPDhkGwMZq0OXzz
-X-Gm-Message-State: AOJu0YwmbiA83lBuKEmcNMArfmIUc0ajSz/r9CutNSN6tLtw1JKijBy2
-	ipoBbPNKHoTGN/JxKGyZUAKDL+fAt4n0s4eg7WXLrhfJN9Wwt3Qx8Nbg47JImg+ftwVC71No3VQ
-	w91b8rY3atber3vucQodh5/vsJjEV3nAyxHCcYw==
-X-Google-Smtp-Source: AGHT+IEtS55U01N1UHgWrnso9WLvSZJG6q6OApUI854HVfe3yLiduHtXnsLcr3c8YSqi3fNxiU17jRDnA4GPIckhyV0=
-X-Received: by 2002:a4a:987:0:b0:5ac:9efc:3b02 with SMTP id
- 129-20020a4a0987000000b005ac9efc3b02mr5567163ooa.8.1714040245481; Thu, 25 Apr
- 2024 03:17:25 -0700 (PDT)
+        bh=nRSofvBWjZnGCZ5wbNW26krjGAh8HH8TfOlAU+v/yzI=;
+        b=uQnG3zxDev5uD03zEFb/o23NbkC69QD27jHSjhL1XdQrVmd/lGj8YV5mnD+exOsPfF
+         fRbZZSQSBO3lQcb/L6QHqpWS3sCL80osH5qsdAzl6f9gd67hkJt4HzTIx5ABvbDB5jJ5
+         Rgh7ORy8F3fFYX8mw/PoBA6dlMvsPSFxxdZX8cRiTt0Fg6NdO+6bzSeT37XEeKtRrgau
+         VgRzBHkRrU5rfQ6WqsR6kASrsGx+sazt9HLozbhlc8W6TUbwRqk2ZOPB7miZIm+uhHBz
+         7t8dHLSYz5u00VlnBqSqIzjojrvfoEsGDjMVvqzSbWi+Z/lAno2XCYP6SXcvPryP9R68
+         VkPQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU3ZaK4FJoBkpW3146wOHjdJYi6KPDXisWSAuy5VXmUcLZOGNoFr4JYsm4Qi2HYHdUwP2skmrA4NKbvYh8xi1JDrAaHuIxrS9ni
+X-Gm-Message-State: AOJu0YxGC8vbGryBM2RT6XSHcYE2LoSPm0tGmjbwTJmCLPQ14VniDpLu
+	rLIDuT9bjjMd668n3nDMtxuSp/3L8NR9VnLGeOnfcFym3M+NkDTaV+LhMSfg8EE3RJlp46T41aV
+	2CKMJvTf2I49Pc+NrsvwApZfGbNX1Kq4FxH+IpA==
+X-Google-Smtp-Source: AGHT+IGzXdN9jQkTN93JYhF62J2Q05oiVeNPbJR1v4bCLwPIyAnVTqlzGOk52nsCy6ZOkF0HDDyk+nkA/ctDRVoz/ms=
+X-Received: by 2002:a4a:98c9:0:b0:5a4:aea7:8066 with SMTP id
+ b9-20020a4a98c9000000b005a4aea78066mr6630741ooj.5.1714040420650; Thu, 25 Apr
+ 2024 03:20:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240423-usb-dwc3-gs101-v1-0-2f331f88203f@linaro.org> <20240423-usb-dwc3-gs101-v1-2-2f331f88203f@linaro.org>
-In-Reply-To: <20240423-usb-dwc3-gs101-v1-2-2f331f88203f@linaro.org>
+References: <20240423-usb-dwc3-gs101-v1-0-2f331f88203f@linaro.org> <20240423-usb-dwc3-gs101-v1-1-2f331f88203f@linaro.org>
+In-Reply-To: <20240423-usb-dwc3-gs101-v1-1-2f331f88203f@linaro.org>
 From: Peter Griffin <peter.griffin@linaro.org>
-Date: Thu, 25 Apr 2024 11:17:14 +0100
-Message-ID: <CADrjBPoyY2p1pwpO-wgMD_o6o1YjEAt_nmAnaniASHNoimE2EQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] usb: dwc3: exynos: add support for Google Tensor gs101
+Date: Thu, 25 Apr 2024 11:20:06 +0100
+Message-ID: <CADrjBPofpRiYc9hqOmBWXRKC7G7LYpLZfdDC4PRw9hmgV3in2g@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: usb: samsung,exynos-dwc3: add gs101 compatible
 To: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring <robh@kernel.org>, 
 	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
@@ -93,13 +93,8 @@ On Tue, 23 Apr 2024 at 21:19, Andr=C3=A9 Draszik <andre.draszik@linaro.org>=
  wrote:
 >
 > The Exynos-based Google Tensor gs101 SoC has a DWC3 compatible USB
-> controller and can reuse the existing Exynos glue. Add the
-> google,gs101-dwusb3 compatible and associated driver data. Four clocks
-> are required for USB for this SoC:
->     * bus clock
->     * suspend clock
->     * Link interface AXI clock
->     * Link interface APB clock
+> controller and can reuse the existing Exynos glue. Update the dt schema
+> to include the google,gs101-dwusb3 compatible for it.
 >
 > Signed-off-by: Andr=C3=A9 Draszik <andre.draszik@linaro.org>
 > ---
