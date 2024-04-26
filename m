@@ -1,139 +1,132 @@
-Return-Path: <linux-usb+bounces-9848-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9849-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40E898B3D40
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Apr 2024 18:54:14 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43C558B40AA
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Apr 2024 22:04:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 733FB1C231CA
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Apr 2024 16:54:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C6EFB1F21F77
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Apr 2024 20:04:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B47A8156F38;
-	Fri, 26 Apr 2024 16:54:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD75322EE8;
+	Fri, 26 Apr 2024 20:04:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ravnborg.org header.i=@ravnborg.org header.b="MoHD/9VX";
-	dkim=permerror (0-bit key) header.d=ravnborg.org header.i=@ravnborg.org header.b="UoBFHtU2"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="LTutAkMA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailrelay5-1.pub.mailoutpod2-cph3.one.com (mailrelay5-1.pub.mailoutpod2-cph3.one.com [46.30.211.180])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97DB0157492
-	for <linux-usb@vger.kernel.org>; Fri, 26 Apr 2024 16:54:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.30.211.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8254E171A5;
+	Fri, 26 Apr 2024 20:04:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714150448; cv=none; b=GnBb/qggVNZLWLoRZ0h3Xl7wHHENnB3okhS9v/fRQv/7gLW48bEy99BKLdF+7m2i5UUgzM1Nt/30WbAJS44Mv3iUUN5i6cgEZ1UERNcMhx3ynI1uIH3oit+H68IMLFy/boheABY2EfsNnAVs95m3GY26fYCAfw1H8RP+h0azaGs=
+	t=1714161869; cv=none; b=QJCEvAfFrB6lh70p5v4FHjZ74Ga263QwYQIpL4Hq9JdheIWyl+ncL7iFiAW8W0nSTmCxbJY7RQo17LZ7hUpg9ijGyYWF/hmjvHRPudx1uJou/Awza1z3SqmHW4pc0W8jQBn8gqbinlemNzEngmuPd/69g38uCDyuBrbmJunRzsE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714150448; c=relaxed/simple;
-	bh=SESjyC2SnswbHWd90IQq6SamRr91p8J8x/FjEOy5PSA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ia2IxhRRHzuOn1DXVklsTfM+0JBNWVAwLhIFV6hSgqbsdN2PqdzN9AjrIMle7ZVDvlTbBUb7dQAq3iwEGqwYo9QzoLEEfZlWx+jIhi1Nq0HMQ/Flq+0r31OFaEKCqUKkAXY2jyldve2Sc/kh7aKIFPiOK5dZ8mRx8JOPrAxoa0A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ravnborg.org; spf=none smtp.mailfrom=ravnborg.org; dkim=pass (2048-bit key) header.d=ravnborg.org header.i=@ravnborg.org header.b=MoHD/9VX; dkim=permerror (0-bit key) header.d=ravnborg.org header.i=@ravnborg.org header.b=UoBFHtU2; arc=none smtp.client-ip=46.30.211.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ravnborg.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ravnborg.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=ravnborg.org; s=rsa1;
-	h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-	 from:date:from;
-	bh=QtZJ+LaGtIZ9ah30lpFZvZR00WRRy58GXdQC7OFQJvU=;
-	b=MoHD/9VXVJdzxrnQFpHynPdxGTbT/vbJiwcQ89Bth3NPZNEnworXAklQwsjFYCyV06ASHH9qeeBjc
-	 L1yHijxar53c9gWDEWhiyzlrk8Fm9LY7eM3kOKvNK8ZhXUEjAkdWnMt4lYS/JdIhZLaeNP3TkhtVg2
-	 8XkKHKrqIuXItkQ3X6016KOeHFYI+XBcHXTmcSPHKEpi26K5TVVjw3umF3oZtHjwtToDYOrkUjjI4W
-	 R8Ht9IhvfH8wj5M/93zD2v22VXMWcZyQDrFKAwYwcHEvhXS6o0Psk3n9atX642heDucQFCr3K7duxP
-	 RZNLCCIJtIbEpc/d+6ftbiLoheAS0wA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
-	d=ravnborg.org; s=ed1;
-	h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-	 from:date:from;
-	bh=QtZJ+LaGtIZ9ah30lpFZvZR00WRRy58GXdQC7OFQJvU=;
-	b=UoBFHtU2GhTQiRAYO19X9G1fRST8HcVcM02AGyrOgGn6HCCRO212CV3fr67lyIksMV2Fwh6mjubCq
-	 gYCnLc5Cg==
-X-HalOne-ID: 91560707-03ed-11ef-827c-edf132814434
-Received: from ravnborg.org (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
-	by mailrelay5.pub.mailoutpod2-cph3.one.com (Halon) with ESMTPSA
-	id 91560707-03ed-11ef-827c-edf132814434;
-	Fri, 26 Apr 2024 16:53:57 +0000 (UTC)
-Date: Fri, 26 Apr 2024 18:53:55 +0200
-From: Sam Ravnborg <sam@ravnborg.org>
-To: Andreas Larsson <andreas@gaisler.com>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Arnd Bergmann <arnd@kernel.org>, Helge Deller <deller@gmx.de>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	Mark Cave-Ayland <mark.cave-ayland@ilande.co.uk>,
-	Kjetil Oftedal <oftedal@gmail.com>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-	sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, linux-sound@vger.kernel.org
-Subject: Re: [PATCH v2 00/28] sparc32: sunset sun4m and sun4d
-Message-ID: <20240426165355.GA1092388@ravnborg.org>
-References: <20240309-sunset-v2-0-f09912574d2c@ravnborg.org>
- <20240423180216.GA906720@ravnborg.org>
- <7749e9f4-2540-4618-8689-b6bb757f9cd0@gaisler.com>
+	s=arc-20240116; t=1714161869; c=relaxed/simple;
+	bh=4Y/1SNbJpP6Iq6bpaDNDG2do5EqjdK+s/ofDm4Cz0GM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=K1nW0SrFmx3MZLpY9PxpYwquDMhLnn4Cd3309/U2rhHMOhjJ8xE6eTYaspn4RqZP405mIjV4qh+L8Mdm+T25L4HedyJg7I/HoYm+eTmrJqiyLFbAdc51QPR9TDdm5SJzHgWbvCqywt3zBhRn650S/KlQMfdD/xU0Q/oGzWVM7LE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=LTutAkMA; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 43QCBwdj013759;
+	Fri, 26 Apr 2024 20:03:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=CVAZFTsLc+ZUqoicJEH8S6rIGArbQdqBeftallr55BM=; b=LT
+	utAkMA83j3mmHOC5EsZVXQFScJhAWIiDmS8EZZ4zx+ionvatYbvZqsiDHEfColcc
+	7kCdPpAoqcqMyi/cELiDp7YnXq5mKUSf9pFl/VQ+68TA1K2PDLZq14FrAsdZ+sRc
+	5I1uSrAgY4z0vN/tS46aJGRrZPqzUNRhGPORUtSInegHg7NHitHelXU6yuFRRa7O
+	slbqL4ICvyNl4k9ruQfB6OGdpY9qYtwxiITczJ+mBsayfGrEqrVO/u7akFNr/c15
+	w9OA2Gv8q9x0tF4yvDw54aMxyIEqQjy8rk+zm79qCigYm90O6E38t9ED39FwJ7aV
+	s4VUIExgbu0B8W4k2QJA==
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xr35ettv5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 26 Apr 2024 20:03:19 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 43QK3Hd7016370
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 26 Apr 2024 20:03:18 GMT
+Received: from [10.110.6.235] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Fri, 26 Apr
+ 2024 13:03:17 -0700
+Message-ID: <a24aac59-961f-0a1a-4558-61e333c6fa7f@quicinc.com>
+Date: Fri, 26 Apr 2024 13:03:11 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7749e9f4-2540-4618-8689-b6bb757f9cd0@gaisler.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH v20 08/41] usb: host: xhci-mem: Allow for interrupter
+ clients to choose specific index
+Content-Language: en-US
+To: =?UTF-8?Q?Amadeusz_S=c5=82awi=c5=84ski?=
+	<amadeuszx.slawinski@linux.intel.com>,
+        <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
+        <perex@perex.cz>, <conor+dt@kernel.org>, <corbet@lwn.net>,
+        <lgirdwood@gmail.com>, <andersson@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <gregkh@linuxfoundation.org>,
+        <Thinh.Nguyen@synopsys.com>, <broonie@kernel.org>,
+        <bgoswami@quicinc.com>, <tiwai@suse.com>, <robh@kernel.org>,
+        <konrad.dybcio@linaro.org>
+CC: <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-sound@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>
+References: <20240425215125.29761-1-quic_wcheng@quicinc.com>
+ <20240425215125.29761-9-quic_wcheng@quicinc.com>
+ <60c17b0c-8069-4019-b062-3b3cb892297b@linux.intel.com>
+From: Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <60c17b0c-8069-4019-b062-3b3cb892297b@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: g6oaGlBmz1dhPebrOegIfxkgZhb6mMgK
+X-Proofpoint-ORIG-GUID: g6oaGlBmz1dhPebrOegIfxkgZhb6mMgK
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1011,Hydra:6.0.650,FMLib:17.11.176.26
+ definitions=2024-04-26_17,2024-04-26_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=718
+ lowpriorityscore=0 malwarescore=0 spamscore=0 bulkscore=0 impostorscore=0
+ phishscore=0 priorityscore=1501 clxscore=1011 suspectscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2404010003
+ definitions=main-2404260139
 
-Hi Andreas.
+Hi Amadeusz,
 
-On Fri, Apr 26, 2024 at 06:31:12PM +0200, Andreas Larsson wrote:
-> On 2024-04-23 20:02, Sam Ravnborg wrote:
-> > Please let me know if you expect me to rebase this on for-next.
-> > I have not yet tried if there are merge conflicts but can take a look in
-> > a some days if required.
+On 4/26/2024 6:24 AM, Amadeusz Sławiński wrote:
+> On 4/25/2024 11:50 PM, Wesley Cheng wrote:
+>> Some clients may operate only on a specific XHCI interrupter instance.
+>> Allow for the associated class driver to request for the interrupter that
+>> it requires.
+>>
+>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+>> ---
 > 
-> My local testing branch for this patchset rebased with trivial fixups,
-> so no immediate rebase and resubmission is needed. I do run into some
-> strange problems on SMP with this patchset plus your CAS patchset, that
-> I do not get when I rebase the Linux patches from our kernel release
-> that has my CAS patchset. With no CAS at all these things fails even
-> worse, so do I need one or the other for these tests.
-:-(
-
+> (...)
 > 
-> I will need to dig deeper into figuring out the problems seems to be due
-> to something in any of your two patchsets in themselves or if it is
-> something else. I do need some additional fixes from our kernel release
-> for SMP to work properly, so it could also be that there is something
-> with my combination of your patches and my patches adapted on top of
-> yours.
+>> -
+>> -    /* Find available secondary interrupter, interrupter 0 is 
+>> reserved for primary */
+>> +    /* Find available secondary interrupter, interrupter 0 is 
+>> reserverd for primary */
 > 
-> There are also some needed fixes for LEON that relies upon code removed
-> in this patchset. Maybe the best solution for that would be if I submit
-> those and you then rebase upon them.
-If you can make LEON stable before starting the code removal that would
-be the best way forward. Then it should be easier to identify when
-the removal patches breaks things.
+> You introduce a typo in here.
 
-With all the surgery I had to do to remove stuff it would have been a
-big surprise if it just worked - so it goes as expected. qemu only
-verify so much - the real target (and SMP) is way better.
+Thanks for the review!  Will fix it.
 
-> > That is assuming you agree with the sunset of the sun platforms...
-> 
-> I do agree with the idea in general, but being busy with other things I
-> have had little time to dig into this lately.
-
-If this round could be used to stabilize LEON and apply other more
-trivial stuff, then I am happy to rebase the "sunset" patchset sometimes
-after next -rc1.
-
-I have accumulated a bit more on top of what I already posted, and I
-will include a few more patches in the next round.
-
-In other words - take your time!
-
-	Sam
+Thanks
+Wesley Cheng
 
