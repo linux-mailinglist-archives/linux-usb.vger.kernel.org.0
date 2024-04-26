@@ -1,108 +1,94 @@
-Return-Path: <linux-usb+bounces-9834-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9835-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A23E8B3468
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Apr 2024 11:46:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 136608B3477
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Apr 2024 11:50:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7B81C1C229CD
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Apr 2024 09:46:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9DDB12861AD
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Apr 2024 09:50:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C610B13F450;
-	Fri, 26 Apr 2024 09:46:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93BEF13FD63;
+	Fri, 26 Apr 2024 09:50:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SVtdD0Xk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XkeQEGdx"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BE087EF;
-	Fri, 26 Apr 2024 09:46:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ECE913EFEC
+	for <linux-usb@vger.kernel.org>; Fri, 26 Apr 2024 09:50:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714124805; cv=none; b=cdWCaGSM1xxh6oe8w6pzrSaVRL2GlEqhOZ9F/q3Pxl+j2FFKptkkcIfGdiqhQfqJ8BqovL16FdeURmPfHkMtILlCrPQi1jfRM2QHnkpd5OB1fLi6a+Qd2G7A35Eyn/uGfJNAhrAnagAxkxlZn5m7Q+YPNKYA5ykSjEbPuUk7JBg=
+	t=1714125015; cv=none; b=Udw41m0iaeuwSi5NRDSiojdqDB2x5ofGxOYIYS9HrzUD8/NWufLKpNcqRx4oeuN14zBn0uiRQgDQsIXmvVDnzO+WRZHHIuf8PDnIIH4pzJDk39AsoFM6uuFw5HR/JC8boir0uSebt0w5Z+LOTyNguoMFRFKYkomRkraukXJK7K0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714124805; c=relaxed/simple;
-	bh=90NGaBLm7Se4rX1TNIozUbVaVlDmswf15kUidTKUIFA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UrjyjiqcoD+WmQHDPwwzCZooy3rv/+o/JXR4/d04ioW3vWfZ3G1e/gawp6qZE4UCqe/xORfV5eyYtw3PmlXpHkOrMj7uX3Cn1Xk5owxDYSN2K5u4NoobGJuFZ+Dr2Hw9dVGGsFxAAXTOW/v184PRlvtirULDqVWxSD4vhLr1KqE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SVtdD0Xk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB0DFC113CE;
-	Fri, 26 Apr 2024 09:46:44 +0000 (UTC)
+	s=arc-20240116; t=1714125015; c=relaxed/simple;
+	bh=6DptD7Y4+C0x0AdF37q0rf+ds2Wf9tuJuYTbd/g7jKA=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=fx4DRMIDcL/EScqsoIrfmQ4BMFEdtKjc3W/8ETNm+tYw/PUX4DBabmWukmLVUfvmWxLsmw24AvLCkpMM2qphYT7/G0Ga00cZFGXaIQl4MZFzXkjt3wEQG2Os/+c0LWI3o0iOoYOrd6/adAEsEThjEnQW2naYh3sQatIgIxx0P7k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XkeQEGdx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A3A7FC2BD10
+	for <linux-usb@vger.kernel.org>; Fri, 26 Apr 2024 09:50:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714124804;
-	bh=90NGaBLm7Se4rX1TNIozUbVaVlDmswf15kUidTKUIFA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=SVtdD0Xk9KJ0NfMOmrDoqnEnptccdnifYdVr5dOgIZ9ahufdaomPqVDFDbOnM2Adc
-	 GKa063kslt7zVXHH/QZb1smV6TpnxOsEpQuYvqmFR8OBeDoGjL9ND20S1Fr0TM0BE+
-	 dg2OOAnbddQIFyM1t5WYVQKfpCFKQTyAbXb1XTdUed2fvpLUp+iGev7zBqnyNgIEVO
-	 Eb/7qSPwJXSP0rveXiwV47t7PCtr+ZIhAUAsmdA22dGQJRjnv08PNLTFNw0WRkXLKD
-	 HvQ5FzlvfTI+qB1+giEnbNXeZIKFm6SPsyldIsO8gws4VgB14EH/+tnLw9bk+MM0kQ
-	 b3kQtquZz7Uig==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1s0IAH-000000001uE-3UdV;
-	Fri, 26 Apr 2024 11:46:45 +0200
-Date: Fri, 26 Apr 2024 11:46:45 +0200
-From: Johan Hovold <johan@kernel.org>
-To: Krishna Kurapati <quic_kriskura@quicinc.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, quic_ppratap@quicinc.com,
-	quic_jackp@quicinc.com, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] usb: dwc3: core: Fix compile warning on s390 gcc in
- dwc3_get_phy call
-Message-ID: <Zit4BfDgDpZDEVxp@hovoldconsulting.com>
-References: <20240426050512.57384-1-quic_kriskura@quicinc.com>
+	s=k20201202; t=1714125014;
+	bh=6DptD7Y4+C0x0AdF37q0rf+ds2Wf9tuJuYTbd/g7jKA=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=XkeQEGdxzag6XjEw5Tvb7fjTlCzgvTfZ8dq9U9+t+wdgs/fi1bMkW+9p6HeHw61Zi
+	 z5LHT0bjlrwX6F3aFzGM7IS989D1G3AZhahS+tbkCXbfJnMyDS3TcqSqDXkH3T70tC
+	 uyz11tEMH0t62YaC6QfgZoqfEh9+JU2w5SfC0LZN+nBBkOpN0V0G1k+XPoyfOSajby
+	 eVZJtkgZzAEe1i6/H4g0L1OO2njhGfyFYkq5zmXQflK19BkTenMfxEUQ889M8+UzC5
+	 Uyd0JB0A692b1FO/a01eSZfHqv1T4CKTwa63g196gA41+QfB9fiH+gPQf0pbbLzik/
+	 BeTjnK8NvIaOA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 83D00C433E3; Fri, 26 Apr 2024 09:50:14 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 218773] device not initialized
+Date: Fri, 26 Apr 2024 09:50:14 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: aros@gmx.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-218773-208809-qZDoliEu2Z@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-218773-208809@https.bugzilla.kernel.org/>
+References: <bug-218773-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240426050512.57384-1-quic_kriskura@quicinc.com>
 
-On Fri, Apr 26, 2024 at 10:35:12AM +0530, Krishna Kurapati wrote:
-> Recent commit introduced support for reading Multiport PHYs and
-> while doing so iterated over an integer variable which runs from
-> [0-254] in the worst case scenario. But S390 compiler treats it as a
-> warning and complains that the integer write to string can go to 11
-> characters. Fix this by modifying iterator variable to u8.
-> 
-> Suggested-by: Johan Hovold <johan@kernel.org>
-> Fixes: 30a46746ca5a ("usb: dwc3: core: Refactor PHY logic to support Multiport Controller")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202404241215.Mib19Cu7-lkp@intel.com/
-> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-> ---
->  drivers/usb/dwc3/core.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> index 4dc6fc79c6d9..719305ab86c0 100644
-> --- a/drivers/usb/dwc3/core.c
-> +++ b/drivers/usb/dwc3/core.c
-> @@ -1449,7 +1449,7 @@ static int dwc3_core_get_phy(struct dwc3 *dwc)
->  	struct device_node	*node = dev->of_node;
->  	char phy_name[9];
->  	int ret;
-> -	int i;
-> +	u8 i;
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218773
 
-Perhaps unsigned int would have been better, but this should work too
-(the broken compiler did get the upper bound right).
+--- Comment #2 from Artem S. Tashkinov (aros@gmx.com) ---
+ASUS X670-P is a brand new motherboard, this issue can't be 10 years old.
 
-I assume you did not install a cross-compiler and tried to reproduce the
-bogus warning?
+1. Update your motherboard BIOS to the latest release.
+2. If possible please confirm this bug affects Windows 10/11 running on your
+device.
+3. Make sure you've tried a completely different USB cable.
 
-In any case, if we want to suppress that bogus W=1 warning, this looks
-good to me:
+--=20
+You may reply to this email to add a comment.
 
-Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
-
-Johan
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
