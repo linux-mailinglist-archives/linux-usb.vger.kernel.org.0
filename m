@@ -1,90 +1,128 @@
-Return-Path: <linux-usb+bounces-9836-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9837-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93F488B3478
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Apr 2024 11:51:16 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 341648B372C
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Apr 2024 14:26:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0FD1B1F2239D
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Apr 2024 09:51:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B69691F23DC7
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Apr 2024 12:26:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 396D113F01A;
-	Fri, 26 Apr 2024 09:51:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDAE8145FED;
+	Fri, 26 Apr 2024 12:26:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="scPDP5IY"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Q/okE3gT"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B238313F45D
-	for <linux-usb@vger.kernel.org>; Fri, 26 Apr 2024 09:51:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5E9114535C;
+	Fri, 26 Apr 2024 12:26:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714125070; cv=none; b=jRTTFtm0CdlOicz5OqMiqQVqMCP+bAYQU3zIoxp/R6AhaM/dhkwKGhm3CzNcAOwk2DIqYSt7ZxpJEKTDXXFB+OTdGDPfhYpSGgxafrbtss6QjIF4JKykhUakzlxIWY7ssQSIV/tPsrKkxDxfvzjG3zI1xaa/FHzY2Lrp4pfEZS4=
+	t=1714134367; cv=none; b=EISiH7ahcGl5V2lOvHHOfez7SlP1Zh1wP9hibuStpANSkkXfi9dpUF4Vqi4HgtTc6HlQGO7FEEotPIXHi+TeKTBXSEH7lm3NwkgDTHMTkT27qWcqb8+ZggVUB8BJtcQGC3w8mxtuZsaSoguXDsrbCoTrD5DWCTwWD03/MyaBb2I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714125070; c=relaxed/simple;
-	bh=wsKuM1T4GOhWUMoqEuCsQ62LyT8hF99WouuIXk6bCXY=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=eEJgmudtI/tAHdsVMDn67+I5usQVGysZacJ6UZTiMWLp1jZ17iODf0fOIyaSKYegK0AwC4xe7X2PZ/tadeYbYGh3OFvVQG61qvd+JeXUdvDTb93nrN1CjSDn49Jh7CVG66DnM+hVw43tDBQVOtX8sLl3lWuDqU20n3aC2yoeCjE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=scPDP5IY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 546F3C113CD
-	for <linux-usb@vger.kernel.org>; Fri, 26 Apr 2024 09:51:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714125070;
-	bh=wsKuM1T4GOhWUMoqEuCsQ62LyT8hF99WouuIXk6bCXY=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=scPDP5IYOy9fS3Som6Q5RggnvtHOdVyooxJuMPKYu17jcUUDx6C/L4pbiEfF/9CVs
-	 Rclc4W8J1ajqqJbaylKG6GSZjiNB2RYjbmF3sGrDEPtOCZEhqq1+ssw0oQqINdkWIH
-	 bMf48m/9V70rPKz/ZSuguY01qpU1pqBSj5lHrrd/NXD7XPxYAKJDKZuHT5k67gfJk9
-	 sYX35S7Rl6qrOI3gcg1BqJvkO2o+lpPuW+aVdnon0ZjrIKGA8fTnl/aUbuJ8zr9+qz
-	 xGo3ig03wcwhPGv5KG0zYBWdhewJ/M/YAQ8ztHI2sNPtqnGmOEa7D70zKC8ka0nB+x
-	 urlDkAadDLPMQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 4A853C433DE; Fri, 26 Apr 2024 09:51:10 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 218773] device not initialized
-Date: Fri, 26 Apr 2024 09:51:09 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: high
-X-Bugzilla-Who: aros@gmx.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-218773-208809-ptaYd5VOGR@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218773-208809@https.bugzilla.kernel.org/>
-References: <bug-218773-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1714134367; c=relaxed/simple;
+	bh=dYh57E6ZQFNHZXIEQC6AnVwy5RS0Foaz8BUdG7uKogU=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=j02TNXSiUSWtH8fwTLATSsaHHuHWJt617A0tQdqjDykN4ygVI5tkROko3bqdmo2BxD2ynhKg3IfcsgJVXc2/oQR4/sU4ls/6yNnQKeANQovdz9yRRQ175kqaSf1SYcJ4fvCvpLoO36YvVs1OEqLSGFD+hWjhF1PsPE4BydseyvI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Q/okE3gT; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 43QBdJgL011896;
+	Fri, 26 Apr 2024 12:25:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	from:to:cc:subject:date:message-id:mime-version
+	:content-transfer-encoding:content-type; s=qcppdkim1; bh=fHEAhtk
+	w2wOoewJBYMs/2MEtu56/1mA6pRiADYx7uCk=; b=Q/okE3gTGMdnRj5Q6etX5yv
+	OWmDLBFHKWmhfBMmRImGE0JvHEPulvsghahGPWjUWsA+D/2OVkjimZk8nQimLnIj
+	r5gCIxXMlYlOWVzZZzPFJxs2a5qkE2DcKPfOAaK/1rvPmfR5SUwg1s4YPbyjpyIF
+	oQGXbtucyrk5EFeCSkvjKD8lBEWoMOVFW4BdQIdM+ErOB8v7M6SH6W79cBZ/2Ybq
+	L5Ot9ZqTtmdm5iFJOuafZNIlznc9IxKE+xkO+akwHdgMtQ8AkQA0UDh8WG420dpL
+	GdtSn/03nM1cSMxqAgSF55Ko92TZR5BjMYhF7TJXnyzRDWC0ckG2b3GYNzHk8yg=
+	=
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xr3591t0v-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 26 Apr 2024 12:25:43 +0000 (GMT)
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+	by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 43QCPf37005147
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 26 Apr 2024 12:25:41 GMT
+Received: from hu-kuruva-hyd.qualcomm.com (10.80.80.8) by
+ nasanex01c.na.qualcomm.com (10.45.79.139) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Fri, 26 Apr 2024 05:25:35 -0700
+From: Rajashekar kuruva <quic_kuruva@quicinc.com>
+To: <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
+        <perex@perex.cz>, <conor+dt@kernel.org>, <corbet@lwn.net>,
+        <lgirdwood@gmail.com>, <andersson@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <gregkh@linuxfoundation.org>,
+        <Thinh.Nguyen@synopsys.com>, <broonie@kernel.org>,
+        <bgoswami@quicinc.com>, <tiwai@suse.com>, <robh@kernel.org>,
+        <konrad.dybcio@linaro.org>
+CC: <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-sound@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>,
+        Rajashekar kuruva <quic_kuruva@quicinc.com>
+Subject: [PATCH] [RFC PATCH] ALSA: usb-audio: endpoint: Prevent NULL pointer deference in snd_usb_endpoint_close
+Date: Fri, 26 Apr 2024 17:55:11 +0530
+Message-ID: <20240426122511.547755-1-quic_kuruva@quicinc.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 3qfEpPMRQq5Ur703ay_jX8btNchQt73f
+X-Proofpoint-ORIG-GUID: 3qfEpPMRQq5Ur703ay_jX8btNchQt73f
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1011,Hydra:6.0.650,FMLib:17.11.176.26
+ definitions=2024-04-26_12,2024-04-26_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
+ impostorscore=0 lowpriorityscore=0 priorityscore=1501 adultscore=0
+ clxscore=1011 mlxscore=0 suspectscore=0 phishscore=0 mlxlogscore=968
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2404010003 definitions=main-2404260082
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218773
+When multiple plug-in and plug-out events occur,
+there is a risk of encountering a NULL pointer dereference
+leading to a kernel panic during a headset use-case.
+this issue arises in the snd_usb_endpoint_close function
 
---- Comment #3 from Artem S. Tashkinov (aros@gmx.com) ---
-Oh, and please upload `sudo dmesg > /tmp/dmesg.txt` (once this all happens,
-i.e. the mouse is not detected first and then gets detected).
+To avoid check if ep->iface_ref is not null before decrementing
+its opened count. If ep->iface_ref is null, we skip the decrement
+and the subsequent logic.
 
---=20
-You may reply to this email to add a comment.
+Signed-off-by: Rajashekar kuruva <quic_kuruva@quicinc.com>
+---
+ sound/usb/endpoint.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+diff --git a/sound/usb/endpoint.c b/sound/usb/endpoint.c
+index 8f65349a06d3..0e3101b7e392 100644
+--- a/sound/usb/endpoint.c
++++ b/sound/usb/endpoint.c
+@@ -950,7 +950,7 @@ void snd_usb_endpoint_close(struct snd_usb_audio *chip,
+ 	usb_audio_dbg(chip, "Closing EP 0x%x (count %d)\n",
+ 		      ep->ep_num, ep->opened);
+ 
+-	if (!--ep->iface_ref->opened &&
++	if (ep->iface_ref && !--ep->iface_ref->opened &&
+ 		!(chip->quirk_flags & QUIRK_FLAG_IFACE_SKIP_CLOSE))
+ 		endpoint_set_interface(chip, ep, false);
+ 
+-- 
+2.25.1
+
 
