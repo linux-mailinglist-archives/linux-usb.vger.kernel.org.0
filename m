@@ -1,220 +1,139 @@
-Return-Path: <linux-usb+bounces-9847-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9848-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A954B8B3D13
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Apr 2024 18:47:25 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 40E898B3D40
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Apr 2024 18:54:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E0A00B22961
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Apr 2024 16:47:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 733FB1C231CA
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Apr 2024 16:54:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F858156F45;
-	Fri, 26 Apr 2024 16:47:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B47A8156F38;
+	Fri, 26 Apr 2024 16:54:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RCtVqu1t"
+	dkim=pass (2048-bit key) header.d=ravnborg.org header.i=@ravnborg.org header.b="MoHD/9VX";
+	dkim=permerror (0-bit key) header.d=ravnborg.org header.i=@ravnborg.org header.b="UoBFHtU2"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailrelay5-1.pub.mailoutpod2-cph3.one.com (mailrelay5-1.pub.mailoutpod2-cph3.one.com [46.30.211.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D39EE24B21;
-	Fri, 26 Apr 2024 16:47:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97DB0157492
+	for <linux-usb@vger.kernel.org>; Fri, 26 Apr 2024 16:54:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.30.211.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714150035; cv=none; b=Bu0fB8eFliKhbkUeySGkQ248JaHOO32D8uWXumpDd1/5VSv2umu2e/29bwWS8AiJDsLRL+HdMSOJsW6bknkB/GHe8s2E1065X2l2fH61CTHkstfhC/7nrpqZ8W/LQ4kWfvQZqvjTBvm/gN8Pm4EA1KKfnz81ccnViAS6ut2znYU=
+	t=1714150448; cv=none; b=GnBb/qggVNZLWLoRZ0h3Xl7wHHENnB3okhS9v/fRQv/7gLW48bEy99BKLdF+7m2i5UUgzM1Nt/30WbAJS44Mv3iUUN5i6cgEZ1UERNcMhx3ynI1uIH3oit+H68IMLFy/boheABY2EfsNnAVs95m3GY26fYCAfw1H8RP+h0azaGs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714150035; c=relaxed/simple;
-	bh=jfWjPGIScqlbTDAnTTHGrdwchCO7+CZVPkoOw2v3wV0=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Go+HMbsplFFQcsMwLhQvmIS47YHbgkkG5TWh5M0e7FoWJ8qB0dx+bxCNNj7bGRbnU4DU6pyjqfbEq1vqS811JWAYg4ELoikv3ZkYubVrQpMLltVU9+KcLTXWLAmWMXu6unD5FZCghMHst8KP70hgC77sqQ8MQJorTGqjQ90Lho0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RCtVqu1t; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1e5715a9ebdso20175625ad.2;
-        Fri, 26 Apr 2024 09:47:13 -0700 (PDT)
+	s=arc-20240116; t=1714150448; c=relaxed/simple;
+	bh=SESjyC2SnswbHWd90IQq6SamRr91p8J8x/FjEOy5PSA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ia2IxhRRHzuOn1DXVklsTfM+0JBNWVAwLhIFV6hSgqbsdN2PqdzN9AjrIMle7ZVDvlTbBUb7dQAq3iwEGqwYo9QzoLEEfZlWx+jIhi1Nq0HMQ/Flq+0r31OFaEKCqUKkAXY2jyldve2Sc/kh7aKIFPiOK5dZ8mRx8JOPrAxoa0A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ravnborg.org; spf=none smtp.mailfrom=ravnborg.org; dkim=pass (2048-bit key) header.d=ravnborg.org header.i=@ravnborg.org header.b=MoHD/9VX; dkim=permerror (0-bit key) header.d=ravnborg.org header.i=@ravnborg.org header.b=UoBFHtU2; arc=none smtp.client-ip=46.30.211.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ravnborg.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ravnborg.org
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1714150033; x=1714754833; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=sQn2ppMWd1uOjL7uqzuPwPjat8fxQZ3r4Xgq8M/reJc=;
-        b=RCtVqu1tpAT/QYUfHRyM28M6Tx64es1qhCMcF/lP67ARhgh1/fsqXIqI23eZqjejQV
-         UC6Ad0wrCzIxdcqS4X0sW47Qqi0GoLdqbQaiHlOVzDH2VU3IavN22CFhP7NM5BlQlCSK
-         TdW8A+L4Z5ln0pRpwnbHXk58wc35T+NZBKz3WNb2tnjBcErhcCRjpt8X+Ykpsle+KiVr
-         1K5++DYPNJOjVz9Jv6KvQ+r7GASc4irLIPjmhiehneyNQpM16ZyqtcQ88Zl+GMPMesxj
-         H6z2vNA+8l5HeC/FbKEGUPpLzu92vgvK3Dkt9kKpgxUUg8+ZHuNLt8Hp9914kYSYMGD9
-         zuCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714150033; x=1714754833;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sQn2ppMWd1uOjL7uqzuPwPjat8fxQZ3r4Xgq8M/reJc=;
-        b=lx5V+IVQJZbtK0MTRkJgYN9lVVeghvoI4fZVpVzXcoyRZkmOIgLFoJRW74tfhTOLkO
-         Vbw+hGF/kkZ/kbcnTPp+0XdMdRRbMvdsTdxg0Kyqeu3JHTXA6brcsqr9Ym2S2zKie+MB
-         I3PMnhD8hYNBdj1TkXmJ0zOQBfQrs6u+WYzEX+VCYgAwubPzRZP8fYgnSzhSirvB2i1x
-         yBDTDFGNY8+Afs54LL6PNVWCxGJyDrDZ/qowq6vSOavEk4Ez1Hbp5OfpyE2IN76yPJ97
-         E+80reDCQK4VZ9751wmaIWVLw/+mpqCH2I56874Dj9WQcudlVv/IDm3iKqwQAajSgCE3
-         XOdQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWxi3JFwHyEs/snaeTBlh7fkNTMz9y9FdnyqfGZPp+TNOZTH+XVnBZ8XnK1BUFwakbgouWUUAKI2uBMJyaLIPAPd12suE/5cw2JXZcH
-X-Gm-Message-State: AOJu0YwG3dXWadrpZf9h+0BpOeO0LCBsWimP9/dQuPhBB0JChGHGhMPw
-	lLxVNp0BXgdvOJkrX5WghpKWkvnrxhp0dsm06GeJbxJTFFCq/la0
-X-Google-Smtp-Source: AGHT+IFHwuV5UcmP2zAhp9tIF5BJVXGc6sYdl7MFsQgMTTVUUw38ID/F1HlogJCOkDP6ZhPiVFL7gA==
-X-Received: by 2002:a17:902:d492:b0:1dd:2eed:52a5 with SMTP id c18-20020a170902d49200b001dd2eed52a5mr225645plg.37.1714150033037;
-        Fri, 26 Apr 2024 09:47:13 -0700 (PDT)
-Received: from kernel.. ([2402:e280:214c:86:dcce:3490:50a1:90df])
-        by smtp.gmail.com with ESMTPSA id q5-20020a17090311c500b001d8f81ecea1sm15766839plh.172.2024.04.26.09.47.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Apr 2024 09:47:12 -0700 (PDT)
-From: R Sundar <prosunofficial@gmail.com>
-To: heikki.krogerus@linux.intel.com,
-	gregkh@linuxfoundation.org,
-	neil.armstrong@linaro.org,
-	dmitry.baryshkov@linaro.org,
-	u.kleine-koenig@pengutronix.de,
-	christophe.jaillet@wanadoo.fr
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	skhan@linuxfoundation.org,
-	javier.carrasco.cruz@gmail.com,
-	R Sundar <prosunofficial@gmail.com>
-Subject: [PATCH v5 linux-next] usb:typec:mux: remove indentation for common path
-Date: Fri, 26 Apr 2024 22:17:05 +0530
-Message-Id: <20240426164705.2717-1-prosunofficial@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	d=ravnborg.org; s=rsa1;
+	h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+	 from:date:from;
+	bh=QtZJ+LaGtIZ9ah30lpFZvZR00WRRy58GXdQC7OFQJvU=;
+	b=MoHD/9VXVJdzxrnQFpHynPdxGTbT/vbJiwcQ89Bth3NPZNEnworXAklQwsjFYCyV06ASHH9qeeBjc
+	 L1yHijxar53c9gWDEWhiyzlrk8Fm9LY7eM3kOKvNK8ZhXUEjAkdWnMt4lYS/JdIhZLaeNP3TkhtVg2
+	 8XkKHKrqIuXItkQ3X6016KOeHFYI+XBcHXTmcSPHKEpi26K5TVVjw3umF3oZtHjwtToDYOrkUjjI4W
+	 R8Ht9IhvfH8wj5M/93zD2v22VXMWcZyQDrFKAwYwcHEvhXS6o0Psk3n9atX642heDucQFCr3K7duxP
+	 RZNLCCIJtIbEpc/d+6ftbiLoheAS0wA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
+	d=ravnborg.org; s=ed1;
+	h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+	 from:date:from;
+	bh=QtZJ+LaGtIZ9ah30lpFZvZR00WRRy58GXdQC7OFQJvU=;
+	b=UoBFHtU2GhTQiRAYO19X9G1fRST8HcVcM02AGyrOgGn6HCCRO212CV3fr67lyIksMV2Fwh6mjubCq
+	 gYCnLc5Cg==
+X-HalOne-ID: 91560707-03ed-11ef-827c-edf132814434
+Received: from ravnborg.org (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
+	by mailrelay5.pub.mailoutpod2-cph3.one.com (Halon) with ESMTPSA
+	id 91560707-03ed-11ef-827c-edf132814434;
+	Fri, 26 Apr 2024 16:53:57 +0000 (UTC)
+Date: Fri, 26 Apr 2024 18:53:55 +0200
+From: Sam Ravnborg <sam@ravnborg.org>
+To: Andreas Larsson <andreas@gaisler.com>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Arnd Bergmann <arnd@kernel.org>, Helge Deller <deller@gmx.de>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Mark Cave-Ayland <mark.cave-ayland@ilande.co.uk>,
+	Kjetil Oftedal <oftedal@gmail.com>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+	sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, linux-sound@vger.kernel.org
+Subject: Re: [PATCH v2 00/28] sparc32: sunset sun4m and sun4d
+Message-ID: <20240426165355.GA1092388@ravnborg.org>
+References: <20240309-sunset-v2-0-f09912574d2c@ravnborg.org>
+ <20240423180216.GA906720@ravnborg.org>
+ <7749e9f4-2540-4618-8689-b6bb757f9cd0@gaisler.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7749e9f4-2540-4618-8689-b6bb757f9cd0@gaisler.com>
 
-Nitpick, Mostly common path will not be indented.  so rewritten this
-function to check device_node pointer is null and removed common path
-indentation.
+Hi Andreas.
 
-Signed-off-by: R Sundar <prosunofficial@gmail.com>
----
+On Fri, Apr 26, 2024 at 06:31:12PM +0200, Andreas Larsson wrote:
+> On 2024-04-23 20:02, Sam Ravnborg wrote:
+> > Please let me know if you expect me to rebase this on for-next.
+> > I have not yet tried if there are merge conflicts but can take a look in
+> > a some days if required.
+> 
+> My local testing branch for this patchset rebased with trivial fixups,
+> so no immediate rebase and resubmission is needed. I do run into some
+> strange problems on SMP with this patchset plus your CAS patchset, that
+> I do not get when I rebase the Linux patches from our kernel release
+> that has my CAS patchset. With no CAS at all these things fails even
+> worse, so do I need one or the other for these tests.
+:-(
 
-Fixed nitpicks in code according to comments received on other patch as
-below:
+> 
+> I will need to dig deeper into figuring out the problems seems to be due
+> to something in any of your two patchsets in themselves or if it is
+> something else. I do need some additional fixes from our kernel release
+> for SMP to work properly, so it could also be that there is something
+> with my combination of your patches and my patches adapted on top of
+> yours.
+> 
+> There are also some needed fixes for LEON that relies upon code removed
+> in this patchset. Maybe the best solution for that would be if I submit
+> those and you then rebase upon them.
+If you can make LEON stable before starting the code removal that would
+be the best way forward. Then it should be easier to identify when
+the removal patches breaks things.
 
-[ Nit, this function should be rewritten to not work like this, the
-"common" path should not be indented, but only the exception (i.e. bail
-if ep is not allocated properly.) ]
-https://lore.kernel.org/all/2024041103-doornail-professor-7c1e@gregkh/
+With all the surgery I had to do to remove stuff it would have been a
+big surprise if it just worked - so it goes as expected. qemu only
+verify so much - the real target (and SMP) is way better.
 
-Goal is to get rid of of_node_put,but sending this patch first to do one
-thing at a time.
+> > That is assuming you agree with the sunset of the sun platforms...
+> 
+> I do agree with the idea in general, but being busy with other things I
+> have had little time to dig into this lately.
 
-Changes since v1 - fixed the typo error for spell from identation to
-indentation
+If this round could be used to stabilize LEON and apply other more
+trivial stuff, then I am happy to rebase the "sunset" patchset sometimes
+after next -rc1.
 
-Changes since v2 - Shifted the indentation to one level left for the
-switch cases as per coding style.
+I have accumulated a bit more on top of what I already posted, and I
+will include a few more patches in the next round.
 
-Changes since v3 - Added descriptive subject for the patch and checked
-from and sign-off having same name.
+In other words - take your time!
 
-Changes since v4 - Fixed name in signed-off-by as in documents.
-
-Patches link:
-------------
-v1  - https://lore.kernel.org/all/20240420145522.15018-1-prosunofficial@gmail.com/
-v2  - https://lore.kernel.org/linux-usb/20240420164927.15290-1-prosunofficial@gmail.com/
-v3  - https://lore.kernel.org/all/20240421011647.3027-1-prosunofficial@gmail.com/
-v4  - https://lore.kernel.org/all/20240424150718.5006-1-prosunofficial@gmail.com/
-
- drivers/usb/typec/mux/nb7vpq904m.c | 68 +++++++++++++++---------------
- 1 file changed, 34 insertions(+), 34 deletions(-)
-
-diff --git a/drivers/usb/typec/mux/nb7vpq904m.c b/drivers/usb/typec/mux/nb7vpq904m.c
-index b17826713753..f7a00b388876 100644
---- a/drivers/usb/typec/mux/nb7vpq904m.c
-+++ b/drivers/usb/typec/mux/nb7vpq904m.c
-@@ -320,47 +320,47 @@ static int nb7vpq904m_parse_data_lanes_mapping(struct nb7vpq904m *nb7)
- 	int ret, i, j;
- 
- 	ep = of_graph_get_endpoint_by_regs(nb7->client->dev.of_node, 1, 0);
-+	if (!ep)
-+		return 0;
- 
--	if (ep) {
--		ret = of_property_count_u32_elems(ep, "data-lanes");
--		if (ret == -EINVAL)
--			/* Property isn't here, consider default mapping */
--			goto out_done;
--		if (ret < 0)
--			goto out_error;
--
--		if (ret != DATA_LANES_COUNT) {
--			dev_err(&nb7->client->dev, "expected 4 data lanes\n");
--			ret = -EINVAL;
--			goto out_error;
--		}
--
--		ret = of_property_read_u32_array(ep, "data-lanes", data_lanes, DATA_LANES_COUNT);
--		if (ret)
--			goto out_error;
-+	ret = of_property_count_u32_elems(ep, "data-lanes");
-+	if (ret == -EINVAL)
-+		/* Property isn't here, consider default mapping */
-+		goto out_done;
-+	if (ret < 0)
-+		goto out_error;
-+
-+	if (ret != DATA_LANES_COUNT) {
-+		dev_err(&nb7->client->dev, "expected 4 data lanes\n");
-+		ret = -EINVAL;
-+		goto out_error;
-+	}
- 
--		for (i = 0; i < ARRAY_SIZE(supported_data_lane_mapping); i++) {
--			for (j = 0; j < DATA_LANES_COUNT; j++) {
--				if (data_lanes[j] != supported_data_lane_mapping[i][j])
--					break;
--			}
-+	ret = of_property_read_u32_array(ep, "data-lanes", data_lanes, DATA_LANES_COUNT);
-+	if (ret)
-+		goto out_error;
- 
--			if (j == DATA_LANES_COUNT)
-+	for (i = 0; i < ARRAY_SIZE(supported_data_lane_mapping); i++) {
-+		for (j = 0; j < DATA_LANES_COUNT; j++) {
-+			if (data_lanes[j] != supported_data_lane_mapping[i][j])
- 				break;
- 		}
- 
--		switch (i) {
--		case NORMAL_LANE_MAPPING:
--			break;
--		case INVERT_LANE_MAPPING:
--			nb7->swap_data_lanes = true;
--			dev_info(&nb7->client->dev, "using inverted data lanes mapping\n");
-+		if (j == DATA_LANES_COUNT)
- 			break;
--		default:
--			dev_err(&nb7->client->dev, "invalid data lanes mapping\n");
--			ret = -EINVAL;
--			goto out_error;
--		}
-+	}
-+
-+	switch (i) {
-+	case NORMAL_LANE_MAPPING:
-+		break;
-+	case INVERT_LANE_MAPPING:
-+		nb7->swap_data_lanes = true;
-+		dev_info(&nb7->client->dev, "using inverted data lanes mapping\n");
-+		break;
-+	default:
-+		dev_err(&nb7->client->dev, "invalid data lanes mapping\n");
-+		ret = -EINVAL;
-+		goto out_error;
- 	}
- 
- out_done:
--- 
-2.34.1
-
+	Sam
 
