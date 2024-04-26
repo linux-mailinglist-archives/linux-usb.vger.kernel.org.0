@@ -1,136 +1,144 @@
-Return-Path: <linux-usb+bounces-9830-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9831-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 334618B2F09
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Apr 2024 05:36:42 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id DDD8A8B2FA8
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Apr 2024 07:05:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3084EB22A0B
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Apr 2024 03:36:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 35797B23A37
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Apr 2024 05:05:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34DDE78C71;
-	Fri, 26 Apr 2024 03:36:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41C8C13A260;
+	Fri, 26 Apr 2024 05:05:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="L+ZC0yNi"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="DIZtkY18"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B46878C62;
-	Fri, 26 Apr 2024 03:36:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36FB81849;
+	Fri, 26 Apr 2024 05:05:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714102586; cv=none; b=ZJMuj0b9htHTZqMxGCGirKVdUTsMjbTlz3u+Yk+npIcIAC4sSqZq4xjwNm2Yf7VBQm6fzjxENyBpII53Sh2qRzbuxC20jKcb268Y+ux8SzOtRYo+SppgAsl087oj9aV1EgAT3CaJQatkL9abenkI0pQH//jecU99stdy+LzwH4o=
+	t=1714107934; cv=none; b=gJzsQpHJv0XoCtBB+Mtor/3VRZLYq/fbQ9jvKtng6+P3Ipva6G9OFY+liGLEPeCH9/9TQIUjrzRD1+0wCnfFM8hbt8oDYIFcdyAIKVnUIGn+fyjsEHNK57VXft364g+7BiNFmmVZ4vwnKX+1FszSoRm0QzJhIIUGOKuroFJ7g1w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714102586; c=relaxed/simple;
-	bh=Ocikva22THq9PBTO61gJ+rASfUWRbAU8cbS5LgaAepQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tPnBcTnxO7m8gKmGVEOqsJJAUL1a93U8PUMGyE9GKERfANYge/+G7LpL7rikQu/QmvEw5l7CWnCOZpUxZez52aCEVXNlQUmcEvgDqyP3q8dcEvysZATPiii7O0vQ7mB6gTDlA3Y3F37yYTFsMtJ+6EXvr9k4fm8AIqRi42YrceA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=L+ZC0yNi; arc=none smtp.client-ip=209.85.167.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oi1-f173.google.com with SMTP id 5614622812f47-3bbbc6b4ed1so1081082b6e.2;
-        Thu, 25 Apr 2024 20:36:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1714102584; x=1714707384; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z8cFtVpbfNqJH56tTzxhsPWmtdud93WLdQtJ36KpwUE=;
-        b=L+ZC0yNiKVIiMtoAZi6J6JWbCVNPs2+QAWPeCKjPrN+Yht92sj1pTUVAmNF/TTpjhd
-         qVOQR9aq8LZHtxxUPQD0xVyesuoeQ6wpDNqZuAQ0A8AodhyewnQbKceTLv6+Vc4pOrKi
-         rV3hxnvGdEaNB3GyIV7BzR8NKnVw7bfV8zRTlYPQ2C3l57DEmjTBgavPT6SjT95h0N5s
-         lS/vWe0gJy3QdPpoOxvU1zKW/2RtSSjxg+A5dLDhb1cFNbbkRLyU6Cj6lK+Tr96LXSOf
-         qc4Sjf6LNp6f1ikg3RpW9RbVelPEQ9W8ZpSi5M1/5i52gmXoMziKwrv4cZhBZ9SAkt4/
-         MhUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714102584; x=1714707384;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Z8cFtVpbfNqJH56tTzxhsPWmtdud93WLdQtJ36KpwUE=;
-        b=G2KZHJaBWs5/lGQXagHZapFp1hcz/Lh8g+mIoi8SHMb//9hsLt7xnskBIXPF9aMzHU
-         8SeD9ZxC9EFCi5yzfGSf9CH3Gwu8Be4aKATslqre+yROlzs/VjO2i9fcHvUdAxtKBFrf
-         DIlLjl+zzvaLGUFcn2Z+yS+Nb0kMpvbyd+Drz+YoyGXG2v9RDY6/+zM0vVpRL1XvGYUD
-         cWv1Ucu8OYm+npIHpfGAorxXEdOfSJbG0i0LJV0HVrc70tNZeADGZ0pOaw3CjEKyATNp
-         6lYDI6DnY0eda+NQyh4UB9NBK28KHi5awgxXvNkMO+VAi3a8Elnkw9JKWwJj9KdP89bD
-         +WFQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXeXITXE0UZcFPw6oNoVR8WJDpLMbYVWYePb3DGFs3ch0NxZ0Q4I6PUTaOKT0A9/qViGIxs5CFu23sKhu3pxG8G/47axnqWVA5a3xkxAvSQiAaQ1rUz9WzQdlsJZyqCFxs56HSDFM+CynbT+l45cXc7WRhny2S/M3/VPowthhTW6sKgZZJ4GUKanNKf7ZYc/a8HEoO4A1S71SE1whoH0P5EL4WbgYUgHid/1D+tO1JNH3q1f/M+wuEmPRIHRA==
-X-Gm-Message-State: AOJu0YzLmRtGNLL2aSSl1JJccUgAD56zd4nJj27r1orHs47LkqPbuDkj
-	mqr9p6EzmQWjrs9crxhuXO2iw1kBA7lcSNnUH90NmkQtAurjhlG3
-X-Google-Smtp-Source: AGHT+IHBLFRWKXEYGxFCF54F3pVkYNxRnt0ZLU+mSTWXVXW5HHsRpGcBmTNLh/DFqy2C7n5xKmynJg==
-X-Received: by 2002:a05:6808:13cd:b0:3c8:4dcb:3d8e with SMTP id d13-20020a05680813cd00b003c84dcb3d8emr2189161oiw.37.1714102584292;
-        Thu, 25 Apr 2024 20:36:24 -0700 (PDT)
-Received: from archie.me ([103.124.138.155])
-        by smtp.gmail.com with ESMTPSA id t3-20020a635343000000b005f077dce0f6sm13740028pgl.31.2024.04.25.20.36.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Apr 2024 20:36:22 -0700 (PDT)
-Received: by archie.me (Postfix, from userid 1000)
-	id 05F3C18462BCF; Fri, 26 Apr 2024 10:36:19 +0700 (WIB)
-Date: Fri, 26 Apr 2024 10:36:19 +0700
-From: Bagas Sanjaya <bagasdotme@gmail.com>
-To: Wesley Cheng <quic_wcheng@quicinc.com>, srinivas.kandagatla@linaro.org,
-	mathias.nyman@intel.com, perex@perex.cz, conor+dt@kernel.org,
-	corbet@lwn.net, lgirdwood@gmail.com, andersson@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
-	Thinh.Nguyen@synopsys.com, broonie@kernel.org, bgoswami@quicinc.com,
-	tiwai@suse.com, robh@kernel.org, konrad.dybcio@linaro.org
-Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-sound@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, linux-doc@vger.kernel.org,
-	alsa-devel@alsa-project.org, Mao Zhu <zhumao001@208suo.com>,
-	Ran Sun <sunran001@208suo.com>, Xiang wangx <wangxiang@cdjrlc.com>,
-	Shaomin Deng <dengshaomin@cdjrlc.com>,
-	Charles Han <hanchunchao@inspur.com>,
-	Attreyee M <tintinm2017@gmail.com>
-Subject: Re: [PATCH v20 41/41] ASoC: doc: Add documentation for SOC USB
-Message-ID: <ZishMx1mSpnbWq0P@archie.me>
-References: <20240425215125.29761-1-quic_wcheng@quicinc.com>
- <20240425215125.29761-42-quic_wcheng@quicinc.com>
+	s=arc-20240116; t=1714107934; c=relaxed/simple;
+	bh=nOVxA6EeiYfLAFMzqkem6m/lwzk/t4zAaDssFQ7c9Us=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ql/FAaqCK1qsKb3DMlAMw7UgnRK8rvyfS56Fwdco7YLHASo78cEegUiW7F2dcWSTcOGVlqkDtvxdE8NcK1YstRFsgaiXEyCAYfuzPcj5UcpH58doov5MpUmsAmy5K1YSvn77B2s6bIkIsM0gk1zxw20czzUP5Wxl3Ggwy1xZ5Wo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=DIZtkY18; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 43Q4mKcX007401;
+	Fri, 26 Apr 2024 05:05:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	from:to:cc:subject:date:message-id:mime-version
+	:content-transfer-encoding:content-type; s=qcppdkim1; bh=2ZOSleS
+	xTGihvmq3TTCFiDPOSWhrXdviz5IBrw9JSPU=; b=DIZtkY18+zRUYK5uuWJaJ1l
+	Q1C02NRpP6T5LyQ3k6Y/CZznQPn14t0YF7qXTKfSowJBZKaTouucJg1hHwdVRJD4
+	lYK7iqX6/pdfSIWIPpnWyu0P2Rv47cYlk3Si5bnhO4UOhsXGXhLLvRV2EqvTw+C1
+	QF05/HK4BSSFB7boKKCrF6v5av8orUvq0oupHMm2XrhE8e3HbguJNRVTjWsRCH22
+	V02mHhpnSaiNb2UWp+FgTWCJdDIO6p+DX5pRP+Baw2AC/HQL9HmHdKzJls8+SJnr
+	+1bL65Ms6WfIoCPX6klJ/LOy016hbmWdzHjWN41DOikJVtgXfc74JCEDseaAk9Q=
+	=
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xr1ne8hxu-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 26 Apr 2024 05:05:26 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 43Q55P9v023284
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 26 Apr 2024 05:05:25 GMT
+Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Thu, 25 Apr 2024 22:05:22 -0700
+From: Krishna Kurapati <quic_kriskura@quicinc.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thinh Nguyen
+	<Thinh.Nguyen@synopsys.com>
+CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_ppratap@quicinc.com>, <quic_jackp@quicinc.com>,
+        Krishna Kurapati
+	<quic_kriskura@quicinc.com>,
+        Johan Hovold <johan@kernel.org>, "kernel test
+ robot" <lkp@intel.com>
+Subject: [PATCH] usb: dwc3: core: Fix compile warning on s390 gcc in dwc3_get_phy call
+Date: Fri, 26 Apr 2024 10:35:12 +0530
+Message-ID: <20240426050512.57384-1-quic_kriskura@quicinc.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="P89L7XsIZU/s9H0u"
-Content-Disposition: inline
-In-Reply-To: <20240425215125.29761-42-quic_wcheng@quicinc.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 7G2Kczhh-2SphlUPwcMmXhJ5CTw5y7O5
+X-Proofpoint-GUID: 7G2Kczhh-2SphlUPwcMmXhJ5CTw5y7O5
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1011,Hydra:6.0.650,FMLib:17.11.176.26
+ definitions=2024-04-26_05,2024-04-25_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 spamscore=0
+ priorityscore=1501 impostorscore=0 adultscore=0 bulkscore=0
+ lowpriorityscore=0 mlxscore=0 mlxlogscore=850 malwarescore=0 phishscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2404010003 definitions=main-2404260030
 
+Recent commit introduced support for reading Multiport PHYs and
+while doing so iterated over an integer variable which runs from
+[0-254] in the worst case scenario. But S390 compiler treats it as a
+warning and complains that the integer write to string can go to 11
+characters. Fix this by modifying iterator variable to u8.
 
---P89L7XsIZU/s9H0u
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Suggested-by: Johan Hovold <johan@kernel.org>
+Fixes: 30a46746ca5a ("usb: dwc3: core: Refactor PHY logic to support Multiport Controller")
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202404241215.Mib19Cu7-lkp@intel.com/
+Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+---
+ drivers/usb/dwc3/core.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-On Thu, Apr 25, 2024 at 02:51:25PM -0700, Wesley Cheng wrote:
-> With the introduction of the soc-usb driver, add documentation highlighti=
-ng
-> details on how to utilize the new driver and how it interacts with
-> different components in USB SND and ASoC.  It provides examples on how to
-> implement the drivers that will need to be introduced in order to enable
-> USB audio offloading.
->=20
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index 4dc6fc79c6d9..719305ab86c0 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -1449,7 +1449,7 @@ static int dwc3_core_get_phy(struct dwc3 *dwc)
+ 	struct device_node	*node = dev->of_node;
+ 	char phy_name[9];
+ 	int ret;
+-	int i;
++	u8 i;
+ 
+ 	if (node) {
+ 		dwc->usb2_phy = devm_usb_get_phy_by_phandle(dev, "usb-phy", 0);
+@@ -1479,7 +1479,7 @@ static int dwc3_core_get_phy(struct dwc3 *dwc)
+ 		if (dwc->num_usb2_ports == 1)
+ 			snprintf(phy_name, sizeof(phy_name), "usb2-phy");
+ 		else
+-			snprintf(phy_name, sizeof(phy_name),  "usb2-%d", i);
++			snprintf(phy_name, sizeof(phy_name),  "usb2-%u", i);
+ 
+ 		dwc->usb2_generic_phy[i] = devm_phy_get(dev, phy_name);
+ 		if (IS_ERR(dwc->usb2_generic_phy[i])) {
+@@ -1496,7 +1496,7 @@ static int dwc3_core_get_phy(struct dwc3 *dwc)
+ 		if (dwc->num_usb3_ports == 1)
+ 			snprintf(phy_name, sizeof(phy_name), "usb3-phy");
+ 		else
+-			snprintf(phy_name, sizeof(phy_name), "usb3-%d", i);
++			snprintf(phy_name, sizeof(phy_name), "usb3-%u", i);
+ 
+ 		dwc->usb3_generic_phy[i] = devm_phy_get(dev, phy_name);
+ 		if (IS_ERR(dwc->usb3_generic_phy[i])) {
+-- 
+2.34.1
 
-The doc LGTM, thanks!
-
-Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---P89L7XsIZU/s9H0u
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZishLwAKCRD2uYlJVVFO
-o5DJAQD+rkyBnIMvpNNaVk9L86LrDuJEbiHqinPevfblrJEMzwEAq9C11BX6KHIX
-RW6EYUrw/Ayfy0D/ZGZo/aorFkUhrQM=
-=d3kj
------END PGP SIGNATURE-----
-
---P89L7XsIZU/s9H0u--
 
