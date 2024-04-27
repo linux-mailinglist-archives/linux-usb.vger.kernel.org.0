@@ -1,203 +1,202 @@
-Return-Path: <linux-usb+bounces-9857-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9858-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C6778B478B
-	for <lists+linux-usb@lfdr.de>; Sat, 27 Apr 2024 21:23:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B90678B47CF
+	for <lists+linux-usb@lfdr.de>; Sat, 27 Apr 2024 22:18:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2E502281E1C
-	for <lists+linux-usb@lfdr.de>; Sat, 27 Apr 2024 19:23:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6ECE3281B9B
+	for <lists+linux-usb@lfdr.de>; Sat, 27 Apr 2024 20:18:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D599444C85;
-	Sat, 27 Apr 2024 19:23:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6169D3B289;
+	Sat, 27 Apr 2024 20:18:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="vsC7iT7N"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vVvMa4jD"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A202C3BBE4
-	for <linux-usb@vger.kernel.org>; Sat, 27 Apr 2024 19:23:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C7D55B1E3
+	for <linux-usb@vger.kernel.org>; Sat, 27 Apr 2024 20:18:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714245802; cv=none; b=hZs7GbddOaTfW5cYL9x29abtuQFrZ25kdMX9uWJLTNTYDDb7c+QXoQGDetMnfxanR60tYlPEkQZR6CP/Y5MJV9WdS8Dupk4SCpVBJ1axvboj5LFMzC3LevCBNosqJOjzmQ/KpNGGRyzsz0CzGWsCElsxwUyOTluG4DQFz8uYfSA=
+	t=1714249113; cv=none; b=lLPgLybBY8fPh3vkD2p6vfWnIzAyTrlGmiYjgHr7/UuCqaVoEqeL3RCkpA69dWibd/PttPyyZrFnGoii7DSqtP9v/zoB5PzjpRn9pzXJa65y6CzCQ/zo2WCh3VWfpLHTVz2XoEyOaEKuv83PzlIAjh5LiRZdEM35TpOMieUABrM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714245802; c=relaxed/simple;
-	bh=JCwvXXGOOpRiQQroxgGXin1e0AgQOViaWS65wT7HZjM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jSvsztK3HhApBjR8aRNrBNUYxSyQk4LlaEMk+zuZuAHwmoCMVfEE4Cxll9D6aJK1R4m7eZgomqF5b5bft9aCkwFewilDfHgTi3hx5WmDU+DfZHczW9OH7UDSJhV5+vAIGkc8CNEW4/cki5Ew1gOWINkPx6123o2Hk5jrcsVHFgU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=vsC7iT7N; arc=none smtp.client-ip=209.85.208.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-2d88a869ce6so43338381fa.3
-        for <linux-usb@vger.kernel.org>; Sat, 27 Apr 2024 12:23:19 -0700 (PDT)
+	s=arc-20240116; t=1714249113; c=relaxed/simple;
+	bh=vGS2/u89PF7/otpUQK90Oz1lFEXoU6UBuU6k8KnR/Dk=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=hejGDvUzzKgJNRduVE1KSllsyGeh4zlgD0KevQp2a8BpTNxQ4OKx7lZv5XN/sSB25rWXw2D9Uf8xp6vW6nERwT3Ra0njcHMjHMtspYW9i28RL8TnLUG/gl4OzgOIzNQh7wDq/3YeULQjLOmFRvMwT5JEYVEHpJYYo8krtv+73VU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--badhri.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=vVvMa4jD; arc=none smtp.client-ip=209.85.216.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--badhri.bounces.google.com
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-2a2dbaacff8so3698197a91.2
+        for <linux-usb@vger.kernel.org>; Sat, 27 Apr 2024 13:18:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1714245798; x=1714850598; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3rDeek3ek163NM2ICcH8yFDp19I1XYbwXVQl5oOKRdM=;
-        b=vsC7iT7NVsAGa25CbtGRVs9EPqgstAZQuaqaCs9i/atc4EAnfGqMuCLicp3I5IGqMN
-         apjWWywswu9pEaG0imV4JdSrG7anlKA5a1VifbSGFL2tzcf7d4zJgkEeLLEw61NHd1Tz
-         Ibr+0cH69Jymia2EblI2M2ClrdlPsiDR9t6Do7cFcup1iOqefxRaGkn7eFrQlcXFkuCI
-         GsJivQgfD3LVr3pURB5LA4lWxaCnwdjlny1Q31jWwMOz2GXWWau3koWRNkPiotEbXA+i
-         19MgdcKcXiLgYrt3YdjHvY1fN9wcXt7ItelPpXoQBFSG8bLvj5xLmHRZkC1OhjAtgHyL
-         RhEw==
+        d=google.com; s=20230601; t=1714249112; x=1714853912; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Sfa5YDgyksbNRIIlp+y0lds34H3yK+b5QDjrM8ldPCA=;
+        b=vVvMa4jDm68HTet+WeoKgylr1uOIqCQaFsDFvaoPstpfBRooqPFwBHreFsnUcgI2E0
+         55G+lnxsKIQUNwAiahF6+N7RNfYId9e1Dtz6CVQSa7qB/jpdqLZ5fcamAloggEs/0Nmo
+         ev5MGEVG4S8m7WykMLkhE+tOVzUaohDq4xCmq3R70yATfBj+oDuFH+MRy//zF0YtTMyH
+         oBqRCPnMdqV65K1mX0pnK7G2UUL+2ZIwakaqtYjmJBWZ+WW6WcBVYC65YY9w4T1oTgIa
+         PGm7j77hyTuavpIabpppjbQwzawCDxbiFN+Qh94XI+FxDHgN3pnZ3e2uMif5vga3Af+8
+         L7cA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714245798; x=1714850598;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3rDeek3ek163NM2ICcH8yFDp19I1XYbwXVQl5oOKRdM=;
-        b=DDW9gYGzwvMk8gkbXCiYlZ1JLI3bsbu8ua0Y53vZR+wrUqDmNMa/ZtkUl8x2bjDb75
-         TREqWjUSRyCrrn6MWBaPixfoRlVieNehHvgTwgZWvQLGzAgFc3t8MCdSBbM0ltYT4RFl
-         hq7jX6iLzy3R/5kqUjl9SYCQd66zQ/s6whkzrocjmb7rldpoRcwEjnmhL6zdQAMIX5fl
-         l6rkzj4RlfvOznO+CYeTzGgUm8piqVxSv4f8XzMz7DLFr0zi3pQ1XVjvG5ewHUxgEyrr
-         6lPNrQrkzOnID6tSfqVtxzCoCU05BdoUuyuQpVECgRwo7eM8cbX1WhVjChggMRUlLJwI
-         qcXA==
-X-Forwarded-Encrypted: i=1; AJvYcCX4koU38wnnQqw9ysi+39uKeqzI+MaPLjO/tRvr9eE+x2VhDq330Z7oafeion22DYJmtC+q5PWxrr8TRuavTAZoI/p0i0q+CPaU
-X-Gm-Message-State: AOJu0YzUtSVcyPJqZDPCcj3xE0SJ2vlFiS0r/M4ofAkvRnRPv23jHJWp
-	11iPhX2S6kbyxsQgCfZRXoO0yMJrpdvhR8T0LJx/RJzW0MJguLj/94LM+CxwD7k=
-X-Google-Smtp-Source: AGHT+IFKqPXK39wIAvLsU8xjJKO3ifaHVSzycC6r8B85uS8OxIfghvSOSvqOl6SjJGRsxf9adzAVOg==
-X-Received: by 2002:a2e:9112:0:b0:2d4:3e82:117e with SMTP id m18-20020a2e9112000000b002d43e82117emr1920448ljg.32.1714245798256;
-        Sat, 27 Apr 2024 12:23:18 -0700 (PDT)
-Received: from eriador.lumag.spb.ru (dzdbxzyyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::8a5])
-        by smtp.gmail.com with ESMTPSA id z19-20020a2e8e93000000b002d8a12e3d90sm3095509ljk.122.2024.04.27.12.23.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 27 Apr 2024 12:23:17 -0700 (PDT)
-Date: Sat, 27 Apr 2024 22:23:16 +0300
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: Badhri Jagan Sridharan <badhri@google.com>
-Cc: gregkh@linuxfoundation.org, linux@roeck-us.net, 
-	heikki.krogerus@linux.intel.com, kyletso@google.com, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, rdbabiera@google.com, amitsd@google.com, stable@vger.kernel.org, 
-	frank.wang@rock-chips.com, broonie@kernel.org
-Subject: Re: [PATCH v1] usb: typec: tcpm: Check for port partner validity
- before consuming it
-Message-ID: <ktl5xjnb7njuoyobnekivyjw6uf6ozn7shd2wubl5styzmmoc6@buzgfwr5wive>
-References: <20240427175010.3367154-1-badhri@google.com>
+        d=1e100.net; s=20230601; t=1714249112; x=1714853912;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Sfa5YDgyksbNRIIlp+y0lds34H3yK+b5QDjrM8ldPCA=;
+        b=KBkNqXA2O7poDM+eOaGM+06T9l3iEjTxZojVWe70dT2HPVVKff4oH+DDyoJ3RjOH46
+         IwsCDTDvE/8XuXFaAiqr22ojoTbHYGlUXh/hQ3w+uTK/jSnUqDxnSR0EN9BoBLqHH1ZX
+         +WQmxnZhDr6/MHtwF3BFi0UKkqROj6huC4H+hfnjyz4PLcp6gz6V7YF/XByAbH73tu1g
+         eTYJ8FpWXFdLsHXbzNwDRdU+XmY+p/AC0mkHpl2UDkpBa/Fw0J5jCd0YinNxIRo/Ohf6
+         fTdqQVNMtzM34yDseDasBnxViqGRGznWHWNibJDwQRxSo75BJXhUUDZCB5ikp5p++3xu
+         e1ag==
+X-Forwarded-Encrypted: i=1; AJvYcCUv2e1LA+eofboFCyqB14b3Mx7yvaDPH+oCi2ZjymZPkVf/j9oX59BCiIv9JBLr93Yp6CQdyHx7aAs1wTtOyUwzUHSKKqUYCFLx
+X-Gm-Message-State: AOJu0Yz0lD6lNAn4bwyWj6FiYnGXgdNdqNt+h3Q9XN2bJwWfc6aF1XhG
+	zvu9xG6S11sp0qEL1RO9Ra79/0G2YRdFQGUchv33XjlbYQBbK3pIrlrc2kclSGcd8LuR65wxuFl
+	6Rw==
+X-Google-Smtp-Source: AGHT+IHHerC52i4r2e7c6erHYCeB0Yloh7vqJTnA/5Zl+bo8JD/bDpT2hdm45YNwxTACMr8F4lILDrdYMno=
+X-Received: from badhri.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:6442])
+ (user=badhri job=sendgmr) by 2002:a17:90b:3652:b0:2a7:82a8:2ac0 with SMTP id
+ nh18-20020a17090b365200b002a782a82ac0mr20041pjb.1.1714249111787; Sat, 27 Apr
+ 2024 13:18:31 -0700 (PDT)
+Date: Sat, 27 Apr 2024 20:18:28 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240427175010.3367154-1-badhri@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.44.0.769.g3c40516874-goog
+Message-ID: <20240427201828.3432713-1-badhri@google.com>
+Subject: [PATCH v2] usb: typec: tcpm: Check for port partner validity before
+ consuming it
+From: Badhri Jagan Sridharan <badhri@google.com>
+To: gregkh@linuxfoundation.org, linux@roeck-us.net, 
+	heikki.krogerus@linux.intel.com
+Cc: kyletso@google.com, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, rdbabiera@google.com, amitsd@google.com, 
+	stable@vger.kernel.org, frank.wang@rock-chips.com, broonie@kernel.org, 
+	dmitry.baryshkov@linaro.org, Badhri Jagan Sridharan <badhri@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Sat, Apr 27, 2024 at 05:50:10PM +0000, Badhri Jagan Sridharan wrote:
-> typec_register_partner() does not guarantee partner registration
-> to always succeed. In the event of failure, port->partner is set
-> to the error value or NULL. Given that port->partner validity is
-> not checked, this results in the following crash:
-> 
-> [17514.377076][  T275] Unable to handle kernel NULL pointer dereference at virtual address 00000000000003c0
-> [17514.378270][  T275] pc : run_state_machine+0x1bc8/0x1c08
-> [17514.378286][  T275] lr : run_state_machine+0x1b90/0x1c08
-> ..
-> [17514.378377][  T275] Call trace:
-> [17514.378381][  T275]  run_state_machine+0x1bc8/0x1c08
-> [17514.378388][  T275]  tcpm_state_machine_work+0x94/0xe4
-> [17514.378396][  T275]  kthread_worker_fn+0x118/0x328
-> [17514.378406][  T275]  kthread+0x1d0/0x23c
-> [17514.378412][  T275]  ret_from_fork+0x10/0x20
+typec_register_partner() does not guarantee partner registration
+to always succeed. In the event of failure, port->partner is set
+to the error value or NULL. Given that port->partner validity is
+not checked, this results in the following crash:
 
-Nit: thre is little use in the timestamps and the T275 tag. In future
-patches you can safely ommit such data.
+Unable to handle kernel NULL pointer dereference at virtual address 00000000000003c0
+ pc : run_state_machine+0x1bc8/0x1c08
+ lr : run_state_machine+0x1b90/0x1c08
+..
+ Call trace:
+   run_state_machine+0x1bc8/0x1c08
+   tcpm_state_machine_work+0x94/0xe4
+   kthread_worker_fn+0x118/0x328
+   kthread+0x1d0/0x23c
+   ret_from_fork+0x10/0x20
 
-> 
-> To prevent the crash, check for port->partner validity before
-> derefencing it in all the call sites.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: c97cd0b4b54e ("usb: typec: tcpm: set initial svdm version based on pd revision")
-> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-> ---
->  drivers/usb/typec/tcpm/tcpm.c | 19 ++++++++++++++-----
->  1 file changed, 14 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index ab6ed6111ed0..8a4fa8d875c6 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -4,7 +4,6 @@
->   *
->   * USB Power Delivery protocol stack.
->   */
-> -
->  #include <linux/completion.h>
->  #include <linux/debugfs.h>
->  #include <linux/device.h>
-> @@ -1580,7 +1579,8 @@ static void svdm_consume_identity(struct tcpm_port *port, const u32 *p, int cnt)
->  	port->partner_ident.cert_stat = p[VDO_INDEX_CSTAT];
->  	port->partner_ident.product = product;
->  
-> -	typec_partner_set_identity(port->partner);
-> +	if (!IS_ERR_OR_NULL(port->partner))
+To prevent the crash, check for port->partner validity before
+derefencing it in all the call sites.
 
-I think that it might be better to check typec_register_partner() result
-in tcpm_typec_connect() and skip setting port->partner in case it
-returned an error (an error message would be also beneficial).
-See for example, how this is handled in ucsi_register_partner().
+Cc: stable@vger.kernel.org
+Fixes: c97cd0b4b54e ("usb: typec: tcpm: set initial svdm version based on pd revision")
+Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+---
+ drivers/usb/typec/tcpm/tcpm.c | 31 +++++++++++++++++++++++--------
+ 1 file changed, 23 insertions(+), 8 deletions(-)
 
-Then these checks can be turned into simple `if (port->partner)`.
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index ab6ed6111ed0..454165776797 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -4,7 +4,6 @@
+  *
+  * USB Power Delivery protocol stack.
+  */
+-
+ #include <linux/completion.h>
+ #include <linux/debugfs.h>
+ #include <linux/device.h>
+@@ -1580,7 +1579,8 @@ static void svdm_consume_identity(struct tcpm_port *port, const u32 *p, int cnt)
+ 	port->partner_ident.cert_stat = p[VDO_INDEX_CSTAT];
+ 	port->partner_ident.product = product;
+ 
+-	typec_partner_set_identity(port->partner);
++	if (port->partner)
++		typec_partner_set_identity(port->partner);
+ 
+ 	tcpm_log(port, "Identity: %04x:%04x.%04x",
+ 		 PD_IDH_VID(vdo),
+@@ -1742,6 +1742,9 @@ static void tcpm_register_partner_altmodes(struct tcpm_port *port)
+ 	struct typec_altmode *altmode;
+ 	int i;
+ 
++	if (!port->partner)
++		return;
++
+ 	for (i = 0; i < modep->altmodes; i++) {
+ 		altmode = typec_partner_register_altmode(port->partner,
+ 						&modep->altmode_desc[i]);
+@@ -4231,7 +4234,10 @@ static int tcpm_init_vconn(struct tcpm_port *port)
+ 
+ static void tcpm_typec_connect(struct tcpm_port *port)
+ {
++	struct typec_partner *partner;
++
+ 	if (!port->connected) {
++		port->connected = true;
+ 		/* Make sure we don't report stale identity information */
+ 		memset(&port->partner_ident, 0, sizeof(port->partner_ident));
+ 		port->partner_desc.usb_pd = port->pd_capable;
+@@ -4241,9 +4247,13 @@ static void tcpm_typec_connect(struct tcpm_port *port)
+ 			port->partner_desc.accessory = TYPEC_ACCESSORY_AUDIO;
+ 		else
+ 			port->partner_desc.accessory = TYPEC_ACCESSORY_NONE;
+-		port->partner = typec_register_partner(port->typec_port,
+-						       &port->partner_desc);
+-		port->connected = true;
++		partner = typec_register_partner(port->typec_port, &port->partner_desc);
++		if (IS_ERR(partner)) {
++			dev_err(port->dev, "Failed to register partner (%ld)\n", PTR_ERR(partner));
++			return;
++		}
++
++		port->partner = partner;
+ 		typec_partner_set_usb_power_delivery(port->partner, port->partner_pd);
+ 	}
+ }
+@@ -4323,9 +4333,11 @@ static void tcpm_typec_disconnect(struct tcpm_port *port)
+ 	port->plug_prime = NULL;
+ 	port->cable = NULL;
+ 	if (port->connected) {
+-		typec_partner_set_usb_power_delivery(port->partner, NULL);
+-		typec_unregister_partner(port->partner);
+-		port->partner = NULL;
++		if (port->partner) {
++			typec_partner_set_usb_power_delivery(port->partner, NULL);
++			typec_unregister_partner(port->partner);
++			port->partner = NULL;
++		}
+ 		port->connected = false;
+ 	}
+ }
+@@ -4549,6 +4561,9 @@ static enum typec_cc_status tcpm_pwr_opmode_to_rp(enum typec_pwr_opmode opmode)
+ 
+ static void tcpm_set_initial_svdm_version(struct tcpm_port *port)
+ {
++	if (!port->partner)
++		return;
++
+ 	switch (port->negotiated_rev) {
+ 	case PD_REV30:
+ 		break;
 
-> +		typec_partner_set_identity(port->partner);
->  
->  	tcpm_log(port, "Identity: %04x:%04x.%04x",
->  		 PD_IDH_VID(vdo),
-> @@ -1742,6 +1742,9 @@ static void tcpm_register_partner_altmodes(struct tcpm_port *port)
->  	struct typec_altmode *altmode;
->  	int i;
->  
-> +	if (IS_ERR_OR_NULL(port->partner))
-> +		return;
-> +
->  	for (i = 0; i < modep->altmodes; i++) {
->  		altmode = typec_partner_register_altmode(port->partner,
->  						&modep->altmode_desc[i]);
-> @@ -4244,7 +4247,8 @@ static void tcpm_typec_connect(struct tcpm_port *port)
->  		port->partner = typec_register_partner(port->typec_port,
->  						       &port->partner_desc);
->  		port->connected = true;
-> -		typec_partner_set_usb_power_delivery(port->partner, port->partner_pd);
-> +		if (!IS_ERR_OR_NULL(port->partner))
-> +			typec_partner_set_usb_power_delivery(port->partner, port->partner_pd);
->  	}
->  }
->  
-> @@ -4323,8 +4327,10 @@ static void tcpm_typec_disconnect(struct tcpm_port *port)
->  	port->plug_prime = NULL;
->  	port->cable = NULL;
->  	if (port->connected) {
-> -		typec_partner_set_usb_power_delivery(port->partner, NULL);
-> -		typec_unregister_partner(port->partner);
-> +		if (!IS_ERR_OR_NULL(port->partner)) {
-> +			typec_partner_set_usb_power_delivery(port->partner, NULL);
-> +			typec_unregister_partner(port->partner);
-> +		}
->  		port->partner = NULL;
->  		port->connected = false;
->  	}
-> @@ -4549,6 +4555,9 @@ static enum typec_cc_status tcpm_pwr_opmode_to_rp(enum typec_pwr_opmode opmode)
->  
->  static void tcpm_set_initial_svdm_version(struct tcpm_port *port)
->  {
-> +	if (IS_ERR_OR_NULL(port->partner))
-> +		return;
-> +
->  	switch (port->negotiated_rev) {
->  	case PD_REV30:
->  		break;
-> 
-> base-commit: 3f12222a4bebeb13ce06ddecc1610ad32fa835dd
-> -- 
-> 2.44.0.769.g3c40516874-goog
-> 
-
+base-commit: 3f12222a4bebeb13ce06ddecc1610ad32fa835dd
 -- 
-With best wishes
-Dmitry
+2.44.0.769.g3c40516874-goog
+
 
