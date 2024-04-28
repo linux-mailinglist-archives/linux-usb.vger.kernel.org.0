@@ -1,159 +1,163 @@
-Return-Path: <linux-usb+bounces-9865-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9866-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C35D78B4A90
-	for <lists+linux-usb@lfdr.de>; Sun, 28 Apr 2024 09:57:50 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 10A998B4B92
+	for <lists+linux-usb@lfdr.de>; Sun, 28 Apr 2024 13:49:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CBAFBB212DC
-	for <lists+linux-usb@lfdr.de>; Sun, 28 Apr 2024 07:57:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A2522281AC0
+	for <lists+linux-usb@lfdr.de>; Sun, 28 Apr 2024 11:49:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3D8B51C3E;
-	Sun, 28 Apr 2024 07:57:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 347E55C8F8;
+	Sun, 28 Apr 2024 11:49:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="Tuha+pGt";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="uLdKuL2J";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="Tuha+pGt";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="uLdKuL2J"
+	dkim=pass (1024-bit key) header.d=ivitera.com header.i=@ivitera.com header.b="LhMYoc9Q";
+	dkim=pass (1024-bit key) header.d=ivitera.com header.i=@ivitera.com header.b="BlwRuTRa"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.ivitera.com (smtp.ivitera.com [88.101.85.59])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E38CA50A7A
-	for <linux-usb@vger.kernel.org>; Sun, 28 Apr 2024 07:57:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3118C5B694;
+	Sun, 28 Apr 2024 11:49:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=88.101.85.59
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714291061; cv=none; b=iyNOG0yPQWymnIkQXJZQyjRYy5iJWDw5sNQysMsLiY+ktXLKCwosG3Qsun9LPxdIUkKRJz56qArNok7iZ37zbOYoL3TnA28kvTFgCPjb0VKlFVGgveDsV5NmNf4LrD65YMBH/VVJWTbnRFmiN2Hcaw9T02GJNTJViTLrIwX5kZ8=
+	t=1714304953; cv=none; b=oxTQvEEwXqEGwehBO75KMI/SjPYmR6FjzDN7iKxBiBi6BvnpP/7C2fJA9TKAZhdO03zJRpL8lHjut7ViBvOQqgBoqjMlN0zguDqC8Mi/9CSN66efGb7g6m7KHFZTNkyzDlQ73+m+GyiODAScBiw7ZRd5BO+aVPdNkutvftB1DBk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714291061; c=relaxed/simple;
-	bh=/SZdXvU0/zNh9eDyGFV7bjeIs8jRXFatuixRfW5OSPM=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=o3QxvTM+v+J9FfDy4xgeJWPm5kUaKU0huAJZh40Um8MeNiecZ53I8bnBDvkpcednlyQNUjFxrT7E4d93Two5CSAe9ZQ7LNp89uJxejM73YJ1opxUv1WCPIbpTiOMzivQyowEXYlNifPol8pu50pgUHrHzVqRG/SqkTzalRSqsEQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=Tuha+pGt; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=uLdKuL2J; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=Tuha+pGt; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=uLdKuL2J; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id A0EB6383E2;
-	Sun, 28 Apr 2024 07:57:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1714291051; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=g7HiDJn2jYaKPNKCjP6hACnCuBIIoIfNAijGiXXE0pI=;
-	b=Tuha+pGtWY5VvJpFimhcq4dl2UfXLlzbV7RToWdM48wzW55d8dkEaFrUTtLVM6Ho9EIfYX
-	1AqB2yDVsztGlVV+cRedIFQSwfNfzebLCPIhOvej1ufkiCEq8m4ZgUuAfe2WiRVa4CAMF1
-	T03M6y22QvTrWbwJT8nict4jpd0cCcQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1714291051;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=g7HiDJn2jYaKPNKCjP6hACnCuBIIoIfNAijGiXXE0pI=;
-	b=uLdKuL2JRL4urMLbYqLlJaSdvkJGTctYN7cCOVdyyXvUatkPd5f/RWwZDspp1PBtqohmYl
-	tvL82VbjVLciksCQ==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1714291051; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=g7HiDJn2jYaKPNKCjP6hACnCuBIIoIfNAijGiXXE0pI=;
-	b=Tuha+pGtWY5VvJpFimhcq4dl2UfXLlzbV7RToWdM48wzW55d8dkEaFrUTtLVM6Ho9EIfYX
-	1AqB2yDVsztGlVV+cRedIFQSwfNfzebLCPIhOvej1ufkiCEq8m4ZgUuAfe2WiRVa4CAMF1
-	T03M6y22QvTrWbwJT8nict4jpd0cCcQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1714291051;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=g7HiDJn2jYaKPNKCjP6hACnCuBIIoIfNAijGiXXE0pI=;
-	b=uLdKuL2JRL4urMLbYqLlJaSdvkJGTctYN7cCOVdyyXvUatkPd5f/RWwZDspp1PBtqohmYl
-	tvL82VbjVLciksCQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 77733138A7;
-	Sun, 28 Apr 2024 07:57:31 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([10.150.64.162])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id npmeG2sBLmbJLAAAD6G6ig
-	(envelope-from <tiwai@suse.de>); Sun, 28 Apr 2024 07:57:31 +0000
-Date: Sun, 28 Apr 2024 09:57:42 +0200
-Message-ID: <8734r53ond.wl-tiwai@suse.de>
-From: Takashi Iwai <tiwai@suse.de>
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: Linux regressions mailing list <regressions@lists.linux.dev>,
-	Oliver Neukum <oneukum@suse.com>,
-	USB list <linux-usb@vger.kernel.org>
-Subject: Re: Regression due to 59cf44575456 ("USB: core: Fix oversight in SuperSpeed initialization")
-In-Reply-To: <87bk5zdtqs.wl-tiwai@suse.de>
-References: <9efbd569-7059-4575-983f-0ea30df41871@suse.com>
-	<78eaec78-663a-428b-b80e-68c398a8f5f7@rowland.harvard.edu>
-	<8a4a7f9e-a191-4301-93f8-9694aa14e42f@leemhuis.info>
-	<673939a1-b07a-457e-9fa6-cf6166fdff03@rowland.harvard.edu>
-	<8734rdjj4n.wl-tiwai@suse.de>
-	<ea0b171b-7ee7-4141-b334-28f637fc6b03@rowland.harvard.edu>
-	<87bk5zdtqs.wl-tiwai@suse.de>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+	s=arc-20240116; t=1714304953; c=relaxed/simple;
+	bh=a3jtrhFLmJsd3Ue/6VPSau0Q462286ZMvv6PDrJlj9k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gn/8lbxbj2jg+aEOXiKzt5k/cwfTTbH2wvsOxm0cobXq88LuTicgcOnwC8Gn1VMg0ThsjrlpQf8Q6JFhdVk52IxFwaeHxWgwpLID4t8DfRgCrRkLemhiZz0WRkcgiSwLXWaPdsjzXR5ZjTbNUr/kacLWrvHN9DizDUzr9nolWDQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ivitera.com; spf=pass smtp.mailfrom=ivitera.com; dkim=pass (1024-bit key) header.d=ivitera.com header.i=@ivitera.com header.b=LhMYoc9Q; dkim=pass (1024-bit key) header.d=ivitera.com header.i=@ivitera.com header.b=BlwRuTRa; arc=none smtp.client-ip=88.101.85.59
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ivitera.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ivitera.com
+Received: from localhost (localhost [127.0.0.1])
+	by smtp.ivitera.com (Postfix) with ESMTP id 8B5E1160136;
+	Sun, 28 Apr 2024 13:49:01 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+	t=1714304941; bh=a3jtrhFLmJsd3Ue/6VPSau0Q462286ZMvv6PDrJlj9k=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=LhMYoc9QjBGMa5qc4n0OK2y6qZ4ouIg7wZCpeDpxR4Ax2y4qIttfughGcZbCTP+/Z
+	 hve7yTUTctZdw0sKKVy/IZhhFe98yMEyPpAaaem01VpWjsD3lf3SwJ2KIylrpYBD6G
+	 IksWcPdh+fyeDGSo4R5N/V70RikkvJO69k60xYa4=
+Received: from smtp.ivitera.com ([127.0.0.1])
+	by localhost (localhost [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id VeLKYB4rjy5u; Sun, 28 Apr 2024 13:49:01 +0200 (CEST)
+Received: from [192.168.105.22] (dustin.pilsfree.net [81.201.58.138])
+	(Authenticated sender: pavel)
+	by smtp.ivitera.com (Postfix) with ESMTPSA id B81331600E5;
+	Sun, 28 Apr 2024 13:49:00 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+	t=1714304940; bh=a3jtrhFLmJsd3Ue/6VPSau0Q462286ZMvv6PDrJlj9k=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=BlwRuTRaKZucHtdx16mb91suWp2Ulyzm4P2i1tN+LCpvVBARCqX0abSnkPhnhQqrD
+	 glzY8MThjaSjbMKnOVMBqRfUgOIGaxsCs3RDCrbhnpEzXB3Gn+Sacw8TKv1d4XvbGt
+	 mSuqhtNMsCXc8sauYYGRArdRpEw7XZa8158AHsmo=
+Message-ID: <817d5f6c-0f9d-7f88-b5ca-26c3547730fb@ivitera.com>
+Date: Sun, 28 Apr 2024 13:49:00 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Flag: NO
-X-Spam-Score: -3.30
-X-Spam-Level: 
-X-Spamd-Result: default: False [-3.30 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	RCVD_TLS_ALL(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	TO_DN_ALL(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns]
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH v2] usb: gadget: f_uac2: Expose all string descriptors
+ through configfs.
+Content-Language: en-US
+To: Chris Wulff <Chris.Wulff@biamp.com>,
+ "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ James Gruber <jimmyjgruber@gmail.com>, Lee Jones <lee@kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+ Takashi Iwai <tiwai@suse.de>
+References: <CO1PR17MB54195BE778868AFDFE2DCB36E1112@CO1PR17MB5419.namprd17.prod.outlook.com>
+ <c9928edb-8b2d-1948-40b8-c16e34cea3e2@ivitera.com>
+ <CO1PR17MB541989646698286B2B13CF23E1112@CO1PR17MB5419.namprd17.prod.outlook.com>
+ <9b40e148-f3eb-f8f5-bf2d-37a0a0629417@ivitera.com>
+ <CO1PR17MB541942196F9A2F73CF8B5B14E1152@CO1PR17MB5419.namprd17.prod.outlook.com>
+From: Pavel Hofman <pavel.hofman@ivitera.com>
+In-Reply-To: <CO1PR17MB541942196F9A2F73CF8B5B14E1152@CO1PR17MB5419.namprd17.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Wed, 24 Apr 2024 10:56:11 +0200,
-Takashi Iwai wrote:
+On 27. 04. 24 18:27, Chris Wulff wrote:
+>> From: Pavel Hofman <pavel.hofman@ivitera.com>
+>>>>> +             p_it_name               playback input terminal name
+>>>>> +             p_ot_name               playback output terminal name
+>>>>> +             p_fu_name               playback function unit name
+>>>>> +             p_alt0_name             playback alt mode 0 name
+>>>>> +             p_alt1_name             playback alt mode 1 name
+>>>>
+>>>> Nacked-by: Pavel Hofman <pavel.hofman@ivitera.com>
+> ...
+>> If the params in the upper level were to stand as defaults for the
+>> altsettings (and for the existing altsetting 1 if no specific altset
+>> subdir configs were given), maybe the naming xxx_alt1_xxx could become a
+>> bit confusing. E.g. p_altx_name or p_alt_non0_name?
 > 
-> On Tue, 23 Apr 2024 21:29:27 +0200,
-> Alan Stern wrote:
-> > 
-> > On Mon, Apr 22, 2024 at 09:24:24PM +0200, Takashi Iwai wrote:
-> > > On Mon, 22 Apr 2024 20:03:46 +0200,
-> > > Alan Stern wrote:
-> > > About the patch change: I appreciate if you cook it rather by
-> > > yourself since I'm not 100% sure what you suggested.  I can
-> > > provide the reporter a test kernel with the patch for confirmation, of
-> > > course.
-> > 
-> > Here's a condensed version of the patch you wrote.  But I would prefer not 
-> > to add this to the kernel if the problem can be fixed somewhere else.
+> I've been prototyping this a bit to see how it will work. My current configfs
+> structure looks something like:
 > 
-> Thanks, I asked the report for testing the patch now.
+> (all existing properties)
+> c_it_name
+> c_it_ch_name
+> c_fu_name
+> c_ot_name
+> p_it_name
+> p_it_ch_name
+> p_fu_name
+> p_ot_name
+> num_alt_modes (settable to 2..5 in my prototype)
+> 
+> alt.0
+>   c_alt_name
+>   p_alt_name
+> alt.1 (for alt.1, alt.2, etc.)
+>   c_alt_name
+>   p_alt_name
+>   c_ssize
+>   p_ssize
+>   (Additional properties here for other things that are settable for each alt mode,
+>    but the only one I've implemented in my prototype so far is sample size.)
+> 
 
-The reporter confirmed that it's still working.
+Hats off to your speed, that's amazing. IMO this is a perfect config
+layout, logical, extensible, easy to generate manually as well as with a
+script.
 
 
-thanks,
+> This brings up a few questions:
+> 
+> Is a property for setting the number of alt modes preferred, or being able to
+> make directories like some other things (eg, "mkdir alt.5" would add alt mode 5)?
+> The former is what I started with, but I am leaning towards the latter as it is a bit
+> more flexible (you could create alt modes of any index, though I'm not entirely
+> sure why you'd want to.) It does involve a bit more dynamic memory allocation,
+> but nothing crazy.
 
-Takashi
+I am not sure the arbitrary index of alt mode would be useful (is it
+even allowed in USB specs?). But I may not have understood your question
+properly.
+
+The num_alt_modes property - can the number be perhaps aquired from the
+number of created directories? Or would that number of alt modes be
+created automatically (all same with default values), and the properties
+in alt.X dirs would subsequently only modify their respective values?
+
+> 
+> And second, should the alt.x directories go back to the defaults if you remove
+> and re-create them? I'm assuming it makes sense to do that, just putting it out
+> there since my current prototype doesn't work that way.
+
+IIUC just creating the alt.X directory would create the alt X mode, with
+default properties from the top-level configs or with the source-code
+defaults.
+
+Thanks a lot,
+
+Pavel.
 
