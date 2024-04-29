@@ -1,126 +1,120 @@
-Return-Path: <linux-usb+bounces-9912-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9893-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 47BED8B5AC3
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Apr 2024 16:02:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id EB92A8B5AB0
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Apr 2024 16:01:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F2BA61F2344C
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Apr 2024 14:02:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A82171F21580
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Apr 2024 14:01:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7C327BAF0;
-	Mon, 29 Apr 2024 14:01:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA76074C08;
+	Mon, 29 Apr 2024 14:00:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DexgR53A"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0C907580B
-	for <linux-usb@vger.kernel.org>; Mon, 29 Apr 2024 14:01:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.58.85.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3E526A8DC
+	for <linux-usb@vger.kernel.org>; Mon, 29 Apr 2024 14:00:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714399308; cv=none; b=VvmZ0WA31EM6+IwdSKMG+ROn9UK84iXwhbG4XWoSZOxAbBTQm2P5MJqslbgoXlnIPiLgU6EZ8VfyoUgDhXnDk1eQ/ULAJhGCpABqJ//u+x12bDmfR0tzkJp9Q5vuZPR3W0tXRCECL8XlO561C4mDmOj2dqUdVj3yy15pTnL2ZjE=
+	t=1714399259; cv=none; b=E5u7Hfnc4hCpFVPeEW0qTR2cWozYmwl5xKikw0Y6Fyfvx2hs+mnWCZDjy8OPWnl9YwTlBRjL7BA+n2hKujoHLFNnG9k2IGEWmM3PIAmUtB/X7EcSsY9ASv/eGFgphswsr0GxzyPjX5Ye/U+W+GteDIRXRhsL7i1Z4aMD/RSP/wc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714399308; c=relaxed/simple;
-	bh=e7TvlrPSQc0/eqYkNg6fTM7yLvokY898/4tGaAFSoIE=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 MIME-Version:Content-Type; b=OcPxQdu4BsfO5fPzLP1X1r3tAqQN28aruSdP09/bpxYYtf/5F5o927DDbnT8+JgUwZCYg8Xu6aNRRdh9Z01iGYWIjY8HzwpPlIrc908BfPpT5fISDJo8TGHvfZVBlQCzGOoyIzheoKFURrARmy78RB3AGXjQMRrnRQ34Wwg1ZpY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM; spf=pass smtp.mailfrom=aculab.com; arc=none smtp.client-ip=185.58.85.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aculab.com
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mtapsc-8-sgBWM_xkPBOQpufxJtdRhg-1; Mon, 29 Apr 2024 15:01:38 +0100
-X-MC-Unique: sgBWM_xkPBOQpufxJtdRhg-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Mon, 29 Apr
- 2024 15:01:00 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Mon, 29 Apr 2024 15:01:00 +0100
-From: David Laight <David.Laight@ACULAB.COM>
-To: 'Guenter Roeck' <linux@roeck-us.net>, Gerd Hoffmann <kraxel@redhat.com>
-CC: Alan Stern <stern@rowland.harvard.edu>, Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>, "linux-usb@vger.kernel.org"
-	<linux-usb@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2] usb: ohci: Prevent missed ohci interrupts
-Thread-Topic: [PATCH v2] usb: ohci: Prevent missed ohci interrupts
-Thread-Index: AQHaloHtuZ6Ib4ELhkipVPWjjF4HNLF8nf2wgAKopXeAAANcoA==
-Date: Mon, 29 Apr 2024 14:01:00 +0000
-Message-ID: <2adc91aebb3a433997e13bd479d4b4b3@AcuMS.aculab.com>
-References: <20240424195951.3749388-1-linux@roeck-us.net>
- <a1b4bac14c6a4334969cc7d671f3a8eb@AcuMS.aculab.com>
- <d434c88a-6575-4d45-ab3e-e27ac7684b07@roeck-us.net>
- <ef23ykui3axiwfkr4wi24abbuklvejx5r5wqem5cr4lq36x7py@kkxvsi3ibtbi>
- <eafc8fb6-cecc-48c8-a053-cd00f094e781@roeck-us.net>
-In-Reply-To: <eafc8fb6-cecc-48c8-a053-cd00f094e781@roeck-us.net>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
+	s=arc-20240116; t=1714399259; c=relaxed/simple;
+	bh=c3zpLthBylZsXdoJCsL8mJa9Cb6Ag9bZXQkZMP7Lilo=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=gjMZvRF6Pt7aytr2HtxMWldvA2+SEIIvPcyBRGHpHQv10ScHBJzajRRjcRZ0jiByDgIvQzVVLHQzrCXHw/Xvbca5KSIYRttB6X8HcPr1lLFMJZW9q0chq/RqxcPu+7tYeSxy4X3XVZf5R1hQmfLAplvNiakZhxE86XkU5UJMd/k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DexgR53A; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1714399258; x=1745935258;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=c3zpLthBylZsXdoJCsL8mJa9Cb6Ag9bZXQkZMP7Lilo=;
+  b=DexgR53AOW3UBN1LloI9kvG6vhpAJXmEVAQS06ox8oy6ve4OI52LItqF
+   9hpeVDjaSNPCjmHC04cOGM8+gDe3yzEbM+RD1qlmyrHplftQCqIk0aae8
+   +QGI1M7pKq7VCPL3pkhB02r/ML9pdI2leva/eiAmmzTrHRRQe0ugKjQlu
+   W8kdCRCehGsIrwB6jowO9KQzfFI0UGfqF7c+m6+aPeBH3NVKuCj65pUiI
+   gEPCyEtmQA6gL6ijCAGJ8nLfYBXACxwiRAIfAOilePdbCTzjCYJdJaQBu
+   FVb+jYsIc5HICW8uRs24rp+pe7b4JOSVHkDZvv/uV7/fqvpX53UiYK4BO
+   w==;
+X-CSE-ConnectionGUID: S2k0nux6QVaY8G50BjLa9w==
+X-CSE-MsgGUID: pcOVFZB6SxWqZzBblG2aqg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11059"; a="9911373"
+X-IronPort-AV: E=Sophos;i="6.07,239,1708416000"; 
+   d="scan'208";a="9911373"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2024 07:00:57 -0700
+X-CSE-ConnectionGUID: 7uUQ8uHUTUSfKINT/rwR6Q==
+X-CSE-MsgGUID: asoHO08kTRWPL6k5t6S+Pg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,239,1708416000"; 
+   d="scan'208";a="26521636"
+Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
+  by orviesa006.jf.intel.com with ESMTP; 29 Apr 2024 07:00:55 -0700
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+To: <gregkh@linuxfoundation.org>
+Cc: <linux-usb@vger.kernel.org>,
+	Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: [PATCH 00/18] xhci cleanups and rework for usb-next
+Date: Mon, 29 Apr 2024 17:02:27 +0300
+Message-Id: <20240429140245.3955523-1-mathias.nyman@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 8bit
 
-RnJvbTogR3VlbnRlciBSb2Vjaw0KPiBTZW50OiAyOSBBcHJpbCAyMDI0IDE0OjM0DQo+IA0KPiBP
-biA0LzI4LzI0IDIzOjQ5LCBHZXJkIEhvZmZtYW5uIHdyb3RlOg0KPiA+ICAgIEhpLA0KPiA+DQo+
-ID4+Pj4gKwkvKiByZXBlYXQgdW50aWwgYWxsIGVuYWJsZWQgaW50ZXJydXB0cyBhcmUgaGFuZGxl
-ZCAqLw0KPiA+Pj4+ICsJaWYgKG9oY2ktPnJoX3N0YXRlICE9IE9IQ0lfUkhfSEFMVEVEKSB7DQo+
-ID4+Pj4gKwkJaW50cyA9IG9oY2lfcmVhZGwob2hjaSwgJnJlZ3MtPmludHJzdGF0dXMpOw0KPiA+
-Pj4+ICsJCWlmIChpbnRzICYgb2hjaV9yZWFkbChvaGNpLCAmcmVncy0+aW50cmVuYWJsZSkpDQo+
-ID4+Pg0KPiA+Pj4gRG9lc24ndCB0aGUgZHJpdmVyIGtub3cgd2hpY2ggaW50ZXJydXB0cyBhcmUg
-ZW5hYmxlZD8NCj4gPj4+IFNvIGl0IHNob3VsZCBiZSBhYmxlIHRvIGF2b2lkIGRvaW5nIHR3byAo
-bGlrZWx5KSBzbG93IGlvIHJlYWRzPw0KPiA+Pj4gKFBDSWUgcmVhZHMgYXJlIHByZXR0eSBtdWNo
-IGd1YXJhbnRlZWQgdG8gYmUgaGlnaCBsYXRlbmN5LikNCj4gPj4NCj4gPj4gTm8sIHRoZSBkcml2
-ZXIgZG9lcyBub3QgY2FjaGUgaW50cmVuYWJsZS4NCj4gPg0KPiA+IERvZXMgdGhlIGRyaXZlciBl
-dmVyIGNoYW5nZSBpbnRyZW5hYmxlIGFmdGVyIGluaXRpYWxpemF0aW9uPw0KPiA+DQo+IA0KPiAk
-IGdpdCBncmVwIC1lIGludHJlbmFibGUgLWUgaW50cmRpc2FibGUgZHJpdmVycy91c2IvaG9zdC8q
-b2hjaSpjIHwgZ3JlcCBvaGNpX3dyaXRlbA0KPiBkcml2ZXJzL3VzYi9ob3N0L29oY2ktaGNkLmM6
-CW9oY2lfd3JpdGVsKG9oY2ksICh1MzIpIH4wLCAmb2hjaS0+cmVncy0+aW50cmRpc2FibGUpOw0K
-PiBkcml2ZXJzL3VzYi9ob3N0L29oY2ktaGNkLmM6CQlvaGNpX3dyaXRlbCAob2hjaSwgT0hDSV9J
-TlRSX09DLCAmb2hjaS0+cmVncy0+aW50cmVuYWJsZSk7DQo+IGRyaXZlcnMvdXNiL2hvc3Qvb2hj
-aS1oY2QuYzoJb2hjaV93cml0ZWwgKG9oY2ksIE9IQ0lfSU5UUl9NSUUsICZvaGNpLT5yZWdzLT5p
-bnRyZGlzYWJsZSk7DQo+IGRyaXZlcnMvdXNiL2hvc3Qvb2hjaS1oY2QuYzoJb2hjaV93cml0ZWwg
-KG9oY2ksIG1hc2ssICZvaGNpLT5yZWdzLT5pbnRyZW5hYmxlKTsNCj4gZHJpdmVycy91c2IvaG9z
-dC9vaGNpLWhjZC5jOgkJCW9oY2lfd3JpdGVsIChvaGNpLCBPSENJX0lOVFJfVUUsICZyZWdzLT5p
-bnRyZGlzYWJsZSk7DQo+IGRyaXZlcnMvdXNiL2hvc3Qvb2hjaS1oY2QuYzoJCW9oY2lfd3JpdGVs
-KG9oY2ksIE9IQ0lfSU5UUl9SSFNDLCAmcmVncy0+aW50cmRpc2FibGUpOw0KPiBkcml2ZXJzL3Vz
-Yi9ob3N0L29oY2ktaGNkLmM6CQlvaGNpX3dyaXRlbCAob2hjaSwgT0hDSV9JTlRSX1NGLCAmcmVn
-cy0+aW50cmRpc2FibGUpOw0KPiBkcml2ZXJzL3VzYi9ob3N0L29oY2ktaGNkLmM6CQlvaGNpX3dy
-aXRlbCAob2hjaSwgT0hDSV9JTlRSX01JRSwgJnJlZ3MtPmludHJlbmFibGUpOw0KPiBkcml2ZXJz
-L3VzYi9ob3N0L29oY2ktaGNkLmM6CW9oY2lfd3JpdGVsIChvaGNpLCBPSENJX0lOVFJfTUlFLCAm
-b2hjaS0+cmVncy0+aW50cmRpc2FibGUpOw0KPiBkcml2ZXJzL3VzYi9ob3N0L29oY2ktaGNkLmM6
-CW9oY2lfd3JpdGVsKG9oY2ksIE9IQ0lfSU5UUl9NSUUsICZvaGNpLT5yZWdzLT5pbnRyZGlzYWJs
-ZSk7DQo+IGRyaXZlcnMvdXNiL2hvc3Qvb2hjaS1oY2QuYzoJCW9oY2lfd3JpdGVsKG9oY2ksIE9I
-Q0lfSU5UUl9NSUUsICZvaGNpLT5yZWdzLT5pbnRyZW5hYmxlKTsNCj4gZHJpdmVycy91c2IvaG9z
-dC9vaGNpLWh1Yi5jOglvaGNpX3dyaXRlbChvaGNpLCBPSENJX0lOVFJfU0YsICZvaGNpLT5yZWdz
-LT5pbnRyZGlzYWJsZSk7DQo+IGRyaXZlcnMvdXNiL2hvc3Qvb2hjaS1odWIuYzoJb2hjaV93cml0
-ZWwgKG9oY2ksIE9IQ0lfSU5UUl9JTklULCAmb2hjaS0+cmVncy0+aW50cmVuYWJsZSk7DQo+IGRy
-aXZlcnMvdXNiL2hvc3Qvb2hjaS1odWIuYzoJCW9oY2lfd3JpdGVsIChvaGNpLCBPSENJX0lOVFJf
-U0YsICZvaGNpLT5yZWdzLT5pbnRyZW5hYmxlKTsNCj4gZHJpdmVycy91c2IvaG9zdC9vaGNpLWh1
-Yi5jOgkJCW9oY2lfd3JpdGVsKG9oY2ksIHJoc2NfZW5hYmxlLCAmb2hjaS0+cmVncy0+aW50cmVu
-YWJsZSk7DQo+IGRyaXZlcnMvdXNiL2hvc3Qvb2hjaS1odWIuYzoJb2hjaV93cml0ZWwob2hjaSwg
-T0hDSV9JTlRSX1JIU0MsICZvaGNpLT5yZWdzLT5pbnRyZW5hYmxlKTsNCj4gZHJpdmVycy91c2Iv
-aG9zdC9vaGNpLXEuYzoJb2hjaV93cml0ZWwgKG9oY2ksIE9IQ0lfSU5UUl9TRiwgJm9oY2ktPnJl
-Z3MtPmludHJlbmFibGUpOw0KDQpBdCBsZWFzdCB0aGUgaGFyZHdhcmUgaGFzIHNlcGFyYXRlIGVu
-YWJsZS9kaXNhYmxlIHJlZ2lzdGVycw0Kc28gdGhlIGRyaXZlciBpc24ndCBkb2luZyBSTVcgY3lj
-bGVzLg0KDQpJJ2QgZ3Vlc3MgdGhhdCB0aGUgbm9ybWFsIGNvbmRpdGlvbiBpcyB0aGF0IG5vIGlu
-dGVycnVwdHMgYXJlIHBlbmRpbmcuDQpTbyBpdCBjYW4gYmUgaGVsZCB0byBvbmUgKHNsb3cpIHJl
-YWQgYnkgY2hlY2tpbmc6DQoJaWYgKGludHMgJiYgKGludHMgJiBvaGNpX3JlYWRsKG9oY2ksICZy
-ZWdzLT5pbnRyZW5hYmxlKSkpDQpBbHRob3VnaCBtYXliZSB0aGVyZSBhcmUgc29tZSAnbmV2ZXIg
-ZW5hYmxlZCcgaW50ZXJydXB0cyB0aGF0DQptaWdodCBuZWVkIG1hc2tpbmc/DQoNCglEYXZpZA0K
-DQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFy
-bSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAo
-V2FsZXMpDQo=
+Hi Greg
+
+This series for usb-next is mostly xhci cleanups and refactoring.
+
+Thanks
+Mathias
+
+Andy Shevchenko (3):
+  xhci: pci: Use full names in PCI IDs for Intel platforms
+  xhci: pci: Group out Thunderbolt xHCI IDs
+  xhci: pci: Use PCI_VENDOR_ID_RENESAS
+
+Mathias Nyman (4):
+  xhci: stored cached port capability values in one place
+  xhci: remove xhci_check_usb2_port_capability helper
+  xhci: improve PORTSC register debugging output
+  xhci: remove XHCI_TRUST_TX_LENGTH quirk
+
+Niklas Neronin (11):
+  usb: xhci: check if 'requested segments' exceeds ERST capacity
+  usb: xhci: improve debug message in xhci_ring_expansion_needed()
+  usb: xhci: address off-by-one in xhci_num_trbs_free()
+  usb: xhci: remove redundant variable 'erst_size'
+  usb: xhci: use array_size() when allocating and freeing memory
+  usb: xhci: prevent potential failure in handle_tx_event() for Transfer
+    events without TRB
+  usb: xhci: remove 'handling_skipped_tds' from handle_tx_event()
+  usb: xhci: replace goto with return when possible in handle_tx_event()
+  usb: xhci: remove goto 'cleanup' in handle_tx_event()
+  usb: xhci: remove duplicate TRB_TO_SLOT_ID() calls
+  usb: xhci: compact 'trb_in_td()' arguments
+
+ drivers/usb/host/xhci-dbgcap.c |   2 +-
+ drivers/usb/host/xhci-mem.c    |  48 +++++-------
+ drivers/usb/host/xhci-pci.c    |  49 +++++-------
+ drivers/usb/host/xhci-rcar.c   |   6 +-
+ drivers/usb/host/xhci-ring.c   | 138 ++++++++++++++-------------------
+ drivers/usb/host/xhci.c        |  38 ++-------
+ drivers/usb/host/xhci.h        |  28 ++++---
+ 7 files changed, 121 insertions(+), 188 deletions(-)
+
+-- 
+2.25.1
 
 
