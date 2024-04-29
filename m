@@ -1,253 +1,194 @@
-Return-Path: <linux-usb+bounces-9913-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9914-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E6268B5C41
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Apr 2024 17:02:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E55C18B5D84
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Apr 2024 17:24:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C4B8C1C2155A
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Apr 2024 15:02:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 149561C21AAC
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Apr 2024 15:24:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EEF280BE3;
-	Mon, 29 Apr 2024 15:02:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1751E83CA0;
+	Mon, 29 Apr 2024 15:23:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ivitera.com header.i=@ivitera.com header.b="MWYSOKa1";
-	dkim=pass (1024-bit key) header.d=ivitera.com header.i=@ivitera.com header.b="okpC09mq"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gDCBA2FL"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.ivitera.com (smtp.ivitera.com [88.101.85.59])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2D867A15C
-	for <linux-usb@vger.kernel.org>; Mon, 29 Apr 2024 15:02:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=88.101.85.59
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27B4382D8E;
+	Mon, 29 Apr 2024 15:23:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714402953; cv=none; b=DUYqidr+1QRyUqZVFCM2v23mfyx1nYuK1ATs31iKzxrGlscDySawVTei5IFppxh0qMi3ml9bMRqU34LHb5gQQ7+tE8P4G4QvUlLoebBjCpFVrvb+NmaDK/Dy9HpFxfKW0AT4dgAyw1S8plNCUk7Cv0UQFSj+/o+O7nuCn0TyiPI=
+	t=1714404233; cv=none; b=C/Vq9FiXZSnuZBn15sptfrBIuMFbHhV7j1mUW2ryM7eVDJ13g2b+HQhcRq/LYGMkWcqWlXSY2oiar6mjlqP7AbGHnwdLta/futd/nuV8Cf0HvTutzxwd7TvHwXatmXbUDKxlFkNkPxCcbD1i6PucYDdmLIF4+mKeyuNvOEATSso=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714402953; c=relaxed/simple;
-	bh=1j9Bh83FGSh7vkGgky5cnAkByc5G6v68ZN1HrXNV2D4=;
+	s=arc-20240116; t=1714404233; c=relaxed/simple;
+	bh=UoOiVi6NxaqejEwIzDKtIZ5vgKiX5KkoRm7zE3CAe6w=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ceq10RZsBRtmaR873hkpHrEhP87PTLKoBWzHeybXtaIWvRz2qIVXRzSYKTpTzqHj6KvQ6BoZuEEIjtgLURUpG3Xq/C1eLTHifs5j6X10NbQ8x5qTtGxYOmoplhu2snZMXFqXcbD9tVrV0UcL2x+m22f2oQbh3SZtMwaIQLaK6UI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ivitera.com; spf=pass smtp.mailfrom=ivitera.com; dkim=pass (1024-bit key) header.d=ivitera.com header.i=@ivitera.com header.b=MWYSOKa1; dkim=pass (1024-bit key) header.d=ivitera.com header.i=@ivitera.com header.b=okpC09mq; arc=none smtp.client-ip=88.101.85.59
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ivitera.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ivitera.com
-Received: from localhost (localhost [127.0.0.1])
-	by smtp.ivitera.com (Postfix) with ESMTP id 4F989165504;
-	Mon, 29 Apr 2024 17:02:21 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-	t=1714402941; bh=1j9Bh83FGSh7vkGgky5cnAkByc5G6v68ZN1HrXNV2D4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=MWYSOKa1NSb6u3aOEBKBFeOsqq7090UxBap/wpIRKij1TWbDGGzYh8DN7gd/egvQw
-	 YvarYA154vXCDk24HzdZA8xwlEq87RILc327uO2bF0irA+by7PF91XmYfhovfuVn+p
-	 CmkPvh6YraKVIqeDeOvsRyPP9bfKxlJVv5ySZS0A=
-Received: from smtp.ivitera.com ([127.0.0.1])
-	by localhost (localhost [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ubuszyJBMD_2; Mon, 29 Apr 2024 17:02:20 +0200 (CEST)
-Received: from [192.168.105.22] (dustin.pilsfree.net [81.201.58.138])
-	(Authenticated sender: pavel)
-	by smtp.ivitera.com (Postfix) with ESMTPSA id 6F34B165503;
-	Mon, 29 Apr 2024 17:02:20 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-	t=1714402940; bh=1j9Bh83FGSh7vkGgky5cnAkByc5G6v68ZN1HrXNV2D4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=okpC09mqLVFXXY/4hzDL8qqdnJWDwxTD37D2I6l09578W8z9G6p9JJxrJn4ILzsqS
-	 g/gAXWxI5qqxCqtdlNYCeR90+/lj4mtHj3UFZx6gVTgStMj+CBXhFRc/2lKL8czrUY
-	 xBHjothsyRX/JKCWORSkBVDQz1CDt0y5AKMly2uI=
-Message-ID: <0ba8963c-9b2a-f7aa-3c0f-296bdddac5e5@ivitera.com>
-Date: Mon, 29 Apr 2024 17:02:19 +0200
+	 In-Reply-To:Content-Type; b=b9Q6+EZQZVA67p5oqTrZt9E19NqGt+G8tCFetlKNmIk6S+A7o2hVRKZzlBBVl4gELvmQQw4s29RHvG3NRHGw5498ll92RmMzV5PZEW8vO7rCMI+YBO1Cct5DiNEmVTHgQPS+PwnlQIMNcjgqUbtj9yR+5VOZSZ2pLmD0jS+FoY4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gDCBA2FL; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1e834159f40so36442245ad.2;
+        Mon, 29 Apr 2024 08:23:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1714404231; x=1715009031; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=3jBawfFhlA0UFRcAmeMLqv9bLy/zzapCJCHTZnIdO/k=;
+        b=gDCBA2FL3PIt+vvkwrkWZhGRsfpU2c2oZF1HAKqLrHOabu6/qgS5yu07G59pVqwQDl
+         SFzipIyxSnqJblhHrrcoEcnvJIr/D4mS7WF4kWCxMUg1FKLV8EiU9DoHoQ05nDJig11x
+         ldIGVyzETzhLVbX7Fh5aDvxiI3dGYFVwGZkvGebf6dEbq1GgqEFcoBGHdJoP1nVRndE/
+         ccgSCfoOKhVwwLtExKCiJhmrvujRfy7x0NBJwPz0BFevDu3CHw+7Rlfs8WZ6ZRtHHdPX
+         wrsyXpum9GrsEryzehX6TZS5LdQD4aCUGsidCvNwnCfXXkoa4jByEJBHCEw+nDonUGLc
+         Kvrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714404231; x=1715009031;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3jBawfFhlA0UFRcAmeMLqv9bLy/zzapCJCHTZnIdO/k=;
+        b=WecselXdrGBayVE5MJ1JCSF0LrzRoY/Jj1dZi+hEkItdiSx4/sGjdsv3JHPAGR+Yhu
+         wYj2CFnTxi4+jKzGu+rl/SiaA6z/6kk2Dt3epwV0sXDJ6x1HlgEPueamC20ehqL6ljCA
+         1VXjwNXwnlC2wGT3dwtEBIN7Jvbg+jJ9XbW39RknMK0PrcEZlsrbS3/4YbDUXUFXnRag
+         iDUGziO4+G9m8w3Ip/ktSL4An5QTrikliXCPp0SOTYhMpygBlf62p3HLGx67GnAZ3nmd
+         matn3ruUK9G8aAbqB34AwHAFXhv6uNN6QrAObQu//TXdcQdFEL78PfzSYh+B9D/Vhyqc
+         ZUTQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUJK8lnRmyCGQUH55TmErJkE+zTFuw3dt5oe6an0HZBdb384BAgrh0stlj9tp6BgXWveDPJc4s9KOBZyttokXHWmmIvwyIRh2dFyfckv1wUK1uCaRKwikZQ1Z7v/qBiPgdddHUhnjba
+X-Gm-Message-State: AOJu0Yy1pfE/d0DZUr0AZM/gaLEQ3Ab8vEJFyg4R4s5db9VeE3KsjJuc
+	p6eTaofOt/VVH3d+gued2gL+MB/sYnVKe14umKawqb1pfwQJnDTM
+X-Google-Smtp-Source: AGHT+IG4M8a/5rwKelhbmpwTd0G8NkgLdEqlScPeP9urTIwVya3bVOOLSQLcRTcGzyfYiwAIzPnFhA==
+X-Received: by 2002:a17:902:ec8a:b0:1e4:203d:ab80 with SMTP id x10-20020a170902ec8a00b001e4203dab80mr11995464plg.57.1714404231247;
+        Mon, 29 Apr 2024 08:23:51 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id jz15-20020a170903430f00b001e4e8278847sm20440680plb.56.2024.04.29.08.23.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Apr 2024 08:23:50 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <dd351be7-4ab4-436d-bfad-7f72aadfc1d1@roeck-us.net>
+Date: Mon, 29 Apr 2024 08:23:48 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: usb:gadget:f_uac2: RFC: allowing multiple altsetttings for
- channel/samplesize combinations
-Content-Language: en-US
-To: Chris Wulff <Chris.Wulff@biamp.com>, Chris Wulff <crwulff@gmail.com>
-Cc: Takashi Iwai <tiwai@suse.de>,
- "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
- "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
- Ruslan Bilovol <ruslan.bilovol@gmail.com>, Felipe Balbi <balbi@kernel.org>,
- Jerome Brunet <jbrunet@baylibre.com>, Julian Scheel <julian@jusst.de>,
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] usb: ohci: Prevent missed ohci interrupts
+To: David Laight <David.Laight@ACULAB.COM>, Gerd Hoffmann <kraxel@redhat.com>
+Cc: Alan Stern <stern@rowland.harvard.edu>,
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- John Keeping <john@metanate.com>, AKASH KUMAR <quic_akakum@quicinc.com>,
- Jack Pham <jackp@codeaurora.org>
-References: <35be4668-58d3-894a-72cf-de1afaacae45@ivitera.com>
- <72e9b581-4a91-2319-cb9f-0bcb370f34a1@ivitera.com>
- <871q6tbxvf.wl-tiwai@suse.de>
- <22301bb6-d893-2e65-6ebd-1787ca231387@ivitera.com>
- <CAB0kiBJm=Ya6a1mWRZ28p9=D_BesH55DFk4fd4wP0be4zKPR7w@mail.gmail.com>
- <CO1PR17MB5419D45A1BDC2AFA22F60DD9E1142@CO1PR17MB5419.namprd17.prod.outlook.com>
-From: Pavel Hofman <pavel.hofman@ivitera.com>
-In-Reply-To: <CO1PR17MB5419D45A1BDC2AFA22F60DD9E1142@CO1PR17MB5419.namprd17.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+ "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20240424195951.3749388-1-linux@roeck-us.net>
+ <a1b4bac14c6a4334969cc7d671f3a8eb@AcuMS.aculab.com>
+ <d434c88a-6575-4d45-ab3e-e27ac7684b07@roeck-us.net>
+ <ef23ykui3axiwfkr4wi24abbuklvejx5r5wqem5cr4lq36x7py@kkxvsi3ibtbi>
+ <eafc8fb6-cecc-48c8-a053-cd00f094e781@roeck-us.net>
+ <2adc91aebb3a433997e13bd479d4b4b3@AcuMS.aculab.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
+ RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
+ nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
+ 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
+ gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
+ IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
+ kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
+ VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
+ jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
+ BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
+ ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
+ CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAlVcphcFCRmg06EACgkQyx8mb86fmYFg0RAA
+ nzXJzuPkLJaOmSIzPAqqnutACchT/meCOgMEpS5oLf6xn5ySZkl23OxuhpMZTVX+49c9pvBx
+ hpvl5bCWFu5qC1jC2eWRYU+aZZE4sxMaAGeWenQJsiG9lP8wkfCJP3ockNu0ZXXAXwIbY1O1
+ c+l11zQkZw89zNgWgKobKzrDMBFOYtAh0pAInZ9TSn7oA4Ctejouo5wUugmk8MrDtUVXmEA9
+ 7f9fgKYSwl/H7dfKKsS1bDOpyJlqhEAH94BHJdK/b1tzwJCFAXFhMlmlbYEk8kWjcxQgDWMu
+ GAthQzSuAyhqyZwFcOlMCNbAcTSQawSo3B9yM9mHJne5RrAbVz4TWLnEaX8gA5xK3uCNCeyI
+ sqYuzA4OzcMwnnTASvzsGZoYHTFP3DQwf2nzxD6yBGCfwNGIYfS0i8YN8XcBgEcDFMWpOQhT
+ Pu3HeztMnF3HXrc0t7e5rDW9zCh3k2PA6D2NV4fews9KDFhLlTfCVzf0PS1dRVVWM+4jVl6l
+ HRIAgWp+2/f8dx5vPc4Ycp4IsZN0l1h9uT7qm1KTwz+sSl1zOqKD/BpfGNZfLRRxrXthvvY8
+ BltcuZ4+PGFTcRkMytUbMDFMF9Cjd2W9dXD35PEtvj8wnEyzIos8bbgtLrGTv/SYhmPpahJA
+ l8hPhYvmAvpOmusUUyB30StsHIU2LLccUPPOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
+ 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
+ pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
+ J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
+ pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
+ 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
+ ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
+ I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
+ nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
+ HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
+ JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAlVcpi8FCRmg08MACgkQyx8mb86fmYHNRQ/+
+ J0OZsBYP4leJvQF8lx9zif+v4ZY/6C9tTcUv/KNAE5leyrD4IKbnV4PnbrVhjq861it/zRQW
+ cFpWQszZyWRwNPWUUz7ejmm9lAwPbr8xWT4qMSA43VKQ7ZCeTQJ4TC8kjqtcbw41SjkjrcTG
+ wF52zFO4bOWyovVAPncvV9eGA/vtnd3xEZXQiSt91kBSqK28yjxAqK/c3G6i7IX2rg6pzgqh
+ hiH3/1qM2M/LSuqAv0Rwrt/k+pZXE+B4Ud42hwmMr0TfhNxG+X7YKvjKC+SjPjqp0CaztQ0H
+ nsDLSLElVROxCd9m8CAUuHplgmR3seYCOrT4jriMFBtKNPtj2EE4DNV4s7k0Zy+6iRQ8G8ng
+ QjsSqYJx8iAR8JRB7Gm2rQOMv8lSRdjva++GT0VLXtHULdlzg8VjDnFZ3lfz5PWEOeIMk7Rj
+ trjv82EZtrhLuLjHRCaG50OOm0hwPSk1J64R8O3HjSLdertmw7eyAYOo4RuWJguYMg5DRnBk
+ WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
+ HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <2adc91aebb3a433997e13bd479d4b4b3@AcuMS.aculab.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-
-On 28. 04. 24 18:38, Chris Wulff wrote:
-> Pavel,
+On 4/29/24 07:01, David Laight wrote:
+> From: Guenter Roeck
+>> Sent: 29 April 2024 14:34
+>>
+>> On 4/28/24 23:49, Gerd Hoffmann wrote:
+>>>     Hi,
+>>>
+>>>>>> +	/* repeat until all enabled interrupts are handled */
+>>>>>> +	if (ohci->rh_state != OHCI_RH_HALTED) {
+>>>>>> +		ints = ohci_readl(ohci, &regs->intrstatus);
+>>>>>> +		if (ints & ohci_readl(ohci, &regs->intrenable))
+>>>>>
+>>>>> Doesn't the driver know which interrupts are enabled?
+>>>>> So it should be able to avoid doing two (likely) slow io reads?
+>>>>> (PCIe reads are pretty much guaranteed to be high latency.)
+>>>>
+>>>> No, the driver does not cache intrenable.
+>>>
+>>> Does the driver ever change intrenable after initialization?
+>>>
+>>
+>> $ git grep -e intrenable -e intrdisable drivers/usb/host/*ohci*c | grep ohci_writel
+>> drivers/usb/host/ohci-hcd.c:	ohci_writel(ohci, (u32) ~0, &ohci->regs->intrdisable);
+>> drivers/usb/host/ohci-hcd.c:		ohci_writel (ohci, OHCI_INTR_OC, &ohci->regs->intrenable);
+>> drivers/usb/host/ohci-hcd.c:	ohci_writel (ohci, OHCI_INTR_MIE, &ohci->regs->intrdisable);
+>> drivers/usb/host/ohci-hcd.c:	ohci_writel (ohci, mask, &ohci->regs->intrenable);
+>> drivers/usb/host/ohci-hcd.c:			ohci_writel (ohci, OHCI_INTR_UE, &regs->intrdisable);
+>> drivers/usb/host/ohci-hcd.c:		ohci_writel(ohci, OHCI_INTR_RHSC, &regs->intrdisable);
+>> drivers/usb/host/ohci-hcd.c:		ohci_writel (ohci, OHCI_INTR_SF, &regs->intrdisable);
+>> drivers/usb/host/ohci-hcd.c:		ohci_writel (ohci, OHCI_INTR_MIE, &regs->intrenable);
+>> drivers/usb/host/ohci-hcd.c:	ohci_writel (ohci, OHCI_INTR_MIE, &ohci->regs->intrdisable);
+>> drivers/usb/host/ohci-hcd.c:	ohci_writel(ohci, OHCI_INTR_MIE, &ohci->regs->intrdisable);
+>> drivers/usb/host/ohci-hcd.c:		ohci_writel(ohci, OHCI_INTR_MIE, &ohci->regs->intrenable);
+>> drivers/usb/host/ohci-hub.c:	ohci_writel(ohci, OHCI_INTR_SF, &ohci->regs->intrdisable);
+>> drivers/usb/host/ohci-hub.c:	ohci_writel (ohci, OHCI_INTR_INIT, &ohci->regs->intrenable);
+>> drivers/usb/host/ohci-hub.c:		ohci_writel (ohci, OHCI_INTR_SF, &ohci->regs->intrenable);
+>> drivers/usb/host/ohci-hub.c:			ohci_writel(ohci, rhsc_enable, &ohci->regs->intrenable);
+>> drivers/usb/host/ohci-hub.c:	ohci_writel(ohci, OHCI_INTR_RHSC, &ohci->regs->intrenable);
+>> drivers/usb/host/ohci-q.c:	ohci_writel (ohci, OHCI_INTR_SF, &ohci->regs->intrenable);
 > 
->   Following up on this and discussions in this patch series
+> At least the hardware has separate enable/disable registers
+> so the driver isn't doing RMW cycles.
 > 
-> https://lore.kernel.org/linux-usb/CO1PR17MB54195BE778868AFDFE2DCB36E1112@CO1PR17MB5419.namprd17.prod.outlook.com/
-> 
-> Example from that thread with c_alt_name changed to c_name as it lives
-> in an "alt.x" directory and removal of the num_alt_modes in favor of just
-> allowing "mkdir alt.x" to create new alt mode settings:
-> 
-> (all existing properties + the following new properties)
-> c_it_name
-> c_it_ch_name
-> c_fu_name
-> c_ot_name
-> p_it_name
-> p_it_ch_name
-> p_fu_name
-> p_ot_name
-> 
-> alt.0
->   c_name
->   p_name
-> alt.1 (for alt.1, alt.2, etc.)
->   c_name
->   p_name
->   c_ssize
->   p_ssize
->   (Additional properties here for other things that are settable for each alt mode,
->    but the only one I've implemented in my prototype so far is sample size.)
+> I'd guess that the normal condition is that no interrupts are pending.
+> So it can be held to one (slow) read by checking:
+> 	if (ints && (ints & ohci_readl(ohci, &regs->intrenable)))
 
-Please let me a question regarding some of the proposed string configs.
-Currently we have one feature unit which implements volume and mute
-feature controls. IIUC more feature units can be added, with specific
-controls set, as specified by the UAC. IIUC the linux USB audio driver
-works with volume+mute specifically and other controls by creating
-corresponding alsa ctls, Windows UAC2 driver works with AGC too
-https://learn.microsoft.com/en-us/windows-hardware/drivers/audio/usb-2-0-audio-drivers#class-requests-and-interrupt-data-messages
-. That means there is a potential for adding more feature units to the
-gadget.
+Guess that can't hurt. I'll send v3.
 
-Would it make sense to name the p/c_fu_name properties specifically
-p/c_fu_volume_name, to leave name room for additional feature units?
+Thanks,
+Guenter
 
-Please what does p/c_it_ch_name stand for?
-
-> 
-> 
-> Here is a more detailed breakdown of the (current) proposal:
-> 
-> * Allow the user to create "alt.x" directories inside uac1 and uac2
->   function configfs
->   * Prior to creation of any of these alt.x subdirectories, the
->     function behaves the same as it does today. No "alt.x" directories would
->     exist on creation of the function.
->   * Creation of "alt.0" contains only "c_name" and "p_name" to set the
->     USB string name for this alt mode, with the defaults as "Capture Inactive"
->     and "Playback Inactive"
->   * Creation of "alt.x" where x is an integer, contains the same name
->     strings but with defaults of "Capture Active" and "Playback Active" and
->     additional files for any per-alt-mode configurable settings (such as
->     c_ssize, p_ssize, etc.) At the time of creation, values for those are copied 
->     from the corresponding settings in the function main configfs directory.
->   * Creation of "alt.1" in particular changes the meaning of the files
->     in the main function configfs dir so that they are only _default_ values used
->     when creating "alt.x" directories and settings from "alt.1" will now be used
->     for alt mode 1. (Alt mode 1 always exists, even when "alt.1" has not been
->     created.)
-> 
-> * ALSA card interface behavior
->   * Configuration of the ALSA card interface remains the same. It is configured
->     when binding the function to match the settings in the main function configfs.
->     "alt.x" settings have no effect on the created ALSA card setup
->   * Sample size will be converted between ALSA and USB data by dropping
->     extra bits or zero padding samples (eg 16->24 will zero pad a byte, 24->16
->     will drop a byte)
-
-Is not this work for userspace, e.g. for the plug plugin? IMO the
-hw_params should reflect the requested format as is now, doing no
-conversions in the gadget driver. Currently the driver just copies the
-buffer from the packet area to the alsa area which is the correct way, IMO.
-
-It also allows for future addition of FLOAT_LE format which is part of
-UAC specs and which (at least) the windows and linux host drivers
-support (for which I would already have a use case). Actually the linux
-and windows USB audio driver supports the TYPE III digital formats.
-
-IIUC the gadget itself does not (and should not, IMO) care much about
-the actual format (apart of converting the USB format ID to the alsa
-format code for hw_params).
-
-
->   * Channel count differences will ignore extra incoming channels and zero
->     outgoing extra channels (eg 8->2 will just copy the first two and ignore
->     the rest. 2->8 will copy the first two and zero the rest.)
-
-I think it's dtto. Either alsa automatic plug plugin, or detailed with
-the route plugin.
-
->   * Per-alt-mode configurable settings will have a read-only ALSA control (like
->     sample rate does currently) that can be used to inform the program attached
->     to the ALSA card what the current state of those settings are when the USB
->     host selects an alt mode.
-
-The fact is that samplerate is already reported in a separate ctl. But
-the main motivation for this control was not to report the rate, but to
-give some indication that USB host started streaming/requesting data.
-The rate ctl was actually handy to report both this change and the
-actual rate.
-
-Actually there have been submitted patches (IMO not yet included) which
-report this change using uevents
-https://patchwork.kernel.org/project/linux-usb/list/?series=745790&state=%2A&archive=both
-. IMO a perfectly valid approach too.
-
-Also the alsa loopback device is very similar from this POV. It reports
-(via ctl notifications) that the other/master side has been opened, and
-it's up to the userspace to read current hw_params to determine what
-format/channels/rate to use to successfully open the device.
-
-Maybe we could leave it to the userspace here too. In fact there are
-already open-source clients which try to handle this master/slave
-principle of the loopback and gadget basically in the same way
-https://github.com/HEnquist/camilladsp/pull/341#issue-2267218348
-https://github.com/HEnquist/camilladsp/issues/342
-
-
-
-> 
-> An simple example of how this could be used to create a second alt mode:
-> 
-> mkdir uac1.0
-> echo 24 > uac1.0/p_ssize
-> echo 24 > uac1.0/c_ssize
-> mkdir uac1.0/alt.2
-> echo 16 > uac1.0/alt.2/c_ssize
-
-Currently the p/c_ssize values represent number of bytes (i.e. 1-4). IMO
-it would make sense to keep this meaning here. In the future e.g.
-negative numbers could be used to select some non-integer format types.
-
-> 
-> NOTE: Alt modes are separately selectable by the host for playback and capture
-> so the host can pick and choose as desired. There is no need to make an alt mode
-> for every combination of playback and capture settings. In this example the host
-> can pick either 24 or 16 bit samples for capture, but is only allowed 24 bit samples
-> for playback as both alt.1 (via uac1.0/p_ssize) and alt.2 (via default copied to
-> uac1.0/alt.2/p_ssize) have been configured as 24-bit.
-
-Are capture and playback alt modes dependent? I thought they were
-separate configurations but I may be wrong.
-
-If they are separate, perhaps p_alt.X and c_alt.X dirs would make sense
-instead, with using non-prefixed properties within them (ssize, ch_mask,
-etc.). I.e. p/c_xxx on the main level (setting the defaults and default
-alt1 for each direction) and non-prefixed properties in the actual
-p/c_alt.X subdirs.
-
-Thanks a lot for your great effort,
-
-Pavel.
 
