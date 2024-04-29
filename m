@@ -1,53 +1,53 @@
-Return-Path: <linux-usb+bounces-9879-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9881-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5FB08B543F
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Apr 2024 11:28:12 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 303CA8B5461
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Apr 2024 11:41:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 71AFE28324D
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Apr 2024 09:28:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C42F91F21748
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Apr 2024 09:41:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97AC623746;
-	Mon, 29 Apr 2024 09:27:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0041824B2F;
+	Mon, 29 Apr 2024 09:41:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fDo0WxYp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GTgv859D"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 239E0171C8
-	for <linux-usb@vger.kernel.org>; Mon, 29 Apr 2024 09:27:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E3D122F19
+	for <linux-usb@vger.kernel.org>; Mon, 29 Apr 2024 09:41:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714382876; cv=none; b=eKO0gNvx7swUnRIK/Q9Y9iHZEd40Wq6bBNpfPhuUmawjwJ/jallVXJo3R5Xq7/AWCC/YraF929eWYdFWD8T8tVHYR1pPENWL2n1emSqzI1+PGgzVHbhazd1U2qdVHnc1CnTDcCB65hQqt4PlXtAj1s5kLzRvaLDQ7uoMCuhCi30=
+	t=1714383662; cv=none; b=N9Pe1tKzb3zDpGq1g4zdUFcLoh3Qsjp7qzd6EW9n3FjOzD2xIeMy3rhsxsoVAvUjatAiG2H7ZyFRST5UEwjmb760RL243e5F960cusg02PySeWRC0MJUF1mMQhFjhr3tilTUulWRDCTfEcedLdiUlMUFs74Qb9/7g88LxeQYErQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714382876; c=relaxed/simple;
-	bh=Pm3HwzHqh5gIo2Ghg37HyvRbvrT/95O444sivYBcEto=;
+	s=arc-20240116; t=1714383662; c=relaxed/simple;
+	bh=vOsn7KOcZYhjQYtgArvaCxOuYDoC2Hl9onDF3RgG6aw=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Eq1d2hKqFczdZ3dhttCCCJDeFMWssg5tqW/Wg/Py3lBGc7vST1+evD2wVXILwP4Lv68v873teT85+v7JFlXStkhf7busAW+FmS56fYcWZK/6T/sYIkdU2305/NldMOm0xdeagXnZ5MC10dVM88c6c/efpodMn4LwW3A9G6HaLAY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fDo0WxYp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 90FF9C4AF18
-	for <linux-usb@vger.kernel.org>; Mon, 29 Apr 2024 09:27:55 +0000 (UTC)
+	 Content-Type:MIME-Version; b=hwKgA3D0BoY01PlQVrLZBFAtZMGcAuUAMG7k1P3Ks2uhNWzUoH8hc1SOqJaTEUZQqjzCwKhXyMmwnkT453CBUT/QsRW7YhLR12uGxMy5hk8yY1gdO1gunkbMhbwiShzsVQtfUMQA/Lh6vv8K6SaHjES6OyYQgh0zT8UL+yXOWE4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GTgv859D; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 2BBCDC4AF19
+	for <linux-usb@vger.kernel.org>; Mon, 29 Apr 2024 09:41:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714382875;
-	bh=Pm3HwzHqh5gIo2Ghg37HyvRbvrT/95O444sivYBcEto=;
+	s=k20201202; t=1714383662;
+	bh=vOsn7KOcZYhjQYtgArvaCxOuYDoC2Hl9onDF3RgG6aw=;
 	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=fDo0WxYp+7CLVBpCp4qpJj17hAot80louMO2Na2/Vhp1VW01nvwFtrKBT9BGR3qA3
-	 5WHWd12x+RSTc9UsoxlTsy6NxOiulknIBcocx74A5qzPon+OYQ6QzQ079X+lCUfBuf
-	 v9690VnNgxiqSkpLUaUjn4NkmonGe0Z76E4vFrF10Tv4P4HbZTTt3i2nLFRp04gGeh
-	 hpgHx4ILLlMAzUFWsN9VIs/oNREvZ0JUb2f89lTbZUY8gDqURl+GtWhm14/hGBycK0
-	 oKTSs0jcSM106zhAoUAkjS+UyaEUjnGDHq2swVqMrJJDQTe//J5hq0x+ElVfhFQ3/z
-	 VOqLNLPsOKg+w==
+	b=GTgv859Diq9vcz3uItHw1/F9RgOnI/UgBCRkFR+6TulFIUWG06NcjbsW6yBE6be4G
+	 ah1aZfbKRJ/sOGxqbdEJXxVWWpykhiF1xbJvwIItFFNoRXWhrd0sIGcW3787e5hm3b
+	 8piKUOYBqS5crNDJYqQUnghq51E06plXgilhKC7zS7Q7uzUhFDlwGLRvgCKW5tWMVf
+	 L1MCsQKRsUO1ZbAf0ELiorCr6zlFttaPK5SpQKuiQnCF+XnBCyQBVUzq47pcYh0rVb
+	 e5/RmtC9LJd7ELpJGwaaPdsMHVjCtHfmipnVyimHtwNPfcPaagH8Rv7vQHzqay166p
+	 JgenwohKp/xag==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 88822C16A72; Mon, 29 Apr 2024 09:27:55 +0000 (UTC)
+	id 22284C433E5; Mon, 29 Apr 2024 09:41:02 +0000 (UTC)
 From: bugzilla-daemon@kernel.org
 To: linux-usb@vger.kernel.org
 Subject: [Bug 218789] ucsi_acpi USBC000:00: ucsi_acpi_dsm: failed to evaluate
  _DSM 2 in logs
-Date: Mon, 29 Apr 2024 09:27:55 +0000
+Date: Mon, 29 Apr 2024 09:41:01 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -56,14 +56,14 @@ X-Bugzilla-Component: USB
 X-Bugzilla-Version: 2.5
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: webcapcha@gmail.com
+X-Bugzilla-Who: aros@gmx.com
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-218789-208809-xcurgcJZTg@https.bugzilla.kernel.org/>
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-218789-208809-pMpoDAkXxr@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-218789-208809@https.bugzilla.kernel.org/>
 References: <bug-218789-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -79,10 +79,8 @@ MIME-Version: 1.0
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D218789
 
---- Comment #2 from webcapcha@gmail.com ---
-Created attachment 306238
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D306238&action=3Dedit
-system-info
+--- Comment #3 from Artem S. Tashkinov (aros@gmx.com) ---
+*** Bug 218788 has been marked as a duplicate of this bug. ***
 
 --=20
 You may reply to this email to add a comment.
