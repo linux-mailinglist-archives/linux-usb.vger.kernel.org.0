@@ -1,91 +1,148 @@
-Return-Path: <linux-usb+bounces-9915-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9916-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5BE308B5DF1
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Apr 2024 17:43:25 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2CF468B5DF6
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Apr 2024 17:44:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A7930B2B065
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Apr 2024 15:30:53 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D6374B21D75
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Apr 2024 15:40:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0912F84D2A;
-	Mon, 29 Apr 2024 15:29:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAE318249F;
+	Mon, 29 Apr 2024 15:40:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZUwtEm+6"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FpCY4KKc"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87A40823CC
-	for <linux-usb@vger.kernel.org>; Mon, 29 Apr 2024 15:29:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 142437E0F6;
+	Mon, 29 Apr 2024 15:40:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714404593; cv=none; b=lgOKAnr4HkUKzTWf01kaoVIceen4S/NihHQ3U7Oi+7sX7cMdXv1wyrgIPtEnztfuEBqqNBal9dcjjgGgsh6aTzwPqlro1PR/RGgBIKswXzbTKuP6FwhykTRVR8gmgA83gHtHTCgTb9+K0Il4xnNW/FTZ+aKeKVsAcQ9PEM2pEO4=
+	t=1714405216; cv=none; b=NsH8Vh8sNYby5zrTXFnvUYmx9vnFALtPzi8rgYZaR/B+iyWLv9+avF3C7p6vJdlzxyshW4Ypy8xEad1x/9+HjwzzifXewyMrvISRuxyq3Udl3GTeC5o/d7rjiydxNEhuVvQOK7fgt3hHQXvei+sr68AYE5qzzScw7mYgmBJxDZc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714404593; c=relaxed/simple;
-	bh=cR4ofG78zLXKStRwsfw+WBjb6WGb3Vag+O4+Vgn48iA=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=QlvW1+7QG59PCxK/Ch9nK50pAoRdUfdi07yJmpP5RFxYEvL/BVA/lL+lr7c05KCoL7t+kraKTLPZV/njkNSGnZMEL9On3hd6Go/2HIZLJa/8Q+o2Z4E8PdayaoyKsih1tFc6HoP21C1e5CsHnu2CjmoejanaXCBCZ7GS6Suf79I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZUwtEm+6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 23666C113CD
-	for <linux-usb@vger.kernel.org>; Mon, 29 Apr 2024 15:29:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714404593;
-	bh=cR4ofG78zLXKStRwsfw+WBjb6WGb3Vag+O4+Vgn48iA=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=ZUwtEm+6Bb47zz07JueGpgei+dZJI3ebbE7qJSt9F6CWs1tgTa+OX3mUS+T94aC7M
-	 UAJsrT9H/zBrLEzZ8ElPdCKkfL6lw6bnE1hMEaXsC0KS5ODZoyB+XAd8iiufqRsyPC
-	 1VtWh5l7v31mz3kw88Flvfh5LSzxDOyc5pUpMNFeiGZds83Mt8PUQraJ6CfY5sqRVg
-	 bsgHlLQJdg/Q5P01+in+WFb5eekRAaMo+PVEIiPOYoTpMYdBWy1rkdWTA5Ys14YWR0
-	 LwUjmkxoWKZFqwyfZFhvVz6VTl7vfGnetSnN5O9z700EwULDVb2W4RAqhXpRYVQupR
-	 j5nPjvycy2apA==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 1300EC16A72; Mon, 29 Apr 2024 15:29:53 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 218789] ucsi_acpi USBC000:00: ucsi_acpi_dsm: failed to evaluate
- _DSM 2 in logs
-Date: Mon, 29 Apr 2024 15:29:52 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: webcapcha@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-218789-208809-DPuNqaZrUw@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218789-208809@https.bugzilla.kernel.org/>
-References: <bug-218789-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1714405216; c=relaxed/simple;
+	bh=zXY1ffgM5q+lSr46Op+3+XcAUtlsLSzt87wdaCFSWfw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=g9XVjq8ve7aD0AEsA5VqsOiwndC7vQJcev523PqH57xjfnb+NCjQCoxQA04Bk4B4MgWfBKolQZkmEltonEjfOFBGLHsZvsWByB/NIuXW+qF1ho4G+4bCkH0kQGTLFrG1GUv8aP9dAwZ15SV8bSZ8DXYAzgI9JOlzhLj8KplNOOo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FpCY4KKc; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1e9320c2ef6so33110085ad.2;
+        Mon, 29 Apr 2024 08:40:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1714405214; x=1715010014; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=fBrnMC0Gct0UOxf9AGIaJ9EyFFBNBd1gd9JECoTWjF4=;
+        b=FpCY4KKcHaxCE9rgyiF5maCAMl7Ska+5gFg5rsrj2J2RNMivZo2Ej7/g49nY5/uw7n
+         z/VYs2V9XpNhV4aU1jD+3IrSoS4xPgOKGAVKmBQ/QbtgLyMG6rv/LZ/6PRUrUQh81h1h
+         ThbflVqGMGMUWFNjtXsfVBzcN4Rr/D5cQ/6V3hwkNYiJ2GhZMMAEIMXJ9EKtpUxFBOFH
+         47hCAdsDrSFGZLqRmo/CTCNqa0493Ep1eEG4YZ9BxdEXHK2w6J72PskbgXVjVyFjdbLl
+         1bJ2frHSnjuyHQI7QrSSsRxpBz+8ZNyVCfSBRAjz7kmIOqdD0IZSv8BW+MpkMNoD0+//
+         mJpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714405214; x=1715010014;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fBrnMC0Gct0UOxf9AGIaJ9EyFFBNBd1gd9JECoTWjF4=;
+        b=VAEYSZni1BMcDQKp9QI4fNE5pblr5Zl7TBKZbuds3vg4l5RLce7S8t4pe4MqyFGT2p
+         qa8CJVBrg0uZzpHjk6dSEkf7EbEe8RKEWfsIJ1S0YQprm7V9zhVvv8Qs97QNlHxAoj6F
+         aUOpXS98hkqwWaCainLRvfFcesrFe9YuJwrSaifsbgLg64zqphWREcjjCFUkxYuv6OR9
+         YKX730FXW5HAt19ikjk1Dim4dv9xUhr2gkg3lM1MHoCcOEC/H+1OGqhUYD9tdGqv6NER
+         SbN7SAeZECht+sAjl7tG84Osry/l8snq8QYye4ayiIOnyGWKIpuSAQOOR1KB2rpe3H+h
+         fHMg==
+X-Forwarded-Encrypted: i=1; AJvYcCVLJj3RzcE1Hy5s6K32e6llfyJuwwMOMIrBK9w9StMrleJDHIcQNRGPPhBtqnaor7glaAgWTnQgSDF08LCC+ZeJKhanJ3YwUsIBCEiWC2o+t/CUQl0t1SdWQPdamg+6mTPhMNlkgqyC
+X-Gm-Message-State: AOJu0YxhtxX3zUNz5n9YTgvWMf8lyZtips5oaLe7noDUTgnBrKwjHaV1
+	+Exd4PS2k4ZzrQ3LSH8zKMiC+5xiNr5IGECW+MrvG+n2wcfBJMre+SlNRQ==
+X-Google-Smtp-Source: AGHT+IHX3jssBR2NBSuP9IzxUteP7JRQ78cKHaa2dWPkHCSDXoK6eOHwWJKTbkbk/H/hPXQCk7woLA==
+X-Received: by 2002:a17:902:a60a:b0:1e4:9d6f:593 with SMTP id u10-20020a170902a60a00b001e49d6f0593mr4767plq.36.1714405214379;
+        Mon, 29 Apr 2024 08:40:14 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id q12-20020a170902a3cc00b001dd707d5fe6sm20863719plb.158.2024.04.29.08.40.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Apr 2024 08:40:13 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From: Guenter Roeck <linux@roeck-us.net>
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	David Laight <David.Laight@aculab.com>,
+	Gerd Hoffmann <kraxel@redhat.com>,
+	Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH v3] usb: ohci: Prevent missed ohci interrupts
+Date: Mon, 29 Apr 2024 08:40:10 -0700
+Message-Id: <20240429154010.1507366-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218789
+Testing ohci functionality with qemu's pci-ohci emulation often results
+in ohci interface stalls, resulting in hung task timeouts.
 
---- Comment #8 from webcaptcha (webcapcha@gmail.com) ---
-@Heikki Krogerus,
-Thank you for joining to this report. Appreciate it
+The problem is caused by lost interrupts between the emulation and the
+Linux kernel code. Additional interrupts raised while the ohci interrupt
+handler in Linux is running and before the handler clears the interrupt
+status are not handled. The fix for a similar problem in ehci suggests
+that the problem is likely caused by edge-triggered MSI interrupts. See
+commit 0b60557230ad ("usb: ehci: Prevent missed ehci interrupts with
+edge-triggered MSI") for details.
 
---=20
-You may reply to this email to add a comment.
+Ensure that the ohci interrupt code handles all pending interrupts before
+returning to solve the problem.
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Cc: Gerd Hoffmann <kraxel@redhat.com>
+Cc: David Laight <David.Laight@aculab.com>
+Cc: stable@vger.kernel.org
+Fixes: 306c54d0edb6 ("usb: hcd: Try MSI interrupts on PCI devices")
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+v3: Check if any interrupts are pending before reading intrenable
+    Add 'Cc: stable@vger.kernel.org'
+v2: Only repeat if the interface is still active
+
+Note that I did not apply Alan's Reviewed-by: tag since I was not sure
+if that was appropriate after the code change.
+
+ drivers/usb/host/ohci-hcd.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/drivers/usb/host/ohci-hcd.c b/drivers/usb/host/ohci-hcd.c
+index 4f9982ecfb58..5cec7640e913 100644
+--- a/drivers/usb/host/ohci-hcd.c
++++ b/drivers/usb/host/ohci-hcd.c
+@@ -888,6 +888,7 @@ static irqreturn_t ohci_irq (struct usb_hcd *hcd)
+ 	/* Check for an all 1's result which is a typical consequence
+ 	 * of dead, unclocked, or unplugged (CardBus...) devices
+ 	 */
++again:
+ 	if (ints == ~(u32)0) {
+ 		ohci->rh_state = OHCI_RH_HALTED;
+ 		ohci_dbg (ohci, "device removed!\n");
+@@ -982,6 +983,13 @@ static irqreturn_t ohci_irq (struct usb_hcd *hcd)
+ 	}
+ 	spin_unlock(&ohci->lock);
+ 
++	/* repeat until all enabled interrupts are handled */
++	if (ohci->rh_state != OHCI_RH_HALTED) {
++		ints = ohci_readl(ohci, &regs->intrstatus);
++		if (ints && (ints & ohci_readl(ohci, &regs->intrenable)))
++			goto again;
++	}
++
+ 	return IRQ_HANDLED;
+ }
+ 
+-- 
+2.39.2
+
 
