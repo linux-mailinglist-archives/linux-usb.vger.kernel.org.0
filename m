@@ -1,113 +1,147 @@
-Return-Path: <linux-usb+bounces-9932-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9933-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E156A8B6B4E
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Apr 2024 09:18:11 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B3F3E8B6C65
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Apr 2024 10:02:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1F13F1C21DB1
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Apr 2024 07:18:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2AF021F23034
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Apr 2024 08:02:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7D8B37719;
-	Tue, 30 Apr 2024 07:18:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95E2F4594D;
+	Tue, 30 Apr 2024 08:02:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="tP+u1jH8"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Wci2KBcs"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE8EC31A8F
-	for <linux-usb@vger.kernel.org>; Tue, 30 Apr 2024 07:18:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FA5B405F2;
+	Tue, 30 Apr 2024 08:02:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714461487; cv=none; b=anpQefTzWVfsVLg3vqDW97z/ZpuC0R/T8jAB4xr72d+LNx8rxNxSa5J/4eybqne9ISV4lsjRNtwZIiBgSwbFWbOFLg2EaEU1lIEFQHcWARY9BIDH1F2gE2LtBSrKuSxCRWTBHlIndzxVOXRmtp/osWnv8et0y9HhNrou+F6tNHA=
+	t=1714464143; cv=none; b=TS/BRL83nWDXZ3misLstPqMCHBMIl5bn3g53Rz2LXiuDLxg4Ctx5FgnMcpXc66xXcVvqBMo9I5tCdIWRH/dAt/seMJcljmrx+g7R5DB1Ps3ktD8rTApiV3CemQcweCwiwv8tPur4r0GcDnEYP+tEb/JpyjLbGR2xfGix+wJmn0A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714461487; c=relaxed/simple;
-	bh=gYjD/L9hhfN50Ps9Y9MHFLTnRz+JNZ4XvkTy/yEmsi8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O2L7budBBt69sfM8I9ocQrprKowKy6t6ALy2I/yh4XcHzQ1MNiIQ7gP7f0N4aayamSYvCDuS6ziKoXvBs+/XB6g6dbmW9TaRW8eMa0wb7TfJ54w57nXTrjqlTgd9axIHRggK5j/xU/zapTNQ5A6+BQF12u0GUpmglvW+0Txv2fY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=tP+u1jH8; arc=none smtp.client-ip=209.85.218.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-a58eb9a42d9so355411866b.0
-        for <linux-usb@vger.kernel.org>; Tue, 30 Apr 2024 00:18:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1714461484; x=1715066284; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0BPb7ImAff8lr+4NxPMpbVa+ZVOYDgWvOqFiGV9m05s=;
-        b=tP+u1jH88wQgo4uYeE/NYc6b56PmOx0k4deajcWljYRGFvi8nMeh7CpSUZhBJ7LtUy
-         fMCTFBZ6oeB66dqZW/NAmAHK4BM9s26QGxuvGUdWlKPSt3UNYnCm+PmeT7WYOfneb20B
-         DACa4T0fOphSVNsx+U76eJTkpJqusHP8GGSAj5pDQNS2kSVl1FH/XW2uLTQbF85PXhSC
-         Zoz13RQJqyh8nJm5Ftt7xLawrQOH45Q9hfGbcHhIEiuuj1sYl894WgNYsVmBbvhCogd0
-         WPaD6VJvXjGUiTm1nC4m50Qc8PmEK1GkFd5JOg/e1a6nt7B3R8TXNLojvk7Y4JXs9Yz+
-         vosw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714461484; x=1715066284;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0BPb7ImAff8lr+4NxPMpbVa+ZVOYDgWvOqFiGV9m05s=;
-        b=g0J9GUN0UZjBHSBx47FKUvmdAWi4j9gz0fOn0s44BbLoUKqN8WeAs843J8HA4LPvHN
-         e/63vYBTrY+kcUYSLHDjptdGtpTdI7niu0ypAxKf2+p0oKNaWa7e6wM+kGg9BTuc4ZKZ
-         +MRUfEoxvND6CXoDo0x9i4YyBeqjvDlIvUmedDDHyE5VOdFPmtn+2eInrGFkxVeVnS8N
-         usCucg4eGpyiMTWKymFsP6wJtF5hUi8ZJZXtCQ+M6xXmzc1bmA+9UMdTygDauGTp2YAk
-         SfAYvj014rZiWxYOTXna3A7jr9CypE6uJ4A7ij246kwUXax8i//03tU85vo80OtxEr8L
-         HtKg==
-X-Forwarded-Encrypted: i=1; AJvYcCXUcIOT4CXx0k2KBkot0vR86Byt+OgEAWmINMknURQLyNyRBdHTRR8XN0hZmEvYzC1aDULccOom8pEP8iHyIJz0GFIKeNuA+Fc8
-X-Gm-Message-State: AOJu0YyiVTCNFdaG9dB6QfMfw7JTF8P2MsMbbBoZzz7KEJbCMiE4paxG
-	CQAmLaEAOZdxgb7ai8PzykreALy9mvIk6gLca9UGMog6o6wcQ0TdnvB10a4fd88=
-X-Google-Smtp-Source: AGHT+IG+O/XTMqMHGbpqGOnwmoixz0hzGXrkxyCkjoDOsOV96VRhtmo4H/tetmj5Fz4yK3hhi1Uvwg==
-X-Received: by 2002:a17:907:334b:b0:a58:f1f3:626e with SMTP id yr11-20020a170907334b00b00a58f1f3626emr1104497ejb.56.1714461483594;
-        Tue, 30 Apr 2024 00:18:03 -0700 (PDT)
-Received: from localhost ([102.222.70.76])
-        by smtp.gmail.com with ESMTPSA id f20-20020a17090624d400b00a5575cde7cdsm14423007ejb.220.2024.04.30.00.18.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Apr 2024 00:18:03 -0700 (PDT)
-Date: Tue, 30 Apr 2024 10:17:59 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Jameson Thies <jthies@google.com>
-Cc: heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
-	pmalani@chromium.org, bleung@google.com,
-	abhishekpandit@chromium.org, andersson@kernel.org,
-	dmitry.baryshkov@linaro.org, fabrice.gasnier@foss.st.com,
-	gregkh@linuxfoundation.org, hdegoede@redhat.com,
-	neil.armstrong@linaro.org, rajaram.regupathy@intel.com,
-	saranya.gopal@intel.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/4] usb: typec: ucsi: Fix null deref in trace
-Message-ID: <32855f4c-f219-4396-81c3-42cbea9fe4da@moroto.mountain>
-References: <20240424014821.4154159-1-jthies@google.com>
- <20240424014821.4154159-2-jthies@google.com>
+	s=arc-20240116; t=1714464143; c=relaxed/simple;
+	bh=yVJdK01yhCnUukA30JdDhN5ZSKoRK85R+ezjnS2GijM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=lSKnzHzOYFnnCllhcrl8M7Y9GT0WGUkGu2fSjKoQlbxtSZQyyiUxDZ1WThwPDz+xdveFqIxbpvv5N1aZMuzqAOLBSQnIRurJMCTxGHjgULfaX6T+3+ka1tbK/yHSOdC0E9Prcc/l2lCssNX6DfsBDmfRaRhrqjUmHouo/UfiNMQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Wci2KBcs; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 43U3tGxi028667;
+	Tue, 30 Apr 2024 08:01:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=GbwTd6BSjMG9RMTPFLFiWPip1PAsE7tlTno/hl5oWyc=; b=Wc
+	i2KBcsfht+cUMJKoqoB3EdqTZh6AduhAAH+HsCPqs5ajqiGHVRVpTEMkvclbRipM
+	x09kwYuCYoH0le70E6aLmknVp5fvTLvFgXtNFPZ7aa4bQrrorhiMQw9KgUCzufqf
+	/EJ8beUBFumjECZNGB2kWcGPZnldJjPpLVvoWcK6MT/nFRW5rdE1uqgn247NZ/L1
+	/u2qvAjm7wAuttXX1UlLjv+qlDlV0Jo33cRjEnus+jxbxZPVk7mhXxvzdb+h0JJe
+	4GzVe105ObdfaMfYAP4Pae6Jke554uusHFVOJniLhL7lroaRMam1HCO3uihVsAAs
+	nsXnUdkHSu52Hwz5c95Q==
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xtqkr8vc6-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 30 Apr 2024 08:01:36 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 43U81Z3I021417
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 30 Apr 2024 08:01:35 GMT
+Received: from [10.110.61.50] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 30 Apr
+ 2024 01:01:34 -0700
+Message-ID: <9707364c-9743-83e2-2fc6-86c76322a1da@quicinc.com>
+Date: Tue, 30 Apr 2024 01:01:29 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240424014821.4154159-2-jthies@google.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH v20 22/41] ASoC: usb: Add PCM format check API for USB
+ backend
+To: =?UTF-8?Q?Amadeusz_S=c5=82awi=c5=84ski?=
+	<amadeuszx.slawinski@linux.intel.com>,
+        <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
+        <perex@perex.cz>, <conor+dt@kernel.org>, <corbet@lwn.net>,
+        <lgirdwood@gmail.com>, <andersson@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <gregkh@linuxfoundation.org>,
+        <Thinh.Nguyen@synopsys.com>, <broonie@kernel.org>,
+        <bgoswami@quicinc.com>, <tiwai@suse.com>, <robh@kernel.org>,
+        <konrad.dybcio@linaro.org>
+CC: <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-sound@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>
+References: <20240425215125.29761-1-quic_wcheng@quicinc.com>
+ <20240425215125.29761-23-quic_wcheng@quicinc.com>
+ <3d70c19f-bab8-4e50-9551-de406a0e0314@linux.intel.com>
+Content-Language: en-US
+From: Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <3d70c19f-bab8-4e50-9551-de406a0e0314@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: btr3Xp9rudx4won1D-9fWNtZMOuVnQ-Y
+X-Proofpoint-ORIG-GUID: btr3Xp9rudx4won1D-9fWNtZMOuVnQ-Y
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1011,Hydra:6.0.650,FMLib:17.11.176.26
+ definitions=2024-04-30_04,2024-04-29_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
+ suspectscore=0 priorityscore=1501 mlxlogscore=874 malwarescore=0
+ phishscore=0 mlxscore=0 clxscore=1015 lowpriorityscore=0 adultscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2404010003 definitions=main-2404300057
 
-On Wed, Apr 24, 2024 at 01:48:18AM +0000, Jameson Thies wrote:
-> From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+Hi Amadeusz,
+
+On 4/26/2024 6:25 AM, Amadeusz Sławiński wrote:
+> On 4/25/2024 11:51 PM, Wesley Cheng wrote:
+>> Introduce a helper to check if a particular PCM format is supported by 
+>> the
+>> USB audio device connected.  If the USB audio device does not have an
+>> audio profile which can support the requested format, then notify the USB
+>> backend.
+>>
+>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+>> ---
 > 
-> ucsi_register_altmode checks IS_ERR on returned pointer and treats
-> NULL as valid. This results in a null deref when
-> trace_ucsi_register_altmode is called. Return an error from
-> ucsi_register_displayport when it is not supported and register the
-> altmode with typec_port_register_altmode.
+> (...)
 > 
-> Reviewed-by: Jameson Thies <jthies@google.com>
-> Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+>> +/**
+>> + * snd_soc_usb_find_format() - Check if audio format is supported
+>> + * @card_idx: USB sound chip array index
+>> + * @params: PCM parameters
+>> + * @direction: capture or playback
+>> + *
+>> + * Ensure that a requested audio profile from the ASoC side is able 
+>> to be
+>> + * supported by the USB device.
+>> + *
+>> + * Return 0 on success, negative on error.
+>> + *
+>> + */
+>> +int snd_soc_usb_find_format(int card_idx, struct snd_pcm_hw_params 
+>> *params,
+>> +            int direction)
+> 
+> Perhaps name function similar to its snd_usb equivalent, so 
+> snd_soc_usb_find_supported_format?
+> 
 
-This is not the correct way to fix this.  The normal thing to do would
-be to add NULL checks.
+Will do.
 
-https://staticthinking.wordpress.com/2022/08/01/mixing-error-pointers-and-null/'
-
-regards,
-dan carpenter
-
+Thanks
+Wesley Cheng
 
