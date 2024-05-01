@@ -1,45 +1,51 @@
-Return-Path: <linux-usb+bounces-9954-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9955-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E6148B8BA2
-	for <lists+linux-usb@lfdr.de>; Wed,  1 May 2024 16:03:38 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F50A8B8BC5
+	for <lists+linux-usb@lfdr.de>; Wed,  1 May 2024 16:19:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EC91A284BC3
-	for <lists+linux-usb@lfdr.de>; Wed,  1 May 2024 14:03:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9C49BB218D0
+	for <lists+linux-usb@lfdr.de>; Wed,  1 May 2024 14:19:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 272BF12EBEF;
-	Wed,  1 May 2024 14:03:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08C2012F384;
+	Wed,  1 May 2024 14:19:21 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id E706112DDB0
-	for <linux-usb@vger.kernel.org>; Wed,  1 May 2024 14:03:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with SMTP id 256F312F360
+	for <linux-usb@vger.kernel.org>; Wed,  1 May 2024 14:19:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714572211; cv=none; b=rV5a5HRjkWXj8I4B595/rsFzBbqd6Hr+jpuAyFZwnASlwqXH6jilT7CRaYFSHBN8zwsu5LC0pZ3hclvM/8uLEz/CDkkZZArFHdzFhmFAVHtfXCtArvdBZ1MxFM53Zt302ks0YApWxuOFO9vIc/PeKN/TM8VI05oPc14qJZAjYz4=
+	t=1714573160; cv=none; b=f4F5A8cAmP0bBpX6oZzVG5otAdRA333p1+BFfiRLNximJwnUQI8yRQ9LVn5qXgi093dI4csMfw9ONZoNDxmuD3ys4ntshiMZuqB/kc1wlxipOBhs6cDw8EGyzfPKAZJPyigA6CmhVX0gM/WwWiAUCGrPQuBAG7u5+/9UHfh8kaE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714572211; c=relaxed/simple;
-	bh=bVdH7wiDMxqebYJ+3rGDOc0SDGA5QMqyJo55xqWs9bE=;
+	s=arc-20240116; t=1714573160; c=relaxed/simple;
+	bh=0fX7DMTnyqd2OctZ1Pn8GWeMAq5i4D6ET5kIT05SFxI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=k6QU5qKGvb/09bWl4aV3r7ZgQvnSqDqwGWfc6zyRO5dJa3ZIq9WJPmS+AO3o699QDHHejhIv5KWMrNeAn06quDDMzJOgcb2hNNdeLzQMNvkd/RG7f35K/1zzwLT9sh7q4F/XzXmMoeqCpmWvlTeaNBu/hdZ2lKuFk0CjZi5LziY=
+	 Content-Type:Content-Disposition:In-Reply-To; b=udFf4cQHt1GnIliLj7KyvXiSIAk1ZyYQN1JI+fG1VizV/RsJ/Khek2eUP99UK/dFbDHvd+FIwjLk2Se1p2W1FLu/jKa5u/HSbs1Mm6XbFuMDveLBb9j4LnckAP3XFBBNioxwVOm9/6rhkyDx2/eCeuYl7UIJL/9GkM8gCmOr6qE=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
-Received: (qmail 692720 invoked by uid 1000); 1 May 2024 10:03:25 -0400
-Date: Wed, 1 May 2024 10:03:25 -0400
+Received: (qmail 693310 invoked by uid 1000); 1 May 2024 10:19:18 -0400
+Date: Wed, 1 May 2024 10:19:18 -0400
 From: Alan Stern <stern@rowland.harvard.edu>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: kernel test robot <lkp@intel.com>,
-  Norihiko Hama <Norihiko.Hama@alpsalpine.com>, llvm@lists.linux.dev,
-  oe-kbuild-all@lists.linux.dev, linux-usb@vger.kernel.org
-Subject: Re: [usb:usb-testing 17/35] drivers/usb/storage/usb.c:141:21: error:
- incompatible pointer types passing 'unsigned int *' to parameter of type
- 'uint64_t *' (aka 'unsigned long long *')
-Message-ID: <3e2a7570-0704-4453-ad0b-68c5806157e5@rowland.harvard.edu>
-References: <202405011431.PvaZHpRK-lkp@intel.com>
- <2024050141-remote-mockup-f933@gregkh>
+To: Michael Grzeschik <mgr@pengutronix.de>
+Cc: Eric Van Hensbergen <ericvh@kernel.org>,
+  Latchesar Ionkov <lucho@ionkov.net>,
+  Dominique Martinet <asmadeus@codewreck.org>,
+  Christian Schoenebeck <linux_oss@crudebyte.com>,
+  Jonathan Corbet <corbet@lwn.net>,
+  Greg Kroah-Hartman <gregkh@linuxfoundation.org>, v9fs@lists.linux.dev,
+  linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+  linux-usb@vger.kernel.org, kernel@pengutronix.de
+Subject: Re: [PATCH v4 1/3] usb: gadget: function: move u_f.h to
+ include/linux/usb/
+Message-ID: <96fe85f7-eaf1-4231-985b-14514cf53f3d@rowland.harvard.edu>
+References: <20240116-ml-topic-u9p-v4-0-722ed28b0ade@pengutronix.de>
+ <20240116-ml-topic-u9p-v4-1-722ed28b0ade@pengutronix.de>
+ <1fb801bf-3bef-4f95-8036-fc8634679141@rowland.harvard.edu>
+ <ZjH_cx_0uBLc6M6L@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -48,36 +54,29 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2024050141-remote-mockup-f933@gregkh>
+In-Reply-To: <ZjH_cx_0uBLc6M6L@pengutronix.de>
 
-On Wed, May 01, 2024 at 08:50:36AM +0200, Greg Kroah-Hartman wrote:
-> On Wed, May 01, 2024 at 02:32:56PM +0800, kernel test robot wrote:
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-> > head:   ac6a205c5bef39d65ecd9f5dd2c1d75652c35405
-> > commit: 70d66b8e47e6fa031f541291e9dd3d7f0c44b41e [17/35] usb-storage: Optimize scan delay more precisely
+On Wed, May 01, 2024 at 10:38:11AM +0200, Michael Grzeschik wrote:
+> On Mon, Apr 29, 2024 at 09:51:20PM -0400, Alan Stern wrote:
+> > On Tue, Apr 30, 2024 at 01:33:26AM +0200, Michael Grzeschik wrote:
+> > > We move the u_f.h header to include/linux/usb to be
+> > > able to compile function drivers outside of the
+> > > drivers/usb/gadget/function directory.
+> > > 
+> > > Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+> > 
+> > Given that you're moving a private header file to a public location,
+> > don't you think it should now have a name that's more meaningful to
+> > general kernel developers than "u_f.h"?
 > 
-> I'm going to drop this commit from my tree now.
+> Fair point.
 > 
-> But really, it feels odd to have this parsing logic in a random driver
-> for something like handling floating point numbers "properly" from
-> userspace.  Why isn't this in the core kernel somewhere?  And, as that
-> was a rhetorical question, the answer is we probably shouldn't be
-> handling floating point number parsing in the kernel...
+> How about func_utils.h instead?
 
-Strictly speaking, this is fixed point rather than floating point.  And 
-the reason the commit didn't put the parsing code in the core kernel is 
-because no other places seem to need it.  Still, I get your objection.
+Yes, that would be a lot better.  Especially if you put it in 
+include/linux/usb/gadget rather than include/linux/usb.
 
-> I understand the quest for handling error time outs "faster" when you
-> assume that you know that the error will never happen, but what's the
-> odds that it will end up happening...
-> 
-> there has to be a better way to do this.
-
-Norihiko, another possibility is to use ordinary integers but have 
-users add an "m" or "ms" suffix when they want the value to be 
-interpreted in milliseconds.  So "5" means 5 seconds, but "500ms" means 
-500 milliseconds.
+Thanks.
 
 Alan Stern
 
