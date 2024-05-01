@@ -1,184 +1,165 @@
-Return-Path: <linux-usb+bounces-9950-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9951-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9D398B83C3
-	for <lists+linux-usb@lfdr.de>; Wed,  1 May 2024 02:33:51 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE93E8B8598
+	for <lists+linux-usb@lfdr.de>; Wed,  1 May 2024 08:33:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E81D61C220F8
-	for <lists+linux-usb@lfdr.de>; Wed,  1 May 2024 00:33:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7CA3D1F230E9
+	for <lists+linux-usb@lfdr.de>; Wed,  1 May 2024 06:33:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D27A54C66;
-	Wed,  1 May 2024 00:33:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AACB431A60;
+	Wed,  1 May 2024 06:33:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="D0fGt0cW"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BML82bAg"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE5A3646;
-	Wed,  1 May 2024 00:33:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 922C72744A
+	for <linux-usb@vger.kernel.org>; Wed,  1 May 2024 06:33:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714523619; cv=none; b=aR7QeBWL7TTQMBbON2pSxyjcnayHwBkWYNyrzSrYKmBecl199+Gzpv4e7XjXflNPRMOh5uLO0yepB/SZtcR0Zp1ybL7KGsvETQG/F1+pvrO9+LTiV0VxlThFHDHhrVqKZjDG+LhahiNMxNDxfX4K641/MReiKOMEz0llvtKc/nY=
+	t=1714545197; cv=none; b=qlDOoDXGQJ+qQ0qjHdP5dunE97ct0K9DAIYPXro3U5vaB64n7fVOoyCvtee9rYqQ87TBZdoG1UYb6RRYQv/V6Tum9rxyf5g535LozjF6a4pNq8w50cqEd9pEpV/Fo0MxNFYFLMWFHKCin4f9LDIYjjHKaL1Dw8tdc8pgTGj+8Yk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714523619; c=relaxed/simple;
-	bh=3GxgYzbam8HgNyK+VdtYgp46UreAUNvtQ0s3h2WWRpU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=kwusV+vIE7JcjYgm3CUKJwJRdOPAG4tHbXLOlgZZ7rXt2J58kI4k039jZsGjgGkCEvVex/zF4C0Ukyb7axrkMKxbXRIEE49cG9dXtHIkimU19pIwSIrKR9G2pW09B4fL6PacPr2e5jxOc7zuIz96NuF5itzyFEoBSM8Qt6AMYC4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=D0fGt0cW; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 43UNxo8v005742;
-	Wed, 1 May 2024 00:32:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=LRnPNBK8fB5m3Wd6M+Ba4l+Ai4vlC8s1ZRRcL3qyiV8=; b=D0
-	fGt0cWBkZIPWOJq1/d0Q52iDWMscdVnrML7zq7Mbq2eSO79vTDbgEhppVdmaZYB9
-	W07e1ZyXYOAC1U9O8EZLDsYzZ/bpdB97r9bWIItYRofzjyHE/VY7+6V/JdLo6Fcx
-	qY6g+5mkCVUTLisci98ZNdXtuwDMVR/rULDTu38jVUqwYaFijmmKAWZOdbSUYj+A
-	pYi+sHTXkQW6eM6eGzbhl6MQ8jRsvz3fHaUHJahsaQ7ouVkBfc/FbF1I3Vi+BM9X
-	h/s/nmOZbCRG4RGgMyTr+0iRCMdVjCr8fjnAXGop8Z5xU3QP8wIKGtaT/Ukm7qVz
-	v/FZnk2+9pAbCBnH4CrA==
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xtw1hj6qf-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 01 May 2024 00:32:27 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 4410WQEC025873
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 1 May 2024 00:32:26 GMT
-Received: from [10.110.61.50] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 30 Apr
- 2024 17:32:25 -0700
-Message-ID: <a1115d39-b60e-a5da-5c7e-79266d6ced17@quicinc.com>
-Date: Tue, 30 Apr 2024 17:32:24 -0700
+	s=arc-20240116; t=1714545197; c=relaxed/simple;
+	bh=xnq5nnv/A1CiIYgYO6m3OKjM8n63AgO2pkIc7+Mj3fA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Ps2e7LGXq5BZ1c0lGOIhhpmvO1U0sgXobT7qRSdskF12qwHWXWjoCG6JgObiKTKLgQzglY8HBNZJOYZXe+eiFwJznP1Ydcma0Qi4UO2bSTWEZLj3a7oifre349/iUexBdCm7y3McUIAbMwRfRbry6y61vJr9mv4eZOV7XdUOsWw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BML82bAg; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1714545195; x=1746081195;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=xnq5nnv/A1CiIYgYO6m3OKjM8n63AgO2pkIc7+Mj3fA=;
+  b=BML82bAg6Uo2JLupLHpUELQ/zOkM5xnq/vx2ZTEnDed3dqmiavq6mcQD
+   A8YCmrbyRVW+OUcH5csRZ3/91EFLQRbtNboTr+2TlV513GLLVPKplxk6Q
+   GTxRRF8YEXe4IYuZu+WMDZD1Gjrnf/y44NRnoGiHoiapuURxn4Ke/kAAE
+   ulwwevaTv1hVMNvaM0eziKI+SDglt0yKDxLRPGaT00VNRFCtE35gioH2N
+   rIN6NuXWH5mXIepkfSYUUC7G9ABOl2DCNKMRKXUQepusnqIkdmWHVzf/5
+   HHx2d9OfgD1vuLzSvljP/6ONG1RwKfc3FcUKPmrJyF1Y1P1dOrpkBu2Si
+   w==;
+X-CSE-ConnectionGUID: tsqJ9O8aQCqbCb0yXh3J6w==
+X-CSE-MsgGUID: 06fkVoS/Sd6kbLCfZMAu/A==
+X-IronPort-AV: E=McAfee;i="6600,9927,11060"; a="10119874"
+X-IronPort-AV: E=Sophos;i="6.07,244,1708416000"; 
+   d="scan'208";a="10119874"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2024 23:33:14 -0700
+X-CSE-ConnectionGUID: hVU0oOXoS4yRV6mDZOwEZg==
+X-CSE-MsgGUID: iyheqARbSW6Qf3UK9nEz0Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,244,1708416000"; 
+   d="scan'208";a="31311967"
+Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 30 Apr 2024 23:33:13 -0700
+Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1s23Wg-0008zN-2q;
+	Wed, 01 May 2024 06:33:10 +0000
+Date: Wed, 1 May 2024 14:32:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Norihiko Hama <Norihiko.Hama@alpsalpine.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-usb@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Alan Stern <stern@rowland.harvard.edu>
+Subject: [usb:usb-testing 17/35] drivers/usb/storage/usb.c:141:21: error:
+ incompatible pointer types passing 'unsigned int *' to parameter of type
+ 'uint64_t *' (aka 'unsigned long long *')
+Message-ID: <202405011431.PvaZHpRK-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH v20 33/41] ASoC: usb: Create SOC USB SND jack kcontrol
-Content-Language: en-US
-To: =?UTF-8?Q?Amadeusz_S=c5=82awi=c5=84ski?=
-	<amadeuszx.slawinski@linux.intel.com>,
-        <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
-        <perex@perex.cz>, <conor+dt@kernel.org>, <corbet@lwn.net>,
-        <lgirdwood@gmail.com>, <andersson@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <gregkh@linuxfoundation.org>,
-        <Thinh.Nguyen@synopsys.com>, <broonie@kernel.org>,
-        <bgoswami@quicinc.com>, <tiwai@suse.com>, <robh@kernel.org>,
-        <konrad.dybcio@linaro.org>
-CC: <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-sound@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>
-References: <20240425215125.29761-1-quic_wcheng@quicinc.com>
- <20240425215125.29761-34-quic_wcheng@quicinc.com>
- <c8bd16e8-b204-471b-a702-36e14c8695c5@linux.intel.com>
-From: Wesley Cheng <quic_wcheng@quicinc.com>
-In-Reply-To: <c8bd16e8-b204-471b-a702-36e14c8695c5@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: ciB1uOnPTSzQscrGnEx8GYc3pFB6UvC6
-X-Proofpoint-ORIG-GUID: ciB1uOnPTSzQscrGnEx8GYc3pFB6UvC6
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1011,Hydra:6.0.650,FMLib:17.11.176.26
- definitions=2024-04-30_16,2024-04-30_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
- mlxlogscore=877 clxscore=1015 bulkscore=0 impostorscore=0 malwarescore=0
- suspectscore=0 spamscore=0 adultscore=0 priorityscore=1501
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2404010003 definitions=main-2405010002
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi Amadeusz,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+head:   ac6a205c5bef39d65ecd9f5dd2c1d75652c35405
+commit: 70d66b8e47e6fa031f541291e9dd3d7f0c44b41e [17/35] usb-storage: Optimize scan delay more precisely
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20240501/202405011431.PvaZHpRK-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240501/202405011431.PvaZHpRK-lkp@intel.com/reproduce)
 
-On 4/26/2024 6:26 AM, Amadeusz Sławiński wrote:
-> On 4/25/2024 11:51 PM, Wesley Cheng wrote:
->> Expose API for creation of a jack control for notifying of available
->> devices that are plugged in/discovered, and that support offloading.  
->> This
->> allows for control names to be standardized across implementations of USB
->> audio offloading.
->>
->> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
->> ---
-> 
-> (...)
-> 
->>   /* SOC USB sound kcontrols */
->> +/**
->> + * snd_soc_usb_setup_offload_jack() - Create USB offloading jack
->> + * @component: USB DPCM backend DAI component
->> + * @jack: jack structure to create
->> + *
->> + * Creates a jack device for notifying userspace of the availability
->> + * of an offload capable device.
->> + *
->> + * Returns 0 on success, negative on error.
->> + *
->> + */
->> +int snd_soc_usb_setup_offload_jack(struct snd_soc_component *component,
->> +                    struct snd_soc_jack *jack)
->> +{
->> +    int ret;
->> +
->> +    ret = snd_soc_card_jack_new(component->card, "USB Offload 
->> Playback Jack",
->> +                    SND_JACK_HEADPHONE, jack);
->> +    if (ret < 0) {
->> +        dev_err(component->card->dev, "Unable to add USB offload 
->> jack\n");
->> +        return ret;
->> +    }
->> +
->> +    ret = snd_soc_component_set_jack(component, jack, NULL);
->> +    if (ret) {
->> +        dev_warn(component->card->dev, "Failed to set jack: %d\n", ret);
->> +        return ret;
->> +    }
->> +
->> +    return 0;
->> +}
->> +EXPORT_SYMBOL_GPL(snd_soc_usb_setup_offload_jack);
->> +
->>   static int snd_soc_usb_get_offload_card_status(struct snd_kcontrol 
->> *kcontrol,
->>                      struct snd_ctl_elem_value *ucontrol)
->>   {
->>
-> 
-> I'm not sure if this should be handled in generic USB API, this feels 
-> like something that should be handled in specific device driver side, 
-> like all users currently do.
-> 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405011431.PvaZHpRK-lkp@intel.com/
 
-In some of the previous comments, it was mentioned that maybe it was 
-better to have more consistent/defined naming across devices that do 
-have support for audio offload.  Initially, I did have these within our 
-vendor specific ASoC platform driver also.
+All error/warnings (new ones prefixed by >>):
 
-> Anyway I think there should also be some function that tears jack down, 
-> by calling:
-> snd_soc_component_set_jack(component, NULL, NULL);
-> so it can get cleaned up properly?
+>> drivers/usb/storage/usb.c:141:21: warning: comparison of distinct pointer types ('typeof ((delay_ms)) *' (aka 'unsigned int *') and 'uint64_t *' (aka 'unsigned long long *')) [-Wcompare-distinct-pointer-types]
+           unsigned int rem = do_div(delay_ms, int_pow(10, ndecimals));
+                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/div64.h:222:28: note: expanded from macro 'do_div'
+           (void)(((typeof((n)) *)0) == ((uint64_t *)0));  \
+                  ~~~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~
+>> drivers/usb/storage/usb.c:141:21: error: incompatible pointer types passing 'unsigned int *' to parameter of type 'uint64_t *' (aka 'unsigned long long *') [-Werror,-Wincompatible-pointer-types]
+           unsigned int rem = do_div(delay_ms, int_pow(10, ndecimals));
+                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/div64.h:238:22: note: expanded from macro 'do_div'
+                   __rem = __div64_32(&(n), __base);       \
+                                      ^~~~
+   arch/arm/include/asm/div64.h:24:45: note: passing argument to parameter 'n' here
+   static inline uint32_t __div64_32(uint64_t *n, uint32_t base)
+                                               ^
+>> drivers/usb/storage/usb.c:141:21: warning: shift count >= width of type [-Wshift-count-overflow]
+           unsigned int rem = do_div(delay_ms, int_pow(10, ndecimals));
+                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/div64.h:234:25: note: expanded from macro 'do_div'
+           } else if (likely(((n) >> 32) == 0)) {          \
+                                  ^  ~~
+   include/linux/compiler.h:76:40: note: expanded from macro 'likely'
+   # define likely(x)      __builtin_expect(!!(x), 1)
+                                               ^
+   2 warnings and 1 error generated.
 
-I can add that.  I didn't realize there were some situations where maybe 
-components would want to disable the jack.  I will leave the cleanup 
-part to ASoC when the platform card is removed.
 
-Thanks
-Wesley Cheng
+vim +141 drivers/usb/storage/usb.c
+
+   123	
+   124	/**
+   125	 * fixed_point_uint_to_str - format a fixed-point decimal value into a string
+   126	 * @val: The integer value to format, scaled by 10^(@ndecimals).
+   127	 * @ndecimals: Number of decimal places in the fixed-point value.
+   128	 * @str: Where to store the formatted string.
+   129	 * @size: The size of buffer for @str.
+   130	 *
+   131	 * Format a fixed-point decimal value in @val scaled by 10^(@ndecimals)
+   132	 * into a string in @str where to store the formatted string.
+   133	 * The string trailing fractional part '0' is trimmed.
+   134	 *
+   135	 * Returns the number of characters written into @str.
+   136	 */
+   137	static int fixed_point_uint_to_str(unsigned int val, int ndecimals,
+   138					   char *str, int size)
+   139	{
+   140		unsigned int delay_ms = val;
+ > 141		unsigned int rem = do_div(delay_ms, int_pow(10, ndecimals));
+   142		int len;
+   143		char buf[16];
+   144	
+   145		len = scnprintf(buf, sizeof(buf), "%d", delay_ms);
+   146		if (rem) {
+   147			char format[8];
+   148	
+   149			snprintf(format, sizeof(format) - 1, ".%%0%dd", ndecimals);
+   150			len += scnprintf(buf + len, sizeof(buf) - len, format, rem);
+   151			while (buf[--len] == '0')
+   152				buf[len] = '\0';
+   153		}
+   154		return scnprintf(str, size, "%s\n", buf);
+   155	}
+   156	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
