@@ -1,82 +1,180 @@
-Return-Path: <linux-usb+bounces-9955-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9956-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F50A8B8BC5
-	for <lists+linux-usb@lfdr.de>; Wed,  1 May 2024 16:19:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DFAA48B920C
+	for <lists+linux-usb@lfdr.de>; Thu,  2 May 2024 01:11:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9C49BB218D0
-	for <lists+linux-usb@lfdr.de>; Wed,  1 May 2024 14:19:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 970D6288AE1
+	for <lists+linux-usb@lfdr.de>; Wed,  1 May 2024 23:11:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08C2012F384;
-	Wed,  1 May 2024 14:19:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5132D165FBE;
+	Wed,  1 May 2024 23:11:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eLx94MLR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id 256F312F360
-	for <linux-usb@vger.kernel.org>; Wed,  1 May 2024 14:19:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF9291C68D
+	for <linux-usb@vger.kernel.org>; Wed,  1 May 2024 23:11:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714573160; cv=none; b=f4F5A8cAmP0bBpX6oZzVG5otAdRA333p1+BFfiRLNximJwnUQI8yRQ9LVn5qXgi093dI4csMfw9ONZoNDxmuD3ys4ntshiMZuqB/kc1wlxipOBhs6cDw8EGyzfPKAZJPyigA6CmhVX0gM/WwWiAUCGrPQuBAG7u5+/9UHfh8kaE=
+	t=1714605091; cv=none; b=hcKHU2IRCHF157Hl00Ndgfbmo4gCoxdFY3lj4dss8ieXFK/p5BfyI1aTo5jd7jicB/0yaLybw0NVBDIszGMz70HxXMjrB0mVVOqJKyuwnW6rK2Kf5HsuKe+ck/8QqBSnOBaHISwzh6cTTROms/h4a7vDVaR53f8tj1scMkveblc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714573160; c=relaxed/simple;
-	bh=0fX7DMTnyqd2OctZ1Pn8GWeMAq5i4D6ET5kIT05SFxI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=udFf4cQHt1GnIliLj7KyvXiSIAk1ZyYQN1JI+fG1VizV/RsJ/Khek2eUP99UK/dFbDHvd+FIwjLk2Se1p2W1FLu/jKa5u/HSbs1Mm6XbFuMDveLBb9j4LnckAP3XFBBNioxwVOm9/6rhkyDx2/eCeuYl7UIJL/9GkM8gCmOr6qE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
-Received: (qmail 693310 invoked by uid 1000); 1 May 2024 10:19:18 -0400
-Date: Wed, 1 May 2024 10:19:18 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Michael Grzeschik <mgr@pengutronix.de>
-Cc: Eric Van Hensbergen <ericvh@kernel.org>,
-  Latchesar Ionkov <lucho@ionkov.net>,
-  Dominique Martinet <asmadeus@codewreck.org>,
-  Christian Schoenebeck <linux_oss@crudebyte.com>,
-  Jonathan Corbet <corbet@lwn.net>,
-  Greg Kroah-Hartman <gregkh@linuxfoundation.org>, v9fs@lists.linux.dev,
-  linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-  linux-usb@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH v4 1/3] usb: gadget: function: move u_f.h to
- include/linux/usb/
-Message-ID: <96fe85f7-eaf1-4231-985b-14514cf53f3d@rowland.harvard.edu>
-References: <20240116-ml-topic-u9p-v4-0-722ed28b0ade@pengutronix.de>
- <20240116-ml-topic-u9p-v4-1-722ed28b0ade@pengutronix.de>
- <1fb801bf-3bef-4f95-8036-fc8634679141@rowland.harvard.edu>
- <ZjH_cx_0uBLc6M6L@pengutronix.de>
+	s=arc-20240116; t=1714605091; c=relaxed/simple;
+	bh=I0EYIxTlzl46UORKFbo7VMaCOibZ+z8mL+G7IrSOdu4=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=oXcOwKuaOq5ihDT1mcapFG5mS9wUC1At+OGVB/+1CjTTKx41fgt+DTv4O83+4IJZWE6QKzqfeeqhydbMfLAcmCP6kkBy3XzKBK4Xf19ImF6GVNqx0GUIKwXhqfGQ4lu29FIAClfGjTuPVzqg35pSO2sWT4x53vIzvir8rVImkTU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eLx94MLR; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1714605090; x=1746141090;
+  h=date:from:to:cc:subject:message-id;
+  bh=I0EYIxTlzl46UORKFbo7VMaCOibZ+z8mL+G7IrSOdu4=;
+  b=eLx94MLRE37QN8Y2t02MXobGeo0XysqHwESbFnYweGBQYiV9URVXwuC/
+   vvg3YCYW7Wzvs7QFUhPdtWioT5NrqjfKz8ZDlP2u+zNSS/B/bI40jegrP
+   fXVcxkB+anO7JcXKyxSPV3V24ovRbte/fmt6Yl0wwzfLz1TS2Dy12cSZ9
+   D06SXU+hGH6qlUzAmmft9TysWYRnOGp1H52tYtCKdjCXRKhtMe5k32t7n
+   zkc7P3HpXAup2Z7rXvQg9ly0DV8gwW4nqe7susXybUsRwCc81FUgK1IG9
+   aYmzca16SxF6D+v+FbofIflObzNceCKRr4V9zgpMvJnuUM6iZBy/xBm31
+   A==;
+X-CSE-ConnectionGUID: GEUvDx+OQR6yNUv/tmlXaw==
+X-CSE-MsgGUID: 6oI/TwmzTBGgygNWTlUCcQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11061"; a="10483749"
+X-IronPort-AV: E=Sophos;i="6.07,246,1708416000"; 
+   d="scan'208";a="10483749"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2024 16:11:30 -0700
+X-CSE-ConnectionGUID: 9VMOy4I9Sua0dtb/F3TV7w==
+X-CSE-MsgGUID: YcAC1niUQb+uppjW4oX/Kg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,246,1708416000"; 
+   d="scan'208";a="27435000"
+Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 01 May 2024 16:11:28 -0700
+Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1s2J6k-000A8E-0N;
+	Wed, 01 May 2024 23:11:26 +0000
+Date: Thu, 02 May 2024 07:10:37 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Subject: [usb:usb-linus] BUILD SUCCESS
+ ae11f04b452b5205536e1c02d31f8045eba249dd
+Message-ID: <202405020733.NaGXP9JY-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZjH_cx_0uBLc6M6L@pengutronix.de>
 
-On Wed, May 01, 2024 at 10:38:11AM +0200, Michael Grzeschik wrote:
-> On Mon, Apr 29, 2024 at 09:51:20PM -0400, Alan Stern wrote:
-> > On Tue, Apr 30, 2024 at 01:33:26AM +0200, Michael Grzeschik wrote:
-> > > We move the u_f.h header to include/linux/usb to be
-> > > able to compile function drivers outside of the
-> > > drivers/usb/gadget/function directory.
-> > > 
-> > > Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
-> > 
-> > Given that you're moving a private header file to a public location,
-> > don't you think it should now have a name that's more meaningful to
-> > general kernel developers than "u_f.h"?
-> 
-> Fair point.
-> 
-> How about func_utils.h instead?
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
+branch HEAD: ae11f04b452b5205536e1c02d31f8045eba249dd  usb: typec: tcpm: Check for port partner validity before consuming it
 
-Yes, that would be a lot better.  Especially if you put it in 
-include/linux/usb/gadget rather than include/linux/usb.
+elapsed time: 1737m
 
-Thanks.
+configs tested: 87
+configs skipped: 3
 
-Alan Stern
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                                 defconfig   gcc  
+arc                   randconfig-001-20240502   gcc  
+arc                   randconfig-002-20240502   gcc  
+arm                               allnoconfig   clang
+arm                                 defconfig   clang
+arm                   randconfig-001-20240502   gcc  
+arm                   randconfig-002-20240502   gcc  
+arm                   randconfig-003-20240502   gcc  
+arm                   randconfig-004-20240502   gcc  
+arm64                             allnoconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                 randconfig-001-20240502   gcc  
+csky                              allnoconfig   gcc  
+csky                                defconfig   gcc  
+hexagon                          allmodconfig   clang
+hexagon                           allnoconfig   clang
+hexagon                          allyesconfig   clang
+hexagon                             defconfig   clang
+i386                             allmodconfig   gcc  
+i386                              allnoconfig   gcc  
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-001-20240501   clang
+i386         buildonly-randconfig-002-20240501   gcc  
+i386         buildonly-randconfig-003-20240501   clang
+i386         buildonly-randconfig-004-20240501   gcc  
+i386         buildonly-randconfig-005-20240501   gcc  
+i386         buildonly-randconfig-006-20240501   clang
+i386                                defconfig   clang
+i386                  randconfig-001-20240501   gcc  
+i386                  randconfig-002-20240501   clang
+i386                  randconfig-003-20240501   gcc  
+i386                  randconfig-004-20240501   gcc  
+i386                  randconfig-005-20240501   clang
+i386                  randconfig-006-20240501   clang
+i386                  randconfig-011-20240501   gcc  
+i386                  randconfig-012-20240501   gcc  
+i386                  randconfig-013-20240501   gcc  
+i386                  randconfig-014-20240501   gcc  
+i386                  randconfig-015-20240501   gcc  
+i386                  randconfig-016-20240501   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                       allyesconfig   gcc  
+microblaze                          defconfig   gcc  
+mips                              allnoconfig   gcc  
+mips                             allyesconfig   gcc  
+nios2                            allmodconfig   gcc  
+nios2                             allnoconfig   gcc  
+nios2                            allyesconfig   gcc  
+nios2                               defconfig   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                            defconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                              defconfig   gcc  
+parisc64                            defconfig   gcc  
+powerpc                           allnoconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                               defconfig   clang
+s390                              allnoconfig   clang
+s390                                defconfig   clang
+sh                                allnoconfig   gcc  
+sh                                  defconfig   gcc  
+sparc                             allnoconfig   gcc  
+sparc                               defconfig   gcc  
+sparc64                             defconfig   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   gcc  
+um                                  defconfig   clang
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   clang
+x86_64                            allnoconfig   clang
+x86_64                           allyesconfig   clang
+x86_64                              defconfig   gcc  
+x86_64                          rhel-8.3-rust   clang
+xtensa                            allnoconfig   gcc  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
