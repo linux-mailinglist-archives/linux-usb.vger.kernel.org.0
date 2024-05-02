@@ -1,99 +1,134 @@
-Return-Path: <linux-usb+bounces-9978-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9979-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CBD7B8B9BF2
-	for <lists+linux-usb@lfdr.de>; Thu,  2 May 2024 16:00:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 890D78B9C4C
+	for <lists+linux-usb@lfdr.de>; Thu,  2 May 2024 16:32:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8AC7B2845FB
-	for <lists+linux-usb@lfdr.de>; Thu,  2 May 2024 14:00:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4466C2829FD
+	for <lists+linux-usb@lfdr.de>; Thu,  2 May 2024 14:32:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C235213C67E;
-	Thu,  2 May 2024 14:00:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D9311534F1;
+	Thu,  2 May 2024 14:32:24 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id DBA7A152788
-	for <linux-usb@vger.kernel.org>; Thu,  2 May 2024 14:00:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
+Received: from unicorn.mansr.com (unicorn.mansr.com [81.2.72.234])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 704D7152DEE
+	for <linux-usb@vger.kernel.org>; Thu,  2 May 2024 14:32:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=81.2.72.234
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714658412; cv=none; b=GgJy9AfCal0+03ygN8fNWT/ACR1/ZVQOl5Kv/LlU0sN2GJSPO5Yv7+xD61Faaap7Zk0pNvqu6nWB6BsK2oKv0DNWBcUj31L5lKtiv2M/UQOJsyKEVyN7nkmRJqD7RShuSNuz17bBXZ9P9UTyAl/a8cMV7MI4Kap8ElKo53NEn7I=
+	t=1714660344; cv=none; b=dG0aFxS7QNCZVRYMD0VaW7QsOzgDi1jgFFVElEYUbCA4ePSKxO/LwPxohViAdiaOCSjrKp/hr+pSIAVQ+Oau9OY8eYcPUx2R/Aegbjo36x0dfQayMYF7Pv7UX2Q/iQYVmuaILPDQhizTaYMeJNAT0c4V14YKKnN77l27/jmj0t8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714658412; c=relaxed/simple;
-	bh=wSk+XEUZsqf9PDZ1vWv5ysBQLJ9fWgK7G29Bey8Oz00=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NIperxD5wUIz8dFx4ZTjDqdy+Y3M1Eljck4iyz6JvUXMbONsOmyZ1NwVh8lmZqQuzpJ2Aw6l0UetvhTMhgtrpDrcYQ8HK0jCac0VLTvphxBAzAQahbyrMcgtguv0jkhE8hTMCZVvYigsmafI/lD43qB8Q2mw1UPG4LH9KvQpQcw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
-Received: (qmail 731655 invoked by uid 1000); 2 May 2024 10:00:03 -0400
-Date: Thu, 2 May 2024 10:00:03 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Oliver Neukum <oneukum@suse.com>
-Cc: linux-usb@vger.kernel.org, gregKH@linuxfoundation.org
-Subject: Re: [PATCHv3] usb: usb_parse_endpoint ignore reserved bits
-Message-ID: <ad307bb5-d48a-4319-9cbf-205faf1c460b@rowland.harvard.edu>
-References: <20240502115259.31076-1-oneukum@suse.com>
+	s=arc-20240116; t=1714660344; c=relaxed/simple;
+	bh=50b3UNYn6OSUOrLdkYETNBj/2ljl9MrhnhFN4TaJYQc=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=tHRWTJJvd6W25EWf0dw3KQrYH4EbhkK6rL43pv9t+Ux1w05Yv2dNZv53jIcSbEinFUo1Bc4X7deJSenueGeSAETj+1apVL8T9Y/s1hqSzoM7SiMZfPFnqJ4i5r52fZjDhIUNQRdAD/tKsT7zv0Uau/7cGSTM0i4RNeCwDhRsbkI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mansr.com; spf=pass smtp.mailfrom=mansr.com; arc=none smtp.client-ip=81.2.72.234
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mansr.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mansr.com
+Received: from raven.mansr.com (raven.mansr.com [IPv6:2001:8b0:ca0d:1::3])
+	by unicorn.mansr.com (Postfix) with ESMTPS id 1634D15360;
+	Thu,  2 May 2024 15:32:20 +0100 (BST)
+Received: by raven.mansr.com (Postfix, from userid 51770)
+	id 04D7221339E; Thu,  2 May 2024 15:32:19 +0100 (BST)
+From: =?iso-8859-1?Q?M=E5ns_Rullg=E5rd?= <mans@mansr.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] USB: serial: use tty_port_register_device_serdev
+In-Reply-To: <2024050228-emission-ointment-88de@gregkh> (Greg Kroah-Hartman's
+	message of "Thu, 2 May 2024 15:57:56 +0200")
+References: <20240502100728.7914-1-mans@mansr.com>
+	<ZjNoWq0r7CJJptRk@hovoldconsulting.com> <yw1xmsp8big7.fsf@mansr.com>
+	<2024050204-recreate-exerciser-bd62@gregkh>
+	<yw1xikzwbb3a.fsf@mansr.com>
+	<2024050228-emission-ointment-88de@gregkh>
+Date: Thu, 02 May 2024 15:32:19 +0100
+Message-ID: <yw1xedakb7yk.fsf@mansr.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/29.3 (gnu/linux)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240502115259.31076-1-oneukum@suse.com>
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 02, 2024 at 01:51:40PM +0200, Oliver Neukum wrote:
-> Reading bEndpointAddress the spec tells is
-> that
-> 
-> b7 is direction, which must be ignored
-> b6:4 are reserved which are to be set to zero
-> b3:0 are the endpoint address
-> 
-> In order to be backwards compatible with possible
-> future versions of USB we have to be ready with
-> devices using those bits. That means that we
-> also have to ignore them like we do with the direction
-> bit.
-> In consequence the only illegal address you can
-> encoding in four bits is endpoint zero, for which
-> no descriptor must exist. Hence the check for exceeding
-> the upper limit on endpoint addresses is removed.
-> 
-> Signed-off-by: Oliver Neukum <oneukum@suse.com>
-> ---
+Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
 
-Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
+> On Thu, May 02, 2024 at 02:24:41PM +0100, M=E5ns Rullg=E5rd wrote:
+>> Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
+>>=20
+>> > On Thu, May 02, 2024 at 11:45:44AM +0100, M=E5ns Rullg=E5rd wrote:
+>> >> Johan Hovold <johan@kernel.org> writes:
+>> >>=20
+>> >> > On Thu, May 02, 2024 at 11:07:28AM +0100, Mans Rullgard wrote:
+>> >> >> Use tty_port_register_device_serdev() so that usb-serial devices
+>> >> >> can be used as serdev controllers.
+>> >> >
+>> >> > I'm afraid it's not that easy. The reason serdev is not enabled for
+>> >> > usb-serial is that there's currently no support for handling hotplu=
+g in
+>> >> > serdev. The device can go away from under you at any time and then =
+you'd
+>> >> > crash the kernel.
+>> >>=20
+>> >> Oh, that's unfortunate.  Regular serial ports can go away too, though,
+>> >> and that seems to be handled fine.  What am I missing?
+>> >
+>> > How is it handled?  Normal serial ports can go away but in practice,
+>> > it's a rare occurance, and usually people use serdev for devices where
+>> > the ports can not be removed (i.e. internal connections).
+>>=20
+>> If I unbind a regular serial port from its driver using sysfs, a serdev
+>> device defined in a device tree gets removed as expected.  Binding the
+>> serial port makes everything come back again.  I fail to see any problem
+>> here.  If there is one, you'll have to be less evasive in explaining
+>> what it is.
+>
+> Try yanking a usb-serial device out with this patch applied and see what
+> happens.  I'm pretty sure serdev will not handle that well, just like if
+> you yank out a pci serial device while it is being used.  Doing
+> bind/unbind is not a "surprise" removal, but a nice orderly one :)
+>
+> If this does now work, nice, but I haven't seen the changes to serdev to
+> make this happen, I wonder what changed...
 
-> v2: Improved commit log
-> v3: Symbolic mask and improved error message
->  drivers/usb/core/config.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/usb/core/config.c b/drivers/usb/core/config.c
-> index 7f8d33f92ddb..3362af165ef5 100644
-> --- a/drivers/usb/core/config.c
-> +++ b/drivers/usb/core/config.c
-> @@ -279,11 +279,11 @@ static int usb_parse_endpoint(struct device *ddev, int cfgno,
->  		goto skip_to_next_endpoint_or_interface_descriptor;
->  	}
->  
-> -	i = d->bEndpointAddress & ~USB_ENDPOINT_DIR_MASK;
-> -	if (i >= 16 || i == 0) {
-> +	i = d->bEndpointAddress & USB_ENDPOINT_NUMBER_MASK;
-> +	if (i == 0) {
->  		dev_notice(ddev, "config %d interface %d altsetting %d has an "
-> -		    "invalid endpoint with address 0x%X, skipping\n",
-> -		    cfgno, inum, asnum, d->bEndpointAddress);
-> +		    "invalid descriptor for endpoint zero, skipping\n",
-> +		    cfgno, inum, asnum);
->  		goto skip_to_next_endpoint_or_interface_descriptor;
->  	}
->  
-> -- 
-> 2.44.0
-> 
+Turns out I missed one change that is needed for unplugging to be
+handled:
+
+--- a/drivers/usb/serial/bus.c
++++ b/drivers/usb/serial/bus.c
+@@ -91,7 +91,7 @@ static void usb_serial_device_remove(struct device *dev)
+        autopm_err =3D usb_autopm_get_interface(port->serial->interface);
+=20
+        minor =3D port->minor;
+-       tty_unregister_device(usb_serial_tty_driver, minor);
++       tty_port_unregister_device(&port->port, usb_serial_tty_driver, mino=
+r);
+=20
+        driver =3D port->serial->type;
+        if (driver->port_remove)
+
+With this additional change, yanking (shorting the data lines; the thing
+is soldered) the usb-serial converter works, although a couple of
+warnings are printed:
+
+[   28.678301] usb 1-1: USB disconnect, device number 2
+[   28.683695] ttyUSB ttyUSB0: tty_hangup: tty->count(1) !=3D (#fd's(0) + #=
+kopen's(0))
+[   28.691516] ftdi_sio ttyUSB0: error from flowcontrol urb
+[   28.759056] ttyUSB ttyUSB0: tty_port_close_start: tty->count =3D 1 port =
+count =3D 0
+[   28.772531] ftdi_sio ttyUSB0: FTDI USB Serial Device converter now disco=
+nnected from ttyUSB0
+[   28.781346] ftdi_sio 1-1:1.0: device disconnected
+
+Where should I go looking for the cause of these?
+
+--=20
+M=E5ns Rullg=E5rd
 
