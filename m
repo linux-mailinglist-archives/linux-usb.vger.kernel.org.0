@@ -1,83 +1,149 @@
-Return-Path: <linux-usb+bounces-9972-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9973-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 012968B997A
-	for <lists+linux-usb@lfdr.de>; Thu,  2 May 2024 12:54:49 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A9728B99B4
+	for <lists+linux-usb@lfdr.de>; Thu,  2 May 2024 13:06:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 312561C20F3A
-	for <lists+linux-usb@lfdr.de>; Thu,  2 May 2024 10:54:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 29F7D1F23D69
+	for <lists+linux-usb@lfdr.de>; Thu,  2 May 2024 11:06:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4E345E091;
-	Thu,  2 May 2024 10:54:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0703369956;
+	Thu,  2 May 2024 11:05:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="kmTmrvzQ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ftuPKS2c"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1629856B7B
-	for <linux-usb@vger.kernel.org>; Thu,  2 May 2024 10:54:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED8F65FEF2;
+	Thu,  2 May 2024 11:05:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714647283; cv=none; b=qKc2B4iM79FqMdWQXQ9u6O4aPRmHYLu0jFllpOynLSp6qQ2L+y4M/M17ZZCExJ37lVQTRt9RcRKZI+QTKPYWQMelAIz1soaR8Ocflj1bVcTnjKfeTjSUvAgrKFErLkw01dzICuoofhS/HTiMyBc475MurMZZRBg0Pf6R39BEsTQ=
+	t=1714647941; cv=none; b=QHIcBTsMeRKPjzg2cR9KiBWyHeRIURKzkC7qdzLyhRXml0ebE36uYfo4ojmdK59CXVBNuW56CQ19lVglD4aMjnaU0eoGw4BZVgFImSTgkuRmObRdFNjVlEYfli4h1jXWxXW0pNB8W5A8/QGUszOEBGEx2jt4wPGpN8BVqnZuzOA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714647283; c=relaxed/simple;
-	bh=mFjq/ifnBqNev0YMd3Y/GcESWFORD7xvByocsgi28E0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aJ60JUpQwMO8+h3Ou+XVsiIfAZajRStYUxx87fCX3RoOtQo7L7Ww2QNVzOeFgsJaKjoXkr0LTMh4pFr4e6HY39xX5XBo2cAcagoD2cFS1fVCPbvPBykGHdJCh/wxt7vmPlk+mPx/HwodGHIOngxT7FFoOHn55F7QuW9wy4nXLIU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=kmTmrvzQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F290AC113CC;
-	Thu,  2 May 2024 10:54:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1714647282;
-	bh=mFjq/ifnBqNev0YMd3Y/GcESWFORD7xvByocsgi28E0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kmTmrvzQYlfAVUFd39La/CXCZ17PNX78JUC/6KcrYUG+TYK4OSSU9nmalBFTwckiM
-	 0xxRBOj/yyttL3/l4+Cf1sZdHAeAx2p88bUhfVVhXgH3iWKSfBYFSDrJZWyGmHitvP
-	 b7EVW6SwtmaIC6hhLS3MbLWPIdpv63n85iPdRMf8=
-Date: Thu, 2 May 2024 12:54:39 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: =?iso-8859-1?Q?M=E5ns_Rullg=E5rd?= <mans@mansr.com>
-Cc: Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: use tty_port_register_device_serdev
-Message-ID: <2024050204-recreate-exerciser-bd62@gregkh>
-References: <20240502100728.7914-1-mans@mansr.com>
- <ZjNoWq0r7CJJptRk@hovoldconsulting.com>
- <yw1xmsp8big7.fsf@mansr.com>
+	s=arc-20240116; t=1714647941; c=relaxed/simple;
+	bh=EluTdDMIMNhKZ/EkpupaemH1PZsrZoO5k/Ow1fEItns=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:From:Subject:
+	 In-Reply-To:Content-Type; b=hgudez0EHh1lSeBgMrnyQ6P9F1uXbbhzXjgkjErC+XGidjJggXOQuOFhqRUe7FScZ8oNkbb02EnlTlY+cm7+T82zHuDJ80hmIVfNQhBMV3G7jIVcFvVruLygQHSbb62YEZhXn/LmQvsAYnwhp/T+Vv1L5n2kCBDEoxzyzvXvEe4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ftuPKS2c; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1714647940; x=1746183940;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=EluTdDMIMNhKZ/EkpupaemH1PZsrZoO5k/Ow1fEItns=;
+  b=ftuPKS2c6s6Q6BcO03FR5MvmaWT642aql9qTd4VwhhM615excS1TAHcF
+   c9zmc2rp/d0eBS0bjC/PpknfcH5DXWZ9MzCAskdkPdyMLUx+W88fFRv8A
+   GNrGBdEeB3YFR5ywBb8QUnjYDV7ylN+kCa+mErnVhsnOAOeTw9f6dfkou
+   T8LVGsgHgUnIYaEeN/yyJMYy3wfWIO1wtlVVs5LCPc3W1CVfFTsIc2AYj
+   yj3f4C0tAdSo09qyIPsEnNGI4e+qnKQBawITc/+WQpVfk3sMjS/+7sMgL
+   SzPA72pIQdUBhv1bfnYw1btn3TkEE/U/AnrehM2eNl4AW99WmaXG1oPuC
+   Q==;
+X-CSE-ConnectionGUID: oUmZip18Tjm7AxchHOyvjA==
+X-CSE-MsgGUID: QnUiwb2NQxGOBAcRY3am0g==
+X-IronPort-AV: E=McAfee;i="6600,9927,11061"; a="21813489"
+X-IronPort-AV: E=Sophos;i="6.07,247,1708416000"; 
+   d="scan'208";a="21813489"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2024 04:05:39 -0700
+X-CSE-ConnectionGUID: RNrykgpXQNOhcPL/BW4gnA==
+X-CSE-MsgGUID: 8wdqEQM1TVOscvvgR0xz0w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,247,1708416000"; 
+   d="scan'208";a="50280954"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmviesa002.fm.intel.com with ESMTP; 02 May 2024 04:05:34 -0700
+Message-ID: <ddd682da-5cfd-db09-e316-3c54939caf90@linux.intel.com>
+Date: Thu, 2 May 2024 14:07:26 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <yw1xmsp8big7.fsf@mansr.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.13.0
+Content-Language: en-US
+To: Wesley Cheng <quic_wcheng@quicinc.com>, srinivas.kandagatla@linaro.org,
+ mathias.nyman@intel.com, perex@perex.cz, conor+dt@kernel.org,
+ corbet@lwn.net, lgirdwood@gmail.com, andersson@kernel.org,
+ krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
+ Thinh.Nguyen@synopsys.com, broonie@kernel.org, bgoswami@quicinc.com,
+ tiwai@suse.com, robh@kernel.org, konrad.dybcio@linaro.org
+Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-sound@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, linux-doc@vger.kernel.org,
+ alsa-devel@alsa-project.org
+References: <20240425215125.29761-1-quic_wcheng@quicinc.com>
+ <20240425215125.29761-7-quic_wcheng@quicinc.com>
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [PATCH v20 06/41] usb: host: xhci-sideband: Expose a sideband
+ interrupter enable API
+In-Reply-To: <20240425215125.29761-7-quic_wcheng@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, May 02, 2024 at 11:45:44AM +0100, Måns Rullgård wrote:
-> Johan Hovold <johan@kernel.org> writes:
+On 26.4.2024 0.50, Wesley Cheng wrote:
+> Some use cases maybe require that the secondary interrupter's events to
+> be handled by the OS.  In this case, configure the IMOD and the
+> skip_events property to enable the interrupter's events.  By default,
+> assume that the secondary interrupter doesn't want to enable OS event
+> handling.
 > 
-> > On Thu, May 02, 2024 at 11:07:28AM +0100, Mans Rullgard wrote:
-> >> Use tty_port_register_device_serdev() so that usb-serial devices
-> >> can be used as serdev controllers.
-> >
-> > I'm afraid it's not that easy. The reason serdev is not enabled for
-> > usb-serial is that there's currently no support for handling hotplug in
-> > serdev. The device can go away from under you at any time and then you'd
-> > crash the kernel.
+> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+> ---
+>   drivers/usb/host/xhci-sideband.c  | 28 ++++++++++++++++++++++++++++
+>   include/linux/usb/xhci-sideband.h |  2 ++
+>   2 files changed, 30 insertions(+)
 > 
-> Oh, that's unfortunate.  Regular serial ports can go away too, though,
-> and that seems to be handled fine.  What am I missing?
+> diff --git a/drivers/usb/host/xhci-sideband.c b/drivers/usb/host/xhci-sideband.c
+> index 255feae33c6e..6fdae9840c11 100644
+> --- a/drivers/usb/host/xhci-sideband.c
+> +++ b/drivers/usb/host/xhci-sideband.c
+> @@ -237,6 +237,30 @@ xhci_sideband_get_event_buffer(struct xhci_sideband *sb)
+>   }
+>   EXPORT_SYMBOL_GPL(xhci_sideband_get_event_buffer);
+>   
+> +/**
+> + * xhci_sideband_enable_interrupt - enable interrupt for secondary interrupter
+> + * @sb: sideband instance for this usb device
+> + * @imod_interval: number of event ring segments to allocate
+> + *
+> + * Enables OS owned event handling for a particular interrupter if client
+> + * requests for it.  In addition, set the IMOD interval for this particular
+> + * interrupter.
+> + *
+> + * Returns 0 on success, negative error otherwise
+> + */
+> +int xhci_sideband_enable_interrupt(struct xhci_sideband *sb, u32 imod_interval)
+> +{
+> +	if (!sb || !sb->ir)
+> +		return -ENODEV;
+> +
+> +	xhci_set_interrupter_moderation(sb->ir, imod_interval);
 
-How is it handled?  Normal serial ports can go away but in practice,
-it's a rare occurance, and usually people use serdev for devices where
-the ports can not be removed (i.e. internal connections).
+Is there a need to adjust the moderation after initial setup?
 
-thanks,
+If not then maybe we could pass the imod_interval as a parameter to
+xhci_create_secondary_interrupter(), and avoid exporting
+xhci_set_interrupter_moderation()
 
-greg k-h
+
+> +	sb->ir->skip_events = false;
+> +	xhci_enable_interrupter(sb->ir);
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(xhci_sideband_enable_interrupt);
+
+I can't find the place where xhci_sideband_enable_interrupt() is called in
+this series. How is it planned to be used?
+
+Thanks
+Mathias
 
