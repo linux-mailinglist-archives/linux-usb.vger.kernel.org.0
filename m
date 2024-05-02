@@ -1,131 +1,106 @@
-Return-Path: <linux-usb+bounces-9960-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9961-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03BBC8B9414
-	for <lists+linux-usb@lfdr.de>; Thu,  2 May 2024 06:59:22 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B8128B942A
+	for <lists+linux-usb@lfdr.de>; Thu,  2 May 2024 07:16:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 348901C20D33
-	for <lists+linux-usb@lfdr.de>; Thu,  2 May 2024 04:59:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 65733B21E74
+	for <lists+linux-usb@lfdr.de>; Thu,  2 May 2024 05:16:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D0471F5FF;
-	Thu,  2 May 2024 04:59:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3422200C7;
+	Thu,  2 May 2024 05:16:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="aIIvqcKW"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="n/Ltc0lD"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1932917997;
-	Thu,  2 May 2024 04:59:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 388E51CD2D;
+	Thu,  2 May 2024 05:16:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714625952; cv=none; b=Nm1IkRnG8hmP8JMFzxiaKBliCNYAn568srD87624FohKzwaFJj/17TKHLSS+kKau2CITM4MMur8ZsPyAFiDz2dbdK4v9vNs6rDnJg76OwdAAbBRMDl0vcgSBrT7HIDvpQirOOJykktRyip8Rovx0INcTmeQjJIrHcQXipSH2Eiw=
+	t=1714627002; cv=none; b=edb/Cv1wXeNNTZ5bC060iIywMgVkZ7JzoRNaPOqG1WOCqYVCgLfKUJu2JTL7JuNgjmSD/uN71i7jPoS0St6TRKpjP6rgT5LvggI6Lm0+uMCiuhg8CGS5ktBswy8hEeEXVL6MzR4T0ChHsrQtSkjiojI0eEwVePUjKzqJ9eJtpr0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714625952; c=relaxed/simple;
-	bh=EP7mz2TcKDYylio2XdMJOHJ1aopi8ifMnNgfMKQJFAE=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=tvKcdBSiQaiZIUEq9sNeaolRjcS5SFaj1z9ad32cq1o/FAikht0xSzm3Fn3B3i9lTtX4S9NHK1v87wMoqhVBCjjM046L7hh0NBgqiQihV9Eg/bfrj+UUzOSwuUqgjYPzwXHuFGbY9zJkcXw4f2jWA0JKEvJ0JxreWryRuewAgJY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=aIIvqcKW; arc=none smtp.client-ip=68.232.153.233
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1714625951; x=1746161951;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=EP7mz2TcKDYylio2XdMJOHJ1aopi8ifMnNgfMKQJFAE=;
-  b=aIIvqcKWRens2Wt4/AW14I6HfTmGgjMPVRVRutoIzjeas8BXZFDz61Ae
-   Dgg9nUPnKT2JvX34pcOaPMHVGrXdcczqgWX5omJdR3owDMbvYSAnrZYXk
-   NhvNjITb1nHoMThbsoo6J0naMFmW+JiYIB1WXvAE6bqHgZeymKPXYNs0I
-   xVB/vuZTQQ2qecrRNFIuW83GfXeCGOuv00PVMYeuB0pbW5ygGZxaDZu4X
-   lNi1mItEdCKTb99KvZoNnMr0MjD1WjQIMPPdjl/TZdAve5CtQeMqIsl7h
-   G1d3s4rOTHYu5u0E0f2xG1TZZRCDgiQNozSeOQ2cC1taMW2D3yMNoPatI
-   A==;
-X-CSE-ConnectionGUID: RHo6q7DuQ3Shfbla5e+9qg==
-X-CSE-MsgGUID: 3ZcQlmuzTQeeaTXJkDWGxg==
-X-IronPort-AV: E=Sophos;i="6.07,247,1708412400"; 
-   d="scan'208";a="254174820"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 01 May 2024 21:59:10 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Wed, 1 May 2024 21:59:01 -0700
-Received: from che-ld-unglab06.microchip.com (10.10.85.11) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.35 via Frontend Transport; Wed, 1 May 2024 21:58:58 -0700
-From: Rengarajan S <rengarajan.s@microchip.com>
-To: <woojung.huh@microchip.com>, <UNGLinuxDriver@microchip.com>,
-	<davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-	<pabeni@redhat.com>, <netdev@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-CC: <rengarajan.s@microchip.com>
-Subject: [PATCH net v1] lan78xx: Fix crash with multiple device attach
-Date: Thu, 2 May 2024 10:27:48 +0530
-Message-ID: <20240502045748.37627-1-rengarajan.s@microchip.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1714627002; c=relaxed/simple;
+	bh=GNnjqZhf/EV01EZnYcWASg64MdiAwmf42mW2YxPHaxQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bJULcu1GPv2e1JBoddK7ypsOtl4ROr4Utgwme/I1sz6QMOtTSGL+gShFOjHGD0gqy9+lMWU7rKOkyQcB+1Va5xxRChjpH650qmzS19XmIXMEwM/HWA0pUPXkConh8iH1XihGb8AYQAsfsLwgpHb5My+s/S+Xr6oH3rQI7dmI3Gs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=n/Ltc0lD; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21E0AC116B1;
+	Thu,  2 May 2024 05:16:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1714627001;
+	bh=GNnjqZhf/EV01EZnYcWASg64MdiAwmf42mW2YxPHaxQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=n/Ltc0lD8MMsd8O5/eh5TXW5PZfHqV9KLBuGZjvo6R33tnWxmR+z/9MP9vxHhVA8g
+	 I0Wa4wzsBa1ovQutKDic9hDFfKsLPZSJsDrckBwC3qf6PTKLtPZpAqGya4gSrdJjID
+	 nbnaK7T9VUNHG5/UR2ke8Z67NS06BZpI+25yQt8Y=
+Date: Thu, 2 May 2024 07:16:37 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Rengarajan S <rengarajan.s@microchip.com>
+Cc: woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, netdev@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net v1] lan78xx: Fix crash with multiple device attach
+Message-ID: <2024050224-robust-ramble-7a56@gregkh>
+References: <20240502045748.37627-1-rengarajan.s@microchip.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240502045748.37627-1-rengarajan.s@microchip.com>
 
-After the first device(MAC + PHY) is attached, the corresponding
-fixup gets registered and before it is unregistered next device
-is attached causing the dev pointer of second device to be NULL.
-Fixed the issue with multiple PHY attach by unregistering PHY
-at the end of probe. Removed the unregistration during phy_init
-since the handling has been taken care in probe.
+On Thu, May 02, 2024 at 10:27:48AM +0530, Rengarajan S wrote:
+> After the first device(MAC + PHY) is attached, the corresponding
+> fixup gets registered and before it is unregistered next device
+> is attached causing the dev pointer of second device to be NULL.
+> Fixed the issue with multiple PHY attach by unregistering PHY
+> at the end of probe. Removed the unregistration during phy_init
+> since the handling has been taken care in probe.
+> 
+> Fixes: 89b36fb5e532 ("lan78xx: Lan7801 Support for Fixed PHY")
+> Signed-off-by: Rengarajan S <rengarajan.s@microchip.com>
+> ---
+> 
+>  drivers/net/usb/lan78xx.c | 16 +++++++++-------
+>  1 file changed, 9 insertions(+), 7 deletions(-)
+> 
 
-Fixes: 89b36fb5e532 ("lan78xx: Lan7801 Support for Fixed PHY")
-Signed-off-by: Rengarajan S <rengarajan.s@microchip.com>
----
+Hi,
 
- drivers/net/usb/lan78xx.c | 16 +++++++++-------
- 1 file changed, 9 insertions(+), 7 deletions(-)
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
-diff --git a/drivers/net/usb/lan78xx.c b/drivers/net/usb/lan78xx.c
-index 5add4145d..3ec79620f 100644
---- a/drivers/net/usb/lan78xx.c
-+++ b/drivers/net/usb/lan78xx.c
-@@ -2383,14 +2383,8 @@ static int lan78xx_phy_init(struct lan78xx_net *dev)
- 		netdev_err(dev->net, "can't attach PHY to %s\n",
- 			   dev->mdiobus->id);
- 		if (dev->chipid == ID_REV_CHIP_ID_7801_) {
--			if (phy_is_pseudo_fixed_link(phydev)) {
-+			if (phy_is_pseudo_fixed_link(phydev))
- 				fixed_phy_unregister(phydev);
--			} else {
--				phy_unregister_fixup_for_uid(PHY_KSZ9031RNX,
--							     0xfffffff0);
--				phy_unregister_fixup_for_uid(PHY_LAN8835,
--							     0xfffffff0);
--			}
- 		}
- 		return -EIO;
- 	}
-@@ -4458,6 +4452,14 @@ static int lan78xx_probe(struct usb_interface *intf,
- 	pm_runtime_set_autosuspend_delay(&udev->dev,
- 					 DEFAULT_AUTOSUSPEND_DELAY);
- 
-+	/* Unregistering Fixup to avoid crash with multiple device
-+	 * attach.
-+	 */
-+	phy_unregister_fixup_for_uid(PHY_KSZ9031RNX,
-+				     0xfffffff0);
-+	phy_unregister_fixup_for_uid(PHY_LAN8835,
-+				     0xfffffff0);
-+
- 	return 0;
- 
- out8:
--- 
-2.25.1
+You are receiving this message because of the following common error(s)
+as indicated below:
 
+- You have marked a patch with a "Fixes:" tag for a commit that is in an
+  older released kernel, yet you do not have a cc: stable line in the
+  signed-off-by area at all, which means that the patch will not be
+  applied to any older kernel releases.  To properly fix this, please
+  follow the documented rules in the
+  Documentation/process/stable-kernel-rules.rst file for how to resolve
+  this.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot
 
