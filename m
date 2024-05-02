@@ -1,106 +1,230 @@
-Return-Path: <linux-usb+bounces-9961-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9962-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1B8128B942A
-	for <lists+linux-usb@lfdr.de>; Thu,  2 May 2024 07:16:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52CE88B954E
+	for <lists+linux-usb@lfdr.de>; Thu,  2 May 2024 09:31:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 65733B21E74
-	for <lists+linux-usb@lfdr.de>; Thu,  2 May 2024 05:16:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 06890283169
+	for <lists+linux-usb@lfdr.de>; Thu,  2 May 2024 07:31:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3422200C7;
-	Thu,  2 May 2024 05:16:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C43EA224F2;
+	Thu,  2 May 2024 07:31:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="n/Ltc0lD"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YLipNn2K"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 388E51CD2D;
-	Thu,  2 May 2024 05:16:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7545921A04
+	for <linux-usb@vger.kernel.org>; Thu,  2 May 2024 07:31:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714627002; cv=none; b=edb/Cv1wXeNNTZ5bC060iIywMgVkZ7JzoRNaPOqG1WOCqYVCgLfKUJu2JTL7JuNgjmSD/uN71i7jPoS0St6TRKpjP6rgT5LvggI6Lm0+uMCiuhg8CGS5ktBswy8hEeEXVL6MzR4T0ChHsrQtSkjiojI0eEwVePUjKzqJ9eJtpr0=
+	t=1714635095; cv=none; b=S0XVxA3MxIikYk/wJW08AOCQbpJCsMBt3y/g6D/lISwnWAhDHVfmL/nlodIprDXQO7LJl67qFnTcdTc7p4d+Br06maQjxVcv5R31cAaJFVaX63jGDWYZ7s8znHXHS7mAFY6+Usw7dFR0DTybeUZPSobcc/XEqy1aJKaz6uF5Sxs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714627002; c=relaxed/simple;
-	bh=GNnjqZhf/EV01EZnYcWASg64MdiAwmf42mW2YxPHaxQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bJULcu1GPv2e1JBoddK7ypsOtl4ROr4Utgwme/I1sz6QMOtTSGL+gShFOjHGD0gqy9+lMWU7rKOkyQcB+1Va5xxRChjpH650qmzS19XmIXMEwM/HWA0pUPXkConh8iH1XihGb8AYQAsfsLwgpHb5My+s/S+Xr6oH3rQI7dmI3Gs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=n/Ltc0lD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21E0AC116B1;
-	Thu,  2 May 2024 05:16:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1714627001;
-	bh=GNnjqZhf/EV01EZnYcWASg64MdiAwmf42mW2YxPHaxQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=n/Ltc0lD8MMsd8O5/eh5TXW5PZfHqV9KLBuGZjvo6R33tnWxmR+z/9MP9vxHhVA8g
-	 I0Wa4wzsBa1ovQutKDic9hDFfKsLPZSJsDrckBwC3qf6PTKLtPZpAqGya4gSrdJjID
-	 nbnaK7T9VUNHG5/UR2ke8Z67NS06BZpI+25yQt8Y=
-Date: Thu, 2 May 2024 07:16:37 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Rengarajan S <rengarajan.s@microchip.com>
-Cc: woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, netdev@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net v1] lan78xx: Fix crash with multiple device attach
-Message-ID: <2024050224-robust-ramble-7a56@gregkh>
-References: <20240502045748.37627-1-rengarajan.s@microchip.com>
+	s=arc-20240116; t=1714635095; c=relaxed/simple;
+	bh=kuobw0wehBp0o/lzUPHQAG4wEZwokDLoGYPCQKDPeeg=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=efQntsDHoVOaMcubQsRPJ9ddkU2MOmGMi3LAUMUrDb8vDoolR1JpQAZI41iEo+7rIbkMWyM/YUfW1HslluCnF/G9KCcW3XYT08GuJ8PFmZ2WusDdUfatanWfFgfzIpvttYftRiXxUDdaE5x5dLdyv2JPLFR+9hREfvwYwh7KwJs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YLipNn2K; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1714635094; x=1746171094;
+  h=date:from:to:cc:subject:message-id;
+  bh=kuobw0wehBp0o/lzUPHQAG4wEZwokDLoGYPCQKDPeeg=;
+  b=YLipNn2Ky0S6B5tDyF3zvXSFHE4Gbf1kzJpT/INHJXJ0DP6fz5h2jrrM
+   j/g1MwH5nSBznjyIhoG47+FiXhkS+4U5FnSLT/A2oKk/tIDMJjJIilBfK
+   2D24BuVjSwBpJb+WKrrCYew0kRCEI81E3HcxyXSH7uq8uKM5Z1apTx7F6
+   ag4d6x5OdeoeEF3TSuQfDVz1THXOEp+eJH9Mgwarp2lcW3T6XyMtKW6I9
+   +dJfITuRm937s+aU6VZR8sJ+WX2tI2RPfXS49gKXhVV65yI2zPXJYK5KJ
+   v+rY1Ntt0gT22ABQL3gOV+r3MGqzay2vxtz3bGVCESUyauuY/mL0njpDb
+   A==;
+X-CSE-ConnectionGUID: A/sR2P1LTUK03PRjyVheaw==
+X-CSE-MsgGUID: K4kfqTmrR2Wtbd8HYevkIw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11061"; a="10515645"
+X-IronPort-AV: E=Sophos;i="6.07,247,1708416000"; 
+   d="scan'208";a="10515645"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2024 00:31:33 -0700
+X-CSE-ConnectionGUID: J+06apLGQ4edy0HnZ4Pdjg==
+X-CSE-MsgGUID: N4CreCjMTCyfMwYjNkEpUg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,247,1708416000"; 
+   d="scan'208";a="27648532"
+Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 02 May 2024 00:31:32 -0700
+Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1s2Quf-000AVM-2M;
+	Thu, 02 May 2024 07:31:29 +0000
+Date: Thu, 02 May 2024 15:30:51 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ 080e73c9411b9ebc4c22e8ee8a12a9f109b85819
+Message-ID: <202405021549.ix1C5oE3-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240502045748.37627-1-rengarajan.s@microchip.com>
 
-On Thu, May 02, 2024 at 10:27:48AM +0530, Rengarajan S wrote:
-> After the first device(MAC + PHY) is attached, the corresponding
-> fixup gets registered and before it is unregistered next device
-> is attached causing the dev pointer of second device to be NULL.
-> Fixed the issue with multiple PHY attach by unregistering PHY
-> at the end of probe. Removed the unregistration during phy_init
-> since the handling has been taken care in probe.
-> 
-> Fixes: 89b36fb5e532 ("lan78xx: Lan7801 Support for Fixed PHY")
-> Signed-off-by: Rengarajan S <rengarajan.s@microchip.com>
-> ---
-> 
->  drivers/net/usb/lan78xx.c | 16 +++++++++-------
->  1 file changed, 9 insertions(+), 7 deletions(-)
-> 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: 080e73c9411b9ebc4c22e8ee8a12a9f109b85819  usb: xhci: compact 'trb_in_td()' arguments
 
-Hi,
+elapsed time: 1456m
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+configs tested: 137
+configs skipped: 5
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-- You have marked a patch with a "Fixes:" tag for a commit that is in an
-  older released kernel, yet you do not have a cc: stable line in the
-  signed-off-by area at all, which means that the patch will not be
-  applied to any older kernel releases.  To properly fix this, please
-  follow the documented rules in the
-  Documentation/process/stable-kernel-rules.rst file for how to resolve
-  this.
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allmodconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                   randconfig-001-20240502   gcc  
+arc                   randconfig-002-20240502   gcc  
+arm                               allnoconfig   clang
+arm                                 defconfig   clang
+arm                   randconfig-001-20240502   gcc  
+arm                   randconfig-002-20240502   gcc  
+arm                   randconfig-003-20240502   gcc  
+arm                   randconfig-004-20240502   gcc  
+arm                         socfpga_defconfig   gcc  
+arm                          sp7021_defconfig   gcc  
+arm64                            allmodconfig   clang
+arm64                             allnoconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                 randconfig-001-20240502   gcc  
+csky                              allnoconfig   gcc  
+csky                                defconfig   gcc  
+csky                  randconfig-001-20240502   gcc  
+csky                  randconfig-002-20240502   gcc  
+hexagon                          allmodconfig   clang
+hexagon                           allnoconfig   clang
+hexagon                          allyesconfig   clang
+hexagon                             defconfig   clang
+i386                             allmodconfig   gcc  
+i386                              allnoconfig   gcc  
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-003-20240502   clang
+i386         buildonly-randconfig-005-20240502   clang
+i386                                defconfig   clang
+i386                  randconfig-002-20240502   clang
+i386                  randconfig-003-20240502   clang
+i386                  randconfig-006-20240502   clang
+i386                  randconfig-012-20240502   clang
+i386                  randconfig-015-20240502   clang
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                        allyesconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch             randconfig-001-20240502   gcc  
+loongarch             randconfig-002-20240502   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                          amiga_defconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                        m5407c3_defconfig   gcc  
+m68k                          multi_defconfig   gcc  
+m68k                        stmark2_defconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                       allyesconfig   gcc  
+microblaze                          defconfig   gcc  
+mips                             allmodconfig   gcc  
+mips                              allnoconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                      pic32mzda_defconfig   gcc  
+nios2                         10m50_defconfig   gcc  
+nios2                            allmodconfig   gcc  
+nios2                             allnoconfig   gcc  
+nios2                            allyesconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                 randconfig-001-20240502   gcc  
+nios2                 randconfig-002-20240502   gcc  
+openrisc                         allmodconfig   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                            defconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                              defconfig   gcc  
+parisc                randconfig-001-20240502   gcc  
+parisc                randconfig-002-20240502   gcc  
+parisc64                            defconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                          allyesconfig   clang
+powerpc                    klondike_defconfig   gcc  
+powerpc64             randconfig-001-20240502   gcc  
+powerpc64             randconfig-003-20240502   gcc  
+riscv                            allmodconfig   clang
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   clang
+riscv                               defconfig   clang
+riscv             nommu_k210_sdcard_defconfig   gcc  
+riscv                 randconfig-002-20240502   gcc  
+s390                              allnoconfig   clang
+s390                             allyesconfig   gcc  
+s390                                defconfig   clang
+s390                  randconfig-001-20240502   gcc  
+sh                               allmodconfig   gcc  
+sh                                allnoconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                                  defconfig   gcc  
+sh                    randconfig-001-20240502   gcc  
+sh                    randconfig-002-20240502   gcc  
+sh                        sh7785lcr_defconfig   gcc  
+sparc                            allmodconfig   gcc  
+sparc                             allnoconfig   gcc  
+sparc                            allyesconfig   gcc  
+sparc                               defconfig   gcc  
+sparc64                          allmodconfig   gcc  
+sparc64                          allyesconfig   gcc  
+sparc64                             defconfig   gcc  
+sparc64               randconfig-001-20240502   gcc  
+sparc64               randconfig-002-20240502   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   gcc  
+um                                  defconfig   clang
+um                             i386_defconfig   gcc  
+um                    randconfig-002-20240502   gcc  
+um                           x86_64_defconfig   clang
+x86_64                            allnoconfig   clang
+x86_64                           allyesconfig   clang
+x86_64       buildonly-randconfig-003-20240502   clang
+x86_64                              defconfig   gcc  
+x86_64                randconfig-002-20240502   clang
+x86_64                randconfig-003-20240502   clang
+x86_64                randconfig-005-20240502   clang
+x86_64                randconfig-006-20240502   clang
+x86_64                randconfig-011-20240502   clang
+x86_64                randconfig-012-20240502   clang
+x86_64                randconfig-016-20240502   clang
+x86_64                randconfig-074-20240502   clang
+x86_64                randconfig-075-20240502   clang
+x86_64                randconfig-076-20240502   clang
+x86_64                          rhel-8.3-func   gcc  
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+xtensa                            allnoconfig   gcc  
+xtensa                           allyesconfig   gcc  
+xtensa                  nommu_kc705_defconfig   gcc  
+xtensa                randconfig-001-20240502   gcc  
+xtensa                randconfig-002-20240502   gcc  
 
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
