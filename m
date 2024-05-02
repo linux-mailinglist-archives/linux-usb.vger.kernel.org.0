@@ -1,220 +1,162 @@
-Return-Path: <linux-usb+bounces-9974-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9975-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 76FDF8B99D0
-	for <lists+linux-usb@lfdr.de>; Thu,  2 May 2024 13:13:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 190608B9A47
+	for <lists+linux-usb@lfdr.de>; Thu,  2 May 2024 13:53:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F053B1F22672
-	for <lists+linux-usb@lfdr.de>; Thu,  2 May 2024 11:13:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C9BDC2827AC
+	for <lists+linux-usb@lfdr.de>; Thu,  2 May 2024 11:53:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 089EE605CE;
-	Thu,  2 May 2024 11:13:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 880F96E617;
+	Thu,  2 May 2024 11:53:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ivitera.com header.i=@ivitera.com header.b="ID/90LXS";
-	dkim=pass (1024-bit key) header.d=ivitera.com header.i=@ivitera.com header.b="ID/90LXS"
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="iZ4rC5m5";
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="Fqgfj2kf"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.ivitera.com (smtp.ivitera.com [88.101.85.59])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B97E604B3
-	for <linux-usb@vger.kernel.org>; Thu,  2 May 2024 11:13:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=88.101.85.59
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 577905FDC8
+	for <linux-usb@vger.kernel.org>; Thu,  2 May 2024 11:53:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714648415; cv=none; b=ojoOoSi6A+L1mjL8LzXUla0I5yqmbbxKRVF9WmUnGo4wzRpdS6RGxrV5WjbPtID3vlG9r2IqNylArLJrqNxo7tS01WqCz081vhSh0gfveoKnj0a+EZwpF7PnGZnsgy50lShKFYVcMu5bGNKzN2oeJrKalHfoBm33ckOPKNcRkhA=
+	t=1714650793; cv=none; b=hcc2lsmkKaipMwKEFqiaeAKFkr84xelFlljzh2YhRmvU3kmvnbNtKyv4U9TAeHtzNchMzURD4qROA/rNXJs4hn6AuEtrmjb+kazo/cHa2NTFutlFMgOib3jFh7dc8ZLTwhgoY9i1Y0P/PsecHn0ba0N4PWAIj5dfcXnNCMbka9k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714648415; c=relaxed/simple;
-	bh=8yOR589ezBdkB5uNsMLgNtJ7R7IO8dRbDOHZynClA7Y=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ugFgX/mcu+cq2C1ylwbQuMj5myE84mR9wju2s0dxixAeb/3RIiW4wb+hRaL+75Sjw42Cg2UN2d8yi5rHN6mEQxBWy5E1zHIopefDYdF834W71gs5smFhUB9mWskj7y2EYmQd4WLr9N03rtRAyzss/7CIYv9Cit7qGHqFKqbq4CA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ivitera.com; spf=pass smtp.mailfrom=ivitera.com; dkim=pass (1024-bit key) header.d=ivitera.com header.i=@ivitera.com header.b=ID/90LXS; dkim=pass (1024-bit key) header.d=ivitera.com header.i=@ivitera.com header.b=ID/90LXS; arc=none smtp.client-ip=88.101.85.59
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ivitera.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ivitera.com
-Received: from localhost (localhost [127.0.0.1])
-	by smtp.ivitera.com (Postfix) with ESMTP id EC48717106E;
-	Thu,  2 May 2024 13:13:23 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-	t=1714648403; bh=8yOR589ezBdkB5uNsMLgNtJ7R7IO8dRbDOHZynClA7Y=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ID/90LXSCF9F2FtiViofiG7+kvdbZABSBn84qU/COWxIRo284KvdRRAFDDWnqVlJP
-	 KByP3/pLZKcO+E0SxrES3rZJQRY8b/CIRZr4346Ng488QPVZuhmseR67mn3rOcZ+B5
-	 qfMvLDpfSlbLtpotWAoxog/Awb9ML1JFB7g/0vcA=
-Received: from smtp.ivitera.com ([127.0.0.1])
-	by localhost (localhost [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tGCN2RXQUkHd; Thu,  2 May 2024 13:13:23 +0200 (CEST)
-Received: from [192.168.105.22] (dustin.pilsfree.net [81.201.58.138])
-	(Authenticated sender: pavel)
-	by smtp.ivitera.com (Postfix) with ESMTPSA id 194EE17106D;
-	Thu,  2 May 2024 13:13:23 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-	t=1714648403; bh=8yOR589ezBdkB5uNsMLgNtJ7R7IO8dRbDOHZynClA7Y=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ID/90LXSCF9F2FtiViofiG7+kvdbZABSBn84qU/COWxIRo284KvdRRAFDDWnqVlJP
-	 KByP3/pLZKcO+E0SxrES3rZJQRY8b/CIRZr4346Ng488QPVZuhmseR67mn3rOcZ+B5
-	 qfMvLDpfSlbLtpotWAoxog/Awb9ML1JFB7g/0vcA=
-Message-ID: <fff3893d-dfa8-87ca-abe1-63bae8a32626@ivitera.com>
-Date: Thu, 2 May 2024 13:13:19 +0200
+	s=arc-20240116; t=1714650793; c=relaxed/simple;
+	bh=Tc8YXFHpSeOb6SHUs89BxzVOIscHLO2lg0XKSC9rb54=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ks1fPxsrTZm3ybVydfK7D3YEp1f2pP5PZDk2kYtownOKWEbGbmPu1RdXpi5t8ibpKyb5R9sxC7FIShnbZLu2Z10/uHuoYOf6qv1Rl4mJG7sQSwZ3RYjmVJ+7IvuOgBtz7qQZsNc+9TJH6eMqlApdSM9ldTJZhJKoLIYDkrMoCCM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=iZ4rC5m5; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=Fqgfj2kf; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 6FCDD1FB79;
+	Thu,  2 May 2024 11:53:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1714650789; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=JvgZZncsU1s2B+lONX62eyVnRpLq6hN+Lwk5t32ZFe0=;
+	b=iZ4rC5m5ztmnNdT5Qov+MmBYpgjtTtb1mbZIAYAujM1GE3IKenqNSW5JpypDmuFTmLYFfr
+	eOuB/P3WblTMlZUeg7iUA7Vj167bxfYPz5VbtkxXi87OrCVsC22SFCbLzIrFD25TmqT38G
+	hs9xZ1HciRmbckr/GjO9ir3UjnECj8M=
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.com header.s=susede1 header.b=Fqgfj2kf
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1714650787; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=JvgZZncsU1s2B+lONX62eyVnRpLq6hN+Lwk5t32ZFe0=;
+	b=Fqgfj2kfmT2bl21ezrb9N6NcsoOFr3fvT8wBhGmAiLQiLE4/wYphhhpOVOou74tGRXbNUS
+	bmob0/jl1NsX0pjB9NXkkFgl9oW2b72Hsw6v/9KdqlCNY9anYvy9TdbNacIWXPcqk8vqrM
+	Axra1mjpirDE1o1eMRHyXI3xAz+I+G4=
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 1651013957;
+	Thu,  2 May 2024 11:53:07 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([10.150.64.162])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id KPmgAKN+M2bBLQAAD6G6ig
+	(envelope-from <oneukum@suse.com>); Thu, 02 May 2024 11:53:07 +0000
+From: Oliver Neukum <oneukum@suse.com>
+To: linux-usb@vger.kernel.org,
+	gregKH@linuxfoundation.org,
+	stern@rowland.harvard.edu
+Cc: Oliver Neukum <oneukum@suse.com>
+Subject: [PATCHv3] usb: usb_parse_endpoint ignore reserved bits
+Date: Thu,  2 May 2024 13:51:40 +0200
+Message-ID: <20240502115259.31076-1-oneukum@suse.com>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: usb:gadget:f_uac2: RFC: allowing multiple altsetttings for
- channel/samplesize combinations
-To: Chris Wulff <Chris.Wulff@biamp.com>, Chris Wulff <crwulff@gmail.com>
-Cc: Takashi Iwai <tiwai@suse.de>,
- "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
- "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
- Ruslan Bilovol <ruslan.bilovol@gmail.com>, Felipe Balbi <balbi@kernel.org>,
- Jerome Brunet <jbrunet@baylibre.com>, Julian Scheel <julian@jusst.de>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- AKASH KUMAR <quic_akakum@quicinc.com>, Jack Pham <jackp@codeaurora.org>
-References: <35be4668-58d3-894a-72cf-de1afaacae45@ivitera.com>
- <72e9b581-4a91-2319-cb9f-0bcb370f34a1@ivitera.com>
- <871q6tbxvf.wl-tiwai@suse.de>
- <22301bb6-d893-2e65-6ebd-1787ca231387@ivitera.com>
- <CAB0kiBJm=Ya6a1mWRZ28p9=D_BesH55DFk4fd4wP0be4zKPR7w@mail.gmail.com>
- <CO1PR17MB5419D45A1BDC2AFA22F60DD9E1142@CO1PR17MB5419.namprd17.prod.outlook.com>
- <0ba8963c-9b2a-f7aa-3c0f-296bdddac5e5@ivitera.com>
- <CO1PR17MB54198ECD1842EAF3CC79985FE11A2@CO1PR17MB5419.namprd17.prod.outlook.com>
-Content-Language: en-US
-From: Pavel Hofman <pavel.hofman@ivitera.com>
-In-Reply-To: <CO1PR17MB54198ECD1842EAF3CC79985FE11A2@CO1PR17MB5419.namprd17.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Spam-Flag: NO
+X-Spam-Score: -3.01
+X-Rspamd-Action: no action
+X-Rspamd-Queue-Id: 6FCDD1FB79
+X-Spam-Level: 
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Spamd-Result: default: False [-3.01 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[suse.com:s=susede1];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	DKIM_SIGNED(0.00)[suse.com:s=susede1];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	ARC_NA(0.00)[];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DWL_DNSWL_BLOCKED(0.00)[suse.com:dkim];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCPT_COUNT_THREE(0.00)[4];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_TRACE(0.00)[suse.com:+];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:dkim,suse.com:email,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns]
 
+Reading bEndpointAddress the spec tells is
+that
 
-On 30. 04. 24 20:51, Chris Wulff wrote:
->> Would it make sense to name the p/c_fu_name properties specifically
->> p/c_fu_volume_name, to leave name room for additional feature units?
->> Yeah, I think that makes sense. I will change it to be p/c_fu_volume_name.
+b7 is direction, which must be ignored
+b6:4 are reserved which are to be set to zero
+b3:0 are the endpoint address
 
-Just a thought - maybe just p/c_fu_vol_name would be shorter without
-loosing meaning, maybe.
-> 
->> Please what does p/c_it_ch_name stand for?
-> 
-> This is the iChannelNames string from the Input Terminal descriptor
-> "the name of the first logical channel" from the UAC1 spec.
+In order to be backwards compatible with possible
+future versions of USB we have to be ready with
+devices using those bits. That means that we
+also have to ignore them like we do with the direction
+bit.
+In consequence the only illegal address you can
+encoding in four bits is endpoint zero, for which
+no descriptor must exist. Hence the check for exceeding
+the upper limit on endpoint addresses is removed.
 
-Thanks!
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+---
+v2: Improved commit log
+v3: Symbolic mask and improved error message
+ drivers/usb/core/config.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
+diff --git a/drivers/usb/core/config.c b/drivers/usb/core/config.c
+index 7f8d33f92ddb..3362af165ef5 100644
+--- a/drivers/usb/core/config.c
++++ b/drivers/usb/core/config.c
+@@ -279,11 +279,11 @@ static int usb_parse_endpoint(struct device *ddev, int cfgno,
+ 		goto skip_to_next_endpoint_or_interface_descriptor;
+ 	}
+ 
+-	i = d->bEndpointAddress & ~USB_ENDPOINT_DIR_MASK;
+-	if (i >= 16 || i == 0) {
++	i = d->bEndpointAddress & USB_ENDPOINT_NUMBER_MASK;
++	if (i == 0) {
+ 		dev_notice(ddev, "config %d interface %d altsetting %d has an "
+-		    "invalid endpoint with address 0x%X, skipping\n",
+-		    cfgno, inum, asnum, d->bEndpointAddress);
++		    "invalid descriptor for endpoint zero, skipping\n",
++		    cfgno, inum, asnum);
+ 		goto skip_to_next_endpoint_or_interface_descriptor;
+ 	}
+ 
+-- 
+2.44.0
 
->>
->> Maybe we could leave it to the userspace here too. In fact there are
->> already open-source clients which try to handle this master/slave
->> principle of the loopback and gadget basically in the same way
->> https://github.com/HEnquist/camilladsp/pull/341*issue-2267218348
->> https://github.com/HEnquist/camilladsp/issues/342
->>
-> 
-> I will take a look at the references you provided. I may have solved this problem
-> in a different way and maybe there is a better way to handle this.
-> 
-> The primary use case for the USB gadget interface of the products that I am
-> working on is to interface with UC clients (like Microsoft Teams or Google Meet).
-> 
-> My basic problem is that I'm using alsaloop to connect the UAC gadget to a
-> second ALSA interface. I ended up making modifications to alsaloop that
-> keeps it running correctly when the host starts/stops audio on the USB interface.
-> Without doing that I was having trouble with dropping the start of speaking
-> or high latency when the USB host decides to start streaming audio because of
-> the time required to get alsaloop running again after getting notified that a
-> different alt mode was selected.
-
-I see, this is a common problem. In fact that linked CamillaDSP
-discussion has partly the same motivation - to avoid having to restart
-the whole process, to keep the latency down and loose as few initial
-samples as possible.
-
-> I do still have the plug plugin in the pipeline
-> as well, so this does result in a double conversion with how I have the UAC
-> gadget driver currently doing sample size conversion.
-> 
-> If we allow userspace to handle all the rate/channel conversion (which does
-> seem like a cleaner approach and is what I initially was trying to do), I think that
-> would mean advertising multiple bit depths/channel counts in the hw_params.
-> That part is pretty easy.
-> 
-> Then the userspace program can pick which to use, but what should we do
-> with the sample data to/from USB if the userspace program picks a different
-> combination than the alt mode currently selected by the host?
-
-This is a very good point! I did not think about it. Using the plug
-plugin provides all the conversions necessary but hides the information
-about the original hw values.
-
-That would perhaps suggest to really add the alsa read-only controls
-informing about required (and only allowed) channels and format, just
-like aloop does
-https://github.com/torvalds/linux/blob/0106679839f7c69632b3b9833c3268c316c0a9fc/sound/drivers/aloop.c#L1588-L1611
-
-
-> 
-> Perhaps just discarding audio when the ALSA and USB formats differ would
-> be the right thing to do here.
-
-Can the USB format (incl. samplerate) change without going through
-altset 0 first, i.e. without explicit stop of the stream? A client
-subscribed to the Capture/Playback Rate ctl notifications will learn
-about this event first.
-
-Currently the u_audio.c code just sends the ctl notification in
-set_active(). There are cases in alsa drivers where change in incoming
-spdif rate stops the stream too, e.g.
-https://github.com/torvalds/linux/blob/0106679839f7c69632b3b9833c3268c316c0a9fc/sound/i2c/other/ak4114.c#L589-L597
-. I vaguely remember this was discussed when implementing the current
-u_audio solution and no support for stopping the stream was given. Maybe
-it could be optionally enabled with some config parameter. It may make
-it easier for the clients, otherwise they get stuck and wait for timeout.
-
-
-
-> I might be able to solve my latency/data chopping
-> issues instead by reconfiguring the ALSA pipeline in response to the change
-> of the ssize ALSA control (or uevent). I think a fair bit of my time delay was
-> re-launching alsaloop. I will experiment a bit with this and see what I can get.
-
-IMO the final solution to the latency/data chopping issue should avoid
-the restart of the loopback software (be it simple alsaloop or complex
-CamillaDSP). Nevertheless IMO the device will need to be re-opened
-anyway because hw params were changed. The gadget should facilitate this
-goal, ideally.
-
-Maybe a reasonable way would really be to offer the alsa ctls with
-required params and let user decide if the conversions will be provided
-by the plug plugin or by his client internally. E.g. a client natively
-capable of 48k-multiples could accept these rates directly and let the
-permanently-inserted plug do automatic rate conversion for the other
-rates, no change in client configuration needed -> no client restart.
-
-The question is (if this path was chosen) whether all of the controls
-should notify (like they do in aloop), or only the rate one (which
-always gets changed at any format change as the gadget must go through
-set_active(false), IMO. I do not know what overhead the extra
-notifications bring but every reduction counts :-)
-
->>
->> Are capture and playback alt modes dependent? I thought they were
->> separate configurations but I may be wrong.
->>
->> If they are separate, perhaps p_alt.X and c_alt.X dirs would make sense
->> instead, with using non-prefixed properties within them (ssize, ch_mask,
->> etc.). I.e. p/c_xxx on the main level (setting the defaults and default
->> alt1 for each direction) and non-prefixed properties in the actual
->> p/c_alt.X subdirs.
-> 
-> They are indeed separate. I like this idea. I will separate these into c_alt.x and p_alt.x
-> which can be created separately.
-
-Again - hats off to your fantastic effort.
-
-Thanks a lot,
-
-Pavel.
 
