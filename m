@@ -1,102 +1,99 @@
-Return-Path: <linux-usb+bounces-9977-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-9978-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D00B98B9BEF
-	for <lists+linux-usb@lfdr.de>; Thu,  2 May 2024 15:58:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id CBD7B8B9BF2
+	for <lists+linux-usb@lfdr.de>; Thu,  2 May 2024 16:00:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 85147283FBC
-	for <lists+linux-usb@lfdr.de>; Thu,  2 May 2024 13:58:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8AC7B2845FB
+	for <lists+linux-usb@lfdr.de>; Thu,  2 May 2024 14:00:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AA0F13C67E;
-	Thu,  2 May 2024 13:58:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="LGhx2anC"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C235213C67E;
+	Thu,  2 May 2024 14:00:12 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1093A7441E
-	for <linux-usb@vger.kernel.org>; Thu,  2 May 2024 13:57:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id DBA7A152788
+	for <linux-usb@vger.kernel.org>; Thu,  2 May 2024 14:00:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714658280; cv=none; b=JoDjCmkDAi/wFnuzw2MO1COnKzkmpipR7n1dfmD1LY31UVMbUE1vG7TnKezCtP3sTvwAk+X3tJk0MPGXAE3GXRKypG82j8F23dAvwZMo7A2Rs7Xzt9dUBExN+s7pFVtXEkG9yhd7Sve3JpJkj1lLch+uXAmZ80KLRVx3Ut8UZVY=
+	t=1714658412; cv=none; b=GgJy9AfCal0+03ygN8fNWT/ACR1/ZVQOl5Kv/LlU0sN2GJSPO5Yv7+xD61Faaap7Zk0pNvqu6nWB6BsK2oKv0DNWBcUj31L5lKtiv2M/UQOJsyKEVyN7nkmRJqD7RShuSNuz17bBXZ9P9UTyAl/a8cMV7MI4Kap8ElKo53NEn7I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714658280; c=relaxed/simple;
-	bh=lmWlMfFpkYTshaKiupURVclJUhNH26l5qVVo5ObHqcI=;
+	s=arc-20240116; t=1714658412; c=relaxed/simple;
+	bh=wSk+XEUZsqf9PDZ1vWv5ysBQLJ9fWgK7G29Bey8Oz00=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CMRqYC5mXKK8iRTi0Ur/Y2PTMZ0S7x4wWgtfLaRojJau1TcrryLBEyQYL60QdEs0H+owd8PDZRUvOYu7CwfUzoJsz6yJoqhaXHmLc07X8XEOPEy6f5XjEifA/kJWBXiQxRvFbIrki9vN8bWhQghCo3ASk6p58DOvvi4aJnCoE5w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=LGhx2anC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31D14C32789;
-	Thu,  2 May 2024 13:57:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1714658279;
-	bh=lmWlMfFpkYTshaKiupURVclJUhNH26l5qVVo5ObHqcI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LGhx2anC1vTA3DRDmv8/C2VkrYeYG+ewu8aCivdRVK0h/DzqnhcA41Yj3PSEbFe5/
-	 nQGQ6DtiYNwiBqS1b1458kww4KK4BFlkv4XfwynDij/s2nrpWhBPkf1V8nfrZ0LOjd
-	 98O2zUWutSh/8jbgiUFg1m95WL2bcICJqCYohd1Q=
-Date: Thu, 2 May 2024 15:57:56 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: =?iso-8859-1?Q?M=E5ns_Rullg=E5rd?= <mans@mansr.com>
-Cc: Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: use tty_port_register_device_serdev
-Message-ID: <2024050228-emission-ointment-88de@gregkh>
-References: <20240502100728.7914-1-mans@mansr.com>
- <ZjNoWq0r7CJJptRk@hovoldconsulting.com>
- <yw1xmsp8big7.fsf@mansr.com>
- <2024050204-recreate-exerciser-bd62@gregkh>
- <yw1xikzwbb3a.fsf@mansr.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=NIperxD5wUIz8dFx4ZTjDqdy+Y3M1Eljck4iyz6JvUXMbONsOmyZ1NwVh8lmZqQuzpJ2Aw6l0UetvhTMhgtrpDrcYQ8HK0jCac0VLTvphxBAzAQahbyrMcgtguv0jkhE8hTMCZVvYigsmafI/lD43qB8Q2mw1UPG4LH9KvQpQcw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
+Received: (qmail 731655 invoked by uid 1000); 2 May 2024 10:00:03 -0400
+Date: Thu, 2 May 2024 10:00:03 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Oliver Neukum <oneukum@suse.com>
+Cc: linux-usb@vger.kernel.org, gregKH@linuxfoundation.org
+Subject: Re: [PATCHv3] usb: usb_parse_endpoint ignore reserved bits
+Message-ID: <ad307bb5-d48a-4319-9cbf-205faf1c460b@rowland.harvard.edu>
+References: <20240502115259.31076-1-oneukum@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <yw1xikzwbb3a.fsf@mansr.com>
+In-Reply-To: <20240502115259.31076-1-oneukum@suse.com>
 
-On Thu, May 02, 2024 at 02:24:41PM +0100, Måns Rullgård wrote:
-> Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
+On Thu, May 02, 2024 at 01:51:40PM +0200, Oliver Neukum wrote:
+> Reading bEndpointAddress the spec tells is
+> that
 > 
-> > On Thu, May 02, 2024 at 11:45:44AM +0100, Måns Rullgård wrote:
-> >> Johan Hovold <johan@kernel.org> writes:
-> >> 
-> >> > On Thu, May 02, 2024 at 11:07:28AM +0100, Mans Rullgard wrote:
-> >> >> Use tty_port_register_device_serdev() so that usb-serial devices
-> >> >> can be used as serdev controllers.
-> >> >
-> >> > I'm afraid it's not that easy. The reason serdev is not enabled for
-> >> > usb-serial is that there's currently no support for handling hotplug in
-> >> > serdev. The device can go away from under you at any time and then you'd
-> >> > crash the kernel.
-> >> 
-> >> Oh, that's unfortunate.  Regular serial ports can go away too, though,
-> >> and that seems to be handled fine.  What am I missing?
-> >
-> > How is it handled?  Normal serial ports can go away but in practice,
-> > it's a rare occurance, and usually people use serdev for devices where
-> > the ports can not be removed (i.e. internal connections).
+> b7 is direction, which must be ignored
+> b6:4 are reserved which are to be set to zero
+> b3:0 are the endpoint address
 > 
-> If I unbind a regular serial port from its driver using sysfs, a serdev
-> device defined in a device tree gets removed as expected.  Binding the
-> serial port makes everything come back again.  I fail to see any problem
-> here.  If there is one, you'll have to be less evasive in explaining
-> what it is.
+> In order to be backwards compatible with possible
+> future versions of USB we have to be ready with
+> devices using those bits. That means that we
+> also have to ignore them like we do with the direction
+> bit.
+> In consequence the only illegal address you can
+> encoding in four bits is endpoint zero, for which
+> no descriptor must exist. Hence the check for exceeding
+> the upper limit on endpoint addresses is removed.
+> 
+> Signed-off-by: Oliver Neukum <oneukum@suse.com>
+> ---
 
-Try yanking a usb-serial device out with this patch applied and see what
-happens.  I'm pretty sure serdev will not handle that well, just like if
-you yank out a pci serial device while it is being used.  Doing
-bind/unbind is not a "surprise" removal, but a nice orderly one :)
+Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
 
-If this does now work, nice, but I haven't seen the changes to serdev to
-make this happen, I wonder what changed...
-
-thanks,
-
-greg k-h
+> v2: Improved commit log
+> v3: Symbolic mask and improved error message
+>  drivers/usb/core/config.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/core/config.c b/drivers/usb/core/config.c
+> index 7f8d33f92ddb..3362af165ef5 100644
+> --- a/drivers/usb/core/config.c
+> +++ b/drivers/usb/core/config.c
+> @@ -279,11 +279,11 @@ static int usb_parse_endpoint(struct device *ddev, int cfgno,
+>  		goto skip_to_next_endpoint_or_interface_descriptor;
+>  	}
+>  
+> -	i = d->bEndpointAddress & ~USB_ENDPOINT_DIR_MASK;
+> -	if (i >= 16 || i == 0) {
+> +	i = d->bEndpointAddress & USB_ENDPOINT_NUMBER_MASK;
+> +	if (i == 0) {
+>  		dev_notice(ddev, "config %d interface %d altsetting %d has an "
+> -		    "invalid endpoint with address 0x%X, skipping\n",
+> -		    cfgno, inum, asnum, d->bEndpointAddress);
+> +		    "invalid descriptor for endpoint zero, skipping\n",
+> +		    cfgno, inum, asnum);
+>  		goto skip_to_next_endpoint_or_interface_descriptor;
+>  	}
+>  
+> -- 
+> 2.44.0
+> 
 
