@@ -1,75 +1,75 @@
-Return-Path: <linux-usb+bounces-10005-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10006-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48A938BAA28
-	for <lists+linux-usb@lfdr.de>; Fri,  3 May 2024 11:50:05 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D1258BAA59
+	for <lists+linux-usb@lfdr.de>; Fri,  3 May 2024 11:55:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C027D1F21EA0
-	for <lists+linux-usb@lfdr.de>; Fri,  3 May 2024 09:50:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 901B71C21F9B
+	for <lists+linux-usb@lfdr.de>; Fri,  3 May 2024 09:55:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFF0514F9D8;
-	Fri,  3 May 2024 09:49:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 131051534EA;
+	Fri,  3 May 2024 09:54:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="J8qKnF5M"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="L0eT+HGN"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C323514A601
-	for <linux-usb@vger.kernel.org>; Fri,  3 May 2024 09:49:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D518152DF0
+	for <linux-usb@vger.kernel.org>; Fri,  3 May 2024 09:54:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714729798; cv=none; b=lfT159lPMWLwx4l4eDmIt5lQ9bTSsBp2j7hzvW2MUPIlf7J5iaadhfqT9o6FcPZ/DHQg5rZkFyw/JQr9J8HGZOs2UCmo+XYpwOxboddu9ulf9rCzRyZsaj5PJuTu+AWGM66RLV4pRLzHJ6dmsWq+E6wfDVe81x0GdyzWob/TVVY=
+	t=1714730055; cv=none; b=qw1z0InQY7VVrYtlXU5ARXjrPHEdE5nqMMVpxUjFum/QGtrkCCPl3bwxJgrJZnaoO2Ty0XCNDT5O4wuwceaqOlYljtEJqvBI6ZJmVXydOUt2+LCtp1W+/JnVhsc3xEEl6DJEOos8+Sq4WB0/6HLCxL25iqr80FTcUu74slZ05hQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714729798; c=relaxed/simple;
-	bh=3LrDmRQsKNnunMPXbC7EWhw7STX0WisSOg83GBg9AIQ=;
+	s=arc-20240116; t=1714730055; c=relaxed/simple;
+	bh=iG60ECYOxrD3aXOMjctmBHv12V8OupZ4cn8B+jtbzBA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=r2xHX5XKpHMJxfqvkYyg/Vx/0e+DDfn18u838cti99YUOdjopWnq+OcAYduv8U10apgVlbnr1pp3gug3EVFz5odqoMvDsVmbBJVTWjqJxO8c5RG7vngMD/LE0Kx1JlHLvvT6oQ6gX18IkhMaG8vBZPErr090vvgs6ILDb4rGhHI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=J8qKnF5M; arc=none smtp.client-ip=209.85.128.44
+	 In-Reply-To:Content-Type; b=Y7XsaQCeH4LywGaO3AyjtrzJO4tCfsACUxdMAVKvpCamh6e7VkscKTC4QL3vsRp02rzQWqgZFwl6XODJkE6WXhwXeanWLbiNwYzv7b+ZBamdja3zzzplYbjSRhEivxAsykkFaE1lDlBbjDFb6tT3/M5f65Q8IM9E76f00ZNy0eU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=L0eT+HGN; arc=none smtp.client-ip=209.85.221.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-41b9dff6be8so49116635e9.3
-        for <linux-usb@vger.kernel.org>; Fri, 03 May 2024 02:49:56 -0700 (PDT)
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-34da35cd01cso3017475f8f.2
+        for <linux-usb@vger.kernel.org>; Fri, 03 May 2024 02:54:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1714729795; x=1715334595; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1714730052; x=1715334852; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :from:references:cc:to:subject:user-agent:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=LKTWeNLujJDpv5WJYvNAC9ytQfUmNr0+EX2BojvW9Mw=;
-        b=J8qKnF5M449SMejK6JV1jRsX7nSfjX9JFKFF/AmvVj7m8zavkTAW4BxYHJ2GMTMcAX
-         oAgUncTcNeW6CCrldMWI3gJFF0LHiRaGT6izIPwDqDjhMrN/lJMUSaFRmbiOHfKmPvWU
-         e4ELEyqU9jj+eAfiMoUu+4K8OcXzUEf11lX0+Gy/CGugdieJu0gddfFLRJgOTOVzDQ0V
-         8fdenWebyjuSkptDEggV82O7Qy/o+SlOXtB4ezM/Qz8zUw6OhD1WnVA0m0JwmqqYUJ4U
-         K9z8mEhmsm/aGqTDzj43noOktPK50bjsZANfOpe+bRkI9bCPIYVEG1oWJRcNPG1j5jEJ
-         Qm8w==
+        bh=zfxIJiAlElThfMQHTOaj038sxuSgJSo+cnym6yLTtrY=;
+        b=L0eT+HGNffr4PKdnPLgDWiRgb0CYAcWDdcKqK6vH0dqDyJ98BA/fIM4q08NUSmXzBD
+         CWk16nLu82o1dLdKat0qdav4Mlwir8k+0rFCUclUBW6HuY914qIgjPXyO2TNDvrzUcAU
+         J14SA71P+JLDWnhtubn15EVuHw4y8CPogDVh00NKs6EGyf66utsHVhp2oQm5UGb1QnpV
+         0WCopydNWpqMtja3XZRUsHaqxp5SaX8063xtNTXJ7t9beFVxn+7raeTrDi0tMBP4w/No
+         NlRzIpXcgNlFrSlHeQLf59Gs9jDomzq4UKeGY7cFIr0pdZJq9+ilOUBD9r21VA1omiWi
+         sjRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714729795; x=1715334595;
+        d=1e100.net; s=20230601; t=1714730052; x=1715334852;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :from:references:cc:to:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=LKTWeNLujJDpv5WJYvNAC9ytQfUmNr0+EX2BojvW9Mw=;
-        b=r98zenikBZyN+BUOC71uw57+5hfuA5IR1vngkUWihkzqAE9DkWQz59VYSV5WEu9l8e
-         IJGG9CuiEfpar5ZnWnfZCd/fXk0zLWktYjEmHqgCGW/fJB99T8nrdTC/VBUkw4Yj65gR
-         bW94GWFna66v6Cr0g5iXrK7wCCdj1DHA/P9mdnt6rnKt1FdOeDZXhawM8Kbim/Pjz1ao
-         ZgruHapjlzS5Ol5ReVmoxRz43lgU+iYLnh5f5yawZFesK6Whsv89nM4BITiRtJwcgw7R
-         L2HqdVXtqgZrd7Cz4j+flpxR3KGd8Hh53OBUuj/NTI+jcwlMbaj630zc2kwOLTQJBarZ
-         S5aw==
-X-Forwarded-Encrypted: i=1; AJvYcCVjYTavDuWSLFnjGzizy6oCvpfcfFBVST4iamEO/YaL2uJ6143Mdgr/wUDtjWLiKxuV5nkh5EX6m4IuuAJTVYtDaFyMI4Xi/ZT9
-X-Gm-Message-State: AOJu0YxRjNyXnodn1/qav0xiw4bsQ5pN+kJ3k20w2ZtDqHfSB4OX+rha
-	dVZIRSlTVvYqnbOHEDG1/l1MQBwwIFySOX6Ov5Nx3/TfxyVaCEfZlRTdJhwpoNQ=
-X-Google-Smtp-Source: AGHT+IEfI40a6iSmYG8mIB0oqwq0TBDFtTKfIa/5JpmnC4jZ+ocIwVS0s47muTzX8eqzlquyaYfBTA==
-X-Received: by 2002:a05:600c:3554:b0:41b:6dbb:52f9 with SMTP id i20-20020a05600c355400b0041b6dbb52f9mr1682526wmq.39.1714729795116;
-        Fri, 03 May 2024 02:49:55 -0700 (PDT)
+        bh=zfxIJiAlElThfMQHTOaj038sxuSgJSo+cnym6yLTtrY=;
+        b=GSbxtf4Ot+/lAWgXSKWGjA1BqcC8NDHh/wK5izCYQ+RkU6i0uh2vM8UHp9H3TMJQg1
+         HLBEz9AnWDnjDL/8xuoNLCgontzMW9grZHFdZTPft4K3ns/uLYJcpzEjVAzLhi+VPi7V
+         UQWIKsPo/0Bgk/gMQ6aAo6l+CoVSX05OQfY8IknrdokI1GnshD+lUbWX8hWNs5h1IPB0
+         P/X3EEm7ZUt/kQBI9Qm/7ymROmlaM0HP0C45OkwLQThgiNYD8LsGFibkTnZsaoUb66na
+         bJ8oovx5wms9Is8itEU8lLN5pnTj68tsimWbDaS63DUYgtXX7lN0TlWzJCsK88TNwdck
+         ydrg==
+X-Forwarded-Encrypted: i=1; AJvYcCWyJZeLntmw1/OyXqvOIZ8JXw2MM0ovNZk8f9OlkMiM9S7xTP9uM2lYi1vfnkvPML2Al4pWS0HTexrvY4/8aeWBAAPFueZaAmpx
+X-Gm-Message-State: AOJu0YzQJw+CfiELLDYpvvdbbnZERbmys1ssRjbwOhor+nv2B90yGWzL
+	SI7RmtyLFvT9L9Woco0klkXpXKKVAYuZR0EpzBF7pItnG9U8nCHsETZPX7jMiX0=
+X-Google-Smtp-Source: AGHT+IH8vCt7vS37/uSWaJNdRHj38YKceu1bjdWmDeQT8pxumVKXXmVnw5BxCBV3faqbLBl96L9lOQ==
+X-Received: by 2002:adf:9b98:0:b0:34d:74cb:b048 with SMTP id d24-20020adf9b98000000b0034d74cbb048mr2305099wrc.34.1714730052418;
+        Fri, 03 May 2024 02:54:12 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.223.16])
-        by smtp.gmail.com with ESMTPSA id g19-20020a05600c311300b0041496734318sm8775845wmo.24.2024.05.03.02.49.53
+        by smtp.gmail.com with ESMTPSA id n13-20020a5d420d000000b00346f9071405sm3356457wrq.21.2024.05.03.02.54.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 May 2024 02:49:54 -0700 (PDT)
-Message-ID: <ee4daf22-8979-45f7-8e20-3cafd6c3e8f3@linaro.org>
-Date: Fri, 3 May 2024 11:49:53 +0200
+        Fri, 03 May 2024 02:54:11 -0700 (PDT)
+Message-ID: <9c57a066-d21e-4e54-b729-d61051191168@linaro.org>
+Date: Fri, 3 May 2024 11:54:10 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -77,13 +77,14 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 00/52] USB: store owner from modules with
+Subject: Re: [PATCH 01/52] USB: serial: store owner from modules with
  usb_serial_register_drivers()
 To: Johan Hovold <johan@kernel.org>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
  linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20240328-module-owner-usb-serial-v1-0-bc46c9ffbf56@linaro.org>
- <ZhzrPA1wP7bER6Pi@hovoldconsulting.com>
+ <20240328-module-owner-usb-serial-v1-1-bc46c9ffbf56@linaro.org>
+ <ZhzruFpJPfORWqYv@hovoldconsulting.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Content-Language: en-US
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
@@ -130,32 +131,47 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <ZhzrPA1wP7bER6Pi@hovoldconsulting.com>
+In-Reply-To: <ZhzruFpJPfORWqYv@hovoldconsulting.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 15/04/2024 10:54, Johan Hovold wrote:
-> On Thu, Mar 28, 2024 at 11:05:38PM +0100, Krzysztof Kozlowski wrote:
->> Merging
->> =======
->> All further patches depend on the first patch.
+On 15/04/2024 10:56, Johan Hovold wrote:
+> On Thu, Mar 28, 2024 at 11:05:39PM +0100, Krzysztof Kozlowski wrote:
+>> Modules registering driver with usb_serial_register_drivers() might
+>> forget to set .owner field.  The field is used by some of other kernel
+>> parts for reference counting (try_module_get()), so it is expected that
+>> drivers will set it.
 >>
->> Description
->> ===========
->> This is going to be a bit of a patch-bomb, but with trivial patches, so
->> I think it is still acceptable. If it is too much, apologies and I will
->> solve it.
+>> Solve the problem by moving this task away from the drivers to the core
+>> amba bus code, just like we did for platform_driver in
 > 
-> No, sending 51 trivial one-line cleanup patches like this is not
-> acceptable.
+> "amba"
 > 
-> This is just one logical change so squash them all into one patch for
-> the entire subsystem (i.e. this series should contain two patches).
+>> commit 9447057eaff8 ("platform_device: use a macro instead of
+>> platform_driver_register").
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> ---
+>>  drivers/usb/serial/usb-serial.c | 12 +++++++-----
+>>  include/linux/usb/serial.h      |  7 +++++--
+>>  2 files changed, 12 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/drivers/usb/serial/usb-serial.c b/drivers/usb/serial/usb-serial.c
+>> index f1e91eb7f8a4..a659f2096a1a 100644
+>> --- a/drivers/usb/serial/usb-serial.c
+>> +++ b/drivers/usb/serial/usb-serial.c
+>> @@ -1459,17 +1459,18 @@ static void usb_serial_deregister(struct usb_serial_driver *device)
+>>  }
+>>  
+>>  /**
+>> - * usb_serial_register_drivers - register drivers for a usb-serial module
+>> + * __usb_serial_register_drivers - register drivers for a usb-serial module
+>>   * @serial_drivers: NULL-terminated array of pointers to drivers to be registered
+>> + * @owner: owning module/driver
 > 
+> Just "module"
 
-Sure. This is not exactly one logical change, but two, because the first
-patch might fix some drivers which forgot to set the owner (even if I
-did not identify them).
+Ack for both.
 
 Best regards,
 Krzysztof
