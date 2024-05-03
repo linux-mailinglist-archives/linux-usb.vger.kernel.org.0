@@ -1,121 +1,98 @@
-Return-Path: <linux-usb+bounces-10013-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10014-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E4B68BB006
-	for <lists+linux-usb@lfdr.de>; Fri,  3 May 2024 17:36:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 509BF8BB3AC
+	for <lists+linux-usb@lfdr.de>; Fri,  3 May 2024 21:05:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B9F871C2249F
-	for <lists+linux-usb@lfdr.de>; Fri,  3 May 2024 15:36:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7B9931C2373D
+	for <lists+linux-usb@lfdr.de>; Fri,  3 May 2024 19:05:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 052B3155339;
-	Fri,  3 May 2024 15:36:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AE9C157A74;
+	Fri,  3 May 2024 19:05:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="vtP14qu2"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="dAn9lVUd"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mout.web.de (mout.web.de [212.227.17.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FEC2153816;
-	Fri,  3 May 2024 15:36:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A88A712EBF1
+	for <linux-usb@vger.kernel.org>; Fri,  3 May 2024 19:05:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714750569; cv=none; b=AgkP1qx6RueuyJZCl6SrSHT93k1H5emX2w6Cal5IBeoZU1QYNSLXoJHvc/xZF351/8IKgQyNIBW+/WN+xGWNqnQaKTOnh7jtQ4GxUbIxT68LNjswOGtK8CMbE2HgbpFvePceHGeLSTWXC04TuSBVZwZkRlzRP6MMfJADoKuigv4=
+	t=1714763136; cv=none; b=kIR7orrH5UTmRjHPEHAPGDhyHSHDMjLPlUqSMntfk76Rm/ZCvfuQkEV/mongwEskrcETiPdbLm3on9bo10dXsoDG636irEpiSWMNOXxSA/ALJih0AZTPXaS5empUX/omTPPR6/ETn9eGdusyBMdYNBIlaiiQEhjbt/F+7Cej4sk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714750569; c=relaxed/simple;
-	bh=NC+ejQiD1SuZYzI3BW/e8K3TbPUaN9KZRtfAdV7jXM4=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
-	 In-Reply-To:Content-Type; b=sYdXhdwjFOYR9Hxhbn2oDba93yAd9sccH0Eu2FGue4E+kA3Cr73nJrO9kx/1wQqIlhDlUJ+yWYLNxX9lRxxSB++j/npQrUHfWn0SUFIw9ZhfqNa3XTp6Wq9JtW1ABa7Q7g6h50HKPP3ukq3wQDZczmEn1R5HmeC8bztY6es18Ss=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=vtP14qu2; arc=none smtp.client-ip=212.227.17.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1714750542; x=1715355342; i=markus.elfring@web.de;
-	bh=IW4IvyC+ChUZFc2mEHb0vBR9MWXWnvhfDjc74j+oTc0=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
-	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 cc:content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=vtP14qu2Z2nObc+Vmx09k8RQnk0Y745Z6dNGLWr6eQ9M/iM02vvaAiB1B0Cnmh4O
-	 csNI3mxKLngtduSN/PxBclFbmyq1wfryDz1oNmJhoRG+HviMEbfljmcRx/1W3Six8
-	 Q+pq4OO/jgZ8CeyREt2Gyop8xJaUohClUFsZ12vdk/kM0E2ZuHD4dgYfUynM3qAl0
-	 Lcw6ldsc85ugJdgkFuiqM2IJuKjCd8iW6cOwQsivZzTDR+tWgXynRwnqfxg0cPc/3
-	 T+XEKYDnYR/5p03SRsXHqdYNPmD5SxWBUbtU08mVaMab1Be19Ti2CFaztr9f8eMVr
-	 YEVd73+PEpytdo6oaA==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.21] ([94.31.83.95]) by smtp.web.de (mrweb105
- [213.165.67.124]) with ESMTPSA (Nemesis) id 1MALiL-1rwdgz0XuN-00COD1; Fri, 03
- May 2024 17:35:42 +0200
-Message-ID: <96d63b0b-3258-4bf6-b75a-06eb4f4253bb@web.de>
-Date: Fri, 3 May 2024 17:35:39 +0200
+	s=arc-20240116; t=1714763136; c=relaxed/simple;
+	bh=TMPkLz1Rk5l8hUIGUHp3SUhVgs+0VIwtmvyAzaSQHtw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=b/7NOKsimakb/rVfHzRWZn8lb6soyvKJfNt2HHaU6WvQVQW+7MMIAnL+48XoGWsEBLCl3JUsLDhc3kTdJKZqoT4EJq0UgdMmNRn8gOTkxYfWw1/gukBOX3sf+uHtURoLijySy7288l0xzMKmGXiFUk1doxJCYO1ZDrl7OVRhCOw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=dAn9lVUd; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-41b48daaaf4so13455e9.0
+        for <linux-usb@vger.kernel.org>; Fri, 03 May 2024 12:05:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1714763133; x=1715367933; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=TMPkLz1Rk5l8hUIGUHp3SUhVgs+0VIwtmvyAzaSQHtw=;
+        b=dAn9lVUd3da+FdxDry6DJiNayIO1O0j43Q4Tgly0Xb6jyXi6iUdbn8gXVw8FpLCSSy
+         E4XtAPtbzREcB9ylS9itaJRmWvzd1ZOalJDrVNBqrwBDCUCZv2ocjvZGo3ahD9vvCnBa
+         kh5SW1FHkLUSclDnunN3dywDLiiCY2+S1YPaeUefqv7roM2IhuhBrfqyZMtYDt2Y7CLo
+         oKBlUH/Q8IAIbLIpwh5Gw1Pvyrrt2IOVBzaPyLjHU123FhyoqmcQ4ikfZnKDNQuw7p/f
+         /bf94328qS/slGUpGUNFJardfW5+Z/ITb8gRLYuVLb2Z2VdrL/gIZ4/zHCJxq84gQ4B1
+         wWNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714763133; x=1715367933;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TMPkLz1Rk5l8hUIGUHp3SUhVgs+0VIwtmvyAzaSQHtw=;
+        b=KBwg7nYOZwEUeUeTxbV9QBqAyw1NnuOoYU9+ilJqaiOZYAkZwDxkACEnZv6dX1zls0
+         8Bl6Q1dfVE6I6wWUghczLJa0+fffKW4CLxDil74WYqZac7A7n+kz7zQR66ELp6oGY8iN
+         MocllS0W/j1p9a+WQxvUHOE6HO+Q297sVB7eA35YI/QtBIEDyi/4vidFJ/35c5nhxDm3
+         Q0koevhU9xyHqyZqn1cWW6uNLpGoTpwQYLTPx7m70RCXNTWYetHv5Hjykq3DGH0iZSZ2
+         fpnqxprlRBlvDAThDQoGA0ru+4qbGiJb63IHU3g7Pe2M6tKFxPvNXdP2dbPQtezQHNjo
+         VPeg==
+X-Forwarded-Encrypted: i=1; AJvYcCVMzi6vdM0ccF2Fn3FKltR1IRFjgWtHzrkrCgMHWhestniQ9+QGO8dvLaAjobWLDZYeFmI9j3mUjRsMReg0xGGIWGjfQdAha0nI
+X-Gm-Message-State: AOJu0YzV7TA8ccIsKbf4tGwfmbRYWWuapAq6gkyIp4jRetep+F/zs2cz
+	zlxtUolQU/pXbiX1lgIwD+8wOG6ZJyshRmHslxf93KBQazbrdjuMU1ZK4od4Ep2logCCSXV9bdL
+	R2rjK+VMG9RQTCaixedfPOQdMT+UJXUD9m4j+
+X-Google-Smtp-Source: AGHT+IHZ8sS4fieprHPXKuhNEWGMwXDOzkCGeSsHEiwmvbVydjjUM/n4xrCSSVc3A4FP0QOHDXDRNSYqyHY5Wg9pFM4=
+X-Received: by 2002:a05:600c:511e:b0:41b:4c6a:de7a with SMTP id
+ 5b1f17b1804b1-41e5b0eb9aemr195745e9.3.1714763133013; Fri, 03 May 2024
+ 12:05:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
- linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org,
- Benson Leung <bleung@google.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Jameson Thies <jthies@google.com>
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Bjorn Andersson <andersson@kernel.org>,
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
- Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Hans de Goede <hdegoede@redhat.com>,
- Neil Armstrong <neil.armstrong@linaro.org>,
- Prashant Malani <pmalani@chromium.org>,
- Rajaram Regupathy <rajaram.regupathy@intel.com>,
- Saranya Gopal <saranya.gopal@intel.com>,
- =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-References: <20240503003920.1482447-2-jthies@google.com>
-Subject: Re: [PATCH v3 1/4] usb: typec: ucsi: Fix null pointer dereference in
- trace
-Content-Language: en-GB
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <20240503003920.1482447-2-jthies@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:Yj/YW07USmuBV9MjkhzGBia+bcNaIJntKJXu9vumv+qYPlcJymr
- ZoqrvdMMkgwaHsRgTLO2/eTcDaZ8YbCbnHlTel4ERyla/sZ64tgqjOkp8yoUmvAuJJLnKk5
- OxZOFQhw3BPnPeNxZyz7yQciu0VkWvkorpyre/ySvGHlz1jAEFqC1frtvT5EG8X387V+4Px
- ZEwznUUpjHUfDWRbjRqFw==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:iGCIxF3wQgg=;hsLjBZes9cVDUUiMSLTqZpV6b9d
- gg/rh1d/+tk1whg20rdA6HbtmbrGb3/j0hNyygr9DxJL5fu8p5bt5LVcJzKvNDtVy+FVV8j+9
- yIbxTTLw3BTS3lOIWpIZOJI+ZfruxLKsjctvs6Vld3dXi0WHAe/yWr8P10KVAq5vHTJlL4TEj
- d7WR+zzz4SwEYVHo23FrSDRqyBnpJyV1EoXWexCKUn2dC9ShiDdZzuvZesJMY8rRu26R0wQVV
- xuWD/Ui8NePxHyFdA0sBhm13f1e7P/51obmyip06R9qhDxxU+H4tOcQnejgiuO+DdEayh177i
- 3+/MC73evmrqMTvaBuHPWxHs2foyeFbsBXgbMfeTMulFvois1V32A91nR4Fir/TwEi9x2Wge8
- ApnriYcK6sTkJtI2882nIzV1v41CuEnf1Xmogadg4CJ1Wj+ZcJeVAfg2PsyKGLfxK5TgJtQkL
- /d7YRIOMcFdooKFXGxA2KnFgmQKRLK04nTNp9/V8mp94ZbNsUsjGj+XC9xhoMkHN8eAHYRGD+
- wXF5WQaZuz2LSUz8GK4vu6bBURsV026oHa2qIGMjCRqTnpS6x8a2Sw+Bck9M/BsmDa8kFrBfZ
- sLrOebq5BhJqnQ+HolMfQzz3cP/X2QaadhzRr1bmNgMv8qUwr8XMhZ6UH2o+tPVNc3eEw1JzD
- QcOWGT2cI25IP1wcg39FeFuW8Dzad95L4zdCoZbujxWSEr7/ZgMnxnpPgTDXdVDB1cdJFGmGv
- 8WQ7PZYXKnwbZkpZW2YHpUAPB5Lw0UvmKHmQ7WS2IRtrWUyOOuaVxnVvKKuwFqzDKDXhZMnFU
- m2v6CsbhidYaGCP5UDW5Z23f3zSt6TI8/TdebQUQARQJpQMNIBYIckjz5lpKR7r1Lj
+References: <20240503003920.1482447-2-jthies@google.com> <96d63b0b-3258-4bf6-b75a-06eb4f4253bb@web.de>
+In-Reply-To: <96d63b0b-3258-4bf6-b75a-06eb4f4253bb@web.de>
+From: Jameson Thies <jthies@google.com>
+Date: Fri, 3 May 2024 12:05:19 -0700
+Message-ID: <CAMFSARdhyWAFWr6qjsabPN6k=sK9LLxOaoSNkVLyTKNE=drSpg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/4] usb: typec: ucsi: Fix null pointer dereference in trace
+To: Markus Elfring <Markus.Elfring@web.de>
+Cc: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>, linux-usb@vger.kernel.org, 
+	kernel-janitors@vger.kernel.org, Benson Leung <bleung@google.com>, 
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>, LKML <linux-kernel@vger.kernel.org>, 
+	Bjorn Andersson <andersson@kernel.org>, Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
+	Fabrice Gasnier <fabrice.gasnier@foss.st.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Hans de Goede <hdegoede@redhat.com>, 
+	Neil Armstrong <neil.armstrong@linaro.org>, Prashant Malani <pmalani@chromium.org>, 
+	Rajaram Regupathy <rajaram.regupathy@intel.com>, Saranya Gopal <saranya.gopal@intel.com>, 
+	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
 
->                                      =E2=80=A6 which causese a NULL poin=
-ter
-=E2=80=A6
+Hi Markus,
+thank you for catching the typo. If I upload a v4 patch, I will fix it
+there. I don't think it is necessary to mention changes to the commit
+message in the section below the commit message.
 
-I hope that a typo will be avoided in the change description for the final=
- commit.
-
-
-=E2=80=A6
-> ---
-> Changes in V3:
-=E2=80=A6
-
-How do you think about to mention also adjustments for the commit message =
-here?
-
-Regards,
-Markus
+Thanks,
+Jameson
 
