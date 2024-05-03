@@ -1,74 +1,75 @@
-Return-Path: <linux-usb+bounces-10003-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10004-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B88BB8BAA21
-	for <lists+linux-usb@lfdr.de>; Fri,  3 May 2024 11:46:26 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC60F8BAA25
+	for <lists+linux-usb@lfdr.de>; Fri,  3 May 2024 11:48:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ACED0B20B94
-	for <lists+linux-usb@lfdr.de>; Fri,  3 May 2024 09:46:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E9077B20C7E
+	for <lists+linux-usb@lfdr.de>; Fri,  3 May 2024 09:48:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C47FA14F9D2;
-	Fri,  3 May 2024 09:46:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A676814F9D4;
+	Fri,  3 May 2024 09:48:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="FphRrsb5"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="zSPeEykV"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3CF014F12D
-	for <linux-usb@vger.kernel.org>; Fri,  3 May 2024 09:46:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5D6D13959C
+	for <linux-usb@vger.kernel.org>; Fri,  3 May 2024 09:48:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714729576; cv=none; b=cCqPDgXWNgT3GMqqnB3GSg3A8HlLDujE7FHncd1AvLShy49N5FeWf/UhFaO44p6a/UqRis0VIoyzjy8LB+VkLMpRSIB1nj+AuLzubqm6hvHlyxef1cFJtthfQ8mkV5uvqjaObXPLH2mx8NxZU8eCtGBKyOXDpQsfiOrIx6iMwAM=
+	t=1714729720; cv=none; b=T+hzLVVhohgpyGuRfOoV9F28FpNApoJIGZln04hxzjiAH4H4LDdcCoxk1OlOS0yZ7wDnqArIu9cao5kYs4jwWU97hVablApWiRV3eKPhyWuKAHlrmeYYqfpvT/tDVrgKSPxHLH69605+S9Y7BUMiLCE1B1m3eAXSjhE0iyzu8Io=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714729576; c=relaxed/simple;
-	bh=XxHhbDO+uBy++8Zmes2AVFWISTSLcv0aWfTj/Nx29As=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RtNzeyq5SUf+iR8MSkyrk19CKFrb8H8Np6uwqOv1D0/JmY14PSa7VSXYuLhm7eDEEZ/NTESi12ZGi+CWuIgSEX5TJOjxOCDKBC0Lg+j6vAYhu/+kV2gz0tL5tIHSKGEeDYN3/cM0vOdvW9L6FO2dx06ZeU9KWNGoKJfvUCvSTOY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=FphRrsb5; arc=none smtp.client-ip=209.85.208.176
+	s=arc-20240116; t=1714729720; c=relaxed/simple;
+	bh=kI+AdC3cA0a0L7SzFHzr3IKTrFVT6gC3wTDkaA5IXO0=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=gNbMJi1Ir1BQHg3K+wGNpUUGFuLGuaEEh4pZ99rkqvstMtx2DJpmxxKl74gtpcotn5T+ppswWnR+EnEYTTsn+fqerDxwWlVIkpMKWIheSFe/3rkbIuc0Kl5ixpwxuP9vQ3kdOv5tf5igBqv4RelH82b6WTen8gW3aq8f+cfU5hQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=zSPeEykV; arc=none smtp.client-ip=209.85.128.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-2db7c6b5598so114614621fa.1
-        for <linux-usb@vger.kernel.org>; Fri, 03 May 2024 02:46:14 -0700 (PDT)
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-41b4ff362a8so83543975e9.0
+        for <linux-usb@vger.kernel.org>; Fri, 03 May 2024 02:48:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1714729573; x=1715334373; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1714729717; x=1715334517; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
+         :references:cc:to:from:subject:user-agent:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=wyB7Un+bQlKT3O3Ner8NzF77awk7tA83OcYIv4t9tIQ=;
-        b=FphRrsb5A8D7DQNZul3/gIBedtjTFgPzZgnRQctifEhAIV5DZ+kdG0oQTG451jqovD
-         c5FRYY61V4I2fu4iNlsvYUzD2geN86xLmRZ4AMecu9sShhtmCCqbryMIf3CHSSvVsqkW
-         wULgqC0skwckST0HqM2QlsAlNHubmQ/Y0AUV3E3/kW1sN550syVMArX2FfgoazhtWn9z
-         CVEAPqnLW9A5YID31erS1yA6dIZHqjJv3VPW+2VWH1ZBxEVyX6C/jo1SkIcCTbrieSVY
-         30wIwoq21fMw63zf87IWc9PfOYiUUpnuS6yD2jFI2iy3wesD9nznKLU4bmnMkx2qgIZB
-         V9gg==
+        bh=QSy/53HBsXrM6K3XBe0PPBtBhqSMQv9ta3VtVgt0D6o=;
+        b=zSPeEykVdi5sHPePmxtvKaXrv1ET0SrZIVKQ+PM24yxe+faDKFdLX7/AOBWGC2yY9Y
+         V5oEOAlFoGsh/OjH3XkC3ZYVwI1KDqI2zPxjyEKAlsEfkZY9JyXk+bTOXbKiMLNHLjsQ
+         EcMUDHWRHc8N/6jdgMeZJ1tYf+YBSe8CCzBCTGZWAT964qACjXs+cFCkeOF7/ErwBolV
+         OX5mwdSkw5ol5bFIcR7002G7geQ/f6j5vXVlbAj9fmI9LJp9eQndtC/GmuuAvrPPolu5
+         WybDQA+cR7nyAgjEUrLTMVbjInuXhbTss6mWZ6GURRV6A1b1kLwRWICwaqwJehXO+mTT
+         Ag+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714729573; x=1715334373;
+        d=1e100.net; s=20230601; t=1714729717; x=1715334517;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
+         :references:cc:to:from:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=wyB7Un+bQlKT3O3Ner8NzF77awk7tA83OcYIv4t9tIQ=;
-        b=F5KuEU8I81XAQf+H2UQFMbI2RvmHzN9NUugj4cNdx/jjOsQijj0HcW2bw9rmFRP+0f
-         D+kJ06TAD5plg6oxQo03gZ3O3y/yRHPDySPSS/CJP7YJNOivmJnrwWarfiRLKAbT7OTk
-         9vuqbCrxYqomvDqPFAM8tJ4Kt57EjU31JFqUjcFzcsGBiV5z40j41SFmAw6xtAHXxBQC
-         K8Hciuq0dEeOP32LvOguNXYO3yZG5HlkpSnvWZ+oberMaIg1JbZ6Ufmf8yo/tVx52mNU
-         /1SRUWyXW7JtJ41AQUPyyXKfEuEr0IUUDAU2ooSujvzzvxYTUUhCsV6r/cpcoOpoWeUB
-         Cf6A==
-X-Gm-Message-State: AOJu0YzjCcYKnPAL1x2BUbZR0GlBwJHRmJfP8PSip2L2ZSY0svD3iWzR
-	xSgY4DCBzbZ/a4BPxAo3Ax7Tf1G0fZthhcBWrL7AMaWEG/E9GzdXtkoSX8vDKVI=
-X-Google-Smtp-Source: AGHT+IFlJhZUvfgpDWjwP1wyxc8OIf64H5izW8oPlTrDiBcOEJuHMDjXPwAXP/Ygu3i9VKpdwT6foA==
-X-Received: by 2002:a2e:979a:0:b0:2e1:aa75:6504 with SMTP id y26-20020a2e979a000000b002e1aa756504mr1431602lji.43.1714729571941;
-        Fri, 03 May 2024 02:46:11 -0700 (PDT)
+        bh=QSy/53HBsXrM6K3XBe0PPBtBhqSMQv9ta3VtVgt0D6o=;
+        b=tu272FKnLwYLpHxA1YTt7yDUBIvYk/gwLdZaZR6AZRiNrBbi3393VCNHqb56SMHUtF
+         +QkLcK+u9USRyFLG83murcpveT/CBNjVFnqXoMPz9Q/x4535pEJkEBmykMT3W4F37+F/
+         kpKKOvR6Mz4CcqU6SXQtbxArZ7jOD4oOXGVq+a7umexSRiuLZ6hmxk3TO5PSSSlRkbJK
+         vTFcA5aoMhh5rkwMwqUQU/3bKMyBCe4zisn5LHEM3eieGe0UNApxeDXFHnnebQLVShsg
+         tfqB6cq4Aa7eHGnZxquZrIDcVJ/3zZV643txk5/MSR3P15yXP/mrz3JwpbSgEtGW7IYR
+         sMMQ==
+X-Gm-Message-State: AOJu0YxkRcNB2gDGnNNIj3VJWv34Lr1qbNsTO3gze8h5aW5Ql/89mlrB
+	S0nD5PK+qdmAGBUtbYBXkFZk8OqiNbUWfp6Hgu7ydz/muWEaS8mnNuYYn5cxCKorM/WenPbYW6w
+	i8fc=
+X-Google-Smtp-Source: AGHT+IEYJhrE6g1L9j8QSQ6A2OUsPgPnGS4Avt0n9K5EXPd+OKVb0Vje4r2MYnmJXr/G6vG3FDgYjw==
+X-Received: by 2002:a05:600c:1e09:b0:418:a706:3209 with SMTP id ay9-20020a05600c1e0900b00418a7063209mr2186907wmb.31.1714729716931;
+        Fri, 03 May 2024 02:48:36 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.223.16])
-        by smtp.gmail.com with ESMTPSA id k7-20020a7bc407000000b0041674bf7d4csm8678112wmi.48.2024.05.03.02.46.10
+        by smtp.gmail.com with ESMTPSA id d3-20020a5d6443000000b0034da4e80885sm3317064wrw.59.2024.05.03.02.48.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 May 2024 02:46:11 -0700 (PDT)
-Message-ID: <0b771439-ef12-407d-bcf7-7f50466726a6@linaro.org>
-Date: Fri, 3 May 2024 11:46:09 +0200
+        Fri, 03 May 2024 02:48:36 -0700 (PDT)
+Message-ID: <ef21450c-9ae6-4515-9b68-32c04369247a@linaro.org>
+Date: Fri, 3 May 2024 11:48:34 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -78,11 +79,12 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 00/52] USB: store owner from modules with
  usb_serial_register_drivers()
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To: Johan Hovold <johan@kernel.org>,
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20240328-module-owner-usb-serial-v1-0-bc46c9ffbf56@linaro.org>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+ <0b771439-ef12-407d-bcf7-7f50466726a6@linaro.org>
 Content-Language: en-US
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -128,34 +130,37 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20240328-module-owner-usb-serial-v1-0-bc46c9ffbf56@linaro.org>
+In-Reply-To: <0b771439-ef12-407d-bcf7-7f50466726a6@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 28/03/2024 23:05, Krzysztof Kozlowski wrote:
-> Merging
-> =======
-> All further patches depend on the first patch.
+On 03/05/2024 11:46, Krzysztof Kozlowski wrote:
+> On 28/03/2024 23:05, Krzysztof Kozlowski wrote:
+>> Merging
+>> =======
+>> All further patches depend on the first patch.
+>>
+>> Description
+>> ===========
+>> This is going to be a bit of a patch-bomb, but with trivial patches, so
+>> I think it is still acceptable. If it is too much, apologies and I will
+>> solve it.
+>>
+>> Modules registering driver with usb_serial_register_drivers() might
+>> forget to set .owner field.
+>>
+>> Solve the problem by moving this task away from the drivers to the core
+>> amba bus code, just like we did for platform_driver in commit
+>> 9447057eaff8 ("platform_device: use a macro instead of
+>> platform_driver_register").
 > 
-> Description
-> ===========
-> This is going to be a bit of a patch-bomb, but with trivial patches, so
-> I think it is still acceptable. If it is too much, apologies and I will
-> solve it.
+> Hi Greg,
 > 
-> Modules registering driver with usb_serial_register_drivers() might
-> forget to set .owner field.
-> 
-> Solve the problem by moving this task away from the drivers to the core
-> amba bus code, just like we did for platform_driver in commit
-> 9447057eaff8 ("platform_device: use a macro instead of
-> platform_driver_register").
+> Any comments on this patchset? I know your patchqueue is usually busy,
+> that's why I did not ping for some time. I just want to know it did not
+> end up in some spam folder.
 
-Hi Greg,
-
-Any comments on this patchset? I know your patchqueue is usually busy,
-that's why I did not ping for some time. I just want to know it did not
-end up in some spam folder.
+Never mind, I missed Johan's response.
 
 Best regards,
 Krzysztof
