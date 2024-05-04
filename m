@@ -1,154 +1,219 @@
-Return-Path: <linux-usb+bounces-10031-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10032-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5E398BBD4C
-	for <lists+linux-usb@lfdr.de>; Sat,  4 May 2024 18:54:59 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 13AC88BBED6
+	for <lists+linux-usb@lfdr.de>; Sun,  5 May 2024 01:45:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BD0861C20C34
-	for <lists+linux-usb@lfdr.de>; Sat,  4 May 2024 16:54:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BD5261F2165C
+	for <lists+linux-usb@lfdr.de>; Sat,  4 May 2024 23:45:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3967D5A7AB;
-	Sat,  4 May 2024 16:54:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="EGu+ImQq"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFD4184FAA;
+	Sat,  4 May 2024 23:45:13 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27BEC1E871
-	for <linux-usb@vger.kernel.org>; Sat,  4 May 2024 16:54:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FD0D3BBD6
+	for <linux-usb@vger.kernel.org>; Sat,  4 May 2024 23:45:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714841691; cv=none; b=rT4sHCh7aDH1LOqYK1Pw2/mfH/U6G/Bp9xcGd9CGGc9KRNseSYhA+x1yozOK4b1hFzg121A4dmJYY/Evr030dDQf3hehWAxAE/INEQ8nYl1sOUQ/TkQn/uYoTIETNZLJ0E9mW/GaUuK9PrzFuXaGhmS4V0UpZXThUVFTGbBf+po=
+	t=1714866313; cv=none; b=T9LwE6VUp28p0Xv+hKTYhjvhMsNXv9iSRTeTy+Tro4aGUtX3aZFFX2BjOb6iMhq8duGe1DcGJFpPy2AelOqzS/uIfujjSb8OgjwGJdLxT6PZgLNMuMGK4xJYIajN5/uhakR26ZeOk4WxSevodZeZaCsKvT0LSRypPfMAXQE05sc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714841691; c=relaxed/simple;
-	bh=zo0FuvvheiYFFNT9SiYqO5W3uBgSTGVpZYuFn4XhiwM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WG5MMntZBOFvw12oT2ncleMFtgbVArjHxB5H0VjrW668nPXGq4fKs0EuKAQ42Rz+mE+XzL/fps9Ckp5EJJrqatwUDmhfw27Y8iqo6v3fyB/wyAV2tzNOv6EYreYmoSEe6qoNbz/sSGcHl/NENK2zOyHW4hhUJHZuJXq8T1HAkBs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=EGu+ImQq; arc=none smtp.client-ip=209.85.219.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-de45385a1b4so584956276.3
-        for <linux-usb@vger.kernel.org>; Sat, 04 May 2024 09:54:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1714841689; x=1715446489; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=tgIbTlJhI5M2gVvaXjd3+8gvJ0cygD+QTOHA6KrM33U=;
-        b=EGu+ImQq15C9oAXQMirzbB13CaAuAjcp36h3Ab+vThGiRCqP6NCx/SefeqBzjyBt/q
-         /C1yRaqsJ6e1BjHG33CQYR0xp8QTGYRXMQkuHPuJpviA9K5Va3/lAJIWq1hQ5JNLBey8
-         rM6Ei7/uk7oOxSVdsPZIVNzI7UCUBq9d8n8iDV7IigaGK5XMYVUuXRjTxknMxjyfOm4N
-         gRrWEEbIVtPXP/YOA0cs0Ko25/Si2rPktG4vEJaKdmJ49C/fauOXN4KU9Zs88G0MpG5W
-         +G55UO6tuc4bXANSi3feXp3JG98Pi5UvhLFVg/ayKlrTo8VHoDjyiQo0VPl3/ElU9Hoe
-         aIsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714841689; x=1715446489;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tgIbTlJhI5M2gVvaXjd3+8gvJ0cygD+QTOHA6KrM33U=;
-        b=LISM+qDX/FEeVpZZe5AvBXpAsEhzwfNad3daG+xgTJhY2i5kaMgiJbRf6XncOUtfqI
-         tFEHdu5vwNodVt/wwybkMpCMCHHxMNhTpBj7dD9xMLRbVWmcfhkllP5ipf4xbIOaGRlj
-         ImyXd7MSTpmG/puE+MKHbBPh766Vpv8dzF2tNewxiPj8fRuh11aw8HKj3Q+8GCrP1BDJ
-         z3ae7C9O3UxTVlFegoyNa0lYjvfH52nPTyC642m4G95q8M5shmWPC9dE1fPhynLeRBUH
-         El7yhbSfSMG5Y67ghYtg+5IKAC2/2PcQLzut8S9cCxVihHioy1fYJ7oEuSg2Phcol6/l
-         A1gQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW9XTE8As0b4ou1tda9S1DMPXLwJkXQRAsYW6J6JNkDtAeVZrm95J/Y87NjV+OxXoBrK14ZN/Kl3JDCjrJ5ZZEPLNBKGU3kDMbw
-X-Gm-Message-State: AOJu0Ywv5l65U9DtUV19JX0J/M5FX9V7zfrsnOlewOdt7mK0sC7rtntY
-	lubfEyqUoYeNl32cw6azR2saCpyFXbh37lHSEESpsDVywpaJhdlriUQlJauU1VGCWRMdvdY4KNQ
-	Crlt4ImvCG+bCDGuxf5LHndhWQpxxn+QduCNPcw==
-X-Google-Smtp-Source: AGHT+IEt9LVSBgeKJB0TGRM0UGx6hBWf+ehs1XeTfLSJzks/QJ5xn5QgePdv1YPfN2bT0VpBiqOznAyRWOlU4ZFKPcs=
-X-Received: by 2002:a25:f604:0:b0:de5:53a6:24ed with SMTP id
- t4-20020a25f604000000b00de553a624edmr6272638ybd.50.1714841689115; Sat, 04 May
- 2024 09:54:49 -0700 (PDT)
+	s=arc-20240116; t=1714866313; c=relaxed/simple;
+	bh=6NRranRUZtEu76ufx1GqSpQk/+a7exiuutmo9+O/V4E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UxtOfhocIBKGT0oEF2ZsALTyU+7COz+VADy/WLXqUWpSWo8LS0lrRFsyLRPW2I2jb7C4jQaRTR8Ob4hLQ0zLeWPklic1z5LvHJbVctbI7SS2c+0ci1g9UX4bcR9nWzPi0NFE5T9KgxDwbZKc9rkSZOl6EeI4JHj2KOo7spa3ZuI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mgr@pengutronix.de>)
+	id 1s3P3s-0005PE-2i; Sun, 05 May 2024 01:45:00 +0200
+Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <mgr@pengutronix.de>)
+	id 1s3P3q-00FzBb-UE; Sun, 05 May 2024 01:44:58 +0200
+Received: from mgr by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <mgr@pengutronix.de>)
+	id 1s3P3q-00BjLU-2k;
+	Sun, 05 May 2024 01:44:58 +0200
+Date: Sun, 5 May 2024 01:44:58 +0200
+From: Michael Grzeschik <mgr@pengutronix.de>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] usb: dwc3: gadget: check drained isoc ep
+Message-ID: <ZjbIeib2UMta7FbY@pengutronix.de>
+References: <20240307-dwc3-gadget-complete-irq-v2-1-8c5e9b35f7b9@pengutronix.de>
+ <20240402230555.xgt5uilc42diyr4m@synopsys.com>
+ <20240402231848.4hzzrxegjrcmdab2@synopsys.com>
+ <20240404002906.wk6xbz2wp2tf2xwn@synopsys.com>
+ <Zie5sN473m2rgNTK@pengutronix.de>
+ <20240424015059.w7hsee4tt2ixkp5y@synopsys.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240424-qc-pmic-typec-hpd-split-v4-1-f7e10d147443@linaro.org>
- <CAA8EJppCxfrBcctaR2jOrwPuO8ZFQw9vmi-0CH_sSWBm3ts7JQ@mail.gmail.com>
- <2024050415-retorted-gory-5fa6@gregkh> <2024050416-mandolin-gauging-9342@gregkh>
-In-Reply-To: <2024050416-mandolin-gauging-9342@gregkh>
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Sat, 4 May 2024 19:54:37 +0300
-Message-ID: <CAA8EJpo6Gar5W3-2jB4YC1OzGWMauCxxJ9oeRHLgkBjRTqLktw@mail.gmail.com>
-Subject: Re: [PATCH v4] usb: typec: qcom-pmic-typec: split HPD bridge alloc
- and registration
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>, 
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>, Bjorn Andersson <andersson@kernel.org>, 
-	Konrad Dybcio <konrad.dybcio@linaro.org>, Johan Hovold <johan+linaro@kernel.org>, 
-	linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Caleb Connolly <caleb.connolly@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="pLoVn6qsK0dxz8GE"
+Content-Disposition: inline
+In-Reply-To: <20240424015059.w7hsee4tt2ixkp5y@synopsys.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL: http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mgr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
-On Sat, 4 May 2024 at 19:22, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+
+--pLoVn6qsK0dxz8GE
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Wed, Apr 24, 2024 at 01:51:01AM +0000, Thinh Nguyen wrote:
+>On Tue, Apr 23, 2024, Michael Grzeschik wrote:
+>> Hi Thinh,
+>>
+>> On Thu, Apr 04, 2024 at 12:29:14AM +0000, Thinh Nguyen wrote:
+>> > On Tue, Apr 02, 2024, Thinh Nguyen wrote:
+>> > > On Tue, Apr 02, 2024, Thinh Nguyen wrote:
+>> > > > My concern here is for the case where transfer_in_flight =3D=3D tr=
+ue and
+>> > >
+>> > > I mean transfer_in_flight =3D=3D false
+>> > >
+>> > > > list_empty(started_list) =3D=3D false. That means that the request=
+s in the
+>> > > > started_list are completed but are not given back to the gadget dr=
+iver.
+>> > > >
+>> > > > Since they remained in the started_list, they will be resubmitted =
+again
+>> > > > on the next usb_ep_queue. We may send duplicate transfers right?
+>> >
+>> > Actually, since the requests are completed, the HWO bits are cleared,
+>> > nothing is submitted and no duplicate. But since the requests are not
+>> > given back yet from the started_list, then the next Start_Transfer
+>> > command will begin with the TRB address of the completed request
+>> > (HWO=3D0), the controller may not process the next TRBs. Have you test=
+ed
+>> > this scenario?
+>> >
+>> > > >
+>> > > > You can try to cleanup requests in the started_list, but you need =
+to be
+>> > > > careful to make sure you're not out of sync with the transfer comp=
+letion
+>> > > > events and new requests from gadget driver.
+>> > > >
+>> >
+>> > Was the problem you encounter due to no_interrupt settings where the
+>> > it was set to the last request of the uvc data pump?
+>> >
+>> > if that's the case, can UVC function driver make sure to not set
+>> > no_interrupt to the last request of the data pump from the UVC?
+>>
+>> Actually no. What I want to do is to ensure that the dwc3 stream
+>> is stopped when the hardware was drained. Which is a valid point
+>> in my case. Since we are actually potentially enqueueing new request
+>> in the complete handler, be it zero length or real transfers.
+>>
+>> Calling kick_transfer on an drained hw will absolutely run into
+>> missed isocs if the irq thread was called late. We saw this on real hard=
+ware,
+>> where another irq_thread was scheduled with the same priority as the
+>> dwc3 irq_thread but was running so long that the HW was running dry in
+>> between the hw irq and the actual dwc3_irq_thread run.
+>>
 >
-> On Sat, May 04, 2024 at 05:15:45PM +0200, Greg Kroah-Hartman wrote:
-> > On Sat, May 04, 2024 at 05:23:20PM +0300, Dmitry Baryshkov wrote:
-> > > On Wed, 24 Apr 2024 at 05:16, Dmitry Baryshkov
-> > > <dmitry.baryshkov@linaro.org> wrote:
-> > > >
-> > > > If a probe function returns -EPROBE_DEFER after creating another device
-> > > > there is a change of ending up in a probe deferral loop, (see commit
-> > > > fbc35b45f9f6 ("Add documentation on meaning of -EPROBE_DEFER"). In case
-> > > > of the qcom-pmic-typec driver the tcpm_register_port() function looks up
-> > > > external resources (USB role switch and inherently via called
-> > > > typec_register_port() USB-C muxes, switches and retimers).
-> > > >
-> > > > In order to prevent such probe-defer loops caused by qcom-pmic-typec
-> > > > driver, use the API added by Johan Hovold and move HPD bridge
-> > > > registration to the end of the probe function.
-> > > >
-> > > > The devm_drm_dp_hpd_bridge_add() is called at the end of the probe
-> > > > function after all TCPM start functions. This is done as a way to
-> > > > overcome a different problem, the DRM subsystem can not properly cope
-> > > > with the DRM bridges being destroyed once the bridge is attached. Having
-> > > > this function call at the end of the probe function prevents possible
-> > > > DRM bridge device creation followed by destruction in case one of the
-> > > > TCPM start functions returns an error.
-> > > >
-> > > > Reported-by: Caleb Connolly <caleb.connolly@linaro.org>
-> > > > Acked-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> > > > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > > > ---
-> > > > Dependency: https://lore.kernel.org/lkml/20240418145730.4605-2-johan+linaro@kernel.org/
-> > > > ---
-> > > > Changes in v4:
-> > > > - Rebased on top of Johan's patches
-> > > > - Link to v3: https://lore.kernel.org/r/20240416-qc-pmic-typec-hpd-split-v3-1-fd071e3191a1@linaro.org
-> > > >
-> > > > Changes in v3:
-> > > > - Updated commit message to explain my decisions (Johan).
-> > > > - Link to v2: https://lore.kernel.org/r/20240408-qc-pmic-typec-hpd-split-v2-1-1704f5321b73@linaro.org
-> > > >
-> > > > Changes in v2:
-> > > > - Fix commit message (Bryan)
-> > > > - Link to v1: https://lore.kernel.org/r/20240405-qc-pmic-typec-hpd-split-v1-1-363daafb3c36@linaro.org
-> > > > ---
-> > > >  drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c | 10 ++++++++--
-> > > >  1 file changed, 8 insertions(+), 2 deletions(-)
-> > >
-> > > A stupid gracious ping. It would be nice to fix the issue in 6.10
-> >
-> > Is this a regression?  If so, what commit does it fix?  Or has it always
-> > just not worked?
->
-> Oh wait, I need Johan's patches applied first, I was waiting for that to
-> happen, so I'll take this next week when that gets into Linus's tree,
-> sorry for the delay.
+>Right. Unfortunately, dwc3 can only "guess" when UVC function stops
+>pumping more request or whether it's due to some large latency. The
+>logic to workaround this underrun issue will not be foolproof. Perhaps
+>we can improve upon it, but the solution is better implement at the UVC
+>function driver.
 
-No problem, as long as it has a chance to land at 6.10.
-Thank you!
+Yes, the best way to solve this is in the uvc driver.
 
+>I thought we have the mechanism in UVC function now to ensure queuing
+>enough zero-length requests to account for underrun/latency issue?
+>What's the issue now?
 
--- 
-With best wishes
-Dmitry
+This is actually only partially true. Even with the zero-length packages
+it is possible that we run into underruns. This is why we implemented
+this patch. This has happened because another interrupt thread with the
+same prio on the same CPU as this interrupt thread was keeping the CPU
+busy. As the dwc3 interrupt thread get to its call, the time was already
+over and the hw was already drained, although the started list was not
+yet empty, which was causing the next queued requests to be queued to
+late. (zero length or not)
+
+Yes, this needed to be solved on the upper level first, by moving the
+long running work of the other interrupt thread to another thread or
+even into the userspace.
+
+However I thought it would be great if we could somehow find out in
+the dwc3 core and make the pump mechanism more robust against such
+late enqueues.
+
+This all started with that series.
+
+https://lore.kernel.org/all/20240307-dwc3-gadget-complete-irq-v1-0-4fe9ac0b=
+a2b7@pengutronix.de/
+
+And patch 2 of this series did work well so far. The next move was this
+patch.
+
+Since the last week debugging we found out that it got other issues.
+It is not allways save to read the HWO bit, from the driver.
+
+Turns out that after an new TRB was prepared with the HWO bit set
+it is not save to read immideatly back from that value as the hw
+will be doing some operations on that exactly new prepared TRB.
+
+We ran into this problem when applying this patch. The trb buffer list
+was actually filled but we hit a false positive where the latest HWO bit
+was 0 (probably due to the hw action in the background) and therefor
+went into end transfer.
+
+Michael
+
+--=20
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+
+--pLoVn6qsK0dxz8GE
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmY2yHgACgkQC+njFXoe
+LGRSaxAAxhBtE6gNRWYO1/UABS9K/sdIsmrSKNvVz9fOIYkEbrulPeJkOG/jJal4
+rWsVidfcLmgcOIJqn1kQG/K6qxWnojSURVSnhYueHPfIim/lakNyDspMfUwnf3nh
+gm3vaoGR7J3bX0wBIIIHAq8v3Js1qoeMHGgq/sw54OLqkIMn1s8nF2AID6PUxU7H
+CZtXz3YtcO5uWd4BK6krSrZd8+4jDRmab40iSMfOHYX79/a9hsy85gXuSOUV+wuz
+XVgeujs0iQnK8CY1hY3M9lAU6iE/ftUiQOqu70fmqASz6x7v3OYiwxrdc8bnjfKO
+5w44jXALoTjiyXDXsHH6/SwjdsT1zcgta0Xf6wKZSEp075c/LJ4w1dlb1Syh4k5H
+c7P10eO7xEogcd0uvYhCTDYAM1HlYU5MHt33+5KX88zlpIrbcy0t/mXiWnB8Hfdf
+BomDWOUskARk5S9EH7hobUEQSHYpEQT66WoJlhNVsf57GsAlxhoxraHbJ6ByDr9W
+fYgAA71tG9agpcFWWwxtQ9RDQ/kg3qp5euA8HbC5TGkAXKXYy6TfsrVpLIlk+tB8
+maR/dm2UBWQ9Wrlgn2F9Xb3DXhaszNkHi8SlBgMN/mvNcXg7luxYMg6yuCl+XLTK
+sLxDy5gdxqpqdbuIeWo591ZCrRyIjeh6F2aF/QuHIzgRTqFmwAM=
+=Uzn2
+-----END PGP SIGNATURE-----
+
+--pLoVn6qsK0dxz8GE--
 
