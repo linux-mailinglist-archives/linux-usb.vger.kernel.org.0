@@ -1,89 +1,165 @@
-Return-Path: <linux-usb+bounces-10020-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10021-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F85B8BBA27
-	for <lists+linux-usb@lfdr.de>; Sat,  4 May 2024 10:49:51 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2646B8BBA5A
+	for <lists+linux-usb@lfdr.de>; Sat,  4 May 2024 11:48:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8F1DDB21B25
-	for <lists+linux-usb@lfdr.de>; Sat,  4 May 2024 08:49:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 58E841C2137F
+	for <lists+linux-usb@lfdr.de>; Sat,  4 May 2024 09:48:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37DD1134A8;
-	Sat,  4 May 2024 08:49:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A861F17996;
+	Sat,  4 May 2024 09:47:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tMEWKLz2"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="qXMsbgQr"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp.smtpout.orange.fr (smtp-26.smtpout.orange.fr [80.12.242.26])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 962BBF4E7;
-	Sat,  4 May 2024 08:49:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 328F45234;
+	Sat,  4 May 2024 09:47:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.26
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714812576; cv=none; b=mefMYNqPqMHXWxX+bM9SMiXhCBVrNjkN9qK2U0bQUg2WhiwaZtZX7+8v3016rY5y/d1+pz2yElQ9H6CRMnXScp29dZCmxcAoR5C8BIcL6gMzhCKwA3V45uV7kRFbp/ULjtcPXXOVf4NwWtx3WUPgZGYWYzF849mUMgXI5tl4Cec=
+	t=1714816074; cv=none; b=HDglfoD/Db2lfA6ziiZMouDiPCZVw4BiW0TPX/SZAl3SXkZha4VNtsjBvz8tgVdn9xDEAW6msNuY6eY+uoHNc7NdKl/7NfcrNGmaxx+4McztgkHtwaOI7jP1g+OF/d28UISXxZ31WYIhR+YnxqFp5V9a5101Z2O05tMvFoAZVMg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714812576; c=relaxed/simple;
-	bh=0gJFi+kIDeGMpOWnhH/p/VLDwq/nOlBo/W46WN3ey2U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=g/Sz2IkpB+c6CpptULI1RsyKoyeci+SHm2NkkjABuo8nqQD9u7cOynnqxSzjQCu6ETgv08UUgVAF6SSoD71dorbsKwzvPRMIn1LYy9eMQfHUobDQvyV9WUl/AoxHlcR3lQz18SAs5I0J3gxG3zPZ1CnXxY8hGYM5wyLozpmH0V8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tMEWKLz2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECE5BC072AA;
-	Sat,  4 May 2024 08:49:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714812576;
-	bh=0gJFi+kIDeGMpOWnhH/p/VLDwq/nOlBo/W46WN3ey2U=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=tMEWKLz2fYRGkpBEDAoxXAy/2t+FgUK5mr2FUtsTW0saOxl77nprEO9qZeUTdTbwm
-	 1b0hSwkqdaulpByawb7e9cmgEB+cmxnLnI1Ti4XPJlR6ccyLHRow5Gc284TZGdhhx9
-	 qYpI7T4K7h1FBTVEl5Lf/S0lrzBZVlSzDKKbwK0ATAetxbnJKnVRmPNerV4zuISM1+
-	 pAZs+yoM/sIlEfhaKfgkLeeUfYqD5viqn49SyusS7wAvSqYHcrmFlXK/PoBb3tAXVv
-	 rTe6HV5Dji/g0PAqQOoc7bENSDpmNzvG/O3iGOq/OjMH2b5GWy8NtTfxkakhPKCV2/
-	 O4xrgOxNxtF2Q==
-Date: Sat, 4 May 2024 09:49:31 +0100
-From: Simon Horman <horms@kernel.org>
-To: Rengarajan S <rengarajan.s@microchip.com>
-Cc: woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, netdev@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v1] lan78xx: Enable 125 MHz CLK and Auto Speed
- configuration for LAN7801 if NO EEPROM is detected
-Message-ID: <20240504084931.GA3167983@kernel.org>
-References: <20240502045503.36298-1-rengarajan.s@microchip.com>
+	s=arc-20240116; t=1714816074; c=relaxed/simple;
+	bh=0RAXrA9ddTunKzQ27o/B/H26iN61m5JOjlIACCixexs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EenVVEiJW1UilZBkGoHWdOFrIi/UXwO+u0vtWZKNabIIbi597ERFuJL2WsV0JnI3nfsSuHO0Q7YaQ9nh7099qEgddUGEzEiTgf1C2SxoLe9XISOhR4p+G4qG/aUcVxrPiBAoOy6oMkt2ay9GfzYCSOqW8UzYskCUWJwbivIM1BQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=qXMsbgQr; arc=none smtp.client-ip=80.12.242.26
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+Received: from localhost.localdomain ([86.243.17.157])
+	by smtp.orange.fr with ESMTPA
+	id 3BzasNrmCn00P3BzasC921; Sat, 04 May 2024 11:47:43 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1714816063;
+	bh=+sxsfrfYccN7R5PHA2bf4kljLQPC2B5E2Xz86Gbnl54=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version;
+	b=qXMsbgQrYWfIaNijqNG3tjPKyVfI1+F11JfJnUUJLhwE4yxS3CcyRmvr0X4GwlSGq
+	 UHxO9k4aSt7BUvCHEWiQrt6CUGrj5+OEw5K4aBM4nNYZWqgBTIwx74v3IEYoKwBkZi
+	 Y/+PplttYcmno9WfdZKVJPVHf1q39sCfLdPV5+HjLoPER5NWjfbDWWSigG3MzaV216
+	 l0SEntzJt6EqDqxPzo3lbyNxev8urLdyTTTZRi0vWrN9jdfTGNeBFKcgxpz+7Bu1Pq
+	 zVW1J7kGjdvxb9hzCWSjzDV9pWkLOrreex3DMyh3AlwXV8VxLNTy579d8NCloIN0+s
+	 eJVLebX5kCnLw==
+X-ME-Helo: localhost.localdomain
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sat, 04 May 2024 11:47:43 +0200
+X-ME-IP: 86.243.17.157
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-kernel@vger.kernel.org,
+	kernel-janitors@vger.kernel.org,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	linux-usb@vger.kernel.org
+Subject: [PATCH] usb: core: Remove the useless struct usb_devmap which is just a bitmap
+Date: Sat,  4 May 2024 11:47:05 +0200
+Message-ID: <1d818575ff7a1e8317674aecf761ee23c89fdc84.1714815990.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.45.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240502045503.36298-1-rengarajan.s@microchip.com>
+Content-Transfer-Encoding: 8bit
 
-On Thu, May 02, 2024 at 10:25:03AM +0530, Rengarajan S wrote:
-> The 125MHz and 25MHz clock configurations are done in the initialization
-> regardless of EEPROM (125MHz is needed for RGMII 1000Mbps operation). After
-> a lite reset (lan78xx_reset), these contents go back to defaults(all 0, so
-> no 125MHz or 25MHz clock and no ASD/ADD). Also, after the lite reset, the
-> LAN7800 enables the ASD/ADD in the absence of EEPROM. There is no such
-> check for LAN7801.
-> 
-> Signed-off-by: Rengarajan S <rengarajan.s@microchip.com>
+struct usb_devmap is really just a bitmap. No need to have a dedicated
+structure for that.
 
-Hi Rengarajan,
+Simplify code and use DECLARE_BITMAP() directly instead.
 
-This patch seems address two issues.
-So I think it would be best to split it into two patches.
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+Compile tested only.
 
-Also, are these problems bugs - do they have adverse effect visible by
-users? If so perhaps they should be targeted at 'net' rather than
-'net-next', and an appropriate Fixes tag should appear just above
-the Signed-off-by line (no blank line in between).
+I've re-used the comment related to struct usb_devmap for the devmap field
+in struct usb_bus, because it sounds better to me.
+---
+ drivers/usb/core/hcd.c | 4 ++--
+ drivers/usb/core/hub.c | 9 ++++-----
+ include/linux/usb.h    | 7 +------
+ 3 files changed, 7 insertions(+), 13 deletions(-)
 
-...
-
+diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
+index c0e005670d67..e3366f4d82b9 100644
+--- a/drivers/usb/core/hcd.c
++++ b/drivers/usb/core/hcd.c
+@@ -866,7 +866,7 @@ static int usb_rh_urb_dequeue(struct usb_hcd *hcd, struct urb *urb, int status)
+  */
+ static void usb_bus_init (struct usb_bus *bus)
+ {
+-	memset (&bus->devmap, 0, sizeof(struct usb_devmap));
++	memset(&bus->devmap, 0, sizeof(bus->devmap));
+ 
+ 	bus->devnum_next = 1;
+ 
+@@ -962,7 +962,7 @@ static int register_root_hub(struct usb_hcd *hcd)
+ 
+ 	usb_dev->devnum = devnum;
+ 	usb_dev->bus->devnum_next = devnum + 1;
+-	set_bit (devnum, usb_dev->bus->devmap.devicemap);
++	set_bit(devnum, usb_dev->bus->devmap);
+ 	usb_set_device_state(usb_dev, USB_STATE_ADDRESS);
+ 
+ 	mutex_lock(&usb_bus_idr_lock);
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index 8939f1410644..4b93c0bd1d4b 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -2207,13 +2207,12 @@ static void choose_devnum(struct usb_device *udev)
+ 	mutex_lock(&bus->devnum_next_mutex);
+ 
+ 	/* Try to allocate the next devnum beginning at bus->devnum_next. */
+-	devnum = find_next_zero_bit(bus->devmap.devicemap, 128,
+-			bus->devnum_next);
++	devnum = find_next_zero_bit(bus->devmap, 128, bus->devnum_next);
+ 	if (devnum >= 128)
+-		devnum = find_next_zero_bit(bus->devmap.devicemap, 128, 1);
++		devnum = find_next_zero_bit(bus->devmap, 128, 1);
+ 	bus->devnum_next = (devnum >= 127 ? 1 : devnum + 1);
+ 	if (devnum < 128) {
+-		set_bit(devnum, bus->devmap.devicemap);
++		set_bit(devnum, bus->devmap);
+ 		udev->devnum = devnum;
+ 	}
+ 	mutex_unlock(&bus->devnum_next_mutex);
+@@ -2222,7 +2221,7 @@ static void choose_devnum(struct usb_device *udev)
+ static void release_devnum(struct usb_device *udev)
+ {
+ 	if (udev->devnum > 0) {
+-		clear_bit(udev->devnum, udev->bus->devmap.devicemap);
++		clear_bit(udev->devnum, udev->bus->devmap);
+ 		udev->devnum = -1;
+ 	}
+ }
+diff --git a/include/linux/usb.h b/include/linux/usb.h
+index 9e52179872a5..1913a13833f2 100644
+--- a/include/linux/usb.h
++++ b/include/linux/usb.h
+@@ -440,11 +440,6 @@ int __usb_get_extra_descriptor(char *buffer, unsigned size,
+ 
+ /* ----------------------------------------------------------------------- */
+ 
+-/* USB device number allocation bitmap */
+-struct usb_devmap {
+-	unsigned long devicemap[128 / (8*sizeof(unsigned long))];
+-};
+-
+ /*
+  * Allocated per bus (tree of devices) we have:
+  */
+@@ -472,7 +467,7 @@ struct usb_bus {
+ 					 * round-robin allocation */
+ 	struct mutex devnum_next_mutex; /* devnum_next mutex */
+ 
+-	struct usb_devmap devmap;	/* device address allocation map */
++	DECLARE_BITMAP(devmap, 128);	/* USB device number allocation bitmap */
+ 	struct usb_device *root_hub;	/* Root hub */
+ 	struct usb_bus *hs_companion;	/* Companion EHCI bus, if any */
+ 
 -- 
-pw-bot: under-review
+2.45.0
+
 
