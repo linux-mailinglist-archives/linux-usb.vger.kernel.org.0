@@ -1,252 +1,293 @@
-Return-Path: <linux-usb+bounces-10017-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10018-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8FEC38BB98F
-	for <lists+linux-usb@lfdr.de>; Sat,  4 May 2024 08:09:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D578E8BB9A7
+	for <lists+linux-usb@lfdr.de>; Sat,  4 May 2024 08:50:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0911C1F22FEB
-	for <lists+linux-usb@lfdr.de>; Sat,  4 May 2024 06:09:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8A532283599
+	for <lists+linux-usb@lfdr.de>; Sat,  4 May 2024 06:50:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EC59539C;
-	Sat,  4 May 2024 06:09:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 550D94A24;
+	Sat,  4 May 2024 06:49:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="g1LL1dTJ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dLzg0Enm"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C223146AF
-	for <linux-usb@vger.kernel.org>; Sat,  4 May 2024 06:09:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A30F291E
+	for <linux-usb@vger.kernel.org>; Sat,  4 May 2024 06:49:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714802961; cv=none; b=oWyDX5BBaVgvyEO40KQs8eThsHrGAiJo33lSZgjzso1mQzQ1wls4S+gDkrnqVYiErxCIjRhdysUhuq+KBxedE3qm38eR60wAXqlNagEWvuFXzonjZ4D+u0W7HsYi26rx9U4LzDyXFZGYekfX7OdLk6zmf5s5sKIfvpS40Xh4llE=
+	t=1714805396; cv=none; b=PkFLSJ5v3lCXNrvN1WyxrtOw2MNmQAFHK66NAN+q4Ly5oWbKa7N2BD5qSnWZyFBXNXI0MZcC/Ak9+8eP99zWhgFF3p2RENSMUndX+uhFGSNWs52BlAEqT0oTbmSNa+Fku0Xm1a/d3eh51eLYy/PPqTEHa6Uo55rrPFB0lhXLT8k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714802961; c=relaxed/simple;
-	bh=KEJ99l1xjZrjBSS8ojhYiHu3jicbUsNe21OGVzjw/Gw=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=DvognAXW3YhXz1BxBGD7lbTliKFhMCke7xM0zIyi/SUHZptm4IP4BJSILZdBam/dVwwNjR2Lo63ojEv1eMzEqXAL3KJvkUZ6uFWV8zzP1gyIecHxww9fPMgoklKpU8LsmASn7vzQYpQFrn+uaxqQQKnjh0qAf7EzINv/KuC5scU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=g1LL1dTJ; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1714802960; x=1746338960;
-  h=date:from:to:cc:subject:message-id;
-  bh=KEJ99l1xjZrjBSS8ojhYiHu3jicbUsNe21OGVzjw/Gw=;
-  b=g1LL1dTJlxITvom0qISR8OF3eeFznJymlcwKr2CttG9KSH/veT1cj6gV
-   ii0vwV0vMp3jiVbd56iuJ2L8E6iX9ZGBmCBf2lSwOY/xtL3i9DCuDnmij
-   z64Nk6s8cxsjZBeeIPESXQxuxFyOQ/vnrJ0NVfK5dVpDAZ0tZlOq37+dW
-   htsoh5dr4M0pZnNoRg5kL/1RbzOzmSGVDHEEcj1LXZU2Tco6fKJpIFAKD
-   XGG4aP76owqJ8pNuXxynV7/hOzc6fqRfXSiB6l9pQqqa2jGRB/e3lnR+N
-   2Mor7lQTA9fNr1UM80KKIzISrmwwPPY+mrSWGFaPK8cxiCKGtfT61QZSA
-   w==;
-X-CSE-ConnectionGUID: nAbb79/qQuqtiBtY2cp+9A==
-X-CSE-MsgGUID: P/wOstKUSem/U5jG6kWggg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11063"; a="22027227"
-X-IronPort-AV: E=Sophos;i="6.07,253,1708416000"; 
-   d="scan'208";a="22027227"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2024 23:09:19 -0700
-X-CSE-ConnectionGUID: Q0dym+ifSoO6eFUGYTDdCw==
-X-CSE-MsgGUID: xllM4G0TSIWi/prhsaeP9A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,253,1708416000"; 
-   d="scan'208";a="27746819"
-Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 03 May 2024 23:09:18 -0700
-Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s38aC-000CUH-0C;
-	Sat, 04 May 2024 06:09:16 +0000
-Date: Sat, 04 May 2024 14:09:02 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- b3e40fc85735b787ce65909619fcd173107113c2
-Message-ID: <202405041400.Qnt40SKk-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1714805396; c=relaxed/simple;
+	bh=rx9kJq41d+LKrriX6r8ovyOqv24j2QFcPlhuxeiCtJs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Y+8kh3z3cii0PJxP70qgcKJbb0xF6lQb33onU3/PDgDF3lu0Q7V/BR3E8Ckb4tifvLhMXWrlzjMpp6xRzxGN5m+XumPvfJuarLDdUSSSmLlyLpPsaJW6n7WMb6otAYbJtN8i0Gq9o925wGwZRXMVx4uOGW5FlZdmq9+NCkKIfT4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=dLzg0Enm; arc=none smtp.client-ip=209.85.128.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-61e04fcf813so2933187b3.3
+        for <linux-usb@vger.kernel.org>; Fri, 03 May 2024 23:49:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1714805393; x=1715410193; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=D3cJMKI74/BsfKZhlMzBdzwD07fKdpiipZf5wrnLnNY=;
+        b=dLzg0EnmTHhjKDecaDM4ov2NbI7D+i3KVx5oi94kjVVsu5BByXxAsdcZoMJ6LhDfcu
+         qsQYkCvfgRixNR90K147UqfNpCrF8jebNLqx5D/jWDCdZASW0SFPVDwA9oSg7XECxhf8
+         IQPsO3obqrwJAQEMvBrqVtZBud9FhIo+bzqPZ7OR4CegL98ejtGMbEWIT/sjnsSYHMBW
+         gQFOhQ6VGNosImVpkZTrW97K+LqDDC1Om/mjmlAOj4Jpd1tgLLa1gkqttnM58oFxHoJ5
+         ze9bfIkFvoTxdTaZAQQZQmcTLg3ozlKvn789+9hKuUCq7TQqxF0cj98+qR7q8EqLhuG8
+         /ZDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714805393; x=1715410193;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=D3cJMKI74/BsfKZhlMzBdzwD07fKdpiipZf5wrnLnNY=;
+        b=VRWi95DrfagAQNjy9JFxa6xG7nka3m2VEqc7+lN4FLR13Z4mQMtWWvjoH5kD48SJSf
+         xgQG4SmDL7YXU2tUZlhHJTfPvPJMtoMbQMl5svDfjP7CmZCUIeGFsUyCxK7Rc5dgeg6r
+         oH15rh7gqZG972lkPlyiID1EXBLSo+O/6uUEimn9sykmBni8waKPTn67A9nIDONEFnY3
+         Rl8yJ0Hj0QkNUGpuImazRSQgMc1/inFnumKSM7NEOA7n4SmW9DbkQ7bfhfXZ8HMGAXes
+         mEDlLLRouAG3xYezzo6uBZdabMtf1wc2bKHVjUXV9xzR2qOekU1W1gGJpxLISNIcB8+o
+         5z/A==
+X-Forwarded-Encrypted: i=1; AJvYcCWl1zJZnqsppcGQADzpmK6eBpMAG1vstwAlNtV7BQet6vnxXmwQHjodRkpad0uweEdaxelzOe7Wzd/+tZD5SdVHaeEyOlykdZ75
+X-Gm-Message-State: AOJu0YyYta37NnqQrpv9aVXHbrOmgZiO02vpks2fRyfY42EFphcjHznJ
+	MWZ8TIm6PNWS8DE7sZkRaTmHeVJJeoNPHZIRVdCa5r/y/Kos9hitb/PUoem4UVNm65eVHOJtxvq
+	OlDEyZ4NfCLzxRKbhKcTa1R8y2+Mkg4lKY+tTdg==
+X-Google-Smtp-Source: AGHT+IH96ebzgmWajjZwH3a4VG81/DDdvIkP/nzgQ+XXTMcLaurSNGHeJ9w5TE6ZqSu5Le59NiFfQiZNAmZrA88LOqg=
+X-Received: by 2002:a05:690c:f06:b0:61b:33f7:225a with SMTP id
+ dc6-20020a05690c0f0600b0061b33f7225amr5693836ywb.42.1714805393327; Fri, 03
+ May 2024 23:49:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20240416-ucsi-glink-altmode-v1-0-890db00877ac@linaro.org>
+ <20240416-ucsi-glink-altmode-v1-7-890db00877ac@linaro.org>
+ <ZiZC/l9nOmzWx+j6@kuha.fi.intel.com> <46fktwtp3xers6tcpov3qo4zswptvajewsdltm45zbz2kmmpzp@cthu6ylttup3>
+ <ZiZ8El4779l0W1Ig@kuha.fi.intel.com>
+In-Reply-To: <ZiZ8El4779l0W1Ig@kuha.fi.intel.com>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date: Sat, 4 May 2024 09:49:42 +0300
+Message-ID: <CAA8EJppMKFSbe-EZLELy+dnd4BZeg24crotH95hpCwcvoEbw5Q@mail.gmail.com>
+Subject: Re: [PATCH 7/8] usb: typec: ucsi: glink: merge pmic_glink_altmode driver
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Neil Armstrong <neil.armstrong@linaro.org>, 
+	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-msm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: b3e40fc85735b787ce65909619fcd173107113c2  USB: usb_parse_endpoint: ignore reserved bits
+On Mon, 22 Apr 2024 at 18:02, Heikki Krogerus
+<heikki.krogerus@linux.intel.com> wrote:
+>
+> Hi Dmitry,
+>
+> On Mon, Apr 22, 2024 at 03:45:22PM +0300, Dmitry Baryshkov wrote:
+> > On Mon, Apr 22, 2024 at 01:59:10PM +0300, Heikki Krogerus wrote:
+> > > Hi Dmitry,
+> > >
+> > > On Tue, Apr 16, 2024 at 05:20:56AM +0300, Dmitry Baryshkov wrote:
+> > > > Move handling of USB Altmode to the ucsi_glink driver. This way the
+> > > > altmode is properly registered in the Type-C framework, the altmode
+> > > > handlers can use generic typec calls, the UCSI driver can use
+> > > > orientation information from altmode messages and vice versa, the
+> > > > altmode handlers can use GPIO-based orientation inormation from UCSI
+> > > > GLINK driver.
+> > > >
+> > > > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> > > > ---
+> > > >  drivers/soc/qcom/Makefile             |   1 -
+> > > >  drivers/soc/qcom/pmic_glink_altmode.c | 546 ----------------------------------
+> > > >  drivers/usb/typec/ucsi/ucsi_glink.c   | 495 ++++++++++++++++++++++++++++--
+> > > >  3 files changed, 475 insertions(+), 567 deletions(-)
+> > > >
+> >
+> > [skipped the patch]
+> >
+> > > > +
+> > > > +static void pmic_glink_ucsi_register_altmode(struct ucsi_connector *con)
+> > > > +{
+> > > > + static const u8 all_assignments = BIT(DP_PIN_ASSIGN_C) | BIT(DP_PIN_ASSIGN_D) |
+> > > > +                      BIT(DP_PIN_ASSIGN_E);
+> > > > + struct typec_altmode_desc desc;
+> > > > + struct typec_altmode *alt;
+> > > > +
+> > > > + mutex_lock(&con->lock);
+> > > > +
+> > > > + if (con->port_altmode[0])
+> > > > +         goto out;
+> > > > +
+> > > > + memset(&desc, 0, sizeof(desc));
+> > > > + desc.svid = USB_TYPEC_DP_SID;
+> > > > + desc.mode = USB_TYPEC_DP_MODE;
+> > > > +
+> > > > + desc.vdo = DP_CAP_CAPABILITY(DP_CAP_DFP_D);
+> > > > +
+> > > > + /* We can't rely on the firmware with the capabilities. */
+> > > > + desc.vdo |= DP_CAP_DP_SIGNALLING(0) | DP_CAP_RECEPTACLE;
+> > > > +
+> > > > + /* Claiming that we support all pin assignments */
+> > > > + desc.vdo |= all_assignments << 8;
+> > > > + desc.vdo |= all_assignments << 16;
+> > > > +
+> > > > + alt = typec_port_register_altmode(con->port, &desc);
+> > >
+> > >         alt = ucsi_register_displayport(con, 0, 0, &desc);
+> >
+> > Note, the existing UCSI displayport AltMode driver depends on the UCSI
+> > actually handling the altomode. It needs a partner, etc.
+> >
+> > > You need to export that function, but that should not be a problem:
+> > >
+> > > diff --git a/drivers/usb/typec/ucsi/displayport.c b/drivers/usb/typec/ucsi/displayport.c
+> > > index d9d3c91125ca..f2754d7b5876 100644
+> > > --- a/drivers/usb/typec/ucsi/displayport.c
+> > > +++ b/drivers/usb/typec/ucsi/displayport.c
+> > > @@ -315,11 +315,13 @@ struct typec_altmode *ucsi_register_displayport(struct ucsi_connector *con,
+> > >         struct ucsi_dp *dp;
+> > >
+> > >         /* We can't rely on the firmware with the capabilities. */
+> > > -       desc->vdo |= DP_CAP_DP_SIGNALLING(0) | DP_CAP_RECEPTACLE;
+> > > +       if (!desc->vdo) {
+> > > +               desc->vdo = DP_CAP_DP_SIGNALLING(0) | DP_CAP_RECEPTACLE;
+> > >
+> > > -       /* Claiming that we support all pin assignments */
+> > > -       desc->vdo |= all_assignments << 8;
+> > > -       desc->vdo |= all_assignments << 16;
+> > > +               /* Claiming that we support all pin assignments */
+> > > +               desc->vdo |= all_assignments << 8;
+> > > +               desc->vdo |= all_assignments << 16;
+> > > +       }
+> > >
+> > >         alt = typec_port_register_altmode(con->port, desc);
+> > >         if (IS_ERR(alt))
+> > > @@ -342,3 +344,4 @@ struct typec_altmode *ucsi_register_displayport(struct ucsi_connector *con,
+> > >
+> > >         return alt;
+> > >  }
+> > > +EXPORT_SYMBOL_GPL(ucsi_register_displayport);
+> > >
+> > > <snip>
+> > >
+> > > > +static void pmic_glink_ucsi_set_state(struct ucsi_connector *con,
+> > > > +                               struct pmic_glink_ucsi_port *port)
+> > > > +{
+> > > > + struct typec_displayport_data dp_data = {};
+> > > > + struct typec_altmode *altmode = NULL;
+> > > > + unsigned long flags;
+> > > > + void *data = NULL;
+> > > > + int mode;
+> > > > +
+> > > > + spin_lock_irqsave(&port->lock, flags);
+> > > > +
+> > > > + if (port->svid == USB_SID_PD) {
+> > > > +         mode = TYPEC_STATE_USB;
+> > > > + } else if (port->svid == USB_TYPEC_DP_SID && port->mode == DPAM_HPD_OUT) {
+> > > > +         mode = TYPEC_STATE_SAFE;
+> > > > + } else if (port->svid == USB_TYPEC_DP_SID) {
+> > > > +         altmode = find_altmode(con, port->svid);
+> > > > +         if (!altmode) {
+> > > > +                 dev_err(con->ucsi->dev, "altmode woth SVID 0x%04x not found\n",
+> > > > +                         port->svid);
+> > > > +                 spin_unlock_irqrestore(&port->lock, flags);
+> > > > +                 return;
+> > > > +         }
+> > > > +
+> > > > +         mode = TYPEC_MODAL_STATE(port->mode - DPAM_HPD_A);
+> > > > +
+> > > > +         dp_data.status = DP_STATUS_ENABLED;
+> > > > +         dp_data.status |= DP_STATUS_CON_DFP_D;
+> > > > +         if (port->hpd_state)
+> > > > +                 dp_data.status |= DP_STATUS_HPD_STATE;
+> > > > +         if (port->hpd_irq)
+> > > > +                 dp_data.status |= DP_STATUS_IRQ_HPD;
+> > > > +         dp_data.conf = DP_CONF_SET_PIN_ASSIGN(port->mode - DPAM_HPD_A);
+> > > > +
+> > > > +         data = &dp_data;
+> > > > + } else {
+> > > > +         dev_err(con->ucsi->dev, "Unsupported SVID 0x%04x\n", port->svid);
+> > > > +         spin_unlock_irqrestore(&port->lock, flags);
+> > > > +         return;
+> > > > + }
+> > > > +
+> > > > + spin_unlock_irqrestore(&port->lock, flags);
+> > > > +
+> > > > + if (altmode)
+> > > > +         typec_altmode_set_port(altmode, mode, data);
+> > >
+> > > So if the port altmode is using the ucsi_displayport_ops, you can
+> > > simply register the partner altmode here instead. That should
+> > > guarantee that it'll bind to the DP altmode driver which will take
+> > > care of typec_altmode_enter() etc.
+> >
+> > In our case the altmode is unfortunately completely hidden inside the
+> > firmware. It is not exported via the native UCSI interface. Even if I
+> > plug the DP dongle, there is no partner / altmode being reported by the
+> > PPM. All DP events are reported via additional GLINK messages.
+>
+> I understand that there is no alt mode being reported, but I assumed
+> that there is a notification about connections.
+>
+> If that's not the case, then you need to use this code path to
+> register the partner device as well I think. The partner really has to
+> be registered somehow.
+>
+> > The goal is to use the core Type-C altmode handling, while keeping UCSI
+> > out of the altmode business.
+> >
+> > This allows the core to handle switches / muxes / retimers, report the
+> > altmode to the userspace via sysfs, keep the link between the DP part of
+> > the stack and the typec port, but at the same time we don't get errors
+> > from UCSI because of the PPM reporting unsupported commands, etc.
+>
+> I understand, and just to be clear, I don't have a problem with
+> bypassing UCSI. But that does not mean you can skip the alt mode
+> registration.
+>
+> The primary purpose of drivers/usb/typec/ucsi/displayport.c is to
+> emulate the partner DP alt mode device a little so that the actual DP
+> alt mode driver drivers/usb/typec/altmodes/displayport.c is happy. The
+> altmode driver will then make sure that all the muxes, switches and
+> what have you, are configured as they should, and more importantly,
+> make sure the DP alt mode is exposed to the user space exactly the
+> same way as it's exposed on all the other systems.
+>
+> There are a couple of UCSI commands that are being used there yes, but
+> by modifying it so that those UCSI commands are executed conditionally
+> - by checking the ALT_MODE_DETAILS feature - you should be able to use
+> it also in this case.
 
-elapsed time: 1447m
+I have played with the DP AltMode driver. I got it somewhat working,
+but I think I'm facing a control issue.
+Basically, the altmode driver wants to control pin assignment on its
+own. It works with the software TCPM, as we control it.
+It works with the normal UCSI, because it still can configure pin
+config. However with PMIC GLINK implementation there is no way to
+control pin assignment from the Linux side. The firmware does that for
+us.
+What would be the recommended way to handle it? Is it okay to override
+status_update to return just the selected pin config? Or is there any
+other (better) way to handle such an issue?
 
-configs tested: 159
-configs skipped: 3
+>
+> You really need to register the partner alt mode(s) one way or the
+> other in any case, and the partner device itself you absolutely must
+> register. The user space interface needs to be consistent.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                          axs103_defconfig   gcc  
-arc                                 defconfig   gcc  
-arc                   randconfig-001-20240504   gcc  
-arc                   randconfig-002-20240504   gcc  
-arc                           tb10x_defconfig   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   clang
-arm                              allyesconfig   gcc  
-arm                                 defconfig   clang
-arm                          moxart_defconfig   gcc  
-arm                        multi_v5_defconfig   gcc  
-arm                         s3c6400_defconfig   gcc  
-arm                           sama5_defconfig   gcc  
-arm                           u8500_defconfig   gcc  
-arm                    vt8500_v6_v7_defconfig   gcc  
-arm64                            alldefconfig   gcc  
-arm64                            allmodconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                            allyesconfig   clang
-arm64                               defconfig   gcc  
-arm64                 randconfig-001-20240504   gcc  
-arm64                 randconfig-002-20240504   gcc  
-arm64                 randconfig-003-20240504   gcc  
-csky                              allnoconfig   gcc  
-csky                                defconfig   gcc  
-csky                  randconfig-001-20240504   gcc  
-csky                  randconfig-002-20240504   gcc  
-hexagon                          allmodconfig   clang
-hexagon                           allnoconfig   clang
-hexagon                          allyesconfig   clang
-hexagon                             defconfig   clang
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-001-20240504   clang
-i386         buildonly-randconfig-004-20240504   clang
-i386         buildonly-randconfig-005-20240504   clang
-i386         buildonly-randconfig-006-20240504   clang
-i386                                defconfig   clang
-i386                  randconfig-002-20240504   clang
-i386                  randconfig-004-20240504   clang
-i386                  randconfig-005-20240504   clang
-i386                  randconfig-012-20240504   clang
-i386                  randconfig-013-20240504   clang
-i386                  randconfig-016-20240504   clang
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                        allyesconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20240504   gcc  
-loongarch             randconfig-002-20240504   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                       m5208evb_defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                       lemote2f_defconfig   gcc  
-mips                          rm200_defconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                 randconfig-001-20240504   gcc  
-nios2                 randconfig-002-20240504   gcc  
-openrisc                         allmodconfig   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc                randconfig-001-20240504   gcc  
-parisc                randconfig-002-20240504   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   clang
-powerpc                    ge_imp3a_defconfig   gcc  
-powerpc                 mpc8313_rdb_defconfig   gcc  
-powerpc                         ps3_defconfig   gcc  
-powerpc               randconfig-001-20240504   gcc  
-powerpc               randconfig-002-20240504   gcc  
-powerpc               randconfig-003-20240504   gcc  
-riscv                            allmodconfig   clang
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   clang
-riscv                               defconfig   clang
-riscv                 randconfig-001-20240504   gcc  
-riscv                 randconfig-002-20240504   gcc  
-s390                             allmodconfig   clang
-s390                              allnoconfig   clang
-s390                             allyesconfig   gcc  
-s390                                defconfig   clang
-s390                  randconfig-002-20240504   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                         ap325rxa_defconfig   gcc  
-sh                         apsh4a3a_defconfig   gcc  
-sh                                  defconfig   gcc  
-sh                         ecovec24_defconfig   gcc  
-sh                        edosk7705_defconfig   gcc  
-sh                    randconfig-001-20240504   gcc  
-sh                    randconfig-002-20240504   gcc  
-sh                           se7780_defconfig   gcc  
-sh                   sh7724_generic_defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-sparc64               randconfig-001-20240504   gcc  
-sparc64               randconfig-002-20240504   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   gcc  
-um                                  defconfig   clang
-um                             i386_defconfig   gcc  
-um                    randconfig-001-20240504   gcc  
-um                           x86_64_defconfig   clang
-x86_64                            allnoconfig   clang
-x86_64                           allyesconfig   clang
-x86_64       buildonly-randconfig-001-20240504   gcc  
-x86_64       buildonly-randconfig-003-20240504   gcc  
-x86_64       buildonly-randconfig-004-20240504   gcc  
-x86_64                              defconfig   gcc  
-x86_64                randconfig-005-20240504   gcc  
-x86_64                randconfig-011-20240504   gcc  
-x86_64                randconfig-013-20240504   gcc  
-x86_64                randconfig-015-20240504   gcc  
-x86_64                randconfig-071-20240504   gcc  
-x86_64                randconfig-073-20240504   gcc  
-x86_64                randconfig-074-20240504   gcc  
-x86_64                randconfig-076-20240504   gcc  
-x86_64                          rhel-8.3-func   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa                            allnoconfig   gcc  
-xtensa                           allyesconfig   gcc  
-xtensa                       common_defconfig   gcc  
-xtensa                randconfig-001-20240504   gcc  
-xtensa                randconfig-002-20240504   gcc  
-xtensa                    xip_kc705_defconfig   gcc  
+For reference, the partner is being reported and registered by the
+UCSI firmware. It's only the altmode itself where I'm facing the
+issue.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+With best wishes
+Dmitry
 
