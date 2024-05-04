@@ -1,67 +1,57 @@
-Return-Path: <linux-usb+bounces-10019-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10020-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8EACC8BB9B8
-	for <lists+linux-usb@lfdr.de>; Sat,  4 May 2024 09:25:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F85B8BBA27
+	for <lists+linux-usb@lfdr.de>; Sat,  4 May 2024 10:49:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ADA59B21B6D
-	for <lists+linux-usb@lfdr.de>; Sat,  4 May 2024 07:25:13 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8F1DDB21B25
+	for <lists+linux-usb@lfdr.de>; Sat,  4 May 2024 08:49:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F865D29E;
-	Sat,  4 May 2024 07:25:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37DD1134A8;
+	Sat,  4 May 2024 08:49:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="gADPExCn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tMEWKLz2"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD4234C79;
-	Sat,  4 May 2024 07:25:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 962BBF4E7;
+	Sat,  4 May 2024 08:49:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714807503; cv=none; b=knPmQ6msnO8tWQrNQgGcJRF8gA8/ieys39Pxrq8N1f+J7Ic05xXd3j8ES7PYdFQ3i666li/V/SIkZ9VUW9ZOTPAotKrOi9fyiOkjU1c9d40GCjGs3LdsvyZJuU3FqzbsR3QyhkfaQhL6x9ir8dK/V4YQ8yrrBXFiD3pVBH22ywE=
+	t=1714812576; cv=none; b=mefMYNqPqMHXWxX+bM9SMiXhCBVrNjkN9qK2U0bQUg2WhiwaZtZX7+8v3016rY5y/d1+pz2yElQ9H6CRMnXScp29dZCmxcAoR5C8BIcL6gMzhCKwA3V45uV7kRFbp/ULjtcPXXOVf4NwWtx3WUPgZGYWYzF849mUMgXI5tl4Cec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714807503; c=relaxed/simple;
-	bh=WdmDyNf2NKYNL8b8araxldj2J5xKr2CLnPlzbU7nol0=;
+	s=arc-20240116; t=1714812576; c=relaxed/simple;
+	bh=0gJFi+kIDeGMpOWnhH/p/VLDwq/nOlBo/W46WN3ey2U=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RCppYHe/ARV68Gu1tcgejto64CkXb7XcSr5RAauBE2TJ18FTryj4TMPptV+FI3nkcx/MWvYJou9TQYku++1m+/jO6DsPYBsUGQFuq0FVWbzBnqJdJCp+l9oFURbvQB24oOgce5KzD7V75cU1I/cJJqaiShwemd6ljclmda3RhPk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=gADPExCn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA647C072AA;
-	Sat,  4 May 2024 07:25:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1714807502;
-	bh=WdmDyNf2NKYNL8b8araxldj2J5xKr2CLnPlzbU7nol0=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=g/Sz2IkpB+c6CpptULI1RsyKoyeci+SHm2NkkjABuo8nqQD9u7cOynnqxSzjQCu6ETgv08UUgVAF6SSoD71dorbsKwzvPRMIn1LYy9eMQfHUobDQvyV9WUl/AoxHlcR3lQz18SAs5I0J3gxG3zPZ1CnXxY8hGYM5wyLozpmH0V8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tMEWKLz2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECE5BC072AA;
+	Sat,  4 May 2024 08:49:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1714812576;
+	bh=0gJFi+kIDeGMpOWnhH/p/VLDwq/nOlBo/W46WN3ey2U=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gADPExCnuVuNsa1mA67lj19b0lFVc6LhsdF4qHJciHwcSoqcksUeVPBvEEbuMlVuu
-	 GkN3u7MmS3g2wrsX0dJGkTZtnptuK/ru56gNLJTR8eLSWKFYUinTxEhXMDLYr+Kedx
-	 O+HDqymWhn3kgO/ZOMR/t2n7yHbidUflf6PazjdM=
-Date: Sat, 4 May 2024 09:24:58 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Markus Elfring <Markus.Elfring@web.de>
-Cc: Jameson Thies <jthies@google.com>,
-	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-	linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org,
-	Benson Leung <bleung@google.com>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Prashant Malani <pmalani@chromium.org>,
-	Rajaram Regupathy <rajaram.regupathy@intel.com>,
-	Saranya Gopal <saranya.gopal@intel.com>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>
-Subject: Re: [v3 1/4] usb: typec: ucsi: Fix null pointer dereference in trace
-Message-ID: <2024050451-stonewall-mouse-4a31@gregkh>
-References: <20240503003920.1482447-2-jthies@google.com>
- <96d63b0b-3258-4bf6-b75a-06eb4f4253bb@web.de>
- <CAMFSARdhyWAFWr6qjsabPN6k=sK9LLxOaoSNkVLyTKNE=drSpg@mail.gmail.com>
- <265db78b-1d69-4b12-a370-2589d8987833@web.de>
+	b=tMEWKLz2fYRGkpBEDAoxXAy/2t+FgUK5mr2FUtsTW0saOxl77nprEO9qZeUTdTbwm
+	 1b0hSwkqdaulpByawb7e9cmgEB+cmxnLnI1Ti4XPJlR6ccyLHRow5Gc284TZGdhhx9
+	 qYpI7T4K7h1FBTVEl5Lf/S0lrzBZVlSzDKKbwK0ATAetxbnJKnVRmPNerV4zuISM1+
+	 pAZs+yoM/sIlEfhaKfgkLeeUfYqD5viqn49SyusS7wAvSqYHcrmFlXK/PoBb3tAXVv
+	 rTe6HV5Dji/g0PAqQOoc7bENSDpmNzvG/O3iGOq/OjMH2b5GWy8NtTfxkakhPKCV2/
+	 O4xrgOxNxtF2Q==
+Date: Sat, 4 May 2024 09:49:31 +0100
+From: Simon Horman <horms@kernel.org>
+To: Rengarajan S <rengarajan.s@microchip.com>
+Cc: woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, netdev@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v1] lan78xx: Enable 125 MHz CLK and Auto Speed
+ configuration for LAN7801 if NO EEPROM is detected
+Message-ID: <20240504084931.GA3167983@kernel.org>
+References: <20240502045503.36298-1-rengarajan.s@microchip.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -70,34 +60,30 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <265db78b-1d69-4b12-a370-2589d8987833@web.de>
+In-Reply-To: <20240502045503.36298-1-rengarajan.s@microchip.com>
 
-On Sat, May 04, 2024 at 07:12:49AM +0200, Markus Elfring wrote:
-> > I don't think it is necessary to mention changes to the commit message
-> > in the section below the commit message.
+On Thu, May 02, 2024 at 10:25:03AM +0530, Rengarajan S wrote:
+> The 125MHz and 25MHz clock configurations are done in the initialization
+> regardless of EEPROM (125MHz is needed for RGMII 1000Mbps operation). After
+> a lite reset (lan78xx_reset), these contents go back to defaults(all 0, so
+> no 125MHz or 25MHz clock and no ASD/ADD). Also, after the lite reset, the
+> LAN7800 enables the ASD/ADD in the absence of EEPROM. There is no such
+> check for LAN7801.
 > 
-> Did you notice that other contributors occasionally share hints about
-> adjustments for parts of commit messages?
-> Will further information presentation become better supported?
+> Signed-off-by: Rengarajan S <rengarajan.s@microchip.com>
 
-Hi,
+Hi Rengarajan,
 
-This is the semi-friendly patch-bot of Greg Kroah-Hartman.
+This patch seems address two issues.
+So I think it would be best to split it into two patches.
 
-Markus, you seem to have sent a nonsensical or otherwise pointless
-review comment to a patch submission on a Linux kernel developer mailing
-list.  I strongly suggest that you not do this anymore.  Please do not
-bother developers who are actively working to produce patches and
-features with comments that, in the end, are a waste of time.
+Also, are these problems bugs - do they have adverse effect visible by
+users? If so perhaps they should be targeted at 'net' rather than
+'net-next', and an appropriate Fixes tag should appear just above
+the Signed-off-by line (no blank line in between).
 
-Patch submitter, please ignore Markus's suggestion; you do not need to
-follow it at all.  The person/bot/AI that sent it is being ignored by
-almost all Linux kernel maintainers for having a persistent pattern of
-behavior of producing distracting and pointless commentary, and
-inability to adapt to feedback.  Please feel free to also ignore emails
-from them.
+...
 
-thanks,
-
-greg k-h's patch email bot
+-- 
+pw-bot: under-review
 
