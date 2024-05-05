@@ -1,129 +1,149 @@
-Return-Path: <linux-usb+bounces-10039-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10040-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C23748BC2E6
-	for <lists+linux-usb@lfdr.de>; Sun,  5 May 2024 19:55:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 23ECA8BC493
+	for <lists+linux-usb@lfdr.de>; Mon,  6 May 2024 00:36:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EF36B1C2091D
-	for <lists+linux-usb@lfdr.de>; Sun,  5 May 2024 17:55:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 471C71C20A8D
+	for <lists+linux-usb@lfdr.de>; Sun,  5 May 2024 22:36:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C32035A0FE;
-	Sun,  5 May 2024 17:55:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=holesch.de header.i=simon@holesch.de header.b="woWiK8s0"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18F1F13FD82;
+	Sun,  5 May 2024 22:36:30 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f208.google.com (mail-il1-f208.google.com [209.85.166.208])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B67A1E861;
-	Sun,  5 May 2024 17:55:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.72.192.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54B0A757E0
+	for <linux-usb@vger.kernel.org>; Sun,  5 May 2024 22:36:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.208
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714931706; cv=none; b=j10wrWHHxfiiKm7U1RMNUS9lAMWGIr5whC2ORBJpJcoxafTpJ0usQ9ELagzm4KIK3wJ4pgJq94C8uvmH8u7R5GuUHncW0GYdtX1q/LWWxV24sKMxbl8/zBqzERnpJvQGKsj/fu4aYtjMiutATiEalVl06mj3LE4a5Qi0VMEmLK4=
+	t=1714948589; cv=none; b=Fn3ae2QFdmpYD8tkYAIrGJiQzJB37QJTePYWHoIxItNrGtQLkYTzrfRcBnsOcmSHQylpBP1K3NEozP07f8wDbXiuHCh+AQoGrScvruE/VGbzs93VRhYQ07VZJrmHB/lzLfs4cuK4iILiaEJ9AkzqqyGzMIH/FUWr+dP6ZBnaEOg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714931706; c=relaxed/simple;
-	bh=rIgBau9/jOMDPPORyP5ZcAPOLT9dTV9Oi1ob3WkgI2E=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=U2OHY4QY1Y4EwghGq6qnh+s8RR4f7LdHJHnTJx5WpA2NWlHljCXe+dj5nPgLyekTPZj8g2xct/qDMvPNMyZe+vejL57Q/tNVY37mbO0p2D7+S5zaSyxx4jO/QG/jSUNUkGWJixuYk4Q9A1nqaXq7235507axduL6EeDoitpyP3E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=holesch.de; spf=pass smtp.mailfrom=holesch.de; dkim=pass (2048-bit key) header.d=holesch.de header.i=simon@holesch.de header.b=woWiK8s0; arc=none smtp.client-ip=217.72.192.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=holesch.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=holesch.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=holesch.de;
-	s=s1-ionos; t=1714931679; x=1715536479; i=simon@holesch.de;
-	bh=D8yZS40uvjiFal83TDgtbWp7BPRYiBD18deONZm1ueM=;
-	h=X-UI-Sender-Class:Mime-Version:Content-Transfer-Encoding:
-	 Content-Type:Date:Message-Id:Cc:Subject:From:To:References:
-	 In-Reply-To:cc:content-transfer-encoding:content-type:date:from:
-	 message-id:mime-version:reply-to:subject:to;
-	b=woWiK8s0KrUNO0aG48/OWpRqEDPSs6eIRGhBXxSKyVtCNKG+FNW3VZcJkiPkH9rj
-	 4QuKK5PYttrIpQwybV81Efgve5h/MLxlcKtSILcGEnxzWgnEMj4X0zQciDdbUym4C
-	 HDorMacx50/aduVH4daNFfxCRe3bdS/j0yfe6tyrIfERWhdB1JlbiBI2ICS7PwVTH
-	 FhOX/ISdXZ7WjAqtQuVX8SajdTNcbrkaBgRYcBrPExqxqZp4TKBwFMmy0qCHPHse7
-	 k4A3NkEeZ2TivWvrBBhtRJ6gGnEjy3G/tQUpwBfL47nWSrnb6NFih8h4pYeUW9y+k
-	 2ET7x0+JnC9ui93Qqw==
-X-UI-Sender-Class: 55c96926-9e95-11ee-ae09-1f7a4046a0f6
-Received: from localhost ([80.209.217.248]) by mrelayeu.kundenserver.de
- (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1M5Q6l-1s2IUU0vCv-001Pt6; Sun, 05 May 2024 19:54:39 +0200
+	s=arc-20240116; t=1714948589; c=relaxed/simple;
+	bh=r5gu4VxP7DM0vjapPd2xEd3mEadqa/G5QY8khM4nqWM=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=WkwAw++Eb9sLUZOXYPyt4w7CmX3/Gvm+ngHhh69gOcDPoVM52U8TjtFc07QV99ldRD3IpFE8HYosr12/99tYpMAreI2hm6Q6rj7J/hTgD1ySV5noHDH2EZvdMqqCSfw9HxD+WzW3+9jiK227HmfIeLYVR5k1W82tzEseT5ttB+8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.208
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f208.google.com with SMTP id e9e14a558f8ab-36b3b387b4eso18379865ab.2
+        for <linux-usb@vger.kernel.org>; Sun, 05 May 2024 15:36:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714948587; x=1715553387;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2OC1pGNkjhP1lPtL2vW4wwZ2WsJJG9m3Rl4S11h+ars=;
+        b=cWvHRMnc2K9C8vVsx47vZdp1ON8i29FAat9B/FGmu8vrUiwYmeCinkGwiz/f7trWPx
+         TbqwkUIakkHlmlF6Ttuqo4dnDst3gbS9OnalZvO4gmUw/qlio5nGu11yg2SNSIWdzP/o
+         dNNUsHkdVfXNJxcLA1uuJtYz1gxkdENaWBv9GGtB9ytsuBQe1EtLTOdeJrnRvhryavvW
+         7syiKbA2pfy9aft5uOC7CFU75Wsgt+1oGmGNrHCgQc+HzBvYbkCEmP9O0Rzlzmx4TgqE
+         rfLfUN7NXCttqBgu8aPOZeysqc7yhj+FQ/1Qv3dphPfTCc9hCmciYUCiTndbk92jMckr
+         gMDw==
+X-Forwarded-Encrypted: i=1; AJvYcCWATcSujQFq+ZZqrUZ4ddq/FT5+eDlCYaEe3S9dXdZH3xhTrnOVCAKRmnS2dArFFKtWd8OZKFSH2pUZOmJTl5W2hGsLEki74l4r
+X-Gm-Message-State: AOJu0YyLXLTQeRytb8l36n9rAh/f0lpoe7G5emZ9rivd0NWNKUFpR/8p
+	LE7buZ0aCDopt2BEOgZM3YAF41Qgytd/1iy4WiGuLntA32a+X9LnP4FJtweLXSaO+w4tp1TbVPv
+	YGz5Nx1996B78LxRgDTKwS3IBt661KPSmxw1E3QfRt2wJP7e0k1y/6ig=
+X-Google-Smtp-Source: AGHT+IG4abLFtNwhzBTUePKHMDhN1EtP93Ij2KhedALQLEIeEVxvEwzFsf2WMKJaEX20R8PnbVMNk+DDSDXngGsKEiFNrTgTnEzS
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sun, 05 May 2024 19:54:36 +0200
-Message-Id: <D11WJK47MBWS.3795S2OL21M7R@holesch.de>
-Cc: "Valentina Manea" <valentina.manea.m@gmail.com>, "Shuah Khan"
- <shuah@kernel.org>, "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
- "Shuah Khan" <skhan@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4] usbip: Don't submit special requests twice
-From: "Simon Holesch" <simon@holesch.de>
-To: "Hongren Zheng" <i@zenithal.me>
-X-Mailer: aerc 0.17.0
-References: <20231217194624.102385-1-simon@holesch.de>
- <ZjemYB6CpAx4Kx5f@Sun>
-In-Reply-To: <ZjemYB6CpAx4Kx5f@Sun>
-X-Provags-ID: V03:K1:mnpNGGOlL2uubD6dyHDJFpsrojJv5/+VtadWqjXFzvosraPoM+F
- Rctx+/V/KdSDDhYsXzvmOcSrOxeq4OC4r3Xc40NIQVFki4CdndC3zN1otiTE2DRps9WVxK9
- sz3X4oDDGsnOiAGTXHLQT5KGeiU5+DkkG+As86/iwMA+pH3QAfUWFvXijRF07PrqrAUOE82
- hnIEdXLWGvsbsgO8ut4BA==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:yk/FWOXkRlA=;iLTnnr1ujQyNqSdircR1HMBB8wu
- v30hocqDdKtgCXQXfZJRb1O3hUoqzL0TnQivT6OxiKpQm+C72DIJFq+q6TvnKWm1Hxb87ZrYu
- P2OTYRKICVMjmvsiMvboFGYml4m7A1V8wXwqC7H3VbeGbCjcvOo6mxulaGEpwiBgGAO9zcW3q
- ZyCizM/68yzzbfj99yQpzuLoihXJ+liD5EOE3XwDgORAtid3MmSzAr36Ro7JTHOl0sDXxFHiT
- gJerevZJfJN787qT/KS2MynBaSqtKfwLipEHdrtzlYblzEfaL8Yn09ZUBg3GEx1WmZkC5b77i
- bovbV07k8BZ1mX7PcZO8vnDfmvdijKZlxThHLb4z3vyrzeH/Nzb1aMfEYjsmcbxiV8ZavCLKD
- 1jlG83o4tv+7tkdS/HrkOS7raV0YtEvQ5KyoKz0VNQ1sMV/scEgN1U5Nv0B2RgY8MyKG/IWLm
- sFQNfw2OygRvyCCPckOp0AmwOpmM7usbBC5r9zNpq2udV/cjnZyX+QwYH5OOTHOc46csfueH9
- 7sv5fXDDSXuuu/g5cWvcu/+MaHIyvCqVwDvnnb9m8lkdc+Tg12RRF/t110/9UUNmVF2hI9a+V
- nfVM7ghEeeL07g5xxpsN4zUYipkpDDMXdp07vwNEUDUdvbR4TnA7LO8P183nucsa0KBIXnQWN
- Y9gN7nHjBeBASl+s5i4xWT9N3F753XLN6YUOB69huziFPiDsiMFGWgKDdGbEDBe2KDSfA6V6u
- CeVXSQgmY1GYtuWNDKUeSKcrMkVaOkK/MevMyhF2pmy/dSwMDUbenI=
+MIME-Version: 1.0
+X-Received: by 2002:a05:6e02:1d9d:b0:36c:468b:203c with SMTP id
+ h29-20020a056e021d9d00b0036c468b203cmr538845ila.4.1714948587536; Sun, 05 May
+ 2024 15:36:27 -0700 (PDT)
+Date: Sun, 05 May 2024 15:36:27 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000005e57b10617bc951f@google.com>
+Subject: [syzbot] [input?] [usb?] WARNING in hid_output_report
+From: syzbot <syzbot+5186630949e3c55f0799@syzkaller.appspotmail.com>
+To: bentiss@kernel.org, jikos@kernel.org, linux-input@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Sun May 5, 2024 at 5:31 PM CEST, Hongren Zheng wrote:
-> On Sun, Dec 17, 2023 at 08:30:40PM +0100, Simon Holesch wrote:
-> > Skip submitting URBs, when identical requests were already sent in
-> > tweak_special_requests(). Instead call the completion handler directly
-> > to return the result of the URB.
->
-> Reproduced the behavior and this patch fixed the bahavior
+Hello,
 
-Thank you for testing.
+syzbot found the following issue on:
 
-> > @@ -468,6 +477,7 @@ static void stub_recv_cmd_submit(struct stub_device=
- *sdev,
-> >  	int support_sg =3D 1;
-> >  	int np =3D 0;
-> >  	int ret, i;
-> > +	int is_tweaked;
-> > =20
-> >  	if (pipe =3D=3D -1)
-> >  		return;
-> > @@ -580,8 +590,7 @@ static void stub_recv_cmd_submit(struct stub_device=
- *sdev,
-> >  		priv->urbs[i]->pipe =3D pipe;
-> >  		priv->urbs[i]->complete =3D stub_complete;
-> > =20
-> > -		/* no need to submit an intercepted request, but harmless? */
-> > -		tweak_special_requests(priv->urbs[i]);
-> > +		is_tweaked =3D tweak_special_requests(priv->urbs[i]);
->
-> One question though, if there are mutiple urbs and one of them is
-> SET CONFIGURATION, then all of them would not be submitted,
-> as is_tweaked is a *global* flag instead of a per-urb flag.
->
-> Now it is assumed that when the urb is SET CONFIGURATION then
-> num_urbs is 1. I assume it just happens to be the case and I do
-> not know if it holds for all scenario.
+HEAD commit:    18daea77cca6 Merge tag 'for-linus' of git://git.kernel.org..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=159f1f17180000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d2f00edef461175
+dashboard link: https://syzkaller.appspot.com/bug?extid=5186630949e3c55f0799
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13deb917180000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1035ae87180000
 
-To be honest, I didn't fully understand the num_urbs > 1 case. I assumed
-this is for drivers not supporting SG and a long URB is just broken up
-into multiple ones.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/4614372cf68b/disk-18daea77.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/e118db95ea43/vmlinux-18daea77.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/998cf091eeb5/bzImage-18daea77.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+5186630949e3c55f0799@syzkaller.appspotmail.com
+
+keytouch 0003:0926:3333.0001: implement() called with too large value 8 (n: 1)! (kworker/0:0)
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 7 at drivers/hid/hid-core.c:1451 implement drivers/hid/hid-core.c:1451 [inline]
+WARNING: CPU: 0 PID: 7 at drivers/hid/hid-core.c:1451 hid_output_report+0x548/0x760 drivers/hid/hid-core.c:1863
+Modules linked in:
+CPU: 0 PID: 7 Comm: kworker/0:0 Not tainted 6.9.0-rc6-syzkaller-00046-g18daea77cca6 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/27/2024
+Workqueue: events hidinput_led_worker
+RIP: 0010:implement drivers/hid/hid-core.c:1451 [inline]
+RIP: 0010:hid_output_report+0x548/0x760 drivers/hid/hid-core.c:1863
+Code: a8 08 00 00 48 8b 44 24 40 48 8d b8 38 19 00 00 48 c7 c6 40 f7 aa 8c 48 c7 c2 c9 10 c9 8d 44 89 f1 45 89 e8 e8 99 e3 ca 02 90 <0f> 0b 90 44 23 74 24 18 e9 b7 fd ff ff 89 d9 80 e1 07 80 c1 03 38
+RSP: 0018:ffffc900000c7a90 EFLAGS: 00010046
+RAX: 65120fbe4e3ed400 RBX: 0000000000000001 RCX: 65120fbe4e3ed400
+RDX: 0000000000000000 RSI: 0000000080000001 RDI: 0000000000000000
+RBP: 0000000000000000 R08: ffffffff8176b74c R09: 1ffff92000018ea8
+R10: dffffc0000000000 R11: fffff52000018ea9 R12: 0000000000000000
+R13: 0000000000000001 R14: 0000000000000008 R15: 0000000000000000
+FS:  0000000000000000(0000) GS:ffff8880b9400000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000000000066c7e0 CR3: 00000000234e6000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __usbhid_submit_report drivers/hid/usbhid/hid-core.c:591 [inline]
+ usbhid_submit_report+0x43d/0x9e0 drivers/hid/usbhid/hid-core.c:636
+ process_one_work kernel/workqueue.c:3267 [inline]
+ process_scheduled_works+0xa10/0x17c0 kernel/workqueue.c:3348
+ worker_thread+0x86d/0xd70 kernel/workqueue.c:3429
+ kthread+0x2f0/0x390 kernel/kthread.c:388
+ ret_from_fork+0x4b/0x80 arch/x86/kernel/process.c:147
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
