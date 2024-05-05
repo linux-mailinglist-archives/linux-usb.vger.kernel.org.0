@@ -1,219 +1,119 @@
-Return-Path: <linux-usb+bounces-10032-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10033-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 13AC88BBED6
-	for <lists+linux-usb@lfdr.de>; Sun,  5 May 2024 01:45:21 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B08AF8BBF4F
+	for <lists+linux-usb@lfdr.de>; Sun,  5 May 2024 07:21:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BD5261F2165C
-	for <lists+linux-usb@lfdr.de>; Sat,  4 May 2024 23:45:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 62BFA281E8A
+	for <lists+linux-usb@lfdr.de>; Sun,  5 May 2024 05:21:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFD4184FAA;
-	Sat,  4 May 2024 23:45:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AE151C36;
+	Sun,  5 May 2024 05:21:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VHEUNN93"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FD0D3BBD6
-	for <linux-usb@vger.kernel.org>; Sat,  4 May 2024 23:45:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C91F17FF;
+	Sun,  5 May 2024 05:20:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714866313; cv=none; b=T9LwE6VUp28p0Xv+hKTYhjvhMsNXv9iSRTeTy+Tro4aGUtX3aZFFX2BjOb6iMhq8duGe1DcGJFpPy2AelOqzS/uIfujjSb8OgjwGJdLxT6PZgLNMuMGK4xJYIajN5/uhakR26ZeOk4WxSevodZeZaCsKvT0LSRypPfMAXQE05sc=
+	t=1714886459; cv=none; b=jX6BYYE7EX2PRC3y/nP4c9bMUXUwfCfMgjyeiBdvG3s11Qq9Am+ufXpvAuN1zdwTK58XlOxHj2TWbbDFm6KsvQIzmvXlcgv0b18yXhXHojuwMESXv6xtr8a5dn82xMxQZsY6xkpAgfp309fwxajkg7p5v991yg65mrcOX+neMzw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714866313; c=relaxed/simple;
-	bh=6NRranRUZtEu76ufx1GqSpQk/+a7exiuutmo9+O/V4E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UxtOfhocIBKGT0oEF2ZsALTyU+7COz+VADy/WLXqUWpSWo8LS0lrRFsyLRPW2I2jb7C4jQaRTR8Ob4hLQ0zLeWPklic1z5LvHJbVctbI7SS2c+0ci1g9UX4bcR9nWzPi0NFE5T9KgxDwbZKc9rkSZOl6EeI4JHj2KOo7spa3ZuI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1s3P3s-0005PE-2i; Sun, 05 May 2024 01:45:00 +0200
-Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1s3P3q-00FzBb-UE; Sun, 05 May 2024 01:44:58 +0200
-Received: from mgr by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1s3P3q-00BjLU-2k;
-	Sun, 05 May 2024 01:44:58 +0200
-Date: Sun, 5 May 2024 01:44:58 +0200
-From: Michael Grzeschik <mgr@pengutronix.de>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] usb: dwc3: gadget: check drained isoc ep
-Message-ID: <ZjbIeib2UMta7FbY@pengutronix.de>
-References: <20240307-dwc3-gadget-complete-irq-v2-1-8c5e9b35f7b9@pengutronix.de>
- <20240402230555.xgt5uilc42diyr4m@synopsys.com>
- <20240402231848.4hzzrxegjrcmdab2@synopsys.com>
- <20240404002906.wk6xbz2wp2tf2xwn@synopsys.com>
- <Zie5sN473m2rgNTK@pengutronix.de>
- <20240424015059.w7hsee4tt2ixkp5y@synopsys.com>
+	s=arc-20240116; t=1714886459; c=relaxed/simple;
+	bh=nC6Z/HJC20OmHLzryYOjpxrk/Qut/kde/pRKSle0cFA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=LKN4PHKsVcFaR6tWG1fRJXylkxxSwVQCCa4nyfYGfKAqS4JuVyt+VaBPwAYADtcqXwQuc9YqNmD9x5tpq388PrxTgtN6Iqio8oDLak6nuU3STjcXWknB+GAHyiOtgn+Dzj4PJt69bwprjC3cd/Y1h7gBQB49I5LtM+uagcOs7/4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VHEUNN93; arc=none smtp.client-ip=209.85.216.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-2b338460546so688525a91.1;
+        Sat, 04 May 2024 22:20:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1714886457; x=1715491257; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8gMn+BR9RQx2vxREiKnQ7+NVvFwlE93xnFnB8nM0/NQ=;
+        b=VHEUNN93ZetH5UWnHDKXFf/cHexjgb2dXKjdFXhZ2btt2nRnym8MYvXdzfGtBKD9CJ
+         oyzk80mporGxocAbpDfSBS/cG10hDa/zb4SzT9hNgle4+6tbzqOJn9uFnhO6QEOrpy4J
+         ojKpb3ChS+/sAQMCCu2ynB7v8bpcwgbAK0CK8T9UzP5EEeGYPJsAx3GpTXdWgrz5oFyL
+         qTwm9qQif5ZPn8k313EO/RT8SE2AyaWrEsDIV5QBXROqFoKFMPe5JwNm9pToiNIprqZR
+         R6+L6OO4y4Pt5AXjgckbQrAeHuP6rbpu/avou76L9qPYHOMGuQpPW5ZQ7K5vt0gsAX8C
+         7ACQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714886457; x=1715491257;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8gMn+BR9RQx2vxREiKnQ7+NVvFwlE93xnFnB8nM0/NQ=;
+        b=DbxA1k4qOGAS5llGxSdy4sTFRVr1Ei1fu9fikZJyZcdk017f+fpa+/eFJ22Klyrbp3
+         tqH0qvKfmkei8F8NQ1h/0j/+oGWvIEHK9XDlpUbnjROcTGyQgoG0pIoFVX3Rvr9lq8vj
+         +9wp/w65iswYlBlPGhVTwOE+4/6Pk12q/z0kxn+6KzkreFkgxhWTSsS6xo2nbhyTEqdd
+         s5i5RdDBZ2/rmlbIiMGq/VKzogtg/COy++v0/FJtnjV4fBS0LG96CN0IYmSn1gWdPYLb
+         mWk04XpK/1RyH4advVkXrrhdjBBx9VV+Qo26DVfwzs2qMN2KGD7va5SGOEyKv4cKxkSO
+         o4KQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVN4RE7h23Ep6jKRbLS52abYNPvL7Idqh6O7MKhuPqyOMWVmm7bjjts8FvRQM+b/jplU87ma4adRi1fPwBL8wFh4AHMoO0aSitlJ3ZA67yC7baQPXnJQuWXUZhy/Ft09ch49Bq+AM4S
+X-Gm-Message-State: AOJu0YxYUWv0q+Rp5zqPAx8CqIU8fh6z4GXaIfGy1ZxUWMiBTABYoNhl
+	P5wyBghEhreZMU7PRfBhXoKXsCMx4mhzozX28eyWd5UxP+XMCFDk
+X-Google-Smtp-Source: AGHT+IHY3DF81k4z2ufQCLvcmibVb6Nyy3avI53nitB/6kPVYJ8UKnCNk/FQnAiI7Ugq7cAojanIGA==
+X-Received: by 2002:a17:902:ef46:b0:1e4:9616:d967 with SMTP id e6-20020a170902ef4600b001e49616d967mr8733452plx.15.1714886457362;
+        Sat, 04 May 2024 22:20:57 -0700 (PDT)
+Received: from ?IPV6:2402:e280:214c:86:54ee:ba66:1638:6278? ([2402:e280:214c:86:54ee:ba66:1638:6278])
+        by smtp.gmail.com with ESMTPSA id jo3-20020a170903054300b001e904b1d164sm5884513plb.177.2024.05.04.22.20.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 04 May 2024 22:20:57 -0700 (PDT)
+Message-ID: <9574a4a1-a7b8-4f35-88b0-754c4396b02e@gmail.com>
+Date: Sun, 5 May 2024 10:50:53 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="pLoVn6qsK0dxz8GE"
-Content-Disposition: inline
-In-Reply-To: <20240424015059.w7hsee4tt2ixkp5y@synopsys.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL: http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] usb: typec: mux: replace of_node_put() with __free
+ [linux-next]
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: heikki.krogerus@linux.intel.com, dmitry.baryshkov@linaro.org,
+ neil.armstrong@linaro.org, christophe.jaillet@wanadoo.fr,
+ u.kleine-koenig@pengutronix.de, skhan@linuxfoundation.org,
+ javier.carrasco.cruz@gmail.com, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Julia Lawall <julia.lawall@inria.fr>
+References: <20240410175804.5195-1-prosunofficial@gmail.com>
+ <2024050443-coerce-bonus-977a@gregkh>
+Content-Language: en-US
+From: R Sundar <prosunofficial@gmail.com>
+In-Reply-To: <2024050443-coerce-bonus-977a@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+
+On 04/05/24 21:48, Greg KH wrote:
+> On Wed, Apr 10, 2024 at 11:28:04PM +0530, R SUNDAR wrote:
+>> Signed-off-by: R SUNDAR <prosunofficial@gmail.com>
+> 
+> Please fix your name up for the next version.
+
+Hi,
+
+This version of patch is sent  before comments provided for naming in 
+patch v1.
+
+The name and nitpick was fixed after suggestion provided in patch v1.
+
+https://lore.kernel.org/all/2024041103-doornail-professor-7c1e@gregkh/
 
 
---pLoVn6qsK0dxz8GE
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Link for patch after fixing name and nitpick:
 
-On Wed, Apr 24, 2024 at 01:51:01AM +0000, Thinh Nguyen wrote:
->On Tue, Apr 23, 2024, Michael Grzeschik wrote:
->> Hi Thinh,
->>
->> On Thu, Apr 04, 2024 at 12:29:14AM +0000, Thinh Nguyen wrote:
->> > On Tue, Apr 02, 2024, Thinh Nguyen wrote:
->> > > On Tue, Apr 02, 2024, Thinh Nguyen wrote:
->> > > > My concern here is for the case where transfer_in_flight =3D=3D tr=
-ue and
->> > >
->> > > I mean transfer_in_flight =3D=3D false
->> > >
->> > > > list_empty(started_list) =3D=3D false. That means that the request=
-s in the
->> > > > started_list are completed but are not given back to the gadget dr=
-iver.
->> > > >
->> > > > Since they remained in the started_list, they will be resubmitted =
-again
->> > > > on the next usb_ep_queue. We may send duplicate transfers right?
->> >
->> > Actually, since the requests are completed, the HWO bits are cleared,
->> > nothing is submitted and no duplicate. But since the requests are not
->> > given back yet from the started_list, then the next Start_Transfer
->> > command will begin with the TRB address of the completed request
->> > (HWO=3D0), the controller may not process the next TRBs. Have you test=
-ed
->> > this scenario?
->> >
->> > > >
->> > > > You can try to cleanup requests in the started_list, but you need =
-to be
->> > > > careful to make sure you're not out of sync with the transfer comp=
-letion
->> > > > events and new requests from gadget driver.
->> > > >
->> >
->> > Was the problem you encounter due to no_interrupt settings where the
->> > it was set to the last request of the uvc data pump?
->> >
->> > if that's the case, can UVC function driver make sure to not set
->> > no_interrupt to the last request of the data pump from the UVC?
->>
->> Actually no. What I want to do is to ensure that the dwc3 stream
->> is stopped when the hardware was drained. Which is a valid point
->> in my case. Since we are actually potentially enqueueing new request
->> in the complete handler, be it zero length or real transfers.
->>
->> Calling kick_transfer on an drained hw will absolutely run into
->> missed isocs if the irq thread was called late. We saw this on real hard=
-ware,
->> where another irq_thread was scheduled with the same priority as the
->> dwc3 irq_thread but was running so long that the HW was running dry in
->> between the hw irq and the actual dwc3_irq_thread run.
->>
->
->Right. Unfortunately, dwc3 can only "guess" when UVC function stops
->pumping more request or whether it's due to some large latency. The
->logic to workaround this underrun issue will not be foolproof. Perhaps
->we can improve upon it, but the solution is better implement at the UVC
->function driver.
+https://lore.kernel.org/all/20240426164705.2717-1-prosunofficial@gmail.com/
 
-Yes, the best way to solve this is in the uvc driver.
 
->I thought we have the mechanism in UVC function now to ensure queuing
->enough zero-length requests to account for underrun/latency issue?
->What's the issue now?
 
-This is actually only partially true. Even with the zero-length packages
-it is possible that we run into underruns. This is why we implemented
-this patch. This has happened because another interrupt thread with the
-same prio on the same CPU as this interrupt thread was keeping the CPU
-busy. As the dwc3 interrupt thread get to its call, the time was already
-over and the hw was already drained, although the started list was not
-yet empty, which was causing the next queued requests to be queued to
-late. (zero length or not)
-
-Yes, this needed to be solved on the upper level first, by moving the
-long running work of the other interrupt thread to another thread or
-even into the userspace.
-
-However I thought it would be great if we could somehow find out in
-the dwc3 core and make the pump mechanism more robust against such
-late enqueues.
-
-This all started with that series.
-
-https://lore.kernel.org/all/20240307-dwc3-gadget-complete-irq-v1-0-4fe9ac0b=
-a2b7@pengutronix.de/
-
-And patch 2 of this series did work well so far. The next move was this
-patch.
-
-Since the last week debugging we found out that it got other issues.
-It is not allways save to read the HWO bit, from the driver.
-
-Turns out that after an new TRB was prepared with the HWO bit set
-it is not save to read immideatly back from that value as the hw
-will be doing some operations on that exactly new prepared TRB.
-
-We ran into this problem when applying this patch. The trb buffer list
-was actually filled but we hit a false positive where the latest HWO bit
-was 0 (probably due to the hw action in the background) and therefor
-went into end transfer.
-
-Michael
-
---=20
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
-
---pLoVn6qsK0dxz8GE
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmY2yHgACgkQC+njFXoe
-LGRSaxAAxhBtE6gNRWYO1/UABS9K/sdIsmrSKNvVz9fOIYkEbrulPeJkOG/jJal4
-rWsVidfcLmgcOIJqn1kQG/K6qxWnojSURVSnhYueHPfIim/lakNyDspMfUwnf3nh
-gm3vaoGR7J3bX0wBIIIHAq8v3Js1qoeMHGgq/sw54OLqkIMn1s8nF2AID6PUxU7H
-CZtXz3YtcO5uWd4BK6krSrZd8+4jDRmab40iSMfOHYX79/a9hsy85gXuSOUV+wuz
-XVgeujs0iQnK8CY1hY3M9lAU6iE/ftUiQOqu70fmqASz6x7v3OYiwxrdc8bnjfKO
-5w44jXALoTjiyXDXsHH6/SwjdsT1zcgta0Xf6wKZSEp075c/LJ4w1dlb1Syh4k5H
-c7P10eO7xEogcd0uvYhCTDYAM1HlYU5MHt33+5KX88zlpIrbcy0t/mXiWnB8Hfdf
-BomDWOUskARk5S9EH7hobUEQSHYpEQT66WoJlhNVsf57GsAlxhoxraHbJ6ByDr9W
-fYgAA71tG9agpcFWWwxtQ9RDQ/kg3qp5euA8HbC5TGkAXKXYy6TfsrVpLIlk+tB8
-maR/dm2UBWQ9Wrlgn2F9Xb3DXhaszNkHi8SlBgMN/mvNcXg7luxYMg6yuCl+XLTK
-sLxDy5gdxqpqdbuIeWo591ZCrRyIjeh6F2aF/QuHIzgRTqFmwAM=
-=Uzn2
------END PGP SIGNATURE-----
-
---pLoVn6qsK0dxz8GE--
+Thanks,
+Sundar
 
