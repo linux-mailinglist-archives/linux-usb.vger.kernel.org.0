@@ -1,270 +1,253 @@
-Return-Path: <linux-usb+bounces-10036-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10037-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A14F8BC055
-	for <lists+linux-usb@lfdr.de>; Sun,  5 May 2024 14:15:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D7CD28BC1A9
+	for <lists+linux-usb@lfdr.de>; Sun,  5 May 2024 17:32:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BA47D281840
-	for <lists+linux-usb@lfdr.de>; Sun,  5 May 2024 12:15:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 06D761C20992
+	for <lists+linux-usb@lfdr.de>; Sun,  5 May 2024 15:32:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57A4B18643;
-	Sun,  5 May 2024 12:15:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDAAE374E9;
+	Sun,  5 May 2024 15:31:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="E9lDkKbb"
+	dkim=pass (1024-bit key) header.d=zenithal.me header.i=@zenithal.me header.b="pcMH5txY"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2104.outbound.protection.outlook.com [40.107.113.104])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 250072CA2
-	for <linux-usb@vger.kernel.org>; Sun,  5 May 2024 12:14:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714911301; cv=none; b=KTEGpzGhtoADE6+IJrd9PH1rHzaWRbyt9XUR6X01M3dIxmcx6gzVIm0LrwSjrwpg7nlHG9/KAats876S9COxby3c+sj+EQ4qifykLo2bV0LaAE+np3dT9K0HhamEj3g62qSw1bwR7+JTeiJZUyGTdwWAHyolPhGf18ebgpnYWMA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714911301; c=relaxed/simple;
-	bh=wtPFxJjqZfzkaieJGy0pleJHcAJZFGq3zcyPGbF68Ok=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=AJqiHHl0tgmtivoIeXRgV+ri6YNC3TRnF2dzdlK7CcA1gMsoa0oW9Pr9q4IhnlDO0EhfAiAfBQLO3F2gdONNzeI9hkStGVRGB+hIglnzLBC+XAndKX97+D6PHi7n73JmUcGV6DIONCnUAp43bYctLNBbRs3/lli1zfkOYsKarYM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=E9lDkKbb; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1714911300; x=1746447300;
-  h=date:from:to:cc:subject:message-id;
-  bh=wtPFxJjqZfzkaieJGy0pleJHcAJZFGq3zcyPGbF68Ok=;
-  b=E9lDkKbbPSEpezsea9HlW1dyhOyw5rdOKjVUGa1+Nu1jVRVTXAr9kg8t
-   +K84qI4q6a6lnMMaoN509nUlDzSJRCE2+sUn0z0KpQ8i55+94H4Pb3fow
-   60Lm7Vzyf80HgGmo3d7RNV/AeueJsfAiTNv/RJlTEqM3h/nNY+0GKFnyI
-   /42nxvn7h2g8vOwbtKyk1d4mbSlQMd+uXYq6fg7x31K0mSD+pjq/hGtAs
-   uv4gkMRKNXvF7hBUck1EOhjFH/ZfqvcouybKK+pjjim+3GAHzRQl2HnEJ
-   Q1QpZWqBBeIx+gYeqaiKOM6JEgZezokwEBgQPss5zykWZ7OJ5h3JPqQNj
-   w==;
-X-CSE-ConnectionGUID: pRpV4fUcRwCWobCcMEPEkA==
-X-CSE-MsgGUID: t5/NmyuxTiqiKvzeX+BCAA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11063"; a="11198373"
-X-IronPort-AV: E=Sophos;i="6.07,256,1708416000"; 
-   d="scan'208";a="11198373"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2024 05:14:59 -0700
-X-CSE-ConnectionGUID: 4hPU9KUbQk6ZtTehP+lYUg==
-X-CSE-MsgGUID: ww3IqZHLRCOtxS4porsXYg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,256,1708416000"; 
-   d="scan'208";a="28480776"
-Received: from lkp-server01.sh.intel.com (HELO 123fad1cf874) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 05 May 2024 05:14:58 -0700
-Received: from kbuild by 123fad1cf874 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s3alb-0000Cb-2P;
-	Sun, 05 May 2024 12:14:55 +0000
-Date: Sun, 05 May 2024 20:14:25 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- a2cf936ebef291ef7395172b9e2f624779fb6dc0
-Message-ID: <202405052023.zwbpBOLA-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3573F2232A;
+	Sun,  5 May 2024 15:31:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.113.104
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1714923117; cv=fail; b=guvfM/l1xm5kleLwpPx9cy86ckExQBuiO8gwp6el0ic7QqXs4LbnOfcpQrycRxq/PAMY/jizDX8WmII3pQAw9/hOvzPQZzxYXBsoS8aNhAAyYQq659yzJ22eQRhLpuMqHVC5HAuXNnkqJ/oimYYQfFCZYMVSetwkuRb+hPplmxU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1714923117; c=relaxed/simple;
+	bh=P6H+mqpy8+9mN0oCtx4hFsIed36ZRsmtKnPw6ECChFQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=ahyEs+qih4p2rNSAekoTYiH9O5sx77WrnAGHaJNBz8TFFDQLNNuI0Zd+UCCH/ZSxgmogEVp+ATc8MxFfBbsoPK8qZJRNr86jhJjoB20Beokv2hyRvtSlq8MQZlwqL2xe9/Ra/TkXUI3nG4JJRUe/Kx9W9xQdmN+46tHqgNp2coY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zenithal.me; spf=pass smtp.mailfrom=zenithal.me; dkim=pass (1024-bit key) header.d=zenithal.me header.i=@zenithal.me header.b=pcMH5txY; arc=fail smtp.client-ip=40.107.113.104
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zenithal.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zenithal.me
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ON4rQeXx0Ta3yBkU5hwP9riApJp4Ga1stVWqTTJ8NWrN0o3gQbBZYUcnKl1ybPhNGWcdg89xb/R38+vTa4jaqAu7pbI5YLwLRPBGD7EbNcW8GlTr13qoB7p0k9xzskVDhV84BO/t8xZgI5nRjVrJrPOTfxQE3VIAQaYqMn35BtPRNjdJ3F+oCXQDUoaomLI4qQtpZ92a57gOMUKZk1BXETNOAA1C7g03TJxYm0icHmwxEgImHNmUcQiWHkOe/LnHX3qiblWYKTBCE5KVw2Wmw3eLHe+hqO+2XtfR/qDOn1S2yZEeZR0f5wa3cXjCh7X0j7VwRIECB50ZrqiKHbo/Ew==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=knVl2MWCjyAQkv53/ycOoJTR3C2W0EGM0Mc3kHm1Fms=;
+ b=PEjHoT0/TtsSizgNJI8gz393dwAc+Rsue0SlitENJJjuUhwmOW9IowjYr2W72S7gSfua45IqKFTtzdjF5J7s1msMeXKv5PWY1LAV1+C3G+h+fkyayCwU8y0I/vGwO+bWfKWD9oMMDLm7Hmi1Yeh8KOsC73nkda71+skzoOdZDrGG2+1Pe24KYCb1OOZap0O/Y27vtWO9ufXJ5gqVSKs/3DC5ABrEG8PieBvs6FulzwTWCqpiJgVoxIrt8Sna+M+6eXKBZ9KGosyc6MSX3Fg5Kqh4sXzMHiEAN9Deb7NHPEgJ4zRsmwUeRj2xtjnkv1ndac9wQFAOEsLjz99MD0Nqeg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=zenithal.me; dmarc=pass action=none header.from=zenithal.me;
+ dkim=pass header.d=zenithal.me; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zenithal.me;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=knVl2MWCjyAQkv53/ycOoJTR3C2W0EGM0Mc3kHm1Fms=;
+ b=pcMH5txYFnNxCLr5OplQDa1aWO30Z1zRJyB1zAg/DzJm+X1zxO5LJwDx80yoQYtsssvHXkSJhzrC2dPtg3lsZl4u6Sn17r4g4Lk5XEzBB+1XjIrosQ9PVsqmHSNH72nkxv9oMaaoTEjg2DEMGukzcCmQe2EozlkCUQqOOWd0Dns=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=zenithal.me;
+Received: from TYCP286MB1393.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:c0::6) by
+ OSZP286MB2031.JPNP286.PROD.OUTLOOK.COM (2603:1096:604:181::14) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7544.41; Sun, 5 May 2024 15:31:52 +0000
+Received: from TYCP286MB1393.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::746a:424a:348:bab6]) by TYCP286MB1393.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::746a:424a:348:bab6%5]) with mapi id 15.20.7544.041; Sun, 5 May 2024
+ 15:31:52 +0000
+Date: Sun, 5 May 2024 23:31:44 +0800
+From: Hongren Zheng <i@zenithal.me>
+To: Simon Holesch <simon@holesch.de>
+Cc: Valentina Manea <valentina.manea.m@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Shuah Khan <skhan@linuxfoundation.org>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] usbip: Don't submit special requests twice
+Message-ID: <ZjemYB6CpAx4Kx5f@Sun>
+References: <20231217194624.102385-1-simon@holesch.de>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231217194624.102385-1-simon@holesch.de>
+X-Operating-System: Linux Sun 6.6.28
+X-Mailer: Mutt 2.2.13 (2024-03-09)
+X-ClientProxiedBy: BYAPR07CA0054.namprd07.prod.outlook.com
+ (2603:10b6:a03:60::31) To TYCP286MB1393.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:400:c0::6)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TYCP286MB1393:EE_|OSZP286MB2031:EE_
+X-MS-Office365-Filtering-Correlation-Id: afb05ee6-281e-4d17-6649-08dc6d187ccb
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230031|1800799015|366007|376005|41320700004;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?8zt8ISaO2xyIjTEfW1GVQUcorEe43upsWSafYMMBWVAQwhA2HdSC7SBTHzx4?=
+ =?us-ascii?Q?iWAuNAIQxGyMSDN1WsKqF0jBRU9vsEnFtdp60IGA7flE1Ru+KEmf5f2prTJW?=
+ =?us-ascii?Q?cyVPoI3OodcAOnMT44GSndF2rtiZRIFM2sZ6uEA3xF4lEsL5zkjWpbZ20Hl6?=
+ =?us-ascii?Q?iYDGxIA9oXpwH1v4MMkDU9A/KyworUM+3qzLmpdC+zbD6UW+1Rj69HRItEx0?=
+ =?us-ascii?Q?gXwPqNOs2P0vHl6MDfVZ4/d5Guh654k+z/zajEbHT5/REJkG2UfJjGLS0DHc?=
+ =?us-ascii?Q?BoiOTOzY3c+xCHlGvUdufNSS4WtRcKM2GEU42bwWgG9OnSVCJ63UILwszMAL?=
+ =?us-ascii?Q?XqURGrQ8rQbnXF1+aWWPIEc74h2sYKdlrKKZXk003bxZZwb5L5xqEVUWPBQp?=
+ =?us-ascii?Q?CYVw/xaKntk5WXGqJfTOl6uS1UZZXgV8dbpY++KprAzlJpCxeBa7omsv5gZL?=
+ =?us-ascii?Q?yupkIFpiwUcjo4Yqe5Vl9wIfTHqACxQ7Py7iqLvPySC3Bm9ZVdbgUTduXeCy?=
+ =?us-ascii?Q?FM8f7FANr2Koy32ROiqpAZwVEkNy6bnZK/qVcXZwYWEh+gAIsqjjjbv6pkfA?=
+ =?us-ascii?Q?+Sv0G+Wb6rK2ibfRR1No3D2jAHz/PAx5nFKD7oPW7Am8sewTHsbkevyzk95l?=
+ =?us-ascii?Q?WTOb6AzEVsPs7mMpIft0do+HsxjSX8UQTOoX2XS5petIBtX3hNOO+R9Dd32x?=
+ =?us-ascii?Q?QMh0Y8WL0ls1nv6r1/rrtTzGjzP8sdIxCzjsiUCE9Tbga9d0ovx6eXoVvtJl?=
+ =?us-ascii?Q?eVR+LOric5zsHSzIrw8MjNTPNwNcTdgpLIv2+SYFP2DHlmfdQU7OzxTJPsfj?=
+ =?us-ascii?Q?wD6JzwunxUmZAvjJ4edYHqrpoeRzHTveFLYmZsjVEAUgqVlfdHSSSKX/tBma?=
+ =?us-ascii?Q?BZ0KxfzRjVN0CXiVunCxNTm+5lU2gl4kdhD6ynAcRB4W9nj8xsdd03NQCMkU?=
+ =?us-ascii?Q?3+UlTjayWG8XCFGocdvhbCKvaWltVWUiDr4Skx5xUO6QLkF6WsYwH+saNac7?=
+ =?us-ascii?Q?VoBZgfTeNaArQGSzwkN/GrOnU2qFSjWXY8jxy1HKCgiIR6jZaGYRuU1NsZ9y?=
+ =?us-ascii?Q?Js4/XghNi57Jy0cjL5IX74hCA8AifK2MjovBzq7M4hWBi4CIteGZ1T1FXHEw?=
+ =?us-ascii?Q?ReeUP3aQgTET7Az3akJRblpI6S7PLA6yyEA5k7LOwz/EbwEVbF02eyzONTQF?=
+ =?us-ascii?Q?FOtAyWfjTRt9jIkl01Y1g61KtPckc4Kvc9CE1NhKcWZebn031q0gVzFIpzhG?=
+ =?us-ascii?Q?ij+MFY9YgOPqrkOwRJr1uIQHRAIlDviK+sgpv+5HIg=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYCP286MB1393.JPNP286.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230031)(1800799015)(366007)(376005)(41320700004);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?GTfmgmq3eK16dIv12BxkTSv7lcWz57ath+6h2M7tsIFoCe6E333fa1Ku6S7h?=
+ =?us-ascii?Q?kDp+DgWHn32h4AR3/+t5qA8EuW2h8wvRffmdnSUZuTA+hkNKbJsqZQhQ/aec?=
+ =?us-ascii?Q?zZ0yDTVxHmm9eL7UpSmY2fIYNdaneuerOgnHwM3J6K2Ov59yJ7SGBNOas/O7?=
+ =?us-ascii?Q?54i9R5nPLvVZ55uz+wY8xqKFFCqZCltQJC6i6hLFGPQ6mFhq052nOlDcP2Pl?=
+ =?us-ascii?Q?5QA9N0zLJSLcWZ75NRXR+yvNGeDM8/L9ndEvFrdnQqBnvB1UfUgzWacsFFQL?=
+ =?us-ascii?Q?tlpg3NlfSdkIAOMB/ndPubDpRVWJ4iTeeJVsRca4VhzkwZYeNEzU6D5pCUrJ?=
+ =?us-ascii?Q?AeXmLiZZLk47SkIPm97mKK9MZyJ4bjzEBTth2Lj0VJwFb59ul/kECye18WYM?=
+ =?us-ascii?Q?qukWpo5HOycfEvrYynRLudjSrprG0rsvAsp2Xo49QRQaim3LYPIwyoPeApa5?=
+ =?us-ascii?Q?vcTAD+4NHZJm67ylMLWG7ssmtwktqqdS8w9GY1v5Me4VUIfVBf1aBrPoFDRY?=
+ =?us-ascii?Q?hXaymzPPy3UMUYpk9I2rNXWPot2NwkIr9Oi+27pbbyoBSt6Cb3FiIuuML29+?=
+ =?us-ascii?Q?cXczKNXh0an78pI9zPRAcChmVKr27B7EpWD8rUDKj4HZDnxUT/g53c/FsIDv?=
+ =?us-ascii?Q?8wK2MqP+NEI1doAbcRplfNHzbl59PGQnaUftjk2syJbLrX91q/AQUpBjcsCG?=
+ =?us-ascii?Q?BpEqoYCg6gF9w2dTK93GbxGpVrU2lHmqo6w+tAoSZKFQtdkNLdKE1R2bqJSd?=
+ =?us-ascii?Q?If39sZMKNEc26NPZ2g4f/fXsIBxJiUYq1GuwRIVLkkVBW9HfoKSe7GEUiaea?=
+ =?us-ascii?Q?BDjDKuIEAwMhPzF8E2vRyiOKn13bfDGGLt1JX7vTF3IhMVQLkM/cTUtbu1k0?=
+ =?us-ascii?Q?FhMZ3bIgVws+eMmdM8zZMrHxfPBcKl/cw0A3JuuN6dgmSAFNOZoY+O0Ta0oy?=
+ =?us-ascii?Q?9Z7vHj1hazoLhwJWge1bGc6FVlEs7hhMs1FFgKLaeDAGIvB/DGJsBjo8tKV5?=
+ =?us-ascii?Q?N+XAneBKk2avKvzeuPcX4lT9k2Yzscfe3cAp2pXZ5jXzahqEFjJwX6EaMOKn?=
+ =?us-ascii?Q?fTEa6X1ftc+OklQLkbsOk2zkn0toTMpyYI0vHX4Y3JI9/Eyluh4obwDMOw8K?=
+ =?us-ascii?Q?DXzjeg45egi0bDBcZOQIhbHPu6gcGWdbTq7nrInVNuVOapT7hKqUTFFodAyI?=
+ =?us-ascii?Q?fJmRwmHjb4K8NORlMyAgeX4CTO2D9TVHo3KVPSDpwQzBpu8WCEj98+BvAXGm?=
+ =?us-ascii?Q?D33Yyh6gbXy9dbuzPy4C+m4TGGZHudfxT5ohF+hnsYDy5PBeHIkhYL6Stcae?=
+ =?us-ascii?Q?2AH6XV2qWG2aBRmjZo6fgJKx47gtGAN9fR/cO3GZkU1QwvX1u6Zmgt9xbcuf?=
+ =?us-ascii?Q?4yTzUtfxu8QLBEDlS/76UgMui/Wp4JySE4loQS15/OaFxumtkyYPI8ttBZZE?=
+ =?us-ascii?Q?Bj+1O96YCrLOd6uuQNuRmYFuFepopDGYmSYw3laWJ+YtFijPmKBypGFQ3uf5?=
+ =?us-ascii?Q?Xu2IZSUoIhMTuZD8Ob9NzZ1AxuEs9mm7WK33JnAAY4Si3v4PUJOVVYT5orBM?=
+ =?us-ascii?Q?+bkMPPUdCHhJHI+ipuj91Fql7+7v87Qp2ix0SWOZ?=
+X-OriginatorOrg: zenithal.me
+X-MS-Exchange-CrossTenant-Network-Message-Id: afb05ee6-281e-4d17-6649-08dc6d187ccb
+X-MS-Exchange-CrossTenant-AuthSource: TYCP286MB1393.JPNP286.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 May 2024 15:31:52.2431
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 436d481c-43b1-4418-8d7f-84c1e4887cf0
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: wyKtt/THKLAuXL9DILMS5MvMyBi9ZVesm+/dbrvuMqmTVxh0Zsd/laYCZ2oZWiY5
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSZP286MB2031
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: a2cf936ebef291ef7395172b9e2f624779fb6dc0  usb: gadget: u_audio: Clear uac pointer when freed.
+On Sun, Dec 17, 2023 at 08:30:40PM +0100, Simon Holesch wrote:
+> Skip submitting URBs, when identical requests were already sent in
+> tweak_special_requests(). Instead call the completion handler directly
+> to return the result of the URB.
 
-elapsed time: 1174m
+Reproduced the behavior and this patch fixed the bahavior
 
-configs tested: 177
-configs skipped: 4
+> 
+> Even though submitting those requests twice should be harmless, there
+> are USB devices that react poorly to some duplicated requests.
+> 
+> One example is the ChipIdea controller implementation in U-Boot: The
+> second SET_CONFIURATION request makes U-Boot disable and re-enable all
+> endpoints. Re-enabling an endpoint in the ChipIdea controller, however,
+> was broken until U-Boot commit b272c8792502 ("usb: ci: Fix gadget
+> reinit").
+> 
+> Signed-off-by: Simon Holesch <simon@holesch.de>
+> Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+> ---
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+>  /*
+> @@ -468,6 +477,7 @@ static void stub_recv_cmd_submit(struct stub_device *sdev,
+>  	int support_sg = 1;
+>  	int np = 0;
+>  	int ret, i;
+> +	int is_tweaked;
+>  
+>  	if (pipe == -1)
+>  		return;
+> @@ -580,8 +590,7 @@ static void stub_recv_cmd_submit(struct stub_device *sdev,
+>  		priv->urbs[i]->pipe = pipe;
+>  		priv->urbs[i]->complete = stub_complete;
+>  
+> -		/* no need to submit an intercepted request, but harmless? */
+> -		tweak_special_requests(priv->urbs[i]);
+> +		is_tweaked = tweak_special_requests(priv->urbs[i]);
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                        nsimosci_defconfig   gcc  
-arc                   randconfig-001-20240505   gcc  
-arc                   randconfig-002-20240505   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   clang
-arm                              allyesconfig   gcc  
-arm                       aspeed_g4_defconfig   clang
-arm                         assabet_defconfig   clang
-arm                                 defconfig   clang
-arm                       multi_v4t_defconfig   clang
-arm                   randconfig-001-20240505   clang
-arm                   randconfig-002-20240505   gcc  
-arm                   randconfig-003-20240505   gcc  
-arm                   randconfig-004-20240505   clang
-arm                         wpcm450_defconfig   gcc  
-arm64                            allmodconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                 randconfig-001-20240505   clang
-arm64                 randconfig-002-20240505   clang
-arm64                 randconfig-003-20240505   clang
-arm64                 randconfig-004-20240505   clang
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-csky                  randconfig-001-20240505   gcc  
-csky                  randconfig-002-20240505   gcc  
-hexagon                          allmodconfig   clang
-hexagon                           allnoconfig   clang
-hexagon                          allyesconfig   clang
-hexagon                             defconfig   clang
-hexagon               randconfig-001-20240505   clang
-hexagon               randconfig-002-20240505   clang
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-001-20240505   clang
-i386         buildonly-randconfig-002-20240505   clang
-i386         buildonly-randconfig-003-20240505   clang
-i386         buildonly-randconfig-004-20240505   gcc  
-i386         buildonly-randconfig-005-20240505   clang
-i386         buildonly-randconfig-006-20240505   clang
-i386                                defconfig   clang
-i386                  randconfig-001-20240505   clang
-i386                  randconfig-002-20240505   clang
-i386                  randconfig-003-20240505   gcc  
-i386                  randconfig-004-20240505   clang
-i386                  randconfig-005-20240505   gcc  
-i386                  randconfig-006-20240505   gcc  
-i386                  randconfig-011-20240505   gcc  
-i386                  randconfig-012-20240505   gcc  
-i386                  randconfig-013-20240505   clang
-i386                  randconfig-014-20240505   gcc  
-i386                  randconfig-015-20240505   gcc  
-i386                  randconfig-016-20240505   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20240505   gcc  
-loongarch             randconfig-002-20240505   gcc  
-m68k                             alldefconfig   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                           virt_defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                        bcm63xx_defconfig   clang
-mips                         bigsur_defconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                 randconfig-001-20240505   gcc  
-nios2                 randconfig-002-20240505   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc                randconfig-001-20240505   gcc  
-parisc                randconfig-002-20240505   gcc  
-parisc64                            defconfig   gcc  
-powerpc                     akebono_defconfig   clang
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   clang
-powerpc                     kmeter1_defconfig   gcc  
-powerpc                 mpc836x_rdk_defconfig   clang
-powerpc               randconfig-001-20240505   gcc  
-powerpc               randconfig-002-20240505   clang
-powerpc               randconfig-003-20240505   clang
-powerpc64             randconfig-001-20240505   gcc  
-powerpc64             randconfig-002-20240505   clang
-powerpc64             randconfig-003-20240505   gcc  
-riscv                            allmodconfig   clang
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   clang
-riscv                               defconfig   clang
-riscv                 randconfig-001-20240505   clang
-riscv                 randconfig-002-20240505   gcc  
-s390                             allmodconfig   clang
-s390                              allnoconfig   clang
-s390                             allyesconfig   gcc  
-s390                                defconfig   clang
-s390                  randconfig-001-20240505   gcc  
-s390                  randconfig-002-20240505   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sh                 kfr2r09-romimage_defconfig   gcc  
-sh                    randconfig-001-20240505   gcc  
-sh                    randconfig-002-20240505   gcc  
-sh                          rsk7203_defconfig   gcc  
-sh                          urquell_defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-sparc64               randconfig-001-20240505   gcc  
-sparc64               randconfig-002-20240505   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   gcc  
-um                                  defconfig   clang
-um                             i386_defconfig   gcc  
-um                    randconfig-001-20240505   gcc  
-um                    randconfig-002-20240505   gcc  
-um                           x86_64_defconfig   clang
-x86_64                            allnoconfig   clang
-x86_64                           allyesconfig   clang
-x86_64       buildonly-randconfig-001-20240505   gcc  
-x86_64       buildonly-randconfig-002-20240505   clang
-x86_64       buildonly-randconfig-003-20240505   clang
-x86_64       buildonly-randconfig-004-20240505   clang
-x86_64       buildonly-randconfig-005-20240505   gcc  
-x86_64       buildonly-randconfig-006-20240505   clang
-x86_64                              defconfig   gcc  
-x86_64                randconfig-001-20240505   clang
-x86_64                randconfig-002-20240505   gcc  
-x86_64                randconfig-003-20240505   clang
-x86_64                randconfig-004-20240505   gcc  
-x86_64                randconfig-005-20240505   gcc  
-x86_64                randconfig-006-20240505   gcc  
-x86_64                randconfig-011-20240505   clang
-x86_64                randconfig-012-20240505   clang
-x86_64                randconfig-013-20240505   clang
-x86_64                randconfig-014-20240505   clang
-x86_64                randconfig-015-20240505   clang
-x86_64                randconfig-016-20240505   clang
-x86_64                randconfig-071-20240505   clang
-x86_64                randconfig-072-20240505   gcc  
-x86_64                randconfig-073-20240505   gcc  
-x86_64                randconfig-074-20240505   gcc  
-x86_64                randconfig-075-20240505   clang
-x86_64                randconfig-076-20240505   gcc  
-x86_64                          rhel-8.3-rust   clang
-xtensa                            allnoconfig   gcc  
-xtensa                randconfig-001-20240505   gcc  
-xtensa                randconfig-002-20240505   gcc  
+One question though, if there are mutiple urbs and one of them is
+SET CONFIGURATION, then all of them would not be submitted,
+as is_tweaked is a *global* flag instead of a per-urb flag.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Now it is assumed that when the urb is SET CONFIGURATION then
+num_urbs is 1. I assume it just happens to be the case and I do
+not know if it holds for all scenario.
+
+>  
+>  		masking_bogus_flags(priv->urbs[i]);
+>  	}
+> @@ -594,22 +603,32 @@ static void stub_recv_cmd_submit(struct stub_device *sdev,
+>  
+>  	/* urb is now ready to submit */
+>  	for (i = 0; i < priv->num_urbs; i++) {
+> -		ret = usb_submit_urb(priv->urbs[i], GFP_KERNEL);
+> +		if (!is_tweaked) {
+> +			ret = usb_submit_urb(priv->urbs[i], GFP_KERNEL);
+>  
+> -		if (ret == 0)
+> -			usbip_dbg_stub_rx("submit urb ok, seqnum %u\n",
+> -					pdu->base.seqnum);
+> -		else {
+> -			dev_err(&udev->dev, "submit_urb error, %d\n", ret);
+> -			usbip_dump_header(pdu);
+> -			usbip_dump_urb(priv->urbs[i]);
+> +			if (ret == 0)
+> +				usbip_dbg_stub_rx("submit urb ok, seqnum %u\n",
+> +						pdu->base.seqnum);
+> +			else {
+> +				dev_err(&udev->dev, "submit_urb error, %d\n", ret);
+> +				usbip_dump_header(pdu);
+> +				usbip_dump_urb(priv->urbs[i]);
+>  
+> +				/*
+> +				 * Pessimistic.
+> +				 * This connection will be discarded.
+> +				 */
+> +				usbip_event_add(ud, SDEV_EVENT_ERROR_SUBMIT);
+> +				break;
+> +			}
+> +		} else {
+>  			/*
+> -			 * Pessimistic.
+> -			 * This connection will be discarded.
+> +			 * An identical URB was already submitted in
+> +			 * tweak_special_requests(). Skip submitting this URB to not
+> +			 * duplicate the request.
+>  			 */
+> -			usbip_event_add(ud, SDEV_EVENT_ERROR_SUBMIT);
+> -			break;
+> +			priv->urbs[i]->status = 0;
+> +			stub_complete(priv->urbs[i]);
+>  		}
+>  	}
+>  
+> -- 
+> 2.43.0
+> 
 
