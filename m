@@ -1,138 +1,140 @@
-Return-Path: <linux-usb+bounces-10034-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10035-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5FE88BBF87
-	for <lists+linux-usb@lfdr.de>; Sun,  5 May 2024 08:58:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 950648BBFCD
+	for <lists+linux-usb@lfdr.de>; Sun,  5 May 2024 10:35:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9AE671F216C6
-	for <lists+linux-usb@lfdr.de>; Sun,  5 May 2024 06:58:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BF5F41C209A7
+	for <lists+linux-usb@lfdr.de>; Sun,  5 May 2024 08:35:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49A456112;
-	Sun,  5 May 2024 06:58:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 333E76AAD;
+	Sun,  5 May 2024 08:35:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q8OZwuB+"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="wpPJP+9k"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A4C0524F;
-	Sun,  5 May 2024 06:58:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88253186A;
+	Sun,  5 May 2024 08:35:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714892325; cv=none; b=rkxHkvicxZDEAArXkaOgETACGIybqMhZIJ+y628WqpppYaQ09/yhsbGCKp/wEjK66z2LWEw1ugJuayllTlM3wQBJWvwrXr/Un3NWWp2f4SmWYS2Qkjf73TYoKGvPKNcyZDI964zAcj5SFt0dCcfG49S7mrHpIfU2KZZqszBK5Aw=
+	t=1714898123; cv=none; b=IJRXcKcAfzPDPE0nO0dhHuld5io5PbjNssYay32QfFPkFPBF8/4A6dEZujEocyjCtM5wRzwLpZWqtalUy0MjVyssSmgFsEE2xUA6QnJZ7dYCUPc9h9ctbVdkuSPYDflXLROWAlZ59QR5n0aj5z9t9P0SmIIGCWbNhrR1JIEoTSU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714892325; c=relaxed/simple;
-	bh=2PBKlYW1qzVbuyWWgJD7yyagzyu9p+LO9Q6duh0Zt1s=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=ocpbVx8FBAsLCUrNmxknVzjS0EcnjKyg+7u9qpF3wKlxj7Ky2ZKQkg+bCN5M6L3BD+oPO+u7CABCBG9ecDjWalDLJCn3v7VGFMKQXaNRvT2zEPmkcP+HMnflgm3XH6vfYtoACsRd+glRd5z+6FavfLd8jlNSFtYvwxiTJM9ETC0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q8OZwuB+; arc=none smtp.client-ip=209.85.160.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-2343ae31a9bso635059fac.1;
-        Sat, 04 May 2024 23:58:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1714892323; x=1715497123; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=4vpukMfzbAPwm14bol0ui9iQpresRYINtD5OwU6MD8w=;
-        b=Q8OZwuB+o+twuVZmal+koXoUGXv5n3sBK6loUtKUQRQmZeVq4mIWGpvJHNWfcc7YoH
-         8QUr92ObNtHvZi+AGyxP9MyIc8vFz9S5noFnWmLilOs7FBx454nbXhLsbdEqwpNqRg+R
-         b9v3LLF/hQ7PFkXd8Dgqe/d8bGgb4/oH60ijBqSAm4wbbjUWcIwSRwXLgFE7eS9MKDRR
-         DXIo7dX8Duw87tx51XK88mrrZDNHDWurUtAoiYIH68NjdjmAgwwx+eSU+FIfwPcwE5bS
-         Hy40TKdsuco5WVh67ECiIPeBpFu+E8UP3v+XlZVn5QkdIB1xdzMnbbdgA4tz51NZYqgd
-         BsqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714892323; x=1715497123;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4vpukMfzbAPwm14bol0ui9iQpresRYINtD5OwU6MD8w=;
-        b=MexVUVcgP76xnBX96ZqLEv4XqPJZO36sagdvDxhjqntqBEGjmWwTSr1fsfMbnTWIIv
-         6SSS/HAjrsR39vSqr9VAL/rejqSzNna+zsxf5aKDvFq0K1z6cl2Zo06cctVtaQMa1QMy
-         uOjTLcu2YwaML71NrEbP9inHYPR2FtClqgzlVkAMBu7ZopmaeWX5EsfxZ/KFbfa5WdF+
-         DDjzZxLIQfc2MRuX3euAxdp2NdGDJYSv69tAfGGxi9l+DfodvhIYCNvutphA6QOCGisD
-         ku4peERRrAQp/n8BCXPTfbAmswFZ1qRvJEH4jho6Bksdn2py0QS59uqcrTSt4M5le+KL
-         VGZg==
-X-Forwarded-Encrypted: i=1; AJvYcCWew2zJeVk4mGgdkJ7OCoSRkDs299YO4WBNWBzRu93KUyUigfrjxI3+ru5k1Dkgpvvc5Vpbpt4xzuzVG5UasSzzV+bn4Bb1ftRrnlIPfrOUCXrHW61/QBwgo5AaCxm4x0n3AlqlJV4q
-X-Gm-Message-State: AOJu0YwKZvVCE0Nbnu1xYkYdczhSpt2YPzC7ap1gDbeiZL+Y42Mm6PNT
-	4dgOgeGB8Zh30bBex8j2gAqr9hthwEq4GFpsovE1VLWZD6aIFWDOSLL1v6MI
-X-Google-Smtp-Source: AGHT+IGxsol5QytOUZjrb7i4kzhX0EYbteDvqcJ1KMaH4YM2PAb0vAHAIZVrR1XXrGxKuvnKhD+JZQ==
-X-Received: by 2002:a05:6870:5387:b0:23b:8a84:2e66 with SMTP id h7-20020a056870538700b0023b8a842e66mr8989034oan.15.1714892323379;
-        Sat, 04 May 2024 23:58:43 -0700 (PDT)
-Received: from ?IPV6:2402:e280:214c:86:54ee:ba66:1638:6278? ([2402:e280:214c:86:54ee:ba66:1638:6278])
-        by smtp.gmail.com with ESMTPSA id nw10-20020a17090b254a00b002b0e8d4c426sm7847133pjb.11.2024.05.04.23.58.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 04 May 2024 23:58:43 -0700 (PDT)
-Message-ID: <5c699755-0317-4485-af69-0a4256dce085@gmail.com>
-Date: Sun, 5 May 2024 12:28:38 +0530
+	s=arc-20240116; t=1714898123; c=relaxed/simple;
+	bh=kfRg1x/iwrvmpSvQGJJsu2tMA5F4zShZabXJ/5yEDE0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=PVPGuCOxqPzUl0BRWDeEvXE0pRm2k1Lb6VnOilBBrGdRen8FAIxjSdWg0VCNu/IuuJCKKLfXTvYAtAbVp+P3ZbBApUItY3kqfHk9AV3YTb2JxOSvkR+g48cK+Sjf8f5yRsuoLPFDYPaD2FXPJjg9a2qnlecw8XTfs38cSJItLbs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=wpPJP+9k; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9595FC113CC;
+	Sun,  5 May 2024 08:35:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1714898123;
+	bh=kfRg1x/iwrvmpSvQGJJsu2tMA5F4zShZabXJ/5yEDE0=;
+	h=Date:From:To:Cc:Subject:From;
+	b=wpPJP+9k5j0phuTQaHp1hB9lX+0LzVmgvIn9qGxLIEg+3+8iwy4O9SXccFkUF4QDF
+	 NJtcl19abkd5xRVV6gftDsdtI7Hqlc6WiIqjzFG/uyYkYHIiSaBFrViKfKEA5Dgqai
+	 cr2oNb/yOh13LcQuKfe+EYWjCDtFzn5f2n8JhRoo=
+Date: Sun, 5 May 2024 09:35:20 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB driver fixes for 6.9-rc7
+Message-ID: <ZjdEyLmMIZ1_TPA3@kroah.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] usb: typec: mux: replace of_node_put() with __free
- [linux-next]
-From: R Sundar <prosunofficial@gmail.com>
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: heikki.krogerus@linux.intel.com, dmitry.baryshkov@linaro.org,
- neil.armstrong@linaro.org, christophe.jaillet@wanadoo.fr,
- u.kleine-koenig@pengutronix.de, skhan@linuxfoundation.org,
- javier.carrasco.cruz@gmail.com, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org, Julia Lawall <julia.lawall@inria.fr>
-References: <20240410175804.5195-1-prosunofficial@gmail.com>
- <2024050443-coerce-bonus-977a@gregkh>
- <9574a4a1-a7b8-4f35-88b0-754c4396b02e@gmail.com>
-Content-Language: en-US
-In-Reply-To: <9574a4a1-a7b8-4f35-88b0-754c4396b02e@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 05/05/24 10:50, R Sundar wrote:
-> On 04/05/24 21:48, Greg KH wrote:
->> On Wed, Apr 10, 2024 at 11:28:04PM +0530, R SUNDAR wrote:
->>> Signed-off-by: R SUNDAR <prosunofficial@gmail.com>
->>
->> Please fix your name up for the next version.
-> 
-> Hi,
-> 
-> This version of patch is sent  before comments provided for naming in 
-> patch v1.
-> 
-> The name and nitpick was fixed after suggestion provided in patch v1.
-> 
-> https://lore.kernel.org/all/2024041103-doornail-professor-7c1e@gregkh/
-> 
-> 
-> Link for patch after fixing name and nitpick:
-> 
-> https://lore.kernel.org/all/20240426164705.2717-1-prosunofficial@gmail.com/
-> 
-> 
-> 
-> Thanks,
-> Sundar
+The following changes since commit ed30a4a51bb196781c8058073ea720133a65596f:
 
-Little more explanation on previous mail:
+  Linux 6.9-rc5 (2024-04-21 12:35:54 -0700)
 
-Nitpick mentioned above , referring to is  , suggestion to rewrite a 
-"nit in code" related to indentation in common path.
+are available in the Git repository at:
 
-https://lore.kernel.org/all/2024041103-doornail-professor-7c1e@gregkh/
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.9-rc7
 
+for you to fetch changes up to ae11f04b452b5205536e1c02d31f8045eba249dd:
 
-So along with fixing name , I fixed that indentations also as suggested.
+  usb: typec: tcpm: Check for port partner validity before consuming it (2024-04-30 19:44:45 +0200)
 
-https://lore.kernel.org/all/20240426164705.2717-1-prosunofficial@gmail.com/
+----------------------------------------------------------------
+USB driver fixes for 6.9-rc7
 
-Thanks,
-Sundar
+Here are some small USB driver fixes for reported problems for 6.9-rc7.
+Included in here are:
+  - usb core fixes for found issues
+  - typec driver fixes for reported problems
+  - usb gadget driver fixes for reported problems
+  - xhci build fixes
+  - dwc3 driver fixes for reported issues
 
+All of these have been in linux-next this past week with no reported
+problems.
 
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+Alan Stern (2):
+      USB: core: Fix access violation during port device removal
+      usb: Fix regression caused by invalid ep0 maxpacket in virtual SuperSpeed device
+
+Amit Sunil Dhamne (1):
+      usb: typec: tcpm: unregister existing source caps before re-registration
+
+Badhri Jagan Sridharan (1):
+      usb: typec: tcpm: Check for port partner validity before consuming it
+
+Chris Wulff (1):
+      usb: gadget: f_fs: Fix a race condition when processing setup packets.
+
+Guenter Roeck (1):
+      usb: ohci: Prevent missed ohci interrupts
+
+Ivan Avdeev (1):
+      usb: gadget: uvc: use correct buffer size when parsing configfs lists
+
+Johan Hovold (2):
+      usb: typec: qcom-pmic: fix use-after-free on late probe errors
+      usb: typec: qcom-pmic: fix pdphy start() error handling
+
+Peter Korsgaard (1):
+      usb: gadget: composite: fix OS descriptors w_value logic
+
+RD Babiera (3):
+      usb: typec: tcpm: queue correct sop type in tcpm_queue_vdm_unlocked
+      usb: typec: tcpm: clear pd_event queue in PORT_RESET
+      usb: typec: tcpm: enforce ready state when queueing alt mode vdm
+
+Thinh Nguyen (2):
+      usb: xhci-plat: Don't include xhci.h
+      usb: dwc3: core: Prevent phy suspend during init
+
+Wesley Cheng (1):
+      usb: gadget: f_fs: Fix race between aio_cancel() and AIO request complete
+
+ drivers/usb/core/hub.c                             |  5 +-
+ drivers/usb/core/port.c                            |  8 +-
+ drivers/usb/dwc3/core.c                            | 90 +++++++++-------------
+ drivers/usb/dwc3/core.h                            |  1 +
+ drivers/usb/dwc3/gadget.c                          |  2 +
+ drivers/usb/dwc3/host.c                            | 27 +++++++
+ drivers/usb/gadget/composite.c                     |  6 +-
+ drivers/usb/gadget/function/f_fs.c                 |  9 ++-
+ drivers/usb/gadget/function/uvc_configfs.c         |  4 +-
+ drivers/usb/host/ohci-hcd.c                        |  8 ++
+ drivers/usb/host/xhci-plat.h                       |  4 +-
+ drivers/usb/host/xhci-rzv2m.c                      |  1 +
+ drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c      |  8 +-
+ .../usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c    | 11 ++-
+ drivers/usb/typec/tcpm/tcpm.c                      | 42 +++++++---
+ 15 files changed, 147 insertions(+), 79 deletions(-)
 
