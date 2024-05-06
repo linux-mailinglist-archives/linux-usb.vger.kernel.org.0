@@ -1,159 +1,135 @@
-Return-Path: <linux-usb+bounces-10049-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10050-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1722E8BCAE7
-	for <lists+linux-usb@lfdr.de>; Mon,  6 May 2024 11:40:31 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D16448BCB8E
+	for <lists+linux-usb@lfdr.de>; Mon,  6 May 2024 12:03:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 42AC71C21E9D
-	for <lists+linux-usb@lfdr.de>; Mon,  6 May 2024 09:40:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C6E47B20FBA
+	for <lists+linux-usb@lfdr.de>; Mon,  6 May 2024 10:03:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DAA5142E9D;
-	Mon,  6 May 2024 09:38:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6EBD1422C5;
+	Mon,  6 May 2024 10:03:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="OOfIOj5H"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="N2x0QhcV"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58139142E65
-	for <linux-usb@vger.kernel.org>; Mon,  6 May 2024 09:38:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA7901428FA;
+	Mon,  6 May 2024 10:03:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714988317; cv=none; b=OYN2v/FIfJNs7UEAEQLVk+xuUSWcWMK/WZrLvFiflr8gqVxF63xV6T9RnkMhGiT3WVlSAqnF0zNRFMIhCma/tmG+Qr9DP15qdlQC/0794XyZOtnM772F05ZW930EUvZFKIiHrPmp4RfQkYtpi7XKgXKn/PPXkKMxcZC5v5YT2hQ=
+	t=1714989799; cv=none; b=O34wNEbmou2Ind9A/ObZZzDGP0jOxuiaPFnF1du3HHIdAOyma1nVXoIyGM9noXvsgW0/7juDsZaktBWE2sj9r4bq3fvpN6hLU3raTHmz4JsuCdDWLo6AxqTqJNjp6xmG6ooJqHYRLzdlIijAUS2hmkPFX7GzJpYvLwuru876CNo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714988317; c=relaxed/simple;
-	bh=nYUm9kcI88bCIJdm7i+MvfIjZW0f5pcjacyJHddWxvA=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=sKI9lorU2jt4ld3ruAfRgnl1CCPcZ0PynaDQpKv4EI783Xq8PDS+3kZ15jEnRobqo9WlAoXCc3Ph/rbtdCsbHp1fsryl/sRR+V8z7x9ZY86GcM0q/mq/Sg8v139siAFClBeBSOnxWPlJ7LP2wHjWatkP64JHLrY1wjH4Y9kTwtQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=OOfIOj5H; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1714988314;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=ofi+IdOsdBBIT7hV591VSzQDADHpiRaZqxTdbVc2Izo=;
-	b=OOfIOj5Hi3M9Mx3dR3r5Gx6y6M9yyh4iYFr6XSV2MCYg2citgLBADrRbOWa4iad/4JK5K5
-	AfBJ5StjxEA4dvjNGLPbuGYPMOX9eX1hapAlASBN93XPgDZZmPTjFeaGI8IIpIMrmgovXA
-	gQ7b0eLaU6IIP61ckVZ/aAYomndi3sA=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-435-5Ag4YWvRPvST9eWPxk6jfA-1; Mon, 06 May 2024 05:38:32 -0400
-X-MC-Unique: 5Ag4YWvRPvST9eWPxk6jfA-1
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-34dcc3eeb58so210415f8f.2
-        for <linux-usb@vger.kernel.org>; Mon, 06 May 2024 02:38:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714988311; x=1715593111;
-        h=mime-version:user-agent:content-transfer-encoding:autocrypt
-         :references:in-reply-to:date:to:from:subject:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ofi+IdOsdBBIT7hV591VSzQDADHpiRaZqxTdbVc2Izo=;
-        b=EKpZne9cP1f7vFkMvJIati3epKtCSA9hwyywku4z6sUr+amWA4W+yaT0Zmh7KpCx0i
-         8NjSEtYIpac1syV9XArA/h0em9ZarN0DrZ9QF3eSZBueJGn2irarSACjuemlhGiRkIDs
-         VNei7B0XYet9BclNMiFFYYj4n0yq95f7CTz+gJiA22rNzHDiImp7JrnIrryC+KLfdZgb
-         ute+04wyxceKt0yf9JrTvFz6HJj/Dl8YjS/0OXidQl81OtaTxPPqwx2fqdc4/iV/ic3t
-         QTrRQJy94fnv4giFbuBkPZl/m8LMZep03XbaOaPv8ACmWCFQYF8KZhw3tLBChwtBcDnQ
-         A19A==
-X-Forwarded-Encrypted: i=1; AJvYcCWKD5tSLGXelG/KfYR6yuqJ9lSsgv17oL+hVG47r2W42bEnTulHVdX4jpLIszmWl5HUa0+Zc29iDf73gV6Ur+cGBI95qYhbxaIC
-X-Gm-Message-State: AOJu0Ywh+iyCX4zfZzxNTkwUF8D4cYEcVlLaNvILyJqAPNpSDsulkXYB
-	ZeEsMcekId8AmL+tvT1byPBlKmvRmhErqI8q599gmbiS0FRqTrArSsIu7r31KL4p7QpFklxCqLY
-	Ti+J7pY39MrHKO9EvvQbN8bWX8fE3g1nh/xMcmvFRzDoOJDUByjn04wZAjw==
-X-Received: by 2002:a5d:590b:0:b0:34c:f9c9:f51c with SMTP id v11-20020a5d590b000000b0034cf9c9f51cmr7294502wrd.4.1714988311590;
-        Mon, 06 May 2024 02:38:31 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEpssS49YGsO2P6VsuovgOlShplA4Wj82H/KCeJWZDajXrjEGx+TY+Fjrv1xhuuoU6+kgEgaQ==
-X-Received: by 2002:a5d:590b:0:b0:34c:f9c9:f51c with SMTP id v11-20020a5d590b000000b0034cf9c9f51cmr7294490wrd.4.1714988311150;
-        Mon, 06 May 2024 02:38:31 -0700 (PDT)
-Received: from gerbillo.redhat.com ([2a0d:3341:b09b:b810:c326:df35:5f81:3c32])
-        by smtp.gmail.com with ESMTPSA id c4-20020a5d5284000000b0034b1a91be72sm10242715wrv.14.2024.05.06.02.38.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 May 2024 02:38:30 -0700 (PDT)
-Message-ID: <1706dd2a3d24462780599f57e379fa2a1e8e15ac.camel@redhat.com>
-Subject: Re: [PATCH net v1] lan78xx: Fix crash with multiple device attach
-From: Paolo Abeni <pabeni@redhat.com>
-To: Rengarajan S <rengarajan.s@microchip.com>, woojung.huh@microchip.com, 
-	UNGLinuxDriver@microchip.com, davem@davemloft.net, edumazet@google.com, 
-	kuba@kernel.org, netdev@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Date: Mon, 06 May 2024 11:38:29 +0200
-In-Reply-To: <20240502045748.37627-1-rengarajan.s@microchip.com>
-References: <20240502045748.37627-1-rengarajan.s@microchip.com>
-Autocrypt: addr=pabeni@redhat.com; prefer-encrypt=mutual; keydata=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
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.4 (3.50.4-1.fc39) 
+	s=arc-20240116; t=1714989799; c=relaxed/simple;
+	bh=jGKjKdTTHtYCR0VQEA2vDa3/c/WRFub9vNT+bb6fzqE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SvkkvSYuA9ylNRX0u2crRghWUjB4sP6bzYx5/jeTaOlQznRhZEUmhfB9QaDM76tUbllhAnOBAFbDDhy7ITqHUGhNWRjPxPzldBkTzE81Y9OMBArMsgfWTE++9/2vzk/mhUwhP0yJPofXWxxFEsfyKlmGzDrJZga8ldcTTl5lM2A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=N2x0QhcV; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1714989798; x=1746525798;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=jGKjKdTTHtYCR0VQEA2vDa3/c/WRFub9vNT+bb6fzqE=;
+  b=N2x0QhcVWMSM8ND0XynuDKOk7e9RgCzVgDyJP1WbZVtBUcKa97QT3HGu
+   HPgw98/UUr2CKHTIzKXzZQC+3czbE+pMUN3inLmPL8BjoZYmheJluLltr
+   tDlxMdapu8V1D+Tn4M9+85K5w2cFQ2g5Q0rNuIZjbBE0ovzFbXpnJfMTQ
+   PZjn4WBc1BhExM18vHRSGcLT+bQxqBw7LqwKdEaU2uhfu0hAIJ9TojdI5
+   qCU6IqbMT1e2pDEoOq7up/okMJl56Uo7cA3/UT0klrUH+qNbs79TSyr8S
+   JUgHqGAErOJ3P7ZgynZ9WPHQw0+iDogdqagydf+ibIAnTKJPBLBqagTNe
+   w==;
+X-CSE-ConnectionGUID: FczGfuXHQT62GkY8NX0jLg==
+X-CSE-MsgGUID: xCYhXlB0SH63AdIv9kFy2w==
+X-IronPort-AV: E=McAfee;i="6600,9927,11064"; a="10889400"
+X-IronPort-AV: E=Sophos;i="6.07,258,1708416000"; 
+   d="scan'208";a="10889400"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2024 03:03:17 -0700
+X-CSE-ConnectionGUID: 8rNnEJpyTnGz/nqtNuckxw==
+X-CSE-MsgGUID: GkldQzuiSQiWf7hst6jZ4A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,258,1708416000"; 
+   d="scan'208";a="28217728"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmviesa006.fm.intel.com with SMTP; 06 May 2024 03:03:13 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 06 May 2024 13:03:12 +0300
+Date: Mon, 6 May 2024 13:03:12 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Jameson Thies <jthies@google.com>
+Cc: linux-usb@vger.kernel.org, pmalani@chromium.org, bleung@google.com,
+	abhishekpandit@chromium.org, andersson@kernel.org,
+	dmitry.baryshkov@linaro.org, fabrice.gasnier@foss.st.com,
+	gregkh@linuxfoundation.org, hdegoede@redhat.com,
+	neil.armstrong@linaro.org, rajaram.regupathy@intel.com,
+	saranya.gopal@intel.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/4] usb: typec: ucsi: Fix null pointer dereference in
+ trace
+Message-ID: <Zjiq4PrL2ju8FOUz@kuha.fi.intel.com>
+References: <20240503003920.1482447-1-jthies@google.com>
+ <20240503003920.1482447-2-jthies@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240503003920.1482447-2-jthies@google.com>
 
-On Thu, 2024-05-02 at 10:27 +0530, Rengarajan S wrote:
-> After the first device(MAC + PHY) is attached, the corresponding
-> fixup gets registered and before it is unregistered next device
-> is attached causing the dev pointer of second device to be NULL.
-> Fixed the issue with multiple PHY attach by unregistering PHY
-> at the end of probe. Removed the unregistration during phy_init
-> since the handling has been taken care in probe.
+On Fri, May 03, 2024 at 12:39:17AM +0000, Jameson Thies wrote:
+> From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+> 
+> ucsi_register_altmode checks IS_ERR on returned pointer and treats
+> NULL as valid. When CONFIG_TYPEC_DP_ALTMODE is not enabled
+> ucsi_register_displayport returns NULL which causese a NULL pointer
+> dereference in trace. Rather than return NULL, call
+> typec_port_register_altmode to register DisplayPort alternate mode
+> as a non-controllable mode when CONFIG_TYPEC_DP_ALTMODE is not enabled.
+> 
+> Reviewed-by: Jameson Thies <jthies@google.com>
+> Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
 
-The above description is unclear to me. Could you please list the exact
-sequence of events/calls that lead to the problem?
+You delivered the patch, so you should have used SoB instead of
+Reviewed-by tag:
+https://docs.kernel.org/process/submitting-patches.html#when-to-use-acked-by-cc-and-co-developed-by
 
-> Fixes: 89b36fb5e532 ("lan78xx: Lan7801 Support for Fixed PHY")
-> Signed-off-by: Rengarajan S <rengarajan.s@microchip.com>
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
 > ---
->=20
->  drivers/net/usb/lan78xx.c | 16 +++++++++-------
->  1 file changed, 9 insertions(+), 7 deletions(-)
->=20
-> diff --git a/drivers/net/usb/lan78xx.c b/drivers/net/usb/lan78xx.c
-> index 5add4145d..3ec79620f 100644
-> --- a/drivers/net/usb/lan78xx.c
-> +++ b/drivers/net/usb/lan78xx.c
-> @@ -2383,14 +2383,8 @@ static int lan78xx_phy_init(struct lan78xx_net *de=
-v)
->  		netdev_err(dev->net, "can't attach PHY to %s\n",
->  			   dev->mdiobus->id);
->  		if (dev->chipid =3D=3D ID_REV_CHIP_ID_7801_) {
-> -			if (phy_is_pseudo_fixed_link(phydev)) {
-> +			if (phy_is_pseudo_fixed_link(phydev))
->  				fixed_phy_unregister(phydev);
-> -			} else {
-> -				phy_unregister_fixup_for_uid(PHY_KSZ9031RNX,
-> -							     0xfffffff0);
-> -				phy_unregister_fixup_for_uid(PHY_LAN8835,
-> -							     0xfffffff0);
-> -			}
->  		}
->  		return -EIO;
->  	}
-> @@ -4458,6 +4452,14 @@ static int lan78xx_probe(struct usb_interface *int=
-f,
->  	pm_runtime_set_autosuspend_delay(&udev->dev,
->  					 DEFAULT_AUTOSUSPEND_DELAY);
-> =20
-> +	/* Unregistering Fixup to avoid crash with multiple device
-> +	 * attach.
-> +	 */
-> +	phy_unregister_fixup_for_uid(PHY_KSZ9031RNX,
-> +				     0xfffffff0);
-> +	phy_unregister_fixup_for_uid(PHY_LAN8835,
-> +				     0xfffffff0);
-> +
+> Changes in V3:
+> - Returns typec_port_register_altmode call from
+> ucsi_register_displayport when CONFIG_TYPEC_DP_ALTMODE is not enabled.
+> 
+> Changes in V2:
+> - Checks for error response from ucsi_register_displayport when
+> registering DisplayPort alternate mode.
+> 
+>  drivers/usb/typec/ucsi/ucsi.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
+> index c4d103db9d0f8..f66224a270bc6 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.h
+> +++ b/drivers/usb/typec/ucsi/ucsi.h
+> @@ -496,7 +496,7 @@ ucsi_register_displayport(struct ucsi_connector *con,
+>  			  bool override, int offset,
+>  			  struct typec_altmode_desc *desc)
+>  {
+> -	return NULL;
+> +	return typec_port_register_altmode(con->port, desc);
+>  }
+>  
+>  static inline void
+> -- 
+> 2.45.0.rc1.225.g2a3ae87e7f-goog
 
-Minor nit: the above 2 statments can now fit a single line each.
-
-Thanks,
-
-Paolo
-
+-- 
+heikki
 
