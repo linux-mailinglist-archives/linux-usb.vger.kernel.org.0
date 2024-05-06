@@ -1,126 +1,119 @@
-Return-Path: <linux-usb+bounces-10046-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10047-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 370E08BC897
-	for <lists+linux-usb@lfdr.de>; Mon,  6 May 2024 09:50:40 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 70CD38BC98F
+	for <lists+linux-usb@lfdr.de>; Mon,  6 May 2024 10:30:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C3F3C1F2252A
-	for <lists+linux-usb@lfdr.de>; Mon,  6 May 2024 07:50:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BCC5DB219BE
+	for <lists+linux-usb@lfdr.de>; Mon,  6 May 2024 08:30:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C79091420A0;
-	Mon,  6 May 2024 07:50:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F386E74BE4;
+	Mon,  6 May 2024 08:30:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Ih9yhy/v"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eE4jLLGP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93FB1140E2E;
-	Mon,  6 May 2024 07:49:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C01C3140394;
+	Mon,  6 May 2024 08:30:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714981801; cv=none; b=BmkVkaY3Rv6tT0SpCR6aSGqKz0GMfZaFuoCcxwiQg5fyN46iaQ53HAOqe2OTSfUIVIdKXTHotZfE+EV91yXTU9/kzekXucHRetEeISfhnqHRsoSDHP2ZK0rNjg0YdGgCzwWBJMdgFto/ZjSFFbwHDIBtrvcUa/YZe0M+NqoDKac=
+	t=1714984204; cv=none; b=Woi1E3nGx4/yZJnttCJIRdZ2eC9oipTduaxaMqOe/Z0WbjZSofYZYwQ94XCJ1USHS84NQSEWYT73s+JSRNyxWrDR72VAgcWcEwsA4T7pkJ3YH7rWWOm9BzLYhzLpAs8bBHN5GKLSl65lKfl6yeXv/uDjqopYkec5bJHm0RH2mGA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714981801; c=relaxed/simple;
-	bh=nxjYtTOk4wofMpPel3ZmiyyJQPYo7VkLkJLA6OmGX78=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Pl7/ai74OmjCIiD7MlhETRIMDLuS7MVG5kTQOvcXwl9wld0vs8MKu06s9VtEiiBQdqLv+VM1ZAqgy7pRd+IVjzCJtvKrTQLZwn1qBQ68Ch/B/d1kJ9HS3na88hDV8v4ssTN1ckAJdKsz3vPzWOArG/K/QYiwfRm7goj8SChek34=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Ih9yhy/v; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4464ealH001645;
-	Mon, 6 May 2024 07:49:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	from:to:cc:subject:date:message-id:mime-version
-	:content-transfer-encoding:content-type; s=qcppdkim1; bh=j1CVj2o
-	ZnYRlZs5a/i5QRPv/1AqJugNmm/k5hNeHcqU=; b=Ih9yhy/vbbwvAiiwh3wCs2h
-	K8mybdjk/TLnATd+P/fP+q/KwTgn1kfx/D8GvwWzgPci0qbP0w8WpQ5wtLpVdMBW
-	imIdcxHANfzJlMPN5aaq7J/u2Ic7oJi2/7GBhMzHAamPDaP1YN58NiqonAzMWUbo
-	WCVqFK6dQe99woRcrHu482UsTR1WTvJFtGKaIFQb5SbEFo1ZL4V7V8QtFCfoBvUC
-	Jl8wtpRbtOJgWwAR/CDQ70KNbCfY9jwO7oTe9GzxUBjT6dniWDdluGKuNTxNkJnr
-	GTOPjc3Hl6UovJ5w2E+RL0nCVFH6XrB9TXTE4F9MFssOMmFavMN4UMUDRn7CTqQ=
-	=
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xwd3yaxvg-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 06 May 2024 07:49:54 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 4467nqSl009975
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 6 May 2024 07:49:52 GMT
-Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Mon, 6 May 2024 00:49:49 -0700
-From: Krishna Kurapati <quic_kriskura@quicinc.com>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>
-CC: <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <quic_ppratap@quicinc.com>, <quic_jackp@quicinc.com>,
-        Krishna Kurapati
-	<quic_kriskura@quicinc.com>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH v2] usb: dwc3: core: Fix unused variable warning in core driver
-Date: Mon, 6 May 2024 13:19:39 +0530
-Message-ID: <20240506074939.1833835-1-quic_kriskura@quicinc.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1714984204; c=relaxed/simple;
+	bh=zrbZIYIjFmgdhfsUba9NxX9M2jhKqKDPnqsG+oMRwkc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nokTBxQuXMlXhQD0xRmF6L9zyUR7G8iPa//1i3BHht1rFMQJiRStGZNj9fjst6kNtyq1cKw5QUtbCUEMFFnUvI7Bj8KhQuXD0Ioi3MmYDizW3JYcHs+EQWETrQ1PYjwmJGq8y5DvrBd+wmj4nHwr79qnmNtkZUrV2uVw1VLohhQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eE4jLLGP; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1714984203; x=1746520203;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=zrbZIYIjFmgdhfsUba9NxX9M2jhKqKDPnqsG+oMRwkc=;
+  b=eE4jLLGPYEq37bG91L/BAUfm7dlWs+uEp69GTZLXJVNKoT1sX9oaFFni
+   qaC5cxM+6esmjHQA3KL1s+/rZQvdTRk4mJKivahphS+DnN/Y8ZIUqurdX
+   fn5CzHvbIj2g3SroRKOJdTfHiVLuzCO8exqFISRUk3xR+qIkBt7i3YK2+
+   C1dud2Qf5lykwX5wQUn3zJUxM0uL21UeWfCWAorGOaebfOrUbxDeAg9gp
+   zdZGfXAjj5uNIeox9x6gmLtY6XmrSUXg1S6BJq2tPeRZCZn0HomTZYlk5
+   XH2cdGixSW8F1jbA74Czdtp7nLlcNjmQ8IaW7GUawGfdaolQigrxJ3nwO
+   Q==;
+X-CSE-ConnectionGUID: s30eJvoTQhC8V2abl6+1BQ==
+X-CSE-MsgGUID: f66cxqmKSfOIJBReRysnJg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11064"; a="21333923"
+X-IronPort-AV: E=Sophos;i="6.07,257,1708416000"; 
+   d="scan'208";a="21333923"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2024 01:30:02 -0700
+X-CSE-ConnectionGUID: j1lGy3uJRieHkthvMxf4gw==
+X-CSE-MsgGUID: CUcpglKaTaeLobxLesCHyA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,257,1708416000"; 
+   d="scan'208";a="28184894"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmviesa010.fm.intel.com with SMTP; 06 May 2024 01:30:00 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 06 May 2024 11:29:58 +0300
+Date: Mon, 6 May 2024 11:29:58 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Javier Carrasco <javier.carrasco@wolfvision.net>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Abdel Alkuor <abdelalkuor@geotab.com>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 3/3] usb: typec: tipd: rely on i2c_get_match_data()
+Message-ID: <ZjiVBkkdUAZ0B/vb@kuha.fi.intel.com>
+References: <20240429-tps6598x_fix_event_handling-v3-0-4e8e58dce489@wolfvision.net>
+ <20240429-tps6598x_fix_event_handling-v3-3-4e8e58dce489@wolfvision.net>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: KfaW0eNgj8nXo7IJOufUNp50r1Hf-48l
-X-Proofpoint-GUID: KfaW0eNgj8nXo7IJOufUNp50r1Hf-48l
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1011,Hydra:6.0.650,FMLib:17.11.176.26
- definitions=2024-05-06_04,2024-05-03_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
- malwarescore=0 phishscore=0 mlxlogscore=508 adultscore=0 clxscore=1015
- impostorscore=0 lowpriorityscore=0 priorityscore=1501 spamscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2404010003 definitions=main-2405060050
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240429-tps6598x_fix_event_handling-v3-3-4e8e58dce489@wolfvision.net>
 
-While fixing a merge conflict in linux-next, hw_mode variable
-was left unused. Remove the unused variable in hs_phy_setup call.
+On Mon, Apr 29, 2024 at 03:35:59PM +0200, Javier Carrasco wrote:
+> The first thing i2c_get_match_data() does is calling
+> device_get_match_data(), which already checks if there is a fwnode.
+> 
+> Remove explicit usage of device_get_match_data() as it is already
+> included in i2c_get_match_data().
+> 
+> Signed-off-by: Javier Carrasco <javier.carrasco@wolfvision.net>
 
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/all/202405030439.AH8NR0Mg-lkp@intel.com/
-Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
----
-Changes in v2:
-Added reported by and closes tags.
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
- drivers/usb/dwc3/core.c | 3 ---
- 1 file changed, 3 deletions(-)
+> ---
+>  drivers/usb/typec/tipd/core.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
+> index 191f86da283d..ad76dbd20e65 100644
+> --- a/drivers/usb/typec/tipd/core.c
+> +++ b/drivers/usb/typec/tipd/core.c
+> @@ -1365,10 +1365,7 @@ static int tps6598x_probe(struct i2c_client *client)
+>  			TPS_REG_INT_PLUG_EVENT;
+>  	}
+>  
+> -	if (dev_fwnode(tps->dev))
+> -		tps->data = device_get_match_data(tps->dev);
+> -	else
+> -		tps->data = i2c_get_match_data(client);
+> +	tps->data = i2c_get_match_data(client);
+>  	if (!tps->data)
+>  		return -EINVAL;
+>  
+> 
+> -- 
+> 2.40.1
 
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 8b6f7769fcd5..7f176ba25354 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -676,11 +676,8 @@ static int dwc3_ss_phy_setup(struct dwc3 *dwc, int index)
- 
- static int dwc3_hs_phy_setup(struct dwc3 *dwc, int index)
- {
--	unsigned int hw_mode;
- 	u32 reg;
- 
--	hw_mode = DWC3_GHWPARAMS0_MODE(dwc->hwparams.hwparams0);
--
- 	reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(index));
- 
- 	/* Select the HS PHY interface */
 -- 
-2.34.1
-
+heikki
 
