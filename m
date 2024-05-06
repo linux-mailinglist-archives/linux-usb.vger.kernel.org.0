@@ -1,80 +1,71 @@
-Return-Path: <linux-usb+bounces-10041-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10042-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 28C9B8BC5DF
-	for <lists+linux-usb@lfdr.de>; Mon,  6 May 2024 04:44:24 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AEAA88BC6A7
+	for <lists+linux-usb@lfdr.de>; Mon,  6 May 2024 07:16:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6265F1C21508
-	for <lists+linux-usb@lfdr.de>; Mon,  6 May 2024 02:44:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AD25B1C20F5B
+	for <lists+linux-usb@lfdr.de>; Mon,  6 May 2024 05:16:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D0CF34CD8;
-	Mon,  6 May 2024 02:44:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A19524653A;
+	Mon,  6 May 2024 05:16:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jOBGgmp6"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="dgvNatgK"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B377019479;
-	Mon,  6 May 2024 02:44:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5BB01EEE9;
+	Mon,  6 May 2024 05:16:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714963458; cv=none; b=lA9Qycmkxgxd9nQoYbLhaeLew6E8y41PCOPfQvOcs32ly6QtGZLefNDkNqyiokH1/I02HD9OCOvo22ITuFRSZHth7/Jxhq1MM0kriE+P7kW6VeW6VsGBkqF9WLn8PoN3G4q3uL1+LqcyzaxZNJ89ABMqvP6eJ5uoXV92incj+P8=
+	t=1714972568; cv=none; b=hJjDPv9Azu0BP69Y5RsgF9dp70W24/VrmAaK3KjP/2f6EKXffWvFWd6BVaBuPqRlcuvj6ROkcvjnD6xF2H15S9Rf0U8OwHssEOU0fbWlEN9VsWQANc6xuCMjm7P1yVtXabDmKkHW+2kyfmWTZewpSRS2jVyzE+pGJ0KC7IgYXTg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714963458; c=relaxed/simple;
-	bh=9IJ7eL/NXZnN6iaxGyEly5g6ObXfEECQHJhrZGGTc9I=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=CN3wDrentjuxUaK6d4kC/OJhXxN6LVRQpEOyOJpKuOt/tbSoFNjdtgPIqaegsav4zfXZQB00xgTvZQ91n4hDDExDIs8Fiu8QunmjDjQSoHss7vy1CtXNo1E37KFXBFj2e0/6BjR4YH8SVP6uRX2URvR1AdFykfuUSiiw5m5ZgIg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jOBGgmp6; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1ed012c1afbso10620315ad.1;
-        Sun, 05 May 2024 19:44:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1714963456; x=1715568256; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=eeHa5cvAFWS6KkAuD02BZwd0wIMOooO6IwbFyNPbjJM=;
-        b=jOBGgmp66fZE6/A5N2LUvX7yoK1CwC8b5f81aHlryPKdb3baslEq53ch044YxEweoc
-         +Dz0RwWTEyuWAfkD7wcMh//0Bwzidvg7WwYQLbKYy6YBlcfgE+yHyo1flBkqu0SVhNDe
-         FD6o/xh17XGpUP2wm4BHBVusPm+RikuwaNjs8Cqxdqn/sBqkzKCtnxkBPiIaQKzpRnly
-         9IS4YFTdxsiz2+OYbbtneMWA1tHrCWqyb2/MYy3OmVwHyWymq+1KKdR/JOjuHbpjOAqj
-         qFDTLQRhW26UBalorijQBXdx4noHZpC8AsXG9RcIp4Ht3lBUZfrCCW8DALpFyK/KrMPC
-         y/xQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714963456; x=1715568256;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eeHa5cvAFWS6KkAuD02BZwd0wIMOooO6IwbFyNPbjJM=;
-        b=GSj6D7znJQNjqQogkCVetD6fCYv3SGM51CDJwAYxbsBRzC9zNh6KJhvpflOlFrOUoE
-         eUCcv/g6pSP+3DviNJJR/8tLG3IWw/7HPGkZsFivted/AInnlALXy/0v9qeeOvK7fMjo
-         5GDBAykyU5UDBF7iBMR4twwxlJhg0MtmiGhMIT8xoXWgx5W37/95SREvjDq7tCUP/Lv2
-         dIk3WevdjsyzPA5lKEOkygqS3S4PQOIw+xYfJymB5Mew8ndpPeFOftbMZ0NgqYd39sis
-         XnNMSkmmQDozqsgDmIgUF7hc4vSLoB4b1QT061Sy+HjjbaAJKk3t7R3FU3olmGys9qxe
-         7YMg==
-X-Forwarded-Encrypted: i=1; AJvYcCWrolOdfewxr+nECkXvkazOe3NONEzscGiKudEScx/qrV6fY1MXuS6d39mYzYU8oG+Kc+SewJWXQuZzUqc/rESAkFmz4mFPbv4j
-X-Gm-Message-State: AOJu0Yxm0jaKTkYKryg2JIcXyazNaKIHZY5WTMgxBYSVDJiRYCYKA3Zu
-	BT7xFGP+4uCZg4G3jCX3/CR8ZZcs8htjfLvZPVmi/Qi36xmQccD5ZP4chjPrc3Q=
-X-Google-Smtp-Source: AGHT+IHbnOBnObgwxWEwtWP/CWIRPGwUPhe7ORjBHqUhSbuZRKoN0UTaJv+4wQPQaX98txh7gPhnlA==
-X-Received: by 2002:a17:902:6546:b0:1ea:691b:3692 with SMTP id d6-20020a170902654600b001ea691b3692mr14746033pln.17.1714963455957;
-        Sun, 05 May 2024 19:44:15 -0700 (PDT)
-Received: from localhost ([42.80.85.11])
-        by smtp.gmail.com with ESMTPSA id q5-20020a170902a3c500b001e99ffdbe56sm7284177plb.215.2024.05.05.19.44.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 May 2024 19:44:15 -0700 (PDT)
-From: qiurui <happyqiuqiu9604@gmail.com>
-X-Google-Original-From: qiurui <qiurui@kylinos.cn>
-To: gregkh@linuxfoundation.org,
-	corbet@lwn.net
-Cc: linux-usb@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	qiurui@kylinos.cn
-Subject: [PATCH] docs: usb:gadget:hid: fix hid_gadget_test code in documentation of hid section
-Date: Mon,  6 May 2024 10:44:08 +0800
-Message-Id: <20240506024408.19344-1-qiurui@kylinos.cn>
+	s=arc-20240116; t=1714972568; c=relaxed/simple;
+	bh=BAKASVa/AofS5RB0Gp033UciJlTVWR1s4oyK01067g8=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=KAuQIrEsFR7UZbicn2zJ9w23QE81xWv2UV1Sx6K2RSMLyWUpljXnuKLSP0v8rK10CCCrHB0tn2DXod61LMA/pTjHd6XazbvYWg7au6Wqi3IzZJ/2t8zabCYG3kZEhHIanOj4NmyVIbl54BFrMOiKhDbJPmUr8gbY1z4bjO874uY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=dgvNatgK; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4462C9Pl027974;
+	Mon, 6 May 2024 05:16:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	from:to:cc:subject:date:message-id:mime-version
+	:content-transfer-encoding:content-type; s=qcppdkim1; bh=z0XwOvB
+	72dJUZkcF3hng94pWYHRw7u8W7DxQNCBWw8A=; b=dgvNatgKTzVj8+Q9orQMLIV
+	e+qiLefuOoX/VaS4tWeiUQorSsntKXojoR3i6G2Ka8Hko7gHRxHU3kCU0KxkB81+
+	mzoyQSZuykrThtJR3GwVrE9EJ343xUR3R1B3W3UX2NgkCxWMtSGoIsAhW95Na98D
+	h5+cCQ9eqJp+Dhs3sdAMwu2vYSyV/2xECLmDfPOLxESz8zJsx5npyLTMqRX7ehsg
+	g5VvZ/ZV+xcyF+lxLblRr3LrBiBFZ1IQKe7vrNkHVKByCLpjpaXQzcLSO1rpke7G
+	1vzx1pDyH8PL7KfRLlp1AD0sC9QHBt44Jnwtgux7NLaSDW5aMdpPqdG2tVaUycg=
+	=
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xwaqjjtdg-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 06 May 2024 05:16:01 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 4465G0bO029663
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 6 May 2024 05:16:00 GMT
+Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Sun, 5 May 2024 22:15:57 -0700
+From: Krishna Kurapati <quic_kriskura@quicinc.com>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>
+CC: <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <quic_ppratap@quicinc.com>, <quic_jackp@quicinc.com>,
+        Krishna Kurapati
+	<quic_kriskura@quicinc.com>
+Subject: [PATCH] usb: dwc3: core: Fix unused variable warning in core driver
+Date: Mon, 6 May 2024 10:45:48 +0530
+Message-ID: <20240506051548.1768794-1-quic_kriskura@quicinc.com>
 X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -83,34 +74,46 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: rHNOMOi9N8VfqUv8lIS_xZm9Pb6fKWI-
+X-Proofpoint-ORIG-GUID: rHNOMOi9N8VfqUv8lIS_xZm9Pb6fKWI-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1011,Hydra:6.0.650,FMLib:17.11.176.26
+ definitions=2024-05-06_02,2024-05-03_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ spamscore=0 clxscore=1015 mlxscore=0 mlxlogscore=575 malwarescore=0
+ bulkscore=0 phishscore=0 impostorscore=0 suspectscore=0 lowpriorityscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2404010003 definitions=main-2405060029
 
-Fix bzero buffer before read()
+While fixing a merge conflict in linux-next, hw_mode variable
+was left unused. Remove the unused variable in hs_phy_setup call.
 
-Signed-off-by: qiurui <qiurui@kylinos.cn>
+Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
 ---
- Documentation/usb/gadget_hid.rst | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/usb/dwc3/core.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/Documentation/usb/gadget_hid.rst b/Documentation/usb/gadget_hid.rst
-index e623416de4f1..c4ee81a6b48e 100644
---- a/Documentation/usb/gadget_hid.rst
-+++ b/Documentation/usb/gadget_hid.rst
-@@ -410,6 +410,7 @@ Sample code::
- 		}
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index 8b6f7769fcd5..7f176ba25354 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -676,11 +676,8 @@ static int dwc3_ss_phy_setup(struct dwc3 *dwc, int index)
  
- 		if (FD_ISSET(fd, &rfds)) {
-+			bzero(buf, SIZE);
- 			cmd_len = read(fd, buf, BUF_LEN - 1);
- 			printf("recv report:");
- 			for (i = 0; i < cmd_len; i++)
-@@ -419,6 +420,7 @@ Sample code::
+ static int dwc3_hs_phy_setup(struct dwc3 *dwc, int index)
+ {
+-	unsigned int hw_mode;
+ 	u32 reg;
  
- 		if (FD_ISSET(STDIN_FILENO, &rfds)) {
- 			memset(report, 0x0, sizeof(report));
-+			bzero(buf, SIZE);
- 			cmd_len = read(STDIN_FILENO, buf, BUF_LEN - 1);
+-	hw_mode = DWC3_GHWPARAMS0_MODE(dwc->hwparams.hwparams0);
+-
+ 	reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(index));
  
- 			if (cmd_len == 0)
+ 	/* Select the HS PHY interface */
 -- 
 2.34.1
 
