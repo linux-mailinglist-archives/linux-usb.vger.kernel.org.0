@@ -1,140 +1,193 @@
-Return-Path: <linux-usb+bounces-10068-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10069-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6EAA8BE8AA
-	for <lists+linux-usb@lfdr.de>; Tue,  7 May 2024 18:21:12 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 959378BE975
+	for <lists+linux-usb@lfdr.de>; Tue,  7 May 2024 18:43:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9D02C1F28846
-	for <lists+linux-usb@lfdr.de>; Tue,  7 May 2024 16:21:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 47654292B2F
+	for <lists+linux-usb@lfdr.de>; Tue,  7 May 2024 16:43:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9997C16D4D9;
-	Tue,  7 May 2024 16:19:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BECFE16EBFA;
+	Tue,  7 May 2024 16:38:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=xff.cz header.i=@xff.cz header.b="i2EWCR3b"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DgPol4bz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from vps.xff.cz (vps.xff.cz [195.181.215.36])
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 148B316C45D;
-	Tue,  7 May 2024 16:19:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.181.215.36
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1C60200D2
+	for <linux-usb@vger.kernel.org>; Tue,  7 May 2024 16:38:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715098766; cv=none; b=eyGEWAvnj5Q6Hqt4lDRvjpMJyaG8ejtU8sYRopPeTCsEeR6Q9TdWGUzt+w4R/XxYdn1nfla1so3WhD5luP0VZGcPaaravm6AsVk8iBBYQY5XBIDHywWHKAwntahyGcJt2k2+ioQ/c4ErSvMjB4jo/e5LpNBFWs68IlsJpZgZPvc=
+	t=1715099907; cv=none; b=udJG+R/yA3+2buZr5RAeqM5EEgl6eFdGn5Gj4Si//fx4nLeqCxuX3zwALv+Gor6L8Db/EHCcIg4HtYuWvPMH31JVS4nFyCy5+y082VvOlQnEEtwUIE5i9oS5AWW3fR3kxGV/n3EeEDSxQFu2utmA4zki1iBghWdiURerYCyspto=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715098766; c=relaxed/simple;
-	bh=wPfBBBqz4mWAHQz6NwLA3VhGyV0ey36YDnag2Ti6L8U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Nyb/ItFnLXZrBCqx8KU+JDnIY8ZOLIysI21pyJiqLawIhwQvDWWDpfR0Gnu/L9t53VLLPpAhpofGOPfiUZ0drCx+zyWG+e1jEetZgNcT3ovC9H43pUQBq52g4mIZmMVyVM2gpq5tlItW8RrZRrRz4TFuFtEPLx0xepRB1aO/DUs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xff.cz; spf=pass smtp.mailfrom=xff.cz; dkim=pass (1024-bit key) header.d=xff.cz header.i=@xff.cz header.b=i2EWCR3b; arc=none smtp.client-ip=195.181.215.36
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xff.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xff.cz
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xff.cz; s=mail;
-	t=1715098754; bh=wPfBBBqz4mWAHQz6NwLA3VhGyV0ey36YDnag2Ti6L8U=;
-	h=Date:From:To:Cc:Subject:X-My-GPG-KeyId:References:From;
-	b=i2EWCR3bNy9bWRT9zukZaUGi24OmEe3DfnT3nOg9HZarTot8adruRC2klo9I3yCaY
-	 v1qz3xF8PmF1mfBwz8SkKd2yJE3D6wzt7nXo6y4xfDzk6H+K0xujtzOuo+u2h+sKBm
-	 Vg1wX2wooUyLByC0p64y4rpA+lafXjZszPkfphdk=
-Date: Tue, 7 May 2024 18:19:13 +0200
-From: =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>
-To: Amit Sunil Dhamne <amitsd@google.com>
-Cc: linux@roeck-us.net, heikki.krogerus@linux.intel.com, 
-	gregkh@linuxfoundation.org, badhri@google.com, rdbabiera@google.com, 
-	linux-usb@vger.kernel.org, stable@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH v1] usb: typec: tcpm: unregister existing source caps
- before re-registration
-Message-ID: <y4lla7vqsrl75qhesmyexq7yvcu6hl6kryh3ctwq5ci3r4mlpw@rsnhfkmlmtt7>
-Mail-Followup-To: =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>, 
-	Amit Sunil Dhamne <amitsd@google.com>, linux@roeck-us.net, heikki.krogerus@linux.intel.com, 
-	gregkh@linuxfoundation.org, badhri@google.com, rdbabiera@google.com, 
-	linux-usb@vger.kernel.org, stable@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Mark Brown <broonie@kernel.org>
-X-My-GPG-KeyId: EBFBDDE11FB918D44D1F56C1F9F0A873BE9777ED
- <https://xff.cz/key.txt>
-References: <20240424223227.1807844-1-amitsd@google.com>
+	s=arc-20240116; t=1715099907; c=relaxed/simple;
+	bh=vjzjLlV+h3ooD2Ke8iOpyMRpgEQjP8m0HSLWxVdVsc8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=BYTNcKMQ1TV0csLyxprQ0WoxEAsUZN51bWyacwwjU+JhhRaQc81nWqE7WX3tgE8QNDhKzvwx1GHOpk9ojxflKzB89ZNSzymm3eWFbP7M6PUgIXmAKI/yYXRv+FJuHyhHVGmxmy3Bc9NnyLDkWdkRBfYrxrk1gmm2h4HNZSlEFt8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DgPol4bz; arc=none smtp.client-ip=209.85.128.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-62027fcf9b1so26804377b3.0
+        for <linux-usb@vger.kernel.org>; Tue, 07 May 2024 09:38:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1715099905; x=1715704705; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NZ/UiD6sm+4LHgYLjSe0XxUcZGEyAtRR+lu5IknlwkQ=;
+        b=DgPol4bz8lFvpUaCMV46/f4jlecWYAQJDwv6T9kD9BtprbV6qaVUgYzkketwC+IJ0M
+         bEZrkx5CYefd7kvKd6emSEPE7260oFNhl7Sj5oWLXbSfViLiclc5trQE0qXSQwn6aVI4
+         DxXNkbEe3B7gvYyfSPltDhChjQbVrsF81Aai1/UNJbw6osAG3ZDA2/0cTxIg0X5pQaPk
+         RebpbYv/Y/4xVPZ4WCWROOFo7EbLtP87kIex73OYmrSRTZezmC9qErovISzbcQw4zJVS
+         M/2Vrgek2qAbECp8gSgjMrLbF+Lh6/hxHfJpZYdXSjfxt8So8/msaOVMjQGx3YHCrCXI
+         +pLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715099905; x=1715704705;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NZ/UiD6sm+4LHgYLjSe0XxUcZGEyAtRR+lu5IknlwkQ=;
+        b=QOzmGE4X6z13f/E132WRyYpdWvZQSlwDoIuFRwJ3L4NI2D3NRnYMxncvWmr2or5/41
+         0L4zUzr/vyfuW6gAIilibtcSb6oYVmgPjHt0oKG9zPZw8Uho9h17O+ANCGCWyI6L1JUY
+         y8vpnHgGlPLDLgBFf6QCRVgaCUR67x5bvdZcQTgpr+70djqkfsXVh0PF11ZBv+Mm1Jn3
+         OwGE7fM6VHDy6wcG5ezVuAv4/+dvcUSLKth112DLIJTg+mRt6ku+bUlRGYvuf+6Pg00F
+         ELullv0TSPApzO2oZPBnl50/PjsVGbOHi78ujKum03lCYjVM6yPCgRjTRfb8MoyQTqu7
+         zSng==
+X-Gm-Message-State: AOJu0YxzCVaDgbKJyqHG/xdtv5rcGiMbPl1ueccF42+Ldv3FwI3COtrd
+	HTbk7dhp+AP55wSBGoe0uQhf9fl+t26n0AkXY293h+ILkB7j3it8L3j3XAGjnCZZ32ZqdcVDNcR
+	oHVzYMMSYTHCku6CoeknthC8DQHNjkMpW
+X-Google-Smtp-Source: AGHT+IHtTz93nN9VsBAhtvcPcPWIApBaC6tK0MurSGUEuMg0S92Fv4kl+o9pV7nY+iPd6x7hfTdV1V7GCk0Wo3aPeHw=
+X-Received: by 2002:a81:4803:0:b0:61a:e24d:186e with SMTP id
+ 00721157ae682-62085ac414dmr3642137b3.14.1715099904816; Tue, 07 May 2024
+ 09:38:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240424223227.1807844-1-amitsd@google.com>
+References: <CAHhAz+g=7pocghMX-Yu=jg0jxnpfwa3+ZmmdLP_pVuXmWLJ=aw@mail.gmail.com>
+ <ea450e31-8f71-4726-91f6-ada79e0b3a9a@rowland.harvard.edu>
+ <CAHhAz+gRvah++Hv4k5+Ec0epNbmet0=JZ6tJ3R8zjZmiKACaQA@mail.gmail.com>
+ <c309b037-50db-4ca1-8f86-60131cb84564@rowland.harvard.edu>
+ <CAHhAz+i9TLCb3hKpzWAL2DkH9Y25XszJO5kgbRGzsut1zCzrJw@mail.gmail.com> <8a8edaba-670b-47ad-a123-2077e2e0644d@rowland.harvard.edu>
+In-Reply-To: <8a8edaba-670b-47ad-a123-2077e2e0644d@rowland.harvard.edu>
+From: Muni Sekhar <munisekharrms@gmail.com>
+Date: Tue, 7 May 2024 22:08:13 +0530
+Message-ID: <CAHhAz+iywarnsNmt0mbuyPV+mNYQ+OwqoDMaymTGAEv6KBcLnA@mail.gmail.com>
+Subject: Re: Seeking Assistance: Implementing USB Device Suspend/Resume in
+ User Space Driver
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: linux-usb@vger.kernel.org, kernelnewbies <kernelnewbies@kernelnewbies.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Apr 24, 2024 at 03:32:16PM GMT, Amit Sunil Dhamne wrote:
-> Check and unregister existing source caps in tcpm_register_source_caps
-> function before registering new ones. This change fixes following
-> warning when port partner resends source caps after negotiating PD contract
-> for the purpose of re-negotiation.
-> 
-> [  343.135030][  T151] sysfs: cannot create duplicate filename '/devices/virtual/usb_power_delivery/pd1/source-capabilities'
-> [  343.135071][  T151] Call trace:
-> [  343.135076][  T151]  dump_backtrace+0xe8/0x108
-> [  343.135099][  T151]  show_stack+0x18/0x24
-> [  343.135106][  T151]  dump_stack_lvl+0x50/0x6c
-> [  343.135119][  T151]  dump_stack+0x18/0x24
-> [  343.135126][  T151]  sysfs_create_dir_ns+0xe0/0x140
-> [  343.135137][  T151]  kobject_add_internal+0x228/0x424
-> [  343.135146][  T151]  kobject_add+0x94/0x10c
-> [  343.135152][  T151]  device_add+0x1b0/0x4c0
-> [  343.135187][  T151]  device_register+0x20/0x34
-> [  343.135195][  T151]  usb_power_delivery_register_capabilities+0x90/0x20c
-> [  343.135209][  T151]  tcpm_pd_rx_handler+0x9f0/0x15b8
-> [  343.135216][  T151]  kthread_worker_fn+0x11c/0x260
-> [  343.135227][  T151]  kthread+0x114/0x1bc
-> [  343.135235][  T151]  ret_from_fork+0x10/0x20
-> [  343.135265][  T151] kobject: kobject_add_internal failed for source-capabilities with -EEXIST, don't try to register things with the same name in the same directory.
-> 
-> Fixes: 8203d26905ee ("usb: typec: tcpm: Register USB Power Delivery Capabilities")
-> Cc: linux-usb@vger.kernel.org
-> Cc: stable@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: Mark Brown <broonie@kernel.org>
-> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
-> ---
->  drivers/usb/typec/tcpm/tcpm.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index ab6ed6111ed0..d8eb89f4f0c3 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -2996,7 +2996,7 @@ static int tcpm_register_source_caps(struct tcpm_port *port)
->  {
->  	struct usb_power_delivery_desc desc = { port->negotiated_rev };
->  	struct usb_power_delivery_capabilities_desc caps = { };
-> -	struct usb_power_delivery_capabilities *cap;
-> +	struct usb_power_delivery_capabilities *cap = port->partner_source_caps;
->  
->  	if (!port->partner_pd)
->  		port->partner_pd = usb_power_delivery_register(NULL, &desc);
-> @@ -3006,6 +3006,9 @@ static int tcpm_register_source_caps(struct tcpm_port *port)
->  	memcpy(caps.pdo, port->source_caps, sizeof(u32) * port->nr_source_caps);
->  	caps.role = TYPEC_SOURCE;
->  
-> +	if (cap)
-> +		usb_power_delivery_unregister_capabilities(cap);
+On Tue, May 7, 2024 at 7:50=E2=80=AFPM Alan Stern <stern@rowland.harvard.ed=
+u> wrote:
+>
+> On Tue, May 07, 2024 at 05:14:25PM +0530, Muni Sekhar wrote:
+> > Thank you, it is very helpful.
+> >
+> > To verify the USB device suspend\resume functionality, I configured
+> > the USB Power Management variables as follows:
+> >
+> > # cat /sys/bus/usb/devices/2-1.7/power/wakeup
+> > enabled
+> >
+> > # cat /sys/bus/usb/devices/2-1.7/power/control
+> > on
+>
+> This means that the device will be permanently on, and so it will never
+> be suspended.  If you want to allow the device to be suspended, you
+> have to write "auto" to the file.
+Thanks a lot for these inputs.
+Now, I can verify USB device auto-suspend and auto-resume through the
+kernel log.
 
-This certainly looks like it's asking for use after free on port->partner_source_caps
-later on, since you're not clearing the pointer for the data that you just freed.
+In my test system, I found three buses "Bus 001, 002, and 003" using
+the lsusb command.
 
-> +
->  	cap = usb_power_delivery_register_capabilities(port->partner_pd, &caps);
->  	if (IS_ERR(cap))
->  		return PTR_ERR(cap);
+The USB device I want to test is located on "Bus 002".
 
-This can easily fail if caps contain invalid PDOs, resulting in keeping pointer
-to freed memory in port->partner_source_caps.
 
-Kind regards,
-	o.
+# lsusb | grep "Bus 002" | wc
+      4      37     224
 
-> base-commit: 0d31ea587709216d88183fe4ca0c8aba5e0205b8
-> -- 
-> 2.44.0.769.g3c40516874-goog
-> 
+As per the output of the above command, there are 4 USB devices on
+"Bus 002" in my test system.
+
+
+# ls -l /sys/bus/usb/devices/2*
+lrwxrwxrwx 1 root root 0 Feb 14 14:48 /sys/bus/usb/devices/2-0:1.0 ->
+../../../devices/pci0000:00/0000:00:14.0/usb2/2-0:1.0
+lrwxrwxrwx 1 root root 0 May  7 13:16 /sys/bus/usb/devices/2-1 ->
+../../../devices/pci0000:00/0000:00:14.0/usb2/2-1
+lrwxrwxrwx 1 root root 0 May  7 13:16 /sys/bus/usb/devices/2-1.1 ->
+../../../devices/pci0000:00/0000:00:14.0/usb2/2-1/2-1.1
+lrwxrwxrwx 1 root root 0 May  7 13:16 /sys/bus/usb/devices/2-1:1.0 ->
+../../../devices/pci0000:00/0000:00:14.0/usb2/2-1/2-1:1.0
+lrwxrwxrwx 1 root root 0 May  7 13:16 /sys/bus/usb/devices/2-1.1:1.0
+-> ../../../devices/pci0000:00/0000:00:14.0/usb2/2-1/2-1.1/2-1.1:1.0
+lrwxrwxrwx 1 root root 0 May  7 13:16 /sys/bus/usb/devices/2-1.7 ->
+../../../devices/pci0000:00/0000:00:14.0/usb2/2-1/2-1.7
+lrwxrwxrwx 1 root root 0 May  7 13:16 /sys/bus/usb/devices/2-1.7:1.0
+-> ../../../devices/pci0000:00/0000:00:14.0/usb2/2-1/2-1.7/2-1.7:1.0
+
+# ls -l /sys/bus/usb/devices/2* | wc
+      7      77     892
+
+
+The above command shows seven nodes in /sys/bus/usb/devices/2* directory.
+
+The wakeup, control, and autosuspend_delay_ms attribute files are
+controlled via /sys/bus/usb/devices/.../power/, where "..." represents
+the device's ID.
+
+I identified my test device in /sys/bus/usb/devices/.../power/ by
+iterating through all the directories, reading the idVendor attribute
+file, and then manipulating the power management attribute files.
+
+Is there a way to manually map /sys/bus/usb/devices/.../power/ from
+the lsusb output? Can this mapping be done from a user space program
+as well? Do you have any reference examples for this? If so, could you
+share their GitHub location?
+
+
+>
+> > # cat /sys/bus/usb/devices/2-1.7/power/autosuspend_delay_ms
+> > 0
+> >
+> > # cat /sys/module/usbcore/parameters/autosuspend
+> > 2
+> >
+> >
+> > So, I configured the system to autosuspend the USB device as soon as
+> > it becomes idle, with no transactions running through the USB device.
+> > Now, how can I verify that the USB device has entered suspend mode
+> > from user space? When checking /var/log/kern.log, there are no
+> > relevant print statements. Are there any other log files related to
+> > power management or USB subsystems?
+> > Please correct me if anything in the test procedure mentioned above is
+> > incorrect.
+>
+> You can see the device's current state by reading the
+> power/runtime_status attribute file in sysfs.  There are lots of other
+> informative files in that directory; you should look at them.
+>
+> If you want to get more debugging information in the kernel log, you can
+> enable dynamic debugging for usbcore:
+>
+>         echo module usbcore =3Dp >/sys/kernel/debug/dynamic_debug/control
+>
+> Alan Stern
+
+
+
+--=20
+Thanks,
+Sekhar
 
