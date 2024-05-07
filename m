@@ -1,173 +1,172 @@
-Return-Path: <linux-usb+bounces-10061-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10062-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9C698BE0AF
-	for <lists+linux-usb@lfdr.de>; Tue,  7 May 2024 13:09:40 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B81518BE14F
+	for <lists+linux-usb@lfdr.de>; Tue,  7 May 2024 13:45:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7F8A1284B39
-	for <lists+linux-usb@lfdr.de>; Tue,  7 May 2024 11:09:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B527EB28385
+	for <lists+linux-usb@lfdr.de>; Tue,  7 May 2024 11:44:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B72141514F1;
-	Tue,  7 May 2024 11:09:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA689152534;
+	Tue,  7 May 2024 11:44:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gbt4wUu9"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b5YnVZIK"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9F731514C9;
-	Tue,  7 May 2024 11:09:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6B2415252F
+	for <linux-usb@vger.kernel.org>; Tue,  7 May 2024 11:44:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715080173; cv=none; b=Gvz5PfeqM4VAhH/OWuR/E3eRgKLdE4PYkxfiPbfxv2Aaonzp66oa/OUaOe/J/WFCLhpyULHQj8LRD3INhrZa9lhVr6bfn+KjzIl1OeBtcssjVJttqgFqafd90bag/dasDtUnDindeZLrfOTHpVEELLqPqpLVPe/B0S34eQEYXf4=
+	t=1715082279; cv=none; b=sZdFZA03Vn1LhQRlnkQMEId+rF/BgQ6xU6DvjRIEckkE/7YQk2K8tMUq86tB/x860J2a2hWfIJiZHC2E+KqLJ2szw6H/kqi1FepZj+60THkD/ulaPmwxR9svThsz1PGXY3IGKV5ipKZAvLIk/NUwvkSVPi+Z9mZoYX3DHkG2BoY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715080173; c=relaxed/simple;
-	bh=ZDHAJEmGPC34idg5wIvN/SlxRNOVp/+v3SFR/mFtXG4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sPzTRSO2JnRgy5GDT3H4geUZxj/j8bJ6ZZZnWYBWuFkYjWb6gDewebvWYsNjcy7hMmwickSM/UQaHIDyJ0QFcAOuqILzbMz35QfQoGEEDS76xZD49UmySvHwbB2imyVNofi1iExswD2Peai7i4XGKNMPFqTAzoA2RT8BsLB07G0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gbt4wUu9; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715080171; x=1746616171;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZDHAJEmGPC34idg5wIvN/SlxRNOVp/+v3SFR/mFtXG4=;
-  b=gbt4wUu9LzLAIIEOtmSd0OewPeAARlHeqy1dc6K1QdU9rt8zushDLUXU
-   Yz2CPCN9xkP8POk9J46cKcM6p/hKew5f3j+fP7IQ0slYx1aSIHyG9fEqL
-   +hqeQlgPc2rIzYzzUl0iPkwzylItQ1uSvsT2AuGlqphUWp5SGwRtO0jmd
-   q+vo11ut7RiUBU1AXG2ew94Pr5dcd9mycWnXS39M3qiz4R+CQM+A+430l
-   heMmKd+gyHjRhcAV3owV6Vbd84BustJSEuul6++DXWBlzXbfQ+dkIxAuy
-   MxWqoeB69SbVHS629dgFUq1xbys7UlglBRFE1OApDzu7sLGsrLgjY+nw0
-   w==;
-X-CSE-ConnectionGUID: YZK1mkJjT+iQigi+sDNIww==
-X-CSE-MsgGUID: TJxgrBpDQSKSemIi8SwFKw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11065"; a="10720744"
-X-IronPort-AV: E=Sophos;i="6.07,261,1708416000"; 
-   d="scan'208";a="10720744"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2024 04:09:31 -0700
-X-CSE-ConnectionGUID: ZrOBaoG9Sdiqh7Rw7qH+sw==
-X-CSE-MsgGUID: 36gEx8TfSX+QnqxwlLRF2A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,261,1708416000"; 
-   d="scan'208";a="51682325"
-Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 07 May 2024 04:09:28 -0700
-Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s4IhJ-0001qH-35;
-	Tue, 07 May 2024 11:09:25 +0000
-Date: Tue, 7 May 2024 19:08:33 +0800
-From: kernel test robot <lkp@intel.com>
-To: Michael Grzeschik <m.grzeschik@pengutronix.de>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	michael.riesch@wolfvision.net, kernel@pengutronix.de,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Michael Grzeschik <m.grzeschik@pengutronix.de>
-Subject: Re: [PATCH] usb: dwc3: gadget: create per ep interrupts
-Message-ID: <202405071800.omy5Ou1D-lkp@intel.com>
-References: <20240507-dwc3_per_ep_irqthread-v1-1-f14dec6de19f@pengutronix.de>
+	s=arc-20240116; t=1715082279; c=relaxed/simple;
+	bh=CxhjvWHJUuKHc+UG+7LRAgjPBSMeb6kOu6pcrk4BnKQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=RYgrBFD4ysWlbcbKAn2wNkPDI+lbEgxFG+8W83uKkl2T8jlVKfBbLxVhNovp0/m+j8U8JxjUibSpVZ15EEGSGl9SB0Jl/6hk+c5cXjUvsT5HHvy60esN4kPHd+46J59bnoow4RL4JJP3R9GH/uDiAhh43CbAXlKIxn964Fu6Jsg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b5YnVZIK; arc=none smtp.client-ip=209.85.128.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-62050e00cfdso20321937b3.3
+        for <linux-usb@vger.kernel.org>; Tue, 07 May 2024 04:44:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1715082277; x=1715687077; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XnAh9SAP3yzVgRg2uuSYhZI7cBVfWDGrjlaKcwxdTHk=;
+        b=b5YnVZIKiZggXwqO0Oyp10DAfgsv/cZ4djvzyQopMMP5tpgcC+AKUWKJoDwVyVqd3K
+         wZAGTP6bax6klIpYZUBPzyJKPns5JCDHuv4eFSllCD69tqziZQ7/LHkzg7sWiEHFCHJ2
+         fYEaxvCsrefMOPzW1RHASEs9QWFbXnRtDxQsRqzw6Y9lEGxB3+bshRezBWbLtH6z5rs2
+         gvQ55FwwWFGNIgSxRtJIaOEL1HLL9h35Nv3T+GHU1HNo1NMiHyymucrty/Qsh/vq0R/B
+         Qj3fswVLuM7PTyakIjHvssfVOlTDYDo6f4jp6iclIcr2dNRcDkVph4jP8uU5OhuQ8ps9
+         Fo2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715082277; x=1715687077;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XnAh9SAP3yzVgRg2uuSYhZI7cBVfWDGrjlaKcwxdTHk=;
+        b=c9WNmLR021tTj8mQgmaT+owV/Oe6OaXRLpfxVD23yQpLYuyYjARvQeW9GtJcghKx0C
+         SOi+gfQ5iNcnS8GQg0Uhn15b2uqx6ZfEnUlLJSRe/zslan6BxhLuaPrn2zgcLnFmbeFT
+         tl0yNJqdcn3UAnEVUlgODP84XG+zOQazIXSRt1ZhZ5Ltzy0eMMdp9iKnawbkxxnOeBG2
+         OFsAys9Zjt1zn3b6af9kP+Ko61p8P+uHxnkEdGR8ISgEek+P2fCJYW6pVq60JDImJBJS
+         kxVWfita5yG07bRdPaD5rUU/Wrwlq+dE12nXIaCm2w2/y2htK5+4HDmno/PQ/RlDmHPc
+         qa4Q==
+X-Gm-Message-State: AOJu0YzRBQRROv3x1HI0Oe3gMHfXhQq0l68Wkk/57FNcPHgzUZo3Cm5l
+	QbmZId8hLUi+Ys3KGEBZHmgk4DduYQfs25f3LWqsTf4WezF+3mqqHLlX4IacRTH04zrzo24bnuA
+	LCWvi1OB1aFcABba3S1VV4PimzSU=
+X-Google-Smtp-Source: AGHT+IHGYaYCTaiIOoGCd5KotF1ipoWL5vDkB/9PbWyMYxlTbF+uKggMLQzSAN7zEqdTmXuLzxAUeTLV6FsDsgKaXmA=
+X-Received: by 2002:a81:920e:0:b0:615:9a1:602b with SMTP id
+ j14-20020a81920e000000b0061509a1602bmr12688013ywg.44.1715082276673; Tue, 07
+ May 2024 04:44:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240507-dwc3_per_ep_irqthread-v1-1-f14dec6de19f@pengutronix.de>
+References: <CAHhAz+g=7pocghMX-Yu=jg0jxnpfwa3+ZmmdLP_pVuXmWLJ=aw@mail.gmail.com>
+ <ea450e31-8f71-4726-91f6-ada79e0b3a9a@rowland.harvard.edu>
+ <CAHhAz+gRvah++Hv4k5+Ec0epNbmet0=JZ6tJ3R8zjZmiKACaQA@mail.gmail.com> <c309b037-50db-4ca1-8f86-60131cb84564@rowland.harvard.edu>
+In-Reply-To: <c309b037-50db-4ca1-8f86-60131cb84564@rowland.harvard.edu>
+From: Muni Sekhar <munisekharrms@gmail.com>
+Date: Tue, 7 May 2024 17:14:25 +0530
+Message-ID: <CAHhAz+i9TLCb3hKpzWAL2DkH9Y25XszJO5kgbRGzsut1zCzrJw@mail.gmail.com>
+Subject: Re: Seeking Assistance: Implementing USB Device Suspend/Resume in
+ User Space Driver
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: linux-usb@vger.kernel.org, kernelnewbies <kernelnewbies@kernelnewbies.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Michael,
+On Tue, May 7, 2024 at 1:20=E2=80=AFAM Alan Stern <stern@rowland.harvard.ed=
+u> wrote:
+>
+> On Mon, May 06, 2024 at 09:44:52PM +0530, Muni Sekhar wrote:
+> > On Mon, May 6, 2024 at 7:59=E2=80=AFPM Alan Stern <stern@rowland.harvar=
+d.edu> wrote:
+> > >
+> > > On Mon, May 06, 2024 at 04:44:30PM +0530, Muni Sekhar wrote:
+> > > > While we have successfully converted most of the USB device driver
+> > > > functionality from kernel space to user space using libusb, we are =
+now
+> > > > seeking guidance on how to implement USB device suspend/resume in u=
+ser
+> > > > space. Specifically, we would like to know if libusb provides suppo=
+rt
+> > > > for achieving the suspend/resume functionality mentioned above.
+> > > > Additionally, any insights or suggestions on how to accomplish this
+> > > > task would be greatly appreciated.
+> > >
+> > > Your question is about libusb, right?  So you'll get better answers i=
+f
+> > > you post it on the libusb mailing list rather than the linux-usb mail=
+ing
+> > > list.
+> > Can USB device suspend\resume  be implemented in user space driver
+> > using software other than libusb?
+>
+> Yes, a userspace driver can use the usbfs interface and can employ the
+> ioctl commands listed in /usr/include/linux/usbdevfs.h.  It's possible
+> that libusb also provides facilities for controlling suspend and resume;
+> I don't know whether it does.
+>
+> > If so, what are those methods or techniques to achieve USB device
+> > suspend\resume , can you please provide clarity on this.
+>
+> As far as I know, these usbfs ioctl commands are not documented
+> anywhere.
+>
+> The USBDEVFS_FORBID_SUSPEND ioctl prevents the device from being
+> suspended, and wakes it up if it is currently suspended.
+>
+> The USBDEVFS_ALLOW_SUSPEND ioctl allows the device to be suspended.  The
+> suspend may not happen immediately; it is controlled by the settings in
+> the device's power/control and power/autosuspend (or
+> power/autosuspend_delay_ms) sysfs attribute files.
+>
+> The USBDEVFS_WAIT_FOR_RESUME ioctl waits until the device resumes,
+> whether because of a remote wakeup or because another process has
+> resumed it, and then forbids the device from suspending again until
+> you perform another USBDEVFS_ALLOW_SUSPEND ioctl.
+>
+Thank you, it is very helpful.
 
-kernel test robot noticed the following build warnings:
+To verify the USB device suspend\resume functionality, I configured
+the USB Power Management variables as follows:
 
-[auto build test WARNING on dd5a440a31fae6e459c0d6271dddd62825505361]
+# cat /sys/bus/usb/devices/2-1.7/power/wakeup
+enabled
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Michael-Grzeschik/usb-dwc3-gadget-create-per-ep-interrupts/20240507-070804
-base:   dd5a440a31fae6e459c0d6271dddd62825505361
-patch link:    https://lore.kernel.org/r/20240507-dwc3_per_ep_irqthread-v1-1-f14dec6de19f%40pengutronix.de
-patch subject: [PATCH] usb: dwc3: gadget: create per ep interrupts
-config: x86_64-buildonly-randconfig-001-20240507 (https://download.01.org/0day-ci/archive/20240507/202405071800.omy5Ou1D-lkp@intel.com/config)
-compiler: clang version 18.1.4 (https://github.com/llvm/llvm-project e6c3289804a67ea0bb6a86fadbe454dd93b8d855)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240507/202405071800.omy5Ou1D-lkp@intel.com/reproduce)
+# cat /sys/bus/usb/devices/2-1.7/power/control
+on
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405071800.omy5Ou1D-lkp@intel.com/
+# cat /sys/bus/usb/devices/2-1.7/power/autosuspend_delay_ms
+0
 
-All warnings (new ones prefixed by >>):
-
->> drivers/usb/dwc3/gadget.c:1068:6: warning: variable 'count_processed' set but not used [-Wunused-but-set-variable]
-    1068 |         int count_processed = 0;
-         |             ^
-   1 warning generated.
+# cat /sys/module/usbcore/parameters/autosuspend
+2
 
 
-vim +/count_processed +1068 drivers/usb/dwc3/gadget.c
+So, I configured the system to autosuspend the USB device as soon as
+it becomes idle, with no transactions running through the USB device.
+Now, how can I verify that the USB device has entered suspend mode
+from user space? When checking /var/log/kern.log, there are no
+relevant print statements. Are there any other log files related to
+power management or USB subsystems?
+Please correct me if anything in the test procedure mentioned above is
+incorrect.
 
-  1059	
-  1060	static void dwc3_process_event_entry(struct dwc3 *dwc,
-  1061					     const union dwc3_event *event);
-  1062	
-  1063	static irqreturn_t dwc3_endpoint_thread_irq(int irq, void *_dep)
-  1064	{
-  1065		struct dwc3_ep *dep = _dep;
-  1066		struct dwc3 *dwc = dep->dwc;
-  1067		const union dwc3_event *event;
-> 1068		int count_processed = 0;
-  1069		u32 event_raw;
-  1070		unsigned long flags;
-  1071	
-  1072		dep->givebacks_current_turn = 0;
-  1073	
-  1074		spin_lock_irqsave(&dep->event_lock, flags);
-  1075	
-  1076		if (dep->ep_event_flags & DWC3_EP_EVENT_OVERFLOW) {
-  1077			dev_err(dwc->dev, "ep%d: event buffer overflow\n", dep->number);
-  1078			dep->ep_event_flags &= ~DWC3_EP_EVENT_OVERFLOW;
-  1079		}
-  1080	
-  1081		while (dep->ep_event_r_index != dep->ep_event_w_index) {
-  1082	
-  1083			event_raw = dep->ep_event_buffer[dep->ep_event_r_index];
-  1084	
-  1085			/*
-  1086			 * we have a copy of the event, so we can release the lock
-  1087			 */
-  1088			spin_unlock_irqrestore(&dep->event_lock, flags);
-  1089	
-  1090			event = (const union dwc3_event *) &event_raw;
-  1091	
-  1092			spin_lock(&dwc->lock);
-  1093			dwc3_process_event_entry(dwc, event);
-  1094			spin_unlock(&dwc->lock);
-  1095	
-  1096			/*
-  1097			 * we need to re-acquire the lock to update the read index
-  1098			 */
-  1099			spin_lock_irqsave(&dep->event_lock, flags);
-  1100	
-  1101			dep->ep_event_r_index = (dep->ep_event_r_index + 1) %
-  1102						 ARRAY_SIZE(dep->ep_event_buffer);
-  1103	
-  1104			count_processed += 1;
-  1105		}
-  1106	
-  1107		spin_unlock_irqrestore(&dep->event_lock, flags);
-  1108	
-  1109		return IRQ_HANDLED;
-  1110	}
-  1111	
+> Alan Stern
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+
+
+--=20
+Thanks,
+Sekhar
 
