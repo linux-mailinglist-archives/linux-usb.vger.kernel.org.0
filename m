@@ -1,464 +1,273 @@
-Return-Path: <linux-usb+bounces-10058-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10059-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7529D8BD807
-	for <lists+linux-usb@lfdr.de>; Tue,  7 May 2024 01:07:01 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AFD208BDA86
+	for <lists+linux-usb@lfdr.de>; Tue,  7 May 2024 07:08:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 97D821F21DDF
-	for <lists+linux-usb@lfdr.de>; Mon,  6 May 2024 23:07:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 666D1282A47
+	for <lists+linux-usb@lfdr.de>; Tue,  7 May 2024 05:08:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22E0715CD49;
-	Mon,  6 May 2024 23:06:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA67F6BB5C;
+	Tue,  7 May 2024 05:07:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="cRN+GFAL";
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="UVGxnwei"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 731EA15B11F
-	for <linux-usb@vger.kernel.org>; Mon,  6 May 2024 23:06:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715036813; cv=none; b=OUBNwZbR+5dPRNRS1kJuYqt5M9YURloxL4XU89tc3OS8kDI1qDP6lo8kJZBipxYhWUpAhD3weLBXkWyfITLmKyNg7rhP5p7kLV1wHEIJWhx8OU2yXeEYJCnRd7GBHM9HrTXdOlF/OyTzJBeD/AO1p0KanhpnnLpRJ+E8UdGjMAE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715036813; c=relaxed/simple;
-	bh=9HN86MYQ33YdNbS0Pmv0lByag7ERw0yRrumYfb+xENQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=e3kp2kC8MV43CpLk5hJnSJQrYbec6rTukIwU4iSlkssWLcLGcGdOiOZbSMEc7N3bsR83/0ujQKDNejEtwcFOoZNFGGQsAusHXhsezIQ5p0UPB0u65g9zSU0s08D0YeXlqITwzTq7SPp0XLtLHBKqSbbMIvjkfJNXAG1sTgmOZrs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <m.grzeschik@pengutronix.de>)
-	id 1s47Pw-0004CD-FD; Tue, 07 May 2024 01:06:44 +0200
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <m.grzeschik@pengutronix.de>)
-	id 1s47Pu-00GMw9-Mp; Tue, 07 May 2024 01:06:42 +0200
-Received: from localhost ([::1] helo=dude04.red.stw.pengutronix.de)
-	by dude04.red.stw.pengutronix.de with esmtp (Exim 4.96)
-	(envelope-from <m.grzeschik@pengutronix.de>)
-	id 1s47Pu-00FAuL-0Z;
-	Tue, 07 May 2024 01:06:42 +0200
-From: Michael Grzeschik <m.grzeschik@pengutronix.de>
-Date: Tue, 07 May 2024 01:06:41 +0200
-Subject: [PATCH] usb: dwc3: gadget: create per ep interrupts
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EA546A8CF;
+	Tue,  7 May 2024 05:07:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=68.232.153.233
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1715058479; cv=fail; b=gInWdWl37aN4Nf4F2GFjlP0oGAp9WkR3NkAqGnGVKY9/pGqP82LJqjBsCjjj2Ma07+Ssrcx6nCoYNFlBd8e61xTI/xq5oUeDF5Mkxv8hOxB2iSdDUoh00gmA40I7bVtbpNCKvOKkv+EpheCu8ds9LsRXJLgJLZ5hKAMJmsUUje0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1715058479; c=relaxed/simple;
+	bh=NGiQr4iM5eqUFNJz8nr26eXUa8Mvkk+K4tGc/CMeyPo=;
+	h=From:To:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=LoM8F/LgFHZhj+5XQgzdJvTI0+yttC2sW89coX1tm1xfxx0iVmPXgVapcpvkxBNh1J7cuSllcZtf4sabCV53GtHfzLON7kxpD6Y3InZVJXekMf1rtUn33s14g7FJch5K3tqdGwCm3kg9ZLmmVIKg/4rElCxEEBdzKY+ROAxEdqo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=cRN+GFAL; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=UVGxnwei; arc=fail smtp.client-ip=68.232.153.233
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1715058477; x=1746594477;
+  h=from:to:subject:date:message-id:references:in-reply-to:
+   content-id:content-transfer-encoding:mime-version;
+  bh=NGiQr4iM5eqUFNJz8nr26eXUa8Mvkk+K4tGc/CMeyPo=;
+  b=cRN+GFALYX+i61yE4UfTp/YYYUgVr8wDElqnIV8Ongb7W9chKqyvH1Q4
+   IpxG3Vtg0h3KWeuKM6N4ul8973sZukYrx64fzJ2W6kgvv/7A2y9mf5KFx
+   yyD7EGTKMhoSINoyuwIDSKtKhkgqyNLdMinoxuGUevjyU8fsShIvsWW6N
+   KsTVSYED7coQkZbd9u8BDam2u2irUVYHsnDfE2JdVuQsny4ozEaIISE1m
+   yogs7RkxlY8BFKOWe/rz8f/tFXHkUtJ7po6K10iqpg/RAf0a11g3SJZLN
+   bQJVDs8KGrPeIrmsQm9i4mCNAp1bwsc2TSp4yLZ543JWJNLv7TFlU71eQ
+   w==;
+X-CSE-ConnectionGUID: dyN5i1OgT9yWgAjs8tx+ew==
+X-CSE-MsgGUID: 816nKeBMRTa/uX+Uu+3mLA==
+X-IronPort-AV: E=Sophos;i="6.07,260,1708412400"; 
+   d="scan'208";a="254744460"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 06 May 2024 22:07:56 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Mon, 6 May 2024 22:07:29 -0700
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (10.10.215.250)
+ by email.microchip.com (10.10.87.72) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35 via Frontend Transport; Mon, 6 May 2024 22:07:28 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Cj8mSCoFz8CmcIDkfx4mULqOGKjvV3thXIRNfpdqRhuDpkfzzjXOkPlEmRtCUv8MsGy1djNKEBHUtWxg9Avl2cGzbb1s/vqtPJiC1mKahOdFMImmHgDD4WVj9t8qpHJ1RxfDR7jonbAdCLxhRX0CDmpTcDU8GdR8CZnAVYOScio3MFoDSjyCwYpxLZu8cixSRft2toKaerGxOJb9kpuK/eF98cHGfOHcpQNoyDV2mu8cH1m07MaZfIBHSCrtELKkIdfYOOwNU/7vpigrLn8SXpTpR//O/EhJDd/L6pqtukXhM8Stg0ZvCd2A/dlAbITcc9STNdevdo4gqEHbGtoMhg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=NGiQr4iM5eqUFNJz8nr26eXUa8Mvkk+K4tGc/CMeyPo=;
+ b=XkuEPSOC0mPdV3o/L6ddSAtoEn27DeA3UMNWVrPQ7qK80iHcCOY3N7pQz/qaRBsf6uhd2oFCd4xmYjqZNXXNsb7p0tPIt+2Z76afo8POlfJXRosKn93s/eajKEE1ijJ5q9D+jd9ujSqtTcBtAUhnT6a9pAi08biVxBCFlI7/GiOWjFtfP+LUHcXdQ+e0TW9eB1KYZ/RzLbsPC0bAw7Cssrnk9TusxmY2XfkLvAt5v5a8MIuV2qe1CKZLdaj1eF/MjfFJz1kTGizm4/6l6JZ7vaPBlFZo50Rp0zcDP243XA7fxZz3rSADTLgQGR77tS3mlx3BuQkuRJKWeOcm0xJW6Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microchip.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NGiQr4iM5eqUFNJz8nr26eXUa8Mvkk+K4tGc/CMeyPo=;
+ b=UVGxnweiSoL8MqZT3er8I8TBp/0kpYrnEX6b9E+HvfUfNlKBkEgFyVur5Myj6d3zRrtMctxe18vZ6eq2J1xaBcBPRZ3vx+Ndp6EKgbN3MZpdzsSxJtKyGLO9Ntr+K4nO48dZWSkdXloBQeSHl0jjTjqvcGe2gvmEjqS9CwVtScz8s2VvK2VnzWnQac5bQwzy5pxmUvh5lgaDwMIsfPxol4yjuxAw2X6Le50lGjiUfA5g+wjXq7FLkxT90FJonizVorydcEd1vJXnwpqkojNUcL2BPQWucOqPMicuMCiB7Wl9YB9H5Krmkl1NCPqgt8LcPqamfBm9s/7rO6Te/iZe+Q==
+Received: from DS0PR11MB7481.namprd11.prod.outlook.com (2603:10b6:8:14b::16)
+ by SA2PR11MB4810.namprd11.prod.outlook.com (2603:10b6:806:116::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.42; Tue, 7 May
+ 2024 05:07:27 +0000
+Received: from DS0PR11MB7481.namprd11.prod.outlook.com
+ ([fe80::3a8a:2d38:64c0:cc4f]) by DS0PR11MB7481.namprd11.prod.outlook.com
+ ([fe80::3a8a:2d38:64c0:cc4f%5]) with mapi id 15.20.7544.029; Tue, 7 May 2024
+ 05:07:26 +0000
+From: <Rengarajan.S@microchip.com>
+To: <linux-usb@vger.kernel.org>, <davem@davemloft.net>,
+	<Woojung.Huh@microchip.com>, <linux-kernel@vger.kernel.org>,
+	<netdev@vger.kernel.org>, <pabeni@redhat.com>, <edumazet@google.com>,
+	<UNGLinuxDriver@microchip.com>, <kuba@kernel.org>
+Subject: Re: [PATCH net v1] lan78xx: Fix crash with multiple device attach
+Thread-Topic: [PATCH net v1] lan78xx: Fix crash with multiple device attach
+Thread-Index: AQHanE12SFIEQHuItUOzC3mq+bjTZbGJ+bKAgAFHa4A=
+Date: Tue, 7 May 2024 05:07:26 +0000
+Message-ID: <26d7f478dfa81cadd246771fb41c6763a4b19772.camel@microchip.com>
+References: <20240502045748.37627-1-rengarajan.s@microchip.com>
+	 <1706dd2a3d24462780599f57e379fa2a1e8e15ac.camel@redhat.com>
+In-Reply-To: <1706dd2a3d24462780599f57e379fa2a1e8e15ac.camel@redhat.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DS0PR11MB7481:EE_|SA2PR11MB4810:EE_
+x-ms-office365-filtering-correlation-id: d89d79b7-d398-497c-4958-08dc6e53969e
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230031|366007|376005|1800799015|38070700009;
+x-microsoft-antispam-message-info: =?utf-8?B?blo1ZHNJb21BUVNjWUxCSEI2KzBDNGFESmZ5MWplNGUrSmZQRVlkSFhPWG1a?=
+ =?utf-8?B?eTFZWStVNnB1b2cvTDF1QlpJelE5R0ZSdWNyTFhxYjVLc0ZEUldQTjFVU2RT?=
+ =?utf-8?B?aklhdFppSk9iMzZ4RVJPRTBBenRzOGV5clEwZ0FZNUJDSWVQamN6Zm1uZUVk?=
+ =?utf-8?B?eklCY0ZIY05MRTRGSHVDN2FCUjFyV0MwUWFPdWlyZi90eUx5UVVUSFAvN3ZT?=
+ =?utf-8?B?YmlQb1p2RVA1dGxKcUxVMHRwZ1ZaWGRKamYwWXA0enNPbVBlazlOZWdiZkJL?=
+ =?utf-8?B?THJmN1FLTldrMVZwQlJ5Q1ZzbmdDRFVzalRybWkrRm40SnpkZlBVS1VhU0JK?=
+ =?utf-8?B?OWFpbyt4bmFtZHdRVlRNbmt0Vkp1cWsrMFZPRThqQ3hBZllOWjdnRDI4T2ly?=
+ =?utf-8?B?K2RFeGhJZjR6c0dJaGpseHBsVGlPV3lmSE5iMVhuTlBlb3J5WWVDWkxHR2NI?=
+ =?utf-8?B?a3JTNW5kS1pZcVp4WkpZNnphcjc3L0FhdmlnWDJrY1d5bXk5VjB6b2VFeisw?=
+ =?utf-8?B?NTJBTzZsam5uSGZqN1hXZTAxbjJTd2N4Z09VSmIvMTdraENGR1BSaGRFdmNq?=
+ =?utf-8?B?cFlCZmJ6dTVVd0xlZ1RRa0lhaHhCdTRmamx1ZGV4cGxqdXYrR2Jya0dlMFVW?=
+ =?utf-8?B?eUE2YmdOSnF1SGlOcDFTTkFET01IMDlrd1BUSUwxTitQVmRnVzRKemJ1K085?=
+ =?utf-8?B?MS92enVxaEtXbUZ2WXdRZ2hGbTJoOFpiM201UWtNUWU0QlNHVSs0eWl4c3Q5?=
+ =?utf-8?B?cG5DaGNWNk55cWJRWHcrRW5MZ0FQYXZ5UzQrN21ZZHFINGIwbzJnRTRpNE5n?=
+ =?utf-8?B?MEVSNFhoNllrUFFBdEJzbGRpWEU4L25ZMElRLzRJNzViRjdBNXFOa3c1ek5U?=
+ =?utf-8?B?SnZCaWd3cWpCcW1LN0IzU2pUOHZhWjV0SkhYZkFTSUJoSFExNmdpUFRkNVFx?=
+ =?utf-8?B?UVdyVEEyUkRQN2lscmtteXc3NjlobkNkN01zWW1xN1JydlRoditXVnZOM3Yy?=
+ =?utf-8?B?aGZxaDZLSTVrRFhIUkY1NGppaWQxOE5WZEhUUlFxVlBRQktsejFkK21RQVY4?=
+ =?utf-8?B?ZEs2RWt0ZlF0dDBwcmJVRG5FckFiVE5OUUtCbmdrOXRYNVlBLzJ5bUVYSUFF?=
+ =?utf-8?B?cDk2WS9ZT3NzbGhBRCtyanJSZWpFS0FOMEZZYlVRSE9TeTFxY1pLcFNXRi9X?=
+ =?utf-8?B?UFRCVDRiektnOUNGSTN1YlNEa1RIeER5OTRES3Q5Mllsc1JNd2FDNjdnT0hW?=
+ =?utf-8?B?R1RTdjJoZWx5ZmNqTjVpTzdnRnRJdWE3WXRObzVzSytnc3hSWUl4bWxvRjdN?=
+ =?utf-8?B?OWZnRTVCSTFoc1JaMlNwNzlQMzRjNmZ0RTgxQ1FuVkZ2N0Q0eHgyREliVlU3?=
+ =?utf-8?B?V1kwUjJ1QUNkbEI5aytyVW83Mk1hdllrUmtKVlZubTVCK1k5ejY4QnF5ekRX?=
+ =?utf-8?B?bEsvT3hvRkJUbjhjYjRzSFhIWWkrNlZiMnVEL3FHZnlOZysvaTJkUUdONGhC?=
+ =?utf-8?B?cnpKSmlyME0xQlFqbjY2VmlJazYwcUpEMEhXUXpNVmxuWUtEUHlTTUQ2cTRu?=
+ =?utf-8?B?aHcrSzBpNWkwbFpNVnJETVhsNTNGU1dyaldpQWdDTDVhUzFrTHhYMXVPc3lR?=
+ =?utf-8?B?QWExVkJsa21xdzRXZkxtb05RQ29JREtscThiMVM5U1NPdkkvelRGL25yNkFs?=
+ =?utf-8?B?T1NxemFFUEswV2JzZ3l2TUtSRkZxeWVoU0tBZkkxUXVobG9LUk1namlmTDdt?=
+ =?utf-8?B?VjRVNVFLMU16QmVBMTNFR1RWc2JWUFFvQ3dTTnBCeHl5bFViWTJVZmgzbVQ0?=
+ =?utf-8?B?bGtJREVtNzh1bTl0WlpaZz09?=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB7481.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366007)(376005)(1800799015)(38070700009);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?NGFxTHNYdjlsa3E0Zlp2aGlpYXZJTzAwR0RLcFpzZ01DMWpJSU05U0hwNGNm?=
+ =?utf-8?B?eUZRV3hWVHFaUDNXbUhrNGZ3L214cDhYNVFyZ2NpdnVXU3VLV01YTCtpRE1B?=
+ =?utf-8?B?WW1MUUxNc29kek1Ba1JweFVsNGZYZnlucEEybkZZR0wwRjdhcFBEbVhiM0pL?=
+ =?utf-8?B?VGdSU0NBdG9jV3NJckdHdWVlMFlmc3pBekE2SlhuVGNSRVg2THVMckdEY3Jx?=
+ =?utf-8?B?K2JmWlFubjV3NWFyTzhGVWtPa05CZ0pHMEZEUzRkMXJENDJtZUNvVlJwYWJm?=
+ =?utf-8?B?VUhBT20xYjh4SzVZbUY2Qk1OTFk5dzZUQU9odGg3bm5GWnNUTSszd0tIZWxa?=
+ =?utf-8?B?eDdQbTlkZEhSM285TnR5SjUrc3ZxQnVwb3JydkEwdytkeitlbzFxRTRFanlO?=
+ =?utf-8?B?UDMraVJCUzR3RHhrbWxiNUJqblZMVGR1ZkJPOW4wRFAwMjFWVG5CbEVYQ2Ew?=
+ =?utf-8?B?emEzQzNzdWhTQ1BESnpTcTRwZFN6czh2czMybTc0OE95REFLL2FZMDZjbzZ5?=
+ =?utf-8?B?OWVtL3ZHbm5BcXEwdTRsczlreVBkQlZWYkxJeWcvRmxVS3YvbDcrT0U0cmE5?=
+ =?utf-8?B?RU1lem1YOTA3a3k3NFNZcTM2VUpHMk5kQkZSR1FJRE5pVHFOb2tFUllCRXkz?=
+ =?utf-8?B?TWJlM0tVTXZZR2x3MDdmY0JyQ1ZrN0VlMSt3Q3orNHM1aTUwTndkbzZnQXRB?=
+ =?utf-8?B?UjAyelc3UUhCZnNyNFBBUUpidFdpSkZxWHppYlRjRElNZEI3cXR2cnFSU2Ir?=
+ =?utf-8?B?M3JxakpUeG8vb3JMUWNZdE1tR2I2amRTSEwxckVCMFJRdDRlQWlyYlFjTzFo?=
+ =?utf-8?B?ZG00dXo2L3p1d2ZqZGxNNTVIcEFOVW4xY1lxZEFwVlVQUk1TQkhhd3ZKRDVi?=
+ =?utf-8?B?QW4yTUhqTTl5STljS0E0MDEvSS9VNEZ1QXl1NmNLSk5wUERqSkJkSU9CQjE0?=
+ =?utf-8?B?UkJNczZhN3FJVFZGeDFyaUhSM0tmaEZXcmg4bVQ3RnY4V1hTeENCNDV2TjFH?=
+ =?utf-8?B?c3BkL0k3RHZvS3NNNWhVcjN2clV1cEh1MDZHV05LRU80cEMra0hYU25Wb0Zi?=
+ =?utf-8?B?Y0wvcG9nbHlXNkluL2NhbWoxTlh4ZHhRYXppeGZWcmcrb1B2VXUzUjY1VVFT?=
+ =?utf-8?B?eFV0eTN1NVl5THQyaG5EbEdHeUpNU1ZYaTAwZVdmKytTUi9XVy83bGZYaDBo?=
+ =?utf-8?B?Ulk0NWRRbXR2T1BPVkpVblhaY0Q1VFhtL3kvZjFJYmxpdHdmNWI4cHVOeHdx?=
+ =?utf-8?B?dzZ5OVNuWllOREdsVitpamMyUnNtaXJzTWRTeTVxYnJtWjJYWXZYUnA5QXhB?=
+ =?utf-8?B?ek1HMW1VMEpJL0kwWXRCN1JwQnhGWGFYcHRENWJUVnRuTEszbnVrVmNmbFMx?=
+ =?utf-8?B?dGp4blpjUkhmZXVxK3djOFZmWjgrRW9GajhXeDV0bE9INlJjUUFyeTlDeTJG?=
+ =?utf-8?B?Y0xUUFFwbDRjU3NjcGVkeEt5ZE5FOU9BOEErWXhGTmJxU05sOW90bTZRVmlW?=
+ =?utf-8?B?NW96V0taZVdPRllua2dsSTlsNVhTY2FraUZtMmduUktyY3BRRWJ0RlFzWEZY?=
+ =?utf-8?B?OEtYL3ltMWg5TDFwWkR4Nk5iZlh6ajNBU3p6NkVXRDVYM2I2d1FDcVZ3UTMy?=
+ =?utf-8?B?aFBqN3JVbFZJR3MvR29IR0Fxb0xmeHBEMzZNZ256d2VjbDBRa3AzY0hBNVVJ?=
+ =?utf-8?B?YTBadEM4d0x3VW1JUnhXTTRsNHJjQTdJM2NmVkNIVkswaExWWU1QdmN6RHBX?=
+ =?utf-8?B?SUM4NnRyb1JpeHp1VHpKOE4waVBQaWp2bDlqdDgzZ0orRVNJa2pNNzFUd1NC?=
+ =?utf-8?B?NTdsZGNVbThzcXcxdGR1TE4rOUVuUDlsc2pPUFd1Y2Jsek05d2FnOVgrajV1?=
+ =?utf-8?B?aGp0c1k2RFRoRjYyeU1TM2YzTStMN09Ubmp0SjJVOWh6cy9VN3ZNSWMrZTQv?=
+ =?utf-8?B?Nno5R2pBYlpxR1hIR1d2ci82WDRYSFc4RFlZZXJ0NWRXWnY5V2xtZklmQXBs?=
+ =?utf-8?B?MlQ5R01pWXJrNTRsbEM5cXhiZG8ybWZCaGVqaXBIYkJuQzkvdHNXR2czYkhU?=
+ =?utf-8?B?aGNvUXpiQTAwSGVHbXRuWlQvOEltci9TTkpZckVzaFFPVXlqTE1WNFRqOHE2?=
+ =?utf-8?B?WVlmb2xFeGlseC8vVDd0R2ZsS08yNjNpaDIyYzMzclRJSno1T09XT0ZCL2FH?=
+ =?utf-8?B?eXc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <E56E234D6B08FB459D6ABCFB06854199@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240507-dwc3_per_ep_irqthread-v1-1-f14dec6de19f@pengutronix.de>
-X-B4-Tracking: v=1; b=H4sIAIBiOWYC/x2N2wrCMBAFf6Xss4Gk3sBfEQm5HM1CiXGjtlD67
- y4+zsAwK3UIo9NlWEnw5c7PquB2A6US6gOGszKNdjzYoz2bPKe9bxCP5lle7yII2WTr4ELMCad
- E2sbQYaKEmorW9TNNKpvgzst/dr1t2w+jR8iNfAAAAA==
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: michael.riesch@wolfvision.net, kernel@pengutronix.de, 
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Michael Grzeschik <m.grzeschik@pengutronix.de>
-X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=10879;
- i=m.grzeschik@pengutronix.de; h=from:subject:message-id;
- bh=9HN86MYQ33YdNbS0Pmv0lByag7ERw0yRrumYfb+xENQ=;
- b=owEBbQKS/ZANAwAKAb9pWET5cfSrAcsmYgBmOWKC1GjeiNy2Qy5NxhR++0X3N3yWLNeUPlNF0
- hxcgCLV0xqJAjMEAAEKAB0WIQQV2+2Fpbqd6fvv0Gi/aVhE+XH0qwUCZjliggAKCRC/aVhE+XH0
- q36ED/oCXb1ah+WzibYE5zj1bJV7PpYrWjOsmSsyZDsbNG/jQswx1jY49hCIoa3km/qsreKsPzl
- ZkkwGsm9UtZ0AtQwlM99LR34YZK476ONQpvI0olbSMrLFtEhDuqRMDkRR3Ydj9AL25IXrDWpxnW
- ljsOpVjl5kLVP2y9mdIDxJeipL5Vv449RlCzSc05VdGRYbV1xMEpMiSY74fFExh6G65nq4zE9xI
- tzY2qNq+evkuQkY1D84RspP9GrgnDwE7RbLa0Gh3Qcu41ovG+WtnSDk6hGPDqnlqvfLIqhJWrDH
- r7Hz4ENkR4beKjC16onbLB5JzMD8Iv2zlvbUFAurlYKaQuKnxx2h4Q7Ec72kNIrcwKXy9jlSCoA
- ZYnOLODjB+sNViu0h7XbZVHeg87CoKQTRsnwEr1Q80fYC/sYCg+7+k1GBFjcMB7UqmpZDWeGYqr
- k4P+WS/zXf6Y4Djbg/6gbq7BoUmYpCGWcWYcGAp/zBzIfNOgHpfMoysrKr6Bop2VE/6tJQ6C3GD
- Cs0EFGB7anC+1kmJkM396TazGhdEWq6aGFBHyEuufkY2JmzDR3sA4MWX/2gP3DS+dZcu8RTN421
- oznNw78p0gzj824LdXr7moh1KCqFCuXznm831YHagsDSIV1aSfkhPnkPR9r2+KZrsgIvKdQTN+q
- D9r9dnWYjbKXplQ==
-X-Developer-Key: i=m.grzeschik@pengutronix.de; a=openpgp;
- fpr=957BC452CE953D7EA60CF4FC0BE9E3157A1E2C64
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: m.grzeschik@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB7481.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d89d79b7-d398-497c-4958-08dc6e53969e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 May 2024 05:07:26.7669
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 75gBFX/tHUpZ8M5ALP1IKPu4+Rt88swkUfEhAM/kzYIldkjvoDm3ULRZSUz7x04YjYKBfgZSZCuWe9iUIMRskNJJ/pXCSF0USRftBV5AD/w=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB4810
 
-This patch is splitting up the interrupt event handling from one
-interrupt thread to separate per endpoint interrupt threads.
-
-To achieve this we create a new dwc3 interrupt domain in which
-we map all claimed interrupts to individual interrupt threads.
-
-Although the gadget layer is preparing the claimed parameter
-of each usb_ep which could be checked if the endpoint is
-to used or not, the claimed value was 0 for each ep in gadget_start.
-This was tested when describing some composite gadget using configfs.
-
-As a workaround we check the ep->address value instead for now.
-
-The ep0 is handling in and out events both in one common thread.
-
-There is still some work left to improve.
-
-1) The big dwc->lock can block other endpoint threads. To solve this,
-   the endpoint need their own locks. While the ep0 device events
-   have still to be handled priviliged.
-
-2) The smp_affinity is currently not possible to change which will make
-   the per ep threads run on the same cpu as the current irq. To gain
-   benefit from running the ep threads on different cores, the big
-   dwc->lock is needs to be solved first anyways.
-
-Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
----
- drivers/usb/dwc3/core.h   |  14 ++++
- drivers/usb/dwc3/gadget.c | 202 +++++++++++++++++++++++++++++++++++++++++++++-
- 2 files changed, 215 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index 180dd8d29287c..53cc34ce71682 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -733,6 +733,18 @@ struct dwc3_ep {
- 	struct list_head	pending_list;
- 	struct list_head	started_list;
- 
-+	unsigned int irq_endpoint;
-+
-+	spinlock_t event_lock;
-+	u32 ep_event_buffer[256];
-+	int ep_event_w_index;
-+	int ep_event_r_index;
-+
-+	int givebacks_current_turn;
-+
-+#define DWC3_EP_EVENT_OVERFLOW		BIT(0)
-+	unsigned int ep_event_flags;
-+
- 	void __iomem		*regs;
- 
- 	struct dwc3_trb		*trb_pool;
-@@ -1173,6 +1185,8 @@ struct dwc3 {
- 	struct usb_gadget	*gadget;
- 	struct usb_gadget_driver *gadget_driver;
- 
-+	struct irq_domain	*ep_irq_domain;
-+
- 	struct clk		*bus_clk;
- 	struct clk		*ref_clk;
- 	struct clk		*susp_clk;
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index f94f68f1e7d2b..3b49d80fc8dfa 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -16,6 +16,9 @@
- #include <linux/pm_runtime.h>
- #include <linux/interrupt.h>
- #include <linux/io.h>
-+#include <linux/irq.h>
-+#include <linux/irqchip.h>
-+#include <linux/irqdomain.h>
- #include <linux/list.h>
- #include <linux/dma-mapping.h>
- 
-@@ -1049,6 +1052,106 @@ static int __dwc3_gadget_ep_disable(struct dwc3_ep *dep)
- 
- /* -------------------------------------------------------------------------- */
- 
-+static irqreturn_t dwc3_endpoint_irq(int irq, void *_dep)
-+{
-+	return IRQ_WAKE_THREAD;
-+}
-+
-+static void dwc3_process_event_entry(struct dwc3 *dwc,
-+				     const union dwc3_event *event);
-+
-+static irqreturn_t dwc3_endpoint_thread_irq(int irq, void *_dep)
-+{
-+	struct dwc3_ep *dep = _dep;
-+	struct dwc3 *dwc = dep->dwc;
-+	const union dwc3_event *event;
-+	int count_processed = 0;
-+	u32 event_raw;
-+	unsigned long flags;
-+
-+	dep->givebacks_current_turn = 0;
-+
-+	spin_lock_irqsave(&dep->event_lock, flags);
-+
-+	if (dep->ep_event_flags & DWC3_EP_EVENT_OVERFLOW) {
-+		dev_err(dwc->dev, "ep%d: event buffer overflow\n", dep->number);
-+		dep->ep_event_flags &= ~DWC3_EP_EVENT_OVERFLOW;
-+	}
-+
-+	while (dep->ep_event_r_index != dep->ep_event_w_index) {
-+
-+		event_raw = dep->ep_event_buffer[dep->ep_event_r_index];
-+
-+		/*
-+		 * we have a copy of the event, so we can release the lock
-+		 */
-+		spin_unlock_irqrestore(&dep->event_lock, flags);
-+
-+		event = (const union dwc3_event *) &event_raw;
-+
-+		spin_lock(&dwc->lock);
-+		dwc3_process_event_entry(dwc, event);
-+		spin_unlock(&dwc->lock);
-+
-+		/*
-+		 * we need to re-acquire the lock to update the read index
-+		 */
-+		spin_lock_irqsave(&dep->event_lock, flags);
-+
-+		dep->ep_event_r_index = (dep->ep_event_r_index + 1) %
-+					 ARRAY_SIZE(dep->ep_event_buffer);
-+
-+		count_processed += 1;
-+	}
-+
-+	spin_unlock_irqrestore(&dep->event_lock, flags);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int dwc3_gadget_init_endpoint_irq(struct dwc3 *dwc, struct dwc3_ep *dep)
-+{
-+	char *irq_name;
-+	int ret = 0;
-+
-+	/* FIXME: endpoint.claimed would be better here, but somehow
-+	 * the composite gadget layer is leaving the claimed value to 0
-+	 * after calling usb_ep_autoconfig_reset after the final bind
-+	 */
-+	/* ep0in and ep0out share the same interrupt thread */
-+	if (!dep->endpoint.address && dep->number)
-+		return 0;
-+
-+	dep->irq_endpoint = irq_create_mapping(dwc->ep_irq_domain, dep->number);
-+	if (dep->irq_endpoint < 0) {
-+		ret = dep->irq_endpoint;
-+
-+		dev_err(dwc->dev, "failed to map irq for ep%d --> %d\n",
-+				dep->number, ret);
-+		return ret;
-+	}
-+
-+	irq_name = kzalloc(16, GFP_KERNEL);
-+	if (!dep->number)
-+		snprintf(irq_name, 16, "ep0");
-+	else
-+		snprintf(irq_name, 16, "ep%d%s", dep->number >> 1, dep->direction ?
-+			"in" : "out");
-+
-+	ret = request_threaded_irq(dep->irq_endpoint, dwc3_endpoint_irq,
-+				   dwc3_endpoint_thread_irq, IRQF_SHARED,
-+				   irq_name, dep);
-+	if (ret) {
-+		irq_dispose_mapping(irq_find_mapping(dwc->ep_irq_domain, dep->number));
-+		dev_err(dwc->dev, "failed to request irq #%d --> %d\n",
-+				dep->irq_endpoint, ret);
-+	}
-+
-+	return ret;
-+}
-+
-+/* -------------------------------------------------------------------------- */
-+
- static int dwc3_gadget_ep0_enable(struct usb_ep *ep,
- 		const struct usb_endpoint_descriptor *desc)
- {
-@@ -2939,6 +3042,7 @@ static int dwc3_gadget_start(struct usb_gadget *g,
- 		struct usb_gadget_driver *driver)
- {
- 	struct dwc3		*dwc = gadget_to_dwc(g);
-+	u8			epnum;
- 	unsigned long		flags;
- 	int			ret;
- 	int			irq;
-@@ -2952,6 +3056,17 @@ static int dwc3_gadget_start(struct usb_gadget *g,
- 		return ret;
- 	}
- 
-+	for (epnum = 0; epnum < dwc->num_eps; epnum++) {
-+		int			ret;
-+		/* ep0in and ep0out share the same interrupt thread */
-+		if (epnum == 1)
-+			continue;
-+
-+		ret = dwc3_gadget_init_endpoint_irq(dwc, dwc->eps[epnum]);
-+		if (ret)
-+			return ret;
-+	}
-+
- 	spin_lock_irqsave(&dwc->lock, flags);
- 	dwc->gadget_driver	= driver;
- 	spin_unlock_irqrestore(&dwc->lock, flags);
-@@ -2972,6 +3087,7 @@ static void __dwc3_gadget_stop(struct dwc3 *dwc)
- static int dwc3_gadget_stop(struct usb_gadget *g)
- {
- 	struct dwc3		*dwc = gadget_to_dwc(g);
-+	u8			epnum;
- 	unsigned long		flags;
- 
- 	if (dwc->sys_wakeup)
-@@ -2982,6 +3098,18 @@ static int dwc3_gadget_stop(struct usb_gadget *g)
- 	dwc->max_cfg_eps = 0;
- 	spin_unlock_irqrestore(&dwc->lock, flags);
- 
-+	for (epnum = 0; epnum < dwc->num_eps; epnum++) {
-+		struct dwc3_ep		*dep;
-+
-+		if (epnum == 1)
-+			continue;
-+
-+		dep = dwc->eps[epnum];
-+
-+		free_irq(dep->irq_endpoint, dwc->eps[epnum]);
-+		irq_dispose_mapping(dep->irq_endpoint);
-+	}
-+
- 	free_irq(dwc->irq_gadget, dwc->ev_buf);
- 
- 	return 0;
-@@ -3298,6 +3426,8 @@ static int dwc3_gadget_init_endpoint(struct dwc3 *dwc, u8 epnum)
- 	INIT_LIST_HEAD(&dep->started_list);
- 	INIT_LIST_HEAD(&dep->cancelled_list);
- 
-+	spin_lock_init(&dep->event_lock);
-+
- 	dwc3_debugfs_create_endpoint_dir(dep);
- 
- 	return 0;
-@@ -4403,7 +4533,9 @@ static irqreturn_t dwc3_process_event_buf(struct dwc3_event_buffer *evt)
- {
- 	struct dwc3 *dwc = evt->dwc;
- 	irqreturn_t ret = IRQ_NONE;
-+	unsigned long flags;
- 	int left;
-+	int i;
- 
- 	left = evt->count;
- 
-@@ -4412,10 +4544,36 @@ static irqreturn_t dwc3_process_event_buf(struct dwc3_event_buffer *evt)
- 
- 	while (left > 0) {
- 		union dwc3_event event;
-+		struct dwc3_ep *dep;
-+		int epnum = 0;
- 
- 		event.raw = *(u32 *) (evt->cache + evt->lpos);
- 
--		dwc3_process_event_entry(dwc, &event);
-+		if (!event.type.is_devspec) {
-+			struct dwc3_event_depevt *depevt = &event.depevt;
-+
-+			epnum = depevt->endpoint_number;
-+			/* ep0in and ep0out share the same interrupt thread */
-+			if (epnum <= 1)
-+				epnum &= ~0x01;
-+
-+			if (epnum < 0 || epnum >= dwc->num_eps) {
-+				dev_err(dwc->dev, "invalid epnum %d\n", epnum);
-+				continue;
-+			}
-+		}
-+
-+		dep = dwc->eps[epnum];
-+
-+		spin_lock(&dep->event_lock);
-+		dep->ep_event_buffer[dep->ep_event_w_index] = event.raw;
-+		dep->ep_event_w_index = (dep->ep_event_w_index + 1) %
-+					 ARRAY_SIZE(dep->ep_event_buffer);
-+
-+		if (dep->ep_event_w_index == dep->ep_event_r_index)
-+			dep->ep_event_flags |= DWC3_EP_EVENT_OVERFLOW;
-+
-+		spin_unlock(&dep->event_lock);
- 
- 		/*
- 		 * FIXME we wrap around correctly to the next entry as
-@@ -4430,6 +4588,22 @@ static irqreturn_t dwc3_process_event_buf(struct dwc3_event_buffer *evt)
- 		left -= 4;
- 	}
- 
-+	for (i = 0; i < dwc->num_eps; i++) {
-+		struct dwc3_ep *dep = dwc->eps[i];
-+
-+		/* ep0in and ep0out share the same interrupt thread */
-+		if (i == 1)
-+			continue;
-+
-+		spin_lock_irqsave(&dep->event_lock, flags);
-+
-+		// TODO: improve
-+		if (dep->ep_event_r_index != dep->ep_event_w_index)
-+			generic_handle_domain_irq_safe(dwc->ep_irq_domain, i);
-+
-+		spin_unlock_irqrestore(&dep->event_lock, flags);
-+	}
-+
- 	evt->count = 0;
- 	ret = IRQ_HANDLED;
- 
-@@ -4553,6 +4727,22 @@ static void dwc_gadget_release(struct device *dev)
- 	kfree(gadget);
- }
- 
-+static const struct irq_chip ep_irq_chip = {
-+	.name = "dwc3-ep",
-+};
-+
-+static int ep_irq_domain_map(struct irq_domain *d, unsigned int virq, irq_hw_number_t hwirq)
-+{
-+	irq_set_chip_and_handler(virq, &ep_irq_chip, handle_simple_irq);
-+
-+	return 0;
-+}
-+
-+static const struct irq_domain_ops ep_irq_dom_ops = {
-+	.map = ep_irq_domain_map,
-+	.xlate = irq_domain_xlate_onetwocell,
-+};
-+
- /**
-  * dwc3_gadget_init - initializes gadget related registers
-  * @dwc: pointer to our controller context structure
-@@ -4573,6 +4763,13 @@ int dwc3_gadget_init(struct dwc3 *dwc)
- 
- 	dwc->irq_gadget = irq;
- 
-+	dwc->ep_irq_domain = irq_domain_add_simple(NULL, dwc->num_eps, 0, &ep_irq_dom_ops, dwc);
-+	if (!dwc->ep_irq_domain) {
-+		dev_err(dwc->dev, "failed to create ep irq domain\n");
-+		ret = -ENOMEM;
-+		goto err0;
-+	}
-+
- 	dwc->ep0_trb = dma_alloc_coherent(dwc->sysdev,
- 					  sizeof(*dwc->ep0_trb) * 2,
- 					  &dwc->ep0_trb_addr, GFP_KERNEL);
-@@ -4691,7 +4888,10 @@ void dwc3_gadget_exit(struct dwc3 *dwc)
- 	if (!dwc->gadget)
- 		return;
- 
-+	irq_domain_remove(dwc->ep_irq_domain);
-+
- 	dwc3_enable_susphy(dwc, false);
-+
- 	usb_del_gadget(dwc->gadget);
- 	dwc3_gadget_free_endpoints(dwc);
- 	usb_put_gadget(dwc->gadget);
-
----
-base-commit: dd5a440a31fae6e459c0d6271dddd62825505361
-change-id: 20240507-dwc3_per_ep_irqthread-d01e1abdce6c
-
-Best regards,
--- 
-Michael Grzeschik <m.grzeschik@pengutronix.de>
-
+SGkgUGFvbG8sIFRoYW5rcyBmb3IgUmV2aWV3aW5nIHRoZSBwYXRjaC4gUGxlYXNlIGZpbmQgbXkg
+Y29tbWVudHMKaW5saW5lLgoKT24gTW9uLCAyMDI0LTA1LTA2IGF0IDExOjM4ICswMjAwLCBQYW9s
+byBBYmVuaSB3cm90ZToKPiBbWW91IGRvbid0IG9mdGVuIGdldCBlbWFpbCBmcm9tIHBhYmVuaUBy
+ZWRoYXQuY29tLiBMZWFybiB3aHkgdGhpcyBpcwo+IGltcG9ydGFudCBhdCBodHRwczovL2FrYS5t
+cy9MZWFybkFib3V0U2VuZGVySWRlbnRpZmljYXRpb27CoF0KPiAKPiBFWFRFUk5BTCBFTUFJTDog
+RG8gbm90IGNsaWNrIGxpbmtzIG9yIG9wZW4gYXR0YWNobWVudHMgdW5sZXNzIHlvdQo+IGtub3cg
+dGhlIGNvbnRlbnQgaXMgc2FmZQo+IAo+IE9uIFRodSwgMjAyNC0wNS0wMiBhdCAxMDoyNyArMDUz
+MCwgUmVuZ2FyYWphbiBTIHdyb3RlOgo+ID4gQWZ0ZXIgdGhlIGZpcnN0IGRldmljZShNQUMgKyBQ
+SFkpIGlzIGF0dGFjaGVkLCB0aGUgY29ycmVzcG9uZGluZwo+ID4gZml4dXAgZ2V0cyByZWdpc3Rl
+cmVkIGFuZCBiZWZvcmUgaXQgaXMgdW5yZWdpc3RlcmVkIG5leHQgZGV2aWNlCj4gPiBpcyBhdHRh
+Y2hlZCBjYXVzaW5nIHRoZSBkZXYgcG9pbnRlciBvZiBzZWNvbmQgZGV2aWNlIHRvIGJlIE5VTEwu
+Cj4gPiBGaXhlZCB0aGUgaXNzdWUgd2l0aCBtdWx0aXBsZSBQSFkgYXR0YWNoIGJ5IHVucmVnaXN0
+ZXJpbmcgUEhZCj4gPiBhdCB0aGUgZW5kIG9mIHByb2JlLiBSZW1vdmVkIHRoZSB1bnJlZ2lzdHJh
+dGlvbiBkdXJpbmcgcGh5X2luaXQKPiA+IHNpbmNlIHRoZSBoYW5kbGluZyBoYXMgYmVlbiB0YWtl
+biBjYXJlIGluIHByb2JlLgo+IAo+IFRoZSBhYm92ZSBkZXNjcmlwdGlvbiBpcyB1bmNsZWFyIHRv
+IG1lLiBDb3VsZCB5b3UgcGxlYXNlIGxpc3QgdGhlCj4gZXhhY3QKPiBzZXF1ZW5jZSBvZiBldmVu
+dHMvY2FsbHMgdGhhdCBsZWFkIHRvIHRoZSBwcm9ibGVtPwoKVGhlIGlzc3VlIHdhcyB3aGVuIGR1
+YWwgc2V0dXAgb2YgTEFONzgwMSB3aXRoIGFuIGV4dGVybmFsIFBIWShMQU44ODQxCmluIHRoaXMg
+Y2FzZSkgYXJlIGNvbm5lY3RlZCB0byB0aGUgc2FtZSBEVVQgUEMsIHRoZSBQQyBnb3QgaGFuZ2Vk
+LiBUaGUKaXNzdWUgaW4gc2VlbiB3aXRoIGV4dGVybmFsIHBoeXMgb25seSBhbmQgbm90IG9ic2Vy
+dmVkIGluIGNhc2Ugb2YKaW50ZXJuYWwgUEhZIGJlaW5nIGNvbm5lY3RlZChMQU43ODAwKS4gV2hl
+biB3ZSBsb29rZWQgaW50byB0aGUgY29kZQpmbG93IHdlIGZvdW5kIHRoYXQgaW4gcGh5X3NjYW5f
+Zml4dXAgYWxsb2NhdGVzIGEgZGV2IGZvciB0aGUgZmlyc3QKZGV2aWNlLiBCZWZvcmUgaXQgaXMg
+dW5yZWdpc3RlcmVkLCB0aGUgc2Vjb25kIGRldmljZSBpcyBhdHRhY2hlZCBhbmQKc2luY2Ugd2Ug
+YWxyZWFkeSBoYXZlIGEgcGh5ZGV2IGl0IGlnbm9yZXMgYW5kIGRvZXMgbm90IGFsbG9jYXRlIGRl
+diBmb3IKc2Vjb25kIGRldmljZS4gVGhpcyBpcyB0aGUgcmVhc29uIHdoeSB3ZSB1bnJlZ2lzdGVy
+IHRoZSBmaXJzdCBkZXZpY2UKYmVmb3JlIHRoZSBzZWNvbmQgZGV2aWNlIGF0dGFjaC4KCj4gCj4g
+PiBGaXhlczogODliMzZmYjVlNTMyICgibGFuNzh4eDogTGFuNzgwMSBTdXBwb3J0IGZvciBGaXhl
+ZCBQSFkiKQo+ID4gU2lnbmVkLW9mZi1ieTogUmVuZ2FyYWphbiBTIDxyZW5nYXJhamFuLnNAbWlj
+cm9jaGlwLmNvbT4KPiA+IC0tLQo+ID4gCj4gPiDCoGRyaXZlcnMvbmV0L3VzYi9sYW43OHh4LmMg
+fCAxNiArKysrKysrKystLS0tLS0tCj4gPiDCoDEgZmlsZSBjaGFuZ2VkLCA5IGluc2VydGlvbnMo
+KyksIDcgZGVsZXRpb25zKC0pCj4gPiAKPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL25ldC91c2Iv
+bGFuNzh4eC5jIGIvZHJpdmVycy9uZXQvdXNiL2xhbjc4eHguYwo+ID4gaW5kZXggNWFkZDQxNDVk
+Li4zZWM3OTYyMGYgMTAwNjQ0Cj4gPiAtLS0gYS9kcml2ZXJzL25ldC91c2IvbGFuNzh4eC5jCj4g
+PiArKysgYi9kcml2ZXJzL25ldC91c2IvbGFuNzh4eC5jCj4gPiBAQCAtMjM4MywxNCArMjM4Myw4
+IEBAIHN0YXRpYyBpbnQgbGFuNzh4eF9waHlfaW5pdChzdHJ1Y3QKPiA+IGxhbjc4eHhfbmV0ICpk
+ZXYpCj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBuZXRkZXZfZXJyKGRldi0+bmV0LCAi
+Y2FuJ3QgYXR0YWNoIFBIWSB0byAlc1xuIiwKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBkZXYtPm1kaW9idXMtPmlkKTsKPiA+IMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgIGlmIChkZXYtPmNoaXBpZCA9PSBJRF9SRVZfQ0hJUF9JRF83ODAxXykg
+ewo+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgaWYgKHBoeV9p
+c19wc2V1ZG9fZml4ZWRfbGluayhwaHlkZXYpKSB7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoCBpZiAocGh5X2lzX3BzZXVkb19maXhlZF9saW5rKHBoeWRldikp
+Cj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgIGZpeGVkX3BoeV91bnJlZ2lzdGVyKHBoeWRldik7Cj4gPiAtwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB9IGVsc2Ugewo+ID4gLcKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgCj4gPiBwaHlfdW5yZWdpc3Rl
+cl9maXh1cF9mb3JfdWlkKFBIWV9LU1o5MDMxUk5YLAo+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoAo+ID4gMHhmZmZmZmZmMCk7Cj4g
+PiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqAKPiA+IHBoeV91bnJlZ2lzdGVyX2ZpeHVwX2Zvcl91aWQoUEhZX0xBTjg4MzUsCj4gPiAtwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgCj4g
+PiAweGZmZmZmZmYwKTsKPiA+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgIH0KPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIH0KPiA+IMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgIHJldHVybiAtRUlPOwo+ID4gwqDCoMKgwqDCoCB9Cj4gPiBAQCAtNDQ1OCw2
+ICs0NDUyLDE0IEBAIHN0YXRpYyBpbnQgbGFuNzh4eF9wcm9iZShzdHJ1Y3QKPiA+IHVzYl9pbnRl
+cmZhY2UgKmludGYsCj4gPiDCoMKgwqDCoMKgIHBtX3J1bnRpbWVfc2V0X2F1dG9zdXNwZW5kX2Rl
+bGF5KCZ1ZGV2LT5kZXYsCj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIERFRkFVTFRfQVVUT1NVU1BF
+TkRfREVMQVkpOwo+ID4gCj4gPiArwqDCoMKgwqAgLyogVW5yZWdpc3RlcmluZyBGaXh1cCB0byBh
+dm9pZCBjcmFzaCB3aXRoIG11bHRpcGxlIGRldmljZQo+ID4gK8KgwqDCoMKgwqAgKiBhdHRhY2gu
+Cj4gPiArwqDCoMKgwqDCoCAqLwo+ID4gK8KgwqDCoMKgIHBoeV91bnJlZ2lzdGVyX2ZpeHVwX2Zv
+cl91aWQoUEhZX0tTWjkwMzFSTlgsCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIDB4ZmZmZmZmZjApOwo+ID4gK8Kg
+wqDCoMKgIHBoeV91bnJlZ2lzdGVyX2ZpeHVwX2Zvcl91aWQoUEhZX0xBTjg4MzUsCj4gPiArwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgIDB4ZmZmZmZmZjApOwo+ID4gKwo+IAo+IE1pbm9yIG5pdDogdGhlIGFib3ZlIDIgc3Rh
+dG1lbnRzIGNhbiBub3cgZml0IGEgc2luZ2xlIGxpbmUgZWFjaC4KClN1cmUuIFdpbGwgdXBkYXRl
+IGl0IGluIHRoZSBuZXh0IHJldmlzaW9uLgoKPiAKPiBUaGFua3MsCj4gCj4gUGFvbG8KPiAKCg==
 
