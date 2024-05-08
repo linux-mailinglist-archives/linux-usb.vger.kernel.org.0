@@ -1,105 +1,70 @@
-Return-Path: <linux-usb+bounces-10137-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10138-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C72278BFE8A
-	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2024 15:19:51 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E449A8BFF9C
+	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2024 15:58:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7ED7B288BB1
-	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2024 13:19:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 21CFC1C231D2
+	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2024 13:58:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AAE5127E2B;
-	Wed,  8 May 2024 13:16:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jlph6Sg7"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B89983CD4;
+	Wed,  8 May 2024 13:58:17 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F7F9127B51;
-	Wed,  8 May 2024 13:16:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id 2ECEB7EF06
+	for <linux-usb@vger.kernel.org>; Wed,  8 May 2024 13:58:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715174186; cv=none; b=phkBPIkMemMHFD6QmORlV9V2RK98wcCakW7t3OKtCwdqCi1OgdJs5ZG4p7PeyUzFsdm5gEVQZ6UPGG7Grb+BqG0p3shVL49aBuTGmGiVlb1aeoawfp6o2kN0BaGN3aWHE8n4UMM5fnMgPg3qAtj5ZTJH+hnnLZQYHsjTgIyxPfc=
+	t=1715176696; cv=none; b=BvOrRE5IzQvTjxdWWE/vfUc6fZqD5rqf8Q8JIjb5SwZ9o3zALymYQY9kwKjJs26Ka9wn/Hst7QHRb+g7FQQHMgf4ydUckBjD/co7A8mqlP9Fmv331Isw5PN5WUN7VgqZjE8M1L/aNMX7laIxItnku+sHhIMYSUECQ0vSG0qc3OU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715174186; c=relaxed/simple;
-	bh=lifN/agSpUEsjctyCIsr+TXeYS3JFwPNhUXnrldJp2g=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XggsCwjNsxDMjkAhDi4BOu6+wpQF6vkA24/cNKXesw8+M30Vu80X0SA+UxwF50igkdc0j9pvs0C9xp+duhvQ9QTwHF/mB2/6FVGICAEsHYB2BFaww0PsIFa0ztDP/Y1dnsBI6V8wxenWDPik8T3ryUR7hKHJqZzrGt3VeSN1gWM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jlph6Sg7; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715174185; x=1746710185;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=lifN/agSpUEsjctyCIsr+TXeYS3JFwPNhUXnrldJp2g=;
-  b=jlph6Sg7wvCAWnkRk6GZs/GsDRfn/bt6yYSVKyWihpQ6D0feTNAuyAE1
-   WtLdQZKYX74EjkMV+YsyDzQzY6JZSF/O6l4iWKec5jNDlZ5N+nZBIzdmE
-   WKzDc6e5c8G55Xob3mgi2kyHYMMV7rOfPHuOrEHo2D3aKn4Oa/W9SVB01
-   x4ncDVOStr+GwZD4SLdwfO9qXcRuvsUG4fl2ZGbFtIqhfcwC9JyCivj9g
-   7myWpMA9icScj1UMmCmSCBKr7cHqDiiiN6U/ApSh4Jz5GJHof7KFAyJAl
-   fXYQ4mz9qQ8seg3MO8S8UQ+ye6ZC6dWjr6hTuLb7mWZerrLqEEbwAdNXo
-   A==;
-X-CSE-ConnectionGUID: /s6aE+taTAGQDby/i+SzLQ==
-X-CSE-MsgGUID: EwnX3h3fSjGIrOyAOtODBQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11066"; a="36413329"
-X-IronPort-AV: E=Sophos;i="6.08,145,1712646000"; 
-   d="scan'208";a="36413329"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2024 06:16:25 -0700
-X-CSE-ConnectionGUID: bsu1eEYFR6+cMJK2ATzrUg==
-X-CSE-MsgGUID: w3/raNdzSdGFMemhzhWL4g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,145,1712646000"; 
-   d="scan'208";a="33356862"
-Received: from sskolar-mobl.amr.corp.intel.com (HELO [10.212.67.115]) ([10.212.67.115])
-  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2024 06:16:23 -0700
-Message-ID: <cb864ea4-95e3-4e99-920d-341188006291@linux.intel.com>
-Date: Tue, 7 May 2024 16:40:42 -0500
+	s=arc-20240116; t=1715176696; c=relaxed/simple;
+	bh=DoFoI2sn8p/by9cN78lyEZH7QH5qZR4GiefXMxapKl8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fCtw9YHC8hmOq5snw0KnJ00JDNg0io+HZsWEbVJdCp57qxc80X4pFJCGuaGDrB3TH+TziHAiy4jTTPnoNNn4BC0I3VpbVcy0s5jROu5ApbfAxgkmIzRK1OVvMh+MlOaoUh8DOe2tVGZgfh6OnCr55YMNrIH/MmiiTbleiU4XwT4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
+Received: (qmail 982879 invoked by uid 1000); 8 May 2024 09:58:12 -0400
+Date: Wed, 8 May 2024 09:58:12 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Muni Sekhar <munisekharrms@gmail.com>
+Cc: linux-usb@vger.kernel.org, kernelnewbies <kernelnewbies@kernelnewbies.org>
+Subject: Re: Seeking Assistance: Implementing USB Device Suspend/Resume in
+ User Space Driver
+Message-ID: <8bbace90-0978-47ad-b79b-50f95e741467@rowland.harvard.edu>
+References: <CAHhAz+g=7pocghMX-Yu=jg0jxnpfwa3+ZmmdLP_pVuXmWLJ=aw@mail.gmail.com>
+ <ea450e31-8f71-4726-91f6-ada79e0b3a9a@rowland.harvard.edu>
+ <CAHhAz+gRvah++Hv4k5+Ec0epNbmet0=JZ6tJ3R8zjZmiKACaQA@mail.gmail.com>
+ <c309b037-50db-4ca1-8f86-60131cb84564@rowland.harvard.edu>
+ <CAHhAz+i9TLCb3hKpzWAL2DkH9Y25XszJO5kgbRGzsut1zCzrJw@mail.gmail.com>
+ <8a8edaba-670b-47ad-a123-2077e2e0644d@rowland.harvard.edu>
+ <CAHhAz+iywarnsNmt0mbuyPV+mNYQ+OwqoDMaymTGAEv6KBcLnA@mail.gmail.com>
+ <9a89ba8d-c406-4ff1-98f0-080c77390efe@rowland.harvard.edu>
+ <CAHhAz+hGD95zoVbEQTvCq4jquBu+x-kv3n=x5Tb4V0mtQDXv7w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v21 38/39] ASoC: qcom: Populate SoC components string
-To: Wesley Cheng <quic_wcheng@quicinc.com>, srinivas.kandagatla@linaro.org,
- mathias.nyman@intel.com, perex@perex.cz, conor+dt@kernel.org,
- corbet@lwn.net, lgirdwood@gmail.com, andersson@kernel.org,
- krzk+dt@kernel.org, gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com,
- broonie@kernel.org, bgoswami@quicinc.com, tiwai@suse.com,
- bagasdotme@gmail.com, robh@kernel.org, konrad.dybcio@linaro.org
-Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
- linux-sound@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, linux-doc@vger.kernel.org,
- alsa-devel@alsa-project.org
-References: <20240507195116.9464-1-quic_wcheng@quicinc.com>
- <20240507195116.9464-39-quic_wcheng@quicinc.com>
-Content-Language: en-US
-From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20240507195116.9464-39-quic_wcheng@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHhAz+hGD95zoVbEQTvCq4jquBu+x-kv3n=x5Tb4V0mtQDXv7w@mail.gmail.com>
 
+On Wed, May 08, 2024 at 11:08:11AM +0530, Muni Sekhar wrote:
+> Thank you for the clear explanation on how to identify devices
+> associated with root hubs.
+> Could you please provide clarity on whether the root hub devices have
+> attribute files in the devices sysfs directory? Upon checking the
+> sysfs directory, I couldn't find any relevant information about these
+> attribute files.
 
+Root hubs have different names in sysfs from all other USB devices.  The 
+root hub on bus N is named "usbN".  For example, the root hub on bus 4 
+is named "usb4".
 
-On 5/7/24 14:51, Wesley Cheng wrote:
-> For userspace to know about certain capabilities of the current platform
-> card, add tags to the components string that it can use to enable support
-> for that audio path.  In case of USB offloading, the "usboffldplybk: 1" tag
-
-usboffloadplayback?
-
-same question as before, do we need spaces?
-
-And if we have controls, why do we need component strings? The component
-string is not dynamic to the best of my knowledge, this could be
-problematic if the card is no longer capable of supporting this stream,
-while a control can be updated at will.
-
+Alan Stern
 
