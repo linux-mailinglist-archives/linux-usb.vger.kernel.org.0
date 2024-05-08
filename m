@@ -1,76 +1,67 @@
-Return-Path: <linux-usb+bounces-10144-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10145-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 675E68C0097
-	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2024 17:07:02 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 255D18C0134
+	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2024 17:44:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 98C801C227B9
-	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2024 15:07:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7A7F91F2722D
+	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2024 15:44:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C88386AF4;
-	Wed,  8 May 2024 15:06:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB4B3127E3C;
+	Wed,  8 May 2024 15:43:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jJyg5OjN"
+	dkim=pass (1024-bit key) header.d=tecnico.ulisboa.pt header.i=@tecnico.ulisboa.pt header.b="NRCdJVQs"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from smtp1.tecnico.ulisboa.pt (smtp1.tecnico.ulisboa.pt [193.136.128.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0A8969D29;
-	Wed,  8 May 2024 15:06:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 459D47D3F5;
+	Wed,  8 May 2024 15:43:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.136.128.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715180816; cv=none; b=lrocmcDeLXR2dJa/kmzIZ34lzmboxD7SEZUHqs9AbcV7irrTgzak9+qE3eMq+dL8S0pNMm15eNfMA11pfr3l2A1MUD3VTB8AVhmBZGP3ANqmiHokBlAci05+Y0926IfyknySPNUeYv1biQocL+kQneqp4oATYcHtE52ADQMLM30=
+	t=1715183033; cv=none; b=mC1vQzkL4BrF4/1I1+b/L8NQhuGBqAjg3s2AbS8K9EbzVQUTycnZqlfaIApc9jIsl5Ev1iXrH3Mu/brOw5LDECiMy+B9DIDWNI7MJ0MGHnAUK188+OgEefXtZXWsMdrVGyQmamyY9p4G8BcH8MnfiSdLa1iTp7+0Yjx2EpULLaY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715180816; c=relaxed/simple;
-	bh=v5MiUA9DTlKONnt0SBn4aw4JvqbNC1DtJQVmFvcZPtE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dJLhd59feKMlnVpb9kHNTu5aBJbnxFrwaSFOB5veBeumMx0gZF4LPOmJhlmFCFVyWswQoi7olRb0VM3jAOcalbajTBS8zRSa3FV9QmTXelSUvNnJGPlylKlCatBbemC1SPdIUlm/pLsdP3d0QkXyckCsmWX2qA6n+pgSqvrB5Io=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jJyg5OjN; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715180815; x=1746716815;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=v5MiUA9DTlKONnt0SBn4aw4JvqbNC1DtJQVmFvcZPtE=;
-  b=jJyg5OjNQvQvlm3bIZtKVVVK5B5HEmgZSojI91ldbcQqL69FBPxMKLgI
-   vzgGhNKU4++CULtFZWNJcPwYOlz00ErGZGiNFoHv87T+2F6Ed4BZfNCNa
-   MtFiG/p6p85hF0cUBZZZNTST3uFbPyW14UYHPItqrucee6Ivz19splaCW
-   IICogaj5dryQhVAI5+CXBSInUu/fRH8kMkBWrCa09aA6WtlDJ6x/OQpVn
-   BoQxynZZoiHiQOCQ8p5Mvadk9clxxmZa1d9aGcyDblJsMb77N/jjwi/5X
-   t3V3hnqHoiMguPmqyqBbkh6S3M85nu3jzmT9eSUfggqZzTIPssR6DfDSR
-   w==;
-X-CSE-ConnectionGUID: 7opiOhjMSuOjgvVcqS/8/A==
-X-CSE-MsgGUID: uVudBaQoRR6cFxwAp9PxYA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11067"; a="22441864"
-X-IronPort-AV: E=Sophos;i="6.08,145,1712646000"; 
-   d="scan'208";a="22441864"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2024 08:06:54 -0700
-X-CSE-ConnectionGUID: tGQnIkQQQwuurRWpgH/mpg==
-X-CSE-MsgGUID: SCYgCp7nTxeB0UCGo3Lfxg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,145,1712646000"; 
-   d="scan'208";a="33474428"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmviesa004.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2024 08:06:53 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.97)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1s4isc-00000005TlZ-3C2a;
-	Wed, 08 May 2024 18:06:50 +0300
-Date: Wed, 8 May 2024 18:06:50 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: Linus Walleij <linus.walleij@linaro.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v1 1/1] usb: fotg210: Use *-y instead of *-objs in
- Makefile
-Message-ID: <ZjuVCvQw4aL0x42W@smile.fi.intel.com>
-References: <20240508150406.1378672-1-andriy.shevchenko@linux.intel.com>
+	s=arc-20240116; t=1715183033; c=relaxed/simple;
+	bh=0j3aBfj9ZfpV1MH5nO9NGwaJrnnRhkiWZXMK8FGpErI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=pytLkAcL1iRDqy2FOflh2Gtw2mJj341DeFjqo8RbSmUhjTmWBHs4oKVDlZ7nXWXMX1eLwhGMS9+ANOnGFxZX51Vdi8zzfVL+EbRvDVvjkNFNsgC4mxuuqgxJIC1q3ZFfrSSay3n77NGGFlHKW8N2C6v0uE5Tr6vFoTYImVX4wnI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tecnico.ulisboa.pt; spf=pass smtp.mailfrom=tecnico.ulisboa.pt; dkim=pass (1024-bit key) header.d=tecnico.ulisboa.pt header.i=@tecnico.ulisboa.pt header.b=NRCdJVQs; arc=none smtp.client-ip=193.136.128.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tecnico.ulisboa.pt
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tecnico.ulisboa.pt
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by smtp1.tecnico.ulisboa.pt (Postfix) with ESMTP id 420666000852;
+	Wed,  8 May 2024 16:43:48 +0100 (WEST)
+X-Virus-Scanned: by amavis-2.13.0 (20230106) (Debian) at tecnico.ulisboa.pt
+Received: from smtp1.tecnico.ulisboa.pt ([127.0.0.1])
+ by localhost (smtp1.tecnico.ulisboa.pt [127.0.0.1]) (amavis, port 10025)
+ with LMTP id Ra1H46aqlsMF; Wed,  8 May 2024 16:43:46 +0100 (WEST)
+Received: from mail1.tecnico.ulisboa.pt (mail1.ist.utl.pt [193.136.128.10])
+	by smtp1.tecnico.ulisboa.pt (Postfix) with ESMTPS id AAC0C6003C01;
+	Wed,  8 May 2024 16:43:45 +0100 (WEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tecnico.ulisboa.pt;
+	s=mail; t=1715183026;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+	bh=NQrIcFv9v2tmhATWNtUWwd3zf3STqTRGKWUwe6MA4gI=;
+	b=NRCdJVQszJtyFHGVGnD5MzT6yNvhPwPdL6u/fZJ2iqnjkT/d9AQd+C5zGqkEItI3J6IWza
+	xnPlieE3SGz8nEVPhO59cCHBWDvrwymYX83i7A1OBcLN7ZiQl2LJ8P3qe5Y864+p0VYHxC
+	w43V5rknL0M16cJTiG8Qu3LFeFaESWI=
+Received: from diogo-gram.home (unknown [IPv6:2a01:14:8070:dc60:4589:2164:1bc5:2670])
+	(Authenticated sender: ist187313)
+	by mail1.tecnico.ulisboa.pt (Postfix) with ESMTPSA id E401F360092;
+	Wed,  8 May 2024 16:43:44 +0100 (WEST)
+Date: Wed, 8 May 2024 16:43:40 +0100
+From: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
+To: heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org, 
+	dmitry.baryshkov@linaro.org, bleung@chromium.org, pmalani@chromium.org, jthies@google.com, 
+	abhishekpandit@chromium.org, lk@c--e.de, saranya.gopal@intel.com, dan.carpenter@linaro.org, 
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: diogo.ivo@tecnico.ulisboa.pt
+Subject: [PATCH] usb: typec: ucsi: Add new notification bits
+Message-ID: <3filrg6mbh6m3galir7ew5juakd25uvksimr7mqd7uc5td3xza@fdvxcewozqeh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -79,22 +70,57 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240508150406.1378672-1-andriy.shevchenko@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Wed, May 08, 2024 at 06:04:06PM +0300, Andy Shevchenko wrote:
-> *-objs suffix is reserved rather for (user-space) host programs while
-> usually *-y suffix is used for kernel drivers (although *-objs works
-> for that purpose for now).
-> 
-> Let's correct the old usages of *-objs in Makefiles.
+Newer UCSI versions defined additional notification bits that can be
+enabled by the PPM. Add their definitions and convert all definitions
+to BIT_ULL() as we now cross the 32-bit boundary.
 
-Note, the original approach is weirdest from existing. Only a few
-drivers use this (-objs-y) one most likely by mistake.
+Signed-off-by: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
+---
+ drivers/usb/typec/ucsi/ucsi.h | 29 +++++++++++++++++------------
+ 1 file changed, 17 insertions(+), 12 deletions(-)
 
+diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
+index c4d103db9d0f..e70cf5b15562 100644
+--- a/drivers/usb/typec/ucsi/ucsi.h
++++ b/drivers/usb/typec/ucsi/ucsi.h
+@@ -124,18 +124,23 @@ void ucsi_connector_change(struct ucsi *ucsi, u8 num);
+ #define UCSI_ACK_COMMAND_COMPLETE		BIT(17)
+ 
+ /* SET_NOTIFICATION_ENABLE command bits */
+-#define UCSI_ENABLE_NTFY_CMD_COMPLETE		BIT(16)
+-#define UCSI_ENABLE_NTFY_EXT_PWR_SRC_CHANGE	BIT(17)
+-#define UCSI_ENABLE_NTFY_PWR_OPMODE_CHANGE	BIT(18)
+-#define UCSI_ENABLE_NTFY_CAP_CHANGE		BIT(21)
+-#define UCSI_ENABLE_NTFY_PWR_LEVEL_CHANGE	BIT(22)
+-#define UCSI_ENABLE_NTFY_PD_RESET_COMPLETE	BIT(23)
+-#define UCSI_ENABLE_NTFY_CAM_CHANGE		BIT(24)
+-#define UCSI_ENABLE_NTFY_BAT_STATUS_CHANGE	BIT(25)
+-#define UCSI_ENABLE_NTFY_PARTNER_CHANGE		BIT(27)
+-#define UCSI_ENABLE_NTFY_PWR_DIR_CHANGE		BIT(28)
+-#define UCSI_ENABLE_NTFY_CONNECTOR_CHANGE	BIT(30)
+-#define UCSI_ENABLE_NTFY_ERROR			BIT(31)
++#define UCSI_ENABLE_NTFY_CMD_COMPLETE		BIT_ULL(16)
++#define UCSI_ENABLE_NTFY_EXT_PWR_SRC_CHANGE	BIT_ULL(17)
++#define UCSI_ENABLE_NTFY_PWR_OPMODE_CHANGE	BIT_ULL(18)
++#define UCSI_ENABLE_NTFY_ATTENTION		BIT_ULL(19)
++#define UCSI_ENABLE_NTFY_LPM_FW_UPDATE_REQ	BIT_ULL(20)
++#define UCSI_ENABLE_NTFY_CAP_CHANGE		BIT_ULL(21)
++#define UCSI_ENABLE_NTFY_PWR_LEVEL_CHANGE	BIT_ULL(22)
++#define UCSI_ENABLE_NTFY_PD_RESET_COMPLETE	BIT_ULL(23)
++#define UCSI_ENABLE_NTFY_CAM_CHANGE		BIT_ULL(24)
++#define UCSI_ENABLE_NTFY_BAT_STATUS_CHANGE	BIT_ULL(25)
++#define UCSI_ENABLE_NTFY_SECURITY_REQ_PARTNER	BIT_ULL(26)
++#define UCSI_ENABLE_NTFY_PARTNER_CHANGE		BIT_ULL(27)
++#define UCSI_ENABLE_NTFY_PWR_DIR_CHANGE		BIT_ULL(28)
++#define UCSI_ENABLE_NTFY_SET_RETIMER_MODE	BIT_ULL(29)
++#define UCSI_ENABLE_NTFY_CONNECTOR_CHANGE	BIT_ULL(30)
++#define UCSI_ENABLE_NTFY_ERROR			BIT_ULL(31)
++#define UCSI_ENABLE_NTFY_SINK_PATH_STS_CHANGE	BIT_ULL(32)
+ #define UCSI_ENABLE_NTFY_ALL			0xdbe70000
+ 
+ /* SET_UOR command bits */
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.45.0
 
 
