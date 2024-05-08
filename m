@@ -1,121 +1,102 @@
-Return-Path: <linux-usb+bounces-10125-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10126-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52C398BF7C7
-	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2024 09:53:24 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 63EB08BF7D1
+	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2024 09:57:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 844291C2029A
-	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2024 07:53:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1FA40285F78
+	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2024 07:57:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C54A3613C;
-	Wed,  8 May 2024 07:53:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42EB43E47F;
+	Wed,  8 May 2024 07:57:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="uC71IjIF"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LLxMd+1J"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 445123F8D0
-	for <linux-usb@vger.kernel.org>; Wed,  8 May 2024 07:53:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C7373A28E
+	for <linux-usb@vger.kernel.org>; Wed,  8 May 2024 07:57:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715154794; cv=none; b=Zf14k0nVQdT0xDe0zESdtnNN+CpXgqc8R5KHRlNZo2KaUZyCJ+PIE3tub2C8tFCkcQoFA0p/1S8RPd0u+EtTrStaeHAJ7d7faElUCVYgBVngqY5oHdtrKhN7Bud+1CMDs8IR3zzjOdBQVLs5BC2OVK0U97d4CKoN39LFucdukhA=
+	t=1715155031; cv=none; b=eBtLKQSY0sXXSXYx5r8B4m9L0FKHJQXTKnGbn3QPgNLG8xA4B4P0US5ZoJEapzQpbUXvRIeNrdnBQd/MN8DM5Jac891qZyrpOYAkJZMnq8XNVmG8vSZRa818mgsT28eoJ3xs69B16GQlZSAw1cYt30593wE0CLOOWk3qrX9TfzE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715154794; c=relaxed/simple;
-	bh=KqzMlW2K41PeNiZQbJkOH4GSHF5EyaQ557XkBzHUURI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=tpEQE1JdWKD8et+b6+9+ptOZdjV4yBV2gVsTeIXt4ZfGr53suZn9vaeFLQyFG6oWreRcLJidyu5hkbUOz/y7Xnhb5Z6K5OYd23b3C8hCrO4L6/m/2KrcF0uBqgA+wgW3krUkqQlnipNF0qxqnhhwsHJ4JTyuMQ6rII//LxbRgPQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=uC71IjIF; arc=none smtp.client-ip=209.85.218.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a59a387fbc9so1011413266b.1
-        for <linux-usb@vger.kernel.org>; Wed, 08 May 2024 00:53:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1715154790; x=1715759590; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ArIySZdI+wtPrwPuuH3tuyxsnRcsZ5+r2wK76wTw7FE=;
-        b=uC71IjIFSzqNWNp1bO/7XpCOwVCpquQ3pROUQjd0x+4ImP02wdGmplPW36bti0td+g
-         4EEpQEDfRAM9MkOS1pKS4UTPmoYRkc+GBjlr5EohCizvccjNufMk5hFR0JAQ+LmGh3IY
-         nVyLFKmEZtx+W5O9yi75BRubl3cOxfFTpyOx/M/ZVyigPZgHRkCkHAI0mJ1E4hgg1dbY
-         oobv/TpLxNH5OxmSAZyZt2C59GzouFfZy7sCppsPOFDekgKmSqk7d/Tjs6tVdP9RB+JT
-         sqDK4Nb4GrF9HRTDt3/jIpBg0BnchvIxMiEtscVEvM60PAh7KN21HFyiJZv+s5Ju8/uw
-         8Tog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715154790; x=1715759590;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ArIySZdI+wtPrwPuuH3tuyxsnRcsZ5+r2wK76wTw7FE=;
-        b=m4o/7d8SneBeFcUM6nqoHHp5cFGsMhxktOP1BZVwcsx8rO6aU3Q7Nt8sPmDbmcSFXC
-         QDjm8PRYeV3BZtlpodlq9yjaJhefOsW21G87GJg4O46rQ7z75tyxV5zs1DzAn1qDr0eJ
-         7yOeNzJbfeyREFIRgJaPNVkU6Tu1c3nx+K97eB9L+5tj67VxewBsoDzcxJhWuxfG7i5u
-         qGYgziVRQzLw+GWtBY0XTLPMXbyQeBRbZITf6DKvSoZ3LC3gvT528hzNywhdDqso4Yd6
-         3BNDrdqwr9O5/q6ChyHV2yUpWfqv1gO6g9RwrkhCDUMBlRRwE7gFAwi9WmtC9PJdk+ta
-         cvqA==
-X-Gm-Message-State: AOJu0YxFhNe3pCEcMeNbaiZXyoBTCqbumNoaPSObauyqMPNrK06Q4w6g
-	I4BG+lcwWaXYdh3d3vce+jY6Wes3M3AABeXcHQHK2h8vNIvZWRZvnBSlVY8RDmo=
-X-Google-Smtp-Source: AGHT+IEFs5moQBlRJVABpggUgOqlWWdYdi5LXwWXIDOsRJ3q4v4gvooTYEryXqnFkBzBhzFqIhEDOQ==
-X-Received: by 2002:a17:906:2dc1:b0:a59:ae6e:486f with SMTP id a640c23a62f3a-a59fb9e5a37mr93056966b.65.1715154790370;
-        Wed, 08 May 2024 00:53:10 -0700 (PDT)
-Received: from localhost ([102.222.70.76])
-        by smtp.gmail.com with ESMTPSA id rh12-20020a17090720ec00b00a59a0cbf048sm5715053ejb.13.2024.05.08.00.53.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 May 2024 00:53:10 -0700 (PDT)
-Date: Wed, 8 May 2024 10:53:05 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: diogo.ivo@tecnico.ulisboa.pt
-Cc: linux-usb@vger.kernel.org
-Subject: [bug report] usb: typec: ucsi: Only enable supported notifications
-Message-ID: <dd955f16-bbb9-4d51-98ea-31cad358ab69@moroto.mountain>
+	s=arc-20240116; t=1715155031; c=relaxed/simple;
+	bh=V/YjDIQfRp2l7miiRrx3Z5IZQokNP9VXtuvlvHRlYG4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=QzixUvF9mnVLs2f+gPWrtg2AFpzItgvFdGxMUVs+WHh4LeYGgfY2U+cVs9vJ10FCnLsoE8gYzCai4KCxu1jt0lzbdJapHnjcjdhuSS5mr/DbOu+l6wAEh6+O95n2UK+yQ2WiRGkGI+WETqGkeAv8eS1Gct3TjA+dgxAOykRqZt0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=LLxMd+1J; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1715155029;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=V/YjDIQfRp2l7miiRrx3Z5IZQokNP9VXtuvlvHRlYG4=;
+	b=LLxMd+1JEukky3S/a6cu8fzPbkLhoIioaqwjIXVPd0XhyKTkqUSzoXFvQ5a0EpTcGarsnP
+	yX9C8sv1RdqM++GFZ4GNJ483/5pzpo3HxTVauL+9jlx4kzQvOn2fvIuhXh+aObRMnsIfxD
+	asx8zxWGZphWBuh4ZWTCHNvy5NMicBg=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-402-9zIbIx_RPi2zsftI5GvHzw-1; Wed, 08 May 2024 03:57:04 -0400
+X-MC-Unique: 9zIbIx_RPi2zsftI5GvHzw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6DAAA800262;
+	Wed,  8 May 2024 07:57:03 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.39.193.44])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id E6CE57414;
+	Wed,  8 May 2024 07:56:59 +0000 (UTC)
+From: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+To: yongqin.liu@linaro.org
+Cc: amit.pundir@linaro.org,
+	davem@davemloft.net,
+	edumazet@google.com,
+	inventor500@vivaldi.net,
+	jarkko.palviainen@gmail.com,
+	jstultz@google.com,
+	jtornosm@redhat.com,
+	kuba@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org,
+	pabeni@redhat.com,
+	stable@vger.kernel.org,
+	sumit.semwal@linaro.org,
+	vadim.fedorenko@linux.dev,
+	vmartensson@google.com
+Subject: Re: [PATCH v2] net: usb: ax88179_178a: avoid writing the mac address before first reading
+Date: Wed,  8 May 2024 09:56:54 +0200
+Message-ID: <20240508075658.7164-1-jtornosm@redhat.com>
+In-Reply-To: <CAMSo37UN11V8UeDM4cyD+iXyRR1Us53a00e34wTy+zP6vx935A@mail.gmail.com>
+References: <CAMSo37UN11V8UeDM4cyD+iXyRR1Us53a00e34wTy+zP6vx935A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.5
 
-Hello Diogo Ivo,
+Hello Yongqin,
 
-Commit 27ffe4ff0b33 ("usb: typec: ucsi: Only enable supported
-notifications") from Mar 27, 2024 (linux-next), leads to the
-following Smatch static checker warning:
+Sorry for the inconveniences.
 
-	drivers/usb/typec/ucsi/ucsi.c:1671 ucsi_get_supported_notifications()
-	warn: was expecting a 64 bit value instead of '((((1))) << (24))'
+I don't have the db845c, could you provide information about the type of
+device and protocol used?
+Related driver logs would be very helpful for this.
 
-drivers/usb/typec/ucsi/ucsi.c
-    1665 static u64 ucsi_get_supported_notifications(struct ucsi *ucsi)
-    1666 {
-    1667         u8 features = ucsi->cap.features;
-    1668         u64 ntfy = UCSI_ENABLE_NTFY_ALL;
-    1669 
-    1670         if (!(features & UCSI_CAP_ALT_MODE_DETAILS))
---> 1671                 ntfy &= ~UCSI_ENABLE_NTFY_CAM_CHANGE;
+Best regards
+José Ignacio
 
-ntfy is a u64 but UCSI_ENABLE_NTFY_CAM_CHANGE is unsigned long.  So on
-a 32 bit system this will clear the high 32 bits.  So far as I can see
-ntfy should just be a u32.  Either way, the types should match.
-BIT_ULL() is the way to do that if it really needs to be a u64.
-
-    1672 
-    1673         if (!(features & UCSI_CAP_PDO_DETAILS))
-    1674                 ntfy &= ~(UCSI_ENABLE_NTFY_PWR_LEVEL_CHANGE |
-    1675                           UCSI_ENABLE_NTFY_CAP_CHANGE);
-    1676 
-    1677         if (!(features & UCSI_CAP_EXT_SUPPLY_NOTIFICATIONS))
-    1678                 ntfy &= ~UCSI_ENABLE_NTFY_EXT_PWR_SRC_CHANGE;
-    1679 
-    1680         if (!(features & UCSI_CAP_PD_RESET))
-    1681                 ntfy &= ~UCSI_ENABLE_NTFY_PD_RESET_COMPLETE;
-    1682 
-    1683         return ntfy;
-    1684 }
-
-regards,
-dan carpenter
 
