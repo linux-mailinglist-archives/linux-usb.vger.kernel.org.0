@@ -1,226 +1,130 @@
-Return-Path: <linux-usb+bounces-10159-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10160-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD2848C0823
-	for <lists+linux-usb@lfdr.de>; Thu,  9 May 2024 01:54:05 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 48EA68C082B
+	for <lists+linux-usb@lfdr.de>; Thu,  9 May 2024 01:58:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 545611F2235B
-	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2024 23:54:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 78CDC1C20DBC
+	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2024 23:58:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA475131E41;
-	Wed,  8 May 2024 23:53:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF46C13443E;
+	Wed,  8 May 2024 23:58:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="nX+4tGye"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A21041327F1
-	for <linux-usb@vger.kernel.org>; Wed,  8 May 2024 23:53:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3DC2134400;
+	Wed,  8 May 2024 23:58:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715212438; cv=none; b=QgwfT5g7VOU6NBpIEpSLYyJRZHbSiolZOsjdG8UCpaMaT+00h+rOELOCAUxIvPf+ithOR9pAu0XWHZn4HWHEPFDPWCmiOdk343gB3IpknlkRetlhd8RFWGX+PYz2NQ36XJWNVbm57UvbthFeELH7OSAbYvLgjaQwUo32+AFQvSc=
+	t=1715212707; cv=none; b=fjvPvIBpIoZ+jU767bBC17I7Dje9YBzasaLtJJkmYCyvYkvUeGpBxVocokUyMopbkhXq13oYyPkk0aQphRz70Rch3XrGHkS4KDBFbvUUPA8mtvh/UIZhRrOKuE78xjHw5DKBodHpcuphw21UaJcFHzojH/vX36GVgstxxjL7Uq4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715212438; c=relaxed/simple;
-	bh=sw7/cyRA0+8F6bdwISmbc5OkCJdAWouQOnOBHriBSbY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YPjD2g93VPe4m7wsohYl5TOQfeDI+wdBeQpdbJcS9u9qEtsbCxmNO/f3OCLtC1ZjE7dGXnAjROgaf+P2o0+l+4EcUVwP7K2XWKlPgg7YikFalJgezhggLGJS1asva5DYVAKyqE3KXQ5Gtht15IXf6Yc/i1NvgiFcI4eTnCvs0dU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1s4r6f-00032N-MT; Thu, 09 May 2024 01:53:53 +0200
-Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1s4r6f-000MDQ-2h; Thu, 09 May 2024 01:53:53 +0200
-Received: from mgr by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1s4r6f-002HCQ-00;
-	Thu, 09 May 2024 01:53:53 +0200
-Date: Thu, 9 May 2024 01:53:52 +0200
-From: Michael Grzeschik <mgr@pengutronix.de>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] usb: dwc3: gadget: check drained isoc ep
-Message-ID: <ZjwQkIBUlhl-4ScO@pengutronix.de>
-References: <20240307-dwc3-gadget-complete-irq-v2-1-8c5e9b35f7b9@pengutronix.de>
- <20240402230555.xgt5uilc42diyr4m@synopsys.com>
- <20240402231848.4hzzrxegjrcmdab2@synopsys.com>
- <20240404002906.wk6xbz2wp2tf2xwn@synopsys.com>
- <Zie5sN473m2rgNTK@pengutronix.de>
- <20240424015059.w7hsee4tt2ixkp5y@synopsys.com>
- <ZjbIeib2UMta7FbY@pengutronix.de>
- <20240508230252.wauttsgkp63fpife@synopsys.com>
+	s=arc-20240116; t=1715212707; c=relaxed/simple;
+	bh=4Wjxj61Jp2LBSuj8M1KVtj73VLCOyTwRD+dyeKgp+3o=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=WNuCV5wVzXgNKzA1atrGLBUjuOQkmi9NxXQNP434sxmBaJry4ZqqvCPubNDka7R0qNJ5OroyCn+CxUMirJSTnH0YZ3gFtbdOlOsK3mGHwhS+BDk7ZBJw1Iuiw4m+iaw70ltQ4wi6c+5c5L6sC7FgrIkL1swrrc+WENKc6bV1oyA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=nX+4tGye; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 448NXjeq006689;
+	Wed, 8 May 2024 23:58:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=0xmfbdvtMH9kyFWsvN05oirZzF4tHdtu/rYfP3YurB0=; b=nX
+	+4tGye2HSa5bsGyJ0lXvL+Fr1AzeAfVahWCq/u17HbLyGkNXTQ2usjoHlltE9lX+
+	rLqsadiA3wFwl3qlcdba7FJqazBKjL6D914UkHYIuDPEj6UdpVpp/EXPGJu6XFqj
+	Y6ypiJnb4hYpxLeH4y3btalLjdVLF6IZyaACGIhwALLMxZxw9uTECWFBYB+tP1vO
+	3MHS09nCIbKPjW+aPbujU7/JEQWBVKIIXWgmwP+0KsjSCCHPVi8hekjQJ+yjKACv
+	7lPPGJ5dMUeFZF02i1NNkZOkq19NSp3+OUC/g5O70RsYitFjyG/JpgqOsGQGsZOe
+	6vun3TeB8jN+EQEgUDgQ==
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3y07wfsk2n-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 08 May 2024 23:58:01 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 448Nw0VL012920
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 8 May 2024 23:58:00 GMT
+Received: from [10.110.126.205] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 8 May 2024
+ 16:57:59 -0700
+Message-ID: <b1f8b531-6041-ec11-5932-13bf17b69d0b@quicinc.com>
+Date: Wed, 8 May 2024 16:57:59 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="Z7LlYPAU/B3cdMx8"
-Content-Disposition: inline
-In-Reply-To: <20240508230252.wauttsgkp63fpife@synopsys.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL: http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH v21 26/39] ASoC: qcom: qdsp6: Add support to track
+ available USB PCM devices
+Content-Language: en-US
+To: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
+        <perex@perex.cz>, <conor+dt@kernel.org>, <corbet@lwn.net>,
+        <lgirdwood@gmail.com>, <andersson@kernel.org>, <krzk+dt@kernel.org>,
+        <gregkh@linuxfoundation.org>, <Thinh.Nguyen@synopsys.com>,
+        <broonie@kernel.org>, <bgoswami@quicinc.com>, <tiwai@suse.com>,
+        <bagasdotme@gmail.com>, <robh@kernel.org>, <konrad.dybcio@linaro.org>
+CC: <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-sound@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>
+References: <20240507195116.9464-1-quic_wcheng@quicinc.com>
+ <20240507195116.9464-27-quic_wcheng@quicinc.com>
+ <875b643f-af2c-4a1b-87e8-80cd6f236dea@linux.intel.com>
+From: Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <875b643f-af2c-4a1b-87e8-80cd6f236dea@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: xPJCVTmBpuP3jrr2Pp7u4kqcVH9sEP4W
+X-Proofpoint-ORIG-GUID: xPJCVTmBpuP3jrr2Pp7u4kqcVH9sEP4W
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.11.176.26
+ definitions=2024-05-08_09,2024-05-08_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
+ spamscore=0 priorityscore=1501 suspectscore=0 bulkscore=0 phishscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 malwarescore=0 mlxlogscore=877
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2405010000
+ definitions=main-2405080179
 
+Hi Pierre,
 
---Z7LlYPAU/B3cdMx8
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 5/7/2024 2:23 PM, Pierre-Louis Bossart wrote:
+> 
+>> @@ -113,6 +120,12 @@ static int q6usb_alsa_connection_cb(struct snd_soc_usb *usb,
+>>   	if (connected) {
+>>   		/* We only track the latest USB headset plugged in */
+>>   		data->active_usb_chip_idx = sdev->card_idx;
+>> +
+>> +		set_bit(sdev->card_idx, &data->available_card_slot);
+>> +		data->status[sdev->card_idx].sdev = sdev;
+> 
+> Not following the 'only track the latest USB headset plugged in', I
+> don't see anything that discard the previously latest headset...
+> 
+> If you plug headset1, then headset2, how is headset1 marked as not
+> available for USB offload?
+> 
 
-On Wed, May 08, 2024 at 11:03:00PM +0000, Thinh Nguyen wrote:
->On Sun, May 05, 2024, Michael Grzeschik wrote:
->> On Wed, Apr 24, 2024 at 01:51:01AM +0000, Thinh Nguyen wrote:
->> > >
->> >
->> > Right. Unfortunately, dwc3 can only "guess" when UVC function stops
->> > pumping more request or whether it's due to some large latency. The
->> > logic to workaround this underrun issue will not be foolproof. Perhaps
->> > we can improve upon it, but the solution is better implement at the UVC
->> > function driver.
->>
->> Yes, the best way to solve this is in the uvc driver.
->>
->> > I thought we have the mechanism in UVC function now to ensure queuing
->> > enough zero-length requests to account for underrun/latency issue?
->> > What's the issue now?
->>
->> This is actually only partially true. Even with the zero-length packages
->> it is possible that we run into underruns. This is why we implemented
->> this patch. This has happened because another interrupt thread with the
->> same prio on the same CPU as this interrupt thread was keeping the CPU
->
->Do you have the data on the worst latency?
+It won't mark headset1 as not available for offload, because offload 
+could happen on either depending on what is selected (from the kcontrol 
+as well).
 
-It was something a bit more then around 2ms AFAIR. Since with one frame
-enqueued we only trigger the interrupt every 16 requests (16*125us =3D 2ms)
-
-So with at least 2ms latency we did hit the sweet spot in several cases.
-
->Can this other interrupt thread lower its priority relative to UVC? For
->isoc endpoint, data is time critical.
-
-The details are not that important. Sure the is a bug, that needed to be
-solved. But all I wanted is to improve the overal dwc3 driver.
-
->Currently dwc3 can have up to 255 TRBs per endpoint, potentially 255
->zero-length requests. That's 255 uframe, or roughly ~30ms. Is your worst
->latency more than 30ms? ie. no handling of transfer completion and
->ep_queue for the whole 255 intervals or 30ms. If that's the case, we
->have problems that cannot just be solved in dwc3.
-
-Yes. But as mentioned above, this was not the case. Speaking of, there
-is currently a bug in the uvc_video driver, that is not taking into
-acount that actually every zero-length request should without exception
-need to trigger an interrupt. Currently we also only scatter them over
-the 16ms period, like with the actual payload. But since we feed the
-video stream with the interrupts, we loose 2ms of potential ep_queue
-calls with actual payload in the worst case.
-
-My patch is already in the stack and will be send today.
-
->> busy. As the dwc3 interrupt thread get to its call, the time was already
->> over and the hw was already drained, although the started list was not
->> yet empty, which was causing the next queued requests to be queued to
->> late. (zero length or not)
->>
->> Yes, this needed to be solved on the upper level first, by moving the
->> long running work of the other interrupt thread to another thread or
->> even into the userspace.
->
->Right.
->
->>
->> However I thought it would be great if we could somehow find out in
->> the dwc3 core and make the pump mechanism more robust against such
->> late enqueues.
->
->The dwc3 core handling of events and ep_queue is relatively quick. I'm
->all for any optimization in the dwc3 core for performance. However, I
->don't want to just continue looking for workaround in the dwc3 core
->without looking to solve the issue where it should be. I don't want to
->sacrifice complexity and/or performance to other applications for just
->UVC.
-
-I totally understand this. And as we already found out more and more
-about the underlying complexity of the dwc3 driver I see more and more
-clearer how we have to handle the corner cases. I just started this
-conversation with Avichal and you in the other thread.
-
-https://lore.kernel.org/all/17192e0f-7f18-49ae-96fc-71054d46f74a@google.com/
-
-I think there is some work to come. As to be sure that everybody is on
-the same page I will prepare a roadmap on how to proceed and what to
-discuss. There are many cases interfering with each other which make the
-solution pretty complex.
-
->> This all started with that series.
->>
->> https://lore.kernel.org/all/20240307-dwc3-gadget-complete-irq-v1-0-4fe9a=
-c0ba2b7@pengutronix.de/
->>
->> And patch 2 of this series did work well so far. The next move was this
->> patch.
->>
->> Since the last week debugging we found out that it got other issues.
->> It is not allways save to read the HWO bit, from the driver.
->>
->> Turns out that after an new TRB was prepared with the HWO bit set
->> it is not save to read immideatly back from that value as the hw
->> will be doing some operations on that exactly new prepared TRB.
->>
->> We ran into this problem when applying this patch. The trb buffer list
->> was actually filled but we hit a false positive where the latest HWO bit
->> was 0 (probably due to the hw action in the background) and therefor
->> went into end transfer.
->>
->
->Thanks for the update.
-
-Thanks,
-Michael
-
---=20
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
-
---Z7LlYPAU/B3cdMx8
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmY8EI4ACgkQC+njFXoe
-LGS01hAAhUG5/Of+XNj3OmLS7wXs3oYCQEAwjttD8+FrH2GTe8qIZ6R9WziBRQ68
-nmT4o9NbmADJ7a8wjLxUNZGhUANm5OVnRfc/bo4OP90/nR1FnREDpBPZC2gL7b1G
-hvhPhRVOcHdGoJ50c/kgW5KczOUwDunhZx+r6n8SZ74MH3KvbExJMMCk+782YpqD
-Ky7hxxx338OsnC4cNNX5w3CNSmG5JmUGja96ygvuM31s89kqzEPQVqrMlE0ycq09
-54xvHkzo4P3h9FYAJ+LW16U520IIMqezc+b7LLjgQQAlOm7G1gWCxaWt2Pm0un8f
-8opE8V2/lxr/bLbUjnN7q8bCjB0HTbtwcIUszxDU1gcyi2QHk59M2KwIAHA29RBK
-Y9bo6qmlix9GRs74kMFHFiszV+lm/+FQ+td7U6HYeiXWlPmlCTc2yI5cKrMVP9WU
-3zCBZv0x1QOkXmOiDTa+2gHxyOmB0AONo60wnrFMLIjgTOfHcDROmTLL1M8Wsbrc
-0W63gguIHEcYn3g7vA2+hqnGT+B0CB8TCr4DgqiteLacUQFeTcC/qvC1Cd0Gw3K7
-3rkJVI8m5/bEmwon8DvE0nAF7I21X23i6YDEoGrTWxXbz3+xssjAi4I93rzmSGOk
-oCyBGJRyUDYiFVDOUAaUrNxklFUm/QIB3SRQaxPlumgbXLtkCB4=
-=YPfe
------END PGP SIGNATURE-----
-
---Z7LlYPAU/B3cdMx8--
+Thanks
+Wesley Cheng
 
