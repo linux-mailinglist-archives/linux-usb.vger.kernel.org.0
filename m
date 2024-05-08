@@ -1,122 +1,112 @@
-Return-Path: <linux-usb+bounces-10127-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10128-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42AC68BFB30
-	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2024 12:42:29 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2756B8BFC44
+	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2024 13:38:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C67A6282236
-	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2024 10:42:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D01AB1F2351F
+	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2024 11:38:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 771CF81AC8;
-	Wed,  8 May 2024 10:42:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7E5D82C6B;
+	Wed,  8 May 2024 11:38:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Z3FgsNNT"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Kci4b9x0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 542C32836D
-	for <linux-usb@vger.kernel.org>; Wed,  8 May 2024 10:42:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 064178120A;
+	Wed,  8 May 2024 11:38:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715164932; cv=none; b=U+Aj2uVnfny7/rvkkhkum4PJl9yW8Z7EON7Fezq+C6HW6IwgjbEZnu/0M1gKlQDU0S/fZUbl0PDQwtyLgEKvWMn+KLnYsRdg3KIPEcmpK/c+ORTrht/DLFpaBviJtgQ6iGuxN9iP8BKnraCDdkxxT6lEHThSUp9uUB8i8aFdYsQ=
+	t=1715168297; cv=none; b=SXXZ+aemNTkzNugrLC+8PtqAD7CJMZO9zvyMsd0/J43nePWid/PYZHb8oLeTgeDfEscNnYof26yixprVtP1CRKrP0m7RHSGv9/tDOVeX/TM0edXyBL3C/RKZ2XTr0oWKGOw+ITsSCiBrfoOStQ4j5j1xm3ruY7YWaJ19w65/Oi8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715164932; c=relaxed/simple;
-	bh=msFOWMMZAv+nOcQqKV5mzuGZJ+dqXm8YAjq5UYtYae0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BH9VMPJZfyaMKGa8U+udAkMWmrY830KFTzmzely0E5y9zmTHkxPGOf1TyPTs1CU8HxCt+g+M14kIRZzzarGuqSpCum27YxLkY+tHlV0PqR8x4mkhTRdkQMhI0hikFuL6UovnVjUgVjdczQerOX2sUar862JMc9SrwXWyn8f2FOQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Z3FgsNNT; arc=none smtp.client-ip=209.85.128.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-61ab6faf179so43673717b3.1
-        for <linux-usb@vger.kernel.org>; Wed, 08 May 2024 03:42:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1715164928; x=1715769728; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=SCNZSYQEn9C0yYifJvIKeqaC0I3ddBBIVvQAOJJfdew=;
-        b=Z3FgsNNTxk1w3eCb/U+dIqo+fSnddur6Kj3Hjwm6PWw6J43QdXoqeyT9WmkuZsv2Fn
-         r0CglCSOtTjn42IStELQLTUfutMDTHCLcjU7Xv9xg0rZExtbqIQLsgy+7rKvINYWrjr3
-         mpdFacD3PlzYQKEt0u4BXc6JzQs8LEQjpOU0pyERqcnGVQJqam7XE69WSpuRL07S+eMF
-         8UOwMlMZPVNNO0MtG3MSzXrNLqYVpOcQ9By2Rf+4C9CaYhcWQ1vYd5xPF98wCF6TtCM5
-         QhLhFYECHfF6Cpj66Bvzue9MmTZucTPd1gd8CXiZSy7hhEj2vRMqYGZQ71X1My/ETTNL
-         JGRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715164928; x=1715769728;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SCNZSYQEn9C0yYifJvIKeqaC0I3ddBBIVvQAOJJfdew=;
-        b=urtvIcRAByIS8Mq3PFqQaYHOt6laP7eecD9WW41gK8ZBOEQMKqvslpSb6lYS72SKbi
-         r4U5j2misv/6KLKZq7ZtNMDA9xwFXkAOBFpdNoX7kj7fqQ/LoA73GJ5Q7aZnn5XWO81R
-         XE4txJV3En3BrcorVb+Uc5bPTBbLu3VIkHtvsnwJEZ0wjMh1vTWmT5I0WvLor6avRIdi
-         irkg7PVKh63DZx/ceqwUMc8o3NnEj0x5QcQlAZB5pE1R7saDbX94VmqAtRMBxWCtdpqr
-         QtBl4eBUN2Efn+LuxUGra7TWLuTZQPBjyO5KklfPQYBQQuAW9NQ38UbIKeRoLMDDfR7r
-         qiQQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVYLpTe2pmiqwOyPi94+rLqR3xvrNSZ7Fs1BkdRRu1IkgEwTZtPtRiOTWYHMUeI4/NWmhItaCbqI3rzjrgriK1EwpeDXvazikFy
-X-Gm-Message-State: AOJu0Yx26ROC9Y8bVKUBiPbMq3rgq9uqzxNyQuouaBJUKmFl1ud9uTU7
-	Fp9pzzM2oQUj8BoIgig52KVbpwsqvcGYMDHzz/w+FJmhMnkMA0G3/KlugPRKSExLWvIs+mxnrG2
-	h46mk3PbYScVa1+1N3esQnRFMauhwahXF0fEqfA==
-X-Google-Smtp-Source: AGHT+IG/YkpxJFnMtp9np4dGXgtlpi8FQCo5Um1fohI6F0WuAx9qFoD5jZyRnJpee9YYAVFVuPsAG5b/WQKuWWsqGYM=
-X-Received: by 2002:a81:844c:0:b0:61a:db67:b84f with SMTP id
- 00721157ae682-62085da981emr27885857b3.27.1715164928430; Wed, 08 May 2024
- 03:42:08 -0700 (PDT)
+	s=arc-20240116; t=1715168297; c=relaxed/simple;
+	bh=iweWDyYezogrtHMPwakIJOi3mF2YKlhm4kZbXzx5dEM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=L0y2Sdez1th6PjCW59a24zJyWBTXNW/03j8GM5fuTESwiajibD9gnqEdUbLNcfYvT3Vr/Y8sRbpUOMriAY/Aik0iFUkGDxLRzhuAnkqS8nlvus/b1UnL3TxLPtLpIpB0vju19mt5Ocx2Exeq5CC3m0EXFgcHvwYpcGxUv4WMnJw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Kci4b9x0; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1715168296; x=1746704296;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=iweWDyYezogrtHMPwakIJOi3mF2YKlhm4kZbXzx5dEM=;
+  b=Kci4b9x0IEIUk5fGHt4RZWBF26Kqg+mi6dSj7YOKBhsEYy+dFC3pi8Wx
+   BjmqR9K6ib+KQueNvI2Vml3iuPnZQi46WAUs3JyvNtHLesrY4tRin2tYM
+   OHTM1S4HpxBLzTS6tddgKkxvTALuP0LNddRCl+6SrjocjOLM8pjVZMHAU
+   hn5fxG/+ofgWIPV0nLOmXyaEGgqLHMWFz3ho9qGIW6ed6P1asBlCn2dvq
+   8YvdHEFVTprsr7HC+HayfNDoMOuLht2ajtf6TMauPbfxiXtQwcO8SQUXo
+   NMLWKId6xWKfMJVhNbdGOQNYTSXtZn9znBQAyT6mZNNTk+psjCGZt+8Li
+   w==;
+X-CSE-ConnectionGUID: OVRgsgomQaSJFGf6BDGb3A==
+X-CSE-MsgGUID: CNNuUfs9RjaprAyMJZHBQw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11066"; a="11233689"
+X-IronPort-AV: E=Sophos;i="6.08,145,1712646000"; 
+   d="scan'208";a="11233689"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2024 04:38:15 -0700
+X-CSE-ConnectionGUID: zisdnwuuRFOLYoml0UjQIw==
+X-CSE-MsgGUID: nwWIU/lPSi2pMCs/8TgTyg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,145,1712646000"; 
+   d="scan'208";a="33695727"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orviesa004.jf.intel.com with ESMTP; 08 May 2024 04:38:13 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+	id 2286911F; Wed, 08 May 2024 14:38:12 +0300 (EEST)
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	linux-usb@vger.kernel.org,
+	linux-tegra@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>
+Subject: [PATCH v1 1/1] usb: phy: tegra: Replace of_gpio.h by proper one
+Date: Wed,  8 May 2024 14:38:09 +0300
+Message-ID: <20240508113809.926155-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAMSo37UN11V8UeDM4cyD+iXyRR1Us53a00e34wTy+zP6vx935A@mail.gmail.com>
- <20240508075658.7164-1-jtornosm@redhat.com>
-In-Reply-To: <20240508075658.7164-1-jtornosm@redhat.com>
-From: Yongqin Liu <yongqin.liu@linaro.org>
-Date: Wed, 8 May 2024 18:41:57 +0800
-Message-ID: <CAMSo37XddAvE199QpA_WR5uwQUjzemF8GxqoWfETUNtFw6iCrg@mail.gmail.com>
-Subject: Re: [PATCH v2] net: usb: ax88179_178a: avoid writing the mac address
- before first reading
-To: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
-Cc: amit.pundir@linaro.org, davem@davemloft.net, edumazet@google.com, 
-	inventor500@vivaldi.net, jarkko.palviainen@gmail.com, jstultz@google.com, 
-	kuba@kernel.org, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	netdev@vger.kernel.org, pabeni@redhat.com, stable@vger.kernel.org, 
-	sumit.semwal@linaro.org, vadim.fedorenko@linux.dev, vmartensson@google.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-Hi, Jose
+of_gpio.h is deprecated and subject to remove.
+The driver doesn't use it directly, replace it
+with what is really being used.
 
-On Wed, 8 May 2024 at 15:57, Jose Ignacio Tornos Martinez
-<jtornosm@redhat.com> wrote:
->
-> Hello Yongqin,
->
-> Sorry for the inconveniences.
->
-> I don't have the db845c, could you provide information about the type of
-> device and protocol used?
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ include/linux/usb/tegra_usb_phy.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-The db845c uses an RJ45 as the physical interface.
-It has the translation from PCIe0 to USB and USB to Gigabit Ethernet controller.
-
-For details, maybe you could check the hardware details from the documents here:
-    https://www.96boards.org/documentation/consumer/dragonboard/dragonboard845c/hardware-docs/
-
-> Related driver logs would be very helpful for this.
-
-Here is the log from the serial console side:
-    https://gist.github.com/liuyq/809247d8a12aa1d9e03058e8371a4d44
-
-Please let me know if I could try and provide more information for the
-investigation.
-
+diff --git a/include/linux/usb/tegra_usb_phy.h b/include/linux/usb/tegra_usb_phy.h
+index 46e73584b6e6..e6c14f2b1f9b 100644
+--- a/include/linux/usb/tegra_usb_phy.h
++++ b/include/linux/usb/tegra_usb_phy.h
+@@ -7,11 +7,12 @@
+ #define __TEGRA_USB_PHY_H
+ 
+ #include <linux/clk.h>
+-#include <linux/gpio.h>
+ #include <linux/regmap.h>
+ #include <linux/reset.h>
+ #include <linux/usb/otg.h>
+ 
++struct gpio_desc;
++
+ /*
+  * utmi_pll_config_in_car_module: true if the UTMI PLL configuration registers
+  *     should be set up by clk-tegra, false if by the PHY code
 -- 
-Best Regards,
-Yongqin Liu
----------------------------------------------------------------
-#mailing list
-linaro-android@lists.linaro.org
-http://lists.linaro.org/mailman/listinfo/linaro-android
+2.43.0.rc1.1336.g36b5255a03ac
+
 
