@@ -1,49 +1,68 @@
-Return-Path: <linux-usb+bounces-10138-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10139-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E449A8BFF9C
-	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2024 15:58:21 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 719CC8BFFD5
+	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2024 16:23:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 21CFC1C231D2
-	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2024 13:58:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 23E551F227F9
+	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2024 14:23:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B89983CD4;
-	Wed,  8 May 2024 13:58:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4B4F85279;
+	Wed,  8 May 2024 14:23:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=tecnico.ulisboa.pt header.i=@tecnico.ulisboa.pt header.b="PkI/TWu9"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id 2ECEB7EF06
-	for <linux-usb@vger.kernel.org>; Wed,  8 May 2024 13:58:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
+Received: from smtp1.tecnico.ulisboa.pt (smtp1.tecnico.ulisboa.pt [193.136.128.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 626D854FA3
+	for <linux-usb@vger.kernel.org>; Wed,  8 May 2024 14:23:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.136.128.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715176696; cv=none; b=BvOrRE5IzQvTjxdWWE/vfUc6fZqD5rqf8Q8JIjb5SwZ9o3zALymYQY9kwKjJs26Ka9wn/Hst7QHRb+g7FQQHMgf4ydUckBjD/co7A8mqlP9Fmv331Isw5PN5WUN7VgqZjE8M1L/aNMX7laIxItnku+sHhIMYSUECQ0vSG0qc3OU=
+	t=1715178188; cv=none; b=RCEBMpcZ2CuH7xb330VzTJD0kJYG8X/vQEo+20fxX0fLuoQfiugqCzn7ZYqPO4TIikpObv9C++/CyRyWLk53y4grZe05HMoCnX69AQbpqLmfqLTIZqz42JNPLZFY6FH9eRlFsT7On7KTOsRIGmwulwPs2AW40bOPsSfS70FD9WA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715176696; c=relaxed/simple;
-	bh=DoFoI2sn8p/by9cN78lyEZH7QH5qZR4GiefXMxapKl8=;
+	s=arc-20240116; t=1715178188; c=relaxed/simple;
+	bh=iTOxWz5qyCtsY9EypXDnRK/yJwfu4rXlJYiN8rURcxE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fCtw9YHC8hmOq5snw0KnJ00JDNg0io+HZsWEbVJdCp57qxc80X4pFJCGuaGDrB3TH+TziHAiy4jTTPnoNNn4BC0I3VpbVcy0s5jROu5ApbfAxgkmIzRK1OVvMh+MlOaoUh8DOe2tVGZgfh6OnCr55YMNrIH/MmiiTbleiU4XwT4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
-Received: (qmail 982879 invoked by uid 1000); 8 May 2024 09:58:12 -0400
-Date: Wed, 8 May 2024 09:58:12 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Muni Sekhar <munisekharrms@gmail.com>
-Cc: linux-usb@vger.kernel.org, kernelnewbies <kernelnewbies@kernelnewbies.org>
-Subject: Re: Seeking Assistance: Implementing USB Device Suspend/Resume in
- User Space Driver
-Message-ID: <8bbace90-0978-47ad-b79b-50f95e741467@rowland.harvard.edu>
-References: <CAHhAz+g=7pocghMX-Yu=jg0jxnpfwa3+ZmmdLP_pVuXmWLJ=aw@mail.gmail.com>
- <ea450e31-8f71-4726-91f6-ada79e0b3a9a@rowland.harvard.edu>
- <CAHhAz+gRvah++Hv4k5+Ec0epNbmet0=JZ6tJ3R8zjZmiKACaQA@mail.gmail.com>
- <c309b037-50db-4ca1-8f86-60131cb84564@rowland.harvard.edu>
- <CAHhAz+i9TLCb3hKpzWAL2DkH9Y25XszJO5kgbRGzsut1zCzrJw@mail.gmail.com>
- <8a8edaba-670b-47ad-a123-2077e2e0644d@rowland.harvard.edu>
- <CAHhAz+iywarnsNmt0mbuyPV+mNYQ+OwqoDMaymTGAEv6KBcLnA@mail.gmail.com>
- <9a89ba8d-c406-4ff1-98f0-080c77390efe@rowland.harvard.edu>
- <CAHhAz+hGD95zoVbEQTvCq4jquBu+x-kv3n=x5Tb4V0mtQDXv7w@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=JKXxclC+1OLB/4jBR+wTaDjBw38bytDs/ZTMQReN/uVyTVx+CsFzkT8RmqxHtmJDYFJNNIQMYqt7xq27JI7uwwYtpZT5QckrakhkHMCJ8lFiI40lNf9j9uaRoLKAjQbgyjuJZBEgp7y5qfWgwIwH2N0Vdp/jDxm588F0uWq2uAY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tecnico.ulisboa.pt; spf=pass smtp.mailfrom=tecnico.ulisboa.pt; dkim=pass (1024-bit key) header.d=tecnico.ulisboa.pt header.i=@tecnico.ulisboa.pt header.b=PkI/TWu9; arc=none smtp.client-ip=193.136.128.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tecnico.ulisboa.pt
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tecnico.ulisboa.pt
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by smtp1.tecnico.ulisboa.pt (Postfix) with ESMTP id 900E56002411;
+	Wed,  8 May 2024 15:22:55 +0100 (WEST)
+X-Virus-Scanned: by amavis-2.13.0 (20230106) (Debian) at tecnico.ulisboa.pt
+Received: from smtp1.tecnico.ulisboa.pt ([127.0.0.1])
+ by localhost (smtp1.tecnico.ulisboa.pt [127.0.0.1]) (amavis, port 10025)
+ with LMTP id olKpX-JP1FdT; Wed,  8 May 2024 15:22:53 +0100 (WEST)
+Received: from mail1.tecnico.ulisboa.pt (mail1.ist.utl.pt [IPv6:2001:690:2100:1::b3dd:b9ac])
+	by smtp1.tecnico.ulisboa.pt (Postfix) with ESMTPS id 4D399600300E;
+	Wed,  8 May 2024 15:22:53 +0100 (WEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tecnico.ulisboa.pt;
+	s=mail; t=1715178173;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=MylGb547aB2dhZyKrPvf/LOcOUbNwyHwPa2ACK4jJJg=;
+	b=PkI/TWu9+c829Rbz2lzBIYbkQzU9yHkEj9pNbZ6uprlmCCDO3BURONs9qxHXFPG7UGcyOs
+	PDZDDJtTdqPiUfVAYNwZLIfAXcJQNVPrdaFzT7Og8zMMsZDhzP9MvBPQyUGwGvWCRHZNNe
+	WHO+/phsdaKKmRfQIqHnBQ+Nrp04kv4=
+Received: from diogo-gram.home (unknown [IPv6:2a01:14:8070:dc60:4589:2164:1bc5:2670])
+	(Authenticated sender: ist187313)
+	by mail1.tecnico.ulisboa.pt (Postfix) with ESMTPSA id DEDE2360071;
+	Wed,  8 May 2024 15:22:52 +0100 (WEST)
+Date: Wed, 8 May 2024 15:22:49 +0100
+From: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
+To: Dan Carpenter <dan.carpenter@linaro.org>
+Cc: linux-usb@vger.kernel.org, heikki.krogerus@linux.intel.com, 
+	diogo.ivo@tecnico.ulisboa.pt
+Subject: Re: [bug report] usb: typec: ucsi: Only enable supported
+ notifications
+Message-ID: <eo56goqwajv2p3wwfrma2wowv7t5fc6fhfapkb75ixs5rvl63a@4joxxdo7bq37>
+References: <dd955f16-bbb9-4d51-98ea-31cad358ab69@moroto.mountain>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -52,19 +71,46 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHhAz+hGD95zoVbEQTvCq4jquBu+x-kv3n=x5Tb4V0mtQDXv7w@mail.gmail.com>
+In-Reply-To: <dd955f16-bbb9-4d51-98ea-31cad358ab69@moroto.mountain>
 
-On Wed, May 08, 2024 at 11:08:11AM +0530, Muni Sekhar wrote:
-> Thank you for the clear explanation on how to identify devices
-> associated with root hubs.
-> Could you please provide clarity on whether the root hub devices have
-> attribute files in the devices sysfs directory? Upon checking the
-> sysfs directory, I couldn't find any relevant information about these
-> attribute files.
+Hello Dan,
 
-Root hubs have different names in sysfs from all other USB devices.  The 
-root hub on bus N is named "usbN".  For example, the root hub on bus 4 
-is named "usb4".
+On Wed, May 08, 2024 at 10:53:05AM GMT, Dan Carpenter wrote:
+> Hello Diogo Ivo,
+> 
+> Commit 27ffe4ff0b33 ("usb: typec: ucsi: Only enable supported
+> notifications") from Mar 27, 2024 (linux-next), leads to the
+> following Smatch static checker warning:
+> 
+> 	drivers/usb/typec/ucsi/ucsi.c:1671 ucsi_get_supported_notifications()
+> 	warn: was expecting a 64 bit value instead of '((((1))) << (24))'
+> 
+> drivers/usb/typec/ucsi/ucsi.c
+>     1665 static u64 ucsi_get_supported_notifications(struct ucsi *ucsi)
+>     1666 {
+>     1667         u8 features = ucsi->cap.features;
+>     1668         u64 ntfy = UCSI_ENABLE_NTFY_ALL;
+>     1669 
+>     1670         if (!(features & UCSI_CAP_ALT_MODE_DETAILS))
+> --> 1671                 ntfy &= ~UCSI_ENABLE_NTFY_CAM_CHANGE;
+> 
+> ntfy is a u64 but UCSI_ENABLE_NTFY_CAM_CHANGE is unsigned long.  So on
+> a 32 bit system this will clear the high 32 bits.  So far as I can see
+> ntfy should just be a u32.  Either way, the types should match.
+> BIT_ULL() is the way to do that if it really needs to be a u64.
 
-Alan Stern
+In my view this variable really should be a u64 and the definitions of
+the UCSI_ENABLE_NTFY_* need to be changed to BIT_ULL(). This is due to
+UCSI versions 2.0 and up definining a new notification on bit 33, crossing
+the u32 barrier. My suggestion for addressing this is sending two
+patches, one for changing BIT() -> BIT_ULL() and adding the missing
+define for the notification of bit 33 and a separate patch to handle
+this new notification bit in ucsi_get_supported_notifications()/ucsi_init().
+
+Thank you for the report and please let me know if this sounds
+reasonable, or if it would be better to split the changes in another
+way.
+
+Best regards,
+Diogo
 
