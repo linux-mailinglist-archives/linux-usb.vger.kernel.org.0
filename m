@@ -1,122 +1,226 @@
-Return-Path: <linux-usb+bounces-10156-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10157-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50A778C07CE
-	for <lists+linux-usb@lfdr.de>; Thu,  9 May 2024 01:40:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E6498C07E4
+	for <lists+linux-usb@lfdr.de>; Thu,  9 May 2024 01:42:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 38A9F1C211AE
-	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2024 23:40:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C7366283D40
+	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2024 23:42:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06AD7133414;
-	Wed,  8 May 2024 23:40:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="fDsVxjMN"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 555C0132C1C;
+	Wed,  8 May 2024 23:42:21 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18D4D1E89A;
-	Wed,  8 May 2024 23:40:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 818261E89A
+	for <linux-usb@vger.kernel.org>; Wed,  8 May 2024 23:42:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715211642; cv=none; b=VrauKH+dr+5AXv7AOqQyFIb6iKUPru8sFSdx/HlJO4xwhw5eEes2BTJIEscso7VKOZxN7U+nSqgYyX+BMolg71uspCUG8J/dH4ptVWue/EVAd6rkbOYtT2FfdRb/zSVSAX871eXl2Nq8sgqTCWJ4Jh/stsqX63TBnxxujcm0oUA=
+	t=1715211741; cv=none; b=rwF/Lminz5R9LE+KAO9lVP+6bOoAzZZV8Wu3FuNgEpmurogatStQfrmNFzdK4xYPkV0YKGrgzE+kEth3Te21VTVNK8X2y8Rh8eyJpyv2C7LKVv9jR34jVp/DH9vkuIQt/lgXZ3fJlXacatKVoBxQMn8kEX/DXkkn/TBmsBa5CKg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715211642; c=relaxed/simple;
-	bh=XHxrjqFEAkxk0OlBRxqEri56L1j3vEZ5UCKWMemhFoY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=qvuUvGfF6rxiUI0hBcqoiiQDjjq/i4oS8EIPfo4/tri/kAvORUC5osshK7Cjm3V4dCZScMhCrJaIjUyeSoCRhK6XE7ImA5Sc0i6rFusinLySpttVZTBVsLV8DE59ake2I/SuVWYcqMuZYQ1uU/p6sjfuHKiN6dECBlZEUlgYbdA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=fDsVxjMN; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 448NBoxd006086;
-	Wed, 8 May 2024 23:40:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=9HgzBBw6z3F0SqH/OB4mEKC34o1ooj2L1DEYGdkaaEU=; b=fD
-	sVxjMNSuHybRUy6+brZOY1gM/KUZi8j+dfZjeMB62qyunphXs9n9ILxQeBL15v5L
-	r1XLpLcZF6uQFiSF0+vdlPv6cvUuQNcF+oSx+CebdN+Wg3KRC37iYzZR8azTgBf4
-	SjrUO5gBhDA9unGeALeg/cf/fqJucuY3vSXVJ7Qbsx8PrwZkIBobscb8943LKgwH
-	Y6x+lSGwvlNMMoLQWz5d5q8KMNnYwJXjbAjgc1+34eFSDdD65oKsc9CrlLqH5TO4
-	sD9TwBoEXXIwHKuUjullzRUdvzLnvWhaRe9+3dhGhhpfXf5eqPfH3dRgxZfrnsS9
-	/rmUkhgl2GxPcpnKLAnw==
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3y07u8sjhw-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 08 May 2024 23:40:21 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 448NeKHf008061
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 8 May 2024 23:40:20 GMT
-Received: from [10.110.126.205] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 8 May 2024
- 16:40:19 -0700
-Message-ID: <066fe096-a9d3-2498-275d-185f709e9a02@quicinc.com>
-Date: Wed, 8 May 2024 16:40:19 -0700
+	s=arc-20240116; t=1715211741; c=relaxed/simple;
+	bh=U5l9NaVPQYYnsjO5onFdxkn95B+7N+E4Z8nCr6buJlc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=e3/7iUUqlrUtIv7g5c/htR3K6yNF1cX0t7x1wNBw4gn9eJ0Bn15IK9d6QPrss7Nrb13UTFIn/GleNUR7xpJZ6PsUj14Teo+BPDlPkQDMHS/TFwWR4SJkkeYfpFMzywGouNiyII/Dt+kITnoQLvfHpuzVtyH+fmznkuLKTSR/YL8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mgr@pengutronix.de>)
+	id 1s4qvL-0001p6-Fz; Thu, 09 May 2024 01:42:11 +0200
+Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <mgr@pengutronix.de>)
+	id 1s4qvJ-000MCM-EU; Thu, 09 May 2024 01:42:09 +0200
+Received: from mgr by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <mgr@pengutronix.de>)
+	id 1s4qvJ-000k4g-19;
+	Thu, 09 May 2024 01:42:09 +0200
+Date: Thu, 9 May 2024 01:42:09 +0200
+From: Michael Grzeschik <mgr@pengutronix.de>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: Wesley Cheng <quic_wcheng@quicinc.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"michael.riesch@wolfvision.net" <michael.riesch@wolfvision.net>,
+	"kernel@pengutronix.de" <kernel@pengutronix.de>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] usb: dwc3: gadget: create per ep interrupts
+Message-ID: <ZjwN0Zp03a1XuQij@pengutronix.de>
+References: <20240507-dwc3_per_ep_irqthread-v1-1-f14dec6de19f@pengutronix.de>
+ <518a046b-1056-287b-f505-149958ad9c9c@quicinc.com>
+ <ZjvuoVpVTnEcHRIH@pengutronix.de>
+ <20240508231950.ifyawl6bfy6bzvk7@synopsys.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH v21 22/39] ALSA: usb-audio: Prevent starting of audio
- stream if in use
-Content-Language: en-US
-To: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
-        <perex@perex.cz>, <conor+dt@kernel.org>, <corbet@lwn.net>,
-        <lgirdwood@gmail.com>, <andersson@kernel.org>, <krzk+dt@kernel.org>,
-        <gregkh@linuxfoundation.org>, <Thinh.Nguyen@synopsys.com>,
-        <broonie@kernel.org>, <bgoswami@quicinc.com>, <tiwai@suse.com>,
-        <bagasdotme@gmail.com>, <robh@kernel.org>, <konrad.dybcio@linaro.org>
-CC: <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-sound@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>
-References: <20240507195116.9464-1-quic_wcheng@quicinc.com>
- <20240507195116.9464-23-quic_wcheng@quicinc.com>
- <1e98935e-e35a-49e0-bbbf-ff326d40b581@linux.intel.com>
-From: Wesley Cheng <quic_wcheng@quicinc.com>
-In-Reply-To: <1e98935e-e35a-49e0-bbbf-ff326d40b581@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: mvZrtfZJK2u-V9ExiU9H9B2lUv-rtHBK
-X-Proofpoint-ORIG-GUID: mvZrtfZJK2u-V9ExiU9H9B2lUv-rtHBK
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.11.176.26
- definitions=2024-05-08_09,2024-05-08_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=821 adultscore=0
- phishscore=0 bulkscore=0 lowpriorityscore=0 clxscore=1015 impostorscore=0
- priorityscore=1501 malwarescore=0 mlxscore=0 suspectscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2405010000
- definitions=main-2405080177
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="is7zaTMiC0FWMD1P"
+Content-Disposition: inline
+In-Reply-To: <20240508231950.ifyawl6bfy6bzvk7@synopsys.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL: http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mgr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
-Hi Pierre,
 
-On 5/7/2024 2:20 PM, Pierre-Louis Bossart wrote:
-> 
->> If a PCM device is already in use, the check will return an error to
->> userspace notifying that the stream is currently busy.  This ensures that
->> only one path is using the USB substream.
-> 
-> What was the point of having a "USB Mixer" then?
+--is7zaTMiC0FWMD1P
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The USB mixer is intended to enable/route the USB offloading path to the 
-audio DSP, and is for controlling the ASoC specific entities.  This 
-change is needed to resolve any contention between the USB SND PCM 
-device (non offload path) and the ASoC USB BE DAI (offload path).
+On Wed, May 08, 2024 at 11:20:03PM +0000, Thinh Nguyen wrote:
+>On Wed, May 08, 2024, Michael Grzeschik wrote:
+>> On Tue, May 07, 2024 at 11:57:36AM -0700, Wesley Cheng wrote:
+>> > Hi Michael,
+>> >
+>> > On 5/6/2024 4:06 PM, Michael Grzeschik wrote:
+>> > > This patch is splitting up the interrupt event handling from one
+>> > > interrupt thread to separate per endpoint interrupt threads.
+>> > >
+>> >
+>> > I assume that the incentive from doing this is to improve overall
+>> > throughput numbers.  Would you be able to share some data on the
+>> > benefits of moving to per EP event management?
+>>
+>> The main benefit is to make it possible to use high demanding usb
+>> endpoints simultaneously. In our special case we saw that streaming
+>> via uac and streaming via uvc was producing noise in the audio
+>> stream. This was due to the fact, that the isoc feedback endpoint
+>> that would adjust the samplerate was not being called fast enough
+>> when there was heavy a lot of traffic in the uvc endpoint context.
+>>
+>> By moving the endpoints into their own thread handlers the short
+>> feedback requests are at least able to be scheduled in between the bursts
+>> of the uvc packages. The next step is to have all threads running on
+>> different cpu cores, without interfering each other. However, as we
+>> still have not matrix irq allocator for arm, there still is no direct
+>> benefit from that yet.
+>>
+>>
+>> > > To achieve this we create a new dwc3 interrupt domain in which
+>> > > we map all claimed interrupts to individual interrupt threads.
+>> > >
+>> > > Although the gadget layer is preparing the claimed parameter
+>> > > of each usb_ep which could be checked if the endpoint is
+>> > > to used or not, the claimed value was 0 for each ep in gadget_start.
+>> > > This was tested when describing some composite gadget using configfs.
+>> > >
+>> >
+>> > yeah... the claimed flag is cleared by the USB gadget, ie USB configfs
+>> > (not sure if you're using this) whenever it adds a USB config.  This is
+>> > to handle multi config situations, so subsequent USB configs can be
+>> > assigned (resuse) endpoints, since only one config is active at a time
+>> > for a USB device.
+>> >
+>> > This was a struggle for me as well when adding the TXFIFO resizing
+>> > logic.  We won't actually know which EPs are going to be used until the
+>> > host issues the set configuration packet to select a config, and the
+>> > set_alt() callback issues usb_ep_enable().  So the implementation
+>> > (TXFIFO resizing) is currently based on the maximum potential endpoints
+>> > used by any USB configuration.
+>> >
+>> > Not sure if having 31 (potentially) different IRQ entries would be ok,
+>> > but maybe it would be simpler to just to request IRQ for dwc->num_eps
+>> > always?
+>> >
+>> > Have you tried this on a multi config device?
+>>
+>> No, I didn't. I doubt that this will work after your explanation. So
+>> thanks for the insides!
+>>
+>> I tried putting the request_threaded_irq into the ep_enable function
+>> but this does not work as I see a lot of schedule while atomic
+>> errors. This is possible as ep_enable is called from an set alt
+>> coming from ep0 interrupt thread context.
+>>
+>> So there is probably now no other option left to have exact endpoint
+>> interrupt threads. I will rework this back to request a kthread for each
+>> endpoint even as we will probably would not be using them.
+>>
+>
+>Do you have any data on latency here?
 
-Thanks
-Wesley Cheng
+I don't have the exact numbers for the uac feedback isoc endpoint
+at the moment. But without the patch applied, it was reproducably
+returning with EXDEV when we started uvc streaming and therefor
+increased the amount of events per interrupt thread cycle.
+
+With the patch applied however, we are able to only route the events to
+the corresponding soft irqs and leave the moment of truth to the
+scheduler.
+
+>I don't see how introducing more soft interrupts would improve on
+>latency, if anything, it should be worse?
+
+Why should explicit handling of coherent ep events on one cpu core
+introduce more latency then by interleaving different events for
+arbitrary ep all in one thread?
+
+>This is making the driver way more complicated and potentially
+>introduce many bugs.
+
+Possible, but not unsolvable.
+
+>I may be wrong here, but I suspect that by multiplying the interrupt
+>handlings, you _may_ see improvement due to the a higher chance being
+>selected by the scheduler. However, the overall latency will probably
+>be worse. (correct me if I'm wrong).
+
+I doubt that it will be worse if each softirq can be handled on
+different cpus at the same time.
+
+>This will affect other applications.
+
+Let's make sure we will not break anything on the way. Okay? :)
+
+>Let's not do this.
+
+I actually thought that this is even requested:
+
+https://docs.kernel.org/usb/dwc3.html
+
+Michael
+
+--=20
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+
+--is7zaTMiC0FWMD1P
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmY8Dc4ACgkQC+njFXoe
+LGSSug//QXxA/BTR70eG6UNSPPLvi4kZldJ8qCOqHp86o/4vRaTUa1pRky4TVQb+
+C59ik7ZvMHMS83nGjqA9T+MK5UmTAfr48PJSla3PAIyr/O8t6vgjYyjeCQNx7yMT
+abvjd+xJAkKl0yY0QwXvNPgdrdH+cqWYwPKS6XxY9d3GYomIujYL3lkzXyeP24gt
+0DKnpR6T0RX6v/UeqBxQcsF6zJHBqh56Vgl4IuWizCuTdC1ZuumCzw8/u99qFbed
+4WLh6p0sbeMkSTEEKOMi9HyvdiEvWK1CpuAkgkASs9deTYDZDzZzDL+ayIg1dVfb
+wC/ya2ohhBPX+TAB+nudloyTaqfb9NLlvrvB6Uh2cAz76I96LOnOk0ALnMmF3ebW
+Kanj4/TjmIl8SXH5LWWdZ8tYj4IL5pacE1wUMDcPzAfmXQeQmmQtZQPXfZfabK8y
+lT07VJOb4cXkMFr1XZUQqQXvlrGj9Qw35HSbLvJ1iiY4sFnDNFkyFiINgt/zIEma
+DcFakD/JszCdT0XDdBJEYxO0tK4HrA2gv1f4pAB15Zv4fNzRg3mMx+sPwDcZlh/z
+wc9tOzHzBSyTwPCoZ6Uo6js+hoObbcDCgDSLOXLPiYjoLVvqjxqKE4lIm9KzHON+
+iP5whUcmsuEX09fMRhs7WB0/93yC3bsbq0JuFBzZuQYpMLS//aA=
+=Hx5X
+-----END PGP SIGNATURE-----
+
+--is7zaTMiC0FWMD1P--
 
