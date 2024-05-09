@@ -1,66 +1,59 @@
-Return-Path: <linux-usb+bounces-10167-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10168-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 033CC8C0F0B
-	for <lists+linux-usb@lfdr.de>; Thu,  9 May 2024 13:56:14 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AFDD18C107B
+	for <lists+linux-usb@lfdr.de>; Thu,  9 May 2024 15:39:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 978111F21B21
-	for <lists+linux-usb@lfdr.de>; Thu,  9 May 2024 11:56:13 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D1AEFB22005
+	for <lists+linux-usb@lfdr.de>; Thu,  9 May 2024 13:39:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E02C14A4EE;
-	Thu,  9 May 2024 11:56:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FD42158A30;
+	Thu,  9 May 2024 13:39:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=tecnico.ulisboa.pt header.i=@tecnico.ulisboa.pt header.b="qzztiXAk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YX+3FdeO"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp1.tecnico.ulisboa.pt (smtp1.tecnico.ulisboa.pt [193.136.128.21])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EB6C12FB3F;
-	Thu,  9 May 2024 11:56:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.136.128.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAE4D1527A2;
+	Thu,  9 May 2024 13:39:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715255766; cv=none; b=FuysAR942dOb0wHdbS24ONOOzEyfBZDkVa8IyQ/116TlSRdRniZq1H8nNhLuhdkkDh/zmFqAHpUGpPed7RvNi7XokeBwHrlZyKwbP7F/igU9OnU3OfTPUtwiXaZyUK7NWbEkWKcabdPuRzHzayB06ccS6WeCJjJtVTsJrJHHNEs=
+	t=1715261968; cv=none; b=MKCPS9TdYVBARZr75ZU+y8k/0QgW8FpQlMM35+lpdiSSOUgU/+z4SXgTC2eui/M1GU1l9OND4SIDsUSDf8URF3qxsyYTdF4bBMCMLouNWB/c9w286B5nnvdOlzXXpQiuEntwO62O+q8VcUxckEPhKsi5ichr0M63guTQy3K3FLY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715255766; c=relaxed/simple;
-	bh=2a4WGdNJa0aUKW/hYfKjmycnkRx12il4Ew/dHWz0o1M=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=o0rnj6iReT48bGy+Xhx/cgGt7YpvjRwq8l6Ij97ulkh2mmeO0O6JyZ014sqMPsJExoYnCblMu1dKeHn9QcTdcW8lYGpmKU0vsgZou6AwF+u/hdDxnDUUz9Yt65yX/4PwD6eb9LTJkDnP7rsKqR7lVbtCEC18W2ZKdpX+iYJ5TTE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tecnico.ulisboa.pt; spf=pass smtp.mailfrom=tecnico.ulisboa.pt; dkim=pass (1024-bit key) header.d=tecnico.ulisboa.pt header.i=@tecnico.ulisboa.pt header.b=qzztiXAk; arc=none smtp.client-ip=193.136.128.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tecnico.ulisboa.pt
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tecnico.ulisboa.pt
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by smtp1.tecnico.ulisboa.pt (Postfix) with ESMTP id 38D836003C11;
-	Thu,  9 May 2024 12:50:45 +0100 (WEST)
-X-Virus-Scanned: by amavis-2.13.0 (20230106) (Debian) at tecnico.ulisboa.pt
-Received: from smtp1.tecnico.ulisboa.pt ([127.0.0.1])
- by localhost (smtp1.tecnico.ulisboa.pt [127.0.0.1]) (amavis, port 10025)
- with LMTP id 7raz_5ZZ9ckV; Thu,  9 May 2024 12:50:43 +0100 (WEST)
-Received: from mail1.tecnico.ulisboa.pt (mail1.ist.utl.pt [IPv6:2001:690:2100:1::b3dd:b9ac])
-	by smtp1.tecnico.ulisboa.pt (Postfix) with ESMTPS id EC5436003C0B;
-	Thu,  9 May 2024 12:50:42 +0100 (WEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tecnico.ulisboa.pt;
-	s=mail; t=1715255443;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-	bh=qrAMwJH6vJusA1DpEsGg7JE4BX5Fr4Y5uKHuSoJyReo=;
-	b=qzztiXAktPgwcH0cvG5DQiw7pCSXr7pnLEo/H4wFuis4hsTEIlRWmiG5ggKiUntqAwWq4C
-	8kpesgdKeQ+x1GuPA9Z2YwWhcESFLU3zqv8vRuoAg9OXnhXZ0+1oUdFjCUolVn0zf9+XMy
-	Cb3ymyvaxy8QTw7Gy9jYjKc3bxvYyd8=
-Received: from diogo-gram.home (unknown [IPv6:2a01:14:8070:dc60:4589:2164:1bc5:2670])
-	(Authenticated sender: ist187313)
-	by mail1.tecnico.ulisboa.pt (Postfix) with ESMTPSA id 170D13600A3;
-	Thu,  9 May 2024 12:50:41 +0100 (WEST)
-Date: Thu, 9 May 2024 12:50:36 +0100
-From: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
-To: heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org, 
-	lk@c--e.de, u.kleine-koenig@pengutronix.de, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Cc: diogo.ivo@tecnico.ulisboa.pt
-Subject: [RFC PATCH] usb: typec: ucsi_acpi: Add LG Gram quirk
-Message-ID: <5qc55gruhn4pmutiukohauki5dehba6n2k22jgvpt7i3hafkon@v2ng2a33o7vv>
+	s=arc-20240116; t=1715261968; c=relaxed/simple;
+	bh=jUr68MLDbSUnFqAm1vse81ZVzM/+9WHZZ9/wSq3eCiI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KFHyIJWxk1VRb39glOBXW0Nd79IrIZC86gMpRkRAP/N8K7jZkojk83NWtz5REFFMUyIX8G/nskZrVIIhVcY1yiJ+BnzWkZlFXFrSM4Uac1gsXtSkiD+RXHYmOLW8bxBJZ6MBZZR/1UthLzUeHx8IuvJiWW+vCIvX64Lbr03D/J8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YX+3FdeO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44001C116B1;
+	Thu,  9 May 2024 13:39:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1715261967;
+	bh=jUr68MLDbSUnFqAm1vse81ZVzM/+9WHZZ9/wSq3eCiI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=YX+3FdeOTKKEw1qyHCMlwNbZqpZRGcwvdQ2kNdsWx+gcYh/014U2juYkWjLuxjGDe
+	 4GMEZfDaldxnl9OfrJMFNVkDJF7AV5zStr9B46GCkmKQUzRWa0CTbiX0Eg6G/qVGdk
+	 GG9JD+CtUiU7HMpnOUcf4iSP+JspX73jWsoSJB0nfASuFP9hcmOg9O1c/S0chuSwVq
+	 bBioBRMdOPs2x18C+4+Ip+o7wvW4rkK6tvxsZuONGCMwAUGQssPsS4JFguylg6VZ0I
+	 oC62okKZS0dFq7O4EldqCPgjG9rp+8vJfBPmW2zU3ZbwznKdDbwIFjcAplSouJd+gU
+	 CrxaKshJ8vsrg==
+Date: Thu, 9 May 2024 14:39:23 +0100
+From: Simon Horman <horms@kernel.org>
+To: Rengarajan.S@microchip.com
+Cc: linux-usb@vger.kernel.org, davem@davemloft.net,
+	Woojung.Huh@microchip.com, linux-kernel@vger.kernel.org,
+	pabeni@redhat.com, netdev@vger.kernel.org, edumazet@google.com,
+	UNGLinuxDriver@microchip.com, kuba@kernel.org
+Subject: Re: [PATCH net-next v1] lan78xx: Enable 125 MHz CLK and Auto Speed
+ configuration for LAN7801 if NO EEPROM is detected
+Message-ID: <20240509133923.GZ1736038@kernel.org>
+References: <20240502045503.36298-1-rengarajan.s@microchip.com>
+ <20240504084931.GA3167983@kernel.org>
+ <d5727bf3d176e3d71abeba7f7c3aa86cf96262cc.camel@microchip.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -69,112 +62,53 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <d5727bf3d176e3d71abeba7f7c3aa86cf96262cc.camel@microchip.com>
 
-Some LG Gram laptops report a bogus connector change event after a
-GET_PDOS command for the partner's source PDOs, which disappears from
-the CCI after acknowledging the command. However, the subsequent
-GET_CONNECTOR_STATUS in ucsi_handle_connector_change() still reports
-this bogus change in bits 5 and 6, leading to the UCSI core re-checking
-the partner's source PDOs and thus to an infinite loop.
+On Thu, May 09, 2024 at 06:59:03AM +0000, Rengarajan.S@microchip.com wrote:
+> Hi Simon,
+> 
+> Apologies for the delay in response. Thanks for reviewing the patch.
+> Please find my comments inline.
+> 
+> On Sat, 2024-05-04 at 09:49 +0100, Simon Horman wrote:
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you
+> > know the content is safe
+> > 
+> > On Thu, May 02, 2024 at 10:25:03AM +0530, Rengarajan S wrote:
+> > > The 125MHz and 25MHz clock configurations are done in the
+> > > initialization
+> > > regardless of EEPROM (125MHz is needed for RGMII 1000Mbps
+> > > operation). After
+> > > a lite reset (lan78xx_reset), these contents go back to
+> > > defaults(all 0, so
+> > > no 125MHz or 25MHz clock and no ASD/ADD). Also, after the lite
+> > > reset, the
+> > > LAN7800 enables the ASD/ADD in the absence of EEPROM. There is no
+> > > such
+> > > check for LAN7801.
+> > > 
+> > > Signed-off-by: Rengarajan S <rengarajan.s@microchip.com>
+> > 
+> > Hi Rengarajan,
+> > 
+> > This patch seems address two issues.
+> > So I think it would be best to split it into two patches.
+> 
+> Sure. Will split the patch into two and will submit the updated patch
+> in the next revision shortly,
+> 
+> > 
+> > Also, are these problems bugs - do they have adverse effect visible
+> > by
+> > users? If so perhaps they should be targeted at 'net' rather than
+> > 'net-next', and an appropriate Fixes tag should appear just above
+> > the Signed-off-by line (no blank line in between).
+> 
+> The changes listed in the patch are feature additions where we give an
+> option of configuring the clock and speed in the absence of the EEPROM.
+> The current code does not have any bugs related to this. Since, these
+> are the additional features/requirements, we are targeting at 'net-
+> next' rather than 'net'.
 
-Fix this by adding a quirk that signals when a potentially buggy GET_PDOS
-command is used, checks the status change report and clears it if it is a
-bogus event before sending it to the UCSI core.
-
-[Sending as RFC both to see if this is a good idea and so that more
-users can test it to gather all the models affected by this bug.]
-
-Signed-off-by: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
----
- drivers/usb/typec/ucsi/ucsi_acpi.c | 60 ++++++++++++++++++++++++++++++
- 1 file changed, 60 insertions(+)
-
-diff --git a/drivers/usb/typec/ucsi/ucsi_acpi.c b/drivers/usb/typec/ucsi/ucsi_acpi.c
-index 8d112c3edae5..c67607f68b44 100644
---- a/drivers/usb/typec/ucsi/ucsi_acpi.c
-+++ b/drivers/usb/typec/ucsi/ucsi_acpi.c
-@@ -25,6 +25,7 @@ struct ucsi_acpi {
- 	unsigned long flags;
- #define UCSI_ACPI_COMMAND_PENDING	1
- #define UCSI_ACPI_ACK_PENDING		2
-+#define UCSI_ACPI_CHECK_BOGUS_EVENT	4
- 	guid_t guid;
- 	u64 cmd;
- };
-@@ -128,6 +129,58 @@ static const struct ucsi_operations ucsi_zenbook_ops = {
- 	.async_write = ucsi_acpi_async_write
- };
- 
-+static int ucsi_gram_read(struct ucsi *ucsi, unsigned int offset,
-+			  void *val, size_t val_len)
-+{
-+	u16 bogus_change = UCSI_CONSTAT_POWER_LEVEL_CHANGE |
-+			   UCSI_CONSTAT_PDOS_CHANGE;
-+	struct ucsi_acpi *ua = ucsi_get_drvdata(ucsi);
-+	struct ucsi_connector_status *status;
-+	int ret;
-+
-+	ret = ucsi_acpi_read(ucsi, offset, val, val_len);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (UCSI_COMMAND(ua->cmd) == UCSI_GET_CONNECTOR_STATUS &&
-+	    ua->flags & UCSI_ACPI_CHECK_BOGUS_EVENT &&
-+	    offset == UCSI_MESSAGE_IN) {
-+		status = (struct ucsi_connector_status *)val;
-+
-+		/* Clear the bogus change */
-+		if (status->change == bogus_change)
-+			status->change = 0;
-+
-+		ua->flags &= ~UCSI_ACPI_CHECK_BOGUS_EVENT;
-+	}
-+
-+	return ret;
-+}
-+
-+static int ucsi_gram_sync_write(struct ucsi *ucsi, unsigned int offset,
-+				const void *val, size_t val_len)
-+{
-+	struct ucsi_acpi *ua = ucsi_get_drvdata(ucsi);
-+	int ret;
-+
-+	ret = ucsi_acpi_sync_write(ucsi, offset, val, val_len);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (UCSI_COMMAND(ua->cmd) == UCSI_GET_PDOS &&
-+	    ua->cmd & UCSI_GET_PDOS_PARTNER_PDO(1) &&
-+	    ua->cmd & UCSI_GET_PDOS_SRC_PDOS)
-+		ua->flags |= UCSI_ACPI_CHECK_BOGUS_EVENT;
-+
-+	return ret;
-+}
-+
-+static const struct ucsi_operations ucsi_gram_ops = {
-+	.read = ucsi_gram_read,
-+	.sync_write = ucsi_gram_sync_write,
-+	.async_write = ucsi_acpi_async_write
-+};
-+
- static const struct dmi_system_id ucsi_acpi_quirks[] = {
- 	{
- 		.matches = {
-@@ -136,6 +189,13 @@ static const struct dmi_system_id ucsi_acpi_quirks[] = {
- 		},
- 		.driver_data = (void *)&ucsi_zenbook_ops,
- 	},
-+	{
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LG Electronics"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "Z90Q"),
-+		},
-+		.driver_data = (void *)&ucsi_gram_ops,
-+	},
- 	{ }
- };
- 
--- 
-2.45.0
-
+Thanks, I agree net-next is appropriate for such changes.
 
