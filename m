@@ -1,139 +1,79 @@
-Return-Path: <linux-usb+bounces-10176-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10177-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7A2B8C15C8
-	for <lists+linux-usb@lfdr.de>; Thu,  9 May 2024 21:58:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA6188C1804
+	for <lists+linux-usb@lfdr.de>; Thu,  9 May 2024 23:03:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2C8C3B23184
-	for <lists+linux-usb@lfdr.de>; Thu,  9 May 2024 19:58:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7E72C28262F
+	for <lists+linux-usb@lfdr.de>; Thu,  9 May 2024 21:03:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5C9E86247;
-	Thu,  9 May 2024 19:56:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SepNGnx2"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8490E839E0;
+	Thu,  9 May 2024 21:03:40 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail.lyhourpay.com (unknown [203.189.132.203])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BABE580055;
-	Thu,  9 May 2024 19:56:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A71438DE4
+	for <linux-usb@vger.kernel.org>; Thu,  9 May 2024 21:03:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.189.132.203
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715284593; cv=none; b=A+lWI+DRORlB+mG1mcNnaC5uvesGMKKxonLOmPBn/bdGPfXHcAZvN+SnHQbj+5O4Vns3bOfsqJy+uvr5YskN4T3I/uGUfptP+/37a9DYP6OOATAHbBxLB5zJ8aSmT5NwyDoncUD8ymo5DyntA6/tuuI1m8Al3cHhSGPjCSDobtk=
+	t=1715288620; cv=none; b=kOf2+X+TBQIXOBRQJr+GcnmAv85qx3GOWazFZjZ8QArxf77Gv1VSCwWA2OPs3RtCdOFDoVTdCDAu4WQTvjMJVXiT877uyvl6vz2sxMlth+++CqI44f/Q/lbZB4iJ1Zjc9VbCrysN2eS7Y+e2WxuxImXT7HPlThT9WVgXGyP6Bkk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715284593; c=relaxed/simple;
-	bh=+Xg6sg0lsspm+oGIl2gKYWFJ9L1HRkPP8JWiP000C8Y=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ctXkHb4dgUoe+gXGI7qJvqBVqACriUkUfi4y3254CwCy1zWlNRThlA0KsyEqR3+iSQAqNGTgJaHkdtcXFZl8iJE7CaSVGC4iDHCgfHmqX7UwTb3VDISh7uzm29sg1rLUY1+2OBARzcXnTIoBHj7ReO6Avrve4HN9sA4HIf+cxRw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SepNGnx2; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715284592; x=1746820592;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=+Xg6sg0lsspm+oGIl2gKYWFJ9L1HRkPP8JWiP000C8Y=;
-  b=SepNGnx2IJcaxT8JIsgqVPN/ggX/nMrhL31NmSKCAZXNPOpCvbozrK0/
-   xy9sy+LTGx/Eth2dOBVHkGqifhBXpSI7xqHBuBsA7xHdmJFFBlD/OrM1w
-   sK/wTvCe7iXt/ClFo7oFVQEvalqA6dKIf8OcLqot26BOYsis+HQdmsvg7
-   JXipXuIXdw5axHo6TR4d6N7pbhKSqsuEB1ZJtL3QVIsWF/6DkOEODOyf0
-   GlRBk54v/0FpzVAM87GAf6SQbvniJN+f5KnxiO7HPNlekYT4QMrrTQfOc
-   yMV3vYMaB7tD2uOrANQAPMluk/2Dde77xtuax1Pq/MN7L/renMAEWEERP
-   w==;
-X-CSE-ConnectionGUID: SbFtlId8TlKzai7seHk4qw==
-X-CSE-MsgGUID: Gd1X/7AfS9+Ajo6SxFC6Bw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11068"; a="11454299"
-X-IronPort-AV: E=Sophos;i="6.08,148,1712646000"; 
-   d="scan'208";a="11454299"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2024 12:56:32 -0700
-X-CSE-ConnectionGUID: 1ox1AHb5TkOlj5+tCcFZIQ==
-X-CSE-MsgGUID: qXDyMCKMR7Opd+vqjTIr4Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,148,1712646000"; 
-   d="scan'208";a="34213141"
-Received: from ajunnare-mobl.amr.corp.intel.com (HELO [10.213.181.85]) ([10.213.181.85])
-  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2024 12:56:28 -0700
-Message-ID: <92abca40-5eda-49d0-bc9d-eeb1a76e3461@linux.intel.com>
-Date: Thu, 9 May 2024 08:17:39 -0500
+	s=arc-20240116; t=1715288620; c=relaxed/simple;
+	bh=ChBKgWtKdkFPuufqT4texndql+6JKiXzz2a5KSlL4I8=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=EJuV5W7xD+gcyTuO66fHMVNQyMzvWSAclZxnTwVN1wksILCogd2YTZciN/5sT1f6L6ltn/2vh1Nmk2MxeauQntiY0GUNEOlyNPHrYqGrhfCjsDDBH34JO/n4xY5QpmfF+JX3pX6LyUTClbr7ZKmsUqouA/p3HZvoP3bp2oPLoKU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lyhourpay.com; spf=pass smtp.mailfrom=lyhourpay.com; arc=none smtp.client-ip=203.189.132.203
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lyhourpay.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lyhourpay.com
+Received: from lyhourpay.com (69.12.94.77) by DC-MAIL-01.lyhourpay.com
+ (192.168.17.19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P256) id 15.1.2507.6; Fri, 10
+ May 2024 03:48:25 +0700
+Reply-To: <vendorscontractor@servicesetihadaviationgroup.com>
+From: Etihad Aviation Group PJSC <thona.ing@lyhourpay.com>
+To: <linux-usb@vger.kernel.org>
+Subject: Etihad Aviation Group, UAE 2024/2025 projects
+Date: Thu, 9 May 2024 13:48:24 -0700
+Message-ID: <20240509134730.4E338011659FDAC9@lyhourpay.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v21 38/39] ASoC: qcom: Populate SoC components string
-To: Wesley Cheng <quic_wcheng@quicinc.com>, srinivas.kandagatla@linaro.org,
- mathias.nyman@intel.com, perex@perex.cz, conor+dt@kernel.org,
- corbet@lwn.net, lgirdwood@gmail.com, andersson@kernel.org,
- krzk+dt@kernel.org, gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com,
- broonie@kernel.org, bgoswami@quicinc.com, tiwai@suse.com,
- bagasdotme@gmail.com, robh@kernel.org, konrad.dybcio@linaro.org
-Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
- linux-sound@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, linux-doc@vger.kernel.org,
- alsa-devel@alsa-project.org
-References: <20240507195116.9464-1-quic_wcheng@quicinc.com>
- <20240507195116.9464-39-quic_wcheng@quicinc.com>
- <cb864ea4-95e3-4e99-920d-341188006291@linux.intel.com>
- <cdee0eb7-7fb7-f267-8203-7dfb0ea2d31d@quicinc.com>
-Content-Language: en-US
-From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <cdee0eb7-7fb7-f267-8203-7dfb0ea2d31d@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: DC-MAIL-01.lyhourpay.com (192.168.17.19) To
+ DC-MAIL-01.lyhourpay.com (192.168.17.19)
 
 
+Attn: Sir/Madam,
 
-On 5/8/24 15:06, Wesley Cheng wrote:
-> Hi Pierre,
-> 
-> On 5/7/2024 2:40 PM, Pierre-Louis Bossart wrote:
->>
->>
->> On 5/7/24 14:51, Wesley Cheng wrote:
->>> For userspace to know about certain capabilities of the current platform
->>> card, add tags to the components string that it can use to enable
->>> support
->>> for that audio path.  In case of USB offloading, the "usboffldplybk:
->>> 1" tag
->>
->> usboffloadplayback?
->>
->> same question as before, do we need spaces?
->>
-> 
-> I think spaces are currently used as a delimiter, so I'll remove the
-> spaces.
-> 
->> And if we have controls, why do we need component strings? The component
->> string is not dynamic to the best of my knowledge, this could be
->> problematic if the card is no longer capable of supporting this stream,
->> while a control can be updated at will.
->>
-> 
-> Maybe I misunderstood your comment here:
-> 
-> https://lore.kernel.org/linux-usb/925d7c03-c288-49a4-8bcd-395b32810d75@linux.intel.com/
-> 
-> At the time, I didn't include the kcontrols on the USB SND portion of
-> it, which was added after this series.  My interpretation was that there
-> were userspace entities that could query for general information about
-> what the card supports based on the components string, or sound card
-> name.  I treated this as an independent identifier, since the change to
-> add the offload capable jack was present.
+Greetings from  Etihad Aviation Group, UAE.
 
-My comment at the time stands: it's very hard to figure out that a
-random card supports USB and is connected to a given endpoint.
+We are inviting your esteemed company for Vendor/Contractor=20
+Partnership registration with Etihad Aviation Group, UAE=20
+2024/2025 projects.
 
-It'd be much easier as you wrote in the comments on patch 34 to have a
-control in the "regular" USB card to point to the 'better' offloaded
-path exposed by another card. Applications wouldn't need to know what
-this other card is, they would then use the card:device information
-directly.
+These projects are open for all companies around the world. If=20
+you have intention to participate in the process, please confirm=20
+your interest by asking for Vendor Questionnaire and EOI.
+
+Your prompt response would be greatly appreciated as it will help=20
+us expedite the vendor/contractor selection process.
+
+Looking forward to your reply.
+
+Kind Regards,
+
+Mr.George Ibrahim
+Contractors Coordinator
+Group Procurement & Contracts Shared Services Center
+Etihad Aviation Group PJSC
+Etihad Airways - Head office, New Airport Road,
+Khalifa City, PO Box 35566, Abu Dhabi
+United Arab Emirates.
 
