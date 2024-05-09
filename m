@@ -1,115 +1,184 @@
-Return-Path: <linux-usb+bounces-10178-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10179-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 23D7F8C1816
-	for <lists+linux-usb@lfdr.de>; Thu,  9 May 2024 23:09:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A6DF8C1871
+	for <lists+linux-usb@lfdr.de>; Thu,  9 May 2024 23:34:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5544C1C21617
-	for <lists+linux-usb@lfdr.de>; Thu,  9 May 2024 21:09:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A987C1C21C0A
+	for <lists+linux-usb@lfdr.de>; Thu,  9 May 2024 21:34:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CD7385264;
-	Thu,  9 May 2024 21:09:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B37A12882C;
+	Thu,  9 May 2024 21:34:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QfOTS12V"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="LI9r2ZDo"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2681383CB2
-	for <linux-usb@vger.kernel.org>; Thu,  9 May 2024 21:09:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22D7385C5E;
+	Thu,  9 May 2024 21:34:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715288971; cv=none; b=rDDBKBOUapWNFPiJfT6B60CVOa/aZjsuXW+64mK6gJEk6OzjTCNFwbFu5bQt1MMHh6pPSRP8nO3kve59lE1K9Qx2cmLmVvV4M/SwYdn2/zyGfzDNRyFaAqwp3JN6eLlo07D2joBZGvxnAqtOHOZJuc3PcnUOsp1AGKxlZLv68Fo=
+	t=1715290473; cv=none; b=SZ6Mb/ttoZ/zOvt4iralrrWEYq5+KgJKph0cDRcVKwGUziD1tSmeFTVuJKCWbZ8QIoI7cz/ucnk4xnWJarPaOycyTTeUl43/hoHpOpFvIlcwAnYlH7pxUQKs6vFi8G8+C5WhaWKdLQl9shsLzg+RLYv7RvzABymzBN7c6M7/DrE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715288971; c=relaxed/simple;
-	bh=7cnpsm3ib7QnJPl5zCKiOydDwPHEacdR7vNxGjiSv8Q=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=k8+qtmpxeel7nP9+F/zj8Vvmh3aPh9LvFR8B/8pgdQCtvAyJOHYdeblTjCiKky3j5+v3MqtiQb8p1yPNUl6HEGSYpxGvQsb8quFH4nHSzYijFBFzjwd7guS3hpc5tT7fx5MoAMONUraAb58r40Z6TjWDbshCsnM5NmRZr99V0bM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=QfOTS12V; arc=none smtp.client-ip=209.85.208.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-572aad902baso4970a12.0
-        for <linux-usb@vger.kernel.org>; Thu, 09 May 2024 14:09:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1715288968; x=1715893768; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=IL/Pjb6tjWhJpQQRsXDN6a0F0TkBXzEFnC2pzR1ugRo=;
-        b=QfOTS12V8fn4ISODCE15/1dK92LwmWbxTpigiSfIVgz/l1OTaw7ouQnXL5PESDqSDW
-         qKsTRWWb7i1dfd3StQT5C+4t5Dj1e/w7OvVwVF8etWprZJxTKb1pFeGSA6m+c7DaqTru
-         CyeQT8JLS9vEOPU2ATQQHhZuqRtwoxRWrJ2hcUPK0vT2jm/hTgwKqvcX9wr6k8xsR2qs
-         lM2mIxOnvgcSr8Nz2X1shsIu+HqX82tTDVIO8vFqT3V+ehtqXxh0C1KijIqQcMW3+VWR
-         f0PlD4XK9h96K1iiBBaojRDq1rKgbF+ZTo4Dt/LK+QpijSMjvNdeAloIQZsA8Xx2X1uY
-         WxvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715288968; x=1715893768;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IL/Pjb6tjWhJpQQRsXDN6a0F0TkBXzEFnC2pzR1ugRo=;
-        b=tiKLFBAqTa8nlS4b2tt4Twe4wALwkCy0dM0L7qlIKHB/KkCwzQYgfjLXNFhkALt/Jz
-         lnGNHSjMWUGOhATpKeqREmY7reF6wvucyZuh99K6QMuemQyu1dw9+gFX1QxnUaweIlQS
-         hC8m/PdXe4uWzeBkyxIfR+UVLxjREwrNKzinGGdj15pgtUb6xa2eXZ+0J/MQcf8b5kOD
-         dDfHL1sClKNrSzuEU7rEVqY1W9vHbHjveJjrsVNsatOAxW4gGn77ivd1408ii9DPaPUe
-         EFfTqGd37EEOkbBr0hEzbDz6o0PdUuPCLELvAs8vGcSxMyNY/Vlwy4Jj5uAE04+d2Ve/
-         uVpw==
-X-Forwarded-Encrypted: i=1; AJvYcCVCeRMucsC4oP5CW7RTsksEfIoUNmuQ4bVa9/DjtmlRezHbshAD4CyVz1OoHG5ZZy/HZWWICQDeHjXM+rLPhnYXnB4GS32en+IB
-X-Gm-Message-State: AOJu0Yzzz52h6z5lJfzfm1sIUGc3LnIG4CqMAzV65xV0oc++L6esSa7l
-	hOvroNlzHE3r3HD3GnkA2qUpQJWU2GFqqRrYFFE1wcKBMlnYr55QLPo770lO0kQfeqoY1Bw4QM+
-	kwd6QY/Gg5niu1lE5F0982vHLBnJJz5VePtYs
-X-Google-Smtp-Source: AGHT+IGLbC6d4w8wZMLlw5I4DGRaK7YIk0zlXO0iTIICkqw5Ts8o5uqz4W8LZrRpEWHQYx4NiJD5Ca9wEo2T+5KNyg0=
-X-Received: by 2002:a50:85cb:0:b0:573:438c:7789 with SMTP id
- 4fb4d7f45d1cf-57351de5880mr9179a12.1.1715288968389; Thu, 09 May 2024 14:09:28
- -0700 (PDT)
+	s=arc-20240116; t=1715290473; c=relaxed/simple;
+	bh=DMClA2EG4om7tUuZOout4+5pUV7yCTXmqNhHE4600xM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=csa6fCgUv9fF8ZEjNxY/qcefXwrQnJ4KZlrBrqDh5GI6doF+u+ULFrEPDoexDfaX/K4lbBSMairkAwBvtYJAO9CyCiBeivwzsja4YvWRGKl6N9hFxE39I3Pk1QRexoPpMYmc2rIL7NoCrxgdaJ/vRwNBPzCnYaepsPFgMMMJDOI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=LI9r2ZDo; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 449KtB8X012405;
+	Thu, 9 May 2024 21:34:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=cIukUmTAz21I3U9U4WGeVwO7Ge0VeW/gUAEvuX3Cztc=; b=LI
+	9r2ZDod4f1CfRw0lzzeck32b+xIyPiWNzUzL70jaE0GWi79OrRqe7hiTMCQnshjR
+	M+YlIEWTxolltwsRLJ54IH3eQAVAfx6gcOgoYnTbqddSIGXfr4qbfsg6nT68hFqO
+	QD+/f7xVKlSdtjj19rpQSd71bm2wPqoPodM2bvcyFL0IrobV0qXFffIAnj3Ryx4J
+	JkuENjg/HdYm0UBiz4/P7WlHIMudK0ofQWhMMPONf+EumzP5KCSW7HoT6VWYJtZN
+	zWuTKpTSAZ6kshg6Mmp5jHEUYmxIwgY55lQPpGltrPb6wjXOMB58KgHKcBKe7MS2
+	WRXOLrTOkp1Gwm7T7XUw==
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3y09f5unjr-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 09 May 2024 21:34:07 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 449LY6PO000667
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 9 May 2024 21:34:06 GMT
+Received: from [10.71.112.114] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Thu, 9 May 2024
+ 14:34:05 -0700
+Message-ID: <d0c1e6a8-3caa-3530-d49a-a8b820d19cf1@quicinc.com>
+Date: Thu, 9 May 2024 14:34:01 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Jeffery Miller <jefferymiller@google.com>
-Date: Thu, 9 May 2024 16:09:16 -0500
-Message-ID: <CAAzPG9M+KNowPwkoYo+QftrN3u6zdN1cWq0XMvgS8UBEmWt+0g@mail.gmail.com>
-Subject: Re: [PATCH v2] net: usb: ax88179_178a: avoid writing the mac address
- before first reading
-To: jtornosm@redhat.com
-Cc: davem@davemloft.net, Eric Dumazet <edumazet@google.com>, inventor500@vivaldi.net, 
-	jarkko.palviainen@gmail.com, kuba@kernel.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, netdev@vger.kernel.org, pabeni@redhat.com, 
-	stable@vger.kernel.org, vadim.fedorenko@linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH v21 09/39] ASoC: qcom: qdsp6: Introduce USB AFE port to
+ q6dsp
+To: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
+        <perex@perex.cz>, <conor+dt@kernel.org>, <corbet@lwn.net>,
+        <lgirdwood@gmail.com>, <andersson@kernel.org>, <krzk+dt@kernel.org>,
+        <gregkh@linuxfoundation.org>, <Thinh.Nguyen@synopsys.com>,
+        <broonie@kernel.org>, <bgoswami@quicinc.com>, <tiwai@suse.com>,
+        <bagasdotme@gmail.com>, <robh@kernel.org>, <konrad.dybcio@linaro.org>
+CC: <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-sound@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>
+References: <20240507195116.9464-1-quic_wcheng@quicinc.com>
+ <20240507195116.9464-10-quic_wcheng@quicinc.com>
+ <9bd1ec72-71ea-4a1c-b795-af6e7687ca07@linux.intel.com>
+ <0a4d7c2b-ac7d-7bd4-f97e-db60944a1d39@quicinc.com>
+ <726e7006-30b4-4525-84c8-4fb2ef380994@linux.intel.com>
+Content-Language: en-US
+From: Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <726e7006-30b4-4525-84c8-4fb2ef380994@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: ElA1DleWGwoZYGAQNwZNxyKuF9wVF_HB
+X-Proofpoint-ORIG-GUID: ElA1DleWGwoZYGAQNwZNxyKuF9wVF_HB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.11.176.26
+ definitions=2024-05-09_12,2024-05-09_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 adultscore=0
+ phishscore=0 suspectscore=0 bulkscore=0 clxscore=1015 priorityscore=1501
+ impostorscore=0 mlxscore=0 lowpriorityscore=0 malwarescore=0
+ mlxlogscore=576 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2405010000 definitions=main-2405090152
 
-Hello Jos=C3=A9,
+Hi Pierre,
 
-I'm testing on the 6.6 kernel with a "0b95:1790 ASIX Electronics Corp.
-AX88179 Gigabit Ethernet" device.
-after applying commit 56f78615bcb1 ("net: usb: ax88179_178a: avoid
-writing the mac address before first reading")
-the network will no longer work after brining the device down.
+On 5/9/2024 5:54 AM, Pierre-Louis Bossart wrote:
+> 
+> 
+> 
+>>> Wait, is this saying you will have exactly one PCM device/FE DAI
+>>> connected to the USB BE DAI exposed in patch 11?
+>>>
+>>>> +    SND_SOC_DAPM_MIXER("USB Mixer", SND_SOC_NOPM, 0, 0,
+>>>> +               usb_mixer_controls,
+>>>> +               ARRAY_SIZE(usb_mixer_controls)),
+>>>> +
+>>>
+>>> And then what is the role of the USB mixer if you only have one input?
+>>>
+>>> I must be missing something.
+>>>
+>>
+>> Not sure if this is a QCOM specific implementation, but the way the DT
+>> is defined for the USB offload path is as follows:
+>>
+>>      usb-dai-link {
+>>          link-name = "USB Playback";
+>>
+>>          cpu {
+>>              sound-dai = <&q6afedai USB_RX>;
+>>          };
+>>
+>>          codec {
+>>              sound-dai = <&usbdai USB_RX>;
+>>          };
+>>
+>>          platform {
+>>              sound-dai = <&q6routing>;
+>>          };
+>>      };
+>>
+>> Based on our DT parser helper API (qcom_snd_parse_of()) this isn't going
+>> to create a PCM device.  The PCM devices are created for nodes that
+>> don't have a codec and platform defined:
+>>
+>>      mm1-dai-link {
+>>          link-name = "MultiMedia1";
+>>          cpu {
+>>              sound-dai = <&q6asmdai      MSM_FRONTEND_DAI_MULTIMEDIA1>;
+>>          };
+>>      };
+>>
+>> The ASM path is the entity that defines the number of PCM devices that
+>> is created for the QC ASoC platform card, and is where the actual PCM
+>> data is sent over to the DSP.  So there could be several PCM devices
+>> that can use the USB BE DAI.
+> 
+> ok, but then how would this work with the ALSA controls reporting which
+> PCM device can be used? I didn't see a mechanism allowing for more than
+> one offloaded device, IIRC the control reported just ONE PCM device number.
 
-After plugging in the device, it generally will work with ifconfig:
-$ ifconfig eth0 <ip address>
-However, if I then try bringing the devcie down and back up, it no longer w=
-orks.
-$ ifconfig eth0 down
-$ ifconfig eth0  <ip address>
-$ ethtool eth0 | grep detected
-  Link detected: no
+With respects to the PCM devices exposed by the ASoC card, the USB Mixer 
+controls which "Multimedia" (ASM) path can be routed to the USB BE DAI.
 
-The link will continue to report as undetected.
+The kcontrols you are mentioning are controlling which USB card and USB 
+PCM device to execute the offloading on.  As of now, at least for the 
+QCOM implementation, we support only offloading on one path/USB 
+interface.  I can't comment on how other offloading solutions look like, 
+but we pass the USB PCM and card index as part of our AFE port open 
+command (done from USB BE DAI).  This will result in a USB QMI message 
+back (from ADSP) to our USB SND offload driver, which carries all the 
+information about the selected card and PCM index to execute offloading on.
 
-If I revert 56f78615bcb1 the device will work after bringing it down
-and back up.
+One thing I can do is to actually make the kcontrols for selecting the 
+PCM and card devices to look at the num_supported_streams.  This would 
+at least allow for vendors that have support for more potential 
+offloading streams to select more than one.
 
-If I build at commit d7a319889498 ("net: usb: ax88179_178a: avoid two
-consecutive device resets") and its
-parent d7a319889498^ these also work.
-
-Is this something you have seen before with your test devices?
-
-Regards,
-Jeff
+Thanks
+Wesley Cheng
 
