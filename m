@@ -1,109 +1,180 @@
-Return-Path: <linux-usb+bounces-10166-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10167-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5E4A8C0CB6
-	for <lists+linux-usb@lfdr.de>; Thu,  9 May 2024 10:40:17 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 033CC8C0F0B
+	for <lists+linux-usb@lfdr.de>; Thu,  9 May 2024 13:56:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 026001C20CCF
-	for <lists+linux-usb@lfdr.de>; Thu,  9 May 2024 08:40:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 978111F21B21
+	for <lists+linux-usb@lfdr.de>; Thu,  9 May 2024 11:56:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0241C149DE2;
-	Thu,  9 May 2024 08:40:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E02C14A4EE;
+	Thu,  9 May 2024 11:56:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a/1SRg54"
+	dkim=pass (1024-bit key) header.d=tecnico.ulisboa.pt header.i=@tecnico.ulisboa.pt header.b="qzztiXAk"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp1.tecnico.ulisboa.pt (smtp1.tecnico.ulisboa.pt [193.136.128.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7220913D24D;
-	Thu,  9 May 2024 08:39:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EB6C12FB3F;
+	Thu,  9 May 2024 11:56:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.136.128.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715243999; cv=none; b=H5So82lRpliWN6n7oOUpAahuHwl5u0KDfe43QPFgEIWQ5qJbi+VNYLNScJc9YLH4b/EGYCCJcygDLyTe7wFj+FY3L79eAr7VOQHTRnu2ND2IDj1d0jt3kooWWGVCwwRKr0vg0jfEUSoKDN7iCMYFbz5IR8qFwGiCAct/QuOqaXo=
+	t=1715255766; cv=none; b=FuysAR942dOb0wHdbS24ONOOzEyfBZDkVa8IyQ/116TlSRdRniZq1H8nNhLuhdkkDh/zmFqAHpUGpPed7RvNi7XokeBwHrlZyKwbP7F/igU9OnU3OfTPUtwiXaZyUK7NWbEkWKcabdPuRzHzayB06ccS6WeCJjJtVTsJrJHHNEs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715243999; c=relaxed/simple;
-	bh=N3lC747+fKJugAEc1wHWjEynnNZm00O2tIitmKEOf7w=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=M3/fg6fdWveJTVlJGts5KEISsIn5CUjOkNBhYogyKFYhCqNIfQ6VBKyKe+Ft6yMKlYyD2mUHUC1YWV+h+1vRz29PSjKOOpVKtaB3H7Sh/R/oYjK/lL3ijYdhXXh2PsEBv1pSLCti9O3NH1kV3LUVqidGal3E7tNOY0ogofyrHdQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a/1SRg54; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE6E7C2BBFC;
-	Thu,  9 May 2024 08:39:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715243998;
-	bh=N3lC747+fKJugAEc1wHWjEynnNZm00O2tIitmKEOf7w=;
-	h=From:To:Cc:Subject:Date:From;
-	b=a/1SRg54ACQpGXLe28vNjQcbiCnoXapyCGFnpwLjWG+RG/X0HmktUb2dn6NxZWsL1
-	 NDvwNS73G3ApSTzsvUFHzTmhOReqBV9miaU4ODUvzxjcOeN2uwk10I/AHFtoLe4y9u
-	 oxT4e+qvo1Cl2gOlQ8zmCJUbBIYkfxWuPw1YUGs2LjZbQ7UDC9nN1zYY4t3UpgK7Wk
-	 OOyMaeNtcTTR/hVjeh9XmN022qyKOz/TYt21TSqLvGuspEX5TltNf5invNuRoaGqjB
-	 zlE096UsIJFVB6MQlQqjnRQuGDBpC6pc+0PpgtlmSaEJ2+BSMHImsEfE1hTzj5as6r
-	 yBu8zGlUVP+wA==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan+linaro@kernel.org>)
-	id 1s4zJq-0000000008m-1zlW;
-	Thu, 09 May 2024 10:40:03 +0200
-From: Johan Hovold <johan+linaro@kernel.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	linux-arm-msm@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Johan Hovold <johan+linaro@kernel.org>,
-	Krishna Kurapati <quic_kriskura@quicinc.com>
-Subject: [PATCH] dt-bindings: usb: qcom,dwc3: fix interrupt max items
-Date: Thu,  9 May 2024 10:38:22 +0200
-Message-ID: <20240509083822.397-1-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.43.2
+	s=arc-20240116; t=1715255766; c=relaxed/simple;
+	bh=2a4WGdNJa0aUKW/hYfKjmycnkRx12il4Ew/dHWz0o1M=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=o0rnj6iReT48bGy+Xhx/cgGt7YpvjRwq8l6Ij97ulkh2mmeO0O6JyZ014sqMPsJExoYnCblMu1dKeHn9QcTdcW8lYGpmKU0vsgZou6AwF+u/hdDxnDUUz9Yt65yX/4PwD6eb9LTJkDnP7rsKqR7lVbtCEC18W2ZKdpX+iYJ5TTE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tecnico.ulisboa.pt; spf=pass smtp.mailfrom=tecnico.ulisboa.pt; dkim=pass (1024-bit key) header.d=tecnico.ulisboa.pt header.i=@tecnico.ulisboa.pt header.b=qzztiXAk; arc=none smtp.client-ip=193.136.128.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tecnico.ulisboa.pt
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tecnico.ulisboa.pt
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by smtp1.tecnico.ulisboa.pt (Postfix) with ESMTP id 38D836003C11;
+	Thu,  9 May 2024 12:50:45 +0100 (WEST)
+X-Virus-Scanned: by amavis-2.13.0 (20230106) (Debian) at tecnico.ulisboa.pt
+Received: from smtp1.tecnico.ulisboa.pt ([127.0.0.1])
+ by localhost (smtp1.tecnico.ulisboa.pt [127.0.0.1]) (amavis, port 10025)
+ with LMTP id 7raz_5ZZ9ckV; Thu,  9 May 2024 12:50:43 +0100 (WEST)
+Received: from mail1.tecnico.ulisboa.pt (mail1.ist.utl.pt [IPv6:2001:690:2100:1::b3dd:b9ac])
+	by smtp1.tecnico.ulisboa.pt (Postfix) with ESMTPS id EC5436003C0B;
+	Thu,  9 May 2024 12:50:42 +0100 (WEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tecnico.ulisboa.pt;
+	s=mail; t=1715255443;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+	bh=qrAMwJH6vJusA1DpEsGg7JE4BX5Fr4Y5uKHuSoJyReo=;
+	b=qzztiXAktPgwcH0cvG5DQiw7pCSXr7pnLEo/H4wFuis4hsTEIlRWmiG5ggKiUntqAwWq4C
+	8kpesgdKeQ+x1GuPA9Z2YwWhcESFLU3zqv8vRuoAg9OXnhXZ0+1oUdFjCUolVn0zf9+XMy
+	Cb3ymyvaxy8QTw7Gy9jYjKc3bxvYyd8=
+Received: from diogo-gram.home (unknown [IPv6:2a01:14:8070:dc60:4589:2164:1bc5:2670])
+	(Authenticated sender: ist187313)
+	by mail1.tecnico.ulisboa.pt (Postfix) with ESMTPSA id 170D13600A3;
+	Thu,  9 May 2024 12:50:41 +0100 (WEST)
+Date: Thu, 9 May 2024 12:50:36 +0100
+From: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
+To: heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org, 
+	lk@c--e.de, u.kleine-koenig@pengutronix.de, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Cc: diogo.ivo@tecnico.ulisboa.pt
+Subject: [RFC PATCH] usb: typec: ucsi_acpi: Add LG Gram quirk
+Message-ID: <5qc55gruhn4pmutiukohauki5dehba6n2k22jgvpt7i3hafkon@v2ng2a33o7vv>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-A recent commit adding the SC8280XP multiport controller to the binding
-failed to update the interrupt maxItems, which results it DT checker
-warnings like:
+Some LG Gram laptops report a bogus connector change event after a
+GET_PDOS command for the partner's source PDOs, which disappears from
+the CCI after acknowledging the command. However, the subsequent
+GET_CONNECTOR_STATUS in ucsi_handle_connector_change() still reports
+this bogus change in bits 5 and 6, leading to the UCSI core re-checking
+the partner's source PDOs and thus to an infinite loop.
 
-	arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dtb: usb@a4f8800: interrupts-extended: [[1, 0, 130, 4], [1, 0, 135, 4], [1, 0, 857, 4], [1, 0, 856, 4], [1, 0, 131, 4], [1, 0, 136, 4], [1, 0, 860, 4], [1, 0, 859, 4], [136, 127, 3], [136, 126, 3], [136, 129, 3], [136, 128, 3], [136, 131, 3], [136, 130, 3], [136, 133, 3], [136, 132, 3], [136, 16, 4], [136, 17, 4]] is too long
+Fix this by adding a quirk that signals when a potentially buggy GET_PDOS
+command is used, checks the status change report and clears it if it is a
+bogus event before sending it to the UCSI core.
 
-Fixes: 80adfb54044e ("dt-bindings: usb: qcom,dwc3: Add bindings for SC8280 Multiport")
-Reported-by: "Rob Herring (Arm)" <robh@kernel.org>
-Link: https://lore.kernel.org/r/171502764588.89686.5159158035724685961.robh@kernel.org
-Link: https://lore.kernel.org/lkml/171449016553.3484108.5214033788092698309.robh@kernel.org/
-Cc: Krishna Kurapati <quic_kriskura@quicinc.com>
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+[Sending as RFC both to see if this is a good idea and so that more
+users can test it to gather all the models affected by this bug.]
+
+Signed-off-by: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
 ---
- Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/usb/typec/ucsi/ucsi_acpi.c | 60 ++++++++++++++++++++++++++++++
+ 1 file changed, 60 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-index f55f601c0329..7dfd2d88b90a 100644
---- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-+++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-@@ -118,11 +118,11 @@ properties:
-                                exception of SDM670/SDM845/SM6350.
-         - ss_phy_irq: Used for remote wakeup in Super Speed mode of operation.
-     minItems: 2
--    maxItems: 5
-+    maxItems: 18
+diff --git a/drivers/usb/typec/ucsi/ucsi_acpi.c b/drivers/usb/typec/ucsi/ucsi_acpi.c
+index 8d112c3edae5..c67607f68b44 100644
+--- a/drivers/usb/typec/ucsi/ucsi_acpi.c
++++ b/drivers/usb/typec/ucsi/ucsi_acpi.c
+@@ -25,6 +25,7 @@ struct ucsi_acpi {
+ 	unsigned long flags;
+ #define UCSI_ACPI_COMMAND_PENDING	1
+ #define UCSI_ACPI_ACK_PENDING		2
++#define UCSI_ACPI_CHECK_BOGUS_EVENT	4
+ 	guid_t guid;
+ 	u64 cmd;
+ };
+@@ -128,6 +129,58 @@ static const struct ucsi_operations ucsi_zenbook_ops = {
+ 	.async_write = ucsi_acpi_async_write
+ };
  
-   interrupt-names:
-     minItems: 2
--    maxItems: 5
-+    maxItems: 18
++static int ucsi_gram_read(struct ucsi *ucsi, unsigned int offset,
++			  void *val, size_t val_len)
++{
++	u16 bogus_change = UCSI_CONSTAT_POWER_LEVEL_CHANGE |
++			   UCSI_CONSTAT_PDOS_CHANGE;
++	struct ucsi_acpi *ua = ucsi_get_drvdata(ucsi);
++	struct ucsi_connector_status *status;
++	int ret;
++
++	ret = ucsi_acpi_read(ucsi, offset, val, val_len);
++	if (ret < 0)
++		return ret;
++
++	if (UCSI_COMMAND(ua->cmd) == UCSI_GET_CONNECTOR_STATUS &&
++	    ua->flags & UCSI_ACPI_CHECK_BOGUS_EVENT &&
++	    offset == UCSI_MESSAGE_IN) {
++		status = (struct ucsi_connector_status *)val;
++
++		/* Clear the bogus change */
++		if (status->change == bogus_change)
++			status->change = 0;
++
++		ua->flags &= ~UCSI_ACPI_CHECK_BOGUS_EVENT;
++	}
++
++	return ret;
++}
++
++static int ucsi_gram_sync_write(struct ucsi *ucsi, unsigned int offset,
++				const void *val, size_t val_len)
++{
++	struct ucsi_acpi *ua = ucsi_get_drvdata(ucsi);
++	int ret;
++
++	ret = ucsi_acpi_sync_write(ucsi, offset, val, val_len);
++	if (ret < 0)
++		return ret;
++
++	if (UCSI_COMMAND(ua->cmd) == UCSI_GET_PDOS &&
++	    ua->cmd & UCSI_GET_PDOS_PARTNER_PDO(1) &&
++	    ua->cmd & UCSI_GET_PDOS_SRC_PDOS)
++		ua->flags |= UCSI_ACPI_CHECK_BOGUS_EVENT;
++
++	return ret;
++}
++
++static const struct ucsi_operations ucsi_gram_ops = {
++	.read = ucsi_gram_read,
++	.sync_write = ucsi_gram_sync_write,
++	.async_write = ucsi_acpi_async_write
++};
++
+ static const struct dmi_system_id ucsi_acpi_quirks[] = {
+ 	{
+ 		.matches = {
+@@ -136,6 +189,13 @@ static const struct dmi_system_id ucsi_acpi_quirks[] = {
+ 		},
+ 		.driver_data = (void *)&ucsi_zenbook_ops,
+ 	},
++	{
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "LG Electronics"),
++			DMI_MATCH(DMI_PRODUCT_NAME, "Z90Q"),
++		},
++		.driver_data = (void *)&ucsi_gram_ops,
++	},
+ 	{ }
+ };
  
-   qcom,select-utmi-as-pipe-clk:
-     description:
 -- 
-2.43.2
+2.45.0
 
 
