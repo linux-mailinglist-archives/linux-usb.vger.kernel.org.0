@@ -1,158 +1,95 @@
-Return-Path: <linux-usb+bounces-10215-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10216-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 260B88C2AA9
-	for <lists+linux-usb@lfdr.de>; Fri, 10 May 2024 21:27:49 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B025B8C2AC5
+	for <lists+linux-usb@lfdr.de>; Fri, 10 May 2024 21:46:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B7352B23C02
-	for <lists+linux-usb@lfdr.de>; Fri, 10 May 2024 19:27:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4E37D1F238CA
+	for <lists+linux-usb@lfdr.de>; Fri, 10 May 2024 19:46:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C20A50249;
-	Fri, 10 May 2024 19:26:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C0A24C637;
+	Fri, 10 May 2024 19:46:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="fuZfixy6"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="XKu1207C"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 343564F602;
-	Fri, 10 May 2024 19:26:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B01948CE0
+	for <linux-usb@vger.kernel.org>; Fri, 10 May 2024 19:46:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715369206; cv=none; b=EYrol6w643Qi7t/9h08QRVjRzB07EHxVV1wEs/siXclVDhwISqSuA0qxSnIOVAL5Jcj+iRFa9ubcrP9F2HsHUprzBl4Pso985IJ+uiK1EQoWYIF0btLsxvWwJapeWYgdKTso0uRSq8nqqcHivd/6LFwWf+u1VXCehnzUuhlX+4A=
+	t=1715370377; cv=none; b=Ho3ZFcagCtjtxBJAfNxxviMUvi1RpGcvo6xUHdt7QcDMuFoETUEoZrnwEbmU/VqkWRCiy1GbWbSaQT119y5KndGIer6ME4jadFVr6DvxR4dxv0gI+z4r06AN2PW4vXIGPvId73iUigTgqhCS/XRcIA9Ggg2BYMgYGgxFLQHOe0I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715369206; c=relaxed/simple;
-	bh=O1bd4+8p4WCFjblMydERN3yaGSWD7IAnIxOjLFqL4jE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=e5YVE0m3Tpxv4AT1anJd5abqjeEtxYX6Zb/BEcRJKiXGXE7FkbVzImixIUf3YVfYrlv/8Sg86uSXLiyJU0UV1FSBayw41TqtuRyMXUcZ2pkJCvz2m0uiZMTJ46hFbPQ5j6171qq/1jJawVl+u/GyNWS1DiogmJYjV4E8XEDGRY8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=fuZfixy6; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 44ACsmNm019682;
-	Fri, 10 May 2024 19:26:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=nQ828hEtLQh1cmFR/y04iyD7xocBkfKV99vrLIVbNEs=; b=fu
-	Zfixy6iVoDMTmXFvaL+1H6D5/aHAFHmkOQUPC1/rvFImeJrnPLNvDGh/B4Lib0Z5
-	ic3bnMHnaxpqND8d1Jqz9HeeZDlqdtNM8GO8OW0dU0igDewe3pZZCOHz8FjVTMCw
-	VxDBTMkl++tnrc/aqs8A7CaH35BNmkO2cJ5MEGnNVP+S4XnE4WNUmLG/4el2K6WO
-	7UhqP5DUUIO2VmoulgmxgfuCftjbkGDBTACGXSXuNmbxU83pFEmehbiuz4xkTB2q
-	K8KHYZxDVxnlcU/livdEb/JzDDLCVcSduVtF49i2xLVHE+jWUWwWQO67EuQBuS34
-	pwhmvmvPLleaQTjPwT3A==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3y16w1jauy-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 10 May 2024 19:26:38 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 44AJQa6s015732
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 10 May 2024 19:26:36 GMT
-Received: from [10.216.5.45] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Fri, 10 May
- 2024 12:26:33 -0700
-Message-ID: <0f056ece-6d38-428e-bf18-edb053c90ca7@quicinc.com>
-Date: Sat, 11 May 2024 00:56:29 +0530
+	s=arc-20240116; t=1715370377; c=relaxed/simple;
+	bh=g5kYHFJnjQGsLeTWX/w7fQ5Mz/mRyoUbOgayf2lFI9I=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=J0bNTE3tiGCbiuruUzoz2HyHL4O2ViMdUrPiHPTwubvqr5zz2drKxXJzPs8SlV1Xyzggq7DXLnuOs6l3qd4+VbppXgna3FmrblNefwEUOGKfKiVI9ct/ocFpzKM20LO1cYoQnfESeX74WSY5uTO0q5GD2LD2HulzWUCfK1pqrqw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=XKu1207C; arc=none smtp.client-ip=209.85.208.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-572aad902baso3044a12.0
+        for <linux-usb@vger.kernel.org>; Fri, 10 May 2024 12:46:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1715370374; x=1715975174; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=g5kYHFJnjQGsLeTWX/w7fQ5Mz/mRyoUbOgayf2lFI9I=;
+        b=XKu1207CLTpv13BSMASfjIq0j+rPfocvoMqR8wybjCG1jbmu+HfrjldiZhyOWqJ62w
+         Bx6URm5ZF2XDauEHQKNOvjaVs8iV81keTJNraBdPFC04NtuvKCnDeQ02Nc13bSOuZGfD
+         vuIo8DBJnCxaGY5BAPuMLllkVp28izCBzdKKMzF3qikQR+pE3OH1ZP0UAObwJXkD/iXt
+         p8DkJptgfCEt+upZ28T9HDhUvcB7vpZ3Oo+UQldbo/zV/9aSqQDIWyoYEYC37v7kwdZZ
+         5KWvPqLOnuf3R7fsu/GMcqM48c3hjGoG5A7OVRf3Qvs9VDje7gcZuedLLhuuh08/8dD6
+         aZPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715370374; x=1715975174;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=g5kYHFJnjQGsLeTWX/w7fQ5Mz/mRyoUbOgayf2lFI9I=;
+        b=Wef0br0P8jtolOxP0bVawYHRzdG8uovAOmcXJQwZeLz9X1VcFP8f1bdCFQptuZ0VvV
+         p1fH0ReKSD+WASR06ZdS/0hHfmBV13njggIHD/rNhUObzeAXlQP+V3bufjHvDG/+PJEX
+         Pvjx9+TmQ0Y+WQXCgKiCP3PTwBjz5Cw99n7lXndhS9sEYn5uZUH4qN1EDRpqWNaR6pmO
+         ro7P+i+mOr62rdpqY4NxwMbE9aoWXsHjn0iKI9U/ciaAKBUNOW+sTD+lF+Z/85mVT9Up
+         /YDZK8sRvgilt0wTLaJFp2aAtHOJiDbel0CkhVz3m5B/J69nOFDAfIfgBjk0KIrphx/a
+         aFjQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUWIYYtmaSpahIIExSGoL1lkJxviKYk3D4X8mqP7DxBJrMOroJrltZReM74UUAeV178GxVK2QIUxMPHzVPavfckOksN/X5sZAOx
+X-Gm-Message-State: AOJu0YwwvNCyhQsb81B9F0AUxkGilZP1MKqKdiYXL9bsYRsska4S/pFH
+	hTH4eVbyanydTyjpWk6whESG+SPlqKglk4YgbWLmgtrF+0qToMrUpcHGe59ydMyoVPjEbEBVZbY
+	ZT4ouAD2465g1V/ePtCQLj8n6kHUlmvpTbURF
+X-Google-Smtp-Source: AGHT+IEjkKKgypzFApgZTL0z6ah3x9iM3bgP7Y8Zn5zYPWt30OoG1qkKTUQ+B4bmehmt0GxsYy1tZ9RDpD4OSamQU4Y=
+X-Received: by 2002:a05:6402:907:b0:572:988f:2f38 with SMTP id
+ 4fb4d7f45d1cf-57443d4d9c7mr27979a12.6.1715370374302; Fri, 10 May 2024
+ 12:46:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] usb: dwc3: core: Fix unused variable warning in core
- driver
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thinh Nguyen
-	<Thinh.Nguyen@synopsys.com>
-CC: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "quic_ppratap@quicinc.com" <quic_ppratap@quicinc.com>,
-        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>,
-        kernel test robot
-	<lkp@intel.com>
-References: <20240506074939.1833835-1-quic_kriskura@quicinc.com>
- <20240508230839.utioi5i2c5kozm4d@synopsys.com>
- <2024051050-pantomime-sudden-a382@gregkh>
-Content-Language: en-US
-From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <2024051050-pantomime-sudden-a382@gregkh>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 81rkDwsK38m6jfg7r_UFZ37oSdANddt8
-X-Proofpoint-GUID: 81rkDwsK38m6jfg7r_UFZ37oSdANddt8
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.11.176.26
- definitions=2024-05-10_14,2024-05-10_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
- lowpriorityscore=0 priorityscore=1501 bulkscore=0 malwarescore=0
- mlxlogscore=816 mlxscore=0 impostorscore=0 clxscore=1011 adultscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2405010000 definitions=main-2405100139
+References: <20240510184324.2944101-1-jthies@google.com> <20240510184324.2944101-2-jthies@google.com>
+In-Reply-To: <20240510184324.2944101-2-jthies@google.com>
+From: Jameson Thies <jthies@google.com>
+Date: Fri, 10 May 2024 12:46:01 -0700
+Message-ID: <CAMFSARcVjCUoGTnNAwy6+RDZ0J6x1hxhVQzdDGOpa0b4cEQJWQ@mail.gmail.com>
+Subject: Re: [PATCH v4 1/4] usb: typec: ucsi: Fix null pointer dereference in trace
+To: heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org
+Cc: pmalani@chromium.org, bleung@google.com, abhishekpandit@chromium.org, 
+	andersson@kernel.org, dmitry.baryshkov@linaro.org, 
+	fabrice.gasnier@foss.st.com, gregkh@linuxfoundation.org, hdegoede@redhat.com, 
+	neil.armstrong@linaro.org, rajaram.regupathy@intel.com, 
+	saranya.gopal@intel.com, linux-kernel@vger.kernel.org, 
+	Benson Leung <bleung@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 
+Hey everyone.
+Benson let me know that the submitter should be listed in the last
+Signed-off-by line. This is out of order in patch 1/4 and 2/4. My bad,
+I'll send out a v5 series fixing this. Sorry about all the email.
 
-
-On 5/10/2024 2:58 PM, Greg Kroah-Hartman wrote:
-> On Wed, May 08, 2024 at 11:08:43PM +0000, Thinh Nguyen wrote:
->> On Mon, May 06, 2024, Krishna Kurapati wrote:
->>> While fixing a merge conflict in linux-next, hw_mode variable
->>> was left unused. Remove the unused variable in hs_phy_setup call.
->>>
->>> Reported-by: kernel test robot <lkp@intel.com>
->>> Closes: https://urldefense.com/v3/__https://lore.kernel.org/all/202405030439.AH8NR0Mg-lkp@intel.com/__;!!A4F2R9G_pg!aXN14tvkvwnNZ9N8-EDi-Seef9jgZBKlkZRYasINRgTOU2ijWbTvFIxkZIXOThGQQHmXc0FjiJPFI1cgdCOyAafAxB-70Q$
->>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
->>> ---
->>> Changes in v2:
->>> Added reported by and closes tags.
->>>
->>>   drivers/usb/dwc3/core.c | 3 ---
->>>   1 file changed, 3 deletions(-)
->>>
->>> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
->>> index 8b6f7769fcd5..7f176ba25354 100644
->>> --- a/drivers/usb/dwc3/core.c
->>> +++ b/drivers/usb/dwc3/core.c
->>> @@ -676,11 +676,8 @@ static int dwc3_ss_phy_setup(struct dwc3 *dwc, int index)
->>>   
->>>   static int dwc3_hs_phy_setup(struct dwc3 *dwc, int index)
->>>   {
->>> -	unsigned int hw_mode;
->>>   	u32 reg;
->>>   
->>> -	hw_mode = DWC3_GHWPARAMS0_MODE(dwc->hwparams.hwparams0);
->>> -
->>>   	reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(index));
->>>   
->>>   	/* Select the HS PHY interface */
->>> -- 
->>> 2.34.1
->>>
->>
->> Looks like my response reporting the merge issue to Stephen fell through
->> the cracks.
->>
->> Thanks for the patch.
->>
->> Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-> 
-> I think I already fixed this up when I did the merge a few hours ago, if
-> not, please let me know.
-> 
-
-Hi Greg,
-
-  I just checked usb-next and linux-next. The unused variable is still 
-there. Can you pick this change up.
-
-Regards,
-Krishna,
+Thanks,
+Jameson
 
