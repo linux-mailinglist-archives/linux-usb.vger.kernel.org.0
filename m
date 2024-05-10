@@ -1,154 +1,158 @@
-Return-Path: <linux-usb+bounces-10214-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10215-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A9258C2A17
-	for <lists+linux-usb@lfdr.de>; Fri, 10 May 2024 20:45:07 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 260B88C2AA9
+	for <lists+linux-usb@lfdr.de>; Fri, 10 May 2024 21:27:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8449C1C21BDD
-	for <lists+linux-usb@lfdr.de>; Fri, 10 May 2024 18:45:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B7352B23C02
+	for <lists+linux-usb@lfdr.de>; Fri, 10 May 2024 19:27:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C7854E1D5;
-	Fri, 10 May 2024 18:43:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C20A50249;
+	Fri, 10 May 2024 19:26:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="XhgFULAD"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="fuZfixy6"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDD514D58A
-	for <linux-usb@vger.kernel.org>; Fri, 10 May 2024 18:43:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 343564F602;
+	Fri, 10 May 2024 19:26:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715366629; cv=none; b=ScKrXjHOYeRhGzA/9HnslSk+dzYZJCc7BXboIKC3UHTnz1B09CdLvUxyqGHPzekgeboxDNqJqsKsPz6lXP4VfFWk6ADC3siSlTWlR0DjgZxImlEs4VQQieTEc4D0G2XEUms0otxRYeKvfDvj7+jMAO4T5j4t92zhanPBpGpfsBY=
+	t=1715369206; cv=none; b=EYrol6w643Qi7t/9h08QRVjRzB07EHxVV1wEs/siXclVDhwISqSuA0qxSnIOVAL5Jcj+iRFa9ubcrP9F2HsHUprzBl4Pso985IJ+uiK1EQoWYIF0btLsxvWwJapeWYgdKTso0uRSq8nqqcHivd/6LFwWf+u1VXCehnzUuhlX+4A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715366629; c=relaxed/simple;
-	bh=R0kPcz2z7KHQtcT+DCQun4RPsuErPgcBNGZMQbxuRmI=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=nW0SSYohORbv2KtSq/nfvp5rWV3x6dpRGdhnHCWI6CAx4/y4SxNsztgisFpuEvMXTgsGXD0aZnYj6p4oqwmwUO802xV0qv5oA/Wl8CAbvE/skcgG+/m3U1VNuQ87zRdMkW+0d8Xn4cR0/x1IW9ywxdEfgQDyB17c2rpK+clLRQY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jthies.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=XhgFULAD; arc=none smtp.client-ip=209.85.128.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jthies.bounces.google.com
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-62035d9ecc4so40628147b3.1
-        for <linux-usb@vger.kernel.org>; Fri, 10 May 2024 11:43:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1715366627; x=1715971427; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5TEblfXliubmthqHAqJA2jNdtqm1t1yD50gCYv7pJus=;
-        b=XhgFULADE46oqk5FpKzQer23oOo97i7TBoKoeteoHxUBHNuHCPWnXvKdZNQrVjzI9g
-         /cU/NV3jJ6FhUVepkLpNnw/MUqZ9jRrP9zsJjFxDHwexN1R1ghP1FwZliTXMDWNk3E7b
-         1QJmp3pPrp/41fg2wC3N3mMoj1ed9iTvxWNG6z8WerFrmT+UrdiEzD1faLvpCQx3GwPm
-         yp1c4ZATrUnxu3OjSAS3px7eDx0ICMC5tevh6MkcjbwmchHB94CcHbRxznmJqmLbu5Uk
-         LxuksmOr67lIagAgYJ44qsqCQ9rzJ7wFR9A2wlj/JkVJlcQ5Ljgnqw/5P/khHRCGmdAz
-         1M1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715366627; x=1715971427;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5TEblfXliubmthqHAqJA2jNdtqm1t1yD50gCYv7pJus=;
-        b=qY8V+A9wYUdfsZKwSmDaeLiBKPWqEeEghE7kprHQyCs/CDsbpVo5oFPgigyCB2PESx
-         R5MX4vdPzoskstaBCsR8H+lhrr2tLn7Xt5MSy43syiGS0UiFtb4un3HgrYfz5H15kdJj
-         iUUZLxO+7YYR7Ac+iXveQEnk4UnJRVcd3b1l4Ee/41xmdM3YxwulVzmSKF2rwpxF4Fkx
-         +bdKCd0qinlaTIRySXWY3M/q3+K6cUDIHanzoou7/qM1KCOkw0pHITqfwStTtfO/K/OO
-         yngKNEbiOZPOHAQrZKe4tI0o8pL6DXHnHhYxS4TrFIoa0R9NcJirXb8g5RvoBShbydDs
-         CGOA==
-X-Forwarded-Encrypted: i=1; AJvYcCV8U+wI3Mu7obdY8qSJNnhsKLRKgW4q+keXXIrR3tsdDfn3F6yKEdtkot/KAurMSyg6hLTLlSItQLT7BXs9ebbTL4Mv+yfB35hO
-X-Gm-Message-State: AOJu0YzW5WYgYOAZUHYY7sLEKDsAiixc7ZN9922S+xlSckWZuQ0CMIXn
-	FcInVaNKc3Os/byHe3tgMxz/M7DJUgSW93dO8YfUpwMpbSqZ0l5cik3W+Rk9HkIM/qtxejzTRdN
-	7CA==
-X-Google-Smtp-Source: AGHT+IGaWgy+lzvqz9wTSsHNfbW5bue9orgmN1BHek+1YZUAMaba3g5YRlXLvCXcathhN4gsL6Nmrz7YeF4=
-X-Received: from jthies.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:23db])
- (user=jthies job=sendgmr) by 2002:a05:690c:3801:b0:61b:ec81:3f3b with SMTP id
- 00721157ae682-622b0038dfbmr8623737b3.5.1715366626864; Fri, 10 May 2024
- 11:43:46 -0700 (PDT)
-Date: Fri, 10 May 2024 18:43:24 +0000
-In-Reply-To: <20240510184324.2944101-1-jthies@google.com>
+	s=arc-20240116; t=1715369206; c=relaxed/simple;
+	bh=O1bd4+8p4WCFjblMydERN3yaGSWD7IAnIxOjLFqL4jE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=e5YVE0m3Tpxv4AT1anJd5abqjeEtxYX6Zb/BEcRJKiXGXE7FkbVzImixIUf3YVfYrlv/8Sg86uSXLiyJU0UV1FSBayw41TqtuRyMXUcZ2pkJCvz2m0uiZMTJ46hFbPQ5j6171qq/1jJawVl+u/GyNWS1DiogmJYjV4E8XEDGRY8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=fuZfixy6; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 44ACsmNm019682;
+	Fri, 10 May 2024 19:26:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=nQ828hEtLQh1cmFR/y04iyD7xocBkfKV99vrLIVbNEs=; b=fu
+	Zfixy6iVoDMTmXFvaL+1H6D5/aHAFHmkOQUPC1/rvFImeJrnPLNvDGh/B4Lib0Z5
+	ic3bnMHnaxpqND8d1Jqz9HeeZDlqdtNM8GO8OW0dU0igDewe3pZZCOHz8FjVTMCw
+	VxDBTMkl++tnrc/aqs8A7CaH35BNmkO2cJ5MEGnNVP+S4XnE4WNUmLG/4el2K6WO
+	7UhqP5DUUIO2VmoulgmxgfuCftjbkGDBTACGXSXuNmbxU83pFEmehbiuz4xkTB2q
+	K8KHYZxDVxnlcU/livdEb/JzDDLCVcSduVtF49i2xLVHE+jWUWwWQO67EuQBuS34
+	pwhmvmvPLleaQTjPwT3A==
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3y16w1jauy-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 10 May 2024 19:26:38 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 44AJQa6s015732
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 10 May 2024 19:26:36 GMT
+Received: from [10.216.5.45] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Fri, 10 May
+ 2024 12:26:33 -0700
+Message-ID: <0f056ece-6d38-428e-bf18-edb053c90ca7@quicinc.com>
+Date: Sat, 11 May 2024 00:56:29 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240510184324.2944101-1-jthies@google.com>
-X-Mailer: git-send-email 2.45.0.118.g7fe29c98d7-goog
-Message-ID: <20240510184324.2944101-5-jthies@google.com>
-Subject: [PATCH v4 4/4] usb: typec: ucsi: Always set number of alternate modes
-From: Jameson Thies <jthies@google.com>
-To: heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org
-Cc: jthies@google.com, pmalani@chromium.org, bleung@google.com, 
-	abhishekpandit@chromium.org, andersson@kernel.org, 
-	dmitry.baryshkov@linaro.org, fabrice.gasnier@foss.st.com, 
-	gregkh@linuxfoundation.org, hdegoede@redhat.com, neil.armstrong@linaro.org, 
-	rajaram.regupathy@intel.com, saranya.gopal@intel.com, 
-	linux-kernel@vger.kernel.org, Benson Leung <bleung@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] usb: dwc3: core: Fix unused variable warning in core
+ driver
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thinh Nguyen
+	<Thinh.Nguyen@synopsys.com>
+CC: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "quic_ppratap@quicinc.com" <quic_ppratap@quicinc.com>,
+        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>,
+        kernel test robot
+	<lkp@intel.com>
+References: <20240506074939.1833835-1-quic_kriskura@quicinc.com>
+ <20240508230839.utioi5i2c5kozm4d@synopsys.com>
+ <2024051050-pantomime-sudden-a382@gregkh>
+Content-Language: en-US
+From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <2024051050-pantomime-sudden-a382@gregkh>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 81rkDwsK38m6jfg7r_UFZ37oSdANddt8
+X-Proofpoint-GUID: 81rkDwsK38m6jfg7r_UFZ37oSdANddt8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.11.176.26
+ definitions=2024-05-10_14,2024-05-10_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
+ lowpriorityscore=0 priorityscore=1501 bulkscore=0 malwarescore=0
+ mlxlogscore=816 mlxscore=0 impostorscore=0 clxscore=1011 adultscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2405010000 definitions=main-2405100139
 
-Providing the number of known alternate modes allows user space to
-determine when device registration has completed. Always register a
-number of known alternate modes for the partner and cable plug, even
-when the number of supported alternate modes is 0.
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Reviewed-by: Benson Leung <bleung@chromium.org>
-Signed-off-by: Jameson Thies <jthies@google.com>
----
-Changes in V4:
-- None.
 
-Changes in V3:
-- None.
+On 5/10/2024 2:58 PM, Greg Kroah-Hartman wrote:
+> On Wed, May 08, 2024 at 11:08:43PM +0000, Thinh Nguyen wrote:
+>> On Mon, May 06, 2024, Krishna Kurapati wrote:
+>>> While fixing a merge conflict in linux-next, hw_mode variable
+>>> was left unused. Remove the unused variable in hs_phy_setup call.
+>>>
+>>> Reported-by: kernel test robot <lkp@intel.com>
+>>> Closes: https://urldefense.com/v3/__https://lore.kernel.org/all/202405030439.AH8NR0Mg-lkp@intel.com/__;!!A4F2R9G_pg!aXN14tvkvwnNZ9N8-EDi-Seef9jgZBKlkZRYasINRgTOU2ijWbTvFIxkZIXOThGQQHmXc0FjiJPFI1cgdCOyAafAxB-70Q$
+>>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+>>> ---
+>>> Changes in v2:
+>>> Added reported by and closes tags.
+>>>
+>>>   drivers/usb/dwc3/core.c | 3 ---
+>>>   1 file changed, 3 deletions(-)
+>>>
+>>> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+>>> index 8b6f7769fcd5..7f176ba25354 100644
+>>> --- a/drivers/usb/dwc3/core.c
+>>> +++ b/drivers/usb/dwc3/core.c
+>>> @@ -676,11 +676,8 @@ static int dwc3_ss_phy_setup(struct dwc3 *dwc, int index)
+>>>   
+>>>   static int dwc3_hs_phy_setup(struct dwc3 *dwc, int index)
+>>>   {
+>>> -	unsigned int hw_mode;
+>>>   	u32 reg;
+>>>   
+>>> -	hw_mode = DWC3_GHWPARAMS0_MODE(dwc->hwparams.hwparams0);
+>>> -
+>>>   	reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(index));
+>>>   
+>>>   	/* Select the HS PHY interface */
+>>> -- 
+>>> 2.34.1
+>>>
+>>
+>> Looks like my response reporting the merge issue to Stephen fell through
+>> the cracks.
+>>
+>> Thanks for the patch.
+>>
+>> Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+> 
+> I think I already fixed this up when I did the merge a few hours ago, if
+> not, please let me know.
+> 
 
-Changes in V2:
-- None.
+Hi Greg,
 
- drivers/usb/typec/ucsi/ucsi.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+  I just checked usb-next and linux-next. The unused variable is still 
+there. Can you pick this change up.
 
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index bb6e57064513d..52a14bfe4107e 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -812,10 +812,11 @@ static int ucsi_check_altmodes(struct ucsi_connector *con)
- 	/* Ignoring the errors in this case. */
- 	if (con->partner_altmode[0]) {
- 		num_partner_am = ucsi_get_num_altmode(con->partner_altmode);
--		if (num_partner_am > 0)
--			typec_partner_set_num_altmodes(con->partner, num_partner_am);
-+		typec_partner_set_num_altmodes(con->partner, num_partner_am);
- 		ucsi_altmode_update_active(con);
- 		return 0;
-+	} else {
-+		typec_partner_set_num_altmodes(con->partner, 0);
- 	}
- 
- 	return ret;
-@@ -1138,7 +1139,7 @@ static int ucsi_check_connection(struct ucsi_connector *con)
- static int ucsi_check_cable(struct ucsi_connector *con)
- {
- 	u64 command;
--	int ret;
-+	int ret, num_plug_am;
- 
- 	if (con->cable)
- 		return 0;
-@@ -1172,6 +1173,13 @@ static int ucsi_check_cable(struct ucsi_connector *con)
- 			return ret;
- 	}
- 
-+	if (con->plug_altmode[0]) {
-+		num_plug_am = ucsi_get_num_altmode(con->plug_altmode);
-+		typec_plug_set_num_altmodes(con->plug, num_plug_am);
-+	} else {
-+		typec_plug_set_num_altmodes(con->plug, 0);
-+	}
-+
- 	return 0;
- }
- 
--- 
-2.45.0.118.g7fe29c98d7-goog
-
+Regards,
+Krishna,
 
