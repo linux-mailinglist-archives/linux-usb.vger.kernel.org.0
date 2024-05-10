@@ -1,52 +1,52 @@
-Return-Path: <linux-usb+bounces-10195-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10196-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F1A38C20F9
-	for <lists+linux-usb@lfdr.de>; Fri, 10 May 2024 11:33:08 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C97FB8C20FE
+	for <lists+linux-usb@lfdr.de>; Fri, 10 May 2024 11:34:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5B562281473
-	for <lists+linux-usb@lfdr.de>; Fri, 10 May 2024 09:33:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8392A2818F3
+	for <lists+linux-usb@lfdr.de>; Fri, 10 May 2024 09:34:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92D93161333;
-	Fri, 10 May 2024 09:33:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A856816191A;
+	Fri, 10 May 2024 09:34:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="PNu2DomR"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="KMPebKyZ"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A1D129405;
-	Fri, 10 May 2024 09:33:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E07110A3E;
+	Fri, 10 May 2024 09:34:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715333583; cv=none; b=b2s4zGfNjzVRl0EwReDFtoz2kSwN89HbDchHIHlnUjxkW0w1LmYthi7R8367Hdos34DDUEOY7Q8fT3/puhZmo3QbpODTt0Y5LEb8caFOhQ8rTk6qaj++VzqzEdxCN2d71h0evQ+z5P88bsUD3geID5dYcDXno0xVa2oP8NAuNbo=
+	t=1715333651; cv=none; b=jYtwqJ+2H/9CiMdLs49Tr9dsLioKcjVvvOD6qdLcaEYnc0YegMIqJRpafwPSaD1ZGhOQhETuRXKKCcGixRZX6VzJjNKIJqDJBrGAbSUauoUAw47JObQcV3Yl28s8wJzlmUYniQGrfQI6Sjs9aRoehz42310m1xm1aNMDIjKTfy0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715333583; c=relaxed/simple;
-	bh=73JsTNaDf+GI4JlgU/jC3QWglWrdkJLycFiZnloba+w=;
+	s=arc-20240116; t=1715333651; c=relaxed/simple;
+	bh=PYfpJSicKdob+Dew7EMxzG7V511iTL5iPZFXkg2MC4A=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KaPhbw+BpCgVKscqQVxfVOtY+8WsFNfFGgjVO4Bbom3tOwmh4Lia48Y/Jz6+HaUEPtRtjHeR1VOpavKOYYx3+JOnELkZAnmqbBW7+ZFTSh04p5N3bUh2dsF1/XXsVC1X6jCHro4vzCUh8Y21JzDZfye4aUx4fpChFe5AFCaWUbI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=PNu2DomR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 150E5C32781;
-	Fri, 10 May 2024 09:33:01 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=NoyaFpUbkyKhxCwOGch36XlAIJGr8b3dKmP5MiCdDoIXasCKWHa8Kd4zge+oRsC4W8DfFUwGMixvHqQId3jOR4j0mt/dzLce+hF8wCE58VE6ql0361NryIJFlof7Nc3qqgJL03yZwcWZjrA+zq8wH7POWqySqaL4JJxdQST9+w4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=KMPebKyZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F4C5C113CC;
+	Fri, 10 May 2024 09:34:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1715333582;
-	bh=73JsTNaDf+GI4JlgU/jC3QWglWrdkJLycFiZnloba+w=;
+	s=korg; t=1715333649;
+	bh=PYfpJSicKdob+Dew7EMxzG7V511iTL5iPZFXkg2MC4A=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PNu2DomRYjl0hblkn7Qiiwf6Dqk6ilB0FmSbGlFt7qWKRVJmojLcoWx1xmLCKxvzR
-	 k2EH0uYWTVwe/4M8+7xexcFDdZsH/t5CYylFFTyf2+mHApoA63oN/ay4BBsdxtOnU4
-	 LPrS3WRShXAwD7oJpl3MZ0cRtKZ+OJz3meLIlD1c=
-Date: Fri, 10 May 2024 10:32:57 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: qiurui <happyqiuqiu9604@gmail.com>
-Cc: corbet@lwn.net, linux-usb@vger.kernel.org, linux-doc@vger.kernel.org,
-	qiurui@kylinos.cn
-Subject: Re: [PATCH] docs: usb:gadget:hid: fix hid_gadget_test code in
- documentation of hid section
-Message-ID: <2024051011-nearby-mowing-e53a@gregkh>
-References: <20240506024408.19344-1-qiurui@kylinos.cn>
+	b=KMPebKyZhF1VD73UY+H2xHl6Zyc+b7YnTd7D8dBxwGZCuJd7OpAKc08BoXT/YsLib
+	 sWps0/rY8WjX2EDnbGL2iytunNZWmMOxQnq8C6eBUs9kjbj2k3KAXSUKpzlleIAjSP
+	 sy2hTvwoYMq3law1uLj5ug2lL+Jgqoq1TsIk7uF4=
+Date: Fri, 10 May 2024 10:34:05 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH v1 1/1] usb: fotg210: Add missing kernel doc description
+Message-ID: <2024051047-scrabble-variable-6e29@gregkh>
+References: <20240508150335.1378629-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -55,78 +55,33 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240506024408.19344-1-qiurui@kylinos.cn>
+In-Reply-To: <20240508150335.1378629-1-andriy.shevchenko@linux.intel.com>
 
-On Mon, May 06, 2024 at 10:44:08AM +0800, qiurui wrote:
-> Fix bzero buffer before read()
+On Wed, May 08, 2024 at 06:03:35PM +0300, Andy Shevchenko wrote:
+> kernel-doc validator is not happy:
 > 
-> Signed-off-by: qiurui <qiurui@kylinos.cn>
+>   warning: Function parameter or struct member 'fotg' not described in 'fotg210_vbus'
+> 
+> Add missing description.
+> 
+> Fixes: 3e679bde529e ("usb: fotg210-udc: Implement VBUS session")
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > ---
->  Documentation/usb/gadget_hid.rst | 2 ++
->  1 file changed, 2 insertions(+)
+>  drivers/usb/fotg210/fotg210-core.c | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/Documentation/usb/gadget_hid.rst b/Documentation/usb/gadget_hid.rst
-> index e623416de4f1..c4ee81a6b48e 100644
-> --- a/Documentation/usb/gadget_hid.rst
-> +++ b/Documentation/usb/gadget_hid.rst
-> @@ -410,6 +410,7 @@ Sample code::
->  		}
+> diff --git a/drivers/usb/fotg210/fotg210-core.c b/drivers/usb/fotg210/fotg210-core.c
+> index 958fc40eae86..00483da40f04 100644
+> --- a/drivers/usb/fotg210/fotg210-core.c
+> +++ b/drivers/usb/fotg210/fotg210-core.c
+> @@ -95,6 +95,7 @@ static int fotg210_gemini_init(struct fotg210 *fotg, struct resource *res,
 >  
->  		if (FD_ISSET(fd, &rfds)) {
-> +			bzero(buf, SIZE);
->  			cmd_len = read(fd, buf, BUF_LEN - 1);
->  			printf("recv report:");
->  			for (i = 0; i < cmd_len; i++)
-> @@ -419,6 +420,7 @@ Sample code::
->  
->  		if (FD_ISSET(STDIN_FILENO, &rfds)) {
->  			memset(report, 0x0, sizeof(report));
-> +			bzero(buf, SIZE);
->  			cmd_len = read(STDIN_FILENO, buf, BUF_LEN - 1);
->  
->  			if (cmd_len == 0)
-> -- 
-> 2.34.1
-> 
-> 
+>  /**
+>   * fotg210_vbus() - Called by gadget driver to enable/disable VBUS
+> + * @fotg210: pointer to a private fotg210 object
+>   * @enable: true to enable VBUS, false to disable VBUS
+>   */
+>  void fotg210_vbus(struct fotg210 *fotg, bool enable)
 
-Hi,
-
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
-
-You are receiving this message because of the following common error(s)
-as indicated below:
-
-- You did not specify a description of why the patch is needed, or
-  possibly, any description at all, in the email body.  Please read the
-  section entitled "The canonical patch format" in the kernel file,
-  Documentation/process/submitting-patches.rst for what is needed in
-  order to properly describe the change.
-
-- You did not write a descriptive Subject: for the patch, allowing Greg,
-  and everyone else, to know what this patch is all about.  Please read
-  the section entitled "The canonical patch format" in the kernel file,
-  Documentation/process/submitting-patches.rst for what a proper
-  Subject: line should look like.
-
-- It looks like you did not use your "real" name for the patch on either
-  the Signed-off-by: line, or the From: line (both of which have to
-  match).  Please read the kernel file,
-  Documentation/process/submitting-patches.rst for how to do this
-  correctly.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
+I don't think you actually built the documentation after this patch :(
 
