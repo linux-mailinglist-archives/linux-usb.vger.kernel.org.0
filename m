@@ -1,96 +1,109 @@
-Return-Path: <linux-usb+bounces-10205-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10206-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A956A8C26DF
-	for <lists+linux-usb@lfdr.de>; Fri, 10 May 2024 16:29:37 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B7548C27A6
+	for <lists+linux-usb@lfdr.de>; Fri, 10 May 2024 17:26:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4A8F61F24A07
-	for <lists+linux-usb@lfdr.de>; Fri, 10 May 2024 14:29:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 057781C20FD4
+	for <lists+linux-usb@lfdr.de>; Fri, 10 May 2024 15:26:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B17016D4DF;
-	Fri, 10 May 2024 14:29:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61BEB171655;
+	Fri, 10 May 2024 15:26:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NPGHal9E"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fZ7AYfwW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 021EB3F8D1
-	for <linux-usb@vger.kernel.org>; Fri, 10 May 2024 14:29:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5754D17109E;
+	Fri, 10 May 2024 15:26:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715351372; cv=none; b=IpUrb4Tt97nucif/tb2uKbd/82lnoerpGzCtX82TRZxMmg36pRRNNWzkOPw4XjWuOxj0pRIgT+K2r3Ci5mPbpX7y2iky2dPAQnOwpsEyPwbX2R/wOLY9yBGlhzp0Qxz1M98FICCBNPLKtElH3UGHc2xn0jS9D/ch5K/NcBuSJE4=
+	t=1715354809; cv=none; b=SlkrscntGegJHlEuaQolJVjnqwDrCObko2FHA0W79g6la2GatO9iF+AV172vdB/9ROyS417Wkuh0vBLv0S2IEPjGw9rfR+5nsrhpmDi5H2pZrYHMYMWN5YUsr+YaWciHEFPA/ZvtNJsOk8p/cinlVnq3SiGRPzK2PlxlE+lLOy4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715351372; c=relaxed/simple;
-	bh=S1kTG7eGKWEjcnmQRjxvCVRYjytJR9nfRU2GcRHLLAg=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=GMLbs/OgLm2WIr/+o7U1OWpEgL7Vzit23Iv0oqMjZnpizM594hZWAx4KxxK2MMJpKcE2BHceRuLTyDt2bKVN0k5IcFGSRe+IPL/p8ek8BuCU4cz/d4ls2eiWXMMb+NnPCnjWHE+/ZuMQ+1Wx67j9k4gdtI0TSb+uZ7rEY5LcR7U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NPGHal9E; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 92DB4C4AF07
-	for <linux-usb@vger.kernel.org>; Fri, 10 May 2024 14:29:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715351371;
-	bh=S1kTG7eGKWEjcnmQRjxvCVRYjytJR9nfRU2GcRHLLAg=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=NPGHal9EBgHNpU34Er3i6qtb1eyfZno2EZ+yq/+K+s5khZU47f4qaDo/7adwLpOik
-	 ureBf6DQhtidfU6TzgPKw0uogp4Xps5u4O2u/j+86JC8jw13alKDQG87o1xSLio68m
-	 LXFM//MfiWLCkh8zvGJkzRJIfuU3gpSRfhYAXqhdIoKkoj76p8gdQTbwdDJfbLnydK
-	 KtLg8F0WlO1pvDKU3pNLZuj9IeL+T2XpPBAroV8+cQxExDhML7l1sF4f/0r0WAdw7k
-	 4vX3wF+SY+qLGO/ZCn5qJf6m737ixN0tTHGgnmmCvczsCGlEZpMaNViMhW1gCPrfhA
-	 JBmyU8LGlUZyw==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 8CF42C53B6C; Fri, 10 May 2024 14:29:31 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 218789] ucsi_acpi USBC000:00: ucsi_acpi_dsm: failed to evaluate
- _DSM 2 in logs
-Date: Fri, 10 May 2024 14:29:31 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: ACPI
-X-Bugzilla-Component: EC
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: rjw@rjwysocki.net
-X-Bugzilla-Status: NEEDINFO
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: acpi_ec@kernel-bugs.osdl.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: component assigned_to product
-Message-ID: <bug-218789-208809-kV6BwhXiTK@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218789-208809@https.bugzilla.kernel.org/>
-References: <bug-218789-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1715354809; c=relaxed/simple;
+	bh=WZ4TGuN2dW7cNy4EbwRGnB4/IoAEcv+5igcpsXySV48=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=V3PNZjQcGu7ED5tkKH8DCLD3gA9+F+rrQz+NyRTDGsDPh+LT2j6l/nmK0z+ratKjPzIMHPfsXIeSuA0La346uJIGK7HOlSrAumV8IRDJB1Frp/8aJDslXnDBcJ7+mt+xifAY7Vu/G684DswuIzlzobSPl62wzIwUrOANm+IDeeM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fZ7AYfwW; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1715354809; x=1746890809;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=WZ4TGuN2dW7cNy4EbwRGnB4/IoAEcv+5igcpsXySV48=;
+  b=fZ7AYfwWK3TVftVQrfys77GJpWfMjD2cvVi69J8Q2n/ooBr7WGBnlxFZ
+   kNxkFUt0sxn1qfEnjEJHqR0n9Dz8GUnIyqxpsrhQKDQQY4bJPrQvJeCI1
+   5fQB6qsLOnphAVGJd6jYejWmaqTxhNMKq7SMjLWrFvPd1EfRepM+M6+ij
+   omPbg9xDtI1z41sbPndhuJ6MlNVf6oX0FKu5p2E8DQtXGQ5xUXCkDRSqN
+   yvDiVFPfitRvdGZQ5vGlQxvknatsfglCHsmPpb6eiy3bx2Am+/lfas5GH
+   Eue6WA10QLDGUME0ehh6JLB+lxqfZtW2S1pfJlzbM3oCeddYqR630vPEd
+   g==;
+X-CSE-ConnectionGUID: AwWSGOIBS5eTk4LgV/5YTA==
+X-CSE-MsgGUID: bmlaT52yRBysECpAh3zkrg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11068"; a="33853116"
+X-IronPort-AV: E=Sophos;i="6.08,151,1712646000"; 
+   d="scan'208";a="33853116"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2024 08:26:48 -0700
+X-CSE-ConnectionGUID: /fs8JJapR6CHsb9uccIbLA==
+X-CSE-MsgGUID: ojovpLzbRRSLkx7ziSC9pQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,151,1712646000"; 
+   d="scan'208";a="29655034"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmviesa009.fm.intel.com with ESMTP; 10 May 2024 08:26:45 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+	id 3B4441AC; Fri, 10 May 2024 18:26:43 +0300 (EEST)
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Linus Walleij <linus.walleij@linaro.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 1/1] usb: fotg210: Add missing kernel doc description
+Date: Fri, 10 May 2024 18:26:22 +0300
+Message-ID: <20240510152641.2421298-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218789
+kernel-doc validator is not happy:
 
-Rafael J. Wysocki (rjw@rjwysocki.net) changed:
+  warning: Function parameter or struct member 'fotg' not described in 'fotg210_vbus'
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-          Component|USB                         |EC
-           Assignee|drivers_usb@kernel-bugs.ker |acpi_ec@kernel-bugs.osdl.or
-                   |nel.org                     |g
-            Product|Drivers                     |ACPI
+Add missing description.
 
---=20
-You may reply to this email to add a comment.
+Fixes: 3e679bde529e ("usb: fotg210-udc: Implement VBUS session")
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+v2: fixed typo (LKP, Greg)
+ drivers/usb/fotg210/fotg210-core.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+diff --git a/drivers/usb/fotg210/fotg210-core.c b/drivers/usb/fotg210/fotg210-core.c
+index 958fc40eae86..0655afe7f977 100644
+--- a/drivers/usb/fotg210/fotg210-core.c
++++ b/drivers/usb/fotg210/fotg210-core.c
+@@ -95,6 +95,7 @@ static int fotg210_gemini_init(struct fotg210 *fotg, struct resource *res,
+ 
+ /**
+  * fotg210_vbus() - Called by gadget driver to enable/disable VBUS
++ * @fotg: pointer to a private fotg210 object
+  * @enable: true to enable VBUS, false to disable VBUS
+  */
+ void fotg210_vbus(struct fotg210 *fotg, bool enable)
+-- 
+2.43.0.rc1.1336.g36b5255a03ac
+
 
