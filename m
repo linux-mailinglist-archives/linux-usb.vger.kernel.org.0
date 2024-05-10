@@ -1,106 +1,93 @@
-Return-Path: <linux-usb+bounces-10208-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10209-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 874FA8C28E1
-	for <lists+linux-usb@lfdr.de>; Fri, 10 May 2024 18:43:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC6BE8C298B
+	for <lists+linux-usb@lfdr.de>; Fri, 10 May 2024 19:48:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3DCBA1F26E3D
-	for <lists+linux-usb@lfdr.de>; Fri, 10 May 2024 16:43:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A6698283064
+	for <lists+linux-usb@lfdr.de>; Fri, 10 May 2024 17:48:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82BEF175AB;
-	Fri, 10 May 2024 16:43:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D64563D556;
+	Fri, 10 May 2024 17:47:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jVatEdLl"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="s9o3owcH"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73AEC134CC
-	for <linux-usb@vger.kernel.org>; Fri, 10 May 2024 16:43:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05A3020309
+	for <linux-usb@vger.kernel.org>; Fri, 10 May 2024 17:47:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715359415; cv=none; b=XxSBxVIc2jKblD9Un5XOnOeg5kHTGe6XY7XqummUpTaMks13htFCx6NFcZEoyN2+VFngHDMMiOl21WsBJo4OA2DSr9KWIOmEMD3f+dJjQiMzBugVgMma4eZKvOE/gO46p3/S4hOliT49926Va4fdl5UGyuN3e0HWmZQcxWEaAsU=
+	t=1715363267; cv=none; b=uvf3DML/yUz6AlM3C+KZECWwVwlwA7KSNOgETHhvWr4qZ+2lQKv/V6ct4RPwDTcyl59CoEyjrMYM5gzLz4PFVPWQI6yYzTRF5btMObGJED88iG6ZnYOqk67sIypqfLnzfL97CG8xL3h2NwHQ4OBjq82zpJfNV+sKx5V3h31iOS4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715359415; c=relaxed/simple;
-	bh=/0igybbvqaKZbT87LgJHpcr7AdAJdE6x4GrhdvG3OVs=;
+	s=arc-20240116; t=1715363267; c=relaxed/simple;
+	bh=wtIQIip5nVPfkbjixVWdphytuwonMdaHcOLroeIqLNo=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=czfBN5i6EjLgG+K8IoWrEwJOwRyzy6quKWvRxyxB0TAMGirUOX9x9tFRHojRvXT+PtYoXo+rMkK/uP70yTdS5wWyiAIeFdiyoOMJFiS7GXXz5cl6WEhLodB2h+yEPL5gZt6UyuzA9+t2XF9orUh+/Qtt9HfXkr3Wc6UL/OyEVZc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=jVatEdLl; arc=none smtp.client-ip=209.85.219.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-de60d05adafso2200533276.2
-        for <linux-usb@vger.kernel.org>; Fri, 10 May 2024 09:43:33 -0700 (PDT)
+	 To:Cc:Content-Type; b=d8sju3OKvbdBe+gb3sGpaQC6rdVdDOceo/pxRB+V77ZMh6RS2WjrahhG0KVdVt+eOlkJjUgIzgiGFZGUzy50giR/lIjQAveqg7mlY9CYTaugb4EPsBjlJv1UZkN+Qd4UIiCgiWDK54sjH1yzVck1TluJlZesrrGMRMOwwxGOX0A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=s9o3owcH; arc=none smtp.client-ip=209.85.208.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-572f6c56cdaso1606a12.0
+        for <linux-usb@vger.kernel.org>; Fri, 10 May 2024 10:47:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1715359412; x=1715964212; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fV4xwRfH6Q44lAhoQwtLiOzzg7OoedjeQNAHkTSN4sk=;
-        b=jVatEdLlSH0aCvyl9UTEog28oZU6WPmzZs8ifWH3nlxQ8Pj5RKVmzFWL9rUgKnzxC8
-         NCboj0YXcu7VlATUvyU78F/10UegxfzwZHhNloro3E3ClAgqpELZZ4TFj8Fl8QRnZPdm
-         RvZaeWa1dgYJarJDrHLsSx7Q0QAxJOH20pmzt8Gs1Y4UYLfwf4dTSROz601K1k1/gLBb
-         I6QRFVk/enSyr/icYR4YixXdR2Zh/xZCuKPran2aOccDnJiaMe7QfOjvY4SpKPAE17bq
-         FvIMYjvojnP90Z8Myk6Vf/MQeqAN6aSydqd8v1EwGtg5ZhZhYdvYWdLK3BPbADWRVw7K
-         /Cag==
+        d=google.com; s=20230601; t=1715363264; x=1715968064; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=wtIQIip5nVPfkbjixVWdphytuwonMdaHcOLroeIqLNo=;
+        b=s9o3owcHBlN0toIX6BKL0MzUXBeLlkQL6SZ4zEQE32E0GloumirZ417QDlmBZ0NrhC
+         sH+xN1mnTienVbnHSErnxstvVIxfJZKzL/Wu9aywNdItoMJtgALS9esesmit1Tska0+z
+         nZ5ChHFtiCio4iprFxbhFhTexHx4XzDWQE3ENOgJPmgRQRIZKdra6Zy3/vZDOR5sxTPP
+         35MVlV9XdficZ4H1nCIOn0PVd3RX+Gmj4ryhgB83Zr/ci2HBWXOekQaclnTl1xMK5kbQ
+         CjCpVh+2Wsl9REFxg0slxrmC74vhhnrpPboC7nU2flYzmhodqr7RY8L6/FT3W7WLYH1w
+         sTXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715359412; x=1715964212;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fV4xwRfH6Q44lAhoQwtLiOzzg7OoedjeQNAHkTSN4sk=;
-        b=IdM6I+5XeM/kc7b/Bv3myvSBy4p/INr92+/uPVWk1GK32Brfl9yUwT9NqGM2Boj6IU
-         oZvhpm8JdoBfD3ueurlBsJSRB7A4xS6WQuFftYlLOUwNEiavITPgrtnVKGyU5+iRNsfL
-         CRguWVs2uvZdonZpZr/T1WNlDDfYT1OAfhs75Pl8o8aUyRRAcr4AHnqEmcaSBPhpPAgH
-         GylSDQsO/iDel1uz+l/MNkZSkR1kVSwtbas/3rH4FGUXwayvNeR5x0PUCCuN+IXofTGk
-         1One/pfAQOufIxUo3nB9ogeh8ncvVDHDDMfHe32oupzD1cbCsmEPJUX6hdmSfPUtWY5+
-         TPxQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWLHZg3RJnvT143jfiTJcnGAOrsv09JuAScvr+ltdu7AkL/NHlEaNJ0ivBYFmB+9PT+TFpmrFkHlYfu8zj8RyVRsgaohj1/P5XV
-X-Gm-Message-State: AOJu0YyxcBAdblVw7c5KUdYsbAsNlLIO0quzgqvIPO0GIjXTn1Cue3KS
-	KnMyT/GyUCzzuDkrcKyzDK1p3QooE+QYKKg8fekS2taJ9CyAnmYt8ZGRf0gYCLa0GI1o0MQabwB
-	w1K238sOCoZA2oklFNsTv+pDWL49dsVJGzai33w==
-X-Google-Smtp-Source: AGHT+IHz+tr9fUvPcGFdrdDni+MtqeYQCFk2Ebm1uXhnb7ZxmEPMNQwNj5AVU/i6HGXgqBJpfKpmjc2gmUOQ+Vu0X3k=
-X-Received: by 2002:a25:9183:0:b0:de5:5919:c9e5 with SMTP id
- 3f1490d57ef6-dee4f4b98f7mr3069205276.43.1715359412355; Fri, 10 May 2024
- 09:43:32 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1715363264; x=1715968064;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wtIQIip5nVPfkbjixVWdphytuwonMdaHcOLroeIqLNo=;
+        b=pMCOHzj1/U5ohit0KqdDEOBwChyD5S7J6gRz+R4jGrcbM0dIS0b+4/IYrv9vmWL7XP
+         bUXEFRL1XOrGc+7HZk1L56s+r7jCtaNdDpJFThYYk4ZIIEImTSPYRYs9Rs1fzZUFNFLi
+         FJsUtNh2KdEbTmeGyjeHNq3PHaC7LNormHuByr2wOhjRIpreJOieOsmue0kjmUFIOq3f
+         q4zQAKSeR/sdZtLfHjtQGrjixjv97EN8W3CfJp82Yc7mC+VWGxIgwJqWUBgFvMmXOaXj
+         gnckhMiB5PUMhrNIkeFpQTdJyOOSm8nDdsGTobeTuonKA4yHHyDzuCCRtqfNxdfVve4I
+         wm/w==
+X-Forwarded-Encrypted: i=1; AJvYcCWaO551CaqQX9RhQBxVWqYdwoTF+n8KkEWD8AOxgy6rO38m6gLa6vpZM6qI130SjQDKC0ddUgY9LshI8Rv7QG4tFyJ2Cc771XtQ
+X-Gm-Message-State: AOJu0YygoSjy320+ndEpbkrwIE+Vyj9P/0kWSlLQSY1OdL3/7MkClTtO
+	N1u9Fkhm904UgfJdjIQTtc1iwhKRZmK0MaqFUcI2EuI074TuIJX1Fnmmfeizf8FIbwwNdUCWYhC
+	NiKplGkG4izjTImxZz4QlZC0I8Glw6KXFcVydHlqZ2pfXFYbVBA==
+X-Google-Smtp-Source: AGHT+IHa5FsJxGeGgllWY9Q4tH+ll2VsmZa3DhLaRjKNVSrW18OHO9wNIjfKJEwokkqsTG8piczzmGTMpNstjiLBz5M=
+X-Received: by 2002:a05:6402:1e87:b0:572:554b:ec4f with SMTP id
+ 4fb4d7f45d1cf-574499eff4cmr162a12.3.1715363264154; Fri, 10 May 2024 10:47:44
+ -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240510152641.2421298-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20240510152641.2421298-1-andriy.shevchenko@linux.intel.com>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Fri, 10 May 2024 18:43:20 +0200
-Message-ID: <CACRpkdbGn1vZn24LmqW6tKXmFf15cbu3OP1H-jYs1pe=C7f7gg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] usb: fotg210: Add missing kernel doc description
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@pengutronix.de>, 
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <20240503003920.1482447-1-jthies@google.com> <20240503003920.1482447-2-jthies@google.com>
+ <Zjiq4PrL2ju8FOUz@kuha.fi.intel.com> <2024051010-hungrily-scholar-7d23@gregkh>
+In-Reply-To: <2024051010-hungrily-scholar-7d23@gregkh>
+From: Jameson Thies <jthies@google.com>
+Date: Fri, 10 May 2024 10:47:32 -0700
+Message-ID: <CAMFSARfBu1vBbuA-jMgD0fWJL1_zfQ2X1P0XB-ysQNrJL7+B5g@mail.gmail.com>
+Subject: Re: [PATCH v3 1/4] usb: typec: ucsi: Fix null pointer dereference in trace
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, linux-usb@vger.kernel.org, 
+	pmalani@chromium.org, bleung@google.com, abhishekpandit@chromium.org, 
+	andersson@kernel.org, dmitry.baryshkov@linaro.org, 
+	fabrice.gasnier@foss.st.com, hdegoede@redhat.com, neil.armstrong@linaro.org, 
+	rajaram.regupathy@intel.com, saranya.gopal@intel.com, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, May 10, 2024 at 5:26=E2=80=AFPM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
+Thank you for the feedback, I'll post a v4 series fixing these issues.
 
-> kernel-doc validator is not happy:
->
->   warning: Function parameter or struct member 'fotg' not described in 'f=
-otg210_vbus'
->
-> Add missing description.
->
-> Fixes: 3e679bde529e ("usb: fotg210-udc: Implement VBUS session")
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
-> v2: fixed typo (LKP, Greg)
-
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-
-Yours,
-Linus Walleij
+Thanks,
+Jameson
 
