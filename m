@@ -1,52 +1,59 @@
-Return-Path: <linux-usb+bounces-10196-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10197-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C97FB8C20FE
-	for <lists+linux-usb@lfdr.de>; Fri, 10 May 2024 11:34:17 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2898A8C210C
+	for <lists+linux-usb@lfdr.de>; Fri, 10 May 2024 11:36:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8392A2818F3
-	for <lists+linux-usb@lfdr.de>; Fri, 10 May 2024 09:34:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 93B41B21FB3
+	for <lists+linux-usb@lfdr.de>; Fri, 10 May 2024 09:36:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A856816191A;
-	Fri, 10 May 2024 09:34:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43C2D1649DD;
+	Fri, 10 May 2024 09:35:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="KMPebKyZ"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="jQIrxaMv"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E07110A3E;
-	Fri, 10 May 2024 09:34:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B60CC161337;
+	Fri, 10 May 2024 09:35:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715333651; cv=none; b=jYtwqJ+2H/9CiMdLs49Tr9dsLioKcjVvvOD6qdLcaEYnc0YegMIqJRpafwPSaD1ZGhOQhETuRXKKCcGixRZX6VzJjNKIJqDJBrGAbSUauoUAw47JObQcV3Yl28s8wJzlmUYniQGrfQI6Sjs9aRoehz42310m1xm1aNMDIjKTfy0=
+	t=1715333751; cv=none; b=hRxmw+Q7/6E3YKArpxBkmnkO4CUt4HjBhMvATtUoGt98l/bv849uiQmpidc6/k4vg5l05KDafnaCfQ2bKpmdlJ27i/rYhJcJtoYmakNuecvE4gjnbHCxt/4SCxCiF0+DFeuYj9SD2Z0ChZ4RkhDtSB+EdsG4XLjiTMq0pRjk4XU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715333651; c=relaxed/simple;
-	bh=PYfpJSicKdob+Dew7EMxzG7V511iTL5iPZFXkg2MC4A=;
+	s=arc-20240116; t=1715333751; c=relaxed/simple;
+	bh=L+6AgakNTXIcMOAJNNHC8vZGom0I8qf1DFO1PdW1RqY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NoyaFpUbkyKhxCwOGch36XlAIJGr8b3dKmP5MiCdDoIXasCKWHa8Kd4zge+oRsC4W8DfFUwGMixvHqQId3jOR4j0mt/dzLce+hF8wCE58VE6ql0361NryIJFlof7Nc3qqgJL03yZwcWZjrA+zq8wH7POWqySqaL4JJxdQST9+w4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=KMPebKyZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F4C5C113CC;
-	Fri, 10 May 2024 09:34:08 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=ud/odVuIrOLgUVF80sHK6TvwdoT4gyHGYUVNo7ckaYIyFlhTatpov8iBmeaED/WrPjF/2g1+FsdgQaXiJPpDtkqeCmn514Tcjqt/aYvM2RQoT/hVq82fccAcuzuYmGTZayONvwEFhGSLDWYk/DVyfTCAoZIfmjVYjQyyxml+FkE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=jQIrxaMv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47028C113CC;
+	Fri, 10 May 2024 09:35:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1715333649;
-	bh=PYfpJSicKdob+Dew7EMxzG7V511iTL5iPZFXkg2MC4A=;
+	s=korg; t=1715333751;
+	bh=L+6AgakNTXIcMOAJNNHC8vZGom0I8qf1DFO1PdW1RqY=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=KMPebKyZhF1VD73UY+H2xHl6Zyc+b7YnTd7D8dBxwGZCuJd7OpAKc08BoXT/YsLib
-	 sWps0/rY8WjX2EDnbGL2iytunNZWmMOxQnq8C6eBUs9kjbj2k3KAXSUKpzlleIAjSP
-	 sy2hTvwoYMq3law1uLj5ug2lL+Jgqoq1TsIk7uF4=
-Date: Fri, 10 May 2024 10:34:05 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH v1 1/1] usb: fotg210: Add missing kernel doc description
-Message-ID: <2024051047-scrabble-variable-6e29@gregkh>
-References: <20240508150335.1378629-1-andriy.shevchenko@linux.intel.com>
+	b=jQIrxaMvMNcE0mSk6GpsIZ4aLjAtwbO52oQwGpRc3PfWva83FZbLpEM/etkFQaHv+
+	 9ZLYOpWvq8ryVathOVjUmMNQg8MyxUz93yDc5NmHdibWqrdecT7v82cBDpiC38H3vw
+	 gwoxH/azf4xsPMFsZVQ8blDxdT8SXARG3h+olSg4=
+Date: Fri, 10 May 2024 10:35:28 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: Jameson Thies <jthies@google.com>, linux-usb@vger.kernel.org,
+	pmalani@chromium.org, bleung@google.com,
+	abhishekpandit@chromium.org, andersson@kernel.org,
+	dmitry.baryshkov@linaro.org, fabrice.gasnier@foss.st.com,
+	hdegoede@redhat.com, neil.armstrong@linaro.org,
+	rajaram.regupathy@intel.com, saranya.gopal@intel.com,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/4] usb: typec: ucsi: Fix null pointer dereference in
+ trace
+Message-ID: <2024051010-hungrily-scholar-7d23@gregkh>
+References: <20240503003920.1482447-1-jthies@google.com>
+ <20240503003920.1482447-2-jthies@google.com>
+ <Zjiq4PrL2ju8FOUz@kuha.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -55,33 +62,27 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240508150335.1378629-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <Zjiq4PrL2ju8FOUz@kuha.fi.intel.com>
 
-On Wed, May 08, 2024 at 06:03:35PM +0300, Andy Shevchenko wrote:
-> kernel-doc validator is not happy:
+On Mon, May 06, 2024 at 01:03:12PM +0300, Heikki Krogerus wrote:
+> On Fri, May 03, 2024 at 12:39:17AM +0000, Jameson Thies wrote:
+> > From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+> > 
+> > ucsi_register_altmode checks IS_ERR on returned pointer and treats
+> > NULL as valid. When CONFIG_TYPEC_DP_ALTMODE is not enabled
+> > ucsi_register_displayport returns NULL which causese a NULL pointer
+> > dereference in trace. Rather than return NULL, call
+> > typec_port_register_altmode to register DisplayPort alternate mode
+> > as a non-controllable mode when CONFIG_TYPEC_DP_ALTMODE is not enabled.
+> > 
+> > Reviewed-by: Jameson Thies <jthies@google.com>
+> > Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
 > 
->   warning: Function parameter or struct member 'fotg' not described in 'fotg210_vbus'
-> 
-> Add missing description.
-> 
-> Fixes: 3e679bde529e ("usb: fotg210-udc: Implement VBUS session")
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  drivers/usb/fotg210/fotg210-core.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/usb/fotg210/fotg210-core.c b/drivers/usb/fotg210/fotg210-core.c
-> index 958fc40eae86..00483da40f04 100644
-> --- a/drivers/usb/fotg210/fotg210-core.c
-> +++ b/drivers/usb/fotg210/fotg210-core.c
-> @@ -95,6 +95,7 @@ static int fotg210_gemini_init(struct fotg210 *fotg, struct resource *res,
->  
->  /**
->   * fotg210_vbus() - Called by gadget driver to enable/disable VBUS
-> + * @fotg210: pointer to a private fotg210 object
->   * @enable: true to enable VBUS, false to disable VBUS
->   */
->  void fotg210_vbus(struct fotg210 *fotg, bool enable)
+> You delivered the patch, so you should have used SoB instead of
+> Reviewed-by tag:
+> https://docs.kernel.org/process/submitting-patches.html#when-to-use-acked-by-cc-and-co-developed-by
 
-I don't think you actually built the documentation after this patch :(
+Not "should", that would be "must". I can't take it like this, sorry.
+
+greg k-h
 
