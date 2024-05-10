@@ -1,53 +1,57 @@
-Return-Path: <linux-usb+bounces-10193-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10194-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97BE08C20E3
-	for <lists+linux-usb@lfdr.de>; Fri, 10 May 2024 11:26:52 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB80C8C20E5
+	for <lists+linux-usb@lfdr.de>; Fri, 10 May 2024 11:28:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4AD881F2258D
-	for <lists+linux-usb@lfdr.de>; Fri, 10 May 2024 09:26:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 79D931F22A6D
+	for <lists+linux-usb@lfdr.de>; Fri, 10 May 2024 09:28:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EE92160877;
-	Fri, 10 May 2024 09:26:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 897C5161320;
+	Fri, 10 May 2024 09:28:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="J8EUypkr"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="JZLPdWRa"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 618C310A3E
-	for <linux-usb@vger.kernel.org>; Fri, 10 May 2024 09:26:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04F371581E3;
+	Fri, 10 May 2024 09:28:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715333207; cv=none; b=H3rulD+1cjeSQWFbzAHwARdrzBDWDm581H84HoUpfWlpOIZTWnZYSmKwP/M9hVnYLH+qGr5djYmwvqJ2pjIK85g6Dc4MlqS3rTFeUTnMd8u28c1LWIsBPBX/cTsbqOB/j7FL3F/hGVULZWhfT5QvK4TI2DBwQbW7UhSdhSfyNB0=
+	t=1715333300; cv=none; b=dfGQ1WDicQewvK6ZUfGRZ1peeU5hSWYpI6K7a5Fa1LlCe17aC21oY4J5iGgkHUC9DFXedXVyKujtEKq5fS/wX1szf8x+/Yd5B1BjK0m3J2X5tVuc85W2rBn1uwwqrnUdA7Gp5LWZf1B7sP2frbWojQHCPYLu49FQDMtAIWtO9Yg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715333207; c=relaxed/simple;
-	bh=6NkCg7hpvWEUrsGIL4WYFJuRuaG7v2fpsPzQedT827c=;
+	s=arc-20240116; t=1715333300; c=relaxed/simple;
+	bh=dxTRjOQB8hV7hmmGL+CDfSzZsS7tWt/RvqCgX+Aa4Nk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pWubmbIzXtS4Vy72dK293t8Y80/xzfbuOmZxNy2Chg6DhUCuAefsvSvq7/H0TVEoggRwE1gyV+uhfrhLoxgKVgw+f8KjiFlFnz70u77zjKd1OGc7v5SmS4gywI2gNGYjeeIQ5mXjvd7f8c+QGcaBiufTflkzCCAhf306C5dj55E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=J8EUypkr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA1ACC113CC;
-	Fri, 10 May 2024 09:26:44 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=uq99qK0ll5sgi0+HTg4dUu7ZbnWKKwTakO6QFr19OdJHL+SJ6Q6mjTdtbUANUSIm93pD2oWuV/IMx4yOcSEapBXoJ7GxoiVoHsagzYp1ylsU5HHHGciM5Odm/qBPPL8wpE0XAZ7KuSTMya1ZX1yBI+sBPj5AA4HHNrtDsxlNJX0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=JZLPdWRa; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5CFBC113CC;
+	Fri, 10 May 2024 09:28:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1715333206;
-	bh=6NkCg7hpvWEUrsGIL4WYFJuRuaG7v2fpsPzQedT827c=;
+	s=korg; t=1715333299;
+	bh=dxTRjOQB8hV7hmmGL+CDfSzZsS7tWt/RvqCgX+Aa4Nk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=J8EUypkrEi/lLVyiyLIGYu5BzOCH0p9//zKa98fWmP5SUu6A3vXpwRYmy2yqb/Omr
-	 xbedhNxENtLOqfuaCWXDv4wez3e9p9J1zCQI3URIIk7SpqKjl1SdreKRuNYfrnoJpV
-	 rJRYvmIekvLGH5Sd4zo0viIPs7Jwvb3xmoY66A8A=
-Date: Fri, 10 May 2024 10:25:52 +0100
+	b=JZLPdWRaFF9cWZ1jbLzizYe53nqJZV9fwPKG5mQ8v0hCrqLuVNJx058fmrHjSq5AW
+	 2iX4dOByuR03/AEs6abnHDnvGp7dWIoDjqUBkk29ICt7ZCMGQIMjDrZi3wwgJj7f8q
+	 oL8oA5CRE1GZI/XZTu5SFF6O9pOFCXTveAbcFkqs=
+Date: Fri, 10 May 2024 10:28:14 +0100
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: linux-usb@vger.kernel.org, Yehezkel Bernat <YehezkelShB@gmail.com>,
-	Michael Jamet <michael.jamet@intel.com>,
-	Lukas Wunner <lukas@wunner.de>,
-	Andreas Noever <andreas.noever@gmail.com>
-Subject: Re: [GIT PULL] USB4/Thunderbolt changes for v6.10 merge window
-Message-ID: <2024051045-steadily-nutlike-dea4@gregkh>
-References: <20240510050524.GB4162345@black.fi.intel.com>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: Krishna Kurapati <quic_kriskura@quicinc.com>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"quic_ppratap@quicinc.com" <quic_ppratap@quicinc.com>,
+	"quic_jackp@quicinc.com" <quic_jackp@quicinc.com>,
+	kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v2] usb: dwc3: core: Fix unused variable warning in core
+ driver
+Message-ID: <2024051050-pantomime-sudden-a382@gregkh>
+References: <20240506074939.1833835-1-quic_kriskura@quicinc.com>
+ <20240508230839.utioi5i2c5kozm4d@synopsys.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -56,20 +60,54 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240510050524.GB4162345@black.fi.intel.com>
+In-Reply-To: <20240508230839.utioi5i2c5kozm4d@synopsys.com>
 
-On Fri, May 10, 2024 at 08:05:24AM +0300, Mika Westerberg wrote:
-> Hi Greg,
+On Wed, May 08, 2024 at 11:08:43PM +0000, Thinh Nguyen wrote:
+> On Mon, May 06, 2024, Krishna Kurapati wrote:
+> > While fixing a merge conflict in linux-next, hw_mode variable
+> > was left unused. Remove the unused variable in hs_phy_setup call.
+> > 
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Closes: https://urldefense.com/v3/__https://lore.kernel.org/all/202405030439.AH8NR0Mg-lkp@intel.com/__;!!A4F2R9G_pg!aXN14tvkvwnNZ9N8-EDi-Seef9jgZBKlkZRYasINRgTOU2ijWbTvFIxkZIXOThGQQHmXc0FjiJPFI1cgdCOyAafAxB-70Q$ 
+> > Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> > ---
+> > Changes in v2:
+> > Added reported by and closes tags.
+> > 
+> >  drivers/usb/dwc3/core.c | 3 ---
+> >  1 file changed, 3 deletions(-)
+> > 
+> > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> > index 8b6f7769fcd5..7f176ba25354 100644
+> > --- a/drivers/usb/dwc3/core.c
+> > +++ b/drivers/usb/dwc3/core.c
+> > @@ -676,11 +676,8 @@ static int dwc3_ss_phy_setup(struct dwc3 *dwc, int index)
+> >  
+> >  static int dwc3_hs_phy_setup(struct dwc3 *dwc, int index)
+> >  {
+> > -	unsigned int hw_mode;
+> >  	u32 reg;
+> >  
+> > -	hw_mode = DWC3_GHWPARAMS0_MODE(dwc->hwparams.hwparams0);
+> > -
+> >  	reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(index));
+> >  
+> >  	/* Select the HS PHY interface */
+> > -- 
+> > 2.34.1
+> > 
 > 
-> The following changes since commit fec50db7033ea478773b159e0e2efb135270e3b7:
+> Looks like my response reporting the merge issue to Stephen fell through
+> the cracks.
 > 
->   Linux 6.9-rc3 (2024-04-07 13:22:46 -0700)
+> Thanks for the patch.
 > 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git tags/thunderbolt-for-v6.10-rc1
+> Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
 
-Pulled and pushed out, thanks.
+I think I already fixed this up when I did the merge a few hours ago, if
+not, please let me know.
+
+thanks,
 
 greg k-h
 
