@@ -1,57 +1,52 @@
-Return-Path: <linux-usb+bounces-10194-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10195-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB80C8C20E5
-	for <lists+linux-usb@lfdr.de>; Fri, 10 May 2024 11:28:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F1A38C20F9
+	for <lists+linux-usb@lfdr.de>; Fri, 10 May 2024 11:33:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 79D931F22A6D
-	for <lists+linux-usb@lfdr.de>; Fri, 10 May 2024 09:28:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5B562281473
+	for <lists+linux-usb@lfdr.de>; Fri, 10 May 2024 09:33:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 897C5161320;
-	Fri, 10 May 2024 09:28:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92D93161333;
+	Fri, 10 May 2024 09:33:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="JZLPdWRa"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="PNu2DomR"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04F371581E3;
-	Fri, 10 May 2024 09:28:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A1D129405;
+	Fri, 10 May 2024 09:33:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715333300; cv=none; b=dfGQ1WDicQewvK6ZUfGRZ1peeU5hSWYpI6K7a5Fa1LlCe17aC21oY4J5iGgkHUC9DFXedXVyKujtEKq5fS/wX1szf8x+/Yd5B1BjK0m3J2X5tVuc85W2rBn1uwwqrnUdA7Gp5LWZf1B7sP2frbWojQHCPYLu49FQDMtAIWtO9Yg=
+	t=1715333583; cv=none; b=b2s4zGfNjzVRl0EwReDFtoz2kSwN89HbDchHIHlnUjxkW0w1LmYthi7R8367Hdos34DDUEOY7Q8fT3/puhZmo3QbpODTt0Y5LEb8caFOhQ8rTk6qaj++VzqzEdxCN2d71h0evQ+z5P88bsUD3geID5dYcDXno0xVa2oP8NAuNbo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715333300; c=relaxed/simple;
-	bh=dxTRjOQB8hV7hmmGL+CDfSzZsS7tWt/RvqCgX+Aa4Nk=;
+	s=arc-20240116; t=1715333583; c=relaxed/simple;
+	bh=73JsTNaDf+GI4JlgU/jC3QWglWrdkJLycFiZnloba+w=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uq99qK0ll5sgi0+HTg4dUu7ZbnWKKwTakO6QFr19OdJHL+SJ6Q6mjTdtbUANUSIm93pD2oWuV/IMx4yOcSEapBXoJ7GxoiVoHsagzYp1ylsU5HHHGciM5Odm/qBPPL8wpE0XAZ7KuSTMya1ZX1yBI+sBPj5AA4HHNrtDsxlNJX0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=JZLPdWRa; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5CFBC113CC;
-	Fri, 10 May 2024 09:28:18 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=KaPhbw+BpCgVKscqQVxfVOtY+8WsFNfFGgjVO4Bbom3tOwmh4Lia48Y/Jz6+HaUEPtRtjHeR1VOpavKOYYx3+JOnELkZAnmqbBW7+ZFTSh04p5N3bUh2dsF1/XXsVC1X6jCHro4vzCUh8Y21JzDZfye4aUx4fpChFe5AFCaWUbI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=PNu2DomR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 150E5C32781;
+	Fri, 10 May 2024 09:33:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1715333299;
-	bh=dxTRjOQB8hV7hmmGL+CDfSzZsS7tWt/RvqCgX+Aa4Nk=;
+	s=korg; t=1715333582;
+	bh=73JsTNaDf+GI4JlgU/jC3QWglWrdkJLycFiZnloba+w=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JZLPdWRaFF9cWZ1jbLzizYe53nqJZV9fwPKG5mQ8v0hCrqLuVNJx058fmrHjSq5AW
-	 2iX4dOByuR03/AEs6abnHDnvGp7dWIoDjqUBkk29ICt7ZCMGQIMjDrZi3wwgJj7f8q
-	 oL8oA5CRE1GZI/XZTu5SFF6O9pOFCXTveAbcFkqs=
-Date: Fri, 10 May 2024 10:28:14 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Krishna Kurapati <quic_kriskura@quicinc.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"quic_ppratap@quicinc.com" <quic_ppratap@quicinc.com>,
-	"quic_jackp@quicinc.com" <quic_jackp@quicinc.com>,
-	kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v2] usb: dwc3: core: Fix unused variable warning in core
- driver
-Message-ID: <2024051050-pantomime-sudden-a382@gregkh>
-References: <20240506074939.1833835-1-quic_kriskura@quicinc.com>
- <20240508230839.utioi5i2c5kozm4d@synopsys.com>
+	b=PNu2DomRYjl0hblkn7Qiiwf6Dqk6ilB0FmSbGlFt7qWKRVJmojLcoWx1xmLCKxvzR
+	 k2EH0uYWTVwe/4M8+7xexcFDdZsH/t5CYylFFTyf2+mHApoA63oN/ay4BBsdxtOnU4
+	 LPrS3WRShXAwD7oJpl3MZ0cRtKZ+OJz3meLIlD1c=
+Date: Fri, 10 May 2024 10:32:57 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: qiurui <happyqiuqiu9604@gmail.com>
+Cc: corbet@lwn.net, linux-usb@vger.kernel.org, linux-doc@vger.kernel.org,
+	qiurui@kylinos.cn
+Subject: Re: [PATCH] docs: usb:gadget:hid: fix hid_gadget_test code in
+ documentation of hid section
+Message-ID: <2024051011-nearby-mowing-e53a@gregkh>
+References: <20240506024408.19344-1-qiurui@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -60,54 +55,78 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240508230839.utioi5i2c5kozm4d@synopsys.com>
+In-Reply-To: <20240506024408.19344-1-qiurui@kylinos.cn>
 
-On Wed, May 08, 2024 at 11:08:43PM +0000, Thinh Nguyen wrote:
-> On Mon, May 06, 2024, Krishna Kurapati wrote:
-> > While fixing a merge conflict in linux-next, hw_mode variable
-> > was left unused. Remove the unused variable in hs_phy_setup call.
-> > 
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Closes: https://urldefense.com/v3/__https://lore.kernel.org/all/202405030439.AH8NR0Mg-lkp@intel.com/__;!!A4F2R9G_pg!aXN14tvkvwnNZ9N8-EDi-Seef9jgZBKlkZRYasINRgTOU2ijWbTvFIxkZIXOThGQQHmXc0FjiJPFI1cgdCOyAafAxB-70Q$ 
-> > Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-> > ---
-> > Changes in v2:
-> > Added reported by and closes tags.
-> > 
-> >  drivers/usb/dwc3/core.c | 3 ---
-> >  1 file changed, 3 deletions(-)
-> > 
-> > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> > index 8b6f7769fcd5..7f176ba25354 100644
-> > --- a/drivers/usb/dwc3/core.c
-> > +++ b/drivers/usb/dwc3/core.c
-> > @@ -676,11 +676,8 @@ static int dwc3_ss_phy_setup(struct dwc3 *dwc, int index)
-> >  
-> >  static int dwc3_hs_phy_setup(struct dwc3 *dwc, int index)
-> >  {
-> > -	unsigned int hw_mode;
-> >  	u32 reg;
-> >  
-> > -	hw_mode = DWC3_GHWPARAMS0_MODE(dwc->hwparams.hwparams0);
-> > -
-> >  	reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(index));
-> >  
-> >  	/* Select the HS PHY interface */
-> > -- 
-> > 2.34.1
-> > 
+On Mon, May 06, 2024 at 10:44:08AM +0800, qiurui wrote:
+> Fix bzero buffer before read()
 > 
-> Looks like my response reporting the merge issue to Stephen fell through
-> the cracks.
+> Signed-off-by: qiurui <qiurui@kylinos.cn>
+> ---
+>  Documentation/usb/gadget_hid.rst | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> Thanks for the patch.
+> diff --git a/Documentation/usb/gadget_hid.rst b/Documentation/usb/gadget_hid.rst
+> index e623416de4f1..c4ee81a6b48e 100644
+> --- a/Documentation/usb/gadget_hid.rst
+> +++ b/Documentation/usb/gadget_hid.rst
+> @@ -410,6 +410,7 @@ Sample code::
+>  		}
+>  
+>  		if (FD_ISSET(fd, &rfds)) {
+> +			bzero(buf, SIZE);
+>  			cmd_len = read(fd, buf, BUF_LEN - 1);
+>  			printf("recv report:");
+>  			for (i = 0; i < cmd_len; i++)
+> @@ -419,6 +420,7 @@ Sample code::
+>  
+>  		if (FD_ISSET(STDIN_FILENO, &rfds)) {
+>  			memset(report, 0x0, sizeof(report));
+> +			bzero(buf, SIZE);
+>  			cmd_len = read(STDIN_FILENO, buf, BUF_LEN - 1);
+>  
+>  			if (cmd_len == 0)
+> -- 
+> 2.34.1
 > 
-> Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+> 
 
-I think I already fixed this up when I did the merge a few hours ago, if
-not, please let me know.
+Hi,
+
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
+
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- You did not specify a description of why the patch is needed, or
+  possibly, any description at all, in the email body.  Please read the
+  section entitled "The canonical patch format" in the kernel file,
+  Documentation/process/submitting-patches.rst for what is needed in
+  order to properly describe the change.
+
+- You did not write a descriptive Subject: for the patch, allowing Greg,
+  and everyone else, to know what this patch is all about.  Please read
+  the section entitled "The canonical patch format" in the kernel file,
+  Documentation/process/submitting-patches.rst for what a proper
+  Subject: line should look like.
+
+- It looks like you did not use your "real" name for the patch on either
+  the Signed-off-by: line, or the From: line (both of which have to
+  match).  Please read the kernel file,
+  Documentation/process/submitting-patches.rst for how to do this
+  correctly.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
 
 thanks,
 
-greg k-h
+greg k-h's patch email bot
 
