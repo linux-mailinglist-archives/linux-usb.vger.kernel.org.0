@@ -1,57 +1,60 @@
-Return-Path: <linux-usb+bounces-10230-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10231-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82E5A8C3016
-	for <lists+linux-usb@lfdr.de>; Sat, 11 May 2024 09:37:38 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E59F8C301C
+	for <lists+linux-usb@lfdr.de>; Sat, 11 May 2024 09:40:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1CC9FB2367C
-	for <lists+linux-usb@lfdr.de>; Sat, 11 May 2024 07:37:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D15EE1F22613
+	for <lists+linux-usb@lfdr.de>; Sat, 11 May 2024 07:40:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31D64D51D;
-	Sat, 11 May 2024 07:37:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDBBCFBE8;
+	Sat, 11 May 2024 07:40:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="h1VdbL2w"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="JV/HMLLw"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A13AE610D;
-	Sat, 11 May 2024 07:37:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 491F828E7;
+	Sat, 11 May 2024 07:40:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715413044; cv=none; b=ho9XwxMxNDUkdxzgQua/P6OHhKrUNBZMhd9Cl5usdBRIbdshh3FME8+m256HILqepo+8vn5DH1HCQFfhefZaILhpxrHpzhf38zrEgBa5tm1D9BbVKi6tGK9vDpp0+fjJrzLt1hpDDI5UTW/FPEwV27a05n11PLjJM93ONAmKKKo=
+	t=1715413205; cv=none; b=lIicoyCeR7wuR+HAFlZBkIQCo+EmtKjdY6lI+gI1Y3FuXU0urD55X2DJ1UxktZwwh3dqvxXkFLvJdrNxan0i/2JjB9umkGP/2v+XGz6JwQT74NV86PquOVCseV78f7HVqc6JlLI0OdbJ0CYcmbnltqhC3o7YA7pZm1oiJjQjOvg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715413044; c=relaxed/simple;
-	bh=WIE9ECguoTDl3Bh4p0UE2krEdWkqrl2jNYJbFKClDoQ=;
+	s=arc-20240116; t=1715413205; c=relaxed/simple;
+	bh=XF+Dy5icbI5aSYWMAVXu2mAAjgCiLJWJwJYriOUWYKg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=V8EdDsZq4oKbrZNJeDwrLk05dJnEHrsvZB+Z1mP8pQaCIV/RgfARni/hob1VSIm0s+OuzKznfiai7o/aO0/eQXvoCRiuPeyJSbNZ+qjrnPp/GL0gkXF9Y/SakFrPB5qs89QoEkFQsuFO8gYYB7bJSjl0hN/XDpqIjTz4EhXSeII=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=h1VdbL2w; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B33DBC2BD10;
-	Sat, 11 May 2024 07:37:23 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=Fo6adeuy20IuppPhyyVAr2JVEvb5U32/dpxctW1jwrty+e05eCRIlJd2xg2/sgXSrCqgNjGMtmqT3M4X0wQjVFHcTbnu2ZB8Bce0+cxHERCn1U0V551jkUJJv7W5mGEqKncu2xZT4ToR04IHr7/KNbICS51WbXZYVHwJPqXC0as=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=JV/HMLLw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B9A7C2BD10;
+	Sat, 11 May 2024 07:40:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1715413044;
-	bh=WIE9ECguoTDl3Bh4p0UE2krEdWkqrl2jNYJbFKClDoQ=;
+	s=korg; t=1715413204;
+	bh=XF+Dy5icbI5aSYWMAVXu2mAAjgCiLJWJwJYriOUWYKg=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=h1VdbL2wUMBdjTEztWbvIneGafbSp6R+1/FwIo6JIOemCjZKmu41PNgI8XjxBT3bM
-	 sfrOUesCf2wREt8R8O5S977KcyI0MeOfImcBVjsw30j+l18PafrlL4uXjYwUlpd2U+
-	 C1L0R3sm5O9slxLTQMq5Oj1hGWE/AI4I1CYul4vQ=
-Date: Sat, 11 May 2024 08:37:21 +0100
+	b=JV/HMLLwoQ06PnDnOPfN2lib6LkUv68VCHOl+HY5emtEqeCCDcKD816kruh4JiJ/V
+	 CCb+B8s0eoe89GR+ungdEBc3LugbBUjzGEunEm4Ga1tAN9pTdlxi139TT9iJjQ9N2i
+	 FmQRsBMOoKzip05DJgwgGeQ5Fu9hRsoCLJXWrcQI=
+Date: Sat, 11 May 2024 08:40:02 +0100
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, linux-usb@vger.kernel.org,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Johan Hovold <johan+linaro@kernel.org>
-Subject: Re: [usb:usb-testing 5/12]
- drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c:113:46: error: too many
- arguments to function call, expected single argument 'adev', have 2
- arguments
-Message-ID: <2024051142-gummy-slimness-47c0@gregkh>
-References: <202405111302.6y9oqb58-lkp@intel.com>
- <2024051124-waffle-blabber-eab6@gregkh>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"quic_ppratap@quicinc.com" <quic_ppratap@quicinc.com>,
+	"quic_jackp@quicinc.com" <quic_jackp@quicinc.com>,
+	kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v2] usb: dwc3: core: Fix unused variable warning in core
+ driver
+Message-ID: <2024051154-define-scandal-993a@gregkh>
+References: <20240506074939.1833835-1-quic_kriskura@quicinc.com>
+ <20240508230839.utioi5i2c5kozm4d@synopsys.com>
+ <2024051050-pantomime-sudden-a382@gregkh>
+ <0f056ece-6d38-428e-bf18-edb053c90ca7@quicinc.com>
+ <20240511010732.4o5dkela2geoyfma@synopsys.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -60,46 +63,71 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2024051124-waffle-blabber-eab6@gregkh>
+In-Reply-To: <20240511010732.4o5dkela2geoyfma@synopsys.com>
 
-On Sat, May 11, 2024 at 08:32:12AM +0100, Greg Kroah-Hartman wrote:
-> On Sat, May 11, 2024 at 02:02:15PM +0800, kernel test robot wrote:
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-> > head:   344f74cf531d90245e1296b3ffbaa7df99dd18f6
-> > commit: 718b36a7b49acbba36546371db2d235271ceb06c [5/12] usb: typec: qcom-pmic-typec: split HPD bridge alloc and registration
-> > config: arm-randconfig-002-20240511 (https://download.01.org/0day-ci/archive/20240511/202405111302.6y9oqb58-lkp@intel.com/config)
-> > compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project b910bebc300dafb30569cecc3017b446ea8eafa0)
-> > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240511/202405111302.6y9oqb58-lkp@intel.com/reproduce)
+On Sat, May 11, 2024 at 01:07:41AM +0000, Thinh Nguyen wrote:
+> On Sat, May 11, 2024, Krishna Kurapati PSSNV wrote:
 > > 
-> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202405111302.6y9oqb58-lkp@intel.com/
 > > 
-> > All errors (new ones prefixed by >>):
+> > On 5/10/2024 2:58 PM, Greg Kroah-Hartman wrote:
+> > > On Wed, May 08, 2024 at 11:08:43PM +0000, Thinh Nguyen wrote:
+> > > > On Mon, May 06, 2024, Krishna Kurapati wrote:
+> > > > > While fixing a merge conflict in linux-next, hw_mode variable
+> > > > > was left unused. Remove the unused variable in hs_phy_setup call.
+> > > > > 
+> > > > > Reported-by: kernel test robot <lkp@intel.com>
+> > > > > Closes: https://urldefense.com/v3/__https://lore.kernel.org/all/202405030439.AH8NR0Mg-lkp@intel.com/__;!!A4F2R9G_pg!aXN14tvkvwnNZ9N8-EDi-Seef9jgZBKlkZRYasINRgTOU2ijWbTvFIxkZIXOThGQQHmXc0FjiJPFI1cgdCOyAafAxB-70Q$
+> > > > > Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> > > > > ---
+> > > > > Changes in v2:
+> > > > > Added reported by and closes tags.
+> > > > > 
+> > > > >   drivers/usb/dwc3/core.c | 3 ---
+> > > > >   1 file changed, 3 deletions(-)
+> > > > > 
+> > > > > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> > > > > index 8b6f7769fcd5..7f176ba25354 100644
+> > > > > --- a/drivers/usb/dwc3/core.c
+> > > > > +++ b/drivers/usb/dwc3/core.c
+> > > > > @@ -676,11 +676,8 @@ static int dwc3_ss_phy_setup(struct dwc3 *dwc, int index)
+> > > > >   static int dwc3_hs_phy_setup(struct dwc3 *dwc, int index)
+> > > > >   {
+> > > > > -	unsigned int hw_mode;
+> > > > >   	u32 reg;
+> > > > > -	hw_mode = DWC3_GHWPARAMS0_MODE(dwc->hwparams.hwparams0);
+> > > > > -
+> > > > >   	reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(index));
+> > > > >   	/* Select the HS PHY interface */
+> > > > > -- 
+> > > > > 2.34.1
+> > > > > 
+> > > > 
+> > > > Looks like my response reporting the merge issue to Stephen fell through
+> > > > the cracks.
+> > > > 
+> > > > Thanks for the patch.
+> > > > 
+> > > > Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+> > > 
+> > > I think I already fixed this up when I did the merge a few hours ago, if
+> > > not, please let me know.
+> > > 
 > > 
-> >    In file included from drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c:15:
-> >    In file included from include/linux/regulator/consumer.h:35:
-> >    In file included from include/linux/suspend.h:5:
-> >    In file included from include/linux/swap.h:9:
-> >    In file included from include/linux/memcontrol.h:21:
-> >    In file included from include/linux/mm.h:2210:
-> >    include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-> >      522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-> >          |                               ~~~~~~~~~~~ ^ ~~~
-> > >> drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c:113:46: error: too many arguments to function call, expected single argument 'adev', have 2 arguments
-> >      113 |         ret = devm_drm_dp_hpd_bridge_add(tcpm->dev, bridge_dev);
-> >          |               ~~~~~~~~~~~~~~~~~~~~~~~~~~            ^~~~~~~~~~
-> >    include/drm/bridge/aux-bridge.h:36:19: note: 'devm_drm_dp_hpd_bridge_add' declared here
-> >       36 | static inline int devm_drm_dp_hpd_bridge_add(struct auxiliary_device *adev)
-> >          |                   ^                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >    1 warning and 1 error generated.
+> > Hi Greg,
+> > 
+> >  I just checked usb-next and linux-next. The unused variable is still there.
+> > Can you pick this change up.
+> > 
 > 
-> This is a bug in the drm headers, not in the commit that was added here,
-> so I'll keep the USB change and try to dig to find the drm fix which
-> hopefully is somewhere in someone else's tree...
+> Just want to note that this new merge conflict is different than the
+> previous that the new fix doesn't iterate through GUSB3PIPECTL[n] and
+> GUSB2PHYCFG[n] base on the number of ports in dwc3_enable_susphy().
+> 
+> I don't think this will affect multi-port configurations. But for
+> consistency, we can iterate and apply the change for all ports.
+> I can submit a patch later.
 
-Can't find it in linux-next so I'll make a fix up later today.
+Please do, thanks!
 
 greg k-h
 
