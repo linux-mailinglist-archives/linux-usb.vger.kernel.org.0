@@ -1,31 +1,31 @@
-Return-Path: <linux-usb+bounces-10245-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10246-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A1E168C389B
-	for <lists+linux-usb@lfdr.de>; Sun, 12 May 2024 23:33:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04F8F8C38F8
+	for <lists+linux-usb@lfdr.de>; Mon, 13 May 2024 00:10:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C103B1C20C5D
-	for <lists+linux-usb@lfdr.de>; Sun, 12 May 2024 21:33:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AE8C42817E4
+	for <lists+linux-usb@lfdr.de>; Sun, 12 May 2024 22:10:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 358FE54762;
-	Sun, 12 May 2024 21:33:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8160054F91;
+	Sun, 12 May 2024 22:10:19 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EA14381DA
-	for <linux-usb@vger.kernel.org>; Sun, 12 May 2024 21:33:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 248535674C
+	for <linux-usb@vger.kernel.org>; Sun, 12 May 2024 22:10:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715549590; cv=none; b=oJLy68aormTqBnlSLQ9Vy15Tx35vkCTLQBz9h0Gu9b+AUO6NIsJi7lNKMd9zTlDv63GCbglJluATluXUaKAshFRCpEC6VmsmzosBj3ArfQEYm6/VZjXgXvU+oAZFWn885uNLGnZhdPBD1EAq9O8vodvjXa8WqwXL8Jr/rCL/0Ys=
+	t=1715551819; cv=none; b=SsJEX4uacgepP+0xRNd7+Lwkik26a/u2ZvY//Leb7AFFQc3Hj7+Yy5xPq3m8AMkGiE5AYI2mwfAsT1uuPHxe7g1ShZ4/XRbpMCMbKPnbd4cA9vknMPPPnuPmw70x58324utfAIyG4fw77CMF5YOk4sky7rNHU8FE31wehn8VTuY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715549590; c=relaxed/simple;
-	bh=qyD64g+gtTWIb6C3r4S6GDbkc52+8LYEktIp3sL18CA=;
+	s=arc-20240116; t=1715551819; c=relaxed/simple;
+	bh=7GNiHiyJMCc14BEJmu617PiZxyGP2KecnFrx009A7Pg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=owKcUWeKVSqAVQ/qgrsOLe5JARQ6L9oyuLS1koB9+33HBN8iexSTR7pPv6Q+/zIbBXq1VhGMQQz4RV5tl4WcTSMjomeHAWIkHY9UpMQgo+TRxq81QQ6ktFiTSlc5apAQLzjwzguFtY9p3n/AHqY5wTWBjC6tkvIeO+071532y8k=
+	 Content-Type:Content-Disposition:In-Reply-To; b=RLNqmKkgOrZMUG/FJ8Ua6V25q9oDueZLXx5x0sb5q+whTjo3z3FrqEQkT2cVeuH7O9bxkkM7zfyAyJHwcWUlFOJTCH+pYssbB1MhfjTmxuoo87NjpBuquY5zZ+lB7pL2ABQnz3kYSBQ0ztkZGoCIe42DmvrXAqnSfWnf3awczdA=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -33,34 +33,36 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <mgr@pengutronix.de>)
-	id 1s6Gob-0008Lu-7B; Sun, 12 May 2024 23:33:05 +0200
+	id 1s6HOP-0002QD-CV; Mon, 13 May 2024 00:10:05 +0200
 Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <mgr@pengutronix.de>)
-	id 1s6GoZ-00135J-Ul; Sun, 12 May 2024 23:33:03 +0200
+	id 1s6HON-0013DH-S3; Mon, 13 May 2024 00:10:03 +0200
 Received: from mgr by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
 	(envelope-from <mgr@pengutronix.de>)
-	id 1s6GoZ-007la7-2m;
-	Sun, 12 May 2024 23:33:03 +0200
-Date: Sun, 12 May 2024 23:33:03 +0200
+	id 1s6HON-007ltE-2S;
+	Mon, 13 May 2024 00:10:03 +0200
+Date: Mon, 13 May 2024 00:10:03 +0200
 From: Michael Grzeschik <mgr@pengutronix.de>
 To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+Cc: Avichal Rakesh <arakesh@google.com>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Daniel Scally <dan.scally@ideasonboard.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jayant Chowdhary <jchowdhary@google.com>,
+	"etalvala@google.com" <etalvala@google.com>,
+	Michael Riesch <michael.riesch@wolfvision.net>,
 	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
 	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] usb: dwc3: gadget: check drained isoc ep
-Message-ID: <ZkE1j2DH1TfUGoGi@pengutronix.de>
-References: <20240307-dwc3-gadget-complete-irq-v2-1-8c5e9b35f7b9@pengutronix.de>
- <20240402230555.xgt5uilc42diyr4m@synopsys.com>
- <20240402231848.4hzzrxegjrcmdab2@synopsys.com>
- <20240404002906.wk6xbz2wp2tf2xwn@synopsys.com>
- <Zie5sN473m2rgNTK@pengutronix.de>
- <20240424015059.w7hsee4tt2ixkp5y@synopsys.com>
- <ZjbIeib2UMta7FbY@pengutronix.de>
- <20240508230252.wauttsgkp63fpife@synopsys.com>
- <ZjwQkIBUlhl-4ScO@pengutronix.de>
- <20240511005148.zqighnpv2zxboogf@synopsys.com>
+Subject: Re: [PATCH 0/3] usb: gadget: uvc: allocate requests based on frame
+ interval length and buffersize
+Message-ID: <ZkE-O0yJ33T9hWa0@pengutronix.de>
+References: <ZiWga5Kqno1ICv97@pengutronix.de>
+ <dcad0089-4105-44bc-a2b4-3cfc6f44164b@google.com>
+ <ZifEvUi9-E8M4dp8@pengutronix.de>
+ <17192e0f-7f18-49ae-96fc-71054d46f74a@google.com>
+ <20240424022806.uo73nwpeg63vexiv@synopsys.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -68,9 +70,9 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="Qg65i6hvpnGuBTbU"
+	protocol="application/pgp-signature"; boundary="xJdUWAcFD0bnMbji"
 Content-Disposition: inline
-In-Reply-To: <20240511005148.zqighnpv2zxboogf@synopsys.com>
+In-Reply-To: <20240424022806.uo73nwpeg63vexiv@synopsys.com>
 X-Sent-From: Pengutronix Hildesheim
 X-URL: http://www.pengutronix.de/
 X-Accept-Language: de,en
@@ -81,162 +83,349 @@ X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expand
 X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
 
---Qg65i6hvpnGuBTbU
-Content-Type: text/plain; charset=us-ascii; format=flowed
+--xJdUWAcFD0bnMbji
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, May 11, 2024 at 12:51:57AM +0000, Thinh Nguyen wrote:
->On Thu, May 09, 2024, Michael Grzeschik wrote:
->> On Wed, May 08, 2024 at 11:03:00PM +0000, Thinh Nguyen wrote:
->> > On Sun, May 05, 2024, Michael Grzeschik wrote:
->> > > On Wed, Apr 24, 2024 at 01:51:01AM +0000, Thinh Nguyen wrote:
->> > > > >
->> > > >
->> > > > Right. Unfortunately, dwc3 can only "guess" when UVC function stops
->> > > > pumping more request or whether it's due to some large latency. The
->> > > > logic to workaround this underrun issue will not be foolproof. Per=
-haps
->> > > > we can improve upon it, but the solution is better implement at th=
-e UVC
->> > > > function driver.
->> > >
->> > > Yes, the best way to solve this is in the uvc driver.
->> > >
->> > > > I thought we have the mechanism in UVC function now to ensure queu=
-ing
->> > > > enough zero-length requests to account for underrun/latency issue?
->> > > > What's the issue now?
->> > >
->> > > This is actually only partially true. Even with the zero-length pack=
-ages
->> > > it is possible that we run into underruns. This is why we implemented
->> > > this patch. This has happened because another interrupt thread with =
-the
->> > > same prio on the same CPU as this interrupt thread was keeping the C=
-PU
+On Wed, Apr 24, 2024 at 02:28:10AM +0000, Thinh Nguyen wrote:
+>On Tue, Apr 23, 2024, Avichal Rakesh wrote:
+>>
+>>
+>> On 4/23/24 07:25, Michael Grzeschik wrote:
+>> > Ccing:
 >> >
->> > Do you have the data on the worst latency?
+>> > Michael Riesch <michael.riesch@wolfvision.net>
+>> > Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+>> >
+>> > On Mon, Apr 22, 2024 at 05:21:09PM -0700, Avichal Rakesh wrote:
+>> >> On 4/21/24 16:25, Michael Grzeschik wrote:
+>> >>> On Tue, Apr 09, 2024 at 11:24:56PM +0200, Michael Grzeschik wrote:
+>> >>>> This patch series is improving the size calculation and allocation
+>> >>>> of the uvc requests. Using the currenlty setup frame duration of the
+>> >>>> stream it is possible to calculate the number of requests based on =
+the
+>> >>>> interval length.
+>> >>>
+>> >>> The basic concept here is right. But unfortunatly we found out that
+>> >>> together with Patch [1] and the current zero length request pump
+>> >>> mechanism [2] and [3] this is not working as expected.
+>> >>>
+>> >>> The conclusion that we can not queue more than one frame at once into
+>> >>> the hw led to [1]. The current implementation of zero length reqeusts
+>> >>> which will be queued while we are waiting for the frame to finish
+>> >>> transferring will enlarge the frame duration. Since every zero-length
+>> >>> request is still taking up at least one frame interval of 125 us.
+>> >>
+>> >> I haven't taken a super close look at your patches, so please feel fr=
+ee
+>> >> to correct me if I am misunderstanding something.
+>> >>
+>> >> It looks like the goal of the patches is to determine a better number
+>> >> and size of usb_requests from the given framerate such that we send e=
+xactly
+>> >> nreqs requests per frame where nreqs is determined to be the exact nu=
+mber
+>> >> of requests that can be sent in one frame interval?
+>> >
+>> > It does not need to be the exact time, actually it may not be exact.
+>> > Scattering the data over all requests would not leave any headroom for
+>> > any latencies or overhead.
 >>
->> It was something a bit more then around 2ms AFAIR. Since with one frame
->> enqueued we only trigger the interrupt every 16 requests (16*125us =3D 2=
-ms)
+>> IIUC, patch 3/3 sets the number of requests to frameinterval / 125 us,
+>> which gives us the number of requests we can send in exactly one frame i=
+nterval,
+>> and then sets the size of the request as max framesize / nreq, which mea=
+ns the
+>> frames will be evenly divided up into all available requests (with a lit=
+tle
+>> fuzz factor here and there).
 >>
->> So with at least 2ms latency we did hit the sweet spot in several cases.
->
->For 2ms, we should be able to handle this with the zero-length requests.
-
-When the interrupt thread is the one that is enqueuing also the
-zero-requests (like the uvc_video gadget) is doing now, we won't be able
-to do that.
-
+>> This effectively means that (assuming no other delays) one frame will ta=
+ke
+>> ~one frameinterval to be transmitted?
 >>
->> > Can this other interrupt thread lower its priority relative to UVC? For
->> > isoc endpoint, data is time critical.
->>
->> The details are not that important. Sure the is a bug, that needed to be
->> solved. But all I wanted is to improve the overal dwc3 driver.
->>
->> > Currently dwc3 can have up to 255 TRBs per endpoint, potentially 255
->> > zero-length requests. That's 255 uframe, or roughly ~30ms. Is your wor=
-st
->> > latency more than 30ms? ie. no handling of transfer completion and
->> > ep_queue for the whole 255 intervals or 30ms. If that's the case, we
->> > have problems that cannot just be solved in dwc3.
->>
->> Yes. But as mentioned above, this was not the case. Speaking of, there
->> is currently a bug in the uvc_video driver, that is not taking into
->> acount that actually every zero-length request should without exception
->> need to trigger an interrupt.
->
->Not necessarily, you can send multiple set of zero-length requests
->where, for example, IOC on the last request of the set.
-
-Right. But for this we have to know if the last request that will be
-enqueued will be followed by an actual data request. As the uvc_video
-gadget is implemented now, we can not do this.
-
-It is only checking if the prepared list is empty and then it is
-enqueueing zero or data requests from the complete handler depending
-=66rom the outcome. It does not know if on the next enqueue the prepared
-list will have some requests ready.
-
->> Currently we also only scatter them over
->> the 16ms period, like with the actual payload. But since we feed the
->> video stream with the interrupts, we loose 2ms of potential ep_queue
->> calls with actual payload in the worst case.
->>
->> My patch is already in the stack and will be send today.
->>
->> > > busy. As the dwc3 interrupt thread get to its call, the time was alr=
-eady
->> > > over and the hw was already drained, although the started list was n=
-ot
->> > > yet empty, which was causing the next queued requests to be queued to
->> > > late. (zero length or not)
->> > >
->> > > Yes, this needed to be solved on the upper level first, by moving the
->> > > long running work of the other interrupt thread to another thread or
->> > > even into the userspace.
+>> >
+>> >> As the logic stands, we need some 0-length requests to be circulating=
+ to
+>> >> ensure that we don't miss ISOC deadlines. The current logic unconditi=
+onally
+>> >> sends half of all allocated requests to be circulated.
+>> >>
+>> >> With those two things in mind, this means than video_pump can at enco=
+de
+>> >> at most half a frame in one go, and then has to wait for complete
+>> >> callbacks to come in. In such cases, the theoretical worst case for
+>> >> encode time is
+>> >> 125us * (number of requests needed per frame / 2) + scheduling delays
+>> >> as after the first half of the frame has been encoded, the video_pump
+>> >> thread will have to wait 125us for each of the zero length requests to
+>> >> be returned.
+>> >>
+>> >> The underlying assumption behind the "queue 0-length requests" approa=
+ch
+>> >> was that video_pump encodes the frames in as few requests as possible
+>> >> and that there are spare requests to maintain a pressure on the
+>> >> ISOC queue without hindering the video_pump thread, and unfortunately
+>> >> it seems like patch 3/3 is breaking both of them?
 >> >
 >> > Right.
 >> >
->> > >
->> > > However I thought it would be great if we could somehow find out in
->> > > the dwc3 core and make the pump mechanism more robust against such
->> > > late enqueues.
+>> >> Assuming my understanding of your patches is correct, my question
+>> >> is: Why do we want to spread the frame uniformly over the requests
+>> >> instead of encoding it in as few requests as possible. Spreading
+>> >> the frame over more requests artificially increases the encode time
+>> >> required by video_pump, and AFAICT there is no real benefit to it?
 >> >
->> > The dwc3 core handling of events and ep_queue is relatively quick. I'm
->> > all for any optimization in the dwc3 core for performance. However, I
->> > don't want to just continue looking for workaround in the dwc3 core
->> > without looking to solve the issue where it should be. I don't want to
->> > sacrifice complexity and/or performance to other applications for just
->> > UVC.
->>
->> I totally understand this. And as we already found out more and more
->> about the underlying complexity of the dwc3 driver I see more and more
->> clearer how we have to handle the corner cases. I just started this
->> conversation with Avichal and you in the other thread.
->>
->> https://lore.kernel.org/all/17192e0f-7f18-49ae-96fc-71054d46f74a@google.=
-com/
->>
->> I think there is some work to come. As to be sure that everybody is on
->> the same page I will prepare a roadmap on how to proceed and what to
->> discuss. There are many cases interfering with each other which make the
->> solution pretty complex.
->
->That's great. Let's do that so we can resolve this issue.
-
-Good
-
->> > > This all started with that series.
->> > >
->> > > https://lore.kernel.org/all/20240307-dwc3-gadget-complete-irq-v1-0-4=
-fe9ac0ba2b7@pengutronix.de/
->> > >
->> > > And patch 2 of this series did work well so far. The next move was t=
-his
->> > > patch.
->> > >
->> > > Since the last week debugging we found out that it got other issues.
->> > > It is not allways save to read the HWO bit, from the driver.
->> > >
->> > > Turns out that after an new TRB was prepared with the HWO bit set
->> > > it is not save to read immideatly back from that value as the hw
->> > > will be doing some operations on that exactly new prepared TRB.
->> > >
->> > > We ran into this problem when applying this patch. The trb buffer li=
-st
->> > > was actually filled but we hit a false positive where the latest HWO=
- bit
->> > > was 0 (probably due to the hw action in the background) and therefor
->> > > went into end transfer.
->> > >
+>> > Thinh gave me the advise that it is better to use the isoc stream
+>> > constantly filled. Rather then streaming big amounts of data in the
+>> > beginning of an frameinterval and having then a lot of spare time
+>> > where the bandwidth is completely unsused.
 >> >
->> > Thanks for the update.
+>> > In our reallife scenario streaming big requests had the impact, that
+>> > the dwc3 core could not keep up with reading the amount of data
+>> > from the memory bus, as the bus is already under heavy load. When the
+>> > HW was then not able to transfer the requested and actually available
+>> > amount of data in the interval, the hw did give us the usual missed
+>> > interrupt answer.
+>> >
+>> > Using smaller requests solved the problem here, as it really was
+>> > unnecessary to stress the memory and usb bus in the beginning as
+>> > we had enough headroom in the temporal domain.
 >>
+>> Ah, I see. This was not a consideration, and it makes sense if USB
+>> bus is under contention from a few different streams. So the solution
+>> seems to be to spread the frame of as many requests as we can transmit
+>> in one frameinterval?
+>>
+>> As an experiment, while we wait for others to respond, could you try
+>> doubling (or 2.5x'ing to be extra safe) the number of requests allocated
+>> by patch 3/3 without changing the request's buffer size?
+>>
+>> It won't help with the error reporting but should help with ensuring
+>> that frames are sent out in one frameinterval with little to no
+>> 0-length requests between them.
+>>
+>> The idea is that video_pump will have enough requests available to fully
+>> encode the frame in one burst, and another frame's worth of request will=
+ be
+>> re-added to req_free list for video_pump to fill up in the time that the=
+ next
+>> frame comes in.
+>>
+>> >
+>> > Which then led to the conclusion that the number of needed requests
+>> > per image frame interval is calculatable since we know the usb
+>> > interval length.
+>> >
+>> > @Thinh: Correct me if I am saying something wrong here.
 >
+>Right, if you max out the data rate per uframe, there's less opportunity
+>for the host to schedule everything for that interval (e.g. affected
+>from other endpoint/device traffics, link commands etc). It also
+>increases the latency of DMA. In many cases, many other vendor hosts
+>can't handle 48KB/uframe for SuperSpeed and 96KB/uframe for SuperSpeed
+>Plus. So, you'd need to test your platform find the optimal request size
+>so it can work for most hosts.
+>
+>> >
+>> >>> Therefor to properly make those patches work, we will have to get ri=
+d of
+>
+>Sorry if I may have missed the explaination, but why do we need to rid
+>of this?
+
+
+The uvc_video gadget is queueing requests with ep_queue whenever they
+are prepared. However for uvc we may not send EOF to the host until
+we know that the frame was transmitted correct or wrong.
+
+To ensure this the gadget is waiting for the last request to be
+completed from dwc3. Until this request was not received, the current
+workflow is to enqueue zero-length requests into the dwc3 hw. With that,
+the final EOF request for the frame will be transmitted after the
+zero-length requests have passed the hw. (They have no data, but they
+still take one frameinterval durtion). This sparsed frame with
+zero-requests inbetween will interfere with the precalculation for
+request data we fill every request with based on the expected frame
+duration.
+
+I know this seems very interlocked. It is very complex indeed. Tell
+me if you still have questions and I will come up with some more
+details to the current uvc_video driver.
+
+>> >>> the zero length pump mechanism again and make sure that the whole
+>> >>> business logic of what to be queued and when will only be done in the
+>> >>> pump worker. It is possible to let the dwc3 udc run dry, as we are
+>> >>> actively waiting for the frame to finish, the last request in the
+>> >>> prepared and started list will stop the current dwc3 stream and=A0 f=
+or
+>> >>> no underruns will occur with the next ep_queue.
+>> >>
+>> >> One thing to note here: The reason we moved to queuing 0-length reque=
+sts
+>> >> from complete callback was because even with realtime priority, video=
+_pump
+>> >> thread doesn't always meet the ISOC queueing cadence. I think stoppin=
+g and
+>> >> starting the stream was briefly discussed in our initial discussion in
+>> >> https://urldefense.com/v3/__https://lore.kernel.org/all/2023041900114=
+3.pdxflhzyecf4kvee@synopsys.com/__;!!A4F2R9G_pg!ZmfvrPq4rs7MIhxNrrEqmgGrlYT=
+J12WgdzaqQhfEehKfjKqxPr2bC1RzUqaa9tvdBtAvXdyK2GpxYzvslpV6$
+>> >> and Thinh mentioned that dwc3 controller does it if it detects an und=
+errun,
+>> >> but I am not sure if starting and stopping an ISOC stream is good pra=
+ctice.
+>
+>There's a workaround specific for UVC in dwc3 to "guess" when underrun
+>happen. It's not foolproof. dwc3 should not need to do that.
+>
+>Isoc data is periodic and continuous. We should not expect this
+>unconventional re-synchronization.
+
+I think we have to discuss what is ment by resynchronization here. If
+the trb ring buffer did run dry and the software is aware of this
+(elemnt in the started and prepared list) then the interrupt handler
+already is calling End Stream Command.
+
+When the stream is stopped, what implications does this have on the bus?
+
+When the Endpoint is enabled, will the hardware then send zero-length
+requests on its own?
+
+With the next ep_queue we start another stream and when we keep up with
+this stream there is no underruns, right?
+
+I picture this scenario in my mind:
+
+thread 1: uvc->queue_buf is called:
+   - we encode the frame buffer data into all available requests
+     and put them into the per uvc_buffer perpared list
+     (as we precalculated the amount of requests properly to the expected
+      frame duration and buffer size there will be enough requests
+      available)
+   - wake up the pump thread
+
+thread 2: pump_worker is triggered
+   - take all requests from the prepared available buffer and enqueue them
+     into the hardware
+     (The pump worker is running with while(1) while it finds requests in
+      the per buffer prepared list) and therefor will have a high chance
+      to finish the pumping for one complete frame.
+   - check for any errors reported from the complete handlers
+     - on error
+       - stop enqueing new requests from current frame
+       - wait for the last request from errornous frame has returned
+   - only start pumping new requests from the next buffer when the last
+     request from the active frame has finished
+   - In the beginning of the next frame send one extra request with
+     EOF/ERR tag so the host knows that the last one was ok or not.
+
+thread 3: complete handler (interrupt)
+   - give back the requests into the empty_list
+   - report EXDEV and errors
+   - wake up the pump thread
+
+With this method we will continously drain the hw trb stream of the dwc3
+controller per frame and therefor will not shoot into one window where
+the current stream could be missed. With the data spreading over the
+many requests we also avoid the missed requests when the DMA was to
+slow.
+
+>> > The realtime latency aspect is not an issue anymore if we ensure that =
+we
+>> > always keep only one frame in the hw ring buffer. When the pump worker
+>> > ensure that it will always run through one full frame the scheduler has
+>> > no chance to break our running dwc3 stream. Since the pump is running
+>> > under a while(1) this should be possible.
+>>
+>> I'll wait for your patch to see, but are you saying that we should have =
+the
+>> pump worker busy spinning  when there are no frames available? Cameras c=
+annot
+>> produce frames fast enough for video_pump to be constantly encoding fram=
+es.
+>> IIRC, "encoding" a frame to usb_requests took less than a ms or two on my
+>> device, and frame interval is 33ms for a 30fps stream, so the CPU would =
+be
+>> busy spinning for ~30ms which is an unreasonable time for a CPU to be
+>> idling.
+>>
+>> >
+>> > Also with the request amount precalculation we can always encode the
+>> > whole frame into all available requests and don't have to wait for
+>> > requests to be available again.
+>> >
+>> > Together with the latest knowladge about the underlying hw we even nee=
+d to only
+>> > keep one frame in the HW ring buffer. Since we have some interrupt lat=
+ency,
+>> > keeping more frames in the ring buffer, would mean that we are not abl=
+e to tag
+>> > the currently streamed frame properly as errornous if the dwc3 hw ring=
+ buffer
+>> > is already telling the host some data about the next frame. And as we =
+already
+>> > need to wait for the end of the frame to finish, based on the assumpti=
+on that
+>> > only one frame is enqueued in the ring buffer the hw will stop the str=
+eam and
+>> > the next requst will start a new stream. So there will no missed under=
+runs be
+>> > happening.
+>> >
+>> > So the main fact here is, that telling the host some status about a
+>> > frame in the past is impossible! Therefor the first request of the next
+>> > hw stream need to be the one that is telling the Host if the previous =
+frame
+>> > is ment to be drawn or not.
+>>
+>> This is a fair point, but the timing on this becomes a little difficult =
+if
+>> the frame is sent over the entire frameinterval. If we wait for the enti=
+re
+>> frame to be transmitted, then we have 125us between the last request of a
+>> frame being transmitted and the first request of the next frame being
+>> queued. The userspace app producing the frames will have timing variatio=
+ns
+>> larger than 125us, so we cannot rely on a frame being available exactly =
+as
+>> one frame is fully transmitted, or of us being notified of transmission
+>> status by the time the next frame comes in.
+>>
+>> >
+>> >> Someone better versed in USB protocol can probably confirm, but it se=
+ems
+>> >> somewhat hacky to stop the ISOC stream at the end of the frame and re=
+start
+>> >> with the next frame.
+>> >
+>> > All I know is that the HW mechanism that is reading from the trb ring =
+buffer is
+>> > started or stopped I don't know if really the ISOC stream is stopped a=
+nd
+>> > restarted here or what that means on the real wire. And if so, I am un=
+sure if
+>> > that is really a problem or not. Thinh?
+>
+>For isoc IN endpoint, if the host requests for data while there's no TRB
+>prepared, the controller would respond with 0-length data. When we stop
+>and start again, we reschedule the prepared isoc data to go out on a new
+>interval.
+>
+>>
+>> Oh? That's great! If the controller can keep the ISOC stream from underr=
+uning
+>> without the gadget feeding it 0-length requests, then we can simplify the
+>> gadget side implementation quite a bit!
+
+>I'm not entirely clear on why we cannot use 0-length requests now. I
+>hope we can resolve this from UVC function driver as it seems to be a
+>proper place to handle this issue.
+
+See above.
+
+Michael
 
 --=20
 Pengutronix e.K.                           |                             |
@@ -244,25 +433,25 @@ Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
 31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
 Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
---Qg65i6hvpnGuBTbU
+--xJdUWAcFD0bnMbji
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmZBNYgACgkQC+njFXoe
-LGTQlhAA1KrYj8curg6vjJNRmuuBOzP4+enFXjLdJQANcM511UCavg4oSlF8c/iW
-AV7kI7vNzwRYg2EqYUBgreIXZWl4JKSc871te3ZOVxe7D9iEVLU2yJAJYC1fLscr
-TjH+Sp61V5oQ1igwaqfe9F4Zp2rbFhyqOfKfcWs0T8dxrtt4uLf2vdNh1IcTClFO
-wqU9O/6CTS+/8MTJOs30NqasvsdRmFzpKqnS6htUzPAPZzJ4mCNd5/22pXroHuAv
-hZcD8rMTgOMgw0B6i7usFuP4bz1etbswvThsqQKBNlvzatv0pAfGThx4WJuJ2vNT
-Fp+QSvEDE6CuHtfp5y3nFTfdCraAEY10wD26YLBZTEZuIxxaIiAe5hletcHfGmNQ
-WJkzAFXGVwQp1LYkofB8UPh/HP4XliroelHheP1t3SsT7RDRYSmD5LcDE3wwzvXC
-hMCng227KYNghELcEywbPTC60NCfWoktHj/VhzKg4+uYtJCtPW+1P2zKeia5vBl1
-oLSsQgQmuJ4dm+6JzJQBHswEuHU5CVQDkM4aJoK6sXOPAUJr60oHIuh/qzQwcoeY
-LIX5ngk5yFmwGr/80aC620ZhzNJ7rdCgl4UXDuIeKxN6mIVmiO2ZaX2J2jYBFo2P
-Ydy59NPo1f5MLbxJ0RSjXEuzYuqOpVEKilqycZSInjxJG207ybg=
-=pMov
+iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmZBPjgACgkQC+njFXoe
+LGSwQxAAyEgYBlFxoGm2DV3b2VJymfpvQeJARVMZE+Nqcx4ZMsO1/idEFvoY1RQR
+d9yEI1Xy8ANihpFliloKZJhp7rw8U6g9VGBNY/RkpZCiCaJnaBtoniVd1qD1A/+1
+s3AL8Vh9SJlMNeuIF8Naf7h9er1x29hNRxD3rHRm9g2VMfJmUBkhhZuTVhIzba07
+T8B89SBR47qkar/JieuuHtekaeBBtNCyqUqFx6YS7+7RoX63BGAZ7d14SVpi9LO8
+pkeos9RLqi4vrAWoidk6nv619HgsxcwW0aOJVvPt35ozARseq2KinRispiPyKl9p
+SgIo5R1u2YYV9PqASDo46ZVRY7g4wIqBvH3wxakuDLZf5apaWD96bJDpg1hEjnWy
+1AIthgMgf8zszxDlZAdLF2h/i9jA9ZXjTJZCm8Q2vcPph076eOOJqN2gKd6TFutq
+SCXxQXhaaLnxL0YSKP39PGh5rj9TKO6uJ513SqaItrjXuV/0QvMfs0kL/hlgAXnv
+q8nz511FDXa6XXun0HwPUSxGpeQ2VmXF9a1eXEkZKxBM4lscOUUWG5IfsVfJOMEe
+z1y9E9ouDhxPScD3sXFVzBXaDJdTy7PvVhFTo04+qI8nC22x943x9wGCSs6dAcFW
+KCk4A02rdJb3ph6+7H8cp35I3125m/Sv48bMLXQsHXl8tS4Qyqs=
+=XoCa
 -----END PGP SIGNATURE-----
 
---Qg65i6hvpnGuBTbU--
+--xJdUWAcFD0bnMbji--
 
