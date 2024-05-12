@@ -1,31 +1,31 @@
-Return-Path: <linux-usb+bounces-10244-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10245-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC0478C3895
-	for <lists+linux-usb@lfdr.de>; Sun, 12 May 2024 23:27:27 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A1E168C389B
+	for <lists+linux-usb@lfdr.de>; Sun, 12 May 2024 23:33:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3B8B6B20D14
-	for <lists+linux-usb@lfdr.de>; Sun, 12 May 2024 21:27:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C103B1C20C5D
+	for <lists+linux-usb@lfdr.de>; Sun, 12 May 2024 21:33:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED00F54750;
-	Sun, 12 May 2024 21:27:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 358FE54762;
+	Sun, 12 May 2024 21:33:11 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C9B33233
-	for <linux-usb@vger.kernel.org>; Sun, 12 May 2024 21:27:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EA14381DA
+	for <linux-usb@vger.kernel.org>; Sun, 12 May 2024 21:33:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715549239; cv=none; b=p6VJNKiZTxUWJFOqYuJ3d8JXEiZCizw7HPE+Sw6xxgSvdy7cfYb0yjna/gtjmm/D4szYnKFa0T/zcMJ+Q7Tz0MmE+ZkRXK85PYSyPXjeC47kVPpH7Me31WMJnxCdFlfnfus6BvC6nTHfFa84VYPT1K8Wj2NBpVJOiNYMhEuDaH0=
+	t=1715549590; cv=none; b=oJLy68aormTqBnlSLQ9Vy15Tx35vkCTLQBz9h0Gu9b+AUO6NIsJi7lNKMd9zTlDv63GCbglJluATluXUaKAshFRCpEC6VmsmzosBj3ArfQEYm6/VZjXgXvU+oAZFWn885uNLGnZhdPBD1EAq9O8vodvjXa8WqwXL8Jr/rCL/0Ys=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715549239; c=relaxed/simple;
-	bh=/SmCLc+51nZ7Qh9NIdIdGgRo8cOJ3eYudHiueR7zgtM=;
+	s=arc-20240116; t=1715549590; c=relaxed/simple;
+	bh=qyD64g+gtTWIb6C3r4S6GDbkc52+8LYEktIp3sL18CA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mY0WcfEFFZM/S6KQ1MFixW1R5LsDn/STmZXr2tguEG9lh5fzulLCCEy/T5f6StvvEI3S732TBrG/Nf+GdMvaq1tzBzncutXrTQgYFRB+GTnvu1LU0HkmeDMEwAd6v6PBkBg4Ea2YHdfbMiSw+eYTfvg0p/Gs4aXh473nctA1ddI=
+	 Content-Type:Content-Disposition:In-Reply-To; b=owKcUWeKVSqAVQ/qgrsOLe5JARQ6L9oyuLS1koB9+33HBN8iexSTR7pPv6Q+/zIbBXq1VhGMQQz4RV5tl4WcTSMjomeHAWIkHY9UpMQgo+TRxq81QQ6ktFiTSlc5apAQLzjwzguFtY9p3n/AHqY5wTWBjC6tkvIeO+071532y8k=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -33,35 +33,34 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <mgr@pengutronix.de>)
-	id 1s6Giq-0006BB-Nz; Sun, 12 May 2024 23:27:08 +0200
+	id 1s6Gob-0008Lu-7B; Sun, 12 May 2024 23:33:05 +0200
 Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <mgr@pengutronix.de>)
-	id 1s6Gio-00134c-U5; Sun, 12 May 2024 23:27:06 +0200
+	id 1s6GoZ-00135J-Ul; Sun, 12 May 2024 23:33:03 +0200
 Received: from mgr by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
 	(envelope-from <mgr@pengutronix.de>)
-	id 1s6Gio-007lUv-2j;
-	Sun, 12 May 2024 23:27:06 +0200
-Date: Sun, 12 May 2024 23:27:06 +0200
+	id 1s6GoZ-007la7-2m;
+	Sun, 12 May 2024 23:33:03 +0200
+Date: Sun, 12 May 2024 23:33:03 +0200
 From: Michael Grzeschik <mgr@pengutronix.de>
 To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Wesley Cheng <quic_wcheng@quicinc.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"michael.riesch@wolfvision.net" <michael.riesch@wolfvision.net>,
-	"kernel@pengutronix.de" <kernel@pengutronix.de>,
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
 	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] usb: dwc3: gadget: create per ep interrupts
-Message-ID: <ZkE0KkFNTMqVT8SP@pengutronix.de>
-References: <20240507-dwc3_per_ep_irqthread-v1-1-f14dec6de19f@pengutronix.de>
- <518a046b-1056-287b-f505-149958ad9c9c@quicinc.com>
- <ZjvuoVpVTnEcHRIH@pengutronix.de>
- <20240508231950.ifyawl6bfy6bzvk7@synopsys.com>
- <ZjwN0Zp03a1XuQij@pengutronix.de>
- <20240509002256.7grpmpnmlghft4gf@synopsys.com>
- <Zj49cYCdFuCGCXdU@pengutronix.de>
- <20240511001123.egbqumpzogk2mhxf@synopsys.com>
+Subject: Re: [PATCH v2] usb: dwc3: gadget: check drained isoc ep
+Message-ID: <ZkE1j2DH1TfUGoGi@pengutronix.de>
+References: <20240307-dwc3-gadget-complete-irq-v2-1-8c5e9b35f7b9@pengutronix.de>
+ <20240402230555.xgt5uilc42diyr4m@synopsys.com>
+ <20240402231848.4hzzrxegjrcmdab2@synopsys.com>
+ <20240404002906.wk6xbz2wp2tf2xwn@synopsys.com>
+ <Zie5sN473m2rgNTK@pengutronix.de>
+ <20240424015059.w7hsee4tt2ixkp5y@synopsys.com>
+ <ZjbIeib2UMta7FbY@pengutronix.de>
+ <20240508230252.wauttsgkp63fpife@synopsys.com>
+ <ZjwQkIBUlhl-4ScO@pengutronix.de>
+ <20240511005148.zqighnpv2zxboogf@synopsys.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -69,9 +68,9 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="2Dl1TMHoq2g/nDDc"
+	protocol="application/pgp-signature"; boundary="Qg65i6hvpnGuBTbU"
 Content-Disposition: inline
-In-Reply-To: <20240511001123.egbqumpzogk2mhxf@synopsys.com>
+In-Reply-To: <20240511005148.zqighnpv2zxboogf@synopsys.com>
 X-Sent-From: Pengutronix Hildesheim
 X-URL: http://www.pengutronix.de/
 X-Accept-Language: de,en
@@ -82,298 +81,162 @@ X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expand
 X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
 
---2Dl1TMHoq2g/nDDc
+--Qg65i6hvpnGuBTbU
 Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, May 11, 2024 at 12:11:31AM +0000, Thinh Nguyen wrote:
->On Fri, May 10, 2024, Michael Grzeschik wrote:
->> On Thu, May 09, 2024 at 12:23:09AM +0000, Thinh Nguyen wrote:
->> > On Thu, May 09, 2024, Michael Grzeschik wrote:
->> > > On Wed, May 08, 2024 at 11:20:03PM +0000, Thinh Nguyen wrote:
->> > > > On Wed, May 08, 2024, Michael Grzeschik wrote:
->> > > > > On Tue, May 07, 2024 at 11:57:36AM -0700, Wesley Cheng wrote:
->> > > > > > Hi Michael,
->> > > > > >
->> > > > > > On 5/6/2024 4:06 PM, Michael Grzeschik wrote:
->> > > > > > > This patch is splitting up the interrupt event handling from=
- one
->> > > > > > > interrupt thread to separate per endpoint interrupt threads.
->> > > > > > >
->> > > > > >
->> > > > > > I assume that the incentive from doing this is to improve over=
-all
->> > > > > > throughput numbers.  Would you be able to share some data on t=
-he
->> > > > > > benefits of moving to per EP event management?
->> > > > >
->> > > > > The main benefit is to make it possible to use high demanding usb
->> > > > > endpoints simultaneously. In our special case we saw that stream=
-ing
->> > > > > via uac and streaming via uvc was producing noise in the audio
->> > > > > stream. This was due to the fact, that the isoc feedback endpoint
->> > > > > that would adjust the samplerate was not being called fast enough
->> > > > > when there was heavy a lot of traffic in the uvc endpoint contex=
-t.
->> > > > >
->> > > > > By moving the endpoints into their own thread handlers the short
->> > > > > feedback requests are at least able to be scheduled in between t=
-he bursts
->> > > > > of the uvc packages. The next step is to have all threads runnin=
-g on
->> > > > > different cpu cores, without interfering each other. However, as=
- we
->> > > > > still have not matrix irq allocator for arm, there still is no d=
-irect
->> > > > > benefit from that yet.
->> > > > >
->> > > > >
->> > > > > > > To achieve this we create a new dwc3 interrupt domain in whi=
-ch
->> > > > > > > we map all claimed interrupts to individual interrupt thread=
-s.
->> > > > > > >
->> > > > > > > Although the gadget layer is preparing the claimed parameter
->> > > > > > > of each usb_ep which could be checked if the endpoint is
->> > > > > > > to used or not, the claimed value was 0 for each ep in gadge=
-t_start.
->> > > > > > > This was tested when describing some composite gadget using =
-configfs.
->> > > > > > >
->> > > > > >
->> > > > > > yeah... the claimed flag is cleared by the USB gadget, ie USB =
-configfs
->> > > > > > (not sure if you're using this) whenever it adds a USB config.=
-  This is
->> > > > > > to handle multi config situations, so subsequent USB configs c=
-an be
->> > > > > > assigned (resuse) endpoints, since only one config is active a=
-t a time
->> > > > > > for a USB device.
->> > > > > >
->> > > > > > This was a struggle for me as well when adding the TXFIFO resi=
-zing
->> > > > > > logic.  We won't actually know which EPs are going to be used =
-until the
->> > > > > > host issues the set configuration packet to select a config, a=
-nd the
->> > > > > > set_alt() callback issues usb_ep_enable().  So the implementat=
-ion
->> > > > > > (TXFIFO resizing) is currently based on the maximum potential =
-endpoints
->> > > > > > used by any USB configuration.
->> > > > > >
->> > > > > > Not sure if having 31 (potentially) different IRQ entries woul=
-d be ok,
->> > > > > > but maybe it would be simpler to just to request IRQ for dwc->=
-num_eps
->> > > > > > always?
->> > > > > >
->> > > > > > Have you tried this on a multi config device?
->> > > > >
->> > > > > No, I didn't. I doubt that this will work after your explanation=
-=2E So
->> > > > > thanks for the insides!
->> > > > >
->> > > > > I tried putting the request_threaded_irq into the ep_enable func=
-tion
->> > > > > but this does not work as I see a lot of schedule while atomic
->> > > > > errors. This is possible as ep_enable is called from an set alt
->> > > > > coming from ep0 interrupt thread context.
->> > > > >
->> > > > > So there is probably now no other option left to have exact endp=
-oint
->> > > > > interrupt threads. I will rework this back to request a kthread =
-for each
->> > > > > endpoint even as we will probably would not be using them.
+On Sat, May 11, 2024 at 12:51:57AM +0000, Thinh Nguyen wrote:
+>On Thu, May 09, 2024, Michael Grzeschik wrote:
+>> On Wed, May 08, 2024 at 11:03:00PM +0000, Thinh Nguyen wrote:
+>> > On Sun, May 05, 2024, Michael Grzeschik wrote:
+>> > > On Wed, Apr 24, 2024 at 01:51:01AM +0000, Thinh Nguyen wrote:
 >> > > > >
 >> > > >
->> > > > Do you have any data on latency here?
+>> > > > Right. Unfortunately, dwc3 can only "guess" when UVC function stops
+>> > > > pumping more request or whether it's due to some large latency. The
+>> > > > logic to workaround this underrun issue will not be foolproof. Per=
+haps
+>> > > > we can improve upon it, but the solution is better implement at th=
+e UVC
+>> > > > function driver.
 >> > >
->> > > I don't have the exact numbers for the uac feedback isoc endpoint
->> > > at the moment. But without the patch applied, it was reproducably
->> > > returning with EXDEV when we started uvc streaming and therefor
->> > > increased the amount of events per interrupt thread cycle.
+>> > > Yes, the best way to solve this is in the uvc driver.
 >> > >
->> > > With the patch applied however, we are able to only route the events=
- to
->> > > the corresponding soft irqs and leave the moment of truth to the
->> > > scheduler.
->> >
->> > Basically you're trying increase the priority of dwc3 by the greater
->> > number of soft interrupts.
->>
->> Possible. Never thought about this.
->>
->> > > > I don't see how introducing more soft interrupts would improve on
->> > > > latency, if anything, it should be worse?
->> > >
->> > > Why should explicit handling of coherent ep events on one cpu core
->> > > introduce more latency then by interleaving different events for
->> > > arbitrary ep all in one thread?
->> >
->> > Because we are only using a single interrupt line, the sequence of
->> > events need to be handled 1 set at a time. The amount of time saved fr=
-om
->> > handling interrupts of different endpoint should be miniscule. There's
->> > latency to switching context and locking, which I think would offset a=
-nd
->> > introduce more latency than what you can potentially save.
->> >
->> > I'd like to see data on the improvement on the net latency here.
->>
->> If this is the case. Then we are currently dealing with way to much
->> durtion in the complete handler of the endpoints. I can't really
->> tell for the uac endpoints. But the uvc complete endpoint is going
->> through this roundtrip.
->>
->> With no_interupt =3D 0 at every 16 request:
->>
->> dwc3_endpoint_interrupt
->>   dwc3_gadget_endpoint_trbs_complete
->>     dwc3_gadget_ep_cleanup_completed_requests
->> ~16 * {
->>         dwc3_gadget_ep_cleanup_completed_request
->> 	  dwc3_gadget_giveback
->> 	    usb_gadget_giveback_request
->> 	      usb_ep_queue
->> 	        __dwc3_gadget_ep_queue
->> 		  dwc3_prepare_trbs
->> ~ *	            {
->>                       dwc3_prepare_trbs_sg/dwc3_prepare_trbs_linear
->> 		    }
->> 		  dwc3_send_gadget_ep_cmd
->>       }
->>
->> I think this is a lot of stack for an interrupt thread to handle if you
->> really want to pipeline this in one irqthread run and leave and make
->> sure that the other endpoints will also be handled soon enough.
->>
->
->The usb_ep_queue ops should be relatively quick, I think you mean the
->request process and/or preparation at the function driver before queuing
->a new request? For usb_ep_queue(), the dwc3 driver doesn't need to do
->much except telling the controller that "new TRBs are prepared, go cache
->and process them when possible" in usb_ep_queue().
-
-What you refer is the call of prepare_trbs and ep_cmd. This is probably
-pretty fast. But we still do this up to 16 times on one interrupt run.
-To really tell the weight in that case we will have to come back with
-numbers.
-
->> > >
->> > > > This is making the driver way more complicated and potentially
->> > > > introduce many bugs.
->> > >
->> > > Possible, but not unsolvable.
->> > >
->> > > > I may be wrong here, but I suspect that by multiplying the interru=
-pt
->> > > > handlings, you _may_ see improvement due to the a higher chance be=
+>> > > > I thought we have the mechanism in UVC function now to ensure queu=
 ing
->> > > > selected by the scheduler. However, the overall latency will proba=
-bly
->> > > > be worse. (correct me if I'm wrong).
+>> > > > enough zero-length requests to account for underrun/latency issue?
+>> > > > What's the issue now?
 >> > >
->> > > I doubt that it will be worse if each softirq can be handled on
->> > > different cpus at the same time.
+>> > > This is actually only partially true. Even with the zero-length pack=
+ages
+>> > > it is possible that we run into underruns. This is why we implemented
+>> > > this patch. This has happened because another interrupt thread with =
+the
+>> > > same prio on the same CPU as this interrupt thread was keeping the C=
+PU
 >> >
->> > See comment above.
+>> > Do you have the data on the worst latency?
 >>
->> To solve this issue I see two options:
+>> It was something a bit more then around 2ms AFAIR. Since with one frame
+>> enqueued we only trigger the interrupt every 16 requests (16*125us =3D 2=
+ms)
 >>
->> We could either do this by having different interrupt threads per ep
->> like in this patch.
+>> So with at least 2ms latency we did hit the sweet spot in several cases.
 >
->I'd like to avoid this.
+>For 2ms, we should be able to handle this with the zero-length requests.
+
+When the interrupt thread is the one that is enqueuing also the
+zero-requests (like the uvc_video gadget) is doing now, we won't be able
+to do that.
+
+>>
+>> > Can this other interrupt thread lower its priority relative to UVC? For
+>> > isoc endpoint, data is time critical.
+>>
+>> The details are not that important. Sure the is a bug, that needed to be
+>> solved. But all I wanted is to improve the overal dwc3 driver.
+>>
+>> > Currently dwc3 can have up to 255 TRBs per endpoint, potentially 255
+>> > zero-length requests. That's 255 uframe, or roughly ~30ms. Is your wor=
+st
+>> > latency more than 30ms? ie. no handling of transfer completion and
+>> > ep_queue for the whole 255 intervals or 30ms. If that's the case, we
+>> > have problems that cannot just be solved in dwc3.
+>>
+>> Yes. But as mentioned above, this was not the case. Speaking of, there
+>> is currently a bug in the uvc_video driver, that is not taking into
+>> acount that actually every zero-length request should without exception
+>> need to trigger an interrupt.
 >
+>Not necessarily, you can send multiple set of zero-length requests
+>where, for example, IOC on the last request of the set.
+
+Right. But for this we have to know if the last request that will be
+enqueued will be followed by an actual data request. As the uvc_video
+gadget is implemented now, we can not do this.
+
+It is only checking if the prepared list is empty and then it is
+enqueueing zero or data requests from the complete handler depending
+=66rom the outcome. It does not know if on the next enqueue the prepared
+list will have some requests ready.
+
+>> Currently we also only scatter them over
+>> the 16ms period, like with the actual payload. But since we feed the
+>> video stream with the interrupts, we loose 2ms of potential ep_queue
+>> calls with actual payload in the worst case.
 >>
->> Or we ensure that the complete handler is not running that long.
->
->This should be the way to go. At the upper layer, you know what takes
->longer to prepare and what priority the work of each request/endpoint
->should be.
-
-Good.
-
->From the dwc3 driver, we currently don't handle the controller with
->"Multiple Interrupt Support" configuration where each interrupt line is
->associated with a separate event buffer and endpoint. So, it doesn't
->make sense to create different interrupt threads for each endpoint. For
->applications that have many endpoints, discounting the latency
->introduces by the function driver, we will have more latency from
->handling, scheduling, and waking up interrupt threads.
-
-I was not aware that this mode (Multiple Interrupt Support) is even possible
-with dwc3. So if I really want to get the per ep hanlder patch to be mainli=
-ne
-it really needs to make use of that feature.
-
->> This could be ensured by providing an interface that is similar to the
->> threaded interrupt interface. The complete handler should then only
->> wake up the corresponding complete thread.
+>> My patch is already in the stack and will be send today.
 >>
->> This policy of a short running complete handler also should be commented
->> somewhere in the kernel.
+>> > > busy. As the dwc3 interrupt thread get to its call, the time was alr=
+eady
+>> > > over and the hw was already drained, although the started list was n=
+ot
+>> > > yet empty, which was causing the next queued requests to be queued to
+>> > > late. (zero length or not)
+>> > >
+>> > > Yes, this needed to be solved on the upper level first, by moving the
+>> > > long running work of the other interrupt thread to another thread or
+>> > > even into the userspace.
+>> >
+>> > Right.
+>> >
+>> > >
+>> > > However I thought it would be great if we could somehow find out in
+>> > > the dwc3 core and make the pump mechanism more robust against such
+>> > > late enqueues.
+>> >
+>> > The dwc3 core handling of events and ep_queue is relatively quick. I'm
+>> > all for any optimization in the dwc3 core for performance. However, I
+>> > don't want to just continue looking for workaround in the dwc3 core
+>> > without looking to solve the issue where it should be. I don't want to
+>> > sacrifice complexity and/or performance to other applications for just
+>> > UVC.
 >>
->> Which brings me back to the open discussion with avichal, where I
->> already ment that it should be possible to completely remove the
->> usb_ep_queue callback from the complete handler. We there should only
->> update the buffer state and make sure that the pump worker would take
->> care of queueing the right buffers to the dwc3 driver. I will go more
->> into the details in this thread:
+>> I totally understand this. And as we already found out more and more
+>> about the underlying complexity of the dwc3 driver I see more and more
+>> clearer how we have to handle the corner cases. I just started this
+>> conversation with Avichal and you in the other thread.
 >>
 >> https://lore.kernel.org/all/17192e0f-7f18-49ae-96fc-71054d46f74a@google.=
 com/
 >>
->> > > > This will affect other applications.
+>> I think there is some work to come. As to be sure that everybody is on
+>> the same page I will prepare a roadmap on how to proceed and what to
+>> discuss. There are many cases interfering with each other which make the
+>> solution pretty complex.
+>
+>That's great. Let's do that so we can resolve this issue.
+
+Good
+
+>> > > This all started with that series.
 >> > >
->> > > Let's make sure we will not break anything on the way. Okay? :)
+>> > > https://lore.kernel.org/all/20240307-dwc3-gadget-complete-irq-v1-0-4=
+fe9ac0ba2b7@pengutronix.de/
 >> > >
->> > > > Let's not do this.
+>> > > And patch 2 of this series did work well so far. The next move was t=
+his
+>> > > patch.
 >> > >
->> > > I actually thought that this is even requested:
+>> > > Since the last week debugging we found out that it got other issues.
+>> > > It is not allways save to read the HWO bit, from the driver.
 >> > >
->> > > https://docs.kernel.org/usb/dwc3.html
+>> > > Turns out that after an new TRB was prepared with the HWO bit set
+>> > > it is not save to read immideatly back from that value as the hw
+>> > > will be doing some operations on that exactly new prepared TRB.
+>> > >
+>> > > We ran into this problem when applying this patch. The trb buffer li=
+st
+>> > > was actually filled but we hit a false positive where the latest HWO=
+ bit
+>> > > was 0 (probably due to the hw action in the background) and therefor
+>> > > went into end transfer.
 >> > >
 >> >
->> > That's a very old and outdate TODO list.
->>
->> We should ensure that this chapter will be removed then.
->
->Sure, we can remove that.
-
-Good.
-
->>
->> > We don't use wait_for_completion_timeout in the commands. During
->> > transfers, we're using Update Transfer command, and it completes almost
->> > immediately. The only time where a command may take a longer time is
->> > when we need to bring the device down for reset/disconnect and stop
->> > transfers, but that's not what contributes to the problem here.
->> >
->> > Internal tests show that we can achieve very close theoretical USB
->> > speeds with the current dwc3 implementation.
->>
->> Granted, but only if we ensure that the complete() callback is not
->> destroing the runtime duration and probably no usb_ep_queue is never
->> called from the complete callback.
+>> > Thanks for the update.
 >>
 >
->Right, we have tests that prepare/process requests within the completion
->callbacks, and we have tests that prepare/process requests in a separate
->work. Depending on the amount of work/latency needed, we implement in a
->certain way. e.g. for UASP tests, the processing of the request is on a
->separate work than completion callback.
-
-So we really need to come up with some interface for the user of the
-complete handlers. So the upper layers won't be informed that the
-amount of work is critical and therefor could need a separate thread.
-
-(At least this should be documented)
-
-Michael
 
 --=20
 Pengutronix e.K.                           |                             |
@@ -381,25 +244,25 @@ Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
 31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
 Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
---2Dl1TMHoq2g/nDDc
+--Qg65i6hvpnGuBTbU
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmZBNCgACgkQC+njFXoe
-LGSlvxAAphaRI9w8mm9MpkVyy19qjiZpyzIPZntcxodOIoMpoSzvDiNnNwRT7vFG
-TaOCAz52NxJyEjagwO2myEWCAjOErHacdtb7w3Gw48khvi+JwdlEqiHwyEy/hxzK
-J5zU0m7C1o5XP2aEnXKhvGdWNmSvPhS/5YA+pb6mV7Y+43Q7giaI5dVi9FvIVPx2
-VcHddzTh0FuZ4dxRs7a/siWyMgOsUmKTV20W0Z6TqrDywvBxgSpngW9xUZ2IBQ2m
-jLmniMjGR7ojBWvPC/OwCW8IKhTMHOdbo7NtlgMyUsw50K3c8vZ+wmu9Fy5sT7jd
-iEnjQL2KYo2GJz3jR9GmM6D4hfnV1tEGMaltAndf6eJZNOZI4D7xwkSD4e6RWngJ
-HQ3vgX0IZRH3/BOHBRujfk4SJErYKOyzXACwDEon1qbhQUL80bRZLR9gi7F/rOIe
-iNzHH3LLrkIH1g+wKQB9i28ZkWspbdTZ+ZDqub/SVllac5cJiYYGxg0prxwg9TOs
-vh1+zzov+xxaAWIOW9lP48m3weoWtO8W/tLlsRan5R8IqK+lU9a/CFTEXrR1FzWD
-hi3efEq9VaaVChsFXIhUsMIYewdMVMu7Fmz1DgmBkbJiGLBNhuZS0/pjDGy9qNIZ
-5wMNDl0OrvkHsuwGt8NgnUi0DDGPWSfFCCC2y9Xj5Dm0rj8Ek80=
-=QACj
+iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmZBNYgACgkQC+njFXoe
+LGTQlhAA1KrYj8curg6vjJNRmuuBOzP4+enFXjLdJQANcM511UCavg4oSlF8c/iW
+AV7kI7vNzwRYg2EqYUBgreIXZWl4JKSc871te3ZOVxe7D9iEVLU2yJAJYC1fLscr
+TjH+Sp61V5oQ1igwaqfe9F4Zp2rbFhyqOfKfcWs0T8dxrtt4uLf2vdNh1IcTClFO
+wqU9O/6CTS+/8MTJOs30NqasvsdRmFzpKqnS6htUzPAPZzJ4mCNd5/22pXroHuAv
+hZcD8rMTgOMgw0B6i7usFuP4bz1etbswvThsqQKBNlvzatv0pAfGThx4WJuJ2vNT
+Fp+QSvEDE6CuHtfp5y3nFTfdCraAEY10wD26YLBZTEZuIxxaIiAe5hletcHfGmNQ
+WJkzAFXGVwQp1LYkofB8UPh/HP4XliroelHheP1t3SsT7RDRYSmD5LcDE3wwzvXC
+hMCng227KYNghELcEywbPTC60NCfWoktHj/VhzKg4+uYtJCtPW+1P2zKeia5vBl1
+oLSsQgQmuJ4dm+6JzJQBHswEuHU5CVQDkM4aJoK6sXOPAUJr60oHIuh/qzQwcoeY
+LIX5ngk5yFmwGr/80aC620ZhzNJ7rdCgl4UXDuIeKxN6mIVmiO2ZaX2J2jYBFo2P
+Ydy59NPo1f5MLbxJ0RSjXEuzYuqOpVEKilqycZSInjxJG207ybg=
+=pMov
 -----END PGP SIGNATURE-----
 
---2Dl1TMHoq2g/nDDc--
+--Qg65i6hvpnGuBTbU--
 
