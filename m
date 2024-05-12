@@ -1,95 +1,102 @@
-Return-Path: <linux-usb+bounces-10241-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10242-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09F3B8C3626
-	for <lists+linux-usb@lfdr.de>; Sun, 12 May 2024 13:05:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A89578C3685
+	for <lists+linux-usb@lfdr.de>; Sun, 12 May 2024 14:29:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9E2131F212C8
-	for <lists+linux-usb@lfdr.de>; Sun, 12 May 2024 11:05:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D9E421C21161
+	for <lists+linux-usb@lfdr.de>; Sun, 12 May 2024 12:29:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A3F220322;
-	Sun, 12 May 2024 11:05:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 469CE20B33;
+	Sun, 12 May 2024 12:29:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="UZC+Zcgu"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F12E71CA9C
-	for <linux-usb@vger.kernel.org>; Sun, 12 May 2024 11:05:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B175F22F11
+	for <linux-usb@vger.kernel.org>; Sun, 12 May 2024 12:29:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715511905; cv=none; b=MJnt+7jpld+BBbYhIWgxPoF2EZJDcdJ+bGyYG6AmLCEjJFHz9PY2oKuUgRBlPLoSQo5ohCofYcc1wr9a7zRa3+0CtxI3NOmrLpuix+m55PJsMSe9Uvlxtj21faei5d+wEnrZbAD2FpCnHrmBlK6tTStMrVgr4+HmUFMEfba47e8=
+	t=1715516975; cv=none; b=MsL25KNarKBFTFv9wJHabVhzH0Mc97fiX1h7jYVAfrGth6thILiqsG6nBb1EaOrRwZ1nqSGK/MS9KHpz7kKddNAlhUSm2PsciTsFfJlcYe7jSFETB+OqH8p/wQ6QtHS/ZN0CBwJPoCie5RyFio/BjBcpqL90UIU83SPuw8veGXg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715511905; c=relaxed/simple;
-	bh=jYig5DgAOcqBHrE0/9+1Mu2F6/2OlimOLVdZNsXTNhY=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=pW+uoA3KRcyZ3LzVcymzNbXKxFk3SJskFdFwzYvlLtmXilLzidOzAQCkB3G10WCGiLHNrjJPrF7LbOMpZitgmBaONSJtQ0AJUmF55+hisjw41H6/Q9YJ27YIYGHKs9BcCsEQaVnU84gwlskW/LGxVw1PAHozL4zU1E1w7xpqoEA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f198.google.com with SMTP id e9e14a558f8ab-36b2eee85edso48531395ab.0
-        for <linux-usb@vger.kernel.org>; Sun, 12 May 2024 04:05:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715511903; x=1716116703;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1AzMq+CA5JeAen4yA3wRsZUlx1QJVPYX6wCmrtep2Os=;
-        b=iM8hZ8JTnpBIFXTdlDUW9bjlATbG/RtZu9T/vfb/Kk/R3HKJcmU8T0I4k8z5rW3TdT
-         vDfWYZYUPP5M3rjbFBN3GOTP91X+H/3y2rbNUajaCSlHrUy4PuVlVrnISdNkHVQBnKeF
-         8Ldz/Lhs1Iex/FR7R3gkpM3ztpdsZfdpFWpSPz9Gg+H7MwxkcWgH7C9eq6h45dFfP4sG
-         uP/Hb3lXoOWBZuSsmadqV3Z2eWG3Zz9jQmEzVD27/CkYX02D6gotkijDbP4po1ql37i3
-         wK4iahu3jFXNM+RUlbdyN+NzfuJ7ESPDuGqk4mP0BKPSrmb6krKSD1yRYQkVBTMOS/Ha
-         8soA==
-X-Forwarded-Encrypted: i=1; AJvYcCXtLY6rFQtVRsXIsZQKMzUNHAOVhq9o6Cf2YsAea9O8N6bxpNR1Cze5iQoJE82hap/8p707NqKZVMlYspufwRLnOXsaa4kRDmEd
-X-Gm-Message-State: AOJu0YwwZObfp6tSPPtnrFSmSHHkmqIkPylgJ/ssCEodlYgKiSy6lDD0
-	V9j+80l3QMBbscXboO0thrmqcQKXto/ZZx1mc7PkhOrKMJYyoB8FiVhNzqdHX1pX4iMOCUtClG4
-	dEVJYPjnbNMqD4ySsRDvCGb3b2JjsWEkAPsrJtoTfbrDYEGblv9/UPT8=
-X-Google-Smtp-Source: AGHT+IGNjREMwQGltAFiKnu2rdMUsKA/x7WehSP+HZJj5UV4BdfJukZuMBf6IpPhE0j3eAVYtBhejK+D6fNrUTJJVVE3zNpl+ZoP
+	s=arc-20240116; t=1715516975; c=relaxed/simple;
+	bh=6rp9tIiJUJ6ATs+ea9+T9RqkNLeclYaeP6YLET5ZzKY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TBnPypK6GZZc/OaMTERwkOGBeTKNdcSYqmdB7xSLPLSk35RRsfO7EqNuBPws+Zp8B2c6b1oRiM2eLrBlSIE6GzH8zlhjwNtexTK9YJVHvsbwujZGXtCNq8zA3WM0NSUpCMs0/6wiskAVzad5pfDlUps/PGkRY6Nj+VvtMf5QhoE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=UZC+Zcgu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16B95C116B1;
+	Sun, 12 May 2024 12:29:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1715516975;
+	bh=6rp9tIiJUJ6ATs+ea9+T9RqkNLeclYaeP6YLET5ZzKY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=UZC+ZcguPGGuH3rb5c8V7f+WMCn+bcEJJvrrhcCIz6TjPbMaedxTw5FmifsWmPMQa
+	 TDSLdlg8gJaLSbbDCh6qTXCtmkDs8oS3zvLqX+W757QyjKwvW7H9Y1hoInhdpLZzFY
+	 jEshpFQqkffNGQl6rkC6OoCiKbItlu4bPh7v6HBs=
+Date: Sun, 12 May 2024 13:29:31 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: sicong <congei42@163.com>
+Cc: peter.chen@kernel.org, pawell@cadence.com, rogerq@kernel.org,
+	linux-usb@vger.kernel.org
+Subject: Re: Bug report: usb: cdns3: cdns3-gadget.c: use-after-free bug in
+ cdns3_gadget_exit due to race condition
+Message-ID: <2024051207-grandson-desktop-85ea@gregkh>
+References: <7f5719b.8700.18f67b324d3.Coremail.congei42@163.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a92:d152:0:b0:36c:4457:ca5d with SMTP id
- e9e14a558f8ab-36cc14f785bmr944215ab.5.1715511903210; Sun, 12 May 2024
- 04:05:03 -0700 (PDT)
-Date: Sun, 12 May 2024 04:05:03 -0700
-In-Reply-To: <0000000000008de5720617f64aae@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000009966ab06183fbd83@google.com>
-Subject: Re: [syzbot] [block?] [usb?] INFO: rcu detected stall in aoecmd_cfg (2)
-From: syzbot <syzbot+1e6e0b916b211bee1bd6@syzkaller.appspotmail.com>
-To: axboe@kernel.dk, gregkh@linuxfoundation.org, hdanton@sina.com, 
-	justin@coraid.com, linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, loberman@redhat.com, marcello.bauer@9elements.com, 
-	rafael@kernel.org, stern@rowland.harvard.edu, sylv@sylv.io, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7f5719b.8700.18f67b324d3.Coremail.congei42@163.com>
 
-syzbot has bisected this issue to:
+On Sat, May 11, 2024 at 08:49:04PM +0800, sicong wrote:
+> 
+> 
+> usb: cdns3: cdns3-gadget.c: use-after-free bug in cdns3_gadget_exit due to      
+> race condition                                                                  
+>                                                                                 
+> This bug exists in drivers/usb/cdns3/cdns3-gadget.c. Function                   
+> __cdns3_gadget_init will call cdns3_gadget_start to do the futher jobs          
+> during the initialization proccess of cdns3 gadget. In cdns3_gadget_start,      
+> &priv_dev->pending_status_wq is bound with cdns3_pending_setup_status_handler.  
+> Then this work will be added to system_freezable_wq in cdns3_gadget_ep0_queue.  
+> Here is the code.                                                               
+> queue_work(system_freezable_wq, &priv_dev->pending_status_wq);                  
+>                                                                                 
+> If we call cdns3_gadget_exit to remove the device and make cleanup,             
+> there are some unfinished works. This function will call cdns3_free_all_eps to  
+> free all the endpoints. However, if cdns3_pending_setup_status_handler is       
+> scheduled to run after the free job, it will cause use-after-free error as      
+> cdns3_pending_setup_status_handler will use the endpoint in the following code. 
+> request->complete(&priv_dev->eps[0]->endpoint, request);                        
+>                                                                                 
+> The possible execution flow that may lead to this issue is as follows:          
+> CPU0                    CPU1                                                    
+>                       | __cdns3_gadget_init                                     
+>                       | cdns3_gadget_start                                      
+> cdns3_gadget_exit     |                                                             
+> cdns3_free_all_eps    |                                                             
+> devm_kfree (free)     |                                                             
+>                       | cdns3_pending_setup_status_handler                       
+>                       | &priv_dev->eps[0]->endpoint (use)    
+> 
+>                                                                                 
+> This bug may be fixed by adding the following code in cdns3_gadget_exit.        
+> cancel_work_sync(&priv_dev->pending_status_wq);                                 
+> cancel_work_sync(&priv_dev->aligned_buf_wq);                                    
 
-commit a7f3813e589fd8e2834720829a47b5eb914a9afe
-Author: Marcello Sylvester Bauer <sylv@sylv.io>
-Date:   Thu Apr 11 14:51:28 2024 +0000
+Can you please provide a patch for this so we can apply it and give you
+the credit for fixing the issue?
 
-    usb: gadget: dummy_hcd: Switch to hrtimer transfer scheduler
+thanks,
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=12415cd0980000
-start commit:   9221b2819b8a Add linux-next specific files for 20240503
-git tree:       linux-next
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=11415cd0980000
-console output: https://syzkaller.appspot.com/x/log.txt?x=16415cd0980000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=8ab537f51a6a0d98
-dashboard link: https://syzkaller.appspot.com/bug?extid=1e6e0b916b211bee1bd6
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15661898980000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=161a5d1f180000
-
-Reported-by: syzbot+1e6e0b916b211bee1bd6@syzkaller.appspotmail.com
-Fixes: a7f3813e589f ("usb: gadget: dummy_hcd: Switch to hrtimer transfer scheduler")
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+greg k-h
 
