@@ -1,87 +1,96 @@
-Return-Path: <linux-usb+bounces-10252-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10253-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8EF6D8C46B7
-	for <lists+linux-usb@lfdr.de>; Mon, 13 May 2024 20:09:40 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5072A8C49D1
+	for <lists+linux-usb@lfdr.de>; Tue, 14 May 2024 01:00:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BF2C61C21A28
-	for <lists+linux-usb@lfdr.de>; Mon, 13 May 2024 18:09:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 05F671F21FDE
+	for <lists+linux-usb@lfdr.de>; Mon, 13 May 2024 23:00:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C7542E3EE;
-	Mon, 13 May 2024 18:09:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 787C885275;
+	Mon, 13 May 2024 23:00:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YOEaI03q"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id 5767015B3
-	for <linux-usb@vger.kernel.org>; Mon, 13 May 2024 18:09:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0FA884DF5;
+	Mon, 13 May 2024 23:00:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715623775; cv=none; b=RjvFydGcin2iEqsSpUFk/NJXC0o50rZG9UoN3Rnw/9pcRUkoKibShKrUN2HSfTKVGbE5MIr2qzqB9xAUlfyqaC896KJqdElWF/3wgqzYKP2pJ2VnZD14UmTyoC7MyD0KVzR54GzuXym/HPKLz/KTBFqywBpHz6dJH6AJO7XlGbk=
+	t=1715641230; cv=none; b=mxsJwH9MiGr55PjSTl4N005jETmfB+tgxKTEeKVqhaekjGJoRbYorDMJBQATwJB7PjindNwdSfnMmqHTn3Kz0XxNg3qu/T7YUUgNoqrYCuVoc++pD7GKS3+eV9ropb1Dvsb/bRj8oRo8dI9k8Q2nzwiOfGqJfNBOusYyLv+b2HQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715623775; c=relaxed/simple;
-	bh=UKtoOVAKPLU3rKoaHXDE+egS7wDDpjZdTSFMkDzLwyw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dm23zr9S/Vc88YurfLxbswuROGHK1u2R2iXebmZM13/uqU7ge1H61dDcpwvtvfiAQ23CwjcObwqChfmiHo/Qz1WobMp8uoSV7JtPC0rvb8t08oGNgavNm2TEv5lbeyfUwPzNfZVm/m6odR8Lcr3L6BoE3KX6JGJqlRtglum5N8I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
-Received: (qmail 149965 invoked by uid 1000); 13 May 2024 14:09:24 -0400
-Date: Mon, 13 May 2024 14:09:24 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Muni Sekhar <munisekharrms@gmail.com>
-Cc: linux-usb@vger.kernel.org, kernelnewbies <kernelnewbies@kernelnewbies.org>
-Subject: Re: Seeking Assistance: Implementing USB Device Suspend/Resume in
- User Space Driver
-Message-ID: <d1cf7350-10d3-4dd4-a93e-94aff2a5c913@rowland.harvard.edu>
-References: <CAHhAz+g=7pocghMX-Yu=jg0jxnpfwa3+ZmmdLP_pVuXmWLJ=aw@mail.gmail.com>
- <ea450e31-8f71-4726-91f6-ada79e0b3a9a@rowland.harvard.edu>
- <CAHhAz+gRvah++Hv4k5+Ec0epNbmet0=JZ6tJ3R8zjZmiKACaQA@mail.gmail.com>
- <c309b037-50db-4ca1-8f86-60131cb84564@rowland.harvard.edu>
- <CAHhAz+i9TLCb3hKpzWAL2DkH9Y25XszJO5kgbRGzsut1zCzrJw@mail.gmail.com>
- <CAHhAz+jWrJBgAkZ6XmyEMdR-BT0GUmew0RqBGVsrenOVo5vcaw@mail.gmail.com>
+	s=arc-20240116; t=1715641230; c=relaxed/simple;
+	bh=QWrQMMenbKUQZ4QzgI8cJC76I4htY/Ol5+3qgfUWMtg=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=odASRdCTUX2BQOLs3Qn1J6fEAle/gmsHDOvM/LetIzCf0I9LdSeGwYPdOEAEmotq21P27gh7HN58iJ0xymF+zKYhEKn05VJrkahpA4v/IEmpa05gCODI1x/JshOMjiodOlN5HIyojo5reEOeB3B4633yyAllx7fJlI8hoBwkFe8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YOEaI03q; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9CC0FC4AF08;
+	Mon, 13 May 2024 23:00:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1715641229;
+	bh=QWrQMMenbKUQZ4QzgI8cJC76I4htY/Ol5+3qgfUWMtg=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=YOEaI03qFecQxBfmfNecZiuwK11A9mZnBfo9LB+k7+i66pjQCAau16LEcmd5TKKl6
+	 nJieIM1rL6Z8qGtrZfZgQWJPb+ykjkFO5TkE2ZkTVOnMRlRrb0WBg30FxWLFuPz7XL
+	 zaLEY9V8jxbc4eGOJizXA8IxAeZjqhEb5rs8s5rLEczhqGMavWW4D/DV/Du3jRlLMA
+	 R+6LW98J+xgktd+vVBwr5xm5pE0SdyqvhltAxfMMZ9CVjhxH/pFfE1awqsC0dGxi9S
+	 pTUy3kkj7sxPgCQxbQrXNDNOES7sca2HaOQSBeQin+IhsHFK19vlBsCYUxG79oYhVf
+	 ZSmu8jIEvdkGw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 87AF7C43443;
+	Mon, 13 May 2024 23:00:29 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHhAz+jWrJBgAkZ6XmyEMdR-BT0GUmew0RqBGVsrenOVo5vcaw@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] net: usb: ax88179_178a: fix link status when link is set to
+ down/up
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <171564122955.1634.5508968909715338167.git-patchwork-notify@kernel.org>
+Date: Mon, 13 May 2024 23:00:29 +0000
+References: <20240510090846.328201-1-jtornosm@redhat.com>
+In-Reply-To: <20240510090846.328201-1-jtornosm@redhat.com>
+To: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+ inventor500@vivaldi.net, yongqin.liu@linaro.org
 
-On Mon, May 13, 2024 at 11:14:44PM +0530, Muni Sekhar wrote:
-> In the context of the Linux kernel and USB devices, what are the
-> similarities and differences between usbfs and sysfs?
+Hello:
 
-They are totally different.  usbfs gives you direct communication with 
-the various USB devices on your system.  sysfs presents interfaces for 
-monitoring and controlling your entire system (including information 
-about how it manages its USB devices) but doesn't provide a way to 
-communicate with the devices.
+This patch was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-> Before invoking the ioctl() system call, we need to obtain a file
-> descriptor by invoking the open() system call. How do we identify the
-> device node in the usbfs interface?
-> For example, can you please explain how to identify the device node
-> location of a Human Interface Device(shown below in lsusb -t output)
-> as the first argument in the open() system call.
+On Fri, 10 May 2024 11:08:28 +0200 you wrote:
+> The idea was to keep only one reset at initialization stage in order to
+> reduce the total delay, or the reset from usbnet_probe or the reset from
+> usbnet_open.
 > 
-> $ lsusb -t
-> /:  Bus 001.Port 001: Dev 001, Class=root_hub, Driver=uhci_hcd/2p, 12M
-> /:  Bus 002.Port 001: Dev 001, Class=root_hub, Driver=ehci-pci/3p, 480M
->     |__ Port 001: Dev 002, If 0, Class=Hub, Driver=hub/8p, 480M
-> /:  Bus 003.Port 001: Dev 001, Class=root_hub, Driver=ehci-pci/4p, 480M
-> /:  Bus 004.Port 001: Dev 001, Class=root_hub, Driver=ehci-pci/3p, 480M
->     |__ Port 001: Dev 002, If 0, Class=Hub, Driver=hub/6p, 480M
->         |__ Port 002: Dev 003, If 0, Class=Human Interface Device, Driver=usbhid, 1.5M
-> /:  Bus 005.Port 001: Dev 001, Class=root_hub, Driver=uhci_hcd/2p, 12M
-> /:  Bus 006.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/15p, 480M
-> /:  Bus 007.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/6p, 5000M
+> I have seen that restarting from usbnet_probe is necessary to avoid doing
+> too complex things. But when the link is set to down/up (for example to
+> configure a different mac address) the link is not correctly recovered
+> unless a reset is commanded from usbnet_open.
+> 
+> [...]
 
-The Human Interface Device is Device 003 on Bus 004.  Therefore the 
-device node is /dev/bus/usb/004/003.
+Here is the summary with links:
+  - net: usb: ax88179_178a: fix link status when link is set to down/up
+    https://git.kernel.org/netdev/net/c/ecf848eb934b
 
-Alan Stern
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
 
