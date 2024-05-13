@@ -1,79 +1,114 @@
-Return-Path: <linux-usb+bounces-10248-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10249-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 709D98C39CE
-	for <lists+linux-usb@lfdr.de>; Mon, 13 May 2024 03:15:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73BB98C3A28
+	for <lists+linux-usb@lfdr.de>; Mon, 13 May 2024 04:20:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0FBDF1F2129F
-	for <lists+linux-usb@lfdr.de>; Mon, 13 May 2024 01:15:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2E8C12814FA
+	for <lists+linux-usb@lfdr.de>; Mon, 13 May 2024 02:20:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2131BAD31;
-	Mon, 13 May 2024 01:14:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D9E212EBD7;
+	Mon, 13 May 2024 02:20:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="ct9Tau9S"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id 0D342A935
-	for <linux-usb@vger.kernel.org>; Mon, 13 May 2024 01:14:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC5687483
+	for <linux-usb@vger.kernel.org>; Mon, 13 May 2024 02:20:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715562898; cv=none; b=UdW48SbPPgHnc3gGAR0UnNROdW7c9D2OMET+OLD9bvxoIr8qWZcmraxJFMqtbWGOOmji9byM49FQ6aWLGFH7lUom1WoxDsQ81c62vwYCq4eOVvPq5yhzQCDAiHjTVzTIK0BiQGGAiOBRZXpe/4CqxZKHrdBwKpp9e31FkjCNDQY=
+	t=1715566840; cv=none; b=D+6fX1oL5v5iPrRGkkgz35X93zMV9GcrjzLhZhTRUeCy+Slgmtwww+ubMlG3qHQxsWTukZD5BRxE5vfqeOaYyFnMDZgW/etC4vjM1U35cSHsIZcDccSMIk/ci4B+9W7iOEDMVKM3nKI+wzwb6LsS70uv2ndf44FRXOAhJL8QWwY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715562898; c=relaxed/simple;
-	bh=qWyqhx6Ze5M7ksjzghQiW71vMakBvcaFS+zvhK4oxC4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gzLPPkEkW0nqFId7ikT0lA1alB63olVeNmhKIOcJLetCT5m9HHtrY8P3MvbgN4sXQZbWfhO15Wmv0YmIiBAfkhkPQhjyCi/aqGiXcJTJ6kOKoI9NNmdzzr+x/OY0DNpxdIad+cUXafGl+GqLktBYmkBW9kuUhq1sUW+A0Q7KbOQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
-Received: (qmail 128017 invoked by uid 1000); 12 May 2024 21:14:55 -0400
-Date: Sun, 12 May 2024 21:14:55 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Ethin Probst <ethindp@pm.me>
-Cc: USB mailing list <linux-usb@vger.kernel.org>
-Subject: Re: Assistance getting the Universal Audio Apollo Solo USB to work
- with Linux
-Message-ID: <a04e5fcb-f5f9-4331-bbf6-b0f141d36073@rowland.harvard.edu>
-References: <DJiA8anOC3V1gHoj0H-8pmsXujLNu7IlZvNmvUEoDfnjC5VIzZ3YsoTgnUD-zVTsnhgln5BzEsy1n4YkoqkEd_pvTF9oZaukzUoyL-pDfRs=@pm.me>
- <ab4d0394-0d71-45a7-a79b-02e3c90f8ac8@rowland.harvard.edu>
- <8fcVwO4QZdKndXMug6gtJOMJ7bCUM0dk3lfyiKsUSR1QFvQeQ1SdRkQUUTJd73wI_dgxAULH_oTBA64hdSb3JYiwAyejHLM7RccUgY1m4sM=@pm.me>
+	s=arc-20240116; t=1715566840; c=relaxed/simple;
+	bh=gVwQQ0+bJl9j2XNFHKpVo1850TmOXPuoyiaLL1H46I8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=tITMOT1OwSWKQTRN/UKGE5zo76WaXvY2rq99zt28g1t784SugFrmNx1/IMUiUSda0Bp0gL2kLPmCH+dpAsV99u9qgvdXzbPCyiDX6eel79leC0SuJva0e6ywA+A7lkcteQ4fOVhN55TV7pGnda01vO7RyseIJLEvf9jMn3nA0Xk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=ct9Tau9S; arc=none smtp.client-ip=220.197.31.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=TPcf1
+	pxzLfKFlBEBd5SLnQVqky/E0pKhUt69oULfpXA=; b=ct9Tau9SXkZOdMtWY8lpK
+	doaVPl5uUec3Qa5mdv9S4EEG8VRaZT2WMIvX0G4LJ6AXuYn/JrSmNw2oBeh96l9Q
+	wYwoRp7WzDUweAMtMW+rc7LbNwZ9JyICFlMP85s4sZmMMxD73D0AYarRNxMbJ09T
+	9pbH7KU2JXfGIGF/OWr42w=
+Received: from flipped.. (unknown [159.226.94.118])
+	by gzga-smtp-mta-g2-0 (Coremail) with SMTP id _____wD3_3TGeEFmpf0pCA--.47954S2;
+	Mon, 13 May 2024 10:19:51 +0800 (CST)
+From: Sicong Huang <congei42@163.com>
+To: peter.chen@kernel.org,
+	pawell@cadence.com,
+	rogerq@kernel.org,
+	gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	Sicong Huang <congei42@163.com>
+Subject: [PATCH v1] usb: cdns3: cdns3-gadget: fix use-after-free bug in cdns3_gadget_exit due to race
+Date: Mon, 13 May 2024 10:19:48 +0800
+Message-Id: <20240513021948.133039-1-congei42@163.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8fcVwO4QZdKndXMug6gtJOMJ7bCUM0dk3lfyiKsUSR1QFvQeQ1SdRkQUUTJd73wI_dgxAULH_oTBA64hdSb3JYiwAyejHLM7RccUgY1m4sM=@pm.me>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wD3_3TGeEFmpf0pCA--.47954S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7AFy8ZFWrXryfWw4rWr4Uurg_yoW8ZFy3pa
+	yqqFWUAayxJrZ8tr1DtrsrWFW5Ww4Utr9FyrWvkr4DZF9xJw1rKF13Kr10kF4UCFykZr4U
+	KF1vgwsY9F4ak3JanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UIg4DUUUUU=
+X-CM-SenderInfo: 5frqwvrlusqiywtou0bp/1tbivgrd8mV4JEyxlgABsI
 
-You should use Reply-to-All so that your message goes to the mailing 
-list as well as to me.
+This bug exists in drivers/usb/cdns3/cdns3-gadget.c. Function
+__cdns3_gadget_init will call cdns3_gadget_start to do futher jobs
+during the initialization proccess of cdns3 gadget. In cdns3_gadget_start,
+&priv_dev->pending_status_wq is bound with cdns3_pending_setup_status_handler.
+Then this work will be added to system_freezable_wq in cdns3_gadget_ep0_queue.
+Here is the code.
+queue_work(system_freezable_wq, &priv_dev->pending_status_wq);
 
-On Sun, May 12, 2024 at 11:22:44PM +0000, Ethin Probst wrote:
-> On Sunday, May 12th, 2024 at 09:13, Alan Stern <stern@rowland.harvard.edu> wrote:
-> > Most likely, Windows sends some firmware to the device (which it needs
-> > in order to run properly) and then restarts the device.
-> 
-> Is there some way I can check for this?
+If we call cdns3_gadget_exit to remove the device and make cleanup,
+there are some unfinished works. This function will call cdns3_free_all_eps to
+free all the endpoints. However, if cdns3_pending_setup_status_handler is
+scheduled to run after the free job, it will cause use-after-free error as
+cdns3_pending_setup_status_handler will use the endpoint in the following code.
+request->complete(&priv_dev->eps[0]->endpoint, request);
 
-The only way I can think of is to compare the data in your captured 
-packets with the contents of the firmware file.  If they agree then you 
-have your answer.
+The possible execution flow that may lead to this issue is as follows:
+CPU0                    CPU1
+                      | __cdns3_gadget_init
+                      | cdns3_gadget_start
+cdns3_gadget_exit     |
+cdns3_free_all_eps    |
+devm_kfree (free)     |
+                      | cdns3_pending_setup_status_handler
+                      | &priv_dev->eps[0]->endpoint (use)
 
->  There are some unusually large
-> transfers in the capture (e.g. frame 24) but there are also some
-> truncated frames (e.g. frame 3), I'm not positive if I can fix that or
-> not -- I don't think VirtualBox allows me to modify the packet maximum
-> length. If I'm the only one on this list with one of these devices I
-> wouldn't mind doing the debugging/tests, even though that may increase
-> the amount of time all of this takes... The devices are a bit expensive
-> (but not ridiculously so), still within the (hopefully decently
-> affordable) range.
+Fix it by cleaning the work in cdns3_gadget_exit.
 
-Unfortunately, I'm too busy now to spend much time helping you with this 
-for a while.
+Signed-off-by: Sicong Huang <congei42@163.com>
+---
+ drivers/usb/cdns3/cdns3-gadget.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Alan Stern
+diff --git a/drivers/usb/cdns3/cdns3-gadget.c b/drivers/usb/cdns3/cdns3-gadget.c
+index fd1beb10bba7..0f2e143bd17a 100644
+--- a/drivers/usb/cdns3/cdns3-gadget.c
++++ b/drivers/usb/cdns3/cdns3-gadget.c
+@@ -3252,6 +3252,9 @@ static void cdns3_gadget_exit(struct cdns *cdns)
+ 	pm_runtime_mark_last_busy(cdns->dev);
+ 	pm_runtime_put_autosuspend(cdns->dev);
+ 
++	cancel_work_sync(&priv_dev->pending_status_wq);
++	cancel_work_sync(&priv_dev->aligned_buf_wq);
++
+ 	usb_del_gadget(&priv_dev->gadget);
+ 	devm_free_irq(cdns->dev, cdns->dev_irq, priv_dev);
+ 
+-- 
+2.34.1
+
 
