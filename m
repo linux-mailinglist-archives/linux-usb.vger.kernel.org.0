@@ -1,111 +1,124 @@
-Return-Path: <linux-usb+bounces-10271-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10272-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2EB048C5940
-	for <lists+linux-usb@lfdr.de>; Tue, 14 May 2024 18:04:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 01C9F8C5D68
+	for <lists+linux-usb@lfdr.de>; Wed, 15 May 2024 00:01:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5BF921C21EE1
-	for <lists+linux-usb@lfdr.de>; Tue, 14 May 2024 16:04:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 32AA21C211AA
+	for <lists+linux-usb@lfdr.de>; Tue, 14 May 2024 22:01:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E211F1802C4;
-	Tue, 14 May 2024 16:03:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B67C181D00;
+	Tue, 14 May 2024 22:01:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="aVIJFg/9"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OQSNSf6E"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5AAB17EBB9;
-	Tue, 14 May 2024 16:03:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B3BA181BA3
+	for <linux-usb@vger.kernel.org>; Tue, 14 May 2024 22:01:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715702639; cv=none; b=m/HO1SCESvm6O5p3uQPRRm+jX2OQfJdO/K8OQWODLgCwWwLbydXM3PqRkFQRcemUcNjBIy2NVSU84xiCHUUp0OrFLPhBHlRAMJ4I/lYwYem+UvMVRXj98yxF+IbTs3gbbRS82C50y3SnxBJPFmQd7Rtd/rPPXfcKrJeT/Dl5gs8=
+	t=1715724102; cv=none; b=Ddvx8Jn7c3wxefe1ZjTCuuUXaU9azqo1HvxJHLwPuow+YEdbm55gQppT1dJi/5DDkEWhwMAnV1YmlTEUd1Ndz3yHSzcrkGFGPWJcLuGUlP1GS9jqw24qHIY3MBdeUJWFC9G2xuDDFSSqd8idsFLevBGxiKH/9xPiLBpcyX4OtDE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715702639; c=relaxed/simple;
-	bh=8p9dxDDyCdgF3n+rmt/g4MC0o+LN7zUSTO4kYJz433g=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ddP0CWX4UIFqBEY2XZiZSFOcTjrFkaE/QOR7oA59bsr8iDg0KZ8nbC1B6maij4m0oq6R6xbKR2y37f9KQL9g7zhISWDAQ+vhaImM+XwlBELFJJod+fYpM9H3fQ6zvcP+z+GXpz92+jaQwNEkN+kXmjw3kWlNAr/XUfE6LAXL/us=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=aVIJFg/9; arc=none smtp.client-ip=68.232.154.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1715702638; x=1747238638;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=8p9dxDDyCdgF3n+rmt/g4MC0o+LN7zUSTO4kYJz433g=;
-  b=aVIJFg/9KcA1zQBAmzZNTmIfFvsmEr606JHducPjt7GjEd3B7tJzxMzZ
-   1QyzVBB5/LOBPkRsp2DJUAeJ+MnMOe5D/Ras94dfo9kOCCh49ysPCA1zd
-   Buu8F5YF/Yh3NJ+nQn4p3Q7ZqA3DtQTCojtNAXvzhnIfoqwwQfcWyDRt4
-   6s0DsgSDT5KF4KMQRaA4Ip1cmuX09iW8nKHz699T++Oeb9KRDZYjpng6t
-   +O1IClDgmx/SLW3kxFzTh7fFevA6wh7G8SrIvWzAjsm4Azqz5VCN02pz6
-   K5H2r2fnQ5N8bkFofh9Gl8k/42nF56iTttNNWJ8gVmlpyXqgF06jOIwnE
-   g==;
-X-CSE-ConnectionGUID: fa/uIrenSP6Bi4ynGM2+AQ==
-X-CSE-MsgGUID: EMuXM7xYQ5ajWp0sIOj5MQ==
-X-IronPort-AV: E=Sophos;i="6.08,159,1712646000"; 
-   d="scan'208";a="192034030"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 14 May 2024 09:03:48 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Tue, 14 May 2024 09:03:36 -0700
-Received: from che-ld-unglab06.microchip.com (10.10.85.11) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2507.35 via Frontend Transport; Tue, 14 May 2024 09:03:32 -0700
-From: Rengarajan S <rengarajan.s@microchip.com>
-To: <woojung.huh@microchip.com>, <UNGLinuxDriver@microchip.com>,
-	<davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-	<pabeni@redhat.com>, <netdev@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-CC: <rengarajan.s@microchip.com>
-Subject: [PATCH net-next v2 2/2] lan78xx: Enable Auto Speed and Auto Duplex configuration for LAN7801 if NO EEPROM is detected
-Date: Tue, 14 May 2024 21:32:01 +0530
-Message-ID: <20240514160201.1651627-3-rengarajan.s@microchip.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20240514160201.1651627-1-rengarajan.s@microchip.com>
-References: <20240514160201.1651627-1-rengarajan.s@microchip.com>
+	s=arc-20240116; t=1715724102; c=relaxed/simple;
+	bh=S1tIWGM3NKAB6bQddDwAPW4gGwnmbTJEnABhbu0cG9Y=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=JzFJA1RFfC16GgcHS2ZyO+UUILDDnfh1cDkNj4ZyLJg9VHqldBUQWDLjZOPwof4qQjKMHeLqqoeMCuoPJ71D8Nr2AwCkdOvXtQHSAwzc4A1uS7m6aZ6DWxXQCFHWU5TwI7g/gozv+ZEBn0LQYRZVFddGAAmlo7lNgv+OI20seog=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--amitsd.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OQSNSf6E; arc=none smtp.client-ip=209.85.219.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--amitsd.bounces.google.com
+Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-de8b66d59f7so8525869276.0
+        for <linux-usb@vger.kernel.org>; Tue, 14 May 2024 15:01:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1715724099; x=1716328899; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=fyYQsAdLlgEZ2rV2qIpyKWvlc+8qV4Q0/4ynMYRrvhE=;
+        b=OQSNSf6EZsAB2MBPN+rntvz3u1/3Me76bPtKnPMC8np7XFV4Z5adN0LjEP35NoR+ag
+         3hhYhHrtx/u0pHnpsesMsw04Ex1c8cdI/zdAiLva4pcfLrcBtvPU3T3DMM8gCjIlqyLE
+         FhqUyyX+t+4f/q3BD6t6IRMRyFB0uPuQAaCcFI9bxMtghWRyCwIBCGB40eC9q2hVtHtI
+         jzYqaJD9n8rdBx0Ys7HX4wVvqi9SntuBJDDvZzmBmgLZKdsTrLCmGihqUoONYq0RwGDB
+         MO27gbAH6JLIYOidikk21X6QJzMGi2ixr3A4bFDd5CR2YVO9AlavLL1JLP6F0kS3uDlu
+         kn+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715724099; x=1716328899;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fyYQsAdLlgEZ2rV2qIpyKWvlc+8qV4Q0/4ynMYRrvhE=;
+        b=eYW4nRVF/KCyOBQ0xCxUU/1x5WqLK+KlkMm3kfX7ZO1U5hEImeJTwovZFFfRRz8ytA
+         IBp7cPsgsqNADOwjkz02pgS9SnVwqWucg4mIIXqx+yfzOTDacfhb4ii034cMWxTEe9RI
+         cC6GIhjCfg1uLktMdHXKwMRyEy5uEqekbh/4MJl7bftMVTvOwbv5qXoCZSKhS8L0br0i
+         wa47MrBcv5V0Bdf6Mr3IoUFiwVr8ywigalC7yZpdGhGA7fn55GWbZbj4CSoOSCnSNNEO
+         1GZqiTtwuvIKcUd0VYCDnF1wwco+SzDBykeU93JUw3bwjQHtuEj7+j0L2Ts0Hd6Y9g93
+         1G0w==
+X-Forwarded-Encrypted: i=1; AJvYcCUxcSwIjOL5DLOm0EZ/dliAozcYs7cBziYQrooHwsPVv+/l2BXpIS1QmGyAev6+v3r047FUFBTWSvvhI+QsPu4Kqog5lRS8MTh9
+X-Gm-Message-State: AOJu0YzUrw1wI4wAwpuqk8QdNy6WxbK9N3IcdmB+vuVa+KucpFYoxlW8
+	Rymoc2S/YxlB33Uqxr3WX3MUmhwVyvr9Tj69acu5NoaVXgoM84q3AxkbZ/ZKVj+Z4PjVpPbhVut
+	AUg==
+X-Google-Smtp-Source: AGHT+IFQuPmXbAuMV4yHfCbocvMCwkaDmQTqNl+j+oT+iNlZrjwgKW3FanuU4+YpCrGMlG3QFv2xd8A+IXg=
+X-Received: from amitsd-gti.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:827])
+ (user=amitsd job=sendgmr) by 2002:a5b:a51:0:b0:de5:4b39:ffd0 with SMTP id
+ 3f1490d57ef6-debcfa7dc5emr3713479276.0.1715724099609; Tue, 14 May 2024
+ 15:01:39 -0700 (PDT)
+Date: Tue, 14 May 2024 15:01:31 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.45.0.rc1.225.g2a3ae87e7f-goog
+Message-ID: <20240514220134.2143181-1-amitsd@google.com>
+Subject: [PATCH v1] usb: typec: tcpm: fix use-after-free case in tcpm_register_source_caps
+From: Amit Sunil Dhamne <amitsd@google.com>
+To: linux@roeck-us.net, heikki.krogerus@linux.intel.com, 
+	gregkh@linuxfoundation.org, megi@xff.cz
+Cc: badhri@google.com, rdbabiera@google.com, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Amit Sunil Dhamne <amitsd@google.com>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Enabled ASD/ADD configuration for LAN7801 in the absence of EEPROM.
-After the lite reset these contents go back to defaults where ASD/
-ADD is disabled. The check is already available for LAN7800.
+There could be a potential use-after-free case in
+tcpm_register_source_caps(). This could happen when:
+ * new (say invalid) source caps are advertised
+ * the existing source caps are unregistered
+ * tcpm_register_source_caps() returns with an error as
+   usb_power_delivery_register_capabilities() fails
 
-Signed-off-by: Rengarajan S <rengarajan.s@microchip.com>
+This causes port->partner_source_caps to hold on to the now freed source
+caps.
+
+Reset port->partner_source_caps value to NULL after unregistering
+existing source caps.
+
+Fixes: 230ecdf71a64 ("usb: typec: tcpm: unregister existing source caps before re-registration")
+Cc: stable@vger.kernel.org
+Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
 ---
- drivers/net/usb/lan78xx.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/usb/typec/tcpm/tcpm.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/usb/lan78xx.c b/drivers/net/usb/lan78xx.c
-index 7ac540cc3686..62dbfff8dad4 100644
---- a/drivers/net/usb/lan78xx.c
-+++ b/drivers/net/usb/lan78xx.c
-@@ -3034,8 +3034,11 @@ static int lan78xx_reset(struct lan78xx_net *dev)
- 		return ret;
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index 8a1af08f71b6..be4127ef84e9 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -3014,8 +3014,10 @@ static int tcpm_register_source_caps(struct tcpm_port *port)
+ 	memcpy(caps.pdo, port->source_caps, sizeof(u32) * port->nr_source_caps);
+ 	caps.role = TYPEC_SOURCE;
  
- 	/* LAN7801 only has RGMII mode */
--	if (dev->chipid == ID_REV_CHIP_ID_7801_)
-+	if (dev->chipid == ID_REV_CHIP_ID_7801_) {
- 		buf &= ~MAC_CR_GMII_EN_;
-+		/* Enable Auto Duplex and Auto speed */
-+		buf |= MAC_CR_AUTO_DUPLEX_ | MAC_CR_AUTO_SPEED_;
+-	if (cap)
++	if (cap) {
+ 		usb_power_delivery_unregister_capabilities(cap);
++		port->partner_source_caps = NULL;
 +	}
  
- 	if (dev->chipid == ID_REV_CHIP_ID_7800_ ||
- 	    dev->chipid == ID_REV_CHIP_ID_7850_) {
+ 	cap = usb_power_delivery_register_capabilities(port->partner_pd, &caps);
+ 	if (IS_ERR(cap))
+
+base-commit: 51474ab44abf907023a8a875e799b07de461e466
 -- 
-2.25.1
+2.45.0.rc1.225.g2a3ae87e7f-goog
 
 
