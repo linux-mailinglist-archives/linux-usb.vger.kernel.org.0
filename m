@@ -1,78 +1,129 @@
-Return-Path: <linux-usb+bounces-10255-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10256-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id EECED8C4C0A
-	for <lists+linux-usb@lfdr.de>; Tue, 14 May 2024 07:48:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A94BC8C4C50
+	for <lists+linux-usb@lfdr.de>; Tue, 14 May 2024 08:30:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 74EA2B237BE
-	for <lists+linux-usb@lfdr.de>; Tue, 14 May 2024 05:48:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6ED53282184
+	for <lists+linux-usb@lfdr.de>; Tue, 14 May 2024 06:30:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1ECD1862A;
-	Tue, 14 May 2024 05:48:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D5B5E545;
+	Tue, 14 May 2024 06:30:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="UaBIbgxo"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="g5DNN69z"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BCBA14A84
-	for <linux-usb@vger.kernel.org>; Tue, 14 May 2024 05:48:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FF774C74
+	for <linux-usb@vger.kernel.org>; Tue, 14 May 2024 06:30:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715665694; cv=none; b=R298QjKQAC5tR2JUQQX74zUWu3x/RL9jXZFKlQohxFuGY6j62mOokFy2p7RTPW/hjT6DBU2SYnJs3rAnXLmwkkUPXD2+17w7+0WZ7ja6025KbwtV9AjA0I5gHxYA1cQ+AIEUoTPTDxikq3NLajLQg1+vY6le740fwqv0ymQEjvI=
+	t=1715668211; cv=none; b=MOVHenSw7uNaZvj20vvVBpXd6BuIgIffa+EsdO05aATXToUpnhmEXGYOpDUJwqymoxxw5haKnPXRVwLcSmztouCjlY3s1PyfJKEXIdqIJT+Xo7EiNDvZxjY7bOnUzbME2WdPU0Ud5GDavbp9TXNN+30du/hPnM/ifRXjLKRVVJI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715665694; c=relaxed/simple;
-	bh=9KQRk8wxPY4uyYKZPsrNId8VP5pXNbVeh5Pc1BXXink=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kHNnyNy+IFjI8h7BKbroFURjSFlF/yNsZJPNQrLB1ftYdjww7zi2jlYYbCD3pxWCJpnuXxUlKPMIgCiLo3WXnV50MFWhyFeAco36Lp33egp2Jz0OhA+0n5eEAQPk6KxZwgnVsz3icsNDE8+bbcFCC/QVvgdrY1fEZoWU+0Zh+Ac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=UaBIbgxo; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F151C2BD10;
-	Tue, 14 May 2024 05:48:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1715665693;
-	bh=9KQRk8wxPY4uyYKZPsrNId8VP5pXNbVeh5Pc1BXXink=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UaBIbgxo+bM5ZCzK78C0sCGeCCmfzJrugNHTg/Gy0XkcECtpT9JxHjIg53kyvHOlR
-	 VvhTn8FGpjTx7oCjA1V5B/oSvJRM5KhtAJemFCptGU4b3nDiZ4yPE2X6p70D3jCv/Y
-	 GEXhoDThfaFQG9alvanQwVaBA5YP46KhA1mF/2SI=
-Date: Tue, 14 May 2024 07:48:10 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Charles Harris <charles7@slingshot.co.nz>
-Cc: linux-usb@vger.kernel.org
-Subject: Re: USB Device ID
-Message-ID: <2024051428-sweep-lark-3923@gregkh>
-References: <befe7135-16f1-4a3f-8164-b15dd748e397@slingshot.co.nz>
+	s=arc-20240116; t=1715668211; c=relaxed/simple;
+	bh=ZfAjRDouTO7ZvYghB+NJtnhbR2ZdJwmxgXE8P3wfpQ4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=SzxBSqepY45ceT1VDUcCx3ql0nYC5N0xe/b6s3ic7xTxMbUWQZOiM90MYe2yleYjETaE17CVzydTOo7cLauWl6/1dEpRSrXKn5oyRK0cGL9ciLAqyfZ3z8Z6CkBwCIZgqdX7dpzjsgbsJDjQCB8cTXMv65LQ/JzZtpuOW4vVabE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=g5DNN69z; arc=none smtp.client-ip=209.85.128.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-61816fc256dso51556477b3.0
+        for <linux-usb@vger.kernel.org>; Mon, 13 May 2024 23:30:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1715668209; x=1716273009; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=RL/HT373iFNB5/gmrPBbQbaIWBxFdiHHF2SpPtkNj6E=;
+        b=g5DNN69ziRlus2VeNnifNs5kjD9k5PmggkgQY0giZsCWMvS6W/onDv5rPWHJvV5y29
+         J89koFeZjn57bDbv56DRTcH/gFV/HvOthC7xvf70w95CP+dIC4IG3n+iH8oCfzNn7keS
+         0TTbNKrv3MVEsnoPWHGclVTPk9B0nR/Auj4+t2A7zdiuHGEGQHX3tZziMTEgvmYnoETX
+         +buCp+6EskM6IyF6nzoyxO9UNAEIHQIFYTMliQl7OSJHQIGq2hBAUj9IIwtUga3+KQ71
+         /SllDw4L3JCKbpLrBHmU1xqmCj2htLIGrLNLgPASku0taSTAhh3zn2zLgtCf03uz2z6Z
+         S5qA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715668209; x=1716273009;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RL/HT373iFNB5/gmrPBbQbaIWBxFdiHHF2SpPtkNj6E=;
+        b=akYeoSJN4NRambEqtdJEJKD0kDBS/kPwFN5qgEgCjHoNkGVF6uZvwCrpCiQIXsgUul
+         p+oUmLIBywB9clawTmC9Ba22WBSRDqi5sSd5jTvLHHhce+tsBxSc7todaZSr+xsvu38e
+         foZxNX+V4Na3zeTxaZjSEbaxCodiUWWiHOfNAjTmTgN/NGnsb1vbx7SZLOt84Ge2yqoz
+         lnNB/DCthiQXTVsgFfMhzrIM+JlpcyBAjzbRaC2JutbzpQLcG9olZnfupWRmiYDNi4LE
+         SRCEFiKuIIzltDlpWRq2sFmlG0u6mVnm2gO9Zrc9dIezYZNrROzp242SxUKf6n32J4sy
+         B45Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUZ0yKCdm+NW7QCgArEsOjvB2t/IWIvlNW1er0qvdcMr2pk3KfwdgoiyW0BQLA4QrrHRFgvwLXCQqSm9wAcn2qt/RChjR77cdhD
+X-Gm-Message-State: AOJu0YyHsGQ1T6kYHGhetC8/gBGyJ7C2sAgOs9WL8Z8hMuw0cunMci2m
+	+cQuq3KSM35TNeGkBKjBeYtPE7ue2kSJ9Cq0RjuJmQ08deT2ASX06Uhyp5EDA0RnIAUADjz3Ch5
+	zi0iJHg82x3xIA10VxylEiqw8LG11JDahWFk4dg==
+X-Google-Smtp-Source: AGHT+IEmSQRtsmi9qrBir2bfVjCB/SQEucaaV9YGbI3BoFMzakNXhdNYP6vrUbPSuXDlSiSULIWHOWNxXgTkE8klnbg=
+X-Received: by 2002:a05:690c:60c6:b0:615:c96:1a8f with SMTP id
+ 00721157ae682-622affe1b3amr131034567b3.17.1715668207682; Mon, 13 May 2024
+ 23:30:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <befe7135-16f1-4a3f-8164-b15dd748e397@slingshot.co.nz>
+References: <CAMSo37UN11V8UeDM4cyD+iXyRR1Us53a00e34wTy+zP6vx935A@mail.gmail.com>
+ <20240508075658.7164-1-jtornosm@redhat.com> <CAMSo37XddAvE199QpA_WR5uwQUjzemF8GxqoWfETUNtFw6iCrg@mail.gmail.com>
+In-Reply-To: <CAMSo37XddAvE199QpA_WR5uwQUjzemF8GxqoWfETUNtFw6iCrg@mail.gmail.com>
+From: Yongqin Liu <yongqin.liu@linaro.org>
+Date: Tue, 14 May 2024 08:29:56 +0200
+Message-ID: <CAMSo37XWZ118=R9tFHZqw+wc7Sy_QNHHLdkQhaxjhCeuQQhDJw@mail.gmail.com>
+Subject: Re: [PATCH v2] net: usb: ax88179_178a: avoid writing the mac address
+ before first reading
+To: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+Cc: amit.pundir@linaro.org, davem@davemloft.net, edumazet@google.com, 
+	inventor500@vivaldi.net, jarkko.palviainen@gmail.com, jstultz@google.com, 
+	kuba@kernel.org, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	netdev@vger.kernel.org, pabeni@redhat.com, stable@vger.kernel.org, 
+	sumit.semwal@linaro.org, vadim.fedorenko@linux.dev, vmartensson@google.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, May 14, 2024 at 01:10:10PM +1200, Charles Harris wrote:
-> Hi Alan and all
-> Noticed conversation as below on earlier post.
-> 
-> I would like to know if this code could be used in a similar case.
-> 
-> Linux Mint 21.3   Using LibreCalc
-> 
-> With USB RFID tag readers, (2 or more reader)  most enter direct into open focus spreadsheet.  However with no device number.   Have same pid and vid.
-> 
-> As the read from USB tag goes to the spreadsheet, can the device number  eg 004 and the bus number eg 004 be appended to the data read into the spreadsheet.  This would enable spreadsheet identify each reader and its location, to manipulate the tag reads by the  location etc.
-> 
-> If so, how do I go about setting up?
+Hi, Jose
 
-Not directly from the kernel, no, you need to write a userspace program
-to do this somehow, sorry.
+On Wed, 8 May 2024 at 12:41, Yongqin Liu <yongqin.liu@linaro.org> wrote:
+>
+> Hi, Jose
+>
+> On Wed, 8 May 2024 at 15:57, Jose Ignacio Tornos Martinez
+> <jtornosm@redhat.com> wrote:
+> >
+> > Hello Yongqin,
+> >
+> > Sorry for the inconveniences.
+> >
+> > I don't have the db845c, could you provide information about the type of
+> > device and protocol used?
+>
+> The db845c uses an RJ45 as the physical interface.
+> It has the translation from PCIe0 to USB and USB to Gigabit Ethernet controller.
+>
+> For details, maybe you could check the hardware details from the documents here:
+>     https://www.96boards.org/documentation/consumer/dragonboard/dragonboard845c/hardware-docs/
+>
+> > Related driver logs would be very helpful for this.
+>
+> Here is the log from the serial console side:
+>     https://gist.github.com/liuyq/809247d8a12aa1d9e03058e8371a4d44
+>
+> Please let me know if I could try and provide more information for the
+> investigation.
 
-good luck!
+Just want to check, not sure if you have checked the serial log file,
+or do you have other suggestions about what we should try next,
 
-greg k-h
+-- 
+Best Regards,
+Yongqin Liu
+---------------------------------------------------------------
+#mailing list
+linaro-android@lists.linaro.org
+http://lists.linaro.org/mailman/listinfo/linaro-android
 
