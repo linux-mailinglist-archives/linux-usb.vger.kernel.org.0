@@ -1,43 +1,43 @@
-Return-Path: <linux-usb+bounces-10265-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10266-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD0FE8C526A
-	for <lists+linux-usb@lfdr.de>; Tue, 14 May 2024 13:36:52 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A75FC8C5395
+	for <lists+linux-usb@lfdr.de>; Tue, 14 May 2024 13:46:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4A6081F224AE
-	for <lists+linux-usb@lfdr.de>; Tue, 14 May 2024 11:36:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6176B1F232DD
+	for <lists+linux-usb@lfdr.de>; Tue, 14 May 2024 11:46:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 192EC13D280;
-	Tue, 14 May 2024 11:24:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8549412BEA9;
+	Tue, 14 May 2024 11:37:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="A12suBtl"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Qb3s9A1j"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AE476311D;
-	Tue, 14 May 2024 11:24:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 071CC12AAC6;
+	Tue, 14 May 2024 11:37:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715685887; cv=none; b=Kg5mrSPcsVmIL5IFnWo/7kMivs55IsHaZ0nEJjGeN1/6mcEyP7UMxreWIyhB+dOWLHkn8w9nW5dl6oDhm7I4srKy/aKSD1v5TLgUmLGGE1613KnJU/MMYf0uSm+r1pLw0mmdVlfqyTzyqaVtixv1TDpT/LIG/k8BMdi618H4+E8=
+	t=1715686622; cv=none; b=QW2MaB4vy04+TwOwzF0swzMRQxoFh8v1sZat2RxqUpirEb9f6qteGKjj879mncKi5O367F1HqfctTpKEyMtVeryrBpiaDiRfw2MOb2AUaSKsfxrP/FbC6WeQkAs6lbT/thlOe3cJsWFyBM2qK2uu4YIqXX+nLiHvxUuw0l5SUJg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715685887; c=relaxed/simple;
-	bh=LXV+ZjnuDjyDDleo0LoYyUv1WccqMEPwcst/tiipykM=;
+	s=arc-20240116; t=1715686622; c=relaxed/simple;
+	bh=DXsKGd6gOe3SgDYdjhcaliY4Ai7uuqKL3a+uZM68mKQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=sxRcOq7skZLep//GTP1VXR7Mt8oePyxA0IWsB88u7BkSiY1caCAIf9QcS03x6Rjk+LLl1QW5gV4gsoF/NNABj18mTFjb8kcS1iBK2VIh0WU6UG/pz2IbaaIt/Tzhn+9XYjVvdWqa8qByZmkvPrfyAO4+PcfitKwioAwFOkHVCMU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=A12suBtl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4BDEC2BD10;
-	Tue, 14 May 2024 11:24:46 +0000 (UTC)
+	 MIME-Version; b=t0dYLaYdNGqJs+4h3ukCSUk9d9UIOEHgG9LfvcSdZAibIF9GJnN+Ezo4H653D8m6W7R0X2OsSiBOs97gZCLoKc2rW/x2OptXZEGDT4wu83gng0gQXo0f1l505/OL0JoTq/8fbGMztRS2AcsjJfIHLGkpF87k83HFAm8a2VpAefg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Qb3s9A1j; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81FEFC2BD10;
+	Tue, 14 May 2024 11:37:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1715685887;
-	bh=LXV+ZjnuDjyDDleo0LoYyUv1WccqMEPwcst/tiipykM=;
+	s=korg; t=1715686621;
+	bh=DXsKGd6gOe3SgDYdjhcaliY4Ai7uuqKL3a+uZM68mKQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=A12suBtlmZTpHrD5Azhe/DLDCkKtPsgttPoXSRecc/ZB5xfAEnZL2NCO/eXdddrXz
-	 iWTdBvQA6ulwZ07uIT01j5FkOSypdzbB8l5ZdT9Lo8FBvPATfVFXG+aYdIlxXFR8vL
-	 bZtWRnS9XqmE31pl9FX++BB2SSupZv6j4kjWF+po=
+	b=Qb3s9A1jtySZOno5ylqwe10JtAKuaoG7DHOoT0TNujX0Sc8wgVtSbRNupc4qAyr53
+	 1eDVfhMgCPZFEumeXIvapp+4WNo6SOduZniRyRjjdKNEUtfY9ACa2AuAGd8x76WUYm
+	 e9EfCBj0CRq0aGzjm8CcKNudEB5momMXcaHnoCGU=
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: stable@vger.kernel.org
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -47,12 +47,12 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Mark Brown <broonie@kernel.org>,
 	Amit Sunil Dhamne <amitsd@google.com>,
 	Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Subject: [PATCH 6.6 237/301] usb: typec: tcpm: unregister existing source caps before re-registration
-Date: Tue, 14 May 2024 12:18:28 +0200
-Message-ID: <20240514101041.202661931@linuxfoundation.org>
+Subject: [PATCH 6.1 201/236] usb: typec: tcpm: unregister existing source caps before re-registration
+Date: Tue, 14 May 2024 12:19:23 +0200
+Message-ID: <20240514101027.995680714@linuxfoundation.org>
 X-Mailer: git-send-email 2.45.0
-In-Reply-To: <20240514101032.219857983@linuxfoundation.org>
-References: <20240514101032.219857983@linuxfoundation.org>
+In-Reply-To: <20240514101020.320785513@linuxfoundation.org>
+References: <20240514101020.320785513@linuxfoundation.org>
 User-Agent: quilt/0.67
 X-stable: review
 X-Patchwork-Hint: ignore
@@ -64,7 +64,7 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-6.6-stable review patch.  If anyone has any objections, please let me know.
+6.1-stable review patch.  If anyone has any objections, please let me know.
 
 ------------------
 
@@ -110,7 +110,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/drivers/usb/typec/tcpm/tcpm.c
 +++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -2422,7 +2422,7 @@ static int tcpm_register_sink_caps(struc
+@@ -2416,7 +2416,7 @@ static int tcpm_register_sink_caps(struc
  {
  	struct usb_power_delivery_desc desc = { port->negotiated_rev };
  	struct usb_power_delivery_capabilities_desc caps = { };
@@ -119,7 +119,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  
  	if (!port->partner_pd)
  		port->partner_pd = usb_power_delivery_register(NULL, &desc);
-@@ -2432,6 +2432,9 @@ static int tcpm_register_sink_caps(struc
+@@ -2426,6 +2426,9 @@ static int tcpm_register_sink_caps(struc
  	memcpy(caps.pdo, port->sink_caps, sizeof(u32) * port->nr_sink_caps);
  	caps.role = TYPEC_SINK;
  
