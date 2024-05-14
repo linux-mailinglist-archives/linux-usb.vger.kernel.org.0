@@ -1,110 +1,132 @@
-Return-Path: <linux-usb+bounces-10259-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10260-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F43D8C4E89
-	for <lists+linux-usb@lfdr.de>; Tue, 14 May 2024 11:15:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 395108C4E8E
+	for <lists+linux-usb@lfdr.de>; Tue, 14 May 2024 11:15:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 44FF91F22BA5
-	for <lists+linux-usb@lfdr.de>; Tue, 14 May 2024 09:15:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B9D1F284CE9
+	for <lists+linux-usb@lfdr.de>; Tue, 14 May 2024 09:15:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22E042C1BA;
-	Tue, 14 May 2024 09:15:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE9BF2554B;
+	Tue, 14 May 2024 09:15:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="qcrYibdz"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="n5ainiE3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AE0028680
-	for <linux-usb@vger.kernel.org>; Tue, 14 May 2024 09:14:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C93271D54B
+	for <linux-usb@vger.kernel.org>; Tue, 14 May 2024 09:15:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715678099; cv=none; b=upuQMPZEY5FEgmapBCkK/Tq1n0vXOAmWV+vmcm5quNRvWKgroScagPyiNNRkQh1y3WIhHyCehT4zlwhJ9Lbouo/alv8inTgvypRr4tjjo3Cl4eiWZZEl8mR5ZJNnZ8GYHAEAIdZBoNvM/APuKpLE8lp6f+Hpw4A72pEc00ab4Gc=
+	t=1715678141; cv=none; b=QNG0zLkbqp1tAxx2GXFJOgcNmhdtTlG080HboAX6mcAllj5Nl7avL0H8cWL6fPqMIDfZOcOBjr8TmJp7bdg0KDn+5/rOsLBgYIm4nHznYbZbNhlReHWbUvAj/XgWcklHxs0r1k0cFeKsAcWeDZBl2yvLmRmQT9dwJB+1GsjUEfo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715678099; c=relaxed/simple;
-	bh=icODbfYucz8iEZrgAXkiUdXTmzMqOGwAC8BcHGY3Tbw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Wl7wqqurecbrZkUB22dJcjSvay0Z8lcUVNqIvhIzszverHlcI87WbRIBSQTYRhE3DiwV7Nrl8MdPYWN+VWxaiJ5+k8JBbMxE4eG36XbTUQ7TsBViCwoPlaJKJbiT6sxNTB5wcWbNEwq2dRi9JjcxkLqFs+wXKRcRoBiJ2FJt0G8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=qcrYibdz; arc=none smtp.client-ip=209.85.128.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-61bed738438so53811237b3.2
-        for <linux-usb@vger.kernel.org>; Tue, 14 May 2024 02:14:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1715678097; x=1716282897; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=HwiEG+/aSeVq+45AIyqwaFB4r49uUU/xCyg6kp9PQPw=;
-        b=qcrYibdzw8ejm3DTwFw0aQ1+8lS7v2cSxPOunX5wyzvQ3VIB47U7vUt+w0Mhhvmp7Z
-         z5P7kDVAcGymKYdHPrjLIaeJK/ImNxN8LnlWBwQ7gZ/zPT1rBmsqgeNyZqgTcqhyA6Vf
-         J1xROsideLdaV4Fo00Swsvk9uNh801DspFGapE3Y7wX0j3udajKlB/tjQbk3+7105lzX
-         miKVMNy8RwOWj9fc+fJxPwImi7TroSZzDytSgAkfdW7PB1PqLbyYQFm+uwLuTGGXuAew
-         wE3bKYXJuE1Kyek921rT/w91vx2Dh98ZXnNatzi+4zPzqP1KnuoqMqWLhVGELXnRlHfy
-         fDEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715678097; x=1716282897;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HwiEG+/aSeVq+45AIyqwaFB4r49uUU/xCyg6kp9PQPw=;
-        b=dCQncvMfaezmN1Ezrb6X8cGr+WW4F8ZUpTQCjZojJo9sUY94LKwUaaIPW2OWeYbOYk
-         xZyxDDrBAQmTscjUq5uPew6IEsIXLYEZxnsOFNEV/XKywQhDeDT5+m5omNXM7oj5GpKH
-         p5nd4R0jSVvitfdDbXtGYFT5T2qN5rhfKvyYcr8jZrHJ8qbv/i5b0JPSW7GG5LpevUqs
-         8v7tgoLy2xugByqqC7OSbwu5YaZZ9OrklIZ7NgD7TTEeWw4DmGriClMOg4WhIknfm3BY
-         FLggSaPNOl2pX2UKRi2McT5x454pYt4/WpT+3Uot/eIueT4iQgGMW5RYvvNRk6F1ZeJU
-         Cf9w==
-X-Forwarded-Encrypted: i=1; AJvYcCVX1sR6BXoI3XO0PI8EUmaRfPsI3sj2uBmReSBsk2Ty8/wZv/YeLRtYRwISOd1tLngJ37Ftp+6RraKHCyfGZ72FvgfQqIMcRf9k
-X-Gm-Message-State: AOJu0Yy9Du0Voahn6oFXGm1hpN030Gm5OzgeWB22umIRbaGmwCuSjqU9
-	QxMUZd3knjD5FxBS2zsymyS8YcfTtTDRz5cNoreYyROcoo3sWiFOq44o9P3QDXERX3g58iqUqTu
-	dnZHB+uOXFqCX6RlLtrhHcbhdaFeQyCYARdoj6w==
-X-Google-Smtp-Source: AGHT+IHTndqU8L/COCyzxzWqR9ztoQ2UlOx5uP/3CeJVhfGg7caer2qbn+5Tp3fV+rceU+UurQnOt0LPpOXSqHkDU54=
-X-Received: by 2002:a05:690c:660e:b0:61a:af67:1cfd with SMTP id
- 00721157ae682-622aff906e3mr134790487b3.5.1715678097010; Tue, 14 May 2024
- 02:14:57 -0700 (PDT)
+	s=arc-20240116; t=1715678141; c=relaxed/simple;
+	bh=dznKRnnrQjxlcmiPJN/HttnecyFpEcqVbKnv3874RPg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=QKDd0tRMB11jPASeAFL6hKkZj3twGDPQtBbJHqEnLVJMpsjvSRThNJ4kDmpidpbfzGSHLyn1vH0dGPTrIkME+4rvAVxdR+MvqcHR51eFSZ0HR7rNsvrF1oFojEdoT9v/wDXKXDquh1BWpw5yEsodJa4mOoKhKPalMJuTM1X12jM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=n5ainiE3; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1715678140; x=1747214140;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=dznKRnnrQjxlcmiPJN/HttnecyFpEcqVbKnv3874RPg=;
+  b=n5ainiE3iPBk07cfBRRqlneqeyDIq+D6kVdST/WBAtSDqy+OTTLkLNSI
+   tRvCkcBDsGi7a3hscFROtj0d78irVtjEYBXlNBuy2fvx5W0wg3VsuF5so
+   yEl0AATQCi8k7kMh2/LVUM+S18b+Mg1Eaiv2wths4tlCypZKHIKq0xQ/R
+   O/ZYskD18BXeLXO7okiBh8r+cuLs4ppYdJ2oFY1in+OCDUscOR+iurtd4
+   gkv49ZFbdWGnPc1zWqrach+Ilcwzs+NC8VDRprWPdBcBAVc6Olth7cjUK
+   kzBKexnd2ufzNQVCkwjtpWbl2ioedHNtSgt358d8k5c9CbVM/VO4zGBnq
+   Q==;
+X-CSE-ConnectionGUID: Bxt5mo+rTdqcrvrybSqqSA==
+X-CSE-MsgGUID: pMYNJbmCQNiIvEg7MtjEwQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11072"; a="14593187"
+X-IronPort-AV: E=Sophos;i="6.08,159,1712646000"; 
+   d="scan'208";a="14593187"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2024 02:15:39 -0700
+X-CSE-ConnectionGUID: rt3e/ryoTLuuPCUMENw5Cg==
+X-CSE-MsgGUID: EFUFqA/AQ3mLmwkMk3B6gA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,159,1712646000"; 
+   d="scan'208";a="30758766"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orviesa009.jf.intel.com with ESMTP; 14 May 2024 02:15:38 -0700
+Message-ID: <1a03a778-75db-9345-0baa-4031660e7192@intel.com>
+Date: Tue, 14 May 2024 12:17:32 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAMSo37XWZ118=R9tFHZqw+wc7Sy_QNHHLdkQhaxjhCeuQQhDJw@mail.gmail.com>
- <20240514070033.5795-1-jtornosm@redhat.com>
-In-Reply-To: <20240514070033.5795-1-jtornosm@redhat.com>
-From: Yongqin Liu <yongqin.liu@linaro.org>
-Date: Tue, 14 May 2024 11:14:46 +0200
-Message-ID: <CAMSo37VywwR8qbNWhOo9kS0QzACE0NcYwJXG_GKT9zcKn4GitQ@mail.gmail.com>
-Subject: Re: [PATCH v2] net: usb: ax88179_178a: avoid writing the mac address
- before first reading
-To: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
-Cc: amit.pundir@linaro.org, davem@davemloft.net, edumazet@google.com, 
-	inventor500@vivaldi.net, jarkko.palviainen@gmail.com, jstultz@google.com, 
-	kuba@kernel.org, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	netdev@vger.kernel.org, pabeni@redhat.com, stable@vger.kernel.org, 
-	sumit.semwal@linaro.org, vadim.fedorenko@linux.dev, vmartensson@google.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.13.0
+Subject: Re: dwc3 hci_version==0x110 should configured xhci->quirks |=
+ XHCI_LINK_TRB_QUIRK in xhci_init
+Content-Language: en-US
+To: app l <lipc198702@gmail.com>
+Cc: gregkh@linuxfoundation.org, USB <linux-usb@vger.kernel.org>
+References: <CAGaOi3bfswEqzF2jzoipzOwzyRknD1oxzwayM1r3KG0QYDrhdQ@mail.gmail.com>
+From: Mathias Nyman <mathias.nyman@intel.com>
+In-Reply-To: <CAGaOi3bfswEqzF2jzoipzOwzyRknD1oxzwayM1r3KG0QYDrhdQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi Jose
-On Tue, 14 May 2024 at 09:00, Jose Ignacio Tornos Martinez
-<jtornosm@redhat.com> wrote:
->
-> Hello Yongqin,
->
-> I could not get a lot of information from the logs, but at least I
-> identified the device.
-> Anyway, I found the issue and the solution is being applied:
-> https://lore.kernel.org/netdev/171564122955.1634.5508968909715338167.git-patchwork-notify@kernel.org/
-Ah, I was not aware of it:(
+Hi
 
-Thanks a lot for the work!
+On 13.5.2024 16.40, app l wrote:
+> Hi,
+>     Host mode，bulk in， dwc3，version; 0x110
+>     A TD is comprised of two normal trbs. The TD length is 0x1000.
 
--- 
-Best Regards,
-Yongqin Liu
----------------------------------------------------------------
-#mailing list
-linaro-android@lists.linaro.org
-http://lists.linaro.org/mailman/listinfo/linaro-android
+Is the bulk TD split into two trbs due to scatter gather data buffer, or
+by xhci driver due to buffer alignment requirements?
+
+Otherwise one TRB should be enough to point to 4k data
+
+> There is a link trb between the two normal trbs. If the chain bit
+> (bit4) in the
+> link trb is 0, there are two interrupts and the data will be
+> lost(scene 1). If the chain bit (bit4) in
+> the link trb is 1, there is one interrupts and then the data is normal(scene 2).
+> A TD is comprised of two normal trbs. There is one interrupts and then
+> the data is normal(scene 3).
+> So I think hci_version == 0x110，it should also be configured
+> xhci->quirks |= XHCI_LINK_TRB_QUIRK in xhci_init;
+
+The chain bit for the link trb should always be set by driver if the link is in
+the middle of a TD. This is done in inc_enq() by checking if trb before Link trb
+has chain bit set.
+
+The XHCI_LINK_TRB_QUIRK is for controllers that always need Link trb chain bit set
+even if no TD is spanning the segment. i.e. link trb chain bit is never cleared.
+
+There might be some other issue here.
+
+Any chance you could try to get a snapshot of the endpoint ring, and event ring
+when this is seen.
+
+debugfs example snippet of device 1, endpoint 2 transfer ring
+
+# mount -t debugfs none /sys/kernel/debug/
+# cat /sys/kernel/debug/usb/xhci/0000:00:14.0/devices/01/ep02/trbs
+...
+0 0x00000001041e0fc0: Buffer 00000001041e5000 length 13 TD size 0 intr 0 type 'Normal' flags b:i:I:c:s:I:e:c
+0 0x00000001041e0fd0: Buffer 00000001041e5000 length 13 TD size 0 intr 0 type 'Normal' flags b:i:I:c:s:I:e:c
+0 0x00000001041e0fe0: Buffer 00000001041e5000 length 13 TD size 0 intr 0 type 'Normal' flags b:i:I:c:s:I:e:c
+0 0x00000001041e0ff0: LINK 00000001041e1000 intr 0 type 'Link' flags i:c:t:c
+1 0x00000001041e1000: Buffer 00000001041e5000 length 13 TD size 0 intr 0 type 'Normal' flags b:i:I:c:s:I:e:c
+1 0x00000001041e1010: Buffer 00000001041e5000 length 13 TD size 0 intr 0 type 'Normal' flags b:i:I:c:s:I:e:c
+1 0x00000001041e1020: Buffer 00000001041e5000 length 13 TD size 0 intr 0 type 'Normal' flags b:i:I:c:s:I:e:c
+...
+
+Thanks
+Mathias
 
