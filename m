@@ -1,96 +1,73 @@
-Return-Path: <linux-usb+bounces-10253-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10254-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5072A8C49D1
-	for <lists+linux-usb@lfdr.de>; Tue, 14 May 2024 01:00:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA87C8C4AE2
+	for <lists+linux-usb@lfdr.de>; Tue, 14 May 2024 03:30:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 05F671F21FDE
-	for <lists+linux-usb@lfdr.de>; Mon, 13 May 2024 23:00:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 72E3A2835D6
+	for <lists+linux-usb@lfdr.de>; Tue, 14 May 2024 01:30:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 787C885275;
-	Mon, 13 May 2024 23:00:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YOEaI03q"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB27717F7;
+	Tue, 14 May 2024 01:30:16 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp-3.slingshot.co.nz (smtp-3.slingshot.co.nz [60.234.4.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0FA884DF5;
-	Mon, 13 May 2024 23:00:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19C89ED8
+	for <linux-usb@vger.kernel.org>; Tue, 14 May 2024 01:30:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.234.4.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715641230; cv=none; b=mxsJwH9MiGr55PjSTl4N005jETmfB+tgxKTEeKVqhaekjGJoRbYorDMJBQATwJB7PjindNwdSfnMmqHTn3Kz0XxNg3qu/T7YUUgNoqrYCuVoc++pD7GKS3+eV9ropb1Dvsb/bRj8oRo8dI9k8Q2nzwiOfGqJfNBOusYyLv+b2HQ=
+	t=1715650216; cv=none; b=hckTh3lQbjMHaU0oO/SQgOtz7EglJ+2Nliyt2Uvi6CrNfgAIKUyKynzdRdnk3790I4NoD8RicyNjDDuIWdD7rdsmi1HitsJk+mpHoBuit3t8RMgKpoCMdzXas8+LAYfxTIHZBSDkys+UGyqzcyxKFWY3paXL2wsQZeehVFehsHE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715641230; c=relaxed/simple;
-	bh=QWrQMMenbKUQZ4QzgI8cJC76I4htY/Ol5+3qgfUWMtg=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=odASRdCTUX2BQOLs3Qn1J6fEAle/gmsHDOvM/LetIzCf0I9LdSeGwYPdOEAEmotq21P27gh7HN58iJ0xymF+zKYhEKn05VJrkahpA4v/IEmpa05gCODI1x/JshOMjiodOlN5HIyojo5reEOeB3B4633yyAllx7fJlI8hoBwkFe8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YOEaI03q; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9CC0FC4AF08;
-	Mon, 13 May 2024 23:00:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715641229;
-	bh=QWrQMMenbKUQZ4QzgI8cJC76I4htY/Ol5+3qgfUWMtg=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=YOEaI03qFecQxBfmfNecZiuwK11A9mZnBfo9LB+k7+i66pjQCAau16LEcmd5TKKl6
-	 nJieIM1rL6Z8qGtrZfZgQWJPb+ykjkFO5TkE2ZkTVOnMRlRrb0WBg30FxWLFuPz7XL
-	 zaLEY9V8jxbc4eGOJizXA8IxAeZjqhEb5rs8s5rLEczhqGMavWW4D/DV/Du3jRlLMA
-	 R+6LW98J+xgktd+vVBwr5xm5pE0SdyqvhltAxfMMZ9CVjhxH/pFfE1awqsC0dGxi9S
-	 pTUy3kkj7sxPgCQxbQrXNDNOES7sca2HaOQSBeQin+IhsHFK19vlBsCYUxG79oYhVf
-	 ZSmu8jIEvdkGw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 87AF7C43443;
-	Mon, 13 May 2024 23:00:29 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1715650216; c=relaxed/simple;
+	bh=UBvkaN7OfGD7yGAg5j9cT2UHYOi/jIDo9m5YtJk37+k=;
+	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type; b=i9tp8LSGqoWLK8e0jGm2FBfQ6G4cSqjGTwvmwCdL8kEyuOZMoRWXj0Z4rfJqZ+8/iL1K9tGUHvX6NA2BCNh1B51YtLavhJ6H+GxLwXPILx+9tHwSFyOcItZRu+tCTMfMT/Pu6TS18GZFIjGvqKHDfeeV4eaGxxyk8P0uOwVsqsc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=slingshot.co.nz; spf=pass smtp.mailfrom=slingshot.co.nz; arc=none smtp.client-ip=60.234.4.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=slingshot.co.nz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=slingshot.co.nz
+Received: from [49.225.18.18] (port=56967 helo=[192.168.68.55])
+	by smtp-3.slingshot.co.nz with esmtpa (Exim 4.90_1)
+	(envelope-from <charles7@slingshot.co.nz>)
+	id 1s6ggG-0002z9-Am
+	for linux-usb@vger.kernel.org; Tue, 14 May 2024 13:10:12 +1200
+Message-ID: <befe7135-16f1-4a3f-8164-b15dd748e397@slingshot.co.nz>
+Date: Tue, 14 May 2024 13:10:10 +1200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: usb: ax88179_178a: fix link status when link is set to
- down/up
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <171564122955.1634.5508968909715338167.git-patchwork-notify@kernel.org>
-Date: Mon, 13 May 2024 23:00:29 +0000
-References: <20240510090846.328201-1-jtornosm@redhat.com>
-In-Reply-To: <20240510090846.328201-1-jtornosm@redhat.com>
-To: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, linux-usb@vger.kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, stable@vger.kernel.org,
- inventor500@vivaldi.net, yongqin.liu@linaro.org
+User-Agent: Mozilla Thunderbird
+To: linux-usb@vger.kernel.org
+Content-Language: en-US
+From: Charles Harris <charles7@slingshot.co.nz>
+Subject: USB Device ID
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-GeoIP: NZ
+X-Spam_score: -2.9
+X-Spam_score_int: -28
+X-Spam_bar: --
 
-Hello:
+Hi Alan and all
+Noticed conversation as below on earlier post.
 
-This patch was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+I would like to know if this code could be used in a similar case.
 
-On Fri, 10 May 2024 11:08:28 +0200 you wrote:
-> The idea was to keep only one reset at initialization stage in order to
-> reduce the total delay, or the reset from usbnet_probe or the reset from
-> usbnet_open.
-> 
-> I have seen that restarting from usbnet_probe is necessary to avoid doing
-> too complex things. But when the link is set to down/up (for example to
-> configure a different mac address) the link is not correctly recovered
-> unless a reset is commanded from usbnet_open.
-> 
-> [...]
+Linux Mint 21.3   Using LibreCalc
 
-Here is the summary with links:
-  - net: usb: ax88179_178a: fix link status when link is set to down/up
-    https://git.kernel.org/netdev/net/c/ecf848eb934b
+With USB RFID tag readers, (2 or more reader)  most enter direct into open focus spreadsheet.  However with no device number.   Have same pid and vid.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+As the read from USB tag goes to the spreadsheet, can the device number  eg 004 and the bus number eg 004 be appended to the data read into the spreadsheet.  This would enable spreadsheet identify each reader and its location, to manipulate the tag reads by the  location etc.
 
+If so, how do I go about setting up?
+
+Your comments and advice would be much appreciated.
+
+Charles Harris
 
 
