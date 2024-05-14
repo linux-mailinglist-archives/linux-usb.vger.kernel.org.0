@@ -1,260 +1,135 @@
-Return-Path: <linux-usb+bounces-10267-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10268-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA3298C587E
-	for <lists+linux-usb@lfdr.de>; Tue, 14 May 2024 17:10:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B0498C58FD
+	for <lists+linux-usb@lfdr.de>; Tue, 14 May 2024 17:44:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A083A28279A
-	for <lists+linux-usb@lfdr.de>; Tue, 14 May 2024 15:10:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 775D2281A0A
+	for <lists+linux-usb@lfdr.de>; Tue, 14 May 2024 15:44:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10FCA17EB87;
-	Tue, 14 May 2024 15:10:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZqCZPnSX"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A601E17EBAF;
+	Tue, 14 May 2024 15:44:45 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f77.google.com (mail-io1-f77.google.com [209.85.166.77])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFF001E480
-	for <linux-usb@vger.kernel.org>; Tue, 14 May 2024 15:10:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02CF417EB85
+	for <linux-usb@vger.kernel.org>; Tue, 14 May 2024 15:44:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.77
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715699423; cv=none; b=Y5UBJU0yX7L0mxDj3ESe8bkoqFQiZtMiPlTgaKqvXGGXkeEjNPkVFCfcwFMVN7A9e90WdZapeXM6QML3xZcJ095ki4usTeMjjh6LF9D6RVSZHTyhNNyQgkSb933n3+o+UWx/fKTNsWGR/1l8V6JhhyIW89XaNDWX3kk/UCxzPpU=
+	t=1715701485; cv=none; b=ruoz62woa/uOkGZIFg52G/WbAmdABcYg7tElkACwIXhvzdws6EhfrCxR4jYXLxjKmm9Gp6JRVsoRBpGDuBQT2brHwTXa2IqAAnvMfhKQ+rBzW6EsYXbmt+WJSf7WSg99uPc3PVI/eUgSXrq0haizHVffHpDgwwK7TfsmzaOq4sU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715699423; c=relaxed/simple;
-	bh=YlvfgrWecR/BVHEZ9dXK0OemgjO8ca0eRw95vMoW9Ss=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=soqZOV8MMAPbmUnI+YMEiCtYvHH29gshnIL+DeGRFAmLGwj3JoRMmnI5lZx6JkCn2/HllI1jKchtZ18hPgn704zkbJnKqbzPWdWOJ7wNdBqVeN3NM06iAgj0bitpnXkKRoZ/i/calpB+BwcYSp3U227+amJoNMjvS/136Qwg5Pk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZqCZPnSX; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1715699420;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=kvO0cxgHO+nsSHAdHeN0TV0zj1R+uYeQ/4oU4vqqMEg=;
-	b=ZqCZPnSXcZJ50Y+bHKyrc969sy49sKmp/bpDVQMilHeBIgypdDVcisz/l0NKJsvtiHZC4D
-	tcssZxHj7wrJJsCU4vgVzLo6MaRr9USQi7hmhpYjD/g0fZ9l05H4uDnM0SLD5+DRosi4B1
-	wk9LWvFW5iLfCliJGZ3d66ve6Lys8ds=
-Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
- [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-34-2itBacfiNWqmlggmmedySg-1; Tue, 14 May 2024 11:10:08 -0400
-X-MC-Unique: 2itBacfiNWqmlggmmedySg-1
-Received: by mail-lf1-f70.google.com with SMTP id 2adb3069b0e04-52236a56aa1so3338512e87.0
-        for <linux-usb@vger.kernel.org>; Tue, 14 May 2024 08:10:08 -0700 (PDT)
+	s=arc-20240116; t=1715701485; c=relaxed/simple;
+	bh=Tzigt9y2Ubkzua+SFQ3VstVK5Sf+6jtdYihzu6CCgv0=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=iP0ZsIsSrZb2RnsteqogU6IO7GJa2FQw+PR33j8wc7xOUC8wvj0kXkUot9IhVAwY19MXFalVx3gnUNYEdYgIvDhu3rhP/UNaCsr6EAcWjdMftoulxjMsywp6vXhsrMRTv3SSynshot0+jgK6W2o0QbfU76LafMDtgEdtVjxmNL0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f77.google.com with SMTP id ca18e2360f4ac-7e1d807cfbaso362785339f.2
+        for <linux-usb@vger.kernel.org>; Tue, 14 May 2024 08:44:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715699407; x=1716304207;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1715701483; x=1716306283;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kvO0cxgHO+nsSHAdHeN0TV0zj1R+uYeQ/4oU4vqqMEg=;
-        b=C1ag2JC6uWCyIRSoqaiCYQJ8rt/PSliR7gtD/GnVUSXpr4HmiA5+J6KkHCJiT+VyLw
-         DngxXUyIkF7eBzWxxkh1b8j5LfUdhyZcRQG1xrdl98xvisRSuTgv2IuzLAY9mR0YfDh/
-         7SpJWK3wIn+DuEhmLNZ1TOQse/iMKTwE9gDsNFuJFDZU9k92y1NC9KYoBOmW8Jja3IvU
-         V0gPVCkyDuVlFFk07LIzGz4NLczp7sEjoN255oVms0LZs7qg++bfEZRIbAMFow7NU58w
-         NKKetnprDzeWXAJhUu79fb1LlGxxN7QmQkoooumwWcVIlqqn7UH/QtPZPeor9102Ddbb
-         UpEA==
-X-Forwarded-Encrypted: i=1; AJvYcCUIhlC72hKErFBJhLtIeoY2Gwb8wJqc3x8Vjlzd4zOBaw6YZhbsLK6Hqxk1a1P+rsDKSjccB0SCF6gkJIZK/BY4bKrsb+ntyPSx
-X-Gm-Message-State: AOJu0Ywi5myTPrgkcmW5GI1JuHnjNTWk4L6HUT8Zpx3sc1Jy1j0/x0oE
-	Lapv1WNTnFxbJ654fi7BdRBpRjDp5fc+S+OrcmKpzOK5QAOR3B3PfuqXAo0VFnE58kCa3SnVYLk
-	d6WWwUss6h4N2OHInzoz+J9qjOsmjqOx6RGu3L86KZc+CCdvR/i0f7Y0tIQ==
-X-Received: by 2002:a19:6454:0:b0:523:87b6:917d with SMTP id 2adb3069b0e04-52387b691d6mr124677e87.69.1715699406933;
-        Tue, 14 May 2024 08:10:06 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IF4F3fHZbZdFrZKrm4Nyer9AlKUoTo2X/QSWY8wl1hVlMQzf4lZMcvxOy1vA2xtq85hXQ4Fxw==
-X-Received: by 2002:a19:6454:0:b0:523:87b6:917d with SMTP id 2adb3069b0e04-52387b691d6mr124647e87.69.1715699406404;
-        Tue, 14 May 2024 08:10:06 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a5a1787c715sm732538566b.46.2024.05.14.08.10.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 May 2024 08:10:05 -0700 (PDT)
-Message-ID: <51cd4b4f-a658-406f-b76c-500231e3ec7d@redhat.com>
-Date: Tue, 14 May 2024 17:10:05 +0200
+        bh=84bc90QHt4ImGokmn/lScqXwBR18E3W9oI7qQt/YIG4=;
+        b=XwkCRpB/Wesm0+0584PVGZcDGzQWtaMP19aggUY8aUD7E8A5e5f6mKACbdi2bTcWY7
+         7BO2yrg1rtT4zZg2+pNIWOP75CBPkyu8xKIP1MqJgkBcqPy9qg3jnFaXKRcLlF2rZRAF
+         c4oiW+Bty8bJfg0TjasyJSQLYG/INeNNPxpxgf7ex3affXv2CEW9TCW2t6zCLjMzd6B5
+         aH0PMJRCmy958kV2j7x1Da/3gqzbw/AKBPyAbVeQIAw2irfzMx4MwlvEzdx859j+b9iD
+         Y9jWK22zJbK8PhJMLhsEXMXzpdxTgXk7jTu9q+FV4YXg9FnlrIpYbSKjB/cFi1dv9rVU
+         +KDw==
+X-Forwarded-Encrypted: i=1; AJvYcCWztkfM0xCuDgnapqZxCZeoUDGiF56KOsCExoHfzxIdVEUujwwxt5JReJq5hZdhEz3v8AmtWIZJtHo1nHjVMMoBHKBV7TnYC0/B
+X-Gm-Message-State: AOJu0YwtGeZbmFpP89t1Gn8a82wq13s0D3RD5MxtnJ37UYxQSpTknHXi
+	PDpAaLEG+UQSC6VXFFhvknIddA1SNwGH8l3gcfEbkJ2/NQLCvip1vQMLauLbRV/KPS5fOs2qJfr
+	Wu6FkGy4WN0u6xEMY91a+jaevrLUA/TxjoLkmmxvnjpKw1K1gcOdUShA=
+X-Google-Smtp-Source: AGHT+IEKvseE3flGi3RquF8/sbhTBAWZPUuEPOU5uSAeVdr0dnI2sW3qlnIYDzHMEFHBAHHVNeA3rLV3Q97/PJ1x2ppHCdxN9zSp
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] platform/x86: Add new MeeGoPad ANX7428 Type-C Cross
- Switch driver
-To: Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
- Andy Shevchenko <andy@kernel.org>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- platform-driver-x86@vger.kernel.org, linux-usb@vger.kernel.org
-References: <20240211195307.158956-1-hdegoede@redhat.com>
- <CAHp75VdSWwntsEh5xBz3jzXGi_QRuaRhcSs1-MwG3QYHW=wMtQ@mail.gmail.com>
-Content-Language: en-US, nl
-From: Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <CAHp75VdSWwntsEh5xBz3jzXGi_QRuaRhcSs1-MwG3QYHW=wMtQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a05:6602:2b02:b0:7de:e172:3eb2 with SMTP id
+ ca18e2360f4ac-7e1b51a0707mr72719339f.1.1715701483180; Tue, 14 May 2024
+ 08:44:43 -0700 (PDT)
+Date: Tue, 14 May 2024 08:44:43 -0700
+In-Reply-To: <000000000000b236c90617ef4e00@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000007224f506186be18b@google.com>
+Subject: Re: [syzbot] [kernfs?] [usb?] WARNING in kernfs_get (5)
+From: syzbot <syzbot+2f44671e54488d20f0e6@syzkaller.appspotmail.com>
+To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com, tj@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Andy,
+syzbot has found a reproducer for the following issue on:
 
-Thank you for the review.
+HEAD commit:    26dd54d03cd9 Add linux-next specific files for 20240514
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=1392596c980000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c8af44e051929224
+dashboard link: https://syzkaller.appspot.com/bug?extid=2f44671e54488d20f0e6
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14b06900980000
 
-I agree with all your review comments below and I have fixed them all
-for v2 of the patch which I'm about to post.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/dca5ce975d7a/disk-26dd54d0.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/24844585ee37/vmlinux-26dd54d0.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/7ea82f6342f5/bzImage-26dd54d0.xz
 
-Regards,
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+2f44671e54488d20f0e6@syzkaller.appspotmail.com
 
-Hans
+usb 2-1: Direct firmware load for ueagle-atm/eagleI.fw failed with error -2
+usb 2-1: Falling back to sysfs fallback for: ueagle-atm/eagleI.fw
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 5166 at fs/kernfs/dir.c:526 kernfs_get+0x71/0x90 fs/kernfs/dir.c:526
+Modules linked in:
+CPU: 0 PID: 5166 Comm: kworker/0:4 Not tainted 6.9.0-next-20240514-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/02/2024
+Workqueue: events request_firmware_work_func
+RIP: 0010:kernfs_get+0x71/0x90 fs/kernfs/dir.c:526
+Code: 23 e8 63 b0 5e ff 48 89 df be 04 00 00 00 e8 96 6c c4 ff f0 ff 03 eb 05 e8 4c b0 5e ff 5b 5d c3 cc cc cc cc e8 40 b0 5e ff 90 <0f> 0b 90 eb d7 89 d9 80 e1 07 80 c1 03 38 c1 7c b7 48 89 df e8 96
+RSP: 0018:ffffc90003bdf6e0 EFLAGS: 00010293
+RAX: ffffffff82379c40 RBX: ffff8880770dff00 RCX: ffff88802729da00
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
+RBP: 0000000000000000 R08: ffffffff82379c14 R09: 1ffff1100ee1bfe0
+R10: dffffc0000000000 R11: ffffed100ee1bfe1 R12: dffffc0000000000
+R13: ffff88802a984008 R14: ffffffff8c4497f0 R15: ffff88802a984038
+FS:  0000000000000000(0000) GS:ffff8880b9400000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f55ba7ad988 CR3: 0000000024c16000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ sysfs_get include/linux/sysfs.h:786 [inline]
+ create_dir lib/kobject.c:89 [inline]
+ kobject_add_internal+0x4ba/0x8d0 lib/kobject.c:240
+ kobject_add_varg lib/kobject.c:374 [inline]
+ kobject_add+0x152/0x220 lib/kobject.c:426
+ device_add+0x4e5/0xbf0 drivers/base/core.c:3659
+ fw_load_sysfs_fallback drivers/base/firmware_loader/fallback.c:86 [inline]
+ fw_load_from_user_helper drivers/base/firmware_loader/fallback.c:162 [inline]
+ firmware_fallback_sysfs+0x307/0x9e0 drivers/base/firmware_loader/fallback.c:238
+ _request_firmware+0xcf5/0x12b0 drivers/base/firmware_loader/main.c:914
+ request_firmware_work_func+0x12a/0x280 drivers/base/firmware_loader/main.c:1165
+ process_one_work kernel/workqueue.c:3231 [inline]
+ process_scheduled_works+0xa2c/0x1830 kernel/workqueue.c:3312
+ worker_thread+0x86d/0xd70 kernel/workqueue.c:3393
+ kthread+0x2f0/0x390 kernel/kthread.c:389
+ ret_from_fork+0x4b/0x80 arch/x86/kernel/process.c:147
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
+ </TASK>
 
 
-
-On 2/11/24 9:50 PM, Andy Shevchenko wrote:
-> On Sun, Feb 11, 2024 at 9:53 PM Hans de Goede <hdegoede@redhat.com> wrote:
->>
->> Some MeeGoPad top-set boxes have an ANX7428 Type-C Switch for USB3.1 Gen 1
->> and DisplayPort over Type-C alternate mode support.
->>
->> The ANX7428 has a microcontroller which takes care of the PD negotiation
->> and automatically sets the builtin Crosspoint Switch to send the right
->> signal to the 4 highspeed pairs of the Type-C connector. It also takes
->> care of HPD and AUX channel routing for DP alternate mode.
->>
->> IOW the ANX7428 operates fully autonomous and to the x5-Z8350 SoC
->> things look like there simple is a USB-3 Type-A connector and a
->> separate DipslayPort connector. Except that the BIOS does not
-> 
-> DisplayPort
-> 
->> power on the ANX7428 at boot (meh).
->>
->> Add a driver to power on the ANX7428. This driver is added under
->> drivers/platform/x86 rather then under drivers/usb/typec for 2 reasons:
-> 
-> than
-> 
->> 1. This driver is specificly written to work with how the ANX7428 is
-> 
-> specifically
-> 
->> described in the ACPI tables of the MeeGoPad x86 (Cherry Trail) devices.
->>
->> 2. This driver only powers on the ANX7428 and does not do anything wrt
->> its Type-C functionality. It should be possible to tell the controller
->> which data- and/or power-role to negotiate and to swap the role(s) after
->> negotiation but the MeeGoPad top-set boxes always draw their power from
->> a separate power-connector and they only support USB host-mode. So this
->> functionality is unnecessary and due to lack of documenation this
-> 
-> documentation
-> 
->> is tricky to support.
-> 
-> ...
-> 
->> +/*
->> + * meegopad_anx7428.c - Driver to power on the Analogix ANX7428
-> 
-> Keeping a filename inside the file is a burden in case the file gets
-> renamed in the future.
-> 
->> + * USB Type-C crosspoint switch on MeeGoPad top-set boxes.
->> + *
->> + * The MeeGoPad T8 and T9 are Cherry Trail top-set boxes which
->> + * use an ANX7428 to provide a Type-C port with USB3.1 Gen 1 and
->> + * DisplayPort over Type-C alternate mode support.
->> + *
->> + * The ANX7428 has a microcontroller which takes care of the PD
->> + * negotiation and automatically sets the builtin Crosspoint Switch
->> + * to send the right signal to the 4 highspeed pairs of the Type-C
->> + * connector. It also takes care of HPD and AUX channel routing for
->> + * DP alternate mode.
->> + *
->> + * IOW the ANX7428 operates fully autonomous and to the x5-Z8350 SoC
->> + * things look like there simple is a USB-3 Type-A connector and a
->> + * separate DipslayPort connector. Except that the BIOS does not
-> 
-> DisplayPort
-> 
->> + * power on the ANX7428 at boot. This driver takes care of powering
->> + * on the ANX7428.
->> + *
->> + * It should be possible to tell the micro-controller which data- and/or
->> + * power-role to negotiate and to swap the role(s) after negotiation
->> + * but the MeeGoPad top-set boxes always draw their power from a separate
->> + * power-connector and they only support USB host-mode. So this functionality
->> + * is unnecessary and due to lack of documenation this is tricky to support.
-> 
-> documentation
-> 
->> + * For a more complete ANX7428 driver see drivers/usb/misc/anx7418/ of
->> + * the LineageOS kernel for the LG G5 (International) aka the LG H850:
->> + * https://github.com/LineageOS/android_kernel_lge_msm8996/
->> + *
->> + * (C) Copyright 2024 Hans de Goede <hansg@kernel.org>
->> + */
->> +
->> +#include <linux/acpi.h>
-> 
-> + bits.h
-> 
->> +#include <linux/delay.h>
->> +#include <linux/dmi.h>
->> +#include <linux/gpio/consumer.h>
->> +#include <linux/i2c.h>
->> +#include <linux/module.h>
-> 
-> ...
-> 
->> +#define VENDOR_ID_L                    0x00
->> +#define VENDOR_ID_H                    0x01
->> +#define DEVICE_ID_L                    0x02
->> +#define DEVICE_ID_H                    0x03
-> 
-> You use word (16-bit) access, why do we need to know these?
-> Just define them without suffixes (and if you want add a comment that
-> they are 16-bit LE).
-> 
-> ...
-> 
->> +       usleep_range(10000, 15000);
-> 
-> fsleep() ?
-> 
-> ...
-> 
->> +       /* Wait for the OCM (On Chip Microcontroller) to start */
->> +       for (i = 0; i < max_tries; i++) {
->> +               usleep_range(5000, 10000);
->> +
->> +               ret = i2c_smbus_read_byte_data(client, TX_STATUS);
->> +               if (ret < 0)
->> +                       dev_err_probe(dev, ret, "reading status register\n");
->> +               else if (ret & OCM_STARTUP)
->> +                       break;
->> +       }
->> +       if (i == max_tries)
->> +               return dev_err_probe(dev, -EIO,
->> +                                    "On Chip Microcontroller did not start, status: 0x%02x\n",
->> +                                    ret);
-> 
-> Why not use read_poll_timeout() / readx_poll_timeout() (whichever suits better)?
-> 
-> ...
-> 
->> +static struct i2c_driver anx7428_driver = {
->> +       .driver = {
->> +               .name = KBUILD_MODNAME,
-> 
-> Strictly speaking this is an ABI and we don't want it to be changed in
-> case of filename change. Personally I _always_ prefer it be open
-> coded.
-> 
->> +               .acpi_match_table = anx7428_acpi_match,
->> +       },
->> +       .probe = anx7428_probe,
->> +};
-> 
-
+---
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
 
