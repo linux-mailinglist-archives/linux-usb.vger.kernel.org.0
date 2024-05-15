@@ -1,165 +1,243 @@
-Return-Path: <linux-usb+bounces-10276-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10277-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B5268C5FBB
-	for <lists+linux-usb@lfdr.de>; Wed, 15 May 2024 06:23:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C99F8C6925
+	for <lists+linux-usb@lfdr.de>; Wed, 15 May 2024 17:02:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D2C63B2212C
-	for <lists+linux-usb@lfdr.de>; Wed, 15 May 2024 04:23:15 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 77D0EB21467
+	for <lists+linux-usb@lfdr.de>; Wed, 15 May 2024 15:02:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2423938FA3;
-	Wed, 15 May 2024 04:23:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 321CF155A4D;
+	Wed, 15 May 2024 15:01:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="APiXXqrM"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dJl3MCaF"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF8823838A;
-	Wed, 15 May 2024 04:23:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02A6D155A27
+	for <linux-usb@vger.kernel.org>; Wed, 15 May 2024 15:01:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715746988; cv=none; b=TVSlVKlA2DeXPEg3KJXZ3eHWXyyHeh/IkCkvPnm1ZiMDdFR5zaPmHO3QSzUi796Zwq7VXJTUwYPglmX7FtqFSGfAXC7h0joUmRqRzmmR3fzGk8bAzX05PWvVh1DcOJTcKIzdFNXcMpF0uLoC6X/iVJYmxNtATHhts1j9hWBsb4g=
+	t=1715785313; cv=none; b=uFAvlfutyeLH20xcylAvgTzZP8w5VBt0EAAzrrBWTZ65lenbtjmFzjTSKt6h1Bj/0XNMD8eNDWJrlKIh0wR4fs+VXJkT+33y9B8wInP2OE2PPmF+B5S3gyN4Wb9UBqMa7Gjtm6hZ7w9tkbQAuw9ojPkFrEUE7sixCyr5QzbjbOM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715746988; c=relaxed/simple;
-	bh=8Awiz0PiHu6C/jaD0D9ripLDiAz+9a7E4CdPN8/555k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=GsmFOVqBPXw7JcFfoSvxO3ocZNXxgeyxIus3Z9pKujMY6bsKnlNgL9G+Ta8rkA9p0/U/gbG82Jkx6N1YO8TSXknddJO89lb957k0T3skB3nA6aRn2T15Ul8SQjlPgAkIue9JbNBB/7ZuPAmEHOfifL3ZsGYHmalK87AQbz6sX1c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=APiXXqrM; arc=none smtp.client-ip=198.47.19.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 44F4N0jF113734;
-	Tue, 14 May 2024 23:23:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1715746980;
-	bh=dufjzbsl5o++moeU25RHOlPciEN9mhqeZLQAsIfEYzg=;
-	h=Date:Subject:To:CC:References:From:In-Reply-To;
-	b=APiXXqrMhZExx5yeQ/ZiMxCJJ4B4NjOCYKszWnjOWlLLlr+pvw2oYXWBM41a8HKh+
-	 qftph4v1GSJmPb5kBEkJfr63TqD7tZOWFfl6YsKEKglfKcDEK8MbGiOVcYirz+Xk1o
-	 0SiwOv0vB/2EKVrvS5qERkRUZnhasBxc7Fk1feRA=
-Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
-	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 44F4N01k117463
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Tue, 14 May 2024 23:23:00 -0500
-Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 14
- May 2024 23:23:00 -0500
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Tue, 14 May 2024 23:23:00 -0500
-Received: from [172.24.227.88] (uda0500640.dhcp.ti.com [172.24.227.88])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 44F4MvTO025252;
-	Tue, 14 May 2024 23:22:58 -0500
-Message-ID: <dde63edb-9057-2d33-032a-8ee25e981c72@ti.com>
-Date: Wed, 15 May 2024 09:52:57 +0530
+	s=arc-20240116; t=1715785313; c=relaxed/simple;
+	bh=ScHBNCjfwH0hgsz8GZny0v3ytqV7J3w0ocDS7d+1VoI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=o7gY7rQv2Se9Q1JnRMJxUZlmLMUi9aMd+pCMuPhqgOT3oYO94VSgB9qMqDb5pi4E7v7Jms/BoOnpotbNtXVDH+AUOYRtBfvCeax4ntAgQ6sesyRTclRn9n+qrkkPrgcqmwIDdrbQjJBbe+LBs5E8luIOU9W4r3rONy8/G5sKFkI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=dJl3MCaF; arc=none smtp.client-ip=209.85.208.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2e6f2534e41so15407341fa.0
+        for <linux-usb@vger.kernel.org>; Wed, 15 May 2024 08:01:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1715785310; x=1716390110; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=1UyqZmUfboktWppmzlMbge493UhsV2Qc8tBPPHmQa0s=;
+        b=dJl3MCaFt/4v3FygCxRHjHN9zOqmdNhNlo1EPkCzVGKI9Yi25D5IHgLeZJaq++ZH01
+         gtVEnJXXNjYebR9EnogSbPVbiLUPUWfjN68+O2q5z4SK98/SK23PyD85QL4ceiNAcFqV
+         VeTYjL5JwY3TP2mGtPFCubqeqsRkAznyJKFNesuaTZSrZU86ONCdi4fyVMsPZnko0VsF
+         4pFACOc8Of/WQHIw5WpRUsww+qo678orS68qP4NaJtJiqIAxrYjw/RYz4zpJRgLW9P0l
+         qsR3r7S+FrtprUzB14vU+93bcgn/LmIyB9wAB/EENKdlZUZp59hTsRsY68fCNbWRtdVY
+         LbzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715785310; x=1716390110;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1UyqZmUfboktWppmzlMbge493UhsV2Qc8tBPPHmQa0s=;
+        b=vuUV21q+oOqg19EK/dCLZCVAKQSKopkmco+1D0UvusOlM6hZ1bOAnN2f5KEpff7rlS
+         qbklkQnBE0Hv1OXN0Tvm7JuevPCSBzWtfpVEzYGdjQlARCMrJHntkiaItDoIdcGEAb7K
+         1ltRS9bsNqIioYGdYVU9o98SQP/00leKISCvRqLKZHoKK9yM6Eo+0N7DwQrxCc1QQ7Q/
+         fpJ4/k5qVoNaLbPxa/sfFyi+rePoV4z5oJnPrTpiLv70CWwuObL3OlpPEVYLkWds9jPN
+         aV04wlvJ6akR6EouvV84zTZl5UTUbYa9Nm0Ll3NPThl0Y/T6yTyOTqho9oZ9ZpW+sEda
+         QdcQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWKRiGxaX2oI6zz+8JWD9/vqYkFiEMqfdFJ10Ko0wHnPNNlAgvUIdnp8qBieRcW/NSKK17FVZ+UGA1oLCA7rLe3+HInhWRcBUZ8
+X-Gm-Message-State: AOJu0YyKI4YtYaDfZsQqb2XHnjAJ+Cjy4AuNRRdY6KumLKkkoire1pW6
+	8cCrJ+mg/LESmJudoHdC38xJsOmB1grpJTCwe2QEP8ONruVyXKb7IrAc7liZkQ0=
+X-Google-Smtp-Source: AGHT+IHbwp2iYCqmHM0R9xejEb13mh3r9CmNNOPKVYnou4CH7qz3D3yCaBHkx24yNkzM8v3qHfsyGg==
+X-Received: by 2002:a2e:f1a:0:b0:2e6:a7c3:775a with SMTP id 38308e7fff4ca-2e6a7c37977mr49132481fa.52.1715785310131;
+        Wed, 15 May 2024 08:01:50 -0700 (PDT)
+Received: from eriador.lumag.spb.ru (dzdbxzyyyyyyyyyyyykxt-3.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::227])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2e4d1622740sm21039371fa.119.2024.05.15.08.01.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 May 2024 08:01:49 -0700 (PDT)
+Date: Wed, 15 May 2024 18:01:48 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Neil Armstrong <neil.armstrong@linaro.org>, Bjorn Andersson <andersson@kernel.org>, 
+	Konrad Dybcio <konrad.dybcio@linaro.org>, linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH 7/8] usb: typec: ucsi: glink: merge pmic_glink_altmode
+ driver
+Message-ID: <f2bqgtoll3j6pseg6hzvwtyqiwfwcaepuhcnq4nrshux2bnluh@rte67mi7zcey>
+References: <20240416-ucsi-glink-altmode-v1-0-890db00877ac@linaro.org>
+ <20240416-ucsi-glink-altmode-v1-7-890db00877ac@linaro.org>
+ <ZiZC/l9nOmzWx+j6@kuha.fi.intel.com>
+ <46fktwtp3xers6tcpov3qo4zswptvajewsdltm45zbz2kmmpzp@cthu6ylttup3>
+ <ZiZ8El4779l0W1Ig@kuha.fi.intel.com>
+ <CAA8EJppMKFSbe-EZLELy+dnd4BZeg24crotH95hpCwcvoEbw5Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 1/2] usb: cdns3: Add quirk flag to enable suspend
- residency
-Content-Language: en-US
-To: Peter Chen <peter.chen@kernel.org>
-CC: <pawell@cadence.com>, <rogerq@kernel.org>, <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Ravi Gunasekaran
-	<r-gunasekaran@ti.com>
-References: <20240514092421.20897-1-r-gunasekaran@ti.com>
- <20240514092421.20897-2-r-gunasekaran@ti.com>
- <20240515013838.GA3279984@nchen-desktop>
-From: Ravi Gunasekaran <r-gunasekaran@ti.com>
-In-Reply-To: <20240515013838.GA3279984@nchen-desktop>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAA8EJppMKFSbe-EZLELy+dnd4BZeg24crotH95hpCwcvoEbw5Q@mail.gmail.com>
+
+Hi Heikki,
 
 
+On Sat, May 04, 2024 at 09:49:42AM +0300, Dmitry Baryshkov wrote:
+> On Mon, 22 Apr 2024 at 18:02, Heikki Krogerus
+> <heikki.krogerus@linux.intel.com> wrote:
+> >
+> > Hi Dmitry,
+> >
+> > On Mon, Apr 22, 2024 at 03:45:22PM +0300, Dmitry Baryshkov wrote:
+> > > On Mon, Apr 22, 2024 at 01:59:10PM +0300, Heikki Krogerus wrote:
+> > > > Hi Dmitry,
+> > > >
+> > > > On Tue, Apr 16, 2024 at 05:20:56AM +0300, Dmitry Baryshkov wrote:
+> > > > > Move handling of USB Altmode to the ucsi_glink driver. This way the
+> > > > > altmode is properly registered in the Type-C framework, the altmode
+> > > > > handlers can use generic typec calls, the UCSI driver can use
+> > > > > orientation information from altmode messages and vice versa, the
+> > > > > altmode handlers can use GPIO-based orientation inormation from UCSI
+> > > > > GLINK driver.
+> > > > >
 
-On 5/15/24 7:08 AM, Peter Chen wrote:
-> On 24-05-14 14:54:20, Ravi Gunasekaran wrote:
->> From: Roger Quadros <rogerq@kernel.org>
->>
->> Some platforms (e.g. ti,j721e-usb, ti,am64-usb) require
->> this bit to be set to workaround a lockup issue with PHY
->> short suspend intervals [1]. Add a platform quirk flag
->> to indicate if Suspend Residency should be enabled.
->>
->> [1] - https://www.ti.com/lit/er/sprz457h/sprz457h.pdf
->> i2409 - USB: USB2 PHY locks up due to short suspend
->>
->> Signed-off-by: Roger Quadros <rogerq@kernel.org>
->> Signed-off-by: Ravi Gunasekaran <r-gunasekaran@ti.com>
->> ---
+[skipped]
 
-[...]
+> > > Note, the existing UCSI displayport AltMode driver depends on the UCSI
+> > > actually handling the altomode. It needs a partner, etc.
+> > >
 
->>  	regs = devm_ioremap_resource(cdns->dev, &cdns->otg_res);
->> @@ -439,6 +439,13 @@ int cdns_drd_init(struct cdns *cdns)
->>  			return -EINVAL;
->>  		}
->>  
->> +		if (cdns->pdata &&
->> +		    (cdns->pdata->quirks & CDNS3_DRD_SUSPEND_RESIDENCY_ENABLE)) {
->> +			reg = readl(&cdns->otg_v1_regs->susp_ctrl);
->> +			reg |= SUSP_CTRL_SUSPEND_RESIDENCY_ENABLE;
->> +			writel(reg, &cdns->otg_v1_regs->susp_ctrl);
->> +		}
->> +
+[skipped the patch]
+
+> > > > > +static void pmic_glink_ucsi_set_state(struct ucsi_connector *con,
+> > > > > +                               struct pmic_glink_ucsi_port *port)
+> > > > > +{
+> > > > > + struct typec_displayport_data dp_data = {};
+> > > > > + struct typec_altmode *altmode = NULL;
+> > > > > + unsigned long flags;
+> > > > > + void *data = NULL;
+> > > > > + int mode;
+> > > > > +
+> > > > > + spin_lock_irqsave(&port->lock, flags);
+> > > > > +
+> > > > > + if (port->svid == USB_SID_PD) {
+> > > > > +         mode = TYPEC_STATE_USB;
+> > > > > + } else if (port->svid == USB_TYPEC_DP_SID && port->mode == DPAM_HPD_OUT) {
+> > > > > +         mode = TYPEC_STATE_SAFE;
+> > > > > + } else if (port->svid == USB_TYPEC_DP_SID) {
+> > > > > +         altmode = find_altmode(con, port->svid);
+> > > > > +         if (!altmode) {
+> > > > > +                 dev_err(con->ucsi->dev, "altmode woth SVID 0x%04x not found\n",
+> > > > > +                         port->svid);
+> > > > > +                 spin_unlock_irqrestore(&port->lock, flags);
+> > > > > +                 return;
+> > > > > +         }
+> > > > > +
+> > > > > +         mode = TYPEC_MODAL_STATE(port->mode - DPAM_HPD_A);
+> > > > > +
+> > > > > +         dp_data.status = DP_STATUS_ENABLED;
+> > > > > +         dp_data.status |= DP_STATUS_CON_DFP_D;
+> > > > > +         if (port->hpd_state)
+> > > > > +                 dp_data.status |= DP_STATUS_HPD_STATE;
+> > > > > +         if (port->hpd_irq)
+> > > > > +                 dp_data.status |= DP_STATUS_IRQ_HPD;
+> > > > > +         dp_data.conf = DP_CONF_SET_PIN_ASSIGN(port->mode - DPAM_HPD_A);
+> > > > > +
+> > > > > +         data = &dp_data;
+> > > > > + } else {
+> > > > > +         dev_err(con->ucsi->dev, "Unsupported SVID 0x%04x\n", port->svid);
+> > > > > +         spin_unlock_irqrestore(&port->lock, flags);
+> > > > > +         return;
+> > > > > + }
+> > > > > +
+> > > > > + spin_unlock_irqrestore(&port->lock, flags);
+> > > > > +
+> > > > > + if (altmode)
+> > > > > +         typec_altmode_set_port(altmode, mode, data);
+> > > >
+> > > > So if the port altmode is using the ucsi_displayport_ops, you can
+> > > > simply register the partner altmode here instead. That should
+> > > > guarantee that it'll bind to the DP altmode driver which will take
+> > > > care of typec_altmode_enter() etc.
+> > >
+> > > In our case the altmode is unfortunately completely hidden inside the
+> > > firmware. It is not exported via the native UCSI interface. Even if I
+> > > plug the DP dongle, there is no partner / altmode being reported by the
+> > > PPM. All DP events are reported via additional GLINK messages.
+> >
+> > I understand that there is no alt mode being reported, but I assumed
+> > that there is a notification about connections.
+> >
+> > If that's not the case, then you need to use this code path to
+> > register the partner device as well I think. The partner really has to
+> > be registered somehow.
+> >
+> > > The goal is to use the core Type-C altmode handling, while keeping UCSI
+> > > out of the altmode business.
+> > >
+> > > This allows the core to handle switches / muxes / retimers, report the
+> > > altmode to the userspace via sysfs, keep the link between the DP part of
+> > > the stack and the typec port, but at the same time we don't get errors
+> > > from UCSI because of the PPM reporting unsupported commands, etc.
+> >
+> > I understand, and just to be clear, I don't have a problem with
+> > bypassing UCSI. But that does not mean you can skip the alt mode
+> > registration.
+> >
+> > The primary purpose of drivers/usb/typec/ucsi/displayport.c is to
+> > emulate the partner DP alt mode device a little so that the actual DP
+> > alt mode driver drivers/usb/typec/altmodes/displayport.c is happy. The
+> > altmode driver will then make sure that all the muxes, switches and
+> > what have you, are configured as they should, and more importantly,
+> > make sure the DP alt mode is exposed to the user space exactly the
+> > same way as it's exposed on all the other systems.
+> >
+> > There are a couple of UCSI commands that are being used there yes, but
+> > by modifying it so that those UCSI commands are executed conditionally
+> > - by checking the ALT_MODE_DETAILS feature - you should be able to use
+> > it also in this case.
 > 
-> It is better put this above (just above code cdns->version  =
-> CDNS3_CONTROLLER_V1;)
+> I have played with the DP AltMode driver. I got it somewhat working,
+> but I think I'm facing a control issue.
+> Basically, the altmode driver wants to control pin assignment on its
+> own. It works with the software TCPM, as we control it.
+> It works with the normal UCSI, because it still can configure pin
+> config. However with PMIC GLINK implementation there is no way to
+> control pin assignment from the Linux side. The firmware does that for
+> us.
+> What would be the recommended way to handle it? Is it okay to override
+> status_update to return just the selected pin config? Or is there any
+> other (better) way to handle such an issue?
+
+Any suggestions or further comments? Is it better to extend the
+DisplayPort Altmode driver with the 'forced' transitions? Or it would be
+fine to just register a partner device, emulate the userspace events,
+but completely ignore the existing displayport driver?
+
 > 
-
-You mean here, to group it with CDNS3 v1?
-
-else if (OTG_CDNS3_CHECK_DID(state)) {                                               
-      cdns->otg_irq_regs = (struct cdns_otg_irq_regs __iomem *)
-                            &cdns->otg_v1_regs->ien;
-      writel(1, &cdns->otg_v1_regs->simulate);
-
-+     if (cdns->pdata &&
-+	  (cdns->pdata->quirks & CDNS3_DRD_SUSPEND_RESIDENCY_ENABLE)) {
-+	      reg = readl(&cdns->otg_v1_regs->susp_ctrl);
-+	      reg |= SUSP_CTRL_SUSPEND_RESIDENCY_ENABLE;
-+	      writel(reg, &cdns->otg_v1_regs->susp_ctrl);
-+     }
-      dns->version  = CDNS3_CONTROLLER_V1;
-} else
-
-> Peter
->>  		dev_dbg(cdns->dev, "DRD version v1 (ID: %08x, rev: %08x)\n",
->>  			 readl(&cdns->otg_v1_regs->did),
->>  			 readl(&cdns->otg_v1_regs->rid));
->> diff --git a/drivers/usb/cdns3/drd.h b/drivers/usb/cdns3/drd.h
->> index d72370c321d3..1e2aee14d629 100644
->> --- a/drivers/usb/cdns3/drd.h
->> +++ b/drivers/usb/cdns3/drd.h
->> @@ -193,6 +193,9 @@ struct cdns_otg_irq_regs {
->>  /* OTGREFCLK - bitmasks */
->>  #define OTGREFCLK_STB_CLK_SWITCH_EN	BIT(31)
->>  
->> +/* SUPS_CTRL - bitmasks */
->> +#define SUSP_CTRL_SUSPEND_RESIDENCY_ENABLE	BIT(17)
->> +
->>  /* OVERRIDE - bitmasks */
->>  #define OVERRIDE_IDPULLUP		BIT(0)
->>  /* Only for CDNS3_CONTROLLER_V0 version */
->> -- 
->> 2.17.1
->>
+> >
+> > You really need to register the partner alt mode(s) one way or the
+> > other in any case, and the partner device itself you absolutely must
+> > register. The user space interface needs to be consistent.
 > 
+> For reference, the partner is being reported and registered by the
+> UCSI firmware. It's only the altmode itself where I'm facing the
+> issue.
 
 -- 
-Regards,
-Ravi
+With best wishes
+Dmitry
 
