@@ -1,215 +1,187 @@
-Return-Path: <linux-usb+bounces-10280-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10281-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2D3C8C6E06
-	for <lists+linux-usb@lfdr.de>; Wed, 15 May 2024 23:51:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D73C78C6E76
+	for <lists+linux-usb@lfdr.de>; Thu, 16 May 2024 00:13:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 134011C21698
-	for <lists+linux-usb@lfdr.de>; Wed, 15 May 2024 21:51:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 88752283B75
+	for <lists+linux-usb@lfdr.de>; Wed, 15 May 2024 22:13:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 029B415CD49;
-	Wed, 15 May 2024 21:50:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A070D15B574;
+	Wed, 15 May 2024 22:13:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aHh8ismu"
+	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="EV1Q3aW+"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-0201.mail-europe.com (mail-0201.mail-europe.com [51.77.79.158])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCE3615B578;
-	Wed, 15 May 2024 21:50:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 228DC15B0E3
+	for <linux-usb@vger.kernel.org>; Wed, 15 May 2024 22:13:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.77.79.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715809835; cv=none; b=K+yLzFgr7MHnVctPMwZG8OnnBrOPycpw6VSpOId2/yo7Sh5DW3C9d/JwgdwcpFiWgXanH4257N4iS2goZPE8D7A6hQWZFQaoBTYNNCdY3hAdH2lesNB+3Nnr7ez+Eqw11lNfRQPRU1HAmUe6a3ChlJgn26/AdKg83aFD6Ak6nl4=
+	t=1715811196; cv=none; b=ZX2A7dATN9K8T9wxuv9fYOF748ZzTuYljY2XHuZRZ0UF1j+57pTZO8OxLyv+ZtgToc3z7ydfeZyHIAm6ciKHj4Po8sAs0pZ0RrufT+sXYgfPZiDPSmtpeeWY2xyNhv9yUhF1J/YrrepFXMNxu/GIHnjoVPMhnEO2JUTRVSOwM7s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715809835; c=relaxed/simple;
-	bh=Tff5kjhuUPpvzAAyUre0AKdN3xDtZWwVcKkQINGkUDE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PZUM/ouNloqp+/smoAi5SQYo2tN7V8ZuABPi/wDqq7BEgrhImyLL+PPvSg/eRTQdGKAWy+3UbknWad7PN1c2sDALGf8quu1+sOAFM6NqsuhjmBuxAJMwgbN69mbJRGPhSaSk7Ue6wwj6dWRdzKAqZUhlWM8iWRF2ZU0qgirRx4M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aHh8ismu; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1ec4dc64c6cso53602995ad.0;
-        Wed, 15 May 2024 14:50:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1715809833; x=1716414633; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TUuTliHGjG8EepapSs2g5/Z8liXHlvUYXr6xFZTnQ/s=;
-        b=aHh8ismud9tYuh2y2103OmS7AAkajLr8vEzIn+QEx+qyBfX9yuztIPMUsmOz0n4TB6
-         A/j8FZPYlwf59zyq/hcC01qpClWBC91lGuqaxIzY3K1S0dvVU14aUi3iEnk1MUrRaJ2o
-         JpNXUwv4/2FMoeydTPZsJ/pOJl//kPD4EZWVQaD+a7yyG5iZlbjgvF8GtYPqtuSc+Cac
-         j/ddIvlzw6L2DjfLG+rrdyp05YY2liz10wKJTQdzrEx8MDx2ZJ++eTeFb5MpaguTZWkZ
-         ly3RmcgAyP+tx08RAfUrSFa5nOo6wBMoutTR8swsEri2+YHl3XfUSIep9IVaUcV8aanQ
-         TSKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715809833; x=1716414633;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TUuTliHGjG8EepapSs2g5/Z8liXHlvUYXr6xFZTnQ/s=;
-        b=jifq8oQFwy2yFdcZo825mftoXz+bXkJfMsQtUxMRIG1ZGESFccaVvceqWEqO3mxd5L
-         zf5i6UUNHL3PtD4KghN31Z9zyjazD17dd0waHpuR96mnLCUe9Fe/rDGBTfPVmO+Iv+49
-         6saC8kCHHHUJ3Eocfu7J2+FrMbkb3Ivas4gXrjHC6b2tYG/AGM5jyi7rFFG1QxRYuAWR
-         7gWAixUv62Fn4mNDw8/v77GtZVurnor/Fb8aQdmlgurqJaWu1iHCsN4X5OSlis7zVE00
-         wH8w+oRfMgqQD6EPzZIieW3Z6TbRrSvNfF8n9ymgztxG+bS38/eSU8DAQOIwrGInAr0a
-         8Dqg==
-X-Forwarded-Encrypted: i=1; AJvYcCVgNCWu3RxXMBGgKwVO+DRv0m62Kn0fJP8gosI2kFnWkw6D2KWroRjBZ6zho6XPDFDlyAwUaRW4L8EK5ZaiynyGeWVZbcC54DOMoMOr483USHYdUeVGi1JOwR/uUTwFwIiw048xzNSO0syL+Yjp2BnCR/V30b26yCo2LoBVGN3xQvUWCMH69NWWLGpFHEKJ2tuqiaXvOAzP0pfmGG+ap1hkPvCp34lTgUpq3NWqkja1757sp9Mk4+lhu/XLvGR7lJg=
-X-Gm-Message-State: AOJu0YzNbXzgEtlE13kZRwdtmm8zjqLYr+kTIyOYI2MhcJvgTCd5c6iX
-	2sPVDkPv3vrrEC14h7vEkNWDG2qWgwPDqf39QmVpLOvhs4jHOF9bBki01Q==
-X-Google-Smtp-Source: AGHT+IElqBOAOz5admZx87XGJtYd5m2pfahWSbve4lpZztwOeNSBe/vb8uRMxRnWFMyzO99p2f7atQ==
-X-Received: by 2002:a17:902:aa03:b0:1ec:5f64:6e74 with SMTP id d9443c01a7336-1ef43d29b65mr185610635ad.23.1715809832960;
-        Wed, 15 May 2024 14:50:32 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1ef0b9d164dsm122822315ad.52.2024.05.15.14.50.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 May 2024 14:50:31 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 15 May 2024 14:50:30 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Christoph Hellwig <hch@lst.de>
-Cc: Jens Axboe <axboe@kernel.dk>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	Damien Le Moal <dlemoal@kernel.org>,
-	Niklas Cassel <cassel@kernel.org>,
-	Takashi Sakamoto <o-takashi@sakamocchi.jp>,
-	Sathya Prakash <sathya.prakash@broadcom.com>,
-	Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-	Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>,
-	"Juergen E. Fischer" <fischer@norbit.de>,
-	Xiang Chen <chenxiang66@hisilicon.com>,
-	HighPoint Linux Team <linux@highpoint-tech.com>,
-	Tyrel Datwyler <tyreld@linux.ibm.com>,
-	Brian King <brking@us.ibm.com>, Lee Duncan <lduncan@suse.com>,
-	Chris Leech <cleech@redhat.com>,
-	Mike Christie <michael.christie@oracle.com>,
-	John Garry <john.g.garry@oracle.com>,
-	Jason Yan <yanaijie@huawei.com>,
-	Kashyap Desai <kashyap.desai@broadcom.com>,
-	Sumit Saxena <sumit.saxena@broadcom.com>,
-	Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
-	Chandrakanth patil <chandrakanth.patil@broadcom.com>,
-	Jack Wang <jinpu.wang@cloud.ionos.com>,
-	Nilesh Javali <njavali@marvell.com>,
-	GR-QLogic-Storage-Upstream@marvell.com,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Avri Altman <avri.altman@wdc.com>,
-	Bart Van Assche <bvanassche@acm.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Alan Stern <stern@rowland.harvard.edu>, linux-block@vger.kernel.org,
-	linux-ide@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
-	MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
-	megaraidlinux.pdl@broadcom.com, mpi3mr-linuxdrv.pdl@broadcom.com,
-	linux-samsung-soc@vger.kernel.org, linux-usb@vger.kernel.org,
-	usb-storage@lists.one-eyed-alien.net,
-	Hannes Reinecke <hare@suse.de>
-Subject: Re: [PATCH 04/23] scsi: initialize scsi midlayer limits before
- allocating the queue
-Message-ID: <ce2bf6af-4382-4fe1-b392-cc6829f5ceb2@roeck-us.net>
-References: <20240409143748.980206-1-hch@lst.de>
- <20240409143748.980206-5-hch@lst.de>
+	s=arc-20240116; t=1715811196; c=relaxed/simple;
+	bh=MR78N6V5nbqP4ftTUyMfemJ45vuP1Y9Zb289h91WKGU=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=aFdEWjiBToDFZc9flRu9DoF1dEtxStFzfmwuF3TzOJSvbI6VTa4aYkUwJBdGdiMXvpmRMZI//Z+hgVk5jjBVhFxGBb6srNf56gLD15TM2UpmfKRy5eA0MmUoKTiOMYOWUWH94vfWgjtCAeF66eLFQPoefVyj3vQI8xHNb3fXfOE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=EV1Q3aW+; arc=none smtp.client-ip=51.77.79.158
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
+	s=protonmail3; t=1715811178; x=1716070378;
+	bh=MR78N6V5nbqP4ftTUyMfemJ45vuP1Y9Zb289h91WKGU=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector;
+	b=EV1Q3aW+CYtYPGTMkI1oEb4rC8u+KFnqOClHz0g+e2LIwvaG+/E+jUd18Vj1r8ltC
+	 4T9Xg7aromqFPSbEyGaBHgxbATyF02Vsj5RBJSlsibQnqgXgNaB9oRA8Ll9VWTD3qi
+	 pbRl8DdTTCJVYLdDb/PnnxrpUBa3r3qmNNbdATCQ3Xp83t9LkaoHuGMrmLPlpJ2Pw3
+	 qs6U8gjdoWSEI1ebiq4dVWVRXxGhNXOStsdrmz7tQ8gjAuzGjlImI7cni23mx2Zxgv
+	 9YPNs759Q15jW6n/dd1rmZQu+yMD6+OnZRnqNXmmHLdvaNPZJuE+7uUCfFw1fOVC2Z
+	 GFk8X0u02lNjg==
+Date: Wed, 15 May 2024 22:12:54 +0000
+To: Alan Stern <stern@rowland.harvard.edu>
+From: Ethin Probst <ethindp@pm.me>
+Cc: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: Assistance getting the Universal Audio Apollo Solo USB to work with Linux
+Message-ID: <N-wnVREkI4qROqLV1rCTIoLRiRzMGvywHt9QIdRD-e5AHby9wfaXcTn2V-Gd_UnmW-JomnWn6xGNhDhIeHIG3VHfHRFmnmPdZEPL8Qi5Gf4=@pm.me>
+In-Reply-To: <ab4d0394-0d71-45a7-a79b-02e3c90f8ac8@rowland.harvard.edu>
+References: <DJiA8anOC3V1gHoj0H-8pmsXujLNu7IlZvNmvUEoDfnjC5VIzZ3YsoTgnUD-zVTsnhgln5BzEsy1n4YkoqkEd_pvTF9oZaukzUoyL-pDfRs=@pm.me> <ab4d0394-0d71-45a7-a79b-02e3c90f8ac8@rowland.harvard.edu>
+Feedback-ID: 24240837:user:proton
+X-Pm-Message-ID: 86a0ba89a5f54cc0b63d4c8c28b224f4c7f645df
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240409143748.980206-5-hch@lst.de>
+Content-Type: multipart/signed; protocol="application/pgp-signature"; micalg=pgp-sha512; boundary="------7c48e40e08a672f6049c7dfaa6f4ddee68115cfd574be250fde1c7a2b2ecd51a"; charset=utf-8
 
-Hi,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------7c48e40e08a672f6049c7dfaa6f4ddee68115cfd574be250fde1c7a2b2ecd51a
+Content-Type: multipart/mixed;boundary=---------------------d11a3dfb27259b6854fdf0796597bf36
 
-On Tue, Apr 09, 2024 at 04:37:29PM +0200, Christoph Hellwig wrote:
-> Turn __scsi_init_queue into scsi_init_limits which initializes
-> queue_limits structure that can be passed to blk_mq_alloc_queue.
-> 
+-----------------------d11a3dfb27259b6854fdf0796597bf36
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain;charset=utf-8
 
-With this patch in linux mainline, I see
+On Sunday, May 12th, 2024 at 09:13, Alan Stern <stern@rowland.harvard.edu>=
+ wrote:
 
-ata2: found unknown device (class 0)
-ata2.00: ATAPI: QEMU DVD-ROM, 2.5+, max UDMA/100
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 27 at block/blk-settings.c:202 blk_validate_limits+0x28c/0x304
-Modules linked in:
-CPU: 0 PID: 27 Comm: kworker/u4:2 Not tainted 6.9.0-05151-g1b294a1f3561 #1
-Hardware name: PowerMac3,1 PPC970FX 0x3c0301 PowerMac
-Workqueue: async async_run_entry_fn
-NIP:  c0000000007ccec8 LR: c0000000007c805c CTR: 0000000000000000
-REGS: c000000006def690 TRAP: 0700   Not tainted  (6.9.0-05151-g1b294a1f3561)
-MSR:  8000000000028032 <SF,EE,IR,DR,RI>  CR: 84004228  XER: 20000000
-IRQMASK: 0
-GPR00: c0000000007c8040 c000000006def930 c00000000159f900 c000000006defac8
-GPR04: c00000000146e788 0000000000000000 0000000000000000 0000000000000100
-GPR08: 0000000000000200 000000000000ff00 0000000000000000 0000000000004000
-GPR12: 000000000fa82000 c000000003330000 c000000000116508 c0000000060c5c40
-GPR16: 0000000000000000 0000000000000000 0000000000000000 0000000000000088
-GPR20: 0000000000000000 c0000000026f2f40 c0000000025eeff0 0000000000000000
-GPR24: c000000006defc80 c0000000031cb3a0 c000000002571c80 c000000006defac8
-GPR28: c0000000033052e0 ffffffffffffffff 0000000000000010 c000000008f13df0
-NIP [c0000000007ccec8] blk_validate_limits+0x28c/0x304
-LR [c0000000007c805c] blk_alloc_queue+0xbc/0x344
-Call Trace:
-[c000000006def930] [c0000000007c8040] blk_alloc_queue+0xa0/0x344 (unreliable)
-[c000000006def990] [c0000000007e2658] blk_mq_alloc_queue+0x60/0xf4
-[c000000006defa60] [c000000000a7a260] scsi_alloc_sdev+0x280/0x464
-[c000000006defb90] [c000000000a7a6b4] scsi_probe_and_add_lun+0x270/0x388
-[c000000006defc60] [c000000000a7b070] __scsi_add_device+0x168/0x1b4
-[c000000006defcc0] [c000000000b08fe0] ata_scsi_scan_host+0x294/0x39c
-[c000000006defd80] [c000000000af7704] async_port_probe+0x6c/0x98
-[c000000006defdb0] [c000000000120028] async_run_entry_fn+0x50/0x13c
-[c000000006defe00] [c00000000010821c] process_one_work+0x2c0/0x828
-[c000000006deff00] [c000000000109090] worker_thread+0x224/0x474
-[c000000006deff90] [c000000000116658] kthread+0x158/0x17c
+> ...
 
-followed by
+> Most likely, Windows sends some firmware to the device (which it needs
+> in order to run properly) and then restarts the device.
 
-scsi_alloc_sdev: Allocation failure during SCSI scanning, some SCSI devices might not be configured
-usb 1-1: new full-speed USB device number 2 using ohci-pci
-scsi_alloc_sdev: Allocation failure during SCSI scanning, some SCSI devices might not be configured
-scsi_alloc_sdev: Allocation failure during SCSI scanning, some SCSI devices might not be configured
-scsi_alloc_sdev: Allocation failure during SCSI scanning, some SCSI devices might not be configured
-input: QEMU QEMU USB Keyboard as /devices/pci0000:f0/0000:f0:0d.0/usb1/1-1/1-1:1.0/0003:0627:0001.0001/input/input0
-scsi_alloc_sdev: Allocation failure during SCSI scanning, some SCSI devices might not be configured
-ata2: WARNING: synchronous SCSI scan failed without making any progress, switching to async
+I don't believe this is happening after trying to dig into the
+captures a bit more. The firmware blobs that are in the archive are
+over 100000 bytes, and though there are some significantly large
+transfers, there isn't a single transfer that is the size of the
+firmware blob. I can't tell for certain though; VirtualBox truncated
+those large frames, so I'm uncertain what data is in them.
+-----------------------d11a3dfb27259b6854fdf0796597bf36
+Content-Type: application/pgp-keys; filename="publickey - ethindp@pm.me - 0x846BFA7B.asc"; name="publickey - ethindp@pm.me - 0x846BFA7B.asc"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="publickey - ethindp@pm.me - 0x846BFA7B.asc"; name="publickey - ethindp@pm.me - 0x846BFA7B.asc"
 
-and ultimately a boot hang. This is with the mac99 emulation in qemu.
-The warning is always seen, the boot hang is seen when trying to boot
-from ide/ata drive. Bisect log is attached.
+LS0tLS1CRUdJTiBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tCgp4c0ZOQkY4aHpqc0JFQUM2RWJL
+V2RLbFJLOGt0VE1VYUJPYVozQU5aUS9lWm0rMnZHYzFnN3JtdWwxV0cKM0dEc29YOTQ4ODZrLytZ
+eHlOQlpjckhBdjh1VjNOU0dQZFZueUN4YTkyOUJBSElCNjFpZTRvMGpUL3V1ClhPVExQWUpwaFJm
+am1JaHZDcHhNNE51alZkZDNtSlZnMDJVdU1EUGkzMVNkMmtJU1l6MWlnaGM1QjhPZwpHdlN3QzRT
+NStySmFCdzJpYUxIa0dHNWVDSGpJVkN1LzlhbXRZOEhQV1gzWm5INFYvK3lVWmJZd2g2bVoKT3E5
+SXo2Tmh6Q09aaWpPRGhPNWhKZkkrUFh4Tm85RWg1cVQ0c1RmVEt4T2F6eEp0SlVrMFVvNjJYeXVm
+CklCamtLZWlLMkd3bUhlNnRYd1FWVXp4UXJ6VVc5NEQ0UzBCYlhsRS9NbFJ1MGU2TGRaVnVuWnNB
+WXh2TQplWUlTNjg0V2V4Q2g2RmRBZWFNUU1IakRKTHdQbGliZVF4dUdJd3kzbGtqYTJ2Q1JlbFlm
+MWw0N0dpR0IKZXZZSHBBbU9DVzVBRXh5TjQ5YkRZUHJxN1J3aktIaGNsTS9SYm9wN0Fmc1R3Mlpp
+MU4ybURmUjRSdjBuCllZRUdQVFpFYXU5VnFMY2N3cHk5aDJjcXhtL3ExaWR2NmFpcUhSSVczMTlz
+Q3hnbGN4NHlmODBhbVVoSQpUSVV2S1h3RE9BUUhpOXFJL0JSb3dQL0dFbUxxR3BMczBzWW1PdEF0
+aXliZTAvbDh5U0tRK2JaR3g3WE8KUFptNytMdVZHK1ZmYnNIUFVqV1d1YXZ5czRXNmFGK0hDcng3
+RUd5dmdUUHJmS0pHVkhKOVFIeXhRbmZJCk8yd0JuNWUrMWY3dXQxdUp2YUNuMHo4K2wrZC8weU1C
+dTJMVzJ3QVJBUUFCelIxbGRHaHBibVJ3UUhCdApMbTFsSUR4bGRHaHBibVJ3UUhCdExtMWxQc0xC
+alFRUUFRZ0FJQVVDWHlINE5nWUxDUWNJQXdJRUZRZ0sKQWdRV0FnRUFBaGtCQWhzREFoNEJBQ0VK
+RUJDajZDMzhXN3NSRmlFRWhHdjZlOXgvZ3MrL2M5ODVFS1BvCkxmeGJ1eEdWOGhBQW1BaUIxWTVU
+SE5EcnhSS0ZtV25lNVhsUlNwMTY2Y2M1MkZmL3dZVEY0dHdlVmNTZQp4MVR4a0RlaVl4YXM5dURV
+amJlcnJxazhLWjJScG9VZW5YeHZSK1pwZm5ocytXVnljYThwNGJsdVVvSksKbVJnby9IOEo2RWl5
+eWpjN0w3cG1Vc2VMcExxbjIwL2s5OWk0QUlSVndFZElPb0tuRjFaOUQ1emFsM2lHClMxWEVlMi9r
+bzFtTHNsZG9lWTNITmFhYjAxdCt2UUdXVVJmYU55d0VlVFFDbUY0a3lFcFBvYjVKb2R4NQpTQ2Uw
+RGJPRTV0M2NydStxQWFiMWgweG1JbjVadUpZMjFjdENqNjladXRIMWFVWmRGeFNCMFNwakc5WXYK
+ZzdNQkhZSWxONEdiOTRHZHlzcldSc0NldGhuZ0ZYeG5sUkNObjA1bC9DNWlnelhvcHUvRXVVQmFt
+V2ZvCmtGQThuRE9md1luTC9iWHArRHAzKzFRM2ZjaFRhc0VZU2FYL3VqVmZqdlJ1a3pDdUErMmdB
+YllMdEk2agpDRTQrSzQ4QmR3Z09FYmtmOXRIZnJ1S2FDcEtEdTFzdzVXSjhZL0U2L2hvTStxSS9t
+Y3F4Y0lobzczL0EKcFFNL2MrUU9hQjN0MzdMUWV1V2VpOXBFRFZvSHpPVFZ4R3FEYmdSd0RZMVFa
+RDV0NmlUSElCcmRuZFF2CktjMVBiRXo4SGFmS0F0OWNpVlpUY09ueDZQdEFBdVliSmFSdnIrQ1d5
+MHBETkdPRnNPeVI2NXNXZFJBLwpnOTB2SHZ2TEgrUDhlUXhwZXFnWTYyZG1Uak1OZUVSYnk4d1dm
+QVgrRnVmU09XVEJDQjE2a0ZHQW96QmkKa0UxejZwUWNpM2ljNUhUVlpoREl3YUhkaGF5bVRXOXEz
+cHJPTXdSZklmQWJGZ2tyQmdFRUFkcEhEd0VCCkIwQUg5a21nMktOSUFQZTF0RlQ1cDZIUFRvNThR
+NjZPdjBKdFdYWTVkcndPRmNMQjdRUVlBUW9BQ1FVQwpYeUg0TmdJYkFnQ1lDUkFRbytndC9GdTdF
+WFlnQkJrV0NnQUdCUUpmSWZnMkFDRUpFSDM4NnBlbVU1T08KRmlFRTQ4NE95N2ZYR2t2M2sxam9m
+ZnpxbDZaVGs0N1g0d0VBKzgzS3lHdFk4OG91WWgzS2NtMXJQdmljCktVSHV1TWpZSnRvMGFDUXRO
+YmdBL1JvR0Voc3NwOGRYWG5NRU4wZVlSSnBHeCt2ekhyV0ZPK0ZsZUVoNQo0UFFFRmlFRWhHdjZl
+OXgvZ3MrL2M5ODVFS1BvTGZ4YnV4SGp1eEFBbWVYbW8wTGlWckpEVFRDZUxKdFQKTEFQRkZ6RjJ5
+SzJQS0x2eHZaMENWaEFSV0xlWTUraENKblcrRzY5ZGxSRE9PMDh6M2dHZTJFWTZqdjFICkphc1hV
+M1pnVCtuVGNaYmlPdFhrSjk5YjRzcVZ0OEEzM1pmWERNeWJNS3dyNUhCMXMzVG54RFZKNWZkeApz
+N0wxMmxLZTFISDJnYUZqeXpyNzJZYjkzV2dOdng5MXRQL1Y1VE5CaUQyZXQyc1l3RTlnTFZOTWhs
+Y1MKbS9UcGdXMWRUaGlwRHR6UmJmbDVsdjhOWWxaSDNBdFpyejNBeWpNRnhUbzNBWkJ5VjR1Z1lO
+S0hVT1RCCm5JbEI3V2tLeW5TRlUrMHEzRFB0TXRMbSthV0NjMTNoQjEzcVA4Y01Ca1hnSjdnOUJU
+QlNadWpZaWd0eAp5L3RSWW44cUpFbFdxOXZ4cUJGbjkrSlFzbElBY0dxRnRIYWVtQ0JMMEVsRXM2
+THZEQWE5Y2ZFTEg3ajYKYkFOQVJXNTNBSWg5elIwdkFVSlp2d2F5UUhZeVdmb3orc253d3k4M21u
+bUlsRGdXRnpiYnlxemtMYmNhCjBiemR1WGF5WHp3Ui9keDRSaElwQzNRbUQ5ZStNcGI2QUlLMGc5
+MnFqVDJ6Sjk0eURmTGJxTU9NUW13egpmc0pBUzBFOUpIUHBXd0QwNndDRDEwTmpXRmlBVjluSm5R
+bGVqMTNzV0xrZzUxRkJXU0kzK24waHgxVGMKeUowWWh0Y09TRUJCVi9NUWxacDFRdSs0Z0tkbmFP
+VkpLN3RudlRGWnNBZTg1eHhLUDRjcjNBTDgzelJFCkRzSVB3RVEwNUl4RG9LWjhwQzFWRUZjRHQ5
+OHBlem9NbVIwc2RERk13SE14WXJSK3FwL0dBZWkwWU90Twpxa2pPT0FSZklmQlFFZ29yQmdFRUFa
+ZFZBUVVCQVFkQUM4Q21MUE9jSDJkSG9jWDBydFhNVlVRcVhncTkKVHlMTFZPVWl0RHlWWGhJREFR
+Z0h3c0YyQkJnQkNBQUpCUUpmSWZnMkFoc01BQ0VKRUJDajZDMzhXN3NSCkZpRUVoR3Y2ZTl4L2dz
+Ky9jOTg1RUtQb0xmeGJ1eEhzTlEvL1ZCWFpFUzBVdWJVUFpBYWhBTUVueVNvQQpnZm5oN2Z4TW04
+UWFYOUE0bnhyeWFaVUh2U1MvSDZVbEZlQ1FaVHZ0dWhVbFhHdVVrbk9mRVhIU1g1WDQKQjRTSng3
+Nktrb1hveFNQTjJrVWwwTW5qOW50K1JRcndJR0o0ZWl4Y1BFYWFDQXV3akhTc05IS0t5ZjRkCnNU
+OFhXMUljYVFJSHl2cFp1UHFkRHBuem9tbUVtWnZHbGxwVk9SRkJOQm8vRTJselFCTGU5eGgyT0dT
+dQpuOFFhZTdGcFphMzluN0NSQ3VZaXJOTHNoWGI5NTNORUpWZWQrYmNDUDlnbzRBSG9QZWpxcktq
+MHhNVUIKaURjRldtT3N5Qy9uMWVHTmpjTkgzZUYxdVdMZXVJSFRKL3hDSGZ3SmR0OFU0Q1RCU2k1
+QTNpbXkwclZlClJoMGh5UitGSk1kSFVmZ2lVVjJYVmdiZE41ditoeUNYRE1LTTQ1akNlWitKczFG
+VXhnbFExU2xOclBVZwpqYlJ5enE1bzVKMFg4TGNoUU56QTErSW8xOUVqSnFydjNhY0E5a1hhK3Q0
+VHBrNTNDQVBRSGFYbDVlakEKbzBBUFJERGwwQTQwQldjRXRHOVJia2IxZXk1RHB3SUZqcUQ2N0Ex
+Y3JsamVVZXBDWDZBNTRocmE2U1JZClNjeVpqVnF0TUh0RmhLak9GRVFCT2dWN3hRa1N0QU1ac01v
+MEtOUk5CNlJtQ1FDamJnV0UveDNGQllCMApkRlZubTlHcTl4MWg1cW96bnVDOHBYN2dvMmZGQVJR
+czRRZXhBcGZSNytjaWxMdERibEhTc1BrVnVyT0cKanp5OWN0VU9tb1VBZjNIVEM1UTJpUTA4QkxX
+UE13SGRoKzk5YVpzRTdrcDVNUFB4SUI3YW9KMlJ6ajdPCk13UmZJZkJwRmdrckJnRUVBZHBIRHdF
+QkIwQkhWcFdGZ3JUbjlqM2Y4SVVWMDgvRG0wcy91Vi8xcWhyUQppOXo1MndKUzBzTEJkZ1FZQVFv
+QUNRVUNYeUg0TmdJYkRBQWhDUkFRbytndC9GdTdFUlloQklScitudmMKZjRMUHYzUGZPUkNqNkMz
+OFc3c1JXUzBQL0E3aFJFTE1WL2RSYnUvOUIwU2ZBOERUQ0hWQ3A2bE1qQ3lnClB6WjlZaExXT2xH
+Q3RZN0J4akZHMFpwS0Nsc1RSU2ppdGNTbGZzTzZFdGtObWVOUGNyNVduZHdDSFJxdQovYVNWWFFr
+QUJxODFtYWZKTERBT21tWmdHSWNnQnYvaE1YRFpKYjFFS3RLekszMEFqMFdHalpkb1dKSDMKN29J
+ellObWJmVDdFMUpCcFNYUno0Mnh5SjBiOE1zMXZGN00zelcrL0Y3bktwM0JYdGZtTVIxeHZObDlQ
+CjZuc3pNRzRacVFydzBNTlV5TkRMY1JLQ0NXRjJmNFVtbWQ0M2FYTVgwSnM4NFQwSjB2RGREZGht
+cFNQYQo1bFhtUXdZdkVldmV6WWx2Z0lxZTNyRDlYM01kV2JCSnozQ2Q5MWJDSHJldG42ZzZTbXZr
+elRBMTNockcKRWRoYk5heTFraCtjZGoxSGYxQjU5eUtXa0tWRDNnNmp6YS92bERmdGhQUlJxd0NZ
+QW5LZnQ1TWpHUjlqCnpnN0FDQmhsTkpScXRsZTQxS0p3SnkwRWpjZS85cklBZWszTHRnR3E1Y3NM
+N2VSR3JsQis3VFR3OXZYUwowaFJaSUIyOUZ0Z3FVQ3FCNVQyNlRhRC9hM0JvWTkzWW1sajNEcHlR
+TDM1ZHZZR0phR3NjdU0yVC9vSVoKWUh3M09PWkVQUXVObmdaZmpYRDF1ZmdZOERHc1JtaVoxYkFC
+cnVkM05UME52bU9GczRtTmJpU2w4Z2hZCnFGMXR4U1dxR0g0SkhEK3F1a3EvVzJ3a3dZOVF2OTFU
+d29LbHZwQVFmS2xJaSt1dW1xUFF4NUlhN2hyRQpVRi9NN2wxcTBtdWlnY04vRmlWc255V2NXVDUx
+OWhNZ0RISGFUd0VYbU1qc2s3TGMKPVlNb1IKLS0tLS1FTkQgUEdQIFBVQkxJQyBLRVkgQkxPQ0st
+LS0tLQo=
+-----------------------d11a3dfb27259b6854fdf0796597bf36--
 
-Guenter
+--------7c48e40e08a672f6049c7dfaa6f4ddee68115cfd574be250fde1c7a2b2ecd51a
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
 
----
-# bad: [1b294a1f35616977caddaddf3e9d28e576a1adbc] Merge tag 'net-next-6.10' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next
-# good: [a5131c3fdf2608f1c15f3809e201cf540eb28489] Merge tag 'x86-shstk-2024-05-13' of git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip
-git bisect start 'HEAD' 'a5131c3fdf26'
-# good: [f8beae078c82abde57fed4a5be0bbc3579b59ad0] Merge tag 'gtp-24-05-07' of git://git.kernel.org/pub/scm/linux/kernel/git/pablo/gtp Pablo neira Ayuso says:
-git bisect good f8beae078c82abde57fed4a5be0bbc3579b59ad0
-# good: [ce952d8f0e9b58dc6a2bde7e47ca7fa7925583cc] Merge tag 'gpio-updates-for-v6.10-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux
-git bisect good ce952d8f0e9b58dc6a2bde7e47ca7fa7925583cc
-# bad: [113d1dd9c8ea2186d56a641a787e2588673c9c32] Merge tag 'scsi-misc' of git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi
-git bisect bad 113d1dd9c8ea2186d56a641a787e2588673c9c32
-# good: [a3d1f54d7aa4c3be2c6a10768d4ffa1dcb620da9] Merge tag 'for-6.10-tag' of git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux
-git bisect good a3d1f54d7aa4c3be2c6a10768d4ffa1dcb620da9
-# bad: [f92141e18c8b466027e226f3388de15b059b6f65] Merge patch series "convert SCSI to atomic queue limits, part 1 (v3)"
-git bisect bad f92141e18c8b466027e226f3388de15b059b6f65
-# good: [0e0a4da35284c85225e3b128912582ebc73256c8] Merge patch series "scsi: ufs: Remove overzealous memory barriers"
-git bisect good 0e0a4da35284c85225e3b128912582ebc73256c8
-# bad: [a25a9c85d17fd2f19bd5a2bb25b8361d72336bc7] scsi: libata: Switch to using ->device_configure
-git bisect bad a25a9c85d17fd2f19bd5a2bb25b8361d72336bc7
-# bad: [6248d7f7714f018f2c02f356582784e74596f8e8] scsi: core: Add a no_highmem flag to struct Scsi_Host
-git bisect bad 6248d7f7714f018f2c02f356582784e74596f8e8
-# good: [33507b3964f136ea1592718cb81885c8f9354f65] scsi: ufs: qcom: Add sanity checks for gear/lane values during ICC scaling
-git bisect good 33507b3964f136ea1592718cb81885c8f9354f65
-# good: [4373d2ecca7fa7ad04aa9c371c80049bafec2610] scsi: bsg: Pass queue_limits to bsg_setup_queue()
-git bisect good 4373d2ecca7fa7ad04aa9c371c80049bafec2610
-# bad: [afd53a3d852808bfeb5bc3ae3cd1caa9389bcc94] scsi: core: Initialize scsi midlayer limits before allocating the queue
-git bisect bad afd53a3d852808bfeb5bc3ae3cd1caa9389bcc94
-# good: [9042fb6d2c085eccdf11069b04754dac807c36ea] scsi: mpi3mr: Pass queue_limits to bsg_setup_queue()
-git bisect good 9042fb6d2c085eccdf11069b04754dac807c36ea
-# first bad commit: [afd53a3d852808bfeb5bc3ae3cd1caa9389bcc94] scsi: core: Initialize scsi midlayer limits before allocating the queue
+-----BEGIN PGP SIGNATURE-----
+Version: ProtonMail
+
+wnUEARYKACcFgmZFM1YJkH386pemU5OOFiEE484Oy7fXGkv3k1joffzql6ZT
+k44AADrIAP4jmZZ/h/v32vQ7g6O2uhZriAVfPV7gaua7YHPZlQVIRwD/bXa7
+NspWfSVEVdPtTGqxLpo9L67ucyfoAxuewv6MKQU=
+=0ZZA
+-----END PGP SIGNATURE-----
+
+
+--------7c48e40e08a672f6049c7dfaa6f4ddee68115cfd574be250fde1c7a2b2ecd51a--
+
 
