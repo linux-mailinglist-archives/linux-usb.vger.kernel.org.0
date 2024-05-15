@@ -1,187 +1,366 @@
-Return-Path: <linux-usb+bounces-10281-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10282-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D73C78C6E76
-	for <lists+linux-usb@lfdr.de>; Thu, 16 May 2024 00:13:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 41CFC8C6E82
+	for <lists+linux-usb@lfdr.de>; Thu, 16 May 2024 00:17:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 88752283B75
-	for <lists+linux-usb@lfdr.de>; Wed, 15 May 2024 22:13:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E849E282577
+	for <lists+linux-usb@lfdr.de>; Wed, 15 May 2024 22:17:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A070D15B574;
-	Wed, 15 May 2024 22:13:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10D9615B967;
+	Wed, 15 May 2024 22:17:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="EV1Q3aW+"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="dN+oo+PL";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="Zs8/q6sv"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-0201.mail-europe.com (mail-0201.mail-europe.com [51.77.79.158])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 228DC15B0E3
-	for <linux-usb@vger.kernel.org>; Wed, 15 May 2024 22:13:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.77.79.158
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715811196; cv=none; b=ZX2A7dATN9K8T9wxuv9fYOF748ZzTuYljY2XHuZRZ0UF1j+57pTZO8OxLyv+ZtgToc3z7ydfeZyHIAm6ciKHj4Po8sAs0pZ0RrufT+sXYgfPZiDPSmtpeeWY2xyNhv9yUhF1J/YrrepFXMNxu/GIHnjoVPMhnEO2JUTRVSOwM7s=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715811196; c=relaxed/simple;
-	bh=MR78N6V5nbqP4ftTUyMfemJ45vuP1Y9Zb289h91WKGU=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=aFdEWjiBToDFZc9flRu9DoF1dEtxStFzfmwuF3TzOJSvbI6VTa4aYkUwJBdGdiMXvpmRMZI//Z+hgVk5jjBVhFxGBb6srNf56gLD15TM2UpmfKRy5eA0MmUoKTiOMYOWUWH94vfWgjtCAeF66eLFQPoefVyj3vQI8xHNb3fXfOE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=EV1Q3aW+; arc=none smtp.client-ip=51.77.79.158
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-	s=protonmail3; t=1715811178; x=1716070378;
-	bh=MR78N6V5nbqP4ftTUyMfemJ45vuP1Y9Zb289h91WKGU=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=EV1Q3aW+CYtYPGTMkI1oEb4rC8u+KFnqOClHz0g+e2LIwvaG+/E+jUd18Vj1r8ltC
-	 4T9Xg7aromqFPSbEyGaBHgxbATyF02Vsj5RBJSlsibQnqgXgNaB9oRA8Ll9VWTD3qi
-	 pbRl8DdTTCJVYLdDb/PnnxrpUBa3r3qmNNbdATCQ3Xp83t9LkaoHuGMrmLPlpJ2Pw3
-	 qs6U8gjdoWSEI1ebiq4dVWVRXxGhNXOStsdrmz7tQ8gjAuzGjlImI7cni23mx2Zxgv
-	 9YPNs759Q15jW6n/dd1rmZQu+yMD6+OnZRnqNXmmHLdvaNPZJuE+7uUCfFw1fOVC2Z
-	 GFk8X0u02lNjg==
-Date: Wed, 15 May 2024 22:12:54 +0000
-To: Alan Stern <stern@rowland.harvard.edu>
-From: Ethin Probst <ethindp@pm.me>
-Cc: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: Assistance getting the Universal Audio Apollo Solo USB to work with Linux
-Message-ID: <N-wnVREkI4qROqLV1rCTIoLRiRzMGvywHt9QIdRD-e5AHby9wfaXcTn2V-Gd_UnmW-JomnWn6xGNhDhIeHIG3VHfHRFmnmPdZEPL8Qi5Gf4=@pm.me>
-In-Reply-To: <ab4d0394-0d71-45a7-a79b-02e3c90f8ac8@rowland.harvard.edu>
-References: <DJiA8anOC3V1gHoj0H-8pmsXujLNu7IlZvNmvUEoDfnjC5VIzZ3YsoTgnUD-zVTsnhgln5BzEsy1n4YkoqkEd_pvTF9oZaukzUoyL-pDfRs=@pm.me> <ab4d0394-0d71-45a7-a79b-02e3c90f8ac8@rowland.harvard.edu>
-Feedback-ID: 24240837:user:proton
-X-Pm-Message-ID: 86a0ba89a5f54cc0b63d4c8c28b224f4c7f645df
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B888515B103;
+	Wed, 15 May 2024 22:17:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1715811469; cv=fail; b=Tp7FbnkvtsTuWLSj/G7HwmFjBIjnCfwOe6VMj8l/VUbBjZKIL8ta9TJlk21BZZ7qhyYxnPon5h3LurnW+y43JryXh0nDdBlL9yKNbUdW+yB5eVzFqJ9aVwn4Ad6alT5SyQ3XD3BCD+3ze14xmWkrRieX8066us8ixW7R1LKhWMs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1715811469; c=relaxed/simple;
+	bh=9V3Mp1oSXIHIhqhEYC+yWukEXAODmcj7qMvgfvqSfH0=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=Z7rJNDQQYPZ+gfrupr10L8HJrGjvoSN/9Dd+Bqis8ozPjXNq9a3C7T8NGl+yOl8eK4b81+DTT3t+6dVOKMqcF87EjYXfXaY4hdTRywj2YKe4q26FyvUGaAp4FbfdggNyJ3lXNid0XSFM+ySGkQQWE/52aNWj97UJKgjS9tS5LO4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=dN+oo+PL; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=Zs8/q6sv; arc=fail smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 44FKwwlh022286;
+	Wed, 15 May 2024 22:16:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2023-11-20;
+ bh=3pPiJewdp5/KRBegqmQK7WJLnrq3twwwqLeQKdjf+3k=;
+ b=dN+oo+PL5xxnqyLjDPaPbbu8yiU2KBZHI6/DH404BvxW1QHqYeYs6eCjNCW40hY6RkHn
+ bUAsz9A3pE1NfvHcDuqxkSdKg7YM0LbT7irATju/tiVZ6sin6pHmVUDMHMaQgj9my0np
+ 9270EyJFofoz0HStmfpDt55aifxNDUhrD1DCO+15vUpShtIsssvHKUI7r4x0qGy9GDdR
+ 5NwTXcip4oFxHa+pbqdrG4miaFqXJil8PQQfIkmc+Xz05pUl1WkDrQil24rvZb5dt8or
+ vvJtlC1q4dfd+FVE4+UM50uxSUxPlKmQUH1BkQ3Xlqb260N3m63Y96wbOX6p9Xus8Wfl 7g== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3y3t4fe61s-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 15 May 2024 22:16:29 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 44FLmWeL018773;
+	Wed, 15 May 2024 22:16:28 GMT
+Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2168.outbound.protection.outlook.com [104.47.59.168])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3y1y49q63q-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 15 May 2024 22:16:28 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ysm6DMNPqVX1X1sIkY7UwN6mJou0ob4m4f6s9YjckjJ34pSDheS14iOEeeFid+Tl3iEfTy/JbHs7zednocI05yM7yaUq+wXy822Rw5g0wIvPEbl6VZxfeiFgZ3HXNOfn0kF3Z+waYHAzB617bv/Ba4Doo9fwiZh2y4e942WMhIWG6QA8XFSqMgzG6M2Au/RO4dGPhW13Z5bSi3UyVcZO2zS0XK5rZrb67l0DKfg7jJhTOhA3J9Lxxcx1osqp3LUydOZtixinse0ePS6YOYkJV1Yaf/6EGV9zNd6cLyAfAE/C1WmB8czFb6EOUTZrc9BpB3f9nZFWpwDaY+Q1JEfsxg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3pPiJewdp5/KRBegqmQK7WJLnrq3twwwqLeQKdjf+3k=;
+ b=Xq2tO5Mst77XWTA7czxa8XFXgH8Jal3XgSVFyWFGkodMy1miTpSgPYSCoUedONMhJXJpAMeYyoOkH3AE5yyNTzySyeLU/tm0IUclKfsIGp177CBjwfPQ5ZCWtiFLV6O3/EAsdcpFpoe064Er0ZzceiFJ1qM20NRg8kL8DAWf2zcMZoER1PlOpMX48L7masaMfjtUonImjRSWQwmpM9OrqYRoxF1CW4pI1DoUjv2mYcAV1TrVtzUj4Uv8aO1BHyhSyvIUC0IPbTgbIactRDh9JOXTTMtdqwjR/Sfn5ApOjPOUeqk7+KjfJLLcLRqgOI7JYRE1uvOtQrcuRzfr0/782g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3pPiJewdp5/KRBegqmQK7WJLnrq3twwwqLeQKdjf+3k=;
+ b=Zs8/q6svUFduh5HvwDePttHTfjGXXjWn+GFSUyg1f2afbEC4+gdN8qMPJMctlfpz7DBru06Tij/8Tx72i7OE8Oq/x+KMTPYgvQMCpr2OlcdKb2AS8jNywv7jq0EmgwKSKG1NNooMmWmJKhMdxFq5ts8jty3FBtutfX5r3OVndb4=
+Received: from DM6PR10MB4313.namprd10.prod.outlook.com (2603:10b6:5:212::20)
+ by PH0PR10MB5610.namprd10.prod.outlook.com (2603:10b6:510:f8::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7587.28; Wed, 15 May
+ 2024 22:16:25 +0000
+Received: from DM6PR10MB4313.namprd10.prod.outlook.com
+ ([fe80::4f45:f4ab:121:e088]) by DM6PR10MB4313.namprd10.prod.outlook.com
+ ([fe80::4f45:f4ab:121:e088%5]) with mapi id 15.20.7544.052; Wed, 15 May 2024
+ 22:16:25 +0000
+Message-ID: <a8c39499-1410-4251-bf26-36763f5f56b0@oracle.com>
+Date: Wed, 15 May 2024 16:16:17 -0600
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 04/23] scsi: initialize scsi midlayer limits before
+ allocating the queue
+To: Guenter Roeck <linux@roeck-us.net>, Christoph Hellwig <hch@lst.de>
+Cc: Jens Axboe <axboe@kernel.dk>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Damien Le Moal <dlemoal@kernel.org>, Niklas Cassel <cassel@kernel.org>,
+        Takashi Sakamoto <o-takashi@sakamocchi.jp>,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>,
+        "Juergen E. Fischer" <fischer@norbit.de>,
+        Xiang Chen <chenxiang66@hisilicon.com>,
+        HighPoint Linux Team <linux@highpoint-tech.com>,
+        Tyrel Datwyler <tyreld@linux.ibm.com>, Brian King <brking@us.ibm.com>,
+        Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        Jason Yan
+ <yanaijie@huawei.com>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Sumit Saxena <sumit.saxena@broadcom.com>,
+        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
+        Chandrakanth patil <chandrakanth.patil@broadcom.com>,
+        Jack Wang <jinpu.wang@cloud.ionos.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        GR-QLogic-Storage-Upstream@marvell.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alan Stern <stern@rowland.harvard.edu>, linux-block@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
+        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+        megaraidlinux.pdl@broadcom.com, mpi3mr-linuxdrv.pdl@broadcom.com,
+        linux-samsung-soc@vger.kernel.org, linux-usb@vger.kernel.org,
+        usb-storage@lists.one-eyed-alien.net, Hannes Reinecke <hare@suse.de>
+References: <20240409143748.980206-1-hch@lst.de>
+ <20240409143748.980206-5-hch@lst.de>
+ <ce2bf6af-4382-4fe1-b392-cc6829f5ceb2@roeck-us.net>
+Content-Language: en-US
+From: John Garry <john.g.garry@oracle.com>
+Organization: Oracle Corporation
+In-Reply-To: <ce2bf6af-4382-4fe1-b392-cc6829f5ceb2@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BL1PR13CA0352.namprd13.prod.outlook.com
+ (2603:10b6:208:2c6::27) To DM6PR10MB4313.namprd10.prod.outlook.com
+ (2603:10b6:5:212::20)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; protocol="application/pgp-signature"; micalg=pgp-sha512; boundary="------7c48e40e08a672f6049c7dfaa6f4ddee68115cfd574be250fde1c7a2b2ecd51a"; charset=utf-8
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR10MB4313:EE_|PH0PR10MB5610:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0f40fc27-2e83-4ec5-472c-08dc752ca8c9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230031|366007|7416005|376005|1800799015;
+X-Microsoft-Antispam-Message-Info: 
+	=?utf-8?B?U21nRXBYYkxURUp6ZmR0MXkrRTF2OVcvOXFlWUw2bllYS0NUVUxGV29zWUtk?=
+ =?utf-8?B?Z1Z1TjFuRFFsRlZ1R0grUXZsM0xTaFU2bEdDZ3NGM1ovd21VdGxxL2p6clFT?=
+ =?utf-8?B?djNlVzl3NjBZTERCc2ExdTZUYktiSWNhbGFOL3B0cFRQM3NXVkJtSnlTWGZo?=
+ =?utf-8?B?anppVzRicFdZaWxTeEFCNkt0eWlNWDJHcVBPYlBEQ1dLSmlva0FzN0lEUTg5?=
+ =?utf-8?B?SUVRUXo1NC9qK1NQdWVNbEFNUGNLYjdXR1V4elBKWlEvcndwYmprRU9tUVV2?=
+ =?utf-8?B?NHB1c3lkSm5uN0NwSVdiQ2YyVnJQVzYxYmUwNXg2ZGdzc00wZnVERjNvcFJ6?=
+ =?utf-8?B?eldzTktmT3N0V1hhdWVhSTIyQ3l5MXl2STJVaDkwZHAwMGVBbTFkcXM3YWs2?=
+ =?utf-8?B?QzV4Y1c1Y2JCWWl2QXM1Qm9mcTBITllsRkpVV3NNRXZGL2dDRE5HK0lZOVlw?=
+ =?utf-8?B?Rm1USURDYUJVUGZjaVZHTFkyRHZyRGxteHhVWXBYUkdTbC9zTVFxUXFJMkNi?=
+ =?utf-8?B?RVlBZythaHRHOWVnMWYwaHlTOXBncUFkK1FhM3FqNWVvSkgwaGJSNWtpelRD?=
+ =?utf-8?B?eTBuZkJxZUsvbEt5M3U4Y3hSZnY0WnhEam5TUldxL3FlL2lrZEl6QzN0N3FB?=
+ =?utf-8?B?R2ViL3V1a0VUVVBIaXh2Z2xNQkd2aUtmdHpLNFhXV2Z3Q2lESmhTbStkK3l0?=
+ =?utf-8?B?WGFicWpUYVpSMng5ZWRNOGtWdm9DQ0xYc0ZMdEd5clpzN0Rva2Vzb2lRMFlq?=
+ =?utf-8?B?Z1pXWmtNRVNkdjZvcW1BcTQ3bFBUMVBIRkxXL09EL1V0Y2I5c3hPYXZ3SXJ2?=
+ =?utf-8?B?dHY5QmVpZ0lRUjk1cWVnSnFVUUNxNCtwUUxQVjZ4YittYmQvNDRXeU9XYTFC?=
+ =?utf-8?B?ZldYZ1kxZXJRQ3l4WEswQjcwUXkxZ3FVWEJxY3FJeFl4TmZ2MnpkZ3lISkVt?=
+ =?utf-8?B?cUNNcHhieUh3MlhnS1huOXZyQmZESmR3UTVhU0Z5OWdxNmx4NEVGamJucUt5?=
+ =?utf-8?B?TkZDZ0IzT1BrY2ZNNmlhckVZVFh3TlhHejdUU3FESE5QY1VqRnh6cjJ4ZGhy?=
+ =?utf-8?B?K3EzaVA0THZvWFkvQVNrNlNxZ1hDNVBhYTFudXRvMUFCdFJ4d0k1R2I0RTVG?=
+ =?utf-8?B?L2hoNEJWbmkvTmxDcis4cFlsSms5MWFLdUVQMDF6UFNmOUJIOU1jMUhLalZa?=
+ =?utf-8?B?aVQ1MktrcFJ0blJvVmN1MWtiREVpL0JlRmZDdWpPdDUrNisrNGNtNXRrdGdP?=
+ =?utf-8?B?SWsvV0d1c1Iya2t5QjRINDM4NUNIWE15cmlpUGdSNkRPb01pRS82dG9oYXlX?=
+ =?utf-8?B?WDdYOU9IUjM2QzR5TU44a1ZnWUNsTjVWZGVtUjhLM3ZzSEFRVVNGYXpUcXor?=
+ =?utf-8?B?bnlHaXJsWGNKZmpiOWZ5OHFSLytlSFFYTlFWV3dYLzh3T0tGVXdIdmlLdVhF?=
+ =?utf-8?B?TGYrYXhnMjdXR3JqZUYrMkdZbVJTUUdsTEJiRVlUVlp4TVExM2Z6YVVucFRS?=
+ =?utf-8?B?VlRGcklFMFd1TGpZdk5VWGpKVmk5NU8reXhwK2tCMmMzRnRPSDJKMjFJUGl2?=
+ =?utf-8?B?K1N5NzVFTUVhVC8zcDlXMGhPZkx0dDZYWWxFc05IaVByOXFSRnh4VThlVkVp?=
+ =?utf-8?B?eWNUVmM1cGZIQjBpcVZYKythRWs5VmxzR0FJWG5HMHBBbW04UHlxZGM5NmdW?=
+ =?utf-8?B?ZnMrUkJ4SGFKbWhMektXendpK1E2eTdrUzBvYUpmRnBaY2E2UHh0cU1BPT0=?=
+X-Forefront-Antispam-Report: 
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR10MB4313.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366007)(7416005)(376005)(1800799015);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: 
+	=?utf-8?B?dW1rbXE5L25XL2Z5bEhVTndYaWJqNEtoK2xPQW54Nm9lVjYzc1ZOa1d4Wnp6?=
+ =?utf-8?B?YUdQVGVVNjdjdDhhT2tINWFFOUE5R21lVllGVnJDY3FZbzZROURPNE9lMnhs?=
+ =?utf-8?B?UHZuYW0rTXo4YnFGb1E0OWE0Mm9jT3lOYVg4YVlHa1F2ZnAyazRlMnp2Vmc4?=
+ =?utf-8?B?MmZBOUswdjNFQ2VCcEhlREZ6SzQvN1Z2Z1drQVFNTHUzTGhGRjJKU1lqbDZ2?=
+ =?utf-8?B?dTNYUEdzNXZMMWRzUXdVNHMwd1hJV1NrZVd6WlNiLzBaSnl4cW15aVM3ZFlt?=
+ =?utf-8?B?dUM4dG5mVjJ0VnRTWG5TZnJPQ3RRMHkrSFJTSUc0T3VYZEluQTNybDArYm1k?=
+ =?utf-8?B?Y2E3ZW0rTVA2TlFqWlJ5NWdqb0JnN1NNTGtvV3Qyc25CUVZWNWlmbHk4QXJz?=
+ =?utf-8?B?ekNDM29Za0pkYUdUOWRCblZ4aDB2TE1TZlUwV2RzdUQwVDZrNmx6RHV4YlpC?=
+ =?utf-8?B?STE0WVNtdURSTnNyMFdjbjU1QlVaRjVGSjVTUjJHTmhFbE92R3JpQVZyWlZU?=
+ =?utf-8?B?TEVoQktQOHUrU20vb29nTk5iUExldWdJVXJMNDBmaVdZZndYOUJ0NHJqSGlt?=
+ =?utf-8?B?M2Z6a0hhZkhiV0RZR0I3QldsUGtZbE9TNTB5OWpYcUo0eHlaQzZlU0t3Qmoz?=
+ =?utf-8?B?ejV0UXNmbnduT2IyR0xBellScWwwSWg3Q3kyTThYUExMRm5NbmRZZnRZTnM4?=
+ =?utf-8?B?Nkp1UUF0MmRsaGhJQXFxS2JCdnlkUEN1TWxkdjR1SFFYWnVLSGxaN05KbTdJ?=
+ =?utf-8?B?NTlmeGZCb2Fnd256N2hSOEtxNnVQUDMrZ3ZsWS9BOVZMOEloYzdWUnlMUDdX?=
+ =?utf-8?B?MzFlMXUxS0lUc3hndzVzcmQ1anlXMWhoY3VhR2VWZVBDYVh6bjVPQUxSWXFz?=
+ =?utf-8?B?a2JUQ25XNEJuUDJnQzVkZC94aGVUNmVVcDhQL2tvRmFNU01mNVNsVS9oMk9z?=
+ =?utf-8?B?MytQTnU4Wk9adnlvL3l5K2ZkdGRKaWVoUWVRSDh6VmNKc3E2OTB0YjJPaFVh?=
+ =?utf-8?B?Sm9tMFlKWEFmMUt5T0tBVTdROWFoVC9XRHJqb1pXeXJhMnNMTnNMMWxEdTFV?=
+ =?utf-8?B?L0VwemVvdmFvRHc1MGhSbmRKZzlOMmFoMUtxOUtRZnBDYzhxOC9DZXJuYUFj?=
+ =?utf-8?B?amoyZU54NnlmMExtSEJtY0NlMzFzdmo0S2x6cUlHYmd6L1VaVTFseGpQakM5?=
+ =?utf-8?B?cWd3anFsZnpTN3JtY1BVWGVndkdMTHhXUkpmOVRoQmFyV0tWQmdrWjB0TVlL?=
+ =?utf-8?B?a0dhVUIydGVwUWQ3bzVnY2xzb3ZQR1FlN2k2VVlGcnJhU0VETStBTFZJT2lS?=
+ =?utf-8?B?bXZaQVBhamxpcXBzeCs1dUVhQnJLWC8zUnJ3N254bTFzalAvbWtzS0dqNm9K?=
+ =?utf-8?B?WkJJRmVPdm0vUnRVTUVRQ1MzRUZ4a3VRdlVMZEpjRmg1akJjVlh0UFJ1Q01j?=
+ =?utf-8?B?TXNsMzJhelovT1FkU3JsNjBKSGZwQm1YM2UwWlduR0dFZTlwbWhJRWYxc0dm?=
+ =?utf-8?B?cEJGaEJ1TlBJMC94aW43cVlOWjdybmpTcGVvSXNGM1dnRmxYWmFiRzRoRDRa?=
+ =?utf-8?B?TTdLZG02RFplVkJSeGorTTVHYm56VHU3N1YrZGR4VXFGOFNZVHRUSGVQMEZL?=
+ =?utf-8?B?bkphbi9nNFhDYWVCL3ZwZjhIUi95WGpRbm1BY01LcHBmbm5sVXFoYUowLzM0?=
+ =?utf-8?B?bXphUy9ibVZxTVd1M2ViN2dxeEJCUHl3UHVmbS8zMzRRczl3dVNtaVEzMW1U?=
+ =?utf-8?B?TGZHc1B5a1J4WWNldFMwZTh4anBkNEdJRnZtWDlUeTd5eTZoZHBISDJ0dmVk?=
+ =?utf-8?B?MjRlbkpiSWhYWjljZnNsMzlSU1RBc2tZNE5XeVJHZ2tVT2Rrbmd4SWc3dlEz?=
+ =?utf-8?B?SFNVQ0MrbDhWbDBZZkR5d1pzeXBWQmlhelJvNXB1STMrcmJzdlAyTmRhQytY?=
+ =?utf-8?B?TUZDUW1yNThZZlQxSjIyUDZWaHZUZW1Nd2ZwanZpaEg3cVgzVHpzRVRaNzlZ?=
+ =?utf-8?B?QnFxaldtL2dSelE3U1NqUGk3b3B3SEhFaHlvZnFKWmRhc21VQk5ocGRuYUIr?=
+ =?utf-8?B?ZW96bERlTTdlT0tXRGIwUmJ0N083ek9kMXJiTjk3Ukhuei9MdlVCS2dKdEFF?=
+ =?utf-8?B?anZWOFI2bHQvU3N3dG44ZjFMZnlwN2NiM1B0UTNMeUV4QU9HNUVzQWJWNnhZ?=
+ =?utf-8?B?TlE9PQ==?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
+	90HB4W+OZuEayW5Oq1HMPT0vou+w/n+u57K4/w9AdT8IaLaDwR4kCw2Yo8akBpeeXjzSCulgNpYwwmuuSmZ+EShzZlF2l2JX0gRQUHgYsQl90ktoSN2rWSSTBFF+/adpQGFODGdKu673jSdcvoTKzAo3dC1a8bSTxe/oIH50U5GXXyPQ6q6dm5Tipy2f8S1loNk6uTKHId2MmmuWOStqikWGMpxI8aUoCtrxHssLH7vYxIK0oSGRdPzxpxKNhKe8HSqgd01vMpebmqKdhcNGKcUDxuZXSwKO5oWUWqrcqGcrq9yyWTz9Z5zWcX432r3vN8ICiaAStwZ/+V6o8agtowq3nr2pNh7RnhBN4P/IVi4d32yE7cB9rhvgAPHpddC/hO+StrXwgV1qAhXLpa2jT1g/JCBgmKpFNGoc3EwjzFG5oW3AFkstk5acMKj2tOxKP29q3l9O+jFZeo/yqqSXLmoXuKXEMR/RHW9W5LiyZ8iZ3ZszxwRmyo4QzdhcNq5AX5n80htiBfbpFtVtzLT7csH5Y40xvR62chTNZsQf4JjbOkU/xJOuYmHSpH+Cbg6xu+DGICURxsyOaJ9uRm2z6OWo10izqcGoutJ0PNt2JOg=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0f40fc27-2e83-4ec5-472c-08dc752ca8c9
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR10MB4313.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 May 2024 22:16:25.2023
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: tcjoJEtD7RBA02KYCrAh90ggLeL9ufU6nbQIkkYjT5RQSkm3FlWr27nmRHOr58PUofCXE3eWs5wfm9m3/b75BQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB5610
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.11.176.26
+ definitions=2024-05-15_14,2024-05-15_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 mlxlogscore=999 adultscore=0
+ bulkscore=0 phishscore=0 suspectscore=0 spamscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2405010000
+ definitions=main-2405150159
+X-Proofpoint-ORIG-GUID: ADksFBouH4n6VItTtUdsNQHK9rb6ouOz
+X-Proofpoint-GUID: ADksFBouH4n6VItTtUdsNQHK9rb6ouOz
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------7c48e40e08a672f6049c7dfaa6f4ddee68115cfd574be250fde1c7a2b2ecd51a
-Content-Type: multipart/mixed;boundary=---------------------d11a3dfb27259b6854fdf0796597bf36
+On 15/05/2024 15:50, Guenter Roeck wrote:
+> Hi,
+> 
+> On Tue, Apr 09, 2024 at 04:37:29PM +0200, Christoph Hellwig wrote:
+>> Turn __scsi_init_queue into scsi_init_limits which initializes
+>> queue_limits structure that can be passed to blk_mq_alloc_queue.
 
------------------------d11a3dfb27259b6854fdf0796597bf36
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain;charset=utf-8
+The previous behavior would sanitize max_segment_size < PAGE_SIZE, so I 
+suppose you could try:
 
-On Sunday, May 12th, 2024 at 09:13, Alan Stern <stern@rowland.harvard.edu>=
- wrote:
+--- a/block/blk-settings.c
++++ b/block/blk-settings.c
+@@ -199,6 +199,8 @@ static int blk_validate_limits(struct queue_limits *lim)
+                  */
+                 if (!lim->max_segment_size)
+                         lim->max_segment_size = BLK_MAX_SEGMENT_SIZE;
++               else if (lim->max_segment_size < PAGE_SIZE)
++                       lim->max_segment_size = PAGE_SIZE;
+                 if (WARN_ON_ONCE(lim->max_segment_size < PAGE_SIZE))
+                         return -EINVAL;
+         }
 
-> ...
+I guess that this following change could also be made since we fix-up a 
+zero value for lim->max_segment_size, above:
 
-> Most likely, Windows sends some firmware to the device (which it needs
-> in order to run properly) and then restarts the device.
+--- a/drivers/scsi/hosts.c
++++ b/drivers/scsi/hosts.c
+@@ -474,10 +474,7 @@ struct Scsi_Host *scsi_host_alloc(const struct 
+scsi_host_template *sht, int priv
+         else
+                 shost->max_sectors = SCSI_DEFAULT_MAX_SECTORS;
 
-I don't believe this is happening after trying to dig into the
-captures a bit more. The firmware blobs that are in the archive are
-over 100000 bytes, and though there are some significantly large
-transfers, there isn't a single transfer that is the size of the
-firmware blob. I can't tell for certain though; VirtualBox truncated
-those large frames, so I'm uncertain what data is in them.
------------------------d11a3dfb27259b6854fdf0796597bf36
-Content-Type: application/pgp-keys; filename="publickey - ethindp@pm.me - 0x846BFA7B.asc"; name="publickey - ethindp@pm.me - 0x846BFA7B.asc"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="publickey - ethindp@pm.me - 0x846BFA7B.asc"; name="publickey - ethindp@pm.me - 0x846BFA7B.asc"
-
-LS0tLS1CRUdJTiBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tCgp4c0ZOQkY4aHpqc0JFQUM2RWJL
-V2RLbFJLOGt0VE1VYUJPYVozQU5aUS9lWm0rMnZHYzFnN3JtdWwxV0cKM0dEc29YOTQ4ODZrLytZ
-eHlOQlpjckhBdjh1VjNOU0dQZFZueUN4YTkyOUJBSElCNjFpZTRvMGpUL3V1ClhPVExQWUpwaFJm
-am1JaHZDcHhNNE51alZkZDNtSlZnMDJVdU1EUGkzMVNkMmtJU1l6MWlnaGM1QjhPZwpHdlN3QzRT
-NStySmFCdzJpYUxIa0dHNWVDSGpJVkN1LzlhbXRZOEhQV1gzWm5INFYvK3lVWmJZd2g2bVoKT3E5
-SXo2Tmh6Q09aaWpPRGhPNWhKZkkrUFh4Tm85RWg1cVQ0c1RmVEt4T2F6eEp0SlVrMFVvNjJYeXVm
-CklCamtLZWlLMkd3bUhlNnRYd1FWVXp4UXJ6VVc5NEQ0UzBCYlhsRS9NbFJ1MGU2TGRaVnVuWnNB
-WXh2TQplWUlTNjg0V2V4Q2g2RmRBZWFNUU1IakRKTHdQbGliZVF4dUdJd3kzbGtqYTJ2Q1JlbFlm
-MWw0N0dpR0IKZXZZSHBBbU9DVzVBRXh5TjQ5YkRZUHJxN1J3aktIaGNsTS9SYm9wN0Fmc1R3Mlpp
-MU4ybURmUjRSdjBuCllZRUdQVFpFYXU5VnFMY2N3cHk5aDJjcXhtL3ExaWR2NmFpcUhSSVczMTlz
-Q3hnbGN4NHlmODBhbVVoSQpUSVV2S1h3RE9BUUhpOXFJL0JSb3dQL0dFbUxxR3BMczBzWW1PdEF0
-aXliZTAvbDh5U0tRK2JaR3g3WE8KUFptNytMdVZHK1ZmYnNIUFVqV1d1YXZ5czRXNmFGK0hDcng3
-RUd5dmdUUHJmS0pHVkhKOVFIeXhRbmZJCk8yd0JuNWUrMWY3dXQxdUp2YUNuMHo4K2wrZC8weU1C
-dTJMVzJ3QVJBUUFCelIxbGRHaHBibVJ3UUhCdApMbTFsSUR4bGRHaHBibVJ3UUhCdExtMWxQc0xC
-alFRUUFRZ0FJQVVDWHlINE5nWUxDUWNJQXdJRUZRZ0sKQWdRV0FnRUFBaGtCQWhzREFoNEJBQ0VK
-RUJDajZDMzhXN3NSRmlFRWhHdjZlOXgvZ3MrL2M5ODVFS1BvCkxmeGJ1eEdWOGhBQW1BaUIxWTVU
-SE5EcnhSS0ZtV25lNVhsUlNwMTY2Y2M1MkZmL3dZVEY0dHdlVmNTZQp4MVR4a0RlaVl4YXM5dURV
-amJlcnJxazhLWjJScG9VZW5YeHZSK1pwZm5ocytXVnljYThwNGJsdVVvSksKbVJnby9IOEo2RWl5
-eWpjN0w3cG1Vc2VMcExxbjIwL2s5OWk0QUlSVndFZElPb0tuRjFaOUQ1emFsM2lHClMxWEVlMi9r
-bzFtTHNsZG9lWTNITmFhYjAxdCt2UUdXVVJmYU55d0VlVFFDbUY0a3lFcFBvYjVKb2R4NQpTQ2Uw
-RGJPRTV0M2NydStxQWFiMWgweG1JbjVadUpZMjFjdENqNjladXRIMWFVWmRGeFNCMFNwakc5WXYK
-ZzdNQkhZSWxONEdiOTRHZHlzcldSc0NldGhuZ0ZYeG5sUkNObjA1bC9DNWlnelhvcHUvRXVVQmFt
-V2ZvCmtGQThuRE9md1luTC9iWHArRHAzKzFRM2ZjaFRhc0VZU2FYL3VqVmZqdlJ1a3pDdUErMmdB
-YllMdEk2agpDRTQrSzQ4QmR3Z09FYmtmOXRIZnJ1S2FDcEtEdTFzdzVXSjhZL0U2L2hvTStxSS9t
-Y3F4Y0lobzczL0EKcFFNL2MrUU9hQjN0MzdMUWV1V2VpOXBFRFZvSHpPVFZ4R3FEYmdSd0RZMVFa
-RDV0NmlUSElCcmRuZFF2CktjMVBiRXo4SGFmS0F0OWNpVlpUY09ueDZQdEFBdVliSmFSdnIrQ1d5
-MHBETkdPRnNPeVI2NXNXZFJBLwpnOTB2SHZ2TEgrUDhlUXhwZXFnWTYyZG1Uak1OZUVSYnk4d1dm
-QVgrRnVmU09XVEJDQjE2a0ZHQW96QmkKa0UxejZwUWNpM2ljNUhUVlpoREl3YUhkaGF5bVRXOXEz
-cHJPTXdSZklmQWJGZ2tyQmdFRUFkcEhEd0VCCkIwQUg5a21nMktOSUFQZTF0RlQ1cDZIUFRvNThR
-NjZPdjBKdFdYWTVkcndPRmNMQjdRUVlBUW9BQ1FVQwpYeUg0TmdJYkFnQ1lDUkFRbytndC9GdTdF
-WFlnQkJrV0NnQUdCUUpmSWZnMkFDRUpFSDM4NnBlbVU1T08KRmlFRTQ4NE95N2ZYR2t2M2sxam9m
-ZnpxbDZaVGs0N1g0d0VBKzgzS3lHdFk4OG91WWgzS2NtMXJQdmljCktVSHV1TWpZSnRvMGFDUXRO
-YmdBL1JvR0Voc3NwOGRYWG5NRU4wZVlSSnBHeCt2ekhyV0ZPK0ZsZUVoNQo0UFFFRmlFRWhHdjZl
-OXgvZ3MrL2M5ODVFS1BvTGZ4YnV4SGp1eEFBbWVYbW8wTGlWckpEVFRDZUxKdFQKTEFQRkZ6RjJ5
-SzJQS0x2eHZaMENWaEFSV0xlWTUraENKblcrRzY5ZGxSRE9PMDh6M2dHZTJFWTZqdjFICkphc1hV
-M1pnVCtuVGNaYmlPdFhrSjk5YjRzcVZ0OEEzM1pmWERNeWJNS3dyNUhCMXMzVG54RFZKNWZkeApz
-N0wxMmxLZTFISDJnYUZqeXpyNzJZYjkzV2dOdng5MXRQL1Y1VE5CaUQyZXQyc1l3RTlnTFZOTWhs
-Y1MKbS9UcGdXMWRUaGlwRHR6UmJmbDVsdjhOWWxaSDNBdFpyejNBeWpNRnhUbzNBWkJ5VjR1Z1lO
-S0hVT1RCCm5JbEI3V2tLeW5TRlUrMHEzRFB0TXRMbSthV0NjMTNoQjEzcVA4Y01Ca1hnSjdnOUJU
-QlNadWpZaWd0eAp5L3RSWW44cUpFbFdxOXZ4cUJGbjkrSlFzbElBY0dxRnRIYWVtQ0JMMEVsRXM2
-THZEQWE5Y2ZFTEg3ajYKYkFOQVJXNTNBSWg5elIwdkFVSlp2d2F5UUhZeVdmb3orc253d3k4M21u
-bUlsRGdXRnpiYnlxemtMYmNhCjBiemR1WGF5WHp3Ui9keDRSaElwQzNRbUQ5ZStNcGI2QUlLMGc5
-MnFqVDJ6Sjk0eURmTGJxTU9NUW13egpmc0pBUzBFOUpIUHBXd0QwNndDRDEwTmpXRmlBVjluSm5R
-bGVqMTNzV0xrZzUxRkJXU0kzK24waHgxVGMKeUowWWh0Y09TRUJCVi9NUWxacDFRdSs0Z0tkbmFP
-VkpLN3RudlRGWnNBZTg1eHhLUDRjcjNBTDgzelJFCkRzSVB3RVEwNUl4RG9LWjhwQzFWRUZjRHQ5
-OHBlem9NbVIwc2RERk13SE14WXJSK3FwL0dBZWkwWU90Twpxa2pPT0FSZklmQlFFZ29yQmdFRUFa
-ZFZBUVVCQVFkQUM4Q21MUE9jSDJkSG9jWDBydFhNVlVRcVhncTkKVHlMTFZPVWl0RHlWWGhJREFR
-Z0h3c0YyQkJnQkNBQUpCUUpmSWZnMkFoc01BQ0VKRUJDajZDMzhXN3NSCkZpRUVoR3Y2ZTl4L2dz
-Ky9jOTg1RUtQb0xmeGJ1eEhzTlEvL1ZCWFpFUzBVdWJVUFpBYWhBTUVueVNvQQpnZm5oN2Z4TW04
-UWFYOUE0bnhyeWFaVUh2U1MvSDZVbEZlQ1FaVHZ0dWhVbFhHdVVrbk9mRVhIU1g1WDQKQjRTSng3
-Nktrb1hveFNQTjJrVWwwTW5qOW50K1JRcndJR0o0ZWl4Y1BFYWFDQXV3akhTc05IS0t5ZjRkCnNU
-OFhXMUljYVFJSHl2cFp1UHFkRHBuem9tbUVtWnZHbGxwVk9SRkJOQm8vRTJselFCTGU5eGgyT0dT
-dQpuOFFhZTdGcFphMzluN0NSQ3VZaXJOTHNoWGI5NTNORUpWZWQrYmNDUDlnbzRBSG9QZWpxcktq
-MHhNVUIKaURjRldtT3N5Qy9uMWVHTmpjTkgzZUYxdVdMZXVJSFRKL3hDSGZ3SmR0OFU0Q1RCU2k1
-QTNpbXkwclZlClJoMGh5UitGSk1kSFVmZ2lVVjJYVmdiZE41ditoeUNYRE1LTTQ1akNlWitKczFG
-VXhnbFExU2xOclBVZwpqYlJ5enE1bzVKMFg4TGNoUU56QTErSW8xOUVqSnFydjNhY0E5a1hhK3Q0
-VHBrNTNDQVBRSGFYbDVlakEKbzBBUFJERGwwQTQwQldjRXRHOVJia2IxZXk1RHB3SUZqcUQ2N0Ex
-Y3JsamVVZXBDWDZBNTRocmE2U1JZClNjeVpqVnF0TUh0RmhLak9GRVFCT2dWN3hRa1N0QU1ac01v
-MEtOUk5CNlJtQ1FDamJnV0UveDNGQllCMApkRlZubTlHcTl4MWg1cW96bnVDOHBYN2dvMmZGQVJR
-czRRZXhBcGZSNytjaWxMdERibEhTc1BrVnVyT0cKanp5OWN0VU9tb1VBZjNIVEM1UTJpUTA4QkxX
-UE13SGRoKzk5YVpzRTdrcDVNUFB4SUI3YW9KMlJ6ajdPCk13UmZJZkJwRmdrckJnRUVBZHBIRHdF
-QkIwQkhWcFdGZ3JUbjlqM2Y4SVVWMDgvRG0wcy91Vi8xcWhyUQppOXo1MndKUzBzTEJkZ1FZQVFv
-QUNRVUNYeUg0TmdJYkRBQWhDUkFRbytndC9GdTdFUlloQklScitudmMKZjRMUHYzUGZPUkNqNkMz
-OFc3c1JXUzBQL0E3aFJFTE1WL2RSYnUvOUIwU2ZBOERUQ0hWQ3A2bE1qQ3lnClB6WjlZaExXT2xH
-Q3RZN0J4akZHMFpwS0Nsc1RSU2ppdGNTbGZzTzZFdGtObWVOUGNyNVduZHdDSFJxdQovYVNWWFFr
-QUJxODFtYWZKTERBT21tWmdHSWNnQnYvaE1YRFpKYjFFS3RLekszMEFqMFdHalpkb1dKSDMKN29J
-ellObWJmVDdFMUpCcFNYUno0Mnh5SjBiOE1zMXZGN00zelcrL0Y3bktwM0JYdGZtTVIxeHZObDlQ
-CjZuc3pNRzRacVFydzBNTlV5TkRMY1JLQ0NXRjJmNFVtbWQ0M2FYTVgwSnM4NFQwSjB2RGREZGht
-cFNQYQo1bFhtUXdZdkVldmV6WWx2Z0lxZTNyRDlYM01kV2JCSnozQ2Q5MWJDSHJldG42ZzZTbXZr
-elRBMTNockcKRWRoYk5heTFraCtjZGoxSGYxQjU5eUtXa0tWRDNnNmp6YS92bERmdGhQUlJxd0NZ
-QW5LZnQ1TWpHUjlqCnpnN0FDQmhsTkpScXRsZTQxS0p3SnkwRWpjZS85cklBZWszTHRnR3E1Y3NM
-N2VSR3JsQis3VFR3OXZYUwowaFJaSUIyOUZ0Z3FVQ3FCNVQyNlRhRC9hM0JvWTkzWW1sajNEcHlR
-TDM1ZHZZR0phR3NjdU0yVC9vSVoKWUh3M09PWkVQUXVObmdaZmpYRDF1ZmdZOERHc1JtaVoxYkFC
-cnVkM05UME52bU9GczRtTmJpU2w4Z2hZCnFGMXR4U1dxR0g0SkhEK3F1a3EvVzJ3a3dZOVF2OTFU
-d29LbHZwQVFmS2xJaSt1dW1xUFF4NUlhN2hyRQpVRi9NN2wxcTBtdWlnY04vRmlWc255V2NXVDUx
-OWhNZ0RISGFUd0VYbU1qc2s3TGMKPVlNb1IKLS0tLS1FTkQgUEdQIFBVQkxJQyBLRVkgQkxPQ0st
-LS0tLQo=
------------------------d11a3dfb27259b6854fdf0796597bf36--
-
---------7c48e40e08a672f6049c7dfaa6f4ddee68115cfd574be250fde1c7a2b2ecd51a
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-Version: ProtonMail
-
-wnUEARYKACcFgmZFM1YJkH386pemU5OOFiEE484Oy7fXGkv3k1joffzql6ZT
-k44AADrIAP4jmZZ/h/v32vQ7g6O2uhZriAVfPV7gaua7YHPZlQVIRwD/bXa7
-NspWfSVEVdPtTGqxLpo9L67ucyfoAxuewv6MKQU=
-=0ZZA
------END PGP SIGNATURE-----
+-       if (sht->max_segment_size)
+-               shost->max_segment_size = sht->max_segment_size;
+-       else
+-               shost->max_segment_size = BLK_MAX_SEGMENT_SIZE;
++       shost->max_segment_size = sht->max_segment_size;
 
 
---------7c48e40e08a672f6049c7dfaa6f4ddee68115cfd574be250fde1c7a2b2ecd51a--
+
+>>
+> 
+> With this patch in linux mainline, I see
+> 
+> ata2: found unknown device (class 0)
+> ata2.00: ATAPI: QEMU DVD-ROM, 2.5+, max UDMA/100
+> ------------[ cut here ]------------
+> WARNING: CPU: 0 PID: 27 at block/blk-settings.c:202 blk_validate_limits+0x28c/0x304
+> Modules linked in:
+> CPU: 0 PID: 27 Comm: kworker/u4:2 Not tainted 6.9.0-05151-g1b294a1f3561 #1
+> Hardware name: PowerMac3,1 PPC970FX 0x3c0301 PowerMac
+> Workqueue: async async_run_entry_fn
+> NIP:  c0000000007ccec8 LR: c0000000007c805c CTR: 0000000000000000
+> REGS: c000000006def690 TRAP: 0700   Not tainted  (6.9.0-05151-g1b294a1f3561)
+> MSR:  8000000000028032 <SF,EE,IR,DR,RI>  CR: 84004228  XER: 20000000
+> IRQMASK: 0
+> GPR00: c0000000007c8040 c000000006def930 c00000000159f900 c000000006defac8
+> GPR04: c00000000146e788 0000000000000000 0000000000000000 0000000000000100
+> GPR08: 0000000000000200 000000000000ff00 0000000000000000 0000000000004000
+> GPR12: 000000000fa82000 c000000003330000 c000000000116508 c0000000060c5c40
+> GPR16: 0000000000000000 0000000000000000 0000000000000000 0000000000000088
+> GPR20: 0000000000000000 c0000000026f2f40 c0000000025eeff0 0000000000000000
+> GPR24: c000000006defc80 c0000000031cb3a0 c000000002571c80 c000000006defac8
+> GPR28: c0000000033052e0 ffffffffffffffff 0000000000000010 c000000008f13df0
+> NIP [c0000000007ccec8] blk_validate_limits+0x28c/0x304
+> LR [c0000000007c805c] blk_alloc_queue+0xbc/0x344
+> Call Trace:
+> [c000000006def930] [c0000000007c8040] blk_alloc_queue+0xa0/0x344 (unreliable)
+> [c000000006def990] [c0000000007e2658] blk_mq_alloc_queue+0x60/0xf4
+> [c000000006defa60] [c000000000a7a260] scsi_alloc_sdev+0x280/0x464
+> [c000000006defb90] [c000000000a7a6b4] scsi_probe_and_add_lun+0x270/0x388
+> [c000000006defc60] [c000000000a7b070] __scsi_add_device+0x168/0x1b4
+> [c000000006defcc0] [c000000000b08fe0] ata_scsi_scan_host+0x294/0x39c
+> [c000000006defd80] [c000000000af7704] async_port_probe+0x6c/0x98
+> [c000000006defdb0] [c000000000120028] async_run_entry_fn+0x50/0x13c
+> [c000000006defe00] [c00000000010821c] process_one_work+0x2c0/0x828
+> [c000000006deff00] [c000000000109090] worker_thread+0x224/0x474
+> [c000000006deff90] [c000000000116658] kthread+0x158/0x17c
+> 
+> followed by
+> 
+> scsi_alloc_sdev: Allocation failure during SCSI scanning, some SCSI devices might not be configured
+> usb 1-1: new full-speed USB device number 2 using ohci-pci
+> scsi_alloc_sdev: Allocation failure during SCSI scanning, some SCSI devices might not be configured
+> scsi_alloc_sdev: Allocation failure during SCSI scanning, some SCSI devices might not be configured
+> scsi_alloc_sdev: Allocation failure during SCSI scanning, some SCSI devices might not be configured
+> input: QEMU QEMU USB Keyboard as /devices/pci0000:f0/0000:f0:0d.0/usb1/1-1/1-1:1.0/0003:0627:0001.0001/input/input0
+> scsi_alloc_sdev: Allocation failure during SCSI scanning, some SCSI devices might not be configured
+> ata2: WARNING: synchronous SCSI scan failed without making any progress, switching to async
+> 
+> and ultimately a boot hang. This is with the mac99 emulation in qemu.
+> The warning is always seen, the boot hang is seen when trying to boot
+> from ide/ata drive. Bisect log is attached.
+> 
+> Guenter
+> 
+> ---
+> # bad: [1b294a1f35616977caddaddf3e9d28e576a1adbc] Merge tag 'net-next-6.10' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next
+> # good: [a5131c3fdf2608f1c15f3809e201cf540eb28489] Merge tag 'x86-shstk-2024-05-13' of git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip
+> git bisect start 'HEAD' 'a5131c3fdf26'
+> # good: [f8beae078c82abde57fed4a5be0bbc3579b59ad0] Merge tag 'gtp-24-05-07' of git://git.kernel.org/pub/scm/linux/kernel/git/pablo/gtp Pablo neira Ayuso says:
+> git bisect good f8beae078c82abde57fed4a5be0bbc3579b59ad0
+> # good: [ce952d8f0e9b58dc6a2bde7e47ca7fa7925583cc] Merge tag 'gpio-updates-for-v6.10-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux
+> git bisect good ce952d8f0e9b58dc6a2bde7e47ca7fa7925583cc
+> # bad: [113d1dd9c8ea2186d56a641a787e2588673c9c32] Merge tag 'scsi-misc' of git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi
+> git bisect bad 113d1dd9c8ea2186d56a641a787e2588673c9c32
+> # good: [a3d1f54d7aa4c3be2c6a10768d4ffa1dcb620da9] Merge tag 'for-6.10-tag' of git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux
+> git bisect good a3d1f54d7aa4c3be2c6a10768d4ffa1dcb620da9
+> # bad: [f92141e18c8b466027e226f3388de15b059b6f65] Merge patch series "convert SCSI to atomic queue limits, part 1 (v3)"
+> git bisect bad f92141e18c8b466027e226f3388de15b059b6f65
+> # good: [0e0a4da35284c85225e3b128912582ebc73256c8] Merge patch series "scsi: ufs: Remove overzealous memory barriers"
+> git bisect good 0e0a4da35284c85225e3b128912582ebc73256c8
+> # bad: [a25a9c85d17fd2f19bd5a2bb25b8361d72336bc7] scsi: libata: Switch to using ->device_configure
+> git bisect bad a25a9c85d17fd2f19bd5a2bb25b8361d72336bc7
+> # bad: [6248d7f7714f018f2c02f356582784e74596f8e8] scsi: core: Add a no_highmem flag to struct Scsi_Host
+> git bisect bad 6248d7f7714f018f2c02f356582784e74596f8e8
+> # good: [33507b3964f136ea1592718cb81885c8f9354f65] scsi: ufs: qcom: Add sanity checks for gear/lane values during ICC scaling
+> git bisect good 33507b3964f136ea1592718cb81885c8f9354f65
+> # good: [4373d2ecca7fa7ad04aa9c371c80049bafec2610] scsi: bsg: Pass queue_limits to bsg_setup_queue()
+> git bisect good 4373d2ecca7fa7ad04aa9c371c80049bafec2610
+> # bad: [afd53a3d852808bfeb5bc3ae3cd1caa9389bcc94] scsi: core: Initialize scsi midlayer limits before allocating the queue
+> git bisect bad afd53a3d852808bfeb5bc3ae3cd1caa9389bcc94
+> # good: [9042fb6d2c085eccdf11069b04754dac807c36ea] scsi: mpi3mr: Pass queue_limits to bsg_setup_queue()
+> git bisect good 9042fb6d2c085eccdf11069b04754dac807c36ea
+> # first bad commit: [afd53a3d852808bfeb5bc3ae3cd1caa9389bcc94] scsi: core: Initialize scsi midlayer limits before allocating the queue
 
 
