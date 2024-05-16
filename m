@@ -1,169 +1,95 @@
-Return-Path: <linux-usb+bounces-10304-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10305-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 765188C7DE9
-	for <lists+linux-usb@lfdr.de>; Thu, 16 May 2024 23:12:10 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B61E8C7E70
+	for <lists+linux-usb@lfdr.de>; Fri, 17 May 2024 00:01:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C6B19B21312
-	for <lists+linux-usb@lfdr.de>; Thu, 16 May 2024 21:12:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BF86C1F222B6
+	for <lists+linux-usb@lfdr.de>; Thu, 16 May 2024 22:01:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E3DF1581FB;
-	Thu, 16 May 2024 21:12:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=franken-peeters.be header.i=@franken-peeters.be header.b="1LKw1Jze"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F05DF15821A;
+	Thu, 16 May 2024 22:01:04 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-4323.proton.ch (mail-4323.proton.ch [185.70.43.23])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41F5626AEA
-	for <linux-usb@vger.kernel.org>; Thu, 16 May 2024 21:11:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EE65156F2A
+	for <linux-usb@vger.kernel.org>; Thu, 16 May 2024 22:01:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715893920; cv=none; b=ITHr6advc2AWL4DNW70FSNio+hwUHCwbkXfd4uaWuK6OGUzm3tDF96lyl9/4ILeMc7Svia2Fm/P8XzDhgkfbrwyj9hmFX8pmVGGoAyvnrKKpuikK/xjxhTYQ4mRG5imAhNwQNs9s/uW0yDDt0He1INaJTEu4Fzb3IcuEFr2xQlg=
+	t=1715896864; cv=none; b=jH5dZ7MkSi9FIYnC6o1LqFEgpITu+l7kdW5FqaYAMweTer4Tv45ePmVjFjXtFa3m31FONNcbdHA7l3dRJ/+ySc3cqzoiR8f1BshXvsWEehQbwyAAfx/FkcmEdACvbTiViAmGzozMVtmcrL/7DGNrXCJvTIfvUqbkeNJ8b8EhAvs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715893920; c=relaxed/simple;
-	bh=obqdqVwbBsHvvAadtY0OXNbvhRT40zmjIJh2iWnmyx4=;
-	h=Date:To:From:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=S1K4y9a1reIxKtCPqilA3jeMP3IecnUvSCFMo0s86I3gZUfZdbV0fqqF14evmM4xOLKh8zuSgAqGrVM+5MBNou9sPcrENYi4juih3eHEFq5BisYH56/yTjz0kJuz06IKP+KXvoLOhE+NzvOL7d+COAVLgn9skBKS+6YrblES0AQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=franken-peeters.be; spf=pass smtp.mailfrom=franken-peeters.be; dkim=pass (2048-bit key) header.d=franken-peeters.be header.i=@franken-peeters.be header.b=1LKw1Jze; arc=none smtp.client-ip=185.70.43.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=franken-peeters.be
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=franken-peeters.be
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=franken-peeters.be;
-	s=protonmail2; t=1715893913; x=1716153113;
-	bh=d4j2OtGA6Vp0Lt9eyDtzX/aZext1Y5uousK6juRLCrY=;
-	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
-	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
-	b=1LKw1JzeqfQqkzdnHPc02Dm77/8yccgoDhaffBhZyN0NqYCL9yLn+HQQjdr+eROXd
-	 lEmqWcPjlcrtcSF8eWlZ5bw7kMcnY6ThathI8HA3X3On4jnCtiHpkgHQ9Z2Nu+C9L3
-	 XGf6N7BAnSLbNEvMgqGVaMmLo/nGIfWmr2Ke/PPZ2fI/1MYNEa23zHND8w5bjB4MwL
-	 JnrrgoyvYjY99PzxutogeJS3gzu9hdun9esexWQZtpnx/Z8pqtkf/Xy3Obw4rhgWBL
-	 0scTY1m5tL7vLv3kAgZMUwJPlejH9JQT/CrfzgBM9+if/jA6l30JZya3cSf1AQXHpM
-	 DJ92ChVwnw8DQ==
-Date: Thu, 16 May 2024 21:11:46 +0000
-To: Marek Szyprowski <m.szyprowski@samsung.com>, Michael Grzeschik <m.grzeschik@pengutronix.de>, Peter Chen <peter.chen@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-From: Wouter Franken <wouter@franken-peeters.be>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: chipidea: move ci_ulpi_init after the phy initialization
-Message-ID: <ecb8d3e8-d525-4a2d-a868-803202c16296@franken-peeters.be>
-Feedback-ID: 87808963:user:proton
-X-Pm-Message-ID: f9e38adc63416260f2281549bc731935d9ca77cb
+	s=arc-20240116; t=1715896864; c=relaxed/simple;
+	bh=5ApjjVyG5kOb2GvSyJn4jbkb/QGye5113VwQa+dzRSA=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=MJ1XV7XKRymsTwzbwroHjE7l4VuIxSp9PcSbSebVKnOSPWcQn8ij/ztBgoWMZ4+DzIe1Yizt4uoGVYZdIOxBDC68P8kWZzrEwXc4wOqCwLrrZxRqYF9H4Az6QRF2VoirsVyLCVYvz4M8u79OPZk3c05to2tmKQnKQkcSYjTAJ/o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f70.google.com with SMTP id ca18e2360f4ac-7e1b65780b7so907739939f.2
+        for <linux-usb@vger.kernel.org>; Thu, 16 May 2024 15:01:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715896862; x=1716501662;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ij9UOEi/rvEspETVKvgQxDYWhFL0r2IXg+Lgbvqktpc=;
+        b=MSN7oOsur8X93u/uQ3raNZ3esgzpAS8vnxj3PrTsf6yfyN/B3aW+WXFNzYEUK5WHPG
+         QW3VOFHiJaKj2wdaqKbyeBZPiS7TxIYkN4Ygjk/8wZNnIPBh0lPMW0NcoHPQ25QUbIUw
+         DAccTVXy+96BkXrLzQF/OGAw2GzgelBheRjiGIKfpWHkF9hvOsQY888aye9HPmNbO15b
+         T2+5miY1WWEKseL4+nU5VjtclsJDLpJTrDy4GNknE7rhbGSG+w0+OWrtWmqaRmHgxiBL
+         UH4swRGg8LXm90726BOIsWuwg0F1/ta7RWhUoisgxlY4Wj4qU6IwqE4FPcoG3lOv1YyQ
+         bUYQ==
+X-Forwarded-Encrypted: i=1; AJvYcCURWkHOK6YhUHRPKrtqFIc+Y6wM8DjTNCAjnBNE+jCqWl3ixjWE17bAgGQRN8mqDNWx1tUhtN9496FSkJDW9voDNmlnD7/qK3+y
+X-Gm-Message-State: AOJu0Ywhpf6Jhmb1X+jzspVMPc2Cd0zn+QiPseWUpi4yydriQGFc/O/P
+	8uiQFyIUgQ7abc2d4jCfL5ypsVhTKggc8V9tXS+7Kz0gZnZsjH4q72omip/rdeha7K02PUfeX84
+	AokiZMrcjAoCkY+TS8cCzIPGHZb6ClejeCiteEQi/Tj0cPovfhj1fSUM=
+X-Google-Smtp-Source: AGHT+IF4FYXyVi+PNgCKKVgxVWjwAbrtBw5UnExXmcnE5b/QOXgG13UczkaJ42LJBz1xoWmDg6pwDEsXRfDUDYXY3d/3NYS8VAyl
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+X-Received: by 2002:a05:6602:3ca:b0:7de:e175:fd2d with SMTP id
+ ca18e2360f4ac-7e1b521f29dmr162925539f.3.1715896862636; Thu, 16 May 2024
+ 15:01:02 -0700 (PDT)
+Date: Thu, 16 May 2024 15:01:02 -0700
+In-Reply-To: <000000000000051b2d06189716c3@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000f8112e0618995e6e@google.com>
+Subject: Re: [syzbot] [usb?] INFO: rcu detected stall in schedule_timeout (6)
+From: syzbot <syzbot+c793a7eca38803212c61@syzkaller.appspotmail.com>
+To: bp@alien8.de, dave.hansen@linux.intel.com, gregkh@linuxfoundation.org, 
+	hpa@zytor.com, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	marcello.bauer@9elements.com, mingo@redhat.com, stern@rowland.harvard.edu, 
+	sylv@sylv.io, syzkaller-bugs@googlegroups.com, tglx@linutronix.de, 
+	x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hello all,
+syzbot has bisected this issue to:
 
-On 4/25/24 21:40, Marek Szyprowski wrote:
-> Dear All,
->
-> On 02.04.2024 08:23, Michael Grzeschik wrote:
->> The function ci_usb_phy_init is already handling the
->> hw_phymode_configure path which is also only possible after we have
->> a valid phy. So we move the ci_ulpi_init after the phy initialization
->> to be really sure to be able to communicate with the ulpi phy.
->>
->> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
-> This patch landed in linux-next some time ago as commit 22ffd399e6e7
-> ("usb: chipidea: move ci_ulpi_init after the phy initialization").
-> Unfortunately it breaks host USB operation on DragonBoard410c
-> (arch/arm64/boot/dts/qcom/apq8016-sbc.dts). There is no error nor
-> warning in the kernel log besides the information about deferred probe
-> on the chipidea controller:
->
-> platform ci_hdrc.0: deferred probe pending: (reason unknown)
->
-> Tomorrow I will try to investigate which operation during driver probe
-> triggers it. If there is anything else to check that might help fixing
-> this issue, let me know.
+commit a7f3813e589fd8e2834720829a47b5eb914a9afe
+Author: Marcello Sylvester Bauer <sylv@sylv.io>
+Date:   Thu Apr 11 14:51:28 2024 +0000
 
-I have the same problem on sony yuga=20
-(arch/arm/boot/dts/qcom/qcom-apq8064-sony-xperia-lagan-yuga.dts):
-it breaks USB operation and shows the same message in the kernel log.
+    usb: gadget: dummy_hcd: Switch to hrtimer transfer scheduler
 
-I have analyzed this issue and came to the following conclusion:
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=119318d0980000
+start commit:   75fa778d74b7 Add linux-next specific files for 20240510
+git tree:       linux-next
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=139318d0980000
+console output: https://syzkaller.appspot.com/x/log.txt?x=159318d0980000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ccdd3ebd6715749a
+dashboard link: https://syzkaller.appspot.com/bug?extid=c793a7eca38803212c61
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16dcd598980000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=151d9c78980000
 
->> ---
->>    drivers/usb/chipidea/core.c | 8 ++++----
->>    drivers/usb/chipidea/ulpi.c | 5 -----
->>    2 files changed, 4 insertions(+), 9 deletions(-)
->>
->> diff --git a/drivers/usb/chipidea/core.c b/drivers/usb/chipidea/core.c
->> index 835bf2428dc6e..bada13f704b62 100644
->> --- a/drivers/usb/chipidea/core.c
->> +++ b/drivers/usb/chipidea/core.c
->> @@ -1084,10 +1084,6 @@ static int ci_hdrc_probe(struct platform_device *=
-pdev)
->>    =09=09return -ENODEV;
->>    =09}
->>   =20
->> -=09ret =3D ci_ulpi_init(ci);
->> -=09if (ret)
->> -=09=09return ret;
->> -
+Reported-by: syzbot+c793a7eca38803212c61@syzkaller.appspotmail.com
+Fixes: a7f3813e589f ("usb: gadget: dummy_hcd: Switch to hrtimer transfer scheduler")
 
-This ci_ulpi_init(...) call eventually calls probe(..) on the USB phy=20
-when the ulpi driver
-registers all its child nodes. A couple lines later devm_phy_get(..) is=20
-called
-to get the initialized phy device. Due to the move of the=20
-ci_ulpi_init(..) the phy
-is not probed and the devm_phy_get(..) call fails with EPROBE_DEFER.=20
-This results
-in a deadlock.
-
-I don't understand the complete train of thought behind this patch to=20
-propose a fix
-but hopefully my investigation can help to solve the issue.
-
->>    =09if (ci->platdata->phy) {
->>    =09=09ci->phy =3D ci->platdata->phy;
->>    =09} else if (ci->platdata->usb_phy) {
->> @@ -1142,6 +1138,10 @@ static int ci_hdrc_probe(struct platform_device *=
-pdev)
->>    =09=09goto ulpi_exit;
->>    =09}
->>   =20
->> +=09ret =3D ci_ulpi_init(ci);
->> +=09if (ret)
->> +=09=09return ret;
->> +
->>    =09ci->hw_bank.phys =3D res->start;
->>   =20
->>    =09ci->irq =3D platform_get_irq(pdev, 0);
->> diff --git a/drivers/usb/chipidea/ulpi.c b/drivers/usb/chipidea/ulpi.c
->> index dfec07e8ae1d2..89fb51e2c3ded 100644
->> --- a/drivers/usb/chipidea/ulpi.c
->> +++ b/drivers/usb/chipidea/ulpi.c
->> @@ -68,11 +68,6 @@ int ci_ulpi_init(struct ci_hdrc *ci)
->>    =09if (ci->platdata->phy_mode !=3D USBPHY_INTERFACE_MODE_ULPI)
->>    =09=09return 0;
->>   =20
->> -=09/*
->> -=09 * Set PORTSC correctly so we can read/write ULPI registers for
->> -=09 * identification purposes
->> -=09 */
->> -=09hw_phymode_configure(ci);
->>   =20
->>    =09ci->ulpi_ops.read =3D ci_ulpi_read;
->>    =09ci->ulpi_ops.write =3D ci_ulpi_write;
->>
->> ---
->> base-commit: 5bab5dc780c9ed0c69fc2f828015532acf4a7848
->> change-id: 20240328-chipidea-phy-misc-b3f2bc814784
->>
->> Best regards,
-> Best regards
-
-Best regards
---
-Wouter Franken
-
-
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
