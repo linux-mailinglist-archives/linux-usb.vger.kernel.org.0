@@ -1,156 +1,100 @@
-Return-Path: <linux-usb+bounces-10284-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10285-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C89368C700E
-	for <lists+linux-usb@lfdr.de>; Thu, 16 May 2024 03:39:44 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 25F4C8C70EB
+	for <lists+linux-usb@lfdr.de>; Thu, 16 May 2024 06:29:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 56D33B227BD
-	for <lists+linux-usb@lfdr.de>; Thu, 16 May 2024 01:39:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4E36B1C22A1F
+	for <lists+linux-usb@lfdr.de>; Thu, 16 May 2024 04:29:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDC19137E;
-	Thu, 16 May 2024 01:39:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5868925601;
+	Thu, 16 May 2024 04:28:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gzEeaPzk"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="sBWJp3lj"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 611EC10E3;
-	Thu, 16 May 2024 01:39:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59059C122;
+	Thu, 16 May 2024 04:28:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715823574; cv=none; b=q/JNJw0U3M/gwVSIVFRVRGi0SFnZLO4X0a9XfmKySHsqA2+JgtGZPbPtaP5jL7kOLx6VApmRoIQ98WqAaGJyl3hETQQYzanfsnnCMCE4CCGLLEj0ssotXx3SkP+2gB3drwG5S+12/J5wCWoQTgfHtxOVekRWQOqO6yZCt/jd5iU=
+	t=1715833738; cv=none; b=ovbtwkTE0jQWZ2XWvuq11NDdVvtcAGB0i2mryEaOqNk0lQDkvprBB6Joc+4dA7U8/+//KCx8VzqFBHW7ria3R8EHH6KW/pP7bfXa5Xl5DSRTfij1oxSepUGcGvKKGZjLSCIM05XcZ304doeVQSwyVY5dpdqaItyZtYidCaAJSH4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715823574; c=relaxed/simple;
-	bh=FmMtybhZYs1e5AN33E5WpxqtlLbnaIg7KEc6WGebVmw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GKaOOFirZXGcT08lSinE9MqMCevDEE5WKQaAchLBm1ACDAYFh1znwRbltloAswWC8XVA6GPXvC9wG7+S7VnXI9Vx7i1hZDMxAe0uOe4f58ec1ewqHRXz+bM0smkekpZLmgy7qptzSv1n+vM2O5zPUlZAiLbqLypakfvV2s6udwI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gzEeaPzk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34E91C116B1;
-	Thu, 16 May 2024 01:39:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715823574;
-	bh=FmMtybhZYs1e5AN33E5WpxqtlLbnaIg7KEc6WGebVmw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gzEeaPzk5KK5Lo3QAapPqzCPdzXzSYw2CCwrjMnDnXXXlWF+6FM/q9VOIIUi2VhbF
-	 zvGFriJ6dp9iYzwrhtGVL1ZNOtvZ/fhflDltCRqgTiejz2i5hAVykwmze/g1SFX9dy
-	 uAxtmAXmbDfhDbwzL6bT2cnSnfgCOrOjZQOuhecBqEcW2mANy1+0zXdGtzbJE8Rt5V
-	 pULG5WaUkcsHCN8JjAY04hmfo3W5ua1WH8usZuKOWoCAiibtYJrUHMNYwaZKbzbz6b
-	 jWVRRlf6O2eShqisqYhTyjWyrdL5ETKPzYuEwr7yTPGOM+nCT97XB54a/wIk1Y02Av
-	 3gHBYepfLuC0w==
-Date: Thu, 16 May 2024 09:39:24 +0800
-From: Peter Chen <peter.chen@kernel.org>
-To: Ravi Gunasekaran <r-gunasekaran@ti.com>
-Cc: pawell@cadence.com, rogerq@kernel.org, gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] usb: cdns3: Add quirk flag to enable suspend
- residency
-Message-ID: <20240516013924.GA3283751@nchen-desktop>
-References: <20240514092421.20897-1-r-gunasekaran@ti.com>
- <20240514092421.20897-2-r-gunasekaran@ti.com>
- <20240515013838.GA3279984@nchen-desktop>
- <dde63edb-9057-2d33-032a-8ee25e981c72@ti.com>
+	s=arc-20240116; t=1715833738; c=relaxed/simple;
+	bh=sRgVPKYSI4Wha9IK+Z5Ny/B3dWS5I+4Qy1/fC9gF4H8=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=OOggpM00Gyj17CTHlHQkxsSDCChZCmE2hVHWwosGzyS2W1HyChaEDrQUJFis1yfSe5jpu4GKUo+Dl20xUOT9cN/i6EH6NXYxR0J9Ps9RADZMP3GZ7c0mCNLrmHf9/7MoshP7eL7ou0sRrz3SpyglY0Z8qOK1O2CE9uRTC3SYRkw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=sBWJp3lj; arc=none smtp.client-ip=198.47.19.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 44G4SnSV114226;
+	Wed, 15 May 2024 23:28:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1715833729;
+	bh=w/D3GBIX3YEvmPeY+U4E3OsVqhG/LJmuFTFGyANLWSE=;
+	h=From:To:CC:Subject:Date;
+	b=sBWJp3lj4HN98QXAJwvA7XWddm+JhEVrD/0xZHzl1knutJPOQIDVJmIdogIcdpHfK
+	 KgxwJsE66ENLFTxLloMs8AanGc3/1QteP2vKZKV0HpnOyKiu0dFyIM8Z7c43hJ/1lv
+	 u1HEPSlvjaoQpbz1FyrDWT5LT05eh9rl3j3PrHzM=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 44G4Sntb078400
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Wed, 15 May 2024 23:28:49 -0500
+Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 15
+ May 2024 23:28:49 -0500
+Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Wed, 15 May 2024 23:28:49 -0500
+Received: from uda0500640.dal.design.ti.com (uda0500640.dhcp.ti.com [172.24.227.88])
+	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 44G4Skhi089022;
+	Wed, 15 May 2024 23:28:47 -0500
+From: Ravi Gunasekaran <r-gunasekaran@ti.com>
+To: <peter.chen@kernel.org>, <pawell@cadence.com>, <rogerq@kernel.org>
+CC: <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <srk@ti.com>, <r-gunasekaran@ti.com>
+Subject: [PATCH v2 0/2] TI AM64/J7: USB Errata i2409 workaround
+Date: Thu, 16 May 2024 09:58:43 +0530
+Message-ID: <20240516042845.31211-1-r-gunasekaran@ti.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <dde63edb-9057-2d33-032a-8ee25e981c72@ti.com>
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-On 24-05-15 09:52:57, Ravi Gunasekaran wrote:
-> 
-> 
-> On 5/15/24 7:08 AM, Peter Chen wrote:
-> > On 24-05-14 14:54:20, Ravi Gunasekaran wrote:
-> >> From: Roger Quadros <rogerq@kernel.org>
-> >>
-> >> Some platforms (e.g. ti,j721e-usb, ti,am64-usb) require
-> >> this bit to be set to workaround a lockup issue with PHY
-> >> short suspend intervals [1]. Add a platform quirk flag
-> >> to indicate if Suspend Residency should be enabled.
-> >>
-> >> [1] - https://www.ti.com/lit/er/sprz457h/sprz457h.pdf
-> >> i2409 - USB: USB2 PHY locks up due to short suspend
-> >>
-> >> Signed-off-by: Roger Quadros <rogerq@kernel.org>
-> >> Signed-off-by: Ravi Gunasekaran <r-gunasekaran@ti.com>
-> >> ---
-> 
-> [...]
-> 
-> >>  	regs = devm_ioremap_resource(cdns->dev, &cdns->otg_res);
-> >> @@ -439,6 +439,13 @@ int cdns_drd_init(struct cdns *cdns)
-> >>  			return -EINVAL;
-> >>  		}
-> >>  
-> >> +		if (cdns->pdata &&
-> >> +		    (cdns->pdata->quirks & CDNS3_DRD_SUSPEND_RESIDENCY_ENABLE)) {
-> >> +			reg = readl(&cdns->otg_v1_regs->susp_ctrl);
-> >> +			reg |= SUSP_CTRL_SUSPEND_RESIDENCY_ENABLE;
-> >> +			writel(reg, &cdns->otg_v1_regs->susp_ctrl);
-> >> +		}
-> >> +
-> > 
-> > It is better put this above (just above code cdns->version  =
-> > CDNS3_CONTROLLER_V1;)
-> > 
-> 
-> You mean here, to group it with CDNS3 v1?
-> 
-> else if (OTG_CDNS3_CHECK_DID(state)) {                                               
->       cdns->otg_irq_regs = (struct cdns_otg_irq_regs __iomem *)
->                             &cdns->otg_v1_regs->ien;
->       writel(1, &cdns->otg_v1_regs->simulate);
-> 
-> +     if (cdns->pdata &&
-> +	  (cdns->pdata->quirks & CDNS3_DRD_SUSPEND_RESIDENCY_ENABLE)) {
-> +	      reg = readl(&cdns->otg_v1_regs->susp_ctrl);
-> +	      reg |= SUSP_CTRL_SUSPEND_RESIDENCY_ENABLE;
-> +	      writel(reg, &cdns->otg_v1_regs->susp_ctrl);
-> +     }
->       dns->version  = CDNS3_CONTROLLER_V1;
+This series adds workaround for all TI platforms using
+cdns3,usb IP. i.e. AM64/J7x
 
-Yes.
+Change log:
+----------
+Changes since v1:
+----------------
+* Grouped the susp_ctrl register update along with
+  existing CDNS3 snippet as suggested by Peter Chen
 
-Peter
+v1: https://lore.kernel.org/all/20240514092421.20897-1-r-gunasekaran@ti.com/#t
 
-> } else
-> 
-> > Peter
-> >>  		dev_dbg(cdns->dev, "DRD version v1 (ID: %08x, rev: %08x)\n",
-> >>  			 readl(&cdns->otg_v1_regs->did),
-> >>  			 readl(&cdns->otg_v1_regs->rid));
-> >> diff --git a/drivers/usb/cdns3/drd.h b/drivers/usb/cdns3/drd.h
-> >> index d72370c321d3..1e2aee14d629 100644
-> >> --- a/drivers/usb/cdns3/drd.h
-> >> +++ b/drivers/usb/cdns3/drd.h
-> >> @@ -193,6 +193,9 @@ struct cdns_otg_irq_regs {
-> >>  /* OTGREFCLK - bitmasks */
-> >>  #define OTGREFCLK_STB_CLK_SWITCH_EN	BIT(31)
-> >>  
-> >> +/* SUPS_CTRL - bitmasks */
-> >> +#define SUSP_CTRL_SUSPEND_RESIDENCY_ENABLE	BIT(17)
-> >> +
-> >>  /* OVERRIDE - bitmasks */
-> >>  #define OVERRIDE_IDPULLUP		BIT(0)
-> >>  /* Only for CDNS3_CONTROLLER_V0 version */
-> >> -- 
-> >> 2.17.1
-> >>
-> > 
-> 
-> -- 
-> Regards,
-> Ravi
+Roger Quadros (2):
+  usb: cdns3: Add quirk flag to enable suspend residency
+  usb: cdns3-ti: Add workaround for Errata i2409
+
+ drivers/usb/cdns3/cdns3-ti.c | 15 ++++++++++++++-
+ drivers/usb/cdns3/core.h     |  1 +
+ drivers/usb/cdns3/drd.c      | 11 ++++++++++-
+ drivers/usb/cdns3/drd.h      |  3 +++
+ 4 files changed, 28 insertions(+), 2 deletions(-)
 
 -- 
+2.17.1
 
-Thanks,
-Peter Chen
 
