@@ -1,172 +1,169 @@
-Return-Path: <linux-usb+bounces-10303-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10304-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2EBC8C7D7A
-	for <lists+linux-usb@lfdr.de>; Thu, 16 May 2024 21:52:12 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 765188C7DE9
+	for <lists+linux-usb@lfdr.de>; Thu, 16 May 2024 23:12:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 299161C215F3
-	for <lists+linux-usb@lfdr.de>; Thu, 16 May 2024 19:52:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C6B19B21312
+	for <lists+linux-usb@lfdr.de>; Thu, 16 May 2024 21:12:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 862D0157E76;
-	Thu, 16 May 2024 19:51:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E3DF1581FB;
+	Thu, 16 May 2024 21:12:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=franken-peeters.be header.i=@franken-peeters.be header.b="1LKw1Jze"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from mail-4323.proton.ch (mail-4323.proton.ch [185.70.43.23])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CCC0157E6C
-	for <linux-usb@vger.kernel.org>; Thu, 16 May 2024 19:51:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41F5626AEA
+	for <linux-usb@vger.kernel.org>; Thu, 16 May 2024 21:11:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715889118; cv=none; b=JfDmD7TV9T5UZPnzsnJ2ZBVr80x7HvsSrbXmBPBUACDhgkWn7mEJcsPOlZucEUJ2o0LfDULA1PUghT/GCgaRf7fd4uwCXoYI/auUjZG/OlCiSOR3BRAZ1ZT/KV0tAvI43PttWHjpQSCa4MNXySoyPOamxoZ2+h2BLv+/kkCZEqU=
+	t=1715893920; cv=none; b=ITHr6advc2AWL4DNW70FSNio+hwUHCwbkXfd4uaWuK6OGUzm3tDF96lyl9/4ILeMc7Svia2Fm/P8XzDhgkfbrwyj9hmFX8pmVGGoAyvnrKKpuikK/xjxhTYQ4mRG5imAhNwQNs9s/uW0yDDt0He1INaJTEu4Fzb3IcuEFr2xQlg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715889118; c=relaxed/simple;
-	bh=s0VpWl+ubeSr9Wh6Ks9w3sfKCAJcIdouKzCfod5VvHM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UHoyiTftlInGw0PxO5AadgFHfBZJ/pTN7zwmlsAfFQ4IkgrtqbdBeJ8quJsEjYiGH7qLyga5rdNR1Vz7NFd9EVIZIVUvxSqI6ZnQmewSo10KodGJyxFMHRv1dXI1Kh8lONcnKYvwMOH73gs63mht7e1vfhE/v5yLSf5a2TpQNx4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1s7h8V-0004Kf-9Z; Thu, 16 May 2024 21:51:31 +0200
-Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1s7h8T-001lyt-UL; Thu, 16 May 2024 21:51:29 +0200
-Received: from mgr by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1s7h8T-00ExOe-2j;
-	Thu, 16 May 2024 21:51:29 +0200
-Date: Thu, 16 May 2024 21:51:29 +0200
-From: Michael Grzeschik <mgr@pengutronix.de>
-To: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Cc: Eric Van Hensbergen <ericvh@kernel.org>,
-	Latchesar Ionkov <lucho@ionkov.net>,
-	Dominique Martinet <asmadeus@codewreck.org>,
-	Christian Schoenebeck <linux_oss@crudebyte.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	v9fs@lists.linux.dev, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	kernel@pengutronix.de
-Subject: Re: [PATCH v4 2/3] net/9p/usbg: Add new usb gadget function transport
-Message-ID: <ZkZjwcd95fYKdm-w@pengutronix.de>
-References: <20240116-ml-topic-u9p-v4-0-722ed28b0ade@pengutronix.de>
- <20240116-ml-topic-u9p-v4-2-722ed28b0ade@pengutronix.de>
- <c78c9e88-bd53-4ae5-8f78-d8b1c468a5cd@collabora.com>
- <Zj3y04btf16BGZAJ@pengutronix.de>
- <2f36e766-054c-4001-addf-fe388916d858@collabora.com>
- <ZkZVHoHcdoNF6T2-@pengutronix.de>
+	s=arc-20240116; t=1715893920; c=relaxed/simple;
+	bh=obqdqVwbBsHvvAadtY0OXNbvhRT40zmjIJh2iWnmyx4=;
+	h=Date:To:From:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=S1K4y9a1reIxKtCPqilA3jeMP3IecnUvSCFMo0s86I3gZUfZdbV0fqqF14evmM4xOLKh8zuSgAqGrVM+5MBNou9sPcrENYi4juih3eHEFq5BisYH56/yTjz0kJuz06IKP+KXvoLOhE+NzvOL7d+COAVLgn9skBKS+6YrblES0AQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=franken-peeters.be; spf=pass smtp.mailfrom=franken-peeters.be; dkim=pass (2048-bit key) header.d=franken-peeters.be header.i=@franken-peeters.be header.b=1LKw1Jze; arc=none smtp.client-ip=185.70.43.23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=franken-peeters.be
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=franken-peeters.be
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=franken-peeters.be;
+	s=protonmail2; t=1715893913; x=1716153113;
+	bh=d4j2OtGA6Vp0Lt9eyDtzX/aZext1Y5uousK6juRLCrY=;
+	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
+	b=1LKw1JzeqfQqkzdnHPc02Dm77/8yccgoDhaffBhZyN0NqYCL9yLn+HQQjdr+eROXd
+	 lEmqWcPjlcrtcSF8eWlZ5bw7kMcnY6ThathI8HA3X3On4jnCtiHpkgHQ9Z2Nu+C9L3
+	 XGf6N7BAnSLbNEvMgqGVaMmLo/nGIfWmr2Ke/PPZ2fI/1MYNEa23zHND8w5bjB4MwL
+	 JnrrgoyvYjY99PzxutogeJS3gzu9hdun9esexWQZtpnx/Z8pqtkf/Xy3Obw4rhgWBL
+	 0scTY1m5tL7vLv3kAgZMUwJPlejH9JQT/CrfzgBM9+if/jA6l30JZya3cSf1AQXHpM
+	 DJ92ChVwnw8DQ==
+Date: Thu, 16 May 2024 21:11:46 +0000
+To: Marek Szyprowski <m.szyprowski@samsung.com>, Michael Grzeschik <m.grzeschik@pengutronix.de>, Peter Chen <peter.chen@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+From: Wouter Franken <wouter@franken-peeters.be>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: chipidea: move ci_ulpi_init after the phy initialization
+Message-ID: <ecb8d3e8-d525-4a2d-a868-803202c16296@franken-peeters.be>
+Feedback-ID: 87808963:user:proton
+X-Pm-Message-ID: f9e38adc63416260f2281549bc731935d9ca77cb
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="JjFffksc5WuBgX2B"
-Content-Disposition: inline
-In-Reply-To: <ZkZVHoHcdoNF6T2-@pengutronix.de>
-X-Sent-From: Pengutronix Hildesheim
-X-URL: http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-
-
---JjFffksc5WuBgX2B
-Content-Type: text/plain; charset=iso-8859-15; format=flowed
-Content-Disposition: inline
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 16, 2024 at 08:49:02PM +0200, Michael Grzeschik wrote:
->Hi
+Hello all,
+
+On 4/25/24 21:40, Marek Szyprowski wrote:
+> Dear All,
 >
->On Fri, May 10, 2024 at 04:11:27PM +0200, Andrzej Pietrasiewicz wrote:
->>W dniu 10.05.2024 o=A012:11, Michael Grzeschik pisze:
->>>On Fri, May 10, 2024 at 11:25:47AM +0200, Andrzej Pietrasiewicz wrote:
->>>>Hi Michael,
->>>>
->>>>W dniu 30.04.2024 o=A001:33, Michael Grzeschik pisze:
->>>>>Add the new gadget function for 9pfs transport. This function is
->>>>>defining an simple 9pfs transport interface that consists of one in and
->>>>>one out endpoint. The endpoints transmit and receive the 9pfs protocol
->>>>>payload when mounting a 9p filesystem over usb.
->>>>>
->>>>>Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
->>>>>
->>>>>---
->>>>>v3 -> v4:
->>>>>=A0 - implemented conn_cancel
->>>>
->>>>I tried this scenario:
->>>>
->>>>1) run all the components and have 9pfs up and running
->>>>2) stop the forwarder
->>>>3) umount -f at the gadget side - this indeed succeeds now in v4
->>>>4) start the forwarder again
->>>>5) mount at the gadget side - this hangs.
->>>>
->>>>Did this scenario work for you?
->>>
->>>I actually tested this exact scenario. So this is
->>>suprising. I will try this again just to be sure
->>>that I did send the latest version.
->>>
->>>My latest testsetup included the dummy_hcd. Did you test on real hardwar=
-e?
+> On 02.04.2024 08:23, Michael Grzeschik wrote:
+>> The function ci_usb_phy_init is already handling the
+>> hw_phymode_configure path which is also only possible after we have
+>> a valid phy. So we move the ci_ulpi_init after the phy initialization
+>> to be really sure to be able to communicate with the ulpi phy.
 >>
->>Yes, I did.
+>> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+> This patch landed in linux-next some time ago as commit 22ffd399e6e7
+> ("usb: chipidea: move ci_ulpi_init after the phy initialization").
+> Unfortunately it breaks host USB operation on DragonBoard410c
+> (arch/arm64/boot/dts/qcom/apq8016-sbc.dts). There is no error nor
+> warning in the kernel log besides the information about deferred probe
+> on the chipidea controller:
 >
->I just also tested this again on real hardware. With the imx6 chipidea
->udc I indeed see that this is stuck after the first round of mount and
->remount. With the musb core on the beaglebone this seems to be fine.
+> platform ci_hdrc.0: deferred probe pending: (reason unknown)
 >
->While debugging this I also ran into some shutdown issues and lockdep
->issues I see because the complete handler is possible to be resumed
->immedeatly on musb, which is odd. However I fixed/fix them and send an
->v5 afterwards.
->
->Regarding the hang on the imx6, which hardware did you test this on?
+> Tomorrow I will try to investigate which operation during driver probe
+> triggers it. If there is anything else to check that might help fixing
+> this issue, let me know.
 
-Nevermind. I can also reproduce the hang with the musb.
+I have the same problem on sony yuga=20
+(arch/arm/boot/dts/qcom/qcom-apq8064-sony-xperia-lagan-yuga.dts):
+it breaks USB operation and shows the same message in the kernel log.
 
-Michael
+I have analyzed this issue and came to the following conclusion:
 
---=20
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+>> ---
+>>    drivers/usb/chipidea/core.c | 8 ++++----
+>>    drivers/usb/chipidea/ulpi.c | 5 -----
+>>    2 files changed, 4 insertions(+), 9 deletions(-)
+>>
+>> diff --git a/drivers/usb/chipidea/core.c b/drivers/usb/chipidea/core.c
+>> index 835bf2428dc6e..bada13f704b62 100644
+>> --- a/drivers/usb/chipidea/core.c
+>> +++ b/drivers/usb/chipidea/core.c
+>> @@ -1084,10 +1084,6 @@ static int ci_hdrc_probe(struct platform_device *=
+pdev)
+>>    =09=09return -ENODEV;
+>>    =09}
+>>   =20
+>> -=09ret =3D ci_ulpi_init(ci);
+>> -=09if (ret)
+>> -=09=09return ret;
+>> -
 
---JjFffksc5WuBgX2B
-Content-Type: application/pgp-signature; name="signature.asc"
+This ci_ulpi_init(...) call eventually calls probe(..) on the USB phy=20
+when the ulpi driver
+registers all its child nodes. A couple lines later devm_phy_get(..) is=20
+called
+to get the initialized phy device. Due to the move of the=20
+ci_ulpi_init(..) the phy
+is not probed and the devm_phy_get(..) call fails with EPROBE_DEFER.=20
+This results
+in a deadlock.
 
------BEGIN PGP SIGNATURE-----
+I don't understand the complete train of thought behind this patch to=20
+propose a fix
+but hopefully my investigation can help to solve the issue.
 
-iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmZGY78ACgkQC+njFXoe
-LGSTWQ//WxyTQBPN02DdbwotbPTfWvYawG2G3/I0tqgV3BX/q6shqvOCiFL5nmDo
-8fkMDfi6+csGacPtPeZBvDUFzfL66laRSO/sdH+ZAKEJK/chv7pufRBUMYdQlz15
-qRaaLvAK1hvuONCjA2bw4WDDaNm/GgUymAogjE9yQlDsj8F6QSt252F3ZQBQKaCM
-uWZy+eUUm83h/rNYkvZqN3oCVbo43HpFXrDKQSAOpPJ+TT32wVBba7HgkYjVNimN
-hSfLDKxAUJdqUfAGToj59eF63rUe+t31iZN1vgk/k3HJXmEP+nvuxes+N2cx8xVH
-2v7cpIEJacspSRuGiAL+fY4xRCXJyAtlQGgllfhKZitrLAUjzDHL9mP4lK7Z7Y5q
-cSGa4006jogsQSSHdQCsVfZyHUqs6ZTgJYVNSeND/ezDiAEowmdR3vq65BaRRSec
-kmkQ2A9kzZmdR/PwlgyrwcP1RbHybgZH0pc9mkDFbPMzGS+XIm0w7ZWF9IX1zN5w
-sKepQa+XzLfvlX0d5JVYROfXBOhEozP0s7pPQqvY/sy8B5qYZADuO5OSnA4eYRdi
-M0gf6Cxj/CFCGuqKCBH5QqIrzOeB54edNFEF5Y5UzFD7T5c09GgvOd3zgaTqPxRy
-MA94+dooEc/8bbHNZZuV7D8UC94YhDwWQmXZfbhNJ4piRYQSjf8=
-=zqmW
------END PGP SIGNATURE-----
+>>    =09if (ci->platdata->phy) {
+>>    =09=09ci->phy =3D ci->platdata->phy;
+>>    =09} else if (ci->platdata->usb_phy) {
+>> @@ -1142,6 +1138,10 @@ static int ci_hdrc_probe(struct platform_device *=
+pdev)
+>>    =09=09goto ulpi_exit;
+>>    =09}
+>>   =20
+>> +=09ret =3D ci_ulpi_init(ci);
+>> +=09if (ret)
+>> +=09=09return ret;
+>> +
+>>    =09ci->hw_bank.phys =3D res->start;
+>>   =20
+>>    =09ci->irq =3D platform_get_irq(pdev, 0);
+>> diff --git a/drivers/usb/chipidea/ulpi.c b/drivers/usb/chipidea/ulpi.c
+>> index dfec07e8ae1d2..89fb51e2c3ded 100644
+>> --- a/drivers/usb/chipidea/ulpi.c
+>> +++ b/drivers/usb/chipidea/ulpi.c
+>> @@ -68,11 +68,6 @@ int ci_ulpi_init(struct ci_hdrc *ci)
+>>    =09if (ci->platdata->phy_mode !=3D USBPHY_INTERFACE_MODE_ULPI)
+>>    =09=09return 0;
+>>   =20
+>> -=09/*
+>> -=09 * Set PORTSC correctly so we can read/write ULPI registers for
+>> -=09 * identification purposes
+>> -=09 */
+>> -=09hw_phymode_configure(ci);
+>>   =20
+>>    =09ci->ulpi_ops.read =3D ci_ulpi_read;
+>>    =09ci->ulpi_ops.write =3D ci_ulpi_write;
+>>
+>> ---
+>> base-commit: 5bab5dc780c9ed0c69fc2f828015532acf4a7848
+>> change-id: 20240328-chipidea-phy-misc-b3f2bc814784
+>>
+>> Best regards,
+> Best regards
 
---JjFffksc5WuBgX2B--
+Best regards
+--
+Wouter Franken
+
+
 
