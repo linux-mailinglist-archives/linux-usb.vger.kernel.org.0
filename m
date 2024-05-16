@@ -1,123 +1,128 @@
-Return-Path: <linux-usb+bounces-10294-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10295-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B85A8C72A4
-	for <lists+linux-usb@lfdr.de>; Thu, 16 May 2024 10:18:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 079F18C7465
+	for <lists+linux-usb@lfdr.de>; Thu, 16 May 2024 12:09:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 740CB1C20E2D
-	for <lists+linux-usb@lfdr.de>; Thu, 16 May 2024 08:18:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 06C381C22646
+	for <lists+linux-usb@lfdr.de>; Thu, 16 May 2024 10:09:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5D8585956;
-	Thu, 16 May 2024 08:18:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 750AD143882;
+	Thu, 16 May 2024 10:09:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PqbpoqkD"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c6jb/Zox"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 026164501A;
-	Thu, 16 May 2024 08:18:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1C5A143886
+	for <linux-usb@vger.kernel.org>; Thu, 16 May 2024 10:09:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715847506; cv=none; b=ZqIl/GLDbZcQq6CBnsd+vdbwbIN5O9y+ZsQC90dg7K8y2I+neq3pPhz8F5mGwYOpxNFZ/RQaeo4lGixrTuBQYNTBTALAO4LfVhHDCVzf1N3V+tus53Z/bu3ML2aDdCo74rakGVH33fEi0eCPob++KaZR2WOCJu12M3/v3MDILQg=
+	t=1715854174; cv=none; b=W50ycc+ZcVJxyVDyjptAhV4NzTFDpQ9kjlEg5CRWJR8pkGxSheRjzhg5TOOYeOwxa6V4kH8h8rDHVblNH6tBuyKCG9Oe05M8K0WmJkGQral0bG9JUSNf4PMSqOJHTj+UPEA9arU5NAEh3LwB/ntX9sba2fD6akUOt2SRIhOnkyI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715847506; c=relaxed/simple;
-	bh=lRZJLUFdmnnOAfzyTHmvoTllMU6+DNYz5tYYHNzXAjI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eRdwsA0MUf/qQ52HgxJTJ8Y2t8jWJCdHKWnURZFejaPyqXl+6tPhbKDQXWMPKFpbrU9mZI7mMN0vZA/BdbdElWzM/FV7vhaoR3RMGpuSRKK1Nl28o9o49dM2ffStaJQVikg+nbN8utkBjMQfZLSFiMM1jRP6ClOG7n0MqNsOYl8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PqbpoqkD; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715847505; x=1747383505;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lRZJLUFdmnnOAfzyTHmvoTllMU6+DNYz5tYYHNzXAjI=;
-  b=PqbpoqkDVY8id8RgIRY4EI6ggIw0MbbxkiAstghxFxDv1fE4yMaWClDX
-   FxsCpsXFrjb7GVj+JcRg4td4/MDwVqkKtIot/8a/SkbGoAZR2OovH6VCL
-   23UpVkXpsTQpM8BDV9+UpI3f8wNzlpw7UnJLUb+MsNH0MnjJvWXGQGGH7
-   eCYWGMC+3ECymp4Mzx/bnjw1WQ/2XhL2QjiDXGNk+lvknRDa6765VG3Kp
-   jUbjLlYgc30+DydgtYsBqJvOEExGLS9SEFrV1CUjoqxvJCv14T2WrZkDd
-   TGOcE+8Y1HHTCZYm/R0SjZ1ygmrxQ8rDSuQfc4BU7OF4L0qiXwsn0rVWH
-   Q==;
-X-CSE-ConnectionGUID: PsO2DpIvTjOpZCM1qQG4fQ==
-X-CSE-MsgGUID: 1LADsLLKShWvXA9VbAB5Lg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11074"; a="23080177"
-X-IronPort-AV: E=Sophos;i="6.08,164,1712646000"; 
-   d="scan'208";a="23080177"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2024 01:18:24 -0700
-X-CSE-ConnectionGUID: cQm4yrICR4SvCvL9OgNUZw==
-X-CSE-MsgGUID: A6JwECsMRLix6jCRDznfLw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,164,1712646000"; 
-   d="scan'208";a="36136414"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by orviesa005.jf.intel.com with SMTP; 16 May 2024 01:18:21 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 16 May 2024 11:18:20 +0300
-Date: Thu, 16 May 2024 11:18:20 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH 7/8] usb: typec: ucsi: glink: merge pmic_glink_altmode
- driver
-Message-ID: <ZkXBTCfMCkl07/sl@kuha.fi.intel.com>
-References: <20240416-ucsi-glink-altmode-v1-0-890db00877ac@linaro.org>
- <20240416-ucsi-glink-altmode-v1-7-890db00877ac@linaro.org>
- <ZiZC/l9nOmzWx+j6@kuha.fi.intel.com>
- <46fktwtp3xers6tcpov3qo4zswptvajewsdltm45zbz2kmmpzp@cthu6ylttup3>
- <ZiZ8El4779l0W1Ig@kuha.fi.intel.com>
- <CAA8EJppMKFSbe-EZLELy+dnd4BZeg24crotH95hpCwcvoEbw5Q@mail.gmail.com>
- <f2bqgtoll3j6pseg6hzvwtyqiwfwcaepuhcnq4nrshux2bnluh@rte67mi7zcey>
+	s=arc-20240116; t=1715854174; c=relaxed/simple;
+	bh=KBQOWLxPWaj3HY5rrajwyuJHg+gjJAWb5fEFPwx8fgg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=daX/razjtnWll29tJ/0PUEBp0E9nSYZlliUWBu+TNBwXKUAUz9UipEWw1k8787qrHCxS7qw2NgxU6ICIKxPNlkgrKnCyROSs0HAnNDAADu6DLBhKr/yTWK+1P0G+vku0BkpsOwDaofaS/7kFv0GdPhSlkH3jsAY2oCL+z4a62LU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c6jb/Zox; arc=none smtp.client-ip=209.85.216.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-2b6208c88dcso10512a91.3
+        for <linux-usb@vger.kernel.org>; Thu, 16 May 2024 03:09:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1715854172; x=1716458972; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=L30oNHDv0aHtYMSd2p8ob6qB1hn3gyPcLqtYgh7FP5M=;
+        b=c6jb/ZoxT7fCJFt6sxOndBGlrQMFCrz2lPxj+puiF/q8bgKK5PlJBcB5SF0vK4oI9p
+         W1H/Tr1P4OkkzuGo2O/0TS/ls4EhQa7t8WLtEEb05n3l2TfwhhMT7KOFKFQ4iWIZfMSM
+         MvD+Eay2/rGtVnFzlSXVJ2S4qg9qJDleWey7RJD4ur/HUMXiYXI8BXWlijJOKPML3anz
+         b5KmhF88Dwt/My/9Mboo5Kr2ym2ihvyUvVPn0X/thS2ExRjSU8NcdbQxeFz+eQclXJo2
+         TdSG2FzSTEyJi2hdvPHAajwyb4Yj+Nc7Sz6QrtQBtZShx4O8mcHYKe6sOwLH9/ckERK3
+         8iSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715854172; x=1716458972;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=L30oNHDv0aHtYMSd2p8ob6qB1hn3gyPcLqtYgh7FP5M=;
+        b=KdvowWE9xVSrbmi12hvdRx3AWUZB3pgbQ4+2ios0Bq+Iw2qDS/F7bkdbcvmEKpHTSH
+         MOoOZVsmbi+b+ewBj7bsiY8NiIbi8oNuAyE24Eq81KNsXQGGc35iJZHMcjNMaLkcR069
+         +ybG19OBDrf5xCgIPuBpyRk1uMf86xrseAElBASh2VMpr3gje+9/u69dz1CpfNBe1LFl
+         n3DLAqlEMsxnT8z3ufMbzZ+6SNwzm84DllCfzZwwF18HmoqyqZ787SZaBBi7JYJG9iSr
+         8LJy7eQArZnHoKTMqdRziLEFI9mrZ++GsTfBzPQVqUJ87HeHszA4JzNQsLfJAhqdk8b1
+         teFw==
+X-Forwarded-Encrypted: i=1; AJvYcCXn13gKaLaI0DCXiSOcGL2+yfwBtvBPNQ8M88fQWkf41M0YnBTNnQj9iZlIOnhjYWS/yrM7N+SELZ0/1ZfCDb0k5WubJMLzx8vo
+X-Gm-Message-State: AOJu0YxCKsELPNueM74PYJCzxvyCYnoKk6TI+WKLl82z9fSyFbURQfyC
+	rduaoFg4D5aVhLfgyJjWXW9YekGqdOVnHdTobxUq8l7/Lzq51RPLdeICT7FBVnc=
+X-Google-Smtp-Source: AGHT+IFI8/jLrlJ/L7/bNjmebm3dMTK9gRMrFPrVO9HHCMUgl7PIjx91eo2wLDRxxAyRK4lzgGGxOw==
+X-Received: by 2002:a17:90a:cb83:b0:2af:2ca6:f14b with SMTP id 98e67ed59e1d1-2b6cb7c86fcmr16344128a91.0.1715854171890;
+        Thu, 16 May 2024 03:09:31 -0700 (PDT)
+Received: from [100.64.100.6] ([103.163.220.31])
+        by smtp.googlemail.com with ESMTPSA id 98e67ed59e1d1-2b67126ac16sm13386859a91.28.2024.05.16.03.09.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 May 2024 03:09:31 -0700 (PDT)
+Message-ID: <3c09b040-e76a-40b4-bf86-47469a6107cb@gmail.com>
+Date: Thu, 16 May 2024 17:09:26 +0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f2bqgtoll3j6pseg6hzvwtyqiwfwcaepuhcnq4nrshux2bnluh@rte67mi7zcey>
+User-Agent: Mozilla Thunderbird
+Subject: Re: Assistance getting the Universal Audio Apollo Solo USB to work
+ with Linux
+To: Ethin Probst <ethindp@pm.me>
+Cc: Alan Stern <stern@rowland.harvard.edu>,
+ "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+References: <DJiA8anOC3V1gHoj0H-8pmsXujLNu7IlZvNmvUEoDfnjC5VIzZ3YsoTgnUD-zVTsnhgln5BzEsy1n4YkoqkEd_pvTF9oZaukzUoyL-pDfRs=@pm.me>
+ <ab4d0394-0d71-45a7-a79b-02e3c90f8ac8@rowland.harvard.edu>
+ <N-wnVREkI4qROqLV1rCTIoLRiRzMGvywHt9QIdRD-e5AHby9wfaXcTn2V-Gd_UnmW-JomnWn6xGNhDhIeHIG3VHfHRFmnmPdZEPL8Qi5Gf4=@pm.me>
+ <8d415ea6-fe5a-4ec0-8e95-45c03968e666@gmail.com>
+ <5jZCAcuLt5YeqkzP4xk28ICJ2WQUxY1eht4CjJNdnGymv3q6AIk3WugtglGVjqvu6BPVO7zHNx7LJeMnS71JUcoNpVZAMmz4o7G4vVyu0GU=@pm.me>
+Content-Language: en-US
+From: Lars Melin <larsm17@gmail.com>
+In-Reply-To: <5jZCAcuLt5YeqkzP4xk28ICJ2WQUxY1eht4CjJNdnGymv3q6AIk3WugtglGVjqvu6BPVO7zHNx7LJeMnS71JUcoNpVZAMmz4o7G4vVyu0GU=@pm.me>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Dmitry,
-
-On Wed, May 15, 2024 at 06:01:48PM +0300, Dmitry Baryshkov wrote:
-> > I have played with the DP AltMode driver. I got it somewhat working,
-> > but I think I'm facing a control issue.
-> > Basically, the altmode driver wants to control pin assignment on its
-> > own. It works with the software TCPM, as we control it.
-> > It works with the normal UCSI, because it still can configure pin
-> > config. However with PMIC GLINK implementation there is no way to
-> > control pin assignment from the Linux side. The firmware does that for
-> > us.
-> > What would be the recommended way to handle it? Is it okay to override
-> > status_update to return just the selected pin config? Or is there any
-> > other (better) way to handle such an issue?
+On 2024-05-16 12:56, Ethin Probst wrote:
+> On Thursday, May 16th, 2024 at 00:19, Lars Melin <larsm17@gmail.com> wrote:
 > 
-> Any suggestions or further comments? Is it better to extend the
-> DisplayPort Altmode driver with the 'forced' transitions? Or it would be
-> fine to just register a partner device, emulate the userspace events,
-> but completely ignore the existing displayport driver?
+>> On 2024-05-16 05:12, Ethin Probst wrote:
 
-I may have to look at the DP alt mode with the TI host interface
-(drivers/usb/typec/tipd/) at some point, because on some systems the
-firmware does not seem to automatically enter the mode, but the forced
-transition option would probable work there as well...
+>> I can also not find such a transition in your other two captures, all
+>> descriptor readouts that includes USB Id are 2b5a:000c.
+> 
+> This is what puzzles me as well. If I'm missing something it's at a
+> level that USB Pcap can't capture. When I begin the capture, plug in
+> the device and power it on, the second packet is always the right
+> descriptor (pid 000d). There is no indicator in the capture that
+> commands are sent before that pid is received. As for the other
+> problem, yeah, that confused me too; I would've thought that another
+> get descriptor request would've been sent, but apparently not, because
+> when I remove the device from the VM and reattach it to the host, the
+> pid is correct.
+> 
 
-I would prefer that we don't ignore the DP alt mode driver, but just
-to be clear, I'm also not completely against it if you feel that would
-be the most reasonable option in your case.
+You can set up a USBPCap filter on id.Vendor and id.Product (2b5a:000c) 
+so that the capture will not start until you connect your device.
+It will stop capture (logging on screen will stop) when the device 
+transition into 2b5a:000d so you can then close the pcap file.
+The cmd making the transition should be near the end of your capture.  :-)
 
-br,
+Your IDA-disassembly is probably on the wrong file, I'd guess that the 
+.sys file in the driver directory corresponding to the .inf file for
+the firmware loading Id is what handles firmware loading/checking.
 
--- 
-heikki
+
+best
+Lars
+
 
