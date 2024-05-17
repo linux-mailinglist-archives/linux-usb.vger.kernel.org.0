@@ -1,151 +1,144 @@
-Return-Path: <linux-usb+bounces-10319-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10320-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E11DF8C8624
-	for <lists+linux-usb@lfdr.de>; Fri, 17 May 2024 14:08:14 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8824A8C8A0D
+	for <lists+linux-usb@lfdr.de>; Fri, 17 May 2024 18:23:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 973D71F24F7F
-	for <lists+linux-usb@lfdr.de>; Fri, 17 May 2024 12:08:14 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E7B09B22AE1
+	for <lists+linux-usb@lfdr.de>; Fri, 17 May 2024 16:23:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E91F741200;
-	Fri, 17 May 2024 12:08:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 191EA130A5D;
+	Fri, 17 May 2024 16:23:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dOf1Vzmu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F8J6rGhR"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F6423FB2F;
-	Fri, 17 May 2024 12:08:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0225D3D9E;
+	Fri, 17 May 2024 16:23:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715947685; cv=none; b=L5W1VZkHoO5rB6xLx2KoW5WumMLuskl7MH1/WzEGayge0XXABRu9hsGIrlWpHusQYPNlPhvP18yj5ZjHL3VOQg0bG6ofnKjzBhTPurm5UHhiyHdhxM/lvDfbGuCKNNonpKFdpitvrS5Aklb6Q/V00/Mx/kPZ33SfpWoeKawezyc=
+	t=1715962994; cv=none; b=JbzhVl9QqOrGn5aI3Lp2QNl3nFNFVGz2U9XaYDDV5FovgM5gKKZAXRXy1/SmO9pdi7wgxYf4Ybf2RQI7LH29HkUaLiMIMdWi2pliMj4nIRJ4+c9q0QjMzoq0sWfXOJpcHg7fErYP1NBGlj//ZNX4xSSk6r7glY0UKNAc0GOIo/w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715947685; c=relaxed/simple;
-	bh=zC56IzlilEBxkuSnH3rPZXwuKG/OnaJ38XUHw1B6ISc=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=hklOcumsARoJ3fu9vZ/kezIjLXSDkeihWv4Vc8ogrJWvT54U7MHEC1W92LCtNQvc5UIEuSapRakGYw8P1uVU8NwVxcTqyGnEw+PNzkMSpa/wYPn4zXfO9e4n7CuJBmGMqeRss6sECDdwqzUCYyA48j0BmhsaqcT0YtoxPnW2yHc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dOf1Vzmu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF0A5C2BD10;
-	Fri, 17 May 2024 12:08:02 +0000 (UTC)
+	s=arc-20240116; t=1715962994; c=relaxed/simple;
+	bh=uNwlZVn0k6bBYrUn2NOTbtyZjAe9hAwPUWGNLiaSzKs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MlIAnJvXoclx91HzV3KHgMAmzFsWWX7APIuqQKg6D8rdDfiO2lBWN8hNUnta8MkPvLMjbRrCzno9d+ey7uKWaxOu5yWMAIKuIS4yXd50yO6+ba4Jn3R+4XC21rSS0pTUnL9jV4xzW+y5gexohMQGsr+7nf1x4bn2gL2/M+fleQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F8J6rGhR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70342C2BD10;
+	Fri, 17 May 2024 16:23:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715947684;
-	bh=zC56IzlilEBxkuSnH3rPZXwuKG/OnaJ38XUHw1B6ISc=;
-	h=From:To:Cc:Subject:Date:From;
-	b=dOf1Vzmu/ZIMNtm7QkjK28wmbTDC0u5Ln9syDWmpSjpV5j3kbBze2RMGlD5KlRVRj
-	 icqj8wW9aJOurtQu5ygXw/V4MLFF4Pg3d/5YaPMKFrApx4eZPQtA2NoWf6Pn8nFKp/
-	 i/edhbu4N48y0eo1ihE2OXZLpsYbpRPNyf53lL939nQbZJe2l3QXmlAMzVxQcsWQVR
-	 1IzNBozJf4eNmNpYZzggcDxSePc+uvkt0Jd/aqMWDDvcH013uc6/DBHkamf+IjAC+d
-	 eZyz8Z7AEiIlmYN4FKZ2zl5xbJ+sDZ+VT5MhrI/2HhN0WlYXHYqxAGLX/ooYK6LU5R
-	 UOLayVxuYYLgg==
-From: Masahiro Yamada <masahiroy@kernel.org>
-To: Bjorn Helgaas <bhelgaas@google.com>,
-	linux-pci@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Alex Shi <alexs@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Pawel Laszczak <pawell@cadence.com>,
-	Yanteng Si <siyanteng@loongson.cn>,
-	linux-doc@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: [PATCH] PCI: use array for .id_table consistently
-Date: Fri, 17 May 2024 21:04:58 +0900
-Message-Id: <20240517120458.1260489-1-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.40.1
+	s=k20201202; t=1715962993;
+	bh=uNwlZVn0k6bBYrUn2NOTbtyZjAe9hAwPUWGNLiaSzKs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=F8J6rGhR6abMw+H3e0sNsBE3c0HR9drUMq7zelYKMTQHa0vv/MIG2W8+/hD/7XTI+
+	 9VkRoCKMyZzVY3LjQAv7zTKPKrfWjp+PaYpWL+HZIXKwJ9PpfHkWCOm8/AnprKJTiS
+	 x71fH3FEiRuBcJ7Snaffb4mCRWAYWAV32gCoEeO44TUBKDap7ZLHPJJXjD0QMTmCNO
+	 ZUj+MK/eDva4zMj4VegTwZ0y/H/lyuO2Nk/KqN8YnLbubwD8YFqugReL9OgeiAJUxc
+	 u0pTJlCPPo4/7T1+KTMYWfO14b9TwwHb+K7KeD4YmO6RNA3DpP+PsNxwbeXmOHuVhd
+	 +qE7xoo2PLRTA==
+Date: Fri, 17 May 2024 09:23:12 -0700
+From: "Darrick J. Wong" <djwong@kernel.org>
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+	Linux trace kernel <linux-trace-kernel@vger.kernel.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org,
+	linux-block@vger.kernel.org, linux-cxl@vger.kernel.org,
+	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	amd-gfx@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+	intel-xe@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+	freedreno@lists.freedesktop.org, virtualization@lists.linux.dev,
+	linux-rdma@vger.kernel.org, linux-pm@vger.kernel.org,
+	iommu@lists.linux.dev, linux-tegra@vger.kernel.org,
+	netdev@vger.kernel.org, linux-hyperv@vger.kernel.org,
+	ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
+	ath11k@lists.infradead.org, ath12k@lists.infradead.org,
+	brcm80211@lists.linux.dev, brcm80211-dev-list.pdl@broadcom.com,
+	linux-usb@vger.kernel.org, linux-bcachefs@vger.kernel.org,
+	linux-nfs@vger.kernel.org, ocfs2-devel@lists.linux.dev,
+	linux-cifs@vger.kernel.org, linux-xfs@vger.kernel.org,
+	linux-edac@vger.kernel.org, selinux@vger.kernel.org,
+	linux-btrfs@vger.kernel.org, linux-erofs@lists.ozlabs.org,
+	linux-f2fs-devel@lists.sourceforge.net, linux-hwmon@vger.kernel.org,
+	io-uring@vger.kernel.org, linux-sound@vger.kernel.org,
+	bpf@vger.kernel.org, linux-wpan@vger.kernel.org,
+	dev@openvswitch.org, linux-s390@vger.kernel.org,
+	tipc-discussion@lists.sourceforge.net,
+	Julia Lawall <Julia.Lawall@inria.fr>
+Subject: Re: [PATCH] tracing/treewide: Remove second parameter of
+ __assign_str()
+Message-ID: <20240517162312.GZ360919@frogsfrogsfrogs>
+References: <20240516133454.681ba6a0@rorschach.local.home>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240516133454.681ba6a0@rorschach.local.home>
 
-While 'x' and '&x[0]' are equivalent, most of the PCI drivers use the
-former form for the .id_table.
+On Thu, May 16, 2024 at 01:34:54PM -0400, Steven Rostedt wrote:
+> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+> 
+> [
+>    This is a treewide change. I will likely re-create this patch again in
+>    the second week of the merge window of v6.10 and submit it then. Hoping
+>    to keep the conflicts that it will cause to a minimum.
+> ]
+> 
+> With the rework of how the __string() handles dynamic strings where it
+> saves off the source string in field in the helper structure[1], the
+> assignment of that value to the trace event field is stored in the helper
+> value and does not need to be passed in again.
+> 
+> This means that with:
+> 
+>   __string(field, mystring)
+> 
+> Which use to be assigned with __assign_str(field, mystring), no longer
+> needs the second parameter and it is unused. With this, __assign_str()
+> will now only get a single parameter.
+> 
+> There's over 700 users of __assign_str() and because coccinelle does not
+> handle the TRACE_EVENT() macro I ended up using the following sed script:
+> 
+>   git grep -l __assign_str | while read a ; do
+>       sed -e 's/\(__assign_str([^,]*[^ ,]\) *,[^;]*/\1)/' $a > /tmp/test-file;
+>       mv /tmp/test-file $a;
+>   done
+> 
+> I then searched for __assign_str() that did not end with ';' as those
+> were multi line assignments that the sed script above would fail to catch.
+> 
+> Note, the same updates will need to be done for:
+> 
+>   __assign_str_len()
+>   __assign_rel_str()
+>   __assign_rel_str_len()
+> 
+> I tested this with both an allmodconfig and an allyesconfig (build only for both).
+> 
+> [1] https://lore.kernel.org/linux-trace-kernel/20240222211442.634192653@goodmis.org/
+> 
+> Cc: Masami Hiramatsu <mhiramat@kernel.org>
+> Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> Cc: Linus Torvalds <torvalds@linux-foundation.org>
+> Cc: Julia Lawall <Julia.Lawall@inria.fr>
+> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-Update some drivers and documentation for consistency.
+/me finds this pretty magical, but such is the way of macros.
+Thanks for being much smarter about them than me. :)
 
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
+Acked-by: Darrick J. Wong <djwong@kernel.org>	# xfs
 
- Documentation/PCI/pciebus-howto.rst                    | 2 +-
- Documentation/translations/zh_CN/PCI/pciebus-howto.rst | 2 +-
- drivers/pci/pcie/portdrv.c                             | 2 +-
- drivers/usb/cdns3/cdnsp-pci.c                          | 2 +-
- drivers/usb/gadget/udc/cdns2/cdns2-pci.c               | 2 +-
- 5 files changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/Documentation/PCI/pciebus-howto.rst b/Documentation/PCI/pciebus-howto.rst
-index a0027e8fb0d0..f344452651e1 100644
---- a/Documentation/PCI/pciebus-howto.rst
-+++ b/Documentation/PCI/pciebus-howto.rst
-@@ -139,7 +139,7 @@ driver data structure.
- 
-   static struct pcie_port_service_driver root_aerdrv = {
-     .name		= (char *)device_name,
--    .id_table	= &service_id[0],
-+    .id_table	= service_id,
- 
-     .probe		= aerdrv_load,
-     .remove		= aerdrv_unload,
-diff --git a/Documentation/translations/zh_CN/PCI/pciebus-howto.rst b/Documentation/translations/zh_CN/PCI/pciebus-howto.rst
-index 65c4301f12cd..c6ffda62af21 100644
---- a/Documentation/translations/zh_CN/PCI/pciebus-howto.rst
-+++ b/Documentation/translations/zh_CN/PCI/pciebus-howto.rst
-@@ -124,7 +124,7 @@ pcie_port_service_unregister取代了Linux驱动模型的pci_unregister_driver
- 
-   static struct pcie_port_service_driver root_aerdrv = {
-     .name		= (char *)device_name,
--    .id_table	= &service_id[0],
-+    .id_table	= service_id,
- 
-     .probe		= aerdrv_load,
-     .remove		= aerdrv_unload,
-diff --git a/drivers/pci/pcie/portdrv.c b/drivers/pci/pcie/portdrv.c
-index 14a4b89a3b83..2faca06ff67c 100644
---- a/drivers/pci/pcie/portdrv.c
-+++ b/drivers/pci/pcie/portdrv.c
-@@ -786,7 +786,7 @@ static const struct pci_error_handlers pcie_portdrv_err_handler = {
- 
- static struct pci_driver pcie_portdriver = {
- 	.name		= "pcieport",
--	.id_table	= &port_pci_ids[0],
-+	.id_table	= port_pci_ids,
- 
- 	.probe		= pcie_portdrv_probe,
- 	.remove		= pcie_portdrv_remove,
-diff --git a/drivers/usb/cdns3/cdnsp-pci.c b/drivers/usb/cdns3/cdnsp-pci.c
-index 0725668ffea4..225540fc81ba 100644
---- a/drivers/usb/cdns3/cdnsp-pci.c
-+++ b/drivers/usb/cdns3/cdnsp-pci.c
-@@ -231,7 +231,7 @@ static const struct pci_device_id cdnsp_pci_ids[] = {
- 
- static struct pci_driver cdnsp_pci_driver = {
- 	.name = "cdnsp-pci",
--	.id_table = &cdnsp_pci_ids[0],
-+	.id_table = cdnsp_pci_ids,
- 	.probe = cdnsp_pci_probe,
- 	.remove = cdnsp_pci_remove,
- 	.driver = {
-diff --git a/drivers/usb/gadget/udc/cdns2/cdns2-pci.c b/drivers/usb/gadget/udc/cdns2/cdns2-pci.c
-index 1691541c9413..50c3d0974d9b 100644
---- a/drivers/usb/gadget/udc/cdns2/cdns2-pci.c
-+++ b/drivers/usb/gadget/udc/cdns2/cdns2-pci.c
-@@ -121,7 +121,7 @@ static const struct pci_device_id cdns2_pci_ids[] = {
- 
- static struct pci_driver cdns2_pci_driver = {
- 	.name = "cdns2-pci",
--	.id_table = &cdns2_pci_ids[0],
-+	.id_table = cdns2_pci_ids,
- 	.probe = cdns2_pci_probe,
- 	.remove = cdns2_pci_remove,
- 	.driver = {
--- 
-2.40.1
-
+--D
 
