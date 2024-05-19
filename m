@@ -1,278 +1,126 @@
-Return-Path: <linux-usb+bounces-10330-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10331-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43E0B8C94F9
-	for <lists+linux-usb@lfdr.de>; Sun, 19 May 2024 16:20:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 26F628C950D
+	for <lists+linux-usb@lfdr.de>; Sun, 19 May 2024 16:38:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EE050281A20
-	for <lists+linux-usb@lfdr.de>; Sun, 19 May 2024 14:20:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D02691F21A59
+	for <lists+linux-usb@lfdr.de>; Sun, 19 May 2024 14:38:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39DF24C3D0;
-	Sun, 19 May 2024 14:20:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A9DD4CB28;
+	Sun, 19 May 2024 14:37:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=holesch.de header.i=simon@holesch.de header.b="Au/xsyQZ"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="EMmbQOEv"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA288481A5;
-	Sun, 19 May 2024 14:20:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.126.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BBD44DA04;
+	Sun, 19 May 2024 14:37:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716128432; cv=none; b=VQ65dG7xQ76H37G5iNUVH2Izfga9iBmgpwiMscdg1fyIdUwqAxpmzCj3jd18TGweuwtmitdGDKlyTP7uuEby3G1EKxPIGWljY7laI4qkRAI6BAg6rK8xcPaMPWldogqsMONO4dHpph3nGmLX+HlO0RROoO28FJlQDBES+JHpEG4=
+	t=1716129477; cv=none; b=unWMQ/n5zDMLm+KUHvmCkpK2+YvRbvF2hWxwm8exVwRwarDKKipuKTIyk14Do8/sLfgJ+ALdHBUjbj+bVVrX625xPF4t+JtzXLdWIMXAHHMOVYM9indcQHI0/Xykal4wxgDzzym4VtSEJEGZddXVBMvLo3ygoVlhQNFmF09DikI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716128432; c=relaxed/simple;
-	bh=BdRenKhE9AoURtk+e0tvVp4/r07Rd9R5Nz+LPkppaKQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=N+McSUvgbguu0OuboUELNnwRDrduVBE3zEOxDQgvhpZ22IjRtacT9e0ARC1EVZjxlcie0lDpQJP2VdfBQaJSzJMjk0zIZkTN2A8gQKxMmwKyn7TilLtNpJWcAnp9Kg/U7NDeWKY2+HiOMwe5gBsZm3qe7beIZBWmzoDVTenoul8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=holesch.de; spf=pass smtp.mailfrom=holesch.de; dkim=pass (2048-bit key) header.d=holesch.de header.i=simon@holesch.de header.b=Au/xsyQZ; arc=none smtp.client-ip=212.227.126.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=holesch.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=holesch.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=holesch.de;
-	s=s1-ionos; t=1716128408; x=1716733208; i=simon@holesch.de;
-	bh=V/rkqwTkUlpGLQVnFawbGWTuYkSjydDaVEN2loFqvtA=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
-	 MIME-Version:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=Au/xsyQZVIGemmbwJH1ewY+ANQ6IalGlU8MCXntwh9DRTAv+9rnP//v39jX2YeWQ
-	 ujVDvjdf8Q9gsLufytpzVbDxQpjWQKEX1Ue77YICakuEl+aZPfHKmgayAi9zs9HJ1
-	 u8srfIlF0By2jxWhaKwu8WulW+U6DnatxW3Ka+qhta4w3WySW/WJOt1L9gqNy9szu
-	 oSZoK9d4jVcJdNL/hQj3p471tnf6NA98fEEBXtTbdnucsez8pP1kIlvO2+At58fs0
-	 uzgMJTY5cXx7FMqh9G6s+29WkjDIks4xN2Ofcc1rL7iq86sYaG/NXLIoPurFr19Wc
-	 K5xny/JfOt1QTl5hIQ==
-X-UI-Sender-Class: 55c96926-9e95-11ee-ae09-1f7a4046a0f6
-Received: from localhost ([79.254.36.181]) by mrelayeu.kundenserver.de
- (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MT9v5-1rycfX0Q8N-00UWbY; Sun, 19 May 2024 16:20:08 +0200
-From: Simon Holesch <simon@holesch.de>
-To: Valentina Manea <valentina.manea.m@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Hongren Zheng <i@zenithal.me>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Simon Holesch <simon@holesch.de>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v5] usbip: Don't submit special requests twice
-Date: Sun, 19 May 2024 16:15:38 +0200
-Message-ID: <20240519141922.171460-1-simon@holesch.de>
-X-Mailer: git-send-email 2.45.1
+	s=arc-20240116; t=1716129477; c=relaxed/simple;
+	bh=AGcBlp/L0UCiDEm9xU4FkF8tyQP1W/SpJauzpAkP8h0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EKm+gs82nK1/rEM+btusF7JKPlrR9rKr4e1yQ8st/qvif92JXOqFym3YrongC8koCpmj4OXlMH9Vj6Mg39jh/y/Hv0fYafLu7KPrWFZTSKzZ34VNqSmBAECGBkPHnsrVlz4XtTVWlb0VyUcXNhfjeNOKdHY33QZVikvHSyn1LiI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=EMmbQOEv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEC45C32781;
+	Sun, 19 May 2024 14:37:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1716129477;
+	bh=AGcBlp/L0UCiDEm9xU4FkF8tyQP1W/SpJauzpAkP8h0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=EMmbQOEvlvD8tg/XNAUE1vqmVbIV9Ny5B5OYx+XdaR5xCATfXTZIkqBZAqdASNYb8
+	 hTxSmORhhPeNQ8i7WAseJZ9KBJujD4lDbFOsV28rkF23navHVpnB5nWivqhTYg7tRg
+	 ez6/mNEVq4d3oAeGZ3THqyF/ZfaxfroSq+ZCL288=
+Date: Sun, 19 May 2024 16:37:54 +0200
+From: gregkh <gregkh@linuxfoundation.org>
+To: "nanfengwq@sina.com" <nanfengwq@sina.com>
+Cc: balbi <balbi@kernel.org>, linux-usb <linux-usb@vger.kernel.org>,
+	linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: memory leakage in ncm_wrap_ntb() in USB ncm mode with kernel 5.15
+Message-ID: <2024051901-gimmick-cosponsor-f2dd@gregkh>
+References: <2024051922230825069112@sina.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:KuIM0LrIHXfgd6BCXcWG1d98RfXPzx9wCdF35N5UOl0kx7MBC24
- uOgUmId1n808YPfWBoSTQdfZgbGebE1c5aEmeCIimHZzhji34nTZRmPxn/QM4Eu7cxayo3J
- xEOtamCLHFosglfVcX4jB3cfqdpgTxqBC3g7Y5/XOrwpETtti3+jeD/Nr3iui+A+yVC5LTW
- Cir172NYTJOgjMxWj2uKg==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:HxSfFBth9NA=;Zbv8j8CJ1WVbFdo8kh1skvECp1z
- gzTM/q79IBFHvLaLCBcgtBYVB80Hv0dkjxsNb9bHi214PUyglOXOO9LskYPwtWDwdX/FSKemc
- D2DurpjUomv0hTkOLY4tZ5aMO0eSOKOysvmdNydpp2KNXpX4fi1dx9Gdg0l8wv3ezuBL310nG
- Yodo0vy7U6m0X8+K1Tazn1nkMMf7pqjyI2t63KaOliPtvByUCG8PVLyVJyllzChaTeZliZWxZ
- 1ezONUZQcdbKPlVds7PeGnw7D9Fe7egyHB9Pj/GxwKPKKkMop3ST5P88JxV50q1AezTGsAqCt
- tX1vMLEXuKjorx6OtgX5ZJFFetKWdufE4GQ1XBc5SArwRurbuNzSQtJDu88YcgkI8A5damcaP
- 0hXd5UzanbPg42Urpp8WXOjfi9Vxvp6/tILIPB9K6PNgjtphidwJId8jxPGuU9IvZj0XVT0FX
- 9j2AQD2LXeXKKKV23mikfXWkppOIa6E8uPqXxE406sgQgjzDPIcNR4H/TQzU7Wct6lmdmnxrA
- sRU/n58SBhlVtqIcHZFnWn54ZgmsO0Zpp4ZKTCiFw/vLzOqNjeoRur0RrKVidTw9dR8Hc8xdZ
- OLFafhsNYzXlGRKS2h9ab1Ds0eg9zEE8wxBPAh4z6XK/auc/qADKamzp1VC69zogPLeLYSXZH
- rNIIhrnhsL7aK0DPVI4ciFOACEVEUZQILkOxd+lNr0OqRL8Q/AG/guMXTsPIipaMDWugRJ+6z
- Bgj99QXWyBdoBV44tYdAAsdWfM7rFwrxGBJTgOb7c+FIf0rBXyGsak=
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2024051922230825069112@sina.com>
 
-Skip submitting URBs, when identical requests were already sent in
-tweak_special_requests(). Instead call the completion handler directly
-to return the result of the URB.
+On Sun, May 19, 2024 at 10:23:10PM +0800, nanfengwq@sina.com wrote:
+> Hello：
+> I have discovered a risk of memory leakage in ncm_wrap_ntb() under USB ncm mode in kernel 5.15, and I have fixed it. 
+> Please help me review it.
+> 
+> If this modification is effective, it can also be integrated into other kernel versions, such as kernel 4.14, and so on.
+> 
+> The logic of a memory leak is as follows:
+> 
+> If the return value skb2 of  package_for_tx() is not NULL, and the return value ncm->skb_tx_data of alloc_skb() is NULL, then the code will go to err, where there is no processing of skb2, resulting in a memory leak in skb2.
+> 
+> 
+> Thank you.
+> 
+> 
+> 
+> 
 
-Even though submitting those requests twice should be harmless, there
-are USB devices that react poorly to some duplicated requests.
 
-One example is the ChipIdea controller implementation in U-Boot: The
-second SET_CONFIGURATION request makes U-Boot disable and re-enable all
-endpoints. Re-enabling an endpoint in the ChipIdea controller, however,
-was broken until U-Boot commit b272c8792502 ("usb: ci: Fix gadget
-reinit").
+Hi,
 
-Signed-off-by: Simon Holesch <simon@holesch.de>
-Acked-by: Shuah Khan <skhan@linuxfoundation.org>
-Reviewed-by: Hongren Zheng <i@zenithal.me>
-Tested-by: Hongren Zheng <i@zenithal.me>
-=2D--
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
-Changes in v5:
-- add comment for global is_tweaked flag
-- fix typo in commit message
+You are receiving this message because of the following common error(s)
+as indicated below:
 
-Changes in v4:
-- fix compile error
+- Your patch did not apply to any known trees that Greg is in control
+  of.  Possibly this is because you made it against Linus's tree, not
+  the linux-next tree, which is where all of the development for the
+  next version of the kernel is at.  Please refresh your patch against
+  the linux-next tree, or even better yet, the development tree
+  specified in the MAINTAINERS file for the subsystem you are submitting
+  a patch for, and resend it.
 
-Changes in v3:
-- handle errors in tweak_* routines: send URB if tweaking fails
+- You did not specify a description of why the patch is needed, or
+  possibly, any description at all, in the email body.  Please read the
+  section entitled "The canonical patch format" in the kernel file,
+  Documentation/process/submitting-patches.rst for what is needed in
+  order to properly describe the change.
 
-Changes in v2:
-- explain change in commit message
+- You did not write a descriptive Subject: for the patch, allowing Greg,
+  and everyone else, to know what this patch is all about.  Please read
+  the section entitled "The canonical patch format" in the kernel file,
+  Documentation/process/submitting-patches.rst for what a proper
+  Subject: line should look like.
 
- drivers/usb/usbip/stub_rx.c | 77 ++++++++++++++++++++++++-------------
- 1 file changed, 50 insertions(+), 27 deletions(-)
+- It looks like you did not use your "real" name for the patch on either
+  the Signed-off-by: line, or the From: line (both of which have to
+  match).  Please read the kernel file,
+  Documentation/process/submitting-patches.rst for how to do this
+  correctly.
 
-diff --git a/drivers/usb/usbip/stub_rx.c b/drivers/usb/usbip/stub_rx.c
-index fc01b31bbb87..6338d818bc8b 100644
-=2D-- a/drivers/usb/usbip/stub_rx.c
-+++ b/drivers/usb/usbip/stub_rx.c
-@@ -144,53 +144,62 @@ static int tweak_set_configuration_cmd(struct urb *u=
-rb)
- 	if (err && err !=3D -ENODEV)
- 		dev_err(&sdev->udev->dev, "can't set config #%d, error %d\n",
- 			config, err);
--	return 0;
-+	return err;
- }
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
 
- static int tweak_reset_device_cmd(struct urb *urb)
- {
- 	struct stub_priv *priv =3D (struct stub_priv *) urb->context;
- 	struct stub_device *sdev =3D priv->sdev;
-+	int err;
+thanks,
 
- 	dev_info(&urb->dev->dev, "usb_queue_reset_device\n");
-
--	if (usb_lock_device_for_reset(sdev->udev, NULL) < 0) {
-+	err =3D usb_lock_device_for_reset(sdev->udev, NULL);
-+	if (err < 0) {
- 		dev_err(&urb->dev->dev, "could not obtain lock to reset device\n");
--		return 0;
-+		return err;
- 	}
--	usb_reset_device(sdev->udev);
-+	err =3D usb_reset_device(sdev->udev);
- 	usb_unlock_device(sdev->udev);
-
--	return 0;
-+	return err;
- }
-
- /*
-  * clear_halt, set_interface, and set_configuration require special trick=
-s.
-+ * Returns 1 if request was tweaked, 0 otherwise.
-  */
--static void tweak_special_requests(struct urb *urb)
-+static int tweak_special_requests(struct urb *urb)
- {
-+	int err;
-+
- 	if (!urb || !urb->setup_packet)
--		return;
-+		return 0;
-
- 	if (usb_pipetype(urb->pipe) !=3D PIPE_CONTROL)
--		return;
-+		return 0;
-
- 	if (is_clear_halt_cmd(urb))
- 		/* tweak clear_halt */
--		 tweak_clear_halt_cmd(urb);
-+		err =3D tweak_clear_halt_cmd(urb);
-
- 	else if (is_set_interface_cmd(urb))
- 		/* tweak set_interface */
--		tweak_set_interface_cmd(urb);
-+		err =3D tweak_set_interface_cmd(urb);
-
- 	else if (is_set_configuration_cmd(urb))
- 		/* tweak set_configuration */
--		tweak_set_configuration_cmd(urb);
-+		err =3D tweak_set_configuration_cmd(urb);
-
- 	else if (is_reset_device_cmd(urb))
--		tweak_reset_device_cmd(urb);
--	else
-+		err =3D tweak_reset_device_cmd(urb);
-+	else {
- 		usbip_dbg_stub_rx("no need to tweak\n");
-+		return 0;
-+	}
-+
-+	return !err;
- }
-
- /*
-@@ -468,6 +477,7 @@ static void stub_recv_cmd_submit(struct stub_device *s=
-dev,
- 	int support_sg =3D 1;
- 	int np =3D 0;
- 	int ret, i;
-+	int is_tweaked;
-
- 	if (pipe =3D=3D -1)
- 		return;
-@@ -580,8 +590,11 @@ static void stub_recv_cmd_submit(struct stub_device *=
-sdev,
- 		priv->urbs[i]->pipe =3D pipe;
- 		priv->urbs[i]->complete =3D stub_complete;
-
--		/* no need to submit an intercepted request, but harmless? */
--		tweak_special_requests(priv->urbs[i]);
-+		/*
-+		 * all URBs belong to a single PDU, so a global is_tweaked flag is
-+		 * enough
-+		 */
-+		is_tweaked =3D tweak_special_requests(priv->urbs[i]);
-
- 		masking_bogus_flags(priv->urbs[i]);
- 	}
-@@ -594,22 +607,32 @@ static void stub_recv_cmd_submit(struct stub_device =
-*sdev,
-
- 	/* urb is now ready to submit */
- 	for (i =3D 0; i < priv->num_urbs; i++) {
--		ret =3D usb_submit_urb(priv->urbs[i], GFP_KERNEL);
-+		if (!is_tweaked) {
-+			ret =3D usb_submit_urb(priv->urbs[i], GFP_KERNEL);
-
--		if (ret =3D=3D 0)
--			usbip_dbg_stub_rx("submit urb ok, seqnum %u\n",
--					pdu->base.seqnum);
--		else {
--			dev_err(&udev->dev, "submit_urb error, %d\n", ret);
--			usbip_dump_header(pdu);
--			usbip_dump_urb(priv->urbs[i]);
-+			if (ret =3D=3D 0)
-+				usbip_dbg_stub_rx("submit urb ok, seqnum %u\n",
-+						pdu->base.seqnum);
-+			else {
-+				dev_err(&udev->dev, "submit_urb error, %d\n", ret);
-+				usbip_dump_header(pdu);
-+				usbip_dump_urb(priv->urbs[i]);
-
-+				/*
-+				 * Pessimistic.
-+				 * This connection will be discarded.
-+				 */
-+				usbip_event_add(ud, SDEV_EVENT_ERROR_SUBMIT);
-+				break;
-+			}
-+		} else {
- 			/*
--			 * Pessimistic.
--			 * This connection will be discarded.
-+			 * An identical URB was already submitted in
-+			 * tweak_special_requests(). Skip submitting this URB to not
-+			 * duplicate the request.
- 			 */
--			usbip_event_add(ud, SDEV_EVENT_ERROR_SUBMIT);
--			break;
-+			priv->urbs[i]->status =3D 0;
-+			stub_complete(priv->urbs[i]);
- 		}
- 	}
-
-=2D-
-2.45.1
-
+greg k-h's patch email bot
 
