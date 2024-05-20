@@ -1,89 +1,71 @@
-Return-Path: <linux-usb+bounces-10351-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10352-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48FA68CA37D
-	for <lists+linux-usb@lfdr.de>; Mon, 20 May 2024 22:43:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 62CB08CA38D
+	for <lists+linux-usb@lfdr.de>; Mon, 20 May 2024 22:59:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 755B31C210D3
-	for <lists+linux-usb@lfdr.de>; Mon, 20 May 2024 20:43:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 19D50281DED
+	for <lists+linux-usb@lfdr.de>; Mon, 20 May 2024 20:59:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EFA213A3EC;
-	Mon, 20 May 2024 20:42:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 094E8139584;
+	Mon, 20 May 2024 20:59:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="IM2hdUYB"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="C1JjhjK3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AAC913A406
-	for <linux-usb@vger.kernel.org>; Mon, 20 May 2024 20:42:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80E4D1F941
+	for <linux-usb@vger.kernel.org>; Mon, 20 May 2024 20:59:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716237721; cv=none; b=A0I9QSH9BSU2cOQ/x5ta7lxzfR09a0O6jBLykZ3QdyVf43OK3KPx6gwTzlTZl9tO+yHhQ1m942+xrGIKRlNu8YwRsbNyLNfzHzFX5/tIcIsBMWLDoeFES5vH8PHAjuM9nUT3RI4eiGWnNwzAN0fVgL0cHRu5Vsa2Xu45UBQ74fo=
+	t=1716238745; cv=none; b=CBsDmkbeIMUyi0Z5AmvEMFjjnGlE4lrPhf1YsMtoiga9ZALLtaD9zaZOPqMujBLszj4Z5hfC/eQdNRjG/AhQUe8SQF/PF6beEZtiWUCin7NDSJvxdyLKCXP2geJoxzHWVqIC6kEnvQadI+oMqIvlXSN2L2wVJAsp/NjpH+XVuwU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716237721; c=relaxed/simple;
-	bh=KH7KLt1vLHj8lAyyx8nEvtd9Ch2hZ4E0zERhgbKhEpo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rZpqxKf8ELIDJpOr0vB6e0Hk4We+dW3vQavvqTr5UY0P/WTlaNPGd+7m8VGu5wavyuQOp/UlYA/ZT7Au7aVmLHBIy0Linu/oL7izSDhSYlrHNj0xjSLQ2C9F2TYjgKi2Vp4iINTEHQ3xRHAXnMpflw0dv4wVqEFqWacJRLVNNqU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=IM2hdUYB; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1ec486198b6so81097245ad.1
-        for <linux-usb@vger.kernel.org>; Mon, 20 May 2024 13:42:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1716237719; x=1716842519; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EAPtcTBq5rQklg7My1+KHMw3K3I6I7ZSFTklmvsLyz8=;
-        b=IM2hdUYB3iWRPBR7kgABs1XQxgueTzVDUdNmzbFAYE7m7OZAFVOcUSoDbrAA7yTqM7
-         zc+c5geP7Q/Cj6TKfe9YOtcrYCsOq7d2oOLKxxnvp6yA7q3WPjdeEKAJGsKVKiGcsRmk
-         Waoz7RNRxB/ZWK654A1OXFr8jYXHTxHLnmiNE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716237719; x=1716842519;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EAPtcTBq5rQklg7My1+KHMw3K3I6I7ZSFTklmvsLyz8=;
-        b=rPXoyVeH5Sox+nWibFKXy6HwF/LG++kHUqA6HWznyuqBgpPE6VeKcwRjtlyosMRw4s
-         xqtGa1vz6N915w95qwGNR1UEjzuExcdIKMS/LqAKYiXvGQY1jhHAlcMtmwftCCvNOEjV
-         nFSXxaNDVO5LILzj8/Hli6AaOJ1boodE7PbIyrVHf1HVEQlDeS8IQU5cxpIM56PkCYkk
-         o5UHSNunEDyMTFMKz9N8ILK8ggMUZBTKhCkzEMtjf2gBXHp4S2kN0H72eBdddXAHxZKe
-         ysI40/jNFtIb0r13ACkAXnbA7SuynjTrVucD7tgLqDVS6Isg4Ym+fV+y42A0o+083qQx
-         ZChw==
-X-Forwarded-Encrypted: i=1; AJvYcCUSINolwkLJxkB90m7TWY9DTK5MOAel4lZTmX63fq/pjapg7Iv+Me545YPiHlNOsi+4Aif0FHau5WempFhGk93auoTWicCnTfY6
-X-Gm-Message-State: AOJu0YzBhUT8t/z0ncNfto8EFvoyOQr7DOLadUnWdlT8NfymMPKfrXE3
-	fBy9igq4uHall5FFT9eYExDRPZGgXKcjglcsLlcIX0/89wHD6ZMnAQtV+nucUA==
-X-Google-Smtp-Source: AGHT+IGox8QB8PBU2tVVtMM4gyfbOeKz51VVq/e4AHSre+WZ4yCg3glyJBr+5bnclNzM/WQaC0MSjg==
-X-Received: by 2002:a17:902:64d6:b0:1e4:5b89:dbfa with SMTP id d9443c01a7336-1f065fde55bmr228544205ad.41.1716237719595;
-        Mon, 20 May 2024 13:41:59 -0700 (PDT)
-Received: from dianders.sjc.corp.google.com ([2620:15c:9d:2:cd20:112a:72ca:4425])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1ef0bbde9d7sm213068255ad.106.2024.05.20.13.41.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 May 2024 13:41:58 -0700 (PDT)
-From: Douglas Anderson <dianders@chromium.org>
-To: "David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Hayes Wang <hayeswang@realtek.com>
-Cc: danielgeorgem@google.com,
-	Douglas Anderson <dianders@chromium.org>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Grant Grundler <grundler@chromium.org>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	linux-kernel@vger.kernel.org,
+	s=arc-20240116; t=1716238745; c=relaxed/simple;
+	bh=y7/tHkkU+6LM/sgkkjIZQzGhCN3OQBbKgY5ooxhPzP4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=kS9FhzI6tb9MxXCOTf5KktOKpO3luECtn6AG9d9NRDGD/rOV82Et5LgxRQZ+IiicjZJ1Y1z23OlKbC6y+FEXvk33XcJil4TqTiZnG0iLoUHfcgkC0YLzO6O1rApkWLX6qH1NaE3Utj/5oVOfnFnpFEP0cN+oTsiPMHjq9FTlyBU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=C1JjhjK3; arc=none smtp.client-ip=91.218.175.185
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Envelope-To: stern@rowland.harvard.edu
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1716238740;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=dVtkm6Cg+QhrfgIVN0pjJZdjkLBJfP8oJdEHuFJPJQU=;
+	b=C1JjhjK3Pqg679wyMjVHSms1bdU0ECv8draV03dcUKEV4zOhFgXdAD0U+Rj/yjW6ouYM3Z
+	xyqddroJwKLa/md5O2X55MpRyNbuELtln3f2RROOinm9I5bw1Qf1053pDCaLgqL9j4pxZ+
+	rC/dX8KF8d81RHiPRxxqSJL4nEKV5dg=
+X-Envelope-To: gregkh@linuxfoundation.org
+X-Envelope-To: andreyknvl@gmail.com
+X-Envelope-To: dvyukov@google.com
+X-Envelope-To: elver@google.com
+X-Envelope-To: glider@google.com
+X-Envelope-To: kasan-dev@googlegroups.com
+X-Envelope-To: penguin-kernel@i-love.sakura.ne.jp
+X-Envelope-To: tj@kernel.org
+X-Envelope-To: linux-usb@vger.kernel.org
+X-Envelope-To: linux-kernel@vger.kernel.org
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: andrey.konovalov@linux.dev
+To: Alan Stern <stern@rowland.harvard.edu>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Andrey Konovalov <andreyknvl@gmail.com>,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Marco Elver <elver@google.com>,
+	Alexander Potapenko <glider@google.com>,
+	kasan-dev@googlegroups.com,
+	Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+	Tejun Heo <tj@kernel.org>,
 	linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org
-Subject: [PATCH net-next 2/2] r8152: Wake up the system if the we need a reset
-Date: Mon, 20 May 2024 13:41:12 -0700
-Message-ID: <20240520134108.net-next.2.Ic039534f7590752a2c403de4ac452e3cb72072f4@changeid>
-X-Mailer: git-send-email 2.45.0.rc1.225.g2a3ae87e7f-goog
-In-Reply-To: <20240520134108.net-next.1.Ibeda5c0772812ce18953150da5a0888d2d875150@changeid>
-References: <20240520134108.net-next.1.Ibeda5c0772812ce18953150da5a0888d2d875150@changeid>
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] kcov, usb: disable interrupts in kcov_remote_start_usb_softirq
+Date: Mon, 20 May 2024 22:58:56 +0200
+Message-Id: <20240520205856.162910-1-andrey.konovalov@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -91,39 +73,140 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-If we get to the end of the r8152's suspend() routine and we find that
-the USB device is INACCESSIBLE then it means that some of our
-preparation for suspend didn't take place. We need a USB reset to get
-ourselves back in a consistent state so we can try again and that
-can't happen during system suspend. Call pm_wakeup_event() to wake the
-system up in this case.
+From: Andrey Konovalov <andreyknvl@gmail.com>
 
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
+After commit 8fea0c8fda30 ("usb: core: hcd: Convert from tasklet to BH
+workqueue"), usb_giveback_urb_bh() runs in the BH workqueue with
+interrupts enabled.
+
+Thus, the remote coverage collection section in usb_giveback_urb_bh()->
+__usb_hcd_giveback_urb() might be interrupted, and the interrupt handler
+might invoke __usb_hcd_giveback_urb() again.
+
+This breaks KCOV, as it does not support nested remote coverage collection
+sections within the same context (neither in task nor in softirq).
+
+Update kcov_remote_start/stop_usb_softirq() to disable interrupts for the
+duration of the coverage collection section to avoid nested sections in
+the softirq context (in addition to such in the task context, which are
+already handled).
+
+Reported-by: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Closes: https://lore.kernel.org/linux-usb/0f4d1964-7397-485b-bc48-11c01e2fcbca@I-love.SAKURA.ne.jp/
+Closes: https://syzkaller.appspot.com/bug?extid=0438378d6f157baae1a2
+Suggested-by: Alan Stern <stern@rowland.harvard.edu>
+Fixes: 8fea0c8fda30 ("usb: core: hcd: Convert from tasklet to BH workqueue")
+Signed-off-by: Andrey Konovalov <andreyknvl@gmail.com>
 ---
+ drivers/usb/core/hcd.c | 12 +++++++-----
+ include/linux/kcov.h   | 44 +++++++++++++++++++++++++++++++++---------
+ 2 files changed, 42 insertions(+), 14 deletions(-)
 
- drivers/net/usb/r8152.c | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 6a3f4b2114ee..09fe70bc45d4 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -8647,6 +8647,13 @@ static int rtl8152_system_suspend(struct r8152 *tp)
- 		tasklet_enable(&tp->tx_tl);
- 	}
+diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
+index c0e005670d67..fb1aa0d4fc28 100644
+--- a/drivers/usb/core/hcd.c
++++ b/drivers/usb/core/hcd.c
+@@ -1623,6 +1623,7 @@ static void __usb_hcd_giveback_urb(struct urb *urb)
+ 	struct usb_hcd *hcd = bus_to_hcd(urb->dev->bus);
+ 	struct usb_anchor *anchor = urb->anchor;
+ 	int status = urb->unlinked;
++	unsigned long flags;
  
-+	/* If we're inaccessible here then some of the work that we did to
-+	 * get the adapter ready for suspend didn't work. Queue up a wakeup
-+	 * event so we can try again.
-+	 */
-+	if (test_bit(RTL8152_INACCESSIBLE, &tp->flags))
-+		pm_wakeup_event(&tp->udev->dev, 0);
+ 	urb->hcpriv = NULL;
+ 	if (unlikely((urb->transfer_flags & URB_SHORT_NOT_OK) &&
+@@ -1640,13 +1641,14 @@ static void __usb_hcd_giveback_urb(struct urb *urb)
+ 	/* pass ownership to the completion handler */
+ 	urb->status = status;
+ 	/*
+-	 * This function can be called in task context inside another remote
+-	 * coverage collection section, but kcov doesn't support that kind of
+-	 * recursion yet. Only collect coverage in softirq context for now.
++	 * Only collect coverage in the softirq context and disable interrupts
++	 * to avoid scenarios with nested remote coverage collection sections
++	 * that KCOV does not support.
++	 * See the comment next to kcov_remote_start_usb_softirq() for details.
+ 	 */
+-	kcov_remote_start_usb_softirq((u64)urb->dev->bus->busnum);
++	flags = kcov_remote_start_usb_softirq((u64)urb->dev->bus->busnum);
+ 	urb->complete(urb);
+-	kcov_remote_stop_softirq();
++	kcov_remote_stop_softirq(flags);
+ 
+ 	usb_anchor_resume_wakeups(anchor);
+ 	atomic_dec(&urb->use_count);
+diff --git a/include/linux/kcov.h b/include/linux/kcov.h
+index b851ba415e03..ebcfc271aee3 100644
+--- a/include/linux/kcov.h
++++ b/include/linux/kcov.h
+@@ -55,21 +55,47 @@ static inline void kcov_remote_start_usb(u64 id)
+ 
+ /*
+  * The softirq flavor of kcov_remote_*() functions is introduced as a temporary
+- * work around for kcov's lack of nested remote coverage sections support in
+- * task context. Adding support for nested sections is tracked in:
+- * https://bugzilla.kernel.org/show_bug.cgi?id=210337
++ * workaround for KCOV's lack of nested remote coverage sections support.
++ *
++ * Adding support is tracked in https://bugzilla.kernel.org/show_bug.cgi?id=210337.
++ *
++ * kcov_remote_start_usb_softirq():
++ *
++ * 1. Only collects coverage when called in the softirq context. This allows
++ *    avoiding nested remote coverage collection sections in the task context.
++ *    For example, USB/IP calls usb_hcd_giveback_urb() in the task context
++ *    within an existing remote coverage collection section. Thus, KCOV should
++ *    not attempt to start collecting coverage within the coverage collection
++ *    section in __usb_hcd_giveback_urb() in this case.
++ *
++ * 2. Disables interrupts for the duration of the coverage collection section.
++ *    This allows avoiding nested remote coverage collection sections in the
++ *    softirq context (a softirq might occur during the execution of a work in
++ *    the BH workqueue, which runs with in_serving_softirq() > 0).
++ *    For example, usb_giveback_urb_bh() runs in the BH workqueue with
++ *    interrupts enabled, so __usb_hcd_giveback_urb() might be interrupted in
++ *    the middle of its remote coverage collection section, and the interrupt
++ *    handler might invoke __usb_hcd_giveback_urb() again.
+  */
+ 
+-static inline void kcov_remote_start_usb_softirq(u64 id)
++static inline unsigned long kcov_remote_start_usb_softirq(u64 id)
+ {
+-	if (in_serving_softirq())
++	unsigned long flags = 0;
 +
- 	return 0;
++	if (in_serving_softirq()) {
++		local_irq_save(flags);
+ 		kcov_remote_start_usb(id);
++	}
++
++	return flags;
  }
  
+-static inline void kcov_remote_stop_softirq(void)
++static inline void kcov_remote_stop_softirq(unsigned long flags)
+ {
+-	if (in_serving_softirq())
++	if (in_serving_softirq()) {
+ 		kcov_remote_stop();
++		local_irq_restore(flags);
++	}
+ }
+ 
+ #ifdef CONFIG_64BIT
+@@ -103,8 +129,8 @@ static inline u64 kcov_common_handle(void)
+ }
+ static inline void kcov_remote_start_common(u64 id) {}
+ static inline void kcov_remote_start_usb(u64 id) {}
+-static inline void kcov_remote_start_usb_softirq(u64 id) {}
+-static inline void kcov_remote_stop_softirq(void) {}
++static inline unsigned long kcov_remote_start_usb_softirq(u64 id) {}
++static inline void kcov_remote_stop_softirq(unsigned long flags) {}
+ 
+ #endif /* CONFIG_KCOV */
+ #endif /* _LINUX_KCOV_H */
 -- 
-2.45.0.rc1.225.g2a3ae87e7f-goog
+2.25.1
 
 
