@@ -1,167 +1,145 @@
-Return-Path: <linux-usb+bounces-10367-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10368-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A7E98CAA83
-	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2024 11:12:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DE6518CAA88
+	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2024 11:14:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7DE461C217F9
-	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2024 09:12:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0D12D1C21A4D
+	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2024 09:14:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 157275732B;
-	Tue, 21 May 2024 09:12:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 985F557C8C;
+	Tue, 21 May 2024 09:13:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jdasMsdr"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Lfw34S9I"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6575A56454;
-	Tue, 21 May 2024 09:12:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5A4C56B7F
+	for <linux-usb@vger.kernel.org>; Tue, 21 May 2024 09:13:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716282743; cv=none; b=N2xRdzeWZ3LRhg7zhlsY01sGp10t5YaT08TKE8YNgymjkwt7I+Js+IlOBJWxSsi86bAJRex3lZy0cusudt5o0xTpRQr/FWU/cjZUFUXpc/mRpFTVkA8pZsmk8LAwCk7AluN0jV7n4rPTWQUW/kZtnpPCHl6yQXpqtuEvxGoC/Rk=
+	t=1716282839; cv=none; b=IHCdQbSj/vO5xkxaMQ1VSFN0xEY7wra+JXqY+FPU96ZkczcOJ9SztLw2OLd52+N49vVDN4a0jHIJj8Zznq2MrHOb7keJNe7ZHkDbp/RYDXoDjlFMY59+eEZjPJym6qFqeQ0pOhLFrOMbxRwBVegYbXh90rmHIfHJMYqdSKN9Xc8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716282743; c=relaxed/simple;
-	bh=2wjs3mdw4rOGvrIqoeda4h5sOrmnWs3RpnJdlvtjnio=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LHh03O2ExUpx6wuB+2ZRpztJtVGWQESu5FJSwsrIh5t5XdFlgb/nQtB0UdycXM8Hy2/0XOb1ZuTLP9pdTk0s82pIf8fn07DwmyWp4o031mxFDRdpHg7DbUhI2z/ajqBWzlhcxCApT34wO1b9wMWItEPnNqQJULOzVYej4DUHkxE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jdasMsdr; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-1ed835f3c3cso34011295ad.3;
-        Tue, 21 May 2024 02:12:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1716282742; x=1716887542; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VFFc8dkP7sP+uu3rw1v9YarWpJd2vkJbAvnBTD0BiKI=;
-        b=jdasMsdrwlrLKhIfGg4S7APIzsdpU5MNdgxIIkCjwMr6zeKOeVuoRkWWaAo5nqvopz
-         nXXbpKvxAGDvC0gcybTxMuTqo5pi819f8/R3O7Wjt8FEHXfgND+x6NQ5Ti5KluKRcjyn
-         Wu68FKTYedcJ26d8qL6w1u7iSSGDOVOcG5FV+o7PJwondyhx0tjND2+6z1M4VvxjXwmo
-         s8OQI/WHOFb+xTViuj66ozuTCDxMocg7NS8o7mnyUHNx1dGfkfpEFc6/1QgjWG/O/MIz
-         ER2cnpLYMMWBU12bjUEZTBckrw73nxzIBa872FoSxJAmiQJgydKmNO8e2xhFf5ps8hJy
-         010g==
+	s=arc-20240116; t=1716282839; c=relaxed/simple;
+	bh=L7aR29FtSZuZ+y/bx0KTKzczdY+Rsy7yZ58GK0tgM4Q=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=fouDmWdOmSTBkcF86WVIE5TAt/MVHZf15Ovx9bqnFU8mYMrksjOgr1EcvKIkXvS+TZcXOAKuaMaXYSCG/oFb2KeFYBszf6helXf+2H3FG7tHJ9PZMi/wyOsMA/cqvBZJlxYG5B3XAPIVCEHQYwnLlV2QR/g49mQHmbzpTMD9vkQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Lfw34S9I; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1716282836;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=L7aR29FtSZuZ+y/bx0KTKzczdY+Rsy7yZ58GK0tgM4Q=;
+	b=Lfw34S9I1URscSqLpS/pCFW/ZK7MJlHh5eJITHXBzrWPGesNFAmSWfanvgobHUr3nxQZvr
+	3sz7T5aQsoKa0J8adC2Z7fHFky8VAdstCOWnZcyT02w7OtVbFI3UABem8I4YTFcdXW5AUU
+	QRVIqQzCLRdUDS1QTA2jEmT2ZTXYVBE=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-391-AUq_meN2MT6Uz7JzMATTgg-1; Tue, 21 May 2024 05:13:54 -0400
+X-MC-Unique: AUq_meN2MT6Uz7JzMATTgg-1
+Received: by mail-ed1-f70.google.com with SMTP id 4fb4d7f45d1cf-572a98260d9so781859a12.0
+        for <linux-usb@vger.kernel.org>; Tue, 21 May 2024 02:13:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716282742; x=1716887542;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VFFc8dkP7sP+uu3rw1v9YarWpJd2vkJbAvnBTD0BiKI=;
-        b=vDY/xbmyZsr25flD/rIyAJ+5SiyFHpuEjSPQBDJt60b7RK8YHhs82Dx5WLDpA+YQ5d
-         CITzz0Hgy799R3xRLvL+RtKfYwqP2odyBNoaDk6+hoKfK35J895PbA7WmD/ushm+YhrM
-         a3k+E4Sf1N+UMq8qkaDFM84jy9YG/u9p+IEqLl8UdMbJVeFMRcBNTIgXlstz+lw6lRsi
-         P690W+ijJ2TQZS2ks1caswz10xpcVF5hLAeZquxrmDwGbQoATt3i9PdTggmI1muZzf4s
-         YiYJVA/jfirnI3NOqIsJU56Xa/z544esNZDFXhpaJbpdobFq4izc75X5UxikS4yaG8q6
-         driA==
-X-Forwarded-Encrypted: i=1; AJvYcCWZgFltBoG6TI6VloHxuaaS8cBkl135yJ0Pmha8aX2IMOWYa54o7qfHcuckEPSD3/D4QThIqzO6miWAQP1Hn8SRUduSiQMjEgyxGfdPg7lZdYOgPExT/fzCOVEVZ2nqN2EBzgQvAFO9NmACwj3HpSgFcDpYAoHSuOXhl2gbB0Za
-X-Gm-Message-State: AOJu0YyE9UEC2zt5jQy0GpJaI8gAKerZfZq4NMm9e05UwKwKDb7YsjdW
-	3sj5Pi/3c+qiA2rzQYoeaNYKL7Hy1GFeWceLyjYPYBBWhTvDyB9DZsg4SCBpamOT+VzVZ1PuCRB
-	BJf6JA5OwSYZDNmd2nuXu2CPGcb4=
-X-Google-Smtp-Source: AGHT+IEZhwsCyczFPZJb/vjIbSf+CiTU9TdOAlzSwjvUCGMcHTAml6sMLqSnnpQ2+kd26Ga3oom9L2K9e7gZCCGVCrU=
-X-Received: by 2002:a17:90b:2305:b0:2b1:782:8827 with SMTP id
- 98e67ed59e1d1-2b6cc564325mr28630098a91.20.1716282741684; Tue, 21 May 2024
- 02:12:21 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1716282833; x=1716887633;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=L7aR29FtSZuZ+y/bx0KTKzczdY+Rsy7yZ58GK0tgM4Q=;
+        b=xJjC7prrZS1QU1P8mEzLGLAtfOO9BTP0kp6TuC6ozFs1EXp4++9Q1f7evOk3j1tiVe
+         O4eUuefgp4eH1UpGFlkAqc2IS/KAuDKe5KKHvmTDOxbp4h1OcLnWNYL3wWQPVEu9R08D
+         JuUw4qdOWkH53pGWMpZWkhQZzBh+XpoUrnYRAcHBLaMwrM6gxIINbQBe0yeS2ftF42xd
+         c1S0Jn0h8DwN7myg8x3/u5A/5wTmZC3t4B0CSks1mEt4YYr24L8QZfZaxNLutG3CGdkI
+         W3xuVY/HwqWgOebIfUVsl/WZS5S9tZkcwG0xopYmvvU0Ko6ueNvQnM2E6NQ0g8jiTe+R
+         hhrA==
+X-Forwarded-Encrypted: i=1; AJvYcCWSM2TgLXV8Kg3r5e5qsvx0FXXBg9SDqTJl9MHTS9m/nZQaxhd5CXXtjcAJfUO3cYKMNCmVmHBNek68WLMsbHgKysqx9CmIoHG/
+X-Gm-Message-State: AOJu0Yyu8u0Vr7sh71Upa+Bq8rTHUAw7pi7kvpsUHkCH6dS0meka/z/l
+	fDFSQJFXUmhLjBwe0XODfSRX5qwW8s2abSNoUpCCKzMN3zH0e+Fjj5PN8ADrn14DlqO0WW1bugu
+	g8RzIJWFR0gBMBw9HJ4p+obBZ52nM7OXbm1eJQ4VS8xhqeCSWHvIy9rhKVg==
+X-Received: by 2002:a17:906:5a53:b0:a59:cb29:3f9e with SMTP id a640c23a62f3a-a5a2d508447mr1997674866b.1.1716282833458;
+        Tue, 21 May 2024 02:13:53 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHV1ntPxccpfq9AyVQGuqsGIGjfqnOrRteQNsYcsYGeXzxKtgD6SptYJpS2ho99TR81HfElig==
+X-Received: by 2002:a17:906:5a53:b0:a59:cb29:3f9e with SMTP id a640c23a62f3a-a5a2d508447mr1997672566b.1.1716282833005;
+        Tue, 21 May 2024 02:13:53 -0700 (PDT)
+Received: from gerbillo.redhat.com ([2a0d:3341:b094:ab10:29ae:cdc:4db4:a22a])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a61c18561casm217908366b.91.2024.05.21.02.13.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 May 2024 02:13:52 -0700 (PDT)
+Message-ID: <75651199a933427a7fc3980ef8a2139f5f1f1695.camel@redhat.com>
+Subject: Re: [PATCH net-next 1/2] r8152: If inaccessible at resume time,
+ issue a reset
+From: Paolo Abeni <pabeni@redhat.com>
+To: Douglas Anderson <dianders@chromium.org>, "David S . Miller"
+	 <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
+	 <kuba@kernel.org>, Hayes Wang <hayeswang@realtek.com>
+Cc: danielgeorgem@google.com, Andrew Lunn <andrew@lunn.ch>, Grant Grundler
+ <grundler@chromium.org>, Heiner Kallweit <hkallweit1@gmail.com>, 
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ netdev@vger.kernel.org
+Date: Tue, 21 May 2024 11:13:50 +0200
+In-Reply-To: <20240520134108.net-next.1.Ibeda5c0772812ce18953150da5a0888d2d875150@changeid>
+References: 
+	<20240520134108.net-next.1.Ibeda5c0772812ce18953150da5a0888d2d875150@changeid>
+Autocrypt: addr=pabeni@redhat.com; prefer-encrypt=mutual; keydata=mQINBGISiDUBEAC5uMdJicjm3ZlWQJG4u2EU1EhWUSx8IZLUTmEE8zmjPJFSYDcjtfGcbzLPb63BvX7FADmTOkO7gwtDgm501XnQaZgBUnCOUT8qv5MkKsFH20h1XJyqjPeGM55YFAXc+a4WD0YyO5M0+KhDeRLoildeRna1ey944VlZ6Inf67zMYw9vfE5XozBtytFIrRyGEWkQwkjaYhr1cGM8ia24QQVQid3P7SPkR78kJmrT32sGk+TdR4YnZzBvVaojX4AroZrrAQVdOLQWR+w4w1mONfJvahNdjq73tKv51nIpu4SAC1Zmnm3x4u9r22mbMDr0uWqDqwhsvkanYmn4umDKc1ZkBnDIbbumd40x9CKgG6ogVlLYeJa9WyfVMOHDF6f0wRjFjxVoPO6p/ZDkuEa67KCpJnXNYipLJ3MYhdKWBZw0xc3LKiKc+nMfQlo76T/qHMDfRMaMhk+L8gWc3ZlRQFG0/Pd1pdQEiRuvfM5DUXDo/YOZLV0NfRFU9SmtIPhbdm9cV8Hf8mUwubihiJB/9zPvVq8xfiVbdT0sPzBtxW0fXwrbFxYAOFvT0UC2MjlIsukjmXOUJtdZqBE3v3Jf7VnjNVj9P58+MOx9iYo8jl3fNd7biyQWdPDfYk9ncK8km4skfZQIoUVqrWqGDJjHO1W9CQLAxkfOeHrmG29PK9tHIwARAQABtB9QYW9sbyBBYmVuaSA8cGFiZW5pQHJlZGhhdC5jb20+iQJSBBMBCAA8FiEEg1AjqC77wbdLX2LbKSR5jcyPE6QFAmISiDUCGwMFCwkIBwIDIgIBBhUKCQgLAgQWAgMBAh4HAheAAAoJECkkeY3MjxOkJSYQAJcc6MTsuFxYdYZkeWjW//zbD3ApRHzpNlHLVSuJqHr9/aDS+tyszgS8jj9MiqALzgq4iZbg
+ 7ZxN9ZsDL38qVIuFkSpgMZCiUHdxBC11J8nbBSLlpnc924UAyr5XrGA99 6Wl5I4Km3128GY6iAkH54pZpOmpoUyBjcxbJWHstzmvyiXrjA2sMzYjt3Xkqp0cJfIEekOi75wnNPofEEJg28XPcFrpkMUFFvB4Aqrdc2yyR8Y36rbw18sIX3dJdomIP3dL7LoJi9mfUKOnr86Z0xltgcLPGYoCiUZMlXyWgB2IPmmcMP2jLJrusICjZxLYJJLofEjznAJSUEwB/3rlvFrSYvkKkVmfnfro5XEr5nStVTECxfy7RTtltwih85LlZEHP8eJWMUDj3P4Q9CWNgz2pWr1t68QuPHWaA+PrXyasDlcRpRXHZCOcvsKhAaCOG8TzCrutOZ5NxdfXTe3f1jVIEab7lNgr+7HiNVS+UPRzmvBc73DAyToKQBn9kC4jh9HoWyYTepjdcxnio0crmara+/HEyRZDQeOzSexf85I4dwxcdPKXv0fmLtxrN57Ae82bHuRlfeTuDG3x3vl/Bjx4O7Lb+oN2BLTmgpYq7V1WJPUwikZg8M+nvDNcsOoWGbU417PbHHn3N7yS0lLGoCCWyrK1OY0QM4EVsL3TjOfUtCNQYW9sbyBBYmVuaSA8cGFvbG8uYWJlbmlAZ21haWwuY29tPokCUgQTAQgAPBYhBINQI6gu+8G3S19i2ykkeY3MjxOkBQJiEoitAhsDBQsJCAcCAyICAQYVCgkICwIEFgIDAQIeBwIXgAAKCRApJHmNzI8TpBzHD/45pUctaCnhee1vkQnmStAYvHmwrWwIEH1lzDMDCpJQHTUQOOJWDAZOFnE/67bxSS81Wie0OKW2jvg1ylmpBA0gPpnzIExQmfP72cQ1TBoeVColVT6Io35BINn+ymM7c0Bn8RvngSEpr3jBtqvvWXjvtnJ5/HbOVQCg62NC6ewosoKJPWpGXMJ9SKsVIOUHsmoWK60spzeiJoSmAwm3zTJQnM5kRh2q
+ iWjoCy8L35zPqR5TV+f5WR5hTVCqmLHSgm1jxwKhPg9L+GfuE4d0SWd84y GeOB3sSxlhWsuTj1K6K3MO9srD9hr0puqjO9sAizd0BJP8ucf/AACfrgmzIqZXCfVS7jJ/M+0ic+j1Si3yY8wYPEi3dvbVC0zsoGj9n1R7B7L9c3g1pZ4L9ui428vnPiMnDN3jh9OsdaXeWLvSvTylYvw9q0DEXVQTv4/OkcoMrfEkfbXbtZ3PRlAiddSZA5BDEkkm6P9KA2YAuooi1OD9d4MW8LFAeEicvHG+TPO6jtKTacdXDRe611EfRwTjBs19HmabSUfFcumL6BlVyceIoSqXFe5jOfGpbBevTZtg4kTSHqymGb6ra6sKs+/9aJiONs5NXY7iacZ55qG3Ib1cpQTps9bQILnqpwL2VTaH9TPGWwMY3Nc2VEc08zsLrXnA/yZKqZ1YzSY9MGXWYLkCDQRiEog1ARAAyXMKL+x1lDvLZVQjSUIVlaWswc0nV5y2EzBdbdZZCP3ysGC+s+n7xtq0o1wOvSvaG9h5q7sYZs+AKbuUbeZPu0bPWKoO02i00yVoSgWnEqDbyNeiSW+vI+VdiXITV83lG6pS+pAoTZlRROkpb5xo0gQ5ZeYok8MrkEmJbsPjdoKUJDBFTwrRnaDOfb+Qx1D22PlAZpdKiNtwbNZWiwEQFm6mHkIVSTUe2zSemoqYX4QQRvbmuMyPIbwbdNWlItukjHsffuPivLF/XsI1gDV67S1cVnQbBgrpFDxN62USwewXkNl+ndwa+15wgJFyq4Sd+RSMTPDzDQPFovyDfA/jxN2SK1Lizam6o+LBmvhIxwZOfdYH8bdYCoSpqcKLJVG3qVcTwbhGJr3kpRcBRz39Ml6iZhJyI3pEoX3bJTlR5Pr1Kjpx13qGydSMos94CIYWAKhegI06aTdvvuiigBwjngo/Rk5S+iEGR5KmTqGyp27o6YxZy6D4NIc6PKUzhIUxfvuHNvfu
+ sD2W1U7eyLdm/jCgticGDsRtweytsgCSYfbz0gdgUuL3EBYN3JLbAU+UZpy v/fyD4cHDWaizNy/KmOI6FFjvVh4LRCpGTGDVPHsQXaqvzUybaMb7HSfmBBzZqqfVbq9n5FqPjAgD2lJ0rkzb9XnVXHgr6bmMRlaTlBMAEQEAAYkCNgQYAQgAIBYhBINQI6gu+8G3S19i2ykkeY3MjxOkBQJiEog1AhsMAAoJECkkeY3MjxOkY1YQAKdGjHyIdOWSjM8DPLdGJaPgJdugHZowaoyCxffilMGXqc8axBtmYjUIoXurpl+f+a7S0tQhXjGUt09zKlNXxGcebL5TEPFqgJTHN/77ayLslMTtZVYHE2FiIxkvW48yDjZUlefmphGpfpoXe4nRBNto1mMB9Pb9vR47EjNBZCtWWbwJTIEUwHP2Z5fV9nMx9Zw2BhwrfnODnzI8xRWVqk7/5R+FJvl7s3nY4F+svKGD9QHYmxfd8Gx42PZc/qkeCjUORaOf1fsYyChTtJI4iNm6iWbD9HK5LTMzwl0n0lL7CEsBsCJ97i2swm1DQiY1ZJ95G2Nz5PjNRSiymIw9/neTvUT8VJJhzRl3Nb/EmO/qeahfiG7zTpqSn2dEl+AwbcwQrbAhTPzuHIcoLZYV0xDWzAibUnn7pSrQKja+b8kHD9WF+m7dPlRVY7soqEYXylyCOXr5516upH8vVBmqweCIxXSWqPAhQq8d3hB/Ww2A0H0PBTN1REVw8pRLNApEA7C2nX6RW0XmA53PIQvAP0EAakWsqHoKZ5WdpeOcH9iVlUQhRgemQSkhfNaP9LqR1XKujlTuUTpoyT3xwAzkmSxN1nABoutHEO/N87fpIbpbZaIdinF7b9srwUvDOKsywfs5HMiUZhLKoZzCcU/AEFjQsPTATACGsWf3JYPnWxL9
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.4 (3.50.4-1.fc39) 
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAHe5sWavQcUTg2zTYaryRsMywSBgBgETG=R1jRexg4qDqwCfdw@mail.gmail.com>
- <38de0776-3adf-4223-b8e0-cedb5a5ebf4d@leemhuis.info> <lqdpk7lopqq4jn22mycxgg6ps4yfs7hcca33tqb2oy6jxc2y7p@rhjjbzs6wigu>
- <611f8200-8e0e-40e4-aff4-cc2c55dc6354@amd.com> <61-664b6880-3-6826fc80@79948770>
- <20240520162100.GI1421138@black.fi.intel.com> <5d-664b8000-d-70f82e80@161590144>
- <CAHe5sWazL96zPa-v9S515ciE46JLZ1ROL7gmGikfn-vhUoDaZg@mail.gmail.com>
- <20240521051151.GK1421138@black.fi.intel.com> <CAHe5sWb7kHurBvu6JC6OgXZm9mSg5a2W2XK9L8gCygYaFZz7JQ@mail.gmail.com>
- <20240521085926.GO1421138@black.fi.intel.com>
-In-Reply-To: <20240521085926.GO1421138@black.fi.intel.com>
-From: Gia <giacomo.gio@gmail.com>
-Date: Tue, 21 May 2024 11:12:10 +0200
-Message-ID: <CAHe5sWb=14MWvQc1xkyrkct2Y9jn=-dKgX55Cow_9VKEeapFwA@mail.gmail.com>
-Subject: Re: [REGRESSION][BISECTED] "xHCI host controller not responding,
- assume dead" on stable kernel > 6.8.7
-To: Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: =?UTF-8?Q?Benjamin_B=C3=B6hmke?= <benjamin@boehmke.net>, 
-	Mario Limonciello <mario.limonciello@amd.com>, Christian Heusel <christian@heusel.eu>, 
-	Linux regressions mailing list <regressions@lists.linux.dev>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"stable@vger.kernel.org" <stable@vger.kernel.org>, "kernel@micha.zone" <kernel@micha.zone>, 
-	Andreas Noever <andreas.noever@gmail.com>, Michael Jamet <michael.jamet@intel.com>, 
-	Yehezkel Bernat <YehezkelShB@gmail.com>, 
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, "S, Sanath" <Sanath.S@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Here you have the output from the dock upstream port:
+On Mon, 2024-05-20 at 13:41 -0700, Douglas Anderson wrote:
+> If we happened to get a USB transfer error during the transition to
+> suspend then the usb_queue_reset_device() that r8152_control_msg()
+> calls will get dropped on the floor. This is because
+> usb_lock_device_for_reset() (which usb_queue_reset_device() uses)
+> silently fails if it's called when a device is suspended or if too
+> much time passes.
+>=20
+> Let's resolve this by resetting the device ourselves in r8152's
+> resume() function.
+>=20
+> NOTE: due to timing, it's _possible_ that we could end up with two USB
+> resets: the one queued previously and the one called from the resume()
+> patch. This didn't happen in test cases I ran, though it's conceivably
+> possible. We can't easily know if this happened since
+> usb_queue_reset_device() can just silently drop the reset request. In
+> any case, it's not expected that this is a problem since the two
+> resets can't run at the same time (because of the device lock) and it
+> should be OK to reset the device twice. If somehow the double-reset
+> causes problems we could prevent resets from being queued up while
+> suspend is running.
+>=20
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
 
-sudo tbdump -r 2 -a 1 -vv -N2 LANE_ADP_CS_0
+## Form letter - net-next-closed
 
-0x0036 0x003c013e 0b00000000 00111100 00000001 00111110 .... LANE_ADP_CS_0
-  [00:07]       0x3e Next Capability Pointer
-  [08:15]        0x1 Capability ID
-  [16:19]        0xc Supported Link Speeds
-  [20:21]        0x3 Supported Link Widths (SLW)
-  [22:23]        0x0 Gen 4 Asymmetric Support (G4AS)
-  [26:26]        0x0 CL0s Support
-  [27:27]        0x0 CL1 Support
-  [28:28]        0x0 CL2 Support
-0x0037 0x0828003c 0b00001000 00101000 00000000 00111100 .... LANE_ADP_CS_1
-  [00:03]        0xc Target Link Speed =E2=86=92 Router shall attempt Gen 3=
- speed
-  [04:05]        0x3 Target Link Width =E2=86=92 Establish a Symmetric Link
-  [06:07]        0x0 Target Asymmetric Link =E2=86=92 Establish Symmetric L=
-ink
-  [10:10]        0x0 CL0s Enable
-  [11:11]        0x0 CL1 Enable
-  [12:12]        0x0 CL2 Enable
-  [14:14]        0x0 Lane Disable (LD)
-  [15:15]        0x0 Lane Bonding (LB)
-  [16:19]        0x8 Current Link Speed =E2=86=92 Gen 2
-  [20:25]        0x2 Negotiated Link Width =E2=86=92 Symmetric Link (x2)
-  [26:29]        0x2 Adapter State =E2=86=92 CL0
-  [30:30]        0x0 PM Secondary (PMS)
+The merge window for v6.10 has begun and we have already posted our
+pull
+request. Therefore net-next is closed for new drivers, features, code
+refactoring and optimizations. We are currently accepting bug fixes
+only.
 
-On Tue, May 21, 2024 at 10:59=E2=80=AFAM Mika Westerberg
-<mika.westerberg@linux.intel.com> wrote:
->
-> On Tue, May 21, 2024 at 10:15:28AM +0200, Gia wrote:
-> > Here you go:
-> >
-> > 0x0080 0x003c01c0 0b00000000 00111100 00000001 11000000 .... LANE_ADP_C=
-S_0
-> >   [00:07]       0xc0 Next Capability Pointer
-> >   [08:15]        0x1 Capability ID
-> >   [16:19]        0xc Supported Link Speeds
-> >   [20:21]        0x3 Supported Link Widths (SLW)
-> >   [22:23]        0x0 Gen 4 Asymmetric Support (G4AS)
-> >   [26:26]        0x0 CL0s Support
-> >   [27:27]        0x0 CL1 Support
-> >   [28:28]        0x0 CL2 Support
-> > 0x0081 0x0828003c 0b00001000 00101000 00000000 00111100 .... LANE_ADP_C=
-S_1
-> >   [00:03]        0xc Target Link Speed =E2=86=92 Router shall attempt G=
-en 3 speed
-> >   [04:05]        0x3 Target Link Width =E2=86=92 Establish a Symmetric =
-Link
-> >   [06:07]        0x0 Target Asymmetric Link =E2=86=92 Establish Symmetr=
-ic Link
-> >   [10:10]        0x0 CL0s Enable
-> >   [11:11]        0x0 CL1 Enable
-> >   [12:12]        0x0 CL2 Enable
-> >   [14:14]        0x0 Lane Disable (LD)
-> >   [15:15]        0x0 Lane Bonding (LB)
-> >   [16:19]        0x8 Current Link Speed =E2=86=92 Gen 2
-> >   [20:25]        0x2 Negotiated Link Width =E2=86=92 Symmetric Link (x2=
-)
-> >   [26:29]        0x2 Adapter State =E2=86=92 CL0
-> >   [30:30]        0x0 PM Secondary (PMS)
->
-> Thanks this looks fine (although the link is still Gen 2). Can you run
-> the same from the dock upstream port too?
->
->   # tbdump -r 2 -a 1 -vv -N2 LANE_ADP_CS_0
+Please repost when net-next reopens after May 26th.
+
+RFC patches sent for review only are obviously welcome at any time.
+
+See:
+https://www.kernel.org/doc/html/next/process/maintainer-netdev.html#develop=
+ment-cycle
+
 
