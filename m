@@ -1,119 +1,128 @@
-Return-Path: <linux-usb+bounces-10358-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10359-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B76318CA795
-	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2024 07:15:43 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B35608CA7B6
+	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2024 07:43:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 36F9BB22389
-	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2024 05:15:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EE8EB1C210A2
+	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2024 05:43:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C0EC3F9FB;
-	Tue, 21 May 2024 05:15:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90DB0433B9;
+	Tue, 21 May 2024 05:43:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gzrO7glz"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="esLKZywy"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54E731BF31;
-	Tue, 21 May 2024 05:15:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE22B47A73;
+	Tue, 21 May 2024 05:43:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716268531; cv=none; b=n+zWvu0XYtYaAsLj/hjyt+Fh3zvbqQ7Ev8YnoL+pWHvcTR8FgWigpeg7qP7R3A1FEnzYpjirFeibdZj3HUl7Nr3HUmZl2oW2oZ7B0uiC3ehDgezfdQdw8jqiM59YZXFPBnVU8pymBG70pXLRe+uqQRjFL1GNrQ92+H+1Nt/PBd4=
+	t=1716270206; cv=none; b=nAdCWY5rXgJEsz054tayPPh6Y0ZRPsp2mQWvTVX0SljcTKTZSbdfTdddKZsAwNf/8LmwdJQIfZjS9LwjU4PGGaSAMvvo7HjcZaiC3fVZFo+MGIsC/wQsrXwKegRsus2JZrmX1qvQwskTCTkACQRnvMODp1I6JyVjXfeM8jG9gcI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716268531; c=relaxed/simple;
-	bh=vFv6DJQbTNFYud7DjAOJ9Oiu/jUCZI9/sQAgG3QA0sc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nJ5k5YZKh6z9SC67zM6QcvJnACqeGv8vQuNMWCVmgOXqlZiYTc3uLdlZWYd4eThNwXDaLAVc5uKHpVJ+bx3M/i3c7mmripomaJlrKWjfSXp45Kwtk71daHHfREz75ocpygLilzsbQnB/3ndfopOl+zVIKvtJikoclpsZ/KGO0pQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gzrO7glz; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1716268531; x=1747804531;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vFv6DJQbTNFYud7DjAOJ9Oiu/jUCZI9/sQAgG3QA0sc=;
-  b=gzrO7glztyyA2exFIQGMCLlxNU1z6/Z4Cty1KZ0ts/tc0K2pjNMVQwzp
-   MrKrQTCd0iydVWPNTIH6mpVzwnLMJ/QzJOWdk4RisZjqoUbpGGd2Kx+yO
-   2PoNflUBTmdCC3xqg+eMJ8aKbgdjODIqdVob0tJQ8jI1JaLjIxEhheBOl
-   w3YTzgz/XeTHdsXSRgHZw/oyQXZCu7A2rWe+aIIXVIyeJloGE314IehTX
-   Jh4RMyGPJQYtW95UfkqhESRYiSBojOZ5Vhnb8AJu9Exg3RmDPPn993NzV
-   rgh2rTMYp+cfUctp6DgAHRjo/7FdDHEl0kViZaVui3IBK+WK6V4XInHn5
-   g==;
-X-CSE-ConnectionGUID: zuOhdeWRSIe4zDJ+ixQa/w==
-X-CSE-MsgGUID: 7XlTP8jfTwywCU0j3luDVQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11078"; a="29958977"
-X-IronPort-AV: E=Sophos;i="6.08,176,1712646000"; 
-   d="scan'208";a="29958977"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2024 22:15:30 -0700
-X-CSE-ConnectionGUID: wYlcXpOhRMagvsD64nYFdQ==
-X-CSE-MsgGUID: 6GmCX/kFRM6fGEXleLbasQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,176,1712646000"; 
-   d="scan'208";a="37313660"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa003.fm.intel.com with ESMTP; 20 May 2024 22:15:26 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id 8F675179; Tue, 21 May 2024 08:15:25 +0300 (EEST)
-Date: Tue, 21 May 2024 08:15:25 +0300
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Gia <giacomo.gio@gmail.com>
-Cc: Mario Limonciello <mario.limonciello@amd.com>,
-	Christian Heusel <christian@heusel.eu>,
-	Linux regressions mailing list <regressions@lists.linux.dev>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"stable@vger.kernel.org" <stable@vger.kernel.org>,
-	"kernel@micha.zone" <kernel@micha.zone>,
-	Andreas Noever <andreas.noever@gmail.com>,
-	Michael Jamet <michael.jamet@intel.com>,
-	Yehezkel Bernat <YehezkelShB@gmail.com>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	Benjamin =?utf-8?Q?B=C3=B6hmke?= <benjamin@boehmke.net>,
-	"S, Sanath" <Sanath.S@amd.com>
-Subject: Re: [REGRESSION][BISECTED] "xHCI host controller not responding,
- assume dead" on stable kernel > 6.8.7
-Message-ID: <20240521051525.GL1421138@black.fi.intel.com>
-References: <CAHe5sWavQcUTg2zTYaryRsMywSBgBgETG=R1jRexg4qDqwCfdw@mail.gmail.com>
- <38de0776-3adf-4223-b8e0-cedb5a5ebf4d@leemhuis.info>
- <lqdpk7lopqq4jn22mycxgg6ps4yfs7hcca33tqb2oy6jxc2y7p@rhjjbzs6wigu>
- <611f8200-8e0e-40e4-aff4-cc2c55dc6354@amd.com>
- <CAHe5sWY_YJsyiuwf2TsfRTS9AoGoYh4+UxkkZZ0G9z2pXfbnzg@mail.gmail.com>
+	s=arc-20240116; t=1716270206; c=relaxed/simple;
+	bh=mRXYAVcS0INx8PQTnBxXRFR4ONvAUOefmV5ZCkLu97E=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=qUAeq66a3oPnxIni18hwspDdLS6htJn2dHsO21P4fW+SwUxMW5iBR8ZsDriU4Ksl1dj6IPRO54TmiIxqLRYQWy3SJ2Y9MeBf4WghguJXXBA7V1/OJfYzY+WUxAb3brotBL2vk9b+8e77lt6MRGUz5dh7MBE0oPB87FudWjglUd0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=esLKZywy; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 44L3VaQX015369;
+	Tue, 21 May 2024 05:43:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	from:to:cc:subject:date:message-id:mime-version:content-type; s=
+	qcppdkim1; bh=9qRAYpc3G8G7AVcjNmq22okmtZTeP5x2a/qxqH9FWng=; b=es
+	LKZywykqGfVf9oZkmh4NPTs+HipYLY8BcHEpHZTZGGiqAH9g1tAEtTFbqUqXOPfD
+	Mm42+TNqRsWyepKxNHXuhC9D0Qbg3T4iJPekwMkoZt+I1C1Z4g3OHw/JVBslcF51
+	MNHL1R4zweBuHieS0aYMdt5MGrMGeOSRL6Kjc5WYj87hAezyCRlnU13aIvwx8fAm
+	YWg5M8pZqhEmmm2ZBMti/te9nm9uSDV5bc8hVnpmcV2QgH8ZgxGUfBYkIcKPkL/5
+	t2YuJh09gQNbD8Jx/NhR/mFO8hXRZ+mu9nXYAWcDUtCLKPBIoI5kXjQgV5Qcuvmt
+	1QphxounOfSHVWVn7pKg==
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3y6n4p5gu6-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 21 May 2024 05:43:18 +0000 (GMT)
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+	by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 44L5hFWd012496
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 21 May 2024 05:43:15 GMT
+Received: from hu-akakum-hyd.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Mon, 20 May 2024 22:43:08 -0700
+From: Akash Kumar <quic_akakum@quicinc.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jing Leng
+	<jleng@ambarella.com>, Felipe Balbi <balbi@kernel.org>,
+        =?UTF-8?q?Pratham=20Pratap=C2=A0?= <quic_ppratap@quicinc.com>,
+        Jack Pham
+	<quic_jackp@quicinc.com>, <kernel@quicinc.com>,
+        Wesley Cheng
+	<quic_wcheng@quicinc.com>,
+        Vijayavardhan Vennapusa
+	<quic_vvreddy@quicinc.com>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>
+CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Akash Kumar
+	<quic_akakum@quicinc.com>
+Subject: [PATCH v2] usb: gadget: Increase max configuration interface to 32
+Date: Tue, 21 May 2024 11:12:57 +0530
+Message-ID: <20240521054257.32689-1-quic_akakum@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAHe5sWY_YJsyiuwf2TsfRTS9AoGoYh4+UxkkZZ0G9z2pXfbnzg@mail.gmail.com>
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: vFoDhf4FlW9cgR_m7-l629bUtglIyTdM
+X-Proofpoint-GUID: vFoDhf4FlW9cgR_m7-l629bUtglIyTdM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.12.28.16
+ definitions=2024-05-21_03,2024-05-21_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ bulkscore=0 lowpriorityscore=0 mlxscore=0 malwarescore=0 spamscore=0
+ impostorscore=0 clxscore=1011 phishscore=0 suspectscore=0 adultscore=0
+ mlxlogscore=776 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2405010000 definitions=main-2405210042
 
-Hi,
+Currently, max configuration interfaces are limited to 16, which fails
+for compositions containing 10 UVC configurations with interrupt ep
+disabled along with other configurations , and we see bind failures
+while allocating interface ID in uvc bind.
 
-On Mon, May 20, 2024 at 05:57:42PM +0200, Gia wrote:
-> Hi Mario,
-> 
-> In my case in both cases the value for:
-> 
-> $ cat /sys/bus/thunderbolt/devices/domain0/iommu_dma_protection
-> 
-> is 0.
-> 
-> Output of sudo journalctl -k with kernel option thunderbolt.dyndbg=+p:
-> https://codeshare.io/qAXLoj
-> 
-> Output of sudo dmesg with kernel option thunderbolt.dyndbg=+p:
-> https://codeshare.io/zlPgRb
+Increase max configuration interface to 32 to support any large
+compositions, limited to the same size as USB device endpoints, as
+interfaces cannot be more than endpoints.
 
-I see you have "pcie_aspm=off" in the kernel command line. That kind of
-affects things. Can you drop that and see if it changes anything? And
-also provide a new full dmesg with "thunderbolt.dyndbg=+p" in the
-command line (dropping pcie_aspm_off)?
+Signed-off-by: Akash Kumar <quic_akakum@quicinc.com>
+---
+ include/linux/usb/composite.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Also is there any particular reason you have it there?
+diff --git a/include/linux/usb/composite.h b/include/linux/usb/composite.h
+index 2040696d75b6..d6d4fbfb6d0e 100644
+--- a/include/linux/usb/composite.h
++++ b/include/linux/usb/composite.h
+@@ -255,7 +255,7 @@ int config_ep_by_speed_and_alt(struct usb_gadget *g, struct usb_function *f,
+ int config_ep_by_speed(struct usb_gadget *g, struct usb_function *f,
+ 			struct usb_ep *_ep);
+ 
+-#define	MAX_CONFIG_INTERFACES		16	/* arbitrary; max 255 */
++#define	MAX_CONFIG_INTERFACES		32
+ 
+ /**
+  * struct usb_configuration - represents one gadget configuration
+-- 
+2.17.1
+
 
