@@ -1,145 +1,188 @@
-Return-Path: <linux-usb+bounces-10368-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10369-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE6518CAA88
-	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2024 11:14:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 886468CAAC0
+	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2024 11:25:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0D12D1C21A4D
-	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2024 09:14:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3DA6D2833AF
+	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2024 09:25:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 985F557C8C;
-	Tue, 21 May 2024 09:13:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DFDF5D8EE;
+	Tue, 21 May 2024 09:25:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Lfw34S9I"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PzFcs6QK"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5A4C56B7F
-	for <linux-usb@vger.kernel.org>; Tue, 21 May 2024 09:13:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FFF06D1B0;
+	Tue, 21 May 2024 09:25:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716282839; cv=none; b=IHCdQbSj/vO5xkxaMQ1VSFN0xEY7wra+JXqY+FPU96ZkczcOJ9SztLw2OLd52+N49vVDN4a0jHIJj8Zznq2MrHOb7keJNe7ZHkDbp/RYDXoDjlFMY59+eEZjPJym6qFqeQ0pOhLFrOMbxRwBVegYbXh90rmHIfHJMYqdSKN9Xc8=
+	t=1716283510; cv=none; b=AbM96lQPcDpLD/mkbcL3yh+W7FJ9r0P4upGEndNkjyBXzFioTFWCZV3CMhLz4RtPGs2Pnj89WvwbOB8HcLuXIWqNyFkNIt3429PZbspeIclvLKkJgf9ccUxufb/h8/N8rlPSO/hM0oHsKhkYWBgCfAXwjnXl6i5FXPLVrDq0FHc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716282839; c=relaxed/simple;
-	bh=L7aR29FtSZuZ+y/bx0KTKzczdY+Rsy7yZ58GK0tgM4Q=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=fouDmWdOmSTBkcF86WVIE5TAt/MVHZf15Ovx9bqnFU8mYMrksjOgr1EcvKIkXvS+TZcXOAKuaMaXYSCG/oFb2KeFYBszf6helXf+2H3FG7tHJ9PZMi/wyOsMA/cqvBZJlxYG5B3XAPIVCEHQYwnLlV2QR/g49mQHmbzpTMD9vkQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Lfw34S9I; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1716282836;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=L7aR29FtSZuZ+y/bx0KTKzczdY+Rsy7yZ58GK0tgM4Q=;
-	b=Lfw34S9I1URscSqLpS/pCFW/ZK7MJlHh5eJITHXBzrWPGesNFAmSWfanvgobHUr3nxQZvr
-	3sz7T5aQsoKa0J8adC2Z7fHFky8VAdstCOWnZcyT02w7OtVbFI3UABem8I4YTFcdXW5AUU
-	QRVIqQzCLRdUDS1QTA2jEmT2ZTXYVBE=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-391-AUq_meN2MT6Uz7JzMATTgg-1; Tue, 21 May 2024 05:13:54 -0400
-X-MC-Unique: AUq_meN2MT6Uz7JzMATTgg-1
-Received: by mail-ed1-f70.google.com with SMTP id 4fb4d7f45d1cf-572a98260d9so781859a12.0
-        for <linux-usb@vger.kernel.org>; Tue, 21 May 2024 02:13:54 -0700 (PDT)
+	s=arc-20240116; t=1716283510; c=relaxed/simple;
+	bh=W7C8qCu9f8aWv8t+JSd20FzArS+tgmmsu1qXPGKkqQk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KjXMUujzwJ19F/XC5czgXWohgaKPiRT/S9RzgAbT3XKfjYqiNxDsNjPxmaruLMAXof9Qh7Wy212J4JAvOhMNRxvTYLNps+rs78aN6h53gQ6Zu7s9NdQoV3a+UxW7y6EaMB93ucHen+ZHUtDxCO/hGSuQHTnl4+LVFDj2sdXeIcY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PzFcs6QK; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-1e3c3aa8938so102245785ad.1;
+        Tue, 21 May 2024 02:25:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1716283508; x=1716888308; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cx9Q/EMTUpa92+pOPrcJO/MH3AWeXtVafWw6ElrJXwI=;
+        b=PzFcs6QKsraea6O4nNMbEjCzvGFvSLD1u7s8lS5BH7NLuTqulqohI1+Z4BVGA5Bljt
+         DrMqXqfKGnnNb+5oRkdpy+LKA0hRc5CyS42Xm6bKmZMxDB0G3BfzFDwFugmyEY4KSTWj
+         tJz6pEuA62HGhA8xX7pddBZgMoPKmZ2e5oW6Xiz74LOtE1wSD4pSmW7pfSbfs98OCFHB
+         vae774blmzCu9llBEOEM+58zojQ3J+4/cJfa7zM8CkodhknP6qeDFnagB0rZ5QPlTuWz
+         F/NW+AL0Ibf2djFmwUMBI/LJsufQTs6RqFzJex7ko3ueiRniQylC+q14TZgjFVQYPhaF
+         XCtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716282833; x=1716887633;
-        h=mime-version:user-agent:content-transfer-encoding:autocrypt
-         :references:in-reply-to:date:cc:to:from:subject:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=L7aR29FtSZuZ+y/bx0KTKzczdY+Rsy7yZ58GK0tgM4Q=;
-        b=xJjC7prrZS1QU1P8mEzLGLAtfOO9BTP0kp6TuC6ozFs1EXp4++9Q1f7evOk3j1tiVe
-         O4eUuefgp4eH1UpGFlkAqc2IS/KAuDKe5KKHvmTDOxbp4h1OcLnWNYL3wWQPVEu9R08D
-         JuUw4qdOWkH53pGWMpZWkhQZzBh+XpoUrnYRAcHBLaMwrM6gxIINbQBe0yeS2ftF42xd
-         c1S0Jn0h8DwN7myg8x3/u5A/5wTmZC3t4B0CSks1mEt4YYr24L8QZfZaxNLutG3CGdkI
-         W3xuVY/HwqWgOebIfUVsl/WZS5S9tZkcwG0xopYmvvU0Ko6ueNvQnM2E6NQ0g8jiTe+R
-         hhrA==
-X-Forwarded-Encrypted: i=1; AJvYcCWSM2TgLXV8Kg3r5e5qsvx0FXXBg9SDqTJl9MHTS9m/nZQaxhd5CXXtjcAJfUO3cYKMNCmVmHBNek68WLMsbHgKysqx9CmIoHG/
-X-Gm-Message-State: AOJu0Yyu8u0Vr7sh71Upa+Bq8rTHUAw7pi7kvpsUHkCH6dS0meka/z/l
-	fDFSQJFXUmhLjBwe0XODfSRX5qwW8s2abSNoUpCCKzMN3zH0e+Fjj5PN8ADrn14DlqO0WW1bugu
-	g8RzIJWFR0gBMBw9HJ4p+obBZ52nM7OXbm1eJQ4VS8xhqeCSWHvIy9rhKVg==
-X-Received: by 2002:a17:906:5a53:b0:a59:cb29:3f9e with SMTP id a640c23a62f3a-a5a2d508447mr1997674866b.1.1716282833458;
-        Tue, 21 May 2024 02:13:53 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHV1ntPxccpfq9AyVQGuqsGIGjfqnOrRteQNsYcsYGeXzxKtgD6SptYJpS2ho99TR81HfElig==
-X-Received: by 2002:a17:906:5a53:b0:a59:cb29:3f9e with SMTP id a640c23a62f3a-a5a2d508447mr1997672566b.1.1716282833005;
-        Tue, 21 May 2024 02:13:53 -0700 (PDT)
-Received: from gerbillo.redhat.com ([2a0d:3341:b094:ab10:29ae:cdc:4db4:a22a])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a61c18561casm217908366b.91.2024.05.21.02.13.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 May 2024 02:13:52 -0700 (PDT)
-Message-ID: <75651199a933427a7fc3980ef8a2139f5f1f1695.camel@redhat.com>
-Subject: Re: [PATCH net-next 1/2] r8152: If inaccessible at resume time,
- issue a reset
-From: Paolo Abeni <pabeni@redhat.com>
-To: Douglas Anderson <dianders@chromium.org>, "David S . Miller"
-	 <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
-	 <kuba@kernel.org>, Hayes Wang <hayeswang@realtek.com>
-Cc: danielgeorgem@google.com, Andrew Lunn <andrew@lunn.ch>, Grant Grundler
- <grundler@chromium.org>, Heiner Kallweit <hkallweit1@gmail.com>, 
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- netdev@vger.kernel.org
-Date: Tue, 21 May 2024 11:13:50 +0200
-In-Reply-To: <20240520134108.net-next.1.Ibeda5c0772812ce18953150da5a0888d2d875150@changeid>
-References: 
-	<20240520134108.net-next.1.Ibeda5c0772812ce18953150da5a0888d2d875150@changeid>
-Autocrypt: addr=pabeni@redhat.com; prefer-encrypt=mutual; keydata=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
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.4 (3.50.4-1.fc39) 
+        d=1e100.net; s=20230601; t=1716283508; x=1716888308;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cx9Q/EMTUpa92+pOPrcJO/MH3AWeXtVafWw6ElrJXwI=;
+        b=Jdw+2mAaxaDVxVXfkze7mCdiQVSq8YPI+Dy+jMR33zwLCnmdyURtjEe9QZ/x/MTH8R
+         /mFONSRENbjGFbhEyM+WIOgf5JMbFUvjXLSg/vlNvta94lJJSKPZT2KomzQUPP9CtQtW
+         wrW8sQ1EFKHuwqTamW7kUGBxYhdL3/89YAe/0ejNXI0sQBvV//6TrLkc3EQPvecFbz+a
+         Ltxu1n+/LrA32H/giw/DciuWddC3sUjHw2tQoM1m8lm93vKUg4fa+dguZHhmaQPzj3sM
+         A3mM+gdhhEGXJ6RwDh3SJ1ifsYTLXOm0RyGI1uZqJ46a77YHiJZXpeWa+rAS6P4NtGJy
+         dxeA==
+X-Forwarded-Encrypted: i=1; AJvYcCUcC2JPZHCf3zVW364uadu0Gr4zYVLdGUmOnyok55LDHe2GfxeoZYK/RUGijQ2G2jC7mqK3E0Q1BEg918w/OGS/w1/RQeOyEZdQNpJhyrcu9/F/PFVW5BlY2dW+2O0EThYs4fDzTAG7c5WKqj5+CyPro2FQK4UwaguRJhCz2/rw
+X-Gm-Message-State: AOJu0YytVwqMDQWRMEY03l05n26jW8zVZVpySQ8a81nTbYl6miCEyBDD
+	2ya11Xt9C9eyG1DOwsJkHiZzIyvoIJ4yPGvYv1FbUc9q4DVC6eaa3MJ3Nv7BgonGfZ7C9OHjKdT
+	G+fq2fXlWY5XdpFOvLE0FrwIkywQ=
+X-Google-Smtp-Source: AGHT+IEwCS7Kheh/nn+lzkJGd0xBKEmdH0HPDsPUkPmuz+sowdI7it3ZW1guqCXJUYh1almZi/G075PMfPqiuKbJrKc=
+X-Received: by 2002:a17:90b:46c4:b0:2b1:817d:982b with SMTP id
+ 98e67ed59e1d1-2b6cc777f3cmr28269888a91.14.1716283507825; Tue, 21 May 2024
+ 02:25:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <CAHe5sWavQcUTg2zTYaryRsMywSBgBgETG=R1jRexg4qDqwCfdw@mail.gmail.com>
+ <38de0776-3adf-4223-b8e0-cedb5a5ebf4d@leemhuis.info> <lqdpk7lopqq4jn22mycxgg6ps4yfs7hcca33tqb2oy6jxc2y7p@rhjjbzs6wigu>
+ <611f8200-8e0e-40e4-aff4-cc2c55dc6354@amd.com> <CAHe5sWY_YJsyiuwf2TsfRTS9AoGoYh4+UxkkZZ0G9z2pXfbnzg@mail.gmail.com>
+ <20240521051525.GL1421138@black.fi.intel.com> <CAHe5sWY3P7AopLqwaeXSO7n-SFwEZom+MfWpLKGmbuA7L=VdmA@mail.gmail.com>
+ <20240521085501.GN1421138@black.fi.intel.com>
+In-Reply-To: <20240521085501.GN1421138@black.fi.intel.com>
+From: Gia <giacomo.gio@gmail.com>
+Date: Tue, 21 May 2024 11:24:56 +0200
+Message-ID: <CAHe5sWaABJi0Xo4ygFK4Oa3LdNUiQJSLidGPdAE=gwmy=b+ycw@mail.gmail.com>
+Subject: Re: [REGRESSION][BISECTED] "xHCI host controller not responding,
+ assume dead" on stable kernel > 6.8.7
+To: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: Mario Limonciello <mario.limonciello@amd.com>, Christian Heusel <christian@heusel.eu>, 
+	Linux regressions mailing list <regressions@lists.linux.dev>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"stable@vger.kernel.org" <stable@vger.kernel.org>, "kernel@micha.zone" <kernel@micha.zone>, 
+	Andreas Noever <andreas.noever@gmail.com>, Michael Jamet <michael.jamet@intel.com>, 
+	Yehezkel Bernat <YehezkelShB@gmail.com>, 
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, =?UTF-8?Q?Benjamin_B=C3=B6hmke?= <benjamin@boehmke.net>, 
+	"S, Sanath" <Sanath.S@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 2024-05-20 at 13:41 -0700, Douglas Anderson wrote:
-> If we happened to get a USB transfer error during the transition to
-> suspend then the usb_queue_reset_device() that r8152_control_msg()
-> calls will get dropped on the floor. This is because
-> usb_lock_device_for_reset() (which usb_queue_reset_device() uses)
-> silently fails if it's called when a device is suspended or if too
-> much time passes.
->=20
-> Let's resolve this by resetting the device ourselves in r8152's
-> resume() function.
->=20
-> NOTE: due to timing, it's _possible_ that we could end up with two USB
-> resets: the one queued previously and the one called from the resume()
-> patch. This didn't happen in test cases I ran, though it's conceivably
-> possible. We can't easily know if this happened since
-> usb_queue_reset_device() can just silently drop the reset request. In
-> any case, it's not expected that this is a problem since the two
-> resets can't run at the same time (because of the device lock) and it
-> should be OK to reset the device twice. If somehow the double-reset
-> causes problems we could prevent resets from being queued up while
-> suspend is running.
->=20
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+Thank you for your suggestion Mika, as a general rule I totally agree
+with you and I do not mess with kernel default parameters, but I
+remember "pcie_aspm=3Doff" was necessary at the time I set up the
+system. Probably a kernel or a BIOS update makes it unnecessary today.
 
-## Form letter - net-next-closed
+I see it removes these messages from my logs but I trust you when you
+say they have not an impact on functionality:
 
-The merge window for v6.10 has begun and we have already posted our
-pull
-request. Therefore net-next is closed for new drivers, features, code
-refactoring and optimizations. We are currently accepting bug fixes
-only.
+May 21 11:01:36 um773arch kernel: pcieport 0000:05:04.0: Unable to
+change power state from D3hot to D0, device inaccessible
+May 21 11:01:36 um773arch kernel: igb 0000:09:00.0 eth0: PCIe link lost
+May 21 11:01:36 um773arch kernel: xhci_hcd 0000:08:00.0: xHCI host
+controller not responding, assume dead
+May 21 11:01:36 um773arch kernel: xhci_hcd 0000:07:00.0: xHCI host
+controller not responding, assume dead
+May 21 11:01:36 um773arch kernel: usb 3-1: 1:1: cannot set freq 48000 to ep=
+ 0x82
+May 21 11:01:36 um773arch kernel: usb 3-1: 10:0: cannot get min/max
+values for control 2 (id 10)
+May 21 11:01:41 um773arch kernel: xhci_hcd 0000:06:00.0: xHCI host
+controller not responding, assume dead
+May 21 11:01:41 um773arch kernel: xhci_hcd 0000:06:00.0: HC died; cleaning =
+up
+May 21 11:01:41 um773arch kernel: usb 1-2: 1:1: cannot set freq 48000 to ep=
+ 0x1
+May 21 11:01:41 um773arch kernel: usb 1-2: 1:2: cannot set freq 48000 to ep=
+ 0x1
+May 21 11:01:41 um773arch kernel: usb 1-2: 1:3: cannot set freq 96000 to ep=
+ 0x1
+May 21 11:01:41 um773arch kernel: usb 1-2: 1:4: cannot set freq 96000 to ep=
+ 0x1
+May 21 11:01:41 um773arch kernel: usb 1-2: 1:5: cannot set freq 48000 to ep=
+ 0x1
+May 21 11:01:41 um773arch kernel: usb 1-2: 2:1: cannot set freq 48000 to ep=
+ 0x82
+May 21 11:01:41 um773arch kernel: usb 1-2: 7:0: cannot get min/max
+values for control 2 (id 7)
+May 21 11:01:41 um773arch kernel: usb 1-2: 5:0: cannot get min/max
+values for control 2 (id 5)
+May 21 11:01:41 um773arch kernel: usb 1-2: 6:0: cannot get min/max
+values for control 2 (id 6)
+May 21 11:01:41 um773arch (udev-worker)[453]: controlC0:
+/usr/lib/udev/rules.d/78-sound-card.rules:5 Failed to write
+ATTR{/sys/devices/pci0000:00/0000:00:03.1/0000:04:00.0/0000:05:01.0/0000:07=
+:00.0/usb3/3-1/3-1:1.0/sound/card0/controlC0/../uevent},
+ignoring: No such file or directory
+May 21 11:01:42 um773arch (udev-worker)[440]: controlC1:
+/usr/lib/udev/rules.d/78-sound-card.rules:5 Failed to write
+ATTR{/sys/devices/pci0000:00/0000:00:03.1/0000:04:00.0/0000:05:00.0/0000:06=
+:00.0/usb1/1-2/1-2:1.0/sound/card1/controlC1/../uevent},
+ignoring: No such file or directory
+May 21 11:01:43 um773arch kernel: hid-generic 0003:0D8C:0134.000A: No
+inputs registered, leaving
 
-Please repost when net-next reopens after May 26th.
-
-RFC patches sent for review only are obviously welcome at any time.
-
-See:
-https://www.kernel.org/doc/html/next/process/maintainer-netdev.html#develop=
-ment-cycle
-
+On Tue, May 21, 2024 at 10:55=E2=80=AFAM Mika Westerberg
+<mika.westerberg@linux.intel.com> wrote:
+>
+> Hi,
+>
+> On Tue, May 21, 2024 at 10:07:23AM +0200, Gia wrote:
+> > Thank you Mika,
+> >
+> > Here you have the output of sudo journalctl -k without enabling the
+> > kernel option "pcie_aspm=3Doff": https://codeshare.io/7JPgpE. Without
+> > "pcie_aspm=3Doff", "thunderbolt.host_reset=3Dfalse" is not needed, my
+> > thunderbolt dock does work. I also connected a 4k monitor to the
+> > thunderbolt dock thinking it could provide more data.
+> >
+> > I'm almost sure I used this option when I set up this system because
+> > it solved some issues with system suspending, but it happened many
+> > months ago.
+>
+> Okay. I recommend not to use it. The defaults should always be the best
+> option (unless you really know what you are doing or working around some
+> issue).
+>
+> The dmesg you shared looks good, there are few oddities but they should
+> not matter from functional perspective (unless you are planning to have
+> a second monitor connected).
+>
+> First is this:
+>
+>   May 21 09:59:40 um773arch kernel: thunderbolt 0000:36:00.5: IOMMU DMA p=
+rotection is disabled
+>
+> It should really be enabled but I'm not familiar with AMD hardware to
+> tell more so hoping Mario can comment on that.
+>
+> The second thing is the USB4 link that seems to be degraded to 2x10G =3D
+> 20G even though you say it is a Thunderbolt cable. I'll comment more on
+> that in the other email.
 
