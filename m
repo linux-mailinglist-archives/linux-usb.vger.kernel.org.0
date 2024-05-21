@@ -1,188 +1,126 @@
-Return-Path: <linux-usb+bounces-10369-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10370-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 886468CAAC0
-	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2024 11:25:27 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B03B8CAADF
+	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2024 11:36:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3DA6D2833AF
-	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2024 09:25:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 10305281AEC
+	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2024 09:36:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DFDF5D8EE;
-	Tue, 21 May 2024 09:25:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AB6E6BB33;
+	Tue, 21 May 2024 09:36:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PzFcs6QK"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="h4XWxlRa"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FFF06D1B0;
-	Tue, 21 May 2024 09:25:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FA51605CE;
+	Tue, 21 May 2024 09:36:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716283510; cv=none; b=AbM96lQPcDpLD/mkbcL3yh+W7FJ9r0P4upGEndNkjyBXzFioTFWCZV3CMhLz4RtPGs2Pnj89WvwbOB8HcLuXIWqNyFkNIt3429PZbspeIclvLKkJgf9ccUxufb/h8/N8rlPSO/hM0oHsKhkYWBgCfAXwjnXl6i5FXPLVrDq0FHc=
+	t=1716284193; cv=none; b=Ln/KOZ6bmiV2vkyRmvZ7xBz83nqaJNhxCofA4wv9ViReGb/VzJBP/lwqNwyhOS0G5yIN/maKCXpICwZIZw+YIqegcF8/hKKOuNrRb+3OxYFD+W8PyLQrCWhagvmC7LUpItFUJbFsvZW38X6nD2VkllWUehT1TX67/ikXqRLBJ2I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716283510; c=relaxed/simple;
-	bh=W7C8qCu9f8aWv8t+JSd20FzArS+tgmmsu1qXPGKkqQk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KjXMUujzwJ19F/XC5czgXWohgaKPiRT/S9RzgAbT3XKfjYqiNxDsNjPxmaruLMAXof9Qh7Wy212J4JAvOhMNRxvTYLNps+rs78aN6h53gQ6Zu7s9NdQoV3a+UxW7y6EaMB93ucHen+ZHUtDxCO/hGSuQHTnl4+LVFDj2sdXeIcY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PzFcs6QK; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-1e3c3aa8938so102245785ad.1;
-        Tue, 21 May 2024 02:25:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1716283508; x=1716888308; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cx9Q/EMTUpa92+pOPrcJO/MH3AWeXtVafWw6ElrJXwI=;
-        b=PzFcs6QKsraea6O4nNMbEjCzvGFvSLD1u7s8lS5BH7NLuTqulqohI1+Z4BVGA5Bljt
-         DrMqXqfKGnnNb+5oRkdpy+LKA0hRc5CyS42Xm6bKmZMxDB0G3BfzFDwFugmyEY4KSTWj
-         tJz6pEuA62HGhA8xX7pddBZgMoPKmZ2e5oW6Xiz74LOtE1wSD4pSmW7pfSbfs98OCFHB
-         vae774blmzCu9llBEOEM+58zojQ3J+4/cJfa7zM8CkodhknP6qeDFnagB0rZ5QPlTuWz
-         F/NW+AL0Ibf2djFmwUMBI/LJsufQTs6RqFzJex7ko3ueiRniQylC+q14TZgjFVQYPhaF
-         XCtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716283508; x=1716888308;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cx9Q/EMTUpa92+pOPrcJO/MH3AWeXtVafWw6ElrJXwI=;
-        b=Jdw+2mAaxaDVxVXfkze7mCdiQVSq8YPI+Dy+jMR33zwLCnmdyURtjEe9QZ/x/MTH8R
-         /mFONSRENbjGFbhEyM+WIOgf5JMbFUvjXLSg/vlNvta94lJJSKPZT2KomzQUPP9CtQtW
-         wrW8sQ1EFKHuwqTamW7kUGBxYhdL3/89YAe/0ejNXI0sQBvV//6TrLkc3EQPvecFbz+a
-         Ltxu1n+/LrA32H/giw/DciuWddC3sUjHw2tQoM1m8lm93vKUg4fa+dguZHhmaQPzj3sM
-         A3mM+gdhhEGXJ6RwDh3SJ1ifsYTLXOm0RyGI1uZqJ46a77YHiJZXpeWa+rAS6P4NtGJy
-         dxeA==
-X-Forwarded-Encrypted: i=1; AJvYcCUcC2JPZHCf3zVW364uadu0Gr4zYVLdGUmOnyok55LDHe2GfxeoZYK/RUGijQ2G2jC7mqK3E0Q1BEg918w/OGS/w1/RQeOyEZdQNpJhyrcu9/F/PFVW5BlY2dW+2O0EThYs4fDzTAG7c5WKqj5+CyPro2FQK4UwaguRJhCz2/rw
-X-Gm-Message-State: AOJu0YytVwqMDQWRMEY03l05n26jW8zVZVpySQ8a81nTbYl6miCEyBDD
-	2ya11Xt9C9eyG1DOwsJkHiZzIyvoIJ4yPGvYv1FbUc9q4DVC6eaa3MJ3Nv7BgonGfZ7C9OHjKdT
-	G+fq2fXlWY5XdpFOvLE0FrwIkywQ=
-X-Google-Smtp-Source: AGHT+IEwCS7Kheh/nn+lzkJGd0xBKEmdH0HPDsPUkPmuz+sowdI7it3ZW1guqCXJUYh1almZi/G075PMfPqiuKbJrKc=
-X-Received: by 2002:a17:90b:46c4:b0:2b1:817d:982b with SMTP id
- 98e67ed59e1d1-2b6cc777f3cmr28269888a91.14.1716283507825; Tue, 21 May 2024
- 02:25:07 -0700 (PDT)
+	s=arc-20240116; t=1716284193; c=relaxed/simple;
+	bh=aZ9KTA3NSZzS8QeCimSEWzDSSXkr6lkyH2AAhT2CxOY=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:CC:References:
+	 In-Reply-To:Content-Type; b=aX1HM7vXqPrlSA0ZRy11+IjAWki4CTFN2ZaYG22aX+f+RpZ+nuLiWF0nYB4AuJWX6rMqsmVZxowAYgK6hPORHeW5we6I3XCg0eEsTrT+mIAgn5SCSAwVH1ZUj6HzkbQgXcCjobviEHvdFfxneySSg6BeoGXvBS0r9sYF6XCXpyM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=h4XWxlRa; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 44L2muCh019783;
+	Tue, 21 May 2024 09:36:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:from:to:cc:references
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=qI1oTQmT40vvo2dT8GWELI8VX5shz/FEUwrm6Ztocvo=; b=h4
+	XWxlRatrACEZKdsXfkpn9M1kXJx3zapfWk3tVtmOsFVTtJI0L5fxeWNXZHF9JGtx
+	y/9534q541rkCeI89TaeA8EceI7J3D4jKmDNHK7b+SxWNG1m4FikgH1qJdRbnS42
+	ep01HgMpG772HYUDgGL/dE00oF9ovBvloebqDf1qbcrNgNpsYb2EwXiNcONPTZeb
+	BIbtsVp8/Pk4IXo5pH7Vbr8JqoxzvRZqy2714qIgZXzoof0ImWK/Ou1Uu5JH8SyE
+	Xo8pwgS4awpM1GdsU9U3wuvrRbr5qr537sRa4VcRsvFXhtPDlpjeCo8LcrOtjLuP
+	QVEtqHK02MZKm4k2yNdA==
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3y6pq5ddk5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 21 May 2024 09:36:28 +0000 (GMT)
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+	by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 44L9aSGl002777
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 21 May 2024 09:36:28 GMT
+Received: from [10.217.219.148] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 21 May
+ 2024 02:36:20 -0700
+Message-ID: <f9e0545d-cf00-447b-a1cf-8251e3fe9ffb@quicinc.com>
+Date: Tue, 21 May 2024 15:06:17 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAHe5sWavQcUTg2zTYaryRsMywSBgBgETG=R1jRexg4qDqwCfdw@mail.gmail.com>
- <38de0776-3adf-4223-b8e0-cedb5a5ebf4d@leemhuis.info> <lqdpk7lopqq4jn22mycxgg6ps4yfs7hcca33tqb2oy6jxc2y7p@rhjjbzs6wigu>
- <611f8200-8e0e-40e4-aff4-cc2c55dc6354@amd.com> <CAHe5sWY_YJsyiuwf2TsfRTS9AoGoYh4+UxkkZZ0G9z2pXfbnzg@mail.gmail.com>
- <20240521051525.GL1421138@black.fi.intel.com> <CAHe5sWY3P7AopLqwaeXSO7n-SFwEZom+MfWpLKGmbuA7L=VdmA@mail.gmail.com>
- <20240521085501.GN1421138@black.fi.intel.com>
-In-Reply-To: <20240521085501.GN1421138@black.fi.intel.com>
-From: Gia <giacomo.gio@gmail.com>
-Date: Tue, 21 May 2024 11:24:56 +0200
-Message-ID: <CAHe5sWaABJi0Xo4ygFK4Oa3LdNUiQJSLidGPdAE=gwmy=b+ycw@mail.gmail.com>
-Subject: Re: [REGRESSION][BISECTED] "xHCI host controller not responding,
- assume dead" on stable kernel > 6.8.7
-To: Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: Mario Limonciello <mario.limonciello@amd.com>, Christian Heusel <christian@heusel.eu>, 
-	Linux regressions mailing list <regressions@lists.linux.dev>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"stable@vger.kernel.org" <stable@vger.kernel.org>, "kernel@micha.zone" <kernel@micha.zone>, 
-	Andreas Noever <andreas.noever@gmail.com>, Michael Jamet <michael.jamet@intel.com>, 
-	Yehezkel Bernat <YehezkelShB@gmail.com>, 
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, =?UTF-8?Q?Benjamin_B=C3=B6hmke?= <benjamin@boehmke.net>, 
-	"S, Sanath" <Sanath.S@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] USB: pci-quirks: Skip usb_early_handoff for Renesas PCI
+ USB
+Content-Language: en-US
+From: AKASH KUMAR <quic_akakum@quicinc.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC: Felipe Balbi <balbi@kernel.org>,
+        Pratham Pratap
+	<quic_ppratap@quicinc.com>,
+        Jack Pham <quic_jackp@quicinc.com>, <kernel@quicinc.com>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        "Vijayavardhan
+ Vennapusa" <quic_vvreddy@quicinc.com>,
+        Krishna Kurapati
+	<quic_kriskura@quicinc.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20240521074635.17938-1-quic_akakum@quicinc.com>
+ <2024052134-roundness-foyer-7bfa@gregkh>
+ <1ceae2a4-0715-4cea-9351-fd98a0017b85@quicinc.com>
+In-Reply-To: <1ceae2a4-0715-4cea-9351-fd98a0017b85@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: M2fQu6igYkd19n8AS39jqhZnIc2e9gYx
+X-Proofpoint-ORIG-GUID: M2fQu6igYkd19n8AS39jqhZnIc2e9gYx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.12.28.16
+ definitions=2024-05-21_06,2024-05-21_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ malwarescore=0 adultscore=0 lowpriorityscore=0 priorityscore=1501
+ suspectscore=0 spamscore=0 clxscore=1015 mlxlogscore=999 mlxscore=0
+ bulkscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2405010000 definitions=main-2405210071
 
-Thank you for your suggestion Mika, as a general rule I totally agree
-with you and I do not mess with kernel default parameters, but I
-remember "pcie_aspm=3Doff" was necessary at the time I set up the
-system. Probably a kernel or a BIOS update makes it unnecessary today.
+Hi Greg,On 5/21/2024 1:35 PM, Greg Kroah-Hartman wrote: > On Tue, May 21, 2024 
+at 01:16:35PM +0530, Akash Kumar wrote: >> Skip usb_early_handoff for 
+the Renesas PCI USB controller due to >> the firmware not being loaded 
+beforehand, which impacts the bootup >> time. >> >> Signed-off-by: Akash 
+Kumar <quic_akakum@quicinc.com> > What commit id does this fix? Should 
+it go to stable kernels? yes it can go to stable kernels, issue is seen on every target with usb over pcie support. >> --- >> drivers/usb/host/pci-quirks.c | 5 +++++ >> 1 file changed, 5 
+insertions(+) >> >> diff --git a/drivers/usb/host/pci-quirks.c 
+b/drivers/usb/host/pci-quirks.c >> index 0b949acfa258..a0770ecc0861 
+100644 >> --- a/drivers/usb/host/pci-quirks.c >> +++ 
+b/drivers/usb/host/pci-quirks.c >> @@ -1264,6 +1264,11 @@ static void 
+quirk_usb_early_handoff(struct pci_dev *pdev) >> } >> } >> >> + /* Skip 
+handoff for Renesas PCI USB controller on QCOM SOC */ >> + if 
+((pdev->vendor == PCI_VENDOR_ID_RENESAS) && >> + 
+(pcie_find_root_port(pdev)->vendor == PCI_VENDOR_ID_QCOM)) > Why are all 
+Renesas PCI devices on a QCOM host to be marked this way? > That's a 
+very big hammer for potentially lots of devices. Have you > tested them 
+all? firmware loading is being done in HLOS, not UEFI,
+if firmware loading is done in UEFI, then calling early_handoff() API makes sense,
+else it is checking for controller ready without firmware loaded which is impacting boot up time by 5 sec roughly.
+We are seeing problem in all targets having usb over pcie support. > thanks, > > greg k-h Thanks,
+Akash
 
-I see it removes these messages from my logs but I trust you when you
-say they have not an impact on functionality:
-
-May 21 11:01:36 um773arch kernel: pcieport 0000:05:04.0: Unable to
-change power state from D3hot to D0, device inaccessible
-May 21 11:01:36 um773arch kernel: igb 0000:09:00.0 eth0: PCIe link lost
-May 21 11:01:36 um773arch kernel: xhci_hcd 0000:08:00.0: xHCI host
-controller not responding, assume dead
-May 21 11:01:36 um773arch kernel: xhci_hcd 0000:07:00.0: xHCI host
-controller not responding, assume dead
-May 21 11:01:36 um773arch kernel: usb 3-1: 1:1: cannot set freq 48000 to ep=
- 0x82
-May 21 11:01:36 um773arch kernel: usb 3-1: 10:0: cannot get min/max
-values for control 2 (id 10)
-May 21 11:01:41 um773arch kernel: xhci_hcd 0000:06:00.0: xHCI host
-controller not responding, assume dead
-May 21 11:01:41 um773arch kernel: xhci_hcd 0000:06:00.0: HC died; cleaning =
-up
-May 21 11:01:41 um773arch kernel: usb 1-2: 1:1: cannot set freq 48000 to ep=
- 0x1
-May 21 11:01:41 um773arch kernel: usb 1-2: 1:2: cannot set freq 48000 to ep=
- 0x1
-May 21 11:01:41 um773arch kernel: usb 1-2: 1:3: cannot set freq 96000 to ep=
- 0x1
-May 21 11:01:41 um773arch kernel: usb 1-2: 1:4: cannot set freq 96000 to ep=
- 0x1
-May 21 11:01:41 um773arch kernel: usb 1-2: 1:5: cannot set freq 48000 to ep=
- 0x1
-May 21 11:01:41 um773arch kernel: usb 1-2: 2:1: cannot set freq 48000 to ep=
- 0x82
-May 21 11:01:41 um773arch kernel: usb 1-2: 7:0: cannot get min/max
-values for control 2 (id 7)
-May 21 11:01:41 um773arch kernel: usb 1-2: 5:0: cannot get min/max
-values for control 2 (id 5)
-May 21 11:01:41 um773arch kernel: usb 1-2: 6:0: cannot get min/max
-values for control 2 (id 6)
-May 21 11:01:41 um773arch (udev-worker)[453]: controlC0:
-/usr/lib/udev/rules.d/78-sound-card.rules:5 Failed to write
-ATTR{/sys/devices/pci0000:00/0000:00:03.1/0000:04:00.0/0000:05:01.0/0000:07=
-:00.0/usb3/3-1/3-1:1.0/sound/card0/controlC0/../uevent},
-ignoring: No such file or directory
-May 21 11:01:42 um773arch (udev-worker)[440]: controlC1:
-/usr/lib/udev/rules.d/78-sound-card.rules:5 Failed to write
-ATTR{/sys/devices/pci0000:00/0000:00:03.1/0000:04:00.0/0000:05:00.0/0000:06=
-:00.0/usb1/1-2/1-2:1.0/sound/card1/controlC1/../uevent},
-ignoring: No such file or directory
-May 21 11:01:43 um773arch kernel: hid-generic 0003:0D8C:0134.000A: No
-inputs registered, leaving
-
-On Tue, May 21, 2024 at 10:55=E2=80=AFAM Mika Westerberg
-<mika.westerberg@linux.intel.com> wrote:
->
-> Hi,
->
-> On Tue, May 21, 2024 at 10:07:23AM +0200, Gia wrote:
-> > Thank you Mika,
-> >
-> > Here you have the output of sudo journalctl -k without enabling the
-> > kernel option "pcie_aspm=3Doff": https://codeshare.io/7JPgpE. Without
-> > "pcie_aspm=3Doff", "thunderbolt.host_reset=3Dfalse" is not needed, my
-> > thunderbolt dock does work. I also connected a 4k monitor to the
-> > thunderbolt dock thinking it could provide more data.
-> >
-> > I'm almost sure I used this option when I set up this system because
-> > it solved some issues with system suspending, but it happened many
-> > months ago.
->
-> Okay. I recommend not to use it. The defaults should always be the best
-> option (unless you really know what you are doing or working around some
-> issue).
->
-> The dmesg you shared looks good, there are few oddities but they should
-> not matter from functional perspective (unless you are planning to have
-> a second monitor connected).
->
-> First is this:
->
->   May 21 09:59:40 um773arch kernel: thunderbolt 0000:36:00.5: IOMMU DMA p=
-rotection is disabled
->
-> It should really be enabled but I'm not familiar with AMD hardware to
-> tell more so hoping Mario can comment on that.
->
-> The second thing is the USB4 link that seems to be degraded to 2x10G =3D
-> 20G even though you say it is a Thunderbolt cable. I'll comment more on
-> that in the other email.
 
