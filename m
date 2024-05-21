@@ -1,97 +1,137 @@
-Return-Path: <linux-usb+bounces-10362-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10363-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C4E08CA99C
-	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2024 10:05:54 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B1098CA9A6
+	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2024 10:07:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 37A57284AEF
-	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2024 08:05:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ABC971C20CF3
+	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2024 08:07:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CADB454662;
-	Tue, 21 May 2024 08:05:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9595E548E0;
+	Tue, 21 May 2024 08:07:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="XpBBKJUb"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a57UL3If"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D386482DA;
-	Tue, 21 May 2024 08:05:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8F2A2209F;
+	Tue, 21 May 2024 08:07:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716278740; cv=none; b=syKPlkWp/OPdtA8W/E7dYa33iApxpVVzHXoSjI9I2R7LC0vBC+EP31iKc/xMV7+7AnrlsON8FtbqqkQDxIX43hMBR9WzQGXY/RIq7ldLfQBg4U494sfxmWfcN/gsBR5pOMiu5Om6RmOLZxtk2/IQUTYiAKgAYfH3ydW7TshBS6Q=
+	t=1716278857; cv=none; b=fMnNZa8HOtusXGX+vwGZrxM4F9PJ2SHJmV70zG0d997+SFC3IKVFpjrTCnHHo1QIEgYOev+dLNwbRUiB4SYZ888qrz5u9AMlZksi0xHl/KZVgDxrzsngVcmNC2SmCSC2lXIQ9W7H/AygDeuNK71C+QmkZah/uLsLdVrTCtqdhCI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716278740; c=relaxed/simple;
-	bh=DTyi1eSDn6BAI8YPWjUVlHpylLqWA8Tpr2CtxKs8Mfw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=S3YYfLylBkGxzmE/urmoMFhcpwn9X4nFA9K4+9UAtswlyZlvbwOCf3850WsF8wFu2PqONGbCg7DXJIdOVO8Mi4pS5I0ey6Y2JzvxqbOuAN8xVBRaOxRJjWSN59NjRZLDJiM09G2TCliW/55Uy9H/Paa/E8UHxisPvxAOYzq5tnQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=XpBBKJUb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5461BC2BD11;
-	Tue, 21 May 2024 08:05:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1716278739;
-	bh=DTyi1eSDn6BAI8YPWjUVlHpylLqWA8Tpr2CtxKs8Mfw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=XpBBKJUbTIH/9tDz5/FEP712Xms07++YuBmRHV/R5iYTcho2JKXcCbMnkrFW2VYi2
-	 lU1Sc5gWnDo1cvBsNniLs1Z9YhyuLV/EShGKcuPJb39oOSh8Xrmbteiyy1ctq3nUeW
-	 urDaY/8ZOAx90FMha3eHB7RsBMMqSTlPnNmkQX1I=
-Date: Tue, 21 May 2024 10:05:36 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Akash Kumar <quic_akakum@quicinc.com>
-Cc: Jing Leng <jleng@ambarella.com>, Felipe Balbi <balbi@kernel.org>,
-	Pratham =?iso-8859-1?Q?Pratap=A0?= <quic_ppratap@quicinc.com>,
-	Jack Pham <quic_jackp@quicinc.com>, kernel@quicinc.com,
-	Wesley Cheng <quic_wcheng@quicinc.com>,
-	Vijayavardhan Vennapusa <quic_vvreddy@quicinc.com>,
-	Krishna Kurapati <quic_kriskura@quicinc.com>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: pci-quirks: Skip usb_early_handoff for Renesas PCI
- USB
-Message-ID: <2024052134-roundness-foyer-7bfa@gregkh>
-References: <20240521074635.17938-1-quic_akakum@quicinc.com>
+	s=arc-20240116; t=1716278857; c=relaxed/simple;
+	bh=hBUirWutusPtAd5yaIQhJwK+OZj1KlZPuozs+O8z/cw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=vEK6ezKTTy0B0CW/LafV5oTKylFvUrMujQfaNshkAyGlkbZpHunuUswzKi838n9UBBAchiW2Mbqw2LfeWAS44XIaZZ9+IFvOgA18Uaeu6UWA+CELX1ulVotuyefNQSfM5AJGn8/LN8IrwCF4P3nqaQf2Wf5p5CGW2/6fVUbzGu0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=a57UL3If; arc=none smtp.client-ip=209.85.215.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-663d2e6a3d7so1896000a12.0;
+        Tue, 21 May 2024 01:07:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1716278855; x=1716883655; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hBUirWutusPtAd5yaIQhJwK+OZj1KlZPuozs+O8z/cw=;
+        b=a57UL3If20IgzWKcpBuzOXj7JubOgF7gAdPHkfC/otkKm17oXIhhUNiFqnX0k6sNAA
+         f828wXAeWgt0ffT/sYV9VmUKtwxoBrauijsvKHd3zCDgy3IVutPteyBsvJ+ySfam9dOG
+         PRi0vuoCxmRHtCdaB2HputIKzNJDCQPJALaVUmZvLnVfsF8aTd459JEUQ5kCse1a240O
+         jKBeq2zxz82BGkh5Uv+xyADyWvAyojeTJ7HVciiAhrM/zITg8I2n3zmltTOyT37HIx+l
+         BRE6al1xOq70dQgZb3jQ96tHJ6Kz9Zt2XF9ZC8ZQ5YRoD3gtZ/J3fKh9Jhmva7aMfseJ
+         aHng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1716278855; x=1716883655;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hBUirWutusPtAd5yaIQhJwK+OZj1KlZPuozs+O8z/cw=;
+        b=iz3BF4GiVexPELyM+XSHsoK/0O1KKbNofgJMc9tc7bI/bmD9az+be5UH3cf/Qp7ikS
+         3y6TSq/L5qLFy2LLTmstuFtf3M2qb50MWSm2HMgNh9RiJbqmDk9QVXPUpQBYG7yQxKWY
+         W1R6ZULcH45EN3GcviTIJZ7nlDsL+tdfMDbvnvwB3QQPz4kzjlQ3t1EgfnQ83vaazYwb
+         ZjxKASGnghXo/Sk1wy3+VgU3MFauVmlMRplduDhs5YgDivHNwq8ELtMDzSVlHNJHDHcm
+         OaCJDSBSuCoK2fCGjfGZWxtXAtPa2zPjkNrYDzv8vJx5NV5DgTc8dmQQMNCKfSlpDw9z
+         VxPA==
+X-Forwarded-Encrypted: i=1; AJvYcCU//mHtqXmqVocMYnZ5Re7ZGF8QL4SOxrHAXHpJ6D7nOTXilHQIegQEIp/DJyD2PycI0ou61xDOe6yFUsWX6dNmcjtd6xNqpJDRZRO0MV03tXrb3cFasB4DwOS7tNH7F11TRaov5CzkuNE7mhfn3OuXiDIlNkvqxXe20FH9n47b
+X-Gm-Message-State: AOJu0YzoxFiDBNRrnUTpSUmQ24skPoMe7BF39OCv0dSTrlWo6LUa/C7n
+	SL8rli7cFFPo8PVM9VRknN4aGDEbk1bR9/o3bB93PurZXmCQsNb9wbOcX5e4DO3eWtwxfedYE95
+	nFvRTbLII/6UlOVicQv/voScs7fItX7GZFz8=
+X-Google-Smtp-Source: AGHT+IGmfAeYbPUIkVmO8kZCcRcccTLZauVNvcfzcB7SNd4lIdVN8vxwNDRATuv964jxZEOekKjrWFp08NKB5cRA558=
+X-Received: by 2002:a17:90a:4a88:b0:2b2:195a:d7bd with SMTP id
+ 98e67ed59e1d1-2bd60352ae4mr10916962a91.2.1716278855107; Tue, 21 May 2024
+ 01:07:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240521074635.17938-1-quic_akakum@quicinc.com>
+References: <CAHe5sWavQcUTg2zTYaryRsMywSBgBgETG=R1jRexg4qDqwCfdw@mail.gmail.com>
+ <38de0776-3adf-4223-b8e0-cedb5a5ebf4d@leemhuis.info> <lqdpk7lopqq4jn22mycxgg6ps4yfs7hcca33tqb2oy6jxc2y7p@rhjjbzs6wigu>
+ <611f8200-8e0e-40e4-aff4-cc2c55dc6354@amd.com> <CAHe5sWY_YJsyiuwf2TsfRTS9AoGoYh4+UxkkZZ0G9z2pXfbnzg@mail.gmail.com>
+ <20240521051525.GL1421138@black.fi.intel.com>
+In-Reply-To: <20240521051525.GL1421138@black.fi.intel.com>
+From: Gia <giacomo.gio@gmail.com>
+Date: Tue, 21 May 2024 10:07:23 +0200
+Message-ID: <CAHe5sWY3P7AopLqwaeXSO7n-SFwEZom+MfWpLKGmbuA7L=VdmA@mail.gmail.com>
+Subject: Re: [REGRESSION][BISECTED] "xHCI host controller not responding,
+ assume dead" on stable kernel > 6.8.7
+To: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: Mario Limonciello <mario.limonciello@amd.com>, Christian Heusel <christian@heusel.eu>, 
+	Linux regressions mailing list <regressions@lists.linux.dev>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"stable@vger.kernel.org" <stable@vger.kernel.org>, "kernel@micha.zone" <kernel@micha.zone>, 
+	Andreas Noever <andreas.noever@gmail.com>, Michael Jamet <michael.jamet@intel.com>, 
+	Yehezkel Bernat <YehezkelShB@gmail.com>, 
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, =?UTF-8?Q?Benjamin_B=C3=B6hmke?= <benjamin@boehmke.net>, 
+	"S, Sanath" <Sanath.S@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, May 21, 2024 at 01:16:35PM +0530, Akash Kumar wrote:
-> Skip usb_early_handoff for the Renesas PCI USB controller due to
-> the firmware not being loaded beforehand, which impacts the bootup
-> time.
-> 
-> Signed-off-by: Akash Kumar <quic_akakum@quicinc.com>
+Thank you Mika,
 
-What commit id does this fix?  Should it go to stable kernels?
+Here you have the output of sudo journalctl -k without enabling the
+kernel option "pcie_aspm=3Doff": https://codeshare.io/7JPgpE. Without
+"pcie_aspm=3Doff", "thunderbolt.host_reset=3Dfalse" is not needed, my
+thunderbolt dock does work. I also connected a 4k monitor to the
+thunderbolt dock thinking it could provide more data.
 
-> ---
->  drivers/usb/host/pci-quirks.c | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/drivers/usb/host/pci-quirks.c b/drivers/usb/host/pci-quirks.c
-> index 0b949acfa258..a0770ecc0861 100644
-> --- a/drivers/usb/host/pci-quirks.c
-> +++ b/drivers/usb/host/pci-quirks.c
-> @@ -1264,6 +1264,11 @@ static void quirk_usb_early_handoff(struct pci_dev *pdev)
->  		}
->  	}
->  
-> +	/* Skip handoff for Renesas PCI USB controller on QCOM SOC */
-> +	if ((pdev->vendor == PCI_VENDOR_ID_RENESAS) &&
-> +			(pcie_find_root_port(pdev)->vendor == PCI_VENDOR_ID_QCOM))
+I'm almost sure I used this option when I set up this system because
+it solved some issues with system suspending, but it happened many
+months ago.
 
-Why are all Renesas PCI devices on a QCOM host to be marked this way?
-That's a very big hammer for potentially lots of devices.  Have you
-tested them all?
 
-thanks,
 
-greg k-h
+On Tue, May 21, 2024 at 7:15=E2=80=AFAM Mika Westerberg
+<mika.westerberg@linux.intel.com> wrote:
+>
+> Hi,
+>
+> On Mon, May 20, 2024 at 05:57:42PM +0200, Gia wrote:
+> > Hi Mario,
+> >
+> > In my case in both cases the value for:
+> >
+> > $ cat /sys/bus/thunderbolt/devices/domain0/iommu_dma_protection
+> >
+> > is 0.
+> >
+> > Output of sudo journalctl -k with kernel option thunderbolt.dyndbg=3D+p=
+:
+> > https://codeshare.io/qAXLoj
+> >
+> > Output of sudo dmesg with kernel option thunderbolt.dyndbg=3D+p:
+> > https://codeshare.io/zlPgRb
+>
+> I see you have "pcie_aspm=3Doff" in the kernel command line. That kind of
+> affects things. Can you drop that and see if it changes anything? And
+> also provide a new full dmesg with "thunderbolt.dyndbg=3D+p" in the
+> command line (dropping pcie_aspm_off)?
+>
+> Also is there any particular reason you have it there?
 
