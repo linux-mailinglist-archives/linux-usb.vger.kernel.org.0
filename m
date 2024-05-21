@@ -1,161 +1,117 @@
-Return-Path: <linux-usb+bounces-10381-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10382-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id BBC4F8CB10B
-	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2024 17:12:27 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD3C28CB126
+	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2024 17:24:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 488D9B227E6
-	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2024 15:12:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 60A0E1F24955
+	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2024 15:24:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 813CE143C58;
-	Tue, 21 May 2024 15:12:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B520143C6A;
+	Tue, 21 May 2024 15:24:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="RzUe5abH"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="w1lSHUlE"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E00D143890;
-	Tue, 21 May 2024 15:12:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.132.182.106
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C02CF7EEFD;
+	Tue, 21 May 2024 15:24:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716304337; cv=none; b=GVkDLy+CfG2e7gGvuyfYI4O+3TrjrXmWQaOr/99qXD4PH++Y50cRhBkk8O24ZxRoJ/kOO0BGlj/PhZXAt7Sp03WDyUD26SDtfjhuy0hfgRIgFwzzlFG/NJARC83mh+Aj89ITseCzjdnBf0o2yQijbp89ehB9F9G/68YVHfc7kPI=
+	t=1716305079; cv=none; b=SXz3RSwgaA3DoyiKeGESMwrgfL72VCoRTcIshlDilILeJs+cnmizxSEDmFbMokJP2jPW/muoEMfzRc1Go4IJgh0YxLrPTHaok2dAMr2dhA+yjseEcUp33sTk7RMVC1mnnSG5VoszXV6U35cuchbQAGzyfHtd73HZiyfq8JPhoI0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716304337; c=relaxed/simple;
-	bh=k9id5A6AEoMcg1f8l0mCaVw+EfoZR8CooAB/aKAYWFM=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=rYcoqhd2k4AsCKNHaf67JHab/fOqYL1rZlS7iYUnS6qQcSRnxUyF9zNmCEtplXmzBEim6dziqYB8eLwQLz9JmMi/8qjU3hAC3eUa1U2WaU87SsnXFF+leLLQaUC1qq7nG4B0gdtazsxu3TOgv8L5/3hr4Jel0RAFluVyePaPmCE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=RzUe5abH; arc=none smtp.client-ip=185.132.182.106
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 44LDpiHh028512;
-	Tue, 21 May 2024 17:11:49 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	from:to:cc:subject:date:message-id:mime-version
-	:content-transfer-encoding:content-type; s=selector1; bh=/FEvlAQ
-	usilGdNjTRD3PN3O7G4HvNhMpAzyobKWFMJ8=; b=RzUe5abH98tY6GRCtWl7ubG
-	AVSey2r/LDF6N+YK3U9A6eXRwP250dihFM5bZPJyA8GFYLqmHfJw9PIKPzA+c6XO
-	hsxsg7pZX2MobxHpYMLu0JJfYmk2A0Zfcwed1cu5CHvTXAf4mJFjTX7O7k2R86GH
-	L2xVp1KMZFbDLfjGYJvc0PfKTEYBA5Co7pBRHfH5bvYvO5abtZikcO89T9h7nkHl
-	Ud0Tcb3BiR6DT5kAQ2Fa+BflikB3eN9VwGpl7QVi8NjQrKT0FI9s9Y3rfR+WYKtd
-	CHCaX4Ai6XP9sS9EbvoekG1iuGsLPegHdsJ7hLjtGyUE9jkm4LHzU32ByQJARdQ=
-	=
-Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3y8vqh8cag-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 21 May 2024 17:11:48 +0200 (MEST)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 1BCFF4002D;
-	Tue, 21 May 2024 17:11:43 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 220332194C7;
-	Tue, 21 May 2024 17:11:17 +0200 (CEST)
-Received: from localhost (10.252.1.80) by SHFDAG1NODE2.st.com (10.75.129.70)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Tue, 21 May
- 2024 17:11:16 +0200
-From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-To: <heikki.krogerus@linux.intel.com>, <gregkh@linuxfoundation.org>
-CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <fabrice.gasnier@foss.st.com>
-Subject: [PATCH] usb: ucsi: stm32: fix command completion handling
-Date: Tue, 21 May 2024 17:11:09 +0200
-Message-ID: <20240521151109.3078775-1-fabrice.gasnier@foss.st.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1716305079; c=relaxed/simple;
+	bh=LT2IUGSarwkRVytFH/RJkbdqTKdlRHx7kjBBbCwkZOc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hPXyNZtz8hGJgUbP+YsFDE99mWoFIt3WQRFcrTwKVBR7NXdjyGgYTZ/dhAhpY8bx8fYHxgnf/VJaCWkO05fldg9W/Z9JxkTnb95TzZEcZ1g8Z/rrEGb9W/HNI9Tz3EC/1G3wudO9zTo6TwRadJ+37QW3vxIEK8xNeb/QLEy1vls=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=w1lSHUlE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08FF1C2BD11;
+	Tue, 21 May 2024 15:24:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1716305079;
+	bh=LT2IUGSarwkRVytFH/RJkbdqTKdlRHx7kjBBbCwkZOc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=w1lSHUlEHNdUOwtpggmkodjLPq5e6XoEd/jeTIGLtlAfkWhwgojNAbWSwSm2MoGXx
+	 BPRZblVE/xwREaXWcgKfJrruhZZE1XuVVN57yD/06Hwa70krn0wGvgrH9DjmwaWiwq
+	 U8MFpltI8aA428Idvt85wdfvGhnWEZdckYdrcX+k=
+Date: Tue, 21 May 2024 17:21:26 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Cc: heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [PATCH] usb: ucsi: stm32: fix command completion handling
+Message-ID: <2024052113-vanilla-expectant-5684@gregkh>
+References: <20240521151109.3078775-1-fabrice.gasnier@foss.st.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SAFCAS1NODE1.st.com (10.75.90.11) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.12.28.16
- definitions=2024-05-21_09,2024-05-21_01,2024-05-17_01
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240521151109.3078775-1-fabrice.gasnier@foss.st.com>
 
-Sometimes errors are seen, when doing DR swap, like:
-[   24.672481] ucsi-stm32g0-i2c 0-0035: UCSI_GET_PDOS failed (-5)
-[   24.720188] ucsi-stm32g0-i2c 0-0035: ucsi_handle_connector_change:
- GET_CONNECTOR_STATUS failed (-5)
+On Tue, May 21, 2024 at 05:11:09PM +0200, Fabrice Gasnier wrote:
+> Sometimes errors are seen, when doing DR swap, like:
+> [   24.672481] ucsi-stm32g0-i2c 0-0035: UCSI_GET_PDOS failed (-5)
+> [   24.720188] ucsi-stm32g0-i2c 0-0035: ucsi_handle_connector_change:
+>  GET_CONNECTOR_STATUS failed (-5)
+> 
+> There may be some race, which lead to read CCI, before the command complete
+> flag is set, hence returning -EIO. Similar fix has been done also in
+> ucsi_acpi [1].
+> 
+> In case of a spurious or otherwise delayed notification it is
+> possible that CCI still reports the previous completion. The
+> UCSI spec is aware of this and provides two completion bits in
+> CCI, one for normal commands and one for acks. As acks and commands
+> alternate the notification handler can determine if the completion
+> bit is from the current command.
+> 
+> To fix this add the ACK_PENDING bit for ucsi_stm32g0 and only complete
+> commands if the completion bit matches.
+> 
+> [1] https://lore.kernel.org/lkml/20240121204123.275441-3-lk@c--e.de/
+> 
+> Fixes: 72849d4fcee7 ("usb: typec: ucsi: stm32g0: add support for stm32g0 controller")
+> Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+> ---
+>  drivers/usb/typec/ucsi/ucsi_stm32g0.c | 18 ++++++++++++++----
+>  1 file changed, 14 insertions(+), 4 deletions(-)
 
-There may be some race, which lead to read CCI, before the command complete
-flag is set, hence returning -EIO. Similar fix has been done also in
-ucsi_acpi [1].
+Hi,
 
-In case of a spurious or otherwise delayed notification it is
-possible that CCI still reports the previous completion. The
-UCSI spec is aware of this and provides two completion bits in
-CCI, one for normal commands and one for acks. As acks and commands
-alternate the notification handler can determine if the completion
-bit is from the current command.
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
-To fix this add the ACK_PENDING bit for ucsi_stm32g0 and only complete
-commands if the completion bit matches.
+You are receiving this message because of the following common error(s)
+as indicated below:
 
-[1] https://lore.kernel.org/lkml/20240121204123.275441-3-lk@c--e.de/
+- You have marked a patch with a "Fixes:" tag for a commit that is in an
+  older released kernel, yet you do not have a cc: stable line in the
+  signed-off-by area at all, which means that the patch will not be
+  applied to any older kernel releases.  To properly fix this, please
+  follow the documented rules in the
+  Documentation/process/stable-kernel-rules.rst file for how to resolve
+  this.
 
-Fixes: 72849d4fcee7 ("usb: typec: ucsi: stm32g0: add support for stm32g0 controller")
-Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
----
- drivers/usb/typec/ucsi/ucsi_stm32g0.c | 18 ++++++++++++++----
- 1 file changed, 14 insertions(+), 4 deletions(-)
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
 
-diff --git a/drivers/usb/typec/ucsi/ucsi_stm32g0.c b/drivers/usb/typec/ucsi/ucsi_stm32g0.c
-index 93d7806681cf..7d6576778dad 100644
---- a/drivers/usb/typec/ucsi/ucsi_stm32g0.c
-+++ b/drivers/usb/typec/ucsi/ucsi_stm32g0.c
-@@ -395,9 +395,13 @@ static int ucsi_stm32g0_sync_write(struct ucsi *ucsi, unsigned int offset, const
- 				   size_t len)
- {
- 	struct ucsi_stm32g0 *g0 = ucsi_get_drvdata(ucsi);
-+	bool ack = UCSI_COMMAND(*(u64 *)val) == UCSI_ACK_CC_CI;
- 	int ret;
- 
--	set_bit(COMMAND_PENDING, &g0->flags);
-+	if (ack)
-+		set_bit(ACK_PENDING, &g0->flags);
-+	else
-+		set_bit(COMMAND_PENDING, &g0->flags);
- 
- 	ret = ucsi_stm32g0_async_write(ucsi, offset, val, len);
- 	if (ret)
-@@ -405,9 +409,14 @@ static int ucsi_stm32g0_sync_write(struct ucsi *ucsi, unsigned int offset, const
- 
- 	if (!wait_for_completion_timeout(&g0->complete, msecs_to_jiffies(5000)))
- 		ret = -ETIMEDOUT;
-+	else
-+		return 0;
- 
- out_clear_bit:
--	clear_bit(COMMAND_PENDING, &g0->flags);
-+	if (ack)
-+		clear_bit(ACK_PENDING, &g0->flags);
-+	else
-+		clear_bit(COMMAND_PENDING, &g0->flags);
- 
- 	return ret;
- }
-@@ -428,8 +437,9 @@ static irqreturn_t ucsi_stm32g0_irq_handler(int irq, void *data)
- 	if (UCSI_CCI_CONNECTOR(cci))
- 		ucsi_connector_change(g0->ucsi, UCSI_CCI_CONNECTOR(cci));
- 
--	if (test_bit(COMMAND_PENDING, &g0->flags) &&
--	    cci & (UCSI_CCI_ACK_COMPLETE | UCSI_CCI_COMMAND_COMPLETE))
-+	if (cci & UCSI_CCI_ACK_COMPLETE && test_and_clear_bit(ACK_PENDING, &g0->flags))
-+		complete(&g0->complete);
-+	if (cci & UCSI_CCI_COMMAND_COMPLETE && test_and_clear_bit(COMMAND_PENDING, &g0->flags))
- 		complete(&g0->complete);
- 
- 	return IRQ_HANDLED;
--- 
-2.25.1
+thanks,
 
+greg k-h's patch email bot
 
