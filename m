@@ -1,117 +1,222 @@
-Return-Path: <linux-usb+bounces-10382-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10383-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD3C28CB126
-	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2024 17:24:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id BEE198CB4D3
+	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2024 22:43:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 60A0E1F24955
-	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2024 15:24:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 50F541F22D6C
+	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2024 20:43:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B520143C6A;
-	Tue, 21 May 2024 15:24:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F08114901E;
+	Tue, 21 May 2024 20:43:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="w1lSHUlE"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ElXeTZh+"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-171.mta1.migadu.com (out-171.mta1.migadu.com [95.215.58.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C02CF7EEFD;
-	Tue, 21 May 2024 15:24:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C8F715EA2
+	for <linux-usb@vger.kernel.org>; Tue, 21 May 2024 20:43:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716305079; cv=none; b=SXz3RSwgaA3DoyiKeGESMwrgfL72VCoRTcIshlDilILeJs+cnmizxSEDmFbMokJP2jPW/muoEMfzRc1Go4IJgh0YxLrPTHaok2dAMr2dhA+yjseEcUp33sTk7RMVC1mnnSG5VoszXV6U35cuchbQAGzyfHtd73HZiyfq8JPhoI0=
+	t=1716324217; cv=none; b=l4s3b1C1rNVYbODXMlgFzFG3UX7EFdKLecHa4q1RuI864YHomJWHYFFzotXWY/+KdHQxk5jTjWp716jAQ/bhiRMWD5xG/qbQRvCKpAr8XlzZzBjdVblobuJNmpvzDwAMKppJwvJziOD/QJdUCD4ILRPq9+fkY+QlkDrllqxErdM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716305079; c=relaxed/simple;
-	bh=LT2IUGSarwkRVytFH/RJkbdqTKdlRHx7kjBBbCwkZOc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hPXyNZtz8hGJgUbP+YsFDE99mWoFIt3WQRFcrTwKVBR7NXdjyGgYTZ/dhAhpY8bx8fYHxgnf/VJaCWkO05fldg9W/Z9JxkTnb95TzZEcZ1g8Z/rrEGb9W/HNI9Tz3EC/1G3wudO9zTo6TwRadJ+37QW3vxIEK8xNeb/QLEy1vls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=w1lSHUlE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08FF1C2BD11;
-	Tue, 21 May 2024 15:24:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1716305079;
-	bh=LT2IUGSarwkRVytFH/RJkbdqTKdlRHx7kjBBbCwkZOc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=w1lSHUlEHNdUOwtpggmkodjLPq5e6XoEd/jeTIGLtlAfkWhwgojNAbWSwSm2MoGXx
-	 BPRZblVE/xwREaXWcgKfJrruhZZE1XuVVN57yD/06Hwa70krn0wGvgrH9DjmwaWiwq
-	 U8MFpltI8aA428Idvt85wdfvGhnWEZdckYdrcX+k=
-Date: Tue, 21 May 2024 17:21:26 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-Cc: heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-stm32@st-md-mailman.stormreply.com
-Subject: Re: [PATCH] usb: ucsi: stm32: fix command completion handling
-Message-ID: <2024052113-vanilla-expectant-5684@gregkh>
-References: <20240521151109.3078775-1-fabrice.gasnier@foss.st.com>
+	s=arc-20240116; t=1716324217; c=relaxed/simple;
+	bh=TzQgSTHgyU3RFoY2gln3DsZdwLETCJum6BNwDOVNJoU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=W/Cb/OUmZj1rercN2meHs2dLOppVe6f06XA15SUJlJWQ9dIPz2jXgamn9pTvHXt8ExQw/wDfnzuGgHfrMf4MTMcTXTp/1Y9Ucf2dV08kGdmRpgOae65eyjXjv7ciNwNsN3pd89/ygCgre6y/+n0nNYbDe2H7yC8O/ZY8c4aYsks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ElXeTZh+; arc=none smtp.client-ip=95.215.58.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Envelope-To: stern@rowland.harvard.edu
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1716324213;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Bef2r7PmAPGGh3unVAHDRXktGwmTTWv6IxMkhLqqDqQ=;
+	b=ElXeTZh+E3DhYrztaPCNXbyulyJAnRLZI3D5L4hTmCT2yONO9HkfS5P7cAoAPxZhxxGxJV
+	Mw7eReiwVSbBXJqU7HaukGpck4HYFNe9Z8td+7LwebFNn3b+sIRHWwqqJcDIKWQ2QGzIgW
+	JfcxbZ2oZr7Y5n6Dd2I8hELpKYS4tG0=
+X-Envelope-To: gregkh@linuxfoundation.org
+X-Envelope-To: andreyknvl@gmail.com
+X-Envelope-To: dvyukov@google.com
+X-Envelope-To: elver@google.com
+X-Envelope-To: glider@google.com
+X-Envelope-To: kasan-dev@googlegroups.com
+X-Envelope-To: penguin-kernel@i-love.sakura.ne.jp
+X-Envelope-To: tj@kernel.org
+X-Envelope-To: linux-usb@vger.kernel.org
+X-Envelope-To: linux-kernel@vger.kernel.org
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: andrey.konovalov@linux.dev
+To: Alan Stern <stern@rowland.harvard.edu>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Andrey Konovalov <andreyknvl@gmail.com>,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Marco Elver <elver@google.com>,
+	Alexander Potapenko <glider@google.com>,
+	kasan-dev@googlegroups.com,
+	Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+	Tejun Heo <tj@kernel.org>,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2] kcov, usb: disable interrupts in kcov_remote_start_usb_softirq
+Date: Tue, 21 May 2024 22:43:24 +0200
+Message-Id: <20240521204324.479972-1-andrey.konovalov@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240521151109.3078775-1-fabrice.gasnier@foss.st.com>
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Tue, May 21, 2024 at 05:11:09PM +0200, Fabrice Gasnier wrote:
-> Sometimes errors are seen, when doing DR swap, like:
-> [   24.672481] ucsi-stm32g0-i2c 0-0035: UCSI_GET_PDOS failed (-5)
-> [   24.720188] ucsi-stm32g0-i2c 0-0035: ucsi_handle_connector_change:
->  GET_CONNECTOR_STATUS failed (-5)
-> 
-> There may be some race, which lead to read CCI, before the command complete
-> flag is set, hence returning -EIO. Similar fix has been done also in
-> ucsi_acpi [1].
-> 
-> In case of a spurious or otherwise delayed notification it is
-> possible that CCI still reports the previous completion. The
-> UCSI spec is aware of this and provides two completion bits in
-> CCI, one for normal commands and one for acks. As acks and commands
-> alternate the notification handler can determine if the completion
-> bit is from the current command.
-> 
-> To fix this add the ACK_PENDING bit for ucsi_stm32g0 and only complete
-> commands if the completion bit matches.
-> 
-> [1] https://lore.kernel.org/lkml/20240121204123.275441-3-lk@c--e.de/
-> 
-> Fixes: 72849d4fcee7 ("usb: typec: ucsi: stm32g0: add support for stm32g0 controller")
-> Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-> ---
->  drivers/usb/typec/ucsi/ucsi_stm32g0.c | 18 ++++++++++++++----
->  1 file changed, 14 insertions(+), 4 deletions(-)
+From: Andrey Konovalov <andreyknvl@gmail.com>
 
-Hi,
+After commit 8fea0c8fda30 ("usb: core: hcd: Convert from tasklet to BH
+workqueue"), usb_giveback_urb_bh() runs in the BH workqueue with
+interrupts enabled.
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+Thus, the remote coverage collection section in usb_giveback_urb_bh()->
+__usb_hcd_giveback_urb() might be interrupted, and the interrupt handler
+might invoke __usb_hcd_giveback_urb() again.
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+This breaks KCOV, as it does not support nested remote coverage collection
+sections within the same context (neither in task nor in softirq).
 
-- You have marked a patch with a "Fixes:" tag for a commit that is in an
-  older released kernel, yet you do not have a cc: stable line in the
-  signed-off-by area at all, which means that the patch will not be
-  applied to any older kernel releases.  To properly fix this, please
-  follow the documented rules in the
-  Documentation/process/stable-kernel-rules.rst file for how to resolve
-  this.
+Update kcov_remote_start/stop_usb_softirq() to disable interrupts for the
+duration of the coverage collection section to avoid nested sections in
+the softirq context (in addition to such in the task context, which are
+already handled).
 
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
+Reported-by: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Closes: https://lore.kernel.org/linux-usb/0f4d1964-7397-485b-bc48-11c01e2fcbca@I-love.SAKURA.ne.jp/
+Closes: https://syzkaller.appspot.com/bug?extid=0438378d6f157baae1a2
+Suggested-by: Alan Stern <stern@rowland.harvard.edu>
+Fixes: 8fea0c8fda30 ("usb: core: hcd: Convert from tasklet to BH workqueue")
+Acked-by: Dmitry Vyukov <dvyukov@google.com>
+Signed-off-by: Andrey Konovalov <andreyknvl@gmail.com>
 
-thanks,
+---
 
-greg k-h's patch email bot
+Changes v1->v2:
+
+- Fix compiler error when CONFIG_KCOV=n.
+---
+ drivers/usb/core/hcd.c | 12 ++++++-----
+ include/linux/kcov.h   | 47 ++++++++++++++++++++++++++++++++++--------
+ 2 files changed, 45 insertions(+), 14 deletions(-)
+
+diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
+index c0e005670d67..fb1aa0d4fc28 100644
+--- a/drivers/usb/core/hcd.c
++++ b/drivers/usb/core/hcd.c
+@@ -1623,6 +1623,7 @@ static void __usb_hcd_giveback_urb(struct urb *urb)
+ 	struct usb_hcd *hcd = bus_to_hcd(urb->dev->bus);
+ 	struct usb_anchor *anchor = urb->anchor;
+ 	int status = urb->unlinked;
++	unsigned long flags;
+ 
+ 	urb->hcpriv = NULL;
+ 	if (unlikely((urb->transfer_flags & URB_SHORT_NOT_OK) &&
+@@ -1640,13 +1641,14 @@ static void __usb_hcd_giveback_urb(struct urb *urb)
+ 	/* pass ownership to the completion handler */
+ 	urb->status = status;
+ 	/*
+-	 * This function can be called in task context inside another remote
+-	 * coverage collection section, but kcov doesn't support that kind of
+-	 * recursion yet. Only collect coverage in softirq context for now.
++	 * Only collect coverage in the softirq context and disable interrupts
++	 * to avoid scenarios with nested remote coverage collection sections
++	 * that KCOV does not support.
++	 * See the comment next to kcov_remote_start_usb_softirq() for details.
+ 	 */
+-	kcov_remote_start_usb_softirq((u64)urb->dev->bus->busnum);
++	flags = kcov_remote_start_usb_softirq((u64)urb->dev->bus->busnum);
+ 	urb->complete(urb);
+-	kcov_remote_stop_softirq();
++	kcov_remote_stop_softirq(flags);
+ 
+ 	usb_anchor_resume_wakeups(anchor);
+ 	atomic_dec(&urb->use_count);
+diff --git a/include/linux/kcov.h b/include/linux/kcov.h
+index b851ba415e03..1068a7318d89 100644
+--- a/include/linux/kcov.h
++++ b/include/linux/kcov.h
+@@ -55,21 +55,47 @@ static inline void kcov_remote_start_usb(u64 id)
+ 
+ /*
+  * The softirq flavor of kcov_remote_*() functions is introduced as a temporary
+- * work around for kcov's lack of nested remote coverage sections support in
+- * task context. Adding support for nested sections is tracked in:
+- * https://bugzilla.kernel.org/show_bug.cgi?id=210337
++ * workaround for KCOV's lack of nested remote coverage sections support.
++ *
++ * Adding support is tracked in https://bugzilla.kernel.org/show_bug.cgi?id=210337.
++ *
++ * kcov_remote_start_usb_softirq():
++ *
++ * 1. Only collects coverage when called in the softirq context. This allows
++ *    avoiding nested remote coverage collection sections in the task context.
++ *    For example, USB/IP calls usb_hcd_giveback_urb() in the task context
++ *    within an existing remote coverage collection section. Thus, KCOV should
++ *    not attempt to start collecting coverage within the coverage collection
++ *    section in __usb_hcd_giveback_urb() in this case.
++ *
++ * 2. Disables interrupts for the duration of the coverage collection section.
++ *    This allows avoiding nested remote coverage collection sections in the
++ *    softirq context (a softirq might occur during the execution of a work in
++ *    the BH workqueue, which runs with in_serving_softirq() > 0).
++ *    For example, usb_giveback_urb_bh() runs in the BH workqueue with
++ *    interrupts enabled, so __usb_hcd_giveback_urb() might be interrupted in
++ *    the middle of its remote coverage collection section, and the interrupt
++ *    handler might invoke __usb_hcd_giveback_urb() again.
+  */
+ 
+-static inline void kcov_remote_start_usb_softirq(u64 id)
++static inline unsigned long kcov_remote_start_usb_softirq(u64 id)
+ {
+-	if (in_serving_softirq())
++	unsigned long flags = 0;
++
++	if (in_serving_softirq()) {
++		local_irq_save(flags);
+ 		kcov_remote_start_usb(id);
++	}
++
++	return flags;
+ }
+ 
+-static inline void kcov_remote_stop_softirq(void)
++static inline void kcov_remote_stop_softirq(unsigned long flags)
+ {
+-	if (in_serving_softirq())
++	if (in_serving_softirq()) {
+ 		kcov_remote_stop();
++		local_irq_restore(flags);
++	}
+ }
+ 
+ #ifdef CONFIG_64BIT
+@@ -103,8 +129,11 @@ static inline u64 kcov_common_handle(void)
+ }
+ static inline void kcov_remote_start_common(u64 id) {}
+ static inline void kcov_remote_start_usb(u64 id) {}
+-static inline void kcov_remote_start_usb_softirq(u64 id) {}
+-static inline void kcov_remote_stop_softirq(void) {}
++static inline unsigned long kcov_remote_start_usb_softirq(u64 id)
++{
++	return 0;
++}
++static inline void kcov_remote_stop_softirq(unsigned long flags) {}
+ 
+ #endif /* CONFIG_KCOV */
+ #endif /* _LINUX_KCOV_H */
+-- 
+2.25.1
+
 
