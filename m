@@ -1,201 +1,126 @@
-Return-Path: <linux-usb+bounces-10360-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10361-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8405F8CA931
-	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2024 09:43:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DDE018CA947
+	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2024 09:47:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B4E6282D82
-	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2024 07:43:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 998D4282BF7
+	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2024 07:47:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0279451C5F;
-	Tue, 21 May 2024 07:43:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C0CC51C5F;
+	Tue, 21 May 2024 07:47:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CM9AT0ap"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="pQrAn3M7"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73BD5C12C;
-	Tue, 21 May 2024 07:43:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A55017740;
+	Tue, 21 May 2024 07:47:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716277431; cv=none; b=METutlkr+aoYLGhZPuL8v475/6fxL1x0FylJC1rvDWI8aF45TSs9EuKXsiyltlSL7dJDMETbysP5TzdW+1nF7ASBNwhaJ1FXNFkXejbUvUt9yoFXZ3HqmWODOtGjIx93u7lqQ8KAyh01Z68VpRUCYSySFMw/G89cCvFZPsw5SW8=
+	t=1716277628; cv=none; b=TH7dhlD9Aha60iEb2BADGLda+K0ghbNP4j6qBCO6yWjIXKfqeAbXGU65HswCsfoKTyiGr8j+m1zxR2cui8IbfTTImOVIUYQX4I0NAXn6wuCvab8Md9YzOIloFJim9KxY8gDPC88YIifcl7j7NkT/MWHHMpmbBt6JSYoDPIFYmbI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716277431; c=relaxed/simple;
-	bh=A9IoVr57gmQQXvYv0Uila/oUZpM/Kyt0jnAtAwEIOdM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TTEcQZUV6dK7/LgoeM6IUS+FrxbvxzVpy7o/3/M2hXFaWUY9p6gqKWiPjjYRwovLATQME1OJF8sAHqTdMIusot5zaLU5PLIFYiY6uBB02YyoZcnuzJQpejyezQwkbu1ztR5ax651a4uOlfQn5RVoG7GcqiOBsxAVrIE/PgOppFY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CM9AT0ap; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F99FC2BD11;
-	Tue, 21 May 2024 07:43:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716277431;
-	bh=A9IoVr57gmQQXvYv0Uila/oUZpM/Kyt0jnAtAwEIOdM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=CM9AT0apq+pZCL0u4THZUTsWP9EETGIxjdkiLNHh0cj02ai8FUL0JrZPgOP/GwGH5
-	 7gL+3RguyfWuUEhL3mHYspEfmDS3wZnrnxlz2MlbdJkZu25tJMULW1kZkDEGSKSjw7
-	 rytD152qkcnXY3HM9O6QKKApQkGYzT8vsllfbEImOW7/nVgPVkIYPOKy3dzX6U2pFl
-	 J90Xhkq2vVMqew4OOXYzknCC2edddAo1nKoA9ivnAwQxLmQmZ1E8JPftPTW95lDVVE
-	 iO/uJ9bJEhiskYxB8kVQObAWg+JPdifmIEENjJ6CSX4+S4T6cMWxLZAfumeNjgXnJn
-	 OVzOlU48ZsLBg==
-Message-ID: <bc9079e8-0f20-4875-80e9-bccf7d1f761b@kernel.org>
-Date: Tue, 21 May 2024 09:43:45 +0200
+	s=arc-20240116; t=1716277628; c=relaxed/simple;
+	bh=jj3ml5NryMM9k6Dd7LW1/PbFcKW1PEXt0SN6m0z7Ovk=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=U60h3lX2BgKX3iSNRCWFlkvPLPxuBL1d0f6mTFGkaMnYjpT8WK8Y025s42WuTYba0w9k90kQEdnC7bILukd2vfCyisoPLIZrTa3GRpt+7Tb87urKd3zvyqG7yb1109Ai/s14rVvZh8HpyrSfZK9vE8W7WY+6neeL69LWocTpKn0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=pQrAn3M7; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 44L3aVDH030616;
+	Tue, 21 May 2024 07:47:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	from:to:cc:subject:date:message-id:mime-version:content-type; s=
+	qcppdkim1; bh=Prfa9G4HnCS9d8aKGY/KCOiEB9xV9WvqnSIJw3f9/gw=; b=pQ
+	rAn3M7BR7cBKc2vxWTqUklXt9Tbi+/SA2F+0Y9uiTKUjMsaiMmDkl9PDp63AEib8
+	lW24OxsQCnwN86Z40UvW/es0Ficj7EWyzYPeI71qFw4WErv3ttfyJH8K/y2rh3uQ
+	GTIubKlkIStXPnFQLTiDIBTZ1o1sqIt2KDakim9K4jzw1l6fiWMlhlRvV2kgAMoJ
+	y5tVf1Mac+zMuGdR4NJ+C2LjsFo3yN8Etnr0cRx9OSOR2F9dTUDdqWIQp1UuNedr
+	CebcKk04qnR+krUIxZ2lfD1YBP3G6TxKBBNYhi2XQ4wctH/8XrT3KCgxtbu3Vbjk
+	gEC7j05KDVG5ogbHPcag==
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3y6pr2n5e7-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 21 May 2024 07:47:02 +0000 (GMT)
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+	by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 44L7l1jd004985
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 21 May 2024 07:47:01 GMT
+Received: from hu-akakum-hyd.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Tue, 21 May 2024 00:46:53 -0700
+From: Akash Kumar <quic_akakum@quicinc.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jing Leng
+	<jleng@ambarella.com>, Felipe Balbi <balbi@kernel.org>,
+        =?UTF-8?q?Pratham=20Pratap=C2=A0?= <quic_ppratap@quicinc.com>,
+        Jack Pham
+	<quic_jackp@quicinc.com>, <kernel@quicinc.com>,
+        Wesley Cheng
+	<quic_wcheng@quicinc.com>,
+        Vijayavardhan Vennapusa
+	<quic_vvreddy@quicinc.com>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>
+CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Akash Kumar
+	<quic_akakum@quicinc.com>
+Subject: [PATCH] USB: pci-quirks: Skip usb_early_handoff for Renesas PCI USB
+Date: Tue, 21 May 2024 13:16:35 +0530
+Message-ID: <20240521074635.17938-1-quic_akakum@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] dt-bindings: usb: gpio-sbu-mux: Add an entry for
- TMUXHS4212
-To: Nishanth Menon <nm@ti.com>
-Cc: Francesco Dolcini <francesco@dolcini.it>,
- Parth Pancholi <parth105105@gmail.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
- Parth Pancholi <parth.pancholi@toradex.com>, linux-usb@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, vigneshr@ti.com
-References: <20240517111140.859677-1-parth105105@gmail.com>
- <1675a33d-47af-4de9-a0e7-177cbe208e2b@kernel.org>
- <20240519202754.GA3334@francesco-nb>
- <469be7c2-6865-40d4-bd06-15dc3a08b3e3@kernel.org>
- <20240520121441.svp6oabjyev4vmih@magazine>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20240520121441.svp6oabjyev4vmih@magazine>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: CrJNrORKKLpUYSxBsDPQS7MuMakBwliP
+X-Proofpoint-GUID: CrJNrORKKLpUYSxBsDPQS7MuMakBwliP
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.12.28.16
+ definitions=2024-05-21_04,2024-05-21_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=964 bulkscore=0
+ malwarescore=0 spamscore=0 priorityscore=1501 impostorscore=0
+ clxscore=1015 lowpriorityscore=0 adultscore=0 suspectscore=0 mlxscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2405010000 definitions=main-2405210058
 
-On 20/05/2024 14:14, Nishanth Menon wrote:
-> On 08:53-20240520, Krzysztof Kozlowski wrote:
->> On 19/05/2024 22:27, Francesco Dolcini wrote:
-> 
-> [...]
->>> If it's not the case we'll send the patch later on, however some
->>> DT files maintainers (e.g. arch/arm64/boot/dts/ti/) have a policy to
->>> just accept DT file in which the binding changes are already merged
->>> therefore I was trying to be a little bit proactive here.
->>
->> TI? Never heard something like this from them... Such requirement would
->> seriously slow down any work, so it's not really reasonable. Expectation
->> is to post both binding change and an user, so DTS, in case of USB in
->> separate patchsets.
-> 
-> There is a reason we have set that "soft rule":
-> - Driver subsystem merges have known to be broken from time to time and
->   the dt maintainer is left holding compatibles that have not made to
->   master.
+Skip usb_early_handoff for the Renesas PCI USB controller due to
+the firmware not being loaded beforehand, which impacts the bootup
+time.
 
-You mean driver tree took the bindings (because then you take the DTS)
-but they did not make it up to the master? Yeah, happens, but postponing
-DTS code for this is quite harsh.
+Signed-off-by: Akash Kumar <quic_akakum@quicinc.com>
+---
+ drivers/usb/host/pci-quirks.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-> - ARM subsystem merges prefers not to see checkpatch warnings -
->   typically, this happens with new compatibles in the driver subsystem.
-
-Never heard any comment about this. Maybe because I always do checkpatch
-tests (part of workflow), so then any warning, which there are pretty
-lot like touching maintainer files, is understood as accepted.
-
-> - Off chance that driver subsystem maintainer picks up the dt changes as
->   well (should not happen, but has happened)
-
-DTS changes? Yes, that's why they should be in separate patchsets for
-few known trees, like USB, net, media.
-
-> 
-> We have however flexed the rule when:
-> a) driver maintainer is willing to provide us an immutable tag that we
->    can merge in and base the dts on top.
-
-You cannot base DTS on top of any driver branch. In the past Arnd and
-Olof were rejecting this, recently this got more flexible, but still cannot.
-
-This implies dependency, which is a no-go.
-
-> b) We felt that the chances of the driver not making it is very very low
->    (typically after 1+ month in next) and the dts change is in the wider
->    interest of the community. In such case, we have to explicitly take
->    the action of letting the patch submitter, driver subsystem to let us
->    know if something bad happens to the PR, also in our PR to SoC
->    maintainers, we have to call it out along with rationale why this is
->    OK. This is a bunch of work from a lot of folks, so prefer only to
->    trigger this path in case of exceptional cases - there have been a
->    few far in between.
-> 
-> Again, the default rule (driver in one window, binding in next) has
-> kept us out of trouble for a few years now at the detriment of pace
-> of merges, but that took care of a lot of conflicts that we had seen
-> during initial days of k3 - there are few chains in the lakml list
-> where this was the direction we ended up in after discussion.
-> 
-> But, yes - as you mentioned, send the patches of the "user" of the dt
-> binding and driver gives the subsystem and dt maintainers a chance to
-> review in the context of usage prior to the driver and binding merge.
-
-Anyway, I am fine, but then I expect from the contributor to explain
-where is the user.
-
-Specifically, for completely new bindings I will NAK them if there is no
-driver or DTS posted. Why? Because experience shown me that people post
-some bindings and then entirely different DTS, without running full
-dtbs_check. Therefore I want to see both - bindings and DTS, if applicable.
-
-It is easy to fulfill both requirements - mine and yours. Post bindings.
-Post DTS and link the bindings, with explanation it should be picked up
-*later*, because that's what TI expects. That's way I can still find
-both pieces, but you do not risk taking DTS too early.
-
-
-Best regards,
-Krzysztof
+diff --git a/drivers/usb/host/pci-quirks.c b/drivers/usb/host/pci-quirks.c
+index 0b949acfa258..a0770ecc0861 100644
+--- a/drivers/usb/host/pci-quirks.c
++++ b/drivers/usb/host/pci-quirks.c
+@@ -1264,6 +1264,11 @@ static void quirk_usb_early_handoff(struct pci_dev *pdev)
+ 		}
+ 	}
+ 
++	/* Skip handoff for Renesas PCI USB controller on QCOM SOC */
++	if ((pdev->vendor == PCI_VENDOR_ID_RENESAS) &&
++			(pcie_find_root_port(pdev)->vendor == PCI_VENDOR_ID_QCOM))
++		return;
++
+ 	if (pdev->class != PCI_CLASS_SERIAL_USB_UHCI &&
+ 			pdev->class != PCI_CLASS_SERIAL_USB_OHCI &&
+ 			pdev->class != PCI_CLASS_SERIAL_USB_EHCI &&
+-- 
+2.17.1
 
 
