@@ -1,70 +1,100 @@
-Return-Path: <linux-usb+bounces-10394-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10395-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B85018CBC1F
-	for <lists+linux-usb@lfdr.de>; Wed, 22 May 2024 09:35:05 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 643388CBDBF
+	for <lists+linux-usb@lfdr.de>; Wed, 22 May 2024 11:24:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 519ABB20FF3
-	for <lists+linux-usb@lfdr.de>; Wed, 22 May 2024 07:35:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 05CDB1F232F2
+	for <lists+linux-usb@lfdr.de>; Wed, 22 May 2024 09:24:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52CCB3E47E;
-	Wed, 22 May 2024 07:34:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0AEB52F7A;
+	Wed, 22 May 2024 09:24:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="BxgOc/Tx"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="WQ+Fxc3H"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A68DE37153;
-	Wed, 22 May 2024 07:34:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAE2280C03;
+	Wed, 22 May 2024 09:24:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716363293; cv=none; b=S+KiFsK3EIJ4voyT0hIe76PkcOIXoa1W7B5cmdfYQZzsUmW2F0w7YDDZgkdy+VWlVod9WOyiAer2EXa6JrWMgUp5X6460PN62mvAJzf3W0sESLe6feTJPWFk+k+d14sosLkYdisPJ1AEbgIQu2H0ghMsxgNKtOQyzsPeGwaiWWg=
+	t=1716369857; cv=none; b=uGSW3OIY4mDdDK+5usfXQbtfPuOQCAFnRZhS3qCYr0vgQ/upRUV9/AtebnnOBQ3FLwHlBBYg8cG6rUxRZYHcPh2tJ0+yGDpLgh17zTmZMwI7ruCnBsqGN/ImeynnFii4E4QjneggZnBNMt9N7n2IFcgylOnjCasaelwysZ/jomY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716363293; c=relaxed/simple;
-	bh=LtjISD2lbLxp70hQc5Z5mwe0ZOQisKZWMR0MnHX+DdY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aGdSwNGaHLNyS5rQU7xLyCXOxTRzgi/gHWmxKyy8+kXo7FIFh/ZWfhY2z1BogD9bkPXXouAgsZl5mBNx65vhE41FX8CBViZOs56XW5INM0lpIDTNdl0lAkhGI+MUn5vL6z7Y2tii9bMErv3PDbLjPDLQT0CnB/PLXSn0mmRue4w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=BxgOc/Tx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBBB2C32789;
-	Wed, 22 May 2024 07:34:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1716363293;
-	bh=LtjISD2lbLxp70hQc5Z5mwe0ZOQisKZWMR0MnHX+DdY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BxgOc/TxWHWxC1u6UuRvtFj8/x7TDPLrM/vfrnpL8WcPDoQPNyH1BbNoMT2GSPGKy
-	 2vhHB0knam2E8y/dDNXVJ3CsuSZhQTYmX4UC+hSAEqJ5dHYvUql9JGBl/dLzdD6h5l
-	 FGT7Yudg0JXPKFjPGf3sWi8mE/JemTDMKlgAlxDQ=
-Date: Wed, 22 May 2024 09:34:50 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Shichao Lai <phyhac@gmail.com>
-Cc: Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org,
-	usb-storage@lists.one-eyed-alien.net, linux-kernel@vger.kernel.org,
-	syzkaller@googlegroups.com
-Subject: Re: divide error in alauda_transport
-Message-ID: <2024052224-motion-perish-82cd@gregkh>
-References: <CAEk6kZszgHVYN8r-AsPw9YtGGf459j0uDMYLdOoTixhE3YJCKw@mail.gmail.com>
+	s=arc-20240116; t=1716369857; c=relaxed/simple;
+	bh=kzzkB8V8z296o4CBEK4CUuCnDBnubxduo8Qf8Pgb+Q8=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=BLX0OiXpW2D+OaJ8yzHYTnbsolwIB/WvYezfrAM7j9jcbHn1r2zbrX9r0ZEE4maEB5to+sARsv83m/S5MLozbwtRuOvDft22H5ArdewI5K3tjJdYuB8wo8WyHfAwqeZjj/8MxqoBeBSQMBT/Zjy2hTjpkJgMrdhodMQEoRCDG/g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=WQ+Fxc3H; arc=none smtp.client-ip=117.135.210.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:Subject:Date:Message-Id; bh=RwMGp8RoTylMfwZCt8
+	jxh3g8ipDYLlZV8k6iQyzxZPQ=; b=WQ+Fxc3H1Ad3e8rRfmPDVsHGLx0R6GHpYj
+	4RPfzhP2IWZ/a0ki6td49eK8ib8mvtHxoq/ZHDctZBoKRm9MNhCdXdaTFVYdUyiM
+	Wgt34mwhIQP5kjO+mFxxjFgzFoZbWWDMTWtmnpYhQTKAE1ZJ4sYJmRSA5Kiq+fad
+	aslXbzh7U=
+Received: from localhost.localdomain (unknown [111.48.58.10])
+	by gzga-smtp-mta-g2-3 (Coremail) with SMTP id _____wD3f0VzuU1mWW3nAw--.29954S2;
+	Wed, 22 May 2024 17:23:00 +0800 (CST)
+From: huanglei814 <huanglei814@163.com>
+To: jikos@kernel.org,
+	bentiss@kernel.org
+Cc: linux-usb@vger.kernel.org,
+	linux-input@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	huanglei <huanglei@kylinos.cn>
+Subject: [PATCH] HID: usbhid: enable remote wakeup for mouse
+Date: Wed, 22 May 2024 17:22:57 +0800
+Message-Id: <20240522092257.19373-1-huanglei814@163.com>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID:_____wD3f0VzuU1mWW3nAw--.29954S2
+X-Coremail-Antispam: 1Uf129KBjvdXoW7Gw1ktw1UAF4fKry7ur4DJwb_yoWktFX_Kw
+	4UuaykG3WfX3Z7Ka45KrWrtryakw4j9rWxWF1Iyr1fX3y2vws8Wr4DZr1qgw1a939rZa48
+	Crs8Kr4Fvr1vkjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU8VHq7UUUUU==
+X-CM-SenderInfo: xkxd0wxohlmiqu6rljoofrz/1tbiLBjm9mXAmD8koQAAsj
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEk6kZszgHVYN8r-AsPw9YtGGf459j0uDMYLdOoTixhE3YJCKw@mail.gmail.com>
 
-On Wed, May 22, 2024 at 03:28:01PM +0800, Shichao Lai wrote:
-> Hello Dear maintainer!
-> A new bug was found by our modified syzkaller.
+From: huanglei <huanglei@kylinos.cn>
 
-Nice, do you have a proposed fix for this issue so that we can give you
-the credit for resolving the issue?
+This patch enables remote wakeup by default for USB mouse
+devices.  Mouse can used to be wakeup devices, but the correct
+place to enable it depends on the device's bus; no single
+approach will work for all mouse devices.  In particular, this
+covers only USB mouse (and then only those supporting the boot
+protocol).
 
-thanks,
+Signed-off-by: huanglei <huanglei@kylinos.cn>
+---
+ drivers/hid/usbhid/hid-core.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-greg k-h
+diff --git a/drivers/hid/usbhid/hid-core.c b/drivers/hid/usbhid/hid-core.c
+index a90ed2ceae84..7ed3ab36426d 100644
+--- a/drivers/hid/usbhid/hid-core.c
++++ b/drivers/hid/usbhid/hid-core.c
+@@ -1189,6 +1189,15 @@ static int usbhid_start(struct hid_device *hid)
+ 		device_set_wakeup_enable(&dev->dev, 1);
+ 	}
+ 
++	/* enable remote wakeup by default for all mouse
++	 * devices supporting the boot protocol.
++	 */
++	if (interface->desc.bInterfaceSubClass == USB_INTERFACE_SUBCLASS_BOOT &&
++			interface->desc.bInterfaceProtocol ==
++				USB_INTERFACE_PROTOCOL_MOUSE) {
++		device_set_wakeup_enable(&dev->dev, 1);
++	}
++
+ 	mutex_unlock(&usbhid->mutex);
+ 	return 0;
+ 
+-- 
+2.17.1
+
 
