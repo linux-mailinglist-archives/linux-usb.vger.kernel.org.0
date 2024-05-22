@@ -1,147 +1,96 @@
-Return-Path: <linux-usb+bounces-10401-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10402-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1FF018CC243
-	for <lists+linux-usb@lfdr.de>; Wed, 22 May 2024 15:39:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 291118CC26E
+	for <lists+linux-usb@lfdr.de>; Wed, 22 May 2024 15:50:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 522D51C21986
-	for <lists+linux-usb@lfdr.de>; Wed, 22 May 2024 13:39:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D9EF12819F8
+	for <lists+linux-usb@lfdr.de>; Wed, 22 May 2024 13:50:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83A3A14037D;
-	Wed, 22 May 2024 13:39:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FFv7Gb93"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC63113EFE3;
+	Wed, 22 May 2024 13:49:59 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3364F13D639;
-	Wed, 22 May 2024 13:39:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id 5BCB71E4AB
+	for <linux-usb@vger.kernel.org>; Wed, 22 May 2024 13:49:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716385145; cv=none; b=sWGrySG6mc1YMeP1U+kW5vWxrBHlQIo3mpc2KMpLwQbLS+UbleYqXfGcXo5IF+q0rT+CKe4MjxN2QWIP7FrIHohFlWbkQfqd7cDplk81BFgDSwEcpQrbvcLv4yZZOYM7obOPvkrPal4qdb8tygFKLrpcf+3neG8wTAyjMVaf0zg=
+	t=1716385799; cv=none; b=S/GB3DYz46+idAi9TzUD0wgh2kniEw+zQNN7FIlGwN9GSNtW1RvGpiKfM5qaoVvjijGWaONgAyQKzOJKJ0gevQ51uX85SDcnXGGB2sWGr0JNMUmBjiHLV1QlvrBdp2ZNrx6tBBrCrnLkSenkFLGSmNifwFmX9vJcCXrCKfRSkek=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716385145; c=relaxed/simple;
-	bh=C8wYKhP4GRxxZY3i0yCo7CFRPS3l6ZJ3JinPO2lbw20=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:From:Subject:
-	 In-Reply-To:Content-Type; b=nvGXbibSr/8BiEZCRZiMwx462XE0UHQoc4MC+h4h2fgeuAxXQF+uCRpKWcLMjQFUOgOXJ6xnkc3lhbtuVpZ116vuvpGl4ezCmK+oZgQwpeycjGqNwFIM7wViKNus8ywE7ryXAk662VcZeVKovM2V6bD4OG9iBv96fvlwIG0Lfic=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FFv7Gb93; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1716385143; x=1747921143;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=C8wYKhP4GRxxZY3i0yCo7CFRPS3l6ZJ3JinPO2lbw20=;
-  b=FFv7Gb93EYT0mol22xB8e3SpFqjuxcCHpgnKicp9+2uc9FSk2txrMaWQ
-   rJ9ezFsgDocRdrL3wxKQotV0365ufDfGtJHEdaBBQE3dnh98M3moCCbMC
-   eWA/DUfwh4/9I4Goa/z5Ly3s2QBQdYqPBCg6d1Uc7XsM26LO5960r/dQV
-   UxtkulQRgKmqXB1QvFHvHcxkomAE+eZujWFpERwM3it//+T8qJJUFknMO
-   nhUObk0HRKNJzcCBWIT9peXdzSw1dnkgLTWK0chrY76vSqrBhQnCkxdML
-   jmaNpSJSVjnj6OJMejJd0PqtTQ2glNnLjQhYhgh1s95/3VYCWKWK9dYMG
-   w==;
-X-CSE-ConnectionGUID: r9x1sCngRBCoedXUinYusg==
-X-CSE-MsgGUID: NnH8BbrBReGOFzE8laldVQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11079"; a="24049568"
-X-IronPort-AV: E=Sophos;i="6.08,179,1712646000"; 
-   d="scan'208";a="24049568"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2024 06:39:02 -0700
-X-CSE-ConnectionGUID: 9nh8CNNKSm6IHeUlWBgVFw==
-X-CSE-MsgGUID: eCXBNuQGS2yGRpZkl0HwMQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,179,1712646000"; 
-   d="scan'208";a="37768842"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmviesa003.fm.intel.com with ESMTP; 22 May 2024 06:39:00 -0700
-Message-ID: <6a4767b5-1e2f-dbec-58ca-c44eb0fca6f1@linux.intel.com>
-Date: Wed, 22 May 2024 16:40:56 +0300
+	s=arc-20240116; t=1716385799; c=relaxed/simple;
+	bh=78Q2CGlF7Kc7/HZA9H4BC5dum8xm9Ro2FY2sOfh2+Cg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cqjZ3sOyaBWIbtZmUTa1n41VjYt0ANjg6t35SxcKmsbAB8ijXYUEnz4f3wdbouCQudoxk6yDfmP7ZpHiuq77aRdIhq8/4J/IjC+KBk5WdImv7EAh1gd5jbGXJAaA1UY9Y53dmjqei9ACsyvdYASbz0+rg3ohuWfbdOOHTuSLElM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
+Received: (qmail 497823 invoked by uid 1000); 22 May 2024 09:49:55 -0400
+Date: Wed, 22 May 2024 09:49:55 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Shichao Lai <phyhac@gmail.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+  linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+  linux-kernel@vger.kernel.org, syzkaller@googlegroups.com
+Subject: Re: divide error in alauda_transport
+Message-ID: <b82e133a-62a3-4f23-9803-1af79b06b8f4@rowland.harvard.edu>
+References: <CAEk6kZszgHVYN8r-AsPw9YtGGf459j0uDMYLdOoTixhE3YJCKw@mail.gmail.com>
+ <2024052224-motion-perish-82cd@gregkh>
+ <CAEk6kZt4qcV0xUxHFRp3DTdZ0f_3fLE0q4e_AWHGyjba=19g9g@mail.gmail.com>
+ <CAEk6kZsgEJNSmFFe-tdA+RhM=+Pjm=JvHiNJ4QjZONPXHt-gjw@mail.gmail.com>
+ <2024052242-hunter-exception-930c@gregkh>
+ <CAEk6kZsLqJ5RbWYMrcbB+LkRq8jzRgTm3F8kq8FKB14y8ST2GQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.13.0
-Content-Language: en-US
-To: Daehwan Jung <dh10.jung@samsung.com>,
- Mathias Nyman <mathias.nyman@intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
- open list <linux-kernel@vger.kernel.org>,
- Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-References: <CGME20240522010409epcas2p457b2fcb4f423f2500305053f44ae3199@epcas2p4.samsung.com>
- <1716339839-44022-1-git-send-email-dh10.jung@samsung.com>
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [RFC] usb: host: xhci-mem: Write high first on erst base of
- secondary interrupter
-In-Reply-To: <1716339839-44022-1-git-send-email-dh10.jung@samsung.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEk6kZsLqJ5RbWYMrcbB+LkRq8jzRgTm3F8kq8FKB14y8ST2GQ@mail.gmail.com>
 
-On 22.5.2024 4.03, Daehwan Jung wrote:
-> ERSTBA_HI should be written first on secondary interrupter.
-> That's why secondary interrupter could be set while Host Controller
-> is already running.
+On Wed, May 22, 2024 at 06:01:57PM +0800, Shichao Lai wrote:
+> Thanks for your patience. I am a beginner and initially attempted to report
+> errors to the community.
+> However, I have just discovered that the issue mentioned above has already
+> been proposed in the previous three months of the article, and there is an
+> ongoing discussion.
+
+To call the discussion "ongoing" is optimistic.  There hasn't been any 
+reply to my last post, which was made on March 17, more than two months 
+ago.
+
+Maybe you can carry out the tests I described in that post.  That 
+would be a big help.
+
+Alan Stern
+
+> I think this post can be closed later.
 > 
-> [Synopsys]- The host controller was design to support ERST setting
-> during the RUN state. But since there is a limitation in controller
-> in supporting separate ERSTBA_HI and ERSTBA_LO programming,
-> It is supported when the ERSTBA is programmed in 64bit,
-> or in 32 bit mode ERSTBA_HI before ERSTBA_LO
-
-xHCI specification 5.1 "Register Conventions "states that 64 bit
-registers should be written in low-high order
-
+> https://groups.google.com/g/syzkaller-bugs/c/m8CuxSpLKoQ/m/JfUy1xGnAwAJ
 > 
-> [Synopsys]- The internal initialization of event ring fetches
-> the "Event Ring Segment Table Entry" based on the indication of
-> ERSTBA_LO written.
+> Greg Kroah-Hartman <gregkh@linuxfoundation.org> 于2024年5月22日周三 16:59写道：
 > 
-
-Any idea if this is a common issue with this host?
-Should other 64 bit registers also be written in reverse order.
-
-> Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
-> ---
->   drivers/usb/host/xhci-mem.c | 5 ++++-
->   drivers/usb/host/xhci.h     | 6 ++++++
->   2 files changed, 10 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-> index 3100219..36ee704 100644
-> --- a/drivers/usb/host/xhci-mem.c
-> +++ b/drivers/usb/host/xhci-mem.c
-> @@ -2325,7 +2325,10 @@ xhci_add_interrupter(struct xhci_hcd *xhci, struct xhci_interrupter *ir,
->   	erst_base = xhci_read_64(xhci, &ir->ir_set->erst_base);
->   	erst_base &= ERST_BASE_RSVDP;
->   	erst_base |= ir->erst.erst_dma_addr & ~ERST_BASE_RSVDP;
-> -	xhci_write_64(xhci, erst_base, &ir->ir_set->erst_base);
-> +	if (intr_num == 0)
-> +		xhci_write_64(xhci, erst_base, &ir->ir_set->erst_base);
-> +	else
-> +		xhci_write_64_r(xhci, erst_base, &ir->ir_set->erst_base);
-
-This may cause issues with other hosts expecting low-high order as stated
-in the specification.
-
-If all 64 bit registers should be written in high-low order for this host then
-maybe set a quirk flag and change xhci_write_64()instead.
-
-xhci_write_64(...)
-{
-	if (xhci->quirks & XHCI_WRITE_64_HI_LO)
-		hi_lo_writeq(val, regs);
-	else
-		lo_hi_writeq(val, regs);
-}
-	
-
-Thanks
-Mathias
+> > On Wed, May 22, 2024 at 04:22:18PM +0800, Shichao Lai wrote:
+> > > patch like this:
+> > > ```c
+> > > while (sectors > 0) {
+> > >     if (!uzonesize) {
+> > >         return USB_STOR_TRANSPORT_ERROR;
+> > >     }
+> > >     unsigned int zone = lba / uzonesize; /* integer division */
+> > >     unsigned int lba_offset = lba - (zone * uzonesize);
+> > >     unsigned int pages;
+> > > ```
+> >
+> > Please submit this properly and we will be glad to review it.
+> >
+> > thanks,
+> >
+> > greg k-h
+> >
 
