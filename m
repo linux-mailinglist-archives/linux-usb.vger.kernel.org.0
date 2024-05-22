@@ -1,125 +1,131 @@
-Return-Path: <linux-usb+bounces-10389-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10390-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 541848CB901
-	for <lists+linux-usb@lfdr.de>; Wed, 22 May 2024 04:39:50 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 569358CBA4C
+	for <lists+linux-usb@lfdr.de>; Wed, 22 May 2024 06:21:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 10FF4282D4F
-	for <lists+linux-usb@lfdr.de>; Wed, 22 May 2024 02:39:49 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 49FAAB21691
+	for <lists+linux-usb@lfdr.de>; Wed, 22 May 2024 04:21:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4495F74BED;
-	Wed, 22 May 2024 02:39:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28DF6757F3;
+	Wed, 22 May 2024 04:21:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MDHH/GXu"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="zSy+agBl"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8317573189;
-	Wed, 22 May 2024 02:39:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F059360;
+	Wed, 22 May 2024 04:21:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716345570; cv=none; b=uSp0mDfLS0orOgZsfkCCsEvC+o301xCyY7/toFAj/mKm4guFdoWqLF3Q8YedhboMS6y+qcgY5lcCQje+GezpzyIELgbvUd6R/Ol+3kIYl2rbS1wDN4FDt025zhyufKzJYicu12CJb2+Odc6bGxL20vNyxkCoZw0vcSuDofhcSSI=
+	t=1716351705; cv=none; b=mt2mgpw1rzlmzUycEWtkQBaP+96h5niwLg7qNY+UiihWnaU5PdVBO0BpVWFMdSVGlZ/dxcNyVdyyGOyosHROzVjGTPcUACnvqxOGpRLxT3XPHV7nxBZmTEGbMMtqC3E/aSrujsENW5RiHqv+oRUyatkGhHzav0L/F3AMem4zQYQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716345570; c=relaxed/simple;
-	bh=5vYKAz0vYuM7ZmedsvMTR6TOI29PHirgtV9WSXn22lg=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=i2f9jZUG+6g8MGQxoGRM9lFyL8ZL+LYXcW8W7JCixgJUBzCNB9vk7QGw6INo3pi+AH49q+zpOALTLA/M0yIraCpYlPJprtvDNMm9wL1z1TcUiGFArZ3O4J/gRPuZwr+H+iQkPvRAvee1C/OFVkEvKjrzv9BjEeVSboJWdxXC754=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MDHH/GXu; arc=none smtp.client-ip=209.85.216.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-2bda88e2b23so34492a91.1;
-        Tue, 21 May 2024 19:39:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1716345569; x=1716950369; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HhRERJ2JMt78LFDeSWT8MFFp6Nkr6mefqh6SZ/M3HyM=;
-        b=MDHH/GXuMHtbCxmeNmt2c5YQgmVnqgyFx6lAeMaFKPqvy16xZrj4Yc9GMuB6eSLUk2
-         QHP5WmCgqmBDvH7KicFQjdoGyustIY45zNtR8K2nTuKh33R4IXLeOoKL80IyWdU1XimR
-         Fqk9/Y6+o7X2X147mKY2yQtCESLZOAGmbGLLVALBxI4aFG0oKn5efHKDyxSIrMtEK/GD
-         ijkKMV4bPA6dKwqXny1Actp71sutFM8LzYXQGLvi9yzdmXaI2IJ7uBaOqOCZXm7uOlTi
-         J2wpsDvWzpoR28rs3JFa7Ru0ncrcc5vGvFOnWPXr4vVWKi53T3w/W1hssBZ11cXB+S6j
-         qV+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716345569; x=1716950369;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HhRERJ2JMt78LFDeSWT8MFFp6Nkr6mefqh6SZ/M3HyM=;
-        b=UEJ7WBeHThg8+0MhCkApt+66tYgtqOG2QwZfHaVOUT5ix7AfFDA0pKCdFco0jbnSVY
-         N5r6Tl/eHtQ8kSdnsXUxF16ehd3Wwrurwnl9N9xSa4qAvscwabTmKb4dT6R5MONJw8+e
-         SvwajGNurkQjFq9ifXPS6dfl/F5NnRZg80/igRmateLzF6CxFIR/pJjyyWrpgbRvcv46
-         c4CLTAplnz3+mvvW/VkoaeOjrIQCAT5l7Ess8Wkkj2/iHr2PzBQjbqnQp2hC27rcHwDS
-         p59RJnVFDFBXWPVjSVMGTvOayE/QypRNhFNuPr0gywWU5yz3sjueOU1eOuTP/+A91z1z
-         lQ6w==
-X-Forwarded-Encrypted: i=1; AJvYcCWVCsi2bop6HUE3sLKPfyyGR2vXnkorYP9VhMrPhEQu8foY5ULXCBjbt9NGl/nD7wjeEhSnxtZ+oy6mQ+WhMfw1ShzUa7ElqM9Ju7YY
-X-Gm-Message-State: AOJu0YzN6+ugDqUhlcQ9LHNe2QTsB2c67IjhAcs8hpFeMludnOCFe198
-	/y0anaj2eCy0TYJR0SiVvkib+GBlJm7rVLF9CPiIw5FJoeIn968x
-X-Google-Smtp-Source: AGHT+IGDovZdlgBmcAC2bcCcTpreEMoPAy9xWW4vdpGDARNp9iaeOZMWNHMjKnjkRWNq6bMsXdtXrw==
-X-Received: by 2002:a17:90b:10f:b0:2ac:69b:886b with SMTP id 98e67ed59e1d1-2bd9f4688c7mr887237a91.1.1716345568820;
-        Tue, 21 May 2024 19:39:28 -0700 (PDT)
-Received: from localhost.localdomain (122-117-151-175.hinet-ip.hinet.net. [122.117.151.175])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2b973234901sm14593157a91.19.2024.05.21.19.39.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 May 2024 19:39:28 -0700 (PDT)
-From: Kuangyi Chiang <ki.chiang65@gmail.com>
-To: mathias.nyman@intel.com,
-	gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	ki.chiang65@gmail.com
-Subject: [PATCH 1/2] xhci: Apply reset resume quirk to Etron EJ188 xHCI host
-Date: Wed, 22 May 2024 10:39:18 +0800
-Message-Id: <20240522023918.7613-2-ki.chiang65@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20240522023918.7613-1-ki.chiang65@gmail.com>
-References: <20240522023918.7613-1-ki.chiang65@gmail.com>
+	s=arc-20240116; t=1716351705; c=relaxed/simple;
+	bh=mTHrYVSkHty3/g7xV+eC5f2SXN3gBUMTd6Tb7+MCzHc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jMb1ejcxXjWMV0w4peS/Zt23nIoyYDdCbtKgohsvqqy84be7HKgYHTR52inlev07OmUyIC8K7PpWsEOyfkOXOh3q8AFfIRUIBaobjwG4bHziLOf7pvU/e0vzvhrmXelzzP8fCCvTyos4UW3zRdm7ZvhDTYLkKl1KUUmdL1voZDM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=zSy+agBl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AC02C2BD11;
+	Wed, 22 May 2024 04:21:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1716351705;
+	bh=mTHrYVSkHty3/g7xV+eC5f2SXN3gBUMTd6Tb7+MCzHc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=zSy+agBl8A3AjVFuIfw0v/OrqRA0TiNAdvglJVwWIeuTYMn6wZ8aRDjASefpznw1H
+	 g/MwcHoNwgCL2z2NuRIRrImXxcIifglCBAR2iGyi0CEGs+JMkD9Qlcl4r/3MC70pgs
+	 rVgwuRQdYsb2ygzRZSOiwro1Caweu8tu7FTVbS7c=
+Date: Wed, 22 May 2024 06:21:42 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: andrey.konovalov@linux.dev
+Cc: Alan Stern <stern@rowland.harvard.edu>,
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	Dmitry Vyukov <dvyukov@google.com>, Marco Elver <elver@google.com>,
+	Alexander Potapenko <glider@google.com>, kasan-dev@googlegroups.com,
+	Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+	Tejun Heo <tj@kernel.org>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] kcov, usb: disable interrupts in
+ kcov_remote_start_usb_softirq
+Message-ID: <2024052232-juggle-oxygen-5bd2@gregkh>
+References: <20240521204324.479972-1-andrey.konovalov@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240521204324.479972-1-andrey.konovalov@linux.dev>
 
-As described in commit c877b3b2ad5c ("xhci: Add reset on resume quirk for
-asrock p67 host"), EJ188 have the same issue as EJ168, where completely
-dies on resume. So apply XHCI_RESET_ON_RESUME quirk to EJ188 as well.
+On Tue, May 21, 2024 at 10:43:24PM +0200, andrey.konovalov@linux.dev wrote:
+> From: Andrey Konovalov <andreyknvl@gmail.com>
+> 
+> After commit 8fea0c8fda30 ("usb: core: hcd: Convert from tasklet to BH
+> workqueue"), usb_giveback_urb_bh() runs in the BH workqueue with
+> interrupts enabled.
+> 
+> Thus, the remote coverage collection section in usb_giveback_urb_bh()->
+> __usb_hcd_giveback_urb() might be interrupted, and the interrupt handler
+> might invoke __usb_hcd_giveback_urb() again.
+> 
+> This breaks KCOV, as it does not support nested remote coverage collection
+> sections within the same context (neither in task nor in softirq).
+> 
+> Update kcov_remote_start/stop_usb_softirq() to disable interrupts for the
+> duration of the coverage collection section to avoid nested sections in
+> the softirq context (in addition to such in the task context, which are
+> already handled).
+> 
+> Reported-by: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+> Closes: https://lore.kernel.org/linux-usb/0f4d1964-7397-485b-bc48-11c01e2fcbca@I-love.SAKURA.ne.jp/
+> Closes: https://syzkaller.appspot.com/bug?extid=0438378d6f157baae1a2
+> Suggested-by: Alan Stern <stern@rowland.harvard.edu>
+> Fixes: 8fea0c8fda30 ("usb: core: hcd: Convert from tasklet to BH workqueue")
+> Acked-by: Dmitry Vyukov <dvyukov@google.com>
+> Signed-off-by: Andrey Konovalov <andreyknvl@gmail.com>
+> 
+> ---
+> 
+> Changes v1->v2:
+> 
+> - Fix compiler error when CONFIG_KCOV=n.
+> ---
+>  drivers/usb/core/hcd.c | 12 ++++++-----
+>  include/linux/kcov.h   | 47 ++++++++++++++++++++++++++++++++++--------
+>  2 files changed, 45 insertions(+), 14 deletions(-)
 
-Signed-off-by: Kuangyi Chiang <ki.chiang65@gmail.com>
----
- drivers/usb/host/xhci-pci.c | 5 +++++
- 1 file changed, 5 insertions(+)
+Hi,
 
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index ef513c2..a0beb41 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -31,6 +31,7 @@
- 
- #define PCI_VENDOR_ID_ETRON		0x1b6f
- #define PCI_DEVICE_ID_EJ168		0x7023
-+#define PCI_DEVICE_ID_EJ188		0x7052
- 
- #define PCI_DEVICE_ID_INTEL_LYNXPOINT_XHCI	0x8c31
- #define PCI_DEVICE_ID_INTEL_LYNXPOINT_LP_XHCI	0x9c31
-@@ -238,6 +239,10 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
- 		xhci->quirks |= XHCI_TRUST_TX_LENGTH;
- 		xhci->quirks |= XHCI_BROKEN_STREAMS;
- 	}
-+	if (pdev->vendor == PCI_VENDOR_ID_ETRON &&
-+			pdev->device == PCI_DEVICE_ID_EJ188) {
-+		xhci->quirks |= XHCI_RESET_ON_RESUME;
-+	}
- 	if (pdev->vendor == PCI_VENDOR_ID_RENESAS &&
- 	    pdev->device == 0x0014) {
- 		xhci->quirks |= XHCI_TRUST_TX_LENGTH;
--- 
-2.25.1
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- You have marked a patch with a "Fixes:" tag for a commit that is in an
+  older released kernel, yet you do not have a cc: stable line in the
+  signed-off-by area at all, which means that the patch will not be
+  applied to any older kernel releases.  To properly fix this, please
+  follow the documented rules in the
+  Documentation/process/stable-kernel-rules.rst file for how to resolve
+  this.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot
 
