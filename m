@@ -1,63 +1,73 @@
-Return-Path: <linux-usb+bounces-10396-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10397-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A8378CBDDB
-	for <lists+linux-usb@lfdr.de>; Wed, 22 May 2024 11:30:57 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FE268CBED2
+	for <lists+linux-usb@lfdr.de>; Wed, 22 May 2024 12:00:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2D56C1C20810
-	for <lists+linux-usb@lfdr.de>; Wed, 22 May 2024 09:30:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D8539B21D44
+	for <lists+linux-usb@lfdr.de>; Wed, 22 May 2024 10:00:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BC8780C04;
-	Wed, 22 May 2024 09:30:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE2B881AD2;
+	Wed, 22 May 2024 10:00:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="bvXgbRtY"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="adgRT1jj"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A5E37D3F5;
-	Wed, 22 May 2024 09:30:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BA7381AB7
+	for <linux-usb@vger.kernel.org>; Wed, 22 May 2024 10:00:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716370248; cv=none; b=nBXxql48pd4Ps2nDursPJLTSrWBam6XYl1/Ov43RyxtZNI6MOOvJKXsE5cDl8TkFt8LIF/zteKEBNPIeRP5YA6NnTIzMT+g9GDAnoSGiWzPujnD/4PqaXbDwYwsirQw0UfSn/67KtlpgYtTogRmSIYIVZNr1Xz6pq4SBZRQsf2s=
+	t=1716372005; cv=none; b=az0Xv5cs4qcrZ4JUNogLiLmo8zMgOUMuhAXQdNVy4kzzZNaU96Dl0/gAOAbVl5YpDsaJOLWt/IeVK1UKh54rzOtPtE+aXxJpckWf6rWRgxBUvwqJWfDqQRvKhlp/poueD9NALufLaiWIzAyHdJ5IVox5PL2PrpiidxWydlSmUOc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716370248; c=relaxed/simple;
-	bh=a691/9SYo0NKiTnhM4MGzJN3tQwhGkEXyRsB6mtMO3w=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=IUxI8fLCRXSc64D5DV9ZZmj6YiYEDAPGQvVvGS1yRrmf0ZoaQpTyHLHY0qlYdhv9CZJPPBoxUIZtLJXs7XNq8BnWf/BXnp5LI/OlcKnQvmkX+o9NcowEMjrM9nf5fW4E7O3qmLaSeSgqvGk1SZs3PYE/RRb5C3tS5IEG2buGdxo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=bvXgbRtY; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 44M8WMgS004387;
-	Wed, 22 May 2024 09:30:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=QnM4WACfCF8VuTUQwFpZpJKatdFA2CHN3v2b1i0LQSs=; b=bv
-	XgbRtY3bz2mbRkyhlugNASPEhW4dVQLmZVbNnNmgwQRlpU2rgQ4Rb4gB+ZVnJW2L
-	ZK7gRwaJbO8YqseYdGy4hBC8ewRLOXRfrdQcNbsA5XOWm+8iooKLHDcwOvbbNUn0
-	6+/W3KGHXbc7VoECFkkueaDp3wfJwLWtlJl7fSHTFipL02whyBYHFJlLwv/omkyX
-	+6Jg1RLkpEhcbuXGAOVcR0aP4+2oa8FnvJjGlqQxfH380YrJ2y1lLtffhWXtjw7C
-	I2UWj4bHkJ1L2w4Is9op/5p1TcWBiUZZQAjFEMpu19dK/m/1O9xJsLMqAzlurG/y
-	+EDTvx3N1l5210qlopIw==
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3y6pqarc8n-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 22 May 2024 09:30:42 +0000 (GMT)
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-	by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 44M9UfuN001980
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 22 May 2024 09:30:41 GMT
-Received: from [10.217.219.148] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 22 May
- 2024 02:30:35 -0700
-Message-ID: <e2e4bb4e-6e49-44f6-b7c7-cde274a8784b@quicinc.com>
-Date: Wed, 22 May 2024 15:00:32 +0530
+	s=arc-20240116; t=1716372005; c=relaxed/simple;
+	bh=UnqolDuaYo8ErtJbe0FrOtS1sHe1/V3hT1Cq1/3MYAs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=i2tNSqJw1x5QBN4ZuN+kLeakwRk0+NDyYZiGip26xZ7qdu430xhvCaGRCz4jgE6kylm0OKUR3b9vCLXBPqMBGMrGUh6v6eeSgRANv1Y2LoXCQwakKlCcuoyMKVnzkFfI0pioR+V1v0/sK4wWeXucxJcsyPrXctl0hDMzyo+zphQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=adgRT1jj; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-41f9ce16ed8so7668145e9.0
+        for <linux-usb@vger.kernel.org>; Wed, 22 May 2024 03:00:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1716372002; x=1716976802; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Zv0peKN7El4wwmaoW8dg3u0DkCkTmb42hFB9WP4X0fc=;
+        b=adgRT1jjTUWWMuv66KXsEGQ3+OWRlxOl3QCy2ARKJIc7jVMx2ntZnAF0ajFow3dBVR
+         FFfM9LMsDq8clIi4zPZLjCe7htk1JMhHW/EpqgjP2EgmJh0X8dE/cKLQkAumbABDP4gD
+         UwrIZl6A6EODZww1/tnLQ9Xr8cR58mPtv+ULuYNEUapdmLflU5kzxyfuu1btCb4DQmY5
+         V1lvXU1VkV3D/T0pZdngLRnkSbvYWZtybJYMEfhlAIL/wEdVArQ+2+rtI9t1CWGrUhcF
+         G04dCsPJkpG8qAw1rw+Qp/q2J9hs5bDHUZ3v/by4S4L2nA/tAl8xOkrkdn75aNgL+5co
+         Hyug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1716372002; x=1716976802;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Zv0peKN7El4wwmaoW8dg3u0DkCkTmb42hFB9WP4X0fc=;
+        b=ZwDFZ6d1tJ1LyvBcsi7FzvBmp3BOG+283R14Rxhp68ozheWDBwgAKt3FrYCdyE9dp4
+         IyLWFQfNu2G9QGyDGXpsvbqlHQhsnSLHcmpIr6kVfDPLJkLLjHPVbqtV0IhfKG9v3vFp
+         lpM3+oJRsDmO5PH0WgsgeYbRhia7vVpOIDxsucXwuzVSnC0PEA9J7SqaiotJZubRB3qb
+         bxvnbaq8B2cVCmywc8Yne3FcisE48Ziv7uzhez0TETVvlRsR2YMFnDKFo4Yuf1tipe+i
+         SasVdKW02dGs6qpzzsNtZ0hcNl7gHvxgXAcGmVSG9vfmJ+bHpiUvNV5xOEA48xm2v8aB
+         kQbA==
+X-Gm-Message-State: AOJu0YxUcOFwa9jnNt3qFochrUAfRZHM3rOq52bIChu+pA3anpVXH5/U
+	QyS203L1t5NB+GNEqVbP5Bx/oW7czSyZXmRq4vckNVlV6r6gaskP5CveUEuuWRQ=
+X-Google-Smtp-Source: AGHT+IHD8u/xHqQMmXbgvlyuMqT7VRwcCG7YYtZUITTUReH2Thqf/mg7BsJniTmEF8WFfyWgndT5JQ==
+X-Received: by 2002:a05:600c:21d5:b0:420:2cbe:7f16 with SMTP id 5b1f17b1804b1-420fd3726d5mr15710025e9.34.1716372001739;
+        Wed, 22 May 2024 03:00:01 -0700 (PDT)
+Received: from ?IPV6:2001:a61:139b:bf01:e8eb:4d8f:8770:df82? ([2001:a61:139b:bf01:e8eb:4d8f:8770:df82])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-420273cff03sm269711845e9.26.2024.05.22.03.00.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 May 2024 03:00:01 -0700 (PDT)
+Message-ID: <9d37e0b4-91fa-4239-b767-2eb17e78ea84@suse.com>
+Date: Wed, 22 May 2024 12:00:00 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -65,85 +75,33 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] USB: pci-quirks: Skip usb_early_handoff for Renesas PCI
- USB
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC: Felipe Balbi <balbi@kernel.org>,
-        Pratham Pratap
-	<quic_ppratap@quicinc.com>,
-        Jack Pham <quic_jackp@quicinc.com>, <kernel@quicinc.com>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        "Vijayavardhan
- Vennapusa" <quic_vvreddy@quicinc.com>,
-        Krishna Kurapati
-	<quic_kriskura@quicinc.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20240521074635.17938-1-quic_akakum@quicinc.com>
- <2024052134-roundness-foyer-7bfa@gregkh>
- <1ceae2a4-0715-4cea-9351-fd98a0017b85@quicinc.com>
- <2024052102-glorified-strung-80a4@gregkh>
+Subject: Re: [PATCH] HID: usbhid: enable remote wakeup for mouse
+To: huanglei814 <huanglei814@163.com>, jikos@kernel.org, bentiss@kernel.org
+Cc: linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
+ linux-kernel@vger.kernel.org, huanglei <huanglei@kylinos.cn>
+References: <20240522092257.19373-1-huanglei814@163.com>
 Content-Language: en-US
-From: AKASH KUMAR <quic_akakum@quicinc.com>
-In-Reply-To: <2024052102-glorified-strung-80a4@gregkh>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <20240522092257.19373-1-huanglei814@163.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: Z-nDka7d5xR0NACM44ds188RSwq3GxjI
-X-Proofpoint-ORIG-GUID: Z-nDka7d5xR0NACM44ds188RSwq3GxjI
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.12.28.16
- definitions=2024-05-22_04,2024-05-21_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- impostorscore=0 suspectscore=0 bulkscore=0 mlxscore=0 adultscore=0
- spamscore=0 malwarescore=0 mlxlogscore=999 clxscore=1015
- priorityscore=1501 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2405010000 definitions=main-2405220068
 
+On 22.05.24 11:22, huanglei814 wrote:
+> From: huanglei <huanglei@kylinos.cn>
+> 
+> This patch enables remote wakeup by default for USB mouse
+> devices.  Mouse can used to be wakeup devices, but the correct
+> place to enable it depends on the device's bus; no single
+> approach will work for all mouse devices.  In particular, this
+> covers only USB mouse (and then only those supporting the boot
+> protocol).
 
-On 5/21/2024 3:08 PM, Greg Kroah-Hartman wrote:
+Hi,
 
-> On Tue, May 21, 2024 at 02:55:13PM +0530, AKASH KUMAR wrote:
->> Hi Greg, On 5/21/2024 1:35 PM, Greg Kroah-Hartman wrote:
->>> On Tue, May 21, 2024 at 01:16:35PM +0530, Akash Kumar wrote:
->>>> Skip usb_early_handoff for the Renesas PCI USB controller due to 
->>>> the firmware not being loaded beforehand, which impacts the bootup 
->>>> time. Signed-off-by: Akash Kumar<quic_akakum@quicinc.com>
->>> What commit id does this fix? Should it go to stable kernels? yes it 
->>> can go to stable kernels, issue is seen on every target with usb 
->>> over pcie support.
->>>> --- drivers/usb/host/pci-quirks.c | 5 +++++ 1 file changed, 5 
->>>> insertions(+) diff --git a/drivers/usb/host/pci-quirks.c 
->>>> b/drivers/usb/host/pci-quirks.c index 0b949acfa258..a0770ecc0861 
->>>> 100644 --- a/drivers/usb/host/pci-quirks.c +++ 
->>>> b/drivers/usb/host/pci-quirks.c @@ -1264,6 +1264,11 @@ static void 
->>>> quirk_usb_early_handoff(struct pci_dev *pdev) } } + /* Skip handoff 
->>>> for Renesas PCI USB controller on QCOM SOC */ + if ((pdev->vendor 
->>>> == PCI_VENDOR_ID_RENESAS) && + (pcie_find_root_port(pdev)->vendor 
->>>> == PCI_VENDOR_ID_QCOM))
->>> Why are all Renesas PCI devices on a QCOM host to be marked this 
->>> way? That's a very big hammer for potentially lots of devices. Have 
->>> you tested them all?
->> firmware loading is being done in HLOS, not UEFI, if firmware loading 
->> is done in UEFI, then calling early_handoff() API makes sense, else 
->> it is checking for controller ready without firmware loaded which is 
->> impacting boot up time by 5 sec roughly. We are seeing problem in all 
->> targets having usb over pcie support.
-> But the bootloader has nothing to do with the device type of the 
-> devices here, right? Why not properly trigger this off of the needed 
-> firmware location instead of here? What happens when you have a system 
-> using UEFI that matches these two devices and the change causes them 
-> to break? In other words, test the proper thing, and only for the 
-> specific devices you need to have the change for, don't be overly 
-> broad like you are doing here, as you might break other systems that 
-> you do not have in front of you at the moment.
+could you explain in the log why you want this to depend
+on support for the boot protocol?
 
-yeah currently we don't have any uefi based targets, will add target specific check.
-
-Thanks,
-
-Akash
+	Regards
+		Oliver
 
 
