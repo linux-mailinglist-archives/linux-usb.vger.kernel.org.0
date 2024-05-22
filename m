@@ -1,484 +1,190 @@
-Return-Path: <linux-usb+bounces-10385-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10386-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 026258CB674
-	for <lists+linux-usb@lfdr.de>; Wed, 22 May 2024 02:08:26 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 35AE38CB862
+	for <lists+linux-usb@lfdr.de>; Wed, 22 May 2024 03:27:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1EB941C20FDA
-	for <lists+linux-usb@lfdr.de>; Wed, 22 May 2024 00:08:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 58AB81C20A85
+	for <lists+linux-usb@lfdr.de>; Wed, 22 May 2024 01:27:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CDB7EC0;
-	Wed, 22 May 2024 00:08:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26E5242AB9;
+	Wed, 22 May 2024 01:04:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="lapIq5Gk"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1EC7360
-	for <linux-usb@vger.kernel.org>; Wed, 22 May 2024 00:08:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0E17D29E
+	for <linux-usb@vger.kernel.org>; Wed, 22 May 2024 01:04:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716336501; cv=none; b=Yw/lm53bCTNL9h47qKEnyDNE7i4f0B7fX+0sL3lODTm31NdRoL/HQUCU+s0uEmcItlv9+0DO5koM+BJy4ZVO3Bu/4CY/BlnjCNSndWG4ODnkOIi8Gx3uD2Wc4qlmcg1QNtFxZg2Y5Bzktj0CZc6wLcWjnDJbP/kjQdyBEnPHVIw=
+	t=1716339856; cv=none; b=EewUmhB/46/GW5DekjClLdX1+FhkvnSKvdjoPZfBUgWoBO88mcms37RJ6Sl3N/YHYIRmqlNUuEUmMpz/UfMyyX3219E+RSsZpvHFxw8Qm10sMxAlhBBd3LNXWKYeBmCsSmVnbgnTBaeHE4as0z8xnRyXYvPUzAohBzf50LDqju0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716336501; c=relaxed/simple;
-	bh=9HsyJVgv0upEiigP2Jga9c2Tlm6NtmtYXmCe7XwkN5Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LXmEcEjEMgR1VHGuecemrtAsd+tB85grcKpIA1ia/hqqt00ujBA/4gJwKF/BtJK9RT32InAvsBfc6xTxWmEE3rzUw87oFFqdw7SEjhsbgbN2K10p57JeMIUKPTvZeKC+/rIMN8hS8FHHBiy84X85rmwLRb6MrOHWID72d8Nc2qY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1s9ZWW-00070C-Tj; Wed, 22 May 2024 02:08:04 +0200
-Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1s9ZWU-002SIM-U7; Wed, 22 May 2024 02:08:02 +0200
-Received: from mgr by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1s9ZWU-007oDU-2h;
-	Wed, 22 May 2024 02:08:02 +0200
-Date: Wed, 22 May 2024 02:08:02 +0200
-From: Michael Grzeschik <mgr@pengutronix.de>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Avichal Rakesh <arakesh@google.com>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Daniel Scally <dan.scally@ideasonboard.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jayant Chowdhary <jchowdhary@google.com>,
-	"etalvala@google.com" <etalvala@google.com>,
-	Michael Riesch <michael.riesch@wolfvision.net>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 0/3] usb: gadget: uvc: allocate requests based on frame
- interval length and buffersize
-Message-ID: <Zk03Ys1rA0I5yiZy@pengutronix.de>
-References: <ZiWga5Kqno1ICv97@pengutronix.de>
- <dcad0089-4105-44bc-a2b4-3cfc6f44164b@google.com>
- <ZifEvUi9-E8M4dp8@pengutronix.de>
- <17192e0f-7f18-49ae-96fc-71054d46f74a@google.com>
- <20240424022806.uo73nwpeg63vexiv@synopsys.com>
- <ZkE-O0yJ33T9hWa0@pengutronix.de>
- <20240517014359.p2s44ypl4bix4odm@synopsys.com>
+	s=arc-20240116; t=1716339856; c=relaxed/simple;
+	bh=OqYU2toc8VhoFRt8nhJ72nYlMy15OQ6sULFO1f7aqe4=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:References; b=n8o8Nwsg1sKcNH+jEWk6Gsm6YDvk65FhacKFWh6ogon9hjdadfvwWfX4JY59Rca307G+HZ5vrsvMZ3I+UoaELHaZQKCKbc7MWcUYnQL/ucEAmqtRvOZK8lOIdAdBLP+Lknq7eZzFT9jsCI/E19gNq1D8bHKv6HwUYt7AOOmcl8I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=lapIq5Gk; arc=none smtp.client-ip=203.254.224.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
+	by mailout3.samsung.com (KnoxPortal) with ESMTP id 20240522010410epoutp03060e622537cd2f93dad05515e875aef1~RqgAwEe0J1276912769epoutp03f
+	for <linux-usb@vger.kernel.org>; Wed, 22 May 2024 01:04:10 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20240522010410epoutp03060e622537cd2f93dad05515e875aef1~RqgAwEe0J1276912769epoutp03f
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1716339850;
+	bh=Uitcad8ZpKbqMNDW2YytBLVtTZ4j7uwwqX9O3MWQJPo=;
+	h=From:To:Cc:Subject:Date:References:From;
+	b=lapIq5GkskK7aRDEkVatV8emSRWbNh4HPuzM77CaA1geDzhCTFC+tjvq2DZ5gA/9m
+	 U9IsDp4IYTSpOS9iWF1zS96iVj480Oq/7SJx+3WCXVho75IKTosdXXejZcQe76u6X8
+	 ocuag9zW4zX5ZL3XPILy7k28b838/khdOpmoY/YE=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+	epcas2p1.samsung.com (KnoxPortal) with ESMTP id
+	20240522010410epcas2p11d5550044515a107ecd4ef5392f36bdc~RqgAbdLEf0338303383epcas2p1e;
+	Wed, 22 May 2024 01:04:10 +0000 (GMT)
+Received: from epsmgec2p1-new.samsung.com (unknown [182.195.36.69]) by
+	epsnrtp2.localdomain (Postfix) with ESMTP id 4VkY3Y64zSz4x9Q9; Wed, 22 May
+	2024 01:04:09 +0000 (GMT)
+Received: from epcas2p1.samsung.com ( [182.195.41.53]) by
+	epsmgec2p1-new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	7A.94.19141.9844D466; Wed, 22 May 2024 10:04:09 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+	epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
+	20240522010409epcas2p457b2fcb4f423f2500305053f44ae3199~Rqf-d4A7i0068900689epcas2p4s;
+	Wed, 22 May 2024 01:04:09 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+	20240522010409epsmtrp2846a47b1fde03b71481eeb5f30d7a431~Rqf-XLog81573115731epsmtrp2M;
+	Wed, 22 May 2024 01:04:09 +0000 (GMT)
+X-AuditID: b6c32a4d-869ff70000004ac5-bb-664d44892cd5
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+	epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	33.61.08924.9844D466; Wed, 22 May 2024 10:04:09 +0900 (KST)
+Received: from ubuntu.dsn.sec.samsung.com (unknown [10.229.95.128]) by
+	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+	20240522010409epsmtip207170fe17fd7525879063e08d597c994~Rqf-JMfKt2481524815epsmtip2G;
+	Wed, 22 May 2024 01:04:09 +0000 (GMT)
+From: Daehwan Jung <dh10.jung@samsung.com>
+To: Mathias Nyman <mathias.nyman@intel.com>, Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org (open list:USB XHCI DRIVER),
+	linux-kernel@vger.kernel.org (open list), Thinh Nguyen
+	<Thinh.Nguyen@synopsys.com>, Daehwan Jung <dh10.jung@samsung.com>
+Subject: [RFC] usb: host: xhci-mem: Write high first on erst base of
+ secondary interrupter
+Date: Wed, 22 May 2024 10:03:59 +0900
+Message-Id: <1716339839-44022-1-git-send-email-dh10.jung@samsung.com>
+X-Mailer: git-send-email 2.7.4
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrHKsWRmVeSWpSXmKPExsWy7bCmqW6ni2+aweM+Q4s7C6YxWTQvXs9m
+	cXnXHDaLRctamS2aN01htVi14AC7A5vH4j0vmTz2z13D7tG3ZRWjx5b9nxk9Pm+SC2CNyrbJ
+	SE1MSS1SSM1Lzk/JzEu3VfIOjneONzUzMNQ1tLQwV1LIS8xNtVVy8QnQdcvMAbpASaEsMacU
+	KBSQWFyspG9nU5RfWpKqkJFfXGKrlFqQklNgXqBXnJhbXJqXrpeXWmJlaGBgZApUmJCdseXx
+	GvaCp4IVv6fNYG1g/M/XxcjJISFgIjHh6FwmEFtIYA+jxK9VrF2MXED2J0aJrRdes0E43xgl
+	9m77xQzTcePPAajEXkaJbS3/mCGcH4wSvbfaWboYOTjYBLQkvi9kBGkQEYiTWNp5iQmkhllg
+	O6PEjBfP2EESwgIxEpvvngKbyiKgKrHl5y82EJtXwFVizvWHjBDb5CRunusEWyAhsIpdYk37
+	CVaIhIvE1ksHWSBsYYlXx7ewQ9hSEp/f7WWDsIslbj1/BtXcwiix4lUL1A/GErOetTOCXMos
+	oCmxfpc+iCkhoCxx5BbYSGYBPomOw3/ZIcK8Eh1tQhCNyhLTL0+AukBS4uDrc1ADPSQ6WuYz
+	QoIxVuLrhW2MExhlZyHMX8DIuIpRKrWgODc9NdmowFA3L7UcHlHJ+bmbGMEJS8t3B+Pr9X/1
+	DjEycTAeYpTgYFYS4d20xTNNiDclsbIqtSg/vqg0J7X4EKMpMMwmMkuJJucDU2ZeSbyhiaWB
+	iZmZobmRqYG5kjjvvda5KUIC6YklqdmpqQWpRTB9TBycUg1MPP+Z/vakTklYf+COHGe0SWNT
+	nZHVnO0+Vlc2SSlcXpipzv5+0j29ibtnXQsS+nMupnjriZiHdhf1Tgd1lCksOphlH25ksD5J
+	6Xh1xqxpQgX//p8IeuqzbSv3nXP/O9/G6HFq2pw1DH8d9OqfuU9a3BzPDw8f5G7yP23gXDwr
+	tXTljAs2WZuEknbNXLCi65B/68PDN/okuOuYuH5seeUaf/GihKpsaURxlPkr2QmRM++XltTu
+	2SsfGa70JnCe5oLP08prX0Vd3vgudfb5vru3qw3ufjq/3m5KoGOBZ5uSivjEsgbV4jMeJhG2
+	ba7Ghc7rgm42vPJ4zHeEtX5jj+H/2Lzl/b7rr1x+fvyWYuhuJZbijERDLeai4kQAPQIb4uED
+	AAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrFJMWRmVeSWpSXmKPExsWy7bCSvG6ni2+awdR9nBZ3FkxjsmhevJ7N
+	4vKuOWwWi5a1Mls0b5rCarFqwQF2BzaPxXteMnnsn7uG3aNvyypGjy37PzN6fN4kF8AaxWWT
+	kpqTWZZapG+XwJWx5fEa9oKnghW/p81gbWD8z9fFyMkhIWAicePPAbYuRi4OIYHdjBKXV2xi
+	h0hISiydewPKFpa433KEFaLoG6PEgl9PgDo4ONgEtCS+L2QEqRERiJNYcXkPC0gNs8BORonb
+	H3awgSSEBaIk/vfcARvEIqAqseXnL7A4r4CrxJzrDxkhFshJ3DzXyTyBkWcBI8MqRsnUguLc
+	9NxiwwLDvNRyveLE3OLSvHS95PzcTYzg4NHS3MG4fdUHvUOMTByMhxglOJiVRHg3bfFME+JN
+	SaysSi3Kjy8qzUktPsQozcGiJM4r/qI3RUggPbEkNTs1tSC1CCbLxMEp1cDk0h+g3nT/bezf
+	H0/m8Xvd27WiVHp/3G/jmZsqXjedVc9vv50064WJwZlnF2VL5q8WM+PVf7bhg+H25slOJrdb
+	+1wOPnwpFBLPMvFiwEal2eUvTu+8ousSI822r/iQt7Xy5bqN53bqtN/9y6bTt6Ky+iH7spIb
+	TR0MewMmsv8Q5RP9vtJG6twPPd/eReWVCpOnH3wXFGBh/orZ4bYdxzmJvcZ8jy7l9Quu3fdB
+	zt1aTCaWy/7pgfseu/ctVeZWyHNRERdcIiRo80Pp/Y4Xf180/y9Q1lM58OrT6yUc54yVjlt+
+	WWrMLZv8W2jFZ+l+hg3L7K2MWH1NbhnuvbxHTdV0z6Eob9VdPsFni6bP2pOgxFKckWioxVxU
+	nAgAkSKzKY0CAAA=
+X-CMS-MailID: 20240522010409epcas2p457b2fcb4f423f2500305053f44ae3199
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20240522010409epcas2p457b2fcb4f423f2500305053f44ae3199
+References: <CGME20240522010409epcas2p457b2fcb4f423f2500305053f44ae3199@epcas2p4.samsung.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="FJN5bpTf2Oav326M"
-Content-Disposition: inline
-In-Reply-To: <20240517014359.p2s44ypl4bix4odm@synopsys.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL: http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
+ERSTBA_HI should be written first on secondary interrupter.
+That's why secondary interrupter could be set while Host Controller
+is already running.
 
---FJN5bpTf2Oav326M
-Content-Type: text/plain; charset=iso-8859-15; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+[Synopsys]- The host controller was design to support ERST setting
+during the RUN state. But since there is a limitation in controller
+in supporting separate ERSTBA_HI and ERSTBA_LO programming,
+It is supported when the ERSTBA is programmed in 64bit,
+or in 32 bit mode ERSTBA_HI before ERSTBA_LO
 
-On Fri, May 17, 2024 at 01:44:05AM +0000, Thinh Nguyen wrote:
->On Mon, May 13, 2024, Michael Grzeschik wrote:
->> On Wed, Apr 24, 2024 at 02:28:10AM +0000, Thinh Nguyen wrote:
->> > On Tue, Apr 23, 2024, Avichal Rakesh wrote:
->> > >
->> > >
->> > > On 4/23/24 07:25, Michael Grzeschik wrote:
->> > > > Ccing:
->> > > >
->> > > > Michael Riesch <michael.riesch@wolfvision.net>
->> > > > Thinh Nguyen <Thinh.Nguyen@synopsys.com>
->> > > >
->> > > > On Mon, Apr 22, 2024 at 05:21:09PM -0700, Avichal Rakesh wrote:
->> > > >> On 4/21/24 16:25, Michael Grzeschik wrote:
->> > > >>> On Tue, Apr 09, 2024 at 11:24:56PM +0200, Michael Grzeschik wrot=
-e:
->> > > >>>> This patch series is improving the size calculation and allocat=
-ion
->> > > >>>> of the uvc requests. Using the currenlty setup frame duration o=
-f the
->> > > >>>> stream it is possible to calculate the number of requests based=
- on the
->> > > >>>> interval length.
->> > > >>>
->> > > >>> The basic concept here is right. But unfortunatly we found out t=
-hat
->> > > >>> together with Patch [1] and the current zero length request pump
->> > > >>> mechanism [2] and [3] this is not working as expected.
->> > > >>>
->> > > >>> The conclusion that we can not queue more than one frame at once=
- into
->> > > >>> the hw led to [1]. The current implementation of zero length req=
-eusts
->> > > >>> which will be queued while we are waiting for the frame to finish
->> > > >>> transferring will enlarge the frame duration. Since every zero-l=
-ength
->> > > >>> request is still taking up at least one frame interval of 125 us.
->> > > >>
->> > > >> I haven't taken a super close look at your patches, so please fee=
-l free
->> > > >> to correct me if I am misunderstanding something.
->> > > >>
->> > > >> It looks like the goal of the patches is to determine a better nu=
-mber
->> > > >> and size of usb_requests from the given framerate such that we se=
-nd exactly
->> > > >> nreqs requests per frame where nreqs is determined to be the exac=
-t number
->> > > >> of requests that can be sent in one frame interval?
->> > > >
->> > > > It does not need to be the exact time, actually it may not be exac=
-t.
->> > > > Scattering the data over all requests would not leave any headroom=
- for
->> > > > any latencies or overhead.
->> > >
->> > > IIUC, patch 3/3 sets the number of requests to frameinterval / 125 u=
-s,
->> > > which gives us the number of requests we can send in exactly one fra=
-me interval,
->> > > and then sets the size of the request as max framesize / nreq, which=
- means the
->> > > frames will be evenly divided up into all available requests (with a=
- little
->> > > fuzz factor here and there).
->> > >
->> > > This effectively means that (assuming no other delays) one frame wil=
-l take
->> > > ~one frameinterval to be transmitted?
->> > >
->> > > >
->> > > >> As the logic stands, we need some 0-length requests to be circula=
-ting to
->> > > >> ensure that we don't miss ISOC deadlines. The current logic uncon=
-ditionally
->> > > >> sends half of all allocated requests to be circulated.
->> > > >>
->> > > >> With those two things in mind, this means than video_pump can at =
-encode
->> > > >> at most half a frame in one go, and then has to wait for complete
->> > > >> callbacks to come in. In such cases, the theoretical worst case f=
-or
->> > > >> encode time is
->> > > >> 125us * (number of requests needed per frame / 2) + scheduling de=
-lays
->> > > >> as after the first half of the frame has been encoded, the video_=
-pump
->> > > >> thread will have to wait 125us for each of the zero length reques=
-ts to
->> > > >> be returned.
->> > > >>
->> > > >> The underlying assumption behind the "queue 0-length requests" ap=
-proach
->> > > >> was that video_pump encodes the frames in as few requests as poss=
-ible
->> > > >> and that there are spare requests to maintain a pressure on the
->> > > >> ISOC queue without hindering the video_pump thread, and unfortuna=
-tely
->> > > >> it seems like patch 3/3 is breaking both of them?
->> > > >
->> > > > Right.
->> > > >
->> > > >> Assuming my understanding of your patches is correct, my question
->> > > >> is: Why do we want to spread the frame uniformly over the requests
->> > > >> instead of encoding it in as few requests as possible. Spreading
->> > > >> the frame over more requests artificially increases the encode ti=
-me
->> > > >> required by video_pump, and AFAICT there is no real benefit to it?
->> > > >
->> > > > Thinh gave me the advise that it is better to use the isoc stream
->> > > > constantly filled. Rather then streaming big amounts of data in the
->> > > > beginning of an frameinterval and having then a lot of spare time
->> > > > where the bandwidth is completely unsused.
->> > > >
->> > > > In our reallife scenario streaming big requests had the impact, th=
-at
->> > > > the dwc3 core could not keep up with reading the amount of data
->> > > > from the memory bus, as the bus is already under heavy load. When =
-the
->> > > > HW was then not able to transfer the requested and actually availa=
-ble
->> > > > amount of data in the interval, the hw did give us the usual missed
->> > > > interrupt answer.
->> > > >
->> > > > Using smaller requests solved the problem here, as it really was
->> > > > unnecessary to stress the memory and usb bus in the beginning as
->> > > > we had enough headroom in the temporal domain.
->> > >
->> > > Ah, I see. This was not a consideration, and it makes sense if USB
->> > > bus is under contention from a few different streams. So the solution
->> > > seems to be to spread the frame of as many requests as we can transm=
-it
->> > > in one frameinterval?
->> > >
->> > > As an experiment, while we wait for others to respond, could you try
->> > > doubling (or 2.5x'ing to be extra safe) the number of requests alloc=
-ated
->> > > by patch 3/3 without changing the request's buffer size?
->> > >
->> > > It won't help with the error reporting but should help with ensuring
->> > > that frames are sent out in one frameinterval with little to no
->> > > 0-length requests between them.
->> > >
->> > > The idea is that video_pump will have enough requests available to f=
-ully
->> > > encode the frame in one burst, and another frame's worth of request =
-will be
->> > > re-added to req_free list for video_pump to fill up in the time that=
- the next
->> > > frame comes in.
->> > >
->> > > >
->> > > > Which then led to the conclusion that the number of needed requests
->> > > > per image frame interval is calculatable since we know the usb
->> > > > interval length.
->> > > >
->> > > > @Thinh: Correct me if I am saying something wrong here.
->> >
->> > Right, if you max out the data rate per uframe, there's less opportuni=
-ty
->> > for the host to schedule everything for that interval (e.g. affected
->> > from other endpoint/device traffics, link commands etc). It also
->> > increases the latency of DMA. In many cases, many other vendor hosts
->> > can't handle 48KB/uframe for SuperSpeed and 96KB/uframe for SuperSpeed
->> > Plus. So, you'd need to test your platform find the optimal request si=
-ze
->> > so it can work for most hosts.
->> >
->> > > >
->> > > >>> Therefor to properly make those patches work, we will have to ge=
-t rid of
->> >
->> > Sorry if I may have missed the explaination, but why do we need to rid
->> > of this?
->>
->>
->> The uvc_video gadget is queueing requests with ep_queue whenever they
->> are prepared. However for uvc we may not send EOF to the host until
->> we know that the frame was transmitted correct or wrong.
->>
->> To ensure this the gadget is waiting for the last request to be
->> completed from dwc3. Until this request was not received, the current
->> workflow is to enqueue zero-length requests into the dwc3 hw. With that,
->> the final EOF request for the frame will be transmitted after the
->> zero-length requests have passed the hw. (They have no data, but they
->> still take one frameinterval durtion). This sparsed frame with
->> zero-requests inbetween will interfere with the precalculation for
->> request data we fill every request with based on the expected frame
->> duration.
->>
->> I know this seems very interlocked. It is very complex indeed. Tell
->> me if you still have questions and I will come up with some more
->> details to the current uvc_video driver.
->>
->> > > >>> the zero length pump mechanism again and make sure that the whole
->> > > >>> business logic of what to be queued and when will only be done i=
-n the
->> > > >>> pump worker. It is possible to let the dwc3 udc run dry, as we a=
-re
->> > > >>> actively waiting for the frame to finish, the last request in the
->> > > >>> prepared and started list will stop the current dwc3 stream and=
-=A0 for
->> > > >>> no underruns will occur with the next ep_queue.
->> > > >>
->> > > >> One thing to note here: The reason we moved to queuing 0-length r=
-equests
->> > > >> from complete callback was because even with realtime priority, v=
-ideo_pump
->> > > >> thread doesn't always meet the ISOC queueing cadence. I think sto=
-pping and
->> > > >> starting the stream was briefly discussed in our initial discussi=
-on in
->> > > >> https://urldefense.com/v3/__https://lore.kernel.org/all/202304190=
-01143.pdxflhzyecf4kvee@synopsys.com/__;!!A4F2R9G_pg!ZmfvrPq4rs7MIhxNrrEqmgG=
-rlYTJ12WgdzaqQhfEehKfjKqxPr2bC1RzUqaa9tvdBtAvXdyK2GpxYzvslpV6$
->> > > >> and Thinh mentioned that dwc3 controller does it if it detects an=
- underrun,
->> > > >> but I am not sure if starting and stopping an ISOC stream is good=
- practice.
->> >
->> > There's a workaround specific for UVC in dwc3 to "guess" when underrun
->> > happen. It's not foolproof. dwc3 should not need to do that.
->> >
->> > Isoc data is periodic and continuous. We should not expect this
->> > unconventional re-synchronization.
->>
->> I think we have to discuss what is ment by resynchronization here. If
->> the trb ring buffer did run dry and the software is aware of this
->> (elemnt in the started and prepared list) then the interrupt handler
->> already is calling End Stream Command.
->
->The driver only aware of this when the controller tells it, which may be
->already too late.
+[Synopsys]- The internal initialization of event ring fetches
+the "Event Ring Segment Table Entry" based on the indication of
+ERSTBA_LO written.
 
-In our special case there should not be any too late any more. Since we
-ensure that all requests will be enqueued for one transfer (which will
-represent one frame) in time and we are not dependent on the complete
-handler for nothing else than telling the uvc driver that the last
-request came back or if there was some error in the current active
-frame.
+Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
+---
+ drivers/usb/host/xhci-mem.c | 5 ++++-
+ drivers/usb/host/xhci.h     | 6 ++++++
+ 2 files changed, 10 insertions(+), 1 deletion(-)
 
-As already stated we also have to wait with enqueueing the next frame
-to the hardware and only are allowed to enqueue one frame at a time.
-Otherwise it is not possible to tell the host if the frame was broken or
-not.
+diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
+index 3100219..36ee704 100644
+--- a/drivers/usb/host/xhci-mem.c
++++ b/drivers/usb/host/xhci-mem.c
+@@ -2325,7 +2325,10 @@ xhci_add_interrupter(struct xhci_hcd *xhci, struct xhci_interrupter *ir,
+ 	erst_base = xhci_read_64(xhci, &ir->ir_set->erst_base);
+ 	erst_base &= ERST_BASE_RSVDP;
+ 	erst_base |= ir->erst.erst_dma_addr & ~ERST_BASE_RSVDP;
+-	xhci_write_64(xhci, erst_base, &ir->ir_set->erst_base);
++	if (intr_num == 0)
++		xhci_write_64(xhci, erst_base, &ir->ir_set->erst_base);
++	else
++		xhci_write_64_r(xhci, erst_base, &ir->ir_set->erst_base);
+ 
+ 	/* Set the event ring dequeue address of this interrupter */
+ 	xhci_set_hc_event_deq(xhci, ir);
+diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+index 3041515..7951c0e 100644
+--- a/drivers/usb/host/xhci.h
++++ b/drivers/usb/host/xhci.h
+@@ -17,6 +17,7 @@
+ #include <linux/kernel.h>
+ #include <linux/usb/hcd.h>
+ #include <linux/io-64-nonatomic-lo-hi.h>
++#include <linux/io-64-nonatomic-hi-lo.h>
+ 
+ /* Code sharing between pci-quirks and xhci hcd */
+ #include	"xhci-ext-caps.h"
+@@ -1747,6 +1748,11 @@ static inline void xhci_write_64(struct xhci_hcd *xhci,
+ {
+ 	lo_hi_writeq(val, regs);
+ }
++static inline void xhci_write_64_r(struct xhci_hcd *xhci,
++				 const u64 val, __le64 __iomem *regs)
++{
++	hi_lo_writeq(val, regs);
++}
+ 
+ static inline int xhci_link_trb_quirk(struct xhci_hcd *xhci)
+ {
+-- 
+2.7.4
 
-I have the following scheme in my mind. It is simplified to take frames
-of only 4 requests into account. (>80 chars warning)
-
-
-frameinterval:                |       125 us       |       125 us       |  =
-     125 us       |       125 us       |       125 us       |       125 us =
-      |       125 us       |
-                               |                    |                    | =
-                   |                    |                    |             =
-       |                    |
-pump thread:   queue          |rqA1 rqA2 rqA3 rqA4'|                    |  =
-                  |                    |                    |rqB0 rqB1 rqB2=
- rqB3 |rqB4'               |
-irq  thread:   complete       |                    |rqA1                |rq=
-A2                |rqA3                |rqA4'               |              =
-      |rqB0                | rqB1
-qbuf thread:   encode         |rqB1 rqB2 rqB3 rqB4'|                    |  =
-                  |                    |                    |rqA1 rqA2 rqA3=
- rqA4'|                    |
-
-dwc3 thread:   Hardware                            < Start Transfer        =
-                                               End Transfer >              =
-      < Start Transfer      ....
-
-legend:
-- rq'  : last request of a frame
-- rqB0 : first request of the next transfer with no payload but the header =
-only
-          telling the host that the last frame was ok/broken
-
-assumption:
-
-- pump thread is never interrupted by a kernel thread but only by some shor=
-t running irq
-- if one request comes back with -EXDEV the rest of the enqueued requests s=
-hould be flushed
-
-In the no_interrupt case we would also only generate the interrupt for
-the last request and giveback all four requests in the last interval.
-This should still work fine.
-
-We also only start streaming when one frame is totally available to be
-enqueued in one run. So in case frames with rqA and rqB both did come back
-with errors the start of the next frame will only begin after the next
-frame was completely and fully encoded.
-
->> When the stream is stopped, what implications does this have on the bus?
->>
->> When the Endpoint is enabled, will the hardware then send zero-length
->> requests on its own?
->
->For isoc endpoint IN, yes. If the host requests for isoc data IN while
->no TRB is prepared, then the controller will automatically send 0-length
->packet respond.
-
-Perfect! This will help a lot and will make active queueing of own
-zero-length requests run unnecessary.
-
->> With the next ep_queue we start another stream and when we keep up with
->> this stream there is no underruns, right?
->>
->> I picture this scenario in my mind:
->>
->> thread 1: uvc->queue_buf is called:
->>   - we encode the frame buffer data into all available requests
->>     and put them into the per uvc_buffer perpared list
->>     (as we precalculated the amount of requests properly to the expected
->>      frame duration and buffer size there will be enough requests
->>      available)
->>   - wake up the pump thread
->>
->> thread 2: pump_worker is triggered
->>   - take all requests from the prepared available buffer and enqueue them
->>     into the hardware
->>     (The pump worker is running with while(1) while it finds requests in
->>      the per buffer prepared list) and therefor will have a high chance
->>      to finish the pumping for one complete frame.
->>   - check for any errors reported from the complete handlers
->>     - on error
->>       - stop enqueing new requests from current frame
->>       - wait for the last request from errornous frame has returned
->>   - only start pumping new requests from the next buffer when the last
->>     request from the active frame has finished
->>   - In the beginning of the next frame send one extra request with
->>     EOF/ERR tag so the host knows that the last one was ok or not.
->>
->> thread 3: complete handler (interrupt)
->>   - give back the requests into the empty_list
->>   - report EXDEV and errors
->>   - wake up the pump thread
->>
->> With this method we will continously drain the hw trb stream of the dwc3
->> controller per frame and therefor will not shoot into one window where
->> the current stream could be missed. With the data spreading over the
->> many requests we also avoid the missed requests when the DMA was to
->> slow.
->>
->
->This sounds good.
->
->As long as we can maintain more than X number of requests enqueued to
->accomodate for the worst latency, then we can avoid underrun. The driver
->should monitor how many requests are enqueued and hopefully can keep up
->the queue with zero-length requests.
-
-Except I totally misunderstood something or did oversimplify to much,
-the above explanation should run this unnecessary.
-
-Although we are able to track the amount of enqueued requests in the udc
-driver and compare that with the amount of completed requests.
-
-Also we have the usb_gadget_frame_number callback to the udc controller
-to ask in which frame it is operating at the moment. This way we would
-be able to calculate not to enqueue requests into a transfer that did
-not come back yet completely but would run into missed transfers.
-
-Michael
-
---=20
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
-
---FJN5bpTf2Oav326M
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmZNN18ACgkQC+njFXoe
-LGQkXRAAvf2PS6WGbXqYYFZekKfZNID7RmWsKD2fPAaGS7HrREZKYmwecjXlcOPt
-RB8iXc3rz3azCKAfFgcOchkGoJdJTMjWmz7bUgKJ/v1fOpVlGN6kWEpzKQP8tHuR
-ecNIYDo7KtbEqQapttUR4x5nDqGplpts0APntLFq30DJp9GwPsPnz2M2STSy21Ah
-mneACn+FUMNLa/OYVRcqBIe33rbdn/ksSNAaJZmj7j0e08Lxu0hu/ALw9kg+HLL3
-lkWSEH3jDmOgXZgjn2WFbWGlhaPj8XwLdt4lLWejz99UXtMrrx4iZAo+VPNXtxe4
-t05GN6azx/HWBSPNTA8pIAhxohIybgBh2BD2GGKufXm+93K8l66cxud1eoZSd35N
-yFG1mKl+ozagowWcTETbNAOSpkRSCMBHbT460tR+yPKgYPi1j/wnPEuqqWFs44DP
-J5iDxIBWWTS8zk38VIBXJ2pAF6i/Dd8IeprduP99nyZnkDkDf6waGLcVUr+gYFNF
-QwRdosirq7G63M6s38gUuTqnXpIFyiER+1YEoOEObbF2ixGqWdvkyGdFx9I3z6/3
-4dNByTJtMWi441PMNnq/W4z4/N6LT+GM1h7gMQMKdrSpkL2584RjZoPF2RQ2LIb1
-u0qNEeRfYM0JacV4l+E+96L3PLfxLa0c17N+yN8vlVuLW2eup2c=
-=7biu
------END PGP SIGNATURE-----
-
---FJN5bpTf2Oav326M--
 
