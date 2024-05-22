@@ -1,96 +1,137 @@
-Return-Path: <linux-usb+bounces-10402-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10403-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 291118CC26E
-	for <lists+linux-usb@lfdr.de>; Wed, 22 May 2024 15:50:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B4478CC2CF
+	for <lists+linux-usb@lfdr.de>; Wed, 22 May 2024 16:10:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D9EF12819F8
-	for <lists+linux-usb@lfdr.de>; Wed, 22 May 2024 13:50:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9C9571C22225
+	for <lists+linux-usb@lfdr.de>; Wed, 22 May 2024 14:10:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC63113EFE3;
-	Wed, 22 May 2024 13:49:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38F9C1411D3;
+	Wed, 22 May 2024 14:09:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="MaazTArG"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id 5BCB71E4AB
-	for <linux-usb@vger.kernel.org>; Wed, 22 May 2024 13:49:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E96F43AAB;
+	Wed, 22 May 2024 14:09:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716385799; cv=none; b=S/GB3DYz46+idAi9TzUD0wgh2kniEw+zQNN7FIlGwN9GSNtW1RvGpiKfM5qaoVvjijGWaONgAyQKzOJKJ0gevQ51uX85SDcnXGGB2sWGr0JNMUmBjiHLV1QlvrBdp2ZNrx6tBBrCrnLkSenkFLGSmNifwFmX9vJcCXrCKfRSkek=
+	t=1716386991; cv=none; b=B8XfHu4K/Zhjx/Mwqhe3QjnP/j3GHLIfv4xqGjB0YgCh9VM0ToWY+7cgT9LI13Xi69BeDNry90XY4qbwk/aSv0EX8nx2VRJx7o96wJFrAuEJDm6VkLhfwEhgyegzCeu/WD6d6adqZ3iw2hOrJU9Nlzy+8ew8716hpc51fczYV3o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716385799; c=relaxed/simple;
-	bh=78Q2CGlF7Kc7/HZA9H4BC5dum8xm9Ro2FY2sOfh2+Cg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cqjZ3sOyaBWIbtZmUTa1n41VjYt0ANjg6t35SxcKmsbAB8ijXYUEnz4f3wdbouCQudoxk6yDfmP7ZpHiuq77aRdIhq8/4J/IjC+KBk5WdImv7EAh1gd5jbGXJAaA1UY9Y53dmjqei9ACsyvdYASbz0+rg3ohuWfbdOOHTuSLElM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
-Received: (qmail 497823 invoked by uid 1000); 22 May 2024 09:49:55 -0400
-Date: Wed, 22 May 2024 09:49:55 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Shichao Lai <phyhac@gmail.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-  linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
-  linux-kernel@vger.kernel.org, syzkaller@googlegroups.com
-Subject: Re: divide error in alauda_transport
-Message-ID: <b82e133a-62a3-4f23-9803-1af79b06b8f4@rowland.harvard.edu>
-References: <CAEk6kZszgHVYN8r-AsPw9YtGGf459j0uDMYLdOoTixhE3YJCKw@mail.gmail.com>
- <2024052224-motion-perish-82cd@gregkh>
- <CAEk6kZt4qcV0xUxHFRp3DTdZ0f_3fLE0q4e_AWHGyjba=19g9g@mail.gmail.com>
- <CAEk6kZsgEJNSmFFe-tdA+RhM=+Pjm=JvHiNJ4QjZONPXHt-gjw@mail.gmail.com>
- <2024052242-hunter-exception-930c@gregkh>
- <CAEk6kZsLqJ5RbWYMrcbB+LkRq8jzRgTm3F8kq8FKB14y8ST2GQ@mail.gmail.com>
+	s=arc-20240116; t=1716386991; c=relaxed/simple;
+	bh=mDWoM0y/9NZiwZeSsw6wupj4kpFKNhJbzUYHPgjsHrc=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=sWYv2LHrgnOYdhdxBglOjhFQmzbzJZ7nA3N/pCmXWvw4Hxasbu24LdaZWyLj8hb/vX7qKBkB8OuvDHZop7yKI9Sm0WyjaMoVuGHXNiqVsxfF6JC/b4T6hD/NUrYihPkCPzsE4pnuCLsyago65p5jJLZAyeHCd+RzyTdOBVLrakQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=MaazTArG; arc=none smtp.client-ip=68.232.154.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1716386989; x=1747922989;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=mDWoM0y/9NZiwZeSsw6wupj4kpFKNhJbzUYHPgjsHrc=;
+  b=MaazTArGUOYa1Euz8VBENkEZXIdY5Vyd51ridQcYBT+4dBe4iypfW/yy
+   HlwfZRO5wwc7/r+giHglMb+HRJsuwvkJLuUJX0rx6s7KypAvp2LWwLRSo
+   IfpqDQ1nRV475I8y0P8UHbjXzvgj9k/8A38wgBI0JaTYYxKSh7layKFuV
+   bariD9bnduHq/DwGmLBpIFi41QXzOqu2DZwxX+DRcBQyIRBJibSRUHdya
+   kN6+BsCsX61aqPUe4T+Bhny9kPk6VOxLQ2UOYfCKWQ8bL9No+RlFL2b7d
+   YfW3dM3g05bBIJ0NR0X68zUkEECZMg28uxoLUyHwnzr71R+GwmcVLq73W
+   g==;
+X-CSE-ConnectionGUID: YDHWVVWpTDmNhpERICjMxw==
+X-CSE-MsgGUID: TeHhQJ9vQwif+nar/DGvUg==
+X-IronPort-AV: E=Sophos;i="6.08,179,1712646000"; 
+   d="scan'208";a="25744430"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 22 May 2024 07:08:40 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Wed, 22 May 2024 07:08:26 -0700
+Received: from che-ll-i17164.microchip.com (10.10.85.11) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2507.35 via Frontend Transport; Wed, 22 May 2024 07:08:22 -0700
+From: Parthiban Veerasooran <Parthiban.Veerasooran@microchip.com>
+To: <steve.glendinning@shawell.net>, <UNGLinuxDriver@microchip.com>,
+	<davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+	<pabeni@redhat.com>
+CC: <netdev@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, Parthiban Veerasooran
+	<Parthiban.Veerasooran@microchip.com>
+Subject: [PATCH] net: usb: smsc95xx: configure external LEDs function for EVB-LAN8670-USB
+Date: Wed, 22 May 2024 19:38:17 +0530
+Message-ID: <20240522140817.409936-1-Parthiban.Veerasooran@microchip.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEk6kZsLqJ5RbWYMrcbB+LkRq8jzRgTm3F8kq8FKB14y8ST2GQ@mail.gmail.com>
+Content-Type: text/plain
 
-On Wed, May 22, 2024 at 06:01:57PM +0800, Shichao Lai wrote:
-> Thanks for your patience. I am a beginner and initially attempted to report
-> errors to the community.
-> However, I have just discovered that the issue mentioned above has already
-> been proposed in the previous three months of the article, and there is an
-> ongoing discussion.
+By default, LAN9500A configures the external LEDs to the below function.
+nSPD_LED -> Speed Indicator
+nLNKA_LED -> Link and Activity Indicator
+nFDX_LED -> Full Duplex Link Indicator
 
-To call the discussion "ongoing" is optimistic.  There hasn't been any 
-reply to my last post, which was made on March 17, more than two months 
-ago.
+But, EVB-LAN8670-USB uses the below external LEDs function which can be
+enabled by writing 1 to the LED Select (LED_SEL) bit in the LAN9500A.
+nSPD_LED -> Speed Indicator
+nLNKA_LED -> Link Indicator
+nFDX_LED -> Activity Indicator
 
-Maybe you can carry out the tests I described in that post.  That 
-would be a big help.
+Signed-off-by: Parthiban Veerasooran <Parthiban.Veerasooran@microchip.com>
+---
+ drivers/net/usb/smsc95xx.c | 12 ++++++++++++
+ drivers/net/usb/smsc95xx.h |  1 +
+ 2 files changed, 13 insertions(+)
 
-Alan Stern
+diff --git a/drivers/net/usb/smsc95xx.c b/drivers/net/usb/smsc95xx.c
+index cbea24666479..05975461bf10 100644
+--- a/drivers/net/usb/smsc95xx.c
++++ b/drivers/net/usb/smsc95xx.c
+@@ -1006,6 +1006,18 @@ static int smsc95xx_reset(struct usbnet *dev)
+ 	/* Configure GPIO pins as LED outputs */
+ 	write_buf = LED_GPIO_CFG_SPD_LED | LED_GPIO_CFG_LNK_LED |
+ 		LED_GPIO_CFG_FDX_LED;
++
++	/* Set LED Select (LED_SEL) bit for the external LED pins functionality
++	 * in the Microchip's EVB-LAN8670-USB 10BASE-T1S Ethernet device which
++	 * uses the below LED function.
++	 * nSPD_LED -> Speed Indicator
++	 * nLNKA_LED -> Link Indicator
++	 * nFDX_LED -> Activity Indicator
++	 */
++	if (dev->udev->descriptor.idVendor == 0x184F &&
++	    dev->udev->descriptor.idProduct == 0x0051)
++		write_buf |= LED_GPIO_CFG_LED_SEL;
++
+ 	ret = smsc95xx_write_reg(dev, LED_GPIO_CFG, write_buf);
+ 	if (ret < 0)
+ 		return ret;
+diff --git a/drivers/net/usb/smsc95xx.h b/drivers/net/usb/smsc95xx.h
+index 013bf42e27f2..134f3c2fddd9 100644
+--- a/drivers/net/usb/smsc95xx.h
++++ b/drivers/net/usb/smsc95xx.h
+@@ -114,6 +114,7 @@
+ 
+ /* LED General Purpose IO Configuration Register */
+ #define LED_GPIO_CFG		(0x24)
++#define LED_GPIO_CFG_LED_SEL	BIT(31)		/* Separate Link/Act LEDs */
+ #define LED_GPIO_CFG_SPD_LED	(0x01000000)	/* GPIOz as Speed LED */
+ #define LED_GPIO_CFG_LNK_LED	(0x00100000)	/* GPIOy as Link LED */
+ #define LED_GPIO_CFG_FDX_LED	(0x00010000)	/* GPIOx as Full Duplex LED */
 
-> I think this post can be closed later.
-> 
-> https://groups.google.com/g/syzkaller-bugs/c/m8CuxSpLKoQ/m/JfUy1xGnAwAJ
-> 
-> Greg Kroah-Hartman <gregkh@linuxfoundation.org> 于2024年5月22日周三 16:59写道：
-> 
-> > On Wed, May 22, 2024 at 04:22:18PM +0800, Shichao Lai wrote:
-> > > patch like this:
-> > > ```c
-> > > while (sectors > 0) {
-> > >     if (!uzonesize) {
-> > >         return USB_STOR_TRANSPORT_ERROR;
-> > >     }
-> > >     unsigned int zone = lba / uzonesize; /* integer division */
-> > >     unsigned int lba_offset = lba - (zone * uzonesize);
-> > >     unsigned int pages;
-> > > ```
-> >
-> > Please submit this properly and we will be glad to review it.
-> >
-> > thanks,
-> >
-> > greg k-h
-> >
+base-commit: 4b377b4868ef17b040065bd468668c707d2477a5
+-- 
+2.34.1
+
 
