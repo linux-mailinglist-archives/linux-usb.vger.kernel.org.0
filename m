@@ -1,120 +1,139 @@
-Return-Path: <linux-usb+bounces-10420-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10421-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 28D828CCB79
-	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2024 06:45:22 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 952C78CCBC8
+	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2024 07:33:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3DB8D1C20F87
-	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2024 04:45:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C6A631C20FA0
+	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2024 05:33:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9364013A86D;
-	Thu, 23 May 2024 04:45:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 245B213A878;
+	Thu, 23 May 2024 05:33:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QF3ROHgA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HhIYXWw4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 914141F5E6;
-	Thu, 23 May 2024 04:45:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A80413A3F2;
+	Thu, 23 May 2024 05:33:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716439514; cv=none; b=KWZK57oO+11vhiqKy1Ou2uRbHvPpRdJH8n+HrhclptNQtlVgzwzBJ/Fupl+0WDj3Q5P1Nak9XD6mxJWJZZvMamdgo9DprojgF1IORTumpfQrMOGE95c1dD7pQJR4U6WtkGKACRUmmaPUOeRRCDxiWNTe14rG72nHET91ZU/VVoc=
+	t=1716442394; cv=none; b=mRZTFIJrcmvThF6+pVql6qU+TsU8dS22cyGrlRJMrB8mFcHMj0Pg0+W3F5olz7sejujnDY/WCMGnAzzeNyLDJVwNayuGejJ0G/Ka+vyhX0oY5kQXJEZkg1iEIb2D5GhTRZJaLkaFIyEl8b6niBKZ6yiADeFSfwBU1q7AU+XDvCw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716439514; c=relaxed/simple;
-	bh=vCGKBBvs+CFNAlmNfTvta6ASZjdxorfckdKRcybznSQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LYB3k5mWJIZFfNlUanpzI5u6uv3FZrLzHek2mdPr6lnhRfVAcSVCL8QcUrxXXqYKhQtZfUhGA2VGorXvzIcjDHbXLdqvAtFQQOJxPZ54f3EshjzuRBLzQo634ke0l+xOveUgrVXjdYkphBjJuKAtasMf5pksoWBOBz4LAZl09uc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QF3ROHgA; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1716439513; x=1747975513;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vCGKBBvs+CFNAlmNfTvta6ASZjdxorfckdKRcybznSQ=;
-  b=QF3ROHgAewoBhWvOAJu5nDL9+dnGiZqJwxylXO12DjU0B049ogvLqpL4
-   VouFS39iu2vF7CUt9pjmKnRdsqZI7AT6pjravWfscF/TzyaUNg00gdXBJ
-   aga8Jx9E1Dn7aUCqOecv+8J1zRADmOF3Jqx6Th9DblneCtTtwD0YRa+v/
-   ANfSCsnVxy4fqhN87KJpe8AIYvE0GGzdECh0NB2CrIiFAwJTOCuc1U3av
-   7qYqxRvM/vMNVOG/ro2le8oowDYnqpa4BG25hwZ5O4Ed7bF6CHLILAGGn
-   E6jxI+m6Xly4BY9gr0OhfZQ/sHJbKESVlIqDYk5xidIBifHM8TNLmLuyC
-   Q==;
-X-CSE-ConnectionGUID: 3stSL6jqTMGpk2zd/QzSaA==
-X-CSE-MsgGUID: kVPSIKh3TL+e7iJDG5srhA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11080"; a="12564657"
-X-IronPort-AV: E=Sophos;i="6.08,181,1712646000"; 
-   d="scan'208";a="12564657"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2024 21:45:12 -0700
-X-CSE-ConnectionGUID: 5hDjUWs0SY++9FE1vCsMCw==
-X-CSE-MsgGUID: myyeBLecRpmyCN6Kh5ttQQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,181,1712646000"; 
-   d="scan'208";a="33427663"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa007.fm.intel.com with ESMTP; 22 May 2024 21:45:09 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id DABA2E7; Thu, 23 May 2024 07:45:07 +0300 (EEST)
-Date: Thu, 23 May 2024 07:45:07 +0300
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Mario Limonciello <mario.limonciello@amd.com>
-Cc: Gia <giacomo.gio@gmail.com>, "S, Sanath" <Sanath.S@amd.com>,
-	Benjamin =?utf-8?Q?B=C3=B6hmke?= <benjamin@boehmke.net>,
-	Christian Heusel <christian@heusel.eu>,
-	Linux regressions mailing list <regressions@lists.linux.dev>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"stable@vger.kernel.org" <stable@vger.kernel.org>,
-	"kernel@micha.zone" <kernel@micha.zone>,
-	Andreas Noever <andreas.noever@gmail.com>,
-	Michael Jamet <michael.jamet@intel.com>,
-	Yehezkel Bernat <YehezkelShB@gmail.com>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [REGRESSION][BISECTED] "xHCI host controller not responding,
- assume dead" on stable kernel > 6.8.7
-Message-ID: <20240523044507.GX1421138@black.fi.intel.com>
-References: <20240520162100.GI1421138@black.fi.intel.com>
- <5d-664b8000-d-70f82e80@161590144>
- <CAHe5sWazL96zPa-v9S515ciE46JLZ1ROL7gmGikfn-vhUoDaZg@mail.gmail.com>
- <20240521051151.GK1421138@black.fi.intel.com>
- <CAHe5sWb7kHurBvu6JC6OgXZm9mSg5a2W2XK9L8gCygYaFZz7JQ@mail.gmail.com>
- <20240521085926.GO1421138@black.fi.intel.com>
- <CAHe5sWb=14MWvQc1xkyrkct2Y9jn=-dKgX55Cow_9VKEeapFwA@mail.gmail.com>
- <20240521112654.GP1421138@black.fi.intel.com>
- <CAHe5sWbAkgypzOA-JpBpwY5oFP1wXShKDNevmjLEu1kR1VOeRA@mail.gmail.com>
- <79dfc0b9-94d4-4046-a3b9-185e53b4a192@amd.com>
+	s=arc-20240116; t=1716442394; c=relaxed/simple;
+	bh=IiYlAd4WaNM02+scnmtTm0a5Xz1nW553J/VFMZi0a2Y=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=JpCl/NCSu99+2XJp/rj61wMyornOYOy85cwtyvZRSE96ByOLxBx3SRik7E7Qx33PB2XA5XyyorWh4boccO35yu6BCsZgKtQG8PtfmGDoPc2DYGjU8FG7kl80apQHr/eV+7NKd1Hw4XhlaXP9oos3zZhQpabPvVEkurqgEpc6QTY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HhIYXWw4; arc=none smtp.client-ip=209.85.216.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2bd9255bc2cso347460a91.3;
+        Wed, 22 May 2024 22:33:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1716442393; x=1717047193; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lK6G6w9tGySDIb4n4fBZsvQfFvWjx+nls5lKdheoGIc=;
+        b=HhIYXWw4eoUyMkRC2kiUArBicc0ECXJ83hsQ8C+BvRwbINAWg7QiQ6CjyvnlL/FFxR
+         VRTv8+RhVylRr8Xc2gtpcKvXxrlOeO+1igOADVxNkqxJb8d6S1/5m/BBO4LZ8QSoybXN
+         Oh5XCby76WEL8GWnV2jy6XofW0WcAkNrSVU8wDmGv+F4ZN90iPI0/r6aa9O25wjmQuuO
+         uxPkz3rNAPV2lF0lQvLt2v32T6ZR6z5dZsYN42tzb15XstPJRMyGqq/e75uv+NRZsA+t
+         DQLAbERVDFBNe65EiQRwx64M/Zd1bIp7IrL5HCZbk0CHzfaevMA5IJ3kCTP9jbNYw4La
+         TKYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1716442393; x=1717047193;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lK6G6w9tGySDIb4n4fBZsvQfFvWjx+nls5lKdheoGIc=;
+        b=VTnY0LIpOT4C83LQZFnWxy9Wszmff4L2z72y+81Ljn6nfQpdDbTOL8zu0bXwOtA53X
+         BWwO8FDlaTTThDxpCkab78h+CcMLnWA1igdD7JlmPP7yQWwzu7r2PV0sYpc6f1w662dh
+         OzcynP4vPw1hOY16jy3Qc0dYx+z9+dwv3SEx3c94Wm+OQtg9DQdjatxPAf9F8E8ive83
+         x86A/mdsu/x5Aj44xfi56ZdnC+U+cLGUXMyZ32ek738AeZ5oBYfbGtAxk6v422/FdpGk
+         PCxXspkQgTydwBzovVqljqw2LgfP0txTfFlflilJrs37e8hsxIPWogi9oLi3QNWtwgFJ
+         Uu0Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWh2VsyIoK+ZVtz8mAap4XvDgyJsHlsnCxxy6tcpurmMjNoXP4RqksI9cG5Zs6ot0DiiZb5061MfjOR+UfznX8tyFekhgVx6l6jYAnB3lPzMkY4iMhOrn9/XBtjrKuTNnpHUAoFbyWJ
+X-Gm-Message-State: AOJu0YyIbGH5g7YD1S6XtRM9EnVYl92ikv/fAYtQbl+mg5R3wjcHbqCg
+	XzOZHzkioaDnUbM9cbqP/kZtDHL/AhDjgVp4yGczo078ibVrfbq3ciAi0AdM5HIr8G0ZAgYiB9d
+	/nikr+8sX9m2oaiCr61GhSImDFk4=
+X-Google-Smtp-Source: AGHT+IFsQ1uY90KhB+RKZu3ri7pwe2IhQbEKkQidqKi13tCvcc62pOSd2liAMgX5LRT4U4HFl7le93LjABhdE7PTEno=
+X-Received: by 2002:a17:90a:f301:b0:2af:d64:4887 with SMTP id
+ 98e67ed59e1d1-2bd9f5d610emr4066034a91.4.1716442392624; Wed, 22 May 2024
+ 22:33:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <79dfc0b9-94d4-4046-a3b9-185e53b4a192@amd.com>
+References: <20240522023918.7613-1-ki.chiang65@gmail.com> <20240522023918.7613-2-ki.chiang65@gmail.com>
+ <2024052204-freehand-say-198c@gregkh>
+In-Reply-To: <2024052204-freehand-say-198c@gregkh>
+From: =?UTF-8?B?6JSj5YWJ55uK?= <ki.chiang65@gmail.com>
+Date: Thu, 23 May 2024 13:33:00 +0800
+Message-ID: <CAHN5xi30GpA8Kco4+EFpvOU2wdgW8dpeBjE=Bs1ffbFVbjo-EA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] xhci: Apply reset resume quirk to Etron EJ188 xHCI host
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: mathias.nyman@intel.com, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, May 22, 2024 at 10:19:51AM -0500, Mario Limonciello wrote:
-> On 5/22/2024 09:41, Gia wrote:
-> > Now this is odd...
-> > 
-> > I've tested another cable - a very short one used with a Gen3 nvme
-> > enclosure that I'm sure it's working - and I got Gen2 20 Gbps. I also
-> > have tested this on Windows 11 and I still just got a Gen2 connection.
-> > 
-> > I was almost sure it was caused by a bad USB4 implementation by the PC
-> > manufacturer, then I tried to connect a Thunderbolt 3 disk enclosure
-> > via daisy chain to the Caldigit dock and I got the full Gen3 40 Gbps
-> > connection! See the attached picture.
-> > 
-> 
-> I suspect you can't actually get Gen 3 performance in this configuration.
-> IIUC you should still be limited by the uplink to the host.
+Hi Greg,
 
-One "explanation" could be that the distance from the SoC to the Type-C
-connector is relatively long which would require a retimer to get the
-Gen3 speeds.
+Greg KH <gregkh@linuxfoundation.org> =E6=96=BC 2024=E5=B9=B45=E6=9C=8822=E6=
+=97=A5 =E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=8812:36=E5=AF=AB=E9=81=93=EF=BC=
+=9A
+>
+> On Wed, May 22, 2024 at 10:39:18AM +0800, Kuangyi Chiang wrote:
+> > As described in commit c877b3b2ad5c ("xhci: Add reset on resume quirk f=
+or
+> > asrock p67 host"), EJ188 have the same issue as EJ168, where completely
+> > dies on resume. So apply XHCI_RESET_ON_RESUME quirk to EJ188 as well.
+> >
+> > Signed-off-by: Kuangyi Chiang <ki.chiang65@gmail.com>
+> > ---
+> >  drivers/usb/host/xhci-pci.c | 5 +++++
+> >  1 file changed, 5 insertions(+)
+> >
+> > diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+> > index ef513c2..a0beb41 100644
+> > --- a/drivers/usb/host/xhci-pci.c
+> > +++ b/drivers/usb/host/xhci-pci.c
+> > @@ -31,6 +31,7 @@
+> >
+> >  #define PCI_VENDOR_ID_ETRON          0x1b6f
+> >  #define PCI_DEVICE_ID_EJ168          0x7023
+> > +#define PCI_DEVICE_ID_EJ188          0x7052
+> >
+> >  #define PCI_DEVICE_ID_INTEL_LYNXPOINT_XHCI   0x8c31
+> >  #define PCI_DEVICE_ID_INTEL_LYNXPOINT_LP_XHCI        0x9c31
+> > @@ -238,6 +239,10 @@ static void xhci_pci_quirks(struct device *dev, st=
+ruct xhci_hcd *xhci)
+> >               xhci->quirks |=3D XHCI_TRUST_TX_LENGTH;
+> >               xhci->quirks |=3D XHCI_BROKEN_STREAMS;
+> >       }
+> > +     if (pdev->vendor =3D=3D PCI_VENDOR_ID_ETRON &&
+> > +                     pdev->device =3D=3D PCI_DEVICE_ID_EJ188) {
+> > +             xhci->quirks |=3D XHCI_RESET_ON_RESUME;
+> > +     }
+>
+> Same question as on other patch, should this be backported to older
+> kernels too?
+>
+> thanks,
+>
+> greg k-h
+
+Sorry, I'm new to this.
+These patches have been tested in the stable 4.19 kernel, so they
+should be backported to stable kernels as old as 4.19, right?
+
+Thanks,
+Kuangyi Chiang
 
