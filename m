@@ -1,152 +1,101 @@
-Return-Path: <linux-usb+bounces-10423-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10424-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 064718CCC49
-	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2024 08:32:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 189D98CCC6D
+	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2024 08:46:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B29501F220D9
-	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2024 06:32:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C8ECA281A78
+	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2024 06:46:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0721113C3FD;
-	Thu, 23 May 2024 06:31:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2AD413C8FB;
+	Thu, 23 May 2024 06:45:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Bl8JF7RO"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ih89tDp/"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7410B1869;
-	Thu, 23 May 2024 06:31:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A304E13C3F5
+	for <linux-usb@vger.kernel.org>; Thu, 23 May 2024 06:45:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716445916; cv=none; b=K2bo35jMM4mH5lYWpdEEcC8smeJukBB4outwOld4waGvJehlCWhB3dckoP3nqEuMVbUecZhBXM75d3B3i4JY2ViPcpANOuZMKOyni259JDKKNIsPiFtsNij43ZFQ2FCVci9YBuCUhXMEby6/f0RvyXtyLgGDg/DWrGoOaMij6pg=
+	t=1716446756; cv=none; b=FU9/A1spAY7NoNa9vSgM3JRJdFUTKe6teQdPm26paUKMANZypSX/BPvzG89yezaREFXihmeWZAMLY3hENF2CmFMpTNnKLWDSwnE4t8/kyUO2c/1oc8TMXSF2M7ptkP6vey8J/BT8xIHZ89L2WCyo6LwWNf3K9NOBGr3FauXawCY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716445916; c=relaxed/simple;
-	bh=o+/cvrJE76RZcQYv9bvFvctskXTaIx6Tfj38u9fplMU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=g/uh4xlcNFU5/0ZsomEbo52EE1H3u70JNV/f8JD/d+nBh0Wp93ZFIPKZrLyqFMGEnrG7DBqFyStW9EtmJJJaPXyp9H3gVfg8iEzLeaf3NP7kIbh+Dailqh1HWRiuvTvYDWWU68ggWmh7l+PXR7mdM7mmVH9UbGPVJB/FgS1QKWA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Bl8JF7RO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A365BC2BD10;
-	Thu, 23 May 2024 06:31:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1716445916;
-	bh=o+/cvrJE76RZcQYv9bvFvctskXTaIx6Tfj38u9fplMU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Bl8JF7ROdvbbOaly//hU3B3zSJy+GOWSaNFEAMjhY87o8cMhHqWwGXTucuejT9gJ3
-	 lZpqavbh74Q+Za632mZ82f1dv08YRa63RK4oy0yn/5VAmLoRwrX3Dep1kkyWeKaNts
-	 RvpkHISzVC1PNvnWqPzZnXSzj40HEu59YXe0spgM=
-Date: Thu, 23 May 2024 08:31:53 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Shichao Lai <phyhac@gmail.com>
-Cc: Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org,
-	usb-storage@lists.one-eyed-alien.net, linux-kernel@vger.kernel.org,
-	syzkaller@googlegroups.com
-Subject: Re: divide error in alauda_transport
-Message-ID: <2024052315-dwelled-unframed-db34@gregkh>
-References: <CAEk6kZszgHVYN8r-AsPw9YtGGf459j0uDMYLdOoTixhE3YJCKw@mail.gmail.com>
- <2024052224-motion-perish-82cd@gregkh>
- <CAEk6kZt4qcV0xUxHFRp3DTdZ0f_3fLE0q4e_AWHGyjba=19g9g@mail.gmail.com>
- <CAEk6kZsgEJNSmFFe-tdA+RhM=+Pjm=JvHiNJ4QjZONPXHt-gjw@mail.gmail.com>
- <2024052242-hunter-exception-930c@gregkh>
- <CAEk6kZsLqJ5RbWYMrcbB+LkRq8jzRgTm3F8kq8FKB14y8ST2GQ@mail.gmail.com>
- <b82e133a-62a3-4f23-9803-1af79b06b8f4@rowland.harvard.edu>
- <CAEk6kZsgMscqmSgsvt9d=z7e69ZGuJAfLuYOV7E6jXJKr+n3Pg@mail.gmail.com>
+	s=arc-20240116; t=1716446756; c=relaxed/simple;
+	bh=QOge68Fw0tzENrc52wcXLnWTfYP7hBED4uLrPeCT0dU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Q7WRmin7i2VKymWSJpStOMvzIqZaayvRSOZJUQCCJ1iLjJG1ymLu8sSsWYe+DgF0FYhS9Guh6+XvZ1+rya933w04V7GkE2uDLzKwxL3kgFuxWNm260cgJGEt/zuZfS9Cm9F3WRQlFTv8OmTzIrPv3oxCkR56wIj24JUp78zFtyY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ih89tDp/; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1716446753;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=yDmW+1GQHZyT/E1Y2bedeCzyZRugpccl1pSBaP9FTL8=;
+	b=ih89tDp/cfjMpGZ3yi1/O+NEsGQOkQxbybnpIBLbDIuhLlJhPwZYDGY/Ua6VLGJH95Tsjm
+	VkV+huxG8+tW0vZ5/DujOAJ44RrEi7A12scaP4YSqEawVIGHBD13sq0lJCSkhMzIxIZxQ5
+	jl8g1VBWojdM7cv/V5OyAuuei3kna0c=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-260-37Yvtka0PjOESfXu_snMHA-1; Thu, 23 May 2024 02:45:51 -0400
+X-MC-Unique: 37Yvtka0PjOESfXu_snMHA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 79410185A78E;
+	Thu, 23 May 2024 06:45:50 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.39.192.206])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id F13181C008BB;
+	Thu, 23 May 2024 06:45:47 +0000 (UTC)
+From: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+To: yongqin.liu@linaro.org
+Cc: davem@davemloft.net,
+	edumazet@google.com,
+	inventor500@vivaldi.net,
+	jtornosm@redhat.com,
+	kuba@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org,
+	pabeni@redhat.com,
+	stable@vger.kernel.org
+Subject: Re: [PATCH] net: usb: ax88179_178a: fix link status when link is set to down/up
+Date: Thu, 23 May 2024 08:45:45 +0200
+Message-ID: <20240523064546.7017-1-jtornosm@redhat.com>
+In-Reply-To: <CAMSo37V5uqJ229iFk-t9DBs-1M5pkWNidM6xZocp4Osi+AOc1g@mail.gmail.com>
+References: <CAMSo37V5uqJ229iFk-t9DBs-1M5pkWNidM6xZocp4Osi+AOc1g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEk6kZsgMscqmSgsvt9d=z7e69ZGuJAfLuYOV7E6jXJKr+n3Pg@mail.gmail.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.7
 
-On Thu, May 23, 2024 at 11:26:48AM +0800, Shichao Lai wrote:
-> 在2024年5月23日星期四 UTC+8 03:59:30<Alan Stern> 写道：
-> 
-> > On Wed, May 22, 2024 at 06:01:57PM +0800, Shichao Lai wrote:
-> > > Thanks for your patience. I am a beginner and initially attempted to
-> > report
-> > > errors to the community.
-> > > However, I have just discovered that the issue mentioned above has
-> > already
-> > > been proposed in the previous three months of the article, and there is
-> > an
-> > > ongoing discussion.
-> >
-> > To call the discussion "ongoing" is optimistic. There hasn't been any
-> > reply to my last post, which was made on March 17, more than two months
-> > ago.
-> >
-> > Maybe you can carry out the tests I described in that post. That
-> > would be a big help.
-> >
-> > Alan Stern
-> >
-> > > I think this post can be closed later.
-> > >
-> > > https://groups.google.com/g/syzkaller-bugs/c/m8CuxSpLKoQ/m/JfUy1xGnAwAJ
-> > >
-> > > Greg Kroah-Hartman <gre...@linuxfoundation.org
-> > <https://groups.google.com/>> 于2024年5月22日周三 16:59写道：
-> > >
-> > > > On Wed, May 22, 2024 at 04:22:18PM +0800, Shichao Lai wrote:
-> > > > > patch like this:
-> > > > > ```c
-> > > > > while (sectors > 0) {
-> > > > > if (!uzonesize) {
-> > > > > return USB_STOR_TRANSPORT_ERROR;
-> > > > > }
-> > > > > unsigned int zone = lba / uzonesize; /* integer division */
-> > > > > unsigned int lba_offset = lba - (zone * uzonesize);
-> > > > > unsigned int pages;
-> > > > > ```
-> > > >
-> > > > Please submit this properly and we will be glad to review it.
-> > > >
-> > > > thanks,
-> > > >
-> > > > greg k-h
-> > > >
-> 
-> 
-> 
-> Hello Dear Maintainer!
-> I found the same divide error yestoday as
-> https://groups.google.com/g/syzkaller-bugs/c/m8CuxSpLKoQ
-> And I add a patch before drivers/usb/storage/alauda.c:950 in
-> alauda_read_data().
-> The true cause of this error is that the variable uzonesize may be set to 0.
-> Here is my patch:
-> ===========
-> 
-> diff --git a/drivers/usb/storage/alauda.c b/drivers/usb/storage/alauda.c
-> index 115f05a6201a..fb54af37efd5 100644
-> --- a/drivers/usb/storage/alauda.c
-> +++ b/drivers/usb/storage/alauda.c
-> @@ -947,6 +947,9 @@ static int alauda_read_data(struct us_data *us,
-> unsigned long address,
->         sg = NULL;
-> 
->         while (sectors > 0) {
-> +               if (!uzonesize) {
-> +                       return USB_STOR_TRANSPORT_ERROR;
-> +               }
->                 unsigned int zone = lba / uzonesize; /* integer division */
->                 unsigned int lba_offset = lba - (zone * uzonesize);
->                 unsigned int pages;
-> 
+Hello Yongqin,
 
+Again, not a lot of information from the logs, but perhaps you coud give me
+more information for your scenario.
 
-Great! Can you turn this into a real patch and send it to us so that we
-can apply it properly?  Directions for how to do so are in the
-Documentation/process/submitting_patches file.
+Could you try to execute the down interface operation, mac assignment and
+the up interface operation from command line? 
+That works for me.
 
-thanks,
+Maybe some synchronization issue is happening in your boot operation.
+Could you provide more information about how/when you are doing the
+commented operations to try to reproduce?
 
-greg k-h
+Best regards
+José Ignacio
+
 
