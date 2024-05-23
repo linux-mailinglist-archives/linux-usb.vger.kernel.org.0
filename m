@@ -1,101 +1,114 @@
-Return-Path: <linux-usb+bounces-10424-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10425-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 189D98CCC6D
-	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2024 08:46:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47F388CCCF3
+	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2024 09:23:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C8ECA281A78
-	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2024 06:46:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F0C501F225BA
+	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2024 07:23:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2AD413C8FB;
-	Thu, 23 May 2024 06:45:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E242D13C9DF;
+	Thu, 23 May 2024 07:23:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ih89tDp/"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Tzv3DL9Y"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A304E13C3F5
-	for <linux-usb@vger.kernel.org>; Thu, 23 May 2024 06:45:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 396C013C677;
+	Thu, 23 May 2024 07:23:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716446756; cv=none; b=FU9/A1spAY7NoNa9vSgM3JRJdFUTKe6teQdPm26paUKMANZypSX/BPvzG89yezaREFXihmeWZAMLY3hENF2CmFMpTNnKLWDSwnE4t8/kyUO2c/1oc8TMXSF2M7ptkP6vey8J/BT8xIHZ89L2WCyo6LwWNf3K9NOBGr3FauXawCY=
+	t=1716449004; cv=none; b=nL0lfgcHS5G7VCn4oo+XsxW0TJ3cNtkWQ1c86pXrY6DgHu4ht9TKD/F1/HOEytQZTRgjmMCuSt3jrHyDOdj6JkbvK1bRrOLDrQlpGmI+57qg7vwVzWVMWeu6RbchUdgHo7HfW8tkUVLGSDcLlrPd/3nMk9g12hdK0oYonSZr6S8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716446756; c=relaxed/simple;
-	bh=QOge68Fw0tzENrc52wcXLnWTfYP7hBED4uLrPeCT0dU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Q7WRmin7i2VKymWSJpStOMvzIqZaayvRSOZJUQCCJ1iLjJG1ymLu8sSsWYe+DgF0FYhS9Guh6+XvZ1+rya933w04V7GkE2uDLzKwxL3kgFuxWNm260cgJGEt/zuZfS9Cm9F3WRQlFTv8OmTzIrPv3oxCkR56wIj24JUp78zFtyY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ih89tDp/; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1716446753;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=yDmW+1GQHZyT/E1Y2bedeCzyZRugpccl1pSBaP9FTL8=;
-	b=ih89tDp/cfjMpGZ3yi1/O+NEsGQOkQxbybnpIBLbDIuhLlJhPwZYDGY/Ua6VLGJH95Tsjm
-	VkV+huxG8+tW0vZ5/DujOAJ44RrEi7A12scaP4YSqEawVIGHBD13sq0lJCSkhMzIxIZxQ5
-	jl8g1VBWojdM7cv/V5OyAuuei3kna0c=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-260-37Yvtka0PjOESfXu_snMHA-1; Thu, 23 May 2024 02:45:51 -0400
-X-MC-Unique: 37Yvtka0PjOESfXu_snMHA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 79410185A78E;
-	Thu, 23 May 2024 06:45:50 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.39.192.206])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id F13181C008BB;
-	Thu, 23 May 2024 06:45:47 +0000 (UTC)
-From: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
-To: yongqin.liu@linaro.org
-Cc: davem@davemloft.net,
-	edumazet@google.com,
-	inventor500@vivaldi.net,
-	jtornosm@redhat.com,
-	kuba@kernel.org,
+	s=arc-20240116; t=1716449004; c=relaxed/simple;
+	bh=vK4pezd55jcyKV1ONSHi+cBOCH1OBx7KMPkopav6q5I=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=frDIwqXr0zMZchtFXU3IEVnI+6c+D9LgYUz+iifscBnTYzUH3aS5ze/10PgA2ZrhjSsbZSpUJ+MkT11BSmKhksi9PeTS/MLVlkhkbaZ5O0OFhF2EPof8u5xPJPiVDuaY/VmGXmCHp+k/QDVQKW64A/hnnD/Sjdf9Tz9HXFfBCg4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Tzv3DL9Y; arc=none smtp.client-ip=209.85.210.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-6f6a045d476so1980947b3a.1;
+        Thu, 23 May 2024 00:23:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1716449002; x=1717053802; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=rq5A7qawIz0cEKS1QsmbeowUJYNK+rwYbjhoZojg+Kk=;
+        b=Tzv3DL9Yj8lhL3SFTdgFNHoDk7lDDNdffTOpzzsXoo32/0vgrX78vWIPpJ+H7d9Uku
+         OD7y4nW0CydeGIw5uUp2jIl+04nzTV1x0he+WBJl2kEsLWmDoaqRQnhtz8ctIMY+5DZL
+         IFgvSudDJ9SKtQZ2Nhpug/YS6O9UqosrlEY19beyN+3na1oPTOJ5/ZrCkabXTFNCaXHF
+         8Sr+inP+IcOKFRJqJXI1YH1BgAGfa0inXiqLLr1/NZo0RQv5pm8DWk2mywpJLa70raJB
+         Zh+feHVrf2fKekYRp88detGfKxHJosm4bAQb5QKXjpYdxifp3cufigLNkE7Jst8h0Ktj
+         2R4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1716449002; x=1717053802;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rq5A7qawIz0cEKS1QsmbeowUJYNK+rwYbjhoZojg+Kk=;
+        b=RgMq7t5xKUae+aPWhiDKLvoCUN8wyFmg1soHVD0T0iIMfJ6G2f34/3Ysnse5Z23C5H
+         EuaJvl1IILYWu4k8Ro30OeN/hNVc2h1TaMdV2idxR4MhQWi/2cDZVZGvtbbl8fK3nq/0
+         bVye80bSHed5bxNm/H1rLKbbArQNjjuV4V7AA2GQ53Ebz7tXnZWBdaG0cpd8IDUZohCf
+         c7rWSqm0UcAJh3neqiXwxhBhF+EMbYiTRPJfAAO+1XA7vcshNrhFtgS4UHwgkMVbcyP+
+         o7aGndMMJKkKqF9+hND2kBstQ0AWk45lxUhMt6bu//QN+ALDiqBSq2NBIxs0rxcjzHOH
+         bpig==
+X-Forwarded-Encrypted: i=1; AJvYcCUkDgeyU/9MLTzGAEQqubVUUN+ZZJXcsPhrbVKJXnIMKCIEd9WEZHLCdLDgCGCE3bYAY6gxxAHGybx2uzDZRglTeyDQMDNAxIHFGuBB
+X-Gm-Message-State: AOJu0YymtY6YmBOP/9fxcblQKMfpbUFoIZbUKvFXPDqb7M9DHqTfqOi5
+	YP2hmlomMdM6Tzh11v45T0dWr+hqqBGED/34Eus57qt6eHxt04r3pDJVn2HrMUUgnA==
+X-Google-Smtp-Source: AGHT+IFpoZpVLbPeQ5T/DaknlTrnAKDdSVBFeHX/QrlwsffK1M0xpnExRp2d75Xz8wt92hyGCyfHGA==
+X-Received: by 2002:a05:6a00:acd:b0:6f3:88c5:fed6 with SMTP id d2e1a72fcca58-6f6d60ca8b7mr4509744b3a.19.1716449002429;
+        Thu, 23 May 2024 00:23:22 -0700 (PDT)
+Received: from velvet.. ([111.42.148.111])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-6f4d2b2fe07sm23453154b3a.216.2024.05.23.00.23.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 May 2024 00:23:22 -0700 (PDT)
+From: Shichao Lai <shichaorai@gmail.com>
+To: stern@rowland.harvard.edu,
+	gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	usb-storage@lists.one-eyed-alien.net,
 	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org,
-	pabeni@redhat.com,
-	stable@vger.kernel.org
-Subject: Re: [PATCH] net: usb: ax88179_178a: fix link status when link is set to down/up
-Date: Thu, 23 May 2024 08:45:45 +0200
-Message-ID: <20240523064546.7017-1-jtornosm@redhat.com>
-In-Reply-To: <CAMSo37V5uqJ229iFk-t9DBs-1M5pkWNidM6xZocp4Osi+AOc1g@mail.gmail.com>
-References: <CAMSo37V5uqJ229iFk-t9DBs-1M5pkWNidM6xZocp4Osi+AOc1g@mail.gmail.com>
+	Shichao Lai <shichaorai@gmail.com>,
+	xingwei lee <xrivendell7@gmail.com>,
+	yue sun <samsun1006219@gmail.com>
+Subject: [PATCH] Check whether divisor is non-zero before division
+Date: Thu, 23 May 2024 15:22:42 +0800
+Message-Id: <20240523072242.787164-1-shichaorai@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.7
 
-Hello Yongqin,
+Since uzonesize may be zero, so a judgement for non-zero is nessesary.
 
-Again, not a lot of information from the logs, but perhaps you coud give me
-more information for your scenario.
+Reported-by: xingwei lee <xrivendell7@gmail.com>
+Reported-by: yue sun <samsun1006219@gmail.com>
+Signed-off-by: Shichao Lai <shichaorai@gmail.com>
+---
+ drivers/usb/storage/alauda.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Could you try to execute the down interface operation, mac assignment and
-the up interface operation from command line? 
-That works for me.
-
-Maybe some synchronization issue is happening in your boot operation.
-Could you provide more information about how/when you are doing the
-commented operations to try to reproduce?
-
-Best regards
-José Ignacio
+diff --git a/drivers/usb/storage/alauda.c b/drivers/usb/storage/alauda.c
+index 115f05a6201a..db075a8c03cb 100644
+--- a/drivers/usb/storage/alauda.c
++++ b/drivers/usb/storage/alauda.c
+@@ -947,6 +947,8 @@ static int alauda_read_data(struct us_data *us, unsigned long address,
+ 	sg = NULL;
+ 
+ 	while (sectors > 0) {
++		if (!uzonesize)
++			return USB_STOR_TRANSPORT_ERROR;
+ 		unsigned int zone = lba / uzonesize; /* integer division */
+ 		unsigned int lba_offset = lba - (zone * uzonesize);
+ 		unsigned int pages;
+-- 
+2.34.1
 
 
