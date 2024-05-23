@@ -1,108 +1,173 @@
-Return-Path: <linux-usb+bounces-10443-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10444-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43E8A8CD26F
-	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2024 14:43:27 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F15C38CD4D8
+	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2024 15:37:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EB745283BBA
-	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2024 12:43:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 71367B21D56
+	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2024 13:37:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9E8F149E1B;
-	Thu, 23 May 2024 12:43:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14C0514A604;
+	Thu, 23 May 2024 13:36:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="CvHkio7O"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hNKRsfqs"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB3CE149017;
-	Thu, 23 May 2024 12:43:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F4D013C80E;
+	Thu, 23 May 2024 13:36:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716468196; cv=none; b=q8xA7UELZyLpgzzFWl7lsYZBSs2R8RUDzs3T5eVTkT5XkkfcAJ9GXh4ZMVh4JQrXc7L+shfeWNdUVFsCYNlREDYXoQX6UHH9mrSUB0YHxBLDnTuPSHBwPOj7g/L5nKxwEyqAlWK141TXJrlWmnYeDpWXqBSdDriKFvKxkLxSwYY=
+	t=1716471416; cv=none; b=FUEX4tVM63V3nqq8NAWgSSnSM3iKLtjWh8c4L+APQb8T7qOaVHhLfRu8SnM8D9wHxlUTXv7XESPlRY6noeiLrj0+JL5kREGAUdjxWSX3P7gfJZKc1tfpY7s+p7GLEjnbMi+3FW0jLBdBA4UH5X1rI/JKp+EMSJ+Jy5NGQAUZ7P0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716468196; c=relaxed/simple;
-	bh=XYhesPrIe+ub1SdQr2xl3FCi7rcAAsmL9Ma1RciSGTM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NpozwHXMotWInZW8LGCRxVM7eH9kL3f0B9UlmVScvxhSnqyyMFOExfymYx/dG3gJeNkNRetameCY36seZQNxAHxgLW0adIAKMMB7EAVkGDk7XhKH69mc6Xnzl8sa3WCC1+nZNbLbP7cxlK7lslU+vAGr5jj4ZFOrYSYosOzy5mM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=CvHkio7O; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=u5xqnRII9t7YYXMuJNUmdTWOeMBfSd5MQF3lTq705uI=; b=CvHkio7OCvRzUdpLmwyhVj4QMY
-	LtoR9hvr7JZ42pcvFz7dA/LAjqXjDDvoZehfM6TPKZFXxTaPDvrZj793Jb73sst8vlfBQzU/xyMju
-	E9PD5quPEPQLLxgcD/Ug5PTEx5H+HOUe/vYyRMgdnjTTQcagntmimL7z9dueblOC3t0c=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1sA7mf-00FtJG-MP; Thu, 23 May 2024 14:43:01 +0200
-Date: Thu, 23 May 2024 14:43:01 +0200
-From: Andrew Lunn <andrew@lunn.ch>
-To: Parthiban.Veerasooran@microchip.com
-Cc: steve.glendinning@shawell.net, UNGLinuxDriver@microchip.com,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, netdev@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: usb: smsc95xx: configure external LEDs function for
- EVB-LAN8670-USB
-Message-ID: <5853e477-be38-40b3-8efe-93f20c57e6fd@lunn.ch>
-References: <20240522140817.409936-1-Parthiban.Veerasooran@microchip.com>
- <9c19e0a1-b65c-416a-833c-1a4c3b63fa2f@lunn.ch>
- <f41c1acd-642a-4449-a03c-1ba699bd8441@microchip.com>
+	s=arc-20240116; t=1716471416; c=relaxed/simple;
+	bh=kRSxtYfvGaEYm+Suf72IVaC4RooK0ePrcIkOVCA7lR4=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:From:Subject:
+	 In-Reply-To:Content-Type; b=C9EK4E1AJ7wXvf1Ru874ZlcsOlRXT2IjjCrrb/qAv5aTlMc+B9MrvJHQwnA/rYSfs8/sy9YclSY1tWeY1J+A4tpQO/5beBM4+z7MMylYqTng8Yk1JH09ct93VNyY2p+4+jNCw6Yipk4AKyzKNwBCLGSkeFCCtP1KXQKnngkEXNQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hNKRsfqs; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1716471415; x=1748007415;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=kRSxtYfvGaEYm+Suf72IVaC4RooK0ePrcIkOVCA7lR4=;
+  b=hNKRsfqsypAyw1ZtwRK40RY0CzwxJMuhX6ebmAkghDtdMnFyBv3eBHvN
+   7cfQ5H1K8dJOjO9u3Cczzi/6xMXlPdDgETwcOvYn75nKSW1tTX4JRyRFC
+   /FVz1oNaTUdgBrJizRenhXVd7bSm2DlbCdBHuNZU5NeqewQI42BzeGvh/
+   AJe5EKNG63B8u/CgzwPyZULHx8IHTnRB+SwfJr6Iv6YkwxDQQDGNQ+5Ba
+   mDOCUUpmbix1D6wuV24Ztm7VMVGG7YaNMckp0DQSwQXgo124jo1ipYeex
+   2aEtlUqSrtgjDgyC+Vz0pdo+tyYPEeibhxDOtT4j0DYlUnEiM4utCq7Tl
+   g==;
+X-CSE-ConnectionGUID: HegFF0DFQGGqhNni9Nh9yw==
+X-CSE-MsgGUID: i6UiiKdzQFa4VwvC/LUfXw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11081"; a="30289874"
+X-IronPort-AV: E=Sophos;i="6.08,182,1712646000"; 
+   d="scan'208";a="30289874"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2024 06:36:54 -0700
+X-CSE-ConnectionGUID: v5Ok4vCWR9WOxxSbY9f7ow==
+X-CSE-MsgGUID: KFwLKT1YSkC01sfJMEv1Dw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,182,1712646000"; 
+   d="scan'208";a="33515993"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orviesa010.jf.intel.com with ESMTP; 23 May 2024 06:36:53 -0700
+Message-ID: <b936df07-47cc-9921-0550-469fbbb6b49f@linux.intel.com>
+Date: Thu, 23 May 2024 16:38:48 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f41c1acd-642a-4449-a03c-1ba699bd8441@microchip.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.13.0
+Content-Language: en-US
+To: Jung Daehwan <dh10.jung@samsung.com>
+Cc: Mathias Nyman <mathias.nyman@intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
+ open list <linux-kernel@vger.kernel.org>,
+ Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+References: <CGME20240522010409epcas2p457b2fcb4f423f2500305053f44ae3199@epcas2p4.samsung.com>
+ <1716339839-44022-1-git-send-email-dh10.jung@samsung.com>
+ <6a4767b5-1e2f-dbec-58ca-c44eb0fca6f1@linux.intel.com>
+ <20240523044314.GA58326@ubuntu>
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [RFC] usb: host: xhci-mem: Write high first on erst base of
+ secondary interrupter
+In-Reply-To: <20240523044314.GA58326@ubuntu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, May 23, 2024 at 08:51:54AM +0000, Parthiban.Veerasooran@microchip.com wrote:
-> Hi Andrew,
+On 23.5.2024 7.43, Jung Daehwan wrote:
+> On Wed, May 22, 2024 at 04:40:56PM +0300, Mathias Nyman wrote:
+>> On 22.5.2024 4.03, Daehwan Jung wrote:
+>>> ERSTBA_HI should be written first on secondary interrupter.
+>>> That's why secondary interrupter could be set while Host Controller
+>>> is already running.
+>>>
+>>> [Synopsys]- The host controller was design to support ERST setting
+>>> during the RUN state. But since there is a limitation in controller
+>>> in supporting separate ERSTBA_HI and ERSTBA_LO programming,
+>>> It is supported when the ERSTBA is programmed in 64bit,
+>>> or in 32 bit mode ERSTBA_HI before ERSTBA_LO
+>>
+>> xHCI specification 5.1 "Register Conventions "states that 64 bit
+>> registers should be written in low-high order
+>>
+>>>
+>>> [Synopsys]- The internal initialization of event ring fetches
+>>> the "Event Ring Segment Table Entry" based on the indication of
+>>> ERSTBA_LO written.
+>>>
+>>
+>> Any idea if this is a common issue with this host?
+>> Should other 64 bit registers also be written in reverse order.
+>>
+>>> Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
+>>> ---
+>>>   drivers/usb/host/xhci-mem.c | 5 ++++-
+>>>   drivers/usb/host/xhci.h     | 6 ++++++
+>>>   2 files changed, 10 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
+>>> index 3100219..36ee704 100644
+>>> --- a/drivers/usb/host/xhci-mem.c
+>>> +++ b/drivers/usb/host/xhci-mem.c
+>>> @@ -2325,7 +2325,10 @@ xhci_add_interrupter(struct xhci_hcd *xhci, struct xhci_interrupter *ir,
+>>>   	erst_base = xhci_read_64(xhci, &ir->ir_set->erst_base);
+>>>   	erst_base &= ERST_BASE_RSVDP;
+>>>   	erst_base |= ir->erst.erst_dma_addr & ~ERST_BASE_RSVDP;
+>>> -	xhci_write_64(xhci, erst_base, &ir->ir_set->erst_base);
+>>> +	if (intr_num == 0)
+>>> +		xhci_write_64(xhci, erst_base, &ir->ir_set->erst_base);
+>>> +	else
+>>> +		xhci_write_64_r(xhci, erst_base, &ir->ir_set->erst_base);
+>>
+>> This may cause issues with other hosts expecting low-high order as stated
+>> in the specification.
+>>
+>> If all 64 bit registers should be written in high-low order for this host then
+>> maybe set a quirk flag and change xhci_write_64()instead.
+>>
+>> xhci_write_64(...)
+>> {
+>> 	if (xhci->quirks & XHCI_WRITE_64_HI_LO)
+>> 		hi_lo_writeq(val, regs);
+>> 	else
+>> 		lo_hi_writeq(val, regs);
+>> }
+>>
 > 
-> On 22/05/24 10:14 pm, Andrew Lunn wrote:
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> > 
-> > On Wed, May 22, 2024 at 07:38:17PM +0530, Parthiban Veerasooran wrote:
-> >> By default, LAN9500A configures the external LEDs to the below function.
-> >> nSPD_LED -> Speed Indicator
-> >> nLNKA_LED -> Link and Activity Indicator
-> >> nFDX_LED -> Full Duplex Link Indicator
-> >>
-> >> But, EVB-LAN8670-USB uses the below external LEDs function which can be
-> >> enabled by writing 1 to the LED Select (LED_SEL) bit in the LAN9500A.
-> >> nSPD_LED -> Speed Indicator
-> >> nLNKA_LED -> Link Indicator
-> >> nFDX_LED -> Activity Indicator
-> > 
-> > What else can the LEDs indicate?
-> There is no other indications.
+> Mathias, Thanks for the comment.
+> 
+> I've seen this issue only writing the base address of ERST.
+> It's better to use a quirk flag as you said.
+> How about using the quirk only in xhci_add_interrupter?
+> 
+> @@ -2325,7 +2325,10 @@ xhci_add_interrupter(struct xhci_hcd *xhci, struct xhci_interrupter *ir,
+>    	erst_base = xhci_read_64(xhci, &ir->ir_set->erst_base);
+>    	erst_base &= ERST_BASE_RSVDP;
+>    	erst_base |= ir->erst.erst_dma_addr & ~ERST_BASE_RSVDP;
+> 	xhci_write_64(xhci, erst_base, &ir->ir_set->erst_base);
+>   	if (xhci->quirks & XHCI_WRITE_64_HI_LO)
+> 		xhci_write_64_r(xhci, erst_base, &ir->ir_set->erst_base);
+> 	else
+> 		xhci_write_64(xhci, erst_base, &ir->ir_set->erst_base);
+> 
 
-O.K. So it is probably not worth going the direction of using the
-netde LED infrastructure to allow the use to configure the LED.
+This works.
+Maybe even skip the xhci_write_64_r() helper and just use hi_lo_writeq() directly.
 
-> >> +     /* Set LED Select (LED_SEL) bit for the external LED pins functionality
-> >> +      * in the Microchip's EVB-LAN8670-USB 10BASE-T1S Ethernet device which
-> > 
-> > Is this a function of the USB dongle? Or a function of the PHY?
-> It is the function of USB dongle.
+Thanks
+Mathias
 
-So an OEM designing a dongle could make the LEDs do different things?
 
-You are solving the problem only for your reference design, and OEMs
-are going to have to solve the same problem for their own design?
-
-This is why i'm asking is it a function of the PHY or the board. If it
-is the PHY, we could have one generic solution for everybody using
-that PHY.
-
-	Andrew
 
