@@ -1,135 +1,136 @@
-Return-Path: <linux-usb+bounces-10432-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10433-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED70E8CCEA8
-	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2024 10:53:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8ED048CCED1
+	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2024 11:13:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7AED5282712
-	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2024 08:53:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3079C1F21ABF
+	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2024 09:13:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 632BE13D260;
-	Thu, 23 May 2024 08:53:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 031B713D26E;
+	Thu, 23 May 2024 09:12:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="mUlfm8Lk"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CszefRik"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f46.google.com (mail-ua1-f46.google.com [209.85.222.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B68F2339A0;
-	Thu, 23 May 2024 08:53:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1729E13CF93;
+	Thu, 23 May 2024 09:12:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716454419; cv=none; b=pQ3J4B1ASnWlIrG8jVdjrp+w0taHTj6gv4V0mwsq/MNizCZCs0N9ccip0chC8Ma2S85H4IeBg8624LcW/4gA/siPEcWXLqAapsXxbD3lavjfqJheytM6eZJ5X/wDmpPYXYcntebfNoqZCcxA01cT5meA4EPSm649mkXrDNmVpOk=
+	t=1716455571; cv=none; b=KrfhIgr8A9JLd/qx3pdQeMdkV/VZhLMc9RQObEh+1xQYapoEW2eahtUx/k0OIOKZcUN2qCpTNiI19vb8f+XEJ/a5lzPbizNAw1qMYaHaY1f0PNaTldPHdz1kCSLR7lOIMjePKZ+D4o8lqyTvIVpA/Hi9lNi3Wgw9ucv8YtUZcGY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716454419; c=relaxed/simple;
-	bh=f+FM0Szq7PCxoqI/dTytc3od6T5lYIl+Cf/sm7v/EZk=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=te93kWul4wFr8+NsneF6x5t7Em0Lne3EKx4vwNEyiQ1oceKdMonNo74aC7dM4ytigfyl/b5CJ+C2REXzHGKZtM83YLkPWHLl1+e/slV1UMA3jViK0YPstzVgg8eg7f39CxpZ6cDMzuOJsMwnzszCS+Ntx4/1gPrQXFFpZYC02a4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=mUlfm8Lk; arc=none smtp.client-ip=68.232.154.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1716454418; x=1747990418;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=f+FM0Szq7PCxoqI/dTytc3od6T5lYIl+Cf/sm7v/EZk=;
-  b=mUlfm8LknpJilAKLZ/v8Ti5dukx8fZ3iSQ0lg4+C2Su+FOgJFUo1mNv4
-   5i33v/fqHUQ8xHoCjOmvyh/eIEilGZMkWIOb5rbo8TX5plkxiM7V1cFK/
-   ZZ6i5UUxbQOqwbD2HPLB4IPvUb17gsyS5GzlRW6zgwOU9d4IgJ1u4wuwC
-   Dq2vtZ/xCsLkvYNEOk6xEdRqBxxlJODgqfRqDFl9+yvdPxzDkcfyu0/U8
-   KYdTYG/hel+VECimt/7wlmt7sg5vR8Vgy2svlAp+69WO2z8C/TvrbVlBe
-   E7iExowHWJbvSm/7zHTmDQ15lc4C2KXmYlRDaX+mzcMRKnfyi/no8Uu1B
-   g==;
-X-CSE-ConnectionGUID: W9KaXAE6RECszhEZa8KEWg==
-X-CSE-MsgGUID: d514tyr7Q9KlyWa+X27VZA==
-X-IronPort-AV: E=Sophos;i="6.08,182,1712646000"; 
-   d="scan'208";a="25876177"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 23 May 2024 01:53:36 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Thu, 23 May 2024 01:53:21 -0700
-Received: from che-ll-i17164.microchip.com (10.10.85.11) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2507.35 via Frontend Transport; Thu, 23 May 2024 01:53:17 -0700
-From: Parthiban Veerasooran <Parthiban.Veerasooran@microchip.com>
-To: <steve.glendinning@shawell.net>, <UNGLinuxDriver@microchip.com>,
-	<davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-	<pabeni@redhat.com>
-CC: <netdev@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, Parthiban Veerasooran
-	<Parthiban.Veerasooran@microchip.com>
-Subject: [PATCH] net: usb: smsc95xx: fix changing LED_SEL bit value updated from EEPROM
-Date: Thu, 23 May 2024 14:23:14 +0530
-Message-ID: <20240523085314.167650-1-Parthiban.Veerasooran@microchip.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1716455571; c=relaxed/simple;
+	bh=CmM379iT6QmJIK52Alxpvhf750M/onC2w2pw28yidDY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=GKpQKG/DMq+4YeheAumdAv/AqwEyYfVmAGoeorqEnUwthX3O/C2Qv/6NU2l5ybf0/42AjjDmqN1a959t5StymArRWCAEbu1yMw/y+Vrf6o0oBXcHYFQevlHcgvslKaInU57EDnd0ywMS1KrD2ASt98fGcl1IwgzRJRuIjAQqs6M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CszefRik; arc=none smtp.client-ip=209.85.222.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ua1-f46.google.com with SMTP id a1e0cc1a2514c-8030e16bb10so635323241.1;
+        Thu, 23 May 2024 02:12:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1716455569; x=1717060369; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hTaMDQBBtugLbt3IOXjZ4RX64GEhtWIXoKX3TZUNq7g=;
+        b=CszefRikETnkMSkV2do8Y9vSP3bSsIAvjVAiVl9duM5No50Bye9ZGu+sSPN/ac6flo
+         f7KC1ezJYE9glOMFPSvb4THb8oQULdyc8r4X/d+mgVK0WFStQ7CCm0FlpcRMLCMkeICF
+         BqjfxqCofihyF+AU4iXhk4w1OdNRC1pomTbe7C49mvql2dKFd8W8Qtqbq2eIWXal9+BG
+         3Z8YQWGrQlk0+Q4BZBBzTsbWgdnXbqoXZ9J9FbYLvY5CqGwWC29oU2TgM9o7vYTojkCa
+         cOWOvl17j8jny0DQWPM6AM+J6Fa9v3edfv/lXvbbtbAqlYg2FFWsDQ8JnEiDddAutUtG
+         p6Ww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1716455569; x=1717060369;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hTaMDQBBtugLbt3IOXjZ4RX64GEhtWIXoKX3TZUNq7g=;
+        b=sA3nvphmZNvdtFXVi0gLxOfvlvqMJo8GfFrqAEyI5CFbeNqm3cyovv54kSTKp9MnZf
+         zhriE48wC2n/BeO6MTp33nhBk5jW19gXTmqOFdiQJ6+JVtYkKcdc8KiC5aKQXFHE3PHt
+         B146eq0C7YsY7rKKVy7RaMxkq5qvML3+sRMIv+GFparzUMOA21NvUylm/F+LkMXHCY5f
+         aZObrrGhI2CJ6IUWr1QVbNIal8YddBRBoZKt0/AI6uPM1ADPM+qEbhi9+3heSBjYcHUl
+         fODgIwmrbZuftTDxwT2sEvLj8ZsIhr0yW8mupc7ofBAH6oiPo3dVII4epSECfR5mlAtM
+         H/0Q==
+X-Forwarded-Encrypted: i=1; AJvYcCX9bbU/qlgA3/bL0BQwdE4h3an/k6RNKzrhibYbPxGqcAggM5waYA5/aOvXDMuMgyERJdd61AO83swp3MiTbDza2JO90rok1G/NfQ3V
+X-Gm-Message-State: AOJu0Yy/G/sd9ZNigrx8Vxfzjmeaw75VMzihR6OYLSoOBvfkw71Wqkwz
+	rWf/uF0clCWRmbwL0++FY4QBDLE+r8Z9lTqWAnUfKw/irhNSEyB+TourpB19JoNNEYopdBIYPDs
+	MW6ZigUCWwJUlaLHdirkNr3QjkQ8=
+X-Google-Smtp-Source: AGHT+IE3ivSd13B0hkeFuHZR7TYjUowEAjXA0nUEzps5FCZwqLNqY9+FsH3MUv+jtFz2YQrc7Fys876K5Zxrn14LeXs=
+X-Received: by 2002:a05:6102:c01:b0:47e:f147:ca71 with SMTP id
+ ada2fe7eead31-4890a2c6a3cmr4831374137.19.1716455567392; Thu, 23 May 2024
+ 02:12:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+References: <20240523072242.787164-1-shichaorai@gmail.com> <a218cac3-9d9d-4ac9-8ea3-0ea9822b2261@suse.com>
+In-Reply-To: <a218cac3-9d9d-4ac9-8ea3-0ea9822b2261@suse.com>
+From: shichao lai <shichaorai@gmail.com>
+Date: Thu, 23 May 2024 17:12:36 +0800
+Message-ID: <CACjpba7yh5Soe_Pr7D3SeTjjqzQB9q=nThaYRGAZu+EvaLfxfw@mail.gmail.com>
+Subject: Re: [PATCH] Check whether divisor is non-zero before division
+To: Oliver Neukum <oneukum@suse.com>, stern@rowland.harvard.edu, gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net, 
+	linux-kernel@vger.kernel.org, xingwei lee <xrivendell7@gmail.com>, 
+	yue sun <samsun1006219@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-LED Select (LED_SEL) bit in the LED General Purpose IO Configuration
-register is used to determine the functionality of external LED pins
-(Speed Indicator, Link and Activity Indicator, Full Duplex Link
-Indicator). The default value for this bit is 0 when no EEPROM is
-present. If a EEPROM is present, the default value is the value of the
-LED Select bit in the Configuration Flags of the EEPROM. A USB Reset or
-Lite Reset (LRST) will cause this bit to be restored to the image value
-last loaded from EEPROM, or to be set to 0 if no EEPROM is present.
+On Thu, May 23, 2024 at 4:18=E2=80=AFPM Oliver Neukum <oneukum@suse.com> wr=
+ote:
+>
+> On 23.05.24 09:22, Shichao Lai wrote:
+>
+> Hi,
+>
+> > Since uzonesize may be zero, so a judgement for non-zero is nessesary.
+> >
+> > Reported-by: xingwei lee <xrivendell7@gmail.com>
+> > Reported-by: yue sun <samsun1006219@gmail.com>
+> > Signed-off-by: Shichao Lai <shichaorai@gmail.com>
+> > ---
+> >   drivers/usb/storage/alauda.c | 2 ++
+> >   1 file changed, 2 insertions(+)
+> >
+> > diff --git a/drivers/usb/storage/alauda.c b/drivers/usb/storage/alauda.=
+c
+> > index 115f05a6201a..db075a8c03cb 100644
+> > --- a/drivers/usb/storage/alauda.c
+> > +++ b/drivers/usb/storage/alauda.c
+> > @@ -947,6 +947,8 @@ static int alauda_read_data(struct us_data *us, uns=
+igned long address,
+> >       sg =3D NULL;
+> >
+> >       while (sectors > 0) {
+> > +             if (!uzonesize)
+> > +                     return USB_STOR_TRANSPORT_ERROR;
+>
+> May I point out that uzonesize does not change in this function?
+> There is no need to retest within the loop.
+>
+> >               unsigned int zone =3D lba / uzonesize; /* integer divisio=
+n */
+> >               unsigned int lba_offset =3D lba - (zone * uzonesize);
+> >               unsigned int pages;
+>
+> Secondly, alauda_write_lba() has the same issue.
+> You also need to check in alauda_write_data().
+>
+>         Regards
+>                 Oliver
 
-While configuring the dual purpose GPIO/LED pins to LED outputs in the
-LED General Purpose IO Configuration register, the LED_SEL bit is changed
-as 0 and resulting the configured value from the EEPROM is cleared. The
-issue is fixed by using read-modify-write approach.
 
-Fixes: f293501c61c5 ("smsc95xx: configure LED outputs")
-Signed-off-by: Parthiban Veerasooran <Parthiban.Veerasooran@microchip.com>
----
- drivers/net/usb/smsc95xx.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/net/usb/smsc95xx.c b/drivers/net/usb/smsc95xx.c
-index cbea24666479..8e82184be5e7 100644
---- a/drivers/net/usb/smsc95xx.c
-+++ b/drivers/net/usb/smsc95xx.c
-@@ -879,7 +879,7 @@ static int smsc95xx_start_rx_path(struct usbnet *dev)
- static int smsc95xx_reset(struct usbnet *dev)
- {
- 	struct smsc95xx_priv *pdata = dev->driver_priv;
--	u32 read_buf, write_buf, burst_cap;
-+	u32 read_buf, burst_cap;
- 	int ret = 0, timeout;
- 
- 	netif_dbg(dev, ifup, dev->net, "entering smsc95xx_reset\n");
-@@ -1003,10 +1003,13 @@ static int smsc95xx_reset(struct usbnet *dev)
- 		return ret;
- 	netif_dbg(dev, ifup, dev->net, "ID_REV = 0x%08x\n", read_buf);
- 
-+	ret = smsc95xx_read_reg(dev, LED_GPIO_CFG, &read_buf);
-+	if (ret < 0)
-+		return ret;
- 	/* Configure GPIO pins as LED outputs */
--	write_buf = LED_GPIO_CFG_SPD_LED | LED_GPIO_CFG_LNK_LED |
--		LED_GPIO_CFG_FDX_LED;
--	ret = smsc95xx_write_reg(dev, LED_GPIO_CFG, write_buf);
-+	read_buf |= LED_GPIO_CFG_SPD_LED | LED_GPIO_CFG_LNK_LED |
-+		    LED_GPIO_CFG_FDX_LED;
-+	ret = smsc95xx_write_reg(dev, LED_GPIO_CFG, read_buf);
- 	if (ret < 0)
- 		return ret;
- 
-
-base-commit: 4b377b4868ef17b040065bd468668c707d2477a5
--- 
-2.34.1
-
+Thanks for the helpful tip!
+I reviewed the code. Your suggestions can actually avoid repeated checks.
+And there is also such a problem in alauda_write_lba().
+I am a beginner at making patches. May I commit a patch again which
+fixes both issues you mentioned?
 
