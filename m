@@ -1,155 +1,286 @@
-Return-Path: <linux-usb+bounces-10416-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10417-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 139BE8CCAE4
-	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2024 05:00:32 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 97D238CCB4D
+	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2024 06:15:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 364161C210D8
-	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2024 03:00:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F39482832C2
+	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2024 04:15:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D653F13A41C;
-	Thu, 23 May 2024 03:00:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B114D364A4;
+	Thu, 23 May 2024 04:15:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="ZFiesRxv"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="nR2jow7H"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D05F38467;
-	Thu, 23 May 2024 03:00:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C9D52E3E0
+	for <linux-usb@vger.kernel.org>; Thu, 23 May 2024 04:15:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716433223; cv=none; b=W5J9HNgsuUlYGc06UfSQif31Ag+aN9vxx2J+5xeLRX7Q5Ga3HXNJG58F+9uu8sCxpP5t/9U+wPF/0S6ILD4u8P5bvi2D4UIc6irMSq0E1x3X85fZo/muOayeBDXCSD2eArrgsTKlUQYxXYNoh+CExqPizHWm5yNuq/fC/MsqPuY=
+	t=1716437715; cv=none; b=uxi+ANaSR3FGk30oz7nv2JY+OIOPQtVPDlt2P1zye6ZNS9xamI2SVNFdLdkSOSUBF+FJrtWSSfbgGmOD8SUvmt979OJi+pqxq11m3m+URYP3fnTrrqqIo5yvhJvHBzN5ABr/dANbmh68hiFaF3efgI+zdXzC7PUldIFE6cMh1Ho=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716433223; c=relaxed/simple;
-	bh=RfEfl+/zn+igK8ii6+mNs5jx+2tS7lWWvd8qVhUCM6s=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bwMulUj/0n7B8gmAE//lkC59+Ua1f8hZUwe1KMmGbj5WG4BnX8LHXO+Q6tX1A+CjdvtNv1CyyPIc2HogVTmLDIgUB9aEkr1zWXsxh07BKOYV7OXHioNCKfETdVDyNVcGWWphybcRV/H18yGsxifPYAFW4nbFsRjnrwFPk+4GpI4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=ZFiesRxv; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 44MJ0w6n028232;
-	Thu, 23 May 2024 03:00:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	date:from:to:cc:subject:message-id:references:mime-version
-	:content-type:in-reply-to; s=qcppdkim1; bh=MEwFaR39ZmfqnamteJbkG
-	QcGt49kGRuAO0GB1G3zUa8=; b=ZFiesRxvCSlSzsSFtbQGKqWsI4ME7nE6Qy90S
-	ahqUpIZCCZ0kT3oQLlaAJZ2RbcE2soS5UZutyOL5osRlPwBCTmjpCELymZV/yhyN
-	F4Gqlr+9bVyDMbmPYq3NUxrG74aP6+phGK+FncRY7meqhaBchXOehFSlfPe4D2US
-	RvA8pqRpUNANp8ehJ1Gt2p8pHkh7uM+2vzor00nUs+PcFcvIZs0jdU4LtQ0x7vVb
-	Ig4oyYCV2NLOF/xW967Z5hjkBzambmFW2hFV1SYpQitdlfBCaoo2fd6p5bD+U4y5
-	etgLT2eEtTUH1Mva2pLdCHcpJU1NpQRi2t+mFxPb9Rx7XNbxQ==
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3y6n3tk8vf-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 23 May 2024 03:00:17 +0000 (GMT)
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 44N30C66010818
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 23 May 2024 03:00:12 GMT
-Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Wed, 22 May 2024 20:00:08 -0700
-Date: Wed, 22 May 2024 20:00:01 -0700
-From: Bjorn Andersson <quic_bjorande@quicinc.com>
-To: AKASH KUMAR <quic_akakum@quicinc.com>
-CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi
-	<balbi@kernel.org>,
-        Pratham Pratap <quic_ppratap@quicinc.com>,
-        Jack Pham
-	<quic_jackp@quicinc.com>, <kernel@quicinc.com>,
-        Wesley Cheng
-	<quic_wcheng@quicinc.com>,
-        Vijayavardhan Vennapusa
-	<quic_vvreddy@quicinc.com>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] USB: pci-quirks: Skip usb_early_handoff for Renesas PCI
- USB
-Message-ID: <Zk6xMRPT22meAzrG@hu-bjorande-lv.qualcomm.com>
-References: <20240521074635.17938-1-quic_akakum@quicinc.com>
- <2024052134-roundness-foyer-7bfa@gregkh>
- <1ceae2a4-0715-4cea-9351-fd98a0017b85@quicinc.com>
- <2024052102-glorified-strung-80a4@gregkh>
- <e2e4bb4e-6e49-44f6-b7c7-cde274a8784b@quicinc.com>
+	s=arc-20240116; t=1716437715; c=relaxed/simple;
+	bh=zvCTIHs5YqJAlk7Ohu27hGvHT/jfiV6FMeApCgHcMnQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Dq3n3aVYN1r7PYVwudDNej81Rhdp/RDTWpmDAzH5qFhsH15WLpsWscLcbMsQcBUXxtHabfVFgLaV9zmPEx+T8BERnUgjL+g0iVgDSrqPglwf2S0gT225LVl74+E1QnUW5NrHrFfH/y7R53mrSDscGuGEJiY0fUfAPoWL41MuzSE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=nR2jow7H; arc=none smtp.client-ip=209.85.128.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-6153d85053aso13146487b3.0
+        for <linux-usb@vger.kernel.org>; Wed, 22 May 2024 21:15:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1716437712; x=1717042512; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=MET5FIAW2m/C0sBmsEV+FEl5MEocq9FyxllKEm3F0/Q=;
+        b=nR2jow7H8vmBxPsIpl9rspXzEP0FIDRS+RniwgtVv8KCkuAzX8brFRjesJJDuHvNx0
+         FJA/Idl/9vy8n/UsTp4Hvve0afrveSM9nHf4HhUGoTZKDevo75Tl1iw6mLUdCT7RFIjO
+         r0wNTa8gQHAWllnQm3HbV7NvBRim3+A2kkdE4lh5TRJaMPBaa9zMzIZWkhxREeFVMoAZ
+         YDleR4VHPHxX/e0Ar49y+bNwTvG/4HOZd+uyebMyvRLFkQE8WaOTIT7Ff695uA3swEw7
+         khIJ/CxOOAB5Zxv/uWkGolmR7VyQNxoMYTI5Ne/JHFs4RiPhh+uzC74YmnkJ4cjq4zTa
+         8Wsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1716437712; x=1717042512;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MET5FIAW2m/C0sBmsEV+FEl5MEocq9FyxllKEm3F0/Q=;
+        b=P6n4k1XDSyf21ahj7tR/xEBTQS1GZVYNq7sALelPIElGa5LIUgSvHqrI1NdWoFifYa
+         BAkWWwNtkPygiQ02Xf9cb7Je8RQ5EaWLGKJEkYE09H1lU+9K/UOQduTIFJ7iWi6KlBml
+         DOyRGsVez1qusrEp8r9YWTXCum6B3rZb6GGpQ300/XeQWQKkqIOf8v1lvyQdmgnZXRB2
+         DGq41lQ8WqcJJpR8O3FEm0UW37+8sMy31lkIHg2R3y/rTlkVKJF+7PawtwReT6swojmq
+         QJeAIg8rbeZoq9H/jJkfyU2B4A5K1htCZvVY/UJXdZ9UQSqgwpZE4ms1iDzoyhDabkUy
+         2MzA==
+X-Forwarded-Encrypted: i=1; AJvYcCUtt9wahx8AduSamoS+lpg1H0BMzSdjd9P5e/aZs54cR2tPJpXcK8BK3KOISR+T+YXy2zxfabW7gkrWDKkPIP0QF/HeE9Z2rhgY
+X-Gm-Message-State: AOJu0YwmpjkMfR+lXF1ULS1eiAXIrygAEdkGoE/ghYUjrxJ2nOhGlt/x
+	nMY+wkH6Fr4teGZlO18XDCU4bgV/AiAs2VfXKS+EkhSRo70MKDABEgXbggwIf5/oQjVoGYtVkLM
+	Jx0IGk20HfQqUAHhKG7eaCGPxjA7I7Ow5nT4/Rw==
+X-Google-Smtp-Source: AGHT+IHkorZjav4Gf4d1OozhsH8Pxc0dMg8/LiEOsXhzjkpYSCLGHEfn/HFnM6PbS2MvI8LGr5ycTQTnUTfx3eftbnY=
+X-Received: by 2002:a81:4f4d:0:b0:61b:748:55a1 with SMTP id
+ 00721157ae682-627e46ca1a9mr40027607b3.13.1716437712376; Wed, 22 May 2024
+ 21:15:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <e2e4bb4e-6e49-44f6-b7c7-cde274a8784b@quicinc.com>
-X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: NmAujBxhm7zN-W01Gd5rp6I_UCxmp2BV
-X-Proofpoint-ORIG-GUID: NmAujBxhm7zN-W01Gd5rp6I_UCxmp2BV
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.12.28.16
- definitions=2024-05-22_14,2024-05-22_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
- bulkscore=0 priorityscore=1501 malwarescore=0 mlxlogscore=999
- lowpriorityscore=0 phishscore=0 spamscore=0 impostorscore=0 clxscore=1011
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2405010000 definitions=main-2405230018
+References: <20240510090846.328201-1-jtornosm@redhat.com>
+In-Reply-To: <20240510090846.328201-1-jtornosm@redhat.com>
+From: Yongqin Liu <yongqin.liu@linaro.org>
+Date: Thu, 23 May 2024 12:15:01 +0800
+Message-ID: <CAMSo37V5uqJ229iFk-t9DBs-1M5pkWNidM6xZocp4Osi+AOc1g@mail.gmail.com>
+Subject: Re: [PATCH] net: usb: ax88179_178a: fix link status when link is set
+ to down/up
+To: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+	pabeni@redhat.com, linux-usb@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org, 
+	Isaac Ganoung <inventor500@vivaldi.net>
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, May 22, 2024 at 03:00:32PM +0530, AKASH KUMAR wrote:
-> 
-> On 5/21/2024 3:08 PM, Greg Kroah-Hartman wrote:
-> 
-> > On Tue, May 21, 2024 at 02:55:13PM +0530, AKASH KUMAR wrote:
-> > > Hi Greg, On 5/21/2024 1:35 PM, Greg Kroah-Hartman wrote:
-> > > > On Tue, May 21, 2024 at 01:16:35PM +0530, Akash Kumar wrote:
-> > > > > Skip usb_early_handoff for the Renesas PCI USB controller
-> > > > > due to the firmware not being loaded beforehand, which
-> > > > > impacts the bootup time. Signed-off-by: Akash
-> > > > > Kumar<quic_akakum@quicinc.com>
-> > > > What commit id does this fix? Should it go to stable kernels?
-> > > > yes it can go to stable kernels, issue is seen on every target
-> > > > with usb over pcie support.
-> > > > > --- drivers/usb/host/pci-quirks.c | 5 +++++ 1 file changed,
-> > > > > 5 insertions(+) diff --git a/drivers/usb/host/pci-quirks.c
-> > > > > b/drivers/usb/host/pci-quirks.c index
-> > > > > 0b949acfa258..a0770ecc0861 100644 ---
-> > > > > a/drivers/usb/host/pci-quirks.c +++
-> > > > > b/drivers/usb/host/pci-quirks.c @@ -1264,6 +1264,11 @@
-> > > > > static void quirk_usb_early_handoff(struct pci_dev *pdev) }
-> > > > > } + /* Skip handoff for Renesas PCI USB controller on QCOM
-> > > > > SOC */ + if ((pdev->vendor == PCI_VENDOR_ID_RENESAS) && +
-> > > > > (pcie_find_root_port(pdev)->vendor == PCI_VENDOR_ID_QCOM))
-> > > > Why are all Renesas PCI devices on a QCOM host to be marked this
-> > > > way? That's a very big hammer for potentially lots of devices.
-> > > > Have you tested them all?
-> > > firmware loading is being done in HLOS, not UEFI, if firmware
-> > > loading is done in UEFI, then calling early_handoff() API makes
-> > > sense, else it is checking for controller ready without firmware
-> > > loaded which is impacting boot up time by 5 sec roughly. We are
-> > > seeing problem in all targets having usb over pcie support.
-> > But the bootloader has nothing to do with the device type of the devices
-> > here, right? Why not properly trigger this off of the needed firmware
-> > location instead of here? What happens when you have a system using UEFI
-> > that matches these two devices and the change causes them to break? In
-> > other words, test the proper thing, and only for the specific devices
-> > you need to have the change for, don't be overly broad like you are
-> > doing here, as you might break other systems that you do not have in
-> > front of you at the moment.
-> 
-> yeah currently we don't have any uefi based targets, will add target specific check.
-> 
+Hi, Jose
 
-Sure we do.
+On Fri, 10 May 2024 at 17:09, Jose Ignacio Tornos Martinez
+<jtornosm@redhat.com> wrote:
+>
+> The idea was to keep only one reset at initialization stage in order to
+> reduce the total delay, or the reset from usbnet_probe or the reset from
+> usbnet_open.
+>
+> I have seen that restarting from usbnet_probe is necessary to avoid doing
+> too complex things. But when the link is set to down/up (for example to
+> configure a different mac address) the link is not correctly recovered
+> unless a reset is commanded from usbnet_open.
+>
+> So, detect the initialization stage (first call) to not reset from
+> usbnet_open after the reset from usbnet_probe and after this stage, always
+> reset from usbnet_open too (when the link needs to be rechecked).
+>
+> Apply to all the possible devices, the behavior now is going to be the same.
+>
+> cc: stable@vger.kernel.org # 6.6+
+> Fixes: 56f78615bcb1 ("net: usb: ax88179_178a: avoid writing the mac address before first reading")
+> Reported-by: Isaac Ganoung <inventor500@vivaldi.net>
+> Reported-by: Yongqin Liu <yongqin.liu@linaro.org>
+> Signed-off-by: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+> ---
+Sorry, I just have a time to test this patch, and it does not help for the issue
+I reported here:
+https://lore.kernel.org/all/CAMSo37UN11V8UeDM4cyD+iXyRR1Us53a00e34wTy+zP6vx935A@mail.gmail.com/
 
-And please fix your email client.
+Here is the serial console log after I cherry picked this change:
+https://gist.github.com/liuyq/6255f2ccd98fa98ac0ed296a61f49883
 
-Regards,
-Bjorn
+Could you please help to check it again?
+Please let me know if there is anything I could provide for the investigation.
+
+Thanks,
+Yongqin Liu
+>  drivers/net/usb/ax88179_178a.c | 37 ++++++++++++++++++++++++----------
+>  1 file changed, 26 insertions(+), 11 deletions(-)
+>
+> diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
+> index 377be0d9ef14..a0edb410f746 100644
+> --- a/drivers/net/usb/ax88179_178a.c
+> +++ b/drivers/net/usb/ax88179_178a.c
+> @@ -174,6 +174,7 @@ struct ax88179_data {
+>         u32 wol_supported;
+>         u32 wolopts;
+>         u8 disconnecting;
+> +       u8 initialized;
+>  };
+>
+>  struct ax88179_int_data {
+> @@ -1672,6 +1673,18 @@ static int ax88179_reset(struct usbnet *dev)
+>         return 0;
+>  }
+>
+> +static int ax88179_net_reset(struct usbnet *dev)
+> +{
+> +       struct ax88179_data *ax179_data = dev->driver_priv;
+> +
+> +       if (ax179_data->initialized)
+> +               ax88179_reset(dev);
+> +       else
+> +               ax179_data->initialized = 1;
+> +
+> +       return 0;
+> +}
+> +
+>  static int ax88179_stop(struct usbnet *dev)
+>  {
+>         u16 tmp16;
+> @@ -1691,6 +1704,7 @@ static const struct driver_info ax88179_info = {
+>         .unbind = ax88179_unbind,
+>         .status = ax88179_status,
+>         .link_reset = ax88179_link_reset,
+> +       .reset = ax88179_net_reset,
+>         .stop = ax88179_stop,
+>         .flags = FLAG_ETHER | FLAG_FRAMING_AX,
+>         .rx_fixup = ax88179_rx_fixup,
+> @@ -1703,6 +1717,7 @@ static const struct driver_info ax88178a_info = {
+>         .unbind = ax88179_unbind,
+>         .status = ax88179_status,
+>         .link_reset = ax88179_link_reset,
+> +       .reset = ax88179_net_reset,
+>         .stop = ax88179_stop,
+>         .flags = FLAG_ETHER | FLAG_FRAMING_AX,
+>         .rx_fixup = ax88179_rx_fixup,
+> @@ -1715,7 +1730,7 @@ static const struct driver_info cypress_GX3_info = {
+>         .unbind = ax88179_unbind,
+>         .status = ax88179_status,
+>         .link_reset = ax88179_link_reset,
+> -       .reset = ax88179_reset,
+> +       .reset = ax88179_net_reset,
+>         .stop = ax88179_stop,
+>         .flags = FLAG_ETHER | FLAG_FRAMING_AX,
+>         .rx_fixup = ax88179_rx_fixup,
+> @@ -1728,7 +1743,7 @@ static const struct driver_info dlink_dub1312_info = {
+>         .unbind = ax88179_unbind,
+>         .status = ax88179_status,
+>         .link_reset = ax88179_link_reset,
+> -       .reset = ax88179_reset,
+> +       .reset = ax88179_net_reset,
+>         .stop = ax88179_stop,
+>         .flags = FLAG_ETHER | FLAG_FRAMING_AX,
+>         .rx_fixup = ax88179_rx_fixup,
+> @@ -1741,7 +1756,7 @@ static const struct driver_info sitecom_info = {
+>         .unbind = ax88179_unbind,
+>         .status = ax88179_status,
+>         .link_reset = ax88179_link_reset,
+> -       .reset = ax88179_reset,
+> +       .reset = ax88179_net_reset,
+>         .stop = ax88179_stop,
+>         .flags = FLAG_ETHER | FLAG_FRAMING_AX,
+>         .rx_fixup = ax88179_rx_fixup,
+> @@ -1754,7 +1769,7 @@ static const struct driver_info samsung_info = {
+>         .unbind = ax88179_unbind,
+>         .status = ax88179_status,
+>         .link_reset = ax88179_link_reset,
+> -       .reset = ax88179_reset,
+> +       .reset = ax88179_net_reset,
+>         .stop = ax88179_stop,
+>         .flags = FLAG_ETHER | FLAG_FRAMING_AX,
+>         .rx_fixup = ax88179_rx_fixup,
+> @@ -1767,7 +1782,7 @@ static const struct driver_info lenovo_info = {
+>         .unbind = ax88179_unbind,
+>         .status = ax88179_status,
+>         .link_reset = ax88179_link_reset,
+> -       .reset = ax88179_reset,
+> +       .reset = ax88179_net_reset,
+>         .stop = ax88179_stop,
+>         .flags = FLAG_ETHER | FLAG_FRAMING_AX,
+>         .rx_fixup = ax88179_rx_fixup,
+> @@ -1780,7 +1795,7 @@ static const struct driver_info belkin_info = {
+>         .unbind = ax88179_unbind,
+>         .status = ax88179_status,
+>         .link_reset = ax88179_link_reset,
+> -       .reset  = ax88179_reset,
+> +       .reset  = ax88179_net_reset,
+>         .stop   = ax88179_stop,
+>         .flags  = FLAG_ETHER | FLAG_FRAMING_AX,
+>         .rx_fixup = ax88179_rx_fixup,
+> @@ -1793,7 +1808,7 @@ static const struct driver_info toshiba_info = {
+>         .unbind = ax88179_unbind,
+>         .status = ax88179_status,
+>         .link_reset = ax88179_link_reset,
+> -       .reset  = ax88179_reset,
+> +       .reset  = ax88179_net_reset,
+>         .stop = ax88179_stop,
+>         .flags  = FLAG_ETHER | FLAG_FRAMING_AX,
+>         .rx_fixup = ax88179_rx_fixup,
+> @@ -1806,7 +1821,7 @@ static const struct driver_info mct_info = {
+>         .unbind = ax88179_unbind,
+>         .status = ax88179_status,
+>         .link_reset = ax88179_link_reset,
+> -       .reset  = ax88179_reset,
+> +       .reset  = ax88179_net_reset,
+>         .stop   = ax88179_stop,
+>         .flags  = FLAG_ETHER | FLAG_FRAMING_AX,
+>         .rx_fixup = ax88179_rx_fixup,
+> @@ -1819,7 +1834,7 @@ static const struct driver_info at_umc2000_info = {
+>         .unbind = ax88179_unbind,
+>         .status = ax88179_status,
+>         .link_reset = ax88179_link_reset,
+> -       .reset  = ax88179_reset,
+> +       .reset  = ax88179_net_reset,
+>         .stop   = ax88179_stop,
+>         .flags  = FLAG_ETHER | FLAG_FRAMING_AX,
+>         .rx_fixup = ax88179_rx_fixup,
+> @@ -1832,7 +1847,7 @@ static const struct driver_info at_umc200_info = {
+>         .unbind = ax88179_unbind,
+>         .status = ax88179_status,
+>         .link_reset = ax88179_link_reset,
+> -       .reset  = ax88179_reset,
+> +       .reset  = ax88179_net_reset,
+>         .stop   = ax88179_stop,
+>         .flags  = FLAG_ETHER | FLAG_FRAMING_AX,
+>         .rx_fixup = ax88179_rx_fixup,
+> @@ -1845,7 +1860,7 @@ static const struct driver_info at_umc2000sp_info = {
+>         .unbind = ax88179_unbind,
+>         .status = ax88179_status,
+>         .link_reset = ax88179_link_reset,
+> -       .reset  = ax88179_reset,
+> +       .reset  = ax88179_net_reset,
+>         .stop   = ax88179_stop,
+>         .flags  = FLAG_ETHER | FLAG_FRAMING_AX,
+>         .rx_fixup = ax88179_rx_fixup,
+> --
+> 2.44.0
+>
+
+
+-- 
+Best Regards,
+Yongqin Liu
+---------------------------------------------------------------
+#mailing list
+linaro-android@lists.linaro.org
+http://lists.linaro.org/mailman/listinfo/linaro-android
 
