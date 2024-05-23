@@ -1,89 +1,96 @@
-Return-Path: <linux-usb+bounces-10454-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10455-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A7B338CDAFC
-	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2024 21:45:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B09DE8CDBD7
+	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2024 23:21:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4FD401F233CB
-	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2024 19:45:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E22E31C22FA4
+	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2024 21:21:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B36980624;
-	Thu, 23 May 2024 19:45:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D661127E0D;
+	Thu, 23 May 2024 21:21:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u8W0AOho"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="mwkCorZZ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC4355FB9C;
-	Thu, 23 May 2024 19:45:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 353D384A22
+	for <linux-usb@vger.kernel.org>; Thu, 23 May 2024 21:21:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716493511; cv=none; b=Fwc0ajzU3/Egly0mWJkxR5ApyF18uAqyhd8R6s9Gcq2rLVh0Rkyq9rsJ16NRisagRC1cODnOvfNVeYYw/VtDAzeKYlQu0i3qAjS7z7OKH81Hnu3sQjGkMecbhBaLMAAxinJkljYrFr3O6TX15sI7oXhKdpRCt8nJWqAV3jtRaZY=
+	t=1716499282; cv=none; b=bX1XvljphqyLGM++Zdg7FZnkbzgkNEmfUwAa5rjB1RP1gNi1XMJ4u+/le/kfsn5DSaQ9sVCut9LShieKZqtmYFyC/g6Sy0Crs/9XQX+FkmgoZN/QUHkS/QNxv13gbMaQrTkySACrghkI5tIwHjtLeuBSsfzLIotoFVjf5dL6JaY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716493511; c=relaxed/simple;
-	bh=JbL1YQc7XIQR2UADcbvWlAd8dwqij8i2yvBbh/aBN54=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=O3+RNvnpnDitLXhtFDWuQjIT26xAklOF5n1RrT4FuOXZ0VfKgBCmzuqaItnGICBooPzWvMfmlHRYgQW1dcP3y1+itWor2+XYy/cdqnIt5NbzwF5HHK93GxPIbxoyJmFcHrdoCpVw/JyI6QdZcqAjgOUjnOwZbh1m2fAXxTXcly4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u8W0AOho; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38D8CC3277B;
-	Thu, 23 May 2024 19:45:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716493509;
-	bh=JbL1YQc7XIQR2UADcbvWlAd8dwqij8i2yvBbh/aBN54=;
-	h=From:To:Cc:Subject:Date:From;
-	b=u8W0AOho/ZcpS7IMP8I+Rg3DUahaQ24B69IGzgC/TjwNfxDEF+hBV9A0SL9r7GONm
-	 LnBOdelRcangdL1aObr85Cxg90s0pUlaSywkYSshS5ZNXMCJSb0uTYri+irgcdJmeW
-	 qoR2FvYu5IbgoMXgxv24qmrOqaEOW5QwA6RwDUl9MtFJbBEQu90l13b5aQ1JcE07D6
-	 IJvhg3JXVuYhJ3/M7Fi0kz5LZqAFNP1Z6PbGaQVVS2VtYIcKC62A+3tp7Krf0Vi+6u
-	 xD0xyConBiekYJaqoYuXNZFx0EbVzWhLUMiQfFaZtfVfl7x+uhYvC2JLHTzTkwh2LE
-	 cFxrpkaXww16A==
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Matthias Kaehlcke <mka@chromium.org>,
-	Stephen Boyd <swboyd@chromium.org>
-Cc: linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: usb: realtek,rts5411: Add missing "additionalProperties" on child nodes
-Date: Thu, 23 May 2024 14:44:59 -0500
-Message-ID: <20240523194500.2958192-1-robh@kernel.org>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1716499282; c=relaxed/simple;
+	bh=vZ83DITT8+71M9hZZLFbFwj221tiAKCa3CoSsZtHtG0=;
+	h=MIME-Version:In-Reply-To:References:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fpmiaIKC6wV3N2Rv4u+FxgyiKXritWunbOUPK4x39hXwSkCbarKUdd1OQ/MZw7OS6sylo8hqXnTKibhTLRdai7hScU4dzkk05HFr9NOtOr9O+BpRbObtFmc1xOnRoNkgWdwu/4lb6ZJLPmr6XEioyzPzcjGfWBB9+p2eon8enNA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=mwkCorZZ; arc=none smtp.client-ip=209.85.222.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-794ab0acfbeso9835085a.0
+        for <linux-usb@vger.kernel.org>; Thu, 23 May 2024 14:21:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1716499280; x=1717104080; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vZ83DITT8+71M9hZZLFbFwj221tiAKCa3CoSsZtHtG0=;
+        b=mwkCorZZFgx1BxAueNuTcBOSggPKz0OYGo33ul3jWegyIJkWO8rYWFmX9pss/0dD79
+         VfgpcaJjz3NGxOS7+Ho4rFwwo5WwvvFklSHlGMl6Ew8ZeiFFGTXhQfNcBqKTYOq31a/5
+         +6YZtrq24JAan4OhhoH0JTKn6noel/VkkV0fg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1716499280; x=1717104080;
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vZ83DITT8+71M9hZZLFbFwj221tiAKCa3CoSsZtHtG0=;
+        b=RBeGevzJtLjgtKe8Ity5fKc7nvTnHRAeUJ969jI3TH67fGcOoTPaylIwYS4nmmDfQD
+         iT+oC4c3QvOzgqgqNyPrFBaT+x+dTripOTqrp3LdL1bM0/Zv9r9NKrlefKfslDX89+0v
+         j+DSix9TXNQce7GjhVjZpZC/zr+QROcq0GZ+AGEHOw1TuvsaWg/EfeV02YTsfM3jqAtm
+         Kz3Olqsp8RzEumrK8dd6MxeUp7Hd072rKJ35PiL7rbOSl+O/rGHYLlXxR+BJwOESdpsy
+         tvw7Agk3J16njMcBVcMIFQiz7Njeuozn/t4FLfQoTPNxoKSfgoAB8dpfCtMXhRE5UHFe
+         E6Mw==
+X-Gm-Message-State: AOJu0Yzk1lhSOO88us86Y+S5CLiY8aovYbC5vKJnYcqVtu6EBtHwVUam
+	PFxnPISultzXybk+NcD2TIDbM2QVJQt+ZgahbIrZikhy0bcoq0bZ84qkbLxtmhB2UpSzVV+ZHRP
+	+V0mmbGpRCaJt8bf7nBdLhnxFq6nAqcuY+If4
+X-Google-Smtp-Source: AGHT+IFjL+VWQfPxSqxR4aZu/onNvALWc1WiN/6Uf4tzU7N3k9tqKuSjNUhBCdKJsEsHttt47nWNY6CUCfaDhionSzs=
+X-Received: by 2002:a05:620a:268f:b0:790:b192:3b9d with SMTP id
+ af79cd13be357-794ab0f8350mr45174985a.58.1716499280217; Thu, 23 May 2024
+ 14:21:20 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 23 May 2024 17:21:19 -0400
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240523194500.2958192-1-robh@kernel.org>
+References: <20240523194500.2958192-1-robh@kernel.org>
+From: Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date: Thu, 23 May 2024 17:21:19 -0400
+Message-ID: <CAE-0n52UhgxauMgctx903UW=smEiYQSoRWdym2kkKGvODvztQA@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: usb: realtek,rts5411: Add missing
+ "additionalProperties" on child nodes
+To: Conor Dooley <conor+dt@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Matthias Kaehlcke <mka@chromium.org>, Rob Herring <robh@kernel.org>
+Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-All nodes need an explicit additionalProperties or unevaluatedProperties
-unless a $ref has one that's false. As that is not the case with
-usb-device.yaml, "additionalProperties" is needed here.
+Quoting Rob Herring (Arm) (2024-05-23 12:44:59)
+> All nodes need an explicit additionalProperties or unevaluatedProperties
+> unless a $ref has one that's false. As that is not the case with
+> usb-device.yaml, "additionalProperties" is needed here.
+>
+> Fixes: c44d9dab31d6 ("dt-bindings: usb: Add downstream facing ports to realtek binding")
+> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+> ---
 
-Fixes: c44d9dab31d6 ("dt-bindings: usb: Add downstream facing ports to realtek binding")
-Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
----
- Documentation/devicetree/bindings/usb/realtek,rts5411.yaml | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/Documentation/devicetree/bindings/usb/realtek,rts5411.yaml b/Documentation/devicetree/bindings/usb/realtek,rts5411.yaml
-index 0874fc21f66f..6577a61cc075 100644
---- a/Documentation/devicetree/bindings/usb/realtek,rts5411.yaml
-+++ b/Documentation/devicetree/bindings/usb/realtek,rts5411.yaml
-@@ -65,6 +65,7 @@ patternProperties:
-     description: The hard wired USB devices
-     type: object
-     $ref: /schemas/usb/usb-device.yaml
-+    additionalProperties: true
- 
- required:
-   - peer-hub
--- 
-2.43.0
-
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
 
