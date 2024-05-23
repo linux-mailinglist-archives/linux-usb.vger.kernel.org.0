@@ -1,129 +1,115 @@
-Return-Path: <linux-usb+bounces-10436-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10437-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E12F28CCF57
-	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2024 11:32:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE4228CCFE9
+	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2024 12:05:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 985EA1F23250
-	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2024 09:32:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 98CE42840E1
+	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2024 10:05:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7000B13D521;
-	Thu, 23 May 2024 09:32:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="dxujooKk"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95CC713D621;
+	Thu, 23 May 2024 10:05:29 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail03.siengine.com (mail03.siengine.com [43.240.192.165])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBC7513D28E;
-	Thu, 23 May 2024 09:32:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E8CA54FA9;
+	Thu, 23 May 2024 10:05:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=43.240.192.165
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716456745; cv=none; b=QITQyFwwG93x5SJmLRVcmaag836vh20Jgvp0IKeZMEfAkblBl8O74ib3H5yLnjqzRymsIAq73XSiaSBzXAHK3IQ/whPVQKkDz1BqMBgkjzVsJVw3ZnjKpjQPs8m4b31lCmbw26d943fFlMQz1mdibCebRzzTkoskLIXvWnj4y/A=
+	t=1716458729; cv=none; b=HyaaV70CIqHtlqjc71L4YQgsetfytkEEk+h29XHieJXHMBTjU+4KpU6v5krJBAxTIkiZg/J9jljwa3Nxngn1K3ci25hqOmuAKtLqEkpYVGyrRedyDvl1ErB7CAzFoY5XryT/fXt0tZllRbQgXrpenvICf2oTp9ftgu0249zASgo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716456745; c=relaxed/simple;
-	bh=i/suwIO2X+IkJLPKjmWkqmwdbwnnIhI4At/U51qCpdo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=piktVr98Anj6MFtix8sn6TWWgjk0ZnhuQdSnZhNWWOZsN22nQq7Q4YY91Ezkz7QYcq6J8Ex9g/5yE1uxApyJYqM3s9WbJXP14BRCn7xZ9jxalKPGgP0P0yGpkBfuHgZI9NYrBjGFNS5Hg0a9Uz4Hg6y+PiZSgpPddIpGArKrEz0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=dxujooKk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 061B2C3277B;
-	Thu, 23 May 2024 09:32:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1716456743;
-	bh=i/suwIO2X+IkJLPKjmWkqmwdbwnnIhI4At/U51qCpdo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dxujooKkOt81xkww9E/rCw7M2kqEcQL/edR+l4TEIrFph3a+zIcB8ZzfXbvkRkOdu
-	 w1UAN/ewE6XhixSlj4Js8iCvNMW1bnfE+hqGFmZtGrgUfb0nt+6uBOmVXvYZrL9z/Y
-	 t7U2rGdrLWOENswfM1n+jz4CXRo6wnGX4x8Sf6Ug=
-Date: Thu, 23 May 2024 11:32:20 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Shichao Lai <shichaorai@gmail.com>
-Cc: stern@rowland.harvard.edu, oneukum@suse.com, linux-usb@vger.kernel.org,
-	usb-storage@lists.one-eyed-alien.net, linux-kernel@vger.kernel.org,
-	xingwei lee <xrivendell7@gmail.com>,
-	yue sun <samsun1006219@gmail.com>
-Subject: Re: [PATCHv2] Check whether divisor is non-zero before division
-Message-ID: <2024052359-clothes-plentiful-c320@gregkh>
-References: <20240523092608.874986-1-shichaorai@gmail.com>
+	s=arc-20240116; t=1716458729; c=relaxed/simple;
+	bh=TVULNsPOp0MUxGLrhYYex7VZrXDsn6a1Lrdw1F8dmQA=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Ll3o/ynoTF8c7ZY7KxkhyAnFbjoIJOf+Yf2jAChHFz/16VuJvp8xWXaqsK9DlJfEaMQgOdZ+y3TtUuUIFhYpmVNRvIRgS9bQm7uCo+ugJcNxXRPblMgCTKm6WsdHVcE3Ix1mNTzKp7DlzSGRcaimbbRYPhzJKVPSraNOr7ev318=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=siengine.com; spf=pass smtp.mailfrom=siengine.com; arc=none smtp.client-ip=43.240.192.165
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=siengine.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=siengine.com
+Received: from mail03.siengine.com (localhost [127.0.0.2] (may be forged))
+	by mail03.siengine.com with ESMTP id 44NA3ffa073193;
+	Thu, 23 May 2024 18:03:41 +0800 (+08)
+	(envelope-from hongchi.peng@siengine.com)
+Received: from dsgsiengine01 ([10.8.1.61])
+	by mail03.siengine.com with ESMTPS id 44NA3HPr073142
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+	Thu, 23 May 2024 18:03:17 +0800 (+08)
+	(envelope-from hongchi.peng@siengine.com)
+Received: from SEEXMB04-2019.siengine.com (SEEXMB04-2019.siengine.com [10.8.1.34])
+	by dsgsiengine01 (SkyGuard) with ESMTPS id 4VlNz801Cvz7ZMhX;
+	Thu, 23 May 2024 18:03:15 +0800 (CST)
+Received: from SEEXMB03-2019.siengine.com (10.8.1.33) by
+ SEEXMB04-2019.siengine.com (10.8.1.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.1544.11; Thu, 23 May 2024 18:03:15 +0800
+Received: from localhost (10.12.10.38) by SEEXMB03-2019.siengine.com
+ (10.8.1.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.2.1544.11 via Frontend
+ Transport; Thu, 23 May 2024 18:03:15 +0800
+From: Peng Hongchi <hongchi.peng@siengine.com>
+To: <hminas@synopsys.com>
+CC: <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <hongchi.peng@siengine.com>
+Subject: [PATCH] usb: dwc2: gadget: Don't write invalid mapped sg entries into dma_desc with iommu enabled
+Date: Thu, 23 May 2024 18:03:15 +0800
+Message-ID: <20240523100315.7226-1-hongchi.peng@siengine.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240523092608.874986-1-shichaorai@gmail.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-DKIM-Results: [10.8.1.61]; dkim=none;
+X-DNSRBL: 
+X-SPAM-SOURCE-CHECK: pass
+X-MAIL:mail03.siengine.com 44NA3ffa073193
 
-On Thu, May 23, 2024 at 05:26:08PM +0800, Shichao Lai wrote:
-> Since uzonesize may be zero, so judgements for non-zero are nessesary in both place.
-> Previous check is moved out of loop, and one more check is added in alauda_write_lba.
-> 
-> Reported-by: xingwei lee <xrivendell7@gmail.com>
-> Reported-by: yue sun <samsun1006219@gmail.com>
-> Signed-off-by: Shichao Lai <shichaorai@gmail.com>
-> ---
->  drivers/usb/storage/alauda.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/usb/storage/alauda.c b/drivers/usb/storage/alauda.c
-> index 115f05a6201a..a6e60ef5cb0d 100644
-> --- a/drivers/usb/storage/alauda.c
-> +++ b/drivers/usb/storage/alauda.c
-> @@ -818,6 +818,8 @@ static int alauda_write_lba(struct us_data *us, u16 lba,
->  	unsigned int blocksize = MEDIA_INFO(us).blocksize;
->  	unsigned int lba_offset = lba % uzonesize;
->  	unsigned int new_pba_offset;
-> +	if (!uzonesize)
-> +		return USB_STOR_TRANSPORT_ERROR;
->  	unsigned int zone = lba / uzonesize;
->  
->  	alauda_ensure_map_for_zone(us, zone);
-> @@ -923,6 +925,8 @@ static int alauda_read_data(struct us_data *us, unsigned long address,
->  	unsigned int uzonesize = MEDIA_INFO(us).uzonesize;
->  	struct scatterlist *sg;
->  	int result;
-> +	if (!uzonesize)
-> +		return USB_STOR_TRANSPORT_ERROR;
->  
->  	/*
->  	 * Since we only read in one block at a time, we have to create
-> -- 
-> 2.34.1
-> 
-> 
+When using dma_map_sg() to map the scatterlist with iommu enabled,
+the entries in the scatterlist can be mergerd into less but longer
+entries in the function __finalise_sg(). So that the number of
+valid mapped entries is actually smaller than ureq->num_reqs,and
+there are still some invalid entries in the scatterlist with
+dma_addr=0xffffffff and len=0. Writing these invalid sg entries
+into the dma_desc can cause a data transmission error.
 
-Hi,
+The function dma_map_sg() returns the number of valid map entries
+and the return value is assigned to usb_request::num_mapped_sgs in
+function usb_gadget_map_request_by_dev(). So that just write valid
+mapped entries into dma_desc according to the usb_request::num_mapped_sgs,
+and set the IOC bit if it's the last valid mapped entry.
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+This patch poses no risk to no-iommu situation, cause
+ureq->num_mapped_sgs equals ureq->num_sgs while using dma_direct_map_sg()
+to map the scatterlist whith iommu disabled.
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+Signed-off-by: Peng Hongchi <hongchi.peng@siengine.com>
+---
+ drivers/usb/dwc2/gadget.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-- Your patch contains warnings and/or errors noticed by the
-  scripts/checkpatch.pl tool.
+diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+index 74ac79abd8f3..e7bf9cc635be 100644
+--- a/drivers/usb/dwc2/gadget.c
++++ b/drivers/usb/dwc2/gadget.c
+@@ -885,10 +885,10 @@ static void dwc2_gadget_config_nonisoc_xfer_ddma(struct dwc2_hsotg_ep *hs_ep,
+ 	}
+ 
+ 	/* DMA sg buffer */
+-	for_each_sg(ureq->sg, sg, ureq->num_sgs, i) {
++	for_each_sg(ureq->sg, sg, ureq->num_mapped_sgs, i) {
+ 		dwc2_gadget_fill_nonisoc_xfer_ddma_one(hs_ep, &desc,
+ 			sg_dma_address(sg) + sg->offset, sg_dma_len(sg),
+-			sg_is_last(sg));
++			(i == (ureq->num_mapped_sgs - 1)));
+ 		desc_count += hs_ep->desc_count;
+ 	}
+ 
+-- 
+2.34.1
 
-- This looks like a new version of a previously submitted patch, but you
-  did not list below the --- line any changes from the previous version.
-  Please read the section entitled "The canonical patch format" in the
-  kernel file, Documentation/process/submitting-patches.rst for what
-  needs to be done here to properly describe this.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
 
