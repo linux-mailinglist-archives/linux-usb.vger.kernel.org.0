@@ -1,113 +1,125 @@
-Return-Path: <linux-usb+bounces-10434-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10435-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0DAC8CCED7
-	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2024 11:15:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F18B8CCF35
+	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2024 11:26:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 80C591F21B6B
-	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2024 09:15:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 54628284952
+	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2024 09:26:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0097E13CFA2;
-	Thu, 23 May 2024 09:15:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C660F13D258;
+	Thu, 23 May 2024 09:26:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="LOTqYI2J"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QP8i+FK+"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F8757E0F6
-	for <linux-usb@vger.kernel.org>; Thu, 23 May 2024 09:15:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 101EA4F8BB;
+	Thu, 23 May 2024 09:26:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716455735; cv=none; b=IVfP9F3Epq4KaiGsPYG8r6D/ac9mkjc96gWcRBaQeQsUMouNYqWE3WwMfATp+Hj1/D1tMQwqo/xoLANTgo53ECHak48QrspDvqUIIh8UpDjGbDIt7jaDBX5uuqiBbmfvjH7CF7vtqVc6B7fcBcyVi2DztZnNbA+/Pux4jqpMIUw=
+	t=1716456404; cv=none; b=sNksetEOD5TiF0HmZ35AeJ3PGEyR8S+hCPkbutw52MwSQRMxGGdKpu2YjqUI6o+ATx9FmBtxWnPeJb1VW+ICKsBKeYsKlSx9wAkdhnLS+5fVWFZnlLRUjnzetBUSqXasd+IYDpgi61llt/DugBHB6MMqGlNkGb30yfGJInphTwY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716455735; c=relaxed/simple;
-	bh=b4/uOiVZm6dCYuLpPsVUE3k95DUxAU5znaBJSv5JF1k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oiPJiT/68jmvxw49OruZS4HZQj/ZsFP/iZNLKQgOenpd0U2OBDhsYlnNay5Kff6FLkc4mu7rRltgoO0J8FZPLYNOKt4s58xOgCR1xqq0mxQqbHzgW7W0kZma9qKt6uC0SBKyyFBqpslrGu1uUtjicdEGziCv9+Gs1C0izb+2b+Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=LOTqYI2J; arc=none smtp.client-ip=209.85.218.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a59ab4f60a6so976773866b.0
-        for <linux-usb@vger.kernel.org>; Thu, 23 May 2024 02:15:33 -0700 (PDT)
+	s=arc-20240116; t=1716456404; c=relaxed/simple;
+	bh=U4/f+5/ELJS3ohNly/5cYQy9ZMzgntrMLXVYhWvpTHQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=dAtHmbqNDC/um+Qt8KwCCkGseJ9IZO9zucwRsqzSnFUAg7HL5pMNVnuOEzr83jaWaH5zrKUVeBEoPCptGhpjz7rxwMCmKdzyhTLGq4bs9Yeneu0qE7+wIkO64GQBv69YiS3PM8NOCYVZ9fgCPWYPoWkehoyjv6QJUddUI4h3mg8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QP8i+FK+; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-1f304533064so13237605ad.0;
+        Thu, 23 May 2024 02:26:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1716455732; x=1717060532; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=b6yzAgRpwuvzYwVR75MaBk20iyXv6xLY4no1ggHk/Gg=;
-        b=LOTqYI2JY/DJyD2p6dH7RrMUUmaTEE/UwQbd3ZdNd9II3SQa+fnUoI9k+qGQYRU6mv
-         FCI365zh2X14z5HSLDX/c7xYwUmtWVC7vaTzDhwiSFh7Ztu42/hfMJPOtzluWevk1hJ1
-         9K0FSNmr6SKnj2JP5UFeaor+MsgPuDHXFnsEWi7ItGDwTwjKifVCGTKhhWSd3sk68Ffl
-         vWzT7M3ScLz6/NLE1ZKveLRedJkvIesGb9dysPtZiSCw7yJg03KfJtODTPEyvwUU9B3L
-         bKzJfLTd5j/iD69ROllj2XGmPhYUIoOxxpNDX3FZ1S44CHexEuColIIgjlXZc4CmNj8Z
-         sEew==
+        d=gmail.com; s=20230601; t=1716456402; x=1717061202; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=LgjVFtFKjSQKkqo/YluY+yPsMkYZspFKPmE22dhDd8w=;
+        b=QP8i+FK+TfArNsWta+I4FDNs4EQzlQ0MDoblMWJRxe9AzhbOfClzPo30NQueUcFr1s
+         Czc97wcv2JMxxOt6mUFf3rRIkIttWwzHnH0Lgbm5Rdkz40ygxfOU2CUR9m51RegQ41EX
+         6c71KUT5WpmTv7j+WE/05mJYqH9MqjpQDkLk+Emb3eOVLZrPdqKWF+SpqIuEq/p7wd6C
+         VQ6WjlhUwHMe4s/vpEmyk2Kdyneyt14IX5aJk+j9BqbrfjeAyjATLzGfd4TSK6oovIAL
+         nqt1BTZwnRw1X/SSigcItr7cOhYF5AOkMFJ8R+QI+m0v2sAt6JkB5mlfcqkstZx/sP/H
+         jngA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716455732; x=1717060532;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=b6yzAgRpwuvzYwVR75MaBk20iyXv6xLY4no1ggHk/Gg=;
-        b=hcQm4gpJOQ6T2a8FOmZ1kfoLBrkGUghvnGcKDFGZHAAxeDgXhQOZQpFZQ+x6OsaaBm
-         +RWMJ80sAyhB1HUPhMm7xAuRPgFw/RmiX7vEgIfaDdIFtDhhqZe8lvgOZss+Gth/XjK3
-         yKM3STOZXeqpztLj0etu8zdz6rOU8zK+jIXDPCBJ8J/6jImv4kr+A67Qa7kcK5zN0XLq
-         RIik9kpsz+Meq/ZB2IqFB3et7ov54NFTZdSvrXFqq8Y5g/dupgMj/2PLHtOQVUARnyDw
-         91N5+lQx3MrbouOquh6QWXYquOMmPgQTk2iKchNlbLFZVNNwgaI406QrxIutzfojbkyq
-         9lSw==
-X-Gm-Message-State: AOJu0YwXju0Tph65V2XPawZyOHNaPGGhNt31GgwrJkexS32D77XKP3Ld
-	1eRaA2Gz/IVcEmGvJ9HKXt/D4tGK2Uv4ZHvbBg3dB8PWNWWJYeeacP/5qB7RR4A=
-X-Google-Smtp-Source: AGHT+IFlK6BPcmpQgb/RasDDa8Kay+SC0dzEgMGYxnkZxxnwGN1c9iB1Q9yynHrqPd1XTTXnWvtzDw==
-X-Received: by 2002:a17:906:81d5:b0:a5c:e031:faf2 with SMTP id a640c23a62f3a-a622820be32mr341298966b.77.1716455731708;
-        Thu, 23 May 2024 02:15:31 -0700 (PDT)
-Received: from ?IPV6:2001:a61:139b:bf01:e8eb:4d8f:8770:df82? ([2001:a61:139b:bf01:e8eb:4d8f:8770:df82])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a5a17b17754sm1888859766b.192.2024.05.23.02.15.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 May 2024 02:15:31 -0700 (PDT)
-Message-ID: <feb574d6-54fb-4ad5-97f2-435e2636c07f@suse.com>
-Date: Thu, 23 May 2024 11:15:29 +0200
+        d=1e100.net; s=20230601; t=1716456402; x=1717061202;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LgjVFtFKjSQKkqo/YluY+yPsMkYZspFKPmE22dhDd8w=;
+        b=SLwt5BIChTnIQXw5GCAqvGeTukG3IBqvfJ4dztQu95nn+3wqEPnI/YFM0skJHY+FRC
+         nZwkCGkOSHws7WzaCU3X/GOrF7U8CM5AygmJyL0jiXgnsYD8XiaTQ9OZLLERwPVQVZpU
+         VgJCR9n+qZtPVX+fubBdOjyY+UywyNTcDeJEeZVjQrqPAb/Qo7ogeYuTlyvbZAQ2GwHa
+         bJoiVrmaoL3TkvNPQ+5fZnOVdGU6WVLGc/vKOTLwgOcZYLdj3E49cs6gWIHJudRkeH5W
+         DALcJo9rqJnZ6ZthJu12Oshw3ASg6j9POoff8JcABazn+KwjO16W8JhhME+Q0JwfkLCA
+         nOkw==
+X-Forwarded-Encrypted: i=1; AJvYcCXHpzkgukl7j/YJ/SxGzC8kTlUwv6cT2icn1rILDJqgB6lnMJlDJ6xirDb2gjk4E05w6T8WBsdjqCgzy0XQixACaetqDLe3CnDyWQxI
+X-Gm-Message-State: AOJu0Yz0AVGIQd7Jz+SBjDhp4YmmSPJcriKNAgRKG0W07sI9t4fQPzvR
+	7owtSR05NPDVpc4Be0O/alBsExBCqXD/keVaafGja5rNKkTfMZ5W
+X-Google-Smtp-Source: AGHT+IFCr3V9Dqrv4LSKbq8usfuk6tYF56YXMp0+vQFUDBMcY6lFQMXXbNGQi4pdZj6/2zBHv3pZdA==
+X-Received: by 2002:a17:903:11c5:b0:1f2:f50d:ca47 with SMTP id d9443c01a7336-1f339ef5237mr23830825ad.3.1716456402245;
+        Thu, 23 May 2024 02:26:42 -0700 (PDT)
+Received: from velvet.. ([111.42.148.111])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-6f4d2a6641dsm23591883b3a.4.2024.05.23.02.26.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 May 2024 02:26:41 -0700 (PDT)
+From: Shichao Lai <shichaorai@gmail.com>
+To: stern@rowland.harvard.edu,
+	gregkh@linuxfoundation.org,
+	oneukum@suse.com
+Cc: linux-usb@vger.kernel.org,
+	usb-storage@lists.one-eyed-alien.net,
+	linux-kernel@vger.kernel.org,
+	Shichao Lai <shichaorai@gmail.com>,
+	xingwei lee <xrivendell7@gmail.com>,
+	yue sun <samsun1006219@gmail.com>
+Subject: [PATCHv2] Check whether divisor is non-zero before division
+Date: Thu, 23 May 2024 17:26:08 +0800
+Message-Id: <20240523092608.874986-1-shichaorai@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] Check whether divisor is non-zero before division
-To: shichao lai <shichaorai@gmail.com>, Oliver Neukum <oneukum@suse.com>,
- stern@rowland.harvard.edu, gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
- linux-kernel@vger.kernel.org, xingwei lee <xrivendell7@gmail.com>,
- yue sun <samsun1006219@gmail.com>
-References: <20240523072242.787164-1-shichaorai@gmail.com>
- <a218cac3-9d9d-4ac9-8ea3-0ea9822b2261@suse.com>
- <CACjpba7yh5Soe_Pr7D3SeTjjqzQB9q=nThaYRGAZu+EvaLfxfw@mail.gmail.com>
-Content-Language: en-US
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <CACjpba7yh5Soe_Pr7D3SeTjjqzQB9q=nThaYRGAZu+EvaLfxfw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+Since uzonesize may be zero, so judgements for non-zero are nessesary in both place.
+Previous check is moved out of loop, and one more check is added in alauda_write_lba.
 
+Reported-by: xingwei lee <xrivendell7@gmail.com>
+Reported-by: yue sun <samsun1006219@gmail.com>
+Signed-off-by: Shichao Lai <shichaorai@gmail.com>
+---
+ drivers/usb/storage/alauda.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-On 23.05.24 11:12, shichao lai wrote:
-
-> Thanks for the helpful tip!
-> I reviewed the code. Your suggestions can actually avoid repeated checks.
-> And there is also such a problem in alauda_write_lba().
-> I am a beginner at making patches. May I commit a patch again which
-> fixes both issues you mentioned?
-
-
-Hi,
-
-yes, you usually are supposed to change the "[PATCH]" in the
-subject line to "[PATCHv2]" and add a line in the log describing
-the difference between the first and second version.
-
-	HTH
-		Oliver
+diff --git a/drivers/usb/storage/alauda.c b/drivers/usb/storage/alauda.c
+index 115f05a6201a..a6e60ef5cb0d 100644
+--- a/drivers/usb/storage/alauda.c
++++ b/drivers/usb/storage/alauda.c
+@@ -818,6 +818,8 @@ static int alauda_write_lba(struct us_data *us, u16 lba,
+ 	unsigned int blocksize = MEDIA_INFO(us).blocksize;
+ 	unsigned int lba_offset = lba % uzonesize;
+ 	unsigned int new_pba_offset;
++	if (!uzonesize)
++		return USB_STOR_TRANSPORT_ERROR;
+ 	unsigned int zone = lba / uzonesize;
+ 
+ 	alauda_ensure_map_for_zone(us, zone);
+@@ -923,6 +925,8 @@ static int alauda_read_data(struct us_data *us, unsigned long address,
+ 	unsigned int uzonesize = MEDIA_INFO(us).uzonesize;
+ 	struct scatterlist *sg;
+ 	int result;
++	if (!uzonesize)
++		return USB_STOR_TRANSPORT_ERROR;
+ 
+ 	/*
+ 	 * Since we only read in one block at a time, we have to create
+-- 
+2.34.1
 
 
