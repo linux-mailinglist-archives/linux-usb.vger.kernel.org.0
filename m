@@ -1,134 +1,116 @@
-Return-Path: <linux-usb+bounces-10513-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10514-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A7C6D8CE4AE
-	for <lists+linux-usb@lfdr.de>; Fri, 24 May 2024 13:08:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 74E528CE4E0
+	for <lists+linux-usb@lfdr.de>; Fri, 24 May 2024 13:32:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D85FE1C21220
-	for <lists+linux-usb@lfdr.de>; Fri, 24 May 2024 11:08:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2F85F28229B
+	for <lists+linux-usb@lfdr.de>; Fri, 24 May 2024 11:32:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 697C186267;
-	Fri, 24 May 2024 11:08:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3E8C86250;
+	Fri, 24 May 2024 11:32:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=tecnico.ulisboa.pt header.i=@tecnico.ulisboa.pt header.b="gOI3nfEu"
+	dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b="GyyKuxGZ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp1.tecnico.ulisboa.pt (smtp1.tecnico.ulisboa.pt [193.136.128.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail11.truemail.it (mail11.truemail.it [217.194.8.81])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1FC842078;
-	Fri, 24 May 2024 11:08:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.136.128.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E2BC9475;
+	Fri, 24 May 2024 11:32:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.194.8.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716548890; cv=none; b=SEmJMzYEPXiRnli6BLCjZ+7/Azj2TPfXfL500fMG9raA2KBnNyVXh7WRnsOpCleZsvdZXa/vIuLoSJ9ZAiNhNN3ma5W9cJrxKoS8e4wNmP2MtV7oTnTjC6qvjkASXq5WHX1nkmcfPMxOn18WKlhbCjJX3U4KKYo7uf22HZeV5mY=
+	t=1716550325; cv=none; b=hX1g4v3pzPEquiwCU6ZOgYeNS2q0Dl/YLkGLQQQjAPWCMBoLKpjz3w7vVSmE7L9BCuZ3VI/SKjjldQv4PENxGCyNU18WHbeqKV4cjLBUi60rOrnu0JlRKs0o9xCn1mIKuKx7SrKzGOKbMGB1Hw0r1xOuR9K7LeelhxbqgIMr9Jo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716548890; c=relaxed/simple;
-	bh=F+uCQdV0aunttbQzzXVZNYHFs0YrsoqwUqhoLVcnC9M=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=HTpTdoA+yZsg2Qxcfy4xMRHnN9j4igjZ8wcdvEOwP3bfOrySPNufESlzmuvJER8xf1Zvg98NFtLarLv4cIKFiwEpgbN9QhlYdn4zACQhvkMrjxOpCximTmtdil0un6iq3oKvCFDacim8faLTty51lvCQjpI8YmnYdqxW25QKKpA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tecnico.ulisboa.pt; spf=pass smtp.mailfrom=tecnico.ulisboa.pt; dkim=pass (1024-bit key) header.d=tecnico.ulisboa.pt header.i=@tecnico.ulisboa.pt header.b=gOI3nfEu; arc=none smtp.client-ip=193.136.128.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tecnico.ulisboa.pt
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tecnico.ulisboa.pt
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by smtp1.tecnico.ulisboa.pt (Postfix) with ESMTP id 23BC1601A40F;
-	Fri, 24 May 2024 11:59:59 +0100 (WEST)
-X-Virus-Scanned: by amavis-2.13.0 (20230106) (Debian) at tecnico.ulisboa.pt
-Received: from smtp1.tecnico.ulisboa.pt ([127.0.0.1])
- by localhost (smtp1.tecnico.ulisboa.pt [127.0.0.1]) (amavis, port 10025)
- with LMTP id 4SPOHJ6UAWWl; Fri, 24 May 2024 11:59:56 +0100 (WEST)
-Received: from mail1.tecnico.ulisboa.pt (mail1.ist.utl.pt [IPv6:2001:690:2100:1::b3dd:b9ac])
-	by smtp1.tecnico.ulisboa.pt (Postfix) with ESMTPS id D65FE600087F;
-	Fri, 24 May 2024 11:59:56 +0100 (WEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tecnico.ulisboa.pt;
-	s=mail; t=1716548396;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=7o+fFn7gbAlvwKqYJrJ0dZxZZJ/KAuKR0bymU0MdKuQ=;
-	b=gOI3nfEuvAJruhD/F3G0dI4EpjmmZNiJs2ecWhlKUmNsTIRJGfk0zAb4XkLHyIJjIhcZJg
-	9N1U42wbTgnS3jwR40mKqf9PGRCjsxoUmamDymK/SAhfRxvAYbfW7w4nlk4t3jih1i6/8y
-	DLNPvPEbGAXWe+LEqX90jwutZ+QZo3o=
-Received: from diogo-gram.. (unknown [136.226.215.14])
-	(Authenticated sender: ist187313)
-	by mail1.tecnico.ulisboa.pt (Postfix) with ESMTPSA id 75E963600C8;
-	Fri, 24 May 2024 11:59:55 +0100 (WEST)
-From: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
-To: heikki.krogerus@linux.intel.com,
-	gregkh@linuxfoundation.org,
-	dmitry.baryshkov@linaro.org,
-	jthies@google.com,
-	bleung@chromium.org,
-	abhishekpandit@chromium.org,
-	saranya.gopal@intel.com,
-	lk@c--e.de,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	pmalani@chromium.org
-Cc: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
-Subject: [PATCH 2/2] usb: typec: ucsi: Enable UCSI v2.0 notifications
-Date: Fri, 24 May 2024 11:58:21 +0100
-Message-ID: <20240524105837.15342-3-diogo.ivo@tecnico.ulisboa.pt>
-X-Mailer: git-send-email 2.45.1
-In-Reply-To: <20240524105837.15342-1-diogo.ivo@tecnico.ulisboa.pt>
-References: <20240524105837.15342-1-diogo.ivo@tecnico.ulisboa.pt>
+	s=arc-20240116; t=1716550325; c=relaxed/simple;
+	bh=IlUQDrvlikCtPQHZL17bTPh6Z9sOobbSRi8dQxajFWE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MuqZKAfAgm5ZVMrLlJ7Lck8EXYBMCvdm8441rAcuFsPsN3Uz4wbHadyZ9br2+QCpxS2uSYtDkOtAEPzPtyrOaxiMWmNIkfiX8F9V+dkAjYycqamNfoRJCWIK2wkzPTXkB7Ey7PAu8ASL7X4TqdsPvckh+xphRVDa+39dOrusZC4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it; spf=pass smtp.mailfrom=dolcini.it; dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b=GyyKuxGZ; arc=none smtp.client-ip=217.194.8.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dolcini.it
+Received: from gaggiata.pivistrello.it (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
+	by mail11.truemail.it (Postfix) with ESMTPA id CACB220232;
+	Fri, 24 May 2024 13:31:58 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dolcini.it;
+	s=default; t=1716550318;
+	bh=82c4Czu1Ofgrwin76Gz+pckw49eOGhAz3rJrK16Yv+Y=;
+	h=Received:From:To:Subject;
+	b=GyyKuxGZ2tIOliFP18R2TXgCqDmRgWASUfwA840XG2LKymLhmQZjiErUKFjbJjaEg
+	 hvCFXNP0SSRooL8Cf7ZaZYkcNa2HhMqz26nIyVzSTR79n+YY98NoxvEKa/lOJIg2Vk
+	 vhQxShGKkdahRQRf47OAhKc6xD3cZC3YIFBPvDJQ6XcQTMtTeIBvaaShbgxgXLtI08
+	 Eo1/vXJ3sAP+6SFsSj/2hS/JyfcagPBBWxzN2v4hdPtEFejG1iVaveWJOUpbMv/RxG
+	 iU5WXYtAzhNjuLb5+ki5g/Ts6hZdUOT54RsmBps/noAc17n/j17wjKoGKOd4qIX0RE
+	 i3YyMYFoU6+SA==
+Received: by gaggiata.pivistrello.it (Postfix, from userid 1000)
+	id 626617F963; Fri, 24 May 2024 13:31:58 +0200 (CEST)
+Date: Fri, 24 May 2024 13:31:58 +0200
+From: Francesco Dolcini <francesco@dolcini.it>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Francesco Dolcini <francesco@dolcini.it>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Francesco Dolcini <francesco.dolcini@toradex.com>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Bjorn Andersson <andersson@kernel.org>
+Subject: Re: [PATCH v1 2/2] usb: typec: mux: gpio-sbu: Make enable gpio
+ optional
+Message-ID: <ZlB6ruZ8j2rVsIio@gaggiata.pivistrello.it>
+References: <20240524071034.4441-1-francesco@dolcini.it>
+ <20240524071034.4441-3-francesco@dolcini.it>
+ <5of64nmgpotr7fu66urgko5gfvr4ffhmff4dgkagkdvwh2dywk@etlw6rsmhki6>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5of64nmgpotr7fu66urgko5gfvr4ffhmff4dgkagkdvwh2dywk@etlw6rsmhki6>
 
-UCSI version 2.0 and above define new PPM notifications. Update the
-logic to determine which notifications to enable taking into account
-these changes.
+Hello Dmitry,
+thanks for the review.
 
-Signed-off-by: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
----
- drivers/usb/typec/ucsi/ucsi.c | 19 ++++++++++++++++++-
- 1 file changed, 18 insertions(+), 1 deletion(-)
+On Fri, May 24, 2024 at 12:56:15PM +0300, Dmitry Baryshkov wrote:
+> On Fri, May 24, 2024 at 09:10:34AM +0200, Francesco Dolcini wrote:
+> > From: Francesco Dolcini <francesco.dolcini@toradex.com>
+> > 
+> > The enable gpio is not required when the SBU mux is used only for
+> > orientation, make it optional.
+> > 
+> > Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
+> > ---
+> >  drivers/usb/typec/mux/gpio-sbu-mux.c | 11 ++++++++---
+> >  1 file changed, 8 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/usb/typec/mux/gpio-sbu-mux.c b/drivers/usb/typec/mux/gpio-sbu-mux.c
+> > index 374168482d36..cf44259980a1 100644
+> > --- a/drivers/usb/typec/mux/gpio-sbu-mux.c
+> > +++ b/drivers/usb/typec/mux/gpio-sbu-mux.c
+...
+> > @@ -66,6 +66,9 @@ static int gpio_sbu_mux_set(struct typec_mux_dev *mux,
+> >  {
+> >  	struct gpio_sbu_mux *sbu_mux = typec_mux_get_drvdata(mux);
+> >  
+> > +	if (!sbu_mux->enable_gpio)
+> > +		return -EOPNOTSUPP;
+> 
+> Can we skip registering the mux if there is no enable_gpio? This can
+> save users from the unexpected errors during runtime.
 
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index cb52e7b0a2c5..0cc1c49da4a0 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -1664,7 +1664,7 @@ static int ucsi_register_port(struct ucsi *ucsi, struct ucsi_connector *con)
- 
- static u64 ucsi_get_supported_notifications(struct ucsi *ucsi)
- {
--	u8 features = ucsi->cap.features;
-+	u16 features = ucsi->cap.features;
- 	u64 ntfy = UCSI_ENABLE_NTFY_ALL;
- 
- 	if (!(features & UCSI_CAP_ALT_MODE_DETAILS))
-@@ -1680,6 +1680,23 @@ static u64 ucsi_get_supported_notifications(struct ucsi *ucsi)
- 	if (!(features & UCSI_CAP_PD_RESET))
- 		ntfy &= ~UCSI_ENABLE_NTFY_PD_RESET_COMPLETE;
- 
-+	if (ucsi->version <= UCSI_VERSION_1_2)
-+		return ntfy;
-+
-+	ntfy |= UCSI_ENABLE_NTFY_SINK_PATH_STS_CHANGE;
-+
-+	if (features & UCSI_CAP_GET_ATTENTION_VDO)
-+		ntfy |= UCSI_ENABLE_NTFY_ATTENTION;
-+
-+	if (features & UCSI_CAP_FW_UPDATE_REQUEST)
-+		ntfy |= UCSI_ENABLE_NTFY_LPM_FW_UPDATE_REQ;
-+
-+	if (features & UCSI_CAP_SECURITY_REQUEST)
-+		ntfy |= UCSI_ENABLE_NTFY_SECURITY_REQ_PARTNER;
-+
-+	if (features & UCSI_CAP_SET_RETIMER_MODE)
-+		ntfy |= UCSI_ENABLE_NTFY_SET_RETIMER_MODE;
-+
- 	return ntfy;
- }
- 
--- 
-2.45.1
+Yes, I considered this option.
+
+The rationale for the current implementation is that if the device tree is
+correct (no mode-switch property, when enable-gpios is not present), nobody
+will call gpio_sbu_mux_set() so no runtime error is possible. If the
+configuration in the DT is not correct you get this runtime error.
+
+With your proposal in case the DT configuration is not correct there will be no
+errors from the kernel, but the functionality will not work.
+
+Francesco
 
 
