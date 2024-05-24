@@ -1,142 +1,119 @@
-Return-Path: <linux-usb+bounces-10515-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10516-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7DB0D8CE4ED
-	for <lists+linux-usb@lfdr.de>; Fri, 24 May 2024 13:42:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 08D188CE501
+	for <lists+linux-usb@lfdr.de>; Fri, 24 May 2024 14:01:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AFD651C215D9
-	for <lists+linux-usb@lfdr.de>; Fri, 24 May 2024 11:42:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9D4E72823CD
+	for <lists+linux-usb@lfdr.de>; Fri, 24 May 2024 12:01:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 271BF86251;
-	Fri, 24 May 2024 11:42:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="nbGQhBWE"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2BC68615C;
+	Fri, 24 May 2024 12:01:30 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from exchange.fintech.ru (exchange.fintech.ru [195.54.195.159])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7FCD433A4
-	for <linux-usb@vger.kernel.org>; Fri, 24 May 2024 11:42:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF4C0839FC;
+	Fri, 24 May 2024 12:01:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.54.195.159
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716550929; cv=none; b=rXJpAnr3h08F1QNN569kUEizJfDuKDzQWyUEREzyjJNwEi8ZqyWT36mjHqp63frt/3DCHhcfuYO4pWVS4kLi4UHwtedYTSokB56xhAAdeDW7jvnrPHsfEGe93YWNrqNSyFs8jPB9M351sR8cZTIG+dHjUGlOLq7xRTfmQIDvffU=
+	t=1716552090; cv=none; b=FG4sea7d5qSC3tyXj+j+Rue+6dy3h0IdyqoKpSM0dm9x9ihi3TQEf0TymFlNGkgwX/XtIRTKsiN0VLYBalairtu1vuhEQRRxSy18rPPc0/3xzIArVkKKHfp0aTMvt488STYmFXC+QAS/q9uspJJmvllRobHhe6DERwwV3mDYwEo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716550929; c=relaxed/simple;
-	bh=um20z/0h51TyiN3ed0lhaWcGjCmT5HIqNWJUIu2xitM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=td0lYlRnPVcMYiVXge/0tDpGpVvNNx0S614zoI6YwzR0NhVNOsQRougWsLQIyu07eB/U4TPIf6rQzaOGHUkg+axoQ6iLqiBbPKCN6CxMth9jW405WoB8OUJpiEV/5Q2MrHc4c4/fYCCEgk8CjouE77VZRPhZP1S12af91cipC08=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=nbGQhBWE; arc=none smtp.client-ip=209.85.167.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-5295a66e775so890161e87.0
-        for <linux-usb@vger.kernel.org>; Fri, 24 May 2024 04:42:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1716550926; x=1717155726; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=U8ucJzSqULWl8fDGLbjGQazBi2zanFjR2g3fW7V53pQ=;
-        b=nbGQhBWECshYUvssH8kdkKMJeXQoDXhESKvUMLK/5dTBvhLQ8bAj713dT7BGNKytps
-         2GZuxeKUSizKl8S/3EADc0GKArT50M59/wprvpuuJRglZyhCXTlKyUqONm6lRYclmHNU
-         zc8lYj5dQHMthMBcGJUqXPtFoCS2qxpcRf4uqTZsji24+bLCb5WtycaX6Vc9atYuN6/j
-         8hqPDc8jgBZJ+8fUXBzctuDnSbGHRHVol7IkiLvpPkgUzuq6PMEFoaia3lwabLbaxhMl
-         XROn6YliHopMOs0FCUIZ6ejEVjdpKtg+UjTN5aeK5GNsYGLmYsP7AqSU/eH/PrEttgp8
-         s7hw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716550926; x=1717155726;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=U8ucJzSqULWl8fDGLbjGQazBi2zanFjR2g3fW7V53pQ=;
-        b=c+mOJUQPIu9tusDITbsM0DqxN7U2/ijeR7hXC0opslfFyjPVTpWvireg5+hnHoK38T
-         f76ak1HRqUHWQQZ5HdM5qY/LjWFy6DFIkFvrqProcbVBGE8KGk5u6/GyClqo4QjzUBjl
-         pv7jFaH7E770G6XaHdvghNASsVl7guxrQ0JAr4ResPPvQfv927P6K9QBInAigX55rEUH
-         gMUgL9Rgbbs8ojG79hHRTdhx7ix16EXjxsudLQ0CVrLjhPi77bhNdIYv0naRtx8Wlrxa
-         h6VYzCqyyUJTs5SlSbzc2n681FnM/g5iBBaQovyWQUwmsTuc/yvrw4XddNYgvuW9oxah
-         6pgQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXilmJa9ir8/4h8N54dXw9bjq4zocODvHT0M8PqzZ5+nFVZLvKgkaELFcet4f4SwC9HL2zsgXKI5DqRwvr5GOrIplR933aEilCO
-X-Gm-Message-State: AOJu0YwGcii/TGFHhsL4BmfK9JbCUWBwalTGdM8h0d5wSG5NNEgsZvTR
-	gZzoY9zCmyAYlXn+Vdkvf3XnD3jGpRrM2BGRAbVLouGwgmoBvDTvsmEXuHw3WloD4XI2oIgKL9W
-	7
-X-Google-Smtp-Source: AGHT+IHr7B3y1pvIPOhoBlsH5vP7fnRdRGNFoCQomY9uiTVTvzbuXki3VUxBhl97FiRxuDdtZV7Hng==
-X-Received: by 2002:a05:6512:224c:b0:518:c69b:3a04 with SMTP id 2adb3069b0e04-529612c0598mr2635953e87.0.1716550925998;
-        Fri, 24 May 2024 04:42:05 -0700 (PDT)
-Received: from eriador.lumag.spb.ru (dzdbxzyyyyyyyyyyyykxt-3.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::227])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52970d2a1f6sm160369e87.220.2024.05.24.04.42.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 May 2024 04:42:05 -0700 (PDT)
-Date: Fri, 24 May 2024 14:42:04 +0300
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: Francesco Dolcini <francesco@dolcini.it>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Francesco Dolcini <francesco.dolcini@toradex.com>, 
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Bjorn Andersson <andersson@kernel.org>
-Subject: Re: [PATCH v1 2/2] usb: typec: mux: gpio-sbu: Make enable gpio
- optional
-Message-ID: <3z3gi2s2dxlflmfpcirutvesnj6gsxyriijl2jrc2udaqucoyb@6scxw5hb2nv7>
-References: <20240524071034.4441-1-francesco@dolcini.it>
- <20240524071034.4441-3-francesco@dolcini.it>
- <5of64nmgpotr7fu66urgko5gfvr4ffhmff4dgkagkdvwh2dywk@etlw6rsmhki6>
- <ZlB6ruZ8j2rVsIio@gaggiata.pivistrello.it>
+	s=arc-20240116; t=1716552090; c=relaxed/simple;
+	bh=sjXQpdVuxVaMrcZZhjQ9Ud+3LbVMqNdFY3q2eDxl45I=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=nVtixYKWRX03A6nojuOnGzu0sVjwEKG6zCuqzo9rX+gOUUHfNF38Li632B0lhH8EzwKqMAzrVUuuBw1eWGW8agpYywGYi5gqDlV/2qNSma7VDvC75HrutJYk53ORij3wbDeeCss+LULG/W5oyvXA6SoUxWYo3hqYuN8sIbUejPo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fintech.ru; spf=pass smtp.mailfrom=fintech.ru; arc=none smtp.client-ip=195.54.195.159
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fintech.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fintech.ru
+Received: from Ex16-01.fintech.ru (10.0.10.18) by exchange.fintech.ru
+ (195.54.195.169) with Microsoft SMTP Server (TLS) id 14.3.498.0; Fri, 24 May
+ 2024 15:01:20 +0300
+Received: from localhost (10.0.253.138) by Ex16-01.fintech.ru (10.0.10.18)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2242.4; Fri, 24 May
+ 2024 15:01:20 +0300
+From: Nikita Zhandarovich <n.zhandarovich@fintech.ru>
+To: Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>
+CC: Nikita Zhandarovich <n.zhandarovich@fintech.ru>, Kees Cook
+	<keescook@chromium.org>, <linux-usb@vger.kernel.org>,
+	<linux-input@vger.kernel.org>, <syzkaller-bugs@googlegroups.com>,
+	<linux-kernel@vger.kernel.org>,
+	<syzbot+c52569baf0c843f35495@syzkaller.appspotmail.com>
+Subject: [PATCH] HID: usbhid: fix recurrent out-of-bounds bug in usbhid_parse()
+Date: Fri, 24 May 2024 05:01:12 -0700
+Message-ID: <20240524120112.28076-1-n.zhandarovich@fintech.ru>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZlB6ruZ8j2rVsIio@gaggiata.pivistrello.it>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: Ex16-02.fintech.ru (10.0.10.19) To Ex16-01.fintech.ru
+ (10.0.10.18)
 
-On Fri, May 24, 2024 at 01:31:58PM +0200, Francesco Dolcini wrote:
-> Hello Dmitry,
-> thanks for the review.
-> 
-> On Fri, May 24, 2024 at 12:56:15PM +0300, Dmitry Baryshkov wrote:
-> > On Fri, May 24, 2024 at 09:10:34AM +0200, Francesco Dolcini wrote:
-> > > From: Francesco Dolcini <francesco.dolcini@toradex.com>
-> > > 
-> > > The enable gpio is not required when the SBU mux is used only for
-> > > orientation, make it optional.
-> > > 
-> > > Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
-> > > ---
-> > >  drivers/usb/typec/mux/gpio-sbu-mux.c | 11 ++++++++---
-> > >  1 file changed, 8 insertions(+), 3 deletions(-)
-> > > 
-> > > diff --git a/drivers/usb/typec/mux/gpio-sbu-mux.c b/drivers/usb/typec/mux/gpio-sbu-mux.c
-> > > index 374168482d36..cf44259980a1 100644
-> > > --- a/drivers/usb/typec/mux/gpio-sbu-mux.c
-> > > +++ b/drivers/usb/typec/mux/gpio-sbu-mux.c
-> ...
-> > > @@ -66,6 +66,9 @@ static int gpio_sbu_mux_set(struct typec_mux_dev *mux,
-> > >  {
-> > >  	struct gpio_sbu_mux *sbu_mux = typec_mux_get_drvdata(mux);
-> > >  
-> > > +	if (!sbu_mux->enable_gpio)
-> > > +		return -EOPNOTSUPP;
-> > 
-> > Can we skip registering the mux if there is no enable_gpio? This can
-> > save users from the unexpected errors during runtime.
-> 
-> Yes, I considered this option.
-> 
-> The rationale for the current implementation is that if the device tree is
-> correct (no mode-switch property, when enable-gpios is not present), nobody
-> will call gpio_sbu_mux_set() so no runtime error is possible. If the
-> configuration in the DT is not correct you get this runtime error.
-> 
-> With your proposal in case the DT configuration is not correct there will be no
-> errors from the kernel, but the functionality will not work.
+Syzbot reports [1] a reemerging out-of-bounds bug regarding hid
+descriptors possibly having incorrect bNumDescriptors values in
+usbhid_parse().
 
-I'm slightly biased maybe, but I prefer an error from probe (or
-dependent devices being deferred). On the other hand, current motto is
-that 'the kernel should not duplicate dt-validate's work'.
+Build on the previous fix in "HID: usbhid: fix out-of-bounds bug"
+and run a sanity-check ensuring that number of descriptors doesn't
+exceed the size of desc[] in struct hid_descriptor.
 
--- 
-With best wishes
-Dmitry
+[1] Syzbot report:
+Link: https://syzkaller.appspot.com/bug?extid=c52569baf0c843f35495
+
+UBSAN: array-index-out-of-bounds in drivers/hid/usbhid/hid-core.c:1024:7
+index 1 is out of range for type 'struct hid_class_descriptor[1]'
+CPU: 0 PID: 8 Comm: kworker/0:1 Not tainted 6.9.0-rc6-syzkaller-00290-gb9158815de52 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/27/2024
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x241/0x360 lib/dump_stack.c:114
+ ubsan_epilogue lib/ubsan.c:231 [inline]
+ __ubsan_handle_out_of_bounds+0x121/0x150 lib/ubsan.c:429
+ usbhid_parse+0x5a7/0xc80 drivers/hid/usbhid/hid-core.c:1024
+ hid_add_device+0x132/0x520 drivers/hid/hid-core.c:2790
+ usbhid_probe+0xb38/0xea0 drivers/hid/usbhid/hid-core.c:1429
+ usb_probe_interface+0x645/0xbb0 drivers/usb/core/driver.c:399
+ really_probe+0x2b8/0xad0 drivers/base/dd.c:656
+ __driver_probe_device+0x1a2/0x390 drivers/base/dd.c:798
+ driver_probe_device+0x50/0x430 drivers/base/dd.c:828
+ __device_attach_driver+0x2d6/0x530 drivers/base/dd.c:956
+ bus_for_each_drv+0x24e/0x2e0 drivers/base/bus.c:457
+ __device_attach+0x333/0x520 drivers/base/dd.c:1028
+ bus_probe_device+0x189/0x260 drivers/base/bus.c:532
+ device_add+0x8ff/0xca0 drivers/base/core.c:3720
+ usb_set_configuration+0x1976/0x1fb0 drivers/usb/core/message.c:2210
+ usb_generic_driver_probe+0x88/0x140 drivers/usb/core/generic.c:254
+ usb_probe_device+0x1b8/0x380 drivers/usb/core/driver.c:294
+
+Reported-and-tested-by: syzbot+c52569baf0c843f35495@syzkaller.appspotmail.com
+Fixes: f043bfc98c19 ("HID: usbhid: fix out-of-bounds bug")
+Signed-off-by: Nikita Zhandarovich <n.zhandarovich@fintech.ru>
+---
+ drivers/hid/usbhid/hid-core.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/hid/usbhid/hid-core.c b/drivers/hid/usbhid/hid-core.c
+index a90ed2ceae84..f38a4bd3a20e 100644
+--- a/drivers/hid/usbhid/hid-core.c
++++ b/drivers/hid/usbhid/hid-core.c
+@@ -1020,6 +1020,9 @@ static int usbhid_parse(struct hid_device *hid)
+ 	num_descriptors = min_t(int, hdesc->bNumDescriptors,
+ 	       (hdesc->bLength - offset) / sizeof(struct hid_class_descriptor));
+ 
++	if (num_descriptors > ARRAY_SIZE(hdesc->desc))
++		num_descriptors = ARRAY_SIZE(hdesc->desc);
++
+ 	for (n = 0; n < num_descriptors; n++)
+ 		if (hdesc->desc[n].bDescriptorType == HID_DT_REPORT)
+ 			rsize = le16_to_cpu(hdesc->desc[n].wDescriptorLength);
 
