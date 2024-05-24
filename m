@@ -1,180 +1,104 @@
-Return-Path: <linux-usb+bounces-10520-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10521-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16A258CE830
-	for <lists+linux-usb@lfdr.de>; Fri, 24 May 2024 17:39:10 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 556AF8CE9EE
+	for <lists+linux-usb@lfdr.de>; Fri, 24 May 2024 20:34:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C0C772821F2
-	for <lists+linux-usb@lfdr.de>; Fri, 24 May 2024 15:39:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0ABF31F24D1A
+	for <lists+linux-usb@lfdr.de>; Fri, 24 May 2024 18:34:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C34CD12E1E4;
-	Fri, 24 May 2024 15:38:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14F343D984;
+	Fri, 24 May 2024 18:31:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Nms4ibFr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qlox4iNq"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B425684D30;
-	Fri, 24 May 2024 15:38:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84BC83399B;
+	Fri, 24 May 2024 18:31:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716565136; cv=none; b=DUN623rfgAxjSNVVcymczej+Xx7nEs2emnvtMNKE8c47lS+r1o8f+De33bttr1hrUx9kBFb6RP75ejLEgy60D3MUFUU+r0gBA/Qa1tzvrlEYcQAe2hXwvu7mAd/34LJyI+i2hU6Xtq4hyitXvtIJne2BMXuaSm2NeiBeDC4itSQ=
+	t=1716575489; cv=none; b=kU/eqwlcfqjUdVlT95C8AjA7JtVAdA0gR8i1pvnq6IWORVNkLo2udss/nAJDzMpMGh+ELm2KZdQUU98cBvwMQpCma7icrHRp1XjWsG7/bB4BhefjAhgJEJkFud2lV1uUGM+/ZARTDF3quCgJOYClEWVDtFvOpZkMeBl1uyH2DnU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716565136; c=relaxed/simple;
-	bh=b61opTK1KH6YtwVDrcPwkZAAgbYNEUe/PC2nBmuKlCI=;
+	s=arc-20240116; t=1716575489; c=relaxed/simple;
+	bh=/ztmUaN+Csn+xIOOn+zVsdPvX0qFx5ZWesnKa3+2u4E=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=X+Aw7Lj9XEKodTTzDIEXsk3tDL2nKhdDoVkWEdx1gTlvnVWc/21u0k9SoPgwCJKpYNGF584dATwiN2DJo2naO/KiAUPjoeq1gTb8mFPuSvyjg1A9IvbMUEvbRCmIIpmLyeIGi+bzxHTwdOBN4b/lYz39j/p1x3t5yNjF2M2Mqy8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Nms4ibFr; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1716565135; x=1748101135;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=b61opTK1KH6YtwVDrcPwkZAAgbYNEUe/PC2nBmuKlCI=;
-  b=Nms4ibFr6ybbtHZ46gdBbagoKWNJMe26G7g5GJ2aUazsjEVOMNm7MJHU
-   N88mr44OlkfW+9861vSEJQnCAjwKfaaJBFI2c0+Rzfpvjf04Q+eTy103v
-   spArXFvq8jMrmjrGToI90o06sGaIS37Mqd7tbnT6cA7I048sv06RrUB6H
-   2Qc62vIIX2kH5LxIHdNoqn0lzcaPxs8wDa8G1/Cb2PM4JjTyuPkSAajcn
-   2LvsA15aE1NjE4y94u4lYHp/N1mhmDGn921/a6GVIVw+8e5EphbgcWV5p
-   OfyCYNJXgKhxOhJM+j3y8XZip0NM1UVEPo+1meC1saKcZZCc7WJtCZ9Pl
-   Q==;
-X-CSE-ConnectionGUID: pNXtQe2ZTZuaHBmhCirjsg==
-X-CSE-MsgGUID: /+SZKrJnRgCyl/JuUnK4jA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11082"; a="13123824"
-X-IronPort-AV: E=Sophos;i="6.08,185,1712646000"; 
-   d="scan'208";a="13123824"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2024 08:38:54 -0700
-X-CSE-ConnectionGUID: wvym/ZEfS8+RgCtzWB+GLw==
-X-CSE-MsgGUID: g29Fv+IYS/uEGWljXqgvhA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,185,1712646000"; 
-   d="scan'208";a="34649446"
-Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by orviesa007.jf.intel.com with ESMTP; 24 May 2024 08:38:51 -0700
-Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sAX0K-0005Yl-13;
-	Fri, 24 May 2024 15:38:48 +0000
-Date: Fri, 24 May 2024 23:38:35 +0800
-From: kernel test robot <lkp@intel.com>
-To: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>,
-	heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
-	dmitry.baryshkov@linaro.org, jthies@google.com, bleung@chromium.org,
-	abhishekpandit@chromium.org, saranya.gopal@intel.com, lk@c--e.de,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	pmalani@chromium.org
-Cc: oe-kbuild-all@lists.linux.dev, Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
-Subject: Re: [PATCH 2/2] usb: typec: ucsi: Enable UCSI v2.0 notifications
-Message-ID: <202405242300.OetIYSh1-lkp@intel.com>
-References: <20240524105837.15342-3-diogo.ivo@tecnico.ulisboa.pt>
+	 Content-Type:Content-Disposition:In-Reply-To; b=ihyxCsYemufg7Xt4iEbQznBVuzoI5Fi3h2+ShUc2bOChGizsvt/Gs1mWtOv++4GHPoIOzyX2PoXFr9FKyxOtguFx5zDVvxHKs83GB0CG+DeWQ7Do30yopAeDKsZUbMyauL3cx3cfPYknwNhqq6Skim8iXMkJ3Fd3ThGz33/c40A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qlox4iNq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD6E0C2BBFC;
+	Fri, 24 May 2024 18:31:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1716575489;
+	bh=/ztmUaN+Csn+xIOOn+zVsdPvX0qFx5ZWesnKa3+2u4E=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=qlox4iNqmDPOjH4JRYBda8MvOcY+AoZDtCUyI65smRCljA+e8fgiRc/xLx8VpsKny
+	 UQzZr3+aYaRJ0Pbn7yrZNarCdTccjKvL4a3VapoRcVL2LBxlr4lwNmrLa6aSb2x70a
+	 l6qswPdJFpmWT059xtUA/+hjTkRzKKcFE4XG+MfShm+xsVpXmmYPwJPWOjVpqcAJWs
+	 M4ULilRuiR5r5xwfhzmxw4WwH0EkLMbRq2Alm2uqozs7SrKCQ47vp8KIP160dhiuBM
+	 Oiqqie/BGma2h2oroJctlzAr7pcAmPyqeaPghpK/ia0CuNrPAA4NGfnOzEEIUfZakc
+	 QJxCWnuOsZQqg==
+Date: Fri, 24 May 2024 19:31:24 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Francesco Dolcini <francesco@dolcini.it>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Francesco Dolcini <francesco.dolcini@toradex.com>,
+	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: Re: [PATCH v1 1/2] dt-bindings: usb: gpio-sbu-mux: Make
+ 'enable-gpios' optional
+Message-ID: <20240524-boxer-grab-820cc815e55a@spud>
+References: <20240524071034.4441-1-francesco@dolcini.it>
+ <20240524071034.4441-2-francesco@dolcini.it>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="O2o6xvA5DJkzSTPJ"
+Content-Disposition: inline
+In-Reply-To: <20240524071034.4441-2-francesco@dolcini.it>
+
+
+--O2o6xvA5DJkzSTPJ
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240524105837.15342-3-diogo.ivo@tecnico.ulisboa.pt>
+Content-Transfer-Encoding: quoted-printable
 
-Hi Diogo,
+On Fri, May 24, 2024 at 09:10:33AM +0200, Francesco Dolcini wrote:
+> From: Francesco Dolcini <francesco.dolcini@toradex.com>
+>=20
+> The enable gpio is not required when the SBU mux is used only for
+> orientation, make enable-gpios required only for alternate mode
+> switch use case.
+>=20
+> Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
 
-kernel test robot noticed the following build errors:
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
-[auto build test ERROR on usb/usb-testing]
-[also build test ERROR on usb/usb-next usb/usb-linus linus/master next-20240523]
-[cannot apply to v6.9]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Cheers,
+Conor.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Diogo-Ivo/usb-typec-ucsi-Add-new-capability-bits/20240524-190924
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/20240524105837.15342-3-diogo.ivo%40tecnico.ulisboa.pt
-patch subject: [PATCH 2/2] usb: typec: ucsi: Enable UCSI v2.0 notifications
-config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20240524/202405242300.OetIYSh1-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240524/202405242300.OetIYSh1-lkp@intel.com/reproduce)
+--O2o6xvA5DJkzSTPJ
+Content-Type: application/pgp-signature; name="signature.asc"
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405242300.OetIYSh1-lkp@intel.com/
+-----BEGIN PGP SIGNATURE-----
 
-All errors (new ones prefixed by >>):
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZlDc/AAKCRB4tDGHoIJi
+0kKTAP46H5UKUeCFhR0V6Md/njZpnW/9w0OktOevN6t6RCH8EAD+KYPvjbobJ9UC
+TQGD0lFTB3bPp1NBXgIa2UoHJrf4Hgw=
+=zDnb
+-----END PGP SIGNATURE-----
 
-   drivers/usb/typec/ucsi/ucsi.c: In function 'ucsi_get_supported_notifications':
->> drivers/usb/typec/ucsi/ucsi.c:1686:17: error: 'UCSI_ENABLE_NTFY_SINK_PATH_STS_CHANGE' undeclared (first use in this function); did you mean 'UCSI_ENABLE_NTFY_EXT_PWR_SRC_CHANGE'?
-    1686 |         ntfy |= UCSI_ENABLE_NTFY_SINK_PATH_STS_CHANGE;
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                 UCSI_ENABLE_NTFY_EXT_PWR_SRC_CHANGE
-   drivers/usb/typec/ucsi/ucsi.c:1686:17: note: each undeclared identifier is reported only once for each function it appears in
->> drivers/usb/typec/ucsi/ucsi.c:1689:25: error: 'UCSI_ENABLE_NTFY_ATTENTION' undeclared (first use in this function); did you mean 'UCSI_ENABLE_NTFY_ERROR'?
-    1689 |                 ntfy |= UCSI_ENABLE_NTFY_ATTENTION;
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                         UCSI_ENABLE_NTFY_ERROR
->> drivers/usb/typec/ucsi/ucsi.c:1692:25: error: 'UCSI_ENABLE_NTFY_LPM_FW_UPDATE_REQ' undeclared (first use in this function)
-    1692 |                 ntfy |= UCSI_ENABLE_NTFY_LPM_FW_UPDATE_REQ;
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/usb/typec/ucsi/ucsi.c:1695:25: error: 'UCSI_ENABLE_NTFY_SECURITY_REQ_PARTNER' undeclared (first use in this function)
-    1695 |                 ntfy |= UCSI_ENABLE_NTFY_SECURITY_REQ_PARTNER;
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/usb/typec/ucsi/ucsi.c:1698:25: error: 'UCSI_ENABLE_NTFY_SET_RETIMER_MODE' undeclared (first use in this function); did you mean 'UCSI_CAP_SET_RETIMER_MODE'?
-    1698 |                 ntfy |= UCSI_ENABLE_NTFY_SET_RETIMER_MODE;
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                         UCSI_CAP_SET_RETIMER_MODE
-
-
-vim +1686 drivers/usb/typec/ucsi/ucsi.c
-
-  1664	
-  1665	static u64 ucsi_get_supported_notifications(struct ucsi *ucsi)
-  1666	{
-  1667		u16 features = ucsi->cap.features;
-  1668		u64 ntfy = UCSI_ENABLE_NTFY_ALL;
-  1669	
-  1670		if (!(features & UCSI_CAP_ALT_MODE_DETAILS))
-  1671			ntfy &= ~UCSI_ENABLE_NTFY_CAM_CHANGE;
-  1672	
-  1673		if (!(features & UCSI_CAP_PDO_DETAILS))
-  1674			ntfy &= ~(UCSI_ENABLE_NTFY_PWR_LEVEL_CHANGE |
-  1675				  UCSI_ENABLE_NTFY_CAP_CHANGE);
-  1676	
-  1677		if (!(features & UCSI_CAP_EXT_SUPPLY_NOTIFICATIONS))
-  1678			ntfy &= ~UCSI_ENABLE_NTFY_EXT_PWR_SRC_CHANGE;
-  1679	
-  1680		if (!(features & UCSI_CAP_PD_RESET))
-  1681			ntfy &= ~UCSI_ENABLE_NTFY_PD_RESET_COMPLETE;
-  1682	
-  1683		if (ucsi->version <= UCSI_VERSION_1_2)
-  1684			return ntfy;
-  1685	
-> 1686		ntfy |= UCSI_ENABLE_NTFY_SINK_PATH_STS_CHANGE;
-  1687	
-  1688		if (features & UCSI_CAP_GET_ATTENTION_VDO)
-> 1689			ntfy |= UCSI_ENABLE_NTFY_ATTENTION;
-  1690	
-  1691		if (features & UCSI_CAP_FW_UPDATE_REQUEST)
-> 1692			ntfy |= UCSI_ENABLE_NTFY_LPM_FW_UPDATE_REQ;
-  1693	
-  1694		if (features & UCSI_CAP_SECURITY_REQUEST)
-> 1695			ntfy |= UCSI_ENABLE_NTFY_SECURITY_REQ_PARTNER;
-  1696	
-  1697		if (features & UCSI_CAP_SET_RETIMER_MODE)
-> 1698			ntfy |= UCSI_ENABLE_NTFY_SET_RETIMER_MODE;
-  1699	
-  1700		return ntfy;
-  1701	}
-  1702	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--O2o6xvA5DJkzSTPJ--
 
