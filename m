@@ -1,72 +1,72 @@
-Return-Path: <linux-usb+bounces-10552-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10553-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F3AC8CF143
-	for <lists+linux-usb@lfdr.de>; Sat, 25 May 2024 22:12:58 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 461948CF146
+	for <lists+linux-usb@lfdr.de>; Sat, 25 May 2024 22:15:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 96DD82819E8
-	for <lists+linux-usb@lfdr.de>; Sat, 25 May 2024 20:12:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6DBC41C208E0
+	for <lists+linux-usb@lfdr.de>; Sat, 25 May 2024 20:15:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 598421292C4;
-	Sat, 25 May 2024 20:12:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2C09128830;
+	Sat, 25 May 2024 20:15:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="iOFvn8tR"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="I0jFpuVB"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E6CB12838A
-	for <linux-usb@vger.kernel.org>; Sat, 25 May 2024 20:12:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D751786ACA
+	for <linux-usb@vger.kernel.org>; Sat, 25 May 2024 20:15:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716667968; cv=none; b=pUSN3ZJHr5bVdABPChGq2bgvLPDsf99GsMTMVn1w0OHhpUY74FyIRrMloBOwjnT5dQjTnecUswHZ29bKGoUh18pA/wREQVwhosEzIU8O+d/2vlaRs35fnM86sqR/5TDOlnoL1V2xa2B7SEUk832eV6gBP4pNM/yw0Ymabscv4CM=
+	t=1716668109; cv=none; b=YXeyKVeq81JtDSh67C7iH98/wmZy3gkEuzTScv2+AeIuOJJjierL+3gGfQk+zuTm3eNwqTEt0qT40G8S0Uu1GVh11ZhNwD6HLLXycFGoeSmJk+06AWkKZqILVI4D3RY7TE6QGu0yfPGc+mWXAB8zBAdAyhNn8F6cHtgE3KE9KRQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716667968; c=relaxed/simple;
-	bh=eY5NFdEB4BLrmrsCDSSMoBVFvT1TeVGAQqzQJjG9lgs=;
+	s=arc-20240116; t=1716668109; c=relaxed/simple;
+	bh=a+2sJsXVsmEzRiG+2OlaEa+uVn+nhz5cWtvRMbWfStY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=foFoaABUGCqF5/0MYQulq4mJXOmkNjDSuYc3g/REfP8kBwQhhrRKHkmlkImy4fLa7szTL+etmzia4U6oSu6mAUoLAMpFzp5s3EVFzzoJb+Go5WiYaKhM4MyxyJxw0td4rgoQ5hlmN3CWvzVFyhDLL7dJWLXKuCcBifJ0yRZZqFY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=iOFvn8tR; arc=none smtp.client-ip=209.85.208.176
+	 Content-Type:Content-Disposition:In-Reply-To; b=iBvBGTGPfJT4L7K1yxlVUpR0OFoS/XYmpI6pT0gNV/gL1bxi40ZYAS6lIDWBX3Ce5ws1x0rRF//MGgXtQvSvfRXUxFzY8KjmClAuLj+h4xxMnf60youaIEnX/GbIZzDXvYiqgpHeiTsqC5P87lGmVru0lwX2mP4WwhIfDdin7go=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=I0jFpuVB; arc=none smtp.client-ip=209.85.208.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-2e95a60dfcdso24504511fa.1
-        for <linux-usb@vger.kernel.org>; Sat, 25 May 2024 13:12:46 -0700 (PDT)
+Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-2e95a7622cfso23074761fa.2
+        for <linux-usb@vger.kernel.org>; Sat, 25 May 2024 13:15:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1716667965; x=1717272765; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1716668106; x=1717272906; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=w6YKAF3uOaRvvdDSRLqD9z7t3ncxonB3HE3QHJTs1EU=;
-        b=iOFvn8tR64bqOAW4wLh408BIkhTt9uzBiLrcTFbLo/d97uhLd94dsGZQ8it6r7sos1
-         tWkONJ54pSdJtxwS4Ha2xYeLWlGvZwRRz0deUGHuKURCCzXAkFUuKvmQ9UiOOME665yT
-         naV0PVRxOwrCxtbEqGbbpJ6X+ZqRtKVOC0yJJHpeqdQWduP/ExMJhoFRvCDmelF1kGcD
-         aQeYrEsp3GLeuPRcDKqF6c0XvOdaNbOZIuDnWaAjYTslgGdhiTWEr9/sD+huEvH3UyZz
-         rYxDp9za9mgdptSrcAQHFgWTHuQR3tQijxxaoEY7HGXd62NfcpYCb/YEdwvjDNnPQb77
-         O0pw==
+        bh=egWjRNm6b0cKfW6TfbtwfyF/4NhODfHU/rXiLN8YUss=;
+        b=I0jFpuVBcRLu1egw011pJYlW/3rkNVNeMP9wOzlafSR1R5pj/G5c3JfSSB3WP/reta
+         jx+v2ypOuV8qxGXhq0iLt4mYgrZc4nYYmozYYS9XoczkGpMxyHaWmddzDX2hu0uFZ1RX
+         bbkZUvGpwTkE1LSIXVYvCFnbzTNTnFcMu5JhCdF33vpTQU2EicTQRtloMsb+pySlL5Dl
+         KaZHbxZzrZEzk605vle0dV/cpf3BvulJQS7bqgwZLobPFzE3LBFcbM7GzInYc3gJHJpc
+         /8/zUKorkFdIM6SqrmHrGwaqZp7+H+4PSIl6g0/9NQWfvbS5OaASvgN1IFuVePQzpTvK
+         xPrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716667965; x=1717272765;
+        d=1e100.net; s=20230601; t=1716668106; x=1717272906;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=w6YKAF3uOaRvvdDSRLqD9z7t3ncxonB3HE3QHJTs1EU=;
-        b=vQqjuRnF6OsX1BB0EOOxCMVIt66YsphqHPU6zM05MmFR/1kjjOr2mA3O5jDYzvAFEg
-         P5fcJLbuqKf3o3fJ2gO3PDL8zebOnx0d3CoiW/poutiWzWiyMZfa7bpJwEu6nYJJonEC
-         t1kFcDgLHml6WEWyQgy9/Qwrg0dke47+TteaOmiICTb9D0saCM/FEgLis9UzhkzylOFR
-         /2loW1qNyJsNTR23O6j+pWeotldRpmJAtihvvGhkeQfJ+7YE9ez5ZxGvzjwLcuWr2PB/
-         JKgSyoPbqjBpRsFYGN6M1vmQFWOO+m+0cwDaihAIL6a1pE4ucxAbq4UQ5KbRRhmp6uWx
-         0c+w==
-X-Forwarded-Encrypted: i=1; AJvYcCWubAcL+azz7brGi6QCn+7b4BeHai1xDBvW30fUDVkwEyAidvvTJo45p1pKwxb66Q8WMQXbeA3ckWzpp+mvfJNfm873rizbbQ2h
-X-Gm-Message-State: AOJu0YwB6y6NWKgZJJIuDWgnW1eVfVnuLQEd9YfdZPrm+tO+ICi+NHU6
-	vuJ8ktf5iypV5yu6q7r2PkzL/pjlofAfqRDXUlCqiW18t+dGjuCSVC1seXoss1A=
-X-Google-Smtp-Source: AGHT+IHJDobPY5xFq5dvnmXXHNOJaX/jRN/ri7kcyQYhHMcDJUmJpMFwZSjdDHIOoZ0wzgcLMXKknQ==
-X-Received: by 2002:a2e:bc08:0:b0:2e9:570e:1cf with SMTP id 38308e7fff4ca-2e95b3089d9mr38786341fa.52.1716667965322;
-        Sat, 25 May 2024 13:12:45 -0700 (PDT)
+        bh=egWjRNm6b0cKfW6TfbtwfyF/4NhODfHU/rXiLN8YUss=;
+        b=h8YcJK1e3E6faLPEq+tPM3E/T5y+oPpN55GbrV+fmeWWn4rGUjkAfTwBpidBtoZYq4
+         uMtX18R1m9jLxSmFTnrH6Z5rDrVUHUWoQZBX+0VM+46MeBtG7sL6Q9+3JothxNh9nOgj
+         FqBNp1PNqrhKEJgUal9XszW0teyGDhN8haZLR+FEyMGgI2Ex5zfp8Fo7ihX0wET+RwLi
+         HJwe2FpxlqiaaLq+qVKtiWt1sWAairKzNOP6/4KkB6FZKXb/suRcyf7YIaLXrAj16X4F
+         UaC+k30O/5RPh71a+nmZBE1mPAN+MUlxjZC6dKtiICXXxFBqCwD83mu03LlDud8J+zrS
+         aLnw==
+X-Forwarded-Encrypted: i=1; AJvYcCU5qXocWpzYrYq0oz10kjuP83V1Zz+NAqBVaXdblD13xlzQ3xn6WzEbCOZQy2HR56823TN2P5VaY0jNksLdyjGqkpYzk1iKIJjJ
+X-Gm-Message-State: AOJu0YztztMyxOe8MC4KBXEU5YWdhURn4M05zNmRRsi+6NHvv/yqLkHA
+	SZtBnpBahEV/sRRX2xWOU8LQhAoQp0B6JIeoUEKCv75DtTKINi8R/DnN4Io9Tqo=
+X-Google-Smtp-Source: AGHT+IHiQh33yuCyFRiG6oGt+h+qN4Mxt2GwttIkrQpd6pTLi9+gx2U58NUig8jJLSxwAFcop03z6Q==
+X-Received: by 2002:a2e:9b12:0:b0:2df:9c94:150e with SMTP id 38308e7fff4ca-2e95b0bcf56mr31356691fa.25.1716668105844;
+        Sat, 25 May 2024 13:15:05 -0700 (PDT)
 Received: from eriador.lumag.spb.ru (dzdbxzyyyyyyyyyyyykxt-3.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::227])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2e95bdd152dsm8775351fa.81.2024.05.25.13.12.44
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2e95bdcd234sm8779761fa.99.2024.05.25.13.15.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 May 2024 13:12:44 -0700 (PDT)
-Date: Sat, 25 May 2024 23:12:43 +0300
+        Sat, 25 May 2024 13:15:05 -0700 (PDT)
+Date: Sat, 25 May 2024 23:15:03 +0300
 From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 To: Bjorn Andersson <andersson@kernel.org>
 Cc: Vinod Koul <vkoul@kernel.org>, 
@@ -77,10 +77,11 @@ Cc: Vinod Koul <vkoul@kernel.org>,
 	Konrad Dybcio <konrad.dybcio@linaro.org>, linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org, 
 	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, 
 	linux-usb@vger.kernel.org, Bjorn Andersson <quic_bjorande@quicinc.com>
-Subject: Re: [PATCH 02/10] phy: qcom-qmp-usb: Add sc8180x USB UNIPHY
-Message-ID: <ynokoy2fh4fwespzfdgo7mpklmy2n76syfyb73bm4m2hp4cftp@am5nldqvj65z>
+Subject: Re: [PATCH 06/10] arm64: dts: qcom: sc8180x-pmics: Add second
+ PMC8180 GPIO
+Message-ID: <rajxidory6cviwatbrkrwokm6pjep3bez3cb6goomzjqk5w3f6@3osk2nd6zl6x>
 References: <20240525-sc8180x-usb-mp-v1-0-60a904392438@quicinc.com>
- <20240525-sc8180x-usb-mp-v1-2-60a904392438@quicinc.com>
+ <20240525-sc8180x-usb-mp-v1-6-60a904392438@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -89,21 +90,25 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240525-sc8180x-usb-mp-v1-2-60a904392438@quicinc.com>
+In-Reply-To: <20240525-sc8180x-usb-mp-v1-6-60a904392438@quicinc.com>
 
-On Sat, May 25, 2024 at 11:03:55AM -0700, Bjorn Andersson wrote:
+On Sat, May 25, 2024 at 11:03:59AM -0700, Bjorn Andersson wrote:
 > From: Bjorn Andersson <quic_bjorande@quicinc.com>
 > 
-> The SC8180X platform has two UNIPHY blocks, add support for these in the
-> QMP driver.
+> The SC8180X comes with two PMC8180 PMICs, with the GPIO block being used
+> to control VBUS supply of the second USB multiport port.
+> 
+> Rename the GPIO controller in the first PMC8180 to match the schematics
+> and define this second controller.
 > 
 > Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
 > ---
->  drivers/phy/qualcomm/phy-qcom-qmp-usb.c | 3 +++
->  1 file changed, 3 insertions(+)
+>  arch/arm64/boot/dts/qcom/sc8180x-pmics.dtsi | 16 +++++++++++++---
+>  1 file changed, 13 insertions(+), 3 deletions(-)
 > 
 
 Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+
 
 -- 
 With best wishes
