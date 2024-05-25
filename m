@@ -1,148 +1,111 @@
-Return-Path: <linux-usb+bounces-10550-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10552-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1FCCB8CF0E5
-	for <lists+linux-usb@lfdr.de>; Sat, 25 May 2024 20:02:57 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F3AC8CF143
+	for <lists+linux-usb@lfdr.de>; Sat, 25 May 2024 22:12:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5165D1C208F0
-	for <lists+linux-usb@lfdr.de>; Sat, 25 May 2024 18:02:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 96DD82819E8
+	for <lists+linux-usb@lfdr.de>; Sat, 25 May 2024 20:12:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27CF9130A56;
-	Sat, 25 May 2024 17:59:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 598421292C4;
+	Sat, 25 May 2024 20:12:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dA5YG2ld"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="iOFvn8tR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96F951304A7;
-	Sat, 25 May 2024 17:59:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E6CB12838A
+	for <linux-usb@vger.kernel.org>; Sat, 25 May 2024 20:12:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716659962; cv=none; b=VTi38brOf68ButwteMRc1YdP1gVdSFFSeorTsDRLXRLZiqf/WN/9ZOf8A7IrsRx3MxOpLOcmSNJ2TtSbOy/n0AvzLgqZg9y1iyP7kqfpFktC6kCNNXxEIOJfaOG/ehn39asGc7bCH6HqbUpoRXS/1ISdE1o5fMF3UcNxA7IWln0=
+	t=1716667968; cv=none; b=pUSN3ZJHr5bVdABPChGq2bgvLPDsf99GsMTMVn1w0OHhpUY74FyIRrMloBOwjnT5dQjTnecUswHZ29bKGoUh18pA/wREQVwhosEzIU8O+d/2vlaRs35fnM86sqR/5TDOlnoL1V2xa2B7SEUk832eV6gBP4pNM/yw0Ymabscv4CM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716659962; c=relaxed/simple;
-	bh=x/A3qlHKSNksLYkJyamEvoUm6j0d2K1gDvbHogrpo0Q=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=uqy4GZOokWJR/GscXnZC8xCds2xxDDGN9+veAM97b6kh4cq5y8zNLST6QeKX4HAvPtz+elhD3BoAyHx6X7qdjNIEX6FLuvPEKQLL3WV9GKloCUBP6lVCuw5++dLvUrC8rUeHmRR0P4Lvy62yhWSO9Ta0q3gJV9wbQmuy95MSsoA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dA5YG2ld; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52574C4AF11;
-	Sat, 25 May 2024 17:59:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716659962;
-	bh=x/A3qlHKSNksLYkJyamEvoUm6j0d2K1gDvbHogrpo0Q=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=dA5YG2ldKuY07n1rg7kv83bweOx1o7532gHn4E3h6ldpV3PWfYE+K8D759V/hWkEm
-	 d5e9XCx8iUJkHOImcjZlNwzWhJusY58NtiPHf2F8l8QAvK+nV51o1ebigd7M+9tK+8
-	 5+21YARO5/JG53BJpigfvP4h/Q9QsPLn44dazPdqT6pgXabQK8GhZ/BWaQwQAXzXq5
-	 TTS2bet5Kej6E0i5e8rqOMTNtQ4GvCow8uqkok2BxGR367w3U0XSO9w8/lgnI8LZUB
-	 /KksqpX3OE1oFRLjT9gBbt3nqMLw94sS0NZSrGq5Ekf3hHdFHuL0CKWwG7hJT1vuPp
-	 vUwTjFrvhYZ2w==
-From: Bjorn Andersson <andersson@kernel.org>
-Date: Sat, 25 May 2024 11:04:03 -0700
-Subject: [PATCH 10/10] arm64: dts: qcom: sc8180x-lenovo-flex-5g: Enable USB
- multiport controller
+	s=arc-20240116; t=1716667968; c=relaxed/simple;
+	bh=eY5NFdEB4BLrmrsCDSSMoBVFvT1TeVGAQqzQJjG9lgs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=foFoaABUGCqF5/0MYQulq4mJXOmkNjDSuYc3g/REfP8kBwQhhrRKHkmlkImy4fLa7szTL+etmzia4U6oSu6mAUoLAMpFzp5s3EVFzzoJb+Go5WiYaKhM4MyxyJxw0td4rgoQ5hlmN3CWvzVFyhDLL7dJWLXKuCcBifJ0yRZZqFY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=iOFvn8tR; arc=none smtp.client-ip=209.85.208.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-2e95a60dfcdso24504511fa.1
+        for <linux-usb@vger.kernel.org>; Sat, 25 May 2024 13:12:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1716667965; x=1717272765; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=w6YKAF3uOaRvvdDSRLqD9z7t3ncxonB3HE3QHJTs1EU=;
+        b=iOFvn8tR64bqOAW4wLh408BIkhTt9uzBiLrcTFbLo/d97uhLd94dsGZQ8it6r7sos1
+         tWkONJ54pSdJtxwS4Ha2xYeLWlGvZwRRz0deUGHuKURCCzXAkFUuKvmQ9UiOOME665yT
+         naV0PVRxOwrCxtbEqGbbpJ6X+ZqRtKVOC0yJJHpeqdQWduP/ExMJhoFRvCDmelF1kGcD
+         aQeYrEsp3GLeuPRcDKqF6c0XvOdaNbOZIuDnWaAjYTslgGdhiTWEr9/sD+huEvH3UyZz
+         rYxDp9za9mgdptSrcAQHFgWTHuQR3tQijxxaoEY7HGXd62NfcpYCb/YEdwvjDNnPQb77
+         O0pw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1716667965; x=1717272765;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=w6YKAF3uOaRvvdDSRLqD9z7t3ncxonB3HE3QHJTs1EU=;
+        b=vQqjuRnF6OsX1BB0EOOxCMVIt66YsphqHPU6zM05MmFR/1kjjOr2mA3O5jDYzvAFEg
+         P5fcJLbuqKf3o3fJ2gO3PDL8zebOnx0d3CoiW/poutiWzWiyMZfa7bpJwEu6nYJJonEC
+         t1kFcDgLHml6WEWyQgy9/Qwrg0dke47+TteaOmiICTb9D0saCM/FEgLis9UzhkzylOFR
+         /2loW1qNyJsNTR23O6j+pWeotldRpmJAtihvvGhkeQfJ+7YE9ez5ZxGvzjwLcuWr2PB/
+         JKgSyoPbqjBpRsFYGN6M1vmQFWOO+m+0cwDaihAIL6a1pE4ucxAbq4UQ5KbRRhmp6uWx
+         0c+w==
+X-Forwarded-Encrypted: i=1; AJvYcCWubAcL+azz7brGi6QCn+7b4BeHai1xDBvW30fUDVkwEyAidvvTJo45p1pKwxb66Q8WMQXbeA3ckWzpp+mvfJNfm873rizbbQ2h
+X-Gm-Message-State: AOJu0YwB6y6NWKgZJJIuDWgnW1eVfVnuLQEd9YfdZPrm+tO+ICi+NHU6
+	vuJ8ktf5iypV5yu6q7r2PkzL/pjlofAfqRDXUlCqiW18t+dGjuCSVC1seXoss1A=
+X-Google-Smtp-Source: AGHT+IHJDobPY5xFq5dvnmXXHNOJaX/jRN/ri7kcyQYhHMcDJUmJpMFwZSjdDHIOoZ0wzgcLMXKknQ==
+X-Received: by 2002:a2e:bc08:0:b0:2e9:570e:1cf with SMTP id 38308e7fff4ca-2e95b3089d9mr38786341fa.52.1716667965322;
+        Sat, 25 May 2024 13:12:45 -0700 (PDT)
+Received: from eriador.lumag.spb.ru (dzdbxzyyyyyyyyyyyykxt-3.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::227])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2e95bdd152dsm8775351fa.81.2024.05.25.13.12.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 25 May 2024 13:12:44 -0700 (PDT)
+Date: Sat, 25 May 2024 23:12:43 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Bjorn Andersson <andersson@kernel.org>
+Cc: Vinod Koul <vkoul@kernel.org>, 
+	Kishon Vijay Abraham I <kishon@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Wesley Cheng <quic_wcheng@quicinc.com>, 
+	Konrad Dybcio <konrad.dybcio@linaro.org>, linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, 
+	linux-usb@vger.kernel.org, Bjorn Andersson <quic_bjorande@quicinc.com>
+Subject: Re: [PATCH 02/10] phy: qcom-qmp-usb: Add sc8180x USB UNIPHY
+Message-ID: <ynokoy2fh4fwespzfdgo7mpklmy2n76syfyb73bm4m2hp4cftp@am5nldqvj65z>
+References: <20240525-sc8180x-usb-mp-v1-0-60a904392438@quicinc.com>
+ <20240525-sc8180x-usb-mp-v1-2-60a904392438@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240525-sc8180x-usb-mp-v1-10-60a904392438@quicinc.com>
-References: <20240525-sc8180x-usb-mp-v1-0-60a904392438@quicinc.com>
-In-Reply-To: <20240525-sc8180x-usb-mp-v1-0-60a904392438@quicinc.com>
-To: Vinod Koul <vkoul@kernel.org>, 
- Kishon Vijay Abraham I <kishon@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
- Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Wesley Cheng <quic_wcheng@quicinc.com>, 
- Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc: linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-clk@vger.kernel.org, linux-usb@vger.kernel.org, 
- Bjorn Andersson <quic_bjorande@quicinc.com>
-X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1388;
- i=quic_bjorande@quicinc.com; h=from:subject:message-id;
- bh=ApeqdvS88ACvmrMfc7ygIjzXVr8WNirPX8Y+Q+iz2qg=;
- b=owEBgwJ8/ZANAwAIAQsfOT8Nma3FAcsmYgBmUigNf7OPmC9AZV+nbwo2ZWqTekEW/mFXM//YE
- 76bMWBweBSJAkkEAAEIADMWIQQF3gPMXzXqTwlm1SULHzk/DZmtxQUCZlIoDRUcYW5kZXJzc29u
- QGtlcm5lbC5vcmcACgkQCx85Pw2ZrcXvxRAAiLS+lEqoMRKXifzpZgBqbQKahAwyZOa/z+B0HjV
- ATMhQP6UbO02H3tHJ6x+6nhC1uq2w6bTtoaOHCJvbdfJq+Bko3nsyk2M/TbDFeVPeFD0UXNaPpE
- NO6LtiLjcPXgXVEEaFqUfzrHv76P2dYXrvBZumeiNcK0oLjNaNQn9nqe+w9c5P6RCB928L3iA5A
- 73IaKXehwKa2kVBsPz4u3bfKcPB5HLecCIMMITIAjAdgcAp/+qGFHP4lh0hBYjxrggcGerQ2/SK
- IixzUjoP3AB/G2IlRXd8h5jS2tghqvsZ9PaHIbaqh4bMHgWuXxKRhlSpstZuSXR+L8o085tQw1D
- r3/X3gwY1J6Xbmb0rjR8aL5qAAQhQcDVCr7msLiIxSKrrqGR+73J5iPmzFtji1vSMedeJGfFIcU
- N1tZc9KjpClkZz50177Qcwjx/2Vt8TgbicEQuZSvQ1sKmw1QuYomO/gYrMjGnMxRplVRehvA0va
- 3eCt3e4JW7JfJSP+HXamS6i0dMX9Sgmj25gqE01lGE12axNnCUwr4PArGUxzmpzCFbLEUk04va1
- B6wXVmxUYKYN1oRA0bllHyaKki/ud+DoHQp9moS94dh2dUc3BX+keKtSuSDpGWAEvIu5ir+4sDr
- LhLiBCDzpogQcB0KF/l4JA0NbNlSK56hzPOvbZiG38HQ=
-X-Developer-Key: i=quic_bjorande@quicinc.com; a=openpgp;
- fpr=05DE03CC5F35EA4F0966D5250B1F393F0D99ADC5
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240525-sc8180x-usb-mp-v1-2-60a904392438@quicinc.com>
 
-From: Bjorn Andersson <quic_bjorande@quicinc.com>
+On Sat, May 25, 2024 at 11:03:55AM -0700, Bjorn Andersson wrote:
+> From: Bjorn Andersson <quic_bjorande@quicinc.com>
+> 
+> The SC8180X platform has two UNIPHY blocks, add support for these in the
+> QMP driver.
+> 
+> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+> ---
+>  drivers/phy/qualcomm/phy-qcom-qmp-usb.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
 
-The Lenovo Flex 5G has a camera attached to the multiport USB
-controller, enable the controller and the four phys to enable this.
-
-Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
----
- .../arm64/boot/dts/qcom/sc8180x-lenovo-flex-5g.dts | 32 ++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/sc8180x-lenovo-flex-5g.dts b/arch/arm64/boot/dts/qcom/sc8180x-lenovo-flex-5g.dts
-index 6af99116c715..daa3065bcfe5 100644
---- a/arch/arm64/boot/dts/qcom/sc8180x-lenovo-flex-5g.dts
-+++ b/arch/arm64/boot/dts/qcom/sc8180x-lenovo-flex-5g.dts
-@@ -557,6 +557,38 @@ &ufs_mem_phy {
- 	status = "okay";
- };
- 
-+&usb_mp {
-+	status = "okay";
-+};
-+
-+&usb_mp0_hsphy {
-+	status = "okay";
-+	vdda-pll-supply = <&vreg_l5e_0p88>;
-+	vdda18-supply = <&vreg_l12a_1p8>;
-+	vdda33-supply = <&vreg_l16e_3p0>;
-+};
-+
-+&usb_mp0_qmpphy {
-+	vdda-phy-supply = <&vreg_l3c_1p2>;
-+	vdda-pll-supply = <&vreg_l5e_0p88>;
-+
-+	status = "okay";
-+};
-+
-+&usb_mp1_hsphy {
-+	status = "okay";
-+	vdda-pll-supply = <&vreg_l5e_0p88>;
-+	vdda18-supply = <&vreg_l12a_1p8>;
-+	vdda33-supply = <&vreg_l16e_3p0>;
-+};
-+
-+&usb_mp1_qmpphy {
-+	vdda-phy-supply = <&vreg_l3c_1p2>;
-+	vdda-pll-supply = <&vreg_l5e_0p88>;
-+
-+	status = "okay";
-+};
-+
- &usb_prim_hsphy {
- 	vdda-pll-supply = <&vreg_l5e_0p88>;
- 	vdda18-supply = <&vreg_l12a_1p8>;
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
 -- 
-2.43.0
-
+With best wishes
+Dmitry
 
