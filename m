@@ -1,100 +1,129 @@
-Return-Path: <linux-usb+bounces-10536-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10537-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA50C8CEF26
-	for <lists+linux-usb@lfdr.de>; Sat, 25 May 2024 15:47:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9AE808CEF2A
+	for <lists+linux-usb@lfdr.de>; Sat, 25 May 2024 15:54:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5AFE11F212A5
-	for <lists+linux-usb@lfdr.de>; Sat, 25 May 2024 13:47:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 54FFB28196E
+	for <lists+linux-usb@lfdr.de>; Sat, 25 May 2024 13:54:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C2894D5AB;
-	Sat, 25 May 2024 13:46:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CF4B4AEF4;
+	Sat, 25 May 2024 13:54:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dknAQ8PI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FWcyfBpM"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-vs1-f44.google.com (mail-vs1-f44.google.com [209.85.217.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7637614294;
-	Sat, 25 May 2024 13:46:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9618AB652
+	for <linux-usb@vger.kernel.org>; Sat, 25 May 2024 13:54:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716644817; cv=none; b=RKvYWr0fVeYxVnxHAXMVSJv+VZX+IZAp65Ziom5eEZ1ZxP6r6ZXPAJffVnUXSirbB2xec4fCoqvzFwZnkj6rnqaJO1pKtlCh5mK1OLKIycCUn2QSwyTKJucqdCs/oZL+Ea9MqhbZ3Q9XHK+oqsh6Lx63ISSyLOXraU7ycNF+cZ4=
+	t=1716645242; cv=none; b=bDSbW7lCJpmnzp9CsjWHEw2e3htyjtlfH4xQ79f8omcvbt2eL4Sm5yW+cqlG/1ksrdII26swgZkuDILiX0+ynbGZq6Bvt+KsB3CqDUh2KWKpRtpdAii4TcMngGntJADBUa4dSlw5yR9Kd56rXyHnWtchiCsHtQYq0goZsFnrvR4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716644817; c=relaxed/simple;
-	bh=9WaAe0JKFp4pkiSw+YjvVW8//r4l2kcEV6G/lW/jPDU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hBSTKJH36Q54WKs9hpOqEl/p/W6qp0sXD1ABlMo6X5vUzMBNPspvpDUqoQF1ON/5v1nUVnxmLJhjBaxPQhsfdqIfeiqZCupURf6BVgE2S2LEj+cVIQdV9mpdfQ+agRY1iIkfd8kUawps7x4ze6r8+HxrxTDNHbt+MvRRCQE1rB4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dknAQ8PI; arc=none smtp.client-ip=209.85.217.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f44.google.com with SMTP id ada2fe7eead31-48a3989641cso555304137.1;
-        Sat, 25 May 2024 06:46:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1716644815; x=1717249615; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=HPFzM8Up3WuBwRJqIYkFqYshq/Exodh2xLR6AUqOCEA=;
-        b=dknAQ8PIk2cBB1ZUeMoxQGq5/Q0uX5654RWFqnkoKH+w7PnUHFmfffSdfE5unRw3yL
-         mS2PYZ7i9Lu7jm9Z4O3RduhvhK3YSxTA+Lhzewpr6VZhAs1H2wdQ7vmrXeYyE0S9CM6r
-         S+LQqA49zFN+wtrS1C/tpW/ybf4O0sm0px4n8GnI0edm+Oi99nCHu6qTUZ/3lYVTaiBj
-         TtfNuoUH9q1nzhxve6FPuY05BUqmJvMwN2yNz6XtNLEVBkTBpsN52HvmibxtO4ig9SYT
-         WEefNsLhMWyIjwwBKhNvkhETSIikvmXqZWm9+8acq9v6rBV5iyFxuZ/owOK2pgbjryLx
-         ljLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716644815; x=1717249615;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HPFzM8Up3WuBwRJqIYkFqYshq/Exodh2xLR6AUqOCEA=;
-        b=kgpoLkfVqLwslt8huhdbjqyAX5V5aiEE4x+oWYsGDGWY3oKbMjZTq+1sW4WnVWK9YE
-         BUwrmnNqDWhdvK1byUpzF6RZ32FzwUlpTu8o3UWYeIdzozAk4M1vR1EJgbPZa6oY+x5w
-         2jhHBwghg43NUqcaZ1zWnsI/8tuLmvyBhTmNGM8ZggKocxIp7Dy7aitRR++kFL+98drX
-         TUqjLg1yYOAlAlvc4KN652gAU5v21353YsY02cU8GdiUUjHtFZKPNpij6EIGC+k6PRCa
-         HcZBkNbvsHIx8YMap0qkoavUqsUW/DzOKOba9i0+zv0YYAVkY81Vdv+AR/UQ5yevfgY+
-         6Cag==
-X-Forwarded-Encrypted: i=1; AJvYcCX6+rnZS/ARQhJ0r4da8kfDMMTyVpIZH5zIFD50HKh0u4epHKRtV50g33zgAqLUoGepOvozEjtbaIh8D9vW7ORgI4Z53mzmwBvhwjD1
-X-Gm-Message-State: AOJu0YzSDyzwk56lZHi+8iLZf2oLTf4u9IUrCRmzx353GMQugtHf6/id
-	w1KNf45ftXnzowofsjmiugicyA7ytuizvfHfccyRAUyIptPFsNCtU+xkniWMOmRAWYTKkRWEVEs
-	4Nxt+T5ML7nsBRXZ3UW5JBUny+e+7nulu0jI6iA==
-X-Google-Smtp-Source: AGHT+IHqxLN0NVW7XDMJFFzMqHi/JtmLf1WUX2BpRnVNSXNjcOxS735dlMSFFP/FwvXGAwBhJFeypLjsJLKYSiMiY5g=
-X-Received: by 2002:a67:fe9a:0:b0:48a:31e9:dce with SMTP id
- ada2fe7eead31-48a3851126dmr5115496137.4.1716644815335; Sat, 25 May 2024
- 06:46:55 -0700 (PDT)
+	s=arc-20240116; t=1716645242; c=relaxed/simple;
+	bh=pb7ubj4E+zSG0hP5dpKcCaDhiFjPX1UCIwWg6wfV2D4=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=TPV4c9eZ+XS+smlUcrdo0EhLhPlxct/zTxAFnGtuD2ysZW0/iOFvkbEi/xaK49WjVV7r3ib79UYj4FlpX09b+NA2E0OdVdhzVDnsWaQa3dNuuqc1n7nT19J7iomOh91gveOQPdXTyhGrIBT9OXBO/y2xJ0dHrfHueaXP7PHSEzg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FWcyfBpM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 15417C2BD11
+	for <linux-usb@vger.kernel.org>; Sat, 25 May 2024 13:54:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1716645242;
+	bh=pb7ubj4E+zSG0hP5dpKcCaDhiFjPX1UCIwWg6wfV2D4=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=FWcyfBpMOjySNny4d2KRDKw5rqtQcu+/jnyiq1h3Yde+5Wk8Eaw0XsN/njJq9GtKI
+	 QjJsDGG2iCr0DTExUA3EgJ1jBJJXR7qo9J6XWFMaxJ6k67m0nw+Xh2OGv569YOcHcI
+	 iKfdCvjRuB9p77sNHOHAVB2N8EPM1g7o7xo4Na33CT/hjSgBsHsf7IB0O0ZG0xVUCI
+	 b1EQvZD1pLnitjHesX7MP0OhFrqsnP/qTC5P/vZa2/TcswwbmG/DtN1ALR5qDqpBoC
+	 kz5ot7G9OlGUtslG6NZIeBy2RXR498ZD27Fmd06MfhXWHuhbRediq2sC4+52DrCQ07
+	 /0TIQbVPArwAA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 05E24C53B73; Sat, 25 May 2024 13:54:02 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 218890] reset SuperSpeed USB device number 2 using xhci_hcd
+Date: Sat, 25 May 2024 13:54:01 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: stern@rowland.harvard.edu
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-218890-208809-PqTq1EYsm7@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-218890-208809@https.bugzilla.kernel.org/>
+References: <bug-218890-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240525063653.2331587-1-shichaorai@gmail.com> <503256e5-fea7-42ab-af15-015b0f78ab33@rowland.harvard.edu>
-In-Reply-To: <503256e5-fea7-42ab-af15-015b0f78ab33@rowland.harvard.edu>
-From: shichao lai <shichaorai@gmail.com>
-Date: Sat, 25 May 2024 21:46:44 +0800
-Message-ID: <CACjpba7uNtPPDAh+mkHc5fU2vzTGiTWkkS9WOqkPZ5sXQXZPGg@mail.gmail.com>
-Subject: Re: [PATCH v4] usb-storage: Check whether the media is initialized successfully
-To: Alan Stern <stern@rowland.harvard.edu>, gregkh@linuxfoundation.org, oneukum@suse.com
-Cc: linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net, 
-	linux-kernel@vger.kernel.org, xingwei lee <xrivendell7@gmail.com>, 
-	yue sun <samsun1006219@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
 
-> Oliver did not suggest that the patch be written this way.
->
-> Now with the patch written out, I think a better name for this variable
-> would be media_initialized.  That is a better description of what it
-> means (it doesn't mean that the driver or the device is initialized).
-> And then you could remove the comment, because it would be obvious.
->
-> You don't need to do this.  The info pointer is an alias for us->extra,
-> which is allocated by kzalloc(), which clears all the memory it
-> allocates to zero.
->
-> Alan Stern
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218890
 
-Thanks for your patient feedback!
-I will rewrite the patch soon.
+--- Comment #1 from Alan Stern (stern@rowland.harvard.edu) ---
+There are at least two very suspicious-looking things in the usbmon trace:
+
+ffff9244d6cf5000 1301812804 S Ci:6:004:0 s 80 06 0301 0409 00ff 255 <
+ffff9244d6cf5000 1306956154 C Ci:6:004:0 -2 255 =3D 00000000 00000000 00000=
+000
+00000000 00000000 00000000 00000000 00000000
+ffff9244d6cf5000 1306956185 S Ci:6:004:0 s 80 06 0301 0409 0002 2 <
+ffff9244d6cf5000 1310626032 C Ci:6:004:0 0 2 =3D 2a03
+
+The first two lines show the computer asking the drive to send one of its
+string descriptors and the transfer timing out after 5 seconds.  The trace =
+says
+that the device sent 255 bytes of zeros, which seems unlikely, but if it is
+true it should have caused the transfer to end right away.  The second two
+lines show the computer asking for just the first two bytes of the string
+descriptor and the response arriving correctly, but not until an additional=
+ 3.7
+seconds have passed.
+
+ffff9244d6cf5300 1311630806 S Bo:6:004:2 -115 31 =3D 55534243 05000000 0002=
+0000
+80000a28 00000000 00000001 00000000 000000
+ffff9244d6cf5300 1311630823 C Bo:6:004:2 0 31 >
+ffff9244ea669300 1311630835 S Bi:6:004:1 -115 512 <
+ffff9244ea669300 1342568184 C Bi:6:004:1 -104 512 =3D 00000000 00000000 000=
+00000
+00000000 00000000 00000000 00000000 00000000
+
+This shows the computer trying to read the first sector of the drive.  The
+transfer times out after 30 seconds (again after 512 bytes of zeros are
+apparently received), and this error is what causes the reset.
+
+It's possible that the problem is in the device, but more likely the proble=
+m is
+in the kernel.  You've made a good start by finding that the 6.6.1 kernel w=
+orks
+properly and the 6.7.7 kernel doesn't.  You should try doing a git bisectio=
+n to
+find out which commit in the interval between those kernels caused the prob=
+lem
+to appear.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
