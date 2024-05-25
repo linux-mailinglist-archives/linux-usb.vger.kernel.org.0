@@ -1,131 +1,90 @@
-Return-Path: <linux-usb+bounces-10531-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10532-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D6A08CEDE1
-	for <lists+linux-usb@lfdr.de>; Sat, 25 May 2024 06:35:27 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A87448CEDF1
+	for <lists+linux-usb@lfdr.de>; Sat, 25 May 2024 07:11:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8EFC21C20E06
-	for <lists+linux-usb@lfdr.de>; Sat, 25 May 2024 04:35:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 532141F218B4
+	for <lists+linux-usb@lfdr.de>; Sat, 25 May 2024 05:11:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B3928F72;
-	Sat, 25 May 2024 04:35:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lEIyI9Th"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72D01B67D;
+	Sat, 25 May 2024 05:11:05 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ua1-f44.google.com (mail-ua1-f44.google.com [209.85.222.44])
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48EE32F3B;
-	Sat, 25 May 2024 04:35:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B65268F66
+	for <linux-usb@vger.kernel.org>; Sat, 25 May 2024 05:11:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716611721; cv=none; b=EWszvAJhIN8dX1Xl5BsyPFTR1RUZPdFxl6L1W8YFZ/LsZwhGacu/9AB/Cx44FDyyx6OjMPpsfZ6GCQtvr4OENUb6lIBNlHfFOzAKHZ5j2jE7uf3iE94aqmkhz9QWdUgc5DHwOtqX0JOH2Rde2cZy4h8DQ/nFTF2lrdnjAPK2Pis=
+	t=1716613865; cv=none; b=KiHOYJk2U/zvwtJWAwEGtNbRFJ/b3t0WkE1XO9TDL+dp/B8dW5NFNmFG6H4XU2zZDCF0pPxOik1aKIR9Q21h/G4NtvBedEo4OCgesDckfqc9yDkKwirxveASerwMJyGuDpry7jY/KzTlBTS/O1zUus6UX1uTXpqDgRqTTG3mIOw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716611721; c=relaxed/simple;
-	bh=A1QDHnOHzNACr3BfijhiqwtFMxaQj6xtkzCa8TcMHp0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=E6JBlKlpTjszMEA9cL34jh1qcwEjMjbUBqe2hzMm8zkEgujqAgtWC6ORSIQ2f8SdL4gqg5kLo3UxYtdmPrDo3jH4+8DTcDo75925a9iK4Xliq0PGcE+mN2NTu5kd/LGiPOpqfnKwIbKoiQQvCBxi/RHDG7FAie9P8dUwwuMwI3c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lEIyI9Th; arc=none smtp.client-ip=209.85.222.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ua1-f44.google.com with SMTP id a1e0cc1a2514c-80325a42c43so958486241.1;
-        Fri, 24 May 2024 21:35:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1716611719; x=1717216519; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dWoy99LOaWUsln1ERoCJO5HjPgM8DNbI1vxUMTq+D6E=;
-        b=lEIyI9ThKHfJl9zIPxu1hSO6Lh7saOedoTduSm/i93/k+QssHmI0V+fyNwX8d0ofBf
-         etYuYMAVLF2MWO7GEWNB8y6GFzq5htm9RmXCGH+osw1N7vy0Xmdgzn6ZVj8o0s9+ZXCa
-         6Vu/w1rNXxaV5EIQN35Dl4UOVIVEiobkzl14xiXb9CSCRAT73u9u2tWlakrYiUrVAdvU
-         ip75LEVQvR0/bcsDlB6ZkjyyrlqTpj1yLaHZ2GWnmfFrGlO9Oqom4i50zDAa/jkmwe0n
-         Sk9+zQG2GYkcqrHCI4lP7wzU4R8kTv7ZB0/K9Hv2BLqyVI4I43+58ac254WkTV2vJE5r
-         0/kQ==
+	s=arc-20240116; t=1716613865; c=relaxed/simple;
+	bh=ChEzdL3+2gOHaf5Aw/yfnfdaUguDfZndQdJ72R/j/mQ=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=uiJZ+lP5x5dvT2j8CXrPxVsjT6R8QBuIIAxQIzlAyfKjqT6HQuZzQcRUKfEGhmYBMwtYs14sx4hysRZrxPIoTD02X3yZ2eLdlS7HpXV6jxdJ91kKuwTjThjZhcdR/WwO+qSJp0w62mjo4TrvCEztwRPx/xUUbUx8RMFtCEnmFRY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f197.google.com with SMTP id e9e14a558f8ab-36da593c0faso37717455ab.0
+        for <linux-usb@vger.kernel.org>; Fri, 24 May 2024 22:11:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716611719; x=1717216519;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dWoy99LOaWUsln1ERoCJO5HjPgM8DNbI1vxUMTq+D6E=;
-        b=Iv0GcCqUfNur4S7DLnCOuyQbGAoN+nqIEe7+Xx4DYW6hGfWDoC5BeItepEOVIMnAv1
-         6ZraHdmF00Om83cO02wQ7Wv2hhim6EXfHagh8FihgZFjDtcuvzzXeL8Hgga+dVQR6Z62
-         bW6Jr+bOc+u68UA3JUm9n8PXOSZR1KPyhwKGwXlDm9v8dOkyRVrLFlCOe4F5FExNnqK4
-         jNyiu7kk1PPUIIkYMA1R4FSmBFtuCQNtDeYMW0FOLxW9P09wTWAggJPVz+eyMGMf+duZ
-         tQPBo/R/RA8SSGfwjadqO4l6chJzMe9May299iga5sIpt0MjBUiQEi3jQg1cSC3oBIRz
-         j6Wg==
-X-Forwarded-Encrypted: i=1; AJvYcCWEaf87IDcDR42wj4wkJUl1nAN34VIH69oI0SXt1zMLyA5AuWT8Er/j1CgkJfW/4fARckkRumCfGq3QUMoKeWAVWnB2swjdeSNid2k6
-X-Gm-Message-State: AOJu0YyVLpRWm8j1F1hsNDqbilVqRCvg/L2ZfwmnNI7xJkzVki0FWo86
-	cPGMPnfbNpixHsY3O0yXUTJaROJhjfAZEyihUUzkmenp6uiCkWXd2LheDOZqUTEUQP3f2rx7JBW
-	8jOM+WRld8HUG66q3HYDEVk4iV4U=
-X-Google-Smtp-Source: AGHT+IGuUFdxP9A7rzCeUnqQpqZyw+z6HN2pYdaw9hUO79s6ZPIB9eH9tXu9iYSUVf4hPnQogmksFj14wtcmJgMmOs8=
-X-Received: by 2002:a67:fe84:0:b0:47b:e9ce:42ac with SMTP id
- ada2fe7eead31-48a38514990mr4246136137.4.1716611719055; Fri, 24 May 2024
- 21:35:19 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1716613863; x=1717218663;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=I8IyrQNJ0zAFLZsLTn91HX7IoDexMyQtJMtnbbiIgt0=;
+        b=KCpmcTJb5B9yjuWNxu0MHOxOL3OIfBjesKmYgoF+WNk7HUK4ccvZaCOj6dva5lfhY8
+         SEy5V9NC6QfelEA1t9Z3yNHEBNJsNEuBMzAjw8FZpLjWz+PvrYVDqc0fpj67X1+uA+Ma
+         30Ai1PkyIKtRsItl/pdM+H6swE0wBZ46G4Q8ycStt6cFfRZE7aVDsQB41H9U/YzTNAbZ
+         GiDQrUqWBFagoROLw8hB4ToTglP4C1a0fiY3mEqK1yBvax3/FDh42DdEalb2O46t9tQ0
+         jCc7D7NRHJ3R/jBXA8PMcPGhdF3sUXe2JPL5uBaNOXX+y9AIaCP7tS2JVXcBmseSPSdc
+         9yFA==
+X-Forwarded-Encrypted: i=1; AJvYcCUrKVcC211xl0+DnROtsUjIkIDlSXJtPczeNvLq95sdY30ttdXLJ9yaCgBxl2UBVlK3C2Vjyj1emkaPK7iHDfpdMngx+AZCYQ9F
+X-Gm-Message-State: AOJu0YypW9DjdcDGV66EiRmDv2bfzyRO1SyTRWYHt+0FR7z6A8QNH8rO
+	hji+hCoD7nzbtjEvbFsGz3i8XZssd10cJ5DJ5c+GFDuJtqyC3bYNF/vWNeI64SH+pE5eSKlHGUB
+	eTMyzIXhC3O+ZiJosGH/HRw2SE2iJGkzf8iSvuoN2Kt3NHyUOKaR67IU=
+X-Google-Smtp-Source: AGHT+IEwpd5Ene7lFVYgVE0epmFBsfn5s2UO1jINS7zpgHxZEKqzT9qhLjfX+igNk2YQjqbsnny9VTdFYS/nCzzlC7H/KSJs3Gmi
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240523092608.874986-1-shichaorai@gmail.com> <a0afa88b-f84c-4b45-a265-2e6bcbb84b35@rowland.harvard.edu>
- <bb581989-4ac5-4ffe-9f80-01b5f993146f@rowland.harvard.edu>
- <CACjpba5iJ5dC=rB_Ckaqe4BKesrAN2VmsDCPZJ=frufNgA96Uw@mail.gmail.com>
- <eb995078-1923-43d5-a20f-9d4a7edee719@rowland.harvard.edu>
- <CACjpba55sPDba9GfpMqe_GUgAtv=6MzWAnsgov-PdpFPEDxwGQ@mail.gmail.com> <e1e593b2-fc50-4303-a01f-b7f7bf467c4e@rowland.harvard.edu>
-In-Reply-To: <e1e593b2-fc50-4303-a01f-b7f7bf467c4e@rowland.harvard.edu>
-From: shichao lai <shichaorai@gmail.com>
-Date: Sat, 25 May 2024 12:35:07 +0800
-Message-ID: <CACjpba4d6i99_NcoShrfsZztzjzBQaL1nDC5WMTj2eBuMoaoZQ@mail.gmail.com>
-Subject: Re: [PATCHv2] Check whether divisor is non-zero before division
-To: Alan Stern <stern@rowland.harvard.edu>, gregkh@linuxfoundation.org, oneukum@suse.com
-Cc: linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net, 
-	linux-kernel@vger.kernel.org, xingwei lee <xrivendell7@gmail.com>, 
-	yue sun <samsun1006219@gmail.com>
+X-Received: by 2002:a05:6e02:1a4e:b0:373:8c59:d31b with SMTP id
+ e9e14a558f8ab-3738c59d5c8mr455755ab.2.1716613863064; Fri, 24 May 2024
+ 22:11:03 -0700 (PDT)
+Date: Fri, 24 May 2024 22:11:03 -0700
+In-Reply-To: <20240524201212.mjMDljAc@linutronix.de>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000865ac60619404fa2@google.com>
+Subject: Re: [syzbot] [staging?] [usb?] memory leak in _r8712_init_xmit_priv (2)
+From: syzbot <syzbot+83763e624cfec6b462cb@syzkaller.appspotmail.com>
+To: florian.c.schilhabel@googlemail.com, gregkh@linuxfoundation.org, 
+	larry.finger@lwfinger.net, linux-kernel@vger.kernel.org, 
+	linux-media@vger.kernel.org, linux-staging@lists.linux.dev, 
+	linux-usb@vger.kernel.org, n.zhandarovich@fintech.ru, namcao@linutronix.de, 
+	syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Sat, May 25, 2024 at 10:24=E2=80=AFAM Alan Stern <stern@rowland.harvard.=
-edu> wrote:
-> If alauda_init_media() returns an error, leave info->initialized
-> unchanged.  alauda_check_media() will return an error also, so the bad
-> division won't take place.
->
-> Alan Stern
+Hello,
 
-Thanks! You also remind me that the return value from
-alauda_init_media() is never used!
-By this way, the workflow now seems to work correctly.
-It tries to initialize multiple times, and finally disconnects due to
-no response.
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-Now if possible, I will post a [PATCH v4] for this bug soon.
-I want to know whether it is possible to add some tags like
-Suggested-by or Reviewed-by for Dear Alan Stern, gregkh
-and oneukum as thanks for your discussions.
+Reported-and-tested-by: syzbot+83763e624cfec6b462cb@syzkaller.appspotmail.com
 
-e.g.
-=3D=3D=3D=3D kernel log
-[   47.266129][ T4125] alauda_check_media: before init_media,
-status[0]: 0000000000000036
-[   47.266555][ T4125] alauda_check_media: enter init_media
-[   47.467314][    T9] usb 1-1: USB disconnect, device number 2
-root@syzkaller:~# [   47.485304][ T4125] alauda_get_media_status: data=3D54=
-, rc=3D4
-[   47.485640][ T4125] alauda_init_media: exit in 391
-[   47.486104][   T41] sd 2:0:0:0: [sdb] Read Capacity(10) failed:
-Result: hostbyte=3DDID_ERROR driverbyte=3DDRIVER_OK
-[   47.486591][   T41] sd 2:0:0:0: [sdb] Sense not available.
-[   47.486889][   T41] sd 2:0:0:0: [sdb] 0 512-byte logical blocks: (0 B/0 =
-B)
-[   47.487212][   T41] sd 2:0:0:0: [sdb] 0-byte physical blocks
-[   47.487515][   T41] sd 2:0:0:0: [sdb] Write Protect is off
-[   47.487813][   T41] sd 2:0:0:0: [sdb] Asking for cache data failed
-[   47.488104][   T41] sd 2:0:0:0: [sdb] Assuming drive cache: write throug=
-h
-[   47.491396][   T41] sd 2:0:0:0: [sdb] Attached SCSI removable disk
-[   48.105309][ T1198] not responding...
+Tested on:
+
+commit:         56fb6f92 Merge tag 'drm-next-2024-05-25' of https://gi..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=12817cb2980000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=b43fd1b132bcf5ba
+dashboard link: https://syzkaller.appspot.com/bug?extid=83763e624cfec6b462cb
+compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=117c460c980000
+
+Note: testing is done by a robot and is best-effort only.
 
