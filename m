@@ -1,144 +1,109 @@
-Return-Path: <linux-usb+bounces-10557-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10558-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1BFCD8CF261
-	for <lists+linux-usb@lfdr.de>; Sun, 26 May 2024 03:29:54 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B04BF8CF2B2
+	for <lists+linux-usb@lfdr.de>; Sun, 26 May 2024 08:49:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CB1EB1F2147E
-	for <lists+linux-usb@lfdr.de>; Sun, 26 May 2024 01:29:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E280F1C209A7
+	for <lists+linux-usb@lfdr.de>; Sun, 26 May 2024 06:49:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C1BAA5F;
-	Sun, 26 May 2024 01:29:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8433379E4;
+	Sun, 26 May 2024 06:49:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g4U+w72A"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="h1kWEPQE"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.web.de (mout.web.de [212.227.15.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB65A79C0;
-	Sun, 26 May 2024 01:29:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79D1E63A5;
+	Sun, 26 May 2024 06:49:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716686987; cv=none; b=s2IwoC/PVwVjQq1oSh2qsacuPtdZV2e11UJyMyDyvpaRo17qHL4zZGEcFYzjgLMJ5wFbH9TB5F9JZwEE0EsIuE9O2f9fa0TXxc8WOE1iiUE8goW5tbdssmj6s1gJhsAKhmlatrXVsF3IC/nJ8gUP9hAmwd1ma2dM3993wGp3boc=
+	t=1716706151; cv=none; b=UD5QvqiBLB0BaJTqtYhAesTOqwwd9SdHNINYmxeDsMV32aZmwvicQlXMORHUx6IIiiywBONalKHveghFU13mIB39wPNpD0qmxJr1x6N6X1w9mRd7LIILJzcrHMSdbzAgfw/kc+PwOgimOoBzanSHUvIzO3bVeVmuXM3Kn82+z8Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716686987; c=relaxed/simple;
-	bh=bTy4rHKWsDHxnt4C0C4Rpj9eCADgsmB6J6v0c5MyoUs=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=lq05dBgrcI5TokK81dATml6Zw9TiQ4IJVkVcak/MiY99SwESwizU3AYed8O7bzIfg/e6WFyhyQQ5rh3Hb1V6u/X73OFFnR9nZ0N2hqEUQqi4GsXzFYtK3n7EPoScHmZ6+Kd8nQwpJM3QLdvmHbovNNokdAZrqNja+U/vSBOUfvs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g4U+w72A; arc=none smtp.client-ip=209.85.215.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-681907af4e7so1592734a12.1;
-        Sat, 25 May 2024 18:29:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1716686985; x=1717291785; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=u07Iey81j3k5fLr1Slpz2mVuu45UdaoKvFPM3aZm1t0=;
-        b=g4U+w72AYr9cSCMLwEq8euzsQ8PUg4LY7rAW0Qlf59ks5HGbf6OVmykg2J0VtulRd6
-         u39XJQSlP6ekvXfSfGomilXMGDt30ETJ+dBhYnVKQKUyUwVB+bR2Xi5BDLteGNAQONrG
-         YCNJUhVrD3iy3IM38wJx4Q7gY9qz8WuCJbFA0lbS2HrzJ/6ix6eMalJrZKor1qJqt2Ju
-         juFKlcJ3IvKzLUk3tc51B6S0WogJQ1raXmBk5GJjhmgsw/hulX8hzG7HUWZTO/LVu2ma
-         gkbp2Zxey6gxMfbJz6SZb3NrtyVHzWNd261bqxvBzmF10ROYJTctGPsuaZ4PIAwj9rmm
-         YumA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716686985; x=1717291785;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=u07Iey81j3k5fLr1Slpz2mVuu45UdaoKvFPM3aZm1t0=;
-        b=cMQcilWYTWwNRJcT3SPgKonXjBNCDXMCk3Z6GwOeZED9gCj4Rvuv6lC2zAoNrp0Xc+
-         kICDo3f8ErubXSVa1aHXHXt8PkDZ5mrZL3GA+mPWo5jrpMpq5bnyVO1eR8SGVfF/pxP2
-         fgR/yoGgy4wIrrAIoOYdqSJhi2t/Kl2DyNxhpJ1xaMjQQ22izPRT7CE9IS6x8Ge6MPeW
-         jYZRI0PvXvmqnBXg8sb8Qna2F4jKBTEYXnJvgievpdJna5MRaOHPKORxWqwl+/5MG/zx
-         7C++KlLEOr188Is6r4UGWiN1sABpvFygusuJ+DCCQD2R3AABoFhsjy56ptsz1zQk08kL
-         nQeA==
-X-Forwarded-Encrypted: i=1; AJvYcCWlubc4i2iyVSil0uNqw7SPhgDmk6X13vy2liAp+CHcKguntgvTNePDCXT9COY9gmj2kkhU3hoDyYm29dt5jKXd7KWMe0+kUMCFZJZpJAAKNyXuUYOfvV4+y5layzvouIluMZhLHCRo
-X-Gm-Message-State: AOJu0Yym/UlRIBwfy/82AiMBodsE1z1lJsJe0hkxtgoTsEQeJRR7onYq
-	a9iEHCOUe4TfDaaYVjeZoI2K2f1V4c+h/1nsOm8pGgltXvsN0M+3
-X-Google-Smtp-Source: AGHT+IG5H2A/t8sX5Ms0sIT+n4AmmQIpy5dhROCHQzOn8UTrX7OvQ49s52FnFHeI8dDjTcUPnGL/zA==
-X-Received: by 2002:a17:902:e995:b0:1f3:50e7:36db with SMTP id d9443c01a7336-1f4498ec1ebmr49195605ad.48.1716686984752;
-        Sat, 25 May 2024 18:29:44 -0700 (PDT)
-Received: from velvet.. ([111.42.148.111])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f481de3d78sm4156025ad.75.2024.05.25.18.29.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 May 2024 18:29:44 -0700 (PDT)
-From: Shichao Lai <shichaorai@gmail.com>
-To: stern@rowland.harvard.edu,
-	gregkh@linuxfoundation.org,
-	Markus.Elfring@web.de
-Cc: oneukum@suse.com,
-	linux-usb@vger.kernel.org,
-	usb-storage@lists.one-eyed-alien.net,
-	linux-kernel@vger.kernel.org,
-	Shichao Lai <shichaorai@gmail.com>,
-	xingwei lee <xrivendell7@gmail.com>,
-	yue sun <samsun1006219@gmail.com>
-Subject: [PATCH v6] usb-storage: alauda: Check whether the media is initialized
-Date: Sun, 26 May 2024 09:27:45 +0800
-Message-Id: <20240526012745.2852061-1-shichaorai@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1716706151; c=relaxed/simple;
+	bh=OiHjt0siDQqvGY8VnV+rHZQiQTcvyc3EyCZa+CupTjc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Lvxj9/jTCEv/eh9s9+Q0dN/TGnZsSNM/XAgQqXTB5PVEPBhkYWC62L3JCr8F/ywwnJTVvyzi97V/Ia+IMVRL1Kt6/6JY9vmtyb7xhMXio6qAiBsCsigIdVUkGZo1jGxeAEVDCgevbJUQvefLcMSTBy0l1rFEt2mgBWMWo0GbA7Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=h1kWEPQE; arc=none smtp.client-ip=212.227.15.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1716706143; x=1717310943; i=markus.elfring@web.de;
+	bh=OiHjt0siDQqvGY8VnV+rHZQiQTcvyc3EyCZa+CupTjc=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=h1kWEPQEiHR5KbRXzsiVZ/RU99yGOvPUQziWgiJiYSHGnh3fKwn5fbjil2E/5U+h
+	 +DmAjOUdShyUY7DzegvIU9r9YKFKlX+SLYEipv/HB/hW93ZQDePqoEqF12d0AbNmm
+	 BWmergP8tPBaHO2OYFeCuDTlZFv3ClIrSHWFSkz83tIFVvK4/mCmgBT6LHNL+xj/G
+	 2NRugboxd3xxSEKdJCh6WjLF0D5K+eOK4RWS+DLYtZjddtxc7fuS/eT8FRA08RbBi
+	 VqyfXa7kwgLwIO1Edn/+eDtQG5cSKjLHr3ceGDXQ148F9utwb9N/amCpa4DFjDwMe
+	 mim4QZqxRsP0uIDDNw==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.83.95]) by smtp.web.de (mrweb005
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 1MSZMD-1s4kp40jRh-00LqcC; Sun, 26
+ May 2024 08:49:03 +0200
+Message-ID: <79ba60d2-357a-45f0-93af-78879b9f4b02@web.de>
+Date: Sun, 26 May 2024 08:49:02 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6] usb-storage: alauda: Check whether the media is
+ initialized
+To: Shichao Lai <shichaorai@gmail.com>, usb-storage@lists.one-eyed-alien.net,
+ linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org,
+ Alan Stern <stern@rowland.harvard.edu>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Oliver Neukum <oneukum@suse.com>,
+ Xingwei Lee <xrivendell7@gmail.com>, Yue Sun <samsun1006219@gmail.com>
+References: <20240526012745.2852061-1-shichaorai@gmail.com>
+Content-Language: en-GB
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <20240526012745.2852061-1-shichaorai@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:OXoA+aME6lnNAQSWdIumGtUQ+qNtxO4D83yhqvkNyUne1qneMsd
+ cGdDBzuwsNW6I/xTqrtrINfSLrO1z0QmXpwKnaEC25OIxbrkJkG/Y+rHnoSZauTXrqJvCfe
+ bHFd5Sfzi7HlomS0eGt6IQqbIh5vG+k1ztRIGb1kpCz4CUSMbpDa1JYvl3z8wmVZFKLch1H
+ EQpOEpku0Q3ddQY1CZqNQ==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:jGCwj6I+3Oo=;8eY2ZJ+x+r/9GB0D0lp9OfZ83KV
+ c1LauGbB0wPyH4rfhzKiQn3QE5P8w0Rt00iSJmxur6FfxDJRWOELwGaGmuUPiWWglf1J00t/X
+ hclDKTCgo2IjmcIDKiL9QpyxZ7dN6PRjOJR02zt16Ti+SlW2CA7yAgvivifktmG3zVO+V5lDR
+ Nvo0PLF3tlDYt493U3sPmaJB4Ccas/fakO2cOSyikhiqDdQ8B8O+iFSqtssAPLlflVDEa3Sc0
+ ie1cCpmxleNGYBitjTfL+Xy+d95d8E4mxAZHxrEvpXscjvezr4B0YL5mIGPcmDSkaVbD0jQTo
+ 6r/RPLUbbaTcve/1p5yQbT/UnIb/RTBYKyh9WU8Tr8RioC26p+D/b4WmmAcmjXKOvza6O8a8P
+ bs+ntkewDMIfEN4ImjhzmLOn+99/Uov4NZUU4K1pk0aGujvuTjLTzSCKx/rInPsOYOqI3f9SZ
+ XSP0kGrVSUebVyqbWXKL9Al7uV+7hldiVZz3oS7KuuqwGrQqKTpv9ilVjjK718oPGHFoeDj+8
+ Hr6SFfZ2f/4WdiWlZ8acXrd66jcTNyd0WCCYLGBIcg/fUJlsWR0371PWJ6+y/PW8knopYH/i3
+ 1wmILOOo/IUgsgNtGiwRNCEAFiUZhCN9+CKNz27Yjc+2bD6ICXuOSWoN/V+CpCQKFZyRycIlH
+ b+sQlWS6/o1k01o9k5SPIVVC/GnL9uT9sudUYemEQEhMKP6OGHE6i2AHJoFVAyfxjx4A3PP/H
+ P9ucS04ANoB0CWwf9ABcOLf0x0A1ILYOgzWcQaKAB8FvdSJzjyGL7V3AjDj0wYs6w8RrqB57/
+ QU6s9mE7qS45lt5/QlOz0LqYEysdh2iZ2TVN3SVX0j4gE=
 
-The member "uzonesize" of struct alauda_info will remain 0
-if alauda_init_media() fails, potentially causing divide errors
-in alauda_read_data() and alauda_write_lba().
-- Add a member "media_initialized" to struct alauda_info.
-- Change a condition in alauda_check_media() to ensure the
-  first initialization.
-- Add an error check for the return value of alauda_init_media().
+=E2=80=A6
+> Fixes: e80b0fade09e ("[PATCH] USB Storage: add alauda support")
 
-Fixes: e80b0fade09e ("[PATCH] USB Storage: add alauda support")
-Reported-by: xingwei lee <xrivendell7@gmail.com>
-Reported-by: yue sun <samsun1006219@gmail.com>
-Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Shichao Lai <shichaorai@gmail.com>
----
-Changes since v5:
-- Check the initialization of alauda_check_media()
-  which is the root cause.
+How do you think about to omit the text =E2=80=9C[PATCH] =E2=80=9D from th=
+e tag summary?
 
- drivers/usb/storage/alauda.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/usb/storage/alauda.c b/drivers/usb/storage/alauda.c
-index 115f05a6201a..40d34cc28344 100644
---- a/drivers/usb/storage/alauda.c
-+++ b/drivers/usb/storage/alauda.c
-@@ -105,6 +105,8 @@ struct alauda_info {
- 	unsigned char sense_key;
- 	unsigned long sense_asc;	/* additional sense code */
- 	unsigned long sense_ascq;	/* additional sense code qualifier */
-+
-+	bool media_initialized;
- };
- 
- #define short_pack(lsb,msb) ( ((u16)(lsb)) | ( ((u16)(msb))<<8 ) )
-@@ -476,11 +478,12 @@ static int alauda_check_media(struct us_data *us)
- 	}
- 
- 	/* Check for media change */
--	if (status[0] & 0x08) {
-+	if (status[0] & 0x08 || !info->media_initialized) {
- 		usb_stor_dbg(us, "Media change detected\n");
- 		alauda_free_maps(&MEDIA_INFO(us));
--		alauda_init_media(us);
--
-+		rc = alauda_init_media(us);
-+		if (rc == USB_STOR_TRANSPORT_GOOD)
-+			info->media_initialized = true;
- 		info->sense_key = UNIT_ATTENTION;
- 		info->sense_asc = 0x28;
- 		info->sense_ascq = 0x00;
--- 
-2.34.1
+> Reported-by: xingwei lee <xrivendell7@gmail.com>
+> Reported-by: yue sun <samsun1006219@gmail.com>
 
+Would you like to add any links as background information for these report=
+s?
+
+Regards,
+Markus
 
