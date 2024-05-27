@@ -1,342 +1,203 @@
-Return-Path: <linux-usb+bounces-10575-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10577-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 588E68CFC29
-	for <lists+linux-usb@lfdr.de>; Mon, 27 May 2024 10:50:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9919A8CFC98
+	for <lists+linux-usb@lfdr.de>; Mon, 27 May 2024 11:16:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7CC1E1C21CB6
-	for <lists+linux-usb@lfdr.de>; Mon, 27 May 2024 08:50:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B92341C20E27
+	for <lists+linux-usb@lfdr.de>; Mon, 27 May 2024 09:16:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A679B69953;
-	Mon, 27 May 2024 08:50:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18A50139D13;
+	Mon, 27 May 2024 09:16:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TqK6yWSJ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="G7RhDco3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2699D56477;
-	Mon, 27 May 2024 08:50:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3E93138493
+	for <linux-usb@vger.kernel.org>; Mon, 27 May 2024 09:16:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716799818; cv=none; b=kWKwqfReCoGqyPUBah9DdZ1JA67NigZwWvxSdxxDiVAb1ZxGR+1xLKYE7RYZPAlz7MUXPKlOp/WvS7XMTxxd0sQ1yiwFr0/Sx7kvyLDrugKFq23Rr6yiJJemWkTiqiYTclNyzEcPGnMDr2DZmlAJMu/kIwhe9jnpMWZWKwI3g0M=
+	t=1716801377; cv=none; b=XL4woTJAPbxoNEkcRgW5itM9e1nJ05OQgikGqwREJC2suk7n/2Ut07gwhyH57VGnz5RooE5Ah992ZKZ4e8TaD7Ekq4X2hTBOyZe1R+ng9ScDJV1RUB1xgMbWR5d6LkA5H7G83P8Iye56C/CqKAO4Pydk8OqzzMFBJwc8OAaCHdg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716799818; c=relaxed/simple;
-	bh=XVMmb0jA3x8IvBNZW56yDA6N/Fuj1xxbiI7+65ezmCE=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:From:Subject:
-	 In-Reply-To:Content-Type; b=bHWt8DE3HJXcWlKeFtio5j1BHb7BVtOj+HD/nt+Ca3EBm4W2ylJZlzNYAfWr6crDqXqtN0uTnG1zS8iVbvGzMAxJi5YKgsX5gwXJYTX3FvWwS1RX0yLVdel5IENl3dh7QfxwP6IKYWIsDUeJII785B86+w1vwl9j/orooOv/1TM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TqK6yWSJ; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1716799815; x=1748335815;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=XVMmb0jA3x8IvBNZW56yDA6N/Fuj1xxbiI7+65ezmCE=;
-  b=TqK6yWSJwxREuvM66xM+B6KU94oD3gdBTCE9appinBkWv6jolqtUGjs0
-   rv0APS3wuhxeS2re6UaRswovzpbXRle8wJCIP/jpsQj0AF8QYjXM2CPEg
-   172eqEEBqFAxvhrIgwxK7bmLs8t3eb1OvHEzNShIRoU5PXowzh5gem8TI
-   ugN0nrLJ3AdbWrk8qzPuwc0gbzPUXJ7fIqFxKubbBCKAUP29mFal44NYJ
-   8QfgQFRp3NLEeU86lUmWaq0rfY660xpGHPCG9+hBjd3HyCzbq8FSXqjQn
-   2Q/WcwL63DlJL3OQHSF0CuQQCwO/dRbgP5/ilRY8XDf9NF2NqGKLIVywy
-   g==;
-X-CSE-ConnectionGUID: AvkB2nGwS0aKXSnwFpr+rg==
-X-CSE-MsgGUID: wpYj0PGQQi6VJknU00vcew==
-X-IronPort-AV: E=McAfee;i="6600,9927,11084"; a="13328457"
-X-IronPort-AV: E=Sophos;i="6.08,192,1712646000"; 
-   d="scan'208";a="13328457"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2024 01:50:15 -0700
-X-CSE-ConnectionGUID: KOSpGiLZTDyguUlL2LTGfw==
-X-CSE-MsgGUID: JbSCY0uPShu1B8RosVYHxw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,192,1712646000"; 
-   d="scan'208";a="39247902"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmviesa004.fm.intel.com with ESMTP; 27 May 2024 01:50:12 -0700
-Message-ID: <c10d7c1a-6e3a-ff11-1eae-363eda02ef05@linux.intel.com>
-Date: Mon, 27 May 2024 11:52:08 +0300
+	s=arc-20240116; t=1716801377; c=relaxed/simple;
+	bh=Ue2tVsGDVZ2DgPwjPShSInk2BKkdPtg1Dw6O8JfqzSA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aODHdZszfBTLN4IITzqXipY5OVFnkIcpHX7hqRlggB3kej5obiqEnYAWxE/AwnGAgohaKra9yQ62wILXkKvkLwtojbjX8Ou1REi2OXgRHPMoldO5uIbExSDBullERKV5co51kkaN16qAh9D9PfENhou+OmzJoaKZnIUkhE8/d/A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=G7RhDco3; arc=none smtp.client-ip=209.85.167.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-5295d509178so2940470e87.1
+        for <linux-usb@vger.kernel.org>; Mon, 27 May 2024 02:16:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1716801374; x=1717406174; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=HQtx7jnj8OkHf0JB5BmFRhF9zFMLEU0M0KHpSnf/nfg=;
+        b=G7RhDco3IqA1kYDPgp1XW3bthkDMKHUu919KX5C8hjYTGFVK64m+FRCApIO1t5FdU3
+         59MtWsoEroq7ddXw4XE6P8+xkKdmkIprTv31o85RhMoZxIi4hc8eVTjuXYYJKmc5Pr9O
+         VLMyrKjpO89j+I9+bQN4ZmYz1pRp89A1+UWYEd6oaiYdibz9Y7rYEhRPZTQBcqj3azHh
+         syVvXwXU6XcyfMCMimIRvNLTHP6xgzk+iJtTXvP0lfgW2zditVbuTNx93bwXEu8D7SHz
+         1Y+htTo/R0AtUTClwAVflNbX/BvzXJoKNn3TXKO71obX5gk6/UxLsA2PjNw5FyhsLV0z
+         YB8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1716801374; x=1717406174;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HQtx7jnj8OkHf0JB5BmFRhF9zFMLEU0M0KHpSnf/nfg=;
+        b=pgUbSvQs4dQrDEEzyNt+kOPRz7NUn+rApEtNaW4wFkXHRcoL259+9KocYPYgK3o1dD
+         eb9v8bc6BZxKY3QNH1g1ZbPG7QbxH6WGGKsLbU0xSomHRFcYFDyOzicFno//8mw4iZFY
+         OHOL3vOCTJJ0yDob/wBK/mLYBaqjKkjhkiyNgWt4QjYcFn7MFmXGQYnYJvGzw6uwLkEI
+         gItIjVTgv68MlISfO44xS3YamgV/Lg+eCHbdTkw9spvGHnu8p7d29nEupigyhiSKmQMR
+         s71DRXoXGFLJkpGMyaJsvq5KqSFv3YCWkuMFxH9ehfUzRvZnH94y99InVXUvlMmIxcpf
+         iSIw==
+X-Forwarded-Encrypted: i=1; AJvYcCWvDcU2VoBN/x81XQQQdX18iBxqisNxhtzUkJYgiUlAWp/ePu2uGIJ8MIcZ55y+8+xzZRSFm9//hxh/U8rVybshMrXcPDi/yqJZ
+X-Gm-Message-State: AOJu0Yyy66SePxYOjAOhxiyc6LcGtVubMnUcc+nvjMOSGjdi7yr/hQQ/
+	nv8SFH2EFYYVH0C2er37IFPNekypot55lHkM1NLzdxTAGsg2GiGAxG/EJ5b6NAY=
+X-Google-Smtp-Source: AGHT+IHKz4XIu/b8vO3XvJlh0od1NHwsAv2tZUl+/Bf2xMSJLGQmRBc9d+aotEQhWhibFZyygstyWg==
+X-Received: by 2002:a05:6512:224c:b0:518:c69b:3a04 with SMTP id 2adb3069b0e04-529612c0598mr11389178e87.0.1716801374132;
+        Mon, 27 May 2024 02:16:14 -0700 (PDT)
+Received: from eriador.lumag.spb.ru (dzdbxzyyyyyyyyyyyykxt-3.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::227])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-529aa059d07sm185070e87.233.2024.05.27.02.16.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 May 2024 02:16:13 -0700 (PDT)
+Date: Mon, 27 May 2024 12:16:12 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Neil Armstrong <neil.armstrong@linaro.org>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Bjorn Andersson <andersson@kernel.org>, 
+	Luca Weiss <luca.weiss@fairphone.com>, linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] usb: typec-mux: ptn36502: broadcast typec state to
+ next mux
+Message-ID: <llt5o2btdlz5ckvhd3a73kxxkrm544wi3b2xhnytwg62ekcm3l@ck6wqglx35d6>
+References: <20240527-topic-sm8x50-upstream-retimer-broadcast-mode-v1-0-79ec91381aba@linaro.org>
+ <20240527-topic-sm8x50-upstream-retimer-broadcast-mode-v1-1-79ec91381aba@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.13.0
-Content-Language: en-US
-To: Hector Martin <marcan@marcan.st>, Mathias Nyman
- <mathias.nyman@intel.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- asahi@lists.linux.dev, stable@vger.kernel.org, security@kernel.org
-References: <20240524-xhci-streams-v1-1-6b1f13819bea@marcan.st>
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH] xhci: Handle TD clearing for multiple streams case
-In-Reply-To: <20240524-xhci-streams-v1-1-6b1f13819bea@marcan.st>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240527-topic-sm8x50-upstream-retimer-broadcast-mode-v1-1-79ec91381aba@linaro.org>
 
-Hi
-
-On 24.5.2024 13.28, Hector Martin wrote:
-> When multiple streams are in use, multiple TDs might be in flight when
-> an endpoint is stopped. We need to issue a Set TR Dequeue Pointer for
-> each, to ensure everything is reset properly and the caches cleared.
-> Change the logic so that any N>1 TDs found active for different streams
-> are deferred until after the first one is processed, calling
-> xhci_invalidate_cancelled_tds() again from xhci_handle_cmd_set_deq() to
-> queue another command until we are done with all of them. Also change
-> the error/"should never happen" paths to ensure we at least clear any
-> affected TDs, even if we can't issue a command to clear the hardware
-> cache, and complain loudly with an xhci_warn() if this ever happens.
+On Mon, May 27, 2024 at 09:45:29AM +0200, Neil Armstrong wrote:
+> In the Type-C graph, the ptn36502 retimer is in between the USB-C
+> connector and the USB3/DP combo PHY, and this PHY also requires the
+> USB-C mode events to properly set-up the SuperSpeed Lanes functions
+> to setup USB3-only, USB3 + DP Altmode or DP Altmode only on the 4 lanes.
 > 
-> This problem case dates back to commit e9df17eb1408 ("USB: xhci: Correct
-> assumptions about number of rings per endpoint.") early on in the XHCI
-> driver's life, when stream support was first added. At that point, this
-> condition would cause TDs to not be given back at all, causing hanging
-> transfers - but no security bug.
-
-At this point all cancelled URBs were always given back, and always before
-cache was cleared. Cache was also never cleared for the second, or later
-stream rings if more than one stream had cancelled URBs.
-
-
-> It was then identified but not fixed
-> nor made into a warning in commit 674f8438c121 ("xhci: split handling
-> halted endpoints into two steps"), which added a FIXME comment for the
-> problem case (without materially changing the behavior as far as I can
-> tell, though the new logic made the problem more obvious).
-
-This rework ensured URB were given back _after_ they were cleared from xHC
-cache. While reworking this it was noticed that something is not correct with
-how driver clears TRBs from xHC cache in the case when cancelled URBS
-exists on several separate stream rings.
-
-No changes were made to stream ring cache clearing.
-
+> Update the ptn36502 retimer to get an optional type-c mux on the next
+> endpoint, and broadcast the received mode to it.
 > 
-> Then later, in commit 94f339147fc3 ("xhci: Fix failure to give back some
-> cached cancelled URBs."), it was acknowledged again. This commit was
-> unfortunately not reviewed at all, as it was authored by the maintainer
-> directly. Had it been, perhaps a second set of eyes would've noticed
-> that it does not fix the bug, but rather just makes it (much) worse.
-> It turns the "transfers hang" bug into a "random memory corruption" bug,
-> by blindly marking TDs as complete without actually clearing them at all
-> nor moving the dequeue pointer past them, which means they aren't actually
-> complete, and the xHC will try to transfer data to/from them when the
-> endpoint resumes, now to freed memory buffers.
-
-94f339147fc3 ("xhci: Fix failure to give back some cached cancelled URBs.")
-fixed the regression caused by previous patch. Users reported issues with
-usb stuck after unmounting/disconnecting UAS devices. This had to be resolved
-and the options at this point were reverting the whole thing, or only roll
-back this targeted streams area to its original condition, not made worse.
-
-Commit was discussed, and first sent as RFT:
-
-https://lore.kernel.org/linux-usb/20210813134729.2402607-1-mathias.nyman@linux.intel.com/
-https://lore.kernel.org/linux-usb/e1feb74fa95ca1f19729bf959f73f30f@codeaurora.org/
-
+> Tested-by: Luca Weiss <luca.weiss@fairphone.com>
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 > 
-> This could have been a legitimate oversight, but apparently the commit
-> author was aware of the problem (yet still chose to submit it): It was
-> still mentioned as a FIXME, an xhci_dbg() was added to log the problem
-> condition, and the remaining issue was mentioned in the commit
-> description. The choice of making the log type xhci_dbg() for what is,
-> at this point, a completely unhandled and known broken condition is
-> puzzling and unfortunate, as it guarantees that no actual users would
-> see the log in production, thereby making it nigh undebuggable (indeed,
-> even if you turn on DEBUG, the message doesn't really hint at there
-> being a problem at all).
+> --
 > 
-> It took me *months* of random xHC crashes to finally find a reliable
-> repro and be able to do a deep dive debug session, which could all have
-> been avoided had this unhandled, broken condition been actually reported
-> with a warning, as it should have been as a bug intentionally left in
-> unfixed (never mind that it shouldn't have been left in at all).
+> Reported Tested by Luca in [1]
 > 
->> Another fix to solve clearing the caches of all stream rings with
->> cancelled TDs is needed, but not as urgent.
-> 
-> 3 years after that statement and 14 years after the original bug was
-> introduced, I think it's finally time to fix it. And maybe next time
-> let's not leave bugs unfixed (that are actually worse than the original
-> bug), and let's actually get people to review kernel commits please.
-
-Issue was only seen at UAS unmount/disconnect where xHC cache clearing
-shouldn't be problem. Whole case wasn't assumed to be an issue otherwise.
-We didn't want to spam users with irrelevant warnings at unmount/disconnect
-but added the debug message and description of issue in code and commit
-message.
-
-Issue has always been there (14 years).
-After 9 years it was noted during another more urgent regression fix, so
-a debug message with description was added.
-Other cases were then prioritized over this.
-
-Now 3 years later it hit you.
-
-Debugging this sounds frustrating.
-I really appreciate you doing this. Your solution is small and clean,
-I like it.
-I could not come up with something like this while trying to resolve the
-regression.
-
-Please don't hesitate to ask for debugging help next time, no need to do
-it all by yourself.
-
-> 
-> Fixes xHC crashes and IOMMU faults with UAS devices when handling
-> errors/faults. Easiest repro is to use `hdparm` to mark an early sector
-> (e.g. 1024) on a disk as bad, then `cat /dev/sdX > /dev/null` in a loop.
-> At least in the case of JMicron controllers, the read errors end up
-> having to cancel two TDs (for two queued requests to different streams)
-> and the one that didn't get cleared properly ends up faulting the xHC
-> entirely when it tries to access DMA pages that have since been unmapped,
-> referred to by the stale TDs. This normally happens quickly (after two
-> or three loops). After this fix, I left the `cat` in a loop running
-> overnight and experienced no xHC failures, with all read errors
-> recovered properly. Repro'd and tested on an Apple M1 Mac Mini
-> (dwc3 host).
-> 
-> On systems without an IOMMU, this bug would instead silently corrupt
-> freed memory, making this a security bug (even on systems with IOMMUs
-> this could silently corrupt memory belonging to other USB devices on the
-> same controller, so it's still a security bug). Given that the kernel
-> autoprobes partition tables, I'm pretty sure a malicious USB device
-> pretending to be a UAS device and reporting an error with the right
-> timing could deliberately trigger a UAF and write to freed memory, with
-> no user action.
-> 
-> Fixes: e9df17eb1408 ("USB: xhci: Correct assumptions about number of rings per endpoint.")
-> Fixes: 94f339147fc3 ("xhci: Fix failure to give back some cached cancelled URBs.")
-> Fixes: 674f8438c121 ("xhci: split handling halted endpoints into two steps")
-> Cc: stable@vger.kernel.org
-> Cc: security@kernel.org
-> Signed-off-by: Hector Martin <marcan@marcan.st>
+> [1] https://lore.kernel.org/all/D1HOCBW6RG72.1B2RKGKW2Q5VC@fairphone.com/
 > ---
->   drivers/usb/host/xhci-ring.c | 54 +++++++++++++++++++++++++++++++++++---------
->   drivers/usb/host/xhci.h      |  1 +
->   2 files changed, 44 insertions(+), 11 deletions(-)
+>  drivers/usb/typec/mux/ptn36502.c | 33 ++++++++++++++++++++++++++++++---
+>  1 file changed, 30 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-> index 575f0fd9c9f1..9c06502be098 100644
-> --- a/drivers/usb/host/xhci-ring.c
-> +++ b/drivers/usb/host/xhci-ring.c
-> @@ -1034,13 +1034,27 @@ static int xhci_invalidate_cancelled_tds(struct xhci_virt_ep *ep)
->   				break;
->   			case TD_DIRTY: /* TD is cached, clear it */
->   			case TD_HALTED:
-> +			case TD_CLEARING_CACHE_DEFERRED:
-> +				if (cached_td) {
-> +					if (cached_td->urb->stream_id != td->urb->stream_id) {
-> +						/* Multiple streams case, defer move dq */
-> +						xhci_dbg(xhci,
-> +							 "Move dq deferred: stream %u URB %p\n",
-> +							 td->urb->stream_id, td->urb);
-> +						td->cancel_status = TD_CLEARING_CACHE_DEFERRED;
-> +						break;
-> +					}
+> diff --git a/drivers/usb/typec/mux/ptn36502.c b/drivers/usb/typec/mux/ptn36502.c
+> index 0ec86ef32a87..129d9d24b932 100644
+> --- a/drivers/usb/typec/mux/ptn36502.c
+> +++ b/drivers/usb/typec/mux/ptn36502.c
+> @@ -67,6 +67,7 @@ struct ptn36502 {
+>  	struct typec_retimer *retimer;
+>  
+>  	struct typec_switch *typec_switch;
+> +	struct typec_mux *typec_mux;
+>  
+>  	struct mutex lock; /* protect non-concurrent retimer & switch */
+>  
+> @@ -235,6 +236,7 @@ static int ptn36502_sw_set(struct typec_switch_dev *sw, enum typec_orientation o
+>  static int ptn36502_retimer_set(struct typec_retimer *retimer, struct typec_retimer_state *state)
+>  {
+>  	struct ptn36502 *ptn = typec_retimer_get_drvdata(retimer);
+> +	struct typec_mux_state mux_state;
+>  	int ret = 0;
+>  
+>  	mutex_lock(&ptn->lock);
+> @@ -252,7 +254,14 @@ static int ptn36502_retimer_set(struct typec_retimer *retimer, struct typec_reti
+>  
+>  	mutex_unlock(&ptn->lock);
+>  
+> -	return ret;
+> +	if (ret)
+> +		return ret;
 > +
-> +					/* Should never happen, at least try to clear the TD if it does */
-
-This while "should never happen" case could probably be removed.
-
-> +					xhci_warn(xhci,
-> +						  "Found multiple active URBs %p and %p in stream %u?\n",
-> +						  td->urb, cached_td->urb,
-> +						  td->urb->stream_id);
-> +					td_to_noop(xhci, ring, cached_td, false);
-> +					cached_td->cancel_status = TD_CLEARED;
-> +				}
+> +	mux_state.alt = state->alt;
+> +	mux_state.data = state->data;
+> +	mux_state.mode = state->mode;
 > +
->   				td->cancel_status = TD_CLEARING_CACHE;
-> -				if (cached_td)
-> -					/* FIXME  stream case, several stopped rings */
-> -					xhci_dbg(xhci,
-> -						 "Move dq past stream %u URB %p instead of stream %u URB %p\n",
-> -						 td->urb->stream_id, td->urb,
-> -						 cached_td->urb->stream_id, cached_td->urb);
->   				cached_td = td;
->   				break;
->   			}
-> @@ -1060,10 +1074,16 @@ static int xhci_invalidate_cancelled_tds(struct xhci_virt_ep *ep)
->   	if (err) {
->   		/* Failed to move past cached td, just set cached TDs to no-op */
->   		list_for_each_entry_safe(td, tmp_td, &ep->cancelled_td_list, cancelled_td_list) {
-> -			if (td->cancel_status != TD_CLEARING_CACHE)
-> +			/*
-> +			 * Deferred TDs need to have the deq pointer set after the above command
-> +			 * completes, so if that failed we just give up on all of them (and
-> +			 * complain loudly since this could cause issues due to caching).
-> +			 */
-> +			if (td->cancel_status != TD_CLEARING_CACHE &&
-> +			    td->cancel_status != TD_CLEARING_CACHE_DEFERRED)
->   				continue;
-> -			xhci_dbg(xhci, "Failed to clear cancelled cached URB %p, mark clear anyway\n",
-> -				 td->urb);
-> +			xhci_warn(xhci, "Failed to clear cancelled cached URB %p, mark clear anyway\n",
-> +				  td->urb);
->   			td_to_noop(xhci, ring, td, false);
->   			td->cancel_status = TD_CLEARED;
->   		}
-> @@ -1350,6 +1370,7 @@ static void xhci_handle_cmd_set_deq(struct xhci_hcd *xhci, int slot_id,
->   	struct xhci_ep_ctx *ep_ctx;
->   	struct xhci_slot_ctx *slot_ctx;
->   	struct xhci_td *td, *tmp_td;
-> +	bool deferred = false;
->   
->   	ep_index = TRB_TO_EP_INDEX(le32_to_cpu(trb->generic.field[3]));
->   	stream_id = TRB_TO_STREAM_ID(le32_to_cpu(trb->generic.field[2]));
-> @@ -1436,6 +1457,8 @@ static void xhci_handle_cmd_set_deq(struct xhci_hcd *xhci, int slot_id,
->   			xhci_dbg(ep->xhci, "%s: Giveback cancelled URB %p TD\n",
->   				 __func__, td->urb);
->   			xhci_td_cleanup(ep->xhci, td, ep_ring, td->status);
-> +		} else if (td->cancel_status == TD_CLEARING_CACHE_DEFERRED) {
-> +			deferred = true;
->   		} else {
->   			xhci_dbg(ep->xhci, "%s: Keep cancelled URB %p TD as cancel_status is %d\n",
->   				 __func__, td->urb, td->cancel_status);
-> @@ -1445,8 +1468,17 @@ static void xhci_handle_cmd_set_deq(struct xhci_hcd *xhci, int slot_id,
->   	ep->ep_state &= ~SET_DEQ_PENDING;
->   	ep->queued_deq_seg = NULL;
->   	ep->queued_deq_ptr = NULL;
-> -	/* Restart any rings with pending URBs */
-> -	ring_doorbell_for_active_rings(xhci, slot_id, ep_index);
-> +
-> +	if (deferred) {
-> +		/* We have more streams to clear */
-> +		xhci_dbg(ep->xhci, "%s: Pending TDs to clear, continuing with invalidation\n",
-> +			 __func__);
-> +		xhci_invalidate_cancelled_tds(ep);
-> +	} else {
-> +		/* Restart any rings with pending URBs */
-> +		xhci_dbg(ep->xhci, "%s: All TDs cleared, ring doorbell\n", __func__);
-> +		ring_doorbell_for_active_rings(xhci, slot_id, ep_index);
+> +	return typec_mux_set(ptn->typec_mux, &mux_state);
+>  }
+>  
+>  static int ptn36502_detect(struct ptn36502 *ptn)
+> @@ -321,9 +330,18 @@ static int ptn36502_probe(struct i2c_client *client)
+>  		return dev_err_probe(dev, PTR_ERR(ptn->typec_switch),
+>  				     "Failed to acquire orientation-switch\n");
+>  
+> +	ptn->typec_mux = fwnode_typec_mux_get(dev->fwnode);
+> +	if (IS_ERR(ptn->typec_mux)) {
+> +		ret = dev_err_probe(dev, PTR_ERR(ptn->typec_mux),
+> +				    "Failed to acquire mode-switch\n");
+> +		goto err_switch_put;
 > +	}
->   }
->   
->   static void xhci_handle_cmd_reset_ep(struct xhci_hcd *xhci, int slot_id,
-> diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-> index 6f4bf98a6282..aa4379bdb90c 100644
-> --- a/drivers/usb/host/xhci.h
-> +++ b/drivers/usb/host/xhci.h
-> @@ -1276,6 +1276,7 @@ enum xhci_cancelled_td_status {
->   	TD_DIRTY = 0,
->   	TD_HALTED,
->   	TD_CLEARING_CACHE,
-> +	TD_CLEARING_CACHE_DEFERRED,
->   	TD_CLEARED,
->   };
+> +
+>  	ret = regulator_enable(ptn->vdd18_supply);
+> -	if (ret)
+> -		return dev_err_probe(dev, ret, "Failed to enable vdd18\n");
+> +	if (ret) {
+> +		ret = dev_err_probe(dev, ret, "Failed to enable vdd18\n");
+> +		goto err_mux_put;
+> +	}
+>  
+>  	ret = ptn36502_detect(ptn);
+>  	if (ret)
+> @@ -363,6 +381,12 @@ static int ptn36502_probe(struct i2c_client *client)
+>  err_disable_regulator:
+>  	regulator_disable(ptn->vdd18_supply);
+>  
+> +err_mux_put:
+> +	typec_mux_put(ptn->typec_mux);
+> +
+> +err_switch_put:
+> +	typec_switch_put(ptn->typec_switch);
 
-I like this solution, can't immediately find any issues with it.
-Commit message makes some hasty assumptions.
+Please split typec_switch_put() to a separate patch, it's a fix.
 
-Thanks
-Mathias
+> +
+>  	return ret;
+>  }
+>  
+> @@ -374,6 +398,9 @@ static void ptn36502_remove(struct i2c_client *client)
+>  	typec_switch_unregister(ptn->sw);
+>  
+>  	regulator_disable(ptn->vdd18_supply);
+> +
+> +	typec_mux_put(ptn->typec_mux);
+> +	typec_switch_put(ptn->typec_switch);
+>  }
+>  
+>  static const struct i2c_device_id ptn36502_table[] = {
+> 
+> -- 
+> 2.34.1
+> 
 
+-- 
+With best wishes
+Dmitry
 
