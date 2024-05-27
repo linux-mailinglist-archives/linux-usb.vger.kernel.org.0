@@ -1,129 +1,146 @@
-Return-Path: <linux-usb+bounces-10598-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10599-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DCFAC8D0642
-	for <lists+linux-usb@lfdr.de>; Mon, 27 May 2024 17:34:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A41CF8D0886
+	for <lists+linux-usb@lfdr.de>; Mon, 27 May 2024 18:29:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 983B82A714A
-	for <lists+linux-usb@lfdr.de>; Mon, 27 May 2024 15:34:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 32B1D284043
+	for <lists+linux-usb@lfdr.de>; Mon, 27 May 2024 16:29:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F12361FC9;
-	Mon, 27 May 2024 15:34:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8A6273441;
+	Mon, 27 May 2024 16:29:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="UgiMUSAx"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HC+86xTn"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 222D417E8E2
-	for <linux-usb@vger.kernel.org>; Mon, 27 May 2024 15:34:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E11461FC9;
+	Mon, 27 May 2024 16:29:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716824047; cv=none; b=ldKaaz9AQJxTGmbP+OR2mQU8noVt3l19BqbdJ08En94mGSggVREk4QLvsubIc3vwb49y6iBhdKdA7GY1fr8cZnrjgnDwN7IsfV4MiL9DSMBEc6k14SFfebiJdjKiom8njvwz2Gv6JElNj54grpVFM//xCqkzSQtQrSwRk7zOZnY=
+	t=1716827368; cv=none; b=DhYI59oKEAdsuVSoEFCTh2pg0k3VBtcGAUQAIlVwPvecLIE5xV040GKKr2KwYneCVxhTkQh/V6XteVDYVA1DBfSTtgXZShN8qqDho5EMMtxSKnB7S6O7XpVypH40VOIcwT6S4zqMvp7ktj4Or098kPRoqypBArW/UnL1q2JsoI4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716824047; c=relaxed/simple;
-	bh=RRCuBh7W6wPfh49qqUiZszG8NXQpLse6WVAdpgbjefI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Pc3KdiSwbFaOWXTlEGFleQPefOs0jIzVsv1pxaUjY3SWy8rkkL8RbKc73qLId83BYLXraZtTurLpr0xNKF/9gX/BuzhamCftM4FH4G6EAeytXzUXgy6MDuj01A4FRAYUyeuE/D+im4JbQuyIp6muKRJuLo7sQhGlu0eSd8soriM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=UgiMUSAx; arc=none smtp.client-ip=209.85.208.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-2e73359b8fbso92401611fa.2
-        for <linux-usb@vger.kernel.org>; Mon, 27 May 2024 08:34:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1716824042; x=1717428842; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SDBLdo0ivVawyK7Z7mv/FF9smz7XbvDNojAc6LLM8WY=;
-        b=UgiMUSAxuX6LlR62CoEuerryQdfVanTs4n405LAYWdsHtsCMBGNTPMfLfywqtk0vK+
-         VYgrAz1x0lq7UQ0oTkRuG4m6kilEvX6u9ScNuJ++PfRUHv1Em3NxXKOH0FjadT4kNqen
-         vctY/zhfMnz1LVU7eTjst3XSziCwKtWWbSRHVSqRzcbDdo8YoI6NB/SflVOq9j/jwr1w
-         9MvaDfVZw9Mavrdp7zk/8TBD0KmIjvVSrpPC90gimqYCWMErKFr172RLOQudumovP2qZ
-         dvoebZ8AbRQYgwHW//kbTppfd9M3LyOHWhME5N6Ttyth0DFvEtpbKm4tD8gQwmwwn9d/
-         muSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716824042; x=1717428842;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SDBLdo0ivVawyK7Z7mv/FF9smz7XbvDNojAc6LLM8WY=;
-        b=GOfPLTEWELZwu4L3C3vrzowlvclXzYejaF+fDpZ1LobPiz6OT4bpm97kqb7yMiwtut
-         EGFAxPjrb21Tboh2XgVkk23/s2AHP+StWYOS4CcXtUJKvCtKPs0TmVkw+GPlMgrNFEeG
-         34cXaWWMY0AZYE6//FpIdY5s7Q7h29pYnDXjn0GZPTVgZGge1EccODZMoCI8veK5xRPf
-         osCkHH2bsSXEowpf+mBoPD157RxVAfzLX19tF53q1whqMdnAlY5CFsLA3egJ0VbD5NBf
-         B4LQGAyiJoY+YhmWD2TyXuWlkq7gcjaMsM8lFvYy0DQxRz4b7udlXh6Yctidk5ENj0rl
-         wI7w==
-X-Forwarded-Encrypted: i=1; AJvYcCXpuGJbJVFVT8KLBW4YKaB+82z0noXlte+48jojnTPYNcTId42vRtnvMK2C1aGNhBs5gQ021Qbt0dLJmFcRRRR93vocfXujjL6Y
-X-Gm-Message-State: AOJu0YyytlrhOE6sXX3QDJ3to6PBH2ECtzat+QHTPbNMj1xEkWR4HYcT
-	kP2vBeRiEeV9FthfpC84CJbPtzM72bOyl7Amn1xJIUEpPniYjUEJlRfF6hQoNdiDLLs38FjXsgh
-	9geoYr3uYnMyncmkbIyo07oO7ym8kb6MY1KKpjg==
-X-Google-Smtp-Source: AGHT+IFNHgFYbIP4SXVIdUe/i8k7EBKc9LawgfrZ+CMTfhw3ojlB2fJ9Ee12gO8HKL+EIQKiC8EqWtul1FeuKsbNg3M=
-X-Received: by 2002:a2e:9c94:0:b0:2e2:a85f:f222 with SMTP id
- 38308e7fff4ca-2e95b042c1dmr89433191fa.10.1716824042240; Mon, 27 May 2024
- 08:34:02 -0700 (PDT)
+	s=arc-20240116; t=1716827368; c=relaxed/simple;
+	bh=iA18VivydKAQ4UA9PjBaSAgMP8a7UkSDlzUR8RE2CNE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=X/Z4nAW4aQNa9Jo+jMndH6FJCLYgIGjX9tJGABs5ZjHit+0SQ2nC+YHMI2wPjHfjn94vSzV4KX0rrAoro7Dk+NJ+v/7c3Js51zSrISq12RaGTVvmXDkwP5Vw1lKu5Uxn+EvFBibrEaSI9Zihd+rxKP6t1E0vQz6Oh2UW/P54dhk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HC+86xTn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28690C2BBFC;
+	Mon, 27 May 2024 16:29:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1716827367;
+	bh=iA18VivydKAQ4UA9PjBaSAgMP8a7UkSDlzUR8RE2CNE=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=HC+86xTnZCEA4oVsfN6B5G05HQwYFMt8In7u8WB8kUekOG/yDZBG8NX1E4lAMYZx+
+	 QAfAJ38guBsbZgPzQGt2oghMxOhl86LikBts4vzJ+bTLld7emKaMekcgEK3BceYaQp
+	 zDltP2A5pzRat7ka3YPooUMEDKgLdAu9Xzz1BqbbaHfmALzPMEUy//1jVaSTTuQTMD
+	 8JKffa6lUdeVo+l98YsswqndFBj4MdRXvHicvLhjEPkQNhV6yYp6LZTGg5c3WCXPsk
+	 lIDDYURMbHTFHehYpTaNdaEFRnGccb07/GShqJq1KW6V7oy5QEdVs8C+DqO5gA0Amg
+	 w8fKFmSTmL60g==
+Message-ID: <35d68e6b-c821-4ebd-96f6-33f09fa04f1b@kernel.org>
+Date: Mon, 27 May 2024 18:29:22 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240527144538.155704-1-brgl@bgdev.pl> <f709f17d-c20c-4777-b23b-8275f6d4f3f5@kernel.org>
-In-Reply-To: <f709f17d-c20c-4777-b23b-8275f6d4f3f5@kernel.org>
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Mon, 27 May 2024 17:33:50 +0200
-Message-ID: <CAMRc=McDRpwvTbVZVmzT45zjrZN+ZxYP8_9QVTScZCew+fboMg@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: usb: qcom,dwc3: set minItems for interrupt-names
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Wesley Cheng <quic_wcheng@quicinc.com>, linux-arm-msm@vger.kernel.org, 
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, 
-	Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] dt-bindings: usb: qcom,dwc3: set minItems for
+ interrupt-names
+To: Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Wesley Cheng <quic_wcheng@quicinc.com>,
+ linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+ Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+References: <20240527144538.155704-1-brgl@bgdev.pl>
+ <f709f17d-c20c-4777-b23b-8275f6d4f3f5@kernel.org>
+ <CAMRc=McDRpwvTbVZVmzT45zjrZN+ZxYP8_9QVTScZCew+fboMg@mail.gmail.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <CAMRc=McDRpwvTbVZVmzT45zjrZN+ZxYP8_9QVTScZCew+fboMg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Mon, May 27, 2024 at 5:13=E2=80=AFPM Krzysztof Kozlowski <krzk@kernel.or=
-g> wrote:
->
-> On 27/05/2024 16:45, Bartosz Golaszewski wrote:
-> > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> >
-> > There's a set of compatibles for which we set a strict list of 5 interr=
-upt
-> > names even though minItems for the interrupts property is 4. One of the
-> > USB controllers on sa8775p only consumes 4 interrupts which leads to
-> > dtbs_check errors. Make the last entry optional by setting minItems to =
-4.
-> >
-> > Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> > ---
-> >  Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 1 +
-> >  1 file changed, 1 insertion(+)
->
-> Can you also fix other cases? I found there at least two other. I missed
-> that during review... or maybe we discussed it? I remember that commit
-> was a pain :/
->
+On 27/05/2024 17:33, Bartosz Golaszewski wrote:
+> On Mon, May 27, 2024 at 5:13 PM Krzysztof Kozlowski <krzk@kernel.org> wrote:
+>>
+>> On 27/05/2024 16:45, Bartosz Golaszewski wrote:
+>>> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+>>>
+>>> There's a set of compatibles for which we set a strict list of 5 interrupt
+>>> names even though minItems for the interrupts property is 4. One of the
+>>> USB controllers on sa8775p only consumes 4 interrupts which leads to
+>>> dtbs_check errors. Make the last entry optional by setting minItems to 4.
+>>>
+>>> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+>>> ---
+>>>  Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 1 +
+>>>  1 file changed, 1 insertion(+)
+>>
+>> Can you also fix other cases? I found there at least two other. I missed
+>> that during review... or maybe we discussed it? I remember that commit
+>> was a pain :/
+>>
+> 
+> I can put that on my TODO list but I really have too much on my plate
+> ATM. I propose this be picked up separately.
+> 
 
-I can put that on my TODO list but I really have too much on my plate
-ATM. I propose this be picked up separately.
 
-> The commits from quicinc fix one issue and bring immediately one more.
->
-> But be sure that this is what we actually want. Maybe intention was to
-> have fixed number of interrupts (so no minItems in interrupts)?
->
-> Also, in any case:
-> Fixes: 53c6d854be4e ("dt-bindings: usb: dwc3: Clean up hs_phy_irq in
-> binding")
->
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Thanks,
-Bart
+Best regards,
+Krzysztof
+
 
