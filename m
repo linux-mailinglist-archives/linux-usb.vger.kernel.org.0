@@ -1,195 +1,184 @@
-Return-Path: <linux-usb+bounces-10578-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10579-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2E458CFCA3
-	for <lists+linux-usb@lfdr.de>; Mon, 27 May 2024 11:18:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EAEEA8CFDB1
+	for <lists+linux-usb@lfdr.de>; Mon, 27 May 2024 12:04:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 229C31C20FAB
-	for <lists+linux-usb@lfdr.de>; Mon, 27 May 2024 09:18:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E3E8E1F23013
+	for <lists+linux-usb@lfdr.de>; Mon, 27 May 2024 10:04:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97703139D13;
-	Mon, 27 May 2024 09:18:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47D6413B2B9;
+	Mon, 27 May 2024 10:03:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="zXWfMfZ7"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="INQiLfoX"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72795138493
-	for <linux-usb@vger.kernel.org>; Mon, 27 May 2024 09:18:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB9DC13AA2D
+	for <linux-usb@vger.kernel.org>; Mon, 27 May 2024 10:03:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716801516; cv=none; b=Oaq0rqC1tMCOs32nTMDPt7c9ORzhl8IRFJV82INIqDhJVFVdzWBJXHrZW+D5uXmBnL6Ph/LsZSz8kAqW0Kj05CENx68ZO5LL6JTzxMtTlLQHdr7IdEN7IeNkSQLn0B5NjjIbTtOloTcWDWA3oiIRDU6sTS60/EsbJoUOW4O+0p4=
+	t=1716804235; cv=none; b=fAw40pOnzblZoCFVeTjsjaMK3+X55DyJeQrN/Y6YJnSv6DyFvP9Yr3qxPwIIQluvMQSIXCfRTG7zyaYADWaSe3yzxwsA1RdG8HcrUp9NjKxpYh5RUR9u8R7P7nQMtbE4EEyVMSme83nPKvPj9QCiD0suv4We5+SG7wezhPnF6ds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716801516; c=relaxed/simple;
-	bh=wQcfv6030ij82jUK6+/wla/4dKOwktAWdTrmIqKWvnM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dIX7mrPSIQHIVyXj655SzE6O2QtyQAPMldj54W2C+GtlvgM/2uGjFtiLA6w8S7fVSTB5wE6VLU4ND/DxW5TCxN3PHs7gZjX0Fx8u/spUBakRY//3Qoh+2MVqXKPEozbBAIbYGgXl4GG6Vo77r3VXqBefKU+6fJTiCqQXblyWIYs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=zXWfMfZ7; arc=none smtp.client-ip=209.85.208.169
+	s=arc-20240116; t=1716804235; c=relaxed/simple;
+	bh=GoSjFgsW9XX4FxaGRuMnHzKdzXrzwD3jV+ewrTpDXy4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=SfggQKayDf0fTd9g8LIjQsvWiDrI4MVHeWSEO3vByNirUL+b5UehtT6SosTJXGK89CPHTHQoBkCCmb0xUWRVttQKzYXLZFxe2xEy7u7W4WygO+3UKqM4u4miCb9s3bS6veZH/KKhNqh6pAQLqFuJqa9fNMH8QtpxrkSDzexLF+I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=INQiLfoX; arc=none smtp.client-ip=209.85.208.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-2e724bc466fso96942681fa.3
-        for <linux-usb@vger.kernel.org>; Mon, 27 May 2024 02:18:34 -0700 (PDT)
+Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-2e95afec7e6so23987791fa.0
+        for <linux-usb@vger.kernel.org>; Mon, 27 May 2024 03:03:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1716801513; x=1717406313; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ElGvATidgGffK1r5Dzp1IOrlLnZD2i4ep1EfK0h/Tms=;
-        b=zXWfMfZ7TMtR/34NQ59daSb9BgImqB6PPvQegbRy512a5zDIwa2nAASZEElW73Ahj/
-         CPRh7FY1zmyUpbCya51XpTu5QG1mUM5Pf5zA3gp0D2vo/4BO+WvXDXk94fBwVsmWFCQR
-         lQpr+WhyUSeBz0QtZwVgvghlGqhVlCQKIGN4A8eisc9btN5cmauzpX7URg3jB92S89Qw
-         OJ1IlJ0j8BL3Cd1AooBveVuD6gUpNTkn4jyD8iLngfIGEgMnu8NTo8NhN2G7CTtsnQ67
-         OP/SuN/sJ2oy9Z2aZOtgiC3MJiSNqvbLFoN0yAJjAy/V3cswUW9ArG4By8DR1NJ77loh
-         0KBA==
+        d=linaro.org; s=google; t=1716804231; x=1717409031; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=CWCAY9nfV/09IvUrExbRVdiOxpHB98rxD+Vvq8u/+7U=;
+        b=INQiLfoXxaQ/sMCpvGupAvjvU5FoewH9ZZUnbquXh6DDPQYYJX3+y586bnL6E+q8ka
+         DWbvQaSX+/si03p75zVEjkBI9G4Ooh76F6DzHdCTPYbxyqhfymzLZaBWQSYDu8ICVG1R
+         OgBPI2FMyq7LZ/jnniKxn1sVeXtmqcoZOr+IkVEN74mSOxdDPYsWpjEWkPntaWgV3FOP
+         8rwSkbF8oJJNjZi9PqTlMfyi+5h2sStSl6kIoX/ABPqYHyeBOiRElIVXP7DoMizT18dS
+         Y56ofQ0tl+O6FQbWWaRCTyRsqqn2OVOJJy92ajN7rM9OanQ4FO21joaDcTl914E4Qd7p
+         msfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716801513; x=1717406313;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ElGvATidgGffK1r5Dzp1IOrlLnZD2i4ep1EfK0h/Tms=;
-        b=CrroSaRBeXCB39t/RlAUMARM1j82QBhHxkWTRLIO0ZJYoW41L67rjynjEHxNqzGbfR
-         4WSry4F+014Tl9EpvUnOo4GrNPGxnLH2avXsOLPVayjK3rqACMIfaU31MkAB6bOnVtvj
-         lwoN6X2RYgOFVkNPLsex3oDI3JENR1HnpN/u9h+tEXaUKPVxDQbnN71vtxBXOdyC7qxW
-         ZLLbuxqXV8Zq/hCvteWN4U8e3q9DAf3B/TuhOLgiUsiQec89w7aH40zKszmHCQqIarG0
-         Hrbf6ColvIc7/Uoj8aB4DAS8i8tljXf8pY9XgyjicHfdRJBVyrrR8EoO2ODfpa/T2uIn
-         HPdg==
-X-Forwarded-Encrypted: i=1; AJvYcCW5rb5CxBDL+i9sJrA7q5tYKJqnXEC7TXpraiVVJhXB5+0DDTFvqBwbtnMNreXbk5+tZP215rVE128iJBgWL0LJqKivzCTEVHN1
-X-Gm-Message-State: AOJu0YzXwzVIu3McqidEhmQTx2FQEBHQk+0NuWYjzbvPPmBfPi7G7R7T
-	3bF/BC1zuJXXMuYGrt1Ilaaz/1sC8CpTrwpBQjgavhYSTBNpctHmiNlM1puVyPg=
-X-Google-Smtp-Source: AGHT+IFhFokDStqP88zftcz543WctnBkGzESkn0T+HS6G4fMr6/934An9b6sPz9x1PZPdPLBTyz6tA==
-X-Received: by 2002:a2e:a710:0:b0:2dd:cb34:ddbc with SMTP id 38308e7fff4ca-2e95b27b108mr66759911fa.48.1716801512661;
-        Mon, 27 May 2024 02:18:32 -0700 (PDT)
-Received: from eriador.lumag.spb.ru (dzdbxzyyyyyyyyyyyykxt-3.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::227])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2e95bcf4c32sm18295741fa.66.2024.05.27.02.18.32
+        d=1e100.net; s=20230601; t=1716804231; x=1717409031;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CWCAY9nfV/09IvUrExbRVdiOxpHB98rxD+Vvq8u/+7U=;
+        b=s7UfNuNTJIGyMClMkeyP7Vsoiek0G9v8xJx9Obb6Wut6gTJz5kuuitL7Btg4Q2K6G/
+         w/Ztfks/x2vYTnHCGh6PlXoGGHF+b0TqoTtej423mniA4bEGD8ihqpbnlcAAuQhYqAor
+         lpUVoRdfVfn34HMEbV504l4J5YgSg53ja4nc3z9fcXkjSac3jw83TAW705x38qwGn+Al
+         1VKbZx52ebVPyT724GVsK0uQBLELzoHkw8IHIJhbjlgcXOqOUQFLE3JWGWvjDJgugDNG
+         4929YtAw9iWvJMuYEkH1HCOvZIqeLwxcOB3nDzoqqSDK8xR9E58JAXVBcCNpJI7FZG1/
+         cV4g==
+X-Forwarded-Encrypted: i=1; AJvYcCXijGd9MdvsH57qfdLfCL4B5zCqdB/Za/GAQV/AswcRyWZif+OZLRT6oyL7mw6JWHIeHNdReyuvMC2fcLmu6lRLN0WS+3Q4oPVq
+X-Gm-Message-State: AOJu0Yy12HAQqnwSmNJhEdiWUCMHdKDQKXKhfqCoddwV00t7M7xGP9s3
+	zWaU5IB4MhrLMZdqjkdZlpk2l4b0WnyY5f+pILKolqwcfxxrRY84LbGPveD7peQ=
+X-Google-Smtp-Source: AGHT+IGJQXRl3GfjDf3dBE4UULEOHF+XIHegN8FJMnDhvaQYCJoS+XwFyHg80n7Nc/+jQJjuok/cPg==
+X-Received: by 2002:a05:651c:225:b0:2e9:7f96:3d56 with SMTP id 38308e7fff4ca-2e97f963e0cmr2563301fa.3.1716804231022;
+        Mon, 27 May 2024 03:03:51 -0700 (PDT)
+Received: from umbar.lan ([192.130.178.91])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2e95bcf4bdfsm18616651fa.63.2024.05.27.03.03.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 May 2024 02:18:32 -0700 (PDT)
-Date: Mon, 27 May 2024 12:18:30 +0300
+        Mon, 27 May 2024 03:03:50 -0700 (PDT)
 From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: Neil Armstrong <neil.armstrong@linaro.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Bjorn Andersson <andersson@kernel.org>, 
-	Luca Weiss <luca.weiss@fairphone.com>, linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] usb: typec-mux: nb7vpq904m: broadcast typec state to
- next mux
-Message-ID: <jdqnlfuqount32ralk4jr3beobdt7dgs3h4lcpxj5fbmanysl6@pgwqeozl7ow5>
-References: <20240527-topic-sm8x50-upstream-retimer-broadcast-mode-v1-0-79ec91381aba@linaro.org>
- <20240527-topic-sm8x50-upstream-retimer-broadcast-mode-v1-2-79ec91381aba@linaro.org>
+Subject: [PATCH v3 0/6] power: supply: Lenovo Yoga C630 EC
+Date: Mon, 27 May 2024 13:03:45 +0300
+Message-Id: <20240527-yoga-ec-driver-v3-0-327a9851dad5@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240527-topic-sm8x50-upstream-retimer-broadcast-mode-v1-2-79ec91381aba@linaro.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAIFaVGYC/zXMQQ6CMBBA0auQrh1SphTQlfcwLiqdwkShZkqIh
+ HB3GxOXb/H/rhIJU1KXYldCKyeOc4Y5Faof3TwQsM9WqLHWFlvY4uCAevDCKwm0TfBtsN476lS
+ O3kKBP7/h7Z4dJE6wjELuvzEata0sdvpcIhpTmwYq8BMvspUPJ1san3G9vnh2EssogzqOL8J4/
+ +ynAAAA
+To: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
+ Hans de Goede <hdegoede@redhat.com>, 
+ =?utf-8?q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org, 
+ linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+ Nikita Travkin <nikita@trvn.ru>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+ Bjorn Andersson <andersson@kernel.org>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3322;
+ i=dmitry.baryshkov@linaro.org; h=from:subject:message-id;
+ bh=GoSjFgsW9XX4FxaGRuMnHzKdzXrzwD3jV+ewrTpDXy4=;
+ b=owEBbQGS/pANAwAKAYs8ij4CKSjVAcsmYgBmVFqFvp6V4hHV2nnKC3YNZLzd1Ddlzs+LtsBu7
+ UmzJ01oxjiJATMEAAEKAB0WIQRMcISVXLJjVvC4lX+LPIo+Aiko1QUCZlRahQAKCRCLPIo+Aiko
+ 1Sy8CACBSZckQ6oU+Va4j+dnglLrIAn4vFRyp8pFD2wCU1xaSTMq/PskHFza/MHghdFpzrhYQuT
+ zfIJKS+xTbM53mmXfxl96xxvkx3nIxyC121PLgj15UX+AHxbGk2ZfhmPDSStKop7m6ltScRsasU
+ r0jDPuzNqohlE00ipD9bGEb9Q9QYNnO0QJ91mR1IvqDQHnY7nFH9rhIxxrtTqt2tPyxbJeEBtjx
+ tlc+9fk/iqkzNna/kE/j+M5kh7Ugta0+fWQJxWDQBoBwEAzyniBUauvaDjOvkdLYkz8eEKa1Z0E
+ BgIKLDQfY3s4K8VrLdV1g1T+l4EVJDDHgsYAT2dxgxy9L0hr
+X-Developer-Key: i=dmitry.baryshkov@linaro.org; a=openpgp;
+ fpr=8F88381DD5C873E4AE487DA5199BF1243632046A
 
-On Mon, May 27, 2024 at 09:45:30AM +0200, Neil Armstrong wrote:
-> In the Type-C graph, the nb7vpq904m retimer is in between the USB-C
-> connector and the USB3/DP combo PHY, and this PHY also requires the
-> USB-C mode events to properly set-up the SuperSpeed Lanes functions
-> to setup USB3-only, USB3 + DP Altmode or DP Altmode only on the 4 lanes.
-> 
-> Update the nb7vpq904m retimer to get an optional type-c mux on the next
-> endpoint, and broadcast the received mode to it.
-> 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
->  drivers/usb/typec/mux/nb7vpq904m.c | 29 +++++++++++++++++++++++++++--
->  1 file changed, 27 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/mux/nb7vpq904m.c b/drivers/usb/typec/mux/nb7vpq904m.c
-> index b17826713753..efb10f890fed 100644
-> --- a/drivers/usb/typec/mux/nb7vpq904m.c
-> +++ b/drivers/usb/typec/mux/nb7vpq904m.c
-> @@ -69,6 +69,7 @@ struct nb7vpq904m {
->  
->  	bool swap_data_lanes;
->  	struct typec_switch *typec_switch;
-> +	struct typec_mux *typec_mux;
->  
->  	struct mutex lock; /* protect non-concurrent retimer & switch */
->  
-> @@ -275,6 +276,7 @@ static int nb7vpq904m_sw_set(struct typec_switch_dev *sw, enum typec_orientation
->  static int nb7vpq904m_retimer_set(struct typec_retimer *retimer, struct typec_retimer_state *state)
->  {
->  	struct nb7vpq904m *nb7 = typec_retimer_get_drvdata(retimer);
-> +	struct typec_mux_state mux_state;
->  	int ret = 0;
->  
->  	mutex_lock(&nb7->lock);
-> @@ -292,7 +294,14 @@ static int nb7vpq904m_retimer_set(struct typec_retimer *retimer, struct typec_re
->  
->  	mutex_unlock(&nb7->lock);
->  
-> -	return ret;
-> +	if (ret)
-> +		return ret;
-> +
-> +	mux_state.alt = state->alt;
-> +	mux_state.data = state->data;
-> +	mux_state.mode = state->mode;
-> +
-> +	return typec_mux_set(nb7->typec_mux, &mux_state);
->  }
->  
->  static const struct regmap_config nb7_regmap = {
-> @@ -411,9 +420,16 @@ static int nb7vpq904m_probe(struct i2c_client *client)
->  		return dev_err_probe(dev, PTR_ERR(nb7->typec_switch),
->  				     "failed to acquire orientation-switch\n");
->  
-> +	nb7->typec_mux = fwnode_typec_mux_get(dev->fwnode);
-> +	if (IS_ERR(nb7->typec_mux)) {
-> +		ret = dev_err_probe(dev, PTR_ERR(nb7->typec_mux),
-> +				    "Failed to acquire mode-switch\n");
-> +		goto err_switch_put;
-> +	}
-> +
->  	ret = nb7vpq904m_parse_data_lanes_mapping(nb7);
->  	if (ret)
-> -		return ret;
-> +		goto err_mux_put;
->  
->  	ret = regulator_enable(nb7->vcc_supply);
->  	if (ret)
-> @@ -456,6 +472,12 @@ static int nb7vpq904m_probe(struct i2c_client *client)
->  	gpiod_set_value(nb7->enable_gpio, 0);
->  	regulator_disable(nb7->vcc_supply);
->  
-> +err_mux_put:
-> +	typec_mux_put(nb7->typec_mux);
-> +
-> +err_switch_put:
-> +	typec_switch_put(nb7->typec_switch);
+This adds binding, driver and the DT support for the Lenovo Yoga C630
+Embedded Controller, to provide battery information.
 
-Same comment, typec_switch_put should go to a separate commit. IMHO it
-almost begs us to have devm_fwnode_typec_mux_get() and
-devm_fwnode_typec_switch_get().
+Support for this EC was implemented by Bjorn, who later could not work
+on this driver. I've picked this patchset up and updated it following
+the pending review comments.
 
-> +
->  	return ret;
->  }
->  
-> @@ -469,6 +491,9 @@ static void nb7vpq904m_remove(struct i2c_client *client)
->  	gpiod_set_value(nb7->enable_gpio, 0);
->  
->  	regulator_disable(nb7->vcc_supply);
-> +
-> +	typec_mux_put(nb7->typec_mux);
-> +	typec_switch_put(nb7->typec_switch);
->  }
->  
->  static const struct i2c_device_id nb7vpq904m_table[] = {
-> 
-> -- 
-> 2.34.1
-> 
+DisplayPort support is still not a part of this patchset. It uses EC
+messages to provide AltMode information rather than implementing
+corresponding UCSI commands. However to have a cleaner uAPI story, the
+AltMode should be handled via the same Type-C port.
 
+Merge strategy: the driver bits depend on the platform/arm64 patch,
+which adds interface for the subdrivers. I'd either ask to get that
+patch merged to the immutable branch, which then can be picked up by
+power/supply and USB trees or, to make life simpler, ack merging all
+driver bits e.g. through USB subsystem (I'm biased here since I plan to
+send more cleanups for the UCSI subsystem, which would otherwise result
+in cross-subsystem conflicts).
+
+---
+Changes in v3:
+- Split the driver into core and power supply drivers,
+- Added UCSI driver part, handling USB connections,
+- Fixed Bjorn's address in DT bindings (Brian Masney)
+- Changed power-role for both ports to be "dual" per UCSI
+- Link to v2: https://lore.kernel.org/linux-arm-msm/20230205152809.2233436-1-dmitry.baryshkov@linaro.org/
+
+Changes in v2:
+- Dropped DP support for now, as the bindings are in process of being
+  discussed separately,
+- Merged dt patch into the same patchseries,
+- Removed the fixed serial number battery property,
+- Fixed indentation of dt bindings example,
+- Added property: reg and unevaluatedProperties to the connector
+  bindings.
+- Link to v1: https://lore.kernel.org/linux-arm-msm/20220810035424.2796777-1-bjorn.andersson@linaro.org/
+
+---
+Bjorn Andersson (2):
+      dt-bindings: power: supply: Add Lenovo Yoga C630 EC
+      arm64: dts: qcom: c630: Add Embedded Controller node
+
+Dmitry Baryshkov (4):
+      platform: arm64: add Lenovo Yoga C630 WOS EC driver
+      usb: typec: ucsi: add Lenovo Yoga C630 glue driver
+      power: supply: lenovo_yoga_c630_battery: add Lenovo C630 driver
+      arm64: dts: qcom: sdm845: describe connections of USB/DP port
+
+ .../bindings/power/supply/lenovo,yoga-c630-ec.yaml |  83 ++++
+ arch/arm64/boot/dts/qcom/sdm845.dtsi               |  53 ++-
+ .../boot/dts/qcom/sdm850-lenovo-yoga-c630.dts      |  76 ++++
+ drivers/platform/arm64/Kconfig                     |  14 +
+ drivers/platform/arm64/Makefile                    |   1 +
+ drivers/platform/arm64/lenovo-yoga-c630.c          | 279 ++++++++++++
+ drivers/power/supply/Kconfig                       |   9 +
+ drivers/power/supply/Makefile                      |   1 +
+ drivers/power/supply/lenovo_yoga_c630_battery.c    | 476 +++++++++++++++++++++
+ drivers/usb/typec/ucsi/Kconfig                     |   9 +
+ drivers/usb/typec/ucsi/Makefile                    |   1 +
+ drivers/usb/typec/ucsi/ucsi_yoga_c630.c            | 189 ++++++++
+ include/linux/platform_data/lenovo-yoga-c630.h     |  42 ++
+ 13 files changed, 1232 insertions(+), 1 deletion(-)
+---
+base-commit: 8314289a8d50a4e05d8ece1ae0445a3b57bb4d3b
+change-id: 20240527-yoga-ec-driver-76fd7f5ddae8
+
+Best regards,
 -- 
-With best wishes
-Dmitry
+Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+
 
