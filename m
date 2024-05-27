@@ -1,161 +1,129 @@
-Return-Path: <linux-usb+bounces-10597-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10598-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24CF88D0607
-	for <lists+linux-usb@lfdr.de>; Mon, 27 May 2024 17:25:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DCFAC8D0642
+	for <lists+linux-usb@lfdr.de>; Mon, 27 May 2024 17:34:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 485931C20EB4
-	for <lists+linux-usb@lfdr.de>; Mon, 27 May 2024 15:25:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 983B82A714A
+	for <lists+linux-usb@lfdr.de>; Mon, 27 May 2024 15:34:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51D07155CB2;
-	Mon, 27 May 2024 15:20:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F12361FC9;
+	Mon, 27 May 2024 15:34:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="UgiMUSAx"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id 795D261FF8
-	for <linux-usb@vger.kernel.org>; Mon, 27 May 2024 15:20:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
+Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 222D417E8E2
+	for <linux-usb@vger.kernel.org>; Mon, 27 May 2024 15:34:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716823237; cv=none; b=I1SUjDuwKlDFdDFk1h/AJC9vMtwm/2F1qQMLUCPHI/MemHN9mCbHuIJfR+Yj1n2zsDNqTPMqIGLWWSOZjLwYfgTQbRrHOHyA0qOnhuvPsEObuvWyaRjbG0vWk2rTmb6nPkhl6Bha9r6G1v2vI72+hhOz0yH/wBR6zwfEP7WuHwI=
+	t=1716824047; cv=none; b=ldKaaz9AQJxTGmbP+OR2mQU8noVt3l19BqbdJ08En94mGSggVREk4QLvsubIc3vwb49y6iBhdKdA7GY1fr8cZnrjgnDwN7IsfV4MiL9DSMBEc6k14SFfebiJdjKiom8njvwz2Gv6JElNj54grpVFM//xCqkzSQtQrSwRk7zOZnY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716823237; c=relaxed/simple;
-	bh=bE0HQufswAxv3T+Fq+LbBkckUaBwmisMgO+tUoa1gKQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=m3vhNg3baCVvOeFjPulS4kC93l0lxP7z9tc51asizxMIQci9EBVQiXdTiTTZSZTBKxzPSuKqRFuv0SONue1k+e/mzo0jMD48tAPHb8KbMX/v+Eywi4yka3ndaaaJXwnhs/9JyVuTHjIfLUvHKwVW5O/tFKup0ktbLJ9GXc4cqb0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
-Received: (qmail 662485 invoked by uid 1000); 27 May 2024 11:20:33 -0400
-Date: Mon, 27 May 2024 11:20:33 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Oliver Neukum <oneukum@suse.com>
-Cc: Shichao Lai <shichaorai@gmail.com>, gregkh@linuxfoundation.org,
-  Markus.Elfring@web.de, linux-usb@vger.kernel.org,
-  usb-storage@lists.one-eyed-alien.net, linux-kernel@vger.kernel.org,
-  xingwei lee <xrivendell7@gmail.com>, yue sun <samsun1006219@gmail.com>
-Subject: Re: [PATCH v6] usb-storage: alauda: Check whether the media is
- initialized
-Message-ID: <5a3057a5-8d20-4fc1-92d7-932c0f2b6c92@rowland.harvard.edu>
-References: <20240526012745.2852061-1-shichaorai@gmail.com>
- <8176c55f-980c-4dcb-9e17-8c9c948ce216@suse.com>
+	s=arc-20240116; t=1716824047; c=relaxed/simple;
+	bh=RRCuBh7W6wPfh49qqUiZszG8NXQpLse6WVAdpgbjefI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Pc3KdiSwbFaOWXTlEGFleQPefOs0jIzVsv1pxaUjY3SWy8rkkL8RbKc73qLId83BYLXraZtTurLpr0xNKF/9gX/BuzhamCftM4FH4G6EAeytXzUXgy6MDuj01A4FRAYUyeuE/D+im4JbQuyIp6muKRJuLo7sQhGlu0eSd8soriM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=UgiMUSAx; arc=none smtp.client-ip=209.85.208.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-2e73359b8fbso92401611fa.2
+        for <linux-usb@vger.kernel.org>; Mon, 27 May 2024 08:34:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1716824042; x=1717428842; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SDBLdo0ivVawyK7Z7mv/FF9smz7XbvDNojAc6LLM8WY=;
+        b=UgiMUSAxuX6LlR62CoEuerryQdfVanTs4n405LAYWdsHtsCMBGNTPMfLfywqtk0vK+
+         VYgrAz1x0lq7UQ0oTkRuG4m6kilEvX6u9ScNuJ++PfRUHv1Em3NxXKOH0FjadT4kNqen
+         vctY/zhfMnz1LVU7eTjst3XSziCwKtWWbSRHVSqRzcbDdo8YoI6NB/SflVOq9j/jwr1w
+         9MvaDfVZw9Mavrdp7zk/8TBD0KmIjvVSrpPC90gimqYCWMErKFr172RLOQudumovP2qZ
+         dvoebZ8AbRQYgwHW//kbTppfd9M3LyOHWhME5N6Ttyth0DFvEtpbKm4tD8gQwmwwn9d/
+         muSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1716824042; x=1717428842;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SDBLdo0ivVawyK7Z7mv/FF9smz7XbvDNojAc6LLM8WY=;
+        b=GOfPLTEWELZwu4L3C3vrzowlvclXzYejaF+fDpZ1LobPiz6OT4bpm97kqb7yMiwtut
+         EGFAxPjrb21Tboh2XgVkk23/s2AHP+StWYOS4CcXtUJKvCtKPs0TmVkw+GPlMgrNFEeG
+         34cXaWWMY0AZYE6//FpIdY5s7Q7h29pYnDXjn0GZPTVgZGge1EccODZMoCI8veK5xRPf
+         osCkHH2bsSXEowpf+mBoPD157RxVAfzLX19tF53q1whqMdnAlY5CFsLA3egJ0VbD5NBf
+         B4LQGAyiJoY+YhmWD2TyXuWlkq7gcjaMsM8lFvYy0DQxRz4b7udlXh6Yctidk5ENj0rl
+         wI7w==
+X-Forwarded-Encrypted: i=1; AJvYcCXpuGJbJVFVT8KLBW4YKaB+82z0noXlte+48jojnTPYNcTId42vRtnvMK2C1aGNhBs5gQ021Qbt0dLJmFcRRRR93vocfXujjL6Y
+X-Gm-Message-State: AOJu0YyytlrhOE6sXX3QDJ3to6PBH2ECtzat+QHTPbNMj1xEkWR4HYcT
+	kP2vBeRiEeV9FthfpC84CJbPtzM72bOyl7Amn1xJIUEpPniYjUEJlRfF6hQoNdiDLLs38FjXsgh
+	9geoYr3uYnMyncmkbIyo07oO7ym8kb6MY1KKpjg==
+X-Google-Smtp-Source: AGHT+IFNHgFYbIP4SXVIdUe/i8k7EBKc9LawgfrZ+CMTfhw3ojlB2fJ9Ee12gO8HKL+EIQKiC8EqWtul1FeuKsbNg3M=
+X-Received: by 2002:a2e:9c94:0:b0:2e2:a85f:f222 with SMTP id
+ 38308e7fff4ca-2e95b042c1dmr89433191fa.10.1716824042240; Mon, 27 May 2024
+ 08:34:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8176c55f-980c-4dcb-9e17-8c9c948ce216@suse.com>
+References: <20240527144538.155704-1-brgl@bgdev.pl> <f709f17d-c20c-4777-b23b-8275f6d4f3f5@kernel.org>
+In-Reply-To: <f709f17d-c20c-4777-b23b-8275f6d4f3f5@kernel.org>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Mon, 27 May 2024 17:33:50 +0200
+Message-ID: <CAMRc=McDRpwvTbVZVmzT45zjrZN+ZxYP8_9QVTScZCew+fboMg@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: usb: qcom,dwc3: set minItems for interrupt-names
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Wesley Cheng <quic_wcheng@quicinc.com>, linux-arm-msm@vger.kernel.org, 
+	linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, 
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, 
+	Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, May 27, 2024 at 05:01:13PM +0200, Oliver Neukum wrote:
-> On 26.05.24 03:27, Shichao Lai wrote:
-> 
-> Hi,
-> 
-> 
-> > The member "uzonesize" of struct alauda_info will remain 0
-> > if alauda_init_media() fails, potentially causing divide errors
-> > in alauda_read_data() and alauda_write_lba().
-> 
-> This means that we can reach those functions.
-> 
-> > - Add a member "media_initialized" to struct alauda_info.
-> > - Change a condition in alauda_check_media() to ensure the
-> >    first initialization.
-> > - Add an error check for the return value of alauda_init_media().
-> > 
-> > Fixes: e80b0fade09e ("[PATCH] USB Storage: add alauda support")
-> > Reported-by: xingwei lee <xrivendell7@gmail.com>
-> > Reported-by: yue sun <samsun1006219@gmail.com>
-> > Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
-> > Signed-off-by: Shichao Lai <shichaorai@gmail.com>
+On Mon, May 27, 2024 at 5:13=E2=80=AFPM Krzysztof Kozlowski <krzk@kernel.or=
+g> wrote:
+>
+> On 27/05/2024 16:45, Bartosz Golaszewski wrote:
+> > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> >
+> > There's a set of compatibles for which we set a strict list of 5 interr=
+upt
+> > names even though minItems for the interrupts property is 4. One of the
+> > USB controllers on sa8775p only consumes 4 interrupts which leads to
+> > dtbs_check errors. Make the last entry optional by setting minItems to =
+4.
+> >
+> > Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 > > ---
-> > Changes since v5:
-> > - Check the initialization of alauda_check_media()
-> >    which is the root cause.
-> > 
-> >   drivers/usb/storage/alauda.c | 9 ++++++---
-> >   1 file changed, 6 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/drivers/usb/storage/alauda.c b/drivers/usb/storage/alauda.c
-> > index 115f05a6201a..40d34cc28344 100644
-> > --- a/drivers/usb/storage/alauda.c
-> > +++ b/drivers/usb/storage/alauda.c
-> > @@ -105,6 +105,8 @@ struct alauda_info {
-> >   	unsigned char sense_key;
-> >   	unsigned long sense_asc;	/* additional sense code */
-> >   	unsigned long sense_ascq;	/* additional sense code qualifier */
-> > +
-> > +	bool media_initialized;
-> >   };
-> >   #define short_pack(lsb,msb) ( ((u16)(lsb)) | ( ((u16)(msb))<<8 ) )
-> > @@ -476,11 +478,12 @@ static int alauda_check_media(struct us_data *us)
-> >   	}
-> >   	/* Check for media change */
-> > -	if (status[0] & 0x08) {
-> > +	if (status[0] & 0x08 || !info->media_initialized) {
-> 
-> If we take this branch due to !info->media_initialized and only due
-> to this condition, alauda_check_media() will return an error
-> 
-> (Quoting the current state):
->         /* Check for media change */
->         if (status[0] & 0x08) {
->                 usb_stor_dbg(us, "Media change detected\n");
->                 alauda_free_maps(&MEDIA_INFO(us));
->                 alauda_init_media(us);
-> 
->                 info->sense_key = UNIT_ATTENTION;
->                 info->sense_asc = 0x28;
->                 info->sense_ascq = 0x00;
->                 return USB_STOR_TRANSPORT_FAILED;
+> >  Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 1 +
+> >  1 file changed, 1 insertion(+)
+>
+> Can you also fix other cases? I found there at least two other. I missed
+> that during review... or maybe we discussed it? I remember that commit
+> was a pain :/
+>
 
-Indeed.  That's what would happen with a properly functioning device, as 
-opposed to a malicious one or a purposely defective fuzzing emulation.  
-The point of the patch is to make the system treat these other things in 
-the same way as it treats normal devices.
+I can put that on my TODO list but I really have too much on my plate
+ATM. I propose this be picked up separately.
 
-> >   		usb_stor_dbg(us, "Media change detected\n");
-> >   		alauda_free_maps(&MEDIA_INFO(us));
-> > -		alauda_init_media(us);
-> > -
-> > +		rc = alauda_init_media(us);
-> > +		if (rc == USB_STOR_TRANSPORT_GOOD)
-> > +			info->media_initialized = true;
-> >   		info->sense_key = UNIT_ATTENTION;
-> >   		info->sense_asc = 0x28;
-> >   		info->sense_ascq = 0x00;
-> 
-> It seems to that we need to evaluate the reasons for taking this branch
-> and the result of alauda_init_media() to compute the correct return
-> of this function.
+> The commits from quicinc fix one issue and bring immediately one more.
+>
+> But be sure that this is what we actually want. Maybe intention was to
+> have fixed number of interrupts (so no minItems in interrupts)?
+>
+> Also, in any case:
+> Fixes: 53c6d854be4e ("dt-bindings: usb: dwc3: Clean up hs_phy_irq in
+> binding")
+>
 
-The return value is what it should be.  With a normal device:
-
-	We see that the device reports a media change.  We read the
-	characteristics of the new media and report a UNIT ATTENTION
-	error, notifyng the SCSI layer about the new media and forcing
-	it to retry the command.
-
-With the defective syzbot emulation and the original code:
-
-	We don't see a report of a media change, so we try to carry
-	out a READ or WRITE operation without knowing any of the
-	media characteristics.  Result: division by zero.
-
-With the defective syzbot emulation and the patched code:
-
-	We don't see a report of a media change, but we do see that
-	the media hasn't been initialized, so we try to read the
-	characteristics of the media.  This fails, so the
-	media_initialized flag remains clear and the command continues 
-	to fail until the SCSI layer gives up.  (Although maybe it would 
-	be better to report a different error to the SCSI layer when
-	this happens; UNIT ATTENTION with 0x28: Media May Have Changed 
-	doesn't seem right.)
-
-Alan Stern
+Thanks,
+Bart
 
