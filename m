@@ -1,186 +1,96 @@
-Return-Path: <linux-usb+bounces-10586-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10587-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5ED48CFE23
-	for <lists+linux-usb@lfdr.de>; Mon, 27 May 2024 12:30:09 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 027F18CFE80
+	for <lists+linux-usb@lfdr.de>; Mon, 27 May 2024 13:00:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5577E1F233B4
-	for <lists+linux-usb@lfdr.de>; Mon, 27 May 2024 10:30:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 337F41C21F25
+	for <lists+linux-usb@lfdr.de>; Mon, 27 May 2024 11:00:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1D1A13B783;
-	Mon, 27 May 2024 10:29:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E65613BC20;
+	Mon, 27 May 2024 11:00:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=trvn.ru header.i=@trvn.ru header.b="ridocHYy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eUkcDjA+"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from box.trvn.ru (box.trvn.ru [194.87.146.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7036113D281;
-	Mon, 27 May 2024 10:29:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.87.146.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16EAC17BCC;
+	Mon, 27 May 2024 11:00:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716805746; cv=none; b=OSsvU8tBvfoDNniP2ZOqoWdE8ZPdcgtDZfu8YDRC37kcbtRe084CRI5kK9N70o0dRToG8qMJXR9Tw5dlwwVbNMQYnypTD3Bo5BPZ43NT4w/M1kyZZczW0X0FrBKGZ8ozdx1e0pEEVuZNSLd0eeicGTAht/XFymNQzpgmtDaR+3c=
+	t=1716807629; cv=none; b=fHeN3qEHvcJ/3RY+JAd3V3dDDO8yV8fRF4btNwhwQWnRfgkAtHnADB3RgaszwrFomxIOcM+lPUmYcZ1XQWq2ZVBFE1JbUbepSmtDpqcA2wMhkUzSoyxvoMYe8kspvL30BqxOnBABENvHz54rT2IIIQC5XD4jGEumMi59bzvXkVQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716805746; c=relaxed/simple;
-	bh=ZAOnZNIPCZ/gjfi2EqP8pXMwOx3RdNya75v5ylcZQ6c=;
-	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
-	 Message-ID:Content-Type; b=TzUkMy8KbiZqGKPaBsljkj4zUVQ6zbSgFqpcN8INnsSQX316PJny4+iP6hD2FPKlm3ZRcqcQVc1Byr59WOqnqK7OEeoDd5DU4AgVwT66dufy84LcRspznnXpMH+LSe/j+y6oQs/0iArj9rCB9flonL0MxqHkkGw5ZLZKk2sV41Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=trvn.ru; spf=pass smtp.mailfrom=trvn.ru; dkim=pass (2048-bit key) header.d=trvn.ru header.i=@trvn.ru header.b=ridocHYy; arc=none smtp.client-ip=194.87.146.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=trvn.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=trvn.ru
-Received: from authenticated-user (box.trvn.ru [194.87.146.52])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-	(No client certificate requested)
-	by box.trvn.ru (Postfix) with ESMTPSA id 283C2401B5;
-	Mon, 27 May 2024 15:21:31 +0500 (+05)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=trvn.ru; s=mail;
-	t=1716805292; bh=ZAOnZNIPCZ/gjfi2EqP8pXMwOx3RdNya75v5ylcZQ6c=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=ridocHYydGXxMzSw/4pmPPWYPapNbiLLDE25aOUH1yhRhqE9IxNCaygl7dmOhLvCu
-	 kfM7xS/lbMNMw/2UJ4se499cJTUropO7SxQVqXnkeEQlQxRyp/9VTqXzg16bnEijfs
-	 IHYiHStZPIA1pcEPsCINtqdueHIA969sfhk+BuCikO7BTUkWycZCY7+n8gtorHnkX2
-	 eP+FnETfN6HL4lc3uPpUFXCKQS/zMBU9tgpYlkXroBji92nHZAhM9HryJhvB71Gki/
-	 FZJx0S/x/EDP/GwgU+gPPxFGMOAJPq1Y2u8OF9T7RO7heMsl0piZ0PpjYNH+vqNXFf
-	 +sKjYJVMEd4Rw==
+	s=arc-20240116; t=1716807629; c=relaxed/simple;
+	bh=9OvgGCLs7UsmYX5hDtFasiQG55WDAV2a+q/y+k0S2Ww=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=JoMff3LHhgSoPoqh+sz+Lp3MJbBe7YSHjJZpIdH7JLoIsjyBoidZnwqwGIi7n+mpLz6BEWAzlywnr8Q+npJYCDm+1lHrZ9GMNTbPBZ0RGbIjwUbpbHODd74nCIfBrCNP0pJ9A5i3hXO5FIlkz3QQzbgzkqtsoq+/UymcHBq3k0Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eUkcDjA+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A333AC32786;
+	Mon, 27 May 2024 11:00:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1716807628;
+	bh=9OvgGCLs7UsmYX5hDtFasiQG55WDAV2a+q/y+k0S2Ww=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=eUkcDjA+J4EeGU1jei0k9g0HiVpryBGM/5vp+X+5Vk+MznHrmADwPrJiNswqFDKLq
+	 F4ZmADjPovevjncTJ/JcQSvgxcpM0phPXFqFniSK0EnDGR5uKM/xsta6PASJjxfBrj
+	 tNa30VY9URVQBnclG0Q042u5ABe4AbnkEukdxA2fudDEY8ctt3uqJs4jsYP7r3N7ud
+	 ++7qm6OxxqDVZMhpPgYYp6hoOB5PEWECCdE8VY//nDslw9PqSUOzNHZJ0jamixW7g3
+	 e5R9xXNQ5m72ozMteVJ0s5H6IZ/7AYEAo5P4NgYituZXLZQQwVtCpMQcPXqNkzpSVL
+	 vsVNGW5R7JUOw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8F94FCF21F8;
+	Mon, 27 May 2024 11:00:28 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Mon, 27 May 2024 15:21:27 +0500
-From: Nikita Travkin <nikita@trvn.ru>
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>, Hans de Goede
- <hdegoede@redhat.com>, =?UTF-8?Q?Ilpo_J=C3=A4rvinen?=
- <ilpo.jarvinen@linux.intel.com>, Bryan O'Donoghue
- <bryan.odonoghue@linaro.org>, Heikki Krogerus
- <heikki.krogerus@linux.intel.com>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, Konrad Dybcio <konrad.dybcio@linaro.org>,
- linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
- linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org, Krzysztof
- Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v3 1/6] dt-bindings: power: supply: Add Lenovo Yoga C630
- EC
-In-Reply-To: <20240527-yoga-ec-driver-v3-1-327a9851dad5@linaro.org>
-References: <20240527-yoga-ec-driver-v3-0-327a9851dad5@linaro.org>
- <20240527-yoga-ec-driver-v3-1-327a9851dad5@linaro.org>
-Message-ID: <f05953c74f2bf58256306eb3d554ae0b@trvn.ru>
-X-Sender: nikita@trvn.ru
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] net: usb: smsc95xx: fix changing LED_SEL bit value updated
+ from EEPROM
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <171680762858.16270.336533909510921768.git-patchwork-notify@kernel.org>
+Date: Mon, 27 May 2024 11:00:28 +0000
+References: <20240523085314.167650-1-Parthiban.Veerasooran@microchip.com>
+In-Reply-To: <20240523085314.167650-1-Parthiban.Veerasooran@microchip.com>
+To: Parthiban Veerasooran <Parthiban.Veerasooran@microchip.com>
+Cc: steve.glendinning@shawell.net, UNGLinuxDriver@microchip.com,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+ netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org
 
-Dmitry Baryshkov писал(а) 27.05.2024 15:03:
-> From: Bjorn Andersson <andersson@kernel.org>
+Hello:
+
+This patch was applied to netdev/net.git (main)
+by Paolo Abeni <pabeni@redhat.com>:
+
+On Thu, 23 May 2024 14:23:14 +0530 you wrote:
+> LED Select (LED_SEL) bit in the LED General Purpose IO Configuration
+> register is used to determine the functionality of external LED pins
+> (Speed Indicator, Link and Activity Indicator, Full Duplex Link
+> Indicator). The default value for this bit is 0 when no EEPROM is
+> present. If a EEPROM is present, the default value is the value of the
+> LED Select bit in the Configuration Flags of the EEPROM. A USB Reset or
+> Lite Reset (LRST) will cause this bit to be restored to the image value
+> last loaded from EEPROM, or to be set to 0 if no EEPROM is present.
 > 
-> Add binding for the Embedded Controller found in the Qualcomm
-> Snapdragon-based Lenovo Yoga C630.
-> 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> ---
->  .../bindings/power/supply/lenovo,yoga-c630-ec.yaml | 83 ++++++++++++++++++++++
->  1 file changed, 83 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/power/supply/lenovo,yoga-c630-ec.yaml b/Documentation/devicetree/bindings/power/supply/lenovo,yoga-c630-ec.yaml
-> new file mode 100644
-> index 000000000000..52a302850743
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/supply/lenovo,yoga-c630-ec.yaml
-> @@ -0,0 +1,83 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/power/supply/lenovo,yoga-c630-ec.yaml#
+> [...]
 
-Should this binding join aspire1 one in bindings/platform ?
+Here is the summary with links:
+  - net: usb: smsc95xx: fix changing LED_SEL bit value updated from EEPROM
+    https://git.kernel.org/netdev/net/c/52a2f0608366
 
-Nikita
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Lenovo Yoga C630 Embedded Controller.
-> +
-> +maintainers:
-> +  - Bjorn Andersson <andersson@kernel.org>
-> +
-> +description:
-> +  The Qualcomm Snapdragon-based Lenovo Yoga C630 has an Embedded Controller
-> +  (EC) which handles things such as battery and USB Type-C. This binding
-> +  describes the interface, on an I2C bus, to this EC.
-> +
-> +properties:
-> +  compatible:
-> +    const: lenovo,yoga-c630-ec
-> +
-> +  reg:
-> +    const: 0x70
-> +
-> +  '#address-cells':
-> +    const: 1
-> +
-> +  '#size-cells':
-> +    const: 0
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +patternProperties:
-> +  '^connector@[01]$':
-> +    $ref: /schemas/connector/usb-connector.yaml#
-> +
-> +    properties:
-> +      reg:
-> +        maxItems: 1
-> +
-> +    unevaluatedProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |+
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    i2c1 {
-> +        clock-frequency = <400000>;
-> +
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        embedded-controller@70 {
-> +            compatible = "lenovo,yoga-c630-ec";
-> +            reg = <0x70>;
-> +
-> +            interrupts-extended = <&tlmm 20 IRQ_TYPE_LEVEL_HIGH>;
-> +
-> +            #address-cells = <1>;
-> +            #size-cells = <0>;
-> +
-> +            connector@0 {
-> +                compatible = "usb-c-connector";
-> +                reg = <0>;
-> +                power-role = "source";
-> +                data-role = "host";
-> +            };
-> +
-> +            connector@1 {
-> +                compatible = "usb-c-connector";
-> +                reg = <1>;
-> +                power-role = "source";
-> +                data-role = "host";
-> +            };
-> +        };
-> +    };
-> +...
+
 
