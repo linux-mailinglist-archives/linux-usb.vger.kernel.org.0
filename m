@@ -1,203 +1,110 @@
-Return-Path: <linux-usb+bounces-10573-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10574-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED8128CFA58
-	for <lists+linux-usb@lfdr.de>; Mon, 27 May 2024 09:46:11 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99E168CFB64
+	for <lists+linux-usb@lfdr.de>; Mon, 27 May 2024 10:28:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 886BD1F21782
-	for <lists+linux-usb@lfdr.de>; Mon, 27 May 2024 07:46:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 50D061F212C4
+	for <lists+linux-usb@lfdr.de>; Mon, 27 May 2024 08:28:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 233642232A;
-	Mon, 27 May 2024 07:45:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D18F554273;
+	Mon, 27 May 2024 08:28:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="LiULr+gM"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="EaDrhefw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E68F425774
-	for <linux-usb@vger.kernel.org>; Mon, 27 May 2024 07:45:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8443F4D5A2
+	for <linux-usb@vger.kernel.org>; Mon, 27 May 2024 08:28:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716795938; cv=none; b=OmxW+5HKNcrtURWd0LAwFkdmkgzz6HympBakcIPgxXcViMzd5na0EARULxvejB9HosesOVnRHhONc0i26cmDwVZrBPgTm4TCAXkD3L3zKrKeVPYENsU7YWgO/l3p+JVVx3MN3CwTEL8kngwHacYdq1E8+p6JhQ4bFvaagY5n7c4=
+	t=1716798500; cv=none; b=lLMI3eolpf01z0RFG/qDjaTEMN9vrYzvsZvYhd3+h1WL8DacrXksS3rtLYMbz72+B1326lwxJ82mC4HLxhko/w58lwbNiYNKkTgefZzFTRTaPpSwXRRx/12R1GBSCMtOtzhXnBHAizxv5evEl4U6hleFYy+BKea0giv8zDtMWUQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716795938; c=relaxed/simple;
-	bh=HrzCuyYOTQp6Hcqse0NW0mxe7R0/QtbPKl1iU6vPkbA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=nMh89tLZ4S5SHKwVLSOcR4ckKPAWydkkHkOpVT1k7JloiTlK8DS7ZRjgdN8CvgsZHCcA4cMazBo/my0pY25Y6PawfWpDOwIAy8Tw3TgX4cAFIhIiccp3o4iTIXQDn7pSdRXEms5Wy2pMfd10Ztb+8eAcIb6xAZKENO36IEnQ458=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=LiULr+gM; arc=none smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-357d533b744so1341600f8f.2
-        for <linux-usb@vger.kernel.org>; Mon, 27 May 2024 00:45:36 -0700 (PDT)
+	s=arc-20240116; t=1716798500; c=relaxed/simple;
+	bh=I2dFfh26l+6htx4A2es4uMpapQ+YgW1iGGGPGSM5nX4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gHseAOAeLov2vrFnjzblIFgR0AWBkIl3gSYuPd6bj+4MocDVim6Ch54yDkoORDZRXnXhg4U6AKEzJ63G99yk0/pj4SO3w9OHAZh0l4Gx32Bzs4YXKzjeG3HPRqRb8akBdG7hd8AwQJU3Ak0suhBw66yA1B9viSHfatIyJT45tgo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=EaDrhefw; arc=none smtp.client-ip=209.85.208.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-57857e0f45dso2804880a12.1
+        for <linux-usb@vger.kernel.org>; Mon, 27 May 2024 01:28:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1716795935; x=1717400735; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+OIdwth0KqS+sBxgs7ae2EL7EzNf1O+NkE/SPqs85gk=;
-        b=LiULr+gMPThr0LuCqo1UUtix1jBRYSr4drOLhH1LC79vsJax4lWdU3opfu1q/3a7L6
-         0Jd0QEJNAxfZCr00JY9ovH8J8KqOtMnpe/v1L0XZNw08vAnBoR9V+2TSAU4P4/MZMxv+
-         XMBdAVYkHJMwG6z+5FzP7XUv35Yg9SwTCJH5OTA6uSuSmNF7dVWKO+As3l0CG+ZQaE3U
-         jHo03HsIrwQ18LrRUcvHn4cK7c0EcawAUOACNOFZFesWxwZu/Sp2mQr2mMuSDYgsoro6
-         Uz3k9F4hdAEwjS8vlz4UrB6yKKL9aZML6Gx20HUize8zLsZgccSkpcVvLjHFZnBwPpJk
-         XwFw==
+        d=suse.com; s=google; t=1716798497; x=1717403297; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nD9laAvbqQPSf4T3VBuD4yAtj5SB6o2Jvt0/iLt+t+k=;
+        b=EaDrhefwIaG00q4eN9sxH+Nrep9893hsQJLzbxaK5Jtx8UKjbfYrAMV2dKKbD4iRZl
+         9VEwy4XDq+5tLsxkcNShQdw2MIEYc+3iYcfhwKKTaT7DXQu0R6rmBsK67Mdm0GjrHPTy
+         2/CzBnVYBqbs7UtolIsMXW42c7XnUpyJMHcBnZQUxpq9Xx+sG29rjufM6wniWt0tiBCG
+         uouGa/w3A+OKaiLROEtrBgTja4YrvEgMIPDhhrC976OEAu3U0/gWr3WNT7dJweLfk+TZ
+         c8i/FXXwtfv7XF3l5Apy2SwX62ibPJEwRDGpdlDazlVYWQNMc9wwHmooR6CAUi6piwFz
+         El3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716795935; x=1717400735;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+OIdwth0KqS+sBxgs7ae2EL7EzNf1O+NkE/SPqs85gk=;
-        b=KF2RjmBqSkBLi/YcgC6II+aZ6S86ZQKpKcR9zULtMCjbwQ+w5nCcYdaD2u13gbOThK
-         hpRDbOQvoz7kjxwT6sgivHfHCEa3+lYtd6tClehCI9ZTClzofh0Vl18UKk5yBSEQBnyd
-         15/NqrdkyaDZ3H7gRM0O6SZyoQTdCZ+uuB6/Ne1MLOa2/xxDqhnYGNhpjmirU4ExQxqT
-         eUpEmtP93CMOxSecE/FELLBfRn58hjkTP4tY9dloadeHS+2RH4523/PeWstwKemxYa+G
-         NJptl4dUqeFvfosDsu0ylkiBqE8V6H9MJkBzK6McbCMh2OZO9xMFEVLFH25hb6RW937B
-         vL+w==
-X-Forwarded-Encrypted: i=1; AJvYcCUVSYAqCuGcKMOejjIfou1ARD9RfuMepMZLdfUSLP6ddFvcr1PDejJwefShnNzOOcf24xZVa4k4Kn0KclKEsN/eHlx6/5KIarfM
-X-Gm-Message-State: AOJu0YykBC/gdi6iJictGJb0l/O8Pd6JPP0Wi+yL3ruhxMbspUFkEsuh
-	gYD6jv8/ZUpZ3HqZtSZK+FKYseEC56MCv9y7ErhIpbFC+Rxnd5QzwQaxeBTloOY=
-X-Google-Smtp-Source: AGHT+IHY2u91yvON0SLaRQalJBNqlqvX+k3ce4dcksK49BgH1rmpX3P5U+oUBK4qkAASspc9wxgBBg==
-X-Received: by 2002:a5d:4ed2:0:b0:354:e021:51c6 with SMTP id ffacd0b85a97d-35526c39f7cmr5966023f8f.29.1716795935311;
-        Mon, 27 May 2024 00:45:35 -0700 (PDT)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-35579d7d96fsm8293353f8f.12.2024.05.27.00.45.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 May 2024 00:45:34 -0700 (PDT)
-From: Neil Armstrong <neil.armstrong@linaro.org>
-Date: Mon, 27 May 2024 09:45:30 +0200
-Subject: [PATCH 2/2] usb: typec-mux: nb7vpq904m: broadcast typec state to
- next mux
+        d=1e100.net; s=20230601; t=1716798497; x=1717403297;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nD9laAvbqQPSf4T3VBuD4yAtj5SB6o2Jvt0/iLt+t+k=;
+        b=vJkASTtNi5F5uigEeJ8XbIfgit7Bp7A794t3IyAqRTMzqDt/JKTfjVThhobjSnz6Hd
+         /ETkSBP5tAQv+eabBUtGo7t67CP2XXo7VEwN8y2lTclcZvQtSnyAR/VaI4S2Jd5+gi+n
+         DT5eceztgFZMD3BWK4MephyzJX6BsScK5oIVP9QjHKjp6vV87gFxsjbuHJ2gt30m8fs0
+         dIz/wycIDpcv6lA4unbvuYW83KvdkG1DZr0uKWDRxj8YlbA4rI2Acnsq+a0der1X2uE6
+         KVJbVUpl5eZhHhodgQ4gWa4/hfeOoSq8jLiBxA5emju3vosThPOTEFEv7LKIt1Y96AKx
+         S2Cw==
+X-Forwarded-Encrypted: i=1; AJvYcCXykc31waVqbybb+kPpPLn7l8fg+84410H/rIFItEkj+sP7KT4iYllPEeYbkjG/A22CZMkwqERjLEJHKC6dn/LwfAERCht3uvDE
+X-Gm-Message-State: AOJu0YzXE7JvlH6VYJtwWab8ZCnZiBV0RqO6x0nN4zXhjZe/6Vigfs81
+	IFu6qbNR3EHeQWAyzgXs4/c3GYEnQH9Y7n22evNvrPHIsESIPRakGEAazrST3ms=
+X-Google-Smtp-Source: AGHT+IGhqSO1/rhzuiLgEOL9XfioS/OqMt1YxNJMb8zzs18KkPeun1uTzC/uLpw3ICBDu9lEfl2Qzw==
+X-Received: by 2002:a17:906:3105:b0:a59:bfab:b25a with SMTP id a640c23a62f3a-a6265116f69mr550448566b.63.1716798496875;
+        Mon, 27 May 2024 01:28:16 -0700 (PDT)
+Received: from ?IPV6:2001:a61:139b:bf01:e8eb:4d8f:8770:df82? ([2001:a61:139b:bf01:e8eb:4d8f:8770:df82])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a626c817b15sm464678366b.40.2024.05.27.01.28.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 May 2024 01:28:16 -0700 (PDT)
+Message-ID: <a6c93527-fc78-4182-9341-97e2fe0d1ace@suse.com>
+Date: Mon, 27 May 2024 10:28:15 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] net: usb: smsc95xx: configure external LEDs function for
+ EVB-LAN8670-USB
+To: Parthiban Veerasooran <Parthiban.Veerasooran@microchip.com>,
+ steve.glendinning@shawell.net, UNGLinuxDriver@microchip.com,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
+Cc: netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20240522140817.409936-1-Parthiban.Veerasooran@microchip.com>
+Content-Language: en-US
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <20240522140817.409936-1-Parthiban.Veerasooran@microchip.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240527-topic-sm8x50-upstream-retimer-broadcast-mode-v1-2-79ec91381aba@linaro.org>
-References: <20240527-topic-sm8x50-upstream-retimer-broadcast-mode-v1-0-79ec91381aba@linaro.org>
-In-Reply-To: <20240527-topic-sm8x50-upstream-retimer-broadcast-mode-v1-0-79ec91381aba@linaro.org>
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Bjorn Andersson <andersson@kernel.org>, 
- Luca Weiss <luca.weiss@fairphone.com>, linux-arm-msm@vger.kernel.org, 
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Neil Armstrong <neil.armstrong@linaro.org>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2956;
- i=neil.armstrong@linaro.org; h=from:subject:message-id;
- bh=HrzCuyYOTQp6Hcqse0NW0mxe7R0/QtbPKl1iU6vPkbA=;
- b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBmVDocelcDrjEPDvs6jUdABnQcdpTrLVpqpPM+z90t
- PF5o0LWJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZlQ6HAAKCRB33NvayMhJ0eNVD/
- 9h2NJKbfL3JsS2/nrhffEi5tD5N8zEdmLMdpUapb+LS2XC9EI8U4xOIn4sH8irpmJ+TBpkEpSNtpPp
- VerjFGsdkdzVsEGmdxn2q0j5d0q7E1HLJj6bFc8ZIiWjvM7ahBxip7PXZPjryFqOTKN+77JSyonye9
- v59VyzvpmWWz92qw2LnFBevJdGaHN/Tk8xYOOq1Z5l4ekyPiqDrn4KeYizPenbDwGvG83qJjwtC9QH
- Oso2wUE0NI7m2tMKa2rL9gZZcMelPs4P+GuU0P1MZk9HUgXmcwbN8qhjCXC+uN4wnzzFW80SmhX8u0
- ELrnQbmbZlrSDromASiTQZ29+3uw+4l/fC+olHXfiEB2nw53sMoVEmddGk3RpKM77hIwGLOl4tdRqs
- bn1kX/+soTo9PmiWAuKB2gxscVXioxLHmkckWKLqlwUJyOlRDBRLBOjdvZY8jqlzD2QYME5tmxl4ou
- 1+2x5sFNJwdDX56hv5glqcoAShOe6ZDIPVhJCmMJDFzaE21K3dqsE05sSX1ZSTAy+3Oo31RSk7xfa0
- Num6QnfBHVkvsZp5anY53iKxcfK7ewuTOIfPeel+bR31pQ/hd5PoITG7lC/zmBclQdAz5Pij4vuPrc
- ZECcYIkU54x3N0V21X7T+St1XLssjU4csuuJQ+f9Uy27KXVpknP0c8bHM0/w==
-X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
- fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
 
-In the Type-C graph, the nb7vpq904m retimer is in between the USB-C
-connector and the USB3/DP combo PHY, and this PHY also requires the
-USB-C mode events to properly set-up the SuperSpeed Lanes functions
-to setup USB3-only, USB3 + DP Altmode or DP Altmode only on the 4 lanes.
+On 22.05.24 16:08, Parthiban Veerasooran wrote:
 
-Update the nb7vpq904m retimer to get an optional type-c mux on the next
-endpoint, and broadcast the received mode to it.
+Hi,
 
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
----
- drivers/usb/typec/mux/nb7vpq904m.c | 29 +++++++++++++++++++++++++++--
- 1 file changed, 27 insertions(+), 2 deletions(-)
+however you solve this, the descriptors are stored in wire order.
 
-diff --git a/drivers/usb/typec/mux/nb7vpq904m.c b/drivers/usb/typec/mux/nb7vpq904m.c
-index b17826713753..efb10f890fed 100644
---- a/drivers/usb/typec/mux/nb7vpq904m.c
-+++ b/drivers/usb/typec/mux/nb7vpq904m.c
-@@ -69,6 +69,7 @@ struct nb7vpq904m {
- 
- 	bool swap_data_lanes;
- 	struct typec_switch *typec_switch;
-+	struct typec_mux *typec_mux;
- 
- 	struct mutex lock; /* protect non-concurrent retimer & switch */
- 
-@@ -275,6 +276,7 @@ static int nb7vpq904m_sw_set(struct typec_switch_dev *sw, enum typec_orientation
- static int nb7vpq904m_retimer_set(struct typec_retimer *retimer, struct typec_retimer_state *state)
- {
- 	struct nb7vpq904m *nb7 = typec_retimer_get_drvdata(retimer);
-+	struct typec_mux_state mux_state;
- 	int ret = 0;
- 
- 	mutex_lock(&nb7->lock);
-@@ -292,7 +294,14 @@ static int nb7vpq904m_retimer_set(struct typec_retimer *retimer, struct typec_re
- 
- 	mutex_unlock(&nb7->lock);
- 
--	return ret;
-+	if (ret)
-+		return ret;
-+
-+	mux_state.alt = state->alt;
-+	mux_state.data = state->data;
-+	mux_state.mode = state->mode;
-+
-+	return typec_mux_set(nb7->typec_mux, &mux_state);
- }
- 
- static const struct regmap_config nb7_regmap = {
-@@ -411,9 +420,16 @@ static int nb7vpq904m_probe(struct i2c_client *client)
- 		return dev_err_probe(dev, PTR_ERR(nb7->typec_switch),
- 				     "failed to acquire orientation-switch\n");
- 
-+	nb7->typec_mux = fwnode_typec_mux_get(dev->fwnode);
-+	if (IS_ERR(nb7->typec_mux)) {
-+		ret = dev_err_probe(dev, PTR_ERR(nb7->typec_mux),
-+				    "Failed to acquire mode-switch\n");
-+		goto err_switch_put;
-+	}
-+
- 	ret = nb7vpq904m_parse_data_lanes_mapping(nb7);
- 	if (ret)
--		return ret;
-+		goto err_mux_put;
- 
- 	ret = regulator_enable(nb7->vcc_supply);
- 	if (ret)
-@@ -456,6 +472,12 @@ static int nb7vpq904m_probe(struct i2c_client *client)
- 	gpiod_set_value(nb7->enable_gpio, 0);
- 	regulator_disable(nb7->vcc_supply);
- 
-+err_mux_put:
-+	typec_mux_put(nb7->typec_mux);
-+
-+err_switch_put:
-+	typec_switch_put(nb7->typec_switch);
-+
- 	return ret;
- }
- 
-@@ -469,6 +491,9 @@ static void nb7vpq904m_remove(struct i2c_client *client)
- 	gpiod_set_value(nb7->enable_gpio, 0);
- 
- 	regulator_disable(nb7->vcc_supply);
-+
-+	typec_mux_put(nb7->typec_mux);
-+	typec_switch_put(nb7->typec_switch);
- }
- 
- static const struct i2c_device_id nb7vpq904m_table[] = {
+> +	if (dev->udev->descriptor.idVendor == 0x184F &&
+> +	    dev->udev->descriptor.idProduct == 0x0051)
+> +		write_buf |= LED_GPIO_CFG_LED_SEL;
 
--- 
-2.34.1
+This needs to be
 
+if (dev->udev->descriptor.idVendor == cpu_to_le16(0x184F) &&
+	dev->udev->descriptor.idProduct == cpu_to_le16(0x0051))
+
+	HTH
+		Oliver
 
