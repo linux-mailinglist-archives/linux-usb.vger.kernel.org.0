@@ -1,52 +1,52 @@
-Return-Path: <linux-usb+bounces-10606-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10607-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 327E08D10D3
-	for <lists+linux-usb@lfdr.de>; Tue, 28 May 2024 02:19:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C1F18D1159
+	for <lists+linux-usb@lfdr.de>; Tue, 28 May 2024 03:08:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 64B651C21016
-	for <lists+linux-usb@lfdr.de>; Tue, 28 May 2024 00:19:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 38342283012
+	for <lists+linux-usb@lfdr.de>; Tue, 28 May 2024 01:08:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C0D2C8C0;
-	Tue, 28 May 2024 00:19:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E46D79F6;
+	Tue, 28 May 2024 01:08:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F4nqvmTQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZX2q/UMP"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98544BA29
-	for <linux-usb@vger.kernel.org>; Tue, 28 May 2024 00:19:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB03F440C
+	for <linux-usb@vger.kernel.org>; Tue, 28 May 2024 01:08:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716855564; cv=none; b=bGkO2Uin1O5er/Ej/CZHDraExpdA9Er5wnIZdwnMo1qRQOGxPiyHSyfFVLn16trWCJWEFm2JjPfhmoqZq60SvzJsePZXmNStxcQsMBtSpgapkH+FSfOtT4Pau/Y+8toKkTo0yrnW0t0YpEWIofnAI+ic2QIQMJzBY0lw9otnPEc=
+	t=1716858522; cv=none; b=glDbFfoq9JNK9ueYtP5HnhszMqHcK4u1HbXo4mJeeIbLL7y9NjWyufDS1+OB2FBvblmEEEBmS1PyaLTTR1yOASD386t7ObcoQkQQOSY2oR03j+nCZpybZ8H3jsVTGngStathEG+cJ2fBXA2H1TxoYOiA5hSP1idC0ZKOolOtS/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716855564; c=relaxed/simple;
-	bh=yywSxx47SHvq0becfEko2WOSC7KzxwSlmlACLGgX3zw=;
+	s=arc-20240116; t=1716858522; c=relaxed/simple;
+	bh=97A6UhnCu8hExDvcfrlM6AhDlsTEFnLfZ9vX9lhEYIA=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=RsKyao6W69ibqz7BGvJ3cXqeGEr45n5GCU1JkBhWMBcWEJ5T8V412bF/nVvfMPoK0X8m+7V3bG6bRJypwaNTuw2hFlGOGLGl6lgPgGdGJXMKcAaSrLDhoMqRgPiSSwAGJyVAgLzwn2IUSueTOvUC72VAiykulKwjM50akUNaqQc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F4nqvmTQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1AF66C2BBFC
-	for <linux-usb@vger.kernel.org>; Tue, 28 May 2024 00:19:24 +0000 (UTC)
+	 Content-Type:MIME-Version; b=kaObj3GhIaexYB8bA6chmI6xFtOdDvPI366wBBYcc6FPDQFCIMWSIhwCh7B0vm9jYivYaOzkRvoA+HFvCDQV3adneI/pRD7G781rz5qlMfhqOYLDNXVgGni3DTG/bfvoZw3/qumtJ6ZgH0zohwbncN/pcu0IBHR3f9f5Udd8h1g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZX2q/UMP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C8913C32782
+	for <linux-usb@vger.kernel.org>; Tue, 28 May 2024 01:08:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716855564;
-	bh=yywSxx47SHvq0becfEko2WOSC7KzxwSlmlACLGgX3zw=;
+	s=k20201202; t=1716858521;
+	bh=97A6UhnCu8hExDvcfrlM6AhDlsTEFnLfZ9vX9lhEYIA=;
 	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=F4nqvmTQn5NB5uoQv0CReGNic3ZzzYws1Km0Q9QVTVgM2vGsBbsoaCcv38FbEI9ui
-	 IBbRxEiX07NJs8O1je3GftkQdtbnz5TpCXvXePu8VGKpNC4OOlExCQkyYg4BiHcvNG
-	 ITXQ11NplCURCcGJZGvxLfWoK5ubkVup8kFQ4bzxL1RsLRYYOgoJZwV54vYg5SrZqN
-	 wcVFMiycqUCQqtYOC3IbbeJReUPZKxAa/ocjFeYtxHoInjkmu3HxgodkLsfJ9yX5LT
-	 E++JM43djRAxbmxkgWdc4btqVdfgzkfEMJeJNe6GkPDOk5FHo2vJlFED4ZGkHWiHlV
-	 kOeiU3v01DKvA==
+	b=ZX2q/UMPja/0+YUy8hKQsNctwzJX4DWm5oet/ZfwoO4V1kZ7z4tEigh66WBr2JIVR
+	 VpUcDxtlosD3CTgm/aksKiFu3h1OKO4R365pBTSnuBR0TxQUyRAlJyLMlkK9DVo3gG
+	 w2Ziu2S9SYTq41P1FbpPm9S8FKtVzrAUBlDwVMHxTtch+BAA6fpZujLN2cbuNk8IGg
+	 cbdis+w4KF45qN0iHT6nHxEadx5bXjH405RbbTrJ/e0N5YfOgogXEouZDaDDF+Mj4p
+	 sGmIjenbGYeyPT3nifPSYbO40OiniFxFIXpfUL38P84I92nXwaP0llwpaAbT7L9pnx
+	 f5Q7QeQXuHeOA==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 079EBC53B73; Tue, 28 May 2024 00:19:24 +0000 (UTC)
+	id B3D7CC53B7F; Tue, 28 May 2024 01:08:41 +0000 (UTC)
 From: bugzilla-daemon@kernel.org
 To: linux-usb@vger.kernel.org
 Subject: [Bug 218890] reset SuperSpeed USB device number 2 using xhci_hcd
-Date: Tue, 28 May 2024 00:19:23 +0000
+Date: Tue, 28 May 2024 01:08:41 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -55,14 +55,14 @@ X-Bugzilla-Component: USB
 X-Bugzilla-Version: 2.5
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: pierretom+12@ik.me
+X-Bugzilla-Who: stern@rowland.harvard.edu
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-218890-208809-CXH9VZlgTc@https.bugzilla.kernel.org/>
+Message-ID: <bug-218890-208809-123KApREiC@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-218890-208809@https.bugzilla.kernel.org/>
 References: <bug-218890-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -78,17 +78,20 @@ MIME-Version: 1.0
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D218890
 
---- Comment #2 from Pierre Tomon (pierretom+12@ik.me) ---
-I did a `git bisect` on the stable repo and it give me this as result:
-d97e1c3602240bd35c48ef9aa978e0c47a511d03 is the first bad commit
-Author: Martin K. Petersen <martin.petersen@oracle.com>
-Date:   Tue Feb 13 09:33:06 2024 -0500
-scsi: sd: usb_storage: uas: Access media prior to querying device properties
-...
+--- Comment #3 from Alan Stern (stern@rowland.harvard.edu) ---
+That makes sense; the commit changes the sequence of commands during the ea=
+rly
+part of initialization.  However, to figure out what's going wrong it would=
+ be
+a big help to have a usbmon trace for an earlier working kernel, such as
+6.6.15, for comparison.  Can you do that test and attach the trace to this =
+bug
+report?
 
-I also did a `git revert` on that commit and built the kernel, The bug does=
- not
-appear.
+You don't have to collect a huge amount of information.  The first few seco=
+nds
+would probably be enough -- up to the point where the "Attached SCSI disk"
+message appears in the kernel log.
 
 --=20
 You may reply to this email to add a comment.
