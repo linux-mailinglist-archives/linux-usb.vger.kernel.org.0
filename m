@@ -1,125 +1,128 @@
-Return-Path: <linux-usb+bounces-10619-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10620-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B6FD8D155D
-	for <lists+linux-usb@lfdr.de>; Tue, 28 May 2024 09:30:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 93CC58D165A
+	for <lists+linux-usb@lfdr.de>; Tue, 28 May 2024 10:36:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D4D061F23016
-	for <lists+linux-usb@lfdr.de>; Tue, 28 May 2024 07:30:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4AE7F1F22744
+	for <lists+linux-usb@lfdr.de>; Tue, 28 May 2024 08:36:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E06474405;
-	Tue, 28 May 2024 07:30:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D0FE13C825;
+	Tue, 28 May 2024 08:36:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="M10WnakR"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c50dkOdm"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A186173474;
-	Tue, 28 May 2024 07:30:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7729861FE6;
+	Tue, 28 May 2024 08:36:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716881432; cv=none; b=iTflqCtuy/5H76X63JuJ/TJR7FS51Ffkq8zr59ludZ2P+vgV5XwqPqWdOw14YFgVpvncIJZK2DnC4I1XfVOAaJ5BqV0vZ8YzsyOLW1vRdbfBsGOJqc8EAY13RGFNvywdGexBElGNjKnl6YYi1luJ6cFA2ESv9Fdv1m+H+XQZPxc=
+	t=1716885380; cv=none; b=OveC23X2Mjvre57z2DPBfsG/ErRCvjD2WWIOlyF0KPvIdE77RsODUDWxbQpMh8K3wTD+bbJD7bGXE4yFUGMOOhGZBxeEqr8XgBw20B9jOc431ZnKVOtdzUyCjLNEHVWfHDcIWd31vdb/VDJrJE8jGlXCQ6uaRSfDHsn0kIc6fng=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716881432; c=relaxed/simple;
-	bh=wky2UOR7xT77sN2zh228jjq+dgKG+IguwbF01IlPNt0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=n4Yuu7APRCooz7OZczHPm/TM+NvFQaGlFbpRQ+CCUaRUrKjNO9pR8nEn3Vr+2m+m0CoY/woM7cuIgihhOvILWqgEZlTqc53SmmLZAJm4vS4CiImYEmkAMpc2iHUXCiAVkJsDrSExcj3rV90zZ3tZyPwGCPlMDqSxNmcukaVo9BE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=M10WnakR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17811C32781;
-	Tue, 28 May 2024 07:30:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1716881431;
-	bh=wky2UOR7xT77sN2zh228jjq+dgKG+IguwbF01IlPNt0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=M10WnakRct4rLxx8cafbzbhZ40GauBojJSLPUPVB0AWMDlIbImOUlyfDXXQWQfdHz
-	 FwRFWnTAg5ty/psPkSan6316VAYZkOgzZYZt9t4mI1TPNgpfuE6b2u+DabVT/1j9rJ
-	 Ce3eE58GB2dPEp8GsFSUWUczN1jQUQUadW5vGh9I=
-Date: Tue, 28 May 2024 09:30:34 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Daehwan Jung <dh10.jung@samsung.com>
-Cc: Mathias Nyman <mathias.nyman@intel.com>,
-	"open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: Re: [PATCH] usb: host: Add a quirk for writing ERST in high-low order
-Message-ID: <2024052838-fifth-liver-fb4e@gregkh>
-References: <CGME20240528055659epcas2p4f86642d6647855747cea35b04f8a46cc@epcas2p4.samsung.com>
- <1716875836-186791-1-git-send-email-dh10.jung@samsung.com>
- <2024052814-exponent-domestic-6da2@gregkh>
+	s=arc-20240116; t=1716885380; c=relaxed/simple;
+	bh=ek3GrqlY84Q06jk77iRWBRKj9BVLS70A3KDY0CS4zUY=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=FVR5DX8DfX8391OYE3taB/6gdvLQQUSsluPi0AU1BkuLFmORNa04QvFelA12L4I7wHn7ELFHTHNM8A0qbfwHzZfCqsw7GY6iZxZaaYfXk51BPtMZmSdvfIz/LN8RpsVdykIyBANKMkqBmfUnWXLofW3Z/mL6XPLXxldu+KCoqMU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c50dkOdm; arc=none smtp.client-ip=209.85.167.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-529682e013dso626958e87.3;
+        Tue, 28 May 2024 01:36:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1716885376; x=1717490176; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3bwfQhGLTMj4hFoy7VGzqwfW2WbFygxoA6ri2lFOZaw=;
+        b=c50dkOdmAzAv8cakbWvpgDjhsTs69dVNrOHFKndi/iaU1+S077cTXgfbvXqlpeXzjD
+         W1yLOoxXiI+2KRWGKHA38aGZOhtvrypMSOxW8n24scJAvjimyctAE7/xP/yKEY4Gc03k
+         OE6O2xXo3hKFDxl78pxqXWo5vqOxo+A8Dv2WCknGf75cSEQmS1oK+4fJvNRCFRDYXtQJ
+         flccXqFEKwW0ghNA0ZND6Md09x0901ZqnTMndf7joxdlD77TseXtsyAk7X8b5uKSzU9n
+         jHc/BdYufHskyGtjAA+XCuSbHwZrh7ywEqnoqvV1g9RCYW1C8zXUxa4Yp030O0FAJiv8
+         dgYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1716885376; x=1717490176;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3bwfQhGLTMj4hFoy7VGzqwfW2WbFygxoA6ri2lFOZaw=;
+        b=ibOp5pGX+/Pfas30EJs3Sb3euz9CZ+ogG8vfi/qX1t3GB6YIaOzO7qpWlpcj1q/KxC
+         GpsT/uwmpiwMkRy+OyFb5CYyQdNeLpIB41liCR12HEBUJVPjZ+vFtQ/Ncca4PNt/cqF4
+         JpXoUzi5WEgX3kqlygQdG7Z14gamw3w9TZVz+GF05ORIoPi4cnT9p6y1I+ayZYcbcS/G
+         kVKTGb+amd5kPNzWe0+Cr7F0tqMx0yezSo4fJ2P01QZZAVfELQ1XyatgwfOM43bC81OB
+         C6Ag8h8tOq6L3YPIuJwFmGx3U50rVabJbqbAo4eFiwqQmeKGmGfX2oRk1ogl/LJSLE/s
+         NI7g==
+X-Forwarded-Encrypted: i=1; AJvYcCU25fbju9wzb9H1ab4OGw6pkRXgzAgPkmwA1ti4GhdZ/uHJc5UGjvFjf2ucMWhW9QuD+VRZjC5KQD+lmnWeRxoBbV+8ZbbdZYo1DTyVJPGohcvpBSp/vX0XyOWHFUNOBl+HJ3sd
+X-Gm-Message-State: AOJu0YxpdK44qI0mSEiqwKO/WHtsvVnH5o2glpS8zEOyEVoOQsb0rRT7
+	TKrENRzoC6BY/369aguQPJiC8Qf7LZ+HXLheec9rd5bVkvFtmzK9UHWIIA==
+X-Google-Smtp-Source: AGHT+IHIoKJ1HbtUskcfzhLaGGPbzPhd19YSGtQTeDJHcjxFS0wELuRKNKsKAc6qvVfucPd+Hg7yyQ==
+X-Received: by 2002:a05:6512:34c5:b0:523:8a99:f68b with SMTP id 2adb3069b0e04-529649c5d3bmr6850582e87.19.1716885376036;
+        Tue, 28 May 2024 01:36:16 -0700 (PDT)
+Received: from [192.168.1.105] ([178.176.72.246])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-529a50b1d85sm689027e87.113.2024.05.28.01.36.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 May 2024 01:36:15 -0700 (PDT)
+Subject: Re: [PATCH v2 1/2] xhci: Apply reset resume quirk to Etron EJ188 xHCI
+ host
+To: Kuangyi Chiang <ki.chiang65@gmail.com>, mathias.nyman@intel.com,
+ gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ stable@vger.kernel.org
+References: <20240528033136.14102-1-ki.chiang65@gmail.com>
+ <20240528033136.14102-2-ki.chiang65@gmail.com>
+From: Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <40d075d0-7075-6ece-ffe3-797d7b49db4a@gmail.com>
+Date: Tue, 28 May 2024 11:36:13 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2024052814-exponent-domestic-6da2@gregkh>
+In-Reply-To: <20240528033136.14102-2-ki.chiang65@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 
-On Tue, May 28, 2024 at 09:23:43AM +0200, Greg Kroah-Hartman wrote:
-> On Tue, May 28, 2024 at 02:57:16PM +0900, Daehwan Jung wrote:
-> > [Synopsys]- The host controller was design to support ERST setting
-> > during the RUN state. But since there is a limitation in controller
-> > in supporting separate ERSTBA_HI and ERSTBA_LO programming,
-> > It is supported when the ERSTBA is programmed in 64bit,
-> > or in 32 bit mode ERSTBA_HI before ERSTBA_LO
-> > 
-> > [Synopsys]- The internal initialization of event ring fetches
-> > the "Event Ring Segment Table Entry" based on the indication of
-> > ERSTBA_LO written.
-> > 
-> > Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
-> > ---
-> >  drivers/usb/host/xhci-mem.c | 5 ++++-
-> >  drivers/usb/host/xhci.h     | 2 ++
-> >  2 files changed, 6 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-> > index 3100219..ef768e6 100644
-> > --- a/drivers/usb/host/xhci-mem.c
-> > +++ b/drivers/usb/host/xhci-mem.c
-> > @@ -2325,7 +2325,10 @@ xhci_add_interrupter(struct xhci_hcd *xhci, struct xhci_interrupter *ir,
-> >  	erst_base = xhci_read_64(xhci, &ir->ir_set->erst_base);
-> >  	erst_base &= ERST_BASE_RSVDP;
-> >  	erst_base |= ir->erst.erst_dma_addr & ~ERST_BASE_RSVDP;
-> > -	xhci_write_64(xhci, erst_base, &ir->ir_set->erst_base);
-> > +	if (xhci->quirks & XHCI_WRITE_64_HI_LO)
-> > +		hi_lo_writeq(erst_base, &ir->ir_set->erst_base);
-> > +	else
-> > +		xhci_write_64(xhci, erst_base, &ir->ir_set->erst_base);
-> >  
-> >  	/* Set the event ring dequeue address of this interrupter */
-> >  	xhci_set_hc_event_deq(xhci, ir);
-> > diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-> > index 3041515..8664dd1 100644
-> > --- a/drivers/usb/host/xhci.h
-> > +++ b/drivers/usb/host/xhci.h
-> > @@ -17,6 +17,7 @@
-> >  #include <linux/kernel.h>
-> >  #include <linux/usb/hcd.h>
-> >  #include <linux/io-64-nonatomic-lo-hi.h>
-> > +#include <linux/io-64-nonatomic-hi-lo.h>
+On 5/28/24 6:31 AM, Kuangyi Chiang wrote:
 
-Why not put this in the .c file?
+> As described in commit c877b3b2ad5c ("xhci: Add reset on resume quirk for
+> asrock p67 host"), EJ188 have the same issue as EJ168, where completely
+> dies on resume. So apply XHCI_RESET_ON_RESUME quirk to EJ188 as well.
+> 
+> Cc: <stable@vger.kernel.org>
+> Signed-off-by: Kuangyi Chiang <ki.chiang65@gmail.com>
+> ---
+> Changes in v2:
+> - Porting to latest release
+> 
+>  drivers/usb/host/xhci-pci.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+> index c040d816e626..b47d57d80b96 100644
+> --- a/drivers/usb/host/xhci-pci.c
+> +++ b/drivers/usb/host/xhci-pci.c
+[...]
+> @@ -395,6 +396,10 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
+>  		xhci->quirks |= XHCI_RESET_ON_RESUME;
+>  		xhci->quirks |= XHCI_BROKEN_STREAMS;
+>  	}
+> +	if (pdev->vendor == PCI_VENDOR_ID_ETRON &&
+> +			pdev->device == PCI_DEVICE_ID_EJ188) {
+> +		xhci->quirks |= XHCI_RESET_ON_RESUME;
+> +	}
 
-> >  /* Code sharing between pci-quirks and xhci hcd */
-> >  #include	"xhci-ext-caps.h"
-> > @@ -1627,6 +1628,7 @@ struct xhci_hcd {
-> >  #define XHCI_RESET_TO_DEFAULT	BIT_ULL(44)
-> >  #define XHCI_ZHAOXIN_TRB_FETCH	BIT_ULL(45)
-> >  #define XHCI_ZHAOXIN_HOST	BIT_ULL(46)
-> > +#define XHCI_WRITE_64_HI_LO	BIT_ULL(47)
+   You don't need {} around a single statement, according to CodingStyle.
 
-Note, you define this, and check it, but it is never set, so this patch
-is useless on its own and so we can not accept it as-is at all.
+[...]
 
-How was this tested?
-
-thanks,
-
-greg k-h
+MBR, Sergey
 
