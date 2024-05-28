@@ -1,257 +1,190 @@
-Return-Path: <linux-usb+bounces-10648-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10649-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1BE28D25C0
-	for <lists+linux-usb@lfdr.de>; Tue, 28 May 2024 22:23:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E36A8D264A
+	for <lists+linux-usb@lfdr.de>; Tue, 28 May 2024 22:46:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5C1831F23896
-	for <lists+linux-usb@lfdr.de>; Tue, 28 May 2024 20:23:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CDE231F2B092
+	for <lists+linux-usb@lfdr.de>; Tue, 28 May 2024 20:46:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98E02178CEE;
-	Tue, 28 May 2024 20:22:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB7B817B423;
+	Tue, 28 May 2024 20:44:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="gEUEogse"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59DED178363
-	for <linux-usb@vger.kernel.org>; Tue, 28 May 2024 20:22:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AB4D17966F
+	for <linux-usb@vger.kernel.org>; Tue, 28 May 2024 20:44:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716927743; cv=none; b=JblxUQLRGdxVrLrWpu9BiRhI3Y7kwD3REMh+qaPpu6BGyzlN7HzhbFrv5OrRWwwpDrG4XTEx3ofuEfr/SNVE48sTMnVo8ZvZCHeieoMIbBTRlD4NIJMNn0HU3hvdGWCryLv0J5I3cKVBPBWz4Q7JBqgBvO7rHROOwoqBQS/8/YE=
+	t=1716929098; cv=none; b=khhGDscVFbtwKEVUMyplL0bYwm6mk6r9vDi73yw5ZrTrxypnyr3mv63eCfxVstfv689Nl6rnXGjNUhvrWalOIIfMTKQOVuJNBOCzjucHnyQiSwf+2os1EyJQggz2CbkvnKU7rRyw3c3o26ntocgjBSLQSN/mWAZKPhY30dZvtzo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716927743; c=relaxed/simple;
-	bh=foz55xSb6MbyEbShSXhvbOWfI0jZsQ4O3qOoukESY3U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nAOJmyRMGYkSzb95oCLiuZBGOsg4N+nC/mV+rRK4O8jciABU7c0gVsuyFpfcHFv0puGDtyZR7EGtkc9Rya1+xpyC4EmOspOwIS987udJjnsXQnQldOLFMYRGHvlXzDDlID+s+pLWCJo9ZulHnauahnEka9A0JOC8stT2pKLSNj8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1sC3Kj-0006kY-Hs; Tue, 28 May 2024 22:22:09 +0200
-Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1sC3Ki-003N8c-7X; Tue, 28 May 2024 22:22:08 +0200
-Received: from mgr by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1sC3Ki-001SGY-0S;
-	Tue, 28 May 2024 22:22:08 +0200
-Date: Tue, 28 May 2024 22:22:08 +0200
-From: Michael Grzeschik <mgr@pengutronix.de>
-To: Avichal Rakesh <arakesh@google.com>
-Cc: Alan Stern <stern@rowland.harvard.edu>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Daniel Scally <dan.scally@ideasonboard.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jayant Chowdhary <jchowdhary@google.com>,
-	"etalvala@google.com" <etalvala@google.com>,
-	Michael Riesch <michael.riesch@wolfvision.net>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: Re: [PATCH 0/3] usb: gadget: uvc: allocate requests based on frame
- interval length and buffersize
-Message-ID: <ZlY88BebTEZs6urD@pengutronix.de>
-References: <17192e0f-7f18-49ae-96fc-71054d46f74a@google.com>
- <20240424022806.uo73nwpeg63vexiv@synopsys.com>
- <ZkE-O0yJ33T9hWa0@pengutronix.de>
- <20240517014359.p2s44ypl4bix4odm@synopsys.com>
- <Zk03Ys1rA0I5yiZy@pengutronix.de>
- <20240522014132.xlf7azgq2urfff2d@synopsys.com>
- <3f404a27-50e8-42c5-a497-b46751154613@rowland.harvard.edu>
- <20240522171640.iuol4672rnklc35g@synopsys.com>
- <Zk4td_0RR0cMJKro@pengutronix.de>
- <f4f0b38a-1f8e-4cf5-8cf1-6da337a1c3c0@google.com>
+	s=arc-20240116; t=1716929098; c=relaxed/simple;
+	bh=Ort2/caZVUYwVthaQyqzi46Ex/gklHG9yBV76k5aP2E=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=eyMl2u5qYVsKpDPM0oZ14k6Msr8sM1siWL8XuPMNTWKSGKvSIuLbuwo9BcZKlyKLOJtF1wDbRDC7R7tDG+7RcmogVjSdz7mFd1yYpvBu/mnamB5chsKwDuMYCV0NHsEkvtO6GofVP0RpE4WKOyhCcY7cSoOb82zo9gU4CdK/GZA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=gEUEogse; arc=none smtp.client-ip=209.85.208.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-2e716e302bdso15321831fa.1
+        for <linux-usb@vger.kernel.org>; Tue, 28 May 2024 13:44:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1716929094; x=1717533894; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=KzZhxdvPLE6mLIqgxvohaJdPdDCKtRQaOpGQeC6Iw60=;
+        b=gEUEogse2a6pvTcim852+up1CtuqHIkXK+kjmSoP6JVYMjb5mkSqGJa/xzJ0JzeKbv
+         toDO6kOxMj6BEfIlyK0tsC7o/KSdmdS6bpj0XPs3lJygFVXR50CUa57WsSVp5Yq8/O9D
+         268VGqiZQFWvhSdf9Km5gVaIInu3KjDn/K54eIsARffpVzU+ngIPYUMiLEQ/r6y3gaIp
+         88JNhNEI11UX9RWjwepKEFOR/4Jl2QwoZmoHcnVqLng2iE1Wu5p5Zr807MbQUoivPZfE
+         Q09vtSTDuehhGoAE6B99XfM95TuR/kdkNEhWniDaxn/F6I62d+vs/y5BSfpe4DARM6QH
+         4Yhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1716929094; x=1717533894;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KzZhxdvPLE6mLIqgxvohaJdPdDCKtRQaOpGQeC6Iw60=;
+        b=W36h2LFtd+uZLgyx9kQ3op5xhhP/U0ssTrR1f8oIUM1cEMWPln6IeEgVOORxReC3xN
+         W51doeJn9E01iHwPVzNRk4VWC4hLEO6K7f/bFLykPiBHOEs/5eilXVtZWj8WmxERzmuR
+         xkNEapTzXtXRRYeGTHqj/FglFbkN1MqWP75mOfudKsdno6Czzy6hV5M+WAUDrFa9qniR
+         Cxb4CrprnJMjPJL9TVMUpwdk7Oi1ODN13EvLoyKOXXCsw0vsbxdlHZvpzILMBXltEpfj
+         sYVvN5HqSraI3ERxtRtTF3LqEDOge5o3RZbtMz9sOVyUnoePI0iVA/XH1PvoVwI9Q+7Q
+         kGMw==
+X-Forwarded-Encrypted: i=1; AJvYcCWhknUZlGEs7+kgC6aRTX9OnkKP2gAnYKvNF6ILuiAoEmI9f49YJmcYuhPmqLg3YWgcmdLtWgPIvyH+4LKpN7Q3UVEvKoudoi3O
+X-Gm-Message-State: AOJu0YyzKtX++0VGNaOSdkqG7E3zN0u15xxjSTI8jo1fOeqGxQpCqCF1
+	mt4Zf6nbtW6URKQzMJNo1AFkvYysnlCJjS2MncpzrxLrndK7bPeZYWs7+vBx+hE=
+X-Google-Smtp-Source: AGHT+IFTNyH3pP9dDhWyNzNcnITON78FAZ8IwLzhdnouwqB9V1tT8j4dkc1idJoVA0AlJzFnYtxDBQ==
+X-Received: by 2002:a2e:8ec4:0:b0:2e9:87f7:caa with SMTP id 38308e7fff4ca-2e987f70d11mr17203611fa.41.1716929094332;
+        Tue, 28 May 2024 13:44:54 -0700 (PDT)
+Received: from umbar.lan ([192.130.178.91])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2e95bdcd21esm22759431fa.100.2024.05.28.13.44.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 May 2024 13:44:53 -0700 (PDT)
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: [PATCH v4 0/6] power: supply: Lenovo Yoga C630 EC
+Date: Tue, 28 May 2024 23:44:45 +0300
+Message-Id: <20240528-yoga-ec-driver-v4-0-4fa8dfaae7b6@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="MrAzwjbS8yyZ58K2"
-Content-Disposition: inline
-In-Reply-To: <f4f0b38a-1f8e-4cf5-8cf1-6da337a1c3c0@google.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL: http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAD1CVmYC/3XOyw6CMBCF4VchXTuktJSLK9/DsKh0gIlKzZQ0E
+ sK7CyQmblz+i/PlLCIgEwZxThbBGCmQH7fIT4loBzv2COS2FkqqXBpVwux7C9iCY4rIUBadKzv
+ jnMVKbKMXY0fvA7w2W3fsnzANjPbLaKmkyYyqZJ0qpXWuC8jAPWniOb1ZnsNw9/HyoNGyTz33O
+ ztQmDzPx82od/zvo6hBglalrSuTOevML9Ws6/oBlMuyoPQAAAA=
+To: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
+ Hans de Goede <hdegoede@redhat.com>, 
+ =?utf-8?q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org, 
+ linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+ Nikita Travkin <nikita@trvn.ru>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3634;
+ i=dmitry.baryshkov@linaro.org; h=from:subject:message-id;
+ bh=Ort2/caZVUYwVthaQyqzi46Ex/gklHG9yBV76k5aP2E=;
+ b=owGbwMvMwMXYbdNlx6SpcZXxtFoSQ1qYk8uBHNmJot+3S8w8Pfc2n7pSvLJijOn0Z+/a3Vxbe
+ 69z/cnsZDRmYWDkYpAVU2TxKWiZGrMpOezDjqn1MINYmUCmMHBxCsBELC04GFbmyeZrfXbg8/rH
+ 4Vxkarnt2L6GufafdX93WG6XWvVnloLaVpETV9gk7Xxi3cL1L5ncueqV3rgpZsX3C3qBMt6/Y++
+ 8P3b3/LPiJpW6EA373ZwvlKvntzT6Pwp8ePTsF8eZ28U4Qu8wFGkKpu2RbBUSXr7tzZbdghZ7c1
+ oL39z8x+Os9lDm05XeNO3Uo9rpC+ZtZmQI+99WL8Rx93nvAY6JnWwL5tV8Om8Uc47znv9Zg7pZ3
+ jW9P+/VGFf4VzddY+wKenWPz3SB0bVZWXKt56LO/64rTM+1fNOrwf0oK5rX7FDhVtXzu6fO3brj
+ tbH02ceHuiQDj+p+aNDZdsDnpLyQ75KtTuUZSg1MvZM6AA==
+X-Developer-Key: i=dmitry.baryshkov@linaro.org; a=openpgp;
+ fpr=8F88381DD5C873E4AE487DA5199BF1243632046A
 
+This adds binding, driver and the DT support for the Lenovo Yoga C630
+Embedded Controller, to provide battery information.
 
---MrAzwjbS8yyZ58K2
-Content-Type: text/plain; charset=iso-8859-15; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Support for this EC was implemented by Bjorn, who later could not work
+on this driver. I've picked this patchset up and updated it following
+the pending review comments.
 
-On Tue, May 28, 2024 at 10:30:30AM -0700, Avichal Rakesh wrote:
->
->
->On 5/22/24 10:37, Michael Grzeschik wrote:
->> On Wed, May 22, 2024 at 05:17:02PM +0000, Thinh Nguyen wrote:
->>> On Wed, May 22, 2024, Alan Stern wrote:
->>>> On Wed, May 22, 2024 at 01:41:42AM +0000, Thinh Nguyen wrote:
->>>> > On Wed, May 22, 2024, Michael Grzeschik wrote:
->>>> > > On Fri, May 17, 2024 at 01:44:05AM +0000, Thinh Nguyen wrote:
->>>> > > > For isoc endpoint IN, yes. If the host requests for isoc data IN=
- while
->>>> > > > no TRB is prepared, then the controller will automatically send =
-0-length
->>>> > > > packet respond.
->>>> > >
->>>> > > Perfect! This will help a lot and will make active queueing of own
->>>> > > zero-length requests run unnecessary.
->>>> >
->>>> > Yes, if we rely on the current start/stop isoc transfer scheme for U=
-VC,
->>>> > then this will work.
->>>>
->>>> You shouldn't rely on this behavior.=A0 Other device controllers might=
- not
->>>> behave this way; they might send no packet at all to the host (causing=
- a
->>>> USB protocol error) instead of sending a zero-length packet.
->>>
->>> I agree. The dwc3 driver has this workaround to somewhat work with the
->>> UVC. This behavior is not something the controller expected, and this
->>> workaround should not be a common behavior for different function
->>> driver/protocol. Since this behavior was added a long time ago, it will
->>> remain the default behavior in dwc3 to avoid regression with UVC (at
->>> least until the UVC is changed). However, it would be nice for UVC to
->>> not rely on this.
->>
->> With "this" you mean exactly the following commit, right?
->>
->> (f5e46aa4 usb: dwc3: gadget: when the started list is empty stop the act=
-ive xfer)
->>
->> When we start questioning this, then lets dig deeper here.
->>
->> With the fast datarate of at least usb superspeed shouldn't they not all
->> completely work asynchronous with their in flight trbs?
->>
->> In my understanding this validates that, with at least superspeed we are
->> unlikely to react fast enough to maintain a steady isoc dataflow, since
->> the driver above has to react to errors in the processing context.
->>
->> This runs the above patch (f5e46aa4) a gadget independent solution
->> which has nothing to do with uvc in particular IMHO.
->>
->> How do other controllers and their drivers work?
->>
->>> Side note, when the dwc3 driver reschedules/starts isoc transfer again,
->>> the first transfer will be scheduled go out at some future interval and
->>> not the next immediate microframe. For UVC, it probably won't be a
->>> problem since it doesn't seem to need data going out every interval.
->>
->> It should not make a difference. [TM]
->>
->
->
->Sorry for being absent for a lot of this discussion.
->
->I want to take a step back from the details of how we're
->solving the problem to what problems we're trying to solve.
->
->So, question(s) for Michael, because I don't see an explicit
->answer in this thread (and my sincerest apologies if they've
->been answered already and I missed it):
->
->What exactly is the bug (or bugs) we're trying to solve here?
->
->So far, it looks like there are two main problems being
->discussed:
->
->1. Reducing the bandwidth usage of individual usb_requests
->2. Error handling for when transmission over the wire fails.
->
->Is that correct, or are there other issues at play here?
+DisplayPort support is still not a part of this patchset. It uses EC
+messages to provide AltMode information rather than implementing
+corresponding UCSI commands. However to have a cleaner uAPI story, the
+AltMode should be handled via the same Type-C port.
 
-That is correct.
+Merge strategy: the driver bits depend on the platform/arm64 patch,
+which adds interface for the subdrivers. I'd either ask to get that
+patch merged to the immutable branch, which then can be picked up by
+power/supply and USB trees or, to make life simpler, ack merging all
+driver bits e.g. through USB subsystem (I'm biased here since I plan to
+send more cleanups for the UCSI subsystem, which would otherwise result
+in cross-subsystem conflicts).
 
->(1) in isolation should be relatively easy to solve: Just
->smear the encoded frame across some percentage
->(prefereably < 100%) of the usb_requests in one
->video frame interval.
+---
+Changes in v4:
+- Moved bindings to platform/ to follow example of other Acer Aspire1 EC
+  (Nikita Travkin)
+- Fixed dt validation for EC interrupt pin (Rob Herring)
+- Dropped separate 'scale' property (Oliver Neukum)
+- Link to v3: https://lore.kernel.org/r/20240527-yoga-ec-driver-v3-0-327a9851dad5@linaro.org
 
-Right.
+Changes in v3:
+- Split the driver into core and power supply drivers,
+- Added UCSI driver part, handling USB connections,
+- Fixed Bjorn's address in DT bindings (Brian Masney)
+- Changed power-role for both ports to be "dual" per UCSI
+- Link to v2: https://lore.kernel.org/linux-arm-msm/20230205152809.2233436-1-dmitry.baryshkov@linaro.org/
 
->(2) is more complicated, and your suggestion is to have a
->sentinel request between two video frames that tells the
->host if the transmission of "current" video frame was
->successful or not. (Is that correct?)
+Changes in v2:
+- Dropped DP support for now, as the bindings are in process of being
+  discussed separately,
+- Merged dt patch into the same patchseries,
+- Removed the fixed serial number battery property,
+- Fixed indentation of dt bindings example,
+- Added property: reg and unevaluatedProperties to the connector
+  bindings.
+- Link to v1: https://lore.kernel.org/linux-arm-msm/20220810035424.2796777-1-bjorn.andersson@linaro.org/
 
-Right.
+---
+Bjorn Andersson (2):
+      dt-bindings: platform: Add Lenovo Yoga C630 EC
+      arm64: dts: qcom: c630: Add Embedded Controller node
 
->Assuming my understanding of (2) is correct, how should
->the host behave if the transmission of the sentinel
->request fails after the video frame was sent
->successfully (isoc is best effort so transmission is
->never guaranteed)?
+Dmitry Baryshkov (4):
+      platform: arm64: add Lenovo Yoga C630 WOS EC driver
+      usb: typec: ucsi: add Lenovo Yoga C630 glue driver
+      power: supply: lenovo_yoga_c630_battery: add Lenovo C630 driver
+      arm64: dts: qcom: sdm845: describe connections of USB/DP port
 
-If we have transmitted all requests of the frame but would only miss the
-sentinel request to the host that includes the EOF, the host could
-rather show it or drop it. The drop would not be necessary since the
-host did see all data of the frame. The user would not see any
-distortion in both cases.
+ .../bindings/platform/lenovo,yoga-c630-ec.yaml     |  83 ++++
+ arch/arm64/boot/dts/qcom/sdm845.dtsi               |  53 ++-
+ .../boot/dts/qcom/sdm850-lenovo-yoga-c630.dts      |  75 ++++
+ drivers/platform/arm64/Kconfig                     |  14 +
+ drivers/platform/arm64/Makefile                    |   1 +
+ drivers/platform/arm64/lenovo-yoga-c630.c          | 279 ++++++++++++
+ drivers/power/supply/Kconfig                       |   9 +
+ drivers/power/supply/Makefile                      |   1 +
+ drivers/power/supply/lenovo_yoga_c630_battery.c    | 479 +++++++++++++++++++++
+ drivers/usb/typec/ucsi/Kconfig                     |   9 +
+ drivers/usb/typec/ucsi/Makefile                    |   1 +
+ drivers/usb/typec/ucsi/ucsi_yoga_c630.c            | 189 ++++++++
+ include/linux/platform_data/lenovo-yoga-c630.h     |  42 ++
+ 13 files changed, 1234 insertions(+), 1 deletion(-)
+---
+base-commit: 6dc544b66971c7f9909ff038b62149105272d26a
+change-id: 20240527-yoga-ec-driver-76fd7f5ddae8
 
-If we have transmitted only partial data of the frame it would be
-preferred if the host would drop the frame that did not finish with an
-proper EOF tag.
+Best regards,
+-- 
+Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-AFAIK the linux kernel would still show the frame if the FID of the
-currently handled request would change and would take this as the end of
-frame indication. But I am not totally sure if this is by spec or
-optional.
-
-One option to be totally sure would be to resend the sentinel request to
-be properly transmitted before starting the next frame. This resend
-polling would probably include some extra zero-length requests. But also
-if this resend keeps failing for n times, the driver should doubt there
-is anything sane going on with the USB connection and bail out somehow.
-
-Since we try to tackle case (1) to avoid transmit errors and also avoid
-creating late enqueued requests in the running isoc transfer, the over
-all chance to trigger missed transfers should be minimal.
-
-Regards,
-Michael
-
---=20
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
-
---MrAzwjbS8yyZ58K2
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmZWPOwACgkQC+njFXoe
-LGTvhBAAy9AMYMKC2c7DAvrCWYPZmgN9LGzTAIDAl74Q8Y0o0hXnjNCu39aUhHHi
-2eTBrhONO8fL5yxo+g2UyPLvGo2alitUjeNtVTW7A7cjI6T9yw/fyeDabI5R5ZR2
-s99M6MsqebgtoyYN2qE2/YyXGZ5evu89OMIUpTUg2a0fwhP41A18s345XQvoKvCA
-dRYLOAcZsyFxACQrsEsBJ1v5nn/ik5x96AP2xwxxw12MgMYWhIeeAc6rm7fWLfsZ
-GVTMPNQmGv1NM2RYpGEHu3gohxP/vAQM0c992cOd3PjcBZpJ4GRRP8JWowbGzMLo
-NkNBsorwOvorPyZn0ZCiZAJXgWV3wXW8YXwNkM8RVrYyfl0S3syE7K65JJAnJEiA
-CAAk35AWyqWFx6rYA32eno7L0EjO0onpqjZCylwWOv2IKGs8tBrmFLiJHOhrXeal
-BWRrapEFkRItE0VSVeg2zuZXwZhK5c87xC8AD3P9YmNm4JaM1n+3FCBr/Fts+fWN
-P7LFIgmmzCMf2wilVecdZEZWYWXdD0WugUcC+9XOcjxNKgVBItYTEuzE+F4wYKDm
-gPfyRVG7PHvFS7MPVFSRgCz0KhJ/7JKB7zylD5391aAxKxjkhzBEZulJjKuMo2tE
-aV4uKpKmxjwf00gnWqv2Nwj0nxEP7fkxRgA62w1kbuXGi/ZJHxc=
-=IBV5
------END PGP SIGNATURE-----
-
---MrAzwjbS8yyZ58K2--
 
