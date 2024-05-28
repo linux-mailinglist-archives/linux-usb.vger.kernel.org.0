@@ -1,139 +1,145 @@
-Return-Path: <linux-usb+bounces-10640-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10641-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D45718D2017
-	for <lists+linux-usb@lfdr.de>; Tue, 28 May 2024 17:16:51 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 463548D2239
+	for <lists+linux-usb@lfdr.de>; Tue, 28 May 2024 19:14:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 37A0528467E
-	for <lists+linux-usb@lfdr.de>; Tue, 28 May 2024 15:16:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7520B1C225A6
+	for <lists+linux-usb@lfdr.de>; Tue, 28 May 2024 17:14:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67B8217165C;
-	Tue, 28 May 2024 15:15:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56716174EE2;
+	Tue, 28 May 2024 17:14:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jZ092uL/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bMFZs+x7"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6206A170833
-	for <linux-usb@vger.kernel.org>; Tue, 28 May 2024 15:15:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5BC817333F;
+	Tue, 28 May 2024 17:13:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716909315; cv=none; b=ekDZTVDwqei7JkytXMuPInsEEMWm3GHd7n66YrOeJo0/bPhzeud7WFpK6gJfRq3UZVAXv0ObrEoMjYt+CGQ6D3j4NoYCHL54GTmGaUvduQB5Wf/XAIbC2m60CcTVk6dirYepbxNo2CEu8vUPFQZ6g9QHuEPtcZi6uBRX6911XVY=
+	t=1716916439; cv=none; b=LSBWWlYEVK6pIpvh7M/Vr7rci9b7yCBHIZGV2fjE4pWULQ/W4awiyljjBxKrRkls8LNYSHrLozbJNHHTBsofqQlYbzihPVWqLzEDPbaA9e78R5MZg78a8Y3EsJqgUUwp6ucVB3f6iTFniSbyYzZiESFKzZqtve82KJv4uM3u6j0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716909315; c=relaxed/simple;
-	bh=tqLiPN5amlvHA7fWTBc4Bily8zs9asXJlXwi5CKHC2g=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=iwB20awRBhd3fG5uKUg/U2jP/7YH2CVrz8nvxL/96qWQxKMQe4ViCDPpK0nZLoHc3BvX2H2AGCFpJP0Y/V59Xap7Y1IJ4erDkilcUMts+hCrW7XyJ3L8Xbs/GSGYxGkGgQ6tEnAQES5wxL3Flon/YHtxS/7WvZba7jlTGfyjEaM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=jZ092uL/; arc=none smtp.client-ip=209.85.219.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-df4dce67becso884290276.2
-        for <linux-usb@vger.kernel.org>; Tue, 28 May 2024 08:15:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1716909312; x=1717514112; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=DZlgz6rpKv8RDjntoQGkTFXF4S8SzOpaXSeRL3rg2Vs=;
-        b=jZ092uL/ktNAxltzv+uss3nbb86PxxbCer1Qztc69hNlVsnvdrNkyd8VXeok1U03xS
-         ICGUEwxnVSMgzgM8pYI3bkvravmkWJNd++XhBxtLCRBsV4iW78yd/v+zDM+3PeSMlv4J
-         h9s+MO5/x2g2er9R3wY4F5OLX+xlDJCR3OegzgbYorNPuTkCDODBCC7wAQe66QZ4zLOv
-         ojQEIPzFXKdk7MVnn01EzGKAyMQq8Nk+3awa8Te63YKQMdJzLmYJQ2Gs9fQ/KM21ciyp
-         dTlDCTLsh17NzEbdhy9PWgnfAyNIMrOCtZIrM35uITDc7VRoKfRykRigVY1xVzjRlOAh
-         tE6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716909312; x=1717514112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DZlgz6rpKv8RDjntoQGkTFXF4S8SzOpaXSeRL3rg2Vs=;
-        b=KyN8Zt8g6WICXgVhGeKmD85x0V+6bTOwXTZBtnujm95v67svB+sejyaVpNyX+xNMMp
-         /ksBXY2C/y7rHAtftFxQNF+mk26CLVjlp24CbBE0iGpJo40v/cPqa1xOXOnxpdpMPWlM
-         gPA3qD5UtIH+Vqwj/LK0YX0lz/9FuVl4Uf1dVBPjtm19uzv3v57eM935mLbFZedCeX9v
-         6konkZnmziiFbWtiIUbY2y4nFqvFAUn3ybgnyR4qvqbaUwgVnEjv6S1oDY6mX/zbs6LP
-         cHQ2BsAw7Tj9rC80/6VRz8KE0k/QGVThZu1Njq//ls+IbqljbNBE/r1Lh2OPJc5sygyb
-         cg8g==
-X-Forwarded-Encrypted: i=1; AJvYcCWHAs45uzZ05cGgwQyNZJeYsCxAR6sFt96nmlpX/J2el1CdEcF6H70i5Bh7lQR7C30YiH3twtFIjn1w9TJoji+hKPIVnZwpi4Wd
-X-Gm-Message-State: AOJu0YzziJbspJ8/Y7TwI2YXMvFy6+i3II97crtvdso5cBwWwtY8P3Is
-	OHWCIuysS8f2RAg+zwlpNxgGDaURsK4WqmOPGe7YoZUuWhM13v7SG/xMKnYU/E9JD7di5BrKHZ7
-	xNU3IwraEuav+J7g+v/mdJM0/ABnSfsIUl/O76Q==
-X-Google-Smtp-Source: AGHT+IEKk+jMfb4UjQ2vLhkVRwJcPbBfG+1IZvWjYuTzuxuXisQPVm0zrHIomjE5POF4/tmNCe9LlwLUsAzYUZawgkQ=
-X-Received: by 2002:a05:6902:507:b0:df4:d692:93b7 with SMTP id
- 3f1490d57ef6-df772266789mr12143479276.44.1716909312385; Tue, 28 May 2024
- 08:15:12 -0700 (PDT)
+	s=arc-20240116; t=1716916439; c=relaxed/simple;
+	bh=BF+bAtAxxwKCW4DJkeefBZDu0K+wuFNxBHFCPnA8enU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rtXAs8aDfiVjAwkGMxjkvt/L1fnsFpPTjH3QEWc1zqp/q47QQzelGEUHXOT9R2vLBEBAucDmpd4ff+pqNdjKDgRSfet4rzle9ZejgDOOtkRZjvH4lQc1f2NftksbOreyjlJPuT7xBcdL42ElgKSDfgVlDtuhJA0wYOMFI23IlTQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bMFZs+x7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1717C3277B;
+	Tue, 28 May 2024 17:13:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1716916439;
+	bh=BF+bAtAxxwKCW4DJkeefBZDu0K+wuFNxBHFCPnA8enU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=bMFZs+x7bluwgOhDpFWlsScecIjnUIpA8wwy44nKxYfhDp21ArJ9EGTXYy1VxEqF1
+	 x9TXpM9QxBZGm4o1v1LqS9mcped9va6UK0lmdFFjkVQ9ubrudgoiehZ3Lz7aYPrcDS
+	 CZcV2KWPGVRc9MF9lJzhe3nDHeJLsvlpYexFNRC/2rCxoOXnChmiFs16/e7IXF/nqt
+	 F+AaJqFSCY3pOPE41ePOAPSLd5WO3qXFyNJl/Bc8i7b3U3AI+tfMNrgblQ08Yw03i1
+	 ZEfdCsCbwqcPqzrlId7esYThtQvQQznFeYTPpondJK/woStogcP0VwGFHXeCNnFk87
+	 kQ0K44ux1N8jg==
+Date: Tue, 28 May 2024 12:13:56 -0500
+From: Bjorn Andersson <andersson@kernel.org>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Hans de Goede <hdegoede@redhat.com>, Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, 
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
+	linux-pm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	platform-driver-x86@vger.kernel.org, linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+	Nikita Travkin <nikita@trvn.ru>
+Subject: Re: [PATCH v3 6/6] arm64: dts: qcom: c630: Add Embedded Controller
+ node
+Message-ID: <njgvpbk4b26qs7zp675xdlmh3pcha6pm2vvvhyrxvrimtltgfx@slyweemaxmhs>
+References: <20240527-yoga-ec-driver-v3-0-327a9851dad5@linaro.org>
+ <20240527-yoga-ec-driver-v3-6-327a9851dad5@linaro.org>
+ <bbsdvqjo2ikljnuvupolpdfstsaegfqyg2ct7bt24evcorcfjt@3fw5eicxxuik>
+ <CAA8EJpr9i=+uJGqxeeVYKwJeMqzQFg6FvqnChKNQqXLLVcB66w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAMSo37UyC-JRfZjd83Vx2+W-K-WqxAN9sHJ88Jev67Fnwci_pg@mail.gmail.com>
- <20240528091831.13674-1-jtornosm@redhat.com>
-In-Reply-To: <20240528091831.13674-1-jtornosm@redhat.com>
-From: Yongqin Liu <yongqin.liu@linaro.org>
-Date: Tue, 28 May 2024 23:15:00 +0800
-Message-ID: <CAMSo37U3Pree8XbHNBOzNXhFAiPss+8FQms1bLy06xeMeWfTcg@mail.gmail.com>
-Subject: Re: [PATCH] net: usb: ax88179_178a: fix link status when link is set
- to down/up
-To: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
-Cc: davem@davemloft.net, edumazet@google.com, inventor500@vivaldi.net, 
-	kuba@kernel.org, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	netdev@vger.kernel.org, pabeni@redhat.com, stable@vger.kernel.org, 
-	Sumit Semwal <sumit.semwal@linaro.org>, John Stultz <jstultz@google.com>, 
-	Amit Pundir <amit.pundir@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAA8EJpr9i=+uJGqxeeVYKwJeMqzQFg6FvqnChKNQqXLLVcB66w@mail.gmail.com>
 
-On Tue, 28 May 2024 at 17:18, Jose Ignacio Tornos Martinez
-<jtornosm@redhat.com> wrote:
->
-> Hello Yongqin,
->
-> > When I tried the down and up operations manually from the command line,
-> > it worked.
-> > But it only worked after I ran the down and up operations after the boot.
-> > It fails to work by default after the boot for both the fresh deployment,
-> > and for the later reboot
-> Ok, so it works as well for you after the initialization.
->
-> > One thing I noticed is that the following message was printed twice
-> >     "ax88179_178a 2-3:1.0 eth0: ax88179 - Link status is: 1"
-> > after I ran the up operation,
+On Tue, May 28, 2024 at 06:12:58PM GMT, Dmitry Baryshkov wrote:
+> On Tue, 28 May 2024 at 18:06, Bjorn Andersson <andersson@kernel.org> wrote:
 > >
-> > Is that expected?
+> > On Mon, May 27, 2024 at 01:03:51PM GMT, Dmitry Baryshkov wrote:
+> > > From: Bjorn Andersson <andersson@kernel.org>
 > >
-> > For details, please check the log here:
-> > https://gist.github.com/liuyq/be8f5305d538067a344001f1d35f677b
-> That is another thing that I am analyzing, to clean those spurious.
-> But they are appearing in my case too, and I am not modifying anything at
-> boot time.
->
-> > The scripts are simple, here are the two scripts for Android build:
-> >    https://android.googlesource.com/device/linaro/dragonboard/+/refs/heads/main/shared/utils/ethaddr/ethaddr.rc
-> >    https://android.googlesource.com/device/linaro/dragonboard/+/refs/heads/main/shared/utils/ethaddr/set_ethaddr.sh
+> > Please align this with the S-o-b - feel free to use either form.
+> 
+> Ack. I'll check what went wrong.
+> 
 > >
-> > Is the one to run the down/change mac/up operations script.
+> > >
+> > > The Embedded Controller in the Lenovo Yoga C630 is accessible on &i2c1
+> > > and provides battery and adapter status, as well as altmode
+> > > notifications for the second USB Type-C port.
+> > >
+> > > Add a definition for the EC.
+> > >
+> > > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> > > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> > > ---
+> > >  .../boot/dts/qcom/sdm850-lenovo-yoga-c630.dts      | 76 ++++++++++++++++++++++
+> > >  1 file changed, 76 insertions(+)
+> > >
+> > > diff --git a/arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts b/arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts
+> > > index 47dc42f6e936..d975f78eb3ab 100644
+> > > --- a/arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts
+> > > +++ b/arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts
+> > > @@ -370,6 +370,66 @@ zap-shader {
+> > >  &i2c1 {
+> > >       status = "okay";
+> > >       clock-frequency = <400000>;
+> > > +
+> > > +     embedded-controller@70 {
+> > > +             compatible = "lenovo,yoga-c630-ec";
+> > > +             reg = <0x70>;
+> > > +
+> > > +             interrupts-extended = <&tlmm 20 IRQ_TYPE_LEVEL_HIGH>;
+> > > +
+> > > +             pinctrl-names = "default";
+> > > +             pinctrl-0 = <&ec_int_state>;
+> > > +
+> > > +             #address-cells = <1>;
+> > > +             #size-cells = <0>;
+> > > +
+> > > +             connector@0 {
+> > > +                     compatible = "usb-c-connector";
+> > > +                     reg = <0>;
+> > > +                     power-role = "dual";
+> > > +                     data-role = "host";
 > >
-> > Not sure why the up in the script does not work, but works when run manually.
-> Ok, I am not working with Android but it doesn't seem spscial, the only
-> doubt is when the script is executed, if the driver initialization is
-> complete, ...
- is there any message that I could check to make sure if the
-initialization is finished?
-or like with adding some printk lines for some kernel functions to hack
+> > I was under the impression that this port is wired directly to the SoC
+> > and as such this would support data role switching as well.
+> >
+> > No concern with that, but just out of curiosity, is this not the case?
+> 
+> It is wired through the external Type-C port controller RTS5437, which
+> also controls the vbus pins, etc. The UCSI firmware reports both ports
+> as host-only and doesn't implement data role switching. So, having it
+> as "host" is a safe bet.
+> 
 
-> Anyway, I will try to reproduce here and analyze it.
+Thanks for the explanation, that makes sense.
 
-Thanks very much! And please feel free to let me know if there is
-anything I could help with on the Android build.
+> I must admit, I also hoped to be able to use this port in gadget mode,
+> but it seems to be nearly impossible.
+> 
 
--- 
-Best Regards,
-Yongqin Liu
----------------------------------------------------------------
-#mailing list
-linaro-android@lists.linaro.org
-http://lists.linaro.org/mailman/listinfo/linaro-android
+Someone must have managed to use the device in peripheral mode to get
+the firmware on there originally...just saying... ;)
+
+Regards,
+Bjorn
 
