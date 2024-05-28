@@ -1,1387 +1,451 @@
-Return-Path: <linux-usb+bounces-10612-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10613-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 055298D13D1
-	for <lists+linux-usb@lfdr.de>; Tue, 28 May 2024 07:22:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id BE0B28D140B
+	for <lists+linux-usb@lfdr.de>; Tue, 28 May 2024 07:46:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 17EE01C21B0F
-	for <lists+linux-usb@lfdr.de>; Tue, 28 May 2024 05:22:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E1A321C20FD6
+	for <lists+linux-usb@lfdr.de>; Tue, 28 May 2024 05:46:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F34364CE09;
-	Tue, 28 May 2024 05:22:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 028454D9F4;
+	Tue, 28 May 2024 05:46:06 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B242B4C622
-	for <linux-usb@vger.kernel.org>; Tue, 28 May 2024 05:22:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E86F3DDDC
+	for <linux-usb@vger.kernel.org>; Tue, 28 May 2024 05:46:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716873724; cv=none; b=MAUw25LjmTNMXnvajN6pPjAJZ2bVCQ3sFfU69bhmRzW0AQ0LAcpPSIyfzrJctQoSjgqhUZIo+X7F5JEz7ZMaa8N/rdOmUwOONH1mZJyWQk79g+/nPQZKfoJ/rQu+WXE1yMa0UIChH7WPm0jN+EDmMYcww3IGvJkTR9aVT/I9HN4=
+	t=1716875165; cv=none; b=CN5X9wfBgkodDhZ86gE8PaLjmL7zvL0C+mMO+W15+smfRlIkch12KfEWhHD8mP1LEOH+yv2+wXUx4hbpLuavbdk9bGFFLvmuSWcMGplKbDORuImpAGA1geEFnaohDBvePrm9DYkJ2ed7qSve0Xv44fkI1jHzRpcS5STN0CytbCk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716873724; c=relaxed/simple;
-	bh=fiD33xhC/rCQwvTNf4StFg1z1yS/raQA//+cyqgObCU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kU6Jl+43rRWq+x5vaBt71M5FBxOUyLWQtoYahm6ICKmlIvcHZrAuMkWciBoMLVwJcmDFBtR4XM5/12YcaeTkwdobxXBe/X5/NE6qxfOckclG2jaJSULY//hH+Ex+QQfeQVB+oYYv9zlgUv27UWIk95EQwVfQCyM9QF3YaqoNJ2w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1sBpHP-0005Rd-Ka; Tue, 28 May 2024 07:21:47 +0200
-Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1sBpHP-003Hdr-4h; Tue, 28 May 2024 07:21:47 +0200
-Received: from mgr by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1sBpHP-001G4x-0A;
-	Tue, 28 May 2024 07:21:47 +0200
-Date: Tue, 28 May 2024 07:21:47 +0200
-From: Michael Grzeschik <mgr@pengutronix.de>
-To: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Cc: Eric Van Hensbergen <ericvh@kernel.org>,
-	Latchesar Ionkov <lucho@ionkov.net>,
-	Dominique Martinet <asmadeus@codewreck.org>,
-	Christian Schoenebeck <linux_oss@crudebyte.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	v9fs@lists.linux.dev, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	kernel@pengutronix.de
-Subject: Re: [PATCH v4 2/3] net/9p/usbg: Add new usb gadget function transport
-Message-ID: <ZlVp643uEIy2Ikbb@pengutronix.de>
-References: <20240116-ml-topic-u9p-v4-0-722ed28b0ade@pengutronix.de>
- <20240116-ml-topic-u9p-v4-2-722ed28b0ade@pengutronix.de>
- <c78c9e88-bd53-4ae5-8f78-d8b1c468a5cd@collabora.com>
- <Zj3y04btf16BGZAJ@pengutronix.de>
- <2f36e766-054c-4001-addf-fe388916d858@collabora.com>
+	s=arc-20240116; t=1716875165; c=relaxed/simple;
+	bh=LNkqndWFKuEPPX1JaqqLndR2tb1JhYcgfZC2a28QYxo=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=kbBT6g1wy/rSlnTwvEoctOFBBt4nihsGmRiYEEJG8pNx/RuIIGnkEQIi18nju+NPOvrGsQlawGto0Ww/BPFLn8ZsTRQZDCXrFo9vyeKg382ZVdKg0+h0CFejvvlw2XXxl3eq8+2G7Ky+ERmfjf8siX2+Ve83uJza6Q95a754aco=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f70.google.com with SMTP id ca18e2360f4ac-7eada05bd3bso47704039f.0
+        for <linux-usb@vger.kernel.org>; Mon, 27 May 2024 22:46:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1716875163; x=1717479963;
+        h=content-transfer-encoding:to:from:subject:message-id:in-reply-to
+         :date:mime-version:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+E1y9AJP/hTWyZH3gbZVFiRkUty28djm2NEmsgQlkRs=;
+        b=GQJBtlUYyIJ16c8M9x3mV6ytor3ioknI+s2KFO+sI0CQCa1b6gjqD2XwxsBxiBTzHZ
+         Yu3KZlg0W3LAsosadpm4zRZsFHOXIGBIJKg+FgthCfdOXzDyB2o4vwodFBw0eAhluo0M
+         jG0UikONdswOMx1Om9i4u3iGnlROsci3jD1fDMZEA2WQOsc9RV0oY/ocrmrx0yo4pJiu
+         7Za3PwQa2xLMVDePaA6e0OEiWobQquvN38Rco+bkYZT/lCZSSnQ87vivNwDQ4nfubwTd
+         7H2Ql0xLpvxbzXj/ZdZWTB4Ui5OKfRVO1nODpXravi82TO2lELjbT03m2WN4eG0gNtio
+         OiUA==
+X-Forwarded-Encrypted: i=1; AJvYcCWgu0uWWRS/qadPfdJEm6c97CvSlDDmEqGC7bJxWUfK9UTPuirxzYq073RcuYPrrWZltob50EYSAIrgUNgyHjkQJEfEeDARjgug
+X-Gm-Message-State: AOJu0Yx6Nudn4i7CWpY4vBZJNxwETfMtAaAm53t8+MBaRnZCd5Q3ihWu
+	Y8aCG2dZkj/UQMdWdAE71EGmNvmDHfO1XJywwoZoZoXLJ4lqa/WwWUojmShOmlZhpym0jEHw+Vc
+	WnL311rpWeyAaSZYJzllprwzSDlDpmO0VYbxQaKyYL4EnyIOdF3HyO24=
+X-Google-Smtp-Source: AGHT+IEu7seloMCjyJ37Unc4OUdBZCbo1oPrf1l7686Q+DcxBOuBUTphC7dUHPfp2nbVgS5WnWslQ7f5q6EH6uewR5bQMJN3pbUt
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="CXYm3VvaaUbdovYY"
-Content-Disposition: inline
-In-Reply-To: <2f36e766-054c-4001-addf-fe388916d858@collabora.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL: http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-
-
---CXYm3VvaaUbdovYY
-Content-Type: text/plain; charset=iso-8859-15; format=flowed
-Content-Disposition: inline
+X-Received: by 2002:a05:6e02:1a41:b0:36d:d38e:3520 with SMTP id
+ e9e14a558f8ab-3737b33d769mr9351795ab.4.1716875163203; Mon, 27 May 2024
+ 22:46:03 -0700 (PDT)
+Date: Mon, 27 May 2024 22:46:03 -0700
+In-Reply-To: <20240528050555.1150628-1-andrewjballance@gmail.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000003a07b706197d2695@google.com>
+Subject: Re: [syzbot] [input?] [usb?] KMSAN: uninit-value in asus_report_fixup
+From: syzbot <syzbot+07762f019fd03d01f04c@syzkaller.appspotmail.com>
+To: andrewjballance@gmail.com, benjamin.tissoires@redhat.com, 
+	bentiss@kernel.org, jikos@kernel.org, jkosina@suse.com, 
+	linux-input@vger.kernel.org, linux-kernel-mentees@lists.linuxfoundation.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, luke@ljones.dev, 
+	skhan@linuxfoundation.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, May 10, 2024 at 04:11:27PM +0200, Andrzej Pietrasiewicz wrote:
->Hi,
->
->W dniu 10.05.2024 o=A012:11, Michael Grzeschik pisze:
->>On Fri, May 10, 2024 at 11:25:47AM +0200, Andrzej Pietrasiewicz wrote:
->>>Hi Michael,
->>>
->>>W dniu 30.04.2024 o=A001:33, Michael Grzeschik pisze:
->>>>Add the new gadget function for 9pfs transport. This function is
->>>>defining an simple 9pfs transport interface that consists of one in and
->>>>one out endpoint. The endpoints transmit and receive the 9pfs protocol
->>>>payload when mounting a 9p filesystem over usb.
->>>>
->>>>Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
->>>>
->>>>---
->>>>v3 -> v4:
->>>>=A0 - implemented conn_cancel
->>>
->>>I tried this scenario:
->>>
->>>1) run all the components and have 9pfs up and running
->>>2) stop the forwarder
->>>3) umount -f at the gadget side - this indeed succeeds now in v4
->>>4) start the forwarder again
->>>5) mount at the gadget side - this hangs.
->>>
->>>Did this scenario work for you?
->>
->>I actually tested this exact scenario. So this is
->>suprising. I will try this again just to be sure
->>that I did send the latest version.
->>
->>My latest testsetup included the dummy_hcd. Did you test on real hardware?
->
->Yes, I did.
+Hello,
 
-I found out that the issue lies in the current disable/enable endpoint
-mechanism the layer was using to stop and enable the endpoint every
-time the fs was unmounted or mounted. I changed this to only disable
-the endpoint on unbind and enable it on set alt callback.
+syzbot tried to test the proposed patch but the build/boot failed:
 
-This should work fine now with v5.
-
-https://lore.kernel.org/all/20240116-ml-topic-u9p-v5-0-5ed0abd53ef5@pengutr=
-onix.de/
-
-Regards,
-Michael
-
->>>>=A0 - moved from mount_tag to device name like ffs does
->>>>=A0 - renamed function_list to usb9pfs_instance
->>>>=A0 - renamed usbg_function_list to usb9pfs_instance_list
->>>>=A0 - renamed rx/tx_fill to queue_rx/tx
->>>>=A0 - added use of retvals
->>>>=A0 - added locking comment over usb9pfs_transmit
->>>>=A0 - using if_else instead of two pathed switch calls
->>>>=A0 - fixed return values of completion handler
->>>>=A0 - using void pointer as parameter in rx_header
->>>>=A0 - added a missed req_put in rx_header
->>>>=A0 - removed extra disable function but call disable_ep directly
->>>>=A0 - repaired several return values
->>>>=A0 - remove the suspicious disable / enable path in usbg_create
->>>>v2 -> v3: -
->>>>v1 -> v2:
->>>>=A0 - move the driver to net/9p/trans_usbg.c
->>>>=A0 - fixed the commit title
->>>>=A0 - fix %zu usage in p9_debug for size_t type
->>>>=A0 - define functions static that are only used localy
->>>>=A0 - return 0 in alloc_requests
->>>>=A0 - use id_alloc_max instead of ida_simple_get
->>>>=A0 - call ida_free in usb9pfs_free_func
->>>>=A0 - call kfree for usb9pfs->tag and usb9pfs in usb9pfs_free_func
->>>>=A0 - add MODULE_ALIAS_9P to load this module automatic when mounting
->>>>=A0 - improved the documentation
->>>>=A0 - added depends on USB_GADGET in Kconfig
->>>>---
->>>>=A0Documentation/filesystems/9p.rst |=A0 17 +-
->>>>=A0net/9p/Kconfig=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
- |=A0=A0 6 +
->>>>=A0net/9p/Makefile=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 |=
-=A0=A0 4 +
->>>>=A0net/9p/trans_usbg.c=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 | 983 +++=
-++++++++++++++++++++++++++++++++++++
->>>>=A04 files changed, 1009 insertions(+), 1 deletion(-)
->>>>
->>>>diff --git a/Documentation/filesystems/9p.rst b/Documentation/filesyste=
-ms/9p.rst
->>>>index 1e0e0bb6fdf91..10cf79dc287f8 100644
->>>>--- a/Documentation/filesystems/9p.rst
->>>>+++ b/Documentation/filesystems/9p.rst
->>>>@@ -48,11 +48,25 @@ For server running on QEMU host with virtio transpo=
-rt::
->>>>=A0=A0=A0=A0 mount -t 9p -o trans=3Dvirtio <mount_tag> /mnt/9
->>>>-where mount_tag is the tag associated by the server to each of the exp=
-orted
->>>>+where mount_tag is the tag generated by the server to each of the expo=
-rted
->>>>=A0mount points. Each 9P export is seen by the client as a virtio devic=
-e with an
->>>>=A0associated "mount_tag" property. Available mount tags can be
->>>>=A0seen by reading /sys/bus/virtio/drivers/9pnet_virtio/virtio<n>/mount=
-_tag files.
->>>>+USBG Usage
->>>>+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->>>>+
->>>>+To mount a 9p FS on a USB Host accessible via the gadget at runtime::
->>>>+
->>>>+=A0=A0=A0 mount -t 9p -o trans=3Dusbg,aname=3D/path/to/fs <device> /mn=
-t/9
->>>>+
->>>>+To mount a 9p FS on a USB Host accessible via the gadget as root files=
-ystem::
->>>>+
->>>>+=A0=A0=A0 root=3D<device> rootfstype=3D9p rootflags=3Dtrans=3Dusbg,cac=
-he=3Dloose,uname=3Droot,access=3D0,dfltuid=3D0,dfltgid=3D0,aname=3D/path/to=
-/rootfs
->>>>+
->>>>+where <device> is the tag associated by the usb gadget transport.
->>>>+It is defined by the configfs instance name.
->>>>+
->>>>=A0Options
->>>>=A0=3D=3D=3D=3D=3D=3D=3D
->>>>@@ -68,6 +82,7 @@ Options
->>>>=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 virtio=A0=A0=A0=A0=A0 connect to t=
-he next virtio channel available
->>>>=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 (from QEMU with =
-trans_virtio module)
->>>>=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 rdma=A0=A0=A0=A0=A0 connect to a s=
-pecified RDMA channel
->>>>+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 usbg=A0=A0=A0=A0=A0 connect to a spe=
-cified usb gadget channel
->>>>=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 =3D=3D=3D=3D=3D=3D=3D=3D=A0 =3D=3D=
+sert=3Don, ref-verify=3Don, zoned=3Dyes, fsverity=3Dyes
+[   50.230614][    T1] Key type encrypted registered
+[   50.235891][    T1] AppArmor: AppArmor sha256 policy hashing enabled
+[   50.242800][    T1] ima: No TPM chip found, activating TPM-bypass!
+[   50.249865][    T1] Loading compiled-in module X.509 certificates
+[   50.292391][    T1] Loaded X.509 cert 'Build time autogenerated kernel k=
+ey: 2ef82123926fa34f508acba9911fce577bb4fe8a'
+[   50.303920][    T1] ima: Allocated hash algorithm: sha256
+[   50.310144][    T1] ima: No architecture policies found
+[   50.316925][    T1] evm: Initialising EVM extended attributes:
+[   50.322973][    T1] evm: security.selinux (disabled)
+[   50.328526][    T1] evm: security.SMACK64 (disabled)
+[   50.334013][    T1] evm: security.SMACK64EXEC (disabled)
+[   50.339602][    T1] evm: security.SMACK64TRANSMUTE (disabled)
+[   50.345640][    T1] evm: security.SMACK64MMAP (disabled)
+[   50.351386][    T1] evm: security.apparmor
+[   50.355851][    T1] evm: security.ima
+[   50.359745][    T1] evm: security.capability
+[   50.364417][    T1] evm: HMAC attrs: 0x1
+[   50.373466][    T1] PM:   Magic number: 8:208:619
+[   50.379889][    T1] usb usb14-port4: hash matches
+[   50.386279][    T1] net ifb0: hash matches
+[   50.391057][    T1] tty ptye9: hash matches
+[   50.396054][    T1] tty ptybc: hash matches
+[   50.401524][    T1] printk: legacy console [netcon0] enabled
+[   50.407774][    T1] netconsole: network logging started
+[   50.414999][    T1] gtp: GTP module loaded (pdp ctx size 128 bytes)
+[   50.424381][    T1] rdma_rxe: loaded
+[   50.430039][    T1] cfg80211: Loading compiled-in X.509 certificates for=
+ regulatory database
+[   50.451536][    T1] Loaded X.509 cert 'sforshee: 00b28ddf47aef9cea7'
+[   50.469189][    T1] Loaded X.509 cert 'wens: 61c038651aabdcf94bd0ac7ff06=
+c7248db18c600'
+[   50.477773][    T1] clk: Disabling unused clocks
+[   50.482816][    T1] ALSA device list:
+[   50.486809][    T1]   #0: Dummy 1
+[   50.490724][    T1]   #1: Loopback 1
+[   50.494616][    T1]   #2: Virtual MIDI Card 1
+[   50.505678][   T10] platform regulatory.0: Direct firmware load for regu=
+latory.db failed with error -2
+[   50.506128][    T1] md: Waiting for all devices to be available before a=
+utodetect
+[   50.517296][   T10] platform regulatory.0: Falling back to sysfs fallbac=
+k for: regulatory.db
+[   50.524217][    T1] md: If you don't use raid, use raid=3Dnoautodetect
+[   50.540178][    T1] md: Autodetecting RAID arrays.
+[   50.545383][    T1] md: autorun ...
+[   50.549388][    T1] md: ... autorun DONE.
+[   50.671837][    T1] EXT4-fs (sda1): mounted filesystem 5941fea2-f5fa-4b4=
+e-b5ef-9af118b27b95 ro with ordered data mode. Quota mode: none.
+[   50.685698][    T1] VFS: Mounted root (ext4 filesystem) readonly on devi=
+ce 8:1.
+[   50.779387][    T1] devtmpfs: mounted
+[   51.037410][    T1] Freeing unused kernel image (initmem) memory: 37032K
+[   51.049223][    T1] Write protecting the kernel read-only data: 262144k
+[   51.096766][    T1] Freeing unused kernel image (rodata/data gap) memory=
+: 1808K
+[   52.746982][    T1] x86/mm: Checked W+X mappings: passed, no W+X pages f=
+ound.
+[   52.757511][    T1] x86/mm: Checking user space page tables
+[   54.254031][    T1] x86/mm: Checked W+X mappings: passed, no W+X pages f=
+ound.
+[   54.263213][    T1] Failed to set sysctl parameter 'kernel.hung_task_all=
+_cpu_backtrace=3D1': parameter not found
+[   54.285036][    T1] Failed to set sysctl parameter 'max_rcu_stall_to_pan=
+ic=3D1': parameter not found
+[   54.296902][    T1] Run /sbin/init as init process
+[   55.866548][ T4446] mount (4446) used greatest stack depth: 8144 bytes l=
+eft
+[   55.941342][ T4447] EXT4-fs (sda1): re-mounted 5941fea2-f5fa-4b4e-b5ef-9=
+af118b27b95 r/w. Quota mode: none.
+mount: mounting smackfs on /sys/fs/smackfs failed: No such file or director=
+y
+mount: mounting selinuxfs on /sys/fs/selinux failed: No such file or direct=
+ory
+[   56.283370][ T4450] mount (4450) used greatest stack depth: 5568 bytes l=
+eft
+Starting syslogd: OK
+Starting acpid: OK
+Starting klogd: OK
+Running sysctl: OK
+Populating /dev using udev: [   60.169672][ T4480] udevd[4480]: starting ve=
+rsion 3.2.11
+[   63.755909][ T4481] udevd[4481]: starting eudev-3.2.11
+[   63.769352][ T4480] udevd (4480) used greatest stack depth: 5272 bytes l=
+eft
+done
+Starting system message bus: done
+Starting iptables: OK
+Starting network: OK
+Starting dhcpcd...
+dhcpcd-9.4.1 starting
+dev: loaded udev
+DUID 00:04:c7:fd:4a:df:9d:a6:e9:60:55:7b:b4:5b:1f:77:00:5c
+forked to background, child pid 4693
+[  111.458895][ T4694] 8021q: adding VLAN 0 to HW filter on device bond0
+[  111.496440][ T4694] eql: remember to turn off Van-Jacobson compression o=
+n your slave devices
+[  111.697880][   T10] cfg80211: failed to load regulatory.db
+Starting sshd: [  113.751142][ T4779] sshd (4779) used greatest stack depth=
+: 4720 bytes left
+[  113.792885][    C0] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->>>>=A0=A0 uname=3Dname=A0=A0=A0 user name to attempt mount as on the remot=
-e server.=A0 The
->>>>diff --git a/net/9p/Kconfig b/net/9p/Kconfig
->>>>index 00ebce9e5a657..c3d357eb8bb37 100644
->>>>--- a/net/9p/Kconfig
->>>>+++ b/net/9p/Kconfig
->>>>@@ -39,6 +39,12 @@ config NET_9P_XEN
->>>>=A0=A0=A0=A0=A0=A0 This builds support for a transport for 9pfs between
->>>>=A0=A0=A0=A0=A0=A0 two Xen domains.
->>>>+config NET_9P_USBG
->>>>+=A0=A0=A0 bool "9P USB Gadget Transport"
->>>>+=A0=A0=A0 depends on USB_GADGET
->>>>+=A0=A0=A0 help
->>>>+=A0=A0=A0=A0=A0 This builds support for a transport for 9pfs over
->>>>+=A0=A0=A0=A0=A0 usb gadget.
->>>>=A0config NET_9P_RDMA
->>>>=A0=A0=A0=A0 depends on INET && INFINIBAND && INFINIBAND_ADDR_TRANS
->>>>diff --git a/net/9p/Makefile b/net/9p/Makefile
->>>>index 1df9b344c30bd..22794a451c3f7 100644
->>>>--- a/net/9p/Makefile
->>>>+++ b/net/9p/Makefile
->>>>@@ -4,6 +4,7 @@ obj-$(CONFIG_NET_9P_FD) +=3D 9pnet_fd.o
->>>>=A0obj-$(CONFIG_NET_9P_XEN) +=3D 9pnet_xen.o
->>>>=A0obj-$(CONFIG_NET_9P_VIRTIO) +=3D 9pnet_virtio.o
->>>>=A0obj-$(CONFIG_NET_9P_RDMA) +=3D 9pnet_rdma.o
->>>>+obj-$(CONFIG_NET_9P_USBG) +=3D 9pnet_usbg.o
->>>>=A09pnet-objs :=3D \
->>>>=A0=A0=A0=A0 mod.o \
->>>>@@ -23,3 +24,6 @@ obj-$(CONFIG_NET_9P_RDMA) +=3D 9pnet_rdma.o
->>>>=A09pnet_rdma-objs :=3D \
->>>>=A0=A0=A0=A0 trans_rdma.o \
->>>>+
->>>>+9pnet_usbg-objs :=3D \
->>>>+=A0=A0=A0 trans_usbg.o \
->>>>diff --git a/net/9p/trans_usbg.c b/net/9p/trans_usbg.c
->>>>new file mode 100644
->>>>index 0000000000000..bc440033cbe68
->>>>--- /dev/null
->>>>+++ b/net/9p/trans_usbg.c
->>>>@@ -0,0 +1,983 @@
->>>>+// SPDX-License-Identifier: GPL-2.0+
->>>>+/*
->>>>+ * trans_usbg.c - USB peripheral usb9pfs configuration driver and tran=
-sport.
->>>>+ *
->>>>+ * Copyright (C) 2024 Michael Grzeschik <m.grzeschik@pengutronix.de>
->>>>+ */
->>>>+
->>>>+/* Gadget usb9pfs only needs two bulk endpoints, and will use the usb9=
-pfs
->>>>+ * transport to mount host exported filesystem via usb gadget.
->>>>+ */
->>>>+
->>>>+/*=A0=A0=A0=A0 +--------------------------+=A0=A0=A0 |=A0=A0=A0 +-----=
----------------------+
->>>>+ *=A0=A0=A0=A0 |=A0 9PFS mounting client=A0=A0=A0 |=A0=A0=A0 |=A0=A0=
-=A0 |=A0 9PFS exporting server=A0=A0 |
->>>>+ *=A0 SW |=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0 |=A0=A0=A0 |=A0=A0=A0 |=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 |
->>>>+ *=A0=A0=A0=A0 |=A0=A0 (this:trans_usbg)=A0=A0=A0=A0=A0 |=A0=A0=A0 |=
-=A0=A0=A0 |(e.g. diod or nfs-ganesha)|
->>>>+ *=A0=A0=A0=A0 +-------------^------------+=A0=A0=A0 |=A0=A0=A0 +-----=
---------^------------+
->>>>+ *=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 |=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 |=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0 |
->>>>+ * ------------------|------------------------------------|-----------=
---
->>>>+ *=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 |=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 |=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0 |
->>>>+ *=A0=A0=A0=A0 +-------------v------------+=A0=A0=A0 |=A0=A0=A0 +-----=
---------v------------+
->>>>+ *=A0=A0=A0=A0 |=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0 |=A0=A0=A0 |=A0=A0=A0 |=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 |
->>>>+ *=A0 HW |=A0=A0 USB Device Controller=A0 <--------->=A0=A0 USB Host C=
-ontroller=A0=A0=A0 |
->>>>+ *=A0=A0=A0=A0 |=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0 |=A0=A0=A0 |=A0=A0=A0 |=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 |
->>>>+ *=A0=A0=A0=A0 +--------------------------+=A0=A0=A0 |=A0=A0=A0 +-----=
----------------------+
->>>>+ */
->>>>+
->>>>+#include <linux/slab.h>
->>>>+#include <linux/kernel.h>
->>>>+#include <linux/device.h>
->>>>+#include <linux/module.h>
->>>>+#include <linux/err.h>
->>>>+#include <linux/usb/composite.h>
->>>>+#include <linux/usb/u_f.h>
->>>>+
->>>>+#include <net/9p/9p.h>
->>>>+#include <net/9p/client.h>
->>>>+#include <net/9p/transport.h>
->>>>+
->>>>+#define DEFAULT_BUFLEN=A0=A0=A0=A0=A0=A0=A0 16384
->>>>+
->>>>+struct f_usb9pfs {
->>>>+=A0=A0=A0 struct p9_client *client;
->>>>+
->>>>+=A0=A0=A0 struct p9_req_t *p9_tx_req;
->>>>+
->>>>+=A0=A0=A0 struct list_head tx_req_list;
->>>>+
->>>>+=A0=A0=A0 /* 9p request lock for en/dequeue */
->>>>+=A0=A0=A0 spinlock_t lock;
->>>>+=A0=A0=A0 /* usb request lock for en/dequeue */
->>>>+=A0=A0=A0 spinlock_t req_lock;
->>>>+
->>>>+=A0=A0=A0 struct usb_request *in_req;
->>>>+=A0=A0=A0 struct usb_request *out_req;
->>>>+
->>>>+=A0=A0=A0 struct usb_ep *in_ep;
->>>>+=A0=A0=A0 struct usb_ep *out_ep;
->>>>+
->>>>+=A0=A0=A0 unsigned int buflen;
->>>>+
->>>>+=A0=A0=A0 struct usb_function function;
->>>>+};
->>>>+
->>>>+static inline struct f_usb9pfs *func_to_usb9pfs(struct usb_function *f)
->>>>+{
->>>>+=A0=A0=A0 return container_of(f, struct f_usb9pfs, function);
->>>>+}
->>>>+
->>>>+struct f_usb9pfs_opts {
->>>>+=A0=A0=A0 struct usb_function_instance func_inst;
->>>>+=A0=A0=A0 unsigned int buflen;
->>>>+
->>>>+=A0=A0=A0 struct f_usb9pfs_dev *dev;
->>>>+
->>>>+=A0=A0=A0 /* Read/write access to configfs attributes is handled by co=
-nfigfs.
->>>>+=A0=A0=A0=A0 *
->>>>+=A0=A0=A0=A0 * This is to protect the data from concurrent access by r=
-ead/write
->>>>+=A0=A0=A0=A0 * and create symlink/remove symlink.
->>>>+=A0=A0=A0=A0 */
->>>>+=A0=A0=A0 struct mutex lock;
->>>>+=A0=A0=A0 int refcnt;
->>>>+};
->>>>+
->>>>+struct f_usb9pfs_dev {
->>>>+=A0=A0=A0 struct f_usb9pfs *usb9pfs;
->>>>+=A0=A0=A0 struct f_usb9pfs_opts *opts;
->>>>+=A0=A0=A0 char tag[41];
->>>>+=A0=A0=A0 bool inuse;
->>>>+
->>>>+=A0=A0=A0 struct list_head usb9pfs_instance;
->>>>+};
->>>>+
->>>>+static DEFINE_MUTEX(usb9pfs_lock);
->>>>+static struct list_head usbg_instance_list;
->>>>+
->>>>+static int usb9pfs_queue_tx(struct f_usb9pfs *usb9pfs, struct usb_requ=
-est *req,
->>>>+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 gfp_t gfp_flags)
->>>>+{
->>>>+=A0=A0=A0 struct usb_composite_dev *cdev =3D usb9pfs->function.config-=
->cdev;
->>>>+=A0=A0=A0 int ret =3D -ENOMEM;
->>>>+
->>>>+=A0=A0=A0 if (!(usb9pfs->p9_tx_req->tc.size % usb9pfs->in_ep->maxpacke=
-t))
->>>>+=A0=A0=A0=A0=A0=A0=A0 req->zero =3D 1;
->>>>+
->>>>+=A0=A0=A0 req->buf =3D usb9pfs->p9_tx_req->tc.sdata;
->>>>+=A0=A0=A0 req->length =3D usb9pfs->p9_tx_req->tc.size;
->>>>+
->>>>+=A0=A0=A0 dev_dbg(&cdev->gadget->dev, "%s usb9pfs send --> %d/%d, zero=
-: %d\n",
->>>>+=A0=A0=A0=A0=A0=A0=A0 usb9pfs->in_ep->name, req->actual, req->length, =
-req->zero);
->>>>+
->>>>+=A0=A0=A0 ret =3D usb_ep_queue(usb9pfs->in_ep, req, gfp_flags);
->>>>+
->>>>+=A0=A0=A0 dev_dbg(&cdev->gadget->dev, "tx submit --> %d\n", ret);
->>>>+
->>>>+=A0=A0=A0 return ret;
->>>>+}
->>>>+
->>>>+static int usb9pfs_queue_rx(struct f_usb9pfs *usb9pfs, struct usb_requ=
-est *req,
->>>>+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 gfp_t gfp_flags)
->>>>+{
->>>>+=A0=A0=A0 struct usb_composite_dev *cdev =3D usb9pfs->function.config-=
->cdev;
->>>>+=A0=A0=A0 int ret =3D -ENOMEM;
->>>>+
->>>>+=A0=A0=A0 ret =3D usb_ep_queue(usb9pfs->out_ep, req, gfp_flags);
->>>>+
->>>>+=A0=A0=A0 dev_dbg(&cdev->gadget->dev, "rx submit --> %d\n", ret);
->>>>+
->>>>+=A0=A0=A0 return ret;
->>>>+}
->>>>+
->>>>+/* This needs to be called with usb9pfs->req_lock held */
->>>>+static int usb9pfs_transmit(struct f_usb9pfs *usb9pfs)
->>>>+{
->>>>+=A0=A0=A0 struct p9_req_t *p9_req =3D NULL;
->>>>+=A0=A0=A0 unsigned long flags;
->>>>+=A0=A0=A0 int ret =3D 0;
->>>>+
->>>>+=A0=A0=A0 spin_lock_irqsave(&usb9pfs->lock, flags);
->>>>+
->>>>+=A0=A0=A0 if (usb9pfs->p9_tx_req) {
->>>>+=A0=A0=A0=A0=A0=A0=A0 spin_unlock_irqrestore(&usb9pfs->lock, flags);
->>>>+=A0=A0=A0=A0=A0=A0=A0 return -EBUSY;
->>>>+=A0=A0=A0 }
->>>>+
->>>>+=A0=A0=A0 p9_req =3D list_first_entry_or_null(&usb9pfs->tx_req_list,
->>>>+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 struct=
- p9_req_t, req_list);
->>>>+=A0=A0=A0 if (!p9_req) {
->>>>+=A0=A0=A0=A0=A0=A0=A0 spin_unlock_irqrestore(&usb9pfs->lock, flags);
->>>>+=A0=A0=A0=A0=A0=A0=A0 return -ENOENT;
->>>>+=A0=A0=A0 }
->>>>+
->>>>+=A0=A0=A0 list_del(&p9_req->req_list);
->>>>+
->>>>+=A0=A0=A0 usb9pfs->p9_tx_req =3D p9_req;
->>>>+
->>>>+=A0=A0=A0 p9_req_get(usb9pfs->p9_tx_req);
->>>>+
->>>>+=A0=A0=A0 ret =3D usb9pfs_queue_tx(usb9pfs, usb9pfs->in_req, GFP_ATOMI=
-C);
->>>>+
->>>>+=A0=A0=A0 spin_unlock_irqrestore(&usb9pfs->lock, flags);
->>>>+
->>>>+=A0=A0=A0 return ret;
->>>>+}
->>>>+
->>>>+static void usb9pfs_tx_complete(struct usb_ep *ep, struct usb_request =
-*req)
->>>>+{
->>>>+=A0=A0=A0 struct f_usb9pfs *usb9pfs =3D ep->driver_data;
->>>>+=A0=A0=A0 struct usb_composite_dev *cdev =3D usb9pfs->function.config-=
->cdev;
->>>>+=A0=A0=A0 int ret =3D 0;
->>>>+
->>>>+=A0=A0=A0 if (req->status) {
->>>>+=A0=A0=A0=A0=A0=A0=A0 dev_err(&cdev->gadget->dev, "%s usb9pfs complete=
- --> %d, %d/%d\n",
->>>>+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 ep->name, req->status, req->actual, =
-req->length);
->>>>+=A0=A0=A0=A0=A0=A0=A0 goto free_req;
->>>>+=A0=A0=A0 }
->>>>+
->>>>+=A0=A0=A0 /* reset zero packages */
->>>>+=A0=A0=A0 req->zero =3D 0;
->>>>+
->>>>+=A0=A0=A0 dev_dbg(&cdev->gadget->dev, "%s usb9pfs complete --> %d, %d/=
-%d\n",
->>>>+=A0=A0=A0=A0=A0=A0=A0 ep->name, req->status, req->actual, req->length);
->>>>+
->>>>+=A0=A0=A0 spin_lock(&usb9pfs->req_lock);
->>>>+
->>>>+=A0=A0=A0 WRITE_ONCE(usb9pfs->p9_tx_req->status, REQ_STATUS_SENT);
->>>>+
->>>>+=A0=A0=A0 p9_req_put(usb9pfs->client, usb9pfs->p9_tx_req);
->>>>+
->>>>+=A0=A0=A0 ret =3D usb9pfs_queue_rx(usb9pfs, usb9pfs->out_req, GFP_ATOM=
-IC);
->>>>+=A0=A0=A0 if (ret) {
->>>>+=A0=A0=A0=A0=A0=A0=A0 spin_unlock(&usb9pfs->req_lock);
->>>>+=A0=A0=A0=A0=A0=A0=A0 goto free_req;
->>>>+=A0=A0=A0 }
->>>>+
->>>>+=A0=A0=A0 spin_unlock(&usb9pfs->req_lock);
->>>>+
->>>>+=A0=A0=A0 return;
->>>>+
->>>>+free_req:
->>>>+=A0=A0=A0 usb_ep_free_request(ep =3D=3D usb9pfs->in_ep ?
->>>>+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 usb9pfs->out_ep : usb9pf=
-s->in_ep,
->>>>+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 req->context);
->>>>+=A0=A0=A0 free_ep_req(ep, req);
->>>>+}
->>>>+
->>>>+static struct p9_req_t *usb9pfs_rx_header(struct f_usb9pfs *usb9pfs, v=
-oid *buf)
->>>>+{
->>>>+=A0=A0=A0 struct p9_req_t *p9_rx_req;
->>>>+=A0=A0=A0 struct p9_fcall=A0=A0=A0 rc;
->>>>+=A0=A0=A0 int ret;
->>>>+
->>>>+=A0=A0=A0 /* start by reading header */
->>>>+=A0=A0=A0 rc.sdata =3D buf;
->>>>+=A0=A0=A0 rc.offset =3D 0;
->>>>+=A0=A0=A0 rc.capacity =3D P9_HDRSZ;
->>>>+=A0=A0=A0 rc.size =3D P9_HDRSZ;
->>>>+
->>>>+=A0=A0=A0 p9_debug(P9_DEBUG_TRANS, "mux %p got %zu bytes\n", usb9pfs,
->>>>+=A0=A0=A0=A0=A0=A0=A0=A0 rc.capacity - rc.offset);
->>>>+
->>>>+=A0=A0=A0 ret =3D p9_parse_header(&rc, &rc.size, NULL, NULL, 0);
->>>>+=A0=A0=A0 if (ret) {
->>>>+=A0=A0=A0=A0=A0=A0=A0 p9_debug(P9_DEBUG_ERROR,
->>>>+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 "error parsing header: %d\n", ret=
-);
->>>>+=A0=A0=A0=A0=A0=A0=A0 return NULL;
->>>>+=A0=A0=A0 }
->>>>+
->>>>+=A0=A0=A0 p9_debug(P9_DEBUG_TRANS,
->>>>+=A0=A0=A0=A0=A0=A0=A0=A0 "mux %p pkt: size: %d bytes tag: %d\n",
->>>>+=A0=A0=A0=A0=A0=A0=A0=A0 usb9pfs, rc.size, rc.tag);
->>>>+
->>>>+=A0=A0=A0 p9_rx_req =3D p9_tag_lookup(usb9pfs->client, rc.tag);
->>>>+=A0=A0=A0 if (!p9_rx_req || p9_rx_req->status !=3D REQ_STATUS_SENT) {
->>>>+=A0=A0=A0=A0=A0=A0=A0 p9_debug(P9_DEBUG_ERROR, "Unexpected packet tag =
-%d\n", rc.tag);
->>>>+=A0=A0=A0=A0=A0=A0=A0 return NULL;
->>>>+=A0=A0=A0 }
->>>>+
->>>>+=A0=A0=A0 if (rc.size > p9_rx_req->rc.capacity) {
->>>>+=A0=A0=A0=A0=A0=A0=A0 p9_debug(P9_DEBUG_ERROR,
->>>>+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 "requested packet size too big: %=
-d for tag %d with=20
->>>>capacity %zd\n",
->>>>+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 rc.size, rc.tag, p9_rx_req->rc.ca=
-pacity);
->>>>+=A0=A0=A0=A0=A0=A0=A0 p9_req_put(usb9pfs->client, p9_rx_req);
->>>>+=A0=A0=A0=A0=A0=A0=A0 return NULL;
->>>>+=A0=A0=A0 }
->>>>+
->>>>+=A0=A0=A0 if (!p9_rx_req->rc.sdata) {
->>>>+=A0=A0=A0=A0=A0=A0=A0 p9_debug(P9_DEBUG_ERROR,
->>>>+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 "No recv fcall for tag %d (req %p=
-), disconnecting!\n",
->>>>+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 rc.tag, p9_rx_req);
->>>>+=A0=A0=A0=A0=A0=A0=A0 p9_req_put(usb9pfs->client, p9_rx_req);
->>>>+=A0=A0=A0=A0=A0=A0=A0 return NULL;
->>>>+=A0=A0=A0 }
->>>>+
->>>>+=A0=A0=A0 return p9_rx_req;
->>>>+}
->>>>+
->>>>+static void usb9pfs_rx_complete(struct usb_ep *ep, struct usb_request =
-*req)
->>>>+{
->>>>+=A0=A0=A0 struct f_usb9pfs *usb9pfs =3D ep->driver_data;
->>>>+=A0=A0=A0 struct usb_composite_dev *cdev =3D usb9pfs->function.config-=
->cdev;
->>>>+=A0=A0=A0 struct p9_req_t *p9_rx_req;
->>>>+=A0=A0=A0 unsigned long flags;
->>>>+=A0=A0=A0 int ret =3D 0;
->>>>+
->>>>+=A0=A0=A0 if (req->status) {
->>>>+=A0=A0=A0=A0=A0=A0=A0 dev_err(&cdev->gadget->dev, "%s usb9pfs complete=
- --> %d, %d/%d\n",
->>>>+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 ep->name, req->status, req->actual, =
-req->length);
->>>>+=A0=A0=A0=A0=A0=A0=A0 goto free_req;
->>>>+=A0=A0=A0 }
->>>>+
->>>>+=A0=A0=A0 spin_lock_irqsave(&usb9pfs->req_lock, flags);
->>>>+
->>>>+=A0=A0=A0 p9_rx_req =3D usb9pfs_rx_header(usb9pfs, req->buf);
->>>>+=A0=A0=A0 if (!p9_rx_req) {
->>>>+=A0=A0=A0=A0=A0=A0=A0 spin_unlock_irqrestore(&usb9pfs->req_lock, flags=
-);
->>>>+=A0=A0=A0=A0=A0=A0=A0 goto free_req;
->>>>+=A0=A0=A0 }
->>>>+
->>>>+=A0=A0=A0 memcpy(p9_rx_req->rc.sdata, req->buf, req->actual);
->>>>+
->>>>+=A0=A0=A0 p9_rx_req->rc.size =3D req->actual;
->>>>+
->>>>+=A0=A0=A0 p9_client_cb(usb9pfs->client, p9_rx_req, REQ_STATUS_RCVD);
->>>>+=A0=A0=A0 p9_req_put(usb9pfs->client, p9_rx_req);
->>>>+
->>>>+=A0=A0=A0 usb9pfs->p9_tx_req =3D NULL;
->>>>+
->>>>+=A0=A0=A0 ret =3D usb9pfs_transmit(usb9pfs);
->>>>+=A0=A0=A0 if (ret) {
->>>>+=A0=A0=A0=A0=A0=A0=A0 spin_unlock_irqrestore(&usb9pfs->req_lock, flags=
-);
->>>>+=A0=A0=A0=A0=A0=A0=A0 return;
->>>>+=A0=A0=A0 }
->>>>+
->>>>+=A0=A0=A0 spin_unlock_irqrestore(&usb9pfs->req_lock, flags);
->>>>+
->>>>+=A0=A0=A0 return;
->>>>+
->>>>+free_req:
->>>>+=A0=A0=A0 usb_ep_free_request(ep =3D=3D usb9pfs->in_ep ?
->>>>+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 usb9pfs->out_ep : usb9pf=
-s->in_ep,
->>>>+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 req->context);
->>>>+=A0=A0=A0 free_ep_req(ep, req);
->>>>+
->>>>+=A0=A0=A0 p9_client_cb(usb9pfs->client, p9_rx_req, REQ_STATUS_ERROR);
->>>>+}
->>>>+
->>>>+static void disable_ep(struct usb_composite_dev *cdev, struct usb_ep *=
-ep)
->>>>+{
->>>>+=A0=A0=A0 int value;
->>>>+
->>>>+=A0=A0=A0 value =3D usb_ep_disable(ep);
->>>>+=A0=A0=A0 if (value < 0)
->>>>+=A0=A0=A0=A0=A0=A0=A0 dev_info(&cdev->gadget->dev,
->>>>+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 "disable %s --> %d\n", ep->name, =
-value);
->>>>+}
->>>>+
->>>>+static void disable_usb9pfs(struct f_usb9pfs *usb9pfs)
->>>>+{
->>>>+=A0=A0=A0 struct usb_composite_dev *cdev =3D
->>>>+=A0=A0=A0=A0=A0=A0=A0 usb9pfs->function.config->cdev;
->>>>+
->>>>+=A0=A0=A0 disable_ep(cdev, usb9pfs->in_ep);
->>>>+=A0=A0=A0 disable_ep(cdev, usb9pfs->out_ep);
->>>>+=A0=A0=A0 dev_dbg(&cdev->gadget->dev, "%s disabled\n",
->>>>+=A0=A0=A0=A0=A0=A0=A0 usb9pfs->function.name);
->>>>+}
->>>>+
->>>>+static int alloc_requests(struct usb_composite_dev *cdev,
->>>>+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 struct f_usb9pfs *usb9pfs)
->>>>+{
->>>>+=A0=A0=A0 int ret =3D 0;
->>>>+
->>>>+=A0=A0=A0 usb9pfs->in_req =3D usb_ep_alloc_request(usb9pfs->in_ep, GFP=
-_ATOMIC);
->>>>+=A0=A0=A0 if (!usb9pfs->in_req) {
->>>>+=A0=A0=A0=A0=A0=A0=A0 ret =3D -ENOENT;
->>>>+=A0=A0=A0=A0=A0=A0=A0 goto fail;
->>>>+=A0=A0=A0 }
->>>>+
->>>>+=A0=A0=A0 usb9pfs->out_req =3D alloc_ep_req(usb9pfs->out_ep, usb9pfs->=
-buflen);
->>>>+=A0=A0=A0 if (!usb9pfs->out_req) {
->>>>+=A0=A0=A0=A0=A0=A0=A0 ret =3D -ENOENT;
->>>>+=A0=A0=A0=A0=A0=A0=A0 goto fail_in;
->>>>+=A0=A0=A0 }
->>>>+
->>>>+=A0=A0=A0 usb9pfs->in_req->complete =3D usb9pfs_tx_complete;
->>>>+=A0=A0=A0 usb9pfs->out_req->complete =3D usb9pfs_rx_complete;
->>>>+
->>>>+=A0=A0=A0 /* length will be set in complete routine */
->>>>+=A0=A0=A0 usb9pfs->in_req->context =3D usb9pfs;
->>>>+=A0=A0=A0 usb9pfs->out_req->context =3D usb9pfs;
->>>>+
->>>>+=A0=A0=A0 return ret;
->>>>+
->>>>+fail_in:
->>>>+=A0=A0=A0 usb_ep_free_request(usb9pfs->in_ep, usb9pfs->in_req);
->>>>+fail:
->>>>+=A0=A0=A0 return ret;
->>>>+}
->>>>+
->>>>+static int enable_endpoint(struct usb_composite_dev *cdev,
->>>>+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 struct f_usb9pfs *usb9pfs, =
-struct usb_ep *ep)
->>>>+{
->>>>+=A0=A0=A0 int ret;
->>>>+
->>>>+=A0=A0=A0 ret =3D config_ep_by_speed(cdev->gadget, &usb9pfs->function,=
- ep);
->>>>+=A0=A0=A0 if (ret)
->>>>+=A0=A0=A0=A0=A0=A0=A0 return ret;
->>>>+
->>>>+=A0=A0=A0 ret =3D usb_ep_enable(ep);
->>>>+=A0=A0=A0 if (ret < 0)
->>>>+=A0=A0=A0=A0=A0=A0=A0 return ret;
->>>>+
->>>>+=A0=A0=A0 ep->driver_data =3D usb9pfs;
->>>>+
->>>>+=A0=A0=A0 return ret;
->>>>+}
->>>>+
->>>>+static int
->>>>+enable_usb9pfs(struct usb_composite_dev *cdev, struct f_usb9pfs *usb9p=
-fs)
->>>>+{
->>>>+=A0=A0=A0 int result =3D 0;
->>>>+
->>>>+=A0=A0=A0 result =3D enable_endpoint(cdev, usb9pfs, usb9pfs->in_ep);
->>>>+=A0=A0=A0 if (result)
->>>>+=A0=A0=A0=A0=A0=A0=A0 goto out;
->>>>+
->>>>+=A0=A0=A0 result =3D enable_endpoint(cdev, usb9pfs, usb9pfs->out_ep);
->>>>+=A0=A0=A0 if (result)
->>>>+=A0=A0=A0=A0=A0=A0=A0 goto disable_in;
->>>>+
->>>>+=A0=A0=A0 result =3D alloc_requests(cdev, usb9pfs);
->>>>+=A0=A0=A0 if (result)
->>>>+=A0=A0=A0=A0=A0=A0=A0 goto disable_out;
->>>>+
->>>>+=A0=A0=A0 dev_dbg(&cdev->gadget->dev, "%s enabled\n", usb9pfs->functio=
-n.name);
->>>>+=A0=A0=A0 return 0;
->>>>+
->>>>+disable_out:
->>>>+=A0=A0=A0 usb_ep_disable(usb9pfs->out_ep);
->>>>+disable_in:
->>>>+=A0=A0=A0 usb_ep_disable(usb9pfs->in_ep);
->>>>+out:
->>>>+=A0=A0=A0 return result;
->>>>+}
->>>>+
->>>>+static int p9_usbg_create(struct p9_client *client, const char=20
->>>>*devname, char *args)
->>>>+{
->>>>+=A0=A0=A0 struct usb_composite_dev *cdev;
->>>>+=A0=A0=A0 struct f_usb9pfs_dev *dev;
->>>>+=A0=A0=A0 struct f_usb9pfs_dev *tmp;
->>>>+=A0=A0=A0 struct f_usb9pfs *usb9pfs;
->>>>+=A0=A0=A0 struct usb_function *f;
->>>>+=A0=A0=A0 int ret =3D -ENOENT;
->>>>+=A0=A0=A0 int found =3D 0;
->>>>+
->>>>+=A0=A0=A0 if (!devname)
->>>>+=A0=A0=A0=A0=A0=A0=A0 return -EINVAL;
->>>>+
->>>>+=A0=A0=A0 mutex_lock(&usb9pfs_lock);
->>>>+=A0=A0=A0 list_for_each_entry_safe(dev, tmp, &usbg_instance_list, usb9=
-pfs_instance) {
->>>>+=A0=A0=A0=A0=A0=A0=A0 if (!strncmp(devname, dev->tag, strlen(devname))=
-) {
->>>>+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 if (!dev->inuse) {
->>>>+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 dev->inuse =3D true;
->>>>+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 found =3D 1;
->>>>+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 break;
->>>>+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 }
->>>>+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 ret =3D -EBUSY;
->>>>+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 break;
->>>>+=A0=A0=A0=A0=A0=A0=A0 }
->>>>+=A0=A0=A0 }
->>>>+=A0=A0=A0 mutex_unlock(&usb9pfs_lock);
->>>>+
->>>>+=A0=A0=A0 if (!found) {
->>>>+=A0=A0=A0=A0=A0=A0=A0 pr_err("no channels available for device %s\n", =
-devname);
->>>>+=A0=A0=A0=A0=A0=A0=A0 return ret;
->>>>+=A0=A0=A0 }
->>>>+
->>>>+=A0=A0=A0 usb9pfs =3D dev->usb9pfs;
->>>>+=A0=A0=A0 if (!usb9pfs)
->>>>+=A0=A0=A0=A0=A0=A0=A0 return -EINVAL;
->>>>+
->>>>+=A0=A0=A0 INIT_LIST_HEAD(&usb9pfs->tx_req_list);
->>>>+
->>>>+=A0=A0=A0 spin_lock_init(&usb9pfs->lock);
->>>>+=A0=A0=A0 spin_lock_init(&usb9pfs->req_lock);
->>>>+
->>>>+=A0=A0=A0 f =3D &usb9pfs->function;
->>>>+=A0=A0=A0 cdev =3D f->config->cdev;
->>>>+
->>>>+=A0=A0=A0 client->trans =3D (void *)usb9pfs;
->>>>+=A0=A0=A0 client->status =3D Connected;
->>>>+=A0=A0=A0 usb9pfs->client =3D client;
->>>>+
->>>>+=A0=A0=A0 client->trans_mod->maxsize =3D usb9pfs->buflen;
->>>>+
->>>>+=A0=A0=A0 return enable_usb9pfs(cdev, usb9pfs);
->>>>+}
->>>>+
->>>>+static void p9_usbg_close(struct p9_client *client)
->>>>+{
->>>>+=A0=A0=A0 struct f_usb9pfs *usb9pfs;
->>>>+=A0=A0=A0 struct f_usb9pfs_dev *dev;
->>>>+=A0=A0=A0 struct p9_req_t *req;
->>>>+=A0=A0=A0 struct f_usb9pfs_opts *opts;
->>>>+
->>>>+=A0=A0=A0 if (!client)
->>>>+=A0=A0=A0=A0=A0=A0=A0 return;
->>>>+
->>>>+=A0=A0=A0 usb9pfs =3D client->trans;
->>>>+=A0=A0=A0 if (!usb9pfs)
->>>>+=A0=A0=A0=A0=A0=A0=A0 return;
->>>>+
->>>>+=A0=A0=A0 client->status =3D Disconnected;
->>>>+
->>>>+=A0=A0=A0 spin_lock(&usb9pfs->req_lock);
->>>>+
->>>>+=A0=A0=A0 req =3D usb9pfs->p9_tx_req;
->>>>+=A0=A0=A0 if (req) {
->>>>+=A0=A0=A0=A0=A0=A0=A0 if (!req->t_err)
->>>>+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 req->t_err =3D -ECONNRESET;
->>>>+=A0=A0=A0=A0=A0=A0=A0 p9_client_cb(usb9pfs->client, req, REQ_STATUS_ER=
-ROR);
->>>>+=A0=A0=A0 }
->>>>+
->>>>+=A0=A0=A0 spin_unlock(&usb9pfs->req_lock);
->>>>+
->>>>+=A0=A0=A0 disable_usb9pfs(usb9pfs);
->>>>+
->>>>+=A0=A0=A0 opts =3D container_of(usb9pfs->function.fi,
->>>>+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 struct f_usb9pfs_opts, f=
-unc_inst);
->>>>+
->>>>+=A0=A0=A0 dev =3D opts->dev;
->>>>+
->>>>+=A0=A0=A0 mutex_lock(&usb9pfs_lock);
->>>>+=A0=A0=A0 dev->inuse =3D false;
->>>>+=A0=A0=A0 mutex_unlock(&usb9pfs_lock);
->>>>+}
->>>>+
->>>>+static int p9_usbg_request(struct p9_client *client, struct p9_req_t *=
-p9_req)
->>>>+{
->>>>+=A0=A0=A0 struct f_usb9pfs *usb9pfs =3D client->trans;
->>>>+=A0=A0=A0 unsigned long flags;
->>>>+
->>>>+=A0=A0=A0 if (client->status !=3D Connected)
->>>>+=A0=A0=A0=A0=A0=A0=A0 return -EBUSY;
->>>>+
->>>>+=A0=A0=A0 spin_lock_irqsave(&usb9pfs->lock, flags);
->>>>+=A0=A0=A0 list_add_tail(&p9_req->req_list, &usb9pfs->tx_req_list);
->>>>+=A0=A0=A0 spin_unlock_irqrestore(&usb9pfs->lock, flags);
->>>>+
->>>>+=A0=A0=A0 spin_lock_irqsave(&usb9pfs->req_lock, flags);
->>>>+=A0=A0=A0 usb9pfs_transmit(usb9pfs);
->>>>+=A0=A0=A0 spin_unlock_irqrestore(&usb9pfs->req_lock, flags);
->>>>+
->>>>+=A0=A0=A0 return 0;
->>>>+}
->>>>+
->>>>+static int p9_usbg_cancel(struct p9_client *client, struct p9_req_t *r=
-eq)
->>>>+{
->>>>+=A0=A0=A0 struct f_usb9pfs *usb9pfs =3D client->trans;
->>>>+=A0=A0=A0 int ret =3D 1;
->>>>+
->>>>+=A0=A0=A0 p9_debug(P9_DEBUG_TRANS, "client %p req %p\n", client, req);
->>>>+
->>>>+=A0=A0=A0 spin_lock(&usb9pfs->req_lock);
->>>>+
->>>>+=A0=A0=A0 if (req->status =3D=3D REQ_STATUS_UNSENT) {
->>>>+=A0=A0=A0=A0=A0=A0=A0 list_del(&req->req_list);
->>>>+=A0=A0=A0=A0=A0=A0=A0 WRITE_ONCE(req->status, REQ_STATUS_FLSHD);
->>>>+=A0=A0=A0=A0=A0=A0=A0 p9_req_put(client, req);
->>>>+=A0=A0=A0=A0=A0=A0=A0 ret =3D 0;
->>>>+=A0=A0=A0 }
->>>>+=A0=A0=A0 spin_unlock(&usb9pfs->req_lock);
->>>>+
->>>>+=A0=A0=A0 return ret;
->>>>+}
->>>>+
->>>>+static struct p9_trans_module p9_usbg_trans =3D {
->>>>+=A0=A0=A0 .name =3D "usbg",
->>>>+=A0=A0=A0 .create =3D p9_usbg_create,
->>>>+=A0=A0=A0 .close =3D p9_usbg_close,
->>>>+=A0=A0=A0 .request =3D p9_usbg_request,
->>>>+=A0=A0=A0 .cancel =3D p9_usbg_cancel,
->>>>+=A0=A0=A0 .owner =3D THIS_MODULE,
->>>>+};
->>>>+
->>>>+/*--------------------------------------------------------------------=
------*/
->>>>+
->>>>+#define USB_PROTOCOL_9PFS=A0=A0=A0 0x09
->>>>+
->>>>+static struct usb_interface_descriptor usb9pfs_intf =3D {
->>>>+=A0=A0=A0 .bLength =3D=A0=A0=A0=A0=A0=A0=A0 sizeof(usb9pfs_intf),
->>>>+=A0=A0=A0 .bDescriptorType =3D=A0=A0=A0 USB_DT_INTERFACE,
->>>>+
->>>>+=A0=A0=A0 .bNumEndpoints =3D=A0=A0=A0 2,
->>>>+=A0=A0=A0 .bInterfaceClass =3D=A0=A0=A0 USB_CLASS_VENDOR_SPEC,
->>>>+=A0=A0=A0 .bInterfaceSubClass =3D=A0=A0=A0 USB_SUBCLASS_VENDOR_SPEC,
->>>>+=A0=A0=A0 .bInterfaceProtocol =3D=A0=A0 USB_PROTOCOL_9PFS,
->>>>+
->>>>+=A0=A0=A0 /* .iInterface =3D DYNAMIC */
->>>>+};
->>>>+
->>>>+/* full speed support: */
->>>>+
->>>>+static struct usb_endpoint_descriptor fs_usb9pfs_source_desc =3D {
->>>>+=A0=A0=A0 .bLength =3D=A0=A0=A0=A0=A0=A0=A0 USB_DT_ENDPOINT_SIZE,
->>>>+=A0=A0=A0 .bDescriptorType =3D=A0=A0=A0 USB_DT_ENDPOINT,
->>>>+
->>>>+=A0=A0=A0 .bEndpointAddress =3D=A0=A0=A0 USB_DIR_IN,
->>>>+=A0=A0=A0 .bmAttributes =3D=A0=A0=A0=A0=A0=A0=A0 USB_ENDPOINT_XFER_BUL=
-K,
->>>>+};
->>>>+
->>>>+static struct usb_endpoint_descriptor fs_usb9pfs_sink_desc =3D {
->>>>+=A0=A0=A0 .bLength =3D=A0=A0=A0=A0=A0=A0=A0 USB_DT_ENDPOINT_SIZE,
->>>>+=A0=A0=A0 .bDescriptorType =3D=A0=A0=A0 USB_DT_ENDPOINT,
->>>>+
->>>>+=A0=A0=A0 .bEndpointAddress =3D=A0=A0=A0 USB_DIR_OUT,
->>>>+=A0=A0=A0 .bmAttributes =3D=A0=A0=A0=A0=A0=A0=A0 USB_ENDPOINT_XFER_BUL=
-K,
->>>>+};
->>>>+
->>>>+static struct usb_descriptor_header *fs_usb9pfs_descs[] =3D {
->>>>+=A0=A0=A0 (struct usb_descriptor_header *)&usb9pfs_intf,
->>>>+=A0=A0=A0 (struct usb_descriptor_header *)&fs_usb9pfs_sink_desc,
->>>>+=A0=A0=A0 (struct usb_descriptor_header *)&fs_usb9pfs_source_desc,
->>>>+=A0=A0=A0 NULL,
->>>>+};
->>>>+
->>>>+/* high speed support: */
->>>>+
->>>>+static struct usb_endpoint_descriptor hs_usb9pfs_source_desc =3D {
->>>>+=A0=A0=A0 .bLength =3D=A0=A0=A0=A0=A0=A0=A0 USB_DT_ENDPOINT_SIZE,
->>>>+=A0=A0=A0 .bDescriptorType =3D=A0=A0=A0 USB_DT_ENDPOINT,
->>>>+
->>>>+=A0=A0=A0 .bmAttributes =3D=A0=A0=A0=A0=A0=A0=A0 USB_ENDPOINT_XFER_BUL=
-K,
->>>>+=A0=A0=A0 .wMaxPacketSize =3D=A0=A0=A0 cpu_to_le16(512),
->>>>+};
->>>>+
->>>>+static struct usb_endpoint_descriptor hs_usb9pfs_sink_desc =3D {
->>>>+=A0=A0=A0 .bLength =3D=A0=A0=A0=A0=A0=A0=A0 USB_DT_ENDPOINT_SIZE,
->>>>+=A0=A0=A0 .bDescriptorType =3D=A0=A0=A0 USB_DT_ENDPOINT,
->>>>+
->>>>+=A0=A0=A0 .bmAttributes =3D=A0=A0=A0=A0=A0=A0=A0 USB_ENDPOINT_XFER_BUL=
-K,
->>>>+=A0=A0=A0 .wMaxPacketSize =3D=A0=A0=A0 cpu_to_le16(512),
->>>>+};
->>>>+
->>>>+static struct usb_descriptor_header *hs_usb9pfs_descs[] =3D {
->>>>+=A0=A0=A0 (struct usb_descriptor_header *)&usb9pfs_intf,
->>>>+=A0=A0=A0 (struct usb_descriptor_header *)&hs_usb9pfs_source_desc,
->>>>+=A0=A0=A0 (struct usb_descriptor_header *)&hs_usb9pfs_sink_desc,
->>>>+=A0=A0=A0 NULL,
->>>>+};
->>>>+
->>>>+/* super speed support: */
->>>>+
->>>>+static struct usb_endpoint_descriptor ss_usb9pfs_source_desc =3D {
->>>>+=A0=A0=A0 .bLength =3D=A0=A0=A0=A0=A0=A0=A0 USB_DT_ENDPOINT_SIZE,
->>>>+=A0=A0=A0 .bDescriptorType =3D=A0=A0=A0 USB_DT_ENDPOINT,
->>>>+
->>>>+=A0=A0=A0 .bmAttributes =3D=A0=A0=A0=A0=A0=A0=A0 USB_ENDPOINT_XFER_BUL=
-K,
->>>>+=A0=A0=A0 .wMaxPacketSize =3D=A0=A0=A0 cpu_to_le16(1024),
->>>>+};
->>>>+
->>>>+static struct usb_ss_ep_comp_descriptor ss_usb9pfs_source_comp_desc =
-=3D {
->>>>+=A0=A0=A0 .bLength =3D=A0=A0=A0=A0=A0=A0=A0 USB_DT_SS_EP_COMP_SIZE,
->>>>+=A0=A0=A0 .bDescriptorType =3D=A0=A0=A0 USB_DT_SS_ENDPOINT_COMP,
->>>>+=A0=A0=A0 .bMaxBurst =3D=A0=A0=A0=A0=A0=A0=A0 0,
->>>>+=A0=A0=A0 .bmAttributes =3D=A0=A0=A0=A0=A0=A0=A0 0,
->>>>+=A0=A0=A0 .wBytesPerInterval =3D=A0=A0=A0 0,
->>>>+};
->>>>+
->>>>+static struct usb_endpoint_descriptor ss_usb9pfs_sink_desc =3D {
->>>>+=A0=A0=A0 .bLength =3D=A0=A0=A0=A0=A0=A0=A0 USB_DT_ENDPOINT_SIZE,
->>>>+=A0=A0=A0 .bDescriptorType =3D=A0=A0=A0 USB_DT_ENDPOINT,
->>>>+
->>>>+=A0=A0=A0 .bmAttributes =3D=A0=A0=A0=A0=A0=A0=A0 USB_ENDPOINT_XFER_BUL=
-K,
->>>>+=A0=A0=A0 .wMaxPacketSize =3D=A0=A0=A0 cpu_to_le16(1024),
->>>>+};
->>>>+
->>>>+static struct usb_ss_ep_comp_descriptor ss_usb9pfs_sink_comp_desc =3D {
->>>>+=A0=A0=A0 .bLength =3D=A0=A0=A0=A0=A0=A0=A0 USB_DT_SS_EP_COMP_SIZE,
->>>>+=A0=A0=A0 .bDescriptorType =3D=A0=A0=A0 USB_DT_SS_ENDPOINT_COMP,
->>>>+=A0=A0=A0 .bMaxBurst =3D=A0=A0=A0=A0=A0=A0=A0 0,
->>>>+=A0=A0=A0 .bmAttributes =3D=A0=A0=A0=A0=A0=A0=A0 0,
->>>>+=A0=A0=A0 .wBytesPerInterval =3D=A0=A0=A0 0,
->>>>+};
->>>>+
->>>>+static struct usb_descriptor_header *ss_usb9pfs_descs[] =3D {
->>>>+=A0=A0=A0 (struct usb_descriptor_header *)&usb9pfs_intf,
->>>>+=A0=A0=A0 (struct usb_descriptor_header *)&ss_usb9pfs_source_desc,
->>>>+=A0=A0=A0 (struct usb_descriptor_header *)&ss_usb9pfs_source_comp_desc,
->>>>+=A0=A0=A0 (struct usb_descriptor_header *)&ss_usb9pfs_sink_desc,
->>>>+=A0=A0=A0 (struct usb_descriptor_header *)&ss_usb9pfs_sink_comp_desc,
->>>>+=A0=A0=A0 NULL,
->>>>+};
->>>>+
->>>>+/* function-specific strings: */
->>>>+static struct usb_string strings_usb9pfs[] =3D {
->>>>+=A0=A0=A0 [0].s =3D "usb9pfs input to output",
->>>>+=A0=A0=A0 {=A0 }=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 /* end of list */
->>>>+};
->>>>+
->>>>+static struct usb_gadget_strings stringtab_usb9pfs =3D {
->>>>+=A0=A0=A0 .language=A0=A0=A0 =3D 0x0409,=A0=A0=A0 /* en-us */
->>>>+=A0=A0=A0 .strings=A0=A0=A0 =3D strings_usb9pfs,
->>>>+};
->>>>+
->>>>+static struct usb_gadget_strings *usb9pfs_strings[] =3D {
->>>>+=A0=A0=A0 &stringtab_usb9pfs,
->>>>+=A0=A0=A0 NULL,
->>>>+};
->>>>+
->>>>+/*--------------------------------------------------------------------=
------*/
->>>>+
->>>>+static int usb9pfs_func_bind(struct usb_configuration *c,
->>>>+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 struct usb_function *=
-f)
->>>>+{
->>>>+=A0=A0=A0 struct f_usb9pfs *usb9pfs =3D func_to_usb9pfs(f);
->>>>+=A0=A0=A0 struct f_usb9pfs_opts *opts;
->>>>+=A0=A0=A0 struct usb_composite_dev *cdev =3D c->cdev;
->>>>+=A0=A0=A0 int ret;
->>>>+=A0=A0=A0 int id;
->>>>+
->>>>+=A0=A0=A0 /* allocate interface ID(s) */
->>>>+=A0=A0=A0 id =3D usb_interface_id(c, f);
->>>>+=A0=A0=A0 if (id < 0)
->>>>+=A0=A0=A0=A0=A0=A0=A0 return id;
->>>>+=A0=A0=A0 usb9pfs_intf.bInterfaceNumber =3D id;
->>>>+
->>>>+=A0=A0=A0 id =3D usb_string_id(cdev);
->>>>+=A0=A0=A0 if (id < 0)
->>>>+=A0=A0=A0=A0=A0=A0=A0 return id;
->>>>+=A0=A0=A0 strings_usb9pfs[0].id =3D id;
->>>>+=A0=A0=A0 usb9pfs_intf.iInterface =3D id;
->>>>+
->>>>+=A0=A0=A0 /* allocate endpoints */
->>>>+=A0=A0=A0 usb9pfs->in_ep =3D usb_ep_autoconfig(cdev->gadget,
->>>>+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 &fs=
-_usb9pfs_source_desc);
->>>>+=A0=A0=A0 if (!usb9pfs->in_ep)
->>>>+=A0=A0=A0=A0=A0=A0=A0 goto autoconf_fail;
->>>>+
->>>>+=A0=A0=A0 usb9pfs->out_ep =3D usb_ep_autoconfig(cdev->gadget,
->>>>+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 =
-&fs_usb9pfs_sink_desc);
->>>>+=A0=A0=A0 if (!usb9pfs->out_ep)
->>>>+=A0=A0=A0=A0=A0=A0=A0 goto autoconf_fail;
->>>>+
->>>>+=A0=A0=A0 /* support high speed hardware */
->>>>+=A0=A0=A0 hs_usb9pfs_source_desc.bEndpointAddress =3D
->>>>+=A0=A0=A0=A0=A0=A0=A0 fs_usb9pfs_source_desc.bEndpointAddress;
->>>>+=A0=A0=A0 hs_usb9pfs_sink_desc.bEndpointAddress =3D
->>>>+=A0=A0=A0=A0=A0=A0=A0 fs_usb9pfs_sink_desc.bEndpointAddress;
->>>>+
->>>>+=A0=A0=A0 /* support super speed hardware */
->>>>+=A0=A0=A0 ss_usb9pfs_source_desc.bEndpointAddress =3D
->>>>+=A0=A0=A0=A0=A0=A0=A0 fs_usb9pfs_source_desc.bEndpointAddress;
->>>>+=A0=A0=A0 ss_usb9pfs_sink_desc.bEndpointAddress =3D
->>>>+=A0=A0=A0=A0=A0=A0=A0 fs_usb9pfs_sink_desc.bEndpointAddress;
->>>>+
->>>>+=A0=A0=A0 ret =3D usb_assign_descriptors(f, fs_usb9pfs_descs, hs_usb9p=
-fs_descs,
->>>>+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 ss_usb9pf=
-s_descs, ss_usb9pfs_descs);
->>>>+=A0=A0=A0 if (ret)
->>>>+=A0=A0=A0=A0=A0=A0=A0 return ret;
->>>>+
->>>>+=A0=A0=A0 opts =3D container_of(f->fi, struct f_usb9pfs_opts, func_ins=
-t);
->>>>+=A0=A0=A0 opts->dev->usb9pfs =3D usb9pfs;
->>>>+
->>>>+=A0=A0=A0 dev_dbg(&cdev->gadget->dev, "%s speed %s: IN/%s, OUT/%s\n",
->>>>+=A0=A0=A0=A0=A0=A0=A0 (gadget_is_superspeed(c->cdev->gadget) ? "super"=
- :
->>>>+=A0=A0=A0=A0=A0=A0=A0 (gadget_is_dualspeed(c->cdev->gadget) ? "dual" :=
- "full")),
->>>>+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 f->name, usb9pfs->in_ep->name, usb9p=
-fs->out_ep->name);
->>>>+
->>>>+=A0=A0=A0 return 0;
->>>>+
->>>>+autoconf_fail:
->>>>+=A0=A0=A0 ERROR(cdev, "%s: can't autoconfigure on %s\n",
->>>>+=A0=A0=A0=A0=A0=A0=A0=A0=A0 f->name, cdev->gadget->name);
->>>>+=A0=A0=A0 return -ENODEV;
->>>>+}
->>>>+
->>>>+static void usb9pfs_free_func(struct usb_function *f)
->>>>+{
->>>>+=A0=A0=A0 struct f_usb9pfs *usb9pfs =3D func_to_usb9pfs(f);
->>>>+=A0=A0=A0 struct f_usb9pfs_opts *opts;
->>>>+
->>>>+=A0=A0=A0 kfree(usb9pfs);
->>>>+
->>>>+=A0=A0=A0 opts =3D container_of(f->fi, struct f_usb9pfs_opts, func_ins=
-t);
->>>>+
->>>>+=A0=A0=A0 mutex_lock(&opts->lock);
->>>>+=A0=A0=A0 opts->refcnt--;
->>>>+=A0=A0=A0 mutex_unlock(&opts->lock);
->>>>+
->>>>+=A0=A0=A0 usb_free_all_descriptors(f);
->>>>+}
->>>>+
->>>>+static int usb9pfs_set_alt(struct usb_function *f,
->>>>+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 unsigned int intf, unsigned=
- int alt)
->>>>+{
->>>>+=A0=A0=A0 return 0;
->>>>+}
->>>>+
->>>>+static void usb9pfs_disable(struct usb_function *f)
->>>>+{
->>>>+=A0=A0=A0 struct f_usb9pfs *usb9pfs =3D func_to_usb9pfs(f);
->>>>+=A0=A0=A0 struct p9_req_t *req;
->>>>+
->>>>+=A0=A0=A0 spin_lock(&usb9pfs->req_lock);
->>>>+
->>>>+=A0=A0=A0 req =3D usb9pfs->p9_tx_req;
->>>>+
->>>>+=A0=A0=A0 if (!req->t_err)
->>>>+=A0=A0=A0=A0=A0=A0=A0 req->t_err =3D -ECONNRESET;
->>>>+=A0=A0=A0 p9_client_cb(usb9pfs->client, req, REQ_STATUS_ERROR);
->>>>+
->>>>+=A0=A0=A0 spin_unlock(&usb9pfs->req_lock);
->>>>+}
->>>>+
->>>>+static struct usb_function *usb9pfs_alloc(struct usb_function_instance=
- *fi)
->>>>+{
->>>>+=A0=A0=A0 struct f_usb9pfs_opts *usb9pfs_opts;
->>>>+=A0=A0=A0 struct f_usb9pfs *usb9pfs;
->>>>+
->>>>+=A0=A0=A0 usb9pfs =3D kzalloc(sizeof(*usb9pfs), GFP_KERNEL);
->>>>+=A0=A0=A0 if (!usb9pfs)
->>>>+=A0=A0=A0=A0=A0=A0=A0 return ERR_PTR(-ENOMEM);
->>>>+
->>>>+=A0=A0=A0 usb9pfs_opts =3D container_of(fi, struct f_usb9pfs_opts, fun=
-c_inst);
->>>>+
->>>>+=A0=A0=A0 mutex_lock(&usb9pfs_opts->lock);
->>>>+=A0=A0=A0 usb9pfs_opts->refcnt++;
->>>>+=A0=A0=A0 mutex_unlock(&usb9pfs_opts->lock);
->>>>+
->>>>+=A0=A0=A0 usb9pfs->buflen =3D usb9pfs_opts->buflen;
->>>>+
->>>>+=A0=A0=A0 usb9pfs->function.name =3D "usb9pfs";
->>>>+=A0=A0=A0 usb9pfs->function.bind =3D usb9pfs_func_bind;
->>>>+=A0=A0=A0 usb9pfs->function.set_alt =3D usb9pfs_set_alt;
->>>>+=A0=A0=A0 usb9pfs->function.disable =3D usb9pfs_disable;
->>>>+=A0=A0=A0 usb9pfs->function.strings =3D usb9pfs_strings;
->>>>+
->>>>+=A0=A0=A0 usb9pfs->function.free_func =3D usb9pfs_free_func;
->>>>+
->>>>+=A0=A0=A0 return &usb9pfs->function;
->>>>+}
->>>>+
->>>>+static inline struct f_usb9pfs_opts *to_f_usb9pfs_opts(struct=20
->>>>config_item *item)
->>>>+{
->>>>+=A0=A0=A0 return container_of(to_config_group(item), struct f_usb9pfs_=
-opts,
->>>>+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 func_inst.group);
->>>>+}
->>>>+
->>>>+static inline struct f_usb9pfs_opts=20
->>>>*fi_to_f_usb9pfs_opts(struct usb_function_instance *fi)
->>>>+{
->>>>+=A0=A0=A0 return container_of(fi, struct f_usb9pfs_opts, func_inst);
->>>>+}
->>>>+
->>>>+static void usb9pfs_attr_release(struct config_item *item)
->>>>+{
->>>>+=A0=A0=A0 struct f_usb9pfs_opts *usb9pfs_opts =3D to_f_usb9pfs_opts(it=
-em);
->>>>+
->>>>+=A0=A0=A0 usb_put_function_instance(&usb9pfs_opts->func_inst);
->>>>+}
->>>>+
->>>>+static struct configfs_item_operations usb9pfs_item_ops =3D {
->>>>+=A0=A0=A0 .release=A0=A0=A0=A0=A0=A0=A0 =3D usb9pfs_attr_release,
->>>>+};
->>>>+
->>>>+static ssize_t f_usb9pfs_opts_buflen_show(struct config_item *item, ch=
-ar *page)
->>>>+{
->>>>+=A0=A0=A0 struct f_usb9pfs_opts *opts =3D to_f_usb9pfs_opts(item);
->>>>+=A0=A0=A0 int result;
->>>>+
->>>>+=A0=A0=A0 mutex_lock(&opts->lock);
->>>>+=A0=A0=A0 result =3D sprintf(page, "%d\n", opts->buflen);
->>>>+=A0=A0=A0 mutex_unlock(&opts->lock);
->>>>+
->>>>+=A0=A0=A0 return result;
->>>>+}
->>>>+
->>>>+static ssize_t f_usb9pfs_opts_buflen_store(struct config_item *item,
->>>>+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 con=
-st char *page, size_t len)
->>>>+{
->>>>+=A0=A0=A0 struct f_usb9pfs_opts *opts =3D to_f_usb9pfs_opts(item);
->>>>+=A0=A0=A0 int ret;
->>>>+=A0=A0=A0 u32 num;
->>>>+
->>>>+=A0=A0=A0 mutex_lock(&opts->lock);
->>>>+=A0=A0=A0 if (opts->refcnt) {
->>>>+=A0=A0=A0=A0=A0=A0=A0 ret =3D -EBUSY;
->>>>+=A0=A0=A0=A0=A0=A0=A0 goto end;
->>>>+=A0=A0=A0 }
->>>>+
->>>>+=A0=A0=A0 ret =3D kstrtou32(page, 0, &num);
->>>>+=A0=A0=A0 if (ret)
->>>>+=A0=A0=A0=A0=A0=A0=A0 goto end;
->>>>+
->>>>+=A0=A0=A0 opts->buflen =3D num;
->>>>+=A0=A0=A0 ret =3D len;
->>>>+end:
->>>>+=A0=A0=A0 mutex_unlock(&opts->lock);
->>>>+=A0=A0=A0 return ret;
->>>>+}
->>>>+
->>>>+CONFIGFS_ATTR(f_usb9pfs_opts_, buflen);
->>>>+
->>>>+static struct configfs_attribute *usb9pfs_attrs[] =3D {
->>>>+=A0=A0=A0 &f_usb9pfs_opts_attr_buflen,
->>>>+=A0=A0=A0 NULL,
->>>>+};
->>>>+
->>>>+static const struct config_item_type usb9pfs_func_type =3D {
->>>>+=A0=A0=A0 .ct_item_ops=A0=A0=A0 =3D &usb9pfs_item_ops,
->>>>+=A0=A0=A0 .ct_attrs=A0=A0=A0 =3D usb9pfs_attrs,
->>>>+=A0=A0=A0 .ct_owner=A0=A0=A0 =3D THIS_MODULE,
->>>>+};
->>>>+
->>>>+static struct f_usb9pfs_dev *_usb9pfs_do_find_dev(const char *tag)
->>>>+{
->>>>+=A0=A0=A0 struct f_usb9pfs_dev *usb9pfs_dev;
->>>>+=A0=A0=A0 struct f_usb9pfs_dev *tmp;
->>>>+
->>>>+=A0=A0=A0 if (!tag)
->>>>+=A0=A0=A0=A0=A0=A0=A0 return NULL;
->>>>+
->>>>+=A0=A0=A0 list_for_each_entry_safe(usb9pfs_dev, tmp,=20
->>>>&usbg_instance_list, usb9pfs_instance) {
->>>>+=A0=A0=A0=A0=A0=A0=A0 if (strcmp(usb9pfs_dev->tag, tag) =3D=3D 0)
->>>>+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 return usb9pfs_dev;
->>>>+=A0=A0=A0 }
->>>>+
->>>>+=A0=A0=A0 return NULL;
->>>>+}
->>>>+
->>>>+static int usb9pfs_tag_instance(struct f_usb9pfs_dev *dev, const char =
-*tag)
->>>>+{
->>>>+=A0=A0=A0 struct f_usb9pfs_dev *existing;
->>>>+=A0=A0=A0 int ret =3D 0;
->>>>+
->>>>+=A0=A0=A0 mutex_lock(&usb9pfs_lock);
->>>>+=A0=A0=A0 existing =3D _usb9pfs_do_find_dev(tag);
->>>>+=A0=A0=A0 if (!existing)
->>>>+=A0=A0=A0=A0=A0=A0=A0 strscpy(dev->tag, tag, ARRAY_SIZE(dev->tag));
->>>>+=A0=A0=A0 else if (existing !=3D dev)
->>>>+=A0=A0=A0=A0=A0=A0=A0 ret =3D -EBUSY;
->>>>+=A0=A0=A0 mutex_unlock(&usb9pfs_lock);
->>>>+
->>>>+=A0=A0=A0 return ret;
->>>>+}
->>>>+
->>>>+static int usb9pfs_set_inst_tag(struct usb_function_instance=20
->>>>*fi, const char *tag)
->>>>+{
->>>>+=A0=A0=A0 if (strlen(tag) >=3D sizeof_field(struct f_usb9pfs_dev, tag))
->>>>+=A0=A0=A0=A0=A0=A0=A0 return -ENAMETOOLONG;
->>>>+=A0=A0=A0 return usb9pfs_tag_instance(fi_to_f_usb9pfs_opts(fi)->dev, t=
-ag);
->>>>+}
->>>>+
->>>>+static void usb9pfs_free_instance(struct usb_function_instance *fi)
->>>>+{
->>>>+=A0=A0=A0 struct f_usb9pfs_opts *usb9pfs_opts;
->>>>+
->>>>+=A0=A0=A0 usb9pfs_opts =3D container_of(fi, struct f_usb9pfs_opts, fun=
-c_inst);
->>>>+=A0=A0=A0 kfree(usb9pfs_opts);
->>>>+}
->>>>+
->>>>+static struct usb_function_instance *usb9pfs_alloc_instance(void)
->>>>+{
->>>>+=A0=A0=A0 struct f_usb9pfs_opts *usb9pfs_opts;
->>>>+=A0=A0=A0 struct f_usb9pfs_dev *dev;
->>>>+
->>>>+=A0=A0=A0 usb9pfs_opts =3D kzalloc(sizeof(*usb9pfs_opts), GFP_KERNEL);
->>>>+=A0=A0=A0 if (!usb9pfs_opts)
->>>>+=A0=A0=A0=A0=A0=A0=A0 return ERR_PTR(-ENOMEM);
->>>>+
->>>>+=A0=A0=A0 mutex_init(&usb9pfs_opts->lock);
->>>>+
->>>>+=A0=A0=A0 usb9pfs_opts->func_inst.set_inst_name =3D usb9pfs_set_inst_t=
-ag;
->>>>+=A0=A0=A0 usb9pfs_opts->func_inst.free_func_inst =3D usb9pfs_free_inst=
-ance;
->>>>+
->>>>+=A0=A0=A0 usb9pfs_opts->buflen =3D DEFAULT_BUFLEN;
->>>>+
->>>>+=A0=A0=A0 mutex_lock(&usb9pfs_lock);
->>>>+=A0=A0=A0 dev =3D kzalloc(sizeof(*dev), GFP_KERNEL);
->>>>+=A0=A0=A0 if (IS_ERR(dev)) {
->>>>+=A0=A0=A0=A0=A0=A0=A0 mutex_unlock(&usb9pfs_lock);
->>>>+=A0=A0=A0=A0=A0=A0=A0 kfree(usb9pfs_opts);
->>>>+=A0=A0=A0=A0=A0=A0=A0 return ERR_CAST(dev);
->>>>+=A0=A0=A0 }
->>>>+=A0=A0=A0 list_add_tail(&dev->usb9pfs_instance, &usbg_instance_list);
->>>>+=A0=A0=A0 mutex_unlock(&usb9pfs_lock);
->>>>+
->>>>+=A0=A0=A0 usb9pfs_opts->dev =3D dev;
->>>>+=A0=A0=A0 dev->opts =3D usb9pfs_opts;
->>>>+
->>>>+=A0=A0=A0 config_group_init_type_name(&usb9pfs_opts->func_inst.group, =
-"",
->>>>+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 &usb9pfs_fun=
-c_type);
->>>>+
->>>>+=A0=A0=A0 return &usb9pfs_opts->func_inst;
->>>>+}
->>>>+DECLARE_USB_FUNCTION(usb9pfs, usb9pfs_alloc_instance, usb9pfs_alloc);
->>>>+
->>>>+static int __init usb9pfs_modinit(void)
->>>>+{
->>>>+=A0=A0=A0 int ret;
->>>>+
->>>>+=A0=A0=A0 INIT_LIST_HEAD(&usbg_instance_list);
->>>>+
->>>>+=A0=A0=A0 ret =3D usb_function_register(&usb9pfsusb_func);
->>>>+=A0=A0=A0 if (!ret)
->>>>+=A0=A0=A0=A0=A0=A0=A0 v9fs_register_trans(&p9_usbg_trans);
->>>>+
->>>>+=A0=A0=A0 return ret;
->>>>+}
->>>>+
->>>>+static void __exit usb9pfs_modexit(void)
->>>>+{
->>>>+=A0=A0=A0 usb_function_unregister(&usb9pfsusb_func);
->>>>+=A0=A0=A0 v9fs_unregister_trans(&p9_usbg_trans);
->>>>+}
->>>>+
->>>>+module_init(usb9pfs_modinit);
->>>>+module_exit(usb9pfs_modexit);
->>>>+
->>>>+MODULE_ALIAS_9P("usbg");
->>>>+MODULE_LICENSE("GPL");
->>>>+MODULE_DESCRIPTION("USB gadget 9pfs transport");
->>>>+MODULE_AUTHOR("Michael Grzeschik");
->>>>
->>>
->>>
->>
->
->
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+[  113.800595][    C0] BUG: KMSAN: uninit-value in receive_buf+0x25e3/0x5fd=
+0
+[  113.807866][    C0]  receive_buf+0x25e3/0x5fd0
+[  113.812660][    C0]  virtnet_poll+0xd1c/0x23c0
+[  113.817511][    C0]  __napi_poll+0xe7/0x980
+[  113.822060][    C0]  net_rx_action+0x82a/0x1850
+[  113.827121][    C0]  handle_softirqs+0x1ce/0x800
+[  113.832171][    C0]  __irq_exit_rcu+0x68/0x120
+[  113.837029][    C0]  irq_exit_rcu+0x12/0x20
+[  113.841544][    C0]  common_interrupt+0x94/0xa0
+[  113.846507][    C0]  asm_common_interrupt+0x2b/0x40
+[  113.851825][    C0]  kmsan_internal_set_shadow_origin+0x76/0xe0
+[  113.858320][    C0]  kmsan_internal_unpoison_memory+0x14/0x20
+[  113.864659][    C0]  kmsan_unpoison_memory+0x28/0x40
+[  113.869970][    C0]  prep_new_page+0x115/0x540
+[  113.874876][    C0]  get_page_from_freelist+0x1578/0x15f0
+[  113.880730][    C0]  __alloc_pages_noprof+0x8a7/0xe70
+[  113.886250][    C0]  alloc_pages_mpol_noprof+0x299/0x990
+[  113.892181][    C0]  vma_alloc_folio_noprof+0x412/0x750
+[  113.898206][    C0]  handle_mm_fault+0x907c/0xe610
+[  113.903457][    C0]  exc_page_fault+0x41b/0x700
+[  113.908439][    C0]  asm_exc_page_fault+0x2b/0x30
+[  113.913577][    C0]=20
+[  113.916067][    C0] Uninit was created at:
+OK[  113.920879][    C0]  __alloc_pages_noprof+0x9d6/0xe70
 
---=20
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+[  113.926417][    C0]  alloc_pages_mpol_noprof+0x299/0x990
+[  113.932200][    C0]  alloc_pages_noprof+0x1bf/0x1e0
+[  113.937655][    C0]  skb_page_frag_refill+0x2bf/0x7c0
+[  113.943288][    C0]  virtnet_rq_alloc+0x43/0xbb0
+[  113.948380][    C0]  try_fill_recv+0x3f0/0x2f50
+[  113.953224][    C0]  virtnet_open+0x1cc/0xb00
+[  113.958077][    C0]  __dev_open+0x546/0x6f0
+[  113.962708][    C0]  __dev_change_flags+0x309/0x9a0
+[  113.968302][    C0]  dev_change_flags+0x8e/0x1d0
+[  113.973240][    C0]  devinet_ioctl+0x13ec/0x22c0
+[  113.978437][    C0]  inet_ioctl+0x4bd/0x6d0
+[  113.983181][    C0]  sock_do_ioctl+0xb7/0x540
+[  113.987928][    C0]  sock_ioctl+0x727/0xd70
+[  113.992433][    C0]  __se_sys_ioctl+0x261/0x450
+[  113.997393][    C0]  __x64_sys_ioctl+0x96/0xe0
+[  114.002313][    C0]  x64_sys_call+0x18c0/0x3b90
+[  114.007248][    C0]  do_syscall_64+0xcd/0x1e0
+[  114.011927][    C0]  entry_SYSCALL_64_after_hwframe+0x77/0x7f
+[  114.018164][    C0]=20
+[  114.020697][    C0] CPU: 0 PID: 4786 Comm: rm Not tainted 6.10.0-rc1-syz=
+kaller-00013-g2bfcfd584ff5-dirty #0
+[  114.031264][    C0] Hardware name: Google Google Compute Engine/Google C=
+ompute Engine, BIOS Google 04/02/2024
+[  114.041826][    C0] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+[  114.049359][    C0] Disabling lock debugging due to kernel taint
+[  114.055708][    C0] Kernel panic - not syncing: kmsan.panic set ...
+[  114.062795][    C0] CPU: 0 PID: 4786 Comm: rm Tainted: G    B           =
+   6.10.0-rc1-syzkaller-00013-g2bfcfd584ff5-dirty #0
+[  114.075000][    C0] Hardware name: Google Google Compute Engine/Google C=
+ompute Engine, BIOS Google 04/02/2024
+[  114.085286][    C0] Call Trace:
+[  114.088865][    C0]  <IRQ>
+[  114.091913][    C0]  dump_stack_lvl+0x216/0x2d0
+[  114.096785][    C0]  ? kmsan_get_shadow_origin_ptr+0x4d/0xb0
+[  114.102924][    C0]  dump_stack+0x1e/0x30
+[  114.107269][    C0]  panic+0x4e2/0xcd0
+[  114.111426][    C0]  ? kmsan_get_metadata+0x111/0x1d0
+[  114.116837][    C0]  kmsan_report+0x2d5/0x2e0
+[  114.121549][    C0]  ? kmsan_alloc_page+0x182/0x220
+[  114.126772][    C0]  ? kmsan_get_metadata+0x146/0x1d0
+[  114.132180][    C0]  ? __msan_warning+0x95/0x120
+[  114.137205][    C0]  ? receive_buf+0x25e3/0x5fd0
+[  114.142074][    C0]  ? virtnet_poll+0xd1c/0x23c0
+[  114.147049][    C0]  ? __napi_poll+0xe7/0x980
+[  114.151760][    C0]  ? net_rx_action+0x82a/0x1850
+[  114.156910][    C0]  ? handle_softirqs+0x1ce/0x800
+[  114.161958][    C0]  ? __irq_exit_rcu+0x68/0x120
+[  114.166911][    C0]  ? irq_exit_rcu+0x12/0x20
+[  114.171601][    C0]  ? common_interrupt+0x94/0xa0
+[  114.176565][    C0]  ? asm_common_interrupt+0x2b/0x40
+[  114.181863][    C0]  ? kmsan_internal_set_shadow_origin+0x76/0xe0
+[  114.188207][    C0]  ? kmsan_internal_unpoison_memory+0x14/0x20
+[  114.194391][    C0]  ? kmsan_unpoison_memory+0x28/0x40
+[  114.199793][    C0]  ? prep_new_page+0x115/0x540
+[  114.204666][    C0]  ? get_page_from_freelist+0x1578/0x15f0
+[  114.210579][    C0]  ? __alloc_pages_noprof+0x8a7/0xe70
+[  114.216060][    C0]  ? alloc_pages_mpol_noprof+0x299/0x990
+[  114.221983][    C0]  ? vma_alloc_folio_noprof+0x412/0x750
+[  114.227836][    C0]  ? handle_mm_fault+0x907c/0xe610
+[  114.233178][    C0]  ? exc_page_fault+0x41b/0x700
 
---CXYm3VvaaUbdovYY
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+[  114.238164][    C0]  ? asm_exc_page_fault+0x2b/0x30
+[  114.243578][    C0]  ? kmsan_internal_memmove_metadata+0x17b/0x230
+syzkaller[  114.250182][    C0]  ? kmsan_get_metadata+0x146/0x1d0
 
-iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmZVaeoACgkQC+njFXoe
-LGQjfRAAyxXw9TjhhwVJP8cw05wJ+3XEpJPBnO8wC0su+1QDdFPzUWU5JmPMbScx
-FjmYXD9JyLY+TzrR3aUe6LwKwYb4MU27pVqm645JLETgujF+F0PDY27rpeJgpDU1
-ni71a189SoUiuZ6wTEkgCDtlStINVNYlwsUzeSllQ5b54QWlxK35LByqwe9E5+7x
-ByBs7Qn9xCNsDnjbuBmU4LFwZyA8MQVeCqapURXVrWbScrWebi5/KB0o07pqVba+
-JZ6M83nDzPoSB1cNT/x8+xg6COLz6vDsk8SUdqmlbwud3EwznNw/1ZPqYJPeymLl
-ObXf29lUoI7EfYq0pCQDlILBjbMpQH6+chEcgTGC+20/cEZPH+NHF8QejFiRNsOU
-/XwnC4ugG7RRsN6B1rIuhqOdrfYxQdbCY3F/P1uCFr2ilZd/RsJDCC5ML8rLl7Wy
-HBEfFr6kE4g8JUlTkyirXxeMUJhd4Anp4SN6JcNFUg2N7pTFynbdzjXb+hHakUnD
-zkXMmAVRUTdg6+KNuBTnibnGc3Q/BVruXY9sRRp9yhRp+Od28+eUzH6erlMpeYqz
-yoEjGawTsSd3Bx4XVB4cVwymkzq38rCAlxQhZdrtX3tV0l7JeR4gTWBtkH8TCtvw
-5QE7DF7pMLk+KHmVTatQuDeUBnDzynSDnzg77yAqiI2y/Zm1RkE=
-=XFfS
------END PGP SIGNATURE-----
+[  114.256633][    C0]  ? kmsan_get_metadata+0x146/0x1d0
+[  114.262332][    C0]  ? page_to_skb+0xdae/0x1620
+[  114.267233][    C0]  __msan_warning+0x95/0x120
+[  114.272275][    C0]  receive_buf+0x25e3/0x5fd0
+[  114.277094][    C0]  ? kmsan_get_metadata+0x146/0x1d0
+[  114.282402][    C0]  ? kmsan_get_shadow_origin_ptr+0x4d/0xb0
+[  114.288519][    C0]  virtnet_poll+0xd1c/0x23c0
+[  114.293235][    C0]  ? __pfx_virtnet_poll+0x10/0x10
+[  114.298573][    C0]  __napi_poll+0xe7/0x980
+[  114.303042][    C0]  ? kmsan_get_metadata+0x146/0x1d0
+[  114.308529][    C0]  net_rx_action+0x82a/0x1850
+[  114.313443][    C0]  ? sched_clock_cpu+0x55/0x870
+[  114.318434][    C0]  ? __pfx_net_rx_action+0x10/0x10
+[  114.323766][    C0]  handle_softirqs+0x1ce/0x800
+[  114.328788][    C0]  __irq_exit_rcu+0x68/0x120
+[  114.333488][    C0]  irq_exit_rcu+0x12/0x20
+[  114.337976][    C0]  common_interrupt+0x94/0xa0
+[  114.343068][    C0]  </IRQ>
+[  114.346080][    C0]  <TASK>
+[  114.349188][    C0]  asm_common_interrupt+0x2b/0x40
+[  114.354554][    C0] RIP: 0010:kmsan_internal_set_shadow_origin+0x76/0xe0
+[  114.361736][    C0] Code: f0 83 e0 03 49 83 e6 fc 49 8d 5c 07 03 4c 89 f=
+7 be 01 00 00 00 e8 3a 35 00 00 48 83 fb 04 72 1a 48 c1 eb 02 31 c9 44 89 2=
+c 88 <ff> c1 48 63 c9 48 39 cb 77 f2 eb 04 84 db 75 0f 5b 41 5c 41 5d 41
+[  114.382246][    C0] RSP: 0000:ffff88812094b8b0 EFLAGS: 00000216
+[  114.388520][    C0] RAX: ffff8881212ed000 RBX: 0000000000000400 RCX: 000=
+000000000019b
+[  114.396599][    C0] RDX: 00000001216ed000 RSI: ffff88813fff9240 RDI: fff=
+f8881216ed000
+[  114.404856][    C0] RBP: ffff88812094b8d8 R08: ffffea000000000f R09: 000=
+0000000000000
+[  114.413096][    C0] R10: ffff888120eed000 R11: 0000000000000004 R12: 000=
+0000000000000
+[  114.421164][    C0] R13: 0000000000000000 R14: ffff8881216ed000 R15: 000=
+0000000001000
+[  114.429361][    C0]  kmsan_internal_unpoison_memory+0x14/0x20
+[  114.435481][    C0]  kmsan_unpoison_memory+0x28/0x40
+[  114.441106][    C0]  prep_new_page+0x115/0x540
+[  114.445833][    C0]  ? kmsan_get_shadow_origin_ptr+0x4d/0xb0
+[  114.451866][    C0]  get_page_from_freelist+0x1578/0x15f0
+[  114.457804][    C0]  __alloc_pages_noprof+0x8a7/0xe70
+[  114.463144][    C0]  alloc_pages_mpol_noprof+0x299/0x990
+[  114.469050][    C0]  ? kmsan_get_metadata+0x146/0x1d0
+[  114.474479][    C0]  vma_alloc_folio_noprof+0x412/0x750
+[  114.480070][    C0]  ? kmsan_get_metadata+0x146/0x1d0
+[  114.485509][    C0]  handle_mm_fault+0x907c/0xe610
+[  114.491145][    C0]  ? kmsan_get_metadata+0x146/0x1d0
+[  114.496501][    C0]  ? kmsan_get_metadata+0x146/0x1d0
+[  114.501877][    C0]  exc_page_fault+0x41b/0x700
+[  114.506694][    C0]  asm_exc_page_fault+0x2b/0x30
+[  114.511959][    C0] RIP: 0033:0x7fbc8aec8b9d
+[  114.517011][    C0] Code: 8b 90 c8 01 00 00 48 81 e2 00 ff ff ff 7e 14 4=
+8 89 d1 48 89 15 94 e6 10 00 48 d1 f9 48 89 0d 92 e6 10 00 48 8b 90 d0 01 0=
+0 00 <48> 89 15 24 58 11 00 48 8b 90 d8 01 00 00 48 89 15 66 e6 10 00 48
+[  114.536844][    C0] RSP: 002b:00007fffd2152068 EFLAGS: 00010206
+[  114.543432][    C0] RAX: 00007fbc8b0dfa80 RBX: 00007fbc8ae35000 RCX: 000=
+0000000dc0000
+[  114.551697][    C0] RDX: 00000000014a0000 RSI: 00007fbc8ae53540 RDI: 000=
+0000000000000
+[  114.559908][    C0] RBP: 00007fffd2152170 R08: 00007fffd2150000 R09: 000=
+07fbc8b0e0ab0
+[  114.568160][    C0] R10: 00007fbc8ae39ab8 R11: 0000000000000025 R12: 000=
+07fbc8b0a95c0
+[  114.576260][    C0] R13: 00007fbc8b0d4eda R14: 00007fbc8afd68c8 R15: 000=
+07fbc8ae39ab8
+[  114.584358][    C0]  </TASK>
+[  114.587837][    C0] Kernel Offset: disabled
+[  114.592358][    C0] Rebooting in 86400 seconds..
 
---CXYm3VvaaUbdovYY--
+
+syzkaller build log:
+go env (err=3D<nil>)
+GO111MODULE=3D'auto'
+GOARCH=3D'amd64'
+GOBIN=3D''
+GOCACHE=3D'/syzkaller/.cache/go-build'
+GOENV=3D'/syzkaller/.config/go/env'
+GOEXE=3D''
+GOEXPERIMENT=3D''
+GOFLAGS=3D''
+GOHOSTARCH=3D'amd64'
+GOHOSTOS=3D'linux'
+GOINSECURE=3D''
+GOMODCACHE=3D'/syzkaller/jobs-2/linux/gopath/pkg/mod'
+GONOPROXY=3D''
+GONOSUMDB=3D''
+GOOS=3D'linux'
+GOPATH=3D'/syzkaller/jobs-2/linux/gopath'
+GOPRIVATE=3D''
+GOPROXY=3D'https://proxy.golang.org,direct'
+GOROOT=3D'/usr/local/go'
+GOSUMDB=3D'sum.golang.org'
+GOTMPDIR=3D''
+GOTOOLCHAIN=3D'auto'
+GOTOOLDIR=3D'/usr/local/go/pkg/tool/linux_amd64'
+GOVCS=3D''
+GOVERSION=3D'go1.21.4'
+GCCGO=3D'gccgo'
+GOAMD64=3D'v1'
+AR=3D'ar'
+CC=3D'gcc'
+CXX=3D'g++'
+CGO_ENABLED=3D'1'
+GOMOD=3D'/syzkaller/jobs-2/linux/gopath/src/github.com/google/syzkaller/go.=
+mod'
+GOWORK=3D''
+CGO_CFLAGS=3D'-O2 -g'
+CGO_CPPFLAGS=3D''
+CGO_CXXFLAGS=3D'-O2 -g'
+CGO_FFLAGS=3D'-O2 -g'
+CGO_LDFLAGS=3D'-O2 -g'
+PKG_CONFIG=3D'pkg-config'
+GOGCCFLAGS=3D'-fPIC -m64 -pthread -Wl,--no-gc-sections -fmessage-length=3D0=
+ -ffile-prefix-map=3D/tmp/go-build1371669175=3D/tmp/go-build -gno-record-gc=
+c-switches'
+
+git status (err=3D<nil>)
+HEAD detached at c0f1611a3
+nothing to commit, working tree clean
+
+
+tput: No value for $TERM and no -T specified
+tput: No value for $TERM and no -T specified
+Makefile:31: run command via tools/syz-env for best compatibility, see:
+Makefile:32: https://github.com/google/syzkaller/blob/master/docs/contribut=
+ing.md#using-syz-env
+go list -f '{{.Stale}}' ./sys/syz-sysgen | grep -q false || go install ./sy=
+s/syz-sysgen
+make .descriptions
+tput: No value for $TERM and no -T specified
+tput: No value for $TERM and no -T specified
+Makefile:31: run command via tools/syz-env for best compatibility, see:
+Makefile:32: https://github.com/google/syzkaller/blob/master/docs/contribut=
+ing.md#using-syz-env
+bin/syz-sysgen
+touch .descriptions
+GOOS=3Dlinux GOARCH=3Damd64 go build "-ldflags=3D-s -w -X github.com/google=
+/syzkaller/prog.GitRevision=3Dc0f1611a36d66bb0bb8e2f294b97fb685bfc5f9c -X '=
+github.com/google/syzkaller/prog.gitRevisionDate=3D20240517-125934'" "-tags=
+=3Dsyz_target syz_os_linux syz_arch_amd64 " -o ./bin/linux_amd64/syz-fuzzer=
+ github.com/google/syzkaller/syz-fuzzer
+GOOS=3Dlinux GOARCH=3Damd64 go build "-ldflags=3D-s -w -X github.com/google=
+/syzkaller/prog.GitRevision=3Dc0f1611a36d66bb0bb8e2f294b97fb685bfc5f9c -X '=
+github.com/google/syzkaller/prog.gitRevisionDate=3D20240517-125934'" "-tags=
+=3Dsyz_target syz_os_linux syz_arch_amd64 " -o ./bin/linux_amd64/syz-execpr=
+og github.com/google/syzkaller/tools/syz-execprog
+mkdir -p ./bin/linux_amd64
+gcc -o ./bin/linux_amd64/syz-executor executor/executor.cc \
+	-m64 -std=3Dc++11 -I. -Iexecutor/_include -O2 -pthread -Wall -Werror -Wpar=
+entheses -Wunused-const-variable -Wframe-larger-than=3D16384 -Wno-stringop-=
+overflow -Wno-array-bounds -Wno-format-overflow -Wno-unused-but-set-variabl=
+e -Wno-unused-command-line-argument -static-pie -fpermissive -w -DGOOS_linu=
+x=3D1 -DGOARCH_amd64=3D1 \
+	-DHOSTGOOS_linux=3D1 -DGIT_REVISION=3D\"c0f1611a36d66bb0bb8e2f294b97fb685b=
+fc5f9c\"
+
+
+Error text is too large and was truncated, full error text is at:
+https://syzkaller.appspot.com/x/error.txt?x=3D15a9822c980000
+
+
+Tested on:
+
+commit:         2bfcfd58 Merge tag 'pmdomain-v6.10-rc1' of git://git.k..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3D54d66e52f38a45d=
+8
+dashboard link: https://syzkaller.appspot.com/bug?extid=3D07762f019fd03d01f=
+04c
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debia=
+n) 2.40
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=3D1425c62c9800=
+00
+
 
