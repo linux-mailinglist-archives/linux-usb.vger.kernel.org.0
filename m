@@ -1,143 +1,218 @@
-Return-Path: <linux-usb+bounces-10621-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10622-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C17848D168C
-	for <lists+linux-usb@lfdr.de>; Tue, 28 May 2024 10:43:25 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 360A68D16BC
+	for <lists+linux-usb@lfdr.de>; Tue, 28 May 2024 10:57:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 60A961F21779
-	for <lists+linux-usb@lfdr.de>; Tue, 28 May 2024 08:43:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B7A6C1F225F1
+	for <lists+linux-usb@lfdr.de>; Tue, 28 May 2024 08:57:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F37F913D2A0;
-	Tue, 28 May 2024 08:43:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C340F13C900;
+	Tue, 28 May 2024 08:57:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Sa/sbfRd"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="c5yGkcfT"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A58B513C90A
-	for <linux-usb@vger.kernel.org>; Tue, 28 May 2024 08:43:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEF656E614
+	for <linux-usb@vger.kernel.org>; Tue, 28 May 2024 08:57:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716885783; cv=none; b=LCdz9u5QWw+LmNhEkLsgXDHwQUGXdvEcKiSgeVO/DBfQcyiH1e/Z9wtlM/VExJ4Sp+QV4Cbvfm4Bni7hy79Yl7TOFrtHbnEZtX2gWHHhRzpHH5U4CAcEVN6jVaRNMUyiKyFlHunAi/lJEY3XjM7Z041ayE/dVl+bTZ8XskcQdeI=
+	t=1716886670; cv=none; b=AfBDnGdiOTmMKUHhBwNjgUz9iLLQbk+UIE25CN2ryPKcmSn0uby2mSQxBm5xtqT1lXRqq7cZoVNy6mFMhyUqq7CCEE/Xt1ZLcTqq/TYOxjYW+3hiBXPLKVAo671ATSYLY65x1V8uf4SEE6yHNp9YFcmeTDKP1cy7t9fWK3SWUfk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716885783; c=relaxed/simple;
-	bh=Y6f9O1rB7bAdaik8Ya5stBAwGWAwYs7mHE+WNyPAEOo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fLh5mLsTGXJQgfSWIU42nzpGaSzBwilJtVbKkEwYKeI/d7zucb/tAh5GOCBqZuCyIUVZSRjvbvHxHpZnXURqkqCHzUssrAfZdSaapa336oKJuOboV8CKJ+Y9jpmiGHwfEid9UccBNTMxxKgCVEy2PSTox2VDEcfWYr9jZov63I0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Sa/sbfRd; arc=none smtp.client-ip=209.85.218.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a634e03339dso29353066b.3
-        for <linux-usb@vger.kernel.org>; Tue, 28 May 2024 01:43:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1716885780; x=1717490580; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BDOzOVJxnG+3KEM1LGz7y97uf9duOTHpiqETF8V1CyI=;
-        b=Sa/sbfRdKnz8/QMS+xeYM3nSHA4bJisg2W0l25IlBxTxty4NiXGvKntownbMHodJzp
-         tITa4FnuRTwj/iW57gW2YpY1FtzaZsh2cZBy3u7j9+1DoH0do0vzwd5zeh28ty/BYNd1
-         wq7I7CvDy/HpeR5LSdeCPZF1OIwueGV55tCuYXt76fGjPc5a3kVlIr7C48gVI67C3K+W
-         oVsUUdRPpTdKUw1u9NXqw5pPv3JoMavC98Sr0y8XLJpcaNUDcB5XhJeDBu0b1aCHl5Pc
-         7smTUTEtiJbRY9fdWSEjbWUT2ob75jgy8fKva8xkFqI7/zUnZ+S/SJV3q/jTt3CVKkuX
-         F+vg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716885780; x=1717490580;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BDOzOVJxnG+3KEM1LGz7y97uf9duOTHpiqETF8V1CyI=;
-        b=OPAqU42jv1yXxQ4rx1Pp5paYRu6XjerU0W1v4hYIsAYG7u5WCuTOZQlqcLKN+PXpxq
-         zVe5o3LkN7KOQaoabAaLk1GbUlsatUbP/vhPjJlb95fz5mzX4v0cFSNX6ZBfoHqpyq03
-         7WDOXNr6iFbU3RJqr7cl+++50TVChrnbrFH+nVqnsX5dwjzm275wptdOhfvXarMq78S2
-         jUqfuEiy1Tdh3v7QeNWM2QoRj264H7d+mfolnPzEdAEsY7LNO4gHP1bvbSXhh5O4mrKh
-         yRnUOEKHyDKqYPeHCFQ5cH/7s0FzXVKiWvwQC+K8SNMYfN5fTlZQ11ijguIfVAaxtqJv
-         092w==
-X-Forwarded-Encrypted: i=1; AJvYcCUUm3PKlLyEbk2ykpp5Lt+0Jn+BTcD7sxZeFI8nquHcm9HU+7I7Z7Up4+UfGHHxr7jFyAg7qtYuNHQkArDaF4mpEbBY2QmRny1E
-X-Gm-Message-State: AOJu0YzsSD8C4nzSDV7c3xYgM9SawgMc/CEVnDmBv9PPRMJjkcNFRD5r
-	jsPQTtE1x+sFxo3GsQmoW4ZttPmzDXyfdSIdj9oArUbfw7aPVkn+ox7mECR+Hpk=
-X-Google-Smtp-Source: AGHT+IFnwFpVgBPbSYYelUXVLbDbkXbUh2jkTNCogIsjRLaryTZNhcVpgseQGExAcVHtIzwZZr7icw==
-X-Received: by 2002:a17:906:69d0:b0:a59:9c4d:da3c with SMTP id a640c23a62f3a-a62643ec91cmr716821266b.40.1716885780045;
-        Tue, 28 May 2024 01:43:00 -0700 (PDT)
-Received: from ?IPV6:2001:a61:139b:bf01:e8eb:4d8f:8770:df82? ([2001:a61:139b:bf01:e8eb:4d8f:8770:df82])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a626c8170cbsm585860666b.20.2024.05.28.01.42.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 May 2024 01:42:59 -0700 (PDT)
-Message-ID: <9a0073a0-d598-4c1a-bb32-328d0a279152@suse.com>
-Date: Tue, 28 May 2024 10:42:58 +0200
+	s=arc-20240116; t=1716886670; c=relaxed/simple;
+	bh=Z2ZVzLCB1DLel0wDQ208lWGGxo/Ay96Am8WGQzDhPcE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:In-Reply-To:
+	 Content-Type:References; b=mOu/pcQjM2/JEk0CInyEOMaClWKGddbqW8gxTQsaduPuhPaAtEfuVpMgtNE52X1987Ac0ueLu7tu9OSrFKqBPGcDRLUa3kbx/hKYl23vdWHOTCI2r2NGtwsTEsF/YSicREksxrX6EWy/QXMtkz2b52q99+GKFqgFWFNHhk1kcDI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=c5yGkcfT; arc=none smtp.client-ip=203.254.224.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
+	by mailout3.samsung.com (KnoxPortal) with ESMTP id 20240528085745epoutp03b545b06a789eee866dc77abce5ecdc77~Tm1NlwWE-2141321413epoutp03e
+	for <linux-usb@vger.kernel.org>; Tue, 28 May 2024 08:57:45 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20240528085745epoutp03b545b06a789eee866dc77abce5ecdc77~Tm1NlwWE-2141321413epoutp03e
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1716886665;
+	bh=Cpu9ZrpHLT33e+kzQYs6/leK8/1+IyQzeyr+U+VgPWk=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=c5yGkcfTKwG6DPcftPW7vrt42GIOFyvAxMcbeKyoQFgQWg6SSIsjB2+TqMNq+6Pd6
+	 7D5/gQ7PBwO+lkNMdxUBo6GPIaLVK7CgJo3om5kM8PSfEHNNFK39Q9L095nH02XYac
+	 fOPzdjxrFnYZj4InjfJcUVbt3KzoKLda4DvzY0Ps=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+	epcas2p3.samsung.com (KnoxPortal) with ESMTP id
+	20240528085744epcas2p3abf3306c8cf83279c818e86be677dd03~Tm1M7iOkp1471314713epcas2p3g;
+	Tue, 28 May 2024 08:57:44 +0000 (GMT)
+Received: from epsmgec2p1.samsung.com (unknown [182.195.36.99]) by
+	epsnrtp2.localdomain (Postfix) with ESMTP id 4VpRHD1gjGz4x9Pv; Tue, 28 May
+	2024 08:57:44 +0000 (GMT)
+Received: from epcas2p1.samsung.com ( [182.195.41.53]) by
+	epsmgec2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+	18.F3.08613.88C95566; Tue, 28 May 2024 17:57:44 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+	epcas2p2.samsung.com (KnoxPortal) with ESMTPA id
+	20240528085743epcas2p2d0114fa01dea187ada84609cc601d8ba~Tm1MJKiIP1279712797epcas2p2w;
+	Tue, 28 May 2024 08:57:43 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+	20240528085743epsmtrp2d4f592fff53cca60b829e6c9922cb814~Tm1MIkTR80217702177epsmtrp28;
+	Tue, 28 May 2024 08:57:43 +0000 (GMT)
+X-AuditID: b6c32a43-af7ff700000021a5-5c-66559c884088
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+	epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	32.3D.08336.78C95566; Tue, 28 May 2024 17:57:43 +0900 (KST)
+Received: from ubuntu (unknown [10.229.95.128]) by epsmtip1.samsung.com
+	(KnoxPortal) with ESMTPA id
+	20240528085743epsmtip10324d002be65f1b61e8a6ae724c7ee9d~Tm1L-jB_O0485504855epsmtip1X;
+	Tue, 28 May 2024 08:57:43 +0000 (GMT)
+Date: Tue, 28 May 2024 17:58:05 +0900
+From: Jung Daehwan <dh10.jung@samsung.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Mathias Nyman <mathias.nyman@intel.com>, "open list:USB XHCI DRIVER"
+	<linux-usb@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>, Thinh
+	Nguyen <Thinh.Nguyen@synopsys.com>
+Subject: Re: [PATCH] usb: host: Add a quirk for writing ERST in high-low
+ order
+Message-ID: <20240528085805.GA80763@ubuntu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 4/6] power: supply: lenovo_yoga_c630_battery: add
- Lenovo C630 driver
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
- Oliver Neukum <oneukum@suse.com>
-Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
- Hans de Goede <hdegoede@redhat.com>,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
- Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Konrad Dybcio <konrad.dybcio@linaro.org>, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- platform-driver-x86@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, Nikita Travkin <nikita@trvn.ru>
-References: <20240527-yoga-ec-driver-v3-0-327a9851dad5@linaro.org>
- <20240527-yoga-ec-driver-v3-4-327a9851dad5@linaro.org>
- <ceb1f7b3-2787-4166-846f-2427b44b3e62@suse.com>
- <vc5nd5dl4czkuxzikazn7ndy6wghlchqsrcgxf7n5w53w3o3m2@spyfgp5pwy4y>
-Content-Language: en-US
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <vc5nd5dl4czkuxzikazn7ndy6wghlchqsrcgxf7n5w53w3o3m2@spyfgp5pwy4y>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <2024052838-fifth-liver-fb4e@gregkh>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpjk+LIzCtJLcpLzFFi42LZdljTVLdjTmiawbMJnBbNi9ezWVzeNYfN
+	YtGyVmaL5k1TWC1WLTjA7sDqsXjPSyaP/XPXsHts2f+Z0ePzJrkAlqhsm4zUxJTUIoXUvOT8
+	lMy8dFsl7+B453hTMwNDXUNLC3MlhbzE3FRbJRefAF23zBygvUoKZYk5pUChgMTiYiV9O5ui
+	/NKSVIWM/OISW6XUgpScAvMCveLE3OLSvHS9vNQSK0MDAyNToMKE7IxZm+ezFfRKVTR/vcPU
+	wDhFtIuRk0NCwERi8pdGVhBbSGAHo8TSGSZdjFxA9idGie4zS6AS3xgl3t72gml4vOMCC0TR
+	XkaJjeca2CCcJ4wS73f9YwOpYhFQlXh2di8TiM0moCVx78cJZhBbRMBYov/sLHYQm1lgD6PE
+	wplCILawQIDE+i+bgHo5OHgFtCX6PxmDhHkFBCVOznzCAmJzChhKTF3QyQ5SIiqgIvHqYD3I
+	WgmBt+wS+6+fZ4Q4zkXi1MzFrBC2sMSr41vYIWwpic/v9rJB2MUSt54/Y4ZobmGUWPGqhRki
+	YSwx61k7I8RtGRLPe7qYQJZJCChLHLnFAhHmk+g4/JcdIswr0dEmBNGpLDH98gSotZISB1+f
+	g5roIbH8xF9mSPC8Y5SYc2Ai2wRG+VlIXpuFZBuErSOxYPcntllAK5gFpCWW/+OAMDUl1u/S
+	X8DIuopRLLWgODc9NdmowBAe1cn5uZsYwQlSy3kH45X5//QOMTJxMB5ilOBgVhLhPTMpNE2I
+	NyWxsiq1KD++qDQntfgQoykwmiYyS4km5wNTdF5JvKGJpYGJmZmhuZGpgbmSOO+91rkpQgLp
+	iSWp2ampBalFMH1MHJxSDUwOqkHuJkd7Hm1yit51/u2l+FOTswLcAyZwnZCb+Ev5/hvPmONr
+	s0Mup+Y0eN+oqTdqddBJ+fRiQt3PDbsYTltdeRXj4Th1UUmpaUJUMr8V03eJoxf1Sm5svL6+
+	U6jlTszRXzHMS58f8Xa8Pm/+5hyGCQtO3HQQzn6+5kAmc/3xecUvln77MCX8zc5tH88/+VDI
+	4nHZ9ej6Bt/bE/PPW0hduyF6pYxX+UdQwdcdXNWz4jhShR+9+2XC7addUlJht79073wVrWYG
+	7caVW39ufe+ix6auo8MsvL891H56uOOOtx0ryl58zb2w67nc6Wod27U1V8+6t3klxv1cdZ9z
+	03b9vhBXpWPfik+/eNll1OWmxFKckWioxVxUnAgAuzis/xkEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrHLMWRmVeSWpSXmKPExsWy7bCSnG77nNA0gx3tRhbNi9ezWVzeNYfN
+	YtGyVmaL5k1TWC1WLTjA7sDqsXjPSyaP/XPXsHts2f+Z0ePzJrkAligum5TUnMyy1CJ9uwSu
+	jC1fexgLzopXTP61lrWB8a1QFyMnh4SAicTjHRdYuhi5OIQEdjNKrP/3hhUiISmxdO4Ndghb
+	WOJ+yxFWiKJHjBItE3azgSRYBFQlnp3dywRiswloSdz7cYIZxBYRMJboPzuLHaSBWWAfo8SP
+	J5NYQBLCAn4S0x+uAbI5OHgFtCX6PxlDDH3HKDHlWDsjSA2vgKDEyZlPwOqZgYbe+PeSCaSe
+	WUBaYvk/DpAwp4ChxNQFnewgYVEBFYlXB+snMArOQtI8C0nzLITmBYzMqxglUwuKc9Nziw0L
+	DPNSy/WKE3OLS/PS9ZLzczcxgoNcS3MH4/ZVH/QOMTJxMB5ilOBgVhLhPTMpNE2INyWxsiq1
+	KD++qDQntfgQozQHi5I4r/iL3hQhgfTEktTs1NSC1CKYLBMHp1QD084Xas/+ND1pPnVtAfP/
+	eUaMiaVy5nMqeSXzxT9drLosr7dObkfYt8XfXpxwMnTxT+sRVns376noruNNcsUL5b9wlKhm
+	uJmfmKHVX3qTTeSqXIH7uuKk705fznelam/QP8kko/xz26rZZjWyTL81l5R+XhtdvK2M0XTV
+	iZvznrpkVsmuS54jeP5NyPOV/wqVQ66JTd7/8ueaw3lT/vuucG+4baz1Y3a0vR5fRdgX/vc9
+	zkXKDs6a80PWLM9ak7Z+4VwXCwfubQtT3rfOVs6uuVSkNv+DynRPrzOi7gtv2a1oDudxMv1p
+	/+5rZEaumGGJMOfHsFaPLzYms/ZFv8/XaFJ7knnrasnTHa8nV19sU2Ipzkg01GIuKk4EALbQ
+	rebhAgAA
+X-CMS-MailID: 20240528085743epcas2p2d0114fa01dea187ada84609cc601d8ba
+X-Msg-Generator: CA
+Content-Type: multipart/mixed;
+	boundary="----9rvGp.wOoe8SBwNMBd7Hnn8uuLJro-MzoefNgNBE_LtzfeiS=_1c70e_"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20240528055659epcas2p4f86642d6647855747cea35b04f8a46cc
+References: <CGME20240528055659epcas2p4f86642d6647855747cea35b04f8a46cc@epcas2p4.samsung.com>
+	<1716875836-186791-1-git-send-email-dh10.jung@samsung.com>
+	<2024052814-exponent-domestic-6da2@gregkh>
+	<2024052838-fifth-liver-fb4e@gregkh>
 
-On 28.05.24 01:15, Dmitry Baryshkov wrote:
-> On Mon, May 27, 2024 at 02:26:36PM +0200, Oliver Neukum wrote:
->> On 27.05.24 12:03, Dmitry Baryshkov wrote:
+------9rvGp.wOoe8SBwNMBd7Hnn8uuLJro-MzoefNgNBE_LtzfeiS=_1c70e_
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
 
-Hi,
-
->>> +struct yoga_c630_psy {
->>> +	struct yoga_c630_ec *ec;
->>> +	struct device *dev;
->>> +	struct device_node *of_node;
->>> +	struct notifier_block nb;
->>> +	struct mutex lock;
->>> +
->>> +	struct power_supply *adp_psy;
->>> +	struct power_supply *bat_psy;
->>> +
->>> +	unsigned long last_status_update;
->>> +
->>> +	bool adapter_online;
->>> +
->>> +	bool unit_mA;
->>> +
->>> +	unsigned int scale;
->>
->> why do you store unit_mA and scale? This looks redundant and like a source
->> of confusion to me.
+On Tue, May 28, 2024 at 09:30:34AM +0200, Greg Kroah-Hartman wrote:
+> On Tue, May 28, 2024 at 09:23:43AM +0200, Greg Kroah-Hartman wrote:
+> > On Tue, May 28, 2024 at 02:57:16PM +0900, Daehwan Jung wrote:
+> > > [Synopsys]- The host controller was design to support ERST setting
+> > > during the RUN state. But since there is a limitation in controller
+> > > in supporting separate ERSTBA_HI and ERSTBA_LO programming,
+> > > It is supported when the ERSTBA is programmed in 64bit,
+> > > or in 32 bit mode ERSTBA_HI before ERSTBA_LO
+> > > 
+> > > [Synopsys]- The internal initialization of event ring fetches
+> > > the "Event Ring Segment Table Entry" based on the indication of
+> > > ERSTBA_LO written.
+> > > 
+> > > Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
+> > > ---
+> > >  drivers/usb/host/xhci-mem.c | 5 ++++-
+> > >  drivers/usb/host/xhci.h     | 2 ++
+> > >  2 files changed, 6 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
+> > > index 3100219..ef768e6 100644
+> > > --- a/drivers/usb/host/xhci-mem.c
+> > > +++ b/drivers/usb/host/xhci-mem.c
+> > > @@ -2325,7 +2325,10 @@ xhci_add_interrupter(struct xhci_hcd *xhci, struct xhci_interrupter *ir,
+> > >  	erst_base = xhci_read_64(xhci, &ir->ir_set->erst_base);
+> > >  	erst_base &= ERST_BASE_RSVDP;
+> > >  	erst_base |= ir->erst.erst_dma_addr & ~ERST_BASE_RSVDP;
+> > > -	xhci_write_64(xhci, erst_base, &ir->ir_set->erst_base);
+> > > +	if (xhci->quirks & XHCI_WRITE_64_HI_LO)
+> > > +		hi_lo_writeq(erst_base, &ir->ir_set->erst_base);
+> > > +	else
+> > > +		xhci_write_64(xhci, erst_base, &ir->ir_set->erst_base);
+> > >  
+> > >  	/* Set the event ring dequeue address of this interrupter */
+> > >  	xhci_set_hc_event_deq(xhci, ir);
+> > > diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+> > > index 3041515..8664dd1 100644
+> > > --- a/drivers/usb/host/xhci.h
+> > > +++ b/drivers/usb/host/xhci.h
+> > > @@ -17,6 +17,7 @@
+> > >  #include <linux/kernel.h>
+> > >  #include <linux/usb/hcd.h>
+> > >  #include <linux/io-64-nonatomic-lo-hi.h>
+> > > +#include <linux/io-64-nonatomic-hi-lo.h>
 > 
-> Here we just followed the AML code in ACPI tables. The unit_mA is a
-> returned from the_BIX method, the 'scale' is used internally in the DSDT.
-> If you think that it's better, I can change all '* scale * 1000' to
-> 'if unit_mA then foo = bar * 10000 else foo = bar * 1000'.
+> Why not put this in the .c file?
 
-I think that would indeed be better. Implementation details of the DSDT
-should not dictate data structures in a kernel driver.
+I add it following similar header file.
+#include <linux/io-64-nonatomic-lo-hi.h>
 
-	Regards
-		Oliver
+Do you think it should be put in .c file because .c file only uses it?
+If so, I will modify it in the next submission.
 
+> 
+> > >  /* Code sharing between pci-quirks and xhci hcd */
+> > >  #include	"xhci-ext-caps.h"
+> > > @@ -1627,6 +1628,7 @@ struct xhci_hcd {
+> > >  #define XHCI_RESET_TO_DEFAULT	BIT_ULL(44)
+> > >  #define XHCI_ZHAOXIN_TRB_FETCH	BIT_ULL(45)
+> > >  #define XHCI_ZHAOXIN_HOST	BIT_ULL(46)
+> > > +#define XHCI_WRITE_64_HI_LO	BIT_ULL(47)
+> 
+> Note, you define this, and check it, but it is never set, so this patch
+> is useless on its own and so we can not accept it as-is at all.
+> 
+> How was this tested?
+
+I got it. I will add other patches and send the patchset.
+
+> 
+> thanks,
+> 
+> greg k-h
+> 
+
+------9rvGp.wOoe8SBwNMBd7Hnn8uuLJro-MzoefNgNBE_LtzfeiS=_1c70e_
+Content-Type: text/plain; charset="utf-8"
+
+
+------9rvGp.wOoe8SBwNMBd7Hnn8uuLJro-MzoefNgNBE_LtzfeiS=_1c70e_--
 
