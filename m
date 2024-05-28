@@ -1,93 +1,122 @@
-Return-Path: <linux-usb+bounces-10637-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10638-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 883B48D1D00
-	for <lists+linux-usb@lfdr.de>; Tue, 28 May 2024 15:30:43 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 343398D1FBE
+	for <lists+linux-usb@lfdr.de>; Tue, 28 May 2024 17:09:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 26D8B1F25F6B
-	for <lists+linux-usb@lfdr.de>; Tue, 28 May 2024 13:30:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DD5A31F2422E
+	for <lists+linux-usb@lfdr.de>; Tue, 28 May 2024 15:09:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B229E16F283;
-	Tue, 28 May 2024 13:30:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AFFA17277F;
+	Tue, 28 May 2024 15:06:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RRTBYo1F"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rJCFrejZ"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25F8213C9C6;
-	Tue, 28 May 2024 13:30:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE4741E880;
+	Tue, 28 May 2024 15:06:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716903032; cv=none; b=d5eK7mzwMl5Qqu5TQ1cqjdPG2ctj/hSKvGA17cFsn5QZ0SnF/o//mrdvAYMxW9P7w9umkmTMU8PYNxIJmkCpQCNVF+luVg9BbLsjC4Q7jOpphMw6TgDxVb5wSJlWT6U09cZMK2ZCQVI7O6STeSoClTP9/3w4MViKqy/eJEDEamM=
+	t=1716908797; cv=none; b=MRkAhaOh2WBXc9WO5VBKA4t0o7dfik4Aq2xbjey+0owwdHPlEspfyhWqO/blciHp3uXqbxWEBOO5+wgW8+qTozxOIxeqgrUb7BnKQA2Io5Gj3b9Xj3WOaXQ0lwbbKJir2VcZaFcSFCH9lyQ6MpM5412DRrQH/VU5npjnuyLl5gY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716903032; c=relaxed/simple;
-	bh=HX+xbDWc0ccFCw9Jm22Z8vVSEpMcwfoWB6AFBLMPeGY=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=IskAd3kcT7Lfv1hco8Ij8/JL8kaB6N5mVU7XONIJKLOX0/3K+SiK8bEgik9cacQl70ErpgQHbIU3VjC61XvzjSLRHmXQvycywT4h8HOZJ+Iy4d8ODo/90mXl1mtFiK58sQojKJRqQpMRdswy+V3NJJ3Jk4/psICvgASeoyeWgjU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RRTBYo1F; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9F33DC32786;
-	Tue, 28 May 2024 13:30:31 +0000 (UTC)
+	s=arc-20240116; t=1716908797; c=relaxed/simple;
+	bh=WW8C6Bc9G0Yfb3CfuxmEdX54sinQDMOYusd6wezRaW4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FZCLWAE1EFnrwEfUscDNHmcD6F2rmKSxpL8tvJj1PHC1fgtKW3448F9X233Kd25Ra0jgzU+PXmUVoY110/Rv/twtymj60Tn0wVTvfMdr3sL1G0br6/oIeXmwsa0OuljL9PyVuU880A716qSfyenSBEj8VewkwIYH47v6OvdcPCc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rJCFrejZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0864BC32782;
+	Tue, 28 May 2024 15:06:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716903031;
-	bh=HX+xbDWc0ccFCw9Jm22Z8vVSEpMcwfoWB6AFBLMPeGY=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=RRTBYo1FXufScJvVHOc/3U5z2Ra3IJA+LXN6OOTU9XQDUYnFurMqvaOLuSW+xrnzx
-	 afOdX3skv4T1sARjrojzsaz2w5xa7giKnheehlgyT6PXecDnbalIohrr2Ylrztwwjm
-	 TOwJ5cveckDoDqzUHAip4b/0mAzM4OFmU76Vkp2sMKXEnD0VFXWMFkrfUdCJLeqtlS
-	 YskhhdY+AeG/f3vTjHGnf/pdVdd7aZwqUT0v7CJhqG6808ofnFcvMKqQbGA4wLPCco
-	 lkWLfDV3LxWY2O2ztStH4xQhyf+bIiccbXAlK7xjSSECePn+QhkiZHNgwsRkf1eCst
-	 PVFIiESuO9AuA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8D4DECF21F3;
-	Tue, 28 May 2024 13:30:31 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1716908796;
+	bh=WW8C6Bc9G0Yfb3CfuxmEdX54sinQDMOYusd6wezRaW4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=rJCFrejZ8h7jn7LQBqsHSkoosHWCqAdx9SAEEq26xBbw8w1j/qr8vwinxz/VhupPS
+	 aBLKEFm7aN/N47MatW0jKAJZhZDKT3Ah4dFSI+ZqIkDMPsej3xS6TRZgaflQ1C9u4g
+	 uE8HcoBYSSXI//rquJlBhTjBeF5UIrnIUnOv/Laai5LFY3DzKTpB46j5lsgljrErTl
+	 DsJOQlowXN7Z5yUHQ8TaLfthwG32J/zqo9beR4leCqRCC9LNWsN1/Om2+3rYh1/VFN
+	 1sF2YhxnnsFsnlzUm5XjEdfeQEmEqTbvFi5sXs/phTLfKR9vuOtGDQ3a3WvtDtK9jg
+	 KCzoZKJyez3AQ==
+Date: Tue, 28 May 2024 10:06:33 -0500
+From: Bjorn Andersson <andersson@kernel.org>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Hans de Goede <hdegoede@redhat.com>, Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, 
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
+	linux-pm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	platform-driver-x86@vger.kernel.org, linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+	Nikita Travkin <nikita@trvn.ru>
+Subject: Re: [PATCH v3 6/6] arm64: dts: qcom: c630: Add Embedded Controller
+ node
+Message-ID: <bbsdvqjo2ikljnuvupolpdfstsaegfqyg2ct7bt24evcorcfjt@3fw5eicxxuik>
+References: <20240527-yoga-ec-driver-v3-0-327a9851dad5@linaro.org>
+ <20240527-yoga-ec-driver-v3-6-327a9851dad5@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: usb: remove unused structs 'usb_context'
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <171690303157.16079.18128405210043451247.git-patchwork-notify@kernel.org>
-Date: Tue, 28 May 2024 13:30:31 +0000
-References: <20240526205922.176578-1-linux@treblig.org>
-In-Reply-To: <20240526205922.176578-1-linux@treblig.org>
-To: Dr. David Alan Gilbert <linux@treblig.org>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
- steve.glendinning@shawell.net, linux-usb@vger.kernel.org,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240527-yoga-ec-driver-v3-6-327a9851dad5@linaro.org>
 
-Hello:
+On Mon, May 27, 2024 at 01:03:51PM GMT, Dmitry Baryshkov wrote:
+> From: Bjorn Andersson <andersson@kernel.org>
 
-This patch was applied to netdev/net-next.git (main)
-by Paolo Abeni <pabeni@redhat.com>:
+Please align this with the S-o-b - feel free to use either form.
 
-On Sun, 26 May 2024 21:59:22 +0100 you wrote:
-> From: "Dr. David Alan Gilbert" <linux@treblig.org>
 > 
-> Both lan78xx and smsc75xx have a 'usb_context'
-> struct which is unused, since their original commits.
+> The Embedded Controller in the Lenovo Yoga C630 is accessible on &i2c1
+> and provides battery and adapter status, as well as altmode
+> notifications for the second USB Type-C port.
 > 
-> Remove them.
+> Add a definition for the EC.
 > 
-> [...]
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> ---
+>  .../boot/dts/qcom/sdm850-lenovo-yoga-c630.dts      | 76 ++++++++++++++++++++++
+>  1 file changed, 76 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts b/arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts
+> index 47dc42f6e936..d975f78eb3ab 100644
+> --- a/arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts
+> +++ b/arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts
+> @@ -370,6 +370,66 @@ zap-shader {
+>  &i2c1 {
+>  	status = "okay";
+>  	clock-frequency = <400000>;
+> +
+> +	embedded-controller@70 {
+> +		compatible = "lenovo,yoga-c630-ec";
+> +		reg = <0x70>;
+> +
+> +		interrupts-extended = <&tlmm 20 IRQ_TYPE_LEVEL_HIGH>;
+> +
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&ec_int_state>;
+> +
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +
+> +		connector@0 {
+> +			compatible = "usb-c-connector";
+> +			reg = <0>;
+> +			power-role = "dual";
+> +			data-role = "host";
 
-Here is the summary with links:
-  - net: usb: remove unused structs 'usb_context'
-    https://git.kernel.org/netdev/net-next/c/c30ff5f3aec3
+I was under the impression that this port is wired directly to the SoC
+and as such this would support data role switching as well.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+No concern with that, but just out of curiosity, is this not the case?
 
-
+Regards,
+Bjorn
 
