@@ -1,339 +1,123 @@
-Return-Path: <linux-usb+bounces-10661-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10662-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D27778D2973
-	for <lists+linux-usb@lfdr.de>; Wed, 29 May 2024 02:33:59 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 39F3A8D2ABF
+	for <lists+linux-usb@lfdr.de>; Wed, 29 May 2024 04:24:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5B1DC1F25562
-	for <lists+linux-usb@lfdr.de>; Wed, 29 May 2024 00:33:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BDB34B22E08
+	for <lists+linux-usb@lfdr.de>; Wed, 29 May 2024 02:24:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C49915990E;
-	Wed, 29 May 2024 00:33:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7A5E15B0E5;
+	Wed, 29 May 2024 02:24:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="X54tpBBF"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M9BAirMw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4752D17E8E4
-	for <linux-usb@vger.kernel.org>; Wed, 29 May 2024 00:33:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34A5315ADA8;
+	Wed, 29 May 2024 02:24:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716942830; cv=none; b=NoXFSsbZX18t1y1o/Fipd70OQcp1DMdp8xO5fbq+idlcgl7ubb3fNpG6jSO5TzNn9iTIJl7DRQrHW5qe6EXXPBzNq8hJIOKP6Dsh3Ah9nCEiKo7o5+Kqb/uDscUGsTJQeqiTfMOxnHx4cm5JU0PZUvfRM1rn2BPigxW4KUS74qI=
+	t=1716949480; cv=none; b=XuvvwOJlhs99JvciDpiRSeYbsyOzu3vq8C/JBwWChYCgFwhMfIKi5K4yrHnZXAUUDxsfqCSgS6i3yGtRpq0hqdvshAtTTch3BkC5HHr3i0QsGrfjDHAYPLuJOa0vaCbLKhdXYynxjMeyIj3WpfdeNB8npXHmL7y1VnO1lDgzM7U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716942830; c=relaxed/simple;
-	bh=DnnR4m1p4oU4U6SccO/LeVG9lOdHFpIn9om0icQLd3U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=D5zvRk7LubF+8DXZWyEiyrhUdNErkoPkQMAkWyAYHSvtmctadlVfSb+OLYbB3KF4i2EoNTJtCHh6kqZ7SqdHqB9QOMe6t40WnB+T/CePnoZJ60AS40SWlMnZX2/0aiO1tLS+PHW9o/BjbSg2ftJcHBMeRwXmHL7+5K44Oc221xE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=X54tpBBF; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1f4a5344ec7so2876925ad.1
-        for <linux-usb@vger.kernel.org>; Tue, 28 May 2024 17:33:49 -0700 (PDT)
+	s=arc-20240116; t=1716949480; c=relaxed/simple;
+	bh=LD/u7PQH0Qz185qWoqI56yH1j1u5QtJq9nIgw/rdnG4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Q/peIiGMRWBru4SZKibrmgb6spRIQ4U9+qa/LwF6gZBsXiZ0HWx//ThvyAhRXyry1GRjedt78CG+cfgw2gEumUWrOAFLJb8eUxVxaWe++MoFoCS/Tg+DuYtx3RT0yZQaZi6i6G7BCt5SpbaR5eyb8OCtocMip9aggtifikUAUU0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M9BAirMw; arc=none smtp.client-ip=209.85.216.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-2bde4d15867so269327a91.3;
+        Tue, 28 May 2024 19:24:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1716942828; x=1717547628; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZEoXkEUUAwl5YxPM26D+WgNJiJo07MgNYdTcPdzNMEE=;
-        b=X54tpBBF1zWpdQbmZzke6l2Yhm0fhcTC+v1DXvU99CFeuyVCtw9+U4jFokedRcHXID
-         r1I2Loz8PXUUTcQxXgAEgB4FECtq5Dx/+vHBiqxjBdfXPqMIb5ZQetTGSdxd45kvabJj
-         0/GApgZYfxDR4kvKSdpUhNhsUFXul3AG+6ztEppbvJm76oOjMn5QQUTv+cw85BjKXebu
-         pyeuabygfVeWk4tXjsMlidvOKDdNjTJl0w7rkYWcX8vTAtSY5rLkdMAQkC4cOtJidMi7
-         xUb1FK14b/HSZ3w+3wujNspCNg0lS95OfnVATqHQCCJD4QEUy9SCnGlAXMjHiGHgl63o
-         Zm7g==
+        d=gmail.com; s=20230601; t=1716949478; x=1717554278; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=A6lxg6L9XPIoxH+sYdGJUuWSOxXCo7mdMoMtsrXkU84=;
+        b=M9BAirMwKGPvwibOsc9fJMyFuYYbecjyU035+C7p2V2xn9KVpxxwPDCI1ddZVf3tDK
+         Yg803iMluR8IM4rFJlLNl/EYr56Uru1Qo0+rDMnYrCilRYp4uWKrk70QlHQGJLq5db01
+         FP1aD0rfptk0Rg01/vUoKwUtGk7WVhQ3e2Rgu5TxTC7XIykqBWhB4dWwumfXTWiJYIA6
+         a+aXqvUCknvxzJ0YQkP0FjVXPsg01AWf93LSiucNdWl8Oe+mNcXHE0ORhcozV9uvbODl
+         8a620F9Gsh0R3IY5iB/KwWHG1lIDWyaEv7CcxXVWzfLDjKHErnFOQPPLJm/KA+JuzROw
+         IKLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716942828; x=1717547628;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZEoXkEUUAwl5YxPM26D+WgNJiJo07MgNYdTcPdzNMEE=;
-        b=H7ID0z4lY28W2YPssfpO0JOhUgxQPsdjPwvcb9OQOjWBNYJOTABCefhkm6ysd2KVpn
-         wrPSQneiPSjaCPzbFBxgwJhNL7OeYQrIeLXJYDRmdyg6O7Dw4sNElRQXq5ITbb0IHu8M
-         OHm29ZFOMECf3NpUObGnu7uFToBG64XSAHmejOZFVnvpJ1AOGkfN6gODKCkHVdoaMKLz
-         StBuug95D6yiEwdP0VdG+dCI5oR98ni0xWB+KXT0+73NwA+byjgTnj7ICyGtFezy0auN
-         QoDO86rhVDSoFuVhPdIe+VmGpeO7tdNVv+1mfYra8SHRFa2KpkSR4BzOfhFoY/dmL5Qv
-         7Vhw==
-X-Forwarded-Encrypted: i=1; AJvYcCUg4vtWcrVXypxByGGHy7rGkh0ZVC1ZijJtZ3wleCCQFUkxAseyIqyPAKd6XW4z2+M6xdh+LQLPtxaSOSd8+CqBbaVOgPDDkNDg
-X-Gm-Message-State: AOJu0YymVEWBHBeQDkouBaJ2au49JQi9yAQxek0mf2VYZByJtSAgec2n
-	nT1v37b+rEoq9SJNCe1YGgVNRJtME7FuuHSUtb99TR9U1QyB+14sO8n3WGaYlw==
-X-Google-Smtp-Source: AGHT+IGMG4IZrbeGjf0fVtb1fsD40Zt48ILPY0YEhyTQQVy/ubNjlBazTaLP/BgbOqPYwiU1sjCJgw==
-X-Received: by 2002:a17:902:e5cf:b0:1f4:84e6:5a87 with SMTP id d9443c01a7336-1f4e9ea07damr9993335ad.9.1716942828183;
-        Tue, 28 May 2024 17:33:48 -0700 (PDT)
-Received: from [192.168.60.239] (213.126.145.34.bc.googleusercontent.com. [34.145.126.213])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f44c96f67fsm86723345ad.154.2024.05.28.17.33.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 May 2024 17:33:47 -0700 (PDT)
-Message-ID: <adabc6f5-1b87-4bbe-9070-984f0acc8e75@google.com>
-Date: Tue, 28 May 2024 17:33:46 -0700
+        d=1e100.net; s=20230601; t=1716949478; x=1717554278;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=A6lxg6L9XPIoxH+sYdGJUuWSOxXCo7mdMoMtsrXkU84=;
+        b=CQlAySSti2SorVyP+KJMXkEIwK8Oo+UH29TXRfOBZ1vspqAArgg7pWCfxHJu1SxGiI
+         b8I9FdMZMWU2RZSd82vk3IbqPlA5G1Ked1xrFNby9B9WHvISLJM0wnvPp02qWGoF1VnH
+         Fe50+xkS3Vl5BbtD/RzbL8e23Q/3Nk/xJatSVeAFrS8SxHQaCNCIxDADXSRmSPgIE55g
+         QNT+Uqs6nAt22PGye1KfJfXmo4LC7f+P/dFqT9B+q8tQn5AAQjnf1MdManFMA8RSpXLw
+         KDZXUrKzBKikUisbt+UH9Ywhjt5ggU2ufwvwdGsXvhQ2hGW8yO8klMacTPlzrmwSo9Ou
+         VUkw==
+X-Forwarded-Encrypted: i=1; AJvYcCXbekYXobV9TyYXmXlw0M2QsrQuYqfVMRiTXmgx2x4p0jrUggqdVZichkr1tpFAAJtwZZwl2V0xY0xmTmI4tThO1EE97ke4VeDg9ct3Dcn4Cv5CzmOx7XawoiYG6FJc+0YiloAX
+X-Gm-Message-State: AOJu0Yw9YHZ/MVYe9TS1pCjxoki04bOOwbQP+fSpEDeizURtTrDoDxoe
+	eLL9BexEghyxb/uL7NEYLvmMNg7K7sTcK6l9Oc4qxATNgFvXcuCN1Dz7KO5+
+X-Google-Smtp-Source: AGHT+IGvFepMkHKmzZJpa/37FHNiBg5wiyNcezQ4F8iraf2aIl03Ti5h7ik3UOYEMGAfJg3TH9Otww==
+X-Received: by 2002:a17:903:41d0:b0:1f3:453:2c82 with SMTP id d9443c01a7336-1f4498f40c2mr155926845ad.4.1716949478375;
+        Tue, 28 May 2024 19:24:38 -0700 (PDT)
+Received: from localhost.localdomain (122-117-151-175.hinet-ip.hinet.net. [122.117.151.175])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f44c9c6fd1sm89856375ad.278.2024.05.28.19.24.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 May 2024 19:24:38 -0700 (PDT)
+From: Kuangyi Chiang <ki.chiang65@gmail.com>
+To: mathias.nyman@intel.com,
+	gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	ki.chiang65@gmail.com,
+	stable@vger.kernel.org
+Subject: [PATCH v3 2/2] xhci: Apply broken streams quirk to Etron EJ188 xHCI host
+Date: Wed, 29 May 2024 10:24:19 +0800
+Message-Id: <20240529022420.9449-1-ki.chiang65@gmail.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/3] usb: gadget: uvc: allocate requests based on frame
- interval length and buffersize
-To: Michael Grzeschik <mgr@pengutronix.de>
-Cc: Alan Stern <stern@rowland.harvard.edu>,
- Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
- Daniel Scally <dan.scally@ideasonboard.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Jayant Chowdhary <jchowdhary@google.com>,
- "etalvala@google.com" <etalvala@google.com>,
- Michael Riesch <michael.riesch@wolfvision.net>,
- "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-References: <ZkE-O0yJ33T9hWa0@pengutronix.de>
- <20240517014359.p2s44ypl4bix4odm@synopsys.com>
- <Zk03Ys1rA0I5yiZy@pengutronix.de>
- <20240522014132.xlf7azgq2urfff2d@synopsys.com>
- <3f404a27-50e8-42c5-a497-b46751154613@rowland.harvard.edu>
- <20240522171640.iuol4672rnklc35g@synopsys.com>
- <Zk4td_0RR0cMJKro@pengutronix.de>
- <f4f0b38a-1f8e-4cf5-8cf1-6da337a1c3c0@google.com>
- <ZlY88BebTEZs6urD@pengutronix.de>
- <0642b7a2-0982-4529-b742-3310f34d16b9@google.com>
- <ZlZeHLmKnw1mApKM@pengutronix.de>
-Content-Language: en-US
-From: Avichal Rakesh <arakesh@google.com>
-In-Reply-To: <ZlZeHLmKnw1mApKM@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
+As described in commit 8f873c1ff4ca ("xhci: Blacklist using streams on the
+Etron EJ168 controller"), EJ188 have the same issue as EJ168, where Streams
+do not work reliable on EJ188. So apply XHCI_BROKEN_STREAMS quirk to EJ188
+as well.
 
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Kuangyi Chiang <ki.chiang65@gmail.com>
+---
+Changes in v3:
+- Fix coding style
 
-On 5/28/24 15:43, Michael Grzeschik wrote:
-> On Tue, May 28, 2024 at 02:27:34PM -0700, Avichal Rakesh wrote:
->>
->>
->> On 5/28/24 13:22, Michael Grzeschik wrote:
->>> On Tue, May 28, 2024 at 10:30:30AM -0700, Avichal Rakesh wrote:
->>>>
->>>>
->>>> On 5/22/24 10:37, Michael Grzeschik wrote:
->>>>> On Wed, May 22, 2024 at 05:17:02PM +0000, Thinh Nguyen wrote:
->>>>>> On Wed, May 22, 2024, Alan Stern wrote:
->>>>>>> On Wed, May 22, 2024 at 01:41:42AM +0000, Thinh Nguyen wrote:
->>>>>>> > On Wed, May 22, 2024, Michael Grzeschik wrote:
->>>>>>> > > On Fri, May 17, 2024 at 01:44:05AM +0000, Thinh Nguyen wrote:
->>>>>>> > > > For isoc endpoint IN, yes. If the host requests for isoc data IN while
->>>>>>> > > > no TRB is prepared, then the controller will automatically send 0-length
->>>>>>> > > > packet respond.
->>>>>>> > >
->>>>>>> > > Perfect! This will help a lot and will make active queueing of own
->>>>>>> > > zero-length requests run unnecessary.
->>>>>>> >
->>>>>>> > Yes, if we rely on the current start/stop isoc transfer scheme for UVC,
->>>>>>> > then this will work.
->>>>>>>
->>>>>>> You shouldn't rely on this behavior.  Other device controllers might not
->>>>>>> behave this way; they might send no packet at all to the host (causing a
->>>>>>> USB protocol error) instead of sending a zero-length packet.
->>>>>>
->>>>>> I agree. The dwc3 driver has this workaround to somewhat work with the
->>>>>> UVC. This behavior is not something the controller expected, and this
->>>>>> workaround should not be a common behavior for different function
->>>>>> driver/protocol. Since this behavior was added a long time ago, it will
->>>>>> remain the default behavior in dwc3 to avoid regression with UVC (at
->>>>>> least until the UVC is changed). However, it would be nice for UVC to
->>>>>> not rely on this.
->>>>>
->>>>> With "this" you mean exactly the following commit, right?
->>>>>
->>>>> (f5e46aa4 usb: dwc3: gadget: when the started list is empty stop the active xfer)
->>>>>
->>>>> When we start questioning this, then lets dig deeper here.
->>>>>
->>>>> With the fast datarate of at least usb superspeed shouldn't they not all
->>>>> completely work asynchronous with their in flight trbs?
->>>>>
->>>>> In my understanding this validates that, with at least superspeed we are
->>>>> unlikely to react fast enough to maintain a steady isoc dataflow, since
->>>>> the driver above has to react to errors in the processing context.
->>>>>
->>>>> This runs the above patch (f5e46aa4) a gadget independent solution
->>>>> which has nothing to do with uvc in particular IMHO.
->>>>>
->>>>> How do other controllers and their drivers work?
->>>>>
->>>>>> Side note, when the dwc3 driver reschedules/starts isoc transfer again,
->>>>>> the first transfer will be scheduled go out at some future interval and
->>>>>> not the next immediate microframe. For UVC, it probably won't be a
->>>>>> problem since it doesn't seem to need data going out every interval.
->>>>>
->>>>> It should not make a difference. [TM]
->>>>>
->>>>
->>>>
->>>> Sorry for being absent for a lot of this discussion.
->>>>
->>>> I want to take a step back from the details of how we're
->>>> solving the problem to what problems we're trying to solve.
->>>>
->>>> So, question(s) for Michael, because I don't see an explicit
->>>> answer in this thread (and my sincerest apologies if they've
->>>> been answered already and I missed it):
->>>>
->>>> What exactly is the bug (or bugs) we're trying to solve here?
->>>>
->>>> So far, it looks like there are two main problems being
->>>> discussed:
->>>>
->>>> 1. Reducing the bandwidth usage of individual usb_requests
->>>> 2. Error handling for when transmission over the wire fails.
->>>>
->>>> Is that correct, or are there other issues at play here?
->>>
->>> That is correct.
->>>
->>>> (1) in isolation should be relatively easy to solve: Just
->>>> smear the encoded frame across some percentage
->>>> (prefereably < 100%) of the usb_requests in one
->>>> video frame interval.
->>>
->>> Right.
->>>
->>>> (2) is more complicated, and your suggestion is to have a
->>>> sentinel request between two video frames that tells the
->>>> host if the transmission of "current" video frame was
->>>> successful or not. (Is that correct?)
->>>
->>> Right.
->>>
->>>> Assuming my understanding of (2) is correct, how should
->>>> the host behave if the transmission of the sentinel
->>>> request fails after the video frame was sent
->>>> successfully (isoc is best effort so transmission is
->>>> never guaranteed)?
->>>
->>> If we have transmitted all requests of the frame but would only miss the
->>> sentinel request to the host that includes the EOF, the host could
->>> rather show it or drop it. The drop would not be necessary since the
->>> host did see all data of the frame. The user would not see any
->>> distortion in both cases.
->>>
->>> If we have transmitted only partial data of the frame it would be
->>> preferred if the host would drop the frame that did not finish with an
->>> proper EOF tag.
->>>
->>> AFAIK the linux kernel would still show the frame if the FID of the
->>> currently handled request would change and would take this as the end of
->>> frame indication. But I am not totally sure if this is by spec or
->>> optional.
->>>
->>> One option to be totally sure would be to resend the sentinel request to
->>> be properly transmitted before starting the next frame. This resend
->>> polling would probably include some extra zero-length requests. But also
->>> if this resend keeps failing for n times, the driver should doubt there
->>> is anything sane going on with the USB connection and bail out somehow.
->>>
->>> Since we try to tackle case (1) to avoid transmit errors and also avoid
->>> creating late enqueued requests in the running isoc transfer, the over
->>> all chance to trigger missed transfers should be minimal.
->>
->> Gotcha. It seems like the UVC gadget driver implicitly assumes that EOF
->> flag will be used although the userspace application can technically
->> make it optional.
-> 
-> That is not all. The additional UVC_STREAM_ERR tag on the sentinel
-> request can be set optional by the host driver. But by spec the
-> userspace application has to drop the frame when the flag was set.
+Changes in v2:
+- Porting to latest release
 
-Looking at the UVC specs, the ERR bit doesn't seem to refer to actual 
-transmission error, only errors in frame generation (Section 4.3.1.7 
-of UVC 1.5 Class Specification). Maybe "data discontinuity" can be 
-used but the examples given are bad media, and encoder issues, which
-suggests errors at higher level than the wire.
+ drivers/usb/host/xhci-pci.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-> 
-> With my proposal this flag will be set, whenever we find out that
-> the currently transferred frame was erroneous.
-> 
->> Summarizing some of the discussions above:
->> 1. UVC gadget driver should _not_ rely on the usb controller to
->>   enqueue 0-length requests on UVC gadget drivers behalf;
->> 2. However keeping up the backpressure to the controller means the
->>   EOF request will be delayed behind all the zero-length requests.
-> 
-> Exactly, this is why we have to somehow finetune the timedelay between
-> requests that trigger interrupts. And also monitor the amount of
-> requests currently enqueued in the hw ringbuffer. So that our drivers
-> enqueue dequeue mechanism is virtually adding only the minimum amount
-> of necessary zero-length requests in the hardware. This should be
-> possible.
-> 
-> I am currently thinking through the remaining steps the pump worker has
-> to do on each wakeup to maintain the minimum threshold while waiting
-> with submitting requests that contain actual image payload.
-> 
->> Out of curiosity: What is wrong with letting the host rely on
->> FID alone? Decoding the jpeg payload _should_ fail if any of the
->> usb_requests containing the payload failed to transmit.
-> 
-> This is not totally true. We saw partially rendered jpeg frames on the
-> host stream. How the host behaves with broken data is totally undefined
-> if the typical uvc flags EOF/ERR are not used as specified. Then think
-> about uncompressed formats. So relying on the transferred image format
-> to solve our problems is just as wrong as relying on the gadgets
-> hardware behavior.
+diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+index dd8256e4e02a..05881153883e 100644
+--- a/drivers/usb/host/xhci-pci.c
++++ b/drivers/usb/host/xhci-pci.c
+@@ -397,8 +397,10 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
+ 		xhci->quirks |= XHCI_BROKEN_STREAMS;
+ 	}
+ 	if (pdev->vendor == PCI_VENDOR_ID_ETRON &&
+-			pdev->device == PCI_DEVICE_ID_EJ188)
++			pdev->device == PCI_DEVICE_ID_EJ188) {
+ 		xhci->quirks |= XHCI_RESET_ON_RESUME;
++		xhci->quirks |= XHCI_BROKEN_STREAMS;
++	}
+ 
+ 	if (pdev->vendor == PCI_VENDOR_ID_RENESAS &&
+ 	    pdev->device == 0x0014) {
+-- 
+2.25.1
 
-Do you know if the partially rendered frames were valid JPEGs, or 
-if the host was simply making a best effort at displaying a broken
-JPEG? Perhaps the fix should go to the host instead?
-
-Following is my opinion, feel free to disagree (and correct me if 
-something is factually incorrect):
-
-The fundamental issue here is that ISOC doesn't guarantee
-delivery of usb_requests or even basic data consistency upon delivery.
-So the gadget driver has no way to know the state of transmitted data. 
-The gadget driver is notified of underruns but not of any other issues,
-and ideally we should never have an underrun if the zero-length 
-backpressure is working as intended.
-
-So, UVC gadget driver can reduce the number of errors, but it'll never be 
-able to guarantee that the data transmitted to the host isn't somehow
-corrupted or missing unless a more reliable mode of transmission 
-(bulk, for example) is used.
-
-All of this to say: The host absolutely needs to be able to handle
-all sorts of invalid and broken payloads. How the host handles it 
-might be undefined, but the host can never rely on perfect knowledge 
-about the transmission state. In cases like these, where the underlying 
-transport is unreliable, the burden of enforcing consistency moves up 
-a layer, i.e. to the encoded payload in this case. So it is perfectly 
-fine for the host to rely on the encoding to determine if the payload 
-is corrupt and handle it accordingly.
-
-As for uncompressed format, you're correct that subtle corruptions
-may not be caught, but outright missing usb_requests can be easily
-checked by simply looking at the number of bytes in the payload. YUV 
-frames are all of the same (predetermined) size for a given resolution.
-
-So my recommendation is the following:
-1. Fix the bandwidth problem by splitting the encoded video frame
-   into more usb_requests (as your patch already does) making sure 
-   there are enough free usb_request to encode the video frame in 
-   one burst so we don't accidentally inflate the transmission 
-   duration of a video frame by sneaking in zero-length requests in
-   the middle.
-2. Unless there is an unusually high rate of transmission failures
-   when using the UVC gadget driver, it might be worth fixing the
-   host side driver to handle broken frames better instead (assuming 
-   host is linux as well).
-2. Tighten up the error checking in UVC gadget driver -- We drop the 
-   current frame whenever an EXDEV happens which is wrong. We should 
-   only be dropping the current frame if the EXDEV corresponds to the 
-   frame currently being encoded. If the frame is already fully queued 
-   to the usb controller, the host can handle missing payload as it 
-   sees fit.
-
-
-- Avi.
 
