@@ -1,76 +1,75 @@
-Return-Path: <linux-usb+bounces-10671-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10672-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A99028D36BF
-	for <lists+linux-usb@lfdr.de>; Wed, 29 May 2024 14:50:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA2758D389F
+	for <lists+linux-usb@lfdr.de>; Wed, 29 May 2024 16:04:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DB6961C227C9
-	for <lists+linux-usb@lfdr.de>; Wed, 29 May 2024 12:50:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6C90E1F24ADA
+	for <lists+linux-usb@lfdr.de>; Wed, 29 May 2024 14:04:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50BC34C70;
-	Wed, 29 May 2024 12:50:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 501261CA9E;
+	Wed, 29 May 2024 14:04:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZMC2fVr9"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="qlvmv05x"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56002748D
-	for <linux-usb@vger.kernel.org>; Wed, 29 May 2024 12:50:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D0C91BF3B;
+	Wed, 29 May 2024 14:04:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716987043; cv=none; b=E9NzOO4GET6TipeRB5/lQ2yb4/I9wFJwFdy5UjK+dNG6lpiVLvgLhITEj/P7t1equDWbsnnAW9Ugj8z7AZ8f02Fxy5SgRM4QR9MiBvA5ihvcnBeE0pFktqC/J1cVrV3jLLjdKAKk0cO8xNOfe/1ivaBtdubpyI988XBmeY4Gsj0=
+	t=1716991485; cv=none; b=kXDG/e4cO8u+ajEuYwhlVHL7B07wtjibeuBCe5vwzSHLrPe0Qby77TAYM87LLkyyDta9Y6fdK3aRdAY+86WyoLJCsNnKK72AElvsuBU1eEdI8PLjFLM5dlt8KTsI5b4ZrGktOl1aiN+j/NO5FWxZmMopQanZVSk+PgvI1dbkHTk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716987043; c=relaxed/simple;
-	bh=uHUm1ZicLxxk/nvv7PllABVU2ZTpvIz46yuu6B4HjKI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Dwng4KvwcPN/Zpm50x9RMUp7EgzShFEMiuJsdctM21K/r5mqY6EkngletyWPRDArvlrUTqFji3b4ONH773BBEN9ZKcXNg6D/ZYYBkvKyEKcvaiOOXiJaJcXkKyVNqFY+/Ph/Hx5Ou96FrBLtfaeArqlavywpE9mdr8vCHoLwZBo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZMC2fVr9; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1716991485; c=relaxed/simple;
+	bh=hywXqe1+thnJEGFL233Btn9YUfw8uz+KCB0n0otHubo=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=JtYJlQt9WBAjIBPHuWrj4YPYy/UtZE9gxbj8q+6qORjMtxe5exJjTk6ZPyQi2LbcjWbYkQ847fRuhvbmWMON3fVn56cMx7yd/7WPr0kpNtaq7VSrV8V7ua9sh3ywxikAkIvlgUcpsPANWMrH/NdHVcFlJPCXRvYGeFr/Lvhf/nA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=qlvmv05x; arc=none smtp.client-ip=68.232.153.233
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1716987042; x=1748523042;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=uHUm1ZicLxxk/nvv7PllABVU2ZTpvIz46yuu6B4HjKI=;
-  b=ZMC2fVr96qX3uvApTpIlQ6fLdt3UmjHgjzq9HkCv5RmpDnhaQIuvIPYx
-   tbC0//6pIToP9WggGF8M208O+bmN9YWQhTrt3roa3jT+JIex2H/vTe+Iw
-   T11vmNIa7i1qaFnRuXs8gjHOSse6nSaf+xzQeovDHDSb98K84wIiFRjsk
-   f00bpiALYwjQyFRNL2GADMg97wmIEymewqAPIy9E73caluCOuri9Glj/s
-   +YHm2AHfXwUDBA8ggD5Hp9aRnYrMpkOemVbStjbixvxUjzEGB61HF8wY/
-   HFC+G2/MosdjzYuzg9adG/bmky7N/9JjXjYaUN3SFaS92oktvZXFM4cLV
-   A==;
-X-CSE-ConnectionGUID: iV39mgktSm+cMeJ3RuGAOg==
-X-CSE-MsgGUID: vUuDVMoTRZ2ot6+nqV+OMA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11087"; a="16335139"
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1716991483; x=1748527483;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=hywXqe1+thnJEGFL233Btn9YUfw8uz+KCB0n0otHubo=;
+  b=qlvmv05xQ/dpQzcxOjbfVzhXAK6+77NfA1Z5NKiCvt1tcWYNHBqGWvIw
+   EFnjKtXqakIEIBn2f8SLC8nJ0cUu5oYBvDGdkyIap5UZBl+TWzK5VM8Lh
+   LTquAG47xMznl43mrWwM7hkI5Vis84Wm/UiuQ0i3QMmqSYHDUWI0u1Osy
+   1H2Guot8AwoqKEsNKYaNVVI2Le0fPvN/Lrf33ZIgmwVqtIBedVwBk+6uE
+   VV4bI/4g1dt14eXdHazj3Egmmy/msii3Zj3IyDd//WJp2BuDA9XiNEcfs
+   Ly4qbplawXB0kxijLrJ/ioUI7J5gMGHbx0eNalPNlqm/MitYMoiyOUdgB
+   w==;
+X-CSE-ConnectionGUID: UHRX1dMPQmiDDA0urO7xTA==
+X-CSE-MsgGUID: KGOuusQJRMmotEnz21LpEw==
 X-IronPort-AV: E=Sophos;i="6.08,198,1712646000"; 
-   d="scan'208";a="16335139"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2024 05:50:41 -0700
-X-CSE-ConnectionGUID: Ys1KakLoQtqI9/IrxQcQHQ==
-X-CSE-MsgGUID: uGCVfReIS+2FvM2l7wV8+Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,198,1712646000"; 
-   d="scan'208";a="35402832"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa008.fm.intel.com with ESMTP; 29 May 2024 05:50:40 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id 001DA20F; Wed, 29 May 2024 15:50:38 +0300 (EEST)
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: linux-usb@vger.kernel.org
-Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
-	Michael Jamet <michael.jamet@intel.com>,
-	Lukas Wunner <lukas@wunner.de>,
-	Andreas Noever <andreas.noever@gmail.com>,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH] thunderbolt: Mention Thunderbolt/USB4 debugging tools in Kconfig
-Date: Wed, 29 May 2024 15:50:38 +0300
-Message-ID: <20240529125038.1051641-1-mika.westerberg@linux.intel.com>
-X-Mailer: git-send-email 2.43.0
+   d="scan'208";a="29036711"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 29 May 2024 07:04:40 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Wed, 29 May 2024 07:04:35 -0700
+Received: from che-ld-unglab06.microchip.com (10.10.85.11) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2507.35 via Frontend Transport; Wed, 29 May 2024 07:04:32 -0700
+From: Rengarajan S <rengarajan.s@microchip.com>
+To: <woojung.huh@microchip.com>, <UNGLinuxDriver@microchip.com>,
+	<davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+	<pabeni@redhat.com>, <netdev@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+CC: <rengarajan.s@microchip.com>
+Subject: [PATCH net-next v3 1/2] lan78xx: Enable 125 MHz CLK configuration for LAN7801 if NO EEPROM is detected
+Date: Wed, 29 May 2024 19:32:55 +0530
+Message-ID: <20240529140256.1849764-2-rengarajan.s@microchip.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20240529140256.1849764-1-rengarajan.s@microchip.com>
+References: <20240529140256.1849764-1-rengarajan.s@microchip.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -78,36 +77,33 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-This allows the interested parties to find the Thunderbolt/USB4
-debugging tools (aka tbtools) easier in case they need to look at the
-information under debugfs entries.
+The 125MHz and 25MHz clock configurations are enabled in the initialization
+regardless of EEPROM (125MHz is needed for RGMII 1000Mbps operation). After
+a lite reset (lan78xx_reset), these contents go back to defaults(all 0, so
+no 125MHz or 25MHz clock).
 
-Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-Suggested-by: Mario Limonciello <mario.limonciello@amd.com>
-Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
+Reviewed-by: Simon Horman <horms@kernel.org>
+Signed-off-by: Rengarajan S <rengarajan.s@microchip.com>
 ---
- drivers/thunderbolt/Kconfig | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/net/usb/lan78xx.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/thunderbolt/Kconfig b/drivers/thunderbolt/Kconfig
-index 448fd2ec8f6e..3e01f41e9d66 100644
---- a/drivers/thunderbolt/Kconfig
-+++ b/drivers/thunderbolt/Kconfig
-@@ -22,7 +22,11 @@ config USB4_DEBUGFS_WRITE
- 	bool "Enable write by debugfs to configuration spaces (DANGEROUS)"
- 	help
- 	  Enables writing to device configuration registers through
--	  debugfs interface.
-+	  debugfs interface. You can use tools such as Thunderbolt/USB4
-+	  debugging tools to access these registers. For more
-+	  information see:
-+
-+	    https://github.com/intel/tbtools
+diff --git a/drivers/net/usb/lan78xx.c b/drivers/net/usb/lan78xx.c
+index ba6c8ac2a736..7ac540cc3686 100644
+--- a/drivers/net/usb/lan78xx.c
++++ b/drivers/net/usb/lan78xx.c
+@@ -2944,6 +2944,8 @@ static int lan78xx_reset(struct lan78xx_net *dev)
+ 		return ret;
  
- 	  Only enable this if you know what you are doing! Never enable
- 	  this for production systems or distro kernels.
+ 	buf |= HW_CFG_MEF_;
++	buf |= HW_CFG_CLK125_EN_;
++	buf |= HW_CFG_REFCLK25_EN_;
+ 
+ 	ret = lan78xx_write_reg(dev, HW_CFG, buf);
+ 	if (ret < 0)
 -- 
-2.43.0
+2.25.1
 
 
