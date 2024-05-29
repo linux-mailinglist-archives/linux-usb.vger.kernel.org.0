@@ -1,133 +1,339 @@
-Return-Path: <linux-usb+bounces-10663-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10664-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id F40878D2AC2
-	for <lists+linux-usb@lfdr.de>; Wed, 29 May 2024 04:25:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA56D8D30C8
+	for <lists+linux-usb@lfdr.de>; Wed, 29 May 2024 10:18:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 92ECAB23953
-	for <lists+linux-usb@lfdr.de>; Wed, 29 May 2024 02:25:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7150028BA47
+	for <lists+linux-usb@lfdr.de>; Wed, 29 May 2024 08:18:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F0A815B0E6;
-	Wed, 29 May 2024 02:24:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCE3718133B;
+	Wed, 29 May 2024 08:08:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P2S/5qri"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="UEqCNGs+"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87D6915ADA8;
-	Wed, 29 May 2024 02:24:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 622A116937F
+	for <linux-usb@vger.kernel.org>; Wed, 29 May 2024 08:08:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716949489; cv=none; b=jh0aFDrfHOnD15yGe1D7cByG1K7gf1orIW1gSqOVD2q0kv00olL3zHagl/gjWFCrAFckgflqTg4tN89Mu0e0NBkdK25+6ekKe4YTWqrc5DILs5GdGynLHVQFVOgfxUMIHnlhYbt2UtUIlz3KTJY6UXPT0iF9Te5tQN8vS4SADgw=
+	t=1716970124; cv=none; b=Vv+uctix4KLTawvvRui5BxQnKyEYq2C/mDCxi04bAm07xu1tiBbdZLOtVoD3/m0KbPQAQj+qNJDOdZjPC+wc0SBsykka3OxmxboTCTX4gFeCDF8NGxVvga6LsR6O7gSnKhx7COOZsyF9SCpu2QkNxc+F7K4ZbYyTy1J4gRWAkwE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716949489; c=relaxed/simple;
-	bh=hxtqqQFtAYgzzrgf4DLHYl91O3D7RMr1juMPdGUfxbM=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=YT900deBl/hn2BXqDke5oML4UrmVjgXmnQ7TjMCk7B4nFdu2l2Ig2Z4cgmnMRtCEPjrQ94/JMbljwZJCqTxiVd34lVqNU6G+7L/9nghZNZMPQYp5uPqc725gmB84yzzh9cO1r2CHBf6XnssGioSRvEbCTzoXdqAqhE7ma8upX4I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P2S/5qri; arc=none smtp.client-ip=209.85.216.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-2bded7f6296so270337a91.1;
-        Tue, 28 May 2024 19:24:48 -0700 (PDT)
+	s=arc-20240116; t=1716970124; c=relaxed/simple;
+	bh=T3LsNDsQjui6zBSWsbGtzYkzQN8h8gfwvEMkMXJ//Qw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ovJuhBXIKKtP1smQhKj/MdX4aphQ7qx8IXAuKXDZ9EZUDLKqnOhiO57AWYlPU9vlY7XoHjNChjNpiDt1d+h19xz5flSq+Nne7sZ5if/vb0DGJi8Nwf2XdcN58wb64XpCLmOLr4Z60v0iA5+f6KoVDpYtyQPAzsWCd6gCFU9VGAA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=UEqCNGs+; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4202ca70270so21081615e9.3
+        for <linux-usb@vger.kernel.org>; Wed, 29 May 2024 01:08:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1716949488; x=1717554288; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0CY4dWZ9cyChcyNHRqzuKIDzJLz0YH1+twjPfRFeGrQ=;
-        b=P2S/5qriIuoK4h9tEXWxJzWr+mHNsGWebLHVyehUkw6Sljg9LWXx88wrsgDGSThsbw
-         KaA6MoMwoIS377yGqWa/iSzwNIPNYEuz2Thn+WHymNFNVC9FViil9E9tNUIned5pILnJ
-         rvltBMDd89MTqToKlwi6axQ9dSywfZELPeLVpGAsDtNnO2KX+A9vXT4IkIlGl/kGPvPD
-         2d8TdMhc+6LT2DkTnWkQlU9tkx36LlSrtv+baX3n7NIX15/2OV5pSIta79MoRkqm/+rd
-         wGLduEEaot3yx9+emXWspec1dUtCJhPusLI3kzcnmc9SdiBSsrikja5oFnkuYF5VyNvZ
-         5/bw==
+        d=linaro.org; s=google; t=1716970121; x=1717574921; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=a/JqdadxOtCgPk5Z92J6Iz23Jf3+Y16joj23RLu5HX0=;
+        b=UEqCNGs+fNHoYv50zpSrTx/PiSv4obl+HDUKrrSNy4QdgzTjjO2e7nGSFuzJfkxQni
+         sQtcbBmcwYQvL2Kd0uwlR3YggHK/S1eouMJ6a/vkgJdjc2QQVxVhaMcpxuR2keWz5gkM
+         4VuqMiXAmfO/hsvoA0Tk3rTSV+DA/O6pSzypolQT/wi99XnRs/xjYcS9cVFIw56oOG0Q
+         WvxsKzby+xQKRyD8C5oQWzoFMk9vbcvWpRH0YEEEkVezx9U/ldTn5Pi8r8xuGZDeiR2v
+         +161X7nuHqgGEy5L3vlLqQUsfuo42cxHzVI6w7TKe9unRrIaRm8vnLgyFnVuRNi9/2x8
+         iCRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716949488; x=1717554288;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0CY4dWZ9cyChcyNHRqzuKIDzJLz0YH1+twjPfRFeGrQ=;
-        b=pgMCZVO1VHQuDLGJqquvQtVupN5zAKyit9IXx66e+3WKw0JP/cuHgbGtqB0JmDDefk
-         dZoYc5g4GeAelf/8k1isyDGz18TaGB7TQxcYCx1i1oa8F0YTFXVvzqeTygD2r7fvRNKL
-         4qCssHo1MS0yNIIwj4VACPnTbOi9g1fJH2uyujtIQ1n435QQdN9VlZ8dTTGyjt/kh/sl
-         FKKW6bHpmb1PzBRNQCDQb7Lt6P2NtnRqZTL/ttQe0wc15rqAiM/MWCgeP0vEmpz5pA8q
-         kJOM6T7S/1OF5iU3rtLvqixvw7hiJ2eqnmyKH9Rt+bgYmunUhMqCIWaWRh1SLIx5+amV
-         NrPw==
-X-Forwarded-Encrypted: i=1; AJvYcCVtH07zRA6j15CouHwZ15thH9pZlFkHeBFWasQ5iNqmLVNfJoCJu7V92CgPqt9iZvfkQtZNl0ScvNkqKe4D5P3Kab3GuOQJs1ww9M81YWOyD8OD29537dhCTpuocBXv8JuPzGyK
-X-Gm-Message-State: AOJu0YzJr9W8ScELZgfdN3qfkAfMNM6qFhpxMomZHksLHoSvThKiL+Ww
-	HCkYdFr8Leywbl7Zwp4M79jkZWi7yQtMHtmOlNFC/k4ceJYIG+72
-X-Google-Smtp-Source: AGHT+IH58pyD92nfulzMGoXRvsFuUoLd54s3wBPWPwNPjTLmxqGbpNPlaSj4WoSUuI1iQI49cCdeww==
-X-Received: by 2002:a17:902:d4c8:b0:1f2:ffbc:7156 with SMTP id d9443c01a7336-1f4486ae484mr156437435ad.1.1716949487799;
-        Tue, 28 May 2024 19:24:47 -0700 (PDT)
-Received: from localhost.localdomain (122-117-151-175.hinet-ip.hinet.net. [122.117.151.175])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f44c9c6fd1sm89856375ad.278.2024.05.28.19.24.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 May 2024 19:24:47 -0700 (PDT)
-From: Kuangyi Chiang <ki.chiang65@gmail.com>
-To: mathias.nyman@intel.com,
-	gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	ki.chiang65@gmail.com,
-	stable@vger.kernel.org
-Subject: [PATCH v3 1/2] xhci: Apply reset resume quirk to Etron EJ188 xHCI host
-Date: Wed, 29 May 2024 10:24:20 +0800
-Message-Id: <20240529022420.9449-2-ki.chiang65@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20240529022420.9449-1-ki.chiang65@gmail.com>
-References: <20240529022420.9449-1-ki.chiang65@gmail.com>
+        d=1e100.net; s=20230601; t=1716970121; x=1717574921;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=a/JqdadxOtCgPk5Z92J6Iz23Jf3+Y16joj23RLu5HX0=;
+        b=WBiTHNFKZZK8NzZi1KblFVevw65r1xAYslkiBaAiOowGlo2xLobG3AoY9RTv+J9T3Y
+         QGuvoWOQawZj6yFhNYSVtFU85b+aUNM9RU6LjhcMsDbWChLHCFUmnUW3JZaeyxMy4U8t
+         FU2JK0iXyxp8ngKyEXGdzC89MQCf+5vwykmM8Sl6b72vLK5Epddo+N65gbfcB+zuaVL7
+         0Ee9w+3gq/R+rzfvudL0zoG/FTWpKY4wMe9fRRfGYUOnRvma0g9Re/5HpBgp9rJS21k9
+         zWHcxmxYCueqVO2K/2uzN7N4HZaiHDpkKyfjeH2uLJGSEsqorsl66utpUHTJd1Gb8nUB
+         v+iA==
+X-Forwarded-Encrypted: i=1; AJvYcCWQ4mmZS/ZpgPm1Tlx4/JuM0jJeGpA/LinPviHE9+hQTgIbRkA91vpBctF22Wb2s7UCjTn7G2bYwgtmyXSi94IzGVHXjW2uBYap
+X-Gm-Message-State: AOJu0Yzny6hwA6hZwqbOLYBV0hDgQuwOrIkCDae5R0aSDioTIzMkkoAT
+	sxBMxddlNmGPrQCE8gQ2W8NT5sjyyoAR8dtrsY6doh2Sqs5FHLVp8nCnXJL/tYc=
+X-Google-Smtp-Source: AGHT+IG37BWRZMEjsIkkPqzKrnfVQeOHaDJWHEmylLb4ayfm/w5tbXgAnW+F/WgUw+Xxl6kVsnytaw==
+X-Received: by 2002:a05:600c:5354:b0:420:f8:23d6 with SMTP id 5b1f17b1804b1-42108aa7589mr151469755e9.36.1716970120703;
+        Wed, 29 May 2024 01:08:40 -0700 (PDT)
+Received: from [192.168.0.3] ([176.61.106.227])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3557a090366sm13891799f8f.56.2024.05.29.01.08.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 May 2024 01:08:40 -0700 (PDT)
+Message-ID: <0f337380-4e43-4ed4-aa05-0c7072ecd112@linaro.org>
+Date: Wed, 29 May 2024 09:08:38 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 2/6] platform: arm64: add Lenovo Yoga C630 WOS EC
+ driver
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
+ Hans de Goede <hdegoede@redhat.com>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Konrad Dybcio <konrad.dybcio@linaro.org>, linux-pm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ platform-driver-x86@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, Nikita Travkin <nikita@trvn.ru>
+References: <20240528-yoga-ec-driver-v4-0-4fa8dfaae7b6@linaro.org>
+ <20240528-yoga-ec-driver-v4-2-4fa8dfaae7b6@linaro.org>
+ <2b76f27e-f223-4ff9-880e-9e232ce9ddc6@linaro.org>
+ <3gbjbuav5l2td5xrfj46krhgdew42medhfrnkd47iahdv4fm3x@qv6jadf6tkol>
+Content-Language: en-US
+From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <3gbjbuav5l2td5xrfj46krhgdew42medhfrnkd47iahdv4fm3x@qv6jadf6tkol>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-As described in commit c877b3b2ad5c ("xhci: Add reset on resume quirk for
-asrock p67 host"), EJ188 have the same issue as EJ168, where completely
-dies on resume. So apply XHCI_RESET_ON_RESUME quirk to EJ188 as well.
+On 29/05/2024 00:56, Dmitry Baryshkov wrote:
+> On Wed, May 29, 2024 at 12:51:04AM +0100, Bryan O'Donoghue wrote:
+>> On 28/05/2024 21:44, Dmitry Baryshkov wrote:
+>>> Lenovo Yoga C630 WOS is a laptop using Snapdragon 850 SoC. Like many
+>>> laptops it uses embedded controller (EC) to perform various platform
+>>
+>> an embedded controller
+>>
+>>> operations, including, but not limited, to Type-C port control or power
+>>> supply handlng.
+>>>
+>>> Add the driver for the EC, that creates devices for UCSI and power
+>>> supply devices.
+>>>
+>>> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+>>> ---
+>>>    drivers/platform/arm64/Kconfig                 |  14 ++
+>>>    drivers/platform/arm64/Makefile                |   1 +
+>>>    drivers/platform/arm64/lenovo-yoga-c630.c      | 279 +++++++++++++++++++++++++
+>>>    include/linux/platform_data/lenovo-yoga-c630.h |  42 ++++
+>>>    4 files changed, 336 insertions(+)
+>>>
+>>> diff --git a/drivers/platform/arm64/Kconfig b/drivers/platform/arm64/Kconfig
+>>> index 8fdca0f8e909..8c103b3150d1 100644
+>>> --- a/drivers/platform/arm64/Kconfig
+>>> +++ b/drivers/platform/arm64/Kconfig
+>>> @@ -32,4 +32,18 @@ config EC_ACER_ASPIRE1
+>>>    	  laptop where this information is not properly exposed via the
+>>>    	  standard ACPI devices.
+>>> +config EC_LENOVO_YOGA_C630
+>>> +	tristate "Lenovo Yoga C630 Embedded Controller driver"
+>>> +	depends on I2C
+>>> +	help
+>>> +	  Driver for the Embedded Controller in the Qualcomm Snapdragon-based
+>>> +	  Lenovo Yoga C630, which provides battery and power adapter
+>>> +	  information.
+>>> +
+>>> +	  This driver provides battery and AC status support for the mentioned
+>>> +	  laptop where this information is not properly exposed via the
+>>> +	  standard ACPI devices.
+>>> +
+>>> +	  Say M or Y here to include this support.
+>>> +
+>>>    endif # ARM64_PLATFORM_DEVICES
+>>> diff --git a/drivers/platform/arm64/Makefile b/drivers/platform/arm64/Makefile
+>>> index 4fcc9855579b..b2ae9114fdd8 100644
+>>> --- a/drivers/platform/arm64/Makefile
+>>> +++ b/drivers/platform/arm64/Makefile
+>>> @@ -6,3 +6,4 @@
+>>>    #
+>>>    obj-$(CONFIG_EC_ACER_ASPIRE1)	+= acer-aspire1-ec.o
+>>> +obj-$(CONFIG_EC_LENOVO_YOGA_C630) += lenovo-yoga-c630.o
+>>> diff --git a/drivers/platform/arm64/lenovo-yoga-c630.c b/drivers/platform/arm64/lenovo-yoga-c630.c
+>>> new file mode 100644
+>>> index 000000000000..3d1d5acde807
+>>> --- /dev/null
+>>> +++ b/drivers/platform/arm64/lenovo-yoga-c630.c
+>>> @@ -0,0 +1,279 @@
+>>> +// SPDX-License-Identifier: GPL-2.0-only
+>>> +/*
+>>> + * Copyright (c) 2022-2024, Linaro Ltd
+>>> + * Authors:
+>>> + *    Bjorn Andersson
+>>> + *    Dmitry Baryshkov
+>>> + */
+>>> +#include <linux/auxiliary_bus.h>
+>>> +#include <linux/i2c.h>
+>>> +#include <linux/module.h>
+>>> +#include <linux/notifier.h>
+>>> +#include <linux/platform_data/lenovo-yoga-c630.h>
+>>> +
+>>> +#define LENOVO_EC_RESPONSE_REG		0x01
+>>> +#define LENOVO_EC_REQUEST_REG		0x02
+>>> +
+>>> +#define LENOVO_EC_UCSI_WRITE		0x20
+>>> +#define LENOVO_EC_UCSI_READ		0x21
+>>> +
+>>> +#define LENOVO_EC_READ_REG		0xb0
+>>> +#define LENOVO_EC_REQUEST_NEXT_EVENT	0x84
+>>> +
+>>> +struct yoga_c630_ec {
+>>> +	struct i2c_client *client;
+>>> +	struct mutex lock;
+>>> +	struct blocking_notifier_head notifier_list;
+>>> +};
+>>> +
+>>> +static int yoga_c630_ec_request(struct yoga_c630_ec *ec, u8 *req, size_t req_len,
+>>> +				u8 *resp, size_t resp_len)
+>>> +{
+>>> +	int ret;
+>>> +
+>>> +	WARN_ON(!mutex_is_locked(&ec->lock));
+>>> +
+>>> +	ret = i2c_smbus_write_i2c_block_data(ec->client, LENOVO_EC_REQUEST_REG,
+>>> +					     req_len, req);
+>>> +	if (ret < 0)
+>>> +		return ret;
+>>> +
+>>> +	return i2c_smbus_read_i2c_block_data(ec->client, LENOVO_EC_RESPONSE_REG,
+>>> +					     resp_len, resp);
+>>> +}
+>>> +
+>>> +int yoga_c630_ec_read8(struct yoga_c630_ec *ec, u8 addr)
+>>> +{
+>>> +	u8 req[2] = { LENOVO_EC_READ_REG, };
+>>> +	int ret;
+>>> +	u8 val;
+>>> +
+>>> +	mutex_lock(&ec->lock);
+>>> +	req[1] = addr;
+>>> +	ret = yoga_c630_ec_request(ec, req, sizeof(req), &val, 1);
+>>> +	mutex_unlock(&ec->lock);
+>>> +
+>>> +	return ret < 0 ? ret : val;
+>>> +}
+>>> +EXPORT_SYMBOL_GPL(yoga_c630_ec_read8);
+>>> +
+>>> +int yoga_c630_ec_read16(struct yoga_c630_ec *ec, u8 addr)
+>>> +{
+>>> +	u8 req[2] = { LENOVO_EC_READ_REG, };
+>>> +	int ret;
+>>> +	u8 msb;
+>>> +	u8 lsb;
+>>> +
+>>> +	mutex_lock(&ec->lock);
+>>> +
+>>> +	req[1] = addr;
+>>> +	ret = yoga_c630_ec_request(ec, req, sizeof(req), &lsb, 1);
+>>> +	if (ret < 0)
+>>> +		goto out;
+>>> +
+>>> +	req[1] = addr + 1;
+>>> +	ret = yoga_c630_ec_request(ec, req, sizeof(req), &msb, 1);
+>>> +
+>>> +out:
+>>> +	mutex_unlock(&ec->lock);
+>>> +
+>>> +	return ret < 0 ? ret : msb << 8 | lsb;
+>>> +}
+>>> +EXPORT_SYMBOL_GPL(yoga_c630_ec_read16);
+>>> +
+>>> +u16 yoga_c630_ec_ucsi_get_version(struct yoga_c630_ec *ec)
+>>> +{
+>>> +	u8 req[3] = { 0xb3, 0xf2, 0x20};
+>>
+>> You have a define above for the read_reg and write_reg commands, could you
+>> not define 0xb3 as LENOVO_EC_GET_VERSION ?
+>>
+>> All of the other commands here seem to have a named define.
+> 
+> Because unlike other registers it is not clear what other use cases does
+> 0xb3 support
+> 
+>>
+>>> +	int ret;
+>>> +	u8 msb;
+>>> +	u8 lsb;
+>>> +
+>>> +	mutex_lock(&ec->lock);
+>>> +	ret = yoga_c630_ec_request(ec, req, sizeof(req), &lsb, 1);
+>>> +	if (ret < 0)
+>>> +		goto out;
+>>> +
+>>> +	req[2]++;
+>>
+>> why not set reg[2] = 0x21;
+> 
+> ack
+> 
+>>
+>> also is req[2] some kind of address ?
+> 
+> Unfortunately no idea. This is totally based on the AML code in DSDT. I
+> have no documentation on the EC or its programming interface.
+> 
+>>
+>>> +	ret = yoga_c630_ec_request(ec, req, sizeof(req), &msb, 1);
+>>> +
+>>> +out:
+>>> +	mutex_unlock(&ec->lock);
+>>> +
+>>> +	return ret < 0 ? ret : msb << 8 | lsb;
+>>> +}
+>>> +EXPORT_SYMBOL_GPL(yoga_c630_ec_ucsi_get_version);
+>>> +
+>>> +int yoga_c630_ec_ucsi_write(struct yoga_c630_ec *ec,
+>>> +			    const u8 req[YOGA_C630_UCSI_WRITE_SIZE])
+>>> +{
+>>> +	int ret;
+>>> +
+>>> +	mutex_lock(&ec->lock);
+>>> +	ret = i2c_smbus_write_i2c_block_data(ec->client, LENOVO_EC_UCSI_WRITE,
+>>> +					     YOGA_C630_UCSI_WRITE_SIZE, req);
+>>> +	mutex_unlock(&ec->lock);
+>>> +
+>>> +	return ret < 0 ? ret : 0;
+>>> +}
+>>> +EXPORT_SYMBOL_GPL(yoga_c630_ec_ucsi_write);
+>>> +
+>>> +int yoga_c630_ec_ucsi_read(struct yoga_c630_ec *ec,
+>>> +			   u8 resp[YOGA_C630_UCSI_READ_SIZE])
+>>> +{
+>>> +	int ret;
+>>> +
+>>> +	mutex_lock(&ec->lock);
+>>> +	ret = i2c_smbus_read_i2c_block_data(ec->client, LENOVO_EC_UCSI_READ,
+>>> +					    YOGA_C630_UCSI_READ_SIZE, resp);
+>>> +	mutex_unlock(&ec->lock);
+>>> +
+>>> +	return ret < 0 ? ret : 0;
+>>> +}
+>>> +EXPORT_SYMBOL_GPL(yoga_c630_ec_ucsi_read);
+>>> +
+>>> +static irqreturn_t yoga_c630_ec_intr(int irq, void *data)
+>>> +{
+>>> +	u8 req[] = { LENOVO_EC_REQUEST_NEXT_EVENT };
+>>> +	struct yoga_c630_ec *ec = data;
+>>> +	u8 event;
+>>> +	int ret;
+>>> +
+>>> +	mutex_lock(&ec->lock);
+>>> +	ret = yoga_c630_ec_request(ec, req, sizeof(req), &event, 1);
+>>> +	mutex_unlock(&ec->lock);
+>>> +	if (ret < 0)
+>>> +		return IRQ_HANDLED;
+>>> +
+>>> +	pr_info("NOTIFY %x\n", event);
+>>
+>> why not dev_info() ?
+> 
+> Argh, debugging code. I should drop it.
+> 
 
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Kuangyi Chiang <ki.chiang65@gmail.com>
----
-Changes in v3:
-- Fix coding style
+Assuming you do all of that in v5
 
-Changes in v2:
-- Porting to latest release
-
- drivers/usb/host/xhci-pci.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index c040d816e626..dd8256e4e02a 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -36,6 +36,7 @@
- 
- #define PCI_VENDOR_ID_ETRON		0x1b6f
- #define PCI_DEVICE_ID_EJ168		0x7023
-+#define PCI_DEVICE_ID_EJ188		0x7052
- 
- #define PCI_DEVICE_ID_INTEL_LYNXPOINT_XHCI	0x8c31
- #define PCI_DEVICE_ID_INTEL_LYNXPOINT_LP_XHCI	0x9c31
-@@ -395,6 +396,10 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
- 		xhci->quirks |= XHCI_RESET_ON_RESUME;
- 		xhci->quirks |= XHCI_BROKEN_STREAMS;
- 	}
-+	if (pdev->vendor == PCI_VENDOR_ID_ETRON &&
-+			pdev->device == PCI_DEVICE_ID_EJ188)
-+		xhci->quirks |= XHCI_RESET_ON_RESUME;
-+
- 	if (pdev->vendor == PCI_VENDOR_ID_RENESAS &&
- 	    pdev->device == 0x0014) {
- 		xhci->quirks |= XHCI_ZERO_64B_REGS;
--- 
-2.25.1
-
+Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 
