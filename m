@@ -1,31 +1,31 @@
-Return-Path: <linux-usb+bounces-10687-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10688-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF1188D403D
-	for <lists+linux-usb@lfdr.de>; Wed, 29 May 2024 23:24:40 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 824F08D4070
+	for <lists+linux-usb@lfdr.de>; Wed, 29 May 2024 23:44:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 63A83288778
-	for <lists+linux-usb@lfdr.de>; Wed, 29 May 2024 21:24:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0FD99B20F1A
+	for <lists+linux-usb@lfdr.de>; Wed, 29 May 2024 21:44:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61F201C8FCD;
-	Wed, 29 May 2024 21:24:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB2F61C9EBF;
+	Wed, 29 May 2024 21:44:40 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F2D2E542
-	for <linux-usb@vger.kernel.org>; Wed, 29 May 2024 21:24:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7250E1C9EAC
+	for <linux-usb@vger.kernel.org>; Wed, 29 May 2024 21:44:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717017875; cv=none; b=qhS9cGcwHCpRu6P83MijQwkAa0OgcdxdAc/bokt5ULa5m+PRg5AnxkkKN39Leo7v6eow2GHlMjcBIA6Lee9XOatJsWJTVgldm7EV9+riKqhU1EX9kZLcUbh55onmzkX7mwoM3uN265qNRVbAIU3tL/T9L+SPD+F31As3wjJS/0E=
+	t=1717019080; cv=none; b=YVrErjdk6Hb4Yw/9RHlS4/6Lt2ojps7Zm6DnUE27p/GLE2yxDCxm9h8zgT/3WyduomjRfVgy/I2IkWoHDY/koaQJvyO1gXFNbRsLY/1u6KveOYT09d9UZzjFxlDhw84ubqUkaR4QbXS4atvxPyG248Jr+ht9vjPQcu2AnubZqS4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717017875; c=relaxed/simple;
-	bh=AiobMrGQILT4QrzJcMsxFSTQflVP48dyRLKT6RFHuZw=;
+	s=arc-20240116; t=1717019080; c=relaxed/simple;
+	bh=59PbtvkDGwCHUpLcKsM3XXYO1OZor26gsdv/VJrP7sw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZXJJoqjeAkPlx3BrkncrzytA6fLC0YLCm9fD8J3kb+0KW/vPa10yBiPdk/r51Ai7yxoidaV7QsHpPV+YgHQBo24E71wji3mt2RS8zQGxZ7uc1mfSc2+LkF1XPC8B7zI0H/Ud92snB1AVQtdJ62zj78QLGMg3nckj8Ro6wmI+69c=
+	 Content-Type:Content-Disposition:In-Reply-To; b=XF48pICTqW7CGeVYnxzS226bukzr2Pgqh1zD3650guQn07kROZr0keT1P1jZI41L+axdth4EHIOMI9pk7zMWVLbiQytLLAlQIYA6tfcd7iHnRP3U0mMQknO22+hl5YHJBY5rkwW9q+OnE35lQSbhQ8fR3k9DNqaeRi87c4qvh8g=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -33,42 +33,34 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <mgr@pengutronix.de>)
-	id 1sCQmS-0007MA-ME; Wed, 29 May 2024 23:24:20 +0200
+	id 1sCR5q-0000wQ-9Y; Wed, 29 May 2024 23:44:22 +0200
 Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <mgr@pengutronix.de>)
-	id 1sCQmQ-003Vmo-MZ; Wed, 29 May 2024 23:24:18 +0200
+	id 1sCR5n-003Vqr-5X; Wed, 29 May 2024 23:44:19 +0200
 Received: from mgr by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
 	(envelope-from <mgr@pengutronix.de>)
-	id 1sCQmQ-003IbX-1w;
-	Wed, 29 May 2024 23:24:18 +0200
-Date: Wed, 29 May 2024 23:24:18 +0200
+	id 1sCR5n-003Ijz-0F;
+	Wed, 29 May 2024 23:44:19 +0200
+Date: Wed, 29 May 2024 23:44:19 +0200
 From: Michael Grzeschik <mgr@pengutronix.de>
-To: Avichal Rakesh <arakesh@google.com>
-Cc: Alan Stern <stern@rowland.harvard.edu>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Daniel Scally <dan.scally@ideasonboard.com>,
+To: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+Cc: Eric Van Hensbergen <ericvh@kernel.org>,
+	Latchesar Ionkov <lucho@ionkov.net>,
+	Dominique Martinet <asmadeus@codewreck.org>,
+	Christian Schoenebeck <linux_oss@crudebyte.com>,
+	Jonathan Corbet <corbet@lwn.net>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jayant Chowdhary <jchowdhary@google.com>,
-	"etalvala@google.com" <etalvala@google.com>,
-	Michael Riesch <michael.riesch@wolfvision.net>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: Re: [PATCH 0/3] usb: gadget: uvc: allocate requests based on frame
- interval length and buffersize
-Message-ID: <ZledAuxYrxZlJ0ow@pengutronix.de>
-References: <Zk03Ys1rA0I5yiZy@pengutronix.de>
- <20240522014132.xlf7azgq2urfff2d@synopsys.com>
- <3f404a27-50e8-42c5-a497-b46751154613@rowland.harvard.edu>
- <20240522171640.iuol4672rnklc35g@synopsys.com>
- <Zk4td_0RR0cMJKro@pengutronix.de>
- <f4f0b38a-1f8e-4cf5-8cf1-6da337a1c3c0@google.com>
- <ZlY88BebTEZs6urD@pengutronix.de>
- <0642b7a2-0982-4529-b742-3310f34d16b9@google.com>
- <ZlZeHLmKnw1mApKM@pengutronix.de>
- <adabc6f5-1b87-4bbe-9070-984f0acc8e75@google.com>
+	v9fs@lists.linux.dev, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	kernel@pengutronix.de, Jan Luebbe <jlu@pengutronix.de>
+Subject: Re: [PATCH v5 3/3] tools: usb: p9_fwd: add usb gadget packet
+ forwarder script
+Message-ID: <ZlehszQxJ5I0AvcE@pengutronix.de>
+References: <20240116-ml-topic-u9p-v5-0-5ed0abd53ef5@pengutronix.de>
+ <20240116-ml-topic-u9p-v5-3-5ed0abd53ef5@pengutronix.de>
+ <50c62db3-060d-4b21-ae28-629003611e1a@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -76,9 +68,9 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="5ybq4RvHIPSf7f10"
+	protocol="application/pgp-signature"; boundary="OF2oatAapDKBaTSq"
 Content-Disposition: inline
-In-Reply-To: <adabc6f5-1b87-4bbe-9070-984f0acc8e75@google.com>
+In-Reply-To: <50c62db3-060d-4b21-ae28-629003611e1a@collabora.com>
 X-Sent-From: Pengutronix Hildesheim
 X-URL: http://www.pengutronix.de/
 X-Accept-Language: de,en
@@ -89,301 +81,395 @@ X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expand
 X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
 
---5ybq4RvHIPSf7f10
+--OF2oatAapDKBaTSq
 Content-Type: text/plain; charset=iso-8859-15; format=flowed
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, May 28, 2024 at 05:33:46PM -0700, Avichal Rakesh wrote:
+On Tue, May 28, 2024 at 08:41:12PM +0200, Andrzej Pietrasiewicz wrote:
+>Hi,
 >
->
->On 5/28/24 15:43, Michael Grzeschik wrote:
->> On Tue, May 28, 2024 at 02:27:34PM -0700, Avichal Rakesh wrote:
->>>
->>>
->>> On 5/28/24 13:22, Michael Grzeschik wrote:
->>>> On Tue, May 28, 2024 at 10:30:30AM -0700, Avichal Rakesh wrote:
->>>>>
->>>>>
->>>>> On 5/22/24 10:37, Michael Grzeschik wrote:
->>>>>> On Wed, May 22, 2024 at 05:17:02PM +0000, Thinh Nguyen wrote:
->>>>>>> On Wed, May 22, 2024, Alan Stern wrote:
->>>>>>>> On Wed, May 22, 2024 at 01:41:42AM +0000, Thinh Nguyen wrote:
->>>>>>>> > On Wed, May 22, 2024, Michael Grzeschik wrote:
->>>>>>>> > > On Fri, May 17, 2024 at 01:44:05AM +0000, Thinh Nguyen wrote:
->>>>>>>> > > > For isoc endpoint IN, yes. If the host requests for isoc dat=
-a IN while
->>>>>>>> > > > no TRB is prepared, then the controller will automatically s=
-end 0-length
->>>>>>>> > > > packet respond.
->>>>>>>> > >
->>>>>>>> > > Perfect! This will help a lot and will make active queueing of=
- own
->>>>>>>> > > zero-length requests run unnecessary.
->>>>>>>> >
->>>>>>>> > Yes, if we rely on the current start/stop isoc transfer scheme f=
-or UVC,
->>>>>>>> > then this will work.
->>>>>>>>
->>>>>>>> You shouldn't rely on this behavior.=A0 Other device controllers m=
-ight not
->>>>>>>> behave this way; they might send no packet at all to the host (cau=
-sing a
->>>>>>>> USB protocol error) instead of sending a zero-length packet.
->>>>>>>
->>>>>>> I agree. The dwc3 driver has this workaround to somewhat work with =
-the
->>>>>>> UVC. This behavior is not something the controller expected, and th=
-is
->>>>>>> workaround should not be a common behavior for different function
->>>>>>> driver/protocol. Since this behavior was added a long time ago, it =
-will
->>>>>>> remain the default behavior in dwc3 to avoid regression with UVC (at
->>>>>>> least until the UVC is changed). However, it would be nice for UVC =
-to
->>>>>>> not rely on this.
->>>>>>
->>>>>> With "this" you mean exactly the following commit, right?
->>>>>>
->>>>>> (f5e46aa4 usb: dwc3: gadget: when the started list is empty stop the=
- active xfer)
->>>>>>
->>>>>> When we start questioning this, then lets dig deeper here.
->>>>>>
->>>>>> With the fast datarate of at least usb superspeed shouldn't they not=
- all
->>>>>> completely work asynchronous with their in flight trbs?
->>>>>>
->>>>>> In my understanding this validates that, with at least superspeed we=
- are
->>>>>> unlikely to react fast enough to maintain a steady isoc dataflow, si=
-nce
->>>>>> the driver above has to react to errors in the processing context.
->>>>>>
->>>>>> This runs the above patch (f5e46aa4) a gadget independent solution
->>>>>> which has nothing to do with uvc in particular IMHO.
->>>>>>
->>>>>> How do other controllers and their drivers work?
->>>>>>
->>>>>>> Side note, when the dwc3 driver reschedules/starts isoc transfer ag=
-ain,
->>>>>>> the first transfer will be scheduled go out at some future interval=
- and
->>>>>>> not the next immediate microframe. For UVC, it probably won't be a
->>>>>>> problem since it doesn't seem to need data going out every interval.
->>>>>>
->>>>>> It should not make a difference. [TM]
->>>>>>
->>>>>
->>>>>
->>>>> Sorry for being absent for a lot of this discussion.
->>>>>
->>>>> I want to take a step back from the details of how we're
->>>>> solving the problem to what problems we're trying to solve.
->>>>>
->>>>> So, question(s) for Michael, because I don't see an explicit
->>>>> answer in this thread (and my sincerest apologies if they've
->>>>> been answered already and I missed it):
->>>>>
->>>>> What exactly is the bug (or bugs) we're trying to solve here?
->>>>>
->>>>> So far, it looks like there are two main problems being
->>>>> discussed:
->>>>>
->>>>> 1. Reducing the bandwidth usage of individual usb_requests
->>>>> 2. Error handling for when transmission over the wire fails.
->>>>>
->>>>> Is that correct, or are there other issues at play here?
->>>>
->>>> That is correct.
->>>>
->>>>> (1) in isolation should be relatively easy to solve: Just
->>>>> smear the encoded frame across some percentage
->>>>> (prefereably < 100%) of the usb_requests in one
->>>>> video frame interval.
->>>>
->>>> Right.
->>>>
->>>>> (2) is more complicated, and your suggestion is to have a
->>>>> sentinel request between two video frames that tells the
->>>>> host if the transmission of "current" video frame was
->>>>> successful or not. (Is that correct?)
->>>>
->>>> Right.
->>>>
->>>>> Assuming my understanding of (2) is correct, how should
->>>>> the host behave if the transmission of the sentinel
->>>>> request fails after the video frame was sent
->>>>> successfully (isoc is best effort so transmission is
->>>>> never guaranteed)?
->>>>
->>>> If we have transmitted all requests of the frame but would only miss t=
-he
->>>> sentinel request to the host that includes the EOF, the host could
->>>> rather show it or drop it. The drop would not be necessary since the
->>>> host did see all data of the frame. The user would not see any
->>>> distortion in both cases.
->>>>
->>>> If we have transmitted only partial data of the frame it would be
->>>> preferred if the host would drop the frame that did not finish with an
->>>> proper EOF tag.
->>>>
->>>> AFAIK the linux kernel would still show the frame if the FID of the
->>>> currently handled request would change and would take this as the end =
-of
->>>> frame indication. But I am not totally sure if this is by spec or
->>>> optional.
->>>>
->>>> One option to be totally sure would be to resend the sentinel request =
-to
->>>> be properly transmitted before starting the next frame. This resend
->>>> polling would probably include some extra zero-length requests. But al=
-so
->>>> if this resend keeps failing for n times, the driver should doubt there
->>>> is anything sane going on with the USB connection and bail out somehow.
->>>>
->>>> Since we try to tackle case (1) to avoid transmit errors and also avoid
->>>> creating late enqueued requests in the running isoc transfer, the over
->>>> all chance to trigger missed transfers should be minimal.
->>>
->>> Gotcha. It seems like the UVC gadget driver implicitly assumes that EOF
->>> flag will be used although the userspace application can technically
->>> make it optional.
+>W dniu 28.05.2024 o=A000:08, Michael Grzeschik pisze:
+>>This patch is adding an small python tool to forward 9pfs requests
+>>from the USB gadget to an existing 9pfs TCP server. Since currently all
+>>9pfs servers lack support for the usb transport this tool is an useful
+>>helper to get started.
 >>
->> That is not all. The additional UVC_STREAM_ERR tag on the sentinel
->> request can be set optional by the host driver. But by spec the
->> userspace application has to drop the frame when the flag was set.
->
->Looking at the UVC specs, the ERR bit doesn't seem to refer to actual
->transmission error, only errors in frame generation (Section 4.3.1.7
->of UVC 1.5 Class Specification). Maybe "data discontinuity" can be
->used but the examples given are bad media, and encoder issues, which
->suggests errors at higher level than the wire.
-
-Oh! That is a new perspective I did not consider.
-
-With the definition of UVC_STREAM_ERR by spec, the uvc_video driver
-would in no case set this header bit for the current frame on its own?
-Is that correct?
-
->> With my proposal this flag will be set, whenever we find out that
->> the currently transferred frame was erroneous.
+>>Refer the Documentation section "USBG Example" in
+>>Documentation/filesystems/9p.rst on how to use it.
 >>
->>> Summarizing some of the discussions above:
->>> 1. UVC gadget driver should _not_ rely on the usb controller to
->>> =A0 enqueue 0-length requests on UVC gadget drivers behalf;
->>> 2. However keeping up the backpressure to the controller means the
->>> =A0 EOF request will be delayed behind all the zero-length requests.
+>>Signed-off-by: Jan Luebbe <jlu@pengutronix.de>
+>>Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
 >>
->> Exactly, this is why we have to somehow finetune the timedelay between
->> requests that trigger interrupts. And also monitor the amount of
->> requests currently enqueued in the hw ringbuffer. So that our drivers
->> enqueue dequeue mechanism is virtually adding only the minimum amount
->> of necessary zero-length requests in the hardware. This should be
->> possible.
+>>---
+>>v4 -> v5:
+>>   - updated documentation for new subcommands list/connect
+>>   - run ruff format
+>>   - make vid and pid parameterized
+>
+>Thanks for adding that.
+>
+>>   - add list as subcommand to scan for devices
+>>   - move connect to extra subcommand
+>>v3 -> v4: -
+>>v2 -> v3: -
+>>v1 -> v2:
+>>   - added usbg 9pfs detailed instructions to 9p.rst doc
+>>---
+>>  Documentation/filesystems/9p.rst |  41 +++++++
+>>  tools/usb/p9_fwd.py              | 243 ++++++++++++++++++++++++++++++++=
++++++++
+>>  2 files changed, 284 insertions(+)
 >>
->> I am currently thinking through the remaining steps the pump worker has
->> to do on each wakeup to maintain the minimum threshold while waiting
->> with submitting requests that contain actual image payload.
->>
->>> Out of curiosity: What is wrong with letting the host rely on
->>> FID alone? Decoding the jpeg payload _should_ fail if any of the
->>> usb_requests containing the payload failed to transmit.
->>
->> This is not totally true. We saw partially rendered jpeg frames on the
->> host stream. How the host behaves with broken data is totally undefined
->> if the typical uvc flags EOF/ERR are not used as specified. Then think
->> about uncompressed formats. So relying on the transferred image format
->> to solve our problems is just as wrong as relying on the gadgets
->> hardware behavior.
+>>diff --git a/Documentation/filesystems/9p.rst b/Documentation/filesystems=
+/9p.rst
+>>index 10cf79dc287f8..2cc85f3e8659f 100644
+>>--- a/Documentation/filesystems/9p.rst
+>>+++ b/Documentation/filesystems/9p.rst
+>>@@ -67,6 +67,47 @@ To mount a 9p FS on a USB Host accessible via the gadg=
+et as root filesystem::
+>>  where <device> is the tag associated by the usb gadget transport.
+>>  It is defined by the configfs instance name.
+>>+USBG Example
+>>+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>>+
+>>+The USB host exports a filesystem, while the gadget on the USB device
+>>+side makes it mountable.
+>>+
+>>+Diod (9pfs server) and the forwarder are on the development host, where
+>>+the root filesystem is actually stored. The gadget is initialized during
+>>+boot (or later) on the embedded board. Then the forwarder will find it
+>>+on the USB bus and start forwarding requests.
+>>+
+>>+In this case the 9p requests come from the device and are handled by the
+>>+host. The reason is that USB device ports are normally not available on
+>>+PCs, so a connection in the other direction would not work.
+>>+
+>>+When using the usbg transport, for now there is no native usb host
+>>+service capable to handle the requests from the gadget driver. For
+>>+this we have to use the extra python tool p9_fwd.py from tools/usb.
+>>+
+>>+Just start the 9pfs capable network server like diod/nfs-ganesha e.g.:
+>>+
+>>+        $ diod -f -n -d 0 -S -l 0.0.0.0:9999 -e $PWD
+>>+
+>>+Optionaly scan your bus if there are more then one usbg gadgets to find =
+their path:
+>>+
+>>+        $ python $kernel_dir/tools/usb/p9_fwd.py list
+>>+
+>>+        Bus | Addr | Manufacturer     | Product          | ID        | P=
+ath
+>>+        --- | ---- | ---------------- | ---------------- | --------- | -=
+---
+>>+          2 |   67 | unknown          | unknown          | 1d6b:0109 | 2=
+-1.1.2
+>>+          2 |   68 | unknown          | unknown          | 1d6b:0109 | 2=
+-1.1.3
+>>+
+>>+Then start the python transport:
+>>+
+>>+        $ python $kernel_dir/tools/usb/p9_fwd.py --path 2-1.1.2 connect =
+-p 9999
+>>+
+>>+After that the gadget driver can be used as described above.
+>>+
+>>+One use-case is to use it as an alternative to NFS root booting during
+>>+the development of embedded Linux devices.
+>>+
+>>  Options
+>>  =3D=3D=3D=3D=3D=3D=3D
+>>diff --git a/tools/usb/p9_fwd.py b/tools/usb/p9_fwd.py
+>>new file mode 100755
+>>index 0000000000000..7bedefce75c7b
+>>--- /dev/null
+>>+++ b/tools/usb/p9_fwd.py
+>>@@ -0,0 +1,243 @@
+>>+#!/usr/bin/env python3
+>>+# SPDX-License-Identifier: GPL-2.0
+>>+
+>>+import argparse
+>>+import errno
+>>+import logging
+>>+import socket
+>>+import struct
+>>+import time
+>>+
+>>+import usb.core
+>>+import usb.util
+>>+
+>>+
+>>+def path_from_usb_dev(dev):
+>>+    """Takes a pyUSB device as argument and returns a string.
+>>+    The string is a Path representation of the position of the USB devic=
+e on the USB bus tree.
+>>+
+>>+    This path is used to find a USB device on the bus or all devices con=
+nected to a HUB.
+>>+    The path is made up of the number of the USB controller followed be =
+the ports of the HUB tree."""
+>>+    if dev.port_numbers:
+>>+        dev_path =3D ".".join(str(i) for i in dev.port_numbers)
+>>+        return f"{dev.bus}-{dev_path}"
+>>+    return ""
+>>+
+>>+
+>>+HEXDUMP_FILTER =3D "".join(chr(x).isprintable() and chr(x) or "." for x =
+in range(128)) + "." * 128
+>>+
+>>+
+>>+class Forwarder:
+>>+    @staticmethod
+>>+    def _log_hexdump(data):
+>>+        if not logging.root.isEnabledFor(logging.TRACE):
+>>+            return
+>>+        L =3D 16
+>>+        for c in range(0, len(data), L):
+>>+            chars =3D data[c : c + L]
+>>+            dump =3D " ".join(f"{x:02x}" for x in chars)
+>>+            printable =3D "".join(HEXDUMP_FILTER[x] for x in chars)
+>>+            line =3D f"{c:08x}  {dump:{L*3}s} |{printable:{L}s}|"
+>>+            logging.root.log(logging.TRACE, "%s", line)
+>>+
+>>+    def __init__(self, server, vid, pid, path):
+>>+        self.stats =3D {
+>>+            "c2s packets": 0,
+>>+            "c2s bytes": 0,
+>>+            "s2c packets": 0,
+>>+            "s2c bytes": 0,
+>>+        }
+>>+        self.stats_logged =3D time.monotonic()
+>>+
+>>+        def find_filter(dev):
+>>+            dev_path =3D path_from_usb_dev(dev)
+>>+            if path is not None:
+>>+                return dev_path =3D=3D path
+>>+            return True
+>>+
+>>+        dev =3D usb.core.find(idVendor=3Dvid, idProduct=3Dpid, custom_ma=
+tch=3Dfind_filter)
+>>+        if dev is None:
+>>+            raise ValueError("Device not found")
+>>+
+>>+        logging.info(f"found device: {dev.bus}/{dev.address} located at =
+{path_from_usb_dev(dev)}")
+>>+
+>>+        # dev.set_configuration() is not necessary since g_multi has onl=
+y one
+>>+        usb9pfs =3D None
+>>+        # g_multi adds 9pfs as last interface
+>>+        cfg =3D dev.get_active_configuration()
+>>+        for intf in cfg:
+>>+            # we have to detach the usb-storage driver from multi gadget=
+ since
+>>+            # stall option could be set, which will lead to spontaneous =
+port
+>>+            # resets and our transfers will run dead
+>>+            if intf.bInterfaceClass =3D=3D 0x08:
+>>+                if dev.is_kernel_driver_active(intf.bInterfaceNumber):
+>>+                    dev.detach_kernel_driver(intf.bInterfaceNumber)
+>>+
+>>+            if intf.bInterfaceClass =3D=3D 0xFF and intf.bInterfaceSubCl=
+ass =3D=3D 0xFF and intf.bInterfaceProtocol =3D=3D 0x09:
+>>+                usb9pfs =3D intf
+>>+        if usb9pfs is None:
+>>+            raise ValueError("Interface not found")
+>>+
+>>+        logging.info(f"claiming interface:\n{usb9pfs}")
+>>+        usb.util.claim_interface(dev, usb9pfs.bInterfaceNumber)
+>>+        ep_out =3D usb.util.find_descriptor(
+>>+            usb9pfs,
+>>+            custom_match=3Dlambda e: usb.util.endpoint_direction(e.bEndp=
+ointAddress) =3D=3D usb.util.ENDPOINT_OUT,
+>>+        )
+>>+        assert ep_out is not None
+>>+        ep_in =3D usb.util.find_descriptor(
+>>+            usb9pfs,
+>>+            custom_match=3Dlambda e: usb.util.endpoint_direction(e.bEndp=
+ointAddress) =3D=3D usb.util.ENDPOINT_IN,
+>>+        )
+>>+        assert ep_in is not None
+>>+        logging.info("interface claimed")
+>>+
+>>+        self.ep_out =3D ep_out
+>>+        self.ep_in =3D ep_in
+>>+        self.dev =3D dev
+>>+
+>>+        # create and connect socket
+>>+        self.s =3D socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+>>+        self.s.connect(server)
+>>+
+>>+        logging.info("connected to server")
+>>+
+>>+    def c2s(self):
+>>+        """forward a request from the USB client to the TCP server"""
+>>+        data =3D None
+>>+        while data is None:
+>>+            try:
+>>+                logging.log(logging.TRACE, "c2s: reading")
+>>+                data =3D self.ep_in.read(self.ep_in.wMaxPacketSize)
+>>+            except usb.core.USBTimeoutError:
+>>+                logging.log(logging.TRACE, "c2s: reading timed out")
+>>+                continue
+>>+            except usb.core.USBError as e:
+>>+                if e.errno =3D=3D errno.EIO:
+>>+                    logging.debug("c2s: reading failed with %s, retrying=
+", repr(e))
+>>+                    time.sleep(0.5)
+>>+                    continue
+>>+                logging.error("c2s: reading failed with %s, aborting", r=
+epr(e))
+>>+                raise
+>>+        size =3D struct.unpack("<I", data[:4])[0]
+>>+        while len(data) < size:
+>>+            data +=3D self.ep_in.read(size - len(data))
+>>+        logging.log(logging.TRACE, "c2s: writing")
+>>+        self._log_hexdump(data)
+>>+        self.s.send(data)
+>>+        logging.debug("c2s: forwarded %i bytes", size)
+>>+        self.stats["c2s packets"] +=3D 1
+>>+        self.stats["c2s bytes"] +=3D size
+>>+
+>>+    def s2c(self):
+>>+        """forward a response from the TCP server to the USB client"""
+>>+        logging.log(logging.TRACE, "s2c: reading")
+>>+        data =3D self.s.recv(4)
+>>+        size =3D struct.unpack("<I", data[:4])[0]
+>>+        while len(data) < size:
+>>+            data +=3D self.s.recv(size - len(data))
+>>+        logging.log(logging.TRACE, "s2c: writing")
+>>+        self._log_hexdump(data)
+>>+        while data:
+>>+            written =3D self.ep_out.write(data)
+>>+            assert written > 0
+>>+            data =3D data[written:]
+>>+        if size % self.ep_out.wMaxPacketSize =3D=3D 0:
+>>+            logging.log(logging.TRACE, "sending zero length packet")
+>>+            self.ep_out.write(b"")
+>>+        logging.debug("s2c: forwarded %i bytes", size)
+>>+        self.stats["s2c packets"] +=3D 1
+>>+        self.stats["s2c bytes"] +=3D size
+>>+
+>>+    def log_stats(self):
+>>+        logging.info("statistics:")
+>>+        for k, v in self.stats.items():
+>>+            logging.info(f"  {k+':':14s} {v}")
+>>+
+>>+    def log_stats_interval(self, interval=3D5):
+>>+        if (time.monotonic() - self.stats_logged) < interval:
+>>+            return
+>>+
+>>+        self.log_stats()
+>>+        self.stats_logged =3D time.monotonic()
+>>+
+>>+
+>>+def try_get_usb_str(dev, name):
+>>+    try:
+>>+        with open(f"/sys/bus/usb/devices/{dev.bus}-{dev.address}/{name}"=
+) as f:
+>>+            return f.read().strip()
+>>+    except FileNotFoundError:
+>>+        return None
+>>+
+>>+
+>>+def list_usb(args):
+>>+    vid, pid =3D [int(x, 16) for x in args.id.split(":", 1)]
+>>+
+>>+    print("Bus | Addr | Manufacturer     | Product          | ID        =
+| Path")
+>>+    print("--- | ---- | ---------------- | ---------------- | --------- =
+| ----")
+>>+    for dev in usb.core.find(find_all=3DTrue, idVendor=3Dvid, idProduct=
+=3Dpid):
+>>+        path =3D path_from_usb_dev(dev) or ""
+>>+        manufacturer =3D try_get_usb_str(dev, "manufacturer") or "unknow=
+n"
+>>+        product =3D try_get_usb_str(dev, "product") or "unknown"
+>>+        print(
+>>+            f"{dev.bus:3} | {dev.address:4} | {manufacturer:16} | {produ=
+ct:16} | {dev.idVendor:04x}:{dev.idProduct:04x} | {path:18}"
+>>+        )
+>>+
+>>+
+>>+def connect(args):
+>>+    vid, pid =3D [int(x, 16) for x in args.id.split(":", 1)]
+>>+
+>>+    f =3D Forwarder(server=3D(args.server, args.port), vid=3Dvid, pid=3D=
+pid, path=3Dargs.path)
+>>+
+>>+    try:
+>>+        while True:
+>>+            f.c2s()
+>>+            f.s2c()
+>>+            f.log_stats_interval()
+>>+    finally:
+>>+        f.log_stats()
+>>+
+>>+
+>>+def main():
+>>+    parser =3D argparse.ArgumentParser(
+>>+        description=3D"Forward 9PFS requests from USB to TCP",
+>>+    )
+>>+
+>>+    parser.add_argument("--id", type=3Dstr, default=3D"1d6b:0109", help=
+=3D"vid:pid of target device")
+>>+    parser.add_argument("--path", type=3Dstr, default=3D"", help=3D"path=
+ of target device")
 >
->Do you know if the partially rendered frames were valid JPEGs, or
->if the host was simply making a best effort at displaying a broken
->JPEG? Perhaps the fix should go to the host instead?
+>I had to specify both --id and --path, otherwise I was getting
+>"device not found".
 
-I can fully reproduce this with linux and windows hosts. For linux
-machines I saw that the host was taking the FID change as a marker
-to see the previous frame as ready and just rendered what got through.
-This did not lead to garbage but only to partially displayed frames
-with jpeg macroblock alignment.
+This is odd. What was your list command saying about the available
+devices?
 
->Following is my opinion, feel free to disagree (and correct me if
->something is factually incorrect):
->
->The fundamental issue here is that ISOC doesn't guarantee
->delivery of usb_requests or even basic data consistency upon delivery.
->So the gadget driver has no way to know the state of transmitted data.
->The gadget driver is notified of underruns but not of any other issues,
->and ideally we should never have an underrun if the zero-length
->backpressure is working as intended.
->
->So, UVC gadget driver can reduce the number of errors, but it'll never be
->able to guarantee that the data transmitted to the host isn't somehow
->corrupted or missing unless a more reliable mode of transmission
->(bulk, for example) is used.
->
->All of this to say: The host absolutely needs to be able to handle
->all sorts of invalid and broken payloads. How the host handles it
->might be undefined, but the host can never rely on perfect knowledge
->about the transmission state. In cases like these, where the underlying
->transport is unreliable, the burden of enforcing consistency moves up
->a layer, i.e. to the encoded payload in this case. So it is perfectly
->fine for the host to rely on the encoding to determine if the payload
->is corrupt and handle it accordingly.
-
-Right.
-
->As for uncompressed format, you're correct that subtle corruptions
->may not be caught, but outright missing usb_requests can be easily
->checked by simply looking at the number of bytes in the payload. YUV
->frames are all of the same (predetermined) size for a given resolution.
-
-That was also my thought about five minutes after I did send you the
-previous mail. So sure, this is no real issue for the host.
-
->So my recommendation is the following:
->1. Fix the bandwidth problem by splitting the encoded video frame
->   into more usb_requests (as your patch already does) making sure
->   there are enough free usb_request to encode the video frame in
->   one burst so we don't accidentally inflate the transmission
->   duration of a video frame by sneaking in zero-length requests in
->   the middle.
-
-Ack. This should already solve a lot of issues.
-
-For this I would still suggest to move the usb_ep_queue to be done in
-the pump worker again. Its a bit back and forth, but IMHO its worth the
-extra mile since only this way we would respect the dwc3 interrupt
-threads assumption to run *very* short.
-
->2. Unless there is an unusually high rate of transmission failures
->   when using the UVC gadget driver, it might be worth fixing the
->   host side driver to handle broken frames better instead (assuming
->   host is linux as well).
-
-Agreed, but this needs a separate scoped undestanding of the host side
-behaviour over all layers.
-
->2. Tighten up the error checking in UVC gadget driver -- We drop the
->   current frame whenever an EXDEV happens which is wrong. We should
->   only be dropping the current frame if the EXDEV corresponds to the
->   frame currently being encoded.
-
-What do you mean by drop?
-
-I would suggest to immediatly switch the uvc_buffer that is being
-enqueued and start queueing prepared requests from the next buffers prep
-list. As suggested, the idea is to have per uvc_buffer prep_list
-requests which would make this task easy.
-
->   If the frame is already fully queued to the usb controller, the host
->   can handle missing payload as it sees fit.
-
-Ack
-
-This roadmap sounds like a good one.
+I tested this with the default vid:pid as described above (1d6b:0109)
+which worked fine with path alone.
 
 Michael
+
+>>+    parser.add_argument("-v", "--verbose", action=3D"count", default=3D0)
+>>+
+>>+    subparsers =3D parser.add_subparsers()
+>>+    subparsers.required =3D True
+>>+    subparsers.dest =3D "command"
+>>+
+>>+    parser_list =3D subparsers.add_parser("list", help=3D"List all conne=
+cted 9p gadgets")
+>>+    parser_list.set_defaults(func=3Dlist_usb)
+>>+
+>>+    parser_connect =3D subparsers.add_parser(
+>>+        "connect", help=3D"Forward messages between the usb9pfs gadget a=
+nd the 9p server"
+>>+    )
+>>+    parser_connect.set_defaults(func=3Dconnect)
+>>+    connect_group =3D parser_connect.add_argument_group()
+>>+    connect_group.required =3D True
+>>+    parser_connect.add_argument("-s", "--server", type=3Dstr, default=3D=
+"127.0.0.1", help=3D"server hostname")
+>>+    parser_connect.add_argument("-p", "--port", type=3Dint, default=3D56=
+4, help=3D"server port")> +
+>>+    args =3D parser.parse_args()
+>>+
+>>+    logging.TRACE =3D logging.DEBUG - 5
+>>+    logging.addLevelName(logging.TRACE, "TRACE")
+>>+
+>>+    if args.verbose >=3D 2:
+>>+        level =3D logging.TRACE
+>>+    elif args.verbose:
+>>+        level =3D logging.DEBUG
+>>+    else:
+>>+        level =3D logging.INFO
+>>+    logging.basicConfig(level=3Dlevel, format=3D"%(asctime)-15s %(leveln=
+ame)-8s %(message)s")
+>>+
+>>+    args.func(args)
+>>+
+>>+
+>>+if __name__ =3D=3D "__main__":
+>>+    main()
+>>
+>
+>
 
 --=20
 Pengutronix e.K.                           |                             |
@@ -391,25 +477,25 @@ Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
 31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
 Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
---5ybq4RvHIPSf7f10
+--OF2oatAapDKBaTSq
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmZXnP8ACgkQC+njFXoe
-LGSq5Q//WUknvXh7uLTVJLzkjy1O09hNKS6z5lk5GMuIdlOYRBOBR3Kpr5xcVVOE
-YudCL2TCdECY/yCq+BCtm3XeXCvXHFGLUHxzjsl/5X1CDNNGTrbRluH/pBQIMzBB
-9jmicboVogS1U8fzDqhYbDhhnt/qe1PzaLWbg0H6+H8SPpwKlbjCvkCwO41pG4DO
-TLe/k9kDfn/RZcpqyac0V9UQSmvruIJfZKJfk7qrB0z76vOK/uWDlTYkyYN4s8Kk
-MKuvLI420C9SbnkPj5vYNzB+SPWWx1xz3WnIQkjOpp3wY4a1oyEr+znai1s/eS3k
-zjB3e0Lcus3cm08Ef/Ic+riGEGBNFscyEBpmMsnz+njC4E5z5uc0Zj5YZ635/NBl
-Spzcf/pNcVWoXvXXsDkggNC/imTyg4stxjnIDMsuhC/7McZjxIfHIbjbvvh0zYvy
-y/SWmG9MpfpeJcjxQQNQ/OJOZu89H1Drs4uEpPLBaEOzh2COCilStyNez/mwvhOq
-72GwFyl8DwN4IljZh3bZq7U/UN/mmTG7mERbIhfdSinbruSYiEkWqiOK86wZufjp
-MPqz4m8X4pK2B7KFvtCI538/Rj30rJyHNQmK7Amgcs7nQ4g5vue3ilTiyEK6M5bp
-9SIUb/yBW1gGRiQWIJiOUzW4tdoTlayPMAI8yA4A4l7eER055w0=
-=SqTy
+iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmZXoa8ACgkQC+njFXoe
+LGTXAA//Q+Sk/86rQAKVKafvT+Jk8xV/mm7TMTtqaIOwMJ9OBbdkU8iUhtF0H8KF
+HOI+Ha5eYW+ir7DGgITGqaaKUSI6P3EyhAslZdnzZRJcdx3YMhFKleQQkLh6Gcrg
+nEmMmjqpfBserP+MrYA4vLBggtOcEyglS5W6ZWF8s2KE9n8IFxWfKpyIiSKKbCxr
+w+2Rm9tJ4X+mMM+Z8tV3Su+gyuQPln5Du2AdqwoM3p8Jo0S5fvTsSEEF4m69MLzm
+vBXvX2+fL2k+QCZJO+IVhtOt/YMMK9EbNvez5/q8tFBUwWU2ZMbexlu7j5lm4awz
+DskTc+yRMC9JgwCDxSe0UjOomAgKZBDMut0yZrJilYeHKZiLcZC9bJlJoMS5qgiY
+Lmfkli00dNJbacIm6ATeuEpMAdPtG3cyugoQLvV2kYzz2mpredojN36/3g1v5lug
+7yg7AGR9mIiOQmJ6B7hFCHqZlE/Q35hxY/Xv1bYIl4c5+QmNkMrGoqVdBW6wzycu
+sdeS/asIn0tQjRhR/3JzXlZuf1upUe+dxMQaK63/f03v2cy1Z8InRchXZUZJv2I+
+KWgHrafqn2l4CkPJo5m0ga1cPqacR4EhakPNO5GOSRQ9ZJ8ZTgF7znqLMWjaIC0P
+ccXT921FzPHcxN53p6a2LjQmq32ga66k8fBoezE4Lk+pmy3TpLc=
+=Ofu+
 -----END PGP SIGNATURE-----
 
---5ybq4RvHIPSf7f10--
+--OF2oatAapDKBaTSq--
 
