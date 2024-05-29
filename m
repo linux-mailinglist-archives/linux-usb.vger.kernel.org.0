@@ -1,330 +1,339 @@
-Return-Path: <linux-usb+bounces-10660-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10661-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 75A4E8D2927
-	for <lists+linux-usb@lfdr.de>; Wed, 29 May 2024 01:57:35 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D27778D2973
+	for <lists+linux-usb@lfdr.de>; Wed, 29 May 2024 02:33:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A8E25B270E7
-	for <lists+linux-usb@lfdr.de>; Tue, 28 May 2024 23:57:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5B1DC1F25562
+	for <lists+linux-usb@lfdr.de>; Wed, 29 May 2024 00:33:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71CD514375F;
-	Tue, 28 May 2024 23:56:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C49915990E;
+	Wed, 29 May 2024 00:33:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="xKbW0B7x"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="X54tpBBF"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E094714374D
-	for <linux-usb@vger.kernel.org>; Tue, 28 May 2024 23:56:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4752D17E8E4
+	for <linux-usb@vger.kernel.org>; Wed, 29 May 2024 00:33:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716940575; cv=none; b=QSvawnrj+dkw2jGbcZRI9z1B2dSVJH4Y5m1LoBbrOcsZBodRdrY1XnhRMNQuEych8iOeOte6PctNN5MS+v5viihbQ9ark6To+faTYygovXRxKQQvhnaWFCStk/LFYN+0z/dlaTgJtUudVWLi5qJSUzo+LU5/rwU473V2fVQgvcc=
+	t=1716942830; cv=none; b=NoXFSsbZX18t1y1o/Fipd70OQcp1DMdp8xO5fbq+idlcgl7ubb3fNpG6jSO5TzNn9iTIJl7DRQrHW5qe6EXXPBzNq8hJIOKP6Dsh3Ah9nCEiKo7o5+Kqb/uDscUGsTJQeqiTfMOxnHx4cm5JU0PZUvfRM1rn2BPigxW4KUS74qI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716940575; c=relaxed/simple;
-	bh=UFnUo5et2nu4ZTLwron8KcsxSOqZm4uccIMJ4BvQ3XM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EvnndGdOZ11YrcZP+F5ZKA6zacj7bitRNbynNL3/JeiuSkK6B3lu0L7QArEO8W/grVtw7M7/8Cjd24ZJ2GflsGT4SQTlMOe648MSWXTVKqf8q2k1CJF9PeC+w/6PDbLNUg9a27f9FkgMOzdE+EXLQOOfeE7q0uMOM/Bs84yM2JE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=xKbW0B7x; arc=none smtp.client-ip=209.85.167.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-52ab1d7243fso260935e87.1
-        for <linux-usb@vger.kernel.org>; Tue, 28 May 2024 16:56:12 -0700 (PDT)
+	s=arc-20240116; t=1716942830; c=relaxed/simple;
+	bh=DnnR4m1p4oU4U6SccO/LeVG9lOdHFpIn9om0icQLd3U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=D5zvRk7LubF+8DXZWyEiyrhUdNErkoPkQMAkWyAYHSvtmctadlVfSb+OLYbB3KF4i2EoNTJtCHh6kqZ7SqdHqB9QOMe6t40WnB+T/CePnoZJ60AS40SWlMnZX2/0aiO1tLS+PHW9o/BjbSg2ftJcHBMeRwXmHL7+5K44Oc221xE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=X54tpBBF; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1f4a5344ec7so2876925ad.1
+        for <linux-usb@vger.kernel.org>; Tue, 28 May 2024 17:33:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1716940571; x=1717545371; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=M4MYPVYNdfA6ot8nLghsVUlr6HtvllgPwAgd9kwmapI=;
-        b=xKbW0B7xa5y17J4mBWrTWCGlZhTKY4tR2rihFm72ghs+tsf2wWEg5VqM624kh4kgw3
-         06T2Jyzn4iahn/7r8zM3wzZ0B8iirM/sPfjSekaXANmChmFRTQvYF2myfM0jsoDyDSrS
-         lGADs0ZZMSLyJDwUrANS2LVrKxFQ34WgPyAC1b8xDqUpboFdLoBjWNSg+RwCY//hc1XI
-         7Z6Wx4/YkRiXccK6gpJq7TYHHOvbI7nNyvGdgImON6Y2ruSo/dfd3py4j4P+y3Je6AM7
-         E6DdVnMnJQ+9oIjNrfwoHQm/1cseV+fL4w7lgTppBDWgZNDB+0KHOEf/ldpbQ4HQSr7B
-         Donw==
+        d=google.com; s=20230601; t=1716942828; x=1717547628; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZEoXkEUUAwl5YxPM26D+WgNJiJo07MgNYdTcPdzNMEE=;
+        b=X54tpBBF1zWpdQbmZzke6l2Yhm0fhcTC+v1DXvU99CFeuyVCtw9+U4jFokedRcHXID
+         r1I2Loz8PXUUTcQxXgAEgB4FECtq5Dx/+vHBiqxjBdfXPqMIb5ZQetTGSdxd45kvabJj
+         0/GApgZYfxDR4kvKSdpUhNhsUFXul3AG+6ztEppbvJm76oOjMn5QQUTv+cw85BjKXebu
+         pyeuabygfVeWk4tXjsMlidvOKDdNjTJl0w7rkYWcX8vTAtSY5rLkdMAQkC4cOtJidMi7
+         xUb1FK14b/HSZ3w+3wujNspCNg0lS95OfnVATqHQCCJD4QEUy9SCnGlAXMjHiGHgl63o
+         Zm7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716940571; x=1717545371;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=M4MYPVYNdfA6ot8nLghsVUlr6HtvllgPwAgd9kwmapI=;
-        b=kXgOF7Qvmov6jFsfxHih7IKZuZITDgLWd094PggoEWTx4J7gPvyySWjyvT5TTWsR2J
-         +O/9YD09jilv1Z3v2daYkPGmDEbGfQzGcgnWG7H5qWzVezHvTXI6lUBF74NHSDiXbK9f
-         qlFe+dmBYOnB1o4DxuYqIGQ7WIrs19y0h1HWsPbJCa8BqyWsCudVIx3HiZVoBRXzb9ez
-         GNFmAeobC01q854bL+LvCfYvgVhoKcIH1EA3AOdxSdYvDggHNXkb92hgY3kh2CrHZ5jX
-         /xwV2ZiURCvCuMKWDDenAt4GQznX/mkt+OP5K6ySqbiso3ewoTNNXmKiJpc/RsiGgqWt
-         7j+w==
-X-Forwarded-Encrypted: i=1; AJvYcCWpXGm/MLLf25kBp3dTlhDo+rN9fUXKvSIIIBoviyA1yKn1bJwcZZv9QpE5CDtzWdygPZm/n7o8d3WdJDhuEqG++gBSWeDjWCc9
-X-Gm-Message-State: AOJu0YxD0kWAoxlAZeRdLcZzWttE4NEGOt8lIdLRQH4I44j1qAbop12d
-	NonCdbkfy11yDWptHCzSG3jOfpOOM2SssfyvglWuqGGvhV9nkhLSaQfRam+sfXw=
-X-Google-Smtp-Source: AGHT+IGTsD1dM3WwZD2UJs8zbC72VrfPx0lRpZvezsImS9eOLf7B6kz3Z1AJOBQKD9VVsfodx+D6aA==
-X-Received: by 2002:ac2:494e:0:b0:524:3177:8e45 with SMTP id 2adb3069b0e04-52966f8f6bcmr8360832e87.68.1716940571039;
-        Tue, 28 May 2024 16:56:11 -0700 (PDT)
-Received: from eriador.lumag.spb.ru (dzdbxzyyyyyyyyyyyykxt-3.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::227])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-529a7fb982esm815183e87.265.2024.05.28.16.56.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 May 2024 16:56:10 -0700 (PDT)
-Date: Wed, 29 May 2024 02:56:09 +0300
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Bjorn Andersson <andersson@kernel.org>, Hans de Goede <hdegoede@redhat.com>, 
-	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
-	linux-pm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	platform-driver-x86@vger.kernel.org, linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
-	Nikita Travkin <nikita@trvn.ru>
-Subject: Re: [PATCH v4 2/6] platform: arm64: add Lenovo Yoga C630 WOS EC
- driver
-Message-ID: <3gbjbuav5l2td5xrfj46krhgdew42medhfrnkd47iahdv4fm3x@qv6jadf6tkol>
-References: <20240528-yoga-ec-driver-v4-0-4fa8dfaae7b6@linaro.org>
- <20240528-yoga-ec-driver-v4-2-4fa8dfaae7b6@linaro.org>
- <2b76f27e-f223-4ff9-880e-9e232ce9ddc6@linaro.org>
+        d=1e100.net; s=20230601; t=1716942828; x=1717547628;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZEoXkEUUAwl5YxPM26D+WgNJiJo07MgNYdTcPdzNMEE=;
+        b=H7ID0z4lY28W2YPssfpO0JOhUgxQPsdjPwvcb9OQOjWBNYJOTABCefhkm6ysd2KVpn
+         wrPSQneiPSjaCPzbFBxgwJhNL7OeYQrIeLXJYDRmdyg6O7Dw4sNElRQXq5ITbb0IHu8M
+         OHm29ZFOMECf3NpUObGnu7uFToBG64XSAHmejOZFVnvpJ1AOGkfN6gODKCkHVdoaMKLz
+         StBuug95D6yiEwdP0VdG+dCI5oR98ni0xWB+KXT0+73NwA+byjgTnj7ICyGtFezy0auN
+         QoDO86rhVDSoFuVhPdIe+VmGpeO7tdNVv+1mfYra8SHRFa2KpkSR4BzOfhFoY/dmL5Qv
+         7Vhw==
+X-Forwarded-Encrypted: i=1; AJvYcCUg4vtWcrVXypxByGGHy7rGkh0ZVC1ZijJtZ3wleCCQFUkxAseyIqyPAKd6XW4z2+M6xdh+LQLPtxaSOSd8+CqBbaVOgPDDkNDg
+X-Gm-Message-State: AOJu0YymVEWBHBeQDkouBaJ2au49JQi9yAQxek0mf2VYZByJtSAgec2n
+	nT1v37b+rEoq9SJNCe1YGgVNRJtME7FuuHSUtb99TR9U1QyB+14sO8n3WGaYlw==
+X-Google-Smtp-Source: AGHT+IGMG4IZrbeGjf0fVtb1fsD40Zt48ILPY0YEhyTQQVy/ubNjlBazTaLP/BgbOqPYwiU1sjCJgw==
+X-Received: by 2002:a17:902:e5cf:b0:1f4:84e6:5a87 with SMTP id d9443c01a7336-1f4e9ea07damr9993335ad.9.1716942828183;
+        Tue, 28 May 2024 17:33:48 -0700 (PDT)
+Received: from [192.168.60.239] (213.126.145.34.bc.googleusercontent.com. [34.145.126.213])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f44c96f67fsm86723345ad.154.2024.05.28.17.33.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 May 2024 17:33:47 -0700 (PDT)
+Message-ID: <adabc6f5-1b87-4bbe-9070-984f0acc8e75@google.com>
+Date: Tue, 28 May 2024 17:33:46 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2b76f27e-f223-4ff9-880e-9e232ce9ddc6@linaro.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/3] usb: gadget: uvc: allocate requests based on frame
+ interval length and buffersize
+To: Michael Grzeschik <mgr@pengutronix.de>
+Cc: Alan Stern <stern@rowland.harvard.edu>,
+ Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+ Daniel Scally <dan.scally@ideasonboard.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Jayant Chowdhary <jchowdhary@google.com>,
+ "etalvala@google.com" <etalvala@google.com>,
+ Michael Riesch <michael.riesch@wolfvision.net>,
+ "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+References: <ZkE-O0yJ33T9hWa0@pengutronix.de>
+ <20240517014359.p2s44ypl4bix4odm@synopsys.com>
+ <Zk03Ys1rA0I5yiZy@pengutronix.de>
+ <20240522014132.xlf7azgq2urfff2d@synopsys.com>
+ <3f404a27-50e8-42c5-a497-b46751154613@rowland.harvard.edu>
+ <20240522171640.iuol4672rnklc35g@synopsys.com>
+ <Zk4td_0RR0cMJKro@pengutronix.de>
+ <f4f0b38a-1f8e-4cf5-8cf1-6da337a1c3c0@google.com>
+ <ZlY88BebTEZs6urD@pengutronix.de>
+ <0642b7a2-0982-4529-b742-3310f34d16b9@google.com>
+ <ZlZeHLmKnw1mApKM@pengutronix.de>
+Content-Language: en-US
+From: Avichal Rakesh <arakesh@google.com>
+In-Reply-To: <ZlZeHLmKnw1mApKM@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Wed, May 29, 2024 at 12:51:04AM +0100, Bryan O'Donoghue wrote:
-> On 28/05/2024 21:44, Dmitry Baryshkov wrote:
-> > Lenovo Yoga C630 WOS is a laptop using Snapdragon 850 SoC. Like many
-> > laptops it uses embedded controller (EC) to perform various platform
-> 
-> an embedded controller
-> 
-> > operations, including, but not limited, to Type-C port control or power
-> > supply handlng.
-> > 
-> > Add the driver for the EC, that creates devices for UCSI and power
-> > supply devices.
-> > 
-> > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > ---
-> >   drivers/platform/arm64/Kconfig                 |  14 ++
-> >   drivers/platform/arm64/Makefile                |   1 +
-> >   drivers/platform/arm64/lenovo-yoga-c630.c      | 279 +++++++++++++++++++++++++
-> >   include/linux/platform_data/lenovo-yoga-c630.h |  42 ++++
-> >   4 files changed, 336 insertions(+)
-> > 
-> > diff --git a/drivers/platform/arm64/Kconfig b/drivers/platform/arm64/Kconfig
-> > index 8fdca0f8e909..8c103b3150d1 100644
-> > --- a/drivers/platform/arm64/Kconfig
-> > +++ b/drivers/platform/arm64/Kconfig
-> > @@ -32,4 +32,18 @@ config EC_ACER_ASPIRE1
-> >   	  laptop where this information is not properly exposed via the
-> >   	  standard ACPI devices.
-> > +config EC_LENOVO_YOGA_C630
-> > +	tristate "Lenovo Yoga C630 Embedded Controller driver"
-> > +	depends on I2C
-> > +	help
-> > +	  Driver for the Embedded Controller in the Qualcomm Snapdragon-based
-> > +	  Lenovo Yoga C630, which provides battery and power adapter
-> > +	  information.
-> > +
-> > +	  This driver provides battery and AC status support for the mentioned
-> > +	  laptop where this information is not properly exposed via the
-> > +	  standard ACPI devices.
-> > +
-> > +	  Say M or Y here to include this support.
-> > +
-> >   endif # ARM64_PLATFORM_DEVICES
-> > diff --git a/drivers/platform/arm64/Makefile b/drivers/platform/arm64/Makefile
-> > index 4fcc9855579b..b2ae9114fdd8 100644
-> > --- a/drivers/platform/arm64/Makefile
-> > +++ b/drivers/platform/arm64/Makefile
-> > @@ -6,3 +6,4 @@
-> >   #
-> >   obj-$(CONFIG_EC_ACER_ASPIRE1)	+= acer-aspire1-ec.o
-> > +obj-$(CONFIG_EC_LENOVO_YOGA_C630) += lenovo-yoga-c630.o
-> > diff --git a/drivers/platform/arm64/lenovo-yoga-c630.c b/drivers/platform/arm64/lenovo-yoga-c630.c
-> > new file mode 100644
-> > index 000000000000..3d1d5acde807
-> > --- /dev/null
-> > +++ b/drivers/platform/arm64/lenovo-yoga-c630.c
-> > @@ -0,0 +1,279 @@
-> > +// SPDX-License-Identifier: GPL-2.0-only
-> > +/*
-> > + * Copyright (c) 2022-2024, Linaro Ltd
-> > + * Authors:
-> > + *    Bjorn Andersson
-> > + *    Dmitry Baryshkov
-> > + */
-> > +#include <linux/auxiliary_bus.h>
-> > +#include <linux/i2c.h>
-> > +#include <linux/module.h>
-> > +#include <linux/notifier.h>
-> > +#include <linux/platform_data/lenovo-yoga-c630.h>
-> > +
-> > +#define LENOVO_EC_RESPONSE_REG		0x01
-> > +#define LENOVO_EC_REQUEST_REG		0x02
-> > +
-> > +#define LENOVO_EC_UCSI_WRITE		0x20
-> > +#define LENOVO_EC_UCSI_READ		0x21
-> > +
-> > +#define LENOVO_EC_READ_REG		0xb0
-> > +#define LENOVO_EC_REQUEST_NEXT_EVENT	0x84
-> > +
-> > +struct yoga_c630_ec {
-> > +	struct i2c_client *client;
-> > +	struct mutex lock;
-> > +	struct blocking_notifier_head notifier_list;
-> > +};
-> > +
-> > +static int yoga_c630_ec_request(struct yoga_c630_ec *ec, u8 *req, size_t req_len,
-> > +				u8 *resp, size_t resp_len)
-> > +{
-> > +	int ret;
-> > +
-> > +	WARN_ON(!mutex_is_locked(&ec->lock));
-> > +
-> > +	ret = i2c_smbus_write_i2c_block_data(ec->client, LENOVO_EC_REQUEST_REG,
-> > +					     req_len, req);
-> > +	if (ret < 0)
-> > +		return ret;
-> > +
-> > +	return i2c_smbus_read_i2c_block_data(ec->client, LENOVO_EC_RESPONSE_REG,
-> > +					     resp_len, resp);
-> > +}
-> > +
-> > +int yoga_c630_ec_read8(struct yoga_c630_ec *ec, u8 addr)
-> > +{
-> > +	u8 req[2] = { LENOVO_EC_READ_REG, };
-> > +	int ret;
-> > +	u8 val;
-> > +
-> > +	mutex_lock(&ec->lock);
-> > +	req[1] = addr;
-> > +	ret = yoga_c630_ec_request(ec, req, sizeof(req), &val, 1);
-> > +	mutex_unlock(&ec->lock);
-> > +
-> > +	return ret < 0 ? ret : val;
-> > +}
-> > +EXPORT_SYMBOL_GPL(yoga_c630_ec_read8);
-> > +
-> > +int yoga_c630_ec_read16(struct yoga_c630_ec *ec, u8 addr)
-> > +{
-> > +	u8 req[2] = { LENOVO_EC_READ_REG, };
-> > +	int ret;
-> > +	u8 msb;
-> > +	u8 lsb;
-> > +
-> > +	mutex_lock(&ec->lock);
-> > +
-> > +	req[1] = addr;
-> > +	ret = yoga_c630_ec_request(ec, req, sizeof(req), &lsb, 1);
-> > +	if (ret < 0)
-> > +		goto out;
-> > +
-> > +	req[1] = addr + 1;
-> > +	ret = yoga_c630_ec_request(ec, req, sizeof(req), &msb, 1);
-> > +
-> > +out:
-> > +	mutex_unlock(&ec->lock);
-> > +
-> > +	return ret < 0 ? ret : msb << 8 | lsb;
-> > +}
-> > +EXPORT_SYMBOL_GPL(yoga_c630_ec_read16);
-> > +
-> > +u16 yoga_c630_ec_ucsi_get_version(struct yoga_c630_ec *ec)
-> > +{
-> > +	u8 req[3] = { 0xb3, 0xf2, 0x20};
-> 
-> You have a define above for the read_reg and write_reg commands, could you
-> not define 0xb3 as LENOVO_EC_GET_VERSION ?
-> 
-> All of the other commands here seem to have a named define.
 
-Because unlike other registers it is not clear what other use cases does
-0xb3 support
 
+On 5/28/24 15:43, Michael Grzeschik wrote:
+> On Tue, May 28, 2024 at 02:27:34PM -0700, Avichal Rakesh wrote:
+>>
+>>
+>> On 5/28/24 13:22, Michael Grzeschik wrote:
+>>> On Tue, May 28, 2024 at 10:30:30AM -0700, Avichal Rakesh wrote:
+>>>>
+>>>>
+>>>> On 5/22/24 10:37, Michael Grzeschik wrote:
+>>>>> On Wed, May 22, 2024 at 05:17:02PM +0000, Thinh Nguyen wrote:
+>>>>>> On Wed, May 22, 2024, Alan Stern wrote:
+>>>>>>> On Wed, May 22, 2024 at 01:41:42AM +0000, Thinh Nguyen wrote:
+>>>>>>> > On Wed, May 22, 2024, Michael Grzeschik wrote:
+>>>>>>> > > On Fri, May 17, 2024 at 01:44:05AM +0000, Thinh Nguyen wrote:
+>>>>>>> > > > For isoc endpoint IN, yes. If the host requests for isoc data IN while
+>>>>>>> > > > no TRB is prepared, then the controller will automatically send 0-length
+>>>>>>> > > > packet respond.
+>>>>>>> > >
+>>>>>>> > > Perfect! This will help a lot and will make active queueing of own
+>>>>>>> > > zero-length requests run unnecessary.
+>>>>>>> >
+>>>>>>> > Yes, if we rely on the current start/stop isoc transfer scheme for UVC,
+>>>>>>> > then this will work.
+>>>>>>>
+>>>>>>> You shouldn't rely on this behavior.  Other device controllers might not
+>>>>>>> behave this way; they might send no packet at all to the host (causing a
+>>>>>>> USB protocol error) instead of sending a zero-length packet.
+>>>>>>
+>>>>>> I agree. The dwc3 driver has this workaround to somewhat work with the
+>>>>>> UVC. This behavior is not something the controller expected, and this
+>>>>>> workaround should not be a common behavior for different function
+>>>>>> driver/protocol. Since this behavior was added a long time ago, it will
+>>>>>> remain the default behavior in dwc3 to avoid regression with UVC (at
+>>>>>> least until the UVC is changed). However, it would be nice for UVC to
+>>>>>> not rely on this.
+>>>>>
+>>>>> With "this" you mean exactly the following commit, right?
+>>>>>
+>>>>> (f5e46aa4 usb: dwc3: gadget: when the started list is empty stop the active xfer)
+>>>>>
+>>>>> When we start questioning this, then lets dig deeper here.
+>>>>>
+>>>>> With the fast datarate of at least usb superspeed shouldn't they not all
+>>>>> completely work asynchronous with their in flight trbs?
+>>>>>
+>>>>> In my understanding this validates that, with at least superspeed we are
+>>>>> unlikely to react fast enough to maintain a steady isoc dataflow, since
+>>>>> the driver above has to react to errors in the processing context.
+>>>>>
+>>>>> This runs the above patch (f5e46aa4) a gadget independent solution
+>>>>> which has nothing to do with uvc in particular IMHO.
+>>>>>
+>>>>> How do other controllers and their drivers work?
+>>>>>
+>>>>>> Side note, when the dwc3 driver reschedules/starts isoc transfer again,
+>>>>>> the first transfer will be scheduled go out at some future interval and
+>>>>>> not the next immediate microframe. For UVC, it probably won't be a
+>>>>>> problem since it doesn't seem to need data going out every interval.
+>>>>>
+>>>>> It should not make a difference. [TM]
+>>>>>
+>>>>
+>>>>
+>>>> Sorry for being absent for a lot of this discussion.
+>>>>
+>>>> I want to take a step back from the details of how we're
+>>>> solving the problem to what problems we're trying to solve.
+>>>>
+>>>> So, question(s) for Michael, because I don't see an explicit
+>>>> answer in this thread (and my sincerest apologies if they've
+>>>> been answered already and I missed it):
+>>>>
+>>>> What exactly is the bug (or bugs) we're trying to solve here?
+>>>>
+>>>> So far, it looks like there are two main problems being
+>>>> discussed:
+>>>>
+>>>> 1. Reducing the bandwidth usage of individual usb_requests
+>>>> 2. Error handling for when transmission over the wire fails.
+>>>>
+>>>> Is that correct, or are there other issues at play here?
+>>>
+>>> That is correct.
+>>>
+>>>> (1) in isolation should be relatively easy to solve: Just
+>>>> smear the encoded frame across some percentage
+>>>> (prefereably < 100%) of the usb_requests in one
+>>>> video frame interval.
+>>>
+>>> Right.
+>>>
+>>>> (2) is more complicated, and your suggestion is to have a
+>>>> sentinel request between two video frames that tells the
+>>>> host if the transmission of "current" video frame was
+>>>> successful or not. (Is that correct?)
+>>>
+>>> Right.
+>>>
+>>>> Assuming my understanding of (2) is correct, how should
+>>>> the host behave if the transmission of the sentinel
+>>>> request fails after the video frame was sent
+>>>> successfully (isoc is best effort so transmission is
+>>>> never guaranteed)?
+>>>
+>>> If we have transmitted all requests of the frame but would only miss the
+>>> sentinel request to the host that includes the EOF, the host could
+>>> rather show it or drop it. The drop would not be necessary since the
+>>> host did see all data of the frame. The user would not see any
+>>> distortion in both cases.
+>>>
+>>> If we have transmitted only partial data of the frame it would be
+>>> preferred if the host would drop the frame that did not finish with an
+>>> proper EOF tag.
+>>>
+>>> AFAIK the linux kernel would still show the frame if the FID of the
+>>> currently handled request would change and would take this as the end of
+>>> frame indication. But I am not totally sure if this is by spec or
+>>> optional.
+>>>
+>>> One option to be totally sure would be to resend the sentinel request to
+>>> be properly transmitted before starting the next frame. This resend
+>>> polling would probably include some extra zero-length requests. But also
+>>> if this resend keeps failing for n times, the driver should doubt there
+>>> is anything sane going on with the USB connection and bail out somehow.
+>>>
+>>> Since we try to tackle case (1) to avoid transmit errors and also avoid
+>>> creating late enqueued requests in the running isoc transfer, the over
+>>> all chance to trigger missed transfers should be minimal.
+>>
+>> Gotcha. It seems like the UVC gadget driver implicitly assumes that EOF
+>> flag will be used although the userspace application can technically
+>> make it optional.
 > 
-> > +	int ret;
-> > +	u8 msb;
-> > +	u8 lsb;
-> > +
-> > +	mutex_lock(&ec->lock);
-> > +	ret = yoga_c630_ec_request(ec, req, sizeof(req), &lsb, 1);
-> > +	if (ret < 0)
-> > +		goto out;
-> > +
-> > +	req[2]++;
-> 
-> why not set reg[2] = 0x21;
+> That is not all. The additional UVC_STREAM_ERR tag on the sentinel
+> request can be set optional by the host driver. But by spec the
+> userspace application has to drop the frame when the flag was set.
 
-ack
-
-> 
-> also is req[2] some kind of address ?
-
-Unfortunately no idea. This is totally based on the AML code in DSDT. I
-have no documentation on the EC or its programming interface.
+Looking at the UVC specs, the ERR bit doesn't seem to refer to actual 
+transmission error, only errors in frame generation (Section 4.3.1.7 
+of UVC 1.5 Class Specification). Maybe "data discontinuity" can be 
+used but the examples given are bad media, and encoder issues, which
+suggests errors at higher level than the wire.
 
 > 
-> > +	ret = yoga_c630_ec_request(ec, req, sizeof(req), &msb, 1);
-> > +
-> > +out:
-> > +	mutex_unlock(&ec->lock);
-> > +
-> > +	return ret < 0 ? ret : msb << 8 | lsb;
-> > +}
-> > +EXPORT_SYMBOL_GPL(yoga_c630_ec_ucsi_get_version);
-> > +
-> > +int yoga_c630_ec_ucsi_write(struct yoga_c630_ec *ec,
-> > +			    const u8 req[YOGA_C630_UCSI_WRITE_SIZE])
-> > +{
-> > +	int ret;
-> > +
-> > +	mutex_lock(&ec->lock);
-> > +	ret = i2c_smbus_write_i2c_block_data(ec->client, LENOVO_EC_UCSI_WRITE,
-> > +					     YOGA_C630_UCSI_WRITE_SIZE, req);
-> > +	mutex_unlock(&ec->lock);
-> > +
-> > +	return ret < 0 ? ret : 0;
-> > +}
-> > +EXPORT_SYMBOL_GPL(yoga_c630_ec_ucsi_write);
-> > +
-> > +int yoga_c630_ec_ucsi_read(struct yoga_c630_ec *ec,
-> > +			   u8 resp[YOGA_C630_UCSI_READ_SIZE])
-> > +{
-> > +	int ret;
-> > +
-> > +	mutex_lock(&ec->lock);
-> > +	ret = i2c_smbus_read_i2c_block_data(ec->client, LENOVO_EC_UCSI_READ,
-> > +					    YOGA_C630_UCSI_READ_SIZE, resp);
-> > +	mutex_unlock(&ec->lock);
-> > +
-> > +	return ret < 0 ? ret : 0;
-> > +}
-> > +EXPORT_SYMBOL_GPL(yoga_c630_ec_ucsi_read);
-> > +
-> > +static irqreturn_t yoga_c630_ec_intr(int irq, void *data)
-> > +{
-> > +	u8 req[] = { LENOVO_EC_REQUEST_NEXT_EVENT };
-> > +	struct yoga_c630_ec *ec = data;
-> > +	u8 event;
-> > +	int ret;
-> > +
-> > +	mutex_lock(&ec->lock);
-> > +	ret = yoga_c630_ec_request(ec, req, sizeof(req), &event, 1);
-> > +	mutex_unlock(&ec->lock);
-> > +	if (ret < 0)
-> > +		return IRQ_HANDLED;
-> > +
-> > +	pr_info("NOTIFY %x\n", event);
+> With my proposal this flag will be set, whenever we find out that
+> the currently transferred frame was erroneous.
 > 
-> why not dev_info() ?
+>> Summarizing some of the discussions above:
+>> 1. UVC gadget driver should _not_ rely on the usb controller to
+>>   enqueue 0-length requests on UVC gadget drivers behalf;
+>> 2. However keeping up the backpressure to the controller means the
+>>   EOF request will be delayed behind all the zero-length requests.
+> 
+> Exactly, this is why we have to somehow finetune the timedelay between
+> requests that trigger interrupts. And also monitor the amount of
+> requests currently enqueued in the hw ringbuffer. So that our drivers
+> enqueue dequeue mechanism is virtually adding only the minimum amount
+> of necessary zero-length requests in the hardware. This should be
+> possible.
+> 
+> I am currently thinking through the remaining steps the pump worker has
+> to do on each wakeup to maintain the minimum threshold while waiting
+> with submitting requests that contain actual image payload.
+> 
+>> Out of curiosity: What is wrong with letting the host rely on
+>> FID alone? Decoding the jpeg payload _should_ fail if any of the
+>> usb_requests containing the payload failed to transmit.
+> 
+> This is not totally true. We saw partially rendered jpeg frames on the
+> host stream. How the host behaves with broken data is totally undefined
+> if the typical uvc flags EOF/ERR are not used as specified. Then think
+> about uncompressed formats. So relying on the transferred image format
+> to solve our problems is just as wrong as relying on the gadgets
+> hardware behavior.
 
-Argh, debugging code. I should drop it.
+Do you know if the partially rendered frames were valid JPEGs, or 
+if the host was simply making a best effort at displaying a broken
+JPEG? Perhaps the fix should go to the host instead?
 
--- 
-With best wishes
-Dmitry
+Following is my opinion, feel free to disagree (and correct me if 
+something is factually incorrect):
+
+The fundamental issue here is that ISOC doesn't guarantee
+delivery of usb_requests or even basic data consistency upon delivery.
+So the gadget driver has no way to know the state of transmitted data. 
+The gadget driver is notified of underruns but not of any other issues,
+and ideally we should never have an underrun if the zero-length 
+backpressure is working as intended.
+
+So, UVC gadget driver can reduce the number of errors, but it'll never be 
+able to guarantee that the data transmitted to the host isn't somehow
+corrupted or missing unless a more reliable mode of transmission 
+(bulk, for example) is used.
+
+All of this to say: The host absolutely needs to be able to handle
+all sorts of invalid and broken payloads. How the host handles it 
+might be undefined, but the host can never rely on perfect knowledge 
+about the transmission state. In cases like these, where the underlying 
+transport is unreliable, the burden of enforcing consistency moves up 
+a layer, i.e. to the encoded payload in this case. So it is perfectly 
+fine for the host to rely on the encoding to determine if the payload 
+is corrupt and handle it accordingly.
+
+As for uncompressed format, you're correct that subtle corruptions
+may not be caught, but outright missing usb_requests can be easily
+checked by simply looking at the number of bytes in the payload. YUV 
+frames are all of the same (predetermined) size for a given resolution.
+
+So my recommendation is the following:
+1. Fix the bandwidth problem by splitting the encoded video frame
+   into more usb_requests (as your patch already does) making sure 
+   there are enough free usb_request to encode the video frame in 
+   one burst so we don't accidentally inflate the transmission 
+   duration of a video frame by sneaking in zero-length requests in
+   the middle.
+2. Unless there is an unusually high rate of transmission failures
+   when using the UVC gadget driver, it might be worth fixing the
+   host side driver to handle broken frames better instead (assuming 
+   host is linux as well).
+2. Tighten up the error checking in UVC gadget driver -- We drop the 
+   current frame whenever an EXDEV happens which is wrong. We should 
+   only be dropping the current frame if the EXDEV corresponds to the 
+   frame currently being encoded. If the frame is already fully queued 
+   to the usb controller, the host can handle missing payload as it 
+   sees fit.
+
+
+- Avi.
 
