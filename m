@@ -1,190 +1,168 @@
-Return-Path: <linux-usb+bounces-10690-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10691-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F60C8D4584
-	for <lists+linux-usb@lfdr.de>; Thu, 30 May 2024 08:38:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A1EE8D4634
+	for <lists+linux-usb@lfdr.de>; Thu, 30 May 2024 09:40:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B2C791C211CD
-	for <lists+linux-usb@lfdr.de>; Thu, 30 May 2024 06:38:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8CEC51C21203
+	for <lists+linux-usb@lfdr.de>; Thu, 30 May 2024 07:40:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3931E21C16A;
-	Thu, 30 May 2024 06:38:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A65C4D8B6;
+	Thu, 30 May 2024 07:40:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=me-ssier-org.20230601.gappssmtp.com header.i=@me-ssier-org.20230601.gappssmtp.com header.b="T6KmJN8d"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="IuslHGZK"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58BCB21019B
-	for <linux-usb@vger.kernel.org>; Thu, 30 May 2024 06:38:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2D1C168BD
+	for <linux-usb@vger.kernel.org>; Thu, 30 May 2024 07:40:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717051120; cv=none; b=fZ51AZGhDAs0dlqgTujNaRAsdnSRa9iqJQ3zbHBTufJA1lhDBhJ5bZXTTNTI2Qxj2Psea4uYavlsPgXUuuWlgUWzU5IXgbOQOzyGCWWt6jYtjv9JZMvQdwkBNyQHxpDORex7w5yk3F2stGxdnf9D164faT9o3EGdymIJd+mXkPY=
+	t=1717054835; cv=none; b=gOah6pc4+FUzPeKC134su4VVmvETUNuttdN+2lZeln9UPZfqpbX0b8/uP64kQALCS+v/NsekIXbXIL6fWIqkMyS20x4bDnSU8iBrnnp6xkBDKvAkcRhmfRN4OeryK140fKpR3jRddZxdQi2OrN5e/qZzQ9obFjsvR3cduCwjyZE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717051120; c=relaxed/simple;
-	bh=3iSSVFjIwnSFCrdOdDZd6ny8U3SfjsDDOMMrtMc+HQs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IkzBtnweWfE9J2yPnERz6XI9OV4LG4tbQeZdHnmjJzOcpO/DOslT/ktenjBig3gBvLjgBn3G7RTFpsw8AyUuUeecYVm/FIw6x3fBjAEn859OIqOJgZC4RBJztkiwNoVGITfIHcvBoBnhdr6Fua4N7r3FSS+EAwZgdS0C7vOmtjk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=me.ssier.org; spf=pass smtp.mailfrom=me.ssier.org; dkim=pass (2048-bit key) header.d=me-ssier-org.20230601.gappssmtp.com header.i=@me-ssier-org.20230601.gappssmtp.com header.b=T6KmJN8d; arc=none smtp.client-ip=209.85.219.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=me.ssier.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=me.ssier.org
-Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-df78b040314so539180276.0
-        for <linux-usb@vger.kernel.org>; Wed, 29 May 2024 23:38:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=me-ssier-org.20230601.gappssmtp.com; s=20230601; t=1717051117; x=1717655917; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6I6bUq5MtPsSJCD04nOMib7SEtzLq2qYb33NbiPQPqo=;
-        b=T6KmJN8dXKR+gpQFlofwnZqiUAG120afg0GLGnolKa3n452as6YE2ZaqJ0/pcYqI/U
-         kAGnFFCjM/ysx5Um8pNs5y1jS1PNk9Ieacbo2EKsE3IWnpHPZx3UCGC9LA9ZtfdpAZgK
-         QuzPB1e2+364hHmok3+AB35YTijGqENENGMxlKVMW8QmD9q6Emqztxc1LKzJkHfnUaub
-         LmI8XQNdxN3qW5d4X8J4JxBKx5SLpzB4207Igb086uK494CtGE6GEwnPZqrvrsucOm+v
-         GOBdG1WNA0uF/dq64ChutGhr5Zt1q1dB+RMlwCbnAGARrpGKNBT5dPWybaR2gk0B8IGJ
-         vQuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717051117; x=1717655917;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6I6bUq5MtPsSJCD04nOMib7SEtzLq2qYb33NbiPQPqo=;
-        b=DtC5GiISeHNI2JslorUfM4fxzaGXAgfVGwQ+sUtXIgZK6NE+zPo2W9hD+KxQoycjuz
-         Apj6vg0NuCQoIRZQqb1qQeGqRhJgyzQpzZoPhqGbV6njTGRLkvhajNFG5uPCSYlrI+c/
-         mHqoK1P7/yDvJF8l7UiSVEIolTLrVXKLna+7+GVU0nLYTSboKwNlTtAkXPWumYI8ujEB
-         ydgFI1T4MyeYdWfVht9ceg152HuacvwFOeH6acRQrmaCcpkZup+ePb+8hc5NxKPXCw5T
-         jPLY0rnAPdLmmY7bJgDmu9bHbiffw1nSPLlDVY5AupMc9qPSZeFkMn6MYq4YvzC+aeuY
-         Nuww==
-X-Gm-Message-State: AOJu0YwAmuntUCkHDwzEmB7DzM0aAibyv2xJ3hSncXTWEvEGPe+UDqHk
-	CjBpG9f/eZdVsUAKX+aWPSg6OkEtPIoNrnGFHmfg5AqVqu0kCHnAeUnty94NZvU=
-X-Google-Smtp-Source: AGHT+IF7XKqWolRteq20RdszdOCxHfIqaWsAlefedQXQH0si50DrOE1KOgzxBdM/g6qKNQxWSjjdWw==
-X-Received: by 2002:a25:a2cb:0:b0:dfa:584d:5e3b with SMTP id 3f1490d57ef6-dfa5a5b7f75mr1425987276.6.1717051117021;
-        Wed, 29 May 2024 23:38:37 -0700 (PDT)
-Received: from [192.168.2.14] ([74.14.126.218])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6ac162ef87fsm60876626d6.80.2024.05.29.23.38.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 May 2024 23:38:36 -0700 (PDT)
-Message-ID: <87546d93-3fe7-4459-b44a-47cbcab9da74@me.ssier.org>
-Date: Thu, 30 May 2024 02:38:25 -0400
+	s=arc-20240116; t=1717054835; c=relaxed/simple;
+	bh=0vBDNTxwzir6Deuyiolc3iWuewX9NJBN5vrHmJm71l8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:In-Reply-To:
+	 Content-Type:References; b=V51D4zPkQz9iDoAuXWMsy6phiKBiSJTMTEMElcrJFN3ArO7SIaDlLP3bqusrXA0fr5k3kBynMRJBXSUaZl4EmGBmuUzDM7OXr23wfhl6J07tUTAzluqp8AHIwwSqUkOlox3cxwcFDYwjnX8WbKiRWirRR/41zZWW7/EXtHV3RFQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=IuslHGZK; arc=none smtp.client-ip=203.254.224.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
+	by mailout3.samsung.com (KnoxPortal) with ESMTP id 20240530074030epoutp036b209dce420819e0d700bdb86a46ff3d~UNEVg4_yD0910809108epoutp03H
+	for <linux-usb@vger.kernel.org>; Thu, 30 May 2024 07:40:30 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20240530074030epoutp036b209dce420819e0d700bdb86a46ff3d~UNEVg4_yD0910809108epoutp03H
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1717054830;
+	bh=KzVuwfEF3G8TNaPo6TezYCEF4u7EfVxw85LvHsZUNBI=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=IuslHGZKWj3OCjkd90uly9JJ9/7Le7EnrZSLOuWIlgipHFbC4oxkzWeCqOqlMLTax
+	 Tu2f+LJz0eVWZ5c2OEof93R4uhLvns0hpXU3Gn8DqEdmWKH3wckmXLvAbK4NKrV/Qq
+	 iJtE+DuPs48EAsyGp/Bz1XTMwMNIWHt3k0S0dxd0=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+	epcas2p3.samsung.com (KnoxPortal) with ESMTP id
+	20240530074030epcas2p3d6ae943a68d2390bf933c7bbc135265d~UNEVO7wKf1569315693epcas2p3q;
+	Thu, 30 May 2024 07:40:30 +0000 (GMT)
+Received: from epsmgec2p1-new.samsung.com (unknown [182.195.36.100]) by
+	epsnrtp2.localdomain (Postfix) with ESMTP id 4VqdT94smbz4x9Q7; Thu, 30 May
+	2024 07:40:29 +0000 (GMT)
+Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
+	epsmgec2p1-new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	5D.34.18956.D6D28566; Thu, 30 May 2024 16:40:29 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+	epcas2p2.samsung.com (KnoxPortal) with ESMTPA id
+	20240530074028epcas2p2c6091ed95530299bae9248bc6efad648~UNEUCaqmu2194121941epcas2p24;
+	Thu, 30 May 2024 07:40:28 +0000 (GMT)
+Received: from epsmgmcp1.samsung.com (unknown [182.195.42.82]) by
+	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+	20240530074028epsmtrp2acb209a5ae4f49315d88465c60bbeb61~UNET-DC241064010640epsmtrp2o;
+	Thu, 30 May 2024 07:40:28 +0000 (GMT)
+X-AuditID: b6c32a4d-247ff70000004a0c-52-66582d6d8392
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+	epsmgmcp1.samsung.com (Symantec Messaging Gateway) with SMTP id
+	26.C3.18846.C6D28566; Thu, 30 May 2024 16:40:28 +0900 (KST)
+Received: from ubuntu (unknown [10.229.95.128]) by epsmtip1.samsung.com
+	(KnoxPortal) with ESMTPA id
+	20240530074028epsmtip12c79a658ac443affd5e4630e94fd0773~UNET2s9Wk1467414674epsmtip1Q;
+	Thu, 30 May 2024 07:40:28 +0000 (GMT)
+Date: Thu, 30 May 2024 16:40:53 +0900
+From: Jung Daehwan <dh10.jung@samsung.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Mathias Nyman <mathias.nyman@intel.com>, "open list:USB XHCI DRIVER"
+	<linux-usb@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>, Thinh
+	Nguyen <Thinh.Nguyen@synopsys.com>
+Subject: Re: [PATCH] usb: host: Add a quirk for writing ERST in high-low
+ order
+Message-ID: <20240530074053.GA48462@ubuntu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: chipidea: move ci_ulpi_init after the phy
- initialization
-To: Marek Szyprowski <m.szyprowski@samsung.com>,
- Michael Grzeschik <m.grzeschik@pengutronix.de>,
- Peter Chen <peter.chen@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- regressions@lists.linux.dev, wouter@franken-peeters.be
-References: <20240328-chipidea-phy-misc-v1-1-907d9de5d4df@pengutronix.de>
- <CGME20240425194033eucas1p2c1e98d1c55c970e246087e2dab180e84@eucas1p2.samsung.com>
- <21ea292a-b1d1-43e2-92ab-9f1f63aaf729@samsung.com>
-Content-Language: en-US
-From: Alexandre Messier <alex@me.ssier.org>
-In-Reply-To: <21ea292a-b1d1-43e2-92ab-9f1f63aaf729@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <2024052845-unwatched-sprig-b0e1@gregkh>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupmk+LIzCtJLcpLzFFi42LZdljTQjdXNyLNoHUxl0Xz4vVsFpd3zWGz
+	WLSsldmiedMUVotVCw6wO7B6LN7zkslj/9w17B5b9n9m9Pi8SS6AJSrbJiM1MSW1SCE1Lzk/
+	JTMv3VbJOzjeOd7UzMBQ19DSwlxJIS8xN9VWycUnQNctMwdor5JCWWJOKVAoILG4WEnfzqYo
+	v7QkVSEjv7jEVim1ICWnwLxArzgxt7g0L10vL7XEytDAwMgUqDAhO6Oz+Q1bwXfOiscNP1ka
+	GPs5uhg5OSQETCQ+tS5g62Lk4hAS2MMo0Xp7DjuE84lRYtuPwyxwzurL75lhWrr+XIeq2sko
+	8a9pJ1MXIweQ84RRYqkxSA2LgKrE1C/bWEFsNgEtiXs/ToD1iggYS/SfncUOYjODrFs4UwjE
+	FhYIkFj/ZRMbiM0roC1x+nUblC0ocXLmExYQm1PAVGLBo2VsIKtEBVQkXh2sBzlBQuARu8T3
+	x03sELe5SJx9fAnqTmGJV8e3QMWlJD6/28sGYRdL3Hr+jBmiuYVRYsWrFqgGY4lZz9oZIY7L
+	kOiccwnsLwkBZYkjt1ggwnwSHYf/skOEeSU62oQgOpUlpl+ewAphS0ocfH0OaqKHxPITf5nh
+	YXhg8USmCYzys5C8NgvJNghbR2LB7k9ss4BWMAtISyz/xwFhakqs36W/gJF1FaNUakFxbnpq
+	slGBoW5eajk8vpPzczcxglOllu8Oxtfr/+odYmTiYDzEKMHBrCTCe2ZSaJoQb0piZVVqUX58
+	UWlOavEhRlNgXE1klhJNzgcm67ySeEMTSwMTMzNDcyNTA3Mlcd57rXNThATSE0tSs1NTC1KL
+	YPqYODilGpg8q37Nvhnr92tz0mnfncznA1dMCdv1gLGWN7i4YPJ1x5t1f282VZQ5Hn9wobWa
+	X6eOgenq1wzxs4INs636A/acNLm1ZMuq2MurqzZGPY4se/chvkKgfKZxQPANHVfjh1/S+C6t
+	+73B9s7s7DCpDWtOFv3ZN4MtyuvufZ9pNfIrrA7UzJodU1MuMC26QeFYyK/EsKTDezR6Q23j
+	9p+UKGA953J82sSGON7bZnJC2Sf+1kg9tv/V+kde7O6B8NXPWI6X2rLevjLbLolddnnZR++/
+	ksuDc/lTaxLzVKTPiBZ22U+/0C62ZMb8T45CD7iW3XJdF9d7XKnQIXWFwMraK4ujZrnHZevf
+	W8KYPImD8YcSS3FGoqEWc1FxIgCRGAcRHgQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrNLMWRmVeSWpSXmKPExsWy7bCSnG6ObkSawbQOI4vmxevZLC7vmsNm
+	sWhZK7NF86YprBarFhxgd2D1WLznJZPH/rlr2D227P/M6PF5k1wASxSXTUpqTmZZapG+XQJX
+	xrYjq1gKtrNX3N37kamB8QVrFyMnh4SAiUTXn+vsXYxcHEIC2xklpjQsZoZISEosnXuDHcIW
+	lrjfcoQVougRo8SFD4/YQBIsAqoSU79sA5vEJqAlce/HCbBmEQFjif6zs8CmMgvsY5T48WQS
+	C0hCWMBPYvrDNWA2r4C2xOnXbWwQUz8xSjz79IERIiEocXLmE7AiZqCpN/69ZOpi5ACypSWW
+	/+MACXMKmEoseLSMDSQsKqAi8epg/QRGwVlImmchaZ6F0LyAkXkVo2hqQXFuem5ygaFecWJu
+	cWleul5yfu4mRnB4awXtYFy2/q/eIUYmDsZDjBIczEoivGcmhaYJ8aYkVlalFuXHF5XmpBYf
+	YpTmYFES51XO6UwREkhPLEnNTk0tSC2CyTJxcEo1MNVNPPckIah6Q7i7we8Tz1Oz2jZcOvd8
+	giajzQMGLgmB+5u7n29gkWk69O6a+6zS1iMRv25U24VfWXQvVdT0SqbjrfDZGgJtaoe0zRe+
+	ibt/at385Mef91gZFK2f1HzfU+fKz/XsezP93vDdfWedO1V5y8dFSR8XL/38S/tXUrWrMEfk
+	kTs5Lz7sm3M3+z3/Q8O+0+Ylnp9cNHm0WWL39AoUTBAvKfpp9PWPo17fwvhbp24k700TFp2Q
+	OqNZ3t1jk9em3zummWzN/xPbw//y9OJvNt8V7uWVHLm4snGZWKyg1tnv30Lj6/q//X2yLztn
+	2+boP6ZZYlsnznBWDz5Sauzc+W/nlltX1rtYPBPoedWmxFKckWioxVxUnAgArn6i+d4CAAA=
+X-CMS-MailID: 20240530074028epcas2p2c6091ed95530299bae9248bc6efad648
+X-Msg-Generator: CA
+Content-Type: multipart/mixed;
+	boundary="----40rWTt6DAFmUrjtMexcyNm5gpMTj9FMdHa8zGfbdWx6mQz74=_191f6_"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20240528055659epcas2p4f86642d6647855747cea35b04f8a46cc
+References: <CGME20240528055659epcas2p4f86642d6647855747cea35b04f8a46cc@epcas2p4.samsung.com>
+	<1716875836-186791-1-git-send-email-dh10.jung@samsung.com>
+	<2024052814-exponent-domestic-6da2@gregkh>
+	<2024052845-unwatched-sprig-b0e1@gregkh>
 
-On 2024-04-25 15:40, Marek Szyprowski wrote:
-> Dear All,
+------40rWTt6DAFmUrjtMexcyNm5gpMTj9FMdHa8zGfbdWx6mQz74=_191f6_
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+
+On Tue, May 28, 2024 at 09:29:21AM +0200, Greg Kroah-Hartman wrote:
+> On Tue, May 28, 2024 at 09:23:43AM +0200, Greg Kroah-Hartman wrote:
+> > On Tue, May 28, 2024 at 02:57:16PM +0900, Daehwan Jung wrote:
+> > > [Synopsys]- The host controller was design to support ERST setting
+> > > during the RUN state. But since there is a limitation in controller
+> > > in supporting separate ERSTBA_HI and ERSTBA_LO programming,
+> > > It is supported when the ERSTBA is programmed in 64bit,
+> > > or in 32 bit mode ERSTBA_HI before ERSTBA_LO
+> > > 
+> > > [Synopsys]- The internal initialization of event ring fetches
+> > > the "Event Ring Segment Table Entry" based on the indication of
+> > > ERSTBA_LO written.
 > 
-> On 02.04.2024 08:23, Michael Grzeschik wrote:
->> The function ci_usb_phy_init is already handling the
->> hw_phymode_configure path which is also only possible after we have
->> a valid phy. So we move the ci_ulpi_init after the phy initialization
->> to be really sure to be able to communicate with the ulpi phy.
->>
->> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+> Also, what is the "[Synopsys]-" stuff?  That's not normally in our
+> changelogs or documentation for how to write a changelog text, is it?
 > 
-> This patch landed in linux-next some time ago as commit 22ffd399e6e7 
-> ("usb: chipidea: move ci_ulpi_init after the phy initialization"). 
-> Unfortunately it breaks host USB operation on DragonBoard410c 
-> (arch/arm64/boot/dts/qcom/apq8016-sbc.dts). There is no error nor 
-> warning in the kernel log besides the information about deferred probe 
-> on the chipidea controller:
+> thanks,
 > 
-> platform ci_hdrc.0: deferred probe pending: (reason unknown)
+> greg k-h
 > 
-> Tomorrow I will try to investigate which operation during driver probe 
-> triggers it. If there is anything else to check that might help fixing 
-> this issue, let me know.
 
-I am also seeing this issue on a msm8974-based device.
+Yes, I will modify it.
 
-There is also a report and analysis by Wouter Franken here:
-https://lore.kernel.org/all/ecb8d3e8-d525-4a2d-a868-803202c16296@franken-peeters.be/
+Best Regards,
+Jung Daehwan
 
-Reverting the commit does fix the issue for me.
+------40rWTt6DAFmUrjtMexcyNm5gpMTj9FMdHa8zGfbdWx6mQz74=_191f6_
+Content-Type: text/plain; charset="utf-8"
 
-Adding to regzbot for tracking:
 
-#regzbot introduced: 22ffd399e6e7 ^
-
-Thanks,
-Alexandre
-
-> 
->> ---
->>   drivers/usb/chipidea/core.c | 8 ++++----
->>   drivers/usb/chipidea/ulpi.c | 5 -----
->>   2 files changed, 4 insertions(+), 9 deletions(-)
->>
->> diff --git a/drivers/usb/chipidea/core.c b/drivers/usb/chipidea/core.c
->> index 835bf2428dc6e..bada13f704b62 100644
->> --- a/drivers/usb/chipidea/core.c
->> +++ b/drivers/usb/chipidea/core.c
->> @@ -1084,10 +1084,6 @@ static int ci_hdrc_probe(struct platform_device *pdev)
->>   		return -ENODEV;
->>   	}
->>   
->> -	ret = ci_ulpi_init(ci);
->> -	if (ret)
->> -		return ret;
->> -
->>   	if (ci->platdata->phy) {
->>   		ci->phy = ci->platdata->phy;
->>   	} else if (ci->platdata->usb_phy) {
->> @@ -1142,6 +1138,10 @@ static int ci_hdrc_probe(struct platform_device *pdev)
->>   		goto ulpi_exit;
->>   	}
->>   
->> +	ret = ci_ulpi_init(ci);
->> +	if (ret)
->> +		return ret;
->> +
->>   	ci->hw_bank.phys = res->start;
->>   
->>   	ci->irq = platform_get_irq(pdev, 0);
->> diff --git a/drivers/usb/chipidea/ulpi.c b/drivers/usb/chipidea/ulpi.c
->> index dfec07e8ae1d2..89fb51e2c3ded 100644
->> --- a/drivers/usb/chipidea/ulpi.c
->> +++ b/drivers/usb/chipidea/ulpi.c
->> @@ -68,11 +68,6 @@ int ci_ulpi_init(struct ci_hdrc *ci)
->>   	if (ci->platdata->phy_mode != USBPHY_INTERFACE_MODE_ULPI)
->>   		return 0;
->>   
->> -	/*
->> -	 * Set PORTSC correctly so we can read/write ULPI registers for
->> -	 * identification purposes
->> -	 */
->> -	hw_phymode_configure(ci);
->>   
->>   	ci->ulpi_ops.read = ci_ulpi_read;
->>   	ci->ulpi_ops.write = ci_ulpi_write;
->>
->> ---
->> base-commit: 5bab5dc780c9ed0c69fc2f828015532acf4a7848
->> change-id: 20240328-chipidea-phy-misc-b3f2bc814784
->>
->> Best regards,
-> 
-> Best regards
-
+------40rWTt6DAFmUrjtMexcyNm5gpMTj9FMdHa8zGfbdWx6mQz74=_191f6_--
 
