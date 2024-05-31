@@ -1,48 +1,48 @@
-Return-Path: <linux-usb+bounces-10721-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10722-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41BDA8D5C66
-	for <lists+linux-usb@lfdr.de>; Fri, 31 May 2024 10:12:16 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD6C98D5C6C
+	for <lists+linux-usb@lfdr.de>; Fri, 31 May 2024 10:13:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D5B3E1F2835D
-	for <lists+linux-usb@lfdr.de>; Fri, 31 May 2024 08:12:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 55C1A1F28899
+	for <lists+linux-usb@lfdr.de>; Fri, 31 May 2024 08:13:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2442E7828B;
-	Fri, 31 May 2024 08:12:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8596980BEC;
+	Fri, 31 May 2024 08:12:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AwLwPL1B"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IP+L4ndD"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99D6274057;
-	Fri, 31 May 2024 08:12:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04BEC7D071;
+	Fri, 31 May 2024 08:12:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717143128; cv=none; b=jb2Z2UfQZJ9hgGZzJ4Xe9V7+atJtz9DiZFmDVxKkNIKuh7AbTcDY0aVWa5xKbqWmGDdYwb3RRc3gYUWqYLYGjNv+W306+gbUsltNrDr50ZLgo2uQhXkdh7Op+FihGUF0Xuq1IanG0riuMod32v+WRhZQqdnLLo4vN2q5mpFM7aQ=
+	t=1717143161; cv=none; b=GSPTP3cxd3jf9AEE4iROmz/F4BNF4gMpm5pLutgn8zaGMfE2sxqXXaAgmJJB4Pj92tHlm28RDtLuT/xukSWFTLHYF5vAmTxy/h47pfc5mCoxe8Ljv3N9eEbqG9T9ULNl/1HuzjWgienmkKz6s0VBRlCPDqziKJBeCnN+7in065I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717143128; c=relaxed/simple;
-	bh=gb9gMIWn8jzO/xjRsGo+uWr3zYzRZbtuO6LQosHp3Q0=;
+	s=arc-20240116; t=1717143161; c=relaxed/simple;
+	bh=WXPnbfneamQCZU98SpigscAYCsAhjXUzYNOnZ/5eMBk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tM1ar8CojOwF6ExI9s39CA8SKKiXAg60FA+VGA5fDcTn25XNTrlHN075ls3/eRLhNbmLvbm1AzFLqZ2RSvd8LIpo7C3HOHtI9Bi2RhZKjfW82TpsH9RijQ99Z8R/2qkuZP9/NXAiLQAbfdDIuqdGToWvZvmH9vyY8zXGX1q9kxI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AwLwPL1B; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04637C2BD10;
-	Fri, 31 May 2024 08:12:04 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=E2/zrSDnqtAk7Da4D4w0sKp/e/I09n+tQoOCnDLMbs2mhqCZRiB9XEGsa/22rrWlfIeYqYCiyafRYcjYsp1roBssofVazJXnnE8QHN++HxhyKwp7FvDTw5Jzga+z+zL2tEuJtg+33ys/EcjOtjr0zWmpKaGN7942zjlLQSdoHLA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IP+L4ndD; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 172D0C4AF07;
+	Fri, 31 May 2024 08:12:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717143128;
-	bh=gb9gMIWn8jzO/xjRsGo+uWr3zYzRZbtuO6LQosHp3Q0=;
+	s=k20201202; t=1717143160;
+	bh=WXPnbfneamQCZU98SpigscAYCsAhjXUzYNOnZ/5eMBk=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=AwLwPL1Bgkg/SP5sslF2ZHxO2ywoT87JmHGa+yUC7A8D95p5rJ9+4jwhdawYPVazq
-	 j/lEsbxbmaal+qpkDIFSY0Z0hjdQ39uixuVecPzBRhCzz9iNpOeVTmivX/Q0sabeLX
-	 ZHk6k+t+TqEjsnOHsX7DaRcTeSd3rx7Hk73cTEOIbMLHKs8L9HTOYgIAaArdVcJgMi
-	 /RieqnKkRgRxOEskDfcA2vJz0owZoyz1L03E81113vZuk3lDSswy4GdGtQZGePek/A
-	 4qF+ZqjdmjOYlYCGgi19JZKWZ1UN0hNXD6XbL/mgOIchqhnuts950TmYsQZf/rKFAW
-	 DqohQQnmmS93A==
-Message-ID: <bcbff3b2-c5ae-4a95-aa36-f9b88a97e72c@kernel.org>
-Date: Fri, 31 May 2024 10:12:03 +0200
+	b=IP+L4ndDsUxPIu21enK9hBhra+lDGUVPYI0P9/NRi14hBHXzKPgZbiOeuATMrz8/s
+	 xjm43Fh+sI1aqNGlHcST0QKV0SQbdZ6e0UrOpAZp7tBMs8MdYE6e6nnxUYyL/jG6zY
+	 dEOeNe7G/Xi652raJn19TC+SynpzBI4EenkrD2S140W/WNBP0Rom6NJmEFq7vWJAhL
+	 C3cVy8tEcXpWHV427mhWB6jBQSmNFyVD3Jdc6TU5IMT4pzTEVLq36ykVnYxu24L2oD
+	 IL34u24EgKPcUUWbayW+V6yYEIeXS3U9GDxqnNRSCy+azzkuWiCL/OZM8wdpTsxoY0
+	 b+cHhNDS5jbaw==
+Message-ID: <9c9d74c0-72a2-418a-b3c6-a0f9716c943d@kernel.org>
+Date: Fri, 31 May 2024 10:12:36 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/5] dt-bindings: usb: xhci: Add 'write-64-hi-lo-quirk'
- quirk
+Subject: Re: [PATCH v2 5/5] usb: host: xhci-plat: Add support for
+ XHCI_WRITE_64_HI_LO_QUIRK
 To: Daehwan Jung <dh10.jung@samsung.com>,
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -62,8 +62,8 @@ Cc: "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
  "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS"
  <devicetree@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
 References: <1717135657-120818-1-git-send-email-dh10.jung@samsung.com>
- <CGME20240531060729epcas2p1df12dd3b14c5fa2fa0716f72010b3dbd@epcas2p1.samsung.com>
- <1717135657-120818-4-git-send-email-dh10.jung@samsung.com>
+ <CGME20240531060731epcas2p4f14afae9f00a7e71e6bd3863f0a51441@epcas2p4.samsung.com>
+ <1717135657-120818-6-git-send-email-dh10.jung@samsung.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -109,26 +109,31 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <1717135657-120818-4-git-send-email-dh10.jung@samsung.com>
+In-Reply-To: <1717135657-120818-6-git-send-email-dh10.jung@samsung.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 31/05/2024 08:07, Daehwan Jung wrote:
-> xHCI specification 5.1 "Register Conventions" states that 64 bit
-> registers should be written in low-high order. All writing operations
-> in xhci is done low-high order following the spec.
-
-What is high-low / low-high order? Are you talking about endianness?
-
+> This is set by dwc3 parent node to support writing high-low order.
 > 
-> Add a new quirk to support workaround for high-low order.
+> Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
+> ---
+>  drivers/usb/host/xhci-plat.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+> index 3d071b8..31bdfa5 100644
+> --- a/drivers/usb/host/xhci-plat.c
+> +++ b/drivers/usb/host/xhci-plat.c
+> @@ -256,6 +256,9 @@ int xhci_plat_probe(struct platform_device *pdev, struct device *sysdev, const s
+>  		if (device_property_read_bool(tmpdev, "xhci-sg-trb-cache-size-quirk"))
+>  			xhci->quirks |= XHCI_SG_TRB_CACHE_SIZE_QUIRK;
+>  
+> +		if (device_property_read_bool(tmpdev, "write-64-hi-lo-quirk"))
+> +			xhci->quirks |= XHCI_WRITE_64_HI_LO;
 
-Why? If they should be written low-high, then why breaking the spec? Why
-this cannot be deduced from compatible?
-
-Which *upstream* hardware is affected?
-
-
+Where is any user of this property (DTS)? Just to clarify: your
+downstream does not matter really.
 
 Best regards,
 Krzysztof
