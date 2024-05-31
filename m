@@ -1,95 +1,110 @@
-Return-Path: <linux-usb+bounces-10727-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10728-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 030048D5F82
-	for <lists+linux-usb@lfdr.de>; Fri, 31 May 2024 12:20:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1DEF58D5FEC
+	for <lists+linux-usb@lfdr.de>; Fri, 31 May 2024 12:47:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B3A3A289D6A
-	for <lists+linux-usb@lfdr.de>; Fri, 31 May 2024 10:20:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4E7A91C234E1
+	for <lists+linux-usb@lfdr.de>; Fri, 31 May 2024 10:47:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D096B1509B9;
-	Fri, 31 May 2024 10:20:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03C7E15625A;
+	Fri, 31 May 2024 10:46:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OP37va8i"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BhBGJQQp"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA3A013D63E
-	for <linux-usb@vger.kernel.org>; Fri, 31 May 2024 10:20:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18DF4156223
+	for <linux-usb@vger.kernel.org>; Fri, 31 May 2024 10:46:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717150832; cv=none; b=ShINuY1rpNVggDUyuqbEh++j4zby4BNeC7+HE4VGb854ydkNWwObikRZbgH51BpKRjwVisRvkwthvFvqQ95PEtmZgzhDnxPFC1gc3LdXTu8HqLD5poBgtE0iRU10hMVuG4r5KPaPp0SySbHQIe/wpHqr47GqnuZlNdMB/gvx5W8=
+	t=1717152417; cv=none; b=NX2orZ4imPJc9Fhh90p1ZK7ppwjOdGSrIrxr8c+edAHubtP4b/VK6gQZyhQ3MfCSl4Tz3DIbBX07b/NwichigBbx7GuV8jKDKY+m+3vIQ8Ad7rzx88fMQXYok3+TGeG1resHA/3gjnOZUmaINwEioBTkPSqkFhePcPd2jGMWH1o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717150832; c=relaxed/simple;
-	bh=2AT3NamIbzRa3+JouCmebSQL52V3CP0OjXaqVgGXfeE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kHYSjj9TdvkqqYRlEIqAFkuPPlvtdCWJAAoiF15tyU/r/u7+YpuaUXqEjtGse0DpYMx6+8HYv3922qG7msHz2XnebpDB/yGH2SbtregP1Wdkm0+SSJVItGNzuI9Jpkol7E93H5oEliyy4AJcx3jTjKTZGcbCmjjxBK8hCOZEwBE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OP37va8i; arc=none smtp.client-ip=192.198.163.13
+	s=arc-20240116; t=1717152417; c=relaxed/simple;
+	bh=M07XuSRObOYmRjMcm9IKvHAmPXbaCFtZxDjtTpb+5uM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UeV2K+rQoN4RcJ/bWsVK7xwIFwl2nS2/Dv6srAXg06SW7gJQZ/8fSDvWYblHE1JtuJxzBqNikd2LqtH7BVQcIi2HSTROKIWEiweLeVCGSIUrZmfUApA1Bpmmh3dBFHgPjzW8MQl1POw+4E74Q2jrs3SnIdcVlukwlmhuZguEBek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BhBGJQQp; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717150831; x=1748686831;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2AT3NamIbzRa3+JouCmebSQL52V3CP0OjXaqVgGXfeE=;
-  b=OP37va8iGh6oBTC/XMtFes7qwkgakJbW967GbeKoTgs7G3m9P5T2dFXn
-   2F2/WvXw/re9lGCsnQOk2nIeGN9krl9SG3mYMEObSRX/Y9G1zjKxCIhOW
-   QBO5Wq7XrET87ANEQBVm0vHDCCsHb06CtzuInGeog3/hXEQnINXGEDgxy
-   MeeXEIZN2kgjDbApLuhAB/h+cMwySI4XlqVpF/RO2l4bl2OGW4BQzBW4r
-   f00kYkNDltvMCHlNpu9NLV3nOLOT5Sx9jBsRQF5F34WDhxmU6fs4ULjkq
-   Y2PtDW/glYHa23LTXfFEn4stUDFvhXdPTy33gJVy87nV+XtIT5dfNZrpg
-   A==;
-X-CSE-ConnectionGUID: 4kDGSbAyT1u7UPv/FjCvfQ==
-X-CSE-MsgGUID: oX5b1qxQRc+CNwZxI+pKTw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11088"; a="16636289"
+  t=1717152416; x=1748688416;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=M07XuSRObOYmRjMcm9IKvHAmPXbaCFtZxDjtTpb+5uM=;
+  b=BhBGJQQpBvNRgXlmIHT+46AyHUixgfqDFxr/KAOg0dPac2G5XAAB6bPL
+   K9lOBJJyFXBKyju2vxeN7gHIoSP3OG5haUUTKVRhYuORdMjJuJN9MBZPT
+   TLy8THoBE7nyn7unkioCDbMzab51eLVxspwynasJSAosL/Jb5ozX5vkQx
+   N8MXKHety7uGVadX3rHFsli1AfNuPKCcp9oxbFGCqZeBYf4j7ssO9orRY
+   FmRdfIRu/eZYH2kRc9/Tqy3K/DG1+xjLNHhkpgnOxsdRSNa6NaNVVSvPl
+   TTmsA6aqUtsHTirIwhFvYxYJM+faOmBVW9g5lakDezIYF0hESE/lOEhVx
+   g==;
+X-CSE-ConnectionGUID: 0sq1jOfISVCm5HBGfh//vw==
+X-CSE-MsgGUID: DGKKISMZTpKPNNV4nOyA7A==
+X-IronPort-AV: E=McAfee;i="6600,9927,11088"; a="13859353"
 X-IronPort-AV: E=Sophos;i="6.08,204,1712646000"; 
-   d="scan'208";a="16636289"
+   d="scan'208";a="13859353"
 Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2024 03:20:26 -0700
-X-CSE-ConnectionGUID: 3Y7i6EkHRl+XU6YhUXSXSw==
-X-CSE-MsgGUID: r4bNJymnTXqEkeo2aZjaPg==
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2024 03:46:55 -0700
+X-CSE-ConnectionGUID: X1mGk+cmQ4uX4jN5+1L8zg==
+X-CSE-MsgGUID: /iCRKHjDQPOaKc4VhwCRZw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,204,1712646000"; 
-   d="scan'208";a="40680910"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa004.fm.intel.com with ESMTP; 31 May 2024 03:20:25 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id 7C04D1A3; Fri, 31 May 2024 13:20:23 +0300 (EEST)
-Date: Fri, 31 May 2024 13:20:23 +0300
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: linux-usb@vger.kernel.org
-Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
-	Michael Jamet <michael.jamet@intel.com>,
-	Lukas Wunner <lukas@wunner.de>,
-	Andreas Noever <andreas.noever@gmail.com>,
-	Mario Limonciello <mario.limonciello@amd.com>
-Subject: Re: [PATCH] thunderbolt: Mention Thunderbolt/USB4 debugging tools in
- Kconfig
-Message-ID: <20240531102023.GC1421138@black.fi.intel.com>
-References: <20240529125038.1051641-1-mika.westerberg@linux.intel.com>
+   d="scan'208";a="40685209"
+Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
+  by fmviesa004.fm.intel.com with ESMTP; 31 May 2024 03:46:54 -0700
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Subject: [PATCH] usb: typec: ucsi: Ack also failed Get Error commands
+Date: Fri, 31 May 2024 13:46:52 +0300
+Message-ID: <20240531104653.1303519-1-heikki.krogerus@linux.intel.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240529125038.1051641-1-mika.westerberg@linux.intel.com>
+Content-Transfer-Encoding: 8bit
 
-On Wed, May 29, 2024 at 03:50:38PM +0300, Mika Westerberg wrote:
-> This allows the interested parties to find the Thunderbolt/USB4
-> debugging tools (aka tbtools) easier in case they need to look at the
-> information under debugfs entries.
-> 
-> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> Suggested-by: Mario Limonciello <mario.limonciello@amd.com>
-> Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
+It is possible that also the GET_ERROR command fails. If
+that happens, the command completion still needs to be
+acknowledged. Otherwise the interface will be stuck until
+it's reset.
 
-Applied to thunderbolt.git/next.
+Reported-by: Ammy Yi <ammy.yi@intel.com>
+Fixes: bdc62f2bae8f ("usb: typec: ucsi: Simplified registration and I/O API")
+Cc: stable@vger.kernel.org
+Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+---
+ drivers/usb/typec/ucsi/ucsi.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+index 3966e555f797..5c57ecbce813 100644
+--- a/drivers/usb/typec/ucsi/ucsi.c
++++ b/drivers/usb/typec/ucsi/ucsi.c
+@@ -153,8 +153,13 @@ static int ucsi_exec_command(struct ucsi *ucsi, u64 cmd)
+ 	}
+ 
+ 	if (cci & UCSI_CCI_ERROR) {
+-		if (cmd == UCSI_GET_ERROR_STATUS)
++		if (cmd == UCSI_GET_ERROR_STATUS) {
++			ret = ucsi_acknowledge(ucsi, false);
++			if (ret)
++				return ret;
++
+ 			return -EIO;
++		}
+ 		return ucsi_read_error(ucsi);
+ 	}
+ 
+-- 
+2.43.0
+
 
