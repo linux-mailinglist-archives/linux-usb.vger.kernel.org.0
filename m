@@ -1,130 +1,303 @@
-Return-Path: <linux-usb+bounces-10704-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10705-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E7CE8D5668
-	for <lists+linux-usb@lfdr.de>; Fri, 31 May 2024 01:44:02 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D5818D56E1
+	for <lists+linux-usb@lfdr.de>; Fri, 31 May 2024 02:23:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5A458286FD1
-	for <lists+linux-usb@lfdr.de>; Thu, 30 May 2024 23:44:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 05FC21F23E08
+	for <lists+linux-usb@lfdr.de>; Fri, 31 May 2024 00:23:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60D931862B1;
-	Thu, 30 May 2024 23:43:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 244124C7C;
+	Fri, 31 May 2024 00:22:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="HgqsFLjB"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="VXLlzU0i"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4817183985
-	for <linux-usb@vger.kernel.org>; Thu, 30 May 2024 23:43:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7133A3D
+	for <linux-usb@vger.kernel.org>; Fri, 31 May 2024 00:22:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717112616; cv=none; b=VyX4COnFMsqivYKWrWBGKUiGJz7eEKmIk7Dt58sBTdybXqH5JFG3tVkMVhEgnOUyqcVm+cWHxYLMqVzLFsfvgb5UIq9q3wd6GgicfaB0dpJTpFALJ28GwISafrCQXmRlntdQMuXJPlSeGbp2zaIBzR8OHhJa8pzk5hnIIvGANOI=
+	t=1717114974; cv=none; b=a5oCr9RqxMcXHCQ3T4LS5zjOh8TNPUyCJWa2M7yLYX3fXHbQ2C21k2EzfaUIgXhmVmvLUtoKo6Vp1yaW+zA/F7/6/XUFx/S4vaJ+mlfdH058V47yvssxH0AlhHjfAEazw3aRTTe+AsKUvTGmcGNDIVij55l9vg89QO7LMb3beK8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717112616; c=relaxed/simple;
-	bh=ltzXXLPD/ETo7voCPkE9iyg3r3LgEMh7nkLmfXKk4pY=;
-	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version; b=kvc66TKIjDrE/ee0ezR0U6OCI3J4Mxq7lT/lwxonpI87flKoRmvFxO9ilf/tIy3WWfv+rlcdHHUs32fDQGux2toTITBamfBJlCVamPpFqmzPMj0ycs2TKlSJ7uuIUYaLpEnwcxTgiRi4lDkJUOb0HAU0x5ez9LZbV0+zza9ddFY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=HgqsFLjB; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1f48bd643a0so10892915ad.3
-        for <linux-usb@vger.kernel.org>; Thu, 30 May 2024 16:43:34 -0700 (PDT)
+	s=arc-20240116; t=1717114974; c=relaxed/simple;
+	bh=a+MTHRbQZmyET4RE0SkjiFYdjs368VfVHQLAD7aFXJg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IoFexvgzHX4MHErMZFdceZZxrKJrO3XnaksLvObxLWLm+D/8UWnP1XKZaNeueQXx7E0bQwhvNnTD7yccEipT0SQVtvBSObQrYS9thTt81gbGqHffotWj24Rn913WBjigwjwFKXbXuz6W9lsMS5xcuHkcEDW+S8Y4bzwor/dXsSg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=VXLlzU0i; arc=none smtp.client-ip=209.85.167.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-52b03d66861so1566550e87.1
+        for <linux-usb@vger.kernel.org>; Thu, 30 May 2024 17:22:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1717112614; x=1717717414; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to:date
-         :subject:cc:to:from:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=o9pq2FYeJqKIzHZBODKgIJ4xCnulDhV4vBp41eJFOEo=;
-        b=HgqsFLjBLfpvUEnQTNUmKyaS7rN6Vmhuc+ZPw92tpXqE016O/4K4zX/BggFkLPT3v7
-         Wk1iVPK+KrdsfE8DlfOmdILIeBpjPCj9fjoxExvAJ0O4GjKEWhCxuYn9rEWZ8Iz5l+lK
-         aHZFqWPTYjgkSSV6i9kH8TH8L9gcvGSMg4+ZE=
+        d=linaro.org; s=google; t=1717114971; x=1717719771; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0yVVKFhmIVyi/gwbSmn3VSSTQQqssFlSlOSpKOH7IJg=;
+        b=VXLlzU0i3WzR4ZBScI9I1du86ITe1/++yytMBiCicYyoFgn5TWyQP/KBM8rBaX7bEm
+         K6X0Y/FBV6iTa4pyok/4/JubT0CDILaA5q55YO2zSgSzDNvnyW7ILJXs/9jvvJnr4ZRP
+         yw1cCmjHxxmzHZh146HwrENngKNQAeCVBVfqSkYavcbv8N2b6X0PDxz3gBNIQKI+sEPZ
+         OwHgrhkFNezkr9m9VWel7Xj1tXPB0d5sbw+mNgfcdU5jxiyWRi63hLABcUzGKRc2hRYM
+         KYPyiyrLFw/RkGnIzHA4ic+kRP6NT2wj2TbJKroz2MCM5Tn0GJwDRuijKAovNCAB8e0s
+         Y9cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717112614; x=1717717414;
-        h=content-transfer-encoding:mime-version:references:in-reply-to:date
-         :subject:cc:to:from:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=o9pq2FYeJqKIzHZBODKgIJ4xCnulDhV4vBp41eJFOEo=;
-        b=hWF2nErw5ahldIZckL6KjnkSNALbYuac+p9RuJ6LXuMmEEIVCWrnJtrF3SXr8CBV9h
-         Q7VwkdhI7679dwl9lYWfyyQImbj4h75yFPSyyaAKEZmGCCOUJ6AXrKglu2ahbGsqoNRf
-         UpoBfNOxp6nde/o7OlQ80WVt3+a3kT3F0xrTnZAWJRqMNcHcWb9glr2rsm75CSN6H91M
-         hMVCArd/L+ncnqXubyOPJbobiMTU8DeHDvS3sbc3dCH3jxCJAqafmBGVHPSMqdLS0VSo
-         MJ0uh9nLNbgq3dxoYgwWOx3dCZrLsQijRFzWOWcfYAMSOiTFbziyMX3JyFIMvWjozG+9
-         i/Uw==
-X-Forwarded-Encrypted: i=1; AJvYcCX5/v7vzTMUea8bcI+V2bmcywRQi9I3aTPtBRTPHTkjXXDwg8JqNTb9cL3J9CKPFytC26jRjBKG7TOUuAc6JZ9dS8WinjTs1AiC
-X-Gm-Message-State: AOJu0YxqCjRbmNIiYrkzrp+NuCb24o702PHyGxpUKFsgv/K/nurzoIFR
-	2tlfM+HhGmM+6QeLsqPCwfL2DGpkwd1+n8YZf1RlepLDPGhZ8BnoztQnQnBsNg==
-X-Google-Smtp-Source: AGHT+IFzh5XzJPXNr+dYh9ZG2MQMwUQ4xDLkV3daefC9PB62bsOX5ogl4Mw9hYuGxSfZLlxDMNS2jg==
-X-Received: by 2002:a17:902:e5d0:b0:1f6:d4b:350c with SMTP id d9443c01a7336-1f6370ba643mr3254985ad.56.1717112613789;
-        Thu, 30 May 2024 16:43:33 -0700 (PDT)
-Received: from dianders.sjc.corp.google.com ([2620:15c:9d:2:564b:72b6:4827:cf6a])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f632416d90sm3459275ad.285.2024.05.30.16.43.32
+        d=1e100.net; s=20230601; t=1717114971; x=1717719771;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0yVVKFhmIVyi/gwbSmn3VSSTQQqssFlSlOSpKOH7IJg=;
+        b=f/QiYlqoMILfV1wCMEVyQKCasyPPxlrB3+5gZs0VykRivjVVZq06VaVjAnpoo4vWGX
+         KaZGkinsp2E6kE1tUopZxbS24LTvFAb85vFP1roy3fYNnLxu6j/opURkqf7bFWcOcAtb
+         9D1T3wlNkaAkPKYF0eBYncsFwnaL1+yV0QTtZL3euHeu21UycRR9YpY9olf4RiAD/v5P
+         qpYM3qr7mE+popNFgUNCIjMnM+zUkcQLMUPnzhJbNkNCwSD3OPZMOQat6thC1TnnhYEu
+         KblraDxtT35NU1IGdXPlRIvT2CW4+X59OE0oZaUIbAkF8qmheav5qf16g3zaPO1I36qW
+         5iCw==
+X-Forwarded-Encrypted: i=1; AJvYcCVPIgtl+KkHXzSFE0LJVIi1BDEvzYJ1bv0GFVBzU3mEsqcra+qWZGyAjQnx0FZvDB8UqAQ2ucAGODuUwxF1Q8Q4HSyAkprnD2nK
+X-Gm-Message-State: AOJu0Yw2Vqnp9PI8zx8oubLEvxOs7YnrAuW2sfFa9BdtHRWS4CFi5i8P
+	DDaHtrF1y+hSBA61pQerLKJLLOy+6UpkiAMaJ9NVu86zV57Hv5Z4gRLmZ+r+WBQ=
+X-Google-Smtp-Source: AGHT+IGwyTjaK7sTOD0lwTEcc8h2FpDlgvXSpJCoPLo5Nq2Xn4TWRqpsowc5anXlgkfZ9x1bVaT+CA==
+X-Received: by 2002:a19:7519:0:b0:523:9811:b0d6 with SMTP id 2adb3069b0e04-52b8959c577mr100931e87.15.1717114970664;
+        Thu, 30 May 2024 17:22:50 -0700 (PDT)
+Received: from eriador.lumag.spb.ru (dzdbxzyyyyyyyyyyyykxt-3.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::227])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52b84d34cdasm135780e87.50.2024.05.30.17.22.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 May 2024 16:43:33 -0700 (PDT)
-Message-ID: <66590f25.170a0220.8b5ad.1752@mx.google.com>
-X-Google-Original-Message-ID: <20240530164304.REPOST net-next.2.Ic039534f7590752a2c403de4ac452e3cb72072f4@changeid>
-From: Douglas Anderson <dianders@chromium.org>
-To: "David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Hayes Wang <hayeswang@realtek.com>
-Cc: danielgeorgem@google.com,
-	Douglas Anderson <dianders@chromium.org>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Grant Grundler <grundler@chromium.org>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org
-Subject: [PATCH REPOST net-next 2/2] r8152: Wake up the system if the we need a reset
-Date: Thu, 30 May 2024 16:43:09 -0700
-X-Mailer: git-send-email 2.45.1.288.g0e0cd299f1-goog
-In-Reply-To: <20240530164304.REPOST net-next.1.Ibeda5c0772812ce18953150da5a0888d2d875150@changeid>
-References: <20240530164304.REPOST net-next.1.Ibeda5c0772812ce18953150da5a0888d2d875150@changeid>
+        Thu, 30 May 2024 17:22:49 -0700 (PDT)
+Date: Fri, 31 May 2024 03:22:48 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Bjorn Andersson <andersson@kernel.org>, Hans de Goede <hdegoede@redhat.com>, 
+	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
+	linux-pm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	platform-driver-x86@vger.kernel.org, linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+	Nikita Travkin <nikita@trvn.ru>
+Subject: Re: [PATCH v4 3/6] usb: typec: ucsi: add Lenovo Yoga C630 glue driver
+Message-ID: <bo6jvoew3s37g753nclbx3badpnnhxs53myuaqb3whr5zb4tf3@fcra5ic6y6wo>
+References: <20240528-yoga-ec-driver-v4-0-4fa8dfaae7b6@linaro.org>
+ <20240528-yoga-ec-driver-v4-3-4fa8dfaae7b6@linaro.org>
+ <afed0bee-de6e-4e86-8437-0518c616bd2c@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <afed0bee-de6e-4e86-8437-0518c616bd2c@linaro.org>
 
-If we get to the end of the r8152's suspend() routine and we find that
-the USB device is INACCESSIBLE then it means that some of our
-preparation for suspend didn't take place. We need a USB reset to get
-ourselves back in a consistent state so we can try again and that
-can't happen during system suspend. Call pm_wakeup_event() to wake the
-system up in this case.
+On Wed, May 29, 2024 at 04:41:40PM +0100, Bryan O'Donoghue wrote:
+> On 28/05/2024 21:44, Dmitry Baryshkov wrote:
+> > The Lenovo Yoga C630 WOS laptop provides implements UCSI interface in
+> > the onboard EC. Add glue driver to interface the platform's UCSI
+> > implementation.
+> > 
+> > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> > ---
+> >   drivers/usb/typec/ucsi/Kconfig          |   9 ++
+> >   drivers/usb/typec/ucsi/Makefile         |   1 +
+> >   drivers/usb/typec/ucsi/ucsi_yoga_c630.c | 189 ++++++++++++++++++++++++++++++++
+> >   3 files changed, 199 insertions(+)
+> > 
+> > diff --git a/drivers/usb/typec/ucsi/Kconfig b/drivers/usb/typec/ucsi/Kconfig
+> > index bdcb1764cfae..680e1b87b152 100644
+> > --- a/drivers/usb/typec/ucsi/Kconfig
+> > +++ b/drivers/usb/typec/ucsi/Kconfig
+> > @@ -69,4 +69,13 @@ config UCSI_PMIC_GLINK
+> >   	  To compile the driver as a module, choose M here: the module will be
+> >   	  called ucsi_glink.
+> > +config UCSI_LENOVO_YOGA_C630
+> > +	tristate "UCSI Interface Driver for Lenovo Yoga C630"
+> > +	depends on EC_LENOVO_YOGA_C630
+> > +	help
+> > +	  This driver enables UCSI support on the Lenovo Yoga C630 laptop.
+> > +
+> > +	  To compile the driver as a module, choose M here: the module will be
+> > +	  called ucsi_yoga_c630.
+> > +
+> >   endif
+> > diff --git a/drivers/usb/typec/ucsi/Makefile b/drivers/usb/typec/ucsi/Makefile
+> > index b4679f94696b..aed41d23887b 100644
+> > --- a/drivers/usb/typec/ucsi/Makefile
+> > +++ b/drivers/usb/typec/ucsi/Makefile
+> > @@ -21,3 +21,4 @@ obj-$(CONFIG_UCSI_ACPI)			+= ucsi_acpi.o
+> >   obj-$(CONFIG_UCSI_CCG)			+= ucsi_ccg.o
+> >   obj-$(CONFIG_UCSI_STM32G0)		+= ucsi_stm32g0.o
+> >   obj-$(CONFIG_UCSI_PMIC_GLINK)		+= ucsi_glink.o
+> > +obj-$(CONFIG_UCSI_LENOVO_YOGA_C630)	+= ucsi_yoga_c630.o
+> > diff --git a/drivers/usb/typec/ucsi/ucsi_yoga_c630.c b/drivers/usb/typec/ucsi/ucsi_yoga_c630.c
+> > new file mode 100644
+> > index 000000000000..ca1ab5c81b87
+> > --- /dev/null
+> > +++ b/drivers/usb/typec/ucsi/ucsi_yoga_c630.c
+> > @@ -0,0 +1,189 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * Copyright (c) 2022-2024, Linaro Ltd
+> > + * Authors:
+> > + *    Bjorn Andersson
+> > + *    Dmitry Baryshkov
+> > + */
+> > +#include <linux/auxiliary_bus.h>
+> > +#include <linux/module.h>
+> > +#include <linux/platform_data/lenovo-yoga-c630.h>
+> > +
+> > +#include "ucsi.h"
+> > +
+> > +struct yoga_c630_ucsi {
+> > +	struct yoga_c630_ec *ec;
+> > +	struct ucsi *ucsi;
+> > +	struct notifier_block nb;
+> > +	struct completion complete;
+> > +	unsigned long flags;
+> > +#define UCSI_C630_COMMAND_PENDING	0
+> > +#define UCSI_C630_ACK_PENDING		1
+> > +	u16 version;
+> > +};
+> > +
+> > +static  int yoga_c630_ucsi_read(struct ucsi *ucsi, unsigned int offset,
+> > +				void *val, size_t val_len)
+> > +{
+> > +	struct yoga_c630_ucsi *uec = ucsi_get_drvdata(ucsi);
+> > +	u8 buf[YOGA_C630_UCSI_READ_SIZE];
+> > +	int ret;
+> > +
+> > +	ret = yoga_c630_ec_ucsi_read(uec->ec, buf);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	if (offset == UCSI_VERSION) {
+> > +		memcpy(val, &uec->version, min(val_len, sizeof(uec->version)));
+> > +		return 0;
+> > +	}
+> > +
+> > +	if (offset == UCSI_CCI)
+> > +		memcpy(val, buf,
+> > +		       min(val_len, YOGA_C630_UCSI_CCI_SIZE));
+> > +	else if (offset == UCSI_MESSAGE_IN)
+> > +		memcpy(val, buf + YOGA_C630_UCSI_CCI_SIZE,
+> > +		       min(val_len, YOGA_C630_UCSI_DATA_SIZE));
+> 
+> For some reason I believe multi-lines like this, including function calls
+> that are split over lines should be encapsulated with {}
+> 
+> else if(x) {
+>     memcpy(x,y,
+>            z);
+> }
+> 
+> If checkpatch doesn't complain about it feel free not to do that though.
 
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
----
+No, checkpatch --strict doesn't complain
 
- drivers/net/usb/r8152.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+> 
+> > +	else
+> > +		return -EINVAL;
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static  int yoga_c630_ucsi_async_write(struct ucsi *ucsi, unsigned int offset,
+> > +				       const void *val, size_t val_len)
+> > +{
+> > +	struct yoga_c630_ucsi *uec = ucsi_get_drvdata(ucsi);
+> > +
+> > +	if (offset != UCSI_CONTROL ||
+> > +	    val_len != YOGA_C630_UCSI_WRITE_SIZE)
+> > +		return -EINVAL;
+> > +
+> > +	return yoga_c630_ec_ucsi_write(uec->ec, val);
+> > +}
+> > +
+> > +static  int yoga_c630_ucsi_sync_write(struct ucsi *ucsi, unsigned int offset,
+> > +				      const void *val, size_t val_len)
+> > +{
+> > +	struct yoga_c630_ucsi *uec = ucsi_get_drvdata(ucsi);
+> > +	bool ack = UCSI_COMMAND(*(u64 *)val) == UCSI_ACK_CC_CI;
+> > +	int ret;
+> > +
+> > +	if (ack)
+> > +		set_bit(UCSI_C630_ACK_PENDING, &uec->flags);
+> > +	else
+> > +		set_bit(UCSI_C630_COMMAND_PENDING, &uec->flags);
+> > +
+> > +	reinit_completion(&uec->complete);
+> > +
+> > +	ret = yoga_c630_ucsi_async_write(ucsi, offset, val, val_len);
+> > +	if (ret)
+> > +		goto out_clear_bit;
+> > +
+> > +	if (!wait_for_completion_timeout(&uec->complete, 5 * HZ))
+> > +		ret = -ETIMEDOUT;
+> > +
+> > +out_clear_bit:
+> > +	if (ack)
+> > +		clear_bit(UCSI_C630_ACK_PENDING, &uec->flags);
+> > +	else
+> > +		clear_bit(UCSI_C630_COMMAND_PENDING, &uec->flags);
+> > +
+> > +	return ret;
+> > +}
+> > +
+> > +const struct ucsi_operations yoga_c630_ucsi_ops = {
+> > +	.read = yoga_c630_ucsi_read,
+> > +	.sync_write = yoga_c630_ucsi_sync_write,
+> > +	.async_write = yoga_c630_ucsi_async_write,
+> > +};
+> > +
+> > +static int yoga_c630_ucsi_notify(struct notifier_block *nb,
+> > +				 unsigned long action, void *data)
+> > +{
+> > +	struct yoga_c630_ucsi *uec = container_of(nb, struct yoga_c630_ucsi, nb);
+> > +	u32 cci;
+> > +	int ret;
+> > +
+> > +	if (action == LENOVO_EC_EVENT_USB || action == LENOVO_EC_EVENT_HPD) {
+> > +		ucsi_connector_change(uec->ucsi, 1);
+> > +		return NOTIFY_OK;
+> > +	}
+> > +
+> > +	if (action != LENOVO_EC_EVENT_UCSI)
+> > +		return NOTIFY_DONE;
+> 
+> Is this disjunction on action a good candidate for a switch(){}
 
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 6a3f4b2114ee..09fe70bc45d4 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -8647,6 +8647,13 @@ static int rtl8152_system_suspend(struct r8152 *tp)
- 		tasklet_enable(&tp->tx_tl);
- 	}
- 
-+	/* If we're inaccessible here then some of the work that we did to
-+	 * get the adapter ready for suspend didn't work. Queue up a wakeup
-+	 * event so we can try again.
-+	 */
-+	if (test_bit(RTL8152_INACCESSIBLE, &tp->flags))
-+		pm_wakeup_event(&tp->udev->dev, 0);
-+
- 	return 0;
- }
- 
+Ack, refactored the function by extracting the UCSI notification code
+and then using the switch-case.
+
+> > +
+> > +	ret = uec->ucsi->ops->read(uec->ucsi, UCSI_CCI, &cci, sizeof(cci));
+> > +	if (ret)
+> > +		return NOTIFY_DONE;
+> > +
+> > +	if (UCSI_CCI_CONNECTOR(cci))
+> > +		ucsi_connector_change(uec->ucsi, UCSI_CCI_CONNECTOR(cci));
+> > +
+> > +	if (cci & UCSI_CCI_ACK_COMPLETE &&
+> > +	    test_bit(UCSI_C630_ACK_PENDING, &uec->flags))
+> > +		complete(&uec->complete);
+> > +	if (cci & UCSI_CCI_COMMAND_COMPLETE &&
+> > +	    test_bit(UCSI_C630_COMMAND_PENDING, &uec->flags))
+> > +		complete(&uec->complete);
+> 
+> IMO these multi-line clauses should end up with a {} around the complete
+> even though its not required.
+> 
+> Emphasis on the O.
+
+I added an empty line inbetween, then it's easier to comprehent event
+without curly brackets.
+
+> 
+> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+
 -- 
-2.45.1.288.g0e0cd299f1-goog
-
+With best wishes
+Dmitry
 
