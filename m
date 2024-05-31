@@ -1,147 +1,172 @@
-Return-Path: <linux-usb+bounces-10709-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10710-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35AC18D58AD
-	for <lists+linux-usb@lfdr.de>; Fri, 31 May 2024 04:40:46 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BF1F48D5A34
+	for <lists+linux-usb@lfdr.de>; Fri, 31 May 2024 08:07:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E71E72865F2
-	for <lists+linux-usb@lfdr.de>; Fri, 31 May 2024 02:40:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4AEF41F25FC0
+	for <lists+linux-usb@lfdr.de>; Fri, 31 May 2024 06:07:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 229E87868B;
-	Fri, 31 May 2024 02:40:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC6367D401;
+	Fri, 31 May 2024 06:07:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="ZsV4HLbj"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="THz7IFy2"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from m15.mail.163.com (m15.mail.163.com [45.254.50.220])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7280C1F16B;
-	Fri, 31 May 2024 02:40:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.50.220
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 621957CF16
+	for <linux-usb@vger.kernel.org>; Fri, 31 May 2024 06:07:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717123238; cv=none; b=o2WMntQwFqRuXK2YFT8V03A0/Jex3baqBEHpoQJxNEcYnVBXcKLz+wzFP0ct4YaomnnQpuVGMIpj36EkBLFzsGylqh4eFjBiOnKrcOrfpBvInj99H8jH7aO71UCY7Epmzmn8dVHIKekdBXur+ddcDokBefYb2Rhb6yK5271RRTE=
+	t=1717135637; cv=none; b=r1Nu5tOc7/cbu8sqf8+9+r5r2nmU/4g94m0c/A8AEThPkC0emJ3227F2tWOeNSrKzQ6tgTjXKdaAuljMG/ysRx3OtuFF+n1bQKNXtBU9oQaIBO/xWJLxvCLieh3FEu3DpK++q4A5iFDdjs+EMssNax5nBKzkl7SkYjlhzLgJzS4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717123238; c=relaxed/simple;
-	bh=bW3j1tAHqoJskcl9nEteT2/AIXwPqPy+9qQ/vXBYs6k=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=YLajmXLuEJB/mzYBvN5LM11iC8sLWzi8lNvlGJyw5pGv3vYX0n5t7IN7isMpMrnWSINs9g3RUiBzruy0X58V3rQ3cdmsoOpy0zWF88Y8wiOPxGyRwAzyVG4yvC8gdXNGVg0aLdoE2uR/7lgRNAeH+Tghy8U1M3Ct9vJFERBjedk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=ZsV4HLbj; arc=none smtp.client-ip=45.254.50.220
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=scfQE
-	T7TC4rP+X2eKiDLC21w14Yps502yz+OGN7LpD8=; b=ZsV4HLbj1XUkRF/Ww+f2z
-	VPG1S5LejQi7gHvXoYYsiLnzy/BZnWeozqtyPJK1JxZvXDJbmbLTF844Tme2rWE8
-	v/bGv7D42O4mbh0JEEMXkx66klmr+2T/7meGgLCnJpzrlOQJk3MBCpoFB4jGGN6+
-	DvRgm3OtzgA7U9DWJEBhj8=
-Received: from smtp.163.com (unknown [124.89.89.114])
-	by gzga-smtp-mta-g0-0 (Coremail) with SMTP id _____wDnz9CPOFlmSUZSGg--.56948S4;
-	Fri, 31 May 2024 10:40:15 +0800 (CST)
-From: Vanillan Wang <vanillanwang@163.com>
-To: johan@kernel.org,
-	gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Vanillan Wang <vanillanwang@163.com>
-Subject: [PATCH] USB: serial: option: add Rolling RW350-GL variants
-Date: Fri, 31 May 2024 10:40:12 +0800
-Message-Id: <20240531024012.29805-1-vanillanwang@163.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1717135637; c=relaxed/simple;
+	bh=EEX5ulwwTova+mQNBy+545y80BMsjEFJJXYmtCRaVYY=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:References; b=lhqqrZB5bKeT++U5s5TbVY3FCdH4ChmspFGWJ+J5O2fPtgkM23wm4uG1lOVWE7G5YXDSa3DizOTadNjufslUTi1dSqeSpdte8EoxprmquChecHCaMqDcD4tG1KqN7H9WR61z2mOdUwSmnQfq3OTLrTOgQQNsZY0BPJt1G76Q9P8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=THz7IFy2; arc=none smtp.client-ip=203.254.224.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
+	by mailout3.samsung.com (KnoxPortal) with ESMTP id 20240531060712epoutp039056e9dcf393996987d89b392aa2630a~UfcKRPvxp0999109991epoutp03R
+	for <linux-usb@vger.kernel.org>; Fri, 31 May 2024 06:07:12 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20240531060712epoutp039056e9dcf393996987d89b392aa2630a~UfcKRPvxp0999109991epoutp03R
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1717135632;
+	bh=lKDV9Lg63LYuTqC7+tbrD7f1+q5993NJv6FjnUKs/Sw=;
+	h=From:To:Cc:Subject:Date:References:From;
+	b=THz7IFy2nHYFFR3BTFB/TlS2FhJKHD5b6Cuk+1wxEtEUtpm2Lm0fd/Afm4UjYP250
+	 N7vz+A+OPJer58UZ/v2rtzRyTWRhA6Z1Eaw4KRs47vhDiJlk2HGk02YNm03+tgJ7mq
+	 Bls+MrQIMjUvqd6AKe4LfwIce8FqEAY0ABp1aQok=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+	epcas2p4.samsung.com (KnoxPortal) with ESMTP id
+	20240531060712epcas2p4a524da1faec7f49395981565053453f1~UfcJz23Rv0235002350epcas2p4i;
+	Fri, 31 May 2024 06:07:12 +0000 (GMT)
+Received: from epsmges2p1.samsung.com (unknown [182.195.36.98]) by
+	epsnrtp2.localdomain (Postfix) with ESMTP id 4VrCM33HGPz4x9QG; Fri, 31 May
+	2024 06:07:11 +0000 (GMT)
+Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
+	epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+	0B.DA.09848.F0969566; Fri, 31 May 2024 15:07:11 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+	epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
+	20240531060711epcas2p4ee3987a647f6a49b589b783d14ea25ae~UfcI87C_40235002350epcas2p4a;
+	Fri, 31 May 2024 06:07:11 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+	20240531060711epsmtrp2f1265052b4a1a10999a9ba9841fdb37e~UfcI8BjGk3234232342epsmtrp2T;
+	Fri, 31 May 2024 06:07:11 +0000 (GMT)
+X-AuditID: b6c32a45-447fe70000002678-18-6659690f1003
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+	epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	8E.91.08336.E0969566; Fri, 31 May 2024 15:07:11 +0900 (KST)
+Received: from ubuntu.dsn.sec.samsung.com (unknown [10.229.95.128]) by
+	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20240531060710epsmtip17a0a62a25928b2871d00720bde6c2a94~UfcIwL4pd0050400504epsmtip1z;
+	Fri, 31 May 2024 06:07:10 +0000 (GMT)
+From: Daehwan Jung <dh10.jung@samsung.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring
+	<robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+	<conor+dt@kernel.org>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>, Mathias
+	Nyman <mathias.nyman@intel.com>, Felipe Balbi <balbi@kernel.org>
+Cc: linux-usb@vger.kernel.org (open list:USB SUBSYSTEM),
+	devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED DEVICE
+	TREE BINDINGS), linux-kernel@vger.kernel.org (open list), Daehwan Jung
+	<dh10.jung@samsung.com>
+Subject: [PATCH v2 0/5] usb: Add quirk for writing high-low order
+Date: Fri, 31 May 2024 15:07:32 +0900
+Message-Id: <1717135657-120818-1-git-send-email-dh10.jung@samsung.com>
+X-Mailer: git-send-email 2.7.4
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrFKsWRmVeSWpSXmKPExsWy7bCmmS5/ZmSawd0FkhbH2p6wW6zZe47J
+	Yv6Rc6wWdxZMY7JoXryezeLlrHtsFpd3zWGzWLSsldmiedMUVov/e3awW6xacIDdgdtj8Z6X
+	TB6bVnWyeeyfu4bdo2/LKkaPLfs/M3p83iQXwBaVbZORmpiSWqSQmpecn5KZl26r5B0c7xxv
+	amZgqGtoaWGupJCXmJtqq+TiE6DrlpkDdJ+SQlliTilQKCCxuFhJ386mKL+0JFUhI7+4xFYp
+	tSAlp8C8QK84Mbe4NC9dLy+1xMrQwMDIFKgwITvjY+Nj1oLFfBUHtveyNzC+5Opi5OSQEDCR
+	mLh4O0sXIxeHkMAORolpX9ewQjifGCWe33zBDOF8Y5To//mOGaZl3vcnjBCJvYwSsx4fZ4Nw
+	fjBKLJ55GmgYBwebgJbE94VgRSICs5gkHs25C+YwCzxjlFj/5zwTyChhAUeJybsms4HYLAKq
+	Et9edrKA2LwCbhL3/+5lhFgnJ3HzXCfYHRIC19gl+g79Z4VIuEgcX7iCBcIWlnh1fAs7hC0l
+	8fndXjYIu1ji1vNnUM0tjBIrXrVAPWEsMetZOyPIqcwCmhLrd+mDmBICyhJHboGNZBbgk+g4
+	/JcdIswr0dEmBNGoLDH98gSoCyQlDr4+BzXQQ+L3oQ9grUICsRL/zp9nnMAoOwth/gJGxlWM
+	YqkFxbnpqcVGBYbwaErOz93ECE50Wq47GCe//aB3iJGJg/EQowQHs5II76/0iDQh3pTEyqrU
+	ovz4otKc1OJDjKbA8JrILCWanA9MtXkl8YYmlgYmZmaG5kamBuZK4rz3WuemCAmkJ5akZqem
+	FqQWwfQxcXBKNTCp5q7Lz7jBU32zQVrgg3zCEx6JP3kcSlber6YoCB9ozC3d+81xW/Zv1f8x
+	i8OddVM5NvvfDe424svgKf32I8Rh6scDcUmvbf6tMXsuMXGOqCLvUYmcNTVxc19G3Wp8kVbm
+	flalnFn6QMsFv7opW+t/L+Vxdvj60qOhJuFa0urHuV83fDhz8m/p4rn1u5N/OX4SPr00gmfL
+	rzOqXKca7p57Mc1Ui+XD5DcHZxe4eqTsOvPmhAFbyIEmuSvmKifd6k7PPX5oLfuBbTtf7dvU
+	yt45M/bxpA17m5Xdpvw6aCL5qdC66VbvloaFHwPOJgtusegTuCbDOFc5jM+JI3d903GL609e
+	umxVuSzyY+G7/P9nlFiKMxINtZiLihMBOdnhX/0DAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprBLMWRmVeSWpSXmKPExsWy7bCSnC5/ZmSaweqFTBbH2p6wW6zZe47J
+	Yv6Rc6wWdxZMY7JoXryezeLlrHtsFpd3zWGzWLSsldmiedMUVov/e3awW6xacIDdgdtj8Z6X
+	TB6bVnWyeeyfu4bdo2/LKkaPLfs/M3p83iQXwBbFZZOSmpNZllqkb5fAlfGx8TFrwWK+igPb
+	e9kbGF9ydTFyckgImEjM+/6EsYuRi0NIYDejxI7ZE5ghEpISS+feYIewhSXutxxhBbGFBL4x
+	SnxqTu9i5OBgE9CS+L4QrFdEYAGTxLVpt9lBHGaBZ4wS9x60gDUICzhKTN41mQ3EZhFQlfj2
+	spMFxOYVcJO4/3cvI8QCOYmb5zqZJzDyLGBkWMUomVpQnJueW2xYYJiXWq5XnJhbXJqXrpec
+	n7uJERx4Wpo7GLev+qB3iJGJg/EQowQHs5II76/0iDQh3pTEyqrUovz4otKc1OJDjNIcLEri
+	vOIvelOEBNITS1KzU1MLUotgskwcnFINTM5r9k8WP/57g8qvbxuK6s3cKgVib7w56WnD7qL1
+	MGev7tvwQuUIn2mbha9H7pn4SU/12tkgdqUkB4+nJ2++KJ50R2burIq9YXJ3Wdm4db51pHTL
+	RL//a/sk8/rjhh+16X/Yn0RtKX+5jrdouUiARFNEeNSJ5SLmi7wZduut+vQg1+xIk/m+i0bS
+	HEc+XbzPpLbf40CZY8Kc2mWqHC+ql2yocmqp8D4t3XX5bct3nmnHpMLM15mcyztgnPOXXYp5
+	qpzHj8OvfWOSfIqSG7M4naWCZ+xN8t5zoCuw/sMnTwcZsdDDnz/Pmr1w4rNXr9QevZjL1//r
+	Zvrm8hidLYZ3o5KMdbW9t4VeMWVI7/JUU2Ipzkg01GIuKk4EAIf3qmCrAgAA
+X-CMS-MailID: 20240531060711epcas2p4ee3987a647f6a49b589b783d14ea25ae
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20240531060711epcas2p4ee3987a647f6a49b589b783d14ea25ae
+References: <CGME20240531060711epcas2p4ee3987a647f6a49b589b783d14ea25ae@epcas2p4.samsung.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wDnz9CPOFlmSUZSGg--.56948S4
-X-Coremail-Antispam: 1Uf129KBjvJXoWxZr1kXry5GF48KFW7KrW5Awb_yoWrGF4DpF
-	4fAF4SqFZ5XF15XFnFkF18ZayrK3Z3Wr17CayUAw4FqFWxAws7tF1UA3yxWr1q9F4Syr4q
-	q398G3y8Ga97KFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pReHqwUUUUU=
-X-CM-SenderInfo: pydqxz5odq4tlqj6il2tof0z/1tbishDvUmVODbxG9gAAs1
 
-Update the USB serial option driver support for the Rolling
-RW350-GL
-- VID:PID 33f8:0802, RW350-GL are laptop M.2 cards (with
-MBIM interfaces for /Linux/Chrome OS)
+There's the limitation of Synopsys dwc3 controller with ERST programming in
+supporting separate ERSTBA_HI and ERSTBA_LO programming. It's supported when
+the ERSTBA is programmed ERSTBA_HI before ERSTBA_LO. But, writing operations
+in xHCI is done low-high order following xHCI spec. xHCI specification 5.1
+"Register Conventions" states that 64 bit registers should be written in
+low-high order. Synopsys dwc3 needs workaround for high-low order. That's why
+I add new quirk to support this.
 
-Here are the outputs of usb-devices:
-
-usbmode=63: mbim, pipe
-
-T:  Bus=02 Lev=01 Prnt=01 Port=02 Cnt=01 Dev#=  2 Spd=5000 MxCh= 0
-D:  Ver= 3.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  1
-P:  Vendor=33f8 ProdID=0802 Rev=00.01
-S:  Manufacturer=Rolling Wireless S.a.r.l.
-S:  Product=USB DATA CARD
-C:  #Ifs= 3 Cfg#= 1 Atr=a0 MxPwr=896mA
-I:  If#= 0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
-E:  Ad=82(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
-I:  If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-E:  Ad=01(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=81(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:  If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=02(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=83(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-
-usbmode=64: mbim, others at (If#= 5 adb)
-
-T:  Bus=02 Lev=01 Prnt=01 Port=02 Cnt=01 Dev#=  5 Spd=5000 MxCh= 0
-D:  Ver= 3.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  1
-P:  Vendor=33f8 ProdID=0802 Rev=00.01
-S:  Manufacturer=Rolling Wireless S.a.r.l.
-S:  Product=USB DATA CARD
-C:  #Ifs=10 Cfg#= 1 Atr=a0 MxPwr=896mA
-I:  If#= 0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
-E:  Ad=82(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
-I:  If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-E:  Ad=01(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=81(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:  If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=02(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=83(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:  If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=03(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=84(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:  If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=04(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=85(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:  If#= 5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=usbfs
-E:  Ad=05(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=86(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:  If#= 6 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=06(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=87(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:  If#= 7 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=07(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=88(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:  If#= 8 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=08(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=89(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:  If#= 9 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=09(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=8a(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-
-Signed-off-by: Vanillan Wang <vanillanwang@163.com>
 ---
- drivers/usb/serial/option.c | 2 ++
- 1 file changed, 2 insertions(+)
+Changes in v2:
+- add a quirk in dwc3
+- add dt-bindings of dwc3/xhci
+- set the quirk in xhci-plat from dwc3
+Link to v1: https://lore.kernel.org/r/1716875836-186791-1-git-send-email-dh10.jung@samsung.com/
 
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index 8a5846d4adf6..039180f32795 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -2321,6 +2321,8 @@ static const struct usb_device_id option_ids[] = {
- 	  .driver_info = RSVD(4) },
- 	{ USB_DEVICE_INTERFACE_CLASS(0x33f8, 0x0115, 0xff),			/* Rolling RW135-GL (laptop MBIM) */
- 	  .driver_info = RSVD(5) },
-+	{ USB_DEVICE_INTERFACE_CLASS(0x33f8, 0x0802, 0xff),			/* Rolling RW350-GL (laptop MBIM) */
-+	  .driver_info = RSVD(5) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(OPPO_VENDOR_ID, OPPO_PRODUCT_R11, 0xff, 0xff, 0x30) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(SIERRA_VENDOR_ID, SIERRA_PRODUCT_EM9191, 0xff, 0xff, 0x30) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(SIERRA_VENDOR_ID, SIERRA_PRODUCT_EM9191, 0xff, 0xff, 0x40) },
+Changes in v1:
+- add a quirk in xhci
+- use the quirk for programming ERST high-low order
+Link to RFC: https://lore.kernel.org/r/1716339839-44022-1-git-send-email-dh10.jung@samsung.com/
+
+---
+
+Daehwan Jung (5):
+  dt-bindings: usb: snps,dwc3: Add 'snps,xhci-write-64-hi-lo-quirk'
+    quirk
+  usb: dwc3: Support quirk for writing high-low order
+  dt-bindings: usb: xhci: Add 'write-64-hi-lo-quirk' quirk
+  xhci: Add a quirk for writing ERST in high-low order
+  usb: host: xhci-plat: Add support for XHCI_WRITE_64_HI_LO_QUIRK
+
+ Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 5 +++++
+ Documentation/devicetree/bindings/usb/usb-xhci.yaml  | 4 ++++
+ drivers/usb/dwc3/core.c                              | 3 +++
+ drivers/usb/dwc3/core.h                              | 2 ++
+ drivers/usb/dwc3/host.c                              | 5 ++++-
+ drivers/usb/host/xhci-mem.c                          | 5 ++++-
+ drivers/usb/host/xhci-plat.c                         | 3 +++
+ drivers/usb/host/xhci.h                              | 2 ++
+ 8 files changed, 27 insertions(+), 2 deletions(-)
+
 -- 
-2.34.1
+2.7.4
 
 
