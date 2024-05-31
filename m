@@ -1,306 +1,239 @@
-Return-Path: <linux-usb+bounces-10707-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10708-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E9EE8D578B
-	for <lists+linux-usb@lfdr.de>; Fri, 31 May 2024 03:05:29 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53E7B8D584F
+	for <lists+linux-usb@lfdr.de>; Fri, 31 May 2024 03:44:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 72B291C242E4
-	for <lists+linux-usb@lfdr.de>; Fri, 31 May 2024 01:05:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BA553B23E2B
+	for <lists+linux-usb@lfdr.de>; Fri, 31 May 2024 01:44:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 717A4D26A;
-	Fri, 31 May 2024 01:05:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="PZ2imBoO"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC31F134BC;
+	Fri, 31 May 2024 01:44:31 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 107ADC8F3
-	for <linux-usb@vger.kernel.org>; Fri, 31 May 2024 01:05:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717117515; cv=none; b=Gf13OY3MDAamKioyQx5mt88kKSdLizm1jDtzShJ4hnOtcf3lVb0x33SfA8T1yTYnCnWoo4DDoqcdwqdg5XNhpeXXh+s3GpK8xxaJkYZvVIOT+pEgmlZH+BK9sZYcslFISvFDZOCuMzsxoRZwGwTACuK1yxp98DPwA4FNQTJn9hE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717117515; c=relaxed/simple;
-	bh=uXfDEOjLv+ehvyI9BLqFEZ08MZc+Pu/2A0MFNLqubJw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oAAz5D2fOxgDQiFj8sMllCyg8EDEyvf4xSOQBkhDFZgQ6B5mXQJAEloVlS8AKMzX/XS57v0y5ru21zMB8691crcGFMkoau46AfzPZJrQaEEX571lrnv/KBJeuTeoBQ5I4ggbTJn7NAZYdPQAxAjDimAZu0P6WPlaQnJOYbMIw3I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=PZ2imBoO; arc=none smtp.client-ip=209.85.167.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-52b86cfcbcaso593379e87.1
-        for <linux-usb@vger.kernel.org>; Thu, 30 May 2024 18:05:11 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C4AFE56A;
+	Fri, 31 May 2024 01:44:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1717119871; cv=fail; b=acm0WAZfuUlbRnS9Kg9B/ayN8yEIfnb5r1S0IJQ4PTOekcE7az5PYnXfy8ykFrGG5HU9QJfgELWnoaVURhHbWUMm/zF9Qn6TCkAXbWjJqlsPQGqU1bYAmTfjjkUY7Yy3UlqARqzXWZhLTX+uFHGDfAfixf59y/LofZk/63m0n8c=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1717119871; c=relaxed/simple;
+	bh=Io15HCCwZp0bTy67/FP1RFJi48o0hH7f0ZCkv+/ZcBc=;
+	h=To:Cc:Subject:From:In-Reply-To:Message-ID:References:Date:
+	 Content-Type:MIME-Version; b=Ff1qyEmgleSlM6KgzWg7K3dXadduWXQG1jpytJlUq6e2kVoKgKexNF9hi7kYWcL5Cz99AUAHCctatDIdv2ecXU3CuiZON7boIKlVyyPY95Zw9ObGpmNIxbzQ0+JE1tLfdKk43eyzL3fAd7ljpdMEyZTOnC/odqBC2V2UYle2cWI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; arc=fail smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 44V1alQ8019720;
+	Fri, 31 May 2024 01:44:23 GMT
+DKIM-Signature: =?UTF-8?Q?v=3D1;_a=3Drsa-sha256;_c=3Drelaxed/relaxed;_d=3Doracle.com;_h?=
+ =?UTF-8?Q?=3Dcc:content-type:date:from:in-reply-to:message-id:mime-versio?=
+ =?UTF-8?Q?n:references:subject:to;_s=3Dcorp-2023-11-20;_bh=3DkfUwWycQ6Yan?=
+ =?UTF-8?Q?kXvVnAS6k8lpGh6U5j3x+Kfs5rDbQxs=3D;_b=3DcbmR3/Vj/uOs3qRJckYQ1th?=
+ =?UTF-8?Q?3xd+nfShMw1inEfLylrAkM86R3zlEOQgWZpZxraGpnfU3_R1ESv/8Ps3QrArGN0?=
+ =?UTF-8?Q?jEiL+su4vmhZK0N+LLSkKybV+RyczYguU38vDXNTPZk3srnFXay_5DgyiCgNy+c?=
+ =?UTF-8?Q?Mg5KVNmrrf6Nlnlgfp5kdfeUw2NrD19Tl/CqMFx7RMQGxQ+RyDje5Xoql_u7U5m?=
+ =?UTF-8?Q?OIfIQTrSzZom//ScqkSsOO1lXJ3g+dQl55XTc6GwbjXTZwQWeXBZKCNtBeHX7da?=
+ =?UTF-8?Q?_RHVmYL5cZo010g4njOZ3LjrogyiOxfQIwlvXwFTy3o3tGfd2xx06PLVU2aOnoh?=
+ =?UTF-8?Q?wFELvE_EQ=3D=3D_?=
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3yb8g9tcjj-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 31 May 2024 01:44:23 +0000
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 44V1Zelm015377;
+	Fri, 31 May 2024 01:44:22 GMT
+Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2101.outbound.protection.outlook.com [104.47.58.101])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3yc538vfcj-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 31 May 2024 01:44:22 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=b9bUrdcOYEDh3+i90ZI/G1WXbKUmG4godYVgTjGlB8Axwb0nyJOwnK1KlmMrEcOwkQraN8prSDCOtlo3qvBhJ8SH36rZVJapBVDSk7zoyrrik4+0U6ytfqhismE0c6Bexhsx58bVZ4b99Oe3DHKk8giaG6+RdBF4NDxBC+aPO/HM+nB6CaKxofqbRFs6w9mXuMqjXomNqObDNY/m1/VQAxgjGCxxqNmzVjAyHi2DH/RSDgklziNByuvlN0bzWw0jHQEphYO7I+gKJur/Tp5rwyHUHZig56XQLI3j1mEn1Khoxss7cyPRhE16Zanl9YlTsel6EA5XAdSo5Kmo6v+KWA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=kfUwWycQ6YankXvVnAS6k8lpGh6U5j3x+Kfs5rDbQxs=;
+ b=AxvFt2i7gTbFWZuYz29XOafX2neciwnBvG/e2t4xe6pp1vgHgwyiJYhqsgUzNeuBmL0eNVjm70rg+H8N1vud4qhyxAKg7azER9HcwVoXxow7gPsp932r/PwiCCghbkPDb7V7bfjbovU1RkQQUtFdnITrXy9T5d91aPAkO+opsFcqowVZlVG3f9x01n8+k37YYsH8k6LFDIvWYqI6qDR6yxBlRBjlBMeWQU8KfR4lu4j2cUcekVoUqbdLcuAcm6mSJcS4Ch0VL9R2V9GV+eOC5WYVkA65lwM8UCn/lCvLui+Ls/iBivMvo1Bh5gzgecerVudoie/yJCRSInVFt/hvGw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1717117510; x=1717722310; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=LVbzQgiFaGguV//d78RBj3pAHXG3P0yCT4npYfngP5s=;
-        b=PZ2imBoOD/Gla9oPGISBS5VRkqhq4CUqBmcLJRO2cnQe+5z/wQ7vLCAr6t+0LFL9GI
-         JZviynR6AAOPVyaqj9w7lN4wf+ydNABI/O3xrrMGDrOcjpWUJXpj0gHVMqpJ0cuM3d2e
-         r9MOwBMb5aNcMx9vfb32/ldlfY0Tqr4p89tmWHXJqTe1rtaCuHecSWKLz/CK+lIf8uni
-         3/VcSepRvfxq0lMeH/O4+A8Xf4XZDVYdLlytmnnmVV3oR4Js986SJKnHvScJSdb5nHQU
-         1lK7D6kjEId1n5NiojZar5VxtGWC35D2tcPmWAG31+dAryUD1fEtG1UBcgjFon0Sbf/m
-         43wQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717117510; x=1717722310;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LVbzQgiFaGguV//d78RBj3pAHXG3P0yCT4npYfngP5s=;
-        b=pzlkcmmxt3a6gAz713RkRB5R+zTVgxDEtKO4rvDY+cHUCAXi6kPKldBG2gUDYkUbZ3
-         b/acuHzpOdU/A5mPxrMS/34F23kjChDnE4B73vgXwn7Yxy+PpTo8zbmyVD8GC7WrOQJC
-         pwyUvHNvDQGO8hz6Dqldqw2umwMXyQuK0JU9bPziWHdKM2TW2xzitG+dyg9qwhnVI2S/
-         LHRdrHlxrlawFPqd+XoYxG/64gHteLOinWDWaF5Gsbg/lWOVvoHtDN8nX8mH0VbtVMF+
-         TRG4SDhBe+ARbrYnVul+BWKeUk7stoWy3sf1Z8uoVuVb8UFVpuy10D2+7BRZ7SVQ7nEl
-         BKIA==
-X-Forwarded-Encrypted: i=1; AJvYcCU3ocQcAMpnv7miGzz6QxW2Y0Q6lVlUJTPpLIsGNq+t/u4ULBBwJEFYBfi9vWvloKA33JzovbtUAPVLXz+QGULphYNLcQSd1ydM
-X-Gm-Message-State: AOJu0YxwsiHVAVG+5ofGmlsAGb8bVQl07xwlVnXJEwqNcBSDX0KPoDtd
-	nIgw9ZW2v0frl3rrV5gJLayiq7Rvj05lDPQeP2xhSbiWkfFIwpPCkOSHJtmWtFw=
-X-Google-Smtp-Source: AGHT+IHomuQLV/a1+46r2/bjrhxItgrwS1B7Si5a5leUogKwVcxPn4v1vNxtZhU6lKWRVAcVsxarfw==
-X-Received: by 2002:ac2:5548:0:b0:52b:88e8:1c82 with SMTP id 2adb3069b0e04-52b895a385fmr190738e87.47.1717117510049;
-        Thu, 30 May 2024 18:05:10 -0700 (PDT)
-Received: from eriador.lumag.spb.ru (dzdbxzyyyyyyyyyyyykxt-3.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::227])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52b84d75fd6sm142407e87.157.2024.05.30.18.05.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 May 2024 18:05:09 -0700 (PDT)
-Date: Fri, 31 May 2024 04:05:08 +0300
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Bjorn Andersson <andersson@kernel.org>, Hans de Goede <hdegoede@redhat.com>, 
-	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
-	linux-pm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	platform-driver-x86@vger.kernel.org, linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
-	Nikita Travkin <nikita@trvn.ru>
-Subject: Re: [PATCH v4 4/6] power: supply: lenovo_yoga_c630_battery: add
- Lenovo C630 driver
-Message-ID: <ndrp6ghnoibfm3t7qk7zuwfcukixh6uzqykj7vitobtiqntin6@ud242mjaivfl>
-References: <20240528-yoga-ec-driver-v4-0-4fa8dfaae7b6@linaro.org>
- <20240528-yoga-ec-driver-v4-4-4fa8dfaae7b6@linaro.org>
- <6d957019-ccec-4129-9e6d-33204de88dd5@linaro.org>
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kfUwWycQ6YankXvVnAS6k8lpGh6U5j3x+Kfs5rDbQxs=;
+ b=t/SrkN6UYHKze+rrqPzkydOlAWN2i5kj3lSMPklRIAy5xUuCjTltyNaYCBLNQoF/v4J8BXqEUuRj1rfywkxLC5gTN3HhDOMTjsIZZL7oocd4fttNWZxomKwh6ZuaV9jCBv3t3CzaeDrSoxBFwXUGxjWEFgiuYrN9o1BVL2mV2ic=
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
+ by DM4PR10MB6864.namprd10.prod.outlook.com (2603:10b6:8:103::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.24; Fri, 31 May
+ 2024 01:44:20 +0000
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::5c74:6a24:843e:e8f7]) by PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::5c74:6a24:843e:e8f7%4]) with mapi id 15.20.7633.021; Fri, 31 May 2024
+ 01:44:19 +0000
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Pierre Tomon
+ <pierretom+12@ik.me>,
+        USB mailing list <linux-usb@vger.kernel.org>,
+        SCSI
+ development list <linux-scsi@vger.kernel.org>
+Subject: Re: [Bug 218890] reset SuperSpeed USB device number 2 using xhci_hcd
+From: "Martin K. Petersen" <martin.petersen@oracle.com>
+In-Reply-To: <70dd7ae0-b6b1-48e1-bb59-53b7c7f18274@rowland.harvard.edu> (Alan
+	Stern's message of "Thu, 30 May 2024 15:03:01 -0400")
+Organization: Oracle Corporation
+Message-ID: <yq1ikyueoz8.fsf@ca-mkp.ca.oracle.com>
+References: <bug-218890-208809@https.bugzilla.kernel.org/>
+	<bug-218890-208809-ISXsODEmWC@https.bugzilla.kernel.org/>
+	<70dd7ae0-b6b1-48e1-bb59-53b7c7f18274@rowland.harvard.edu>
+Date: Thu, 30 May 2024 21:44:13 -0400
+Content-Type: text/plain
+X-ClientProxiedBy: LO2P265CA0340.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:d::16) To CO1PR10MB4754.namprd10.prod.outlook.com
+ (2603:10b6:303:91::24)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6d957019-ccec-4129-9e6d-33204de88dd5@linaro.org>
-
-On Wed, May 29, 2024 at 04:51:54PM +0100, Bryan O'Donoghue wrote:
-> On 28/05/2024 21:44, Dmitry Baryshkov wrote:
-> > On the Lenovo Yoga C630 WOS laptop the EC provides access to the adapter
-> > and battery status. Add the driver to read power supply status on the
-> > laptop.
-> > 
-> > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > ---
-> >   drivers/power/supply/Kconfig                    |   9 +
-> >   drivers/power/supply/Makefile                   |   1 +
-> >   drivers/power/supply/lenovo_yoga_c630_battery.c | 479 ++++++++++++++++++++++++
-> >   3 files changed, 489 insertions(+)
-> > 
-> > diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
-> > index 3e31375491d5..55ab8e90747d 100644
-> > --- a/drivers/power/supply/Kconfig
-> > +++ b/drivers/power/supply/Kconfig
-> > @@ -167,6 +167,15 @@ config BATTERY_LEGO_EV3
-> >   	help
-> >   	  Say Y here to enable support for the LEGO MINDSTORMS EV3 battery.
-> > +config BATTERY_LENOVO_YOGA_C630
-> > +	tristate "Lenovo Yoga C630 battery"
-> > +	depends on OF && EC_LENOVO_YOGA_C630
-> > +	help
-> > +	  This driver enables battery support on the Lenovo Yoga C630 laptop.
-> > +
-> > +	  To compile the driver as a module, choose M here: the module will be
-> > +	  called lenovo_yoga_c630_battery.
-> > +
-> >   config BATTERY_PMU
-> >   	tristate "Apple PMU battery"
-> >   	depends on PPC32 && ADB_PMU
-> > diff --git a/drivers/power/supply/Makefile b/drivers/power/supply/Makefile
-> > index 58b567278034..8ebbdcf92dac 100644
-> > --- a/drivers/power/supply/Makefile
-> > +++ b/drivers/power/supply/Makefile
-> > @@ -32,6 +32,7 @@ obj-$(CONFIG_BATTERY_DS2782)	+= ds2782_battery.o
-> >   obj-$(CONFIG_BATTERY_GAUGE_LTC2941)	+= ltc2941-battery-gauge.o
-> >   obj-$(CONFIG_BATTERY_GOLDFISH)	+= goldfish_battery.o
-> >   obj-$(CONFIG_BATTERY_LEGO_EV3)	+= lego_ev3_battery.o
-> > +obj-$(CONFIG_BATTERY_LENOVO_YOGA_C630) += lenovo_yoga_c630_battery.o
-> >   obj-$(CONFIG_BATTERY_PMU)	+= pmu_battery.o
-> >   obj-$(CONFIG_BATTERY_QCOM_BATTMGR)	+= qcom_battmgr.o
-> >   obj-$(CONFIG_BATTERY_OLPC)	+= olpc_battery.o
-> > diff --git a/drivers/power/supply/lenovo_yoga_c630_battery.c b/drivers/power/supply/lenovo_yoga_c630_battery.c
-> > new file mode 100644
-> > index 000000000000..76152ad38d46
-> > --- /dev/null
-> > +++ b/drivers/power/supply/lenovo_yoga_c630_battery.c
-> > @@ -0,0 +1,479 @@
-> > +// SPDX-License-Identifier: GPL-2.0-only
-> > +/*
-> > + * Copyright (c) 2022-2024, Linaro Ltd
-> > + * Authors:
-> > + *    Bjorn Andersson
-> > + *    Dmitry Baryshkov
-> > + */
-> > +#include <linux/auxiliary_bus.h>
-> > +#include <linux/delay.h>
-> > +#include <linux/module.h>
-> > +#include <linux/platform_data/lenovo-yoga-c630.h>
-> > +#include <linux/power_supply.h>
-> > +
-> > +struct yoga_c630_psy {
-> > +	struct yoga_c630_ec *ec;
-> > +	struct device *dev;
-> > +	struct device_node *of_node;
-> > +	struct notifier_block nb;
-> > +	struct mutex lock;
-> 
-> Do locks still not require a
-> 
-> struct mutex lock; /* this mutex locks this thing */
-
-Not required, but let me add the doc.
-
-> 
-> > +
-> > +	struct power_supply *adp_psy;
-> > +	struct power_supply *bat_psy;
-> > +
-> > +	unsigned long last_status_update;
-> > +
-> > +	bool adapter_online;
-> > +
-> > +	bool unit_mA;
-> > +
-> > +	bool bat_present;
-> > +	unsigned int bat_status;
-> > +	unsigned int design_capacity;
-> > +	unsigned int design_voltage;
-> > +	unsigned int full_charge_capacity;
-> > +
-> > +	unsigned int capacity_now;
-> > +	unsigned int voltage_now;
-> > +
-> > +	int current_now;
-> > +	int rate_now;
-> > +};
-> > +
-> > +#define LENOVO_EC_CACHE_TIME		(10 * HZ)
-> > +
-> > +#define LENOVO_EC_ADPT_STATUS		0xa3
-> > +#define LENOVO_EC_ADPT_PRESENT		BIT(7)
-> > +#define LENOVO_EC_BAT_ATTRIBUTES	0xc0
-> > +#define LENOVO_EC_BAT_ATTR_UNIT_IS_MA	BIT(1)
-> > +#define LENOVO_EC_BAT_STATUS		0xc1
-> > +#define LENOVO_EC_BAT_REMAIN_CAPACITY	0xc2
-> > +#define LENOVO_EC_BAT_VOLTAGE		0xc6
-> > +#define LENOVO_EC_BAT_DESIGN_VOLTAGE	0xc8
-> > +#define LENOVO_EC_BAT_DESIGN_CAPACITY	0xca
-> > +#define LENOVO_EC_BAT_FULL_CAPACITY	0xcc
-> > +#define LENOVO_EC_BAT_CURRENT		0xd2
-> > +#define LENOVO_EC_BAT_FULL_FACTORY	0xd6
-> > +#define LENOVO_EC_BAT_PRESENT		0xda
-> > +#define LENOVO_EC_BAT_FULL_REGISTER	0xdb
-> > +#define LENOVO_EC_BAT_FULL_IS_FACTORY	BIT(0)
-> > +
-> > +/* the mutex should already be locked */
-> > +static int yoga_c630_psy_update_bat_info(struct yoga_c630_psy *ecbat)
-> > +{
-> > +	struct yoga_c630_ec *ec = ecbat->ec;
-> > +	int val;
-> > +
-> > +	val = yoga_c630_ec_read8(ec, LENOVO_EC_BAT_PRESENT);
-> > +	if (val < 0)
-> > +		return val;
-> > +	ecbat->bat_present = !!(val & BIT(0));
-> > +	if (!ecbat->bat_present)
-> > +		return val;
-> > +
-> > +	val = yoga_c630_ec_read8(ec, LENOVO_EC_BAT_ATTRIBUTES);
-> > +	if (val < 0)
-> > +		return val;
-> > +	ecbat->unit_mA = val & LENOVO_EC_BAT_ATTR_UNIT_IS_MA;
-> > +
-> > +	val = yoga_c630_ec_read16(ec, LENOVO_EC_BAT_DESIGN_CAPACITY);
-> > +	if (val < 0)
-> > +		return val;
-> > +	ecbat->design_capacity = val * 1000;
-> > +
-> > +	msleep(50);
-> 
-> What's this for ? Also do you really want to hold a mutex for 50
-> milliseconds ?
-
-DSDT has these delays after each read, so I can only assume it is required.
-Sleeping outside of the mutex() would mean that a concurrent thread
-might break into this delay and query the EC.
-
-[skipped]
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR10MB4759:EE_|DM4PR10MB6864:EE_
+X-MS-Office365-Filtering-Correlation-Id: 92d18952-2b96-4667-04cf-08dc81132f9e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230031|366007|376005|1800799015;
+X-Microsoft-Antispam-Message-Info: 
+	=?us-ascii?Q?fI5k1qMXKPUcl8ZcwOqTQLQJrN+mQjAeBVUltiu88tsiyiE6RRsmgaQGNzSb?=
+ =?us-ascii?Q?+P9lf05fbXodZo7xbgeKcFnq2cXTA0wRT8CnzGD1vESIseBz7+q+pymlrPdm?=
+ =?us-ascii?Q?bNmKKEwlSKa+v4fsknLSxUpe2wffMTOyZjWyN5OkrbTJWgqAyl5+o+YWEfs2?=
+ =?us-ascii?Q?k1AXRpoUOm02Tc/5A64WtF9XGVOsyrwnwlyRInmauLLh8d8dYpu9Vgz/UFK5?=
+ =?us-ascii?Q?vaKCJZMp7EK68grSS+wjAvORbOfmBr25050SfRawp74XuJwpteDj96iZ+g2j?=
+ =?us-ascii?Q?G2T2v8gTsOtJCG7gcC/bNcTp6PBttJe5tst7yoHH8LNQ36Xq9kw1eFRO06x/?=
+ =?us-ascii?Q?8cEm5bYwYNC72QK1WmDotxJGfvHgNMj5EiYzF4Cnhtq3sgz8dlnw4M2IlNEy?=
+ =?us-ascii?Q?pxsScEAGA1mOz6nc32ps9oKk1iNrI84OGug/KIXPgksX+FoJHpxUHzo0h8+3?=
+ =?us-ascii?Q?CstYSHlsIrYncyi5ESTIWkWKULiUG2uC7wVCn38J6OtJkpOhEfpSd/tSxxQq?=
+ =?us-ascii?Q?v7zmfyBxWaOjgQiKz4wxos1Pq8buFg2J1DzcIOcVZMFib1UzXyv3H/vbnb9P?=
+ =?us-ascii?Q?bunGhIbJ989bbaTJhylbtCQs5Iwz/eVzDQlVX9T2K3UI47c/FVeBwFjBOsy0?=
+ =?us-ascii?Q?igV3sXoOLiJHyTU3K5ulyeTr69qZqTJdqdlW0rTNpAjC4HciFMuPtIde0O4F?=
+ =?us-ascii?Q?Fw/3AVkHyTPpqVGGmsPG577d0lHj+h+5l8QphryBJ/4fS9+IK90UTjDLZ3Fd?=
+ =?us-ascii?Q?x2/uS2E4i7jLOElOVYcJuwmVI8g0hQ9ji2+ljI0P+ej5xjD/JxVchoD1svAh?=
+ =?us-ascii?Q?5vfbqCbfdDZj6UVF9YbAqv+3Dl+lPI46kF7/Z8LBd3LKcZHP0X/r1L106rkY?=
+ =?us-ascii?Q?Q2ZiryXBWsRZ/FFpXe8H7gycFDNhCSA4D/oyqhc1mc0SD7ZaPhPdYfhvCc6a?=
+ =?us-ascii?Q?RoHB2PeqSiV9gTq3N1v6w3xMLlOTgYEtYz4pTt50/w49ub4+lh24wYRSDKuD?=
+ =?us-ascii?Q?gn0jOL+wBLGHHOJwyr2HmuskOLiByCEPlxwxXnuoe9tFWz5LDuGoO5FERsh5?=
+ =?us-ascii?Q?r/57n5gMBbHwsl3RLR7drxaFdq0Xw5YCwfTDb0eyObiVeFThYJ8Dk6ku/pWW?=
+ =?us-ascii?Q?z9Nv3GYZtu55DsmYdG+ErkZpq7yRh/HFlMJra+LIJ4mVUu/auhtLW5D11zBk?=
+ =?us-ascii?Q?Dn9mJs+PxReG1Omq8rkqsNM1+LPwmxXE72MRZh/eWCQ/wxlZe0L4LtZ4nHar?=
+ =?us-ascii?Q?c2yoVOWj8g/ckK8yZZklZK9j3DLR0R7gIKuIBQEVZQ=3D=3D?=
+X-Forefront-Antispam-Report: 
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366007)(376005)(1800799015);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: 
+	=?us-ascii?Q?wrAembrd/3xl29ivlH1LkJv2KGo5EZhRQZEmPmps1idDP+wB50vrhKy4MJ43?=
+ =?us-ascii?Q?+GGFgZ56JpvjDyTQFjaQdXCXcFDd8Vq0TrPb9p+2eFcQ8pEuu9vr4iyQW4NJ?=
+ =?us-ascii?Q?X+DZySZVx9sOu97wnjqvMQD705bTiciy3Yl91YWdJdQ+uzrVTH3+J0Dmx+u9?=
+ =?us-ascii?Q?kaZXFQ/p6vk9pW6XeEIpNP6J8MtCB9usJ8G9d79/MmhGIfKFWe5HthwAt+CU?=
+ =?us-ascii?Q?oAcSXhS39P7nO5sIBUHR+l7EwXX7p5LtN9DdrP/CHnD8I9xM7qPa4klLyboI?=
+ =?us-ascii?Q?0UK1ZXZJ0lWjgGlKqDDX8HCXudDb78pscIvGeWwQdRi0ZrBGsuPENCa8ISMN?=
+ =?us-ascii?Q?5Y5YpvCWlpG36H0wrbCa/57Qand8YUNhg4Fp2tvj4QDRblRtzF/KXfbmqdYn?=
+ =?us-ascii?Q?nWR5Da5gXwC/jNtvGthbfSgstzdsNA1zeQf3kWJb8WBSY2iknvfFvg1YZdbn?=
+ =?us-ascii?Q?VnLKEF6XLmlM4uH3Tx3FU/LBuK3bOBP2pgYGfadP3dycR2nv4yTk6Z1189fl?=
+ =?us-ascii?Q?s2N8uYmCz7jMYR8MnBRF4/T2rLgQMZcCLQr/rzSNThinzc/6eRtKwFyM0MwJ?=
+ =?us-ascii?Q?WHii566fHUEqL8rDHNGTfljF/qPnm3nOcqQ6MP+5P2dAlSLvcX212wHjoIlJ?=
+ =?us-ascii?Q?ycJBpqejz4DP5oPvFdQauBblNFbdjCbeGV0tn6JSquU/QkHos0muMuh3tWno?=
+ =?us-ascii?Q?gh95iMy3LNS8ddh/c+L0ZRUrTi74kgkjptYDq7AErnGgmXc0TnBf3dTG1A5m?=
+ =?us-ascii?Q?s3zP/g4cvTVLwBoEx9IrGAOQ3utgXniJYJ0K9AGqyNh+0jTeuKLo2LovKICc?=
+ =?us-ascii?Q?KC7ScYru2bCS5wJKRLCs/+1eRu7B0LC3tl0HQ1AelIGJ8O3eozj5azXYkY3F?=
+ =?us-ascii?Q?+EMiftT4HIT3IMco34pUPRFWDxa487p9i6OluN6VvNtXPe6FFZL6iAmaqrtR?=
+ =?us-ascii?Q?OCLT67VBRp3+WpaFOM0x/EBn2AcCYm24Gvxa02qhykNfIiKgiHSDn45fPqLZ?=
+ =?us-ascii?Q?E2nEog4eB4HPNAu/Cm7SaE39/bh6itGBX8Y+BsJN0Rh9FTqH6NZ7C6xcTyRK?=
+ =?us-ascii?Q?dhcKc59vA7qekEEVX/kPiHLt04VqP7hOOV7nogXed8YTU6c/NF6r+NLCuGfR?=
+ =?us-ascii?Q?8vvn8qwBT6S66OyYxMXedoQyVjsfivBj55Gysvd0lgBkiyiMJ28hHIvCV+yM?=
+ =?us-ascii?Q?qdLpamj6kWTmF5k5v1caGIerdn8TbLvgvvJ2zkmTRGfstVpBR+lmBG/lufm7?=
+ =?us-ascii?Q?mMwXAmk6VdCpJlO4rhsXJVV91t5BSiI4gQWgNCK7d7D4Il8N68UawdbyV1SY?=
+ =?us-ascii?Q?RyM/QbqscNm2it1zs868bSe5xZhpaL5MQJYVoEciu9LJbFnLLXXqDzJoZh7O?=
+ =?us-ascii?Q?IxxjopefzM30xRcPLcm7hwi+ZfzYwJalMy9xdZ6VMnDP7pM7m6Js4Ruj50vy?=
+ =?us-ascii?Q?xG82jvVS29zsa/0Dprb+KGEGDuTfORSCds3Ln+7ygHudO3YDy9N5+D8aCJBX?=
+ =?us-ascii?Q?thjIPhXE6lxhzWTUWwv68n+9vy9vj1yF+K/2eXdO8X5u+6EnOEQoBAaUYqrD?=
+ =?us-ascii?Q?uOguTTkKtWgxDCxBoKWMw/dzF3HYaiNsnS1J2PyNWzjwJjJ7qH+RkAo+b8Q3?=
+ =?us-ascii?Q?pg=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
+	OVkrgOMHLMyTdlV8iVDdKK+Tg5N2vVRfWDIbuBNcq6shGM+gYxREHTWyuSzooAAuLhtQVvEx0f5T73aBK9FMnxTZ5fc/oakL9cc4Ko3Ayi4KZu6bGXp1ZSv4g77lR4ImlZd54f7Nhl5BXWGcu7kE3is3b195ti+vnDud0Y2Ez/XOFTbutchQ140rNwhradE6tNj1e6uMy50UZrSsCAu5NBrJ3uggK3ZHnxHwVS8oxs8UUd8lckNKoSs7mNS0m7xs/hl1h3hahxFuf+0PFSvrObloLpL6ISjGNuLQd/lF1xyTiAEL1VZAphtNF5iBMytjOLNyAK2wabc1lLB9OUvwITNXGr1OcONYYFoL/Hwx2bFPIfJmxFnv1d9u1TxpB6bKgsA/eez+2xn2jWHwWW/f/NcdnFlZ04aiYrB7TX41md1NSQ4NuZiDTBG6gYtAWYxtRQAG+Nlky+PWq90hNQg4Q0Ticac812xDV5o1Kcs6fOhwKq1BdTH0etHLJ7uoEM/k2g19Z2ByTLw4H2c30YIvFfQVJ9Gq7dRxWerZxxpIBpM2w9HJEeHw4ryQA/RYbGAn2pZrwr4IPqHDEOqSGbnw+4RRE3Ve67pqLdxyp9CFOyc=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 92d18952-2b96-4667-04cf-08dc81132f9e
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR10MB4754.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2024 01:44:19.9408
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: He6OvskHsOrClSo/2VS6uVr4x9Rxy5w45f/xbNM6QSt44/5crKeCk1j1lWp18RWuov4LLQpsMnR6hhg0uH1coby0vj1QnVQiPy/ToA6lfbk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR10MB6864
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.12.28.16
+ definitions=2024-05-30_21,2024-05-30_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 spamscore=0
+ phishscore=0 bulkscore=0 malwarescore=0 adultscore=0 mlxscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2405010000 definitions=main-2405310012
+X-Proofpoint-GUID: E6by7bCNCntUTG4zRRTLPuzLTxPKcRyz
+X-Proofpoint-ORIG-GUID: E6by7bCNCntUTG4zRRTLPuzLTxPKcRyz
 
 
-> > +static int yoga_c630_psy_probe(struct auxiliary_device *adev,
-> > +				   const struct auxiliary_device_id *id)
-> > +{
-> > +	struct yoga_c630_ec *ec = adev->dev.platform_data;
-> > +	struct power_supply_config adp_cfg = {};
-> > +	struct device *dev = &adev->dev;
-> > +	struct yoga_c630_psy *ecbat;
-> > +	int ret;
-> > +
-> > +	ecbat = devm_kzalloc(&adev->dev, sizeof(*ecbat), GFP_KERNEL);
-> > +	if (!ecbat)
-> > +		return -ENOMEM;
-> > +
-> > +	ecbat->ec = ec;
-> > +	ecbat->dev = dev;
-> > +	mutex_init(&ecbat->lock);
-> > +	ecbat->of_node = adev->dev.parent->of_node;
-> > +	ecbat->nb.notifier_call = yoga_c630_psy_notify;
-> > +
-> > +	auxiliary_set_drvdata(adev, ecbat);
-> > +
-> > +	adp_cfg.drv_data = ecbat;
-> > +	adp_cfg.of_node = ecbat->of_node;
-> > +	adp_cfg.supplied_to = (char **)&yoga_c630_psy_bat_psy_desc_mA.name;
-> > +	adp_cfg.num_supplicants = 1;
-> > +	ecbat->adp_psy = devm_power_supply_register_no_ws(dev, &yoga_c630_psy_adpt_psy_desc, &adp_cfg);
-> > +	if (IS_ERR(ecbat->adp_psy)) {
-> > +		dev_err(dev, "failed to register AC adapter supply\n");
-> > +		return PTR_ERR(ecbat->adp_psy);
-> > +	}
-> > +
-> > +	mutex_lock(&ecbat->lock);
-> 
-> Do you really need this lock here in your probe() function ? What's the
-> parallel path of execution you are mitigating against here ?
+Alan,
 
-Notifications from the battery driver can already happen at this point.
-Also once the fist power supply is registered, userspace can potentially
-access it, triggering EC access and updates of the PSY registration.
+> This bug report was bisected down to your commit 321da3dc1f3c ("scsi:
+> sd: usb_storage: uas: Access media prior to querying device
+> properties"). Apparently the drive in question doesn't like READ(10)
+> commands but it does work with READ(16).
+>
+> Can you provide a test patch that updates the new sd_read_block_zero()
+> routine to issue READ(16) if the drive has more than 4G logical
+> blocks?
 
-> 
-> > +
-> > +	ret = yoga_c630_psy_update_bat_info(ecbat);
-> > +	if (ret)
-> > +		goto err_unlock;
-> > +
-> > +	ret = yoga_c630_psy_register_bat_psy(ecbat);
-> > +	if (ret)
-> > +		goto err_unlock;
-> > +
-> > +	mutex_unlock(&ecbat->lock);
-> > +
+Please try the following:
 
-
--- 
-With best wishes
-Dmitry
+diff --git a/drivers/scsi/sd.c b/drivers/scsi/sd.c
+index 65cdc8b77e35..6759bd5af58a 100644
+--- a/drivers/scsi/sd.c
++++ b/drivers/scsi/sd.c
+@@ -3572,16 +3572,23 @@ static bool sd_validate_opt_xfer_size(struct scsi_disk *sdkp,
+ 
+ static void sd_read_block_zero(struct scsi_disk *sdkp)
+ {
+-	unsigned int buf_len = sdkp->device->sector_size;
+-	char *buffer, cmd[10] = { };
++	struct scsi_device *sdev = sdkp->device;
++	unsigned int buf_len = sdev->sector_size;
++	char *buffer, cmd[16] = { };
+ 
+ 	buffer = kmalloc(buf_len, GFP_KERNEL);
+ 	if (!buffer)
+ 		return;
+ 
+-	cmd[0] = READ_10;
+-	put_unaligned_be32(0, &cmd[2]); /* Logical block address 0 */
+-	put_unaligned_be16(1, &cmd[7]);	/* Transfer 1 logical block */
++	if (sdev->use_16_for_rw) {
++		cmd[0] = READ_16;
++		put_unaligned_be64(0, &cmd[2]); /* Logical block address 0 */
++		put_unaligned_be32(1, &cmd[10]);/* Transfer 1 logical block */
++	} else {
++		cmd[0] = READ_10;
++		put_unaligned_be32(0, &cmd[2]); /* Logical block address 0 */
++		put_unaligned_be16(1, &cmd[7]);	/* Transfer 1 logical block */
++	}
+ 
+ 	scsi_execute_cmd(sdkp->device, cmd, REQ_OP_DRV_IN, buffer, buf_len,
+ 			 SD_TIMEOUT, sdkp->max_retries, NULL);
 
