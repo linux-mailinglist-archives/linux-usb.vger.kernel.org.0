@@ -1,81 +1,79 @@
-Return-Path: <linux-usb+bounces-10738-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10739-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EDD968D6F26
-	for <lists+linux-usb@lfdr.de>; Sat,  1 Jun 2024 11:32:45 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B9148D6FAB
+	for <lists+linux-usb@lfdr.de>; Sat,  1 Jun 2024 14:07:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E06B91C2184B
-	for <lists+linux-usb@lfdr.de>; Sat,  1 Jun 2024 09:32:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CA85BB219C2
+	for <lists+linux-usb@lfdr.de>; Sat,  1 Jun 2024 12:06:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9111D14E2FB;
-	Sat,  1 Jun 2024 09:32:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D29E615098B;
+	Sat,  1 Jun 2024 12:06:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VHOLZ8D/"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VenUSeDy"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C85AD6AAD;
-	Sat,  1 Jun 2024 09:32:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1127214F9D4;
+	Sat,  1 Jun 2024 12:06:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717234359; cv=none; b=hpaZ/ws3gYK4y8t8H41TI04PrXvhydju5dTPG++UIHbQRcHK+RN+6AsuKP7AC0LHH7C1hBldC2j748TgGCKrv2kfs7MFaBRXz8+FziW2OsHnhf5ixvlCG+ihuLSBFh/KN/1aAogLj9wQTTei7Bed/4DEUolYmeAEknXPid7pj/g=
+	t=1717243610; cv=none; b=W1Zb3fJPumcnJ2ma3d7M6VOZglnC3qmFSqqIVHrCpvHBGyawx6YmCSotDtUkZLzkwcPHy+diUqxYrt7FP/F7w73csGgt8aVNzlLS1N+HxueJczjSAbf3lEEY5jTZtkCAVJ6oq4RdHJNpAclJxLQ4Lt8jHyYyXB+qihz8W/XZnjE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717234359; c=relaxed/simple;
-	bh=8qeuq/9NyK9dd0k3Ody3dB9SOCFgZ5HrBOGAyz4hQwo=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=e15RouO2EVSVxKGZ2XqhXIok4YKQbcFeCQRGxueUhniUR1u/TExvAsQVAdBRc/5wFFM9C80hW67Nn+r/KvlgdJ03sxJcfQzTzY2Ah75IRX8LvmmoHKFFWpCyJnSuP5C6zHYG1+YBaT8cR2idxcEMePkLDDQsWbZ+PT694NMybR0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VHOLZ8D/; arc=none smtp.client-ip=209.85.214.178
+	s=arc-20240116; t=1717243610; c=relaxed/simple;
+	bh=t+ryz2ON73Vff2ZY7l+uEuivqA1BpuWuGKPspY1/ue8=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=Bgpcjh8cT6x45/saIl6M6RMXViEPIEt0uY0gZBW2LU+t+5ZXv0nGEJ6aH+2l8vQ56BLVcfMQ5/uplSjnkWbUUtenTRxcVQ3l1d1znQNvpIcnaz4rks6su/YH/MbhAMxL+2cNlFX1R3GwNUKSRYOV+pgQd2vPd2oUxdHxAUMxJvU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VenUSeDy; arc=none smtp.client-ip=209.85.210.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-1f62fae8c3cso17325205ad.3;
-        Sat, 01 Jun 2024 02:32:37 -0700 (PDT)
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-7025cb09553so162377b3a.3;
+        Sat, 01 Jun 2024 05:06:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717234357; x=1717839157; darn=vger.kernel.org;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=WfDan29VxVHZmK0WASWdz2aN4PE4yQZdFHSJZf8M3Io=;
-        b=VHOLZ8D/0MKfMb5/9DzrnPU4zL+fMrFJPRGS0Y6qh4JeOtR2cJMjwtDR2x16H52DuB
-         LgZuzG+IX0/awRRIBFQhoHO5lzI8zpClqokIZBFUcCW9CsTZu/cHJnnrxWaaIjnXoS2B
-         kCK8M/tSVqQ+buIRmE4aydUALXc8Mi/szGmrJnDAqAYgRSfS47WgtuxheWDBYt7Is380
-         RqplniEn1zRs4TVbP3vEnmcdEFJq9uiyQgO42d71NLuH38z3m7Xtu27Ee9VIJh+E908x
-         rvZSoQEuKQwzZRiG0FFqiWadXD79YfsmCs6LhpnGM6r8FQhY+sCt/Tx22KPg6IdASiTB
-         UVYQ==
+        d=gmail.com; s=20230601; t=1717243608; x=1717848408; darn=vger.kernel.org;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eu1fLGJneetG/YubvsVksmohTmywLlkgIhdNDim3AZo=;
+        b=VenUSeDyKV+SFFYtII8IPTGQp15lavk96f9FKnrmq21/xrNaDX96KrDjfy/n1lu7QT
+         fyqE194i7K8dGA3z5lnRdmjrW1rsHJsxHfpo10NPnP5SWBJJz8RrVPp8sXhchdxdKOWw
+         OQZ2Az35AxvgipXK94SEdKyt14K8gh3nbP8iyakNeSrsvjsjaEL3f8i9kLJV/TZQbrcp
+         fFfVcfsdKGcUSsBNYN3kVPvdSRAUH2dz/v56j4tHNn5vsSc8aSl8KxMhJ9zuBtcuCcw1
+         /VZLrdkL7SvYb9mbBw7Ge4taDZZfvhIn2UyTlxy2hOP4z73IiRnefci9p7jZPOQLQXiN
+         sMEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717234357; x=1717839157;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WfDan29VxVHZmK0WASWdz2aN4PE4yQZdFHSJZf8M3Io=;
-        b=sMfo8sAEXFtVhj84AfQWvwOpIrxBRQD18wlDsb1zSMtklMtNstNvOFjjtGLNG1STQi
-         7D2uxDRq45df/zH9RGs1ryBTHM5FIWap/4vHngaWZ7WeGYbP5f3ghFvdqMtvd1kFjA4a
-         6ZQGFDkE9sQPXbJS5uWPfpoqqEiPHVtIccbsaydyhWEcbR0ue6vE4l8pA/OmsYTll5p5
-         RyYaelWP8pZyMdTAyM92YrhV3kys++d0ZR7Or9qYmmRFoYLanWPXfwUMhGifQGHg+Trf
-         dee7OEe/rkKrNrQ0/NP0rBaVjYY7Om0l6MkfnKVMxQAPIYxf14Dl3VEsMV5VOtAUnzkP
-         jLwg==
-X-Forwarded-Encrypted: i=1; AJvYcCUtU2kTDp4c+Sw7TqLvf43Qu2g0ZjmVHg6top6oaoXPCHFxvhK0OSTRnVOMOCAAVUsJdCDHFDgxqqgHh+IXUz/FQfkvUzCaOQuclTkCq+npgIb1x493s+xClBGIgpeESjknEn/uzg7N
-X-Gm-Message-State: AOJu0Ywqz+ENoMp4T0cGj1FkXEQl92OgLZEoHVXi9jr7h0KK42kis88N
-	uYPdApCrZjD4meKulfLo/HFDYymOc/XtX9Dhe8yL45WJySoG51lt
-X-Google-Smtp-Source: AGHT+IF2Y/lvJC2CHSbJ8VM+i+/4AWA1oMbbO9ctIjt+vHM9XrZrC5hZywfN/zjx0YrFt+wiVtSrww==
-X-Received: by 2002:a17:903:22c3:b0:1f4:bb5c:b7bd with SMTP id d9443c01a7336-1f6370b8aa1mr45185795ad.61.1717234357015;
-        Sat, 01 Jun 2024 02:32:37 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1717243608; x=1717848408;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eu1fLGJneetG/YubvsVksmohTmywLlkgIhdNDim3AZo=;
+        b=kmXBbpnym2/12SxlRCqZsV6+hB5SFL/Aun47NfWXhyxHJNvNBxjZuprH4QcBFwEtcm
+         RmeKThdZR0ZH8EvpnAILeGU24eVCdUneBgiBIurD8am1t3mdPO+p9lUbTXfF6MEahwZr
+         t6IWYOu8tg1DiCzy+Bw+bwv1R50fRYDAu/bbrWII1k8z5lbV98d/++ic6iF79kJ9h96o
+         1b9zcHuJ/Oqi7mTkGLPwpHolcVvy2LvWG/K8UbvrFpjwo6X1na+f31sNqUlsGsQvUibj
+         uiw5P8y2FfneVKuq7DB+m8rBVW5cOBzfvw/Nbfq46MF44Pj/KzSvwiNeRv7i9MAeSEDc
+         ifKw==
+X-Forwarded-Encrypted: i=1; AJvYcCUqDi/DEKxcVRsKk5V/lOj8RFqe9XdaTkHfDlQYYIg0DpaqLTw7pCotYA/UnJ/1Uuj9BiIPcGtbLlQUV2JKn8D4/6fgi/XGEmZxCWsZ
+X-Gm-Message-State: AOJu0YxfhhJNNHMydP+YfDR6PvzB7MXVp0DUfePBmcw8OtUlf44BfR4P
+	50kDegA87MAkKCckmediEC02ucucQAxd0dgBDStJZI/VCoc9ePvO
+X-Google-Smtp-Source: AGHT+IHtBezDsvbVMqibRsEPH2sf0BlTtcK7wXNFnZnb+FlIqmROFSO4SL00hPaO6pCWkFuV4wai3g==
+X-Received: by 2002:a05:6a20:3946:b0:1ad:6c36:ee82 with SMTP id adf61e73a8af0-1b26f0ec2f5mr5469399637.13.1717243608180;
+        Sat, 01 Jun 2024 05:06:48 -0700 (PDT)
 Received: from localhost ([219.144.1.218])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f6323feaa0sm30271675ad.230.2024.06.01.02.32.36
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-702425da465sm2798253b3a.73.2024.06.01.05.06.46
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Sat, 01 Jun 2024 02:32:36 -0700 (PDT)
+        Sat, 01 Jun 2024 05:06:47 -0700 (PDT)
 From: joswang <joswang1221@gmail.com>
-To: Thinh.Nguyen@synopsys.com
-Cc: gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org,
+To: mathias.nyman@intel.com,
+	gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	joswang <joswang@lenovo.com>
-Subject: [PATCH 2/2] usb: dwc3: core: Workaround for CSR read timeout
-Date: Sat,  1 Jun 2024 17:32:32 +0800
-Message-Id: <20240601093232.52319-1-joswang1221@gmail.com>
+Subject: [RFC 1/1] usb: host: xhci-plat: add enable XHCI-AVOID-BEI quirk by dts
+Date: Sat,  1 Jun 2024 20:06:40 +0800
+Message-Id: <20240601120640.73556-1-joswang1221@gmail.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20240601092646.52139-1-joswang1221@gmail.com>
-References: <20240601092646.52139-1-joswang1221@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -84,64 +82,48 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 
 From: joswang <joswang@lenovo.com>
 
-DWC31 version 2.00a have an issue that would cause
-a CSR read timeout When CSR read coincides with RAM
-Clock Gating Entry.
+For Synopsys DWC31 2.00a and earlier versions, every isochronous
+interval the BEI(Block Event Interrupt) flag is set for all except
+the last Isoch TRB in a URB, host controller consumes the event
+TRBs in the event ring, once the event ring is full, it will not
+generate an interrupt and will stop all data transmission and command
+execution.
 
-This workaround solution disable Clock Gating, sacrificing
-power consumption for normal operation.
+To avoid the problem of event ring full, the XHCI-AVOID-BEI quirk is
+introduced. Currently, the XHCI-AVOID-BEI quirk has been applied to all
+Intel xHCI controllers, see commit '227a4fd801c8 ("USB: xhci: apply
+XHCI-AVOID-BEI quirk to all Intel xHCI controllers")'.
+
+For Linux system, each event ring consists of one or more event ring
+segments and each segment is 4 KB that contains 256 TRBs. It seems that
+the TRBs on the event ring are sufficient and the event ring will not be
+full. In real application, if it does happen, event ring is full, host
+controller no interrupt causes the driver to timeout.
+
+However, applying XHCI-AVOID-BEI quirk will also bring power consumption
+issues. We can consider the application scenarios of the product to decide
+whether to enable it. Therefore, we add the enable XHCI-AVOID-BEI quirk
+through dts configuration to make it more flexible.
 
 Signed-off-by: joswang <joswang@lenovo.com>
 ---
- drivers/usb/dwc3/core.c | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+ drivers/usb/host/xhci-plat.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 3a8fbc2d6b99..1df85c505c9e 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -978,11 +978,22 @@ static void dwc3_core_setup_global_control(struct dwc3 *dwc)
- 		 *
- 		 * STAR#9000588375: Clock Gating, SOF Issues when ref_clk-Based
- 		 * SOF/ITP Mode Used
-+		 *
-+		 * WORKAROUND: DWC31 version 2.00a have an issue that would
-+		 * cause a CSR read timeout When CSR read coincides with RAM
-+		 * Clock Gating Entry.
-+		 *
-+		 * This workaround solution disable Clock Gating, sacrificing
-+		 * power consumption for normal operation.
- 		 */
- 		if ((dwc->dr_mode == USB_DR_MODE_HOST ||
- 				dwc->dr_mode == USB_DR_MODE_OTG) &&
- 				DWC3_VER_IS_WITHIN(DWC3, 210A, 250A))
- 			reg |= DWC3_GCTL_DSBLCLKGTNG | DWC3_GCTL_SOFITPSYNC;
-+		else if ((dwc->dr_mode == USB_DR_MODE_HOST ||
-+				dwc->dr_mode == USB_DR_MODE_OTG) &&
-+				DWC3_VER_IS(DWC31, 200A))
-+			reg |= DWC3_GCTL_DSBLCLKGTNG;
- 		else
- 			reg &= ~DWC3_GCTL_DSBLCLKGTNG;
- 		break;
-@@ -992,6 +1003,18 @@ static void dwc3_core_setup_global_control(struct dwc3 *dwc)
- 		 * will work. Device-mode hibernation is not yet implemented.
- 		 */
- 		reg |= DWC3_GCTL_GBLHIBERNATIONEN;
+diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+index 3d071b875308..e1071827d4b3 100644
+--- a/drivers/usb/host/xhci-plat.c
++++ b/drivers/usb/host/xhci-plat.c
+@@ -253,6 +253,9 @@ int xhci_plat_probe(struct platform_device *pdev, struct device *sysdev, const s
+ 		if (device_property_read_bool(tmpdev, "quirk-broken-port-ped"))
+ 			xhci->quirks |= XHCI_BROKEN_PORT_PED;
+ 
++		if (device_property_read_bool(tmpdev, "quirk-avoid-bei"))
++			xhci->quirks |= XHCI_AVOID_BEI;
 +
-+		/*
-+		 * WORKAROUND: DWC31 version 2.00a have an issue that would
-+		 * cause a CSR read timeout When CSR read coincides with RAM
-+		 * Clock Gating Entry.
-+		 *
-+		 * This workaround solution disable Clock Gating, sacrificing
-+		 * power consumption for normal operation.
-+		 */
-+		if ((dwc->dr_mode == USB_DR_MODE_HOST ||
-+		     dwc->dr_mode == USB_DR_MODE_OTG) && DWC3_VER_IS(DWC31, 200A))
-+			reg |= DWC3_GCTL_DSBLCLKGTNG;
- 		break;
- 	default:
- 		/* nothing */
+ 		if (device_property_read_bool(tmpdev, "xhci-sg-trb-cache-size-quirk"))
+ 			xhci->quirks |= XHCI_SG_TRB_CACHE_SIZE_QUIRK;
+ 
 -- 
 2.17.1
 
