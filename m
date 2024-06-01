@@ -1,130 +1,139 @@
-Return-Path: <linux-usb+bounces-10739-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10740-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B9148D6FAB
-	for <lists+linux-usb@lfdr.de>; Sat,  1 Jun 2024 14:07:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA2308D7046
+	for <lists+linux-usb@lfdr.de>; Sat,  1 Jun 2024 15:42:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CA85BB219C2
-	for <lists+linux-usb@lfdr.de>; Sat,  1 Jun 2024 12:06:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6FBF81F22EFC
+	for <lists+linux-usb@lfdr.de>; Sat,  1 Jun 2024 13:42:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D29E615098B;
-	Sat,  1 Jun 2024 12:06:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 214D21514F0;
+	Sat,  1 Jun 2024 13:42:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VenUSeDy"
+	dkim=pass (1024-bit key) header.d=z3ntu.xyz header.i=@z3ntu.xyz header.b="f3vaZ/v/"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+Received: from ahti.lucaweiss.eu (ahti.lucaweiss.eu [128.199.32.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1127214F9D4;
-	Sat,  1 Jun 2024 12:06:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCA69BE78
+	for <linux-usb@vger.kernel.org>; Sat,  1 Jun 2024 13:42:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=128.199.32.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717243610; cv=none; b=W1Zb3fJPumcnJ2ma3d7M6VOZglnC3qmFSqqIVHrCpvHBGyawx6YmCSotDtUkZLzkwcPHy+diUqxYrt7FP/F7w73csGgt8aVNzlLS1N+HxueJczjSAbf3lEEY5jTZtkCAVJ6oq4RdHJNpAclJxLQ4Lt8jHyYyXB+qihz8W/XZnjE=
+	t=1717249361; cv=none; b=MpmLwT1cKeWk5GtlhiyCf9fxkWp3CcJ9giD9o8+VwWB2boCRWAKjODO8DDga6DVgHGNN4eSx2hvXIevdqw6x9K2OYDVui7Fy/k1T8ameTHe/c+V1azQOWIAwZlZ553syQGPdPCgeuDZP7biHu5iD3lZOK+m/6uXDvuyy8A5aixo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717243610; c=relaxed/simple;
-	bh=t+ryz2ON73Vff2ZY7l+uEuivqA1BpuWuGKPspY1/ue8=;
-	h=From:To:Cc:Subject:Date:Message-Id; b=Bgpcjh8cT6x45/saIl6M6RMXViEPIEt0uY0gZBW2LU+t+5ZXv0nGEJ6aH+2l8vQ56BLVcfMQ5/uplSjnkWbUUtenTRxcVQ3l1d1znQNvpIcnaz4rks6su/YH/MbhAMxL+2cNlFX1R3GwNUKSRYOV+pgQd2vPd2oUxdHxAUMxJvU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VenUSeDy; arc=none smtp.client-ip=209.85.210.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-7025cb09553so162377b3a.3;
-        Sat, 01 Jun 2024 05:06:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717243608; x=1717848408; darn=vger.kernel.org;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eu1fLGJneetG/YubvsVksmohTmywLlkgIhdNDim3AZo=;
-        b=VenUSeDyKV+SFFYtII8IPTGQp15lavk96f9FKnrmq21/xrNaDX96KrDjfy/n1lu7QT
-         fyqE194i7K8dGA3z5lnRdmjrW1rsHJsxHfpo10NPnP5SWBJJz8RrVPp8sXhchdxdKOWw
-         OQZ2Az35AxvgipXK94SEdKyt14K8gh3nbP8iyakNeSrsvjsjaEL3f8i9kLJV/TZQbrcp
-         fFfVcfsdKGcUSsBNYN3kVPvdSRAUH2dz/v56j4tHNn5vsSc8aSl8KxMhJ9zuBtcuCcw1
-         /VZLrdkL7SvYb9mbBw7Ge4taDZZfvhIn2UyTlxy2hOP4z73IiRnefci9p7jZPOQLQXiN
-         sMEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717243608; x=1717848408;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eu1fLGJneetG/YubvsVksmohTmywLlkgIhdNDim3AZo=;
-        b=kmXBbpnym2/12SxlRCqZsV6+hB5SFL/Aun47NfWXhyxHJNvNBxjZuprH4QcBFwEtcm
-         RmeKThdZR0ZH8EvpnAILeGU24eVCdUneBgiBIurD8am1t3mdPO+p9lUbTXfF6MEahwZr
-         t6IWYOu8tg1DiCzy+Bw+bwv1R50fRYDAu/bbrWII1k8z5lbV98d/++ic6iF79kJ9h96o
-         1b9zcHuJ/Oqi7mTkGLPwpHolcVvy2LvWG/K8UbvrFpjwo6X1na+f31sNqUlsGsQvUibj
-         uiw5P8y2FfneVKuq7DB+m8rBVW5cOBzfvw/Nbfq46MF44Pj/KzSvwiNeRv7i9MAeSEDc
-         ifKw==
-X-Forwarded-Encrypted: i=1; AJvYcCUqDi/DEKxcVRsKk5V/lOj8RFqe9XdaTkHfDlQYYIg0DpaqLTw7pCotYA/UnJ/1Uuj9BiIPcGtbLlQUV2JKn8D4/6fgi/XGEmZxCWsZ
-X-Gm-Message-State: AOJu0YxfhhJNNHMydP+YfDR6PvzB7MXVp0DUfePBmcw8OtUlf44BfR4P
-	50kDegA87MAkKCckmediEC02ucucQAxd0dgBDStJZI/VCoc9ePvO
-X-Google-Smtp-Source: AGHT+IHtBezDsvbVMqibRsEPH2sf0BlTtcK7wXNFnZnb+FlIqmROFSO4SL00hPaO6pCWkFuV4wai3g==
-X-Received: by 2002:a05:6a20:3946:b0:1ad:6c36:ee82 with SMTP id adf61e73a8af0-1b26f0ec2f5mr5469399637.13.1717243608180;
-        Sat, 01 Jun 2024 05:06:48 -0700 (PDT)
-Received: from localhost ([219.144.1.218])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-702425da465sm2798253b3a.73.2024.06.01.05.06.46
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Sat, 01 Jun 2024 05:06:47 -0700 (PDT)
-From: joswang <joswang1221@gmail.com>
-To: mathias.nyman@intel.com,
-	gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	joswang <joswang@lenovo.com>
-Subject: [RFC 1/1] usb: host: xhci-plat: add enable XHCI-AVOID-BEI quirk by dts
-Date: Sat,  1 Jun 2024 20:06:40 +0800
-Message-Id: <20240601120640.73556-1-joswang1221@gmail.com>
-X-Mailer: git-send-email 2.17.1
+	s=arc-20240116; t=1717249361; c=relaxed/simple;
+	bh=SH0xg2/TC8u23Q2MiVfelki1BHd498w9fSc0Jd6h3aw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Z2MX6+nTyjMmsJXLxQfTstDoc+Z5KK73xOlkNLRd6+CxiRxJ7R94ZBI2KVH919aZ180f91aFO1nsFSvjuOWyRwaIbKFWEK2dOwBeqfJ8hpv73wFfSt4ReZpAg/48F7lcLh2wkfhmob+7dUQjSw+1F+yE5wOUmaKj7TS7QuCCMEA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=z3ntu.xyz; spf=pass smtp.mailfrom=z3ntu.xyz; dkim=pass (1024-bit key) header.d=z3ntu.xyz header.i=@z3ntu.xyz header.b=f3vaZ/v/; arc=none smtp.client-ip=128.199.32.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=z3ntu.xyz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=z3ntu.xyz
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=s1;
+	t=1717249351; bh=SH0xg2/TC8u23Q2MiVfelki1BHd498w9fSc0Jd6h3aw=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=f3vaZ/v/DGlJ25gF5Pi4fLgi2V2IU6qOwUfU00HQvqd3XLOpmlgAXi+QvOoDYixn7
+	 LpZGZo5FI70jAAQoqlYuQUDVTGayj9FClBBkV+yOnS2rkNjrP2o77MQTqxxmb/PNcJ
+	 NGghS+DxqDu4/aojosrfpMBF6SmI4mDlraSp4M7g=
+From: Luca Weiss <luca@z3ntu.xyz>
+To: gregkh@linuxfoundation.org, Peter Chen <peter.chen@kernel.org>
+Cc: linux-usb@vger.kernel.org, Peter Chen <peter.chen@kernel.org>,
+ Michael Grzeschik <m.grzeschik@pengutronix.de>,
+ Marek Szyprowski <m.szyprowski@samsung.com>,
+ Wouter Franken <wouter@franken-peeters.be>
+Subject:
+ Re: [PATCH 1/1] Revert "usb: chipidea: move ci_ulpi_init after the phy
+ initialization"
+Date: Sat, 01 Jun 2024 15:42:29 +0200
+Message-ID: <4894045.GXAFRqVoOG@g550jk>
+In-Reply-To: <20240517023648.3459188-1-peter.chen@kernel.org>
+References: <20240517023648.3459188-1-peter.chen@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"
 
-From: joswang <joswang@lenovo.com>
+On Freitag, 17. Mai 2024 04:36:48 MESZ Peter Chen wrote:
+> This reverts commit 22ffd399e6e7aa18ae0314278ed0b7f05f8ab679.
+> People report this commit causes the driver defer probed, and never
+> back to work[1][2].
+> 
+> [1] https://lore.kernel.org/lkml/20240407011913.GA168730@nchen-desktop/T/#mc2b93bc11a8b01ec7cd0d0bf6b0b03951d9ef751
+> [2] https://lore.kernel.org/lkml/20240407011913.GA168730@nchen-desktop/T/#me87d9a2a76c07619d83b3879ea14780da89fbbbf
+> 
 
-For Synopsys DWC31 2.00a and earlier versions, every isochronous
-interval the BEI(Block Event Interrupt) flag is set for all except
-the last Isoch TRB in a URB, host controller consumes the event
-TRBs in the event ring, once the event ring is full, it will not
-generate an interrupt and will stop all data transmission and command
-execution.
+Hi all,
 
-To avoid the problem of event ring full, the XHCI-AVOID-BEI quirk is
-introduced. Currently, the XHCI-AVOID-BEI quirk has been applied to all
-Intel xHCI controllers, see commit '227a4fd801c8 ("USB: xhci: apply
-XHCI-AVOID-BEI quirk to all Intel xHCI controllers")'.
+the original commit appears to break USB on Qualcomm msm8974 also (and
+probably other platforms), as reported in
+https://lore.kernel.org/all/87546d93-3fe7-4459-b44a-47cbcab9da74@me.ssier.org/
 
-For Linux system, each event ring consists of one or more event ring
-segments and each segment is 4 KB that contains 256 TRBs. It seems that
-the TRBs on the event ring are sufficient and the event ring will not be
-full. In real application, if it does happen, event ring is full, host
-controller no interrupt causes the driver to timeout.
+Could this get picked up?
 
-However, applying XHCI-AVOID-BEI quirk will also bring power consumption
-issues. We can consider the application scenarios of the product to decide
-whether to enable it. Therefore, we add the enable XHCI-AVOID-BEI quirk
-through dts configuration to make it more flexible.
+Regards
+Luca
 
-Signed-off-by: joswang <joswang@lenovo.com>
----
- drivers/usb/host/xhci-plat.c | 3 +++
- 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-index 3d071b875308..e1071827d4b3 100644
---- a/drivers/usb/host/xhci-plat.c
-+++ b/drivers/usb/host/xhci-plat.c
-@@ -253,6 +253,9 @@ int xhci_plat_probe(struct platform_device *pdev, struct device *sysdev, const s
- 		if (device_property_read_bool(tmpdev, "quirk-broken-port-ped"))
- 			xhci->quirks |= XHCI_BROKEN_PORT_PED;
- 
-+		if (device_property_read_bool(tmpdev, "quirk-avoid-bei"))
-+			xhci->quirks |= XHCI_AVOID_BEI;
-+
- 		if (device_property_read_bool(tmpdev, "xhci-sg-trb-cache-size-quirk"))
- 			xhci->quirks |= XHCI_SG_TRB_CACHE_SIZE_QUIRK;
- 
--- 
-2.17.1
+> Cc: Michael Grzeschik <m.grzeschik@pengutronix.de>
+> Cc: Marek Szyprowski <m.szyprowski@samsung.com>
+> Cc: Wouter Franken <wouter@franken-peeters.be>
+> Signed-off-by: Peter Chen <peter.chen@kernel.org>
+> ---
+>  drivers/usb/chipidea/core.c | 8 ++++----
+>  drivers/usb/chipidea/ulpi.c | 5 +++++
+>  2 files changed, 9 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/chipidea/core.c b/drivers/usb/chipidea/core.c
+> index bada13f704b6..835bf2428dc6 100644
+> --- a/drivers/usb/chipidea/core.c
+> +++ b/drivers/usb/chipidea/core.c
+> @@ -1084,6 +1084,10 @@ static int ci_hdrc_probe(struct platform_device *pdev)
+>  		return -ENODEV;
+>  	}
+>  
+> +	ret = ci_ulpi_init(ci);
+> +	if (ret)
+> +		return ret;
+> +
+>  	if (ci->platdata->phy) {
+>  		ci->phy = ci->platdata->phy;
+>  	} else if (ci->platdata->usb_phy) {
+> @@ -1138,10 +1142,6 @@ static int ci_hdrc_probe(struct platform_device *pdev)
+>  		goto ulpi_exit;
+>  	}
+>  
+> -	ret = ci_ulpi_init(ci);
+> -	if (ret)
+> -		return ret;
+> -
+>  	ci->hw_bank.phys = res->start;
+>  
+>  	ci->irq = platform_get_irq(pdev, 0);
+> diff --git a/drivers/usb/chipidea/ulpi.c b/drivers/usb/chipidea/ulpi.c
+> index 89fb51e2c3de..dfec07e8ae1d 100644
+> --- a/drivers/usb/chipidea/ulpi.c
+> +++ b/drivers/usb/chipidea/ulpi.c
+> @@ -68,6 +68,11 @@ int ci_ulpi_init(struct ci_hdrc *ci)
+>  	if (ci->platdata->phy_mode != USBPHY_INTERFACE_MODE_ULPI)
+>  		return 0;
+>  
+> +	/*
+> +	 * Set PORTSC correctly so we can read/write ULPI registers for
+> +	 * identification purposes
+> +	 */
+> +	hw_phymode_configure(ci);
+>  
+>  	ci->ulpi_ops.read = ci_ulpi_read;
+>  	ci->ulpi_ops.write = ci_ulpi_write;
+> 
+
+
+
 
 
