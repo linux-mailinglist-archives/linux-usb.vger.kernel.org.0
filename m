@@ -1,187 +1,129 @@
-Return-Path: <linux-usb+bounces-10745-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10746-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B649C8D7306
-	for <lists+linux-usb@lfdr.de>; Sun,  2 Jun 2024 03:44:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5953C8D7451
+	for <lists+linux-usb@lfdr.de>; Sun,  2 Jun 2024 10:52:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 869121C20945
-	for <lists+linux-usb@lfdr.de>; Sun,  2 Jun 2024 01:44:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 11FDE281B79
+	for <lists+linux-usb@lfdr.de>; Sun,  2 Jun 2024 08:52:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD5BC4C81;
-	Sun,  2 Jun 2024 01:44:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85206282FD;
+	Sun,  2 Jun 2024 08:51:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jtFdSVVw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-io1-f79.google.com (mail-io1-f79.google.com [209.85.166.79])
+Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E73A0639
-	for <linux-usb@vger.kernel.org>; Sun,  2 Jun 2024 01:44:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.79
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF3311E535;
+	Sun,  2 Jun 2024 08:51:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717292672; cv=none; b=i1fpGUU/Ku1qTh5e5IRmb+Qt7jFGxns2sYcKvCVREtOVf0W5UT2qzSHF64c4lUX4knpyyJjOMmQwRk1coBnKoxeEVJC13nq+Om4cl9ukK0COxrUjIS1Cq13XHAN1i7cu9LZcxG6Y8Ize7hjguGAk0mNp4vNydih8znRXwoc7d8Y=
+	t=1717318312; cv=none; b=Ec/pRrZTq4dQXvQq+uVRzZXcKleNnz3YhTxohGL9GwLChTo7UxQbeCzaAhZKCfJNs7uZvMujyjaFLsihhOmhR+aPk5SlL0dI4X4HngLkKJUz/D9ITfjt937yJgGFWuSSLWqx6lx6eUDaWpFoLxcq3DA/aKFy1qobJpEy3gQ0bgc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717292672; c=relaxed/simple;
-	bh=L6huh4WFyKIVkBNbX6dnvyVqd/LbRjammXro5OYz/Yg=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=hBTd1+goxSUjxteE+e2LwzI92uTJfsCkk80MsfMbI2ciCt1eKnVhena191IXNeI/FNInB0XAuO4nILMLEcvFEM3u4WQXKPrTIxVFo4VuslV+xoi0HvEhvNP4tCaYv+oM3EZKU47uBL8y2KRHM7rblt+3FPmQukpp/6SGrAHR7zk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.79
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f79.google.com with SMTP id ca18e2360f4ac-7eaa9ddad99so403894539f.2
-        for <linux-usb@vger.kernel.org>; Sat, 01 Jun 2024 18:44:30 -0700 (PDT)
+	s=arc-20240116; t=1717318312; c=relaxed/simple;
+	bh=e65MDGgz/5t6pNJjm2h6eNurKKcTphF0Q2NEmJmIwI8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=G2XKzPxvH4608GwX6BHnq/cxWfUJ7QGEOWaZet7ZEriuz0IZ2pMNuUJYqCRCRgiTbuHloBzOfga/sHOPWzsBVGJFz7W+RamAd/xlGqw3zqH8XT8lVIbL729evx7vsozYHQ3SaqCAwd8MeSqCI5K+/M43U/KgTwKUQsgXb1EgBww=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jtFdSVVw; arc=none smtp.client-ip=209.85.210.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ot1-f54.google.com with SMTP id 46e09a7af769-6f8d0a215deso1685489a34.0;
+        Sun, 02 Jun 2024 01:51:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1717318309; x=1717923109; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=B4hYHmgrY/sSpNoKlBUHQFCOVOO+xIhSM1LWCgBv6E8=;
+        b=jtFdSVVwxMJN+IfM/Qj0maZbLCSUFQHHaaGeWQKBMMEuptqbyqB6XzjZH++P3MQ8zT
+         TcSDMy/ZM4w5nXK453/tZq8N3iNB+3kGZM+BBMqvjMO4ZCIpFJZEVwC4910ZONv6AS51
+         kfY8J+7HU90M+nKB8TYBWIwzPKZHpqQ32N1WcQESI+Jm5V44Es9PX+R42NAe8zeXlic0
+         KnXZo+1tvxddtwtJ8yGry25HrQXto8YQrKpGnGv/h5F0MLWT4dALG39wGIF1B8PONGfv
+         UWIIP1RrYj/5St3oxiG5Fv4lRPKk2jlMx0jCKxsqlZE5QVCueuLYsfv4wfKCSTt8gBZ+
+         pqWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717292670; x=1717897470;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=N/E2HjWx2Ed6dFkXX1+r4wbdkwC7c6bpCT2rElMK7a8=;
-        b=DykQ1sbG6m/IpgslxTBIUOrrpg7R1U5c4T6bXQ/AfQHkzhddC6WuykS3ZtGlC5XFBB
-         2xo/eUPh2ngbKhdzTQ7n1vSMC3XMt1xXucHMga1w3/6jPectxdlWA0zfuFnHDFO8NHrF
-         XHRc5BYnblPgV+4G9itH8jU3H9NCcUzxcBitxRdzxLoNmBgax8wL3c6ytqBFgpS14DH1
-         axlJjmVlWMlqdjCZ80S5yvpsqsefJzrInbp56sYKbMHCx1i/LstM0v+JgKuj/aalpbW3
-         BNt0nALO7IIxjIa8j4w8kKsC71IsOQtBsig+266Rs+I+eB1oY63oUBa55xpH3915OMsC
-         exZg==
-X-Forwarded-Encrypted: i=1; AJvYcCXfwkeJ6ih7y9XnzHTUkvhTIlQ9VtC9g/VyZHaT2Agl90jURjzEJsX7/Gv7ICUoH8jTiLIx8Ch5bSJofKxtTTgpBVvbwXReqBQG
-X-Gm-Message-State: AOJu0Yy8dq5BlbLDuUOlYbi80GOb+JaiRU8IKqxE7R9TD6JqkF8K6OVL
-	GEZW1/DpgE9j+Xz9iiFJJzmRydQb0wZl/DPSWKNAFb57PDW/oLgHVeKzLzqzG1fT1pmWBDmu61l
-	nJtCZpnhtFc9+dHRupiMW11AejJAQedOwdTu4B8OHHlMxx7vfAQ/PV3s=
-X-Google-Smtp-Source: AGHT+IHXplj+0MNWzfVC72xih9Sii5ngPfH5O60jBILqhsEw5CMXbNzF1Pz9GrlfgFQVjONUdaJYA4q0jm6lX9bTNXEHaEfHBU5I
+        d=1e100.net; s=20230601; t=1717318309; x=1717923109;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=B4hYHmgrY/sSpNoKlBUHQFCOVOO+xIhSM1LWCgBv6E8=;
+        b=WennGhYAEgQpK0EXIxcv3ZIXQQy/JCSwBLtaC2kVqBBbGEXNeGqEcfm4jky2MfZZTy
+         BZAIsYZSpO75JGiQgnoRWt9bVCsG/DHw5bKx6AQNqhfJW6Wjv0DbymH0/O1K4PNNkYpk
+         y8kkWowmkJ6/V5zGmMfZYkT/ltwh4LlS2wcn8TvB4ZLUUmqt3ap+DStZ3ZNZFsNVlkTh
+         bOviKXBakFHuF6jJmO03ToeC5s2nAQazAfWu7vTga3EM2B2zdoPsiw1HUq0q7hgcBzwX
+         0AwKx4jeUG6QV9FxhSirfd9TtVRQ3m0NY3SxL8N1ggG+f4c781zAc8Zggf9r6QjTIMrv
+         siGw==
+X-Forwarded-Encrypted: i=1; AJvYcCVDMYk4qUoQ7Bj0Df9YjQXQoSW4ICA7uBQ6H+1I+SEKsF4UYT772//giJ24SzSWtcBUwNUN+xTHo0wgaR+Wi9cA4GlaKvJE8bO8bcIfTdXME1ZnS4FvzUIu14tpvHVIbGMRgQWANGk4Y/tf7qT6721A0t+D+4wUixCT5sIQ15Dkgpp4tCY=
+X-Gm-Message-State: AOJu0Yx3mP6cK49M+s+E0BSSqcnF06GEOeweAI1X5R8/TSLOyCtaBzL/
+	jj5C/dRVpjnGUgbVgtD7TM/VA5Ehr0//AHmOTpVREkWHkuqr11VN
+X-Google-Smtp-Source: AGHT+IEoQt9fiVgS/wUK8ZbhbZqDxwqVnEkmcyWbSOlcPJ7KPfGB5ccFde9C7qL7s2kTgPWdscxIPg==
+X-Received: by 2002:a9d:3e0c:0:b0:6f0:360d:d730 with SMTP id 46e09a7af769-6f911a8e5d6mr2783523a34.6.1717318309450;
+        Sun, 02 Jun 2024 01:51:49 -0700 (PDT)
+Received: from my-computer.lan (c-98-39-68-68.hsd1.tx.comcast.net. [98.39.68.68])
+        by smtp.googlemail.com with ESMTPSA id 46e09a7af769-6f91054f672sm1016350a34.46.2024.06.02.01.51.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 02 Jun 2024 01:51:49 -0700 (PDT)
+From: Andrew Ballance <andrewjballance@gmail.com>
+To: dan.carpenter@linaro.org
+Cc: andrewjballance@gmail.com,
+	benjamin.tissoires@redhat.com,
+	bentiss@kernel.org,
+	jikos@kernel.org,
+	jkosina@suse.com,
+	linux-input@vger.kernel.org,
+	linux-kernel-mentees@lists.linuxfoundation.org,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	luke@ljones.dev,
+	skhan@linuxfoundation.org,
+	syzbot+07762f019fd03d01f04c@syzkaller.appspotmail.com,
+	syzkaller-bugs@googlegroups.com
+Subject: [PATCH v2] hid: asus: asus_report_fixup: fix potential read out of bounds
+Date: Sun,  2 Jun 2024 03:50:23 -0500
+Message-ID: <20240602085023.1720492-1-andrewjballance@gmail.com>
+X-Mailer: git-send-email 2.45.1
+In-Reply-To: <d87335b8-9eae-4689-87b4-b581c0b28c9b@moroto.mountain>
+References: <d87335b8-9eae-4689-87b4-b581c0b28c9b@moroto.mountain>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:640f:b0:7de:da9b:21f4 with SMTP id
- ca18e2360f4ac-7eafff0ac29mr47505339f.2.1717292669999; Sat, 01 Jun 2024
- 18:44:29 -0700 (PDT)
-Date: Sat, 01 Jun 2024 18:44:29 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000922b0b0619de5b8f@google.com>
-Subject: [syzbot] [media?] [usb?] WARNING in usb_free_urb
-From: syzbot <syzbot+b466336413a1fba398a5@syzkaller.appspotmail.com>
-To: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
-	linux-usb@vger.kernel.org, mchehab@kernel.org, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-Hello,
+syzbot reported a potential read out of bounds in asus_report_fixup.
 
-syzbot found the following issue on:
+this patch adds checks so that a read out of bounds will not occur
 
-HEAD commit:    e0cce98fe279 Merge tag 'tpmdd-next-6.10-rc2' of git://git...
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=15c9b13c980000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=238430243a58f702
-dashboard link: https://syzkaller.appspot.com/bug?extid=b466336413a1fba398a5
-compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15f3e2fc980000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=157ada62980000
-
-Downloadable assets:
-disk image (non-bootable): https://storage.googleapis.com/syzbot-assets/7bc7510fe41f/non_bootable_disk-e0cce98f.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/5a8fbe5a0be1/vmlinux-e0cce98f.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/1f8ed6b81845/bzImage-e0cce98f.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+b466336413a1fba398a5@syzkaller.appspotmail.com
-
-usb 5-1: Product: syz
-usb 5-1: Manufacturer: syz
-usb 5-1: SerialNumber: syz
-smsusb:smsusb_probe: board id=7, interface number 55
-smsusb:smsusb_probe: board id=7, interface number 147
-smsusb:smsusb_probe: board id=7, interface number 0
-smsusb:siano_media_device_register: media controller created
-smsusb:smsusb_start_streaming: smsusb_submit_urb(...) failed
-smsusb:smsusb_init_device: smsusb_start_streaming(...) failed
-------------[ cut here ]------------
-WARNING: CPU: 2 PID: 55 at mm/slub.c:4519 free_large_kmalloc+0xda/0x140 mm/slub.c:4519
-Modules linked in:
-CPU: 2 PID: 55 Comm: kworker/2:1 Not tainted 6.10.0-rc1-syzkaller-00021-ge0cce98fe279 #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
-Workqueue: usb_hub_wq hub_event
-RIP: 0010:free_large_kmalloc+0xda/0x140 mm/slub.c:4519
-Code: 56 fb 8b 43 34 85 c0 75 c7 48 c7 c6 90 f0 26 8d 48 89 df e8 e8 08 f1 ff 90 0f 0b 48 89 df 5b 5d 41 5c 41 5d e9 47 a2 e4 ff 90 <0f> 0b 90 80 3d 3c b9 ee 0d 00 74 28 48 8b 74 24 20 48 89 ef e8 bd
-RSP: 0018:ffffc90000a76e18 EFLAGS: 00010246
-RAX: 00fff00000000000 RBX: ffffea0000c9d880 RCX: ffffffff813e21dc
-RDX: ffff88801a924880 RSI: ffff888032762000 RDI: ffffea0000c9d880
-RBP: ffff888032762000 R08: 0000000000000007 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: ffff88801ade0000
-R13: ffff88801ac2b000 R14: dffffc0000000000 R15: ffff88801ade00f0
-FS:  0000000000000000(0000) GS:ffff88806b200000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f66ab5c8388 CR3: 000000002a16a000 CR4: 0000000000350ef0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- urb_destroy drivers/usb/core/urb.c:25 [inline]
- kref_put include/linux/kref.h:65 [inline]
- usb_free_urb.part.0+0xf8/0x110 drivers/usb/core/urb.c:97
- usb_free_urb+0x1f/0x30 drivers/usb/core/urb.c:96
- smsusb_term_device+0x108/0x1e0 drivers/media/usb/siano/smsusb.c:352
- smsusb_init_device+0xaa2/0xe10 drivers/media/usb/siano/smsusb.c:497
- smsusb_probe+0x5e2/0x10b0 drivers/media/usb/siano/smsusb.c:575
- usb_probe_interface+0x309/0x9d0 drivers/usb/core/driver.c:399
- call_driver_probe drivers/base/dd.c:578 [inline]
- really_probe+0x23e/0xa90 drivers/base/dd.c:656
- __driver_probe_device+0x1de/0x440 drivers/base/dd.c:798
- driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:828
- __device_attach_driver+0x1df/0x310 drivers/base/dd.c:956
- bus_for_each_drv+0x157/0x1e0 drivers/base/bus.c:457
- __device_attach+0x1e8/0x4b0 drivers/base/dd.c:1028
- bus_probe_device+0x17f/0x1c0 drivers/base/bus.c:532
- device_add+0x114b/0x1a70 drivers/base/core.c:3721
- usb_set_configuration+0x10cb/0x1c50 drivers/usb/core/message.c:2210
- usb_generic_driver_probe+0xb1/0x110 drivers/usb/core/generic.c:254
- usb_probe_device+0xec/0x3e0 drivers/usb/core/driver.c:294
- call_driver_probe drivers/base/dd.c:578 [inline]
- really_probe+0x23e/0xa90 drivers/base/dd.c:656
- __driver_probe_device+0x1de/0x440 drivers/base/dd.c:798
- driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:828
- __device_attach_driver+0x1df/0x310 drivers/base/dd.c:956
- bus_for_each_drv+0x157/0x1e0 drivers/base/bus.c:457
- __device_attach+0x1e8/0x4b0 drivers/base/dd.c:1028
- bus_probe_device+0x17f/0x1c0 drivers/base/bus.c:532
- device_add+0x114b/0x1a70 drivers/base/core.c:3721
- usb_new_device+0xd90/0x1a10 drivers/usb/core/hub.c:2651
- hub_port_connect drivers/usb/core/hub.c:5521 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5661 [inline]
- port_event drivers/usb/core/hub.c:5821 [inline]
- hub_event+0x2db0/0x4e20 drivers/usb/core/hub.c:5903
- process_one_work+0x9fb/0x1b60 kernel/workqueue.c:3231
- process_scheduled_works kernel/workqueue.c:3312 [inline]
- worker_thread+0x6c8/0xf70 kernel/workqueue.c:3393
- kthread+0x2c1/0x3a0 kernel/kthread.c:389
- ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
- </TASK>
-
-
+Signed-off-by: Andrew Ballance <andrewjballance@gmail.com>
+Reported-by: syzbot+07762f019fd03d01f04c@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=07762f019fd03d01f04c
+Fixes: 59d2f5b73921 ("HID: asus: fix more n-key report descriptors if n-key quirked")
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ drivers/hid/hid-asus.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+diff --git a/drivers/hid/hid-asus.c b/drivers/hid/hid-asus.c
+index 02de2bf4f790..37e6d25593c2 100644
+--- a/drivers/hid/hid-asus.c
++++ b/drivers/hid/hid-asus.c
+@@ -1204,8 +1204,8 @@ static __u8 *asus_report_fixup(struct hid_device *hdev, __u8 *rdesc,
+ 	}
+ 
+ 	/* match many more n-key devices */
+-	if (drvdata->quirks & QUIRK_ROG_NKEY_KEYBOARD) {
+-		for (int i = 0; i < *rsize + 1; i++) {
++	if (drvdata->quirks & QUIRK_ROG_NKEY_KEYBOARD && *rsize > 15) {
++		for (int i = 0; i < *rsize - 15; i++) {
+ 			/* offset to the count from 0x5a report part always 14 */
+ 			if (rdesc[i] == 0x85 && rdesc[i + 1] == 0x5a &&
+ 			    rdesc[i + 14] == 0x95 && rdesc[i + 15] == 0x05) {
+-- 
+2.45.1
 
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
 
