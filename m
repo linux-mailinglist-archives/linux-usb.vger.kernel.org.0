@@ -1,150 +1,160 @@
-Return-Path: <linux-usb+bounces-10784-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10785-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A677F8D8225
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Jun 2024 14:22:34 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7681E8D8285
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Jun 2024 14:39:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0C94DB24A48
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Jun 2024 12:22:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0D18A1F21567
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Jun 2024 12:39:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB54212E1C7;
-	Mon,  3 Jun 2024 12:21:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CE3812C81F;
+	Mon,  3 Jun 2024 12:39:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TEb5N0ce"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="Hqcgmw4m"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 770EE12C46E;
-	Mon,  3 Jun 2024 12:21:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E167212C473;
+	Mon,  3 Jun 2024 12:39:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717417262; cv=none; b=agLqBr+K5xRSoxMdoGYhdvx2e6HueAaQzEd+U+ZO+c1XMMmkTovUdFad0jpK9P6Z9875KwhwuP8W2Z8bnf5cZMxXwPuQUo6BqcmN/afhmTJw6S9LVEiWpH2zoo9aYrGyF+BjkgsMRA3pStkgTCNyQXArfj73wmsK/LEIi7xU2VQ=
+	t=1717418358; cv=none; b=Vk/eOovX1rtovngQD33wcFTz1tsOUENVxJq7oWHjIIkuDlOAfn+NRPefGKpXBrAbMD50P4EbdgXOKdCcxLNL7DYlxk9cqoBEgxaMajy6MT/GW7Xs68CHKfCTICBVr1+VzP5LZFXDuYgx/E4lqc9xiPrtd7U4dA/3EcNCTKfKZc0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717417262; c=relaxed/simple;
-	bh=jFAQdB069Gt4QTX8b38JiH2wefG9AwJc5jgi++86ZX4=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:From:Subject:
-	 In-Reply-To:Content-Type; b=J/Pwo/DVr0a+U14r+v5gU4tuNhDq/f2TBL+8Q2/BrM++YEzN7TASU4RzEMuMKgUgr2lTgX7rE7WecHOVmqLxgH2JcPI/X09k6xpE0T0NjZzIM5WqjBwPg89k2XXVCeBqSv7/ax1kszmWTbcyiOEOsUJzZWRsPSPZIsTgcJmUvS4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TEb5N0ce; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1717418358; c=relaxed/simple;
+	bh=LEM9nLCZweC6fzBGd3LiqBJyI0EVR5DWYNV+RHxhfJc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=Rk9j9+yPewQeBwWkcfpqTv/2MUBRkd96DN9uvKLncenknwEqkwIwWeL8LvNvxyVGw8zoK+QqXBUX33BV8gf5Cbs2FbbzDo9+qlb17gWRUNQTHVawf2rIrDf61oFVDX+5MOspdqPCl2cPHh1zlYtsNrCpSRcyyZD1TBaDnCVrwbo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=Hqcgmw4m; arc=none smtp.client-ip=68.232.154.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717417260; x=1748953260;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=jFAQdB069Gt4QTX8b38JiH2wefG9AwJc5jgi++86ZX4=;
-  b=TEb5N0ceqHqi8d07o7DsJ+6Y2geuIuRKhIsrqeZrP90xYsIbqVuds4oF
-   xQPCa/va0AOEDibGs0bY4J0tvbfiFebi8iL80jqXmuw5EAXIBjqHPe2bp
-   fE1aH+yMYavbuRDx3rJisnNuZIB3qSPSytcQZahSnjcagMUAqjilJs8Cs
-   O7rfY7XdSYspdVefzVTcDKfTCPiUhw+aEUxx+RDxh7nP/D1XkSbSNwJbr
-   u43RVwxmkhF5Uk8k1WPkHFsmGIk7Y43epglwvzB2z7jOJR+bYm4PP2696
-   6wgfgh7SUAqv7P+WFN/Rs0uTlukl25DvX6f+2Ef11v7Ya90ptWffBY6rq
-   A==;
-X-CSE-ConnectionGUID: 4M66t9EKSyGhq46rZheVOg==
-X-CSE-MsgGUID: Gzv8E4bxThKhpcNcxDuZug==
-X-IronPort-AV: E=McAfee;i="6600,9927,11092"; a="17731481"
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1717418356; x=1748954356;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=LEM9nLCZweC6fzBGd3LiqBJyI0EVR5DWYNV+RHxhfJc=;
+  b=Hqcgmw4moR5xrn3ljGdNG2NQIqkjpx77ho9zS40XDNG2X3wb34CUkuya
+   X/mt32h+rUIU0pzJci/Ji1fsu/fcQxsni0pycwJPYZMybmJ9+da3Bqhe+
+   QRLyxgI0JOR7uXmU/EF8JF1RKBIpsXNd0o16tFy+L44kcuJp+QW/q6oJ0
+   NhAJzLZ0M4xuF5Aw+lk8aZ6MkwDPrIcWdT4qJPG61eu3enuINwaherele
+   ghX+9sPDzlaZ4vZOYHUNDgiwNl+85sbGEvJA0Sk9jhg6rhrPNTEVHkd5V
+   SipaiU+scw1XcuBPMYKDZUtj4XS3gEvmCQCTM12MAE38i40ax4V1plv7I
+   g==;
+X-CSE-ConnectionGUID: mGTV6IY0SjuqO4B8d/I3Zg==
+X-CSE-MsgGUID: cs2mH/dwScqctcaN/BguNA==
 X-IronPort-AV: E=Sophos;i="6.08,211,1712646000"; 
-   d="scan'208";a="17731481"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2024 05:20:38 -0700
-X-CSE-ConnectionGUID: FYDliy5JSg+41S59NNnXYg==
-X-CSE-MsgGUID: x8zXxQGmSE62o9qOT+PupQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,211,1712646000"; 
-   d="scan'208";a="36758547"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmviesa007.fm.intel.com with ESMTP; 03 Jun 2024 05:20:35 -0700
-Message-ID: <1662c9c9-7330-4794-843a-940f05802021@linux.intel.com>
-Date: Mon, 3 Jun 2024 15:22:32 +0300
+   d="scan'208";a="194291692"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 03 Jun 2024 05:39:11 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Mon, 3 Jun 2024 05:38:36 -0700
+Received: from [10.159.227.221] (10.10.85.11) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2507.35 via Frontend
+ Transport; Mon, 3 Jun 2024 05:38:23 -0700
+Message-ID: <7e618af0-51a7-4941-a386-0ac68c66d358@microchip.com>
+Date: Mon, 3 Jun 2024 14:38:22 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.13.0
-Content-Language: en-US
-To: joswang <joswang1221@gmail.com>, mathias.nyman@intel.com,
- gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- joswang <joswang@lenovo.com>
-References: <20240601120640.73556-1-joswang1221@gmail.com>
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [RFC 1/1] usb: host: xhci-plat: add enable XHCI-AVOID-BEI quirk
- by dts
-In-Reply-To: <20240601120640.73556-1-joswang1221@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 9/9] mmc: Convert from tasklet to BH workqueue
+To: Allen Pais <apais@linux.microsoft.com>, <linux-kernel@vger.kernel.org>
+CC: <tj@kernel.org>, <keescook@chromium.org>, <vkoul@kernel.org>,
+	<marcan@marcan.st>, <sven@svenpeter.dev>, <florian.fainelli@broadcom.com>,
+	<rjui@broadcom.com>, <sbranden@broadcom.com>, <paul@crapouillou.net>,
+	<Eugeniy.Paltsev@synopsys.com>, <manivannan.sadhasivam@linaro.org>,
+	<vireshk@kernel.org>, <Frank.Li@nxp.com>, <leoyang.li@nxp.com>,
+	<zw@zh-kernel.org>, <wangzhou1@hisilicon.com>, <haijie1@huawei.com>,
+	<shawnguo@kernel.org>, <s.hauer@pengutronix.de>, <sean.wang@mediatek.com>,
+	<matthias.bgg@gmail.com>, <angelogioacchino.delregno@collabora.com>,
+	<afaerber@suse.de>, <logang@deltatee.com>, <daniel@zonque.org>,
+	<haojian.zhuang@gmail.com>, <robert.jarzmik@free.fr>, <andersson@kernel.org>,
+	<konrad.dybcio@linaro.org>, <orsonzhai@gmail.com>,
+	<baolin.wang@linux.alibaba.com>, <zhang.lyra@gmail.com>,
+	<patrice.chotard@foss.st.com>, <linus.walleij@linaro.org>, <wens@csie.org>,
+	<jernej.skrabec@gmail.com>, <peter.ujfalusi@gmail.com>, <kys@microsoft.com>,
+	<haiyangz@microsoft.com>, <wei.liu@kernel.org>, <decui@microsoft.com>,
+	<jassisinghbrar@gmail.com>, <mchehab@kernel.org>,
+	<maintainers@bluecherrydvr.com>, <ulf.hansson@linaro.org>,
+	<manuel.lauss@gmail.com>, <mirq-linux@rere.qmqm.pl>,
+	<jh80.chung@samsung.com>, <oakad@yahoo.com>,
+	<hayashi.kunihiko@socionext.com>, <mhiramat@kernel.org>,
+	<brucechang@via.com.tw>, <HaraldWelte@viatech.com>, <pierre@ossman.eu>,
+	<duncan.sands@free.fr>, <stern@rowland.harvard.edu>, <oneukum@suse.com>,
+	<openipmi-developer@lists.sourceforge.net>, <dmaengine@vger.kernel.org>,
+	<asahi@lists.linux.dev>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-rpi-kernel@lists.infradead.org>, <linux-mips@vger.kernel.org>,
+	<imx@lists.linux.dev>, <linuxppc-dev@lists.ozlabs.org>,
+	<linux-mediatek@lists.infradead.org>, <linux-actions@lists.infradead.org>,
+	<linux-arm-msm@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+	<linux-sunxi@lists.linux.dev>, <linux-tegra@vger.kernel.org>,
+	<linux-hyperv@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+	<linux-media@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
+	<linux-omap@vger.kernel.org>, <linux-renesas-soc@vger.kernel.org>,
+	<linux-s390@vger.kernel.org>, <netdev@vger.kernel.org>,
+	<linux-usb@vger.kernel.org>
+References: <20240327160314.9982-1-apais@linux.microsoft.com>
+ <20240327160314.9982-10-apais@linux.microsoft.com>
+Content-Language: en-US, fr
+From: Aubin Constans <aubin.constans@microchip.com>
+In-Reply-To: <20240327160314.9982-10-apais@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 1.6.2024 15.06, joswang wrote:
-> From: joswang <joswang@lenovo.com>
+On 27/03/2024 17:03, Allen Pais wrote:
+> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
 > 
-> For Synopsys DWC31 2.00a and earlier versions, every isochronous
-> interval the BEI(Block Event Interrupt) flag is set for all except
-> the last Isoch TRB in a URB, host controller consumes the event
-> TRBs in the event ring, once the event ring is full, it will not
-> generate an interrupt and will stop all data transmission and command
-> execution.
+> The only generic interface to execute asynchronously in the BH context is
+> tasklet; however, it's marked deprecated and has some design flaws. To
+> replace tasklets, BH workqueue support was recently added. A BH workqueue
+> behaves similarly to regular workqueues except that the queued work items
+> are executed in the BH context.
 > 
-> To avoid the problem of event ring full, the XHCI-AVOID-BEI quirk is
-> introduced. Currently, the XHCI-AVOID-BEI quirk has been applied to all
-> Intel xHCI controllers, see commit '227a4fd801c8 ("USB: xhci: apply
-> XHCI-AVOID-BEI quirk to all Intel xHCI controllers")'.
+> This patch converts drivers/infiniband/* from tasklet to BH workqueue.
 > 
-> For Linux system, each event ring consists of one or more event ring
-> segments and each segment is 4 KB that contains 256 TRBs. It seems that
-> the TRBs on the event ring are sufficient and the event ring will not be
-> full. In real application, if it does happen, event ring is full, host
-> controller no interrupt causes the driver to timeout.
+> Based on the work done by Tejun Heo <tj@kernel.org>
+> Branch: https://git.kernel.org/pub/scm/linux/kernel/git/tj/wq.git for-6.10
 > 
-> However, applying XHCI-AVOID-BEI quirk will also bring power consumption
-> issues. We can consider the application scenarios of the product to decide
-> whether to enable it. Therefore, we add the enable XHCI-AVOID-BEI quirk
-> through dts configuration to make it more flexible.
+> Signed-off-by: Allen Pais <allen.lkml@gmail.com>
+> ---
+>   drivers/mmc/host/atmel-mci.c                  | 35 ++++-----
+[...]
 
-Took a look at XHCI_AVOID_BEI quirk and it seems that it evolved from
-solving a hardware issue into a interrupt trigger optimization.
+For atmel-mci, judging from a few simple tests, performance is preserved.
+E.g. writing to a SD Card on the SAMA5D3-Xplained board:
+time dd if=/dev/zero of=/opt/_del_me bs=4k count=64k
 
-How about making current XHCI_AVOID_BEI the default behavior, i.e. force
-an interrupt every 32nd isoc trb, and reduce it in case event ring
-has more than half a segments of events per interrupt.
+      Base 6.9.0 : 0.07user 5.05system 0:18.92elapsed 27%CPU
+   Patched 6.9.0+: 0.12user 4.92system 0:18.76elapsed 26%CPU
 
-The actual XHCI_AVOID_BEI quirk would only be used for hardware that that
-can't handle BEI flag properly
+However, please resolve what checkpatch is complaining about:
+scripts/checkpatch.pl --strict 
+PATCH-9-9-mmc-Convert-from-tasklet-to-BH-workqueue.mbox
 
-something like:
+   WARNING: please, no space before tabs
+   #72: FILE: drivers/mmc/host/atmel-mci.c:367:
+   +^Istruct work_struct ^Iwork;$
 
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 266fcbc4bb93..dd161ebf15a3 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -3991,16 +3991,17 @@ static int xhci_get_isoc_frame_id(struct xhci_hcd *xhci,
-  static bool trb_block_event_intr(struct xhci_hcd *xhci, int num_tds, int i,
-                                  struct xhci_interrupter *ir)
-  {
--       if (xhci->hci_version < 0x100)
-+       if (xhci->hci_version < 0x100 || xhci->quirks & XHCI_AVOID_BEI)
-                 return false;
-+
-         /* always generate an event interrupt for the last TD */
-         if (i == num_tds - 1)
-                 return false;
-         /*
--        * If AVOID_BEI is set the host handles full event rings poorly,
--        * generate an event at least every 8th TD to clear the event ring
-+        * host handles full event rings poorly, force an interrupt at least
-+        * every 32 isoc TRB to clear the event ring.
-          */
--       if (i && ir->isoc_bei_interval && xhci->quirks & XHCI_AVOID_BEI)
-+       if (i && ir->isoc_bei_interval)
+Same as discussions on the USB patch[1] and others in this series, I am 
+also in favour of "workqueue" or similar in the comments, rather than 
+just "work".
 
+Apart from that:
+Tested-by: Aubin Constans <aubin.constans@microchip.com>
+Acked-by: Aubin Constans <aubin.constans@microchip.com>
 
-Thanks
-Mathias
+Thanks.
 
+[1]: 
+https://lore.kernel.org/linux-mmc/CAOMdWSLipPfm3OZTpjZz4uF4M+E_8QAoTeMcKBXawLnkTQx6Jg@mail.gmail.com/
 
