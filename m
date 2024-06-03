@@ -1,83 +1,81 @@
-Return-Path: <linux-usb+bounces-10778-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10779-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55CAB8D7FC0
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Jun 2024 12:10:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F70C8D7FC2
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Jun 2024 12:10:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C6ED11F213A4
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Jun 2024 10:10:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1E4751F237DA
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Jun 2024 10:10:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D71282489;
-	Mon,  3 Jun 2024 10:10:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92D67824A6;
+	Mon,  3 Jun 2024 10:10:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="WeahWID4"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="X3kHmeSC"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 254A881735
-	for <linux-usb@vger.kernel.org>; Mon,  3 Jun 2024 10:10:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 818D48060E
+	for <linux-usb@vger.kernel.org>; Mon,  3 Jun 2024 10:10:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717409411; cv=none; b=Nggn3SmH8tEAlLRrTCVI6rds6je5et5RkNqaPPL3+rGpFg9kTepZ0gH9fS0IRDtjWwHW2vO2aZ9F217bqomsBjHpyJnWYIo0IPjs9ICarD37rSzlrzJlaGLUd5D4CQq5bq/GC27WPVeR7RkS6MTo/uSFgcuRa7fU6MTPqZsxHQw=
+	t=1717409432; cv=none; b=ebZ7iP6sZkWx6nbv1lA88W2ouRnXzrhXlKzRMc7Yk8q+S68uvzgoWZ2v54cgEAdSip/ikbMeL8edB2OLkjrNJb8orh6yPl0jnp9DU0Q+jZz6iZt4jIxp3DtQWxmB0gVED7Mvf0xP6N2IF/FwdGMpSigndI9DbC2iT11tfzNGQAM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717409411; c=relaxed/simple;
-	bh=axCaytBs4Nv5HrnZxUnB+aeuBj8JrqMrdedG5ZfR364=;
+	s=arc-20240116; t=1717409432; c=relaxed/simple;
+	bh=XuAc7dh5ANwBVYj9UfeHlkW7qY8aQh6rucm3UqmciOM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iuaOo/7N37QedT8VHadsleWIMe7nOmkcAe8ye77L1yZwR5lQEnOXct8XFTr262xGs6paz0Cinz8TW6mvd/0pLYBdoT384EdKxOXQ1ZEo+1Wlp7yTRguT2rjy2UfSgvxlrFrhXmbbWjBuEoGBKs5j0VOyAaRy7lSQqjwGTwcc+zU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=WeahWID4; arc=none smtp.client-ip=209.85.208.172
+	 Content-Type:Content-Disposition:In-Reply-To; b=lz9kbICKIOyNZaelHvn34xsS3dD7pB2IKcggO2erazLuHYfesxAXLEB7QcB9GjJRHLuUFDRg+84oeE9/euDanZPvQMaB0RkSdgJ+AjcJmd4qMas6x/ewViskFAHlzogdr6NXkZX2uTYgzhgELsCPNOZmvC5rNmihKqLB74skaEE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=X3kHmeSC; arc=none smtp.client-ip=209.85.218.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2e73359b900so48611101fa.2
-        for <linux-usb@vger.kernel.org>; Mon, 03 Jun 2024 03:10:08 -0700 (PDT)
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-a689ad8d1f6so277301066b.2
+        for <linux-usb@vger.kernel.org>; Mon, 03 Jun 2024 03:10:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1717409407; x=1718014207; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1717409429; x=1718014229; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/oQILeAKHOw/6kmTRnoLAXLSnuKdCsLUhNLs5GdUc34=;
-        b=WeahWID4PFQSo+SmAHT5DaUUwVp2NjBxfgdvPVQhFTaCsd18cuzlEXE3gMbktt9UpR
-         TlpdYFJ8RZYv46dvvHJzCk4alEPGZuwrKVRHivKH8Xzzh4pb47vRR2mWSSEokzdlFeVU
-         qx0sJMjy2TrB2WuohOOKeAfWn4nj/Cu1lZ0rQnE3iCPLuVfEjjpBve2fYUKrCjpy59Q2
-         /2z9TDsx65CH0JucJbEU7N3UJA5pklTg+xJ1WzoZ5nYmCeRxTGGHOuLKalxQKQzAeG+t
-         0Kj3bjQZj3z+r0nV1gB2arZlgY3tpKW2iv4UyIc/PUMeKpJKWJ/kKvEgazymXKIDPNn/
-         Focw==
+        bh=LkWOhV+DQwJ6ndMHwlwz7TM2x8mN3yyZr2x2zYuk2Oc=;
+        b=X3kHmeSCFoAePasblA5NKIPXNXRH1knV+4U+zs/hhpRgkouB1JIyz2hYuYUkePuLvB
+         pwWRfpPcYD4s+AqGjaxQJ8vc3e7RHzCMOCzFXNq0MJJqNCAeaqdI38FTu/Ewx3Xblh+g
+         rmSaG/4w04gvLPf2P5ilTCsU9aGQNYWjk1id7vCmis+f0n90kv2UdZtpiAkXXXD+HgEC
+         hXYCaJpUki2vPiQJ0QOgW8TzvbzZtdpFCXbiB+Ugl3/bFj7Y9tHNcbX/YOr2mr8GCrOg
+         T6h7HAe56JeleUUxiU7KF+iaGLa8w2NY8/32gvR/hRjL6FqAs6r1EPNoJdez6C3FdnRK
+         fGEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717409407; x=1718014207;
+        d=1e100.net; s=20230601; t=1717409429; x=1718014229;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/oQILeAKHOw/6kmTRnoLAXLSnuKdCsLUhNLs5GdUc34=;
-        b=mGoqvr1ZA38k/P4e8WLa/23Yc0u2TyN7CSo22n4y4rs+RZ+VVfSIOXtO2cGqhT4Uom
-         Wh8PW2i0LcCgqcV0p59u6bXlnTNtVChZVOYMTU6UxxR0sRRmfeYWTIGQcgcog9rMmH7b
-         rAhgbT5Ocx1eCut4/yFxV4bEQjtX+z2rTyi4D9TTacV7n5FmIrBO9zrz+fbvErBaETSg
-         y0WUjbedJbU0WfcYfqOgd21vuNxWMtOD6t0XLFIuBpHNgGs/+SQSuX6H2u9fEvMvHymi
-         siq9NIz6q3xaMR36kxFmVS0KW3w7Q9ecYCR/fYV2+Pv/vCA1Z6QVV5FF31g8S64TgH2x
-         MYWQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVyEpZrvtCUxnPkPBMoH+bMiNXZ9Uc5OgJ5sqtg0VcqRfwLZBB4UvWTKvmpSE0duM4h8QfMWaB+VpSxX/OAokmMZ/gRgbnGGvEG
-X-Gm-Message-State: AOJu0Yx6PSsE0vmvtZV2nUMLVhxw2RtIAVjwEjwSFlhPsJpoApmQOPoD
-	WIXl648XYtTi2JzdEAMC/pfOCIvVdC2lZBr2NCCLtKVbMOoOUr65yexto1oPtWY=
-X-Google-Smtp-Source: AGHT+IGn3CzzELML6N16hK8AnLGIUEFMcTTvwgUdRPEpFKKFP4W6B3EpYysrx8TTkgAynFdvKb3M2w==
-X-Received: by 2002:a2e:be85:0:b0:2e6:b00f:da92 with SMTP id 38308e7fff4ca-2ea9510c2f2mr63295851fa.24.1717409407334;
-        Mon, 03 Jun 2024 03:10:07 -0700 (PDT)
-Received: from eriador.lumag.spb.ru (dzdbxzyyyyyyyyyyyykxt-3.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::227])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2ea91bb4c07sm11274131fa.45.2024.06.03.03.10.06
+        bh=LkWOhV+DQwJ6ndMHwlwz7TM2x8mN3yyZr2x2zYuk2Oc=;
+        b=dVbOitmsqptKnwFJvn0+E0OVAXMO3cS340QJnc6fLJGoUpxHCc7hVVFTgeZV5+Tpah
+         xPuYZSlI6ai1AtL7utij/EQWiK5rGhBZy7SBeP7Ub+MFMmyCcPVrj3uXjyY5Ir0qBBvO
+         xFp6mlD9hPrxRzIiuP9OWnvXCW3DOe3ZNTjpMRTfZb6eTxOah7Ric0ypH1X1KWsF4RaF
+         YLeBFuyEs8kzNPd/G2wC/2vP9ZZipdltVqQGNpR4VStt7mn5OiQQDBSqezTywCRp1jSC
+         6julLzF5EjoEuiVtNEqgfOeFopL2VIiAaF5s3snm73Zvvxr5Q6222mGSv5mOXgm62sW7
+         WCiQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXwNJRpkauRl49hT/hMfDQJ2405q/Uxrx4JKmtUhnGgluAfRpaurfs1woHX8usgIE7b6jwHXc53ndjhDUCZc/+1xFl7k6Tbg/iA
+X-Gm-Message-State: AOJu0YzX2mK/5Zkgu/jSlHRoB4EzddbCsOemmXflXsQ9dARJ+ZwJ4suN
+	mZd/y0RtaVfclkJkC0Zik49jB8SwwHCq9TftEiUI2cHNhwO3fwbAlk7yrv+GObc=
+X-Google-Smtp-Source: AGHT+IHbpgvcshlXyC2u1OwtaVW61Tn6IJT8AxGEZwKgPW1bJBRtTNMuu6EOVReA48fHyxMu0ZnKYQ==
+X-Received: by 2002:a17:906:7f90:b0:a63:4e03:d71 with SMTP id a640c23a62f3a-a681fb6080fmr594007366b.6.1717409428702;
+        Mon, 03 Jun 2024 03:10:28 -0700 (PDT)
+Received: from linaro.org ([188.27.161.69])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a68f9092ddbsm201510266b.101.2024.06.03.03.10.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jun 2024 03:10:07 -0700 (PDT)
-Date: Mon, 3 Jun 2024 13:10:05 +0300
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: Francesco Dolcini <francesco@dolcini.it>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Francesco Dolcini <francesco.dolcini@toradex.com>, 
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Bjorn Andersson <andersson@kernel.org>
-Subject: Re: [PATCH v2 2/2] usb: typec: mux: gpio-sbu: Make enable gpio
- optional
-Message-ID: <mkrpe3w54u7dkwjzhbakcvjry2ot5uvwjd4fasgirdcgsjbgdb@53q4a4f5ecix>
-References: <20240603083558.9629-1-francesco@dolcini.it>
- <20240603083558.9629-3-francesco@dolcini.it>
+        Mon, 03 Jun 2024 03:10:28 -0700 (PDT)
+Date: Mon, 3 Jun 2024 13:10:27 +0300
+From: Abel Vesa <abel.vesa@linaro.org>
+To: Johan Hovold <johan+linaro@kernel.org>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: ucsi: glink: increase max ports for x1e80100
+Message-ID: <Zl2Wkx5AqAfr1jfV@linaro.org>
+References: <20240603100007.10236-1-johan+linaro@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -86,27 +84,34 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240603083558.9629-3-francesco@dolcini.it>
+In-Reply-To: <20240603100007.10236-1-johan+linaro@kernel.org>
 
-On Mon, Jun 03, 2024 at 10:35:58AM +0200, Francesco Dolcini wrote:
-> From: Francesco Dolcini <francesco.dolcini@toradex.com>
+On 24-06-03 12:00:07, Johan Hovold wrote:
+> The new X Elite (x1e80100) platform has three ports so increase the
+> maximum so that all ports can be registered.
 > 
-> The enable gpio is not required when the SBU mux is used only for
-> orientation, make it optional.
-> 
-> Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+
+Reviewed-by: Abel Vesa <abel.vesa@linaro.org>
+
 > ---
-> v2:
->  - removed useless NULL check for optional enable gpio
-> ---
->  drivers/usb/typec/mux/gpio-sbu-mux.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
+>  drivers/usb/typec/ucsi/ucsi_glink.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-
-
--- 
-With best wishes
-Dmitry
+> diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c b/drivers/usb/typec/ucsi/ucsi_glink.c
+> index f7546bb488c3..985a880e86da 100644
+> --- a/drivers/usb/typec/ucsi/ucsi_glink.c
+> +++ b/drivers/usb/typec/ucsi/ucsi_glink.c
+> @@ -14,7 +14,7 @@
+>  #include <linux/soc/qcom/pmic_glink.h>
+>  #include "ucsi.h"
+>  
+> -#define PMIC_GLINK_MAX_PORTS	2
+> +#define PMIC_GLINK_MAX_PORTS		3
+>  
+>  #define UCSI_BUF_SIZE                   48
+>  
+> -- 
+> 2.44.1
+> 
 
