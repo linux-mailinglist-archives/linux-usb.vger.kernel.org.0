@@ -1,212 +1,241 @@
-Return-Path: <linux-usb+bounces-10802-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10803-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A90A8FA7B4
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Jun 2024 03:38:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6AFA68FA7FC
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Jun 2024 04:00:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9B4FE1C2221E
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Jun 2024 01:38:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8DCED1C2482D
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Jun 2024 02:00:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E255E13D881;
-	Tue,  4 Jun 2024 01:38:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82C5413E036;
+	Tue,  4 Jun 2024 01:58:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="Th53HUJy"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21040137C48;
-	Tue,  4 Jun 2024 01:38:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BD3113D504
+	for <linux-usb@vger.kernel.org>; Tue,  4 Jun 2024 01:58:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717465101; cv=none; b=U57bWztd6FVrp5RoHGqcyK+zVf7R8+R42DNV0K0/MeuoUDKbO5xa++I2ZAoFBNf8ps6cg8r1Z2NsF0QBaTbzwtt3B3rSzA98JVY7UN+4A1gtBCa+lUYw7kyEzDSQxOgYETXbTwsIA0pPa6sFl0hVJ6TIzVxVIY7FqN7PSFkXso0=
+	t=1717466332; cv=none; b=DpX/nMnQIcGhGxgh4/Ai7byr+ilhNanwE8e+AZqGIH+eumyks1xv3Z6FCTztu4xlrc0R1a5Hfct2jXliJAYFzS+0inlrbLmTrC0+ql2nP5Omai/t8jTKwvixKGOfIz6WcG6GnGQtLyqklWbaorZWRN75FYMh8fb5URIBhq0CTl8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717465101; c=relaxed/simple;
-	bh=AJSz8KJObMMDxhywmduW5EuoLxLL09BUaUxOa9QUubw=;
-	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=W76wPOqJhcfdB6bDI384qYWr5It8IGNtsF7P3ZiEf2do4DteNys1XNAEj5j60+v6mm0u/CGqeb0nwGs+414yqQsMpnESMXIbwZneeb0x7Kbi/vtHxEGiYG4HQPZLqgd0UOu3U5f8c5+SFb6zgHHWbikoW93g8IYO0vRmjfGZQu4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.252])
-	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4VtY9H1DnBzcc6M;
-	Tue,  4 Jun 2024 09:36:51 +0800 (CST)
-Received: from kwepemm600013.china.huawei.com (unknown [7.193.23.68])
-	by mail.maildlp.com (Postfix) with ESMTPS id 7C016180069;
-	Tue,  4 Jun 2024 09:38:14 +0800 (CST)
-Received: from [10.174.178.46] (10.174.178.46) by
- kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Tue, 4 Jun 2024 09:38:02 +0800
-Subject: Re: [PATCH v1 1/1] treewide: Align match_string() with
- sysfs_match_string()
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>, "Rafael J. Wysocki"
-	<rafael.j.wysocki@intel.com>, Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>, Corey Minyard <minyard@acm.org>, Allen Pais
-	<apais@linux.microsoft.com>, Sebastian Reichel
-	<sebastian.reichel@collabora.com>, Perry Yuan <perry.yuan@amd.com>, Giovanni
- Cabiddu <giovanni.cabiddu@intel.com>, Herbert Xu
-	<herbert@gondor.apana.org.au>, Nuno Sa <nuno.sa@analog.com>, Guenter Roeck
-	<linux@roeck-us.net>, Randy Dunlap <rdunlap@infradead.org>, Andi Shyti
-	<andi.shyti@kernel.org>, Heiner Kallweit <hkallweit1@gmail.com>, Lee Jones
-	<lee@kernel.org>, Samuel Holland <samuel@sholland.org>, Elad Nachman
-	<enachman@marvell.com>, Arseniy Krasnov <AVKrasnov@sberdevices.ru>, Johannes
- Berg <johannes.berg@intel.com>, Gregory Greenman
-	<gregory.greenman@intel.com>, Benjamin Berg <benjamin.berg@intel.com>, Bjorn
- Helgaas <bhelgaas@google.com>, Robert Richter <rrichter@amd.com>, Vinod Koul
-	<vkoul@kernel.org>, Chunfeng Yun <chunfeng.yun@mediatek.com>, Linus Walleij
-	<linus.walleij@linaro.org>, Hans de Goede <hdegoede@redhat.com>,
-	=?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>, Nikita
- Kravets <teackot@gmail.com>, Jiri Slaby <jirislaby@kernel.org>, Srinivas
- Pandruvada <srinivas.pandruvada@linux.intel.com>, Stanley Chang
-	<stanley_chang@realtek.com>, Heikki Krogerus
-	<heikki.krogerus@linux.intel.com>, Abdel Alkuor <abdelalkuor@geotab.com>,
-	Kent Overstreet <kent.overstreet@linux.dev>, Eric Biggers
-	<ebiggers@google.com>, Kees Cook <keescook@chromium.org>, Ingo Molnar
-	<mingo@kernel.org>, "Steven Rostedt (Google)" <rostedt@goodmis.org>, Daniel
- Bristot de Oliveira <bristot@kernel.org>, Andrew Morton
-	<akpm@linux-foundation.org>, Hugh Dickins <hughd@google.com>, Abel Wu
-	<wuyun.abel@bytedance.com>, John Johansen <john.johansen@canonical.com>, Mimi
- Zohar <zohar@linux.ibm.com>, Stefan Berger <stefanb@linux.ibm.com>, Roberto
- Sassu <roberto.sassu@huawei.com>, Eric Snowberg <eric.snowberg@oracle.com>,
-	Takashi Iwai <tiwai@suse.de>, Takashi Sakamoto <o-takashi@sakamocchi.jp>,
-	Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, Mark Brown
-	<broonie@kernel.org>, Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-	<linuxppc-dev@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
-	<keyrings@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
-	<linux-acpi@vger.kernel.org>, <linux-ide@vger.kernel.org>,
-	<openipmi-developer@lists.sourceforge.net>, <linux-clk@vger.kernel.org>,
-	<linux-rpi-kernel@lists.infradead.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-rockchip@lists.infradead.org>,
-	<linux-tegra@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-	<qat-linux@intel.com>, <dri-devel@lists.freedesktop.org>,
-	<intel-gfx@lists.freedesktop.org>, <intel-xe@lists.freedesktop.org>,
-	<nouveau@lists.freedesktop.org>, <linux-hwmon@vger.kernel.org>,
-	<linux-i2c@vger.kernel.org>, <linux-leds@vger.kernel.org>,
-	<linux-sunxi@lists.linux.dev>, <linux-omap@vger.kernel.org>,
-	<linux-mmc@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
-	<netdev@vger.kernel.org>, <linux-wireless@vger.kernel.org>,
-	<linux-pci@vger.kernel.org>, <linux-mediatek@lists.infradead.org>,
-	<linux-phy@lists.infradead.org>, <linux-gpio@vger.kernel.org>,
-	<platform-driver-x86@vger.kernel.org>, <linux-staging@lists.linux.dev>,
-	<linux-usb@vger.kernel.org>, <linux-fbdev@vger.kernel.org>,
-	<linux-bcachefs@vger.kernel.org>, <linux-hardening@vger.kernel.org>,
-	<cgroups@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
-	<linux-mm@kvack.org>, <apparmor@lists.ubuntu.com>,
-	<linux-security-module@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
-	<alsa-devel@alsa-project.org>, <linux-sound@vger.kernel.org>
-CC: Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin
-	<npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, "Naveen
- N. Rao" <naveen.n.rao@linux.ibm.com>, Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
-	<dave.hansen@linux.intel.com>, <x86@kernel.org>, "H. Peter Anvin"
-	<hpa@zytor.com>, David Howells <dhowells@redhat.com>, "David S. Miller"
-	<davem@davemloft.net>, "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown
-	<lenb@kernel.org>, Sergey Shtylyov <s.shtylyov@omp.ru>, Damien Le Moal
-	<dlemoal@kernel.org>, Niklas Cassel <cassel@kernel.org>, Daniel Scally
-	<djrscally@gmail.com>, Sakari Ailus <sakari.ailus@linux.intel.com>, Michael
- Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, Florian
- Fainelli <florian.fainelli@broadcom.com>, Ray Jui <rjui@broadcom.com>, Scott
- Branden <sbranden@broadcom.com>, Broadcom internal kernel review list
-	<bcm-kernel-feedback-list@broadcom.com>, Heiko Stuebner <heiko@sntech.de>,
-	Peter De Schrijver <pdeschrijver@nvidia.com>, Prashant Gaikwad
-	<pgaikwad@nvidia.com>, Thierry Reding <thierry.reding@gmail.com>, Jonathan
- Hunter <jonathanh@nvidia.com>, Huang Rui <ray.huang@amd.com>, "Gautham R.
- Shenoy" <gautham.shenoy@amd.com>, Mario Limonciello
-	<mario.limonciello@amd.com>, Viresh Kumar <viresh.kumar@linaro.org>, Maarten
- Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard
-	<mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, David Airlie
-	<airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, Jani Nikula
-	<jani.nikula@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, Joonas
- Lahtinen <joonas.lahtinen@linux.intel.com>, Tvrtko Ursulin
-	<tursulin@ursulin.net>, Karol Herbst <kherbst@redhat.com>, Lyude Paul
-	<lyude@redhat.com>, Danilo Krummrich <dakr@redhat.com>, Jean Delvare
-	<jdelvare@suse.com>, Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Pavel Machek <pavel@ucw.cz>, Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec
-	<jernej.skrabec@gmail.com>, Tony Lindgren <tony@atomide.com>, Adrian Hunter
-	<adrian.hunter@intel.com>, Hu Ziji <huziji@marvell.com>, Ulf Hansson
-	<ulf.hansson@linaro.org>, Miquel Raynal <miquel.raynal@bootlin.com>, Richard
- Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>, Potnuri
- Bharat Teja <bharat@chelsio.com>, Eric Dumazet <edumazet@google.com>, Jakub
- Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Miri Korenblit
-	<miriam.rachel.korenblit@intel.com>, Kalle Valo <kvalo@kernel.org>, Mahesh J
- Salgaonkar <mahesh@linux.ibm.com>, Oliver O'Halloran <oohall@gmail.com>,
-	Kishon Vijay Abraham I <kishon@kernel.org>, Matthias Brugger
-	<matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
-	<angelogioacchino.delregno@collabora.com>, JC Kuo <jckuo@nvidia.com>, Andrew
- Lunn <andrew@lunn.ch>, Gregory Clement <gregory.clement@bootlin.com>,
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, Sebastian Reichel
-	<sre@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui
-	<rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, Thinh Nguyen
-	<Thinh.Nguyen@synopsys.com>, Helge Deller <deller@gmx.de>, Brian Foster
-	<bfoster@redhat.com>, Tejun Heo <tj@kernel.org>, Zefan Li
-	<lizefan.x@bytedance.com>, Johannes Weiner <hannes@cmpxchg.org>, Peter
- Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>, Vincent
- Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann
-	<dietmar.eggemann@arm.com>, Ben Segall <bsegall@google.com>, Mel Gorman
-	<mgorman@suse.de>, Daniel Bristot de Oliveira <bristot@redhat.com>, Valentin
- Schneider <vschneid@redhat.com>, Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Jason Baron
-	<jbaron@akamai.com>, Jim Cromie <jim.cromie@gmail.com>, Paul Moore
-	<paul@paul-moore.com>, James Morris <jmorris@namei.org>, "Serge E. Hallyn"
-	<serge@hallyn.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, Clemens
- Ladisch <clemens@ladisch.de>, Jaroslav Kysela <perex@perex.cz>, Takashi Iwai
-	<tiwai@suse.com>, Liam Girdwood <lgirdwood@gmail.com>, Linus Torvalds
-	<torvalds@linux-foundation.org>
-References: <20240603211538.289765-1-andriy.shevchenko@linux.intel.com>
-From: Zhihao Cheng <chengzhihao1@huawei.com>
-Message-ID: <a6cff4d3-821a-3723-b261-3699053b5a51@huawei.com>
-Date: Tue, 4 Jun 2024 09:37:50 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+	s=arc-20240116; t=1717466332; c=relaxed/simple;
+	bh=rgMCn6lMtYT3C6MH4IXwlBWYt7HZx/BGAC7eWAk9iGg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:In-Reply-To:
+	 Content-Type:References; b=JQtP1mSPWoeeYlO33zCG7ScHK0bcb+/4GE58U3/Fkvtj4LZmx6NOo4Lv8CmlfHggQxABS05tMOYMRaFownJg8cGGF7n6AYKwZGZSg6c9yL+25du4Uxvbno8ahVX0f29XbJ/WZtyoIELBpjOEMVuGkCz4FUQjmnOBn1a8JjaUiEo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=Th53HUJy; arc=none smtp.client-ip=203.254.224.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
+	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20240604015843epoutp04fdb8e8bb32ac24678460c6d9c5add6b7~VqoWGrB9f2639726397epoutp04J
+	for <linux-usb@vger.kernel.org>; Tue,  4 Jun 2024 01:58:43 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20240604015843epoutp04fdb8e8bb32ac24678460c6d9c5add6b7~VqoWGrB9f2639726397epoutp04J
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1717466323;
+	bh=ULzoNe3gq/jqt0kCQiGI47UROKcm+zVrZOwhKuLBnN4=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=Th53HUJyIOgsBUZrHYrAM7ThiUo91hHeKPtkulUZlxN1tk+jN4hPHbJy10mk1Sa9P
+	 cUq0VIN0pCqBswFsZUY7T/VTxYyUzP8Cg7MphNKCZ8PhyH3OrkKwZA4utskhWaKUbw
+	 G43OC3+X1Qe4owO/avc+kpv8HtEhNQQ8mBnWgXlg=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+	epcas2p2.samsung.com (KnoxPortal) with ESMTP id
+	20240604015843epcas2p28a1c7b793ed977e44c33729dbabc796e~VqoVxzLqt0577505775epcas2p2R;
+	Tue,  4 Jun 2024 01:58:43 +0000 (GMT)
+Received: from epsmges2p2.samsung.com (unknown [182.195.36.68]) by
+	epsnrtp1.localdomain (Postfix) with ESMTP id 4VtYfV2wy6z4x9QB; Tue,  4 Jun
+	2024 01:58:42 +0000 (GMT)
+Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
+	epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+	5E.C7.09485.2D47E566; Tue,  4 Jun 2024 10:58:42 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+	epcas2p3.samsung.com (KnoxPortal) with ESMTPA id
+	20240604015841epcas2p3c21e0326a40e9d82e6b82d6cb2b8748f~VqoUyggJ00103001030epcas2p3a;
+	Tue,  4 Jun 2024 01:58:41 +0000 (GMT)
+Received: from epsmgmc1p1new.samsung.com (unknown [182.195.42.40]) by
+	epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+	20240604015841epsmtrp1ac43e0d3cfcfc3ca01b5f7a14111cbbe~VqoUxmMG71914419144epsmtrp1f;
+	Tue,  4 Jun 2024 01:58:41 +0000 (GMT)
+X-AuditID: b6c32a46-f3bff7000000250d-6f-665e74d21c1a
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+	epsmgmc1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	6A.34.07412.1D47E566; Tue,  4 Jun 2024 10:58:41 +0900 (KST)
+Received: from ubuntu (unknown [10.229.95.128]) by epsmtip1.samsung.com
+	(KnoxPortal) with ESMTPA id
+	20240604015841epsmtip174006edde616e8b12616da7f8f76e792~VqoUku_Fn1932519325epsmtip1i;
+	Tue,  4 Jun 2024 01:58:41 +0000 (GMT)
+Date: Tue, 4 Jun 2024 10:59:15 +0900
+From: Jung Daehwan <dh10.jung@samsung.com>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring
+	<robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+	<conor+dt@kernel.org>, Mathias Nyman <mathias.nyman@intel.com>, Felipe Balbi
+	<balbi@kernel.org>, "open list:USB  SUBSYSTEM" <linux-usb@vger.kernel.org>,
+	"open list:OPEN FIRMWARE AND  FLATTENED DEVICE TREE BINDINGS"
+	<devicetree@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 2/5] usb: dwc3: Support quirk for writing high-low
+ order
+Message-ID: <20240604015900.GA49465@ubuntu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20240603211538.289765-1-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset="gbk"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600013.china.huawei.com (7.193.23.68)
+In-Reply-To: <20240604001619.nflngpnm6zu6nwnl@synopsys.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrKJsWRmVeSWpSXmKPExsWy7bCmhe6lkrg0g10TRC2OtT1ht1iz9xyT
+	xfwj51gtmhevZ7N4Oesem8XlXXPYLBYta2W2aN40hdXi/54d7BarFhxgd+DyWLznJZPHplWd
+	bB77565h99iy/zOjx+dNcgGsUdk2GamJKalFCql5yfkpmXnptkrewfHO8aZmBoa6hpYW5koK
+	eYm5qbZKLj4Bum6ZOUBXKSmUJeaUAoUCEouLlfTtbIryS0tSFTLyi0tslVILUnIKzAv0ihNz
+	i0vz0vXyUkusDA0MjEyBChOyM+acvshUcEe24lDvHLYGxgkSXYycHBICJhKfjrxg7WLk4hAS
+	2MEocf59MzOE84lR4s/ZRkYI5xujxKt7q5i6GDnAWhbstoOI72WUOPzlEVTHE0aJRac+ghWx
+	CKhIPJ0oArKCTUBL4t6PE8wgtoiAjsSBE+eZQOqZBTYxSzxtX8QKkhAWCJRY//0sO4jNK6At
+	8eFrLxOELShxcuYTFpCZnALWEo+XcIGYokDjXx2sBxkjITCVQ+Ld0U9MEO+4SCxduQ7KFpZ4
+	dXwLO4QtJfGyvw3KLpa49fwZM0RzC6PEilctzBAJY4lZz9oZQWxmgQyJ7Qt62CAeVpY4cosF
+	Iswn0XH4LztEmFeio00IolNZYvrlCawQtqTEwdfnoCZ6SFycNIkJEjwdTBLLHi9nncAoPwvJ
+	Z7OQbIOwdYDB+wnI5gCypSWW/+OAMDUl1u/SX8DIuopRLLWgODc9tdiowAge18n5uZsYwelV
+	y20H45S3H/QOMTJxMB5ilOBgVhLh7auLThPiTUmsrEotyo8vKs1JLT7EaAqMponMUqLJ+cAE
+	n1cSb2hiaWBiZmZobmRqYK4kznuvdW6KkEB6YklqdmpqQWoRTB8TB6dUA5P8Bi4he/d7JutW
+	958ynHhDQ8km2a782dOa+CumKd+t1M8vdDW6H5X71GjV4xfVK/f80vVKffn70c4WpvsKutqr
+	ardtiVE/nr6t3Hnn0t5te59EPL69YeJRiX1Wv0OXOz9/xqRoPHf57v3NDK83rVuhlyopOX1x
+	5t/Uk2s05C4Wi8eclXyw9V4/f7PT3Iidv5ij9Pl3ab6/dq36qU9/rS4bZ8Gj3xvTclSsWd88
+	Zag4vGBNd+dc8a7UJyI2650vhc1qSIgW7phwVT9ILfv2DleHx3t6+zqWBK7eXGG6cNvReHYd
+	zv7o7ZduZRWtu9qm+tNjcVH6lgwVD4uzO55YONzP/L6FW6Lgz42S00Flu2yVWIozEg21mIuK
+	EwF/1tinOAQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrJLMWRmVeSWpSXmKPExsWy7bCSnO7Fkrg0g3srjS2OtT1ht1iz9xyT
+	xfwj51gtmhevZ7N4Oesem8XlXXPYLBYta2W2aN40hdXi/54d7BarFhxgd+DyWLznJZPHplWd
+	bB77565h99iy/zOjx+dNcgGsUVw2Kak5mWWpRfp2CVwZ3VOvsRbMka54tbmVtYHxpWgXIweH
+	hICJxILddl2MXBxCArsZJX5+fsLYxcgJFJeUWDr3BjuELSxxv+UIK4gtJPCIUeLHfyaQXhYB
+	FYmnE0VAwmwCWhL3fpxgBrFFBHQkDpw4zwQyk1lgB7PEk4P3wGYKCwRKrP9+Fmwmr4C2xIev
+	vUwQizuYJPadaWOBSAhKnJz5BMxmBpp6499LsGXMAtISy/9xgJicAtYSj5dwgZiiQCe8Olg/
+	gVFwFpLeWUh6ZyH0LmBkXsUomVpQnJuem2xYYJiXWq5XnJhbXJqXrpecn7uJERwbWho7GO/N
+	/6d3iJGJg/EQowQHs5IIb19ddJoQb0piZVVqUX58UWlOavEhRmkOFiVxXsMZs1OEBNITS1Kz
+	U1MLUotgskwcnFINTNLn7/LPnvGEwdvcMKzw46ZUjfQd9j6PF6dX3LrSsi/00fmfE1RPhGqY
+	xxy20n63/vek8/OFTlUUKr5YmvCUMSd3eqRcr2+W6IYbmeXtk0qn/t6adep427dURW2jnxn6
+	qd5BU998Lyu517lYL2S5Ct/c46sftK1ZY8KsUrz94JM7L37L7DtQd4EtjCv7yyNupeYXlj92
+	rqs6vfvS40UffQp/bnnh6H4v9Prjn6Gzt0+IOCRywv/r/g+6G8qTva0lt03pUcprFeu0WpRa
+	4Lc1/8OWI9O1zt1MMuiJrNHYIxi2vGnHSv6CTwFWeY5LfO8GbV69aVLJxtnrXlxxkv/P2Wl3
+	vT6rIZ/1K1dY3HbfrktKLMUZiYZazEXFiQDRPowS/AIAAA==
+X-CMS-MailID: 20240604015841epcas2p3c21e0326a40e9d82e6b82d6cb2b8748f
+X-Msg-Generator: CA
+Content-Type: multipart/mixed;
+	boundary="----NM.SL-8AX4fCWwUaz12YupYcgI_4q5PcTQ1CNbbJhqicWcnv=_43222_"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20240531060729epcas2p2d895a441b017f1797b1bc1e2558d9e1b
+References: <1717135657-120818-1-git-send-email-dh10.jung@samsung.com>
+	<CGME20240531060729epcas2p2d895a441b017f1797b1bc1e2558d9e1b@epcas2p2.samsung.com>
+	<1717135657-120818-3-git-send-email-dh10.jung@samsung.com>
+	<20240604001619.nflngpnm6zu6nwnl@synopsys.com>
 
-ÔÚ 2024/6/2 23:57, Andy Shevchenko Ð´µÀ:
-> Make two APIs look similar. Hence convert match_string() to be
-> a 2-argument macro. In order to avoid unneeded churn, convert
-> all users as well. There is no functional change intended.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
-> 
-> Compile tested with `make allyesconfig` and `make allmodconfig`
-> on x86_64, arm, aarch64, powerpc64 (8 builds total).
-> 
+------NM.SL-8AX4fCWwUaz12YupYcgI_4q5PcTQ1CNbbJhqicWcnv=_43222_
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
 
-[...]
-> diff --git a/fs/ubifs/auth.c b/fs/ubifs/auth.c
-> index a4a0158f712d..fc0da18bfa65 100644
-> --- a/fs/ubifs/auth.c
-> +++ b/fs/ubifs/auth.c
-> @@ -264,13 +264,13 @@ int ubifs_init_authentication(struct ubifs_info *c)
->   		return -EINVAL;
->   	}
->   
-> -	c->auth_hash_algo = match_string(hash_algo_name, HASH_ALGO__LAST,
-> -					 c->auth_hash_name);
-> -	if ((int)c->auth_hash_algo < 0) {
-> +	err = __match_string(hash_algo_name, HASH_ALGO__LAST, c->auth_hash_name);
-> +	if (err < 0) {
->   		ubifs_err(c, "Unknown hash algo %s specified",
->   			  c->auth_hash_name);
-> -		return -EINVAL;
-> +		return err;
->   	}
-> +	c->auth_hash_algo = err;
->   
->   	snprintf(hmac_name, CRYPTO_MAX_ALG_NAME, "hmac(%s)",
->   		 c->auth_hash_name);
+On Tue, Jun 04, 2024 at 12:16:33AM +0000, Thinh Nguyen wrote:
+> On Fri, May 31, 2024, Daehwan Jung wrote:
+> > Set xhci "write-64-hi-lo-quirk" property via
+> > "snps,xhci-write-64-hi-lo-quirk" property.
+> 
+> Please describe the change as if the reader has no context of the other
+> patches in the series.
+> 
+Thanks for the comment. I will add it in next submission.
+> > 
+> > Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
+> > ---
+> 
+> Please provide change note for v2.
+I will do it.
+> 
+> >  drivers/usb/dwc3/core.c | 3 +++
+> >  drivers/usb/dwc3/core.h | 2 ++
+> >  drivers/usb/dwc3/host.c | 5 ++++-
+> >  3 files changed, 9 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> > index 7ee61a8..89985fd 100644
+> > --- a/drivers/usb/dwc3/core.c
+> > +++ b/drivers/usb/dwc3/core.c
+> > @@ -1716,6 +1716,9 @@ static void dwc3_get_properties(struct dwc3 *dwc)
+> >  	dwc->dis_split_quirk = device_property_read_bool(dev,
+> >  				"snps,dis-split-quirk");
+> >  
+> > +	dwc->xhci_write_64_hi_lo_quirk = device_property_read_bool(dev,
+> > +				"snps,xhci-write-64-hi-lo-quirk");
+> > +
+> >  	dwc->lpm_nyet_threshold = lpm_nyet_threshold;
+> >  	dwc->tx_de_emphasis = tx_de_emphasis;
+> >  
+> > diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+> > index 3781c73..ab5913c 100644
+> > --- a/drivers/usb/dwc3/core.h
+> > +++ b/drivers/usb/dwc3/core.h
+> > @@ -1142,6 +1142,7 @@ struct dwc3_scratchpad_array {
+> >   *	3	- Reserved
+> >   * @dis_metastability_quirk: set to disable metastability quirk.
+> >   * @dis_split_quirk: set to disable split boundary.
+> > + * @xhci_write_64_hi_lo_quirk: set if we enable quirk for writing in high-low order.
+> 
+> The description should be more detail here. But I don't think we need
+> this. Just pass the PROPERTY_ENTRY_BOOL("write-64-hi-lo-quirk") to xhci
+> platform unconditionally. This should apply to all released versions (at
+> the moment) of DWC_usb3x.
+> 
+I got it. If so, I also think it's not needed. I will remove this.
+> >   * @sys_wakeup: set if the device may do system wakeup.
+> >   * @wakeup_configured: set if the device is configured for remote wakeup.
+> >   * @suspended: set to track suspend event due to U3/L2.
+> > @@ -1369,6 +1370,7 @@ struct dwc3 {
+> >  	unsigned		dis_metastability_quirk:1;
+> >  
+> >  	unsigned		dis_split_quirk:1;
+> > +	unsigned		xhci_write_64_hi_lo_quirk:1;
+> >  	unsigned		async_callbacks:1;
+> >  	unsigned		sys_wakeup:1;
+> >  	unsigned		wakeup_configured:1;
+> > diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
+> > index a171b27..8cc0def 100644
+> > --- a/drivers/usb/dwc3/host.c
+> > +++ b/drivers/usb/dwc3/host.c
+> > @@ -126,7 +126,7 @@ static int dwc3_host_get_irq(struct dwc3 *dwc)
+> >  
+> >  int dwc3_host_init(struct dwc3 *dwc)
+> >  {
+> > -	struct property_entry	props[5];
+> > +	struct property_entry	props[6];
+> >  	struct platform_device	*xhci;
+> >  	int			ret, irq;
+> >  	int			prop_idx = 0;
+> > @@ -162,6 +162,9 @@ int dwc3_host_init(struct dwc3 *dwc)
+> >  
+> >  	props[prop_idx++] = PROPERTY_ENTRY_BOOL("xhci-sg-trb-cache-size-quirk");
+> >  
+> > +	if (dwc->xhci_write_64_hi_lo_quirk)
+> > +		props[prop_idx++] = PROPERTY_ENTRY_BOOL("write-64-hi-lo-quirk");
+> > +
+> >  	if (dwc->usb3_lpm_capable)
+> >  		props[prop_idx++] = PROPERTY_ENTRY_BOOL("usb3-lpm-capable");
+> >  
+> > -- 
+> > 2.7.4
+> > 
+> 
+Best Regards,
+Jung Daehwan
+> Thanks,
+> Thinh
 
-Reviewed-by: Zhihao Cheng <chengzhihao1@huawei.com>  # fs/ubifs
+------NM.SL-8AX4fCWwUaz12YupYcgI_4q5PcTQ1CNbbJhqicWcnv=_43222_
+Content-Type: text/plain; charset="utf-8"
+
+
+------NM.SL-8AX4fCWwUaz12YupYcgI_4q5PcTQ1CNbbJhqicWcnv=_43222_--
 
