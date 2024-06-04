@@ -1,111 +1,97 @@
-Return-Path: <linux-usb+bounces-10848-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10849-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F3168FBFB7
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 01:14:31 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C8B58FBFCE
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 01:26:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BD3B9B27A79
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Jun 2024 23:14:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A620EB22357
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Jun 2024 23:26:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49A9414D6EB;
-	Tue,  4 Jun 2024 23:14:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="SwPFvpoN"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 198091442FE;
+	Tue,  4 Jun 2024 23:26:07 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A9E414D28B;
-	Tue,  4 Jun 2024 23:14:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69BF91442F5
+	for <linux-usb@vger.kernel.org>; Tue,  4 Jun 2024 23:26:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.69
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717542858; cv=none; b=D6JmmMSAxDgYikPKQ6IdJBOMxaapn91BuORfXuHR8gBfo9EnJSeorFQShwVEIAIkuFpCH9fZ/JFVNO+ggXJhttjaqqGXwcD1Zg5XUTE4zytrVwILGsUvqACesqzZJGWzgTlyXVp7TEdw11Vw04x5kKLI0UxkulrjiYvpFoiyo+Y=
+	t=1717543566; cv=none; b=dKg5WGIHbwRcJqoF5NJ5Q+4BwKH2E0KG0LzyOYHcVdkIM8CHfSu+D9mKUpCwFCLpbX7+7sCpTeqmm1ojL4+OSfI+7BRT7sUokQwvMW9QF3fviahgfVvlolny4GGWxrkIplokCg/aLCchjHYb/lUvZXKaMPCTxiIh4pKnswfJ/O4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717542858; c=relaxed/simple;
-	bh=y1mTtAlH2HuLUf25v/LySlH6akxKBu02tXMnW6gHWHk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=ntFaOJdBvUm8ieW9FGC8poeW5/3drXwzcJXJhnJDNGrawr1b0xeDO7XzmXn+aY+ZqCYNuMJo359hmDKyPP5ejgQDztBdxxO4RM3lCYez+Yhqqua+1nVHSBnRV7GyjlRsoUCZ5iPuOKDD1OrP+W2SPd5k4aZOqOunuTU5tqGK5sY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=SwPFvpoN; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 454LD832000945;
-	Tue, 4 Jun 2024 23:13:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	y1mTtAlH2HuLUf25v/LySlH6akxKBu02tXMnW6gHWHk=; b=SwPFvpoNZE7dHwJc
-	ir+h/O60rTin1bD+0PHOMpC9/sUgAnNqvY9cQW4X000flKMiH3YDT9DyymYl0DwB
-	09clSjTJOetJWuB4GY3TNMPBnqVZc9+XVezXZwir6gj5oOAz8Kd9iXGxTP1zWGh3
-	dZYgkS+NFueMl8QBhbmR9g34NjdOZDx9my8PcMJMwxsF7pmHPBjo0yMhB3LjMRRe
-	7dFgx0Y3SKesHvvZB+PD5XfYgX82JwtF4qeqQpySF/c+yagt/YWd2cNJIVzNYXo6
-	L4nQtMmve4rbOmQtknGF5iMArAVUhjcC9oGIoOH22E0HZxAGVSfUdmfE5OpEiUJq
-	xwvB6w==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3yjan2g5yx-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 04 Jun 2024 23:13:57 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 454NDuo6025285
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 4 Jun 2024 23:13:56 GMT
-Received: from [10.48.241.109] (10.49.16.6) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 4 Jun 2024
- 16:13:55 -0700
-Message-ID: <40e65895-fc87-4754-ab5c-29d7c95b6d17@quicinc.com>
-Date: Tue, 4 Jun 2024 16:13:54 -0700
+	s=arc-20240116; t=1717543566; c=relaxed/simple;
+	bh=uOxO572PIMYk4UD1AMdP6QiZNSv5xA+cPBiAG1f4D1I=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=ZYrwhAGEMRNsVQlRAJ3GfCsCDX5tm7KvovZk03wG2aIklZVm9UhAycpNrkUMcDR+2RrB4d4weH/mStF/of2evEioMTkgKqlatl0ppiSzgp0mWhySAK8yWcsogxyLHbp8mqa8I2zFFAx1dCbn4qCMBIwe38n5wpH5e2RVJ/wL1j4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.69
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-7ea8fc6bd4dso743357539f.1
+        for <linux-usb@vger.kernel.org>; Tue, 04 Jun 2024 16:26:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717543564; x=1718148364;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=i6eAuVeWTDMsF1yEe0WIVH8Cs9Fqf92OWhWU5p1no/4=;
+        b=NJd/VW5SCjMO1JDJQu8hV2dRHEKeG9ERwLwJ9EjpuzfuTrBG4QpA68YY5dT7deDi6p
+         zBCTSlz3xR896orHX2XNyRG3QLou2tWQgB8BJM+8zF19Cw+Bs94FpP75TRWsYzEz2ya3
+         xN7NldEQNEuGV2G22/YazwqlO+XVx+loN08sk/gxTmAw768trwmtOeFKUY8PrnLgWX2Q
+         567QQRLafUyRnmVdCdrbjb+WwsWatc5ug7dzb2LjE1CUFOWJLBhgZgNIm2KdNSyN1ENo
+         RnNiw8L53LHP9iosJdaOUks42HM64z4Z21tMQJx3e1c119dxPncYugD8no5LKNTp/Mk3
+         XmUw==
+X-Forwarded-Encrypted: i=1; AJvYcCXQPwUcaxuX4jsLFvbFGErlPL3Q6akYnPON04t9W/N55bvm6ExlrGuerHL0ZJRB3HtJ1CUVZ9xIoHF2S+b7Bvv8IOkoOSNBVYCu
+X-Gm-Message-State: AOJu0YyOBjxwtnb2XLQTJZeWLxvPN/qpKplvLYVQNnCKwyFGwzRZgjXK
+	yrPagzq9E35vItzXcca0wDISLkrLuOABVHeRdbNVpf9CvsLSUnv0lY3kAATxqhpH4IAb91fjrEW
+	Wdc9bmTf5KBjNjq5ggJoBM2SQozncW2Qxfa9sA7v7gesvX9HL1XNVC0A=
+X-Google-Smtp-Source: AGHT+IF5vyONmiDcpL1Vn1ikfQ9FuJdcA7AQfBqFl0c9bGxvp4BtLQVTyajhYTtMfn8Ff5AgREPlf6px3j7XUvVzCm5vX4mikeym
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v22 03/38] xhci: sideband: add initial api to register a
- sideband entity
-Content-Language: en-US
-To: Wesley Cheng <quic_wcheng@quicinc.com>, <srinivas.kandagatla@linaro.org>,
-        <mathias.nyman@intel.com>, <perex@perex.cz>, <conor+dt@kernel.org>,
-        <corbet@lwn.net>, <lgirdwood@gmail.com>, <tiwai@suse.com>,
-        <krzk+dt@kernel.org>, <Thinh.Nguyen@synopsys.com>,
-        <broonie@kernel.org>, <bgoswami@quicinc.com>, <robh@kernel.org>,
-        <gregkh@linuxfoundation.org>
-CC: <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-sound@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>
-References: <20240524001043.10141-1-quic_wcheng@quicinc.com>
- <20240524001043.10141-4-quic_wcheng@quicinc.com>
-From: Jeff Johnson <quic_jjohnson@quicinc.com>
-In-Reply-To: <20240524001043.10141-4-quic_wcheng@quicinc.com>
+X-Received: by 2002:a92:c261:0:b0:374:a12c:30e0 with SMTP id
+ e9e14a558f8ab-374b1f47739mr473255ab.3.1717543564732; Tue, 04 Jun 2024
+ 16:26:04 -0700 (PDT)
+Date: Tue, 04 Jun 2024 16:26:04 -0700
+In-Reply-To: <0000000000003d63410605a18363@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000100905061a18c63a@google.com>
+Subject: Re: [syzbot] [usb?] [input?] INFO: task hung in __input_unregister_device
+ (5)
+From: syzbot <syzbot+78e2288f58b881ed3c45@syzkaller.appspotmail.com>
+To: Henk.Vergonet@gmail.com, dmitry.torokhov@gmail.com, 
+	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux1394-devel@lists.sourceforge.net, mathieu.desnoyers@efficios.com, 
+	mhiramat@kernel.org, o-takashi@sakamocchi.jp, ricardo@marliere.net, 
+	rostedt@goodmis.org, rydberg@bitmath.org, syzkaller-bugs@googlegroups.com, 
+	usbb2k-api-dev@nongnu.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: vwSx6Pp3ZiBFJUsFcI3mthVu9lAH8gPT
-X-Proofpoint-ORIG-GUID: vwSx6Pp3ZiBFJUsFcI3mthVu9lAH8gPT
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-06-04_11,2024-06-04_02,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- phishscore=0 adultscore=0 spamscore=0 clxscore=1011 mlxscore=0
- malwarescore=0 impostorscore=0 mlxlogscore=999 bulkscore=0 suspectscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2405170001 definitions=main-2406040188
 
-On 5/23/2024 5:10 PM, Wesley Cheng wrote:
-> From: Mathias Nyman <mathias.nyman@linux.intel.com>
-[...]
-> +EXPORT_SYMBOL_GPL(xhci_sideband_unregister);
-> +MODULE_LICENSE("GPL");
+syzbot has bisected this issue to:
 
-Please add missing MODULE_DESCRIPTION()
+commit 6b0b708f12d18f9cccfb1c418bea59fcbff8798c
+Author: Takashi Sakamoto <o-takashi@sakamocchi.jp>
+Date:   Wed May 1 07:32:38 2024 +0000
 
+    firewire: core: add tracepoint event for handling bus reset
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=14969a16980000
+start commit:   e0cce98fe279 Merge tag 'tpmdd-next-6.10-rc2' of git://git...
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=12969a16980000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=238430243a58f702
+dashboard link: https://syzkaller.appspot.com/bug?extid=78e2288f58b881ed3c45
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1318e162980000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=122e8eaa980000
+
+Reported-by: syzbot+78e2288f58b881ed3c45@syzkaller.appspotmail.com
+Fixes: 6b0b708f12d1 ("firewire: core: add tracepoint event for handling bus reset")
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
