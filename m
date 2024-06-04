@@ -1,48 +1,48 @@
-Return-Path: <linux-usb+bounces-10808-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10809-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1728B8FAA9E
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Jun 2024 08:21:00 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 61F1C8FAAE4
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Jun 2024 08:33:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9B195B238F5
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Jun 2024 06:20:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F36A11F21BDC
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Jun 2024 06:33:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E73CA13DDA6;
-	Tue,  4 Jun 2024 06:20:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B64A1137C38;
+	Tue,  4 Jun 2024 06:33:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qWMgBupE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pVALGFzO"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C9D265F;
-	Tue,  4 Jun 2024 06:20:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36B2C801;
+	Tue,  4 Jun 2024 06:33:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717482049; cv=none; b=t6S2XjtmTfs9paNh/T5MVN28nfd8V2TZoyl5ViH9ctv2XIaeWFNYM5UtxS+n/9KvTUCVKjS//Q0RhIfAZBpHx57zi9NpvFhsVbZxlv54zU9JmP5ul/J6YfqMNep5dR4uwWmtdWY1SuvIvy+RW5aS6IGYyrwHClDqqEUPABLEsNQ=
+	t=1717482805; cv=none; b=Q3R5HFYgQi3e0eOFU79wnydTn9INn5QGqPpsdWZfjF52eeSANUpYf2G34Geu7YXgDjs+d5312tv6Dz/H8uA6f0hzJ/opoIr9B7+f0BIJDXpsePg20WJHPoYKqKr3pSxFhecpChhI+w94JD+azza9z/SwO5/DW7d41T7PI2MMIhI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717482049; c=relaxed/simple;
-	bh=PkcqrMAXbZdOIXCh/dOOZCamoIybPOfYxoA1rbNE88M=;
+	s=arc-20240116; t=1717482805; c=relaxed/simple;
+	bh=dpZyVHMswi3v2L6bUKC9WMVdfPiLGk+kr3qSj20mpgs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=om1/IYq1HEYv6GU+ZmTEl2yNl2Xk/s/aIQ4ZnKVkQH0OxC1k+fWyuHmbtNnHgzKARus0IBrG7OdejXmPERv6HmnMHIQliZKDJHkZjwdl5KDcQkU6+4F657qPLfaKB1s4i4Y9vUiDJEbmSrVX6OyD30HUgpe8xONcKcZ7/t7MIBM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qWMgBupE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25E9EC2BBFC;
-	Tue,  4 Jun 2024 06:20:45 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=DlfqoaecgMJSYyYwnWCQotvBJz2snbv7OTwDBesADGS78pvnTZP96ia9KBE6Wg1RQBJPkcLZ/PZ6XmF9r6ZOQo3LkgaRlqnVY/4rgowF2026Lu+kX46I56YZFvp4Lk5LAN1B/BUvPdXeNyCSFtJp0QWt1hzq0vOkm+PvMiipVlM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pVALGFzO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1521CC32786;
+	Tue,  4 Jun 2024 06:33:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717482049;
-	bh=PkcqrMAXbZdOIXCh/dOOZCamoIybPOfYxoA1rbNE88M=;
+	s=k20201202; t=1717482804;
+	bh=dpZyVHMswi3v2L6bUKC9WMVdfPiLGk+kr3qSj20mpgs=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=qWMgBupEpdF99BXtOszC6ED+NVHBrhxsT/I5aq2QAU++igqCPmsbajWCpldgZWisL
-	 c8J7TmnE4hpzlL4dQlNsGoKnNv4k+SOk2xGtEAG9v4v/A406Gae6E1biNkyom6FHe6
-	 poc49FazLBYU5dhnC9IEBGbMXjZ8EsyXSa/UDLIcLZf7mTfjhjT+aV+5TL3PxUncdm
-	 6T3xL4wRFvX+Scx5YIq6liCTCDaaNO3KeyEUD964nSVJdv7qdrsrB5g/YqJV8Zz5Hy
-	 mq07iA3AAn8vPnlbypEPmB8hWSQS/qGfFWIDOpiynGk2X71p2lP/mQ0kfYzjZ5OZPy
-	 6wCSDHEQxLTUQ==
-Message-ID: <1935a30f-b4fd-4240-93f0-e2baf218223d@kernel.org>
-Date: Tue, 4 Jun 2024 08:20:44 +0200
+	b=pVALGFzOARE6ZmiWGLawAzToD5WjGG+qyYYrbdPC1P1LiUviUiU7ap39ICGCO16LS
+	 XuC4aQmorcr+Y0MvV2WXYAuRE5g6DVOU1OYBEdMmqU+TXdccglyWWP0Gt0EIMeqGcW
+	 7kG9XiziI6HHB/fcDUxmXEc0K6d9NA41gjrxLsA9lCYYOT0IauwZtKkiNSlW0Oc+QK
+	 UKzVOOxGZPqJ+9z0aoH6g4x6cBvVWliMLWbzZ5SYrRUWke+YHzcASqQAT8F88vhxqA
+	 uLC+7H/3NiOwtaIW7xufe6pUuaWv9Y05A5KCOlIj38i6E4pgd3TrrBpBumb2rp6wCm
+	 QVOaQUjqbT4aQ==
+Message-ID: <9c665afe-16d7-469e-ac3e-d0d7388a31b7@kernel.org>
+Date: Tue, 4 Jun 2024 08:33:19 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -50,24 +50,14 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 5/5] usb: host: xhci-plat: Add support for
- XHCI_WRITE_64_HI_LO_QUIRK
-To: Jung Daehwan <dh10.jung@samsung.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Thinh Nguyen
- <Thinh.Nguyen@synopsys.com>, Mathias Nyman <mathias.nyman@intel.com>,
- Felipe Balbi <balbi@kernel.org>,
- "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
- "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS"
- <devicetree@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
-References: <1717135657-120818-1-git-send-email-dh10.jung@samsung.com>
- <CGME20240531060731epcas2p4f14afae9f00a7e71e6bd3863f0a51441@epcas2p4.samsung.com>
- <1717135657-120818-6-git-send-email-dh10.jung@samsung.com>
- <9c9d74c0-72a2-418a-b3c6-a0f9716c943d@kernel.org>
- <20240603034435.GC23593@ubuntu>
- <eb1d9734-fa19-4051-9e78-a6e72ac12662@kernel.org>
- <20240603085111.GF23593@ubuntu>
+Subject: Re: [PATCH v2, 1/3] dt-bindings: usb: dwc3: Add snps,p2p3tranok quirk
+To: joswang <joswang1221@gmail.com>, Thinh.Nguyen@synopsys.com,
+ robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org
+Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, balbi@kernel.org, devicetree@vger.kernel.org,
+ joswang <joswang@lenovo.com>
+References: <20240601092646.52139-1-joswang1221@gmail.com>
+ <20240603130004.25662-1-joswang1221@gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -113,36 +103,49 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240603085111.GF23593@ubuntu>
+In-Reply-To: <20240603130004.25662-1-joswang1221@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 03/06/2024 10:51, Jung Daehwan wrote:
->>>>>  
->>>>> +		if (device_property_read_bool(tmpdev, "write-64-hi-lo-quirk"))
->>>>> +			xhci->quirks |= XHCI_WRITE_64_HI_LO;
->>>>
->>>> Where is any user of this property (DTS)? Just to clarify: your
->>>> downstream does not matter really.
->>>>
->>>
->>> This is set by dwc3 parent node by software node.
->>>
->>> [PATCH v2 1/5] dt-bindings: usb: snps,dwc3: Add 'snps,xhci-write-64-hi-lo-quirk' quirk
->>> https://lore.kernel.org/r/1717135657-120818-2-git-send-email-dh10.jung@samsung.com/
->>
->> This is not a patch to DTS.
->>
->>
-> 
-> This is set by software node from dwc3. That's why I think this patch doesn't
-> need DTS patch. I would add DTS patch in dwc3 not xhci if it's needed.
-> 
+On 03/06/2024 15:00, joswang wrote:
+> From: joswang <joswang@lenovo.com>
 
-What?
+Is this your full name or known identity you want to use for all kernel
+contributions? Looks like login...
 
-I asked you question which upstream SoC (link to DTS) uses it, and you
-say that "no need for DTS patch"? That's not an answer.
+> 
+> There is an issue with the DWC31 2.00a and earlier versions
+> where the controller link power state transition from
+> P3/P3CPM/P4 to P2 may take longer than expected, ultimately
+> resulting in the hibernation D3 entering time exceeding the
+> expected 10ms.
+> 
+> Add a new 'snps,p2p3tranok-quirk' DT quirk to dwc3 core
+> for enable the controller transitions directly from phy
+> power state P2 to P3 or from state P3 to P2.
+> 
+> Note that this can only be set if the USB3 PHY supports
+> direct p3 to p2 or p2 to p3 conversion.
+> 
+> Signed-off-by: joswang <joswang@lenovo.com>
+> ---
+>  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> index 1cd0ca90127d..721927495887 100644
+> --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> @@ -242,6 +242,13 @@ properties:
+>        When set, all HighSpeed bus instances in park mode are disabled.
+>      type: boolean
+>  
+> +  snps,p2p3tranok-quirk:
+
+Why this cannot be deduced from compatible? Which upstream SoCs are
+affected?
+
+
 
 Best regards,
 Krzysztof
