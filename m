@@ -1,159 +1,125 @@
-Return-Path: <linux-usb+bounces-10811-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10812-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41EE08FAB1E
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Jun 2024 08:46:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C86348FAB67
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Jun 2024 08:53:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C2474B214EB
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Jun 2024 06:46:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6673BB22830
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Jun 2024 06:53:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 183F013D889;
-	Tue,  4 Jun 2024 06:46:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1861A13F45B;
+	Tue,  4 Jun 2024 06:53:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Y4W2SlXa"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="NqNM5DeU"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92B041EB27;
-	Tue,  4 Jun 2024 06:46:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3EBE1DDD6
+	for <linux-usb@vger.kernel.org>; Tue,  4 Jun 2024 06:53:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717483570; cv=none; b=RmtZb1XJf8kZlFf/1nqAkZFWb50vu1FUCmqoZ+yxo9r7c9WkLQWAXjopQruXdEDDTD2uut45e2CLe4UKFlwYLf4b4JoKKSUo7zhpKMDpD/9zdrEJOLttJTWoUyV4g1YOLJnOxsjOzoVwODjoSTuL9Suyie6T/UAtt8XEx6z9FjA=
+	t=1717483986; cv=none; b=mpUlO0vGzjLAqjY46MO+Dn9sf7GC8S7OYtiX6EROXesdLSwURKu11Pq6yxHbENfi20xzj+wy7YsNUTt3iofR+cKTknSmhrgVepBGO3TVm9VrlG05OR9fuTrgYGZ+Ru7TJaHVMk+jh4YQAEFKL9HKhaOWgB08qYo6keI/W3dCPo4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717483570; c=relaxed/simple;
-	bh=Ecz97fuA80kTvU9pUiDGPFSSeiB30Bdma4sD2YjzAuk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=ojed+xkqhOckSJ9m3ijYB1hRxUazhuIfDBGjjOCVVycmFNfXn7mV5ExcDWhLgNv1CTGsmDt8/LfO2toJa7lyQcXP+OJPzHxi7XoaUI7xRHQjatjvXDzH0KdsN04fKtlbpzSyRmLexuTF4cCd2sijc4ohFZV4y0lE8mvSN6GyD+0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Y4W2SlXa; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45406u9I027017;
-	Tue, 4 Jun 2024 06:45:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	W5fV2eyMl9DzZbkzaE8fuVIp2iWIDzcWjq2/eRbmFTw=; b=Y4W2SlXachqDys9H
-	laleOfb72r/EeUpuToI5XvT1g9IP29P2aUDCGmsQxgpvpLgSA9K3xf78FIATVY9X
-	1/FqlM9OoooTGUiYnXEOvsn1CkhpKTmeYS7ZPVtB3oy9zLObWWAJTpczuS9BeYso
-	74gO3n3/SN2+s8Lq1h4eMjWgU6fmkusgQnBfXL1fpOdGyeyR1V0EyqsMVUm+Qw3y
-	VR2rj6jGy/PEmgjmCUdSHxwb+snwoobIbUD6nVsioaqiOGpp7CcOIRxFUV4lrXJS
-	7Ur9Dyty5to6qdfPqgDLr9jPzCE/NDuPX4REJifn8rthu3YuRVBQm4vHz8ZQ8aZa
-	rfuYxA==
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3yfw6v63wb-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 04 Jun 2024 06:45:59 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 4546jwr3028382
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 4 Jun 2024 06:45:58 GMT
-Received: from [10.216.52.99] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 3 Jun 2024
- 23:45:56 -0700
-Message-ID: <91b3af13-e723-4a49-b7f6-06f927c286c9@quicinc.com>
-Date: Tue, 4 Jun 2024 12:15:53 +0530
+	s=arc-20240116; t=1717483986; c=relaxed/simple;
+	bh=Q/s+/2HLOEshSXyevA+kwwuV9LKh61E8wNAoTbTnOcA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=a8P5XXjtFry812/AOW1RR9GMwSjeWeXR0lfzaQOtOiDhEcyH6kPQvtVZvykcUEcnrlYxWymuBIawKUCz3FRJPbem8KNILEp+UCLtiEe1UaQnSLmEkQXPeDPEMdC6tT1YuLwNR3C0iVG6RZ9Bcy+/TGpJzh8eE/dym7Wte5XfuJ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=NqNM5DeU; arc=none smtp.client-ip=209.85.208.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2eabd22d404so5754071fa.2
+        for <linux-usb@vger.kernel.org>; Mon, 03 Jun 2024 23:53:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1717483983; x=1718088783; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wxQuguER/BLQYm1ZxDJ/qSzZSNtAmQOi2t1QHj9aOVI=;
+        b=NqNM5DeUKXfcBuHHiexLviXzsrj8yeBF8DLFI7inoLjekwHDBLbj9KnuG1hjzr/AP0
+         dSqCRHsIrGOS5svJcLvUF7Egf2lJa2ybYsGugqXz2n02KLLxw/hKFQuENQ48SjwFbrR9
+         Q2y/xw3JYOsHYcrLaAvSvmmGBVkaHzOBKyHatvpVnblES9/YlQGj91HhXPWIEyyeHraA
+         sm+y02xkbqc7NBkM+OTdNXlpUq+XH+0vr4aopphqHMrpjLFV1mJwHqekAHoVzjyyYdYy
+         Z06dDGmk7dIIu7fD11Iq9j4PHmyX6rH3vGqOvfxTxzuWcnt3zOJHni5hWscUvAu4XWfS
+         MH3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717483983; x=1718088783;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wxQuguER/BLQYm1ZxDJ/qSzZSNtAmQOi2t1QHj9aOVI=;
+        b=ETxgO60kDdPPVi6bMuJLpB+SgkCVY5NSMtbP7fCy07NSRB2mZmW4oFIPApTZBjEfVV
+         JkzyAHwHKcQ9SHR+m9GBTefOysARMV1iUw8YBQQRCtnpiRHiEz8iK8l3z886C5N76cu+
+         KJ2SqZXbrckY3wE9rII4c5mRZ+N/JnEXYYUFsjKaLc2RTD+RgbMcFYnJSzGdgRC9tqQ2
+         ddiIoKxGOAlPQ+ajHJ2P6iTjYojU9sSNhnNOymAgPjYVfi+pg4M/i6x/WviiGsJSJJLd
+         4kGXEAOfOODtwwQvYYjT/ZqdUHW2vBkocM6FsCQKi3sJjzeX8jXcUUXnhaMsDE5/10Al
+         bZ5Q==
+X-Forwarded-Encrypted: i=1; AJvYcCW3eir4/4oE/4cjYmTDuY3M2mCOhHtnoeEuyCZbBE1CQDOF+HE1CTA64kAl4yiyoBKGnIPj9AAvXb9ByroEUjpnKVxsqC1Yivsz
+X-Gm-Message-State: AOJu0YzwBrnz4TvtMewl8hsvnk57LzgzAdwDEROTBE5YOHWoSHZvWfCn
+	ezLwHtToEQgYKz/BxKnsIuxCOyGGNiLuwHRE3ju8Dnc321YsXsYSNZQf0uKOFxjxdCMTv22P7EN
+	P81D4m5PLO2Q5FXjv8jOXTNUN++b7sK9+oqgBDQ==
+X-Google-Smtp-Source: AGHT+IHggwyuAzryxCFutJC1tfJ+3ZKkr//fbN9+PVWQCSu4HBedgiEUAp7ppj5bkGkwiOXOwRFyEwgRUKUmWYk9oag=
+X-Received: by 2002:a2e:9016:0:b0:2e6:f1f6:7dbe with SMTP id
+ 38308e7fff4ca-2ea951e1cccmr71890431fa.34.1717483982951; Mon, 03 Jun 2024
+ 23:53:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: dwc3: gadget: Inform system of suspended state
-To: Mike Looijmans <mike.looijmans@topic.nl>,
-        Thinh Nguyen
-	<Thinh.Nguyen@synopsys.com>
-CC: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Greg
- Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>
-References: <1b153bce-a66a-45ee-a5c6-963ea6fb1c82.949ef384-8293-46b8-903f-40a477c056ae.c5f44c79-75b2-43c1-a791-806fe8b693cd@emailsignatures365.codetwo.com>
- <20240603131304.233403-1-mike.looijmans@topic.nl>
- <20240604010256.4dxamwvcjxug6xfb@synopsys.com>
- <0fceefc4-2b3c-41a4-a6ac-d0b6dbacc1f7@topic.nl>
-Content-Language: en-US
-From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <0fceefc4-2b3c-41a4-a6ac-d0b6dbacc1f7@topic.nl>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: xi61c0ePZgzqs6I81ZUnwz5XikUtLuYA
-X-Proofpoint-ORIG-GUID: xi61c0ePZgzqs6I81ZUnwz5XikUtLuYA
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.12.28.16
- definitions=2024-06-04_03,2024-05-30_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 malwarescore=0
- impostorscore=0 mlxscore=0 suspectscore=0 adultscore=0 lowpriorityscore=0
- clxscore=1011 spamscore=0 priorityscore=1501 mlxlogscore=589 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2405170001
- definitions=main-2406040053
+References: <20240527144538.155704-1-brgl@bgdev.pl>
+In-Reply-To: <20240527144538.155704-1-brgl@bgdev.pl>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Tue, 4 Jun 2024 08:52:52 +0200
+Message-ID: <CAMRc=McurmN4Hs2MVGCjF0z_FX+84v0psGuTse0K7caSVF445A@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: usb: qcom,dwc3: set minItems for interrupt-names
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Wesley Cheng <quic_wcheng@quicinc.com>
+Cc: linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Mon, May 27, 2024 at 4:45=E2=80=AFPM Bartosz Golaszewski <brgl@bgdev.pl>=
+ wrote:
+>
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+>
+> There's a set of compatibles for which we set a strict list of 5 interrup=
+t
+> names even though minItems for the interrupts property is 4. One of the
+> USB controllers on sa8775p only consumes 4 interrupts which leads to
+> dtbs_check errors. Make the last entry optional by setting minItems to 4.
+>
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Docum=
+entation/devicetree/bindings/usb/qcom,dwc3.yaml
+> index cf633d488c3f..4251dc25ee9a 100644
+> --- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> +++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> @@ -468,6 +468,7 @@ allOf:
+>            minItems: 4
+>            maxItems: 5
+>          interrupt-names:
+> +          minItems: 4
+>            items:
+>              - const: pwr_event
+>              - const: hs_phy_irq
+> --
+> 2.43.0
+>
 
+Gentle ping.
 
-On 6/4/2024 10:56 AM, Mike Looijmans wrote:
-> On 04-06-2024 03:03, Thinh Nguyen wrote:
->> Hi,
->>
->> On Mon, Jun 03, 2024, Mike Looijmans wrote:
->>> When disconnecting the USB cable on an LS1028 device, nothing happens
->>> in userspace, which keeps thinking everything is still up and running.
->>> Turns out that the DWC3 controller only sends DWC3_DEVICE_EVENT_SUSPEND
->>> in that case, and not a DWC3_DEVICE_EVENT_DISCONNECT as one would
->>> expect. As a result, sysfs attribute "state" remains "configured"
->>> until something resets it.
->>>
->>> Forward the "suspended" state to sysfs, so that the "state" at least
->>> changes into "suspended" when one removes the cable, and hence also
->>> matches the gadget's state when really suspended.
->> On disconnection, did you see disconnect interrupt? If so, it should
->> transition to USB_STATE_NOATTACHED. This change doesn't seem to directly
->> address your issue. Can you provide the driver tracepoints?
-> 
-> The device doesn't issue a disconnect event, I didn't have tracing 
-> enabled in the kernel but added some dev_info() calls to determine what 
-> was going on. Added this to dwc3_process_event_entry():
-> 
-> dev_info(dwc->dev, "event: 0x%x type=0x%x", event->raw, event->type.type);
-> 
-> When disconnecting the cable from the host, I see this:
-> 
-> [   50.841411] dwc3 3110000.usb: event: 0x6084 type=0x42
-> [   50.841457] dwc3 3110000.usb: event: 0x4086 type=0x43
-> [   50.841494] dwc3 3110000.usb: event: 0x6084 type=0x42
-> [   50.841534] dwc3 3110000.usb: event: 0x4086 type=0x43
-> [   50.841571] dwc3 3110000.usb: event: 0x4086 type=0x43
-> [   52.650990] dwc3 3110000.usb: event: 0x30601 type=0x0
-> 
-> The "0x4086" and "0x6084" messages are endpoint events that occur all 
-> the time while connected. The last event is the "suspend" one. After 
-> that, total silence.
-> 
-> If you need traces, please point me to a description on how to obtain them.
-> 
-> 
-
-Hi Mike,
-
-  I may be wrong, but can you help understand the mechanism as to how 
-disconnect interrupt is generated in your targets. For example, on QC 
-SoC's, this happens when HS_PHY_CTRL reg VBUS_VALID bit is cleared and 
-cable is disconnected. This is because the vbus line is not routed to 
-controller. But from my calls with Synopsys previously, I remember that 
-the vbus line is routed to the controller as well for other OEMs. In 
-your SoC, what is the indication to controller that vbus is absent ?
-
-Also, after this happens, do you see the next plug in working ?
-
-Regards,
-Krishna,
+Bart
 
