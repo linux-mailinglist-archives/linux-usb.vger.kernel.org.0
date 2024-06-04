@@ -1,99 +1,76 @@
-Return-Path: <linux-usb+bounces-10831-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10832-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD0558FB500
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Jun 2024 16:15:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CAB38FB515
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Jun 2024 16:21:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6CF6E1F27550
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Jun 2024 14:15:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CDC2A1C21B4A
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Jun 2024 14:21:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46EB012C495;
-	Tue,  4 Jun 2024 14:15:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hQTUbCPV"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E31AE13B5B7;
+	Tue,  4 Jun 2024 14:20:40 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B72DC182C5;
-	Tue,  4 Jun 2024 14:15:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id B21341311AC
+	for <linux-usb@vger.kernel.org>; Tue,  4 Jun 2024 14:20:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717510522; cv=none; b=itO9r+XWDLZRbNh1Ss0v/cYlDVfI6JOlZLHNXJ53J86bheXM3Fg/OZt2f/INM2t4izvqe3SrXPNRclTLhXekSY4OaQLeLkJtuBQN5ddHXS6/HfPPPij5K8MIQKsxFNxXUd4k5krVn6RcbL0zhVTJENe9HkBkzMFUacYPBntoP74=
+	t=1717510840; cv=none; b=jshoXkF3gASK2xKsIhPABlL1ecCrZ6d9k2ly2zd658ImiHwEJAiQL7lkNQntNGLw8tGuBVxnlMjTNMgZcYLuA8LufaJJJS+rPqEU+DPus+9+0IAfsukwvbmiYeOEvKGlw1oILPBjkI7nba1YScMBGpAjZnkYye5XJw7nRico6BI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717510522; c=relaxed/simple;
-	bh=dCYwA2T+wZ6B5AlnOfH1EZwq/LhU73DxcZwcbP3J1KE=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=mM13mTLBXSm96Nst+Gm9rxGsOsx3zqDQFem0QoF/V00kQvr2swPPXB2n1ToHsYUACNyb6kCQeEya4e000TjytXHBXhWIxkX/rba7tpzHdXyVZrgPatEE5ozI20UK0oL/Gt30AtbIJovGaVsVsJscYciXz1Zo60DqENBvnhf9/G0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hQTUbCPV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 002F2C2BBFC;
-	Tue,  4 Jun 2024 14:15:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717510522;
-	bh=dCYwA2T+wZ6B5AlnOfH1EZwq/LhU73DxcZwcbP3J1KE=;
-	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-	b=hQTUbCPVJi1r+pUQWfOjRlDqPUhoGDRQjxa+eKN7HETb6j5lHyQLuQg0n4y4ohkI6
-	 ZXTmSRrZ7fwSaVoyympC+8a7ifj+PDFnJF6UY/oW6GT/kYKHrRK/eOME5MrsvqzTFk
-	 BUh0/XDSGSPQhhorYMHqCsI6HQ2wuS87eptzS1bdw+nZ9RZN3hocTuVMbluB1iUqJP
-	 Xy6rhCLaVhHsbrMmbNVlyjAI9FYHUWQyC0Gh2fFEPYsLvCIPA5UIkpKqwAEASNVXep
-	 U142C/fpa2VN3hjdZ/szAaBBA9mglxngccRNPu07+/5PJmwnpW8iM4F/RIE4UQgOJF
-	 gpmLOgBf7pK6Q==
-Date: Tue, 4 Jun 2024 16:15:18 +0200 (CEST)
-From: Jiri Kosina <jikos@kernel.org>
-To: Kees Cook <kees@kernel.org>
-cc: Nikita Zhandarovich <n.zhandarovich@fintech.ru>, 
-    Benjamin Tissoires <bentiss@kernel.org>, Kees Cook <keescook@chromium.org>, 
-    linux-usb@vger.kernel.org, linux-input@vger.kernel.org, 
-    syzkaller-bugs@googlegroups.com, linux-kernel@vger.kernel.org, 
-    syzbot+c52569baf0c843f35495@syzkaller.appspotmail.com, 
-    linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] HID: usbhid: fix recurrent out-of-bounds bug in
- usbhid_parse()
-In-Reply-To: <E62FA5CB-D7AE-4A11-9D2E-7D78D7C10ADA@kernel.org>
-Message-ID: <nycvar.YFH.7.76.2406041614210.24940@cbobk.fhfr.pm>
-References: <20240524120112.28076-1-n.zhandarovich@fintech.ru> <nycvar.YFH.7.76.2406041015210.16865@cbobk.fhfr.pm> <E62FA5CB-D7AE-4A11-9D2E-7D78D7C10ADA@kernel.org>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+	s=arc-20240116; t=1717510840; c=relaxed/simple;
+	bh=x9CkWTxGLFPRYVUUOKNEAhRFOItGOxVF5wXD2HSaC14=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PF4pYFxJ+itNBRGsEg0AVeoAJ0TbbpmKox3Kq9HLXjfJpOcjBfxbT1pnxZRwWnNq/ArgKRwPsuRzrHPV2BtjeAVxLSWpBH3JTCwoMUs2Q72VqBQ6gMHc0rpx2GL4eZUYYyyOtlBDTUkXMCLo6eWs14kQlUuIoqaP2tXeFgcQnjQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
+Received: (qmail 158307 invoked by uid 1000); 4 Jun 2024 10:20:31 -0400
+Date: Tue, 4 Jun 2024 10:20:31 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Marcello Sylvester Bauer <marcello.bauer@9elements.com>
+Cc: syzbot <syzbot+c793a7eca38803212c61@syzkaller.appspotmail.com>,
+  bp@alien8.de, dave.hansen@linux.intel.com, gregkh@linuxfoundation.org,
+  hpa@zytor.com, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+  mingo@redhat.com, syzkaller-bugs@googlegroups.com, tglx@linutronix.de,
+  x86@kernel.org, Matthias Stoeckl <matthias.stoeckl@secunet.com>,
+  Uwe Kleine-Koenig <u.kleine-koenig@pengutronix.de>
+Subject: Re: [syzbot] [usb?] INFO: rcu detected stall in schedule_timeout (6)
+Message-ID: <3e1b188f-2a68-461c-9b7c-a1d85bf8eb31@rowland.harvard.edu>
+References: <000000000000f8112e0618995e6e@google.com>
+ <46cbe0a914065917ea1024636e864a1e2c982145.camel@9elements.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <46cbe0a914065917ea1024636e864a1e2c982145.camel@9elements.com>
 
-On Tue, 4 Jun 2024, Kees Cook wrote:
-
-> This isn't the right solution. The problem is that hid_class_descriptor 
-> is a flexible array but was sized as a single element fake flexible 
-> array:
+On Tue, Jun 04, 2024 at 02:05:12PM +0200, Marcello Sylvester Bauer wrote:
+> Greetings,
 > 
-> struct hid_descriptor {
-> 	   __u8  bLength;
-> 	   __u8  bDescriptorType;
-> 	   __le16 bcdHID;
-> 	   __u8  bCountryCode;
-> 	   __u8  bNumDescriptors;
+> I'm currently investigating this regression to properly fix it. My
+> patch only replaces the corresponding timer API calls without actually
+> changing the code. I'm trying to get it to work properly with the
+> hrtimer API.
 > 
-> 	   struct hid_class_descriptor desc[1];
-> } __attribute__ ((packed));
-> 
-> This likely needs to be: 
-> 
-> struct hid_class_descriptor desc[] __counted_by(bNumDescriptors);
-> 
-> And then check for any sizeof() uses of the struct that might have changed.
+> Any hints on how to accomplish this are welcome.
 
-Ah, you are of course right, not sure what I was thinking. Thanks a lot 
-for catching my brainfart.
+Start by figuring out what isn't getting executed.  That is, which USB 
+(or usb_request) transfer isn't completing.  Once you know that, see 
+what timer callbacks do occur (if any) and figure out why they don't 
+cause the transfer to complete.
 
-I am dropping the patch for now; Nikita, will you please send a refreshed 
-one?
+If there are no timer callbacks at all when the hang occurs, make a 
+record (printk if nothing else), from the start of the test, of each 
+callback and each timer restart, so you can definitively prove to the 
+hrtimer maintainers that there's a restart with no later callback.  Then 
+it will be up to them to figure out what's going wrong.
 
--- 
-Jiri Kosina
-SUSE Labs
-
+Alan Stern
 
