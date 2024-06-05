@@ -1,194 +1,169 @@
-Return-Path: <linux-usb+bounces-10935-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10936-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EFACA8FD90D
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 23:34:30 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D293A8FD9CF
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2024 00:22:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 86F8328A2EF
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 21:34:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 33DE5B21CE6
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 22:22:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83762161925;
-	Wed,  5 Jun 2024 21:29:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C161115F3EC;
+	Wed,  5 Jun 2024 22:22:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gCH5bEc4"
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="PRbf//X5"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from sonic322-19.consmr.mail.gq1.yahoo.com (sonic322-19.consmr.mail.gq1.yahoo.com [98.137.70.82])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A55F161305;
-	Wed,  5 Jun 2024 21:29:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0EB06FD0
+	for <linux-usb@vger.kernel.org>; Wed,  5 Jun 2024 22:22:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=98.137.70.82
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717622982; cv=none; b=Qje2b3Zszlo7awxNExnn7BnmJO9FRrD300Z4ox7L/9rrz/zNsj6pIOyGutzHWVktMGokAwxhACv32C1xVpRzfVlnBEk2EeaI5Sx+FdpZbVir+dMxYcjhSvhnua/QmWsa/dg5PtRRCnf9jpq7B0dgSy9ZxCPpo0Q6FjlSMnmFM9g=
+	t=1717626144; cv=none; b=LSV5fRpr2VCAFl+/0/MN7iqPGj90LBmVdsqofzyzl0J/TmEMQPUgQRzmQhX+4PNF4dXAX7CljKjTVPoGgzNLsy6PRkCO9WxuSphBJQc7J0TyhyZXPtWi9GceLp4CeCVOBFhe+us6Yo9sgcwNpqR3YiwWbZatVbdwM3ILwpuk3Ew=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717622982; c=relaxed/simple;
-	bh=EcFyrnIhN2EcyznTTZWa8lDK7SEr6wP+JFqqI+WhmA8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CndSNwrwwsY/O2dm0SYapuQoofBd/ocwAeciFDNyB38XcYksDAs1O5PGVFeyORZd7JlAqIzT494T9XRjUCJJYjCpyiNvYMG7dQeclQZ8jFbgtwrwEIPlYEEGQAktqEU5MG8939FUCnX8DwROVd0AhPJIzZJ9Fe+XQJik061GgnQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gCH5bEc4; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1f480624d10so3107395ad.1;
-        Wed, 05 Jun 2024 14:29:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717622980; x=1718227780; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=1ykgR3L/UstpN4SIwm20+ZcpzOT7fdir+umJychdO/w=;
-        b=gCH5bEc4OhVNH4oP3sCDDwuJDBIjkBB/KFXld2cjn04O7Y9fFeZqmQtSI8a79PMk1P
-         6ZxXeLjiLf/zNmWQIwnM5AdN9ebXaezrxnciL/oYIMRpT6epBz8L8kRECnKgC395RB+M
-         SHzK4grl3scsNi2g4lSYL6vAIL/hD/rOyAcAFqFf2gZOuDGVDoA4GfV7KG6wHa2AF8yF
-         b0dDQKLXbrTJT6Pm+KwyFG23lx/mI2jXh7Czgk7F0dXMHaRwoMEIvsW+8C3ot1lcGSN7
-         VMqVaVhqMpL+OXmpntwmR7BVzB53XT5+EpNo3OECLXQpm+lnvLk735Qv2D46Cb+LQ54w
-         gxAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717622980; x=1718227780;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1ykgR3L/UstpN4SIwm20+ZcpzOT7fdir+umJychdO/w=;
-        b=RMpZYNhE70oCJG4ddVQVvtMggjULyQHV4+cvS9arX4z9vnZFBNnJ2XN4oFn7hSx7Vi
-         94+wCmHflxdwGCLzOo8s/N+yV3F6981SshF2yIDXG+km8JN8rdh+XTuuxsGTwM0YCgTK
-         z4FZ6ppuLiKw8ezLtKXTiILXnSSalKD8nRWNCiEX6bIGS30BsC/LyVTbDIgyjO8ug/K5
-         gK00NNTi7ZlWL0LQ1Epuv+aHlckH7r1bBS9R6iRQmicPGrZ8A6IBcD4WJKPHXRZf2XK/
-         P+xXpN1iJqsjhR/3QUBLi+VZsa3iNEXI9dNSpaibU7WeDecfV5kIYHLXZ1h9fiP4DMsR
-         9ywA==
-X-Forwarded-Encrypted: i=1; AJvYcCUnYddKund70Wkbyvz8uk25ZB7iCW8Vh/lUDUG2BPl8PryJ1fsz4L4iv64RdRTxlE5qCWge3jCToQdeLgizOE7xI7qxdwLP8pOqWx/UuUcUiMvIrQmkZ/NTLvnV/3TX3i0g6QoRCu2yUPeUGZwRo2tuKs0f9qEopp8J1HeexTXAssevJgFtTBzPIuG6Y+iUhfnI0Q8zcstN0AQQKz0BrHbpqfIMwZ8dQU/iCm3O6L/6DHuKvG/6AB68RZmibTb7QQUrBfUZ5eq0A+f/GzYlJ6eqd10zQKaANgfWgddsE84nLNBYdcHRaTOKkkGxnOQ/JWqVLF7TuuUGh0mB+hsD7M31Hn5qOlJtUumT9/FT+Rg=
-X-Gm-Message-State: AOJu0YzRO9jZQfCIV3waB7KJzn0g3c0qflaMn7r/zWvpmI1jOwESfvl/
-	2/l8bLvr7M3bp4lzj+bDQd1UiBFaemRW3gskz4pKJK7XldNXI0fs
-X-Google-Smtp-Source: AGHT+IHJa9EhK/bGsffLpO9ENpa1wXgSIlyIBiv/iO54z9u+sDw1SpV9Ivh8m1HnM6EboA4MQCQMlQ==
-X-Received: by 2002:a17:902:d4c7:b0:1f6:3b03:6fa1 with SMTP id d9443c01a7336-1f6a5a9b049mr43648595ad.56.1717622979790;
-        Wed, 05 Jun 2024 14:29:39 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f6bd7e30a9sm21005ad.198.2024.06.05.14.29.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Jun 2024 14:29:39 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <b2ccaf40-fe04-490f-a625-4c502c038627@roeck-us.net>
-Date: Wed, 5 Jun 2024 14:29:37 -0700
+	s=arc-20240116; t=1717626144; c=relaxed/simple;
+	bh=yVX8r4qEnwDYzTpdDCUC/a6Wns6YVRUvt9z3s9GeARo=;
+	h=Date:From:To:Cc:Message-ID:Subject:MIME-Version:Content-Type:
+	 References; b=HgSXrSUwvRMkQgEOR9AAQQXLfRSVR0OpnpPKloH/mPulDaITXLwSo9ZJyfI44EaHDOb7XWsk8qs1h+e2YCSumOPZFw0IMOSsgOdmnm4Ywwsfk8G6JZ4KTT5Sj1Ttu7atQKmD0egRGSND/dockcKcVb6Z/FxRCOxA/bvBOTUegk0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=yahoo.com; spf=pass smtp.mailfrom=yahoo.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=PRbf//X5; arc=none smtp.client-ip=98.137.70.82
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=yahoo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yahoo.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1717626142; bh=yVX8r4qEnwDYzTpdDCUC/a6Wns6YVRUvt9z3s9GeARo=; h=Date:From:To:Cc:Subject:References:From:Subject:Reply-To; b=PRbf//X5Wap1ifWf8b6L57KS2gVBv4MTWqKHM1l8BCD+WcHw2gGUjw7dULjfgLomA+8eRvb/fedcs/MdcjrvJP4i5mA5Y7ocxXkO8e52KOoFPssVyHPfUGMweKWYXnSf4r5jvdtrO2QLoogyehbat3f1ZC+muYePF9+/p8CYUzraBp+Fe76m7KkVFzOs9Sq99BEGXlne/PI9AnCLPMPbCcZU1d8UPTpbngx0p6eFC1wIDH8lXqEuHP2hVnFOdwky0q9QAN7IxtSoC0ZZIxR3oiwl2P1r5Cau3FjS4IRZda7s+VywinyyUZLcwrFrff5BknwvhcP1DvG9CjFm/djk4Q==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1717626142; bh=5YvTXGBZsAoG+n+SslNDQdJIKTLeg2Uom4Bv3m3nyJk=; h=X-Sonic-MF:Date:From:To:Subject:From:Subject; b=AFC1KojFlZ++92T7QvfB72U3QIJoBUhFaB0UJD43gik3WFNhnnaqv6FofaSZ8Pg4IwTFt1ytqSY8LTZpzCvYAoDoo0Q92+ptoGKAGIf46EpS+1aaB2YEUkjAcS5l65eurvsSD729sfoA+GAT/WnC66tWhQnLRNP5gyapoabQpOaRc7pbHkcgygzH4dP4WDir0Wt9KTmdIrwAubmWNaqOFJz5LUyRKSaXg5maTp49MCa3q+QOtxlx3pt+94K0j6S/0NQ9jc+a7ftUovh3gig6V+gDAyccjy3hj/0htO7RBC+KCQXL+iluo+NtKW3jHJESiuWZsasE8nftVS27VSJl8Q==
+X-YMail-OSG: J_D.cwMVM1klEcSbdJ0pXblbSrHGbxSapY_DPhETzzW20VPLkGPFtDAAmtchRx7
+ oyfIeJZMP9Liv6xOsS0Fq3EpuNnAfuE.abX1IU28dd4P3W1r0BdBmM2deCZVgo7QFkf8qDVId3X.
+ vqtbefo9N45tbCbUBBKApy9pIJlUk53UJqg_DM10kuqLc0pIDuSpTWYDZxKQlziwMHb1fVAS0a6U
+ x0Kach8Q4Fq4cUXW8Bvey3jZIqvbN5FEUc8H.tN56rwaucMPwBoarOtfpdSu.80M1z1nOxMof9jE
+ 1ofSyjgpFtCun.zNKFtTWuFePl36xPbJDHuwFNvKLQBoZ3ykx3sPQlhgguri4.GmghM1q57F3qIi
+ bLe.F3kqODOh8WrWD6dx4JSny6k0D_KSs1gWw3tUpMcEuJ7AlOxXGrcYFtyyNYp8wzcRM2Zi15KZ
+ hTDlZ9QraVBn5r2Jfgczs06lVCbIx5M9gqq49lCmBLkjGkFmTW78foKgzgAhaJgaeryDjjgK0lJI
+ lY3VdwROfqeYEwnCvVQOLkxvRxD2wZ4ZVUGT2udKvgUMmSNM.K2.hMrAYZk_PTGZALT9tKowbH5f
+ xSIwk3JM1.Xr0yohWi_aIT0VxYTZXOe0PTOab5N1NSDc.fWQIbWtiGWTdTfVm38HS1C6cRrTU6d9
+ cDdJSgei.DfKRTKoUYp_Nb.sDrxnYX5mktOC2LsJM.SUER051d54UfEsade3pMz2KXVhazkdH8Dh
+ kDNgsvZdMOBUdSsTK41yFkh896OPGtpFoxT2Fc.LDYz_1kjgtWjxbALibrNzCTcv6fc2Ff41JC_B
+ ie8Qeu.nTgKbDY9L79ZwoOmwv6kNYTEg7Hp3v6PNqqXGuo5tTyQPoGXGrU8B8DLMWIMnhb8QMWoZ
+ Ir0Yxce5dY3Em8HO_eSTO_3SkygOxqsqDxoTNT2vSSEZMe4T3HFyKwLjcTWwcPlXrBlc0Ei9PzMS
+ C4AC_LW0Czlham5A8WlPsgVPn.zUQE7iFN9eRAQb82AUp2WRfHfgbLZTeTV0zbVW0CZf3w3IgtJ.
+ y9iCms17ou6D2qHrvvodzHHyKwFeV6mG.QwpcmXprVUHed8WsqFItBspxFgj.YiIzza7ytXfCqfH
+ wJddcdNbUCGJOqZCJdiTF87KYStyZXNBmjmHlNV0930P5dN6_9X_K4RGJSG52oUnrGvBjLJGCMjn
+ 3hJCCuaW1uqfOdk68U69b2K2L59O0oEOBB3CoNb3fipFkEay1y57tiPRhuDEZuowFl_ujXjmI3dR
+ z79Sgv0lSifIXHW9csBefqCQSLwx8NQzTGWrPuDh4_PtvmENcILY5E5JH__tmIg4WkIWBnjjjLkG
+ WUhsokkPcMrWpmobgBV5lH8tKDFATLYbijV.HfhtFBuGtzE7HWubhsDKCeeTTGT.ZD_7UwxRZFA8
+ TeUHPEPdgFpNaYYPrOA_Ms6z22ZqIZHJEAfd.kE0aNjN6wqS21FCnmCxx.Be3pPIhKlw7QVLd388
+ LiCyJEhqV6Gf50h9dmVMX357j6LRJ.G4ZKxQKkwDYzSyVodMkt.DAkYNwcnwIbjoVzNhQBs61Zus
+ FmeCU_khOz4016TQCeHYYgBwZdVFh.GRyxcnoxYwJwrZTXGIlGbQTCEC1va6p06QbeeUzP5Fck2n
+ rjLvkbHHjlJCUuJmiLTqV4hh1eNjZ3mlqJp.raiV2GtiK82vo.Sj5lSVv6IA4XSOltbIJqwMBBiG
+ 0K4GYEFEtcA6OXLHFumXyxqwCVKPboox8iTmTqoX3yQRTObmOAY.JJ3ELoiG2Gtf..tA9A8gf.2s
+ YVysaEQnlPio1fADboucidvfQHh5uHPz33pBK6yq9.a1ZWA3ykg37ZHb1798FO0pVoYKfINwMxrN
+ HMkK3phZwxHSzav9eo0SG1nQGjmaxAmNckjW9DlcYmtXE8UlJrqmvCiJqtPa9XeJYkeCHYxTdhS3
+ HL_ZGDo90V44tQ1DfRfbQCqkI9IEZEwZ2rnfN79vRIdUDbqDtvkwhj4KV6uYuGRjnHX7sWjDyYAk
+ 9BdKX9nlkDi_wNzscJzpNjVsjvvdspQ8vF4aygwZDphFMYELH1safSjmagQ0EhkSrempLKEHiQi8
+ 7AtUPbdy7KuIUQG.VyZclhFgRNMFx1Zxl2kWuMNgpsHGSNlaCsnBGfK5iUe4u7Rlpg_5HMdQnHaQ
+ IxuMaE_qnCy0Xwbut8WWE04nq4.glPaqTgXn6ihsl922vhqFQ1swgJ88hjPXvKaq4
+X-Sonic-MF: <sgoel01@yahoo.com>
+X-Sonic-ID: 8cadc2be-f04d-4de7-ab7f-9a2074382d89
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic322.consmr.mail.gq1.yahoo.com with HTTP; Wed, 5 Jun 2024 22:22:22 +0000
+Date: Wed, 5 Jun 2024 21:52:00 +0000 (UTC)
+From: Shantanu Goel <sgoel01@yahoo.com>
+To: Oliver Neukum <oneukum@suse.com>
+Cc: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, 
+	"linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
+Message-ID: <675774215.2024605.1717624320352@mail.yahoo.com>
+Subject: [PATCH] uas: set host status byte on data completion error
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 01/17] hwmon: pmbus: adm1266: Change nvmem
- reg_read/write return type
-To: Joy Chakraborty <joychakr@google.com>,
- Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Lars-Peter Clausen <lars@metafoo.de>,
- Sakari Ailus <sakari.ailus@linux.intel.com>,
- Bingbu Cao <bingbu.cao@intel.com>, Zhihao Cheng <chengzhihao1@huawei.com>,
- Jerome Brunet <jbrunet@baylibre.com>,
- Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-iio@vger.kernel.org, linux-media@vger.kernel.org,
- linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-mtd@lists.infradead.org, linux-rtc@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-amlogic@lists.infradead.org,
- linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
- linux-usb@vger.kernel.org, manugautam@google.com
-References: <20240605175953.2613260-1-joychakr@google.com>
- <20240605175953.2613260-2-joychakr@google.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
- RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
- nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
- 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
- gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
- IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
- kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
- VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
- jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
- BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
- ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
- CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAlVcphcFCRmg06EACgkQyx8mb86fmYFg0RAA
- nzXJzuPkLJaOmSIzPAqqnutACchT/meCOgMEpS5oLf6xn5ySZkl23OxuhpMZTVX+49c9pvBx
- hpvl5bCWFu5qC1jC2eWRYU+aZZE4sxMaAGeWenQJsiG9lP8wkfCJP3ockNu0ZXXAXwIbY1O1
- c+l11zQkZw89zNgWgKobKzrDMBFOYtAh0pAInZ9TSn7oA4Ctejouo5wUugmk8MrDtUVXmEA9
- 7f9fgKYSwl/H7dfKKsS1bDOpyJlqhEAH94BHJdK/b1tzwJCFAXFhMlmlbYEk8kWjcxQgDWMu
- GAthQzSuAyhqyZwFcOlMCNbAcTSQawSo3B9yM9mHJne5RrAbVz4TWLnEaX8gA5xK3uCNCeyI
- sqYuzA4OzcMwnnTASvzsGZoYHTFP3DQwf2nzxD6yBGCfwNGIYfS0i8YN8XcBgEcDFMWpOQhT
- Pu3HeztMnF3HXrc0t7e5rDW9zCh3k2PA6D2NV4fews9KDFhLlTfCVzf0PS1dRVVWM+4jVl6l
- HRIAgWp+2/f8dx5vPc4Ycp4IsZN0l1h9uT7qm1KTwz+sSl1zOqKD/BpfGNZfLRRxrXthvvY8
- BltcuZ4+PGFTcRkMytUbMDFMF9Cjd2W9dXD35PEtvj8wnEyzIos8bbgtLrGTv/SYhmPpahJA
- l8hPhYvmAvpOmusUUyB30StsHIU2LLccUPPOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
- 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
- pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
- J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
- pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
- 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
- ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
- I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
- nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
- HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
- JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAlVcpi8FCRmg08MACgkQyx8mb86fmYHNRQ/+
- J0OZsBYP4leJvQF8lx9zif+v4ZY/6C9tTcUv/KNAE5leyrD4IKbnV4PnbrVhjq861it/zRQW
- cFpWQszZyWRwNPWUUz7ejmm9lAwPbr8xWT4qMSA43VKQ7ZCeTQJ4TC8kjqtcbw41SjkjrcTG
- wF52zFO4bOWyovVAPncvV9eGA/vtnd3xEZXQiSt91kBSqK28yjxAqK/c3G6i7IX2rg6pzgqh
- hiH3/1qM2M/LSuqAv0Rwrt/k+pZXE+B4Ud42hwmMr0TfhNxG+X7YKvjKC+SjPjqp0CaztQ0H
- nsDLSLElVROxCd9m8CAUuHplgmR3seYCOrT4jriMFBtKNPtj2EE4DNV4s7k0Zy+6iRQ8G8ng
- QjsSqYJx8iAR8JRB7Gm2rQOMv8lSRdjva++GT0VLXtHULdlzg8VjDnFZ3lfz5PWEOeIMk7Rj
- trjv82EZtrhLuLjHRCaG50OOm0hwPSk1J64R8O3HjSLdertmw7eyAYOo4RuWJguYMg5DRnBk
- WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
- HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20240605175953.2613260-2-joychakr@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; 
+	boundary="----=_Part_2024604_1929375854.1717624320352"
+References: <675774215.2024605.1717624320352.ref@mail.yahoo.com>
+X-Mailer: WebService/1.1.22407 YMailNorrin
 
-On 6/5/24 10:59, Joy Chakraborty wrote:
-> Change nvmem read/write function definition return type to ssize_t.
-> 
-> Signed-off-by: Joy Chakraborty <joychakr@google.com>
-> ---
->   drivers/hwmon/pmbus/adm1266.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/hwmon/pmbus/adm1266.c b/drivers/hwmon/pmbus/adm1266.c
-> index 2c4d94cc8729..7eaab5a7b04c 100644
-> --- a/drivers/hwmon/pmbus/adm1266.c
-> +++ b/drivers/hwmon/pmbus/adm1266.c
-> @@ -375,7 +375,7 @@ static int adm1266_nvmem_read_blackbox(struct adm1266_data *data, u8 *read_buff)
->   	return 0;
->   }
->   
-> -static int adm1266_nvmem_read(void *priv, unsigned int offset, void *val, size_t bytes)
-> +static ssize_t adm1266_nvmem_read(void *priv, unsigned int offset, void *val, size_t bytes)
->   {
->   	struct adm1266_data *data = priv;
->   	int ret;
-> @@ -395,7 +395,7 @@ static int adm1266_nvmem_read(void *priv, unsigned int offset, void *val, size_t
->   
->   	memcpy(val, data->dev_mem + offset, bytes);
->   
-> -	return 0;
-> +	return bytes;
->   }
->   
->   static int adm1266_config_nvmem(struct adm1266_data *data)
+------=_Part_2024604_1929375854.1717624320352
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-The series doesn't explain what a driver is supposed to do if it
-only transfers part of the data but not all of it due to an error,
-or because the request exceeded the size of the media.
+Hi,
 
-For example, this driver still returns an error code if it successfully
-transferred some data but not all of it, or if more data was requested
-than is available.
+I have a disk enclosure which is prone to data completion errors during ini=
+tialization and because the UAS driver
+only sets the resid on a data completion error and not the host status byte=
+, the SD driver ends up using invalid zero'ed data.
+The attached patch against v6.6.32 fixes this by setting the host status by=
+te to DID_ERROR so the SD driver will notice
+the error and retry the command.
 
-I didn't check other drivers, but I would assume that many of them
-have the same or a similar problem.
+This bug is present in all stable kernels (4.19, 5.4, 5.15, 6.1, 6,6) and t=
+he current 6.9.3 kernel.
 
-Guenter
+This is the behavior prior to applying the patch.
 
+[=C2=A0=C2=A0 11.872824] sd 0:0:0:1: [sdf] tag#9 data cmplt err -75 uas-tag=
+ 1 inflight:
+[=C2=A0=C2=A0 11.872826] sd 0:0:0:1: [sdf] tag#9 CDB: Read capacity(16) 9e =
+10 00 00 00 00 00 00 00 00 00 00 00 20 00 00
+[=C2=A0=C2=A0 11.872830] sd 0:0:0:1: [sdf] Sector size 0 reported, assuming=
+ 512.
+[=C2=A0=C2=A0 11.872995] sd 2:0:0:1: [sdn] Preferred minimum I/O size 4096 =
+bytes
+[=C2=A0=C2=A0 11.872996] sd 2:0:0:1: [sdn] Optimal transfer size 33553920 b=
+ytes not a multiple of preferred minimum block size (4096 bytes)
+[=C2=A0=C2=A0 11.873466] sd 1:0:0:0: [sdd] tag#29 data cmplt err -75 uas-ta=
+g 1 inflight:
+[=C2=A0=C2=A0 11.873468] sd 1:0:0:0: [sdd] tag#29 CDB: Read capacity(16) 9e=
+ 10 00 00 00 00 00 00 00 00 00 00 00 20 00 00
+[=C2=A0=C2=A0 11.873472] sd 1:0:0:0: [sdd] Sector size 0 reported, assuming=
+ 512.
+[=C2=A0=C2=A0 11.873824] sd 7:0:0:0: [sde] Attached SCSI disk
+[=C2=A0=C2=A0 11.874064] sd 3:0:0:1: [sdk] tag#16 data cmplt err -75 uas-ta=
+g 1 inflight:
+[=C2=A0=C2=A0 11.874065] sd 3:0:0:1: [sdk] tag#16 CDB: Read capacity(16) 9e=
+ 10 00 00 00 00 00 00 00 00 00 00 00 20 00 00
+[=C2=A0=C2=A0 11.874070] sd 3:0:0:1: [sdk] Sector size 0 reported, assuming=
+ 512.
+[=C2=A0=C2=A0 11.874465] sd 5:0:0:0: [sdo] tag#10 data cmplt err -75 uas-ta=
+g 1 inflight:
+[=C2=A0=C2=A0 11.874466] sd 5:0:0:0: [sdo] tag#10 CDB: Read capacity(16) 9e=
+ 10 00 00 00 00 00 00 00 00 00 00 00 20 00 00
+[=C2=A0=C2=A0 11.874474] sd 5:0:0:0: [sdo] Sector size 0 reported, assuming=
+ 512.
+[=C2=A0=C2=A0 11.876151] sd 4:0:0:1: [sdj] tag#10 data cmplt err -75 uas-ta=
+g 2 inflight:
+[=C2=A0=C2=A0 11.876153] sd 4:0:0:1: [sdj] tag#10 CDB: Read capacity(16) 9e=
+ 10 00 00 00 00 00 00 00 00 00 00 00 20 00 00
+[=C2=A0=C2=A0 11.876158] sd 4:0:0:1: [sdj] Sector size 0 reported, assuming=
+ 512.
+
+
+After applying the patch I no longer see the zero sector sizes above and al=
+l sizes are detected correctly despite
+the presence of completion errors.
+
+Thanks
+
+Signed-off-by: Shantanu Goel <sgoel01@yahoo.com>
+
+
+------=_Part_2024604_1929375854.1717624320352
+Content-Type: text/x-patch
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename="patch-6.6.32-uas-set-data-result.diff"
+Content-ID: <f475478f-ac60-93b3-e250-fd41439b2e5f@yahoo.com>
+
+LS0tIC5vcmlnL2RyaXZlcnMvdXNiL3N0b3JhZ2UvdWFzLmMJMjAyNC0wNi0wMiAxMTo0Njo0OS4x
+NDQ0NTcyNTMgLTA0MDAKKysrIGxpbnV4LTYuNi4zMi0xLnNnLjEuZWw5Lng4Nl82NC9kcml2ZXJz
+L3VzYi9zdG9yYWdlL3Vhcy5jCTIwMjQtMDYtMDIgMTE6NDQ6MjEuNTIzMzc1NTE3IC0wNDAwCkBA
+IC00MjIsNiArNDIyLDcgQEAKIAkJCXVhc19sb2dfY21kX3N0YXRlKGNtbmQsICJkYXRhIGNtcGx0
+IGVyciIsIHN0YXR1cyk7CiAJCS8qIGVycm9yOiBubyBkYXRhIHRyYW5zZmVyZWQgKi8KIAkJc2Nz
+aV9zZXRfcmVzaWQoY21uZCwgc2RiLT5sZW5ndGgpOworCQlzZXRfaG9zdF9ieXRlKGNtbmQsIERJ
+RF9FUlJPUik7CiAJfSBlbHNlIHsKIAkJc2NzaV9zZXRfcmVzaWQoY21uZCwgc2RiLT5sZW5ndGgg
+LSB1cmItPmFjdHVhbF9sZW5ndGgpOwogCX0K
+
+------=_Part_2024604_1929375854.1717624320352--
 
