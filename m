@@ -1,100 +1,138 @@
-Return-Path: <linux-usb+bounces-10892-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10894-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4AA268FCC29
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 14:14:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 090968FCC3F
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 14:15:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4218E286EB8
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 12:13:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B43681F246F3
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 12:15:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21DAF197556;
-	Wed,  5 Jun 2024 11:54:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3C7319883B;
+	Wed,  5 Jun 2024 11:54:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NCt5y84X"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nU3dP4oG"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9360E19752E;
-	Wed,  5 Jun 2024 11:54:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 359C319882A;
+	Wed,  5 Jun 2024 11:54:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717588451; cv=none; b=LpCdSDChPyw8E43ViABFO3nhvEFkoLV9e2GzndljjNGHAiWtDZZ326ppLKG831QcxM3uurjYF9OJNfbW92sClFeNQWtZ19ITsCbGPrY6rUw3e9YXnV2ai5VPkmBlNBRYUmiZdQSKmEFptfX9ByMWHmEs+ndJZkGn6P88ms0MVxw=
+	t=1717588488; cv=none; b=YRB9zhLkx1aU7uTcLWAURwHXR1pGiNEDOaJuovaxTr3cZa71FgVQQvEyhznk09o+PsKR651vs+gmUEZBuYdlBKVPJXvhdHyO5hRPyXj1W8bAfUgD9OOpwQ4R442xYzWt0Es0bh+JySxrWYppCSEs/aJ89N/k/5kkvTBhm/IA5qs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717588451; c=relaxed/simple;
-	bh=2OM9RluI5P3tgT/FuEMdv4m5T8LO/7Z+ZcmeBnkHodo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YEgPAi5H0gC65tA6zvlYsiGniPcFxg3nnTL3+f4VAzwiTY/rF7EpSyw86UY2288aGxEp6hwGzxWJ0erOmmQ8cXm8HYOy7dLeQCLIqQY/cMZFVBqIO2+Qc/45lQf5eSdCGdXxhjZJ7HpF3AMGJGbyH9NfJx0inP7rkjQALNAO2RM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NCt5y84X; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 254A5C32781;
-	Wed,  5 Jun 2024 11:54:11 +0000 (UTC)
+	s=arc-20240116; t=1717588488; c=relaxed/simple;
+	bh=keKYWfzN1djD6KLmxuPPa4XdGqVyHQTp9UFTeJAwljs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=GqOsU9xE+kg8/935jH5ND+W8xCJ0A9jBjX2mD8vVjvE1B1QRSTln5P49cN5xbLPrB7pssyITbbPht0md4CFrt9ZacSliLFTHEqPsWKYbbNu+yDyth8BJejJJO7k6nxc2o5TqrLYREsm+abAgnCLJFCEy/XlifciuALNAET4fk9E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nU3dP4oG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06CF3C32786;
+	Wed,  5 Jun 2024 11:54:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717588451;
-	bh=2OM9RluI5P3tgT/FuEMdv4m5T8LO/7Z+ZcmeBnkHodo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NCt5y84XkRxyoqsCOCZDpELqR+/dN4Kf17tPK4590lu6zwwQoq2oeKH0msFFBu0pj
-	 DoVpIylycE9kJPHJpDkw4MsInUK6VvL1MWovx+vEe+ueA1iFI7U+HnyqanrKZPvcdN
-	 R0IRVQkhulaiBb9nnMVI6FG9/rQbIKSSjcWlAfF8Gz4kmCIdFv4LL/ZuG1r5Q6xjpe
-	 bXh9X0GooJkyF+UoFkLZf2GI9n1e8vXzbeu6wxs1QdTErXAbMfu54ir6LbhH7gcT7n
-	 sMuGDwYJX2TD0ihz4qgtZEhtxXRFhdlGSSEMe4cGnBCxmQDH6aSx3tmniBqs3bTeqs
-	 DKoM4JdxA1E5A==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1sEpDY-000000000x0-2U9q;
-	Wed, 05 Jun 2024 13:54:12 +0200
-Date: Wed, 5 Jun 2024 13:54:12 +0200
-From: Johan Hovold <johan@kernel.org>
-To: Sasha Levin <sashal@kernel.org>
-Cc: linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-	Krishna Kurapati <quic_kriskura@quicinc.com>,
-	Bjorn Andersson <quic_bjorande@quicinc.com>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Johan Hovold <johan+linaro@kernel.org>,
+	s=k20201202; t=1717588487;
+	bh=keKYWfzN1djD6KLmxuPPa4XdGqVyHQTp9UFTeJAwljs=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=nU3dP4oGHGWshq8APClBLEUanqpxmKUBD+ZCLzbLwqUfJj++cPEL5h50Bcth3tdmN
+	 8rej/RqiRbkLueOx+8MliCrbPc/XTBnVIFbfrXwoRgJTfuzXXLDevo8JSA0LFbkPSP
+	 ESvbND2NSHr/+mcuy/KEDtEwwDmMpMR9WbWFyMnFHhHK5lcP1vys+wcYZ0BFHWyJ/M
+	 Ey6ivuhEaFMzMeNozZpHjexOIoq3xwBi0W+EZs6EeqfZp7UATXPS50lITuAjlnx39u
+	 iFLs/uwYdYFHQRulNmigjeYEPJ5d5iOLJkHFLBw/vu2FTm7vTtbgDoCfkyH3oRenrT
+	 W0yWlf44DZSRw==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Alex Henrie <alexhenrie24@gmail.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Sasha Levin <sashal@kernel.org>,
+	sudipm.mukherjee@gmail.com,
 	linux-usb@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 6.8 15/24] usb: dwc3: core: Access XHCI address
- space temporarily to read port info
-Message-ID: <ZmBR5I_TQ-219IEq@hovoldconsulting.com>
-References: <20240605115101.2962372-1-sashal@kernel.org>
- <20240605115101.2962372-15-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 2/7] usb: misc: uss720: check for incompatible versions of the Belkin F5U002
+Date: Wed,  5 Jun 2024 07:54:31 -0400
+Message-ID: <20240605115442.2964376-2-sashal@kernel.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240605115442.2964376-1-sashal@kernel.org>
+References: <20240605115442.2964376-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240605115101.2962372-15-sashal@kernel.org>
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 5.10.218
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jun 05, 2024 at 07:50:25AM -0400, Sasha Levin wrote:
-> From: Krishna Kurapati <quic_kriskura@quicinc.com>
-> 
-> [ Upstream commit 921e109c6200741499ad0136e41cca9d16431c92 ]
-> 
-> All DWC3 Multi Port controllers that exist today only support host mode.
-> Temporarily map XHCI address space for host-only controllers and parse
-> XHCI Extended Capabilities registers to read number of usb2 ports and
-> usb3 ports present on multiport controller. Each USB Port is at least HS
-> capable.
-> 
-> The port info for usb2 and usb3 phy are identified as num_usb2_ports
-> and num_usb3_ports and these are used as iterators for phy operations
-> and for modifying GUSB2PHYCFG/ GUSB3PIPECTL registers accordingly.
-> 
-> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-> Reviewed-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-> Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-> Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
-> Tested-by: Johan Hovold <johan+linaro@kernel.org>
-> Link: https://lore.kernel.org/r/20240420044901.884098-3-quic_kriskura@quicinc.com
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
+From: Alex Henrie <alexhenrie24@gmail.com>
 
-Same here. Not a fix. Please drop.
+[ Upstream commit 3295f1b866bfbcabd625511968e8a5c541f9ab32 ]
 
-Johan
+The incompatible device in my possession has a sticker that says
+"F5U002 Rev 2" and "P80453-B", and lsusb identifies it as
+"050d:0002 Belkin Components IEEE-1284 Controller". There is a bug
+report from 2007 from Michael Trausch who was seeing the exact same
+errors that I saw in 2024 trying to use this cable.
+
+Link: https://lore.kernel.org/all/46DE5830.9060401@trausch.us/
+Signed-off-by: Alex Henrie <alexhenrie24@gmail.com>
+Link: https://lore.kernel.org/r/20240326150723.99939-5-alexhenrie24@gmail.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/usb/misc/uss720.c | 20 +++++++++++++-------
+ 1 file changed, 13 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/usb/misc/uss720.c b/drivers/usb/misc/uss720.c
+index 0be8efcda15d5..d972c09629397 100644
+--- a/drivers/usb/misc/uss720.c
++++ b/drivers/usb/misc/uss720.c
+@@ -677,7 +677,7 @@ static int uss720_probe(struct usb_interface *intf,
+ 	struct parport_uss720_private *priv;
+ 	struct parport *pp;
+ 	unsigned char reg;
+-	int i;
++	int ret;
+ 
+ 	dev_dbg(&intf->dev, "probe: vendor id 0x%x, device id 0x%x\n",
+ 		le16_to_cpu(usbdev->descriptor.idVendor),
+@@ -688,8 +688,8 @@ static int uss720_probe(struct usb_interface *intf,
+ 		usb_put_dev(usbdev);
+ 		return -ENODEV;
+ 	}
+-	i = usb_set_interface(usbdev, intf->altsetting->desc.bInterfaceNumber, 2);
+-	dev_dbg(&intf->dev, "set interface result %d\n", i);
++	ret = usb_set_interface(usbdev, intf->altsetting->desc.bInterfaceNumber, 2);
++	dev_dbg(&intf->dev, "set interface result %d\n", ret);
+ 
+ 	interface = intf->cur_altsetting;
+ 
+@@ -725,12 +725,18 @@ static int uss720_probe(struct usb_interface *intf,
+ 	set_1284_register(pp, 7, 0x00, GFP_KERNEL);
+ 	set_1284_register(pp, 6, 0x30, GFP_KERNEL);  /* PS/2 mode */
+ 	set_1284_register(pp, 2, 0x0c, GFP_KERNEL);
+-	/* debugging */
+-	get_1284_register(pp, 0, &reg, GFP_KERNEL);
++
++	/* The Belkin F5U002 Rev 2 P80453-B USB parallel port adapter shares the
++	 * device ID 050d:0002 with some other device that works with this
++	 * driver, but it itself does not. Detect and handle the bad cable
++	 * here. */
++	ret = get_1284_register(pp, 0, &reg, GFP_KERNEL);
+ 	dev_dbg(&intf->dev, "reg: %7ph\n", priv->reg);
++	if (ret < 0)
++		return ret;
+ 
+-	i = usb_find_last_int_in_endpoint(interface, &epd);
+-	if (!i) {
++	ret = usb_find_last_int_in_endpoint(interface, &epd);
++	if (!ret) {
+ 		dev_dbg(&intf->dev, "epaddr %d interval %d\n",
+ 				epd->bEndpointAddress, epd->bInterval);
+ 	}
+-- 
+2.43.0
+
 
