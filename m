@@ -1,58 +1,64 @@
-Return-Path: <linux-usb+bounces-10867-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10868-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C5878FCADF
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 13:49:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E5078FCAEA
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 13:50:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C966C1F2401E
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 11:49:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B0C7B28BF36
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 11:50:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 258DD19007B;
-	Wed,  5 Jun 2024 11:49:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5160A194A45;
+	Wed,  5 Jun 2024 11:49:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pEs2GZSj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MeZ4UL0+"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87CAD27459;
-	Wed,  5 Jun 2024 11:49:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF8D4193078;
+	Wed,  5 Jun 2024 11:49:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717588169; cv=none; b=tyaWtF4vd3wOY6DMV2VTwfqtg9Q2Bpu0YhG0VCcQ+DqSG7oofWeGJAwlN9nsZje5OzZi4HWHXrdQvuPOmKRB2cOksibsSbr1umbNXisamZx3yWKb0I3wi3rd9yeBuO3G+onpotRjosIzwB1RnBtz4nxwXoEszvpOc2xGe2VdmpQ=
+	t=1717588175; cv=none; b=Vva7jWzs+NApAPKvQeW3Rz1M/y+UbqFjimbQv+3pL74RsYtB1Ty1lcZD7PxhTvMSy3o0Xe9GeyUDv/LrH0yXXIoNSRSMac8vB8hmG4ZebpJxZKgTh3fAsF5bLNjslIyglJ1uDUMAdxrROMCVNvW5xq8HENvT4zFW8LhTfffD/qw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717588169; c=relaxed/simple;
-	bh=JJbEb6Be+uGFHcPPviUGo9V6PlBpgcCgy8HtnK62XBI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=r1FdoSJgJKLgx+qSVyM8WKbxHyvZujmWAVudn/7eQaikWoBjp5tpK3D8N5v8Y+fRQLLI5W6efr+4R23gs5SHn2EUZJw+grMKxAmGxclmVHt0CIwYH9/NhX7tv3qVGfqWVtS2ZObx4vm15jm5fTfhgxKilXv42EBVv8twExKp/eM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pEs2GZSj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B860C3277B;
-	Wed,  5 Jun 2024 11:49:28 +0000 (UTC)
+	s=arc-20240116; t=1717588175; c=relaxed/simple;
+	bh=dfOEL015ORH+6IM7K8biVLVLo1OBKrxckpzA/YbrmQQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=EIUJYJg6ByaP40Qgc6NrCYztQj8ZWoeB3WSQEpCr5eMxHr2ulaE3wYIOVwKCKlWuBmz1GMsPeJXdoI4Be06xQCgNn7bQKyEU/3cn5PU0mXQs0mjOn6CjkoqY57Xo/ypkxCY4UEl6LaCQle1oEy2EvpyjQrOUI9d5XlCjB5qbjw4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MeZ4UL0+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F2B7C32781;
+	Wed,  5 Jun 2024 11:49:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717588169;
-	bh=JJbEb6Be+uGFHcPPviUGo9V6PlBpgcCgy8HtnK62XBI=;
-	h=From:To:Cc:Subject:Date:From;
-	b=pEs2GZSjhoI052k+119dcqpUX79fqtUZbcUG4n6w9FV2UUUKuNlAsLb/hSVy1s5f7
-	 y/zYf9LDXhBBdnlDr7uM6tKidngWplu810MKaiZfI3yfop34E7kP39r/8nnq/EYFMP
-	 nU5JsSIo1ElUB7R/Jpwhqi8jufL910rYRit3mv4l+ULMLFBAxBx6MRfY6jYeUy/hi8
-	 1jHr8mtKWL4VRXzuwbU9uzWLG4xpoQdFFVjD7lycMjKIAascSwkai4HvOqWMjfsfoT
-	 JqfR2eaGYfjW+PwnhzpRbhogTIHNkS2WvBWOl8vk4tO1gWjQD6ZTFjYDFE0oJAGULA
-	 PktPuU2rrCZvQ==
+	s=k20201202; t=1717588175;
+	bh=dfOEL015ORH+6IM7K8biVLVLo1OBKrxckpzA/YbrmQQ=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=MeZ4UL0+pv31wDBY2zRXDV9fnzYtOaqnmFZC4FLIbHDhY8Z1q9R1ZF3s4R5RHG79s
+	 7hosjCDCReBpDNWJ/biWE2acstMfIbD1QhxMyXa+tuwKKorSsvuO/bZvzL5jOzaeIa
+	 mJrog/9uQT1daJbRqM47+obJP2idFsOK7A5hC++hkX4Bai9E33kzfchjQ4T2sqkEvq
+	 RtDZSu35mSywu+ELrfdjkj+1x7pIqEmBjyTLuRv/PKdV9YOQu/QpBTNz7Ybs1NfCPp
+	 JOjtqsFsV4Ung+JsV8jzimSYagGZcyupwLMb/dqK6EUPLRTrbdmoXJXfGB1ufcjDtA
+	 cEC/pYh9SKzeQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Michael Grzeschik <m.grzeschik@pengutronix.de>,
+Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Sasha Levin <sashal@kernel.org>,
-	laurent.pinchart@ideasonboard.com,
-	dan.scally@ideasonboard.com,
+	neil.armstrong@linaro.org,
+	quic_kriskura@quicinc.com,
+	luca.weiss@fairphone.com,
+	robh@kernel.org,
 	linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.9 01/28] usb: gadget: uvc: configfs: ensure guid to be valid before set
-Date: Wed,  5 Jun 2024 07:48:30 -0400
-Message-ID: <20240605114927.2961639-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.9 04/28] usb: typec: ucsi_glink: rework quirks implementation
+Date: Wed,  5 Jun 2024 07:48:33 -0400
+Message-ID: <20240605114927.2961639-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240605114927.2961639-1-sashal@kernel.org>
+References: <20240605114927.2961639-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -64,61 +70,55 @@ X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.9.3
 Content-Transfer-Encoding: 8bit
 
-From: Michael Grzeschik <m.grzeschik@pengutronix.de>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-[ Upstream commit f7a7f80ccc8df017507e2b1e1dd652361374d25b ]
+[ Upstream commit 3f81cf54c1889eeecbb8d9188f5f2f597622170e ]
 
-When setting the guid via configfs it is possible to test if
-its value is one of the kernel supported ones by calling
-uvc_format_by_guid on it. If the result is NULL, we know the
-guid is unsupported and can be ignored.
+In preparation to adding more quirks, extract quirks to the static
+variables and reference them through match->data. Otherwise adding
+more quirks will add the table really cumbersome.
 
-Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
-Link: https://lore.kernel.org/r/20240221-uvc-gadget-configfs-guid-v1-1-f0678ca62ebb@pengutronix.de
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Link: https://lore.kernel.org/r/20240329-qcom-ucsi-fixes-v2-8-0f5d37ed04db@linaro.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/gadget/function/uvc_configfs.c | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
+ drivers/usb/typec/ucsi/ucsi_glink.c | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/usb/gadget/function/uvc_configfs.c b/drivers/usb/gadget/function/uvc_configfs.c
-index a4377df612f51..6fac696ea8463 100644
---- a/drivers/usb/gadget/function/uvc_configfs.c
-+++ b/drivers/usb/gadget/function/uvc_configfs.c
-@@ -13,6 +13,7 @@
- #include "uvc_configfs.h"
+diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c b/drivers/usb/typec/ucsi/ucsi_glink.c
+index ce08eb33e5bec..0e6f837f6c31b 100644
+--- a/drivers/usb/typec/ucsi/ucsi_glink.c
++++ b/drivers/usb/typec/ucsi/ucsi_glink.c
+@@ -311,12 +311,14 @@ static void pmic_glink_ucsi_destroy(void *data)
+ 	mutex_unlock(&ucsi->lock);
+ }
  
- #include <linux/sort.h>
-+#include <linux/usb/uvc.h>
- #include <linux/usb/video.h>
- 
- /* -----------------------------------------------------------------------------
-@@ -2260,6 +2261,8 @@ static ssize_t uvcg_uncompressed_guid_format_store(struct config_item *item,
- 	struct f_uvc_opts *opts;
- 	struct config_item *opts_item;
- 	struct mutex *su_mutex = &ch->fmt.group.cg_subsys->su_mutex;
-+	const struct uvc_format_desc *format;
-+	u8 tmpguidFormat[sizeof(ch->desc.guidFormat)];
- 	int ret;
- 
- 	mutex_lock(su_mutex); /* for navigating configfs hierarchy */
-@@ -2273,7 +2276,16 @@ static ssize_t uvcg_uncompressed_guid_format_store(struct config_item *item,
- 		goto end;
- 	}
- 
--	memcpy(ch->desc.guidFormat, page,
-+	memcpy(tmpguidFormat, page,
-+	       min(sizeof(tmpguidFormat), len));
++static unsigned long quirk_sc8180x = UCSI_NO_PARTNER_PDOS;
 +
-+	format = uvc_format_by_guid(tmpguidFormat);
-+	if (!format) {
-+		ret = -EINVAL;
-+		goto end;
-+	}
-+
-+	memcpy(ch->desc.guidFormat, tmpguidFormat,
- 	       min(sizeof(ch->desc.guidFormat), len));
- 	ret = sizeof(ch->desc.guidFormat);
+ static const struct of_device_id pmic_glink_ucsi_of_quirks[] = {
+-	{ .compatible = "qcom,qcm6490-pmic-glink", .data = (void *)UCSI_NO_PARTNER_PDOS, },
+-	{ .compatible = "qcom,sc8180x-pmic-glink", .data = (void *)UCSI_NO_PARTNER_PDOS, },
+-	{ .compatible = "qcom,sc8280xp-pmic-glink", .data = (void *)UCSI_NO_PARTNER_PDOS, },
+-	{ .compatible = "qcom,sm8350-pmic-glink", .data = (void *)UCSI_NO_PARTNER_PDOS, },
+-	{ .compatible = "qcom,sm8550-pmic-glink", .data = (void *)UCSI_NO_PARTNER_PDOS, },
++	{ .compatible = "qcom,qcm6490-pmic-glink", .data = &quirk_sc8180x, },
++	{ .compatible = "qcom,sc8180x-pmic-glink", .data = &quirk_sc8180x, },
++	{ .compatible = "qcom,sc8280xp-pmic-glink", .data = &quirk_sc8180x, },
++	{ .compatible = "qcom,sm8350-pmic-glink", .data = &quirk_sc8180x, },
++	{ .compatible = "qcom,sm8550-pmic-glink", .data = &quirk_sc8180x, },
+ 	{}
+ };
+ 
+@@ -354,7 +356,7 @@ static int pmic_glink_ucsi_probe(struct auxiliary_device *adev,
+ 
+ 	match = of_match_device(pmic_glink_ucsi_of_quirks, dev->parent);
+ 	if (match)
+-		ucsi->ucsi->quirks = (unsigned long)match->data;
++		ucsi->ucsi->quirks = *(unsigned long *)match->data;
+ 
+ 	ucsi_set_drvdata(ucsi->ucsi, ucsi);
  
 -- 
 2.43.0
