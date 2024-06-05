@@ -1,149 +1,142 @@
-Return-Path: <linux-usb+bounces-10911-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10912-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 179C78FD39E
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 19:11:32 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ACA498FD43F
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 19:44:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A1D601F26529
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 17:11:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 41F0A2857F6
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 17:44:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF3E818FDAF;
-	Wed,  5 Jun 2024 17:11:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 646BB13A88A;
+	Wed,  5 Jun 2024 17:44:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="uS7stvm2"
+	dkim=pass (1024-bit key) header.d=inbox.lv header.i=@inbox.lv header.b="b3c32LE+"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mout.web.de (mout.web.de [212.227.15.14])
+Received: from shark1.inbox.lv (shark1.inbox.lv [194.152.32.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C20B2575A;
-	Wed,  5 Jun 2024 17:11:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95F9D621
+	for <linux-usb@vger.kernel.org>; Wed,  5 Jun 2024 17:44:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.152.32.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717607483; cv=none; b=P/PEcjj4DG2NNAyx7CjbhNcCUQ2Svv5xpuBVedxUWp9OLVDAmLkp/2P7nzEqNf0dFFOScnkTUMq22xM8QU1P32qMp/t/5zD8vyqE7wFyCsCva2UJe4lnt3xt2dMb48Ndo7xHWyuCdGOo6CT0O6OU2abYR9KNF02GQyI/Z9Sm1o4=
+	t=1717609453; cv=none; b=Za5se9n8LrRFKXtJZiFGoAa3PgHGTkbfqHkFzNF1EfeJc/4ahS4goehLOHM4liafF4hEXuFaU32zBxxX47tmP2FXRvY0O5ekQXb4xroORPTK/N+hWQ035Zdv5y3G63LryWUyJMDcWIyajVg9jnVyjTRvGNi2mWecdi3a2DJ+w6Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717607483; c=relaxed/simple;
-	bh=fmb5TpMfeMLyPeR/4CXjm6GWO6a9KEDsuXW2IhRHv/s=;
-	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=Dqw1MEHDBKmZS/V7TonOi4fZoPSbLEpvepeKtxrF322CaarC3qyk+/AxHe0iFxTVgWtN9bRvSCY57moDBb1/Ls2m5V2260yl5FUuv6N6ZyhFqoVXUc0n73w7ik5YOnj9wCb3ncKyEe97DIySZUwIJ4u3TSLOBxFtNTy+wlrAuoI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=uS7stvm2; arc=none smtp.client-ip=212.227.15.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1717607469; x=1718212269; i=markus.elfring@web.de;
-	bh=ygcT8PMT3gQgm193jaLXcPwMadyNYL0mF6kGlGdUQMU=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:From:
-	 Subject:Content-Type:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=uS7stvm2zenctSskNf/nSuo80BiljGcr0jknaymv/2Ln6SxNZSOei4hlYreGGCSe
-	 5BHbGKk+BmRt/DmTA5SSVQPBcdylOKCvbZojBXuXN/lEwqoqrSRwWbatoxq+SgtSk
-	 0bFDnOBqK8jqp5qRhObp8lxRFbsAJb+kJdnaGBh+gpaFcESr9LOSii43s/A4CphGF
-	 JjusQqskUifhdgxQG9J7aDx3xYFQQtQLtca0A7rdUfJHTueeFYbmEg4BX8hSY2w7Y
-	 JVS5mhZLvHa0UQZANVH5QO7Gqpzru/7Bxaf2Z7rtUh7bm+6hcnBeJZ5hgqcgnb168
-	 9ylqB/kzooKgVUV24A==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.21] ([94.31.83.95]) by smtp.web.de (mrweb006
- [213.165.67.108]) with ESMTPSA (Nemesis) id 1MOlwp-1s5sAN3mBD-00VtoQ; Wed, 05
- Jun 2024 19:11:08 +0200
-Message-ID: <889729ac-3fc5-4666-b9f5-ce6e588a341a@web.de>
-Date: Wed, 5 Jun 2024 19:11:04 +0200
+	s=arc-20240116; t=1717609453; c=relaxed/simple;
+	bh=GJn/xA6s1+S1gr4PC0gOF49LsFKmnQcWpi3zDjUFMiw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=fgDDvxs2aMpNBokOTw8c8TVC+xlyP5cqk25Ekwn4U3PE72L9sY9WbgDPwXH/skJZAHX1UVU/bovXrAqSdc3luhxMfK31KaIqWW9vJRClzIT0Bt8oTGdP8hSqJVYbHdUXdUl9BQ91BS/XYS/PGgs+e58rgsoJG+AamrbwpBegAws=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=inbox.lv; spf=pass smtp.mailfrom=inbox.lv; dkim=pass (1024-bit key) header.d=inbox.lv header.i=@inbox.lv header.b=b3c32LE+; arc=none smtp.client-ip=194.152.32.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=inbox.lv
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=inbox.lv
+Received: from shark1.inbox.lv (localhost [127.0.0.1])
+	by shark1-out.inbox.lv (Postfix) with ESMTP id 4VvZZx2Jthz2d6LK;
+	Wed,  5 Jun 2024 20:44:09 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=inbox.lv;
+	s=p20220324; t=1717609449; x=1717611249;
+	bh=GJn/xA6s1+S1gr4PC0gOF49LsFKmnQcWpi3zDjUFMiw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:X-ESPOL:
+	 From:Date:To:Cc:Message-ID:Subject:Reply-To;
+	b=b3c32LE+eCdkW2TvEzLgygjcyLDf41ibQZWSiEMcv6sVwrQILXSHqCBbG6H6Qf29j
+	 BZZnH+q11zua1hd1M0m9guRMRjEccj/Tc0+K9/j90Wh6kQsD9YlEM7wZCdHKVgQ1w5
+	 qt+bU4Hg7Y+adlLEedwG+RbOszCV6G7GW5dfZF/4=
+Received: from mail.inbox.lv (pop1 [127.0.0.1])
+	by shark1-in.inbox.lv (Postfix) with ESMTP id 4VvZZx1mNYz2d6L9;
+	Wed,  5 Jun 2024 20:44:09 +0300 (EEST)
+From: Dmitry <d.smirnov@inbox.lv>
+To: linux-usb@vger.kernel.org
+Cc: Dmitry <d.smirnov@inbox.lv>
+Subject: [PATCH] usb: serial: Fix mos7840 hangup when resuming from standby
+Date: Wed,  5 Jun 2024 20:44:01 +0300
+Message-ID: <20240605174401.3193-1-d.smirnov@inbox.lv>
+X-Mailer: git-send-email 2.45.1
+In-Reply-To: <20240604225507.6801-1-d.smirnov@inbox.lv>
+References: <20240604225507.6801-1-d.smirnov@inbox.lv>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Xin Ji <xji@analogixsemi.com>
-Content-Language: en-GB
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Jonathan Cameron <Jonathan.Cameron@huawei.com>
-From: Markus Elfring <Markus.Elfring@web.de>
-Subject: [PATCH] usb: typec: anx7411: Use scope-based resource management in
- anx7411_typec_port_probe()
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:T5g7jB/ZHufzy80Ddm6DM8BWwJfKECH30n7VQH9LEIbgO1a+9Tr
- 2jkjdU8SzUVXwO6xroramWor7k3LXHc+gog999peacSlldUOaF2xHkl1nY8VHVGVFx2tJNd
- e0E+Ij/zEI+gITRNmYExT6MJuifTNQKtELlB5EWOjNdcdxC8OIgd2pPAcfyjFsx5wuij//6
- ySqmeiSSW+zPQx08h1tbg==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:iMcl/J7hc1E=;KWaKLrWhYWU96yjLsw2JIoSnNfO
- lUO85AdEGvxW6nL1/mVZZh6McWue/ZbmTiwZNpUmD8NOD/4QcfsGmTvAWvfbKDkUKXmPMNXDe
- 0n5gsA8V3uEu8ch+IJ4aaL2eRyn9EksK51B+MShKBsixs4FcTQEhqXTc9K/um+ac7oZaIDF1+
- rJ70yFqU/r74WRG7ju15W3fMC6TISvt0dFpeGGbr2liL/Vyj7AE5FD/tyoA8SaYAX2osgS3lW
- vBQQ2SyyN4DHlNHLvQ9ZLb/JHn8g8pncJJGCmuu34lr4n/rVXdpaR0kR6w8+zRNv5zkfalWMj
- h/iGjYTh9yE4G/x22lTpsqIZolyX/F2DeWppoSisn+L0TXichTMxKqrf4ZO80xGllvqxusSmY
- NtNXNo+jR/XpUK9V8nrWB6gJOQcmEiPe7Ytkbno7wx3XMmk0nkdcrjXtT/CtrOYJImrJ2hPIF
- 9EtKPhUcfohStxUgBvA0vdUdPD6+3qlGIlqWgKdbuBGiJOKsWX4QRSiX3xe9G2YlDPFhKO+iq
- pyDUbEB4JPYuo4ZlKsf0oAR6dOS1nllICKOy0SSi+EfbfT4D8BuoDy74chTdc43eUEiYwLhmP
- +EPII9woYDIve+IF35ud0tyLcjGu2IC8ZON7eZdu+Di4FVNyY31xONcwAiDonqs+44GtYGao2
- bcCAVw8UhUa27hW6fcw6m2kTqvRyrmI9wXOp3NnOwW/HYLoYYqMvEv5r+nLtMGJUWPh5FdAUq
- dKMUQxXkZGHLongA15N7CSl98720PyXCrNkUoqV8AKo4QA99TN3yWpwjzRbBjMgc6tPB4nNvD
- 3+GmnrXgunTrKTLU/P8Yc8GYt57rMAlTwyx2XQpO0B9ng=
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: OK
+X-ESPOL: EZeEAiZdmGUky828N/0M6uvn2N+6SFshtTn7yqFDmn8l0K+jx9N0cWyUGILnHwa7bg==
 
-From: Markus Elfring <elfring@users.sourceforge.net>
-Date: Wed, 5 Jun 2024 18:56:19 +0200
+---
+ drivers/usb/serial/mos7840.c | 50 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 50 insertions(+)
 
-Scope-based resource management became supported also for another
-programming interface by contributions of Jonathan Cameron on 2024-02-17.
-See also the commit 59ed5e2d505bf5f9b4af64d0021cd0c96aec1f7c ("device
-property: Add cleanup.h based fwnode_handle_put() scope based cleanup.").
-
-* Thus use the attribute =E2=80=9C__free(fwnode_handle)=E2=80=9D.
-
-* Reduce the scope for the local variable =E2=80=9Cfwnode=E2=80=9D.
-
-Fixes: fe6d8a9c8e64 ("usb: typec: anx7411: Add Analogix PD ANX7411 support=
-")
-Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
-=2D--
- drivers/usb/typec/anx7411.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/usb/typec/anx7411.c b/drivers/usb/typec/anx7411.c
-index b12a07edc71b..9fb52f233a30 100644
-=2D-- a/drivers/usb/typec/anx7411.c
-+++ b/drivers/usb/typec/anx7411.c
-@@ -16,6 +16,7 @@
- #include <linux/of_graph.h>
- #include <linux/of_platform.h>
- #include <linux/pm_runtime.h>
-+#include <linux/property.h>
- #include <linux/regulator/consumer.h>
- #include <linux/slab.h>
- #include <linux/types.h>
-@@ -1142,11 +1143,11 @@ static int anx7411_typec_port_probe(struct anx7411=
-_data *ctx,
- {
- 	struct typec_capability *cap =3D &ctx->typec.caps;
- 	struct typec_params *typecp =3D &ctx->typec;
--	struct fwnode_handle *fwnode;
- 	const char *buf;
- 	int ret, i;
-
--	fwnode =3D device_get_named_child_node(dev, "connector");
-+	struct fwnode_handle *fwnode __free(fwnode_handle)
-+				     =3D device_get_named_child_node(dev, "connector");
- 	if (!fwnode)
- 		return -EINVAL;
-
-@@ -1237,7 +1238,7 @@ static int anx7411_typec_port_probe(struct anx7411_d=
-ata *ctx,
- 		typecp->caps_flags |=3D HAS_SINK_WATT;
- 	}
-
--	cap->fwnode =3D fwnode;
-+	cap->fwnode =3D no_free_ptr(fwnode);
-
- 	ctx->typec.role_sw =3D usb_role_switch_get(dev);
- 	if (IS_ERR(ctx->typec.role_sw)) {
-=2D-
+diff --git a/drivers/usb/serial/mos7840.c b/drivers/usb/serial/mos7840.c
+index 8b0308d84270..30c5b09a4409 100644
+--- a/drivers/usb/serial/mos7840.c
++++ b/drivers/usb/serial/mos7840.c
+@@ -1737,6 +1737,54 @@ static void mos7840_port_remove(struct usb_serial_port *port)
+ 	kfree(mos7840_port);
+ }
+ 
++static int mos7840_suspend(struct usb_serial *serial, pm_message_t message)
++{
++	struct moschip_port *mos7840_port;
++	struct usb_serial_port *port;
++	int i;
++	dev_dbg(&serial->interface->dev, "mos7840_suspend\n");
++
++	for (i = 0; i < serial->num_ports; ++i) {
++		port = serial->port[i];
++		if (!tty_port_initialized(&port->port))
++			continue;
++
++		mos7840_port = usb_get_serial_port_data(port);
++
++		usb_kill_urb(mos7840_port->read_urb);
++		mos7840_port->read_urb_busy = false;
++	}
++	return 0;
++}
++
++static int mos7840_resume(struct usb_serial *serial)
++{
++	struct moschip_port *mos7840_port;
++	struct usb_serial_port *port;
++	int res;
++	int i;
++	dev_dbg(&serial->interface->dev, "mos7840_resume\n");
++
++	for (i = 0; i < serial->num_ports; ++i) {
++		port = serial->port[i];
++		if (!tty_port_initialized(&port->port))
++			continue;
++
++		mos7840_port = usb_get_serial_port_data(port);
++
++		if (port->bulk_in_size) {
++			res = usb_submit_urb(mos7840_port->read_urb, GFP_NOIO);
++
++			if (res) {
++				usb_kill_urb(mos7840_port->read_urb);
++				mos7840_port->read_urb_busy = false;
++			}
++		}
++	}
++
++	return 0;
++}
++
+ static struct usb_serial_driver moschip7840_4port_device = {
+ 	.driver = {
+ 		   .owner = THIS_MODULE,
+@@ -1764,6 +1812,8 @@ static struct usb_serial_driver moschip7840_4port_device = {
+ 	.port_probe = mos7840_port_probe,
+ 	.port_remove = mos7840_port_remove,
+ 	.read_bulk_callback = mos7840_bulk_in_callback,
++	.suspend = mos7840_suspend,
++	.resume = mos7840_resume,
+ };
+ 
+ static struct usb_serial_driver * const serial_drivers[] = {
+-- 
 2.45.1
 
 
