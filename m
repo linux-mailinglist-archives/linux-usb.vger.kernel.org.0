@@ -1,58 +1,61 @@
-Return-Path: <linux-usb+bounces-10874-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10875-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39F9B8FCB23
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 13:54:25 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1DA9C8FCB44
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 13:56:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8487BB24713
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 11:54:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 24C741C21A9F
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 11:56:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EEF0197508;
-	Wed,  5 Jun 2024 11:50:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20B5B19AD92;
+	Wed,  5 Jun 2024 11:50:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g4nIStZw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="srSLjOHJ"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBB4E1974EE;
-	Wed,  5 Jun 2024 11:50:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8865919885B;
+	Wed,  5 Jun 2024 11:50:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717588211; cv=none; b=o9HRPtQk+fhN4KDd5hyazFRsSFR/jWG4B3GI15UY3vrJGu37FILRMUbuwvoMTM16xnZ4czrjJZbGwdamU0qODL5Xbdh5FZ19mPUezWhxdHbmNM5UqebA4YTFzBKUv+OT2+n4bl3WKf/q2z75+P5ImR5r3UVteWmhIyXikuGwk7w=
+	t=1717588226; cv=none; b=OWLvvORgEX5eYV+fmZZG8IpwfzxVVwtqofGDuBKQwFYR0E6OGPcXknNMRd2+zpx7tOzpXGtCtvXGDp6ve7/UgLcPk1ZP30t00MO7J+dizY+uq5mk8D41uUbSRxkpjJ2ErvlZFhab+1wWtrit/y8rhiqSDOUpsuA3YJaNc2arvrk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717588211; c=relaxed/simple;
-	bh=A5zpdyyeSFrZwf+rhOiMQ3bJtXoyJuww8Kp6CsWnv1U=;
+	s=arc-20240116; t=1717588226; c=relaxed/simple;
+	bh=k9wMZie2g8zido3r8l4XxgOwAvQm8nitQZP1EAGITQo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Dt7KxxCf0FcJrDcyfOQiWHQVqER1p9ITQnP7izkvEx/y/iFyNEDJC2INVvXrB8/vqppj3wYc4KkM7CfxkXOQ3k94jjtZ7LYEVfuqjoGCLIbWVGTGSKj4dY785kjT8sE4ESFHWe+zN+5ppSeZfOhfOuRSsxh24B9ogkmSlBr8xv0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g4nIStZw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88821C32781;
-	Wed,  5 Jun 2024 11:50:09 +0000 (UTC)
+	 MIME-Version; b=MrUImC5OpCr8CX9WRbOoj/IhAwRdXjx/sMvIBqVK471xZzmi+U3/vYPjvcOiAJPpecz4obEmPNCix5vmmEQ9dTH5iTgpsmASemjWwFM+ab46ZBVtdHAF+0ZvQ88cjMCtLlIkRKTWfPsOqN5nIpWuL/1F8+TNFLXsFoHZIxZdsH0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=srSLjOHJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6686C32781;
+	Wed,  5 Jun 2024 11:50:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717588210;
-	bh=A5zpdyyeSFrZwf+rhOiMQ3bJtXoyJuww8Kp6CsWnv1U=;
+	s=k20201202; t=1717588226;
+	bh=k9wMZie2g8zido3r8l4XxgOwAvQm8nitQZP1EAGITQo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=g4nIStZw80/RuJUG/lqdDnq8FgKirwIIzqTuSdRs6RdaKAdGgzadwO7VZMvDMSlqG
-	 CoKqIzFhQ8IELzvYpPxzKjEWt6T/6xftQJfex4AsaykJNGdadg5Yh9xSg6bqkHLkeF
-	 v+gHmVtjaypL0Z2gBrZEFM7VosP9sQmGkQF59CjSdkZXX+esg1WW2/NCcWUmTwIj68
-	 /wwYzLUH2MBSLpSkOJJlFAeGU2uFnlwkskL4i7evTK/8nd2ObVQN4p5j8m0X8oAXOL
-	 f49p6H3jZpGEwJqd/xC8KF/IHN2hkrf3kpaxO5ry+fekI1bZ5pPdwhIMnqw/7Iea4L
-	 txfP8mPp2ZJ7A==
+	b=srSLjOHJPV5k+Ehbe7IXYhch/SaoMiisFIobMaX3hHfYkqH8syKfSI390h2AeFDVV
+	 2Lvb+4sqSgaLC4vGoSWUHvPy7A4cperkpQtbTJCBRsRYh6vwuqg6+3Za24tCewtH6l
+	 aj01P70pxm25gAqCiuzKxt48wB1VhDk8lx2Dis9UsX/PeBxMWSTqMUGz5AxxJ2naZz
+	 09Gf+U3pFrduu/Lp55vUXz1D+rehjevzHgrf3V9lfJ4giA+C9LW8kMImmxFuschxyq
+	 XLpvkoHFKT7WXHZzEAFdV35kYsx8vH0mE+OoKPoP9QK9aY6mHETLQyZbHmlb3pfqfW
+	 ZO7geDPqlin/Q==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Mathias Nyman <mathias.nyman@linux.intel.com>,
-	Niklas Neronin <niklas.neronin@linux.intel.com>,
+Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Caleb Connolly <caleb.connolly@linaro.org>,
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Johan Hovold <johan+linaro@kernel.org>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Sasha Levin <sashal@kernel.org>,
-	mathias.nyman@intel.com,
+	linux-arm-msm@vger.kernel.org,
 	linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.9 18/28] xhci: remove XHCI_TRUST_TX_LENGTH quirk
-Date: Wed,  5 Jun 2024 07:48:47 -0400
-Message-ID: <20240605114927.2961639-18-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.9 24/28] usb: typec: qcom-pmic-typec: split HPD bridge alloc and registration
+Date: Wed,  5 Jun 2024 07:48:53 -0400
+Message-ID: <20240605114927.2961639-24-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240605114927.2961639-1-sashal@kernel.org>
 References: <20240605114927.2961639-1-sashal@kernel.org>
@@ -67,184 +70,78 @@ X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.9.3
 Content-Transfer-Encoding: 8bit
 
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-[ Upstream commit 34b67198244f2d7d8409fa4eb76204c409c0c97e ]
+[ Upstream commit 718b36a7b49acbba36546371db2d235271ceb06c ]
 
-If this quirk was set then driver would treat transfer events with
-'Success' completion code as 'Short packet' if there were untransferred
-bytes left.
+If a probe function returns -EPROBE_DEFER after creating another device
+there is a change of ending up in a probe deferral loop, (see commit
+fbc35b45f9f6 ("Add documentation on meaning of -EPROBE_DEFER"). In case
+of the qcom-pmic-typec driver the tcpm_register_port() function looks up
+external resources (USB role switch and inherently via called
+typec_register_port() USB-C muxes, switches and retimers).
 
-This is so common that turn it into default behavior.
+In order to prevent such probe-defer loops caused by qcom-pmic-typec
+driver, use the API added by Johan Hovold and move HPD bridge
+registration to the end of the probe function.
 
-xhci_warn_ratelimited() is no longer used after this, so remove it.
+The devm_drm_dp_hpd_bridge_add() is called at the end of the probe
+function after all TCPM start functions. This is done as a way to
+overcome a different problem, the DRM subsystem can not properly cope
+with the DRM bridges being destroyed once the bridge is attached. Having
+this function call at the end of the probe function prevents possible
+DRM bridge device creation followed by destruction in case one of the
+TCPM start functions returns an error.
 
-A success event with untransferred bytes left doesn't always mean a
-misbehaving controller. If there was an error mid a multi-TRB TD it's
-allowed to issue a success event for the last TRB in that TD.
-
-See xhci 1.2 spec 4.9.1 Transfer Descriptors
-
-"Note: If an error is detected while processing a multi-TRB TD, the xHC
- shall generate a Transfer Event for the TRB that the error was detected
- on with the appropriate error Condition Code, then may advance to the
- next TD. If in the process of advancing to the next TD, a Transfer TRB
- is encountered with its IOC flag set, then the Condition Code of the
- Transfer Event generated for that Transfer TRB should be Success,
- because there was no error actually associated with the TRB that
- generated the Event. However, an xHC implementation may redundantly
- assert the original error Condition Code."
-
-Co-developed-by: Niklas Neronin <niklas.neronin@linux.intel.com>
-Signed-off-by: Niklas Neronin <niklas.neronin@linux.intel.com>
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-Link: https://lore.kernel.org/r/20240429140245.3955523-10-mathias.nyman@linux.intel.com
+Reported-by: Caleb Connolly <caleb.connolly@linaro.org>
+Acked-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
+Link: https://lore.kernel.org/r/20240424-qc-pmic-typec-hpd-split-v4-1-f7e10d147443@linaro.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/host/xhci-pci.c  | 15 ++-------------
- drivers/usb/host/xhci-rcar.c |  6 ++----
- drivers/usb/host/xhci-ring.c | 15 +++++----------
- drivers/usb/host/xhci.h      |  4 +---
- 4 files changed, 10 insertions(+), 30 deletions(-)
+ drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index 93b6976480188..653b47c45591d 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -270,17 +270,12 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
- 				"QUIRK: Fresco Logic revision %u "
- 				"has broken MSI implementation",
- 				pdev->revision);
--		xhci->quirks |= XHCI_TRUST_TX_LENGTH;
- 	}
+diff --git a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c
+index d3958c061a972..501eddb294e43 100644
+--- a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c
++++ b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c
+@@ -41,7 +41,7 @@ static int qcom_pmic_typec_probe(struct platform_device *pdev)
+ 	struct device_node *np = dev->of_node;
+ 	const struct pmic_typec_resources *res;
+ 	struct regmap *regmap;
+-	struct device *bridge_dev;
++	struct auxiliary_device *bridge_dev;
+ 	u32 base;
+ 	int ret;
  
- 	if (pdev->vendor == PCI_VENDOR_ID_FRESCO_LOGIC &&
- 			pdev->device == PCI_DEVICE_ID_FRESCO_LOGIC_FL1009)
- 		xhci->quirks |= XHCI_BROKEN_STREAMS;
+@@ -92,7 +92,7 @@ static int qcom_pmic_typec_probe(struct platform_device *pdev)
+ 	if (!tcpm->tcpc.fwnode)
+ 		return -EINVAL;
  
--	if (pdev->vendor == PCI_VENDOR_ID_FRESCO_LOGIC &&
--			pdev->device == PCI_DEVICE_ID_FRESCO_LOGIC_FL1100)
--		xhci->quirks |= XHCI_TRUST_TX_LENGTH;
--
- 	if (pdev->vendor == PCI_VENDOR_ID_NEC)
- 		xhci->quirks |= XHCI_NEC_HOST;
+-	bridge_dev = drm_dp_hpd_bridge_register(tcpm->dev, to_of_node(tcpm->tcpc.fwnode));
++	bridge_dev = devm_drm_dp_hpd_bridge_alloc(tcpm->dev, to_of_node(tcpm->tcpc.fwnode));
+ 	if (IS_ERR(bridge_dev))
+ 		return PTR_ERR(bridge_dev);
  
-@@ -307,11 +302,8 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
- 		xhci->quirks |= XHCI_RESET_ON_RESUME;
- 	}
+@@ -110,8 +110,14 @@ static int qcom_pmic_typec_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		goto port_stop;
  
--	if (pdev->vendor == PCI_VENDOR_ID_AMD) {
--		xhci->quirks |= XHCI_TRUST_TX_LENGTH;
--		if (pdev->device == 0x43f7)
--			xhci->quirks |= XHCI_DEFAULT_PM_RUNTIME_ALLOW;
--	}
-+	if (pdev->vendor == PCI_VENDOR_ID_AMD && pdev->device == 0x43f7)
-+		xhci->quirks |= XHCI_DEFAULT_PM_RUNTIME_ALLOW;
++	ret = devm_drm_dp_hpd_bridge_add(tcpm->dev, bridge_dev);
++	if (ret)
++		goto pdphy_stop;
++
+ 	return 0;
  
- 	if ((pdev->vendor == PCI_VENDOR_ID_AMD) &&
- 		((pdev->device == PCI_DEVICE_ID_AMD_PROMONTORYA_4) ||
-@@ -399,12 +391,10 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
- 	if (pdev->vendor == PCI_VENDOR_ID_ETRON &&
- 			pdev->device == PCI_DEVICE_ID_EJ168) {
- 		xhci->quirks |= XHCI_RESET_ON_RESUME;
--		xhci->quirks |= XHCI_TRUST_TX_LENGTH;
- 		xhci->quirks |= XHCI_BROKEN_STREAMS;
- 	}
- 	if (pdev->vendor == PCI_VENDOR_ID_RENESAS &&
- 	    pdev->device == 0x0014) {
--		xhci->quirks |= XHCI_TRUST_TX_LENGTH;
- 		xhci->quirks |= XHCI_ZERO_64B_REGS;
- 	}
- 	if (pdev->vendor == PCI_VENDOR_ID_RENESAS &&
-@@ -434,7 +424,6 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
- 	}
- 	if (pdev->vendor == PCI_VENDOR_ID_ASMEDIA &&
- 		pdev->device == PCI_DEVICE_ID_ASMEDIA_1042A_XHCI) {
--		xhci->quirks |= XHCI_TRUST_TX_LENGTH;
- 		xhci->quirks |= XHCI_NO_64BIT_SUPPORT;
- 	}
- 	if (pdev->vendor == PCI_VENDOR_ID_ASMEDIA &&
-diff --git a/drivers/usb/host/xhci-rcar.c b/drivers/usb/host/xhci-rcar.c
-index ab9c5969e4624..8b357647728c2 100644
---- a/drivers/usb/host/xhci-rcar.c
-+++ b/drivers/usb/host/xhci-rcar.c
-@@ -214,8 +214,7 @@ static int xhci_rcar_resume_quirk(struct usb_hcd *hcd)
-  */
- #define SET_XHCI_PLAT_PRIV_FOR_RCAR(firmware)				\
- 	.firmware_name = firmware,					\
--	.quirks = XHCI_NO_64BIT_SUPPORT | XHCI_TRUST_TX_LENGTH |	\
--		  XHCI_SLOW_SUSPEND,					\
-+	.quirks = XHCI_NO_64BIT_SUPPORT |  XHCI_SLOW_SUSPEND,		\
- 	.init_quirk = xhci_rcar_init_quirk,				\
- 	.plat_start = xhci_rcar_start,					\
- 	.resume_quirk = xhci_rcar_resume_quirk,
-@@ -229,8 +228,7 @@ static const struct xhci_plat_priv xhci_plat_renesas_rcar_gen3 = {
- };
- 
- static const struct xhci_plat_priv xhci_plat_renesas_rzv2m = {
--	.quirks = XHCI_NO_64BIT_SUPPORT | XHCI_TRUST_TX_LENGTH |
--		  XHCI_SLOW_SUSPEND,
-+	.quirks = XHCI_NO_64BIT_SUPPORT | XHCI_SLOW_SUSPEND,
- 	.init_quirk = xhci_rzv2m_init_quirk,
- 	.plat_start = xhci_rzv2m_start,
- };
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 575f0fd9c9f11..e9ba5bc321bd1 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -2399,8 +2399,7 @@ static int process_isoc_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
- 			break;
- 		if (remaining) {
- 			frame->status = short_framestatus;
--			if (xhci->quirks & XHCI_TRUST_TX_LENGTH)
--				sum_trbs_for_length = true;
-+			sum_trbs_for_length = true;
- 			break;
- 		}
- 		frame->status = 0;
-@@ -2650,15 +2649,11 @@ static int handle_tx_event(struct xhci_hcd *xhci,
- 	 * transfer type
- 	 */
- 	case COMP_SUCCESS:
--		if (EVENT_TRB_LEN(le32_to_cpu(event->transfer_len)) == 0)
--			break;
--		if (xhci->quirks & XHCI_TRUST_TX_LENGTH ||
--		    ep_ring->last_td_was_short)
-+		if (EVENT_TRB_LEN(le32_to_cpu(event->transfer_len)) != 0) {
- 			trb_comp_code = COMP_SHORT_PACKET;
--		else
--			xhci_warn_ratelimited(xhci,
--					      "WARN Successful completion on short TX for slot %u ep %u: needs XHCI_TRUST_TX_LENGTH quirk?\n",
--					      slot_id, ep_index);
-+			xhci_dbg(xhci, "Successful completion on short TX for slot %u ep %u with last td short %d\n",
-+				 slot_id, ep_index, ep_ring->last_td_was_short);
-+		}
- 		break;
- 	case COMP_SHORT_PACKET:
- 		break;
-diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index 6f4bf98a62824..cdca3126b302b 100644
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -1589,7 +1589,7 @@ struct xhci_hcd {
- #define XHCI_RESET_ON_RESUME	BIT_ULL(7)
- #define	XHCI_SW_BW_CHECKING	BIT_ULL(8)
- #define XHCI_AMD_0x96_HOST	BIT_ULL(9)
--#define XHCI_TRUST_TX_LENGTH	BIT_ULL(10)
-+#define XHCI_TRUST_TX_LENGTH	BIT_ULL(10) /* Deprecated */
- #define XHCI_LPM_SUPPORT	BIT_ULL(11)
- #define XHCI_INTEL_HOST		BIT_ULL(12)
- #define XHCI_SPURIOUS_REBOOT	BIT_ULL(13)
-@@ -1729,8 +1729,6 @@ static inline bool xhci_has_one_roothub(struct xhci_hcd *xhci)
- 	dev_err(xhci_to_hcd(xhci)->self.controller , fmt , ## args)
- #define xhci_warn(xhci, fmt, args...) \
- 	dev_warn(xhci_to_hcd(xhci)->self.controller , fmt , ## args)
--#define xhci_warn_ratelimited(xhci, fmt, args...) \
--	dev_warn_ratelimited(xhci_to_hcd(xhci)->self.controller , fmt , ## args)
- #define xhci_info(xhci, fmt, args...) \
- 	dev_info(xhci_to_hcd(xhci)->self.controller , fmt , ## args)
- 
++pdphy_stop:
++	tcpm->pdphy_stop(tcpm);
+ port_stop:
+ 	tcpm->port_stop(tcpm);
+ port_unregister:
 -- 
 2.43.0
 
