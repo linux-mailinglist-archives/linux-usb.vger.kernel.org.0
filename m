@@ -1,144 +1,135 @@
-Return-Path: <linux-usb+bounces-10861-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10862-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 329708FC88B
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 12:01:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C6F68FC89D
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 12:05:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D3DB6284108
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 10:01:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A13AE287864
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 10:05:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F370A18FDD3;
-	Wed,  5 Jun 2024 10:01:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C716118FDD8;
+	Wed,  5 Jun 2024 10:05:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="tQLzxtYz"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="tyNLJ43v"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDF0F14A4F4
-	for <linux-usb@vger.kernel.org>; Wed,  5 Jun 2024 10:01:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32D42BE5A
+	for <linux-usb@vger.kernel.org>; Wed,  5 Jun 2024 10:05:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717581685; cv=none; b=iW2pj8d7UZvpT93PX0t6CW4nSE2uCpjbMLYtvOMvNsMhNTml6AfgOeP2N1WUiF5pPVuBAxDXQBW0PCUqSS8OdXPUUvhjLlsVj1gg2Y5OmLh1FTvvTz1uJvKfysOD1Azg+W9ipA3+G4UtJJvROpZfr4FM0EAKx8R/Clq/UHmt74Y=
+	t=1717581939; cv=none; b=nZ0zVpyhl4aw+dTt+o3tdSFzzyPmyFqJ2yZ2eaaOewWotKdEOZpmfTogCPsxZkzJjt89/ahk5eBotukP/Je5nQ2rZrQ1m6Wyiq34d9zgjyibgZYwjHIQwzE2byN/MXqgH0FLh8QVKMb0jwCug/NKdWGc5rVKbJQKvq9XncB0ync=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717581685; c=relaxed/simple;
-	bh=X4J+NHCPUK/pGeuU2jk5RSkU7NENxyMnKn+lp9gIWQY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=YHKXLRXhujHNJ4cN996MTW2DBCphzEKinW1fBQBSdKYAGHPjZ9rApOURYnGOtBlqIj54yDxDmUK6HOzQTaNOcTMD7rqgWoXsasRGWk28Vh17mOW6DQleXurcVT+5y3SIi5uUHhOTyGnN3Rw+2eylOqSwOVBXFSCCkEwjG3I1wDY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=tQLzxtYz; arc=none smtp.client-ip=209.85.221.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-354f3f6c3b1so1869139f8f.2
-        for <linux-usb@vger.kernel.org>; Wed, 05 Jun 2024 03:01:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1717581682; x=1718186482; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=9DzuTZgbZabvBJ626xcW1V1Egdfb6MOgv2LEKNybpd4=;
-        b=tQLzxtYzxu2+Ru8+klts8EHgg2RizfAG/TG8uwd2wDI/1LRrbaG+zosv4/GPBozw6O
-         kVd7DhpHk61DHijT6vq7ccbb8Q1hOUz943Tk3p6Vv2TSTKu3034HHdNmZEWpKGTaVnzT
-         x7VvAj8rebSW55yk5YIE4hoV3hZdTal4nHFCERhtGAF0Hrr4tA61xZpEceVMZ3os2DV9
-         I8opD9bNHIcd+Ef3dHOQDXL15kNX0sf09tOYjZsokTJU9E58wrAMBzNMn9ZqEvumSqbz
-         SfVh+62Nq9Cj7id2rDLCDExr+Cg2EjLqX6poVjyLpdRRH1j+PIZ/8IAlVyaIRm5CWe5K
-         eRSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717581682; x=1718186482;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9DzuTZgbZabvBJ626xcW1V1Egdfb6MOgv2LEKNybpd4=;
-        b=V35AbJRJkqt3KAVlPR6TTISBqorTtW95zt9rRX4Txwbn7XfjpGp7fE5bfcpxrmkWTb
-         9/BcSNCPkUSwz3fgLqFfWq7wMob/WNkpBaqGO5KVnKq0R+eX94VQlTDod2rzGy4Px+ip
-         vXdxxUFNrScrKADTPL1w0ynJoYLYANXVW6IuPU36ZbhyYkzFXccTUkE1PSHssO6KRQiU
-         qGj0HzdW8jSX/5QoKzRLrnJhzDBUOmc4dMuowf97d84IcfxTPOXxVoYYuRRIgliLOjku
-         ZquHAB5dbv1vAXVgqcUzv8GjbObyBxcjnMmfR0A2ZFDAvgl4dv8xtyvUB1U5qAhnI2t8
-         i/dQ==
-X-Gm-Message-State: AOJu0Yyp7V3TPyYC0AOflD4cYPQieKONuFPHeNeTcuormpACjEzqGvwS
-	GuwyaG2EJUMQT85pSL/jckkCIX7FPdu2ubhMgShzVE/XYs4EhYrs+uHncyApwxY=
-X-Google-Smtp-Source: AGHT+IFGB6+8XGX3B39GWLZTV1hN9L0hjBlUU61Lpb7u32G6xWF46KpUdOIbw9v2lAWlyu68sGB/ww==
-X-Received: by 2002:a5d:64c3:0:b0:356:6c6f:2609 with SMTP id ffacd0b85a97d-35e84070f54mr1572425f8f.17.1717581681967;
-        Wed, 05 Jun 2024 03:01:21 -0700 (PDT)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-35dd04c0d98sm13952677f8f.24.2024.06.05.03.01.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jun 2024 03:01:21 -0700 (PDT)
-From: Neil Armstrong <neil.armstrong@linaro.org>
-Date: Wed, 05 Jun 2024 12:01:20 +0200
-Subject: [PATCH] dt-bindings: usb: dwc2: allow device sub-nodes
+	s=arc-20240116; t=1717581939; c=relaxed/simple;
+	bh=eSPJ6TaF7jNoTRcthAibyafY/Gm1lkLxIwnhrGec3TQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Z6RWh2cafultbPXG1yEniaUgHDMTn5fQOnwu815TERQSCu5FsvZyPRMulXk1gSkLWFFogTj8Ot+lzSW9ltCmM9mLSVwktz0baw51h1lf5082mFJ8GXgO+QkfNf55C9gIVlDzlD1YUQJpm4uhT3R3NG4pip5tBGsViDmGVawxu3U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=tyNLJ43v; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FF02C32781;
+	Wed,  5 Jun 2024 10:05:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1717581938;
+	bh=eSPJ6TaF7jNoTRcthAibyafY/Gm1lkLxIwnhrGec3TQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=tyNLJ43vlwAwpgfzOFVwTRJ5gOZ0IkMTxLzaFzN64SsQZNCjMR9Ix6knE5YBYKOn8
+	 Ja67Pj4+btB5z2XCilBir9oJAbIFjGnzLT0kH+tiuAsr80aJVC6BV3TpAnMQhfEhh9
+	 h+ITTQQYrLDKWpkqIcvscaSd7iSJKr7La+cxVcQs=
+Date: Wed, 5 Jun 2024 10:41:16 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: sicong <congei42@163.com>
+Cc: peter.chen@kernel.org, pawell@cadence.com, rogerq@kernel.org,
+	linux-usb@vger.kernel.org
+Subject: Re: Re: [PATCH v1] usb: cdns3: cdns3-gadget: fix use-after-free bug
+ in cdns3_gadget_exit due to race
+Message-ID: <2024060546-dumpling-unripe-4283@gregkh>
+References: <20240513021948.133039-1-congei42@163.com>
+ <2024060444-delay-surgical-c8ff@gregkh>
+ <6d94822a.2eaf.18fe6414d2a.Coremail.congei42@163.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240605-topic-amlogic-upstream-bindings-fixes-dwc2-subnodes-v1-1-915893e0cb20@linaro.org>
-X-B4-Tracking: v=1; b=H4sIAG83YGYC/x3MywrCMBCF4Vcps3YghhgvryJdpMkYB2wSMq0Kp
- e/u4OrwweHfQKgzCdyGDTq9WbgWxfEwQHyGkgk5qcEa64w3J1xq44hhftWsuzZZOoUZJy6JSxZ
- 88JcE0ydalHUqNalc8BcK6Xz11oGWW6f/TcP3cd9/Uub03IUAAAA=
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>
-Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Neil Armstrong <neil.armstrong@linaro.org>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1269;
- i=neil.armstrong@linaro.org; h=from:subject:message-id;
- bh=X4J+NHCPUK/pGeuU2jk5RSkU7NENxyMnKn+lp9gIWQY=;
- b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBmYDdwUDjjv9AL8LPyasrSreKHRVDjunpIjJGGPuCs
- SFm8FWaJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZmA3cAAKCRB33NvayMhJ0RHqD/
- 91reH0EXlToPWL2lQdQz/ocv7rkKkEopctmGkYidL3n347CT+/C7ZIhK9dRAUxJi4ht0SC+P8871iv
- k3sW9oW7Yt2DrgRLzaQvZODRodJ3SYAkpBU0uNXJ6oYUGFyQrI376Zo5BL5Pn/j2Y43smPvaLr8kW5
- zbY66WL+5KrnX7BqgEJ3QkH4x+8enMhdh4RWaUM9jExizBN0evEgJPmzbQX4laIvNg7oP6FXel+rQp
- H1Lv/ziAnQxX5Tay3FIhwcS1bbCG3q9TS3k7qkJXUw1xXpSXGQ+Lf90Fs2g+lJ751NfmVcB2CbrO2w
- nYKxbGVyoMgJTpMHEbBS7fujVIalvaHwbqXgW0CEw4oMUL7iLgHHSRYQcr0CQsywAP3TWQiSOrlT6s
- x37eP4M34lbN789gS/sWrmYUxrxHfBZSXN+OnLcVSbM97uN/tpWLgCtwfeaJQzQsH13Sfr96m2GhiA
- 5GGNBzvoZ8T9qwVK0k2JMhoG55L5uP1bUcskCZU2jWnLor270WQyoyukLL50lyvqkBDrrj0EHWSuVn
- KVz1+rV6YTf0JniqimLr+VJHek19SLIw7SAS4vFKcyzBkPpsWREOGKfLr9QaZFUioVdjt8MPr0bUSP
- bDARGb2JCqkXVFe2GTAROTaL5MrDY6vRtmR3OekfD4oF1VVHipcWG5vvJSMg==
-X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
- fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6d94822a.2eaf.18fe6414d2a.Coremail.congei42@163.com>
 
-Allow the '#address-cells', '#size-cells' and subnodes as defined in
-usb-hcd.yaml and used in the meson-gxbb-odroidc2 DT.
+On Wed, Jun 05, 2024 at 10:36:30AM +0800, sicong wrote:
+> 
+> 
+> At 2024-06-04 21:11:57, "Greg KH" <gregkh@linuxfoundation.org> wrote:
+> >On Mon, May 13, 2024 at 10:19:48AM +0800, Sicong Huang wrote:
+> >> This bug exists in drivers/usb/cdns3/cdns3-gadget.c. Function
+> >> __cdns3_gadget_init will call cdns3_gadget_start to do futher jobs
+> >> during the initialization proccess of cdns3 gadget. In cdns3_gadget_start,
+> >> &priv_dev->pending_status_wq is bound with cdns3_pending_setup_status_handler.
+> >> Then this work will be added to system_freezable_wq in cdns3_gadget_ep0_queue.
+> >> Here is the code.
+> >> queue_work(system_freezable_wq, &priv_dev->pending_status_wq);
+> >> 
+> >> If we call cdns3_gadget_exit to remove the device and make cleanup,
+> >> there are some unfinished works. This function will call cdns3_free_all_eps to
+> >> free all the endpoints. However, if cdns3_pending_setup_status_handler is
+> >> scheduled to run after the free job, it will cause use-after-free error as
+> >> cdns3_pending_setup_status_handler will use the endpoint in the following code.
+> >> request->complete(&priv_dev->eps[0]->endpoint, request);
+> >> 
+> >> The possible execution flow that may lead to this issue is as follows:
+> >> CPU0                    CPU1
+> >>                       | __cdns3_gadget_init
+> >>                       | cdns3_gadget_start
+> >> cdns3_gadget_exit     |
+> >> cdns3_free_all_eps    |
+> >> devm_kfree (free)     |
+> >>                       | cdns3_pending_setup_status_handler
+> >>                       | &priv_dev->eps[0]->endpoint (use)
+> >> 
+> >> Fix it by cleaning the work in cdns3_gadget_exit.
+> >> 
+> >> Signed-off-by: Sicong Huang <congei42@163.com>
+> >> ---
+> >>  drivers/usb/cdns3/cdns3-gadget.c | 3 +++
+> >>  1 file changed, 3 insertions(+)
+> >> 
+> >> diff --git a/drivers/usb/cdns3/cdns3-gadget.c b/drivers/usb/cdns3/cdns3-gadget.c
+> >> index fd1beb10bba7..0f2e143bd17a 100644
+> >> --- a/drivers/usb/cdns3/cdns3-gadget.c
+> >> +++ b/drivers/usb/cdns3/cdns3-gadget.c
+> >> @@ -3252,6 +3252,9 @@ static void cdns3_gadget_exit(struct cdns *cdns)
+> >>  	pm_runtime_mark_last_busy(cdns->dev);
+> >>  	pm_runtime_put_autosuspend(cdns->dev);
+> >>  
+> >> +	cancel_work_sync(&priv_dev->pending_status_wq);
+> >> +	cancel_work_sync(&priv_dev->aligned_buf_wq);
+> >> +
+> >>  	usb_del_gadget(&priv_dev->gadget);
+> >>  	devm_free_irq(cdns->dev, cdns->dev_irq, priv_dev);
+> >>  
+> >> -- 
+> >> 2.34.1
+> >
+> >What commit id does this fix?
+> >
+> >thanks,
+> >
+> 
+> >greg k-h
+> 
+> 
+> I made the changes based on the following commit information.
+> commit 51474ab44abf907023a8a875e799b07de461e466 (origin/usb-testing, origin/usb-next)
 
-The fixes the following:
-meson-gxbb-odroidc2.dtb: usb@c9100000: '#address-cells', '#size-cells', 'hub@1' do not match any of the regexes: 'pinctrl-[0-9]+'
-	from schema $id: http://devicetree.org/schemas/usb/dwc2.yaml#
+That is not what I meant, sorry.
 
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
----
- Documentation/devicetree/bindings/usb/dwc2.yaml | 7 +++++++
- 1 file changed, 7 insertions(+)
+I mean, "this is a bugfix, so what commit caused the problem that this
+is fixing?"
 
-diff --git a/Documentation/devicetree/bindings/usb/dwc2.yaml b/Documentation/devicetree/bindings/usb/dwc2.yaml
-index 4f36a22aa6d7..9e737f587664 100644
---- a/Documentation/devicetree/bindings/usb/dwc2.yaml
-+++ b/Documentation/devicetree/bindings/usb/dwc2.yaml
-@@ -177,6 +177,13 @@ properties:
-     minItems: 1
-     maxItems: 2
- 
-+  "#address-cells": true
-+
-+  "#size-cells": true
-+
-+patternProperties:
-+  "^.*@[0-9a-f]{1,2}$": true
-+
- dependencies:
-   port: [ usb-role-switch ]
-   role-switch-default-mode: [ usb-role-switch ]
+thanks,
 
----
-base-commit: c3f38fa61af77b49866b006939479069cd451173
-change-id: 20240605-topic-amlogic-upstream-bindings-fixes-dwc2-subnodes-4a68ead79624
-
-Best regards,
--- 
-Neil Armstrong <neil.armstrong@linaro.org>
-
+greg k-h
 
