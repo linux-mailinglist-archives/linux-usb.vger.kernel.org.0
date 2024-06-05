@@ -1,142 +1,177 @@
-Return-Path: <linux-usb+bounces-10912-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10913-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ACA498FD43F
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 19:44:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B9C368FD4A1
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 20:00:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 41F0A2857F6
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 17:44:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CFB491C23C49
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 18:00:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 646BB13A88A;
-	Wed,  5 Jun 2024 17:44:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19B8413BAD4;
+	Wed,  5 Jun 2024 18:00:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=inbox.lv header.i=@inbox.lv header.b="b3c32LE+"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OyMmHgy1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from shark1.inbox.lv (shark1.inbox.lv [194.152.32.81])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95F9D621
-	for <linux-usb@vger.kernel.org>; Wed,  5 Jun 2024 17:44:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.152.32.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB53D195387
+	for <linux-usb@vger.kernel.org>; Wed,  5 Jun 2024 18:00:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717609453; cv=none; b=Za5se9n8LrRFKXtJZiFGoAa3PgHGTkbfqHkFzNF1EfeJc/4ahS4goehLOHM4liafF4hEXuFaU32zBxxX47tmP2FXRvY0O5ekQXb4xroORPTK/N+hWQ035Zdv5y3G63LryWUyJMDcWIyajVg9jnVyjTRvGNi2mWecdi3a2DJ+w6Y=
+	t=1717610403; cv=none; b=ddEahQDglQ9hN/fTE6UATzF1luGnE86zbc2WAvr7JgzBo+TiWygENrsNcaK5NKrlBPkqDosV9QN1tZc0h9A/fgEaojhjcw5uBWFiLeRdzGIAk1ayQPybzjBQHpVeBHDYtE4xVY5tTovSzlkU/wK+tLO+dGbjD2bqJ2OHsMgMkAs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717609453; c=relaxed/simple;
-	bh=GJn/xA6s1+S1gr4PC0gOF49LsFKmnQcWpi3zDjUFMiw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fgDDvxs2aMpNBokOTw8c8TVC+xlyP5cqk25Ekwn4U3PE72L9sY9WbgDPwXH/skJZAHX1UVU/bovXrAqSdc3luhxMfK31KaIqWW9vJRClzIT0Bt8oTGdP8hSqJVYbHdUXdUl9BQ91BS/XYS/PGgs+e58rgsoJG+AamrbwpBegAws=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=inbox.lv; spf=pass smtp.mailfrom=inbox.lv; dkim=pass (1024-bit key) header.d=inbox.lv header.i=@inbox.lv header.b=b3c32LE+; arc=none smtp.client-ip=194.152.32.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=inbox.lv
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=inbox.lv
-Received: from shark1.inbox.lv (localhost [127.0.0.1])
-	by shark1-out.inbox.lv (Postfix) with ESMTP id 4VvZZx2Jthz2d6LK;
-	Wed,  5 Jun 2024 20:44:09 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=inbox.lv;
-	s=p20220324; t=1717609449; x=1717611249;
-	bh=GJn/xA6s1+S1gr4PC0gOF49LsFKmnQcWpi3zDjUFMiw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:X-ESPOL:
-	 From:Date:To:Cc:Message-ID:Subject:Reply-To;
-	b=b3c32LE+eCdkW2TvEzLgygjcyLDf41ibQZWSiEMcv6sVwrQILXSHqCBbG6H6Qf29j
-	 BZZnH+q11zua1hd1M0m9guRMRjEccj/Tc0+K9/j90Wh6kQsD9YlEM7wZCdHKVgQ1w5
-	 qt+bU4Hg7Y+adlLEedwG+RbOszCV6G7GW5dfZF/4=
-Received: from mail.inbox.lv (pop1 [127.0.0.1])
-	by shark1-in.inbox.lv (Postfix) with ESMTP id 4VvZZx1mNYz2d6L9;
-	Wed,  5 Jun 2024 20:44:09 +0300 (EEST)
-From: Dmitry <d.smirnov@inbox.lv>
-To: linux-usb@vger.kernel.org
-Cc: Dmitry <d.smirnov@inbox.lv>
-Subject: [PATCH] usb: serial: Fix mos7840 hangup when resuming from standby
-Date: Wed,  5 Jun 2024 20:44:01 +0300
-Message-ID: <20240605174401.3193-1-d.smirnov@inbox.lv>
-X-Mailer: git-send-email 2.45.1
-In-Reply-To: <20240604225507.6801-1-d.smirnov@inbox.lv>
-References: <20240604225507.6801-1-d.smirnov@inbox.lv>
+	s=arc-20240116; t=1717610403; c=relaxed/simple;
+	bh=BxoABlKvJef+pUpKvjxVkdFoF53gAB3xVu8cHZaGBrk=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=cjqV0xlYzJz0shcHaG4wB/mj046CBbbO7Sei/RPk+xRvHoY91gXNkbz/Q5HRGyuk6d33102uiKL+lvHDhNOqKKE3nl/KIDnK6nR/SQKetggYl3k2JYrwF7XfOPGercNGfpwSIDI/sZmPVDM7LAp9+Fzeul0xoYVwTiThi1znrtw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--joychakr.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OyMmHgy1; arc=none smtp.client-ip=209.85.128.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--joychakr.bounces.google.com
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-62a088faef7so15610067b3.0
+        for <linux-usb@vger.kernel.org>; Wed, 05 Jun 2024 11:00:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1717610401; x=1718215201; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=w5RPl7PD7LMs1k1njsQ/RXiUssQb7CTl+XBmOvI3R5A=;
+        b=OyMmHgy1OprhTZCk1PpY0KDM++WlQ1Edw2Mps1X0EgJF2iRBA3+tnZUd98ocPSXWN7
+         I5HJFrKZWoDLgPm7SDxl1bkWvzGz18zxNjGoXmNXX1/JRy6wFqUXPM4fg6njQ4saM2A8
+         yLMbKusUCgwnE0ITdDiMX3hsSX1dBE5GBbZOTqY8dwoA8iLHbnfmjPCwDmWjbzvPqRvX
+         jE0jfYNVECTVlFMrLnVd2AQ5Xmr6HOM3bKPb3xt0oUX/V9PhfG/3FV6uK6EMbBp8IkTk
+         9k2llsKW20VKa+QhtGVJt5Ip8/G/LiZr0xSkvjVn57gLonJE8lQKc2VUpPo0iQIWkuHq
+         QWrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717610401; x=1718215201;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=w5RPl7PD7LMs1k1njsQ/RXiUssQb7CTl+XBmOvI3R5A=;
+        b=FR5vvmDb8s8z5j8efJkE5muqX0o9FZjpMIEiPLc/EZi+Taene0EKWjwvw32GJ9wsz1
+         yhuPFe7NHrD9mTwpML6M9wXWyIh9qWGMmKGfFqHQHy4zgR7vtBeghsYZElyKnjQgRWE+
+         SjKIrRz/yvT3OlbS8Lxx/16cWA/uZ6qIUFmUWY4ngCzxtaMOVdhxUkToQDFYT0Qwpoj+
+         z6GbfSdBVG75bEJwitBm6UAR6KDhEFBGMI06BpDjHcW2dyeNdVL2RReU0HHvgNuXlSU7
+         kUHE38cOKzOg1ZjIlRYz2FqdBiGFFRuvPImLljnupdrCHwktv1CFKxtXeN1QNdREK6Oi
+         RVzA==
+X-Forwarded-Encrypted: i=1; AJvYcCXKhyg4WJBDSd7Dl5IpXcWl8dtk30VGeOA2hdvpPaO+QmSroO73z0MoW5ZhVf1LNcwfi0n7UPjnV6wLnXKvKOZr7l+KHE4sZDMP
+X-Gm-Message-State: AOJu0YyFqItmVkv5BZTNhSLP3xDIEmRISVqj1ItrQa9+U81aARUg8xWX
+	XM1GBgDdQ0q8J/78Q62tJk6V++7SEQx+YDjX7Pg6DMDj7xsuxTa2HtyolQ4JAjTNFoL3L4jIKYL
+	thWo69NwtDg==
+X-Google-Smtp-Source: AGHT+IE3beT3+LJiyuyeey70O4vTmt9cNoEU8h7bwGC3fodiNqs+98CXh8Kyq/MReppn/4vWIwzPR7Cf0wAFHw==
+X-Received: from joychakr.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:6ea])
+ (user=joychakr job=sendgmr) by 2002:a05:6902:987:b0:dfa:7552:e09e with SMTP
+ id 3f1490d57ef6-dfade7e34cbmr71646276.0.1717610400689; Wed, 05 Jun 2024
+ 11:00:00 -0700 (PDT)
+Date: Wed,  5 Jun 2024 17:59:44 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: OK
-X-ESPOL: EZeEAiZdmGUky828N/0M6uvn2N+6SFshtTn7yqFDmn8l0K+jx9N0cWyUGILnHwa7bg==
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.45.1.467.gbab1589fc0-goog
+Message-ID: <20240605175953.2613260-1-joychakr@google.com>
+Subject: [PATCH v1 00/17] nvmem: Handle change of return type in
+ reg_read/write() definition
+From: Joy Chakraborty <joychakr@google.com>
+To: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+	Lars-Peter Clausen <lars@metafoo.de>, Sakari Ailus <sakari.ailus@linux.intel.com>, 
+	Bingbu Cao <bingbu.cao@intel.com>, Zhihao Cheng <chengzhihao1@huawei.com>, 
+	Jerome Brunet <jbrunet@baylibre.com>, 
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-iio@vger.kernel.org, linux-media@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-mtd@lists.infradead.org, linux-rtc@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-amlogic@lists.infradead.org, 
+	linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org, 
+	linux-usb@vger.kernel.org, manugautam@google.com, 
+	Joy Chakraborty <joychakr@google.com>
+Content-Type: text/plain; charset="UTF-8"
+
+This patch series facilitates compilation post the change in definition
+of nvmem_reg_read_t and nvmem_reg_write_t callback in
+https://lore.kernel.org/all/171751721565.70889.16944298203785853489.b4-ty@linaro.org/
+
+Currently the nvmem core change is picked on
+https://git.kernel.org/pub/scm/linux/kernel/git/srini/nvmem.git/log/?h=for-next
 
 ---
- drivers/usb/serial/mos7840.c | 50 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 50 insertions(+)
+V1 Changes : Change read/write return type to ssize_t and handle
+relevant logic changes
+---
 
-diff --git a/drivers/usb/serial/mos7840.c b/drivers/usb/serial/mos7840.c
-index 8b0308d84270..30c5b09a4409 100644
---- a/drivers/usb/serial/mos7840.c
-+++ b/drivers/usb/serial/mos7840.c
-@@ -1737,6 +1737,54 @@ static void mos7840_port_remove(struct usb_serial_port *port)
- 	kfree(mos7840_port);
- }
- 
-+static int mos7840_suspend(struct usb_serial *serial, pm_message_t message)
-+{
-+	struct moschip_port *mos7840_port;
-+	struct usb_serial_port *port;
-+	int i;
-+	dev_dbg(&serial->interface->dev, "mos7840_suspend\n");
-+
-+	for (i = 0; i < serial->num_ports; ++i) {
-+		port = serial->port[i];
-+		if (!tty_port_initialized(&port->port))
-+			continue;
-+
-+		mos7840_port = usb_get_serial_port_data(port);
-+
-+		usb_kill_urb(mos7840_port->read_urb);
-+		mos7840_port->read_urb_busy = false;
-+	}
-+	return 0;
-+}
-+
-+static int mos7840_resume(struct usb_serial *serial)
-+{
-+	struct moschip_port *mos7840_port;
-+	struct usb_serial_port *port;
-+	int res;
-+	int i;
-+	dev_dbg(&serial->interface->dev, "mos7840_resume\n");
-+
-+	for (i = 0; i < serial->num_ports; ++i) {
-+		port = serial->port[i];
-+		if (!tty_port_initialized(&port->port))
-+			continue;
-+
-+		mos7840_port = usb_get_serial_port_data(port);
-+
-+		if (port->bulk_in_size) {
-+			res = usb_submit_urb(mos7840_port->read_urb, GFP_NOIO);
-+
-+			if (res) {
-+				usb_kill_urb(mos7840_port->read_urb);
-+				mos7840_port->read_urb_busy = false;
-+			}
-+		}
-+	}
-+
-+	return 0;
-+}
-+
- static struct usb_serial_driver moschip7840_4port_device = {
- 	.driver = {
- 		   .owner = THIS_MODULE,
-@@ -1764,6 +1812,8 @@ static struct usb_serial_driver moschip7840_4port_device = {
- 	.port_probe = mos7840_port_probe,
- 	.port_remove = mos7840_port_remove,
- 	.read_bulk_callback = mos7840_bulk_in_callback,
-+	.suspend = mos7840_suspend,
-+	.resume = mos7840_resume,
- };
- 
- static struct usb_serial_driver * const serial_drivers[] = {
+Joy Chakraborty (17):
+  hwmon: pmbus: adm1266: Change nvmem reg_read/write return type
+  media: i2c: ov2740: Change nvmem reg_read/write return type
+  media: i2c: video-i2c: Change nvmem reg_read/write return type
+  iio: pressure: bmp280: Change nvmem reg_read/write return type
+  misc: ds1682: Change nvmem reg_read/write return type
+  misc: eeprom: at24: Change nvmem reg_read/write return type
+  misc: eeprom: at25: Change nvmem reg_read/write return type
+  misc: eeprom: 93xx46: Change nvmem reg_read/write return type
+  misc: mchp_pci1xxxx: Change nvmem reg_read/write return type
+  mtd: core: Change nvmem reg_read/write return type
+  mtd: ubi: nvmem: Change nvmem reg_read/write return type
+  soc: atmel: sfr: Change nvmem reg_read/write return type
+  w1: slaves: w1_ds250x: Change nvmem reg_read/write return type
+  thunderbolt: switch: Change nvmem reg_read/write return type
+  thunderbolt: retimer: Change nvmem reg_read/write return type
+  soc: tegra: fuse: Change nvmem reg_read/write return type
+  rtc: Change nvmem reg_read/write return type
+
+ drivers/hwmon/pmbus/adm1266.c                 |  4 +-
+ drivers/iio/pressure/bmp280-core.c            | 14 ++++---
+ drivers/media/i2c/ov2740.c                    |  6 +--
+ drivers/media/i2c/video-i2c.c                 |  9 +++--
+ drivers/misc/ds1682.c                         | 16 +++-----
+ drivers/misc/eeprom/at24.c                    | 10 +++--
+ drivers/misc/eeprom/at25.c                    | 11 +++---
+ drivers/misc/eeprom/eeprom_93xx46.c           | 12 +++---
+ .../misc/mchp_pci1xxxx/mchp_pci1xxxx_otpe2p.c | 16 ++++----
+ drivers/mtd/mtdcore.c                         | 18 ++++-----
+ drivers/mtd/ubi/nvmem.c                       |  6 +--
+ drivers/rtc/rtc-abx80x.c                      | 15 +++----
+ drivers/rtc/rtc-cmos.c                        |  8 ++--
+ drivers/rtc/rtc-ds1305.c                      | 18 ++++++---
+ drivers/rtc/rtc-ds1307.c                      | 22 +++++++----
+ drivers/rtc/rtc-ds1343.c                      | 18 ++++++---
+ drivers/rtc/rtc-ds1511.c                      | 12 +++---
+ drivers/rtc/rtc-ds1553.c                      | 14 ++++---
+ drivers/rtc/rtc-ds1685.c                      | 14 ++++---
+ drivers/rtc/rtc-ds1742.c                      | 14 ++++---
+ drivers/rtc/rtc-ds3232.c                      | 22 +++++++----
+ drivers/rtc/rtc-isl12026.c                    | 12 +++---
+ drivers/rtc/rtc-isl1208.c                     |  8 ++--
+ drivers/rtc/rtc-m48t59.c                      | 12 +++---
+ drivers/rtc/rtc-m48t86.c                      | 12 +++---
+ drivers/rtc/rtc-max31335.c                    | 18 ++++++---
+ drivers/rtc/rtc-meson.c                       | 18 ++++++---
+ drivers/rtc/rtc-omap.c                        | 12 +++---
+ drivers/rtc/rtc-pcf2127.c                     | 20 ++++++----
+ drivers/rtc/rtc-pcf85063.c                    | 20 +++++++---
+ drivers/rtc/rtc-pcf85363.c                    | 39 ++++++++++++-------
+ drivers/rtc/rtc-rp5c01.c                      | 14 ++++---
+ drivers/rtc/rtc-rv3028.c                      | 32 +++++++++------
+ drivers/rtc/rtc-rv3029c2.c                    | 20 +++++++---
+ drivers/rtc/rtc-rv3032.c                      | 24 ++++++++----
+ drivers/rtc/rtc-rv8803.c                      | 16 +++++---
+ drivers/rtc/rtc-rx8581.c                      | 39 ++++++++++++-------
+ drivers/rtc/rtc-stk17ta8.c                    | 14 ++++---
+ drivers/rtc/rtc-sun6i.c                       |  8 ++--
+ drivers/rtc/rtc-ti-k3.c                       | 16 +++++---
+ drivers/rtc/rtc-twl.c                         | 20 +++++++---
+ drivers/soc/atmel/sfr.c                       | 11 ++++--
+ drivers/soc/tegra/fuse/fuse-tegra.c           |  6 +--
+ drivers/thunderbolt/retimer.c                 |  8 ++--
+ drivers/thunderbolt/switch.c                  |  8 ++--
+ drivers/w1/slaves/w1_ds250x.c                 |  4 +-
+ 46 files changed, 408 insertions(+), 282 deletions(-)
+
 -- 
-2.45.1
+2.45.1.467.gbab1589fc0-goog
 
 
