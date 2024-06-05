@@ -1,104 +1,167 @@
-Return-Path: <linux-usb+bounces-10909-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10910-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D0CA8FD30B
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 18:40:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5756E8FD39C
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 19:09:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 747B51C21880
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 16:40:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DF70D288123
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 17:09:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3E1115F33A;
-	Wed,  5 Jun 2024 16:40:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97DB218F2E4;
+	Wed,  5 Jun 2024 17:09:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="GcvxvlvC"
+	dkim=pass (2048-bit key) header.d=squebb.ca header.i=@squebb.ca header.b="yNnDzR1g";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="ft8oOzDh"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from wfout6-smtp.messagingengine.com (wfout6-smtp.messagingengine.com [64.147.123.149])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49A782575A;
-	Wed,  5 Jun 2024 16:40:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11A7B3BBD7;
+	Wed,  5 Jun 2024 17:09:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.149
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717605607; cv=none; b=IvHbitorp6mFBaN67PnhHWxu/Zo8KvW1cpdWmsrtCkaaY21e5Qb2R6erk5/iBkX2GCLwqvt1U3J68mYF93oV98tnyrOsSrGuCVomc8wHdwQSR9hi1+D8WZQHsEbhT1SHMeoCw5oha7FhykUEv2r91eoDwq/bpJe2B/ofvUpuqdE=
+	t=1717607366; cv=none; b=fitfpzvzehMxqFw1J2eB+RrbzcLHp42X5qY2ZdMCjHUnUeW2FvieP9PoxzeBIetwbahVtGyzBB13ouIK/rdtsgXquBywbULctYHynuQ0A+/PwiZzNUKytzOLZInxHDiXFchQgZpOuFSzLKP2SFKQob1rX86R/DsoUyvoNAMIx8w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717605607; c=relaxed/simple;
-	bh=O4G8eQ2hC0FwwtinYnY34YnV+5ukJLCh4ZVgQJRREHE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FPrrkyI7PuRyrcJGDQgpYLKJscmnbYBAR7RI/oVUFJzLo7Niys5KlfFY7PIxj+bWsJWpyqFVF0rjolltrFZ6W37I17WRABIL+5QoiAIJ82WDVN9v2UHmPqkJSMsuCJ+QfomVJtST5gQDJrhGpCZ1RTyihU5go2Z9U+9Op597DLc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=GcvxvlvC; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=XEQ31M+AQ32LiINcV0Ik8aCt65Mcjm7BZkNioozKiB4=; b=GcvxvlvCAtyy1QN8zJ1O28vL6g
-	2Cdiorp4ffRMSuHOuxNhjUkTyBVLCxsTZk5hi5nj/ktx+zpcV4eV8C23yRVRNTSf8h2XbfWbnx+cV
-	BZsCBrSX+DAEerSFWVIFd6Wl9suCEVv/bW9amoI7CK2xr7m289kRq0YMm9JwNZ0trzIs=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1sEtg1-00Gvlt-JA; Wed, 05 Jun 2024 18:39:53 +0200
-Date: Wed, 5 Jun 2024 18:39:53 +0200
-From: Andrew Lunn <andrew@lunn.ch>
-To: Milan Broz <gmazyland@gmail.com>
-Cc: linux-usb@vger.kernel.org, netdev@vger.kernel.org, davem@davemloft.net,
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-	grundler@chromium.org, dianders@chromium.org, hayeswang@realtek.com,
-	hkallweit1@gmail.com
-Subject: Re: [PATCH] r8152: Set NET_ADDR_STOLEN if using passthru MAC
-Message-ID: <f5d30745-fab8-4a03-8d29-3ce32c63c370@lunn.ch>
-References: <20240605153340.25694-1-gmazyland@gmail.com>
+	s=arc-20240116; t=1717607366; c=relaxed/simple;
+	bh=F7Eh5kg8b6tfkcpTjbETzCmLSlgUgrmBSekOVyhs6+4=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=ZAvIhqhnMt6YaSHysPJvMWuUKzsg+zbj4HCcDW/GsfSRqeiriIoLZg99D8nO9P7u59D3pg4pGPywY4BT5KqcF45ii4qzkLih9sbHAa06uf56HAWJ0Pz80XEU4m5GvhvuThx/qhGzCvBvms9gslOQixoYVchb9np7taUin71o++U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=squebb.ca; spf=pass smtp.mailfrom=squebb.ca; dkim=pass (2048-bit key) header.d=squebb.ca header.i=@squebb.ca header.b=yNnDzR1g; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=ft8oOzDh; arc=none smtp.client-ip=64.147.123.149
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=squebb.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=squebb.ca
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+	by mailfout.west.internal (Postfix) with ESMTP id D5E361C00133;
+	Wed,  5 Jun 2024 13:09:22 -0400 (EDT)
+Received: from imap52 ([10.202.2.102])
+  by compute3.internal (MEProxy); Wed, 05 Jun 2024 13:09:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=squebb.ca; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm2; t=1717607362; x=1717693762; bh=ZHXgv05Ed0
+	PNjKxsr4XqCWtGawsCHif6ccMqAyWwMRI=; b=yNnDzR1gQvhsPIbQw+80gvRg2C
+	4JbdDp12xAj7J9fYlGVpC/jJu0ibS85YpUttxqanIHl4lWWWSGMaIQcC5uEPsVDn
+	qSGj0S3+yfZh09HH8XfC3wvk1e+I/8IbBybpdVqWjJ9Pw/vC2mpBzSR904v3X8n4
+	E1eqKbZh7hBru1Wqf4PUZ1q68B6GOTxAWrRYPxDDvxGSe1Zpp5GsnCXCw9P/A4Es
+	LN93suNkj7VRuPNOPtQk+J2RcjlldWuNaQP4PKDZb0KAYWx4WkBYcsnjSFSYBSjn
+	POQs5CE+T0GkTFcfFWJJCxqSkagBARKP8wOneqASiSNtws+Tk5DA/i5sk+3Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm1; t=1717607362; x=1717693762; bh=ZHXgv05Ed0PNjKxsr4XqCWtGawsC
+	Hif6ccMqAyWwMRI=; b=ft8oOzDhh5a1Ns1kkZD1ugH+T5UN4KXwxe3orwtLIDMf
+	ye7VyVTs4ipt/XCVdro5BCFfsAASMfUqX2mS6ygtje2nM9QU+nIkZrxtFCr4c5yK
+	MQ3rgfDwKh/XhprC1Uw9IPtk88tZjn9jwLsYY11qsCM8bVGurlbljDAeUTAklou3
+	2J1EPDLPzMFjzf11uCfv3gVtrrxj0s1q1pPf0CHkvWgzwoLOzg1p0nu9Yjc5B6zk
+	fi7hIakBhYwF+Mgw/hHL/j+QEDN9V7vieHLmBBHGDumEnKTHOo5fakPQR0tj7RJC
+	69Qz7YhzTMbjB0G2WcLHtQx/eEBR3TCuQO6Xdr3WDA==
+X-ME-Sender: <xms:wptgZpS4NhllHqMyFQkIWpyk2Hu5IBm0f4Me9RrAYAI7_PmJACqfQQ>
+    <xme:wptgZiyrh64mJqnKmyAPWgSGZrcPsc4pFTjryV4gSnll3pAXS9xN29eAYnw6oqRHH
+    Vl3iWnd41xLNVtr0hE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrvdeliedgudduudcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdfo
+    rghrkhcurfgvrghrshhonhdfuceomhhpvggrrhhsohhnqdhlvghnohhvohesshhquhgvsg
+    gsrdgtrgeqnecuggftrfgrthhtvghrnhepieeufeejieevteduvdekteefledtveffvedu
+    hefffeejudefvdeijeegudegkefhnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
+    hmpehmrghilhhfrhhomhepmhhpvggrrhhsohhnqdhlvghnohhvohesshhquhgvsggsrdgt
+    rg
+X-ME-Proxy: <xmx:wptgZu3BfR8455hJIcEgAe7dn-TNFhf6gA80i_ZvBkqXoqmiIhaTkA>
+    <xmx:wptgZhDsJfaudmgGb2rc_gFL33Gn5gbo_qhhIKTMMs-oVvx8CSNdbw>
+    <xmx:wptgZiinP5t9LfBrXb3Ebeqcc3q8LpPTQQDj2eKSQKmGS995Qmftcw>
+    <xmx:wptgZlq4DpTt_tuBckOjyCbuZelUXTOU12R-KgFBk_ix31-4Y1OQLg>
+    <xmx:wptgZkagJgrgVWR8Hp5UVHjYLl5G6-zGtL01FoI2p7BQqJrpL4WCiklx>
+Feedback-ID: ibe194615:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 1A572C60097; Wed,  5 Jun 2024 13:09:21 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-497-g97f96844c-fm-20240526.001-g97f96844
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240605153340.25694-1-gmazyland@gmail.com>
+Message-Id: <a517bb13-9772-49f9-b75c-8fa4d98b2ae9@app.fastmail.com>
+In-Reply-To: 
+ <2midmmssv2i3plvtc2hajar6alfvggpnbvgpmldspelxsnjvcl@qiblhwat6n3p>
+References: <mpearson-lenovo@squebb.ca>
+ <20240604194056.16625-1-mpearson-lenovo@squebb.ca>
+ <2midmmssv2i3plvtc2hajar6alfvggpnbvgpmldspelxsnjvcl@qiblhwat6n3p>
+Date: Wed, 05 Jun 2024 13:09:01 -0400
+From: "Mark Pearson" <mpearson-lenovo@squebb.ca>
+To: "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>
+Cc: "Heikki Krogerus" <heikki.krogerus@linux.intel.com>,
+ "Greg KH" <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, "Diogo Ivo" <diogo.ivo@siemens.com>
+Subject: Re: [PATCH] usb: typec: ucsi: treat get_pdos not supported condition as info
+ instead of error
+Content-Type: text/plain
 
-On Wed, Jun 05, 2024 at 05:33:40PM +0200, Milan Broz wrote:
-> Some docks support MAC pass-through - MAC address
-> is taken from another device.
-> 
-> Driver should indicate that with NET_ADDR_STOLEN flag.
-> 
-> This should help to avoid collisions if network interface
-> names are generated with MAC policy.
-> 
-> Reported and discussed here
-> https://github.com/systemd/systemd/issues/33104
+Thanks Dmitry (& Diogo from the other thread)
 
-MAC pass-through is broken, and expected to cause problems. We
-strongly push back on any patches trying to add more instances of
-it.
+On Tue, Jun 4, 2024, at 7:45 PM, Dmitry Baryshkov wrote:
+> On Tue, Jun 04, 2024 at 03:40:44PM -0400, Mark Pearson wrote:
+>> On systems where the UCSI PDOs are not supported, the UCSI driver is
+>> giving an error message. This can cause users to believe there is a HW
+>> issue with their system when in fact it is working as designed.
+>> 
+>> Downgrade message to dev_info for EOPNOTSUPP condition.
+>> 
+>> Tested on Lenovo L14 G5 AMD and confirmed with Lenovo FW team that PDOs
+>> are not supported on this platform.
+>> 
+>> Signed-off-by: Mark Pearson <mpearson-lenovo@squebb.ca>
+>> ---
+>>  drivers/usb/typec/ucsi/ucsi.c | 8 ++++++--
+>>  1 file changed, 6 insertions(+), 2 deletions(-)
+>> 
+>> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+>> index cb52e7b0a2c5..090be87d5485 100644
+>> --- a/drivers/usb/typec/ucsi/ucsi.c
+>> +++ b/drivers/usb/typec/ucsi/ucsi.c
+>> @@ -632,8 +632,12 @@ static int ucsi_read_pdos(struct ucsi_connector *con,
+>>  	command |= is_source(role) ? UCSI_GET_PDOS_SRC_PDOS : 0;
+>>  	ret = ucsi_send_command(ucsi, command, pdos + offset,
+>>  				num_pdos * sizeof(u32));
+>> -	if (ret < 0 && ret != -ETIMEDOUT)
+>> -		dev_err(ucsi->dev, "UCSI_GET_PDOS failed (%d)\n", ret);
+>> +	if (ret < 0 && ret != -ETIMEDOUT) {
+>> +		if (ret == -EOPNOTSUPP)
+>> +			dev_info(ucsi->dev, "UCSI_GET_PDOS not supported on this hardware\n");
+>
+> Maybe it would be enough to guard GET_PDOS commands with the
+> UCSI_CAP_PDO_DETAILS check? Is it cleared on affected platforms?
+>
 
-Ideally it needs to be done in user space where you have full access
-to the tree of devices, can determine if the device getting the MAC
-address really is in a dock, is the first dock in a chain of docks,
-and not a USB dongle etc.
+I checked on the system I have and the features are 0x84, so the CAP_PDO_DETAILS aren't set.
+I can do a formal patch if the approach is better, I ended up doing:
 
-Using NET_ADDR_STOLEN is interesting. It is currently used in bonding,
-when the bond device takes the MAC address from one of its slaves. It
-is also used with VLAN interfaces, which inherit the MAC address of
-the base interface. There is a clear relationship between the two
-interfaces using the same MAC address. However in the pass through
-case, the interfaces are unrelated.
+@@ -645,9 +645,13 @@ static int ucsi_read_pdos(struct ucsi_connector *con,
+ static int ucsi_get_pdos(struct ucsi_connector *con, enum typec_role role,
+                         int is_partner, u32 *pdos)
+ {
++       struct ucsi *ucsi = con->ucsi;
+        u8 num_pdos;
+        int ret;
+ 
++       if (!(ucsi->cap.features & UCSI_CAP_PDO_DETAILS))
++               return 0;
++
+        /* UCSI max payload means only getting at most 4 PDOs at a time */
+        ret = ucsi_read_pdos(con, role, is_partner, pdos, 0, UCSI_MAX_PDOS);
 
-However, the code says:
+And this did indeed squelch the 'error' message.
 
-#define NET_ADDR_STOLEN		2	/* address is stolen from other device */
+Couple of notes:
+ - I don't know this area very well, so don't know if there are risks of any regressions in other circumstances. I think it's pretty safe, but if any experts have an opinion that would be appreciated.
+ - It means that there isn't a log message saying that PDO capabilities are not available. Are there going to be power related tooling that won't work and it would be useful to have that message available?
 
-which is exactly what is happening here.
-
-> Signed-off-by: Milan Broz <gmazyland@gmail.com>
-
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-
-    Andrew
+Thanks
+Mark
 
