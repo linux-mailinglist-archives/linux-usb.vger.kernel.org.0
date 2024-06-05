@@ -1,131 +1,144 @@
-Return-Path: <linux-usb+bounces-10860-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10861-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0DE5C8FC827
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 11:43:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 329708FC88B
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 12:01:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 33F221C21369
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 09:43:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D3DB6284108
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 10:01:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62EB9191473;
-	Wed,  5 Jun 2024 09:41:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F370A18FDD3;
+	Wed,  5 Jun 2024 10:01:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="HKztHKAy"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="tQLzxtYz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-m32109.qiye.163.com (mail-m32109.qiye.163.com [220.197.32.109])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EECE190045;
-	Wed,  5 Jun 2024 09:41:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.32.109
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDF0F14A4F4
+	for <linux-usb@vger.kernel.org>; Wed,  5 Jun 2024 10:01:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717580514; cv=none; b=s7KzfjteOZnFIrGjGWGJ/4cJaStNS7ci+ih2E8q3/QQeHfMixYC1ECpuks5oh611VsV7/zeO0bknwzifQLjITZbOlmb/TNeH+jjW3gDa/ebnIjEsz3asf+EXkSj/kCodBSW4oXT9EeTHd2HcLKtg8CYHbnpKp6u2Wcxxchnpfr4=
+	t=1717581685; cv=none; b=iW2pj8d7UZvpT93PX0t6CW4nSE2uCpjbMLYtvOMvNsMhNTml6AfgOeP2N1WUiF5pPVuBAxDXQBW0PCUqSS8OdXPUUvhjLlsVj1gg2Y5OmLh1FTvvTz1uJvKfysOD1Azg+W9ipA3+G4UtJJvROpZfr4FM0EAKx8R/Clq/UHmt74Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717580514; c=relaxed/simple;
-	bh=aBy7vIst2FBAPwGPshMP9IQOR/ZWBTluJmQmKcqLFng=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
-	 In-Reply-To:Content-Type; b=B1Wuc9HdBAEh1qrWOZTOhpUIVL3yX6YpnYFtiVbsn0lFEH+xavNs83nOIynYdacxyu/7Lw5salveSfAxH85Af9V71ZyPqAsa1Ekptc/glfJAr3yXjkop41hI8vzJGo5trqs8b0nJlVe9TMdPlCRt+VNXi+TxsH3oWCiG+JJCDh0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=HKztHKAy; arc=none smtp.client-ip=220.197.32.109
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
-DKIM-Signature: a=rsa-sha256;
-	b=HKztHKAyn248J+U2sZbJUYIvNPzdyC8CP+mQ2KjqyTNYmiJhDfssPyipAMYZ5xPA/cLDR1afFNhE7W70ylj2c66NwNIfS49E1VD7eFCIEdzXNhd637fXZ8HBO+Qj2sjnt6VlG3sN7uImQPVEaJE6vZZ1JrqPCtudIeKdzg6gBO0=;
-	s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
-	bh=DQv58ir20XJLj4kjCZ4hNT8DMmOKn/UVGcDrVAwYVW0=;
-	h=date:mime-version:subject:message-id:from;
-Received: from [192.168.60.56] (unknown [103.29.142.67])
-	by smtp.qiye.163.com (Hmail) with ESMTPA id 2C7771A0423;
-	Wed,  5 Jun 2024 11:06:01 +0800 (CST)
-Message-ID: <10f48a9b-d66a-439e-80d3-54f8e01f015e@rock-chips.com>
-Date: Wed, 5 Jun 2024 11:05:59 +0800
+	s=arc-20240116; t=1717581685; c=relaxed/simple;
+	bh=X4J+NHCPUK/pGeuU2jk5RSkU7NENxyMnKn+lp9gIWQY=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=YHKXLRXhujHNJ4cN996MTW2DBCphzEKinW1fBQBSdKYAGHPjZ9rApOURYnGOtBlqIj54yDxDmUK6HOzQTaNOcTMD7rqgWoXsasRGWk28Vh17mOW6DQleXurcVT+5y3SIi5uUHhOTyGnN3Rw+2eylOqSwOVBXFSCCkEwjG3I1wDY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=tQLzxtYz; arc=none smtp.client-ip=209.85.221.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-354f3f6c3b1so1869139f8f.2
+        for <linux-usb@vger.kernel.org>; Wed, 05 Jun 2024 03:01:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1717581682; x=1718186482; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9DzuTZgbZabvBJ626xcW1V1Egdfb6MOgv2LEKNybpd4=;
+        b=tQLzxtYzxu2+Ru8+klts8EHgg2RizfAG/TG8uwd2wDI/1LRrbaG+zosv4/GPBozw6O
+         kVd7DhpHk61DHijT6vq7ccbb8Q1hOUz943Tk3p6Vv2TSTKu3034HHdNmZEWpKGTaVnzT
+         x7VvAj8rebSW55yk5YIE4hoV3hZdTal4nHFCERhtGAF0Hrr4tA61xZpEceVMZ3os2DV9
+         I8opD9bNHIcd+Ef3dHOQDXL15kNX0sf09tOYjZsokTJU9E58wrAMBzNMn9ZqEvumSqbz
+         SfVh+62Nq9Cj7id2rDLCDExr+Cg2EjLqX6poVjyLpdRRH1j+PIZ/8IAlVyaIRm5CWe5K
+         eRSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717581682; x=1718186482;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9DzuTZgbZabvBJ626xcW1V1Egdfb6MOgv2LEKNybpd4=;
+        b=V35AbJRJkqt3KAVlPR6TTISBqorTtW95zt9rRX4Txwbn7XfjpGp7fE5bfcpxrmkWTb
+         9/BcSNCPkUSwz3fgLqFfWq7wMob/WNkpBaqGO5KVnKq0R+eX94VQlTDod2rzGy4Px+ip
+         vXdxxUFNrScrKADTPL1w0ynJoYLYANXVW6IuPU36ZbhyYkzFXccTUkE1PSHssO6KRQiU
+         qGj0HzdW8jSX/5QoKzRLrnJhzDBUOmc4dMuowf97d84IcfxTPOXxVoYYuRRIgliLOjku
+         ZquHAB5dbv1vAXVgqcUzv8GjbObyBxcjnMmfR0A2ZFDAvgl4dv8xtyvUB1U5qAhnI2t8
+         i/dQ==
+X-Gm-Message-State: AOJu0Yyp7V3TPyYC0AOflD4cYPQieKONuFPHeNeTcuormpACjEzqGvwS
+	GuwyaG2EJUMQT85pSL/jckkCIX7FPdu2ubhMgShzVE/XYs4EhYrs+uHncyApwxY=
+X-Google-Smtp-Source: AGHT+IFGB6+8XGX3B39GWLZTV1hN9L0hjBlUU61Lpb7u32G6xWF46KpUdOIbw9v2lAWlyu68sGB/ww==
+X-Received: by 2002:a5d:64c3:0:b0:356:6c6f:2609 with SMTP id ffacd0b85a97d-35e84070f54mr1572425f8f.17.1717581681967;
+        Wed, 05 Jun 2024 03:01:21 -0700 (PDT)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-35dd04c0d98sm13952677f8f.24.2024.06.05.03.01.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jun 2024 03:01:21 -0700 (PDT)
+From: Neil Armstrong <neil.armstrong@linaro.org>
+Date: Wed, 05 Jun 2024 12:01:20 +0200
+Subject: [PATCH] dt-bindings: usb: dwc2: allow device sub-nodes
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: bjorn.andersson@linaro.org
-Cc: andriy.shevchenko@linux.intel.com, devicetree@vger.kernel.org,
- djrscally@gmail.com, gregkh@linuxfoundation.org, hdegoede@redhat.com,
- heikki.krogerus@linux.intel.com, krzysztof.kozlowski+dt@linaro.org,
- linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, rafael@kernel.org, robh+dt@kernel.org,
- sakari.ailus@linux.intel.com, =?UTF-8?B?5ZC06Imv5bOw?=
- <william.wu@rock-chips.com>, yubing.zhang@rock-chips.com, wmc@rock-chips.com
-References: <20220422222351.1297276-6-bjorn.andersson@linaro.org>
-Subject: Re: [PATCH v5 5/7] usb: typec: mux: Allow multiple mux_devs per mux
-Content-Language: en-US
-Reply-To: 20220422222351.1297276-1-bjorn.andersson@linaro.org
-From: Frank Wang <frank.wang@rock-chips.com>
-In-Reply-To: <20220422222351.1297276-6-bjorn.andersson@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlDGUtIVksaSkpLTUIZShgfGFUTARMWGhIXJBQOD1
-	lXWRgSC1lBWUpLSFVJQlVKT0lVTUxZV1kWGg8SFR0UWUFZT0tIVUpNT0lMTlVKS0tVSkJLS1kG
-X-HM-Tid: 0a8fe65c587c03abkunm2c7771a0423
-X-HM-MType: 1
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6NiI6Djo*EjNMQzJDEQ8SNxAx
-	PywaCRNVSlVKTEpMTk5NTE1ISEtDVTMWGhIXVR0JGhUQVQwaFRw7CRQYEFYYExILCFUYFBZFWVdZ
-	EgtZQVlKS0hVSUJVSk9JVU1MWVdZCAFZQU9KTUI3Bg++
+Message-Id: <20240605-topic-amlogic-upstream-bindings-fixes-dwc2-subnodes-v1-1-915893e0cb20@linaro.org>
+X-B4-Tracking: v=1; b=H4sIAG83YGYC/x3MywrCMBCF4Vcps3YghhgvryJdpMkYB2wSMq0Kp
+ e/u4OrwweHfQKgzCdyGDTq9WbgWxfEwQHyGkgk5qcEa64w3J1xq44hhftWsuzZZOoUZJy6JSxZ
+ 88JcE0ydalHUqNalc8BcK6Xz11oGWW6f/TcP3cd9/Uub03IUAAAA=
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>
+Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Neil Armstrong <neil.armstrong@linaro.org>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1269;
+ i=neil.armstrong@linaro.org; h=from:subject:message-id;
+ bh=X4J+NHCPUK/pGeuU2jk5RSkU7NENxyMnKn+lp9gIWQY=;
+ b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBmYDdwUDjjv9AL8LPyasrSreKHRVDjunpIjJGGPuCs
+ SFm8FWaJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZmA3cAAKCRB33NvayMhJ0RHqD/
+ 91reH0EXlToPWL2lQdQz/ocv7rkKkEopctmGkYidL3n347CT+/C7ZIhK9dRAUxJi4ht0SC+P8871iv
+ k3sW9oW7Yt2DrgRLzaQvZODRodJ3SYAkpBU0uNXJ6oYUGFyQrI376Zo5BL5Pn/j2Y43smPvaLr8kW5
+ zbY66WL+5KrnX7BqgEJ3QkH4x+8enMhdh4RWaUM9jExizBN0evEgJPmzbQX4laIvNg7oP6FXel+rQp
+ H1Lv/ziAnQxX5Tay3FIhwcS1bbCG3q9TS3k7qkJXUw1xXpSXGQ+Lf90Fs2g+lJ751NfmVcB2CbrO2w
+ nYKxbGVyoMgJTpMHEbBS7fujVIalvaHwbqXgW0CEw4oMUL7iLgHHSRYQcr0CQsywAP3TWQiSOrlT6s
+ x37eP4M34lbN789gS/sWrmYUxrxHfBZSXN+OnLcVSbM97uN/tpWLgCtwfeaJQzQsH13Sfr96m2GhiA
+ 5GGNBzvoZ8T9qwVK0k2JMhoG55L5uP1bUcskCZU2jWnLor270WQyoyukLL50lyvqkBDrrj0EHWSuVn
+ KVz1+rV6YTf0JniqimLr+VJHek19SLIw7SAS4vFKcyzBkPpsWREOGKfLr9QaZFUioVdjt8MPr0bUSP
+ bDARGb2JCqkXVFe2GTAROTaL5MrDY6vRtmR3OekfD4oF1VVHipcWG5vvJSMg==
+X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
+ fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
 
-Hi Bjorn,
+Allow the '#address-cells', '#size-cells' and subnodes as defined in
+usb-hcd.yaml and used in the meson-gxbb-odroidc2 DT.
 
-> In the Qualcomm platforms the USB/DP PHY handles muxing and orientation
-> switching of the SuperSpeed lines, but the SBU lines needs to be
-> connected and switched by external (to the SoC) hardware.
->
-> It's therefor necessary to be able to have the TypeC controller operate
-> multiple TypeC muxes and switches. Use the newly introduced indirection
-> object to handle this, to avoid having to taint the TypeC controllers
-> with knowledge about the downstream hardware configuration.
->
-> The max number of devs per indirection is set to 3, which account for
-> being able to mux/switch the USB HS, SS and SBU lines, as per defined
-> defined in the usb-c-connector binding. This number could be grown if
-> need arrises at a later point in time.
->
-> Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> ---
->
-> Changes since v4:
-> - None
->
->   drivers/usb/typec/mux.c  <https://lore.kernel.org/all/20220422222351.1297276-6-bjorn.andersson@linaro.org/#Z31drivers:usb:typec:mux.c>  | 128 ++++++++++++++++++++++++++++++++--------
->   1 filechanged  <https://lore.kernel.org/all/20220422222351.1297276-6-bjorn.andersson@linaro.org/#related>, 102 insertions(+), 26 deletions(-)
+The fixes the following:
+meson-gxbb-odroidc2.dtb: usb@c9100000: '#address-cells', '#size-cells', 'hub@1' do not match any of the regexes: 'pinctrl-[0-9]+'
+	from schema $id: http://devicetree.org/schemas/usb/dwc2.yaml#
 
-With this commit, TCPC device shall match *two* endpoint port both for switch device and mux device
-if they have the same parent node like the following DT. It causes the callback funtion is invoked
-twice both for switch and mux in tcpm_mux_set() process.
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+---
+ Documentation/devicetree/bindings/usb/dwc2.yaml | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-arch/arm64/boot/dts/rockchip/rk3588-evb1-v10.dts
+diff --git a/Documentation/devicetree/bindings/usb/dwc2.yaml b/Documentation/devicetree/bindings/usb/dwc2.yaml
+index 4f36a22aa6d7..9e737f587664 100644
+--- a/Documentation/devicetree/bindings/usb/dwc2.yaml
++++ b/Documentation/devicetree/bindings/usb/dwc2.yaml
+@@ -177,6 +177,13 @@ properties:
+     minItems: 1
+     maxItems: 2
+ 
++  "#address-cells": true
++
++  "#size-cells": true
++
++patternProperties:
++  "^.*@[0-9a-f]{1,2}$": true
++
+ dependencies:
+   port: [ usb-role-switch ]
+   role-switch-default-mode: [ usb-role-switch ]
 
-&usbdp_phy0 {
-         mode-switch;
-         orientation-switch;
-         [...]
-         port {
-                 #address-cells = <1>;
-                 #size-cells = <0>;
+---
+base-commit: c3f38fa61af77b49866b006939479069cd451173
+change-id: 20240605-topic-amlogic-upstream-bindings-fixes-dwc2-subnodes-4a68ead79624
 
-                 usbdp_phy0_orientation_switch: endpoint@0 {
-                         reg = <0>;
-                         remote-endpoint = <&usbc0_orien_sw>;
-                 };
-
-                 usbdp_phy0_dp_altmode_mux: endpoint@1 {
-                         reg = <1>;
-                         remote-endpoint = <&dp_altmode_mux>;
-                 };
-         };
-};
-
-BR.
-Frank
+Best regards,
+-- 
+Neil Armstrong <neil.armstrong@linaro.org>
 
 
