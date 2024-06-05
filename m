@@ -1,64 +1,58 @@
-Return-Path: <linux-usb+bounces-10875-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10876-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1DA9C8FCB44
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 13:56:28 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 226448FCB56
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 13:58:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 24C741C21A9F
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 11:56:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B38071F2473E
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 11:58:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20B5B19AD92;
-	Wed,  5 Jun 2024 11:50:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A37A194A5A;
+	Wed,  5 Jun 2024 11:51:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="srSLjOHJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o+wO1efP"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8865919885B;
-	Wed,  5 Jun 2024 11:50:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9399190050;
+	Wed,  5 Jun 2024 11:51:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717588226; cv=none; b=OWLvvORgEX5eYV+fmZZG8IpwfzxVVwtqofGDuBKQwFYR0E6OGPcXknNMRd2+zpx7tOzpXGtCtvXGDp6ve7/UgLcPk1ZP30t00MO7J+dizY+uq5mk8D41uUbSRxkpjJ2ErvlZFhab+1wWtrit/y8rhiqSDOUpsuA3YJaNc2arvrk=
+	t=1717588263; cv=none; b=U6FgOpqJu1CND+XUEBXAJsRrJ5fmxFEU/vsPGyeAni6cKW8K4wCjrIlH7znoEQsBKo2U3QKLI1961m0Lsydl7HhZognmJqvQSjgtFuskkz5AzbZ50IEh7+zJRAEGRN4P1+zI5nDFJ2oyyzD0w6obOQAOxRp/BW31DNGfeGCcx0k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717588226; c=relaxed/simple;
-	bh=k9wMZie2g8zido3r8l4XxgOwAvQm8nitQZP1EAGITQo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MrUImC5OpCr8CX9WRbOoj/IhAwRdXjx/sMvIBqVK471xZzmi+U3/vYPjvcOiAJPpecz4obEmPNCix5vmmEQ9dTH5iTgpsmASemjWwFM+ab46ZBVtdHAF+0ZvQ88cjMCtLlIkRKTWfPsOqN5nIpWuL/1F8+TNFLXsFoHZIxZdsH0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=srSLjOHJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6686C32781;
-	Wed,  5 Jun 2024 11:50:24 +0000 (UTC)
+	s=arc-20240116; t=1717588263; c=relaxed/simple;
+	bh=JJbEb6Be+uGFHcPPviUGo9V6PlBpgcCgy8HtnK62XBI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=i2c+Kskl/vZXKX4a6sPiopPTHPp2ZYtzX+LxkmHkeZXV86hF+KtBYTrCF5j79I/SngmBstypfFQ7twU9ibXGOvvmJ+s2N0nVWMO/Cb+xOAI6xKQ0uEmtPa0wPxr9GVa24TkoM3A2YJU3i440+OY3zjdtzyTSNAawrYtGicgZVzk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o+wO1efP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B5C3C3277B;
+	Wed,  5 Jun 2024 11:51:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717588226;
-	bh=k9wMZie2g8zido3r8l4XxgOwAvQm8nitQZP1EAGITQo=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=srSLjOHJPV5k+Ehbe7IXYhch/SaoMiisFIobMaX3hHfYkqH8syKfSI390h2AeFDVV
-	 2Lvb+4sqSgaLC4vGoSWUHvPy7A4cperkpQtbTJCBRsRYh6vwuqg6+3Za24tCewtH6l
-	 aj01P70pxm25gAqCiuzKxt48wB1VhDk8lx2Dis9UsX/PeBxMWSTqMUGz5AxxJ2naZz
-	 09Gf+U3pFrduu/Lp55vUXz1D+rehjevzHgrf3V9lfJ4giA+C9LW8kMImmxFuschxyq
-	 XLpvkoHFKT7WXHZzEAFdV35kYsx8vH0mE+OoKPoP9QK9aY6mHETLQyZbHmlb3pfqfW
-	 ZO7geDPqlin/Q==
+	s=k20201202; t=1717588263;
+	bh=JJbEb6Be+uGFHcPPviUGo9V6PlBpgcCgy8HtnK62XBI=;
+	h=From:To:Cc:Subject:Date:From;
+	b=o+wO1efPfxvK/Uh8oxtOIQcboHQZT4ExRolhdUTiWfMdE7816GfxhYkdlcfpdEUUj
+	 fYoTHPYV87Uah2g8un0yfa8p8W0imo/CSCgOcZtE8Je/EZU8FvhHAddNt925Hfoqwl
+	 CwfgROB4wYPL/mfeS4vjBWDvK23uGcuiYr7of7OBhkvzRoEh2LSJajSdSwKFOn5no3
+	 lBqJnmKDykorJVj8JBB60sro5wRh72GImfLFfo2jxE3Qh2XWJ0bVX1deiXjG599wb2
+	 REqEZTX8BYZQxyhqM1UmQNoUK0k0qJ14ybjbddln/7//oRA73mKYRGofdh7IDHjG++
+	 wHAorx9WSs3qA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Caleb Connolly <caleb.connolly@linaro.org>,
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Johan Hovold <johan+linaro@kernel.org>,
+Cc: Michael Grzeschik <m.grzeschik@pengutronix.de>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Sasha Levin <sashal@kernel.org>,
-	linux-arm-msm@vger.kernel.org,
+	laurent.pinchart@ideasonboard.com,
+	dan.scally@ideasonboard.com,
 	linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.9 24/28] usb: typec: qcom-pmic-typec: split HPD bridge alloc and registration
-Date: Wed,  5 Jun 2024 07:48:53 -0400
-Message-ID: <20240605114927.2961639-24-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.8 01/24] usb: gadget: uvc: configfs: ensure guid to be valid before set
+Date: Wed,  5 Jun 2024 07:50:11 -0400
+Message-ID: <20240605115101.2962372-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240605114927.2961639-1-sashal@kernel.org>
-References: <20240605114927.2961639-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -67,81 +61,65 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.9.3
+X-stable-base: Linux 6.8.12
 Content-Transfer-Encoding: 8bit
 
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+From: Michael Grzeschik <m.grzeschik@pengutronix.de>
 
-[ Upstream commit 718b36a7b49acbba36546371db2d235271ceb06c ]
+[ Upstream commit f7a7f80ccc8df017507e2b1e1dd652361374d25b ]
 
-If a probe function returns -EPROBE_DEFER after creating another device
-there is a change of ending up in a probe deferral loop, (see commit
-fbc35b45f9f6 ("Add documentation on meaning of -EPROBE_DEFER"). In case
-of the qcom-pmic-typec driver the tcpm_register_port() function looks up
-external resources (USB role switch and inherently via called
-typec_register_port() USB-C muxes, switches and retimers).
+When setting the guid via configfs it is possible to test if
+its value is one of the kernel supported ones by calling
+uvc_format_by_guid on it. If the result is NULL, we know the
+guid is unsupported and can be ignored.
 
-In order to prevent such probe-defer loops caused by qcom-pmic-typec
-driver, use the API added by Johan Hovold and move HPD bridge
-registration to the end of the probe function.
-
-The devm_drm_dp_hpd_bridge_add() is called at the end of the probe
-function after all TCPM start functions. This is done as a way to
-overcome a different problem, the DRM subsystem can not properly cope
-with the DRM bridges being destroyed once the bridge is attached. Having
-this function call at the end of the probe function prevents possible
-DRM bridge device creation followed by destruction in case one of the
-TCPM start functions returns an error.
-
-Reported-by: Caleb Connolly <caleb.connolly@linaro.org>
-Acked-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
-Link: https://lore.kernel.org/r/20240424-qc-pmic-typec-hpd-split-v4-1-f7e10d147443@linaro.org
+Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+Link: https://lore.kernel.org/r/20240221-uvc-gadget-configfs-guid-v1-1-f0678ca62ebb@pengutronix.de
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ drivers/usb/gadget/function/uvc_configfs.c | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c
-index d3958c061a972..501eddb294e43 100644
---- a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c
-+++ b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c
-@@ -41,7 +41,7 @@ static int qcom_pmic_typec_probe(struct platform_device *pdev)
- 	struct device_node *np = dev->of_node;
- 	const struct pmic_typec_resources *res;
- 	struct regmap *regmap;
--	struct device *bridge_dev;
-+	struct auxiliary_device *bridge_dev;
- 	u32 base;
+diff --git a/drivers/usb/gadget/function/uvc_configfs.c b/drivers/usb/gadget/function/uvc_configfs.c
+index a4377df612f51..6fac696ea8463 100644
+--- a/drivers/usb/gadget/function/uvc_configfs.c
++++ b/drivers/usb/gadget/function/uvc_configfs.c
+@@ -13,6 +13,7 @@
+ #include "uvc_configfs.h"
+ 
+ #include <linux/sort.h>
++#include <linux/usb/uvc.h>
+ #include <linux/usb/video.h>
+ 
+ /* -----------------------------------------------------------------------------
+@@ -2260,6 +2261,8 @@ static ssize_t uvcg_uncompressed_guid_format_store(struct config_item *item,
+ 	struct f_uvc_opts *opts;
+ 	struct config_item *opts_item;
+ 	struct mutex *su_mutex = &ch->fmt.group.cg_subsys->su_mutex;
++	const struct uvc_format_desc *format;
++	u8 tmpguidFormat[sizeof(ch->desc.guidFormat)];
  	int ret;
  
-@@ -92,7 +92,7 @@ static int qcom_pmic_typec_probe(struct platform_device *pdev)
- 	if (!tcpm->tcpc.fwnode)
- 		return -EINVAL;
+ 	mutex_lock(su_mutex); /* for navigating configfs hierarchy */
+@@ -2273,7 +2276,16 @@ static ssize_t uvcg_uncompressed_guid_format_store(struct config_item *item,
+ 		goto end;
+ 	}
  
--	bridge_dev = drm_dp_hpd_bridge_register(tcpm->dev, to_of_node(tcpm->tcpc.fwnode));
-+	bridge_dev = devm_drm_dp_hpd_bridge_alloc(tcpm->dev, to_of_node(tcpm->tcpc.fwnode));
- 	if (IS_ERR(bridge_dev))
- 		return PTR_ERR(bridge_dev);
- 
-@@ -110,8 +110,14 @@ static int qcom_pmic_typec_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto port_stop;
- 
-+	ret = devm_drm_dp_hpd_bridge_add(tcpm->dev, bridge_dev);
-+	if (ret)
-+		goto pdphy_stop;
+-	memcpy(ch->desc.guidFormat, page,
++	memcpy(tmpguidFormat, page,
++	       min(sizeof(tmpguidFormat), len));
 +
- 	return 0;
++	format = uvc_format_by_guid(tmpguidFormat);
++	if (!format) {
++		ret = -EINVAL;
++		goto end;
++	}
++
++	memcpy(ch->desc.guidFormat, tmpguidFormat,
+ 	       min(sizeof(ch->desc.guidFormat), len));
+ 	ret = sizeof(ch->desc.guidFormat);
  
-+pdphy_stop:
-+	tcpm->pdphy_stop(tcpm);
- port_stop:
- 	tcpm->port_stop(tcpm);
- port_unregister:
 -- 
 2.43.0
 
