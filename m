@@ -1,57 +1,59 @@
-Return-Path: <linux-usb+bounces-10890-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10891-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 708D78FCBFB
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 14:11:01 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9AD0B8FCC27
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 14:14:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EC6FC1F23B58
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 12:11:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7D2E828D357
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 12:12:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F505196DAB;
-	Wed,  5 Jun 2024 11:53:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02C2A1B1422;
+	Wed,  5 Jun 2024 11:54:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c0iMoWk1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H0QC5DyF"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C09B2196D95;
-	Wed,  5 Jun 2024 11:53:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B33F1B1408;
+	Wed,  5 Jun 2024 11:54:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717588421; cv=none; b=mUYH6z5ku4AS2uvLlWGx8R7VtC/su2MciY4Cx0G4fQLz2THLz51AMq9FXiXfaW+xmpwLIEl4cp3ehIu0CPZp0/A8Fm01fSYQpwTUlKinEVVGZrP2STkTTha0RwX1G9t+mV8FibxRG3trpl/6U5lrDwj4q3m5PH8BTQnuHxjCFa4=
+	t=1717588441; cv=none; b=X44m1LnhFAckDVSePHtJh9nfg5ECp48ChIsSPQa3oedyiFRCe7hR/Xz8+vASs6FR5pXd3kFX+uWQaoVDs8Kwu+/8RY5FJOgbuUJ6q7zHXzUm+F3WXfVtG0i6m71wBK05GOHqEfuzS41zb3e+Q+ylwnz2FYy1KkZfMtuzPEWXEH4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717588421; c=relaxed/simple;
-	bh=QpQAPRQYmwJRJjhbalApNjUg1YtzVBQoY0SC40djM98=;
+	s=arc-20240116; t=1717588441; c=relaxed/simple;
+	bh=I1cLYhMYobYuzz+f5gJeRK0PZzYtjFyd+VHC04L27oU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jv/6+9wEdDdsw/WExidEmpfsZOwPPcd9r7tMXvDTu1vPDEDiZeunOJoDcqN6orHq2SyzuSm9l14nRZLqv9hGx+0n3IlmUrVtlsuINxHrTg/DPha3C/l2PPgwGCtMiRZjsQvZME850Q2/AGrI1xuSfZaxHJxYDUyNRhH32ZYMQv0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c0iMoWk1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2F5FC4AF08;
-	Wed,  5 Jun 2024 11:53:40 +0000 (UTC)
+	 MIME-Version; b=FvQyFQJhaoePFu2XWdR1BG9Q8hUgVE9537Tm0gcVTwaZtFGXisLQJ3S0W7Ag4nEArWDpswSM1mtdDO4NLctx7N4AChAjDU+gJ9aqeeDVIdBPqX3HJMyErXHTIrkdsMbiDRXOPtBsosw2sUooRBRYKwcYbY/ekOOw/ybWEV5ZRrI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H0QC5DyF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E577C3277B;
+	Wed,  5 Jun 2024 11:54:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717588421;
-	bh=QpQAPRQYmwJRJjhbalApNjUg1YtzVBQoY0SC40djM98=;
+	s=k20201202; t=1717588441;
+	bh=I1cLYhMYobYuzz+f5gJeRK0PZzYtjFyd+VHC04L27oU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=c0iMoWk16KKAxl8PSCNOxmI1euGJvaH26JcOROzqRTPIcYXwn/3N7XufPnRNgyHnP
-	 p0TxY+BE0Fcs2vdjjL8dXDL9QXQ0JTImAO+kcaWTpA1yuTAMfL4RJ7thzpOsdhlrBa
-	 fPHzM7GeFI3/scvxLOGqcARx2HBmQAq4kVbqsV5U8woY6HOjHz9gebx+BTRy6fFWsD
-	 QVPJRfLyI/E+NPl/Z7rfCY2qSOI/8kVLY7gmg4IdK4GSuP6CiwfVEh7O8cH/IC1XVW
-	 rs4DCjtW8KcZwLYRw4x7rcgpDy7BVVFFYhhluEr5bWJI0KdoVqdnGjmPi8aYeII5UO
-	 2IpLET0/dzAag==
+	b=H0QC5DyFFnWe4tt3QAYuMa0bJleOl8W1cIm/fkkK5MzAbJf0d5VI2l2D+QZgSVIMb
+	 BoaGNhwGMeaNXnCBNDiRVLa25FtCOg/BsvtWyuNkCEiVxWFD+6phoY2nUfLo7Iw9ZM
+	 maDpYQBO8ypVxpqmhSTqerkniAtiwARd7UeOy+TWwGoFs3k2tUHA5Xp3kEQN/fn3bD
+	 mEXOJSOy2uMh/I9ZxVtI5mzl8sThEICpagrgaVfH61rIy++aWfpfShSlM5s6Yv+GXV
+	 RaH6lLERwjx5rx8A0YRFp1OpsLbwue4ZrjUQBSF+n+s9qVvUdJoP+RbExTuFvS+Ldv
+	 IjXE1Sl1J6kvA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Hans de Goede <hdegoede@redhat.com>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+Cc: Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Sasha Levin <sashal@kernel.org>,
+	aladyshev22@gmail.com,
+	ivan.orlov0322@gmail.com,
+	azeemshaikh38@gmail.com,
 	linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 04/12] usb: dwc3: pci: Don't set "linux,phy_charger_detect" property on Lenovo Yoga Tab2 1380
-Date: Wed,  5 Jun 2024 07:53:09 -0400
-Message-ID: <20240605115334.2963803-4-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 10/12] usb: gadget: function: Remove usage of the deprecated ida_simple_xx() API
+Date: Wed,  5 Jun 2024 07:53:15 -0400
+Message-ID: <20240605115334.2963803-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240605115334.2963803-1-sashal@kernel.org>
 References: <20240605115334.2963803-1-sashal@kernel.org>
@@ -66,65 +68,95 @@ X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.1.92
 Content-Transfer-Encoding: 8bit
 
-From: Hans de Goede <hdegoede@redhat.com>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-[ Upstream commit 0fb782b5d5c462b2518b3b4fe7d652114c28d613 ]
+[ Upstream commit 920e7522e3bab5ebc2fb0cc1a034f4470c87fa97 ]
 
-The Lenovo Yoga Tablet 2 Pro 1380 model is the exception to the rule that
-devices which use the Crystal Cove PMIC without using ACPI for battery and
-AC power_supply class support use the USB-phy for charger detection.
+ida_alloc() and ida_free() should be preferred to the deprecated
+ida_simple_get() and ida_simple_remove().
 
-Unlike the Lenovo Yoga Tablet 2 830 / 1050 models this model has an extra
-LC824206XA Micro USB switch which does the charger detection.
+Note that the upper limit of ida_simple_get() is exclusive, but the one of
+ida_alloc_max() is inclusive. So a -1 has been added when needed.
 
-Add a DMI quirk to not set the "linux,phy_charger_detect" property on
-the 1380 model. This quirk matches on the BIOS version to differentiate
-the 1380 model from the 830 and 1050 models which otherwise have
-the same DMI strings.
-
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Link: https://lore.kernel.org/r/20240406140127.17885-1-hdegoede@redhat.com
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Link: https://lore.kernel.org/r/7cd361e2b377a5373968fa7deee4169229992a1e.1713107386.git.christophe.jaillet@wanadoo.fr
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/dwc3/dwc3-pci.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ drivers/usb/gadget/function/f_hid.c     | 6 +++---
+ drivers/usb/gadget/function/f_printer.c | 6 +++---
+ drivers/usb/gadget/function/rndis.c     | 4 ++--
+ 3 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/usb/dwc3/dwc3-pci.c b/drivers/usb/dwc3/dwc3-pci.c
-index ae25ee832ec03..6110ab1f91318 100644
---- a/drivers/usb/dwc3/dwc3-pci.c
-+++ b/drivers/usb/dwc3/dwc3-pci.c
-@@ -8,6 +8,7 @@
-  *	    Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-  */
+diff --git a/drivers/usb/gadget/function/f_hid.c b/drivers/usb/gadget/function/f_hid.c
+index f1ca9250cad96..bb558a575cb15 100644
+--- a/drivers/usb/gadget/function/f_hid.c
++++ b/drivers/usb/gadget/function/f_hid.c
+@@ -1025,9 +1025,9 @@ static inline int hidg_get_minor(void)
+ {
+ 	int ret;
  
-+#include <linux/dmi.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/slab.h>
-@@ -219,6 +220,7 @@ static int dwc3_pci_quirks(struct dwc3_pci *dwc,
+-	ret = ida_simple_get(&hidg_ida, 0, 0, GFP_KERNEL);
++	ret = ida_alloc(&hidg_ida, GFP_KERNEL);
+ 	if (ret >= HIDG_MINORS) {
+-		ida_simple_remove(&hidg_ida, ret);
++		ida_free(&hidg_ida, ret);
+ 		ret = -ENODEV;
+ 	}
  
- 		if (pdev->device == PCI_DEVICE_ID_INTEL_BYT) {
- 			struct gpio_desc *gpio;
-+			const char *bios_ver;
- 			int ret;
+@@ -1172,7 +1172,7 @@ static const struct config_item_type hid_func_type = {
  
- 			/* On BYT the FW does not always enable the refclock */
-@@ -276,8 +278,12 @@ static int dwc3_pci_quirks(struct dwc3_pci *dwc,
- 			 * detection. These can be identified by them _not_
- 			 * using the standard ACPI battery and ac drivers.
- 			 */
-+			bios_ver = dmi_get_system_info(DMI_BIOS_VERSION);
- 			if (acpi_dev_present("INT33FD", "1", 2) &&
--			    acpi_quirk_skip_acpi_ac_and_battery()) {
-+			    acpi_quirk_skip_acpi_ac_and_battery() &&
-+			    /* Lenovo Yoga Tablet 2 Pro 1380 uses LC824206XA instead */
-+			    !(bios_ver &&
-+			      strstarts(bios_ver, "BLADE_21.X64.0005.R00.1504101516"))) {
- 				dev_info(&pdev->dev, "Using TUSB1211 phy for charger detection\n");
- 				swnode = &dwc3_pci_intel_phy_charger_detect_swnode;
- 			}
+ static inline void hidg_put_minor(int minor)
+ {
+-	ida_simple_remove(&hidg_ida, minor);
++	ida_free(&hidg_ida, minor);
+ }
+ 
+ static void hidg_free_inst(struct usb_function_instance *f)
+diff --git a/drivers/usb/gadget/function/f_printer.c b/drivers/usb/gadget/function/f_printer.c
+index a881c69b1f2bf..8545656419c71 100644
+--- a/drivers/usb/gadget/function/f_printer.c
++++ b/drivers/usb/gadget/function/f_printer.c
+@@ -1316,9 +1316,9 @@ static inline int gprinter_get_minor(void)
+ {
+ 	int ret;
+ 
+-	ret = ida_simple_get(&printer_ida, 0, 0, GFP_KERNEL);
++	ret = ida_alloc(&printer_ida, GFP_KERNEL);
+ 	if (ret >= PRINTER_MINORS) {
+-		ida_simple_remove(&printer_ida, ret);
++		ida_free(&printer_ida, ret);
+ 		ret = -ENODEV;
+ 	}
+ 
+@@ -1327,7 +1327,7 @@ static inline int gprinter_get_minor(void)
+ 
+ static inline void gprinter_put_minor(int minor)
+ {
+-	ida_simple_remove(&printer_ida, minor);
++	ida_free(&printer_ida, minor);
+ }
+ 
+ static int gprinter_setup(int);
+diff --git a/drivers/usb/gadget/function/rndis.c b/drivers/usb/gadget/function/rndis.c
+index 29bf8664bf582..12c5d9cf450c1 100644
+--- a/drivers/usb/gadget/function/rndis.c
++++ b/drivers/usb/gadget/function/rndis.c
+@@ -869,12 +869,12 @@ EXPORT_SYMBOL_GPL(rndis_msg_parser);
+ 
+ static inline int rndis_get_nr(void)
+ {
+-	return ida_simple_get(&rndis_ida, 0, 1000, GFP_KERNEL);
++	return ida_alloc_max(&rndis_ida, 999, GFP_KERNEL);
+ }
+ 
+ static inline void rndis_put_nr(int nr)
+ {
+-	ida_simple_remove(&rndis_ida, nr);
++	ida_free(&rndis_ida, nr);
+ }
+ 
+ struct rndis_params *rndis_register(void (*resp_avail)(void *v), void *v)
 -- 
 2.43.0
 
