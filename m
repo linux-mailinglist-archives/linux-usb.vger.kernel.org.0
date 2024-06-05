@@ -1,62 +1,59 @@
-Return-Path: <linux-usb+bounces-10880-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10881-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF0108FCB67
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 13:59:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 833ED8FCB7B
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 14:01:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D6AFE1C23226
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 11:59:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9CE961C2349F
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 12:01:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95EC7195FF7;
-	Wed,  5 Jun 2024 11:51:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D77D19EEDA;
+	Wed,  5 Jun 2024 11:51:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V/sxMjPY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p8KiMBdU"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1949819EEDE;
-	Wed,  5 Jun 2024 11:51:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E605D192B6D;
+	Wed,  5 Jun 2024 11:51:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717588278; cv=none; b=ZToUYGvMR73IPaz7NsWOG88flIM/7J2awgxiIRwdra0s8CzSCNzpp1DLX7hK+KBoOSm47esJLnf6XSxKxlOsGHUJbjbuZRP+QE+0Ig2AatDCdxyCSDL2koG7S5P2qoSMsPMRlu+alKan3iAuXDD7J+Yrs4AbQqoebZVkhJwHkY8=
+	t=1717588300; cv=none; b=bsMeby+FtCJIb9c5PVMIdYLZqjxWXhJygUllopYRcoTj0i5P6b5+zRq8rXT1RExIUltNjYbujuL7EBw8v8Q7iqCV1KT5KjzWgB1jpa+lfc5esLSv8g/oJah32gqA7IGtm9xOOl4tVG4g1LdS/L2qSpMiqwYNfL4GKCLTuKyXcDc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717588278; c=relaxed/simple;
-	bh=t0vokvuIvTAMl4gK58qFsQK8Hj3e1FRkIYK+llSr3UA=;
+	s=arc-20240116; t=1717588300; c=relaxed/simple;
+	bh=ZPF7T9kuWu/BZfONDXqgsMzLC8AUBVBAEKzU6hLpZ9k=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kzmKm8MO7hNnQzIHZVzkgfDma6ypz+urrZulQKZltipzOX2ZMxr8rLIOOKV8/QeJLnUMef3l5qt+KbwDcRC2XYWEiXBY2kK7YRqzyPGQ0MXgVJjdTBg4p9ysu6J+Q/N0JdT6Vzk9ANc6LqcURSZI3b3MpEEIOta0gRismEyIBH0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V/sxMjPY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A56BC3277B;
-	Wed,  5 Jun 2024 11:51:16 +0000 (UTC)
+	 MIME-Version; b=mnqM3wQD5/5aoZlGe4zPFOjWtb+OFahUAve7aDdEB/qOH24kkAiWn4/o8uqDaxYmFmM0GG1R6MCpJNrwvS/saFgE7hfN45hLOExutOVp/aAOSldFc+oVdXSD5tcVJ/a/OXHfgpDMcmzY0rTnxT9Ha+/C03AoCVcs3jg9AIPESBM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p8KiMBdU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89F64C4AF09;
+	Wed,  5 Jun 2024 11:51:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717588277;
-	bh=t0vokvuIvTAMl4gK58qFsQK8Hj3e1FRkIYK+llSr3UA=;
+	s=k20201202; t=1717588299;
+	bh=ZPF7T9kuWu/BZfONDXqgsMzLC8AUBVBAEKzU6hLpZ9k=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=V/sxMjPYncHTgm3SsljT3Hb+g9r79N9f2jgJjYaNLym+02950tcFPujOvifew2unR
-	 FVrzTc3WDa5Ofx3+ww7kof1VXnZRycdAS98aaHKEeJwQujm4zMpIJk5k2HHJjSr/Gu
-	 EawNYUuFMXp5MjzjaN3Qz0dDTvGDWAlwe2vM+66iAfiLa8Z0KSUMA7nXqFXj956Okb
-	 uGOTbsGJq7iLhkdmODY/8wFb8JU4/39D3pyNoi1QBdcvPr+/AIWKunyLmDgtK+qGZp
-	 IoZwNB7rqWnlGuY64t+6oX2nJ0ueuTHAdnxAFe2M2gfXBoafISlcDQf3AnSQrl0g9S
-	 bPl+0ACRtjF8Q==
+	b=p8KiMBdUIYOAwzHlE0Y43NU0GQJCA+6r+G2ePX8c4iQEge7RuxDyENA6WMVX4Xv8e
+	 aHkTq3ZthcADtMYzy6JvcsXYPWy3jK61tRkUB1kaAsoyPUsoFNY7ot4B9RZgfchi7f
+	 Y38ymOSkrX4XzPX5Nzokti100k7wCsP5LR8GJPRCWCmDwhmoJ5S0eeSZQ9seT9uLTo
+	 /6XtZ8RPzNvWHj+7tL3bZVi55Qgjm8cvSzIcJ6Id2qiWMh5k8aL3YsOvVi13LianrU
+	 sctiNbe0ZhwOfFWh9ilGhuAHX/ohU7V4+Z98RehcyThRb2XFMUA01NQJ8I4Gh7gfUD
+	 LJ3+m0HgYXLvw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+Cc: Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Sasha Levin <sashal@kernel.org>,
-	neil.armstrong@linaro.org,
-	johan+linaro@kernel.org,
-	robh@kernel.org,
-	luca.weiss@fairphone.com,
-	quic_kriskura@quicinc.com,
+	aladyshev22@gmail.com,
+	ivan.orlov0322@gmail.com,
+	azeemshaikh38@gmail.com,
 	linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.8 07/24] usb: typec: ucsi_glink: drop special handling for CCI_BUSY
-Date: Wed,  5 Jun 2024 07:50:17 -0400
-Message-ID: <20240605115101.2962372-7-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.8 14/24] usb: gadget: function: Remove usage of the deprecated ida_simple_xx() API
+Date: Wed,  5 Jun 2024 07:50:24 -0400
+Message-ID: <20240605115101.2962372-14-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240605115101.2962372-1-sashal@kernel.org>
 References: <20240605115101.2962372-1-sashal@kernel.org>
@@ -71,54 +68,95 @@ X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.8.12
 Content-Transfer-Encoding: 8bit
 
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-[ Upstream commit 1a395af9d53c6240bf7799abc43b4dc292ca9dd0 ]
+[ Upstream commit 920e7522e3bab5ebc2fb0cc1a034f4470c87fa97 ]
 
-Newer Qualcomm platforms (sm8450+) successfully handle busy state and
-send the Command Completion after sending the Busy state. Older devices
-have firmware bug and can not continue after sending the CCI_BUSY state,
-but the command that leads to CCI_BUSY is already forbidden by the
-NO_PARTNER_PDOS quirk.
+ida_alloc() and ida_free() should be preferred to the deprecated
+ida_simple_get() and ida_simple_remove().
 
-Follow other UCSI glue drivers and drop special handling for CCI_BUSY
-event. Let the UCSI core properly handle this state.
+Note that the upper limit of ida_simple_get() is exclusive, but the one of
+ida_alloc_max() is inclusive. So a -1 has been added when needed.
 
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Link: https://lore.kernel.org/r/20240408-qcom-ucsi-fixes-bis-v1-3-716c145ca4b1@linaro.org
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Link: https://lore.kernel.org/r/7cd361e2b377a5373968fa7deee4169229992a1e.1713107386.git.christophe.jaillet@wanadoo.fr
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/typec/ucsi/ucsi_glink.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ drivers/usb/gadget/function/f_hid.c     | 6 +++---
+ drivers/usb/gadget/function/f_printer.c | 6 +++---
+ drivers/usb/gadget/function/rndis.c     | 4 ++--
+ 3 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c b/drivers/usb/typec/ucsi/ucsi_glink.c
-index 0e6f837f6c31b..1d0e2d87e9b31 100644
---- a/drivers/usb/typec/ucsi/ucsi_glink.c
-+++ b/drivers/usb/typec/ucsi/ucsi_glink.c
-@@ -176,7 +176,8 @@ static int pmic_glink_ucsi_sync_write(struct ucsi *__ucsi, unsigned int offset,
- 	left = wait_for_completion_timeout(&ucsi->sync_ack, 5 * HZ);
- 	if (!left) {
- 		dev_err(ucsi->dev, "timeout waiting for UCSI sync write response\n");
--		ret = -ETIMEDOUT;
-+		/* return 0 here and let core UCSI code handle the CCI_BUSY */
-+		ret = 0;
- 	} else if (ucsi->sync_val) {
- 		dev_err(ucsi->dev, "sync write returned: %d\n", ucsi->sync_val);
- 	}
-@@ -243,10 +244,7 @@ static void pmic_glink_ucsi_notify(struct work_struct *work)
- 		ucsi_connector_change(ucsi->ucsi, con_num);
+diff --git a/drivers/usb/gadget/function/f_hid.c b/drivers/usb/gadget/function/f_hid.c
+index 3c8a9dd585c09..2db01e03bfbf0 100644
+--- a/drivers/usb/gadget/function/f_hid.c
++++ b/drivers/usb/gadget/function/f_hid.c
+@@ -1029,9 +1029,9 @@ static inline int hidg_get_minor(void)
+ {
+ 	int ret;
+ 
+-	ret = ida_simple_get(&hidg_ida, 0, 0, GFP_KERNEL);
++	ret = ida_alloc(&hidg_ida, GFP_KERNEL);
+ 	if (ret >= HIDG_MINORS) {
+-		ida_simple_remove(&hidg_ida, ret);
++		ida_free(&hidg_ida, ret);
+ 		ret = -ENODEV;
  	}
  
--	if (ucsi->sync_pending && cci & UCSI_CCI_BUSY) {
--		ucsi->sync_val = -EBUSY;
--		complete(&ucsi->sync_ack);
--	} else if (ucsi->sync_pending &&
-+	if (ucsi->sync_pending &&
- 		   (cci & (UCSI_CCI_ACK_COMPLETE | UCSI_CCI_COMMAND_COMPLETE))) {
- 		complete(&ucsi->sync_ack);
+@@ -1176,7 +1176,7 @@ static const struct config_item_type hid_func_type = {
+ 
+ static inline void hidg_put_minor(int minor)
+ {
+-	ida_simple_remove(&hidg_ida, minor);
++	ida_free(&hidg_ida, minor);
+ }
+ 
+ static void hidg_free_inst(struct usb_function_instance *f)
+diff --git a/drivers/usb/gadget/function/f_printer.c b/drivers/usb/gadget/function/f_printer.c
+index 076dd4c1be96c..ba7d180cc9e6d 100644
+--- a/drivers/usb/gadget/function/f_printer.c
++++ b/drivers/usb/gadget/function/f_printer.c
+@@ -1312,9 +1312,9 @@ static inline int gprinter_get_minor(void)
+ {
+ 	int ret;
+ 
+-	ret = ida_simple_get(&printer_ida, 0, 0, GFP_KERNEL);
++	ret = ida_alloc(&printer_ida, GFP_KERNEL);
+ 	if (ret >= PRINTER_MINORS) {
+-		ida_simple_remove(&printer_ida, ret);
++		ida_free(&printer_ida, ret);
+ 		ret = -ENODEV;
  	}
+ 
+@@ -1323,7 +1323,7 @@ static inline int gprinter_get_minor(void)
+ 
+ static inline void gprinter_put_minor(int minor)
+ {
+-	ida_simple_remove(&printer_ida, minor);
++	ida_free(&printer_ida, minor);
+ }
+ 
+ static int gprinter_setup(int);
+diff --git a/drivers/usb/gadget/function/rndis.c b/drivers/usb/gadget/function/rndis.c
+index 29bf8664bf582..12c5d9cf450c1 100644
+--- a/drivers/usb/gadget/function/rndis.c
++++ b/drivers/usb/gadget/function/rndis.c
+@@ -869,12 +869,12 @@ EXPORT_SYMBOL_GPL(rndis_msg_parser);
+ 
+ static inline int rndis_get_nr(void)
+ {
+-	return ida_simple_get(&rndis_ida, 0, 1000, GFP_KERNEL);
++	return ida_alloc_max(&rndis_ida, 999, GFP_KERNEL);
+ }
+ 
+ static inline void rndis_put_nr(int nr)
+ {
+-	ida_simple_remove(&rndis_ida, nr);
++	ida_free(&rndis_ida, nr);
+ }
+ 
+ struct rndis_params *rndis_register(void (*resp_avail)(void *v), void *v)
 -- 
 2.43.0
 
