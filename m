@@ -1,45 +1,45 @@
-Return-Path: <linux-usb+bounces-10895-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10896-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2238D8FCC50
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 14:17:18 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 08B5B8FCC61
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 14:18:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4B1771C23A2C
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 12:17:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 91DDD296358
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 12:18:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 797BA198E93;
-	Wed,  5 Jun 2024 11:55:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2226B1BA877;
+	Wed,  5 Jun 2024 11:55:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eQIKvC9e"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mmxHA5v4"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF615198E87;
-	Wed,  5 Jun 2024 11:55:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 991321BA867;
+	Wed,  5 Jun 2024 11:55:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717588506; cv=none; b=cRNrjwmsPkzp9ZwQvnBEwGJEOLM7oyYemQCGdHszUdW0HAPYnVWNlYElq8yIaIMsBOC4QJisCgen0w0PW0dervuiXQ4H/huO3MPec7affFOEkLGVhVCuUgf//AYzguh6tEYYwd4anEd/pZurQ1/wMim1xgK+aS6nnKtTQDOwpJw=
+	t=1717588520; cv=none; b=L/27zTUwIRRoA8Nr8usac2J+6RMaf9vZd4+J0Cg+vNU6/8FkQaW0SbETqrz5qmxIt7bta6UWcJb/xuoLsQ6M2Cd5agAZBsQN6xir3qMJhoNNsKsMdeufP8UxpXpwY74WHPICE/e2A1Yc/opiI0tt//BHnG2K3wklxLnEAc5SP1g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717588506; c=relaxed/simple;
+	s=arc-20240116; t=1717588520; c=relaxed/simple;
 	bh=keKYWfzN1djD6KLmxuPPa4XdGqVyHQTp9UFTeJAwljs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aI6vOrqN0q4erkrDEVf9JsYS1Ob6bAxVUnxDNAknPO7lrccC5YmY1tLPFLKwIZtHU6zbEvc28Bx2BJYkP3gUy7E5GE6hEDS/WBxm05tcyYZ0P2+RTSdu9u1UHlI4CbQdJDVMAitkhH6rHFxvxj3pBvgUQVHxOoIM9Haghk0ZRHc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eQIKvC9e; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 041DCC32781;
-	Wed,  5 Jun 2024 11:55:04 +0000 (UTC)
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=oRJPIlEFjm7zqqgnsdlT9XjkxoAIMHsYIl4GLXtToa5BnqPeEbVLFxoYl6HI/N/Qa2WiTo9s3LYibhBYaRjgZbpepIImEeRlLkFdB8CViR2Lboe2Xd6cT422YvnKjITS6il8GXnZwBN/42jfLg2Z8cQQV+uHT/UNuoI87WPBnMs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mmxHA5v4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8BC1C3277B;
+	Wed,  5 Jun 2024 11:55:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717588505;
+	s=k20201202; t=1717588520;
 	bh=keKYWfzN1djD6KLmxuPPa4XdGqVyHQTp9UFTeJAwljs=;
 	h=From:To:Cc:Subject:Date:From;
-	b=eQIKvC9e+hKIF6kevzVmirJR3Nu8X9xqoH5WiIBeaWXGj3m11mExxTA2ccA+6koT+
-	 H0FJ3FpeoddhLw+oQEq48URUVGIrKRFzKYXnL+pz/gT5tWbc6arJoEFoGOB9jGOUcP
-	 gGsl1dt9pkeVv8E1Y6SqEVY/jTonWGTKGeuYWsGkWwNM5g7zyAJTttR+HmNaSelNxZ
-	 bqR2RjwN2+OpwEidb9AqEEd6kv0QpTy5ZUL8QoqnpZDPzR28iG2vV8BKsKOOprjfqc
-	 gdK440Cgb4ywqhkZVKDPpZ/5tlQONxwl3Xdxhjjub4zAw/BKdGtQuTa4DM7RDV+JAz
-	 /pnlqPfJQtkKA==
+	b=mmxHA5v4VSrbjUI6RLb4wp/u334tvAzC5AKi5cx/4dJvbRRK+WTtS0F7WghboiSgT
+	 XGNLsPGs4mN/L1rj0MbWIiF9FenBe6NXj/NSCijJEwl2tvWCOYTBNJytDRbadG3iEF
+	 HuPtsQow7CkShCvKlBF7BCyny2EP5VeQ4Rbop3sRSgOlT+qGfFIlGVHYHJ48WlvVh0
+	 21SXfoZ133mJYH1fh3AlypZtZZ7a69lGUsYMAMfegHqio2bBYOH9YXI21ykSK72iKO
+	 wKqCyFGYYT4Dp+0BoycfVWvtjA5MckquV7Gj7UinvQyfwbDo9Rbq3KViIsVXu+xXXS
+	 /Xks8iEArxtqg==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -48,9 +48,9 @@ Cc: Alex Henrie <alexhenrie24@gmail.com>,
 	Sasha Levin <sashal@kernel.org>,
 	sudipm.mukherjee@gmail.com,
 	linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 1/5] usb: misc: uss720: check for incompatible versions of the Belkin F5U002
-Date: Wed,  5 Jun 2024 07:54:54 -0400
-Message-ID: <20240605115504.2964549-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 1/4] usb: misc: uss720: check for incompatible versions of the Belkin F5U002
+Date: Wed,  5 Jun 2024 07:55:09 -0400
+Message-ID: <20240605115518.2964670-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -60,7 +60,7 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.4.277
+X-stable-base: Linux 4.19.315
 Content-Transfer-Encoding: 8bit
 
 From: Alex Henrie <alexhenrie24@gmail.com>
