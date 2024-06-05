@@ -1,46 +1,45 @@
-Return-Path: <linux-usb+bounces-10894-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10895-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 090968FCC3F
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 14:15:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2238D8FCC50
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 14:17:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B43681F246F3
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 12:15:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4B1771C23A2C
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 12:17:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3C7319883B;
-	Wed,  5 Jun 2024 11:54:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 797BA198E93;
+	Wed,  5 Jun 2024 11:55:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nU3dP4oG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eQIKvC9e"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 359C319882A;
-	Wed,  5 Jun 2024 11:54:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF615198E87;
+	Wed,  5 Jun 2024 11:55:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717588488; cv=none; b=YRB9zhLkx1aU7uTcLWAURwHXR1pGiNEDOaJuovaxTr3cZa71FgVQQvEyhznk09o+PsKR651vs+gmUEZBuYdlBKVPJXvhdHyO5hRPyXj1W8bAfUgD9OOpwQ4R442xYzWt0Es0bh+JySxrWYppCSEs/aJ89N/k/5kkvTBhm/IA5qs=
+	t=1717588506; cv=none; b=cRNrjwmsPkzp9ZwQvnBEwGJEOLM7oyYemQCGdHszUdW0HAPYnVWNlYElq8yIaIMsBOC4QJisCgen0w0PW0dervuiXQ4H/huO3MPec7affFOEkLGVhVCuUgf//AYzguh6tEYYwd4anEd/pZurQ1/wMim1xgK+aS6nnKtTQDOwpJw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717588488; c=relaxed/simple;
+	s=arc-20240116; t=1717588506; c=relaxed/simple;
 	bh=keKYWfzN1djD6KLmxuPPa4XdGqVyHQTp9UFTeJAwljs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GqOsU9xE+kg8/935jH5ND+W8xCJ0A9jBjX2mD8vVjvE1B1QRSTln5P49cN5xbLPrB7pssyITbbPht0md4CFrt9ZacSliLFTHEqPsWKYbbNu+yDyth8BJejJJO7k6nxc2o5TqrLYREsm+abAgnCLJFCEy/XlifciuALNAET4fk9E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nU3dP4oG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06CF3C32786;
-	Wed,  5 Jun 2024 11:54:46 +0000 (UTC)
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aI6vOrqN0q4erkrDEVf9JsYS1Ob6bAxVUnxDNAknPO7lrccC5YmY1tLPFLKwIZtHU6zbEvc28Bx2BJYkP3gUy7E5GE6hEDS/WBxm05tcyYZ0P2+RTSdu9u1UHlI4CbQdJDVMAitkhH6rHFxvxj3pBvgUQVHxOoIM9Haghk0ZRHc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eQIKvC9e; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 041DCC32781;
+	Wed,  5 Jun 2024 11:55:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717588487;
+	s=k20201202; t=1717588505;
 	bh=keKYWfzN1djD6KLmxuPPa4XdGqVyHQTp9UFTeJAwljs=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=nU3dP4oGHGWshq8APClBLEUanqpxmKUBD+ZCLzbLwqUfJj++cPEL5h50Bcth3tdmN
-	 8rej/RqiRbkLueOx+8MliCrbPc/XTBnVIFbfrXwoRgJTfuzXXLDevo8JSA0LFbkPSP
-	 ESvbND2NSHr/+mcuy/KEDtEwwDmMpMR9WbWFyMnFHhHK5lcP1vys+wcYZ0BFHWyJ/M
-	 Ey6ivuhEaFMzMeNozZpHjexOIoq3xwBi0W+EZs6EeqfZp7UATXPS50lITuAjlnx39u
-	 iFLs/uwYdYFHQRulNmigjeYEPJ5d5iOLJkHFLBw/vu2FTm7vTtbgDoCfkyH3oRenrT
-	 W0yWlf44DZSRw==
+	h=From:To:Cc:Subject:Date:From;
+	b=eQIKvC9e+hKIF6kevzVmirJR3Nu8X9xqoH5WiIBeaWXGj3m11mExxTA2ccA+6koT+
+	 H0FJ3FpeoddhLw+oQEq48URUVGIrKRFzKYXnL+pz/gT5tWbc6arJoEFoGOB9jGOUcP
+	 gGsl1dt9pkeVv8E1Y6SqEVY/jTonWGTKGeuYWsGkWwNM5g7zyAJTttR+HmNaSelNxZ
+	 bqR2RjwN2+OpwEidb9AqEEd6kv0QpTy5ZUL8QoqnpZDPzR28iG2vV8BKsKOOprjfqc
+	 gdK440Cgb4ywqhkZVKDPpZ/5tlQONxwl3Xdxhjjub4zAw/BKdGtQuTa4DM7RDV+JAz
+	 /pnlqPfJQtkKA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -49,12 +48,10 @@ Cc: Alex Henrie <alexhenrie24@gmail.com>,
 	Sasha Levin <sashal@kernel.org>,
 	sudipm.mukherjee@gmail.com,
 	linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 2/7] usb: misc: uss720: check for incompatible versions of the Belkin F5U002
-Date: Wed,  5 Jun 2024 07:54:31 -0400
-Message-ID: <20240605115442.2964376-2-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 1/5] usb: misc: uss720: check for incompatible versions of the Belkin F5U002
+Date: Wed,  5 Jun 2024 07:54:54 -0400
+Message-ID: <20240605115504.2964549-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240605115442.2964376-1-sashal@kernel.org>
-References: <20240605115442.2964376-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -63,7 +60,7 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.10.218
+X-stable-base: Linux 5.4.277
 Content-Transfer-Encoding: 8bit
 
 From: Alex Henrie <alexhenrie24@gmail.com>
