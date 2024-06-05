@@ -1,57 +1,86 @@
-Return-Path: <linux-usb+bounces-10905-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10906-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9ACC98FD19E
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 17:29:27 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CDF868FD1BB
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 17:34:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 435E2282579
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 15:29:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B89721C22A0E
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 15:34:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E56A481B3;
-	Wed,  5 Jun 2024 15:29:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D10CF35280;
+	Wed,  5 Jun 2024 15:34:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=siemens.com header.i=diogo.ivo@siemens.com header.b="c7/xBj9Q"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G/PZ8Z/Q"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mta-65-226.siemens.flowmailer.net (mta-65-226.siemens.flowmailer.net [185.136.65.226])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C5824D5A2
-	for <linux-usb@vger.kernel.org>; Wed,  5 Jun 2024 15:29:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.136.65.226
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1F1327450;
+	Wed,  5 Jun 2024 15:34:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717601362; cv=none; b=FKTYZUfkBIlBrb3uugDq3s1KMeXjs2sx32wjMpSM26oqPxzQlxr2/GgGaXq7l8s02HfMEOzpsKZJdZ357NOXO3lVfS/SV9kZwBN37OC7yLT7fYZyiP+oQ5fTrW/g4q0VhLPSXzFJZKPtysOP23TfgIElumy24FxkOg3vZR7cyQo=
+	t=1717601665; cv=none; b=MTphiYaARCFfTFv88uoYDVVHHPhuQWN5sPtrpigkLhr4/KciOZpZC8Ss1LcVZ5f9nMdkehEuSdJhKMh4mDfOpvceNUKGqVbGQ+C8HX5ZXiTR6n7pXaBNpv/rTjamohWtTCHvfXd0NfaA/2/KFya7lHwZXGRRHi/Ru+x38Ic79Ec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717601362; c=relaxed/simple;
-	bh=lYE4mLW4/3gTTTeblhA4fcedkm6JVBcKv/nqj5RQWbM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Hwe8ZhSXSqime4GfXsOWDeUy2yhy/i/HyL80ynHrejip1HRuZujIHZpxuzhm9qYdQJs41dRjy9yY2OoyD4qCFQZn6oBmlp1mg72R8y5Jr2bEy7E3WtYs7MyqwbG7v/HR2RXZtbKI46QAezGUnPD9G8bhD63kUG+UwAhL4ZIY6+Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com; dkim=pass (1024-bit key) header.d=siemens.com header.i=diogo.ivo@siemens.com header.b=c7/xBj9Q; arc=none smtp.client-ip=185.136.65.226
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com
-Received: by mta-65-226.siemens.flowmailer.net with ESMTPSA id 202406051529127163b379a8bf7f9b35
-        for <linux-usb@vger.kernel.org>;
-        Wed, 05 Jun 2024 17:29:12 +0200
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm2;
- d=siemens.com; i=diogo.ivo@siemens.com;
- h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc:References:In-Reply-To;
- bh=lYE4mLW4/3gTTTeblhA4fcedkm6JVBcKv/nqj5RQWbM=;
- b=c7/xBj9Q3Nu7BlSuOm5AYocnULLKZkmuIpnYSMKe5F5wn173MbfZ++XL1/Jo1Cex6Qw9gZ
- Us1Ti3LM6Md+P2m3NvOFWLtN0Vbibkek3Cp+XwcW/rbtNX2gv02Gq5uOsuLPfdPdQ3sR5GXf
- BhEO/fzyNUeaE2arihgxYyQ1+/K/8=;
-From: Diogo Ivo <diogo.ivo@siemens.com>
-To: mpearson-lenovo@squebb.ca
-Cc: gregkh@linuxfoundation.org,
-	heikki.krogerus@linux.intel.com,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: ucsi: treat get_pdos not supported condition as info instead of error
-Date: Wed,  5 Jun 2024 16:29:11 +0100
-Message-ID: <20240605152911.167179-1-diogo.ivo@siemens.com>
-In-Reply-To: <20240604194056.16625-1-mpearson-lenovo@squebb.ca>
-References: <20240604194056.16625-1-mpearson-lenovo@squebb.ca>
+	s=arc-20240116; t=1717601665; c=relaxed/simple;
+	bh=ajRlHz4ISqja5UdXe1MvHhvYA/kLt79BL5wrslKLLUc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XM4ln1d0//vq74w0ZeAJQ99VmMusySHbnShCH8uUAGseydwBeESVtbyCG5nJT3n5zVKzP8bOAWWChYbL69bBSx4zy2mhHs7atYoEfTVoEN0NTfyF2MPufo7PADLs3E0aH5+hELh/uimX4vo0In/6MhHZqs5/sJysMzft6m/WKj8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G/PZ8Z/Q; arc=none smtp.client-ip=209.85.167.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-52b962c4bb6so5969038e87.3;
+        Wed, 05 Jun 2024 08:34:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1717601662; x=1718206462; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/ozim78RZhEu9AGeHQuy80qkyfEbq6KZxgEz/yrejKE=;
+        b=G/PZ8Z/QziOgyFUEkJPTtXQlr7lGLfdtef/bzWewatpru89h8niRPNvx+lO1gInnaW
+         lEmxxbNDNcyEhghBEH0N3nck6Q/puN8s6gJ9k2G/oo/my3NEHW/u70db+JRPo6snhBb7
+         nBVDKJQKA0HTNVLBbo5QIXu95ojRDJu50N6/DMo19HULoZzeK7AOkf0Wnvp9rncI0i80
+         a9Czk+ayXKWvmq7NO2gDeAwieIhWVKYSbavsznHRW74WQywqacD+beE0mkywgcHkVjSz
+         rSHYC5Kr9mFIX2aonLpt/IgoGZdCWSGPVn6bNegDchpvH0+sGbU7EUoighDIlxrKLET7
+         1cJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717601662; x=1718206462;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/ozim78RZhEu9AGeHQuy80qkyfEbq6KZxgEz/yrejKE=;
+        b=ifuwUFZHJzwlAAejIsg8uv8Jpk4JRJU23LpEnwn0P05r2l5Nrp+jUkd/k81IIf29KI
+         unXRdStXORm9ixm4MyD3LRYpmX0AjXznroC5KekbRUwzOv7xMp5eGLuNDH/lsy07xBpD
+         6YphYtRuRoW405BqzojBrO6hwc8zTr2SRVthcyQGmEY7/0+55c6r6NAh7zDgQZ9kiGn9
+         SnJhifHQnQEyYe1QhmNfwFrrFML1J3L8dVljAE0MIimdJpCfe9ULroFoYPMe47Wrpn5+
+         y2TPNBURYo4kPB6Hee8WwuMg1HbJEb86UE8TQOsuOPJqo5XwwmPPdkj8+tNHrvNRiqR9
+         e5ag==
+X-Gm-Message-State: AOJu0YzlrbCHtn/tKI/Ss6VRpXwAeAu00vtbw+wXdeDnvNzucRez1e9C
+	UwWdABCgW3joBPGFaDke1s+3g/9Fu/33ZRR6se5MqihB+eyy+Yyt33HEtPi/
+X-Google-Smtp-Source: AGHT+IG8Pjb61i3+lCBe9lvPfRRYjfCsCB5bXJ+nq2F+RPU5vnSIUhD2Izw4Y9m1QwYMPd59Z3TqWg==
+X-Received: by 2002:a05:6512:2253:b0:523:9515:4b74 with SMTP id 2adb3069b0e04-52bab4ca5e9mr2814781e87.14.1717601661592;
+        Wed, 05 Jun 2024 08:34:21 -0700 (PDT)
+Received: from sauvignon.fi.muni.cz (laomedon.fi.muni.cz. [2001:718:801:22a::6b])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6831a91b36sm764215266b.167.2024.06.05.08.34.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jun 2024 08:34:21 -0700 (PDT)
+From: Milan Broz <gmazyland@gmail.com>
+To: linux-usb@vger.kernel.org
+Cc: netdev@vger.kernel.org,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	grundler@chromium.org,
+	dianders@chromium.org,
+	hayeswang@realtek.com,
+	hkallweit1@gmail.com,
+	andrew@lunn.ch,
+	Milan Broz <gmazyland@gmail.com>
+Subject: [PATCH] r8152: Set NET_ADDR_STOLEN if using passthru MAC
+Date: Wed,  5 Jun 2024 17:33:40 +0200
+Message-ID: <20240605153340.25694-1-gmazyland@gmail.com>
+X-Mailer: git-send-email 2.45.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -59,12 +88,36 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Flowmailer-Platform: Siemens
-Feedback-ID: 519:519-1320519:519-21489:flowmailer
 
-Just realized Dmitry said literally the same thing as me. Sorry for the
-extra noise, please ignore my comment.
+Some docks support MAC pass-through - MAC address
+is taken from another device.
 
-Best regards,
-Diogo
+Driver should indicate that with NET_ADDR_STOLEN flag.
+
+This should help to avoid collisions if network interface
+names are generated with MAC policy.
+
+Reported and discussed here
+https://github.com/systemd/systemd/issues/33104
+
+Signed-off-by: Milan Broz <gmazyland@gmail.com>
+---
+ drivers/net/usb/r8152.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+index 19df1cd9f072..ea5c5be4a958 100644
+--- a/drivers/net/usb/r8152.c
++++ b/drivers/net/usb/r8152.c
+@@ -1774,6 +1774,7 @@ static int vendor_mac_passthru_addr_read(struct r8152 *tp, struct sockaddr *sa)
+ 		goto amacout;
+ 	}
+ 	memcpy(sa->sa_data, buf, 6);
++	tp->netdev->addr_assign_type = NET_ADDR_STOLEN;
+ 	netif_info(tp, probe, tp->netdev,
+ 		   "Using pass-thru MAC addr %pM\n", sa->sa_data);
+ 
+-- 
+2.45.1
+
 
