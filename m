@@ -1,54 +1,51 @@
-Return-Path: <linux-usb+bounces-10862-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10863-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C6F68FC89D
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 12:05:47 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id F07458FC89F
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 12:05:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A13AE287864
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 10:05:45 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 02A86B247E0
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 10:05:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C716118FDD8;
-	Wed,  5 Jun 2024 10:05:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C655190051;
+	Wed,  5 Jun 2024 10:05:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="tyNLJ43v"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Daq/rWsh"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32D42BE5A
-	for <linux-usb@vger.kernel.org>; Wed,  5 Jun 2024 10:05:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7702C18FDAD
+	for <linux-usb@vger.kernel.org>; Wed,  5 Jun 2024 10:05:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717581939; cv=none; b=nZ0zVpyhl4aw+dTt+o3tdSFzzyPmyFqJ2yZ2eaaOewWotKdEOZpmfTogCPsxZkzJjt89/ahk5eBotukP/Je5nQ2rZrQ1m6Wyiq34d9zgjyibgZYwjHIQwzE2byN/MXqgH0FLh8QVKMb0jwCug/NKdWGc5rVKbJQKvq9XncB0ync=
+	t=1717581939; cv=none; b=QwUDJDOevU42B5vO12CwfHGzcOxG7vRZQpKzvpJvqxIba5Prxcq7TKS+SHtv5KBKql7oBi6MbwPtKHsPoLagCN0aomBcQ0G41cnb9u0mONaDhUQjYx+fGX8He6eltvAjQB4zGOf6OT1UGqyE0e8NmO70ajAdW8H1W7iqjAGp6+I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1717581939; c=relaxed/simple;
-	bh=eSPJ6TaF7jNoTRcthAibyafY/Gm1lkLxIwnhrGec3TQ=;
+	bh=n4FgBuLC5ilaiBYdZnmVnwaMqxbCBH0R8+4xHJfTXF8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Z6RWh2cafultbPXG1yEniaUgHDMTn5fQOnwu815TERQSCu5FsvZyPRMulXk1gSkLWFFogTj8Ot+lzSW9ltCmM9mLSVwktz0baw51h1lf5082mFJ8GXgO+QkfNf55C9gIVlDzlD1YUQJpm4uhT3R3NG4pip5tBGsViDmGVawxu3U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=tyNLJ43v; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FF02C32781;
-	Wed,  5 Jun 2024 10:05:38 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=XcroIiAqrIY8QJGiCeczM+FFdp58b7aS+n0T5FO9M9PUPRjkReZ0RK3igEadfEj6CkGnHpb5VYnpbQo3uLAvlQFoImhtaoYl1q6CawD4HguDRHhG8gBQCDJWNMtjp/hcJcftd0rwX7W1tULZ2dN7YkkL5c6kdQXpzOOj0pyGbRA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Daq/rWsh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33B59C3277B;
+	Wed,  5 Jun 2024 10:05:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1717581938;
-	bh=eSPJ6TaF7jNoTRcthAibyafY/Gm1lkLxIwnhrGec3TQ=;
+	s=korg; t=1717581939;
+	bh=n4FgBuLC5ilaiBYdZnmVnwaMqxbCBH0R8+4xHJfTXF8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=tyNLJ43vlwAwpgfzOFVwTRJ5gOZ0IkMTxLzaFzN64SsQZNCjMR9Ix6knE5YBYKOn8
-	 Ja67Pj4+btB5z2XCilBir9oJAbIFjGnzLT0kH+tiuAsr80aJVC6BV3TpAnMQhfEhh9
-	 h+ITTQQYrLDKWpkqIcvscaSd7iSJKr7La+cxVcQs=
-Date: Wed, 5 Jun 2024 10:41:16 +0200
+	b=Daq/rWshwUigvvFBsZZDlUNfxo+bgmWZXdingy8kT7kj0eZO27uDhdza2o3tZctlH
+	 rK4FyANI/xJzKHBt/8ABDa37xm3DCmdq6rRKkmj+BeJqUG6R0qOaR1bWWjJDu9tadn
+	 ECh9bOA26YaBqkcDvl6aIvHWAGfe640U8nbFT9Pw=
+Date: Wed, 5 Jun 2024 12:03:31 +0200
 From: Greg KH <gregkh@linuxfoundation.org>
-To: sicong <congei42@163.com>
-Cc: peter.chen@kernel.org, pawell@cadence.com, rogerq@kernel.org,
-	linux-usb@vger.kernel.org
-Subject: Re: Re: [PATCH v1] usb: cdns3: cdns3-gadget: fix use-after-free bug
- in cdns3_gadget_exit due to race
-Message-ID: <2024060546-dumpling-unripe-4283@gregkh>
-References: <20240513021948.133039-1-congei42@163.com>
- <2024060444-delay-surgical-c8ff@gregkh>
- <6d94822a.2eaf.18fe6414d2a.Coremail.congei42@163.com>
+To: Dmitry <d.smirnov@inbox.lv>
+Cc: linux-usb@vger.kernel.org, Dmitry <dimonija@gmail.com>
+Subject: Re: [PATCH 1/1] usb: serial: Fix mos7840 resume from standby
+Message-ID: <2024060539-satchel-unisexual-fde9@gregkh>
+References: <20240604225507.6801-1-d.smirnov@inbox.lv>
+ <20240604225507.6801-2-d.smirnov@inbox.lv>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -57,79 +54,123 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6d94822a.2eaf.18fe6414d2a.Coremail.congei42@163.com>
+In-Reply-To: <20240604225507.6801-2-d.smirnov@inbox.lv>
 
-On Wed, Jun 05, 2024 at 10:36:30AM +0800, sicong wrote:
+On Wed, Jun 05, 2024 at 01:55:07AM +0300, Dmitry wrote:
+> From: Dmitry <dimonija@gmail.com>
+> 
+> ---
+>  drivers/usb/serial/mos7840.c | 34 ++++++++++++++++++++++++++++++++++
+>  1 file changed, 34 insertions(+)
+> 
+> diff --git a/drivers/usb/serial/mos7840.c b/drivers/usb/serial/mos7840.c
+> index 8b0308d84270..7443d2f018b4 100644
+> --- a/drivers/usb/serial/mos7840.c
+> +++ b/drivers/usb/serial/mos7840.c
+> @@ -770,6 +770,7 @@ static void mos7840_close(struct usb_serial_port *port)
+>  		if (mos7840_port->write_urb_pool[j]) {
+>  			kfree(mos7840_port->write_urb_pool[j]->transfer_buffer);
+>  			usb_free_urb(mos7840_port->write_urb_pool[j]);
+> +			mos7840_port->write_urb_pool[j] = NULL;
+>  		}
+>  	}
+>  
+> @@ -1737,6 +1738,37 @@ static void mos7840_port_remove(struct usb_serial_port *port)
+>  	kfree(mos7840_port);
+>  }
+>  
+> +static int mos7840_suspend(struct usb_serial *serial, pm_message_t message)
+> +{
+> +    dev_dbg(&serial->interface->dev, "mos7840_suspend\n");
+> +
+> +    return 0;
+> +}
+> +
+> +static int mos7840_resume(struct usb_serial *serial)
+> +{
+> +	struct moschip_port *mos7840_port;
+> +	struct usb_serial_port *port;
+> +	int i;
+> +	dev_dbg(&serial->interface->dev, "mos7840_resume\n");
+> +
+> +	for (i = 0; i < serial->num_ports; ++i) {
+> +		port = serial->port[i];
+> +		if (!tty_port_initialized(&port->port))
+> +			continue;
+> +
+> +		mos7840_port = usb_get_serial_port_data(port);
+> +
+> +		if (port->bulk_in_size)
+> +			usb_submit_urb(mos7840_port->read_urb, GFP_NOIO);
+> +
+> +		/*if (port->bulk_out_size)
+> +			usb_submit_urb(mos7840_port->read_urb, GFP_ATOMIC);*/
+> +	}
+> +
+> +    return 0;
+> +}
+> +
+>  static struct usb_serial_driver moschip7840_4port_device = {
+>  	.driver = {
+>  		   .owner = THIS_MODULE,
+> @@ -1764,6 +1796,8 @@ static struct usb_serial_driver moschip7840_4port_device = {
+>  	.port_probe = mos7840_port_probe,
+>  	.port_remove = mos7840_port_remove,
+>  	.read_bulk_callback = mos7840_bulk_in_callback,
+> +	.suspend = mos7840_suspend,
+> +	.resume = mos7840_resume,
+>  };
+>  
+>  static struct usb_serial_driver * const serial_drivers[] = {
+> -- 
+> 2.45.1
 > 
 > 
-> At 2024-06-04 21:11:57, "Greg KH" <gregkh@linuxfoundation.org> wrote:
-> >On Mon, May 13, 2024 at 10:19:48AM +0800, Sicong Huang wrote:
-> >> This bug exists in drivers/usb/cdns3/cdns3-gadget.c. Function
-> >> __cdns3_gadget_init will call cdns3_gadget_start to do futher jobs
-> >> during the initialization proccess of cdns3 gadget. In cdns3_gadget_start,
-> >> &priv_dev->pending_status_wq is bound with cdns3_pending_setup_status_handler.
-> >> Then this work will be added to system_freezable_wq in cdns3_gadget_ep0_queue.
-> >> Here is the code.
-> >> queue_work(system_freezable_wq, &priv_dev->pending_status_wq);
-> >> 
-> >> If we call cdns3_gadget_exit to remove the device and make cleanup,
-> >> there are some unfinished works. This function will call cdns3_free_all_eps to
-> >> free all the endpoints. However, if cdns3_pending_setup_status_handler is
-> >> scheduled to run after the free job, it will cause use-after-free error as
-> >> cdns3_pending_setup_status_handler will use the endpoint in the following code.
-> >> request->complete(&priv_dev->eps[0]->endpoint, request);
-> >> 
-> >> The possible execution flow that may lead to this issue is as follows:
-> >> CPU0                    CPU1
-> >>                       | __cdns3_gadget_init
-> >>                       | cdns3_gadget_start
-> >> cdns3_gadget_exit     |
-> >> cdns3_free_all_eps    |
-> >> devm_kfree (free)     |
-> >>                       | cdns3_pending_setup_status_handler
-> >>                       | &priv_dev->eps[0]->endpoint (use)
-> >> 
-> >> Fix it by cleaning the work in cdns3_gadget_exit.
-> >> 
-> >> Signed-off-by: Sicong Huang <congei42@163.com>
-> >> ---
-> >>  drivers/usb/cdns3/cdns3-gadget.c | 3 +++
-> >>  1 file changed, 3 insertions(+)
-> >> 
-> >> diff --git a/drivers/usb/cdns3/cdns3-gadget.c b/drivers/usb/cdns3/cdns3-gadget.c
-> >> index fd1beb10bba7..0f2e143bd17a 100644
-> >> --- a/drivers/usb/cdns3/cdns3-gadget.c
-> >> +++ b/drivers/usb/cdns3/cdns3-gadget.c
-> >> @@ -3252,6 +3252,9 @@ static void cdns3_gadget_exit(struct cdns *cdns)
-> >>  	pm_runtime_mark_last_busy(cdns->dev);
-> >>  	pm_runtime_put_autosuspend(cdns->dev);
-> >>  
-> >> +	cancel_work_sync(&priv_dev->pending_status_wq);
-> >> +	cancel_work_sync(&priv_dev->aligned_buf_wq);
-> >> +
-> >>  	usb_del_gadget(&priv_dev->gadget);
-> >>  	devm_free_irq(cdns->dev, cdns->dev_irq, priv_dev);
-> >>  
-> >> -- 
-> >> 2.34.1
-> >
-> >What commit id does this fix?
-> >
-> >thanks,
-> >
-> 
-> >greg k-h
-> 
-> 
-> I made the changes based on the following commit information.
-> commit 51474ab44abf907023a8a875e799b07de461e466 (origin/usb-testing, origin/usb-next)
 
-That is not what I meant, sorry.
+Hi,
 
-I mean, "this is a bugfix, so what commit caused the problem that this
-is fixing?"
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
+
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- Your patch does not have a Signed-off-by: line.  Please read the
+  kernel file, Documentation/process/submitting-patches.rst and resend
+  it after adding that line.  Note, the line needs to be in the body of
+  the email, before the patch, not at the bottom of the patch or in the
+  email signature.
+
+- You did not specify a description of why the patch is needed, or
+  possibly, any description at all, in the email body.  Please read the
+  section entitled "The canonical patch format" in the kernel file,
+  Documentation/process/submitting-patches.rst for what is needed in
+  order to properly describe the change.
+
+- You did not write a descriptive Subject: for the patch, allowing Greg,
+  and everyone else, to know what this patch is all about.  Please read
+  the section entitled "The canonical patch format" in the kernel file,
+  Documentation/process/submitting-patches.rst for what a proper
+  Subject: line should look like.
+
+- It looks like you did not use your "real" name for the patch on either
+  the Signed-off-by: line, or the From: line (both of which have to
+  match).  Please read the kernel file,
+  Documentation/process/submitting-patches.rst for how to do this
+  correctly.
+
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
 
 thanks,
 
-greg k-h
+greg k-h's patch email bot
 
