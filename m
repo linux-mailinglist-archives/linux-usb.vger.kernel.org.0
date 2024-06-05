@@ -1,191 +1,112 @@
-Return-Path: <linux-usb+bounces-10852-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10853-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A4F18FC16A
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 03:49:54 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC1BF8FC1E8
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 04:37:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AFA21B25370
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 01:49:51 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6F83BB20E93
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 02:36:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93B3E56477;
-	Wed,  5 Jun 2024 01:49:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F179261FCF;
+	Wed,  5 Jun 2024 02:36:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="TPEuragX"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=163.com header.i=@163.com header.b="Dg+4uPXB"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A503626AD4
-	for <linux-usb@vger.kernel.org>; Wed,  5 Jun 2024 01:49:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.34
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31792184E
+	for <linux-usb@vger.kernel.org>; Wed,  5 Jun 2024 02:36:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717552182; cv=none; b=AXDOhTyvPYe1cXIrjvm1ZggXSSSqMYEsKJdN6Wk3ZtwpTeTfBMHYQpuXdmsdg8RCd9cvapdrjlszY0SzLaeRhbfySA+ns+M6TprROOJGJPZTFIPNP2ZZmPWrH7qT6VWWijt56sCJVrKBYozfSovjSdt381XfKNTlVoS23FyfHGs=
+	t=1717555012; cv=none; b=u6NRtpiLzHEM0QLsXAAiC9DQMnlgG+Hj1xpxxXjxgrma+Z10mpouNXmiIzGlcfl/xh5/UZ7I8/CgCgC/0bstR/ciYPQxBagLeonsJc3QDG9kRV8QhVb/kYh9tCD1EoH1XxrOjjjMrhT1De0Eqmrlr55p3LOSyShQCFPWhf14B5k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717552182; c=relaxed/simple;
-	bh=54xGD9mwhdTUfJvhlirOvqh8dGVz6PFWwFl4GPdlsSg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:In-Reply-To:
-	 Content-Type:References; b=UU6/PItBPVUcjzXPjtYT+ncxMKsJjOAaJdNQ4VjmLdHpXn2lFVs+OYGE3/vONpCBoxaWQ2jeEPVKfuvzqNYhqQA6BsdTc/tU21qItBaMYEw2WQpRLoplHIVJFQhwqHVTyWG3pt6sTvs0TmSdI0ALXTmWC1/jlZhtKg/TGnKvLkU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=TPEuragX; arc=none smtp.client-ip=203.254.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
-	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20240605014937epoutp04c5268f2b8b19738d8c688a1f14d3fc5d~V_JsF5po80043800438epoutp04g
-	for <linux-usb@vger.kernel.org>; Wed,  5 Jun 2024 01:49:37 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20240605014937epoutp04c5268f2b8b19738d8c688a1f14d3fc5d~V_JsF5po80043800438epoutp04g
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1717552177;
-	bh=F5s/37u811Q469zE6i98obPqxxD2mwwdYws0s56w6D4=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=TPEuragX9kWStU3D4c85z2qDNv2rdnUStKqfRm6gt9qUd77R1DzgcIwx33dVbdCzS
-	 o8M/JVlthRBz6k8ntdS5sKGQbA6rynFzz85wgzYzxFx3MnwVtPecDJIXjC7vp+js3G
-	 ZDbbrWCulbAqr390omyEM1zZ868NzITsMflFGsTE=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-	epcas2p2.samsung.com (KnoxPortal) with ESMTP id
-	20240605014937epcas2p220b03702a6f5c1b65e5c3bb229553cb1~V_Jrh4nE12571225712epcas2p21;
-	Wed,  5 Jun 2024 01:49:37 +0000 (GMT)
-Received: from epsmges2p4.samsung.com (unknown [182.195.36.98]) by
-	epsnrtp1.localdomain (Postfix) with ESMTP id 4Vv9PX4QjZz4x9Pp; Wed,  5 Jun
-	2024 01:49:36 +0000 (GMT)
-Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
-	epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-	FD.45.09479.034CF566; Wed,  5 Jun 2024 10:49:36 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-	epcas2p2.samsung.com (KnoxPortal) with ESMTPA id
-	20240605014936epcas2p2aef39bb60589271af07737a1059d3d4c~V_JqwN-wm0462504625epcas2p2N;
-	Wed,  5 Jun 2024 01:49:36 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-	epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-	20240605014936epsmtrp157818f9a5c878445047e778261e221a3~V_JqvgBl42315723157epsmtrp1Y;
-	Wed,  5 Jun 2024 01:49:36 +0000 (GMT)
-X-AuditID: b6c32a48-105fa70000002507-32-665fc4309100
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-	epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	79.1B.08336.F24CF566; Wed,  5 Jun 2024 10:49:36 +0900 (KST)
-Received: from ubuntu (unknown [10.229.95.128]) by epsmtip1.samsung.com
-	(KnoxPortal) with ESMTPA id
-	20240605014935epsmtip10c11447db649ccb708543d313fa09d5c~V_JqgYdri2617126171epsmtip1d;
-	Wed,  5 Jun 2024 01:49:35 +0000 (GMT)
-Date: Wed, 5 Jun 2024 10:50:10 +0900
-From: Jung Daehwan <dh10.jung@samsung.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring
-	<robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
-	<conor+dt@kernel.org>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>, Mathias
-	Nyman <mathias.nyman@intel.com>, Felipe Balbi <balbi@kernel.org>, "open
- list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>, "open list:OPEN FIRMWARE
- AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>, open list
-	<linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 5/5] usb: host: xhci-plat: Add support for
- XHCI_WRITE_64_HI_LO_QUIRK
-Message-ID: <20240605015010.GA57120@ubuntu>
+	s=arc-20240116; t=1717555012; c=relaxed/simple;
+	bh=dlrW8xU+KUYIOzg2TTc2oYe8xLQE6g8+Jl52AFi3Mw0=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
+	 MIME-Version:Message-ID; b=c0z0EccOBAxhDp5XubK7PKtB2koSqgfTo9AJubeqHu1q1dMcqcBGyCF7xspVVbYf1RR0c8p+z7tOo6RPYmRgpSi65Pt8IYU3yyQXZcUcMpCkKlXD+BMcSew4wfOXZ2lYaZ1NQI2W7ApEBIumgubVsHn9TfFBauonTJetSAoVVmc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=fail (1024-bit key) header.d=163.com header.i=@163.com header.b=Dg+4uPXB reason="signature verification failed"; arc=none smtp.client-ip=117.135.210.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=Date:From:Subject:Content-Type:MIME-Version:
+	Message-ID; bh=UhrSWUqlQlytUrhBbG2nlJEYIXZMCHqS/UY5Kb0wsGQ=; b=D
+	g+4uPXBLCY+wQTvYposTaDJq1NDwTTioBAHwpICuVkTl0KebCI+sNN12NtZCV5jL
+	h7rOKBe1NDi3sPTW6IErsxSfQnKddZQftVmUT8cPTIr46d7DA8d08eUdvTMT7fVo
+	ze6ayY8IThHYMZ4WpKxs1puSUfqQ/MGUgG8jT6fmfY=
+Received: from congei42$163.com ( [159.226.94.118] ) by
+ ajax-webmail-wmsvr-40-114 (Coremail) ; Wed, 5 Jun 2024 10:36:30 +0800 (CST)
+Date: Wed, 5 Jun 2024 10:36:30 +0800 (CST)
+From: sicong  <congei42@163.com>
+To: "Greg KH" <gregkh@linuxfoundation.org>
+Cc: peter.chen@kernel.org, pawell@cadence.com, rogerq@kernel.org, 
+	linux-usb@vger.kernel.org
+Subject: Re:Re: [PATCH v1] usb: cdns3: cdns3-gadget: fix use-after-free bug
+ in cdns3_gadget_exit due to race
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20230109(dcb5de15)
+ Copyright (c) 2002-2024 www.mailtech.cn 163com
+In-Reply-To: <2024060444-delay-surgical-c8ff@gregkh>
+References: <20240513021948.133039-1-congei42@163.com>
+ <2024060444-delay-surgical-c8ff@gregkh>
+X-NTES-SC: AL_Qu2aBfmeu0Ei5iOfZukfm0YUj+44Wsa4uvgk2YJeOpt4jDvp3gsie2dTEUPJ2eSKLB2InwiHYQNu8tpBXZZBZp8VRwvWVBCt0f5/2XijxbIu4A==
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=GBK
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <1935a30f-b4fd-4240-93f0-e2baf218223d@kernel.org>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrFJsWRmVeSWpSXmKPExsWy7bCmua7Bkfg0g46TShbH2p6wW6zZe47J
-	Yv6Rc6wWzYvXs1m8nHWPzeL8+Q3sFpd3zWGzWLSsldmiedMUVov/e3awW6xacIDdgdtj8Z6X
-	TB6bVnWyeeyfu4bdY8v+z4wenzfJBbBGZdtkpCampBYppOYl56dk5qXbKnkHxzvHm5oZGOoa
-	WlqYKynkJeam2iq5+AToumXmAJ2mpFCWmFMKFApILC5W0rezKcovLUlVyMgvLrFVSi1IySkw
-	L9ArTswtLs1L18tLLbEyNDAwMgUqTMjOONY3lb2gnadiy7QmlgbGV5xdjBwcEgImEn9+Sncx
-	cnEICexglJjxcj47hPOJUeJ68zc2COcbo8Tqj1fYYTpuTdOBiO9llNg1+T4rhPOEUWLzj3OM
-	XYycHCwCKhIfj4E0cHKwCWhJ3PtxghnEFhHQlLj+9ztYA7PAHWaJSetOsIEkhAViJT7emQlW
-	xCugLfF0w0tWCFtQ4uTMJywgNqeAncTUht1sIFeIAi14dbAeJCwhMJNDYv0SSQjbReL5mY9M
-	ELawxKvjW9ghbCmJl/1tUHaxxK3nz5hBbpAQaGGUWPGqhRkiYSwx61k72APMAhkST+7NZ4L4
-	WFniyC0WiDCfRMfhv9CA4JXoaBOC6FSWmH55AiuELSlx8PU5qIkeEpeuz4YG4nZmiVsnl7BP
-	YJSfheSzWUi2Qdg6Egt2f2KbBbSCWUBaYvk/DghTU2L9Lv0FjKyrGMVSC4pz01OLjQpM4HGd
-	nJ+7iRGcaLU8djDOfvtB7xAjEwfjIUYJDmYlEV6/4vg0Id6UxMqq1KL8+KLSnNTiQ4ymwHia
-	yCwlmpwPTPV5JfGGJpYGJmZmhuZGpgbmSuK891rnpggJpCeWpGanphakFsH0MXFwSjUwubma
-	SFktXeuw69zUJ/M2zf5+Z+/Vm0vEZ8U6zZBgTW6cbB33tc5LYPHBR0JvZrpkG7Dobpv9c8nH
-	SQp3lTX1n51Zzh/YuFLjA+/evK/cu9j1NSy/zK0w9l2gYPV8+XWZo5NftG9Pvrh+0wbTVacU
-	jqbL+uRs6z71w0j4jPd9lVcXbslwRp+Kvz9v2cIal3/TzF382p5NOT8nR/W2seyhl2eXN6j8
-	m/IyoznX/Ll65G/OtJspx9W92o3YmH0S816752hNuXxrDofM6Ydnz779zKV+wG7RmhUvwy71
-	3KqYLTzPQGXGs5utkhfPW15bx/b5k2e9Nt8vOftU6+cW5s/VEh3OTbvOb83rWvc0iY/X/4gS
-	S3FGoqEWc1FxIgCYDzEjPQQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrILMWRmVeSWpSXmKPExsWy7bCSnK7Bkfg0g//rGC2OtT1ht1iz9xyT
-	xfwj51gtmhevZ7N4Oesem8X58xvYLS7vmsNmsWhZK7NF86YprBb/9+xgt1i14AC7A7fH4j0v
-	mTw2repk89g/dw27x5b9nxk9Pm+SC2CN4rJJSc3JLEst0rdL4MrY+2Myc8FxzoqL93eyNDAe
-	Zu9i5OCQEDCRuDVNp4uRi0NIYDejxKnDC1i7GDmB4pISS+feYIewhSXutxxhhSh6xChx9NhP
-	NpAEi4CKxMdjV8CK2AS0JO79OMEMYosIaEpc//sdrIFZ4BGzxPQXT8AahAViJT7emQlWxCug
-	LfF0w0uoqduZJWbvWsUCkRCUODnzCZjNDDT1xr+XTCCnMgtISyz/xwES5hSwk5jasJsNJCwK
-	dMSrg/UTGAVnIWmehaR5FkLzAkbmVYySqQXFuem5xYYFhnmp5XrFibnFpXnpesn5uZsYwbGi
-	pbmDcfuqD3qHGJk4GA8xSnAwK4nw+hXHpwnxpiRWVqUW5ccXleakFh9ilOZgURLnFX/RmyIk
-	kJ5YkpqdmlqQWgSTZeLglGpgqnl/w7fGNSk4WfCna3niGxbHcyq+71/onzdvn74ofMPKW6ty
-	+S26WeJrvrywyudY+UNa8s8Jm1mxdqLXOsS3WdrqSWUWOQZJLvz8SEQ4Jdl/8fY5v+9XfzMS
-	WPXsfnWLjVByOsuignmBsf+CHb98ecr1xnrei7N9eat1Aqbll567qX43gz1r0Zc31e3bV8+/
-	dMH0nNFq79NyrMufnfe/X7Ao9Ge028KWM1XPYpKMr6bPzrrT4PPuNfNjX04bx/r0xwVa80T5
-	b8qt+KF7X9df8bi9YGb9nsVX51n89jli8mif3tt/b3ukVsQcrNdR6LqrHZ93SU9r5cT1muFP
-	z+oXrg1X8HFd+N/8mNaDVYJXlViKMxINtZiLihMBf3VjTQQDAAA=
-X-CMS-MailID: 20240605014936epcas2p2aef39bb60589271af07737a1059d3d4c
-X-Msg-Generator: CA
-Content-Type: multipart/mixed;
-	boundary="----40rWTt6DAFmUrjtMexcyNm5gpMTj9FMdHa8zGfbdWx6mQz74=_4fd93_"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20240531060731epcas2p4f14afae9f00a7e71e6bd3863f0a51441
-References: <1717135657-120818-1-git-send-email-dh10.jung@samsung.com>
-	<CGME20240531060731epcas2p4f14afae9f00a7e71e6bd3863f0a51441@epcas2p4.samsung.com>
-	<1717135657-120818-6-git-send-email-dh10.jung@samsung.com>
-	<9c9d74c0-72a2-418a-b3c6-a0f9716c943d@kernel.org>
-	<20240603034435.GC23593@ubuntu>
-	<eb1d9734-fa19-4051-9e78-a6e72ac12662@kernel.org>
-	<20240603085111.GF23593@ubuntu>
-	<1935a30f-b4fd-4240-93f0-e2baf218223d@kernel.org>
+Message-ID: <6d94822a.2eaf.18fe6414d2a.Coremail.congei42@163.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID:_____wD3Hyguz19mYBpVAA--.14539W
+X-CM-SenderInfo: 5frqwvrlusqiywtou0bp/xtbBFQHz8mXAlvOL6QAGsx
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
 
-------40rWTt6DAFmUrjtMexcyNm5gpMTj9FMdHa8zGfbdWx6mQz74=_4fd93_
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-
-On Tue, Jun 04, 2024 at 08:20:44AM +0200, Krzysztof Kozlowski wrote:
-> On 03/06/2024 10:51, Jung Daehwan wrote:
-> >>>>>  
-> >>>>> +		if (device_property_read_bool(tmpdev, "write-64-hi-lo-quirk"))
-> >>>>> +			xhci->quirks |= XHCI_WRITE_64_HI_LO;
-> >>>>
-> >>>> Where is any user of this property (DTS)? Just to clarify: your
-> >>>> downstream does not matter really.
-> >>>>
-> >>>
-> >>> This is set by dwc3 parent node by software node.
-> >>>
-> >>> [PATCH v2 1/5] dt-bindings: usb: snps,dwc3: Add 'snps,xhci-write-64-hi-lo-quirk' quirk
-> >>> https://lore.kernel.org/r/1717135657-120818-2-git-send-email-dh10.jung@samsung.com/
-> >>
-> >> This is not a patch to DTS.
-> >>
-> >>
-> > 
-> > This is set by software node from dwc3. That's why I think this patch doesn't
-> > need DTS patch. I would add DTS patch in dwc3 not xhci if it's needed.
-> > 
-> 
-> What?
-> 
-> I asked you question which upstream SoC (link to DTS) uses it, and you
-> say that "no need for DTS patch"? That's not an answer.
-> 
-> Best regards,
-> Krzysztof
-> 
-> 
-
-I'm sorry I didn't get your point. I've been working on Exynos SoC.
-But there's no upstream user of this property yet in this patchset.
-
-Best Regards,
-Jung Daehwan
-
-------40rWTt6DAFmUrjtMexcyNm5gpMTj9FMdHa8zGfbdWx6mQz74=_4fd93_
-Content-Type: text/plain; charset="utf-8"
-
-
-------40rWTt6DAFmUrjtMexcyNm5gpMTj9FMdHa8zGfbdWx6mQz74=_4fd93_--
+CgpBdCAyMDI0LTA2LTA0IDIxOjExOjU3LCAiR3JlZyBLSCIgPGdyZWdraEBsaW51eGZvdW5kYXRp
+b24ub3JnPiB3cm90ZToKPk9uIE1vbiwgTWF5IDEzLCAyMDI0IGF0IDEwOjE5OjQ4QU0gKzA4MDAs
+IFNpY29uZyBIdWFuZyB3cm90ZToKPj4gVGhpcyBidWcgZXhpc3RzIGluIGRyaXZlcnMvdXNiL2Nk
+bnMzL2NkbnMzLWdhZGdldC5jLiBGdW5jdGlvbgo+PiBfX2NkbnMzX2dhZGdldF9pbml0IHdpbGwg
+Y2FsbCBjZG5zM19nYWRnZXRfc3RhcnQgdG8gZG8gZnV0aGVyIGpvYnMKPj4gZHVyaW5nIHRoZSBp
+bml0aWFsaXphdGlvbiBwcm9jY2VzcyBvZiBjZG5zMyBnYWRnZXQuIEluIGNkbnMzX2dhZGdldF9z
+dGFydCwKPj4gJnByaXZfZGV2LT5wZW5kaW5nX3N0YXR1c193cSBpcyBib3VuZCB3aXRoIGNkbnMz
+X3BlbmRpbmdfc2V0dXBfc3RhdHVzX2hhbmRsZXIuCj4+IFRoZW4gdGhpcyB3b3JrIHdpbGwgYmUg
+YWRkZWQgdG8gc3lzdGVtX2ZyZWV6YWJsZV93cSBpbiBjZG5zM19nYWRnZXRfZXAwX3F1ZXVlLgo+
+PiBIZXJlIGlzIHRoZSBjb2RlLgo+PiBxdWV1ZV93b3JrKHN5c3RlbV9mcmVlemFibGVfd3EsICZw
+cml2X2Rldi0+cGVuZGluZ19zdGF0dXNfd3EpOwo+PiAKPj4gSWYgd2UgY2FsbCBjZG5zM19nYWRn
+ZXRfZXhpdCB0byByZW1vdmUgdGhlIGRldmljZSBhbmQgbWFrZSBjbGVhbnVwLAo+PiB0aGVyZSBh
+cmUgc29tZSB1bmZpbmlzaGVkIHdvcmtzLiBUaGlzIGZ1bmN0aW9uIHdpbGwgY2FsbCBjZG5zM19m
+cmVlX2FsbF9lcHMgdG8KPj4gZnJlZSBhbGwgdGhlIGVuZHBvaW50cy4gSG93ZXZlciwgaWYgY2Ru
+czNfcGVuZGluZ19zZXR1cF9zdGF0dXNfaGFuZGxlciBpcwo+PiBzY2hlZHVsZWQgdG8gcnVuIGFm
+dGVyIHRoZSBmcmVlIGpvYiwgaXQgd2lsbCBjYXVzZSB1c2UtYWZ0ZXItZnJlZSBlcnJvciBhcwo+
+PiBjZG5zM19wZW5kaW5nX3NldHVwX3N0YXR1c19oYW5kbGVyIHdpbGwgdXNlIHRoZSBlbmRwb2lu
+dCBpbiB0aGUgZm9sbG93aW5nIGNvZGUuCj4+IHJlcXVlc3QtPmNvbXBsZXRlKCZwcml2X2Rldi0+
+ZXBzWzBdLT5lbmRwb2ludCwgcmVxdWVzdCk7Cj4+IAo+PiBUaGUgcG9zc2libGUgZXhlY3V0aW9u
+IGZsb3cgdGhhdCBtYXkgbGVhZCB0byB0aGlzIGlzc3VlIGlzIGFzIGZvbGxvd3M6Cj4+IENQVTAg
+ICAgICAgICAgICAgICAgICAgIENQVTEKPj4gICAgICAgICAgICAgICAgICAgICAgIHwgX19jZG5z
+M19nYWRnZXRfaW5pdAo+PiAgICAgICAgICAgICAgICAgICAgICAgfCBjZG5zM19nYWRnZXRfc3Rh
+cnQKPj4gY2RuczNfZ2FkZ2V0X2V4aXQgICAgIHwKPj4gY2RuczNfZnJlZV9hbGxfZXBzICAgIHwK
+Pj4gZGV2bV9rZnJlZSAoZnJlZSkgICAgIHwKPj4gICAgICAgICAgICAgICAgICAgICAgIHwgY2Ru
+czNfcGVuZGluZ19zZXR1cF9zdGF0dXNfaGFuZGxlcgo+PiAgICAgICAgICAgICAgICAgICAgICAg
+fCAmcHJpdl9kZXYtPmVwc1swXS0+ZW5kcG9pbnQgKHVzZSkKPj4gCj4+IEZpeCBpdCBieSBjbGVh
+bmluZyB0aGUgd29yayBpbiBjZG5zM19nYWRnZXRfZXhpdC4KPj4gCj4+IFNpZ25lZC1vZmYtYnk6
+IFNpY29uZyBIdWFuZyA8Y29uZ2VpNDJAMTYzLmNvbT4KPj4gLS0tCj4+ICBkcml2ZXJzL3VzYi9j
+ZG5zMy9jZG5zMy1nYWRnZXQuYyB8IDMgKysrCj4+ICAxIGZpbGUgY2hhbmdlZCwgMyBpbnNlcnRp
+b25zKCspCj4+IAo+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2IvY2RuczMvY2RuczMtZ2FkZ2V0
+LmMgYi9kcml2ZXJzL3VzYi9jZG5zMy9jZG5zMy1nYWRnZXQuYwo+PiBpbmRleCBmZDFiZWIxMGJi
+YTcuLjBmMmUxNDNiZDE3YSAxMDA2NDQKPj4gLS0tIGEvZHJpdmVycy91c2IvY2RuczMvY2RuczMt
+Z2FkZ2V0LmMKPj4gKysrIGIvZHJpdmVycy91c2IvY2RuczMvY2RuczMtZ2FkZ2V0LmMKPj4gQEAg
+LTMyNTIsNiArMzI1Miw5IEBAIHN0YXRpYyB2b2lkIGNkbnMzX2dhZGdldF9leGl0KHN0cnVjdCBj
+ZG5zICpjZG5zKQo+PiAgCXBtX3J1bnRpbWVfbWFya19sYXN0X2J1c3koY2Rucy0+ZGV2KTsKPj4g
+IAlwbV9ydW50aW1lX3B1dF9hdXRvc3VzcGVuZChjZG5zLT5kZXYpOwo+PiAgCj4+ICsJY2FuY2Vs
+X3dvcmtfc3luYygmcHJpdl9kZXYtPnBlbmRpbmdfc3RhdHVzX3dxKTsKPj4gKwljYW5jZWxfd29y
+a19zeW5jKCZwcml2X2Rldi0+YWxpZ25lZF9idWZfd3EpOwo+PiArCj4+ICAJdXNiX2RlbF9nYWRn
+ZXQoJnByaXZfZGV2LT5nYWRnZXQpOwo+PiAgCWRldm1fZnJlZV9pcnEoY2Rucy0+ZGV2LCBjZG5z
+LT5kZXZfaXJxLCBwcml2X2Rldik7Cj4+ICAKPj4gLS0gCj4+IDIuMzQuMQo+Cj5XaGF0IGNvbW1p
+dCBpZCBkb2VzIHRoaXMgZml4Pwo+Cj50aGFua3MsCj4KCj5ncmVnIGstaAoKCkkgbWFkZSB0aGUg
+Y2hhbmdlcyBiYXNlZCBvbiB0aGUgZm9sbG93aW5nIGNvbW1pdCBpbmZvcm1hdGlvbi4KY29tbWl0
+IDUxNDc0YWI0NGFiZjkwNzAyM2E4YTg3NWU3OTliMDdkZTQ2MWU0NjYgKG9yaWdpbi91c2ItdGVz
+dGluZywgb3JpZ2luL3VzYi1uZXh0KQoKcmVnYXJkcywKClNpY29uZyBIdWFuZwoK
 
