@@ -1,57 +1,57 @@
-Return-Path: <linux-usb+bounces-10878-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10879-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 649F98FCB5E
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 13:59:13 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D2ABF8FCB64
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 13:59:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 050CF1F242EF
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 11:59:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AEE401C23075
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 11:59:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03F3E19E7E7;
-	Wed,  5 Jun 2024 11:51:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC74419EEB0;
+	Wed,  5 Jun 2024 11:51:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SONaxWk8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bDzxf0yO"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79E3119E7DD;
-	Wed,  5 Jun 2024 11:51:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D65119E7EF;
+	Wed,  5 Jun 2024 11:51:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717588271; cv=none; b=jRCTr1MVRc2CZW7pXbPyOxgcavIulc83z1ateRuEnyon18wkxRd8ELagj1/FKE5xBS6clNldGpeBGVZXTG1+czkKzJPSoHlczFslS5LtBorVVWqMeWHR4QQkvDgeXLPQXAdvXxMDNejpGkeDaF6+VaJ7LZTLEy4+Irks/JHqgLw=
+	t=1717588274; cv=none; b=W1QOxLl4v+y82yX130lPPEJ3M4bOW+OMGz4moHX8/B4tpPQkNTJjOeabdgnqVtIcNeBZhKL0iN0CIjC+WU6aO4sRY6E7wn9SY+m0sIlvq3xc4TcpMz0RlaBe8TfNaOHf1lr3e/DWte+E7p7ESSy/5y9dXLzkeCeYgi9LvfmzTl0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717588271; c=relaxed/simple;
-	bh=Lt+FpEM0jPpr3XwvPw7UJ/AendB5vN0IPjs2xeR8CQQ=;
+	s=arc-20240116; t=1717588274; c=relaxed/simple;
+	bh=6KgIFqyKayKEXnNF/obBfmrkXcZtNXQT4U+oTZVIPK0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YXeUkx8CAWlMrHv4ZprvJgdfOU3G8JYevbvDvdUvarYhHyqmVsIC+/ua4QdC5Ldmh5DpuyUV7mZIhIrecWWhv8lRcZ3jKchb44w4D/IQ0D85R+elqR5Xa9nRPuXdff6XrRfowXT+lfI1PIfyvK0bB3nHMjPJ/1zg54WtFbK8CFM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SONaxWk8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87FE1C32781;
-	Wed,  5 Jun 2024 11:51:10 +0000 (UTC)
+	 MIME-Version; b=uXAWoJRIm/5dfhdBH2X7XLlqYyPP+kCRsLxy1mcpMdcqlNQl4ePjeEMR0IyN+q5ZKImM9CzMSR986ORTGWcoca9v6y/nZGc1GyZe/DmoOsE3uDpXnmaJfrbPCDmmN7egAWR41APH/q8PyVsRURxe/z1/yKlkIwXHg4lKJzfX4o4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bDzxf0yO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AED8C4AF0A;
+	Wed,  5 Jun 2024 11:51:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717588271;
-	bh=Lt+FpEM0jPpr3XwvPw7UJ/AendB5vN0IPjs2xeR8CQQ=;
+	s=k20201202; t=1717588274;
+	bh=6KgIFqyKayKEXnNF/obBfmrkXcZtNXQT4U+oTZVIPK0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=SONaxWk8cDU0EO1mY24CQbgoVBinXLE7FzUcPy0xAPeK5wrQOpfFtR+QyFgbqKC7J
-	 bNkCQZjlmuT7vWo+rWF4UMsdKUD9cdvopPEqpeSOWv2jEkPPHHb4RGFo8sX9GlcL5l
-	 Anfksk+nRUmJvKuKfUnGvDUD9VjG5YX+I7jrrJC+ib6z4QTHqR4igzqWwwnjZbZPVG
-	 fc9s21OtT2gnJPzmVsgPX70NdaBdLQlsQJl+csukzgOwLMqTvK4p9+DkB0AHttlHo5
-	 3A4ktfkKiT5IFCj1hT+A1og26NocyddG9JHY2Q5uKrWl8O/CrSHVO1KcReaCvq/Yha
-	 q1jPPPkSh8lIA==
+	b=bDzxf0yOsqw8QrUQBP+vytYg5uKFtKUAsqp2pd4lZJptG7hCNBFgBVehk5KFe0Zn1
+	 nQ72IJDwDk+zWqRRZSjdn+MwoKyUF5cd0YfoKVQYLlsR7/N4wqKxuICNyENRKFNOsd
+	 WQK+dNJQuTHv97N1C/VMlZBiUXsbPYDp9+03jqLsgXL/fhaA6yhGPmynA8WW3S4Dhf
+	 GUK4ziP8ibIJPz22oVR0rZWuROqFJ62iKlNN5RAJwtuJa63z4jzFBErGsu4qejL7xT
+	 jummmhsPTqFRg+ILdfKgzilyLu76kPUjQJoY9EyeyH43xx9nDCMUWrIrEkYKhV1gcG
+	 jErZU328ysJgQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Alex Henrie <alexhenrie24@gmail.com>,
+Cc: Hans de Goede <hdegoede@redhat.com>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Sasha Levin <sashal@kernel.org>,
-	sudipm.mukherjee@gmail.com,
 	linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.8 04/24] usb: misc: uss720: check for incompatible versions of the Belkin F5U002
-Date: Wed,  5 Jun 2024 07:50:14 -0400
-Message-ID: <20240605115101.2962372-4-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.8 06/24] usb: dwc3: pci: Don't set "linux,phy_charger_detect" property on Lenovo Yoga Tab2 1380
+Date: Wed,  5 Jun 2024 07:50:16 -0400
+Message-ID: <20240605115101.2962372-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240605115101.2962372-1-sashal@kernel.org>
 References: <20240605115101.2962372-1-sashal@kernel.org>
@@ -66,72 +66,65 @@ X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.8.12
 Content-Transfer-Encoding: 8bit
 
-From: Alex Henrie <alexhenrie24@gmail.com>
+From: Hans de Goede <hdegoede@redhat.com>
 
-[ Upstream commit 3295f1b866bfbcabd625511968e8a5c541f9ab32 ]
+[ Upstream commit 0fb782b5d5c462b2518b3b4fe7d652114c28d613 ]
 
-The incompatible device in my possession has a sticker that says
-"F5U002 Rev 2" and "P80453-B", and lsusb identifies it as
-"050d:0002 Belkin Components IEEE-1284 Controller". There is a bug
-report from 2007 from Michael Trausch who was seeing the exact same
-errors that I saw in 2024 trying to use this cable.
+The Lenovo Yoga Tablet 2 Pro 1380 model is the exception to the rule that
+devices which use the Crystal Cove PMIC without using ACPI for battery and
+AC power_supply class support use the USB-phy for charger detection.
 
-Link: https://lore.kernel.org/all/46DE5830.9060401@trausch.us/
-Signed-off-by: Alex Henrie <alexhenrie24@gmail.com>
-Link: https://lore.kernel.org/r/20240326150723.99939-5-alexhenrie24@gmail.com
+Unlike the Lenovo Yoga Tablet 2 830 / 1050 models this model has an extra
+LC824206XA Micro USB switch which does the charger detection.
+
+Add a DMI quirk to not set the "linux,phy_charger_detect" property on
+the 1380 model. This quirk matches on the BIOS version to differentiate
+the 1380 model from the 830 and 1050 models which otherwise have
+the same DMI strings.
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Link: https://lore.kernel.org/r/20240406140127.17885-1-hdegoede@redhat.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/misc/uss720.c | 20 +++++++++++++-------
- 1 file changed, 13 insertions(+), 7 deletions(-)
+ drivers/usb/dwc3/dwc3-pci.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/misc/uss720.c b/drivers/usb/misc/uss720.c
-index b00d92db5dfd1..eb5a8e0d9e2d6 100644
---- a/drivers/usb/misc/uss720.c
-+++ b/drivers/usb/misc/uss720.c
-@@ -677,7 +677,7 @@ static int uss720_probe(struct usb_interface *intf,
- 	struct parport_uss720_private *priv;
- 	struct parport *pp;
- 	unsigned char reg;
--	int i;
-+	int ret;
+diff --git a/drivers/usb/dwc3/dwc3-pci.c b/drivers/usb/dwc3/dwc3-pci.c
+index 497deed38c0c1..9ef821ca2fc71 100644
+--- a/drivers/usb/dwc3/dwc3-pci.c
++++ b/drivers/usb/dwc3/dwc3-pci.c
+@@ -8,6 +8,7 @@
+  *	    Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+  */
  
- 	dev_dbg(&intf->dev, "probe: vendor id 0x%x, device id 0x%x\n",
- 		le16_to_cpu(usbdev->descriptor.idVendor),
-@@ -688,8 +688,8 @@ static int uss720_probe(struct usb_interface *intf,
- 		usb_put_dev(usbdev);
- 		return -ENODEV;
- 	}
--	i = usb_set_interface(usbdev, intf->altsetting->desc.bInterfaceNumber, 2);
--	dev_dbg(&intf->dev, "set interface result %d\n", i);
-+	ret = usb_set_interface(usbdev, intf->altsetting->desc.bInterfaceNumber, 2);
-+	dev_dbg(&intf->dev, "set interface result %d\n", ret);
++#include <linux/dmi.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+ #include <linux/slab.h>
+@@ -220,6 +221,7 @@ static int dwc3_pci_quirks(struct dwc3_pci *dwc,
  
- 	interface = intf->cur_altsetting;
+ 		if (pdev->device == PCI_DEVICE_ID_INTEL_BYT) {
+ 			struct gpio_desc *gpio;
++			const char *bios_ver;
+ 			int ret;
  
-@@ -725,12 +725,18 @@ static int uss720_probe(struct usb_interface *intf,
- 	set_1284_register(pp, 7, 0x00, GFP_KERNEL);
- 	set_1284_register(pp, 6, 0x30, GFP_KERNEL);  /* PS/2 mode */
- 	set_1284_register(pp, 2, 0x0c, GFP_KERNEL);
--	/* debugging */
--	get_1284_register(pp, 0, &reg, GFP_KERNEL);
-+
-+	/* The Belkin F5U002 Rev 2 P80453-B USB parallel port adapter shares the
-+	 * device ID 050d:0002 with some other device that works with this
-+	 * driver, but it itself does not. Detect and handle the bad cable
-+	 * here. */
-+	ret = get_1284_register(pp, 0, &reg, GFP_KERNEL);
- 	dev_dbg(&intf->dev, "reg: %7ph\n", priv->reg);
-+	if (ret < 0)
-+		return ret;
- 
--	i = usb_find_last_int_in_endpoint(interface, &epd);
--	if (!i) {
-+	ret = usb_find_last_int_in_endpoint(interface, &epd);
-+	if (!ret) {
- 		dev_dbg(&intf->dev, "epaddr %d interval %d\n",
- 				epd->bEndpointAddress, epd->bInterval);
- 	}
+ 			/* On BYT the FW does not always enable the refclock */
+@@ -277,8 +279,12 @@ static int dwc3_pci_quirks(struct dwc3_pci *dwc,
+ 			 * detection. These can be identified by them _not_
+ 			 * using the standard ACPI battery and ac drivers.
+ 			 */
++			bios_ver = dmi_get_system_info(DMI_BIOS_VERSION);
+ 			if (acpi_dev_present("INT33FD", "1", 2) &&
+-			    acpi_quirk_skip_acpi_ac_and_battery()) {
++			    acpi_quirk_skip_acpi_ac_and_battery() &&
++			    /* Lenovo Yoga Tablet 2 Pro 1380 uses LC824206XA instead */
++			    !(bios_ver &&
++			      strstarts(bios_ver, "BLADE_21.X64.0005.R00.1504101516"))) {
+ 				dev_info(&pdev->dev, "Using TUSB1211 phy for charger detection\n");
+ 				swnode = &dwc3_pci_intel_phy_charger_detect_swnode;
+ 			}
 -- 
 2.43.0
 
