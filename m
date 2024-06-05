@@ -1,157 +1,183 @@
-Return-Path: <linux-usb+bounces-10937-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10938-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6FBF68FDA72
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2024 01:27:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6EB3E8FDB01
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2024 01:55:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B071D1F25CE3
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 23:27:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 71D111C23334
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2024 23:55:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2998167265;
-	Wed,  5 Jun 2024 23:27:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 532FE17E8F7;
+	Wed,  5 Jun 2024 23:52:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="iElbNTyu"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="KNBfEpor"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02FD515A867
-	for <linux-usb@vger.kernel.org>; Wed,  5 Jun 2024 23:27:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 497DB1AAA5;
+	Wed,  5 Jun 2024 23:52:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717630023; cv=none; b=f7INdbgLMBmw4d3c3ibETKaPN3VyW3Q1+uxmvWKOOrvuTrxoScvkpdLrD98/v7sWY+9ZMRst3Dhutm8tVgVN8mMfHoSkMGaoowE/sjTNhvmCNzoJrUKAfQad4cfGffoCZsQ+uvAJ8q5QAjz8vrwAZvklI0cUnchcdRtiQPF75tA=
+	t=1717631555; cv=none; b=o1W1JZxblfH0QcQVuq5bs8r7L32FbWjFADJgNiH1/OLQEpe7rVIK1VsUmLwENv+6ZsLzsHbIq7r1gRxyxAtO+NSa+PF4IKHnG/uxtDa09f0tanTF1klONeHiJEK/erWLHU6t5i88iSYOLJQ7ogMurv22J+WbtP/NfY2CdDhOIfE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717630023; c=relaxed/simple;
-	bh=Uvh7c5HPcPZsUBUF5x6xG49unjoIWNwnWZBN+MKrLUU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ufGpXC1CQe3UrD5S1QkF9Q30xo1UKx21j8RSun+DjZHlgJlHYwjiEqq72lYmx0hqbtyaehRGzYQ1K0VN7+5GKsIw750AfKK/xyYI359ZhOqRUDAovA9t2OBnUx2p0yv5zi6Klp9CNpJK7GEYKHcmjfaG5jNM3MCdBJ64fqMzEow=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=iElbNTyu; arc=none smtp.client-ip=209.85.219.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-df79380ffceso1271898276.1
-        for <linux-usb@vger.kernel.org>; Wed, 05 Jun 2024 16:27:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1717630020; x=1718234820; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=QIAF8QbRwm7UUfXsDXX+XUkKot8/Im3q+obHDhaEPyU=;
-        b=iElbNTyuJl/fqEYibZ3VA2RQmTCx2dGHqviU5RG/TU7LfcW6r/kj6IDQNux6qSrxEh
-         d5TP5+ZwBOBxlYYaVZgL7yW7p8oJ6fr+J+frp5u7DjHdyqIaBsocMU7FYe2ismAy0+0h
-         a+eJI0F7KhN6Qv2+E5VPVU0XvBI+fW2mLzdc9H42k2RyRFQhf38wiXUqzvbwA9qLViYz
-         lvcnFYsvQfpmUcD64Y9UndMsjLqv4wP8ckou1K57uMhK5zV7OLR9DzRNrGOkC2d7rLIa
-         dSbY8+OblEVpRo26KS2VjnQA0z6EfB2NYAqPmSWTWarH4jbJ2P72dXmJAiqSj4h4q6LP
-         38fw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717630020; x=1718234820;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QIAF8QbRwm7UUfXsDXX+XUkKot8/Im3q+obHDhaEPyU=;
-        b=AEzrCtUGbXOQqD0bge43pqaPfjjiU8CPuC3kzXjWww+ztKeMPYMYy4D+oZhVH8Aume
-         Il45EAAEsGOVNiGGYQfl9lTv+V0FKsVDXabq055U6z7ULi0lBB773GdJSoBJulQkvPQi
-         tW0S7bfNAXas7dJXYw2nlanpbUlylfJfQBj11EFGpFPdzMUmIJ+45USjWvVQdM4D8N5q
-         JJOM0LsKb1GL3eU6IVefxCgFj116zEASOJI///r6KkMmDkOhQz2DXLTLzKpJs68BBXZY
-         P5BnX3rqBsr4cypHUcWnMcjtGpKugXtzaJoBTDntkoviuKRAa7o6itMOW4c0mbC+ra0c
-         jQBQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWA3kJOwIus288AqpmpZVdcCQXDxcUNwfhON5LszN5LmNuNtzxevMXvoTQBfNqQNx7q2puFIEuwyT3YgM5ZeAc1vnYks1TsL+a0
-X-Gm-Message-State: AOJu0Yzw0HjZaGiuCnsBdPOVTMhJE/4byqg/EiPrecPDZAPGew/4Vm34
-	e5cMLgasObn1p8Dx/oCfVAiNoIv/NmaikT1Z2O7/4XQc8P/dAWR61R7EhUEnZ761JssiufwgY3/
-	6xo5x7bjmlBIPBCs1+VO2farqSjMsMi10qLgIfg==
-X-Google-Smtp-Source: AGHT+IFfQiXdaxWwXiph80q/21i5cUmAcf5zvU2JUP9S2fWWkpl/D3qIPiQt8Ovp+Liq/Ff2Le+9lzJrniwVaZMFMjI=
-X-Received: by 2002:a25:906:0:b0:dfa:5ab5:d2d with SMTP id 3f1490d57ef6-dfadeb86662mr1026190276.13.1717630019511;
- Wed, 05 Jun 2024 16:26:59 -0700 (PDT)
+	s=arc-20240116; t=1717631555; c=relaxed/simple;
+	bh=S5f1uzmtb8uc01jTh5ar2w9G5sPTtr6TfMY0Y57y51I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=exwogDsvrL/SjVBeonkMvJOIAhXt+5/ce3ZCODcd42EmUAkFYXmQu7/MNW6GqVij8qS/KMM9ZB2uSP5mF42RSxQLVrRg7Zd3lED+IBn279rTvu5ygGatzeMbfuHAXJBOqgeB+EJQil8i2r1uHdGwf2/Lx1CIzt2dPsZ2fSyXPUo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=KNBfEpor; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1717631552;
+	bh=S5f1uzmtb8uc01jTh5ar2w9G5sPTtr6TfMY0Y57y51I=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=KNBfEporJmpNknMJZiS7jXmOSq3w0jhWnijSn4zrZwzqTv3/Kj5GVr6rc6RPSfiiT
+	 xT9DFOCYJQsU6Tr/r+mnHtF2sGq9z3d46OV6sWbul/Nk450x6Nk91ddyF1hbDkLe5c
+	 h8ukxce5hZ0e1geY0NehPHakiJdHx9l8TbIuO3FZGdq/57JX8HhLSmx4Ms8dodvsL7
+	 dvDMEhasmnTC+AwDr0wdJaRTpaSJrmOl2InBZelFa2Ofy7K5QOUwrHYHtRkyU0gTkP
+	 3eC9k0VkNpiAUIOQm9hnA3MWtJu3DaWtXfGajefxKRz3zfwHhjWXnzCBzOp7xh1MMx
+	 AC523n1BdeTlA==
+Received: from mercury (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: sre)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 3346937820CD;
+	Wed,  5 Jun 2024 23:52:32 +0000 (UTC)
+Received: by mercury (Postfix, from userid 1000)
+	id ACD2B1060501; Thu, 06 Jun 2024 01:52:31 +0200 (CEST)
+Date: Thu, 6 Jun 2024 01:52:31 +0200
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Bjorn Andersson <andersson@kernel.org>, Hans de Goede <hdegoede@redhat.com>, 
+	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Konrad Dybcio <konrad.dybcio@linaro.org>, linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-arm-msm@vger.kernel.org, Nikita Travkin <nikita@trvn.ru>
+Subject: Re: [PATCH v4 4/6] power: supply: lenovo_yoga_c630_battery: add
+ Lenovo C630 driver
+Message-ID: <iefpe3vjf6u43yph2jqhd2pp6dhzk5kzseo2cffv5ksoyqk22c@2plv7xxped67>
+References: <20240528-yoga-ec-driver-v4-0-4fa8dfaae7b6@linaro.org>
+ <20240528-yoga-ec-driver-v4-4-4fa8dfaae7b6@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <mpearson-lenovo@squebb.ca> <20240604194056.16625-1-mpearson-lenovo@squebb.ca>
- <2midmmssv2i3plvtc2hajar6alfvggpnbvgpmldspelxsnjvcl@qiblhwat6n3p> <a517bb13-9772-49f9-b75c-8fa4d98b2ae9@app.fastmail.com>
-In-Reply-To: <a517bb13-9772-49f9-b75c-8fa4d98b2ae9@app.fastmail.com>
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Thu, 6 Jun 2024 02:26:46 +0300
-Message-ID: <CAA8EJppzeBPHW1GPGvVzT-YSGm4PZUQ4qgq0FCgqn1e9Vt-MXg@mail.gmail.com>
-Subject: Re: [PATCH] usb: typec: ucsi: treat get_pdos not supported condition
- as info instead of error
-To: Mark Pearson <mpearson-lenovo@squebb.ca>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, Greg KH <gregkh@linuxfoundation.org>, 
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Diogo Ivo <diogo.ivo@siemens.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="ebyt27yflv6nt4ze"
+Content-Disposition: inline
+In-Reply-To: <20240528-yoga-ec-driver-v4-4-4fa8dfaae7b6@linaro.org>
 
-On Wed, 5 Jun 2024 at 20:09, Mark Pearson <mpearson-lenovo@squebb.ca> wrote:
->
-> Thanks Dmitry (& Diogo from the other thread)
->
-> On Tue, Jun 4, 2024, at 7:45 PM, Dmitry Baryshkov wrote:
-> > On Tue, Jun 04, 2024 at 03:40:44PM -0400, Mark Pearson wrote:
-> >> On systems where the UCSI PDOs are not supported, the UCSI driver is
-> >> giving an error message. This can cause users to believe there is a HW
-> >> issue with their system when in fact it is working as designed.
-> >>
-> >> Downgrade message to dev_info for EOPNOTSUPP condition.
-> >>
-> >> Tested on Lenovo L14 G5 AMD and confirmed with Lenovo FW team that PDOs
-> >> are not supported on this platform.
-> >>
-> >> Signed-off-by: Mark Pearson <mpearson-lenovo@squebb.ca>
-> >> ---
-> >>  drivers/usb/typec/ucsi/ucsi.c | 8 ++++++--
-> >>  1 file changed, 6 insertions(+), 2 deletions(-)
-> >>
-> >> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> >> index cb52e7b0a2c5..090be87d5485 100644
-> >> --- a/drivers/usb/typec/ucsi/ucsi.c
-> >> +++ b/drivers/usb/typec/ucsi/ucsi.c
-> >> @@ -632,8 +632,12 @@ static int ucsi_read_pdos(struct ucsi_connector *con,
-> >>      command |= is_source(role) ? UCSI_GET_PDOS_SRC_PDOS : 0;
-> >>      ret = ucsi_send_command(ucsi, command, pdos + offset,
-> >>                              num_pdos * sizeof(u32));
-> >> -    if (ret < 0 && ret != -ETIMEDOUT)
-> >> -            dev_err(ucsi->dev, "UCSI_GET_PDOS failed (%d)\n", ret);
-> >> +    if (ret < 0 && ret != -ETIMEDOUT) {
-> >> +            if (ret == -EOPNOTSUPP)
-> >> +                    dev_info(ucsi->dev, "UCSI_GET_PDOS not supported on this hardware\n");
-> >
-> > Maybe it would be enough to guard GET_PDOS commands with the
-> > UCSI_CAP_PDO_DETAILS check? Is it cleared on affected platforms?
-> >
->
-> I checked on the system I have and the features are 0x84, so the CAP_PDO_DETAILS aren't set.
-> I can do a formal patch if the approach is better, I ended up doing:
->
-> @@ -645,9 +645,13 @@ static int ucsi_read_pdos(struct ucsi_connector *con,
->  static int ucsi_get_pdos(struct ucsi_connector *con, enum typec_role role,
->                          int is_partner, u32 *pdos)
->  {
-> +       struct ucsi *ucsi = con->ucsi;
->         u8 num_pdos;
->         int ret;
->
-> +       if (!(ucsi->cap.features & UCSI_CAP_PDO_DETAILS))
-> +               return 0;
+
+--ebyt27yflv6nt4ze
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+Hi,
+
+Thanks for your patch. I have a few more comments.
+
+On Tue, May 28, 2024 at 11:44:49PM +0300, Dmitry Baryshkov wrote:
+...
+> +struct yoga_c630_psy {
+> +       struct yoga_c630_ec *ec;
+> +       struct device *dev;
+> +       struct device_node *of_node;
+
+Please use fwnode
+
+> +static enum power_supply_property yoga_c630_psy_bat_mA_properties[] = {
+> +	POWER_SUPPLY_PROP_STATUS,
+> +	POWER_SUPPLY_PROP_PRESENT,
+> +	POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN,
+> +	POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN,
+> +	POWER_SUPPLY_PROP_CHARGE_FULL,
+> +	POWER_SUPPLY_PROP_CHARGE_NOW,
+> +	POWER_SUPPLY_PROP_CURRENT_NOW,
+> +	POWER_SUPPLY_PROP_POWER_NOW,
+> +	POWER_SUPPLY_PROP_VOLTAGE_NOW,
+> +	POWER_SUPPLY_PROP_TECHNOLOGY,
+> +	POWER_SUPPLY_PROP_MODEL_NAME,
+> +	POWER_SUPPLY_PROP_MANUFACTURER,
+> +};
 > +
->         /* UCSI max payload means only getting at most 4 PDOs at a time */
->         ret = ucsi_read_pdos(con, role, is_partner, pdos, 0, UCSI_MAX_PDOS);
->
-> And this did indeed squelch the 'error' message.
->
-> Couple of notes:
->  - I don't know this area very well, so don't know if there are risks of any regressions in other circumstances. I think it's pretty safe, but if any experts have an opinion that would be appreciated.
->  - It means that there isn't a log message saying that PDO capabilities are not available. Are there going to be power related tooling that won't work and it would be useful to have that message available?
+> +static enum power_supply_property yoga_c630_psy_bat_mWh_properties[] = {
+> +	POWER_SUPPLY_PROP_STATUS,
+> +	POWER_SUPPLY_PROP_PRESENT,
+> +	POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN,
+> +	POWER_SUPPLY_PROP_ENERGY_FULL_DESIGN,
+> +	POWER_SUPPLY_PROP_ENERGY_FULL,
+> +	POWER_SUPPLY_PROP_ENERGY_NOW,
+> +	POWER_SUPPLY_PROP_CURRENT_NOW,
+> +	POWER_SUPPLY_PROP_POWER_NOW,
+> +	POWER_SUPPLY_PROP_VOLTAGE_NOW,
+> +	POWER_SUPPLY_PROP_TECHNOLOGY,
+> +	POWER_SUPPLY_PROP_MODEL_NAME,
+> +	POWER_SUPPLY_PROP_MANUFACTURER,
+> +};
 
-From my POV this patch looks good. Also if there are no PDOs, then the
-UCSI driver will register an empty usb_power_delivery object with
-neither source nor sink capabilities being present. So userspace can
-identify the case of PDOs retrieval being unsupported. If you really
-want to have a possible trace in the logs, it might be a good idea to
-add dev_dbg under this if statement.
+Please also add
 
--- 
-With best wishes
-Dmitry
+POWER_SUPPLY_PROP_SCOPE = POWER_SUPPLY_SCOPE_SYSTEM
+
+> +static enum power_supply_property yoga_c630_psy_adpt_properties[] = {
+> +       POWER_SUPPLY_PROP_ONLINE,
+> +};
+
+Please also add
+
+POWER_SUPPLY_PROP_USB_TYPE = POWER_SUPPLY_USB_TYPE_C
+
+> +static const struct power_supply_desc yoga_c630_psy_adpt_psy_desc = {
+> +	.name = "yoga-c630-adapter",
+> +	.type = POWER_SUPPLY_TYPE_USB_TYPE_C,
+
+static const enum power_supply_usb_type yoga_c630_psy_adpt_usb_type[] = {
+	POWER_SUPPLY_USB_TYPE_C,
+};
+
+.type = POWER_SUPPLY_TYPE_USB
+.usb_types = yoga_c630_psy_adpt_usb_type
+.num_usb_types = ARRAY_SIZE(yoga_c630_psy_adpt_usb_type),
+
+> +	.properties = yoga_c630_psy_adpt_properties,
+> +	.num_properties = ARRAY_SIZE(yoga_c630_psy_adpt_properties),
+> +	.get_property = yoga_c630_psy_adpt_get_property,
+> +};
+> +
+
+Greetings,
+
+-- Sebastian
+
+--ebyt27yflv6nt4ze
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmZg+jwACgkQ2O7X88g7
++prgcg/+Oj9Lis1zOv00R9LtK2n3mOqqE4WLDAnm9j8cxMhyQyNlAOY/71t6VkCU
+bXeDpkoBVYVLRTHu++yw7yuBXckKJ8ZGxfzGtuHPiUzl2FjXBOjZEHCc7RlAfiHy
+wLpqos2ZHrDu/IkSr1wgLmPe1nqOGbuBWJLcUgmi0pk9iKt5+tB1w2UqP7CsqDRH
+ncOE7YydWI71ueD4DmBceAa4p11mUnX+dBrx2vuTWUPaAJecpP6vcIkqWiKdf5LF
+USw8GvSMfEgBus/KMgohMI9YJvNeNM/iC8wjxjOFHN6Csvt5VmRE7L7rk/EsG1QX
+g+zXiHh8FxasapjsiM5ZHwYbT5zZBLSl6DLS16gcouZu7a8spmPXDi4PafaHi46A
+YGNjb1It/aUdJdA2GLjiHXZKCtmTNKTngm40UbP0BsfSJgG7tGTfQb7HNCShBOlL
+V1KmhEeIuFgs0PbkAH5bu993Vu2qn19ohYwd64KWTJqXtsMlfDWxcOPw8aNBxDc1
+i8kv1Tytya3a0XK3oCHUZ4AUVO2BfwbA0uLc2JVZ0LV2nJiCeFVzyW76YA4FhAPl
+PeIvwvoOYAD4GtX6Ovf4npq5QMhMjG1f5QBVW1CkjXPtYeZNqAIft8AlnL0MzazY
+4rKlgjL6XywuGsqmhSEO43GoBleMTQNDwi3J+LOM/u4Fmi3f1zE=
+=PNUy
+-----END PGP SIGNATURE-----
+
+--ebyt27yflv6nt4ze--
 
