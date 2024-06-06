@@ -1,161 +1,160 @@
-Return-Path: <linux-usb+bounces-10967-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10968-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D61D08FE350
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2024 11:46:01 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B933A8FE2F9
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2024 11:35:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B5AA3B2FC1E
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2024 09:25:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D140F1C25142
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2024 09:35:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50AF2140363;
-	Thu,  6 Jun 2024 09:24:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C78491514EE;
+	Thu,  6 Jun 2024 09:34:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bfpZeOT2"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AFu9v8vv"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88F9D13E41F
-	for <linux-usb@vger.kernel.org>; Thu,  6 Jun 2024 09:24:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC61C19D8B5;
+	Thu,  6 Jun 2024 09:34:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717665868; cv=none; b=Bye2X+j6qOMcjOnyiF8QcMDvMJQCX3XXlz55dH4vUsQy09i+zUWsudnyDNEFRjI9JHGe3SCLET/Sq84TZEGB0gGB4XSZrVVcJygKMZBoXFBRgzNN4ojGVdcfCUPyeoBBEkzhgEkuRNeQNBZtcyz8H5Il7ih5BGYr09t0tTpp26w=
+	t=1717666477; cv=none; b=f1uhGl4GcE7PesaZRclmhadoZ1sI2x8f8pO0tvUF7ivmhdJK1+2rZ6Ggl4ZDLd1It9d+AUQfUWTKSpYllK6AtuBJnRRfpsoXHdLn5iL6wVpS/zmmDbbsTczjzD7Jg8ggx6XEGufqD/E6aoQB7KwcVKEGvsDKpd6kVnHwlxxctWE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717665868; c=relaxed/simple;
-	bh=udXsNUhcnZ8ynFTNJ+VRVp6bj42T4g0XRqCcuRb5JXc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=umvljUAhZ80iRoX4ABxKPT9R4+sJ2JxuKSX9yrHK5I49egrYYNDMXozPWyoa/cgxz98kLLiGO4imNgfyu5MxCdKZqd+xL1V8mas/RQJGAfqBGBPWz2csHUuKuXtRQcGyhCu/09F04YNCe1chh91Ujnc6cGsgBQ2twOh1tFKSp+A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=bfpZeOT2; arc=none smtp.client-ip=209.85.216.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-2bfdae7997aso604794a91.2
-        for <linux-usb@vger.kernel.org>; Thu, 06 Jun 2024 02:24:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1717665866; x=1718270666; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oCgaL8o9gTqW3R6MkCs66+V6tGdqOhyMZityYxhrOKQ=;
-        b=bfpZeOT2jsOO3ulGbxN5iU0WItcvHCC1Wn7N83jkTs0cI1lpe4yhWJzD2ssYEWJzi/
-         0YT3EFkkfrqqgxKblh7U5CZMVkJZ+5Cc0DZm6fknSk8jtMGrOHNev83QLjft35fAeS7Z
-         +WoslQTEVfQjvkQfwTc/PAawt3wWIWWNpdvOJt39kWGIp8LIqZVhnbc7e+IvYr3WvkHr
-         lJ04buV0AbIEChXCvX/ISxcxdJftTVwtW0U2oFExRP3I7hgur46QN6MFnlWknLp0yr3V
-         bWSgELUA3qy6CgcJ/UNDTB9R4rnyz8rrLDXZ7FLpfburz71zBFqV20TZEWSqvJ1Mq/EL
-         9THA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717665866; x=1718270666;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oCgaL8o9gTqW3R6MkCs66+V6tGdqOhyMZityYxhrOKQ=;
-        b=nT1KU9AgqlHm+d2ZBlFWGcZbEax+HxG5t9mzazPj1Ktdky8huV+/ZnMayaPhQqNCFw
-         ELHviDPoU+hL6Icjonhcjb22yWa+bq5gceJHoTjc3On0qWNXEvGn+5vov9trqYnBo7JZ
-         LLyc7vFZ/0WSGuXo0Rgqy3trAH0Nti4vn8qaImaYgzHRRpylrFFXdCiEBILtkEqxUC8I
-         TVjR+XWhrvMBiNcaf5CknJSieHkurYvTbJWQu+VyxsQcRtKHfG4gW99/7s3bcADt+qPr
-         BBp9RUzZ4inN0kl6B1+tYPZyAGjTBc+KWcwFt1wLmwOblYGygFm1M1OluuU+r0L9vJI3
-         3XKg==
-X-Forwarded-Encrypted: i=1; AJvYcCVSz9ZXYESM5rgI38SrkJlGnUFe/rtPrF0cAv196D4RXdW+7XzJAsD77acK8+hY3Ye/wntba0yOmRRkTpCieIn0Br8KF6nDhifY
-X-Gm-Message-State: AOJu0YxlZ7pmK9mkJ30B+1kcS9LY0cLYjcnvrSTyI3P45flZBMYu/wFa
-	w93k0wKOvB8p0VA18MOxSD7fXgQZAECPGA4775hUiPNPT5mfjwQ2Pe/E+UaGsrgS53iUlH4I3xj
-	j9NfPzzsylGXODxz2l9JCEkIFg90dG1u4MMA+
-X-Google-Smtp-Source: AGHT+IFO27fLQ60otnz+VPqegLb1l+ah/BSl+EBtF4Q1892OcY0hAdcmXoAoiATlOwzJL3jUrPraipj4bPnP8gdWMEU=
-X-Received: by 2002:a17:90b:4ad0:b0:2c1:ad46:7133 with SMTP id
- 98e67ed59e1d1-2c27dafd1d8mr5026032a91.8.1717665865426; Thu, 06 Jun 2024
- 02:24:25 -0700 (PDT)
+	s=arc-20240116; t=1717666477; c=relaxed/simple;
+	bh=hpQf42qO3MldKUzInM+V4YN6hGRQ+MuTA6xdfGIOxiE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Yz5+xs3uSMF5wv+9ayuKSsM+uDlGapnc4aJ3qhy/pbjYj9KI9mHwBg0ckCu5Bhm/7Q5r0aZMjEEIX8ZvS5a2RGxKAGCXW16St5RLOcEG5OlQu8uhAU1M+SZKksKBHIJ0AY1uWLgk2JJR+L8/IJdTHeyaUbi5NZOkEZNtwUjarr0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AFu9v8vv; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1717666476; x=1749202476;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hpQf42qO3MldKUzInM+V4YN6hGRQ+MuTA6xdfGIOxiE=;
+  b=AFu9v8vvNedvXxE3BbNfFW3WUl03K6Zef/XxI4X4bzFAZubRum86uX2w
+   ZSfE+J88vfajzeA8n/1jS7H9jd86SPgkbgrD8ZlzbMFOFoU48yJ9tfnGB
+   sPaOTzY6FAKmuqxusAtt9AzSyal7SCooa8DCJdAmzYDXjOvGuPSS1NWaa
+   xGvxJqtT8K9kjqcK8oLNUnFqSb28ZqlbOael269ldf/52zH0nLdAmrof2
+   rIKDjPszXiORqa9Hq+w4DNVnD4B0PS2RYWNKWA3eD+dCTE/i2l/FJeChg
+   j+KNihc/6K98P3IBDpqeHvHC2SoGesLf6LudT9VDhodhZUZk3h4tpdjAo
+   w==;
+X-CSE-ConnectionGUID: tA1pQjBCQ3mLyjZAeZzXpg==
+X-CSE-MsgGUID: +hef+bk6TeCJsiGj3ZbOaw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11094"; a="14160722"
+X-IronPort-AV: E=Sophos;i="6.08,218,1712646000"; 
+   d="scan'208";a="14160722"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2024 02:34:35 -0700
+X-CSE-ConnectionGUID: 6lFhivlMQbOOE+4FuD6zMA==
+X-CSE-MsgGUID: HV4SniVhQUKAJFr0KO1MjQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,218,1712646000"; 
+   d="scan'208";a="38350304"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by orviesa006.jf.intel.com with SMTP; 06 Jun 2024 02:34:33 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 06 Jun 2024 12:34:31 +0300
+Date: Thu, 6 Jun 2024 12:34:31 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Javier Carrasco <javier.carrasco@wolfvision.net>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] usb: typec: tipd: drop second firmware name read
+Message-ID: <ZmGCp8G4nK2ljRU8@kuha.fi.intel.com>
+References: <20240606-tps6598x_fw_update_log-v1-0-2b5b8369a0ba@wolfvision.net>
+ <20240606-tps6598x_fw_update_log-v1-1-2b5b8369a0ba@wolfvision.net>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240605175953.2613260-1-joychakr@google.com> <20240605175953.2613260-6-joychakr@google.com>
- <20a9ea0b-74d0-47b2-8dc0-2b5e7d070d38@roeck-us.net>
-In-Reply-To: <20a9ea0b-74d0-47b2-8dc0-2b5e7d070d38@roeck-us.net>
-From: Joy Chakraborty <joychakr@google.com>
-Date: Thu, 6 Jun 2024 14:54:09 +0530
-Message-ID: <CAOSNQF3Kes3MHWf3FMCCfNOCvymSZV8RS+UMM_oKjhBQzQz8Bg@mail.gmail.com>
-Subject: Re: [PATCH v1 05/17] misc: ds1682: Change nvmem reg_read/write return type
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	Lars-Peter Clausen <lars@metafoo.de>, Sakari Ailus <sakari.ailus@linux.intel.com>, 
-	Bingbu Cao <bingbu.cao@intel.com>, Zhihao Cheng <chengzhihao1@huawei.com>, 
-	Jerome Brunet <jbrunet@baylibre.com>, 
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>, linux-hwmon@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org, 
-	linux-media@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-mtd@lists.infradead.org, 
-	linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-amlogic@lists.infradead.org, linux-sunxi@lists.linux.dev, 
-	linux-tegra@vger.kernel.org, linux-usb@vger.kernel.org, manugautam@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240606-tps6598x_fw_update_log-v1-1-2b5b8369a0ba@wolfvision.net>
 
-On Thu, Jun 6, 2024 at 2:48=E2=80=AFAM Guenter Roeck <linux@roeck-us.net> w=
-rote:
->
-> On 6/5/24 10:59, Joy Chakraborty wrote:
-> > Change nvmem read/write function definition return type to ssize_t.
-> >
-> > Signed-off-by: Joy Chakraborty <joychakr@google.com>
-> > ---
-> >   drivers/misc/ds1682.c | 16 ++++++----------
-> >   1 file changed, 6 insertions(+), 10 deletions(-)
-> >
-> > diff --git a/drivers/misc/ds1682.c b/drivers/misc/ds1682.c
-> > index 5f8dcd0e3848..953341666ddb 100644
-> > --- a/drivers/misc/ds1682.c
-> > +++ b/drivers/misc/ds1682.c
-> > @@ -198,26 +198,22 @@ static const struct bin_attribute ds1682_eeprom_a=
-ttr =3D {
-> >       .write =3D ds1682_eeprom_write,
-> >   };
-> >
-> > -static int ds1682_nvmem_read(void *priv, unsigned int offset, void *va=
-l,
-> > -                          size_t bytes)
-> > +static ssize_t ds1682_nvmem_read(void *priv, unsigned int offset, void=
- *val,
-> > +                              size_t bytes)
-> >   {
-> >       struct i2c_client *client =3D priv;
-> > -     int ret;
-> >
-> > -     ret =3D i2c_smbus_read_i2c_block_data(client, DS1682_REG_EEPROM +=
- offset,
-> > +     return i2c_smbus_read_i2c_block_data(client, DS1682_REG_EEPROM + =
-offset,
-> >                                           bytes, val);
-> > -     return ret < 0 ? ret : 0;
-> >   }
-> >
-> > -static int ds1682_nvmem_write(void *priv, unsigned int offset, void *v=
-al,
-> > -                           size_t bytes)
-> > +static ssize_t ds1682_nvmem_write(void *priv, unsigned int offset, voi=
-d *val,
-> > +                               size_t bytes)
-> >   {
-> >       struct i2c_client *client =3D priv;
-> > -     int ret;
-> >
-> > -     ret =3D i2c_smbus_write_i2c_block_data(client, DS1682_REG_EEPROM =
-+ offset,
-> > +     return i2c_smbus_write_i2c_block_data(client, DS1682_REG_EEPROM +=
- offset,
-> >                                            bytes, val);
->
-> i2c_smbus_write_i2c_block_data() does not return the number of bytes writ=
-ten.
-> It returns either 0 or an error code.
->
-Ack, I see only i2c_smbus_read_i2c_block_data()  returns the number of
-bytes read . Will fix it next revision.
+On Thu, Jun 06, 2024 at 11:03:55AM +0200, Javier Carrasco wrote:
+> tps_request_firmware() reads the firmware name and there is no need to
+> repeat the action in the device-specific implementations of the firmware
+> update mechanism.
+> 
+> Provide the firmware name as a parameter in tps_request_firmware() to
+> avoid repetitive operations in the device-specific implementations.
+> 
+> Signed-off-by: Javier Carrasco <javier.carrasco@wolfvision.net>
 
-> Guenter
->
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
+> ---
+>  drivers/usb/typec/tipd/core.c | 24 +++++++-----------------
+>  1 file changed, 7 insertions(+), 17 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
+> index ad76dbd20e65..851b0d02727a 100644
+> --- a/drivers/usb/typec/tipd/core.c
+> +++ b/drivers/usb/typec/tipd/core.c
+> @@ -892,19 +892,19 @@ tps6598x_register_port(struct tps6598x *tps, struct fwnode_handle *fwnode)
+>  	return 0;
+>  }
+>  
+> -static int tps_request_firmware(struct tps6598x *tps, const struct firmware **fw)
+> +static int tps_request_firmware(struct tps6598x *tps, const struct firmware **fw,
+> +				const char **firmware_name)
+>  {
+> -	const char *firmware_name;
+>  	int ret;
+>  
+>  	ret = device_property_read_string(tps->dev, "firmware-name",
+> -					  &firmware_name);
+> +					  firmware_name);
+>  	if (ret)
+>  		return ret;
+>  
+> -	ret = request_firmware(fw, firmware_name, tps->dev);
+> +	ret = request_firmware(fw, *firmware_name, tps->dev);
+>  	if (ret) {
+> -		dev_err(tps->dev, "failed to retrieve \"%s\"\n", firmware_name);
+> +		dev_err(tps->dev, "failed to retrieve \"%s\"\n", *firmware_name);
+>  		return ret;
+>  	}
+>  
+> @@ -999,12 +999,7 @@ static int tps25750_start_patch_burst_mode(struct tps6598x *tps)
+>  	u32 addr;
+>  	struct device_node *np = tps->dev->of_node;
+>  
+> -	ret = device_property_read_string(tps->dev, "firmware-name",
+> -					  &firmware_name);
+> -	if (ret)
+> -		return ret;
+> -
+> -	ret = tps_request_firmware(tps, &fw);
+> +	ret = tps_request_firmware(tps, &fw, &firmware_name);
+>  	if (ret)
+>  		return ret;
+>  
+> @@ -1155,12 +1150,7 @@ static int tps6598x_apply_patch(struct tps6598x *tps)
+>  	const char *firmware_name;
+>  	int ret;
+>  
+> -	ret = device_property_read_string(tps->dev, "firmware-name",
+> -					  &firmware_name);
+> -	if (ret)
+> -		return ret;
+> -
+> -	ret = tps_request_firmware(tps, &fw);
+> +	ret = tps_request_firmware(tps, &fw, &firmware_name);
+>  	if (ret)
+>  		return ret;
+>  
+> 
+> -- 
+> 2.40.1
+
+-- 
+heikki
 
