@@ -1,233 +1,141 @@
-Return-Path: <linux-usb+bounces-10951-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10952-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5608F8FDFBC
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2024 09:29:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B2C958FE016
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2024 09:42:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BAA531F2265B
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2024 07:29:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 47A6A1F222CC
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2024 07:42:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C756F13BC3D;
-	Thu,  6 Jun 2024 07:29:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A0792260C;
+	Thu,  6 Jun 2024 07:42:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="rls46QLz"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="NL++cvwa"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99959745E1
-	for <linux-usb@vger.kernel.org>; Thu,  6 Jun 2024 07:29:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC15213AA32
+	for <linux-usb@vger.kernel.org>; Thu,  6 Jun 2024 07:42:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717658972; cv=none; b=U1yfZVndmWcx5GJwr5TJOqSiDTp8k69NrD6T6hkDRi97v4uL445yuh1ZJKQ93sAzvPvEi3wCWZPm7ZvAlf0aIyO/lVxqO+qTgnChjwsutgSNzC0cevbZc89RJmUXDMQNiyGnr8OId2sX8GVpje0kS56+g+G6bK0sz7ZFvi/r6l8=
+	t=1717659763; cv=none; b=fycTvGXlPiz4nR9+92/ehB4mw6wdN0WEAz6iOwcjqCWgybgEmfC/zAkxn72l8XcvuUcwqw/Ta9bfFXCua+DxjAeYGwcoAdpXg4WgwQtrIt8ijEQTz1GvWKiCaP7bFpYuGe+AVuzFu0FJzkknHxoWZmTsPUy8Ig/OBPKfoCyGAL0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717658972; c=relaxed/simple;
-	bh=mvugkjV3h9RCu4RO3FAJtYNtn0G5I8hVr+TzUTOCXCA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MpNTHZS/C4l5oFPyTYHq7jOR4F70Y4CAJ/+f/CBGKdW9jIYBDrGYSW6Ki5vHyfNxQt4qDvvAdI4fzIV0bK7TL4ypxJFEqT7KVzdn3nU2pK0BDUC8fGBfVHqGBNVDduaPGQo5gMyQfgITR0yu1PZ43L+5NZdcYiZJueBhgFEHrpA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=rls46QLz; arc=none smtp.client-ip=209.85.221.51
+	s=arc-20240116; t=1717659763; c=relaxed/simple;
+	bh=7OaWmqVFqUj8UiBMIFYvyTDVYpCRKRaVDuAaqAod2/I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GpEA5ZgPwy3hyBjV+0L9ABM60CxbgSA/+V/pJiBSedfLZf9ukQjIQ9DMc+M3JzDbQY0q75lj+lbAHgoSZtwpVFOT0g22ytLJOyvzoNyH8aca7OYmnDgsBAGDM+mVEuPWLb41b6zAVdj8yhHSxGAXLP4KDz3DIwn8+fnqKqWOh5M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=NL++cvwa; arc=none smtp.client-ip=209.85.208.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-354b722fe81so655006f8f.3
-        for <linux-usb@vger.kernel.org>; Thu, 06 Jun 2024 00:29:30 -0700 (PDT)
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-57a2ed9af7dso865000a12.1
+        for <linux-usb@vger.kernel.org>; Thu, 06 Jun 2024 00:42:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1717658969; x=1718263769; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=t8efieOuxLOC4m4WQpfKYHK3Moyv5bSIBkNKefQTR50=;
-        b=rls46QLzXlcVlB6WDcpUru5NsOMQSco2yCvGgpJ0Y0U4xxqaekqxIRGOfQJeI6GJJk
-         5IJfAAHAZf9HNw3pjTDg9EPGHHmtMQ14sygt65+i67JKvqpqbtFHjuZfoIMvtDVwXg6C
-         PnUKu83cCBiz0ZJuZjqs7RaY7m9YEF5qXvGLrngZnX0S43Ofv2hNjx9M3yM9RJxgXRvM
-         ALL4YCxYMX7glssdh+wleQejhJWru/3EDKUSD2YeMEl2P/MkCyoDY8jbuSKuokubsXyE
-         yA12zZwW2Ld1nYy/iGUsnOI2q4eaw/OQ3FpA/Cc4kGkbvd+kURozh1w/BLTwUof1qxCd
-         lfQQ==
+        d=linaro.org; s=google; t=1717659760; x=1718264560; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=7hn7A2vtREo0E7HfSwjkC9hqptsOSWf7nUvmnuVDMQY=;
+        b=NL++cvwa1YzNLaO02KuHXfdUWI0iBeBifsmyZyDIb5uMpknUdYDOeT/BDI/fB1OqHk
+         +7gCI0acVsZJ9rqdfi0zaMODPSc2iNqRCIIzabLp1tuBymzYzAtsSw1iGNJhqh8NyJ/4
+         bfRhWy9o8GJlE3fdPgPV+MIOX2Zas3+n6dR2PFZyU7rJMR6cFy0R0pMq+kF7E/jGpRD5
+         dXGJ+GxjzoVPjGZ3tiwUrB4gUVnyjnHucGul9epeD37Bp6ZiZqmXwZ1hXIrXEdNVrXJF
+         ilEl3P0UI+XCbpU9AbkrYXIGfV5G0BBv+rrjrB1As9IXmF71GnivuRMlHZ8mIiUgEiHw
+         uAJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717658969; x=1718263769;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=t8efieOuxLOC4m4WQpfKYHK3Moyv5bSIBkNKefQTR50=;
-        b=WjwjuFORJVNWv72GiNe7nngrWlDcgrHYmV5YCEzStAE5m63oA0XVse7/BKj+bEocIb
-         /0ZV5USJ+O2VRr6wSblYrNXWw5epXWgjBXuw+e+JbQ24aRn9IBN+1VzlxHbuBAkS/gHr
-         pmDrtLkPhy1QirdT6bTGNynEVxTyaWo2/Wf7DpZI0sTkQfY8hB6zK9jatJCtaoKm5GBa
-         OlMxxhFBDb862jwB/G6jGgdu0qtH+Lfy0R8oD2M1YrytWKTOLRzCt9JYDBuAfBtmBQ9D
-         goXit0EIYtk09GW2P6c6dh6d3/19pbujUI3TyGrrXtrh+n0FlVz9un9G5oWQqD8GzSTy
-         n0rg==
-X-Gm-Message-State: AOJu0YwFvsakzinhLPaYOekVcWVr0x0genx9xTb5WNDbeD3GMZSM3wgl
-	moMt+ZASOaq/L0zPR3IJYvVA2632cRNeT7W/cQYic6QnCQ9u6wJBlWLZZioAbwc=
-X-Google-Smtp-Source: AGHT+IETOQHpQmaJnbdrwXqa+sTVxNSmnoSfXPg7tewRbQMQzP8hgL3GQV0b4Cr4hrNt8Rgp00jRAg==
-X-Received: by 2002:a5d:4f05:0:b0:354:e4e0:21dd with SMTP id ffacd0b85a97d-35e8ef77b6bmr3502850f8f.50.1717658968951;
-        Thu, 06 Jun 2024 00:29:28 -0700 (PDT)
-Received: from [192.168.2.24] ([110.93.11.116])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-35ef5d29c37sm797266f8f.24.2024.06.06.00.29.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Jun 2024 00:29:28 -0700 (PDT)
-Message-ID: <17c9ef5c-068f-4ffa-a86f-1bacc75f2b78@linaro.org>
-Date: Thu, 6 Jun 2024 09:29:27 +0200
+        d=1e100.net; s=20230601; t=1717659760; x=1718264560;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7hn7A2vtREo0E7HfSwjkC9hqptsOSWf7nUvmnuVDMQY=;
+        b=NHGqNxOCCaEo+7L8x6RejpUCjs9ne5iSWuCKHIxGVEvSP8seYMWtuymAbdv5tGbsEV
+         aQX7x66W1bgiSVERXpx5fWYCezHKNLH+TpOXHgBmw7MPljoDQOU9b9+4kTg2x2fx05Rb
+         hk+tqBvJ+gGVWBKx36CRxrA/1BUI5NKGsev8h8yGGPCTFU3N0z7luEfocfkkSAxGTocB
+         A6wGXW71+o/ZnY2lYVHJbegXeA9Mb2/yiCwiaMPA6fHFIURaXhtzuW+sF39r/wnwERF3
+         xS6WZE9BLMSeVbysvDSbfVebczrkE39e1kYs1ylE6IQTgz4yZSGgd/d6ssPMOhY2MH4W
+         1cXA==
+X-Forwarded-Encrypted: i=1; AJvYcCWFk8UwXRrUcZO/ow9JmF9Co6NqLbgEFylXSGEofS0jqJTXSNHQGqi25vdH3FJ/5myVmwct9pY2ynF/AWNuiH3I7waHZFZwYSCu
+X-Gm-Message-State: AOJu0YwIbcIPKViHSgDcu1NvBfdVWfIqiPlhFW+JjKCxPqpjfXOqKtW6
+	jFdOT2mcRHCm6lH4xeZqb8dgYytboW7OYEh8IkoR2vulX+8ED6u3q0nMcC+rSrE=
+X-Google-Smtp-Source: AGHT+IG9fb84ekx6f8HaBtotI1FnubBAZuTJ3dgM/XdsdCeyuhCLEIFdUbolQkfIb3FKjJXzmIhddQ==
+X-Received: by 2002:a17:907:900e:b0:a68:fe79:9499 with SMTP id a640c23a62f3a-a699f88b67cmr343464966b.40.1717659760015;
+        Thu, 06 Jun 2024 00:42:40 -0700 (PDT)
+Received: from localhost ([102.222.70.76])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6c806ebc43sm57149266b.141.2024.06.06.00.42.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jun 2024 00:42:39 -0700 (PDT)
+Date: Thu, 6 Jun 2024 10:42:35 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Joy Chakraborty <joychakr@google.com>
+Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Bingbu Cao <bingbu.cao@intel.com>,
+	Zhihao Cheng <chengzhihao1@huawei.com>,
+	Jerome Brunet <jbrunet@baylibre.com>,
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-iio@vger.kernel.org, linux-media@vger.kernel.org,
+	linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-mtd@lists.infradead.org, linux-rtc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-amlogic@lists.infradead.org, linux-sunxi@lists.linux.dev,
+	linux-tegra@vger.kernel.org, linux-usb@vger.kernel.org,
+	manugautam@google.com
+Subject: Re: [PATCH v1 01/17] hwmon: pmbus: adm1266: Change nvmem
+ reg_read/write return type
+Message-ID: <08ff07f4-034d-4342-89da-d83044871ab1@moroto.mountain>
+References: <20240605175953.2613260-1-joychakr@google.com>
+ <20240605175953.2613260-2-joychakr@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] usb: dwc3: enable CCI support for AMD-xilinx DWC3
- controller
-To: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>,
- Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org, michal.simek@amd.com,
- robh+dt@kernel.org
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, git@amd.com
-References: <1717657279-2631757-1-git-send-email-radhey.shyam.pandey@amd.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Content-Language: en-US
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <1717657279-2631757-1-git-send-email-radhey.shyam.pandey@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240605175953.2613260-2-joychakr@google.com>
 
-On 06/06/2024 09:01, Radhey Shyam Pandey wrote:
-> The GSBUSCFG0 register bits [31:16] are used to configure the cache type
-> settings of the descriptor and data write/read transfers (Cacheable,
-> Bufferable/Posted). When CCI is enabled in the design, DWC3 core GSBUSCFG0
-> cache bits must be updated to support CCI enabled transfers in USB.
+On Wed, Jun 05, 2024 at 05:59:45PM +0000, Joy Chakraborty wrote:
+> Change nvmem read/write function definition return type to ssize_t.
 > 
-> To program GSBUSCFG0 cache bits create a software node property
-> in AMD-xilinx dwc3 glue driver and pass it to dwc3 core. The core
-> then reads this property value and configures it in dwc3_core_init()
-> sequence.
-> 
-> Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+> Signed-off-by: Joy Chakraborty <joychakr@google.com>
 > ---
-> Changes for v3:
-> In v2 review as suggested by Thinh Nguyen, switch to swnode implementation
-> for passing GSBUSCFG0 cache bits from AMD-xilinx dwc3 glue driver to
-> core driver.
+>  drivers/hwmon/pmbus/adm1266.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> Changes for v2:
-> Make GSBUSCFG0 configuration specific to AMD-xilinx platform.
-> Taken reference from existing commit ec5eb43813a4 ("usb: dwc3: core:
-> add support for realtek SoCs custom's global register start address")
-> 
-> v1 link:
-> https://lore.kernel.org/all/20231013053448.11056-1-piyush.mehta@amd.com
-> ---
->  drivers/usb/dwc3/core.c        | 24 ++++++++++++++++++++++++
->  drivers/usb/dwc3/core.h        |  8 ++++++++
->  drivers/usb/dwc3/dwc3-xilinx.c | 18 +++++++++++++++++-
->  3 files changed, 49 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> index 7ee61a89520b..159d21b25629 100644
-> --- a/drivers/usb/dwc3/core.c
-> +++ b/drivers/usb/dwc3/core.c
-> @@ -23,6 +23,7 @@
->  #include <linux/delay.h>
->  #include <linux/dma-mapping.h>
->  #include <linux/of.h>
-> +#include <linux/of_address.h>
->  #include <linux/of_graph.h>
->  #include <linux/acpi.h>
->  #include <linux/pinctrl/consumer.h>
-> @@ -599,6 +600,19 @@ static void dwc3_cache_hwparams(struct dwc3 *dwc)
->  		parms->hwparams9 = dwc3_readl(dwc->regs, DWC3_GHWPARAMS9);
+> diff --git a/drivers/hwmon/pmbus/adm1266.c b/drivers/hwmon/pmbus/adm1266.c
+> index 2c4d94cc8729..7eaab5a7b04c 100644
+> --- a/drivers/hwmon/pmbus/adm1266.c
+> +++ b/drivers/hwmon/pmbus/adm1266.c
+> @@ -375,7 +375,7 @@ static int adm1266_nvmem_read_blackbox(struct adm1266_data *data, u8 *read_buff)
+>  	return 0;
 >  }
 >  
-> +static void dwc3_config_soc_bus(struct dwc3 *dwc)
-> +{
-> +	if (of_dma_is_coherent(dwc->dev->of_node)) {
-> +		u32 reg;
-> +
-> +		reg = dwc3_readl(dwc->regs, DWC3_GSBUSCFG0);
-> +		reg &= ~DWC3_GSBUSCFG0_DAT_DES_RD_WR_REQINFO_MASK;
-> +		reg |= (dwc->acache_data_rd_wr_info <<
-> +			DWC3_GSBUSCFG0_DAT_DES_RD_WR_REQINFO_SHIFT);
-> +		dwc3_writel(dwc->regs, DWC3_GSBUSCFG0, reg);
-> +	}
-> +}
-> +
->  static int dwc3_core_ulpi_init(struct dwc3 *dwc)
+> -static int adm1266_nvmem_read(void *priv, unsigned int offset, void *val, size_t bytes)
+> +static ssize_t adm1266_nvmem_read(void *priv, unsigned int offset, void *val, size_t bytes)
 >  {
->  	int intf;
-> @@ -1320,6 +1334,8 @@ static int dwc3_core_init(struct dwc3 *dwc)
+>  	struct adm1266_data *data = priv;
+>  	int ret;
+> @@ -395,7 +395,7 @@ static int adm1266_nvmem_read(void *priv, unsigned int offset, void *val, size_t
 >  
->  	dwc3_set_incr_burst_type(dwc);
+>  	memcpy(val, data->dev_mem + offset, bytes);
 >  
-> +	dwc3_config_soc_bus(dwc);
-> +
->  	ret = dwc3_phy_power_on(dwc);
->  	if (ret)
->  		goto err_exit_phy;
-> @@ -1574,6 +1590,7 @@ static void dwc3_get_properties(struct dwc3 *dwc)
->  	u8			tx_max_burst_prd = 0;
->  	u8			tx_fifo_resize_max_num;
->  	const char		*usb_psy_name;
-> +	struct device		*tmpdev;
->  	int			ret;
->  
->  	/* default to highest possible threshold */
-> @@ -1716,6 +1733,13 @@ static void dwc3_get_properties(struct dwc3 *dwc)
->  	dwc->dis_split_quirk = device_property_read_bool(dev,
->  				"snps,dis-split-quirk");
->  
-> +	/* Iterate over all parent nodes for finding swnode properties */
+> -	return 0;
+> +	return bytes;
+>  }
 
-And:
-/* non-DT (non-ABI) properties */
+This breaks the build so it's not allowed.  The way to do it is to:
+1) add a new pointer which takes a ssize_t
+2) convert everything to the new pointer
+3) Rename the new pointer to the old name
 
-so someone will not try to make it ABI post-factum.
-
-
-
-Best regards,
-Krzysztof
+regards,
+dan carpenter
 
 
