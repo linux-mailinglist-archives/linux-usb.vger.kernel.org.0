@@ -1,198 +1,111 @@
-Return-Path: <linux-usb+bounces-10983-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10984-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C66C38FE749
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2024 15:12:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 144E28FE854
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2024 16:04:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DD7461C24CC7
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2024 13:12:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EC9BE1C23203
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2024 14:04:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A84F196C9F;
-	Thu,  6 Jun 2024 13:11:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E419196C63;
+	Thu,  6 Jun 2024 14:03:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="YZqssjJx"
+	dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b="Z+AFN3KH"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF434195FDC
-	for <linux-usb@vger.kernel.org>; Thu,  6 Jun 2024 13:11:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 049322BAF1;
+	Thu,  6 Jun 2024 14:03:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.237.130.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717679485; cv=none; b=Ah67qrg4yoUtyQL8DkGjbtQuMc7+2e03J5I8MXFPgLAl0iNCwO++sqsCATRo7jkDnr/TO1h8dStVSJKNYbb0ny/wRjJI0qgM7uPduH0GsWfouFOB4SB3rYvbqkyeQCfmQBppT8i4aHFM/+Y3WBm9ZIzmt8IT1Fmwa7wVk9ELVsY=
+	t=1717682635; cv=none; b=SbhL3xbCjSYHraUYCWnPQpYxG6Wj5qDNsaAfNFv3S8M6dRUqcKMW46kRMRYgk/Oq1tVRLroVqOcYE3c6fAWjr0f2tazllIxC+omDBjR3MsVNe76+Wbpjv6PGPh47GPN5fWsKKEzmOGElpSU62J9FExKFkBHMst7YcR+SZWiwPGg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717679485; c=relaxed/simple;
-	bh=qb+nX0PsQ8r0ONiEBtEpU+5wDoCjx57v1hbZ1gvN1vE=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=aRSXpDummkdWszyRamsWVNT6GjkNQ+Sj0nkUtFq/M4DKJNR0LR2Yf6mLQ1Um3Bs3wtqxDyGTyyCsqxxAxU+5pTHFJqObeWyRGGaVKQVAvOeHaIeJBjKHQOdwso99diEu/a/s9heqpweqWRvIdcxHeStb5ZR3KzXWzq/vHjlLCXk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=YZqssjJx; arc=none smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-35e816b735aso1043782f8f.0
-        for <linux-usb@vger.kernel.org>; Thu, 06 Jun 2024 06:11:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1717679480; x=1718284280; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cEWi4BwYNC7NiwESLETKdGa2PVEvW42M7cysehMEv/w=;
-        b=YZqssjJxZjALoW8a9Zo/Yg3sPXUytGVL/zKpYbAGboJkB20wwQ0Z7Np8MGXT+ov0sx
-         Vfzn8y8wJX1ktb2CnbW4Og6L1NWzzNXCZLjeH6cPvwtWCzzltK4EmyY3qbKJrUl8vqkj
-         FVhNCZnRmUxWIVvuA5mBFWptptps50x9LZfc0edUvFZD0wUt6jFiqrolrdgQR7Fn91DJ
-         n8Hd/Wv2JjbmNjxwrXDPXnbGJCVD6KadAm51ZOlGAWAd4oDVByva+Hm0KJHduE+gEB9V
-         t6T0oAwZaCrDR3bOZVgxPIw5L6tmO4E/t0C2EGDajBzC8CP9d7l+wDGT0wZ0TjBeQCf8
-         3TMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717679480; x=1718284280;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cEWi4BwYNC7NiwESLETKdGa2PVEvW42M7cysehMEv/w=;
-        b=lz2h3M7PcT3LVUjTJ+lvuFNq2+xnmxggf4Ixomiovq1ejVSQiXzK2WcT57lx3zvVAr
-         0dbSAFj+qPUvEqVNZeWx5Fxrzl82EKCMDw5Raj51VdHTtrQ65CBIxQX5SSmumM/EcsBP
-         V+7o6kdHS1X5Xjey8GMAp3vrSEJ0jKtHXkrhD/zz3Si70tWyatZIiQ2ghyx/PKw8C4yT
-         urv4ifoUxX4jPU86B5R5iftzkAV90kkVbwgIoxULa9MwYARf0edrG5uWaxzIXqekzDNd
-         Vm/8TrdbVPJJy+759WToGkRtMMZeE5ZeWybiFhS0U+yoHrNWJxvG144l5mKG12e/hiFP
-         pOPA==
-X-Forwarded-Encrypted: i=1; AJvYcCUiDFtYUHRX57u/wEuKkDcZbUAR5Ld26L3LlN/XDoc/1MEDUOilCusV41k7HlnctdtGgMxug1JqwI8V4V28S8IfyVv4592qvv/Q
-X-Gm-Message-State: AOJu0YzZXD1eFwrEYA8XosE3wkwSST6L+hgHDlyrIt93yIkJnpFOb2Yl
-	WvYjFObJrW0COOOCfDTScMRnSbUWLdpSCfWkxw0knMrm6/o0T561RdMBXzX+t0s=
-X-Google-Smtp-Source: AGHT+IE9b0Gh3BEH2+Z6EhiMWZLgD7E7TuzNaS2tTCwJyO7yfVStod/NfZPZ5Zly8PO/5FoVvBMI+g==
-X-Received: by 2002:a5d:6789:0:b0:35e:5189:2d78 with SMTP id ffacd0b85a97d-35e8ef65f13mr4278385f8f.51.1717679480088;
-        Thu, 06 Jun 2024 06:11:20 -0700 (PDT)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-35ef5e96d8csm1536316f8f.68.2024.06.06.06.11.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jun 2024 06:11:19 -0700 (PDT)
-From: Neil Armstrong <neil.armstrong@linaro.org>
-Date: Thu, 06 Jun 2024 15:11:16 +0200
-Subject: [PATCH v2 4/4] usb: typec-mux: nb7vpq904m: broadcast typec state
- to next mux
+	s=arc-20240116; t=1717682635; c=relaxed/simple;
+	bh=eDx4LH2JaI56Oq69k1D2PUzOsVKOAQd9jJf6JpRrviw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Z5+/jRLrfVWeYMwERAuwGsX2qnyfGkoymdnl626aXEiSKq4YvMH0ZyaCNWkb/x7czaoIPPYSxQG+Ee9aEEYpa45kiibKgwoMsfO4n1WGfmBkSeV7TOm5RJ8Scsa4lgHYEzj35DYhwO0+nxDVhQ2LJfY0tn4Y5dpcu1A1XnrLyfE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info; spf=pass smtp.mailfrom=leemhuis.info; dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b=Z+AFN3KH; arc=none smtp.client-ip=80.237.130.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leemhuis.info
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=leemhuis.info; s=he214686; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:From:Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:
+	Content-Type:Content-Transfer-Encoding:Content-ID:Content-Description:
+	In-Reply-To:References; bh=ZiaiXQCWQ0/RfkMmzlIJgP09K1a+3++7CIazeg7YTlw=;
+	t=1717682634; x=1718114634; b=Z+AFN3KH0WaOVCED8ZZ8LkBz5baNqc08PICa6uwjrdefX81
+	ZR4TXHKn8l0Y6iMz9McfPrJvTW1UJGFLHDSiYf4j7iequFIjVio3bFkiSoTaXY0jApxX738q1YRe0
+	PjmcHbGcFcE1zjEUStC7k7PzCsJ7NwOZq92O9Hl1mReNkv2fA79XgdppBDdRkPTmNA8UUQpYs/pz0
+	/yiuOfJqdlMKS9wI6tEyke6VY7enNMlaYqaafEjo6BZaW04kUrIvLKjyWZjfssj/D4h2WZs1Q2goB
+	BKpbRr+Q7T2nhpQKcF8kj+OH+fofRH6dN5dNOqBvV19qtaaq1i7Aa2sF9akF/ZmQ==;
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+	id 1sFDiY-0006Jk-3i; Thu, 06 Jun 2024 16:03:50 +0200
+Message-ID: <b0dceea1-3cf1-433d-954b-879f6390c5a4@leemhuis.info>
+Date: Thu, 6 Jun 2024 16:03:49 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240606-topic-sm8x50-upstream-retimer-broadcast-mode-v2-4-c6f6eae479c3@linaro.org>
-References: <20240606-topic-sm8x50-upstream-retimer-broadcast-mode-v2-0-c6f6eae479c3@linaro.org>
-In-Reply-To: <20240606-topic-sm8x50-upstream-retimer-broadcast-mode-v2-0-c6f6eae479c3@linaro.org>
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb: chipidea: move ci_ulpi_init after the phy
+ initialization
+To: Alexandre Messier <alex@me.ssier.org>,
+ Marek Szyprowski <m.szyprowski@samsung.com>,
+ Michael Grzeschik <m.grzeschik@pengutronix.de>,
+ Peter Chen <peter.chen@kernel.org>,
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Bjorn Andersson <andersson@kernel.org>, 
- Luca Weiss <luca.weiss@fairphone.com>, linux-arm-msm@vger.kernel.org, 
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Neil Armstrong <neil.armstrong@linaro.org>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2837;
- i=neil.armstrong@linaro.org; h=from:subject:message-id;
- bh=qb+nX0PsQ8r0ONiEBtEpU+5wDoCjx57v1hbZ1gvN1vE=;
- b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBmYbVzE2VApWoDdpfFcgBobGdrW+oswV9CTaRJdatQ
- yQcQhE2JAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZmG1cwAKCRB33NvayMhJ0XMwEA
- CstrM6GVtFB3iT4ScLC99aKh3P3kIZ5m63NeW452HP255KG6zoj3lWFOOaZu5ni4doUIVI5mbRLUa1
- mbMR/c76PjtFi5T+zuP65MGXcxxiXdiAUeLY4KelNaaAMXqeOFNgZaTdH8vjW3qqa0ri9XGxJQ362N
- WEcnUr1WbqqbXnJ8qIK5ntewXkwRpxfneqZCSrAA/78Yclc03W2BTESxgdMl/aJJwmYJyIW5rx+8n3
- SxK5rlisB1GzOQGzH17bjtP6QUzh1YkczAW26+YOLvekqOS6NxAc8D/S042ZP68FSwY2WvRKhA/fZl
- c574ke1/S81rIF7GUWdWm7mTDEsz6mI56dcoxoNcnARx+cQVBc1Nk4bV84gMbyQ65OqYGmrglul/ga
- GfFINiQloveTpdP8uxBNuZLNPxQTUH91QgRR9LoCRe+fW7NUeHTipRq/2Dv4Pq6woouWR/j2xsRiAl
- 945OYEFAHkPU3FUJNJIhNvV9GJMeZ69rwzGyxLT3RT+OGU9KU/4TMCmspObIFtgEBGWFRSNjSuYP7F
- f5bI/IpmhMsiFu2V4Nz5kgIVl/bF55eoylVb79zBjXd+JxxUBRf5GIKUSeodBYN5FCGpQS80W4Bh2h
- POd0+GojKcV059dYoybl8ufZOpA6oHaBU4uWCr6arQ4Y5e5TOohbXTwvhCNA==
-X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
- fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ regressions@lists.linux.dev, wouter@franken-peeters.be
+References: <20240328-chipidea-phy-misc-v1-1-907d9de5d4df@pengutronix.de>
+ <CGME20240425194033eucas1p2c1e98d1c55c970e246087e2dab180e84@eucas1p2.samsung.com>
+ <21ea292a-b1d1-43e2-92ab-9f1f63aaf729@samsung.com>
+ <87546d93-3fe7-4459-b44a-47cbcab9da74@me.ssier.org>
+From: "Linux regression tracking (Thorsten Leemhuis)"
+ <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+Content-Language: en-US, de-DE
+In-Reply-To: <87546d93-3fe7-4459-b44a-47cbcab9da74@me.ssier.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1717682634;3c2d6c6c;
+X-HE-SMSGID: 1sFDiY-0006Jk-3i
 
-In the Type-C graph, the nb7vpq904m retimer is in between the USB-C
-connector and the USB3/DP combo PHY, and this PHY also requires the
-USB-C mode events to properly set-up the SuperSpeed Lanes functions
-to setup USB3-only, USB3 + DP Altmode or DP Altmode only on the 4 lanes.
+On 30.05.24 08:38, Alexandre Messier wrote:
+> On 2024-04-25 15:40, Marek Szyprowski wrote:
+>> On 02.04.2024 08:23, Michael Grzeschik wrote:
+>>> The function ci_usb_phy_init is already handling the
+>>> hw_phymode_configure path which is also only possible after we have
+>>> a valid phy. So we move the ci_ulpi_init after the phy initialization
+>>> to be really sure to be able to communicate with the ulpi phy.
+>>>
+>>> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+>>
+>> This patch landed in linux-next some time ago as commit 22ffd399e6e7 
+>> ("usb: chipidea: move ci_ulpi_init after the phy initialization"). 
+>> Unfortunately it breaks host USB operation on DragonBoard410c 
+>> (arch/arm64/boot/dts/qcom/apq8016-sbc.dts). There is no error nor 
+>> warning in the kernel log besides the information about deferred probe 
+>> on the chipidea controller:
+> 
+> I am also seeing this issue on a msm8974-based device.
+> 
+> There is also a report and analysis by Wouter Franken here:
+> https://lore.kernel.org/all/ecb8d3e8-d525-4a2d-a868-803202c16296@franken-peeters.be/
 
-Update the nb7vpq904m retimer to get an optional type-c mux on the next
-endpoint, and broadcast the received mode to it.
+TWIMC, as this is easy to miss (I was extremely close to writing a
+status inquiry instead of writing what I'm typing now): Greg applied
+that revert two days ago and I assume he'll soon send it to Linus.
 
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
----
- drivers/usb/typec/mux/nb7vpq904m.c | 24 ++++++++++++++++++++++--
- 1 file changed, 22 insertions(+), 2 deletions(-)
+Ciao, Thorsten
 
-diff --git a/drivers/usb/typec/mux/nb7vpq904m.c b/drivers/usb/typec/mux/nb7vpq904m.c
-index 569f1162ee2e..b57b6c9c40fe 100644
---- a/drivers/usb/typec/mux/nb7vpq904m.c
-+++ b/drivers/usb/typec/mux/nb7vpq904m.c
-@@ -69,6 +69,7 @@ struct nb7vpq904m {
- 
- 	bool swap_data_lanes;
- 	struct typec_switch *typec_switch;
-+	struct typec_mux *typec_mux;
- 
- 	struct mutex lock; /* protect non-concurrent retimer & switch */
- 
-@@ -275,6 +276,7 @@ static int nb7vpq904m_sw_set(struct typec_switch_dev *sw, enum typec_orientation
- static int nb7vpq904m_retimer_set(struct typec_retimer *retimer, struct typec_retimer_state *state)
- {
- 	struct nb7vpq904m *nb7 = typec_retimer_get_drvdata(retimer);
-+	struct typec_mux_state mux_state;
- 	int ret = 0;
- 
- 	mutex_lock(&nb7->lock);
-@@ -292,7 +294,14 @@ static int nb7vpq904m_retimer_set(struct typec_retimer *retimer, struct typec_re
- 
- 	mutex_unlock(&nb7->lock);
- 
--	return ret;
-+	if (ret)
-+		return ret;
-+
-+	mux_state.alt = state->alt;
-+	mux_state.data = state->data;
-+	mux_state.mode = state->mode;
-+
-+	return typec_mux_set(nb7->typec_mux, &mux_state);
- }
- 
- static const struct regmap_config nb7_regmap = {
-@@ -413,9 +422,16 @@ static int nb7vpq904m_probe(struct i2c_client *client)
- 		return dev_err_probe(dev, PTR_ERR(nb7->typec_switch),
- 				     "failed to acquire orientation-switch\n");
- 
-+	nb7->typec_mux = fwnode_typec_mux_get(dev->fwnode);
-+	if (IS_ERR(nb7->typec_mux)) {
-+		ret = dev_err_probe(dev, PTR_ERR(nb7->typec_mux),
-+				    "Failed to acquire mode-switch\n");
-+		goto err_switch_put;
-+	}
-+
- 	ret = nb7vpq904m_parse_data_lanes_mapping(nb7);
- 	if (ret)
--		goto err_switch_put;
-+		goto err_mux_put;
- 
- 	ret = regulator_enable(nb7->vcc_supply);
- 	if (ret)
-@@ -458,6 +474,9 @@ static int nb7vpq904m_probe(struct i2c_client *client)
- 	gpiod_set_value(nb7->enable_gpio, 0);
- 	regulator_disable(nb7->vcc_supply);
- 
-+err_mux_put:
-+	typec_mux_put(nb7->typec_mux);
-+
- err_switch_put:
- 	typec_switch_put(nb7->typec_switch);
- 
-@@ -475,6 +494,7 @@ static void nb7vpq904m_remove(struct i2c_client *client)
- 
- 	regulator_disable(nb7->vcc_supply);
- 
-+	typec_mux_put(nb7->typec_mux);
- 	typec_switch_put(nb7->typec_switch);
- }
- 
-
--- 
-2.34.1
+#regzbot fix: 718d4a63c0a62d16af1d0425d515d7e76f35681e
+#regzbot ignore-activity
 
 
