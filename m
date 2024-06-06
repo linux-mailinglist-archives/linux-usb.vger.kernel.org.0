@@ -1,221 +1,293 @@
-Return-Path: <linux-usb+bounces-10988-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10989-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B079D8FF242
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2024 18:20:22 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD0038FF493
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2024 20:24:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 22D161F26AAE
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2024 16:20:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BC3C61C23A4D
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2024 18:24:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62741198E70;
-	Thu,  6 Jun 2024 16:15:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59D8419939E;
+	Thu,  6 Jun 2024 18:24:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="ONcTPmZq"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="EEsprxD1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2088.outbound.protection.outlook.com [40.107.6.88])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f178.google.com (mail-il1-f178.google.com [209.85.166.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C73C91957F2;
-	Thu,  6 Jun 2024 16:15:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.6.88
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717690532; cv=fail; b=szetdyJXWN4yeS/kTz1bsVkoMH1CGGBNm/qaEm1U1BLCAFzcx1bUqVFSSHbR11kapq8x4hxIpr7w6Cg17Qh6H5FUQAe1uxG/cHP3OU/6MNpTnMGj7kHlbCvMZaqpO67OYoqSznQXFkQXaLrCRs0mxFT0/6Q65akS6o65jgkDThw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717690532; c=relaxed/simple;
-	bh=e5HiZAdyuAMAqAqKBMosRkPt7zxPjDxLe0FECa7PRTI=;
-	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=ZoGx7zBLZm8UCWWK4qc5Uj9WfMSld0aiVNMhaaaFjZzTeJec3ASyEKjbw56jZV9Y3c1jm6UjhGQ6+NIzX46ADbvxru22j1ilycuLQZL2k2xsXnO04auLnsNR72bBExb6TuvO3jG4V4URWXmLW2uxwbV9+ZX8MIxp7DZ6sHxhwVs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b=ONcTPmZq; arc=fail smtp.client-ip=40.107.6.88
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Qd4pEyP1QD83A9RxHbEHey7HxrJOdc2CvheYzOtwSnGjOtULpK9gRxoWSmmx6y4J+N+3JUopgqpe3sTUWkPsNrUCaMnvhpbgD0T/RrZez1vpKnrcssYZP4Cyk1bES0r49gPzAoGxVxCO/Z1LSIzaFrAd0d6JngVH0FX0t+QTSkFR5C408Ava17lWWPfCoci6x86Vr2ObNgc5ebtQYge6LsF79DhoA3SWokRj5xcfDOc7g0gOmnHq/dPFfqGTqBw4m44kANMgfw0ju9QMnPIavNGGXOx/7MuEp7b4fQ/ewgOvL5Uy7IXBn1PrixS+5JSseJOmu7SnaMyxjemlColt8Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VIabDmCnSVeAXKxuY1kwmP0WgyX2qDFg9qZBQkTWegU=;
- b=gEX3uXLyUv3zl4G40yHPdMEUz3P8IZX2mb+YVyWrnWsXL2JseZtgaAi3fA0TefyaZBqxcuWEKJjCnpec0BSc+o4/yFqUPGYc/I2Y9ZUBOkQwg2j3E40Q7X0f6ZvwIxroqvo0wxkO71v4lmpBN61HZRgKA40hnFdXKpHugS4aIgpcr2Ssm8BB7uUkSqCPXS+DaOoVHe4A9Gks8vXkdBymshaeqX/ZE/fondwnOGl+EvwPDzyC3rr6BDXaYsFNvkQXYe+2lXlQS3l2CM5u+lfOHP90miwshwj2mEASpb20QJzRtJPuJO/lEitKjfm0eTOqHCLlzIjA6nsM1coII+d9rg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VIabDmCnSVeAXKxuY1kwmP0WgyX2qDFg9qZBQkTWegU=;
- b=ONcTPmZq6WLa/EF1HMnQUw2nqB9/qxp5JveMRS6GFtBisIJNPf3vmeCKSjAWo4EYZ3tlSnPDxj/N2g+g5EbFQ9CEWNzJb5fDc5Un381lKSO2vtfzq4oSeqGTvL5Ynul7iHlr9oPY3JyghDbv24ATuZTWWAy2p0PTgoObO01rp1o=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from PAXPR04MB9642.eurprd04.prod.outlook.com (2603:10a6:102:240::14)
- by DB8PR04MB7034.eurprd04.prod.outlook.com (2603:10a6:10:128::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.33; Thu, 6 Jun
- 2024 16:15:27 +0000
-Received: from PAXPR04MB9642.eurprd04.prod.outlook.com
- ([fe80::9126:a61e:341d:4b06]) by PAXPR04MB9642.eurprd04.prod.outlook.com
- ([fe80::9126:a61e:341d:4b06%2]) with mapi id 15.20.7633.021; Thu, 6 Jun 2024
- 16:15:25 +0000
-From: Frank Li <Frank.Li@nxp.com>
-To: Peter Chen <peter.chen@kernel.org>,
-	Pawel Laszczak <pawell@cadence.com>,
-	Roger Quadros <rogerq@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	linux-usb@vger.kernel.org (open list:CADENCE USB3 DRD IP DRIVER),
-	devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS),
-	linux-kernel@vger.kernel.org (open list)
-Cc: imx@lists.linux.dev
-Subject: [PATCH 1/1] dt-bindings: usb: cdns,usb3: use common usb-drd yaml
-Date: Thu,  6 Jun 2024 12:15:09 -0400
-Message-Id: <20240606161509.3201080-1-Frank.Li@nxp.com>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SJ0PR13CA0146.namprd13.prod.outlook.com
- (2603:10b6:a03:2c6::31) To PAXPR04MB9642.eurprd04.prod.outlook.com
- (2603:10a6:102:240::14)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 573DD19938C
+	for <linux-usb@vger.kernel.org>; Thu,  6 Jun 2024 18:24:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.178
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1717698246; cv=none; b=Nv8fweBByo+p8vnWGULP52FhZfym2e9PEk3F6lDA0NK8dJNBpvpk95ghLi2rhFVAqzw+uaKGsSNaAyazaTZguTIZOkxWq53e2Db7UQq2qSdBGLeySrt35LlN6vp8W/C4eaT4681DSs2HwHoDknp6nKSL1wPFrM3x0v7QuS22n3o=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1717698246; c=relaxed/simple;
+	bh=GkWa7BIPh4/KmbJyOT/Mk5hzWzWa5IQyYQXoThRbpnk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OCyzoK7M+gp+8/WEIUJytVANs/+UbTdrjxF4ze7h69AQNY80cqtGBXIuIMA0ErddgU2MdvOCWy+OSreM7PDfqc2iIHpneeWb5ThcROvZS4y0IydliWXx1mRksBsEZqSwv62CrX9AjPhLaOHTHc2INTtnlOJMNb0FqjrPnJNXxVA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=EEsprxD1; arc=none smtp.client-ip=209.85.166.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-il1-f178.google.com with SMTP id e9e14a558f8ab-374a7d73669so5297745ab.2
+        for <linux-usb@vger.kernel.org>; Thu, 06 Jun 2024 11:24:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1717698244; x=1718303044; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Gl+OqhWGBvRrXejeIiWyBxaA/z/+TnOK8uadnUzKZxU=;
+        b=EEsprxD1SbSPBe0cxtYH/7sTBKSfsrej5TCeM5l2QQGH0/BvAISGrk9+6PcfcYButW
+         9bIsAuWR75+ZGQOGie7B/hwDIitSFaH7E8CQSipn38b67E5UuDGNdLqbWP0LgkYjaByR
+         29D41PbWncfwXf+l114QGwPGg1/BknlslZwJw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717698244; x=1718303044;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Gl+OqhWGBvRrXejeIiWyBxaA/z/+TnOK8uadnUzKZxU=;
+        b=LUrJjrPlGzBCL9YkzI1Dh9aBj6TdRsXCkAd3qtXY10FvPD2oj8ixhzdX0OYLquyc88
+         A3eYVSKRbnXa9VDQMsRGQRC6RSls8qoVft5/vw9GDGEiZUutdeTRPznUmnh+5jeE94wH
+         XQvTxkpsjX9U+gze7uyV3o6qKqI2Cbf6Wd8tEIWrPBm5Jhu99p2Q6S+QarhGYXoiksjy
+         IXHzLugXEGm7qBSfPchSUVJFm0U6RQDhZIdpiKiyBgqKVXaPIhts5yHItHyUgpU7rgAa
+         xGVnZxi8KfmQXKcF2IE+VjTN50aymnFS7Lg+tQMjKQX36a5Ue7GfqKQz347HL/57+bhv
+         P/dA==
+X-Forwarded-Encrypted: i=1; AJvYcCVeEb2lvv1Cm+Z6b7GD3OESM3T+O491q96iiIpADD3XFltOM+7kwAxRyBTdAMeZ8rfIbzbg/hP/rrDPyABjL98sAOP8fO2zaFEb
+X-Gm-Message-State: AOJu0YyqApwBtqLjnFaye21iiRUNjP2QdA2oRe7QENUTSZjoXuSeI8IW
+	YmjCTaL31qhlX56TZLWfUfmUbRc1tM0WNFs3TKpSH5Ozk6YNkIN/uZI/A8dpRA==
+X-Google-Smtp-Source: AGHT+IFJPZFXI4+pEL8XTW85t1QN+HSWQIYmTgmWjR8yPBouYuGxl/ji+dUgM0GRTYwa/tPXlAUkYg==
+X-Received: by 2002:a05:6e02:1d1e:b0:374:91a6:7bc9 with SMTP id e9e14a558f8ab-375803a748bmr5902575ab.30.1717698243975;
+        Thu, 06 Jun 2024 11:24:03 -0700 (PDT)
+Received: from localhost (113.176.132.34.bc.googleusercontent.com. [34.132.176.113])
+        by smtp.gmail.com with UTF8SMTPSA id e9e14a558f8ab-374bc1c82fesm3948695ab.84.2024.06.06.11.24.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Jun 2024 11:24:03 -0700 (PDT)
+Date: Thu, 6 Jun 2024 18:24:02 +0000
+From: Matthias Kaehlcke <mka@chromium.org>
+To: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+Cc: gregkh@linuxfoundation.org, javier.carrasco@wolfvision.net,
+	benjamin.bara@skidata.com, m.felsch@pengutronix.de,
+	jbrunet@baylibre.com, frieder.schrempf@kontron.de,
+	stefan.eichenberger@toradex.com, michal.simek@amd.com,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	git@amd.com
+Subject: Re: [PATCH] usb: misc: add Microchip usb5744 SMBus programming
+ support
+Message-ID: <ZmH-wuS8TUxpm6h-@google.com>
+References: <1717676883-2876611-1-git-send-email-radhey.shyam.pandey@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB9642:EE_|DB8PR04MB7034:EE_
-X-MS-Office365-Filtering-Correlation-Id: 70d65587-f279-4a2c-9a63-08dc8643df5d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230031|366007|7416005|52116005|1800799015|376005|921011|38350700005;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?NkINoUrRyJofGq6nFuzcJ0oBTNtxW4JDth5RNga74lcrFJ4aNOuRmy+fzxV3?=
- =?us-ascii?Q?RU2nuUx4V7G+RYRrrZTNG2FbG6y8hg/Yj2YFb1AnlURa3EH84SbQKaBdZt0S?=
- =?us-ascii?Q?INEsOrVgj6QMuvPId1hlnHLh7prPtjEFiz/Q2ic8fqsEF8AmABnTy4d+p7QT?=
- =?us-ascii?Q?1wUqeFqsdXyVX9kf35AcT2D5qimM5juTQKhCRG5A0Ven1EjTrASw89bazgid?=
- =?us-ascii?Q?ta8OFX5hfbNDbGVuSeNvhK3P9tQ5sLrWOKRmFh1hTArMu4uqk3n8JyZz8H5k?=
- =?us-ascii?Q?UGY0kkDeKl7pwPkjFlo5RsTe1tp3cRdtgdoP3cNu9nQqhjYFSVSyHQqjTGh6?=
- =?us-ascii?Q?5tWqmtUY99buovYO4OCjThbC5AopvVkhR/zwtIGPe6Php+YzZAz9JBXzFs6Y?=
- =?us-ascii?Q?XYv449D1OALBCIo6JCIP432Iz/WiqY0DQ7S2RTvXPxX/I5r1WUIat9OcRS2O?=
- =?us-ascii?Q?o5jXuaRRH0hSjy7X7AQBAqXZNPzKzeObOaadp/RZTbXPia6IGs9yl1CJU5ad?=
- =?us-ascii?Q?IdYI9lApw84cO0ZUH/HD5LDPdXAt/ogjQ3giTkhQQxgPWvHOR2c/KMmVPsb4?=
- =?us-ascii?Q?v1UmsnG2aPAgC3fi6r8Au6jrwraUdayi6pzp32v3f85guVrgiyCqIWl6RNGS?=
- =?us-ascii?Q?pFKNYu7L3CbL/Drs4d9WXGmUMmMimRZwiWgWXJTaeKoGLcefuIZZ33vzaKsD?=
- =?us-ascii?Q?8DAr8+gIxhdmrE9U7pW8z50tJSh1WvZ7ybQ2DiMDsvAhjd+98UmPJi1RZ/oO?=
- =?us-ascii?Q?O0ODWilxDi/hprE4f+Bogq+Z2WhNfeIhoWWJHorEKe6LjwOUbXiabjElT1Id?=
- =?us-ascii?Q?9V7V5EvwdbculP1S+BVFvzWn6mZLwC9Wo/G+N63k4/Qn6z0Ej+cG3Lyw8fLT?=
- =?us-ascii?Q?qirrnm7T+hRoJwEdCs3Pny6mm2T0r2ZXAp+29CZV2uI90X5pRJgCvL0pcCkL?=
- =?us-ascii?Q?yTzoxShZ4xvq21OR4hDVcj9EoctWmn35m6G4yK12mVff2FPoxQX3Z1EUdf83?=
- =?us-ascii?Q?Tk5rIspz73NaBtyAr/SfDahj33D069y9khnWkeotDvI+VpzPNavf+r94lACR?=
- =?us-ascii?Q?T7HJxqojw73Vv034GsC04ClJQ8URxyvh3qWeGQ5fDPLe+KaNMqJUVTDpiWPg?=
- =?us-ascii?Q?aR9x4V2g6CPw1gEJCB1bMDNCa5g3l4n5Kwa10+Fsns8tFM+fQ93ITUW1vlYk?=
- =?us-ascii?Q?GatJsv9D6+RUGJSstWMzsfUWtSQxh1SWJcmPmv2+x7+ciBkeI5Q7DenbJd/L?=
- =?us-ascii?Q?FawqbYpJw1/XKxU5YNyhxWrxqBoZD+QqGN1CoLZGOvKY4PQA0mlFJ0WhMSQk?=
- =?us-ascii?Q?cleED4uUp1ZczuO2+ua/6E+nYuvXQ28OgFuE4LyR1RKc5JgLfcxgP+yinera?=
- =?us-ascii?Q?VB/HeWrhpjl/Ta++7AkAnh8wAQIC?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366007)(7416005)(52116005)(1800799015)(376005)(921011)(38350700005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?q7eB93mmlxNu5yUQBdBEj9Aya29JWear11phPnZB6zugokoXvIQmVyLvLCQR?=
- =?us-ascii?Q?D85zt6Sd+dKcSZajPCGCaambcvkr9Ey4YTmltEGmUEp9DFaQyUB65b4mmejv?=
- =?us-ascii?Q?ty3fwqJPfo5GZc4pBzoUXAjqHAl7wN9XpWbsu5aXsXTbVweKMr998JUmkWdB?=
- =?us-ascii?Q?gqj1HXhhVNJTsfdI3kNbUa38Yn5DpHrqACFamNfE7UsY1W1UR1ujSual2n5z?=
- =?us-ascii?Q?OxVy/Zran/sOOO2ad3LOmie0m0bvtMvyqE9GRZ0c5VBGZkyYtFCaCemLK7WB?=
- =?us-ascii?Q?aNy8rlzO/WOhk+PH5VmQJM+QrsUw9XuJV7VRDi6AEjfLXpXCVhBzwROyOv+5?=
- =?us-ascii?Q?cH1xQfTmyDDPd5MXj7XzLh8ng4QgXWpEhQCpaf+89O4ITvm4TRnaeRsDN37E?=
- =?us-ascii?Q?G32cgBMpJAxZ64uoeNj+EG0JZGjp4Qt0v43whzYPrnKOP/Cj4IGutBMWHPkH?=
- =?us-ascii?Q?kmS1mOitNZbb3XZ/pLeVJo9Y/L5PoYQ0upniw459cEtQxfIy1P3U3gNXzAQJ?=
- =?us-ascii?Q?qmzpbKr9ko43ZnAQUDIhuL0R+W6hcNHtpsP939IrDHTwbF/qH3cx2mrCsP/z?=
- =?us-ascii?Q?G2bWLUSfuaLSDDleW/GHWETQGuTfT1U+68tdEpdTYLjYj1djMaC2uFHt6q3L?=
- =?us-ascii?Q?GbHhSmyBRA0PCxVGXr8kBDbmi3qBeQBZDqmQjl79SD+TbcmFGa5oYYgfD3WA?=
- =?us-ascii?Q?9AW9ZuGuPIwD/ZHDKgRusD10JjPteBh/Tr6wTqR0clV+2NvrfC1HUH1lY9qq?=
- =?us-ascii?Q?0cOKcxbvYQgfJGkKQMeKBp2ulEVgXS+tAqnzeBzl8G2xVhVv/BDxmHxQM6bs?=
- =?us-ascii?Q?Gn1laVhoy/oPg1Xr0vo+bFGvR8c5qf7r9UJggCulPxblbaVRKyZt4JE199SD?=
- =?us-ascii?Q?KP4jolY1C9pFeQHduV6sSQk8ihjAgEyLBOWI/hqnbwtgWkCShOQds0vO5OAi?=
- =?us-ascii?Q?M8M7iN9TsttkjslmpzUeVzcQGGhklh+7hQCcax7CFDMaWdvsEKuvNkdRzuDx?=
- =?us-ascii?Q?RuhKDLUUYue2452HFiDQkPfKAEaivOtXv0f+ZbRqmQrxvv7J13eXW4/DOJqj?=
- =?us-ascii?Q?RPCp9Fh30NhCT/mGVBy8aK6+6FMdSPpZesBByXSVByF1iir3hfI0d7Up/+nh?=
- =?us-ascii?Q?PFZRbYLPS00d04rnVQ2m8uIL8M25I0HuoT8A0ytNbztFLBSHgVp+q6N0cV6M?=
- =?us-ascii?Q?FsfOcvtW2TXOPaj8E+D0PMZmakl5gA0/ZjmUXQQ92zpIm4VWa2gqeFbR2v9u?=
- =?us-ascii?Q?p9vDg7Pq2VaW72G7uiCLO+rDLtqJs7vIySwQSbSQp1kmvDHXk8azEJnrv1s5?=
- =?us-ascii?Q?5LVHhpmSEYfjNWjPMvI6BSv9q8iecnuzIl/Bc9FJ3/Dm9abPz+FxRrQvkeQF?=
- =?us-ascii?Q?hLDQioFoaJKouxqyu4V8Uhbf6IaY84km8t/Xa2B1Xgup7BUg4lrYFLcsSFGj?=
- =?us-ascii?Q?XmMmN2P6+hU3qtulmoh+3igAmMWWaFuXvEbBCR4JVnwNGbY+sRcrIQBqprYL?=
- =?us-ascii?Q?5uTtnhCk1xHPdYgSDDnkF5gtBVVa4xMKJmlkTLs16RVr+gwKPI/5jgHAsuhD?=
- =?us-ascii?Q?nS4cwr5lFp14sDtcsqU=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 70d65587-f279-4a2c-9a63-08dc8643df5d
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9642.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2024 16:15:24.9576
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Weo6hN8q6nUfF/4HWVm3Z6YonBC2/6cvhzvHHtSS+Y3HxkbycWaTlaTi2FioL0fuOige62jQHdFYNue7DImTVg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB7034
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1717676883-2876611-1-git-send-email-radhey.shyam.pandey@amd.com>
 
-Use common usb-drd yaml for usb OTG related propteries. Allow propertry
-"usb-role-switch" to fix below DTB_CHECK warning.
+On Thu, Jun 06, 2024 at 05:58:03PM +0530, Radhey Shyam Pandey wrote:
 
-arch/arm64/boot/dts/freescale/imx8qxp-mek.dtb: usb@5b110000: usb@5b120000: 'port', 'usb-role-switch' do not match any of the regexes: 'pinctrl-[0-9]+'
+> PATCH] usb: misc: add Microchip usb5744 SMBus programming support
 
-Add "port" proptery to use connect type C connector and fix below warning.
-arch/arm64/boot/dts/freescale/imx8qxp-mek.dtb: usb@5b110000: usb@5b120000: Unevaluated properties are not allowed ('port' was unexpected)
+usb: misc: onboard_usb_dev: ...
 
-Signed-off-by: Frank Li <Frank.Li@nxp.com>
----
+>
+> usb5744 supports SMBus Configuration and it may be configured via the
+> SMBus slave interface during the hub’s start-up configuration stage.
+> 
+> To program it introduce i2c initialization hook and set usb5744 platform
+> data with function having required smbus initialization sequence. Core
+> driver uses i2c-bus phandle (added in commit '02be19e914b8 dt-bindings:
+> usb: Add support for Microchip usb5744 hub controller') to get i2c client
+> device and then calls usb5744 i2c default initialization sequence.
+> 
+> Apart from the USB command attach, prevent the hub from suspend.
+> when the “USB Attach with SMBus (0xAA56)” command is issued to the hub,
+> the hub is getting enumerated and then it puts in a suspend mode.
+> This causes the hub to NAK any SMBus access made by the SMBus Master
+> during this period and not able to see the hub's slave address while
+> running the "i2c probe" command.
+> 
+> Prevent the MCU from the putting the HUB in suspend mode through
+> register write. The BYPASS_UDC_SUSPEND bit (Bit 3) of the RuntimeFlags2
+> register at address 0x411D controls this aspect of the hub. The
+> BYPASS_UDC_SUSPEND bit in register 0x411Dh must be set to ensure that the
+> MCU is always enabled and ready to respond to SMBus runtime commands.
+> This register needs to be written before the USB attach command is issued.
+> 
+> The byte sequence is as follows:
+> Slave addr: 0x2d           00 00 05 00 01 41 1D 08
+> Slave addr: 0x2d           99 37 00
+> Slave addr: 0x2d           AA 56 00
+> 
+> In addition to SMBus programming sequence also update post reset
+> delay as without it there is a failure on first SMBus write.
+> i2c 2-002d: error -ENXIO: BYPASS_UDC_SUSPEND bit configuration failed
+> 
+> Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+> ---
+> ---
+>  drivers/usb/misc/onboard_usb_dev.c | 46 ++++++++++++++++++++++++++++++
+>  drivers/usb/misc/onboard_usb_dev.h |  8 +++++-
+>  2 files changed, 53 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/misc/onboard_usb_dev.c b/drivers/usb/misc/onboard_usb_dev.c
+> index f2bcc1a8b95f..5621c1273a12 100644
+> --- a/drivers/usb/misc/onboard_usb_dev.c
+> +++ b/drivers/usb/misc/onboard_usb_dev.c
+> @@ -98,6 +98,7 @@ static int onboard_dev_power_on(struct onboard_dev *onboard_dev)
+>  
+>  	fsleep(onboard_dev->pdata->reset_us);
+>  	gpiod_set_value_cansleep(onboard_dev->reset_gpio, 0);
+> +	fsleep(onboard_dev->pdata->reset_us);
 
-Notes:
-    pass dt_binding_check
-    
-    make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -j8  dt_binding_check DT_SCHEMA_FILES=cdns,usb3.yaml
-      SCHEMA  Documentation/devicetree/bindings/processed-schema.json
-      CHKDT   Documentation/devicetree/bindings
-      LINT    Documentation/devicetree/bindings
-      DTEX    Documentation/devicetree/bindings/usb/cdns,usb3.example.dts
-      DTC_CHK Documentation/devicetree/bindings/usb/cdns,usb3.example.dtb
+This also impacts devices that don't require a delay, plus requirements for
+this delay are not necessarily the same as the reset delay.
 
- .../devicetree/bindings/usb/cdns,usb3.yaml       | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
+Better add a dedicated field like 'power_on_delay_us'.
 
-diff --git a/Documentation/devicetree/bindings/usb/cdns,usb3.yaml b/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
-index 69a93a0722f07..38df19bad7c41 100644
---- a/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
-+++ b/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
-@@ -42,8 +42,15 @@ properties:
-       - const: otg
-       - const: wakeup
- 
--  dr_mode:
--    enum: [host, otg, peripheral]
-+  dr_mode: true
-+
-+  usb-role-switch: true
-+
-+  port:
-+    $ref: /schemas/graph.yaml#/properties/port
-+    description:
-+      This port is used with the 'usb-role-switch' property  to connect the
-+      cdns3 to type C connector.
- 
-   maximum-speed:
-     enum: [super-speed, high-speed, full-speed]
-@@ -77,7 +84,10 @@ required:
-   - interrupts
-   - interrupt-names
- 
--additionalProperties: false
-+allOf:
-+  - $ref: usb-drd.yaml#
-+
-+unevaluatedProperties: false
- 
- examples:
-   - |
--- 
-2.34.1
+>  
+>  	onboard_dev->is_powered_on = true;
+>  
+> @@ -296,10 +297,34 @@ static void onboard_dev_attach_usb_driver(struct work_struct *work)
+>  		pr_err("Failed to attach USB driver: %pe\n", ERR_PTR(err));
+>  }
+>  
+> +int onboard_dev_5744_i2c_init(struct i2c_client *client)
 
+static int
+
+We probably want to move hardware specific code to a dedicated file
+as there is added more, but I for now it's ok to have it in the main
+driver.
+
+> +{
+> +	struct device *dev = &client->dev;
+> +	int ret;
+> +
+> +	char wr_buf[7] = {0x00, 0x05, 0x00, 0x01, 0x41, 0x1D, 0x08};
+
+Please use constants for the different bits instead of magic values. I know
+the magic values are explained in the commit message, but that's something
+people have to dig up.
+
+> +
+> +	ret = i2c_smbus_write_block_data(client, 0, sizeof(wr_buf), wr_buf);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "BYPASS_UDC_SUSPEND bit configuration failed\n");
+> +
+> +	ret = i2c_smbus_write_word_data(client, 0x99, htons(0x3700));
+
+ditto, no magic values please
+
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "Configuration Register Access Command failed\n");
+> +
+> +	/* Send SMBus command to boot hub. */
+> +	ret = i2c_smbus_write_word_data(client, 0xAA, htons(0x5600));
+
+ditto
+
+> +	if (ret < 0)
+> +		return dev_err_probe(dev, ret, "USB Attach with SMBus command failed\n");
+> +
+> +	return ret;
+
+  	return 0;
+> +}
+> +
+>  static int onboard_dev_probe(struct platform_device *pdev)
+>  {
+>  	struct device *dev = &pdev->dev;
+>  	struct onboard_dev *onboard_dev;
+> +	struct device_node *i2c_node;
+>  	int err;
+>  
+>  	onboard_dev = devm_kzalloc(dev, sizeof(*onboard_dev), GFP_KERNEL);
+> @@ -339,6 +364,23 @@ static int onboard_dev_probe(struct platform_device *pdev)
+>  	if (err)
+>  		return err;
+>  
+> +	i2c_node = of_parse_phandle(pdev->dev.of_node, "i2c-bus", 0);
+> +	if (i2c_node) {
+> +		struct i2c_client *client;
+> +
+> +		client = of_find_i2c_device_by_node(i2c_node);
+> +		of_node_put(i2c_node);
+> +
+> +		if (!client) {
+> +			err = -EPROBE_DEFER;
+> +			goto err_dev_power_off;
+
+nit: err_power_off
+
+> +		}
+> +		err = onboard_dev->pdata->onboard_dev_i2c_init(client);
+> +		put_device(&client->dev);
+> +		if (err < 0)
+> +			goto err_dev_power_off;
+> +	}
+> +
+>  	/*
+>  	 * The USB driver might have been detached from the USB devices by
+>  	 * onboard_dev_remove() (e.g. through an 'unbind' by userspace),
+> @@ -350,6 +392,10 @@ static int onboard_dev_probe(struct platform_device *pdev)
+>  	schedule_work(&attach_usb_driver_work);
+>  
+>  	return 0;
+> +
+> +err_dev_power_off:
+> +	onboard_dev_power_off(onboard_dev);
+> +	return err;
+>  }
+>  
+>  static void onboard_dev_remove(struct platform_device *pdev)
+> diff --git a/drivers/usb/misc/onboard_usb_dev.h b/drivers/usb/misc/onboard_usb_dev.h
+> index fbba549c0f47..17311ea7bacd 100644
+> --- a/drivers/usb/misc/onboard_usb_dev.h
+> +++ b/drivers/usb/misc/onboard_usb_dev.h
+> @@ -6,6 +6,8 @@
+>  #ifndef _USB_MISC_ONBOARD_USB_DEV_H
+>  #define _USB_MISC_ONBOARD_USB_DEV_H
+>  
+> +#include <linux/i2c.h>
+> +
+>  #define MAX_SUPPLIES 2
+>  
+>  struct onboard_dev_pdata {
+> @@ -13,6 +15,7 @@ struct onboard_dev_pdata {
+>  	unsigned int num_supplies;	/* number of supplies */
+>  	const char * const supply_names[MAX_SUPPLIES];
+>  	bool is_hub;
+> +	int (*onboard_dev_i2c_init)(struct i2c_client *client);
+>  };
+>  
+>  static const struct onboard_dev_pdata microchip_usb424_data = {
+> @@ -22,11 +25,14 @@ static const struct onboard_dev_pdata microchip_usb424_data = {
+>  	.is_hub = true,
+>  };
+>  
+> +int onboard_dev_5744_i2c_init(struct i2c_client *client);
+> +
+>  static const struct onboard_dev_pdata microchip_usb5744_data = {
+> -	.reset_us = 0,
+> +	.reset_us = 10000,
+
+That's one reason why I don't think it's a good idea to use 'reset_us'
+twice. In this case the total delay would go from formerly 0ms to 20ms,
+when a delay of 10ms after the reset should be sufficient.
+
+>  	.num_supplies = 2,
+>  	.supply_names = { "vdd", "vdd2" },
+>  	.is_hub = true,
+> +	.onboard_dev_i2c_init = onboard_dev_5744_i2c_init,
+>  };
+>  
+>  static const struct onboard_dev_pdata realtek_rts5411_data = {
+> -- 
+> 2.34.1
+> 
 
