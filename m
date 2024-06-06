@@ -1,215 +1,170 @@
-Return-Path: <linux-usb+bounces-10963-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10965-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B38D08FE237
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2024 11:12:53 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D91DD8FE2BB
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2024 11:28:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4726728895A
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2024 09:12:52 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0DC08B2EBE5
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2024 09:20:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB67E15DBA3;
-	Thu,  6 Jun 2024 09:04:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=wolfvision.net header.i=@wolfvision.net header.b="Mfe8kNA8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02DB713E3E1;
+	Thu,  6 Jun 2024 09:18:06 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2137.outbound.protection.outlook.com [40.107.22.137])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2EDD13F43C;
-	Thu,  6 Jun 2024 09:04:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.22.137
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717664653; cv=fail; b=Tndul5aV2BH8Q5ln3Qs3k71dhNiztYgxmNwbSbW/6eQQGxRkCa4DvBtrMCwzVWaLErpGhPY6CBRLSFdhn0KMLQ3SjKHsxsY5acV+y8FisM1/LO80aD9KpgDEJBb9QaGS1H4cqxAspr8GBNaPsndcYJYL+nQE4Zs4yolJsYSOLS4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717664653; c=relaxed/simple;
-	bh=/bvpjmuTI73t9Y50sKoIVGe6v8d3c15b5jQEKsWXO6g=;
-	h=From:Date:Subject:Content-Type:Message-Id:References:In-Reply-To:
-	 To:Cc:MIME-Version; b=J3U8To1embw1OO6Nl/dqdSPV6qxBS+f0CTCyomPgNTQ5QNWwh+Q7MqDK5KCZXCxVQBJfvJ5XTPOOstOMiWqhjvUyvUc9T2e0FOyK77Bvi+K2fFw7HuIQg+WcUaiyfTjr9KKc7xLlB7dNp49exIBeCx3yr/8vMe2E7ADQPYmEXCQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wolfvision.net; spf=pass smtp.mailfrom=wolfvision.net; dkim=pass (1024-bit key) header.d=wolfvision.net header.i=@wolfvision.net header.b=Mfe8kNA8; arc=fail smtp.client-ip=40.107.22.137
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wolfvision.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wolfvision.net
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=D0EafCGd4TYE7ps86p31XWdT1gkhqR0oxOFguEHrHUBjOSb6WBkcitdRiJL/dbaAJv0Kw3SEUcy8TXarSUWOf2iRWkb9GtWzB7DBJe7W6ydaOeOkkxMS7WOHQxC8iuVhnph/ITJoj2v0aikOPU0nWAe1NWGF93N6SSJVm7kr80kmYDN+jkDHl15fE/RYlo7rY9NUxQCZ1dT36sRIH3OYXGHvgvQ8VMDvluo0edY/KRjoKQUKDYAVHMyS2cpmzvnNA6tLeZmnDg+yRgBjOo6IdBHdtMR1PTFHn4IqJT+6fQwPT8HKYG821ecLtTa52ci57A8+gzfv0WC+KdxIQCfqLw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/0sPv/kgzthBYwBq9wWhLcgJfqattFC5Ri363g8RG+s=;
- b=bbqHXrGym1JJIdRhMEaJN2PTM1xqVL51r8XWFNA85VHUwZyYwqj7ZrL//FEbQTgiMO4lrW3kTHs1B3BVk45TRCT3I9q8kIiIDjxe0l8tdBCsw06/0uwp3a6io0TZCgnE6Z7HUf4WPXAzCVdd6SxbdrRBqMLJFS7wmkh9zJJpCXRWOPGfY4B8QIN3TsQSf4C09VHbFB754Zde9aXEqYrA+pWVuLncDZZAXpIbPk/fhaJyfPMicrQRWv5en8X0JMJ6GMYpH6ANXwU/IIxtM6wE3A6en2YKif+Tint1lxTqYbcdRHcPfU4Iu8zG10rAj9CtrxnLgE/Ae9TWgASU/v46/Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wolfvision.net; dmarc=pass action=none
- header.from=wolfvision.net; dkim=pass header.d=wolfvision.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/0sPv/kgzthBYwBq9wWhLcgJfqattFC5Ri363g8RG+s=;
- b=Mfe8kNA8MnhORslnyJW2ba+tsUavRNxPtrQZjcT0BTbkaZLR+OeWdvXujiRZBn3ObdzZ3nlAQCV0oyh5gSZldVm509sBBUMF3LaJ8KAGzsVPDrtzRtILFy7fNIvPI0kc4Lxmxc5Xn7imhgbhmbroQrasqjDPZSDbiuFRUxadnFE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=wolfvision.net;
-Received: from VE1PR08MB4974.eurprd08.prod.outlook.com (2603:10a6:803:111::15)
- by DB9PR08MB9513.eurprd08.prod.outlook.com (2603:10a6:10:459::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.31; Thu, 6 Jun
- 2024 09:04:04 +0000
-Received: from VE1PR08MB4974.eurprd08.prod.outlook.com
- ([fe80::a08:11be:8709:f5e1]) by VE1PR08MB4974.eurprd08.prod.outlook.com
- ([fe80::a08:11be:8709:f5e1%4]) with mapi id 15.20.7633.033; Thu, 6 Jun 2024
- 09:04:04 +0000
-From: Javier Carrasco <javier.carrasco@wolfvision.net>
-Date: Thu, 06 Jun 2024 11:03:57 +0200
-Subject: [PATCH 3/3] usb: typec: tipd: use min() to set tps6598x firmware
- packet size
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240606-tps6598x_fw_update_log-v1-3-2b5b8369a0ba@wolfvision.net>
-References: <20240606-tps6598x_fw_update_log-v1-0-2b5b8369a0ba@wolfvision.net>
-In-Reply-To: <20240606-tps6598x_fw_update_log-v1-0-2b5b8369a0ba@wolfvision.net>
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Javier Carrasco <javier.carrasco@wolfvision.net>, 
- Julia Lawall <julia.lawall@inria.fr>
-X-Mailer: b4 0.14-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1717664643; l=1069;
- i=javier.carrasco@wolfvision.net; s=20240320; h=from:subject:message-id;
- bh=/bvpjmuTI73t9Y50sKoIVGe6v8d3c15b5jQEKsWXO6g=;
- b=rItKa9iubWFufBYxSWm3roOl9DhE7SOTQxKGq428uU59ImBcxOIMUFYbYzbZ3wxucnyPyl1bK
- B0Q+qwA7qAXDBnqhPYkS/59J6l17DKOK/7cEYVanpJDeEEG/rDwd0s0
-X-Developer-Key: i=javier.carrasco@wolfvision.net; a=ed25519;
- pk=Vxk2/0sGIxM8rsKnceszFuSuHVfQwa1Yo8+is7BX2nY=
-X-ClientProxiedBy: VI1PR07CA0310.eurprd07.prod.outlook.com
- (2603:10a6:800:130::38) To VE1PR08MB4974.eurprd08.prod.outlook.com
- (2603:10a6:803:111::15)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A50519D8B5;
+	Thu,  6 Jun 2024 09:18:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1717665485; cv=none; b=V7zBnq+Cb86QUgtxQwKgId85eI1XhGJpo0v4pXXl9O2TA2+raLCuwyKDFQwPEYS9fJxBH0S1D1II9PJWLBPnEsg39cGlCYnohtF0oINOcMVITFFibjPWzQjwaXmmCt5WL8b4frfodLW37QefzP2uudklfY3SqCrYX8lg3wXUEnk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1717665485; c=relaxed/simple;
+	bh=YJdbOuaHsaurGjX4eUFukDBYK8rr97L6xCHKtPDmWFg=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=hCvjJpUpyZJ4oAUHl1mF1tlAvZo5oqOgAs84o3LKeL0qWrsv3JE2tju4J2Ez0AmThULKCEOsDoOoig72QPQpNnYPROWVHg/K0EI4V5fKaOqW4CDNQUYfLDcUuw3e2qZXbo63pqYkPPfL491dK3vvsdLKFkMWN/emKLygUMCJZbA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.31])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VvzC40f30z6K6f5;
+	Thu,  6 Jun 2024 17:13:20 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
+	by mail.maildlp.com (Postfix) with ESMTPS id D1A511400E7;
+	Thu,  6 Jun 2024 17:17:58 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Thu, 6 Jun
+ 2024 10:17:58 +0100
+Date: Thu, 6 Jun 2024 10:17:57 +0100
+From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To: Markus Elfring <Markus.Elfring@web.de>
+CC: <linux-usb@vger.kernel.org>, <kernel-janitors@vger.kernel.org>, "Greg
+ Kroah-Hartman" <gregkh@linuxfoundation.org>, Heikki Krogerus
+	<heikki.krogerus@linux.intel.com>, Xin Ji <xji@analogixsemi.com>, LKML
+	<linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] usb: typec: anx7411: Use scope-based resource
+ management in anx7411_typec_port_probe()
+Message-ID: <20240606101757.0000331f@Huawei.com>
+In-Reply-To: <889729ac-3fc5-4666-b9f5-ce6e588a341a@web.de>
+References: <889729ac-3fc5-4666-b9f5-ce6e588a341a@web.de>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VE1PR08MB4974:EE_|DB9PR08MB9513:EE_
-X-MS-Office365-Filtering-Correlation-Id: e8150fcc-12e0-4735-f2c3-08dc86079d54
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230031|376005|366007|1800799015|52116005|38350700005;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?SUpQZWtHNnZyYnd5YllHc216TEYwMmJMemhMZVcvMmFvc3VQTlVkdmJFa2RD?=
- =?utf-8?B?eDNpWUd5ZTNLYjhBV1pLZlhrMFNVaHVwMFpoaHczRkVQUThiSmtPS016M1g1?=
- =?utf-8?B?dlhLZzhEdVh2NUY5NU53NmQ5QWdmd2dmZ0FtaDdQdjlRam5BQ041dDBrTURp?=
- =?utf-8?B?WURpVjc2OHE0d0pkdXBvVUE4Qk9qMHdtbUFPUTI2b1psSnJ6T2lVWFliNGxB?=
- =?utf-8?B?aEpBVzEyMC9sc0RJQzh5ZkJtbnpUTnptYVordHA4Z2dLVVdMbytmcTVEMEFC?=
- =?utf-8?B?NjFRc2JwdDBVRFFJTDVBZWtQQW0rajVWOFdGcnZnWkhSKzV1NE0wV2ltdVM4?=
- =?utf-8?B?NWxjdStIbE8zeGZqVElVemwrK1dUOVkxYmdnc2V4NGdGN1VGeXlpODg3M05V?=
- =?utf-8?B?M0lCaWN6c2U4N0hBdkk5RHBrUitwdzlnblBTRml0dWlBc2ppWVdsQVYrWENM?=
- =?utf-8?B?ZW5na0VtRWdxdk1VUUplTFd5NDJMTVdVQ21UZVppRnR0c1RNTGJRU2hmVTZo?=
- =?utf-8?B?M012NW84U0VrbmRYSVFYVDlCM0RzYWZyUllqRXFuOXEwdldVbk9jZklBakor?=
- =?utf-8?B?b2FYTDNwYTN4ZkFuOU9mbDQ4N3R0M0IyV2lqM0NQVDhmdFJ6TEVsZ2lEb1Jp?=
- =?utf-8?B?UEt4WVlub0Vpc1lKUFpuWi8zaldVVWpmZmdDcVJiNG1GUkpZUTNvcXBGL3J4?=
- =?utf-8?B?Y3ZRUnJBM1haZTJxZ2pBcllnZU1ueG9aV0hGNUt6bEVaSG0zTlUzUWgzMmow?=
- =?utf-8?B?Y1F1eG5PcDFIS2dZOTVId2d1OUMxckttdWg5SXZBVC83S2FHdVBWbnZDV0RF?=
- =?utf-8?B?N2psT0tZTVFDNGdncU1UY0xFTW5qZ1VaditLL2N3TWc5WUh6cjJhS0xRcnlt?=
- =?utf-8?B?UFl4cVpSOE1DakdvRFdOT3RoUXYyN1AreWU0NGkxUWYrNm1mai9UYW1oMERr?=
- =?utf-8?B?STBONGpJRWR1SldHajRDa3pxWjhkTmRKZ1pVd1I4Vm1zTkV4SU8yTEdUR1d1?=
- =?utf-8?B?Z0J2OFozZlhQeUFNR0VqdDU5a25vY0ZSNmZVblN1K1hXNnhleWtkTWVSTC9s?=
- =?utf-8?B?V0cxY3pWQnhQeml3QmNKNUQrMGcwRHM1T2lXcWZMRk9PSXdFTjJ1UTFuSXNm?=
- =?utf-8?B?am5mQk9DZ1BhWkMva2UrQXZxTmF1WjQraDJJSWxvd01TSUlDdXRSa1VBNVQ4?=
- =?utf-8?B?ZW9IZW44clVITVZSRVdVR1VoTUc5UHg1a2QrVklSaDNsTnpPM1hNY3Y1RGJp?=
- =?utf-8?B?MWJhUXpaSmR1eitYVHNNTDdreUY5RnUzRWNrNGduWHlESzBmTmpQTkUwUG5V?=
- =?utf-8?B?TzJCVkp0Qm1qc28zN21YalBmMG8xRHMvcE9pb1V3bkk3ZnlNdjcvSnBQTTdv?=
- =?utf-8?B?VzUvcER2WWs3dENaLy9GZDFMSjFHdUVqbE5yZmhyVmZvUGFGK1M5WkFBY0Zy?=
- =?utf-8?B?TXdsMWhSQ2NqTXRPdVRxQ2dibGhxWmlrcHFtMFRUL1hKUWh2N0Rxc1pyM2U2?=
- =?utf-8?B?QjRlTXRkYUJYMk1NTW1ibUwvWGZqdXJJYnFqM3Z6NTJkS2V4WkJlYjFEbEIx?=
- =?utf-8?B?Nmh1MkJaNU02QXZQU1lXQ3Nic2JnZUc4cXl2bGlkdFM0M2dPYjZCcHhQaFFH?=
- =?utf-8?B?bUxEOFhlUk1yVkhXWVpRbjVkcFBRZHBtdVN0OHJiQTFHS1FHYmt2bUgwczd2?=
- =?utf-8?B?ZjVDTmdGcVUvQnpKa3I4SS9zSWxDeEx2WGtRYTVWa3h0RDBpTmowTDBoUDZH?=
- =?utf-8?B?akRHNTFPa2lKcy9zWVlJczlNN0dabGR2U21pYWtobTYzRVo4YmVXS0hFZE03?=
- =?utf-8?Q?StM0blWGQBtAFbsRXHWV2Y0229K4DmHOWIYjQ=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR08MB4974.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(366007)(1800799015)(52116005)(38350700005);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?bVVNc1l6Z1FNR0NoMm9WMUMxSFJ0T1BkbUc4VHhxcW8wTTdZcGZ4cXZGc3JV?=
- =?utf-8?B?ZHRKd0xWN0hGOTFkK0lqMnRkRUVJL3llb3JjYjJDejZhV3MrUFhjd2VBNG4x?=
- =?utf-8?B?OU53czhMTFlKWFJMdEJzOE5KcjYvRnFBbjRQQnQvRWMzMWk1SHI3bmd0YmUx?=
- =?utf-8?B?REZqYXEvU1Q3cTc5VDN5VHAzZmZQM2ozLzZ0UUpTUldWTHNKMXVMejhXTWJm?=
- =?utf-8?B?L01lamZPSk0zV2RWd0pxendNL093UTFUUUt3OWdKaTQ3bUxTamVOZm9qM0Rk?=
- =?utf-8?B?d295czN5R09LNHlldDREZ2d6VmtoY2J3OXcxU3JGUkNZcUlFT2lBRU5IdGF2?=
- =?utf-8?B?bHl6SHpBK1hMbkUxN0JIOHhTTStSbGw0eld6MDhid3FVcXNnanVkemkzUXVI?=
- =?utf-8?B?ZDJ1UytQSDdncVB5NStsYkc1TGE1NjZpcitBQnVMUSt6SjNmNTZoVkJaSlZR?=
- =?utf-8?B?Nk50WnB5dDhNYVA4UFdIVDFiQ29sd1JSK1FFb3hrK05idUt5QXR4YzFVZFVr?=
- =?utf-8?B?dWZVQ0tubnRGVWora1FKdUQvcVNtOGQwaUxJMGRsUElnQzAyZmI3M2ZTeTdj?=
- =?utf-8?B?cE1IT2VDcldOclV3MjJrYTJoeEk4enNBZzEra0tNYjQ0SXgrZEJUL3ZJVklj?=
- =?utf-8?B?d29xR0h2NWJYU2dBeTlPdU9NTGcvYTdkWEFmSU15aGRqUkg2d2l2Mk9OeC9H?=
- =?utf-8?B?Q21tRHBZM05zYkJBbURLc3hUNjgyZ1BJWlRpMWFnUGlJZDIxTnA4QjlLNitn?=
- =?utf-8?B?aHRUWGdRdkJIY2dnb1RyNmJQcGV1U1lPMXVTbXMwRlZVMGhCSXFtczh6Um5l?=
- =?utf-8?B?QkpGbEdRQW90Q3lKTVhoc1YzaUlmOUJValpJL1RDczl0SU9IdkkrOVc3T0gy?=
- =?utf-8?B?UUpyK2Fsa0FzVUt5bmF2c0VINzNVYUpVR2VscHhuMnNXTEttM2JwWG9lbDZt?=
- =?utf-8?B?amdxak5mZEFld3ByQ0pKN3BxdHduQ0FaS0dmRkh0NjAwV012TFBCMHN1RWdZ?=
- =?utf-8?B?RnVaR1plc2RhVjZFczFWSVFSdDVjVjQ1M3VMQjZtOTAvaHk1RlRTVGtsTXpZ?=
- =?utf-8?B?VGhtaTJIdmdOVEJpejdSaWt3b1BTOWFmUjdtclVSSzZQNFB4SjlMWjA0MXpQ?=
- =?utf-8?B?dEpmNTRuLzhsN2FIMWpxR05oaHdSR0FXWHcyMlVTVTJla0QvNGQyNkZEQXF4?=
- =?utf-8?B?Rlkwa3o4Ulh5dUk1ZEYvZTZ2T24vaWxld20wRk1zK0pJMi9yZ0RXQzR3b0dE?=
- =?utf-8?B?NXlycEpzb0l1Q1JuN1U4TFc2SlorZzNKTy9oM2h5N2hmUHRwS3ZMRndDdnNv?=
- =?utf-8?B?SE5WTnBHQ2xoZGhPLzVjQUxwQnhTcSsrR0FXekE3UnZZWGxKdFRRaVpWNUpo?=
- =?utf-8?B?cnlESVpMOExYYUx1dDdSZXVLUVRVS3g2SERjajM2bWdwYnpTUncvNmFpWGpH?=
- =?utf-8?B?SXFRa0VsVzhaQ0JKVjQ0SkZyaC9pampCVVpIQ0szS0FjOVI1MkwwQXNkVyt6?=
- =?utf-8?B?VkV2ckt2WFl6UjJmNFhRNmVJVEtxSTZleGk3MGRvY3VOQ054OEhBQ21JejBr?=
- =?utf-8?B?cS9wLytvU2cySjZ2L0FzYlc4MW43cTBzSmExUFh3V1lvYk1jWDh5UDJSSGVG?=
- =?utf-8?B?enlTWGtjNHo2dVF4bTFQZThuY0VreFJYcE1zUUd4YkV6VHc5OUt3WWMyWjVy?=
- =?utf-8?B?cHN5Z1JTdndseCtpYUxZUmZEdXdSOGRDUnlsbWRoNXV2T0Q3V0pZWWNKNEd6?=
- =?utf-8?B?RHlJL1JLYTNRcnlnMkxyVmcreEJoM2RTYXB2TGZnSDVBSll1Q2ErUFF2Yk1Y?=
- =?utf-8?B?S0syWkhiV3dKRnhQd3Z1cWoxc2FXVUZvQTlPTnNjNENFZFVUSENJL0R2VE9D?=
- =?utf-8?B?L2hnOWtHMjNPS2xtSUQ1Nm1iNC9GWkdRdmpFaUZvNWxJL29WTWc4L3lCcURJ?=
- =?utf-8?B?U1EzL1VEMElIRHEwN1dXMEQrbjFnMVpBbUFqQVFkSlNuNEJGeUxMSDhqZ2Fz?=
- =?utf-8?B?V3hEK09sY29ZTWxJRHlVK2dzaEtFSDRkcHJLTlRVT1RIOFRiSGY1aHhYcWRy?=
- =?utf-8?B?WjFkYVE1UzRiWXVadWEweFNlOUgranFCQk1Fc2YxQlNaalBjRnJsa3c1bEdH?=
- =?utf-8?B?WlRjQ090eEM2MTJwZEdTRGNpeDVlSTdrYlRqMTA2YlpvcHlzRHhNQVJ5RDFJ?=
- =?utf-8?Q?36O4Gn4D6sbKVne2AyAuXPQ=3D?=
-X-OriginatorOrg: wolfvision.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: e8150fcc-12e0-4735-f2c3-08dc86079d54
-X-MS-Exchange-CrossTenant-AuthSource: VE1PR08MB4974.eurprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2024 09:04:04.3202
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: YPjXAs4gDcCNtis9VgPMVGVEGwrPsujzqIDg5WbjO9QEnlF+PS1bns7A9gEJU8zkoDv/9Iaidtx/4G/tYdgo9t/a6GPuJ2gvGeSYV7GzSAQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR08MB9513
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: lhrpeml100001.china.huawei.com (7.191.160.183) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
 
-Simplify the current firmware packet size check in the tps6598x
-implementation by means of a single call to min(), which is what the
-current code does in a more verbose, less elegant way.
+On Wed, 5 Jun 2024 19:11:04 +0200
+Markus Elfring <Markus.Elfring@web.de> wrote:
 
-This patch fixes a cocci warning ("WARNING opportunity for min()").
+> From: Markus Elfring <elfring@users.sourceforge.net>
+> Date: Wed, 5 Jun 2024 18:56:19 +0200
+>=20
+> Scope-based resource management became supported also for another
+> programming interface by contributions of Jonathan Cameron on 2024-02-17.
+> See also the commit 59ed5e2d505bf5f9b4af64d0021cd0c96aec1f7c ("device
+> property: Add cleanup.h based fwnode_handle_put() scope based cleanup.").
+>=20
+> * Thus use the attribute =E2=80=9C__free(fwnode_handle)=E2=80=9D.
+>=20
+> * Reduce the scope for the local variable =E2=80=9Cfwnode=E2=80=9D.
+>=20
+> Fixes: fe6d8a9c8e64 ("usb: typec: anx7411: Add Analogix PD ANX7411 suppor=
+t")
+> Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
 
-Suggested-by: Julia Lawall <julia.lawall@inria.fr>
-Signed-off-by: Javier Carrasco <javier.carrasco@wolfvision.net>
----
- drivers/usb/typec/tipd/core.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+Hi Markus,
 
-diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-index 58f6eeffd070..ea768b19a7f1 100644
---- a/drivers/usb/typec/tipd/core.c
-+++ b/drivers/usb/typec/tipd/core.c
-@@ -1165,10 +1165,7 @@ static int tps6598x_apply_patch(struct tps6598x *tps)
- 
- 	bytes_left = fw->size;
- 	while (bytes_left) {
--		if (bytes_left < TPS_MAX_LEN)
--			in_len = bytes_left;
--		else
--			in_len = TPS_MAX_LEN;
-+		in_len = min(bytes_left, TPS_MAX_LEN);
- 		ret = tps6598x_exec_cmd(tps, "PTCd", in_len,
- 					fw->data + copied_bytes,
- 					TPS_PTCD_OUT_BYTES, out);
+Good catch. However in this case I think this is insufficient.
+Also your patch description should more clearly state the bug rather
+and impacts (a potential resource leak).
 
--- 
-2.40.1
+I'm not 100% sure how this should work though.
+
+If the expectation is that a reference to the fwnode is held when we
+enter typec_register_port(), then if that errors out then we
+need fwnode_handle_put().
+
+If expectation is that the reference is not held, then we should
+always call fwnode_handle_put() before that is called.
+Internally it just uses this to fill in port->dev.fwnode.
+
+Given typec_get_fw_cap() is called from there and doesn't get a reference
+I think expectation is that the fwnode is held by the driver calling
+typec_register_port() until that is unregistered.
+
+Hence should be put in the error path of that call in the calling driver.
+
+	ctx->typec.port =3D typec_register_port(dev, cap);
+	if (IS_ERR(ctx->typec.port)) {
+		// fwnode_handle_put() in here.
+ 		ret =3D PTR_ERR(ctx->typec.port);
+		ctx->typec.port =3D NULL;
+		dev_err(dev, "Failed to register type c port %d\n", ret);
+		return ret;
+	}
+
+That makes it tricky to use no_free_ptr() so I wonder if this is
+a case where the old fashioned fix of adding all the relevant
+fwnode_handle_put() calls is the better option.  The __free()
+approach doesn't always fit.
+
+Jonathan
+
+=20
+> ---
+>  drivers/usb/typec/anx7411.c | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/drivers/usb/typec/anx7411.c b/drivers/usb/typec/anx7411.c
+> index b12a07edc71b..9fb52f233a30 100644
+> --- a/drivers/usb/typec/anx7411.c
+> +++ b/drivers/usb/typec/anx7411.c
+> @@ -16,6 +16,7 @@
+>  #include <linux/of_graph.h>
+>  #include <linux/of_platform.h>
+>  #include <linux/pm_runtime.h>
+> +#include <linux/property.h>
+>  #include <linux/regulator/consumer.h>
+>  #include <linux/slab.h>
+>  #include <linux/types.h>
+> @@ -1142,11 +1143,11 @@ static int anx7411_typec_port_probe(struct anx741=
+1_data *ctx,
+>  {
+>  	struct typec_capability *cap =3D &ctx->typec.caps;
+>  	struct typec_params *typecp =3D &ctx->typec;
+> -	struct fwnode_handle *fwnode;
+>  	const char *buf;
+>  	int ret, i;
+>=20
+> -	fwnode =3D device_get_named_child_node(dev, "connector");
+> +	struct fwnode_handle *fwnode __free(fwnode_handle)
+> +				     =3D device_get_named_child_node(dev, "connector");
+>  	if (!fwnode)
+>  		return -EINVAL;
+>=20
+> @@ -1237,7 +1238,7 @@ static int anx7411_typec_port_probe(struct anx7411_=
+data *ctx,
+>  		typecp->caps_flags |=3D HAS_SINK_WATT;
+>  	}
+>=20
+> -	cap->fwnode =3D fwnode;
+> +	cap->fwnode =3D no_free_ptr(fwnode);
+>=20
+>  	ctx->typec.role_sw =3D usb_role_switch_get(dev);
+>  	if (IS_ERR(ctx->typec.role_sw)) {
+> --
+> 2.45.1
+>=20
 
 
