@@ -1,183 +1,104 @@
-Return-Path: <linux-usb+bounces-10974-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10975-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68B3C8FE459
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2024 12:32:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3DEDE8FE4CF
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2024 13:02:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 125A0287FB7
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2024 10:32:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AA6C72849F9
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2024 11:02:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 425F2194C63;
-	Thu,  6 Jun 2024 10:32:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6453195381;
+	Thu,  6 Jun 2024 11:02:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Ij9/iU/U"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="LYtv5Z21"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.web.de (mout.web.de [212.227.15.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 028171922C3
-	for <linux-usb@vger.kernel.org>; Thu,  6 Jun 2024 10:32:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A14D3D56D;
+	Thu,  6 Jun 2024 11:01:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717669926; cv=none; b=SokMRyTVslLk7qPSQMX4x252b+UikuYh2MXmBc4vDepVUaFg/6V2Fdyjk3NLAuna2xjXwBBcuCkoNwbxQEGFpj70Btha8dllUn1YbL7cCo67h1NH5aWDv1znyM3LbFIipXljkBZrAGjcJOdd+jZixKJuAhG9rIAjRnPWXX07/hM=
+	t=1717671722; cv=none; b=HSkEkAHtFTjRgi9kL8R4byiDqFXxCwkFiPoQ2vRZqpwR9ir4/ZnJSGBaeOzGjLRmzcno09TYlDSrnXxg82Gt5zeNqPtoozhnZakaFXDJfrZ9MxVtCJI23eKvIzOCGHsCa/GPjdJ+HRF4nOibCho4OS9v28Z4nrlrnH9uGa+jvSk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717669926; c=relaxed/simple;
-	bh=n0hrzdYnBksW+DamHG6BupTO1J0YAJybs/VDL2sugrE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uov7lggP/0YGwIvBHiIfFjDEWi42ZJFL98ws2FeWrQZ3w3tfNv89+MeZOz3y9h2K5LMhzXe3UrgwGo9wiXVadHDl+1YmIbSMA8nRwc6R15o7kz8dzcLMPoMAPrsH1h/yDpT8p7tjgeou0RIeXelIBRWV/jnEf0iLIAfAbOSPVns=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Ij9/iU/U; arc=none smtp.client-ip=209.85.208.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-2eaae2a6dc1so14457181fa.0
-        for <linux-usb@vger.kernel.org>; Thu, 06 Jun 2024 03:32:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1717669923; x=1718274723; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2yOK4FlQCW+JMOCwnWP72jJymCtr5dD6IgIpna60BCY=;
-        b=Ij9/iU/Uyo6fcf8LONJ7xC09lvYBG8qaaeEz4vBXq2BTPZbQ2/pF3yyQBM4fRbFGfh
-         G2YVI79pdecNzRewdbn8sACLDUSzd7rOjlh6zMMORYPcVD1QveoeZ2kHNSsE+9FRNNbv
-         STcLcfiwZHhGsSEvRFW5mX9h4B8YphLBoSkl78uJsHCRnl9eDwrE59GFqtGknBB9mMy1
-         OSPuYgWTVQS8j2w3KVuq+5S7UftcTUbs1qQVWVzbjEhqRqb3+fKICTURvn7oWD734yHM
-         ft1saZpU5WP1Di0/lkFYY358dTnV3FFIlPJYisX1EUMUoYuw+wFXKiytWhGLxoNHAlTO
-         IcBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717669923; x=1718274723;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2yOK4FlQCW+JMOCwnWP72jJymCtr5dD6IgIpna60BCY=;
-        b=aeO/S8mSclBazh2QfIdOYBE1aMJDaRojvB8XEZGnncEVCkoZymLFG6lCCfJD8bpuTK
-         p4KNlmpuxAxCZqfqSVEf/CL0KyD9ayau47OT1rSLc4HkmZSBSudyyesQISp0ivfkb98F
-         ZTxGtSRJbJaNJah2bxqKcp+hQ2DtOsFOUQ7icFeSaEhrg/p7WmhhcxY80hhQq+wCsiaK
-         O9mfbkFvkV8ex4FHOKDmG0KdweEJI8tzOMNyw4T9Cs4UcJ7gD2TomGlKo5KNUExtX2Y7
-         OKah/0W4supE/mrsfbEixJgPtNeS2phyg/hvMqr8/yBXCN75X//HwpZAFeBlH4OBHnRb
-         3fgA==
-X-Forwarded-Encrypted: i=1; AJvYcCXo57mIDe5zuYjjlHKeuRd7wAnSIoXHPJanUEa95T8M5BYFC8Wds3f5ekyi/AmN0bqZDNELZikrgKBjRNa7IlXsff5rKtcjoTI9
-X-Gm-Message-State: AOJu0Yx0T8kRXJsSS4fWw8Nk0AtJl1L0hiIK8Fi6aD8jJEG2bHHuMKle
-	NUAETmk0RkA/zzrObj2cmQ1jQZ6hHHbHoDKdQpp1J1up4QCTA45gFj79oLP60MHM/iTZ4LQ8aAg
-	fYtaMB0rgCVLd3s0/V5lWESrTIf+nVxIOmY4T
-X-Google-Smtp-Source: AGHT+IHb92CvWzY0UMLIO3bnYXJ9lrbqmbf5jFApgNniI36TJ0LubnwynaglXsT5ps/3HCuaPh8FvkYR0EYkfnbTRiI=
-X-Received: by 2002:a2e:9643:0:b0:2e1:9c57:195a with SMTP id
- 38308e7fff4ca-2eac7a5fd4dmr33302121fa.32.1717669922881; Thu, 06 Jun 2024
- 03:32:02 -0700 (PDT)
+	s=arc-20240116; t=1717671722; c=relaxed/simple;
+	bh=62CrMwnBsDesJfBbj4JdA6nLwnTrPFPozSa6mWTBTjg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=IFVeP9PmmO+grqbAkxkfyo+vP/QOU8EyYjwG1ThPD/A8SGAaywV9MzuY+VsJpSjrbY2fxcbjnLxjQaM/OXqBMzv0uy1do1RNm78QjKb29kAVqv6j4GZ0qM1ZeFL6rq+bE+4gQYaot4pQgy85Fzjf1/wWjNWuOCUkPuOaP51pTfs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=LYtv5Z21; arc=none smtp.client-ip=212.227.15.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1717671696; x=1718276496; i=markus.elfring@web.de;
+	bh=fbrojDn0VDdn0L3EW1XYF97yJqxtpi3UOK2VLs7ulp0=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=LYtv5Z21OpbjF02YgCTqGl/K15aq6Hez0UbRlIO5aaBciJaoAGZ1m8Iht+qhSYEV
+	 tagLKVk6my66ej5CfUCVJDAddet96+95Ln6IU1CHLAro/V2sPVD0c9V+ZL5Olr8fM
+	 WWLNG4qfVMJj5Sjy9CTTTiPJr1Pganv6r5ElLrHsxVErLpNpc+9zsgcaOIjLYgVNj
+	 04t5XAwi+37ORrya8E/lfiWTgtnlqSFMrg8zYpkgG0Vna2mujmahCagNQ4kZ/uUln
+	 l5Qoggeyb4wtd7DNedzDZ9aqSPW/HdBUUfIoA3Muy+eSqeOVy37auEFvVboTaKQDI
+	 3aWB0nihTdszQmwyhg==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.83.95]) by smtp.web.de (mrweb006
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 1N14ta-1sQhFd3w0Q-00rGUS; Thu, 06
+ Jun 2024 13:01:35 +0200
+Message-ID: <204dc14f-1f58-4425-b613-85538eb4d947@web.de>
+Date: Thu, 6 Jun 2024 13:01:34 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240605175953.2613260-1-joychakr@google.com> <20240605175953.2613260-8-joychakr@google.com>
- <f98a1d8f-e936-4798-8447-c642e8fe11d5@moroto.mountain> <CAOSNQF0Qj2CnRDWAGM8Y1wyEdgWP04RDJx1TKO-Ge4nUH=qxoQ@mail.gmail.com>
- <2b979aa4-3a63-4010-9670-294ce7624e18@moroto.mountain>
-In-Reply-To: <2b979aa4-3a63-4010-9670-294ce7624e18@moroto.mountain>
-From: Joy Chakraborty <joychakr@google.com>
-Date: Thu, 6 Jun 2024 16:01:42 +0530
-Message-ID: <CAOSNQF02nUPZ=8re=uyruhxReQSjPoc8L-9yTnWMe4EfJ0-huA@mail.gmail.com>
-Subject: Re: [PATCH v1 07/17] misc: eeprom: at25: Change nvmem reg_read/write
- return type
-To: Dan Carpenter <dan.carpenter@linaro.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	Lars-Peter Clausen <lars@metafoo.de>, Sakari Ailus <sakari.ailus@linux.intel.com>, 
-	Bingbu Cao <bingbu.cao@intel.com>, Zhihao Cheng <chengzhihao1@huawei.com>, 
-	Jerome Brunet <jbrunet@baylibre.com>, 
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>, linux-hwmon@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org, 
-	linux-media@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-mtd@lists.infradead.org, 
-	linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-amlogic@lists.infradead.org, linux-sunxi@lists.linux.dev, 
-	linux-tegra@vger.kernel.org, linux-usb@vger.kernel.org, manugautam@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: usb: typec: anx7411: Use scope-based resource management in
+ anx7411_typec_port_probe()
+To: Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
+ linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Xin Ji <xji@analogixsemi.com>
+Cc: LKML <linux-kernel@vger.kernel.org>
+References: <889729ac-3fc5-4666-b9f5-ce6e588a341a@web.de>
+ <20240606101757.0000331f@Huawei.com>
+Content-Language: en-GB
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <20240606101757.0000331f@Huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:+TjG99r+XNmlKF6SwclUrVxDdMTNQkCcRDjGzvh01/WEkKXLCTs
+ 8SyL/Aay6KAsy3sM1C+dyMCaVelTWmyZFONT1jOsovzYxEh5i9M2KYJ1uVTqqbnaZwfvOen
+ W3Bn7BjhhjqRhGrF9jxxl05jobJ3HFe7jAnotPL3tKKe76hFpb+9bf3epKG2wMVRcZyD3IB
+ +xQf59yiUk7/vijNhlZUQ==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:h0TlJMfNPT8=;buw75irrEL0dwYIUtjk0vsyLbxT
+ A4i5U6FotW7xRr3WUT/bv7tNybBAp0Y5N9UJEmIyPSrE59jK8eTpBQhZ9+GD6n9nd8SlxyP0X
+ ioS+hdwR3MRP8l/LUvxWlnBDAMj6Nld1Mwm7apyVo/ootiSXSM0IYWA2UpkP/BQaeSmxb/+OU
+ vDFOhom4mWhGpoFnRouiJxIBk4bKmYwst/Qof9TBgrDiaZnh2nx6tpeh57sASUHtucPDZxn8Q
+ DrfmMiUHa+kSppYnRueQ+4UPtNKaaYHLP04EdSo7wdXUiOXs2bHiICpF1V4fRTEw+2ezEfo25
+ OV1taok/oNcJCeictql5z/DHrlXMIsfF2NP6fR+3u5/g96S/VijY4/0wt3dlS+wj418jSN05b
+ x90G/7AH2KSQmbeqiwgxrkdFXyzddI5/sh6dUj65znRoR0Qns9jYJdJYnPKyOpJd8XytUrGIG
+ 0qHVMlO+WPKa0ppXmaQW8gQ2sdHvK9cfvEjii1zZYGO3eizaO8sFVdPPvXtiPCNEEoymccG+K
+ LLehTl0Zc2IxbdyKkWeRPN1HrMdNY2ifvGegyLKK6mY5cV9V1WvrDd1K8pFY+Y1knNf9xx+8n
+ 0WWo/NdtGG/NXDKLn5Gd6t9/Y6OwZM88izNtPchF7dhJg3qOXkWBRXijoIVp4yn78gYsivOeo
+ p8+LAZRpNfiOvEQ4w2XmhJVOdWORZo0e360um7F5VvHFbsiIksRXw66dYUCghf7BG595KZCSP
+ v3wTdrMuKP7eiOuCorDmcY+xOKZGEqD3hYIUcfI+El2E/I3nT6EM//mML/PKEDqHF3KShUinF
+ u9VEkXEPqFocJRzwD5vV1KsFWTJNMeIZRWdvVVQjWnePo=
 
-On Thu, Jun 6, 2024 at 3:41=E2=80=AFPM Dan Carpenter <dan.carpenter@linaro.=
-org> wrote:
->
-> On Thu, Jun 06, 2024 at 03:12:03PM +0530, Joy Chakraborty wrote:
-> > > These functions are used internally and exported to the user through
-> > > sysfs via bin_attr_nvmem_read/write().  For internal users partial re=
-ads
-> > > should be treated as failure.  What are we supposed to do with a part=
-ial
-> > > read?  I don't think anyone has asked for partial reads to be support=
-ed
-> > > from sysfs either except Greg was wondering about it while reading th=
-e
-> > > code.
-> > >
-> > > Currently, a lot of drivers return -EINVAL for partial read/writes bu=
-t
-> > > some return success.  It is a bit messy.  But this patchset doesn't
-> > > really improve anything.  In at24_read() we check if it's going to be=
- a
-> > > partial read and return -EINVAL.  Below we report a partial read as a
-> > > full read.  It's just a more complicated way of doing exactly what we
-> > > were doing before.
-> >
-> > Currently what drivers return is up to their interpretation of int
-> > return type, there are a few drivers which also return the number of
-> > bytes written/read already like
-> > drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_otpe2p.c .
->
-> Returning non-zero is a bug.  It won't break bin_attr_nvmem_read/write()
-> but it will break other places like nvmem_access_with_keepouts(),
-> __nvmem_cell_read() and nvmem_cell_prepare_write_buffer() where all
-> non-zero returns from nvmem_reg_read() are treated as an error.
->
+> That makes it tricky to use no_free_ptr() so I wonder if this is
+> a case where the old fashioned fix of adding all the relevant
+> fwnode_handle_put() calls is the better option.  The __free()
+> approach doesn't always fit.
 
-Yes, I will resend the patch to fix that.
+Can involved development concerns be clarified better anyhow?
 
-> > The objective of the patch was to handle partial reads and errors at
-> > the nvmem core and instead of leaving it up to each nvmem provider by
-> > providing a better return value to nvmem providers.
-> >
-> > Regarding drivers/misc/eeprom/at25.c which you pointed below, that is
-> > a problem in my code change. I missed that count was modified later on
-> > and should initialize bytes_written to the new value of count, will
-> > fix that when I come up with the new patch.
-> >
-> > I agree that it does not improve anything for a lot of nvmem providers
-> > for example the ones which call into other reg_map_read/write apis
-> > which do not return the number of bytes read/written but it does help
-> > us do better error handling at the nvmem core layer for nvmem
-> > providers who can return the valid number of bytes read/written.
->
-> If we're going to support partial writes, then it needs to be done all
-> the way.  We need to audit functions like at24_read() and remove the
-> -EINVAL lines.
->
->    440          if (off + count > at24->byte_len)
->    441                  return -EINVAL;
->
-> It should be:
->
->         if (off + count > at24->byte_len)
->                 count =3D at24->byte_len - off;
->
-> Some drivers handle writing zero bytes as -EINVAL and some return 0.
-> Those changes could be done before we change the API.
->
-
-Sure, we can do it in a phased manner like you suggested in another
-reply by creating new pointers and slowly moving each driver to the
-new pointer and then deprecating the old one.
-
-> You updated nvmem_access_with_keepouts() to handle negative returns but
-> not zero returns so it could lead to a forever loop.
->
-
-Yes, that is a possible case. Will rework it.
-
-> regards,
-> dan carpenter
->
-Thanks
-Joy
+Regards,
+Markus
 
