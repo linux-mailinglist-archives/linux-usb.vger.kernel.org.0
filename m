@@ -1,73 +1,74 @@
-Return-Path: <linux-usb+bounces-10968-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10969-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B933A8FE2F9
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2024 11:35:19 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C3448FE301
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2024 11:36:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D140F1C25142
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2024 09:35:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DCBCB1F25E3A
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2024 09:36:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C78491514EE;
-	Thu,  6 Jun 2024 09:34:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEC22153830;
+	Thu,  6 Jun 2024 09:35:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AFu9v8vv"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="S/l8QgMo"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC61C19D8B5;
-	Thu,  6 Jun 2024 09:34:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2F9713FD93;
+	Thu,  6 Jun 2024 09:35:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717666477; cv=none; b=f1uhGl4GcE7PesaZRclmhadoZ1sI2x8f8pO0tvUF7ivmhdJK1+2rZ6Ggl4ZDLd1It9d+AUQfUWTKSpYllK6AtuBJnRRfpsoXHdLn5iL6wVpS/zmmDbbsTczjzD7Jg8ggx6XEGufqD/E6aoQB7KwcVKEGvsDKpd6kVnHwlxxctWE=
+	t=1717666520; cv=none; b=WARrBCQmIxQcWMufFBDvJCNSHmcXYQyqEsVNEznZQhSLWMCLW4SqtydbifmmHEINzOb/x+LYLn6sxO2jJsYdWzrl24oYVkZX8aGrWZc0kZVM6EKiVwGnFtwr4ebPRHpa3tCO9p7pbNrhActPOb2WMIAVJyWoCyjMsHsM7ZpIZ0Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717666477; c=relaxed/simple;
-	bh=hpQf42qO3MldKUzInM+V4YN6hGRQ+MuTA6xdfGIOxiE=;
+	s=arc-20240116; t=1717666520; c=relaxed/simple;
+	bh=lSnVyFfsh3dBWQOr8ak0lsCs/qYXVWWWArFcx9m3wjQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Yz5+xs3uSMF5wv+9ayuKSsM+uDlGapnc4aJ3qhy/pbjYj9KI9mHwBg0ckCu5Bhm/7Q5r0aZMjEEIX8ZvS5a2RGxKAGCXW16St5RLOcEG5OlQu8uhAU1M+SZKksKBHIJ0AY1uWLgk2JJR+L8/IJdTHeyaUbi5NZOkEZNtwUjarr0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AFu9v8vv; arc=none smtp.client-ip=198.175.65.20
+	 Content-Type:Content-Disposition:In-Reply-To; b=roaC+phudKxLEFZgXuz0Zekpm/vwJnr67a038KjRyLob95sbxfI63G4xa48fW0GeUCKiIX/oIGeOrIuI3JXL3dRzY5u7eJvR8mLkFbQaK0krVN1QyoYHJhAb0jFOLKgznKLI1OwSEpxV+W8Gev9hR2XS7KfTiypKuTdiMVX+E0I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=S/l8QgMo; arc=none smtp.client-ip=192.198.163.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717666476; x=1749202476;
+  t=1717666519; x=1749202519;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=hpQf42qO3MldKUzInM+V4YN6hGRQ+MuTA6xdfGIOxiE=;
-  b=AFu9v8vvNedvXxE3BbNfFW3WUl03K6Zef/XxI4X4bzFAZubRum86uX2w
-   ZSfE+J88vfajzeA8n/1jS7H9jd86SPgkbgrD8ZlzbMFOFoU48yJ9tfnGB
-   sPaOTzY6FAKmuqxusAtt9AzSyal7SCooa8DCJdAmzYDXjOvGuPSS1NWaa
-   xGvxJqtT8K9kjqcK8oLNUnFqSb28ZqlbOael269ldf/52zH0nLdAmrof2
-   rIKDjPszXiORqa9Hq+w4DNVnD4B0PS2RYWNKWA3eD+dCTE/i2l/FJeChg
-   j+KNihc/6K98P3IBDpqeHvHC2SoGesLf6LudT9VDhodhZUZk3h4tpdjAo
-   w==;
-X-CSE-ConnectionGUID: tA1pQjBCQ3mLyjZAeZzXpg==
-X-CSE-MsgGUID: +hef+bk6TeCJsiGj3ZbOaw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11094"; a="14160722"
+  bh=lSnVyFfsh3dBWQOr8ak0lsCs/qYXVWWWArFcx9m3wjQ=;
+  b=S/l8QgMoTLsUA40XdOwAUtA5SEdaQ0RdO7odu7o1soWgg74pz4WhhZV0
+   A6nevV6JJzgMlzsVoLBDhEWZP+KjaoOL0bm87BUygqCvhogtb3CKmXGoy
+   PqSHGUN88C43UylNKeYxlnb/vfRx6vCW51ULb8HCcFDffEXn+YuBAfLk0
+   0sf9ELt45tEPdSzw1TIB/237EKT/IyqGn7HstXmIIXa79Ry+7GVfO6/Ni
+   uF+XaraEocs6laHZx9DpjKkef81AVqHnLg9xhNE0NFknf7xfI3ZqP9DcA
+   kkdZE0RJ73EMtzepnoXJ6Wrrm3tkpchG+zg46F+4hImeRQ5Sk12ZlekOD
+   Q==;
+X-CSE-ConnectionGUID: U/lujlU9Q5GCSHu6BzYVPw==
+X-CSE-MsgGUID: fOTIIMXrQKOwyptqj8OksA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11094"; a="24976825"
 X-IronPort-AV: E=Sophos;i="6.08,218,1712646000"; 
-   d="scan'208";a="14160722"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2024 02:34:35 -0700
-X-CSE-ConnectionGUID: 6lFhivlMQbOOE+4FuD6zMA==
-X-CSE-MsgGUID: HV4SniVhQUKAJFr0KO1MjQ==
+   d="scan'208";a="24976825"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2024 02:35:18 -0700
+X-CSE-ConnectionGUID: 6Q885TLKTBSEtSsgDAqeIA==
+X-CSE-MsgGUID: J8llops4SY+XlB2zYjha6A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,218,1712646000"; 
-   d="scan'208";a="38350304"
+   d="scan'208";a="75375036"
 Received: from kuha.fi.intel.com ([10.237.72.185])
-  by orviesa006.jf.intel.com with SMTP; 06 Jun 2024 02:34:33 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 06 Jun 2024 12:34:31 +0300
-Date: Thu, 6 Jun 2024 12:34:31 +0300
+  by orviesa001.jf.intel.com with SMTP; 06 Jun 2024 02:35:15 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 06 Jun 2024 12:35:14 +0300
+Date: Thu, 6 Jun 2024 12:35:14 +0300
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To: Javier Carrasco <javier.carrasco@wolfvision.net>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] usb: typec: tipd: drop second firmware name read
-Message-ID: <ZmGCp8G4nK2ljRU8@kuha.fi.intel.com>
+Subject: Re: [PATCH 2/3] usb: typec: tipd: add error log to provide firmware
+ name and size
+Message-ID: <ZmGC0roOLn3hIo9A@kuha.fi.intel.com>
 References: <20240606-tps6598x_fw_update_log-v1-0-2b5b8369a0ba@wolfvision.net>
- <20240606-tps6598x_fw_update_log-v1-1-2b5b8369a0ba@wolfvision.net>
+ <20240606-tps6598x_fw_update_log-v1-2-2b5b8369a0ba@wolfvision.net>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -76,81 +77,38 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240606-tps6598x_fw_update_log-v1-1-2b5b8369a0ba@wolfvision.net>
+In-Reply-To: <20240606-tps6598x_fw_update_log-v1-2-2b5b8369a0ba@wolfvision.net>
 
-On Thu, Jun 06, 2024 at 11:03:55AM +0200, Javier Carrasco wrote:
-> tps_request_firmware() reads the firmware name and there is no need to
-> repeat the action in the device-specific implementations of the firmware
-> update mechanism.
-> 
-> Provide the firmware name as a parameter in tps_request_firmware() to
-> avoid repetitive operations in the device-specific implementations.
+On Thu, Jun 06, 2024 at 11:03:56AM +0200, Javier Carrasco wrote:
+> The current error logs do not show the firmware name and size for the
+> tps6598x. On the other hand, this information is provided for the
+> tps25750. Both implementations have access to that information, and the
+> existing message for the tps25750 can be used for the tps6598x without
+> extra modifications.
 > 
 > Signed-off-by: Javier Carrasco <javier.carrasco@wolfvision.net>
 
 Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
 > ---
->  drivers/usb/typec/tipd/core.c | 24 +++++++-----------------
->  1 file changed, 7 insertions(+), 17 deletions(-)
+>  drivers/usb/typec/tipd/core.c | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
 > diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-> index ad76dbd20e65..851b0d02727a 100644
+> index 851b0d02727a..58f6eeffd070 100644
 > --- a/drivers/usb/typec/tipd/core.c
 > +++ b/drivers/usb/typec/tipd/core.c
-> @@ -892,19 +892,19 @@ tps6598x_register_port(struct tps6598x *tps, struct fwnode_handle *fwnode)
->  	return 0;
->  }
+> @@ -1195,6 +1195,10 @@ static int tps6598x_apply_patch(struct tps6598x *tps)
 >  
-> -static int tps_request_firmware(struct tps6598x *tps, const struct firmware **fw)
-> +static int tps_request_firmware(struct tps6598x *tps, const struct firmware **fw,
-> +				const char **firmware_name)
->  {
-> -	const char *firmware_name;
->  	int ret;
+>  release_fw:
+>  	release_firmware(fw);
+> +	if (ret) {
+> +		dev_err(tps->dev, "Failed to write patch %s of %zu bytes\n",
+> +			firmware_name, fw->size);
+> +	}
 >  
->  	ret = device_property_read_string(tps->dev, "firmware-name",
-> -					  &firmware_name);
-> +					  firmware_name);
->  	if (ret)
->  		return ret;
->  
-> -	ret = request_firmware(fw, firmware_name, tps->dev);
-> +	ret = request_firmware(fw, *firmware_name, tps->dev);
->  	if (ret) {
-> -		dev_err(tps->dev, "failed to retrieve \"%s\"\n", firmware_name);
-> +		dev_err(tps->dev, "failed to retrieve \"%s\"\n", *firmware_name);
->  		return ret;
->  	}
->  
-> @@ -999,12 +999,7 @@ static int tps25750_start_patch_burst_mode(struct tps6598x *tps)
->  	u32 addr;
->  	struct device_node *np = tps->dev->of_node;
->  
-> -	ret = device_property_read_string(tps->dev, "firmware-name",
-> -					  &firmware_name);
-> -	if (ret)
-> -		return ret;
-> -
-> -	ret = tps_request_firmware(tps, &fw);
-> +	ret = tps_request_firmware(tps, &fw, &firmware_name);
->  	if (ret)
->  		return ret;
->  
-> @@ -1155,12 +1150,7 @@ static int tps6598x_apply_patch(struct tps6598x *tps)
->  	const char *firmware_name;
->  	int ret;
->  
-> -	ret = device_property_read_string(tps->dev, "firmware-name",
-> -					  &firmware_name);
-> -	if (ret)
-> -		return ret;
-> -
-> -	ret = tps_request_firmware(tps, &fw);
-> +	ret = tps_request_firmware(tps, &fw, &firmware_name);
->  	if (ret)
->  		return ret;
->  
+>  	return ret;
+>  };
 > 
 > -- 
 > 2.40.1
