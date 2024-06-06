@@ -1,174 +1,108 @@
-Return-Path: <linux-usb+bounces-10941-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10942-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1084D8FDB7E
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2024 02:33:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3DA9D8FDB91
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2024 02:40:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5F36D2849CE
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2024 00:33:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E7D111F248AA
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2024 00:40:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2B42C8C0;
-	Thu,  6 Jun 2024 00:33:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3E78101DE;
+	Thu,  6 Jun 2024 00:40:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DN4rWgBp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mAgjRwqr"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC77CEAC7
-	for <linux-usb@vger.kernel.org>; Thu,  6 Jun 2024 00:33:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45F8FEEDB;
+	Thu,  6 Jun 2024 00:40:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717634014; cv=none; b=Dkvm2bhzbyq7W2BYKuemKSOnllgEcX0QoyeaY3OL9GoJUMyonRa/teKsBB1tMq6XjGXBinjEzNtfaBilPWcHWl9Ht6S1GysqBzn99A24LBqUH3NQTMkQd8eGlwHTJh8NXFrl97J+SAs43At1SJXTbFWmWY2m4CdLA6WB+fACzuY=
+	t=1717634404; cv=none; b=a6jrXVSgtuNqunSHlEc6UvNCnRPNHPoZIyGrtMyMV29+JRIRPpHLPHlgtOVBHFVlAGQW5nHuJO5fFeNvHakPUqMCn412qJVexN/BPmNnM1TUaiyj1UXKu42AR+PD89FjB8zBXfCV2/ZeWbFQuYiDvFtBy/52WkcUXcy1LZDph6E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717634014; c=relaxed/simple;
-	bh=PWu+Mdmn5vWax/jE+X3fiIhQcWIwiH323ISaKGnWq7Q=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=CeREHLi0BGD5vqgXAG7oXi/Ocg+jn1wkeu1hQH+MDIDK0oKQ8uEw0VFJPdAD+0bgfrRi2nG8haHkHy71vXOT/h4CesZwS5Z3SCZ1RSRpYt85eJinJ0pHlFhEFu85IrsjWgoi9L1TWQx1YCN2Bo9B3pIw210nph6t11GYOJEd8CQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DN4rWgBp; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717634013; x=1749170013;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=PWu+Mdmn5vWax/jE+X3fiIhQcWIwiH323ISaKGnWq7Q=;
-  b=DN4rWgBp7QYwGo/LGBwJGlJqhcEMXnG72mf4NNqt37NX82UXfkrM5PA2
-   BxjKcX/zTMJFmrs5U1FqvTcpiINz38P7y1FYO0QbkJyrLUHpq7vhnO9bg
-   e2hQsNGMzpR40HOkqGtV2brbwhBPdPKjjiQhB8hFI49RQLqnN3VN9oqHz
-   MHDUnP+ZTd3W4/JEQ12od//mWnK1fc18S2Kp+DH+/OtBcKPwBIR5pGl5n
-   teRylZr5hGaRigeb+TZWOGGIqg2kP+rLkUXdPp7CFr+SrTHqrK42J4DXo
-   kcP0kYQdqPcWYeJhN9ZxdAXgWK4X7tM1yPVuBF2ZxVk5QXq2O4TZD6Bc4
-   w==;
-X-CSE-ConnectionGUID: fPS355psSgyA0g3y/heMFg==
-X-CSE-MsgGUID: h6rFoJxHRVydWfNSWV9ufQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11094"; a="11931192"
-X-IronPort-AV: E=Sophos;i="6.08,218,1712646000"; 
-   d="scan'208";a="11931192"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2024 17:33:32 -0700
-X-CSE-ConnectionGUID: eb+gykrvSgOp4Tdn9m9OGw==
-X-CSE-MsgGUID: aOhvusToSimFD06dTAwqvQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,218,1712646000"; 
-   d="scan'208";a="42192957"
-Received: from pooja-lin-vm.fm.intel.com ([10.80.128.159])
-  by fmviesa005.fm.intel.com with ESMTP; 05 Jun 2024 17:33:32 -0700
-From: Pooja Katiyar <pooja.katiyar@intel.com>
-To: linux-usb@vger.kernel.org
-Cc: heikki.krogerus@linux.intel.com,
-	gregkh@linuxfoundation.org,
-	pooja.katiyar@intel.com
-Subject: [PATCH] usb: typec: ucsi: UCSI2.0 Get Error Status changes
-Date: Wed,  5 Jun 2024 17:32:11 -0700
-Message-Id: <20240606003211.1337526-1-pooja.katiyar@intel.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1717634404; c=relaxed/simple;
+	bh=FR0+k6fv0YnpKmp2vH2K4VsZGW8MvdlAWv+l1JC7UJs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=n/iH9x9s0mFtzBYb5pvsyPljEaX9jXvNFWHJB2d+UZjILA+u+Du1Y6aImuYkNOEjz29qof34bITKK1pUyjl8Tdhwj1GQ/wiTmkqyPvtlnGzJhMx1jnIjCrfAeodu2mQx6z+NbCrn5AKiGxI9mYWDkimpp4dykH9xbtnv/Zomc+0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mAgjRwqr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55BC5C4AF09;
+	Thu,  6 Jun 2024 00:40:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1717634403;
+	bh=FR0+k6fv0YnpKmp2vH2K4VsZGW8MvdlAWv+l1JC7UJs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=mAgjRwqrWzEPptUYHbBnsVG3lZp2/U/ycBwESN9sWpxiU2iSEw4E89NHXsoqOtlA0
+	 5c0I4y2k/w4GXgzREX61XYl8HdgKnriPv52gNERkcVTPzbBfkGuszU9LkhGtP06ud9
+	 iP+LY0vXlGVU6hc7eDYYkiIEW3UYqUQyFQkJAJc4vGXPXc6idT0sSsi2V23VfTCKrb
+	 9FEc4uuYQH4ua/uLamse3syG02/I46EM+N4GX3Pu41tat377zNu9WCpVxeIwwbQjDw
+	 PWW/yrR/Ihw7kqr+IaODXyfScRcHJifbhuoM4kYKmgyruuAjR5gKtFCFa2U6bczH96
+	 runBA4Veoy+jQ==
+Date: Wed, 5 Jun 2024 18:40:01 -0600
+From: Rob Herring <robh@kernel.org>
+To: Neil Armstrong <neil.armstrong@linaro.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: usb: dwc2: allow device sub-nodes
+Message-ID: <20240606004001.GA3525173-robh@kernel.org>
+References: <20240605-topic-amlogic-upstream-bindings-fixes-dwc2-subnodes-v1-1-915893e0cb20@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240605-topic-amlogic-upstream-bindings-fixes-dwc2-subnodes-v1-1-915893e0cb20@linaro.org>
 
-Add support for UCSI 2.0 Get Error Status command to add connector
-number field to the command structure.
+On Wed, Jun 05, 2024 at 12:01:20PM +0200, Neil Armstrong wrote:
+> Allow the '#address-cells', '#size-cells' and subnodes as defined in
+> usb-hcd.yaml and used in the meson-gxbb-odroidc2 DT.
 
-Connector number field is extracted from the previous UCSI command
-which has failed and is used to get the failure reason/Error using
-Get Error Status command.
+Doesn't referencing usb-hcd.yaml instead work? Or you need 
+unevaluatedProperties?
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Pooja Katiyar <pooja.katiyar@intel.com>
----
-
- drivers/usb/typec/ucsi/ucsi.c | 29 ++++++++++++++++++++++++++---
- drivers/usb/typec/ucsi/ucsi.h |  3 +++
- 2 files changed, 29 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index bd6ae92aa39e..d6037ec2a642 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -71,8 +71,9 @@ static int ucsi_acknowledge_connector_change(struct ucsi *ucsi)
- 
- static int ucsi_exec_command(struct ucsi *ucsi, u64 command);
- 
--static int ucsi_read_error(struct ucsi *ucsi)
-+static int ucsi_read_error(struct ucsi *ucsi, u8 connector_num)
- {
-+	u64 command;
- 	u16 error;
- 	int ret;
- 
-@@ -81,7 +82,8 @@ static int ucsi_read_error(struct ucsi *ucsi)
- 	if (ret)
- 		return ret;
- 
--	ret = ucsi_exec_command(ucsi, UCSI_GET_ERROR_STATUS);
-+	command = UCSI_GET_ERROR_STATUS | UCSI_CONNECTOR_NUMBER(connector_num);
-+	ret = ucsi_exec_command(ucsi, command);
- 	if (ret < 0)
- 		return ret;
- 
-@@ -134,9 +136,30 @@ static int ucsi_read_error(struct ucsi *ucsi)
- 
- static int ucsi_exec_command(struct ucsi *ucsi, u64 cmd)
- {
-+	u8 connector_num;
- 	u32 cci;
- 	int ret;
- 
-+	if (ucsi->version > UCSI_VERSION_1_2) {
-+		switch (UCSI_COMMAND(cmd)) {
-+		case UCSI_GET_ALTERNATE_MODES:
-+			connector_num = UCSI_GET_ALTMODE_GET_CONNECTOR_NUMBER(cmd);
-+			break;
-+		case UCSI_PPM_RESET:
-+		case UCSI_CANCEL:
-+		case UCSI_ACK_CC_CI:
-+		case UCSI_SET_NOTIFICATION_ENABLE:
-+		case UCSI_GET_CAPABILITY:
-+			connector_num = 0;
-+			break;
-+		default:
-+			connector_num = UCSI_DEFAULT_GET_CONNECTOR_NUMBER(cmd);
-+			break;
-+		}
-+	} else {
-+		connector_num = 0;
-+	}
-+
- 	ret = ucsi->ops->sync_write(ucsi, UCSI_CONTROL, &cmd, sizeof(cmd));
- 	if (ret)
- 		return ret;
-@@ -161,7 +184,7 @@ static int ucsi_exec_command(struct ucsi *ucsi, u64 cmd)
- 	if (cci & UCSI_CCI_ERROR) {
- 		if (cmd == UCSI_GET_ERROR_STATUS)
- 			return -EIO;
--		return ucsi_read_error(ucsi);
-+		return ucsi_read_error(ucsi, connector_num);
- 	}
- 
- 	if (cmd == UCSI_CANCEL && cci & UCSI_CCI_CANCEL_COMPLETE) {
-diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
-index 0e7c92eb1b22..349fbdc819c7 100644
---- a/drivers/usb/typec/ucsi/ucsi.h
-+++ b/drivers/usb/typec/ucsi/ucsi.h
-@@ -111,6 +111,9 @@ void ucsi_connector_change(struct ucsi *ucsi, u8 num);
- #define UCSI_CONNECTOR_NUMBER(_num_)		((u64)(_num_) << 16)
- #define UCSI_COMMAND(_cmd_)			((_cmd_) & 0xff)
- 
-+#define UCSI_GET_ALTMODE_GET_CONNECTOR_NUMBER(_cmd_)	(((_cmd_) >> 24) & GENMASK(6, 0))
-+#define UCSI_DEFAULT_GET_CONNECTOR_NUMBER(_cmd_)	(((_cmd_) >> 16) & GENMASK(6, 0))
-+
- /* CONNECTOR_RESET command bits */
- #define UCSI_CONNECTOR_RESET_HARD		BIT(23) /* Deprecated in v1.1 */
- 
--- 
-2.34.1
-
+> 
+> The fixes the following:
+> meson-gxbb-odroidc2.dtb: usb@c9100000: '#address-cells', '#size-cells', 'hub@1' do not match any of the regexes: 'pinctrl-[0-9]+'
+> 	from schema $id: http://devicetree.org/schemas/usb/dwc2.yaml#
+> 
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/usb/dwc2.yaml | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/dwc2.yaml b/Documentation/devicetree/bindings/usb/dwc2.yaml
+> index 4f36a22aa6d7..9e737f587664 100644
+> --- a/Documentation/devicetree/bindings/usb/dwc2.yaml
+> +++ b/Documentation/devicetree/bindings/usb/dwc2.yaml
+> @@ -177,6 +177,13 @@ properties:
+>      minItems: 1
+>      maxItems: 2
+>  
+> +  "#address-cells": true
+> +
+> +  "#size-cells": true
+> +
+> +patternProperties:
+> +  "^.*@[0-9a-f]{1,2}$": true
+> +
+>  dependencies:
+>    port: [ usb-role-switch ]
+>    role-switch-default-mode: [ usb-role-switch ]
+> 
+> ---
+> base-commit: c3f38fa61af77b49866b006939479069cd451173
+> change-id: 20240605-topic-amlogic-upstream-bindings-fixes-dwc2-subnodes-4a68ead79624
+> 
+> Best regards,
+> -- 
+> Neil Armstrong <neil.armstrong@linaro.org>
+> 
 
