@@ -1,141 +1,149 @@
-Return-Path: <linux-usb+bounces-10952-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10953-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2C958FE016
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2024 09:42:53 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 14CD48FE028
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2024 09:51:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 47A6A1F222CC
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2024 07:42:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8A5F71F23843
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2024 07:51:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A0792260C;
-	Thu,  6 Jun 2024 07:42:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A616813B28F;
+	Thu,  6 Jun 2024 07:50:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="NL++cvwa"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nyeVwCmT"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC15213AA32
-	for <linux-usb@vger.kernel.org>; Thu,  6 Jun 2024 07:42:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4E87DF44;
+	Thu,  6 Jun 2024 07:50:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717659763; cv=none; b=fycTvGXlPiz4nR9+92/ehB4mw6wdN0WEAz6iOwcjqCWgybgEmfC/zAkxn72l8XcvuUcwqw/Ta9bfFXCua+DxjAeYGwcoAdpXg4WgwQtrIt8ijEQTz1GvWKiCaP7bFpYuGe+AVuzFu0FJzkknHxoWZmTsPUy8Ig/OBPKfoCyGAL0=
+	t=1717660257; cv=none; b=e1nbRokBa8zqkmBnR9amfITeACUVt0VxtWT7kWfp08oh90ZGoXf8xXc4eS6Jt76F4cAdtVS7rGocV4yr/MPw3cQInOmJAiWvxMRLTtzM927uxfyJjsTK4uU18GEefxobmHs1UzPaCocPZlf9MO2dfYNd0qzLMNGJD6aKV10P3WA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717659763; c=relaxed/simple;
-	bh=7OaWmqVFqUj8UiBMIFYvyTDVYpCRKRaVDuAaqAod2/I=;
+	s=arc-20240116; t=1717660257; c=relaxed/simple;
+	bh=KbKt7/g1FIVQl+e686tRBTUARQfsnnzl+KTMOBV11GM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GpEA5ZgPwy3hyBjV+0L9ABM60CxbgSA/+V/pJiBSedfLZf9ukQjIQ9DMc+M3JzDbQY0q75lj+lbAHgoSZtwpVFOT0g22ytLJOyvzoNyH8aca7OYmnDgsBAGDM+mVEuPWLb41b6zAVdj8yhHSxGAXLP4KDz3DIwn8+fnqKqWOh5M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=NL++cvwa; arc=none smtp.client-ip=209.85.208.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-57a2ed9af7dso865000a12.1
-        for <linux-usb@vger.kernel.org>; Thu, 06 Jun 2024 00:42:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1717659760; x=1718264560; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7hn7A2vtREo0E7HfSwjkC9hqptsOSWf7nUvmnuVDMQY=;
-        b=NL++cvwa1YzNLaO02KuHXfdUWI0iBeBifsmyZyDIb5uMpknUdYDOeT/BDI/fB1OqHk
-         +7gCI0acVsZJ9rqdfi0zaMODPSc2iNqRCIIzabLp1tuBymzYzAtsSw1iGNJhqh8NyJ/4
-         bfRhWy9o8GJlE3fdPgPV+MIOX2Zas3+n6dR2PFZyU7rJMR6cFy0R0pMq+kF7E/jGpRD5
-         dXGJ+GxjzoVPjGZ3tiwUrB4gUVnyjnHucGul9epeD37Bp6ZiZqmXwZ1hXIrXEdNVrXJF
-         ilEl3P0UI+XCbpU9AbkrYXIGfV5G0BBv+rrjrB1As9IXmF71GnivuRMlHZ8mIiUgEiHw
-         uAJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717659760; x=1718264560;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7hn7A2vtREo0E7HfSwjkC9hqptsOSWf7nUvmnuVDMQY=;
-        b=NHGqNxOCCaEo+7L8x6RejpUCjs9ne5iSWuCKHIxGVEvSP8seYMWtuymAbdv5tGbsEV
-         aQX7x66W1bgiSVERXpx5fWYCezHKNLH+TpOXHgBmw7MPljoDQOU9b9+4kTg2x2fx05Rb
-         hk+tqBvJ+gGVWBKx36CRxrA/1BUI5NKGsev8h8yGGPCTFU3N0z7luEfocfkkSAxGTocB
-         A6wGXW71+o/ZnY2lYVHJbegXeA9Mb2/yiCwiaMPA6fHFIURaXhtzuW+sF39r/wnwERF3
-         xS6WZE9BLMSeVbysvDSbfVebczrkE39e1kYs1ylE6IQTgz4yZSGgd/d6ssPMOhY2MH4W
-         1cXA==
-X-Forwarded-Encrypted: i=1; AJvYcCWFk8UwXRrUcZO/ow9JmF9Co6NqLbgEFylXSGEofS0jqJTXSNHQGqi25vdH3FJ/5myVmwct9pY2ynF/AWNuiH3I7waHZFZwYSCu
-X-Gm-Message-State: AOJu0YwIbcIPKViHSgDcu1NvBfdVWfIqiPlhFW+JjKCxPqpjfXOqKtW6
-	jFdOT2mcRHCm6lH4xeZqb8dgYytboW7OYEh8IkoR2vulX+8ED6u3q0nMcC+rSrE=
-X-Google-Smtp-Source: AGHT+IG9fb84ekx6f8HaBtotI1FnubBAZuTJ3dgM/XdsdCeyuhCLEIFdUbolQkfIb3FKjJXzmIhddQ==
-X-Received: by 2002:a17:907:900e:b0:a68:fe79:9499 with SMTP id a640c23a62f3a-a699f88b67cmr343464966b.40.1717659760015;
-        Thu, 06 Jun 2024 00:42:40 -0700 (PDT)
-Received: from localhost ([102.222.70.76])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6c806ebc43sm57149266b.141.2024.06.06.00.42.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jun 2024 00:42:39 -0700 (PDT)
-Date: Thu, 6 Jun 2024 10:42:35 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Joy Chakraborty <joychakr@google.com>
-Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZdaJo0rsWxypvuEA25xXok6V4FLO/vqYGYum4DpHK2FAuMURMlGjiqa2FKnzqIUz3lRlqM4LH8Z80NUem8Hqbyx0+7ibamlaAMfr94z6VdVRh8V3B72qt2+LAK/WEupr9UZuvWK9lqAM6POgtfZwojb8C3lwIQI2q67y3Be+V1c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nyeVwCmT; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1717660255; x=1749196255;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=KbKt7/g1FIVQl+e686tRBTUARQfsnnzl+KTMOBV11GM=;
+  b=nyeVwCmTjzY0f6CllUF0rka7wDHi0PFxX+GZ1HsU3uhsQtYxq0jRh/sD
+   oJehUKPWY5NolNaB2wJhTlN+t7fg00FL2LUFatKQQgkDxRFqR5rgMwqwc
+   O9Vw8Mdzd8rz6km6E05x+7+BXm9SL7N3EDeGbOTsibGkfyyyBUW5URhiK
+   jcOEaKGxEpOzLK0jaqQEkRf46Rjjay8EfBmXoXThs6WLpOyeiiiR2RuKS
+   q+XCAOIbvMsgXeMU61R+JPAYyGMpLfKPatvdCqDw5ejQ5OekH2JnY7tAk
+   RjIVe6IICxUoXHkAqpMomaBSeFxYo+5l7QUBX2ZJnwcg2ju+gvA6yj0tX
+   A==;
+X-CSE-ConnectionGUID: r98B2grqSAeSE+FQGgQUEw==
+X-CSE-MsgGUID: 9SbnLWjgRDyH9kCt/JUkTA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11094"; a="24966544"
+X-IronPort-AV: E=Sophos;i="6.08,218,1712646000"; 
+   d="scan'208";a="24966544"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2024 00:50:55 -0700
+X-CSE-ConnectionGUID: ASUIEKgwTyCLrIwxWuK8sg==
+X-CSE-MsgGUID: aRNYetmaRNa8KejmhwBAJA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,218,1712646000"; 
+   d="scan'208";a="68689466"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by orviesa002.jf.intel.com with SMTP; 06 Jun 2024 00:50:52 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 06 Jun 2024 10:50:51 +0300
+Date: Thu, 6 Jun 2024 10:50:51 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Markus Elfring <Markus.Elfring@web.de>
+Cc: linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Lars-Peter Clausen <lars@metafoo.de>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Bingbu Cao <bingbu.cao@intel.com>,
-	Zhihao Cheng <chengzhihao1@huawei.com>,
-	Jerome Brunet <jbrunet@baylibre.com>,
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-iio@vger.kernel.org, linux-media@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-mtd@lists.infradead.org, linux-rtc@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-amlogic@lists.infradead.org, linux-sunxi@lists.linux.dev,
-	linux-tegra@vger.kernel.org, linux-usb@vger.kernel.org,
-	manugautam@google.com
-Subject: Re: [PATCH v1 01/17] hwmon: pmbus: adm1266: Change nvmem
- reg_read/write return type
-Message-ID: <08ff07f4-034d-4342-89da-d83044871ab1@moroto.mountain>
-References: <20240605175953.2613260-1-joychakr@google.com>
- <20240605175953.2613260-2-joychakr@google.com>
+	Xin Ji <xji@analogixsemi.com>, LKML <linux-kernel@vger.kernel.org>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: Re: [PATCH] usb: typec: anx7411: Use scope-based resource management
+ in anx7411_typec_port_probe()
+Message-ID: <ZmFqWxqOsd6FxD3l@kuha.fi.intel.com>
+References: <889729ac-3fc5-4666-b9f5-ce6e588a341a@web.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240605175953.2613260-2-joychakr@google.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <889729ac-3fc5-4666-b9f5-ce6e588a341a@web.de>
 
-On Wed, Jun 05, 2024 at 05:59:45PM +0000, Joy Chakraborty wrote:
-> Change nvmem read/write function definition return type to ssize_t.
+On Wed, Jun 05, 2024 at 07:11:04PM +0200, Markus Elfring wrote:
+> From: Markus Elfring <elfring@users.sourceforge.net>
+> Date: Wed, 5 Jun 2024 18:56:19 +0200
 > 
-> Signed-off-by: Joy Chakraborty <joychakr@google.com>
+> Scope-based resource management became supported also for another
+> programming interface by contributions of Jonathan Cameron on 2024-02-17.
+> See also the commit 59ed5e2d505bf5f9b4af64d0021cd0c96aec1f7c ("device
+> property: Add cleanup.h based fwnode_handle_put() scope based cleanup.").
+> 
+> * Thus use the attribute “__free(fwnode_handle)”.
+> 
+> * Reduce the scope for the local variable “fwnode”.
+> 
+> Fixes: fe6d8a9c8e64 ("usb: typec: anx7411: Add Analogix PD ANX7411 support")
+> Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
+
+Was the fwnode leaked, or why else is this a "fix"? It's not clear
+from the commit message. In any case:
+
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
 > ---
->  drivers/hwmon/pmbus/adm1266.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  drivers/usb/typec/anx7411.c | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/hwmon/pmbus/adm1266.c b/drivers/hwmon/pmbus/adm1266.c
-> index 2c4d94cc8729..7eaab5a7b04c 100644
-> --- a/drivers/hwmon/pmbus/adm1266.c
-> +++ b/drivers/hwmon/pmbus/adm1266.c
-> @@ -375,7 +375,7 @@ static int adm1266_nvmem_read_blackbox(struct adm1266_data *data, u8 *read_buff)
->  	return 0;
->  }
->  
-> -static int adm1266_nvmem_read(void *priv, unsigned int offset, void *val, size_t bytes)
-> +static ssize_t adm1266_nvmem_read(void *priv, unsigned int offset, void *val, size_t bytes)
+> diff --git a/drivers/usb/typec/anx7411.c b/drivers/usb/typec/anx7411.c
+> index b12a07edc71b..9fb52f233a30 100644
+> --- a/drivers/usb/typec/anx7411.c
+> +++ b/drivers/usb/typec/anx7411.c
+> @@ -16,6 +16,7 @@
+>  #include <linux/of_graph.h>
+>  #include <linux/of_platform.h>
+>  #include <linux/pm_runtime.h>
+> +#include <linux/property.h>
+>  #include <linux/regulator/consumer.h>
+>  #include <linux/slab.h>
+>  #include <linux/types.h>
+> @@ -1142,11 +1143,11 @@ static int anx7411_typec_port_probe(struct anx7411_data *ctx,
 >  {
->  	struct adm1266_data *data = priv;
->  	int ret;
-> @@ -395,7 +395,7 @@ static int adm1266_nvmem_read(void *priv, unsigned int offset, void *val, size_t
->  
->  	memcpy(val, data->dev_mem + offset, bytes);
->  
-> -	return 0;
-> +	return bytes;
->  }
+>  	struct typec_capability *cap = &ctx->typec.caps;
+>  	struct typec_params *typecp = &ctx->typec;
+> -	struct fwnode_handle *fwnode;
+>  	const char *buf;
+>  	int ret, i;
+> 
+> -	fwnode = device_get_named_child_node(dev, "connector");
+> +	struct fwnode_handle *fwnode __free(fwnode_handle)
+> +				     = device_get_named_child_node(dev, "connector");
+>  	if (!fwnode)
+>  		return -EINVAL;
+> 
+> @@ -1237,7 +1238,7 @@ static int anx7411_typec_port_probe(struct anx7411_data *ctx,
+>  		typecp->caps_flags |= HAS_SINK_WATT;
+>  	}
+> 
+> -	cap->fwnode = fwnode;
+> +	cap->fwnode = no_free_ptr(fwnode);
+> 
+>  	ctx->typec.role_sw = usb_role_switch_get(dev);
+>  	if (IS_ERR(ctx->typec.role_sw)) {
+> --
+> 2.45.1
 
-This breaks the build so it's not allowed.  The way to do it is to:
-1) add a new pointer which takes a ssize_t
-2) convert everything to the new pointer
-3) Rename the new pointer to the old name
-
-regards,
-dan carpenter
-
+-- 
+heikki
 
