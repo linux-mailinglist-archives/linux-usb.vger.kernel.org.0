@@ -1,149 +1,176 @@
-Return-Path: <linux-usb+bounces-10953-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10954-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14CD48FE028
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2024 09:51:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id F01738FE03E
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2024 09:55:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8A5F71F23843
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2024 07:51:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6025B1F26ACA
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2024 07:55:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A616813B28F;
-	Thu,  6 Jun 2024 07:50:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B42513BAFB;
+	Thu,  6 Jun 2024 07:55:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nyeVwCmT"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="I8gQesET"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4E87DF44;
-	Thu,  6 Jun 2024 07:50:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CB621F5F5
+	for <linux-usb@vger.kernel.org>; Thu,  6 Jun 2024 07:55:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717660257; cv=none; b=e1nbRokBa8zqkmBnR9amfITeACUVt0VxtWT7kWfp08oh90ZGoXf8xXc4eS6Jt76F4cAdtVS7rGocV4yr/MPw3cQInOmJAiWvxMRLTtzM927uxfyJjsTK4uU18GEefxobmHs1UzPaCocPZlf9MO2dfYNd0qzLMNGJD6aKV10P3WA=
+	t=1717660538; cv=none; b=pIKWjUWzC0UHDDWt1vRvs4EsoZepeNK9TS+3lNb+zCdVomvlhun3W2vIPEcQSAZZFaA780xHmGeJi3nmUCsYfu25TmcLaIQCiyJJL8hVXKyVKe8KbjYYblgu6kA5Up/eDb9z/hlDe2F6BJ1P5TYBnJzF3ryhHueUZYyRX6/LqVE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717660257; c=relaxed/simple;
-	bh=KbKt7/g1FIVQl+e686tRBTUARQfsnnzl+KTMOBV11GM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZdaJo0rsWxypvuEA25xXok6V4FLO/vqYGYum4DpHK2FAuMURMlGjiqa2FKnzqIUz3lRlqM4LH8Z80NUem8Hqbyx0+7ibamlaAMfr94z6VdVRh8V3B72qt2+LAK/WEupr9UZuvWK9lqAM6POgtfZwojb8C3lwIQI2q67y3Be+V1c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nyeVwCmT; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717660255; x=1749196255;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=KbKt7/g1FIVQl+e686tRBTUARQfsnnzl+KTMOBV11GM=;
-  b=nyeVwCmTjzY0f6CllUF0rka7wDHi0PFxX+GZ1HsU3uhsQtYxq0jRh/sD
-   oJehUKPWY5NolNaB2wJhTlN+t7fg00FL2LUFatKQQgkDxRFqR5rgMwqwc
-   O9Vw8Mdzd8rz6km6E05x+7+BXm9SL7N3EDeGbOTsibGkfyyyBUW5URhiK
-   jcOEaKGxEpOzLK0jaqQEkRf46Rjjay8EfBmXoXThs6WLpOyeiiiR2RuKS
-   q+XCAOIbvMsgXeMU61R+JPAYyGMpLfKPatvdCqDw5ejQ5OekH2JnY7tAk
-   RjIVe6IICxUoXHkAqpMomaBSeFxYo+5l7QUBX2ZJnwcg2ju+gvA6yj0tX
-   A==;
-X-CSE-ConnectionGUID: r98B2grqSAeSE+FQGgQUEw==
-X-CSE-MsgGUID: 9SbnLWjgRDyH9kCt/JUkTA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11094"; a="24966544"
-X-IronPort-AV: E=Sophos;i="6.08,218,1712646000"; 
-   d="scan'208";a="24966544"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2024 00:50:55 -0700
-X-CSE-ConnectionGUID: ASUIEKgwTyCLrIwxWuK8sg==
-X-CSE-MsgGUID: aRNYetmaRNa8KejmhwBAJA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,218,1712646000"; 
-   d="scan'208";a="68689466"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by orviesa002.jf.intel.com with SMTP; 06 Jun 2024 00:50:52 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 06 Jun 2024 10:50:51 +0300
-Date: Thu, 6 Jun 2024 10:50:51 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Markus Elfring <Markus.Elfring@web.de>
-Cc: linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Xin Ji <xji@analogixsemi.com>, LKML <linux-kernel@vger.kernel.org>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: Re: [PATCH] usb: typec: anx7411: Use scope-based resource management
- in anx7411_typec_port_probe()
-Message-ID: <ZmFqWxqOsd6FxD3l@kuha.fi.intel.com>
-References: <889729ac-3fc5-4666-b9f5-ce6e588a341a@web.de>
+	s=arc-20240116; t=1717660538; c=relaxed/simple;
+	bh=J7Ei1H0hqKdC8QZE3bB6jegN6szBqUtxZBcpRBHsuK8=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=YvvvxqvEBIhMBT67l/zsz+TjNTNu/2/BwcnY8onhZP66ITU0VbLLKYm+UQ5uGOfw0wEBGRDbdui66Q8gqX6tisRO1V41uh2b0ZP16Hsto/OT2uPW7meesPtTNGSWtvYuQSgMfFMqwY42tU/wmqZxJ83cKnuIp8DRkll4JkH2pG4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=I8gQesET; arc=none smtp.client-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a66e9eac48fso61667366b.2
+        for <linux-usb@vger.kernel.org>; Thu, 06 Jun 2024 00:55:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1717660535; x=1718265335; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:references:cc:to:subject:reply-to:from:user-agent
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=o8T95313W3mZDzPZstW7YjrlrInDFmRJwHTZECYIMkU=;
+        b=I8gQesETMR4W/I3HOTfKevCldBYAKacTlPmWTazIT5ddacGpiW6NUtQkvKQUEUCYRx
+         hk2OicWtrWSaBY68W+nvJSIxIQHUKCRafXuQ41h52+DbFVDT8iVCBax0g6+nsfHExVbl
+         JhAD7IcmEeuyzBGaLjZgIjqRytZiCRgVVH7+0/cu5QdD5aEJKulKETKmL0yNCljZ6Y9W
+         zaoXdrHI8zgzo5Zuv9FaUMqvF8rg64Yt4PghvjtB6Sr7KyMAUAEA2NmCwxIMYBwjjrOq
+         cByHl3JXnhnj2pPZEXT9QNi+R0AX+Cij7WchdCT8neTtyCqfo2hS+WQBI72MT0n/2XH6
+         c5ng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717660535; x=1718265335;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:references:cc:to:subject:reply-to:from:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=o8T95313W3mZDzPZstW7YjrlrInDFmRJwHTZECYIMkU=;
+        b=JuPHbZ+E7PaZ6O2m+zlQ8tMp1u2RSYY8WCEuZDmikEuFe24H9knTxizFb//M7JaDUV
+         o6ErYjiAhRD7hbJ2pe2JH3lg1J/NqtlD8Aoj8Hnvqf+5hjHkpSoGsmZF8kFMaWddhV/Y
+         xZedWtD6zriTD5bITj2+qhh1tN44exKOqqpUuoO+WnaoM09U+Sm1gQrPM54nZBbpzke4
+         3pueG2Vx65Z8bkE5zkCF1DPLkHnpCx6qvXJ5STDFr9Ss3SFTnvEdVE/Hpq91K0eSoniN
+         FvWoD8OnCfKxKaPglDNAzUkY9Ki2sHw4zjEDE5Ei/4PHL2gxczQazG5fgyTtpsbaV/XH
+         63JA==
+X-Forwarded-Encrypted: i=1; AJvYcCVp+/bu4AJ/5J4G467Eeby6nLYi6WqSnKsctAEh89PxcHDlZyAig9KzvtwlWw4jDf8L0ro6+gVE04fFF3M3pJsTJqGfabJuiraf
+X-Gm-Message-State: AOJu0YwcpGZ8S7U1iPAdqW273RdOHLaKobvPp1H1wH3w4kNQLxKFBfx3
+	S4yJhKTtXrwMnLeG8/xNqMnLPI1IFAKOU1tUiwAHeOto7A15A56LEsXykyPh9gY=
+X-Google-Smtp-Source: AGHT+IFRDHwHG3B4LPuZSPQ1kwaqSrqUtGY4PgYiLj1LS7ldqzI2fECImZ1/8mCuVSI1SJMKMjUudQ==
+X-Received: by 2002:a17:906:617:b0:a68:c21f:e24 with SMTP id a640c23a62f3a-a699f66767amr324062866b.32.1717660534734;
+        Thu, 06 Jun 2024 00:55:34 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:22fd:4ae6:287f:17f2? ([2a01:e0a:982:cbb0:22fd:4ae6:287f:17f2])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6c805cbca9sm58709366b.65.2024.06.06.00.55.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Jun 2024 00:55:34 -0700 (PDT)
+Message-ID: <a5195a02-5a5d-43a3-9309-748bbc1e5346@linaro.org>
+Date: Thu, 6 Jun 2024 09:55:33 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <889729ac-3fc5-4666-b9f5-ce6e588a341a@web.de>
+User-Agent: Mozilla Thunderbird
+From: Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH] dt-bindings: usb: dwc2: allow device sub-nodes
+To: Rob Herring <robh@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, linux-usb@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240605-topic-amlogic-upstream-bindings-fixes-dwc2-subnodes-v1-1-915893e0cb20@linaro.org>
+ <20240606004001.GA3525173-robh@kernel.org>
+Content-Language: en-US, fr
+Autocrypt: addr=neil.armstrong@linaro.org; keydata=
+ xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
+ GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
+ BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
+ qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
+ 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
+ AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
+ OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
+ Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
+ YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
+ GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
+ UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
+ GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
+ yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
+ QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
+ SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
+ 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
+ Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
+ oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
+ M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
+ 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
+ KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
+ 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
+ QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
+Organization: Linaro
+In-Reply-To: <20240606004001.GA3525173-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Jun 05, 2024 at 07:11:04PM +0200, Markus Elfring wrote:
-> From: Markus Elfring <elfring@users.sourceforge.net>
-> Date: Wed, 5 Jun 2024 18:56:19 +0200
+On 06/06/2024 02:40, Rob Herring wrote:
+> On Wed, Jun 05, 2024 at 12:01:20PM +0200, Neil Armstrong wrote:
+>> Allow the '#address-cells', '#size-cells' and subnodes as defined in
+>> usb-hcd.yaml and used in the meson-gxbb-odroidc2 DT.
 > 
-> Scope-based resource management became supported also for another
-> programming interface by contributions of Jonathan Cameron on 2024-02-17.
-> See also the commit 59ed5e2d505bf5f9b4af64d0021cd0c96aec1f7c ("device
-> property: Add cleanup.h based fwnode_handle_put() scope based cleanup.").
-> 
-> * Thus use the attribute “__free(fwnode_handle)”.
-> 
-> * Reduce the scope for the local variable “fwnode”.
-> 
-> Fixes: fe6d8a9c8e64 ("usb: typec: anx7411: Add Analogix PD ANX7411 support")
-> Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
+> Doesn't referencing usb-hcd.yaml instead work? Or you need
+> unevaluatedProperties?
 
-Was the fwnode leaked, or why else is this a "fix"? It's not clear
-from the commit message. In any case:
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+I realized after my dt-schema was too old, and updating it fixes the problem...
 
-> ---
->  drivers/usb/typec/anx7411.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/anx7411.c b/drivers/usb/typec/anx7411.c
-> index b12a07edc71b..9fb52f233a30 100644
-> --- a/drivers/usb/typec/anx7411.c
-> +++ b/drivers/usb/typec/anx7411.c
-> @@ -16,6 +16,7 @@
->  #include <linux/of_graph.h>
->  #include <linux/of_platform.h>
->  #include <linux/pm_runtime.h>
-> +#include <linux/property.h>
->  #include <linux/regulator/consumer.h>
->  #include <linux/slab.h>
->  #include <linux/types.h>
-> @@ -1142,11 +1143,11 @@ static int anx7411_typec_port_probe(struct anx7411_data *ctx,
->  {
->  	struct typec_capability *cap = &ctx->typec.caps;
->  	struct typec_params *typecp = &ctx->typec;
-> -	struct fwnode_handle *fwnode;
->  	const char *buf;
->  	int ret, i;
-> 
-> -	fwnode = device_get_named_child_node(dev, "connector");
-> +	struct fwnode_handle *fwnode __free(fwnode_handle)
-> +				     = device_get_named_child_node(dev, "connector");
->  	if (!fwnode)
->  		return -EINVAL;
-> 
-> @@ -1237,7 +1238,7 @@ static int anx7411_typec_port_probe(struct anx7411_data *ctx,
->  		typecp->caps_flags |= HAS_SINK_WATT;
->  	}
-> 
-> -	cap->fwnode = fwnode;
-> +	cap->fwnode = no_free_ptr(fwnode);
-> 
->  	ctx->typec.role_sw = usb_role_switch_get(dev);
->  	if (IS_ERR(ctx->typec.role_sw)) {
-> --
-> 2.45.1
+Please ignore this patch,
 
--- 
-heikki
+Thanks,
+Neil
+
+> 
+>>
+>> The fixes the following:
+>> meson-gxbb-odroidc2.dtb: usb@c9100000: '#address-cells', '#size-cells', 'hub@1' do not match any of the regexes: 'pinctrl-[0-9]+'
+>> 	from schema $id: http://devicetree.org/schemas/usb/dwc2.yaml#
+>>
+>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+>> ---
+>>   Documentation/devicetree/bindings/usb/dwc2.yaml | 7 +++++++
+>>   1 file changed, 7 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/usb/dwc2.yaml b/Documentation/devicetree/bindings/usb/dwc2.yaml
+>> index 4f36a22aa6d7..9e737f587664 100644
+>> --- a/Documentation/devicetree/bindings/usb/dwc2.yaml
+>> +++ b/Documentation/devicetree/bindings/usb/dwc2.yaml
+>> @@ -177,6 +177,13 @@ properties:
+>>       minItems: 1
+>>       maxItems: 2
+>>   
+>> +  "#address-cells": true
+>> +
+>> +  "#size-cells": true
+>> +
+>> +patternProperties:
+>> +  "^.*@[0-9a-f]{1,2}$": true
+>> +
+>>   dependencies:
+>>     port: [ usb-role-switch ]
+>>     role-switch-default-mode: [ usb-role-switch ]
+>>
+>> ---
+>> base-commit: c3f38fa61af77b49866b006939479069cd451173
+>> change-id: 20240605-topic-amlogic-upstream-bindings-fixes-dwc2-subnodes-4a68ead79624
+>>
+>> Best regards,
+>> -- 
+>> Neil Armstrong <neil.armstrong@linaro.org>
+>>
+
 
