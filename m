@@ -1,130 +1,187 @@
-Return-Path: <linux-usb+bounces-10959-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10960-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F9438FE140
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2024 10:41:17 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id B00E28FE151
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2024 10:42:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 452B21C20F56
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2024 08:41:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1A509B25FF5
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2024 08:42:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF0B313C82D;
-	Thu,  6 Jun 2024 08:41:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BF4713D880;
+	Thu,  6 Jun 2024 08:41:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="iTaJJJdi"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="BV2vGp8+"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mout.web.de (mout.web.de [212.227.15.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A5AB3C28;
-	Thu,  6 Jun 2024 08:41:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A24281DDF5
+	for <linux-usb@vger.kernel.org>; Thu,  6 Jun 2024 08:41:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717663268; cv=none; b=Dmwhgn6/sb+ea8CX80/F3hwSLR/+iYfVWoZaP1mHCTC6lhg5VO0oP2LRF22TD7QJHkGPHOW7uJRdh2e4Avsu7Rb0RqMlbXa5etw3BksVj5zJE6VOMTiR+z5oMNtoLqReE52eII7LpXk0rWGXj6DocB1y91u7GLC2uICiF4Ztoy0=
+	t=1717663315; cv=none; b=c8T7TNyI8h7UeMHPeAtYAXlH9SFud8ObjE7/zFz8GnCtTSvromp2uR1/Jj8oZ5rbAwYnL4ylDQlyj5kdvKeuNx0/fyaehY4eZ4yQ4aR/WxMMXuFYBlzobecsc+qyI5bOykcZiT96gDOKAyDhklsh1B3gk3BwjmfN74IPbwnGQ04=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717663268; c=relaxed/simple;
-	bh=e/VCNqfFaWy7ItYcqEMDM5/mC8drdFcJnkaRYXy5E1o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qeqj/NPkXuv+6cz1qvmB5bnMVmVQzXprP7NY3CG/dSdQOElTRThCuu6B3Zhig5v6rGaYKkALfrZCReDJhbmdOmc0G8+nquRH+tDAJipoivnOj2I6s/GbW6fdo1m7R5b4haIxqJMCJvu61CYbbopgfSgpz7hj05GqPy8HP4QIwd8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=iTaJJJdi; arc=none smtp.client-ip=212.227.15.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1717663246; x=1718268046; i=markus.elfring@web.de;
-	bh=e/VCNqfFaWy7ItYcqEMDM5/mC8drdFcJnkaRYXy5E1o=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=iTaJJJdiHHoU2vqr6/pTK33mLIrxRUtim6UtXSwArVU0EkuO5Q1Xgldt7Z5i5xTf
-	 E4MAxX1igCPy4GxnZ3mSEbnt7ugujb1jUQ90g+44KJC5keH7fiqCofMbZ2atUYrOl
-	 uQQr47xzX77QNX0xU2qlq+vLNyBLOYNPN+GHrSDet/nj6H21ytMyZoumCXcm54J3N
-	 PIg7KdaIZ3jXmumtpW/l9k8jJ2YXtdUu1n+exJAlK4KkXtS+/ru/Y8mws751S/mmp
-	 lwlJ4kCboeBXG/UvhteMKzVgFwMZUGGppoRnEIMyUsa+JQpp1i3CZAwNQdb0bj3kP
-	 RI6B+n+uLl9LBMXt2w==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.21] ([94.31.83.95]) by smtp.web.de (mrweb006
- [213.165.67.108]) with ESMTPSA (Nemesis) id 1MsrhU-1sZ12U0G2C-010a0Z; Thu, 06
- Jun 2024 10:40:46 +0200
-Message-ID: <a3363ad5-26ff-45a6-841b-b090baa5a19d@web.de>
-Date: Thu, 6 Jun 2024 10:40:44 +0200
+	s=arc-20240116; t=1717663315; c=relaxed/simple;
+	bh=Tnid5tfB5kBNwDescW1YCizAMVKFdBOYhN6ibNA8jrc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ix3UBR3aspThUoBjfOyQx+o17KyKzYbmFSCk/AJReid5iknvu/QFHXkaRhpMTDjXY6e0MktWkqC6hOfbeNxlCT8TsVQJEMUjFBsLpHq+GcSE6SDXoHM6S0ZnFJAxclfYvPkPqQJhrT9Lu9iHvEuewqRmwZaLYx07qdD0nCLPrJk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=BV2vGp8+; arc=none smtp.client-ip=209.85.208.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2eacd7e7b38so7658551fa.2
+        for <linux-usb@vger.kernel.org>; Thu, 06 Jun 2024 01:41:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1717663311; x=1718268111; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=lboqGDLkSlZiXGaj/uzeRuz104hFq0ngZ+Ud/fj/+Ag=;
+        b=BV2vGp8+YXaLnNH1waaAKaquOhikkhb2BWhRfWW9k7Va0KXcavSwNjREuP+jVgWRLC
+         kQjGxdFGcqbd3zvl+gqz8Fcghyrx9Aqpzn8lyrBSJ9rmmgboMhMwFpY+R6FTTemamxUb
+         PbXk39YVIv3VUg2MAlbkHP7QqLUdeLPq3vtviteGDSYQHqH7bQgBr/VAbAWwIIMLzhuN
+         YcGS76bZiWWFKOLnJYMQphXg0yszLXxR6NDzfzXgAL9h+t0MVo3CJYxGmVpc/W2KPPTn
+         muuE/nh3uL5T+aX4GON7WzoiUjwUSH5rMSA8ZdSKRljIlkkcqCFN2kwr3VKScvrdNGRX
+         OKCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717663311; x=1718268111;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lboqGDLkSlZiXGaj/uzeRuz104hFq0ngZ+Ud/fj/+Ag=;
+        b=lfBbz6RUvipd6BZe/khr28jcUJRQ0F1p5TZJVS8M0fm36o7CtPYAd5mVIpflvjHEMs
+         66FWmmaDgb7Kj894GuGTDrbzKTFVNud/fMOWdh4bL7IaNMyK/ww3zPiPFMSbO+Gn/pt4
+         D7pJQIHYeDU96MNBgcGNRfpyJqJYQ5+M27zajGhdFTuoYUS5BtnGZMU5iK6MiY6zI1dt
+         MV6ZP7SMcopqfwGFGdEd1XQKgBUnh56OKy97mB+CoHJ2kmWrHYOs6febhMpeZ8KZTKx0
+         53YmPurlFHXXaODq3JvuaUnrocXSRULteMkeqEqHT8HCvCK0YbbzAlUervO7mAAXiAqW
+         u4vw==
+X-Forwarded-Encrypted: i=1; AJvYcCV3Rgh109XBAG0YKvifEqtfdxK0vbX3+RpRimDL8l4+56cyXssEXPzhMSpcJ3ko1Bujx6lOeAj44XhVrLmBFU+M+IYICPzecgt9
+X-Gm-Message-State: AOJu0YwxbULb6x3J8WbfsGWqxcvlyrHwX9QZ1aJqjNRopeUyPXlIev26
+	4GZ4LtmP83rBLlVeXwLB7H10msZ7FUNf93LHLnoLYBwp9Ccmpicv/UA4roUAgu4=
+X-Google-Smtp-Source: AGHT+IEzdn9+piYZ1x5EsTOIWqi/J/85mLEB4Nr/4e4HHjN18eVZC+5BHKwFvsEHZndySpOVd4em4g==
+X-Received: by 2002:a2e:8550:0:b0:2e6:d1fb:4470 with SMTP id 38308e7fff4ca-2eac7a832dbmr34173771fa.42.1717663310478;
+        Thu, 06 Jun 2024 01:41:50 -0700 (PDT)
+Received: from localhost ([102.222.70.76])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-57aadf9d8ddsm715207a12.1.2024.06.06.01.41.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jun 2024 01:41:50 -0700 (PDT)
+Date: Thu, 6 Jun 2024 11:41:45 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Joy Chakraborty <joychakr@google.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Bingbu Cao <bingbu.cao@intel.com>,
+	Zhihao Cheng <chengzhihao1@huawei.com>,
+	Jerome Brunet <jbrunet@baylibre.com>,
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-iio@vger.kernel.org, linux-media@vger.kernel.org,
+	linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-mtd@lists.infradead.org, linux-rtc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-amlogic@lists.infradead.org, linux-sunxi@lists.linux.dev,
+	linux-tegra@vger.kernel.org, linux-usb@vger.kernel.org,
+	manugautam@google.com
+Subject: Re: [PATCH v1 07/17] misc: eeprom: at25: Change nvmem reg_read/write
+ return type
+Message-ID: <f98a1d8f-e936-4798-8447-c642e8fe11d5@moroto.mountain>
+References: <20240605175953.2613260-1-joychakr@google.com>
+ <20240605175953.2613260-8-joychakr@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: usb: typec: anx7411: Use scope-based resource management in
- anx7411_typec_port_probe()
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Xin Ji <xji@analogixsemi.com>
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Jonathan Cameron <Jonathan.Cameron@huawei.com>
-References: <889729ac-3fc5-4666-b9f5-ce6e588a341a@web.de>
- <ZmFqWxqOsd6FxD3l@kuha.fi.intel.com>
-Content-Language: en-GB
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <ZmFqWxqOsd6FxD3l@kuha.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:XYMNeB+wdOJ+rY7H6hGuDKhAA3nTC8k5yav9AqBoPIX5FWvDPnH
- 6ApVFN7ysrNQIhsKvfWF8eYigC+mk26QUPsxczK1hO3iTxqCBa0CK4pu46VcTme5WF2kJCu
- 8CCrJNUDUzmaOmKsUBBO+DyJioOWkdDEtzVwCtyUDesLERN/gYVwty4xuNxte490MelW7kY
- JaWu0TrzB41dMqZjEzXvA==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:krzoOp3aQ5A=;zesfMb/xqfq0vCU8okDGwkUCe4q
- 1pVB9tV7kv4OE5lAC/LxHwRibJirnVTsd8mymXfoE4o3rQhxzudx1W4UXBy9X0jt9EWq5iOAz
- Kw5exO/AAJl0swJbMiT71OgSZ4TMnX+laK2ilm4zYlMbaUM/4/859jBMXkw7mYsHFh/5MLe/k
- lVoJvLAv6GBiPASdVx3bQwrPj0X/KLwPWcj1gbMv++wa5Yf5BmJLWpSmxRFwcE0yDpVrrjE7Q
- 4YemhtGbSUsGfTaU/g8JM7mIKaIqo2Qr3lwjq4WhIxuZNb6jTv/r6viJAvEu8vn5rODOedjpi
- LH7OPslCj86E3dIsGWXFTaO1HnRxF3eoed6psPfZ31lvsuLv1HKPJ38kqZf5Mq10X/M+IYRiy
- 8ea7k4CARWwtIhrzD4zO27xE8hyg5fK3jlfv+wk96M5jIsvqkZ2HBc3XfYnPbPtxkB5148Kmi
- AtYhOQvypXnJt1rqNexM1M2/179p8ctEhnYDV7Ee6IIYVKg+i7JeioDssWOtpJIEiF3/NUAZ0
- vp+lZaT7XQ1avb6Bf9mFrOXWVc5lq3h2J/86uWuIaS4Gj6Bns/qCzNdTf9Ph7QvHEtxjfxbxI
- FnAtJ3CKa5qBTyiIJ/1S5jzq4e7Khy7J/4PKIj7N/P/QIqF5KIMT+Xh4tyVYNWynaK1y7ajZt
- 53pZHOvGSEHtSG+C0Lcj/ZWHV3Za5wJ3D//JdLola6FbklRwj+G4BnGYsjxwxisbiyfoKmVJU
- 4eY42iCq3IsH2eEFE5pLpMXebuWyELR/GBeaVGly+sqVKgI3rcysLmbWwuBKxf9JVa4c5PU1m
- pjQ1rpq0thtZL2A1YnN4LlFglq46zgkrWpRCaVS56AC1w=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240605175953.2613260-8-joychakr@google.com>
 
->> Scope-based resource management became supported also for another
->> programming interface by contributions of Jonathan Cameron on 2024-02-1=
-7.
->> See also the commit 59ed5e2d505bf5f9b4af64d0021cd0c96aec1f7c ("device
->> property: Add cleanup.h based fwnode_handle_put() scope based cleanup."=
-).
->>
->> * Thus use the attribute =E2=80=9C__free(fwnode_handle)=E2=80=9D.
->>
->> * Reduce the scope for the local variable =E2=80=9Cfwnode=E2=80=9D.
->>
->> Fixes: fe6d8a9c8e64 ("usb: typec: anx7411: Add Analogix PD ANX7411 supp=
-ort")
->> Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
->
-> Was the fwnode leaked, or why else is this a "fix"? It's not clear
-> from the commit message.
-Can you notice that fwnode_handle_put() calls were forgotten
-in the mentioned function implementation?
-https://elixir.bootlin.com/linux/v6.10-rc2/source/drivers/usb/typec/anx741=
-1.c#L1140
+On Wed, Jun 05, 2024 at 05:59:51PM +0000, Joy Chakraborty wrote:
+> @@ -195,10 +195,11 @@ static struct attribute *sernum_attrs[] = {
+>  };
+>  ATTRIBUTE_GROUPS(sernum);
+>  
+> -static int at25_ee_write(void *priv, unsigned int off, void *val, size_t count)
+> +static ssize_t at25_ee_write(void *priv, unsigned int off, void *val, size_t count)
+>  {
+>  	struct at25_data *at25 = priv;
+>  	size_t maxsz = spi_max_transfer_size(at25->spi);
+> +	size_t bytes_written = count;
+>  	const char *buf = val;
+>  	int			status = 0;
+>  	unsigned		buf_size;
+> @@ -313,7 +314,7 @@ static int at25_ee_write(void *priv, unsigned int off, void *val, size_t count)
+>  	mutex_unlock(&at25->lock);
+>  
+>  	kfree(bounce);
+> -	return status;
+> +	return status < 0 ? status : bytes_written;
+>  }
 
-I propose another code cleanup accordingly.
+So the original bug was that rmem_read() is returning positive values
+on success instead of zero[1].  That started a discussion about partial
+reads which resulted in changing the API to support partial reads[2].
+That patchset broke the build.  This patchset is trying to fix the
+build breakage.
 
+[1] https://lore.kernel.org/all/20240206042408.224138-1-joychakr@google.com/
+[2] https://lore.kernel.org/all/20240510082929.3792559-2-joychakr@google.com/
 
-Will development attention grow anyhow for information in the available
-API documentation?
+The bug in rmem_read() is still not fixed.  That needs to be fixed as
+a stand alone patch.  We can discuss re-writing the API separately.
 
-Example:
-device_get_named_child_node()
-https://elixir.bootlin.com/linux/v6.10-rc2/source/drivers/base/property.c#=
-L839
+These functions are used internally and exported to the user through
+sysfs via bin_attr_nvmem_read/write().  For internal users partial reads
+should be treated as failure.  What are we supposed to do with a partial
+read?  I don't think anyone has asked for partial reads to be supported
+from sysfs either except Greg was wondering about it while reading the
+code.
 
-Regards,
-Markus
+Currently, a lot of drivers return -EINVAL for partial read/writes but
+some return success.  It is a bit messy.  But this patchset doesn't
+really improve anything.  In at24_read() we check if it's going to be a
+partial read and return -EINVAL.  Below we report a partial read as a
+full read.  It's just a more complicated way of doing exactly what we
+were doing before.
+
+drivers/misc/eeprom/at25.c
+   198  static int at25_ee_write(void *priv, unsigned int off, void *val, size_t count)
+   199  {
+   200          struct at25_data *at25 = priv;
+   201          size_t maxsz = spi_max_transfer_size(at25->spi);
+New:            size_t bytes_written = count;
+                       ^^^^^^^^^^^^^^^^^^^^^
+This is not the number of bytes written.
+
+   202          const char *buf = val;
+   203          int                     status = 0;
+   204          unsigned                buf_size;
+   205          u8                      *bounce;
+   206  
+   207          if (unlikely(off >= at25->chip.byte_len))
+   208                  return -EFBIG;
+   209          if ((off + count) > at25->chip.byte_len)
+   210                  count = at25->chip.byte_len - off;
+                        ^^^^^
+This is.
+
+   211          if (unlikely(!count))
+   212                  return -EINVAL;
+   213  
+   214          /* Temp buffer starts with command and address */
+   215          buf_size = at25->chip.page_size;
+   216          if (buf_size > io_limit)
+   217                  buf_size = io_limit;
+   218          bounce = kmalloc(buf_size + at25->addrlen + 1, GFP_KERNEL);
+   219          if (!bounce)
+   220                  return -ENOMEM;
+   221  
+
+regards,
+dan carpenter
 
