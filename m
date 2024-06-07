@@ -1,234 +1,155 @@
-Return-Path: <linux-usb+bounces-11028-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11029-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0337290095D
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2024 17:41:52 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 06A9B9009B4
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2024 17:56:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7E26C1F23AAB
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2024 15:41:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0B2BB1C2316A
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2024 15:56:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82F121991BE;
-	Fri,  7 Jun 2024 15:41:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C592199E93;
+	Fri,  7 Jun 2024 15:56:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="D25HrCpj"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BzLxpzFL"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2057.outbound.protection.outlook.com [40.107.21.57])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39C7F1667DE;
-	Fri,  7 Jun 2024 15:41:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.21.57
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717774902; cv=fail; b=rEW7qlf0e2I4NX4cF9y4UXIhnsmB9H7tgn1AEeGZ9CHGtbhJ4Vtmeq09pz7V4+cttAkzf6F/kW5e8P/7HA8QYILsS4jgv3h8tECVYwchgM46gtz7cErfnQjcoM/OQREiR+gR0X9h0XBJ+CtEAdgMZyeK3fZqRhq7Lb2k3Lg7z6c=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717774902; c=relaxed/simple;
-	bh=375alDv6D2y/YQOqZmqyEtmYGu+LeAXh9p0tA0zR+UE=;
-	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=DLwQ+k/t/MsJtZNcJurBSXEulB7gJuBmi9tmrfEXJuvuktDldzsC5fx0NnU4ku+XcI4V0yU+/2+Ll/6NpiUFYgQO/D7HNjJM2alzl3FzMvCWsM++Bu+TfwZLFpo2NEaO4xX0sPi4QSz0Luwo8druvSDTExOi5mw5wA6mbzIh1aM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b=D25HrCpj; arc=fail smtp.client-ip=40.107.21.57
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=X7f0bsRBmnDBhSZ/s6iPz+eZ/rLm0AZLrA9URT700z7r1BjuFrnu74tD9DwK4kv5rH8jlKRGJ7kw41FQXVvWKezh0kFwvoDVw+5ZrS1S9rY6tx7MwAFK2YTvOMJTg3Sc/kwwOHF6foERQ/PJyzT+gJdjOkKSh7e6OYW1nFwcKpFyYIXvQOFIG4nUOhqyu4T1rMGNmlGz9HTDOymEH8vGgF5FNNd3/cNyofFib/VVcPym0n+o0BNkHL4VAe/m6Dt5FwKzEUrmlHbcf2GZZZgEOrjlghRTM6y1hcsWJBIJpSWrBdFY70fY9DRMeBmcZL5eTmMjQnEiUyAGhGj0G8OwDQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=89I21VWJ9LAjxQ8NOx4YFHYv7JrSE7ToxeaiT69lacA=;
- b=Z5lPsANL+O+wPXCivEy5fYrYSKi+YBZh9HSi8p2XXwEd961rXbr3SL4Qi88kJXWWVpC7Xj3NazN60+8QEZNjQ4qqwobEebQCAFGacsvE33/HwnHtr7rzvndjuGvoAHdxAiPkp9rVPtDB3aHvvGDJUYZ7ia7/OteIv4VutmV+kYcfFzcnI+eAm1sgykin+2/xgVXWCB4QSMHpBCtd+g94BvliXzUiSOcvdXtb1sj+8AA3iy1PvcVC/XCffs8nw1dkHio9SW//ise1QZsM5ff6jeqgVW/dHK+mv7ajmEvUIl9fr6ujtw0MMdgUMNfr69nnW0NEyw3WNtK7PnghkqtAvA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=89I21VWJ9LAjxQ8NOx4YFHYv7JrSE7ToxeaiT69lacA=;
- b=D25HrCpjEsPVSoUfgdSR01Ar31pZRy9tDNjw76RF3FcvNgQnfQkZiNgNAAbsdVJchSC0H+tV3cnSqR6QnW5jhoN91JtmIFP6Fou8GNfngcda0H09hBwBzQ5V9L/VvRnGKDDA/FHb0oaX1X75PkMuwVLuTCqISg5VD4KlxiiKJHI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from PAXPR04MB9642.eurprd04.prod.outlook.com (2603:10a6:102:240::14)
- by AM9PR04MB8179.eurprd04.prod.outlook.com (2603:10a6:20b:3b5::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.34; Fri, 7 Jun
- 2024 15:41:37 +0000
-Received: from PAXPR04MB9642.eurprd04.prod.outlook.com
- ([fe80::9126:a61e:341d:4b06]) by PAXPR04MB9642.eurprd04.prod.outlook.com
- ([fe80::9126:a61e:341d:4b06%2]) with mapi id 15.20.7633.033; Fri, 7 Jun 2024
- 15:41:37 +0000
-From: Frank Li <Frank.Li@nxp.com>
-To: krzk@kernel.org
-Cc: Frank.Li@nxp.com,
-	conor+dt@kernel.org,
-	devicetree@vger.kernel.org,
-	gregkh@linuxfoundation.org,
-	imx@lists.linux.dev,
-	krzk+dt@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	pawell@cadence.com,
-	peter.chen@kernel.org,
-	robh@kernel.org,
-	rogerq@kernel.org
-Subject: [PATCH v2 1/1] dt-bindings: usb: cdns,usb3: use common usb-drd yaml
-Date: Fri,  7 Jun 2024 11:41:19 -0400
-Message-Id: <20240607154119.1543290-1-Frank.Li@nxp.com>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SJ0PR05CA0013.namprd05.prod.outlook.com
- (2603:10b6:a03:33b::18) To PAXPR04MB9642.eurprd04.prod.outlook.com
- (2603:10a6:102:240::14)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E74419885E;
+	Fri,  7 Jun 2024 15:56:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1717775787; cv=none; b=kMy0UVq2CObOCnU5ehg7CJSdtAwRKkZOCbOCoYE/tU8mGm7oamNN5WP/Kn04I8WG3qOfGsf2/ANLY+ZsSIYCMSM6x2F8t0AJ/e8Ytv/dr1mKTLflwIPUXbDkRXDmj1e+VQbpRX7VyjH6iIe3pCL1UjKFCNT4knk48xNxeIjdPEg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1717775787; c=relaxed/simple;
+	bh=QyCtiVbsdznSlYWboPZDIQv5by3PO7uwRbT+3Y5ZKtM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZpgA9vRTHfLoIXyS7/rXDav545xjViu/hWYaUX2UKSR3PdICoo6YwIQH9MTLoYcURkcDXyu+ztGj8f9CTtelpO0uX9bCZG2edM0Erhk1J8LsXGlK8bYUraAH8oWM+Xs/GW7cDO3Kjq5Fog1ZBn+8BvGJjTzMKmNSLZR8OzxkDUE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BzLxpzFL; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1717775785; x=1749311785;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=QyCtiVbsdznSlYWboPZDIQv5by3PO7uwRbT+3Y5ZKtM=;
+  b=BzLxpzFLS6raLIy/5L+Ac0Lf5GxXxQv7pgaZ1lJMnve1dBGtt8xw0+NT
+   HrO2yhxhCA1GYFxpk7n7dB5rs/Mnpgg39yLIlIFbbTGLKh4yLjUPCyLII
+   nwQ6u7ybT0tm6kDfnGG47bSBUDgPbHG8tPMfN+t/5Ypy7MGGNm8zW3wiB
+   bUm7ntCSu/t/2utlrYek8A5F9TfMMxZLzen51AJxcM2dO6EncXLsJAuk0
+   /l6b3KOllD3FyBbGWK+K1e7Ib0hQCarMnsPOD4vskyny8OosLpzo1mzFH
+   MaTVRiTLciHPLfX8my5Kha8r5bupneBSoFIwog43aLVbLEwX9ApjHxsXc
+   A==;
+X-CSE-ConnectionGUID: 0p8+7MUsTha5IXfZ2730LQ==
+X-CSE-MsgGUID: /grvQ6toRkOI8QrFd9ohrw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11096"; a="32048728"
+X-IronPort-AV: E=Sophos;i="6.08,221,1712646000"; 
+   d="scan'208";a="32048728"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2024 08:56:20 -0700
+X-CSE-ConnectionGUID: O7MLN+YwS7qkXvFqrSto5Q==
+X-CSE-MsgGUID: A6v6P8j/RamywGIt98zkDQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,221,1712646000"; 
+   d="scan'208";a="43495677"
+Received: from lkp-server01.sh.intel.com (HELO 472b94a103a1) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 07 Jun 2024 08:56:17 -0700
+Received: from kbuild by 472b94a103a1 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sFbws-00004s-30;
+	Fri, 07 Jun 2024 15:56:14 +0000
+Date: Fri, 7 Jun 2024 23:55:48 +0800
+From: kernel test robot <lkp@intel.com>
+To: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>, mka@chromium.org,
+	gregkh@linuxfoundation.org, javier.carrasco@wolfvision.net,
+	benjamin.bara@skidata.com, m.felsch@pengutronix.de,
+	jbrunet@baylibre.com, frieder.schrempf@kontron.de,
+	stefan.eichenberger@toradex.com, michal.simek@amd.com
+Cc: oe-kbuild-all@lists.linux.dev, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, git@amd.com,
+	Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+Subject: Re: [PATCH] usb: misc: add Microchip usb5744 SMBus programming
+ support
+Message-ID: <202406072332.qRphZq3E-lkp@intel.com>
+References: <1717676883-2876611-1-git-send-email-radhey.shyam.pandey@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB9642:EE_|AM9PR04MB8179:EE_
-X-MS-Office365-Filtering-Correlation-Id: b11a9c6b-bdbc-45e1-2923-08dc87085145
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230031|1800799015|7416005|376005|52116005|366007|38350700005;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?KcIIXmsvl1WUv507gQKs2r1/ixl/ThnfOSVnsbTsFkOxTlWfrRn57DsfUBEJ?=
- =?us-ascii?Q?nFE2Rdb47DalO83xT4+ua8nO9a/cFpNkw1RBLIEPPeWIAv9thK5wdnuDKyM4?=
- =?us-ascii?Q?N9RWgepDfePadqfBKIzyOHdf48kNp7AFoeKOxapv3Php6RYZcwnK50KG3OEo?=
- =?us-ascii?Q?7YAs2eFppzYWE7R1y5DHj9rB3GHsqU7NFL18/php6dg0NWw6RXMA+c/7xYvp?=
- =?us-ascii?Q?XxS3RiaS2UoaWNBw3sWQJ7DXEfeH8Jy6ZnSWXYrflp6dtn9E+A91wIvkKr+P?=
- =?us-ascii?Q?pE6GMKt7apLrJ2mMKH7VUD+RclMMuGRgimqDkNitn1U1sgx47EVkZOPhzFaz?=
- =?us-ascii?Q?xdf1/mgNuVlprISZulwqycFcTUEGtw5ZriU6Kcr50WRyBREBMl/cGeYACISh?=
- =?us-ascii?Q?DoXT2UnY3FtHygvASmrnTRI7449R08KQD0aEgipPkk0X2rSWkfWt9XzaBxW0?=
- =?us-ascii?Q?Ona+DIN5+Hf9m136UGMIS1x5V48vhO3Vd7ir/xLkqHQsK372rrHozeIIOeUO?=
- =?us-ascii?Q?eBy4SuuGgjIbjOKJR4AUMvwqZ98iw5oZfFwvKKuBtspkTePeX2j44GTWYSeK?=
- =?us-ascii?Q?wonStjzl3NoSb972DQbaR0rvYUuwZQgY7kcDjIWCoVSVSAOftMRY4Eri40Io?=
- =?us-ascii?Q?TrIcCPm0apcA2a54Nj6nYmoS2Cenw0diBqqajwy0EHJHhs28hFrKIgDDrWGw?=
- =?us-ascii?Q?ld2w5tdOvWVzUmiArSzEyU4KPAzTU3qJSSbXoZSqe8ICKbFM5LkpNuIlHEgH?=
- =?us-ascii?Q?C8Fy8bTOkf+XpP50krWlGmjIRbtrZB8gkHDfMYrwhkTzUVcQ0GfetS3x0MqT?=
- =?us-ascii?Q?B5YQ3EUn6Cz1LfMkV/5Dgdf6ZVVTZrDazt29NcZiRKW35VKsVs4OmQnT0hz9?=
- =?us-ascii?Q?bUdtkSOZSHHdB4V1S29wVHoRfX22RwT8rlzNXluygtmahq9qJI8wpK7c+oJt?=
- =?us-ascii?Q?C1cCsk2nkelwvCyoL1cnQOv+17V2rd/U8SogfnQ5hj2otVWAyM/YLD7x6RYW?=
- =?us-ascii?Q?saVmall1sfRpUmtGnkbxGKKJld5zlrXGIJ/qHHlcK+vJxePfRmWPPGHH6CWX?=
- =?us-ascii?Q?bDfA97bmmd2Tb383m6hNsmxxl8X9bQgtg93lyYjoKBm7IwLDjKls2tJEGk5e?=
- =?us-ascii?Q?/psqjz/+Vihm0Z3ihXx8lnquV5yI1NNANf3xEnPnZ80eBPuVm0c3vY08kyxj?=
- =?us-ascii?Q?9raLxdHLTNRWXXRKsVpj0+fq1L0rVCfWz53X5gGdGjygBwRVKjNuah7AEdr6?=
- =?us-ascii?Q?uapMnLhM///xX16HgdHc7irh4omZbROkv+glPpjD4SLqvWd4WW+gQhAYXeVZ?=
- =?us-ascii?Q?XuxrsY6zQg6AO+O9K0xSagvS1rk1tYtNwdwkccOBxOGUkQJXoAo+PV9MYbJc?=
- =?us-ascii?Q?WFUzFK4=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(1800799015)(7416005)(376005)(52116005)(366007)(38350700005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?Y38miWiLanXztJOelqofD6VG20vnrGwJF3tCcZhtzgwXmsTwna7Q6lTKBDKS?=
- =?us-ascii?Q?NsYni3HYN4pCOjNLmleJ1LKaAMaKEzxaJ6WS9ID9w7JZFAQK+6vWAuiYCk49?=
- =?us-ascii?Q?F+687H3fpHktWXgh4xQhKaXePfBYd3hplhZ2s7zZa0IJCy4PfRvXMFbeK/E3?=
- =?us-ascii?Q?DkY5XdogzTAi9DckCZdKWn9psQYxzzUXQSFRALdQzInpnWnnjF3maksuJIk1?=
- =?us-ascii?Q?4r9KKx+WS//R0E5u1D2IOxWXVCuxLo15vo9Lacj/XaOreO+mevVf9CNiKcyJ?=
- =?us-ascii?Q?QipQ5jAYX88BlkrXrk/ypKPj68DMzwrkdgQCr8PJxhS4gT1KufW5mqijbU3D?=
- =?us-ascii?Q?zbPbJY8w+F/2fjgkIcjs+rnVnbyIqV+Ek00TO43crrG64th8uGEKD8iIM1Lr?=
- =?us-ascii?Q?nu4K+UTvoUaYDJl7jwUxol0ZuUOTPavBXhgNE165HZdTY5WGBkubMpEnKGk3?=
- =?us-ascii?Q?tlL0RkdbGpDaIDl1eW06SoqKG3Pb/MA7DEM0Ctnx8FmKIMDVAO5pjUIdTL7t?=
- =?us-ascii?Q?OAskaFK3Lm+NP4I0j1fvLGa9dNu63rwAY5YWScpUUbGvypYyphNDa86sFoof?=
- =?us-ascii?Q?o0VtkHi5OAD3IjYFSvAwDSxWBvCVrE14zGt1jgAGy6gOAtrWdCYH9bxpVAjx?=
- =?us-ascii?Q?oAZNDgQ5ceC5NCObinoKzdsXhaIz71IQhdnKOeXjd3vRuS/z86CIta0LpzmR?=
- =?us-ascii?Q?7F9d0OjDjQzzWxPJeqcUcBQmMhBW8+/OfeT1a5Wt6bXJs9BDVavtFZ9jnxHU?=
- =?us-ascii?Q?X0SloVerIAB8kQR75bMVWKSTvOOq10TJZv55GnNHRNNwwgzphEDJOoLMlQTT?=
- =?us-ascii?Q?dB5BMwuqX0AGmAoWRfVzsa10SAmNi+Mx1IdV8ezYjuAmDVtKr81I5isKmck+?=
- =?us-ascii?Q?l3I43aAT+IRV2W/aIrs8liM6q7a2jYwb5b5+kN9OgKbdMHONBFJ3b4eBENHd?=
- =?us-ascii?Q?u89PR8jPnN+p7nkkFi7mPrmm9RcVQGGDaA8MXzjV1jhkJ8FdR/j5rvp1gdWr?=
- =?us-ascii?Q?AQvf+viEP4TiPb9Opuc3+e5IUkhrHgju6c9+ecqHaZra8zLVjY/Zr1cLSsJS?=
- =?us-ascii?Q?jMPswSkDI2L4MSWJku8Sy6joZuJLqfcAJJcXZBt2eDMobyyvSbbjk0+KQu6o?=
- =?us-ascii?Q?YJ7/jslVEKBdj0oskKv48UUcCUNtk6B0cV3VvGCd32YCSBm1Pn7wzdeDdJ5w?=
- =?us-ascii?Q?q1yb5A2xSnJ+uTATgB2vLLai5tpDqt4X+Q/K43F/Yxy9Sg1Ka5qrRtq4XKRi?=
- =?us-ascii?Q?8OxfKAQcoU7m7SVfR0qZ0u9+5wZKBvBSPEEWtPYwxwHHhS1a33yNTEhml0Ts?=
- =?us-ascii?Q?TK4Q2hbJd1LpokZymqxKtHrtXV1lD8HeUfU+/+MppHPnT/syZniWeEQxctpM?=
- =?us-ascii?Q?zHUhjKDoyUOH04xsqydnd7RNMa4XEp3rroi9PLHILFQRnmjeZB7sSRv13JwL?=
- =?us-ascii?Q?S9akMyzJK1nd6Iiym4NcIJcSbCZWuMornT+sSvPkvSm0ZWQ7s+rgfFPoH8Oo?=
- =?us-ascii?Q?oTymYEZyRBHYemKHnZq3Fo26e0he2SW4kSH7C7BcZZMzZxC/36YJGe6j184J?=
- =?us-ascii?Q?CND6S+U9BJFe72U9+6gYe7pb+BUgAW2hs+IgOYch?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b11a9c6b-bdbc-45e1-2923-08dc87085145
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9642.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jun 2024 15:41:37.4095
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: YR2y25h1dCIG/mCxgPbB3OmOF9E2tLjxfsGakkWzV13fDQVaZm4goJtxzmtB5KqK1Ohal9+f9wR7Wl3WcALCPg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8179
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1717676883-2876611-1-git-send-email-radhey.shyam.pandey@amd.com>
 
-Use common usb-drd yaml for usb OTG related propteries to fix below
-DTB_CHECK warning.
+Hi Radhey,
 
-arch/arm64/boot/dts/freescale/imx8qxp-mek.dtb: usb@5b110000: usb@5b120000: 'port', 'usb-role-switch' do not match any of the regexes: 'pinctrl-[0-9]+'
+kernel test robot noticed the following build warnings:
 
-Add "port" proptery to use connect type C connector and fix below warning.
-arch/arm64/boot/dts/freescale/imx8qxp-mek.dtb: usb@5b110000: usb@5b120000: Unevaluated properties are not allowed ('port' was unexpected)
+[auto build test WARNING on usb/usb-testing]
+[also build test WARNING on usb/usb-next usb/usb-linus linus/master v6.10-rc2 next-20240607]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Signed-off-by: Frank Li <Frank.Li@nxp.com>
----
+url:    https://github.com/intel-lab-lkp/linux/commits/Radhey-Shyam-Pandey/usb-misc-add-Microchip-usb5744-SMBus-programming-support/20240606-203028
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/1717676883-2876611-1-git-send-email-radhey.shyam.pandey%40amd.com
+patch subject: [PATCH] usb: misc: add Microchip usb5744 SMBus programming support
+config: i386-randconfig-063-20240607 (https://download.01.org/0day-ci/archive/20240607/202406072332.qRphZq3E-lkp@intel.com/config)
+compiler: gcc-13 (Ubuntu 13.2.0-4ubuntu3) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240607/202406072332.qRphZq3E-lkp@intel.com/reproduce)
 
-Notes:
-    change from v1 to v2
-    - add dependences
-    - remove dr-mode : true and usb-role-switch: true
-    - update commit message
-    
-    pass dt_binding_check
-    
-    make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -j8  dt_binding_check DT_SCHEMA_FILES=cdns,usb3.yaml
-      SCHEMA  Documentation/devicetree/bindings/processed-schema.json
-      CHKDT   Documentation/devicetree/bindings
-      LINT    Documentation/devicetree/bindings
-      DTEX    Documentation/devicetree/bindings/usb/cdns,usb3.example.dts
-      DTC_CHK Documentation/devicetree/bindings/usb/cdns,usb3.example.dtb
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406072332.qRphZq3E-lkp@intel.com/
 
- .../devicetree/bindings/usb/cdns,usb3.yaml        | 15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+sparse warnings: (new ones prefixed by >>)
+>> drivers/usb/misc/onboard_usb_dev.c:311:55: sparse: sparse: incorrect type in argument 3 (different base types) @@     expected unsigned short [usertype] value @@     got restricted __be16 [usertype] @@
+   drivers/usb/misc/onboard_usb_dev.c:311:55: sparse:     expected unsigned short [usertype] value
+   drivers/usb/misc/onboard_usb_dev.c:311:55: sparse:     got restricted __be16 [usertype]
+   drivers/usb/misc/onboard_usb_dev.c:316:55: sparse: sparse: incorrect type in argument 3 (different base types) @@     expected unsigned short [usertype] value @@     got restricted __be16 [usertype] @@
+   drivers/usb/misc/onboard_usb_dev.c:316:55: sparse:     expected unsigned short [usertype] value
+   drivers/usb/misc/onboard_usb_dev.c:316:55: sparse:     got restricted __be16 [usertype]
+   drivers/usb/misc/onboard_usb_dev.c: note: in included file (through include/linux/mmzone.h, include/linux/gfp.h, include/linux/xarray.h, ...):
+   include/linux/page-flags.h:240:46: sparse: sparse: self-comparison always evaluates to false
+   include/linux/page-flags.h:240:46: sparse: sparse: self-comparison always evaluates to false
+   drivers/usb/misc/onboard_usb_dev.c: note: in included file (through include/linux/mutex.h, include/linux/notifier.h, include/linux/clk.h):
+   include/linux/list.h:83:21: sparse: sparse: self-comparison always evaluates to true
 
-diff --git a/Documentation/devicetree/bindings/usb/cdns,usb3.yaml b/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
-index 69a93a0722f07..f454ddd9bbaa6 100644
---- a/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
-+++ b/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
-@@ -42,8 +42,11 @@ properties:
-       - const: otg
-       - const: wakeup
- 
--  dr_mode:
--    enum: [host, otg, peripheral]
-+  port:
-+    $ref: /schemas/graph.yaml#/properties/port
-+    description:
-+      This port is used with the 'usb-role-switch' property to connect the
-+      cdns3 to type C connector.
- 
-   maximum-speed:
-     enum: [super-speed, high-speed, full-speed]
-@@ -70,6 +73,9 @@ properties:
-     description: Enable resetting of PHY if Rx fail is detected
-     type: boolean
- 
-+dependencies:
-+  port: [ usb-role-switch ]
-+
- required:
-   - compatible
-   - reg
-@@ -77,7 +83,10 @@ required:
-   - interrupts
-   - interrupt-names
- 
--additionalProperties: false
-+allOf:
-+  - $ref: usb-drd.yaml#
-+
-+unevaluatedProperties: false
- 
- examples:
-   - |
+vim +311 drivers/usb/misc/onboard_usb_dev.c
+
+   299	
+   300	int onboard_dev_5744_i2c_init(struct i2c_client *client)
+   301	{
+   302		struct device *dev = &client->dev;
+   303		int ret;
+   304	
+   305		char wr_buf[7] = {0x00, 0x05, 0x00, 0x01, 0x41, 0x1D, 0x08};
+   306	
+   307		ret = i2c_smbus_write_block_data(client, 0, sizeof(wr_buf), wr_buf);
+   308		if (ret)
+   309			return dev_err_probe(dev, ret, "BYPASS_UDC_SUSPEND bit configuration failed\n");
+   310	
+ > 311		ret = i2c_smbus_write_word_data(client, 0x99, htons(0x3700));
+   312		if (ret)
+   313			return dev_err_probe(dev, ret, "Configuration Register Access Command failed\n");
+   314	
+   315		/* Send SMBus command to boot hub. */
+   316		ret = i2c_smbus_write_word_data(client, 0xAA, htons(0x5600));
+   317		if (ret < 0)
+   318			return dev_err_probe(dev, ret, "USB Attach with SMBus command failed\n");
+   319	
+   320		return ret;
+   321	}
+   322	
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
