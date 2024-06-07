@@ -1,174 +1,199 @@
-Return-Path: <linux-usb+bounces-11007-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11008-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 254328FFD32
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2024 09:33:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9BB1A8FFD5D
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2024 09:42:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A93DD284B00
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2024 07:33:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A34B91C21470
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2024 07:42:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E26F157A5B;
-	Fri,  7 Jun 2024 07:30:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BAD3156C6A;
+	Fri,  7 Jun 2024 07:41:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EEnoQekJ"
+	dkim=pass (2048-bit key) header.d=frida-re.20230601.gappssmtp.com header.i=@frida-re.20230601.gappssmtp.com header.b="tTcLtCpO"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A946115530F;
-	Fri,  7 Jun 2024 07:30:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E2F11C2BE
+	for <linux-usb@vger.kernel.org>; Fri,  7 Jun 2024 07:41:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717745448; cv=none; b=skcS13tdWtsUz8DehQ8fsPz1z8H6xX7fZ6W8dGHWr4mct3+AKHFdnBR9+PLMVuiw1cq8sk38mLIamp2xLvk7ZHi2Bf1GAVAvfMXkgO9mSfwFJ/rSgmIfTH48yWoflZh1y4YtWOoAtifXJaF2wDEnReVzH40zeggG/UaEwJ8ensU=
+	t=1717746116; cv=none; b=RR79TD3xQu4Tb38ExUXE7xlTw5CsdQKNnEmX4BOM+zfTh5buQuiRdEf4hE46kxGtiylZzUgfczIeArMQd2+BYrpNJgVUmPUIzz2FfylQLVKusfeSoXaj/T/D56hCRiGM+Jya18CURa7lAlylQhDBQqC/Qh+3UytG90LPemWtJxk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717745448; c=relaxed/simple;
-	bh=Z3FFAvOtY81jdbTzkmiEyBDE39rxcsFJ3zmC1SfF600=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hynK5eHjclgir6I9TGpIJkMju8Niib9Ki+JnxttMYfwJQEG9F6XDN/IoZS4kt/ozEA9nUrmF0rOROZZ05Gm/igGeql/iIRdp9xTGV9w7kT/FoPH1/+TWYV2dNCB5yf9vm0VWkAEdQvqIYxxl3Qoq6i0Gwsgg6CRVRRND7SBBynY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EEnoQekJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02F6CC4AF0C;
-	Fri,  7 Jun 2024 07:30:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717745448;
-	bh=Z3FFAvOtY81jdbTzkmiEyBDE39rxcsFJ3zmC1SfF600=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=EEnoQekJzv20W+ISchcm3xeqM/6W18gDiCqVjix0yEokK0PbYuYHq5p9Cnl6HhB23
-	 1ZDpekv8iXooWSuCZ1y/MAR3WuxkQKZ5qAAbGtDuYTcGPDayMDyq5C3OlzP0a0sda+
-	 YBK/w4xohv9p4jt+STGWLVkBEph0Aa9B7mglkycA5DdhvG9PmUAnVn6QlNya6p1y/Q
-	 RejBcdDEZkK4Ox0XZndfL3kDJDS2luboQ+MFTcG9/XZfLYfaLwzJBJGQDjvDZxEyNN
-	 LikDzCWc0EW5Mj1QOt0fbRjw2+SvSG4kwxy+CE99Q1DlaTxGlFbhgd0b3G82rnZOBv
-	 wHbFoNNiVYTWQ==
-Message-ID: <bd4e31a5-180d-40fb-88bc-e34d2a28f56b@kernel.org>
-Date: Fri, 7 Jun 2024 09:30:43 +0200
+	s=arc-20240116; t=1717746116; c=relaxed/simple;
+	bh=bxHk5juL2BwApQbEfrDkXVE6NAyGLzESh9yj98zWu7E=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=sFpS4hiLg38ZCF4gVgnmBHP9/+so9aWA1D7n6hKT1UWRYX70M+p9ufWbCITgLmb2y7uI8E5aJzpTgYYhAKE4SbAv4i1LP2x1S+qoxplwIV6pKyTAGHEdI5yvcAfdFjL+5iPb/EikU6dHGHlnkBWNmMNJlOuavevbAI8HPEy/2UU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=frida.re; spf=none smtp.mailfrom=frida.re; dkim=pass (2048-bit key) header.d=frida-re.20230601.gappssmtp.com header.i=@frida-re.20230601.gappssmtp.com header.b=tTcLtCpO; arc=none smtp.client-ip=209.85.167.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=frida.re
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=frida.re
+Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-52b88335dd7so2238758e87.1
+        for <linux-usb@vger.kernel.org>; Fri, 07 Jun 2024 00:41:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=frida-re.20230601.gappssmtp.com; s=20230601; t=1717746113; x=1718350913; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=RwY0JwFMiJzMlaWNetx19cuzpZpfePjhFAyTDmYWxao=;
+        b=tTcLtCpOCN5aAvir0/Z9s6ZJ8XHhAN49QqJGJ/6NZKs3nQzuQYBw9zztWC/cmAY8sl
+         g7x0sQr2kXS0mv0cLRbXrLT9Ibfh0SVTRhVsx4VT0IgFkB/D5BPD4C8/dIVQf6Onp7lh
+         2rNds3RQJqBbhW3x6Er8sMBzMzE+EayR36xEitYxasiTK6aYo2VdWvzwVd3QgYvCTN9n
+         N4x96egRHe8Pg93rezLjhxZPVNJWnO77RXmAAxc+bH6rRnBQlgV7gKYlgNgAT8WgHIiN
+         YV81fSjPuccSDWEfcZyB4ZoiN3RQ4ifS5pimmAupiZSzHv7CQqTvGzzfk+PhwykBp2VD
+         bhSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717746113; x=1718350913;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RwY0JwFMiJzMlaWNetx19cuzpZpfePjhFAyTDmYWxao=;
+        b=TklpCawoj5qAPmPPrq9hCEg4k85SigjVXUMKdHQHJuqDYjHFbLB+aLMWsPYRTaV7PU
+         h9YH29eOtGzUE2iFfFjt3B4/5v4zJm99l4H0XZc7wyJ1yzW0cx6Ywc6I7GGfdyNdscwq
+         4+zsU1Z7yT7ur6KCfwtdxTHM3D1vcug0FxUNE0r+u0cNfk8CALkrjsLV/mXj9KgnuV3E
+         9Rsvd9xG87JUbgO6HCyzkE5g5L5ai7oAHmd6SAA/Z/HhgN/JPU7nh8DFz1JMIBKtkzyP
+         pZUE0ry+AY/bCKJ6PjJxJolW1PIemKFr/4xYmV2t+TQ7uSSlYsEIM4hpumJMOkBnyOIR
+         eDjQ==
+X-Gm-Message-State: AOJu0Ywi5eijuaxenM/OUKPoVS5rIkxIJRUPxoNJDZfLhdw4frV3loQ/
+	g8V435ZnjDh77XMIstQ04IVXfyOVrHmryv1oFH5RQQNbdy+MU3gHHBdO7C17qiCzBoHIwLOkjGq
+	ahro=
+X-Google-Smtp-Source: AGHT+IHuE937leKgNwyYXsF7/ru7SERRnRL9LfAh13X/fheWO4uiKX17Isn3y9RyhdCSIhWwfBMSnA==
+X-Received: by 2002:a05:6512:1cd:b0:52b:7c41:698 with SMTP id 2adb3069b0e04-52bb9f6ab36mr1174486e87.18.1717746112692;
+        Fri, 07 Jun 2024 00:41:52 -0700 (PDT)
+Received: from localhost.localdomain ([109.247.171.206])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52bb41e1d6esm438251e87.11.2024.06.07.00.41.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Jun 2024 00:41:52 -0700 (PDT)
+From: =?UTF-8?q?Ole=20Andr=C3=A9=20Vadla=20Ravn=C3=A5s?= <oleavr@frida.re>
+To: linux-usb@vger.kernel.org
+Cc: oleavr@frida.re,
+	=?UTF-8?q?Ha=CC=8Avard=20S=C3=B8rb=C3=B8?= <havard@hsorbo.no>,
+	Oliver Neukum <oliver@neukum.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] CDC-NCM: add support for Apple's private interface
+Date: Fri,  7 Jun 2024 09:40:17 +0200
+Message-ID: <20240607074117.31322-1-oleavr@frida.re>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/1] dt-bindings: usb: cdns,usb3: use common usb-drd yaml
-To: Frank Li <Frank.Li@nxp.com>, Peter Chen <peter.chen@kernel.org>,
- Pawel Laszczak <pawell@cadence.com>, Roger Quadros <rogerq@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
- "open list:CADENCE USB3 DRD IP DRIVER" <linux-usb@vger.kernel.org>,
- "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS"
- <devicetree@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
-Cc: imx@lists.linux.dev
-References: <20240606161509.3201080-1-Frank.Li@nxp.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20240606161509.3201080-1-Frank.Li@nxp.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 06/06/2024 18:15, Frank Li wrote:
-> Use common usb-drd yaml for usb OTG related propteries. Allow propertry
-> "usb-role-switch" to fix below DTB_CHECK warning.
-> 
-> arch/arm64/boot/dts/freescale/imx8qxp-mek.dtb: usb@5b110000: usb@5b120000: 'port', 'usb-role-switch' do not match any of the regexes: 'pinctrl-[0-9]+'
-> 
-> Add "port" proptery to use connect type C connector and fix below warning.
-> arch/arm64/boot/dts/freescale/imx8qxp-mek.dtb: usb@5b110000: usb@5b120000: Unevaluated properties are not allowed ('port' was unexpected)
-> 
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> ---
-> 
-> Notes:
->     pass dt_binding_check
->     
->     make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -j8  dt_binding_check DT_SCHEMA_FILES=cdns,usb3.yaml
->       SCHEMA  Documentation/devicetree/bindings/processed-schema.json
->       CHKDT   Documentation/devicetree/bindings
->       LINT    Documentation/devicetree/bindings
->       DTEX    Documentation/devicetree/bindings/usb/cdns,usb3.example.dts
->       DTC_CHK Documentation/devicetree/bindings/usb/cdns,usb3.example.dtb
-> 
->  .../devicetree/bindings/usb/cdns,usb3.yaml       | 16 +++++++++++++---
->  1 file changed, 13 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/cdns,usb3.yaml b/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
-> index 69a93a0722f07..38df19bad7c41 100644
-> --- a/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
-> +++ b/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
-> @@ -42,8 +42,15 @@ properties:
->        - const: otg
->        - const: wakeup
->  
-> -  dr_mode:
-> -    enum: [host, otg, peripheral]
-> +  dr_mode: true
-> +
-> +  usb-role-switch: true
+Available on iOS/iPadOS >= 17, where this new interface is used by
+developer tools using the new RemoteXPC protocol.
 
-These two should not be needed now (usage of unevaluatedProps allows
-them), just drop them.
+This private interface lacks a status endpoint, presumably because there
+isn't a physical cable that can be unplugged, nor any speed changes to
+be notified about.
 
-> +
-> +  port:
-> +    $ref: /schemas/graph.yaml#/properties/port
-> +    description:
-> +      This port is used with the 'usb-role-switch' property  to connect the
-> +      cdns3 to type C connector.
->  
->    maximum-speed:
->      enum: [super-speed, high-speed, full-speed]
-> @@ -77,7 +84,10 @@ required:
->    - interrupts
->    - interrupt-names
+Note that NCM interfaces are not exposed until a mode switch is
+requested, which macOS does automatically.
 
-Missing dependency on "port", see other bindings like dwc2.
+The mode switch can be performed like this:
 
+        uint8_t status;
+        libusb_control_transfer(device_handle,
+                LIBUSB_RECIPIENT_DEVICE | LIBUSB_REQUEST_TYPE_VENDOR |
+                LIBUSB_ENDPOINT_IN,
+                82, /* bRequest */
+                0,  /* wValue   */
+                3,  /* wIndex   */
+                &status,
+                sizeof(status),
+                0);
 
-Best regards,
-Krzysztof
+Newer versions of usbmuxd do this automatically.
+
+Co-developed-by: Håvard Sørbø <havard@hsorbo.no>
+Signed-off-by: Håvard Sørbø <havard@hsorbo.no>
+Signed-off-by: Ole André Vadla Ravnås <oleavr@frida.re>
+---
+ drivers/net/usb/cdc_ncm.c | 47 ++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 46 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/usb/cdc_ncm.c b/drivers/net/usb/cdc_ncm.c
+index bf76ecccc2e6..d5c47a2a62dc 100644
+--- a/drivers/net/usb/cdc_ncm.c
++++ b/drivers/net/usb/cdc_ncm.c
+@@ -933,7 +933,8 @@ int cdc_ncm_bind_common(struct usbnet *dev, struct usb_interface *intf, u8 data_
+ 
+ 	cdc_ncm_find_endpoints(dev, ctx->data);
+ 	cdc_ncm_find_endpoints(dev, ctx->control);
+-	if (!dev->in || !dev->out || !dev->status) {
++	if (!dev->in || !dev->out ||
++	    (!dev->status && dev->driver_info->flags & FLAG_LINK_INTR)) {
+ 		dev_dbg(&intf->dev, "failed to collect endpoints\n");
+ 		goto error2;
+ 	}
+@@ -1925,6 +1926,34 @@ static const struct driver_info cdc_ncm_zlp_info = {
+ 	.set_rx_mode = usbnet_cdc_update_filter,
+ };
+ 
++/* Same as cdc_ncm_info, but with FLAG_SEND_ZLP */
++static const struct driver_info apple_tethering_interface_info = {
++	.description = "CDC NCM (Apple Tethering)",
++	.flags = FLAG_POINTTOPOINT | FLAG_NO_SETINT | FLAG_MULTI_PACKET
++			| FLAG_LINK_INTR | FLAG_ETHER | FLAG_SEND_ZLP,
++	.bind = cdc_ncm_bind,
++	.unbind = cdc_ncm_unbind,
++	.manage_power = usbnet_manage_power,
++	.status = cdc_ncm_status,
++	.rx_fixup = cdc_ncm_rx_fixup,
++	.tx_fixup = cdc_ncm_tx_fixup,
++	.set_rx_mode = usbnet_cdc_update_filter,
++};
++
++/* Same as apple_tethering_interface_info, but without FLAG_LINK_INTR */
++static const struct driver_info apple_private_interface_info = {
++	.description = "CDC NCM (Apple Private)",
++	.flags = FLAG_POINTTOPOINT | FLAG_NO_SETINT | FLAG_MULTI_PACKET
++			| FLAG_ETHER | FLAG_SEND_ZLP,
++	.bind = cdc_ncm_bind,
++	.unbind = cdc_ncm_unbind,
++	.manage_power = usbnet_manage_power,
++	.status = cdc_ncm_status,
++	.rx_fixup = cdc_ncm_rx_fixup,
++	.tx_fixup = cdc_ncm_tx_fixup,
++	.set_rx_mode = usbnet_cdc_update_filter,
++};
++
+ /* Same as cdc_ncm_info, but with FLAG_WWAN */
+ static const struct driver_info wwan_info = {
+ 	.description = "Mobile Broadband Network Device",
+@@ -1954,6 +1983,22 @@ static const struct driver_info wwan_noarp_info = {
+ };
+ 
+ static const struct usb_device_id cdc_devs[] = {
++	/* iPhone */
++	{ USB_DEVICE_INTERFACE_NUMBER(0x05ac, 0x12a8, 2),
++		.driver_info = (unsigned long)&apple_tethering_interface_info,
++	},
++	{ USB_DEVICE_INTERFACE_NUMBER(0x05ac, 0x12a8, 4),
++		.driver_info = (unsigned long)&apple_private_interface_info,
++	},
++
++	/* iPad */
++	{ USB_DEVICE_INTERFACE_NUMBER(0x05ac, 0x12ab, 2),
++		.driver_info = (unsigned long)&apple_tethering_interface_info,
++	},
++	{ USB_DEVICE_INTERFACE_NUMBER(0x05ac, 0x12ab, 4),
++		.driver_info = (unsigned long)&apple_private_interface_info,
++	},
++
+ 	/* Ericsson MBM devices like F5521gw */
+ 	{ .match_flags = USB_DEVICE_ID_MATCH_INT_INFO
+ 		| USB_DEVICE_ID_MATCH_VENDOR,
+-- 
+2.45.2
 
 
