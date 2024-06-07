@@ -1,115 +1,278 @@
-Return-Path: <linux-usb+bounces-11017-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11018-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 800E9900255
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2024 13:38:19 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5EB7890028F
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2024 13:46:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EF29A1F265CB
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2024 11:38:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4D9D71C22DCB
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2024 11:46:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2131A18FC6D;
-	Fri,  7 Jun 2024 11:38:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19500190673;
+	Fri,  7 Jun 2024 11:46:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QJxNMsDw"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CoZhXKKH"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44EE718F2CD
-	for <linux-usb@vger.kernel.org>; Fri,  7 Jun 2024 11:38:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFC581527A4;
+	Fri,  7 Jun 2024 11:46:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717760286; cv=none; b=WAirj8vCyG/QvL6G60QYt60/UEI5nvwEFSphzslZUuT6hckh96U4XI28J0cqQHV4uGTxu542p6q6DVuGj8Lp5E1S/je0bDoE+iZ3xyl0qq2HOE9nW32DDPCu2x5fdM4HxjRtNWahq3Hi9GdpUqTxRazUoZIgsiXgldhcDp5bA9U=
+	t=1717760792; cv=none; b=ltlV5a4+wwxC3vdbJhvdQmtwHHR2Klytb9LvWMlwfwAI6KJSlW+MDWg6k6xJaQ5AuFVwo1gbNHOqzMvpcvFicGkZaouaL4hQcUJKUPgrFTayvl/HNmYP1vv/tB54nsoT/DhG2jBojcMowHz02oK3RcwnkDNlmnAFpa5dqPsvDuM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717760286; c=relaxed/simple;
-	bh=jk8YglklVD2fYLpHtEV5say+ujQ4zFsi+OKzRdDxgvg=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:From:Subject:
-	 In-Reply-To:Content-Type; b=MK4J6YafY4SiWgM5gY9YATcp/W+m58a8ofQUi/Ag/VKOsf0eInjn83ZdkZrLaux1mGPS0h2ZFk2s3s7A2V7vsOzv9er48yVi9gya5+ZvL4Qal159b6YYEG9FNNwh5qYZDuH53Lehto8F1Q2FfOXsNRAz+VcRMBhsPnMD67/CVzU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QJxNMsDw; arc=none smtp.client-ip=198.175.65.16
+	s=arc-20240116; t=1717760792; c=relaxed/simple;
+	bh=WgoPOvpJBrjFRzJkMr0lOsjcrFohGFp24YpP2tSK04c=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=fAjEXV3hixdSBKzJkqa97qOXDyWT5bHWZ2E04lma6Z3Fu0KFvPSweYgbB9iLHDPLfoppEuzLyCYif82MRWCxlIuvnC70ojIbSopw92XdxqWCeA6C4/j++8Ecps/zBT35tUrEaKLqaT+M2qjjgnXN6PJn3L0x5GJArXMm4v6K860=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CoZhXKKH; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717760285; x=1749296285;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=jk8YglklVD2fYLpHtEV5say+ujQ4zFsi+OKzRdDxgvg=;
-  b=QJxNMsDwWv6nJHglk+oxBYuGyvdt0ASrAnhU77ZsGPuosSWPzJoT4DMo
-   OPdd8OjKwJgM0kr0fE2k37Qb90FFrgaq5b3BkxTm3SAsgiQvZjLzS/waG
-   RlNLJ7QVXGEJ0Aky/OiFbIO63H8Ioe173j8aS3SMWjqiecWujBE2QPC72
-   faBAq4zsHUSR4t4kbzk893bnMoOMWwDeGLzZkERQZgJnOCT5iPJwqKpDQ
-   tH1kFFvcOnBrqinmt6RGGgk2tFB3C03UtVV6Nye2eDgQM8+/SQ8843MB2
-   wS+aJx0tXjkUzV1vJERuD5BAvfSZNmKG5r9iGD4xl59IKD9iYIWY350tn
-   Q==;
-X-CSE-ConnectionGUID: xtyPq4BvRPaqxVQ2YZJENQ==
-X-CSE-MsgGUID: 6uePG8uRS6ugMUW9OiF5QA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11095"; a="14610626"
+  t=1717760791; x=1749296791;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=WgoPOvpJBrjFRzJkMr0lOsjcrFohGFp24YpP2tSK04c=;
+  b=CoZhXKKHANDuPBh6mFhQQ+Nm+6+uKzTjsT5V6kGS8bwoGm/AJcXeVOLm
+   A7JcjEu4peb+RSg3ifgezvZb3KlWEhNcYoJjHD7Ze+DO/OgAgPgrPtpMx
+   ExcDq3vaKlvWK+eh4SPngIk0Q3IlaQ11McSEof4vB/Ii8NQCzpX6Ir+oI
+   fzC1Vzg+MWUC6BA3N2p+r/kYQIA7JZAKQ67P8cT6hDCB3JP/9+4Zf88rF
+   0oRVa2wF7n16mUq6xwTWz4j1e+lWh00Ly9UeMwYtkYmM/JZX31WWxa9GX
+   Z113+3Otk4/DTVnEWCTRcxk0wJIu5FrWoDiR6+EfbP740LBjQEZSFHC0p
+   w==;
+X-CSE-ConnectionGUID: lLWB/BQ/SMq5f4D/w/WuGg==
+X-CSE-MsgGUID: F/M4WIOqSWCs6hs8Nkno4w==
+X-IronPort-AV: E=McAfee;i="6600,9927,11095"; a="14321039"
 X-IronPort-AV: E=Sophos;i="6.08,221,1712646000"; 
-   d="scan'208";a="14610626"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2024 04:38:05 -0700
-X-CSE-ConnectionGUID: U49kSiLNQyarla00Op2YYw==
-X-CSE-MsgGUID: g+JMbTnjQv2HMw2nlrPuDg==
+   d="scan'208";a="14321039"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2024 04:46:30 -0700
+X-CSE-ConnectionGUID: 4lKNgLrKSGCxUy3it4FE/Q==
+X-CSE-MsgGUID: +x08uut2TuWWc9SfCar14w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,221,1712646000"; 
-   d="scan'208";a="38235275"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmviesa006.fm.intel.com with ESMTP; 07 Jun 2024 04:38:03 -0700
-Message-ID: <41b21cbc-a5ff-334b-c269-d7dec248573e@linux.intel.com>
-Date: Fri, 7 Jun 2024 14:40:00 +0300
+   d="scan'208";a="38400831"
+Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.247.184])
+  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2024 04:46:24 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Fri, 7 Jun 2024 14:46:20 +0300 (EEST)
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
+    Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+    Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
+    Hans de Goede <hdegoede@redhat.com>, 
+    =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
+    Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
+    Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+    Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+    Konrad Dybcio <konrad.dybcio@linaro.org>, linux-pm@vger.kernel.org, 
+    devicetree@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
+    platform-driver-x86@vger.kernel.org, linux-usb@vger.kernel.org, 
+    linux-arm-msm@vger.kernel.org, Nikita Travkin <nikita@trvn.ru>
+Subject: Re: [PATCH v5 2/6] platform: arm64: add Lenovo Yoga C630 WOS EC
+ driver
+In-Reply-To: <20240607-yoga-ec-driver-v5-2-1ac91a0b4326@linaro.org>
+Message-ID: <3a9cb5b3-92a0-640d-baac-0429a91a669b@linux.intel.com>
+References: <20240607-yoga-ec-driver-v5-0-1ac91a0b4326@linaro.org> <20240607-yoga-ec-driver-v5-2-1ac91a0b4326@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.13.0
-Content-Language: en-US
-To: Zhangzhansheng <zhang.zhansheng@h3c.com>
-Cc: Ladislav Michl <oss-lists@triops.cz>,
- "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
- Sneeker Yeh <sneeker.yeh@gmail.com>, Wangxiaoqing <wangxiaoqing@h3c.com>,
- Xinhaining <xinhaining@h3c.com>, Zhangchun <zhang.chunA@h3c.com>,
- Alan Stern <stern@rowland.harvard.edu>
-References: <23cecbd846eb47099cf9e5bd986e434d@h3c.com>
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: =?UTF-8?Q?Re=3a_=e3=80=90=5bConsulting_about=3a_The_scsi_disk_drive?=
- =?UTF-8?Q?r_of_ub_and_storage_kernel_2=2e6=2e39_=5d=e3=80=91?=
-In-Reply-To: <23cecbd846eb47099cf9e5bd986e434d@h3c.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
 
-Hi
+On Fri, 7 Jun 2024, Dmitry Baryshkov wrote:
 
-On 7.6.2024 13.14, Zhangzhansheng wrote:
-> Mathias：
+> Lenovo Yoga C630 WOS is a laptop using Snapdragon 850 SoC. Like many
+> laptops it uses an embedded controller (EC) to perform various platform
+> operations, including, but not limited, to Type-C port control or power
+> supply handlng.
 > 
-> I am so sorry to trouble you again.
+> Add the driver for the EC, that creates devices for UCSI and power
+> supply devices.
 > 
-> As you know, the kernel 2.6.39 has two scsi drivers including the ub and the mass storage, which those respectively located at directory drivers/block/ub.c and drivers/usb/storage.
+> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> ---
+>  drivers/platform/arm64/Kconfig                 |  14 ++
+>  drivers/platform/arm64/Makefile                |   1 +
+>  drivers/platform/arm64/lenovo-yoga-c630.c      | 283 +++++++++++++++++++++++++
+>  include/linux/platform_data/lenovo-yoga-c630.h |  43 ++++
+>  4 files changed, 341 insertions(+)
 > 
-> The Ub and storage driver both can be used for USB storage driver of USB device, So I want to know which driver should be correctly used in kernel 2.6.39.
+> diff --git a/drivers/platform/arm64/Kconfig b/drivers/platform/arm64/Kconfig
+> index 8fdca0f8e909..8c103b3150d1 100644
+> --- a/drivers/platform/arm64/Kconfig
+> +++ b/drivers/platform/arm64/Kconfig
+> @@ -32,4 +32,18 @@ config EC_ACER_ASPIRE1
+>  	  laptop where this information is not properly exposed via the
+>  	  standard ACPI devices.
+>  
+> +config EC_LENOVO_YOGA_C630
+> +	tristate "Lenovo Yoga C630 Embedded Controller driver"
+> +	depends on I2C
+> +	help
+> +	  Driver for the Embedded Controller in the Qualcomm Snapdragon-based
+> +	  Lenovo Yoga C630, which provides battery and power adapter
+> +	  information.
+> +
+> +	  This driver provides battery and AC status support for the mentioned
+> +	  laptop where this information is not properly exposed via the
+> +	  standard ACPI devices.
+> +
+> +	  Say M or Y here to include this support.
+> +
+>  endif # ARM64_PLATFORM_DEVICES
+> diff --git a/drivers/platform/arm64/Makefile b/drivers/platform/arm64/Makefile
+> index 4fcc9855579b..b2ae9114fdd8 100644
+> --- a/drivers/platform/arm64/Makefile
+> +++ b/drivers/platform/arm64/Makefile
+> @@ -6,3 +6,4 @@
+>  #
+>  
+>  obj-$(CONFIG_EC_ACER_ASPIRE1)	+= acer-aspire1-ec.o
+> +obj-$(CONFIG_EC_LENOVO_YOGA_C630) += lenovo-yoga-c630.o
+> diff --git a/drivers/platform/arm64/lenovo-yoga-c630.c b/drivers/platform/arm64/lenovo-yoga-c630.c
+> new file mode 100644
+> index 000000000000..ffad8c443a13
+> --- /dev/null
+> +++ b/drivers/platform/arm64/lenovo-yoga-c630.c
 
-2.6.39 is very old, 13 years now.
-Only recommendation I can give is to update the kernel.
+> +int yoga_c630_ec_read8(struct yoga_c630_ec *ec, u8 addr)
+> +{
+> +	u8 req[2] = { LENOVO_EC_READ_REG, };
+> +	int ret;
+> +	u8 val;
+> +
+> +	scoped_guard(mutex, &ec->lock) {
+> +		req[1] = addr;
+> +		ret = yoga_c630_ec_request(ec, req, sizeof(req), &val, 1);
+> +		if (ret < 0)
+> +			return ret;
+> +	}
+> +
+> +	return val;
 
+For simple cases like this which don't do logic after the unlock, guard() 
+would be enough (I don't mind scoped_guard() myself though).
+
+> +}
+> +EXPORT_SYMBOL_GPL(yoga_c630_ec_read8);
+> +
+> +int yoga_c630_ec_read16(struct yoga_c630_ec *ec, u8 addr)
+> +{
+> +	u8 req[2] = { LENOVO_EC_READ_REG, };
+> +	int ret;
+> +	u8 msb;
+> +	u8 lsb;
+
+addr + 1 could overflow below so it would be good the return -EINVAL if 
+0xff addr is given as a parameter.
+
+> +	scoped_guard(mutex, &ec->lock) {
+> +		req[1] = addr;
+> +		ret = yoga_c630_ec_request(ec, req, sizeof(req), &lsb, 1);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		req[1] = addr + 1;
+> +		ret = yoga_c630_ec_request(ec, req, sizeof(req), &msb, 1);
+> +		if (ret < 0)
+> +			return ret;
+> +	}
+> +
+> +	return msb << 8 | lsb;
+> +}
+> +EXPORT_SYMBOL_GPL(yoga_c630_ec_read16);
+
+
+> +
+> +u16 yoga_c630_ec_ucsi_get_version(struct yoga_c630_ec *ec)
+> +{
+> +	u8 req[3] = { 0xb3, 0xf2, 0x20};
+> +	int ret;
+> +	u8 msb;
+> +	u8 lsb;
+> +
+> +	scoped_guard(mutex, &ec->lock) {
+> +		ret = yoga_c630_ec_request(ec, req, sizeof(req), &lsb, 1);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		req[2] = 0x21;
+
+Could you name 0x20 with a define and use it above and with + 1 here?
+
+> +		ret = yoga_c630_ec_request(ec, req, sizeof(req), &msb, 1);
+> +		if (ret < 0)
+> +			return ret;
+> +	}
+> +
+> +	return msb << 8 | lsb;
+> +}
+> +EXPORT_SYMBOL_GPL(yoga_c630_ec_ucsi_get_version);
+
+> diff --git a/include/linux/platform_data/lenovo-yoga-c630.h b/include/linux/platform_data/lenovo-yoga-c630.h
+> new file mode 100644
+> index 000000000000..5571dd65ce08
+> --- /dev/null
+> +++ b/include/linux/platform_data/lenovo-yoga-c630.h
+> @@ -0,0 +1,43 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) 2022-2024, Linaro Ltd
+> + * Authors:
+> + *    Bjorn Andersson
+> + *    Dmitry Baryshkov
+> + */
+> +
+> +#ifndef _LENOVO_YOGA_C630_DATA_H
+> +#define _LENOVO_YOGA_C630_DATA_H
+> +
+> +struct yoga_c630_ec;
+> +struct notifier_block;
+> +
+> +#define YOGA_C630_MOD_NAME	"lenovo_yoga_c630"
+> +
+> +#define YOGA_C630_DEV_UCSI	"ucsi"
+> +#define YOGA_C630_DEV_PSY	"psy"
+> +
+> +int yoga_c630_ec_read8(struct yoga_c630_ec *ec, u8 addr);
+> +int yoga_c630_ec_read16(struct yoga_c630_ec *ec, u8 addr);
+> +
+> +int yoga_c630_ec_register_notify(struct yoga_c630_ec *ec, struct notifier_block *nb);
+> +void yoga_c630_ec_unregister_notify(struct yoga_c630_ec *ec, struct notifier_block *nb);
+> +
+> +#define YOGA_C630_UCSI_WRITE_SIZE	8
+> +#define YOGA_C630_UCSI_CCI_SIZE		4
+> +#define YOGA_C630_UCSI_DATA_SIZE	16
+> +#define YOGA_C630_UCSI_READ_SIZE	(YOGA_C630_UCSI_CCI_SIZE + YOGA_C630_UCSI_DATA_SIZE)
+
+Add newline here.
+
+> +u16 yoga_c630_ec_ucsi_get_version(struct yoga_c630_ec *ec);
+> +int yoga_c630_ec_ucsi_write(struct yoga_c630_ec *ec,
+> +			    const u8 req[YOGA_C630_UCSI_WRITE_SIZE]);
+> +int yoga_c630_ec_ucsi_read(struct yoga_c630_ec *ec,
+> +			   u8 resp[YOGA_C630_UCSI_READ_SIZE]);
+> +
+> +#define LENOVO_EC_EVENT_USB		0x20
+> +#define LENOVO_EC_EVENT_UCSI		0x21
+> +#define LENOVO_EC_EVENT_HPD		0x22
+> +#define LENOVO_EC_EVENT_BAT_STATUS	0x24
+> +#define LENOVO_EC_EVENT_BAT_INFO	0x25
+> +#define LENOVO_EC_EVENT_BAT_ADPT_STATUS	0x37
+> +
+> +#endif
 > 
-> The question is as follow:
-> I recently use the kernel 2.6.39 scsi disk driver ub.c , encountered one deadlock issue. The root cause is that the tasklet function of ub_scsi_action(ub.c) on the CPU0
-> cutting off the CPU hardware interrupt for a long time which causing IPI interrupt sended by CPU1 without response. At the same time, the tasklet function of ub_scsi_action on CPU0 core
-> is attempting to obtain the lockA holded by the other thread task on CPU1 core which causing the lockA occurred deadlock.
 > 
-> If I replace the ub (drivers/block/ub.c ) with the mass storage (drivers/usb/storage) in kernel 2.6.39 , whether it will cause potential problem?
 
-I'm not familiar with the Ub driver at all. Looks like it was removed in v3.7 kernel.
-It doesn't make much sense for anybody to look into it anymore.
+-- 
+ i.
 
-Alan Stern would know about the mass storage driver
-
-Thanks
-Mathias
 
