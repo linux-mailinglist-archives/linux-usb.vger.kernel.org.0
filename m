@@ -1,84 +1,83 @@
-Return-Path: <linux-usb+bounces-11002-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11003-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C6988FFB70
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2024 07:50:58 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 113D48FFB75
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2024 07:52:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B7604285B5D
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2024 05:50:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1A74C1C25910
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2024 05:52:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68C5114F128;
-	Fri,  7 Jun 2024 05:50:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D11D514F111;
+	Fri,  7 Jun 2024 05:52:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="w+Kv65ke"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="o0giEob/"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 437E6200A0
-	for <linux-usb@vger.kernel.org>; Fri,  7 Jun 2024 05:50:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B79AF14EC46
+	for <linux-usb@vger.kernel.org>; Fri,  7 Jun 2024 05:52:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717739447; cv=none; b=SiYUWCqu80XJXPIQazdCbwKc3WHu3z4UMg8SLwh2XGaoMuxW2fTM9o8hz5Eou9HmjX4yd45McbyHfyCbalJwbjynxEuE+Fbs/KtJgGLvIxQZ4j/z7KWa3y3itpBvuBF5QYJ21h2To11vWg7sgEdoBTULCH0lwhPy4BsL2QCgu7o=
+	t=1717739525; cv=none; b=JfnQmmE61rBclQUrSb8If/PXR/cRLvTlBXMQ3incABzUGhdFsQtIa5vK6evXkJq/1MuTI7+eSOPAnXrqhn7DzeXu/nit2KykHLpQwKZsVKiHohCo5fNkdFLlkBYrd+RZk9KncFhgx1DPXLOoyfAocziW2OQPktAYSuCErkvj7g8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717739447; c=relaxed/simple;
-	bh=WWjnJuF2jvrWqXlg80eSCREBoaO3Hy82DlIpXP9JGCg=;
+	s=arc-20240116; t=1717739525; c=relaxed/simple;
+	bh=yjfBB9hcHm1GdPkoCIVncn5BsoZSKuknr1ecPwNeNdY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=o1o8xfSq+Vw5Ts52DZESBEV4VRh+uDHySKbJaeR7akkmj3S6H/SUwcYSTlRsw/N1kedO6jovG92TQLenp/B40Ryy3jOLrdB0UNlwWRh8aTzM1eDejZ8pkf1/5mJ823jVxaW7HcYdpx4R0a5FWM+Dx94L8q+W47QttoreLMi8AG4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=w+Kv65ke; arc=none smtp.client-ip=209.85.167.50
+	 Content-Type:Content-Disposition:In-Reply-To; b=QaTRl41EH/HnWcmNb9/8CncITj22nUzPIKRlDrBpJkQrBwzlhogGdIa5Ay45FCSRqrkVF0SaPTEcZfZPNRCvOLYOhMZcp4zeHgdaxPiHzBK5B2BBMShExZ/jryZygh/Vm1Q7i8Zb3+vusG7E3S+LUrFVr1akCSoB6ObMmLgTmiw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=o0giEob/; arc=none smtp.client-ip=209.85.167.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-52b919d214cso1682487e87.2
-        for <linux-usb@vger.kernel.org>; Thu, 06 Jun 2024 22:50:45 -0700 (PDT)
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-52b83225088so2049202e87.3
+        for <linux-usb@vger.kernel.org>; Thu, 06 Jun 2024 22:52:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1717739443; x=1718344243; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1717739522; x=1718344322; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/bqzV5tdPmmU3mHMbEPSLVv1cy1wjxHPrAkA1dFhc+c=;
-        b=w+Kv65keYiLfiaP3WdqYU8Q+diZ65p8c/RfgkobhGA6wgaWj0IT8KKYAZkj3xWU9SR
-         1AuoSHWgnTrbFLudPWqRtJmFDWsthm04HOVE9nSWD7AIJgpGYe+uSf1DT2Rq3iR9E694
-         03ABEf4W9jPwfrilvk8iH+XB29UQDMePciCQMT0TESCRAf1Pmru+lx5PdvqStYejScyu
-         WhrUhivQurnRe97qL1vlN6REikaaVoxqIWlSjscvCIwc1s/D7ozArfCHc3YvJ+L1LRZg
-         D+zxj7u1mHHNhQwgar1EPiiu16vePudiguVqlvxCyWP6Hc8Q3NT8sWCtm94n7w/R+tG9
-         Rbsw==
+        bh=6ds3YrxKC2YqkmVCc8zc0vIF7O+RXU9qkRaH97//E3s=;
+        b=o0giEob/jwm2Ovs+mK2tseP7QHjHt8I/QABq3bIFoGSkiMxSBqAz+AIzlLS7ayEfGi
+         D0eBmBNW32NCVkVa2MQdO+c7y3iW7Azzk5B8ULLZguwNX+PlpcFbNSzFE4mpsX2KNhs9
+         0eCG6v6I5SIrUJi0/0E2U7RWeKZ2ENhBtVmSnrx6RdOytDSTsYYHSAEqyP7jas9vpaOo
+         1Mf97+/M3orkRoSOEArcTDFCPjY1uT6462jH5VlDa5JCCQ+EJ2qP5DcRdotf1LPlGeZM
+         u/qR+jb+wxLVNOr8NXVHCzI52Qcv5+y+RtPpOTbCzfVt8g/iiRBHbuPA8BF3SzuCbN/W
+         o8ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717739443; x=1718344243;
+        d=1e100.net; s=20230601; t=1717739522; x=1718344322;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/bqzV5tdPmmU3mHMbEPSLVv1cy1wjxHPrAkA1dFhc+c=;
-        b=lmwHVALlqJoTwvWtAWR0ytPP5vdIdvUXw3QPxYZkWCj2MLNeeqz7+U1JstH0kDb0Ox
-         nMiLOahTxK9X4OWu6Ci/iwtuuoWf6JjYHKptW34I65fniqSl9boQx6LxAkg7vREWWj7S
-         k0TUgB0T1hoVVnZsrCYMGckRhVN+djQ4NQBTEcoxfhbHAfgaVPI+uYcTFqEpZuT+m5AW
-         tvCeR2pFZtyMO7R4gbm8T3B0cjdY/0BcVV9hnsDJTyusGrisW6XqBeYwFChWtbK/uI4K
-         hoFPJLrtpGpEcUi2wsvJTR+Nk2h55fDWh0jezfE0I27K1aC5qa71KguFj4MhFjhXfrQo
-         0/uw==
-X-Forwarded-Encrypted: i=1; AJvYcCXNST6Tx8WKKU98F7IvtopccnNsu9WJ2KD6VJ7ujIO8iuMFcOQBTOhJK5WjxVwW30wxsqJQSv3lpSWIaBy3yhbGKwjpcBJpqx8P
-X-Gm-Message-State: AOJu0YzGouxIyXb/0NuGiJN006SrvZeCqQwUSm9Ml2YPo3O1L/LM5079
-	zkCLmgOnSvB57/k+S3LlhKqCSrPXZI5lDucXx8Om5IvLUnmmUIm+9Xi50RxucJ1+1YNfjVGV5uN
-	O
-X-Google-Smtp-Source: AGHT+IG//kbk8KInPeK0rOHjQkW4NYLBs9XxNeHD41gR6HKQSJt8UwgYii5ky6wRDQTILzivuiaI7g==
-X-Received: by 2002:ac2:5297:0:b0:51b:6296:8d1a with SMTP id 2adb3069b0e04-52bb9f8e1e3mr800372e87.29.1717739443383;
-        Thu, 06 Jun 2024 22:50:43 -0700 (PDT)
+        bh=6ds3YrxKC2YqkmVCc8zc0vIF7O+RXU9qkRaH97//E3s=;
+        b=vY6oJ0ZaUbOX1rp3HAf0e+IlfROKn+D0PVMU/i0qkr9mNHCLtOmJ2fnjrYkpoP+dKx
+         yzjIQOj0MnKS2dET0kivd3kRyip1/ZGh8+x8x7Y9shpsYYAXeDiZiATXReMRAC/ApgTG
+         +0rlIfPxjB2Gip5DntOjQusSNB19Od1ospg2ch+RJ0WPP9FXGb5MPWqcn8YOHErsnqbm
+         +D4500pkHN5G94JjEDpVu7ncfcNt7k/bvcn7RhbxPEE1/Y8TlVbTtl3XY9XQaq75+yzS
+         ih3KMd3h4P61/Kube0/qoM/SIPJjUXIoriSiki7u6tebpNKyBrrhM5ET5RDGpjZa5J1l
+         VxyQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUZLd04xAAbtWXJ5LukRIF88+qwFEl4Ass9uy0VjrpjXotGH9AZX9kWAT11pNYLm79l8f9F+0fLtbhmTUMLaTf7OgWWQGFFa4Pb
+X-Gm-Message-State: AOJu0YwzxrIoxdeOjb2R//ek246JnUPW6oVK/88c4yhOzCvEPHnLn+C0
+	wVtxhTEjCbnNlckKwCUeFBWwl9sPcRifWq/TBIbeNERYvHKPOwcZlVMFHD1h9JA=
+X-Google-Smtp-Source: AGHT+IEbHhFjHS8dWeaZLLp+nTrpqYZYWMO28QUHVkRG+qJlNDvp8ryAUcl0gAoduivNTBb6mfzoFw==
+X-Received: by 2002:a19:6b14:0:b0:52b:b30e:a775 with SMTP id 2adb3069b0e04-52bb9f7704cmr941576e87.24.1717739521937;
+        Thu, 06 Jun 2024 22:52:01 -0700 (PDT)
 Received: from eriador.lumag.spb.ru (dzdbxzyyyyyyyyyyyykxt-3.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::227])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52bb423d993sm412332e87.217.2024.06.06.22.50.42
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52bb41e1acasm414342e87.27.2024.06.06.22.52.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jun 2024 22:50:42 -0700 (PDT)
-Date: Fri, 7 Jun 2024 08:50:40 +0300
+        Thu, 06 Jun 2024 22:52:01 -0700 (PDT)
+Date: Fri, 7 Jun 2024 08:51:59 +0300
 From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 To: Neil Armstrong <neil.armstrong@linaro.org>
 Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Bjorn Andersson <andersson@kernel.org>, 
 	Luca Weiss <luca.weiss@fairphone.com>, linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org, 
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/4] usb: typec-mux: nb7vpq904m: unregister typec
- switch on probe error and remove
-Message-ID: <cnqpgfjcqqedk3xqkfbjacjikc5jwktev6c3kwmbq7cwut3eyk@xqyhgi5xgzgf>
+Subject: Re: [PATCH v2 3/4] usb: typec-mux: ptn36502: broadcast typec state
+ to next mux
+Message-ID: <t76a2k62ykkzqg5kyohkufqsm3xqk33nady6zkbncbye5h7wfz@leeou6ghc77g>
 References: <20240606-topic-sm8x50-upstream-retimer-broadcast-mode-v2-0-c6f6eae479c3@linaro.org>
- <20240606-topic-sm8x50-upstream-retimer-broadcast-mode-v2-2-c6f6eae479c3@linaro.org>
+ <20240606-topic-sm8x50-upstream-retimer-broadcast-mode-v2-3-c6f6eae479c3@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -87,26 +86,31 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240606-topic-sm8x50-upstream-retimer-broadcast-mode-v2-2-c6f6eae479c3@linaro.org>
+In-Reply-To: <20240606-topic-sm8x50-upstream-retimer-broadcast-mode-v2-3-c6f6eae479c3@linaro.org>
 
-On Thu, Jun 06, 2024 at 03:11:14PM +0200, Neil Armstrong wrote:
-> Add the missing call to typec_switch_put() when probe fails and
-> the nb7vpq904m_remove() call is called.
+On Thu, Jun 06, 2024 at 03:11:15PM +0200, Neil Armstrong wrote:
+> In the Type-C graph, the ptn36502 retimer is in between the USB-C
+> connector and the USB3/DP combo PHY, and this PHY also requires the
+> USB-C mode events to properly set-up the SuperSpeed Lanes functions
+> to setup USB3-only, USB3 + DP Altmode or DP Altmode only on the 4 lanes.
 > 
-> Fixes: 348359e7c232 ("usb: typec: nb7vpq904m: Add an error handling path in nb7vpq904m_probe()")
+> Update the ptn36502 retimer to get an optional type-c mux on the next
+> endpoint, and broadcast the received mode to it.
+> 
+> Tested-by: Luca Weiss <luca.weiss@fairphone.com>
 > Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> 
 > ---
->  drivers/usb/typec/mux/nb7vpq904m.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
-
-I'd say:
-
-Fixes: 88d8f3ac9c67 ("usb: typec: add support for the nb7vpq904m Type-C Linear Redriver")
-
-Nevertheless:
+> 
+> Reported Tested by Luca in [1]
+> 
+> [1] https://lore.kernel.org/all/D1HOCBW6RG72.1B2RKGKW2Q5VC@fairphone.com/
+> ---
+>  drivers/usb/typec/mux/ptn36502.c | 24 ++++++++++++++++++++++--
+>  1 file changed, 22 insertions(+), 2 deletions(-)
+> 
 
 Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-
 
 
 -- 
