@@ -1,199 +1,207 @@
-Return-Path: <linux-usb+bounces-11008-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11009-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9BB1A8FFD5D
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2024 09:42:08 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F0309000DA
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2024 12:32:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A34B91C21470
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2024 07:42:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5F3371C22483
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2024 10:32:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BAD3156C6A;
-	Fri,  7 Jun 2024 07:41:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D77615DBBC;
+	Fri,  7 Jun 2024 10:32:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=frida-re.20230601.gappssmtp.com header.i=@frida-re.20230601.gappssmtp.com header.b="tTcLtCpO"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="wunUnyRc"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E2F11C2BE
-	for <linux-usb@vger.kernel.org>; Fri,  7 Jun 2024 07:41:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05A8612FB3B
+	for <linux-usb@vger.kernel.org>; Fri,  7 Jun 2024 10:32:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717746116; cv=none; b=RR79TD3xQu4Tb38ExUXE7xlTw5CsdQKNnEmX4BOM+zfTh5buQuiRdEf4hE46kxGtiylZzUgfczIeArMQd2+BYrpNJgVUmPUIzz2FfylQLVKusfeSoXaj/T/D56hCRiGM+Jya18CURa7lAlylQhDBQqC/Qh+3UytG90LPemWtJxk=
+	t=1717756363; cv=none; b=ITp001hhwFBoj7aRX2B06OmCFkXh6AKFcSP9EXHx+iau3IWV3Hto8AvFBw7UV9TEn37QyTRGP280Ej2YV/kJV7011h3daz0gbDacIsQBvi01qsLeCE4txEA7JdNWl/HWPoTd4vk8VCiFK3yt5Oiyh2HS/VQEZ3SKcFF36ZFtkLE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717746116; c=relaxed/simple;
-	bh=bxHk5juL2BwApQbEfrDkXVE6NAyGLzESh9yj98zWu7E=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=sFpS4hiLg38ZCF4gVgnmBHP9/+so9aWA1D7n6hKT1UWRYX70M+p9ufWbCITgLmb2y7uI8E5aJzpTgYYhAKE4SbAv4i1LP2x1S+qoxplwIV6pKyTAGHEdI5yvcAfdFjL+5iPb/EikU6dHGHlnkBWNmMNJlOuavevbAI8HPEy/2UU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=frida.re; spf=none smtp.mailfrom=frida.re; dkim=pass (2048-bit key) header.d=frida-re.20230601.gappssmtp.com header.i=@frida-re.20230601.gappssmtp.com header.b=tTcLtCpO; arc=none smtp.client-ip=209.85.167.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=frida.re
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=frida.re
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-52b88335dd7so2238758e87.1
-        for <linux-usb@vger.kernel.org>; Fri, 07 Jun 2024 00:41:54 -0700 (PDT)
+	s=arc-20240116; t=1717756363; c=relaxed/simple;
+	bh=xvt5m4Jlh1y+ovh7kSIJW1gyiD5eGzqYSOeOJW+BqiA=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=grXWPIGah8bEXv4kCNz+qI3ZNM4bsekhyjVmA+XAaczFYlXpOpfq+EMDHIRi+TyA+7G8mWE91d4CpyJ+jty/Mo3KqoLp0LuG8bJIQVZYuvNrU5o+BI/unIICEatcgeuXtWGkTZ48IH5N3zE0F+2YcJg6KRUnv0eAISXG/be0xsk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=wunUnyRc; arc=none smtp.client-ip=209.85.167.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-52b950aa47bso2932042e87.1
+        for <linux-usb@vger.kernel.org>; Fri, 07 Jun 2024 03:32:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=frida-re.20230601.gappssmtp.com; s=20230601; t=1717746113; x=1718350913; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=RwY0JwFMiJzMlaWNetx19cuzpZpfePjhFAyTDmYWxao=;
-        b=tTcLtCpOCN5aAvir0/Z9s6ZJ8XHhAN49QqJGJ/6NZKs3nQzuQYBw9zztWC/cmAY8sl
-         g7x0sQr2kXS0mv0cLRbXrLT9Ibfh0SVTRhVsx4VT0IgFkB/D5BPD4C8/dIVQf6Onp7lh
-         2rNds3RQJqBbhW3x6Er8sMBzMzE+EayR36xEitYxasiTK6aYo2VdWvzwVd3QgYvCTN9n
-         N4x96egRHe8Pg93rezLjhxZPVNJWnO77RXmAAxc+bH6rRnBQlgV7gKYlgNgAT8WgHIiN
-         YV81fSjPuccSDWEfcZyB4ZoiN3RQ4ifS5pimmAupiZSzHv7CQqTvGzzfk+PhwykBp2VD
-         bhSQ==
+        d=linaro.org; s=google; t=1717756360; x=1718361160; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5itY4RhKi9EGd/T0IPjWMpqNRJQ1/SokdqN1IoH3jZk=;
+        b=wunUnyRcFqB5j5M5rq4rAtVr1q+IwydzrlOCdmzbU58Xltaxx+R9UiNAQtDpjIeAuU
+         L/AD1i/OdrpuJIStPb41pRuVDfC6UECqpZsHIRWJ70AR1eL04fRxPcfVH7UD1VS/7DXh
+         3+78ea4VPlHlBWqgKLEhMjZCayNbReM4JDlWaUhoaZuNJLlgbVZoS3pNQLEpDZbhPwsW
+         TP4pmgjHuKoLGx08mSewTj6Noc5l/i60uwiy+xfdHGvxx3FDxOpVnKM98yMO+USO7lIe
+         1PpMDVylEiXglSkF77e1FKW/JfcDwLH+mlrnKdc6fIVyJWzfUOaahRbW2blCR16pOwR/
+         qd0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717746113; x=1718350913;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1717756360; x=1718361160;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=RwY0JwFMiJzMlaWNetx19cuzpZpfePjhFAyTDmYWxao=;
-        b=TklpCawoj5qAPmPPrq9hCEg4k85SigjVXUMKdHQHJuqDYjHFbLB+aLMWsPYRTaV7PU
-         h9YH29eOtGzUE2iFfFjt3B4/5v4zJm99l4H0XZc7wyJ1yzW0cx6Ywc6I7GGfdyNdscwq
-         4+zsU1Z7yT7ur6KCfwtdxTHM3D1vcug0FxUNE0r+u0cNfk8CALkrjsLV/mXj9KgnuV3E
-         9Rsvd9xG87JUbgO6HCyzkE5g5L5ai7oAHmd6SAA/Z/HhgN/JPU7nh8DFz1JMIBKtkzyP
-         pZUE0ry+AY/bCKJ6PjJxJolW1PIemKFr/4xYmV2t+TQ7uSSlYsEIM4hpumJMOkBnyOIR
-         eDjQ==
-X-Gm-Message-State: AOJu0Ywi5eijuaxenM/OUKPoVS5rIkxIJRUPxoNJDZfLhdw4frV3loQ/
-	g8V435ZnjDh77XMIstQ04IVXfyOVrHmryv1oFH5RQQNbdy+MU3gHHBdO7C17qiCzBoHIwLOkjGq
-	ahro=
-X-Google-Smtp-Source: AGHT+IHuE937leKgNwyYXsF7/ru7SERRnRL9LfAh13X/fheWO4uiKX17Isn3y9RyhdCSIhWwfBMSnA==
-X-Received: by 2002:a05:6512:1cd:b0:52b:7c41:698 with SMTP id 2adb3069b0e04-52bb9f6ab36mr1174486e87.18.1717746112692;
-        Fri, 07 Jun 2024 00:41:52 -0700 (PDT)
-Received: from localhost.localdomain ([109.247.171.206])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52bb41e1d6esm438251e87.11.2024.06.07.00.41.51
+        bh=5itY4RhKi9EGd/T0IPjWMpqNRJQ1/SokdqN1IoH3jZk=;
+        b=HJby+HQZANR0ibwziBgNkPSyQZepcfwGZ2z6zekqSm2ijqTysGLJH9lOQtrnMzF6SJ
+         7o26XvMy+PG1nBNe+I0X5FhzWJiWhzdISUqZvId/TlBQ+2pBZzlF5uK7JUSh4y4Vw+Ui
+         F91NxMSuepbB/dlsId++QKxXi7kaaIHqzKolggTKl7aTFBBkwGeegipFFm7TRLEaxTGk
+         JD5hnfrtiQzfD4tDJakRYx2yrttn25FogMAoq1C7iB8zRidsPUl9Y2Ttd3YQvQ8lcTvC
+         pbcwvyASEkfjceXf2veDvokJadNijEILZ8sg6X/0z/W3t56dkBhqe4N7XClRIhtQBW1I
+         YYXw==
+X-Forwarded-Encrypted: i=1; AJvYcCWpP0dGDLmH/u9UxfmMA9SpAyM/y0NKxrwidJ00FG12Eluz2P4es/Nd/FPCp05slVoC7pC2Z0gkNacp++Mml2RVOJhkeojzMGx+
+X-Gm-Message-State: AOJu0YyAzidIGCEg+CewkbIc4OTZi8bvp6YBdETo+F7GpJxtet6qabRy
+	gABGaLJfPPvGUPfRw9+xvkRroRj7BsdaYFVCdIPnynI0pahqQO7xE03EUswSMq0=
+X-Google-Smtp-Source: AGHT+IHhod+l49aRiiKMj7mDaCpAkinn0yA7FL4cBp5PJtT0eHAkde4rBn/etlB/H1vtvFvVoUJuHg==
+X-Received: by 2002:a19:5e4a:0:b0:523:88d8:67cf with SMTP id 2adb3069b0e04-52bb9f81522mr1189290e87.36.1717756360045;
+        Fri, 07 Jun 2024 03:32:40 -0700 (PDT)
+Received: from umbar.lan ([192.130.178.91])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52bb433ccdbsm483448e87.283.2024.06.07.03.32.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jun 2024 00:41:52 -0700 (PDT)
-From: =?UTF-8?q?Ole=20Andr=C3=A9=20Vadla=20Ravn=C3=A5s?= <oleavr@frida.re>
-To: linux-usb@vger.kernel.org
-Cc: oleavr@frida.re,
-	=?UTF-8?q?Ha=CC=8Avard=20S=C3=B8rb=C3=B8?= <havard@hsorbo.no>,
-	Oliver Neukum <oliver@neukum.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] CDC-NCM: add support for Apple's private interface
-Date: Fri,  7 Jun 2024 09:40:17 +0200
-Message-ID: <20240607074117.31322-1-oleavr@frida.re>
-X-Mailer: git-send-email 2.45.2
+        Fri, 07 Jun 2024 03:32:39 -0700 (PDT)
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: [PATCH v5 0/6] power: supply: Lenovo Yoga C630 EC
+Date: Fri, 07 Jun 2024 13:32:35 +0300
+Message-Id: <20240607-yoga-ec-driver-v5-0-1ac91a0b4326@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAMPhYmYC/3WOy2rDMBAAfyXo3DWyHpbSU/+j5LCJVrZoY5WVE
+ THB/145UEgpPc5hhrmLQpyoiNfDXTDVVFKeG9iXg7hMOI8EKTQWSiojrXKw5hGBLhA4VWJwQww
+ u2hCQvGjSF1NMt0fw/dQ4cr7CMjHhT0ZLJW1vlZfHTimtjR6gh3BNC6/dGXkt00eub59pRs5d5
+ nHPTqksmdfHZtV7/N+jqkGCVg6P3vYBg31O7UvVPPv+j2+abyL6EBHJnYdf/rZt38MjJcY0AQA
+ A
+To: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
+ Hans de Goede <hdegoede@redhat.com>, 
+ =?utf-8?q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org, 
+ linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+ Nikita Travkin <nikita@trvn.ru>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4434;
+ i=dmitry.baryshkov@linaro.org; h=from:subject:message-id;
+ bh=xvt5m4Jlh1y+ovh7kSIJW1gyiD5eGzqYSOeOJW+BqiA=;
+ b=owEBbQGS/pANAwAKAYs8ij4CKSjVAcsmYgBmYuHG/5FW+we87ynSKCH/7Psskmx4E6tEpczmM
+ uz37tA+3DSJATMEAAEKAB0WIQRMcISVXLJjVvC4lX+LPIo+Aiko1QUCZmLhxgAKCRCLPIo+Aiko
+ 1Y+7B/9XoTuBxr2ReB46vcPQzaeoAQ7xneC9zq117TItcNWQbvHvqqE7rL2/bzOomGmUBRT7315
+ LkhdpEfW2pfjw6RkrTnrZOuF8qWq1dtmKT9BhQlELc4JAYlB0kt3n6aCGyzRG8WKwpkCh3bOTr2
+ qDuuOF6Ie5RvmM+0xSGyHbxbfuIyu/Ti4xygWE0kVuICgrlX6VMUcI4IfWGYa8MNjUjXBdyKbHy
+ TT5l14fuM29YMiaWL13t6VrCc6LfQbXgigZNANTl59BcuBX09lAfhmzDSYc5/Vm0WZjFpVAoVuD
+ mTYHgV20Q/avwzNYdXoxppccPFBux3wniJG9vB86O5HbL/fJ
+X-Developer-Key: i=dmitry.baryshkov@linaro.org; a=openpgp;
+ fpr=8F88381DD5C873E4AE487DA5199BF1243632046A
 
-Available on iOS/iPadOS >= 17, where this new interface is used by
-developer tools using the new RemoteXPC protocol.
+This adds binding, driver and the DT support for the Lenovo Yoga C630
+Embedded Controller, to provide battery information.
 
-This private interface lacks a status endpoint, presumably because there
-isn't a physical cable that can be unplugged, nor any speed changes to
-be notified about.
+Support for this EC was implemented by Bjorn, who later could not work
+on this driver. I've picked this patchset up and updated it following
+the pending review comments.
 
-Note that NCM interfaces are not exposed until a mode switch is
-requested, which macOS does automatically.
+DisplayPort support is still not a part of this patchset. It uses EC
+messages to provide AltMode information rather than implementing
+corresponding UCSI commands. However to have a cleaner uAPI story, the
+AltMode should be handled via the same Type-C port.
 
-The mode switch can be performed like this:
+Merge strategy: the driver bits depend on the platform/arm64 patch,
+which adds interface for the subdrivers. I'd either ask to get that
+patch merged to the immutable branch, which then can be picked up by
+power/supply and USB trees or, to make life simpler, ack merging all
+driver bits e.g. through USB subsystem (I'm biased here since I plan to
+send more cleanups for the UCSI subsystem, which would otherwise result
+in cross-subsystem conflicts).
 
-        uint8_t status;
-        libusb_control_transfer(device_handle,
-                LIBUSB_RECIPIENT_DEVICE | LIBUSB_REQUEST_TYPE_VENDOR |
-                LIBUSB_ENDPOINT_IN,
-                82, /* bRequest */
-                0,  /* wValue   */
-                3,  /* wIndex   */
-                &status,
-                sizeof(status),
-                0);
-
-Newer versions of usbmuxd do this automatically.
-
-Co-developed-by: Håvard Sørbø <havard@hsorbo.no>
-Signed-off-by: Håvard Sørbø <havard@hsorbo.no>
-Signed-off-by: Ole André Vadla Ravnås <oleavr@frida.re>
 ---
- drivers/net/usb/cdc_ncm.c | 47 ++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 46 insertions(+), 1 deletion(-)
+Changes in v5:
+- Added missing article in the commit message (Bryan)
+- Changed yoga_c630_ec_ucsi_get_version() to explicitly set the register
+  instead of just incrementing it (Bryan)
+- Dropped spurious debugging pr_info (Bryan)
+- Added missing includes all over the place (Ilpo)
+- Switched to scoped_guard() where it's suitable (Ilpo)
+- Defined register bits (Ilpo, Bryan)
+- Whitespace cleanup (Ilpo, Bryan)
+- Reworked yoga_c630_ucsi_notify() to use switch-case (Bryan)
+- Use ternary operators instead of if()s (Ilpo)
+- Switched power supply driver to use fwnode (Sebastian)
+- Fixed handling of the adapter's type vs usb_type (Sebastian)
+- Added SCOPE property to the battery (Sebastian)
+- Link to v4: https://lore.kernel.org/r/20240528-yoga-ec-driver-v4-0-4fa8dfaae7b6@linaro.org
 
-diff --git a/drivers/net/usb/cdc_ncm.c b/drivers/net/usb/cdc_ncm.c
-index bf76ecccc2e6..d5c47a2a62dc 100644
---- a/drivers/net/usb/cdc_ncm.c
-+++ b/drivers/net/usb/cdc_ncm.c
-@@ -933,7 +933,8 @@ int cdc_ncm_bind_common(struct usbnet *dev, struct usb_interface *intf, u8 data_
- 
- 	cdc_ncm_find_endpoints(dev, ctx->data);
- 	cdc_ncm_find_endpoints(dev, ctx->control);
--	if (!dev->in || !dev->out || !dev->status) {
-+	if (!dev->in || !dev->out ||
-+	    (!dev->status && dev->driver_info->flags & FLAG_LINK_INTR)) {
- 		dev_dbg(&intf->dev, "failed to collect endpoints\n");
- 		goto error2;
- 	}
-@@ -1925,6 +1926,34 @@ static const struct driver_info cdc_ncm_zlp_info = {
- 	.set_rx_mode = usbnet_cdc_update_filter,
- };
- 
-+/* Same as cdc_ncm_info, but with FLAG_SEND_ZLP */
-+static const struct driver_info apple_tethering_interface_info = {
-+	.description = "CDC NCM (Apple Tethering)",
-+	.flags = FLAG_POINTTOPOINT | FLAG_NO_SETINT | FLAG_MULTI_PACKET
-+			| FLAG_LINK_INTR | FLAG_ETHER | FLAG_SEND_ZLP,
-+	.bind = cdc_ncm_bind,
-+	.unbind = cdc_ncm_unbind,
-+	.manage_power = usbnet_manage_power,
-+	.status = cdc_ncm_status,
-+	.rx_fixup = cdc_ncm_rx_fixup,
-+	.tx_fixup = cdc_ncm_tx_fixup,
-+	.set_rx_mode = usbnet_cdc_update_filter,
-+};
-+
-+/* Same as apple_tethering_interface_info, but without FLAG_LINK_INTR */
-+static const struct driver_info apple_private_interface_info = {
-+	.description = "CDC NCM (Apple Private)",
-+	.flags = FLAG_POINTTOPOINT | FLAG_NO_SETINT | FLAG_MULTI_PACKET
-+			| FLAG_ETHER | FLAG_SEND_ZLP,
-+	.bind = cdc_ncm_bind,
-+	.unbind = cdc_ncm_unbind,
-+	.manage_power = usbnet_manage_power,
-+	.status = cdc_ncm_status,
-+	.rx_fixup = cdc_ncm_rx_fixup,
-+	.tx_fixup = cdc_ncm_tx_fixup,
-+	.set_rx_mode = usbnet_cdc_update_filter,
-+};
-+
- /* Same as cdc_ncm_info, but with FLAG_WWAN */
- static const struct driver_info wwan_info = {
- 	.description = "Mobile Broadband Network Device",
-@@ -1954,6 +1983,22 @@ static const struct driver_info wwan_noarp_info = {
- };
- 
- static const struct usb_device_id cdc_devs[] = {
-+	/* iPhone */
-+	{ USB_DEVICE_INTERFACE_NUMBER(0x05ac, 0x12a8, 2),
-+		.driver_info = (unsigned long)&apple_tethering_interface_info,
-+	},
-+	{ USB_DEVICE_INTERFACE_NUMBER(0x05ac, 0x12a8, 4),
-+		.driver_info = (unsigned long)&apple_private_interface_info,
-+	},
-+
-+	/* iPad */
-+	{ USB_DEVICE_INTERFACE_NUMBER(0x05ac, 0x12ab, 2),
-+		.driver_info = (unsigned long)&apple_tethering_interface_info,
-+	},
-+	{ USB_DEVICE_INTERFACE_NUMBER(0x05ac, 0x12ab, 4),
-+		.driver_info = (unsigned long)&apple_private_interface_info,
-+	},
-+
- 	/* Ericsson MBM devices like F5521gw */
- 	{ .match_flags = USB_DEVICE_ID_MATCH_INT_INFO
- 		| USB_DEVICE_ID_MATCH_VENDOR,
+Changes in v4:
+- Moved bindings to platform/ to follow example of other Acer Aspire1 EC
+  (Nikita Travkin)
+- Fixed dt validation for EC interrupt pin (Rob Herring)
+- Dropped separate 'scale' property (Oliver Neukum)
+- Link to v3: https://lore.kernel.org/r/20240527-yoga-ec-driver-v3-0-327a9851dad5@linaro.org
+
+Changes in v3:
+- Split the driver into core and power supply drivers,
+- Added UCSI driver part, handling USB connections,
+- Fixed Bjorn's address in DT bindings (Brian Masney)
+- Changed power-role for both ports to be "dual" per UCSI
+- Link to v2: https://lore.kernel.org/linux-arm-msm/20230205152809.2233436-1-dmitry.baryshkov@linaro.org/
+
+Changes in v2:
+- Dropped DP support for now, as the bindings are in process of being
+  discussed separately,
+- Merged dt patch into the same patchseries,
+- Removed the fixed serial number battery property,
+- Fixed indentation of dt bindings example,
+- Added property: reg and unevaluatedProperties to the connector
+  bindings.
+- Link to v1: https://lore.kernel.org/linux-arm-msm/20220810035424.2796777-1-bjorn.andersson@linaro.org/
+
+---
+Bjorn Andersson (2):
+      dt-bindings: platform: Add Lenovo Yoga C630 EC
+      arm64: dts: qcom: c630: Add Embedded Controller node
+
+Dmitry Baryshkov (4):
+      platform: arm64: add Lenovo Yoga C630 WOS EC driver
+      usb: typec: ucsi: add Lenovo Yoga C630 glue driver
+      power: supply: lenovo_yoga_c630_battery: add Lenovo C630 driver
+      arm64: dts: qcom: sdm845: describe connections of USB/DP port
+
+ .../bindings/platform/lenovo,yoga-c630-ec.yaml     |  83 ++++
+ arch/arm64/boot/dts/qcom/sdm845.dtsi               |  53 ++-
+ .../boot/dts/qcom/sdm850-lenovo-yoga-c630.dts      |  75 ++++
+ drivers/platform/arm64/Kconfig                     |  14 +
+ drivers/platform/arm64/Makefile                    |   1 +
+ drivers/platform/arm64/lenovo-yoga-c630.c          | 283 ++++++++++++
+ drivers/power/supply/Kconfig                       |   9 +
+ drivers/power/supply/Makefile                      |   1 +
+ drivers/power/supply/lenovo_yoga_c630_battery.c    | 500 +++++++++++++++++++++
+ drivers/usb/typec/ucsi/Kconfig                     |   9 +
+ drivers/usb/typec/ucsi/Makefile                    |   1 +
+ drivers/usb/typec/ucsi/ucsi_yoga_c630.c            | 202 +++++++++
+ include/linux/platform_data/lenovo-yoga-c630.h     |  43 ++
+ 13 files changed, 1273 insertions(+), 1 deletion(-)
+---
+base-commit: ee78a17615ad0cfdbbc27182b1047cd36c9d4d5f
+change-id: 20240527-yoga-ec-driver-76fd7f5ddae8
+
+Best regards,
 -- 
-2.45.2
+Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
 
