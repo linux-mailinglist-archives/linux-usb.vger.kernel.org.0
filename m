@@ -1,176 +1,133 @@
-Return-Path: <linux-usb+bounces-10993-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-10994-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D6BC8FF661
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2024 23:07:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E7C88FF85D
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2024 02:01:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 15101288389
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2024 21:07:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1AE76283BB1
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2024 00:01:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9A4319753B;
-	Thu,  6 Jun 2024 21:06:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A4A2A48;
+	Fri,  7 Jun 2024 00:01:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=exalondelft.nl header.i=@exalondelft.nl header.b="LGM/SHI3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fwmfw6QY"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailfilter05-out30.webhostingserver.nl (mailfilter05-out30.webhostingserver.nl [195.211.73.139])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1EF26A33B
-	for <linux-usb@vger.kernel.org>; Thu,  6 Jun 2024 21:06:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=195.211.73.139
-ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717708012; cv=pass; b=gDNgulQJoPmLcvL3NZ/onw860zzg+DRSwNhk3GR6cDa9IP+P+tyXIZfJLpJIVI5sZR3D+a5xK0r9CC6VYCMPu553HDYR0usPhU72WclLHxAUCdU8CILsDkWn6Je0GHi2T8Gk+ftohYcRFPkUgvEF6Yxu/8GPGgBfPTfjmc153/w=
-ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717708012; c=relaxed/simple;
-	bh=2LfGQsiTfKh7G/p03O+Vr+UYtMgWtbnVWvSWFL9ixwc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=iETnmMGg7qrjKUN8wfCIjJp+rzYHhkXyHwVYAlvVErSWVWYDDV23577JCxOostiE680O81h9y5HyjyBRMdRs4DLEXpGOdByPPYxb44GHXgFyJ8omZ97ArC/JzitNDtdN97W+oJOgQtYw6H3h79y1awCIh/KPOxt+C2YmVQewjwU=
-ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=exalondelft.nl; spf=pass smtp.mailfrom=exalondelft.nl; dkim=pass (2048-bit key) header.d=exalondelft.nl header.i=@exalondelft.nl header.b=LGM/SHI3; arc=pass smtp.client-ip=195.211.73.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=exalondelft.nl
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=exalondelft.nl
-ARC-Seal: i=2; a=rsa-sha256; t=1717707942; cv=pass;
-	d=webhostingserver.nl; s=whs1;
-	b=Lx1EwviNzU8Ka+W/2IBHCdBXZMMU0gALqLEXd4x2efXAUgHR9mWw04STFQCR0LXN2QlSuLfpdgUl2
-	 LWKzkWrJ0bDRXp3aFE8YbIgn+m4f6fDWg+fimtRceidWs/tTb1zpnLLa75SNgElk7RssTJkQgNX+WA
-	 Ae/jLrhPhaSxYNNIo0+yP4jn/w4Xkr8OSVl7TtmTweezv/N28YwP7d5kEswvEScZmOWztePSTgrrpQ
-	 FJTk6DVBYfeKytc6yQVq1fy+a7DkGLz24iRs3Xkz07i4lxqz4ugXXx6JfTD3y7EjMvINxCSUqpGsge
-	 rWYcwblUseCQykuA/L5sRqX6Emlw46Q==
-ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed;
-	d=webhostingserver.nl; s=whs1;
-	h=content-transfer-encoding:mime-version:references:in-reply-to:message-id:date:
-	 subject:cc:to:from:dkim-signature:from;
-	bh=FsLnuFLGe0haxXdGehDFQL/y8+K9ZmLXTG4uRUF1/zo=;
-	b=bEEb+jbTmBSZsQdvYYsT0BKZSgkaZDrQlVQpIqIT97ZUAlg/DWoFhrc1qVxgKV75ltJGOkFxyCj5d
-	 +maXd/waTOdJDLcShonIe27zo+cFKifwH0z4X1nhvagB+8gKzo0DVdZnaR710v1uwycOiHMGVJ+HAW
-	 2DsbaTJ1uPu5rkiNdgcSt3DB+xKeYasgvFoawItyKXGeijdN5OqITQJ+mWacyE5VUTVw5+m/wQD2kM
-	 lVFA9XECRl63t2f5KF+DKbGCvk9BMF6kMrLKh1SwvkNzvQZlUwrzxCM7raZEpESu/z394CZowJMUUH
-	 hr2sWKzarovZ1pAq0GI341oJd6v9+3A==
-ARC-Authentication-Results: i=2; mailfilter05.webhostingserver.nl;
-	spf=pass smtp.mailfrom=exalondelft.nl smtp.remote-ip=141.138.168.154;
-	dmarc=pass header.from=exalondelft.nl;
-	arc=pass header.oldest-pass=0;
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=exalondelft.nl; s=whs1;
-	h=content-transfer-encoding:mime-version:references:in-reply-to:message-id:date:
-	 subject:cc:to:from:from;
-	bh=FsLnuFLGe0haxXdGehDFQL/y8+K9ZmLXTG4uRUF1/zo=;
-	b=LGM/SHI32TNJKiE3G9kJNz7clO/8LLwCawXsXW7xErcuDqIOJLVWb8Vga4qlVKl6HZ+eSZj56pBSo
-	 xVoFv6gaBTnuQwv0k7Qe5nSjHaINPPVRZx/oro0BqQrSWyJagleE1OM0HHQVl4LUMYOQKUAS7TwwZ0
-	 wLPikjmKJqhlhWyEoVawizIlU+fCOYm58c4wBlgvloKljokxFEwnSozehlTXg0ele1THfQSJdRuIfs
-	 YCeiRtkxSFBa2+JO8hMW7oG9FNKYZuxEVB3nCVD6POcJOwYr/B9nT9ZXV5Y9HCR3JgZS8ftEddijxQ
-	 2+VYZd99zGrV/P9H8hGFgMYzG0C6CTA==
-X-Halon-ID: 878ee013-2448-11ef-9554-001a4a4cb933
-Received: from s198.webhostingserver.nl (s198.webhostingserver.nl [141.138.168.154])
-	by mailfilter05.webhostingserver.nl (Halon) with ESMTPSA
-	id 878ee013-2448-11ef-9554-001a4a4cb933;
-	Thu, 06 Jun 2024 23:05:40 +0200 (CEST)
-ARC-Seal: i=1; cv=none; a=rsa-sha256; d=webhostingserver.nl; s=whs1; t=1717707940;
-	 b=jVFg5tSPgeZJgpR42u9PofkZ2CoOYxrsE7PpLuVZSA6KvR+rZGaoQK90HOxWjiVHqz/z9w728/
-	  5aOpbhx1P1kaXMuvx5okbRJS6L3/18F6Lnfb7Gfo7Z5UUKRBTFs68DAwyBUbheFRpXtt6g1QJe
-	  ub7oQiOObFBKuIO0vT5iJyifMkH3Dga1SSXfnFCe00Rb1mKp1TWf12hoKUq9/WLbhNcMVbYS1O
-	  JcTeWJz5mz/p3+R7Gl21Y6vnu9GkGzOXXz5zTDQxsEfo34SMvexzLNPEMkW3ELaPgFGretU43+
-	  tZcEqWgSQoOdwuK4nU5GWrT3zwSWVIpj86JVqdWduC21Ng==;
-ARC-Authentication-Results: i=1; webhostingserver.nl; smtp.remote-ip=2a02:a466:68ed:1:d680:309e:9a32:ec62;
-	iprev=pass (2a02-a466-68ed-1-d680-309e-9a32-ec62.fixed6.kpn.net) smtp.remote-ip=2a02:a466:68ed:1:d680:309e:9a32:ec62;
-	auth=pass (PLAIN) smtp.auth=ferry.toth@elsinga.info;
-	spf=softfail smtp.mailfrom=exalondelft.nl;
-	dmarc=skipped header.from=exalondelft.nl;
-	arc=none
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed; d=webhostingserver.nl; s=whs1; t=1717707940;
-	bh=2LfGQsiTfKh7G/p03O+Vr+UYtMgWtbnVWvSWFL9ixwc=;
-	h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:
-	  Date:Subject:Cc:To:From;
-	b=gWl5B4q5+s++MRB8Ib8PpyVSYjWKVF2vNydZ7d32FeeJEpJGQTfNJr3wINMlcJsZDnegrYpW+a
-	  JHoQj82ra4e4WP18M4xo3sLE+8CMfHUOPx9z/J+RfI1c1+47DVXsKU9RFuRP2RHWJ+XX+55Mxg
-	  PClkyFnqdFpL5lmt9F44ZmJSyIPIPgy/Og7UURv+8+QwlYNau2saKqC6hABQxvRGCpt3K010r1
-	  qcGw2qcH+2WxLiMyjGnMsD7W8ktGgCY277begy/V+eWnwwm8G3OIMGgkVkHr2oQROHZQGetIio
-	  5Qv/CuqSRL4HuS/GP5/TumwVQ7xJo0TdpAm4efXRTn0z7g==;
-Authentication-Results: webhostingserver.nl;
-	iprev=pass (2a02-a466-68ed-1-d680-309e-9a32-ec62.fixed6.kpn.net) smtp.remote-ip=2a02:a466:68ed:1:d680:309e:9a32:ec62;
-	auth=pass (PLAIN) smtp.auth=ferry.toth@elsinga.info;
-	spf=softfail smtp.mailfrom=exalondelft.nl;
-	dmarc=skipped header.from=exalondelft.nl;
-	arc=none
-Received: from 2a02-a466-68ed-1-d680-309e-9a32-ec62.fixed6.kpn.net ([2a02:a466:68ed:1:d680:309e:9a32:ec62] helo=submission)
-	by s198.webhostingserver.nl with esmtpa (Exim 4.97.1)
-	(envelope-from <ftoth@exalondelft.nl>)
-	id 1sFKIm-0000000APHI-0BCC;
-	Thu, 06 Jun 2024 23:05:40 +0200
-From: Ferry Toth <ftoth@exalondelft.nl>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Ricardo B. Marliere" <ricardo@marliere.net>,
-	Kees Cook <kees@kernel.org>,
-	Linyu Yuan <quic_linyyuan@quicinc.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Ferry Toth <ftoth@exalondelft.nl>,
-	Richard Acayan <mailingradian@gmail.com>,
-	Hardik Gajjar <hgajjar@de.adit-jv.com>,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Andy Shevchenko <andriy.shevchenko@intel.com>,
-	s.hauer@pengutronix.de,
-	jonathanh@nvidia.com,
-	paul@crapouillou.net,
-	quic_eserrao@quicinc.com,
-	erosca@de.adit-jv.com,
-	regressions@leemhuis.info,
-	Ferry Toth <fntoth@gmail.com>,
-	stable@vger.kernel.org
-Subject: [PATCH v1 2/2] Revert "usb: gadget: u_ether: Replace netif_stop_queue with netif_device_detach"
-Date: Thu,  6 Jun 2024 23:02:32 +0200
-Message-ID: <20240606210436.54100-3-ftoth@exalondelft.nl>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240606210436.54100-1-ftoth@exalondelft.nl>
-References: <20240606210436.54100-1-ftoth@exalondelft.nl>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80C95363
+	for <linux-usb@vger.kernel.org>; Fri,  7 Jun 2024 00:01:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1717718486; cv=none; b=YxQ7EUo9/zgyrgYCfZbmdGAQrM3pYm5YnJTVrU+mYSkOxh/tD2Fu9hWGFzmIe80h1tzHTYcaGu+nGdut53SO/5c5MosfED51AGw18gK5GyptppvLvmiT86T6pjo1cwLXpJpepLvl/fdkOnAvF7esZqW5Fe9Nh++bYRKsri42JPc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1717718486; c=relaxed/simple;
+	bh=+l3AdUbOxmm/gkE4u2/97ypeNNaDcCvTfwY+0gJtquw=;
+	h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version; b=YrEOoXXtFIiHL30iyC2Ud+GBNev2mVK3oxOcEBAyG52/FTSEJAZzJ7G5QemJeO/u32YKpg8LKlareJtz5c8Y6Bl83BJe/Hq0mxJPZ1yIMlXX8jTiPSjB0KmjgbcRAa2DQEH6wdBOntj8SlKKNS8hCwv+zJn+st+uEhJQ8vnZBTs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Fwmfw6QY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 34F03C2BD10
+	for <linux-usb@vger.kernel.org>; Fri,  7 Jun 2024 00:01:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1717718486;
+	bh=+l3AdUbOxmm/gkE4u2/97ypeNNaDcCvTfwY+0gJtquw=;
+	h=From:To:Subject:Date:From;
+	b=Fwmfw6QYxZpazCOSn33oxM0YuKCjpnbgK8ZYDm46UjZ45k/GGQOH1Ue8KLwxzWdm0
+	 VpFltvUYLuK4Ay655gM81QC56d7UlFPk+X1HJYSGq/GnQ/WCpRY6a2jsJu6nDRlH4a
+	 TH88nEf5CTWLtaGQGA3mm+JbgrrInfwtPSJ8ots592lP8p8G3wHS+jQmFZBCBRHiPT
+	 +kXfTpNi9YOsF3NVbiwt8MwTPgwE/X2ajFcawRqKaqv45th9Io2r8vO9PRZqDNSEZb
+	 QF8EPH3Kz6HxsLIHQ1ETLWkFcHZtdQcssJlaZlY4Cxkm5lzP7Qzhq8NbVQFRdIgvjq
+	 bOVk5IWi30Ceg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 25C7BC53B73; Fri,  7 Jun 2024 00:01:26 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 218943] New: No SuperSpeedPlus on AM4/5 Hubs
+Date: Fri, 07 Jun 2024 00:01:25 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: jarrard@proton.me
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
+ op_sys bug_status bug_severity priority component assigned_to reporter
+ cf_regression attachments.created
+Message-ID: <bug-218943-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-ACL-Warn: Sender domain ( exalondelft.nl ) must match your domain name used in authenticated email user ( ferry.toth@elsinga.info ).
-X-ACL-Warn: From-header domain ( exalondelft.nl} ) must match your domain name used in authenticated email user ( ferry.toth@elsinga.info )
-X-Antivirus-Scanner: Clean mail though you should still use an Antivirus
 
-This reverts commit f49449fbc21e7e9550a5203902d69c8ae7dfd918.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218943
 
-This commit breaks u_ether on some setups (at least Merrifield). The fix
-"usb: gadget: u_ether: Re-attach netif device to mirror detachment" party
-restores u-ether. However the netif usb: remains up even usb is switched
-from device to host mode. This creates problems for user space as the
-interface remains in the routing table while not realy present and network
-managers (connman) not detecting a network change.
+            Bug ID: 218943
+           Summary: No SuperSpeedPlus on AM4/5 Hubs
+           Product: Drivers
+           Version: 2.5
+          Hardware: AMD
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P3
+         Component: USB
+          Assignee: drivers_usb@kernel-bugs.kernel.org
+          Reporter: jarrard@proton.me
+        Regression: No
 
-Various attempts to find the root cause were unsuccesful up to now. Therefore
-revert until a solution is found.
+Created attachment 306432
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D306432&action=3Dedit
+lsusb verbose list of devices and hubs
 
-Link: https://lore.kernel.org/linux-usb/20231006141231.7220-1-hgajjar@de.adit-jv.com/
-Reported-by: Andy Shevchenko <andriy.shevchenko@intel.com>
-Reported-by: Ferry Toth <fntoth@gmail.com>
-Fixes: f49449fbc21e ("usb: gadget: u_ether: Replace netif_stop_queue with netif_device_detach")
-Cc: stable@vger.kernel.org
----
- drivers/usb/gadget/function/u_ether.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Having major problem getting my USB capture card and any usb device that is
+rated at 10Gbps working under Linux at 10Gbps.  They all default to 5Gbps.
 
-diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/function/u_ether.c
-index aa0511c3a62c..95191083b455 100644
---- a/drivers/usb/gadget/function/u_ether.c
-+++ b/drivers/usb/gadget/function/u_ether.c
-@@ -1200,7 +1200,7 @@ void gether_disconnect(struct gether *link)
- 
- 	DBG(dev, "%s\n", __func__);
- 
--	netif_device_detach(dev->net);
-+	netif_stop_queue(dev->net);
- 	netif_carrier_off(dev->net);
- 
- 	/* disable endpoints, forcing (synchronous) completion
--- 
-2.43.0
+Things done:=20
+Checked systems on Windows, 10Gbps confirmed
+Checked devices on Windows ""
+Checked multiple 10Gbps+ cables under Windows, all works.
+Checked Linux kernel to ensure superspeedplus
 
+Linux system won't use superspeedplus on devices and via usb hubs, all are
+forced to 5Gbps.  I have tested on Arch and Ubuntu with multiple cables and
+systems.
+
+Device in question is USB Live Gamer 2.1 Capture Card from AsMedia. It works
+flawlessly under Windows at 10Gbps!=20
+
+I've added a lsusb list and as can be showned the root hub supports
+superspeedplus but all devices are 5000M however the very last one is AsMed=
+ia
+device should should be 10000M
+
+I've tried many ports, I can't figure out what is wrong.=20=20
+
+There is a youtube video showing this device works at 10Gbps under Linux but
+this system can't.=20
+
+If I can't fix this I will need to abandon Linux and move back to Windows f=
+or
+the streaming due to this bug.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
