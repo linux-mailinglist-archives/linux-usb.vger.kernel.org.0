@@ -1,119 +1,92 @@
-Return-Path: <linux-usb+bounces-11019-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11020-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3EB4B900452
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2024 15:07:08 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5226900525
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2024 15:38:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E71191F259E8
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2024 13:07:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E48D31C21215
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2024 13:38:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A372C19408C;
-	Fri,  7 Jun 2024 13:07:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jc8um35+"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E123194A60;
+	Fri,  7 Jun 2024 13:36:16 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCAD618732D;
-	Fri,  7 Jun 2024 13:06:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id 98EA518629B
+	for <linux-usb@vger.kernel.org>; Fri,  7 Jun 2024 13:36:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717765621; cv=none; b=LB/7G1blH05iDX4ah1vkK33TW8Wc0+9cRIO2UtBwTkU6Chsiv8902mKgX4pVYuxF+0P9lOiq/lIwv4TOHavP8asL52JFCjmmuvD0Zp8IjZTY6mhezacTcgQRx++dkRVqDS4HrInWshuyPb99dQ/Wup4CXRtqi2oW35zon9eY+eA=
+	t=1717767376; cv=none; b=nNGHW1iLhoF1AWkQ/xBcXfmxFwi3eWrgFXJAy0+UwpUhtAh2gWZxJgl6RkhyflFNRsb5Ep73swoou89FouWJpMHhIMo5dvRJYkXwATPKzaKsmVMGwffF2d7qvF42ryWTwLnpTtHtfC7xIeu67AUT0zZhHyTlNCduOsVG8b4LEPA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717765621; c=relaxed/simple;
-	bh=Cl1VjJYMkumRiEN01m8cKTK5QcLM61/oHQxBE4Vr0Eg=;
+	s=arc-20240116; t=1717767376; c=relaxed/simple;
+	bh=qEoPogBvmfVVC9OpBmEMEUY4zs0qEuJhne69sY4P69g=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ao2T5jMmz5vXFWFJokp5ORF6npQXVa+eRkabOole1r2UFB5x4mOxza7H0Kd8ZJooQAX8t2H/5soje4jXS607cRKakYJLSwaNZ9PvvLQ+Vx24cqJ7CqD+8Zk/3os5ZeuDp0Jc3bwZvTEdNhwvORi/2xVwPzouBQp7gJubh+PZaNs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jc8um35+; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717765620; x=1749301620;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Cl1VjJYMkumRiEN01m8cKTK5QcLM61/oHQxBE4Vr0Eg=;
-  b=jc8um35+FZjaWMvmMsZyuj/4gsIWpXtm9vtp7z9q0WPdTxw92Uk8HDMG
-   +BFNEn4ch35wb/HemxG/JdDsTpAMn9LdehFLBRXp1FLMc1zGbG/dLOMV6
-   TeKknIBFIw6N9FhSfUEXjllIht3gsx0JpHl15Fd0IcI8Q5mQrJMlfQr4n
-   DYAZUnshtJsbT4kpMtoN34Nztz8yj4qmVf5WIH/bfhSfQkr+fz45D5jGP
-   TFyQX/Y6F9/TRpL+Qlu8R3lNS+IiRewFA7+UyONa2/VyHL0Q+i/GHCymY
-   Ew2lGs7rD8Bv47E4SqT5Rbp94jpNaxu4Oj/6zR32fEDjbiyeotTO9blha
-   w==;
-X-CSE-ConnectionGUID: tJtWYCpGS5KvrPdX8H/VTQ==
-X-CSE-MsgGUID: 7XsY1APRQueWQIS4njfaiQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11096"; a="25587516"
-X-IronPort-AV: E=Sophos;i="6.08,221,1712646000"; 
-   d="scan'208";a="25587516"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2024 06:06:59 -0700
-X-CSE-ConnectionGUID: SgtAXGKJRQSmo94SscSW+w==
-X-CSE-MsgGUID: aW0G0XJESzSS8loZJhAOCQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,221,1712646000"; 
-   d="scan'208";a="61522733"
-Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by fmviesa002.fm.intel.com with ESMTP; 07 Jun 2024 06:06:56 -0700
-Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sFZJ0-0004oK-08;
-	Fri, 07 Jun 2024 13:06:54 +0000
-Date: Fri, 7 Jun 2024 21:06:10 +0800
-From: kernel test robot <lkp@intel.com>
-To: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>, mka@chromium.org,
-	gregkh@linuxfoundation.org, javier.carrasco@wolfvision.net,
-	benjamin.bara@skidata.com, m.felsch@pengutronix.de,
-	jbrunet@baylibre.com, frieder.schrempf@kontron.de,
-	stefan.eichenberger@toradex.com, michal.simek@amd.com
-Cc: oe-kbuild-all@lists.linux.dev, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, git@amd.com,
-	Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
-Subject: Re: [PATCH] usb: misc: add Microchip usb5744 SMBus programming
- support
-Message-ID: <202406072046.cA1Mbg1K-lkp@intel.com>
-References: <1717676883-2876611-1-git-send-email-radhey.shyam.pandey@amd.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=qHJ/hwfMAXbe0fgGU1TTSw7cr4oCfoC/HI97RwdGhGmfCJDAKVWZV8GAtrB2ppa+2axGIRLrXOlpIBmituG+pi3A6REXv3hgG2GJqGJ/rJ+ziYgAbIYlCFEn+VLlRH1Lelnw+tfrne2QsyDnxATF66q06I1fuonZyetBK+kQlzI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
+Received: (qmail 47063 invoked by uid 1000); 7 Jun 2024 09:36:12 -0400
+Date: Fri, 7 Jun 2024 09:36:12 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: Zhangzhansheng <zhang.zhansheng@h3c.com>,
+  Ladislav Michl <oss-lists@triops.cz>,
+  "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+  Sneeker Yeh <sneeker.yeh@gmail.com>, Wangxiaoqing <wangxiaoqing@h3c.com>,
+  Xinhaining <xinhaining@h3c.com>, Zhangchun <zhang.chunA@h3c.com>
+Subject: Re: =?utf-8?B?44CQW0NvbnN1bHRpbmcgYWJvdXQ6?=
+ =?utf-8?Q?_The_scsi_disk_driver_of_ub_and_storage_kernel_2=2E6=2E39_=5D?=
+ =?utf-8?B?44CR?=
+Message-ID: <4a66ab26-1995-4c6b-9a0e-ff1d612f8c25@rowland.harvard.edu>
+References: <23cecbd846eb47099cf9e5bd986e434d@h3c.com>
+ <41b21cbc-a5ff-334b-c269-d7dec248573e@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1717676883-2876611-1-git-send-email-radhey.shyam.pandey@amd.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <41b21cbc-a5ff-334b-c269-d7dec248573e@linux.intel.com>
 
-Hi Radhey,
+On Fri, Jun 07, 2024 at 02:40:00PM +0300, Mathias Nyman wrote:
+> Hi
+> 
+> On 7.6.2024 13.14, Zhangzhansheng wrote:
+> > Mathias：
+> > 
+> > I am so sorry to trouble you again.
+> > 
+> > As you know, the kernel 2.6.39 has two scsi drivers including the ub and the mass storage, which those respectively located at directory drivers/block/ub.c and drivers/usb/storage.
+> > 
+> > The Ub and storage driver both can be used for USB storage driver of USB device, So I want to know which driver should be correctly used in kernel 2.6.39.
+> 
+> 2.6.39 is very old, 13 years now.
+> Only recommendation I can give is to update the kernel.
+> 
+> > 
+> > The question is as follow:
+> > I recently use the kernel 2.6.39 scsi disk driver ub.c , encountered one deadlock issue. The root cause is that the tasklet function of ub_scsi_action(ub.c) on the CPU0
+> > cutting off the CPU hardware interrupt for a long time which causing IPI interrupt sended by CPU1 without response. At the same time, the tasklet function of ub_scsi_action on CPU0 core
+> > is attempting to obtain the lockA holded by the other thread task on CPU1 core which causing the lockA occurred deadlock.
+> > 
+> > If I replace the ub (drivers/block/ub.c ) with the mass storage (drivers/usb/storage) in kernel 2.6.39 , whether it will cause potential problem?
+> 
+> I'm not familiar with the Ub driver at all. Looks like it was removed in v3.7 kernel.
+> It doesn't make much sense for anybody to look into it anymore.
+> 
+> Alan Stern would know about the mass storage driver
 
-kernel test robot noticed the following build errors:
+The best way to find out what will happen with the other driver is to 
+try it and see.  Anything we can tell you would be only a guess.
 
-[auto build test ERROR on usb/usb-testing]
-[also build test ERROR on usb/usb-next usb/usb-linus linus/master v6.10-rc2 next-20240607]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+However, as Mathias said, you really should not be using a 2.6 kernel.  
+The current kernel version is 6.9, and you can imagine how much it has 
+changed and improved in the meantime.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Radhey-Shyam-Pandey/usb-misc-add-Microchip-usb5744-SMBus-programming-support/20240606-203028
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/1717676883-2876611-1-git-send-email-radhey.shyam.pandey%40amd.com
-patch subject: [PATCH] usb: misc: add Microchip usb5744 SMBus programming support
-config: arm64-defconfig (https://download.01.org/0day-ci/archive/20240607/202406072046.cA1Mbg1K-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240607/202406072046.cA1Mbg1K-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406072046.cA1Mbg1K-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> aarch64-linux-ld: drivers/usb/misc/onboard_usb_dev_pdevs.o:(.rodata+0x1498): undefined reference to `onboard_dev_5744_i2c_init'
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Alan Stern
 
