@@ -1,197 +1,128 @@
-Return-Path: <linux-usb+bounces-11025-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11026-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6DDBC900667
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2024 16:24:56 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C34E39007AA
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2024 16:55:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6F4691C2286E
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2024 14:24:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 783671F2503D
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2024 14:55:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6979197A9E;
-	Fri,  7 Jun 2024 14:24:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38D3519D08C;
+	Fri,  7 Jun 2024 14:49:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YOJddF1b"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="t2nYRtGx"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCC411DFC5;
-	Fri,  7 Jun 2024 14:24:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6967A199389
+	for <linux-usb@vger.kernel.org>; Fri,  7 Jun 2024 14:49:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717770269; cv=none; b=KDiRU3Kaz+/I76t1KdELIAu8p206UbrNBgXscle5JvyvHHHp97TyGMZZsGA++lBWJw0X/DKxS5/nR4pnoUDXer6JjwtexazxyAvUbCZlWICk9ExB6MSYQZZcvIyMlhP8C6UhCHwEHY/lxzMy0Tux311RpKH0SR72SoiiNgOiD/Y=
+	t=1717771794; cv=none; b=AFmw0Jyt6pocJV/KyJ9Ul0kI6k/8CH7nmw8JWzLywolL78A7Fa+VXLan1b8cx1rh6W7SkzhzWKFk0JZfdSbxUDREOuInhEMAqP/YAl2NNfJn4XR1jpEk/dOMU+SnAMVNx4LBnPXye+yihQDhgSM9XXLs/oDS331FQXbiXvMlWXQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717770269; c=relaxed/simple;
-	bh=hp/cGjF++wivVrBHhIAfNPrYCnmzaM2UH+s1Nk+FShQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=E6bfi+AwYsHHwKFkrhVirFDbF0eHYLVdExsqFMwVgiHJz7mtsvf9JCR4HRZ2Nz6esT8cVVde9CC2E4ETe3pQ/B8V11403gdTDVJSa4gGO96tYmB+HkO3fPuPCaiZ+JTeW9tEZUkaKHioK1amHlrAD25MBPFjTaW+oE4R88C5Vts=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YOJddF1b; arc=none smtp.client-ip=209.85.208.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-57a677d3d79so6181522a12.1;
-        Fri, 07 Jun 2024 07:24:27 -0700 (PDT)
+	s=arc-20240116; t=1717771794; c=relaxed/simple;
+	bh=dNcfbEn/4dwttuD6duwT+dnalxogOxKSbIawfyls7tw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UtDc+NOw3+FeFmRJs+O/0nbLOyUxclrOeDUjYlj0W1E475xC9keT0I8ibTzl4JOc2JymABhrE6CHt0xxBRwYHVdTMYxfkMqRlP5+nh9ptQqV79M+Q4bM0cK0AzyUq3VrXTpPJeylg1VfSIUmmQMrJEbWpRlIiw/pjVnRoU6Ph9M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=t2nYRtGx; arc=none smtp.client-ip=209.85.167.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-52bc035a7ccso697166e87.2
+        for <linux-usb@vger.kernel.org>; Fri, 07 Jun 2024 07:49:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717770266; x=1718375066; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=S9chcR0C/4WpGgrP/nkGNRsJs9D6tCay4d9wcTqhpek=;
-        b=YOJddF1biIUXgSqMXfIunnX8sqk4JkrgW1lMK5JP4t6l9F+L/jc549tiB+1kPifsRr
-         uhtc5gdBUNkrX+7lTPLfNWDti31Lwj1Zurcb6oZV0a3vviQaUx934R3kMd9XUFcgXiso
-         DM4J01mN0HHgdik6Jut80GnPhcKsgs8YsD5C2EvI28qlzJc7d1TnUMVxCWyE4KG6XglM
-         GgR+pQ0lFOLI1Z1zYCNtiETDNOkqDMBBOKWRV+taoAAxJdUXvImHdIGD71CRnleaxkZx
-         mGvszocHif5kVDqhOjXpHTu5oTGCJw81nglezzo98iH+2TinpJefFHlU543K+3gBR1pK
-         Wlzg==
+        d=linaro.org; s=google; t=1717771790; x=1718376590; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YeBDr4hz46MDwNO029hqLbhPu5de9UVwtLyZV8A2Etw=;
+        b=t2nYRtGxE9aAFb/ukNSKwCKzUC9o74+snoq3IgLStY6L+dpw2e6DxbOuetpDq1stD3
+         H2VZP8+2eaxKl6myIdO+jua+jHwasvIdn1m3hfNFtLmgxPB/9IRXwHofPaoZ0PuX4yvM
+         YjOA3olXMgrDuCUB6F2+qahqUUAmJvprv6Xbh+HotNmBwmfq2XZLqtdTwmocijGngcB6
+         flQYsgOiV18Nv1QglqwWoK+aBkcfL9RN1FfFzZ+4gLok3C02eOI+iUjq9N5Ft6USqIfs
+         MYInO9drL35HSuYRPCzZd6Usj2K075Joa+WPC/dMG/okJeAL+PQt4WTH0E21TECcj08D
+         Odjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717770266; x=1718375066;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=S9chcR0C/4WpGgrP/nkGNRsJs9D6tCay4d9wcTqhpek=;
-        b=F2fKFWCie2O7u5Yu3AZUfnCyABVoFGO3RgVLHYceVePZwcqP3BM7DruqgeTcvmIs94
-         DFy+s/sTkBsSJeRITrfKTtMlqugDxhF3/ufej9nk5LcEER4rhJHEFjE7CnqerZGmF8bY
-         tqh7MYpMcMaKP65+3EnkRgopWCwef3YBOZrV7hPa5Hw94nGVTH6jgNxP7d+Y3kO5AU4W
-         2N6DOdcAI1sJEXGwE86x9Y6kCfGNDjFOzgEGz4PAlczree3OHZcE+umhip1BY9Xc01fU
-         6jUCkp91Et3CcuYxF34OxiT6obJKLIQNz/Dtw+jMf8KwirCSkDhdOZ4Y6A9kRmYbDm44
-         rgNQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXE/HdtT9iOQq4bmRM3y+QwrAxnmBJWJFd1rF7UwaQm5gmXgp8/AfOpLKBRkdD4YXuCj9g1hlAiRvccM1qWHt3vaz9vbAoVskk8RWbmvXvE1deuEmqCbj93qAkwepKTO1vwrlMY4RqB60grW7Wpl5ImS1y8Nkl7E88mPe0g28lzMWHL1A==
-X-Gm-Message-State: AOJu0YzT71h8r5EF4ZA9grQ1qzY6ECJd5J3J1VOHG7uqKoSwH0FJcZ8k
-	xT4onaoBRdMLaLz23/vSuKFaKkMgrHlmuRab8N4OJYq+yC02EWdHxdO5wfcn6m10HhVmvUMWqcl
-	pcu+G8LoTmYPcZw9i6/N0dzJupR5LuWdnVQGJ0Q==
-X-Google-Smtp-Source: AGHT+IHazATLc9iZSxsS4MHtBMrdKO/1iTLsyl6W+quG/kmslgwVnMLCJ9ogH/flBgGREsYBB2+YNH3SWfN5Z+EjyRU=
-X-Received: by 2002:a17:906:6889:b0:a59:a3ad:c3f6 with SMTP id
- a640c23a62f3a-a6cb9348584mr231427566b.3.1717770265952; Fri, 07 Jun 2024
- 07:24:25 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1717771790; x=1718376590;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YeBDr4hz46MDwNO029hqLbhPu5de9UVwtLyZV8A2Etw=;
+        b=KHwYnv65l9fJbfbrR8UbNwoluinrQOn9uBVY0BVqpzYOIiTF+h7RZKeOPPmo+eb0YS
+         ivjCslQ45vkD7w9SIoxMTKi8FYChvcfN4twtl1pofM6QU+kHJONeImAXL5c1IcHqLMAu
+         xvcfpc7Fcdvyk6+BKj1w2tytzFeh6e7JBWWs8F8fOXDcae02eq86aE0RKGbSljMRKWIC
+         PeAJS/9usDNBr8d/XYpAnyAuwk3tmgwOLjcwyBqeVLgu9yMChDq70g35x+vPub6MwbGO
+         QniAIixuzijt+eeqMgCva+fMvKILfneWaU5Ua2GqzOxQUjbvh2L6EgBgiLmFj/I2PrYq
+         R08A==
+X-Forwarded-Encrypted: i=1; AJvYcCXkSrtNPXqoA+JzVUzHwawpQptTEHk4Vrud2iZhqblZ6Sm2VNuENRVymsn19boPgs8zne0grjz7+c3dd5dZYAP18L8RdpiV/XMK
+X-Gm-Message-State: AOJu0YwcS7x/BHhivdlxnoE5QT0XcpFlyE6aiDFiATriSDJ9JVJZsisz
+	Ey3hljRNTMmVvsoQA8KufNKw4khuFkMpyeQLjXI3LMMthmcHMPd3/Jre6L0sD8ddXuJqn2n4xIS
+	1
+X-Google-Smtp-Source: AGHT+IG0AZxjWYuE+muWD8kWSB/kMaubH3h5PiaJkS3Te9HOfhANYploBcOkSprTh7bH9wAMG+Cozg==
+X-Received: by 2002:a05:6512:3b99:b0:52b:c1cc:5d51 with SMTP id 2adb3069b0e04-52bc1cc5daamr1208817e87.63.1717771790525;
+        Fri, 07 Jun 2024 07:49:50 -0700 (PDT)
+Received: from eriador.lumag.spb.ru (dzdbxzyyyyyyyyyyyykxt-3.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::227])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52bb41ee0c1sm557650e87.66.2024.06.07.07.49.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Jun 2024 07:49:50 -0700 (PDT)
+Date: Fri, 7 Jun 2024 17:49:48 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Neil Armstrong <neil.armstrong@linaro.org>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Bjorn Andersson <andersson@kernel.org>, 
+	Luca Weiss <luca.weiss@fairphone.com>, linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/4] usb: typec-mux: nb7vpq904m: unregister typec
+ switch on probe error and remove
+Message-ID: <dltdptcgqtg6ffyajiompniag6otgrib73p4jbiskxaieagjqs@jtqse45u3gh5>
+References: <20240606-topic-sm8x50-upstream-retimer-broadcast-mode-v2-0-c6f6eae479c3@linaro.org>
+ <20240606-topic-sm8x50-upstream-retimer-broadcast-mode-v2-2-c6f6eae479c3@linaro.org>
+ <cnqpgfjcqqedk3xqkfbjacjikc5jwktev6c3kwmbq7cwut3eyk@xqyhgi5xgzgf>
+ <ac155efa-de85-4bc0-9af3-2190d4d1a60d@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240601092646.52139-1-joswang1221@gmail.com> <20240603130126.25758-1-joswang1221@gmail.com>
- <20240604000147.2xxkkp7efjsbr3i5@synopsys.com>
-In-Reply-To: <20240604000147.2xxkkp7efjsbr3i5@synopsys.com>
-From: joswang <joswang1221@gmail.com>
-Date: Fri, 7 Jun 2024 22:24:15 +0800
-Message-ID: <CAMtoTm1PMYr2jvo1iY6J34O3fPj=wJ5WHn-T8mrj+3TjcF5POg@mail.gmail.com>
-Subject: Re: [PATCH v2, 2/3] usb: dwc3: core: add p3p2tranok quirk
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: "robh@kernel.org" <robh@kernel.org>, "krzk+dt@kernel.org" <krzk+dt@kernel.org>, 
-	"conor+dt@kernel.org" <conor+dt@kernel.org>, 
-	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>, 
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, "balbi@kernel.org" <balbi@kernel.org>, 
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, joswang <joswang@lenovo.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ac155efa-de85-4bc0-9af3-2190d4d1a60d@linaro.org>
 
-On Tue, Jun 4, 2024 at 8:02=E2=80=AFAM Thinh Nguyen <Thinh.Nguyen@synopsys.=
-com> wrote:
->
-> On Mon, Jun 03, 2024, joswang wrote:
-> > From: joswang <joswang@lenovo.com>
-> >
-> > In the case of enable hibernation, there is an issue with
->
-> I assume this is for host mode since we currently don't handle
-> hibernation in device mode (please confirm).
->
-> > the DWC31 2.00a and earlier versions where the controller
-> > link power state transition from P3/P3CPM/P4 to P2 may take
-> > longer than expected, ultimately resulting in the hibernation
-> > D3 entering time exceeding the expected 10ms.
->
-> Can you provide more context where the 10ms requirement is from?
->
-> >
-> > Synopsys workaround:
-> > If the PHY supports direct P3 to P2 transition, program
-> > GUSB3PIPECTL.P3P2Tran0K=3D1.
-> >
->
-> Which STAR issue is this?
->
-> > Therefore, adding p3p2tranok quirk for workaround hibernation
-> > D3 exceeded the expected entry time.
-> >
-> > Signed-off-by: joswang <joswang@lenovo.com>
-> > ---
->
-> Please provide change note for v1->v2 here (and the rest of the other
-> patches).
->
-> >  drivers/usb/dwc3/core.c | 5 +++++
-> >  drivers/usb/dwc3/core.h | 4 ++++
-> >  2 files changed, 9 insertions(+)
-> >
-> > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> > index 7ee61a89520b..3a8fbc2d6b99 100644
-> > --- a/drivers/usb/dwc3/core.c
-> > +++ b/drivers/usb/dwc3/core.c
-> > @@ -666,6 +666,9 @@ static int dwc3_ss_phy_setup(struct dwc3 *dwc, int =
-index)
-> >       if (dwc->dis_del_phy_power_chg_quirk)
-> >               reg &=3D ~DWC3_GUSB3PIPECTL_DEPOCHANGE;
-> >
-> > +     if (dwc->p2p3tranok_quirk)
-> > +             reg |=3D DWC3_GUSB3PIPECTL_P3P2TRANOK;
-> > +
-> >       dwc3_writel(dwc->regs, DWC3_GUSB3PIPECTL(index), reg);
-> >
-> >       return 0;
-> > @@ -1715,6 +1718,8 @@ static void dwc3_get_properties(struct dwc3 *dwc)
-> >
-> >       dwc->dis_split_quirk =3D device_property_read_bool(dev,
-> >                               "snps,dis-split-quirk");
-> > +     dwc->p2p3tranok_quirk =3D device_property_read_bool(dev,
-> > +                             "snps,p2p3tranok-quirk");
-> >
-> >       dwc->lpm_nyet_threshold =3D lpm_nyet_threshold;
-> >       dwc->tx_de_emphasis =3D tx_de_emphasis;
-> > diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-> > index 3781c736c1a1..2810dce8b42e 100644
-> > --- a/drivers/usb/dwc3/core.h
-> > +++ b/drivers/usb/dwc3/core.h
-> > @@ -327,6 +327,7 @@
-> >  #define DWC3_GUSB3PIPECTL_DEP1P2P3_EN        DWC3_GUSB3PIPECTL_DEP1P2P=
-3(1)
-> >  #define DWC3_GUSB3PIPECTL_DEPOCHANGE BIT(18)
-> >  #define DWC3_GUSB3PIPECTL_SUSPHY     BIT(17)
-> > +#define DWC3_GUSB3PIPECTL_P3P2TRANOK BIT(11)
-> >  #define DWC3_GUSB3PIPECTL_LFPSFILT   BIT(9)
-> >  #define DWC3_GUSB3PIPECTL_RX_DETOPOLL        BIT(8)
-> >  #define DWC3_GUSB3PIPECTL_TX_DEEPH_MASK      DWC3_GUSB3PIPECTL_TX_DEEP=
-H(3)
-> > @@ -1132,6 +1133,8 @@ struct dwc3_scratchpad_array {
-> >   *                   instances in park mode.
-> >   * @parkmode_disable_hs_quirk: set if we need to disable all HishSpeed
-> >   *                   instances in park mode.
-> > + * @p2p3tranok_quirk: set if Controller transitions directly from phy
-> > + *                   power state P2 to P3 or from state P3 to P2.
-> >   * @gfladj_refclk_lpm_sel: set if we need to enable SOF/ITP counter
-> >   *                          running based on ref_clk
-> >   * @tx_de_emphasis_quirk: set if we enable Tx de-emphasis quirk
-> > @@ -1361,6 +1364,7 @@ struct dwc3 {
-> >       unsigned                ulpi_ext_vbus_drv:1;
-> >       unsigned                parkmode_disable_ss_quirk:1;
-> >       unsigned                parkmode_disable_hs_quirk:1;
-> > +     unsigned                p2p3tranok_quirk:1;
-> >       unsigned                gfladj_refclk_lpm_sel:1;
-> >
-> >       unsigned                tx_de_emphasis_quirk:1;
-> > --
-> > 2.17.1
-> >
->
-> Thanks,
-> Thinh
+On Fri, Jun 07, 2024 at 04:00:22PM +0200, Neil Armstrong wrote:
+> On 07/06/2024 07:50, Dmitry Baryshkov wrote:
+> > On Thu, Jun 06, 2024 at 03:11:14PM +0200, Neil Armstrong wrote:
+> > > Add the missing call to typec_switch_put() when probe fails and
+> > > the nb7vpq904m_remove() call is called.
+> > > 
+> > > Fixes: 348359e7c232 ("usb: typec: nb7vpq904m: Add an error handling path in nb7vpq904m_probe()")
+> > > Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> > > ---
+> > >   drivers/usb/typec/mux/nb7vpq904m.c | 7 ++++++-
+> > >   1 file changed, 6 insertions(+), 1 deletion(-)
+> > 
+> > I'd say:
+> > 
+> > Fixes: 88d8f3ac9c67 ("usb: typec: add support for the nb7vpq904m Type-C Linear Redriver")
+> 
+> I should add both yes, it won't apply with only 88d8f3ac9c67
 
-Difference between V2 and V1: This patch has no changes, only the
-"dt-bindings: usb: dwc3: Add snps,p2p3tranok quirk" patch is added.
+That's fine. The issue is still present in the original commit. In the
+worst case you'll get a 'please backport' request.
 
-Thanks
-Jos Wang
+> 
+> > 
+> > Nevertheless:
+> > 
+> > Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> > 
+> > 
+> > 
+> 
+
+-- 
+With best wishes
+Dmitry
 
