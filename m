@@ -1,117 +1,121 @@
-Return-Path: <linux-usb+bounces-11021-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11022-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61D5C90053A
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2024 15:42:13 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 027BB900578
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2024 15:49:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 144A91F252F5
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2024 13:42:13 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5602BB24655
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2024 13:49:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C66D194159;
-	Fri,  7 Jun 2024 13:42:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 243F6195808;
+	Fri,  7 Jun 2024 13:49:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AViY6cYH"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IIG4J86z"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7DD5192B89
-	for <linux-usb@vger.kernel.org>; Fri,  7 Jun 2024 13:42:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4759E194AD9;
+	Fri,  7 Jun 2024 13:49:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717767726; cv=none; b=UsTLq4mTcmKj0Ed93q6cklgjmIVmTa8mL/MPgs0VNNvs8YHzTVPEc3eO4aCgmFRHjKnn7SMciAoh/lP21Fjd06a8DBkCc/cmccatHXFiJx0Ua6NDdraVqbNjwc9kDoZWCVHOeZyXrnJ3EfhfLdakrTCvPSs2siAWsg05Mn7XXAM=
+	t=1717768155; cv=none; b=uDABSbtg43WYKLcgCxPh2dy4qM1QezjgkvuK60wW8Iz5GCzMScGZI4mGI5YcXFcyAIcw0S2YZq6zE2UcMue2tfiqWGdXHl+xJ9Gpnm/pdSwWCBy+Ev4uIXnMU+PDjxnK53nKxyeO+SWPbPKH85zbUkQdeu/jhr5kdfN4/+oxoM4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717767726; c=relaxed/simple;
-	bh=hFmHGGx8pX2kMYxasi0WPisiEOBjW4j+hcBs3xuZTgc=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=E53vYgJfLGnhKQuQLWeALtM0w1M3LPXpVodupg2GtKSSjX8+XekauB3hTgYWzkmMLYFkVX2ZP7Z56ej1+DACozAtmQOj8tOvshYldzsXI1lzHQx4FZM/F59nd0ZBASuLh13k9SLSLkGN4ZH/VUUdYU3uY2SamO52rl4i98UtcCc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AViY6cYH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 65580C32786
-	for <linux-usb@vger.kernel.org>; Fri,  7 Jun 2024 13:42:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717767726;
-	bh=hFmHGGx8pX2kMYxasi0WPisiEOBjW4j+hcBs3xuZTgc=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=AViY6cYHLFK5y6zAC224bnDr7lecnr+Fv9l3gubF5HWDestiG0TXU/Sd3y8+Y/Ext
-	 Mm3jEtRy300I1QtT4Ql+lsJ0O8QtYpeorr9gF6SJZZ0+5fZZeMxwA/a92ITX2hCA1/
-	 7Ih0VPZS3vilPmpjowFHA79prA3/GPXuEHllTRqzFeqLTX84pRwg+1s+gH7Mb1xXf3
-	 3uNFmcNjlKvsZ6KBdzFqajiVmjvR1sySTndyF8x7VtNp+E+NBPCdZW8uOllTHYYFdG
-	 kLIeiUXNbdtTNZ0ONQhNNLWV8ZdwOAY2stH9Bu3CSs1S6+oaV6PpZGPisG/vQXqbxD
-	 fyErlYv0HsNKw==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 3AA67C53B50; Fri,  7 Jun 2024 13:42:06 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 218943] No SuperSpeedPlus on AM4/5 Hubs
-Date: Fri, 07 Jun 2024 13:42:06 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: mathias.nyman@linux.intel.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-218943-208809-bVN6OWST5A@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218943-208809@https.bugzilla.kernel.org/>
-References: <bug-218943-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1717768155; c=relaxed/simple;
+	bh=6tBWrLoq2JL/28m9DOqPDcuz6HYtkpUgfLGc+DHWGcU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hpngrxgQaah+Y+KI6BEpa0L33UgSNU7SDXoPv6c89ro8Elusp+dSv3KLHJ1wNFNxDwHUKo0fv/37Ts2DBQJf0QAOAmsI2WAela3YWtlW82zRl1jE8uci5OIocHBBM4zw/mCRN0r/9eqP/uJVnxrFDQzUZWND1v+WIR0daSHbdTs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IIG4J86z; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1717768154; x=1749304154;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6tBWrLoq2JL/28m9DOqPDcuz6HYtkpUgfLGc+DHWGcU=;
+  b=IIG4J86zXEGiWeYW3COnS/03FEhMd/6ijKHz3B9RgEukWTgPREKuAc3Y
+   zS/oJoCGXBZpZHsg+uqnWEiahItMnUO6X/2cSQnDW1coFwWD6ATOZzMkB
+   euT81tB0HjFE/+T93nTqPtfVrHI/YppAbiWL5/+QaR0Q1Vfne187LhCC7
+   8x31K1Nr5Wr5tlXhiOkI/sxvJDk7KZl3b0Z/PC5JOoqRWV8PrXu4uoESZ
+   UlPXAqadZwlHRhaa1jHWySg42Qx+Yyn1y+UUghM21OUVZYD+O+KFIko9U
+   4cGb/d2sBSYmTYad95YVvztso3V6dHmTASkz2NVzckbcduPwSnxpaZLhQ
+   w==;
+X-CSE-ConnectionGUID: WnVOrRkaRX6d9Ebr3Y/fKw==
+X-CSE-MsgGUID: DK7TNwmwSh+O3idpor3m6g==
+X-IronPort-AV: E=McAfee;i="6600,9927,11096"; a="25062199"
+X-IronPort-AV: E=Sophos;i="6.08,221,1712646000"; 
+   d="scan'208";a="25062199"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2024 06:49:14 -0700
+X-CSE-ConnectionGUID: 7je1gDvWQ/WAxzEUj89UdA==
+X-CSE-MsgGUID: fyC2pXJJSAyqBmvvqdheaA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,221,1712646000"; 
+   d="scan'208";a="69495146"
+Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
+  by fmviesa001.fm.intel.com with ESMTP; 07 Jun 2024 06:49:10 -0700
+Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sFZxs-0004se-12;
+	Fri, 07 Jun 2024 13:49:08 +0000
+Date: Fri, 7 Jun 2024 21:48:52 +0800
+From: kernel test robot <lkp@intel.com>
+To: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>, mka@chromium.org,
+	gregkh@linuxfoundation.org, javier.carrasco@wolfvision.net,
+	benjamin.bara@skidata.com, m.felsch@pengutronix.de,
+	jbrunet@baylibre.com, frieder.schrempf@kontron.de,
+	stefan.eichenberger@toradex.com, michal.simek@amd.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	git@amd.com, Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+Subject: Re: [PATCH] usb: misc: add Microchip usb5744 SMBus programming
+ support
+Message-ID: <202406072150.57XLel7f-lkp@intel.com>
+References: <1717676883-2876611-1-git-send-email-radhey.shyam.pandey@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1717676883-2876611-1-git-send-email-radhey.shyam.pandey@amd.com>
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218943
+Hi Radhey,
 
-Mathias Nyman (mathias.nyman@linux.intel.com) changed:
+kernel test robot noticed the following build errors:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |mathias.nyman@linux.intel.c
-                   |                            |om
+[auto build test ERROR on usb/usb-testing]
+[also build test ERROR on usb/usb-next usb/usb-linus linus/master v6.10-rc2 next-20240607]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
---- Comment #5 from Mathias Nyman (mathias.nyman@linux.intel.com) ---
-Can you check the xhci roothub port speed of connected devices:
+url:    https://github.com/intel-lab-lkp/linux/commits/Radhey-Shyam-Pandey/usb-misc-add-Microchip-usb5744-SMBus-programming-support/20240606-203028
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/1717676883-2876611-1-git-send-email-radhey.shyam.pandey%40amd.com
+patch subject: [PATCH] usb: misc: add Microchip usb5744 SMBus programming support
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20240607/202406072150.57XLel7f-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240607/202406072150.57XLel7f-lkp@intel.com/reproduce)
 
-mount -t debugfs none /sys/kernel/debug/
-cat /sys/kernel/debug/usb/xhci/<address of device>/ports/port*/portsc
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406072150.57XLel7f-lkp@intel.com/
 
-If host uses default speed IDs then=20
-PortSpeed 4 is 5Gbps
-PortSpeed 5 is 10Gbps (Gen2x1)
-PortSpeed 6 is 10Gbps (2x5Gbps, Gen 1x2)
+All errors (new ones prefixed by >>):
 
-example:
+>> ld.lld: error: undefined symbol: onboard_dev_5744_i2c_init
+   >>> referenced by onboard_usb_dev_pdevs.c
+   >>>               drivers/usb/misc/onboard_usb_dev_pdevs.o:(microchip_usb5744_data) in archive vmlinux.a
 
-cat /sys/kernel/debug/usb/xhci/0000:00:0d.0/ports/port*/portsc
-0x0a0002a0 Powered Not-connected Disabled Link:RxDetect PortSpeed:0 Change:
-Wake: WCE WOE=20
-0x000002a0 Powered Not-connected Disabled Link:RxDetect PortSpeed:0 Change:
-Wake:=20
-0x000002a0 Powered Not-connected Disabled Link:RxDetect PortSpeed:0 Change:
-Wake:=20
-0x00001603 Powered Connected Enabled Link:U0 PortSpeed:5 Change: Wake:=20
-0x000002a0 Powered Not-connected Disabled Link:RxDetect PortSpeed:0 Change:
-Wake:
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
