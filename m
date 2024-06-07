@@ -1,125 +1,118 @@
-Return-Path: <linux-usb+bounces-10999-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11000-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C50B38FFA46
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2024 05:50:55 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B79E8FFA4F
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2024 06:03:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 54B58286945
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2024 03:50:54 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 35BBEB20F11
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2024 04:03:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F24417BB7;
-	Fri,  7 Jun 2024 03:50:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE87E18059;
+	Fri,  7 Jun 2024 04:03:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="EQTxTWBb"
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="ODLD69Ca"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from sonic301-20.consmr.mail.gq1.yahoo.com (sonic301-20.consmr.mail.gq1.yahoo.com [98.137.64.146])
+Received: from sonic307-8.consmr.mail.gq1.yahoo.com (sonic307-8.consmr.mail.gq1.yahoo.com [98.137.64.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B4A414F90
-	for <linux-usb@vger.kernel.org>; Fri,  7 Jun 2024 03:50:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=98.137.64.146
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00DD717BB4
+	for <linux-usb@vger.kernel.org>; Fri,  7 Jun 2024 04:03:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=98.137.64.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717732249; cv=none; b=CBexB8OCERKk1Oe0jdmQLns2flT+t1nt2Oj1qIJcYndcrjzKvZzUjSl3g/MVpP32qmnyJvmp5w3p6R6MYFCrah7ABDVejC9yl+ufvWPriDtkp/hNl1hQP7+rvCAcp+ZnKxVZeloMPlSLuu2XkxNQriA5azyL1s++yLhY/E6MGg0=
+	t=1717733002; cv=none; b=Ty2Y8EpJzsOgcMdGwkd5iOYqkxDsXlKkgdKAn2MqShKNlYTKJTPoMMiEvD9c3Io6fMaaArvhTR4uNRv/rmcABNPlCvMzP1b+HWnGMyLBquRzE26RXd/scezEBy6tN57XkWPOV6PVSyz/G4swB6MaZLTv8LP2tHIvDXEJbQkZtJ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717732249; c=relaxed/simple;
-	bh=bue3JtM59gCHPb3/MA4YuPASt++NJ+AkR9hEtDleJQ8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ofecCYLUvtVjMKjRIKvyTW1zwRTPui5StBNbv5enyVN4pINfwQwDYUn6uuHF3cO3lROueCo26uP5UHto5KAx5GJkvX8ZJt/BPvZWYqEzJJ5ndfpaUm+DnRyBtZWcYiEw27mEZpSla6IReMtsqulgo81Bj4eEK2/ANpMw3u9OTA4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=yahoo.com; spf=pass smtp.mailfrom=yahoo.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=EQTxTWBb; arc=none smtp.client-ip=98.137.64.146
+	s=arc-20240116; t=1717733002; c=relaxed/simple;
+	bh=IpJGEGr45jVuWDbw3eeBtBXtj8q1hpx003Vx0hbGImg=;
+	h=From:To:Subject:cc:Date:Message-ID:MIME-Version:Content-Type:
+	 References; b=aEb2/i64dQwR0K3keNBIYbPeXLZpg8L1dlxItCMAEGxRvojLZlRBlI0oxy0vu0FQ4LSed4mnj9N9mOqTrPrILpwnJ4LdujZGzTpHFJMmsI4pKykJlJWX4Vi2k6YrTSvos42MTglXHYrJmVoFx2qmRFvHOogANRHIFTE6fPwTLd0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=yahoo.com; spf=pass smtp.mailfrom=yahoo.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=ODLD69Ca; arc=none smtp.client-ip=98.137.64.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=yahoo.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yahoo.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1717732248; bh=+Jc4NLWEcBYVUaXY827BS4XfdcmOeE+CPKXiNhnJHAA=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=EQTxTWBb0gm9PapyS/tiyiO/Cu6s5FLknCteqWWColzxbtmOETWM7WrS7WfOLlhjyyKA+DgeAHNwJm0e8dkeaf+RbPuRp4Ir8X+DKgSXvwxxArrlHLSUofWCscl6QrsjznVoblzVNhKrAarZex1u01JDq2dT2w+lSdo+slClPF264C3mBRk26z3aVyJtpLHwERyMKgeCz8Hijvdi5R9AYQeEV6J0fQAnQunuNAnhBfLvljlPRi37jV6xnhRmyltOpEILIspsEZhfTLnDdlyG7z7MdY8Go/lF3iwZngst2VGOjjpFMfX4S+DGBGKb1dggrcNSfWZvQ+UmakKI0pC3bw==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1717732248; bh=pIdvvEvQyPEFJwmohBxaOyLMMtSdStiE9PbmQ52WX6z=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=GNHlBN1krXbGRb9t6dVZ0zeARZFcswTslTlAKsLsCVChGZbnthClMS6bH9n2DRrPIQOYYuBB8qk6wr8CV5SfaZxQgyuwlQFSmxXwoAYFVrLnm4FA6oXZm1jMxaPEu5fDrTxRYcnIzxCtI7qVClkmrgJk7653KovaOjBEU/CijTASjkc80u0+zMZC0a9drKTdw2g3nTK0JYnI5I80mgJX6Ra+GjaQj3jFkOc2K4ErwclF9bOuv62TzcuaH7vuIxmwsGIc4BefhIK8M1pbOLkd5Yhf3Y+iMsxk8gkAlpvpAtgQX4rH5TRkNxBeRvXXDCHW5FLoDDO4bB3ImYmHJCKaSg==
-X-YMail-OSG: jnzRMfIVM1l9v0wbN9a1N2w1UyQVg4B2Dfch0cASSvKGBgMK6afysTr1y5tR.RC
- 4zu7vztXi6Z.ZYLN.6lEZORt1E1AHbGItOJVDl26iUHjdm0ux_zq7bi7MQopaB1eSD1XhiCqSshJ
- pmCYHtFWJws.uArFmkhAaSE2YSEEGd2HfJFU4fDpzvL8SaFtDWec0Q4.corVQZrH7oDG7LLJmoj2
- U1yexc0t_ZonQFQc6QFyPrwpVmZNH4rptpaF20aWiA3UjyGizvUePeAKFL7tVB1LanREpQw.rd7v
- ojwyk4FpdbrWAwSKUrYCyLnAgIPdpuwB5Kw5hj0xuiq_5LK9R0GTtoI9wTt0rBpVtSCh0ovh1Dn3
- 6XwxGq9F0NZONxcb74VT0r3cnvbOS4mWv2l3QlvDE.HWGTTu1aMSXqQxOkIq9Q.vLfnKIoZj_KSP
- y5mu3.M0vyxPZpOlDWaglTK.cMMlsT.e_4X2G.GenfKSs2_RdGsr5Kxj4s3mT1Muf9HZ9d00X.Rx
- wPdH_rN2HuQWWxEPlgRih66WMfp74U2S2B2_o6u0yqQ9VpLPIAL2ahdxV_dGPRKRq5yk7y58.7lP
- BOrnsTssBoIVEYuH8pU4_LDAcwXyXDsxaPouTrtXRC_jt06p9Mm2ZxkexJeRKv5gkZKAysfFYQFD
- AuxsYQhAn5OdtTM81frxPH8WM.VHsFHKzyVU5ylRYftjfoHRW20Lx_8PhzbCMOQM0fHwzbYWFdWD
- SwoIogm4TBR1EZ76soIxh3A7iltsfx38mvytKk7acbMbg_RVwH8cw25rckCb3eOA7CvzWQc_lfao
- psaou66n8eCjFPaGbXeZrliapZEDWHGXQOp8Z7WKAbOJtmCrNKL5irdAGsr0CNdzGxuu7OCa4aAM
- g9vOSAVkoO1hYYzM9w_SthZ2L4TdHiJ0N.hUdB70lcgUgh4bXxGYgHsm9sJzUUCs1RlRRUR8_fWH
- G4qQBuDia1XfSDQ8SRDIE4kMUimbBEzPaMUNtBYjHnw4NZuHSb_CJ17XQ5BlLylLEUp5IRtZfpVb
- u2S0OjeZv_cCiwnBUp0p.1faY1wRam5ifZ366MpTdide1jrnsymVYIs1w23YT48wEO.WrmPT1t93
- wx1U1Nveoj4KQNzZHD3Hip9ct3SI.1r4.ezg_PMoDLk5SUgqc__WJQM.cKzdkbHXWJdbBIIpD.bX
- OvZQuzE4RyRGLUMaUYBwiimnf1DnGngNV06.nvmVJvJVxH7jeFmOltda6sRipuZZT_1CJjI9l_mF
- PsWHvFjZiI2gXtd3wp66hJy4MjW7ZUIuOxxX483mVT5uROzB8QFr1aotHyox25OzFgpLrRiR2CLf
- brAcHj7HeFq.tiO1oVV7gBRQUwi6AnlgRBZWi8LAwppiFDoMvMOibLcpOEb.rTto.qsdtacHgrBJ
- 9pPqfM2gpqCS3XqCgRA.iNDhOpW7K814Q6xRo_TiHiljD8JZ8BecOijvhp8_7seYjCw4OTJwa5B8
- QCreSuiM_k6mfDzf5j4ENMK04U3OyUmnN0L.EF3eney7K_Wiyy3RZ9kfCEJk27x.p5myk4ib4Js_
- LWmMFZMx7pXag5Z89SehYOYfgQXgikG1a2tGLe8ytklXglCcvM068QK1VO.ywbNusRA.YrFCufFj
- 8kYw30SQ63oEY4CooBaVaj.KdDMnizvBm8yuPvzdOWPmn50e_A3eCdqVlCp0B9niMxYxToXelsXH
- MWvm4lHHRANNd7hDmYaLCRlY6h4VobLc28S3BB7BxgTOAkDd0PSaOBUKFUyJpLrXxsJJWbvJoNPM
- dXntspyseLZUgy5YTKpSofhlmn9W8aFSsY_Yuvm6f_EC7_lHdaCe9T5A01ulzRE38mkgy_BRBggp
- BrbTyhiIYocKdkj4mGBlTuDGKuI6T_PYIgFljkSUTQa3a4sC5m8LbBmlE2BX9O.O3.f7GYnoyRhP
- FU5gCXkz7P4zzsKsa6XP2n.BP.4.ow8Q_ah9qA_r0gEXGwsp8HhpbnDeKE45MplQE0NgkEHy_19F
- m2Cc0QEa4cPZJHQgr38.35102aQ0XzyVVYvq4iBHTjKNxCZ7keo6p6k2OHwz9iPXvnxbbu0co6T6
- VjQwiwtEz.ZAEim1qEVLMM3wqEGCJeOw1QA8nEcUJJiWT9fo28.M9_J0VPUqh0sarzNfMH8yeFBz
- CxAL.ZibqE_8wRS3ihal.HV89170dEnwQex5ar7zub83KZZGnUcra_4EuNZtdNTvHttaQ_COwTh5
- Xxy6iNrf8rGDGzrrrG7.KMW7759FwADwHoKqdXX.a890YJT3FGQ--
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1717733000; bh=Q6x70XqkxpQhjKlSSOz0uqzdL65rjXGnszv/ieyuSlY=; h=From:To:Subject:cc:Date:References:From:Subject:Reply-To; b=ODLD69CaO1ajr9WDfhoO044tHjuTVpBcoTnO3XwGrla2wkpJ3izo7/2COFEY3ncqbt/YbAsWQv5sDxwa/LrBuQ3SfoPG/zbJzN0Uu17X4enHk/4ZO2m1RPTHTSWPm8b9ZhBTygJJYVoUc6OgysnD598J881GUIRTTtbwwEd3lhcDXQFfV1XTg+3qiCWz8x4g3Wkh9StgWlwWwWGRRceT5X6sGEQfXJRByqbAL1BN+OY1G7IQDtqK0SrsvL6dmDwSS6SUpiERwIKy+4nbXMDyfv7vWoHguXfvQJoPbpq32pvwu34/ZSHePZajACuQPDqUstHAOQz4P6A02YW8KuMnfg==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1717733000; bh=pp0sU89dv4b6Usst2HYOe5Cac/3QEQSOh3vo5u4Qvoq=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=WIwr3Nk1dwpYMpxrydxdN+UKJwQwE2d6Hl1/Ve3A1h/nbCX93zwB+gtVVd2FR5/VlxWEVtxy5Gvv4d4XYr77czNgIWE3wKXxl8etL6vFpMRHrXr3Gy6bhcVmnB3/stY1LJeXt1yIwEPMd1M9Xlpuw50MkKi/FHYe9LoYcu66QDXpOABqDUP/U6NraC1L7cMuSBzMnT/CWOWGOfDv7QENI8vk5QUvQfC+lFFteqJ64Wu+Ainj0sg0LHn4RFYXv97GDYAQQ0iaAapRPJyyeUFplWds/W+uQ+0ZC+Tt5K9sJTBQpG6H1dCfOfUP4Z7c9I9Nbmg4N+4qBDchh88ivg1IWg==
+X-YMail-OSG: v36CNDEVM1nI75LeZJq5dsEpm96CkBer4zePfkGYllXkkyccQ9ikpla2Ihmq8XD
+ q1.ZgNKmx73j5JRJIOqSlJcV3IlR_kW.iWwqrQaUDbC1APYsEWXJErxSfRm8.7Xb0iv13hrirtt3
+ lrXKcLTTEcPlevCNkZVIDCkxxe5WIaqHhniE6LTxIxP0lTM96akBGtr_d8Zwou7ukD72UPMD2sdY
+ VtkMO8E_8J1fQF_u1.u65S1Gtl68FeSgwGTSzvRENnOTM8Lx8_ORK.g9a1nazMXR7rJg2SVLTbyo
+ L_pEM5Kk3DpBCMCW1LD51Jph0.UyIyaTS31pqrLtmSK44Acay8ElIYvyY2sUHGHVOIH12FDk5Pj8
+ w_sFm83JNX7b4RNkcYYFEOv7TrlXMP0.yGJokTSyyh3rJRRh0M.cbcFT5DK9_e8g0lN5BAAnfYBb
+ m6OHHpZcooC0McuiYz_JCErBy_JBIXwuAHl6CeGVAEkem2J.drHIDMlHpm33d8fCgIVZjNgKtGsA
+ Hh2cmu0LCv.lBse0C5VaLObufrOM8Hz0LuGm6agdb_sFmBzs8xj0H3yjigfYQN4clds6ggEOugYS
+ TUCtyndr1VZW.9cyhUVLM5l0a8ECxKHb1mPy_9QNtvTsg.IDqUFqWt8EM8FdOOr.gltAFqnyzVTM
+ F4.ojJ1nFCVzNqCOVHKAqET7YhLBeiNyYbvYCtgJm46loI.bcBcsMoVbUBV5.xA_hEHDfXgecLfN
+ eDCw8g.V0JXZhieab8H8foWjTgJHyPoL4w6YxZWUS7tO17nMZpe94qkpKCy_o.u12gRGdmjJH272
+ B1WORYl1zDxUDtbOeGHbIWgy4z0DEmiuMgJZrOO_DchzSUAtvUbYSp3eyaRXMT1KRaBv5rjy9AmJ
+ fb2TGM_MgBNIiE97vrlfZ4kj4O.n87CZeAdWfNJ.bEG4_osBNNMZRv5ieY_Gv3tL_41qylS6qlgP
+ 84O4s.zs8YoZxWHld.t1OD.54e0kVnOjToW.1mx.mOxGCWjyG0SGC1DMGWRWg64XdonfoqGbpaCv
+ gsJ3IV62D2eqrXvQaNNA06UmvOWal55hNNBPkJWAkyQ5tYO72i9s8HeBGjxyalTSKIWSPg2VrOw1
+ o7TlUcoF3QSQy7WD1XrH5QmS_JvsM4rQjFnZYc_ixrFX.XjWbTGJBi4yyajFuYLScf_ajPh_3nNH
+ XPz1U53VYLLcGjVdAB94C1fOPQX.cK_RqqskJspNAKYcxYMtkR2ErRAWDrYTHTCL.RCwZ3O5Lm.o
+ jednIXbKJAHWmO.MbZNMFgbIisFTbhuUBK54UCnAopEDRzFG2dz0UKvJknYUhZ_1VYAeKbXZrk_t
+ j.eFRUnkMow4yvW8tco20RCeJiDHzZuEi4WQo5U6wrVWeKHru2cs5L0IhawngAhl6qZyBoU6KH5n
+ QzJFlssjpdwc6Q8guuasDp3GGaIpDtAhNobO9JV5QK_u7S3FiquBnm97CEH5gdiSFM5bI1R7MQX7
+ tFLQ2lKGM8XPerc4vekaGx.02K.EyIoX88N3ITFe2znaWhMLoUxfYcwE4UgdeL_yW8BrmC7hMSWi
+ pFlyrCDngpS2MMDw_23ENs24AqCRk9McchG3AdVt82t9aKHfZj7W7IlHmBiwRbk5ZdRws6r.YbgD
+ fXxxOoh.py.AkKrxsBZI3FXWk3LcLPQ_hsQFQVGFeTAa.rn7bkCU8Buri.kC._cJ6LfNmzFOkvZk
+ 9IgfRgh.RmADsUIBYiBJFW0wte902IhyyGhRGnFSJvnFAvas59bBYg4WmzKJ2tg2jgi374Av3Gz2
+ 0UsmOsLAgI2FujkU6JKKyb3zQGPxfXdeQDTbh3YdIKNGc.eLUTwacJVE.R1uXrKYrbljuXH2FhzZ
+ iPnZOeDZxJ0OB9hxHOEc1R8IJjvgtOytIHJT78Ak90R3ec7aeP2iOYUnPnNs56zZAc9gRTpQiJxh
+ Rob1Z765OWd278_yh3VZmP33grMJo6wDhsJQQ891w3artI1Nr83I.c9d0NXUsG7CebZuDC.sRx20
+ np_sAPZ42RIOVbD8BFU37wy5hoTSXspcfU.43VJbmOYr5sWL0rto9.gDNR.Yl23Mno1SoISLpy1M
+ 7V2spgM8ftShBlomuNuIJgyVP8maP6KYu.YjqNA5KF9yPMRQIq3jy7H6c6G3rpk5OkHI6MwUjowN
+ x0WnI7BNjbHnnKchzdXzlYD86TevV1Q_Hy2JDD3kyK0C3_C9Y4L8oiEhZsWfpnm1egmMvdqbcN0N
+ OyrOF3wrLS1kaIHz6ucrnxxpZq8c4tmOMHwobsW_Zbco-
 X-Sonic-MF: <sgoel01@yahoo.com>
-X-Sonic-ID: 0e569a19-2113-41a8-bdad-a5b9f423f4ec
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic301.consmr.mail.gq1.yahoo.com with HTTP; Fri, 7 Jun 2024 03:50:48 +0000
-Received: by hermes--production-bf1-5cc9fc94c8-f7jgm (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 384f9e98e1da2ce7f9ca1a16818211fd;
-          Fri, 07 Jun 2024 03:20:23 +0000 (UTC)
-Message-ID: <a5b96b5f-9a6d-4356-afd6-9962829cfaea@yahoo.com>
-Date: Thu, 6 Jun 2024 23:20:20 -0400
+X-Sonic-ID: ff8817ce-e8a5-4c36-8020-1cae7f60b75e
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic307.consmr.mail.gq1.yahoo.com with HTTP; Fri, 7 Jun 2024 04:03:20 +0000
+Received: by hermes--production-bf1-5cc9fc94c8-lh7nk (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 30ff7e5fec496a63b87261d9bb8a5863;
+          Fri, 07 Jun 2024 03:32:58 +0000 (UTC)
+From: Shantanu Goel <sgoel01@yahoo.com>
+To: Oliver Neukum <oneukum@suse.com>
+Subject: [RESEND][PATCH] usb: uas: set host status byte on data completion
+ error
+cc: linux-usb@vger.kernel.org <linux-usb@vger.kernel.org>,
+ linux-scsi@vger.kernel.org <linux-scsi@vger.kernel.org>
+Date: Thu, 06 Jun 2024 23:32:57 -0400
+Message-ID: <87msnx4ec6.fsf@yahoo.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] uas: set host status byte on data completion error
-To: Oliver Neukum <oneukum@suse.com>
-Cc: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
- "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
-References: <675774215.2024605.1717624320352.ref@mail.yahoo.com>
- <675774215.2024605.1717624320352@mail.yahoo.com>
- <4a60e45b-de56-414f-85eb-71541e5d2cf5@suse.com>
-Content-Language: en-US
-From: Shantanu Goel <sgoel01@yahoo.com>
-In-Reply-To: <4a60e45b-de56-414f-85eb-71541e5d2cf5@suse.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+References: <87msnx4ec6.fsf.ref@yahoo.com>
 X-Mailer: WebService/1.1.22407 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 
-On 6/6/24 2:30 AM, Oliver Neukum wrote:
+Set the host status byte when a data completion error is encountered
+otherwise the upper layer may end up using the invalid zero'ed data.
+The following output was observed from scsi/sd.c prior to this fix.
 
->
->
-> On 05.06.24 23:52, Shantanu Goel wrote:
->> Hi,
-> Hi,
->
-> thank you for the patch. Good catch.
-> Could you submit in the form that the Docuemntation describes?
-> That is inline and not attached, with your sign off also
-> inline, preferably generated with the script?
->
->     Regards
->         Oliver
->
->
+[   11.872824] sd 0:0:0:1: [sdf] tag#9 data cmplt err -75 uas-tag 1 inflight:
+[   11.872826] sd 0:0:0:1: [sdf] tag#9 CDB: Read capacity(16) 9e 10 00 00 00 00 00 00 00 00 00 00 00 20 00 00
+[   11.872830] sd 0:0:0:1: [sdf] Sector size 0 reported, assuming 512.
 
-Hi Oliver,
+Signed-off-by: Shantanu Goel <sgoel01@yahoo.com>
+---
+ drivers/usb/storage/uas.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-
-Thanks for your feedback.  I'll regenerate the patch with 
-git-format-patch and resubmit it in a separate email.
-
-
-Regards,
-
-Shantanu
-
+diff --git a/drivers/usb/storage/uas.c b/drivers/usb/storage/uas.c
+index 451d9569163a..f794cb39cc31 100644
+--- a/drivers/usb/storage/uas.c
++++ b/drivers/usb/storage/uas.c
+@@ -422,6 +422,7 @@ static void uas_data_cmplt(struct urb *urb)
+ 			uas_log_cmd_state(cmnd, "data cmplt err", status);
+ 		/* error: no data transfered */
+ 		scsi_set_resid(cmnd, sdb->length);
++		set_host_byte(cmnd, DID_ERROR);
+ 	} else {
+ 		scsi_set_resid(cmnd, sdb->length - urb->actual_length);
+ 	}
+-- 
+2.43.0
 
 
