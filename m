@@ -1,84 +1,83 @@
-Return-Path: <linux-usb+bounces-11024-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11025-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6468D9005E4
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2024 16:07:52 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6DDBC900667
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2024 16:24:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A16D5B20D05
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2024 14:07:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6F4691C2286E
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2024 14:24:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 294AD195F34;
-	Fri,  7 Jun 2024 14:07:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6979197A9E;
+	Fri,  7 Jun 2024 14:24:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M5smkiGD"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YOJddF1b"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F3CA1DFEB;
-	Fri,  7 Jun 2024 14:07:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCC411DFC5;
+	Fri,  7 Jun 2024 14:24:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717769259; cv=none; b=hNlriQUCbI2NcL5PG++woebQozCBRHei2IaC2+JCK/FKyhJ5e2p2YxUZiVaAplFVkZLtz1mvCNw+SbnMtXUGKugZNEq27zNYQJ4a6aoeGHq/0pPB2IYGhrJAqPTiv0Z4bq4Y4PrHBhkYyGZxzRwRdihc9loN8xME9JFF6fNgBpk=
+	t=1717770269; cv=none; b=KDiRU3Kaz+/I76t1KdELIAu8p206UbrNBgXscle5JvyvHHHp97TyGMZZsGA++lBWJw0X/DKxS5/nR4pnoUDXer6JjwtexazxyAvUbCZlWICk9ExB6MSYQZZcvIyMlhP8C6UhCHwEHY/lxzMy0Tux311RpKH0SR72SoiiNgOiD/Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717769259; c=relaxed/simple;
-	bh=RTmoEXDN61rc/9JZjVN0F0j/56FrXKcrmh9lendfC9U=;
+	s=arc-20240116; t=1717770269; c=relaxed/simple;
+	bh=hp/cGjF++wivVrBHhIAfNPrYCnmzaM2UH+s1Nk+FShQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hYDrgzIwBqfl4U4p5mpBU6aNDngB8Qt4d5OoZ/D2E4lmC8sQinfSI7ZuSGNi+f1Bo/q3kpu0q6jJ1+BcWGIUSFZ+Uxv8Eki7xDQNwEv0+vMo1I0+HRaFJiRTNFcVZ4Z/8bkP1oRMMgD08tUkiOMvdWVMJiybC7OD8vopfLHrSvQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M5smkiGD; arc=none smtp.client-ip=209.85.208.45
+	 To:Cc:Content-Type; b=E6bfi+AwYsHHwKFkrhVirFDbF0eHYLVdExsqFMwVgiHJz7mtsvf9JCR4HRZ2Nz6esT8cVVde9CC2E4ETe3pQ/B8V11403gdTDVJSa4gGO96tYmB+HkO3fPuPCaiZ+JTeW9tEZUkaKHioK1amHlrAD25MBPFjTaW+oE4R88C5Vts=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YOJddF1b; arc=none smtp.client-ip=209.85.208.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-5751bcb3139so2427408a12.1;
-        Fri, 07 Jun 2024 07:07:37 -0700 (PDT)
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-57a677d3d79so6181522a12.1;
+        Fri, 07 Jun 2024 07:24:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717769256; x=1718374056; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1717770266; x=1718375066; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5Me2iTbiGcSnepzGFoeP1Kv/Pyr0OL6SqP6KwSmLQKI=;
-        b=M5smkiGDHos/F9o5hg880v2JXv7Fx91e/exONN3KcXcjYJbQC5MZZMFzJR305ehofS
-         6mvfSlqbr7nSuE9AcuQPeXsJIY3h8UyxfEzW9I8Gi3UqyaE94ppYtLt6v5Xa7/BxkHw5
-         94HNTvzVhRsS/JzS66g3FFxCTIR4w9xx7i4QY5kP07KPwcOfCT2kvuPgtkPUWx8fVp2Z
-         BQ2aEhuMSE2Qqqw/4jfYVTZF4SUCPZSEDkp+wtldaqeEoBuuK0mB0GSzGmdPTEIxE4r9
-         4NJaC/tvfiipLOSgEQWDRHx9TAHAMbQcrevDH1jsWWxJl1h6Lz9yWr6hj1K+XFBZ9Bkk
-         xvwQ==
+        bh=S9chcR0C/4WpGgrP/nkGNRsJs9D6tCay4d9wcTqhpek=;
+        b=YOJddF1biIUXgSqMXfIunnX8sqk4JkrgW1lMK5JP4t6l9F+L/jc549tiB+1kPifsRr
+         uhtc5gdBUNkrX+7lTPLfNWDti31Lwj1Zurcb6oZV0a3vviQaUx934R3kMd9XUFcgXiso
+         DM4J01mN0HHgdik6Jut80GnPhcKsgs8YsD5C2EvI28qlzJc7d1TnUMVxCWyE4KG6XglM
+         GgR+pQ0lFOLI1Z1zYCNtiETDNOkqDMBBOKWRV+taoAAxJdUXvImHdIGD71CRnleaxkZx
+         mGvszocHif5kVDqhOjXpHTu5oTGCJw81nglezzo98iH+2TinpJefFHlU543K+3gBR1pK
+         Wlzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717769256; x=1718374056;
+        d=1e100.net; s=20230601; t=1717770266; x=1718375066;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5Me2iTbiGcSnepzGFoeP1Kv/Pyr0OL6SqP6KwSmLQKI=;
-        b=w3C6T7LxWzsax24j2gUZz2ObVRnvl3PCD1t8/takyTCiBFlrcRcZxc1Zm+Yn/CrBcu
-         vAo0GZ1UrXNdc1VCF1RAXnhAlaM185OVb3L3elwzfLRWapscJhZgVmWzVrhMMWKtgSX6
-         gPYUisnt89AqViLkIuzoJ2hLnOCMWJJEJ16OgUy4G+uhngeF8iR0JpsOTGCf26chFu+D
-         EAtkCYGLBiNYKtNuvHVHDy6DKMRcf1yoe4ZRCQVjDx5qiNzWPDGiL5guP9PT58z52tkq
-         NxDN2mTfmYYqbYTfT8Ox7x2tzQJK8IkaVwss+wyIIQFXkKB7XXGzGV3mMtNoP6cSdot4
-         bmtw==
-X-Forwarded-Encrypted: i=1; AJvYcCWlu/gvSA/atsfv3ZMS9a6Lvo2ll5Opm0HHQEOlNn07u4EDWgOKsvhwSaUpnFFrlqJyINZRQaHt+eeKSKTMWHrlpyoCnPjZywB+r+IBBs3A1kmiWWoERabFew9FOqFuGj6uqLeu6Mb8fFQe9sW9rVv2vW5gAyG8ArqAgey/x+yUcS0eMQ==
-X-Gm-Message-State: AOJu0Yz0t3+ohKAuUAiHkCRsZIcNB+r1v2kEEmk9hjx1Bh8vHg0DsUgy
-	EPVpfBZWtDpYBjgqU4snHbIos4Z92Q9GV4zyR4P3EHD5gehQ7fUtPNeqqQhxIbDGmLgI07gyYFt
-	VJps3cH4mKsPpGt5TeORTs8W6nP0=
-X-Google-Smtp-Source: AGHT+IGOj6cqmE+0vX1WwdfE9tuk3n3txL5O9YIAEo8rjdIp3JwO23Yvn8mZ2mG6/ge7dgPEgzIxsenbJpZKmm2bNUA=
-X-Received: by 2002:a50:9e06:0:b0:57a:2a46:701 with SMTP id
- 4fb4d7f45d1cf-57c50902d83mr1546865a12.19.1717769256110; Fri, 07 Jun 2024
- 07:07:36 -0700 (PDT)
+        bh=S9chcR0C/4WpGgrP/nkGNRsJs9D6tCay4d9wcTqhpek=;
+        b=F2fKFWCie2O7u5Yu3AZUfnCyABVoFGO3RgVLHYceVePZwcqP3BM7DruqgeTcvmIs94
+         DFy+s/sTkBsSJeRITrfKTtMlqugDxhF3/ufej9nk5LcEER4rhJHEFjE7CnqerZGmF8bY
+         tqh7MYpMcMaKP65+3EnkRgopWCwef3YBOZrV7hPa5Hw94nGVTH6jgNxP7d+Y3kO5AU4W
+         2N6DOdcAI1sJEXGwE86x9Y6kCfGNDjFOzgEGz4PAlczree3OHZcE+umhip1BY9Xc01fU
+         6jUCkp91Et3CcuYxF34OxiT6obJKLIQNz/Dtw+jMf8KwirCSkDhdOZ4Y6A9kRmYbDm44
+         rgNQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXE/HdtT9iOQq4bmRM3y+QwrAxnmBJWJFd1rF7UwaQm5gmXgp8/AfOpLKBRkdD4YXuCj9g1hlAiRvccM1qWHt3vaz9vbAoVskk8RWbmvXvE1deuEmqCbj93qAkwepKTO1vwrlMY4RqB60grW7Wpl5ImS1y8Nkl7E88mPe0g28lzMWHL1A==
+X-Gm-Message-State: AOJu0YzT71h8r5EF4ZA9grQ1qzY6ECJd5J3J1VOHG7uqKoSwH0FJcZ8k
+	xT4onaoBRdMLaLz23/vSuKFaKkMgrHlmuRab8N4OJYq+yC02EWdHxdO5wfcn6m10HhVmvUMWqcl
+	pcu+G8LoTmYPcZw9i6/N0dzJupR5LuWdnVQGJ0Q==
+X-Google-Smtp-Source: AGHT+IHazATLc9iZSxsS4MHtBMrdKO/1iTLsyl6W+quG/kmslgwVnMLCJ9ogH/flBgGREsYBB2+YNH3SWfN5Z+EjyRU=
+X-Received: by 2002:a17:906:6889:b0:a59:a3ad:c3f6 with SMTP id
+ a640c23a62f3a-a6cb9348584mr231427566b.3.1717770265952; Fri, 07 Jun 2024
+ 07:24:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240601092646.52139-1-joswang1221@gmail.com> <20240603130219.25825-1-joswang1221@gmail.com>
- <20240604000715.3rlmzxriof6wwksm@synopsys.com> <CAMtoTm3XnPr8DY9qPW0X0+aayu_7CWrC1od8qKqU3S2wRjMi1Q@mail.gmail.com>
- <20240606012936.jdokepv73qrdorbp@synopsys.com>
-In-Reply-To: <20240606012936.jdokepv73qrdorbp@synopsys.com>
+References: <20240601092646.52139-1-joswang1221@gmail.com> <20240603130126.25758-1-joswang1221@gmail.com>
+ <20240604000147.2xxkkp7efjsbr3i5@synopsys.com>
+In-Reply-To: <20240604000147.2xxkkp7efjsbr3i5@synopsys.com>
 From: joswang <joswang1221@gmail.com>
-Date: Fri, 7 Jun 2024 22:07:26 +0800
-Message-ID: <CAMtoTm3tSNKdv+LOCeQFtFpGq=6yNqTm8Jq=koFfAxT4UamOQg@mail.gmail.com>
-Subject: Re: [PATCH v2, 3/3] usb: dwc3: core: Workaround for CSR read timeout
+Date: Fri, 7 Jun 2024 22:24:15 +0800
+Message-ID: <CAMtoTm1PMYr2jvo1iY6J34O3fPj=wJ5WHn-T8mrj+3TjcF5POg@mail.gmail.com>
+Subject: Re: [PATCH v2, 2/3] usb: dwc3: core: add p3p2tranok quirk
 To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
 Cc: "robh@kernel.org" <robh@kernel.org>, "krzk+dt@kernel.org" <krzk+dt@kernel.org>, 
 	"conor+dt@kernel.org" <conor+dt@kernel.org>, 
@@ -89,140 +88,110 @@ Cc: "robh@kernel.org" <robh@kernel.org>, "krzk+dt@kernel.org" <krzk+dt@kernel.or
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jun 6, 2024 at 9:29=E2=80=AFAM Thinh Nguyen <Thinh.Nguyen@synopsys.=
+On Tue, Jun 4, 2024 at 8:02=E2=80=AFAM Thinh Nguyen <Thinh.Nguyen@synopsys.=
 com> wrote:
 >
-> On Tue, Jun 04, 2024, joswang wrote:
-> > On Tue, Jun 4, 2024 at 8:07=E2=80=AFAM Thinh Nguyen <Thinh.Nguyen@synop=
-sys.com> wrote:
-> > >
-> > > On Mon, Jun 03, 2024, joswang wrote:
-> > > > From: joswang <joswang@lenovo.com>
-> > > >
-> > > > DWC31 version 2.00a have an issue that would cause
-> > > > a CSR read timeout When CSR read coincides with RAM
-> > > > Clock Gating Entry.
-> > >
-> > > Do you have the STAR issue number?
-> > >
-> > Thanks for reviewing the code.
-> > The STAR number provided by Synopsys is 4846132.
-> > Please help review further.
+> On Mon, Jun 03, 2024, joswang wrote:
+> > From: joswang <joswang@lenovo.com>
+> >
+> > In the case of enable hibernation, there is an issue with
 >
-> I've confirmed internally. As you have noted, this applies to DWC_usb31
-> v2.00a for host mode only and DRD mode operating as host.
+> I assume this is for host mode since we currently don't handle
+> hibernation in device mode (please confirm).
+>
+> > the DWC31 2.00a and earlier versions where the controller
+> > link power state transition from P3/P3CPM/P4 to P2 may take
+> > longer than expected, ultimately resulting in the hibernation
+> > D3 entering time exceeding the expected 10ms.
+>
+> Can you provide more context where the 10ms requirement is from?
 >
 > >
-> > > >
-> > > > This workaround solution disable Clock Gating, sacrificing
-> > > > power consumption for normal operation.
-> > > >
-> > > > Signed-off-by: joswang <joswang@lenovo.com>
-> > > > ---
-> > > >  drivers/usb/dwc3/core.c | 23 +++++++++++++++++++++++
-> > > >  1 file changed, 23 insertions(+)
-> > > >
-> > > > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> > > > index 3a8fbc2d6b99..1df85c505c9e 100644
-> > > > --- a/drivers/usb/dwc3/core.c
-> > > > +++ b/drivers/usb/dwc3/core.c
-> > > > @@ -978,11 +978,22 @@ static void dwc3_core_setup_global_control(st=
-ruct dwc3 *dwc)
-> > > >                *
-> > > >                * STAR#9000588375: Clock Gating, SOF Issues when ref=
-_clk-Based
-> > > >                * SOF/ITP Mode Used
+> > Synopsys workaround:
+> > If the PHY supports direct P3 to P2 transition, program
+> > GUSB3PIPECTL.P3P2Tran0K=3D1.
+> >
 >
-> Since there's another STAR, let's split the if-else case separately and
-> provide the comments separately.
+> Which STAR issue is this?
 >
-OK
-> > > > +              *
-> > > > +              * WORKAROUND: DWC31 version 2.00a have an issue that=
- would
+> > Therefore, adding p3p2tranok quirk for workaround hibernation
+> > D3 exceeded the expected entry time.
+> >
+> > Signed-off-by: joswang <joswang@lenovo.com>
+> > ---
 >
-> Can we use the full name DWC_usb31 instead of DWC31.
+> Please provide change note for v1->v2 here (and the rest of the other
+> patches).
 >
-Subsequent V3 versions use DWC_usb31
-> > > > +              * cause a CSR read timeout When CSR read coincides w=
-ith RAM
-> > > > +              * Clock Gating Entry.
-> > > > +              *
-> > > > +              * This workaround solution disable Clock Gating, sac=
-rificing
-> > > > +              * power consumption for normal operation.
-> > > >                */
-> > > >               if ((dwc->dr_mode =3D=3D USB_DR_MODE_HOST ||
-> > > >                               dwc->dr_mode =3D=3D USB_DR_MODE_OTG) =
-&&
-> > > >                               DWC3_VER_IS_WITHIN(DWC3, 210A, 250A))
-> > > >                       reg |=3D DWC3_GCTL_DSBLCLKGTNG | DWC3_GCTL_SO=
-FITPSYNC;
-> > > > +             else if ((dwc->dr_mode =3D=3D USB_DR_MODE_HOST ||
-> > > > +                             dwc->dr_mode =3D=3D USB_DR_MODE_OTG) =
-&&
->
-> There's no OTG mode for DWC_usb31. Let's enable this workaround if the
-> HW mode is not DWC_GHWPARAMS0_MODE_GADGET.
->
-> > > > +                             DWC3_VER_IS(DWC31, 200A))
-> > > > +                     reg |=3D DWC3_GCTL_DSBLCLKGTNG;
-> > > >               else
-> > > >                       reg &=3D ~DWC3_GCTL_DSBLCLKGTNG;
-> > > >               break;
-> > > > @@ -992,6 +1003,18 @@ static void dwc3_core_setup_global_control(st=
-ruct dwc3 *dwc)
-> > > >                * will work. Device-mode hibernation is not yet impl=
-emented.
-> > > >                */
-> > > >               reg |=3D DWC3_GCTL_GBLHIBERNATIONEN;
-> > > > +
-> > > > +             /*
-> > > > +              * WORKAROUND: DWC31 version 2.00a have an issue that=
- would
-> > > > +              * cause a CSR read timeout When CSR read coincides w=
-ith RAM
-> > > > +              * Clock Gating Entry.
-> > > > +              *
-> > > > +              * This workaround solution disable Clock Gating, sac=
-rificing
-> > > > +              * power consumption for normal operation.
-> > > > +              */
-> > > > +             if ((dwc->dr_mode =3D=3D USB_DR_MODE_HOST ||
-> > > > +                  dwc->dr_mode =3D=3D USB_DR_MODE_OTG) && DWC3_VER=
-_IS(DWC31, 200A))
-> > > > +                     reg |=3D DWC3_GCTL_DSBLCLKGTNG;
-> > > >               break;
-> > > >       default:
-> > > >               /* nothing */
-> > > > --
-> > > > 2.17.1
-> > > >
-> > >
->
-> We have the same checks and comments here. Can we refactor?
-> Perhaps something this?
->
-> power_opt =3D DWC3_GHWPARAMS1_EN_PWROPT(dwc->hwparams.hwparams1);
-> switch (power_opt) {
->     ...
-> }
->
-> /*
->  * <comment>
->  */
-> if (power_opt !=3D DWC3_GHWPARAMS1_EN_PWROPT_NO) {
-> }
->
+> >  drivers/usb/dwc3/core.c | 5 +++++
+> >  drivers/usb/dwc3/core.h | 4 ++++
+> >  2 files changed, 9 insertions(+)
+> >
+> > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> > index 7ee61a89520b..3a8fbc2d6b99 100644
+> > --- a/drivers/usb/dwc3/core.c
+> > +++ b/drivers/usb/dwc3/core.c
+> > @@ -666,6 +666,9 @@ static int dwc3_ss_phy_setup(struct dwc3 *dwc, int =
+index)
+> >       if (dwc->dis_del_phy_power_chg_quirk)
+> >               reg &=3D ~DWC3_GUSB3PIPECTL_DEPOCHANGE;
+> >
+> > +     if (dwc->p2p3tranok_quirk)
+> > +             reg |=3D DWC3_GUSB3PIPECTL_P3P2TRANOK;
+> > +
+> >       dwc3_writel(dwc->regs, DWC3_GUSB3PIPECTL(index), reg);
+> >
+> >       return 0;
+> > @@ -1715,6 +1718,8 @@ static void dwc3_get_properties(struct dwc3 *dwc)
+> >
+> >       dwc->dis_split_quirk =3D device_property_read_bool(dev,
+> >                               "snps,dis-split-quirk");
+> > +     dwc->p2p3tranok_quirk =3D device_property_read_bool(dev,
+> > +                             "snps,p2p3tranok-quirk");
+> >
+> >       dwc->lpm_nyet_threshold =3D lpm_nyet_threshold;
+> >       dwc->tx_de_emphasis =3D tx_de_emphasis;
+> > diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+> > index 3781c736c1a1..2810dce8b42e 100644
+> > --- a/drivers/usb/dwc3/core.h
+> > +++ b/drivers/usb/dwc3/core.h
+> > @@ -327,6 +327,7 @@
+> >  #define DWC3_GUSB3PIPECTL_DEP1P2P3_EN        DWC3_GUSB3PIPECTL_DEP1P2P=
+3(1)
+> >  #define DWC3_GUSB3PIPECTL_DEPOCHANGE BIT(18)
+> >  #define DWC3_GUSB3PIPECTL_SUSPHY     BIT(17)
+> > +#define DWC3_GUSB3PIPECTL_P3P2TRANOK BIT(11)
+> >  #define DWC3_GUSB3PIPECTL_LFPSFILT   BIT(9)
+> >  #define DWC3_GUSB3PIPECTL_RX_DETOPOLL        BIT(8)
+> >  #define DWC3_GUSB3PIPECTL_TX_DEEPH_MASK      DWC3_GUSB3PIPECTL_TX_DEEP=
+H(3)
+> > @@ -1132,6 +1133,8 @@ struct dwc3_scratchpad_array {
+> >   *                   instances in park mode.
+> >   * @parkmode_disable_hs_quirk: set if we need to disable all HishSpeed
+> >   *                   instances in park mode.
+> > + * @p2p3tranok_quirk: set if Controller transitions directly from phy
+> > + *                   power state P2 to P3 or from state P3 to P2.
+> >   * @gfladj_refclk_lpm_sel: set if we need to enable SOF/ITP counter
+> >   *                          running based on ref_clk
+> >   * @tx_de_emphasis_quirk: set if we enable Tx de-emphasis quirk
+> > @@ -1361,6 +1364,7 @@ struct dwc3 {
+> >       unsigned                ulpi_ext_vbus_drv:1;
+> >       unsigned                parkmode_disable_ss_quirk:1;
+> >       unsigned                parkmode_disable_hs_quirk:1;
+> > +     unsigned                p2p3tranok_quirk:1;
+> >       unsigned                gfladj_refclk_lpm_sel:1;
+> >
+> >       unsigned                tx_de_emphasis_quirk:1;
+> > --
+> > 2.17.1
+> >
 >
 > Thanks,
 > Thinh
 
-Thank you for your valuable suggestions.I can refactor according to
-your suggestion.
-Do I need to submit a V3 version patch separately, or should I submit
-a V3 version patch together with other cases?
+Difference between V2 and V1: This patch has no changes, only the
+"dt-bindings: usb: dwc3: Add snps,p2p3tranok quirk" patch is added.
 
-Thanks,
+Thanks
 Jos Wang
 
