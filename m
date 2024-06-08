@@ -1,113 +1,95 @@
-Return-Path: <linux-usb+bounces-11041-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11042-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 94001901359
-	for <lists+linux-usb@lfdr.de>; Sat,  8 Jun 2024 21:25:29 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F3DF901401
+	for <lists+linux-usb@lfdr.de>; Sun,  9 Jun 2024 01:51:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0F187B214D3
-	for <lists+linux-usb@lfdr.de>; Sat,  8 Jun 2024 19:25:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E4EE81F225A4
+	for <lists+linux-usb@lfdr.de>; Sat,  8 Jun 2024 23:51:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AF051CD2D;
-	Sat,  8 Jun 2024 19:25:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Cf+uqqfb"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49575433C2;
+	Sat,  8 Jun 2024 23:51:05 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CFF21A702
-	for <linux-usb@vger.kernel.org>; Sat,  8 Jun 2024 19:25:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A912C249ED
+	for <linux-usb@vger.kernel.org>; Sat,  8 Jun 2024 23:51:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717874721; cv=none; b=sDxUdEyaJAPhjytxy6dPxOHolTY5RCgFFL7QynOXChF4Ce/8jmElDLZ11yG5C5/tFm1HUnv3RikSVs8NCVN9S+Lpx7DriSf10hTqhrGCnJO7M3QHlQrvDSrlmpLbWX3dTBqvRbfRyOb86PZIRDuMyBDbwa0Mp6r9SjHDBxGU3XA=
+	t=1717890665; cv=none; b=APNAhUhVrh/bn/Kxbn7/mnDM5woDTVKhL3qJxLnwSw72HYNJ7hnaGquLYaOiDULkEUagii7E8MOyeBZjwIbeKVLP/6Upo7ymmPMWyw/bs/sRg4m+EUsHQav8V5u9g6yl6WaaqHIV78UTiCAKXi2MQMUZzYJs4K6AkgWb21KQV6Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717874721; c=relaxed/simple;
-	bh=cI99bWZgsyE28gw6SuRURjWUQlpJDxSU8ev2w5Mc0YQ=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=Rutxj/n5Zzdx2OUWeovkP4JX2yVNpxB9oNa9DnEnybQACnLyGEXLjdVyZipHuNCDTVnxmyM+WeKBNLKDFeKFqnfaeh9DMskQrxfhwrHZfwMdV5QHttsk7RQp7BGA670T0UZSlmoBhSP9R72loaM221zFkGMW3qwAgFefCGIIWDE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Cf+uqqfb; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717874719; x=1749410719;
-  h=date:from:to:cc:subject:message-id;
-  bh=cI99bWZgsyE28gw6SuRURjWUQlpJDxSU8ev2w5Mc0YQ=;
-  b=Cf+uqqfbGXGqvtFG/VfBOamFyit9FvrdCOvxQQ5cT8UlM67lVvodBsaP
-   qC7ZnTDBbsfYpqKwaCxU2jIi51/9aXoj08mhPUU8x2dSAEjGa6k31Xe6p
-   P5JMyWEgBUNQ9BoOrT1ZZdT0Zf92yvE5V2v1v0yRoj4R6RSHwsNSNh3XE
-   E3cZQJgt9KPmtzNzD5wDNp1mx7yLYSYQNlBm6GkXEy2CCd1NB7CrxowZg
-   uQoM0i+UyEzpgJthpB5Q7L6yB35d9OzaNVxiVHd3i2VvjfFemNkUL6L8C
-   FpXVXzoLpGHpg1H7UHyDWvCHYlJGsJhaiHbllGFuk+oFlWw5+9deEkX7o
-   w==;
-X-CSE-ConnectionGUID: YeielrOWQjyi0ImAO2qFBg==
-X-CSE-MsgGUID: LSFHrz71QEur74Mide5ZdA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11097"; a="14761310"
-X-IronPort-AV: E=Sophos;i="6.08,224,1712646000"; 
-   d="scan'208";a="14761310"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2024 12:25:18 -0700
-X-CSE-ConnectionGUID: 4LCBUWY+Rhu5kqaUXuaM2A==
-X-CSE-MsgGUID: MnD2XX/iTOalv8apyV5fng==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,224,1712646000"; 
-   d="scan'208";a="43088876"
-Received: from lkp-server01.sh.intel.com (HELO 8967fbab76b3) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 08 Jun 2024 12:25:17 -0700
-Received: from kbuild by 8967fbab76b3 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sG1gh-0000Nh-2V;
-	Sat, 08 Jun 2024 19:25:15 +0000
-Date: Sun, 09 Jun 2024 03:24:56 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Subject: [usb:usb-linus] BUILD SUCCESS
- 1092c4126bf8fa57d7298724d9894ba3b1c07f86
-Message-ID: <202406090354.BCEBMMSA-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1717890665; c=relaxed/simple;
+	bh=d0niSI0BPqgORWJ8d6uor4Qauk2a0PRIg7Z3CF9XdmY=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=BYmVHybRSSv7f7cZhLUoA6fXKgkVca/wfR1Xh9GEh6D3S9Qd+kxoAA5sUfpSOWSi9a6OzZgPB/LGDAectqz4uRzShHQDVrQNhgLHtheFzlFnjLztGHiwraeOwMojz3BP7CEVV6zWrNfNLA/X8C6cw+2P3m/Z4LIqnj/+v94FPT0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.200
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f200.google.com with SMTP id e9e14a558f8ab-3737b3ae019so33957825ab.2
+        for <linux-usb@vger.kernel.org>; Sat, 08 Jun 2024 16:51:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717890663; x=1718495463;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=K1VLo2KJi9o9tzQVg0N1w+H/e9lvP5uDzyw9PtVc0as=;
+        b=Tq3bsGIX2N8Ihr/gh9BlabMOfYQ5bxvmyVKP7Djw9na7gCg/o82QoSUWUhtSeg9ZD4
+         SM+iyamdMvfgOreRnFDD4tuxiTE0duDqb3D7+Pnmmd5i3RNG1cE0VHfMgeOD8nw3AL4O
+         MWuDmOhVoaFuXBTuTZbLXf9XQ0YrzBcVslKEX4ELikNzCUVKNrlvDIZxlHkiwsDOVVSi
+         /sYGPo3JFzffTIMFpdkh79atFPoABBHIRfFLhjKYZLHvgtWuMRfxgJK6JI6Lw9TFMWDC
+         phLeYsREp2rJXyCepiTJYCLV3xurxp0xlPASfUzdIHbqH2QwhAGLvAUC7gD7lgz8jUwT
+         xBuQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVN0+MaAIUQBmiyFyXFTPBCMiQr/y75LvVXvKNBQG/iCQGsMLPtrmzjmZqqusz3kC9e6dBnDPLAoBdgEgdTm//wX5x5OYeqqE+Q
+X-Gm-Message-State: AOJu0YxoCasPUFr7e3mSQYYQcGLhXGZY+Y8dToci0eq99xEUddJsDHoD
+	0bGu4V7HgkZOB+AKrbshoVPQG0eEt+mG5JwmVPiaXcadv5bCuZFcv+7T7mHfCtTAmyDGuyGRYRG
+	2BljohzQquXeajm/65il3ve2yCY0wAwlwbuHnt/pXQp9Nga0bKc8otaE=
+X-Google-Smtp-Source: AGHT+IHJ8bs/U3I3g1f4q/Xp24Ah0Qnma9lKdfqjhw9W8j5aEoYUBtabb+mH1Cbm0PU1piVVmfgBeW2+PGKAZvVoTvSuYOx3fOwS
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+X-Received: by 2002:a05:6e02:1c49:b0:374:9a34:a0a with SMTP id
+ e9e14a558f8ab-375803d3e9bmr5712495ab.6.1717890662891; Sat, 08 Jun 2024
+ 16:51:02 -0700 (PDT)
+Date: Sat, 08 Jun 2024 16:51:02 -0700
+In-Reply-To: <0000000000008b96230610c6b3fe@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000b99437061a6996df@google.com>
+Subject: Re: [syzbot] [media?] [usb?] possible deadlock in vb2_video_unregister_device
+From: syzbot <syzbot+3b1d4b3d5f7a358bf9a9@syzkaller.appspotmail.com>
+To: benjamin.gaignard@collabora.com, hdanton@sina.com, 
+	hverkuil-cisco@xs4all.nl, hverkuil@xs4all.nl, 
+	laurent.pinchart@ideasonboard.com, linux-kernel@vger.kernel.org, 
+	linux-media@vger.kernel.org, linux-usb@vger.kernel.org, 
+	m.szyprowski@samsung.com, mchehab@kernel.org, syzkaller-bugs@googlegroups.com, 
+	tfiga@chromium.org
+Content-Type: text/plain; charset="UTF-8"
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
-branch HEAD: 1092c4126bf8fa57d7298724d9894ba3b1c07f86  Merge tag 'thunderbolt-for-v6.10-rc3' of git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt into usb-next
+syzbot suspects this issue was fixed by commit:
 
-elapsed time: 1454m
+commit 65e6a2773d655172143cc0b927cdc89549842895
+Author: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Date:   Sat Mar 2 10:37:08 2024 +0000
 
-configs tested: 20
-configs skipped: 1
+    media: usbtv: Remove useless locks in usbtv_video_free()
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1009e6f6980000
+start commit:   b401b621758e Linux 6.8-rc5
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=eff9f3183d0a20dd
+dashboard link: https://syzkaller.appspot.com/bug?extid=3b1d4b3d5f7a358bf9a9
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13ffaae8180000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13ef909c180000
 
-tested configs:
-openrisc                          allnoconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                           allnoconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   clang
-s390                              allnoconfig   clang
-s390                                defconfig   clang
-sh                                allnoconfig   gcc  
-sh                                  defconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64                             defconfig   gcc  
-um                                allnoconfig   clang
-um                                  defconfig   clang
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   clang
-xtensa                            allnoconfig   gcc  
+If the result looks correct, please mark the issue as fixed by replying with:
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+#syz fix: media: usbtv: Remove useless locks in usbtv_video_free()
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
