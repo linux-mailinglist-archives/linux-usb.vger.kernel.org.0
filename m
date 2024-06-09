@@ -1,147 +1,94 @@
-Return-Path: <linux-usb+bounces-11049-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11050-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5AF9690185A
-	for <lists+linux-usb@lfdr.de>; Sun,  9 Jun 2024 23:43:58 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53A1A901877
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Jun 2024 00:11:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0151CB20D04
-	for <lists+linux-usb@lfdr.de>; Sun,  9 Jun 2024 21:43:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 17EFD1C209D0
+	for <lists+linux-usb@lfdr.de>; Sun,  9 Jun 2024 22:11:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BC8950291;
-	Sun,  9 Jun 2024 21:43:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89B354D9FB;
+	Sun,  9 Jun 2024 22:11:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=squebb.ca header.i=@squebb.ca header.b="XImHj7o6";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="OFv/hOoE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mGqK4TWY"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from fout8-smtp.messagingengine.com (fout8-smtp.messagingengine.com [103.168.172.151])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0521C48CE0;
-	Sun,  9 Jun 2024 21:43:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 115871CD00
+	for <linux-usb@vger.kernel.org>; Sun,  9 Jun 2024 22:11:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717969428; cv=none; b=ZQfmafBYp+kwy7sPWs1BII89Y+D2nQ8tYQHUxEZMZgMEWYy5dLNSE1rf8vid440D1M0SwrwpSEt5/gLb+CReVj2FbXTFeEf76/osT/3vety68JrAxDrLYZdOywGOX6oJbzLL+N8k4JU/69l5rBACe9easXv8YbJ92YwRI3ZyfXw=
+	t=1717971099; cv=none; b=ICtRiFchnEhMH0KuX5ybSH2ztsnuXisoy2zll3R9dQntc1RPHhzvEHHda31aE0DLubMx+A3o5pWYPnEkNlY8ldhWYqHVj1zXMxMq18JnLzmLdVVNvhpIhrhfuQJP07rVVOQWn5hEFl2omj9spChp9Y3zb+ghG6uomnqwNmsTRf4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717969428; c=relaxed/simple;
-	bh=HJgurrWiX7eXP4/IiNcGUcXHq8B7HVmDJ3Xbz7REcyE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hYbhZCZfx9BEoEokDJ4C83jjUmUFEeocNZ93R1w0f/J0i8F5T9k+EyEr7V3UDUl733pkc5Qdj7Guujjt7no6/91IETw/ey1zz8Zd5C/hu8KzTw/i7ZPPms/W24AOQw8IJVLBtSonijEbzxXK4dLr/wrsqeKNqPzs9llZl1HbEJc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=squebb.ca; spf=pass smtp.mailfrom=squebb.ca; dkim=pass (2048-bit key) header.d=squebb.ca header.i=@squebb.ca header.b=XImHj7o6; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=OFv/hOoE; arc=none smtp.client-ip=103.168.172.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=squebb.ca
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=squebb.ca
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-	by mailfout.nyi.internal (Postfix) with ESMTP id 0147913800C2;
-	Sun,  9 Jun 2024 17:43:45 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Sun, 09 Jun 2024 17:43:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=squebb.ca; h=cc
-	:cc:content-transfer-encoding:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm2; t=1717969424; x=
-	1718055824; bh=fGXoDc5UQ7R92D0+Vz5I/WElToagZBOZ6lR8JyKacWE=; b=X
-	ImHj7o6OhXSA1D8wybapa2gE4lY/FttnqFiGnltyOvsho9nXXG2uooFMwOsnPqBy
-	MB1/JwtctjTauXMWydtA8BTVxG634bd15zNGytG4kJ0bvSMv5MqI7pPLnEfqzeKr
-	e8+y5knhXbfbnhp7n9erHcGeGWkzcbZ54uhKoBGVZr3VY+1JwRDcnd8b95+5JG8d
-	K7vo3+/sb/9m9xOhOXdhC837Fhszt3vDFxnQTlBPWrgCUh3LnX9jnXprGp4XPRXQ
-	YolsM51/bt+FVOleAt/f6Mm7Eu2LTWlExPoUfF9v8q5UIcVTX4LhTjxkAdAINokZ
-	qHmWHpw1NWf/aDLFKgypw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1717969424; x=
-	1718055824; bh=fGXoDc5UQ7R92D0+Vz5I/WElToagZBOZ6lR8JyKacWE=; b=O
-	Fv/hOoEMJbyIFtVcjPMCbMXCMCm4SCIlQu/bMnDJQ/2j6VjtU5iPvAUdid5ltmdR
-	hSK06azb6ogDhYZCnQ1VHGgjzg76NIgILM61oFJz/Yi/kwfAEYFE1aUllWBYgVaw
-	IrE+kT5lFzAwh2LqMCfaFd3VbIw29hR5uAwExlZu8uPsvNajRqzQIt9JOTX7+cQV
-	athT1KOKThpigCZQnQcZfN/lxF2Va1uZZk/vIZbpDLpajuUPyvQikUKrdOWgm8su
-	CPTm5ZOPKBuahJNTBfwCaTsgIEIrroGIaOuT5lL+cljVBO6rjHfYXYX6InZKNals
-	hlpfYJWcW2sCWEnnip7Kw==
-X-ME-Sender: <xms:ECJmZvXJ2WMUi2o5Vppw2T2IjzyabY8cXmq6RLp-Zk_bP6TPMjM-1g>
-    <xme:ECJmZnk3_xrOb9fhQ08yKzgRfur63HlgikXtLyIsE9Nlrc5Y31lAmtJUVo2Knc86V
-    Kqkx6E8H3fs2rGzJyY>
-X-ME-Received: <xmr:ECJmZrasbdMOKSTFRurHZqGhAhmrQvs0DqzunHbR6kJunYIk6TQHnTcKGdW1U-tL0vxXwN0ouJA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfedtkedgtdduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucgoteeftdduqddtudculdduhedmnecujfgurhephf
-    fvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepofgrrhhkucfrvggrrhhs
-    ohhnuceomhhpvggrrhhsohhnqdhlvghnohhvohesshhquhgvsggsrdgtrgeqnecuggftrf
-    grthhtvghrnhepfedtvdejfeelffevhffgjeejheduteetieeguefgkefhhfegjeduueet
-    hefgvdffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epmhhpvggrrhhsohhnqdhlvghnohhvohesshhquhgvsggsrdgtrg
-X-ME-Proxy: <xmx:ECJmZqV5id-LmX3dEvCOtw14p1adApGTXy9BKe3ZulhgMFAheivLYQ>
-    <xmx:ECJmZpnNMidT_gv0XCnPlwhVNrYtJGMK0Sk-SqmGBJVorJgeqVcE-w>
-    <xmx:ECJmZnecSw1Du_aoOqkxose4tXoIwgclGfgI5CBaWb7TeLkytSP9sg>
-    <xmx:ECJmZjEaFnqRX_VTUOJhBdjLTiZEJFS7HtBqwHmPFXnkqoBtYvmdzg>
-    <xmx:ECJmZvWReU4NmGO7ltoJasA2W0GiIUMJwooYBJzhDp_RCJeETtSY5lbJ>
-Feedback-ID: ibe194615:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 9 Jun 2024 17:43:44 -0400 (EDT)
-From: Mark Pearson <mpearson-lenovo@squebb.ca>
-To: mpearson-lenovo@squebb.ca
-Cc: diogo.ivo@siemens.com,
-	dmitry.baryshkov@linaro.org,
-	heikki.krogerus@linux.intel.com,
-	gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: typec: ucsi: don't retrieve PDOs if not supported
-Date: Sun,  9 Jun 2024 17:43:18 -0400
-Message-ID: <20240609214328.6580-1-mpearson-lenovo@squebb.ca>
-X-Mailer: git-send-email 2.45.1
-In-Reply-To: <mpearson-lenovo@squebb.ca>
-References: <mpearson-lenovo@squebb.ca>
+	s=arc-20240116; t=1717971099; c=relaxed/simple;
+	bh=itAoqU14t1ab+gK6KZn/0r8rRhjykPEcAJAVpE0qk1o=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=uW+BDMv9a1nezhA9IFFqDdxeNjLOhx2BsYaJksZiA207LcP0246DiQdC6JUqSKmgS5vNk3ml3jGJnqpWsi71VLJ1otYHb+7TZo9fNsCDl1MBsvHqg/Lo3RKSRSMJMVPciTKues+7Omt+Nnd6r5mMtGpkXch6hFm2tYl3rH0U2Z0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mGqK4TWY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7EB0CC2BD10
+	for <linux-usb@vger.kernel.org>; Sun,  9 Jun 2024 22:11:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1717971098;
+	bh=itAoqU14t1ab+gK6KZn/0r8rRhjykPEcAJAVpE0qk1o=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=mGqK4TWYk/N+GL0B9TjRqUjoUX45hM/D2dFUZp6VZKrCfxeP6vmezSWLqrHQaTk/3
+	 DYYnuqvJvkb7UmSc1+VHKL7SCzJZYLFO9oK0MQwv/PcIIQWIlerqvLxxRE60n+YWZU
+	 Dm2yPdiuQU0q5isLWaTWX4MFtTXJMfBzHGmgyfpsht5gvSEI3iSpCFbo//3PGHCa/Z
+	 D8LlDUUnPfStggFmRUwyVwMiMkAnrt9PPXpsDALkfXqzRLlWR5ZnWnDD9ALIKmiD9+
+	 XcpLTJY03t6BELt60H3Tt35YGWBoksr4JCtrzPWRtPP3534yupUZQrtuecx6KUpe9d
+	 xwC7RObR8Dijw==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 69166C53B50; Sun,  9 Jun 2024 22:11:38 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 215649] all usb devices stop working and forced to reboot the
+ system
+Date: Sun, 09 Jun 2024 22:11:38 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: blocking
+X-Bugzilla-Who: ricciare@libero.it
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: PATCH_ALREADY_AVAILABLE
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_status resolution
+Message-ID: <bug-215649-208809-m1MV9LWBhz@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-215649-208809@https.bugzilla.kernel.org/>
+References: <bug-215649-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-On systems where the UCSI PDOs are not supported, the UCSI driver is
-giving an error message. This can cause users to believe there is a HW
-issue with their system when in fact it is working as designed.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215649
 
-Check if PDO_DETAILS are supported as a feature before attempting to
-access PDO. If not supported return that zero PDOs are available.
+Nicola Ricciarelli (ricciare@libero.it) changed:
 
-Tested on Lenovo L14 G5 AMD and confirmed with Lenovo FW team that PDOs
-are not supported on this platform.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |PATCH_ALREADY_AVAILABLE
 
-Suggested-by: Diogo Ivo <diogo.ivo@siemens.com>
-Suggested-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Signed-off-by: Mark Pearson <mpearson-lenovo@squebb.ca>
----
-Note this patch replaces my previous submission 'treat get_pdos not supported
-condition as info instead of error', based on feedback from review.
+--=20
+You may reply to this email to add a comment.
 
- drivers/usb/typec/ucsi/ucsi.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index cb52e7b0a2c5..cadea8d328ed 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -641,9 +641,13 @@ static int ucsi_read_pdos(struct ucsi_connector *con,
- static int ucsi_get_pdos(struct ucsi_connector *con, enum typec_role role,
- 			 int is_partner, u32 *pdos)
- {
-+	struct ucsi *ucsi = con->ucsi;
- 	u8 num_pdos;
- 	int ret;
- 
-+	if (!(ucsi->cap.features & UCSI_CAP_PDO_DETAILS))
-+		return 0;
-+
- 	/* UCSI max payload means only getting at most 4 PDOs at a time */
- 	ret = ucsi_read_pdos(con, role, is_partner, pdos, 0, UCSI_MAX_PDOS);
- 	if (ret < 0)
--- 
-2.45.1
-
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
