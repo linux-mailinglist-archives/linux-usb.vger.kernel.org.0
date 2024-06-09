@@ -1,147 +1,199 @@
-Return-Path: <linux-usb+bounces-11047-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11048-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C67B90162E
-	for <lists+linux-usb@lfdr.de>; Sun,  9 Jun 2024 15:16:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7549690164A
+	for <lists+linux-usb@lfdr.de>; Sun,  9 Jun 2024 15:56:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 39CF41C20BE0
-	for <lists+linux-usb@lfdr.de>; Sun,  9 Jun 2024 13:16:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 79A241C2080D
+	for <lists+linux-usb@lfdr.de>; Sun,  9 Jun 2024 13:56:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83E45405CC;
-	Sun,  9 Jun 2024 13:15:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BD8443AC3;
+	Sun,  9 Jun 2024 13:56:29 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from exchange.fintech.ru (exchange.fintech.ru [195.54.195.159])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+Received: from mail-io1-f78.google.com (mail-io1-f78.google.com [209.85.166.78])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D11F617E9;
-	Sun,  9 Jun 2024 13:15:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.54.195.159
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4145F25634
+	for <linux-usb@vger.kernel.org>; Sun,  9 Jun 2024 13:56:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.78
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717938957; cv=none; b=GAvvq8ZqwtlUHNjS+RYZLJVEvkW43y4NftXR8yQ+RKtBTvx0PImpMsPor8I9ZbBF+Gc4A+/5LVc6ExtrNgrblf5zIk3QThrpAUeK6Ufi9rmp01nkoWhpJ2NN+cJJ1qPQMYtkT7pACXOqSeL0YMjeLpPTYSmwkZUAHT4B3Ep4CCg=
+	t=1717941388; cv=none; b=BpmWLE8hiJeOeOBMRtE72TU7KG/JFAFonHMnaWBo8sjs7DZXA3CFXTnGuo+KA9Ju77xfCE+VW8ozz8r/8Zqt8Ybhez0fPiH813NHIFLRE2ibRrMiyfNF3iTWCuyEFBHZelc3HLk3qAG9wXYlL9nf6xQgeSHl2hUXO06fPXDPYCM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717938957; c=relaxed/simple;
-	bh=J50IMlbyPb8/H6PmypRr6nVSUigdq3HjYL8zSIF79P0=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=bqAm0rHNy4Fl7BoBVNCtRxAFrQcgIOZsxpg1zGX/+FpkUxvDI385iS1QJGvH8Zp2v9/C4ZaptGMzmKW7c+REL77ppR9f4RNbuKt0E2JK5cqjmIPu9fS/g76FuJ2ridm1ams6DAGbM15JGohe0gCllLYSvCJgpjTbyR3WY4KB/r0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fintech.ru; spf=pass smtp.mailfrom=fintech.ru; arc=none smtp.client-ip=195.54.195.159
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fintech.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fintech.ru
-Received: from Ex16-01.fintech.ru (10.0.10.18) by exchange.fintech.ru
- (195.54.195.169) with Microsoft SMTP Server (TLS) id 14.3.498.0; Sun, 9 Jun
- 2024 16:15:49 +0300
-Received: from localhost (10.0.253.138) by Ex16-01.fintech.ru (10.0.10.18)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2242.4; Sun, 9 Jun 2024
- 16:15:49 +0300
-From: Nikita Zhandarovich <n.zhandarovich@fintech.ru>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC: Nikita Zhandarovich <n.zhandarovich@fintech.ru>,
-	<linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<syzkaller-bugs@googlegroups.com>,
-	<syzbot+00c18ee8497dd3be6ade@syzkaller.appspotmail.com>
-Subject: [PATCH v2] usb: atm: cxacru: fix endpoint checking in cxacru_bind()
-Date: Sun, 9 Jun 2024 06:15:46 -0700
-Message-ID: <20240609131546.3932-1-n.zhandarovich@fintech.ru>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1717941388; c=relaxed/simple;
+	bh=ctgGFK0f83OshrGzxHN9PDYqPrKX7kRjkvE2eCUdg1g=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=H+/i2hWRPMvvuaFQhizUUOelx8SRVLMUmmbY+L0jXsLoKgi9vZKPQEb88h1bXG48ndl0TpDpsay6qfmzDIcVMJDaUcwJE7q+Cqme1aWHZ/SGU6kDTPLwJ/aJhtTOODKkw22n+VQLSI/lO9wGrrorksLG8QpTNCHgVKhq76nnCcw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f78.google.com with SMTP id ca18e2360f4ac-7e1fe2ba2e1so471567339f.3
+        for <linux-usb@vger.kernel.org>; Sun, 09 Jun 2024 06:56:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717941386; x=1718546186;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=B4xB2sVEkGbk0dXhq9RX5GlImfc1l66UOyNLhJBnq70=;
+        b=IRRibLOEt58snMbmKI9n4Cew3T7R62KmyXGzwjBOJCw5HpcDvq048iiES7PdR914s0
+         B2LPOMVOD7NGCOwIn2DnmIVvNnRSSg+Vajpy1JJoJ49QzuxVJz9JxnxlsFJQw9S62cMF
+         VEeMTWrmYjuWt243dPkSxKssHLEPsEpBxNS4SbfTI6gMfuAgn9feOYHBHKR8bu8o0fe+
+         k/ld/bEnkPJk7d0b8XsYB8Jf4tUXJADzynH8CkuohbVkQIOtgfH0R0l2tMv6H8TC9Oc6
+         7Sn0J18g7iOWl/w2zAXbXP6OetrT3x2R9Vzp0EWPK/qKsi/LLyIfh8YlFWELS7NCFIIk
+         1yUw==
+X-Forwarded-Encrypted: i=1; AJvYcCW2zBBvl3kDSZJgDl6FK1961OLg0D+vTmWg3n5jtex7rll1vcW+y1iGqZKqBFWFUwnJyhNeQjCozy7xM7e/yjcb9ySsjwIPQ8W2
+X-Gm-Message-State: AOJu0YxLl+PkxAarxll4jJjX/WWB84+gr5wCnOVpD39bOk9jyUzMP28q
+	xhPACZGnhsD7vB7Ko5TnJgl9cFWE6CeyuetyBEaEEUEaiJpAXfw1BZexXCbMj+9XVGM0X3gguzZ
+	rPOKw/IcfaFAm0BeCubRtPafDcmuIKr4b/8fYMx0/TePtUFL4mTR8M+o=
+X-Google-Smtp-Source: AGHT+IFxWD5oU6rI6aMJkkfqVBPKoanXVPfnsPx/cqSntI23J2zY2w6lXMv5/dAYm0jlFXnDmHbqW/D5wETUGSYLbpGxhXtt0uqG
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: Ex16-02.fintech.ru (10.0.10.19) To Ex16-01.fintech.ru
- (10.0.10.18)
+X-Received: by 2002:a05:6638:8608:b0:4b7:ba1f:5449 with SMTP id
+ 8926c6da1cb9f-4b7ba1f5689mr414887173.4.1717941386345; Sun, 09 Jun 2024
+ 06:56:26 -0700 (PDT)
+Date: Sun, 09 Jun 2024 06:56:26 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000141201061a75665a@google.com>
+Subject: [syzbot] [usb?] WARNING in kcov_remote_start (4)
+From: syzbot <syzbot+7110e6a4069f19537d85@syzkaller.appspotmail.com>
+To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-Syzbot is still reporting quite an old issue [1] that occurs due to
-incomplete checking of present usb endpoints. As such, wrong
-endpoints types may be used at urb sumbitting stage which in turn
-triggers a warning in usb_submit_urb().
+Hello,
 
-Fix the issue by verifying that required endpoint types are present
-for both in and out endpoints, taking into account cmd endpoint type.
+syzbot found the following issue on:
 
-Unfortunately, this patch has not been tested on real hardware.
+HEAD commit:    771ed66105de Merge tag 'clk-fixes-for-linus' of git://git...
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=16c06364980000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=333ebe38d43c42e2
+dashboard link: https://syzkaller.appspot.com/bug?extid=7110e6a4069f19537d85
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
 
-[1] Syzbot report:
-usb 1-1: BOGUS urb xfer, pipe 1 != type 3
-WARNING: CPU: 0 PID: 8667 at drivers/usb/core/urb.c:502 usb_submit_urb+0xed2/0x18a0 drivers/usb/core/urb.c:502
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/9ca3dd648520/disk-771ed661.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/54c60e26a55f/vmlinux-771ed661.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/b8ec7b1012cf/bzImage-771ed661.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+7110e6a4069f19537d85@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 24 at kernel/kcov.c:870 kcov_remote_start+0x5a2/0x7e0 kernel/kcov.c:870
 Modules linked in:
-CPU: 0 PID: 8667 Comm: kworker/0:4 Not tainted 5.14.0-rc4-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: usb_hub_wq hub_event
-RIP: 0010:usb_submit_urb+0xed2/0x18a0 drivers/usb/core/urb.c:502
-...
+CPU: 1 PID: 24 Comm: ksoftirqd/1 Not tainted 6.10.0-rc2-syzkaller-00366-g771ed66105de #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/02/2024
+RIP: 0010:kcov_remote_start+0x5a2/0x7e0 kernel/kcov.c:870
+Code: 24 00 00 00 00 9c 8f 04 24 f7 04 24 00 02 00 00 0f 85 a6 01 00 00 41 f7 c6 00 02 00 00 0f 84 93 fa ff ff fb e9 8d fa ff ff 90 <0f> 0b 90 e8 86 6f f0 09 89 c0 48 c7 c7 c8 d4 02 00 48 03 3c c5 e0
+RSP: 0018:ffffc90000a189c0 EFLAGS: 00010002
+RAX: 0000000080010100 RBX: ffff888017af0000 RCX: 0000000000000002
+RDX: dffffc0000000000 RSI: ffffffff8bcacd00 RDI: ffffffff8c1ff280
+RBP: 0100000000000003 R08: ffffffff92fab5f7 R09: 1ffffffff25f56be
+R10: dffffc0000000000 R11: fffffbfff25f56bf R12: ffffffff819630ae
+R13: 00000000ffffffb9 R14: 0000000000000006 R15: ffff8880b952d4c8
+FS:  0000000000000000(0000) GS:ffff8880b9500000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000001b33527000 CR3: 00000000674b4000 CR4: 00000000003526f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 Call Trace:
- cxacru_cm+0x3c0/0x8e0 drivers/usb/atm/cxacru.c:649
- cxacru_card_status+0x22/0xd0 drivers/usb/atm/cxacru.c:760
- cxacru_bind+0x7ac/0x11a0 drivers/usb/atm/cxacru.c:1209
- usbatm_usb_probe+0x321/0x1ae0 drivers/usb/atm/usbatm.c:1055
- cxacru_usb_probe+0xdf/0x1e0 drivers/usb/atm/cxacru.c:1363
- usb_probe_interface+0x315/0x7f0 drivers/usb/core/driver.c:396
- call_driver_probe drivers/base/dd.c:517 [inline]
- really_probe+0x23c/0xcd0 drivers/base/dd.c:595
- __driver_probe_device+0x338/0x4d0 drivers/base/dd.c:747
- driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:777
- __device_attach_driver+0x20b/0x2f0 drivers/base/dd.c:894
- bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:427
- __device_attach+0x228/0x4a0 drivers/base/dd.c:965
- bus_probe_device+0x1e4/0x290 drivers/base/bus.c:487
- device_add+0xc2f/0x2180 drivers/base/core.c:3354
- usb_set_configuration+0x113a/0x1910 drivers/usb/core/message.c:2170
- usb_generic_driver_probe+0xba/0x100 drivers/usb/core/generic.c:238
- usb_probe_device+0xd9/0x2c0 drivers/usb/core/driver.c:293
+ <IRQ>
+ kcov_remote_start_usb include/linux/kcov.h:53 [inline]
+ kcov_remote_start_usb_softirq include/linux/kcov.h:66 [inline]
+ __usb_hcd_giveback_urb+0x34a/0x530 drivers/usb/core/hcd.c:1647
+ dummy_timer+0x830/0x45d0 drivers/usb/gadget/udc/dummy_hcd.c:1987
+ __run_hrtimer kernel/time/hrtimer.c:1687 [inline]
+ __hrtimer_run_queues+0x59b/0xd50 kernel/time/hrtimer.c:1751
+ hrtimer_interrupt+0x396/0x990 kernel/time/hrtimer.c:1813
+ local_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1032 [inline]
+ __sysvec_apic_timer_interrupt+0x110/0x3f0 arch/x86/kernel/apic/apic.c:1049
+ instr_sysvec_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1043 [inline]
+ sysvec_apic_timer_interrupt+0xa1/0xc0 arch/x86/kernel/apic/apic.c:1043
+ </IRQ>
+ <TASK>
+ asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:702
+RIP: 0010:kcov_remote_start+0x2e/0x7e0 kernel/kcov.c:924
+Code: 55 41 57 41 56 41 55 41 54 53 48 83 ec 18 65 48 8b 1c 25 00 d5 03 00 48 b8 00 00 00 00 ff ff ff 00 48 85 c7 74 17 90 0f 0b 90 <48> 83 c4 18 5b 41 5c 41 5d 41 5e 41 5f 5d c3 cc cc cc cc 48 89 fd
+RSP: 0018:ffffc900001e7840 EFLAGS: 00000206
+RAX: 5308892166c1b700 RBX: ffff888017af0000 RCX: ffffffff8172d80a
+RDX: dffffc0000000000 RSI: ffffffff8bcabb80 RDI: ffffffff8c1ff280
+RBP: ffff8880b952d4c8 R08: ffffffff92fab5f7 R09: 1ffffffff25f56be
+R10: dffffc0000000000 R11: fffffbfff25f56bf R12: 0000000000040000
+R13: 0000000000000000 R14: 0000000000000206 R15: ffff88801c71e700
+ kcov_remote_start_usb include/linux/kcov.h:53 [inline]
+ kcov_remote_start_usb_softirq include/linux/kcov.h:66 [inline]
+ __usb_hcd_giveback_urb+0x34a/0x530 drivers/usb/core/hcd.c:1647
+ usb_giveback_urb_bh+0x306/0x4e0 drivers/usb/core/hcd.c:1682
+ process_one_work kernel/workqueue.c:3231 [inline]
+ process_scheduled_works+0xa2c/0x1830 kernel/workqueue.c:3312
+ bh_worker+0x2a5/0x620 kernel/workqueue.c:3572
+ tasklet_hi_action+0xf/0x90 kernel/softirq.c:816
+ handle_softirqs+0x2c4/0x970 kernel/softirq.c:554
+ run_ksoftirqd+0xca/0x130 kernel/softirq.c:928
+ smpboot_thread_fn+0x544/0xa30 kernel/smpboot.c:164
+ kthread+0x2f0/0x390 kernel/kthread.c:389
+ ret_from_fork+0x4b/0x80 arch/x86/kernel/process.c:147
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
+ </TASK>
+----------------
+Code disassembly (best guess):
+   0:	55                   	push   %rbp
+   1:	41 57                	push   %r15
+   3:	41 56                	push   %r14
+   5:	41 55                	push   %r13
+   7:	41 54                	push   %r12
+   9:	53                   	push   %rbx
+   a:	48 83 ec 18          	sub    $0x18,%rsp
+   e:	65 48 8b 1c 25 00 d5 	mov    %gs:0x3d500,%rbx
+  15:	03 00
+  17:	48 b8 00 00 00 00 ff 	movabs $0xffffff00000000,%rax
+  1e:	ff ff 00
+  21:	48 85 c7             	test   %rax,%rdi
+  24:	74 17                	je     0x3d
+  26:	90                   	nop
+  27:	0f 0b                	ud2
+  29:	90                   	nop
+* 2a:	48 83 c4 18          	add    $0x18,%rsp <-- trapping instruction
+  2e:	5b                   	pop    %rbx
+  2f:	41 5c                	pop    %r12
+  31:	41 5d                	pop    %r13
+  33:	41 5e                	pop    %r14
+  35:	41 5f                	pop    %r15
+  37:	5d                   	pop    %rbp
+  38:	c3                   	ret
+  39:	cc                   	int3
+  3a:	cc                   	int3
+  3b:	cc                   	int3
+  3c:	cc                   	int3
+  3d:	48 89 fd             	mov    %rdi,%rbp
 
-Reported-and-tested-by: syzbot+00c18ee8497dd3be6ade@syzkaller.appspotmail.com
-Fixes: 902ffc3c707c ("USB: cxacru: Use a bulk/int URB to access the command endpoint")
-Signed-off-by: Nikita Zhandarovich <n.zhandarovich@fintech.ru>
+
 ---
-v2: remove useless ret variable initialization; log the error with
-with usb_err() instead of usb_dbg().
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-v1: https://lore.kernel.org/all/20240528183807.3832-1-n.zhandarovich@fintech.ru/
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-P.S. While the driver is orphaned, it might still make sense to
-suppress the syzbot report, seeing how ancient it is.
-P.P.S. checkpatch complains about outdated format of debug printing
-but I decided to keep it in tune with the rest of the driver.
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
- drivers/usb/atm/cxacru.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
 
-diff --git a/drivers/usb/atm/cxacru.c b/drivers/usb/atm/cxacru.c
-index 4ce7cba2b48a..8f3b9a0a38e1 100644
---- a/drivers/usb/atm/cxacru.c
-+++ b/drivers/usb/atm/cxacru.c
-@@ -1131,6 +1131,7 @@ static int cxacru_bind(struct usbatm_data *usbatm_instance,
- 	struct cxacru_data *instance;
- 	struct usb_device *usb_dev = interface_to_usbdev(intf);
- 	struct usb_host_endpoint *cmd_ep = usb_dev->ep_in[CXACRU_EP_CMD];
-+	struct usb_endpoint_descriptor *in, *out;
- 	int ret;
- 
- 	/* instance init */
-@@ -1177,6 +1178,19 @@ static int cxacru_bind(struct usbatm_data *usbatm_instance,
- 		goto fail;
- 	}
- 
-+	if (usb_endpoint_xfer_int(&cmd_ep->desc))
-+		ret = usb_find_common_endpoints(intf->cur_altsetting,
-+						NULL, NULL, &in, &out);
-+	else
-+		ret = usb_find_common_endpoints(intf->cur_altsetting,
-+						&in, &out, NULL, NULL);
-+
-+	if (ret) {
-+		usb_err(usbatm_instance, "cxacru_bind: interface has incorrect endpoints\n");
-+		ret = -ENODEV;
-+		goto fail;
-+	}
-+
- 	if ((cmd_ep->desc.bmAttributes & USB_ENDPOINT_XFERTYPE_MASK)
- 			== USB_ENDPOINT_XFER_INT) {
- 		usb_fill_int_urb(instance->rcv_urb,
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
