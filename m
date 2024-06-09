@@ -1,94 +1,89 @@
-Return-Path: <linux-usb+bounces-11050-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11051-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 53A1A901877
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Jun 2024 00:11:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 55D13901894
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Jun 2024 00:59:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 17EFD1C209D0
-	for <lists+linux-usb@lfdr.de>; Sun,  9 Jun 2024 22:11:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 556ED1C20BA5
+	for <lists+linux-usb@lfdr.de>; Sun,  9 Jun 2024 22:59:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89B354D9FB;
-	Sun,  9 Jun 2024 22:11:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B5EF4C627;
+	Sun,  9 Jun 2024 22:59:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mGqK4TWY"
+	dkim=pass (1024-bit key) header.d=inbox.lv header.i=@inbox.lv header.b="iWqz16sp"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from shark3.inbox.lv (shark3.inbox.lv [194.152.32.83])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 115871CD00
-	for <linux-usb@vger.kernel.org>; Sun,  9 Jun 2024 22:11:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F124B208CB
+	for <linux-usb@vger.kernel.org>; Sun,  9 Jun 2024 22:59:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.152.32.83
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717971099; cv=none; b=ICtRiFchnEhMH0KuX5ybSH2ztsnuXisoy2zll3R9dQntc1RPHhzvEHHda31aE0DLubMx+A3o5pWYPnEkNlY8ldhWYqHVj1zXMxMq18JnLzmLdVVNvhpIhrhfuQJP07rVVOQWn5hEFl2omj9spChp9Y3zb+ghG6uomnqwNmsTRf4=
+	t=1717973958; cv=none; b=jw7tcXgTbNmMdzwXQtrLz+Qi8YcY9CoViAf//1LkV4BvbYdVnDnwhUr0a4dlJ4SdDl0oiVSfX7K1rpQ9qZjCdPAx/tZpqxMQGlEGGecgnSO9uugTLFP+ww0YqvI+gqe5kbZwFfPSbbBhl3r0as7m/ozM1LUyo5CNkHogGu3Req4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717971099; c=relaxed/simple;
-	bh=itAoqU14t1ab+gK6KZn/0r8rRhjykPEcAJAVpE0qk1o=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=uW+BDMv9a1nezhA9IFFqDdxeNjLOhx2BsYaJksZiA207LcP0246DiQdC6JUqSKmgS5vNk3ml3jGJnqpWsi71VLJ1otYHb+7TZo9fNsCDl1MBsvHqg/Lo3RKSRSMJMVPciTKues+7Omt+Nnd6r5mMtGpkXch6hFm2tYl3rH0U2Z0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mGqK4TWY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7EB0CC2BD10
-	for <linux-usb@vger.kernel.org>; Sun,  9 Jun 2024 22:11:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717971098;
-	bh=itAoqU14t1ab+gK6KZn/0r8rRhjykPEcAJAVpE0qk1o=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=mGqK4TWYk/N+GL0B9TjRqUjoUX45hM/D2dFUZp6VZKrCfxeP6vmezSWLqrHQaTk/3
-	 DYYnuqvJvkb7UmSc1+VHKL7SCzJZYLFO9oK0MQwv/PcIIQWIlerqvLxxRE60n+YWZU
-	 Dm2yPdiuQU0q5isLWaTWX4MFtTXJMfBzHGmgyfpsht5gvSEI3iSpCFbo//3PGHCa/Z
-	 D8LlDUUnPfStggFmRUwyVwMiMkAnrt9PPXpsDALkfXqzRLlWR5ZnWnDD9ALIKmiD9+
-	 XcpLTJY03t6BELt60H3Tt35YGWBoksr4JCtrzPWRtPP3534yupUZQrtuecx6KUpe9d
-	 xwC7RObR8Dijw==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 69166C53B50; Sun,  9 Jun 2024 22:11:38 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
+	s=arc-20240116; t=1717973958; c=relaxed/simple;
+	bh=1ZNYob3TV8v/wdIdU6axJvcvSj8URlQb8ejg8tETTJI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tiXuuFOvE0SQwIuCX7W9C0OraZCH4OKASo2omFT9MlULi1N1Il5AAEHeRFxz1VFoetew7ao7ljU7/2tm/Qc5FuAZnfDgaoshDENJnn3kJAT07hgioBP7aJ4JSA2xOsFDbrNxJ+ZV6/JxUjgMt5khpSfasVzpzGtPFstLC5J3i0s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=inbox.lv; spf=pass smtp.mailfrom=inbox.lv; dkim=pass (1024-bit key) header.d=inbox.lv header.i=@inbox.lv header.b=iWqz16sp; arc=none smtp.client-ip=194.152.32.83
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=inbox.lv
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=inbox.lv
+Received: from shark3.inbox.lv (localhost [127.0.0.1])
+	by shark3-out.inbox.lv (Postfix) with ESMTP id 4Vy9NX3zKxzMkv8;
+	Mon, 10 Jun 2024 01:59:08 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=inbox.lv;
+	s=p20220324; t=1717973948; x=1717975748;
+	bh=1ZNYob3TV8v/wdIdU6axJvcvSj8URlQb8ejg8tETTJI=;
+	h=From:To:Cc:Subject:Date:Message-ID:X-ESPOL:From:Date:To:Cc:
+	 Message-ID:Subject:Reply-To;
+	b=iWqz16spMUG50Y5/xvt0EaVxTE5R4X+YB7mmIJ6k6ifDxq2x28fFkikI+98Kf1bEW
+	 sa1+Dbn0JOYjseo8slLTUzsAFtMbOcJCpFVtg6kM57qkllGjjndLyAHJT6uwG4AMuY
+	 XPMQ3YCN1hnIZ1a1q+agsw8wtMLxVg1G0Sth5vcc=
+Received: from shark3.inbox.lv (localhost [127.0.0.1])
+	by shark3-in.inbox.lv (Postfix) with ESMTP id 4Vy9NX3vhfzMkvB;
+	Mon, 10 Jun 2024 01:59:08 +0300 (EEST)
+Received: from mail.inbox.lv (pop1 [127.0.0.1])
+	by shark3-in.inbox.lv (Postfix) with ESMTP id 4Vy9NX1WhvzMkv8;
+	Mon, 10 Jun 2024 01:59:08 +0300 (EEST)
+From: Dmitry Smirnov <d.smirnov@inbox.lv>
 To: linux-usb@vger.kernel.org
-Subject: [Bug 215649] all usb devices stop working and forced to reboot the
- system
-Date: Sun, 09 Jun 2024 22:11:38 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: blocking
-X-Bugzilla-Who: ricciare@libero.it
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: PATCH_ALREADY_AVAILABLE
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_status resolution
-Message-ID: <bug-215649-208809-m1MV9LWBhz@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-215649-208809@https.bugzilla.kernel.org/>
-References: <bug-215649-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+Cc: Dmitry Smirnov <d.smirnov@inbox.lv>
+Subject: [PATCH V2 0/1] usb: mos7840: Fix hangup after resume
+Date: Mon, 10 Jun 2024 01:58:49 +0300
+Message-ID: <20240609225850.3900-1-d.smirnov@inbox.lv>
+X-Mailer: git-send-email 2.45.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: OK
+X-ESPOL: G4mESnoDkHBYucK2NYVo+4GXy9SvNC4uvCb5z7424XRdtK+yzdM1Ly+UB/ecFH7fbg==
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D215649
+This patch addresses a kernel hang issue with the mos7840 driver when
+resuming from a suspend with a device connected to the serial port.
 
-Nicola Ricciarelli (ricciare@libero.it) changed:
+This patch introduces two new functions: mos7840_suspend() and mos7840_resume()
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |PATCH_ALREADY_AVAILABLE
+Tested with Delock 87414 USB 2.0 to 4x serial adapter.
 
---=20
-You may reply to this email to add a comment.
+Signed-off-by: Dmitry Smirnov <d.smirnov@inbox.lv>
+---
+V1 -> V2: Addressed review comments
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Dmitry Smirnov (1):
+  usb: mos7840: Fix hangup after resume
+
+ drivers/usb/serial/mos7840.c | 50 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 50 insertions(+)
+
+
+base-commit: c3f38fa61af77b49866b006939479069cd451173
+-- 
+2.45.1
+
 
