@@ -1,145 +1,67 @@
-Return-Path: <linux-usb+bounces-11052-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11053-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7D23901895
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Jun 2024 01:01:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2FCC89019D0
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Jun 2024 06:39:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CF8BC1C20A21
-	for <lists+linux-usb@lfdr.de>; Sun,  9 Jun 2024 23:01:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C78141F213BD
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Jun 2024 04:39:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2667544C8F;
-	Sun,  9 Jun 2024 23:01:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7252BB645;
+	Mon, 10 Jun 2024 04:39:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=inbox.lv header.i=@inbox.lv header.b="g93hKHg2"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="wvX2vguA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from shark1.inbox.lv (shark1.inbox.lv [194.152.32.81])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FFAA208AD
-	for <linux-usb@vger.kernel.org>; Sun,  9 Jun 2024 23:00:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.152.32.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED2566FB6
+	for <linux-usb@vger.kernel.org>; Mon, 10 Jun 2024 04:39:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717974062; cv=none; b=EbQn3oaheamhO7p4cV2Ay/fhNiU7INFQrncshWlG0RvqW19nlEwImr+S2caFcf6hqAlSNjQyyeK9lKREVrlazpJCMPnAyea3IzQHh7DRjQbCg8JUVgBuUOooRGh5lOXZTERu5FWI5d8kz4iVsvcOMxpNQ5I02+v9YrAUjLPPYvk=
+	t=1717994385; cv=none; b=W1USJB9IWDP39Jajp7T8b3YkvU8wcmyM42fkG0TwwbDLUAHVDyhzACv9x/a0yKOrsWdH+cY1oYnrzA0Z4N9MLuAnC8527OneV4Y6cGQGCwxVdqRO6RcWdRyQmowGqlJITDB6bELH9ZzzSiZda6OBTq+C5xpFvPBWj7TjNUWYzj4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717974062; c=relaxed/simple;
-	bh=Ix3neKdGrLymLxKdnn5URp23JMl+qKf74DUlokJocsI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YjLtsKi/HZn05U8cuOtBUZCIq/7f4JMMCEDODofNNn/9iwdtVl3A9kq93IbKKivyASqSBpp1d8ro4gOxjMlL5ZvxGAtvs9fupXUqps3Kw6sEm4xiGyidDF4FAddrIvNz6RKV2ISPTkcL+aFwNT84JURLve+3wRffmXsy5TJlwfU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=inbox.lv; spf=pass smtp.mailfrom=inbox.lv; dkim=pass (1024-bit key) header.d=inbox.lv header.i=@inbox.lv header.b=g93hKHg2; arc=none smtp.client-ip=194.152.32.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=inbox.lv
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=inbox.lv
-Received: from shark1.inbox.lv (localhost [127.0.0.1])
-	by shark1-out.inbox.lv (Postfix) with ESMTP id 4Vy9QX44Jhz2d6Hk;
-	Mon, 10 Jun 2024 02:00:52 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=inbox.lv;
-	s=p20220324; t=1717974052; x=1717975852;
-	bh=Ix3neKdGrLymLxKdnn5URp23JMl+qKf74DUlokJocsI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:X-ESPOL:
-	 From:Date:To:Cc:Message-ID:Subject:Reply-To;
-	b=g93hKHg2xFH0sS0EPuqELUXYqmZtsuXUl/6TF7AanBFE+QrY0sr+7A6U3tf5nuGgX
-	 N12aqcXmj77FHIZOMER3/uzitipsyuGd3/bVex0pfiWv78rYHfi9S517D9+xDCy4cf
-	 NX9ugtjSheHj+rNZFPJ3ZHOEDeU/gDZpTzsbxfu0=
-Received: from mail.inbox.lv (pop1 [127.0.0.1])
-	by shark1-in.inbox.lv (Postfix) with ESMTP id 4Vy9QX3Vh2z2d6Gg;
-	Mon, 10 Jun 2024 02:00:52 +0300 (EEST)
-From: Dmitry Smirnov <d.smirnov@inbox.lv>
-To: linux-usb@vger.kernel.org
-Cc: Dmitry Smirnov <d.smirnov@inbox.lv>
-Subject: [PATCH V2 1/1] usb: mos7840: Fix hangup after resume
-Date: Mon, 10 Jun 2024 01:58:50 +0300
-Message-ID: <20240609225850.3900-2-d.smirnov@inbox.lv>
-X-Mailer: git-send-email 2.45.1
-In-Reply-To: <20240609225850.3900-1-d.smirnov@inbox.lv>
+	s=arc-20240116; t=1717994385; c=relaxed/simple;
+	bh=/U0B9K9gnliVgdyeKE5ES3uMh1Ahdfbc9bFbkE+Lzuk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AIAKK1m+pHeXA2tsPvfPACOHDpoq8ZUFujt+O5bKqN7zh/p00M0yQC8of+SfiyABy5dl6+JhDrDWE8q0O5U4eZnZ22hf6zrNIoB18Fv1nPKrlvzpObaCzXZLqUCXpOVH16IXYeFlezFKl+ROyhQiLP7eW+XLncuvJ5y5QQ/7ipA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=wvX2vguA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13149C2BBFC;
+	Mon, 10 Jun 2024 04:39:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1717994384;
+	bh=/U0B9K9gnliVgdyeKE5ES3uMh1Ahdfbc9bFbkE+Lzuk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=wvX2vguA5PTnqD5ieIKz5z+CatN9eOaPPEpsypVBBazSmkCQjrX+LjT/6M7PEPWeG
+	 B0txAycYjMxvZjadXPkyeNROhiMhRpDA7QxooPDYC8IMg2tif0n50d2Z/1kmSW1ZOs
+	 wZzwKl8o48bj3KnHDNANP5B+GJhIAkIjYq5/EH+c=
+Date: Mon, 10 Jun 2024 06:39:41 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Dmitry Smirnov <d.smirnov@inbox.lv>
+Cc: linux-usb@vger.kernel.org
+Subject: Re: [PATCH V2 1/1] usb: mos7840: Fix hangup after resume
+Message-ID: <2024061022-blandness-rack-8c84@gregkh>
 References: <20240609225850.3900-1-d.smirnov@inbox.lv>
+ <20240609225850.3900-2-d.smirnov@inbox.lv>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: OK
-X-ESPOL: EZeEAiZdmGUky828N+YY6uLlxdewUFIluSXmt9094XFHv7rfstx9bm6RB/ecFH7fbg==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240609225850.3900-2-d.smirnov@inbox.lv>
 
-Signed-off-by: Dmitry Smirnov <d.smirnov@inbox.lv>
----
-V1 -> V2: Addressed review comments
+On Mon, Jun 10, 2024 at 01:58:50AM +0300, Dmitry Smirnov wrote:
+> Signed-off-by: Dmitry Smirnov <d.smirnov@inbox.lv>
+> ---
 
- drivers/usb/serial/mos7840.c | 50 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 50 insertions(+)
+Sorry, but we can't take patches with no changelog text for obvious
+reasons.
 
-diff --git a/drivers/usb/serial/mos7840.c b/drivers/usb/serial/mos7840.c
-index 8b0308d84270..30c5b09a4409 100644
---- a/drivers/usb/serial/mos7840.c
-+++ b/drivers/usb/serial/mos7840.c
-@@ -1737,6 +1737,54 @@ static void mos7840_port_remove(struct usb_serial_port *port)
- 	kfree(mos7840_port);
- }
- 
-+static int mos7840_suspend(struct usb_serial *serial, pm_message_t message)
-+{
-+	struct moschip_port *mos7840_port;
-+	struct usb_serial_port *port;
-+	int i;
-+	dev_dbg(&serial->interface->dev, "mos7840_suspend\n");
-+
-+	for (i = 0; i < serial->num_ports; ++i) {
-+		port = serial->port[i];
-+		if (!tty_port_initialized(&port->port))
-+			continue;
-+
-+		mos7840_port = usb_get_serial_port_data(port);
-+
-+		usb_kill_urb(mos7840_port->read_urb);
-+		mos7840_port->read_urb_busy = false;
-+	}
-+	return 0;
-+}
-+
-+static int mos7840_resume(struct usb_serial *serial)
-+{
-+	struct moschip_port *mos7840_port;
-+	struct usb_serial_port *port;
-+	int res;
-+	int i;
-+	dev_dbg(&serial->interface->dev, "mos7840_resume\n");
-+
-+	for (i = 0; i < serial->num_ports; ++i) {
-+		port = serial->port[i];
-+		if (!tty_port_initialized(&port->port))
-+			continue;
-+
-+		mos7840_port = usb_get_serial_port_data(port);
-+
-+		if (port->bulk_in_size) {
-+			res = usb_submit_urb(mos7840_port->read_urb, GFP_NOIO);
-+
-+			if (res) {
-+				usb_kill_urb(mos7840_port->read_urb);
-+				mos7840_port->read_urb_busy = false;
-+			}
-+		}
-+	}
-+
-+	return 0;
-+}
-+
- static struct usb_serial_driver moschip7840_4port_device = {
- 	.driver = {
- 		   .owner = THIS_MODULE,
-@@ -1764,6 +1812,8 @@ static struct usb_serial_driver moschip7840_4port_device = {
- 	.port_probe = mos7840_port_probe,
- 	.port_remove = mos7840_port_remove,
- 	.read_bulk_callback = mos7840_bulk_in_callback,
-+	.suspend = mos7840_suspend,
-+	.resume = mos7840_resume,
- };
- 
- static struct usb_serial_driver * const serial_drivers[] = {
--- 
-2.45.1
-
+greg k-h
 
