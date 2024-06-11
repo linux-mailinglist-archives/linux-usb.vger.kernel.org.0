@@ -1,188 +1,89 @@
-Return-Path: <linux-usb+bounces-11150-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11151-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD02B903FDB
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Jun 2024 17:21:07 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36250904086
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Jun 2024 17:53:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7305E1F2464C
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Jun 2024 15:21:07 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0F575B24839
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Jun 2024 15:53:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49C40208AF;
-	Tue, 11 Jun 2024 15:21:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 400B538FA1;
+	Tue, 11 Jun 2024 15:53:05 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id C26D014A96
-	for <linux-usb@vger.kernel.org>; Tue, 11 Jun 2024 15:20:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E9E738390
+	for <linux-usb@vger.kernel.org>; Tue, 11 Jun 2024 15:53:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718119261; cv=none; b=J6hDN4XlYpT/lR96qPyzIl7cyoSTvSa4mNQqj2+cWKMLxBjhBfCN7N+TVHppW3DcKuFGcQpdZP/2DKKFiJVKLa2+afWzuhnWGFxRnglZpTXTvC9Z0+3+XAU66GEcimbMOoFSA7xCaDPxkbU9cztd/w+QYDvcWcaOEJyzA47aY58=
+	t=1718121185; cv=none; b=ejPp9VMzVhD9+EgB2zDXS4DxpZpIuBTCVSd9YeicFbGYc2Q4HPnSKBqIWVXsU/fDITnug4FcBQC2BixXUDaLa3/pRZPd8KyJimvMM3LVg7I6GKhdAjjoaVUmJPg00C7Uhi6V5MvAy38DW3hflz5ALlyKokRBxVOjpIVRgLWekhA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718119261; c=relaxed/simple;
-	bh=Er6PA3/Modh6YaGC9UL3eMxeB6uHpwFIoxsNj22/flE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ukNpzy1Is0We5Wq7Q9VqXqhxELokRhqvAFaXFNGAJazee7d52MBIB3gsV67qL9/KBSv4tMDgoWN2WbX/A+aihvnd2r3t0UJZ1rMfeXZ+MhV1068xAZAAtEO6DnKveFmuwPbG8yGDsJqvJ7gB2w9bs72G7ahX7IHvh5gWk4Scxog=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
-Received: (qmail 189524 invoked by uid 1000); 11 Jun 2024 11:20:57 -0400
-Date: Tue, 11 Jun 2024 11:20:57 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: syzbot <syzbot+5f996b83575ef4058638@syzkaller.appspotmail.com>
-Cc: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-  linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [usb?] INFO: rcu detected stall in raw_ioctl
-Message-ID: <23b1962c-044d-4dbd-a705-58754f0914cb@rowland.harvard.edu>
-References: <c3073a8c-bdaa-4123-ae27-9143d916a701@rowland.harvard.edu>
- <000000000000386b64061a8ec33d@google.com>
+	s=arc-20240116; t=1718121185; c=relaxed/simple;
+	bh=4YWTAY4k/NT07i2PrAMgV8Tt2wCvS+q0e0VohlzadUM=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=n3n8xup4yq1R8uMTQHjX5but+zw6KxjgeMOh8RqtDouJxkEO2pFCBioeO64j/vpjHBqhc6fWwOfextyaJyLFC10dzLL7xCVsYNUXoFuWo1cuQsTcNqIZaOw5Rm2HtCLWaJH3X9YdLcoJtIhPNUVjvR0H81HbjahRTmX2RXxt8SU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-7ebb445bacaso120082039f.3
+        for <linux-usb@vger.kernel.org>; Tue, 11 Jun 2024 08:53:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718121182; x=1718725982;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XFjbHNvcgSLNXhJqn3uZ0hKKgUPVLUjPjtWE4E1qJgU=;
+        b=vqLFjXCwPhVDZ9HjJOkK/33p/AqLcghDGd+914K/59ncgEBAszubZaiE0jQtUaue56
+         KP1eS+PI5p5T8mI6G+pNx5dZaNcGdt6SHPUey0TNWr4bFmgCF58glQrVHarms0NFGfg1
+         D9T+QsVF4OtIFc7KztlcuEjPTBjSC9zPSOm/T6JztdxMO8ml4e+/MlUMpFHZ7Jzvp/+4
+         7SXH0LsT5RX+oOU5D9uQ01QMcCLQ38n9msLputMZTSLvUNN3WYBE/neOvx/2BM5OTorO
+         PkcYSnVKQ58+2YFP94bvreRl2/GebnzJOqSfw6NN9YMf5EIZBeXfWoWNIO4Lyiq+gCYZ
+         QvMw==
+X-Forwarded-Encrypted: i=1; AJvYcCWkYFawAdFrtvkZoP5DhtZUECl3Y4XlzBdo7oba4fh2Gn3SYyDSwZaSK20E3sHUjS65ZJi4+kM0VNAxgtymud4MQBcbeMb3fi0F
+X-Gm-Message-State: AOJu0YwTD54MV1Z+I5wbUbf6xiaQWBkvTvFhwhIf2ABXaJKFvyMKDxIP
+	A/7HhWHzzaPrrW/kmGp44rMAKbjimbtnZ6l2TUR5eR3EgEM3PZG5SJy/n6/JGzzXlF0SehcJta/
+	hG1bYtgdxdI+IsAe/CuC/jPdWT2bzElSVETaBYQ2ZiM4+Jwwu8wO5lkU=
+X-Google-Smtp-Source: AGHT+IGX4GhvZg4jJi7qIRxkQJLJsCVxY7kkD2G+PAaxGMOK9zdGU2RuivPQudvigA1TlgfuRyax4v+kmchvaBlro09kIzvP63XE
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <000000000000386b64061a8ec33d@google.com>
+X-Received: by 2002:a92:cd82:0:b0:374:a16b:6f7e with SMTP id
+ e9e14a558f8ab-375803c4cd0mr8494635ab.4.1718121182777; Tue, 11 Jun 2024
+ 08:53:02 -0700 (PDT)
+Date: Tue, 11 Jun 2024 08:53:02 -0700
+In-Reply-To: <23b1962c-044d-4dbd-a705-58754f0914cb@rowland.harvard.edu>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c7e169061a9f42e8@google.com>
+Subject: Re: [syzbot] [usb?] INFO: rcu detected stall in raw_ioctl
+From: syzbot <syzbot+5f996b83575ef4058638@syzkaller.appspotmail.com>
+To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, stern@rowland.harvard.edu, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Jun 10, 2024 at 01:12:03PM -0700, syzbot wrote:
-> Hello,
-> 
-> syzbot has tested the proposed patch and the reproducer did not trigger any issue:
-> 
-> Reported-and-tested-by: syzbot+5f996b83575ef4058638@syzkaller.appspotmail.com
-> 
-> Tested on:
-> 
-> commit:         8867bbd4 mm: arm64: Fix the out-of-bounds issue in con..
-> git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
-> console output: https://syzkaller.appspot.com/x/log.txt?x=15f51bce980000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=3b4350cf56c61c80
-> dashboard link: https://syzkaller.appspot.com/bug?extid=5f996b83575ef4058638
-> compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-> userspace arch: arm64
-> patch:          https://syzkaller.appspot.com/x/patch.diff?x=151b5fce980000
-> 
-> Note: testing is done by a robot and is best-effort only.
+Hello,
 
-That's not much use.  Let's see what happens without all the error 
-messages filling up the log, and let's test how well the timer emulation 
-works.
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-The kernel config has CONFIG_HZ set to 100, which is not a very good 
-value for dummy-hcd although it should still work.  But the 
-multiple-millisecond intervals between timer interrupts are worrisome.
+Reported-and-tested-by: syzbot+5f996b83575ef4058638@syzkaller.appspotmail.com
 
-Alan Stern
+Tested on:
 
-#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git 8867bbd4a056
+commit:         8867bbd4 mm: arm64: Fix the out-of-bounds issue in con..
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=11bcfa36980000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3b4350cf56c61c80
+dashboard link: https://syzkaller.appspot.com/bug?extid=5f996b83575ef4058638
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+userspace arch: arm64
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=17790922980000
 
-Index: usb-devel/drivers/usb/class/cdc-wdm.c
-===================================================================
---- usb-devel.orig/drivers/usb/class/cdc-wdm.c
-+++ usb-devel/drivers/usb/class/cdc-wdm.c
-@@ -265,18 +265,11 @@ static void wdm_int_callback(struct urb
- 			set_bit(WDM_INT_STALL, &desc->flags);
- 			dev_err(&desc->intf->dev, "Stall on int endpoint\n");
- 			goto sw; /* halt is cleared in work */
--		default:
--			dev_err(&desc->intf->dev,
--				"nonzero urb status received: %d\n", status);
--			break;
- 		}
- 	}
- 
--	if (urb->actual_length < sizeof(struct usb_cdc_notification)) {
--		dev_err(&desc->intf->dev, "wdm_int_callback - %d bytes\n",
--			urb->actual_length);
-+	if (urb->actual_length < sizeof(struct usb_cdc_notification))
- 		goto exit;
--	}
- 
- 	switch (dr->bNotificationType) {
- 	case USB_CDC_NOTIFY_RESPONSE_AVAILABLE:
-Index: usb-devel/drivers/usb/gadget/legacy/raw_gadget.c
-===================================================================
---- usb-devel.orig/drivers/usb/gadget/legacy/raw_gadget.c
-+++ usb-devel/drivers/usb/gadget/legacy/raw_gadget.c
-@@ -596,8 +596,6 @@ static int raw_ioctl_run(struct raw_dev
- 
- 	spin_lock_irqsave(&dev->lock, flags);
- 	if (ret) {
--		dev_err(dev->dev,
--			"fail, usb_gadget_register_driver returned %d\n", ret);
- 		dev->state = STATE_DEV_FAILED;
- 		goto out_unlock;
- 	}
-Index: usb-devel/drivers/usb/gadget/udc/core.c
-===================================================================
---- usb-devel.orig/drivers/usb/gadget/udc/core.c
-+++ usb-devel/drivers/usb/gadget/udc/core.c
-@@ -1699,8 +1699,6 @@ int usb_gadget_register_driver_owner(str
- 	mutex_lock(&udc_lock);
- 	if (!driver->is_bound) {
- 		if (driver->match_existing_only) {
--			pr_warn("%s: couldn't find an available UDC or it's busy\n",
--					driver->function);
- 			ret = -EBUSY;
- 		} else {
- 			pr_info("%s: couldn't find an available UDC\n",
-Index: usb-devel/drivers/usb/gadget/udc/dummy_hcd.c
-===================================================================
---- usb-devel.orig/drivers/usb/gadget/udc/dummy_hcd.c
-+++ usb-devel/drivers/usb/gadget/udc/dummy_hcd.c
-@@ -989,12 +989,42 @@ static DEVICE_ATTR_RO(function);
-  * for each driver that registers:  just add to a big root hub.
-  */
- 
-+static struct timer_list	alan_timer;
-+static int			alan_count;
-+#define ALAN_MAX		20
-+
-+static void alan_callback(struct timer_list *t)
-+{
-+	if (++alan_count >= ALAN_MAX)
-+		return;
-+	mod_timer(&alan_timer, jiffies + msecs_to_jiffies(1));
-+}
-+
-+static void test_alan_timer(void)
-+{
-+	int	alan_prev;
-+
-+	alan_prev = alan_count = 0;
-+	mod_timer(&alan_timer, jiffies + msecs_to_jiffies(1));
-+	for (;;) {
-+		if (alan_prev != alan_count) {
-+			alan_prev = alan_count;
-+			pr_info("alan_count %d\n", alan_prev);
-+			if (alan_prev >= ALAN_MAX)
-+				break;
-+		}
-+		cpu_relax();
-+	}
-+}
-+
- static int dummy_udc_start(struct usb_gadget *g,
- 		struct usb_gadget_driver *driver)
- {
- 	struct dummy_hcd	*dum_hcd = gadget_to_dummy_hcd(g);
- 	struct dummy		*dum = dum_hcd->dum;
- 
-+	test_alan_timer();
-+
- 	switch (g->speed) {
- 	/* All the speeds we support */
- 	case USB_SPEED_LOW:
-@@ -2769,6 +2799,8 @@ static int __init dummy_hcd_init(void)
- 	int	i;
- 	struct	dummy *dum[MAX_NUM_UDC] = {};
- 
-+	timer_setup(&alan_timer, alan_callback, TIMER_PINNED);
-+
- 	if (usb_disabled())
- 		return -ENODEV;
- 
+Note: testing is done by a robot and is best-effort only.
 
