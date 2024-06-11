@@ -1,142 +1,136 @@
-Return-Path: <linux-usb+bounces-11130-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11131-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 60E1C903779
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Jun 2024 11:09:00 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1953F90381B
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Jun 2024 11:45:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 809C8B216D3
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Jun 2024 09:02:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C2B9C1F24873
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Jun 2024 09:45:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC8AC176228;
-	Tue, 11 Jun 2024 09:02:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C499917836F;
+	Tue, 11 Jun 2024 09:45:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mrlFIach"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="K9ThOjT6"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 662B079C8
-	for <linux-usb@vger.kernel.org>; Tue, 11 Jun 2024 09:02:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF378176FB3;
+	Tue, 11 Jun 2024 09:45:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718096571; cv=none; b=UbmOHounyIOdJbbDQjop8RY6rBge9b6bmOBghWO7alfHomLFsJM+aAyDzwmmMb9Hl9YHxirqheBxpcV5n3pBYxkjTaNTt8FSSAnwa2MVBgP0g855yd5xw+693cx90vYUhzMPJLcsMKuU44JcRMfuXS5abjsQtV2GrsMyjdxElZE=
+	t=1718099107; cv=none; b=HBGYnu7i3AqmO7aJclivTLVNtojLydSVRN8vIro1bfIO7lIfehBfymkYMZ9ICcMAKTFsVqelDS/QeVNbWjhTgsTR4dDbtLIVUIU0n34haGvsXJw2zCkabouA80XjcNZ7UZK+js4czFo9wOwC76vLCspejHMQfHy91j4jNC19duk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718096571; c=relaxed/simple;
-	bh=BZay0EVsEKUz9BqbYRVxh6GC3HFo+QuVfXiWmbyve3k=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=hTY8nZpuTjQt12l9GP1fJPpkQfCI1ENr/XGG/KUN2/4eeuvW+d+xL+DALt/6MEtAGuksZ9wUX4LqaY0bgibogky1UFHEbNkBp3x5Bi136GvJwHSAo3DWYluarWuS9eh0IE4ea8A9BjGP6vtKALDatV4u59TVNx9BTEfE9ujgPDY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mrlFIach; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DB2A8C2BD10
-	for <linux-usb@vger.kernel.org>; Tue, 11 Jun 2024 09:02:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718096570;
-	bh=BZay0EVsEKUz9BqbYRVxh6GC3HFo+QuVfXiWmbyve3k=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=mrlFIachKSs75ISy0rca3RZk4wD3Eh5gYWZlucEL5gi9Od5XeSBswoIfI6kbuXC5s
-	 8HvzyQgLpX8enHot4BozWx0/IzB8g06p4cHDyFzC0Zq/8h6BOJeaJCb7gyVlJbbwET
-	 8337GuF1HENu52bbJfUlz98MN853deuQSi3XPNgl2OvdxJ7I1CwfeiJUy8pyPb6rfB
-	 aZ8v0tNbQYeH28RxkXrUWp0vEt14Np7HIKx5Fy6ZDfMBt6XOWCAxHuRjskaVH6n+jE
-	 wSigVKSu3z3Zx3KpT1m0I2WxxrgzaveYqt72rdBsD+7q1/EsnM/prlnsamKBXI+dl+
-	 fpfoCNi4sQnTQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id D48E0C53B73; Tue, 11 Jun 2024 09:02:50 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 218943] No SuperSpeedPlus on AM4/5 Hubs
-Date: Tue, 11 Jun 2024 09:02:50 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: jarrard@proton.me
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-218943-208809-ALP54t4y9q@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218943-208809@https.bugzilla.kernel.org/>
-References: <bug-218943-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1718099107; c=relaxed/simple;
+	bh=N2AFykO7g5lcDZvqLYnlKBNb5KH5FUFag2Cy+VHydbM=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=KVSW6MjZYuZ7b9WqRkij/Ll/LY/qILpPIfXQwFUDd0avOX1YN91j4R18T5GyYZfA9WWSmRiABmn7FZyUvkLmVeBfLnbJ8bdE3bwxyPv2cEAK3IFloporK/qPegkzNwQE23BZk6a1TbkH4+3vJ3WDuQ90Txm8Rpoi9ZgAWA3i1N4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=K9ThOjT6; arc=none smtp.client-ip=68.232.153.233
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1718099104; x=1749635104;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=N2AFykO7g5lcDZvqLYnlKBNb5KH5FUFag2Cy+VHydbM=;
+  b=K9ThOjT6eRMXsPMk/KE8gY8zmwZlP1De9T65zFXvzNeoXkUkLm6PoLDg
+   SvRv5rrap+8apnN0Jbo3238jOFMBiZbNRUsRDDBjlDK3tJnz3UJHKhI69
+   HF+Gjo8Yu2X+wL/P7GWPrSdjudsUB1Jgn7CfdGKM7yBPRhJiwuOUPjD13
+   fscRCtGqjZxQajUgiCES0oH4t8qVITNer6IZscnFqCxHGgLIScCTheV2W
+   C6yDN5cHPP4ynuX4fAflLvd1/5FL6RZK8WhSq6eLd+w5k5IYJPJb9xD1O
+   4PhGxkGudR2acNNZjoGfpADHAq8qtNkjsHWv7pN0kg5ixiuDDDUCqK02X
+   A==;
+X-CSE-ConnectionGUID: 0cBbznKCTOiQxMmBD6ZkJQ==
+X-CSE-MsgGUID: s44okEMyQhCNKnXzE0tYLw==
+X-IronPort-AV: E=Sophos;i="6.08,229,1712646000"; 
+   d="scan'208";a="258114337"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 11 Jun 2024 02:44:58 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Tue, 11 Jun 2024 02:44:17 -0700
+Received: from che-ld-unglab06.microchip.com (10.10.85.11) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2507.35 via Frontend Transport; Tue, 11 Jun 2024 02:44:14 -0700
+From: Rengarajan S <rengarajan.s@microchip.com>
+To: <woojung.huh@microchip.com>, <UNGLinuxDriver@microchip.com>,
+	<davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+	<pabeni@redhat.com>, <netdev@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+CC: <rengarajan.s@microchip.com>
+Subject: [PATCH net-next v1] lan78xx: lan7801 MAC support with lan8841
+Date: Tue, 11 Jun 2024 15:12:33 +0530
+Message-ID: <20240611094233.865234-1-rengarajan.s@microchip.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218943
+Add lan7801 MAC only support with lan8841. The PHY fixup is registered
+for lan8841 and the initializations are done using lan8835_fixup since
+the register configs are similar for both lann8841 and lan8835. The PHY
+is unregistered at two instances, one during init and other during
+disconnect.
 
---- Comment #15 from Jarrard (jarrard@proton.me) ---
-[  668.628381] usb 3-4: new high-speed USB device number 4 using xhci_hcd
-[  668.755970] usb 3-4: New USB device found, idVendor=3D1a40, idProduct=3D=
-0101,
-bcdDevice=3D 1.11
-[  668.755978] usb 3-4: New USB device strings: Mfr=3D0, Product=3D1,
-SerialNumber=3D0
-[  668.755983] usb 3-4: Product: USB 2.0 Hub
-[  668.818075] hub 3-4:1.0: USB hub found
-[  668.818344] hub 3-4:1.0: 4 ports detected
-[  669.113942] usb 4-4: new SuperSpeed USB device number 5 using xhci_hcd
-[  674.233892] usb 4-4: unable to get BOS descriptor or descriptor too short
-[  674.258279] usb 4-4: unable to read config index 0 descriptor/start: -71
-[  674.258288] usb 4-4: can't read configurations, error -71
-[  674.409839] usb 3-4.3: new full-speed USB device number 5 using xhci_hcd
-[  674.628846] usb 3-4.3: New USB device found, idVendor=3D07ca, idProduct=
-=3Dd553,
-bcdDevice=3D 1.01
-[  674.628853] usb 3-4.3: New USB device strings: Mfr=3D1, Product=3D2,
-SerialNumber=3D3
-[  674.628858] usb 3-4.3: Product: Live Gamer Ultra 2.1-RGB
-[  674.628862] usb 3-4.3: Manufacturer: AVerMedia Computer Inc.
-[  674.628866] usb 3-4.3: SerialNumber: 5204140800332
-[  674.683236] hid-generic 0003:07CA:D553.000B: hiddev5,hidraw10: USB HID v=
-1.11
-Device [AVerMedia Computer Inc. Live Gamer Ultra 2.1-RGB] on
-usb-0000:30:00.3-4.3/input1
-[  675.205949] usb 4-4: Device not responding to setup address.
-[  675.418073] usb 4-4: Device not responding to setup address.
-[  675.625936] usb 4-4: device not accepting address 6, error -71
-[  675.634016] usb usb4-port4: attempt power cycle
-[  676.742634] usb 4-4: new SuperSpeed USB device number 7 using xhci_hcd
-[  676.950771] usb 4-4: LPM exit latency is zeroed, disabling LPM.
-[  677.048948] usb 4-4: New USB device found, idVendor=3D07ca, idProduct=3D=
-2553,
-bcdDevice=3D 1.00
-[  677.048957] usb 4-4: New USB device strings: Mfr=3D6, Product=3D7,
-SerialNumber=3D3
-[  677.048962] usb 4-4: Product: Live Gamer Ultra 2.1
-[  677.048966] usb 4-4: Manufacturer: AVerMedia
-[  677.048970] usb 4-4: SerialNumber: 5204140800332
-[  677.147762] uvcvideo 4-4:1.1: Unknown video format
-30313050-0000-0010-8000-00aa00389b71
-[  677.147779] usb 4-4: Found UVC 1.00 device Live Gamer Ultra 2.1 (07ca:25=
-53)
-[  677.547565] usb 4-4: 3:2: failed to get current value for ch 0 (-22)
+Signed-off-by: Rengarajan S <rengarajan.s@microchip.com>
+---
+ drivers/net/usb/lan78xx.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
+diff --git a/drivers/net/usb/lan78xx.c b/drivers/net/usb/lan78xx.c
+index 5add4145d9fc..ab6f0c42b4d9 100644
+--- a/drivers/net/usb/lan78xx.c
++++ b/drivers/net/usb/lan78xx.c
+@@ -479,6 +479,7 @@ struct lan78xx_net {
+ 
+ /* define external phy id */
+ #define	PHY_LAN8835			(0x0007C130)
++#define PHY_LAN8841			(0x00221650)
+ #define	PHY_KSZ9031RNX			(0x00221620)
+ 
+ /* use ethtool to change the level for any given device */
+@@ -2327,6 +2328,13 @@ static struct phy_device *lan7801_phy_init(struct lan78xx_net *dev)
+ 			netdev_err(dev->net, "Failed to register fixup for PHY_LAN8835\n");
+ 			return NULL;
+ 		}
++		/* external PHY fixup for LAN8841 */
++		ret = phy_register_fixup_for_uid(PHY_LAN8841, 0xfffffff0,
++						 lan8835_fixup);
++		if (ret < 0) {
++			netdev_err(dev->net, "Failed to register fixup for PHY_LAN8841\n");
++			return NULL;
++		}
+ 		/* add more external PHY fixup here if needed */
+ 
+ 		phydev->is_internal = false;
+@@ -2390,6 +2398,8 @@ static int lan78xx_phy_init(struct lan78xx_net *dev)
+ 							     0xfffffff0);
+ 				phy_unregister_fixup_for_uid(PHY_LAN8835,
+ 							     0xfffffff0);
++				phy_unregister_fixup_for_uid(PHY_LAN8841,
++							     0xfffffff0);
+ 			}
+ 		}
+ 		return -EIO;
+@@ -4239,6 +4249,7 @@ static void lan78xx_disconnect(struct usb_interface *intf)
+ 
+ 	phy_unregister_fixup_for_uid(PHY_KSZ9031RNX, 0xfffffff0);
+ 	phy_unregister_fixup_for_uid(PHY_LAN8835, 0xfffffff0);
++	phy_unregister_fixup_for_uid(PHY_LAN8841, 0xfffffff0);
+ 
+ 	phy_disconnect(net->phydev);
+ 
+-- 
+2.25.1
 
-
-
-
-Nothing about superspeedplus sorry to day.  I don't understand the descript=
-or
-and can't debug further as dynamic debug is not allowed under this distro a=
-tm.
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
 
