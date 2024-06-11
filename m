@@ -1,159 +1,245 @@
-Return-Path: <linux-usb+bounces-11147-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11148-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55BB3903F14
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Jun 2024 16:45:44 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9EF25903F40
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Jun 2024 16:53:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0A1B01F23C38
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Jun 2024 14:45:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9FB011C23441
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Jun 2024 14:53:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A680111A1;
-	Tue, 11 Jun 2024 14:45:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEFE51171D;
+	Tue, 11 Jun 2024 14:53:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FmixNAO3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MyVZL3ei"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7A421CD2B;
-	Tue, 11 Jun 2024 14:45:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 643621CFA0
+	for <linux-usb@vger.kernel.org>; Tue, 11 Jun 2024 14:53:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718117138; cv=none; b=j38oZzz8v+2iIbZQ7peXsllSYQtK6gh4Gg4k8M1bZ+Kw42UAR9Z6C1vDzSv3uj9KFyf4bvN4jfBFcG01pWnD7HRfMtO6BQH2eJXjH+aHQgLqWZYZVs12RPqUvu2+c00nO3U2XU1/yhu3rhy0FL2tHEbOSyv+RYRLptdryvxZWj8=
+	t=1718117590; cv=none; b=Wcz5u3sRg1dnNtWXT21byT2+cXKkdbAmGunCSCLR75eWCFD1RcDDnetOYfHEyY7c97LFLgkTeVVvKl0Cb7Iv30OqAaOxnOlJ7LnMtqOND3D5scU7f25a3jE0ejc/JsOW1ZJms/BmanMPobSBTy9IAEnKkppA3ex4Be1dPp6Z/jc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718117138; c=relaxed/simple;
-	bh=/H9XWnYs0Gk9ZeqHTnYujfKVyliogBQwwJWeAfHwh98=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Q6wxpCU4nASVbcUmKFDtR01Lv3LyB2zIRcs0FmEis+uS0ZurjgiU1fWzjN9ZTCewLSig3waHa37Kmi8xskO8ErkLGKd7v4L8cs9g6LCc0qfG7RfdRRiFz/fqsnvskacdirlN1OCOHtdIlwgaINHChzZykQQtYxuODI/zM5dmexw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FmixNAO3; arc=none smtp.client-ip=209.85.208.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-57c83100bd6so3012020a12.3;
-        Tue, 11 Jun 2024 07:45:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718117135; x=1718721935; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZDmcQfJiJg3AhnNDskLBlCw1R+pPrp3kDPPVyHiSs34=;
-        b=FmixNAO3O1YHsSEWlGUa8WiSiUhz4+org9mTv2BvJHGls82Ie0d1QH15vBw83RWO+q
-         gQxuH1tMJ6VWhohRIu7DFM772BfkMTcpPT8FLJPjy1EhcGSreL1Xi1soghw7p7EEB5je
-         rq7Y7gYFDF3ikhRzMZc72q2JqBF6M0ceAfPRqR+wpzW5Ba4ciG6bWMz+r6TzeD6bDE2J
-         wFMAdU4UzNMiwBMs/qV7Oro8+RoATZ4d9+XqNJKREpaOfSE42YRCyqP5i7U5ccFyjyPn
-         L8OdkbWzxz0wQTdfy5sG3XYFOHRozf3d0iUkPyvsRWuUAlixhPHs6ufjBxcarGT64HI3
-         AZcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718117135; x=1718721935;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZDmcQfJiJg3AhnNDskLBlCw1R+pPrp3kDPPVyHiSs34=;
-        b=n5hY09PCY7I2Kn+G6G33ejnKq9y7rGW9EDPgR9gGOZuGgvJdOLvzdvQWU2cMdUBrTw
-         v2cgJ93C62dbPVbLCZ5yHtY8HWRWzb1b2NLV3oZLLSLBLahHZxGSUfPFCSIMMh90MSC+
-         8BgYnRDZl4PKlpavr0a5kBi1WSpxdcswewah97KkX+j1TPnLCeZqccLu4EaRIEFOyE5S
-         flD1QESbp6zD6a3vYDTBVfp5CeDOAO+VTEZIZ3yWr72G4rywZOmyyKdrxXNAbxbuInnq
-         3MDz6kCM7Jmp/k7c7EAvANysfbVnapecIzLucw6san1FRloMvi/tygd7ozMRkFJDN7g2
-         ryYw==
-X-Forwarded-Encrypted: i=1; AJvYcCX5EJLYIRci5+SOconfn80861dm0w1OMljKLRUE3vmuY9dvsQrdUY7rHMXNYhBWCcfyHovEDtT1Du7ocK3EdIeMmKwSBYvKFFvxBV6VsXD2n8t9vr3ZMStzGwNHGE/gR4rkOADVDndb
-X-Gm-Message-State: AOJu0YxTsQjLUAmkzscFjUqAhXA8Djp7d3S/XhKkRUMXPANevG9r/L8G
-	Lhkc9pdKMV5lB8GH4AxQvu+n0BFCaS3+5P/904AzrreaqjCHMOmEiWgrpSWiTp0pejZZ7E6taUg
-	tZXIAVM/QzCs4xb9PtYo5om2i6z0=
-X-Google-Smtp-Source: AGHT+IG7CIRLR+hJ7GJps0P7xxR9z8sOBVvX+i3dYJEQm0KFaH57K3LlfTaYAM4fsZpZAwb91tP+V4bjqE7cM6tk0YY=
-X-Received: by 2002:a50:8d5c:0:b0:578:3335:6e88 with SMTP id
- 4fb4d7f45d1cf-57c506bf7a9mr8912411a12.0.1718117133955; Tue, 11 Jun 2024
- 07:45:33 -0700 (PDT)
+	s=arc-20240116; t=1718117590; c=relaxed/simple;
+	bh=BeLbx54XpSz1Li4UWtS/i+HtgZfy3144st8Kb+4qGDM=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=bNyNrhbI2f/kKkVzneYLEP6zgCN8uOfaOoDGLP4s85gfnjdddrVZIAii3uMTChaxXyBESLeaZ2q5gWAJxdSAGhG7Yc+4b16v7fox0sFzL5O4KY9GZM7AUBplidDN3xZXNzD0gMCdnViFR9tbjMmoKge4DLlUn5J941ohUtIsPdk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MyVZL3ei; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EE5FCC2BD10
+	for <linux-usb@vger.kernel.org>; Tue, 11 Jun 2024 14:53:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718117590;
+	bh=BeLbx54XpSz1Li4UWtS/i+HtgZfy3144st8Kb+4qGDM=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=MyVZL3eiGjpBAQvXZbYlw9PFj6eMxH3UE/hS6x3qN6KQDt7n1YVZuG3FNLm1itKv0
+	 nBENwpfbxM81iL9dttERH+kDfE7UirJWphyb29+eVkWGhresRcEwDwbx10OnOPJpPu
+	 mykPbHC2CwB1Sk2XfljzqjQ9n2DJDQfr9OemqAuXF2soZcqVCtXXEtOlOUpQ2Bj0la
+	 t0LDz9DuySVBbbihzEIbkwduPM9I4iIreBn6pAwBodFiPfN831NBslzudRs65WbeCE
+	 qnFoXCczP3Ac5Kjjz5258wqaXZg7EpVUEbWnwhp6qiG5fPMsrHqhCU/hSwGtrOHdfz
+	 Fm3EBe6RCaSIg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id DBC7FC53B73; Tue, 11 Jun 2024 14:53:09 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 218943] No SuperSpeedPlus on AM4/5 Hubs
+Date: Tue, 11 Jun 2024 14:53:09 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: jarrard@proton.me
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-218943-208809-OGGBcCgXuT@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-218943-208809@https.bugzilla.kernel.org/>
+References: <bug-218943-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240601120640.73556-1-joswang1221@gmail.com> <1662c9c9-7330-4794-843a-940f05802021@linux.intel.com>
- <CAMtoTm1u+8ynBRaWgCMVgaR+dBoZfNGhzGqmvooBSDxZm5Qx+g@mail.gmail.com>
- <c9430561-ecfe-5b36-9574-73a946410eea@linux.intel.com> <CAMtoTm1xYUuaV1rO3dZexS=q_5Xf61+QAZ1++VvzK10VtGHexA@mail.gmail.com>
- <2521588d-30a6-0224-c7c9-3015e9cc65a3@linux.intel.com>
-In-Reply-To: <2521588d-30a6-0224-c7c9-3015e9cc65a3@linux.intel.com>
-From: joswang <joswang1221@gmail.com>
-Date: Tue, 11 Jun 2024 22:45:26 +0800
-Message-ID: <CAMtoTm2G-w+yRjechji7scJO-JZo6N==VK6Wun3ATRc7do9rEg@mail.gmail.com>
-Subject: Re: [RFC 1/1] usb: host: xhci-plat: add enable XHCI-AVOID-BEI quirk
- by dts
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: mathias.nyman@intel.com, gregkh@linuxfoundation.org, 
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	joswang <joswang@lenovo.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 11, 2024 at 6:01=E2=80=AFPM Mathias Nyman
-<mathias.nyman@linux.intel.com> wrote:
->
-> On 6.6.2024 17.08, joswang wrote:
-> > On Wed, Jun 5, 2024 at 6:31=E2=80=AFPM Mathias Nyman
-> > <mathias.nyman@linux.intel.com> wrote:
-> ...
-> >>
-> >> I was thinking of turning XHCI_AVOID_BEI behavior into the new default=
-, so no
-> >> quirk flag would be needed:
-> >>
-> >> Currently without the quirk flag:
-> >>
-> >> - ISOC TRBs trigger interrupt if TRB is the last in the TD
-> >>
-> >> Currently with XHCI_AVOID_BEI quirk flag:
-> >>
-> >> - ISOC TRBs trigger interrupt if TRB is the last in the TD
-> >> - Interrupt is additionally triggered every 32 isoc TRB (initially).
-> >> - if more than 128 events are processed in one interrupt then the
-> >>     32 is halved, and we trigger an interrupts every 16th isoc TRB, an=
-d so
-> >>     on, 16 -> 8...
-> >>
-> >> I would remove the quirk flag, and make all controllers interrupt
-> >> behave as if it was set. i.e. interrupt at least every 32 isoc TRB
-> >
-> > Thank you for your detailed analysis.
-> > Excuse me, I have a question, do you mean to set "Currently with
-> > XHCI_AVOID_BEI quirk flag" as the default behavior?
->
-> Yes, unless it causes some issues or there are strong objections
->
-> >>
-> >> Is there an actual real world case where interrupting every 32nd ISOC =
-TRB is
-> >> too often?
-> >
-> > I mean that if the XHCI_AVOID_BEI quirk flag is set, an interrupt will
-> > be triggered every 8 TRBs, which makes the interrupts seem to be quite
-> > frequent.
-> > Thanks
-> > Jos
-> >
->
-> It should start with interrupting every 32nd isoc TD, not 8th
->
-> #define AVOID_BEI_INTERVAL_MAX   32
->
-> ir->isoc_bei_interval =3D AVOID_BEI_INTERVAL_MAX;
->
-> Thanks
-> Mathias
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218943
 
-As you mentioned=EF=BC=8Cif more than 128 events are processed in one
-interrupt then the 32 is halved, and we trigger an interrupts every
-16th isoc TRB, and so on, 16 -> 8...
-xhci_handle_events()
-    ......
-    if (event_loop++ > TRBS_PER_SEGMENT / 2) {
-         if (ir->isoc_bei_interval > AVOID_BEI_INTERVAL_MIN)
-              ir->isoc_bei_interval =3D ir->isoc_bei_interval / 2;
-    }
-    .......
+--- Comment #18 from Jarrard (jarrard@proton.me) ---
+Here is a more truncated dmesg log, ran it a few times and this seems to be=
+ the
+sum of the log when plugging the device in.
 
-Thanks
-Jos Wang
+Removed most the xhci_get_isoc_frame_id: index 0........ stuff
+
+Keep in mind this USB capture card has around 3 devices on it from what I c=
+an
+see. Video, Audio, RGB Lighting.
+
+[ 1560.044886] xhci_hcd 0000:30:00.3: udev->tt =3D 0000000000000000
+[ 1560.044890] xhci_hcd 0000:30:00.3: udev->ttport =3D 0x0
+[ 1560.044895] xhci_hcd 0000:30:00.3: // Ding dong!
+[ 1560.052981] usb 4-4: Device not responding to setup address.
+[ 1560.053033] xhci_hcd 0000:30:00.3: // Ding dong!
+[ 1560.053055] xhci_hcd 0000:30:00.3: // Ding dong!
+[ 1560.053092] xhci_hcd 0000:30:00.3: Slot 7 output ctx =3D 0x0x00000000fff=
+26000
+(dma)
+[ 1560.053098] xhci_hcd 0000:30:00.3: Slot 7 input ctx =3D 0x0x00000000fff1=
+7000
+(dma)
+[ 1560.053105] xhci_hcd 0000:30:00.3: Set slot id 7 dcbaa entry
+00000000dcd62c49 to 0xfff26000
+[ 1560.053130] xhci_hcd 0000:30:00.3: xhci_get_isoc_frame_id: index 0, reg
+0xac3 start_frame_id 0x159, end_frame_id 0x4d7, start_frame 0x164
+[ 1560.054017] xhci_hcd 0000:30:00.3: Port change event, 4-4, id 8, portsc:
+0xe0202a0
+[ 1560.054025] xhci_hcd 0000:30:00.3: handle_port_status: starting usb4 port
+polling.
+[ 1560.256853] xhci_hcd 0000:30:00.3: Set root hub portnum to 8
+[ 1560.256857] xhci_hcd 0000:30:00.3: Set fake root hub portnum to 4
+[ 1560.256861] xhci_hcd 0000:30:00.3: udev->tt =3D 0000000000000000
+[ 1560.256865] xhci_hcd 0000:30:00.3: udev->ttport =3D 0x0
+[ 1560.256871] xhci_hcd 0000:30:00.3: // Ding dong!
+[ 1560.264980] usb 4-4: Device not responding to setup address.
+[ 1560.265022] xhci_hcd 0000:30:00.3: // Ding dong!
+[ 1560.265045] xhci_hcd 0000:30:00.3: // Ding dong!
+[ 1560.265079] xhci_hcd 0000:30:00.3: Slot 7 output ctx =3D 0x0x00000000fff=
+26000
+(dma)
+[ 1560.265085] xhci_hcd 0000:30:00.3: Slot 7 input ctx =3D 0x0x00000000fff1=
+7000
+(dma)
+[ 1560.265091] xhci_hcd 0000:30:00.3: Set slot id 7 dcbaa entry
+00000000dcd62c49 to 0xfff26000
+[ 1560.473834] usb 4-4: device not accepting address 25, error -71
+[ 1560.473846] xhci_hcd 0000:30:00.3: Set port 4-4 link state, portsc:
+0xe021203, write 0xe011261
+[ 1560.481893] xhci_hcd 0000:30:00.3: // Ding dong!
+[ 1560.481911] xhci_hcd 0000:30:00.3: Bad real port.
+[ 1560.481918] usb usb4-port4: attempt power cycle
+[ 1560.481924] xhci_hcd 0000:30:00.3: set port power 4-4 OFF, portsc: 0xe02=
+1263
+[ 1560.688829] xhci_hcd 0000:30:00.3: set port power 4-4 ON, portsc: 0xe020=
+080
+[ 1560.792813] xhci_hcd 0000:30:00.3: // Ding dong!
+[ 1560.792835] xhci_hcd 0000:30:00.3: Slot 7 output ctx =3D 0x0x00000000fff=
+26000
+(dma)
+[ 1560.792841] xhci_hcd 0000:30:00.3: Slot 7 input ctx =3D 0x0x00000000fff1=
+7000
+(dma)
+[ 1560.792849] xhci_hcd 0000:30:00.3: Set slot id 7 dcbaa entry
+00000000dcd62c49 to 0xfff26000
+[ 1560.792888] xhci_hcd 0000:30:00.3: Get port status 4-4 read: 0xe0202a0,
+return 0x102a0
+[ 1560.792912] xhci_hcd 0000:30:00.3: set port reset, actual port 4-4 statu=
+s  =3D
+0xe0202b0
+[ 1560.854820] xhci_hcd 0000:30:00.3: Get port status 4-4 read: 0xe2a02a0,
+return 0x3102a0
+[ 1560.854839] usb usb4-port4: not reset yet, waiting 60ms
+[ 1560.916802] xhci_hcd 0000:30:00.3: Get port status 4-4 read: 0xe2a02a0,
+return 0x3102a0
+[ 1560.916831] usb usb4-port4: not reset yet, waiting 200ms
+[ 1561.120792] xhci_hcd 0000:30:00.3: Get port status 4-4 read: 0xe2a02a0,
+return 0x3102a0
+[ 1561.120840] usb usb4-port4: not reset yet, waiting 200ms
+[ 1561.328770] xhci_hcd 0000:30:00.3: Get port status 4-4 read: 0xe2a02a0,
+return 0x3102a0
+[ 1561.328790] usb usb4-port4: not reset yet, waiting 200ms
+[ 1561.536760] xhci_hcd 0000:30:00.3: Get port status 4-4 read: 0xe2a1203,
+return 0x310203
+[ 1561.536780] xhci_hcd 0000:30:00.3: clear port4 reset change, portsc:
+0xe0a1203
+[ 1561.536794] xhci_hcd 0000:30:00.3: clear port4 warm(BH) reset change,
+portsc: 0xe021203
+[ 1561.536810] xhci_hcd 0000:30:00.3: clear port4 link state change, portsc:
+0xe021203
+[ 1561.536824] xhci_hcd 0000:30:00.3: clear port4 connect change, portsc:
+0xe001203
+[ 1561.536837] xhci_hcd 0000:30:00.3: Get port status 4-4 read: 0xe001203,
+return 0x203
+[ 1561.588756] xhci_hcd 0000:30:00.3: Set root hub portnum to 8
+[ 1561.588762] xhci_hcd 0000:30:00.3: Set fake root hub portnum to 4
+[ 1561.588766] xhci_hcd 0000:30:00.3: udev->tt =3D 0000000000000000
+[ 1561.588770] xhci_hcd 0000:30:00.3: udev->ttport =3D 0x0
+[ 1561.588776] xhci_hcd 0000:30:00.3: // Ding dong!
+[ 1561.589112] xhci_hcd 0000:30:00.3: xhci_get_isoc_frame_id: index 0, reg
+0x3ac3 start_frame_id 0x759, end_frame_id 0x2d7, start_frame 0x764
+[ 1561.589376] xhci_hcd 0000:30:00.3: Successful setup address command
+[ 1561.589383] xhci_hcd 0000:30:00.3: Op regs DCBAA ptr =3D 0x000000fffff000
+[ 1561.589387] xhci_hcd 0000:30:00.3: Slot ID 7 dcbaa entry @00000000dcd62c=
+49 =3D
+0x000000fff26000
+[ 1561.589393] xhci_hcd 0000:30:00.3: Output Context DMA address =3D 0xfff2=
+6000
+[ 1561.589397] xhci_hcd 0000:30:00.3: Internal device address =3D 7
+[ 1561.589404] usb 4-4: new SuperSpeed USB device number 26 using xhci_hcd
+[ 1561.784721] xhci_hcd 0000:30:00.3: xhci_hub_status_data: stopping usb4 p=
+ort
+polling
+[ 1561.811955] usb 4-4: LPM exit latency is zeroed, disabling LPM.
+[ 1561.857239] usb 4-4: skipped 1 descriptor after configuration
+[ 1561.857246] usb 4-4: skipped 5 descriptors after interface
+[ 1561.857253] usb 4-4: skipped 2 descriptors after endpoint
+[ 1561.857259] usb 4-4: skipped 42 descriptors after interface
+[ 1561.857265] usb 4-4: skipped 2 descriptors after endpoint
+[ 1561.857270] usb 4-4: skipped 5 descriptors after interface
+[ 1561.857275] usb 4-4: skipped 2 descriptors after interface
+[ 1561.857281] usb 4-4: skipped 2 descriptors after endpoint
+[ 1561.870967] xhci_hcd 0000:30:00.3: Waiting for status stage event
+[ 1561.871029] usb 4-4: default language 0x0409
+[ 1561.910158] usb 4-4: udev 26, busnum 4, minor =3D 409
+[ 1561.910165] usb 4-4: New USB device found, idVendor=3D07ca, idProduct=3D=
+2553,
+bcdDevice=3D 1.00
+[ 1561.910172] usb 4-4: New USB device strings: Mfr=3D6, Product=3D7,
+SerialNumber=3D3
+[ 1561.910177] usb 4-4: Product: Live Gamer Ultra 2.1
+[ 1561.910183] usb 4-4: Manufacturer: AVerMedia
+[ 1561.910188] usb 4-4: SerialNumber: 5204140800332
+[ 1561.910426] usb 4-4: usb_probe_device
+[ 1561.910432] usb 4-4: configuration #1 chosen from 1 choice
+[ 1561.910446] xhci_hcd 0000:30:00.3: add ep 0x85, slot id 7, new drop flag=
+s =3D
+0x0, new add flags =3D 0x800
+[ 1561.910456] xhci_hcd 0000:30:00.3: add ep 0x82, slot id 7, new drop flag=
+s =3D
+0x0, new add flags =3D 0x820
+[ 1561.910463] xhci_hcd 0000:30:00.3: xhci_check_bandwidth called for udev
+0000000005f01f8b
+[ 1561.910472] xhci_hcd 0000:30:00.3: // Ding dong!
+[ 1561.911116] xhci_hcd 0000:30:00.3: xhci_get_isoc_frame_id: index 0, reg
+0x4d3=20
+[ 1561.916735] xhci_hcd 0000:30:00.3: Successful Endpoint Configure command
+[ 1561.916772] xhci_hcd 0000:30:00.3: // Ding dong!
+[ 1561.916784] xhci_hcd 0000:30:00.3: Stopped on No-op or Link TRB for slot=
+ 7
+ep 10
+[ 1561.916795] xhci_hcd 0000:30:00.3: // Ding dong!
+[ 1561.932735] xhci_hcd 0000:30:00.3: // Ding dong!
+[ 1561.932764] xhci_hcd 0000:30:00.3: Stopped on No-op or Link TRB for slot=
+ 7
+ep 4
+[ 1561.932772] xhci_hcd 0000:30:00.3: // Ding dong!
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
