@@ -1,161 +1,188 @@
-Return-Path: <linux-usb+bounces-11149-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11150-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 318FB903F67
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Jun 2024 17:00:37 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD02B903FDB
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Jun 2024 17:21:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DA8BC1F2452B
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Jun 2024 15:00:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7305E1F2464C
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Jun 2024 15:21:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9604C1BDD0;
-	Tue, 11 Jun 2024 15:00:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eaH6STUm"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49C40208AF;
+	Tue, 11 Jun 2024 15:21:01 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84F45208AF;
-	Tue, 11 Jun 2024 15:00:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id C26D014A96
+	for <linux-usb@vger.kernel.org>; Tue, 11 Jun 2024 15:20:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718118031; cv=none; b=IdI6mvyQDvFfRDMxbWaUKGxiE6/nKnBxjHKCFhLmNBDWvvpcWtpWRytxSa1MI3yo3VYtk6cb0Zov7xvY3C4GOtR6AjXBuBFYtAV8lfQU7vhDOdVpT1kViFFrAR9T6yIeggr617p12Cz+5pb5fk/BrPsBs1tL6v49NFSohOBJKiY=
+	t=1718119261; cv=none; b=J6hDN4XlYpT/lR96qPyzIl7cyoSTvSa4mNQqj2+cWKMLxBjhBfCN7N+TVHppW3DcKuFGcQpdZP/2DKKFiJVKLa2+afWzuhnWGFxRnglZpTXTvC9Z0+3+XAU66GEcimbMOoFSA7xCaDPxkbU9cztd/w+QYDvcWcaOEJyzA47aY58=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718118031; c=relaxed/simple;
-	bh=91mEIWE6KuDoenU3fDkspc4I9RYUULOQfo4L08RhrXI=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:From:Subject:
-	 In-Reply-To:Content-Type; b=sEGEdVtbtjP5TgY4Nd/KNtLnF55Dlth2SpsBI/T5i6TMgyGZ0Nq3+a+eK/KQ1dUu6OMqwY7Efba5aohM5vvp6qN2UoXpDMpt0mSb6zDgFbRusasN869CEjX3FrDgXeuAMGTr2aB//htSkGM/cB/adRvEIlPfVqhRCGVlE0hqu24=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eaH6STUm; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1718118030; x=1749654030;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=91mEIWE6KuDoenU3fDkspc4I9RYUULOQfo4L08RhrXI=;
-  b=eaH6STUm11tczp1mrkH+gbSAOBJr1p0v147mn8TLkkcd4V/dno3vGE/j
-   EO5W8mQccd4HhMrRdNPRhkBpq+SQwc5JrZ1Bj2tMqnLm5frdzi2PINvoo
-   qfk+JTd0U7awviTW0Jj4gh/fAKYVwJ5XpuAgaBWoJU3vq3y4Ai1ZGbvrO
-   bFxddHuInUEHb1KGkUD54ts9aS+BetryZzwI6PMXuXnB9SFPrPbnuYsd7
-   9iaKEeJIcUkK0efHjX4VkXacvR4kcWv80VgWOBQFwoyFVWoPEcoGO9Nmx
-   i/U3aW6mmanWjvWxVUwj6riJxpHc2plFn2AuThaU/JlvstHl1A59JHJAd
-   w==;
-X-CSE-ConnectionGUID: fznZbByrTUyoo57yEUm1aQ==
-X-CSE-MsgGUID: IRW34F2NRdqUBS6IQa30zA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11100"; a="14787680"
-X-IronPort-AV: E=Sophos;i="6.08,230,1712646000"; 
-   d="scan'208";a="14787680"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2024 07:56:10 -0700
-X-CSE-ConnectionGUID: WKI8vl8xQ2Wimmzj0ir7pA==
-X-CSE-MsgGUID: o2sGCjdnQ364eDUqdQN9ww==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,230,1712646000"; 
-   d="scan'208";a="39552759"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orviesa009.jf.intel.com with ESMTP; 11 Jun 2024 07:56:07 -0700
-Message-ID: <b5deb873-7151-46fa-164e-9e2c6a339636@linux.intel.com>
-Date: Tue, 11 Jun 2024 17:58:05 +0300
+	s=arc-20240116; t=1718119261; c=relaxed/simple;
+	bh=Er6PA3/Modh6YaGC9UL3eMxeB6uHpwFIoxsNj22/flE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ukNpzy1Is0We5Wq7Q9VqXqhxELokRhqvAFaXFNGAJazee7d52MBIB3gsV67qL9/KBSv4tMDgoWN2WbX/A+aihvnd2r3t0UJZ1rMfeXZ+MhV1068xAZAAtEO6DnKveFmuwPbG8yGDsJqvJ7gB2w9bs72G7ahX7IHvh5gWk4Scxog=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
+Received: (qmail 189524 invoked by uid 1000); 11 Jun 2024 11:20:57 -0400
+Date: Tue, 11 Jun 2024 11:20:57 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: syzbot <syzbot+5f996b83575ef4058638@syzkaller.appspotmail.com>
+Cc: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+  linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [usb?] INFO: rcu detected stall in raw_ioctl
+Message-ID: <23b1962c-044d-4dbd-a705-58754f0914cb@rowland.harvard.edu>
+References: <c3073a8c-bdaa-4123-ae27-9143d916a701@rowland.harvard.edu>
+ <000000000000386b64061a8ec33d@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.13.0
-Content-Language: en-US
-To: joswang <joswang1221@gmail.com>
-Cc: mathias.nyman@intel.com, gregkh@linuxfoundation.org,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- joswang <joswang@lenovo.com>
-References: <20240601120640.73556-1-joswang1221@gmail.com>
- <1662c9c9-7330-4794-843a-940f05802021@linux.intel.com>
- <CAMtoTm1u+8ynBRaWgCMVgaR+dBoZfNGhzGqmvooBSDxZm5Qx+g@mail.gmail.com>
- <c9430561-ecfe-5b36-9574-73a946410eea@linux.intel.com>
- <CAMtoTm1xYUuaV1rO3dZexS=q_5Xf61+QAZ1++VvzK10VtGHexA@mail.gmail.com>
- <2521588d-30a6-0224-c7c9-3015e9cc65a3@linux.intel.com>
- <CAMtoTm2G-w+yRjechji7scJO-JZo6N==VK6Wun3ATRc7do9rEg@mail.gmail.com>
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [RFC 1/1] usb: host: xhci-plat: add enable XHCI-AVOID-BEI quirk
- by dts
-In-Reply-To: <CAMtoTm2G-w+yRjechji7scJO-JZo6N==VK6Wun3ATRc7do9rEg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <000000000000386b64061a8ec33d@google.com>
 
-On 11.6.2024 17.45, joswang wrote:
-> On Tue, Jun 11, 2024 at 6:01 PM Mathias Nyman
-> <mathias.nyman@linux.intel.com> wrote:
->>
->> On 6.6.2024 17.08, joswang wrote:
->>> On Wed, Jun 5, 2024 at 6:31 PM Mathias Nyman
->>> <mathias.nyman@linux.intel.com> wrote:
->> ...
->>>>
->>>> I was thinking of turning XHCI_AVOID_BEI behavior into the new default, so no
->>>> quirk flag would be needed:
->>>>
->>>> Currently without the quirk flag:
->>>>
->>>> - ISOC TRBs trigger interrupt if TRB is the last in the TD
->>>>
->>>> Currently with XHCI_AVOID_BEI quirk flag:
->>>>
->>>> - ISOC TRBs trigger interrupt if TRB is the last in the TD
->>>> - Interrupt is additionally triggered every 32 isoc TRB (initially).
->>>> - if more than 128 events are processed in one interrupt then the
->>>>      32 is halved, and we trigger an interrupts every 16th isoc TRB, and so
->>>>      on, 16 -> 8...
->>>>
->>>> I would remove the quirk flag, and make all controllers interrupt
->>>> behave as if it was set. i.e. interrupt at least every 32 isoc TRB
->>>
->>> Thank you for your detailed analysis.
->>> Excuse me, I have a question, do you mean to set "Currently with
->>> XHCI_AVOID_BEI quirk flag" as the default behavior?
->>
->> Yes, unless it causes some issues or there are strong objections
->>
->>>>
->>>> Is there an actual real world case where interrupting every 32nd ISOC TRB is
->>>> too often?
->>>
->>> I mean that if the XHCI_AVOID_BEI quirk flag is set, an interrupt will
->>> be triggered every 8 TRBs, which makes the interrupts seem to be quite
->>> frequent.
->>> Thanks
->>> Jos
->>>
->>
->> It should start with interrupting every 32nd isoc TD, not 8th
->>
->> #define AVOID_BEI_INTERVAL_MAX   32
->>
->> ir->isoc_bei_interval = AVOID_BEI_INTERVAL_MAX;
->>
->> Thanks
->> Mathias
+On Mon, Jun 10, 2024 at 01:12:03PM -0700, syzbot wrote:
+> Hello,
 > 
-> As you mentioned，if more than 128 events are processed in one
-> interrupt then the 32 is halved, and we trigger an interrupts every
-> 16th isoc TRB, and so on, 16 -> 8...
-> xhci_handle_events()
->      ......
->      if (event_loop++ > TRBS_PER_SEGMENT / 2) {
->           if (ir->isoc_bei_interval > AVOID_BEI_INTERVAL_MIN)
->                ir->isoc_bei_interval = ir->isoc_bei_interval / 2;
->      }
->      .......
+> syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+> 
+> Reported-and-tested-by: syzbot+5f996b83575ef4058638@syzkaller.appspotmail.com
+> 
+> Tested on:
+> 
+> commit:         8867bbd4 mm: arm64: Fix the out-of-bounds issue in con..
+> git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
+> console output: https://syzkaller.appspot.com/x/log.txt?x=15f51bce980000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=3b4350cf56c61c80
+> dashboard link: https://syzkaller.appspot.com/bug?extid=5f996b83575ef4058638
+> compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+> userspace arch: arm64
+> patch:          https://syzkaller.appspot.com/x/patch.diff?x=151b5fce980000
+> 
+> Note: testing is done by a robot and is best-effort only.
 
-Yes, and to me this seems reasonable .
-If there are over 128 events per interrupt then we should interrupt more often.
+That's not much use.  Let's see what happens without all the error 
+messages filling up the log, and let's test how well the timer emulation 
+works.
 
-Would this work as the default for the Synopsys hosts you are working with?
+The kernel config has CONFIG_HZ set to 100, which is not a very good 
+value for dummy-hcd although it should still work.  But the 
+multiple-millisecond intervals between timer interrupts are worrisome.
 
-Thanks
-Mathias
+Alan Stern
+
+#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git 8867bbd4a056
+
+Index: usb-devel/drivers/usb/class/cdc-wdm.c
+===================================================================
+--- usb-devel.orig/drivers/usb/class/cdc-wdm.c
++++ usb-devel/drivers/usb/class/cdc-wdm.c
+@@ -265,18 +265,11 @@ static void wdm_int_callback(struct urb
+ 			set_bit(WDM_INT_STALL, &desc->flags);
+ 			dev_err(&desc->intf->dev, "Stall on int endpoint\n");
+ 			goto sw; /* halt is cleared in work */
+-		default:
+-			dev_err(&desc->intf->dev,
+-				"nonzero urb status received: %d\n", status);
+-			break;
+ 		}
+ 	}
+ 
+-	if (urb->actual_length < sizeof(struct usb_cdc_notification)) {
+-		dev_err(&desc->intf->dev, "wdm_int_callback - %d bytes\n",
+-			urb->actual_length);
++	if (urb->actual_length < sizeof(struct usb_cdc_notification))
+ 		goto exit;
+-	}
+ 
+ 	switch (dr->bNotificationType) {
+ 	case USB_CDC_NOTIFY_RESPONSE_AVAILABLE:
+Index: usb-devel/drivers/usb/gadget/legacy/raw_gadget.c
+===================================================================
+--- usb-devel.orig/drivers/usb/gadget/legacy/raw_gadget.c
++++ usb-devel/drivers/usb/gadget/legacy/raw_gadget.c
+@@ -596,8 +596,6 @@ static int raw_ioctl_run(struct raw_dev
+ 
+ 	spin_lock_irqsave(&dev->lock, flags);
+ 	if (ret) {
+-		dev_err(dev->dev,
+-			"fail, usb_gadget_register_driver returned %d\n", ret);
+ 		dev->state = STATE_DEV_FAILED;
+ 		goto out_unlock;
+ 	}
+Index: usb-devel/drivers/usb/gadget/udc/core.c
+===================================================================
+--- usb-devel.orig/drivers/usb/gadget/udc/core.c
++++ usb-devel/drivers/usb/gadget/udc/core.c
+@@ -1699,8 +1699,6 @@ int usb_gadget_register_driver_owner(str
+ 	mutex_lock(&udc_lock);
+ 	if (!driver->is_bound) {
+ 		if (driver->match_existing_only) {
+-			pr_warn("%s: couldn't find an available UDC or it's busy\n",
+-					driver->function);
+ 			ret = -EBUSY;
+ 		} else {
+ 			pr_info("%s: couldn't find an available UDC\n",
+Index: usb-devel/drivers/usb/gadget/udc/dummy_hcd.c
+===================================================================
+--- usb-devel.orig/drivers/usb/gadget/udc/dummy_hcd.c
++++ usb-devel/drivers/usb/gadget/udc/dummy_hcd.c
+@@ -989,12 +989,42 @@ static DEVICE_ATTR_RO(function);
+  * for each driver that registers:  just add to a big root hub.
+  */
+ 
++static struct timer_list	alan_timer;
++static int			alan_count;
++#define ALAN_MAX		20
++
++static void alan_callback(struct timer_list *t)
++{
++	if (++alan_count >= ALAN_MAX)
++		return;
++	mod_timer(&alan_timer, jiffies + msecs_to_jiffies(1));
++}
++
++static void test_alan_timer(void)
++{
++	int	alan_prev;
++
++	alan_prev = alan_count = 0;
++	mod_timer(&alan_timer, jiffies + msecs_to_jiffies(1));
++	for (;;) {
++		if (alan_prev != alan_count) {
++			alan_prev = alan_count;
++			pr_info("alan_count %d\n", alan_prev);
++			if (alan_prev >= ALAN_MAX)
++				break;
++		}
++		cpu_relax();
++	}
++}
++
+ static int dummy_udc_start(struct usb_gadget *g,
+ 		struct usb_gadget_driver *driver)
+ {
+ 	struct dummy_hcd	*dum_hcd = gadget_to_dummy_hcd(g);
+ 	struct dummy		*dum = dum_hcd->dum;
+ 
++	test_alan_timer();
++
+ 	switch (g->speed) {
+ 	/* All the speeds we support */
+ 	case USB_SPEED_LOW:
+@@ -2769,6 +2799,8 @@ static int __init dummy_hcd_init(void)
+ 	int	i;
+ 	struct	dummy *dum[MAX_NUM_UDC] = {};
+ 
++	timer_setup(&alan_timer, alan_callback, TIMER_PINNED);
++
+ 	if (usb_disabled())
+ 		return -ENODEV;
+ 
 
