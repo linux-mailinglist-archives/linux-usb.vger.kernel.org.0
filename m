@@ -1,152 +1,155 @@
-Return-Path: <linux-usb+bounces-11143-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11144-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69A5E903E69
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Jun 2024 16:11:02 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 16AC2903ECB
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Jun 2024 16:30:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 126B11F21837
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Jun 2024 14:11:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 091C61C21C8E
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Jun 2024 14:30:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E287117D37B;
-	Tue, 11 Jun 2024 14:10:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8AE217D8A3;
+	Tue, 11 Jun 2024 14:30:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TS/395nV"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iwOjPLg0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67B281DDF4
-	for <linux-usb@vger.kernel.org>; Tue, 11 Jun 2024 14:10:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 097B1176FB2;
+	Tue, 11 Jun 2024 14:29:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718115054; cv=none; b=OY4y0E+DUMkPLwuDZaXC0lZl/JxizaytD0gOIDCmV5V/C//rvsZrgTlvtc8F8M8t/xEOJXIoEL9orn6N+hnWaJd6EBq7cvhavWol+GHT45JqdK9478d8+S8DTm4XRHFlsjJczatHpO/DcNw5NUbVQejuJNrgbkYqLIFqQrLrk50=
+	t=1718116200; cv=none; b=Oma7ppCZo807SauwSds9eeOMWreOqAjwHzuesBoU6DFEsL0hPJE6MHYxi/uv4pdrN9z9L0mydori/Rc2BrYR/RJDWHMcCHzWKXRmhsqdOX5taIDoLnhiLcRr5ZvJvLcocyb/QGjUpXNLWBz9zDOWvwd8cEYyVsaJgbVqVQ8PVQU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718115054; c=relaxed/simple;
-	bh=1lYxTI4Ez4M8KDCd6qrvxWGztbUm6Z8bv5fxn9AxIB4=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=OUFtdcuIpjILN7bj3zFzGkWOvq4wSIj7CfPtDVQxSxAE8mxJecGy7bFYJ6AYJlqWEkTpezPT8RypuTxk4+op2odsdhqNK+gz2aNUIZwtokOvYQz8jMaKydzxvZF/Hl3QbwS3DhzxPXXptaqsx4mhN/ynUvYhJLkyaRf7wgC1RB8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TS/395nV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D2B15C2BD10
-	for <linux-usb@vger.kernel.org>; Tue, 11 Jun 2024 14:10:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718115053;
-	bh=1lYxTI4Ez4M8KDCd6qrvxWGztbUm6Z8bv5fxn9AxIB4=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=TS/395nVO4/DKkNKkHlJvsZ7RnCIhjFyYBoC2EyUnVRhOe+CsTzITUr4gzSYJxBpa
-	 bcRUt6HAquimKpcDHfa56YziWaI28FpUbv2Ri+yxGRQfoJKFdsgBsTEbFfsMltt1CA
-	 0mvwSLcDfi/I0ye0vt11AS76afPYeYxDMg6L3EdXryoLvpfs514Ub5QUJRO4MHDNq3
-	 +p3VB0LxwSOuB6TXOdF9rRttvpyodENI+UW3Ge5AVfgbYzoLE7d3jwGHQA8Ohe4P/k
-	 TgyIemXldy47AarnAEYgXENdKYRX19igYAobS63fPPdYI+psC6OdzJyKpt+685csJx
-	 brsE3c/BdFiMg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id BCE08C53B50; Tue, 11 Jun 2024 14:10:53 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 218943] No SuperSpeedPlus on AM4/5 Hubs
-Date: Tue, 11 Jun 2024 14:10:53 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: jarrard@proton.me
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-218943-208809-Enx7N0jQTU@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218943-208809@https.bugzilla.kernel.org/>
-References: <bug-218943-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1718116200; c=relaxed/simple;
+	bh=jFYH2da5XcpRBIqchmBL/ENU7P0kcVqu0RtOd05/6/k=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=buDdogD+VF0eC1EX6lzNGyOh+I27Rt2Kn2/lYO8cKdFLK6xYiTjQ07nNn19tkRxV/cApZsMVWao6QmZ7KUExb2Skh8bSPbcI2+blvImPpZ04E844PXbAdb6r4L5vgHKldTsyGnPD2g3RIxBEvuevJBz7wpkWVGIsAuWbo5XwXNo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iwOjPLg0; arc=none smtp.client-ip=209.85.210.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-701b0b0be38so5332915b3a.0;
+        Tue, 11 Jun 2024 07:29:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1718116198; x=1718720998; darn=vger.kernel.org;
+        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=qw+ZTo+XND5Z/h5anzLLoBN7tIc7rhg0Cb5o5EiNfwo=;
+        b=iwOjPLg004gtdgyRJ8s1RZe4LBo5zzqYg4LvTady0aJE84OJoZJ/IgNdizTdC1p9I8
+         7icg+qDxgfMUrOkopD1tb1Tw7Br0ZAELu2pHiRct6W3pdALhvOGd65w3U2xBBk4sqyfN
+         wB5b5e7Uao/ExQRr+gVBfQuOcpYQEfcK+6O7bqVdP3cpnkj6dM8nCJfwPdM1/YeVvp0M
+         ld78OYTAVu12L3t/MQN6R23XFayclsQJF+Crlj31vJ1ifybQXKMGReFuAolcTPyb8vmC
+         nK8KsCa5QOr0QDqVTuCTzuQCi2PRXd1zeujb8gXLI9EvSIt0bLAmDCXPVfP5aGOyLgvx
+         u5Sg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718116198; x=1718720998;
+        h=references:in-reply-to:message-id:date:subject:cc:to:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qw+ZTo+XND5Z/h5anzLLoBN7tIc7rhg0Cb5o5EiNfwo=;
+        b=QBMa4KnHrsiwnluD9/+FoVEMQZ1k/N0Dgd55RdhBZ8n7xLzX2dVd+1sKeHAgsOMhE0
+         GHRvGGo6ZySdoUGoNtE7sG3/5xQsJBZjaNIWtXUX4w2si94j90KhJpbkuC8aXyUjNZmk
+         xbi2pK/Eu+9S8RNXCCc3aC8VQWG7llQvWl5c+GgrgskVSJg44B8PXfmsPQfu1QEX/9G1
+         2YrHBYFZkvx8gNlZUgytJHwknrf5n0zbsJLq/AWGomHzflPk9TDRiUPRZM5y5Sbccvry
+         wrBoRSOSwJy2R8yQw4bJ3lOPI0oiafu2j3P6/6BJGnkJQGL8fy7Myfj4BB3cA4Qju7W1
+         9q9Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWQmDy+D43HUt/9upODLIr5NmMYIpeKufUtVxH6sRLxLFlEmMTa22wGybakgzMHztJLA2U5g+Ya6DEth0eDMtYEYF8HZhHDUWEjT4m9
+X-Gm-Message-State: AOJu0YysMZtT09jFo8Rkf/bjO6C6taZ1Rn2tBAv4dyrMLe8ybwpjac5i
+	MBIq8cdI4+lZWQddviVk81Yr4Ql/Ue9TtbZrhm8qp/XGlA5Iykyy
+X-Google-Smtp-Source: AGHT+IG2mqTYdeCEXWIJR2uKPPk7Ohhj3KpLoWze21uf2Ct5dMlAtm7fMRmC869DyZet027tJbtPTQ==
+X-Received: by 2002:a05:6a21:6d8a:b0:1b5:e2c8:dd0e with SMTP id adf61e73a8af0-1b5e2c8dd9emr9718975637.9.1718116198223;
+        Tue, 11 Jun 2024 07:29:58 -0700 (PDT)
+Received: from localhost ([106.44.60.97])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70408c58197sm7777141b3a.129.2024.06.11.07.29.57
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 11 Jun 2024 07:29:57 -0700 (PDT)
+From: joswang <joswang1221@gmail.com>
+To: Thinh.Nguyen@synopsys.com,
+	gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Jos Wang <joswang@lenovo.com>
+Subject: [PATCH v3, 3/3] usb: dwc3: core: Workaround for CSR read timeout
+Date: Tue, 11 Jun 2024 22:29:53 +0800
+Message-Id: <20240611142953.12057-1-joswang1221@gmail.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20240601092646.52139-1-joswang1221@gmail.com>
+References: <20240601092646.52139-1-joswang1221@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218943
+From: Jos Wang <joswang@lenovo.com>
 
---- Comment #16 from Jarrard (jarrard@proton.me) ---
-I(In reply to Jarrard from comment #15)
-> [  668.628381] usb 3-4: new high-speed USB device number 4 using xhci_hcd
-> [  668.755970] usb 3-4: New USB device found, idVendor=3D1a40, idProduct=
-=3D0101,
-> bcdDevice=3D 1.11
-> [  668.755978] usb 3-4: New USB device strings: Mfr=3D0, Product=3D1,
-> SerialNumber=3D0
-> [  668.755983] usb 3-4: Product: USB 2.0 Hub
-> [  668.818075] hub 3-4:1.0: USB hub found
-> [  668.818344] hub 3-4:1.0: 4 ports detected
-> [  669.113942] usb 4-4: new SuperSpeed USB device number 5 using xhci_hcd
-> [  674.233892] usb 4-4: unable to get BOS descriptor or descriptor too sh=
-ort
-> [  674.258279] usb 4-4: unable to read config index 0 descriptor/start: -=
-71
-> [  674.258288] usb 4-4: can't read configurations, error -71
-> [  674.409839] usb 3-4.3: new full-speed USB device number 5 using xhci_h=
-cd
-> [  674.628846] usb 3-4.3: New USB device found, idVendor=3D07ca,
-> idProduct=3Dd553, bcdDevice=3D 1.01
-> [  674.628853] usb 3-4.3: New USB device strings: Mfr=3D1, Product=3D2,
-> SerialNumber=3D3
-> [  674.628858] usb 3-4.3: Product: Live Gamer Ultra 2.1-RGB
-> [  674.628862] usb 3-4.3: Manufacturer: AVerMedia Computer Inc.
-> [  674.628866] usb 3-4.3: SerialNumber: 5204140800332
-> [  674.683236] hid-generic 0003:07CA:D553.000B: hiddev5,hidraw10: USB HID
-> v1.11 Device [AVerMedia Computer Inc. Live Gamer Ultra 2.1-RGB] on
-> usb-0000:30:00.3-4.3/input1
-> [  675.205949] usb 4-4: Device not responding to setup address.
-> [  675.418073] usb 4-4: Device not responding to setup address.
-> [  675.625936] usb 4-4: device not accepting address 6, error -71
-> [  675.634016] usb usb4-port4: attempt power cycle
-> [  676.742634] usb 4-4: new SuperSpeed USB device number 7 using xhci_hcd
-> [  676.950771] usb 4-4: LPM exit latency is zeroed, disabling LPM.
-> [  677.048948] usb 4-4: New USB device found, idVendor=3D07ca, idProduct=
-=3D2553,
-> bcdDevice=3D 1.00
-> [  677.048957] usb 4-4: New USB device strings: Mfr=3D6, Product=3D7,
-> SerialNumber=3D3
-> [  677.048962] usb 4-4: Product: Live Gamer Ultra 2.1
-> [  677.048966] usb 4-4: Manufacturer: AVerMedia
-> [  677.048970] usb 4-4: SerialNumber: 5204140800332
-> [  677.147762] uvcvideo 4-4:1.1: Unknown video format
-> 30313050-0000-0010-8000-00aa00389b71
-> [  677.147779] usb 4-4: Found UVC 1.00 device Live Gamer Ultra 2.1
-> (07ca:2553)
-> [  677.547565] usb 4-4: 3:2: failed to get current value for ch 0 (-22)
->=20
->=20
->=20
->=20
->=20
-> Nothing about superspeedplus sorry to day.  I don't understand the
-> descriptor and can't debug further as dynamic debug is not allowed under
-> this distro atm.
+This is a workaround for STAR 4846132, which only affects
+DWC_usb31 version2.00a operating in host mode.
 
-Interesting enough dynamic debug is compiled in with this release of kernel=
- for
-kubuntu but it spits a permission denied with any of those cat commands.  I
-don't really understand the issue.=20
+There is a problem in DWC_usb31 version 2.00a operating
+in host mode that would cause a CSR read timeout When CSR
+read coincides with RAM Clock Gating Entry. By disable
+Clock Gating, sacrificing power consumption for normal
+operation.
 
-Pretty sure I was able to do them under Arch so maybe I should go back to t=
-hat
-instead of using kubuntu. For some reason I find Arch simpler, lol
+Signed-off-by: Jos Wang <joswang@lenovo.com>
+---
+v1 -> v2:
+- add "dt-bindings: usb: dwc3: Add snps,p2p3tranok quirk" patch
+v2 -> v3:
+- code refactor
+- modify comment, add STAR number, workaround applied in host mode
+- modify commit message, add STAR number, workaround applied in host mode
+- modify Author Jos Wang
+---
+ drivers/usb/dwc3/core.c | 20 +++++++++++++++++++-
+ 1 file changed, 19 insertions(+), 1 deletion(-)
 
---=20
-You may reply to this email to add a comment.
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index 3a8fbc2d6b99..61f858f64e5a 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -960,12 +960,16 @@ static bool dwc3_core_is_valid(struct dwc3 *dwc)
+ 
+ static void dwc3_core_setup_global_control(struct dwc3 *dwc)
+ {
++	unsigned int power_opt;
++	unsigned int hw_mode;
+ 	u32 reg;
+ 
+ 	reg = dwc3_readl(dwc->regs, DWC3_GCTL);
+ 	reg &= ~DWC3_GCTL_SCALEDOWN_MASK;
++	hw_mode = DWC3_GHWPARAMS0_MODE(dwc->hwparams.hwparams0);
++	power_opt = DWC3_GHWPARAMS1_EN_PWROPT(dwc->hwparams.hwparams1);
+ 
+-	switch (DWC3_GHWPARAMS1_EN_PWROPT(dwc->hwparams.hwparams1)) {
++	switch (power_opt) {
+ 	case DWC3_GHWPARAMS1_EN_PWROPT_CLK:
+ 		/**
+ 		 * WORKAROUND: DWC3 revisions between 2.10a and 2.50a have an
+@@ -998,6 +1002,20 @@ static void dwc3_core_setup_global_control(struct dwc3 *dwc)
+ 		break;
+ 	}
+ 
++	/*
++	 * This is a workaround for STAR#4846132, which only affects
++	 * DWC_usb31 version2.00a operating in host mode.
++	 *
++	 * There is a problem in DWC_usb31 version 2.00a operating
++	 * in host mode that would cause a CSR read timeout When CSR
++	 * read coincides with RAM Clock Gating Entry. By disable
++	 * Clock Gating, sacrificing power consumption for normal
++	 * operation.
++	 */
++	if (power_opt != DWC3_GHWPARAMS1_EN_PWROPT_NO &&
++	    hw_mode != DWC3_GHWPARAMS0_MODE_GADGET && DWC3_VER_IS(DWC31, 200A))
++		reg |= DWC3_GCTL_DSBLCLKGTNG;
++
+ 	/* check if current dwc3 is on simulation board */
+ 	if (dwc->hwparams.hwparams6 & DWC3_GHWPARAMS6_EN_FPGA) {
+ 		dev_info(dwc->dev, "Running with FPGA optimizations\n");
+-- 
+2.17.1
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
 
