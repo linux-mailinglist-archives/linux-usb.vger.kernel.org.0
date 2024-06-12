@@ -1,160 +1,97 @@
-Return-Path: <linux-usb+bounces-11237-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11238-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D1A9905CE9
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 22:38:21 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D262905CEA
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 22:38:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1A2D81C226AE
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 20:38:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B9F821F21AFC
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 20:38:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC18686AE9;
-	Wed, 12 Jun 2024 20:37:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C095E84D29;
+	Wed, 12 Jun 2024 20:38:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="c3RB1txl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XUpXVA6w"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from 008.lax.mailroute.net (008.lax.mailroute.net [199.89.1.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C922E84FB7;
-	Wed, 12 Jun 2024 20:37:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4958E52F62
+	for <linux-usb@vger.kernel.org>; Wed, 12 Jun 2024 20:38:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718224673; cv=none; b=mw3B7fsur3xBklFjCebqXro+dZbF1W56YbnoLkHJAmDVdkRCxyP6gYpXDaabJ1qNAiabqmVBvIDjVM40Vj9Hm8qOcru0294jzCqC2xSXkLcaaNCZQxsdzKX0Eg/xXpoOmzW/v1GUq4aGX5TGl7kW6onfDhc2evtHMMF1Q3hQxHw=
+	t=1718224709; cv=none; b=oYSWWam8doVe1MpjC29mykNGkEAOqRN602RFtoXy0xEqh0LkPwcDvobbX81x/KuzFTXdwhkjQXyTt6oCbYdg9i+kPdvRkbwSQcbCtGqi32EFqenGc/6a4wrKlznY4dqhNYqNIcKwH4kpaZlhYkbkM8EU/YO4ZfVewG8z0ePZpf8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718224673; c=relaxed/simple;
-	bh=P6YdIf+4h9Mbh9g27KC45uffOCN8bhGX+6xrXGja70g=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qesKk0HRkJFqULcFT21kW/BPcbab6/cMTdkcOsZ1rC9DMVUtfaQsCLrUxa7i8kpyiVmLlAfA2siVOcl3OERfA+vrDd1xQoEFex0NRlGQQinq5owdSv4FLWf1+iyZDdxIyCm1/CGAWRyjImk7BTTa8yW4RKUpM2mESMeXKpYOkpY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=c3RB1txl; arc=none smtp.client-ip=199.89.1.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
-Received: from localhost (localhost [127.0.0.1])
-	by 008.lax.mailroute.net (Postfix) with ESMTP id 4Vzy673jwwz6Cnv3g;
-	Wed, 12 Jun 2024 20:37:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:mime-version:references:in-reply-to
-	:x-mailer:message-id:date:date:subject:subject:from:from
-	:received:received; s=mr01; t=1718224664; x=1720816665; bh=vkQHJ
-	TTJIwL9c+V0Yep/xL4oLUQVR0FrLfLA/m0LXvA=; b=c3RB1txlv0ZhRUvtUzF5C
-	oyLtvY4KZ6BFV/kxYGR/rCofpz6ld4hik7ATC7+b01pZIcOTF6rq6f7EnT0/gs61
-	XbVuW6ODBrzDv13OYwk4vFOnKRJ5Gmv4xPB37z8lNCMqG+6AsguJYJsRtvrQCZab
-	EOy1HaYVA3L287J4OgzPt5tF9iD7HrG1dGOr9jrdeDhcVqUPMfgY3wCbIatJNTmR
-	dZo9BjMG4mcmTSTrdPtKWLoFVGlpg90uqYu/5Hzsf4/VuCl0me6KmYVLfWvTrKb9
-	TVGdA88GvNfobr0ckF0XdXPSguBcd7VT1REqtrgDBN+yrqYug7dMiMsYKNa3h3DD
-	Q==
-X-Virus-Scanned: by MailRoute
-Received: from 008.lax.mailroute.net ([127.0.0.1])
- by localhost (008.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id wX-nDI5cUhJu; Wed, 12 Jun 2024 20:37:44 +0000 (UTC)
-Received: from bvanassche.mtv.corp.google.com (unknown [104.132.0.90])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 008.lax.mailroute.net (Postfix) with ESMTPSA id 4Vzy600hxFz6Cnk9Y;
-	Wed, 12 Jun 2024 20:37:44 +0000 (UTC)
-From: Bart Van Assche <bvanassche@acm.org>
-To: "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc: Alan Stern <stern@rowland.harvard.edu>,
-	linux-scsi@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	Bart Van Assche <bvanassche@acm.org>,
-	Joao Machado <jocrismachado@gmail.com>,
-	Andy Shevchenko <andy.shevchenko@gmail.com>,
-	Christian Heusel <christian@heusel.eu>,
-	stable@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Oliver Neukum <oneukum@suse.com>
-Subject: [PATCH v2 2/2] scsi: core: Do not query IO hints for USB devices
-Date: Wed, 12 Jun 2024 13:37:34 -0700
-Message-ID: <20240612203735.4108690-4-bvanassche@acm.org>
-X-Mailer: git-send-email 2.45.2.505.gda0bf45e8d-goog
-In-Reply-To: <20240612203735.4108690-1-bvanassche@acm.org>
-References: <20240612203735.4108690-1-bvanassche@acm.org>
+	s=arc-20240116; t=1718224709; c=relaxed/simple;
+	bh=Zy0yYh/gqdh9SKF0NwHGgT6P1UJELoBIOnn2ylhWNfE=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=FyaZAUxTWNa7QmEuR+iernnxk37F5YtiRobvUCozimR5LTqW9PlaXKuS5oDve8dFhQ+57IuyzB5/kWGTyR/ruwLwnkjTbsXeuIjf3svIQzgvxVMW5fRbOwVc9h5jTjVjHjJYgz1aSXhwuo3XxykR4tQj0fFevCeoCSzzTa2eEBY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XUpXVA6w; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E3BD1C116B1
+	for <linux-usb@vger.kernel.org>; Wed, 12 Jun 2024 20:38:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718224708;
+	bh=Zy0yYh/gqdh9SKF0NwHGgT6P1UJELoBIOnn2ylhWNfE=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=XUpXVA6w0istWFVBW5tbo2OAGKqPjSF1WZqUXRREIjLiKsy5V7TPSV8mn1AgLBxmI
+	 gLDZTaSoC8XvG9sekCQHUJvnMJyRiDMkZsWCSRLbKJMrIQkXJYZHCeQd+Ic7edaB8V
+	 RgYgGH0C7c9e1D+n5fKuEj1Zcr/rn/hg5aLy597bU41raeXyrstqEvokx9g9U293CI
+	 270vy0AbqUWkhzWLqX2Qks2gCGBlFyFloUKu6AWuNL+eEs2jtuqm/aSU9VEmnwqFgy
+	 5awJhlLfe0QyixdPNCAixtYc1Hg/u5Cf9KH0cp/YE3MfZwb14kT9nO+Bpwuxzt1bR0
+	 1gtzQFivK0D4A==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id CE5AAC433E5; Wed, 12 Jun 2024 20:38:28 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 218943] No SuperSpeedPlus on AM4/5 Hubs
+Date: Wed, 12 Jun 2024 20:38:28 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: jarrard@proton.me
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-218943-208809-gk195DtRUv@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-218943-208809@https.bugzilla.kernel.org/>
+References: <bug-218943-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
 
-Recently it was reported that the following USB storage devices are unusa=
-ble
-with Linux kernel 6.9:
-* Kingston DataTraveler G2
-* Garmin FR35
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218943
 
-This is because attempting to read the IO hint VPD page causes these devi=
-ces
-to reset. Hence do not read the IO hint VPD page from USB storage devices=
-.
+--- Comment #19 from Jarrard (jarrard@proton.me) ---
+Plugged in a USB3 10Gbps HUB (red ports).  Under windows usbview shows it as
+USB3.2 SuperSpeedPlus 10Gbps and the USB devices connected agree.=20
 
-Cc: Alan Stern <stern@rowland.harvard.edu>
-Cc: linux-usb@vger.kernel.org
-Cc: Joao Machado <jocrismachado@gmail.com>
-Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc: Christian Heusel <christian@heusel.eu>
-Cc: stable@vger.kernel.org
-Fixes: 4f53138fffc2 ("scsi: sd: Translate data lifetime information")
-Reported-by: Joao Machado <jocrismachado@gmail.com>
-Closes: https://lore.kernel.org/linux-scsi/20240130214911.1863909-1-bvana=
-ssche@acm.org/T/#mf4e3410d8f210454d7e4c3d1fb5c0f41e651b85f
-Tested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Bisected-by: Christian Heusel <christian@heusel.eu>
-Reported-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Closes: https://lore.kernel.org/linux-scsi/CACLx9VdpUanftfPo2jVAqXdcWe8Y4=
-3MsDeZmMPooTzVaVJAh2w@mail.gmail.com/
-Signed-off-by: Bart Van Assche <bvanassche@acm.org>
----
- drivers/usb/storage/scsiglue.c | 6 ++++++
- drivers/usb/storage/uas.c      | 7 +++++++
- 2 files changed, 13 insertions(+)
+UNDER LINUX it is a 5Gbps hub and no SuperSpeedPlus.  I can't believe this =
+sort
+of massive USB port bug has existed this long under Linux, does nobody test
+AM4/AM5 usb port speed compatibility?=20
 
-diff --git a/drivers/usb/storage/scsiglue.c b/drivers/usb/storage/scsiglu=
-e.c
-index b31464740f6c..b4cf0349fd0d 100644
---- a/drivers/usb/storage/scsiglue.c
-+++ b/drivers/usb/storage/scsiglue.c
-@@ -79,6 +79,12 @@ static int slave_alloc (struct scsi_device *sdev)
- 	if (us->protocol =3D=3D USB_PR_BULK && us->max_lun > 0)
- 		sdev->sdev_bflags |=3D BLIST_FORCELUN;
-=20
-+	/*
-+	 * Some USB storage devices reset if the IO hints VPD page is queried.
-+	 * Hence skip that VPD page.
-+	 */
-+	sdev->sdev_bflags |=3D BLIST_SKIP_IO_HINTS;
-+
- 	return 0;
- }
-=20
-diff --git a/drivers/usb/storage/uas.c b/drivers/usb/storage/uas.c
-index a48870a87a29..77fdfb6a90c8 100644
---- a/drivers/usb/storage/uas.c
-+++ b/drivers/usb/storage/uas.c
-@@ -21,6 +21,7 @@
- #include <scsi/scsi.h>
- #include <scsi/scsi_eh.h>
- #include <scsi/scsi_dbg.h>
-+#include <scsi/scsi_devinfo.h>
- #include <scsi/scsi_cmnd.h>
- #include <scsi/scsi_device.h>
- #include <scsi/scsi_host.h>
-@@ -820,6 +821,12 @@ static int uas_slave_alloc(struct scsi_device *sdev)
- 	struct uas_dev_info *devinfo =3D
- 		(struct uas_dev_info *)sdev->host->hostdata;
-=20
-+	/*
-+	 * Some USB storage devices reset if the IO hints VPD page is queried.
-+	 * Hence skip that VPD page.
-+	 */
-+	sdev->sdev_bflags |=3D BLIST_SKIP_IO_HINTS;
-+
- 	sdev->hostdata =3D devinfo;
- 	return 0;
- }
+Anyway, still no clue on how to fix this, way above my pay grade.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
