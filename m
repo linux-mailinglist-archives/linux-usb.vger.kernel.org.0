@@ -1,140 +1,129 @@
-Return-Path: <linux-usb+bounces-11192-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11193-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2AAC990525C
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 14:25:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 83B909052D0
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 14:45:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 34D561C210ED
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 12:25:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3A79D1F27747
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 12:45:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59DDF16F91D;
-	Wed, 12 Jun 2024 12:25:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9692817167F;
+	Wed, 12 Jun 2024 12:45:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mtrf2Ssy"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VqLHufmt"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97D7D208C3;
-	Wed, 12 Jun 2024 12:25:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 963A916F0D4;
+	Wed, 12 Jun 2024 12:45:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718195124; cv=none; b=JI37Wy8KctsCh6NtL+Jw4y8Qv+p7BDbkK4atbokPkRM9KZGDws+T0VEOK+WyaxtOimvJRhdfSJMRZyOQdr+Ttxvo7j1Zl4k4LthuOb+ZBa9w5/HVLkWHHx7f+/zS3A+6PYar9ZKcp+hcOJ6uzHklnkEGPV1E3+YZaYHjA45Db28=
+	t=1718196302; cv=none; b=LrxHEdNtzrihKxJszOIm/GLoJOjE2IGpLhtjuLU2du86h1+8+bZg5F41mY4oGAeoNzwfuVwUfsilzeSjQ4atIJSTmzasunIbnpoYW4y3aqDVx7hmuDVk6zlMQfchkcFaDkrqDaE6VhKtFpB8JTFojs3oolpFoC6I5Fh0N7GQ2GY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718195124; c=relaxed/simple;
-	bh=Wrzhzu7bIdEAEmG7BQsLuO7wEyAX0cCb7hQvsk2N+G0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iaaDEGr9g1R25XxyjFuNvfdgylj5DOnoRhKAtu+pWcNQYnJTs7f3pMoHXCRqlnzkKUiqEvfsIkwndbedEyCnW7ChHOO9NVv03Wcxa1Ve41VjfldYeDQUHgR5P66xXwXuPITiPB2CYAAs8udrMyi4fDIncLfqVuge1mx9KyyO6Is=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mtrf2Ssy; arc=none smtp.client-ip=209.85.210.170
+	s=arc-20240116; t=1718196302; c=relaxed/simple;
+	bh=ToG6BzHtI/rb2S4dySACsofNTnEPMpjXjIAcAeo94XI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=oaQ7Cqv8znsg3MBakCd706b4XMRp2nV09QlcZwtAw9VnT51Srsm2w21KwMsd3+qVeDyH3zHmac8AqGgFkUjkeT81x73q64NIr+HIlWR3XnWvPz/UuOP19bo168ZRe9dPMViX7TRH6FwI6v9lEbneQ2o0SOc3bz3Td3lIHeyu0jQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VqLHufmt; arc=none smtp.client-ip=209.85.208.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-7041ed475acso3831297b3a.2;
-        Wed, 12 Jun 2024 05:25:23 -0700 (PDT)
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-57ca81533d0so1341992a12.0;
+        Wed, 12 Jun 2024 05:45:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718195123; x=1718799923; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=jC+Unx6/L3Ahsjr160FqlUlQIcBGGCTwQ+U7pYUCZQ0=;
-        b=mtrf2Ssy5+xJS8eAuqn0r6Qpu9caoLMkvtUQgqv8iaan+cCnTHe9yW72t3+RoivsoY
-         osxa1qrqQJmd5Z6vl09xbtkgLO18dV9pb6JPFOUWb9nAo1CwjlHiLdBYWdrxmTeRYctD
-         Zpzq1LPD4rIch96M/KeFySietP0YcRez2sIjHb6Qj2NbYbfGqpPBvRhVTPpN1hSQgQ4N
-         nm17TZRSy8kpbabl1bTYnp7RxXORGzUztKOijLbLwRVxeMxb3rUu1OrEaT9I7Ot/3yS5
-         st/I4lwu1X/I59wndSqh3ntFguu/57OOwkaxR/is4/h0RxPIcBlceZu4T7RA6YY0BJRX
-         1JtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718195123; x=1718799923;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1718196299; x=1718801099; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jC+Unx6/L3Ahsjr160FqlUlQIcBGGCTwQ+U7pYUCZQ0=;
-        b=WX17RLb+3T691ALkA5HVbZPOg0cbMMOZcgMKw+a4G5zPlxip+/fOjTjH8Iad271aMF
-         j/NURa7ByAsdY4m9l+isE0PXOi9zId0Com6GKMiTiBOMXaWezhLH5JW1wOWeXww6y/uj
-         tPWrWGsVOiXez8SY9M3C8JzvLcyUNaGoMqVlBBcz48weS7m3fmkiswy8CdkyO2KE5t57
-         o+kOHsnIIMyE/AaclHc+D79+xhpV9ivusUSgyr0NOeq7kBjJgUQ/Lm+JI9jIZEjmVzVD
-         hWn48dUjWiONRl4ehufAXmIvFvqiltR23O/Q6zaTvbFdGrpveVcgBxZ7/yCsatFQOgqC
-         5Ltg==
-X-Forwarded-Encrypted: i=1; AJvYcCVKRgrOLCIpDYHgtXNCJygTPjgLvADYDayexPOpXpizd973jlaSuWj2ePZ9QUzWTPrGGhNlBCC4zWYwicrTUwr68z4IGXPxGhNQ0ETxwVqKer2XjvglHO0xakM4s/0Ki1X0O4bVHVP2oNxLIMaXs07hmFp6Ien4WqCtxcMmbQy+yxF6CiMCawiyH3arj3Rd1QzvZWBtEk1LikoMesNxP4skFzf2qApShj9zDBHIEMZEiNEBFzUuHubi858yLg==
-X-Gm-Message-State: AOJu0YxtUD0F9c3Ds6OkuHDgKua7Bu8Wr0bLN7inY502Q7YKjlivrSd+
-	f7Fu3HI0xTrwWP+r3Xt/UerBci9eUNMFQ5iXJFH5Tf2DhR1XPvrn
-X-Google-Smtp-Source: AGHT+IErt7uVvEdoTI+9BxF9U3hhKUgJvir/IBG5VhQMRaKn/1u60z5z026VLtNbbSWbrgj1SHg2Bg==
-X-Received: by 2002:a05:6a21:32a4:b0:1b8:54f8:385d with SMTP id adf61e73a8af0-1b8a9c688e8mr1858023637.47.1718195122807;
-        Wed, 12 Jun 2024 05:25:22 -0700 (PDT)
-Received: from archie.me ([103.124.138.155])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f6bd7e3e71sm121898095ad.219.2024.06.12.05.25.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jun 2024 05:25:22 -0700 (PDT)
-Received: by archie.me (Postfix, from userid 1000)
-	id 5B4DE182522A0; Wed, 12 Jun 2024 19:25:19 +0700 (WIB)
-Date: Wed, 12 Jun 2024 19:25:19 +0700
-From: Bagas Sanjaya <bagasdotme@gmail.com>
-To: Wesley Cheng <quic_wcheng@quicinc.com>, srinivas.kandagatla@linaro.org,
-	mathias.nyman@intel.com, perex@perex.cz, conor+dt@kernel.org,
-	corbet@lwn.net, broonie@kernel.org, lgirdwood@gmail.com,
-	krzk+dt@kernel.org, Thinh.Nguyen@synopsys.com, bgoswami@quicinc.com,
-	tiwai@suse.com, robh@kernel.org, gregkh@linuxfoundation.org
-Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-sound@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, linux-doc@vger.kernel.org,
-	alsa-devel@alsa-project.org
-Subject: Re: [PATCH v23 32/32] ASoC: doc: Add documentation for SOC USB
-Message-ID: <ZmmTr48zLCxRVlYf@archie.me>
-References: <20240610235808.22173-1-quic_wcheng@quicinc.com>
- <20240610235808.22173-33-quic_wcheng@quicinc.com>
+        bh=PFz7E97KT/QfrEMFbCJhoNnw2GGkEahMUEAz9KOKeB4=;
+        b=VqLHufmtBBuLVOG+MY7fLSsEPudjWGeNke5mPcQJZS/KfqrLQasOxaxRTA0NFv/5vy
+         Fh2RmxEMxg/0xnii0D8uDPNs+zzplqW0j+Z1fmXEnKi/frU+/SD0tzT61zt3OHKkUlTD
+         Jm5f3HPiGYFDnzeCQqZbv2Wb5qYTn6ZD60ZlLeGmLHFboLb1OBWpEW4YOcq/vVNVvjkE
+         2rf7YCfuoZ8bkPYrJW+FMhemvU7Rv97s0pKLv1yNTJEfJ7NMy4nq8AjP2nWBQbUTxBaX
+         hSzcLVyf8wpikOwgz9ugz8cA06ZTKdFqPBD7WJ89WX/oz21BLT2sQMTGhBZ7VJIlvR58
+         wXfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718196299; x=1718801099;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PFz7E97KT/QfrEMFbCJhoNnw2GGkEahMUEAz9KOKeB4=;
+        b=Sczok4wNFeSq6sK49/CS3e54w87lMM1uXgEIYtfmWFwF8fywRK7AQzvqrKzPUHheYW
+         qPlpXq9aVonTo0paGVLRhyIOcdVKsKBMrc5M37vKGXDOQddNGNnEIraDtFZgGPG1eLE/
+         s9pBJ47KdfrI0/i8aa4SuRWLb1wwj0S9s6nmtbHlmuiukr1zmUwgO0n0lhN3CmCplluT
+         WjxImgVBFXtPpv4ijnTXGfxEs8EpUPUrBxp6EXDrKK08zLUCTWycWV5BgOprKbqWhPTM
+         65CnkEQQsvuN9JZYIAVrKWJC9V8Y8myW4Sdva1EK6SFLtGvw4MmFZp/mhMpMp8Z3d17F
+         5HGw==
+X-Forwarded-Encrypted: i=1; AJvYcCVPAsUJeJrokL+AWTntN5hp/d6oLaeWEyppiy5dXOGMgmkcvd+MDQriEnzE60ZakiHfoDBwxY+ZvUk+eVpkPQotLt3+xmN/RGgZk5CMngUh479foDFoIYcWZ240rUmgsSeqoBcMQYr9
+X-Gm-Message-State: AOJu0YwUOG/snunSxYdMFNeucEpBOInjEl7HU+ixR7MZcTYZ2JQW0ogU
+	lbqPTAYkmpmfK3gYUyVnj+aLyQjLLcWNI6SbYs44ZGvd8AbFEUrdGn5MIFpWj/FuGZ9MMQ5ysii
+	3GeO5uC+iNsRTUNS2I3o8wch5GXE=
+X-Google-Smtp-Source: AGHT+IHcci7QpGj3bZnXK1M4+y8pE5RZBZzm+luYAOhm6VIvB2UmcoMk/VPkQ/0Dd9mLOBnqDtVCAqa4hFVvtxtb6EU=
+X-Received: by 2002:a05:6402:34c3:b0:57c:7cff:6c7e with SMTP id
+ 4fb4d7f45d1cf-57cac8905a4mr1155336a12.12.1718196298548; Wed, 12 Jun 2024
+ 05:44:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="P13nW3ExZUkt8gyc"
-Content-Disposition: inline
-In-Reply-To: <20240610235808.22173-33-quic_wcheng@quicinc.com>
-
-
---P13nW3ExZUkt8gyc
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+References: <20240601092646.52139-1-joswang1221@gmail.com> <20240611142953.12057-1-joswang1221@gmail.com>
+ <2024061247-geranium-unstaffed-ff09@gregkh>
+In-Reply-To: <2024061247-geranium-unstaffed-ff09@gregkh>
+From: joswang <joswang1221@gmail.com>
+Date: Wed, 12 Jun 2024 20:44:46 +0800
+Message-ID: <CAMtoTm1_2+oiLeMFLWyUHutAts3=+HLWSKWim6h1vVK9Lq7b8g@mail.gmail.com>
+Subject: Re: [PATCH v3, 3/3] usb: dwc3: core: Workaround for CSR read timeout
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: Thinh.Nguyen@synopsys.com, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Jos Wang <joswang@lenovo.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jun 10, 2024 at 04:58:08PM -0700, Wesley Cheng wrote:
-> +Overview
-> +=3D=3D=3D=3D=3D=3D=3D=3D
-> +In order to leverage the existing USB sound device support in ALSA, the
-> +introduction of the ASoC USB APIs, allow for the entities to communicate
-> +with one another.
-"... ASoC USB APIs are introduced to allow for ..."
+On Wed, Jun 12, 2024 at 3:58=E2=80=AFPM Greg KH <gregkh@linuxfoundation.org=
+> wrote:
+>
+> On Tue, Jun 11, 2024 at 10:29:53PM +0800, joswang wrote:
+> > From: Jos Wang <joswang@lenovo.com>
+> >
+> > This is a workaround for STAR 4846132, which only affects
+> > DWC_usb31 version2.00a operating in host mode.
+> >
+> > There is a problem in DWC_usb31 version 2.00a operating
+> > in host mode that would cause a CSR read timeout When CSR
+> > read coincides with RAM Clock Gating Entry. By disable
+> > Clock Gating, sacrificing power consumption for normal
+> > operation.
+> >
+> > Signed-off-by: Jos Wang <joswang@lenovo.com>
+> > ---
+> > v1 -> v2:
+> > - add "dt-bindings: usb: dwc3: Add snps,p2p3tranok quirk" patch
+> > v2 -> v3:
+> > - code refactor
+> > - modify comment, add STAR number, workaround applied in host mode
+> > - modify commit message, add STAR number, workaround applied in host mo=
+de
+> > - modify Author Jos Wang
+> > ---
+> >  drivers/usb/dwc3/core.c | 20 +++++++++++++++++++-
+> >  1 file changed, 19 insertions(+), 1 deletion(-)
+>
+> Should this have a cc: stable line?
+>
+> thanks,
+>
+> greg k-h
 
-> +USB Audio Device Connection Flow
-> +--------------------------------
-> +USB devices can be hotplugged into the USB root hub at any point in time.
-> +The BE DAI link should be aware of the current state of the physical USB
-> +port, i.e. if there are any USB devices with audio interface(s) connecte=
-d.
-> +The following callback can be used to notify the BE DAI link of any chan=
-ge:
-> +
-> +	**connection_status_cb()**
-"... connection_status_cb() can be used to ..."
+Thanks for your help in reviewing the code.
+In the subsequent v4 version, Cc: stable@vger.kernel.org will be added
+to the patch approval area.
 
-Thanks.
+Thanks,
 
---=20
-An old man doll... just what I always wanted! - Clara
-
---P13nW3ExZUkt8gyc
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZmmTqwAKCRD2uYlJVVFO
-owd6AQCEY5WzdrzzRuY11wLRsArm4PXhVeYX76BrwKtOEaytPAEA0vFiTnhwd+vZ
-Dthl3BItVCKR0K2COEv+kWuRoxJD1As=
-=YNu/
------END PGP SIGNATURE-----
-
---P13nW3ExZUkt8gyc--
+Jos Wang
 
