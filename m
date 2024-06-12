@@ -1,181 +1,185 @@
-Return-Path: <linux-usb+bounces-11163-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11164-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AABEA9048F3
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 04:23:39 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id B9E2C904913
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 04:37:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 29DA31F246AC
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 02:23:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 288DEB23BBC
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 02:37:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22BE2BE48;
-	Wed, 12 Jun 2024 02:23:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11CA9E566;
+	Wed, 12 Jun 2024 02:37:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CmsKNxu1"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="JNRGtLfp"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 394C3847C;
-	Wed, 12 Jun 2024 02:23:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04BEAB651;
+	Wed, 12 Jun 2024 02:37:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718159013; cv=none; b=YxN0m27YL32gXPcerppyg3RCoi4iHWtSlQPULTqjD3FokhWZGr7Kaq9lfx41o03nxffEcnPM+M1DEFLMerpduZrMoDInmlxLQu8znzBKKS01+RiSVNU3H9NBzcR2juV0o4MxfbXYBA4hObZWZhN9/8r5WSxHRlSqnxC97lB1lTU=
+	t=1718159851; cv=none; b=mEBztCV3LFRNJfSsOb4kBV/2DAdrALrdTcwO6hJBpL1EjTPvi088zi4brVxvOXDU4TDTJDwzeJVQ5W5w84ShNscwRohvN+dY0UCwXU1ooUworTTxQucViiJXIgEtndG9MzPS9aYWB+TllJQxnWTomiqpHW7ePUdYSdrG0VPTHmU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718159013; c=relaxed/simple;
-	bh=553eqYP03BYXJPed84E6WmxmDEiKOgjTIuF2NPlDzdI=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=n6HjSZjPvzYzJXslZjVwdVB5EjqjvfEGq5sfEz8F4qmdODRtk5jNNd8uGayhYolTYtwSbSL5f7Saz7pdT/uzUYVOa2tH2J3spKfeHRS9QYtCj2r7rrcSYezhlo67UyJbPc0H3p/QrPuf4DegNnOnJJHkA2JadI5xyqSCVCjZ3tw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CmsKNxu1; arc=none smtp.client-ip=209.85.216.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-2c2db1fc31fso655430a91.0;
-        Tue, 11 Jun 2024 19:23:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718159011; x=1718763811; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=5gFOKkMDT7D7pRqOfPOEkuBjvwZEWIElC/m+QYJ00kU=;
-        b=CmsKNxu1/Fbcelfj2kBARXJPX6MNHDbL+q6qrT3Ng5ty8OLnQBlhM4uzbCLXSM97w6
-         UxOSgChF0jMNgb5Oqb+LQO3g5+I02B99AcAoBbTnQnSr2FJr5dLvMFTFTf0Vp6g1RmoI
-         P8sQp7tUWEzg4MI/UZqqIMIU+t5q6mmOISBZmiAG+EHt9zoU8ehAk2lJOjjFqCc5G1tC
-         4wFKP1fSXHuObpnJfucwChAGeM9dYWOFDVMKe1UFOajIpV8wG4Dqo+VfhlaYeXq+K7b9
-         QChUsWjFSNB1L/TLek1tVQQ8Un04mHQAw26GptiKVF4ln0XEWq7uDIXoq2yq+bKhNMa+
-         kFbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718159011; x=1718763811;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5gFOKkMDT7D7pRqOfPOEkuBjvwZEWIElC/m+QYJ00kU=;
-        b=BzRPpslJz/WPCyV6rgfVIfv7zwplI3c0sYp9AH5Tq3gFOyCKW7dlm+4H/cbCf7HRWh
-         HYO71sdx5CiXPvms9XwCasZTDhpTyP2xDAmSJgTxtHycpgXcwh0A2DlhRT4pu/Z/jH6S
-         Io6iU11JM3oV/ex4eVvi2gbBd1zFyDmuZDXvNX+ILQyOpFdK6jbgHZAyiLmF2Of23cZR
-         dppOm03IAWuOgV6Br0vmOpZrUH5vl884Y26CQTvPSnGsru/Ohbo5wAu0qpeEoaMkEddg
-         M74x43/QjKGetXiqb11Z7aormMpmqSEWmCz993KduPE8S0eMNkzRjJbxLoXfqfNRG0K5
-         XWvw==
-X-Forwarded-Encrypted: i=1; AJvYcCXXBbMkJ0AxoU/JfQ0dSnLUObKhU2QpNeXaPXC7/0nmTkEk+IjwpwbFPudJRBNXcauEh0TXNVGbzS1y7MpOJfnTeLIWjl+YaQbaZv2yv85YyRh5tR1fxu9oy2vG5Vb8uxrC16xR
-X-Gm-Message-State: AOJu0YxFX+fgNQP8E1aU31H8yjiPzZoXvNj3JWwetbglQpvkPeRrHZjG
-	rqvacfGa1dy8R9lD5ESgQ134YR2uHMyGI1cTugeIW51Oc/K+TiTT
-X-Google-Smtp-Source: AGHT+IESk5o6BdqOI4+/gL5n5TOvot4UBXUgXEXOFZNwf8A6gZ8XocCd8ISrU+dCkYmNGrzZHycrXA==
-X-Received: by 2002:a05:6a20:dd9e:b0:1b5:ae2c:c730 with SMTP id adf61e73a8af0-1b8a9c5107cmr620180637.3.1718159011301;
-        Tue, 11 Jun 2024 19:23:31 -0700 (PDT)
-Received: from localhost.localdomain (122-117-151-175.hinet-ip.hinet.net. [122.117.151.175])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f70e644446sm52250505ad.7.2024.06.11.19.23.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jun 2024 19:23:30 -0700 (PDT)
-From: Kuangyi Chiang <ki.chiang65@gmail.com>
-To: mathias.nyman@intel.com,
-	gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	ki.chiang65@gmail.com,
-	stable@vger.kernel.org
-Subject: [PATCH] xhci: Don't issue Reset Device command to Etron xHCI host
-Date: Wed, 12 Jun 2024 10:22:56 +0800
-Message-Id: <20240612022256.7365-1-ki.chiang65@gmail.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1718159851; c=relaxed/simple;
+	bh=FIlZ1Po+7l5jXHSE5OgRVwHa3qfDT39V0YMl45YwWI8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:To:CC; b=jY9cCYbY4nu2VPxKfwdq8AimQn7aAPKXDU7fIUTrYHEERlaL9T5RHyHoluoBSYhWUFKeuhLfo+7ZVVdN/JV4ibYdRC2yFqjvVwMv/IAhVc7B892GrvleqREvmurIHu/s28TSDw6iWfsho1z4kMTg7RXgEXe1Ziohh0r9zinNs1c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=JNRGtLfp; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45BDmAGv011284;
+	Wed, 12 Jun 2024 02:37:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=dL/OjdmAVSy+SNFQu2VJRG
+	bXRL5/DpTz2Gw/w62br+c=; b=JNRGtLfpSo5M+5/4+21aQbQ9PyQEx4sllodK5+
+	gduT8hW75PTYbtMw3HYLxqgVgDuRerdd/0cHmncDai2Tlt6IgL7HctMgPXG4vHWF
+	nJCnLHtd9bC3kiUrtq9Q9R2AQJT7H6yQZARGtnaS6XSYMdtN9AprOW8bVZzO9Xtt
+	mvzWV9/sm/l4VwAQIh0Kt/jDe/HLrvN4xf1ICWryEmRoi+dKGLRkG8cYDqLdt9Aw
+	eAomOgd/JCcMjBy5/duS0CmaGh8JzC/Cqjq8Orfb5ieRbynT/7IY/z6+RYAtXpWY
+	I+N489+/BZqiT/34XZIysxC8FGIV/FeJPA2N1lZ5edYb5RzA==
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ymcnmyw5e-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 12 Jun 2024 02:37:23 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA04.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 45C2bM1i016440
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 12 Jun 2024 02:37:22 GMT
+Received: from [169.254.0.1] (10.49.16.6) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 11 Jun
+ 2024 19:37:22 -0700
+From: Jeff Johnson <quic_jjohnson@quicinc.com>
+Date: Tue, 11 Jun 2024 19:37:20 -0700
+Subject: [PATCH] usb: add missing MODULE_DESCRIPTION() macros
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-ID: <20240611-md-drivers-usb-v1-1-8b8d669e8e73@quicinc.com>
+X-B4-Tracking: v=1; b=H4sIAN8JaWYC/x3MwQqDMAyA4VeRnBewMrt1rzJ2aE02A1pHoiKI7
+ 26343f4/x2MVdjgUe2gvIrJlAvcpYKuj/nDKFQMTd1ca+8cjoSksrIaLpbw7kMI1N6YnIcSfZX
+ fsv2Hz1dxisaYNOau/20GycuGY7SZFY7jBLnTZiJ/AAAA
+To: Peter Chen <peter.chen@kernel.org>,
+        Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>,
+        Oliver Neukum <oneukum@suse.com>,
+        Alan Stern
+	<stern@rowland.harvard.edu>
+CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-scsi@vger.kernel.org>, <usb-storage@lists.one-eyed-alien.net>,
+        <kernel-janitors@vger.kernel.org>,
+        Jeff Johnson <quic_jjohnson@quicinc.com>
+X-Mailer: b4 0.13.0
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: JDBySRTaunjx1iEhh1rC7EVO5Nj43UbF
+X-Proofpoint-ORIG-GUID: JDBySRTaunjx1iEhh1rC7EVO5Nj43UbF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-06-11_13,2024-06-11_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ impostorscore=0 clxscore=1011 adultscore=0 phishscore=0 spamscore=0
+ priorityscore=1501 malwarescore=0 mlxscore=0 mlxlogscore=999 bulkscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2405170001 definitions=main-2406120016
 
-Sometimes hub driver does not recognize USB device that is connected
-to external USB2.0 Hub when system resumes from S4.
+With ARCH=x86, make allmodconfig && make W=1 C=1 reports:
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/core/usbcore.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/mon/usbmon.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/class/usbtmc.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/storage/uas.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/chipidea/ci_hdrc_msm.o
 
-This happens when xHCI driver issue Reset Device command to inform
-Etron xHCI host that USB device has been reset.
+Add the missing invocations of the MODULE_DESCRIPTION() macro.
 
-Seems that Etron xHCI host can not perform this command correctly,
-affecting that USB device.
-
-Instead, to aviod this, xHCI driver should reassign device slot ID
-by calling xhci_free_dev() and then xhci_alloc_dev(), the effect is
-the same.
-
-Add XHCI_ETRON_HOST quirk flag to invoke workaround in
-xhci_discover_or_reset_device().
-
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Kuangyi Chiang <ki.chiang65@gmail.com>
+Signed-off-by: Jeff Johnson <quic_jjohnson@quicinc.com>
 ---
- drivers/usb/host/xhci-pci.c |  2 ++
- drivers/usb/host/xhci.c     | 11 ++++++++++-
- drivers/usb/host/xhci.h     |  2 ++
- 3 files changed, 14 insertions(+), 1 deletion(-)
+This is the remaining one-off fixes in usb.
 
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index 05881153883e..c7a88340a6f8 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -395,11 +395,13 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
- 			pdev->device == PCI_DEVICE_ID_EJ168) {
- 		xhci->quirks |= XHCI_RESET_ON_RESUME;
- 		xhci->quirks |= XHCI_BROKEN_STREAMS;
-+		xhci->quirks |= XHCI_ETRON_HOST;
- 	}
- 	if (pdev->vendor == PCI_VENDOR_ID_ETRON &&
- 			pdev->device == PCI_DEVICE_ID_EJ188) {
- 		xhci->quirks |= XHCI_RESET_ON_RESUME;
- 		xhci->quirks |= XHCI_BROKEN_STREAMS;
-+		xhci->quirks |= XHCI_ETRON_HOST;
- 	}
+Corrections to these descriptions are welcomed. I'm not an expert in
+this code so in most cases I've taken these descriptions directly from
+code comments, Kconfig descriptions, or git logs.  History has shown
+that in some cases these are originally wrong due to cut-n-paste
+errors, and in other cases the drivers have evolved such that the
+original information is no longer accurate.
+
+Let me know if any of these changes need to be segregated into
+separate patches to go through different maintainer trees.
+---
+ drivers/usb/chipidea/ci_hdrc_msm.c | 1 +
+ drivers/usb/class/usbtmc.c         | 1 +
+ drivers/usb/core/usb.c             | 1 +
+ drivers/usb/mon/mon_main.c         | 1 +
+ drivers/usb/storage/uas.c          | 1 +
+ 5 files changed, 5 insertions(+)
+
+diff --git a/drivers/usb/chipidea/ci_hdrc_msm.c b/drivers/usb/chipidea/ci_hdrc_msm.c
+index 7b5b47ce8a02..1661639cd2eb 100644
+--- a/drivers/usb/chipidea/ci_hdrc_msm.c
++++ b/drivers/usb/chipidea/ci_hdrc_msm.c
+@@ -303,4 +303,5 @@ module_platform_driver(ci_hdrc_msm_driver);
  
- 	if (pdev->vendor == PCI_VENDOR_ID_RENESAS &&
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 37eb37b0affa..aba4164b0873 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -3752,6 +3752,15 @@ static int xhci_discover_or_reset_device(struct usb_hcd *hcd,
- 						SLOT_STATE_DISABLED)
- 		return 0;
+ MODULE_ALIAS("platform:msm_hsusb");
+ MODULE_ALIAS("platform:ci13xxx_msm");
++MODULE_DESCRIPTION("ChipIdea Highspeed Dual Role Controller");
+ MODULE_LICENSE("GPL v2");
+diff --git a/drivers/usb/class/usbtmc.c b/drivers/usb/class/usbtmc.c
+index 311007b1d904..6bd9fe565385 100644
+--- a/drivers/usb/class/usbtmc.c
++++ b/drivers/usb/class/usbtmc.c
+@@ -2592,4 +2592,5 @@ static struct usb_driver usbtmc_driver = {
  
-+	if (xhci->quirks & XHCI_ETRON_HOST) {
-+		xhci_free_dev(hcd, udev);
-+		ret = xhci_alloc_dev(hcd, udev);
-+		if (ret == 1)
-+			return 0;
-+		else
-+			return -EINVAL;
-+	}
-+
- 	trace_xhci_discover_or_reset_device(slot_ctx);
+ module_usb_driver(usbtmc_driver);
  
- 	xhci_dbg(xhci, "Resetting device with slot ID %u\n", slot_id);
-@@ -3862,7 +3871,7 @@ static int xhci_discover_or_reset_device(struct usb_hcd *hcd,
-  * disconnected, and all traffic has been stopped and the endpoints have been
-  * disabled.  Free any HC data structures associated with that device.
-  */
--static void xhci_free_dev(struct usb_hcd *hcd, struct usb_device *udev)
-+void xhci_free_dev(struct usb_hcd *hcd, struct usb_device *udev)
- {
- 	struct xhci_hcd *xhci = hcd_to_xhci(hcd);
- 	struct xhci_virt_device *virt_dev;
-diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index 30415158ed3c..f46b4dcb0613 100644
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -1627,6 +1627,7 @@ struct xhci_hcd {
- #define XHCI_RESET_TO_DEFAULT	BIT_ULL(44)
- #define XHCI_ZHAOXIN_TRB_FETCH	BIT_ULL(45)
- #define XHCI_ZHAOXIN_HOST	BIT_ULL(46)
-+#define XHCI_ETRON_HOST	BIT_ULL(47)
++MODULE_DESCRIPTION("USB Test & Measurement class driver");
+ MODULE_LICENSE("GPL");
+diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
+index a0c432b14b20..65f9940bc7e8 100644
+--- a/drivers/usb/core/usb.c
++++ b/drivers/usb/core/usb.c
+@@ -1150,4 +1150,5 @@ static void __exit usb_exit(void)
  
- 	unsigned int		num_active_eps;
- 	unsigned int		limit_active_eps;
-@@ -1863,6 +1864,7 @@ int xhci_resume(struct xhci_hcd *xhci, pm_message_t msg);
- irqreturn_t xhci_irq(struct usb_hcd *hcd);
- irqreturn_t xhci_msi_irq(int irq, void *hcd);
- int xhci_alloc_dev(struct usb_hcd *hcd, struct usb_device *udev);
-+void xhci_free_dev(struct usb_hcd *hcd, struct usb_device *udev);
- int xhci_alloc_tt_info(struct xhci_hcd *xhci,
- 		struct xhci_virt_device *virt_dev,
- 		struct usb_device *hdev,
--- 
-2.25.1
+ subsys_initcall(usb_init);
+ module_exit(usb_exit);
++MODULE_DESCRIPTION("USB support library");
+ MODULE_LICENSE("GPL");
+diff --git a/drivers/usb/mon/mon_main.c b/drivers/usb/mon/mon_main.c
+index 824904abe76f..af852d53aac6 100644
+--- a/drivers/usb/mon/mon_main.c
++++ b/drivers/usb/mon/mon_main.c
+@@ -419,4 +419,5 @@ static void __exit mon_exit(void)
+ module_init(mon_init);
+ module_exit(mon_exit);
+ 
++MODULE_DESCRIPTION("USB Monitor");
+ MODULE_LICENSE("GPL");
+diff --git a/drivers/usb/storage/uas.c b/drivers/usb/storage/uas.c
+index a48870a87a29..9b8f578eef53 100644
+--- a/drivers/usb/storage/uas.c
++++ b/drivers/usb/storage/uas.c
+@@ -1280,6 +1280,7 @@ static void __exit uas_exit(void)
+ module_init(uas_init);
+ module_exit(uas_exit);
+ 
++MODULE_DESCRIPTION("USB Attached SCSI driver");
+ MODULE_LICENSE("GPL");
+ MODULE_IMPORT_NS(USB_STORAGE);
+ MODULE_AUTHOR(
+
+---
+base-commit: 83a7eefedc9b56fe7bfeff13b6c7356688ffa670
+change-id: 20240611-md-drivers-usb-86999d57ed16
 
 
