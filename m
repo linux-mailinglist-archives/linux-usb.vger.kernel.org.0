@@ -1,166 +1,372 @@
-Return-Path: <linux-usb+bounces-11212-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11213-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C09E90567A
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 17:11:28 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 142CE905696
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 17:14:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E761A286B60
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 15:11:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 13FEA1C2373C
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 15:14:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 461E618133E;
-	Wed, 12 Jun 2024 15:07:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57AB217FAB5;
+	Wed, 12 Jun 2024 15:13:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PfaolSLj"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bfWlAx3S"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7541A18131B;
-	Wed, 12 Jun 2024 15:07:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CCE217FAAF
+	for <linux-usb@vger.kernel.org>; Wed, 12 Jun 2024 15:13:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718204854; cv=none; b=S2PrExFGaeTE+p+AbMyS2kutFO/tsyB6EUzKynHDXI2c0Z8VqwgX06VZTBGvL8HZ3lf1ufgWLLFmKRAjemdHW1Bpsws5AeZTsDJyhCh0crvgSZNqANa6L+CkTwplBSSzIgX7whhLCvQxgJARfsVGJepcbYN3q4vs7MLOUZqy1uQ=
+	t=1718205198; cv=none; b=FR20ciiZP8qKwZnlbswZYGb7hBSOtorADOCknkhNUTTqIY39B+FddTxZTqb7U/VVx/RgtVrSCVXna3BGtcVWsJNNlz23LjwseFv7uoNCXYACLYUySg9rbeec6jn6OwUWlDMmNZtbGQsKMc4dbxg/v3O+wEb2bEEky3pXQWCOkqA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718204854; c=relaxed/simple;
-	bh=AEdp41grZ7smqjvikNgkrPlZJz64+dxMSUEJtvA8Se0=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=Jrc7GmSeZbXcKC/SZ7oioAHXIAYwBM1yruqjNClXtabRu6We9jMgtlmc4MPiJwjKOcix8LbNZ7wb8OeacinuLPb34ZhL9shwwMqeIqzF0eIX8Z6aqJ3QRSqmyE/S897QC2+3Lf9wMOqkkE24h2n9wKyHzI96sXg6jeQt63hxl0A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PfaolSLj; arc=none smtp.client-ip=209.85.210.175
+	s=arc-20240116; t=1718205198; c=relaxed/simple;
+	bh=Dptd+mRtLcSpQPmfm4/7W36vRn9dxyqo0Pzuc/nbcp0=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=T0TLqVYGwoHR18dlxBLBCKUzdpVXLKgJIhXNYnP86dhybGZZhBgvTg4VkJ1jmtx3TSORSvJOcD/4qXpyBkYUP9TEOFCLi+MwueU1v5KpHPro/CXv68CJ9Sfqd48wKNAM7ZzmtGz4gv41cTX7rMX1aGU/ME25fD3ChCj5Y5oddzY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bfWlAx3S; arc=none smtp.client-ip=209.85.221.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-705c7e2d31cso194408b3a.3;
-        Wed, 12 Jun 2024 08:07:33 -0700 (PDT)
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-35f1c567ae4so276995f8f.1
+        for <linux-usb@vger.kernel.org>; Wed, 12 Jun 2024 08:13:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718204853; x=1718809653; darn=vger.kernel.org;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=de53VCSP+1Fk6NTgs8BHySBUMjOfP3GoW+uQPcFGoBI=;
-        b=PfaolSLjoi1XUQpj8Ka8DiB0tNqvpgyXm0J7e8k5ryQtQndAYX8pi30D0QEGtuD1Rn
-         tJyv1Pfcuewxwj/9hm/4YWn55Bd0Fb1+6h1JbMlasA3dKzoag2dJ/RqdXBPnaPOMFK1S
-         hUKdon4f7Am/ukT+8D/XWu5gSD6M9PpgMydvgJ5A7Q+2RIaAAr6S1/V0NW9jJcrsbQ2t
-         ElOwicvM5hOHbi0B0AFHTHXceV2h/Xj04qXxkhHY+aDTepUN2HTjpeQOPoahoRioFnt6
-         qmHG2yux39qe4xOulawpKXg6SCJnjAyeYq+Bjdv1+7PE0G9p+Ej0Q4OepNheZ9B78J5u
-         2aPg==
+        d=gmail.com; s=20230601; t=1718205195; x=1718809995; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:to:from:subject:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=X1r5Wwk6FxbFjD4SUzMqYBHW8Gf1+vzlkAOo1W9fu7k=;
+        b=bfWlAx3SHnKDYzFiOuLkKCxisdzek2ew8zAsBrTS2W4WNDVmOgkDGug+CkapTBemXM
+         p31Vsey5yMhVxpleg6S5UQiVnNZZntiUMiZBXGtzSkof+lOK0JogxgA8yqUPQ7lAYe/0
+         hAVA4VqL+vJCxiY1UJ0d/W4/IcNOdoflSTDmn2fmdNMMp4MS9bX93I9JQnyuZS9Y4pgW
+         omDkgWY9hCcf1c9NlpVH6M/ojk+SCJwIhvz79qweRFCO75jCvNzagpkJDQQaq/fcs6S0
+         5er5kAknFWdXJW8x1LCp6d4i24KQTWGAvjGALeOrDHf9M+Em+ZfXcViPdtV+7h6MjmkI
+         a6xg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718204853; x=1718809653;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=de53VCSP+1Fk6NTgs8BHySBUMjOfP3GoW+uQPcFGoBI=;
-        b=aUuUT6g5oUReuUZmryeO4CoIODzqvs+Q3lJsXW022I0mqY/tUGv6pq2u4oN8ok0ivY
-         CccqOJ0zMq106zXy09QgCTGAZiTlywI0e1aB4ow233obLsJI/DmZ0zstabtUwfcvXNd7
-         3EKFTbhfYxxA4CTAxHzYY45EZVXydOu8xcR19BnR0lk2x/SxO8GN9fE3r1hkp9pN6fao
-         VgtdaXVIzMChANbpRrWY81v4u7Dkdc76DR7AuUwlcHbHvu9FC2GIRqTtUZ8C+u95j6Be
-         YUofn3Hc+rhA+zge6eXoZH41IGx0Z0Lw/K+A6JO8D3+aS5O827DJOa7vo8zzwcQjRsA/
-         DEXg==
-X-Forwarded-Encrypted: i=1; AJvYcCWTDMKgS850iBVinDxcEEOvU9C7iEtqGIxgmVgGXeFVOgLXzUteHf9oLDfx4CIkZFwZOs/1Epw+S95YuYlTGUL9Im+INX1VuSfkIR3DwLNdsVwcG4BiKVW6I6IMqEqzwn0uw5PZUUm2
-X-Gm-Message-State: AOJu0YwShuVFtEXCoSE0fq1l2DubVdsyiYVMcswIeuBljOHZRnnimfQK
-	YAgmdox+zOMpm1QPasAwW7q6vHI4MSe1yp/1iKXEEmGgIsL0Db/J
-X-Google-Smtp-Source: AGHT+IGET+0saUfgwHn28NUAEnP9WP1y5seckJICErXi/Wa7YOBOPkCo6NoqKYKrE6XVsc2GzRTBHQ==
-X-Received: by 2002:aa7:8888:0:b0:702:65de:19e5 with SMTP id d2e1a72fcca58-705bcf032aamr2484369b3a.33.1718204852569;
-        Wed, 12 Jun 2024 08:07:32 -0700 (PDT)
-Received: from localhost ([113.143.197.225])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-6f75f3377f8sm2413661a12.60.2024.06.12.08.07.30
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 12 Jun 2024 08:07:32 -0700 (PDT)
-From: joswang <joswang1221@gmail.com>
-To: Thinh.Nguyen@synopsys.com
-Cc: gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Jos Wang <joswang@lenovo.com>
-Subject: [PATCH v3, 2/3] usb: dwc3: core: add p3p2tranok quirk
-Date: Wed, 12 Jun 2024 23:07:23 +0800
-Message-Id: <20240612150723.2299-1-joswang1221@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20240601092646.52139-1-joswang1221@gmail.com>
-References: <20240601092646.52139-1-joswang1221@gmail.com>
+        d=1e100.net; s=20230601; t=1718205195; x=1718809995;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:to:from:subject:message-id:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=X1r5Wwk6FxbFjD4SUzMqYBHW8Gf1+vzlkAOo1W9fu7k=;
+        b=ScOhqe7+l1pgo8P+8qQFjaxhksM4SA9LZ7B3DEdCcsUcxAPu4KU9bR7V6mpIycrL9K
+         tPg/P8p7IL2XULqqNHGjt4cWzxU7KZB3yxsgx2TNZpn3eU89unhcjCJgKGBIMF1rbN9Y
+         66n4nUIKCWjcRa3k9/8ZmWiuX+vRfeXwCUkoBxEcUKMMtLbTrCgdT2V3N+CDyygIjp7j
+         yvRkN7vy9U3FZCdI562NDhE3DENn0pLCPoPyLsnNwSXdjK5DolH1HaDqvWoEsGEPfaGY
+         IRkUYmNGfcVC+u9gsXThkH1ipLHMxtPefdRjvcsQzmRThy6UmhZf/NmVIJi2dvYSl0AI
+         PxZw==
+X-Forwarded-Encrypted: i=1; AJvYcCX3wezbq497+esnpEOxfHVOv/2cOOfY9xpiMN4WlZFQ2l+E5kx14Go0hFV9Y8WIVvcc8UAKja+Zs6HmCsPpbggEl4atD85fNhYT
+X-Gm-Message-State: AOJu0YwZPx6Iap0pehpqR6QBcOgijYRfcUHzPd7C9edBMFpYsZHZv9tD
+	J8DkU9inAP5YbYyELIEZkBd7gR4Nzbayy6lOx8zhvcKu8U/Zi6dr8kwPBaXr
+X-Google-Smtp-Source: AGHT+IGwXYgc+lJulHptoBTuZAC7RFKMUCtpmnlwwnqHA5Loymg40C34pVVNcjQSA8WCRZ5wHMzJVw==
+X-Received: by 2002:a5d:678b:0:b0:35f:1128:2514 with SMTP id ffacd0b85a97d-35fdf7ad04emr1360910f8f.32.1718205194943;
+        Wed, 12 Jun 2024 08:13:14 -0700 (PDT)
+Received: from hermes.prahal.homelinux.net (91-175-163-178.subs.proxad.net. [91.175.163.178])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-35f254fb3c2sm8252223f8f.49.2024.06.12.08.13.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jun 2024 08:13:14 -0700 (PDT)
+Message-ID: <45b88a576be459f37ed8f329d53221640ce3617e.camel@gmail.com>
+Subject: Re: add NO_REPORT_LUNS quirk for at least a few Seagate external
+ drives to fix smartctl with uas
+From: Alban Browaeys <alban.browaeys@gmail.com>
+To: Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org
+Date: Wed, 12 Jun 2024 17:13:15 +0200
+In-Reply-To: <25ee57cfbe5c2ab6522ae4e0992f68c4c9a70766.camel@gmail.com>
+References: <9791b3eee4fc52b45f1ea9b9724bf977bf5c38d4.camel@gmail.com>
+	 <48c94250-64b3-4a19-9c87-0f48a2ceb425@suse.com>
+	 <25ee57cfbe5c2ab6522ae4e0992f68c4c9a70766.camel@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.2-2 
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
 
-From: Jos Wang <joswang@lenovo.com>
+Le mercredi 12 juin 2024 =C3=A0 03:39 +0200, Alban Browaeys a =C3=A9crit=C2=
+=A0:
+> Le mardi 11 juin 2024 =C3=A0 10:21 +0200, Oliver Neukum a =C3=A9crit=C2=
+=A0:
+> >=20
+> >=20
+> > On 10.06.24 21:25, Alban Browaeys wrote:
+> > > I found that for "smartctl" to work on my two Seagate Expansion
+> > > external USB3=C2=A0 I had to add the "j" usb-storage quirks ie
+> > > "US_FL_NO_REPORT_LUNS".
+> > > (They are years apart).
+> >=20
+> > Hi,
+> >=20
+> > does the attached patch do the job?
+> >=20
+> > 	Regards
+> > 		Oliver
+>=20
+> No, it does not work.
+> smartctl is still broken with the US_FL_NO_REPORT_LUNS in
+> drivers/usb/storage/unusual_uas.h.
+>=20
+> But if I add back the "j" usb.quirks flag back with:
+> echo -n "0x0bc2:0x2037:j" | sudo tee=C2=A0
+> /sys/module/usb_storage/parameters/quirks
+> and then:
+> echo -n "2-2:1.0" | sudo tee /sys/bus/usb/drivers/uas/unbind
+> echo -n "2-2:1.0" | sudo tee /sys/bus/usb/drivers/uas/bind
+> then smartctl works.
+>=20
+> I tested on tw kernels with the two different seagate drives.
+>=20
+> sudo grep Seagate /sys/devices/ -r |& grep Seagate
+> /sys/devices/pci0000:00/0000:00:14.0/usb2/2-2/manufacturer:Seagate
+> /sys/devices/pci0000:00/0000:00:14.0/usb2/2-2/2-
+> 2:1.0/host8/target8:0:0/8:0:0:0/vendor:Seagate
+>=20
+> head /sys/devices/pci0000\:00/0000\:00\:14.0/usb2/2-2/quirks=20
+> 0x0
+>=20
+> =C2=A0
+>=20
+>=20
+> lrwxrwxrwx 1 root root=C2=A0 9 12 juin=C2=A0 03:14 usb-
+> Seagate_Expansion_HDD_00000000NACSHZWL-0:0 -> ../../sdc
+> lrwxrwxrwx 1 root root 10 12 juin=C2=A0 03:14 usb-
+> Seagate_Expansion_HDD_00000000NACSHZWL-0:0-part1 -> ../../sdc1
+>=20
+> sudo smartctl -i /dev/sdc
+> smartctl 7.4 2023-08-01 r5530 [x86_64-linux-6.10.0-rc3+] (local
+> build)
+> Copyright (C) 2002-23, Bruce Allen, Christian Franke,
+> www.smartmontools.org
+>=20
+> Read Device Identity failed: scsi error unsupported field in scsi
+> command
+>=20
+> If this is a USB connected device, look at the various --device=3DTYPE
+> variants
+> A mandatory SMART command failed: exiting. To continue, add one or
+> more '-T permissive' options.
+>=20
+>=20
+> lsusb -t
+> /:=C2=A0 Bus 001.Port 001: Dev 001, Class=3Droot_hub, Driver=3Dxhci_hcd/1=
+2p,
+> 480M
+> =C2=A0=C2=A0=C2=A0 |__ Port 001: Dev 002, If 0, Class=3DVendor Specific C=
+lass,
+> Driver=3D[none], 12M
+> =C2=A0=C2=A0=C2=A0 |__ Port 001: Dev 002, If 1, Class=3DAudio, Driver=3D[=
+none], 12M
+> =C2=A0=C2=A0=C2=A0 |__ Port 001: Dev 002, If 2, Class=3DAudio, Driver=3D[=
+none], 12M
+> =C2=A0=C2=A0=C2=A0 |__ Port 005: Dev 003, If 0, Class=3DHub, Driver=3Dhub=
+/4p, 480M
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |__ Port 002: Dev 005, If 0, C=
+lass=3DVendor Specific Class,
+> Driver=3Dcp210x, 12M
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |__ Port 003: Dev 008, If 0, C=
+lass=3DWireless, Driver=3Dbtusb,
+> 12M
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |__ Port 003: Dev 008, If 1, C=
+lass=3DWireless, Driver=3Dbtusb,
+> 12M
+> =C2=A0=C2=A0=C2=A0 |__ Port 009: Dev 004, If 0, Class=3DHub, Driver=3Dhub=
+/4p, 480M
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |__ Port 003: Dev 009, If 0, C=
+lass=3DHuman Interface Device,
+> Driver=3Dusbhid, 1.5M
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |__ Port 003: Dev 009, If 1, C=
+lass=3DHuman Interface Device,
+> Driver=3Dusbhid, 1.5M
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |__ Port 004: Dev 010, If 0, C=
+lass=3DHuman Interface Device,
+> Driver=3Dusbhid, 1.5M
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |__ Port 004: Dev 010, If 1, C=
+lass=3DHuman Interface Device,
+> Driver=3Dusbhid, 1.5M
+> /:=C2=A0 Bus 002.Port 001: Dev 001, Class=3Droot_hub, Driver=3Dxhci_hcd/6=
+p,
+> 5000M
+> =C2=A0=C2=A0=C2=A0 |__ Port 002: Dev 002, If 0, Class=3DMass Storage, Dri=
+ver=3Duas,
+> 5000M
+> =C2=A0=C2=A0=C2=A0 |__ Port 003: Dev 003, If 0, Class=3DMass Storage, Dri=
+ver=3Dusb-
+> storage, 5000M
+> =C2=A0=C2=A0=C2=A0 |__ Port 005: Dev 004, If 0, Class=3DHub, Driver=3Dhub=
+/4p, 5000M
+> =C2=A0=C2=A0=C2=A0 |__ Port 006: Dev 005, If 0, Class=3DMass Storage, Dri=
+ver=3Dusb-
+> storage, 5000M
+>=20
+> with the "j" usb.quirks flag:
+> sudo smartctl -i /dev/sdc
+> smartctl 7.4 2023-08-01 r5530 [x86_64-linux-6.10.0-rc3+] (local
+> build)
+> Copyright (C) 2002-23, Bruce Allen, Christian Franke,
+> www.smartmontools.org
+>=20
+> =3D=3D=3D START OF INFORMATION SECTION =3D=3D=3D
+> Model Family:=C2=A0=C2=A0=C2=A0=C2=A0 Seagate Barracuda 2.5 5400
+> Device Model:=C2=A0=C2=A0=C2=A0=C2=A0 ST4000LM024-2AN17V
+> Serial Number:=C2=A0=C2=A0=C2=A0 WCKAEWZZ
+> LU WWN Device Id: 5 000c50 0e732b6d8
+> Firmware Version: 0001
+> User Capacity:=C2=A0=C2=A0=C2=A0 4=E2=80=AF000=E2=80=AF787=E2=80=AF030=E2=
+=80=AF016 bytes [4,00 TB]
+> Sector Sizes:=C2=A0=C2=A0=C2=A0=C2=A0 512 bytes logical, 4096 bytes physi=
+cal
+> Rotation Rate:=C2=A0=C2=A0=C2=A0 5526 rpm
+> Form Factor:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 2.5 inches
+> Device is:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 In smartctl database=
+ 7.3/5528
+> ATA Version is:=C2=A0=C2=A0 ACS-3 T13/2161-D revision 5
+> SATA Version is:=C2=A0 SATA 3.1, 6.0 Gb/s (current: 6.0 Gb/s)
+> Local Time is:=C2=A0=C2=A0=C2=A0 Wed Jun 12 03:30:47 2024 CEST
+> SMART support is: Available - device has SMART capability.
+> SMART support is: Enabled
+>=20
+>=20
 
-In the case of enable hibernation, there is an issue with
-the DWC31 2.00a and earlier versions where the controller
-link power state transition from P3/P3CPM/P4 to P2 may take
-longer than expected, ultimately resulting in the hibernation
-D3 entering time exceeding the expected 10ms.
 
-Synopsys workaround:
-If the PHY supports direct P3 to P2 transition, program
-GUSB3PIPECTL.P3P2Tran0K=1.
 
-Therefore, adding p3p2tranok quirk for workaround hibernation
-D3 exceeded the expected entry time.
-
-Signed-off-by: Jos Wang <joswang@lenovo.com>
----
-v1 -> v2:
-- no change
-v2 -> v3:
-- modify Author Jos Wang
----
- drivers/usb/dwc3/core.c | 5 +++++
- drivers/usb/dwc3/core.h | 4 ++++
- 2 files changed, 9 insertions(+)
-
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 7ee61a89520b..3a8fbc2d6b99 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -666,6 +666,9 @@ static int dwc3_ss_phy_setup(struct dwc3 *dwc, int index)
- 	if (dwc->dis_del_phy_power_chg_quirk)
- 		reg &= ~DWC3_GUSB3PIPECTL_DEPOCHANGE;
- 
-+	if (dwc->p2p3tranok_quirk)
-+		reg |= DWC3_GUSB3PIPECTL_P3P2TRANOK;
+Your patch had:
++UNUSUAL_DEV(0x0bc2, 0x2037, 0x0000, 0x9999,
++		"Seagate",
++		"RSS LLC Expansion HDD",
++		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
++		US_FL_NO_REPORT_LUNS),
 +
- 	dwc3_writel(dwc->regs, DWC3_GUSB3PIPECTL(index), reg);
- 
- 	return 0;
-@@ -1715,6 +1718,8 @@ static void dwc3_get_properties(struct dwc3 *dwc)
- 
- 	dwc->dis_split_quirk = device_property_read_bool(dev,
- 				"snps,dis-split-quirk");
-+	dwc->p2p3tranok_quirk = device_property_read_bool(dev,
-+				"snps,p2p3tranok-quirk");
- 
- 	dwc->lpm_nyet_threshold = lpm_nyet_threshold;
- 	dwc->tx_de_emphasis = tx_de_emphasis;
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index 3781c736c1a1..2810dce8b42e 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -327,6 +327,7 @@
- #define DWC3_GUSB3PIPECTL_DEP1P2P3_EN	DWC3_GUSB3PIPECTL_DEP1P2P3(1)
- #define DWC3_GUSB3PIPECTL_DEPOCHANGE	BIT(18)
- #define DWC3_GUSB3PIPECTL_SUSPHY	BIT(17)
-+#define DWC3_GUSB3PIPECTL_P3P2TRANOK	BIT(11)
- #define DWC3_GUSB3PIPECTL_LFPSFILT	BIT(9)
- #define DWC3_GUSB3PIPECTL_RX_DETOPOLL	BIT(8)
- #define DWC3_GUSB3PIPECTL_TX_DEEPH_MASK	DWC3_GUSB3PIPECTL_TX_DEEPH(3)
-@@ -1132,6 +1133,8 @@ struct dwc3_scratchpad_array {
-  *			instances in park mode.
-  * @parkmode_disable_hs_quirk: set if we need to disable all HishSpeed
-  *			instances in park mode.
-+ * @p2p3tranok_quirk: set if Controller transitions directly from phy
-+ *			power state P2 to P3 or from state P3 to P2.
-  * @gfladj_refclk_lpm_sel: set if we need to enable SOF/ITP counter
-  *                          running based on ref_clk
-  * @tx_de_emphasis_quirk: set if we enable Tx de-emphasis quirk
-@@ -1361,6 +1364,7 @@ struct dwc3 {
- 	unsigned		ulpi_ext_vbus_drv:1;
- 	unsigned		parkmode_disable_ss_quirk:1;
- 	unsigned		parkmode_disable_hs_quirk:1;
-+	unsigned		p2p3tranok_quirk:1;
- 	unsigned		gfladj_refclk_lpm_sel:1;
- 
- 	unsigned		tx_de_emphasis_quirk:1;
--- 
-2.17.1
++/* Reported-by: Alban Browaeys <alban.browaeys@gmail.com> */
++UNUSUAL_DEV(0x0bc2, 0x231a, 0x0000, 0x9999,
++		"Seagate",
++		"RSS LLC Expansion Portable",
++		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
++		US_FL_NO_REPORT_LUNS),
++
+
+but:
+head /sys/devices/pci0000:00/0000:00:14.0/usb2/2-2/manufacturer
+Seagate
+
+head /sys/devices/pci0000:00/0000:00:14.0/usb2/2-2/product
+Expansion HDD
+
+head /sys/devices/pci0000:00/0000:00:14.0/usb2/2-2/id*
+=3D=3D> /sys/devices/pci0000:00/0000:00:14.0/usb2/2-2/idProduct <=3D=3D
+2037
+
+=3D=3D> /sys/devices/pci0000:00/0000:00:14.0/usb2/2-2/idVendor <=3D=3D
+0bc2
+head /sys/devices/pci0000:00/0000:00:14.0/usb2/2-2/quirks
+0x0
+
+
+
+and:
+
+head /sys/devices/platform/usb@fe900000/fe900000.usb/xhci-hcd.0.auto/usb2/2=
+-1/2-1.2/2-1.2.1/2-1.2.1.4/manufacturer=20
+Seagate
+head /sys/devices/platform/usb@fe900000/fe900000.usb/xhci-hcd.0.auto/usb2/2=
+-1/2-1.2/2-1.2.1/2-1.2.1.4/product=20
+Expansion
+head /sys/devices/platform/usb@fe900000/fe900000.usb/xhci-hcd.0.auto/usb2/2=
+-1/2-1.2/2-1.2.1/2-1.2.1.4/id*
+=3D=3D> /sys/devices/platform/usb@fe900000/fe900000.usb/xhci-hcd.0.auto/usb=
+2/2-1/2-1.2/2-1.2.1/2-1.2.1.4/idProduct <=3D=3D
+231a
+
+=3D=3D> /sys/devices/platform/usb@fe900000/fe900000.usb/xhci-hcd.0.auto/usb=
+2/2-1/2-1.2/2-1.2.1/2-1.2.1.4/idVendor <=3D=3D
+0bc2
+
+
+I replace the product name with the one from sysfs in your patch but the pa=
+tch still does not work.
++UNUSUAL_DEV(0x0bc2, 0x2037, 0x0000, 0x9999,
++               "Seagate",
++               "Expansion HDD",
++               USB_SC_DEVICE, USB_PR_DEVICE, NULL,
++               US_FL_NO_REPORT_LUNS),
+
++UNUSUAL_DEV(0x0bc2, 0x231a, 0x0000, 0x9999,
++               "Seagate",
++               "Expansion",
++               USB_SC_DEVICE, USB_PR_DEVICE, NULL,
++               US_FL_NO_REPORT_LUNS),
+
+
+
+How could I see if the quirk is applied?
+Does sysfs:
+head /sys/devices/pci0000:00/0000:00:14.0/usb2/2-2/quirks
+0x0
+tells it was not?
+
+
+On the 0x2037 box:
+lsusb -t
+/:  Bus 001.Port 001: Dev 001, Class=3Droot_hub, Driver=3Dxhci_hcd/12p, 480=
+M
+    |__ Port 001: Dev 002, If 0, Class=3DVendor Specific Class, Driver=3D[n=
+one], 12M
+    |__ Port 001: Dev 002, If 1, Class=3DAudio, Driver=3D[none], 12M
+    |__ Port 001: Dev 002, If 2, Class=3DAudio, Driver=3D[none], 12M
+    |__ Port 005: Dev 003, If 0, Class=3DHub, Driver=3Dhub/4p, 480M
+        |__ Port 002: Dev 005, If 0, Class=3DVendor Specific Class, Driver=
+=3Dcp210x, 12M
+        |__ Port 003: Dev 008, If 0, Class=3DWireless, Driver=3Dbtusb, 12M
+        |__ Port 003: Dev 008, If 1, Class=3DWireless, Driver=3Dbtusb, 12M
+    |__ Port 009: Dev 004, If 0, Class=3DHub, Driver=3Dhub/4p, 480M
+        |__ Port 003: Dev 009, If 0, Class=3DHuman Interface Device, Driver=
+=3Dusbhid, 1.5M
+        |__ Port 003: Dev 009, If 1, Class=3DHuman Interface Device, Driver=
+=3Dusbhid, 1.5M
+        |__ Port 004: Dev 010, If 0, Class=3DHuman Interface Device, Driver=
+=3Dusbhid, 1.5M
+        |__ Port 004: Dev 010, If 1, Class=3DHuman Interface Device, Driver=
+=3Dusbhid, 1.5M
+/:  Bus 002.Port 001: Dev 001, Class=3Droot_hub, Driver=3Dxhci_hcd/6p, 5000=
+M
+    |__ Port 002: Dev 002, If 0, Class=3DMass Storage, Driver=3Duas, 5000M
+    |__ Port 003: Dev 003, If 0, Class=3DMass Storage, Driver=3Dusb-storage=
+, 5000M
+    |__ Port 005: Dev 004, If 0, Class=3DHub, Driver=3Dhub/4p, 5000M
+    |__ Port 006: Dev 005, If 0, Class=3DMass Storage, Driver=3Dusb-storage=
+, 5000M
+
+
+lsusb
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 001 Device 002: ID 046d:08ae Logitech, Inc. QuickCam for Notebooks
+Bus 001 Device 003: ID 05e3:0610 Genesys Logic, Inc. Hub
+Bus 001 Device 004: ID 05e3:0610 Genesys Logic, Inc. Hub
+Bus 001 Device 005: ID 10c4:ea60 Silicon Labs CP210x UART Bridge
+Bus 001 Device 008: ID 0a12:0001 Cambridge Silicon Radio, Ltd Bluetooth Don=
+gle (HCI mode)
+Bus 001 Device 009: ID 17ef:608c Lenovo Lenovo Calliope USB Keyboard
+Bus 001 Device 010: ID 046d:c517 Logitech, Inc. LX710 Cordless Desktop Lase=
+r
+Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 002 Device 002: ID 0bc2:2037 Seagate RSS LLC Expansion HDD
+Bus 002 Device 003: ID 1058:1078 Western Digital Technologies, Inc. Element=
+s Portable (WDBUZG)
+Bus 002 Device 004: ID 05e3:0626 Genesys Logic, Inc. Hub
+Bus 002 Device 005: ID 08e4:017a Pioneer Corp. BD-XD07 BD/DVD/CD Writer
+
+
+
+Mind I have not test the 0x231a device on 6.9 branch yet as the kernel
+build with the patch change is till building. I only tested the 0x2037
+one on 6.10.0-rc3.
+
+
+
+Regards,
+Alban
 
 
