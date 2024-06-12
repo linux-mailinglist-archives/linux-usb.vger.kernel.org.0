@@ -1,62 +1,50 @@
-Return-Path: <linux-usb+bounces-11161-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11162-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 573DE904896
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 03:54:39 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6DA949048BF
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 04:08:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7CEE61C20B51
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 01:54:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BE436B22240
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 02:08:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D074BE55;
-	Wed, 12 Jun 2024 01:54:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59E3A4C90;
+	Wed, 12 Jun 2024 02:08:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="IaV9SEyl"
+	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="fL48R4Uz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1913E4696;
-	Wed, 12 Jun 2024 01:54:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 938534696
+	for <linux-usb@vger.kernel.org>; Wed, 12 Jun 2024 02:08:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.241.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718157259; cv=none; b=SWTmTGdVVi9zdpoKybQ4tkWFpyo5DvkTv6S+qM/6PVHEh++r4pjrhb4/aLZUr13+Ml027PsNVRFOVcviJZnk3uwi3qthPR0RxZ7iPXK6AZL7jFn4LQvqrb1ddId1nroA/dPJjmhgqtLvsFxl4AAShnxLCi5o+v9WS0GkpRuUOzY=
+	t=1718158091; cv=none; b=jy2yPGLhf5sXdiDrZap7Vr/hQHcMUCrJ6ccpILQGjiWsg8/eRyUzDQveAAzxO3hR0pSN5V9t96ex3rEbCAoFlTjMpVl3AmhBXBKyQtNrxWUKKFgIZZwxdGBJsA8B07kVfUZKup+kWfqGh3V2hOEhOQD2kfrSGmP7eyawE3RzLps=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718157259; c=relaxed/simple;
-	bh=qEP1jfUnLDqKY+Tbv7jWMRIeP29xqp5aif0Wikh853o=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:To:CC; b=VciAf8PgYMRg6AvktxQhdQD14BtHjUb7v/LDPTLphp/h5aI31aTaK1GgnZpINKo5BkcyYe4AdbEcjElhNymiOaku903t+QOsaNE1HkykreoLq12PvBYj892Ivbr0E0FCYNSiaLekWmu0bgOdWE4P539luVqE3f0SOHfxhrdVkz8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=IaV9SEyl; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45BFD0TR031044;
-	Wed, 12 Jun 2024 01:54:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=qcppdkim1; bh=dEliYOecfFwvzvpruyOir3
-	lcTsdZk5RA15G2wEuI1WA=; b=IaV9SEylu7NSFXZfhs2n4RO2fkhanhD6kofAJS
-	L4umGZBIrLvYNKxlr/XLfKNXifOPSEkBihNiFLA5eYxZSpg3wSDdBAvKoY2Wjpjs
-	Z88/lrpPu3N32r0dOfu5dWABaOQvt2Q18AuNIV4X2kqpsEFoJhtUL387IkNMheFR
-	nupel6Yg7nZ5Tv/p4VjhmDnrhKFSVKw17pg3rPks7Gb5R+UgU7H743LMSfDM/4Lf
-	JRFF8oB3DeNvFPqm1d/tSs0ZyPt4Ssn0fqn1Ndiw10CJOLFa+lWDqU0fHIov0FPh
-	GHy71gpsg2P9P6Tx9e0FwSr7frKz8Gzx81efVgPZPrbSJ6vw==
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ymcnmytwj-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 12 Jun 2024 01:54:13 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA04.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 45C1sCPI026977
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 12 Jun 2024 01:54:12 GMT
-Received: from [169.254.0.1] (10.49.16.6) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 11 Jun
- 2024 18:54:12 -0700
-From: Jeff Johnson <quic_jjohnson@quicinc.com>
-Date: Tue, 11 Jun 2024 18:54:11 -0700
-Subject: [PATCH] usb: common: add missing MODULE_DESCRIPTION() macros
+	s=arc-20240116; t=1718158091; c=relaxed/simple;
+	bh=cl19qSP8hdSCVvnd4cXugCUomIfeUwLbYtVdmDfIQig=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=CQ+FXjnu1W89DC5X0QPXMt51vRAiShtrU4M5m5c1pWAO7RU9Bb/XWYxnQEWbtvcP7VlMFuspWIowxYRUx7fppZhzuMcVaI5WhVRg0ao/QRMJFjNxdILwA1csnYDZcXYeA9UlsseXLxb7+5fVc5tjMHvr9KLp8FhbuHPoaKWRo/M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au; spf=pass smtp.mailfrom=codeconstruct.com.au; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=fL48R4Uz; arc=none smtp.client-ip=203.29.241.158
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeconstruct.com.au
+Received: by codeconstruct.com.au (Postfix, from userid 10000)
+	id 7333A201FE; Wed, 12 Jun 2024 10:08:01 +0800 (AWST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=codeconstruct.com.au; s=2022a; t=1718158081;
+	bh=DB5rOb0/z6zqHMVZYKY5CxM6R3KYeCCK6hxDRwtNY6g=;
+	h=From:Date:Subject:To:Cc;
+	b=fL48R4Uzk+a8VXbNyXLDa0/KTKTQt89AdkNuyLDqjKayeJF72dnQKL82A1jpDUHF/
+	 xrdfyEx4/tFAug6WGKLNsUqVYWLqYhx0TTZ8M/A0Nve0ZiXuBakG1PMLjthYwqntsd
+	 LH0R8Ukri/SgsN+Bb0kz4VVLv0FsghGpzLhbnTt1Z6RB4WA3BkWGxQxoI5tCmKRAN3
+	 oT1KXNroA8+mZSar8qZ+Ekjgu1SyMigc7yTmAQRr12gL0CrwxrJB0ie+voQ5Ux/dNT
+	 zRN6Ieg8jHmWTJ7kl/SfGgx6gt06XFJOwRBvZ83vi4xIKJnFaqBcVou+UqsBkGZIxc
+	 DM+//FAgGVW2Q==
+From: Jeremy Kerr <jk@codeconstruct.com.au>
+Date: Wed, 12 Jun 2024 10:07:33 +0800
+Subject: [PATCH] usb: gadget: aspeed_udc: fix device address configuration
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -65,67 +53,70 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20240611-md-drivers-usb-common-v1-1-f81555b0bd0d@quicinc.com>
-X-B4-Tracking: v=1; b=H4sIAML/aGYC/x3MwQrCMAyA4VcZORtoi1P0VcRD2kYXsK0kbgzG3
- t3q8Tv8/wbGKmxwHTZQXsSk1Q5/GCBNVJ+MkrshuHB0J++xZMwqC6vhbBFTK6VVHMMYHF/OkVy
- E3r6VH7L+v7d7dyRjjEo1Tb/bS+q8YiH7sMK+fwHJzxW9hgAAAA==
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Chen
-	<peter.chen@kernel.org>
-CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel-janitors@vger.kernel.org>,
-        Jeff Johnson <quic_jjohnson@quicinc.com>
+Message-Id: <20240612-aspeed-udc-v1-1-d277b553aecf@codeconstruct.com.au>
+X-B4-Tracking: v=1; b=H4sIAOUCaWYC/x3MQQqAIBBA0avIrBNUwqCrRAuZGWs2JkoRiHdPW
+ r7F/w0qF+EKq2pQ+JEqVxqwkwI8QzpYCw2DM2423lodamYmfRNqsxASG+8QI4wgF47y/rNt7/0
+ DjpD6xVwAAAA=
+To: Neal Liu <neal_liu@aspeedtech.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@codeconstruct.com.au>
+Cc: linux-aspeed@lists.ozlabs.org, linux-usb@vger.kernel.org
 X-Mailer: b4 0.13.0
-X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: sX6MLW-0Ze7QD44XD6xCn93IH3hZr5T7
-X-Proofpoint-ORIG-GUID: sX6MLW-0Ze7QD44XD6xCn93IH3hZr5T7
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-06-11_13,2024-06-11_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- impostorscore=0 clxscore=1011 adultscore=0 phishscore=0 spamscore=0
- priorityscore=1501 malwarescore=0 mlxscore=0 mlxlogscore=797 bulkscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2405170001 definitions=main-2406120010
 
-With ARCH=x86, make allmodconfig && make W=1 C=1 reports:
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/common/usb-common.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/common/usb-otg-fsm.o
+In the aspeed UDC setup, we configure the UDC hardware with the assigned
+USB device address.
 
-Add the missing invocations of the MODULE_DESCRIPTION() macro.
+However, we have an off-by-one in the bitmask, so we're only setting the
+lower 6 bits of the address (USB addresses being 7 bits, and the
+hardware bitmask being bits 0:6).
 
-Signed-off-by: Jeff Johnson <quic_jjohnson@quicinc.com>
+This means that device enumeration fails if the assigned address is
+greater than 64:
+
+[  344.607255] usb 1-1: new high-speed USB device number 63 using ehci-platform
+[  344.808459] usb 1-1: New USB device found, idVendor=cc00, idProduct=cc00, bcdDevice= 6.10
+[  344.817684] usb 1-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+[  344.825671] usb 1-1: Product: Test device
+[  344.831075] usb 1-1: Manufacturer: Test vendor
+[  344.836335] usb 1-1: SerialNumber: 00
+[  349.917181] usb 1-1: USB disconnect, device number 63
+[  352.036775] usb 1-1: new high-speed USB device number 64 using ehci-platform
+[  352.249432] usb 1-1: device descriptor read/all, error -71
+[  352.696740] usb 1-1: new high-speed USB device number 65 using ehci-platform
+[  352.909431] usb 1-1: device descriptor read/all, error -71
+
+Use the correct mask of 0x7f (rather than 0x3f), and generate this
+through the GENMASK macro, so we have numbers that correspond exactly
+to the hardware register definition.
+
+Fixes: 055276c13205 ("usb: gadget: add Aspeed ast2600 udc driver")
+Signed-off-by: Jeremy Kerr <jk@codeconstruct.com.au>
 ---
- drivers/usb/common/common.c      | 1 +
- drivers/usb/common/usb-otg-fsm.c | 1 +
- 2 files changed, 2 insertions(+)
+ drivers/usb/gadget/udc/aspeed_udc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/common/common.c b/drivers/usb/common/common.c
-index b84efae26e15..59b55d6cf490 100644
---- a/drivers/usb/common/common.c
-+++ b/drivers/usb/common/common.c
-@@ -433,4 +433,5 @@ static void __exit usb_common_exit(void)
- subsys_initcall(usb_common_init);
- module_exit(usb_common_exit);
+diff --git a/drivers/usb/gadget/udc/aspeed_udc.c b/drivers/usb/gadget/udc/aspeed_udc.c
+index 3916c8e2ba01..821a6ab5da56 100644
+--- a/drivers/usb/gadget/udc/aspeed_udc.c
++++ b/drivers/usb/gadget/udc/aspeed_udc.c
+@@ -66,8 +66,8 @@
+ #define USB_UPSTREAM_EN			BIT(0)
  
-+MODULE_DESCRIPTION("Common code for host and device side USB");
- MODULE_LICENSE("GPL");
-diff --git a/drivers/usb/common/usb-otg-fsm.c b/drivers/usb/common/usb-otg-fsm.c
-index 0697fde51d00..e11803225775 100644
---- a/drivers/usb/common/usb-otg-fsm.c
-+++ b/drivers/usb/common/usb-otg-fsm.c
-@@ -449,4 +449,5 @@ int otg_statemachine(struct otg_fsm *fsm)
- 	return fsm->state_changed;
- }
- EXPORT_SYMBOL_GPL(otg_statemachine);
-+MODULE_DESCRIPTION("OTG Finite State Machine");
- MODULE_LICENSE("GPL");
+ /* Main config reg */
+-#define UDC_CFG_SET_ADDR(x)		((x) & 0x3f)
+-#define UDC_CFG_ADDR_MASK		(0x3f)
++#define UDC_CFG_SET_ADDR(x)		((x) & UDC_CFG_ADDR_MASK)
++#define UDC_CFG_ADDR_MASK		GENMASK(6, 0)
+ 
+ /* Interrupt ctrl & status reg */
+ #define UDC_IRQ_EP_POOL_NAK		BIT(17)
 
 ---
-base-commit: 83a7eefedc9b56fe7bfeff13b6c7356688ffa670
-change-id: 20240611-md-drivers-usb-common-52520e97ba0b
+base-commit: 32f88d65f01bf6f45476d7edbe675e44fb9e1d58
+change-id: 20240611-aspeed-udc-07dcde062ccf
+
+Best regards,
+-- 
+Jeremy Kerr <jk@codeconstruct.com.au>
 
 
