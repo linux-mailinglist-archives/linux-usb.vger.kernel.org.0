@@ -1,205 +1,131 @@
-Return-Path: <linux-usb+bounces-11160-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11161-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD54990487D
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 03:40:08 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 573DE904896
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 03:54:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BA3D81C228F7
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 01:40:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7CEE61C20B51
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 01:54:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A60F4A15;
-	Wed, 12 Jun 2024 01:40:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D074BE55;
+	Wed, 12 Jun 2024 01:54:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lTV8i3jD"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="IaV9SEyl"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D86FAD54
-	for <linux-usb@vger.kernel.org>; Wed, 12 Jun 2024 01:39:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1913E4696;
+	Wed, 12 Jun 2024 01:54:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718156401; cv=none; b=GBuCi9r7TRfDQkFtBtQ6dWvXW/dWFjW1M//tD+xmSaXBJprhHod0aCwJLTrSmpIMff5lq4g9/5/9/ymeUllFU3ZPjymJ78xbrCrR7RyVET5T6Opa8lhLFqJJ1JGWBfWaBNqC3aEjLO/gIpFtmM3x73qFu6T4Kf4Qz2UnNy4bgSQ=
+	t=1718157259; cv=none; b=SWTmTGdVVi9zdpoKybQ4tkWFpyo5DvkTv6S+qM/6PVHEh++r4pjrhb4/aLZUr13+Ml027PsNVRFOVcviJZnk3uwi3qthPR0RxZ7iPXK6AZL7jFn4LQvqrb1ddId1nroA/dPJjmhgqtLvsFxl4AAShnxLCi5o+v9WS0GkpRuUOzY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718156401; c=relaxed/simple;
-	bh=XvZawrNFaMNQsYNLGlsvIyMOSBnBG888WsL7h0MV0MU=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=KR4zI3VqzN+d6PxD6wuj/sghNvQR+S1DXdiPqcWpMCzlFiVIB/rbzE2l3aI1Xo0WnkRH71M93SkYK0AvTcLmyMvxX8Z9IS8OPtz4nMqBSU6Q4wHx3+BjzOARKrBZgP+atAb+6FKgw0Nl3hrue8Bcl1oOFgspJ7pJGFu8elhMmA4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lTV8i3jD; arc=none smtp.client-ip=209.85.221.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-35e1fcd0c0fso5112225f8f.0
-        for <linux-usb@vger.kernel.org>; Tue, 11 Jun 2024 18:39:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718156398; x=1718761198; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:to:from:subject:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9FFQ/yvQKHlBYG8ZQI/GY926VHTRG6IwMI8ctNgOKzA=;
-        b=lTV8i3jD1DGZ300+m9IZ1iUqkVRPPInIyu0z8uZ5WeRkokItj1U4RMam3VpT5iRwvx
-         6jxyCd3kBhOtFmz3DYGZNv+oW275p917GdVQ0vwDfbhLL8IToIrsD6xKtldCdHPtwkiX
-         5cEtz1XtB+yQmxrMoCJV3UZvRpzAIfXe49txNkgbVyqknIpApEQCCSurpUMmd1KB4ZQ7
-         WglPFP0FI5j2J9Xyr5UVkgD59K7UY0ETOA5tSKh01zWsCrvSjvHvm9jMvb5RMLAfsLL5
-         wkDuT4cVhQ2RIZr13grAtaUlFlj4DPXUKRDlVtXxO9+sctbSneKapJ9yTDi/wpbK+3vN
-         lIXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718156398; x=1718761198;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:to:from:subject:message-id:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=9FFQ/yvQKHlBYG8ZQI/GY926VHTRG6IwMI8ctNgOKzA=;
-        b=iIhFBxK4lqXpI1My6XYu2Hq5bKTPuqO+FII7/eh5AGSn9AfR8fJZVqLqkL+sP0axt/
-         5UrlwJj94GVFQjTxc9pGlTtyvQqhdQLyC6vyHvtRGNjNQUnSqN0VTO9WS8JPWayCmiAi
-         zz8qBrdwt7WhFf7y42r/Q9QBzMQT7fdfpgj8Xit/bJ4sLbR2kbgGtXBVpBtILnm0hbw4
-         Ppzpeitaa4AUEHFX7pjVJ91KTHI35ML1llYYpH958LNCN89Zn+szRzMFYPW8tzaFsuTu
-         yzfhzJjXTFxZiybclf/p56IxcA+KuKaYLXduLrZgw0pjuuIZ8059aR4a0YboO6rfjiWS
-         bZ8A==
-X-Forwarded-Encrypted: i=1; AJvYcCWeICt67AHe9b+4Pq5qORW55JDSpimLYWlGQJzbYEncNRD8x+0ocP2RNRW2gaT+K5AWzasDhZwqU4VaJt5SgaigtzhnCV5oXqyK
-X-Gm-Message-State: AOJu0YymuWM8rwj3SGyflXFjRLW6dNjRPpRv3kOUtPY6Vbzt3Xw+ldyv
-	Nnhk2t2fJhqFmY+XLzIwIs1YKeVXd8HysCt6QR8DW34J2atjCXZe
-X-Google-Smtp-Source: AGHT+IFV0V4efSNGhgnTTCrNTvviY/Y01WU+Yfts58e70GY29QqZybypEUMK3wwYKjxcBlqZYnRf9w==
-X-Received: by 2002:a5d:4d87:0:b0:35e:8364:f4d4 with SMTP id ffacd0b85a97d-35fe892484dmr183912f8f.58.1718156398221;
-        Tue, 11 Jun 2024 18:39:58 -0700 (PDT)
-Received: from hermes.prahal.homelinux.net (91-175-163-178.subs.proxad.net. [91.175.163.178])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-35ef5fc47ebsm15114676f8f.108.2024.06.11.18.39.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jun 2024 18:39:57 -0700 (PDT)
-Message-ID: <25ee57cfbe5c2ab6522ae4e0992f68c4c9a70766.camel@gmail.com>
-Subject: Re: add NO_REPORT_LUNS quirk for at least a few Seagate external
- drives to fix smartctl with uas
-From: Alban Browaeys <alban.browaeys@gmail.com>
-To: Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org
-Date: Wed, 12 Jun 2024 03:39:56 +0200
-In-Reply-To: <48c94250-64b3-4a19-9c87-0f48a2ceb425@suse.com>
-References: <9791b3eee4fc52b45f1ea9b9724bf977bf5c38d4.camel@gmail.com>
-	 <48c94250-64b3-4a19-9c87-0f48a2ceb425@suse.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.2-2 
+	s=arc-20240116; t=1718157259; c=relaxed/simple;
+	bh=qEP1jfUnLDqKY+Tbv7jWMRIeP29xqp5aif0Wikh853o=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:To:CC; b=VciAf8PgYMRg6AvktxQhdQD14BtHjUb7v/LDPTLphp/h5aI31aTaK1GgnZpINKo5BkcyYe4AdbEcjElhNymiOaku903t+QOsaNE1HkykreoLq12PvBYj892Ivbr0E0FCYNSiaLekWmu0bgOdWE4P539luVqE3f0SOHfxhrdVkz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=IaV9SEyl; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45BFD0TR031044;
+	Wed, 12 Jun 2024 01:54:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=dEliYOecfFwvzvpruyOir3
+	lcTsdZk5RA15G2wEuI1WA=; b=IaV9SEylu7NSFXZfhs2n4RO2fkhanhD6kofAJS
+	L4umGZBIrLvYNKxlr/XLfKNXifOPSEkBihNiFLA5eYxZSpg3wSDdBAvKoY2Wjpjs
+	Z88/lrpPu3N32r0dOfu5dWABaOQvt2Q18AuNIV4X2kqpsEFoJhtUL387IkNMheFR
+	nupel6Yg7nZ5Tv/p4VjhmDnrhKFSVKw17pg3rPks7Gb5R+UgU7H743LMSfDM/4Lf
+	JRFF8oB3DeNvFPqm1d/tSs0ZyPt4Ssn0fqn1Ndiw10CJOLFa+lWDqU0fHIov0FPh
+	GHy71gpsg2P9P6Tx9e0FwSr7frKz8Gzx81efVgPZPrbSJ6vw==
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ymcnmytwj-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 12 Jun 2024 01:54:13 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA04.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 45C1sCPI026977
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 12 Jun 2024 01:54:12 GMT
+Received: from [169.254.0.1] (10.49.16.6) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 11 Jun
+ 2024 18:54:12 -0700
+From: Jeff Johnson <quic_jjohnson@quicinc.com>
+Date: Tue, 11 Jun 2024 18:54:11 -0700
+Subject: [PATCH] usb: common: add missing MODULE_DESCRIPTION() macros
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-ID: <20240611-md-drivers-usb-common-v1-1-f81555b0bd0d@quicinc.com>
+X-B4-Tracking: v=1; b=H4sIAML/aGYC/x3MwQrCMAyA4VcZORtoi1P0VcRD2kYXsK0kbgzG3
+ t3q8Tv8/wbGKmxwHTZQXsSk1Q5/GCBNVJ+MkrshuHB0J++xZMwqC6vhbBFTK6VVHMMYHF/OkVy
+ E3r6VH7L+v7d7dyRjjEo1Tb/bS+q8YiH7sMK+fwHJzxW9hgAAAA==
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Chen
+	<peter.chen@kernel.org>
+CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kernel-janitors@vger.kernel.org>,
+        Jeff Johnson <quic_jjohnson@quicinc.com>
+X-Mailer: b4 0.13.0
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: sX6MLW-0Ze7QD44XD6xCn93IH3hZr5T7
+X-Proofpoint-ORIG-GUID: sX6MLW-0Ze7QD44XD6xCn93IH3hZr5T7
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-06-11_13,2024-06-11_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ impostorscore=0 clxscore=1011 adultscore=0 phishscore=0 spamscore=0
+ priorityscore=1501 malwarescore=0 mlxscore=0 mlxlogscore=797 bulkscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2405170001 definitions=main-2406120010
 
-Le mardi 11 juin 2024 =C3=A0 10:21 +0200, Oliver Neukum a =C3=A9crit=C2=A0:
->=20
->=20
-> On 10.06.24 21:25, Alban Browaeys wrote:
-> > I found that for "smartctl" to work on my two Seagate Expansion
-> > external USB3=C2=A0 I had to add the "j" usb-storage quirks ie
-> > "US_FL_NO_REPORT_LUNS".
-> > (They are years apart).
->=20
-> Hi,
->=20
-> does the attached patch do the job?
->=20
-> 	Regards
-> 		Oliver
+With ARCH=x86, make allmodconfig && make W=1 C=1 reports:
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/common/usb-common.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/common/usb-otg-fsm.o
 
-No, it does not work.
-smartctl is still broken with the US_FL_NO_REPORT_LUNS in
-drivers/usb/storage/unusual_uas.h.
+Add the missing invocations of the MODULE_DESCRIPTION() macro.
 
-But if I add back the "j" usb.quirks flag back with:
-echo -n "0x0bc2:0x2037:j" | sudo tee  /sys/module/usb_storage/parameters/qu=
-irks
-and then:
-echo -n "2-2:1.0" | sudo tee /sys/bus/usb/drivers/uas/unbind
-echo -n "2-2:1.0" | sudo tee /sys/bus/usb/drivers/uas/bind
-then smartctl works.
+Signed-off-by: Jeff Johnson <quic_jjohnson@quicinc.com>
+---
+ drivers/usb/common/common.c      | 1 +
+ drivers/usb/common/usb-otg-fsm.c | 1 +
+ 2 files changed, 2 insertions(+)
 
-I tested on tw kernels with the two different seagate drives.
+diff --git a/drivers/usb/common/common.c b/drivers/usb/common/common.c
+index b84efae26e15..59b55d6cf490 100644
+--- a/drivers/usb/common/common.c
++++ b/drivers/usb/common/common.c
+@@ -433,4 +433,5 @@ static void __exit usb_common_exit(void)
+ subsys_initcall(usb_common_init);
+ module_exit(usb_common_exit);
+ 
++MODULE_DESCRIPTION("Common code for host and device side USB");
+ MODULE_LICENSE("GPL");
+diff --git a/drivers/usb/common/usb-otg-fsm.c b/drivers/usb/common/usb-otg-fsm.c
+index 0697fde51d00..e11803225775 100644
+--- a/drivers/usb/common/usb-otg-fsm.c
++++ b/drivers/usb/common/usb-otg-fsm.c
+@@ -449,4 +449,5 @@ int otg_statemachine(struct otg_fsm *fsm)
+ 	return fsm->state_changed;
+ }
+ EXPORT_SYMBOL_GPL(otg_statemachine);
++MODULE_DESCRIPTION("OTG Finite State Machine");
+ MODULE_LICENSE("GPL");
 
-sudo grep Seagate /sys/devices/ -r |& grep Seagate
-/sys/devices/pci0000:00/0000:00:14.0/usb2/2-2/manufacturer:Seagate
-/sys/devices/pci0000:00/0000:00:14.0/usb2/2-2/2-2:1.0/host8/target8:0:0/8:0=
-:0:0/vendor:Seagate
+---
+base-commit: 83a7eefedc9b56fe7bfeff13b6c7356688ffa670
+change-id: 20240611-md-drivers-usb-common-52520e97ba0b
 
-head /sys/devices/pci0000\:00/0000\:00\:14.0/usb2/2-2/quirks=20
-0x0
-
-=20
-
-
-lrwxrwxrwx 1 root root  9 12 juin  03:14 usb-
-Seagate_Expansion_HDD_00000000NACSHZWL-0:0 -> ../../sdc
-lrwxrwxrwx 1 root root 10 12 juin  03:14 usb-Seagate_Expansion_HDD_00000000=
-NACSHZWL-0:0-part1 -> ../../sdc1
-
-sudo smartctl -i /dev/sdc
-smartctl 7.4 2023-08-01 r5530 [x86_64-linux-6.10.0-rc3+] (local build)
-Copyright (C) 2002-23, Bruce Allen, Christian Franke, www.smartmontools.org
-
-Read Device Identity failed: scsi error unsupported field in scsi command
-
-If this is a USB connected device, look at the various --device=3DTYPE vari=
-ants
-A mandatory SMART command failed: exiting. To continue, add one or more '-T=
- permissive' options.
-
-
-lsusb -t
-/:  Bus 001.Port 001: Dev 001, Class=3Droot_hub, Driver=3Dxhci_hcd/12p, 480=
-M
-    |__ Port 001: Dev 002, If 0, Class=3DVendor Specific Class, Driver=3D[n=
-one], 12M
-    |__ Port 001: Dev 002, If 1, Class=3DAudio, Driver=3D[none], 12M
-    |__ Port 001: Dev 002, If 2, Class=3DAudio, Driver=3D[none], 12M
-    |__ Port 005: Dev 003, If 0, Class=3DHub, Driver=3Dhub/4p, 480M
-        |__ Port 002: Dev 005, If 0, Class=3DVendor Specific Class, Driver=
-=3Dcp210x, 12M
-        |__ Port 003: Dev 008, If 0, Class=3DWireless, Driver=3Dbtusb, 12M
-        |__ Port 003: Dev 008, If 1, Class=3DWireless, Driver=3Dbtusb, 12M
-    |__ Port 009: Dev 004, If 0, Class=3DHub, Driver=3Dhub/4p, 480M
-        |__ Port 003: Dev 009, If 0, Class=3DHuman Interface Device, Driver=
-=3Dusbhid, 1.5M
-        |__ Port 003: Dev 009, If 1, Class=3DHuman Interface Device, Driver=
-=3Dusbhid, 1.5M
-        |__ Port 004: Dev 010, If 0, Class=3DHuman Interface Device, Driver=
-=3Dusbhid, 1.5M
-        |__ Port 004: Dev 010, If 1, Class=3DHuman Interface Device, Driver=
-=3Dusbhid, 1.5M
-/:  Bus 002.Port 001: Dev 001, Class=3Droot_hub, Driver=3Dxhci_hcd/6p, 5000=
-M
-    |__ Port 002: Dev 002, If 0, Class=3DMass Storage, Driver=3Duas, 5000M
-    |__ Port 003: Dev 003, If 0, Class=3DMass Storage, Driver=3Dusb-storage=
-, 5000M
-    |__ Port 005: Dev 004, If 0, Class=3DHub, Driver=3Dhub/4p, 5000M
-    |__ Port 006: Dev 005, If 0, Class=3DMass Storage, Driver=3Dusb-storage=
-, 5000M
-
-with the "j" usb.quirks flag:
-sudo smartctl -i /dev/sdc
-smartctl 7.4 2023-08-01 r5530 [x86_64-linux-6.10.0-rc3+] (local build)
-Copyright (C) 2002-23, Bruce Allen, Christian Franke,
-www.smartmontools.org
-
-=3D=3D=3D START OF INFORMATION SECTION =3D=3D=3D
-Model Family:     Seagate Barracuda 2.5 5400
-Device Model:     ST4000LM024-2AN17V
-Serial Number:    WCKAEWZZ
-LU WWN Device Id: 5 000c50 0e732b6d8
-Firmware Version: 0001
-User Capacity:    4=E2=80=AF000=E2=80=AF787=E2=80=AF030=E2=80=AF016 bytes [=
-4,00 TB]
-Sector Sizes:     512 bytes logical, 4096 bytes physical
-Rotation Rate:    5526 rpm
-Form Factor:      2.5 inches
-Device is:        In smartctl database 7.3/5528
-ATA Version is:   ACS-3 T13/2161-D revision 5
-SATA Version is:  SATA 3.1, 6.0 Gb/s (current: 6.0 Gb/s)
-Local Time is:    Wed Jun 12 03:30:47 2024 CEST
-SMART support is: Available - device has SMART capability.
-SMART support is: Enabled
-
-
-
-Regards,
-Alban
 
