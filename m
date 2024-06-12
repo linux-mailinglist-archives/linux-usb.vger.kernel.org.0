@@ -1,73 +1,140 @@
-Return-Path: <linux-usb+bounces-11197-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11199-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DFC12905383
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 15:19:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A7C559053F2
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 15:40:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 921561F239B8
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 13:19:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4E2571F2689E
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 13:40:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A614E178398;
-	Wed, 12 Jun 2024 13:19:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF26317C215;
+	Wed, 12 Jun 2024 13:40:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=inbox.lv header.i=@inbox.lv header.b="mLg0Lp+1"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HdxnY/DA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from shark1.inbox.lv (shark1.inbox.lv [194.152.32.81])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E81316EC0F
-	for <linux-usb@vger.kernel.org>; Wed, 12 Jun 2024 13:19:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.152.32.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B25E217083D;
+	Wed, 12 Jun 2024 13:40:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718198383; cv=none; b=ow90ahxu5YslG0bnLvVLmMkOZbDA376nQGStmqUi/Tgkb0OeWseq8C49bWbzsSe5OZ/qbKf+fUFP240giJ0EmyXqJZ4cjeAevuGRl448NcN7Rhk+8My1tHIELUmnnMlnVewZ+NbOuU2MILuVySso7BkPGV4Rzltsar1VNnL9Ou0=
+	t=1718199603; cv=none; b=Gy/80djEoTzwljEGX7J4N1GUWo07BJYdedYx2xhgbatLeZqUjLBks7bKhecrBFEr3g8rQLM2QH4mOul3BPwnzUGS3jVchLreF1M1UqtwzWID6P2d4T46ho9oZUsHLOFuCZ2hil2dr1L2u6g6BqsPOQ7e2Z/ACj4xPCcdCRXTpu4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718198383; c=relaxed/simple;
-	bh=Yg07jVbqIa4EKi0yGM23fGn+NxynCOQbYK513GrXGU0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=pi2PkH+6EHe368MmOm6122/LSd8hnCcHmXwiFe0s0dmmMhdaCggHE0ZeD3SF6RniOeKn4M+NHh/RX1/5OXVDFNnIHR1KRnsTyQCTcH9waRY8V1oHsY/Z/m71cR+ar3Rz4XxkZdt9ppylWZbOJkHFQmq56GLo5kKK2mfkJfsqAls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=inbox.lv; spf=pass smtp.mailfrom=inbox.lv; dkim=pass (1024-bit key) header.d=inbox.lv header.i=@inbox.lv header.b=mLg0Lp+1; arc=none smtp.client-ip=194.152.32.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=inbox.lv
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=inbox.lv
-Received: from shark1.inbox.lv (localhost [127.0.0.1])
-	by shark1-out.inbox.lv (Postfix) with ESMTP id 4VzmNP1Tctz2d6MH;
-	Wed, 12 Jun 2024 16:19:33 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=inbox.lv;
-	s=p20220324; t=1718198373; x=1718200173;
-	bh=Yg07jVbqIa4EKi0yGM23fGn+NxynCOQbYK513GrXGU0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:X-ESPOL:
-	 From:Date:To:Cc:Message-ID:Subject:Reply-To;
-	b=mLg0Lp+12xW3KfOZ8Pg6lsiaaNznnYQzzhatU/Wnr/hy/lJZ0XzvGuSISeJptFmLU
-	 iodXva1rBTj+dJ6Qsfrbgts0tvRIQiKg4y74+e/JGqdPvgbLX6mIxnxy6AtX324ipp
-	 32xUPI/sU8PtYDNQa7bkbMxXjwbiojbNKF4as5Mo=
-Received: from mail.inbox.lv (pop1 [127.0.0.1])
-	by shark1-in.inbox.lv (Postfix) with ESMTP id 4VzmNP10GXz2d6Kd;
-	Wed, 12 Jun 2024 16:19:33 +0300 (EEST)
-From: Dmitry Smirnov <d.smirnov@inbox.lv>
-To: gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
-	Dmitry Smirnov <d.smirnov@inbox.lv>
-Subject: Re: Re: [PATCH V3] usb: mos7840: Fix hangup after suspend
-Date: Wed, 12 Jun 2024 16:19:03 +0300
-Message-ID: <20240612131913.13856-1-d.smirnov@inbox.lv>
-X-Mailer: git-send-email 2.45.1
-In-Reply-To: <2024061241-washstand-baggage-5789@gregkh>
-References: <2024061241-washstand-baggage-5789@gregkh>
+	s=arc-20240116; t=1718199603; c=relaxed/simple;
+	bh=qofywMV5/uv8Sye/afC+Jj1O5QoX0nVKMe+D3Ox+mH8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=a2K2eDde9cIAqDKfDZALnhDA5dQELar6Wf30+wjkIpwkiuzdsSkDqh7dvav640FESXxqLQuPjgKCJa16kaJGHde3X0S7YZpo/wnYHBYYVxDzvMfE4yn6vmusTrJDMGaUke2AygUtZvkTR5vVxcj0fr8LCCpIDIDxUI9QPa9Q56Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HdxnY/DA; arc=none smtp.client-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a6f0dc80ab9so316006466b.2;
+        Wed, 12 Jun 2024 06:40:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1718199600; x=1718804400; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PxSRp9AgxyNNYPtlrdSJYTaRP0/nzbJTU1dqjCUg+7Y=;
+        b=HdxnY/DA+J/Vqk6R4tj61q6ThNXffWnEf3Hvzm0h+7DhMqI/Peuot4JUxHUbovNAXE
+         Bqpnz+icPHYUJExrNjhZgumswyx3JyA1O2RfGGL5wh6QFgFjex89TvKly9uJ+cd/hqRu
+         /bc951X3gyl/r7BC9+wLhfnUK1TF5/SLJqd7uZtCyTey0j6f+lh7ij6IUYOIUdxvQVXd
+         P9UK+vfBi37VjnAmMLE80tgIVM11QkURjSuHDLBG9LMmxSkrHJcfdnoJAFjpl1gzc69K
+         q8p325grvVhLSlGqbOHglgjhTdpdETOz9eJe14vVa3/o40LltZZO4Mb7Ec8f8tStG9Cs
+         oYiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718199600; x=1718804400;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PxSRp9AgxyNNYPtlrdSJYTaRP0/nzbJTU1dqjCUg+7Y=;
+        b=OVsqjhdzXDCdKdY5x+J8m496BSsPWKi7Jm+zuh+PfxQvAMfrCRMbvv/2aB0Y4FG73N
+         lm4kw7cGMv5AfwUjw6LUltDr+eLJFYqDDn/gReDts8dEuTxjz3Og5U/g9Y3i+7mtNp3Q
+         sRz2YuaNXrK4cKsCm+eyhTaGM3tSo3bp5MJ4D4vo/M3XTW4SFMdrYKVcVhD2u6ekZ83j
+         NMB3hRP0hivNi4U/PMUEqiJyURzZ8n84JjoBcqan5iFd0BMtbxrpgW34FsqWeJ7LjOW6
+         USgod/wBa90L/qERg9qiXrfHBTJuMBvnK7ntN6l5w7ThwD4K5bIQ77v3uoe6f9Z/rvAw
+         hZ/w==
+X-Forwarded-Encrypted: i=1; AJvYcCUBWCaCeBELvc94RBXArtFCjKQ2bIUljCAX3zLVSMRlZJow8UnTPj3Cn03qydTa4QYBX2N4ngioUdm+wP79KiAXs6PioKfnMgsJq6wQjAH56TwuE8xgTfcQWrtDbqb52gjf4LdYRBLr
+X-Gm-Message-State: AOJu0Ywzy+Ka6b1v9Y2T9t+AxfFxXNzosV798zSd2NdttQj8RtaUsiSF
+	zDAaZsOcCjfLj8jFkrHT6sLeqAZv8CIxT1CRsLLXwlbU6iSkTrsQ3o0rJ5NW22te6Ry+27AhUyo
+	hcGtZzkD6mcqFz5ESexcOfBbfKLZyvEoPanOcWLtk
+X-Google-Smtp-Source: AGHT+IFORC6nwYwsG9+can2YBbSr+OG9w7Qx4gXZTETrgSbBDvaGHpxaOFL34klylO1pz109avkjnc/23nimkdxALkE=
+X-Received: by 2002:a17:906:f582:b0:a6f:13f0:c8e9 with SMTP id
+ a640c23a62f3a-a6f47d3b89cmr133183666b.53.1718199599430; Wed, 12 Jun 2024
+ 06:39:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: OK
-X-ESPOL: G4mESnoDkHBYucK2NYVo+5Cay5bsFls/zlT3stssiwFUta+jx9N0cWyUGILnHwa7bg==
+References: <20240601092646.52139-1-joswang1221@gmail.com> <20240611142953.12057-1-joswang1221@gmail.com>
+ <2024061219-reroute-strike-7230@gregkh> <CAMtoTm2tUDD-CCs4wqigx9ZNqHjWUCA_F080i+v55vubu8wtmQ@mail.gmail.com>
+ <2024061254-oval-womb-a6c1@gregkh>
+In-Reply-To: <2024061254-oval-womb-a6c1@gregkh>
+From: joswang <joswang1221@gmail.com>
+Date: Wed, 12 Jun 2024 21:39:47 +0800
+Message-ID: <CAMtoTm0DtH=pi_20UibBjea1P5OkfKP3eY3G5s_Ta4pks0M3Lw@mail.gmail.com>
+Subject: Re: [PATCH v3, 3/3] usb: dwc3: core: Workaround for CSR read timeout
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: Thinh.Nguyen@synopsys.com, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Jos Wang <joswang@lenovo.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> You always need to send a new version, otherwise how can we apply it?
-Than I'll prepare the fix and send it as [PATCH V4] in new thread.
+On Wed, Jun 12, 2024 at 8:56=E2=80=AFPM Greg KH <gregkh@linuxfoundation.org=
+> wrote:
+>
+> On Wed, Jun 12, 2024 at 08:47:31PM +0800, joswang wrote:
+> > On Wed, Jun 12, 2024 at 3:58=E2=80=AFPM Greg KH <gregkh@linuxfoundation=
+.org> wrote:
+> > >
+> > > On Tue, Jun 11, 2024 at 10:29:53PM +0800, joswang wrote:
+> > > > From: Jos Wang <joswang@lenovo.com>
+> > > >
+> > > > This is a workaround for STAR 4846132, which only affects
+> > > > DWC_usb31 version2.00a operating in host mode.
+> > > >
+> > > > There is a problem in DWC_usb31 version 2.00a operating
+> > > > in host mode that would cause a CSR read timeout When CSR
+> > > > read coincides with RAM Clock Gating Entry. By disable
+> > > > Clock Gating, sacrificing power consumption for normal
+> > > > operation.
+> > > >
+> > > > Signed-off-by: Jos Wang <joswang@lenovo.com>
+> > > > ---
+> > > > v1 -> v2:
+> > > > - add "dt-bindings: usb: dwc3: Add snps,p2p3tranok quirk" patch
+> > > > v2 -> v3:
+> > > > - code refactor
+> > > > - modify comment, add STAR number, workaround applied in host mode
+> > > > - modify commit message, add STAR number, workaround applied in hos=
+t mode
+> > > > - modify Author Jos Wang
+> > > > ---
+> > > >  drivers/usb/dwc3/core.c | 20 +++++++++++++++++++-
+> > > >  1 file changed, 19 insertions(+), 1 deletion(-)
+> > >
+> > > Where are patches 1/3 and 2/3 of this series?
+> > >
+> > > thanks,
+> > >
+> > > greg k-h
+> >
+> > Patches 1/3 and 2/3 are other cases. The maintainer is reviewing them
+> > and has no accurate conclusion yet, so only patches 3/3 are submitted.
+>
+> How are we supposed to know this?  A patch series should be taken all at
+> once, right?
+>
+> confused,
+>
+> greg k-h
 
----
-Dmitry
+I am very sorry, I misunderstood the patch series before. How should I
+deal with this patch now? Should Patches 1/3 and 2/3 also be
+submitted?
 
