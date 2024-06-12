@@ -1,177 +1,131 @@
-Return-Path: <linux-usb+bounces-11173-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11174-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2EDAA904C55
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 09:08:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD014904D0E
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 09:46:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DAD7B1F225CA
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 07:08:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 50E61281C75
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 07:46:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 589B816C6AC;
-	Wed, 12 Jun 2024 07:07:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B502816C69E;
+	Wed, 12 Jun 2024 07:44:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ztbXtLPC"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="YcCAgEI4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBA3E16C69E;
-	Wed, 12 Jun 2024 07:07:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BE9D16C448
+	for <linux-usb@vger.kernel.org>; Wed, 12 Jun 2024 07:43:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718176052; cv=none; b=SFYxOC3qSGr8boXln08BWNfe+PIWYw2m3raHy4zZ6RNGEsSwT+zcfGFzjL1BxP+qBr50dYIqISdSEvOjHwf5vMEopT/3yb3E3MIMkzb9CUdU8YEuyBfR4dck3CRoRwswDOKm+5f9ovaML8zRpiJKVRCAQbAngcAXzdh/hBZC6+k=
+	t=1718178241; cv=none; b=TvhBIsUGAh9g+uVAnl/r1h2tgi2AtPkTDRtU2zTe78rmyLGVqhx8Y5dIl1cvFEUt4uDAkjJ5vGybjp8eWSIW/WEuGfKXdjRu+2wE7lpihJyueTnqbRRAU4qcEUJ8S6MtWPObtA48Rim3HvzV7za6TlOdSRnz4TGKl09Y3/v+nNM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718176052; c=relaxed/simple;
-	bh=+YUgPW5c25TRz6pbWQMM+dmE1GdC7Q7SfIqSXdzEvCk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RLlZ+WHm77TAXe1iSmZnNuJFLeC3L8hOCfkbOTw8bubyCy4nxsq7gl9pflAIxYB+ZT/LtSRQ19T2urEZNyv8AqUAxmXFIRZMB5YitqUcJMv4vAJmRDYJMnVONDETLwfx14OMbQw8e5D9eRXyeFMAacFO8z/CSttTTe+EIMtbUe0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ztbXtLPC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08598C3277B;
-	Wed, 12 Jun 2024 07:07:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1718176052;
-	bh=+YUgPW5c25TRz6pbWQMM+dmE1GdC7Q7SfIqSXdzEvCk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ztbXtLPCgGzGXhxdVipqgUVlhhdRqf6MLnT2wsd5MI2CglPVgTNnp6f7koCkB/Xg9
-	 ZARawHbun5ow/0InrH+ABs9UezZycFxQiDZjWIklkMEvLafw7LJajHUNH0mrwsbzHR
-	 PSSejEKyh+phAFXSBO9ugm107JD2DbHRqmpYXfn0=
-Date: Wed, 12 Jun 2024 09:07:29 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Kuangyi Chiang <ki.chiang65@gmail.com>
-Cc: mathias.nyman@intel.com, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] xhci: Don't issue Reset Device command to Etron xHCI host
-Message-ID: <2024061227-cruelness-unwind-13a4@gregkh>
-References: <20240612022256.7365-1-ki.chiang65@gmail.com>
+	s=arc-20240116; t=1718178241; c=relaxed/simple;
+	bh=Zp4Fclwy9Ip9T6QzhOSObLdDOwV/2k/pJYqHvtg6csE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ek/1zO1X3MSk9c2WUaMPi2i1G2k7RMJrqQdR0bk+/gutHY+wPJxjHmnIh/S07XPyhiFs5iPwjfbobyVMcTCWdd5rjL0hsvwC4DOgGvbfEvCKfoVzJDRpl+tWxx5vTMZSibmB5Q+d7nM6bPIW7BYUUbvxkp6cqer9imVRo8ENISA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=YcCAgEI4; arc=none smtp.client-ip=209.85.218.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a6265d3ba8fso662570266b.0
+        for <linux-usb@vger.kernel.org>; Wed, 12 Jun 2024 00:43:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1718178236; x=1718783036; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MQGnus83dj6CCaRJokgRnGxqGwR1EkDq+zwBP9OjyZk=;
+        b=YcCAgEI4G5bl4LGhkqnrbFnTEpPcbG1frHjOnqDQPvgUoJ1W2yRllvWZIF8xghAzqI
+         tJi6Qb3p5PG7bAl2duS3t1lqKxkUYkE5DxS6wvYREgYo3fxGVYT0yVWm0BBe3d+R4qDN
+         0UsXWJhNuM89OFXBWfQDVaCOL0WLh5o6D8dvEFHaLGlOQDOadUFGJDQHenNfSZ3WYTDm
+         hQx+cjDI5qs92x/dpiVaDen7481nsLE5qHIur36RdXYw9hB2sBmRph5OfMAAUUWhCKQo
+         Wo0Iy6+NsMYy3VTODLBLmVzEIg408LUTe4uQ5dCUAZ7xae33GlYqIs37GUyhQg1EotmO
+         xNog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718178236; x=1718783036;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MQGnus83dj6CCaRJokgRnGxqGwR1EkDq+zwBP9OjyZk=;
+        b=GVqfB2cbifT5quc1EtoOR4WSF5y2wI37tjSYzIJfhlumzlqxs752UwT6ymsnOflVvf
+         b/IQ2fL272pmlXRteFOXjj7kutitXpSEIW9oV++kqUygfdUvM5qmgnMRHaMK5EZm7TYj
+         QgEYqhWvsAtc6WdJff6P5WsLi4UMHEVTxLE2DSfFaeMex3rjVMLUf43UBWvc9Ihgvwru
+         +0KpKNfKz/gDrXnXwF+Il00QidA9EqbstZypnay5vQD7vTcnfj7/d/pGC2CSvOvjw8VB
+         +IEI+S4mihg+jT7kWaz83FqwewiSDdBbWrsfhaO8kSkDQUh86xpOm6pjFc6WHk1QASmk
+         lLig==
+X-Gm-Message-State: AOJu0YzmmWqjBQ6CC0bTbdM/OXmvLqn4QPhFTjMUMMn//1c1gS32IhEG
+	p1aNhpNC/eC5QWU+Pv4VaIYjBluqw7nAYHaSMkm7p+/74PHIFniGna27/51fzvA=
+X-Google-Smtp-Source: AGHT+IHdDe951tApCgeN9PY7H4UIV+YbR3Sr2UYWTmgobwqV6t82cAG3IhrelTq/lxpnZJtoCh7/ew==
+X-Received: by 2002:a17:906:240c:b0:a6f:f7c:5c7a with SMTP id a640c23a62f3a-a6f48009fcamr52957366b.67.1718178236238;
+        Wed, 12 Jun 2024 00:43:56 -0700 (PDT)
+Received: from ?IPV6:2001:a61:138e:201:27e2:fe9:90b9:6b9a? ([2001:a61:138e:201:27e2:fe9:90b9:6b9a])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6f1b2f674dsm399315366b.204.2024.06.12.00.43.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Jun 2024 00:43:56 -0700 (PDT)
+Message-ID: <b3bcf3a1-c0ee-4550-867d-b92c66f564b6@suse.com>
+Date: Wed, 12 Jun 2024 09:43:55 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240612022256.7365-1-ki.chiang65@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: USB Denial Of Service
+To: Alan Stern <stern@rowland.harvard.edu>, Oliver Neukum <oneukum@suse.com>,
+ Greg KH <gregkh@linuxfoundation.org>
+Cc: USB mailing list <linux-usb@vger.kernel.org>
+References: <40dfa45b-5f21-4eef-a8c1-51a2f320e267@rowland.harvard.edu>
+ <a09c0dfc-1cdc-445b-a524-305c3f5f3d79@rowland.harvard.edu>
+Content-Language: en-US
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <a09c0dfc-1cdc-445b-a524-305c3f5f3d79@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Jun 12, 2024 at 10:22:56AM +0800, Kuangyi Chiang wrote:
-> Sometimes hub driver does not recognize USB device that is connected
-> to external USB2.0 Hub when system resumes from S4.
-> 
-> This happens when xHCI driver issue Reset Device command to inform
-> Etron xHCI host that USB device has been reset.
-> 
-> Seems that Etron xHCI host can not perform this command correctly,
-> affecting that USB device.
-> 
-> Instead, to aviod this, xHCI driver should reassign device slot ID
-> by calling xhci_free_dev() and then xhci_alloc_dev(), the effect is
-> the same.
+On 11.06.24 21:09, Alan Stern wrote:
 
-How is freeing and then allocating the device doing anything?
+> Alternatively, the driver could avoid resubmitting the URB when one of
+> those errors occurs.  This is perhaps less appropriate, because these
+> kinds of errors can be transient (although that is normally rare).
 
-> 
-> Add XHCI_ETRON_HOST quirk flag to invoke workaround in
-> xhci_discover_or_reset_device().
-> 
-> Cc: <stable@vger.kernel.org>
-> Signed-off-by: Kuangyi Chiang <ki.chiang65@gmail.com>
-> ---
->  drivers/usb/host/xhci-pci.c |  2 ++
->  drivers/usb/host/xhci.c     | 11 ++++++++++-
->  drivers/usb/host/xhci.h     |  2 ++
->  3 files changed, 14 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-> index 05881153883e..c7a88340a6f8 100644
-> --- a/drivers/usb/host/xhci-pci.c
-> +++ b/drivers/usb/host/xhci-pci.c
-> @@ -395,11 +395,13 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
->  			pdev->device == PCI_DEVICE_ID_EJ168) {
->  		xhci->quirks |= XHCI_RESET_ON_RESUME;
->  		xhci->quirks |= XHCI_BROKEN_STREAMS;
-> +		xhci->quirks |= XHCI_ETRON_HOST;
->  	}
->  	if (pdev->vendor == PCI_VENDOR_ID_ETRON &&
->  			pdev->device == PCI_DEVICE_ID_EJ188) {
->  		xhci->quirks |= XHCI_RESET_ON_RESUME;
->  		xhci->quirks |= XHCI_BROKEN_STREAMS;
-> +		xhci->quirks |= XHCI_ETRON_HOST;
->  	}
->  
->  	if (pdev->vendor == PCI_VENDOR_ID_RENESAS &&
-> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> index 37eb37b0affa..aba4164b0873 100644
-> --- a/drivers/usb/host/xhci.c
-> +++ b/drivers/usb/host/xhci.c
-> @@ -3752,6 +3752,15 @@ static int xhci_discover_or_reset_device(struct usb_hcd *hcd,
->  						SLOT_STATE_DISABLED)
->  		return 0;
->  
-> +	if (xhci->quirks & XHCI_ETRON_HOST) {
-> +		xhci_free_dev(hcd, udev);
-> +		ret = xhci_alloc_dev(hcd, udev);
+Optimally we'd wait a small delay and resubmit after that for a limited
+number of attempts. In fact optimally we'd add helpers to do so for
+all drivers to use.
 
-Wait, why are you freeing and then allocating the same device?  That
-needs a lot of documentation here.
+However, to make this wor with suspend, reset and disconnect would
+take work. Is a corner case worth that?
 
-> +		if (ret == 1)
-> +			return 0;
+> Index: usb-devel/drivers/usb/class/cdc-wdm.c
+> ===================================================================
+> --- usb-devel.orig/drivers/usb/class/cdc-wdm.c
+> +++ usb-devel/drivers/usb/class/cdc-wdm.c
+> @@ -266,14 +266,14 @@ static void wdm_int_callback(struct urb
+>   			dev_err(&desc->intf->dev, "Stall on int endpoint\n");
+>   			goto sw; /* halt is cleared in work */
+>   		default:
+> -			dev_err(&desc->intf->dev,
+> +			dev_dbg(&desc->intf->dev,
 
-And why does the function return 1?
+Good idea.
 
-> +		else
-> +			return -EINVAL;
-> +	}
-> +
->  	trace_xhci_discover_or_reset_device(slot_ctx);
->  
->  	xhci_dbg(xhci, "Resetting device with slot ID %u\n", slot_id);
-> @@ -3862,7 +3871,7 @@ static int xhci_discover_or_reset_device(struct usb_hcd *hcd,
->   * disconnected, and all traffic has been stopped and the endpoints have been
->   * disabled.  Free any HC data structures associated with that device.
->   */
-> -static void xhci_free_dev(struct usb_hcd *hcd, struct usb_device *udev)
-> +void xhci_free_dev(struct usb_hcd *hcd, struct usb_device *udev)
+>   				"nonzero urb status received: %d\n", status);
+>   			break;
+>   		}
+>   	}
+>   
+>   	if (urb->actual_length < sizeof(struct usb_cdc_notification)) {
+> -		dev_err(&desc->intf->dev, "wdm_int_callback - %d bytes\n",
+> +		dev_dbg(&desc->intf->dev, "wdm_int_callback - %d bytes\n",
 
-Why is this now global if you are only calling it in the same file?
+Not so good idea. If that happens it points to either a bug in the firmware
+or a malicious device. Such things need to be logged.
 
+	Regards
+		Oliver
 
->  {
->  	struct xhci_hcd *xhci = hcd_to_xhci(hcd);
->  	struct xhci_virt_device *virt_dev;
-> diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-> index 30415158ed3c..f46b4dcb0613 100644
-> --- a/drivers/usb/host/xhci.h
-> +++ b/drivers/usb/host/xhci.h
-> @@ -1627,6 +1627,7 @@ struct xhci_hcd {
->  #define XHCI_RESET_TO_DEFAULT	BIT_ULL(44)
->  #define XHCI_ZHAOXIN_TRB_FETCH	BIT_ULL(45)
->  #define XHCI_ZHAOXIN_HOST	BIT_ULL(46)
-> +#define XHCI_ETRON_HOST	BIT_ULL(47)
-
-Defining bit quirks just based on the vendor seems wrong to me, as that
-information can be determined when needed at any time just by the pci
-id, right?  So why is a quirk bit needed?
-
-Shouldn't the quirk bit say what the broken functionality is?  Same
-probably for the XHCI_ZHAOXIN_HOST, but that's not your issue to
-solve...
-
->  
->  	unsigned int		num_active_eps;
->  	unsigned int		limit_active_eps;
-> @@ -1863,6 +1864,7 @@ int xhci_resume(struct xhci_hcd *xhci, pm_message_t msg);
->  irqreturn_t xhci_irq(struct usb_hcd *hcd);
->  irqreturn_t xhci_msi_irq(int irq, void *hcd);
->  int xhci_alloc_dev(struct usb_hcd *hcd, struct usb_device *udev);
-> +void xhci_free_dev(struct usb_hcd *hcd, struct usb_device *udev);
-
-Should not be needed.
-
-thanks,
-
-greg k-h
 
