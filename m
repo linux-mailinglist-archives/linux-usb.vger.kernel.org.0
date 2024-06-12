@@ -1,78 +1,79 @@
-Return-Path: <linux-usb+bounces-11215-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11216-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01FC8905711
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 17:37:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4273905728
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 17:39:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 93BBDB24FE2
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 15:37:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 776E71F266E9
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 15:39:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C799180A78;
-	Wed, 12 Jun 2024 15:36:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAB80180A72;
+	Wed, 12 Jun 2024 15:39:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JMBZUz1w"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TomE6Pe4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6F8E1802D9;
-	Wed, 12 Jun 2024 15:36:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF9AB17B437;
+	Wed, 12 Jun 2024 15:39:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718206615; cv=none; b=sGkxmkyE1k0FUz3UQXylXZr0YfK7A/CKIEDo8Bv2wLsSTVmsA3DjyMnyJEYrXASHpmGuyej9OR1D+duR/s8sxHSFcr/Dg63Cl245GfciI9gZXDBcd/0zgz4wa1qLFupwh2k5O1thb+uCegvC8UKzSN3tEELWdodCCH4LKeqeIMA=
+	t=1718206770; cv=none; b=C20MzzUoGVGJSpZFs6XoayGX6Y2t/m1vh25XJVy6zByK1f+O8wAnsssB2P505I2WJRObNZQsCuG2dj1JFCxCK0j/Sq0HlncTcrFudb/ZtTULM0lCdf30MiFSZia1i1kpTHOBb7UcCLYVNY+6R0wnNo8tDWn0cywVZsqAGiIekIU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718206615; c=relaxed/simple;
-	bh=B2EJY2fdWyqPC/dobzAD2r4rS7Bv1HJFs4E5f1twlDw=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=cYakpF0V2xFtz32O34rcGoYhWh/w/GeEQsXBNpRiEVjLD9KIa78SYXRLBE4LMQPwsvIyKqav+oSECqdrZbhT+FIUYK3sdf/nrcrx7ikuGzmW/CNaDizienAxKXADRCzOym8nW3kiU8ER7z4501tcOsUt2+UczzczF9cvGOO7aE0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JMBZUz1w; arc=none smtp.client-ip=209.85.210.174
+	s=arc-20240116; t=1718206770; c=relaxed/simple;
+	bh=dkjw2ohFiXCup80T4CFjYApo4cuECd+cmHE4G40BA1A=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=K7exRDGEzVIXqHmZROBiIY/rygz3gAMKvhAXYvw8VZ4BfBs5j9oOCYgNdDWwMpVYIw9R9Icl4DnLlcpJel4AsM5APLCWfWB5I5QvDspf4N4NJjSBeQF0Y+PQrVqTp3vtThO1XVfOQ0wFW7tGIfKNo6ZXvntSlE85IWP5+Zt0gAI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TomE6Pe4; arc=none smtp.client-ip=209.85.210.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-705959a2dfbso878778b3a.1;
-        Wed, 12 Jun 2024 08:36:53 -0700 (PDT)
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-704090c11easo5540996b3a.2;
+        Wed, 12 Jun 2024 08:39:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718206613; x=1718811413; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1718206768; x=1718811568; darn=vger.kernel.org;
         h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=XnDR5q/QFjNu5mCGyDWLErYmJ8MVjBhaUzMoGVIo8jk=;
-        b=JMBZUz1wjMjrmAAD3HW7znzFUst9of2MdzN44C3AaxpMQjZUr6Ov652dKNNblW1gkS
-         DiUxsgMnSJ3Rh5fX9Lb+TmdhzfzgdQjowfvcSMRmFtwTqIk9pMZk8KXn/eRl3dGdBtxx
-         mGhMGKq33olyOZ3QYp91wt3AMamDjm002zWGPUtHBryphFi1ozk+FC2SjxDRjiZAZEDA
-         88bNs+BLBPKi64d5ycFB9KK6SUl7i+J26mE/I99GEnBdMC8DYIF/R4cTINWr0LWrPxPk
-         ZAyOtw/gnzs2JYSkEVwixWYiSfBXhJwtEFhMhao3ft+Qf91lbvbeIzW0xnIIX0hEIFGE
-         q1GA==
+        bh=a5i7zUeG4PPBp0qWV+Ep+ZL6qU5kaVlXsxN+qELW5E4=;
+        b=TomE6Pe4Eb0OP0TCEHy53eMPTCH1L08wHp3/UlO90b8AGmJAqU7p253l9Sts/FZkpG
+         V6+erUIL6QgekCKp3j6LIk6xwmKN8kppQVGZuH/kyzyyQD89KgraRv5YG5ptioyTmt5B
+         Qy+dQwbCY0V96KCoeqPCZ/ctrflUc334+AUc8LIKR3BP1p4m4vYPEblsc9ayRE7Lsiij
+         ZsBZL6md6IL1fRDhPpu03T9INGMpaHIzwKZcAJhhX+vPx7FOaJmq40Vy04QAHVnKl0hM
+         oh43Nwk5sKjDh79y8kKhA96ybdMsLYYMBoxKJaz2rsEQEEsnDigWZA4DyDX3grXlKwSC
+         0i7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718206613; x=1718811413;
+        d=1e100.net; s=20230601; t=1718206768; x=1718811568;
         h=references:in-reply-to:message-id:date:subject:cc:to:from
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XnDR5q/QFjNu5mCGyDWLErYmJ8MVjBhaUzMoGVIo8jk=;
-        b=bzsto57HL19gaYqw2WGCVbWGvRbhvCLW8WKTJIFBME+4eveVsNOS1aeDWskY30HP57
-         W082VcyV4AyuOis2ZGtKrYXxGlQdVNlphkthxnH8pnh0p56rshUtinJ0AGG2e1jJLbd4
-         i0aHaOGJs4uKLN9hRFLHQHNdL16aahbdkaYSyljULFCbFmxq11PkSpnZlcyxe+TSTigs
-         xwEK/1Z1wYiBYqQj5N9yl61hXaL48cSlWgfSRtPKHuSuoqPAyuq1hLL2d0ONRzjyHqpu
-         dVwO5yJafKZUFkIfVymCD0xNZ89tB1497ypTIztgrcaYfZTq3aU88W3bUzJjOmANMuhZ
-         3rRQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWqq1nzUqR47at+pyAAMRBdfsfmDQ2f2CSUMyZjlWkkC4YwPYo7qBOVHHE7zmGkKHTLPvBnFR7Wr5MS7vL2nrI2FjrSLQlP131H+PLckAwZAis4QAF6pN2aYn3jtulssqwyo0Fnk5ZC
-X-Gm-Message-State: AOJu0YzxcvZHh3G+/kT5SR66/nhc+4n1jT0gaY2xUsIL5DhPtl73nFSO
-	r4KVM/qGR8FoyEH43+4GwDMSMO1EJYzDY/ZlgV/hHit/iWP9hp5RFO2zJP/WRN1K2g==
-X-Google-Smtp-Source: AGHT+IE/78o2hZQABwUKV2pzbe8Jz7OUiKWMrndcbFANDCxShjvxfPVjD/sUV5fsJnq+nTNDJIU11w==
-X-Received: by 2002:a05:6a21:8181:b0:1b8:4486:fb74 with SMTP id adf61e73a8af0-1b86d375013mr6421591637.25.1718206612918;
-        Wed, 12 Jun 2024 08:36:52 -0700 (PDT)
+        bh=a5i7zUeG4PPBp0qWV+Ep+ZL6qU5kaVlXsxN+qELW5E4=;
+        b=MJx9z/mjxltAgnvqsysBmliA8u7UeuZlXqOqQM3MJ5Jpv/bzIpp1SQgV8TGV5+VYzF
+         TcxWSGv1iTKzuaXKuxtv6S2nn/HmdPcXHw5cvR/WmA4NHr9HL0uyKFjmtVZtb3xlBYKz
+         c38d2B2Jf9dhaJGJrrOVtJjj/OmA3oZF4SdE8o9Xyk+3wZEEb2dq946Wi7QI+XWf5d2h
+         G164U9aQ/QFvE5vcWVYHeIL3bxr892ER9sbJ0mn6ZQWLguzdoRl4H9BSOTaFgSdPyxhm
+         YLNrRKpKxJ0YyVsweq8m4VI19TGD9KHFmujhscCKWo8in6rLWpCXbPn5EurWHZW6P3uC
+         R1Jw==
+X-Forwarded-Encrypted: i=1; AJvYcCVNjFtkR0uQIdFkJsJNeDVMh+5IM8f02gR7bSdEPgTfVPBVHy3khebx7LK94qVG91VVBSo/gGN0aWxOyNJSYm69PeaQdXSYFzsZ/5A7IqrFgNgKgv+cmAvClXsxpPaM9/XPC5MmrIUfcLVU5DUx83WgEQcz5p3PPB3EuCaVU0Kn
+X-Gm-Message-State: AOJu0YwmDmpuoj6KAtHZ2Wz7Y8pRzE3osTZ33daqelcViJyizQy8HVFF
+	vmK/vbIdk0bvlNiuovDHD7lL0JCPvAS+2hUkHNqBVERDAHygb8Y3EZ3kmztqN4WHHw==
+X-Google-Smtp-Source: AGHT+IG5lHab+fHfgF23kgv84wra3o3xRcQiRCRLO0Hjiemm/oKJqu5T5xBuAbkAPUeZHsR2REDBzg==
+X-Received: by 2002:a05:6a20:2584:b0:1b4:e956:ae64 with SMTP id adf61e73a8af0-1b8a9c87755mr2628969637.54.1718206768211;
+        Wed, 12 Jun 2024 08:39:28 -0700 (PDT)
 Received: from localhost ([113.143.197.225])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-6de279e1e20sm10223267a12.82.2024.06.12.08.36.30
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f6ee3f30e7sm89342385ad.173.2024.06.12.08.39.26
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 12 Jun 2024 08:36:52 -0700 (PDT)
+        Wed, 12 Jun 2024 08:39:27 -0700 (PDT)
 From: joswang <joswang1221@gmail.com>
 To: Thinh.Nguyen@synopsys.com
 Cc: gregkh@linuxfoundation.org,
 	linux-usb@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org,
 	Jos Wang <joswang@lenovo.com>
-Subject: [PATCH v4, 2/3] usb: dwc3: core: add p3p2tranok quirk
-Date: Wed, 12 Jun 2024 23:36:25 +0800
-Message-Id: <20240612153625.2368-1-joswang1221@gmail.com>
+Subject: [PATCH v4, 3/3] usb: dwc3: core: Workaround for CSR read timeout
+Date: Wed, 12 Jun 2024 23:39:22 +0800
+Message-Id: <20240612153922.2531-1-joswang1221@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20240601092646.52139-1-joswang1221@gmail.com>
 References: <20240601092646.52139-1-joswang1221@gmail.com>
@@ -84,84 +85,75 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 
 From: Jos Wang <joswang@lenovo.com>
 
-In the case of enable hibernation, there is an issue with
-the DWC31 2.00a and earlier versions where the controller
-link power state transition from P3/P3CPM/P4 to P2 may take
-longer than expected, ultimately resulting in the hibernation
-D3 entering time exceeding the expected 10ms.
+This is a workaround for STAR 4846132, which only affects
+DWC_usb31 version2.00a operating in host mode.
 
-Synopsys workaround:
-If the PHY supports direct P3 to P2 transition, program
-GUSB3PIPECTL.P3P2Tran0K=1.
+There is a problem in DWC_usb31 version 2.00a operating
+in host mode that would cause a CSR read timeout When CSR
+read coincides with RAM Clock Gating Entry. By disable
+Clock Gating, sacrificing power consumption for normal
+operation.
 
-Therefore, adding p3p2tranok quirk for workaround hibernation
-D3 exceeded the expected entry time.
-
+Cc: stable@vger.kernel.org
 Signed-off-by: Jos Wang <joswang@lenovo.com>
 ---
 v1 -> v2:
-- no change
+- add "dt-bindings: usb: dwc3: Add snps,p2p3tranok quirk" patch,
+  this patch does not make any changes
 v2 -> v3:
+- code refactor
+- modify comment, add STAR number, workaround applied in host mode
+- modify commit message, add STAR number, workaround applied in host mode
 - modify Author Jos Wang
 v3 -> v4:
-- no change
+- modify commit message, add Cc: stable@vger.kernel.org
 ---
- drivers/usb/dwc3/core.c | 5 +++++
- drivers/usb/dwc3/core.h | 4 ++++
- 2 files changed, 9 insertions(+)
+ drivers/usb/dwc3/core.c | 20 +++++++++++++++++++-
+ 1 file changed, 19 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 7ee61a89520b..3a8fbc2d6b99 100644
+index 3a8fbc2d6b99..61f858f64e5a 100644
 --- a/drivers/usb/dwc3/core.c
 +++ b/drivers/usb/dwc3/core.c
-@@ -666,6 +666,9 @@ static int dwc3_ss_phy_setup(struct dwc3 *dwc, int index)
- 	if (dwc->dis_del_phy_power_chg_quirk)
- 		reg &= ~DWC3_GUSB3PIPECTL_DEPOCHANGE;
+@@ -960,12 +960,16 @@ static bool dwc3_core_is_valid(struct dwc3 *dwc)
  
-+	if (dwc->p2p3tranok_quirk)
-+		reg |= DWC3_GUSB3PIPECTL_P3P2TRANOK;
+ static void dwc3_core_setup_global_control(struct dwc3 *dwc)
+ {
++	unsigned int power_opt;
++	unsigned int hw_mode;
+ 	u32 reg;
+ 
+ 	reg = dwc3_readl(dwc->regs, DWC3_GCTL);
+ 	reg &= ~DWC3_GCTL_SCALEDOWN_MASK;
++	hw_mode = DWC3_GHWPARAMS0_MODE(dwc->hwparams.hwparams0);
++	power_opt = DWC3_GHWPARAMS1_EN_PWROPT(dwc->hwparams.hwparams1);
+ 
+-	switch (DWC3_GHWPARAMS1_EN_PWROPT(dwc->hwparams.hwparams1)) {
++	switch (power_opt) {
+ 	case DWC3_GHWPARAMS1_EN_PWROPT_CLK:
+ 		/**
+ 		 * WORKAROUND: DWC3 revisions between 2.10a and 2.50a have an
+@@ -998,6 +1002,20 @@ static void dwc3_core_setup_global_control(struct dwc3 *dwc)
+ 		break;
+ 	}
+ 
++	/*
++	 * This is a workaround for STAR#4846132, which only affects
++	 * DWC_usb31 version2.00a operating in host mode.
++	 *
++	 * There is a problem in DWC_usb31 version 2.00a operating
++	 * in host mode that would cause a CSR read timeout When CSR
++	 * read coincides with RAM Clock Gating Entry. By disable
++	 * Clock Gating, sacrificing power consumption for normal
++	 * operation.
++	 */
++	if (power_opt != DWC3_GHWPARAMS1_EN_PWROPT_NO &&
++	    hw_mode != DWC3_GHWPARAMS0_MODE_GADGET && DWC3_VER_IS(DWC31, 200A))
++		reg |= DWC3_GCTL_DSBLCLKGTNG;
 +
- 	dwc3_writel(dwc->regs, DWC3_GUSB3PIPECTL(index), reg);
- 
- 	return 0;
-@@ -1715,6 +1718,8 @@ static void dwc3_get_properties(struct dwc3 *dwc)
- 
- 	dwc->dis_split_quirk = device_property_read_bool(dev,
- 				"snps,dis-split-quirk");
-+	dwc->p2p3tranok_quirk = device_property_read_bool(dev,
-+				"snps,p2p3tranok-quirk");
- 
- 	dwc->lpm_nyet_threshold = lpm_nyet_threshold;
- 	dwc->tx_de_emphasis = tx_de_emphasis;
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index 3781c736c1a1..2810dce8b42e 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -327,6 +327,7 @@
- #define DWC3_GUSB3PIPECTL_DEP1P2P3_EN	DWC3_GUSB3PIPECTL_DEP1P2P3(1)
- #define DWC3_GUSB3PIPECTL_DEPOCHANGE	BIT(18)
- #define DWC3_GUSB3PIPECTL_SUSPHY	BIT(17)
-+#define DWC3_GUSB3PIPECTL_P3P2TRANOK	BIT(11)
- #define DWC3_GUSB3PIPECTL_LFPSFILT	BIT(9)
- #define DWC3_GUSB3PIPECTL_RX_DETOPOLL	BIT(8)
- #define DWC3_GUSB3PIPECTL_TX_DEEPH_MASK	DWC3_GUSB3PIPECTL_TX_DEEPH(3)
-@@ -1132,6 +1133,8 @@ struct dwc3_scratchpad_array {
-  *			instances in park mode.
-  * @parkmode_disable_hs_quirk: set if we need to disable all HishSpeed
-  *			instances in park mode.
-+ * @p2p3tranok_quirk: set if Controller transitions directly from phy
-+ *			power state P2 to P3 or from state P3 to P2.
-  * @gfladj_refclk_lpm_sel: set if we need to enable SOF/ITP counter
-  *                          running based on ref_clk
-  * @tx_de_emphasis_quirk: set if we enable Tx de-emphasis quirk
-@@ -1361,6 +1364,7 @@ struct dwc3 {
- 	unsigned		ulpi_ext_vbus_drv:1;
- 	unsigned		parkmode_disable_ss_quirk:1;
- 	unsigned		parkmode_disable_hs_quirk:1;
-+	unsigned		p2p3tranok_quirk:1;
- 	unsigned		gfladj_refclk_lpm_sel:1;
- 
- 	unsigned		tx_de_emphasis_quirk:1;
+ 	/* check if current dwc3 is on simulation board */
+ 	if (dwc->hwparams.hwparams6 & DWC3_GHWPARAMS6_EN_FPGA) {
+ 		dev_info(dwc->dev, "Running with FPGA optimizations\n");
 -- 
 2.17.1
 
