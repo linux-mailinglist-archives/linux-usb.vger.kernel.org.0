@@ -1,141 +1,187 @@
-Return-Path: <linux-usb+bounces-11203-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11204-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 85B389054DD
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 16:16:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 117AF90550A
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 16:24:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 78D57B23CA6
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 14:16:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 87D171F233A9
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 14:24:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A36D17E45D;
-	Wed, 12 Jun 2024 14:16:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E8E917E45D;
+	Wed, 12 Jun 2024 14:23:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M0khO82C"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iTlWzBH/"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F22D917DE21;
-	Wed, 12 Jun 2024 14:16:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FEB112B89;
+	Wed, 12 Jun 2024 14:23:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718201769; cv=none; b=EsZfnK3IRFvxr8PkYS4kKaoLCwCX5S2VWuSBtqiIpzGJNHU3clLSfSSe4xB6srCbg1329MiZSYJ0YgS2SE2wAA+YnwK+mJ2Tstp0nMy+Toh+SSSLeQJMuWQV474HX5DGIGrATEbTf3BI+j7Vy5oyS5m0GmGXzDfZcRT3x8ZOnMM=
+	t=1718202233; cv=none; b=IrEeScfqR237cNzqdgeHWRAPXykW2I3BvGuT/bIKijH8T/xdB/sXlT0LiuuuXoOwguKxEpMBK2EsWuNtmQ+K3+e3SaRuYH5TtzXmjXzqIDMgk/VAdHrIALFuu5Qe5EN+ifZVdddjNSsufkUShB3n9VFWp3hXJeq4kVbw1kbWuWE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718201769; c=relaxed/simple;
-	bh=lS4Q64mUZkPtGZTGN1Vvs1emIda9a/KP8HYXBdNQGHA=;
+	s=arc-20240116; t=1718202233; c=relaxed/simple;
+	bh=3SUwjfEdE7/+jWZ9Ch4cHafMHD2Z4aDWpTH5LPKONC4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mMINyZCEGMjW1hQrAASSErLd7ZJwYCJQsAPMDL6ttbqOxRQiRfj6t6C3um0xwToTInBuqVk05Gsa/r+mgQWS7HgoWgYGhQc1m3JWeMhtWkzdxPgVzZeDJAum0BV5ggfyh2zPUHbVCF+O64SRwCHTaBzIyh9dx4MezQ5BarTXPHk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M0khO82C; arc=none smtp.client-ip=209.85.221.50
+	 To:Cc:Content-Type; b=RbPko3rnEokWS2G6yb1CZPnQXAmaE7YDjPOw52MC/7Nlerv7Hs6yKUhV7SGm1jSf2K6emCxEZ5p3RUluF0YxfL/AFEM/Zu50z2/BGG+/f2P9A5lRgCA3xu0u+r7dWwF64ssOts+1w/GxfIX2WZBhkD28AZ4AD47zv+wOnTgzi7I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iTlWzBH/; arc=none smtp.client-ip=209.85.221.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-35f06861ae6so4444685f8f.2;
-        Wed, 12 Jun 2024 07:16:05 -0700 (PDT)
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-35f225ac23bso3432922f8f.0;
+        Wed, 12 Jun 2024 07:23:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718201764; x=1718806564; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1718202230; x=1718807030; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JNJdiRvVFKx+Fq5oad51B9nRPB0lGgFCkitSs5laVyY=;
-        b=M0khO82CpfvEDY30HHWAMvM/0ZvaRXSHW0pHS/iuG9/8dXW4IrA0KsOGO9hUTCEeXx
-         K03l3XkLflOiTTeu/2RFQmU6vOtzQ7PdUQ2HRMrkB6qidrkLcNjMSm4Tod3oY59DRIwZ
-         Q9yuRoDbL7qS06eD6epStZY9Aik8wECohhPr36cxJbL4RQSqWN7eOrhMIng3gln+Vose
-         E3RYDHwje3xn82KzmAUFsmOs0cPD3fsgB0Xz6rh23k/7M1xFuLY0pAGk+cHHceYY0hlJ
-         RNoUAwZJMYECg3Kn5FQmi8x+nWyONPT+2tRLKkoenJrQfMZsE19Xo37joXmCmmPwvVGv
-         7AlA==
+        bh=dyHQAv7KA+rn6UX/lfbQls3iW8tdEzN0HjsbuxSkKYs=;
+        b=iTlWzBH/Cr4ERu3mBJUhCupeYHAKm1F9OUGgyYfxpGhnff09azxZnn52KR6NgVwH4+
+         Hbwmv/h4+ArQHqiviLh6Zec03iITcM8loDZeupjlHfoPtNBXOf5FHpa0kmsx76GfgUTp
+         yMioU/wfNDNkS8PcoxyvfdIdEpigqjmB2HhqENzcFeBvN0E6Uy7R0kdHW2qneComEYRu
+         dvvRtqEGBch2REK6kA/u8DbIHeLq0CwGD5faTYi/gmm9soB8w6zuB5qyPRi7i1+Ybepc
+         6dM5qla1F8a4g+pQN6Sohz2lL3AB1tU2znguWEvjNyBFlYPHQsJWS/q7R+lgFEdtEELO
+         63pQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718201764; x=1718806564;
+        d=1e100.net; s=20230601; t=1718202230; x=1718807030;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=JNJdiRvVFKx+Fq5oad51B9nRPB0lGgFCkitSs5laVyY=;
-        b=UYjJGJ0+vqfWOt03qzMKb69iMCPVrf7gh9i582JRKEOZkXjHBvCzQD0B0sDKlQPdSO
-         YGpzthAK15z6zNtKjq80xSeKnEZ1Xsn0B/2K5kD34M2GQGRXey/NlInOEUt4IjgVrUe0
-         vNnZgECaROBpRcxK0KAQGCygfrulfcyhHUa12WiKovrhWQbsVgicM8c5zP5YoHS7TM+W
-         80qPi+gp39v6VWtITeiWAl5/ZN5yT0WFE9k+kL3Ew/fHE5vxiNgQfy+/yixNZR2zIWKS
-         ochMnoiYYSBu9YvsrQ17PGlBhs8TqfcHRuXsyxetB5Ncc+wkizelOgmOD89RJhj51ywt
-         emuQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUVBIgDe46aCoEWyZx6MduNux5VjRs+zlqatYn4YgmPwLxbK7XtKUUxp3LKkzx13FsqtWnBlE/FHBUWYcgH0imrNZjJuQNzUXasLl8Ip7B/Nn/SYSprg4phhbgbLx73q82pNjo1GhsK
-X-Gm-Message-State: AOJu0YzRLVgM6vYEQUGISJ+f+Zyrx0jn81FHP2CdJUWDx37jeof5GfOm
-	J8i+g68bnL949sbhBaeIiTH092L9XEyEzUjBNGFHHpVPrkmnbL0m3IW6+ICOZzK4fpDTJROFM4s
-	V8l4HHHrKRcnENdYWbslgyYTTBEvmqTlAie65dw==
-X-Google-Smtp-Source: AGHT+IEAOwXzvDL/aUgGhZr0L8GgFeDp+p5XP45ibYIyQtwVdipelfwhOfbZ6mfhMY8Z9i9VxewbjVBLBySpmdHGsYw=
-X-Received: by 2002:a5d:6248:0:b0:35f:122d:a589 with SMTP id
- ffacd0b85a97d-35fe1c0a0acmr1218164f8f.40.1718201764066; Wed, 12 Jun 2024
- 07:16:04 -0700 (PDT)
+        bh=dyHQAv7KA+rn6UX/lfbQls3iW8tdEzN0HjsbuxSkKYs=;
+        b=AT8/Y2JmjyVZcCQ9DsyD6cZEl7wONuEAsq3QU7/3NPC96rvDPGpwwPEL2bt/j7Qvtc
+         FsA6A/5t1YjSGfOr3Ld95nsz/U94G2as+tQ77CBMZvdjiyjjv+yZo6c7ybX3l/RbjcpY
+         qC9ZLP/PwUeBHNbqTdMK1c+eGtqJ/1a/VyOg1GW2YAxEvG7gd99oGmzr3rFBsD5+rJN8
+         ND6weZRciEWtpLMZ8y8W+8ovxRuYqJj76peFE/MjvCWsBOlbQCqFJrlUj4AbTgbXJ2f3
+         fk/f6tfZ1c3RQ3PMbzIKKTBr+TzExkazfT7+MlVO4dMGFhylrDk8dDVE8Cvbcz+49cnV
+         IRTg==
+X-Forwarded-Encrypted: i=1; AJvYcCVFLNPSOrvI8WRjO28YPgJwp42kxKorVmkm4G5KUs8/OEfiKddruK0VcVkoHa5z9wVhZShkUyhr0PCNH88tMgD89g2aeSfxXGmkGaOVgnzhd6MYcfJ+HKArwZe7JV649aF3pLvnyOoj
+X-Gm-Message-State: AOJu0Yw/pBk48YiIJXoZ7f+7fjtm78HWO9l6nGoIG5vZKEls/8R5t0z9
+	lOe8YWeZvn5ATDVU0QxmCNZw7udCBw860uAl9SeSGq+QTpfTIZmR0NC0ClNGW5kFD2zQ7Jsjsjw
+	/7zAfkOCukxKAzVF/bbrVH2oKE7A=
+X-Google-Smtp-Source: AGHT+IF1PvGCSHdsKggJruHtQ6IFABccwQhxXVpOCJnfS32UBtyDtto4VYpqqX2CnamBP9xBwVsHzfCS57lKMWC2xek=
+X-Received: by 2002:a5d:5184:0:b0:35f:1eba:cf66 with SMTP id
+ ffacd0b85a97d-35fe8938566mr1901642f8f.61.1718202229602; Wed, 12 Jun 2024
+ 07:23:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240601092646.52139-1-joswang1221@gmail.com> <20240611142953.12057-1-joswang1221@gmail.com>
- <2024061247-geranium-unstaffed-ff09@gregkh> <CAMtoTm32JDwWAjpKJ4TXxA9ROqqr-fNaOR1nqui8ayMHnYzkjg@mail.gmail.com>
- <2024061217-haiku-unlocked-9d72@gregkh>
-In-Reply-To: <2024061217-haiku-unlocked-9d72@gregkh>
+References: <20240601120640.73556-1-joswang1221@gmail.com> <1662c9c9-7330-4794-843a-940f05802021@linux.intel.com>
+ <CAMtoTm1u+8ynBRaWgCMVgaR+dBoZfNGhzGqmvooBSDxZm5Qx+g@mail.gmail.com>
+ <c9430561-ecfe-5b36-9574-73a946410eea@linux.intel.com> <CAMtoTm1xYUuaV1rO3dZexS=q_5Xf61+QAZ1++VvzK10VtGHexA@mail.gmail.com>
+ <2521588d-30a6-0224-c7c9-3015e9cc65a3@linux.intel.com> <CAMtoTm2G-w+yRjechji7scJO-JZo6N==VK6Wun3ATRc7do9rEg@mail.gmail.com>
+ <b5deb873-7151-46fa-164e-9e2c6a339636@linux.intel.com>
+In-Reply-To: <b5deb873-7151-46fa-164e-9e2c6a339636@linux.intel.com>
 From: joswang <joswang1221@gmail.com>
-Date: Wed, 12 Jun 2024 22:15:52 +0800
-Message-ID: <CAMtoTm0dk2y9XLjABP-O27b37zZfjfVKAGvAootzwAE4aJuUtQ@mail.gmail.com>
-Subject: Re: [PATCH v3, 3/3] usb: dwc3: core: Workaround for CSR read timeout
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: Thinh.Nguyen@synopsys.com, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Jos Wang <joswang@lenovo.com>
+Date: Wed, 12 Jun 2024 22:23:38 +0800
+Message-ID: <CAMtoTm1cqeFhko_+D7cZL5vAv7ea+bvF0yGHn0Uy7cwyU=O0zw@mail.gmail.com>
+Subject: Re: [RFC 1/1] usb: host: xhci-plat: add enable XHCI-AVOID-BEI quirk
+ by dts
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: mathias.nyman@intel.com, gregkh@linuxfoundation.org, 
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	joswang <joswang@lenovo.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jun 12, 2024 at 10:07=E2=80=AFPM Greg KH <gregkh@linuxfoundation.or=
-g> wrote:
+On Tue, Jun 11, 2024 at 11:00=E2=80=AFPM Mathias Nyman
+<mathias.nyman@linux.intel.com> wrote:
 >
-> On Wed, Jun 12, 2024 at 09:52:04PM +0800, joswang wrote:
-> > On Wed, Jun 12, 2024 at 3:58=E2=80=AFPM Greg KH <gregkh@linuxfoundation=
-.org> wrote:
-> > >
-> > > On Tue, Jun 11, 2024 at 10:29:53PM +0800, joswang wrote:
-> > > > From: Jos Wang <joswang@lenovo.com>
-> > > >
-> > > > This is a workaround for STAR 4846132, which only affects
-> > > > DWC_usb31 version2.00a operating in host mode.
-> > > >
-> > > > There is a problem in DWC_usb31 version 2.00a operating
-> > > > in host mode that would cause a CSR read timeout When CSR
-> > > > read coincides with RAM Clock Gating Entry. By disable
-> > > > Clock Gating, sacrificing power consumption for normal
-> > > > operation.
-> > > >
-> > > > Signed-off-by: Jos Wang <joswang@lenovo.com>
-> > > > ---
-> > > > v1 -> v2:
-> > > > - add "dt-bindings: usb: dwc3: Add snps,p2p3tranok quirk" patch
-> > > > v2 -> v3:
-> > > > - code refactor
-> > > > - modify comment, add STAR number, workaround applied in host mode
-> > > > - modify commit message, add STAR number, workaround applied in hos=
-t mode
-> > > > - modify Author Jos Wang
-> > > > ---
-> > > >  drivers/usb/dwc3/core.c | 20 +++++++++++++++++++-
-> > > >  1 file changed, 19 insertions(+), 1 deletion(-)
-> > >
-> > > Should this have a cc: stable line?
-> > >
-> > > thanks,
-> > >
-> > > greg k-h
+> On 11.6.2024 17.45, joswang wrote:
+> > On Tue, Jun 11, 2024 at 6:01=E2=80=AFPM Mathias Nyman
+> > <mathias.nyman@linux.intel.com> wrote:
+> >>
+> >> On 6.6.2024 17.08, joswang wrote:
+> >>> On Wed, Jun 5, 2024 at 6:31=E2=80=AFPM Mathias Nyman
+> >>> <mathias.nyman@linux.intel.com> wrote:
+> >> ...
+> >>>>
+> >>>> I was thinking of turning XHCI_AVOID_BEI behavior into the new defau=
+lt, so no
+> >>>> quirk flag would be needed:
+> >>>>
+> >>>> Currently without the quirk flag:
+> >>>>
+> >>>> - ISOC TRBs trigger interrupt if TRB is the last in the TD
+> >>>>
+> >>>> Currently with XHCI_AVOID_BEI quirk flag:
+> >>>>
+> >>>> - ISOC TRBs trigger interrupt if TRB is the last in the TD
+> >>>> - Interrupt is additionally triggered every 32 isoc TRB (initially).
+> >>>> - if more than 128 events are processed in one interrupt then the
+> >>>>      32 is halved, and we trigger an interrupts every 16th isoc TRB,=
+ and so
+> >>>>      on, 16 -> 8...
+> >>>>
+> >>>> I would remove the quirk flag, and make all controllers interrupt
+> >>>> behave as if it was set. i.e. interrupt at least every 32 isoc TRB
+> >>>
+> >>> Thank you for your detailed analysis.
+> >>> Excuse me, I have a question, do you mean to set "Currently with
+> >>> XHCI_AVOID_BEI quirk flag" as the default behavior?
+> >>
+> >> Yes, unless it causes some issues or there are strong objections
+> >>
+> >>>>
+> >>>> Is there an actual real world case where interrupting every 32nd ISO=
+C TRB is
+> >>>> too often?
+> >>>
+> >>> I mean that if the XHCI_AVOID_BEI quirk flag is set, an interrupt wil=
+l
+> >>> be triggered every 8 TRBs, which makes the interrupts seem to be quit=
+e
+> >>> frequent.
+> >>> Thanks
+> >>> Jos
+> >>>
+> >>
+> >> It should start with interrupting every 32nd isoc TD, not 8th
+> >>
+> >> #define AVOID_BEI_INTERVAL_MAX   32
+> >>
+> >> ir->isoc_bei_interval =3D AVOID_BEI_INTERVAL_MAX;
+> >>
+> >> Thanks
+> >> Mathias
 > >
-> > I have a question here, please help me confirm
-> > 1. Cc: stable@vger.kernel.org or Cc: stable@kernel.org ?
-> > 2. Do I need to modify the commit message, for example:
-> > Cc: stable@kernel.org
-> > Signed-off-by: Jos Wang <joswang@lenovo.com>
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Jos Wang <joswang@lenovo.com>
+> > As you mentioned=EF=BC=8Cif more than 128 events are processed in one
+> > interrupt then the 32 is halved, and we trigger an interrupts every
+> > 16th isoc TRB, and so on, 16 -> 8...
+> > xhci_handle_events()
+> >      ......
+> >      if (event_loop++ > TRBS_PER_SEGMENT / 2) {
+> >           if (ir->isoc_bei_interval > AVOID_BEI_INTERVAL_MIN)
+> >                ir->isoc_bei_interval =3D ir->isoc_bei_interval / 2;
+> >      }
+> >      .......
 >
-> Please read:
->     https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.ht=
-ml
-> for how to do this properly.
+> Yes, and to me this seems reasonable .
+> If there are over 128 events per interrupt then we should interrupt more =
+often.
+>
+> Would this work as the default for the Synopsys hosts you are working wit=
+h?
+>
+> Thanks
+> Mathias
 
-Thank You
+Without enabling XHCI_AVOID_BEI quirk, that is, triggering an
+interrupt once for every 32TRB:
+For some USB cameras (such as high-resolution cameras, etc.), the data
+volume of one frame is relatively large, and the host controller will
+frequently trigger interrupts during data transmission. For some SOC
+platforms (such as rockchip platforms, which also use Synopsys USB IP)
+with poor performance, it is possible that the CPU cannot respond to
+interrupts in time, resulting in frame loss.
+Therefore, I think that using XHCI_AVOID_BEI quirk by default may
+aggravate the above problem. Please help evaluate, thank you.
+
+Thanks,
+Jos Wang
 
