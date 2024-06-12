@@ -1,187 +1,139 @@
-Return-Path: <linux-usb+bounces-11204-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11205-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 117AF90550A
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 16:24:02 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CBCC990551D
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 16:28:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 87D171F233A9
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 14:24:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6E08B1F23269
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 14:28:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E8E917E45D;
-	Wed, 12 Jun 2024 14:23:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED6B717E474;
+	Wed, 12 Jun 2024 14:28:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iTlWzBH/"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eb/TW/q5"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FEB112B89;
-	Wed, 12 Jun 2024 14:23:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D28297FB;
+	Wed, 12 Jun 2024 14:28:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718202233; cv=none; b=IrEeScfqR237cNzqdgeHWRAPXykW2I3BvGuT/bIKijH8T/xdB/sXlT0LiuuuXoOwguKxEpMBK2EsWuNtmQ+K3+e3SaRuYH5TtzXmjXzqIDMgk/VAdHrIALFuu5Qe5EN+ifZVdddjNSsufkUShB3n9VFWp3hXJeq4kVbw1kbWuWE=
+	t=1718202501; cv=none; b=rXufMtK0yu8S5lLLdZ/odRG3IhaUc4yMvKowv4tsufv/lY1xOOGfCvy/EgTh11154AVWikvbhXuR/WHbkHQFh2a7oXDiiBgptfjXGOPck3TDhZM9gaktsfnwt6VVFOz2UTlseH2j+uJszW73hjNhiUJFDkBRmLG5xHRK5M2JIVU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718202233; c=relaxed/simple;
-	bh=3SUwjfEdE7/+jWZ9Ch4cHafMHD2Z4aDWpTH5LPKONC4=;
+	s=arc-20240116; t=1718202501; c=relaxed/simple;
+	bh=M5Wq5PkW+j5WBpUWNaxe35+bKituzA8SiWZVorHnflI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RbPko3rnEokWS2G6yb1CZPnQXAmaE7YDjPOw52MC/7Nlerv7Hs6yKUhV7SGm1jSf2K6emCxEZ5p3RUluF0YxfL/AFEM/Zu50z2/BGG+/f2P9A5lRgCA3xu0u+r7dWwF64ssOts+1w/GxfIX2WZBhkD28AZ4AD47zv+wOnTgzi7I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iTlWzBH/; arc=none smtp.client-ip=209.85.221.48
+	 To:Cc:Content-Type; b=aChqzn+kkN2cYsueCYD4hk0wfe8zXNGel3X7swibSHAE5ZELmoSTaOZEN0WzKoJzKewxWbL4n+Qh5P9969kPrJ9ORex998ciSNvgyG5A9FAHIwjNjJESQCuqgmU1fxxh040REg3PYYNBFTJxLptU7CZfkPFbs/mFrjshl5YI0EY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eb/TW/q5; arc=none smtp.client-ip=209.85.208.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-35f225ac23bso3432922f8f.0;
-        Wed, 12 Jun 2024 07:23:51 -0700 (PDT)
+Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-2ebeefb9a6eso22171461fa.1;
+        Wed, 12 Jun 2024 07:28:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718202230; x=1718807030; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1718202498; x=1718807298; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=dyHQAv7KA+rn6UX/lfbQls3iW8tdEzN0HjsbuxSkKYs=;
-        b=iTlWzBH/Cr4ERu3mBJUhCupeYHAKm1F9OUGgyYfxpGhnff09azxZnn52KR6NgVwH4+
-         Hbwmv/h4+ArQHqiviLh6Zec03iITcM8loDZeupjlHfoPtNBXOf5FHpa0kmsx76GfgUTp
-         yMioU/wfNDNkS8PcoxyvfdIdEpigqjmB2HhqENzcFeBvN0E6Uy7R0kdHW2qneComEYRu
-         dvvRtqEGBch2REK6kA/u8DbIHeLq0CwGD5faTYi/gmm9soB8w6zuB5qyPRi7i1+Ybepc
-         6dM5qla1F8a4g+pQN6Sohz2lL3AB1tU2znguWEvjNyBFlYPHQsJWS/q7R+lgFEdtEELO
-         63pQ==
+        bh=ZBGRs/yfS5hfu0UJmUEEloYokRcE9KOZ/5P6i9N80po=;
+        b=eb/TW/q5oO48KNt+Af+wQUVUoayNH3z49p2H8HIXHzUArNvBEDW7LTqdOFlZIr96Qt
+         0UUr5huK4UbmmzOs7cQgm6uhtFugC7x5pspeRSJkLUSHt1Fwhpq3WiY/blgSmCtc85OX
+         +eiB1O5GJ/rXpd59J2VQJKtF7KnwznQqoYbuQwZcp001wMpICGNO1xjUF7pYP12Zsa1U
+         HhocjK7izQ/nKeYBGJAXqwzl3wiYmheU+ua6DhZ7D6aR0grGmObiRnwhWhv45uyTu+3k
+         nAZty1x9Y8FnLRviUvMqRyuFJ2X/oG7Z8tkaq5bbvwACtafw24APSAjlrOm1MRD+IYBm
+         OkrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718202230; x=1718807030;
+        d=1e100.net; s=20230601; t=1718202498; x=1718807298;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=dyHQAv7KA+rn6UX/lfbQls3iW8tdEzN0HjsbuxSkKYs=;
-        b=AT8/Y2JmjyVZcCQ9DsyD6cZEl7wONuEAsq3QU7/3NPC96rvDPGpwwPEL2bt/j7Qvtc
-         FsA6A/5t1YjSGfOr3Ld95nsz/U94G2as+tQ77CBMZvdjiyjjv+yZo6c7ybX3l/RbjcpY
-         qC9ZLP/PwUeBHNbqTdMK1c+eGtqJ/1a/VyOg1GW2YAxEvG7gd99oGmzr3rFBsD5+rJN8
-         ND6weZRciEWtpLMZ8y8W+8ovxRuYqJj76peFE/MjvCWsBOlbQCqFJrlUj4AbTgbXJ2f3
-         fk/f6tfZ1c3RQ3PMbzIKKTBr+TzExkazfT7+MlVO4dMGFhylrDk8dDVE8Cvbcz+49cnV
-         IRTg==
-X-Forwarded-Encrypted: i=1; AJvYcCVFLNPSOrvI8WRjO28YPgJwp42kxKorVmkm4G5KUs8/OEfiKddruK0VcVkoHa5z9wVhZShkUyhr0PCNH88tMgD89g2aeSfxXGmkGaOVgnzhd6MYcfJ+HKArwZe7JV649aF3pLvnyOoj
-X-Gm-Message-State: AOJu0Yw/pBk48YiIJXoZ7f+7fjtm78HWO9l6nGoIG5vZKEls/8R5t0z9
-	lOe8YWeZvn5ATDVU0QxmCNZw7udCBw860uAl9SeSGq+QTpfTIZmR0NC0ClNGW5kFD2zQ7Jsjsjw
-	/7zAfkOCukxKAzVF/bbrVH2oKE7A=
-X-Google-Smtp-Source: AGHT+IF1PvGCSHdsKggJruHtQ6IFABccwQhxXVpOCJnfS32UBtyDtto4VYpqqX2CnamBP9xBwVsHzfCS57lKMWC2xek=
-X-Received: by 2002:a5d:5184:0:b0:35f:1eba:cf66 with SMTP id
- ffacd0b85a97d-35fe8938566mr1901642f8f.61.1718202229602; Wed, 12 Jun 2024
- 07:23:49 -0700 (PDT)
+        bh=ZBGRs/yfS5hfu0UJmUEEloYokRcE9KOZ/5P6i9N80po=;
+        b=uXn/xDOIGO5Kbecd4eTtVEXHfD/9T0POVI23Gb1JO04MBJLGzWfhVIgi+rxVQBz2hm
+         Mm+3tcZwyKz06+I5AreYBbzK2uv2hb+gVE3n9tbOiL5J8m2N5i1FJMoEnxhe0tzZkRJL
+         8hlfW8zL4bGQmIVL1u4B2WR2JtVa5AL9oXHvj1/6TEPQBjJjOmXVF05XaXHdRsAzrktO
+         z53qpWp3EGnVXqV1gDT1E3N1C6H8WaMi+wFY+WxwaE09IsQmXANn8dgtL0WaAlKjAyRe
+         4Ef/xppbMcqi8zxQH6EHfGeu2oUH3qlkjZBBc7BiWFGFeBMEGXKKc+Fx5CgScOHWjhh+
+         r1IQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU+rZgMlsu5w1wHhcuhYPlpC4eav/gizoTRANgwhKN31O9IOtYZvIKh/Hac7FUhP5QtISsVKnxskYW4b3uEcY/Nofk0syrutEUhO5dqq4IP9lvEg5JBfjB5kDdejT4+pgFwtYTiZo8CihpJebrlZhiGsHJTi5Q/xUA6kicmwdlztYuBng==
+X-Gm-Message-State: AOJu0Yy4eQonk6i3bE1x1ToeQozIxj0tzsVWkZydjvurdbT63NHm+5TZ
+	wN53WAh0d/hxDTg1oSY68GPqcuVWLzLFBgE1nn+FF1ctj5s7NIiFaKNaYBDxcvmFayfZTEIEMQp
+	lDqwyWD/ovGuU71xzIv1k/mnpuDPJIuCOB/oju9Rh
+X-Google-Smtp-Source: AGHT+IHOs3ciOviU8J52fVK6ZywQ5lGQdMISCOwO4tHH7On+5Hsi54kgd/FP+vf2ZrTO8jNLdDjnz/KhkhEElQXnm7M=
+X-Received: by 2002:a2e:a0cc:0:b0:2ea:e4e9:8776 with SMTP id
+ 38308e7fff4ca-2ebfc9ab259mr12598771fa.46.1718202497821; Wed, 12 Jun 2024
+ 07:28:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240601120640.73556-1-joswang1221@gmail.com> <1662c9c9-7330-4794-843a-940f05802021@linux.intel.com>
- <CAMtoTm1u+8ynBRaWgCMVgaR+dBoZfNGhzGqmvooBSDxZm5Qx+g@mail.gmail.com>
- <c9430561-ecfe-5b36-9574-73a946410eea@linux.intel.com> <CAMtoTm1xYUuaV1rO3dZexS=q_5Xf61+QAZ1++VvzK10VtGHexA@mail.gmail.com>
- <2521588d-30a6-0224-c7c9-3015e9cc65a3@linux.intel.com> <CAMtoTm2G-w+yRjechji7scJO-JZo6N==VK6Wun3ATRc7do9rEg@mail.gmail.com>
- <b5deb873-7151-46fa-164e-9e2c6a339636@linux.intel.com>
-In-Reply-To: <b5deb873-7151-46fa-164e-9e2c6a339636@linux.intel.com>
+References: <20240601092646.52139-1-joswang1221@gmail.com> <20240603130004.25662-1-joswang1221@gmail.com>
+ <9c665afe-16d7-469e-ac3e-d0d7388a31b7@kernel.org>
+In-Reply-To: <9c665afe-16d7-469e-ac3e-d0d7388a31b7@kernel.org>
 From: joswang <joswang1221@gmail.com>
-Date: Wed, 12 Jun 2024 22:23:38 +0800
-Message-ID: <CAMtoTm1cqeFhko_+D7cZL5vAv7ea+bvF0yGHn0Uy7cwyU=O0zw@mail.gmail.com>
-Subject: Re: [RFC 1/1] usb: host: xhci-plat: add enable XHCI-AVOID-BEI quirk
- by dts
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: mathias.nyman@intel.com, gregkh@linuxfoundation.org, 
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+Date: Wed, 12 Jun 2024 22:28:06 +0800
+Message-ID: <CAMtoTm1ojhCSRb4c+MPjuJB+JaeD2ex6B7FpCaJtLvrTj0Q8Cg@mail.gmail.com>
+Subject: Re: [PATCH v2, 1/3] dt-bindings: usb: dwc3: Add snps,p2p3tranok quirk
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Thinh.Nguyen@synopsys.com, robh@kernel.org, krzk+dt@kernel.org, 
+	conor+dt@kernel.org, gregkh@linuxfoundation.org, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, balbi@kernel.org, devicetree@vger.kernel.org, 
 	joswang <joswang@lenovo.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 11, 2024 at 11:00=E2=80=AFPM Mathias Nyman
-<mathias.nyman@linux.intel.com> wrote:
+On Tue, Jun 4, 2024 at 2:33=E2=80=AFPM Krzysztof Kozlowski <krzk@kernel.org=
+> wrote:
 >
-> On 11.6.2024 17.45, joswang wrote:
-> > On Tue, Jun 11, 2024 at 6:01=E2=80=AFPM Mathias Nyman
-> > <mathias.nyman@linux.intel.com> wrote:
-> >>
-> >> On 6.6.2024 17.08, joswang wrote:
-> >>> On Wed, Jun 5, 2024 at 6:31=E2=80=AFPM Mathias Nyman
-> >>> <mathias.nyman@linux.intel.com> wrote:
-> >> ...
-> >>>>
-> >>>> I was thinking of turning XHCI_AVOID_BEI behavior into the new defau=
-lt, so no
-> >>>> quirk flag would be needed:
-> >>>>
-> >>>> Currently without the quirk flag:
-> >>>>
-> >>>> - ISOC TRBs trigger interrupt if TRB is the last in the TD
-> >>>>
-> >>>> Currently with XHCI_AVOID_BEI quirk flag:
-> >>>>
-> >>>> - ISOC TRBs trigger interrupt if TRB is the last in the TD
-> >>>> - Interrupt is additionally triggered every 32 isoc TRB (initially).
-> >>>> - if more than 128 events are processed in one interrupt then the
-> >>>>      32 is halved, and we trigger an interrupts every 16th isoc TRB,=
- and so
-> >>>>      on, 16 -> 8...
-> >>>>
-> >>>> I would remove the quirk flag, and make all controllers interrupt
-> >>>> behave as if it was set. i.e. interrupt at least every 32 isoc TRB
-> >>>
-> >>> Thank you for your detailed analysis.
-> >>> Excuse me, I have a question, do you mean to set "Currently with
-> >>> XHCI_AVOID_BEI quirk flag" as the default behavior?
-> >>
-> >> Yes, unless it causes some issues or there are strong objections
-> >>
-> >>>>
-> >>>> Is there an actual real world case where interrupting every 32nd ISO=
-C TRB is
-> >>>> too often?
-> >>>
-> >>> I mean that if the XHCI_AVOID_BEI quirk flag is set, an interrupt wil=
-l
-> >>> be triggered every 8 TRBs, which makes the interrupts seem to be quit=
-e
-> >>> frequent.
-> >>> Thanks
-> >>> Jos
-> >>>
-> >>
-> >> It should start with interrupting every 32nd isoc TD, not 8th
-> >>
-> >> #define AVOID_BEI_INTERVAL_MAX   32
-> >>
-> >> ir->isoc_bei_interval =3D AVOID_BEI_INTERVAL_MAX;
-> >>
-> >> Thanks
-> >> Mathias
+> On 03/06/2024 15:00, joswang wrote:
+> > From: joswang <joswang@lenovo.com>
+>
+> Is this your full name or known identity you want to use for all kernel
+> contributions? Looks like login...
+>
 > >
-> > As you mentioned=EF=BC=8Cif more than 128 events are processed in one
-> > interrupt then the 32 is halved, and we trigger an interrupts every
-> > 16th isoc TRB, and so on, 16 -> 8...
-> > xhci_handle_events()
-> >      ......
-> >      if (event_loop++ > TRBS_PER_SEGMENT / 2) {
-> >           if (ir->isoc_bei_interval > AVOID_BEI_INTERVAL_MIN)
-> >                ir->isoc_bei_interval =3D ir->isoc_bei_interval / 2;
-> >      }
-> >      .......
+> > There is an issue with the DWC31 2.00a and earlier versions
+> > where the controller link power state transition from
+> > P3/P3CPM/P4 to P2 may take longer than expected, ultimately
+> > resulting in the hibernation D3 entering time exceeding the
+> > expected 10ms.
+> >
+> > Add a new 'snps,p2p3tranok-quirk' DT quirk to dwc3 core
+> > for enable the controller transitions directly from phy
+> > power state P2 to P3 or from state P3 to P2.
+> >
+> > Note that this can only be set if the USB3 PHY supports
+> > direct p3 to p2 or p2 to p3 conversion.
+> >
+> > Signed-off-by: joswang <joswang@lenovo.com>
+> > ---
+> >  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 7 +++++++
+> >  1 file changed, 7 insertions(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Doc=
+umentation/devicetree/bindings/usb/snps,dwc3.yaml
+> > index 1cd0ca90127d..721927495887 100644
+> > --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> > +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> > @@ -242,6 +242,13 @@ properties:
+> >        When set, all HighSpeed bus instances in park mode are disabled.
+> >      type: boolean
+> >
+> > +  snps,p2p3tranok-quirk:
 >
-> Yes, and to me this seems reasonable .
-> If there are over 128 events per interrupt then we should interrupt more =
-often.
+> Why this cannot be deduced from compatible? Which upstream SoCs are
+> affected?
 >
-> Would this work as the default for the Synopsys hosts you are working wit=
-h?
 >
-> Thanks
-> Mathias
+>
+> Best regards,
+> Krzysztof
+>
 
-Without enabling XHCI_AVOID_BEI quirk, that is, triggering an
-interrupt once for every 32TRB:
-For some USB cameras (such as high-resolution cameras, etc.), the data
-volume of one frame is relatively large, and the host controller will
-frequently trigger interrupts during data transmission. For some SOC
-platforms (such as rockchip platforms, which also use Synopsys USB IP)
-with poor performance, it is possible that the CPU cannot respond to
-interrupts in time, resulting in frame loss.
-Therefore, I think that using XHCI_AVOID_BEI quirk by default may
-aggravate the above problem. Please help evaluate, thank you.
-
-Thanks,
-Jos Wang
+Thanks for your help in reviewing the code
+DWC31_USB 2.00a and earlier versions IP bug, regardless of platform.
 
