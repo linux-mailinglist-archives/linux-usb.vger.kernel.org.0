@@ -1,97 +1,221 @@
-Return-Path: <linux-usb+bounces-11206-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11207-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3CA290554D
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 16:38:02 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3DFE99055A8
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 16:48:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 40A43B227BC
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 14:38:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3DC101C20FF7
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 14:48:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9889F17E475;
-	Wed, 12 Jun 2024 14:37:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1ACC417FAAF;
+	Wed, 12 Jun 2024 14:47:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="grGqWBkB"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id BD21417E45B
-	for <linux-usb@vger.kernel.org>; Wed, 12 Jun 2024 14:37:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 528C21E504;
+	Wed, 12 Jun 2024 14:47:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718203050; cv=none; b=ZpnxUZtARNlkBRtotxNu71tRU7acXx5fGmBNIsGsr/fMoTsZTJWrdOzOZb5ZQJkn0MWM2uyinIJEMTV2kg1hKVPAh2dW/9CVUUAn7VEhmKkB9qVDxEqgc5CU4pd2DWahLy1QzLTgnoYNeoy7FF78NaPayVioOTD6aZPxMZgWb3Y=
+	t=1718203664; cv=none; b=SLO86olC37nGUwDl4inOE7HqfzNhey+H//p7Krv8eQyXnA5OYRnTqV3vBfB67WffvaF//3cNFnk6zYmdv82e+aNDMrGf0iSOOX9xRFLAHulnQwS67/llMjNsXfx/nHow5gXfRWMR1Vw+X6idJ7uY9S8ZBtsOejJfCdktVckCP9I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718203050; c=relaxed/simple;
-	bh=bQA6/YbD0LnAqlHHCD0lNcxUEHgiqOkL0iQb13PzXRI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hbJcr7L3nWHJdIWNJCwrT3e9ivF3Gk7H6QqNeP3xpSLXXXt5pPcGlcJzUvVXUX/DWDTiNJLC9yq2Au1Le3jT7MO7oXUFKPlbmOf4nz+pZgfz5dfONouKX6prCki7Dl38s08RShn/WXxTptXZv9972y32shgB3y6ZBsvJZyG7Org=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
-Received: (qmail 226065 invoked by uid 1000); 12 Jun 2024 10:37:26 -0400
-Date: Wed, 12 Jun 2024 10:37:26 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: syzbot <syzbot+5f996b83575ef4058638@syzkaller.appspotmail.com>
-Cc: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-  linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [usb?] INFO: rcu detected stall in raw_ioctl
-Message-ID: <2bfca69a-b7e0-4f66-9025-1324af803318@rowland.harvard.edu>
-References: <684687e4-8be4-42ee-a125-8ef9acc3fec9@rowland.harvard.edu>
- <000000000000babbf8061aa113df@google.com>
+	s=arc-20240116; t=1718203664; c=relaxed/simple;
+	bh=afYKfX5WiT24a7vRcOHvX/frxR+u+IAFVv0AQdtNlWs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=lzzHYRp813k/cuM3XLTZw3zt5OE3fK8MTEwH5iujQjQJq9LK2go/h+fjsS7+kCkPYyD4D62Q6/5iF0obty8uLuIM4D7Eoryy+zgEkRy++VPioCh5pOITz2uBaDOmSe2koPzZEJcNFZsGWD6G/aowTXHg4xbaYBalLSr5SI4sbFs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=grGqWBkB; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1718203663; x=1749739663;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=afYKfX5WiT24a7vRcOHvX/frxR+u+IAFVv0AQdtNlWs=;
+  b=grGqWBkBrKX6Msb/pvvAOHn2rH4uV6Qb4CJO1tFzD+6GU18XlXSAXUWd
+   oAqBUpmV20lrCMDqbIW7gf+JUeJ5efRIYEFlpa4/rBRMVhb6PuVMrhq6i
+   3jR2/G2RcbpqfaxoniGJoeOKy31B4d+8uYv+V9mpLABrfVd5ZUj+COHm0
+   tx21xtLqs5F23FhWS5j2q5bRfjp/nalZL/xLjNyVzTgTYDwbVr0VdjN0U
+   /BtxqqgXrSKRknC/Y55XC2nGOzAHqTQYVQ0q+FeTnLOBjLMiQcAJ+B/SR
+   p+MKvpLnPW+5Oto47i9YhHk/FXrg3HXpCXRFkmh2cL5iLZ4/YdW15U2QG
+   g==;
+X-CSE-ConnectionGUID: jWqhhuq5RhGZ7B+MzB90kg==
+X-CSE-MsgGUID: O1xhuSP7TYm6zrnXWMr0HA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11101"; a="14846470"
+X-IronPort-AV: E=Sophos;i="6.08,233,1712646000"; 
+   d="scan'208";a="14846470"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2024 07:47:41 -0700
+X-CSE-ConnectionGUID: lXJttGFaTCK21oTjZ4kGZw==
+X-CSE-MsgGUID: iGl843MOR66bAy93XUaE6w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,233,1712646000"; 
+   d="scan'208";a="44375086"
+Received: from aslawinx-mobl.ger.corp.intel.com (HELO [10.94.0.53]) ([10.94.0.53])
+  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2024 07:47:36 -0700
+Message-ID: <5be51e1f-70c9-4bbc-96fa-1e50e441bd35@linux.intel.com>
+Date: Wed, 12 Jun 2024 16:47:34 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <000000000000babbf8061aa113df@google.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v23 32/32] ASoC: doc: Add documentation for SOC USB
+Content-Language: en-US
+To: Wesley Cheng <quic_wcheng@quicinc.com>, srinivas.kandagatla@linaro.org,
+ mathias.nyman@intel.com, perex@perex.cz, conor+dt@kernel.org,
+ corbet@lwn.net, broonie@kernel.org, lgirdwood@gmail.com, krzk+dt@kernel.org,
+ Thinh.Nguyen@synopsys.com, bgoswami@quicinc.com, tiwai@suse.com,
+ robh@kernel.org, gregkh@linuxfoundation.org
+Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-sound@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, linux-doc@vger.kernel.org,
+ alsa-devel@alsa-project.org
+References: <20240610235808.22173-1-quic_wcheng@quicinc.com>
+ <20240610235808.22173-33-quic_wcheng@quicinc.com>
+From: =?UTF-8?Q?Amadeusz_S=C5=82awi=C5=84ski?=
+ <amadeuszx.slawinski@linux.intel.com>
+In-Reply-To: <20240610235808.22173-33-quic_wcheng@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Jun 11, 2024 at 11:03:03AM -0700, syzbot wrote:
-> Hello,
-> 
-> syzbot has tested the proposed patch and the reproducer did not trigger any issue:
-> 
-> Reported-and-tested-by: syzbot+5f996b83575ef4058638@syzkaller.appspotmail.com
-> 
-> Tested on:
-> 
-> commit:         8867bbd4 mm: arm64: Fix the out-of-bounds issue in con..
-> git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
-> console output: https://syzkaller.appspot.com/x/log.txt?x=14e092de980000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=3b4350cf56c61c80
-> dashboard link: https://syzkaller.appspot.com/bug?extid=5f996b83575ef4058638
-> compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-> userspace arch: arm64
-> patch:          https://syzkaller.appspot.com/x/patch.diff?x=137c697e980000
-> 
-> Note: testing is done by a robot and is best-effort only.
+On 6/11/2024 1:58 AM, Wesley Cheng wrote:
 
-Let's try Greg's suggestion to replace dev_err() with 
-dev_err_ratelimited().
+(...)
 
-Alan Stern
+> +In the case where the USB offload driver is unbounded, while USB SND is
 
-Index: usb-devel/drivers/usb/class/cdc-wdm.c
-===================================================================
---- usb-devel.orig/drivers/usb/class/cdc-wdm.c
-+++ usb-devel/drivers/usb/class/cdc-wdm.c
-@@ -266,14 +266,14 @@ static void wdm_int_callback(struct urb
- 			dev_err(&desc->intf->dev, "Stall on int endpoint\n");
- 			goto sw; /* halt is cleared in work */
- 		default:
--			dev_err(&desc->intf->dev,
-+			dev_err_ratelimited(&desc->intf->dev,
- 				"nonzero urb status received: %d\n", status);
- 			break;
- 		}
- 	}
- 
- 	if (urb->actual_length < sizeof(struct usb_cdc_notification)) {
--		dev_err(&desc->intf->dev, "wdm_int_callback - %d bytes\n",
-+		dev_err_ratelimited(&desc->intf->dev, "wdm_int_callback - %d bytes\n",
- 			urb->actual_length);
- 		goto exit;
- 	}
+unbounded -> unbound
+
+(...)
+
+> +SOC USB and USB Sound Kcontrols
+> +===============================
+> +Details
+> +-------
+> +SOC USB and USB sound expose a set of SND kcontrols for applications to select
+> +and fetch the current offloading status for the ASoC platform sound card. Kcontrols
+> +are split between two layers:
+> +
+> +	- USB sound - Notifies the sound card number for the ASoC platform sound
+> +	  card that it is registered to for supporting audio offload.
+> +
+> +	- SOC USB - Maintains the current status of the offload path, and device
+> +	  (USB sound card and PCM device) information.  This would be the main
+> +	  card that applications can read to determine offloading capabilities.
+> +
+> +Implementation
+> +--------------
+> +
+> +**Example:**
+> +
+> +  **Sound Cards**:
+> +
+> +	::
+> +
+> +	  0 [SM8250MTPWCD938]: sm8250 - SM8250-MTP-WCD9380-WSA8810-VA-D
+> +                     SM8250-MTP-WCD9380-WSA8810-VA-DMIC
+> +	  1 [C320M          ]: USB-Audio - Plantronics C320-M
+> +                     Plantronics Plantronics C320-M at usb-xhci-hcd.1.auto-1, full speed
+> +
+> +
+> +  **Platform Sound Card** - card#0:
+> +
+> +	::
+> +
+> +	  USB Offload Playback Route Card Select  1 (range -1->32)
+> +	  USB Offload Playback Route PCM Select   0 (range -1->255)
+> +	  USB Offload Playback Route Card Status  -1 (range -1->32)
+> +	  USB Offload Playback Route PCM Status   -1 (range -1->255)
+> +
+> +
+> +  **USB Sound Card** - card#1:
+> +
+> +	::
+> +
+> +	  USB Offload Playback Capable Card         0 (range -1->32)
+> +
+> +
+> +The platform sound card(card#0) kcontrols are created as part of adding the SOC
+> +USB device using **snd_soc_usb_add_port()**.  The following kcontrols are defined
+> +as:
+> +
+> +  - ``USB Offload Playback Route Card Status`` **(R)**: USB sound card device index
+> +    that defines which USB SND resources are currently offloaded.  If -1 is seen, it
+> +    signifies that offload is not active.
+> +  - ``USB Offload Playback Route PCM Status`` **(R)**: USB PCM device index
+> +    that defines which USB SND resources are currently offloaded.  If -1 is seen, it
+> +    signifies that offload is not active.
+> +  - ``USB Offload Playback Route Card Select`` **(R/W)**: USB sound card index which
+> +    selects the USB device to initiate offloading on.  If no value is written to the
+> +    kcontrol, then the last USB device discovered card index will be chosen.
+
+I see only one kcontrol, what if hardware is capable of offloading on 
+more cards, is it possible to do offloading on more than one device?
+
+> +  - ``USB Offload Playback Route PCM Select`` **(R/W)**: USB PCM index which selects
+> +    the USB device to initiate offloading on.  If no value is written to the
+> +    kcontrol, then the last USB device discovered PCM zero index will be chosen.
+> +
+> +The USB sound card(card#1) kcontrols are created as USB audio devices are plugged
+> +into the physical USB port and enumerated.  The kcontrols are defined as:
+> +
+> +  - ``USB Offload Playback Capable Card`` **(R)**: Provides the sound card
+> +    number/index that supports USB offloading.  Further/follow up queries about
+> +    the current offload state can be handled by reading the offload status
+> +    kcontrol exposed by the platform card.
+> +
+
+
+Why do we need to some magic between cards? I feel like whole kcontrol 
+thing is overengineered a bit - I'm not sure I understand the need to do 
+linking between cards. It would feel a lot simpler if USB card exposed 
+one "USB Offload" kcontrol on USB card if USB controller supports 
+offloading and allowed to set it to true/false to allow user to choose 
+if they want to do offloading on device.
+
+(...)
+> +Mixer Examples
+> +--------------
+> +
+> +	::
+> +
+> +	  tinymix -D 0 set 'USB Offload Playback Route Card Select' 2
+> +	  tinymix -D 0 set 'USB Offload Playback Route PCM Select' 0
+> +
+> +
+> +	::
+> +
+> +	  tinymix -D 0 get 'USB Offload Playback Route Card Select'
+> +	  --> 2 (range -1->32)
+> +	  tinymix -D 0 get 'USB Offload Playback Route PCM Select'
+> +	  --> 0 (range -1->255)
+> +
+> +	::
+> +
+> +	  tinymix -D 0 get 'USB Offload Playback Route Card Status'
+> +	  --> 2 (range -1->32)   [OFFLD active]
+> +	  --> -1 (range -1->32) [OFFLD idle]
+> +	  tinymix -D 0 get 'USB Offload Playback Route PCM Status'
+> +	  --> 0 (range -1->255)   [OFFLD active]
+> +	  --> -1 (range -1->255) [OFFLD idle]
+> +
+> +	::
+> +
+> +	  tinymix -D 1 get 'USB Offload Playback Capable Card'
+> +	  --> 0 (range -1->32)
+> 
+
+Yes, looking at examples again, I'm still not sure I understand. There 
+are two cards and you do linking between them, this feels broken by 
+design. From my point of view USB Offload should be property of USB card 
+and not involve any other card in a system.
 
 
