@@ -1,50 +1,50 @@
-Return-Path: <linux-usb+bounces-11177-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11178-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 923FE904D42
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 09:58:28 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 20039904D46
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 09:58:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3387F284435
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 07:58:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C90231F23B76
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 07:58:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47EBA16C862;
-	Wed, 12 Jun 2024 07:58:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AA9B16C856;
+	Wed, 12 Jun 2024 07:58:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="se3m/+I1"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="N1nWtVyq"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A95B816C6BE;
-	Wed, 12 Jun 2024 07:58:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1C8116B736;
+	Wed, 12 Jun 2024 07:58:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718179093; cv=none; b=ghtp/g1fqp40vcvTyPdFbf1vvjmnuXGSayMzQOvrWUAHdgM+YKGWGWvB5fTBwKveLdJiPqSe5O6yNIEfrj2rtbgm4BTJn451eK5ooHPRUKp4TM/8sDgCEp/j7AU/7A9TYN60BCiwTf8lI6cUKFuHD1UZQn2wrGa78hh5y5jDaOI=
+	t=1718179113; cv=none; b=RrvfCsDmCIOn3cPbNNmiURjadYoKgvIPgfjSMQUHZ05UdVNkgAJvVA+I1bL9x4A3KH5mbHAkTUF69Y/CJzPrk4MmqWsB5X+vG61JVaYheMTs5yuVV1bdhDI3w4XRr2lb+BGB20fyKDHfFuB17AkkHXj6J1KlQo/vgIARRNXip/Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718179093; c=relaxed/simple;
-	bh=OknuNNK6uKLrZGWMzcve3pAdEC6a+jZCzFuUAGM0Ipw=;
+	s=arc-20240116; t=1718179113; c=relaxed/simple;
+	bh=AID1zA96gkZSX2MHB5QKswBCGsVCtrNxcelcI+moxa4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Pu38KHQhGFmQVXT4mhyxH9a4nbkJUw2QZISJAMsybpSsSRRNY20Eq6sAF1P0XYzzUHODkXH/1050HfdALc8RpSQoXPLqCocJ2ghDtDuSgi/W5vJu0v0zZzWkeCYixBlwtROM1JMU6qRQprVvRotCIftMAcZnLsG77OUFsRYr8xc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=se3m/+I1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 201A9C3277B;
-	Wed, 12 Jun 2024 07:58:12 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=V3rhmt7oZdiXmr0AXmpWN5LG5YPrS6ju01Dz/bdmCoWapEEHvxNj+VYT92GQvmdsEBYaCS90wIz27CeeHWWe2zKeaLtRdf88VsySdqvDFONmfeNXqkoDV6G8Fye5riwSLOT6+/eBvln9gaB8VZAYVjAlnMeA+J4cvxsKuE9su7U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=N1nWtVyq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22E36C3277B;
+	Wed, 12 Jun 2024 07:58:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1718179093;
-	bh=OknuNNK6uKLrZGWMzcve3pAdEC6a+jZCzFuUAGM0Ipw=;
+	s=korg; t=1718179113;
+	bh=AID1zA96gkZSX2MHB5QKswBCGsVCtrNxcelcI+moxa4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=se3m/+I1/51CyWYewGMwD1WNe7WIJWRqspVpvn8k3yTPWa7WQvJSpkFjjUYsNx3s9
-	 2rDM1spM2i6oNdvCV6cHc8l7yevsUj1hAJ0DJUr+J8QtCRcmARc1zRkTMAHbS9bqn/
-	 veY/zAQtP7Nf+E3xMa+5BbTjj2eCA2+RMe5JBXsQ=
-Date: Wed, 12 Jun 2024 09:58:10 +0200
+	b=N1nWtVyqi3KkcPW53SNQFwQHL6iSykojhlPJboyfKMyj1JKiAU9V9fD+WgwKeQ90w
+	 F0RW7nIwz2arYXUOsOXik6LQ/EUfFC4m8q9/tWE3Xcn1HUgxmDbGQEspXtmE7pgcb2
+	 JPyxeqO5ujLWjSt2bO+MATeKXXeSP2FXmN97PhVg=
+Date: Wed, 12 Jun 2024 09:58:30 +0200
 From: Greg KH <gregkh@linuxfoundation.org>
 To: joswang <joswang1221@gmail.com>
 Cc: Thinh.Nguyen@synopsys.com, linux-usb@vger.kernel.org,
 	linux-kernel@vger.kernel.org, Jos Wang <joswang@lenovo.com>
 Subject: Re: [PATCH v3, 3/3] usb: dwc3: core: Workaround for CSR read timeout
-Message-ID: <2024061247-geranium-unstaffed-ff09@gregkh>
+Message-ID: <2024061219-reroute-strike-7230@gregkh>
 References: <20240601092646.52139-1-joswang1221@gmail.com>
  <20240611142953.12057-1-joswang1221@gmail.com>
 Precedence: bulk
@@ -82,7 +82,7 @@ On Tue, Jun 11, 2024 at 10:29:53PM +0800, joswang wrote:
 >  drivers/usb/dwc3/core.c | 20 +++++++++++++++++++-
 >  1 file changed, 19 insertions(+), 1 deletion(-)
 
-Should this have a cc: stable line?
+Where are patches 1/3 and 2/3 of this series?
 
 thanks,
 
