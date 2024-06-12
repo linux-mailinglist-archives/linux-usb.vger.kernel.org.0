@@ -1,128 +1,136 @@
-Return-Path: <linux-usb+bounces-11208-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11209-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A3B99055B9
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 16:50:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C04389055E3
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 16:55:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EBBF3B22BF2
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 14:50:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6B2441F26F35
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 14:55:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3C6A17F363;
-	Wed, 12 Jun 2024 14:50:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66FC617FAB5;
+	Wed, 12 Jun 2024 14:54:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ludUtzU7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NbuqYZ9r"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94D791DFC6;
-	Wed, 12 Jun 2024 14:50:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A820717F37B;
+	Wed, 12 Jun 2024 14:54:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718203812; cv=none; b=jrD3kCMYf0S6sOy7lVh3fxVYGqMshJBsGW1KNAwMn8Z+Bb2GIAf7In2eBLcDzzqXUUHs0dVqTVD3FNLNPipOTzXf6tNDI98R7KHZmA/pQEMHL1Fx5RkVd2xthtab6rah207yWZSddtL3x4JWD1SbFneqlLyTuUE3ke09egFMC7c=
+	t=1718204098; cv=none; b=r8JrWPQkxSpqcJoV+5umpXZPbyg2x3fm0DqED2fO+u+y1xol7i+0LtsszNMb0WZy44RzoaISX0/Mx3h9nggnmTrMuMctRU9PnSPfbqUr257GQwXXAbqMyYx3JZSDw+J5tQAXSMt+/MqdBy0F/mFIpML5BC+WESdVvG5tCKFxli8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718203812; c=relaxed/simple;
-	bh=A3ALZuSC7JFA7FKUWJ7dtEFKaiBbbWF3EU24yn8PEOM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=l3EnbwRBWyUicWBoImu5Kf4AujSwNxEM98bvPUl3zhhLB3xa72i44MzMfa2tdpNWdGfWe1EEgbQm81JYDwGxCbk2OUj95/eF+s1xtTSCpmu9NzQS1SctRPqImEuruhkM+Zgr0NdRbGtWa9VlNu5/yr81ImOsQJRSJCaNaP18sPs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ludUtzU7; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1718203811; x=1749739811;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=A3ALZuSC7JFA7FKUWJ7dtEFKaiBbbWF3EU24yn8PEOM=;
-  b=ludUtzU7LmTO+kSNJthOdS/BQde4iLc2wy8s+ObKl4kOgNgWqkoZFsZb
-   c8rLZFYEsIbq1bWB9uhOCDG5VS6ZYxiNrXeuNZRwcNPkQbIVsmmN9Y2OO
-   DgyA4JrgZWWnGRq7oHfX0UC94v79AV1VAqR6vTlExzrcbgUaernowYvek
-   u8mfqetKQMso/YxM6OznL77FvO0rIHvhWmAAB/tnca2QDhoHq1UzLnpbK
-   WPlut+tjhu5j/xkc6pNGJQTlBnSID1MwB72n1l9NdRcdt95OPEwPsQXwN
-   9k1fWiOUwWhmU/Yd+kIK3sf3iYfIbm0zCOnkUpc7heNJPimpM5pgOc06t
-   g==;
-X-CSE-ConnectionGUID: wIze13QBTKmuKkcdNb4mOQ==
-X-CSE-MsgGUID: krqLjsqNQrWDuIXnA7J2mA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11101"; a="25603908"
-X-IronPort-AV: E=Sophos;i="6.08,233,1712646000"; 
-   d="scan'208";a="25603908"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2024 07:50:09 -0700
-X-CSE-ConnectionGUID: sIB8IIaFR/u7dDoKj/j2Iw==
-X-CSE-MsgGUID: V8mahd+5QBSIdsk5KEyVLQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,233,1712646000"; 
-   d="scan'208";a="39925635"
-Received: from aslawinx-mobl.ger.corp.intel.com (HELO [10.94.0.53]) ([10.94.0.53])
-  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2024 07:50:04 -0700
-Message-ID: <80fefd6b-0f3a-4f6a-869e-fd2225315801@linux.intel.com>
-Date: Wed, 12 Jun 2024 16:50:01 +0200
+	s=arc-20240116; t=1718204098; c=relaxed/simple;
+	bh=TdnMRlY8eU1gITOGUrVoljnN7uigPURXsJ3psiHrBfs=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=AwiQSStsFQpFa61Tj3Fwni5SaVa5t+CYiMBhSbAqMeGzn4yvLP4rZ+w8PC1FtKXW79sGBONxWAgIwTz/brBMO0JDyhcNy17TPVSP2LR2bC7BDnYXgQhD9ZXadlWl9dE2FldeH3niwyKia2Bo1vSqRZ5OXZU3Vz6DYK9mupwXoxs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NbuqYZ9r; arc=none smtp.client-ip=209.85.215.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-6ce533b6409so1846922a12.1;
+        Wed, 12 Jun 2024 07:54:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1718204096; x=1718808896; darn=vger.kernel.org;
+        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=tfYwhTvzmupicsQsu7JIZ1FN+uaECXqcNKkkP1OPyAw=;
+        b=NbuqYZ9rIc9d42IeJzZy/HeQtj/uaP2xBw4s+fUjtYedLUDzjAPIm4Ywo173dwFZ87
+         QqLkp4GOcPfVMUDCkur0a04Ll9SOgMMf0JVN99jjWZUBcsq8eIDAkRQDRbP/bR2Qfdh+
+         9usFJUSmu9wxEPPY2iSTP66RN+qFuUT9dc9G2uzzY9LQUJvXrd4G8/FSgdfbQge/Ycw2
+         0FtUZbG/26NDhS83y+2VbQt75Cc9kkWvlCMabrUKWTzcqgh06PJJG1rdT/Cb+N4Wi4zy
+         qAw1gCYBGrsJkChml0p41a0cA3SbTyfMul8i0s++khAF6do9QHpekz6BnTy8HM6OLjpF
+         Pcig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718204096; x=1718808896;
+        h=references:in-reply-to:message-id:date:subject:cc:to:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tfYwhTvzmupicsQsu7JIZ1FN+uaECXqcNKkkP1OPyAw=;
+        b=N2ZxMOuH9dDHLBP7COduLRkOAZpBMCCb99GVzPoEV4TU2aWWT0iZY8mYEScmjvGaa/
+         HOzEjNfFdRjrV7i7Pqr6lhv+Yp9NMYBodcSCXr4CaAcL1nIzC8VJkwqf6/F4S8W4/iGC
+         a0Ja68+pMf2U5JZ6LYvl6GycUhsvzuhvAmuTMIE0PU8y6aRiPHLazoDp8jhrPkpw9jtO
+         oxmh4PwLTixbV2aBN8gkkMA9mAOd62y9p0TqLkpXARViCSFcxykfThbAheWfuzGXxuUn
+         hvm9RZFhExoAfZrH/dZ/htDcalt/5WgwwoHzwyJUIvkXxbSt5/oM0a4ofU2PfJkcyD3p
+         uCDg==
+X-Forwarded-Encrypted: i=1; AJvYcCVdVydRwGBckEs57d5yyhTG0q5ACZ6TSi8QsRpKlN0LranXoy2Eq0ed3OAV+IPs2tEm9jslz4lD+Op+mAvW2/Hw64QEgosCcjyW/kpKT4r3c5viYMCyyxznEhj6HEnu+RKrf2v5teV2HC5ApAzWCiaL1SiWaXzhiEmOpWahnF9PZD4PqA==
+X-Gm-Message-State: AOJu0Yy2YN52vzn0kbSfanYCbc/Ppc5+Ep4A6IEHTSOd29cargfn/pEy
+	yy/s69FJwAvb2nl/W3wb66W1PXSxAtQ0nYQLD38BMKnM2uxaZkhQ
+X-Google-Smtp-Source: AGHT+IGWUPYM8K3Nnkcka/I8nD/MNSiEar2GaXIc7pu/h7PPkdh9SKZwgNksERpTNh6mAOSYvrCRhg==
+X-Received: by 2002:a17:90b:2242:b0:2c3:13dd:fe56 with SMTP id 98e67ed59e1d1-2c4a7629b14mr2214108a91.19.1718204095871;
+        Wed, 12 Jun 2024 07:54:55 -0700 (PDT)
+Received: from localhost ([113.143.197.225])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c4a76d391esm1856733a91.57.2024.06.12.07.54.54
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 12 Jun 2024 07:54:55 -0700 (PDT)
+From: joswang <joswang1221@gmail.com>
+To: robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org
+Cc: Thinh.Nguyen@synopsys.com,
+	gregkh@linuxfoundation.org,
+	balbi@kernel.org,
+	linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Jos Wang <joswang@lenovo.com>
+Subject: [PATCH v3, 1/3] dt-bindings: usb: dwc3: Add snps,p2p3tranok quirk
+Date: Wed, 12 Jun 2024 22:54:48 +0800
+Message-Id: <20240612145448.2614-1-joswang1221@gmail.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20240601092646.52139-1-joswang1221@gmail.com>
+References: <20240601092646.52139-1-joswang1221@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v23 00/32] Introduce QC USB SND audio offloading support
-Content-Language: en-US
-To: Wesley Cheng <quic_wcheng@quicinc.com>, srinivas.kandagatla@linaro.org,
- mathias.nyman@intel.com, perex@perex.cz, conor+dt@kernel.org,
- corbet@lwn.net, broonie@kernel.org, lgirdwood@gmail.com, krzk+dt@kernel.org,
- Thinh.Nguyen@synopsys.com, bgoswami@quicinc.com, tiwai@suse.com,
- robh@kernel.org, gregkh@linuxfoundation.org
-Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
- linux-sound@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, linux-doc@vger.kernel.org,
- alsa-devel@alsa-project.org
-References: <20240610235808.22173-1-quic_wcheng@quicinc.com>
-From: =?UTF-8?Q?Amadeusz_S=C5=82awi=C5=84ski?=
- <amadeuszx.slawinski@linux.intel.com>
-In-Reply-To: <20240610235808.22173-1-quic_wcheng@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-On 6/11/2024 1:57 AM, Wesley Cheng wrote:
+From: Jos Wang <joswang@lenovo.com>
 
-> Wesley Cheng (32):
->    ASoC: Add SOC USB APIs for adding an USB backend
->    ASoC: dt-bindings: qcom,q6dsp-lpass-ports: Add USB_RX port
->    ASoC: qcom: qdsp6: Introduce USB AFE port to q6dsp
->    ASoC: qdsp6: q6afe: Increase APR timeout
->    ASoC: qcom: qdsp6: Add USB backend ASoC driver for Q6
->    ALSA: usb-audio: Introduce USB SND platform op callbacks
->    ALSA: usb-audio: Export USB SND APIs for modules
->    ALSA: usb-audio: Save UAC sample size information
->    usb: dwc3: Specify maximum number of XHCI interrupters
->    usb: host: xhci-plat: Set XHCI max interrupters if property is present
->    ALSA: usb-audio: qcom: Add USB QMI definitions
->    ALSA: usb-audio: qcom: Introduce QC USB SND offloading support
->    ALSA: usb-audio: Check for support for requested audio format
->    ASoC: usb: Add PCM format check API for USB backend
->    ASoC: qcom: qdsp6: Ensure PCM format is supported by USB audio device
->    ALSA: usb-audio: Prevent starting of audio stream if in use
->    ALSA: usb-audio: Do not allow USB offload path if PCM device is in use
->    ASoC: dt-bindings: Update example for enabling USB offload on SM8250
->    ALSA: usb-audio: qcom: Populate PCM and USB chip information
->    ASoC: qcom: qdsp6: Add support to track available USB PCM devices
->    ASoC: Introduce SND kcontrols to select sound card and PCM device
->    ASoC: qcom: qdsp6: Add SOC USB offload select get/put callbacks
->    ASoC: Introduce SND kcontrols to track USB offloading state
->    ASoC: qcom: qdsp6: Add PCM ops to track current state
->    ASoC: usb: Create SOC USB SND jack kcontrol
->    ASoC: qcom: qdsp6: Add headphone jack for offload connection status
->    ASoC: usb: Fetch ASoC sound card information
->    ALSA: usb-audio: Add USB offloading capable kcontrol
->    ALSA: usb-audio: Allow for rediscovery of connected USB SND devices
->    ALSA: usb-audio: qcom: Use card and PCM index from QMI request
->    ASoC: usb: Rediscover USB SND devices on USB port add
->    ASoC: doc: Add documentation for SOC USB
+There is an issue with the DWC31 2.00a and earlier versions
+where the controller link power state transition from
+P3/P3CPM/P4 to P2 may take longer than expected, ultimately
+resulting in the hibernation D3 entering time exceeding the
+expected 10ms.
 
-I'm not sure how other reviewers feel about this, but is there any 
-chance to group patches in some logical order? It is bit hard to review 
-when I need to jump from generic ALSA to ASoC then QCOM code and then 
-there are dt-bindings mixed in between and back again.
+Add a new 'snps,p2p3tranok-quirk' DT quirk to dwc3 core
+for enable the controller transitions directly from phy
+power state P2 to P3 or from state P3 to P2.
+
+Note that this can only be set if the USB3 PHY supports
+direct p3 to p2 or p2 to p3 conversion.
+
+Signed-off-by: Jos Wang <joswang@lenovo.com>
+---
+v1 -> v2:
+- v1 did not add this PATCH
+v2 -> v3:
+- modify Author Jos Wang
+---
+ Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+index 1cd0ca90127d..721927495887 100644
+--- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
++++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+@@ -242,6 +242,13 @@ properties:
+       When set, all HighSpeed bus instances in park mode are disabled.
+     type: boolean
+ 
++  snps,p2p3tranok-quirk:
++    description:
++      When set, the controller transitions directly from phy power state
++      P2 to P3 or from state P3 to P2. Note that this can only be set
++      if the USB3 PHY supports direct p3 to p2 or p2 to p3 conversion.
++    type: boolean
++
+   snps,dis_metastability_quirk:
+     description:
+       When set, disable metastability workaround. CAUTION! Use only if you are
+-- 
+2.17.1
+
 
