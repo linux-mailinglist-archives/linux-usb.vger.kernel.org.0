@@ -1,201 +1,121 @@
-Return-Path: <linux-usb+bounces-11166-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11167-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2D1C9049EA
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 06:20:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AFCA8904A37
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 06:48:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 329D51F230CC
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 04:20:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A8B4C1C23C07
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2024 04:48:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D372221360;
-	Wed, 12 Jun 2024 04:20:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DC01286A8;
+	Wed, 12 Jun 2024 04:48:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="YjsDia+M"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-io1-f77.google.com (mail-io1-f77.google.com [209.85.166.77])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8E79179B7
-	for <linux-usb@vger.kernel.org>; Wed, 12 Jun 2024 04:20:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.77
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA691224C9
+	for <linux-usb@vger.kernel.org>; Wed, 12 Jun 2024 04:48:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718166033; cv=none; b=aU5NfOU9CtVI+AVGeApXaLG/AGBY6AdHYiPLVjxqyl+X8W71wS6GZsGqfwU7FmcVL4DP9i3MR5WflIZ+fKDwUidtUzea+2H7dqRhpPV4gkfLGwArl+tmeJuEqp+8EbJxMWZdFqPiz41/dXxX6Ni6ewDOjY7irmHW3bNN9TvPiXk=
+	t=1718167710; cv=none; b=QRAmzXi+syGnSsuDPtnDAo+kDVr85E3d7kgGae/EFTBScrugfSt5x7OGZ27pWgH/zCxmJnK6eJEKI0hcnNu9FKrsUX2WSt1lR1ZUylg8JvurqfVYZzb9qgoOH6oqPLjPxMNeK16AJeyRmi/eo7V9MwhA80/LrTT9Negf23UUYe8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718166033; c=relaxed/simple;
-	bh=GctkiOdVRpfP7LUutwUwpfgSAb/wlxs4NY6m/Ij4VrI=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=oKBEkPdyeFkyO9Uf6/uFOmpexTnnjPaneDiSmkYj8XTnv+05QqAHtvpRs/7qen57GEOT1sSHfFUF5cIQGcj8JOarlw3r26w0zDA8E+Yh9wZt6XoZegThzDeP+WuL5nrbxFq98tjRYr9UUP3BYOQ3OnCKL+NPmbAm5r4O70Z1dsQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.77
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f77.google.com with SMTP id ca18e2360f4ac-7e94cac3c71so722495039f.2
-        for <linux-usb@vger.kernel.org>; Tue, 11 Jun 2024 21:20:31 -0700 (PDT)
+	s=arc-20240116; t=1718167710; c=relaxed/simple;
+	bh=uN30+iX5HS6j0Alppcs0vu8flXzHQALuudsUtjcgloQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jlnTWzAuTz2J/l69MaGYOGFyRAwztcrl0uiXL4RaDoe+VMQ3e2PUqW458SH4AHPYtRl1sh9ZVPLw7hq/sCbEJHz4R29ZJcKoGbytq8Ajm6W1B0Ld6WKEAmZM1BM808LcrO0FlagC68oWKT6gk1mreaak0jzuemBYABLLTzgrSpw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=YjsDia+M; arc=none smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1f7274a453bso17839985ad.2
+        for <linux-usb@vger.kernel.org>; Tue, 11 Jun 2024 21:48:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1718167708; x=1718772508; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=1qYwyTzuhCwYdAhfUrXP4v1Mpi8PB2fy3oQFcPcQ+CI=;
+        b=YjsDia+May9JSw0JF1XHBnw8i6wegczxMVo3R52euItHWCwKaj9ac41Fo1ficLCTgo
+         4YhnPTJFQUrUONJmqjVSXpMPrfuM8sericRU607BZX1NldQKYLBwGU32ahIJCZx/0G/L
+         yHLcjN9jKv/ByotsDADX9vnkJsyY1rZoFTroY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718166031; x=1718770831;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dnEcZQSlSSfWGLe3U4JPeUiGUJ9V4peTlbScVRNrxNs=;
-        b=g5khj+oxI0nsf7WNi98X5xDVFoUbxPEQKWR7D5AdOY4XP79dwjcSz5ZavBUwR2oY8V
-         4sE4QgtDn4hr3ViqyxSc9epOidI2LZka25gy7bmxAkZVrOGSC85ZuDvDLzHjvWlC5VwG
-         TV3zGnqWR7cmyULkgTRT9paAor2w5FQ2S7FVk4yzGF039ciB5LujLr9Z/GnBpXnuoxFt
-         KadtCpcPIk7pZGNGoRev4+DSsswxJBWMaUnFoYH80LD36p/vJyUP7nrflOOogzWR8Qke
-         AWPgKWFBH56O2kFFqwSymH2f6BDyntEmZL8o9rwkmx7/orxGD7Aq/JRkO+tiESt1L7FL
-         Q1TA==
-X-Forwarded-Encrypted: i=1; AJvYcCV/x9NYwi5v8ukblnFaFjMwTWlBwd/uF/Df3lSvq9kauYGx+GK1J2xMbv3JYMm1LJ07xBh3CLgvcFYBN8TW+TuUMHiOeT8ok3v8
-X-Gm-Message-State: AOJu0YwqZpSn8zeI/4fikM3VPFhRThlKP/wSAjVaCD8XhDxOjyNLYSPc
-	eSBAg6KCLnKvYeriv1NU6PYquGXxDS1+YG0MoBpWscUY3u74678XmfY5Jw+YNhHhq31X1xIj/Qb
-	PlIDJmb6naDfTBsyqdPSudpcnjUVSFHKqd7uhcJNoO0a2Es/TRT5s5/M=
-X-Google-Smtp-Source: AGHT+IFkTHvhhUdoUr2ZTibKNN6lcj7J6RVdaWsARGNYjEPc/B+AzfjC6+2yOQ4dNQPTLPLLJ81bK6hiZ5Ht25sDs/lEC7M/Z4TX
+        d=1e100.net; s=20230601; t=1718167708; x=1718772508;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1qYwyTzuhCwYdAhfUrXP4v1Mpi8PB2fy3oQFcPcQ+CI=;
+        b=gkHvDZkbYcdB28hCmyg7ZLK+cQPAUJDILrdO1W08fsjH4w8V9lRzQqpjwqGLVYlmi8
+         Rx0kesZWP8hk3HSCWra0TdA9qlmw0cOKMgDBuuQqD+SPkGpqPNdbVmuDJ68qmJlOj/oi
+         61wn0Ldw4UAE0BEXj1HZdtQv7fdiKi4YQK66qPrI9gkmEHNfBltQcdlNGau5vouFCkAs
+         eTYvFtZyPZhXtyls/7HU88KWdvvDWaiIBgqqDZoAApTgKV4Bu5tcv4ZAQn5+He5NvE4o
+         1iE16vr1nTXrRgiRxnocLlDuhtpEXE1sqTM7X6nwzH4NUoLzhLgaQDxphCkoTahdy2f/
+         mXWw==
+X-Forwarded-Encrypted: i=1; AJvYcCXD9X9/haKFSjVRG14W4hEO/aOmIFbfaIedg0cDX4JzUqCK3e2i0pq5lhejkSSAV8ugu0JUVAzFUGTKizPvcFYYVEkwldvfXh5Z
+X-Gm-Message-State: AOJu0YyIxhSA4oSxb89lj5pGezqFIajwPXBc8jowmXBmsiFGTyCYlxki
+	xScItpf2YIRXu2qEJqYHTl1UDhwKG0q7RSlV5/KXkYHp8c94OBYAZ7FLpAsJHg==
+X-Google-Smtp-Source: AGHT+IHa7syXHI3rg/TDkmLHd/W/wad2Ic6mZcgQXhfvS6L1vWlzXJEt3fg9ITGX4GY3sGg8jzRMBw==
+X-Received: by 2002:a17:902:ce8d:b0:1f6:3b15:82a0 with SMTP id d9443c01a7336-1f83b71650amr9861365ad.64.1718167707882;
+        Tue, 11 Jun 2024 21:48:27 -0700 (PDT)
+Received: from rekanorman3.syd.corp.google.com ([2401:fa00:9:14:58af:8c3:44cb:ad1b])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f6bd7e5cc4sm114479215ad.235.2024.06.11.21.48.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jun 2024 21:48:27 -0700 (PDT)
+From: Reka Norman <rekanorman@chromium.org>
+To: Mathias Nyman <mathias.nyman@intel.com>
+Cc: Reka Norman <rekanorman@chromium.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: [PATCH] xhci: Apply XHCI_RESET_TO_DEFAULT quirk to TGL
+Date: Wed, 12 Jun 2024 14:47:38 +1000
+Message-ID: <20240612044759.3193928-1-rekanorman@chromium.org>
+X-Mailer: git-send-email 2.45.2.505.gda0bf45e8d-goog
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:8414:b0:4b9:13c9:b0fb with SMTP id
- 8926c6da1cb9f-4b93eef52camr57346173.5.1718166031186; Tue, 11 Jun 2024
- 21:20:31 -0700 (PDT)
-Date: Tue, 11 Jun 2024 21:20:31 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000f45085061aa9b37e@google.com>
-Subject: [syzbot] [bluetooth?] [usb?] BUG: soft lockup in hci_cmd_timeout
-From: syzbot <syzbot+1b2abad17596ad03dcff@syzkaller.appspotmail.com>
-To: johan.hedberg@gmail.com, linux-bluetooth@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, luiz.dentz@gmail.com, 
-	marcel@holtmann.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-Hello,
+TGL systems have the same issue as ADL, where a large boot firmware
+delay is seen if USB ports are left in U3 at shutdown. So apply the
+XHCI_RESET_TO_DEFAULT quirk to TGL as well.
 
-syzbot found the following issue on:
+The issue it fixes is a ~20s boot time delay when booting from S5. It
+affects TGL devices, and TGL support was added starting from v5.3.
 
-HEAD commit:    8867bbd4a056 mm: arm64: Fix the out-of-bounds issue in con..
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=112ad20a980000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3b4350cf56c61c80
-dashboard link: https://syzkaller.appspot.com/bug?extid=1b2abad17596ad03dcff
-compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1112d2ce980000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12c37286980000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/6ea21f50498b/disk-8867bbd4.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/e2fed09364aa/vmlinux-8867bbd4.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/4860173c7a18/Image-8867bbd4.gz.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+1b2abad17596ad03dcff@syzkaller.appspotmail.com
-
-cdc_wdm 1-1:1.0: nonzero urb status received: -71
-cdc_wdm 1-1:1.0: wdm_int_callback - 0 bytes
-cdc_wdm 1-1:1.0: nonzero urb status received: -71
-cdc_wdm 1-1:1.0: wdm_int_callback - 0 bytes
-watchdog: BUG: soft lockup - CPU#0 stuck for 27s! [kworker/u9:2:6293]
-CPU#0 Utilization every 4s during lockup:
-	#1:  97% system,	  1% softirq,	  4% hardirq,	  0% idle
-	#2:  98% system,	  1% softirq,	  3% hardirq,	  0% idle
-	#3:  97% system,	  0% softirq,	  3% hardirq,	  0% idle
-	#4:  98% system,	  1% softirq,	  3% hardirq,	  0% idle
-	#5:  98% system,	  1% softirq,	  3% hardirq,	  0% idle
-Modules linked in:
-irq event stamp: 150196
-hardirqs last  enabled at (150195): [<ffff80008037bc00>] console_emit_next_record kernel/printk/printk.c:2935 [inline]
-hardirqs last  enabled at (150195): [<ffff80008037bc00>] console_flush_all+0x650/0xb74 kernel/printk/printk.c:2994
-hardirqs last disabled at (150196): [<ffff80008af10b00>] __el1_irq arch/arm64/kernel/entry-common.c:533 [inline]
-hardirqs last disabled at (150196): [<ffff80008af10b00>] el1_interrupt+0x24/0x68 arch/arm64/kernel/entry-common.c:551
-softirqs last  enabled at (150190): [<ffff8000801ea530>] softirq_handle_end kernel/softirq.c:400 [inline]
-softirqs last  enabled at (150190): [<ffff8000801ea530>] handle_softirqs+0xa60/0xc34 kernel/softirq.c:582
-softirqs last disabled at (150185): [<ffff800080020de8>] __do_softirq+0x14/0x20 kernel/softirq.c:588
-CPU: 0 PID: 6293 Comm: kworker/u9:2 Tainted: G        W          6.10.0-rc2-syzkaller-g8867bbd4a056 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/02/2024
-Workqueue: hci0 hci_cmd_timeout
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __daif_local_irq_restore arch/arm64/include/asm/irqflags.h:176 [inline]
-pc : arch_local_irq_restore arch/arm64/include/asm/irqflags.h:195 [inline]
-pc : console_emit_next_record kernel/printk/printk.c:2935 [inline]
-pc : console_flush_all+0x67c/0xb74 kernel/printk/printk.c:2994
-lr : console_emit_next_record kernel/printk/printk.c:2935 [inline]
-lr : console_flush_all+0x678/0xb74 kernel/printk/printk.c:2994
-sp : ffff8000993f7360
-x29: ffff8000993f7460 x28: ffff8000993f7510 x27: 0000000000000001
-x26: ffff80009090b530 x25: ffff80009090b520 x24: dfff800000000000
-x23: 1ffff000121216af x22: dfff800000000000 x21: ffff80009090b578
-x20: 0000000000000000 x19: 00000000000000c0 x18: ffff8000993f7298
-x17: 6965636572207375 x16: ffff80008033878c x15: 0000000000000001
-x14: 1ffff00011e379c8 x13: 0000000000000000 x12: 0000000000000003
-x11: 0000000000000001 x10: 0000000000ff0100 x9 : 0000000000000000
-x8 : ffff0000d3a39e40 x7 : ffff800080381d44 x6 : 0000000000000000
-x5 : 0000000000000001 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000006 x1 : 0000000000000080 x0 : 0000000000000000
-Call trace:
- __daif_local_irq_restore arch/arm64/include/asm/irqflags.h:175 [inline]
- arch_local_irq_restore arch/arm64/include/asm/irqflags.h:195 [inline]
- console_emit_next_record kernel/printk/printk.c:2935 [inline]
- console_flush_all+0x67c/0xb74 kernel/printk/printk.c:2994
- console_unlock+0xec/0x3d4 kernel/printk/printk.c:3063
- vprintk_emit+0x1ec/0x350 kernel/printk/printk.c:2345
- vprintk_default+0xa0/0xe4 kernel/printk/printk.c:2360
- vprintk+0x200/0x2d4 kernel/printk/printk_safe.c:45
- _printk+0xdc/0x128 kernel/printk/printk.c:2370
- bt_err+0xfc/0x144 net/bluetooth/lib.c:296
- hci_cmd_timeout+0xd8/0x1cc net/bluetooth/hci_core.c:1528
- process_one_work+0x7b0/0x15e8 kernel/workqueue.c:3231
- process_scheduled_works kernel/workqueue.c:3312 [inline]
- worker_thread+0x938/0xef4 kernel/workqueue.c:3393
- kthread+0x288/0x310 kernel/kthread.c:389
- ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:860
-Sending NMI from CPU 0 to CPUs 1:
-NMI backtrace for cpu 1
-CPU: 1 PID: 0 Comm: swapper/1 Tainted: G        W          6.10.0-rc2-syzkaller-g8867bbd4a056 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/02/2024
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : arch_local_irq_enable+0x8/0xc arch/arm64/include/asm/irqflags.h:50
-lr : default_idle_call+0xf8/0x128 kernel/sched/idle.c:124
-sp : ffff800093e97d10
-x29: ffff800093e97d10 x28: dfff800000000000 x27: 1ffff000127d2fb0
-x26: ffff80008efed000 x25: 0000000000000000 x24: 0000000000000002
-x23: 1ffff00011dfdaad x22: ffff80008efed568 x21: 0000000000000000
-x20: ffff0000c1b70000 x19: ffff8000802e6e08 x18: 1fffe000367b6bde
-x17: ffff80008efed000 x16: ffff8000802e66cc x15: 0000000000000001
-x14: 1fffe000367b8941 x13: 0000000000000000 x12: 0000000000000003
-x11: 0000000000000001 x10: 0000000000000003 x9 : 0000000000000000
-x8 : 00000000000b17a9 x7 : ffff80008047f238 x6 : 0000000000000000
-x5 : 0000000000000001 x4 : 0000000000000001 x3 : ffff80008af14fe8
-x2 : 0000000000000000 x1 : ffff80008b0900a0 x0 : ffff800124e80000
-Call trace:
- __daif_local_irq_enable arch/arm64/include/asm/irqflags.h:26 [inline]
- arch_local_irq_enable+0x8/0xc arch/arm64/include/asm/irqflags.h:48
- cpuidle_idle_call kernel/sched/idle.c:191 [inline]
- do_idle+0x1f0/0x4e4 kernel/sched/idle.c:332
- cpu_startup_entry+0x5c/0x74 kernel/sched/idle.c:430
- secondary_start_kernel+0x1bc/0x1e4 arch/arm64/kernel/smp.c:279
- __secondary_switched+0xb8/0xbc arch/arm64/kernel/head.S:417
-
-
+Signed-off-by: Reka Norman <rekanorman@chromium.org>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+ drivers/usb/host/xhci-pci.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
+diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+index c040d816e626..137bd3da1128 100644
+--- a/drivers/usb/host/xhci-pci.c
++++ b/drivers/usb/host/xhci-pci.c
+@@ -49,6 +49,7 @@
+ #define PCI_DEVICE_ID_INTEL_DENVERTON_XHCI		0x19d0
+ #define PCI_DEVICE_ID_INTEL_ICE_LAKE_XHCI		0x8a13
+ #define PCI_DEVICE_ID_INTEL_TIGER_LAKE_XHCI		0x9a13
++#define PCI_DEVICE_ID_INTEL_TIGER_LAKE_PCH_XHCI		0xa0ed
+ #define PCI_DEVICE_ID_INTEL_COMET_LAKE_XHCI		0xa3af
+ #define PCI_DEVICE_ID_INTEL_ALDER_LAKE_PCH_XHCI		0x51ed
+ #define PCI_DEVICE_ID_INTEL_ALDER_LAKE_N_PCH_XHCI	0x54ed
+@@ -372,7 +373,8 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
+ 		xhci->quirks |= XHCI_MISSING_CAS;
+ 
+ 	if (pdev->vendor == PCI_VENDOR_ID_INTEL &&
+-	    (pdev->device == PCI_DEVICE_ID_INTEL_ALDER_LAKE_PCH_XHCI ||
++	    (pdev->device == PCI_DEVICE_ID_INTEL_TIGER_LAKE_PCH_XHCI ||
++	     pdev->device == PCI_DEVICE_ID_INTEL_ALDER_LAKE_PCH_XHCI ||
+ 	     pdev->device == PCI_DEVICE_ID_INTEL_ALDER_LAKE_N_PCH_XHCI))
+ 		xhci->quirks |= XHCI_RESET_TO_DEFAULT;
+ 
+-- 
+2.45.2.505.gda0bf45e8d-goog
 
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
 
