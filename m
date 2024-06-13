@@ -1,92 +1,89 @@
-Return-Path: <linux-usb+bounces-11247-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11248-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D80FC90617C
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2024 04:00:40 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 08ECD9062CD
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2024 05:40:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0A4A91C217F5
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2024 02:00:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F3538B2344F
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2024 03:40:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4FD62AD0F;
-	Thu, 13 Jun 2024 02:00:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="flf80hdQ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEAD113440F;
+	Thu, 13 Jun 2024 03:40:05 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6474A182D2;
-	Thu, 13 Jun 2024 02:00:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BC0E133993
+	for <linux-usb@vger.kernel.org>; Thu, 13 Jun 2024 03:40:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718244031; cv=none; b=LVCP15lg/q6q1qFJ+z3FUJLwiZ+jrBA42WmOJ75lv2D9kaWtfB9AV0nkMLrgB9iOa7nqQXwZvZyjXuKGMwgf3P7a4HH/4VWXozhy5d31ZOX4mohc3raoaJuG97cX43Dh8XYCdQ3h88iOaVwsvhtwqWkBIvre5PF9+2RbTkC6x8Q=
+	t=1718250005; cv=none; b=Ucl8tKKsdPpAXxpQ7GJ0Y2jP3aSPaff7Z8nlP+mhZtjozdO08RjFrTa+4hntRYSpEcKT2GhciIc0s5gR+5BXY/dm0a/uP/kgSJRHK+WFAxnFFzmtKJwtFMqj2hoAk5FPbK315VNviiD2+WnF23SLdRKa++XdmCDXtDIKr6B6tl0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718244031; c=relaxed/simple;
-	bh=AHORsZ2XbgOLg/SYaRcgeXCqV/NnLh27EdS+OTnGA3M=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=qI03QRgRQgccimwySs94Kj9wAECL1hKhSBn9lrirmHmtCBd0eM2+dOSwg+ybBHuBz1PEnnK4zZsdVGLn8Xx3wznkU309i6iGBlMzXEqETvNbfQmd0snaN0bekAoQ1WC7kCe7tQkbVbhc/jxoG0zEVeRha9oShItWEK3XYhk4AXk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=flf80hdQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E56D0C4AF60;
-	Thu, 13 Jun 2024 02:00:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718244030;
-	bh=AHORsZ2XbgOLg/SYaRcgeXCqV/NnLh27EdS+OTnGA3M=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=flf80hdQwhhRq1NT1/OwAzpRtabI/tyjvdHQtfW+PAiXlPXRjCSpDu4WkwoDA+3kz
-	 tFhfGiRJahlrPOHel0WMcWwKHNhXb9jK1DWqqpbJCbFb1QHlwsr1dg12wxCtGPa/L+
-	 Wrmf1bYFONOfA25xWr5kRNPT6htyWhlp5hBrr3QHlMhPWtu09pHd81UwuTyOG4lbkb
-	 Nc9i7o+ZozUHHWkXtNzURSpId9yLYS6mUG0/kKhYsZTF1sj0P6HFVERfIAy7LxA821
-	 P31bTE11v414xgxopH8ZrycV94P8+BoLyOGDfKOAxnSn8LgikWf3xsB4WyFI4KfPHV
-	 Rna+EoTr/LwMQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DCD14C43616;
-	Thu, 13 Jun 2024 02:00:30 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1718250005; c=relaxed/simple;
+	bh=U8wfKXZ6dXDuTnGtLn+oGkITmPDjqSK9YVtUdYEmccw=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=CSmv4yP4G7u/YZqmM3icR/cFT/qIi9wBTcGp+wjLGO+7HJp3rkkDSvcKirIm4ewA55Fxn2r7HgH1HVxxrAuWyb2RA1yMmdg37JuG/WDd1XGNb5m/fjotNVyeL8qQIrm/x/06lbfrpepyo2rpTUJi5LqJtKjLB9LQ/sPgDKyojN0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-37596e877e9so5966685ab.3
+        for <linux-usb@vger.kernel.org>; Wed, 12 Jun 2024 20:40:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718250003; x=1718854803;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Gwf8U+aeM/znZoLJ/KePv4osrbUt6PFY/I+1iIJ7DYw=;
+        b=kDGQwoeKYaIG7kSafbZyM4XfZ0evkm5a8yfnVRAl+oIU/tlEfU78XP1HH3sCcEOm2l
+         r5UOmL6TkuBooSxZfhpPOYl2uCV8bP1J4VmnvraVD4LrlmGrBQHz/TMajh4OX2EdvIt4
+         oUvjJwzl2Ss+4Q/Ey5DQTHiY11an6XpMw3fER6Lw8zTEBcMff82QR3yOClVRbmPfGuB+
+         mIQIwRoOfUvf01Jqx+V1Mfvwpo37pZstOXg3gd5i2fXYH2yOOpAo7F3qIItQzFRQPLLM
+         2D+MUuSQnCUh7F+Ti2aJB/51WrzS3LdLE8qbS4nEUh0H+N+09y6Ae+HsHY4l0PiTrZH5
+         SuOA==
+X-Forwarded-Encrypted: i=1; AJvYcCWXS2aVIq7ZechhMBwCRAuzSmfS4FPbCQCwYlOomOh5YrcR+5JixVxN6kWVPIq/MCqa7ZZjJC/FC6p4p+bPJDRvSgzQ3Oh/e18Q
+X-Gm-Message-State: AOJu0Yy+mQCZqnHeZAZWI6c5FmM/5J21xSTI0ovP8mGneWUjuebpgx/V
+	PR+WR+2Qv6g0ZZeMiQXbUJB0jaD2QZvD2Hv0L5oFV4u9ta/enh/5Oeur4zGIv7uqhLy40QbBGkb
+	ybpaqDoBqy1XXVrE/OH9Wv0VY8afreAwYiYIyUStzQgr4vNbQGC33gG0=
+X-Google-Smtp-Source: AGHT+IE2dSvCixNi5QNUPAzHQTktaN00DZRyly7IMMNum1otnzGQYkd70dFBmlq6wef7VaY+UUAJd0mRwmJPGOVhu/1ngJbXFG3n
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] CDC-NCM: add support for Apple's private interface
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <171824403090.29575.17232138329645868339.git-patchwork-notify@kernel.org>
-Date: Thu, 13 Jun 2024 02:00:30 +0000
-References: <20240607074117.31322-1-oleavr@frida.re>
-In-Reply-To: <20240607074117.31322-1-oleavr@frida.re>
-To: =?utf-8?b?T2xlIEFuZHLDqSBWYWRsYSBSYXZuw6VzIDxvbGVhdnJAZnJpZGEucmU+?=@codeaurora.org
-Cc: linux-usb@vger.kernel.org, havard@hsorbo.no, oliver@neukum.org,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Received: by 2002:a92:c54a:0:b0:375:88ec:810d with SMTP id
+ e9e14a558f8ab-375cd238b0fmr2195325ab.5.1718250003518; Wed, 12 Jun 2024
+ 20:40:03 -0700 (PDT)
+Date: Wed, 12 Jun 2024 20:40:03 -0700
+In-Reply-To: <871507d8-b4ff-4af8-8bba-9a3149c41e8a@rowland.harvard.edu>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000186749061abd412c@google.com>
+Subject: Re: [syzbot] [usb?] INFO: rcu detected stall in raw_ioctl
+From: syzbot <syzbot+5f996b83575ef4058638@syzkaller.appspotmail.com>
+To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, stern@rowland.harvard.edu, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-Hello:
+Hello,
 
-This patch was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-On Fri,  7 Jun 2024 09:40:17 +0200 you wrote:
-> Available on iOS/iPadOS >= 17, where this new interface is used by
-> developer tools using the new RemoteXPC protocol.
-> 
-> This private interface lacks a status endpoint, presumably because there
-> isn't a physical cable that can be unplugged, nor any speed changes to
-> be notified about.
-> 
-> [...]
+Reported-and-tested-by: syzbot+5f996b83575ef4058638@syzkaller.appspotmail.com
 
-Here is the summary with links:
-  - CDC-NCM: add support for Apple's private interface
-    https://git.kernel.org/netdev/net-next/c/3ec8d7572a69
+Tested on:
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+commit:         8867bbd4 mm: arm64: Fix the out-of-bounds issue in con..
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=179339ca980000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3b4350cf56c61c80
+dashboard link: https://syzkaller.appspot.com/bug?extid=5f996b83575ef4058638
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+userspace arch: arm64
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=14ad2856980000
 
-
+Note: testing is done by a robot and is best-effort only.
 
