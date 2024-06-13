@@ -1,158 +1,226 @@
-Return-Path: <linux-usb+bounces-11276-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11277-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2CD04906F3A
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2024 14:18:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F29D79070C5
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2024 14:30:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D78B41F238ED
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2024 12:18:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EDBDF1C22CE1
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2024 12:30:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D82CB145B29;
-	Thu, 13 Jun 2024 12:14:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64A814A07;
+	Thu, 13 Jun 2024 12:30:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Mj7cV27f"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CD/45SMu"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C627E1459FB;
-	Thu, 13 Jun 2024 12:14:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56A521C32;
+	Thu, 13 Jun 2024 12:30:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718280898; cv=none; b=RbDuXaezJh7jWjRvM3IpgBs4EViUrJhMpNhH3Pcf7ERYtStti760hZfT7CLnhXeYAZoqWWXBkLkTF/hcNfEY8m3IpsPaR04ovEZ2nK5c8LZA9FglrluJ9E7NKtGIGGuEyyVSSf1d4RzDyQAIXqKiraHodrV/xE/9Iz9MSn3s5Q4=
+	t=1718281839; cv=none; b=FuxXPmoci4ndB6EuRWx/y+naQm1PnkNBg1Uqes+0QJ1NERJ3K16WNJbQTpDsC5FI31/y6VayhXZxAgyLWgUX4Nqoy72JmdRI2EXZccE1wHbPx/MNE0w9RRNmUdCMeNLMirDJvsWwDMxAcE4gwugxAGylS907kKY1AXUvV2GzzoA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718280898; c=relaxed/simple;
-	bh=Ughm9l3G5ckH3Jnm36S6wz8bPjQrkCbc1vToYq+2KW8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=lztoc039/6M2V4sZCdfVrBcVAi6qj/9FRUa8/1EcltuFngXFH301JTikYhcHBZK6vZrr2e78Jx3m/thNCZ2mO/UCWt0ibgCP/DmxddyWoF7JsVcRQ+YYcuXvGDsf0UZKyBD4yqtxgqt5x/TzEcIIDS602Dtt7ZGCniDXKqhbtf8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Mj7cV27f; arc=none smtp.client-ip=209.85.208.41
+	s=arc-20240116; t=1718281839; c=relaxed/simple;
+	bh=UJ5vlctxDseqqsh+SakzrcuK4Vz7Nl4HZ24S2HN5GkI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nVZzoW57g+Y8KGLjcytKGF+vIMk43pmfRq45CtWcg18M27hKqJganmuEABfiicVCJN+MLbDfS/0j7Fdk73B6PLPrz4HRAyb0hhmokripBO6vFwaUTC/vRpz9QEcbANzy6GZSw58V980ENvyMSGDD7sZNsg1I6eWOu7TbyCOsxJY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CD/45SMu; arc=none smtp.client-ip=209.85.160.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-57c778b5742so976003a12.2;
-        Thu, 13 Jun 2024 05:14:56 -0700 (PDT)
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-254aec5a084so465662fac.3;
+        Thu, 13 Jun 2024 05:30:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718280895; x=1718885695; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=zjivG+XaKe4Am+Fx0XOt/e28iXIYWa1P+7zK1ifd1rw=;
-        b=Mj7cV27fLwEF366zUY7dfm+PClIVDclW+jD1efBXuRtkrlt/loXAgBBWDqYWF2HoIb
-         tE5LlLc/4+YSBM7k//vIe+Hq/WbK9MDQyAluPmirb3pigypC+GytV2xyL/1NfvybZc1R
-         Dxhvk264pqTgFJO3XMEQXrc/ZGuPSYGh2LiZp/y+iqo6MYY4v3OR37NpjOYmgPl/0vez
-         sByUmwZSZFWfkqWq9KYREkWFgoKv4411/MmyZpPnG6YDF7WLxwQG+Ml4d2ds5Y87rt/m
-         ENlXpH68RLKWEgQEligWooBqp14y9JULBPXiVSXFyAnF9o9yW6sS9mJIaQwv3josQidc
-         vv3Q==
+        d=gmail.com; s=20230601; t=1718281837; x=1718886637; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=pCVokkdZ2AzZZwD9JHJBnP81SaNJNef4hr9QhUUF4Mk=;
+        b=CD/45SMunkqz+kpgO71fQ41nka37vbfnhJ2y+p3WVdXXs+AtlYEK87n2C9rPe7kX6j
+         g8rujQ/6GDp4z/mAfgHM7NlsCcOTwnwkoImNCRpJOG9MH5rCazGVyJTNz/fobBp2aIEV
+         ascx1+W3gwcR/ULj5LEuE8pUFss2HyGqcoS0J0nBP1dVl5jSJRVcFyBzW73bXw9I0xEX
+         X1jIr1YzcjWq7b1bG/8puRe5G12KJE7atqz7vfvQJ4YPeZRMv+cWVuNlNrlwgfjd9IQ/
+         GAlPqmOfQ9XJvp7RsXmzCsfhjAEBQpMFzGRPry3sgZhrXLbCAYMA5o4UhzXmvyTK4AQw
+         3tzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718280895; x=1718885695;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1718281837; x=1718886637;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=zjivG+XaKe4Am+Fx0XOt/e28iXIYWa1P+7zK1ifd1rw=;
-        b=tRmIdBxhZqrbQUa6xRFmkcNAl8a10kzH3GoWstH1vevZW+mPdMuMZEw7+ZmLYRhhAI
-         iBPY2EdN0w0cHRwFlQv/tjq5pZD7398qEGy0oIdVLlX6areqnKePDoGs8cOvU2+AqDSH
-         3WR+E1oungKuAn9MYIFiBJ/UKVK7nngaVMbJcEv/UN3Rb9f76tE5nxRNiaJ8a00LrnPL
-         IOKI2iBFGwLZ7SrZjcGVvwFhCrcn/dLL4+XCrnqN8f1YIJaWZveKDz17qUl4e9vsWpYW
-         u4iGaUV+1ZsquGXfxcxzHyHRRSrpwYfytvTdtxfbMzwttYRIPCxeFZW1kkyXDSBy7y6j
-         mCVw==
-X-Forwarded-Encrypted: i=1; AJvYcCW53tTSalVLUjvn6oPmEbeaPU4N466TRudkgWkLrFKKiPVcaMwLJ1SfFvnmqeoJrA5Z8u2+pUUeXPE1e//+o1IG2KnFYQX0h05xzbDi/Jo0lEJzCs8vS6Cyjp0XsylhMFeytRyP
-X-Gm-Message-State: AOJu0Yz0LF1xsVxKFoN6rVFlYyKBLpP2Bj8nNf6PWmUtHw4/4QpPgtPc
-	s1n5vp3ulNyUJUcDQzDf44g4WpUvSm98NPthw96Jvc3u1x/LLUA1
-X-Google-Smtp-Source: AGHT+IGzyxg4N9X/04QjUk81mzMKs4lvDIGYdWaRPWHzvvEjA+WMsslAg9qHkv+RapswAaEsqS6raA==
-X-Received: by 2002:a50:d65a:0:b0:57c:68fd:2bc9 with SMTP id 4fb4d7f45d1cf-57ca9749636mr2961850a12.3.1718280894903;
-        Thu, 13 Jun 2024 05:14:54 -0700 (PDT)
-Received: from [127.0.1.1] (84-115-213-103.cable.dynamic.surfer.at. [84.115.213.103])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-57cb72da82fsm815747a12.32.2024.06.13.05.14.53
+        bh=pCVokkdZ2AzZZwD9JHJBnP81SaNJNef4hr9QhUUF4Mk=;
+        b=Npp7+3/NGFsq+oRvoQbHIeyQwcFSZ0GJKkHnfzlkXsE6fjQbPfNXAZSogLB46PDloe
+         RwQxR/YGQwVF7TVNSooSVGy+IYr/oUVElyPFaGo2HD9zOSmk8M18JCajiGvxxoylUpda
+         NH8kqnwFMfv2JJoAtqgns/UbkJl4m52AzNmCIAyEdkdIYn3JUo6gxf4JUgWglKRz54wd
+         C7Kh88ddXJOHq7bJO1y6j+J+vFgu8hm+6izNQdwp8tNc6HL5/3lFOulo+2F+/+w+nPNH
+         bwMmEWtRsr+EYSdzci0wPnP79RALrd9WPWIsVjZttCUdHA1BGZmEoMBVi/NBu03h45e+
+         hwWA==
+X-Forwarded-Encrypted: i=1; AJvYcCXyDczxFNJoKJCoXcBj6m3FifLYiZ4/5gGQbaOQ5iVZsZoDhzoVGp/SjXAMiShpTXAaS1ta2TwRvjhUt/VXsOMtZmZPYOxVbXN3aogkPos6+4ekzCRyqBItpSt07eX6IVJRVOTG8zE5Ils2DkP5Z8rU5NpuH6hEwNKEbsBVNBBzHHnKKQ==
+X-Gm-Message-State: AOJu0YxTC9Bp66eDSpHW2z479zdn3x71N/Bdn6QJvEhwnFJhj7HK2175
+	jzbzJwCFBAm910EDEhxYsf5REfoqaMPrYW2INyKkyRh8SBC36t1i
+X-Google-Smtp-Source: AGHT+IG1yE761Oo0wHvASf6bT313rWSBwQTyYZPjfHIYWPlbf2Wd4perdaLwwot/BR8RraQ77TWppQ==
+X-Received: by 2002:a05:6871:521e:b0:24c:4c82:4f15 with SMTP id 586e51a60fabf-25514c4fc96mr5391470fac.24.1718281836864;
+        Thu, 13 Jun 2024 05:30:36 -0700 (PDT)
+Received: from localhost.localdomain ([113.30.217.222])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-6fedf59299fsm875459a12.55.2024.06.13.05.30.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Jun 2024 05:14:54 -0700 (PDT)
-From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Date: Thu, 13 Jun 2024 14:14:48 +0200
-Subject: [PATCH] usb: typec: ucsi: glink: fix child node release in probe
- function
+        Thu, 13 Jun 2024 05:30:36 -0700 (PDT)
+From: Anand Moon <linux.amoon@gmail.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Icenowy Zheng <uwu@icenowy.me>
+Cc: Anand Moon <linux.amoon@gmail.com>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v7 1/2] dt-bindings: usb: Add the binding example for the Genesys Logic GL3523 hub
+Date: Thu, 13 Jun 2024 18:00:14 +0530
+Message-ID: <20240613123020.43500-1-linux.amoon@gmail.com>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240613-ucsi-glink-release-node-v1-1-f7629a56f70a@gmail.com>
-X-B4-Tracking: v=1; b=H4sIALfiamYC/x3MwQpAQBRG4VfRXbs1g4RXkYVmftxoaG6k5N1Nl
- t/inIcUUaDUZQ9FXKKyhwSbZ+SWMcxg8clUmKIytS35dCo8bxJWjtgwKjjsHtxOzrS+sbBlQ6k
- +Iia5/3M/vO8HLZq5tWkAAAA=
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
- stable@vger.kernel.org, Javier Carrasco <javier.carrasco.cruz@gmail.com>
-X-Mailer: b4 0.14-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1718280893; l=2414;
- i=javier.carrasco.cruz@gmail.com; s=20240312; h=from:subject:message-id;
- bh=Ughm9l3G5ckH3Jnm36S6wz8bPjQrkCbc1vToYq+2KW8=;
- b=YDgrSVBahWgrzOAC3FGi+0YtUEAsHFh5ocCyy795FfD+LmURtA0lSth9sMHj8hkjA4QByq4zv
- yDBQaF49grEBxzAgRYmYa5SAIFi+RLhcFhvCjs2NfZi0pMRhzgoJ7Pr
-X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
- pk=lzSIvIzMz0JhJrzLXI0HAdPwsNPSSmEn6RbS+PTS9aQ=
+Content-Transfer-Encoding: 8bit
 
-The device_for_each_child_node() macro requires explicit calls to
-fwnode_handle_put() in all early exits of the loop if the child node is
-not required outside. Otherwise, the child node's refcount is not
-decremented and the resource is not released.
+Add the binding example for the USB3.1 Genesys Logic GL3523
+integrates with USB 3.1 Gen 1 Super Speed and USB 2.0 High-Speed
+hub.
 
-The current implementation of pmic_glink_ucsi_probe() makes use of the
-device_for_each_child_node(), but does not release the child node on
-early returns. Add the missing calls to fwnode_handle_put().
+For onboard hub controllers that support USB 3.x and USB 2.0 hubs
+with shared resets and power supplies, this property is used to identify
+the hubs with which these are shared.
 
-Cc: stable@vger.kernel.org
-Fixes: c6165ed2f425 ("usb: ucsi: glink: use the connector orientation GPIO to provide switch events")
-Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+GL3523 has built-in 5V to 3.3V and 5V to 1.2V regulators, which serves
+power to the USB HUB, it uses 5V power regulator.
+
+Update the peer-hub description.
+
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+Signed-off-by: Anand Moon <linux.amoon@gmail.com>
 ---
-This case would be a great opportunity for the recently introduced
-device_for_each_child_node_scoped(), but given that it has not been
-released yet, the traditional approach has been used to account for
-stable kernels (bug introduced with v6.7). A second patch to clean
-this up with that macro is ready to be sent once this fix is applied,
-so this kind of problem does not arise if more early returns are added.
+Now with fresh install image and updated dtschema all the
+dt_binding_check pass
 
-This issue has been found while analyzing the code and not tested with
-hardware, only compiled and checked with static analysis tools. Any
-tests with real hardware are always welcome.
+make DT_CHECKER_FLAGS=-m -j$(nproc) dt_binding_check
+
+V7: dropped the reset-gpios: true:
+Rob 'No need for this if schema. The default is they are allowed.'
+[7] https://lore.kernel.org/lkml/194aa24c-2763-47e2-8ccc-1637d299c1ba@linaro.org/T/
+
+V6: fix the description of the regulators
+Updated the commit message for regulator updates.
+add reviewed by Conor Dooley
+[1] https://lore.kernel.org/all/20231130053130.21966-2-linux.amoon@gmail.com/
+v5: upgrade peer-hub description : Conor Dooley
+[0] https://www.genesyslogic.com.tw/en/product_view.php?show=67 [Block Diagram]
+v4: Fix the description of peer-hub and update the commit message.
+Schematics of the Odroid N2+
+https://dn.odroid.com/S922X/ODROID-N2/Schematic/odroid-n2_rev0.6_20210121.pdf
+V3: fix the dt_binding_check error, added new example for Genesys GL3523
+v2: added Genesys GL3523 binding
+v1: none
 ---
- drivers/usb/typec/ucsi/ucsi_glink.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ .../bindings/usb/genesys,gl850g.yaml          | 60 +++++++++++++++++--
+ 1 file changed, 55 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c b/drivers/usb/typec/ucsi/ucsi_glink.c
-index f7546bb488c3..41375e0f9280 100644
---- a/drivers/usb/typec/ucsi/ucsi_glink.c
-+++ b/drivers/usb/typec/ucsi/ucsi_glink.c
-@@ -372,6 +372,7 @@ static int pmic_glink_ucsi_probe(struct auxiliary_device *adev,
- 		ret = fwnode_property_read_u32(fwnode, "reg", &port);
- 		if (ret < 0) {
- 			dev_err(dev, "missing reg property of %pOFn\n", fwnode);
-+			fwnode_handle_put(fwnode);
- 			return ret;
- 		}
+diff --git a/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml b/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
+index 37cf5249e526..fc833363cfb4 100644
+--- a/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
++++ b/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
+@@ -9,9 +9,6 @@ title: Genesys Logic USB hub controller
+ maintainers:
+   - Icenowy Zheng <uwu@icenowy.me>
  
-@@ -386,9 +387,11 @@ static int pmic_glink_ucsi_probe(struct auxiliary_device *adev,
- 		if (!desc)
- 			continue;
+-allOf:
+-  - $ref: usb-device.yaml#
+-
+ properties:
+   compatible:
+     enum:
+@@ -27,17 +24,44 @@ properties:
  
--		if (IS_ERR(desc))
-+		if (IS_ERR(desc)) {
-+			fwnode_handle_put(fwnode);
- 			return dev_err_probe(dev, PTR_ERR(desc),
- 					     "unable to acquire orientation gpio\n");
-+		}
- 		ucsi->port_orientation[port] = desc;
- 	}
+   vdd-supply:
+     description:
+-      the regulator that provides 3.3V core power to the hub.
++      The regulator that provides 3.3V or 5.0V core power to the hub.
  
-
----
-base-commit: 83a7eefedc9b56fe7bfeff13b6c7356688ffa670
-change-id: 20240613-ucsi-glink-release-node-9fc09d81e138
-
-Best regards,
+   peer-hub:
+     $ref: /schemas/types.yaml#/definitions/phandle
+     description:
+-      phandle to the peer hub on the controller.
++      For onboard hub controllers that support USB 3.x and USB 2.0 hubs
++      with shared resets and power supplies, this property is used to identify
++      the hubs with which these are shared.
+ 
+ required:
+   - compatible
+   - reg
+ 
++allOf:
++  - $ref: usb-device.yaml#
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - usb5e3,608
++    then:
++      properties:
++        peer-hub: false
++        vdd-supply: false
++
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - usb5e3,610
++              - usb5e3,620
++    then:
++      properties:
++        peer-hub: true
++        vdd-supply: true
++
+ additionalProperties: false
+ 
+ examples:
+@@ -54,3 +78,29 @@ examples:
+             reset-gpios = <&pio 7 2 GPIO_ACTIVE_LOW>;
+         };
+     };
++
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++    usb {
++        dr_mode = "host";
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        /* 2.0 hub on port 1 */
++        hub_2_0: hub@1 {
++            compatible = "usb5e3,610";
++            reg = <1>;
++            peer-hub = <&hub_3_0>;
++            reset-gpios = <&gpio 20 GPIO_ACTIVE_LOW>;
++            vdd-supply = <&vcc_5v>;
++        };
++
++        /* 3.1 hub on port 4 */
++        hub_3_0: hub@2 {
++            compatible = "usb5e3,620";
++            reg = <2>;
++            peer-hub = <&hub_2_0>;
++            reset-gpios = <&gpio 20 GPIO_ACTIVE_LOW>;
++            vdd-supply = <&vcc_5v>;
++        };
++    };
 -- 
-Javier Carrasco <javier.carrasco.cruz@gmail.com>
+2.44.0
 
 
