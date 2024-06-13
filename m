@@ -1,81 +1,108 @@
-Return-Path: <linux-usb+bounces-11296-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11297-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 745FF907DA0
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2024 22:46:35 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 05B35907DFA
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2024 23:19:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 259772850A5
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2024 20:46:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AE50A1F23F20
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2024 21:19:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6603913B797;
-	Thu, 13 Jun 2024 20:46:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAAC1145B0B;
+	Thu, 13 Jun 2024 21:18:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="t/CGnthG"
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="RjcuLnM7"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from 009.lax.mailroute.net (009.lax.mailroute.net [199.89.1.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5A5C763E7;
-	Thu, 13 Jun 2024 20:46:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0C3E13D243;
+	Thu, 13 Jun 2024 21:18:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718311586; cv=none; b=lzRDOIj1rkFyeZcCx90AZcpgHHNaJZDGtPSd64IQif9oW0uydFpF03KIKQI7Zgid9Pj+226zMgdzf2l9gDIQ5/PuZo8fbxMegxXv+uAjesZRijS/j6CDqqUQLnj7DKvQE6BTbFAmwzIYSuQm3sB3jn3JFUcbWw1h618r7j8pJbM=
+	t=1718313537; cv=none; b=Kq1muucsxrCkgHsfCpQRw9VTTxLDr4JCik9XZRUjVIdYZRHZ21qe0flvnWBktBqM2E164W2V181oOg4f5WJ1oj9ONm7x/ekB5uZhmtrR2ydqgDh2caz8MI9KiPk0Va9ZiokcnsRv0PMx37xaU7BnlMy0xi2RbxFYOrg9Qw6rbSU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718311586; c=relaxed/simple;
-	bh=HicCLRv+HEWgT4PEns+naj+VIcI7qkndERvazIZM33g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Mgn0/Zo2ylkdxrtzeKxel5ScCw9TmjAfvRaXtD16aR7CJ0N98gr8hkyyWTUgGd9FsttqxqgpAcqWfVGFSY16fJCOFbdtGKe+dAMFWhe0MHQSPnU0FxbZhau55XHu+8wSb03IB9RGPwBpLtvHiE4cxDQyeWsbVGetuctWUqkZjPc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=t/CGnthG; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=rdUt95wCW7pUkKB7MuV0OXQsjoGeXHyKiKG8gB7jBxw=; b=t/CGnthG7/sB5eOHvVxPMw254R
-	rYKGxhsxSrlVd1M19VkDAM7Ij2cdor+ezzPSlaQPt41RbGiH0hlwFBPYFFBjax6tvBIrafaw0ziNp
-	bMT/cuqDMWrQD9lkrBeRQbxKSm/00LV0m+Txf9iKaea8R4dJX0BHbcxLXt1Dfpgd7kZk=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1sHrKn-0000Mh-OF; Thu, 13 Jun 2024 22:46:13 +0200
-Date: Thu, 13 Jun 2024 22:46:13 +0200
-From: Andrew Lunn <andrew@lunn.ch>
-To: Rengarajan S <rengarajan.s@microchip.com>
-Cc: woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, netdev@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v1] lan78xx: lan7801 MAC support with lan8841
-Message-ID: <6eec7a37-13d0-4451-9b32-4b031c942aa1@lunn.ch>
-References: <20240611094233.865234-1-rengarajan.s@microchip.com>
+	s=arc-20240116; t=1718313537; c=relaxed/simple;
+	bh=K+amnAHMXL7ZbOYHmjXNkiAUGZB4Ot4Mc5KO6tpik2o=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Mlj7SoKM7OpLUxTCBNDtNa3GrnoPe8paX4SgqFtzb5ENgSPdS6MqAg1CjkHKN0+t6jNCIhJ1Yem7De2LtolHynIyL9HIBPamDvSOu9tHAAK3ot49kH8u4wlOKOnRatrgUoIaAvHW3jeDgKea8Fv6jRJqknn+Fw40Ukpx9hvEjHg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=RjcuLnM7; arc=none smtp.client-ip=199.89.1.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
+Received: from localhost (localhost [127.0.0.1])
+	by 009.lax.mailroute.net (Postfix) with ESMTP id 4W0Zz30tHTzlgMVg;
+	Thu, 13 Jun 2024 21:18:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
+	content-transfer-encoding:mime-version:x-mailer:message-id:date
+	:date:subject:subject:from:from:received:received; s=mr01; t=
+	1718313533; x=1720905534; bh=lf9Wv4l+dRLmfjFPmsEPJ8T05zmFhS1wPjB
+	F1wCJhFg=; b=RjcuLnM7OmdniK+9Ah/ECaCDMg0PAmP6djiyeecjxV5q7/d8ql+
+	A+G3K82N+0ns0skx5HWCpsLmrBGllWWIBqCLxb0pYnyrE9oDU0LgxGmoGyGh6u+R
+	hIYHbmpcdOmGHt78oa0ZpiiFzaKAMsys+IPxex2iZccg5Cv5uCIRY/InmL3WJWjJ
+	fYD9jdO/C+wKBVN2bid0nrkxViY7xgCG6Ms6P32QS3Ykf6Pvhnd8DLvuiyYQCV4g
+	A0Wm47KuSqlZIy/wZiZ39UlUdRhIkWibq62ZmPO0RPtiumVxxkZazU2+WbielfaR
+	VC6BJGeGaMKNuWI3T0tToNw63cjcPWCYB2g==
+X-Virus-Scanned: by MailRoute
+Received: from 009.lax.mailroute.net ([127.0.0.1])
+ by localhost (009.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
+ id e0MnTJuWazZ3; Thu, 13 Jun 2024 21:18:53 +0000 (UTC)
+Received: from bvanassche.mtv.corp.google.com (unknown [104.132.0.90])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: bvanassche@acm.org)
+	by 009.lax.mailroute.net (Postfix) with ESMTPSA id 4W0Zz05ZCQzlgMVV;
+	Thu, 13 Jun 2024 21:18:52 +0000 (UTC)
+From: Bart Van Assche <bvanassche@acm.org>
+To: "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc: Alan Stern <stern@rowland.harvard.edu>,
+	linux-scsi@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	Bart Van Assche <bvanassche@acm.org>
+Subject: [PATCH v3 0/2] Do not read the IO hints VPD page from USB storage devices
+Date: Thu, 13 Jun 2024 14:18:25 -0700
+Message-ID: <20240613211828.2077477-1-bvanassche@acm.org>
+X-Mailer: git-send-email 2.45.2.627.g7a2c4fd464-goog
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240611094233.865234-1-rengarajan.s@microchip.com>
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 11, 2024 at 03:12:33PM +0530, Rengarajan S wrote:
-> Add lan7801 MAC only support with lan8841. The PHY fixup is registered
-> for lan8841 and the initializations are done using lan8835_fixup since
-> the register configs are similar for both lann8841 and lan8835.
+Hi Martin,
 
-What exactly does this fixup do?
+Recently it was reported that reading the IO hints VPD page makes at leas=
+t two
+USB storage devices crash. Hence this patch series that disables reading =
+the IO
+hints VPD page from USB storage devices. Please consider this patch serie=
+s for
+your scsi-fixes branch.
 
-Looking at it, what protects it from being used on some other device
-which also happens to use the same PHY? Is there something to
-guarantee:
+Thanks,
 
-struct lan78xx_net *dev = netdev_priv(phydev->attached_dev);
+Bart.
 
-really is a lan78xx_net * ?
+Changes compared to v2:
+ - Changed "IO hints VPD page" into "IO Advice Hints Grouping mode page".
+ - Changed "scsi: core: " prefix for patch 2/2 into "usb: ".
+ - Removed redundant Cc-tags.
 
-   Andrew
+Changes compared to v1:
+ - Also set the BLIST_SKIP_IO_HINTS for USB Attached SCSI devices.
+
+Bart Van Assche (2):
+  scsi: core: Introduce the BLIST_SKIP_IO_HINTS flag
+  usb: Do not query the IO advice hints grouping mode page for USB
+    devices
+
+ drivers/scsi/sd.c              | 4 ++++
+ drivers/usb/storage/scsiglue.c | 6 ++++++
+ drivers/usb/storage/uas.c      | 7 +++++++
+ include/scsi/scsi_devinfo.h    | 4 +++-
+ 4 files changed, 20 insertions(+), 1 deletion(-)
+
 
