@@ -1,131 +1,103 @@
-Return-Path: <linux-usb+bounces-11242-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11244-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D784905FD3
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2024 02:50:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC4AF90605C
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2024 03:23:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 44F201C21062
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2024 00:50:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5727D282FFC
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2024 01:23:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 579CB8C11;
-	Thu, 13 Jun 2024 00:50:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EsqTbaop"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 480A3D530;
+	Thu, 13 Jun 2024 01:23:21 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3C8F8BF7
-	for <linux-usb@vger.kernel.org>; Thu, 13 Jun 2024 00:50:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id AF4B2C8C7
+	for <linux-usb@vger.kernel.org>; Thu, 13 Jun 2024 01:23:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718239842; cv=none; b=CTr8AQ9fShfp7DXI+F4y4luvm5ZQRTkmtQYbUrRK/z97XbaKxwJTVx8SrQI/jBE0NEUSJbRMWavW9ibiCcRaOVitpCj7h217iH+W+MPEs9CTxi4MkCVm8+fHbAmHsgaxAxXXgPI87geSLq/97dRvGafuo4UezEba93BJQ5Q5J/M=
+	t=1718241801; cv=none; b=n54m3jL6CBko4l67qXrq7Wh4swLYBKvY6vBLJ+EznNreC+m6C4cOIEL2zKqyX/ruAePmkGglW7mH7N3J2e5KLSCTF+I/uF5IxlqV0IzyMXLgkyEbJ+nBJVRjYZ483E4goxoEQZZWy0JXs5FtdCv2WJ8i+2wJ0kv4MUl4f9Y1Flo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718239842; c=relaxed/simple;
-	bh=f9xt7InB+uUmUHX5sSdLe0yePj3C0xgI9o63tC9WOpc=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Dw6IX1eZ5lChJb3wFufKRPhpElhWd8QRaYVRDmm4uBIWP3iyFZBp2QfMIFc8Q9Zy6OybKfY2dkXDFEhSq3Y8oNGzo8+hojQ6e9TkTTdHaObpUXvcjysLi8Xs+oEjenvGdhNRtthmqZJjvODbSCko0RaYZ1suqMVGiqQA/gwJc1g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EsqTbaop; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4DD63C4AF1C
-	for <linux-usb@vger.kernel.org>; Thu, 13 Jun 2024 00:50:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718239842;
-	bh=f9xt7InB+uUmUHX5sSdLe0yePj3C0xgI9o63tC9WOpc=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=EsqTbaop7pPS4qzY6WkB4q0/35leLZmM03l32JUbgP/D5R1V2JnX5y4FGltXRiWfn
-	 sgIM7Gkq+8hBfCAQQzH0c33Q+0JQaZ/r/R5PkFvBy/fCUI+oHIvfGdcNz6fu4CXSOv
-	 HUXO6CXDuLcCn/hb7/2mfV2abmzHnBYOz+STj8fdolv/iT+KejoeeNz21IHDQqix8P
-	 6XPKjMBOCpHmchrZpg1m9N8dcDx9++p98XIdAB2Saf7nQpkjTAoI+CBomQYH3oZvpz
-	 96UPLHQqiRsJz6B0V57K65w8hiJQVEE46MfnN413gnOR2M2zolLsByGizS6z0rMNbi
-	 rDeAkDS64m/vw==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 39FA6C53B73; Thu, 13 Jun 2024 00:50:42 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 218943] No SuperSpeedPlus on AM4/5 Hubs
-Date: Thu, 13 Jun 2024 00:50:42 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: high
-X-Bugzilla-Who: jarrard@proton.me
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-218943-208809-jInMCWytWO@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218943-208809@https.bugzilla.kernel.org/>
-References: <bug-218943-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1718241801; c=relaxed/simple;
+	bh=tl13HOFJCymRly5X6WxSw4qih6uoNtD88ObLIrANbDo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JQlaXusv1AfvBfuTKrC0d+6ibc4avJ20a89vXQnthoTXKChd1+HcLz5xjMrdzBXM0zwyXtBqsb/3V5DrwuCvtib/0J4igfkID7Id9Bu4WBAVOviAO1Wcl3tEgUG7uI+66dkzmdhx9smEOu6vBnhaJ8eHohM2SmTiLMzwOc+hZ6E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
+Received: (qmail 244083 invoked by uid 1000); 12 Jun 2024 21:23:17 -0400
+Date: Wed, 12 Jun 2024 21:23:17 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: syzbot <syzbot+5f996b83575ef4058638@syzkaller.appspotmail.com>
+Cc: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+  linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [usb?] INFO: rcu detected stall in raw_ioctl
+Message-ID: <871507d8-b4ff-4af8-8bba-9a3149c41e8a@rowland.harvard.edu>
+References: <684687e4-8be4-42ee-a125-8ef9acc3fec9@rowland.harvard.edu>
+ <000000000000babbf8061aa113df@google.com>
+ <2bfca69a-b7e0-4f66-9025-1324af803318@rowland.harvard.edu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2bfca69a-b7e0-4f66-9025-1324af803318@rowland.harvard.edu>
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218943
+Try again, with the "#syz test:" command present this time.  Sigh.
 
---- Comment #21 from Jarrard (jarrard@proton.me) ---
-(In reply to Thinh.Nguyen from comment #20)
-> On Wed, Jun 12, 2024, bugzilla-daemon@kernel.org wrote:
-> >
-> >
-> https://urldefense.com/v3/__https://bugzilla.kernel.org/show_bug.cgi?id=
-=3D218943__;!!A4F2R9G_pg!cCuzUsUD-2ePSsdCBgCODNgftuH0LhiYyBq6--AbqKmW5wPBuG=
-EQCnSgOWhEOf4rPi-n6bd02HAx-VvD0vN56GomiUx1GIRM$=20
-> >=20
-> > --- Comment #19 from Jarrard (jarrard@proton.me) ---
-> > Plugged in a USB3 10Gbps HUB (red ports).  Under windows usbview shows =
-it
-> as
-> > USB3.2 SuperSpeedPlus 10Gbps and the USB devices connected agree.=20
-> >=20
-> > UNDER LINUX it is a 5Gbps hub and no SuperSpeedPlus.  I can't believe t=
-his
-> > sort
-> > of massive USB port bug has existed this long under Linux, does nobody =
-test
-> > AM4/AM5 usb port speed compatibility?=20
-> >=20
-> > Anyway, still no clue on how to fix this, way above my pay grade.
-> >=20
->=20
-> Are you using AsMedia host? Then I suspect it's a similar issue that was
-> reported before, and the issue is likely in the host controller
-> reporting the wrong port ID and not the driver issue.
->=20
-> It's a different AsMedia host version, but you can checkout this [*]
-> thread for more info. I suspect the test patch I provided there should
-> resolve your issue. It's been a while, you may need to tweak that change
-> to apply for your latest kernel.
->=20
-> [*]
-> https://lore.kernel.org/all/6908aa69-469b-8f92-8e19-60685f524f9c@synopsys.
-> com/
->=20
-> BR,
-> Thinh
+On Tue, Jun 11, 2024 at 11:03:03AM -0700, syzbot wrote:
+> Hello,
+> 
+> syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+> 
+> Reported-and-tested-by: syzbot+5f996b83575ef4058638@syzkaller.appspotmail.com
+> 
+> Tested on:
+> 
+> commit:         8867bbd4 mm: arm64: Fix the out-of-bounds issue in con..
+> git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
+> console output: https://syzkaller.appspot.com/x/log.txt?x=14e092de980000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=3b4350cf56c61c80
+> dashboard link: https://syzkaller.appspot.com/bug?extid=5f996b83575ef4058638
+> compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+> userspace arch: arm64
+> patch:          https://syzkaller.appspot.com/x/patch.diff?x=137c697e980000
+> 
+> Note: testing is done by a robot and is best-effort only.
 
-Thanks I'll check that out sometime. I don't normally compile my own kernel=
-s so
-will need to set it up for doing so under this Kubuntu install.
+Let's try Greg's suggestion to replace dev_err() with 
+dev_err_ratelimited().
 
---=20
-You may reply to this email to add a comment.
+Alan Stern
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git 8867bbd4a056
+
+Index: usb-devel/drivers/usb/class/cdc-wdm.c
+===================================================================
+--- usb-devel.orig/drivers/usb/class/cdc-wdm.c
++++ usb-devel/drivers/usb/class/cdc-wdm.c
+@@ -266,14 +266,14 @@ static void wdm_int_callback(struct urb
+ 			dev_err(&desc->intf->dev, "Stall on int endpoint\n");
+ 			goto sw; /* halt is cleared in work */
+ 		default:
+-			dev_err(&desc->intf->dev,
++			dev_err_ratelimited(&desc->intf->dev,
+ 				"nonzero urb status received: %d\n", status);
+ 			break;
+ 		}
+ 	}
+ 
+ 	if (urb->actual_length < sizeof(struct usb_cdc_notification)) {
+-		dev_err(&desc->intf->dev, "wdm_int_callback - %d bytes\n",
++		dev_err_ratelimited(&desc->intf->dev, "wdm_int_callback - %d bytes\n",
+ 			urb->actual_length);
+ 		goto exit;
+ 	}
+
+
 
