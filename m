@@ -1,48 +1,48 @@
-Return-Path: <linux-usb+bounces-11255-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11256-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 023609063C4
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2024 08:09:38 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C81B49063E6
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2024 08:17:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 186161C20DD4
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2024 06:09:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7249A1F230B6
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2024 06:17:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DCD61369BC;
-	Thu, 13 Jun 2024 06:09:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACAD11369BC;
+	Thu, 13 Jun 2024 06:17:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l+0pv7QH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XZ5w158l"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD340135A4B;
-	Thu, 13 Jun 2024 06:09:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C4A4EEC8;
+	Thu, 13 Jun 2024 06:17:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718258968; cv=none; b=N0Dr9p54C4KgYxJGMdrQL3xDzM7Kti+jP+LMOmutNskEQ2eHkoAMAYXZJcWHKrzIV6D4SlczcxHnmVluIJGs+3QiYNENcC2tOzNbf/09m19kBKw1Ls7TQHpDATOMpMm+LwHfifMSUTzDblyu/pspegPtDQg7Mb96w5RPsmK4c/E=
+	t=1718259456; cv=none; b=TexsEQQQ+ZndRkg2RO1T6S+IkRpzOonBMAw1Auxl6vxW/aF11jOq4Lz2toCJVOGPw+MNLjj2+DwXK+RVj692XmKMJAcsQ8R+6ACvdCeMEaCYeGekXIqRbGBGUsK8FD7RE8LfDq8ySJqkTcSvrBWM4H+icFQSmwjZtuPSquiEZxk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718258968; c=relaxed/simple;
-	bh=bbKEWwxPZT1MGbNUJwasQJFcX1zxr/x5+hhhJZnpu2k=;
+	s=arc-20240116; t=1718259456; c=relaxed/simple;
+	bh=uihNMKDFDeq6DZWQuossSskGGT4qt/lQSs9ST43sm58=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=X2cyG1DGFmaCClM2fQrbs3raXtxbWTU+mI+xDskWq+P0lFZzrj3SYU8h7xlrLjQ8W3DsgF4hTptBeo5u9JF33Oua/MHCUyVlwOGTkIs6+BpPL8yKzFDzwyDlu4Ry+tiQoJ6DjVZgEwIoFJ45BW4xjIxuL9kLT1cEPuwxpBtQSOI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l+0pv7QH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92148C2BBFC;
-	Thu, 13 Jun 2024 06:09:25 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=kmXJdMIIMNQuoHtsJlWElIjHp9f/mCMuuugnQMoC0eZNOlV1Zp180zUX9k8TNTS1ozaw+iyNOW1qv7O7ZdHh3LSpTEpvZy6Ok8CdCD1nr7rjDeMFA901pzT5NtwfppHswoJzlVebDoL9jwKZV869t+Bsg3PLG/pI4E+EW3s0q0Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XZ5w158l; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF2C2C2BBFC;
+	Thu, 13 Jun 2024 06:17:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718258968;
-	bh=bbKEWwxPZT1MGbNUJwasQJFcX1zxr/x5+hhhJZnpu2k=;
+	s=k20201202; t=1718259455;
+	bh=uihNMKDFDeq6DZWQuossSskGGT4qt/lQSs9ST43sm58=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=l+0pv7QHW3Uo1aG1Nam8Rb0tUCcz94L4ehaSclgjQs0By5gn20C+2G3C/VSfpM6hU
-	 XTRg6JQaIuGV9tXr6N4QXUOL5TQKBlSfLy2k02D5lvBXMuH5p6FwPGAZpQJjPCQ5+9
-	 r23/SEQLrdzzdAK4xK6d6Zvs83RZ0N1M4Ucg12mYTT6mNiZYlnwRWvGMbU/9qzqX28
-	 gSQ/TPSShofnZ0WaVywtGDbYzkSep0O3ZRQD9CYbGJ0PCSY/4ahmN2LFj+RwY8l3n2
-	 0BRgIqlCf7/x9r5DLlK9g1OwHtqjhFNWfnjyyLuf8PnUba8wzuVXeW7O5ZWO6Qvn3V
-	 hB/iAA3r57lMA==
-Message-ID: <3275676c-7392-47ac-8345-808681462003@kernel.org>
-Date: Thu, 13 Jun 2024 08:09:22 +0200
+	b=XZ5w158lqgz67H8DBY2CPvY575GUl30o1VHIsZCxgg1USkXbjgrkdUciO6bt9EnNx
+	 mPZn/4eeu0OQ3MZiyZJbT0WSlg6E3eGsAZWKb7fX+h0MAO+WT3pC6MNtwcHLmf0ZPu
+	 ApT5f34799TVvKHRmo7YMLwFROW8hW0xqiS0kbJEh/woUIfJYe40XFzm0nNwhCvLgD
+	 fAY8/HhSqOxIYt/r/kqpeQLHJXtNg7cL3cSJ85mFjVXzOhODuREoW6pdWhRzUSRxa0
+	 RSr7U2jBag31Q1ADiKOE9c5NxdN9evSllnIzcHdmRJtTLho3OZxjGMEf3VYVpqJZH8
+	 uIzRV7k+rC7+g==
+Message-ID: <21cfeb4c-4ce2-487a-bdd5-45c3ed71bf6f@kernel.org>
+Date: Thu, 13 Jun 2024 08:17:29 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -50,16 +50,14 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2, 1/3] dt-bindings: usb: dwc3: Add snps,p2p3tranok quirk
-To: joswang <joswang1221@gmail.com>
-Cc: Thinh.Nguyen@synopsys.com, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org, balbi@kernel.org, devicetree@vger.kernel.org,
- joswang <joswang@lenovo.com>
+Subject: Re: [PATCH v4, 1/3] dt-bindings: usb: dwc3: Add snps,p2p3tranok quirk
+To: joswang <joswang1221@gmail.com>, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org
+Cc: Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org, balbi@kernel.org,
+ linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Jos Wang <joswang@lenovo.com>
 References: <20240601092646.52139-1-joswang1221@gmail.com>
- <20240603130004.25662-1-joswang1221@gmail.com>
- <9c665afe-16d7-469e-ac3e-d0d7388a31b7@kernel.org>
- <CAMtoTm1ojhCSRb4c+MPjuJB+JaeD2ex6B7FpCaJtLvrTj0Q8Cg@mail.gmail.com>
+ <20240612152347.3192-1-joswang1221@gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -105,62 +103,23 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <CAMtoTm1ojhCSRb4c+MPjuJB+JaeD2ex6B7FpCaJtLvrTj0Q8Cg@mail.gmail.com>
+In-Reply-To: <20240612152347.3192-1-joswang1221@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 12/06/2024 16:28, joswang wrote:
-> On Tue, Jun 4, 2024 at 2:33 PM Krzysztof Kozlowski <krzk@kernel.org> wrote:
->>
->> On 03/06/2024 15:00, joswang wrote:
->>> From: joswang <joswang@lenovo.com>
->>
->> Is this your full name or known identity you want to use for all kernel
->> contributions? Looks like login...
->>
->>>
->>> There is an issue with the DWC31 2.00a and earlier versions
->>> where the controller link power state transition from
->>> P3/P3CPM/P4 to P2 may take longer than expected, ultimately
->>> resulting in the hibernation D3 entering time exceeding the
->>> expected 10ms.
->>>
->>> Add a new 'snps,p2p3tranok-quirk' DT quirk to dwc3 core
->>> for enable the controller transitions directly from phy
->>> power state P2 to P3 or from state P3 to P2.
->>>
->>> Note that this can only be set if the USB3 PHY supports
->>> direct p3 to p2 or p2 to p3 conversion.
->>>
->>> Signed-off-by: joswang <joswang@lenovo.com>
->>> ---
->>>  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 7 +++++++
->>>  1 file changed, 7 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
->>> index 1cd0ca90127d..721927495887 100644
->>> --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
->>> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
->>> @@ -242,6 +242,13 @@ properties:
->>>        When set, all HighSpeed bus instances in park mode are disabled.
->>>      type: boolean
->>>
->>> +  snps,p2p3tranok-quirk:
->>
->> Why this cannot be deduced from compatible? Which upstream SoCs are
->> affected?
->>
->>
->>
->> Best regards,
->> Krzysztof
->>
-> 
-> Thanks for your help in reviewing the code
-> DWC31_USB 2.00a and earlier versions IP bug, regardless of platform.
+On 12/06/2024 17:23, joswang wrote:
+>  
+> +  snps,p2p3tranok-quirk:
+> +    description:
+> +      When set, the controller transitions directly from phy power state
+> +      P2 to P3 or from state P3 to P2. Note that this can only be set
+> +      if the USB3 PHY supports direct p3 to p2 or p2 to p3 conversion.
+> +    type: boolean
 
-So this can be deduced from compatible, then use quirks in the driver
-based on compatible and drop the property.
+Hm? You respond to feedback and, without waiting for my answer,
+immediately send new version?
+
+No. Read feedback on your previous version. Drop the quirk.
 
 Best regards,
 Krzysztof
