@@ -1,116 +1,105 @@
-Return-Path: <linux-usb+bounces-11285-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11286-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE37A90759C
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2024 16:48:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A983890764C
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2024 17:15:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E6E911C24098
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2024 14:48:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A4C851C22ADB
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2024 15:15:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A22F12C477;
-	Thu, 13 Jun 2024 14:48:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C467149C6A;
+	Thu, 13 Jun 2024 15:15:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="UUCThmTd"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id B7EAA13CA9A
-	for <linux-usb@vger.kernel.org>; Thu, 13 Jun 2024 14:48:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E7481494D0;
+	Thu, 13 Jun 2024 15:15:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718290110; cv=none; b=ccuPpi45EtNMWv8bpgnTczfnp1oA5lzQafBNgYJH1sZr3/FaQUSRl6em6+UfqufKYtU5iuRz4FOExiGskry/uPraifsJ5nlsUMHwCqwYL9zbNwhSSHMwVPKA06KtUJwPm5sGgCWvqplGvb5IySA28i/7iLzscLt4EMZpp5B+wj4=
+	t=1718291712; cv=none; b=GmGhnMu/HkHZ2A+/Jy7O0jjc9K/1WajVuyePXxV8uN7BSYbX+wDJXdmky2hBPghi4rqdmLStEttmWj/a5LOyeMly3ahbIAkNyJGeNzEoopf2USCrQe9qNGl9GdIi2+hgIIZQK9hPk4BDuinlSB7TUsK3+X3mX+eReLBrBBKkl4s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718290110; c=relaxed/simple;
-	bh=WJfygxCiIGV+LFOhGdFIBNXZJXjEjMO9dlxerVwEtX0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TxNVIuv1swe4MTKONhYjI8LcnFdSrb6+dePhFZFsxp8iQv7W7HgoRPZ/Afg85c6XUtHaLr+MkTNnYEHCQXu4m815Mirfb0Wjzdfp74mprfQPSHbK8CQMORGwDkP4MFcJVlT8gdBoi1fYe3JPFMVQyIyya+dFfWCeDQypu6fCIXU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
-Received: (qmail 263793 invoked by uid 1000); 13 Jun 2024 10:48:24 -0400
-Date: Thu, 13 Jun 2024 10:48:24 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: syzbot <syzbot+1b2abad17596ad03dcff@syzkaller.appspotmail.com>
-Cc: johan.hedberg@gmail.com, linux-bluetooth@vger.kernel.org,
-  linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-  luiz.dentz@gmail.com, marcel@holtmann.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [bluetooth?] [usb?] BUG: soft lockup in hci_cmd_timeout
-Message-ID: <4e155544-60df-42d2-89ea-924ebc9f7057@rowland.harvard.edu>
-References: <000000000000f45085061aa9b37e@google.com>
+	s=arc-20240116; t=1718291712; c=relaxed/simple;
+	bh=3ozSPTlSEgTYrRu6Ije/gYJYhDxZM9wnwxZkXNIo93s=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=V7Yu6dXF431Q3hsgnHbZtJPVOjv//sRizpzafA0kFjUQQJ2JLe/1kEO0/pe1yf9LLSBTUT728UWdREWYmUEH3PFLILZ/d3qDMWoF1jROcFkDabE2bpLQnZhnEpDR6YiDtyAa6dgy7MLcpgHqvL6J51W5hdDYp4umhdZA5Gj9AS4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=UUCThmTd; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1718291709;
+	bh=3ozSPTlSEgTYrRu6Ije/gYJYhDxZM9wnwxZkXNIo93s=;
+	h=From:Subject:Date:To:Cc:From;
+	b=UUCThmTdzPIbMLr/IpB5mxKKfkA/O7KmzK4VF6Hv1GBu4JuUWkPHVnCmB+vnCPLub
+	 igLGRvGl0LFc3dGnqJ3TFJfVjV+dtbZr0r/xlGLQt/CeLT//209TPeN+1GONijYXW0
+	 hQja/LRZrxNHit93PdSFKJ4FqBCqp6RPQ1fMsX7qmQu8C3YtbjT3fRFpj8QYGSXPWl
+	 ekxk0LXvyI0O7zrP3hxRNrhjjG3VTY+/tf+AkNBE48rHuYLESbyDJ88FoenNOmhwgs
+	 rqX0IPGOoFzllDYwwFj+0GpnR8rIgRERrc/lDUysa9jnqKQPRxyELs+A5Q+KkqlJeR
+	 f+gH+4OVAUr5w==
+Received: from [192.168.1.250] (zone.collabora.co.uk [167.235.23.81])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: nfraprado)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 6EAC4378143B;
+	Thu, 13 Jun 2024 15:15:07 +0000 (UTC)
+From: =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
+Subject: [PATCH 0/2] kselftest: devices: Allow running test on more
+ platforms
+Date: Thu, 13 Jun 2024 11:14:50 -0400
+Message-Id: <20240613-kselftest-discoverable-probe-mt8195-kci-v1-0-7b396a9b032d@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <000000000000f45085061aa9b37e@google.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAOoMa2YC/x3NQQqDMBBA0avIrDuQDGraXqW4iMnYDlojmSAF8
+ e4NLt/m/wOUs7DCszkg8y4qaa2wtwbCx69vRonVQIZa01vCWXmZCmvBKBrSztmPC+OW08j4LXf
+ 76HAOgsGTdS0510cDtbZlnuR3nV7Def4BuUDenHkAAAA=
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: kernel@collabora.com, linux-usb@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ kernelci@lists.linux.dev, 
+ =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
+X-Mailer: b4 0.13.0
 
-On Tue, Jun 11, 2024 at 09:20:31PM -0700, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    8867bbd4a056 mm: arm64: Fix the out-of-bounds issue in con..
-> git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-> console output: https://syzkaller.appspot.com/x/log.txt?x=112ad20a980000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=3b4350cf56c61c80
-> dashboard link: https://syzkaller.appspot.com/bug?extid=1b2abad17596ad03dcff
-> compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-> userspace arch: arm64
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1112d2ce980000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12c37286980000
-> 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/6ea21f50498b/disk-8867bbd4.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/e2fed09364aa/vmlinux-8867bbd4.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/4860173c7a18/Image-8867bbd4.gz.xz
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+1b2abad17596ad03dcff@syzkaller.appspotmail.com
-> 
-> cdc_wdm 1-1:1.0: nonzero urb status received: -71
-> cdc_wdm 1-1:1.0: wdm_int_callback - 0 bytes
-> cdc_wdm 1-1:1.0: nonzero urb status received: -71
-> cdc_wdm 1-1:1.0: wdm_int_callback - 0 bytes
-> watchdog: BUG: soft lockup - CPU#0 stuck for 27s! [kworker/u9:2:6293]
-> CPU#0 Utilization every 4s during lockup:
-> 	#1:  97% system,	  1% softirq,	  4% hardirq,	  0% idle
-> 	#2:  98% system,	  1% softirq,	  3% hardirq,	  0% idle
-> 	#3:  97% system,	  0% softirq,	  3% hardirq,	  0% idle
-> 	#4:  98% system,	  1% softirq,	  3% hardirq,	  0% idle
-> 	#5:  98% system,	  1% softirq,	  3% hardirq,	  0% idle
-> Modules linked in:
-> irq event stamp: 150196
+This series adds two new features required to be able to run the test on
+more platforms on KernelCI.
 
-This patch fixed the problem in a different syzbot lockup.  Let's see if 
-it also fixes this one.  The console log output suggests that it will.
+The first patch adds a parameter to allow overriding the directory in
+which the board files will be looked for. Since the board files are
+hosted in a separate repository [1], this parameter allows overlaying
+those files on the filesystem and passing the location to the test.
 
-Alan Stern
+The second is needed for one platform in particular, MT8195, in which
+the usb controllers are instanced from a two-level deep DT node that
+doesn't allow unique matching based on the existing properties.
 
-#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git 8867bbd4a056
+[1] https://github.com/kernelci/platform-test-parameters
 
-Index: usb-devel/drivers/usb/class/cdc-wdm.c
-===================================================================
---- usb-devel.orig/drivers/usb/class/cdc-wdm.c
-+++ usb-devel/drivers/usb/class/cdc-wdm.c
-@@ -266,14 +266,14 @@ static void wdm_int_callback(struct urb
- 			dev_err(&desc->intf->dev, "Stall on int endpoint\n");
- 			goto sw; /* halt is cleared in work */
- 		default:
--			dev_err(&desc->intf->dev,
-+			dev_err_ratelimited(&desc->intf->dev,
- 				"nonzero urb status received: %d\n", status);
- 			break;
- 		}
- 	}
- 
- 	if (urb->actual_length < sizeof(struct usb_cdc_notification)) {
--		dev_err(&desc->intf->dev, "wdm_int_callback - %d bytes\n",
-+		dev_err_ratelimited(&desc->intf->dev, "wdm_int_callback - %d bytes\n",
- 			urb->actual_length);
- 		goto exit;
- 	}
+Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+---
+Nícolas F. R. A. Prado (2):
+      kselftest: devices: Allow specifying boards directory through parameter
+      kselftest: devices: Add of-fullname-regex property
+
+ .../selftests/devices/boards/google,spherion.yaml  |  4 +++
+ .../selftests/devices/test_discoverable_devices.py | 37 +++++++++++++++++++++-
+ 2 files changed, 40 insertions(+), 1 deletion(-)
+---
+base-commit: d97496ca23a2d4ee80b7302849404859d9058bcd
+change-id: 20240612-kselftest-discoverable-probe-mt8195-kci-ca21742776d0
+
+Best regards,
+-- 
+Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
 
