@@ -1,123 +1,116 @@
-Return-Path: <linux-usb+bounces-11281-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11282-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE38F907371
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2024 15:20:01 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C6BF89073B1
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2024 15:29:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7856E1F2343A
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2024 13:20:01 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 506DBB24833
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2024 13:29:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70B8F143C5F;
-	Thu, 13 Jun 2024 13:19:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EC7514430A;
+	Thu, 13 Jun 2024 13:29:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eeLm1vd8"
+	dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b="hEr0vpCb"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx.treblig.org (mx.treblig.org [46.235.229.95])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B38D1E49B;
-	Thu, 13 Jun 2024 13:19:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53DC1A94D;
+	Thu, 13 Jun 2024 13:28:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.229.95
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718284794; cv=none; b=oks6EqHHKZeAq9vBCzefBPPJs1HE/5sM04h2GR5LZgzmuAFCbxOb4FH4a6iIGxD5I7OdFE6MLVE2Ah/K3eHv+O4mmPtH5jNqoaDXYHWV52c3yRMpJBAPq6Bl0vKisVIw53Tw9wnNMR3OXYyFCQbuA6E8pJF0VHeaUN7wbOY7YAw=
+	t=1718285340; cv=none; b=A8/0X4kT4dgq2U2/B/NcGPdQZ8EAjCZYBrKULQ7cFZInx4yUuHVr2JUhpCTfFYAsgHrb+0ArJJp60IiEBZ7rD4j+3QgGKhnbGVkxm55p6c3dU/Cn1LjJOiscU+C4BDVyEMiLWbxmnTfDUfVExG5UpRt8KSkvn9JHuedEABlJPW0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718284794; c=relaxed/simple;
-	bh=Xj0fTEOHNx3Q4YEflBUls+3/aqrcnAVI5yTl1SkqXik=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NizGwUPQpgD1w8BGAD/FHbjRJuOnvK7GqJBe448UucEv/JWGIIG5uQnVGQCFqzdsNeD4IpsjN4fuWw8rCT2ZU0HJ/+er3Li53oMOlIBiQ3azuYG1au+ptOXlO/JU9G1o8cMOVNFMJhKdjJ95porVNYhuhS7Krj0ihDMjOsvgq2U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eeLm1vd8; arc=none smtp.client-ip=209.85.218.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a6f253a06caso130737866b.1;
-        Thu, 13 Jun 2024 06:19:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718284791; x=1718889591; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fJivB3lAqZdSHKd3laSLZTvON3gpyYSN3zAVDG77JhA=;
-        b=eeLm1vd8k0SeBOlaSv9mKdPv5axnUz00OV0pNrl1qthhwCuWWJGxgbERNqd/tPnBFv
-         ck/zIzq+L8BSmLGXf5ttCtoLPPhqBz8PyTuwKReAThVGmhG6sLtVGlezVcSAmZHE+Snl
-         LrwJFGP36Xv04EIsrNtpXzwtaaduoKA7rln7dQfVHTcTz16REQArAwM1EKFmcRCw6TeR
-         +P349n0HzhFRnkPajKETs9YZN8rGjneqTuyxAa+r8OCknJUZU7cOcDISzWQM1k0Ou76v
-         5uLrfk/wqzPkVm2IE0lIzLXzko2oODqQMcdhdjAE+kZcmVV6A6LmzfYAxr/cf2vScWp7
-         WW3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718284791; x=1718889591;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fJivB3lAqZdSHKd3laSLZTvON3gpyYSN3zAVDG77JhA=;
-        b=fCWgrA+Xchvq6Q7OW1jAxuXgy6ru9wuKmMTKt3b8fvegf1iekozutO8q3LUbb5PhU+
-         ZrQoYOelAdyMwCZCYyNRwl9Hs7Iou3R29On4D1VV/kvamlj1e9BiSmR3d3QP24UBW7t3
-         Iw/XSuirWb4SsCBwX9kpVhDi+LZzt3Llp1yRfxYv9S8Hulp2EYmH6BarbBVUlmsxxxig
-         pS6h8c9rz/Z07q9EMkN3CbOjyAgjoVbXw/yBYhAvSRlq2WcKRyBanlxH92LftJHrZa+Q
-         7TFkS2Z33dryKhqLgoOh9l0kNO6dKKeBi0piBRhCnqAh9mR1mv8kkvJOdkxFHRnOGgju
-         ajlQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX6soOBFtLWTrcq8Mkw0+KHlk4OrzGzNzBFWxZnhgJWtrE2PGzHZzQ0w296pqO7HXS6eltgGwwa5rwC7qsJW1qiRLJ5owuQFjGOXcv0gQw4w5PatX+ECJLkreViE+2x1edtvrpAcd78p6nwXO4qSzh2FiLuv5zqdoXVZLpqhbN5h4EElA==
-X-Gm-Message-State: AOJu0YxBp7WdKgWWQu7F5IUcQjNPkF+heAxOFpb/emls3SQ9sf5qeOA9
-	MkLW1XXMxa+h2/wilQrzX34FvQnZ5sILOhlwFxCdeX/3VKD3yeqeerdFaJs3drQhSYktcLDBmYl
-	LSarfw+/DDCqpJW+zm/bQ5smMhu4=
-X-Google-Smtp-Source: AGHT+IF9xJixqueLEsoJYNUdnYefU0/4ugzxbAQahO7t/3irWc+vxn0SjcTMwk0X/V/5gZgDrKFwFa5kckGo8IZxiPg=
-X-Received: by 2002:a17:906:1354:b0:a68:b73d:30d0 with SMTP id
- a640c23a62f3a-a6f47d4eceamr366263966b.6.1718284790528; Thu, 13 Jun 2024
- 06:19:50 -0700 (PDT)
+	s=arc-20240116; t=1718285340; c=relaxed/simple;
+	bh=M403i1wr03iFxSd5oZuZ47XjBAqlOdDgajGkG8jLGws=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JJ5M7AtIJ2U2JqbITv43fzRPeNIcbb5mScERGdFlTVa1DB6HaF2mWsclUekw25hbOZ0yWjzIe2N4B1XRiMPTbNeojhohA1GizHJhr5EjbJ1Ehat5fFDK3HCd4iy4L61U/MCvpWJnvwKFidSzjFp7e4wJ1q6MNzo7Eegce5T24Gs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org; spf=pass smtp.mailfrom=treblig.org; dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b=hEr0vpCb; arc=none smtp.client-ip=46.235.229.95
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=treblig.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
+	; s=bytemarkmx; h=Content-Type:MIME-Version:Message-ID:Subject:From:Date:From
+	:Subject; bh=Aw2UpRrb/0IRX1nWbi9uNr4uEqnfOdv5VXfHN4te1L0=; b=hEr0vpCbWOHz/J+z
+	+k0p0caJpTQx7IMpqg+C3MWqwiHA9TNK89ikZc4sB4js4JjRVAorgP4MlgM62J0DbOb/ML7+fddic
+	NuGK/F/+eOH4rgyckM7xu5nRMxjiXeYSJ0/aYR0KH4GDxSyGc+VdVUF0M1gUCzS+aTmNjtzA/do2S
+	OkM5hDTnORr9hyB+CUqv9OxrxhNOP9KTyd4idDdr95/3WPevSxRwwq+1ffCTNZxe7l0ibaBrsBa1A
+	cumxpA+CqXVXmqhY1nilgsgzG0pufuL5G10c7pJTKgphkN34UqDjLwall+Un1fSVUwwYlBgLmIpDf
+	v8RH1iVywx3mPROZ7w==;
+Received: from dg by mx.treblig.org with local (Exim 4.96)
+	(envelope-from <dg@treblig.org>)
+	id 1sHkVd-0062bu-0M;
+	Thu, 13 Jun 2024 13:28:57 +0000
+Date: Thu, 13 Jun 2024 13:28:57 +0000
+From: "Dr. David Alan Gilbert" <linux@treblig.org>
+To: johan@kernel.org, gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] USB: serial: spcp8x5: remove unused struct
+ 'spcp8x5_usb_ctrl_arg'
+Message-ID: <Zmr0GV57EGwxcYeM@gallifrey>
+References: <20240529234722.130609-1-linux@treblig.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240601092646.52139-1-joswang1221@gmail.com> <20240612152347.3192-1-joswang1221@gmail.com>
- <21cfeb4c-4ce2-487a-bdd5-45c3ed71bf6f@kernel.org>
-In-Reply-To: <21cfeb4c-4ce2-487a-bdd5-45c3ed71bf6f@kernel.org>
-From: joswang <joswang1221@gmail.com>
-Date: Thu, 13 Jun 2024 21:19:40 +0800
-Message-ID: <CAMtoTm1ORiZHhMZRZ9NCq4qD7RB-ZCzAnusdN3PvRUff5zSh3A@mail.gmail.com>
-Subject: Re: [PATCH v4, 1/3] dt-bindings: usb: dwc3: Add snps,p2p3tranok quirk
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
-	Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org, balbi@kernel.org, 
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Jos Wang <joswang@lenovo.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+In-Reply-To: <20240529234722.130609-1-linux@treblig.org>
+X-Chocolate: 70 percent or better cocoa solids preferably
+X-Operating-System: Linux/6.1.0-21-amd64 (x86_64)
+X-Uptime: 13:28:39 up 36 days, 42 min,  1 user,  load average: 0.08, 0.08,
+ 0.02
+User-Agent: Mutt/2.2.12 (2023-09-09)
 
-On Thu, Jun 13, 2024 at 2:17=E2=80=AFPM Krzysztof Kozlowski <krzk@kernel.or=
-g> wrote:
->
-> On 12/06/2024 17:23, joswang wrote:
-> >
-> > +  snps,p2p3tranok-quirk:
-> > +    description:
-> > +      When set, the controller transitions directly from phy power sta=
-te
-> > +      P2 to P3 or from state P3 to P2. Note that this can only be set
-> > +      if the USB3 PHY supports direct p3 to p2 or p2 to p3 conversion.
-> > +    type: boolean
->
-> Hm? You respond to feedback and, without waiting for my answer,
-> immediately send new version?
->
-> No. Read feedback on your previous version. Drop the quirk.
->
-> Best regards,
-> Krzysztof
->
+* linux@treblig.org (linux@treblig.org) wrote:
+> From: "Dr. David Alan Gilbert" <linux@treblig.org>
+> 
+> 'spcp8x5_usb_ctrl_arg' has been unused since the original
+> commit 619a6f1d1423 ("USB: add usb-serial spcp8x5 driver").
+> 
+> Remove it.
+> 
+> Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
 
-Thank you for your help in reviewing the code.
-Sorry, I submitted three patches in total. Patch1 (the current patch)
-and patch2 solve one case, and patch3 solves another case. Because
-patch3 needs to submit a new version, I resubmitted v3 and v4
-versions.
-Patch2 is under review, and there is no clear conclusion. For now,
-patch1 does not need to be paid attention to. I will notify you when
-patch2 has a clear conclusion.
+Ping?
 
-Thanks,
+Dave
 
-Jos Wang
+> ---
+>  drivers/usb/serial/spcp8x5.c | 10 ----------
+>  1 file changed, 10 deletions(-)
+> 
+> diff --git a/drivers/usb/serial/spcp8x5.c b/drivers/usb/serial/spcp8x5.c
+> index 09a972a838ee..6b294bf8bc43 100644
+> --- a/drivers/usb/serial/spcp8x5.c
+> +++ b/drivers/usb/serial/spcp8x5.c
+> @@ -49,16 +49,6 @@ static const struct usb_device_id id_table[] = {
+>  };
+>  MODULE_DEVICE_TABLE(usb, id_table);
+>  
+> -struct spcp8x5_usb_ctrl_arg {
+> -	u8	type;
+> -	u8	cmd;
+> -	u8	cmd_type;
+> -	u16	value;
+> -	u16	index;
+> -	u16	length;
+> -};
+> -
+> -
+>  /* spcp8x5 spec register define */
+>  #define MCR_CONTROL_LINE_RTS		0x02
+>  #define MCR_CONTROL_LINE_DTR		0x01
+> -- 
+> 2.45.1
+> 
+-- 
+ -----Open up your eyes, open up your mind, open up your code -------   
+/ Dr. David Alan Gilbert    |       Running GNU/Linux       | Happy  \ 
+\        dave @ treblig.org |                               | In Hex /
+ \ _________________________|_____ http://www.treblig.org   |_______/
 
