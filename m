@@ -1,116 +1,83 @@
-Return-Path: <linux-usb+bounces-11282-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11283-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C6BF89073B1
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2024 15:29:09 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C161B9073F8
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2024 15:40:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 506DBB24833
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2024 13:29:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3243C28B0DA
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2024 13:40:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EC7514430A;
-	Thu, 13 Jun 2024 13:29:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97599145323;
+	Thu, 13 Jun 2024 13:39:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b="hEr0vpCb"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="MfMzUYFq"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx.treblig.org (mx.treblig.org [46.235.229.95])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53DC1A94D;
-	Thu, 13 Jun 2024 13:28:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.229.95
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F9A7144D22;
+	Thu, 13 Jun 2024 13:39:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718285340; cv=none; b=A8/0X4kT4dgq2U2/B/NcGPdQZ8EAjCZYBrKULQ7cFZInx4yUuHVr2JUhpCTfFYAsgHrb+0ArJJp60IiEBZ7rD4j+3QgGKhnbGVkxm55p6c3dU/Cn1LjJOiscU+C4BDVyEMiLWbxmnTfDUfVExG5UpRt8KSkvn9JHuedEABlJPW0=
+	t=1718285987; cv=none; b=WMyYeEEKTGlZwuPthFebr8I8c+eHWbDpSs+dRTdHXpRPC8N3YrD2H75XIx9PjlV3Y6gPEO3C9cNCcdJJxUu+YsckLfNcq6Z7rFwyMbW5IFeWgXNHwnn5AI7gAWNBeOFHPhd2A9daUDi6PWQ3hCKhA2bhXOdaHBZb+cv5VCF+qqc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718285340; c=relaxed/simple;
-	bh=M403i1wr03iFxSd5oZuZ47XjBAqlOdDgajGkG8jLGws=;
+	s=arc-20240116; t=1718285987; c=relaxed/simple;
+	bh=0V2xfbv1qoX2jEhAXlPk2ELeXPbgFnKVzbds4fptVAc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JJ5M7AtIJ2U2JqbITv43fzRPeNIcbb5mScERGdFlTVa1DB6HaF2mWsclUekw25hbOZ0yWjzIe2N4B1XRiMPTbNeojhohA1GizHJhr5EjbJ1Ehat5fFDK3HCd4iy4L61U/MCvpWJnvwKFidSzjFp7e4wJ1q6MNzo7Eegce5T24Gs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org; spf=pass smtp.mailfrom=treblig.org; dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b=hEr0vpCb; arc=none smtp.client-ip=46.235.229.95
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=treblig.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
-	; s=bytemarkmx; h=Content-Type:MIME-Version:Message-ID:Subject:From:Date:From
-	:Subject; bh=Aw2UpRrb/0IRX1nWbi9uNr4uEqnfOdv5VXfHN4te1L0=; b=hEr0vpCbWOHz/J+z
-	+k0p0caJpTQx7IMpqg+C3MWqwiHA9TNK89ikZc4sB4js4JjRVAorgP4MlgM62J0DbOb/ML7+fddic
-	NuGK/F/+eOH4rgyckM7xu5nRMxjiXeYSJ0/aYR0KH4GDxSyGc+VdVUF0M1gUCzS+aTmNjtzA/do2S
-	OkM5hDTnORr9hyB+CUqv9OxrxhNOP9KTyd4idDdr95/3WPevSxRwwq+1ffCTNZxe7l0ibaBrsBa1A
-	cumxpA+CqXVXmqhY1nilgsgzG0pufuL5G10c7pJTKgphkN34UqDjLwall+Un1fSVUwwYlBgLmIpDf
-	v8RH1iVywx3mPROZ7w==;
-Received: from dg by mx.treblig.org with local (Exim 4.96)
-	(envelope-from <dg@treblig.org>)
-	id 1sHkVd-0062bu-0M;
-	Thu, 13 Jun 2024 13:28:57 +0000
-Date: Thu, 13 Jun 2024 13:28:57 +0000
-From: "Dr. David Alan Gilbert" <linux@treblig.org>
-To: johan@kernel.org, gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=fdp0ze5z/F/2ADs/twsK0NRkUreU0bmaRc+yOmB92fnaeOzDPmdvtbh+5NE3qpzedinncjjqUdcMYFrh6q5BlrD1o/vHqpYC2hl48I3yIvNyldt5e7sDpkgpTHntu1Yo6QaIYlBvXvUHIIA5HBq9yMF/2NBwIsYUP24mj9WiQFE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=MfMzUYFq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32B67C2BBFC;
+	Thu, 13 Jun 2024 13:39:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1718285986;
+	bh=0V2xfbv1qoX2jEhAXlPk2ELeXPbgFnKVzbds4fptVAc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=MfMzUYFq6tSu6oKFUlDbbXzqclh+Wul3HoHFWqBZRUZBOKrdB1u9ptSC3Z3eGLraN
+	 BI+NQDKs4uYs72jr5iiXcYpgFsZb8V2npCajdsRnwX8yMbN4OvrGIKQOoR3meKume8
+	 RwPVBIJiLfu8/yyveo0MltaPSz2MQGLhX2sDRBv8=
+Date: Thu, 13 Jun 2024 15:39:43 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: "Dr. David Alan Gilbert" <linux@treblig.org>
+Cc: johan@kernel.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] USB: serial: spcp8x5: remove unused struct
  'spcp8x5_usb_ctrl_arg'
-Message-ID: <Zmr0GV57EGwxcYeM@gallifrey>
+Message-ID: <2024061357-lagged-cloud-a2a3@gregkh>
 References: <20240529234722.130609-1-linux@treblig.org>
+ <Zmr0GV57EGwxcYeM@gallifrey>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240529234722.130609-1-linux@treblig.org>
-X-Chocolate: 70 percent or better cocoa solids preferably
-X-Operating-System: Linux/6.1.0-21-amd64 (x86_64)
-X-Uptime: 13:28:39 up 36 days, 42 min,  1 user,  load average: 0.08, 0.08,
- 0.02
-User-Agent: Mutt/2.2.12 (2023-09-09)
+In-Reply-To: <Zmr0GV57EGwxcYeM@gallifrey>
 
-* linux@treblig.org (linux@treblig.org) wrote:
-> From: "Dr. David Alan Gilbert" <linux@treblig.org>
+On Thu, Jun 13, 2024 at 01:28:57PM +0000, Dr. David Alan Gilbert wrote:
+> * linux@treblig.org (linux@treblig.org) wrote:
+> > From: "Dr. David Alan Gilbert" <linux@treblig.org>
+> > 
+> > 'spcp8x5_usb_ctrl_arg' has been unused since the original
+> > commit 619a6f1d1423 ("USB: add usb-serial spcp8x5 driver").
+> > 
+> > Remove it.
+> > 
+> > Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
 > 
-> 'spcp8x5_usb_ctrl_arg' has been unused since the original
-> commit 619a6f1d1423 ("USB: add usb-serial spcp8x5 driver").
-> 
-> Remove it.
-> 
-> Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
+> Ping?
 
-Ping?
+It's only been 2 weeks for a "remove some unused code" type of patch,
+which will be gotten to, but realize that people are traveling and the
+like...  Give it some time.
 
-Dave
+In the meantime, why not help review other patches on the list?
 
-> ---
->  drivers/usb/serial/spcp8x5.c | 10 ----------
->  1 file changed, 10 deletions(-)
-> 
-> diff --git a/drivers/usb/serial/spcp8x5.c b/drivers/usb/serial/spcp8x5.c
-> index 09a972a838ee..6b294bf8bc43 100644
-> --- a/drivers/usb/serial/spcp8x5.c
-> +++ b/drivers/usb/serial/spcp8x5.c
-> @@ -49,16 +49,6 @@ static const struct usb_device_id id_table[] = {
->  };
->  MODULE_DEVICE_TABLE(usb, id_table);
->  
-> -struct spcp8x5_usb_ctrl_arg {
-> -	u8	type;
-> -	u8	cmd;
-> -	u8	cmd_type;
-> -	u16	value;
-> -	u16	index;
-> -	u16	length;
-> -};
-> -
-> -
->  /* spcp8x5 spec register define */
->  #define MCR_CONTROL_LINE_RTS		0x02
->  #define MCR_CONTROL_LINE_DTR		0x01
-> -- 
-> 2.45.1
-> 
--- 
- -----Open up your eyes, open up your mind, open up your code -------   
-/ Dr. David Alan Gilbert    |       Running GNU/Linux       | Happy  \ 
-\        dave @ treblig.org |                               | In Hex /
- \ _________________________|_____ http://www.treblig.org   |_______/
+thanks,
+
+greg k-h
 
