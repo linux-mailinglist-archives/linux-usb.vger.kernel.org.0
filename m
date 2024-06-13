@@ -1,156 +1,90 @@
-Return-Path: <linux-usb+bounces-11299-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11300-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5C19907E00
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2024 23:19:25 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5825C907F5A
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Jun 2024 01:25:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 594B71C2284D
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2024 21:19:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EA72E1F23BA3
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2024 23:25:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B448B14A4E5;
-	Thu, 13 Jun 2024 21:19:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="X10ZHZc9"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F02314E2E7;
+	Thu, 13 Jun 2024 23:25:05 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from 009.lax.mailroute.net (009.lax.mailroute.net [199.89.1.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C15A1149DF7;
-	Thu, 13 Jun 2024 21:19:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8582A131E33
+	for <linux-usb@vger.kernel.org>; Thu, 13 Jun 2024 23:25:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.71
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718313543; cv=none; b=uVm4WrEFAURZOURxmWuaWspIaBcPWW59cTTXonk47t2cLyHtVv+2cunLDC4B8nBvY/E0HHqbHPhEfUDCto6jomMfxfPshce/6mwwDx+dTJBSHQdRXzZHw4ncjXPcna9DzhpY/HOZ9ZmSkEEFDLXQgAnclQ339UF2g+uh3Q1oVog=
+	t=1718321105; cv=none; b=aYK7bOlurzs03N8oC59HNc6NCiA7olY4IWhdlyA/EC5t+o7cSXrisSre3EShx6qh8VzCjXEcxNT6+rlMPCWSYzKLvFyqwNsxadv//8Us+CSi4OYuzM9RGxTaNSSkCc4dikbIReXDsSXJQTy0N0pJx0qzGvDqAkYEyjOlAnbAZ4k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718313543; c=relaxed/simple;
-	bh=tZvJB1zZMlZ/8ONQM8FRNxl/VRbTmnA/DEVVz4TVs9U=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=sWStXt52dl91ckZvsT6gmxdfa1rv232OtR19DXCPGhFaFwdur5P1G1A90sXALElp+s7uo0oCR4mC8aeddOHNFVyLNvmKEP+mpB3nm6kHPkCzVJRi8eDEbVPO7kyx3mygmWOwd09tMIG9OqYqOqEnJ0fuL6ewmgZojteQw5o8wno=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=X10ZHZc9; arc=none smtp.client-ip=199.89.1.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
-Received: from localhost (localhost [127.0.0.1])
-	by 009.lax.mailroute.net (Postfix) with ESMTP id 4W0Zz91nL8zlgMVW;
-	Thu, 13 Jun 2024 21:19:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:mime-version:references:in-reply-to
-	:x-mailer:message-id:date:date:subject:subject:from:from
-	:received:received; s=mr01; t=1718313535; x=1720905536; bh=3P4N3
-	+6ifBdgnmu9uA3MOujTvZ1LycpwhELSBY2Mf2o=; b=X10ZHZc9rqFtJO7Ji/Ayc
-	K9dz9pkQ8tiTkTorj+wKLoRScQaB0zb4p0SxXhM/6Bk7dEMewrGW8giZlmTSPJQ2
-	EUdLSM6cAD8vOUbxEam3aO3EUhROu1gCeQqa4oGFR1uW4orW2r067BSoxXjB5r2w
-	i3YgwBucT3bf4MP9uYpw4q41VRJeIMarmudJkHMvkwbHa+yk0fRSHH/0CCgZc3XU
-	tcbx7dPd0z03EcOPXRChnxu2bU1quEStvxqHxcWI/UnU2SJnGEPeiIxI2pi5NAbV
-	6v+EuWywGM1N4oDGgSEAuDSg22SnuS6Wc25Z2XiwlHwOWgiUXEvO5j+ERIno4A1K
-	g==
-X-Virus-Scanned: by MailRoute
-Received: from 009.lax.mailroute.net ([127.0.0.1])
- by localhost (009.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id CODr6Bz3qUgG; Thu, 13 Jun 2024 21:18:55 +0000 (UTC)
-Received: from bvanassche.mtv.corp.google.com (unknown [104.132.0.90])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 009.lax.mailroute.net (Postfix) with ESMTPSA id 4W0Zz25qZRzlgMVX;
-	Thu, 13 Jun 2024 21:18:54 +0000 (UTC)
-From: Bart Van Assche <bvanassche@acm.org>
-To: "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc: Alan Stern <stern@rowland.harvard.edu>,
-	linux-scsi@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	Bart Van Assche <bvanassche@acm.org>,
-	stable@vger.kernel.org,
-	Joao Machado <jocrismachado@gmail.com>,
-	Andy Shevchenko <andy.shevchenko@gmail.com>,
-	Christian Heusel <christian@heusel.eu>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Oliver Neukum <oneukum@suse.com>
-Subject: [PATCH v3 2/2] usb: Do not query the IO advice hints grouping mode page for USB devices
-Date: Thu, 13 Jun 2024 14:18:27 -0700
-Message-ID: <20240613211828.2077477-3-bvanassche@acm.org>
-X-Mailer: git-send-email 2.45.2.627.g7a2c4fd464-goog
-In-Reply-To: <20240613211828.2077477-1-bvanassche@acm.org>
-References: <20240613211828.2077477-1-bvanassche@acm.org>
+	s=arc-20240116; t=1718321105; c=relaxed/simple;
+	bh=kRSIYh+IYVsXXlkBrcyb1CecN7b4j+1hi+u7PUdG9pU=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=tY8m2m4H0//Nn2DfiQ46p7Kp/H9I2EVmgkhXqNgGtl9X1EEeMHyc/5gA4LtAQTfMNBMjPcf2tuy68QMrEr/sUCkmczJ0q4Y7xDzjEY2CK6qgZOwIYHlSLf0y/6qgCe67foLSOF7EkUG70QxZX+d1KU9Dh6e2q9oYK6kB4YkWaE0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f71.google.com with SMTP id ca18e2360f4ac-7e20341b122so141784339f.1
+        for <linux-usb@vger.kernel.org>; Thu, 13 Jun 2024 16:25:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718321103; x=1718925903;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qG6e0f6B6AAWAv+NDZols4qYfUhB6B8cdTbTKaoc4lY=;
+        b=VqB3o7qqCjKznIrLIJZ1w0caaKYmxdUJ5XB96KkMX/gw8f1tvyCupQAKCLWh9JR0FD
+         5blZxUx7ykmVoDKcMrFER/PJtEDTXdWbUVVjcShOfTDNLCtB89YyGkSey+V1xpnwyMa0
+         XnfEjX3xInUNAGDJv23ZVaqrhoel+I9a80kbYXgFjrAV0dTv5rDQc1EFW/LjntQY/28d
+         YY+2biNpaPu84EEQqe/pPLwQBFscbpP3ggaiTQIExHFkSmjhcwF4Ym77EQI0OvQcgFPK
+         s19waYx8zh4+1xy6gAiTsXdccKWCs5p/YWIaA3D+q7U1uF03jPl8e+z72Oc1HP0DH+si
+         +yog==
+X-Forwarded-Encrypted: i=1; AJvYcCWiOff8OUOgbXdca8TLWbALbsXPz5fLx7QBCSgOiq9ytpCye8md7/q9eEaN+66+4Zbrw4AlDcP7p4RYi7jFJO0iBSJ7ik1QeR03
+X-Gm-Message-State: AOJu0Yz3nmRwrXNsOkrZFACW4Dm8Qz3Y6+IUKfLZ/2YR7kEXuC/U78FN
+	uNc1IVW2X2CmEbOi1QOCfKgjAwjw6aYLqhIL0Lx3CZPD38trqPnq1pff8GygQ2/VfFcAk4+73WK
+	4BbVeds6TDA4QjLxuPVInLT6JKJ7W4qHVlM3xuCQJM+yZU9puRG1MV2s=
+X-Google-Smtp-Source: AGHT+IEhDJvAgrT7IU1f8Os5C1RPrBKRLzz2lQBbD8T5VpaHGB5z5lOjl4EfW2O2KasgHQP6Kj4s1zW3ckdJhh2SdkGJz5NJZnVa
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+X-Received: by 2002:a05:6638:14ca:b0:4b9:23bf:6fd5 with SMTP id
+ 8926c6da1cb9f-4b96420b2c4mr11353173.6.1718321102775; Thu, 13 Jun 2024
+ 16:25:02 -0700 (PDT)
+Date: Thu, 13 Jun 2024 16:25:02 -0700
+In-Reply-To: <4e155544-60df-42d2-89ea-924ebc9f7057@rowland.harvard.edu>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000f0fa5e061acdce6a@google.com>
+Subject: Re: [syzbot] [bluetooth?] [usb?] BUG: soft lockup in hci_cmd_timeout
+From: syzbot <syzbot+1b2abad17596ad03dcff@syzkaller.appspotmail.com>
+To: johan.hedberg@gmail.com, linux-bluetooth@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, luiz.dentz@gmail.com, 
+	marcel@holtmann.org, stern@rowland.harvard.edu, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-Recently it was reported that the following USB storage devices are unusa=
-ble
-with Linux kernel 6.9:
-* Kingston DataTraveler G2
-* Garmin FR35
+Hello,
 
-This is because attempting to read the IO advice hints grouping mode page
-causes these devices to reset. Hence do not read the IO advice hints grou=
-ping
-mode page from USB storage devices.
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-Cc: stable@vger.kernel.org
-Fixes: 4f53138fffc2 ("scsi: sd: Translate data lifetime information")
-Reported-by: Joao Machado <jocrismachado@gmail.com>
-Closes: https://lore.kernel.org/linux-scsi/20240130214911.1863909-1-bvana=
-ssche@acm.org/T/#mf4e3410d8f210454d7e4c3d1fb5c0f41e651b85f
-Tested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Bisected-by: Christian Heusel <christian@heusel.eu>
-Reported-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Closes: https://lore.kernel.org/linux-scsi/CACLx9VdpUanftfPo2jVAqXdcWe8Y4=
-3MsDeZmMPooTzVaVJAh2w@mail.gmail.com/
-Signed-off-by: Bart Van Assche <bvanassche@acm.org>
----
- drivers/usb/storage/scsiglue.c | 6 ++++++
- drivers/usb/storage/uas.c      | 7 +++++++
- 2 files changed, 13 insertions(+)
+Reported-and-tested-by: syzbot+1b2abad17596ad03dcff@syzkaller.appspotmail.com
 
-diff --git a/drivers/usb/storage/scsiglue.c b/drivers/usb/storage/scsiglu=
-e.c
-index b31464740f6c..8c8b5e6041cc 100644
---- a/drivers/usb/storage/scsiglue.c
-+++ b/drivers/usb/storage/scsiglue.c
-@@ -79,6 +79,12 @@ static int slave_alloc (struct scsi_device *sdev)
- 	if (us->protocol =3D=3D USB_PR_BULK && us->max_lun > 0)
- 		sdev->sdev_bflags |=3D BLIST_FORCELUN;
-=20
-+	/*
-+	 * Some USB storage devices reset if the IO advice hints grouping mode
-+	 * page is queried. Hence skip that mode page.
-+	 */
-+	sdev->sdev_bflags |=3D BLIST_SKIP_IO_HINTS;
-+
- 	return 0;
- }
-=20
-diff --git a/drivers/usb/storage/uas.c b/drivers/usb/storage/uas.c
-index a48870a87a29..b610a2de4ae5 100644
---- a/drivers/usb/storage/uas.c
-+++ b/drivers/usb/storage/uas.c
-@@ -21,6 +21,7 @@
- #include <scsi/scsi.h>
- #include <scsi/scsi_eh.h>
- #include <scsi/scsi_dbg.h>
-+#include <scsi/scsi_devinfo.h>
- #include <scsi/scsi_cmnd.h>
- #include <scsi/scsi_device.h>
- #include <scsi/scsi_host.h>
-@@ -820,6 +821,12 @@ static int uas_slave_alloc(struct scsi_device *sdev)
- 	struct uas_dev_info *devinfo =3D
- 		(struct uas_dev_info *)sdev->host->hostdata;
-=20
-+	/*
-+	 * Some USB storage devices reset if the IO advice hints grouping mode
-+	 * page is queried. Hence skip that mode page.
-+	 */
-+	sdev->sdev_bflags |=3D BLIST_SKIP_IO_HINTS;
-+
- 	sdev->hostdata =3D devinfo;
- 	return 0;
- }
+Tested on:
+
+commit:         8867bbd4 mm: arm64: Fix the out-of-bounds issue in con..
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=1258bf6a980000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3b4350cf56c61c80
+dashboard link: https://syzkaller.appspot.com/bug?extid=1b2abad17596ad03dcff
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+userspace arch: arm64
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=137d960e980000
+
+Note: testing is done by a robot and is best-effort only.
 
