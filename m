@@ -1,132 +1,192 @@
-Return-Path: <linux-usb+bounces-11266-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11267-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C35179067DE
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2024 10:56:53 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 77593906934
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2024 11:46:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 422C2B25E3D
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2024 08:55:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 221592862B1
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2024 09:46:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4D3C3209;
-	Thu, 13 Jun 2024 08:52:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33BA61411C1;
+	Thu, 13 Jun 2024 09:46:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fmlbtIPO"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="F5c4pI2A"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66A1113C9A1;
-	Thu, 13 Jun 2024 08:52:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD20713A41A
+	for <linux-usb@vger.kernel.org>; Thu, 13 Jun 2024 09:46:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718268767; cv=none; b=Q0MlWEJDKx9CFNh3wZdZTRi+t0QKOz7cRBX07YBvIxnmG225gTRU6hiZsT3ptO4BvrZTu56CBy3IdPgPxbhAd3dSGED2RQkRbBf1AVKJ3urvf9lbfN9PovSMud8ceyfcPkCP/RChAtutJgR9cU1mRhiqFlGZRxdDxRw8kQgasx8=
+	t=1718271963; cv=none; b=kVXhJbT2uXPIcdtBA7GWtxP0RkllV5oC/UhelATTfRlXyfXvyNXPyNXE0vEckGQPootQWvOUsSLIA7xcUjCVuFV4RJNOrZXT4oU5+vVqawmPwn+4VyGwWCBr+sV9pJKqRYIW1udgaWAOlGdasGBizHiqO8LuZNYxOoXtNGictD8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718268767; c=relaxed/simple;
-	bh=Irx/gci0ZA3rOvQHA6GSCj2QdQ8Xc/neLqNKaC/68s0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=bK2ghraySPjPnpQY6cgqxqw7ugFcY+FuNEMojl78QcQo+prwzf+/zhFZ1adm9ciWktnsOXeZL5wodYxNXEnDHzyUn/Y+m0PC/02rBMBWeiM7125KkpjaT8FpcHGzbWl3Mb5hrfJ1x4PvhUZiVlcl2LhGAsTsUn1CEcLu9Z6WTsY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fmlbtIPO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9312CC2BBFC;
-	Thu, 13 Jun 2024 08:52:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718268766;
-	bh=Irx/gci0ZA3rOvQHA6GSCj2QdQ8Xc/neLqNKaC/68s0=;
-	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=fmlbtIPO+G1MlsJ7fVs6XPIRy/EDzweZhiVWTq4c/z5HtoDVyG3poQVD1KbFDgkcX
-	 kxnKHfHnMC5U5tTtF+/sxIv6hXBB2znmPqAskRGqLfGjFqEKtIVu3WJpQhpdurLdtQ
-	 X2qpe02hoiokT2ldHyzVo60/vwzLSiMVDbKcDI5Sawe+TuhSt4mAMbYTlJhvjoqfhf
-	 F8YxgIMmf23SUbFTbOWDvLvpBSpCStqWFoKLx3U1vuPp5fiVMSK36UMehhQR8iYsL5
-	 m+vHwXWaFRCpgleQoB5OJwTkb2t8x7ENOUaU0Of2hASk+/Tjz7r9822LlIYUTAoC35
-	 jFHQUF8BENOxQ==
-Message-ID: <69839983-5ec0-4207-a798-8cdac7444f20@kernel.org>
-Date: Thu, 13 Jun 2024 10:52:42 +0200
+	s=arc-20240116; t=1718271963; c=relaxed/simple;
+	bh=HBTxYj7hSb7vADSO2DhC2kKfnMQmixkYdyntaGXn0JU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=jb3OpuI3qNoThSZRub8eHaOSUvsfFCLcFiNAV1Y1GEEqr88pBdqGa8TV2NXNaM8LI6Ib/z+BZmUoighWUdnYOFl7SwekNkII0LN6PnZtAyiVkswJ4M0QKfP0zADlRmKmOjmUrToZlwbCcT0LuUOdy6LWvZ9YHiKmpUdjnJ9sIkM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=F5c4pI2A; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1718271960;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=3tyKWNDm8K+z1bqT8uezMkjcvOydkUdTtsMuG8yW+Z0=;
+	b=F5c4pI2AzLxJbA6JfeOYSF7O0jQduEtDiqmjaGCwehtQd4F+fbLS5LrHc4YBK6EpDpUqfS
+	d2DWKjTLS+CmgK+YAAoTdJfFhxhkjayxSWfcXylqIFQTNg4wShCXa62d5YMYBc0g+/tf53
+	aVYqIbbKY7kqP6P47OyP0YQsiyQuwvI=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-374-hOchQgmBMNu8Wpx5P95fuQ-1; Thu,
+ 13 Jun 2024 05:45:56 -0400
+X-MC-Unique: hOchQgmBMNu8Wpx5P95fuQ-1
+Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 85EF719560B3;
+	Thu, 13 Jun 2024 09:45:54 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.39.192.157])
+	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 906DF1955E91;
+	Thu, 13 Jun 2024 09:45:48 +0000 (UTC)
+From: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+To: yongqin.liu@linaro.org
+Cc: amit.pundir@linaro.org,
+	davem@davemloft.net,
+	edumazet@google.com,
+	inventor500@vivaldi.net,
+	jstultz@google.com,
+	jtornosm@redhat.com,
+	kuba@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org,
+	pabeni@redhat.com,
+	stable@vger.kernel.org,
+	sumit.semwal@linaro.org
+Subject: Re: [PATCH] net: usb: ax88179_178a: fix link status when link is set to down/up
+Date: Thu, 13 Jun 2024 11:45:44 +0200
+Message-ID: <20240613094546.508121-1-jtornosm@redhat.com>
+In-Reply-To: <CAMSo37U3Pree8XbHNBOzNXhFAiPss+8FQms1bLy06xeMeWfTcg@mail.gmail.com>
+References: <CAMSo37U3Pree8XbHNBOzNXhFAiPss+8FQms1bLy06xeMeWfTcg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: dwc3: core: remove lock of otg mode during gadget
- suspend/resume to avoid deadlock
-To: Meng Li <Meng.Li@windriver.com>, Thinh.Nguyen@synopsys.com,
- gregkh@linuxfoundation.org, quic_uaggarwa@quicinc.com,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240613072310.1927966-1-Meng.Li@windriver.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20240613072310.1927966-1-Meng.Li@windriver.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
 
-On 13/06/2024 09:23, Meng Li wrote:
-> When config CONFIG_USB_DWC3_DUAL_ROLE is selected, and trigger system
-> to enter suspend status with below command:
-> echo mem > /sys/power/state
-> There will be a deadlock issue occurring. Because dwc3_gadget_suspend() also
-> try to get the lock again when previous invoked dwc3_suspend_common() has
-> got the lock . This issue is introduced by commit c7ebd8149ee5 ("usb: dwc3:
-> gadget: Fix NULL pointer dereference in dwc3_gadget_suspend") that removes
-> the code of checking whether dwc->gadget_driver is NULL or not. It causes the
-> following code is executed and deadlock occurs when trying to get the spinlock.
-> To fix the deadlock issue, refer to commit 5265397f9442("usb: dwc3: Remove
-> DWC3 locking during gadget suspend/resume"), remove lock of otg mode during
-> gadget suspend/resume.
+Hello Yongqin,
 
-That's a funny way of fixing deadlocks: remove the lock. Of course it
-could be correct way with some justification why locking is not needed.
-No such justification here, so following your logic, let's remove
-locking everywhere and then no deadlocks possible!
+After some research  and testing, it seems to happen that if initialization
+is slower the second reset from open is needed too.
+So, I have been working with some reproducers and I think I have the
+solution for detecting when there is a problem.
+If you can test it in your real environment that would be great.
 
-Let me prepare patches for that...
+Here the patch on the latest version of the file:
+$ git diff drivers/net/usb/ax88179_178a.c
+diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
+index 51c295e1e823..60357796be99 100644
+--- a/drivers/net/usb/ax88179_178a.c
++++ b/drivers/net/usb/ax88179_178a.c
+@@ -174,7 +174,6 @@ struct ax88179_data {
+        u32 wol_supported;
+        u32 wolopts;
+        u8 disconnecting;
+-       u8 initialized;
+ };
+ 
+ struct ax88179_int_data {
+@@ -327,7 +326,8 @@ static void ax88179_status(struct usbnet *dev, struct urb *urb)
+ 
+        if (netif_carrier_ok(dev->net) != link) {
+                usbnet_link_change(dev, link, 1);
+-               netdev_info(dev->net, "ax88179 - Link status is: %d\n", link);
++               if (!link)
+diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
+index 51c295e1e823..60357796be99 100644
+--- a/drivers/net/usb/ax88179_178a.c
++++ b/drivers/net/usb/ax88179_178a.c
+@@ -174,7 +174,6 @@ struct ax88179_data {
+        u32 wol_supported;
+        u32 wolopts;
+        u8 disconnecting;
+-       u8 initialized;
+ };
+ 
+ struct ax88179_int_data {
+@@ -327,7 +326,8 @@ static void ax88179_status(struct usbnet *dev, struct urb *urb)
+ 
+        if (netif_carrier_ok(dev->net) != link) {
+                usbnet_link_change(dev, link, 1);
+-               netdev_info(dev->net, "ax88179 - Link status is: %d\n", link);
++               if (!link)
++                       netdev_info(dev->net, "ax88179 - Link status is: %d\n", link);
+        }
+ }
+ 
+@@ -1543,6 +1543,7 @@ static int ax88179_link_reset(struct usbnet *dev)
+                         GMII_PHY_PHYSR, 2, &tmp16);
+ 
+        if (!(tmp16 & GMII_PHY_PHYSR_LINK)) {
++               netdev_info(dev->net, "ax88179 - Link status is: 0\n");
+                return 0;
+        } else if (GMII_PHY_PHYSR_GIGA == (tmp16 & GMII_PHY_PHYSR_SMASK)) {
+                mode |= AX_MEDIUM_GIGAMODE | AX_MEDIUM_EN_125MHZ;
+@@ -1580,6 +1581,8 @@ static int ax88179_link_reset(struct usbnet *dev)
+ 
+        netif_carrier_on(dev->net);
+ 
++       netdev_info(dev->net, "ax88179 - Link status is: 1\n");
++
+        return 0;
+ }
+ 
+@@ -1678,12 +1681,21 @@ static int ax88179_reset(struct usbnet *dev)
+ 
+ static int ax88179_net_reset(struct usbnet *dev)
+ {
+-       struct ax88179_data *ax179_data = dev->driver_priv;
++       u16 tmp16;
+ 
+-       if (ax179_data->initialized)
++       ax88179_read_cmd(dev, AX_ACCESS_PHY, AX88179_PHY_ID, GMII_PHY_PHYSR,
++                        2, &tmp16);
++       if (tmp16) {
++               ax88179_read_cmd(dev, AX_ACCESS_MAC, AX_MEDIUM_STATUS_MODE,
++                                2, 2, &tmp16);
++               if (!(tmp16 & AX_MEDIUM_RECEIVE_EN)) {
++                       tmp16 |= AX_MEDIUM_RECEIVE_EN;
++                       ax88179_write_cmd(dev, AX_ACCESS_MAC, AX_MEDIUM_STATUS_MODE,
++                                         2, 2, &tmp16);
++               }
++       } else {
+                ax88179_reset(dev);
+-       else
+-               ax179_data->initialized = 1;
++       }
+ 
+        return 0;
+ }
 
-Best regards,
-Krzysztof
+In addition, I have fixed the logs to show the link correclty.
+
+If this is ok, I will submit the patch.
+
+Thanks
+
+Best regards
+José Ignacio
 
 
