@@ -1,43 +1,47 @@
-Return-Path: <linux-usb+bounces-11244-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11245-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC4AF90605C
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2024 03:23:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 862BC906060
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2024 03:25:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5727D282FFC
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2024 01:23:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EB2F7282C0A
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2024 01:25:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 480A3D530;
-	Thu, 13 Jun 2024 01:23:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8746DC144;
+	Thu, 13 Jun 2024 01:25:18 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id AF4B2C8C7
-	for <linux-usb@vger.kernel.org>; Thu, 13 Jun 2024 01:23:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with SMTP id A5D63B664
+	for <linux-usb@vger.kernel.org>; Thu, 13 Jun 2024 01:25:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718241801; cv=none; b=n54m3jL6CBko4l67qXrq7Wh4swLYBKvY6vBLJ+EznNreC+m6C4cOIEL2zKqyX/ruAePmkGglW7mH7N3J2e5KLSCTF+I/uF5IxlqV0IzyMXLgkyEbJ+nBJVRjYZ483E4goxoEQZZWy0JXs5FtdCv2WJ8i+2wJ0kv4MUl4f9Y1Flo=
+	t=1718241918; cv=none; b=CIzuvL0Loe47dHNGfrlFCF/vPC2j2EUpBJRDqgmRXrrqYIoMLC8M86+hF7h5iQN6LdHzak+FYVLMk31/w8ewOY5d8ZEGQtdqnH3iF1OLELaamDN6tZcZRX9hM3BS7PuQoGoOixIpiBbm2Oq8nzhRP9heypqKTFtBXor1XjryuaM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718241801; c=relaxed/simple;
-	bh=tl13HOFJCymRly5X6WxSw4qih6uoNtD88ObLIrANbDo=;
+	s=arc-20240116; t=1718241918; c=relaxed/simple;
+	bh=Dy43Ep+dfiP1wMhLybaOZNggtqTx58gNGri+jBBfQ1o=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JQlaXusv1AfvBfuTKrC0d+6ibc4avJ20a89vXQnthoTXKChd1+HcLz5xjMrdzBXM0zwyXtBqsb/3V5DrwuCvtib/0J4igfkID7Id9Bu4WBAVOviAO1Wcl3tEgUG7uI+66dkzmdhx9smEOu6vBnhaJ8eHohM2SmTiLMzwOc+hZ6E=
+	 Content-Type:Content-Disposition:In-Reply-To; b=QxIwtYDa906uGO1WdbcxPVc5DCMsrXgNhvw+qlQTvox9uQne1/buDlO/nULKrdh+os4QY5An0RJet9cQagQKSVYqZEBwjJ+AzpKwgf6lKuiPF6Hej3wgpgRY7P6wbWOKU9w8s4AvOXogbRqTmz9t/HNN0CIb+tAwwbKN0V2kH/c=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
-Received: (qmail 244083 invoked by uid 1000); 12 Jun 2024 21:23:17 -0400
-Date: Wed, 12 Jun 2024 21:23:17 -0400
+Received: (qmail 244126 invoked by uid 1000); 12 Jun 2024 21:25:15 -0400
+Date: Wed, 12 Jun 2024 21:25:15 -0400
 From: Alan Stern <stern@rowland.harvard.edu>
-To: syzbot <syzbot+5f996b83575ef4058638@syzkaller.appspotmail.com>
-Cc: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-  linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [usb?] INFO: rcu detected stall in raw_ioctl
-Message-ID: <871507d8-b4ff-4af8-8bba-9a3149c41e8a@rowland.harvard.edu>
-References: <684687e4-8be4-42ee-a125-8ef9acc3fec9@rowland.harvard.edu>
- <000000000000babbf8061aa113df@google.com>
- <2bfca69a-b7e0-4f66-9025-1324af803318@rowland.harvard.edu>
+To: Bart Van Assche <bvanassche@acm.org>
+Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
+  linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org,
+  Joao Machado <jocrismachado@gmail.com>,
+  Andy Shevchenko <andy.shevchenko@gmail.com>,
+  Christian Heusel <christian@heusel.eu>, stable@vger.kernel.org,
+  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+  Oliver Neukum <oneukum@suse.com>
+Subject: Re: [PATCH v2 2/2] scsi: core: Do not query IO hints for USB devices
+Message-ID: <5c873978-47d7-4409-82fc-d4f3841b5069@rowland.harvard.edu>
+References: <20240612203735.4108690-1-bvanassche@acm.org>
+ <20240612203735.4108690-4-bvanassche@acm.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -46,58 +50,79 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2bfca69a-b7e0-4f66-9025-1324af803318@rowland.harvard.edu>
+In-Reply-To: <20240612203735.4108690-4-bvanassche@acm.org>
 
-Try again, with the "#syz test:" command present this time.  Sigh.
-
-On Tue, Jun 11, 2024 at 11:03:03AM -0700, syzbot wrote:
-> Hello,
+On Wed, Jun 12, 2024 at 01:37:34PM -0700, Bart Van Assche wrote:
+> Recently it was reported that the following USB storage devices are unusable
+> with Linux kernel 6.9:
+> * Kingston DataTraveler G2
+> * Garmin FR35
 > 
-> syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+> This is because attempting to read the IO hint VPD page causes these devices
+> to reset. Hence do not read the IO hint VPD page from USB storage devices.
 > 
-> Reported-and-tested-by: syzbot+5f996b83575ef4058638@syzkaller.appspotmail.com
+> Cc: Alan Stern <stern@rowland.harvard.edu>
+> Cc: linux-usb@vger.kernel.org
+> Cc: Joao Machado <jocrismachado@gmail.com>
+> Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
+> Cc: Christian Heusel <christian@heusel.eu>
+> Cc: stable@vger.kernel.org
+> Fixes: 4f53138fffc2 ("scsi: sd: Translate data lifetime information")
+> Reported-by: Joao Machado <jocrismachado@gmail.com>
+> Closes: https://lore.kernel.org/linux-scsi/20240130214911.1863909-1-bvanassche@acm.org/T/#mf4e3410d8f210454d7e4c3d1fb5c0f41e651b85f
+> Tested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> Bisected-by: Christian Heusel <christian@heusel.eu>
+> Reported-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> Closes: https://lore.kernel.org/linux-scsi/CACLx9VdpUanftfPo2jVAqXdcWe8Y43MsDeZmMPooTzVaVJAh2w@mail.gmail.com/
+> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+> ---
+
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+
+>  drivers/usb/storage/scsiglue.c | 6 ++++++
+>  drivers/usb/storage/uas.c      | 7 +++++++
+>  2 files changed, 13 insertions(+)
 > 
-> Tested on:
-> 
-> commit:         8867bbd4 mm: arm64: Fix the out-of-bounds issue in con..
-> git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
-> console output: https://syzkaller.appspot.com/x/log.txt?x=14e092de980000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=3b4350cf56c61c80
-> dashboard link: https://syzkaller.appspot.com/bug?extid=5f996b83575ef4058638
-> compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-> userspace arch: arm64
-> patch:          https://syzkaller.appspot.com/x/patch.diff?x=137c697e980000
-> 
-> Note: testing is done by a robot and is best-effort only.
-
-Let's try Greg's suggestion to replace dev_err() with 
-dev_err_ratelimited().
-
-Alan Stern
-
-#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git 8867bbd4a056
-
-Index: usb-devel/drivers/usb/class/cdc-wdm.c
-===================================================================
---- usb-devel.orig/drivers/usb/class/cdc-wdm.c
-+++ usb-devel/drivers/usb/class/cdc-wdm.c
-@@ -266,14 +266,14 @@ static void wdm_int_callback(struct urb
- 			dev_err(&desc->intf->dev, "Stall on int endpoint\n");
- 			goto sw; /* halt is cleared in work */
- 		default:
--			dev_err(&desc->intf->dev,
-+			dev_err_ratelimited(&desc->intf->dev,
- 				"nonzero urb status received: %d\n", status);
- 			break;
- 		}
- 	}
- 
- 	if (urb->actual_length < sizeof(struct usb_cdc_notification)) {
--		dev_err(&desc->intf->dev, "wdm_int_callback - %d bytes\n",
-+		dev_err_ratelimited(&desc->intf->dev, "wdm_int_callback - %d bytes\n",
- 			urb->actual_length);
- 		goto exit;
- 	}
-
-
+> diff --git a/drivers/usb/storage/scsiglue.c b/drivers/usb/storage/scsiglue.c
+> index b31464740f6c..b4cf0349fd0d 100644
+> --- a/drivers/usb/storage/scsiglue.c
+> +++ b/drivers/usb/storage/scsiglue.c
+> @@ -79,6 +79,12 @@ static int slave_alloc (struct scsi_device *sdev)
+>  	if (us->protocol == USB_PR_BULK && us->max_lun > 0)
+>  		sdev->sdev_bflags |= BLIST_FORCELUN;
+>  
+> +	/*
+> +	 * Some USB storage devices reset if the IO hints VPD page is queried.
+> +	 * Hence skip that VPD page.
+> +	 */
+> +	sdev->sdev_bflags |= BLIST_SKIP_IO_HINTS;
+> +
+>  	return 0;
+>  }
+>  
+> diff --git a/drivers/usb/storage/uas.c b/drivers/usb/storage/uas.c
+> index a48870a87a29..77fdfb6a90c8 100644
+> --- a/drivers/usb/storage/uas.c
+> +++ b/drivers/usb/storage/uas.c
+> @@ -21,6 +21,7 @@
+>  #include <scsi/scsi.h>
+>  #include <scsi/scsi_eh.h>
+>  #include <scsi/scsi_dbg.h>
+> +#include <scsi/scsi_devinfo.h>
+>  #include <scsi/scsi_cmnd.h>
+>  #include <scsi/scsi_device.h>
+>  #include <scsi/scsi_host.h>
+> @@ -820,6 +821,12 @@ static int uas_slave_alloc(struct scsi_device *sdev)
+>  	struct uas_dev_info *devinfo =
+>  		(struct uas_dev_info *)sdev->host->hostdata;
+>  
+> +	/*
+> +	 * Some USB storage devices reset if the IO hints VPD page is queried.
+> +	 * Hence skip that VPD page.
+> +	 */
+> +	sdev->sdev_bflags |= BLIST_SKIP_IO_HINTS;
+> +
+>  	sdev->hostdata = devinfo;
+>  	return 0;
+>  }
 
