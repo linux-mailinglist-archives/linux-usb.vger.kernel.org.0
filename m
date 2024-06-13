@@ -1,61 +1,61 @@
-Return-Path: <linux-usb+bounces-11267-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11268-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77593906934
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2024 11:46:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8BF00906982
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2024 11:59:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 221592862B1
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2024 09:46:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 121E928519D
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2024 09:59:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33BA61411C1;
-	Thu, 13 Jun 2024 09:46:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8E851411F8;
+	Thu, 13 Jun 2024 09:59:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="F5c4pI2A"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VDSuFkkB"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD20713A41A
-	for <linux-usb@vger.kernel.org>; Thu, 13 Jun 2024 09:46:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E11241411C7
+	for <linux-usb@vger.kernel.org>; Thu, 13 Jun 2024 09:59:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718271963; cv=none; b=kVXhJbT2uXPIcdtBA7GWtxP0RkllV5oC/UhelATTfRlXyfXvyNXPyNXE0vEckGQPootQWvOUsSLIA7xcUjCVuFV4RJNOrZXT4oU5+vVqawmPwn+4VyGwWCBr+sV9pJKqRYIW1udgaWAOlGdasGBizHiqO8LuZNYxOoXtNGictD8=
+	t=1718272760; cv=none; b=L/CRjogGkQ4HQ5ntPRIeirQxPewN058/SkcMIBNqQQ45lOXWxF6xclcAt9A+t6yJzSZluNnGI9u8rzD9TlxLEuVtgLgB3Nw2DMLvp0avRsZznRJ45zOSA5brvLdNzz14RKEVWmlVDklnG1Rae4fNblbHNHpzSU4BqEbgwmgPd0k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718271963; c=relaxed/simple;
-	bh=HBTxYj7hSb7vADSO2DhC2kKfnMQmixkYdyntaGXn0JU=;
+	s=arc-20240116; t=1718272760; c=relaxed/simple;
+	bh=jCiq080FY8/GLZ3f85CnJwt8lnALYICND+Kr+0wWgCE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=jb3OpuI3qNoThSZRub8eHaOSUvsfFCLcFiNAV1Y1GEEqr88pBdqGa8TV2NXNaM8LI6Ib/z+BZmUoighWUdnYOFl7SwekNkII0LN6PnZtAyiVkswJ4M0QKfP0zADlRmKmOjmUrToZlwbCcT0LuUOdy6LWvZ9YHiKmpUdjnJ9sIkM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=F5c4pI2A; arc=none smtp.client-ip=170.10.133.124
+	 MIME-Version:Content-Type; b=XeqEWj6eyddZ0r1oSP5HTnpC/QEzsK9BNfPsM92Qq4u+rgQgpzEG4WBEjM8YF1VnWZTRdI53Tuy5nJE8YO3h8jXKxfpeyOd0FUATw/ZsaMP7/YRxbbozzCfUJy6fzrzRwWrVr2Gya1Tlgv5oa6PSgb7HYhZ4yBL2qDIadFTrfLw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=VDSuFkkB; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1718271960;
+	s=mimecast20190719; t=1718272757;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=3tyKWNDm8K+z1bqT8uezMkjcvOydkUdTtsMuG8yW+Z0=;
-	b=F5c4pI2AzLxJbA6JfeOYSF7O0jQduEtDiqmjaGCwehtQd4F+fbLS5LrHc4YBK6EpDpUqfS
-	d2DWKjTLS+CmgK+YAAoTdJfFhxhkjayxSWfcXylqIFQTNg4wShCXa62d5YMYBc0g+/tf53
-	aVYqIbbKY7kqP6P47OyP0YQsiyQuwvI=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+	bh=V8U7PlezzDV+xaQgoC4Cin990sme5WLS2JK3q11wSEk=;
+	b=VDSuFkkBbd5EVen6sP7gfCOBXtuE3sCAaWIEcBaEsdJql7Z6+r5rbadP3KEqQ1shu8PQ28
+	RYWrBqalsOAsNcow4qjMDCUMgrJCYM3VW+yOU9uqe9t8MJeWkV5jdH50R1z1PkIvHpaHME
+	uQHK6hL6/r+EVsewBuB9sqpI7Lp7Ehw=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-374-hOchQgmBMNu8Wpx5P95fuQ-1; Thu,
- 13 Jun 2024 05:45:56 -0400
-X-MC-Unique: hOchQgmBMNu8Wpx5P95fuQ-1
-Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-463-0TgEbf4qMsuYAn4dE498RQ-1; Thu,
+ 13 Jun 2024 05:59:11 -0400
+X-MC-Unique: 0TgEbf4qMsuYAn4dE498RQ-1
+Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 85EF719560B3;
-	Thu, 13 Jun 2024 09:45:54 +0000 (UTC)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5510019560B5;
+	Thu, 13 Jun 2024 09:59:09 +0000 (UTC)
 Received: from fedora.redhat.com (unknown [10.39.192.157])
-	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 906DF1955E91;
-	Thu, 13 Jun 2024 09:45:48 +0000 (UTC)
+	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id E389A19560AA;
+	Thu, 13 Jun 2024 09:59:02 +0000 (UTC)
 From: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
 To: yongqin.liu@linaro.org
 Cc: amit.pundir@linaro.org,
@@ -72,8 +72,8 @@ Cc: amit.pundir@linaro.org,
 	stable@vger.kernel.org,
 	sumit.semwal@linaro.org
 Subject: Re: [PATCH] net: usb: ax88179_178a: fix link status when link is set to down/up
-Date: Thu, 13 Jun 2024 11:45:44 +0200
-Message-ID: <20240613094546.508121-1-jtornosm@redhat.com>
+Date: Thu, 13 Jun 2024 11:59:00 +0200
+Message-ID: <20240613095901.508753-1-jtornosm@redhat.com>
 In-Reply-To: <CAMSo37U3Pree8XbHNBOzNXhFAiPss+8FQms1bLy06xeMeWfTcg@mail.gmail.com>
 References: <CAMSo37U3Pree8XbHNBOzNXhFAiPss+8FQms1bLy06xeMeWfTcg@mail.gmail.com>
 Precedence: bulk
@@ -84,36 +84,13 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
 
-Hello Yongqin,
+Hello again,
 
-After some research  and testing, it seems to happen that if initialization
-is slower the second reset from open is needed too.
-So, I have been working with some reproducers and I think I have the
-solution for detecting when there is a problem.
-If you can test it in your real environment that would be great.
+There was a problem copying the patch, sorry, here the good one:
 
-Here the patch on the latest version of the file:
 $ git diff drivers/net/usb/ax88179_178a.c
-diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
-index 51c295e1e823..60357796be99 100644
---- a/drivers/net/usb/ax88179_178a.c
-+++ b/drivers/net/usb/ax88179_178a.c
-@@ -174,7 +174,6 @@ struct ax88179_data {
-        u32 wol_supported;
-        u32 wolopts;
-        u8 disconnecting;
--       u8 initialized;
- };
- 
- struct ax88179_int_data {
-@@ -327,7 +326,8 @@ static void ax88179_status(struct usbnet *dev, struct urb *urb)
- 
-        if (netif_carrier_ok(dev->net) != link) {
-                usbnet_link_change(dev, link, 1);
--               netdev_info(dev->net, "ax88179 - Link status is: %d\n", link);
-+               if (!link)
 diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
 index 51c295e1e823..60357796be99 100644
 --- a/drivers/net/usb/ax88179_178a.c
@@ -179,12 +156,6 @@ index 51c295e1e823..60357796be99 100644
  
         return 0;
  }
-
-In addition, I have fixed the logs to show the link correclty.
-
-If this is ok, I will submit the patch.
-
-Thanks
 
 Best regards
 José Ignacio
