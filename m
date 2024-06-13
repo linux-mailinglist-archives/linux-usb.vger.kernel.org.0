@@ -1,107 +1,118 @@
-Return-Path: <linux-usb+bounces-11289-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11290-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7EC169078FC
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2024 18:59:17 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D46B907A24
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2024 19:45:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 27FEC1F22D70
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2024 16:59:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DCBECB21438
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2024 17:45:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 624E5149C54;
-	Thu, 13 Jun 2024 16:58:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D753614A089;
+	Thu, 13 Jun 2024 17:45:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b="a1i1kTVX"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O1NTnV0w"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx.treblig.org (mx.treblig.org [46.235.229.95])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEF87149C6A;
-	Thu, 13 Jun 2024 16:58:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.229.95
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF10D14A0BC;
+	Thu, 13 Jun 2024 17:45:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718297935; cv=none; b=Dc36/+3xJS82mVsmukb0eis0i94FalnuymhW1AifSEBDV1EGhSc9TOkj1Of3hMvr0VcXdoaGoV7m4hUTE6eTXY/OQmJ20kG4E9DeU+kl7/V3iZsLzCFwIUVNNzVEYEk1yEREefXFR4p+4dh6rtsar70otSwXNvwvkHMRm2C7Wik=
+	t=1718300707; cv=none; b=S2T4c2ufJbllhZrt22LzXljfCn2p3Wgj6l1YtX4V5oBtxp+uVD/kTWWwyGrTdOzjmFZFXTY80nhLB40bIqj4O8PcOABs9b63M3tdAN9v1CzoU3HuxZeJA5xr6HZTsPmWY1xT+nP0PBlVLhnumxcApRX5bOe41FYDEz46vdbtHxQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718297935; c=relaxed/simple;
-	bh=6u+NhXdFVO3k8i1c1rzwLCRp9nsLuhq6+/8Mt0uxOwo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rQh4IKLYv+LTjZmGJ6miwo13DTlgxO682OhSxeuoSYh6pl4bKOR83QfYrt/fnHrK3hwE1UMW9zSdT02121yGSpbKSTnw1vF1ureRg04l6A+dGeaWSjSmo62/fK42TBMDCu/ilH3yQNflkch3ZFivNobBw3nZ6/8p8BJOxJI0Avo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org; spf=pass smtp.mailfrom=treblig.org; dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b=a1i1kTVX; arc=none smtp.client-ip=46.235.229.95
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=treblig.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
-	; s=bytemarkmx; h=Content-Type:MIME-Version:Message-ID:Subject:From:Date:From
-	:Subject; bh=poj+Qvco2Pg30XXjoM/PpwizdBw3VYd+GQTsThXG5bs=; b=a1i1kTVXB8yUBOLy
-	hDHDkBe61NUkGzaaPux5/CDfTFU2FEYUPua/JLOLmm42jjK8l9ojymlSo6L5cdjGxXTj14VbBvZaZ
-	B9M2ZBP4pcmiREGaIwDE+RnxYyneiwCh2PMWpm4Qs4dy37xT6qTNPC4ohr8qMCtYyW3gwM+Q3Qmsw
-	fVh1oTBHTI7NFjKxaV6JQLJ4Dsvh7y3vFmWEXx3y838k45wn2LUeLFNKKusVZwGjbOcwbPAEgEmnL
-	QHyDsII3+r+Y9PsP5SugW/AWX6iZ2VtC2ChYhnLlvBpGQxi9d5ukqe2ww4HovdCkzPl7/sXgsTD4d
-	vEqtjfs+CL9yBm3ICA==;
-Received: from dg by mx.treblig.org with local (Exim 4.96)
-	(envelope-from <dg@treblig.org>)
-	id 1sHnmk-0065pg-1C;
-	Thu, 13 Jun 2024 16:58:50 +0000
-Date: Thu, 13 Jun 2024 16:58:50 +0000
-From: "Dr. David Alan Gilbert" <linux@treblig.org>
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: johan@kernel.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: spcp8x5: remove unused struct
- 'spcp8x5_usb_ctrl_arg'
-Message-ID: <ZmslSsXK3njLZwIy@gallifrey>
-References: <20240529234722.130609-1-linux@treblig.org>
- <Zmr0GV57EGwxcYeM@gallifrey>
- <2024061357-lagged-cloud-a2a3@gregkh>
+	s=arc-20240116; t=1718300707; c=relaxed/simple;
+	bh=W1NN4FEaI545WsKG5QYNWSaOEHoanK1aCsXeN3ZFySY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=plCSveJ4fHbkhYJIVgjmj+8zI3YmAMeK/VCs9mvHbkcOX1wSk5nK3o91odRUDd7GibQgWGdkjDw5T8TRBaD2yKjNum7JCJ3fYnkwpb8k2lIacCj5FWHMSB5keHby/gCXKsDK1yM6fWLUst70KZvubXfixU6BM5/n4x2WGL0FTOc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=O1NTnV0w; arc=none smtp.client-ip=209.85.167.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-52bbdc237f0so1627812e87.0;
+        Thu, 13 Jun 2024 10:45:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1718300704; x=1718905504; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=W1NN4FEaI545WsKG5QYNWSaOEHoanK1aCsXeN3ZFySY=;
+        b=O1NTnV0wnt1Ii5Xcam0p7pU44VL+a1r0kGMXID6kpX1jQCWdpgEN8EcEidmcSD3oEI
+         9fRS+v6P7MA8EnZNHCGiID3kjAJD9rJfp40KpLRMnp+WhMJm1YaHxqbeeeVMErqnwhZo
+         C7gNrRwXd3Trb3NEpfOEXfAEWUf39ErJBn0XqkOHAJ/ggoaKLQ4Pqc2yxR/fCJ/FrI81
+         dIf9WobPbIBxWqY/XEMkO94ZVHuDL9DMKarhlgp5DBcvN2tTA0PNywW3EFX5UIOnnREh
+         /dGa8rCfUE9aq9x+K1Frs+LN1uNaGfZTsSMRNfwiUSdyfibMbQ8LXlW8ACsZTe3sQClF
+         m9lQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718300704; x=1718905504;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=W1NN4FEaI545WsKG5QYNWSaOEHoanK1aCsXeN3ZFySY=;
+        b=IzI+JtTm1oWcdWPP1eJ4faNNljc0a+J52oFkupvYHTepCcnwBR+mBGCnf+b4b/CrpN
+         OEovrK70hpF57UqPq6R9l5sFPdc+I7kEdkL+g4wMZ6LXOhNwToqx1DrR6lCWsWrgnsMm
+         yj8nF8CLsgu1MrFtTnikuEL1qNsSwsVhI3xiAANy+8pZ9HwmHyoYIMbz4srTsRSPQdLu
+         8oY1sqvIwpIh3rlC2koHqUDWc7B0JXmJFZdtSaxC/DvMcW5IIBrrFKLTmsyBpoM95PZu
+         J//CwqChzk5hOBvukKE5Wr6objPv+btGk81qIq9pvs6AI7fv7MMNyzFZEsFPkLZJ5449
+         xmNQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXFQKlHmKcekuWWn4vwJWLuMtgMJQyoIl2Ok3d72mHkV9Ofi4Sw/xz6mN7t0oGapLF/Vh2mAkK7Giu049BxdC667mnpWe2eHobm0e/GiAGiH5+wbmCSvsAzqpQziinRNfUGgHNyr11sIu2kerpChOpRX3Gf5jWIWRITQyl8xg==
+X-Gm-Message-State: AOJu0YxtVRHV3zIDgihH1NvJK41P2enmMAd2zhCDxvQBGKde3Ow6vpIf
+	ZB5gmjmaZen9/SfHnfNcg9vvUH6U7VSivWiGZ/8fo+iELhb7AgCfXfpjH55yWyU+xOXdwvdo2w2
+	5YaJV1ksYK7cX3Ezih3VvAOC8ltL7oEDMJqqu3Q==
+X-Google-Smtp-Source: AGHT+IHYWeogOBzyL542s+6sxUjpi4sk9wNSwKBTh/Q8bkZg0I7HCQz3LHhUiZcmfmY+AC6RY80vUHIB7pAF/F8QP7I=
+X-Received: by 2002:a05:6512:5c9:b0:520:ed4e:2203 with SMTP id
+ 2adb3069b0e04-52ca6e562bfmr360632e87.8.1718300703669; Thu, 13 Jun 2024
+ 10:45:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-In-Reply-To: <2024061357-lagged-cloud-a2a3@gregkh>
-X-Chocolate: 70 percent or better cocoa solids preferably
-X-Operating-System: Linux/6.1.0-21-amd64 (x86_64)
-X-Uptime: 16:56:35 up 36 days,  4:10,  1 user,  load average: 0.06, 0.03, 0.00
-User-Agent: Mutt/2.2.12 (2023-09-09)
+References: <20240612165249.2671204-1-bvanassche@acm.org> <20240612165249.2671204-3-bvanassche@acm.org>
+In-Reply-To: <20240612165249.2671204-3-bvanassche@acm.org>
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+Date: Thu, 13 Jun 2024 19:44:26 +0200
+Message-ID: <CAHp75VdT8hp+aSN_ZyGebkUykaP=p9ipq4Guk6+e_HJ2apu18g@mail.gmail.com>
+Subject: Re: [PATCH 2/2] scsi: core: Do not query IO hints for USB devices
+To: Bart Van Assche <bvanassche@acm.org>
+Cc: "Martin K . Petersen" <martin.petersen@oracle.com>, Alan Stern <stern@rowland.harvard.edu>, 
+	linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org, 
+	Joao Machado <jocrismachado@gmail.com>, Christian Heusel <christian@heusel.eu>, stable@vger.kernel.org, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-* Greg KH (gregkh@linuxfoundation.org) wrote:
-> On Thu, Jun 13, 2024 at 01:28:57PM +0000, Dr. David Alan Gilbert wrote:
-> > * linux@treblig.org (linux@treblig.org) wrote:
-> > > From: "Dr. David Alan Gilbert" <linux@treblig.org>
-> > > 
-> > > 'spcp8x5_usb_ctrl_arg' has been unused since the original
-> > > commit 619a6f1d1423 ("USB: add usb-serial spcp8x5 driver").
-> > > 
-> > > Remove it.
-> > > 
-> > > Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
-> > 
-> > Ping?
-> 
-> It's only been 2 weeks for a "remove some unused code" type of patch,
-> which will be gotten to, but realize that people are traveling and the
-> like...  Give it some time.
+On Wed, Jun 12, 2024 at 6:53=E2=80=AFPM Bart Van Assche <bvanassche@acm.org=
+> wrote:
+>
+> Recently it was reported that the following USB storage devices are unusa=
+ble
+> with Linux kernel 6.9:
+> * Kingston DataTraveler G2
+> * Garmin FR35
+>
+> This is because attempting to read the IO hint VPD page causes these devi=
+ces
+> to reset. Hence do not read the IO hint VPD page from USB storage devices=
+.
 
-OK, it was only a gentle ping, not a moan; and that seems to have
-unstuck a few others in the large set this is part of.
+> Cc: Alan Stern <stern@rowland.harvard.edu>
+> Cc: linux-usb@vger.kernel.org
+> Cc: Joao Machado <jocrismachado@gmail.com>
 
-> In the meantime, why not help review other patches on the list?
+> Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
+> Cc: Christian Heusel <christian@heusel.eu>
 
-Sure, I'll keep an eye out for stuff that doesn't require too much
-detailed knowledge of any particular subsystem.
+Besides no need to repeat these Cc's in case there are other tags for
+the same emails, can you move the rest of Cc's after the --- line
+below? For you it will be the same effect, for many others the Git
+history won't be polluted with this noise.
 
-Dave
 
-> thanks,
-> 
-> greg k-h
--- 
- -----Open up your eyes, open up your mind, open up your code -------   
-/ Dr. David Alan Gilbert    |       Running GNU/Linux       | Happy  \ 
-\        dave @ treblig.org |                               | In Hex /
- \ _________________________|_____ http://www.treblig.org   |_______/
+--=20
+With Best Regards,
+Andy Shevchenko
 
