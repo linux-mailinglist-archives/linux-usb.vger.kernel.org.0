@@ -1,128 +1,93 @@
-Return-Path: <linux-usb+bounces-11245-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11246-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 862BC906060
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2024 03:25:24 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C0BE90606E
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2024 03:33:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EB2F7282C0A
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2024 01:25:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 83F081C21299
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2024 01:33:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8746DC144;
-	Thu, 13 Jun 2024 01:25:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5010DDD8;
+	Thu, 13 Jun 2024 01:33:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u3RG/+Qm"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id A5D63B664
-	for <linux-usb@vger.kernel.org>; Thu, 13 Jun 2024 01:25:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 197B612B83;
+	Thu, 13 Jun 2024 01:33:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718241918; cv=none; b=CIzuvL0Loe47dHNGfrlFCF/vPC2j2EUpBJRDqgmRXrrqYIoMLC8M86+hF7h5iQN6LdHzak+FYVLMk31/w8ewOY5d8ZEGQtdqnH3iF1OLELaamDN6tZcZRX9hM3BS7PuQoGoOixIpiBbm2Oq8nzhRP9heypqKTFtBXor1XjryuaM=
+	t=1718242391; cv=none; b=LJzQ2wnaiapMVyb13OwnpKjEsykmLY8evavB60QAzAInhe9pIIG4xby2TG/t5r/7pbkfxF9zbYO3KOGkNRLsSWPkiI9kVyeS+NM30vpIAaIG9rWm6wmoyaSfpGuZ84Qast4TfMFtMzl8Q64qetfTMQIhTV+J3C+FhIUaK2X06LA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718241918; c=relaxed/simple;
-	bh=Dy43Ep+dfiP1wMhLybaOZNggtqTx58gNGri+jBBfQ1o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QxIwtYDa906uGO1WdbcxPVc5DCMsrXgNhvw+qlQTvox9uQne1/buDlO/nULKrdh+os4QY5An0RJet9cQagQKSVYqZEBwjJ+AzpKwgf6lKuiPF6Hej3wgpgRY7P6wbWOKU9w8s4AvOXogbRqTmz9t/HNN0CIb+tAwwbKN0V2kH/c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
-Received: (qmail 244126 invoked by uid 1000); 12 Jun 2024 21:25:15 -0400
-Date: Wed, 12 Jun 2024 21:25:15 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Bart Van Assche <bvanassche@acm.org>
-Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-  linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org,
-  Joao Machado <jocrismachado@gmail.com>,
-  Andy Shevchenko <andy.shevchenko@gmail.com>,
-  Christian Heusel <christian@heusel.eu>, stable@vger.kernel.org,
-  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-  Oliver Neukum <oneukum@suse.com>
-Subject: Re: [PATCH v2 2/2] scsi: core: Do not query IO hints for USB devices
-Message-ID: <5c873978-47d7-4409-82fc-d4f3841b5069@rowland.harvard.edu>
-References: <20240612203735.4108690-1-bvanassche@acm.org>
- <20240612203735.4108690-4-bvanassche@acm.org>
+	s=arc-20240116; t=1718242391; c=relaxed/simple;
+	bh=MWyhtnST40YbbxnfAwXhylv+xDPKS43fpIQmIg3zRfY=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Bia6OFGjVLN0IUtAIECFBISqPaaKqi0P9rOZGGhCOpJgZd10HMk1oFoa1tuz8Y17nQOgQ63XTTNahXxSXJDKCWdGWWKyTLTv7lsYIkWv+bP1H1hUPWYFOjpbzJ8iEYCvO77Fdwtfd0UoOmiRnMhfL6IHR2EoR+9KqL2tESL+rBk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u3RG/+Qm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 360CEC116B1;
+	Thu, 13 Jun 2024 01:33:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718242390;
+	bh=MWyhtnST40YbbxnfAwXhylv+xDPKS43fpIQmIg3zRfY=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=u3RG/+Qm0PoyYf3nxwJ+VxfzLwPHD1Jgst78ruQL5zHjKP6qDFM22E7ou7pzmq+di
+	 /BeEYw0am4NOhQkdHMoVfqTBpEFngr9HGz0GY/msd5qd9ns2qJcFhqtGAut3QFYtgJ
+	 UJUgNFShqug1imhOYfBh8RWRl4Q627tO7twZ4HN/RJ4qv3jy54Msu7qgcPFHkMCLI+
+	 Uhjfb911Oezk4R/Pzg0WwjIIpItuifd2pDFFoLk4wUaZyqJJRoH+B8Qe/05bkYx9Ps
+	 0ixAxX3IIrNAUz7Uf7OVxlwsAgOvjECeo5ogaFnoJtebiW9ItV/GdKiyLbk1zrgFhk
+	 bF7IXpFM/rsGQ==
+Date: Wed, 12 Jun 2024 18:33:09 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Rengarajan S <rengarajan.s@microchip.com>
+Cc: <woojung.huh@microchip.com>, <UNGLinuxDriver@microchip.com>,
+ <davem@davemloft.net>, <edumazet@google.com>, <pabeni@redhat.com>,
+ <netdev@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net-next v1] lan78xx: lan7801 MAC support with lan8841
+Message-ID: <20240612183309.01782254@kernel.org>
+In-Reply-To: <20240611094233.865234-1-rengarajan.s@microchip.com>
+References: <20240611094233.865234-1-rengarajan.s@microchip.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240612203735.4108690-4-bvanassche@acm.org>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Wed, Jun 12, 2024 at 01:37:34PM -0700, Bart Van Assche wrote:
-> Recently it was reported that the following USB storage devices are unusable
-> with Linux kernel 6.9:
-> * Kingston DataTraveler G2
-> * Garmin FR35
-> 
-> This is because attempting to read the IO hint VPD page causes these devices
-> to reset. Hence do not read the IO hint VPD page from USB storage devices.
-> 
-> Cc: Alan Stern <stern@rowland.harvard.edu>
-> Cc: linux-usb@vger.kernel.org
-> Cc: Joao Machado <jocrismachado@gmail.com>
-> Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
-> Cc: Christian Heusel <christian@heusel.eu>
-> Cc: stable@vger.kernel.org
-> Fixes: 4f53138fffc2 ("scsi: sd: Translate data lifetime information")
-> Reported-by: Joao Machado <jocrismachado@gmail.com>
-> Closes: https://lore.kernel.org/linux-scsi/20240130214911.1863909-1-bvanassche@acm.org/T/#mf4e3410d8f210454d7e4c3d1fb5c0f41e651b85f
-> Tested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> Bisected-by: Christian Heusel <christian@heusel.eu>
-> Reported-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> Closes: https://lore.kernel.org/linux-scsi/CACLx9VdpUanftfPo2jVAqXdcWe8Y43MsDeZmMPooTzVaVJAh2w@mail.gmail.com/
-> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
-> ---
+On Tue, 11 Jun 2024 15:12:33 +0530 Rengarajan S wrote:
+>  /* define external phy id */
+>  #define	PHY_LAN8835			(0x0007C130)
+> +#define PHY_LAN8841			(0x00221650)
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
+For whatever reason the existing code uses a tab between define and its
+name, so let's stick to that?
 
->  drivers/usb/storage/scsiglue.c | 6 ++++++
->  drivers/usb/storage/uas.c      | 7 +++++++
->  2 files changed, 13 insertions(+)
-> 
-> diff --git a/drivers/usb/storage/scsiglue.c b/drivers/usb/storage/scsiglue.c
-> index b31464740f6c..b4cf0349fd0d 100644
-> --- a/drivers/usb/storage/scsiglue.c
-> +++ b/drivers/usb/storage/scsiglue.c
-> @@ -79,6 +79,12 @@ static int slave_alloc (struct scsi_device *sdev)
->  	if (us->protocol == USB_PR_BULK && us->max_lun > 0)
->  		sdev->sdev_bflags |= BLIST_FORCELUN;
+>  #define	PHY_KSZ9031RNX			(0x00221620)
 >  
-> +	/*
-> +	 * Some USB storage devices reset if the IO hints VPD page is queried.
-> +	 * Hence skip that VPD page.
-> +	 */
-> +	sdev->sdev_bflags |= BLIST_SKIP_IO_HINTS;
-> +
->  	return 0;
->  }
->  
-> diff --git a/drivers/usb/storage/uas.c b/drivers/usb/storage/uas.c
-> index a48870a87a29..77fdfb6a90c8 100644
-> --- a/drivers/usb/storage/uas.c
-> +++ b/drivers/usb/storage/uas.c
-> @@ -21,6 +21,7 @@
->  #include <scsi/scsi.h>
->  #include <scsi/scsi_eh.h>
->  #include <scsi/scsi_dbg.h>
-> +#include <scsi/scsi_devinfo.h>
->  #include <scsi/scsi_cmnd.h>
->  #include <scsi/scsi_device.h>
->  #include <scsi/scsi_host.h>
-> @@ -820,6 +821,12 @@ static int uas_slave_alloc(struct scsi_device *sdev)
->  	struct uas_dev_info *devinfo =
->  		(struct uas_dev_info *)sdev->host->hostdata;
->  
-> +	/*
-> +	 * Some USB storage devices reset if the IO hints VPD page is queried.
-> +	 * Hence skip that VPD page.
-> +	 */
-> +	sdev->sdev_bflags |= BLIST_SKIP_IO_HINTS;
-> +
->  	sdev->hostdata = devinfo;
->  	return 0;
->  }
+>  /* use ethtool to change the level for any given device */
+> @@ -2327,6 +2328,13 @@ static struct phy_device *lan7801_phy_init(struct lan78xx_net *dev)
+>  			netdev_err(dev->net, "Failed to register fixup for PHY_LAN8835\n");
+>  			return NULL;
+>  		}
+> +		/* external PHY fixup for LAN8841 */
+> +		ret = phy_register_fixup_for_uid(PHY_LAN8841, 0xfffffff0,
+> +						 lan8835_fixup);
+> +		if (ret < 0) {
+> +			netdev_err(dev->net, "Failed to register fixup for PHY_LAN8841\n");
+
+Don't you have to unregister the previous fixup on the error path here?
+In fact the existing error path for PHY_LAN8835 is missing an unregsiter
+for PHY_KSZ9031RNX.
+
+Could you please send a separate fix for that with a Fixes tag?
+
+> +			return NULL;
+> +		}
 
