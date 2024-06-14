@@ -1,34 +1,34 @@
-Return-Path: <linux-usb+bounces-11330-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11331-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5041E908B68
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Jun 2024 14:15:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4EBC7908B67
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Jun 2024 14:15:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8C009B26625
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 334301C217DF
 	for <lists+linux-usb@lfdr.de>; Fri, 14 Jun 2024 12:15:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B94C51990D0;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D70B0195FFC;
 	Fri, 14 Jun 2024 12:15:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QiMBGGvC"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d00V9Jli"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39360197A65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABF70192B8D
 	for <linux-usb@vger.kernel.org>; Fri, 14 Jun 2024 12:15:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718367321; cv=none; b=m7l219tjMWW1reI0BHNwh4FHEw5QEQ4Nu/UrD+QgvVltjpuSPQZYSqxetyrWQmbDpUBx5o0MpgweihmpxkK+3cfK+MzcFnkUEPkavpjlgMJsSjOFl81JjjA0GxTtlAayj5LDW1KOTtRHZDoZPSzDhR/laOMldQWzjKt5eJSd2yQ=
+	t=1718367321; cv=none; b=UMUaHiIFB6dPoAzwfktNRhIntFmMnLMyxGlJ3MNVUWKwOIUC46IO5NiixQL6uvmQmU7zfJaXBUH2DVrLWKh55j9nEA9UsOzJ8C3m1OlkAmhZZPJUK/OJX08lGVf6RwKYgphaT0qEgMjkDd+1rnVBOZ7p/qxfm7IPeY4Qd3KZZNM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1718367321; c=relaxed/simple;
-	bh=zvH/SyPnfNmGVQfsGEw1AZjDkw6Tv/pm2rbwaTXx8d0=;
+	bh=0qzMqwjMf/phMm8XHRioUKrHjMMP0UUbwl/nJooCsrc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=pMSBvX52/n5t+x8A8zq78xQC0tknTHZ5XKu20hMlWuCIUEaPM5IC5GQrH/k2byt8VkrEoLThTVdpcsmHFj6YzdYxU4h3w2VLwvx6SiT2Nh/1s2kfUnhJhFmMq5NcMNI8Epod9v9b/fcfkugBTW7fy1BJx7cWCb58gbRSeAPvRjY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QiMBGGvC; arc=none smtp.client-ip=192.198.163.15
+	 MIME-Version; b=BYuf1lGYc7mupA/e1hIeLGzNGPNJkDkQIDXM15kCiWP1l2hOBj1UATUGt60OiCFVM7uN8/n9mWhPYNEztdcIjzHVHh6tCEu2UOYwEE2gDtDGdnDLI4C2ruyPvl4Z1thoBoonnheKzWaB+IXfluz9aaQD1oVkLq3Fl2Uqvhy7Qk8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d00V9Jli; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
@@ -36,30 +36,30 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   t=1718367319; x=1749903319;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=zvH/SyPnfNmGVQfsGEw1AZjDkw6Tv/pm2rbwaTXx8d0=;
-  b=QiMBGGvCDJlaOiowgsVJjZ1oj8gS1sA0gRjwpTYohPDBGzjANonwPjEo
-   TboruvJv0KuLypbR4iNIn82nAvXMKQTrw1pggWvG+HqftyFKmcA3XhX60
-   YQ3agmSh1N9gFtu/9etZLAdNzDNOEJQ9K+i3pGN0uaEdKXjbjhLg6q0HE
-   Xkqum5gevVujkBqEUo7EPonxYNzNI1dM1HCgo8YcThjWQnoK99RMeWMEs
-   xWJHTwcbF2djid45+zNqvAQGAEsi49tFZZx12VxsoK30P+nlJpO7pjbtu
-   miTr1m44UPO3PrJJSRJdlr0uEF8dmtcceXmf6mSpHO8SnN/kMBAfy3OBM
+  bh=0qzMqwjMf/phMm8XHRioUKrHjMMP0UUbwl/nJooCsrc=;
+  b=d00V9JlimfFKQxI+8jht2YgYtf5iXRz6C3biaVXI84/cIJZTp+VU4Ras
+   b6omK+ZpMpCpHnnmfpFwgD6RqBPJ0Usm4mxrjvNeY4wowhm0BZ7Qdij3Q
+   LGP2jy0LtD4SI1T9+Yj1qfODLncjPAN8qK0RnMRqqjxg2nn10RoKOu5Wa
+   TfNEAX5foba1QAbyitrc+LyOrbyz0jbClqL0FMPFU2ZuU0BBqKZrkqRSx
+   Y8zZ0pctaSB/qrs/8iIZpArLr0JIzpXmV+V5I9QUplzDexz3UzVBsWORP
+   rUuJRXM2/k55bBMtuTkkeHUU1+u0Bb80xGAChMoo8XRZTrwCM6HVUbFJH
    w==;
-X-CSE-ConnectionGUID: v74bVYNCSpmeO0ibrD1Z/A==
-X-CSE-MsgGUID: khV7udTfR7eGFM/oouyqRg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11102"; a="15410005"
+X-CSE-ConnectionGUID: n92TyMt8SzyyUwC9kdA22A==
+X-CSE-MsgGUID: 2lVz3muKTn6g8f9giSODDQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11102"; a="15410012"
 X-IronPort-AV: E=Sophos;i="6.08,237,1712646000"; 
-   d="scan'208";a="15410005"
+   d="scan'208";a="15410012"
 Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2024 05:15:15 -0700
-X-CSE-ConnectionGUID: Oaun0p5ZR6CNm6VYuaIXCA==
-X-CSE-MsgGUID: KNBd41waR/+Jw/iwoKktSA==
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2024 05:15:18 -0700
+X-CSE-ConnectionGUID: MNCXekL6TQaEXRyIbS3cJQ==
+X-CSE-MsgGUID: KTyFGZCPSSe4bNxsTwqp8g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,237,1712646000"; 
-   d="scan'208";a="45437715"
+   d="scan'208";a="45437735"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa005.jf.intel.com with ESMTP; 14 Jun 2024 05:15:13 -0700
+  by orviesa005.jf.intel.com with ESMTP; 14 Jun 2024 05:15:16 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id 7A9FE3B6; Fri, 14 Jun 2024 15:15:12 +0300 (EEST)
+	id 7FC18360; Fri, 14 Jun 2024 15:15:12 +0300 (EEST)
 From: Mika Westerberg <mika.westerberg@linux.intel.com>
 To: Yehezkel Bernat <YehezkelShB@gmail.com>,
 	Michael Jamet <michael.jamet@intel.com>,
@@ -68,9 +68,9 @@ To: Yehezkel Bernat <YehezkelShB@gmail.com>,
 Cc: linux-usb@vger.kernel.org,
 	Greg KH <gregkh@linuxfoundation.org>,
 	Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH v2 4/6] thunderbolt: Split out margining from USB4 port
-Date: Fri, 14 Jun 2024 15:15:10 +0300
-Message-ID: <20240614121512.1361184-5-mika.westerberg@linux.intel.com>
+Subject: [PATCH v2 5/6] thunderbolt: Make margining functions accept target and retimer index
+Date: Fri, 14 Jun 2024 15:15:11 +0300
+Message-ID: <20240614121512.1361184-6-mika.westerberg@linux.intel.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240614121512.1361184-1-mika.westerberg@linux.intel.com>
 References: <20240614121512.1361184-1-mika.westerberg@linux.intel.com>
@@ -82,572 +82,229 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-We are going to expand lane margining support for retimers too so split
-out the generic margining functionality out of being specific to USB4
-ports.
+In order to add lane margining support for retimers make the margining
+functions take sideband target and retimer index as parameters. This
+makes it possible to access both router and retimer sideband using the
+same functions.
 
 Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 ---
- drivers/thunderbolt/debugfs.c | 234 ++++++++++++++++------------------
- 1 file changed, 112 insertions(+), 122 deletions(-)
+ drivers/thunderbolt/debugfs.c | 16 ++++++-----
+ drivers/thunderbolt/tb.h      | 15 ++++++-----
+ drivers/thunderbolt/usb4.c    | 51 +++++++++++++++++++++--------------
+ 3 files changed, 50 insertions(+), 32 deletions(-)
 
 diff --git a/drivers/thunderbolt/debugfs.c b/drivers/thunderbolt/debugfs.c
-index 5196ece2ded7..0e871c7ae9c0 100644
+index 0e871c7ae9c0..87b2c91a4656 100644
 --- a/drivers/thunderbolt/debugfs.c
 +++ b/drivers/thunderbolt/debugfs.c
-@@ -379,6 +379,7 @@ static ssize_t retimer_sb_regs_write(struct file *file,
- #if IS_ENABLED(CONFIG_USB4_DEBUGFS_MARGINING)
- /**
-  * struct tb_margining - Lane margining support
-+ * @port: USB4 port through which the margining operations are run
-  * @caps: Port lane margining capabilities
-  * @results: Last lane margining results
-  * @lanes: %0, %1 or %7 (all)
-@@ -395,6 +396,7 @@ static ssize_t retimer_sb_regs_write(struct file *file,
-  *		right/high
-  */
- struct tb_margining {
-+	struct tb_port *port;
- 	u32 caps[2];
- 	u32 results[2];
- 	unsigned int lanes;
-@@ -410,36 +412,38 @@ struct tb_margining {
- 	bool right_high;
- };
- 
--static bool supports_software(const struct usb4_port *usb4)
-+static bool supports_software(const struct tb_margining *margining)
- {
--	return usb4->margining->caps[0] & USB4_MARGIN_CAP_0_MODES_SW;
-+	return margining->caps[0] & USB4_MARGIN_CAP_0_MODES_SW;
- }
- 
--static bool supports_hardware(const struct usb4_port *usb4)
-+static bool supports_hardware(const struct tb_margining *margining)
- {
--	return usb4->margining->caps[0] & USB4_MARGIN_CAP_0_MODES_HW;
-+	return margining->caps[0] & USB4_MARGIN_CAP_0_MODES_HW;
- }
- 
--static bool both_lanes(const struct usb4_port *usb4)
-+static bool both_lanes(const struct tb_margining *margining)
- {
--	return usb4->margining->caps[0] & USB4_MARGIN_CAP_0_2_LANES;
-+	return margining->caps[0] & USB4_MARGIN_CAP_0_2_LANES;
- }
- 
--static unsigned int independent_voltage_margins(const struct usb4_port *usb4)
-+static unsigned int
-+independent_voltage_margins(const struct tb_margining *margining)
- {
--	return (usb4->margining->caps[0] & USB4_MARGIN_CAP_0_VOLTAGE_INDP_MASK) >>
-+	return (margining->caps[0] & USB4_MARGIN_CAP_0_VOLTAGE_INDP_MASK) >>
- 		USB4_MARGIN_CAP_0_VOLTAGE_INDP_SHIFT;
- }
- 
--static bool supports_time(const struct usb4_port *usb4)
-+static bool supports_time(const struct tb_margining *margining)
- {
--	return usb4->margining->caps[0] & USB4_MARGIN_CAP_0_TIME;
-+	return margining->caps[0] & USB4_MARGIN_CAP_0_TIME;
- }
- 
- /* Only applicable if supports_time() returns true */
--static unsigned int independent_time_margins(const struct usb4_port *usb4)
-+static unsigned int
-+independent_time_margins(const struct tb_margining *margining)
- {
--	return (usb4->margining->caps[1] & USB4_MARGIN_CAP_1_TIME_INDP_MASK) >>
-+	return (margining->caps[1] & USB4_MARGIN_CAP_1_TIME_INDP_MASK) >>
- 		USB4_MARGIN_CAP_1_TIME_INDP_SHIFT;
- }
- 
-@@ -448,9 +452,8 @@ margining_ber_level_write(struct file *file, const char __user *user_buf,
- 			   size_t count, loff_t *ppos)
- {
- 	struct seq_file *s = file->private_data;
--	struct tb_port *port = s->private;
--	struct usb4_port *usb4 = port->usb4;
--	struct tb *tb = port->sw->tb;
-+	struct tb_margining *margining = s->private;
-+	struct tb *tb = margining->port->sw->tb;
- 	unsigned int val;
- 	int ret = 0;
- 	char *buf;
-@@ -458,7 +461,7 @@ margining_ber_level_write(struct file *file, const char __user *user_buf,
- 	if (mutex_lock_interruptible(&tb->lock))
- 		return -ERESTARTSYS;
- 
--	if (usb4->margining->software) {
-+	if (margining->software) {
- 		ret = -EINVAL;
- 		goto out_unlock;
- 	}
-@@ -475,13 +478,13 @@ margining_ber_level_write(struct file *file, const char __user *user_buf,
- 	if (ret)
- 		goto out_free;
- 
--	if (val < usb4->margining->min_ber_level ||
--	    val > usb4->margining->max_ber_level) {
-+	if (val < margining->min_ber_level ||
-+	    val > margining->max_ber_level) {
- 		ret = -EINVAL;
- 		goto out_free;
- 	}
- 
--	usb4->margining->ber_level = val;
-+	margining->ber_level = val;
- 
- out_free:
- 	free_page((unsigned long)buf);
-@@ -501,52 +504,50 @@ static void ber_level_show(struct seq_file *s, unsigned int val)
- 
- static int margining_ber_level_show(struct seq_file *s, void *not_used)
- {
--	struct tb_port *port = s->private;
--	struct usb4_port *usb4 = port->usb4;
-+	const struct tb_margining *margining = s->private;
- 
--	if (usb4->margining->software)
-+	if (margining->software)
- 		return -EINVAL;
--	ber_level_show(s, usb4->margining->ber_level);
-+	ber_level_show(s, margining->ber_level);
- 	return 0;
- }
- DEBUGFS_ATTR_RW(margining_ber_level);
- 
- static int margining_caps_show(struct seq_file *s, void *not_used)
- {
--	struct tb_port *port = s->private;
--	struct usb4_port *usb4 = port->usb4;
--	struct tb *tb = port->sw->tb;
-+	struct tb_margining *margining = s->private;
-+	struct tb *tb = margining->port->sw->tb;
- 	u32 cap0, cap1;
- 
- 	if (mutex_lock_interruptible(&tb->lock))
- 		return -ERESTARTSYS;
- 
- 	/* Dump the raw caps first */
--	cap0 = usb4->margining->caps[0];
-+	cap0 = margining->caps[0];
- 	seq_printf(s, "0x%08x\n", cap0);
--	cap1 = usb4->margining->caps[1];
-+	cap1 = margining->caps[1];
- 	seq_printf(s, "0x%08x\n", cap1);
- 
- 	seq_printf(s, "# software margining: %s\n",
--		   supports_software(usb4) ? "yes" : "no");
--	if (supports_hardware(usb4)) {
-+		   supports_software(margining) ? "yes" : "no");
-+	if (supports_hardware(margining)) {
- 		seq_puts(s, "# hardware margining: yes\n");
- 		seq_puts(s, "# minimum BER level contour: ");
--		ber_level_show(s, usb4->margining->min_ber_level);
-+		ber_level_show(s, margining->min_ber_level);
- 		seq_puts(s, "# maximum BER level contour: ");
--		ber_level_show(s, usb4->margining->max_ber_level);
-+		ber_level_show(s, margining->max_ber_level);
- 	} else {
- 		seq_puts(s, "# hardware margining: no\n");
- 	}
- 
- 	seq_printf(s, "# both lanes simultaneously: %s\n",
--		  both_lanes(usb4) ? "yes" : "no");
-+		  both_lanes(margining) ? "yes" : "no");
- 	seq_printf(s, "# voltage margin steps: %u\n",
--		   usb4->margining->voltage_steps);
-+		   margining->voltage_steps);
- 	seq_printf(s, "# maximum voltage offset: %u mV\n",
--		   usb4->margining->max_voltage_offset);
-+		   margining->max_voltage_offset);
- 
--	switch (independent_voltage_margins(usb4)) {
-+	switch (independent_voltage_margins(margining)) {
- 	case USB4_MARGIN_CAP_0_VOLTAGE_MIN:
- 		seq_puts(s, "# returns minimum between high and low voltage margins\n");
- 		break;
-@@ -558,12 +559,12 @@ static int margining_caps_show(struct seq_file *s, void *not_used)
- 		break;
- 	}
- 
--	if (supports_time(usb4)) {
-+	if (supports_time(margining)) {
- 		seq_puts(s, "# time margining: yes\n");
- 		seq_printf(s, "# time margining is destructive: %s\n",
- 			   cap1 & USB4_MARGIN_CAP_1_TIME_DESTR ? "yes" : "no");
- 
--		switch (independent_time_margins(usb4)) {
-+		switch (independent_time_margins(margining)) {
- 		case USB4_MARGIN_CAP_1_TIME_MIN:
- 			seq_puts(s, "# returns minimum between left and right time margins\n");
- 			break;
-@@ -576,9 +577,9 @@ static int margining_caps_show(struct seq_file *s, void *not_used)
- 		}
- 
- 		seq_printf(s, "# time margin steps: %u\n",
--			   usb4->margining->time_steps);
-+			   margining->time_steps);
- 		seq_printf(s, "# maximum time offset: %u mUI\n",
--			   usb4->margining->max_time_offset);
-+			   margining->max_time_offset);
- 	} else {
- 		seq_puts(s, "# time margining: no\n");
- 	}
-@@ -593,9 +594,8 @@ margining_lanes_write(struct file *file, const char __user *user_buf,
- 		      size_t count, loff_t *ppos)
- {
- 	struct seq_file *s = file->private_data;
--	struct tb_port *port = s->private;
--	struct usb4_port *usb4 = port->usb4;
--	struct tb *tb = port->sw->tb;
-+	struct tb_margining *margining = s->private;
-+	struct tb *tb = margining->port->sw->tb;
- 	int ret = 0;
- 	char *buf;
- 
-@@ -611,13 +611,13 @@ margining_lanes_write(struct file *file, const char __user *user_buf,
- 	}
- 
- 	if (!strcmp(buf, "0")) {
--		usb4->margining->lanes = 0;
-+		margining->lanes = 0;
- 	} else if (!strcmp(buf, "1")) {
--		usb4->margining->lanes = 1;
-+		margining->lanes = 1;
- 	} else if (!strcmp(buf, "all")) {
- 		/* Needs to be supported */
--		if (both_lanes(usb4))
--			usb4->margining->lanes = 7;
-+		if (both_lanes(margining))
-+			margining->lanes = 7;
- 		else
- 			ret = -EINVAL;
- 	} else {
-@@ -633,16 +633,15 @@ margining_lanes_write(struct file *file, const char __user *user_buf,
- 
- static int margining_lanes_show(struct seq_file *s, void *not_used)
- {
--	struct tb_port *port = s->private;
--	struct usb4_port *usb4 = port->usb4;
--	struct tb *tb = port->sw->tb;
-+	struct tb_margining *margining = s->private;
-+	struct tb *tb = margining->port->sw->tb;
- 	unsigned int lanes;
- 
- 	if (mutex_lock_interruptible(&tb->lock))
- 		return -ERESTARTSYS;
- 
--	lanes = usb4->margining->lanes;
--	if (both_lanes(usb4)) {
-+	lanes = margining->lanes;
-+	if (both_lanes(margining)) {
- 		if (!lanes)
- 			seq_puts(s, "[0] 1 all\n");
- 		else if (lanes == 1)
-@@ -666,9 +665,8 @@ static ssize_t margining_mode_write(struct file *file,
- 				   size_t count, loff_t *ppos)
- {
- 	struct seq_file *s = file->private_data;
--	struct tb_port *port = s->private;
--	struct usb4_port *usb4 = port->usb4;
--	struct tb *tb = port->sw->tb;
-+	struct tb_margining *margining = s->private;
-+	struct tb *tb = margining->port->sw->tb;
- 	int ret = 0;
- 	char *buf;
- 
-@@ -684,13 +682,13 @@ static ssize_t margining_mode_write(struct file *file,
- 	}
- 
- 	if (!strcmp(buf, "software")) {
--		if (supports_software(usb4))
--			usb4->margining->software = true;
-+		if (supports_software(margining))
-+			margining->software = true;
- 		else
- 			ret = -EINVAL;
- 	} else if (!strcmp(buf, "hardware")) {
--		if (supports_hardware(usb4))
--			usb4->margining->software = false;
-+		if (supports_hardware(margining))
-+			margining->software = false;
- 		else
- 			ret = -EINVAL;
- 	} else {
-@@ -706,23 +704,22 @@ static ssize_t margining_mode_write(struct file *file,
- 
- static int margining_mode_show(struct seq_file *s, void *not_used)
- {
--	const struct tb_port *port = s->private;
--	const struct usb4_port *usb4 = port->usb4;
--	struct tb *tb = port->sw->tb;
-+	struct tb_margining *margining = s->private;
-+	struct tb *tb = margining->port->sw->tb;
- 	const char *space = "";
- 
- 	if (mutex_lock_interruptible(&tb->lock))
- 		return -ERESTARTSYS;
- 
--	if (supports_software(usb4)) {
--		if (usb4->margining->software)
-+	if (supports_software(margining)) {
-+		if (margining->software)
- 			seq_puts(s, "[software]");
- 		else
- 			seq_puts(s, "software");
- 		space = " ";
- 	}
--	if (supports_hardware(usb4)) {
--		if (usb4->margining->software)
-+	if (supports_hardware(margining)) {
-+		if (margining->software)
- 			seq_printf(s, "%shardware", space);
- 		else
- 			seq_printf(s, "%s[hardware]", space);
-@@ -737,10 +734,9 @@ DEBUGFS_ATTR_RW(margining_mode);
- 
- static int margining_run_write(void *data, u64 val)
- {
--	struct tb_port *port = data;
--	struct usb4_port *usb4 = port->usb4;
-+	struct tb_margining *margining = data;
-+	struct tb_port *port = margining->port;
- 	struct tb_switch *sw = port->sw;
--	struct tb_margining *margining;
- 	struct tb_switch *down_sw;
- 	struct tb *tb = sw->tb;
- 	int ret, clx;
-@@ -775,8 +771,6 @@ static int margining_run_write(void *data, u64 val)
- 		clx = ret;
- 	}
- 
--	margining = usb4->margining;
--
+@@ -774,22 +774,25 @@ static int margining_run_write(void *data, u64 val)
  	if (margining->software) {
  		tb_port_dbg(port, "running software %s lane margining for lanes %u\n",
  			    margining->time ? "time" : "voltage", margining->lanes);
-@@ -817,16 +811,15 @@ static ssize_t margining_results_write(struct file *file,
- 				       size_t count, loff_t *ppos)
- {
- 	struct seq_file *s = file->private_data;
--	struct tb_port *port = s->private;
--	struct usb4_port *usb4 = port->usb4;
--	struct tb *tb = port->sw->tb;
-+	struct tb_margining *margining = s->private;
-+	struct tb *tb = margining->port->sw->tb;
+-		ret = usb4_port_sw_margin(port, margining->lanes, margining->time,
++		ret = usb4_port_sw_margin(port, USB4_SB_TARGET_ROUTER, 0,
++					  margining->lanes, margining->time,
+ 					  margining->right_high,
+ 					  USB4_MARGIN_SW_COUNTER_CLEAR);
+ 		if (ret)
+ 			goto out_clx;
  
- 	if (mutex_lock_interruptible(&tb->lock))
- 		return -ERESTARTSYS;
- 
- 	/* Just clear the results */
--	usb4->margining->results[0] = 0;
--	usb4->margining->results[1] = 0;
-+	margining->results[0] = 0;
-+	margining->results[1] = 0;
- 
- 	mutex_unlock(&tb->lock);
- 	return count;
-@@ -860,15 +853,12 @@ static void time_margin_show(struct seq_file *s,
- 
- static int margining_results_show(struct seq_file *s, void *not_used)
- {
--	struct tb_port *port = s->private;
--	struct usb4_port *usb4 = port->usb4;
--	struct tb_margining *margining;
--	struct tb *tb = port->sw->tb;
-+	struct tb_margining *margining = s->private;
-+	struct tb *tb = margining->port->sw->tb;
- 
- 	if (mutex_lock_interruptible(&tb->lock))
- 		return -ERESTARTSYS;
- 
--	margining = usb4->margining;
- 	/* Dump the raw results first */
- 	seq_printf(s, "0x%08x\n", margining->results[0]);
- 	/* Only the hardware margining has two result dwords */
-@@ -930,9 +920,8 @@ static ssize_t margining_test_write(struct file *file,
- 				    size_t count, loff_t *ppos)
- {
- 	struct seq_file *s = file->private_data;
--	struct tb_port *port = s->private;
--	struct usb4_port *usb4 = port->usb4;
--	struct tb *tb = port->sw->tb;
-+	struct tb_margining *margining = s->private;
-+	struct tb *tb = margining->port->sw->tb;
- 	int ret = 0;
- 	char *buf;
- 
-@@ -947,10 +936,10 @@ static ssize_t margining_test_write(struct file *file,
- 		goto out_free;
- 	}
- 
--	if (!strcmp(buf, "time") && supports_time(usb4))
--		usb4->margining->time = true;
-+	if (!strcmp(buf, "time") && supports_time(margining))
-+		margining->time = true;
- 	else if (!strcmp(buf, "voltage"))
--		usb4->margining->time = false;
-+		margining->time = false;
- 	else
- 		ret = -EINVAL;
- 
-@@ -963,15 +952,14 @@ static ssize_t margining_test_write(struct file *file,
- 
- static int margining_test_show(struct seq_file *s, void *not_used)
- {
--	struct tb_port *port = s->private;
--	struct usb4_port *usb4 = port->usb4;
--	struct tb *tb = port->sw->tb;
-+	struct tb_margining *margining = s->private;
-+	struct tb *tb = margining->port->sw->tb;
- 
- 	if (mutex_lock_interruptible(&tb->lock))
- 		return -ERESTARTSYS;
- 
--	if (supports_time(usb4)) {
--		if (usb4->margining->time)
-+	if (supports_time(margining)) {
-+		if (margining->time)
- 			seq_puts(s, "voltage [time]\n");
- 		else
- 			seq_puts(s, "[voltage] time\n");
-@@ -989,9 +977,8 @@ static ssize_t margining_margin_write(struct file *file,
- 				    size_t count, loff_t *ppos)
- {
- 	struct seq_file *s = file->private_data;
--	struct tb_port *port = s->private;
--	struct usb4_port *usb4 = port->usb4;
--	struct tb *tb = port->sw->tb;
-+	struct tb_margining *margining = s->private;
-+	struct tb *tb = margining->port->sw->tb;
- 	int ret = 0;
- 	char *buf;
- 
-@@ -1006,18 +993,18 @@ static ssize_t margining_margin_write(struct file *file,
- 		goto out_free;
- 	}
- 
--	if (usb4->margining->time) {
-+	if (margining->time) {
- 		if (!strcmp(buf, "left"))
--			usb4->margining->right_high = false;
-+			margining->right_high = false;
- 		else if (!strcmp(buf, "right"))
--			usb4->margining->right_high = true;
-+			margining->right_high = true;
- 		else
- 			ret = -EINVAL;
+-		ret = usb4_port_sw_margin_errors(port, &margining->results[0]);
++		ret = usb4_port_sw_margin_errors(port, USB4_SB_TARGET_ROUTER, 0,
++						 &margining->results[0]);
  	} else {
- 		if (!strcmp(buf, "low"))
--			usb4->margining->right_high = false;
-+			margining->right_high = false;
- 		else if (!strcmp(buf, "high"))
--			usb4->margining->right_high = true;
-+			margining->right_high = true;
- 		else
- 			ret = -EINVAL;
+ 		tb_port_dbg(port, "running hardware %s lane margining for lanes %u\n",
+ 			    margining->time ? "time" : "voltage", margining->lanes);
+ 		/* Clear the results */
+ 		margining->results[0] = 0;
+ 		margining->results[1] = 0;
+-		ret = usb4_port_hw_margin(port, margining->lanes,
+-					  margining->ber_level, margining->time,
+-					  margining->right_high, margining->results);
++		ret = usb4_port_hw_margin(port, USB4_SB_TARGET_ROUTER, 0,
++					  margining->lanes, margining->ber_level,
++					  margining->time, margining->right_high,
++					  margining->results);
  	}
-@@ -1031,20 +1018,19 @@ static ssize_t margining_margin_write(struct file *file,
  
- static int margining_margin_show(struct seq_file *s, void *not_used)
- {
--	struct tb_port *port = s->private;
--	struct usb4_port *usb4 = port->usb4;
--	struct tb *tb = port->sw->tb;
-+	struct tb_margining *margining = s->private;
-+	struct tb *tb = margining->port->sw->tb;
+ out_clx:
+@@ -1063,7 +1066,8 @@ static void margining_port_init(struct tb_port *port)
  
- 	if (mutex_lock_interruptible(&tb->lock))
- 		return -ERESTARTSYS;
+ 	margining->port = port;
  
--	if (usb4->margining->time) {
--		if (usb4->margining->right_high)
-+	if (margining->time) {
-+		if (margining->right_high)
- 			seq_puts(s, "left [right]\n");
- 		else
- 			seq_puts(s, "[left] right\n");
- 	} else {
--		if (usb4->margining->right_high)
-+		if (margining->right_high)
- 			seq_puts(s, "low [high]\n");
- 		else
- 			seq_puts(s, "[low] high\n");
-@@ -1075,16 +1061,16 @@ static void margining_port_init(struct tb_port *port)
- 	if (!margining)
- 		return;
- 
-+	margining->port = port;
-+
- 	ret = usb4_port_margining_caps(port, margining->caps);
+-	ret = usb4_port_margining_caps(port, margining->caps);
++	ret = usb4_port_margining_caps(port, USB4_SB_TARGET_ROUTER, 0,
++				       margining->caps);
  	if (ret) {
  		kfree(margining);
  		return;
- 	}
+diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
+index 1a53d18223d9..2f3de3d3c2e0 100644
+--- a/drivers/thunderbolt/tb.h
++++ b/drivers/thunderbolt/tb.h
+@@ -1349,13 +1349,16 @@ int usb4_port_sb_read(struct tb_port *port, enum usb4_sb_target target, u8 index
+ int usb4_port_sb_write(struct tb_port *port, enum usb4_sb_target target,
+ 		       u8 index, u8 reg, const void *buf, u8 size);
  
--	usb4->margining = margining;
--
- 	/* Set the initial mode */
--	if (supports_software(usb4))
-+	if (supports_software(margining))
- 		margining->software = true;
+-int usb4_port_margining_caps(struct tb_port *port, u32 *caps);
+-int usb4_port_hw_margin(struct tb_port *port, unsigned int lanes,
+-			unsigned int ber_level, bool timing, bool right_high,
+-			u32 *results);
+-int usb4_port_sw_margin(struct tb_port *port, unsigned int lanes, bool timing,
++int usb4_port_margining_caps(struct tb_port *port, enum usb4_sb_target target,
++			     u8 index, u32 *caps);
++int usb4_port_hw_margin(struct tb_port *port, enum usb4_sb_target target,
++			u8 index, unsigned int lanes, unsigned int ber_level,
++			bool timing, bool right_high, u32 *results);
++int usb4_port_sw_margin(struct tb_port *port, enum usb4_sb_target target,
++			u8 index, unsigned int lanes, bool timing,
+ 			bool right_high, u32 counter);
+-int usb4_port_sw_margin_errors(struct tb_port *port, u32 *errors);
++int usb4_port_sw_margin_errors(struct tb_port *port, enum usb4_sb_target target,
++			       u8 index, u32 *errors);
  
- 	val = (margining->caps[0] & USB4_MARGIN_CAP_0_VOLTAGE_STEPS_MASK) >>
-@@ -1094,7 +1080,7 @@ static void margining_port_init(struct tb_port *port)
- 		USB4_MARGIN_CAP_0_MAX_VOLTAGE_OFFSET_SHIFT;
- 	margining->max_voltage_offset = 74 + val * 2;
+ int usb4_port_retimer_set_inbound_sbtx(struct tb_port *port, u8 index);
+ int usb4_port_retimer_unset_inbound_sbtx(struct tb_port *port, u8 index);
+diff --git a/drivers/thunderbolt/usb4.c b/drivers/thunderbolt/usb4.c
+index 140e0da3a8de..d952de07493f 100644
+--- a/drivers/thunderbolt/usb4.c
++++ b/drivers/thunderbolt/usb4.c
+@@ -1628,26 +1628,31 @@ int usb4_port_asym_start(struct tb_port *port)
+ /**
+  * usb4_port_margining_caps() - Read USB4 port marginig capabilities
+  * @port: USB4 port
++ * @target: Sideband target
++ * @index: Retimer index if taget is %USB4_SB_TARGET_RETIMER
+  * @caps: Array with at least two elements to hold the results
+  *
+  * Reads the USB4 port lane margining capabilities into @caps.
+  */
+-int usb4_port_margining_caps(struct tb_port *port, u32 *caps)
++int usb4_port_margining_caps(struct tb_port *port, enum usb4_sb_target target,
++			     u8 index, u32 *caps)
+ {
+ 	int ret;
  
--	if (supports_time(usb4)) {
-+	if (supports_time(margining)) {
- 		val = (margining->caps[1] & USB4_MARGIN_CAP_1_TIME_STEPS_MASK) >>
- 			USB4_MARGIN_CAP_1_TIME_STEPS_SHIFT;
- 		margining->time_steps = val;
-@@ -1108,7 +1094,7 @@ static void margining_port_init(struct tb_port *port)
- 	}
+-	ret = usb4_port_sb_op(port, USB4_SB_TARGET_ROUTER, 0,
++	ret = usb4_port_sb_op(port, target, index,
+ 			      USB4_SB_OPCODE_READ_LANE_MARGINING_CAP, 500);
+ 	if (ret)
+ 		return ret;
  
- 	dir = debugfs_create_dir("margining", parent);
--	if (supports_hardware(usb4)) {
-+	if (supports_hardware(margining)) {
- 		val = (margining->caps[1] & USB4_MARGIN_CAP_1_MIN_BER_MASK) >>
- 			USB4_MARGIN_CAP_1_MIN_BER_SHIFT;
- 		margining->min_ber_level = val;
-@@ -1119,19 +1105,23 @@ static void margining_port_init(struct tb_port *port)
- 		/* Set the default to minimum */
- 		margining->ber_level = margining->min_ber_level;
- 
--		debugfs_create_file("ber_level_contour", 0400, dir, port,
-+		debugfs_create_file("ber_level_contour", 0400, dir, margining,
- 				    &margining_ber_level_fops);
- 	}
--	debugfs_create_file("caps", 0400, dir, port, &margining_caps_fops);
--	debugfs_create_file("lanes", 0600, dir, port, &margining_lanes_fops);
--	debugfs_create_file("mode", 0600, dir, port, &margining_mode_fops);
--	debugfs_create_file("run", 0600, dir, port, &margining_run_fops);
--	debugfs_create_file("results", 0600, dir, port, &margining_results_fops);
--	debugfs_create_file("test", 0600, dir, port, &margining_test_fops);
--	if (independent_voltage_margins(usb4) == USB4_MARGIN_CAP_0_VOLTAGE_HL ||
--	    (supports_time(usb4) &&
--	     independent_time_margins(usb4) == USB4_MARGIN_CAP_1_TIME_LR))
--		debugfs_create_file("margin", 0600, dir, port, &margining_margin_fops);
-+	debugfs_create_file("caps", 0400, dir, margining, &margining_caps_fops);
-+	debugfs_create_file("lanes", 0600, dir, margining, &margining_lanes_fops);
-+	debugfs_create_file("mode", 0600, dir, margining, &margining_mode_fops);
-+	debugfs_create_file("run", 0600, dir, margining, &margining_run_fops);
-+	debugfs_create_file("results", 0600, dir, margining,
-+			    &margining_results_fops);
-+	debugfs_create_file("test", 0600, dir, margining, &margining_test_fops);
-+	if (independent_voltage_margins(margining) == USB4_MARGIN_CAP_0_VOLTAGE_HL ||
-+	    (supports_time(margining) &&
-+	     independent_time_margins(margining) == USB4_MARGIN_CAP_1_TIME_LR))
-+		debugfs_create_file("margin", 0600, dir, margining,
-+				    &margining_margin_fops);
-+
-+	usb4->margining = margining;
+-	return usb4_port_sb_read(port, USB4_SB_TARGET_ROUTER, 0,
+-				 USB4_SB_DATA, caps, sizeof(*caps) * 2);
++	return usb4_port_sb_read(port, target, index, USB4_SB_DATA, caps,
++				 sizeof(*caps) * 2);
  }
  
- static void margining_port_remove(struct tb_port *port)
+ /**
+  * usb4_port_hw_margin() - Run hardware lane margining on port
+  * @port: USB4 port
++ * @target: Sideband target
++ * @index: Retimer index if taget is %USB4_SB_TARGET_RETIMER
+  * @lanes: Which lanes to run (must match the port capabilities). Can be
+  *	   %0, %1 or %7.
+  * @ber_level: BER level contour value
+@@ -1658,9 +1663,9 @@ int usb4_port_margining_caps(struct tb_port *port, u32 *caps)
+  * Runs hardware lane margining on USB4 port and returns the result in
+  * @results.
+  */
+-int usb4_port_hw_margin(struct tb_port *port, unsigned int lanes,
+-			unsigned int ber_level, bool timing, bool right_high,
+-			u32 *results)
++int usb4_port_hw_margin(struct tb_port *port, enum usb4_sb_target target,
++			u8 index, unsigned int lanes, unsigned int ber_level,
++			bool timing, bool right_high, u32 *results)
+ {
+ 	u32 val;
+ 	int ret;
+@@ -1674,23 +1679,25 @@ int usb4_port_hw_margin(struct tb_port *port, unsigned int lanes,
+ 		val |= (ber_level << USB4_MARGIN_HW_BER_SHIFT) &
+ 			USB4_MARGIN_HW_BER_MASK;
+ 
+-	ret = usb4_port_sb_write(port, USB4_SB_TARGET_ROUTER, 0,
+-				 USB4_SB_METADATA, &val, sizeof(val));
++	ret = usb4_port_sb_write(port, target, index, USB4_SB_METADATA, &val,
++				 sizeof(val));
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = usb4_port_sb_op(port, USB4_SB_TARGET_ROUTER, 0,
++	ret = usb4_port_sb_op(port, target, index,
+ 			      USB4_SB_OPCODE_RUN_HW_LANE_MARGINING, 2500);
+ 	if (ret)
+ 		return ret;
+ 
+-	return usb4_port_sb_read(port, USB4_SB_TARGET_ROUTER, 0,
+-				 USB4_SB_DATA, results, sizeof(*results) * 2);
++	return usb4_port_sb_read(port, target, index, USB4_SB_DATA, results,
++				 sizeof(*results) * 2);
+ }
+ 
+ /**
+  * usb4_port_sw_margin() - Run software lane margining on port
+  * @port: USB4 port
++ * @target: Sideband target
++ * @index: Retimer index if taget is %USB4_SB_TARGET_RETIMER
+  * @lanes: Which lanes to run (must match the port capabilities). Can be
+  *	   %0, %1 or %7.
+  * @timing: Perform timing margining instead of voltage
+@@ -1701,7 +1708,8 @@ int usb4_port_hw_margin(struct tb_port *port, unsigned int lanes,
+  * counters by calling usb4_port_sw_margin_errors(). Returns %0 in
+  * success and negative errno otherwise.
+  */
+-int usb4_port_sw_margin(struct tb_port *port, unsigned int lanes, bool timing,
++int usb4_port_sw_margin(struct tb_port *port, enum usb4_sb_target target,
++			u8 index, unsigned int lanes, bool timing,
+ 			bool right_high, u32 counter)
+ {
+ 	u32 val;
+@@ -1715,34 +1723,37 @@ int usb4_port_sw_margin(struct tb_port *port, unsigned int lanes, bool timing,
+ 	val |= (counter << USB4_MARGIN_SW_COUNTER_SHIFT) &
+ 		USB4_MARGIN_SW_COUNTER_MASK;
+ 
+-	ret = usb4_port_sb_write(port, USB4_SB_TARGET_ROUTER, 0,
+-				 USB4_SB_METADATA, &val, sizeof(val));
++	ret = usb4_port_sb_write(port, target, index, USB4_SB_METADATA, &val,
++				 sizeof(val));
+ 	if (ret)
+ 		return ret;
+ 
+-	return usb4_port_sb_op(port, USB4_SB_TARGET_ROUTER, 0,
++	return usb4_port_sb_op(port, target, index,
+ 			       USB4_SB_OPCODE_RUN_SW_LANE_MARGINING, 2500);
+ }
+ 
+ /**
+  * usb4_port_sw_margin_errors() - Read the software margining error counters
+  * @port: USB4 port
++ * @target: Sideband target
++ * @index: Retimer index if taget is %USB4_SB_TARGET_RETIMER
+  * @errors: Error metadata is copied here.
+  *
+  * This reads back the software margining error counters from the port.
+  * Returns %0 in success and negative errno otherwise.
+  */
+-int usb4_port_sw_margin_errors(struct tb_port *port, u32 *errors)
++int usb4_port_sw_margin_errors(struct tb_port *port, enum usb4_sb_target target,
++			       u8 index, u32 *errors)
+ {
+ 	int ret;
+ 
+-	ret = usb4_port_sb_op(port, USB4_SB_TARGET_ROUTER, 0,
++	ret = usb4_port_sb_op(port, target, index,
+ 			      USB4_SB_OPCODE_READ_SW_MARGIN_ERR, 150);
+ 	if (ret)
+ 		return ret;
+ 
+-	return usb4_port_sb_read(port, USB4_SB_TARGET_ROUTER, 0,
+-				 USB4_SB_METADATA, errors, sizeof(*errors));
++	return usb4_port_sb_read(port, target, index, USB4_SB_METADATA, errors,
++				 sizeof(*errors));
+ }
+ 
+ static inline int usb4_port_retimer_op(struct tb_port *port, u8 index,
 -- 
 2.43.0
 
