@@ -1,124 +1,141 @@
-Return-Path: <linux-usb+bounces-11311-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11312-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DBB469080A4
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Jun 2024 03:31:06 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65DD09080BB
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Jun 2024 03:35:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 81EEF284317
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Jun 2024 01:31:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 62BF11C21915
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Jun 2024 01:35:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69FD31822F9;
-	Fri, 14 Jun 2024 01:30:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE36F18306F;
+	Fri, 14 Jun 2024 01:35:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="0xM6FHeW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id ABD4829A2
-	for <linux-usb@vger.kernel.org>; Fri, 14 Jun 2024 01:30:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D57462AF0F;
+	Fri, 14 Jun 2024 01:35:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718328654; cv=none; b=HpgsdKJ0wtE3ZIPpTywpvE31Sias4rvWSkU2PgOsrpMIVmfamPYENg8m39uFfYkAcZt7aqEBBFuF+enrCRV6qCXo5YDpQSdZPPq3FdNt5gw8gy2CG3W33yMBXUGbdTi7S5xUyBRWxoBmyH1FVKP8sfPOI+j0IHqHRTNvV/nbzRk=
+	t=1718328930; cv=none; b=ifbmy41bjGVM4R6Vk9m2FXOVrZQLJUALgCkfw5eaB4N4f6O/4AqtDURfiH2CLciSGLelAIgL5vX3dMmgLGYaBGupdMgp8AiHTJMjWPYK9IA5pm1XHERLTxUipQGJD4wEuhZtQPeV19wczP9Vdvih3PPYEzx3eUoA5O+QDCr55r4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718328654; c=relaxed/simple;
-	bh=NHfuDosNeZjSwPeDyy3cQ2MkLsMtVZXIVIVqodb7G6Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=LyKnf3Y+cmCJ2hBfbYB/kfv0H8uDyfZbGqYkJ+foXC7HrhLBz3FI9HB2mZntwjL2I6Si7uGtUM8TccBtEp5jAnjgimauqg2Y61ORvjfx7BMDqhoXJ71Rh7byP8bvsaPVegyI/H4oXbyDrf0ZHEpE0abOWUiiwqSRU9JTZthDEdw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
-Received: (qmail 282581 invoked by uid 1000); 13 Jun 2024 21:30:43 -0400
-Date: Thu, 13 Jun 2024 21:30:43 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: syzbot <syzbot+1b2abad17596ad03dcff@syzkaller.appspotmail.com>,
-  syzbot <syzbot+5f996b83575ef4058638@syzkaller.appspotmail.com>,
-  johan.hedberg@gmail.com, linux-bluetooth@vger.kernel.org,
-  linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-  luiz.dentz@gmail.com, marcel@holtmann.org, syzkaller-bugs@googlegroups.com
-Subject: [PATCH] USB: class: cdc-wdm: Fix CPU lockup caused by excessive log
- messages
-Message-ID: <29855215-52f5-4385-b058-91f42c2bee18@rowland.harvard.edu>
+	s=arc-20240116; t=1718328930; c=relaxed/simple;
+	bh=v3Qw98jelyFXnj4jFQ7LoIE7Rtkyp417F9WQDHhbY1U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JYJxu+zqsUiXdZl0ZzMIrMTW0ilz218s7foboZ27fqbBRQ/vmeK7YhQnKaztvzYhLVuOu6yZZ+0+jSy3ALbuBv26k/DdWoZLg8BJMqGrPfuD36skC8hFqyG0WtAkEXDbTGWT8M5PmQxdeCuiJ4w22L92yUiVFHd3DhpCwcQ23Ww=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=0xM6FHeW; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1718328926;
+	bh=v3Qw98jelyFXnj4jFQ7LoIE7Rtkyp417F9WQDHhbY1U=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=0xM6FHeWJ/E0j5TBZpQmTvNm6dwjE3FxtbjWzwTr25mO2h3MLNp3MrBrdFmQk4/iQ
+	 wuHUPjY1unhE9+5HWyzlK/NYBIGc4G+UeS8CkPCxTDdeM+xNk9Jft2YD4vZvSLIV3R
+	 Wo4/hFHIdMtOJauwgZE3keub+SaIo9KrPtQVGNsqM6Fcmv0kRGJmfVxqbSkC4Mbj4n
+	 N8nXa4qeJmy96nZFv2ZTMl0i63/8/xzCCd6glovL80owyH8fNkmzGCDTwYhi20CgZj
+	 XZpwS+4X9m5rsSU1EQ9oMqaLeOmGPvxRamBXXuN+uzY1KIt31pAUfNPAVsnat+DBmF
+	 MN/ITcEp/Mi3A==
+Received: from mercury (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: sre)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id D6CC6378107D;
+	Fri, 14 Jun 2024 01:35:25 +0000 (UTC)
+Received: by mercury (Postfix, from userid 1000)
+	id 61CE210608F7; Fri, 14 Jun 2024 03:35:25 +0200 (CEST)
+Date: Fri, 14 Jun 2024 03:35:25 +0200
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Bjorn Andersson <andersson@kernel.org>, Hans de Goede <hdegoede@redhat.com>, 
+	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Konrad Dybcio <konrad.dybcio@linaro.org>, linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-arm-msm@vger.kernel.org, Nikita Travkin <nikita@trvn.ru>
+Subject: Re: [PATCH v6 4/6] power: supply: lenovo_yoga_c630_battery: add
+ Lenovo C630 driver
+Message-ID: <r5wjdxqdechzxbyqwbyz7ou6nbxqewb6bruvklvcek2dhspixf@ujavcd3ky7n7>
+References: <20240612-yoga-ec-driver-v6-0-8e76ba060439@linaro.org>
+ <20240612-yoga-ec-driver-v6-4-8e76ba060439@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="xulyxrxhy6ccwuiy"
+Content-Disposition: inline
+In-Reply-To: <20240612-yoga-ec-driver-v6-4-8e76ba060439@linaro.org>
+
+
+--xulyxrxhy6ccwuiy
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The syzbot fuzzer found that the interrupt-URB completion callback in
-the cdc-wdm driver was taking too long, and the driver's immediate
-resubmission of interrupt URBs with -EPROTO status combined with the
-dummy-hcd emulation to cause a CPU lockup:
+Hi,
 
+On Wed, Jun 12, 2024 at 12:59:35PM GMT, Dmitry Baryshkov wrote:
+> On the Lenovo Yoga C630 WOS laptop the EC provides access to the adapter
+> and battery status. Add the driver to read power supply status on the
+> laptop.
+>=20
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> ---
+>  drivers/power/supply/Kconfig                    |   9 +
+>  drivers/power/supply/Makefile                   |   1 +
+>  drivers/power/supply/lenovo_yoga_c630_battery.c | 500 ++++++++++++++++++=
+++++++
+>  3 files changed, 510 insertions(+)
+>=20
+> diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
+> index 3e31375491d5..55ab8e90747d 100644
+> --- a/drivers/power/supply/Kconfig
+> +++ b/drivers/power/supply/Kconfig
+> @@ -167,6 +167,15 @@ config BATTERY_LEGO_EV3
+>  	help
+>  	  Say Y here to enable support for the LEGO MINDSTORMS EV3 battery.
+> =20
+> +config BATTERY_LENOVO_YOGA_C630
+> +	tristate "Lenovo Yoga C630 battery"
+> +	depends on OF && EC_LENOVO_YOGA_C630
 
-cdc_wdm 1-1:1.0: nonzero urb status received: -71
-cdc_wdm 1-1:1.0: wdm_int_callback - 0 bytes
-watchdog: BUG: soft lockup - CPU#0 stuck for 26s! [syz-executor782:6625]
-CPU#0 Utilization every 4s during lockup:
-	#1:  98% system,	  0% softirq,	  3% hardirq,	  0% idle
-	#2:  98% system,	  0% softirq,	  3% hardirq,	  0% idle
-	#3:  98% system,	  0% softirq,	  3% hardirq,	  0% idle
-	#4:  98% system,	  0% softirq,	  3% hardirq,	  0% idle
-	#5:  98% system,	  1% softirq,	  3% hardirq,	  0% idle
-Modules linked in:
-irq event stamp: 73096
-hardirqs last  enabled at (73095): [<ffff80008037bc00>] console_emit_next_record kernel/printk/printk.c:2935 [inline]
-hardirqs last  enabled at (73095): [<ffff80008037bc00>] console_flush_all+0x650/0xb74 kernel/printk/printk.c:2994
-hardirqs last disabled at (73096): [<ffff80008af10b00>] __el1_irq arch/arm64/kernel/entry-common.c:533 [inline]
-hardirqs last disabled at (73096): [<ffff80008af10b00>] el1_interrupt+0x24/0x68 arch/arm64/kernel/entry-common.c:551
-softirqs last  enabled at (73048): [<ffff8000801ea530>] softirq_handle_end kernel/softirq.c:400 [inline]
-softirqs last  enabled at (73048): [<ffff8000801ea530>] handle_softirqs+0xa60/0xc34 kernel/softirq.c:582
-softirqs last disabled at (73043): [<ffff800080020de8>] __do_softirq+0x14/0x20 kernel/softirq.c:588
-CPU: 0 PID: 6625 Comm: syz-executor782 Tainted: G        W          6.10.0-rc2-syzkaller-g8867bbd4a056 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/02/2024
+The driver should no longer depend on OF. Otherwise LGTM.
+Thanks for reworking it.
 
+Greetings,
 
-Testing showed that the problem did not occur if the two error
-messages -- the first two lines above -- were removed; apparently adding
-material to the kernel log takes a surprisingly large amount of time.
+-- Sebastian
 
-In any case, the best approach for preventing these lockups and to
-avoid spamming the log with thousands of error messages per second is
-to ratelimit the two dev_err() calls.  Therefore we replace them with
-dev_err_ratelimited().
+--xulyxrxhy6ccwuiy
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-Suggested-by: Greg KH <gregkh@linuxfoundation.org>
-Reported-and-tested-by: syzbot+5f996b83575ef4058638@syzkaller.appspotmail.com
-Closes: https://lore.kernel.org/linux-usb/00000000000073d54b061a6a1c65@google.com/
-Reported-and-tested-by: syzbot+1b2abad17596ad03dcff@syzkaller.appspotmail.com
-Closes: https://lore.kernel.org/linux-usb/000000000000f45085061aa9b37e@google.com/
-Fixes: 9908a32e94de ("USB: remove err() macro from usb class drivers")
-Link: https://lore.kernel.org/linux-usb/40dfa45b-5f21-4eef-a8c1-51a2f320e267@rowland.harvard.edu/
-Cc: stable@vger.kernel.org
+-----BEGIN PGP SIGNATURE-----
 
----
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmZrnlUACgkQ2O7X88g7
++po9/g/+LchaOK3fxp4Ks0qfIV6s6rPwUjxhMA9+JLpq62BTpdYsklPtbF3aCjJE
+8eJzchrPFDxhP0/jJFYIMYQsy4dBY5GJS3VK02fflNhSgLgLy8aLlFbafrYIu+Av
+GmWi/M6UcvTJ366avMqazRvWbwqomMzQ6yUkA9dqYNTo9WnjWV6ereiWTkRlonFo
+GN61nFbjoMiNS7fvb216KEq2EbZ+RdZjzup0k/b10Zyu+zX6iIbyoWQ8ALdQXyK8
+TsMshTv9R/Mbk3pVp+0EIxPPnbkTG2GkrzJmK2pE8Nh3Cs3fVC9zjojZtj9XtZID
+RZYMjk+2l/1xZEEnQfUK8SBzRx3DtHSG5dDJr7IHaqWfphVI2BGQwgujsGsbuu4r
+rKKv6k7tyAXMXa3KHNzTcf7msmTnn3cipWnaBY3OtJ4Q088aXCSKxti1l0zFSjGN
+UXzgECgLeNMSbWEEZZ0TqBEY+ye8YBpV6/Q0cv6YfFfl0yr16tqsStj9vFNR7FFS
+hicmJpxzRvTwuvVOV0GpgxNiA51aqnaxXI4lDNHfCKHQ97Hq50BeNkd3almuYjgO
+F8e53wz2aopNqBT4WSOSLi4MAZbGQRG7kiVCyl2IBPnBMkoShBqWqdF6BWLuYodc
++xLePf7j6ThMA1q1+JuLpv2rpvsEPrWyoYTHAdRGqee37XiKaUQ=
+=J71+
+-----END PGP SIGNATURE-----
 
- drivers/usb/class/cdc-wdm.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-Index: usb-devel/drivers/usb/class/cdc-wdm.c
-===================================================================
---- usb-devel.orig/drivers/usb/class/cdc-wdm.c
-+++ usb-devel/drivers/usb/class/cdc-wdm.c
-@@ -266,14 +266,14 @@ static void wdm_int_callback(struct urb
- 			dev_err(&desc->intf->dev, "Stall on int endpoint\n");
- 			goto sw; /* halt is cleared in work */
- 		default:
--			dev_err(&desc->intf->dev,
-+			dev_err_ratelimited(&desc->intf->dev,
- 				"nonzero urb status received: %d\n", status);
- 			break;
- 		}
- 	}
- 
- 	if (urb->actual_length < sizeof(struct usb_cdc_notification)) {
--		dev_err(&desc->intf->dev, "wdm_int_callback - %d bytes\n",
-+		dev_err_ratelimited(&desc->intf->dev, "wdm_int_callback - %d bytes\n",
- 			urb->actual_length);
- 		goto exit;
- 	}
+--xulyxrxhy6ccwuiy--
 
