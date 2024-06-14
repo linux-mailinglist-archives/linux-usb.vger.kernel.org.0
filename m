@@ -1,113 +1,110 @@
-Return-Path: <linux-usb+bounces-11314-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11315-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7FE890818E
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Jun 2024 04:23:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 546379082E2
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Jun 2024 06:20:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 42370283138
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Jun 2024 02:23:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 633F51C216EE
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Jun 2024 04:20:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DAA31822D6;
-	Fri, 14 Jun 2024 02:23:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACA2613A411;
+	Fri, 14 Jun 2024 04:20:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="SlyWzDRP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L4gKkIQz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D31972836A;
-	Fri, 14 Jun 2024 02:23:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30CCD26AD7
+	for <linux-usb@vger.kernel.org>; Fri, 14 Jun 2024 04:20:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718331831; cv=none; b=NoYOs+027Djh63aFOjkjuKEBwckNYb3l3naXyHkvYTu8Qh/lKevKTh4cCe6cDJy0IOiyaSIhF/vT469M+W/4gXAfLqoqUw4PPu1bxio7uQZe9z3F6Y7WKJ4ZWYDKeOkVWqn9hgoqf8e7uo6UyfM+AW1mUmXihAyQ5bdsfoJiYpA=
+	t=1718338816; cv=none; b=fp7I1Q5pEM9Bt+cvewO3mh1U3FR/G3GQAMR0YG4WoF90zN3s8Jk2dAX+1m/kJAH9BeI6gIe/GPiCrc+3eKy8HGwvBq/k2+7eUNtQ2pPj5vWGvurD8idaQXfea0OrS/Czg5rZuFEoLwC1KdWTXMQ28Cn0jNR75FJzwI7XTKSmtds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718331831; c=relaxed/simple;
-	bh=T7ZI30pdt8cKouu+B6Wek7jgn7JCy3A/eGiNzOKgFco=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=B7ZGst+v2MNGWQ13z4d2WCF6YDr82vkWqd8XfOvBsI/1DjDuqN97gOlTcFtxAYRNaHgBqKh+aUQLS1JADdcGvMnj/zIbQpVxyyBP7nw28JWp4AYAhEMNAa0eYJfF986GwaBGc1Zjf85PqiZDPqq8rwNsMyjI43S/AIFaAfWsy1Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=SlyWzDRP; arc=none smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45E1gA3o023011;
-	Fri, 14 Jun 2024 02:23:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=
-	from:to:cc:subject:date:message-id:in-reply-to:references
-	:mime-version:content-type:content-transfer-encoding; s=
-	corp-2023-11-20; bh=9Z41dJob1FL54RNTLvwuxNa32aW8KmiumqItdNjxDWE=; b=
-	SlyWzDRP89S/UmdhaNXSbB8M1eXehWdoJkBFE0ItT2bYk1t1Igddk7qL+aKun+OE
-	TZn7UnQp83jPHSQKHg94CC85zXWlkkpafwG2oNaeFA62tkzQAl04GqjLQNvM9/rw
-	DKy500ikOnw1h7HwIxw0tSUbYCDH6l4deNsjB4rHy1LQS5n5CFOwV24JJiNGOP6I
-	4ITUxjI2cRZ/mi9kWpemyL75fAy4IAsUKU54GTfTknGLs8khDewRzUmas5UyWtXp
-	YTxVkCU/FSxBX9KlhgptfKaFffkm4T1uKR9irWtNC/EtpRfYKmSVJUfgzYg5wpnD
-	SD0q5RIddWeuwhixnjGguA==
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3ymh1mjt5v-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 14 Jun 2024 02:23:45 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 45E0Uq2M012527;
-	Fri, 14 Jun 2024 02:23:44 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3ynca1vrj0-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 14 Jun 2024 02:23:44 +0000
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 45E2NhG1009531;
-	Fri, 14 Jun 2024 02:23:43 GMT
-Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3ynca1vrfh-1;
-	Fri, 14 Jun 2024 02:23:43 +0000
-From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: Bart Van Assche <bvanassche@acm.org>
-Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Alan Stern <stern@rowland.harvard.edu>, linux-scsi@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v3 0/2] Do not read the IO hints VPD page from USB storage devices
-Date: Thu, 13 Jun 2024 22:23:00 -0400
-Message-ID: <171833164848.271429.11609704907810406023.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.45.1
-In-Reply-To: <20240613211828.2077477-1-bvanassche@acm.org>
-References: <20240613211828.2077477-1-bvanassche@acm.org>
+	s=arc-20240116; t=1718338816; c=relaxed/simple;
+	bh=2XW8rEChzBQDO/7Jadaq4j+uDFrNtFkux7i+j5A6hWQ=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=lRE75NtFSha1l7FoOcHkg0EYP9xw0inuURTKxAPkRa2m/Mjz9rfILbbVPmUr0E4kkNu9DBSmPWmhh7YgzfHNvod/sHPIwO1EjsoWpIdHu33yCSW/SQEK7en0C+AJTkxZvKyjc9YC239uFBZFRYeoVkaPdiBwJkGDN2dN9JLVFHU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L4gKkIQz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A2DCFC3277B
+	for <linux-usb@vger.kernel.org>; Fri, 14 Jun 2024 04:20:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718338815;
+	bh=2XW8rEChzBQDO/7Jadaq4j+uDFrNtFkux7i+j5A6hWQ=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=L4gKkIQzwcxBu1TItt/DjtYCJWso9gs2H6eJnzSwHckHuAG0TYwsnaUwOmWPh1IOr
+	 nVKzbSDuZ7g5zSHAc99PrlNLK/UOrxSMy3lrzqpZWgh7zKjLLpKxyb/d1Qinfx5mG6
+	 Qlq7mlMryBMjeF0Kw158HyprqilaLsAnxrLnmSCfUwW1W/2goE77viw+ePxGACrhmX
+	 v6vJTDYldA5EdBFi97yZ7hT5IUNy7wzyz60jRuS3HDxPRZ+KNn+C2ZPglsRL3yYdYT
+	 twwWpzgOT/c6N7o0LLo9D30tKvDWa8zdcOYVoVnwmq99O3Jr7xlJP68vtjJcHm96wW
+	 I3Mx2MWPR3rBA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 92A17C53B50; Fri, 14 Jun 2024 04:20:15 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 218943] No SuperSpeedPlus on AM4/5 Hubs
+Date: Fri, 14 Jun 2024 04:20:15 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: jarrard@proton.me
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: attachments.created
+Message-ID: <bug-218943-208809-O3alcTDBA2@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-218943-208809@https.bugzilla.kernel.org/>
+References: <bug-218943-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-06-13_15,2024-06-13_02,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=519 adultscore=0
- phishscore=0 suspectscore=0 malwarescore=0 mlxscore=0 spamscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2405010000 definitions=main-2406140014
-X-Proofpoint-ORIG-GUID: KBoZJP_SYEyMBxyv70ULe3jKD7eRXUqz
-X-Proofpoint-GUID: KBoZJP_SYEyMBxyv70ULe3jKD7eRXUqz
 
-On Thu, 13 Jun 2024 14:18:25 -0700, Bart Van Assche wrote:
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218943
 
-> Recently it was reported that reading the IO hints VPD page makes at least two
-> USB storage devices crash. Hence this patch series that disables reading the IO
-> hints VPD page from USB storage devices. Please consider this patch series for
-> your scsi-fixes branch.
-> 
-> Thanks,
-> 
-> [...]
+--- Comment #23 from Jarrard (jarrard@proton.me) ---
+Created attachment 306461
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D306461&action=3Dedit
+USBView (patch)
 
-Applied to 6.10/scsi-fixes, thanks!
+Here is a image showing what I see in USB View app.
 
-[1/2] scsi: core: Introduce the BLIST_SKIP_IO_HINTS flag
-      https://git.kernel.org/mkp/scsi/c/633aeefafc9c
-[2/2] usb: Do not query the IO advice hints grouping mode page for USB devices
-      https://git.kernel.org/mkp/scsi/c/57619f3cdeb5
+When the HUB is connected it does show as 10Gbps but AsMedia device is still
+5Gbps.  HOWEVER here we clearly see the VIA hub is 5Gbps which is confusing=
+ to
+me.
 
--- 
-Martin K. Petersen	Oracle Linux Engineering
+I don't understand what is going on but this seems like a pretty big proble=
+m.
+Guessing INTEL CPU/MOBO users don't have this issue.=20
+
+This is with XANMOD kernel with USB Patch applied as suggested.=20
+
+Perhaps there is a modification to the patch that can be done to fix this
+specific asmedia device? I do not know much about programming so can't real=
+ly
+figure it out, its a small miracle I even got the patch applied successfully
+(according to logs).
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
