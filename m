@@ -1,54 +1,55 @@
-Return-Path: <linux-usb+bounces-11333-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11334-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1DAD1908B84
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Jun 2024 14:19:37 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 38837908B86
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Jun 2024 14:20:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2C75E1C2208E
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Jun 2024 12:19:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 388EE1C2252F
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Jun 2024 12:20:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DB08196C8B;
-	Fri, 14 Jun 2024 12:19:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB64919645D;
+	Fri, 14 Jun 2024 12:20:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="HfKcuYZB"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="NxejRGnh"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EBDD187560;
-	Fri, 14 Jun 2024 12:19:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 654F0195F03
+	for <linux-usb@vger.kernel.org>; Fri, 14 Jun 2024 12:20:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718367567; cv=none; b=OF/F87qR1owdpldkMvJEoLIncY0NoLG09OnH2vWXyUNaZOMVpZ1GTxMC5/Bxb7C/Ctf30se3PAuuQcaPdN6KJDnud5MeRhVwZyc0T9n7Dpf4xlddXOEsxZQt+RSdSBpqbNYD6wgFEXgBhYDbtQGRBxKLI7aI83QygucD7rYDpCg=
+	t=1718367602; cv=none; b=NEaPRp/hXCIYjk3U4m5Vv/cFdiWSE6w4T9n0qo8nKS5bCWfquUnFm4CZl/P7PzTEHJnWaSLkCXs93sBYL9nTLfssBpsQg004LX+36eKAQSreIh4z7DGHwXnT0/vksyj5Wj9rLgSTzYZON1l/C/MMafKaUQQ4MobyINYXSnazTeo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718367567; c=relaxed/simple;
-	bh=hk2wJWKdWSr6yMdrtnHXWxXOgLKEOsBAss/qBR+wnSg=;
+	s=arc-20240116; t=1718367602; c=relaxed/simple;
+	bh=rcblBbCdGpe990TbwKyeMXohm3XAf40sIHXzz3ZMpDA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tZa+di0RJ+yIyRY5FeB+QlG+An6BbC9FOULcRMpn5cDKNrHgsib1rCWggRs3C9NSs7wwFX5DwhbX3Z1ujPMPjZPXSiDLuRsa/w68lkUcftVP9PL7AkThc0DqIDw7um2M+yZGvbs5VZp0dFBiEFyphYl+3zYleJvNZld8kFReGXg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=HfKcuYZB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9398C2BD10;
-	Fri, 14 Jun 2024 12:19:26 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=DLnXagLBrTnnZe7I/jCWG5+olQs3Duc+CkZrSQZ+55JwbiWbe60Jut/0Lz4HCEPcZdRn8LLz1VHSF+vXsXhEPjT4XHiYM5c7ZCH3wGO8NyeRKf51K4EaKkN9k/KxIIJz8wwvSqrRqjoClm3uGd2LLiqiKSGeslk5nPl0tjurVOc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=NxejRGnh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEE41C2BD10;
+	Fri, 14 Jun 2024 12:20:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1718367567;
-	bh=hk2wJWKdWSr6yMdrtnHXWxXOgLKEOsBAss/qBR+wnSg=;
+	s=korg; t=1718367602;
+	bh=rcblBbCdGpe990TbwKyeMXohm3XAf40sIHXzz3ZMpDA=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=HfKcuYZBn5eYIDevNfYrlyJgBJq4po+7lmaIB5gVMh7EKJQ1yhOJhgL6IPidCps0q
-	 NrikKCzLyWYop/VlnstmcdHGTGuFRDzPuj3ew9hgzVrxpCHY2DUN7J0LyJ8mSPLRf9
-	 nyWkqZEg3EMdK52YqelrgFQ2ruXmKEa286B5M830=
-Date: Fri, 14 Jun 2024 14:19:23 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: linux-usb@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Grant Grundler <grundler@chromium.org>,
-	Yajun Deng <yajun.deng@linux.dev>, Oliver Neukum <oneukum@suse.com>,
-	Douglas Anderson <dianders@chromium.org>
-Subject: Re: [PATCH 1/4] USB: make to_usb_driver() use container_of_const()
-Message-ID: <2024061444-open-denote-804b@gregkh>
-References: <2024061448-manly-universal-00ad@gregkh>
+	b=NxejRGnhm4B5UoFuNuUM/N3n3ovKOKDKUWukVhhacyvZAsxAVcBGheFsNshh7rPVo
+	 qSumhqLvKlHBIP0cab4QPhyQ59U9Zx/LJ76askFM3xHw91Nu2aeMPRv3LCpPh/I5hW
+	 Z5UDudRDh4dzs3vLxjwxHji++TS3XSKgCRNux0dw=
+Date: Fri, 14 Jun 2024 14:19:58 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Michael Jamet <michael.jamet@intel.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2 0/6] thunderbolt: Sideband access and retimer lane
+ margining support
+Message-ID: <2024061449-wilt-goliath-8248@gregkh>
+References: <20240614121512.1361184-1-mika.westerberg@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -57,49 +58,33 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2024061448-manly-universal-00ad@gregkh>
+In-Reply-To: <20240614121512.1361184-1-mika.westerberg@linux.intel.com>
 
-On Fri, Jun 14, 2024 at 02:11:49PM +0200, Greg Kroah-Hartman wrote:
-> Turns out that we have some const pointers being passed to
-> to_usb_driver() but were not catching this.  Change the macro to
-> properly propagate the const-ness of the pointer so that we will notice
-> when we try to write to memory that we shouldn't be writing to.
+On Fri, Jun 14, 2024 at 03:15:06PM +0300, Mika Westerberg wrote:
+> Hi all,
 > 
-> This requires fixing up the usb_match_dynamic_id() function as well,
-> because it can handle a const * to struct usb_driver.
+> This series adds USB4 link sideband access through debugfs. This can be
+> used to run port operations etc. from userspace usable for example in
+> manufacturing. The other feature is receiver lane margining support for
+> retimers with similar use case.
 > 
-> Cc: Johan Hovold <johan@kernel.org>
-> Cc: Alan Stern <stern@rowland.harvard.edu>
-> Cc: Grant Grundler <grundler@chromium.org>
-> Cc: Yajun Deng <yajun.deng@linux.dev>
-> Cc: Oliver Neukum <oneukum@suse.com>
-> Cc: Douglas Anderson <dianders@chromium.org>
-> Cc: linux-usb@vger.kernel.org
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
->  drivers/usb/core/driver.c | 4 ++--
->  include/linux/usb.h       | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+> Mika Westerberg (6):
+>   thunderbolt: Move usb4_port_margining_caps() declaration into correct place
+>   thunderbolt: Make usb4_port_sb_read/write() available outside of usb4.c
+>   thunderbolt: Add sideband register access to debugfs
+>   thunderbolt: Split out margining from USB4 port
+>   thunderbolt: Make margining functions accept target and retimer index
+>   thunderbolt: Add receiver lane margining support for retimers
 > 
-> diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
-> index 8e9bafcd62c6..c985a272e552 100644
-> --- a/drivers/usb/core/driver.c
-> +++ b/drivers/usb/core/driver.c
-> @@ -229,7 +229,7 @@ static void usb_free_dynids(struct usb_driver *usb_drv)
->  }
->  
->  static const struct usb_device_id *usb_match_dynamic_id(struct usb_interface *intf,
-> -							struct usb_driver *drv)
-> +							const struct usb_driver *drv)
+>  drivers/thunderbolt/Kconfig   |  11 +-
+>  drivers/thunderbolt/debugfs.c | 623 ++++++++++++++++++++++++++--------
+>  drivers/thunderbolt/retimer.c |  53 +--
+>  drivers/thunderbolt/sb_regs.h |   9 +
+>  drivers/thunderbolt/tb.h      |  45 ++-
+>  drivers/thunderbolt/usb4.c    | 183 +++++-----
+>  6 files changed, 655 insertions(+), 269 deletions(-)
 
-Oops, this requires a patch that I have not sent out yet that changes
-the signature of all match() callbacks for busses, that is still winding
-it's way through the build systems.  So I'll hold off on applying any of
-this until that is accepted, but at least it's good to get this out for
-review now to see if anyone objects to this series.
-
-Also, I've tested this locally and all seems to work properly, but
-finding good "unit tests" for adding new device ids is hard...
+No hint as to what changed from v1?
 
 thanks,
 
