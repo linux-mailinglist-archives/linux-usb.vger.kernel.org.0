@@ -1,125 +1,113 @@
-Return-Path: <linux-usb+bounces-11313-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11314-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A937C9080F6
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Jun 2024 03:47:28 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D7FE890818E
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Jun 2024 04:23:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 980751C21842
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Jun 2024 01:47:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 42370283138
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Jun 2024 02:23:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29389183072;
-	Fri, 14 Jun 2024 01:47:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DAA31822D6;
+	Fri, 14 Jun 2024 02:23:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="rsdlC1zC"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="SlyWzDRP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CF841EEE0;
-	Fri, 14 Jun 2024 01:47:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D31972836A;
+	Fri, 14 Jun 2024 02:23:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718329633; cv=none; b=MvCZhyFEHiAfpKxxoZ6aOi9oSTA+68bK+gGOMDtlo7rH1kWEeMD2R2zoytioMC6XIAKIK/tIGa40CDj0KND1+hTFp3rJzj1KRu3cUZenW1idGyqijWJoAhlj+AUi4I8exkAAIJDXMUTWP4omEvuX9ivSiFoNBwM+11OBfsTj60Q=
+	t=1718331831; cv=none; b=NoYOs+027Djh63aFOjkjuKEBwckNYb3l3naXyHkvYTu8Qh/lKevKTh4cCe6cDJy0IOiyaSIhF/vT469M+W/4gXAfLqoqUw4PPu1bxio7uQZe9z3F6Y7WKJ4ZWYDKeOkVWqn9hgoqf8e7uo6UyfM+AW1mUmXihAyQ5bdsfoJiYpA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718329633; c=relaxed/simple;
-	bh=e6x2Udov0z0jRMGzv0LZfs+zVlznnJAxrLeH7tE+OpI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HcmTXCmGYFMh1uR6i5ArwZZYjSgKt5ArAghsJ88WZ8kM/IMbrIaAGJVE6+nINdJ1m8kvfBUOc2UVZdIwPaBjZ2iwO2qJYEsCDykW6v9rkufUOdl83ro6uhBRgIh3Sg4FXJtEkJZkw8piiweLD1n+C6JPHqNSHiHfXE/J+GwtGJk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=rsdlC1zC; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1718329630;
-	bh=e6x2Udov0z0jRMGzv0LZfs+zVlznnJAxrLeH7tE+OpI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=rsdlC1zCDtjj9NNQJqwh10IMZV2lXH+lj0o5X3YUhEcglxqQNXjpeIDcSTIKJ4X6a
-	 nW/20ZT2cYSdZ2XRsfnzpSA10Yi+KK8kmmKWL6muFOuuf/w6wGth9aNzuY9CptZqlM
-	 8QgUVJreO3LgOlcw9RrvdZDSFEY0udY6WEK0XBOwW0TERpF9jz+FuW3C3qsjINrrIm
-	 VJb+5eBW+OfRH2YeneuIPflsMwlZ5s6UlgC/A0KkDdQknsyaMd/iaFkOsKG+qJ2wl6
-	 ck6VA796TJuPdWkFRYMI6pXN68NG6mjQsZ8Mjm8XI+pkKj00djb5G/fd9NhIjmaZH5
-	 2HWfi5EfYdp5A==
-Received: from mercury (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(No client certificate requested)
-	(Authenticated sender: sre)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 40313378107D;
-	Fri, 14 Jun 2024 01:47:10 +0000 (UTC)
-Received: by mercury (Postfix, from userid 1000)
-	id C9A8710608F7; Fri, 14 Jun 2024 03:47:09 +0200 (CEST)
-Date: Fri, 14 Jun 2024 03:47:09 +0200
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>
-Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
-	linux-pm@vger.kernel.org, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Bjorn Andersson <andersson@kernel.org>, Hans de Goede <hdegoede@redhat.com>, 
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
-	devicetree@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
-	platform-driver-x86@vger.kernel.org, linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
-	Nikita Travkin <nikita@trvn.ru>
-Subject: Re: [PATCH v6 4/6] power: supply: lenovo_yoga_c630_battery: add
- Lenovo C630 driver
-Message-ID: <yrysv4c2xeazfi2w3g35qsyoz6b4k3uunzpgj3cdtbyussufqn@5fnuoeubwjnr>
-References: <20240612-yoga-ec-driver-v6-0-8e76ba060439@linaro.org>
- <20240612-yoga-ec-driver-v6-4-8e76ba060439@linaro.org>
- <4fc43c56-f801-909a-9178-166d275a5fee@linux.intel.com>
+	s=arc-20240116; t=1718331831; c=relaxed/simple;
+	bh=T7ZI30pdt8cKouu+B6Wek7jgn7JCy3A/eGiNzOKgFco=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=B7ZGst+v2MNGWQ13z4d2WCF6YDr82vkWqd8XfOvBsI/1DjDuqN97gOlTcFtxAYRNaHgBqKh+aUQLS1JADdcGvMnj/zIbQpVxyyBP7nw28JWp4AYAhEMNAa0eYJfF986GwaBGc1Zjf85PqiZDPqq8rwNsMyjI43S/AIFaAfWsy1Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=SlyWzDRP; arc=none smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45E1gA3o023011;
+	Fri, 14 Jun 2024 02:23:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=
+	from:to:cc:subject:date:message-id:in-reply-to:references
+	:mime-version:content-type:content-transfer-encoding; s=
+	corp-2023-11-20; bh=9Z41dJob1FL54RNTLvwuxNa32aW8KmiumqItdNjxDWE=; b=
+	SlyWzDRP89S/UmdhaNXSbB8M1eXehWdoJkBFE0ItT2bYk1t1Igddk7qL+aKun+OE
+	TZn7UnQp83jPHSQKHg94CC85zXWlkkpafwG2oNaeFA62tkzQAl04GqjLQNvM9/rw
+	DKy500ikOnw1h7HwIxw0tSUbYCDH6l4deNsjB4rHy1LQS5n5CFOwV24JJiNGOP6I
+	4ITUxjI2cRZ/mi9kWpemyL75fAy4IAsUKU54GTfTknGLs8khDewRzUmas5UyWtXp
+	YTxVkCU/FSxBX9KlhgptfKaFffkm4T1uKR9irWtNC/EtpRfYKmSVJUfgzYg5wpnD
+	SD0q5RIddWeuwhixnjGguA==
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3ymh1mjt5v-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 14 Jun 2024 02:23:45 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 45E0Uq2M012527;
+	Fri, 14 Jun 2024 02:23:44 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3ynca1vrj0-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 14 Jun 2024 02:23:44 +0000
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 45E2NhG1009531;
+	Fri, 14 Jun 2024 02:23:43 GMT
+Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3ynca1vrfh-1;
+	Fri, 14 Jun 2024 02:23:43 +0000
+From: "Martin K. Petersen" <martin.petersen@oracle.com>
+To: Bart Van Assche <bvanassche@acm.org>
+Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Alan Stern <stern@rowland.harvard.edu>, linux-scsi@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v3 0/2] Do not read the IO hints VPD page from USB storage devices
+Date: Thu, 13 Jun 2024 22:23:00 -0400
+Message-ID: <171833164848.271429.11609704907810406023.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.45.1
+In-Reply-To: <20240613211828.2077477-1-bvanassche@acm.org>
+References: <20240613211828.2077477-1-bvanassche@acm.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="tqsq4jiejojoj7cg"
-Content-Disposition: inline
-In-Reply-To: <4fc43c56-f801-909a-9178-166d275a5fee@linux.intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-06-13_15,2024-06-13_02,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=519 adultscore=0
+ phishscore=0 suspectscore=0 malwarescore=0 mlxscore=0 spamscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2405010000 definitions=main-2406140014
+X-Proofpoint-ORIG-GUID: KBoZJP_SYEyMBxyv70ULe3jKD7eRXUqz
+X-Proofpoint-GUID: KBoZJP_SYEyMBxyv70ULe3jKD7eRXUqz
 
+On Thu, 13 Jun 2024 14:18:25 -0700, Bart Van Assche wrote:
 
---tqsq4jiejojoj7cg
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> Recently it was reported that reading the IO hints VPD page makes at least two
+> USB storage devices crash. Hence this patch series that disables reading the IO
+> hints VPD page from USB storage devices. Please consider this patch series for
+> your scsi-fixes branch.
+> 
+> Thanks,
+> 
+> [...]
 
-Hi,
+Applied to 6.10/scsi-fixes, thanks!
 
-On Thu, Jun 13, 2024 at 10:57:41AM GMT, Ilpo J=E4rvinen wrote:
-> > +	adp_cfg.supplied_to =3D (char **)&yoga_c630_psy_bat_psy_desc_mA.name;
->=20
-> This is not problem with your patch but I'm wondering why supplied_to=20
-> needs to be non-const char *. Are those strings expected to be altered by=
-=20
-> something, I couldn't find anything to that effect (the pointer itself=20
-> does not become const if supplied_to is changed to const char **)?
+[1/2] scsi: core: Introduce the BLIST_SKIP_IO_HINTS flag
+      https://git.kernel.org/mkp/scsi/c/633aeefafc9c
+[2/2] usb: Do not query the IO advice hints grouping mode page for USB devices
+      https://git.kernel.org/mkp/scsi/c/57619f3cdeb5
 
-No, they are not supposed to be modified. It should be fine to make
-the struct member const char **, patches are welcome :)
-
--- Sebastian
-
---tqsq4jiejojoj7cg
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmZroRkACgkQ2O7X88g7
-+ppBkg/9H0Vh77I1df6YmgtH3Dc3JT3L5qfTx7EDy6jHu7ihZ6qWM7UoWR6UbThB
-eM9iqWs+qw9CbO+oiHX4TwHItM8ua6CjwOTJaXN3LRvQ86tZ1S3oYFYQRz3cqHSy
-guEdkIELM9rKsTguKre5bJrXNcfQ5T6jjrAJx+60/Y+pJGzJD7SimNGRmBU9erSp
-HBMQ548Ct5roKoNqzauPnGRCXslMVSGAk9vmGu3dv4C1VFr30ndPeRnK4YfPLl50
-cjEu8x8MenIvkNSA7mpIFZem4NBnmQVWVtfi6sMuvfH230pnKi6SvNKr4daPrYMI
-atHouDXhMUMcMg6/p+ARuk/1BcW3kBl3H+2piHY1qj6Riuv+zch4Ah0Wz3SZQmdA
-GiKlfLZVk4LPx5e3EIUR8cNXUrNOVwj7GnH8D+OIgnPIoMQNufNPYFvCCFWipqjP
-OnrfAXz1ebAFpREjHm9rfLk7PvYmWnTLS2F19cfmTbC+bQqulgvclLOITdOQxr3V
-okhD1SjFC6Wm+SkwnNFOsNSf1aEwOnpOJkhvdKS0dRAY5AkCH1H5baTAZal+hGdg
-GA3qo6hCZTjGGofYSp302ltyJQ9Nn61PI48gBa79+7ovYMkrZsYmWnHJibxnFcQI
-SnHurPxpcCALPl8osrReAKV8CUVAsP4KL6+NbdgcQdyF1UxEH3w=
-=xOfT
------END PGP SIGNATURE-----
-
---tqsq4jiejojoj7cg--
+-- 
+Martin K. Petersen	Oracle Linux Engineering
 
