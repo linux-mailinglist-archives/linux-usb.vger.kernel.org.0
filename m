@@ -1,155 +1,101 @@
-Return-Path: <linux-usb+bounces-11340-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11341-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90F86909437
-	for <lists+linux-usb@lfdr.de>; Sat, 15 Jun 2024 00:46:45 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 639BA90959D
+	for <lists+linux-usb@lfdr.de>; Sat, 15 Jun 2024 04:13:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D7D9EB21A9D
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Jun 2024 22:46:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0C9AF1F21AA5
+	for <lists+linux-usb@lfdr.de>; Sat, 15 Jun 2024 02:13:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9AE0184122;
-	Fri, 14 Jun 2024 22:46:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=inbox.lv header.i=@inbox.lv header.b="ekGEdWPc"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 633DCE573;
+	Sat, 15 Jun 2024 02:12:58 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from shark3.inbox.lv (shark3.inbox.lv [194.152.32.83])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF1C62F50
-	for <linux-usb@vger.kernel.org>; Fri, 14 Jun 2024 22:46:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.152.32.83
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id EC312BE5D
+	for <linux-usb@vger.kernel.org>; Sat, 15 Jun 2024 02:12:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718405196; cv=none; b=CVIhFiuTOR1eTm6kCgHdwsdeccgyc5QB8FNiUmMux/pnbtTeFBRZ/1RmCt7XcvKuGKgFbKHpthyC/GzAAveEVrnLnJio6712kwqIzJfSnpMqyl1DGb/GmfW8w944YxpSXwJn8CKq/e9qjYZtVu1E9NJBcxIVryWU1bxn7ve4ULU=
+	t=1718417578; cv=none; b=FOWgRb4fzo8Uvf/de6HSoftt0dDv9NjUPjpJPT+Z1jpTfp4vZgtx3WNqnCeeNMgXCjIewl5xkz21z42fWAfiakCpnfXty3sTz13NJFEoH+5ae4jVP39OHmqsp/Ybh/g8h8F1t5e+BGytABnWP41iHWIZ5APyLwGIsEDHOV6rIqk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718405196; c=relaxed/simple;
-	bh=1cMBg1kVM/fQRmYnr56GCHmoZH/jPvuwhj4spL6IdbU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=dMfUiLCA4OC4/taSUb2SrL6tIrzsCZAEHw7Xbsio4afhcsd2q1V/4me2PnX07X/7InGppJCImsKa8qi6lQymx+YJFlEU5ZvhS6FQYS382UPRErdM+thAGA/AeeASFNFCiMmmnHcSv/pXoH5GalSV6KPm/oaOnHCHpuav6D11Vpc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=inbox.lv; spf=pass smtp.mailfrom=inbox.lv; dkim=pass (1024-bit key) header.d=inbox.lv header.i=@inbox.lv header.b=ekGEdWPc; arc=none smtp.client-ip=194.152.32.83
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=inbox.lv
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=inbox.lv
-Received: from shark3.inbox.lv (localhost [127.0.0.1])
-	by shark3-out.inbox.lv (Postfix) with ESMTP id 4W1DsY1n2QzMkxv;
-	Sat, 15 Jun 2024 01:46:25 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=inbox.lv;
-	s=p20220324; t=1718405185; x=1718406985;
-	bh=1cMBg1kVM/fQRmYnr56GCHmoZH/jPvuwhj4spL6IdbU=;
-	h=From:To:Cc:Subject:Date:Message-ID:X-ESPOL:From:Date:To:Cc:
-	 Message-ID:Subject:Reply-To;
-	b=ekGEdWPci2tBDgJ8aUUr0AXwdma5hyHNCTEyCb0zDiU42WJqGIIc5q6UQoNF6I2hf
-	 ORXCoECkDK4NZgmoEncCD3x9U9K7eFxsKg1ShtGzZ4ec4FvNjbQfY92M9frNzpS9ow
-	 IkFR635ezbNS/cidJJbMKBDz/eP48u3WC4XtsOCQ=
-Received: from shark3.inbox.lv (localhost [127.0.0.1])
-	by shark3-in.inbox.lv (Postfix) with ESMTP id 4W1DsY1j38zMkxx;
-	Sat, 15 Jun 2024 01:46:25 +0300 (EEST)
-Received: from mail.inbox.lv (pop1 [127.0.0.1])
-	by shark3-in.inbox.lv (Postfix) with ESMTP id 4W1DsX4V87zMkxv;
-	Sat, 15 Jun 2024 01:46:24 +0300 (EEST)
-From: Dmitry Smirnov <d.smirnov@inbox.lv>
-To: linux-usb@vger.kernel.org
-Cc: Dmitry Smirnov <d.smirnov@inbox.lv>
-Subject: [PATCH V4] usb: serial: Fix mos7840 hangup on resume
-Date: Sat, 15 Jun 2024 01:45:56 +0300
-Message-ID: <20240614224556.23215-1-d.smirnov@inbox.lv>
-X-Mailer: git-send-email 2.45.1
+	s=arc-20240116; t=1718417578; c=relaxed/simple;
+	bh=8jvg4P7j0AS2DCzxRo49o5VTq7VMAg+68jYRkjla9po=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CECWp9YIxbYQ+HP8quIXKZp60F69sjLS8IcoQQ3DyvfMbnStz2K3lgvF1MkNw5JxRfzCzXRi2s0WxYiATR67UkFvd3Xji1pJ8Ca6Qp9JYdpjpIW4XUAVcNTR8YxKpeyMp8DiI4/FcAhMwHWpuoaHAABfFtqSG6GJradM23w/sec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
+Received: (qmail 317762 invoked by uid 1000); 14 Jun 2024 22:12:48 -0400
+Date: Fri, 14 Jun 2024 22:12:48 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Andrey Konovalov <andreyknvl@gmail.com>
+Cc: USB list <linux-usb@vger.kernel.org>
+Subject: Re: Stalling non-0-length OUT control requests in Raw Gadget/GadgetFS
+Message-ID: <8b7aa23c-9976-46c2-b64f-1d4614aefe89@rowland.harvard.edu>
+References: <CA+fCnZeLRqk-FOkJ81qMY0NMZC7YnW=beTw=w_DVA=OhOnywRw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: OK
-X-ESPOL: AJ2EQ3gemHpAsMa6KZgOlO7m2qXNWxp8/Sbmvc49lRRFz9PMu91reWaLGobnBwO9bg==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+fCnZeLRqk-FOkJ81qMY0NMZC7YnW=beTw=w_DVA=OhOnywRw@mail.gmail.com>
 
-This patch addresses a kernel hang issue with the mos7840 driver when
-PC resuming from a suspend with a device connected to the serial port.
+On Sat, Jun 15, 2024 at 12:31:12AM +0200, Andrey Konovalov wrote:
+> Hi Alan,
+> 
+> I'm working on implementing a USB proxy that uses libusb on one side
+> and Raw Gadget on the other. The idea is to pass all requests received
+> from the host via Raw Gadget to the proxied device via libusb and
+> report back the responses.
+> 
+> However, I've stumbled upon an issue with non-0-length control
+> requests that get stalled by the proxied device.
+> 
+> To pass an OUT control request to the device via libusb I need to
+> first retrieve the data for the request from the host. And with Raw
+> Gadget I can do that via USB_RAW_IOCTL_EP0_READ, which internally
+> calls usb_ep_queue, waits for its completion, and copies the data to
+> userspace.
+> 
+> But the problem is that once I retrieve the data, the request is
+> automatically acked. Thus, if the proxied device stalls the request,
+> it's already too late to stall it via Raw Gadget.
+> 
+> AFAIU, GadgetFS works the same way.
+> 
+> Is there a way to work around this? If this requires a change is Raw
+> Gadget, that is fine. But I'm wondering if this is possible to do at
+> all with the USB Gadget API: AFAIU, we have to either stall or
+> retrieve the data; we cannot do both.
 
-This patch introduces two new functions: mos7840_suspend() and mos7840_resume().
+Yeah, this is a known weakness of the Gadget API.  There's no way to do 
+it at present.
 
-Tested with Delock 87414 USB 2.0 to 4x serial adapter.
+> If this is indeed impossible, perhaps you know if there's a way to
+> directly use usbfs to separately submit the control request header to
+> the proxied device to figure out if it wants to stall? And only then
+> retrieve the data from the host via Raw Gadget if the device doesn't
+> stall.
 
-Signed-off-by: Dmitry Smirnov <d.smirnov@inbox.lv>
----
-V4: Removed debug prints
-V3: Code cleanup
-V2: Reworked mos7840_suspend() based on comments from reviewer
-V1: Initial version
+usbfs allows the user to send a complete transfer, not a partial one 
+(i.e., just the SETUP transaction).  Besides, it's not possible for a 
+device to stall a SETUP packet -- the USB-2.0 spec requires devices to 
+respond to SETUP with ACK every time (section 8.5.3) -- so this approach 
+won't solve the problem anyway. And even if it did, you'd still have to 
+handle the situation where the proxy device accepts the SETUP packet and 
+the data but then stalls during the Status stage of the transfer.
 
- drivers/usb/serial/mos7840.c | 48 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
+There has been a patch posted to support UDC drivers that don't 
+automatically acknowledge non-zero-length control-OUT transfers.  But 
+the patch hasn't been merged, and even if it were, all the existing UDC 
+drivers would still need to be updated.
 
-diff --git a/drivers/usb/serial/mos7840.c b/drivers/usb/serial/mos7840.c
-index 8b0308d84270..2f4b2c8f4a48 100644
---- a/drivers/usb/serial/mos7840.c
-+++ b/drivers/usb/serial/mos7840.c
-@@ -1737,6 +1737,52 @@ static void mos7840_port_remove(struct usb_serial_port *port)
- 	kfree(mos7840_port);
- }
- 
-+static int mos7840_suspend(struct usb_serial *serial, pm_message_t message)
-+{
-+	struct moschip_port *mos7840_port;
-+	struct usb_serial_port *port;
-+	int i;
-+
-+	for (i = 0; i < serial->num_ports; ++i) {
-+		port = serial->port[i];
-+		if (!tty_port_initialized(&port->port))
-+			continue;
-+
-+		mos7840_port = usb_get_serial_port_data(port);
-+
-+		usb_kill_urb(mos7840_port->read_urb);
-+		mos7840_port->read_urb_busy = false;
-+	}
-+
-+	return 0;
-+}
-+
-+static int mos7840_resume(struct usb_serial *serial)
-+{
-+	struct moschip_port *mos7840_port;
-+	struct usb_serial_port *port;
-+	int res;
-+	int i;
-+
-+	for (i = 0; i < serial->num_ports; ++i) {
-+		port = serial->port[i];
-+		if (!tty_port_initialized(&port->port))
-+			continue;
-+
-+		mos7840_port = usb_get_serial_port_data(port);
-+
-+		if (port->bulk_in_size) {
-+			res = usb_submit_urb(mos7840_port->read_urb, GFP_NOIO);
-+			if (res) {
-+				usb_kill_urb(mos7840_port->read_urb);
-+				mos7840_port->read_urb_busy = false;
-+			}
-+		}
-+	}
-+
-+	return 0;
-+}
-+
- static struct usb_serial_driver moschip7840_4port_device = {
- 	.driver = {
- 		   .owner = THIS_MODULE,
-@@ -1764,6 +1810,8 @@ static struct usb_serial_driver moschip7840_4port_device = {
- 	.port_probe = mos7840_port_probe,
- 	.port_remove = mos7840_port_remove,
- 	.read_bulk_callback = mos7840_bulk_in_callback,
-+	.suspend = mos7840_suspend,
-+	.resume = mos7840_resume,
- };
- 
- static struct usb_serial_driver * const serial_drivers[] = {
+Sorry, but the kernel just doesn't provide any way to do this.
 
-base-commit: c3f38fa61af77b49866b006939479069cd451173
--- 
-2.45.1
-
+Alan Stern
 
