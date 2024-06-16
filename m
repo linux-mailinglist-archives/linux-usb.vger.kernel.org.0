@@ -1,124 +1,113 @@
-Return-Path: <linux-usb+bounces-11346-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11347-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE38B9099ED
-	for <lists+linux-usb@lfdr.de>; Sat, 15 Jun 2024 22:50:09 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2853E909B43
+	for <lists+linux-usb@lfdr.de>; Sun, 16 Jun 2024 04:33:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3BB96B21BF5
-	for <lists+linux-usb@lfdr.de>; Sat, 15 Jun 2024 20:50:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 201541C209A5
+	for <lists+linux-usb@lfdr.de>; Sun, 16 Jun 2024 02:33:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 404385577E;
-	Sat, 15 Jun 2024 20:50:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UMcYxJqK"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 699F116C686;
+	Sun, 16 Jun 2024 02:33:38 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AB5DCA6B
-	for <linux-usb@vger.kernel.org>; Sat, 15 Jun 2024 20:49:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id AE7C82B9AE
+	for <linux-usb@vger.kernel.org>; Sun, 16 Jun 2024 02:33:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718484600; cv=none; b=JYa09G4H/IJnKc3CPIBOBNAWiTBRQ9+qPPUQPiauOA0T7sMukWeshFFRS9Ct21wlXH7FjHZRFzj9e6sgmzkx8HXvLCaYYkf7/mdBZ1GiLnoWMd67V4YPk/s2E8KDe4LAoDOIIw14qERX9N86ZRqgitB+ti6IlDI/ZgX+xBEQDF4=
+	t=1718505218; cv=none; b=X3JH6t/xpKYtPpsc2jqDDJM9MEDSWJEztw9t58ka1aMKU3ZlythKxggY7nXQxSzthq1Ho/Jk87BSKC8cry7Iv8dStfaINejU5g9eKB7IjukF1NirYQDv6sofBfJXbey5DU/N+OY00WAnxS0R7G+W/teXjrl63QGW4KMQhs25lOE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718484600; c=relaxed/simple;
-	bh=uJLr+npbKlPmNakVPmmsmYXLiqcnCrFt5oaOgk8UNxs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TujSnrTMN3w1JXJ4PRO2Mtz9UNLU3N5JtXbSLhmjpHr7aX0wVHoJWbvbvowLw8pJ0RHGYrUkeXsSNnL9WCSB1hKl7MKB6iOFCMNwEYbAV2qJQtJVH6mToXuUUSadQQeMnRF2vGZG1VhCVU03EdRiIcojELIIURykAdltsovBx0E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UMcYxJqK; arc=none smtp.client-ip=209.85.221.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-35f22d3abf1so2982286f8f.1
-        for <linux-usb@vger.kernel.org>; Sat, 15 Jun 2024 13:49:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718484597; x=1719089397; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WkNLFHzGWQ4/eLcOF7s0YoqwiLrU1v1qbfrs9MiBC2Y=;
-        b=UMcYxJqKkryj7KsmxXO5KvSe0YnvBPZDnKgztOfgb++AKMKydXL96S4/9cEL/CFUd0
-         X+rtlgCoVy2lHQ7EXE3KqmXqpjEw3MC2qLBdJfdyu1AjdEEMfdbZrTu5KNS9LWwcSdxL
-         rUiUuA0uU/nq9cWXbO4sKWwbLm9O3r1hVJpH0dowEh5LDXJvRFE2ypmAj6eB23vyY9Aw
-         gzapy+6Rqw5dPZTqlbAzsStpLBb5NhDFOM/teBI8s7WXF335q3fNCHns+cFzPDPRtswc
-         AW9lYW8XypTUg2Gc1jp6MxcWP3gV32TPPxX1qVsrglSnZJxfuifzpWGPwQekGI4AxZDp
-         cfEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718484597; x=1719089397;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WkNLFHzGWQ4/eLcOF7s0YoqwiLrU1v1qbfrs9MiBC2Y=;
-        b=HI/xyAbAZREg6VLreqP1pLHDiqzdmyRshXD5CH0MkoiEsO1xl/wq/m3wmh+9ih/zF7
-         ILASc6WP/dc7vvdx9mFgHakaVCgRqSfhTOZw8mG+OK+R4vOVvyNwrBNpEbe9j5mob2Lg
-         TnnPkfWPckYdfxjRpVdzna0scEQjNuxAPnV3BP+5PgMGB+qgKIxYjXAfpLMz5l9iTXL7
-         malsOEnOOHz+EZHi5Hun+BxhXMmRcWvB0SYEvCZFJnMTKw0Xi2qfTwqGLiZ0wZWSAXWC
-         PPqgkiAeimZkByEA5R9uU92spl562UAFi+B87tk0qXQVdDeshPJppFRzRwQtlhIQfpwO
-         3W4w==
-X-Gm-Message-State: AOJu0Yxgo02i34P9u61fNmtLhhM++62axDE+8bs+jROGJFU2hMaD/fb9
-	EZO+OCTjgeBQehd3gHN+CGax7yNsALo1CJsNDbabVdyidlN+w6MK3PUOw4rf3Cqs7O2n+JrHJKB
-	fnx7h3kDtSqQTSIHc6uQ1aJ8ATsPZb5Ns
-X-Google-Smtp-Source: AGHT+IEVd5dHVZFV7rd4p2GSb22RitfHOq5ve+sVP/ZlLRGTzPc8psuDzsxbjUGjv0/IUcC8A3MHi7+xS8swfelKDAg=
-X-Received: by 2002:adf:e943:0:b0:360:71e0:8e69 with SMTP id
- ffacd0b85a97d-3607a761dcdmr4825459f8f.26.1718484597223; Sat, 15 Jun 2024
- 13:49:57 -0700 (PDT)
+	s=arc-20240116; t=1718505218; c=relaxed/simple;
+	bh=ONbqzeAqs76ztTATisoNcK/GU5U+aAy/cFH/PYmU1Wk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VV30h6NRRjf4RyfdKXXzXtugnzFnyVRdvFuGqtezNKDzGKb10mBi3KIM3iSfxTxz8qmR3Em+CH3qFxfTN6qqYSTFi6LpRqVX4uxizjQut7gLEPZTxv2BvW/DpdDnHmxJTDqotCUsAzbgRXwTvyDc4uj0fnLfAD9DZ9c3HHjskGg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
+Received: (qmail 346353 invoked by uid 1000); 15 Jun 2024 22:33:28 -0400
+Date: Sat, 15 Jun 2024 22:33:28 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Andrey Konovalov <andreyknvl@gmail.com>
+Cc: USB list <linux-usb@vger.kernel.org>,
+  Paul Elder <paul.elder@ideasonboard.com>
+Subject: Re: Stalling non-0-length OUT control requests in Raw Gadget/GadgetFS
+Message-ID: <73838855-fe52-4d2f-a826-c5757f75bd92@rowland.harvard.edu>
+References: <CA+fCnZeLRqk-FOkJ81qMY0NMZC7YnW=beTw=w_DVA=OhOnywRw@mail.gmail.com>
+ <8b7aa23c-9976-46c2-b64f-1d4614aefe89@rowland.harvard.edu>
+ <CA+fCnZd1UOqCiH7L1FMMqLhepiMSBfgVb-tXfc81F_VuX_zy4w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CA+fCnZeLRqk-FOkJ81qMY0NMZC7YnW=beTw=w_DVA=OhOnywRw@mail.gmail.com>
- <8b7aa23c-9976-46c2-b64f-1d4614aefe89@rowland.harvard.edu>
-In-Reply-To: <8b7aa23c-9976-46c2-b64f-1d4614aefe89@rowland.harvard.edu>
-From: Andrey Konovalov <andreyknvl@gmail.com>
-Date: Sat, 15 Jun 2024 22:49:46 +0200
-Message-ID: <CA+fCnZd1UOqCiH7L1FMMqLhepiMSBfgVb-tXfc81F_VuX_zy4w@mail.gmail.com>
-Subject: Re: Stalling non-0-length OUT control requests in Raw Gadget/GadgetFS
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: USB list <linux-usb@vger.kernel.org>, Paul Elder <paul.elder@ideasonboard.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CA+fCnZd1UOqCiH7L1FMMqLhepiMSBfgVb-tXfc81F_VuX_zy4w@mail.gmail.com>
 
-On Sat, Jun 15, 2024 at 4:12=E2=80=AFAM Alan Stern <stern@rowland.harvard.e=
-du> wrote:
->
-> Yeah, this is a known weakness of the Gadget API.  There's no way to do
-> it at present.
+On Sat, Jun 15, 2024 at 10:49:46PM +0200, Andrey Konovalov wrote:
+> On Sat, Jun 15, 2024 at 4:12 AM Alan Stern <stern@rowland.harvard.edu> wrote:
+> > There has been a patch posted to support UDC drivers that don't
+> > automatically acknowledge non-zero-length control-OUT transfers.  But
+> > the patch hasn't been merged, and even if it were, all the existing UDC
+> > drivers would still need to be updated.
+> 
+> This series below is the one you're referring to, right?
+> 
+> https://lore.kernel.org/linux-kernel/20190124030228.19840-1-paul.elder@ideasonboard.com/
 
-Ack.
+Yes, that's it.  I'm impressed that you were able to find it; I had lost 
+track of it.
 
-> usbfs allows the user to send a complete transfer, not a partial one
-> (i.e., just the SETUP transaction).  Besides, it's not possible for a
-> device to stall a SETUP packet -- the USB-2.0 spec requires devices to
-> respond to SETUP with ACK every time (section 8.5.3) -- so this approach
-> won't solve the problem anyway. And even if it did, you'd still have to
-> handle the situation where the proxy device accepts the SETUP packet and
-> the data but then stalls during the Status stage of the transfer.
+> Do you know why it wasn't merged? (CC Paul). There are no comments on
+> the latest version I managed to find.
 
-Ah, so dealing with this on the usbfs side is impossible.
+I guess Felipe Balbi (the USB Gadget maintainer at the time) just wasn't 
+very interested in fixing the problem.
 
-> There has been a patch posted to support UDC drivers that don't
-> automatically acknowledge non-zero-length control-OUT transfers.  But
-> the patch hasn't been merged, and even if it were, all the existing UDC
-> drivers would still need to be updated.
+> Also, just to check my understanding: with that series in place and
+> assuming the UDC drivers are updated, a gadget driver would need to
+> first do usb_ep_queue with the proper length and explicit_status ==
+> true to get the data for the control OUT request, and then either do
+> usb_ep_queue again with length 0 to ack or do usb_ep_set_halt to
+> stall?
 
-This series below is the one you're referring to, right?
+Yes, that's how it worked.  Alternatively, if the gadget driver didn't 
+set explicit_status in the control-OUT request then the UDC core would 
+automatically call usb_ep_queue again with a 0-length transfer to send 
+the status.  That way existing gadget drivers would continue to work 
+after the UDC drivers were updated, and updated UDC drivers wouldn't 
+have to worry about doing an automatic acknowledge only some of the 
+time.
 
-https://lore.kernel.org/linux-kernel/20190124030228.19840-1-paul.elder@idea=
-sonboard.com/
+Note that in order to avoid breaking things during the transition 
+period, it would also be necessary to add a flag to the usb_gadget 
+structure, indicating that the UDC driver has been updated to support 
+explicit_status.
 
-Do you know why it wasn't merged? (CC Paul). There are no comments on
-the latest version I managed to find.
+Alan Stern
 
-Also, just to check my understanding: with that series in place and
-assuming the UDC drivers are updated, a gadget driver would need to
-first do usb_ep_queue with the proper length and explicit_status =3D=3D
-true to get the data for the control OUT request, and then either do
-usb_ep_queue again with length 0 to ack or do usb_ep_set_halt to
-stall?
+PS: There's another weakness in the Gadget API which you might possibly 
+run across in your project.  It's less likely to arise because it 
+involves lengthy delays.
 
-Thank you!
+Say there's a control transfer with delayed status, and the gadget 
+driver delays for so long that the host times out the transfer.  Then 
+the host starts a new control transfer before the gadget driver queues 
+its status reply.  Since the Gadget API doesn't have any way to indicate 
+which control transfer a usb_request was meant for, the reply that was 
+meant for the old transfer would get sent to the host, and the host 
+would think it was a reply to the new transfer.
+
+This problem could be solved by adding a unique ID tag to each 
+usb_request, and passing the transfer ID as an extra argument to the 
+gadget driver's setup() callback.  That would explicitly indicate which 
+transfer a request was meant for.  But doing this would also require 
+updating every function driver and every UDC driver.  Probably not worth 
+the effort, considering how unlikely it is that the situation will ever 
+arise.
 
