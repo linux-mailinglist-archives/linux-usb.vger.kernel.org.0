@@ -1,149 +1,189 @@
-Return-Path: <linux-usb+bounces-11371-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11370-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE63A90B3F1
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Jun 2024 17:22:06 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id B9C0B90B631
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Jun 2024 18:22:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 67EEB28C978
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Jun 2024 15:22:05 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0A2FBB2E961
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Jun 2024 15:11:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A98215ECCD;
-	Mon, 17 Jun 2024 14:41:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CDFF155A56;
+	Mon, 17 Jun 2024 14:28:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="g/RJHWfF"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="GMKN27UH"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 767EA15E5DE;
-	Mon, 17 Jun 2024 14:41:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 084E9155C85
+	for <linux-usb@vger.kernel.org>; Mon, 17 Jun 2024 14:28:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718635298; cv=none; b=JKmaPozO8jO3KrLViF3enCw8nKGk0H7R9bw97/NbbkboqE4c/BcFRpqj0T6uJP0A7YmqvEUirPcWxjhx9tllYDqYqS9sq2zFlC9va6HiVu72/0yHkRcvOSZ5YOzVttrAwxRm46Y7sMHRvBAFUIVBhA7bt1I6oY1Dac3eaxVlC94=
+	t=1718634537; cv=none; b=lpKGOEn5CXRXfo3tYcYZpUWCYq6EiDnthxJRikwiyV1koAUH0qnZZBVHoSFtXu+rIDWBORt5DTwecuqObYWxS18uzyom0LnR9KOKGC2Yt7w9H6pKqR1SFfbhuBB6qD9Figi404WcysndKRaCUVZ++PNqlc+Na3YdSP4ptFAskAE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718635298; c=relaxed/simple;
-	bh=FyWrXdXjckoc0z50AFEwR9w92vG/cvPD3T0yDH7WBvQ=;
+	s=arc-20240116; t=1718634537; c=relaxed/simple;
+	bh=IvAzEYSqjp955nxuHYqD3GwR+NTLpNNY0SVZEjurZrM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hV0efFoIGEcyYF9+eQlzthXEmaJeMtWXvfVq93b6OlUK8oibc+S3RLA185uUsqs0GOKiKfEX+7uhQrjZzpcys2mWhoSlTvOnG+CobiQHQCeTFxhwp1Epco4ZhELpOCSZUr6zL1RFIzJovXnt513Od5znAwlOaSSSSJsEEKK9pjk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=g/RJHWfF; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1718635297; x=1750171297;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=FyWrXdXjckoc0z50AFEwR9w92vG/cvPD3T0yDH7WBvQ=;
-  b=g/RJHWfFAfu/kyMrsGlrOy7zZGMmU4PzUTrGw9D3uBpoMm7awoxPJixm
-   dakdQWWXvkV7MBEPDCyIz+ZZhAA05dxOlunRdPeZfZwj2TsLN40pQp1O9
-   lDcyZOO3f/VrlNK1eUcqSO5rIUtRsEJ/B5u+9C3d68oFnDD/0vqESpyW1
-   QEIoL6ptLC+1FwTiwLeMWKdzAeRS8l1YZeT5qcJ6Nw6Ut6gvptbWl6F2A
-   VOK0MIpTIEU52BZUnQ6vygixh3P3/FC+5mAYAot34OXLsGFePIhxk9QO7
-   PI/IyKKG4VvBd93mTofP6RmO3vDiEmI1IaRS9TaqHZbRfpkG3Lksub9sR
-   g==;
-X-CSE-ConnectionGUID: 6tW5+gjxQKK02LBReq6R+g==
-X-CSE-MsgGUID: JIE+7mvtTI+KcxR3v0Eb4A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11106"; a="15179865"
-X-IronPort-AV: E=Sophos;i="6.08,244,1712646000"; 
-   d="scan'208";a="15179865"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2024 07:41:36 -0700
-X-CSE-ConnectionGUID: XRIBTruCQAK1dCALWT0eWA==
-X-CSE-MsgGUID: jNSuDk0rR3u54hagyJvdiA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,244,1712646000"; 
-   d="scan'208";a="41915717"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by orviesa007.jf.intel.com with SMTP; 17 Jun 2024 07:41:33 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 17 Jun 2024 17:41:32 +0300
-Date: Mon, 17 Jun 2024 17:41:32 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: ucsi: glink: fix child node release in probe
- function
-Message-ID: <ZnBLHFA4PjxwYWr+@kuha.fi.intel.com>
-References: <20240613-ucsi-glink-release-node-v1-1-f7629a56f70a@gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=plJG/yf9Dyc+AhOlS5/ltyApXRJb4mqK+yFoeUC3pixjFMrJ/LtSjKh3TvZE+tOyMonyLAXmjk8+IFR1INt+wvigudQcQSJLw8Pq/h0GYO+8wzXfkYlKaXYUIr90ok+sW4uzzYwbzZ9IbIB/YrSZRdasfa2pTqL2/xkGGR3u2H8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=GMKN27UH; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1718634534;
+	bh=IvAzEYSqjp955nxuHYqD3GwR+NTLpNNY0SVZEjurZrM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=GMKN27UHcD81efpg0WI3EtyXpuI0XMFlIuhaBwuMeAAjW2YY2nCkH/8iXpZemXMTI
+	 X8JDNuT4MSeZK/uikrbaUqvSluRVCJYLbQftm6JOPcAksnL84qX07mS8h/1jdlC6Pd
+	 +wxk9zatQa7orEbKinA8/ADKCBOzLyfAG/J4Y7RgToQSFPiXI2lwT8tRW5QpzqrK/j
+	 IJODBABhONBmvZiS4wflH9Hs737hhQpChZGd/s11VInp+wRsj+lcE1kxDJFeVCPOPZ
+	 MCrDTE3HSF0JqZ6a8QVj78LWK9PZ67tib4ksQlBFJnsEqBC540GObe/tLzoqdc00wX
+	 1MX8tDR47NoFA==
+Received: from mercury (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: sre)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 260DA37812FD;
+	Mon, 17 Jun 2024 14:28:54 +0000 (UTC)
+Received: by mercury (Postfix, from userid 1000)
+	id BC7C01060734; Mon, 17 Jun 2024 16:28:53 +0200 (CEST)
+Date: Mon, 17 Jun 2024 16:28:53 +0200
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Mario Limonciello <mario.limonciello@amd.com>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: ucsi: psy: Expose the charge-type property
+Message-ID: <3qqzailo3ewq53ozmpnarlcb5zqhi2afeivb4ptszwhtygq3bd@l3jyosbcekxk>
+References: <20240617105554.1677285-1-heikki.krogerus@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="cnv6rlkh26lqzka2"
+Content-Disposition: inline
+In-Reply-To: <20240617105554.1677285-1-heikki.krogerus@linux.intel.com>
+
+
+--cnv6rlkh26lqzka2
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240613-ucsi-glink-release-node-v1-1-f7629a56f70a@gmail.com>
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jun 13, 2024 at 02:14:48PM +0200, Javier Carrasco wrote:
-> The device_for_each_child_node() macro requires explicit calls to
-> fwnode_handle_put() in all early exits of the loop if the child node is
-> not required outside. Otherwise, the child node's refcount is not
-> decremented and the resource is not released.
-> 
-> The current implementation of pmic_glink_ucsi_probe() makes use of the
-> device_for_each_child_node(), but does not release the child node on
-> early returns. Add the missing calls to fwnode_handle_put().
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: c6165ed2f425 ("usb: ucsi: glink: use the connector orientation GPIO to provide switch events")
-> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Hi,
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
+On Mon, Jun 17, 2024 at 01:55:54PM GMT, Heikki Krogerus wrote:
+> UCSI has this information in the Battery Charging Capability
+> Status, so making it available for the user.
+>=20
+> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 > ---
-> This case would be a great opportunity for the recently introduced
-> device_for_each_child_node_scoped(), but given that it has not been
-> released yet, the traditional approach has been used to account for
-> stable kernels (bug introduced with v6.7). A second patch to clean
-> this up with that macro is ready to be sent once this fix is applied,
-> so this kind of problem does not arise if more early returns are added.
-> 
-> This issue has been found while analyzing the code and not tested with
-> hardware, only compiled and checked with static analysis tools. Any
-> tests with real hardware are always welcome.
-> ---
->  drivers/usb/typec/ucsi/ucsi_glink.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c b/drivers/usb/typec/ucsi/ucsi_glink.c
-> index f7546bb488c3..41375e0f9280 100644
-> --- a/drivers/usb/typec/ucsi/ucsi_glink.c
-> +++ b/drivers/usb/typec/ucsi/ucsi_glink.c
-> @@ -372,6 +372,7 @@ static int pmic_glink_ucsi_probe(struct auxiliary_device *adev,
->  		ret = fwnode_property_read_u32(fwnode, "reg", &port);
->  		if (ret < 0) {
->  			dev_err(dev, "missing reg property of %pOFn\n", fwnode);
-> +			fwnode_handle_put(fwnode);
->  			return ret;
->  		}
->  
-> @@ -386,9 +387,11 @@ static int pmic_glink_ucsi_probe(struct auxiliary_device *adev,
->  		if (!desc)
->  			continue;
->  
-> -		if (IS_ERR(desc))
-> +		if (IS_ERR(desc)) {
-> +			fwnode_handle_put(fwnode);
->  			return dev_err_probe(dev, PTR_ERR(desc),
->  					     "unable to acquire orientation gpio\n");
-> +		}
->  		ucsi->port_orientation[port] = desc;
->  	}
->  
-> 
-> ---
-> base-commit: 83a7eefedc9b56fe7bfeff13b6c7356688ffa670
-> change-id: 20240613-ucsi-glink-release-node-9fc09d81e138
-> 
-> Best regards,
-> -- 
-> Javier Carrasco <javier.carrasco.cruz@gmail.com>
 
--- 
-heikki
+Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+
+-- Sebastian
+
+>  drivers/usb/typec/ucsi/psy.c  | 27 +++++++++++++++++++++++++++
+>  drivers/usb/typec/ucsi/ucsi.c |  3 +++
+>  2 files changed, 30 insertions(+)
+>=20
+> diff --git a/drivers/usb/typec/ucsi/psy.c b/drivers/usb/typec/ucsi/psy.c
+> index b35c6e07911e..b3910f37e171 100644
+> --- a/drivers/usb/typec/ucsi/psy.c
+> +++ b/drivers/usb/typec/ucsi/psy.c
+> @@ -20,6 +20,7 @@ enum ucsi_psy_online_states {
+>  };
+> =20
+>  static enum power_supply_property ucsi_psy_props[] =3D {
+> +	POWER_SUPPLY_PROP_CHARGE_TYPE,
+>  	POWER_SUPPLY_PROP_USB_TYPE,
+>  	POWER_SUPPLY_PROP_ONLINE,
+>  	POWER_SUPPLY_PROP_VOLTAGE_MIN,
+> @@ -194,6 +195,30 @@ static int ucsi_psy_get_usb_type(struct ucsi_connect=
+or *con,
+>  	return 0;
+>  }
+> =20
+> +static int ucsi_psy_get_charge_type(struct ucsi_connector *con, union po=
+wer_supply_propval *val)
+> +{
+> +	if (!(con->status.flags & UCSI_CONSTAT_CONNECTED) ||
+> +	    (con->status.flags & UCSI_CONSTAT_PWR_DIR) !=3D TYPEC_SINK) {
+> +		val->intval =3D POWER_SUPPLY_CHARGE_TYPE_NONE;
+> +		return 0;
+> +	}
+> +
+> +	switch (UCSI_CONSTAT_BC_STATUS(con->status.pwr_status)) {
+> +	case UCSI_CONSTAT_BC_NOMINAL_CHARGING:
+> +		val->intval =3D POWER_SUPPLY_CHARGE_TYPE_STANDARD;
+> +		break;
+> +	case UCSI_CONSTAT_BC_SLOW_CHARGING:
+> +	case UCSI_CONSTAT_BC_TRICKLE_CHARGING:
+> +		val->intval =3D POWER_SUPPLY_CHARGE_TYPE_TRICKLE;
+> +		break;
+> +	default:
+> +		val->intval =3D POWER_SUPPLY_CHARGE_TYPE_NONE;
+> +		break;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  static int ucsi_psy_get_prop(struct power_supply *psy,
+>  			     enum power_supply_property psp,
+>  			     union power_supply_propval *val)
+> @@ -201,6 +226,8 @@ static int ucsi_psy_get_prop(struct power_supply *psy,
+>  	struct ucsi_connector *con =3D power_supply_get_drvdata(psy);
+> =20
+>  	switch (psp) {
+> +	case POWER_SUPPLY_PROP_CHARGE_TYPE:
+> +		return ucsi_psy_get_charge_type(con, val);
+>  	case POWER_SUPPLY_PROP_USB_TYPE:
+>  		return ucsi_psy_get_usb_type(con, val);
+>  	case POWER_SUPPLY_PROP_ONLINE:
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index 6bbaad4b89a5..51135e3502cf 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -1257,6 +1257,9 @@ static void ucsi_handle_connector_change(struct wor=
+k_struct *work)
+>  	if (con->status.change & UCSI_CONSTAT_CAM_CHANGE)
+>  		ucsi_partner_task(con, ucsi_check_altmodes, 1, HZ);
+> =20
+> +	if (con->status.change & UCSI_CONSTAT_BC_CHANGE)
+> +		ucsi_port_psy_changed(con);
+> +
+>  out_unlock:
+>  	mutex_unlock(&con->lock);
+>  }
+> --=20
+> 2.43.0
+>=20
+
+--cnv6rlkh26lqzka2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmZwSB0ACgkQ2O7X88g7
++poH5A//VGQdyBS1/E8UtvZeJcUW8nZsdHtosjVrTabhd/byiRcxk4LxwAfMycQh
+PicL7RA4LfRKL1gmbhyhTbglLu5VvaCHBBqaAC4moINWN/iIqtpl/gsyrfCykkNr
+Toz8aw+FbbgpOHPbkX+VIYv5PXWbDP2E2pdiNcUN7kLVkY4vFAMyzb4d/v8ixIhY
+19cowlsPRovR9CUs8hxNTs1mJE/satg8aD/rq8NdPlsafXFrUtuZV1o/X8iKUn4J
+1IkiHMB/nFYDwpyl2BndHGoE8d8qsFSqL8sojGYPp4qv0/ujrYpBPDapkZoEJGaE
+AOWLrVezPMLeLsb3yQZ7plXX0vnHuTEc7jppEyCoG2Cv0Ttq+9iLX9sKOBJFa3zZ
+OZ54oohBUfg3DyqVb+OpXdcUUv+U5aoolYcgbE+DlXmrgBeRwamyaN9soLYng046
+e72r7ivbPjCL8dpaS6q0xXmrz9XKy4cD7zIB2e0zxIRbCmXxBQMf/7lr3cUAcqHD
+q0povLZIXXOwv0u9motAU7Es/nS4jlz2RK0Rs7DLkFSh6QGFwiXOkTEksaN5XcML
+5iuQdk4d4iNevlDOeiFMy47XuODMgcjaskrbktFYj+0W4hZMgMPdyNGZ6611xLu3
+2ykhiLy2vgxNeQBQNgUFAU8y+lwwGNxAtViuDtGS/yTu0pA4SaY=
+=WKtl
+-----END PGP SIGNATURE-----
+
+--cnv6rlkh26lqzka2--
 
