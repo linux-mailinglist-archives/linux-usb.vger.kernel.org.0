@@ -1,79 +1,99 @@
-Return-Path: <linux-usb+bounces-11352-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11353-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7917790A251
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Jun 2024 04:10:43 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D0E7A90A2A0
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Jun 2024 04:50:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2CFF81F21A3C
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Jun 2024 02:10:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C6E4B1C203B8
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Jun 2024 02:50:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BA60161310;
-	Mon, 17 Jun 2024 02:10:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95F4B1CFBD;
+	Mon, 17 Jun 2024 02:50:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mXTgBfzA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id 08FDA29D19
-	for <linux-usb@vger.kernel.org>; Mon, 17 Jun 2024 02:10:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F93379D3
+	for <linux-usb@vger.kernel.org>; Mon, 17 Jun 2024 02:50:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718590237; cv=none; b=k2rUM8qMedCavnFflvdgxy8CrJ8gktO4Ux87lMU5K/nCgL8tJXnC7+dzXcnuKeuWGtokIW7f6lj8c0BJAB8OkLT12SXNhU9ndUMHj/Cj1CnovEvjOtPOqEJZGfddVNIHzf3A8HXe5vP6S7iYjyFXPZ94gYSohXb1+zKv06tFW8k=
+	t=1718592618; cv=none; b=Yf8wZhlZQHvlfl8GWjn11y4bDCG1N4yKoAUT1nP72L8Q2d2gQhSTDJYmKGYIS8ORb8YX7pMiodQVm2ygoNhUuzo9w5HoxXEGM/f+8AT9V/e2eT67XqV5MVPPJo6ud2faxML+q2lam287Z5LjOfRMNdz/AGESYdfFzBrj0SV2Xjs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718590237; c=relaxed/simple;
-	bh=pC2H/O6eiqESTCmr8neLdEOkJtPLbpth/TOg54DIL9I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CVH0yE8XTQwcBA9k9zcdZlikityRaN2v/Uf6Ov0LX0t/PjCb3XlCj7zYDwTTgE7t5+PCpogJoiCCXCKsnoEIsAISa28oc7fdJJqrhrVVwidioJa4NilK2PFmFRVKs8OkEfq4M8BS/ZSCkv7Jp0HsDWS6cY99/8UNUj0qRMBLHLc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
-Received: (qmail 376162 invoked by uid 1000); 16 Jun 2024 22:10:33 -0400
-Date: Sun, 16 Jun 2024 22:10:33 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Andrey Konovalov <andreyknvl@gmail.com>
-Cc: USB list <linux-usb@vger.kernel.org>,
-  Paul Elder <paul.elder@ideasonboard.com>
-Subject: Re: Stalling non-0-length OUT control requests in Raw Gadget/GadgetFS
-Message-ID: <762b8751-16d5-4ce5-8504-efcb6440585c@rowland.harvard.edu>
-References: <CA+fCnZeLRqk-FOkJ81qMY0NMZC7YnW=beTw=w_DVA=OhOnywRw@mail.gmail.com>
- <8b7aa23c-9976-46c2-b64f-1d4614aefe89@rowland.harvard.edu>
- <CA+fCnZd1UOqCiH7L1FMMqLhepiMSBfgVb-tXfc81F_VuX_zy4w@mail.gmail.com>
- <73838855-fe52-4d2f-a826-c5757f75bd92@rowland.harvard.edu>
- <CA+fCnZetfWWhO+Fufg_Q=MOFtyN+g6nBrLJ29HGrGc0znsQTGQ@mail.gmail.com>
+	s=arc-20240116; t=1718592618; c=relaxed/simple;
+	bh=Ybg8/iXcGvZx/NENf2LKuYDwOS3I0rInleK5cISpcrU=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=PA0nxyW+Yxm1n6M/LkDCb5wXjeSh2Z35XpENs2nXYe9qfbJyh/IV76X1TqxX3DIC8uV6z9emOXQifMHOn20/u6iQDTs7LOgEBRm/Bcvool2Hyy23eKkmwRRYsJtltkZKgn+9JMzQAWyk79De3tPZAOZrQFPvny78nBlc5fhON6g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mXTgBfzA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id CEAE1C32786
+	for <linux-usb@vger.kernel.org>; Mon, 17 Jun 2024 02:50:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718592617;
+	bh=Ybg8/iXcGvZx/NENf2LKuYDwOS3I0rInleK5cISpcrU=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=mXTgBfzAg7q0qZT6cRBWYmj1jSSql9u2umpf5s3R86D/HrSbrT+MBLnaAT1odJKiG
+	 V5+ANNfBl6J216aOWabWz0MvJ9/H0d2WE2aP5enGJsA4l29AE8dH1crQniCc7LJ6xm
+	 fUkKsiIx9wdvp6l3g7hq3if8PSSEkm3LwgH//N9XqQqsMmNUYdhHTfTzIlAVP/Wwvh
+	 2IMNuPcIJDV05yqX+sLVf/Lea1y255X4kv8c34uzG2r4osQbbarTCNPfCJ6ZZkqw58
+	 ZZOgte3xMpVflEybuxvHqnPvYZ8FoF2jWAgE16pUH1QNWcnkzEvq8ZWK6s/wYxg+GK
+	 p+xqiqoYtDMYQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id B2BAAC433E5; Mon, 17 Jun 2024 02:50:17 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 218943] No SuperSpeedPlus on AM4/5 Hubs
+Date: Mon, 17 Jun 2024 02:50:17 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: jarrard@proton.me
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-218943-208809-NyzJZIy7nb@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-218943-208809@https.bugzilla.kernel.org/>
+References: <bug-218943-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+fCnZetfWWhO+Fufg_Q=MOFtyN+g6nBrLJ29HGrGc0znsQTGQ@mail.gmail.com>
 
-On Mon, Jun 17, 2024 at 12:42:56AM +0200, Andrey Konovalov wrote:
-> I've been collecting different kinds of non-critical issues and
-> inconsistencies within the Gadget subsystem I hit while testing Raw
-> Gadget. It's unlikely I'll get to working on them in the foreseeable
-> future, but it's good to know what needs fixing should the need arise.
-> 
-> So far, I have:
-> 
-> - Allow stalling non-0-length control OUT transfers
-> (https://github.com/xairy/raw-gadget/issues/71);
-> - Contain USB_GADGET_DELAYED_STATUS within composite framework
-> (https://github.com/xairy/raw-gadget/issues/70);
-> - Support isochronous transfers in Dummy HCD/UDC
-> (https://github.com/xairy/raw-gadget/issues/72);
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218943
 
-As it happens, I wrote a patch (meant mainly for testing, not production 
-use) that implemented a start at isochronous support in dummy-hcd.  It 
-was far from complete, but it could be expanded.
+--- Comment #26 from Jarrard (jarrard@proton.me) ---
+AverMedia said they won't be fixing this for Linux.=20=20
 
-However, it's another thing I have lost track of.  It may have been 
-posted to linux-usb at one point, but that would have been quite some 
-time ago.  Probably before well lore.kernel.org existed.  (I vaguely 
-remember working on it before moving to my current home, which means 
-in 2008 or earlier.)
+So until a exception flag can be compiled into these USB speed checks for t=
+his
+device. Its stuck at 5Gbps.=20=20
 
-Alan Stern
+Wish I was a Kernel code-master, probably fixable within a day for myself.=
+=20
+
+Thanks for help none the less. The OBS server will remain on Win10. (I have
+dual boot in case miracle happens and this issue is resolved)
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
