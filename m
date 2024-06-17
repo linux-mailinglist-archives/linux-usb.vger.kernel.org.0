@@ -1,126 +1,101 @@
-Return-Path: <linux-usb+bounces-11360-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11361-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9FEA090A99A
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Jun 2024 11:31:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5273890AA74
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Jun 2024 11:59:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AB8B01C213F0
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Jun 2024 09:31:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 09B6B28DC6E
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Jun 2024 09:59:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C951192B83;
-	Mon, 17 Jun 2024 09:31:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 566BD1946C2;
+	Mon, 17 Jun 2024 09:58:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="x0OO7ZoJ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ES4QMh2U"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33016192B88
-	for <linux-usb@vger.kernel.org>; Mon, 17 Jun 2024 09:31:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5995E192B7B
+	for <linux-usb@vger.kernel.org>; Mon, 17 Jun 2024 09:58:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718616697; cv=none; b=mEJbBjZy7X1Ug7ExrpkMGrGYUniFDajBvlu74bNvl1lS4wohnhjSYlrNFH0VOnr035hJwUM/A0kT/hwftaeomH8NQ2YNYB4ZKuJe4jRm1rJt1CdaXhdRZ2nJ1V/H4x7l1K1+T1sx4ZpeajabrPUAGGq5fp4ran+78dRha4UbpSQ=
+	t=1718618315; cv=none; b=BG8SIyEVTjXyA0uXcIyz0CUKOB9Hz9Srw7pBxpLHndtbjsq9U8AfJwkZmgnyD7o8WRT5slGm064oS2VS8uwon11EqNOmxEvk9TrdGmvGYu81wsHF/AKWPFYVZ5/vG5MNZiJtuxb8ngIjMHeOdLAeMIXco8EWzAZ1y6kHeGtGdn4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718616697; c=relaxed/simple;
-	bh=fRmLFWtad0MeVfCzJRA49BbTleCC61mmZxAFsL6FegQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=mguaJcEtLW6qyf9cK1BUkYY60GQLwrupQyGbzd1qjoMEQim6sYuaZ6vKPrvjnO8sQXvWtrwkNSgJurG9Vn+ngtpno11pZwsh1mKylj26QDVYQhVBxC3hy/FNU648l5sKZy3Jhs/+z/rqG2LN8Mk+FpVs0FJDCNdnv18uturSC5I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=x0OO7ZoJ; arc=none smtp.client-ip=209.85.208.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-2ebd421a931so40402391fa.1
-        for <linux-usb@vger.kernel.org>; Mon, 17 Jun 2024 02:31:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1718616694; x=1719221494; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dIKWXjEnV/JvaI/YdcZiIYzxlyFqw0Iq/qRXLaIf03Q=;
-        b=x0OO7ZoJl49oJhq0ieXzpJJr+3gLU1YvJuDb3UA61aLIlPef09wrEnFtAcAEVEhssv
-         T5aAin03VqfyFkWmBAvbnMTp28Ea8DwukfEuMKhtID/45UdJrZTITMYVD3n+RALPUTpn
-         Uhqziz6kB4AlR9gMYjItAuohJK4+6vj/nROl1we/5iMIPmTlDsFVGjfDMvZa+sh1flPY
-         PVY4cE5dJ4sF3oMKTzwhPK55TEiSxHmiRi1glIxpI+sUoX8YJatxZxp6GsPAik0Kb9sw
-         /1ukV49jpq7HOzzFNhsXjAlhFJaSYChu7GY6UxUtB7NW2Hc4EfNk0J5NBTI8gb7YD0eP
-         bo7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718616694; x=1719221494;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dIKWXjEnV/JvaI/YdcZiIYzxlyFqw0Iq/qRXLaIf03Q=;
-        b=iJY9ht+wmgpMxxo6uPWTMdOO9JCLHXa3Mfar7spL5G1qrLN83saDcpjWECoA4Nx83i
-         NOKO/84ldaptSBRp5EOBk75dIPEqr44jBNlwN/5V+kb2faNI4+MJZLE2zwkqreN5aHjK
-         GwTmenudGFPbvlv5CtZt2LSrGLectCpYqkKWhn5Ycde1OCCH25t4LSUJArLZowYIBI3q
-         dd9rQ6mNft3MLANLu6um8xzOthY38tIciR/gXR28GyiJ9RYFu0qNobKMywIJ8e/jiZif
-         oDBVgvXpGaL5pnbBmJ4N9ZWxou+Lzy7MUlGrAmGxKXlj79p5+z76Mte56gw6PXd35RyQ
-         ulyg==
-X-Forwarded-Encrypted: i=1; AJvYcCUbvhFWR7NJcoj1j1qD/khRgZOC67VfMRyeCE3cH7d7AJaF0u6iocnWdDtQVlc1iXGIdwn0h+pgoNT2KXm/GkKs96szGix78d14
-X-Gm-Message-State: AOJu0Yw1CgmW+g0vQXRY0CfRaAhE3ZgMOoCgQSc2yEr3IBhQQIwUrNtC
-	LfN13l1GBpRvA0hO1DH64nzVuYobRL1SF9oySo4NuchKCJrP3NFVhBAFKEyNiEL+of73bolw7MZ
-	q
-X-Google-Smtp-Source: AGHT+IEODBDEsxxAci2aBLEEjswUYh1kr6DsZMBMYgj0029fdsBS+kjBKhpqZUVlxzZYUPOZnGGZNw==
-X-Received: by 2002:a2e:9217:0:b0:2ec:2617:ad4 with SMTP id 38308e7fff4ca-2ec26170c7bmr29025681fa.43.1718616694419;
-        Mon, 17 Jun 2024 02:31:34 -0700 (PDT)
-Received: from localhost ([102.222.70.76])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4229447eaa5sm186875575e9.48.2024.06.17.02.31.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Jun 2024 02:31:34 -0700 (PDT)
-Date: Mon, 17 Jun 2024 12:31:30 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Alexandre Bailon <abailon@baylibre.com>
-Cc: Bin Liu <b-liu@ti.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	kernel-janitors@vger.kernel.org
-Subject: [PATCH] usb: musb: da8xx: fix a resource leak in probe()
-Message-ID: <69af1b1d-d3f4-492b-bcea-359ca5949f30@moroto.mountain>
+	s=arc-20240116; t=1718618315; c=relaxed/simple;
+	bh=nk0qAolTVcAAx7qPOOLpAx3juXmKCouTou8x5Dztrqg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ibSegkvb1saqMJudByZ9pUq160X0lnHK6wC3HQAYbC4A8c5qjLUMSFiapG1LoMbjuZhxXDkbm0TtcX+h0R2f31OTdZenm9Orqb5CLTJFYSZ/3n8a9pwxlZPZL7vh7W5Pv4cqipF1m8RvY8eo8WSOLdl3o/ZFkRtHJjXXvdS1d9Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ES4QMh2U; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1718618315; x=1750154315;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=nk0qAolTVcAAx7qPOOLpAx3juXmKCouTou8x5Dztrqg=;
+  b=ES4QMh2UMqK01ZyQuGrA4CUWjAY6I8SvubixmqY5lHLF6tp6NHVAy5PY
+   mz3dTMqeV4M59F+2iTU4JDgHnXdDf8xJogVVTRPJ/hOTCeRpkPrm84rIT
+   UVqhQtB+Wz3ptJobonRuG0FroauQzEU9ToD8zE3ei/eBZJ92WuIKzL7S5
+   1xwBCDX3Ja/TwcnVqWukgmh+0hzHJvETL5xVAlIelP5l02KIwbqOpJF1S
+   V6l0IPqSYwntOb1V4nSmUhQBcYk9TblLWWhfIIXtuKTdbwAimpdOLaesV
+   J77aRxNAXAlv3oDM3nKbM8VxXw9mk72fSDTRDX1RvNlxypMnlKmNkJ8Uf
+   g==;
+X-CSE-ConnectionGUID: Hw5wQ5AiTOeUg+bYQzei+A==
+X-CSE-MsgGUID: Rf79pL33S8GsBY8SzDgegA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11105"; a="15403632"
+X-IronPort-AV: E=Sophos;i="6.08,244,1712646000"; 
+   d="scan'208";a="15403632"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2024 02:58:34 -0700
+X-CSE-ConnectionGUID: a/dccBR2S2y2ZBoJXQyo3w==
+X-CSE-MsgGUID: ApPZ/JuOSPWf0HiR0t0IjQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,244,1712646000"; 
+   d="scan'208";a="46260497"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orviesa004.jf.intel.com with ESMTP; 17 Jun 2024 02:58:32 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id B03FE18E; Mon, 17 Jun 2024 12:58:30 +0300 (EEST)
+Date: Mon, 17 Jun 2024 12:58:30 +0300
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Michael Jamet <michael.jamet@intel.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Andreas Noever <andreas.noever@gmail.com>
+Cc: linux-usb@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v2 0/6] thunderbolt: Sideband access and retimer lane
+ margining support
+Message-ID: <20240617095830.GA1532424@black.fi.intel.com>
+References: <20240614121512.1361184-1-mika.westerberg@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Mailer: git-send-email haha only kidding
+In-Reply-To: <20240614121512.1361184-1-mika.westerberg@linux.intel.com>
 
-Call usb_phy_generic_unregister() if of_platform_populate() fails.
+On Fri, Jun 14, 2024 at 03:15:06PM +0300, Mika Westerberg wrote:
+> Hi all,
+> 
+> This series adds USB4 link sideband access through debugfs. This can be
+> used to run port operations etc. from userspace usable for example in
+> manufacturing. The other feature is receiver lane margining support for
+> retimers with similar use case.
+> 
+> Mika Westerberg (6):
+>   thunderbolt: Move usb4_port_margining_caps() declaration into correct place
+>   thunderbolt: Make usb4_port_sb_read/write() available outside of usb4.c
+>   thunderbolt: Add sideband register access to debugfs
+>   thunderbolt: Split out margining from USB4 port
+>   thunderbolt: Make margining functions accept target and retimer index
+>   thunderbolt: Add receiver lane margining support for retimers
 
-Fixes: d6299b6efbf6 ("usb: musb: Add support of CPPI 4.1 DMA controller to DA8xx")
-Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
----
- drivers/usb/musb/da8xx.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/usb/musb/da8xx.c b/drivers/usb/musb/da8xx.c
-index fcf06dcf2d61..953094c1930c 100644
---- a/drivers/usb/musb/da8xx.c
-+++ b/drivers/usb/musb/da8xx.c
-@@ -560,7 +560,7 @@ static int da8xx_probe(struct platform_device *pdev)
- 	ret = of_platform_populate(pdev->dev.of_node, NULL,
- 				   da8xx_auxdata_lookup, &pdev->dev);
- 	if (ret)
--		return ret;
-+		goto err_unregister_phy;
- 
- 	pinfo = da8xx_dev_info;
- 	pinfo.parent = &pdev->dev;
-@@ -575,9 +575,13 @@ static int da8xx_probe(struct platform_device *pdev)
- 	ret = PTR_ERR_OR_ZERO(glue->musb);
- 	if (ret) {
- 		dev_err(&pdev->dev, "failed to register musb device: %d\n", ret);
--		usb_phy_generic_unregister(glue->usb_phy);
-+		goto err_unregister_phy;
- 	}
- 
-+	return 0;
-+
-+err_unregister_phy:
-+	usb_phy_generic_unregister(glue->usb_phy);
- 	return ret;
- }
- 
--- 
-2.43.0
-
+Applied to thunderbolt.git/next.
 
