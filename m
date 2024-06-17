@@ -1,346 +1,323 @@
-Return-Path: <linux-usb+bounces-11372-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11373-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0AD690B69B
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Jun 2024 18:38:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 083B690B74D
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Jun 2024 19:03:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8E797B37C7F
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Jun 2024 15:30:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 12B0E1C231C3
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Jun 2024 17:03:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05B5D13AA37;
-	Mon, 17 Jun 2024 15:02:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 875AA1684B0;
+	Mon, 17 Jun 2024 17:02:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="ZQMnO/q2"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id CD6E813AA2A
-	for <linux-usb@vger.kernel.org>; Mon, 17 Jun 2024 15:02:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FE49157A41;
+	Mon, 17 Jun 2024 17:02:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718636559; cv=none; b=WM0Vm8s30iLXDK/zSlQZJxYL6skY3WZEwEMSGdiTOlJIWQVW3B5xE2Vfqh5Ydr9H+enm17N905VqltMbexA66nUoiSBRWj1IlqslTnfrz31xw5IRcBIiCNXUAv0ze2FK+6NNp3PHwOmN7Y6E/AKgCi17v8T12UDZ+kh0sVnTwFY=
+	t=1718643777; cv=none; b=MIUPFBdQ7fE+1JQfB1MALtEqax0iQxe7jfbOvuS4rECPbLRQVDQvQQFDRDdPwUfDVI1cuH+s5v5wGJp55adQ1D84IofN/s+c8tTHxEkbQ9ZfYKW+iYExSgCmIJWgs1mdVTpo0p0JDiBUSOxWSRRm54q3Pj3Xscei1w0tMbriTIs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718636559; c=relaxed/simple;
-	bh=Ro9fb2wcUc1hJnJZ7EzdIaHRfvi69H+iMMCNglY/YJU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QM1DfdTzly3XGfTwAt2nGqiY4E9xSZICczyYK0iP8vbGj/Zq9fQZGVaj60elsIfzFLGrdfG6BbVLrsaRVBiPdlksIrfxy7U/FIz/cPmpFj37Vi3gegU0rDGn9/rQSHUsn7jo+gq4pJXf+Vh1BUIDXl2NhABeBEFzUSwQse0nciE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
-Received: (qmail 395005 invoked by uid 1000); 17 Jun 2024 11:02:30 -0400
-Date: Mon, 17 Jun 2024 11:02:30 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Greg KH <greg@kroah.com>
-Cc: Andrey Konovalov <andreyknvl@gmail.com>,
-  USB list <linux-usb@vger.kernel.org>,
-  Paul Elder <paul.elder@ideasonboard.com>
-Subject: Partial isochronous support for dummy-hcd [was: Re: Stalling
- non-0-length OUT control requests in Raw Gadget/GadgetFS]
-Message-ID: <82b983a3-7ed5-4800-8a3d-1615c381d115@rowland.harvard.edu>
-References: <CA+fCnZeLRqk-FOkJ81qMY0NMZC7YnW=beTw=w_DVA=OhOnywRw@mail.gmail.com>
- <8b7aa23c-9976-46c2-b64f-1d4614aefe89@rowland.harvard.edu>
- <CA+fCnZd1UOqCiH7L1FMMqLhepiMSBfgVb-tXfc81F_VuX_zy4w@mail.gmail.com>
- <73838855-fe52-4d2f-a826-c5757f75bd92@rowland.harvard.edu>
- <CA+fCnZetfWWhO+Fufg_Q=MOFtyN+g6nBrLJ29HGrGc0znsQTGQ@mail.gmail.com>
- <762b8751-16d5-4ce5-8504-efcb6440585c@rowland.harvard.edu>
- <2024061736-bagginess-raffle-7e1e@gregkh>
+	s=arc-20240116; t=1718643777; c=relaxed/simple;
+	bh=3JGhG02vtoZ1ijfk8c3Nd/z5OHJyc03LsZJnbgNIDQ8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=C80hqxQcak+e+tT3+i9ruIQB4IaMJO0n25qF5fdPRdE2Shavz9UI4j80idBIj6H/Gv8h2j1bDR7Yv26JInfRlPZrtkt8oq2ppV6+8G+pDP2XnO/nBz1wzzArhQHlmxubR6yZBXGz/jfjbehByfFZfmr3/JIyjiLuakCEK3qldlM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=ZQMnO/q2; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45HE3k1v030595;
+	Mon, 17 Jun 2024 17:02:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	GAb0X9XKILevg0s3K1b3t7RQbb42+rkRZsD2p+B37jg=; b=ZQMnO/q2rII2ut1J
+	sjiucoFbxhEcoBC0oYgZ3OpSJyrdGi+yi2zyKbBWeS0bKhUWe8Mtgc2YxZcfnncl
+	POodabHi8Z/cmIyCGtGFe1TWG2v1YJWQ6HSMTX/Y+C99qsM1ylNl2MX4KhS5bPxr
+	5x7PN0ZFDgquFKgeW2skSgI5WEWGoyu+HW3kxmv7BKPChIeS5jNGSuBh2XBzNSCs
+	ta2hNKHfJeFGjKhXAT3SdIYGGH73uwqeo6BNu1CRwmdA0fB5ILD1yalVwdqDFlTV
+	zWiEY8yjwlPsB9CIZtgFw6235R22FBQj+RZ1hijkFGqD7/YDnTltdlyhHATLIMyD
+	0kEzdA==
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ytfut1ej8-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 17 Jun 2024 17:02:29 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA05.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 45HH2SH9008951
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 17 Jun 2024 17:02:28 GMT
+Received: from [10.110.93.116] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 17 Jun
+ 2024 10:02:27 -0700
+Message-ID: <096d59a0-5e18-092c-c9ae-d98130226f06@quicinc.com>
+Date: Mon, 17 Jun 2024 10:02:26 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2024061736-bagginess-raffle-7e1e@gregkh>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH v23 32/32] ASoC: doc: Add documentation for SOC USB
+Content-Language: en-US
+To: =?UTF-8?Q?Amadeusz_S=c5=82awi=c5=84ski?=
+	<amadeuszx.slawinski@linux.intel.com>,
+        <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
+        <perex@perex.cz>, <conor+dt@kernel.org>, <corbet@lwn.net>,
+        <broonie@kernel.org>, <lgirdwood@gmail.com>, <krzk+dt@kernel.org>,
+        <Thinh.Nguyen@synopsys.com>, <bgoswami@quicinc.com>, <tiwai@suse.com>,
+        <robh@kernel.org>, <gregkh@linuxfoundation.org>
+CC: <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-sound@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>
+References: <20240610235808.22173-1-quic_wcheng@quicinc.com>
+ <20240610235808.22173-33-quic_wcheng@quicinc.com>
+ <5be51e1f-70c9-4bbc-96fa-1e50e441bd35@linux.intel.com>
+ <408d9e8e-0f40-7e66-54be-2f8d2c0783a3@quicinc.com>
+ <ca1e1063-e1bd-4e03-a7cd-91985e9954e9@linux.intel.com>
+From: Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <ca1e1063-e1bd-4e03-a7cd-91985e9954e9@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 6iEKt_voJesWSGLnIJI_1RjB-WcfLNX5
+X-Proofpoint-GUID: 6iEKt_voJesWSGLnIJI_1RjB-WcfLNX5
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-06-17_14,2024-06-17_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxlogscore=999
+ suspectscore=0 priorityscore=1501 impostorscore=0 phishscore=0 mlxscore=0
+ adultscore=0 clxscore=1015 spamscore=0 lowpriorityscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2405170001
+ definitions=main-2406170131
 
-On Mon, Jun 17, 2024 at 08:29:12AM +0200, Greg KH wrote:
-> On Sun, Jun 16, 2024 at 10:10:33PM -0400, Alan Stern wrote:
-> > However, it's another thing I have lost track of.  It may have been 
-> > posted to linux-usb at one point, but that would have been quite some 
-> > time ago.  Probably before well lore.kernel.org existed.  (I vaguely 
-> > remember working on it before moving to my current home, which means 
-> > in 2008 or earlier.)
+Hi Amadeusz,
+
+On 6/13/2024 12:46 AM, Amadeusz Sławiński wrote:
+> On 6/12/2024 9:28 PM, Wesley Cheng wrote:
+>> Hi Amadeusz,
+>>
+>> On 6/12/2024 7:47 AM, Amadeusz Sławiński wrote:
+>>> On 6/11/2024 1:58 AM, Wesley Cheng wrote:
+>>>
+>>> (...)
+>>>
+>>>> +In the case where the USB offload driver is unbounded, while USB 
+>>>> SND is
+>>>
+>>> unbounded -> unbound
+>>>
+>>> (...)
+>>>
+>>>> +SOC USB and USB Sound Kcontrols
+>>>> +===============================
+>>>> +Details
+>>>> +-------
+>>>> +SOC USB and USB sound expose a set of SND kcontrols for 
+>>>> applications to select
+>>>> +and fetch the current offloading status for the ASoC platform sound 
+>>>> card. Kcontrols
+>>>> +are split between two layers:
+>>>> +
+>>>> +    - USB sound - Notifies the sound card number for the ASoC 
+>>>> platform sound
+>>>> +      card that it is registered to for supporting audio offload.
+>>>> +
+>>>> +    - SOC USB - Maintains the current status of the offload path, 
+>>>> and device
+>>>> +      (USB sound card and PCM device) information.  This would be 
+>>>> the main
+>>>> +      card that applications can read to determine offloading 
+>>>> capabilities.
+>>>> +
+>>>> +Implementation
+>>>> +--------------
+>>>> +
+>>>> +**Example:**
+>>>> +
+>>>> +  **Sound Cards**:
+>>>> +
+>>>> +    ::
+>>>> +
+>>>> +      0 [SM8250MTPWCD938]: sm8250 - SM8250-MTP-WCD9380-WSA8810-VA-D
+>>>> +                     SM8250-MTP-WCD9380-WSA8810-VA-DMIC
+>>>> +      1 [C320M          ]: USB-Audio - Plantronics C320-M
+>>>> +                     Plantronics Plantronics C320-M at 
+>>>> usb-xhci-hcd.1.auto-1, full speed
+>>>> +
+>>>> +
+>>>> +  **Platform Sound Card** - card#0:
+>>>> +
+>>>> +    ::
+>>>> +
+>>>> +      USB Offload Playback Route Card Select  1 (range -1->32)
+>>>> +      USB Offload Playback Route PCM Select   0 (range -1->255)
+>>>> +      USB Offload Playback Route Card Status  -1 (range -1->32)
+>>>> +      USB Offload Playback Route PCM Status   -1 (range -1->255)
+>>>> +
+>>>> +
+>>>> +  **USB Sound Card** - card#1:
+>>>> +
+>>>> +    ::
+>>>> +
+>>>> +      USB Offload Playback Capable Card         0 (range -1->32)
+>>>> +
+>>>> +
+>>>> +The platform sound card(card#0) kcontrols are created as part of 
+>>>> adding the SOC
+>>>> +USB device using **snd_soc_usb_add_port()**.  The following 
+>>>> kcontrols are defined
+>>>> +as:
+>>>> +
+>>>> +  - ``USB Offload Playback Route Card Status`` **(R)**: USB sound 
+>>>> card device index
+>>>> +    that defines which USB SND resources are currently offloaded. 
+>>>> If -1 is seen, it
+>>>> +    signifies that offload is not active.
+>>>> +  - ``USB Offload Playback Route PCM Status`` **(R)**: USB PCM 
+>>>> device index
+>>>> +    that defines which USB SND resources are currently offloaded. 
+>>>> If -1 is seen, it
+>>>> +    signifies that offload is not active.
+>>>> +  - ``USB Offload Playback Route Card Select`` **(R/W)**: USB sound 
+>>>> card index which
+>>>> +    selects the USB device to initiate offloading on.  If no value 
+>>>> is written to the
+>>>> +    kcontrol, then the last USB device discovered card index will 
+>>>> be chosen.
+>>>
+>>> I see only one kcontrol, what if hardware is capable of offloading on 
+>>> more cards, is it possible to do offloading on more than one device?
+>>>
+>>>> +  - ``USB Offload Playback Route PCM Select`` **(R/W)**: USB PCM 
+>>>> index which selects
+>>>> +    the USB device to initiate offloading on.  If no value is 
+>>>> written to the
+>>>> +    kcontrol, then the last USB device discovered PCM zero index 
+>>>> will be chosen.
+>>>> +
+>>>> +The USB sound card(card#1) kcontrols are created as USB audio 
+>>>> devices are plugged
+>>>> +into the physical USB port and enumerated.  The kcontrols are 
+>>>> defined as:
+>>>> +
+>>>> +  - ``USB Offload Playback Capable Card`` **(R)**: Provides the 
+>>>> sound card
+>>>> +    number/index that supports USB offloading.  Further/follow up 
+>>>> queries about
+>>>> +    the current offload state can be handled by reading the offload 
+>>>> status
+>>>> +    kcontrol exposed by the platform card.
+>>>> +
+>>>
+>>>
+>>> Why do we need to some magic between cards? I feel like whole 
+>>> kcontrol thing is overengineered a bit - I'm not sure I understand 
+>>> the need to do linking between cards. It would feel a lot simpler if 
+>>> USB card exposed one "USB Offload" kcontrol on USB card if USB 
+>>> controller supports offloading and allowed to set it to true/false to 
+>>> allow user to choose if they want to do offloading on device.
+>>>
+>>> (...)
+>>
+>> Based on feedback from Pierre, what I understood is that for some 
+>> applications, there won't be an order on which sound card is 
+>> queried/opened first.
+>>
 > 
-> I think lore is populated with all of the linux-usb mailing list
-> archives, but we might have missed from before when there was -user and
-> -devel versions of the list.
+> Yes if you have multiple cards, they are probed in random order.
 > 
-> If needed, I can try to dig up my older archives from cold storage and
-> get Konstantin to import them.
+>> So the end use case example given was if an application opened the USB 
+>> sound card first, it can see if there is an offload path available.  
+>> If there is then it can enable the offload path on the corresponding 
+>> card if desired.
+>>
+> 
+> This still doesn't explain why you need to link cards using controls. 
+> What would not work with simple "Enable Offload" with true/false values 
+> on USB card that works while you do have above routing controls?
+> 
 
-No need -- I found a copy of it on an old backup drive.  It probably got 
-left behind when I switched my system over from using 32-bit userspace 
-to 64 bits.
+Sorry for the late response.
 
-For the record, the patch is appended below.  The file on the backup 
-drive was dated May 2006 (before the 2.6.17 kernel was released!); the 
-original work may have been even earlier.
+I think either way, even with the "Enable Offload" kcontrol in USB SND, 
+we'd need a way to link these cards, because if you have multiple USB 
+audio devices connected, and say... your offload mechanism only supports 
+one stream.  Then I assume we'd still need to way to determine if that 
+stream can be enabled for that USB SND device or not.
 
-Alan Stern
+Since the USB SND isn't really the entity maintaining the offload path, 
+I went with the decision to add that route selection to the ASoC 
+platform card. It would have access to all the parameters supported by 
+the audio DSP.
 
+Thanks
+Wesley Cheng
 
-
-Index: usb/drivers/usb/gadget/dummy_hcd.c
-===================================================================
---- usb.orig/drivers/usb/gadget/dummy_hcd.c
-+++ usb/drivers/usb/gadget/dummy_hcd.c
-@@ -84,6 +84,9 @@ struct dummy_ep {
- 	struct usb_gadget		*gadget;
- 	const struct usb_endpoint_descriptor *desc;
- 	struct usb_ep			ep;
-+	int				iso_desc_num;
-+	int				iso_status;
-+	int				interval_left;
- 	unsigned			halted : 1;
- 	unsigned			already_seen : 1;
- 	unsigned			setup_stage : 1;
-@@ -808,6 +811,7 @@ usb_gadget_register_driver (struct usb_g
- 
- 	dum->gadget.ep0 = &dum->ep [0].ep;
- 	dum->ep [0].ep.maxpacket = 64;
-+	dum->ep [0].setup_stage = 1;
- 	list_del_init (&dum->ep [0].ep.ep_list);
- 	INIT_LIST_HEAD(&dum->fifo_req.queue);
- 
-@@ -1017,8 +1021,7 @@ static int dummy_urb_enqueue (
- 
- 	list_add_tail (&urbp->urbp_list, &dum->urbp_list);
- 	urb->hcpriv = urbp;
--	if (usb_pipetype (urb->pipe) == PIPE_CONTROL)
--		urb->error_count = 1;		/* mark as a new urb */
-+	urb->error_count = 0;
- 
- 	/* kick the scheduler, it'll do the rest */
- 	if (!timer_pending (&dum->timer))
-@@ -1056,13 +1059,44 @@ static int
- transfer (struct dummy *dum, struct urb *urb, struct dummy_ep *ep, int limit)
- {
- 	struct dummy_request	*req;
-+	struct usb_iso_packet_descriptor *iso;
-+	int			to_host;
-+
-+	to_host = usb_pipein (urb->pipe);
-+	iso = NULL;
-+	if (usb_pipetype (urb->pipe) == PIPE_ISOCHRONOUS)
-+		iso = &urb->iso_frame_desc [ep->iso_desc_num];
- 
- top:
-+	/* isochronous transfers go through even without a responder */
-+	if (iso && list_empty (&ep->queue)) {
-+		int		limit2 = limit;
-+		int		maxlen = ep->ep.maxpacket;
-+
-+		while (maxlen <= limit2) {
-+			limit2 -= maxlen;
-+			if (to_host)
-+				ep->iso_status = iso->status = -EPROTO;
-+			else {
-+				iso->status = 0;
-+				iso->actual_length = iso->length;
-+				urb->actual_length += iso->length;
-+			}
-+			++iso;
-+			if (++ep->iso_desc_num >= urb->number_of_packets) {
-+				maybe_set_status (urb, ep->iso_status);
-+				break;
-+			}
-+		}
-+		return limit;
-+	}
-+
- 	/* if there's no request queued, the device is NAKing; return */
- 	list_for_each_entry (req, &ep->queue, queue) {
- 		unsigned	host_len, dev_len, len;
--		int		is_short, to_host;
-+		int		is_short;
- 		int		rescan = 0;
-+		int		ustatus;
- 
- 		/* 1..N packets of ep->ep.maxpacket each ... the last one
- 		 * may be short (including zero length).
-@@ -1071,24 +1105,22 @@ top:
- 		 * (length mod maxpacket zero, and 'zero' flag); they always
- 		 * terminate reads.
- 		 */
--		host_len = urb->transfer_buffer_length - urb->actual_length;
-+		host_len = (iso ? iso->length : urb->transfer_buffer_length -
-+				urb->actual_length);
- 		dev_len = req->req.length - req->req.actual;
- 		len = min (host_len, dev_len);
- 
- 		/* FIXME update emulated data toggle too */
- 
--		to_host = usb_pipein (urb->pipe);
- 		if (unlikely (len == 0))
- 			is_short = 1;
- 		else {
- 			char		*ubuf, *rbuf;
- 
- 			/* not enough bandwidth left? */
--			if (limit < ep->ep.maxpacket && limit < len)
-+			if (limit < ep->ep.maxpacket && limit < host_len)
- 				break;
- 			len = min (len, (unsigned) limit);
--			if (len == 0)
--				break;
- 
- 			/* use an extra pass for the final short packet */
- 			if (len > ep->ep.maxpacket) {
-@@ -1098,15 +1130,15 @@ top:
- 			is_short = (len % ep->ep.maxpacket) != 0;
- 
- 			/* else transfer packet(s) */
--			ubuf = urb->transfer_buffer + urb->actual_length;
-+			ubuf = urb->transfer_buffer + (iso ?
-+					iso->offset : urb->actual_length);
- 			rbuf = req->req.buf + req->req.actual;
- 			if (to_host)
- 				memcpy (ubuf, rbuf, len);
- 			else
- 				memcpy (rbuf, ubuf, len);
--			ep->last_io = jiffies;
- 
--			limit -= len;
-+			limit -= (iso ? ep->ep.maxpacket : len);
- 			urb->actual_length += len;
- 			req->req.actual += len;
- 		}
-@@ -1119,21 +1151,18 @@ top:
- 		 * need to emulate such data-in-flight.  so we only show part
- 		 * of the URB_SHORT_NOT_OK effect: completion status.
- 		 */
-+		ustatus = 0;
- 		if (is_short) {
- 			if (host_len == dev_len) {
- 				req->req.status = 0;
--				maybe_set_status (urb, 0);
- 			} else if (to_host) {
- 				req->req.status = 0;
- 				if (dev_len > host_len)
--					maybe_set_status (urb, -EOVERFLOW);
--				else
--					maybe_set_status (urb,
--						(urb->transfer_flags
--							& URB_SHORT_NOT_OK)
--						? -EREMOTEIO : 0);
--			} else if (!to_host) {
--				maybe_set_status (urb, 0);
-+					ustatus = -EOVERFLOW;
-+				else if (urb->transfer_flags &
-+						URB_SHORT_NOT_OK)
-+					ustatus = -EREMOTEIO;
-+			} else {
- 				if (host_len > dev_len)
- 					req->req.status = -EOVERFLOW;
- 				else
-@@ -1147,10 +1176,25 @@ top:
- 				req->req.status = 0;
- 			if (urb->transfer_buffer_length == urb->actual_length
- 					&& !(urb->transfer_flags
--						& URB_ZERO_PACKET)) {
--				maybe_set_status (urb, 0);
-+						& URB_ZERO_PACKET))
-+				;		/* URB is done */
-+			else if (!iso)
-+				ustatus = 1;	/* URB continues */
-+		}
-+
-+		if (iso) {
-+			iso->actual_length = len;
-+			iso->status = ustatus;
-+			if (ustatus) {
-+				ep->iso_status = ustatus;
-+				++urb->error_count;
- 			}
-+			++iso;
-+			if (++ep->iso_desc_num >= urb->number_of_packets)
-+				maybe_set_status (urb, ep->iso_status);
- 		}
-+		else if (ustatus <= 0)
-+			maybe_set_status (urb, ustatus);
- 
- 		/* device side completion --> continuable */
- 		if (req->req.status != -EINPROGRESS) {
-@@ -1309,10 +1353,6 @@ restart:
- 		if (ep->already_seen)
- 			continue;
- 		ep->already_seen = 1;
--		if (ep == &dum->ep [0] && urb->error_count) {
--			ep->setup_stage = 1;	/* a new urb */
--			urb->error_count = 0;
--		}
- 		if (ep->halted && !ep->setup_stage) {
- 			/* NOTE: must not be iso! */
- 			dev_dbg (dummy_dev(dum), "ep %s halted, urb %p\n",
-@@ -1323,7 +1363,7 @@ restart:
- 		/* FIXME make sure both ends agree on maxpacket */
- 
- 		/* handle control requests */
--		if (ep == &dum->ep [0] && ep->setup_stage) {
-+		if (ep->setup_stage) {
- 			struct usb_ctrlrequest		setup;
- 			int				value = 1;
- 			struct dummy_ep			*ep2;
-@@ -1483,7 +1523,7 @@ restart:
- 				if (value >= 0) {
- 					/* no delays (max 64KB data stage) */
- 					limit = 64*1024;
--					goto treat_control_like_bulk;
-+					goto treat_like_bulk;
- 				}
- 				/* error, see below */
- 			}
-@@ -1504,25 +1544,24 @@ restart:
- 		limit = total;
- 		switch (usb_pipetype (urb->pipe)) {
- 		case PIPE_ISOCHRONOUS:
--			/* FIXME is it urb->interval since the last xfer?
--			 * use urb->iso_frame_desc[i].
--			 * complete whether or not ep has requests queued.
--			 * report random errors, to debug drivers.
-+			/* FIXME: report random errors, to debug drivers.
- 			 */
-+			if (--ep->interval_left > 0)
-+				break;
-+			ep->interval_left = urb->interval;
- 			limit = max (limit, periodic_bytes (dum, ep));
--			maybe_set_status (urb, -ENOSYS);
--			break;
-+			goto treat_like_bulk;
- 
- 		case PIPE_INTERRUPT:
--			/* FIXME is it urb->interval since the last xfer?
--			 * this almost certainly polls too fast.
--			 */
-+			if (--ep->interval_left > 0)
-+				break;
-+			ep->interval_left = urb->interval;
- 			limit = max (limit, periodic_bytes (dum, ep));
- 			/* FALLTHROUGH */
- 
- 		// case PIPE_BULK:  case PIPE_CONTROL:
- 		default:
--		treat_control_like_bulk:
-+		treat_like_bulk:
- 			ep->last_io = jiffies;
- 			total = transfer (dum, urb, ep, limit);
- 			break;
-@@ -1536,8 +1575,13 @@ return_urb:
- 		urb->hcpriv = NULL;
- 		list_del (&urbp->urbp_list);
- 		kfree (urbp);
--		if (ep)
--			ep->already_seen = ep->setup_stage = 0;
-+		if (ep) {
-+			ep->already_seen = 0;
-+			ep->iso_desc_num = 0;
-+			ep->iso_status = 0;
-+			if (ep == &dum->ep [0])
-+				ep->setup_stage = 1;
-+		}
- 
- 		spin_unlock (&dum->lock);
- 		usb_hcd_giveback_urb (dummy_to_hcd(dum), urb, NULL);
-
+>>>> +Mixer Examples
+>>>> +--------------
+>>>> +
+>>>> +    ::
+>>>> +
+>>>> +      tinymix -D 0 set 'USB Offload Playback Route Card Select' 2
+>>>> +      tinymix -D 0 set 'USB Offload Playback Route PCM Select' 0
+>>>> +
+>>>> +
+>>>> +    ::
+>>>> +
+>>>> +      tinymix -D 0 get 'USB Offload Playback Route Card Select'
+>>>> +      --> 2 (range -1->32)
+>>>> +      tinymix -D 0 get 'USB Offload Playback Route PCM Select'
+>>>> +      --> 0 (range -1->255)
+>>>> +
+>>>> +    ::
+>>>> +
+>>>> +      tinymix -D 0 get 'USB Offload Playback Route Card Status'
+>>>> +      --> 2 (range -1->32)   [OFFLD active]
+>>>> +      --> -1 (range -1->32) [OFFLD idle]
+>>>> +      tinymix -D 0 get 'USB Offload Playback Route PCM Status'
+>>>> +      --> 0 (range -1->255)   [OFFLD active]
+>>>> +      --> -1 (range -1->255) [OFFLD idle]
+>>>> +
+>>>> +    ::
+>>>> +
+>>>> +      tinymix -D 1 get 'USB Offload Playback Capable Card'
+>>>> +      --> 0 (range -1->32)
+>>>>
+>>>
+>>> Yes, looking at examples again, I'm still not sure I understand. 
+>>> There are two cards and you do linking between them, this feels 
+>>> broken by design. From my point of view USB Offload should be 
+>>> property of USB card and not involve any other card in a system.
+>>>
+>>
+>> Main benefit to having two cards (keeping one for USB SND and another 
+>> for the ASoC platform sound card) is that current applications won't 
+>> break.  The behavior is the same, in that if something opens the USB 
+>> sound card, it will go through the same non-offloaded path.  During 
+>> initial reviews, I think this was a big point where folks wanted the 
+>> USB PCM path to still be an option.
+>>
+> 
+> I'm not against having two cards, in fact I hope that USB card looks and 
+> behaves the same as before this patch set, with only difference being 
+> controls for enabling offload.
+> 
+>> If applications want to add the offload capabilities to its 
+>> environment, they can enable it as an additional feature.
+> 
+> That sounds fine to me.
+> 
 
