@@ -1,217 +1,169 @@
-Return-Path: <linux-usb+bounces-11379-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11380-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E54890C2C9
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Jun 2024 06:25:10 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45DCC90C6EB
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Jun 2024 12:29:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1AAF51F22082
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Jun 2024 04:25:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C830AB2286B
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Jun 2024 10:29:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDEDB481A3;
-	Tue, 18 Jun 2024 04:25:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81AB91A0B0F;
+	Tue, 18 Jun 2024 08:15:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="MQync8Ka"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="M1A+hic4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C7CF17740
-	for <linux-usb@vger.kernel.org>; Tue, 18 Jun 2024 04:25:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.24
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 655421A0AE0
+	for <linux-usb@vger.kernel.org>; Tue, 18 Jun 2024 08:15:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718684703; cv=none; b=KhU1s5j2prUIBWmi1fXVGpYIkPEhoH/zyUQcITMharauPHszDcTt8LURsTSJoYJ8z/ttC1dgw7vcZ365M3SRFmg4XDozsFwY9b5UPz0XfnKITRBpZsr5RuSo+7d7ZUM6zg7E1ZlTuMwDf9xrypMPkvhWeRjcZ3wTgbzt1Pjc3lg=
+	t=1718698523; cv=none; b=P4064nqwkZVHVhcfGMfWUSJi+FINGH+6PpXkP2by73kEMWezxfUtIrYEjfpql3Mp/Z7OTmy0nt7SUmQT2A/QdLtVd9i3x9/UVAeosoMUh/PLXDa3h7HV1Yn8B6S4X8J7SIfIxMogOWrcNfaZa7cOncXq7QZvQ+kAeM7XakOU5Hk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718684703; c=relaxed/simple;
-	bh=+b2kXCUfsf2g4619ygnTCbnlP7qe0wWywZPtttOQKzM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:In-Reply-To:
-	 Content-Type:References; b=TmKmr5nesFXJjRxLNrEQTho0t+dX9ziOikw4qdlW8sImnRE+FWB8u6E+taZHYzNGYZSCUJS9G6DXMcWY1W70IJuxAqauG2+uhIJT3wlitlfD9F/Ftg2KTZ97dEZzO8Algrvl2WZBB4oBCpeKaitQ8h8GUkNGXvwY4lPSIuBDxmA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=MQync8Ka; arc=none smtp.client-ip=203.254.224.24
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
-	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20240618042458epoutp018b5cb8153ec015fe01d62c016868ec9c~Z-qCOX6ic1309813098epoutp01h
-	for <linux-usb@vger.kernel.org>; Tue, 18 Jun 2024 04:24:58 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20240618042458epoutp018b5cb8153ec015fe01d62c016868ec9c~Z-qCOX6ic1309813098epoutp01h
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1718684698;
-	bh=vB1bAHIdtk0etp7sNOGy2K2uwCH5ZON2u2W/CFR2QJ0=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=MQync8Ka0m6i6NdXu2PI0NaoeNBdF/D8rsKeHWZrECvTL8Zj2+/EDPtZohFhCyCwN
-	 xHD9+GP4h/FNAktDQtGnl75/V6gywpzO2MvVA/arQ+FvWOEet7TAxUoPoazhE2zpRF
-	 Nhnb+aaw7yNfHq93DNITYqUb+WhhLM6Qj50l1oh0=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-	epcas2p2.samsung.com (KnoxPortal) with ESMTP id
-	20240618042457epcas2p230ba70ac20df5f694d86ca97f5792bad~Z-qByvx1f2866928669epcas2p2I;
-	Tue, 18 Jun 2024 04:24:57 +0000 (GMT)
-Received: from epsmges2p4.samsung.com (unknown [182.195.36.100]) by
-	epsnrtp1.localdomain (Postfix) with ESMTP id 4W3DDn2XPqz4x9Py; Tue, 18 Jun
-	2024 04:24:57 +0000 (GMT)
-Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
-	epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-	C8.8C.09479.91C01766; Tue, 18 Jun 2024 13:24:57 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-	epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
-	20240618042456epcas2p45678af844d2c1140e5fe9a2383e200f9~Z-qA5vJl52983429834epcas2p4p;
-	Tue, 18 Jun 2024 04:24:56 +0000 (GMT)
-Received: from epsmgmc1p1new.samsung.com (unknown [182.195.42.40]) by
-	epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-	20240618042456epsmtrp16d99dcbf0cacbc71d4bc7381a807f5b9~Z-qA2DI_I1892318923epsmtrp1i;
-	Tue, 18 Jun 2024 04:24:56 +0000 (GMT)
-X-AuditID: b6c32a48-105fa70000002507-53-66710c191b3f
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-	epsmgmc1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	6D.D8.07412.81C01766; Tue, 18 Jun 2024 13:24:56 +0900 (KST)
-Received: from ubuntu (unknown [10.229.95.128]) by epsmtip1.samsung.com
-	(KnoxPortal) with ESMTPA id
-	20240618042456epsmtip143cc251a975a0e53c164ee2969700109~Z-qAp8L1a0337703377epsmtip1L;
-	Tue, 18 Jun 2024 04:24:56 +0000 (GMT)
-Date: Tue, 18 Jun 2024 13:24:29 +0900
-From: Jung Daehwan <dh10.jung@samsung.com>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: joswang <joswang1221@gmail.com>, Greg KH <gregkh@linuxfoundation.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"stable@vger.kernel.org" <stable@vger.kernel.org>, Jos Wang
-	<joswang@lenovo.com>
-Subject: Re: [PATCH v4, 3/3] usb: dwc3: core: Workaround for CSR read
- timeout
-Message-ID: <20240618042429.GA190639@ubuntu>
+	s=arc-20240116; t=1718698523; c=relaxed/simple;
+	bh=mCyLmK6T6XtEU4IjrmpNRuUhvm44x3Q2JDG2A7DtnCs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JON38eX4TRZdE1wRHOfCbM+J/Qth3dB9lAZMJhbv7uMMJpdl6l0d7w5fiYMEBZG158DuTB3STbv6OEPEfWiLGa0gq/vvYptQ2jrS2lrlII94cTDmz5ToWgWkzulUV0Xrjc6NwyXlN7Pl0+F/XA20W+A5zjQ8k2Xb7b9fBBy5egU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=M1A+hic4; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1718698521; x=1750234521;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=mCyLmK6T6XtEU4IjrmpNRuUhvm44x3Q2JDG2A7DtnCs=;
+  b=M1A+hic4d5tb/nzHPytYlWoxPlL2AV3yNbU07GggILzEtvOWNVSX8yea
+   KBxZQOb+QdgxFizYIGJ+TQgu/1oRcJLe9SrJWYG3ft4qlUtxj51ap4xok
+   lBqKccabm3GAsW7pss4AOblxQN54JV+YEnUZ8lU8Vih4rXMYm+1WtY3jG
+   fouenow/9fX6pbQE0VR0kfdozpYvgwvnRqWfjZDiaAnMZxSmcD9hjEQKJ
+   NQwMm2YzBG5bWLmBM3QP7CjTp0K4MbVEhe5kzOxuBKG3hxyTRH78nW9es
+   4viav2zPO4NSO8ernsVcpFrpk6sTZjxm+ia6tceB5jQfandsoNy7Oub0x
+   Q==;
+X-CSE-ConnectionGUID: j8JLalpgRm6vp9KxSlWKOg==
+X-CSE-MsgGUID: EyqCBvO2T9uCeaeHdGnL/g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11106"; a="26959364"
+X-IronPort-AV: E=Sophos;i="6.08,247,1712646000"; 
+   d="scan'208";a="26959364"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2024 01:15:12 -0700
+X-CSE-ConnectionGUID: Gl35EoRERB2MrUmXiYg33w==
+X-CSE-MsgGUID: MJy+RgeFRRGij9RDJlM0hA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,247,1712646000"; 
+   d="scan'208";a="41334071"
+Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
+  by fmviesa007.fm.intel.com with ESMTP; 18 Jun 2024 01:15:11 -0700
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Mario Limonciello <mario.limonciello@amd.com>,
+	Sebastian Reichel <sebastian.reichel@collabora.com>,
+	linux-usb@vger.kernel.org
+Subject: [PATCH v2] usb: typec: ucsi: psy: Add support for the charge type property
+Date: Tue, 18 Jun 2024 11:15:10 +0300
+Message-ID: <20240618081510.2764297-1-heikki.krogerus@linux.intel.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20240618000502.n3elxua2is3u7bq2@synopsys.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrIJsWRmVeSWpSXmKPExsWy7bCmha4kT2GawZJnAhbNi9ezWdx/y27R
-	fW0Pk8XlXXPYLBYta2W2WLDxEaPFqgUH2B3YPXbOusvucfbXS2aP/XPXsHts2f+Z0ePzJrkA
-	1qhsm4zUxJTUIoXUvOT8lMy8dFsl7+B453hTMwNDXUNLC3MlhbzE3FRbJRefAF23zBygK5QU
-	yhJzSoFCAYnFxUr6djZF+aUlqQoZ+cUltkqpBSk5BeYFesWJucWleel6eaklVoYGBkamQIUJ
-	2Rnb9t9jKeiVqDj+qYmpgXGCcBcjJ4eEgInEjVsPmboYuTiEBHYwSmxo7GaDcD4xSpzaOIUd
-	wvnGKNGzqoUZpuX+1m1QVXsZJTr+LYNynjBKTNx3HqyKRUBV4sexfjYQm01AS+LejxNgcREB
-	HYkDJ86DLWQWmM0kMff3Q8YuRg4OYQF/iSUbJEBqeIFq5p3axw5hC0qcnPmEBcTmFLCWOL56
-	CxNIuaiAisSrg/UQB/VySMy6Fwdhu0hcubOdDcIWlnh1fAs7hC0l8bK/Dcoulrj1/BkzyAkS
-	Ai2MEitewXxmLDHrWTsjiM0skCHxe/0nsNMkBJQljtxigQjzSXQc/ssOEeaV6GgTguhUlph+
-	eQIrhC0pcfD1OaiJHhJXZ0yFBuJdJonGtnmsExjlZyH5bBaSbbOAxjILaEqs36UPEZaXaN46
-	mxkiLC2x/B8HkooFjGyrGMVSC4pz01OLjQpM4PGenJ+7iRGcVrU8djDOfvtB7xAjEwfjIUYJ
-	DmYlEV6naXlpQrwpiZVVqUX58UWlOanFhxhNgTE2kVlKNDkfmNjzSuINTSwNTMzMDM2NTA3M
-	lcR577XOTRESSE8sSc1OTS1ILYLpY+LglGpg0rmZujmCQ1FHYu8sfZV3J/icG+UdJxwx8SmO
-	FjN3y1Q87N85Y4fchnff3/6Y/CDzvlD6rEDuFMG306Yrdm9d332qa27yJEWBwM0aJ/aUdS5x
-	iogOySnW6yj54safzro8/05BeoFFpxLX4tPdVa++1K59tjj5VtYc6fj9DYfDQzbM+OB16P7k
-	3SuvT+FN3Gw3Jcxb/1RUgPpbT3vmPhG+tdqfKrgEOOcrqabHnNOI959Wlu82+X7h+j/5nzeJ
-	nrzadqgsLY3hq9685QemGOskzeTTCol0ffxrSu3qFkFJjrmMXtKvH+1USVvbx3slZCoHMMvG
-	XXh3XupkOwP/3z3qmtXbwmf7zvn8emrMRWYlluKMREMt5qLiRACrWFcQNAQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrCLMWRmVeSWpSXmKPExsWy7bCSnK4ET2Gawc9+fYvmxevZLO6/Zbfo
-	vraHyeLyrjlsFouWtTJbLNj4iNFi1YID7A7sHjtn3WX3OPvrJbPH/rlr2D227P/M6PF5k1wA
-	axSXTUpqTmZZapG+XQJXxva2j4wF60Urzj3ax9bAeE6gi5GTQ0LAROL+1m1sILaQwG5GiXvT
-	aiDikhJL595gh7CFJe63HGHtYuQCqnnEKPHk1SIWkASLgKrEj2P9YM1sAloS936cYAaxRQR0
-	JA6cOM8E0sAsMJtJ4ty9FYwgCWEBX4nz+3rAbF6gonmn9rFDTL3LJPF5wVM2iISgxMmZT8A2
-	MAuoS/yZdwloKgeQLS2x/B8HRFheonnrbLBlnALWEsdXb2ECKREVUJF4dbB+AqPQLCSDZiEZ
-	NAth0CwkgxYwsqxilEwtKM5Nz002LDDMSy3XK07MLS7NS9dLzs/dxAiOGC2NHYz35v/TO8TI
-	xMF4iFGCg1lJhNdpWl6aEG9KYmVValF+fFFpTmrxIUZpDhYlcV7DGbNThATSE0tSs1NTC1KL
-	YLJMHJxSDUxGvhvnsq3ekvpV/lvYcx133trpFm3CDyJaFtqx6hSmnvzyaluM6MZ93L9mKnJJ
-	HDXZobB5md5s25KFfkExWYJz/7D/io7WNvItFj54ILLx3onFy26YHMl8FxXOuEl7e84iLv00
-	hwNbNlS6739tq5T/QsJpi2doEvd76Qsi/5lzjKbc51n5mlOChaXE2XDCynvblf9dsM2Z9jlM
-	5svejolHTA6bqfz0v71t7oIXNucdwieWhB1YcuNvdZ/b8e/SDMkvMwvfHnZY7nR4svjqQNut
-	OVOFz7gl7PaYf/PXywdJiz9+Wn1Hpj83v9+5OT3ispby33sLb4tuEY0XzdiyUlPjd4uhqbyO
-	0uIKkWWrCncosRRnJBpqMRcVJwIANhcXkQcDAAA=
-X-CMS-MailID: 20240618042456epcas2p45678af844d2c1140e5fe9a2383e200f9
-X-Msg-Generator: CA
-Content-Type: multipart/mixed;
-	boundary="----NM.SL-8AX4fCWwUaz12YupYcgI_4q5PcTQ1CNbbJhqicWcnv=_d358d_"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20240618000530epcas2p15ee3deff0d07c8b8710bf909bdc82a50
-References: <20240601092646.52139-1-joswang1221@gmail.com>
-	<20240612153922.2531-1-joswang1221@gmail.com>
-	<2024061203-good-sneeze-f118@gregkh>
-	<CAMtoTm0NWV_1sGNzpULAEH6qAzQgKT_xWz7oPaLrKeu49r2RzA@mail.gmail.com>
-	<CGME20240618000530epcas2p15ee3deff0d07c8b8710bf909bdc82a50@epcas2p1.samsung.com>
-	<20240618000502.n3elxua2is3u7bq2@synopsys.com>
-
-------NM.SL-8AX4fCWwUaz12YupYcgI_4q5PcTQ1CNbbJhqicWcnv=_d358d_
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Content-Disposition: inline
 
-On Tue, Jun 18, 2024 at 12:05:05AM +0000, Thinh Nguyen wrote:
-> On Thu, Jun 13, 2024, joswang wrote:
-> > On Thu, Jun 13, 2024 at 1:04 AM Greg KH <gregkh@linuxfoundation.org> wrote:
-> > >
-> > > On Wed, Jun 12, 2024 at 11:39:22PM +0800, joswang wrote:
-> > > > From: Jos Wang <joswang@lenovo.com>
-> > > >
-> > > > This is a workaround for STAR 4846132, which only affects
-> > > > DWC_usb31 version2.00a operating in host mode.
-> > > >
-> > > > There is a problem in DWC_usb31 version 2.00a operating
-> > > > in host mode that would cause a CSR read timeout When CSR
-> > > > read coincides with RAM Clock Gating Entry. By disable
-> > > > Clock Gating, sacrificing power consumption for normal
-> > > > operation.
-> > > >
-> > > > Cc: stable@vger.kernel.org
-> > > > Signed-off-by: Jos Wang <joswang@lenovo.com>
-> > > > ---
-> > > > v1 -> v2:
-> > > > - add "dt-bindings: usb: dwc3: Add snps,p2p3tranok quirk" patch,
-> > > >   this patch does not make any changes
-> > > > v2 -> v3:
-> > > > - code refactor
-> > > > - modify comment, add STAR number, workaround applied in host mode
-> > > > - modify commit message, add STAR number, workaround applied in host mode
-> > > > - modify Author Jos Wang
-> > > > v3 -> v4:
-> > > > - modify commit message, add Cc: stable@vger.kernel.org
-> > >
-> > > This thread is crazy, look at:
-> > >         https://urldefense.com/v3/__https://lore.kernel.org/all/20240612153922.2531-1-joswang1221@gmail.com/__;!!A4F2R9G_pg!a29V9NsG_rMKPnub-JtIe5I_lAoJmzK8dgo3UK-qD_xpT_TOgyPb6LkEMkIsijsDKIgdxB_QVLW_MwtdQLnyvOujOA$ 
-> > > for how it looks.  How do I pick out the proper patches to review/apply
-> > > there at all?  What would you do if you were in my position except just
-> > > delete the whole thing?
-> > >
-> > > Just properly submit new versions of patches (hint, without the ','), as
-> > > the documentation file says to, as new threads each time, with all
-> > > commits, and all should be fine.
-> > >
-> > > We even have tools that can do this for you semi-automatically, why not
-> > > use them?
-> > >
-> > > thanks,
-> > >
-> > > greg k-h
-> > 
-> > We apologize for any inconvenience this may cause.
-> > The following incorrect operation caused the problem you mentioned:
-> > git send-email --in-reply-to command sends the new version patch
-> > git format-patch --subject-prefix='PATCH v3
-> > 
-> > Should I resend the v5 patch now?
-> 
-> Please send this as a stand-alone patch outside of the series as v5. (ie.
-> remove the "3/3"). I still need to review the other issue of the series.
-> 
-> Thanks,
-> Thinh
+Adding support for the charge type Linux power supply class
+property (POWER_SUPPLY_PROP_CHARGE_TYPE) to the UCSI driver.
+That will make the charge type visible in the charge_type
+power supply class sysfs attribute file.
 
-Hi Thinh,
+UCSI has the charge type specified in the Battery Charging
+Status field of the response to the GET_CONNECTOR_STATUS
+command.
 
-We faced similar issue on DRD mode operating as device.
-Could you check it internally?
-Case: 01635304
+Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+---
+Changed since the last version:
+The commit message is completely rewritten. The subject line was also changed.
 
-Best Regards,
-Jung Daehwan
+The original patch:
+https://lore.kernel.org/linux-usb/20240617105554.1677285-1-heikki.krogerus@linux.intel.com/
 
-------NM.SL-8AX4fCWwUaz12YupYcgI_4q5PcTQ1CNbbJhqicWcnv=_d358d_
-Content-Type: text/plain; charset="utf-8"
+---
+ drivers/usb/typec/ucsi/psy.c  | 27 +++++++++++++++++++++++++++
+ drivers/usb/typec/ucsi/ucsi.c |  3 +++
+ 2 files changed, 30 insertions(+)
 
+diff --git a/drivers/usb/typec/ucsi/psy.c b/drivers/usb/typec/ucsi/psy.c
+index b35c6e07911e..b3910f37e171 100644
+--- a/drivers/usb/typec/ucsi/psy.c
++++ b/drivers/usb/typec/ucsi/psy.c
+@@ -20,6 +20,7 @@ enum ucsi_psy_online_states {
+ };
+ 
+ static enum power_supply_property ucsi_psy_props[] = {
++	POWER_SUPPLY_PROP_CHARGE_TYPE,
+ 	POWER_SUPPLY_PROP_USB_TYPE,
+ 	POWER_SUPPLY_PROP_ONLINE,
+ 	POWER_SUPPLY_PROP_VOLTAGE_MIN,
+@@ -194,6 +195,30 @@ static int ucsi_psy_get_usb_type(struct ucsi_connector *con,
+ 	return 0;
+ }
+ 
++static int ucsi_psy_get_charge_type(struct ucsi_connector *con, union power_supply_propval *val)
++{
++	if (!(con->status.flags & UCSI_CONSTAT_CONNECTED) ||
++	    (con->status.flags & UCSI_CONSTAT_PWR_DIR) != TYPEC_SINK) {
++		val->intval = POWER_SUPPLY_CHARGE_TYPE_NONE;
++		return 0;
++	}
++
++	switch (UCSI_CONSTAT_BC_STATUS(con->status.pwr_status)) {
++	case UCSI_CONSTAT_BC_NOMINAL_CHARGING:
++		val->intval = POWER_SUPPLY_CHARGE_TYPE_STANDARD;
++		break;
++	case UCSI_CONSTAT_BC_SLOW_CHARGING:
++	case UCSI_CONSTAT_BC_TRICKLE_CHARGING:
++		val->intval = POWER_SUPPLY_CHARGE_TYPE_TRICKLE;
++		break;
++	default:
++		val->intval = POWER_SUPPLY_CHARGE_TYPE_NONE;
++		break;
++	}
++
++	return 0;
++}
++
+ static int ucsi_psy_get_prop(struct power_supply *psy,
+ 			     enum power_supply_property psp,
+ 			     union power_supply_propval *val)
+@@ -201,6 +226,8 @@ static int ucsi_psy_get_prop(struct power_supply *psy,
+ 	struct ucsi_connector *con = power_supply_get_drvdata(psy);
+ 
+ 	switch (psp) {
++	case POWER_SUPPLY_PROP_CHARGE_TYPE:
++		return ucsi_psy_get_charge_type(con, val);
+ 	case POWER_SUPPLY_PROP_USB_TYPE:
+ 		return ucsi_psy_get_usb_type(con, val);
+ 	case POWER_SUPPLY_PROP_ONLINE:
+diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+index 6bbaad4b89a5..51135e3502cf 100644
+--- a/drivers/usb/typec/ucsi/ucsi.c
++++ b/drivers/usb/typec/ucsi/ucsi.c
+@@ -1257,6 +1257,9 @@ static void ucsi_handle_connector_change(struct work_struct *work)
+ 	if (con->status.change & UCSI_CONSTAT_CAM_CHANGE)
+ 		ucsi_partner_task(con, ucsi_check_altmodes, 1, HZ);
+ 
++	if (con->status.change & UCSI_CONSTAT_BC_CHANGE)
++		ucsi_port_psy_changed(con);
++
+ out_unlock:
+ 	mutex_unlock(&con->lock);
+ }
+-- 
+2.43.0
 
-------NM.SL-8AX4fCWwUaz12YupYcgI_4q5PcTQ1CNbbJhqicWcnv=_d358d_--
 
