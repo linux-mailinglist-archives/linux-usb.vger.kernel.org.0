@@ -1,47 +1,47 @@
-Return-Path: <linux-usb+bounces-11383-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11384-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22C4990C9FE
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Jun 2024 13:43:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA38990CA2C
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Jun 2024 13:47:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A49B228ACAD
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Jun 2024 11:43:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E9F1E1C22DAB
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Jun 2024 11:47:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D61DC158A04;
-	Tue, 18 Jun 2024 11:08:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D5441A00D2;
+	Tue, 18 Jun 2024 11:15:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TJ6ArSLP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h4bIjzSV"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CAF41581F4;
-	Tue, 18 Jun 2024 11:08:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD3E615A844;
+	Tue, 18 Jun 2024 11:15:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718708886; cv=none; b=V9hkpLoocLepvyeN8TGK4gT+SR3M0sBnCLv8rqSZEKJDN7sZ9HWqfR4A+UDPDliYPlsfgIiqY7yNLXoUzGYUbXXSa7czY3pqhzEEhjpuYEWGLj5y70LKdWrLLk3RUublqQdNNE60u/0vh/SdtS7jrTVBnoKY0qNGb6X0J7oWHd8=
+	t=1718709310; cv=none; b=P9fhfvjMlUadZmAt8Z/ZuAqTB2NOxm1hcFB5v/ICXQWl6wIajvxnGGU09+ewSg5mQYDpZV/CLloaL4jhchUDlMBwwtBK36t5fKwY3asvpIcsYmMCMHzJ81Zsth/qLiUL9FhhPrLDQUnZMIVa6XHTj6M4mUDdj6Ajrq/wo+Fwnfg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718708886; c=relaxed/simple;
-	bh=iuju15LgOX/mkNKHdPi9+klPChsI8/gq/J6t0HcI0TU=;
+	s=arc-20240116; t=1718709310; c=relaxed/simple;
+	bh=FhuwRLQO68CQIh1e4REGDMaFZVAy4zws0a+cKVmWB6E=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Zht4uWhR8ZGJ0gI2UgaNoDVGLsdnSUFuvEMGk5NOIvcjD9E2ejqk5k7Dveo6j9Whh7Yq7piHm0DvOz/jNaaf9y7AanaDlb6qDpzxRc2FQsvlw67WodX8AjvjQYiSqTZiVrKcj7t5Lmr7taQuQE5IJeZxdljc87/X2ZX4fI2hTyU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TJ6ArSLP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F8F4C3277B;
-	Tue, 18 Jun 2024 11:08:03 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=uLJ+MLUHQYx//sX7rIyeOVhU0qgwAjmwAUu+5/GJxrrhTiHAGvKvB2JOni1DYk9F3UlZDRPMB5c9M/On3wrdA9xZv6Je+H81P2pDNHGE3+9WDkVlmkmSdDXbEyHQ3swbnk09eaDwQ5Z8L9zGgC2NyVPhMTksgdPD6A5wnzSL3CU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h4bIjzSV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27420C32786;
+	Tue, 18 Jun 2024 11:15:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718708885;
-	bh=iuju15LgOX/mkNKHdPi9+klPChsI8/gq/J6t0HcI0TU=;
+	s=k20201202; t=1718709310;
+	bh=FhuwRLQO68CQIh1e4REGDMaFZVAy4zws0a+cKVmWB6E=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=TJ6ArSLPlxEufwERlt1gruw+Lg/DVgnUGMgQZFd0A9uDSBhsqTkPXb7t0v5HKFYw3
-	 aZ3SHG9unx+P3A/T++X9Y600nLMUNS59/Gpcvn6TpljJtUn8F7OQzUP0pnbRAoNanN
-	 8IjkiYYDX8LItSR9CtbL1i3gFMhUWac23HTSm3/gfZe3rGrrQPVlE6S0El/+RlR6i6
-	 MhU+XTLOKCyhe80eXqS1530danoakPtPdNwY636evgiB3lRQiZlkOQ5kief7Qn4l/R
-	 Fiu332zT+N/tQMGeC/dlI7MUQ/vcRMV+sdCfEBfsJCc25BdWGb1fe84dB82WTeifS3
-	 oJ1Mt5b8GyCSg==
-Date: Tue, 18 Jun 2024 12:08:00 +0100
+	b=h4bIjzSVPAu4fkvyJyB7moPqIUratKHa2oT88TgrlOFzik2cza/FWitwjT4vRm0kB
+	 CPUUKIDPQtGeT3fKthaJpQJAjPxRIC3qKjXUYAOm+vtUfYRQhXP1ya+N4mJh2cdcux
+	 o9ABxKD7i7hGruhZRyP2HFaQRn3EyPfn0Mog5Gm5XSX1HpSbmf1BuWqNnMnOsZ8tbG
+	 Vrf4oTcy1fbLlCfpTDl0uKeHjkePbLtIgRtjY6iFJzdTMIa5enrbAlZeVHshc8YQqb
+	 tvrClkZdjbX6k3bhnULszCBliCxN00ni5+Xzxngnb2oql6zxKgX6OkKmYs9VP6M3by
+	 xUZlSn8n2eupQ==
+Date: Tue, 18 Jun 2024 12:15:05 +0100
 From: Simon Horman <horms@kernel.org>
 To: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
 Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
@@ -49,7 +49,7 @@ Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
 	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
 Subject: Re: [PATCH] net: usb: ax88179_178a: improve link status logs
-Message-ID: <20240618110800.GM8447@kernel.org>
+Message-ID: <20240618111505.GA650324@kernel.org>
 References: <20240617103405.654567-1-jtornosm@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -65,27 +65,43 @@ On Mon, Jun 17, 2024 at 12:33:59PM +0200, Jose Ignacio Tornos Martinez wrote:
 > Avoid spurious link status logs that may ultimately be wrong; for example,
 > if the link is set to down with the cable plugged, then the cable is
 > unplugged and afer this the link is set to up, the last new log that is
-
-nit: after
-
 > appearing is incorrectly telling that the link is up.
 > 
 > In order to aovid errors, show link status logs after link_reset
-
-nit: avoid
-
-Nits Flagged by checkpatch.pl --codespell
-
 > processing, and in order to avoid spurious as much as possible, only show
 > the link loss when some link status change is detected.
 > 
 > cc: stable@vger.kernel.org
 > Fixes: e2ca90c276e1 ("ax88179_178a: ASIX AX88179_178A USB 3.0/2.0 to gigabit ethernet adapter driver")
 > Signed-off-by: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+> ---
+>  drivers/net/usb/ax88179_178a.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
+> index c2fb736f78b2..60357796be99 100644
+> --- a/drivers/net/usb/ax88179_178a.c
+> +++ b/drivers/net/usb/ax88179_178a.c
+> @@ -326,7 +326,8 @@ static void ax88179_status(struct usbnet *dev, struct urb *urb)
+>  
+>  	if (netif_carrier_ok(dev->net) != link) {
+>  		usbnet_link_change(dev, link, 1);
+> -		netdev_info(dev->net, "ax88179 - Link status is: %d\n", link);
+> +		if (!link)
+> +			netdev_info(dev->net, "ax88179 - Link status is: %d\n", link);
 
-The nits above notwithstanding, this looks good to me.
+Sorry Jose,
 
-Reviewed-by: Simon Horman <horms@kernel.org>
+one more nit I noticed after sending my previous email.
+
+The line above looks like it could be wrapped to <= 80 columns wide,
+which is still preferred for Networking code.
+
+Flagged by checkpatch.pl --max-line-length=80
+
+>  	}
+>  }
+>  
 
 ...
 
