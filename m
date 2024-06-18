@@ -1,237 +1,217 @@
-Return-Path: <linux-usb+bounces-11378-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11379-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB02490C267
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Jun 2024 05:21:39 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E54890C2C9
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Jun 2024 06:25:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AE2171C21BD3
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Jun 2024 03:21:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1AAF51F22082
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Jun 2024 04:25:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9164419CD02;
-	Tue, 18 Jun 2024 03:19:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDEDB481A3;
+	Tue, 18 Jun 2024 04:25:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="MQync8Ka"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0064b401.pphosted.com (mx0a-0064b401.pphosted.com [205.220.166.238])
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A779D19B5BC;
-	Tue, 18 Jun 2024 03:19:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.166.238
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718680799; cv=fail; b=YfAIFaYWHrGHw3amABw8CFUeTPMeu1f05E9BxROnW4a6pbbpJUJG7PpxtCQG+M6Y16pirCzTTRxaida01LGpn5qJFV5SFAgQKQLwhJzCSjpA8VJq6xT20DHCgyUvXE89pP5k8Kj+sMTZ+6trd3fF8SnfeE8DTwlVbWpBJ3vljcw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718680799; c=relaxed/simple;
-	bh=ChNAqyUZIIS8muMlAqDCh/ZwWnZmM5XLnzXpP6cip30=;
-	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=Sr3qNuk2yIrTJsOPtxhZWeX0hOC01SrPBoPEL70bGVT48N5mQTKsuaGyc1AslYAYAJekz2yvPJhM2RytrtFHdgnaM4yzHbZ4ypH1R1/QVKol/VfslnvRSrFkTBLbwKw1Kjotb4pQrdaeGnKZkD6rK1kq5J+dHDTbv5J2Uo8pcZw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=windriver.com; spf=pass smtp.mailfrom=windriver.com; arc=fail smtp.client-ip=205.220.166.238
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=windriver.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=windriver.com
-Received: from pps.filterd (m0250810.ppops.net [127.0.0.1])
-	by mx0a-0064b401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45I3C9HR001607;
-	Mon, 17 Jun 2024 20:19:44 -0700
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2168.outbound.protection.outlook.com [104.47.59.168])
-	by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 3ys682jagq-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 17 Jun 2024 20:19:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=l04YyKAh9gCXNYkSZ+67ech9bkSwH5m8r5f1cPZnWvSLYwxQBv0Ci8LP3VNhqPAKtNp+fWNjFoOCZ+uI6AYipl25lbxtUoDFe/t9faBVgTMv+FqCXTVUOlTxeU4wDH5ZXbh9KD6nwzJI60NpE5MpSRE8ISoCzfbuIm4SfqIrEzi6+P26Wbes6JjLPqiJiVni6UHaogDXFP4/TMFIXr/+UgKUqwpSt07UjD6NDJyvzbbYD9i5GTYbNR4lkL3ZyaCRpNhxPr1nq0q9kIVN3VxdV8UBQX7bQNqjPz9/ARIfRREcdfFN/yoBJUvF7C/HtF6ZI81TNUuwtcCbjopZ1hOgsg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=o396iQvrfI9LVpA5w8y8NEQesZx9/7oXOBPrevSPO7U=;
- b=iHgUUkE3RgeqR5hatHqXOSoyv5t4V5mjUoyDJt5x41MO7eYOCUV6zC+WEBM3Eyh79TE82Kkc/mcI3tUUTYYcdlO0DXGqzKS5gSUvqR+rmjuhfLVr/tOfCO69zYtXSsI+BheUVNy2M8/vuMA9SY/tMP25Nx7PCBnPGbxynqQGK4tkUhZ3AicQqOJETXOLpYAuPN5HiXXx/U/j+8oBSNvRc3/V+oDHvF9nIDmIlMXqJtbvQ26jZ9zNHt9gk8qvA6dUPMszi+D/GUxT2xS3KYpW4ZU8UpctPRcGKYgC3Lt7sJCCVjdPFoc4+WQMVnAbjpBR+IPXNoA/w9budRlgCenEag==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=windriver.com; dmarc=pass action=none
- header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
-Received: from PH0PR11MB5191.namprd11.prod.outlook.com (2603:10b6:510:3e::24)
- by BL1PR11MB6025.namprd11.prod.outlook.com (2603:10b6:208:390::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7677.31; Tue, 18 Jun
- 2024 03:19:39 +0000
-Received: from PH0PR11MB5191.namprd11.prod.outlook.com
- ([fe80::e9d7:7193:8b2b:f0b9]) by PH0PR11MB5191.namprd11.prod.outlook.com
- ([fe80::e9d7:7193:8b2b:f0b9%3]) with mapi id 15.20.7677.030; Tue, 18 Jun 2024
- 03:19:39 +0000
-From: Meng Li <Meng.Li@windriver.com>
-To: Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org,
-        quic_uaggarwa@quicinc.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc: xu.yang_2@nxp.com, meng.li@windriver.com
-Subject: [v2 PATCH] usb: dwc3: core: remove lock of otg mode during gadget suspend/resume to avoid deadlock
-Date: Tue, 18 Jun 2024 11:19:18 +0800
-Message-Id: <20240618031918.2585799-1-Meng.Li@windriver.com>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR02CA0131.apcprd02.prod.outlook.com
- (2603:1096:4:188::6) To PH0PR11MB5191.namprd11.prod.outlook.com
- (2603:10b6:510:3e::24)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C7CF17740
+	for <linux-usb@vger.kernel.org>; Tue, 18 Jun 2024 04:25:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.24
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1718684703; cv=none; b=KhU1s5j2prUIBWmi1fXVGpYIkPEhoH/zyUQcITMharauPHszDcTt8LURsTSJoYJ8z/ttC1dgw7vcZ365M3SRFmg4XDozsFwY9b5UPz0XfnKITRBpZsr5RuSo+7d7ZUM6zg7E1ZlTuMwDf9xrypMPkvhWeRjcZ3wTgbzt1Pjc3lg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1718684703; c=relaxed/simple;
+	bh=+b2kXCUfsf2g4619ygnTCbnlP7qe0wWywZPtttOQKzM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:In-Reply-To:
+	 Content-Type:References; b=TmKmr5nesFXJjRxLNrEQTho0t+dX9ziOikw4qdlW8sImnRE+FWB8u6E+taZHYzNGYZSCUJS9G6DXMcWY1W70IJuxAqauG2+uhIJT3wlitlfD9F/Ftg2KTZ97dEZzO8Algrvl2WZBB4oBCpeKaitQ8h8GUkNGXvwY4lPSIuBDxmA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=MQync8Ka; arc=none smtp.client-ip=203.254.224.24
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
+	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20240618042458epoutp018b5cb8153ec015fe01d62c016868ec9c~Z-qCOX6ic1309813098epoutp01h
+	for <linux-usb@vger.kernel.org>; Tue, 18 Jun 2024 04:24:58 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20240618042458epoutp018b5cb8153ec015fe01d62c016868ec9c~Z-qCOX6ic1309813098epoutp01h
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1718684698;
+	bh=vB1bAHIdtk0etp7sNOGy2K2uwCH5ZON2u2W/CFR2QJ0=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=MQync8Ka0m6i6NdXu2PI0NaoeNBdF/D8rsKeHWZrECvTL8Zj2+/EDPtZohFhCyCwN
+	 xHD9+GP4h/FNAktDQtGnl75/V6gywpzO2MvVA/arQ+FvWOEet7TAxUoPoazhE2zpRF
+	 Nhnb+aaw7yNfHq93DNITYqUb+WhhLM6Qj50l1oh0=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+	epcas2p2.samsung.com (KnoxPortal) with ESMTP id
+	20240618042457epcas2p230ba70ac20df5f694d86ca97f5792bad~Z-qByvx1f2866928669epcas2p2I;
+	Tue, 18 Jun 2024 04:24:57 +0000 (GMT)
+Received: from epsmges2p4.samsung.com (unknown [182.195.36.100]) by
+	epsnrtp1.localdomain (Postfix) with ESMTP id 4W3DDn2XPqz4x9Py; Tue, 18 Jun
+	2024 04:24:57 +0000 (GMT)
+Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
+	epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
+	C8.8C.09479.91C01766; Tue, 18 Jun 2024 13:24:57 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+	epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
+	20240618042456epcas2p45678af844d2c1140e5fe9a2383e200f9~Z-qA5vJl52983429834epcas2p4p;
+	Tue, 18 Jun 2024 04:24:56 +0000 (GMT)
+Received: from epsmgmc1p1new.samsung.com (unknown [182.195.42.40]) by
+	epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+	20240618042456epsmtrp16d99dcbf0cacbc71d4bc7381a807f5b9~Z-qA2DI_I1892318923epsmtrp1i;
+	Tue, 18 Jun 2024 04:24:56 +0000 (GMT)
+X-AuditID: b6c32a48-105fa70000002507-53-66710c191b3f
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+	epsmgmc1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	6D.D8.07412.81C01766; Tue, 18 Jun 2024 13:24:56 +0900 (KST)
+Received: from ubuntu (unknown [10.229.95.128]) by epsmtip1.samsung.com
+	(KnoxPortal) with ESMTPA id
+	20240618042456epsmtip143cc251a975a0e53c164ee2969700109~Z-qAp8L1a0337703377epsmtip1L;
+	Tue, 18 Jun 2024 04:24:56 +0000 (GMT)
+Date: Tue, 18 Jun 2024 13:24:29 +0900
+From: Jung Daehwan <dh10.jung@samsung.com>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: joswang <joswang1221@gmail.com>, Greg KH <gregkh@linuxfoundation.org>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"stable@vger.kernel.org" <stable@vger.kernel.org>, Jos Wang
+	<joswang@lenovo.com>
+Subject: Re: [PATCH v4, 3/3] usb: dwc3: core: Workaround for CSR read
+ timeout
+Message-ID: <20240618042429.GA190639@ubuntu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR11MB5191:EE_|BL1PR11MB6025:EE_
-X-MS-Office365-Filtering-Correlation-Id: d45856d9-bb52-436a-3cf5-08dc8f457ce6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: 
-	BCL:0;ARA:13230037|52116011|376011|1800799021|366013|38350700011;
-X-Microsoft-Antispam-Message-Info: 
-	=?us-ascii?Q?KkekTMUJ3HhQ/fuOKXaP331HzhNO8eJAsLWOelSJECp/oCaDDMJQ/fUU/2gx?=
- =?us-ascii?Q?84KqW5NIs0ZU9LKkrx5fVUrs0tlag8Y80xyHi6HBbS9ZOoZ0qdMKUXF9fKZC?=
- =?us-ascii?Q?nvgyXVAaWzvpvGLr/bEdaCm9z1PdFPchuqcmH41Za1NkehE98gSzSOBH0f1W?=
- =?us-ascii?Q?i2CSySZp0Li3zuTxgy5tN+26UYTNhVRfgzzXuv05hDy3nIOklz/E7Rc8mX9S?=
- =?us-ascii?Q?5Z5MGqpHZzIyUNumA82tjb+EUqytTEXjf+c4okh0sa+sZXGHhUzq0ID97x98?=
- =?us-ascii?Q?rYMNBPJRWtFgRMAWqusYKKK71JdMdM5ClLXvB+BQBxovx9ndANvHuADyUiNL?=
- =?us-ascii?Q?yAfG/1iFfZkwsn5nWk8RzIcMmYfgBSmvswz9Ybs3CQeKpAz0pQL1iTq9QBfD?=
- =?us-ascii?Q?Ag3KhhEbcpjQlSG796RPq/Pf38ynWgAeKKrmdk8cs0bkZ6yq6R+cKJC5GFCM?=
- =?us-ascii?Q?WabHC1HPf5zB1T/G6PRBn9LfdjBNyYLXlpPuRebAwvzikkj1oI9iN2K13ocW?=
- =?us-ascii?Q?V7X388A5+gQ2ZAXSLdjH5gvwFH6DCil8+QLnU4xreaBpvwYjf3mjSwzKiwZi?=
- =?us-ascii?Q?qmnRUo4iOEpJ3EBd/8hbeUgEup/HIIlGgGXbFbX6CC/sMhPfyjBCg9pzvnY0?=
- =?us-ascii?Q?GEKLps5+PRPjLTUZqBkssFcy4y5Z5aRtuX4PC2TUvTUL4I9iUEBzyl6Ovkhv?=
- =?us-ascii?Q?7DwxeuOSzUFEyXfmxeL+m1HksyTBaul9Sqqq+0dI12LQSO1uLEhwm+4GK6KL?=
- =?us-ascii?Q?V7DW6C5wJqq1hxxVYKLGUSyPei9fbvDY7yUvpXy2uOZatYsJG45hE3u4glJN?=
- =?us-ascii?Q?hlqeZ7lqedAKZVVO4Tilt5RrT+fEuQPnU974tdjOenuxl52XbYyb4Bi3bSQf?=
- =?us-ascii?Q?imtF2kxdagwKz6EM1kR2SJc2ubFVNtw8nIv9GbLXrN9+qLqiQnjqILuzpxJ4?=
- =?us-ascii?Q?QMHNKy/h/LrLZVpLHUE4RFFSrYmmhxRCsg0+2McUmoqlnc0UXqVxFEbL6Zsb?=
- =?us-ascii?Q?kTKiWEEjxRnym+HryT5Nk4fQWNOqDPAmhaU0qs2cUP5tZPFB6aQUcNI6ysKP?=
- =?us-ascii?Q?9zIFThBD33tQUNuNbxswqr9V8+XnjO9bM3R8q32x8cZLpcrIKRIVwGZvnIHu?=
- =?us-ascii?Q?qwbKCEtKKk5Kzcl/GycCPkJKXzBkzbJgtjx6cowDdYVN9m4VYKt6m47Gi05q?=
- =?us-ascii?Q?teSiAm9vWNjGreDGocmeQPE/yRdhP4Fx8XJYEREyXVwWTGhgOuuYrtgUbBSA?=
- =?us-ascii?Q?7utdO8YUObQAA4FVG82aX/f6OeY5/MzxkJ+ZEBC4K32xdlcvBzsrvGre87Tk?=
- =?us-ascii?Q?iVZ1DH1BGbj9Smot+xk3vusXyqJO0DTDnZzoOLspSSBvBxm83he6/6pR4lLs?=
- =?us-ascii?Q?KNsWD5M=3D?=
-X-Forefront-Antispam-Report: 
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB5191.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230037)(52116011)(376011)(1800799021)(366013)(38350700011);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: 
-	=?us-ascii?Q?5DfFn7L4OmlfHKCHJwWRyFq2lGLbELKka1k8tfbQDujZlZTdQ8sqD24xo63p?=
- =?us-ascii?Q?OKSubZ7U/DemvNuvE3RX6knZrx66RmMMV0o0L+aSbBMkY8A3Pqf8R4bQcF6g?=
- =?us-ascii?Q?yspChQRC33UsYhKOWqZKoB/1ilHkjbhj+ms8BAl7n/6a9U8o/9Cy/utvm3oq?=
- =?us-ascii?Q?VTeYUt5mWAvS8nWdWJYlzOgbFX1Avla4n7s0mDquLyU6o1g3irXMdH7FmIAt?=
- =?us-ascii?Q?nGwuISX6I7z482yzQKxo5M9+A7yUolYXsny0EqVQ48I9p7QxC2V/XPiR0gLw?=
- =?us-ascii?Q?+w3/Ecftgu7S4sw6HknoaVVwWDsIR7uX7oRDb0hzXGnsGN9TtHhpLo4TE6fG?=
- =?us-ascii?Q?SeQEA9t8Az4k4eKm1K2685883HTkYx1DABHBTKne9c6LRmC86oMFGBPkOrGW?=
- =?us-ascii?Q?fFrIOjmYGDmaysnthRZQcUAxA2Ii4Iapd1ph+cS8vPad6PCigkDpJOc8A1Vy?=
- =?us-ascii?Q?4ZbwzV6WtJ/Wttb+79VKLPxWcOrn4f9tvc0SxNN5oIwfWbY9yEndTHG7Thqp?=
- =?us-ascii?Q?rWACKavhf8AJRqq8ydaocbuiQJBVDXCK8SKf8WIk733394OPadYS62QWB9Pg?=
- =?us-ascii?Q?jAKnrEVeTeR9CBMT5cYo51IS5Ev/hO8QMceVXXDpJNbCNzktIIKcdf6u7M2G?=
- =?us-ascii?Q?aJyUN6U1geeyhQf2TVXc7igtGQLsqdK/QAFiXAsuZf6cNZ9j80vfpngcmkNv?=
- =?us-ascii?Q?69TsHyKUY4c0qm/pI1gPG+Yq0KHFa8S5cNvxESVJdNB/Axekc/b4YoTzd7nI?=
- =?us-ascii?Q?9RD6MUH0SquplbeKplO6KtIPxVBQ75q9aPBzhvyXocA50/fAOccm7I+dV4Ko?=
- =?us-ascii?Q?3I/jK1ekZS+rnF/HAehdrCuirqThnRVt88ekGyiM1cRt6KHD7C03jZq1tNtF?=
- =?us-ascii?Q?pevEJGfD8bVWDLXMYiywsN0BZl4VngjXR770vXMf23p8Y7mNJFXUX8vuUjlS?=
- =?us-ascii?Q?Z0XJkOzUTSlddCOWqEzG0jER8S48b8W8o0k/r/W7ATkL8H6+1ivdXla+SAom?=
- =?us-ascii?Q?QaaH6K0GdVL2z56jAuTehtEI6obBZAQn/DUWkI4/OssgOn941PQ0MufL54ZR?=
- =?us-ascii?Q?8wdXOrn+JrkY2kGjRfMQwY7Y/rkIMhuZlLEanPuNoxDA6TgLAb7xcbQ+Imy9?=
- =?us-ascii?Q?Y37PZmN418xttEfUq95zgikobSnFHCPwVgnUZN4/8uFLxIbp251/ozpqIz9k?=
- =?us-ascii?Q?wA67Ack58oqHRWyYdOIs989DaFk/X3B6H3CMZ02/JuaYWQzSFnZ8yz/Zd3jL?=
- =?us-ascii?Q?IwuZVQo0TtbNqhestBa05wxCHkJYNxDdY/EdljVf9CDnmHvbdJ7xOduMEn/K?=
- =?us-ascii?Q?AbfX11tW+48mjd8NZKmaKU+KmSVDq/FivnEMMyq3UQW97jn5WzefK7ZNqUut?=
- =?us-ascii?Q?LABFkcWJLDDsX4c10Ctyc1ED/wiD8DTPY9/FSu961ocfQqq2bW5uBj1M7DJb?=
- =?us-ascii?Q?R8R+guC0COfcitMUb3+FfGJbkvFnGFS27LUSQaQxwVTP8+gozqnL42FiE9gE?=
- =?us-ascii?Q?tv2+pKsupsOdtWlDJHViWExIySll/TmDiLF7t5UWdMetw0q43q7StTXePM3W?=
- =?us-ascii?Q?xctTifapZivw/+X2LZXzvnKxM5qTp2bpBCyS/cdM?=
-X-OriginatorOrg: windriver.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d45856d9-bb52-436a-3cf5-08dc8f457ce6
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB5191.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jun 2024 03:19:39.2582
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: iPglr9f3UkK33OoimlIMv1akMZYHZ8LQ3ZMjP53DskUtzlgCY6J5JGdWs8IoNfIihPn+XFPx2car9ygqIVc3jA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB6025
-X-Proofpoint-ORIG-GUID: tfgGnUJIzrlpEkCekCxA2hZI9Ob9rP3C
-X-Proofpoint-GUID: tfgGnUJIzrlpEkCekCxA2hZI9Ob9rP3C
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-06-17_14,2024-06-17_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- suspectscore=0 clxscore=1011 bulkscore=0 priorityscore=1501 spamscore=0
- adultscore=0 malwarescore=0 impostorscore=0 lowpriorityscore=0 mlxscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.21.0-2405170001 definitions=main-2406180024
+In-Reply-To: <20240618000502.n3elxua2is3u7bq2@synopsys.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrIJsWRmVeSWpSXmKPExsWy7bCmha4kT2GawZJnAhbNi9ezWdx/y27R
+	fW0Pk8XlXXPYLBYta2W2WLDxEaPFqgUH2B3YPXbOusvucfbXS2aP/XPXsHts2f+Z0ePzJrkA
+	1qhsm4zUxJTUIoXUvOT8lMy8dFsl7+B453hTMwNDXUNLC3MlhbzE3FRbJRefAF23zBygK5QU
+	yhJzSoFCAYnFxUr6djZF+aUlqQoZ+cUltkqpBSk5BeYFesWJucWleel6eaklVoYGBkamQIUJ
+	2Rnb9t9jKeiVqDj+qYmpgXGCcBcjJ4eEgInEjVsPmboYuTiEBHYwSmxo7GaDcD4xSpzaOIUd
+	wvnGKNGzqoUZpuX+1m1QVXsZJTr+LYNynjBKTNx3HqyKRUBV4sexfjYQm01AS+LejxNgcREB
+	HYkDJ86DLWQWmM0kMff3Q8YuRg4OYQF/iSUbJEBqeIFq5p3axw5hC0qcnPmEBcTmFLCWOL56
+	CxNIuaiAisSrg/UQB/VySMy6Fwdhu0hcubOdDcIWlnh1fAs7hC0l8bK/Dcoulrj1/BkzyAkS
+	Ai2MEitewXxmLDHrWTsjiM0skCHxe/0nsNMkBJQljtxigQjzSXQc/ssOEeaV6GgTguhUlph+
+	eQIrhC0pcfD1OaiJHhJXZ0yFBuJdJonGtnmsExjlZyH5bBaSbbOAxjILaEqs36UPEZaXaN46
+	mxkiLC2x/B8HkooFjGyrGMVSC4pz01OLjQpM4PGenJ+7iRGcVrU8djDOfvtB7xAjEwfjIUYJ
+	DmYlEV6naXlpQrwpiZVVqUX58UWlOanFhxhNgTE2kVlKNDkfmNjzSuINTSwNTMzMDM2NTA3M
+	lcR577XOTRESSE8sSc1OTS1ILYLpY+LglGpg0rmZujmCQ1FHYu8sfZV3J/icG+UdJxwx8SmO
+	FjN3y1Q87N85Y4fchnff3/6Y/CDzvlD6rEDuFMG306Yrdm9d332qa27yJEWBwM0aJ/aUdS5x
+	iogOySnW6yj54safzro8/05BeoFFpxLX4tPdVa++1K59tjj5VtYc6fj9DYfDQzbM+OB16P7k
+	3SuvT+FN3Gw3Jcxb/1RUgPpbT3vmPhG+tdqfKrgEOOcrqabHnNOI959Wlu82+X7h+j/5nzeJ
+	nrzadqgsLY3hq9685QemGOskzeTTCol0ffxrSu3qFkFJjrmMXtKvH+1USVvbx3slZCoHMMvG
+	XXh3XupkOwP/3z3qmtXbwmf7zvn8emrMRWYlluKMREMt5qLiRACrWFcQNAQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrCLMWRmVeSWpSXmKPExsWy7bCSnK4ET2Gawc9+fYvmxevZLO6/Zbfo
+	vraHyeLyrjlsFouWtTJbLNj4iNFi1YID7A7sHjtn3WX3OPvrJbPH/rlr2D227P/M6PF5k1wA
+	axSXTUpqTmZZapG+XQJXxva2j4wF60Urzj3ax9bAeE6gi5GTQ0LAROL+1m1sILaQwG5GiXvT
+	aiDikhJL595gh7CFJe63HGHtYuQCqnnEKPHk1SIWkASLgKrEj2P9YM1sAloS936cYAaxRQR0
+	JA6cOM8E0sAsMJtJ4ty9FYwgCWEBX4nz+3rAbF6gonmn9rFDTL3LJPF5wVM2iISgxMmZT8A2
+	MAuoS/yZdwloKgeQLS2x/B8HRFheonnrbLBlnALWEsdXb2ECKREVUJF4dbB+AqPQLCSDZiEZ
+	NAth0CwkgxYwsqxilEwtKM5Nz002LDDMSy3XK07MLS7NS9dLzs/dxAiOGC2NHYz35v/TO8TI
+	xMF4iFGCg1lJhNdpWl6aEG9KYmVValF+fFFpTmrxIUZpDhYlcV7DGbNThATSE0tSs1NTC1KL
+	YLJMHJxSDUxGvhvnsq3ekvpV/lvYcx133trpFm3CDyJaFtqx6hSmnvzyaluM6MZ93L9mKnJJ
+	HDXZobB5md5s25KFfkExWYJz/7D/io7WNvItFj54ILLx3onFy26YHMl8FxXOuEl7e84iLv00
+	hwNbNlS6739tq5T/QsJpi2doEvd76Qsi/5lzjKbc51n5mlOChaXE2XDCynvblf9dsM2Z9jlM
+	5svejolHTA6bqfz0v71t7oIXNucdwieWhB1YcuNvdZ/b8e/SDMkvMwvfHnZY7nR4svjqQNut
+	OVOFz7gl7PaYf/PXywdJiz9+Wn1Hpj83v9+5OT3ispby33sLb4tuEY0XzdiyUlPjd4uhqbyO
+	0uIKkWWrCncosRRnJBpqMRcVJwIANhcXkQcDAAA=
+X-CMS-MailID: 20240618042456epcas2p45678af844d2c1140e5fe9a2383e200f9
+X-Msg-Generator: CA
+Content-Type: multipart/mixed;
+	boundary="----NM.SL-8AX4fCWwUaz12YupYcgI_4q5PcTQ1CNbbJhqicWcnv=_d358d_"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20240618000530epcas2p15ee3deff0d07c8b8710bf909bdc82a50
+References: <20240601092646.52139-1-joswang1221@gmail.com>
+	<20240612153922.2531-1-joswang1221@gmail.com>
+	<2024061203-good-sneeze-f118@gregkh>
+	<CAMtoTm0NWV_1sGNzpULAEH6qAzQgKT_xWz7oPaLrKeu49r2RzA@mail.gmail.com>
+	<CGME20240618000530epcas2p15ee3deff0d07c8b8710bf909bdc82a50@epcas2p1.samsung.com>
+	<20240618000502.n3elxua2is3u7bq2@synopsys.com>
 
-When config CONFIG_USB_DWC3_DUAL_ROLE is selected, and trigger system
-to enter suspend status with below command:
-echo mem > /sys/power/state
-There will be a deadlock issue occurring. Detailed invoking path as
-below:
-dwc3_suspend_common()
-    spin_lock_irqsave(&dwc->lock, flags);              <-- 1st
-    dwc3_gadget_suspend(dwc);
-        dwc3_gadget_soft_disconnect(dwc);
-            spin_lock_irqsave(&dwc->lock, flags);      <-- 2nd
-This issue is exposed by commit c7ebd8149ee5 ("usb: dwc3: gadget: Fix
-NULL pointer dereference in dwc3_gadget_suspend") that removes the code
-of checking whether dwc->gadget_driver is NULL or not. It causes the
-following code is executed and deadlock occurs when trying to get the
-spinlock. In fact, the root cause is the commit 5265397f9442("usb: dwc3:
-Remove DWC3 locking during gadget suspend/resume") that forgot to remove
-the lock of otg mode. So, remove the redundant lock of otg mode during
-gadget suspend/resume.
+------NM.SL-8AX4fCWwUaz12YupYcgI_4q5PcTQ1CNbbJhqicWcnv=_d358d_
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Content-Disposition: inline
 
-Fixes: 5265397f9442 ("usb: dwc3: Remove DWC3 locking during gadget suspend/resume")
-Cc: Xu Yang <xu.yang_2@nxp.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Meng Li <Meng.Li@windriver.com>
+On Tue, Jun 18, 2024 at 12:05:05AM +0000, Thinh Nguyen wrote:
+> On Thu, Jun 13, 2024, joswang wrote:
+> > On Thu, Jun 13, 2024 at 1:04 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+> > >
+> > > On Wed, Jun 12, 2024 at 11:39:22PM +0800, joswang wrote:
+> > > > From: Jos Wang <joswang@lenovo.com>
+> > > >
+> > > > This is a workaround for STAR 4846132, which only affects
+> > > > DWC_usb31 version2.00a operating in host mode.
+> > > >
+> > > > There is a problem in DWC_usb31 version 2.00a operating
+> > > > in host mode that would cause a CSR read timeout When CSR
+> > > > read coincides with RAM Clock Gating Entry. By disable
+> > > > Clock Gating, sacrificing power consumption for normal
+> > > > operation.
+> > > >
+> > > > Cc: stable@vger.kernel.org
+> > > > Signed-off-by: Jos Wang <joswang@lenovo.com>
+> > > > ---
+> > > > v1 -> v2:
+> > > > - add "dt-bindings: usb: dwc3: Add snps,p2p3tranok quirk" patch,
+> > > >   this patch does not make any changes
+> > > > v2 -> v3:
+> > > > - code refactor
+> > > > - modify comment, add STAR number, workaround applied in host mode
+> > > > - modify commit message, add STAR number, workaround applied in host mode
+> > > > - modify Author Jos Wang
+> > > > v3 -> v4:
+> > > > - modify commit message, add Cc: stable@vger.kernel.org
+> > >
+> > > This thread is crazy, look at:
+> > >         https://urldefense.com/v3/__https://lore.kernel.org/all/20240612153922.2531-1-joswang1221@gmail.com/__;!!A4F2R9G_pg!a29V9NsG_rMKPnub-JtIe5I_lAoJmzK8dgo3UK-qD_xpT_TOgyPb6LkEMkIsijsDKIgdxB_QVLW_MwtdQLnyvOujOA$ 
+> > > for how it looks.  How do I pick out the proper patches to review/apply
+> > > there at all?  What would you do if you were in my position except just
+> > > delete the whole thing?
+> > >
+> > > Just properly submit new versions of patches (hint, without the ','), as
+> > > the documentation file says to, as new threads each time, with all
+> > > commits, and all should be fine.
+> > >
+> > > We even have tools that can do this for you semi-automatically, why not
+> > > use them?
+> > >
+> > > thanks,
+> > >
+> > > greg k-h
+> > 
+> > We apologize for any inconvenience this may cause.
+> > The following incorrect operation caused the problem you mentioned:
+> > git send-email --in-reply-to command sends the new version patch
+> > git format-patch --subject-prefix='PATCH v3
+> > 
+> > Should I resend the v5 patch now?
+> 
+> Please send this as a stand-alone patch outside of the series as v5. (ie.
+> remove the "3/3"). I still need to review the other issue of the series.
+> 
+> Thanks,
+> Thinh
 
----
-v1->v2:
- - improve commit log, correct the Fixes commit id.
+Hi Thinh,
 
----
- drivers/usb/dwc3/core.c | 6 ------
- 1 file changed, 6 deletions(-)
+We faced similar issue on DRD mode operating as device.
+Could you check it internally?
+Case: 01635304
 
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 7ee61a89520b..9d47c3aa5777 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -2250,7 +2250,6 @@ static int dwc3_core_init_for_resume(struct dwc3 *dwc)
- 
- static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
- {
--	unsigned long	flags;
- 	u32 reg;
- 	int i;
- 
-@@ -2293,9 +2292,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
- 			break;
- 
- 		if (dwc->current_otg_role == DWC3_OTG_ROLE_DEVICE) {
--			spin_lock_irqsave(&dwc->lock, flags);
- 			dwc3_gadget_suspend(dwc);
--			spin_unlock_irqrestore(&dwc->lock, flags);
- 			synchronize_irq(dwc->irq_gadget);
- 		}
- 
-@@ -2312,7 +2309,6 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
- 
- static int dwc3_resume_common(struct dwc3 *dwc, pm_message_t msg)
- {
--	unsigned long	flags;
- 	int		ret;
- 	u32		reg;
- 	int		i;
-@@ -2366,9 +2362,7 @@ static int dwc3_resume_common(struct dwc3 *dwc, pm_message_t msg)
- 		if (dwc->current_otg_role == DWC3_OTG_ROLE_HOST) {
- 			dwc3_otg_host_init(dwc);
- 		} else if (dwc->current_otg_role == DWC3_OTG_ROLE_DEVICE) {
--			spin_lock_irqsave(&dwc->lock, flags);
- 			dwc3_gadget_resume(dwc);
--			spin_unlock_irqrestore(&dwc->lock, flags);
- 		}
- 
- 		break;
--- 
-2.34.1
+Best Regards,
+Jung Daehwan
 
+------NM.SL-8AX4fCWwUaz12YupYcgI_4q5PcTQ1CNbbJhqicWcnv=_d358d_
+Content-Type: text/plain; charset="utf-8"
+
+
+------NM.SL-8AX4fCWwUaz12YupYcgI_4q5PcTQ1CNbbJhqicWcnv=_d358d_--
 
