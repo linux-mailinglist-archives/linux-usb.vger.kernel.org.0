@@ -1,101 +1,190 @@
-Return-Path: <linux-usb+bounces-11399-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11400-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id F026390D6DC
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Jun 2024 17:15:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7267690D712
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Jun 2024 17:22:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C3F1D1C23E90
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Jun 2024 15:15:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8CEE4285C5D
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Jun 2024 15:22:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54FCD21350;
-	Tue, 18 Jun 2024 15:12:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EA7213BC20;
+	Tue, 18 Jun 2024 15:18:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g1y8xOys"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="geE5LFiZ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51B421EB2C
-	for <linux-usb@vger.kernel.org>; Tue, 18 Jun 2024 15:12:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4843E6BFB0;
+	Tue, 18 Jun 2024 15:18:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718723531; cv=none; b=lY+CZ1UdJV8YM0f+dIcxqCWndaWRdFBI4/47i2d5C5GX8KI6iC0xeIK8kANTOwIxD/26tYzIKJTa3luosRDuxakOB+DhWgeXfJaP/AVisZ+fCivqH4r/S3juN1n5KH5HYCJTF/W7ikNIRWpGzCtlwhRrafqrt+VgE1Xjrck99nI=
+	t=1718723919; cv=none; b=SApynrt0nzszrlSnTbwLI5shtGWz5AG9vfzB6V7uvpcnx9gu+TChQPHf3AfiwDw59BhrbKSAgcD2atuvLLexmbXBasNjfk2ib5Dku6vZvONst8TCwIL+a0+pl+kKxb6ebZhIAxmOR0E4GCbdjvWPzKzp2wgZwNKcTqBpeMHzJ0c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718723531; c=relaxed/simple;
-	bh=fHY6e5S339hn1tglFAEnJlLPu4FNbNaR5Q4xwYltsds=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JxQxBPxW0gdGU0lgrnQpBUAKqF/aSjzLRavjuo3brVLW8M927hKuIxQ9rHQsvAsTUdr1Lg8ROPyPp//Q6AjC2sMGXIm3XPK3yhi15xgoQwPTYAyo+KFberBXw3TSialggD+ZqMQLFQ2tFpdaUNIZrbqGB1Hb3z39ju3FymFrABw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g1y8xOys; arc=none smtp.client-ip=209.85.218.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a6f1dc06298so676565466b.1
-        for <linux-usb@vger.kernel.org>; Tue, 18 Jun 2024 08:12:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718723529; x=1719328329; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fHY6e5S339hn1tglFAEnJlLPu4FNbNaR5Q4xwYltsds=;
-        b=g1y8xOys4RoD7ADPxaEwPbpVBJ1uqRFdf+dKl+j/F02OCGFdtuZEQjQYiC/Dy+ZmRG
-         twXXXLkqn/mcOcUcgW3pIz1jIcNwUECDVuxDYwKO9xO8AWcRuLrNouQaqixPFzNwRHSZ
-         HAtTBoH/Qzicy+6RYxPYvTo/MOeRlCRQb4kQopjT/qh1Xta+dxUyhzgo6K9GTVIvMNO1
-         LmhPG9KWUsZ15XLIZysRzogcWocLqq8TN5DwF+H15llvSdKMN0O/cIH0E6TMTglBdYcl
-         uqboLgCLX3k3hQONPXTCHwbKSVf/C4z0mCE9k2UYjAZ1peuiCQZ2Asf5u+l6KAQoqvyL
-         L1uA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718723529; x=1719328329;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fHY6e5S339hn1tglFAEnJlLPu4FNbNaR5Q4xwYltsds=;
-        b=bT7uLR7y8NhXZINSQWcaWkvnCmAImkI/unfTT2c45Ik/wWABRm9A28QcZYDyO0nCCB
-         x4/yAQeYrFGoyIRV9Lcx+4gbaaWqmPe5pduWP216YW2OYRyn/09PzSkongKuRk7IMo8t
-         8w+8b1auoEUKflEbmWx08LNsewnuFlwlSIqLVQ9DAw6keFLJ8mRDZTwG8DuSZYeER74E
-         CLUfNpDOI4xEx7UF8Cb/NFPLk5V38PoLa8LqR7vM8mnzoYjmaadpR9Oj5pXWRqGoLNbU
-         Xo1VYbh0+wnbkbmv3A6/a7O2C/a01VeHL0xqyMjvUmjbBEkWirDYZ7uvprmQBWr6t2AG
-         /m+w==
-X-Forwarded-Encrypted: i=1; AJvYcCVieTwvkXWIqgObn+ebkKmj/SrFONnZTamlClixkx/f/3Ij0zRssiLjxS+npviAQLlf6pWULBBBBm1seJVNbMuBmP5ut+Ssap4V
-X-Gm-Message-State: AOJu0Yx3tblBPWSYNBixzXUqj86s9RqikOuT66rwNRPLlykJQ/To6FSp
-	dVvRr0b9NGhpxSLwoKELr0ljpwt908ce+RlwiIVg6yhOxVVIR1QvnURnHc4cwjWyDwKyulWmMHE
-	/YP8SMNcTRiyHQjOrohpvZWQcHdg=
-X-Google-Smtp-Source: AGHT+IEeW+re+XQXlTckA7WALBeDFjP2tB0cwc5nPQDB9pfgoK/CP5D68c24BC1Z0MFtm/BoPIte5cwBKFXGFYA9zVw=
-X-Received: by 2002:a17:906:66da:b0:a6f:bc2:e579 with SMTP id
- a640c23a62f3a-a6f60d2ad84mr846780166b.30.1718723528399; Tue, 18 Jun 2024
- 08:12:08 -0700 (PDT)
+	s=arc-20240116; t=1718723919; c=relaxed/simple;
+	bh=4HYzkCyMIH1bQMt4sBkTNq8QrB4AOvLgwFW3TO6rwK0=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:To:CC; b=fWRbbLLkt6ojDMRRcJtVVgIcVftnW37V6t8PGfMbXYjd8btULIeBHpPR7b0TTvZEdidDm6pOz/q/Xh3ta4/8ATEfKm/pg1n4V5YLFh45nJFaYWLf5hXaYGM7OJKKEVr1gdPjolU+BE4WMjqzTU3nkMz5c4fytRZK3GrjZB6a+SY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=geE5LFiZ; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45ICqgwc006175;
+	Tue, 18 Jun 2024 15:18:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=Durdm3Ss1qe6LtFrzIfT5W
+	eOKJaKnsW3YZanyZgKCYI=; b=geE5LFiZpxL0oN4j3J60RN06NdzGlkXetSMFSr
+	wZ5dw4UXp1axMzC+sqDV/MzEpeyzOEvpmPAJI3cxFr9VI+UA0KRUoiiQj/sZuHIa
+	xDDnjb8dgdLEsCfVVATifNWN+ntDH0xFCpzOCM5e9egJUB2fspo0mbqg17DG4bDh
+	T0jIsLxeHD25azL1VrJoW4vdTtN4n1JfSFl9RHDIViSdB9ON90XolXb7sg56mi2s
+	qWJBqaHhXQuoKINzvdtnnF7cutueGqdmb9rKDqTTB4Xajgaf30oUSZmUEIFGPkWm
+	HhbbsNnhDXjqMqRdA5WkEIQReNIQC3S4547xyY9TgVLG8Kpw==
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3yuamp0cmd-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 18 Jun 2024 15:18:28 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA04.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 45IFIR1W011196
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 18 Jun 2024 15:18:27 GMT
+Received: from [169.254.0.1] (10.49.16.6) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 18 Jun
+ 2024 08:18:27 -0700
+From: Jeff Johnson <quic_jjohnson@quicinc.com>
+Date: Tue, 18 Jun 2024 08:18:26 -0700
+Subject: [PATCH v2] usb: add missing MODULE_DESCRIPTION() macros
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240617100100.1628147-1-mika.westerberg@linux.intel.com>
-In-Reply-To: <20240617100100.1628147-1-mika.westerberg@linux.intel.com>
-From: Yehezkel Bernat <yehezkelshb@gmail.com>
-Date: Tue, 18 Jun 2024 18:11:51 +0300
-Message-ID: <CA+CmpXsdHVbyp=jb2zfYbUssmNR=W88AN1B=_8H5WJNqeiY4kw@mail.gmail.com>
-Subject: Re: [PATCH] thunderbolt: debugfs: Use FIELD_GET()
-To: Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: Michael Jamet <michael.jamet@intel.com>, Lukas Wunner <lukas@wunner.de>, 
-	Andreas Noever <andreas.noever@gmail.com>, Aapo Vienamo <aapo.vienamo@linux.intel.com>, 
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-ID: <20240618-md-drivers-usb-v2-1-e9b20a5eb7f9@quicinc.com>
+X-B4-Tracking: v=1; b=H4sIAEGlcWYC/3WNyw6CMBBFf4V07RiKWoor/8Ow6GOUSaRoBxoM4
+ d8t7F2e5N5zFsEYCVlci0VETMQ0hAzVoRCuM+GJQD6zqMrqXCopoffgIyWMDBNb0KppGn+p0Us
+ l8ukd8UHzLry3ma1hBBtNcN2meVGYZugNjxi3eUc8DvG755PcTn9LSYIEbbVXqkGN9en2mchRc
+ Ec39KJd1/UHbgaEWM0AAAA=
+To: Peter Chen <peter.chen@kernel.org>,
+        Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>,
+        Oliver Neukum <oneukum@suse.com>,
+        Alan Stern
+	<stern@rowland.harvard.edu>
+CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-scsi@vger.kernel.org>, <usb-storage@lists.one-eyed-alien.net>,
+        <kernel-janitors@vger.kernel.org>,
+        Jeff Johnson <quic_jjohnson@quicinc.com>
+X-Mailer: b4 0.14.0
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: nhU7BEU7uW8DlvoFktTopxPNM_nIwuxx
+X-Proofpoint-GUID: nhU7BEU7uW8DlvoFktTopxPNM_nIwuxx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-06-18_02,2024-06-17_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1015
+ malwarescore=0 spamscore=0 bulkscore=0 mlxlogscore=999 lowpriorityscore=0
+ impostorscore=0 suspectscore=0 mlxscore=0 adultscore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2405170001
+ definitions=main-2406180114
 
-On Mon, Jun 17, 2024 at 1:01=E2=80=AFPM Mika Westerberg
-<mika.westerberg@linux.intel.com> wrote:
->
-> From: Aapo Vienamo <aapo.vienamo@linux.intel.com>
->
-> Use the FIELD_GET() macro instead of open coding the masks and shifts.
-> This makes the code more compact and improves readability as the this
+With ARCH=x86, make allmodconfig && make W=1 C=1 reports:
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/core/usbcore.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/mon/usbmon.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/class/usbtmc.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/storage/uas.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/chipidea/ci_hdrc_msm.o
 
-the this =3D> this, probably?
+Add the missing invocations of the MODULE_DESCRIPTION() macro.
 
-> avoids the need to wrap excessively long lines.
->
+Signed-off-by: Jeff Johnson <quic_jjohnson@quicinc.com>
+---
+This is the remaining one-off fixes in usb.
 
-Reviewed-by: Yehezkel Bernat <YehezkelShB@gmail.com>
+Corrections to these descriptions are welcomed. I'm not an expert in
+this code so in most cases I've taken these descriptions directly from
+code comments, Kconfig descriptions, or git logs.  History has shown
+that in some cases these are originally wrong due to cut-n-paste
+errors, and in other cases the drivers have evolved such that the
+original information is no longer accurate.
+
+Let me know if any of these changes need to be segregated into
+separate patches to go through different maintainer trees.
+---
+Changes in v2:
+- Updated drivers/usb/core/usb.c description per Alan
+- Link to v1: https://lore.kernel.org/r/20240611-md-drivers-usb-v1-1-8b8d669e8e73@quicinc.com
+---
+ drivers/usb/chipidea/ci_hdrc_msm.c | 1 +
+ drivers/usb/class/usbtmc.c         | 1 +
+ drivers/usb/core/usb.c             | 1 +
+ drivers/usb/mon/mon_main.c         | 1 +
+ drivers/usb/storage/uas.c          | 1 +
+ 5 files changed, 5 insertions(+)
+
+diff --git a/drivers/usb/chipidea/ci_hdrc_msm.c b/drivers/usb/chipidea/ci_hdrc_msm.c
+index 7b5b47ce8a02..1661639cd2eb 100644
+--- a/drivers/usb/chipidea/ci_hdrc_msm.c
++++ b/drivers/usb/chipidea/ci_hdrc_msm.c
+@@ -303,4 +303,5 @@ module_platform_driver(ci_hdrc_msm_driver);
+ 
+ MODULE_ALIAS("platform:msm_hsusb");
+ MODULE_ALIAS("platform:ci13xxx_msm");
++MODULE_DESCRIPTION("ChipIdea Highspeed Dual Role Controller");
+ MODULE_LICENSE("GPL v2");
+diff --git a/drivers/usb/class/usbtmc.c b/drivers/usb/class/usbtmc.c
+index 311007b1d904..6bd9fe565385 100644
+--- a/drivers/usb/class/usbtmc.c
++++ b/drivers/usb/class/usbtmc.c
+@@ -2592,4 +2592,5 @@ static struct usb_driver usbtmc_driver = {
+ 
+ module_usb_driver(usbtmc_driver);
+ 
++MODULE_DESCRIPTION("USB Test & Measurement class driver");
+ MODULE_LICENSE("GPL");
+diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
+index a0c432b14b20..0b4685aad2d5 100644
+--- a/drivers/usb/core/usb.c
++++ b/drivers/usb/core/usb.c
+@@ -1150,4 +1150,5 @@ static void __exit usb_exit(void)
+ 
+ subsys_initcall(usb_init);
+ module_exit(usb_exit);
++MODULE_DESCRIPTION("USB core host-side support");
+ MODULE_LICENSE("GPL");
+diff --git a/drivers/usb/mon/mon_main.c b/drivers/usb/mon/mon_main.c
+index 824904abe76f..af852d53aac6 100644
+--- a/drivers/usb/mon/mon_main.c
++++ b/drivers/usb/mon/mon_main.c
+@@ -419,4 +419,5 @@ static void __exit mon_exit(void)
+ module_init(mon_init);
+ module_exit(mon_exit);
+ 
++MODULE_DESCRIPTION("USB Monitor");
+ MODULE_LICENSE("GPL");
+diff --git a/drivers/usb/storage/uas.c b/drivers/usb/storage/uas.c
+index a48870a87a29..9b8f578eef53 100644
+--- a/drivers/usb/storage/uas.c
++++ b/drivers/usb/storage/uas.c
+@@ -1280,6 +1280,7 @@ static void __exit uas_exit(void)
+ module_init(uas_init);
+ module_exit(uas_exit);
+ 
++MODULE_DESCRIPTION("USB Attached SCSI driver");
+ MODULE_LICENSE("GPL");
+ MODULE_IMPORT_NS(USB_STORAGE);
+ MODULE_AUTHOR(
+
+---
+base-commit: 83a7eefedc9b56fe7bfeff13b6c7356688ffa670
+change-id: 20240611-md-drivers-usb-86999d57ed16
+
 
