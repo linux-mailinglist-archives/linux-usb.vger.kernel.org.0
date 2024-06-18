@@ -1,164 +1,121 @@
-Return-Path: <linux-usb+bounces-11393-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11394-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8EE9E90CF62
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Jun 2024 15:26:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B41890D204
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Jun 2024 15:47:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 936CE1C2142A
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Jun 2024 13:26:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8737E283040
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Jun 2024 13:47:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D173515E5C2;
-	Tue, 18 Jun 2024 12:47:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF02B1AAE3F;
+	Tue, 18 Jun 2024 13:14:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SmKVcg85"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OB5B9a9x"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B46B3145B37;
-	Tue, 18 Jun 2024 12:47:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7883C13CA97;
+	Tue, 18 Jun 2024 13:14:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718714868; cv=none; b=KdjW7gIecAsetVsXpnfq3WzRTMzM1Kcwf0f8v1GHBuemuNoae2iALh65NrXdEfiKt1wrz6rvePZ0I5YqKrOveWWA0a8Gd+3BmfBKvz+wQfEgSyitjBalOGfdUrHRXiNzN0uo/UybabAtMegYOcSH3VFXQY/AvP/O7gc5ufwxCYY=
+	t=1718716499; cv=none; b=S5whtr88xZABOhxBbNrg/rfK6XrWAD5wSsf3qRV/ZKO9XHKTYUiSkHMWMmg+0OEJLx1Ql6Ab8qyo7Eq4BBX5lzNQL4xGJ+F4iqJxiU0Q+G8FVuDCZZ1q5GG8UvqocAYeUsrlKYcQtTLde35hgMXPgdrutj7BTEtAWbk4BrwvAr0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718714868; c=relaxed/simple;
-	bh=llKsSokbWVreY2pYxSxMXJ4DmkKrX3OzdhY8owx9+Fs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XWUia1ztKil+4Jl1bfG+UdIKBiuBATJtnOOt9vAFpN03ZQq49OFJK2cVGLFolwPlb8xP6ZOlz/cHw64At4euL5KK0lbbjowpc9BAfZjesJ5MaO0Xu8CTNFzTRsG9SyTqaupFIF9oQEDJ2vBxTvr9hobcAVUzVLHLu58/rRlDj9E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SmKVcg85; arc=none smtp.client-ip=209.85.218.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a6efacd25ecso332281166b.1;
-        Tue, 18 Jun 2024 05:47:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718714865; x=1719319665; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=W3VpHd0JHmZD4WjBkUsTzzEDz6Rx27ZsVrJclfCl2X8=;
-        b=SmKVcg85SO5esFP0WCiyk8IhDWHk375GvrGPbtqK5QP6qk3XB8a0n7OwPdD1PwAS5F
-         joTOtbMD9H/mhj0cRks62+MMGuCjal+sgZIUv5kR75DcGh0L7+HwXus0e3DO/UHNEou6
-         3beW0BJmk6AjlU4kngzW0Dcvca1CsA4PkV9RkSsfvtpF+Yji4IOx4V84zc7cZtZTZR9X
-         A8USdhES4fQctAn7EVKB3qwh4m7JTuOdn1hwZ84/hWG+47srwxqrPxqnxqR7rcQwmaZC
-         Y7avAMqZjuO1liN+Y9Z2fWcfN5CI8zOkaLguxe00UtBdwThObeyu2Opvk/+cmElXfPrO
-         M3dQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718714865; x=1719319665;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=W3VpHd0JHmZD4WjBkUsTzzEDz6Rx27ZsVrJclfCl2X8=;
-        b=rhxoslDaXq6qOXzafaV0FwobNyQHHE3lmQD5pPD2tC7RtisoXh3aK/vRDblN8NkOQD
-         6yDpmKfDM2nQyycFWitXlse9g5AdSfy2rVpuoOP430j5oKYgPwA6qVSDT4XOxa8n/GjN
-         ARuG9uOtrlwJvPjtKuXw5WcYcZmNM3lOryu9WPWSAJ6VYrGlPZiW2lxfHlW/sI2D5uNu
-         AqLmuRF4yoLMJn2VF+a5gF5OM3qvmzI+CL8Lte3Svdj4RSJZQnhyH9/jSs00LZ4DToYp
-         aCaBdPAamK9RFNrzB18J9UPGSSxvwA3eGYjcCWLcHZgHvBOz5gZMpuInxe0D1nvVKnWA
-         IKvg==
-X-Forwarded-Encrypted: i=1; AJvYcCVMqRTz8wzoHFKhYb3fM0LYD5Hm+BJTjIWfxK6e83+UsLn70mfLxpPhcH37uhJNqqeot3hLXymn5P80Au+0JuHUpTNmJLGTYYPi1RKPudw4xij1CY7HWPO3DpE+qnDPIXvotzJy9EBE0zdUitM+5AsYpYyILUElrg1t7Wk1Ei9K
-X-Gm-Message-State: AOJu0YwFuj2x0AmsPdTgtDnqxc2c1w0Yns1uM+Gu5w2YXrfkRZVmgbCp
-	97hnb210nfO+NM/hTNYKEtPo/ChdImG0mK9/vEyOstFRPYXnHFB30zgSELQErptk6iPTcf71gz6
-	muuRX7QDdD6tGNNJuTelo/QEe3eI=
-X-Google-Smtp-Source: AGHT+IHIr5iz35UBLYc9HYQ/hr9/2KdLV2xXGggyddelPLlm2c+GVYrDo85rEXR385uQ6YppFvU0egjvulIHsqGkR2s=
-X-Received: by 2002:a50:ab4d:0:b0:579:73b7:b4cc with SMTP id
- 4fb4d7f45d1cf-57cbd6778eamr9821853a12.2.1718714864647; Tue, 18 Jun 2024
- 05:47:44 -0700 (PDT)
+	s=arc-20240116; t=1718716499; c=relaxed/simple;
+	bh=WgDyQ5YzUy6HdCGUckeHXwVK5Oj57SOYRJWXwepLxS8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hB0QxZ9Yu5dmmF017PSGXD6jtW6SHZsy8dduT8ZLSFYwcPNXmssHwh6cuqUU9IMZM9RdG79oCOE6QnjF0Cm8Ryi5TIuaJ09doTAP/kAme7NcXqU1fhv6fdrCpg5u8oug1jL69lWL+2p+2ZWPcOyiOCl0mCl4yTvjO+SRo/L8hF4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OB5B9a9x; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1718716498; x=1750252498;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=WgDyQ5YzUy6HdCGUckeHXwVK5Oj57SOYRJWXwepLxS8=;
+  b=OB5B9a9xj/+Nq9DNIrY4sQ4lJJ05buh1yveWt1Hu2MUs+5INawR1oWc9
+   8M28Dv8jO+i5MxRQ4/rtSweW40OqVzTjAuppdOxGH60t6Qyg4roF2KDyf
+   ktDlEDUPV0rc3cuc7SwYKVkkqM0F+k2gS6Vbw/uoPDxVfr5nmHEogfzzZ
+   lACugowYK2CoyMejd4A+zSm5uGI6EbiE6IcUFrwnEZ5WC2AKwK/jH3JIy
+   /e4lb9ulEEo4sXlXtF8s7x2QO9MMBQ/onwLotK92WC+bCu1FeM13hAxdr
+   928Yx90SaQTVH5uQtyr9QG6EHywurzCqs3+npWs8uF57O8w9QdAeybl9q
+   A==;
+X-CSE-ConnectionGUID: s/T1Z5RwTCipmCC8z9HKAQ==
+X-CSE-MsgGUID: 9JsJC2L/R9SEdrq0cdNVNw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11107"; a="26223701"
+X-IronPort-AV: E=Sophos;i="6.08,247,1712646000"; 
+   d="scan'208";a="26223701"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2024 06:14:56 -0700
+X-CSE-ConnectionGUID: CJpw4o/XQnStVhsVr8QvxQ==
+X-CSE-MsgGUID: XUx20M8NTvSpegtYzyN6TA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,247,1712646000"; 
+   d="scan'208";a="41415394"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmviesa007.fm.intel.com with ESMTP; 18 Jun 2024 06:14:54 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id 092D41CB; Tue, 18 Jun 2024 16:14:52 +0300 (EEST)
+Date: Tue, 18 Jun 2024 16:14:52 +0300
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Mario Limonciello <mario.limonciello@amd.com>
+Cc: Bjorn Helgaas <bhelgaas@google.com>,
+	Mathias Nyman <mathias.nyman@intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
+	open list <linux-kernel@vger.kernel.org>,
+	"open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
+	Daniel Drake <drake@endlessos.org>, Gary Li <Gary.Li@amd.com>
+Subject: Re: [PATCH 0/4] Verify devices transition from D3cold to D0
+Message-ID: <20240618131452.GC1532424@black.fi.intel.com>
+References: <20240613054204.5850-1-mario.limonciello@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240601092646.52139-1-joswang1221@gmail.com> <20240612153922.2531-1-joswang1221@gmail.com>
- <2024061203-good-sneeze-f118@gregkh> <CAMtoTm0NWV_1sGNzpULAEH6qAzQgKT_xWz7oPaLrKeu49r2RzA@mail.gmail.com>
- <20240618000502.n3elxua2is3u7bq2@synopsys.com>
-In-Reply-To: <20240618000502.n3elxua2is3u7bq2@synopsys.com>
-From: joswang <joswang1221@gmail.com>
-Date: Tue, 18 Jun 2024 20:47:38 +0800
-Message-ID: <CAMtoTm1ZkT6NoBj9N-wKkzxASQ2AboYNdd-L7DHUEt8m8hootg@mail.gmail.com>
-Subject: Re: [PATCH v4, 3/3] usb: dwc3: core: Workaround for CSR read timeout
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Greg KH <gregkh@linuxfoundation.org>, 
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"stable@vger.kernel.org" <stable@vger.kernel.org>, Jos Wang <joswang@lenovo.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20240613054204.5850-1-mario.limonciello@amd.com>
 
-On Tue, Jun 18, 2024 at 8:05=E2=80=AFAM Thinh Nguyen <Thinh.Nguyen@synopsys=
-.com> wrote:
->
-> On Thu, Jun 13, 2024, joswang wrote:
-> > On Thu, Jun 13, 2024 at 1:04=E2=80=AFAM Greg KH <gregkh@linuxfoundation=
-.org> wrote:
-> > >
-> > > On Wed, Jun 12, 2024 at 11:39:22PM +0800, joswang wrote:
-> > > > From: Jos Wang <joswang@lenovo.com>
-> > > >
-> > > > This is a workaround for STAR 4846132, which only affects
-> > > > DWC_usb31 version2.00a operating in host mode.
-> > > >
-> > > > There is a problem in DWC_usb31 version 2.00a operating
-> > > > in host mode that would cause a CSR read timeout When CSR
-> > > > read coincides with RAM Clock Gating Entry. By disable
-> > > > Clock Gating, sacrificing power consumption for normal
-> > > > operation.
-> > > >
-> > > > Cc: stable@vger.kernel.org
-> > > > Signed-off-by: Jos Wang <joswang@lenovo.com>
-> > > > ---
-> > > > v1 -> v2:
-> > > > - add "dt-bindings: usb: dwc3: Add snps,p2p3tranok quirk" patch,
-> > > >   this patch does not make any changes
-> > > > v2 -> v3:
-> > > > - code refactor
-> > > > - modify comment, add STAR number, workaround applied in host mode
-> > > > - modify commit message, add STAR number, workaround applied in hos=
-t mode
-> > > > - modify Author Jos Wang
-> > > > v3 -> v4:
-> > > > - modify commit message, add Cc: stable@vger.kernel.org
-> > >
-> > > This thread is crazy, look at:
-> > >         https://urldefense.com/v3/__https://lore.kernel.org/all/20240=
-612153922.2531-1-joswang1221@gmail.com/__;!!A4F2R9G_pg!a29V9NsG_rMKPnub-JtI=
-e5I_lAoJmzK8dgo3UK-qD_xpT_TOgyPb6LkEMkIsijsDKIgdxB_QVLW_MwtdQLnyvOujOA$
-> > > for how it looks.  How do I pick out the proper patches to review/app=
-ly
-> > > there at all?  What would you do if you were in my position except ju=
-st
-> > > delete the whole thing?
-> > >
-> > > Just properly submit new versions of patches (hint, without the ','),=
- as
-> > > the documentation file says to, as new threads each time, with all
-> > > commits, and all should be fine.
-> > >
-> > > We even have tools that can do this for you semi-automatically, why n=
-ot
-> > > use them?
-> > >
-> > > thanks,
-> > >
-> > > greg k-h
-> >
-> > We apologize for any inconvenience this may cause.
-> > The following incorrect operation caused the problem you mentioned:
-> > git send-email --in-reply-to command sends the new version patch
-> > git format-patch --subject-prefix=3D'PATCH v3
-> >
-> > Should I resend the v5 patch now?
->
-> Please send this as a stand-alone patch outside of the series as v5. (ie.
-> remove the "3/3"). I still need to review the other issue of the series.
->
-> Thanks,
-> Thinh
+Hi Mario,
 
-This patch has been sent separately, please help review it.
+On Thu, Jun 13, 2024 at 12:42:00AM -0500, Mario Limonciello wrote:
+> Gary has reported that when a dock is plugged into a system at the same
+> time the autosuspend delay has tripped that the USB4 stack malfunctions.
+> 
+> Messages show up like this:
+> 
+> ```
+> thunderbolt 0000:e5:00.6: ring_interrupt_active: interrupt for TX ring 0 is already enabled
+> ```
+> 
+> Furthermore the USB4 router is non-functional at this point.
 
-Thanks
-Jos Wang
+Once the USB4 domain starts the sleep transition, it cannot be
+interrupted by anything so it always should go through full sleep
+transition and only then back from sleep.
+
+> Those messages happen because the device is still in D3cold at the time
+> that the PCI core handed control back to the USB4 connection manager
+> (thunderbolt).
+
+This is weird. Yes we should be getting the wake from the hotplug but
+that should happen only after the domain is fully in sleep (D3cold). The
+BIOS ACPI code is supposed to deal with this.
+
+> The issue is that it takes time for a device to enter D3cold and do a
+> conventional reset, and then more time for it to exit D3cold.
+> 
+> This appears not to be a new problem; previously there were very similar
+> reports from Ryzen XHCI controllers.  Quirks were added for those.
+> Furthermore; adding extra logging it's apparent that other PCI devices
+> in the system can take more than 10ms to recover from D3cold as well.
+
+They can take anything up to 100ms after the link has trained.
 
