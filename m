@@ -1,135 +1,120 @@
-Return-Path: <linux-usb+bounces-11387-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11388-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B062790CACB
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Jun 2024 14:00:38 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CCE7290CAE9
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Jun 2024 14:03:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BD84A1C23744
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Jun 2024 12:00:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 862EF1F240DF
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Jun 2024 12:03:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3ABC613A40D;
-	Tue, 18 Jun 2024 11:51:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14BE41534FD;
+	Tue, 18 Jun 2024 11:56:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="IwPsPiIp"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="KW1i0k9q"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4450B135A49
-	for <linux-usb@vger.kernel.org>; Tue, 18 Jun 2024 11:51:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8A4F13A89E
+	for <linux-usb@vger.kernel.org>; Tue, 18 Jun 2024 11:56:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718711469; cv=none; b=XIqzQFY++W4UMxxNEJfTdgoRLLjqophUKO6ATuVo1UOEW9/81BP8JinQNR52P3F9+mQ9XOup59FQX/4oZiSBjwrzdTp4GdWqfjd8/4rJM0SulNP/56rhQkXgnssULXSX+bpxlVOLCTxQU9qCfK0BpYWirz/IOKvg9KFx3DMX9/Q=
+	t=1718711771; cv=none; b=LxkGyeDyTs3sq13vyf7k2D/U1evdsNCuFCCPRo1bN8p6vSnjEzNXYyC2E94eswhtj5LonXpw39aru/+Yj7spJB1MrKbky/KTePRFQTCe9Pxcopv/G6VVYyPrSeao/8qI6Y6R4p2rsdFQe70kBuQXwsZS0GxXSAKo9FKVldVc358=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718711469; c=relaxed/simple;
-	bh=0OCU1F5p+RZ18ExkVkZmiDL8HQ0Vl08o3pAP2J0zteo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=oTkHrxmRKIVO/3UavogpP5oBpDVXc1NAK7d46psRL5cnxu8GJBgvvEwPykgEuUSn+uTjyrWoZGity4cP2C1CzOAyFrpz9JUxvqE3bVC2Vs3DB7VPifW7KBnApgFJe3gZhaHLyoOLcMYLtShUXmcKGjnfxZfK8DTsDgq/dy/7VXw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=IwPsPiIp; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1718711467;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=KbEwByzdZ2FR46495vyGSwk/Ycglqttws2hwnHDj1Xw=;
-	b=IwPsPiIpeWSiskwiJFV+vKtg26cmt3IwaFOGSuG8/dJgGqwV81/5JaAlrh0Z1ek6khXgVO
-	kg0PNc/IFG2XiNxTKw91IXBlMkmNqeBjyIk9F7RGy1wKpN39er5W6cRAsWWuvmlKryKmLg
-	TmVq7jA2ksOOnG9I39Y6b+4K0ulSB9M=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-249-jRgKipW8Mxu-BMiVbdwb2g-1; Tue,
- 18 Jun 2024 07:51:04 -0400
-X-MC-Unique: jRgKipW8Mxu-BMiVbdwb2g-1
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D03FA19560A7;
-	Tue, 18 Jun 2024 11:51:02 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.39.192.152])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 98AFD19560B2;
-	Tue, 18 Jun 2024 11:50:58 +0000 (UTC)
-From: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
-To: davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: jtornosm@redhat.com,
-	stable@vger.kernel.org
-Subject: [PATCH v2] net: usb: ax88179_178a: improve link status logs
-Date: Tue, 18 Jun 2024 13:50:40 +0200
-Message-ID: <20240618115054.101577-1-jtornosm@redhat.com>
+	s=arc-20240116; t=1718711771; c=relaxed/simple;
+	bh=jpPEB/6YZTPYLy3RYj7LOJsKZCfOADwF3vloVsYeags=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=cAR0I9L4d8DlMYYeVZV3Fu/27kBxLlIYZ+LBIpGEcqwO+8veFJx5+eS3jF2wKaEkj7DTvplxe9sa+3OMsyvMmVugguvFBITv/GJPEbqAjZ4KRMXMYE/v/krI42fgwiMkaMswtLFS38IpEy4zZy0DsH26aRO0NG88XFlWjs2lbFk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=KW1i0k9q; arc=none smtp.client-ip=209.85.167.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-52bd48cf36bso6131122e87.3
+        for <linux-usb@vger.kernel.org>; Tue, 18 Jun 2024 04:56:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1718711768; x=1719316568; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mq75lZPvciVQwZ7mi6K5o2q0ASdayZBfX3qCcW8QAuE=;
+        b=KW1i0k9qj0DskKaCd1uV1Dlm3Ignkxrap9uKQr1wHBUc6iiPcmYL4bQAjj1qoJJmk0
+         c6F4rsmFO2rpCbPJimWUuw3b/2paE4eA1VjbNXnPDQtPl4UwRx8hltyorbVoKUQsJR0F
+         F5N3l6JCZdON/lrLnQnFxr0O+AuQGi8nW6B9hLXQ6JGfv+hcEBf2OZMcsrJEc17WwShE
+         VhQOy856Ii6Jj0/DukJJ1KLdp3cD2uqKrRQKt6tJwm9VfyxAihYjcScdd3RsBApNUT1Y
+         kEjNdXJ7LfXm4prHCAVvJRbmRTzOuEaRYWPLFINadyXml5OMfkCXffUwg0hqUf08wYw+
+         5Vig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718711768; x=1719316568;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mq75lZPvciVQwZ7mi6K5o2q0ASdayZBfX3qCcW8QAuE=;
+        b=GLXLkVIfPPurqGlACB4U2NXf3ZqdbP8WOln8bUgaI1Vgeg1bQt+dlMLow0DdKjsKjj
+         flYeg5SMUcM6wu9Jof4Zp7+B/Ki1f0jHy2VB3tsDKchPIZJIRyBDMXfs7gpZ6pwbqSmV
+         VGbJPG4wQFAcKZoOMIvjLn7LHpQr+dugn6pX1nqoeHxP8GPHTWbSetFO4W0X1qvIKwJG
+         tZ/HtbgTtmY3J0v2GC7fYwj488pfD5zVlFp/K6D5BCWGEDz6whDcuTm0qvUINBUVk3bN
+         1LJqHFOr1/Jo3uBDItBy4HaZTsR1CwvyJK+ALi1v5jdE4PVhJhPleXfNO5OiiterIYa+
+         4r9A==
+X-Forwarded-Encrypted: i=1; AJvYcCW9ir1z5wyaIDtw3NTF7ZAouuTlreB/aDTMYzejgYevbhh35/fFJJHrGskQWjr9+/TOOZnoJqr1aj3+rZV5ooAYdIDByw3sfP97
+X-Gm-Message-State: AOJu0YyNd5saDNZtoQbjBc7OlU9bG4HXO6rCgYUMms5lh7d8S2rg4RGW
+	CsbqGBZKasmPxZIflR4Jn2lVvNFH2btw1Vi4RO33Y58LIdBqja4bUKl+p7Sqh2k=
+X-Google-Smtp-Source: AGHT+IEYh8t5Lf/IT2gzYEj9aUFut5HJwk0C+UH8HgqmpV5pG3oPCZTtmSV1TDxS2pKMtIogxvp+lQ==
+X-Received: by 2002:a05:6512:3b93:b0:52c:8206:b986 with SMTP id 2adb3069b0e04-52cb621b577mr6055207e87.56.1718711767941;
+        Tue, 18 Jun 2024 04:56:07 -0700 (PDT)
+Received: from ?IPV6:2a00:f41:9028:9df3:4fb7:492b:2c94:7283? ([2a00:f41:9028:9df3:4fb7:492b:2c94:7283])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52ca28870f5sm1487968e87.249.2024.06.18.04.56.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Jun 2024 04:56:07 -0700 (PDT)
+Message-ID: <c807a7c6-ac17-454d-9a99-1a221038774e@linaro.org>
+Date: Tue, 18 Jun 2024 13:56:04 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7 6/6] arm64: dts: qcom: c630: Add Embedded Controller
+ node
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+ Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
+ Hans de Goede <hdegoede@redhat.com>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ Nikita Travkin <nikita@trvn.ru>
+References: <20240614-yoga-ec-driver-v7-0-9f0b9b40ae76@linaro.org>
+ <20240614-yoga-ec-driver-v7-6-9f0b9b40ae76@linaro.org>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20240614-yoga-ec-driver-v7-6-9f0b9b40ae76@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Avoid spurious link status logs that may ultimately be wrong; for example,
-if the link is set to down with the cable plugged, then the cable is
-unplugged and after this the link is set to up, the last new log that is
-appearing is incorrectly telling that the link is up.
 
-In order to avoid errors, show link status logs after link_reset
-processing, and in order to avoid spurious as much as possible, only show
-the link loss when some link status change is detected.
 
-cc: stable@vger.kernel.org
-Fixes: e2ca90c276e1 ("ax88179_178a: ASIX AX88179_178A USB 3.0/2.0 to gigabit ethernet adapter driver")
-Signed-off-by: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
----
-v2:
-  - Fix the nits
-v1: https://lore.kernel.org/netdev/20240617103405.654567-1-jtornosm@redhat.com/
+On 6/14/24 01:43, Dmitry Baryshkov wrote:
+> From: Bjorn Andersson <andersson@kernel.org>
+> 
+> The Embedded Controller in the Lenovo Yoga C630 is accessible on &i2c1
+> and provides battery and adapter status, as well as altmode
+> notifications for the second USB Type-C port.
+> 
+> Add a definition for the EC.
+> 
+> Signed-off-by: Bjorn Andersson <andersson@kernel.org>
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> ---
 
- drivers/net/usb/ax88179_178a.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
-index c2fb736f78b2..d90ceab282ff 100644
---- a/drivers/net/usb/ax88179_178a.c
-+++ b/drivers/net/usb/ax88179_178a.c
-@@ -326,7 +326,9 @@ static void ax88179_status(struct usbnet *dev, struct urb *urb)
- 
- 	if (netif_carrier_ok(dev->net) != link) {
- 		usbnet_link_change(dev, link, 1);
--		netdev_info(dev->net, "ax88179 - Link status is: %d\n", link);
-+		if (!link)
-+			netdev_info(dev->net, "ax88179 - Link status is: %d\n",
-+				    link);
- 	}
- }
- 
-@@ -1542,6 +1544,7 @@ static int ax88179_link_reset(struct usbnet *dev)
- 			 GMII_PHY_PHYSR, 2, &tmp16);
- 
- 	if (!(tmp16 & GMII_PHY_PHYSR_LINK)) {
-+		netdev_info(dev->net, "ax88179 - Link status is: 0\n");
- 		return 0;
- 	} else if (GMII_PHY_PHYSR_GIGA == (tmp16 & GMII_PHY_PHYSR_SMASK)) {
- 		mode |= AX_MEDIUM_GIGAMODE | AX_MEDIUM_EN_125MHZ;
-@@ -1579,6 +1582,8 @@ static int ax88179_link_reset(struct usbnet *dev)
- 
- 	netif_carrier_on(dev->net);
- 
-+	netdev_info(dev->net, "ax88179 - Link status is: 1\n");
-+
- 	return 0;
- }
- 
--- 
-2.45.1
-
+Konrad
 
