@@ -1,136 +1,96 @@
-Return-Path: <linux-usb+bounces-11426-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11427-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0E1190E732
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2024 11:41:15 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22C9D90E74A
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2024 11:50:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5B9F6B212EF
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2024 09:41:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BEF7E282653
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2024 09:50:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99D3280C09;
-	Wed, 19 Jun 2024 09:41:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 325A081729;
+	Wed, 19 Jun 2024 09:50:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BHmgL1Kj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G1HX2Rq1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07DED80638;
-	Wed, 19 Jun 2024 09:41:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99E3D54784;
+	Wed, 19 Jun 2024 09:50:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718790065; cv=none; b=W5ibpGJTPM7fa2+3u45TNH9HOSX8+SpIHmYdzbsa//bc29UiLbootIcAdUSKg4uMQC+PJmCvsImvJtDvOIIUdI6zjB1CHwLROmYMIfUXDcn01WrCm4nWFK83fBxgm3Xo3hmjvrK3zQ+ue8iB2psj1HkSTyUQD4uklCuZIsgiDUc=
+	t=1718790629; cv=none; b=bRLDUvnIX+nfP84zYDKGxZgJN2lJM8Bqie/lnrkhQR7e8atsG4JXb/Y+bTFUbwi3pziWSgdY1wrJS9MOuHbjhd0MJZFrGGx1BZMMslRHSCKYLl+bHn1o5oFjYauJ6k+zfVRywakmO/x8fIOgkWR+vn73U78eYwigJsbdrC6lPE8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718790065; c=relaxed/simple;
-	bh=Qg6GuD9uT0FjYhDJqubImg2K17b3CJlSTTIQ09qnDB8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=dAUd06/Mc0sCtY1HSx8RPooRZvZZVyHuvrOha3ca0xp0gnIvhxA9jrfkdXWj/iRjLT3UGwEuHattkmaly4bVSXntIw6BV+VgfumdJiwH7D8cM0ikDkHg3oNQoSNetQERqJJO2PN5WL/dnoDI5awbpkT4lZN/CGbHFQyLEFuLCno=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BHmgL1Kj; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-42121d27861so49751805e9.0;
-        Wed, 19 Jun 2024 02:41:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718790061; x=1719394861; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=r22BRKQXYcHOcbW5qU6bmdOJSTmqJ20MxR35f7aK9/A=;
-        b=BHmgL1Kj5iclisI+DC+6STb6ZX5dGHyGnEYx1laRQJmQwIQ5BoEPLs5VoAAjI8mZuq
-         VDJGlMGZ01DcVYbkB69rwZNfoCiQnvK1bnpDMGCMPDCbm0ScQBmhV5o9CK5EvnreD97s
-         oeP/9oXZGgzG27HQxk3JfRJAjUNsoiHMlvpHOnkvYq0JCdsmUaPMuSjukLZGuwA3/uWB
-         G7A+74nL7RRCP9q5d/daZrgOM8ZlHDh3tl0EHQ+SNWxNsCEc4PyW/ML+WS5Cxe52r0Om
-         8O54mAuEIYpYizeMCSc+OPX+rntd3V37gEYMVA3PGF559SXi0t0ogW1m+nA3WxhAtAVz
-         1sAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718790061; x=1719394861;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=r22BRKQXYcHOcbW5qU6bmdOJSTmqJ20MxR35f7aK9/A=;
-        b=hPC3k8AQRoTDO78APt8mz8f4qUV5Myavbp1pEXlu75rUnzXQ1tNbdnBA1r/ZLAjBS9
-         SbL9bmJYrp/rhfUJuRiXNVl0SOJ84DcogtGv/M/f2WUFul82AH55L4fEL+cixqcumdbs
-         4I0OwBrs77LTXWtKyGKT3lMY/dpR+FKuZl71kkLwyh5iUfkLJ+ArSeh201arvP/AN7VW
-         xwhBMpxINcrpBlTs9a3b/sEIVWU2hMU9YOI7yTd4NrbS1HZAemn+GjWSgMGIIYkMfKJK
-         hnuQHbn0jKsPhgEU2w0WrfhMLwMarOXe8xqlyzIRwnz0PLRDugFgL8Me0K1Z9o6ZSvbV
-         hY9A==
-X-Forwarded-Encrypted: i=1; AJvYcCX014WX20ugXSObpdIrPI6pPWVyUJYavryE7ieD+CXXrEBA+V4nPGipj7y+iHnByMNFg9lChWXcG3vm+JX9c6n0kJZXHUTxx+j2M0i7vrCi2oUk5Mbij1C1oAEaSPfnB/XkZJd4YkAttIuEZOSN
-X-Gm-Message-State: AOJu0YyInlfdIxxhaCqjMVBZqyxr2RWDBP6PkQngQCE0KeAUEVlDxs+2
-	GmYTn2Dpzc1EI8HGqyVP0Iv5Whua9cVQvtOLO29o2cw/WMJAg3py
-X-Google-Smtp-Source: AGHT+IElF7dg8O3LJe50WO5VqjUMPh2cpDUpsDriBW2iVQl47dtiuAO0Ws2JcFXsP6UpV3klb5M5gg==
-X-Received: by 2002:a05:600c:35c3:b0:421:7bed:5274 with SMTP id 5b1f17b1804b1-42475173ce3mr16488635e9.10.1718790061178;
-        Wed, 19 Jun 2024 02:41:01 -0700 (PDT)
-Received: from [127.0.1.1] (84-115-213-103.cable.dynamic.surfer.at. [84.115.213.103])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42306049f1asm182804075e9.22.2024.06.19.02.41.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Jun 2024 02:41:00 -0700 (PDT)
-From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Date: Wed, 19 Jun 2024 11:40:57 +0200
-Subject: [PATCH] USB: serial: garmin_gps: annotate struct garmin_packet
- with __counted_by
+	s=arc-20240116; t=1718790629; c=relaxed/simple;
+	bh=lVHQo/Rj8HhEKrJi1VW2exUVeazX3WH1N6budU1lWgk=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=BRqTtuU7QkPk8Ug/6qoTkkjqDQegVGCZh1qHrNvC1o/xDImYQLKH3PmDJxjf5SWxNUDvSilZtgv6TuJmokdQv+UF1LOL1vxGZ77DTptnVw2CnUsuIEsNRdO8eA30AdT2NNPZwOiVhsSwxc6jFW/ajc8vwjqnt/lOTkEs9CTxHNA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G1HX2Rq1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1C7E9C32786;
+	Wed, 19 Jun 2024 09:50:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718790629;
+	bh=lVHQo/Rj8HhEKrJi1VW2exUVeazX3WH1N6budU1lWgk=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=G1HX2Rq1hevKUVDD04H7sH8UWhSq15z5mx62GD1m6IICziaFlfqIA7rwTgjDJ4PZL
+	 eqYlBTyLqXzgKydr7IMFwcstSBRLhLcZNxXXkMnPHQIYV4RCpgsNbaMTzfJ52R0o9P
+	 W2uwNNKP4MFrERBBTE6ran9RepX/2mLsdA2J/dKAf0jT2UjePrjKFgSwiPq/CqZ5oo
+	 t/SRYjIFGL1pZU/nOBQ/eXU2ytv7oisK3EiAQTxPTa5AGU6TNhYJaTSgmy/48bsHUi
+	 lZ8padfEH2dVGLz3Q3MbUb4fGjRDeWp/9R3ZEyBsi+KkbkwWhVfuBG+CLkweE5LiBq
+	 c9HmsNMQqNmpQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 05347C4361B;
+	Wed, 19 Jun 2024 09:50:29 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240619-garmin_gps_counted_by-v1-1-d8d816f085d9@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAKincmYC/x3MQQ5AMBBA0avIrDUp1QpXEWnQUbNQ0iJEeneN5
- Vv8/0JATxigzV7weFGgzSUUeQbTMjiLjEwylLysuCoaZge/ktN2D3raTneg0ePDRK1kJRvFhRS
- Q2t3jTPf/7foYP5WT9QVnAAAA
-To: Johan Hovold <johan@kernel.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
- Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-hardening@vger.kernel.org, llvm@lists.linux.dev, 
- Javier Carrasco <javier.carrasco.cruz@gmail.com>
-X-Mailer: b4 0.14-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1718790059; l=1151;
- i=javier.carrasco.cruz@gmail.com; s=20240312; h=from:subject:message-id;
- bh=Qg6GuD9uT0FjYhDJqubImg2K17b3CJlSTTIQ09qnDB8=;
- b=AebiJqrhEZoqxVdOt6AGpsJ3S/JQfLwNfhVOY++mgZwM+D/d/7g+jZIVsIR6q94qhuAkGG7eX
- ict+JBHmecYBkDJ9r7+wq3TtL94ZE7beQOexXCgFNweWVRff/v7UqZC
-X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
- pk=lzSIvIzMz0JhJrzLXI0HAdPwsNPSSmEn6RbS+PTS9aQ=
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] net: usb: ax88179_178a: improve reset check
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <171879062901.26288.8596567430830957012.git-patchwork-notify@kernel.org>
+Date: Wed, 19 Jun 2024 09:50:29 +0000
+References: <20240617102839.654316-1-jtornosm@redhat.com>
+In-Reply-To: <20240617102839.654316-1-jtornosm@redhat.com>
+To: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, horms@kernel.org, linux-usb@vger.kernel.org,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+ yongqin.liu@linaro.org, a.miederhoefer@gmx.de, arne_f@ipfire.org
 
-Use the __counted_by compiler attribute for the data[] flexible array member
-to improve the results of array bound sanitizers.
+Hello:
 
-Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
----
-The size is assigned before the first reference to the flexible array
-(see pkt_add()), which allows for a straightforward annotation without
-further modifications.
----
- drivers/usb/serial/garmin_gps.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This patch was applied to netdev/net.git (main)
+by David S. Miller <davem@davemloft.net>:
 
-diff --git a/drivers/usb/serial/garmin_gps.c b/drivers/usb/serial/garmin_gps.c
-index 670e942fdaaa..57df6ad183ff 100644
---- a/drivers/usb/serial/garmin_gps.c
-+++ b/drivers/usb/serial/garmin_gps.c
-@@ -104,7 +104,7 @@ struct garmin_packet {
- 	int               seq;
- 	/* the real size of the data array, always > 0 */
- 	int               size;
--	__u8              data[];
-+	__u8              data[] __counted_by(size);
- };
- 
- /* structure used to keep the current state of the driver */
+On Mon, 17 Jun 2024 12:28:21 +0200 you wrote:
+> After ecf848eb934b ("net: usb: ax88179_178a: fix link status when link is
+> set to down/up") to not reset from usbnet_open after the reset from
+> usbnet_probe at initialization stage to speed up this, some issues have
+> been reported.
+> 
+> It seems to happen that if the initialization is slower, and some time
+> passes between the probe operation and the open operation, the second reset
+> from open is necessary too to have the device working. The reason is that
+> if there is no activity with the phy, this is "disconnected".
+> 
+> [...]
 
----
-base-commit: 0c52056d9f77508cb6d4d68d3fc91c6c08ec71af
-change-id: 20240619-garmin_gps_counted_by-376545960353
+Here is the summary with links:
+  - net: usb: ax88179_178a: improve reset check
+    https://git.kernel.org/netdev/net/c/7be4cb7189f7
 
-Best regards,
+You are awesome, thank you!
 -- 
-Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
 
