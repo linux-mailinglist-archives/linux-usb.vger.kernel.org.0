@@ -1,76 +1,83 @@
-Return-Path: <linux-usb+bounces-11439-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11440-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9FF8090EBEA
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2024 15:02:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 843A490EE6A
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2024 15:28:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 39B912839B3
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2024 13:02:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2E5B4286CA7
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2024 13:28:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8ECE14B96E;
-	Wed, 19 Jun 2024 13:01:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 901A014BFA8;
+	Wed, 19 Jun 2024 13:28:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Zs1TLHf5"
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="a2Zw825w";
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="a2Zw825w"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E638315098D
-	for <linux-usb@vger.kernel.org>; Wed, 19 Jun 2024 13:01:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5276A14373E;
+	Wed, 19 Jun 2024 13:28:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718802081; cv=none; b=m7m8xAn4flR/5b4c1cH8P7b6CK0IecvXQuPL9Ckm+DD0lqumQVXGbfGWD46tdQHXoHD3IoGWZNEdkSM+fMoUz9ADsHXCYCh0NZHl0voMT3FebC+/wueMZqHr317y0Sppn/ifrgCrnYayrAJEKdzYrLSdIykVDWye9icAb5IW43M=
+	t=1718803704; cv=none; b=TCOTIDAoMvp8CfAjO6JNhhYgZkB0xeu1jAxF7ny20FEuPChYEQMmJUsc2+SpUsOSRUhS0ymQhg7NB8P85zFBYJmxhNX7fufL1rp0wyhwaMcW13HLmZmlrfmU5Jfk0dxiy/ZSEBj2JGKk9giMa2OqdajAeIHSXK0n58Qdrxntcoo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718802081; c=relaxed/simple;
-	bh=ETz0h53BYwLAJiwuFSFgaqF56R5KnO4eNd47Q3C+Wt8=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=pbHQIx1z/lGdm9ZUaDrXOhwcDNDmXyA8yMoDYAoDpQte7Fon80lj8AKB75CtaL9cJROXog4eyB5BttFz/eTz0XX9uvhREHGu9DA25R8Sdvh6lVWxj4eIZlKnP/2WycW2wHIzJTuZtomiOI8Fvbw9wcKtSxSCSSSRjqAZNgmlqkw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Zs1TLHf5; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1718802081; x=1750338081;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ETz0h53BYwLAJiwuFSFgaqF56R5KnO4eNd47Q3C+Wt8=;
-  b=Zs1TLHf5vA34XPZ3dtNBz8/cdRz6uZKGSH3CpxF9ehzICxpt2qEPvrA/
-   0CejnIA4562XXdi7D+pAQTyOquiYLYVuFkdGEbfQW7ftNIc7RHeDn4STH
-   hpHOGFfXC4l6fXGHg7MGLpMgueVNh4oAh8RLo9lGuciTdkn2qWT90H/Wy
-   Ep39ftKdyGWh3455Tay7CGovBtUhrcDHEne/jTf5FyR3vCL5LPzGEPxdZ
-   IkTXDjz6DJ8KkBjEdNMQzydzdrOAqOpcwcajfKbVUAjOUcDH62+7R2RWY
-   kSjIuFdzb/+Zrhrv6zSUXPpt2BlR8fuYp3YYqmAJ781Yvgh8plOaCYpEk
-   g==;
-X-CSE-ConnectionGUID: Utz5WnQ8Qr2+O+DK82xp4w==
-X-CSE-MsgGUID: hhR20SY1TkOenUiMLrCtpQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11107"; a="15868311"
-X-IronPort-AV: E=Sophos;i="6.08,250,1712646000"; 
-   d="scan'208";a="15868311"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2024 06:01:20 -0700
-X-CSE-ConnectionGUID: T2XUgqX/S36QtffRnmehfA==
-X-CSE-MsgGUID: 6FOrCKOxQzqfwUBPNdDF7w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,250,1712646000"; 
-   d="scan'208";a="47040555"
-Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
-  by orviesa004.jf.intel.com with ESMTP; 19 Jun 2024 06:01:18 -0700
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-To: <linux-usb@vger.kernel.org>,
-	<gregkh@linuxfoundation.org>
-Cc: mika.westerberg@linux.intel.com,
-	Mathias Nyman <mathias.nyman@linux.intel.com>,
-	Rajaram Regupathy <rajaram.regupathy@intel.com>,
-	Saranya Gopal <saranya.gopal@intel.com>
-Subject: [PATCH 4/4] thunderbolt: Don't create device link from USB4 Host Interface to USB3 xHC host
-Date: Wed, 19 Jun 2024 16:03:05 +0300
-Message-Id: <20240619130305.2617784-5-mathias.nyman@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20240619130305.2617784-1-mathias.nyman@linux.intel.com>
-References: <20240619130305.2617784-1-mathias.nyman@linux.intel.com>
+	s=arc-20240116; t=1718803704; c=relaxed/simple;
+	bh=23ifTE2BbLszVOYk+nDmzGkUuLpyFuSdy9xfyKOZ0kM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KWn3OP656yBiKcMRPD9XncQ8Tul6tKHyzV9Dm4q4rX6UVV/XTy7M4wdU6x8E7unG05lSUL6fI88iD+F+gGNrpV9MXzqzMJ805uYMth38++s9sHyUm7W1ggkp8hgQtfa5O65z5fabP+8SCt1rf1nrYjS8dHIRhcK6JFW93d8oA5E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=a2Zw825w; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=a2Zw825w; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 4FE9821AB5;
+	Wed, 19 Jun 2024 13:28:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1718803700; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=4JsY+EPtMaRXfnzJxvSEnU0R09HA9SC8CtDxtOIu5Dg=;
+	b=a2Zw825wwynfuNcrk2V0Q4dBCa1m8mr0kGF06U6s72kCaNa5CyA5IVW9NeYl1rbq/sIjvV
+	LN7knV0tstiTjhQZ1wV8VRMduQwEjbMMTvw+xvp6zLBVnLdDnYbx1jIOljdByYw+CvSrcn
+	Blzo8qwN3VlUML6AlfI2R3mMAajBAYE=
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.com header.s=susede1 header.b=a2Zw825w
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1718803700; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=4JsY+EPtMaRXfnzJxvSEnU0R09HA9SC8CtDxtOIu5Dg=;
+	b=a2Zw825wwynfuNcrk2V0Q4dBCa1m8mr0kGF06U6s72kCaNa5CyA5IVW9NeYl1rbq/sIjvV
+	LN7knV0tstiTjhQZ1wV8VRMduQwEjbMMTvw+xvp6zLBVnLdDnYbx1jIOljdByYw+CvSrcn
+	Blzo8qwN3VlUML6AlfI2R3mMAajBAYE=
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id D75CE13ABD;
+	Wed, 19 Jun 2024 13:28:19 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id 98Q2MvPccmZ4egAAD6G6ig
+	(envelope-from <oneukum@suse.com>); Wed, 19 Jun 2024 13:28:19 +0000
+From: Oliver Neukum <oneukum@suse.com>
+To: petkan@nucleusys.com,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Oliver Neukum <oneukum@suse.com>,
+	syzbot+5186630949e3c55f0799@syzkaller.appspotmail.com
+Subject: [PATCH net] net: usb: rtl8150 fix unintiatilzed variables in rtl8150_get_link_ksettings
+Date: Wed, 19 Jun 2024 15:28:03 +0200
+Message-ID: <20240619132816.11526-1-oneukum@suse.com>
+X-Mailer: git-send-email 2.45.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -78,81 +85,69 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [-0.49 / 50.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	DWL_DNSWL_LOW(-1.00)[suse.com:dkim];
+	MID_CONTAINS_FROM(1.00)[];
+	BAYES_HAM(-0.98)[86.98%];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[suse.com:s=susede1];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_SOME(0.00)[];
+	ARC_NA(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	DKIM_SIGNED(0.00)[suse.com:s=susede1];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_TRACE(0.00)[suse.com:+];
+	RCVD_COUNT_TWO(0.00)[2];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	DNSWL_BLOCKED(0.00)[2a07:de40:b281:104:10:150:64:97:from,2a07:de40:b281:106:10:150:64:167:received];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[5186630949e3c55f0799];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email,suse.com:dkim,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns]
+X-Spamd-Bar: /
+X-Rspamd-Queue-Id: 4FE9821AB5
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Rspamd-Action: no action
+X-Spam-Flag: NO
+X-Spam-Score: -0.49
+X-Spam-Level: 
 
-USB core will create device links between tunneled USB3 devices and
-USB4 Host Interface during USB device creation.
+This functions retrieves values by passing a pointer. As the function
+that retrieves them can fail before touching the pointers, the variables
+must be initialized.
 
-Those device links are removed with the tunneled USB3 devices, allowing
-USB4 Host Interface to runtime suspend if USB3 tunnels are not used.
-
-So remove device link creation between USB4 Host Interface and USB3 xHC
-during NHI probe
-
-Reported-by: Rajaram Regupathy <rajaram.regupathy@intel.com>
-Reported-by: Saranya Gopal <saranya.gopal@intel.com>
-Tested-by: Saranya Gopal <saranya.gopal@intel.com>
-Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+Reported-by: syzbot+5186630949e3c55f0799@syzkaller.appspotmail.com
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
 ---
- drivers/thunderbolt/acpi.c | 40 ++++++++++----------------------------
- 1 file changed, 10 insertions(+), 30 deletions(-)
+ drivers/net/usb/rtl8150.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/thunderbolt/acpi.c b/drivers/thunderbolt/acpi.c
-index c9b6bb46111c..d2a0054217da 100644
---- a/drivers/thunderbolt/acpi.c
-+++ b/drivers/thunderbolt/acpi.c
-@@ -32,40 +32,20 @@ static acpi_status tb_acpi_add_link(acpi_handle handle, u32 level, void *data,
- 		goto out_put;
+diff --git a/drivers/net/usb/rtl8150.c b/drivers/net/usb/rtl8150.c
+index 97afd7335d86..01a3b2417a54 100644
+--- a/drivers/net/usb/rtl8150.c
++++ b/drivers/net/usb/rtl8150.c
+@@ -778,7 +778,8 @@ static int rtl8150_get_link_ksettings(struct net_device *netdev,
+ 				      struct ethtool_link_ksettings *ecmd)
+ {
+ 	rtl8150_t *dev = netdev_priv(netdev);
+-	short lpa, bmcr;
++	short lpa = 0;
++	short bmcr = 0;
+ 	u32 supported;
  
- 	/*
--	 * Try to find physical device walking upwards to the hierarcy.
--	 * We need to do this because the xHCI driver might not yet be
--	 * bound so the USB3 SuperSpeed ports are not yet created.
-+	 * Ignore USB3 ports here as USB core will set up device links between
-+	 * tunneled USB3 devices and NHI host during USB device creation.
-+	 * USB3 ports might not even have a physical device yet if xHCI driver
-+	 * isn't bound yet.
- 	 */
--	do {
--		dev = acpi_get_first_physical_node(adev);
--		if (dev)
--			break;
--
--		adev = acpi_dev_parent(adev);
--	} while (adev);
--
--	/*
--	 * Check that the device is PCIe. This is because USB3
--	 * SuperSpeed ports have this property and they are not power
--	 * managed with the xHCI and the SuperSpeed hub so we create the
--	 * link from xHCI instead.
--	 */
--	while (dev && !dev_is_pci(dev))
--		dev = dev->parent;
--
--	if (!dev)
-+	dev = acpi_get_first_physical_node(adev);
-+	if (!dev || !dev_is_pci(dev))
- 		goto out_put;
- 
--	/*
--	 * Check that this actually matches the type of device we
--	 * expect. It should either be xHCI or PCIe root/downstream
--	 * port.
--	 */
-+	/* Check that this matches a PCIe root/downstream port. */
- 	pdev = to_pci_dev(dev);
--	if (pdev->class == PCI_CLASS_SERIAL_USB_XHCI ||
--	    (pci_is_pcie(pdev) &&
--		(pci_pcie_type(pdev) == PCI_EXP_TYPE_ROOT_PORT ||
--		 pci_pcie_type(pdev) == PCI_EXP_TYPE_DOWNSTREAM))) {
-+	if (pci_is_pcie(pdev) &&
-+	    (pci_pcie_type(pdev) == PCI_EXP_TYPE_ROOT_PORT ||
-+	     pci_pcie_type(pdev) == PCI_EXP_TYPE_DOWNSTREAM)) {
- 		const struct device_link *link;
- 
- 		/*
+ 	supported = (SUPPORTED_10baseT_Half |
 -- 
-2.25.1
+2.45.1
 
 
