@@ -1,154 +1,153 @@
-Return-Path: <linux-usb+bounces-11421-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11422-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7486290E2AF
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2024 07:29:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B29890E2DD
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2024 07:48:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 122232845BE
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2024 05:29:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D8B11285AC5
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2024 05:48:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6654558BC;
-	Wed, 19 Jun 2024 05:29:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1FF557CB4;
+	Wed, 19 Jun 2024 05:48:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UvEwz7G/"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OwwvRfkb"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6974D55887;
-	Wed, 19 Jun 2024 05:29:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB63D48788;
+	Wed, 19 Jun 2024 05:48:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718774973; cv=none; b=jMN99mCi9NTphc0wnsghsR03jLMsf58tP4RcJuWG1q90w27RqLZ1W7F9WcrWyibTBTV0MWSN94HH0uIDmB78/x41C6iyW+L93/5pwqNtVwvLtMvoXgYhDscpjXTYCNbDKpnDCbPYLR9LtdmApLQWZBl3AHVCUsYBLCkD/nFohqs=
+	t=1718776119; cv=none; b=YKUCoFznILvncVgtmKp4VaSNE7YAg2DxKXXeegg6DfgHffcwpD2rj2POc8d+jRAdVanRFqL25RzLUHurCv8loK+FjAaYe2LW8B/01GF3Rf6yiteFotqMWV2V1oS9DlJhXySwbb568bOZmHq4Vhz92BIi5uxwvjT37dMUD3rqUec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718774973; c=relaxed/simple;
-	bh=ProNh6WDpQJsTCKWeK/xBB+DgqPo4qArcFsOCcPezwM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tSYYEEvVm/OgCbSwU7H+v7GW1YeooXLjWrhIDVOxKzJOiJg5VIkLLMOFnv79dobYZKyIgcTRpC+9T4DpscdMloyNeAno0dUUeA1ZacLEUFQvAF6Fuq52RiR+Tmd/ujGZ3KuJghldw2/S9jB/x7Wr60vAb5ojCiQ6cohfTuO5lw0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UvEwz7G/; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1718774971; x=1750310971;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ProNh6WDpQJsTCKWeK/xBB+DgqPo4qArcFsOCcPezwM=;
-  b=UvEwz7G/0ZzxFAge9gmBj4C3LxCjmanrdUIp2EwrHCTyyAO7WFm1TNLL
-   8Zr3YXsus3j26122QllO3Aqm0MXiq66jO+5UPaxbbcq8x6z6r3Ve13bGZ
-   d/SuazcVK2mBhyZmOiCEVaqFlFgO24hyXcdO3NBcKlSqqdWJv02Kf96Qb
-   qD29x2+g9fXk6eDZieoj+hKMX1THZutvL2J3LXjlX93trv8A6BIerrHVR
-   gnEN439xbD5dQmm/gzMvhN7S1DVCWG9EkarINWDsG7kRAIfXjqrrL58ex
-   /5rYol0kt3QQogMFEboIUEgEZvJmWWXPocga3L0An0yhdDP4ArlYdTkY8
-   w==;
-X-CSE-ConnectionGUID: czHvkxWIQTm6Q4uEzgfyBw==
-X-CSE-MsgGUID: Rd0kxEWPQQWJL34wAosL/A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11107"; a="33235027"
-X-IronPort-AV: E=Sophos;i="6.08,249,1712646000"; 
-   d="scan'208";a="33235027"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2024 22:29:30 -0700
-X-CSE-ConnectionGUID: B63f9b/RT0WXS1EvrdiIRg==
-X-CSE-MsgGUID: J9RujRSITdSp2fbnatoSKw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,249,1712646000"; 
-   d="scan'208";a="65031965"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa002.fm.intel.com with ESMTP; 18 Jun 2024 22:29:28 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id 705971A3; Wed, 19 Jun 2024 08:29:27 +0300 (EEST)
-Date: Wed, 19 Jun 2024 08:29:27 +0300
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Mario Limonciello <mario.limonciello@amd.com>
-Cc: Bjorn Helgaas <bhelgaas@google.com>,
-	Mathias Nyman <mathias.nyman@intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
-	Daniel Drake <drake@endlessos.org>, Gary Li <Gary.Li@amd.com>
-Subject: Re: [PATCH 0/4] Verify devices transition from D3cold to D0
-Message-ID: <20240619052927.GF1532424@black.fi.intel.com>
-References: <20240613054204.5850-1-mario.limonciello@amd.com>
- <20240618131452.GC1532424@black.fi.intel.com>
- <9f465ec4-32b9-4cd8-89de-a57a99880360@amd.com>
+	s=arc-20240116; t=1718776119; c=relaxed/simple;
+	bh=HG2uYDQDA5LUfb3Rj3XK64Qm99gLTPvf8sYWfoqAnhk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Tdae1bIwmsKkirhwN5e/FSmDpwdUafKrJyPXjxKOKRlC+ad+ye1a4nveosn4PdNS6k7nmvsex89POt87wahKZwaxhwpXQNJlBqjqlcdOt6xgLFmDoVXPelQ62IeWPkZhVpAFJ0kjWSIkrBA3hux59Yn3rfWHKC5khfJEFvCnfhk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OwwvRfkb; arc=none smtp.client-ip=209.85.161.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-5b3356fd4f3so576328eaf.1;
+        Tue, 18 Jun 2024 22:48:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1718776117; x=1719380917; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=txDixZDYkb0sMcFIHxT8WMusXak2eLUjpnDzHabgDBE=;
+        b=OwwvRfkbl+idmWMEpAhToSW4seW4Zi6+XkfGPocLn8pf8UDGvzS8N3UvbSRVbQ3WEw
+         XNo1sgbU5S0lNxsvsT7BZlhE5AQg4AJjKPZvbvCrxGUydhlzMzSWPw1hdc5C6ZVDDTAF
+         lNVluyMQTuX6/QT87yBtK0jaXsjJuKwRI3xsRlfzXW1KlU/AeK1/wYfxKffAI+SKqo7F
+         lFt0pRkD7jpc6XwNrLnw0HHs+S4P1JQ0X1o3J6J44Fx3S4arvLSQGIwKvWd2aKUxC3Rs
+         qCUvh7zxIJsUqsrX+FqJ92lTeugmjzmg6QhQ8gxiL55yyqPsQeOp94vcYELbxIJBIjWY
+         iP7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718776117; x=1719380917;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=txDixZDYkb0sMcFIHxT8WMusXak2eLUjpnDzHabgDBE=;
+        b=EXSL+A9+UOWF3qWlFq/P/5XGxxnUteG4kphXXQpTCL8LvR2dp/TyRfX5M2LiWjydh1
+         4pqoXs3vVAgYFTubtMMCI4ZvBJ1rXAcKrlz7ctOlPock9sERNHuDsAJySHJsnfI/DWeN
+         WNZAJ0adJ1xN0l25eRpqQMetGaeQtznApS3hieH9FPhoJuwhl4wpSY7C+2tKUoJ3yHCZ
+         9eaB8hJY0I+9vxeX1QJHjl0exdHOezO3Y+SUwEkBcYdirRmXZ71KnbNB0T+6B587U7Ol
+         mSGogQDFDW75qfmcw1T3sow8BraT+hPqmtCZ3EvKbe1dsJKkZnraXKujTpN500AXOKiu
+         O2aw==
+X-Forwarded-Encrypted: i=1; AJvYcCXw1PuzVy5Z/QDbuhsCEI3D6p6K1KcUtjJzC2UYecH5RAOAmYv+6idmRkcASGBLtO5+XQO/e9VjNI/rL/O9agemmZl5EnTy9zuMUu9bXOfngpWy3JP9Sczh3CCjqAyBgE3vaM7s
+X-Gm-Message-State: AOJu0YxRXplVmPOjRdaQYsEM6+GxD6zc48JISV5YxjMFLJFxkbM3TW5l
+	o2i3zPBTQGTdLyk2BzhdY7o4PSYqIIjFYaifPg7h0k9EY+W7e/2K
+X-Google-Smtp-Source: AGHT+IH2DZYYM+p02l6YA7ePfYsYNMkqQxWcnBW5NDw6XLpWlhn6DQE7a0VfVAeGIfezzOozyXcFbQ==
+X-Received: by 2002:a05:6870:148d:b0:258:4dcb:7d48 with SMTP id 586e51a60fabf-25c943e5c01mr2108991fac.0.1718776116791;
+        Tue, 18 Jun 2024 22:48:36 -0700 (PDT)
+Received: from localhost.localdomain (122-117-151-175.hinet-ip.hinet.net. [122.117.151.175])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-705ccb3d1f8sm9886592b3a.113.2024.06.18.22.48.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Jun 2024 22:48:36 -0700 (PDT)
+From: Kuangyi Chiang <ki.chiang65@gmail.com>
+To: mathias.nyman@intel.com,
+	gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	ki.chiang65@gmail.com,
+	stable@vger.kernel.org
+Subject: [PATCH v2] xhci: Don't issue Reset Device command to Etron xHCI host
+Date: Wed, 19 Jun 2024 13:48:08 +0800
+Message-Id: <20240619054808.12861-1-ki.chiang65@gmail.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <9f465ec4-32b9-4cd8-89de-a57a99880360@amd.com>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Jun 18, 2024 at 11:56:50AM -0500, Mario Limonciello wrote:
-> On 6/18/2024 08:14, Mika Westerberg wrote:
-> > Hi Mario,
-> > 
-> > On Thu, Jun 13, 2024 at 12:42:00AM -0500, Mario Limonciello wrote:
-> > > Gary has reported that when a dock is plugged into a system at the same
-> > > time the autosuspend delay has tripped that the USB4 stack malfunctions.
-> > > 
-> > > Messages show up like this:
-> > > 
-> > > ```
-> > > thunderbolt 0000:e5:00.6: ring_interrupt_active: interrupt for TX ring 0 is already enabled
-> > > ```
-> > > 
-> > > Furthermore the USB4 router is non-functional at this point.
-> > 
-> > Once the USB4 domain starts the sleep transition, it cannot be
-> > interrupted by anything so it always should go through full sleep
-> > transition and only then back from sleep.
-> > 
-> > > Those messages happen because the device is still in D3cold at the time
-> > > that the PCI core handed control back to the USB4 connection manager
-> > > (thunderbolt).
-> > 
-> > This is weird. Yes we should be getting the wake from the hotplug but
-> > that should happen only after the domain is fully in sleep (D3cold). The
-> > BIOS ACPI code is supposed to deal with this.
-> 
-> Is that from from experience or do you mean there is a spec behavior?
-> 
-> IE I'm wondering if we have different "expectations" from different
-> company's hardware designers.
+Sometimes the hub driver does not recognize the USB device connected
+to the external USB2.0 hub when the system resumes from S4.
 
-The spec and the CM guide "imply" this behaviour as far as I can tell,
-so that the "sleep event" is done completely once started. I guess this
-can be interpreted differently too because it is not explicitly said
-there.
+This happens when the xHCI driver issue the Reset Device command to
+inform the Etron xHCI host that the USB device has been reset.
 
-Can you ask AMD HW folks if this is their interpretation too? Basically
-when we get "Sleep Ready" bit set for all the routers in the domain and
-turn off power (send PERST) there cannot be wake events until that is
-fully completed.
+Seems that the Etron xHCI host can not perform this command correctly,
+affecting the USB device.
 
-There is typically a timeout mechanism in the BIOS side (part of the
-power off method) that waits for the PCIe links to enter L2 before it
-triggers PERST. We have seen an issue on our side that if this L2
-transition is not completed in time a wake event triggered but that was
-a BIOS issue.
+Instead, to avoid this, disabling slot ID and then enabling slot ID
+is a workable solution to replace the Reset Device command.
 
-> > > The issue is that it takes time for a device to enter D3cold and do a
-> > > conventional reset, and then more time for it to exit D3cold.
-> > > 
-> > > This appears not to be a new problem; previously there were very similar
-> > > reports from Ryzen XHCI controllers.  Quirks were added for those.
-> > > Furthermore; adding extra logging it's apparent that other PCI devices
-> > > in the system can take more than 10ms to recover from D3cold as well.
-> > 
-> > They can take anything up to 100ms after the link has trained.
-> 
-> Right; so currently there is nothing checking they really made it back to D0
-> after calling pci_power_up().  I feel like we've "mostly" gotten lucky.
+An easy way to issue these commands in sequence is to call
+xhci_free_dev() and then xhci_alloc_dev().
 
-We do have pci_bridge_wait_for_secondary_bus() there but I guess that's
-not called for integrated PCIe endpoints such as xHCI and the USB4 Host
-Interface. They too enter D3cold once power is turned off so I agree we
-might have gotten lucky here with the D3hot 10ms delay.
+Applying this patch then the issue is gone.
+
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Kuangyi Chiang <ki.chiang65@gmail.com>
+---
+Changes in v2:
+- Change commit log
+- Add a comment for the workaround
+- Revert "global xhci_free_dev()"
+- Remove XHCI_ETRON_HOST quirk bit
+
+ drivers/usb/host/xhci.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index 37eb37b0affa..c892750a89c5 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -3682,6 +3682,8 @@ void xhci_free_device_endpoint_resources(struct xhci_hcd *xhci,
+ 				xhci->num_active_eps);
+ }
+ 
++static void xhci_free_dev(struct usb_hcd *hcd, struct usb_device *udev);
++
+ /*
+  * This submits a Reset Device Command, which will set the device state to 0,
+  * set the device address to 0, and disable all the endpoints except the default
+@@ -3752,6 +3754,20 @@ static int xhci_discover_or_reset_device(struct usb_hcd *hcd,
+ 						SLOT_STATE_DISABLED)
+ 		return 0;
+ 
++	if (dev_is_pci(hcd->self.controller) &&
++		to_pci_dev(hcd->self.controller)->vendor == 0x1b6f) {
++		/*
++		 * Disabling and then enabling device slot ID to inform xHCI
++		 * host that the USB device has been reset.
++		 */
++		xhci_free_dev(hcd, udev);
++		ret = xhci_alloc_dev(hcd, udev);
++		if (ret == 1)
++			return 0;
++		else
++			return -EINVAL;
++	}
++
+ 	trace_xhci_discover_or_reset_device(slot_ctx);
+ 
+ 	xhci_dbg(xhci, "Resetting device with slot ID %u\n", slot_id);
+-- 
+2.25.1
+
 
