@@ -1,172 +1,136 @@
-Return-Path: <linux-usb+bounces-11412-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11413-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4FC090E15F
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2024 03:43:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C65E990E163
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2024 03:44:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ED3931C218C5
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2024 01:43:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 314332843BD
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2024 01:44:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E791B653;
-	Wed, 19 Jun 2024 01:42:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09584BA2F;
+	Wed, 19 Jun 2024 01:44:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="GDzwUmEY"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="KU6qhPAC"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5BC26AAD
-	for <linux-usb@vger.kernel.org>; Wed, 19 Jun 2024 01:42:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E9F5AD5A
+	for <linux-usb@vger.kernel.org>; Wed, 19 Jun 2024 01:44:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718761378; cv=none; b=PP0cqNEBBLZkMQCw7fkgcZZfe6/KIu2ggs9teU+9uaIKoGT5CzDQUsJHwSwazbXF2Sy6GgorphWljz4Acel0TOQc4Ih89NrJVw7KP4UOn56Jd72wdoIkIEBPC4oGm7ZtP7aJBiHxa05yvmy18R62RN9f1cGleG8BHhNo/OeDHpE=
+	t=1718761466; cv=none; b=RaNrxRmWtxVIJG+aSMavPlvEfwp1B/cfQFh/n3cmcjvQDjN5KQirAzu+Wz+oZB9jAqSzJHXdqfV/YZsGonco8kNTIq8Eb5mGLnq2C6mVbcotH8zKkAziY/NA8NwlJ+k2V33udfMIonhJQkieeXhpb7xNwr4ozKbxYGR46f7+Kr0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718761378; c=relaxed/simple;
-	bh=AgBQfUPLoqrbhuSoC4dUS42wrCdlYP45yQF/5SJEYpA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:In-Reply-To:
-	 Content-Type:References; b=Z/kB2uA848KcH69geRW9EWriDf3l/xl2q8JLTLW4v9BXzrIhFpsIhcaaxzkblrjFpiDqhaC/tSc7USFu0SQUyBglOksrI3VYknq+kBDAod1/wlJVdfiaqhyaLVnLL5kuvl2u8xuzr/4Hs5RKExMYtVl62B42f04s13DXQUane5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=GDzwUmEY; arc=none smtp.client-ip=203.254.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
-	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20240619013329epoutp0445bd3fcafde9a005b4ae3d2e77bdc344~aQ9l-ZdO80961609616epoutp04H
-	for <linux-usb@vger.kernel.org>; Wed, 19 Jun 2024 01:33:29 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20240619013329epoutp0445bd3fcafde9a005b4ae3d2e77bdc344~aQ9l-ZdO80961609616epoutp04H
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1718760809;
-	bh=4t/SmYLar+HaG2yFNDOf3LyoDqlKE/6BTNN5g/MR14Y=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=GDzwUmEYkrqDlIXzI8+m6PqScF6BtKnrjoOf4fbpzsUgrrWwokY6aQS1sKGLQC8CY
-	 yoi9tGd6F2kZHhncfX3NUF6zUCK/bdqjsMCMKrxm7+Lbbd+7cPaJ32lodZsB2X/51e
-	 wLQTlZMdmXViP/rn4a5sKBRQPpgL0g1sUwQRl24o=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-	epcas2p4.samsung.com (KnoxPortal) with ESMTP id
-	20240619013328epcas2p494f2194ebe55b1b6c1f899a77d359d17~aQ9lUZRaF2096220962epcas2p4M;
-	Wed, 19 Jun 2024 01:33:28 +0000 (GMT)
-Received: from epsmgec2p1-new.samsung.com (unknown [182.195.36.70]) by
-	epsnrtp1.localdomain (Postfix) with ESMTP id 4W3mNS0zWCz4x9Q1; Wed, 19 Jun
-	2024 01:33:28 +0000 (GMT)
-Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
-	epsmgec2p1-new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	1C.00.25328.86532766; Wed, 19 Jun 2024 10:33:28 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-	epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
-	20240619013327epcas2p46269e8b7db43b5897a65c4c67fa7ff58~aQ9kV-voa2094720947epcas2p4d;
-	Wed, 19 Jun 2024 01:33:27 +0000 (GMT)
-Received: from epsmgmc1p1new.samsung.com (unknown [182.195.42.40]) by
-	epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-	20240619013327epsmtrp10184b41cf3437c9bff27ee4706de600a~aQ9kVQoj52781227812epsmtrp1R;
-	Wed, 19 Jun 2024 01:33:27 +0000 (GMT)
-X-AuditID: b6c32a4d-d53ff700000262f0-3f-667235688e26
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-	epsmgmc1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	53.EC.07412.76532766; Wed, 19 Jun 2024 10:33:27 +0900 (KST)
-Received: from ubuntu (unknown [10.229.95.128]) by epsmtip2.samsung.com
-	(KnoxPortal) with ESMTPA id
-	20240619013327epsmtip29d769f5bdd0ca8faf4c2876b7be0a569~aQ9kKoWM92746027460epsmtip2P;
-	Wed, 19 Jun 2024 01:33:27 +0000 (GMT)
-Date: Wed, 19 Jun 2024 10:34:26 +0900
-From: Jung Daehwan <dh10.jung@samsung.com>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: joswang <joswang1221@gmail.com>, Greg KH <gregkh@linuxfoundation.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"stable@vger.kernel.org" <stable@vger.kernel.org>, Jos Wang
-	<joswang@lenovo.com>
-Subject: Re: [PATCH v4, 3/3] usb: dwc3: core: Workaround for CSR read
- timeout
-Message-ID: <20240619013423.GA132190@ubuntu>
+	s=arc-20240116; t=1718761466; c=relaxed/simple;
+	bh=bxqKkp5RsRrRMXQSjN5plFyhoWn8bBxpTFP0MGicwNI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CbXaeAgnY/m+xjFb5nmtUbVEdmm0T7nfxnD4cB3KQqdEFA+LOt+pqRSv+GUTUikHdxlRU20e2duz+dEXxQD9ZfHOyoWkxB6QST6zVnbbcf6Wlob1gpBHeiOdvgc7b5UjYpP0h7yqhuUFr9kg/e0QZAxUor2NgDlko7lEco3FwHo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=KU6qhPAC; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+Received: from pyrite.rasen.tech (h175-177-049-156.catv02.itscom.jp [175.177.49.156])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 3013CF89;
+	Wed, 19 Jun 2024 03:44:03 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1718761445;
+	bh=bxqKkp5RsRrRMXQSjN5plFyhoWn8bBxpTFP0MGicwNI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=KU6qhPACn+CA1umxGb4v3xQV+a2U29jVoEr2XdwCejVOYBbKbfTZr3O1d6QCex17b
+	 myEipwCJ5NmFcg73jERME3antpOLHtLHXEEIjdBByrDqMX9WZnUN+FVp7Q21ejzFjc
+	 dm3K0sA26m4QPPNbizIHypaIDCpM0+Gr1KGcnpzQ=
+Date: Wed, 19 Jun 2024 10:44:15 +0900
+From: Paul Elder <paul.elder@ideasonboard.com>
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: Andrey Konovalov <andreyknvl@gmail.com>,
+	USB list <linux-usb@vger.kernel.org>
+Subject: Re: Stalling non-0-length OUT control requests in Raw Gadget/GadgetFS
+Message-ID: <ZnI376uuUb34I1go@pyrite.rasen.tech>
+References: <CA+fCnZeLRqk-FOkJ81qMY0NMZC7YnW=beTw=w_DVA=OhOnywRw@mail.gmail.com>
+ <8b7aa23c-9976-46c2-b64f-1d4614aefe89@rowland.harvard.edu>
+ <CA+fCnZd1UOqCiH7L1FMMqLhepiMSBfgVb-tXfc81F_VuX_zy4w@mail.gmail.com>
+ <73838855-fe52-4d2f-a826-c5757f75bd92@rowland.harvard.edu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20240618213600.63fdhod6nnx4h4m6@synopsys.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprFJsWRmVeSWpSXmKPExsWy7bCmmW6GaVGawdntLBbNi9ezWdx/y27R
-	fW0Pk8XlXXPYLBYta2W2WLDxEaPFqgUH2B3YPXbOusvucfbXS2aP/XPXsHts2f+Z0ePzJrkA
-	1qhsm4zUxJTUIoXUvOT8lMy8dFsl7+B453hTMwNDXUNLC3MlhbzE3FRbJRefAF23zBygK5QU
-	yhJzSoFCAYnFxUr6djZF+aUlqQoZ+cUltkqpBSk5BeYFesWJucWleel6eaklVoYGBkamQIUJ
-	2RndMwQLjrJVLJv5gLGBcT1rFyMnh4SAicS++dcZuxi5OIQE9jBK/Nm6kw3C+cQo8fDhaxYI
-	5xujxLxpB1hgWrrWtjBDJPYySiz8d50dwnnCKDHt1mdmkCoWAVWJV0t+MoLYbAJaEvd+nACL
-	iwjoSBw4cZ4JpIFZYDaTxNzfD4GKODiEBfwllmyQAKnhBapZdeE/G4QtKHFy5hOwzZwC1hKz
-	Gg6zgZSLCqhIvDpYDzJGQuAru8SN75eZIa5zkXi44grUpcISr45vYYewpSRe9rdB2cUSt54/
-	Y4ZobmGUWPGqBarZWGLWs3awo5kFMiR+fZnIDrJMQkBZ4sgtFogwn0TH4b9QYV6JjjYhiE5l
-	iemXJ0DDVFLi4OtzUBM9JK7OmAoNn43MEl3/NzNPYJSfheS1WUi2Qdg6Egt2f2KbBbSCWUBa
-	Yvk/DghTU2L9Lv0FjKyrGKVSC4pz01OTjQoMdfNSy+ERnpyfu4kRnEi1fHcwvl7/V+8QIxMH
-	4yFGCQ5mJRFep2l5aUK8KYmVValF+fFFpTmpxYcYTYFxNZFZSjQ5H5jK80riDU0sDUzMzAzN
-	jUwNzJXEee+1zk0REkhPLEnNTk0tSC2C6WPi4JRqYKpyPZ9Uy3uzZeVa1w1337m5HnPY2sYi
-	VVex7M4xtb+nm1L/i/op6Al9v3JLRzwzufdD1cpJoksOWz261JmZZKa8ZHe64oXuc70LH/9d
-	zPm9/tHEQ4sX5Gf/PKex+aiRm6PfBKUPrebiRxhVT9xiODxrU4M0h2BYlkPZu6rnWp4WLuf3
-	HxIUUDAx0c1vjetIChOM4F7ncF28eK3PvWfnjl0WMiqumjRhtdSkvx3vZjSFTWf8JD1j+pza
-	5cWHA2OO7C2ZFa0r9tFsmmnG7rXKLTl/VcRuVut/15if8t5O6xAXE9PWAGGuc7/FZz5cvLjk
-	zuojB7KztmfWFS1ie5TD9etoGrd6wzVjr6VnvXM1LJVYijMSDbWYi4oTAWx46pctBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrLLMWRmVeSWpSXmKPExsWy7bCSvG66aVGawfp/ohbNi9ezWdx/y27R
-	fW0Pk8XlXXPYLBYta2W2WLDxEaPFqgUH2B3YPXbOusvucfbXS2aP/XPXsHts2f+Z0ePzJrkA
-	1igum5TUnMyy1CJ9uwSujFMHtzAWtLJUTNp8k7mBsYO5i5GTQ0LARKJrbQuQzcUhJLCbUeL5
-	6fVQCUmJpXNvsEPYwhL3W46wQhQ9YpSY0dgNVsQioCrxaslPRhCbTUBL4t6PE2BxEQEdiQMn
-	zjOBNDALzGaSOHdvBViRsICvxPl9PWA2L1DRqgv/2SCmbmSW6PzbzQqREJQ4OfMJC4jNDDT1
-	xr+XQJM4gGxpieX/OEDCnALWErMaDrOBhEUFVCReHayfwCg4C0nzLCTNsxCaFzAyr2KUTC0o
-	zk3PTTYsMMxLLdcrTswtLs1L10vOz93ECI4BLY0djPfm/9M7xMjEwXiIUYKDWUmE12laXpoQ
-	b0piZVVqUX58UWlOavEhRmkOFiVxXsMZs1OEBNITS1KzU1MLUotgskwcnFINTEfNc7rjfm6L
-	3FPcdufAPdGcfW3pvKfP3uUsZr72Omx6c/R80W/vzn3pz0xXi+HWn3fdyNb24Z33s7cWlP+s
-	+afWO/V5X6K735nQHfXc8XtlhQqm8+YlnrkccFNmJ6fvyrNHLOY+sj+ntdf1e4qHlFzaBtct
-	bClOG9y7ayweNeuqznbTKP+wfKnj7PmivYf9nf1++xZvefCrOsX69j39XFZZpzKl13LTJjkk
-	/zdrTOLJyp6xdvu3Y+cyBCNt5W6b/Q2wevuo7DPDFX81m8Vn4yx+eW++4GTVEjCVIStqSuSB
-	xs8a91WynBT2H6uSb9x5Q197dfxjob2GBqI/drz7IjRr1a2yC9mvwsRn/O6cpMRSnJFoqMVc
-	VJwIAITzWYrwAgAA
-X-CMS-MailID: 20240619013327epcas2p46269e8b7db43b5897a65c4c67fa7ff58
-X-Msg-Generator: CA
-Content-Type: multipart/mixed;
-	boundary="----40rWTt6DAFmUrjtMexcyNm5gpMTj9FMdHa8zGfbdWx6mQz74=_de1c8_"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20240618000530epcas2p15ee3deff0d07c8b8710bf909bdc82a50
-References: <20240601092646.52139-1-joswang1221@gmail.com>
-	<20240612153922.2531-1-joswang1221@gmail.com>
-	<2024061203-good-sneeze-f118@gregkh>
-	<CAMtoTm0NWV_1sGNzpULAEH6qAzQgKT_xWz7oPaLrKeu49r2RzA@mail.gmail.com>
-	<CGME20240618000530epcas2p15ee3deff0d07c8b8710bf909bdc82a50@epcas2p1.samsung.com>
-	<20240618000502.n3elxua2is3u7bq2@synopsys.com>
-	<20240618042429.GA190639@ubuntu>
-	<20240618213600.63fdhod6nnx4h4m6@synopsys.com>
-
-------40rWTt6DAFmUrjtMexcyNm5gpMTj9FMdHa8zGfbdWx6mQz74=_de1c8_
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <73838855-fe52-4d2f-a826-c5757f75bd92@rowland.harvard.edu>
 
-On Tue, Jun 18, 2024 at 09:36:03PM +0000, Thinh Nguyen wrote:
-> On Tue, Jun 18, 2024, Jung Daehwan wrote:
+On Sat, Jun 15, 2024 at 10:33:28PM -0400, Alan Stern wrote:
+> On Sat, Jun 15, 2024 at 10:49:46PM +0200, Andrey Konovalov wrote:
+> > On Sat, Jun 15, 2024 at 4:12 AM Alan Stern <stern@rowland.harvard.edu> wrote:
+> > > There has been a patch posted to support UDC drivers that don't
+> > > automatically acknowledge non-zero-length control-OUT transfers.  But
+> > > the patch hasn't been merged, and even if it were, all the existing UDC
+> > > drivers would still need to be updated.
 > > 
-> > Hi Thinh,
+> > This series below is the one you're referring to, right?
 > > 
-> > We faced similar issue on DRD mode operating as device.
-> > Could you check it internally?
-> > Case: 01635304
-> > 
+> > https://lore.kernel.org/linux-kernel/20190124030228.19840-1-paul.elder@ideasonboard.com/
 > 
-> Hi Jung,
+> Yes, that's it.  I'm impressed that you were able to find it; I had lost 
+> track of it.
 > 
-> It's a separate case. Please check through our support channel to avoid
-> any miscommunication/disconnect.
+> > Do you know why it wasn't merged? (CC Paul). There are no comments on
+> > the latest version I managed to find.
 > 
-> Thanks,
-> Thinh
+> I guess Felipe Balbi (the USB Gadget maintainer at the time) just wasn't 
+> very interested in fixing the problem.
 
-Thanks for the check. I will check through the support channel again.
+So that's why we never continued with merging it...
 
-Best Regards,
-Jung Daehwan
-
-------40rWTt6DAFmUrjtMexcyNm5gpMTj9FMdHa8zGfbdWx6mQz74=_de1c8_
-Content-Type: text/plain; charset="utf-8"
+Is it time to dust it off and try to upstream it again? :)
 
 
-------40rWTt6DAFmUrjtMexcyNm5gpMTj9FMdHa8zGfbdWx6mQz74=_de1c8_--
+Paul
+
+> 
+> > Also, just to check my understanding: with that series in place and
+> > assuming the UDC drivers are updated, a gadget driver would need to
+> > first do usb_ep_queue with the proper length and explicit_status ==
+> > true to get the data for the control OUT request, and then either do
+> > usb_ep_queue again with length 0 to ack or do usb_ep_set_halt to
+> > stall?
+> 
+> Yes, that's how it worked.  Alternatively, if the gadget driver didn't 
+> set explicit_status in the control-OUT request then the UDC core would 
+> automatically call usb_ep_queue again with a 0-length transfer to send 
+> the status.  That way existing gadget drivers would continue to work 
+> after the UDC drivers were updated, and updated UDC drivers wouldn't 
+> have to worry about doing an automatic acknowledge only some of the 
+> time.
+> 
+> Note that in order to avoid breaking things during the transition 
+> period, it would also be necessary to add a flag to the usb_gadget 
+> structure, indicating that the UDC driver has been updated to support 
+> explicit_status.
+> 
+> Alan Stern
+> 
+> PS: There's another weakness in the Gadget API which you might possibly 
+> run across in your project.  It's less likely to arise because it 
+> involves lengthy delays.
+> 
+> Say there's a control transfer with delayed status, and the gadget 
+> driver delays for so long that the host times out the transfer.  Then 
+> the host starts a new control transfer before the gadget driver queues 
+> its status reply.  Since the Gadget API doesn't have any way to indicate 
+> which control transfer a usb_request was meant for, the reply that was 
+> meant for the old transfer would get sent to the host, and the host 
+> would think it was a reply to the new transfer.
+> 
+> This problem could be solved by adding a unique ID tag to each 
+> usb_request, and passing the transfer ID as an extra argument to the 
+> gadget driver's setup() callback.  That would explicitly indicate which 
+> transfer a request was meant for.  But doing this would also require 
+> updating every function driver and every UDC driver.  Probably not worth 
+> the effort, considering how unlikely it is that the situation will ever 
+> arise.
 
