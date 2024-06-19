@@ -1,79 +1,75 @@
-Return-Path: <linux-usb+bounces-11430-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11431-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C949990E90A
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2024 13:11:52 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA25E90E917
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2024 13:14:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 89D431F22B5D
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2024 11:11:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B89731C232DF
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2024 11:14:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59FA7136E0E;
-	Wed, 19 Jun 2024 11:11:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44D11139578;
+	Wed, 19 Jun 2024 11:14:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nS192f2p"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="C3TtnQLm"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 154A075817;
-	Wed, 19 Jun 2024 11:11:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5058A80BF0
+	for <linux-usb@vger.kernel.org>; Wed, 19 Jun 2024 11:14:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718795504; cv=none; b=n38IyOKJ3oJHjF3O9dm2UL4Qppx9NxanVGgrWDW1XZYkbKDsv0xuppOH0IWFNZEoAIYEeRFJZt+uuilkPJ4fs+NM6RszUAloGUhEwID/aa061WqtMx+BihgpLUjnDYBKWe40fuPhw1aa3i72u3CaipeJDMG096aMtXVSIHAHn6U=
+	t=1718795673; cv=none; b=Z++oS97AXvmkpDTPf0Vfb1eOGcng8KbB4d6YZn7FCFtFKGIACrLTj6EwALUw5EG/H8T5sUCCg9LucRm9o0P15tTPBX/fwJ5d1yFjNN0/8lSMcg4hQ/tPmVRtnOO8PVICpdgQYiRENbzyl0AMqxLhmORggAs51McKJqhIcDLOs5U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718795504; c=relaxed/simple;
-	bh=Q4p8OGkyZzyrh1giwx6LIVg6Ii/VKLg/MXvccZBGuxM=;
+	s=arc-20240116; t=1718795673; c=relaxed/simple;
+	bh=s9SeTYmoXTQdeOWluxrOTooNLDhsWcez8QncRNnMaSQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=P50JDl5ly5XAzGBV2Y512jdRN6khF1J9weV0J43FY9iVsBaSBqtkz8pF+6kRVu/4wpaVpPUk4X1hkcnYLDDYOY1qqhPNAs2xWo+XA3HjYfjszd7QOecDTqaOfVL5jhIPKNRFKmP4UQ7QDQ8I5wJmZ5QrDkXIzcCAjTImxDTx2HI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nS192f2p; arc=none smtp.client-ip=198.175.65.15
+	 Content-Type:Content-Disposition:In-Reply-To; b=fMavgg5NpqKMLBuqwLf8NpW4s9nEtEk/n2NYbw3P771z3+qE6nHfv36O8PVrvTQNz+kuuLgloHetZYbnw6LNTAlpEwV+dCxQ8AV/nUCvw4NwH2ZxRrjDuMN0jGOxaTNOgbD95rJECvMalzw/UxsT01oRF1ICchYpIbzuEGAUwa4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=C3TtnQLm; arc=none smtp.client-ip=192.198.163.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1718795503; x=1750331503;
+  t=1718795672; x=1750331672;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=Q4p8OGkyZzyrh1giwx6LIVg6Ii/VKLg/MXvccZBGuxM=;
-  b=nS192f2pB2rr8Y19mdkmR3LUk2HjpknqCNtXWssfgmiAlO9vJRtGXV7V
-   BIEbZVzGGvw0b92s45K6hhHmreSiKpPp/lmU9AiuYMhC7DtlqIZnckImM
-   kVvee0Ky8ebedgVkEaYkcl7zGq62VQ/VNxxxHj1xMnhRR6K7YtWKYgRbm
-   h85sAu5ovaVHXsTns84ExLayRXnL4AhwgNjZAhOXN6HZidOppUf1e/pqe
-   73zXsFmgD0A1FJSentPsAvGakiLUBkLPsPeTwx8VSjisprMiMn8yLKGAt
-   PhMINX/7aB0BjbyfjOZKoQyqAxKpFzt6oNGgGdAw5SJ7l6BXKXaArTFZ+
-   g==;
-X-CSE-ConnectionGUID: 7ad/JKByTTyhl6QL5G1O6g==
-X-CSE-MsgGUID: 74ai+d2NSZiLY7KHHp92gg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11107"; a="19509363"
+  bh=s9SeTYmoXTQdeOWluxrOTooNLDhsWcez8QncRNnMaSQ=;
+  b=C3TtnQLm5jzQdy+F2HtTi8iZn8irehmjrBdmqZmxKwjKrv5/OY3NEHCb
+   u/mNo4gLs8cz0yjWWMaet0TauF1xQh6gidXJTzsBfsN0D/AEPqQHnSbaS
+   CW6Ls/JpyL6Kdp9N3K4jhouOaUeIV38g95ueg54lx3EfKq4Z5q7Zxmn36
+   6vTrkjSe1CS+nUd5lqDghyCRAIHInP1NjHF0+LCypOQI241SxUFWrm7HD
+   4xy+z3yiiQJEaXGBBrpBu3QnkG1zIszlDnApAQEzvW9fXXZTU4N2Ng0pL
+   kezH6si158rSXivehqx6e+XdTr6EiZQ5q3eAiy1owDrjBJCbIPlpsFBaa
+   w==;
+X-CSE-ConnectionGUID: PnqiBta7SNasY/Q2X/dYFA==
+X-CSE-MsgGUID: QggaJ9GtRDCmEXG/QKL0EA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11107"; a="33274669"
 X-IronPort-AV: E=Sophos;i="6.08,250,1712646000"; 
-   d="scan'208";a="19509363"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2024 04:11:42 -0700
-X-CSE-ConnectionGUID: Mdk7oiMqRseYyKPfAuwCtg==
-X-CSE-MsgGUID: Us5UChcrTv2vW5+bzdDyiw==
+   d="scan'208";a="33274669"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2024 04:14:32 -0700
+X-CSE-ConnectionGUID: M2j2rQadR1ewgPRbGIlC8Q==
+X-CSE-MsgGUID: U0gbNm2hSm671Sd8KdB73A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,250,1712646000"; 
-   d="scan'208";a="46323943"
+   d="scan'208";a="46829731"
 Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmviesa005.fm.intel.com with SMTP; 19 Jun 2024 04:11:39 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 19 Jun 2024 14:11:38 +0300
-Date: Wed, 19 Jun 2024 14:11:37 +0300
+  by orviesa005.jf.intel.com with SMTP; 19 Jun 2024 04:14:29 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 19 Jun 2024 14:14:28 +0300
+Date: Wed, 19 Jun 2024 14:14:28 +0300
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Mario Limonciello <mario.limonciello@amd.com>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Nikita Travkin <nikita@trvn.ru>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH RFC 0/7] usb: typec: ucsi: rework glue driver interface
-Message-ID: <ZnK86Zgkr6krdV9C@kuha.fi.intel.com>
-References: <20240603-ucsi-rework-interface-v1-0-99a6d544cec8@linaro.org>
- <hgqvyaziumpag5g5ajzupllvpwlz44scma6yu3drmtoqwcwav4@w366suy7c2eo>
+	Sebastian Reichel <sebastian.reichel@collabora.com>,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2] usb: typec: ucsi: psy: Add support for the charge
+ type property
+Message-ID: <ZnK9lA16RRnB0qAL@kuha.fi.intel.com>
+References: <20240618081510.2764297-1-heikki.krogerus@linux.intel.com>
+ <bd44a37e-ca64-4ab0-81e9-b25d7185fe42@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -82,41 +78,67 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <hgqvyaziumpag5g5ajzupllvpwlz44scma6yu3drmtoqwcwav4@w366suy7c2eo>
+In-Reply-To: <bd44a37e-ca64-4ab0-81e9-b25d7185fe42@amd.com>
 
-Hi Dmitry,
-
-On Tue, Jun 18, 2024 at 09:59:07PM +0300, Dmitry Baryshkov wrote:
-> On Mon, Jun 03, 2024 at 02:24:53AM GMT, Dmitry Baryshkov wrote:
-> > The interface between UCSI and the glue driver is very low-level. It
-> > allows reading the UCSI data from any offset (but in reality the UCSI
-> > driver reads only VERSION, CCI an MESSAGE_IN data). All event handling
-> > is to be done by the glue driver (which already resulted in several
-> > similar-but-slightly different implementations). It leaves no place to
-> > optimize the write-read-read sequence for the command execution (which
-> > might be beneficial for some of the drivers), etc.
+On Tue, Jun 18, 2024 at 10:01:21AM -0500, Mario Limonciello wrote:
+> On 6/18/2024 03:15, Heikki Krogerus wrote:
+> > Adding support for the charge type Linux power supply class
+> > property (POWER_SUPPLY_PROP_CHARGE_TYPE) to the UCSI driver.
+> > That will make the charge type visible in the charge_type
+> > power supply class sysfs attribute file.
 > > 
-> > The patchseries attempts to restructure the UCSI glue driver interface
-> > in order to provide sensible operations instead of a low-level read /
-> > write calls.
+> > UCSI has the charge type specified in the Battery Charging
+> > Status field of the response to the GET_CONNECTOR_STATUS
+> > command.
 > > 
-> > If this approach is found to be acceptable, I plan to further rework the
-> > command interface, moving reading CCI and MESSAGE_IN to the common
-> > control code, which should simplify driver's implementation and remove
-> > necessity to split quirks between sync_control and read_message_in e.g.
-> > as implemented in the ucsi_ccg.c.
+> > Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> > Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > ---
+> > Changed since the last version:
+> > The commit message is completely rewritten. The subject line was also changed.
 > > 
-> > Note, the series was tested only on the ucsi_glink platforms. Further
-> > testing is appreciated.
+> > The original patch:
+> > https://lore.kernel.org/linux-usb/20240617105554.1677285-1-heikki.krogerus@linux.intel.com/
+> > 
+> > ---
+> >   drivers/usb/typec/ucsi/psy.c  | 27 +++++++++++++++++++++++++++
+> >   drivers/usb/typec/ucsi/ucsi.c |  3 +++
+> >   2 files changed, 30 insertions(+)
+> > 
+> > diff --git a/drivers/usb/typec/ucsi/psy.c b/drivers/usb/typec/ucsi/psy.c
+> > index b35c6e07911e..b3910f37e171 100644
+> > --- a/drivers/usb/typec/ucsi/psy.c
+> > +++ b/drivers/usb/typec/ucsi/psy.c
+> > @@ -20,6 +20,7 @@ enum ucsi_psy_online_states {
+> >   };
+> >   static enum power_supply_property ucsi_psy_props[] = {
+> > +	POWER_SUPPLY_PROP_CHARGE_TYPE,
+> >   	POWER_SUPPLY_PROP_USB_TYPE,
+> >   	POWER_SUPPLY_PROP_ONLINE,
+> >   	POWER_SUPPLY_PROP_VOLTAGE_MIN,
+> > @@ -194,6 +195,30 @@ static int ucsi_psy_get_usb_type(struct ucsi_connector *con,
+> >   	return 0;
+> >   }
+> > +static int ucsi_psy_get_charge_type(struct ucsi_connector *con, union power_supply_propval *val)
+> > +{
+> > +	if (!(con->status.flags & UCSI_CONSTAT_CONNECTED) ||
+> > +	    (con->status.flags & UCSI_CONSTAT_PWR_DIR) != TYPEC_SINK) {
+> > +		val->intval = POWER_SUPPLY_CHARGE_TYPE_NONE;
 > 
-> Gracious ping for the reviews / comments. My endgoal is to simplify the
-> command submission interface, allowing us to handle odd commands in a
-> single function rather than having the code split between sync_write()
-> and notification handling.
+> The not connected state obviously makes sense for
+> POWER_SUPPLY_CHARGE_TYPE_NONE, but what exactly is the other situation? A
+> UCSI state machine failure?
+> 
+> I'm mostly wondering if POWER_SUPPLY_CHARGE_TYPE_UNKNOWN makes sense for
+> that or not.
 
-I don't have any objections. Just rebase these and drop the RFC. The
-patch 6/7 did not apply cleanly anymore on top of the two dependencies
-you listed.
+That works for me. I'll change it to POWER_SUPPLY_CHARGE_TYPE_UNKNOWN
+in that case.
+
+> Besides this question the patch looks fine to me and you can add my tag with
+> your decision.
+> 
+> Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
 
 thanks,
 
