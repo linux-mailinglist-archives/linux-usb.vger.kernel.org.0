@@ -1,147 +1,117 @@
-Return-Path: <linux-usb+bounces-11431-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11432-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA25E90E917
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2024 13:14:40 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7627890E925
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2024 13:19:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B89731C232DF
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2024 11:14:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 141F3B2370F
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2024 11:19:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44D11139578;
-	Wed, 19 Jun 2024 11:14:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F08A139D15;
+	Wed, 19 Jun 2024 11:19:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="C3TtnQLm"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S6DSPamK"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5058A80BF0
-	for <linux-usb@vger.kernel.org>; Wed, 19 Jun 2024 11:14:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D5D64D8B2;
+	Wed, 19 Jun 2024 11:19:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718795673; cv=none; b=Z++oS97AXvmkpDTPf0Vfb1eOGcng8KbB4d6YZn7FCFtFKGIACrLTj6EwALUw5EG/H8T5sUCCg9LucRm9o0P15tTPBX/fwJ5d1yFjNN0/8lSMcg4hQ/tPmVRtnOO8PVICpdgQYiRENbzyl0AMqxLhmORggAs51McKJqhIcDLOs5U=
+	t=1718795942; cv=none; b=kGmRvhyHUu+7WREs/EJJfxU57qt/03KzLv/6Mh5gdbjomKMqRcY91YP1kaU6Vt197VoJAu4Gb3NwJmpWL3omqrvMU2W/uhMpA+fKJSOqNUqDOKy2+gFhePZVvp/nxH/9Y/r+EDtTm+hd4y9VA8YBUm6qBiKGCEaB7F+b/P/zHNs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718795673; c=relaxed/simple;
-	bh=s9SeTYmoXTQdeOWluxrOTooNLDhsWcez8QncRNnMaSQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fMavgg5NpqKMLBuqwLf8NpW4s9nEtEk/n2NYbw3P771z3+qE6nHfv36O8PVrvTQNz+kuuLgloHetZYbnw6LNTAlpEwV+dCxQ8AV/nUCvw4NwH2ZxRrjDuMN0jGOxaTNOgbD95rJECvMalzw/UxsT01oRF1ICchYpIbzuEGAUwa4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=C3TtnQLm; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1718795672; x=1750331672;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=s9SeTYmoXTQdeOWluxrOTooNLDhsWcez8QncRNnMaSQ=;
-  b=C3TtnQLm5jzQdy+F2HtTi8iZn8irehmjrBdmqZmxKwjKrv5/OY3NEHCb
-   u/mNo4gLs8cz0yjWWMaet0TauF1xQh6gidXJTzsBfsN0D/AEPqQHnSbaS
-   CW6Ls/JpyL6Kdp9N3K4jhouOaUeIV38g95ueg54lx3EfKq4Z5q7Zxmn36
-   6vTrkjSe1CS+nUd5lqDghyCRAIHInP1NjHF0+LCypOQI241SxUFWrm7HD
-   4xy+z3yiiQJEaXGBBrpBu3QnkG1zIszlDnApAQEzvW9fXXZTU4N2Ng0pL
-   kezH6si158rSXivehqx6e+XdTr6EiZQ5q3eAiy1owDrjBJCbIPlpsFBaa
-   w==;
-X-CSE-ConnectionGUID: PnqiBta7SNasY/Q2X/dYFA==
-X-CSE-MsgGUID: QggaJ9GtRDCmEXG/QKL0EA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11107"; a="33274669"
-X-IronPort-AV: E=Sophos;i="6.08,250,1712646000"; 
-   d="scan'208";a="33274669"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2024 04:14:32 -0700
-X-CSE-ConnectionGUID: M2j2rQadR1ewgPRbGIlC8Q==
-X-CSE-MsgGUID: U0gbNm2hSm671Sd8KdB73A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,250,1712646000"; 
-   d="scan'208";a="46829731"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by orviesa005.jf.intel.com with SMTP; 19 Jun 2024 04:14:29 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 19 Jun 2024 14:14:28 +0300
-Date: Wed, 19 Jun 2024 14:14:28 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Mario Limonciello <mario.limonciello@amd.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Sebastian Reichel <sebastian.reichel@collabora.com>,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2] usb: typec: ucsi: psy: Add support for the charge
- type property
-Message-ID: <ZnK9lA16RRnB0qAL@kuha.fi.intel.com>
-References: <20240618081510.2764297-1-heikki.krogerus@linux.intel.com>
- <bd44a37e-ca64-4ab0-81e9-b25d7185fe42@amd.com>
+	s=arc-20240116; t=1718795942; c=relaxed/simple;
+	bh=qx/037j5l/h26XirlFV4UFdaLFteBY/swy2KfQlGKZQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=FMFfBpZovvbHjgcSLoZ6MS+0ROhkXCrg9WOU++ehlsTPaqe7b5CjoGInU3P11qMVEGrPfvd/wXm5XqdDI3M5RWPs6sVhBPSdfVqIV5yraCZh/5hwEd4loTKKj0v412FKf0zssp70E2aWt+o1Ia4CMnk338LlBfgt3IX+ZOMfldg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S6DSPamK; arc=none smtp.client-ip=209.85.218.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-a6fb341a7f2so67262166b.1;
+        Wed, 19 Jun 2024 04:19:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1718795939; x=1719400739; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pLVIq+eeSfRMQKg1AreCKiYpS4TWzLzpMNboeHds0vI=;
+        b=S6DSPamKmdPt97iIn48RyFjcnlYlNEjo+0/esIimma7Cro/BMLhARI7rxwg+du0YLt
+         lGdHhnIzp+P1TvMezbqYUoppeiw/49fSPgdaXKhcSdNWSoS9Jtdugzl5UWgpmfs24498
+         jB7W2ADUvGBXZl1/XO6/N2cVK4anm/lUMPZ49I8WFrbkG5MDacICFqOb+AoyRg1fWW9T
+         XGu9B+3Pu4Ogxobr2KJl62o853Cp5bbP0e4C6snoRaf1rC0r7O0rXthrgzp8S5mXm7hf
+         H7XwHt+Fp1qoUo4M68sO05Ah/zI2RmwYLUxYxJoDfT7VmS+n+OswFs0bFAltkYGTQD2v
+         MWmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718795939; x=1719400739;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pLVIq+eeSfRMQKg1AreCKiYpS4TWzLzpMNboeHds0vI=;
+        b=wIn3Pw74joJF/vMlfQzA6URNoYpfpTFEjm3PHFUg97wlwmDfzp9lRfELqEctzwrwhK
+         1YlDxZjGXvj4OpjwJ8YtPi1Dg3b8/txQaSxJBxUwbqAZrEK6ZZyKLWcaFnz1KT1y3wMV
+         Sd/pM0IaGRgthFnkQeGI+trzd73j380n8DYVg3TqQ68LSl6YGVzHRNP2ltNbv1X8kAMp
+         VNgdzxo8fWGGrbEf31v9fiNTW3D1jazvKnL5jGV5Oq0mSgDxkSS7PerFBusj8wqGMkHl
+         rb1qaYIn2B3xMk317JcELQJDUp80jThqEannC+h1PznOylS7kzK4MxmBDP7IJzBMJEKw
+         8IlQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWkoytWEBWgMbWOleV6r4NfFRPOQVfE154VksPiMdiaqRzwyirrnMZfpapwAZWRJj5mMFs6T9vjHfPy/HmiQ1Mh77h6uJbHPHiBQbb43MZMR7xp62wmdHpWnUMp9S1WNLc5/U67vWNZholoH2d8otmK4qOSfdAzc/jXlnUU9ZNZ
+X-Gm-Message-State: AOJu0YxHhI7GgVddOEUDt5ikSS2rk4YGmQ/susavZingJROrt3fUaWZD
+	Nxs79+v4tVlvb1ij3Gvr/5xWRwuUWx1bxcwbxcT5Tii/YCKU7WZ3aBXx5DiSHCF4BbtyPjNOXMC
+	tip/0QHSLnCiTLLIghrIhsFTqo6g=
+X-Google-Smtp-Source: AGHT+IGICb+ryxdnC8Bm0bzuX9pSGgnIGjfjrPhkvEs3vkcekNWZ9OOSOET2zfCNqCAEIzzbZUhrHh6rWIR1j2CxIys=
+X-Received: by 2002:a17:906:2814:b0:a6f:4e1f:e613 with SMTP id
+ a640c23a62f3a-a6fab6488famr127124966b.37.1718795938561; Wed, 19 Jun 2024
+ 04:18:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bd44a37e-ca64-4ab0-81e9-b25d7185fe42@amd.com>
+References: <20240619050125.4444-1-joswang1221@gmail.com> <2024061947-grandpa-bucktooth-4f55@gregkh>
+In-Reply-To: <2024061947-grandpa-bucktooth-4f55@gregkh>
+From: joswang <joswang1221@gmail.com>
+Date: Wed, 19 Jun 2024 19:18:48 +0800
+Message-ID: <CAMtoTm3+eSCeF_FQtyBZ1Yb43Sb_ABKDQv7zEueAHwXYGnv72Q@mail.gmail.com>
+Subject: Re: [PATCH v6] usb: dwc3: core: Workaround for CSR read timeout
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: Thinh.Nguyen@synopsys.com, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org, 
+	Jos Wang <joswang@lenovo.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 18, 2024 at 10:01:21AM -0500, Mario Limonciello wrote:
-> On 6/18/2024 03:15, Heikki Krogerus wrote:
-> > Adding support for the charge type Linux power supply class
-> > property (POWER_SUPPLY_PROP_CHARGE_TYPE) to the UCSI driver.
-> > That will make the charge type visible in the charge_type
-> > power supply class sysfs attribute file.
-> > 
-> > UCSI has the charge type specified in the Battery Charging
-> > Status field of the response to the GET_CONNECTOR_STATUS
-> > command.
-> > 
-> > Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> > Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+On Wed, Jun 19, 2024 at 1:10=E2=80=AFPM Greg KH <gregkh@linuxfoundation.org=
+> wrote:
+>
+> On Wed, Jun 19, 2024 at 01:01:25PM +0800, joswang wrote:
+> > From: Jos Wang <joswang@lenovo.com>
+> >
+> > This is a workaround for STAR 4846132, which only affects
+> > DWC_usb31 version2.00a operating in host mode.
+> >
+> > There is a problem in DWC_usb31 version 2.00a operating
+> > in host mode that would cause a CSR read timeout When CSR
+> > read coincides with RAM Clock Gating Entry. By disable
+> > Clock Gating, sacrificing power consumption for normal
+> > operation.
+> >
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Jos Wang <joswang@lenovo.com>
 > > ---
-> > Changed since the last version:
-> > The commit message is completely rewritten. The subject line was also changed.
-> > 
-> > The original patch:
-> > https://lore.kernel.org/linux-usb/20240617105554.1677285-1-heikki.krogerus@linux.intel.com/
-> > 
-> > ---
-> >   drivers/usb/typec/ucsi/psy.c  | 27 +++++++++++++++++++++++++++
-> >   drivers/usb/typec/ucsi/ucsi.c |  3 +++
-> >   2 files changed, 30 insertions(+)
-> > 
-> > diff --git a/drivers/usb/typec/ucsi/psy.c b/drivers/usb/typec/ucsi/psy.c
-> > index b35c6e07911e..b3910f37e171 100644
-> > --- a/drivers/usb/typec/ucsi/psy.c
-> > +++ b/drivers/usb/typec/ucsi/psy.c
-> > @@ -20,6 +20,7 @@ enum ucsi_psy_online_states {
-> >   };
-> >   static enum power_supply_property ucsi_psy_props[] = {
-> > +	POWER_SUPPLY_PROP_CHARGE_TYPE,
-> >   	POWER_SUPPLY_PROP_USB_TYPE,
-> >   	POWER_SUPPLY_PROP_ONLINE,
-> >   	POWER_SUPPLY_PROP_VOLTAGE_MIN,
-> > @@ -194,6 +195,30 @@ static int ucsi_psy_get_usb_type(struct ucsi_connector *con,
-> >   	return 0;
-> >   }
-> > +static int ucsi_psy_get_charge_type(struct ucsi_connector *con, union power_supply_propval *val)
-> > +{
-> > +	if (!(con->status.flags & UCSI_CONSTAT_CONNECTED) ||
-> > +	    (con->status.flags & UCSI_CONSTAT_PWR_DIR) != TYPEC_SINK) {
-> > +		val->intval = POWER_SUPPLY_CHARGE_TYPE_NONE;
-> 
-> The not connected state obviously makes sense for
-> POWER_SUPPLY_CHARGE_TYPE_NONE, but what exactly is the other situation? A
-> UCSI state machine failure?
-> 
-> I'm mostly wondering if POWER_SUPPLY_CHARGE_TYPE_UNKNOWN makes sense for
-> that or not.
+> > v5 -> v6: no change
+> > v4 -> v5: no change
+>
+> If there was no change, why was there new versions submitted?  Please
+> always document what was done.
+>
+> greg k-h
 
-That works for me. I'll change it to POWER_SUPPLY_CHARGE_TYPE_UNKNOWN
-in that case.
+Ok, I will submit a new version and add the differences.
 
-> Besides this question the patch looks fine to me and you can add my tag with
-> your decision.
-> 
-> Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
-
-thanks,
-
--- 
-heikki
+Thanks,
+Jos Wang
 
