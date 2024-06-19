@@ -1,121 +1,90 @@
-Return-Path: <linux-usb+bounces-11447-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11448-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 234D090F3C3
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2024 18:12:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5FD2990F465
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2024 18:46:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9977A281799
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2024 16:12:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EC038282B8D
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2024 16:45:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD21F14F9FD;
-	Wed, 19 Jun 2024 16:12:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71E7415530D;
+	Wed, 19 Jun 2024 16:45:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Dd91JLfq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UM1YHjgh"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE131A29;
-	Wed, 19 Jun 2024 16:12:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEAAA1CA92;
+	Wed, 19 Jun 2024 16:45:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718813527; cv=none; b=mf7qygc9S1lRWq8X9ZZtmtmijN0VCCkYBUA6qIJkqIS/zgLyn9iOkIAwuHYZ2o96+UUp/94j6ab/P37JQ2aJHznArwyu386RLF5YYz/QhmTHoIYN477ZJC3QNAYRxcYMzP7hXSdFWmiesgeRl0KbkTGjQNX5GZj2IrXOuUg9b5c=
+	t=1718815552; cv=none; b=u07P+wNx2syUt5tmWDOjiLTc0yeyDMBmaxksHwaE06fZcS8LCr55AInDG4SFnGSYH7rCByPC5MkrRn+h5rpr0UI7VPsK9da5eOL32Wlc1OAVaVcp9VqMj6+1dXp64H+atCz5/T0JiJH3b37a3JuWjhPj3D3WCl1Z2BraE9DHhhU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718813527; c=relaxed/simple;
-	bh=WvxkYqGLa/yBd53bZMfPZ2U1lIrtO/ZWbnXsdP4ZNy8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RD9498V9ZbiGo5mF2A8Pl1wnRm6VvV0TQ1qPWORmAZpe1QPg5cqXg+R9m+njU3fcE2yKajmGgXq0BbXYtD0W7R41vsLjJooxPt9IKCaHnbk1bQbcBK8SJypfQLc9ugsJNw+YJnncCUouj2FAr1Ls26irTVloxNplreq095/azi8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Dd91JLfq; arc=none smtp.client-ip=209.85.218.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a6ef8bf500dso769539066b.0;
-        Wed, 19 Jun 2024 09:12:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718813524; x=1719418324; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=eGorT4rH9fVB+lgR1JoKoDxU9RpCSgqSCB5TfWxaDpc=;
-        b=Dd91JLfqTOgHAqa9OIUBuRkE3bjEe0vIfBRn45wxXaYqpJFBKKrz7ES/8ac7/s6OD+
-         bY/n7OhbUdQT3mcK6y/HNyZ1FdcRwsFk9Vux4mdfZAt2GqSeQbAdiSJXhpSSrErb9Nxp
-         hvlF27spfu+TvsxWgo8hFeHqK+YcmOTaGCjE39OEViGQSv34RvoOopau7sOAIyukHD7U
-         bOnQvAwxb1lLzO6my+PxTzqefYoSqg+d+I+Yp+jErMtNmXy5aqazcPSk4vTI0a+DhEK8
-         x5Ghn6i6Oi34xhEuqHwlltFFjZ6Xzh/izsLQ1sTXzY8zw1d9PSw4n7oOnveLgbhvHsjX
-         faNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718813524; x=1719418324;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eGorT4rH9fVB+lgR1JoKoDxU9RpCSgqSCB5TfWxaDpc=;
-        b=XgsDxcNX3uOlWyqAsYeobkW8RUJ1Up8ST7IkYQ3tPxVRyQ9r/MW82DJarNhDHek8Q3
-         v9WHQv3eLkUGXLGZolcFlRiblhOOYPFsq/muVOP88XlyrvZxPyP5Elxu/COyME1EEWE9
-         91bkS5mNlQoODyIYqXHg6p//KaiGhRayqTCIwCWTVm/vv2yPFQIreNxbgE8NGvj7qp44
-         INTN5b4VQRvnH64Qv0AmkqDNrUsNeZ3wFeZPnjuCjjDdBn0Tf1chDEaA28wLimLjo51/
-         PxvQHpSuHgtNu6IXx0/Eddo9EcTmTdQXqb30YWSAjIxVDX1XKDr3doOUt0F4tBRI0RM7
-         jvag==
-X-Forwarded-Encrypted: i=1; AJvYcCXIomGQzVwqeGAB37gKl1XPfuQfwdUHfO/ruoeexMo02A2Y8BTa0fSY9TWE8nUqYEmXPSIZaLwrQlcIbcqPEwNdqqj4U7kxP2mm82Xj0DZEdb6Kz6sqZFa0k24MX4ebVRHk4nbbhDucM3Y7EwGxushjzxzlApKsSYBNO758WgJbQkfu+tM94JEI
-X-Gm-Message-State: AOJu0YzK12WA7WF29GgcEmSpELWzbz6tAtqHvGXfJc8oCI90sf5rRY2C
-	wyaBLZQmte0+V4P5PtiWPfUQSDRfWpEbiLglMPrnf3VE1Cr56S+k
-X-Google-Smtp-Source: AGHT+IETTsmKISRF6ckXFNkhnsxj3NqZsZJqQvxJi608L+mYCRbLb7SKQNKkDttWyIXFvpoJx8Hezw==
-X-Received: by 2002:a17:907:cc06:b0:a68:bae4:d66f with SMTP id a640c23a62f3a-a6fab615d55mr157162366b.30.1718813523802;
-        Wed, 19 Jun 2024 09:12:03 -0700 (PDT)
-Received: from [192.168.0.31] (84-115-213-103.cable.dynamic.surfer.at. [84.115.213.103])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6f5f1c8d6fsm615589166b.0.2024.06.19.09.12.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Jun 2024 09:12:03 -0700 (PDT)
-Message-ID: <4c74c145-4fc1-44b9-88e7-1075c541adba@gmail.com>
-Date: Wed, 19 Jun 2024 18:12:01 +0200
+	s=arc-20240116; t=1718815552; c=relaxed/simple;
+	bh=K8uYWHQVt5wnGOLTeizQh7FySqtxu5oVMkUG6y75JQ4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DNdQQI+uI4op2XsNDVlhVjZyTJra5q/xQKinBpbbSNTExKkNK4mCXMLK696t/Ia0loqpXlMEsQndS8JBDKFPrDGuuR/Llxlomp7iIeRD/46OF6tVv7FZEL1Z9Gw5hys5HGedLDFjnhfXyw3HV+9ybFHXccXwF+2I/qfwbhmw0P4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UM1YHjgh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 798FDC32786;
+	Wed, 19 Jun 2024 16:45:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718815551;
+	bh=K8uYWHQVt5wnGOLTeizQh7FySqtxu5oVMkUG6y75JQ4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=UM1YHjghpU8mmx0WQ80JK3tpB5rYEtG8qffkGASY4KfAADQNuJpHNBv9TCRrI63SJ
+	 2ZdNtFA5Lg+cGxfbrtxK5rueGtv3NlJl8u6EATbzdzfmsCXFtK+cKBQWn991o0jKw2
+	 eqZWP55RjvG97ECV6cVGYNq78LIkxfmzzfsuSW+xagY0neWU9L9Dyw87vAXeRvOmAA
+	 EUQmE3WSP3zdUXlRa7GqJTbKX9KdY/c4J2kkD6tuZxtBodYSy9znEaypOse6zRmh7u
+	 0XkK6oDY2PHUjRSuXj/87/GIw7Yde7lzDyeRDeD3Ai6qxaeknT1W8NVpRM1Dv5riX+
+	 u7nWuMGuYlv2g==
+Date: Wed, 19 Jun 2024 17:45:47 +0100
+From: Simon Horman <horms@kernel.org>
+To: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH v2] net: usb: ax88179_178a: improve link status logs
+Message-ID: <20240619164547.GM690967@kernel.org>
+References: <20240618115054.101577-1-jtornosm@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] USB: serial: garmin_gps: annotate struct garmin_packet
- with __counted_by
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Johan Hovold <johan@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Kees Cook
- <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-hardening@vger.kernel.org, llvm@lists.linux.dev
-References: <20240619-garmin_gps_counted_by-v1-1-d8d816f085d9@gmail.com>
- <20240619144320.GA2091442@thelio-3990X>
-Content-Language: en-US, de-AT
-From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-In-Reply-To: <20240619144320.GA2091442@thelio-3990X>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240618115054.101577-1-jtornosm@redhat.com>
 
-On 19/06/2024 16:43, Nathan Chancellor wrote:
-> On Wed, Jun 19, 2024 at 11:40:57AM +0200, Javier Carrasco wrote:
->> Use the __counted_by compiler attribute for the data[] flexible array member
->> to improve the results of array bound sanitizers.
->>
->> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
->> ---
->> The size is assigned before the first reference to the flexible array
->> (see pkt_add()), which allows for a straightforward annotation without
->> further modifications.
+On Tue, Jun 18, 2024 at 01:50:40PM +0200, Jose Ignacio Tornos Martinez wrote:
+> Avoid spurious link status logs that may ultimately be wrong; for example,
+> if the link is set to down with the cable plugged, then the cable is
+> unplugged and after this the link is set to up, the last new log that is
+> appearing is incorrectly telling that the link is up.
 > 
-> Agreed, this seems like a reasonable patch in and of itself that should
-> work:
+> In order to avoid errors, show link status logs after link_reset
+> processing, and in order to avoid spurious as much as possible, only show
+> the link loss when some link status change is detected.
 > 
-> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-> 
-> It might also make sense to change the pkt allocation to use
-> struct_size() instead of open coding it?
+> cc: stable@vger.kernel.org
+> Fixes: e2ca90c276e1 ("ax88179_178a: ASIX AX88179_178A USB 3.0/2.0 to gigabit ethernet adapter driver")
+> Signed-off-by: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+> ---
+> v2:
+>   - Fix the nits
+> v1: https://lore.kernel.org/netdev/20240617103405.654567-1-jtornosm@redhat.com/
 
-Sure, it looks much better. I will send a v2 with the patch and the
-corresponding Suggested-by:
+Hi Jose,
 
-Thanks and best regards,
-Javier Carrasco
+Thanks for the updates.
+This version looks good to me.
+
+Reviewed-by: Simon Horman <horms@kernel.org>
+
+...
 
