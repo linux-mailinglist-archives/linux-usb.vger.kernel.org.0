@@ -1,82 +1,154 @@
-Return-Path: <linux-usb+bounces-11420-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11421-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8DBCE90E291
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2024 07:10:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7486290E2AF
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2024 07:29:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3D58328490D
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2024 05:10:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 122232845BE
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2024 05:29:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 507D35381B;
-	Wed, 19 Jun 2024 05:10:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6654558BC;
+	Wed, 19 Jun 2024 05:29:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="1wWjIkSo"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UvEwz7G/"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94FAB50280;
-	Wed, 19 Jun 2024 05:10:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6974D55887;
+	Wed, 19 Jun 2024 05:29:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718773817; cv=none; b=X69YY2o8XI9RX7GQ8IA0WcGRBI7O0uSdGvtGEjIiMuFPm74tzbvTpvnfO8YFmKqh6DOVxOHVFJ5iwpmMZaGlGcqD/ne40I8weh41twVzpxGEXefowlp4L9R4115YilS9CE3mZAg0DQ2PR946VzSdTpNlEkU27w7Exr4FtLa6xcE=
+	t=1718774973; cv=none; b=jMN99mCi9NTphc0wnsghsR03jLMsf58tP4RcJuWG1q90w27RqLZ1W7F9WcrWyibTBTV0MWSN94HH0uIDmB78/x41C6iyW+L93/5pwqNtVwvLtMvoXgYhDscpjXTYCNbDKpnDCbPYLR9LtdmApLQWZBl3AHVCUsYBLCkD/nFohqs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718773817; c=relaxed/simple;
-	bh=BMRHDddXQbT7sXetp9OyuKJuPZPI4jJlgICusGcSAhE=;
+	s=arc-20240116; t=1718774973; c=relaxed/simple;
+	bh=ProNh6WDpQJsTCKWeK/xBB+DgqPo4qArcFsOCcPezwM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=f2tDkrKRsTxYkAEHlcqp5nNweeclc5saC08Y93Mb36om8TkJfwY8S/1ov1we4RoFucvhm9246cLUW1WMbJZLRDC8KQ0Fzq/1n7eqp3nt0nX8cwYGIAvk/HcDGYRYwzH6bU8QelkiDZWZW3X4ofDP9jsR9zfQujgHLY9S7AC+NpY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=1wWjIkSo; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA968C2BBFC;
-	Wed, 19 Jun 2024 05:10:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1718773817;
-	bh=BMRHDddXQbT7sXetp9OyuKJuPZPI4jJlgICusGcSAhE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=1wWjIkSouz9yjWWMclSXwVU7txRXxEYi+YuLoIOHdg5MUwIPSxES8k2FHfq7+dV/7
-	 t7y5tcoD5Q20mDVEKIsuV+8o7q3ZFl/ypBW+5IMl5Wde4EOB8aypOBrUjtzs8agl9F
-	 pMbEgSwlsLfLs3QdYq6N8R7xhR0X+kg0/ODlFWHM=
-Date: Wed, 19 Jun 2024 07:10:15 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: joswang <joswang1221@gmail.com>
-Cc: Thinh.Nguyen@synopsys.com, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-	Jos Wang <joswang@lenovo.com>
-Subject: Re: [PATCH v6] usb: dwc3: core: Workaround for CSR read timeout
-Message-ID: <2024061947-grandpa-bucktooth-4f55@gregkh>
-References: <20240619050125.4444-1-joswang1221@gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=tSYYEEvVm/OgCbSwU7H+v7GW1YeooXLjWrhIDVOxKzJOiJg5VIkLLMOFnv79dobYZKyIgcTRpC+9T4DpscdMloyNeAno0dUUeA1ZacLEUFQvAF6Fuq52RiR+Tmd/ujGZ3KuJghldw2/S9jB/x7Wr60vAb5ojCiQ6cohfTuO5lw0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UvEwz7G/; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1718774971; x=1750310971;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ProNh6WDpQJsTCKWeK/xBB+DgqPo4qArcFsOCcPezwM=;
+  b=UvEwz7G/0ZzxFAge9gmBj4C3LxCjmanrdUIp2EwrHCTyyAO7WFm1TNLL
+   8Zr3YXsus3j26122QllO3Aqm0MXiq66jO+5UPaxbbcq8x6z6r3Ve13bGZ
+   d/SuazcVK2mBhyZmOiCEVaqFlFgO24hyXcdO3NBcKlSqqdWJv02Kf96Qb
+   qD29x2+g9fXk6eDZieoj+hKMX1THZutvL2J3LXjlX93trv8A6BIerrHVR
+   gnEN439xbD5dQmm/gzMvhN7S1DVCWG9EkarINWDsG7kRAIfXjqrrL58ex
+   /5rYol0kt3QQogMFEboIUEgEZvJmWWXPocga3L0An0yhdDP4ArlYdTkY8
+   w==;
+X-CSE-ConnectionGUID: czHvkxWIQTm6Q4uEzgfyBw==
+X-CSE-MsgGUID: Rd0kxEWPQQWJL34wAosL/A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11107"; a="33235027"
+X-IronPort-AV: E=Sophos;i="6.08,249,1712646000"; 
+   d="scan'208";a="33235027"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2024 22:29:30 -0700
+X-CSE-ConnectionGUID: B63f9b/RT0WXS1EvrdiIRg==
+X-CSE-MsgGUID: J9RujRSITdSp2fbnatoSKw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,249,1712646000"; 
+   d="scan'208";a="65031965"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmviesa002.fm.intel.com with ESMTP; 18 Jun 2024 22:29:28 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id 705971A3; Wed, 19 Jun 2024 08:29:27 +0300 (EEST)
+Date: Wed, 19 Jun 2024 08:29:27 +0300
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Mario Limonciello <mario.limonciello@amd.com>
+Cc: Bjorn Helgaas <bhelgaas@google.com>,
+	Mathias Nyman <mathias.nyman@intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
+	open list <linux-kernel@vger.kernel.org>,
+	"open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
+	Daniel Drake <drake@endlessos.org>, Gary Li <Gary.Li@amd.com>
+Subject: Re: [PATCH 0/4] Verify devices transition from D3cold to D0
+Message-ID: <20240619052927.GF1532424@black.fi.intel.com>
+References: <20240613054204.5850-1-mario.limonciello@amd.com>
+ <20240618131452.GC1532424@black.fi.intel.com>
+ <9f465ec4-32b9-4cd8-89de-a57a99880360@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240619050125.4444-1-joswang1221@gmail.com>
+In-Reply-To: <9f465ec4-32b9-4cd8-89de-a57a99880360@amd.com>
 
-On Wed, Jun 19, 2024 at 01:01:25PM +0800, joswang wrote:
-> From: Jos Wang <joswang@lenovo.com>
+On Tue, Jun 18, 2024 at 11:56:50AM -0500, Mario Limonciello wrote:
+> On 6/18/2024 08:14, Mika Westerberg wrote:
+> > Hi Mario,
+> > 
+> > On Thu, Jun 13, 2024 at 12:42:00AM -0500, Mario Limonciello wrote:
+> > > Gary has reported that when a dock is plugged into a system at the same
+> > > time the autosuspend delay has tripped that the USB4 stack malfunctions.
+> > > 
+> > > Messages show up like this:
+> > > 
+> > > ```
+> > > thunderbolt 0000:e5:00.6: ring_interrupt_active: interrupt for TX ring 0 is already enabled
+> > > ```
+> > > 
+> > > Furthermore the USB4 router is non-functional at this point.
+> > 
+> > Once the USB4 domain starts the sleep transition, it cannot be
+> > interrupted by anything so it always should go through full sleep
+> > transition and only then back from sleep.
+> > 
+> > > Those messages happen because the device is still in D3cold at the time
+> > > that the PCI core handed control back to the USB4 connection manager
+> > > (thunderbolt).
+> > 
+> > This is weird. Yes we should be getting the wake from the hotplug but
+> > that should happen only after the domain is fully in sleep (D3cold). The
+> > BIOS ACPI code is supposed to deal with this.
 > 
-> This is a workaround for STAR 4846132, which only affects
-> DWC_usb31 version2.00a operating in host mode.
+> Is that from from experience or do you mean there is a spec behavior?
 > 
-> There is a problem in DWC_usb31 version 2.00a operating
-> in host mode that would cause a CSR read timeout When CSR
-> read coincides with RAM Clock Gating Entry. By disable
-> Clock Gating, sacrificing power consumption for normal
-> operation.
-> 
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Jos Wang <joswang@lenovo.com>
-> ---
-> v5 -> v6: no change
-> v4 -> v5: no change
+> IE I'm wondering if we have different "expectations" from different
+> company's hardware designers.
 
-If there was no change, why was there new versions submitted?  Please
-always document what was done.
+The spec and the CM guide "imply" this behaviour as far as I can tell,
+so that the "sleep event" is done completely once started. I guess this
+can be interpreted differently too because it is not explicitly said
+there.
 
-greg k-h
+Can you ask AMD HW folks if this is their interpretation too? Basically
+when we get "Sleep Ready" bit set for all the routers in the domain and
+turn off power (send PERST) there cannot be wake events until that is
+fully completed.
+
+There is typically a timeout mechanism in the BIOS side (part of the
+power off method) that waits for the PCIe links to enter L2 before it
+triggers PERST. We have seen an issue on our side that if this L2
+transition is not completed in time a wake event triggered but that was
+a BIOS issue.
+
+> > > The issue is that it takes time for a device to enter D3cold and do a
+> > > conventional reset, and then more time for it to exit D3cold.
+> > > 
+> > > This appears not to be a new problem; previously there were very similar
+> > > reports from Ryzen XHCI controllers.  Quirks were added for those.
+> > > Furthermore; adding extra logging it's apparent that other PCI devices
+> > > in the system can take more than 10ms to recover from D3cold as well.
+> > 
+> > They can take anything up to 100ms after the link has trained.
+> 
+> Right; so currently there is nothing checking they really made it back to D0
+> after calling pci_power_up().  I feel like we've "mostly" gotten lucky.
+
+We do have pci_bridge_wait_for_secondary_bus() there but I guess that's
+not called for integrated PCIe endpoints such as xHCI and the USB4 Host
+Interface. They too enter D3cold once power is turned off so I agree we
+might have gotten lucky here with the D3hot 10ms delay.
 
