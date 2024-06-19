@@ -1,102 +1,129 @@
-Return-Path: <linux-usb+bounces-11443-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11445-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90D6F90F0C4
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2024 16:36:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E98B290F0FA
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2024 16:43:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A78131C21068
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2024 14:36:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1CD751C2121F
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2024 14:43:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B9A91DA23;
-	Wed, 19 Jun 2024 14:33:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 626C5225AF;
+	Wed, 19 Jun 2024 14:43:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="adhV4Jb6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TBSJQoiC"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B29A1D545;
-	Wed, 19 Jun 2024 14:33:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1656182B9;
+	Wed, 19 Jun 2024 14:43:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718807602; cv=none; b=a8OWXbnzdr+cbbfF2OnJZ0DdoF4MxyIQVClY+fIfNnLnpyeDJy+PdchGJXTZqUsUCiNyJGuzZaY0ijMJ4S4Mg9SHvQZaz8ss7RdxgwgI8EBU5yk6zs6oaEsHMINGWQyVw3X79UE5yBLIQ7hd8+yaB4ujAJ2y2mOkTsyndat4DEY=
+	t=1718808204; cv=none; b=YmxoRBGHsgnJX+Lg9iqJHp30J+wBnEjyGGY2o+o2frNOEozrlgAoA30TagddQgk82HSo4wh1c6TM2h5GjgUPMg3hF8JufPsftEY1aTwWwfrtnS6hvarzxR1G2ml98VYKcjLuQtgRlnYXhcrQKjucClEaqCrn+g2NiKkW9n7dtlQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718807602; c=relaxed/simple;
-	bh=4J4/INqOxWh7C7XMEDneVXcBMfEaxAM3ar7OIpr3fVs=;
+	s=arc-20240116; t=1718808204; c=relaxed/simple;
+	bh=LJPht4Ub9bY7nUd850dflo7eqAY3XAP1LS0KzfrQ+hI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TO3vhMgQx0V2EWRheyVWYClDVDqnDtrffoG90FbuNYZdJ9I4xxEHDaN7Bxf4rq6Jt0kiQPM6tDJ90aT87ymr00BZqhgZJHmMFAiPt/60lcnBtdO7kw1xTF2cGlNGU9JIq07MSZjr8L5Pun51DAJjlmxu1P+wxm1LaFFvmS6URKM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=adhV4Jb6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7CB4C2BBFC;
-	Wed, 19 Jun 2024 14:33:21 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=g9rLRdItGvD6fot8WRp3fClw1mJHwzHLAnn/OZo4rb9IWMRKmIkBPngXOseK3FQ0vr0uXYuZRaMyJq7k8FYRAvdiImwJHkVfWHIceWjxy6tet7z1XaMDOuyrcmjGyvacbOmZp358R3oWu4X3n5Fnz2CCaMK7hAT8cnGvTnS3aaw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TBSJQoiC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93C63C2BBFC;
+	Wed, 19 Jun 2024 14:43:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718807602;
-	bh=4J4/INqOxWh7C7XMEDneVXcBMfEaxAM3ar7OIpr3fVs=;
+	s=k20201202; t=1718808203;
+	bh=LJPht4Ub9bY7nUd850dflo7eqAY3XAP1LS0KzfrQ+hI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=adhV4Jb6uF72CggtYmqfNP+X1hMT85zC8IEycsra4hCoT3TrcZmXN5CVYJyzS/yBu
-	 aHt+LQNwWAoVE9QYygDEiiAVuV7pPvCbsNvGcMq0bY8D+U9X+OMb0TitCVLceyjr1Q
-	 QxnGeSi1O/PPc9jfEN2EeFjLtRUXMhMSq1GeoztNCJtlyaBqoZiHR/PLvKXicuRm4r
-	 6h/9f19pDfsSTgtPWgugZY9yE1kMrNuj2+mCjGa5eeW+a36ZEaVZQXUH1XetXBff2d
-	 f5NAdYecbPqwAjGc7nuwfsG8Qondmhb+cUpOgZ+Ew+2FdUEfxrEoiN+f/3XCQi/EN+
-	 bkOamhOnw9REA==
-Date: Wed, 19 Jun 2024 10:33:20 -0400
-From: Sasha Levin <sashal@kernel.org>
-To: Johan Hovold <johan@kernel.org>
-Cc: linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-	Krishna Kurapati <quic_kriskura@quicinc.com>,
-	Bjorn Andersson <quic_bjorande@quicinc.com>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Johan Hovold <johan+linaro@kernel.org>,
+	b=TBSJQoiC5fdPJmItV3cVhKlpWdUc3K7JOlVBHV7fUqf5OdWhySZB9+gETipZrJLwk
+	 ItZEYjAmlfSC70N56f8rM5k8BCcZyW9ZQAeLLu2cnGxVhKEExwe6AV4xbMOXyQMt6X
+	 huXm0nxO5de0ggr2Takr5J3aguim3l0YzFk5CrcKVEsJ23dv1r2o0YTTAM2Pik0I/F
+	 ecItaNIQpln/7YpAOdkK+4uIxstctIk1H4/Q6f5V8hPZzjYq1PM6djyVtt0Qg1zB9V
+	 7t2Tr20szBZMwiMlx4rqhX3T2epyQ9aLNZlvrR9uSemvd3UkhmbB76PHdX2a4TYiJc
+	 kA3hgh8TwoVSw==
+Date: Wed, 19 Jun 2024 07:43:20 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Cc: Johan Hovold <johan@kernel.org>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 6.9 16/28] usb: dwc3: core: Access XHCI address
- space temporarily to read port info
-Message-ID: <ZnLsMLxMsKRUc3Lb@sashalap>
-References: <20240605114927.2961639-1-sashal@kernel.org>
- <20240605114927.2961639-16-sashal@kernel.org>
- <ZmBRsqiexF9-sHpk@hovoldconsulting.com>
+	Kees Cook <kees@kernel.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] USB: serial: garmin_gps: annotate struct garmin_packet
+ with __counted_by
+Message-ID: <20240619144320.GA2091442@thelio-3990X>
+References: <20240619-garmin_gps_counted_by-v1-1-d8d816f085d9@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZmBRsqiexF9-sHpk@hovoldconsulting.com>
+In-Reply-To: <20240619-garmin_gps_counted_by-v1-1-d8d816f085d9@gmail.com>
 
-On Wed, Jun 05, 2024 at 01:53:22PM +0200, Johan Hovold wrote:
->On Wed, Jun 05, 2024 at 07:48:45AM -0400, Sasha Levin wrote:
->> From: Krishna Kurapati <quic_kriskura@quicinc.com>
->>
->> [ Upstream commit 921e109c6200741499ad0136e41cca9d16431c92 ]
->>
->> All DWC3 Multi Port controllers that exist today only support host mode.
->> Temporarily map XHCI address space for host-only controllers and parse
->> XHCI Extended Capabilities registers to read number of usb2 ports and
->> usb3 ports present on multiport controller. Each USB Port is at least HS
->> capable.
->>
->> The port info for usb2 and usb3 phy are identified as num_usb2_ports
->> and num_usb3_ports and these are used as iterators for phy operations
->> and for modifying GUSB2PHYCFG/ GUSB3PIPECTL registers accordingly.
->>
->> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
->> Reviewed-by: Bjorn Andersson <quic_bjorande@quicinc.com>
->> Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
->> Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
->> Tested-by: Johan Hovold <johan+linaro@kernel.org>
->> Link: https://lore.kernel.org/r/20240420044901.884098-3-quic_kriskura@quicinc.com
->> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->> Signed-off-by: Sasha Levin <sashal@kernel.org>
->
->This is not a fix. Please drop.
+On Wed, Jun 19, 2024 at 11:40:57AM +0200, Javier Carrasco wrote:
+> Use the __counted_by compiler attribute for the data[] flexible array member
+> to improve the results of array bound sanitizers.
+> 
+> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+> ---
+> The size is assigned before the first reference to the flexible array
+> (see pkt_add()), which allows for a straightforward annotation without
+> further modifications.
 
-Dropped, thanks!
+Agreed, this seems like a reasonable patch in and of itself that should
+work:
 
--- 
-Thanks,
-Sasha
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+
+It might also make sense to change the pkt allocation to use
+struct_size() instead of open coding it?
+
+diff --git a/drivers/usb/serial/garmin_gps.c b/drivers/usb/serial/garmin_gps.c
+index 670e942fdaaa..04946c1cbf6f 100644
+--- a/drivers/usb/serial/garmin_gps.c
++++ b/drivers/usb/serial/garmin_gps.c
+@@ -267,8 +267,7 @@ static int pkt_add(struct garmin_data *garmin_data_p,
+ 
+ 	/* process only packets containing data ... */
+ 	if (data_length) {
+-		pkt = kmalloc(sizeof(struct garmin_packet)+data_length,
+-								GFP_ATOMIC);
++		pkt = kmalloc(struct_size(pkt, data, data_length), GFP_ATOMIC);
+ 		if (!pkt)
+ 			return 0;
+ 
+
+> ---
+>  drivers/usb/serial/garmin_gps.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/serial/garmin_gps.c b/drivers/usb/serial/garmin_gps.c
+> index 670e942fdaaa..57df6ad183ff 100644
+> --- a/drivers/usb/serial/garmin_gps.c
+> +++ b/drivers/usb/serial/garmin_gps.c
+> @@ -104,7 +104,7 @@ struct garmin_packet {
+>  	int               seq;
+>  	/* the real size of the data array, always > 0 */
+>  	int               size;
+> -	__u8              data[];
+> +	__u8              data[] __counted_by(size);
+>  };
+>  
+>  /* structure used to keep the current state of the driver */
+> 
+> ---
+> base-commit: 0c52056d9f77508cb6d4d68d3fc91c6c08ec71af
+> change-id: 20240619-garmin_gps_counted_by-376545960353
+> 
+> Best regards,
+> -- 
+> Javier Carrasco <javier.carrasco.cruz@gmail.com>
+> 
 
