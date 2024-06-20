@@ -1,52 +1,44 @@
-Return-Path: <linux-usb+bounces-11490-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11491-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C6DD910E3F
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Jun 2024 19:16:26 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9646F910E88
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Jun 2024 19:30:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ED89E2861B3
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Jun 2024 17:16:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4E34B1F2280E
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Jun 2024 17:30:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDA0D1B3F07;
-	Thu, 20 Jun 2024 17:16:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Nfy4McdF"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA0D51B3F35;
+	Thu, 20 Jun 2024 17:29:51 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69EA51AB8F0;
-	Thu, 20 Jun 2024 17:16:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id C7C571B374E
+	for <linux-usb@vger.kernel.org>; Thu, 20 Jun 2024 17:29:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718903775; cv=none; b=pVcKgHbapiLd4cZ/gQ7EDiB/zN0WHReow6h007mZxqHHLelGHUu0+MJKoqBGz1VbFASrl6T262h+P6puUdfNAJuK/MABM2Iv7uNPZ/RW5QyMRjKAr6dCxw2BZHOxxR2+QlXETlnPu+3T/IO6pUrn9mrRFd3I9JZB7LPbqaFgWYQ=
+	t=1718904591; cv=none; b=SRhPDB7mtnjUgPygrU2TjocvR251TuycZo/GzRpg/A6cOf2SCYAMuXsNHtR9+J4ZAtEcQkM6ojGQs9J4KSbNrPB2C34FL5uc76KFFgqcXLE/AHy+XONk7qPPTOWxQ0q6TFBQKKcj1HTQQ1LV11teZPxffZWaDaY08QGZv/teN5o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718903775; c=relaxed/simple;
-	bh=nTUjyvPJwsjHGiR5ySPNqFmwFDArPcRIv7+YmkcFFU4=;
+	s=arc-20240116; t=1718904591; c=relaxed/simple;
+	bh=HSV+mjGe9U1QjnuLWkIZr8nQXJh3Rx93/FTUhxTQ+94=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fY1v2zv4YeiBzKkqmocRUBiVS278+e75Gv7Z59Czk7YairUjHxEXnLbHJnd2QA4V2c/qIT65mYJoWZopJaBlv0wXPkruhgGGWIEVg92ykPH+ePSMbpF3udIudnSncXhgaIl1rSWvvmmaawI5bSjjJY5iR8ElxO+LcA+6s5lA0Fk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Nfy4McdF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83661C2BD10;
-	Thu, 20 Jun 2024 17:16:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1718903774;
-	bh=nTUjyvPJwsjHGiR5ySPNqFmwFDArPcRIv7+YmkcFFU4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Nfy4McdF386W/gXzEyZ1mJEuc3YaDXHDojaIAbWNI66xGKUkCTx8dGqwzj1fP+Xgt
-	 zX9gmQnLf+m5SJXfZa1lty5JuVhZdZh8Bn8Re6+zKZ//1CziFcwaaiNynNH4FwgZb4
-	 Zh5ut+a0k+bKp1lIfiKzYKE75F77VqLCTUOoU2xg=
-Date: Thu, 20 Jun 2024 19:16:12 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: joswang <joswang1221@gmail.com>
-Cc: Thinh.Nguyen@synopsys.com, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-	Jos Wang <joswang@lenovo.com>
-Subject: Re: [PATCH v7] usb: dwc3: core: Workaround for CSR read timeout
-Message-ID: <2024062051-washtub-sufferer-d756@gregkh>
-References: <20240619114529.3441-1-joswang1221@gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=U4U3Mm4w5HuT4pRRtfzWCMv+U0JLZhm4RFn7F0aPWztyCdHFK8CrOPZZazEZQZ1J+QQoKBDCmCpkmmpmsWbbhdXsaKZyxUSHI5dDZEhe6BoD+q7bdQlPMGGsGN6ZXDzn008d51UkqVJi0aczJ7PuhhLS28UHuMtoyUN64/30C+I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
+Received: (qmail 506493 invoked by uid 1000); 20 Jun 2024 13:29:42 -0400
+Date: Thu, 20 Jun 2024 13:29:42 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: syzbot <syzbot+696cffe71c444e4a2dd8@syzkaller.appspotmail.com>
+Cc: davem@davemloft.net, dsahern@kernel.org, edumazet@google.com,
+  kadlec@netfilter.org, kuba@kernel.org, linux-kernel@vger.kernel.org,
+  linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+  netfilter-devel@vger.kernel.org, pabeni@redhat.com, pablo@netfilter.org,
+  syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [netfilter?] [usb?] INFO: rcu detected stall in NF_HOOK
+Message-ID: <24f0d918-efba-414c-8328-c0ed240e67b2@rowland.harvard.edu>
+References: <000000000000c63a8e061b556ea6@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -55,27 +47,42 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240619114529.3441-1-joswang1221@gmail.com>
+In-Reply-To: <000000000000c63a8e061b556ea6@google.com>
 
-On Wed, Jun 19, 2024 at 07:45:29PM +0800, joswang wrote:
-> From: Jos Wang <joswang@lenovo.com>
+On Thu, Jun 20, 2024 at 10:13:24AM -0700, syzbot wrote:
+> Hello,
 > 
-> This is a workaround for STAR 4846132, which only affects
-> DWC_usb31 version2.00a operating in host mode.
+> syzbot found the following issue on:
 > 
-> There is a problem in DWC_usb31 version 2.00a operating
-> in host mode that would cause a CSR read timeout When CSR
-> read coincides with RAM Clock Gating Entry. By disable
-> Clock Gating, sacrificing power consumption for normal
-> operation.
+> HEAD commit:    2ccbdf43d5e7 Merge tag 'for-linus' of git://git.kernel.org..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=10341146980000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=fa0ce06dcc735711
+> dashboard link: https://syzkaller.appspot.com/bug?extid=696cffe71c444e4a2dd8
+> compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13e8bfee980000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12d3d851980000
 > 
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Jos Wang <joswang@lenovo.com>
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/93525a95fe83/disk-2ccbdf43.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/b9b895227ea2/vmlinux-2ccbdf43.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/e825248a8e73/bzImage-2ccbdf43.xz
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+696cffe71c444e4a2dd8@syzkaller.appspotmail.com
+> 
+> rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P45
+>  1-....
+>  } 2688 jiffies s: 1349 root: 0x2/T
+> rcu: blocking rcu_node structures (internal RCU debug):
+> 
+> Sending NMI from CPU 0 to CPUs 1:
+> cdc_wdm 3-1:1.0: wdm_int_callback - 0 bytes
+> cdc_wdm 3-1:1.0: nonzero urb status received: -71
+> cdc_wdm 3-1:1.0: wdm_int_callback - 0 bytes
+> cdc_wdm 3-1:1.0: nonzero urb status received: -71
 
-What commit id does this fix?  How far back should it be backported in
-the stable releases?
+#syz dup: [syzbot] [usb?] INFO: rcu detected stall in raw_ioctl
 
-thanks,
-
-greg k-h
+Alan Stern
 
