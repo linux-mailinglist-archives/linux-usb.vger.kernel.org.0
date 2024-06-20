@@ -1,381 +1,1151 @@
-Return-Path: <linux-usb+bounces-11469-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11470-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6827C90FFF0
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Jun 2024 11:08:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B8D5291003B
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Jun 2024 11:26:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 92CD7B237A5
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Jun 2024 09:08:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C34BA1C21A0C
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Jun 2024 09:26:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4383F19ADB8;
-	Thu, 20 Jun 2024 09:08:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2931C1A00CB;
+	Thu, 20 Jun 2024 09:26:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CxLlJl3q"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f207.google.com (mail-il1-f207.google.com [209.85.166.207])
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10CE3171E7C
-	for <linux-usb@vger.kernel.org>; Thu, 20 Jun 2024 09:08:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.207
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28EF51A00C2
+	for <linux-usb@vger.kernel.org>; Thu, 20 Jun 2024 09:25:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718874504; cv=none; b=moCo3qmtu6h+XYOugATSAHz2js+aOrAbLVid00imp6GCZ7h09RmnaQR5nGgNh+RhDOlEgM/B4Ysqt355EO2FiYj2iBLRFQnf+yym7Sp0WIUjfXYX7TxXwf8ale5v8PoRtirP0ps8j+TB8/L68BE2oauGC86DCvs/L2G8JgwTXrQ=
+	t=1718875559; cv=none; b=TeR3wOQxsgjhFHM48Z1VG5G1qIdpfMZtexrNCRwBJ9+UrM8tBhSHq6LR9dtWnaTOa35n4HbJgDv0MwxRk2KywM2BriQefTV7ztn9YGHDZn49p1jpWbYWn9Qb0cgrpMlr8Kc7S4k9e6lKHOj2TpoPPu/uVjccSs5Sh1ZkGNeLzk0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718874504; c=relaxed/simple;
-	bh=RSzsSzCpc7P9raMm7NlFu3anSnHVxrrthjMHzdxpzRg=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=MZ3qjRBCNJ4rNzDL973mviw0PwVYp42/ReHOPKkjo11QbmWGlnsUFcPxvT6iSl9y8KoexzWCIgfEdiYQslVRILztbJNH7caB0yr5RwaUAL9A9RSUWnyP/lUpR7Tu4yz4ct2et4kHt+FOfw2fkVn8RYKYYC6S/s0Uz5BKskCvA6E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.207
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f207.google.com with SMTP id e9e14a558f8ab-37597adfab4so6273215ab.2
-        for <linux-usb@vger.kernel.org>; Thu, 20 Jun 2024 02:08:21 -0700 (PDT)
+	s=arc-20240116; t=1718875559; c=relaxed/simple;
+	bh=u1zcV0zPUIbE1mmJF3H8fjHdbsntW7sKlIOVxtDxKSY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ngUlpGZY4dauJIwTYbivbVkHQHAIebcdkavoCBC87FkSdmFIL8gaU9M2wHVNZAV4GtxuN5O6s3tTzxR9/VgFUx8Jiw1VEuCNz/dUTO8XMHYhEdClDHqQXq93JvodxX82acEWSLYVvRrGhjs2Sv7PFiakAkcIJOl837JFZcCsxAE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CxLlJl3q; arc=none smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-a6f177b78dcso65084166b.1
+        for <linux-usb@vger.kernel.org>; Thu, 20 Jun 2024 02:25:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1718875555; x=1719480355; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=j32Ba8pyxKwPZQfCHYky4VcmA6qd89daDeN5Cvnb5qs=;
+        b=CxLlJl3qZ8VhUUTjXioC+LjdCWC6JvpSDXMs65pxuNrBL4x1wMvmENqOTr+yEFBufU
+         SzVP7wcrGN/z5gjKYBquVNetGXwBHoO1QOz14sgfN7f1O6Oifk6GW+WVUSs3mcHJpxcX
+         R0MEUKJIg0KrK+qrlsUwa41YOQdpwkdwzI0HAnOjLFWZ8EQVJAmDBAbIwUCH8YhQwNl9
+         ZFwavug58yqzPahYsGbziV6xgdmg40D7fupHOCgqNSgUNja/xxQ/OTX7J97N7Y12Yjye
+         oAyxqVZ3PU/q7Qs/pBVgKX2cvANnGR1QNCW/HvevOTiU36qh49jzVDL5NxF0rU4rU71Y
+         PgzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718874501; x=1719479301;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vJrw9A7rHEBRMICr3ppgDN1cORq1He91u4mw7Mw1cCU=;
-        b=d8sbQ9ENK9ju+YDXlTnVH6WC6aZUCiE/DqXvKDWgTsTM14N+k5FpCdpLt0Kh98kTYT
-         E7XKfca+h0m9HTmxpAlyQG+WfmuEFEdWXtlnPdx0PiuzJlStJFh3Oa8Cki8wSuXR2Hqt
-         fUxOhTzG2fPhLy2owhnsyLyo3+3Y5y2s1GlUqIOBCSYP/C2diy59KQcyvZpq3RdoyO+w
-         wPUKK1+WJOx5ckn4NBJVbyJgl9gaA73PopNoZNJZJXh8wlPLfQbSuReJndZwmP7RGrwW
-         EAABMqR46vdfqMRvHZKwQeG0kzZsypj4/RNbKdnFzSSABcTjwNDMc8h5ALKWK3f/kCJU
-         UjQw==
-X-Forwarded-Encrypted: i=1; AJvYcCUcKylU5tmqPf3yxCvIeVVdPLf2qTDUfs/H6NONqGZU4cWIGDyzjicmCcfldpSkkTI3DjPi+2RSza8oC+p013Jz9zZV5SiOivHZ
-X-Gm-Message-State: AOJu0YymIkkFTwbS0oJxU7108AZ/a5kO/MMPAyoG8hBaWU9tZJAFFFgY
-	xgSpI69w3TESiTtBugPOhT7RkAJZcMjjW5Tvtb4D/cdISV8upjQIvcM4jU9guXt9UCyv0vGZDh2
-	VgqEkOA9X3KdEzC9xLyZPdxvEm7yN74IJx4XUShwsbU5pXyN0/SiQMJY=
-X-Google-Smtp-Source: AGHT+IGBgcJSV1PiSNNKCUci2n3ViSLiJat3LC5ZwHNnR1vjJxlLS3YgaXoV87PkBV+WicoeT2NX7uRd/VYhCL9mqsqjG0mIGqfM
+        d=1e100.net; s=20230601; t=1718875555; x=1719480355;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=j32Ba8pyxKwPZQfCHYky4VcmA6qd89daDeN5Cvnb5qs=;
+        b=fXGEI0v5V4OODG0cnPGWxweFhyj2fB0muAoh94VuMfe0U8+YMiFeArWICQFSa1+5gA
+         a44BZxAveJQSS1mqkf6/THd1/sEJ9UZeGYo6/mOpMU4G6wa30f6qlzYBxvjTRNMrsU2r
+         bEGevJ4LgwTP2gKiNBh6CEZMYPQsIf63YzUK4y+JZtI9gSMSixq2SQgUyoANxKsQ0CJo
+         aSEh0zskbGnvkfbGuXqjdLYcx+WgpGYZniAh1+YCIKMMBpDGx512PJoE7JnyJGO5YMHH
+         xJyT2q3IHSFtvUkimQkpvp5f2mmrehyCt3q28cDi6Nor03YOCKs0/iSPeXtxK1+2wVKO
+         5M/Q==
+X-Gm-Message-State: AOJu0YyN19EAu1/lguuKIi+y5uP9GxyBxymQfPoqoWkHj/Z2anmz8nFq
+	aj95Ta6xhOhmeS5Wp4SSJNc3aeWCx724D0Xc+5Q9w7QgsVD+zLBb9tpUmysKOE4a+kUNCvOLtRN
+	PAXmEhirjssZxebOlmAVU6i67wjf1YDa/
+X-Google-Smtp-Source: AGHT+IHxths4O2g3xUhNuS7e1gfnj8MzgY+uUQ69qQ74OSfaSAjfpcAS1j68gkGZsQQBEQdKdxONaAZRR0z3nRdJLSw=
+X-Received: by 2002:a17:906:1cd9:b0:a6f:1b3a:8898 with SMTP id
+ a640c23a62f3a-a6fab60b9c7mr233102166b.2.1718875555020; Thu, 20 Jun 2024
+ 02:25:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1c8c:b0:375:dad7:a664 with SMTP id
- e9e14a558f8ab-3761d7c4a0bmr2713545ab.6.1718874501276; Thu, 20 Jun 2024
- 02:08:21 -0700 (PDT)
-Date: Thu, 20 Jun 2024 02:08:21 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000000ff9cb061b4ea872@google.com>
-Subject: [syzbot] [usb?] INFO: task hung in wdm_release
-From: syzbot <syzbot+973d01eb49b060b12e63@syzkaller.appspotmail.com>
-To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <CAKSBH7F7LhCykPdKYRi0DvLX5yYjKtbOZbEOKhDXfvrQJA-XKA@mail.gmail.com>
+ <2024062016-robust-distance-ea98@gregkh> <CAKSBH7H=TEFtsQLr3=L-Eh9odeEej2j028G2RcbM0H=CTZWrQQ@mail.gmail.com>
+ <2024062010-facing-refining-c204@gregkh>
+In-Reply-To: <2024062010-facing-refining-c204@gregkh>
+From: Giacinto Cifelli <gciofono@gmail.com>
+Date: Thu, 20 Jun 2024 11:25:43 +0200
+Message-ID: <CAKSBH7HeKuP7gA7hk-RFFdnQpaSAOF46JRnQeqFgcA1deG3D6w@mail.gmail.com>
+Subject: Re: usb composition without class
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello,
+On Thu, Jun 20, 2024 at 8:41=E2=80=AFAM Greg KH <gregkh@linuxfoundation.org=
+> wrote:
+> > > On Thu, Jun 20, 2024 at 07:58:13AM +0200, Giacinto Cifelli wrote:
+> > > > greetings,
+> > > >
+> > > > question:
+> > > >
+> > > > on a system (yocto), I have a usb composition that doesn't assign t=
+he
+> > > > class for the interfaces:
+> > > >     |__ Port 3: Dev 3, If 10, Class=3D, Driver=3Dcdc_mbim, 480M
+> > > >     |__ Port 3: Dev 3, If 8, Class=3D, Driver=3Dcdc_acm, 480M
+> > > >     |__ Port 3: Dev 3, If 6, Class=3D, Driver=3Dcdc_acm, 480M
+> > > >     |__ Port 3: Dev 3, If 4, Class=3D, Driver=3Dcdc_acm, 480M
+> > > >     |__ Port 3: Dev 3, If 2, Class=3D, Driver=3Dcdc_acm, 480M
+> > > >     |__ Port 3: Dev 3, If 11, Class=3D, Driver=3Dcdc_mbim, 480M
+> > > >     |__ Port 3: Dev 3, If 0, Class=3D, Driver=3Dcdc_acm, 480M
+> > > >     |__ Port 3: Dev 3, If 9, Class=3D, Driver=3Dcdc_acm, 480M
+> > > >     |__ Port 3: Dev 3, If 7, Class=3D, Driver=3Dcdc_acm, 480M
+> > > >     |__ Port 3: Dev 3, If 5, Class=3D, Driver=3Dcdc_acm, 480M
+> > > >     |__ Port 3: Dev 3, If 3, Class=3D, Driver=3Dcdc_acm, 480M
+> > > >     |__ Port 3: Dev 3, If 1, Class=3D, Driver=3Dcdc_acm, 480M
+> > > > Kernel: Linux version 6.1.35 (oe-user@oe-host) (x86_64-poky-linux-g=
+cc
+> > > > (GCC) 11.4.0, GNU ld (GNU Binutils) 2.38.20220708) #1 SMP
+> > > > PREEMPT_DYNAMIC Thu Jun 22 18:03:13 UTC 2023
+> > > >
+> > > > instead of (arch):
+> > > >     |__ Port 004: Dev 004, If 0, Class=3DCommunications, Driver=3Dc=
+dc_acm, 5000M
+> > > >     |__ Port 004: Dev 004, If 1, Class=3DCDC Data, Driver=3Dcdc_acm=
+, 5000M
+> > > >     |__ Port 004: Dev 004, If 2, Class=3DCommunications, Driver=3Dc=
+dc_acm, 5000M
+> > > >     |__ Port 004: Dev 004, If 3, Class=3DCDC Data, Driver=3Dcdc_acm=
+, 5000M
+> > > >     |__ Port 004: Dev 004, If 4, Class=3DCommunications, Driver=3Dc=
+dc_acm, 5000M
+> > > >     |__ Port 004: Dev 004, If 5, Class=3DCDC Data, Driver=3Dcdc_acm=
+, 5000M
+> > > >     |__ Port 004: Dev 004, If 6, Class=3DCommunications, Driver=3Dc=
+dc_acm, 5000M
+> > > >     |__ Port 004: Dev 004, If 7, Class=3DCDC Data, Driver=3Dcdc_acm=
+, 5000M
+> > > >     |__ Port 004: Dev 004, If 8, Class=3DCommunications, Driver=3Dc=
+dc_acm, 5000M
+> > > >     |__ Port 004: Dev 004, If 9, Class=3DCDC Data, Driver=3Dcdc_acm=
+, 5000M
+> > > >     |__ Port 004: Dev 004, If 10, Class=3DCommunications, Driver=3D=
+cdc_mbim, 5000M
+> > > >     |__ Port 004: Dev 004, If 11, Class=3DCDC Data, Driver=3Dcdc_mb=
+im, 5000M
+> > > > Kernel: Linux 6.6.34-1-lts #1 SMP PREEMPT_DYNAMIC Sun, 16 Jun 2024
+> > > > 14:45:31 +0000 x86_64 GNU/Linux
+> > > >
+> > > > This lack of class creates too many /dev/ttyACMx ports, and
+> > > > ModemManager tries to access them all, perhaps also blocking the
+> > > > device, and the whole system doesn't work.
+> > > >
+> > > > For completeness, the device is:
+> > > >     Bus 002 Device 004: ID 1e2d:0065 Gemalto M2M GmbH LTE Modem
+> > > > which is supported without any customs in the cdc-acm and cdc_mbim =
+drivers.
+> > > >
+> > > > I spotted only two options not compiled-in in the yocto .config
+> > > > (compared with the arch one), but I strongly doubt this is related:
+> > > >     CONFIG_USB_G_MULTI
+> > > >     CONFIG_USB_G_MULTI_CDC
+> > > >
+> > > > Would you know why the class is not assigned?
+> > >
+> > > This is just a userspace issue, right?
+> >
+> > I think the class is assigned by the kernel/driver.
+> >
+> > > Or are you saying that somehow
+> > > the same device plugged into two different systems works differently?
+> >
+> > correct: the same device works differently in the two systems...  in
+> > the sense of the class not assigned.
+>
+> It's not that it is not assigned, it's that something isn't figuring it
+> out properly.
+>
+> Can you provide the output of 'lsusb -v -d 1e2d:0065' for both systems?
 
-syzbot found the following issue on:
+they seem ok with -v, I don't understand it.
 
-HEAD commit:    2ccbdf43d5e7 Merge tag 'for-linus' of git://git.kernel.org..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=10cb5954980000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=fa0ce06dcc735711
-dashboard link: https://syzkaller.appspot.com/bug?extid=973d01eb49b060b12e63
-compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12a2cbfe980000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=125f8ada980000
+yocto:
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/93525a95fe83/disk-2ccbdf43.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/b9b895227ea2/vmlinux-2ccbdf43.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/e825248a8e73/bzImage-2ccbdf43.xz
+Bus 001 Device 003: ID 1e2d:0065 Cinterion LTE Modem
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               2.00
+  bDeviceClass          239
+  bDeviceSubClass         2
+  bDeviceProtocol         1
+  bMaxPacketSize0        64
+  idVendor           0x1e2d
+  idProduct          0x0065
+  bcdDevice            3.18
+  iManufacturer           1 Cinterion
+  iProduct                2 LTE Modem
+  iSerial                 3 2de297b0
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x01a9
+    bNumInterfaces         12
+    bConfigurationValue     1
+    iConfiguration          0
+    bmAttributes         0xa0
+      (Bus Powered)
+      Remote Wakeup
+    MaxPower              500mA
+    Interface Association:
+      bLength                 8
+      bDescriptorType        11
+      bFirstInterface         0
+      bInterfaceCount         2
+      bFunctionClass          2
+      bFunctionSubClass       2
+      bFunctionProtocol       1
+      iFunction               8 CDC Serial
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         2
+      bInterfaceSubClass      2
+      bInterfaceProtocol      1
+      iInterface              6 CDC Abstract Control Model (ACM)
+      CDC Header:
+        bcdCDC               1.10
+      CDC Call Management:
+        bmCapabilities       0x00
+        bDataInterface          1
+      CDC ACM:
+        bmCapabilities       0x02
+          line coding and serial state
+      CDC Union:
+        bMasterInterface        0
+        bSlaveInterface         1
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x82  EP 2 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval               9
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        1
+      bAlternateSetting       0
+      bNumEndpoints           2
+      bInterfaceClass        10
+      bInterfaceSubClass      0
+      bInterfaceProtocol      0
+      iInterface              7 CDC ACM Data
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x01  EP 1 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+    Interface Association:
+      bLength                 8
+      bDescriptorType        11
+      bFirstInterface         2
+      bInterfaceCount         2
+      bFunctionClass          2
+      bFunctionSubClass       2
+      bFunctionProtocol       1
+      iFunction               8 CDC Serial
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        2
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         2
+      bInterfaceSubClass      2
+      bInterfaceProtocol      1
+      iInterface              6 CDC Abstract Control Model (ACM)
+      CDC Header:
+        bcdCDC               1.10
+      CDC Call Management:
+        bmCapabilities       0x00
+        bDataInterface          3
+      CDC ACM:
+        bmCapabilities       0x02
+          line coding and serial state
+      CDC Union:
+        bMasterInterface        2
+        bSlaveInterface         3
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x84  EP 4 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval               9
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        3
+      bAlternateSetting       0
+      bNumEndpoints           2
+      bInterfaceClass        10
+      bInterfaceSubClass      0
+      bInterfaceProtocol      0
+      iInterface              7 CDC ACM Data
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x83  EP 3 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x02  EP 2 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+    Interface Association:
+      bLength                 8
+      bDescriptorType        11
+      bFirstInterface         4
+      bInterfaceCount         2
+      bFunctionClass          2
+      bFunctionSubClass       2
+      bFunctionProtocol       1
+      iFunction               8 CDC Serial
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        4
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         2
+      bInterfaceSubClass      2
+      bInterfaceProtocol      1
+      iInterface              6 CDC Abstract Control Model (ACM)
+      CDC Header:
+        bcdCDC               1.10
+      CDC Call Management:
+        bmCapabilities       0x00
+        bDataInterface          5
+      CDC ACM:
+        bmCapabilities       0x02
+          line coding and serial state
+      CDC Union:
+        bMasterInterface        4
+        bSlaveInterface         5
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x86  EP 6 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval               9
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        5
+      bAlternateSetting       0
+      bNumEndpoints           2
+      bInterfaceClass        10
+      bInterfaceSubClass      0
+      bInterfaceProtocol      0
+      iInterface              7 CDC ACM Data
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x85  EP 5 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x03  EP 3 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+    Interface Association:
+      bLength                 8
+      bDescriptorType        11
+      bFirstInterface         6
+      bInterfaceCount         2
+      bFunctionClass          2
+      bFunctionSubClass       2
+      bFunctionProtocol       1
+      iFunction               8 CDC Serial
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        6
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         2
+      bInterfaceSubClass      2
+      bInterfaceProtocol      1
+      iInterface              6 CDC Abstract Control Model (ACM)
+      CDC Header:
+        bcdCDC               1.10
+      CDC Call Management:
+        bmCapabilities       0x00
+        bDataInterface          7
+      CDC ACM:
+        bmCapabilities       0x02
+          line coding and serial state
+      CDC Union:
+        bMasterInterface        6
+        bSlaveInterface         7
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x88  EP 8 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval               9
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        7
+      bAlternateSetting       0
+      bNumEndpoints           2
+      bInterfaceClass        10
+      bInterfaceSubClass      0
+      bInterfaceProtocol      0
+      iInterface              7 CDC ACM Data
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x87  EP 7 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x04  EP 4 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+    Interface Association:
+      bLength                 8
+      bDescriptorType        11
+      bFirstInterface         8
+      bInterfaceCount         2
+      bFunctionClass          2
+      bFunctionSubClass       2
+      bFunctionProtocol       1
+      iFunction              10 CDC Serial (DIAG)
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        8
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         2
+      bInterfaceSubClass      2
+      bInterfaceProtocol      1
+      iInterface             11 CDC Abstract Control Model (ACM) for DIAG
+      CDC Header:
+        bcdCDC               1.10
+      CDC Call Management:
+        bmCapabilities       0x00
+        bDataInterface          0
+      CDC ACM:
+        bmCapabilities       0x00
+      CDC Union:
+        bMasterInterface        8
+        bSlaveInterface         9
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x8a  EP 10 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval               9
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        9
+      bAlternateSetting       0
+      bNumEndpoints           2
+      bInterfaceClass        10
+      bInterfaceSubClass      0
+      bInterfaceProtocol      0
+      iInterface             12 CDC ACM Data for DIAG
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x89  EP 9 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x05  EP 5 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+    Interface Association:
+      bLength                 8
+      bDescriptorType        11
+      bFirstInterface        10
+      bInterfaceCount         2
+      bFunctionClass          2
+      bFunctionSubClass      14
+      bFunctionProtocol       0
+      iFunction               0
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber       10
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         2
+      bInterfaceSubClass     14
+      bInterfaceProtocol      0
+      iInterface             13 MBIM Control
+      CDC Header:
+        bcdCDC               1.10
+      CDC Union:
+        bMasterInterface        10
+        bSlaveInterface         11
+      CDC MBIM:
+        bcdMBIMVersion       1.00
+        wMaxControlMessage   4096
+        bNumberFilters       32
+        bMaxFilterSize       128
+        wMaxSegmentSize      2048
+        bmNetworkCapabilities 0x20
+          8-byte ntb input size
+      CDC MBIM Extended:
+        bcdMBIMExtendedVersion           1.00
+        bMaxOutstandingCommandMessages     64
+        wMTU                             1500
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x8b  EP 11 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval               9
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber       11
+      bAlternateSetting       0
+      bNumEndpoints           0
+      bInterfaceClass        10
+      bInterfaceSubClass      0
+      bInterfaceProtocol      2
+      iInterface              0
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber       11
+      bAlternateSetting       1
+      bNumEndpoints           2
+      bInterfaceClass        10
+      bInterfaceSubClass      0
+      bInterfaceProtocol      2
+      iInterface             14 MBIM Data
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x8e  EP 14 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x0f  EP 15 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+Device Qualifier (for other device speed):
+  bLength                10
+  bDescriptorType         6
+  bcdUSB               2.00
+  bDeviceClass          239
+  bDeviceSubClass         2
+  bDeviceProtocol         1
+  bMaxPacketSize0        64
+  bNumConfigurations      1
+Device Status:     0x0000
+  (Bus Powered)
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+973d01eb49b060b12e63@syzkaller.appspotmail.com
 
-INFO: task syz-executor320:7035 blocked for more than 142 seconds.
-      Not tainted 6.10.0-rc3-syzkaller-00044-g2ccbdf43d5e7 #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz-executor320 state:D
- stack:24416 pid:7035  tgid:7034  ppid:5154   flags:0x00004002
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5408 [inline]
- __schedule+0x17e8/0x4a20 kernel/sched/core.c:6745
- __schedule_loop kernel/sched/core.c:6822 [inline]
- schedule+0x14b/0x320 kernel/sched/core.c:6837
- schedule_preempt_disabled+0x13/0x30 kernel/sched/core.c:6894
- __mutex_lock_common kernel/locking/mutex.c:684 [inline]
- __mutex_lock+0x6a4/0xd70 kernel/locking/mutex.c:752
- wdm_release+0x52/0x470 drivers/usb/class/cdc-wdm.c:764
- __fput+0x406/0x8b0 fs/file_table.c:422
- task_work_run+0x24f/0x310 kernel/task_work.c:180
- exit_task_work include/linux/task_work.h:38 [inline]
- do_exit+0xa27/0x27e0 kernel/exit.c:874
- do_group_exit+0x207/0x2c0 kernel/exit.c:1023
- get_signal+0x16a1/0x1740 kernel/signal.c:2909
- arch_do_signal_or_restart+0x96/0x860 arch/x86/kernel/signal.c:310
- exit_to_user_mode_loop kernel/entry/common.c:111 [inline]
- exit_to_user_mode_prepare include/linux/entry-common.h:328 [inline]
- __syscall_exit_to_user_mode_work kernel/entry/common.c:207 [inline]
- syscall_exit_to_user_mode+0xc9/0x370 kernel/entry/common.c:218
- do_syscall_64+0x100/0x230 arch/x86/entry/common.c:89
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7feafc194719
-RSP: 002b:00007feafc13f228 EFLAGS: 00000246
- ORIG_RAX: 00000000000000ca
-RAX: fffffffffffffe00 RBX: 00007feafc21b1a8 RCX: 00007feafc194719
-RDX: 0000000000000000 RSI: 0000000000000080 RDI: 00007feafc21b1a8
-RBP: 00007feafc21b1a0 R08: 00007feafc13f6c0 R09: 00007feafc13f6c0
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007feafc21b1ac
-R13: 0023776172646968 R14: 6469682f7665642f R15: 00007ffc872c23c8
- </TASK>
-INFO: task syz-executor320:7039 blocked for more than 143 seconds.
-      Not tainted 6.10.0-rc3-syzkaller-00044-g2ccbdf43d5e7 #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz-executor320 state:D
- stack:26384 pid:7039  tgid:7038  ppid:5155   flags:0x00004006
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5408 [inline]
- __schedule+0x17e8/0x4a20 kernel/sched/core.c:6745
- __schedule_loop kernel/sched/core.c:6822 [inline]
- schedule+0x14b/0x320 kernel/sched/core.c:6837
- rpm_resume+0x504/0x1670 drivers/base/power/runtime.c:834
- rpm_resume+0x8fe/0x1670 drivers/base/power/runtime.c:892
- __pm_runtime_resume+0x120/0x180 drivers/base/power/runtime.c:1172
- pm_runtime_resume_and_get include/linux/pm_runtime.h:430 [inline]
- usb_autopm_get_interface+0x22/0xf0 drivers/usb/core/driver.c:1819
- wdm_open+0x218/0x550 drivers/usb/class/cdc-wdm.c:730
- usb_open+0x225/0x300 drivers/usb/core/file.c:47
- chrdev_open+0x5b0/0x630 fs/char_dev.c:414
- do_dentry_open+0x95a/0x1720 fs/open.c:955
- do_open fs/namei.c:3650 [inline]
- path_openat+0x289f/0x3280 fs/namei.c:3807
- do_filp_open+0x235/0x490 fs/namei.c:3834
- do_sys_openat2+0x13e/0x1d0 fs/open.c:1405
- do_sys_open fs/open.c:1420 [inline]
- __do_sys_openat fs/open.c:1436 [inline]
- __se_sys_openat fs/open.c:1431 [inline]
- __x64_sys_openat+0x247/0x2a0 fs/open.c:1431
- do_syscall_x64 arch/x86/entry/common.c:52 [inline]
- do_syscall_64+0xf3/0x230 arch/x86/entry/common.c:83
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7feafc193370
-RSP: 002b:00007feafc13ed80 EFLAGS: 00000293
- ORIG_RAX: 0000000000000101
-RAX: ffffffffffffffda RBX: 0000000000000002 RCX: 00007feafc193370
-RDX: 0000000000000002 RSI: 00007feafc13ee10 RDI: 00000000ffffff9c
-RBP: 00007feafc13ee10 R08: 0000000000000000 R09: 00007feafc13eb97
-R10: 0000000000000000 R11: 0000000000000293 R12: 00007feafc21b1ac
-R13: 0023776172646968 R14: 6469682f7665642f R15: 00007ffc872c23c8
- </TASK>
-INFO: task syz-executor320:7046 blocked for more than 145 seconds.
-      Not tainted 6.10.0-rc3-syzkaller-00044-g2ccbdf43d5e7 #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz-executor320 state:D
- stack:27360 pid:7046  tgid:7040  ppid:5153   flags:0x00000006
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5408 [inline]
- __schedule+0x17e8/0x4a20 kernel/sched/core.c:6745
- __schedule_loop kernel/sched/core.c:6822 [inline]
- schedule+0x14b/0x320 kernel/sched/core.c:6837
- schedule_preempt_disabled+0x13/0x30 kernel/sched/core.c:6894
- __mutex_lock_common kernel/locking/mutex.c:684 [inline]
- __mutex_lock+0x6a4/0xd70 kernel/locking/mutex.c:752
- wdm_open+0x56/0x550 drivers/usb/class/cdc-wdm.c:715
- usb_open+0x225/0x300 drivers/usb/core/file.c:47
- chrdev_open+0x5b0/0x630 fs/char_dev.c:414
- do_dentry_open+0x95a/0x1720 fs/open.c:955
- do_open fs/namei.c:3650 [inline]
- path_openat+0x289f/0x3280 fs/namei.c:3807
- do_filp_open+0x235/0x490 fs/namei.c:3834
- do_sys_openat2+0x13e/0x1d0 fs/open.c:1405
- do_sys_open fs/open.c:1420 [inline]
- __do_sys_openat fs/open.c:1436 [inline]
- __se_sys_openat fs/open.c:1431 [inline]
- __x64_sys_openat+0x247/0x2a0 fs/open.c:1431
- do_syscall_x64 arch/x86/entry/common.c:52 [inline]
- do_syscall_64+0xf3/0x230 arch/x86/entry/common.c:83
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7feafc193370
-RSP: 002b:00007feafc11dd80 EFLAGS: 00000293
- ORIG_RAX: 0000000000000101
-RAX: ffffffffffffffda RBX: 0000000000000002 RCX: 00007feafc193370
-RDX: 0000000000000002 RSI: 00007feafc11de10 RDI: 00000000ffffff9c
-RBP: 00007feafc11de10 R08: 0000000000000000 R09: 00007feafc11db97
-R10: 0000000000000000 R11: 0000000000000293 R12: 00007feafc21b1bc
-R13: 0023776172646968 R14: 6469682f7665642f R15: 00007ffc872c23c8
- </TASK>
-INFO: task syz-executor320:7043 blocked for more than 146 seconds.
-      Not tainted 6.10.0-rc3-syzkaller-00044-g2ccbdf43d5e7 #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz-executor320 state:D stack:25712 pid:7043  tgid:7042  ppid:5156   flags:0x00000006
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5408 [inline]
- __schedule+0x17e8/0x4a20 kernel/sched/core.c:6745
- __schedule_loop kernel/sched/core.c:6822 [inline]
- schedule+0x14b/0x320 kernel/sched/core.c:6837
- schedule_preempt_disabled+0x13/0x30 kernel/sched/core.c:6894
- __mutex_lock_common kernel/locking/mutex.c:684 [inline]
- __mutex_lock+0x6a4/0xd70 kernel/locking/mutex.c:752
- wdm_open+0x56/0x550 drivers/usb/class/cdc-wdm.c:715
- usb_open+0x225/0x300 drivers/usb/core/file.c:47
- chrdev_open+0x5b0/0x630 fs/char_dev.c:414
- </TASK>
+arch:
 
-Showing all locks held in the system:
-3 locks held by kworker/u8:0/11:
- #0: ffff8880b953e7d8 (&rq->__lock){-.-.}-{2:2}, at: raw_spin_rq_lock_nested+0x2a/0x140 kernel/sched/core.c:559
- #1: ffff8880b9528948 (&per_cpu_ptr(group->pcpu, cpu)->seq){-.-.}-{0:0}, at: psi_task_switch+0x441/0x770 kernel/sched/psi.c:988
- #2: ffff8880754f0768 (&rdev->wiphy.mtx){+.+.}-{3:3}, at: wiphy_lock include/net/cfg80211.h:5966 [inline]
- #2: ffff8880754f0768 (&rdev->wiphy.mtx){+.+.}-{3:3}, at: cfg80211_wiphy_work+0x35/0x260 net/wireless/core.c:424
-1 lock held by khungtaskd/30:
- #0: ffffffff8e333fa0 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire include/linux/rcupdate.h:329 [inline]
- #0: ffffffff8e333fa0 (rcu_read_lock){....}-{1:2}, at: rcu_read_lock include/linux/rcupdate.h:781 [inline]
- #0: ffffffff8e333fa0 (rcu_read_lock){....}-{1:2}, at: debug_show_all_locks+0x55/0x2a0 kernel/locking/lockdep.c:6614
-7 locks held by kworker/1:1/45:
- #0: ffff8880186e6948 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_one_work kernel/workqueue.c:3206 [inline]
- #0: ffff8880186e6948 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_scheduled_works+0x90a/0x1830 kernel/workqueue.c:3312
- #1: ffffc90000b57d00 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_one_work kernel/workqueue.c:3207 [inline]
- #1: ffffc90000b57d00 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_scheduled_works+0x945/0x1830 kernel/workqueue.c:3312
- #2: ffff888023f67190 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:1009 [inline]
- #2: ffff888023f67190 (&dev->mutex){....}-{3:3}, at: hub_event+0x1fe/0x5150 drivers/usb/core/hub.c:5849
- #3: ffff88801aeaf190 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:1009 [inline]
- #3: ffff88801aeaf190 (&dev->mutex){....}-{3:3}, at: usb_remote_wakeup drivers/usb/core/hub.c:3840 [inline]
- #3: ffff88801aeaf190 (&dev->mutex){....}-{3:3}, at: hub_port_connect_change drivers/usb/core/hub.c:5647 [inline]
- #3: ffff88801aeaf190 (&dev->mutex){....}-{3:3}, at: port_event drivers/usb/core/hub.c:5821 [inline]
- #3: ffff88801aeaf190 (&dev->mutex){....}-{3:3}, at: hub_event+0x2117/0x5150 drivers/usb/core/hub.c:5903
- #4: ffff888023fba518 (&port_dev->status_lock){+.+.}-{3:3}, at: usb_lock_port drivers/usb/core/hub.c:3206 [inline]
- #4: ffff888023fba518 (&port_dev->status_lock){+.+.}-{3:3}, at: usb_port_resume+0x2cc/0x2210 drivers/usb/core/hub.c:3764
- #5: ffff8880231af468 (hcd->address0_mutex){+.+.}-{3:3}, at: usb_reset_and_verify_device+0x319/0x1440 drivers/usb/core/hub.c:6120
- #6: ffffffff8ef1eed0 (ehci_cf_port_reset_rwsem){.+.+}-{3:3}, at: hub_port_reset+0x1f8/0x1b30 drivers/usb/core/hub.c:3021
-2 locks held by getty/4851:
- #0: ffff88802d9000a0 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x25/0x70 drivers/tty/tty_ldisc.c:243
- #1: ffffc900031432f0 (&ldata->atomic_read_lock){+.+.}-{3:3}, at: n_tty_read+0x6b5/0x1e10 drivers/tty/n_tty.c:2201
-6 locks held by kworker/0:3/5160:
- #0: ffff8880186e6948 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_one_work kernel/workqueue.c:3206 [inline]
- #0: ffff8880186e6948 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_scheduled_works+0x90a/0x1830 kernel/workqueue.c:3312
- #1: ffffc90004147d00 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_one_work kernel/workqueue.c:3207 [inline]
- #1: ffffc90004147d00 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_scheduled_works+0x945/0x1830 kernel/workqueue.c:3312
- #2: ffff888023fcf190 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:1009 [inline]
- #2: ffff888023fcf190 (&dev->mutex){....}-{3:3}, at: hub_event+0x1fe/0x5150 drivers/usb/core/hub.c:5849
- #3: ffff88802401a518 (&port_dev->status_lock){+.+.}-{3:3}, at: usb_lock_port drivers/usb/core/hub.c:3206 [inline]
- #3: ffff88802401a518 (&port_dev->status_lock){+.+.}-{3:3}, at: hub_port_connect drivers/usb/core/hub.c:5418 [inline]
- #3: ffff88802401a518 (&port_dev->status_lock){+.+.}-{3:3}, at: hub_port_connect_change drivers/usb/core/hub.c:5661 [inline]
- #3: ffff88802401a518 (&port_dev->status_lock){+.+.}-{3:3}, at: port_event drivers/usb/core/hub.c:5821 [inline]
- #3: ffff88802401a518 (&port_dev->status_lock){+.+.}-{3:3}, at: hub_event+0x25b6/0x5150 drivers/usb/core/hub.c:5903
- #4: ffff88802301b668 (hcd->address0_mutex){+.+.}-{3:3}, at: hub_port_connect drivers/usb/core/hub.c:5419 [inline]
- #4: ffff88802301b668 (hcd->address0_mutex){+.+.}-{3:3}, at: hub_port_connect_change drivers/usb/core/hub.c:5661 [inline]
- #4: ffff88802301b668 (hcd->address0_mutex){+.+.}-{3:3}, at: port_event drivers/usb/core/hub.c:5821 [inline]
- #4: ffff88802301b668 (hcd->address0_mutex){+.+.}-{3:3}, at: hub_event+0x25f4/0x5150 drivers/usb/core/hub.c:5903
- #5: ffffffff8ef1eed0 (ehci_cf_port_reset_rwsem){.+.+}-{3:3}, at: hub_port_reset+0x1f8/0x1b30 drivers/usb/core/hub.c:3021
-6 locks held by kworker/0:4/5186:
- #0: ffff8880186e6948 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_one_work kernel/workqueue.c:3206 [inline]
- #0: ffff8880186e6948 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_scheduled_works+0x90a/0x1830 kernel/workqueue.c:3312
- #1: ffffc900042e7d00 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_one_work kernel/workqueue.c:3207 [inline]
- #1: ffffc900042e7d00 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_scheduled_works+0x945/0x1830 kernel/workqueue.c:3312
- #2: ffff888023fbf190 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:1009 [inline]
- #2: ffff888023fbf190 (&dev->mutex){....}-{3:3}, at: hub_event+0x1fe/0x5150 drivers/usb/core/hub.c:5849
- #3: 
-ffff888023fca518 (&port_dev->status_lock){+.+.}-{3:3}, at: usb_lock_port drivers/usb/core/hub.c:3206 [inline]
-ffff888023fca518 (&port_dev->status_lock){+.+.}-{3:3}, at: hub_port_connect drivers/usb/core/hub.c:5418 [inline]
-ffff888023fca518 (&port_dev->status_lock){+.+.}-{3:3}, at: hub_port_connect_change drivers/usb/core/hub.c:5661 [inline]
-ffff888023fca518 (&port_dev->status_lock){+.+.}-{3:3}, at: port_event drivers/usb/core/hub.c:5821 [inline]
-ffff888023fca518 (&port_dev->status_lock){+.+.}-{3:3}, at: hub_event+0x25b6/0x5150 drivers/usb/core/hub.c:5903
- #4: ffff8880238acd68 (hcd->address0_mutex){+.+.}-{3:3}, at: hub_port_connect drivers/usb/core/hub.c:5419 [inline]
- #4: ffff8880238acd68 (hcd->address0_mutex){+.+.}-{3:3}, at: hub_port_connect_change drivers/usb/core/hub.c:5661 [inline]
- #4: ffff8880238acd68 (hcd->address0_mutex){+.+.}-{3:3}, at: port_event drivers/usb/core/hub.c:5821 [inline]
- #4: ffff8880238acd68 (hcd->address0_mutex){+.+.}-{3:3}, at: hub_event+0x25f4/0x5150 drivers/usb/core/hub.c:5903
- #5: ffff8880b943e7d8 (&rq->__lock){-.-.}-{2:2}, at: raw_spin_rq_lock_nested+0x2a/0x140 kernel/sched/core.c:559
-7 locks held by kworker/1:6/5373:
+Bus 002 Device 004: ID 1e2d:0065 Gemalto M2M GmbH LTE Modem
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               3.10
+  bDeviceClass          239 Miscellaneous Device
+  bDeviceSubClass         2 [unknown]
+  bDeviceProtocol         1 Interface Association
+  bMaxPacketSize0         9
+  idVendor           0x1e2d Gemalto M2M GmbH
+  idProduct          0x0065 LTE Modem
+  bcdDevice            3.18
+  iManufacturer           1 Cinterion
+  iProduct                2 LTE Modem
+  iSerial                 3 2de297b0
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x0215
+    bNumInterfaces         12
+    bConfigurationValue     1
+    iConfiguration          0
+    bmAttributes         0xa0
+      (Bus Powered)
+      Remote Wakeup
+    MaxPower              896mA
+    Interface Association:
+      bLength                 8
+      bDescriptorType        11
+      bFirstInterface         0
+      bInterfaceCount         2
+      bFunctionClass          2 Communications
+      bFunctionSubClass       2 Abstract (modem)
+      bFunctionProtocol       1 AT-commands (v.25ter)
+      iFunction               8
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         2 Communications
+      bInterfaceSubClass      2 Abstract (modem)
+      bInterfaceProtocol      1 AT-commands (v.25ter)
+      iInterface              6
+      CDC Header:
+        bcdCDC               1.10
+      CDC Call Management:
+        bmCapabilities       0x00
+        bDataInterface          1
+      CDC ACM:
+        bmCapabilities       0x02
+          line coding and serial state
+      CDC Union:
+        bMasterInterface        0
+        bSlaveInterface         1
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x82  EP 2 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval               9
+        bMaxBurst               0
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        1
+      bAlternateSetting       0
+      bNumEndpoints           2
+      bInterfaceClass        10 CDC Data
+      bInterfaceSubClass      0 [unknown]
+      bInterfaceProtocol      0
+      iInterface              7
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0400  1x 1024 bytes
+        bInterval               0
+        bMaxBurst               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x01  EP 1 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0400  1x 1024 bytes
+        bInterval               0
+        bMaxBurst               0
+    Interface Association:
+      bLength                 8
+      bDescriptorType        11
+      bFirstInterface         2
+      bInterfaceCount         2
+      bFunctionClass          2 Communications
+      bFunctionSubClass       2 Abstract (modem)
+      bFunctionProtocol       1 AT-commands (v.25ter)
+      iFunction               8
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        2
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         2 Communications
+      bInterfaceSubClass      2 Abstract (modem)
+      bInterfaceProtocol      1 AT-commands (v.25ter)
+      iInterface              6
+      CDC Header:
+        bcdCDC               1.10
+      CDC Call Management:
+        bmCapabilities       0x00
+        bDataInterface          3
+      CDC ACM:
+        bmCapabilities       0x02
+          line coding and serial state
+      CDC Union:
+        bMasterInterface        2
+        bSlaveInterface         3
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x84  EP 4 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval               9
+        bMaxBurst               0
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        3
+      bAlternateSetting       0
+      bNumEndpoints           2
+      bInterfaceClass        10 CDC Data
+      bInterfaceSubClass      0 [unknown]
+      bInterfaceProtocol      0
+      iInterface              7
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x83  EP 3 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0400  1x 1024 bytes
+        bInterval               0
+        bMaxBurst               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x02  EP 2 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0400  1x 1024 bytes
+        bInterval               0
+        bMaxBurst               0
+    Interface Association:
+      bLength                 8
+      bDescriptorType        11
+      bFirstInterface         4
+      bInterfaceCount         2
+      bFunctionClass          2 Communications
+      bFunctionSubClass       2 Abstract (modem)
+      bFunctionProtocol       1 AT-commands (v.25ter)
+      iFunction               8
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        4
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         2 Communications
+      bInterfaceSubClass      2 Abstract (modem)
+      bInterfaceProtocol      1 AT-commands (v.25ter)
+      iInterface              6
+      CDC Header:
+        bcdCDC               1.10
+      CDC Call Management:
+        bmCapabilities       0x00
+        bDataInterface          5
+      CDC ACM:
+        bmCapabilities       0x02
+          line coding and serial state
+      CDC Union:
+        bMasterInterface        4
+        bSlaveInterface         5
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x86  EP 6 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval               9
+        bMaxBurst               0
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        5
+      bAlternateSetting       0
+      bNumEndpoints           2
+      bInterfaceClass        10 CDC Data
+      bInterfaceSubClass      0 [unknown]
+      bInterfaceProtocol      0
+      iInterface              7
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x85  EP 5 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0400  1x 1024 bytes
+        bInterval               0
+        bMaxBurst               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x03  EP 3 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0400  1x 1024 bytes
+        bInterval               0
+        bMaxBurst               0
+    Interface Association:
+      bLength                 8
+      bDescriptorType        11
+      bFirstInterface         6
+      bInterfaceCount         2
+      bFunctionClass          2 Communications
+      bFunctionSubClass       2 Abstract (modem)
+      bFunctionProtocol       1 AT-commands (v.25ter)
+      iFunction               8
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        6
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         2 Communications
+      bInterfaceSubClass      2 Abstract (modem)
+      bInterfaceProtocol      1 AT-commands (v.25ter)
+      iInterface              6
+      CDC Header:
+        bcdCDC               1.10
+      CDC Call Management:
+        bmCapabilities       0x00
+        bDataInterface          7
+      CDC ACM:
+        bmCapabilities       0x02
+          line coding and serial state
+      CDC Union:
+        bMasterInterface        6
+        bSlaveInterface         7
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x88  EP 8 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval               9
+        bMaxBurst               0
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        7
+      bAlternateSetting       0
+      bNumEndpoints           2
+      bInterfaceClass        10 CDC Data
+      bInterfaceSubClass      0 [unknown]
+      bInterfaceProtocol      0
+      iInterface              7
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x87  EP 7 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0400  1x 1024 bytes
+        bInterval               0
+        bMaxBurst               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x04  EP 4 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0400  1x 1024 bytes
+        bInterval               0
+        bMaxBurst               0
+    Interface Association:
+      bLength                 8
+      bDescriptorType        11
+      bFirstInterface         8
+      bInterfaceCount         2
+      bFunctionClass          2 Communications
+      bFunctionSubClass       2 Abstract (modem)
+      bFunctionProtocol       1 AT-commands (v.25ter)
+      iFunction              10
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        8
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         2 Communications
+      bInterfaceSubClass      2 Abstract (modem)
+      bInterfaceProtocol      1 AT-commands (v.25ter)
+      iInterface             11
+      CDC Header:
+        bcdCDC               1.10
+      CDC Call Management:
+        bmCapabilities       0x00
+        bDataInterface          0
+      CDC ACM:
+        bmCapabilities       0x00
+      CDC Union:
+        bMasterInterface        8
+        bSlaveInterface         9
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x8a  EP 10 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval               9
+        bMaxBurst               0
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        9
+      bAlternateSetting       0
+      bNumEndpoints           2
+      bInterfaceClass        10 CDC Data
+      bInterfaceSubClass      0 [unknown]
+      bInterfaceProtocol      0
+      iInterface             12
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x89  EP 9 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0400  1x 1024 bytes
+        bInterval               0
+        bMaxBurst               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x05  EP 5 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0400  1x 1024 bytes
+        bInterval               0
+        bMaxBurst               0
+    Interface Association:
+      bLength                 8
+      bDescriptorType        11
+      bFirstInterface        10
+      bInterfaceCount         2
+      bFunctionClass          2 Communications
+      bFunctionSubClass      14 [unknown]
+      bFunctionProtocol       0
+      iFunction               0
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber       10
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         2 Communications
+      bInterfaceSubClass     14 [unknown]
+      bInterfaceProtocol      0
+      iInterface             13
+      CDC Header:
+        bcdCDC               1.10
+      CDC Union:
+        bMasterInterface        10
+        bSlaveInterface         11
+      CDC MBIM:
+        bcdMBIMVersion       1.00
+        wMaxControlMessage   4096
+        bNumberFilters       32
+        bMaxFilterSize       128
+        wMaxSegmentSize      2048
+        bmNetworkCapabilities 0x20
+          8-byte ntb input size
+      CDC MBIM Extended:
+        bcdMBIMExtendedVersion           1.00
+        bMaxOutstandingCommandMessages     64
+        wMTU                             1500
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x8b  EP 11 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval               9
+        bMaxBurst               0
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber       11
+      bAlternateSetting       0
+      bNumEndpoints           0
+      bInterfaceClass        10 CDC Data
+      bInterfaceSubClass      0 [unknown]
+      bInterfaceProtocol      2
+      iInterface              0
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber       11
+      bAlternateSetting       1
+      bNumEndpoints           2
+      bInterfaceClass        10 CDC Data
+      bInterfaceSubClass      0 [unknown]
+      bInterfaceProtocol      2
+      iInterface             14
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x8e  EP 14 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0400  1x 1024 bytes
+        bInterval               0
+        bMaxBurst               2
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x0f  EP 15 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0400  1x 1024 bytes
+        bInterval               0
+        bMaxBurst               2
 
-=============================================
 
-NMI backtrace for cpu 1
-CPU: 1 PID: 30 Comm: khungtaskd Not tainted 6.10.0-rc3-syzkaller-00044-g2ccbdf43d5e7 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/07/2024
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x241/0x360 lib/dump_stack.c:114
- nmi_cpu_backtrace+0x49c/0x4d0 lib/nmi_backtrace.c:113
- nmi_trigger_cpumask_backtrace+0x198/0x320 lib/nmi_backtrace.c:62
- trigger_all_cpu_backtrace include/linux/nmi.h:162 [inline]
- check_hung_uninterruptible_tasks kernel/hung_task.c:223 [inline]
- watchdog+0xfde/0x1020 kernel/hung_task.c:379
- kthread+0x2f0/0x390 kernel/kthread.c:389
- ret_from_fork+0x4b/0x80 arch/x86/kernel/process.c:147
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
- </TASK>
-Sending NMI from CPU 1 to CPUs 0:
-NMI backtrace for cpu 0
-CPU: 0 PID: 4532 Comm: klogd Not tainted 6.10.0-rc3-syzkaller-00044-g2ccbdf43d5e7 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/07/2024
-RIP: 0010:lock_is_held_type+0x5/0x190 kernel/locking/lockdep.c:5810
-Code: 90 90 eb b5 e8 2c fc ff ff 66 2e 0f 1f 84 00 00 00 00 00 66 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 f3 0f 1e fa 55 <41> 57 41 56 41 55 41 54 53 48 83 ec 10 65 48 8b 04 25 28 00 00 00
-RSP: 0018:ffffc9000304f820 EFLAGS: 00000086
-RAX: 0000000000000000 RBX: ffff8880b943f538 RCX: ffffc9000304f900
-RDX: 0000000000000010 RSI: 00000000ffffffff RDI: ffff8880b943e7d8
-RBP: 0000000000000010 R08: ffffffff8fad50af R09: 1ffffffff1f5aa15
-R10: dffffc0000000000 R11: fffffbfff1f5aa16 R12: ffff8880b943e7c0
-R13: ffff88807c71da00 R14: ffff8880b943e7c0 R15: dffffc0000000000
-FS:  00007f923e470380(0000) GS:ffff8880b9400000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000055d767cc7e98 CR3: 000000007b90c000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <NMI>
- </NMI>
- <TASK>
- lock_is_held include/linux/lockdep.h:231 [inline]
- lockdep_assert_rq_held kernel/sched/sched.h:1397 [inline]
- ttwu_do_activate+0x9d/0x7e0 kernel/sched/core.c:3778
- ttwu_queue kernel/sched/core.c:4057 [inline]
- try_to_wake_up+0x884/0x1470 kernel/sched/core.c:4378
- autoremove_wake_function+0x16/0x110 kernel/sched/wait.c:384
- __wake_up_common kernel/sched/wait.c:89 [inline]
- __wake_up_common_lock+0x130/0x1e0 kernel/sched/wait.c:106
- sock_def_readable+0x20f/0x5b0 net/core/sock.c:3353
- unix_dgram_sendmsg+0x148e/0x1f80 net/unix/af_unix.c:2116
- sock_sendmsg_nosec net/socket.c:730 [inline]
- __sock_sendmsg+0x221/0x270 net/socket.c:745
- __sys_sendto+0x3a4/0x4f0 net/socket.c:2192
- __do_sys_sendto net/socket.c:2204 [inline]
- __se_sys_sendto net/socket.c:2200 [inline]
- __x64_sys_sendto+0xde/0x100 net/socket.c:2200
- do_syscall_x64 arch/x86/entry/common.c:52 [inline]
- do_syscall_64+0xf3/0x230 arch/x86/entry/common.c:83
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7f923e5d29b5
-Code: 8b 44 24 08 48 83 c4 28 48 98 c3 48 98 c3 41 89 ca 64 8b 04 25 18 00 00 00 85 c0 75 26 45 31 c9 45 31 c0 b8 2c 00 00 00 0f 05 <48> 3d 00 f0 ff ff 76 7a 48 8b 15 44 c4 0c 00 f7 d8 64 89 02 48 83
-RSP: 002b:00007ffd088564d8 EFLAGS: 00000246 ORIG_RAX: 000000000000002c
-RAX: ffffffffffffffda RBX: 0000000000000002 RCX: 00007f923e5d29b5
-RDX: 000000000000008b RSI: 00005563a644c180 RDI: 0000000000000003
-RBP: 00005563a6447910 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000004000 R11: 0000000000000246 R12: 0000000000000013
-R13: 00007f923e760212 R14: 00007ffd088565d8 R15: 0000000000000000
- </TASK>
+>
+> > The device boots in the same way, the difference is not in the device.
+>
+> True, but this type of device has had a lot of quirks added to it for
+> the cdc_ether driver for other ones by this vendor, but not for this
+> specific device from what I can tell.  So perhaps we got it right in
+> newer kernels, but not older ones?
+
+it was working in the 4.x series, and I never had issues since.  I
+think it is some compile option for yocto.
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+>
+> thanks,
+>
+> greg k-h
 
