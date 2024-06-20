@@ -1,44 +1,50 @@
-Return-Path: <linux-usb+bounces-11491-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11492-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9646F910E88
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Jun 2024 19:30:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DCD5E910E8A
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Jun 2024 19:30:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4E34B1F2280E
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Jun 2024 17:30:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9A1E32821C7
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Jun 2024 17:30:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA0D51B3F35;
-	Thu, 20 Jun 2024 17:29:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 876CE1B47D6;
+	Thu, 20 Jun 2024 17:30:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="NJjJKe5Z"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id C7C571B374E
-	for <linux-usb@vger.kernel.org>; Thu, 20 Jun 2024 17:29:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10F811B47D2
+	for <linux-usb@vger.kernel.org>; Thu, 20 Jun 2024 17:30:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718904591; cv=none; b=SRhPDB7mtnjUgPygrU2TjocvR251TuycZo/GzRpg/A6cOf2SCYAMuXsNHtR9+J4ZAtEcQkM6ojGQs9J4KSbNrPB2C34FL5uc76KFFgqcXLE/AHy+XONk7qPPTOWxQ0q6TFBQKKcj1HTQQ1LV11teZPxffZWaDaY08QGZv/teN5o=
+	t=1718904607; cv=none; b=TO8xxkHKMg2Ll8hVwMP+bVtBYGYeIZ0fPnhcYzgKUTHyTyYqNycbQrGkKjDIfhtn3E4ZSOmqGCQ1127eksI7srW7+tjm9IxzzNiYWMqkBuhGQ9WH0YAkOX5W5niOW1bEBWgKuLnbiPj74UQB/2q3TAcpQIy+xuEoVm7lyAbIZWs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718904591; c=relaxed/simple;
-	bh=HSV+mjGe9U1QjnuLWkIZr8nQXJh3Rx93/FTUhxTQ+94=;
+	s=arc-20240116; t=1718904607; c=relaxed/simple;
+	bh=MMPMhMqKb+n6C3/H88oDRzlkPT5K7sTU5zXwS92wQNI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=U4U3Mm4w5HuT4pRRtfzWCMv+U0JLZhm4RFn7F0aPWztyCdHFK8CrOPZZazEZQZ1J+QQoKBDCmCpkmmpmsWbbhdXsaKZyxUSHI5dDZEhe6BoD+q7bdQlPMGGsGN6ZXDzn008d51UkqVJi0aczJ7PuhhLS28UHuMtoyUN64/30C+I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
-Received: (qmail 506493 invoked by uid 1000); 20 Jun 2024 13:29:42 -0400
-Date: Thu, 20 Jun 2024 13:29:42 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: syzbot <syzbot+696cffe71c444e4a2dd8@syzkaller.appspotmail.com>
-Cc: davem@davemloft.net, dsahern@kernel.org, edumazet@google.com,
-  kadlec@netfilter.org, kuba@kernel.org, linux-kernel@vger.kernel.org,
-  linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-  netfilter-devel@vger.kernel.org, pabeni@redhat.com, pablo@netfilter.org,
-  syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [netfilter?] [usb?] INFO: rcu detected stall in NF_HOOK
-Message-ID: <24f0d918-efba-414c-8328-c0ed240e67b2@rowland.harvard.edu>
-References: <000000000000c63a8e061b556ea6@google.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=NVuq15UNre85pifEOiBQpPsjR8gPGLo/9e5XPhsBgSzxigxJsOHS4up3BeBrt94oc63wbSn+l8fGtlQ4pxYlHqComRDEKSQ3+mJVqR3SKkFR6SGbD3I3U8WTe789L3az9iAnnA+alNP9EszXTexT97wTZN5PwKr1uFwhcYKJ/Ws=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=NJjJKe5Z; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54D6AC2BD10;
+	Thu, 20 Jun 2024 17:30:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1718904606;
+	bh=MMPMhMqKb+n6C3/H88oDRzlkPT5K7sTU5zXwS92wQNI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=NJjJKe5ZgpMcwXe8rQruX29jrKG2bmKds6Uy5mOC+HWlAc9R3li8i5UV6bQEqYWl0
+	 YjxfozC1C700JzMcrg9yZrGhNSLQNXkT/ZfCE4n3RDjskssUCWYU4RaiiN3jzYb7fX
+	 dL9ZjGxOTGWOEeGB+SY87BD9KuC8KDArVJ+LElaE=
+Date: Thu, 20 Jun 2024 19:30:04 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Pooja Katiyar <pooja.katiyar@intel.com>
+Cc: linux-usb@vger.kernel.org, heikki.krogerus@linux.intel.com
+Subject: Re: [PATCH] usb: typec: ucsi: UCSI2.0 Get Error Status changes
+Message-ID: <2024062056-anywhere-paralysis-249f@gregkh>
+References: <20240606003211.1337526-1-pooja.katiyar@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -47,42 +53,24 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <000000000000c63a8e061b556ea6@google.com>
+In-Reply-To: <20240606003211.1337526-1-pooja.katiyar@intel.com>
 
-On Thu, Jun 20, 2024 at 10:13:24AM -0700, syzbot wrote:
-> Hello,
+On Wed, Jun 05, 2024 at 05:32:11PM -0700, Pooja Katiyar wrote:
+> Add support for UCSI 2.0 Get Error Status command to add connector
+> number field to the command structure.
 > 
-> syzbot found the following issue on:
+> Connector number field is extracted from the previous UCSI command
+> which has failed and is used to get the failure reason/Error using
+> Get Error Status command.
 > 
-> HEAD commit:    2ccbdf43d5e7 Merge tag 'for-linus' of git://git.kernel.org..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=10341146980000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=fa0ce06dcc735711
-> dashboard link: https://syzkaller.appspot.com/bug?extid=696cffe71c444e4a2dd8
-> compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13e8bfee980000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12d3d851980000
+> Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Signed-off-by: Pooja Katiyar <pooja.katiyar@intel.com>
+> ---
 > 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/93525a95fe83/disk-2ccbdf43.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/b9b895227ea2/vmlinux-2ccbdf43.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/e825248a8e73/bzImage-2ccbdf43.xz
+>  drivers/usb/typec/ucsi/ucsi.c | 29 ++++++++++++++++++++++++++---
+>  drivers/usb/typec/ucsi/ucsi.h |  3 +++
+>  2 files changed, 29 insertions(+), 3 deletions(-)
 > 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+696cffe71c444e4a2dd8@syzkaller.appspotmail.com
-> 
-> rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P45
->  1-....
->  } 2688 jiffies s: 1349 root: 0x2/T
-> rcu: blocking rcu_node structures (internal RCU debug):
-> 
-> Sending NMI from CPU 0 to CPUs 1:
-> cdc_wdm 3-1:1.0: wdm_int_callback - 0 bytes
-> cdc_wdm 3-1:1.0: nonzero urb status received: -71
-> cdc_wdm 3-1:1.0: wdm_int_callback - 0 bytes
-> cdc_wdm 3-1:1.0: nonzero urb status received: -71
 
-#syz dup: [syzbot] [usb?] INFO: rcu detected stall in raw_ioctl
-
-Alan Stern
+Does not apply to my tree :(
 
