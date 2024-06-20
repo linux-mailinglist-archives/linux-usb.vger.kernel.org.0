@@ -1,93 +1,91 @@
-Return-Path: <linux-usb+bounces-11509-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11512-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 877A9911386
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Jun 2024 22:42:28 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 181CD9113A9
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Jun 2024 22:50:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 42250281F3B
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Jun 2024 20:42:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B39E71F23A1E
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Jun 2024 20:50:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9906C768F0;
-	Thu, 20 Jun 2024 20:41:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BE28757EE;
+	Thu, 20 Jun 2024 20:49:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=exalondelft.nl header.i=@exalondelft.nl header.b="lKfjTQxM"
+	dkim=pass (2048-bit key) header.d=exalondelft.nl header.i=@exalondelft.nl header.b="iaefMUsz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailfilter06-out31.webhostingserver.nl (mailfilter06-out31.webhostingserver.nl [141.138.169.48])
+Received: from mailfilter04-out31.webhostingserver.nl (mailfilter04-out31.webhostingserver.nl [141.138.168.145])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F2465F47D
-	for <linux-usb@vger.kernel.org>; Thu, 20 Jun 2024 20:41:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=141.138.169.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E7233D0C5
+	for <linux-usb@vger.kernel.org>; Thu, 20 Jun 2024 20:49:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=141.138.168.145
 ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718916116; cv=pass; b=DCzFojPr3JY2x4XDCi9nCkndJCG0kjkC1+Lch2HvqZoV/Y0dUl25h2gfrd07gR7B9JjVLMV6zRN/ct46L3cMq4bDhEClwSggRG5s4VWrZ6gKAH1BqgBKkheASOD+uXloeWuQCcmah+khqRF/NJ9T0egQMp3qELIFenmTbyLfvAc=
+	t=1718916596; cv=pass; b=HQjYjEO7Yquy5SEOmn5nNepyjMNjgG3FZe2ocD4td0g30dxKlaUqTuK5wFtAi3zsoJRHXl5k5VAujJ+8JvVyjxeZY6a9PP5rsE2V5vMvOuXFDoDllO6mec7G2kiyfxnOK9lqN+5TlQFHyI/ylOCYkuPAK6NIF3DIunZ3WKYs+Ls=
 ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718916116; c=relaxed/simple;
-	bh=2LfGQsiTfKh7G/p03O+Vr+UYtMgWtbnVWvSWFL9ixwc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Lklgyrz9Qd/Q1FW/uAKaTj/jXEwvCu6AMJANG3qmweqG0APcFW46lBhyd2aQ6Ij9GZHa9jO157injJBUQfNOywGF2J14kCTp16p3RkJg0Qdcdup6rHb317gJ8kUaiZ8fk8UJxL1dPMp75YJqQMdbRCJU0a+RSuLm1+AeS9RcryU=
-ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=exalondelft.nl; spf=pass smtp.mailfrom=exalondelft.nl; dkim=pass (2048-bit key) header.d=exalondelft.nl header.i=@exalondelft.nl header.b=lKfjTQxM; arc=pass smtp.client-ip=141.138.169.48
+	s=arc-20240116; t=1718916596; c=relaxed/simple;
+	bh=tO7RlLGvnbzcseEbdf7AXIl94m/yGIpURI+8T+ue3CM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MjdqgF5Q3wTUuyvLO61XuwzyPGs6PJ4FWaqVEoe2SfsGfPmc9MV8fgO8A374vlnyiwRAnkglMNwVp/ABj9VwprvEdKvki2q2hjghohXhotDGoen+9/56xeAqvW6Aoic2L6GrAToUaH+wOWiko7PaF8AfEX6nVZneJOwQM4ey5LY=
+ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=exalondelft.nl; spf=pass smtp.mailfrom=exalondelft.nl; dkim=pass (2048-bit key) header.d=exalondelft.nl header.i=@exalondelft.nl header.b=iaefMUsz; arc=pass smtp.client-ip=141.138.168.145
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=exalondelft.nl
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=exalondelft.nl
-ARC-Seal: i=2; a=rsa-sha256; t=1718916044; cv=pass;
+ARC-Seal: i=2; a=rsa-sha256; t=1718916524; cv=pass;
 	d=webhostingserver.nl; s=whs1;
-	b=DIBJNlF/7sYFBVmECmPGxK3epF/JAZOFck9JZRkKTxoEGcPQWgPqFenyhDLsWHhQEk9T6HU/9LEHi
-	 AhGHAW0PfLpoi3GIbKLdfhYq0c3vT4s3Dm+hwkAoqr+AnNb+jPB+GuGWHByeQEg/RQXYz1/UZqgxCE
-	 abr0tNqR4G24mTJ2TW070oumeKI380r0swe3/kKoJnxoWDT8Ay2FMFQp1XP6g9n1Y792jvSUZ92Dcz
-	 WKklw+wQabjRnGirV30TUT/jZtABFDdZFGbgP+j8XPI0X5Ho+DuhprLDkPw9sxqIbAieV/GBrSmAyk
-	 GoIiTNxYP/F/GpGA3Li+wPuj4J5ZSsg==
+	b=wnFydICEv+xW3xlIRqMyR/l6ybBVxvqH/oLdCpWeoXCCYv4fbsrCxd4WwIUjRGueaFwRwlw5sFTDT
+	 h3CBzS5+hpa2qyI/cFEXffnpzVjKFvDYzWldMpgDEcE9m4nwPO8F8XHxEf44CpuVipl27i/3tMzOlB
+	 H36jqaG1fZnM1iiFKKvHRiZiHdBMNxfIf9f2TKMLmMxquxdD/VEXbrHE+lBW6aH7cW2PVvgL21fFQd
+	 /LYVFZwa17PjiMThlsZSoemk3ciqNlItftbu1NmDVdKKEjWyECWxe5Uv2D2f6l68xH5xn0GoOxyF3W
+	 JqvUZ6fqgQR8BWTCjQTQAcXxzbqkVMw==
 ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed;
 	d=webhostingserver.nl; s=whs1;
-	h=content-transfer-encoding:mime-version:references:in-reply-to:message-id:date:
-	 subject:cc:to:from:dkim-signature:from;
-	bh=FsLnuFLGe0haxXdGehDFQL/y8+K9ZmLXTG4uRUF1/zo=;
-	b=Bn4/OKN3A7NA19dfI6ui8II6bCVsYhELe60i6kx2MY6Ib1EISe8EFJAJvKspmjSGL9ha8poPo25rj
-	 bkysbx3aXfhiflFoTQ9gkz6hLRQRBlnbTPoP7VGk/aXd4uDjQy97HLlYpkZqJNSxTEPsbIRRJGFG77
-	 K3LTpmHLpftWTDRdilgs2dgUYMf8aIksMSm8TgzqPeDaWZIZHDwwtEHDj6omhX4cSuGb2TxZp1vP52
-	 7foJ4WYcvVhOiJONf/UEIBS/QlD7PPa2xgR0N08PHeYvPuyyMJtrxVtaaifB0LYczbpGr448UbzXkG
-	 MMD+MjmB4pnUoyGkxz9qiFeV4goPGRQ==
-ARC-Authentication-Results: i=2; mailfilter06.webhostingserver.nl;
+	h=content-transfer-encoding:mime-version:message-id:date:subject:cc:to:from:
+	 dkim-signature:from;
+	bh=9+M3Uv1SDWgEtwezAhMtgvAm7m6c69NggQHCM24fRB0=;
+	b=X7Iwj+AOfuM1l4OKN9lzCBWw2690WdTTVZ/cquD00IXeZvK++eepKe3cX9zMJZulaQKzAVe65gots
+	 79euhqAFr7XlIPRlKjfCLQSor3Asow5j4Qb/EvmyMj8gMJO53/HYvq9STAqD9cMCSn1fPqVd6XUzCI
+	 RQBBdmx9m7VbFOUynusS8BMJx3PQwqWSnDuchSVzqP2us/Weu9RX+KHmuFLj2Q19wKubd+P0WUXf2+
+	 jc6/8lOB/7QgTUVYe/iceBAECMB2jXQ4WZaDCHp2MXkwtYTgcGPiZ771sn4jFl4YYNv0GzQAVj0H/C
+	 zXIu0nBUD0wljVmAQhKnzNFo/W4dTjw==
+ARC-Authentication-Results: i=2; mailfilter04.webhostingserver.nl;
 	spf=pass smtp.mailfrom=exalondelft.nl smtp.remote-ip=141.138.168.154;
 	dmarc=pass header.from=exalondelft.nl;
 	arc=pass header.oldest-pass=0;
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=exalondelft.nl; s=whs1;
-	h=content-transfer-encoding:mime-version:references:in-reply-to:message-id:date:
-	 subject:cc:to:from:from;
-	bh=FsLnuFLGe0haxXdGehDFQL/y8+K9ZmLXTG4uRUF1/zo=;
-	b=lKfjTQxMd40s22s91x2niTfqbTmK2j5FC6LvRfmvj5fAUOL0lCXs0zEladHDsWAF78G42sCBuJgmy
-	 J/avCq5qeT5ZZfsL66Fs4uginmTrKo0KW1N1LdOQ4TCkmlfUT1pJcnE3Q8ThjO2FaONErexWa51kMb
-	 Fk9mWPI8H5AsHKH/axRGUAVUgbuEX56ZXq49Hwr/ioi+4/uFSUjRhSrU9lMCE1AnTPSdls+Crdari/
-	 EqZZvr5BR5womKDM/kU9pp6XaouACgX76E5b4nd+LweGtjNnn+h9iHmCC9Hs3RAO2dQ8/oTx1V6/HH
-	 vPxhKaDmA5rIlR2u6yfMEXHe7xDpu7A==
-X-Halon-ID: 5c8f9e2b-2f45-11ef-a465-001a4a4cb958
+	h=content-transfer-encoding:mime-version:message-id:date:subject:cc:to:from:
+	 from;
+	bh=9+M3Uv1SDWgEtwezAhMtgvAm7m6c69NggQHCM24fRB0=;
+	b=iaefMUsz8UggPjTYIA44AH7EVYegCGiJ/QRCDSjG4xmNbrJTzRXB1obnmFTc/1CoNScTfFioavVle
+	 OrN44Wn/HmdmMD/sU5HbKQWhPjjwl4i0P+ULeZuYsgAfJGqx0oDUAWx22spEiJPPdW83FrCkeZjaMV
+	 9QmoMzXBVMbS8Q6IK7dxhlqCSv0jVG1We6aZvObn8ypzgQCi75DD7CU/CSTlQ1rV7BYW5hH+icKaNC
+	 nMKze9aYGe+03I/x9lr8SIeJxJcfCxOb13XLLtTKiyyhaYwcsxYLG4ThaK95i+k+xfxLRwM7XFKwQ2
+	 APp5Wdqhef71R5mlSyMmOKMZ4kbgsfg==
+X-Halon-ID: 7ab212cb-2f46-11ef-bd6e-001a4a4cb95f
 Received: from s198.webhostingserver.nl (s198.webhostingserver.nl [141.138.168.154])
-	by mailfilter06.webhostingserver.nl (Halon) with ESMTPSA
-	id 5c8f9e2b-2f45-11ef-a465-001a4a4cb958;
-	Thu, 20 Jun 2024 22:40:42 +0200 (CEST)
-ARC-Seal: i=1; cv=none; a=rsa-sha256; d=webhostingserver.nl; s=whs1; t=1718916042;
-	 b=XKbj21OChAstn4hJjYm0/lFYJ9YUFrKTBmmZk/L5c0PVsEwPopJ1UvJpuXxssLFfzu6PZZ5jYs
-	  2Ga1qBgyVntfnmzIvI3Gou+427IxImA5x5lHgtREUUR9LKg3w2aceO2vMnT06OXyadOcapm8zK
-	  d/wjMsR98fXKTtwyr1PQQSnVOJYgzTDnrLiPa6OKxvimtpPRlmjLuOEkmHHhVm9+GIQ70yYMBm
-	  z7qp8OqB9Q7wv/TbzCPwc77ayWmtkz7CW6ioBzuSvdNXzxt0p/yGph9kMK3QX6Qigi0888l1FC
-	  BDobtVPMWy20Ak2DYCjUmrERw4V03FaJsIoWhKaHEmYC1g==;
+	by mailfilter04.webhostingserver.nl (Halon) with ESMTPSA
+	id 7ab212cb-2f46-11ef-bd6e-001a4a4cb95f;
+	Thu, 20 Jun 2024 22:48:42 +0200 (CEST)
+ARC-Seal: i=1; cv=none; a=rsa-sha256; d=webhostingserver.nl; s=whs1; t=1718916522;
+	 b=Xp/WLBvuEUcU1nsOMV1hqJRPU2JUbw9r480WaPblP/zecDExKlgvizFSKziCp/k9w7mqmBsFUX
+	  8OaK/0o64dTMv9rINdZcTyEHVL+ePqS51M6/76zPZpsaiXGGptd3C3o9xb/U3Ez7zBlOJlMqyN
+	  5kyvsfnSZwV1E0d/BNvJYZNpVb8uj1m1YTVMhKUOWPwUeZJq06PaMseY4VPF3ho//PuJXYdNY8
+	  nAOzuMz/faC6zs30vHuHI80UPd+LRF6LPeVbj70sozsQcGcRu9sTX2b1XZcEUpuvI8tKH1j9zN
+	  X3Kz/kwB9DTfmQ7cLyJELTA0qs/ucU2vb+U8V3C43W0Z/Q==;
 ARC-Authentication-Results: i=1; webhostingserver.nl; smtp.remote-ip=2a02:a466:68ed:1:d31:9797:59c3:1c58;
 	iprev=pass (2a02-a466-68ed-1-d31-9797-59c3-1c58.fixed6.kpn.net) smtp.remote-ip=2a02:a466:68ed:1:d31:9797:59c3:1c58;
 	auth=pass (PLAIN) smtp.auth=ferry.toth@elsinga.info;
 	spf=softfail smtp.mailfrom=exalondelft.nl;
 	dmarc=skipped header.from=exalondelft.nl;
 	arc=none
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed; d=webhostingserver.nl; s=whs1; t=1718916042;
-	bh=2LfGQsiTfKh7G/p03O+Vr+UYtMgWtbnVWvSWFL9ixwc=;
-	h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:
-	  Date:Subject:Cc:To:From;
-	b=kdOexz7d0KolgugU+OymvcIwmIXUOQ4VTE9btnGJde185fBspiwBwYe/ynRiveWTBN2g0xdvaz
-	  t0nZDal8JwR516/SbmtM3ZUPTGVB8Mz9tzjRSLOPj0ER+ArKEUtxvGUBf2wLvFyhQe0QL5BOR6
-	  u1YF4vEZsDDwu8CVkCAQejPxR2PhrqLiu/DlN8tOhUVtl4Ah5sE3+Dm1NCzALB6RjnhN2cxZN9
-	  XgXsqYQpq4lAG8grMeFVdm3SWgPZp8RCQCM6vv7DRLyOKVMwzauiP0HKYWmFE4riO8wfOph8rs
-	  X6BB3tS9RNtmY8BQVYRV5fpsUsLVNK2ZFozk4tTfuCNhCw==;
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed; d=webhostingserver.nl; s=whs1; t=1718916522;
+	bh=tO7RlLGvnbzcseEbdf7AXIl94m/yGIpURI+8T+ue3CM=;
+	h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:Cc:To:From;
+	b=qv7djCnvLVoPb7yFq1BaONkGl9GKJZFHK9siRE/5vRnhyQXQklkQ1laIt2yvndNux3aDHZi13u
+	  PYQovDcM56m8M9F7KAAjWCda4kGuazwwzWHseAKnP5iHXwaLghJm+C+lgFK/MfGqCDq26wZNdM
+	  H0hUHuHC7EbN4r9OaesELnN52MBj0W3mSUvKf+LdWdk5XKWg7TX7bppyFmZo/WCSeexZvLKEKP
+	  VpD/8j5BnvfekWvpmJTH72CpRWmcjcCtwtmwqD2LF9VR+2mbkFQ/gBO7QDmfKHEtg0kR3mrvin
+	  edjaKqEnRSjh5H+F6cuiGJQmcLGvOSTxC7QyVfE1pw0G9Q==;
 Authentication-Results: webhostingserver.nl;
 	iprev=pass (2a02-a466-68ed-1-d31-9797-59c3-1c58.fixed6.kpn.net) smtp.remote-ip=2a02:a466:68ed:1:d31:9797:59c3:1c58;
 	auth=pass (PLAIN) smtp.auth=ferry.toth@elsinga.info;
@@ -97,17 +95,16 @@ Authentication-Results: webhostingserver.nl;
 Received: from 2a02-a466-68ed-1-d31-9797-59c3-1c58.fixed6.kpn.net ([2a02:a466:68ed:1:d31:9797:59c3:1c58] helo=submission)
 	by s198.webhostingserver.nl with esmtpa (Exim 4.97.1)
 	(envelope-from <ftoth@exalondelft.nl>)
-	id 1sKOaI-0000000CPjK-0j4N;
-	Thu, 20 Jun 2024 22:40:42 +0200
+	id 1sKOi2-0000000CsKj-10V7;
+	Thu, 20 Jun 2024 22:48:42 +0200
 From: Ferry Toth <ftoth@exalondelft.nl>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Ferry Toth <ftoth@exalondelft.nl>,
-	Hardik Gajjar <hgajjar@de.adit-jv.com>,
-	"Ricardo B. Marliere" <ricardo@marliere.net>,
-	Kees Cook <kees@kernel.org>,
 	Richard Acayan <mailingradian@gmail.com>,
-	Linyu Yuan <quic_linyyuan@quicinc.com>,
 	Justin Stitt <justinstitt@google.com>,
+	"Ricardo B. Marliere" <ricardo@marliere.net>,
+	Linyu Yuan <quic_linyyuan@quicinc.com>,
+	Hardik Gajjar <hgajjar@de.adit-jv.com>,
 	linux-usb@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Cc: Andy Shevchenko <andriy.shevchenko@intel.com>,
@@ -116,15 +113,11 @@ Cc: Andy Shevchenko <andriy.shevchenko@intel.com>,
 	paul@crapouillou.net,
 	quic_eserrao@quicinc.com,
 	erosca@de.adit-jv.com,
-	regressions@leemhuis.info,
-	Ferry Toth <fntoth@gmail.com>,
-	stable@vger.kernel.org
-Subject: [PATCH v2 2/2] Revert "usb: gadget: u_ether: Replace netif_stop_queue with netif_device_detach"
-Date: Thu, 20 Jun 2024 22:38:31 +0200
-Message-ID: <20240620203954.20254-3-ftoth@exalondelft.nl>
+	regressions@leemhuis.info
+Subject: [PATCH v3 0/2] usb: gadget: u_ether: revert netif_device_detach change
+Date: Thu, 20 Jun 2024 22:46:40 +0200
+Message-ID: <20240620204832.24518-1-ftoth@exalondelft.nl>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240620203954.20254-1-ftoth@exalondelft.nl>
-References: <20240620203954.20254-1-ftoth@exalondelft.nl>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -136,40 +129,25 @@ X-ACL-Warn: Sender domain ( exalondelft.nl ) must match your domain name used in
 X-ACL-Warn: From-header domain ( exalondelft.nl} ) must match your domain name used in authenticated email user ( ferry.toth@elsinga.info )
 X-Antivirus-Scanner: Clean mail though you should still use an Antivirus
 
-This reverts commit f49449fbc21e7e9550a5203902d69c8ae7dfd918.
+As agreed with the author, the netif_device_detach change is going to be reverted by
+this series, so we will collaborate on a new one in the future that
+brings no regressions.
 
-This commit breaks u_ether on some setups (at least Merrifield). The fix
-"usb: gadget: u_ether: Re-attach netif device to mirror detachment" party
-restores u-ether. However the netif usb: remains up even usb is switched
-from device to host mode. This creates problems for user space as the
-interface remains in the routing table while not realy present and network
-managers (connman) not detecting a network change.
+v3:
+- Send out actual version (Ferry)
 
-Various attempts to find the root cause were unsuccesful up to now. Therefore
-revert until a solution is found.
+v2:
+- Add SoB (Greg)
 
-Link: https://lore.kernel.org/linux-usb/20231006141231.7220-1-hgajjar@de.adit-jv.com/
-Reported-by: Andy Shevchenko <andriy.shevchenko@intel.com>
-Reported-by: Ferry Toth <fntoth@gmail.com>
-Fixes: f49449fbc21e ("usb: gadget: u_ether: Replace netif_stop_queue with netif_device_detach")
-Cc: stable@vger.kernel.org
----
- drivers/usb/gadget/function/u_ether.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Ferry Toth (2):
+  Revert "usb: gadget: u_ether: Re-attach netif device to mirror
+    detachment"
+  Revert "usb: gadget: u_ether: Replace netif_stop_queue with
+    netif_device_detach"
 
-diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/function/u_ether.c
-index aa0511c3a62c..95191083b455 100644
---- a/drivers/usb/gadget/function/u_ether.c
-+++ b/drivers/usb/gadget/function/u_ether.c
-@@ -1200,7 +1200,7 @@ void gether_disconnect(struct gether *link)
- 
- 	DBG(dev, "%s\n", __func__);
- 
--	netif_device_detach(dev->net);
-+	netif_stop_queue(dev->net);
- 	netif_carrier_off(dev->net);
- 
- 	/* disable endpoints, forcing (synchronous) completion
+ drivers/usb/gadget/function/u_ether.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
 -- 
 2.43.0
 
