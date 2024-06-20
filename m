@@ -1,104 +1,102 @@
-Return-Path: <linux-usb+bounces-11482-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11483-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 83AD5910586
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Jun 2024 15:12:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E193091063B
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Jun 2024 15:36:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3AC5E1F21D8A
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Jun 2024 13:12:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 946331F262C9
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Jun 2024 13:36:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50B561ACE7D;
-	Thu, 20 Jun 2024 13:11:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FE271AF695;
+	Thu, 20 Jun 2024 13:31:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="GIf9PEmC"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GyESTg1E"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF1901AAE20
-	for <linux-usb@vger.kernel.org>; Thu, 20 Jun 2024 13:11:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07DC31AE098
+	for <linux-usb@vger.kernel.org>; Thu, 20 Jun 2024 13:31:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718889092; cv=none; b=bxg7pzj7t3zn4DM6hKKe7vy8IynDCYBQ3l7fxvie1NJOqpZvdgWORXuh1G6jn0neCXqP+xbxrNWm1HPczPuobfwNkGc0YmBaaLj5MwsWkAT3mMPcgKb8CtJxklMgKLt5cEvZ4GUMZ7C8ztaGdyPuon4xT5UXQyo/fja3eMAdzbE=
+	t=1718890304; cv=none; b=vE28JT/kaRhfQZH8qTbTtlcwWPOj9jYzY1RuLV9fdHEcdpj6IDNy9HipmsUjSSlz2fagK7OmGYAllyM3MXS2PtR0rG0xhX2eJ2lV/dLRAw0Jb+fjIcjNuPeHNVWR1ThQY0EQ8fP+PZ2jVwtc6gqJOq+YKaYLOXFfKkKxJVa+Hvs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718889092; c=relaxed/simple;
-	bh=hd3Q8yJrBU83/vq4Tdq0vSLuK1/a+/gzqmHuqsPSEvA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LU6HuMtGuRCiEPkOcwz/Ybivb3ZnpFf4HJnITd/ay2Sq+PisqhFD8tVrepolRhY7zV5OGp50LfDoHz0Ht/Z7+xzaEi0RoiOSAvVZ3/uNLL5oki9Smst+L6QFl9Q/QHOxazoA10tZdo74tQoVkHVJ6xA/nQX0aDBmw/Mxj9cWz2g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=GIf9PEmC; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-35f2c9e23d3so1306744f8f.0
-        for <linux-usb@vger.kernel.org>; Thu, 20 Jun 2024 06:11:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1718889089; x=1719493889; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=oGPcdTkNws/Ir1JG6ZVqWzEQBhKRGmn8Rvpu4p2bq7E=;
-        b=GIf9PEmCuTthPdvjUFYQFjAHCwvBv5ZDG618RCpdLqTTea6nB1+5SJVzIDaPnH0sJn
-         6Ffx2DcMSbcznvR/tWVmXsRUllRaf03/yPtvze0iyy3LmIAhlK1Bf5JLQ5szMoffZsRd
-         QWzcdugKUm1uwpJR7QFjxnL7PGX636xxAxRgtG40NcX8DNEL5WrKu/ePAgQYDc+1qbvL
-         gKS67IQLmhiduFNtnaYnugBD3VLGLOGLVvKuEH23n34kXqG5Wkh8JbDnypG8r8sIQM1t
-         uyl/72wnDM1vH18X58q7x+VWYTDIsjwwuduym+L+8pcxhUup6tDBOO8XiT+lBdaxg4LX
-         QiGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718889089; x=1719493889;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oGPcdTkNws/Ir1JG6ZVqWzEQBhKRGmn8Rvpu4p2bq7E=;
-        b=TMtOP8oOt2qCtGOo3JEzhnpIG5NzSDpKkilLVaJwHyq+9ZVbPllXIyGfVTfbHQt9QA
-         3FK0IOJlkaAsP/sQEKF48Tt9DQlRGAdCi6jQ4/tiLkB1SXk7J05C5FjkN7++FfgAFy0s
-         PFxIvz2GEhRrteGL1BAYgTAxWIGnP59hkXmTu6Pfnq40xJZfRAHXTk5/CGiG5/y7Kt5T
-         v2pDUYZtl9topGTkEXkkzmdhcKn4E9JFOnjyoknuCBqAu0EzQZ5e1CYeZIq6qXLiJes/
-         j2QIA0ryN81lhLa/2RlAxIpJ6Vc8odhzoreAgEzEpzm/XQ/grBXOZ8DI86kqPshDKbF9
-         39yg==
-X-Forwarded-Encrypted: i=1; AJvYcCVwnu1YVWIS3de4ffLkq54FF9XCplNs7l8Q+AKxbYoprfcKSopsbyDh61uX4flfkxSx1ytUOJMzTF9cqBcqJP5q7FFJbDEILhy0
-X-Gm-Message-State: AOJu0YwA3QOMDqhjAbvh/OO7MkoMjhA6HCvEaY9gXonBMp7UL10GkWum
-	sA0r9kdlAW7ntxiLc45DDzVNB6DkyWdayueCpOigGdfXHhZZUxObrF5i7//+qs3ksxRH+TyUcnJ
-	P
-X-Google-Smtp-Source: AGHT+IE+SaHGz6P8E0eXuWhe11tMhAz/CEI8QJK+AP6jyh8H+aYeB/NqZ82bP9jvyuqJQ7FTmFLt9Q==
-X-Received: by 2002:a5d:64c7:0:b0:364:4321:271a with SMTP id ffacd0b85a97d-36443212c16mr3981802f8f.25.1718889088845;
-        Thu, 20 Jun 2024 06:11:28 -0700 (PDT)
-Received: from ?IPV6:2001:a61:138e:201:27e2:fe9:90b9:6b9a? ([2001:a61:138e:201:27e2:fe9:90b9:6b9a])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-362fbbff809sm5526546f8f.73.2024.06.20.06.11.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Jun 2024 06:11:28 -0700 (PDT)
-Message-ID: <a772eccd-f5e3-4281-9162-b81b5f8124fa@suse.com>
-Date: Thu, 20 Jun 2024 15:11:27 +0200
+	s=arc-20240116; t=1718890304; c=relaxed/simple;
+	bh=ppX6VBx7+1zsn2VbQNl3tkDpaOj+UZLirFEMqA8idfc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=WchTGuo+G4heADszC2/t4RrnfIgL8kkae9TDqKotirVHgjTskE6Q4GElWnHOPq3FaRtyyfjrGhyGi+wi2zef8S3zn+BdwjFXqRz436yJZSblYXgZLIYuBvxSv9L/lYUgCSYaDDLZHCTP9Nk8RPqLaoWP4fZPEmdhyNdH8TiC6rY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=GyESTg1E; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1718890302;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vE+mxyg8YyUZt5GQS1+ElW8LtSozIu63aF5ZDw92HPo=;
+	b=GyESTg1EdheZk87D1nv1eq1j/MKV6eDDx/CSeWG+zLL0pys8LhipdeTyN06oWdX0RFEsdZ
+	DjI26nqRAKqcnV01dURFcFC/Aukfq65WSjuBtZsOoZhjF0gf9tYrlv4UTR1nVkDiuynHgo
+	QOnpKhubPatZOAoF4CL+JY4uhsDFhrk=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-61-mEWm_jU-PZ-8LL1KS58Nvw-1; Thu,
+ 20 Jun 2024 09:31:37 -0400
+X-MC-Unique: mEWm_jU-PZ-8LL1KS58Nvw-1
+Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 229C01955D68;
+	Thu, 20 Jun 2024 13:31:31 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.39.192.104])
+	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 3988E1956087;
+	Thu, 20 Jun 2024 13:31:25 +0000 (UTC)
+From: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+To: pabeni@redhat.com
+Cc: davem@davemloft.net,
+	edumazet@google.com,
+	horms@kernel.org,
+	jtornosm@redhat.com,
+	kuba@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH v2] net: usb: ax88179_178a: improve link status logs
+Date: Thu, 20 Jun 2024 15:31:20 +0200
+Message-ID: <20240620133124.102154-1-jtornosm@redhat.com>
+In-Reply-To: <c76d1786c308aeb6e4c836334084e3049c0f108a.camel@redhat.com>
+References: <c76d1786c308aeb6e4c836334084e3049c0f108a.camel@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: gadget: printer: fix races against disable
-To: Greg KH <gregkh@linuxfoundation.org>, Oliver Neukum <oneukum@suse.com>
-Cc: qiang.zhang@windriver.com, ivan.orlov0322@gmail.com,
- christophe.jaillet@wanadoo.fr, linux-usb@vger.kernel.org
-References: <20240620114039.5767-1-oneukum@suse.com>
- <2024062039-twerp-magnify-2469@gregkh>
-Content-Language: en-US
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <2024062039-twerp-magnify-2469@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
 
-On 20.06.24 14:28, Greg KH wrote:
+Hello Paolo,
 
-> What?  Why is MITRE assigning CVEs for the kernel now?  Who asked for
-> this and who assigned this?  Do I need to go poke someone with a big
-> stick?
+> Please always include the target tree in the subj prefix - in this case
+> it should have been 'net'.
+Ok, I forgot it.
 
-I don't know about that. I just get the bug reports and this one
-said that the issue is a CVE.
+> Here                                ^^^^ link value is always 0, so you
+> should using a constant string.
+Ok, better in that way.
 
-	Regards
-		Oliver
+I will send a next version of the patch.
+
+Thanks
+
+Best regards
+José Ignacio
 
 
