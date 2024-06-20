@@ -1,94 +1,80 @@
-Return-Path: <linux-usb+bounces-11479-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11480-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6CC591043B
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Jun 2024 14:32:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4BA7A910474
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Jun 2024 14:48:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6D81F1F21D4E
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Jun 2024 12:32:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 62BDE1C23092
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Jun 2024 12:48:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F67B1AC76F;
-	Thu, 20 Jun 2024 12:31:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Chl5D/i5"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 308D51AC78E;
+	Thu, 20 Jun 2024 12:48:17 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9855F1A8C03;
-	Thu, 20 Jun 2024 12:31:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78E8A1AC245
+	for <linux-usb@vger.kernel.org>; Thu, 20 Jun 2024 12:48:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.181.97.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718886680; cv=none; b=mAzEjOf0YOZW3jHBGQ1vuUvWPANqFvFk7GAz+TkI+ad3OTbTnEegpwoJ0z0NCJmU/FBv59qOv6GyovXQWDDKTqckRfr8S2NAr1+23sJ+bclmfHYqZoCPpiWHrgqdI6BNnEmHzsIY0LrESGl4Bt3GtHqiMv+33f03xsnED4RffSE=
+	t=1718887696; cv=none; b=VnY8Moe6pJohG+h5Hcr1x/tA0A4X1MsY0bJ3lHtvd8Cz29LHNEwkhDrMLw6hYyqPXa0zidVOfQUvHebs9GWddVdz93RNTAx4Du96WarEibUu4mgHfCeP7LaBDfFeFDK4EmmjPQAYK+MDnHKZpNl8MmmZEvG1WWKDXdthOx1rPBw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718886680; c=relaxed/simple;
-	bh=CzLQPFPgm5W33TEwVXj/lQd3pJ5PvjIpvQTILdCthP4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=alOYaf6AysbOHLyOe7n9JnKaVV0UmbgGl8nEUDnV8pN/rwiqUGlQ6NM7eOdRR0+LGE8nxgStSVUplDT6vsEee06jBhmQQnQL3FdP20vDS6LdBEHT0ra7i/W4afRwx51ee3MkeSj9KbEbwWXsR5ltywiHGuIpM7rxHFmUOXBvXno=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Chl5D/i5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFB4FC2BD10;
-	Thu, 20 Jun 2024 12:31:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1718886680;
-	bh=CzLQPFPgm5W33TEwVXj/lQd3pJ5PvjIpvQTILdCthP4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Chl5D/i5kxk7B9DFzveHJFZUtaQ0hXGlMDiAe6W8G80LhngfPiJjaNjSMY2MXTB4n
-	 /KA9OZEHZ7cD33jAHcnUmLoLnoCOKZAsbdOnj89z6in29pE85pfGKY+NXkgDWzlF+Q
-	 YuoB97YpkiICLUkmQiMZ7jYond+OywKpahxFflZU=
-Date: Thu, 20 Jun 2024 14:31:17 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc: Hillf Danton <hdanton@sina.com>,
-	syzbot <syzbot+973d01eb49b060b12e63@syzkaller.appspotmail.com>,
-	linux-kernel@vger.kernel.org, Boqun Feng <boqun.feng@gmail.com>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [usb?] INFO: task hung in wdm_release
-Message-ID: <2024062045-improve-tidbit-ed0d@gregkh>
-References: <20240620103847.1724-1-hdanton@sina.com>
- <0044d7b1-ae7d-4d36-b730-38b06186c8bf@I-love.SAKURA.ne.jp>
+	s=arc-20240116; t=1718887696; c=relaxed/simple;
+	bh=GFQaJw4XcEHyGOdoxaSG9hvPYQqEJENyK6i6ExXQOlY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=LHqFRfBZNN4Pc6Lr5+sdnBH0AQatINpwbzE09585xfrVxIhnAgKXdbCwjQqgp4jZlcaiI53pMFZylyzzrFTRNNTvWq+4HK2r/IAbh2QKQ8KNTusLHRwBh4QBtYO/+yzt1PbGiGEU9XZf9Hv2NbPOxzkOKbyNPHw3I5ES95h/QJo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=I-love.SAKURA.ne.jp; spf=pass smtp.mailfrom=I-love.SAKURA.ne.jp; arc=none smtp.client-ip=202.181.97.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=I-love.SAKURA.ne.jp
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=I-love.SAKURA.ne.jp
+Received: from fsav412.sakura.ne.jp (fsav412.sakura.ne.jp [133.242.250.111])
+	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 45KClqVP043035;
+	Thu, 20 Jun 2024 21:47:52 +0900 (JST)
+	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav412.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav412.sakura.ne.jp);
+ Thu, 20 Jun 2024 21:47:52 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav412.sakura.ne.jp)
+Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+	(authenticated bits=0)
+	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 45KClpBm043032
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+	Thu, 20 Jun 2024 21:47:51 +0900 (JST)
+	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <2e1e84bd-b2d0-45a6-a93b-c908dce7dd27@I-love.SAKURA.ne.jp>
+Date: Thu, 20 Jun 2024 21:47:51 +0900
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0044d7b1-ae7d-4d36-b730-38b06186c8bf@I-love.SAKURA.ne.jp>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [syzbot] [usb?] INFO: task hung in wdm_release
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: Hillf Danton <hdanton@sina.com>,
+        syzbot <syzbot+973d01eb49b060b12e63@syzkaller.appspotmail.com>,
+        linux-kernel@vger.kernel.org, Boqun Feng <boqun.feng@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <20240620103847.1724-1-hdanton@sina.com>
+ <0044d7b1-ae7d-4d36-b730-38b06186c8bf@I-love.SAKURA.ne.jp>
+ <2024062045-improve-tidbit-ed0d@gregkh>
+Content-Language: en-US
+From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <2024062045-improve-tidbit-ed0d@gregkh>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Jun 20, 2024 at 08:47:03PM +0900, Tetsuo Handa wrote:
-> On 2024/06/20 19:38, Hillf Danton wrote:
-> > On Thu, 20 Jun 2024 02:08:21 -0700
-> >> Showing all locks held in the system:
-> >> 3 locks held by kworker/u8:0/11:
-> >>  #0: ffff8880b953e7d8 (&rq->__lock){-.-.}-{2:2}, at: raw_spin_rq_lock_nested+0x2a/0x140 kernel/sched/core.c:559
-> >>  #1: ffff8880b9528948 (&per_cpu_ptr(group->pcpu, cpu)->seq){-.-.}-{0:0}, at: psi_task_switch+0x441/0x770 kernel/sched/psi.c:988
-> >>  #2: ffff8880754f0768 (&rdev->wiphy.mtx){+.+.}-{3:3}, at: wiphy_lock include/net/cfg80211.h:5966 [inline]
-> >>  #2: ffff8880754f0768 (&rdev->wiphy.mtx){+.+.}-{3:3}, at: cfg80211_wiphy_work+0x35/0x260 net/wireless/core.c:424
-> > 
-> > The info looks bogus given acquiring mutex with runqueue lock held.
-> 
-> Nothing wrong. Printing the backtrace and/or locks held is not atomic.
-> That is, locks held by a non current thread can change at any moment.
-> 
-> For example, the former block starting with
-> "INFO: task syz-executor320:7035 blocked for more than 142 seconds."
-> says that pid 7035 is blocked at "mutex_lock(&wdm_mutex)", but the latter
-> block starting with "Showing all locks held in the system:" says that
-> pid 7035 was holding (or trying to hold) no lock.
-> 
-> Threads were making progress slowly. Though, printk() flooding by
-> 
->   cdc_wdm 5-1:1.0: nonzero urb status received: -71
->   cdc_wdm 5-1:1.0: wdm_int_callback - 0 bytes
-> 
-> should be avoided. We need to persuade Greg to let these noisy messages reduced.
+On 2024/06/20 21:31, Greg KH wrote:
+> Please see:
+> 	22f008128625 ("USB: class: cdc-wdm: Fix CPU lockup caused by excessive log messages")
+> it should have fixed this already.
 
-Please see:
-	22f008128625 ("USB: class: cdc-wdm: Fix CPU lockup caused by excessive log messages")
-it should have fixed this already.
+OK. Thank you.
+
+#syz fix: USB: class: cdc-wdm: Fix CPU lockup caused by excessive log messages
+
 
