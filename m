@@ -1,120 +1,104 @@
-Return-Path: <linux-usb+bounces-11481-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11482-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E2A7910541
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Jun 2024 15:05:29 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 83AD5910586
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Jun 2024 15:12:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 299EC2883EB
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Jun 2024 13:05:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3AC5E1F21D8A
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Jun 2024 13:12:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26D261ACE73;
-	Thu, 20 Jun 2024 12:57:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50B561ACE7D;
+	Thu, 20 Jun 2024 13:11:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j8eYOnT0"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="GIf9PEmC"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 271C91ACE86
-	for <linux-usb@vger.kernel.org>; Thu, 20 Jun 2024 12:57:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF1901AAE20
+	for <linux-usb@vger.kernel.org>; Thu, 20 Jun 2024 13:11:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718888269; cv=none; b=AX4mTc9ZrEKGb9kGt5ssOkHQfcjRp9gwtRxNlGJIIJIEjXka29ADBUnkF7raEYzElr86h2FCZ6jVD3p169y0ykG3JyoJH8wYI5PzmGvvraajVT3kbHriQSzPYH2X5zDfcOn04zSWjCPljIHr0ob4KB+dUtIcehxa4uisxElvakE=
+	t=1718889092; cv=none; b=bxg7pzj7t3zn4DM6hKKe7vy8IynDCYBQ3l7fxvie1NJOqpZvdgWORXuh1G6jn0neCXqP+xbxrNWm1HPczPuobfwNkGc0YmBaaLj5MwsWkAT3mMPcgKb8CtJxklMgKLt5cEvZ4GUMZ7C8ztaGdyPuon4xT5UXQyo/fja3eMAdzbE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718888269; c=relaxed/simple;
-	bh=CFCmNu4uZBtNgWT0kvptoQSsCVC5fZv0QtDX978p+T0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ihPQqyryme+p6GhPdbzvIM8j0Jjyq4zwJObA9Z0ir6h/8VIto1qA5dW9CB3nOPMm1DKifklchE24Mw8c+ZmgxwEaivzNVcMV5y77OeUzkKdYXWe9q/NIKiwnyh0+YOZUanltmHmeJxxyLRMSmzttHabkx4GIE+OAbflmzOfCe3s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j8eYOnT0; arc=none smtp.client-ip=209.85.221.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-36336aa7ca1so684194f8f.1
-        for <linux-usb@vger.kernel.org>; Thu, 20 Jun 2024 05:57:47 -0700 (PDT)
+	s=arc-20240116; t=1718889092; c=relaxed/simple;
+	bh=hd3Q8yJrBU83/vq4Tdq0vSLuK1/a+/gzqmHuqsPSEvA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=LU6HuMtGuRCiEPkOcwz/Ybivb3ZnpFf4HJnITd/ay2Sq+PisqhFD8tVrepolRhY7zV5OGp50LfDoHz0Ht/Z7+xzaEi0RoiOSAvVZ3/uNLL5oki9Smst+L6QFl9Q/QHOxazoA10tZdo74tQoVkHVJ6xA/nQX0aDBmw/Mxj9cWz2g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=GIf9PEmC; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-35f2c9e23d3so1306744f8f.0
+        for <linux-usb@vger.kernel.org>; Thu, 20 Jun 2024 06:11:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718888266; x=1719493066; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bfTXR9y+SFuLuLxEUFUjpi/opQ29fER0P6g81P0y5TI=;
-        b=j8eYOnT0VW/JgMIIOu8gr1W93axVD6tmrf0c8ERKOabafzQlfFSLeYl+MV7q05NX47
-         eVNnZLHupZm3jSIPsS66wX6WNsWbGSyzLpL3OvZHagGiZafQTEz7cQcxv6E/Ky3D693x
-         pj/TDYrHmEtKKj79DOy+wl/E58yRAfLvFRXufJuOy2Wp15jyDxflFOvu0myCMddyESo3
-         w7bvvKwp2V5zV6rLPWoslnrDE9d71H5XPnFwxp6JTkh3isqIMvYzh1+RIMoJZE/O6Ndt
-         XcQ+aj9gU+Sn6t6a47yUR7Wy2O8WCjP3U7HTWDjJk7FrGHe+fDHhYUNU9YCpXLb4oZ96
-         Uo+A==
+        d=suse.com; s=google; t=1718889089; x=1719493889; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=oGPcdTkNws/Ir1JG6ZVqWzEQBhKRGmn8Rvpu4p2bq7E=;
+        b=GIf9PEmCuTthPdvjUFYQFjAHCwvBv5ZDG618RCpdLqTTea6nB1+5SJVzIDaPnH0sJn
+         6Ffx2DcMSbcznvR/tWVmXsRUllRaf03/yPtvze0iyy3LmIAhlK1Bf5JLQ5szMoffZsRd
+         QWzcdugKUm1uwpJR7QFjxnL7PGX636xxAxRgtG40NcX8DNEL5WrKu/ePAgQYDc+1qbvL
+         gKS67IQLmhiduFNtnaYnugBD3VLGLOGLVvKuEH23n34kXqG5Wkh8JbDnypG8r8sIQM1t
+         uyl/72wnDM1vH18X58q7x+VWYTDIsjwwuduym+L+8pcxhUup6tDBOO8XiT+lBdaxg4LX
+         QiGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718888266; x=1719493066;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bfTXR9y+SFuLuLxEUFUjpi/opQ29fER0P6g81P0y5TI=;
-        b=ZAA/RxbD34MFLRV2EAvz89gt1awcfHIpmGiBy+i8v0t4J9sRazGmMMJnPA/B10KWg/
-         g9jHTvUv6GLDgQ3JmFLTit++4pKUNdQzKiAZGDa9fwuhDPo4BfQAXSp6KzB7aK5nc0xY
-         iNdAETHN2+5ysc/uGg9otCcHlmXMC1B1a8+zwJsxFBNQpRXtibj0bDKw/DtLTJxYm3kq
-         lmG0/Ah5yaG2ohsMGD5plPT6FHN/mA5pqGzoYXGJU+jMFp+ZS13XTOcWpV1KoEXBpW/r
-         jonVidzxOHWeTcG331vkdWLW0n2JFx8Prd602dUHIMB8Mw0iYq8Z1GqjwOKlr+yQuNRT
-         5pvA==
-X-Forwarded-Encrypted: i=1; AJvYcCV83Gk50MKIDRbjDUYel8vcuwZdNm31UeNstBN7iOzPV4vIakkKa6fKzfgz2OeYzDs3uvEOQY/uq3BPqWUPYyLAZWPt4HR1jZ4L
-X-Gm-Message-State: AOJu0YxT/Ej5oT7OXmpQ0gIonRLJ5H0T9/5qt9puLe45mpSu27Jhf5tl
-	4/91PTM1SmWdogbExe01bU437+JOS1Z0yQ65pgk2eM8JERzAMJd4r57r6Jspq+iw5uwokCNgufh
-	HdxvoE3xJ48TQojRCuQXK/k8rmsqKJw==
-X-Google-Smtp-Source: AGHT+IEzxBYx+sLYq6S3fXoh+BNsKdujyYdDL1ib6CIatx4VD2cM6pMw9FWRkUFz/BdNFs8/7C/bFmJFTN5wamg837Y=
-X-Received: by 2002:adf:eac1:0:b0:364:aef1:da77 with SMTP id
- ffacd0b85a97d-364aef1db66mr1431573f8f.62.1718888266161; Thu, 20 Jun 2024
- 05:57:46 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1718889089; x=1719493889;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oGPcdTkNws/Ir1JG6ZVqWzEQBhKRGmn8Rvpu4p2bq7E=;
+        b=TMtOP8oOt2qCtGOo3JEzhnpIG5NzSDpKkilLVaJwHyq+9ZVbPllXIyGfVTfbHQt9QA
+         3FK0IOJlkaAsP/sQEKF48Tt9DQlRGAdCi6jQ4/tiLkB1SXk7J05C5FjkN7++FfgAFy0s
+         PFxIvz2GEhRrteGL1BAYgTAxWIGnP59hkXmTu6Pfnq40xJZfRAHXTk5/CGiG5/y7Kt5T
+         v2pDUYZtl9topGTkEXkkzmdhcKn4E9JFOnjyoknuCBqAu0EzQZ5e1CYeZIq6qXLiJes/
+         j2QIA0ryN81lhLa/2RlAxIpJ6Vc8odhzoreAgEzEpzm/XQ/grBXOZ8DI86kqPshDKbF9
+         39yg==
+X-Forwarded-Encrypted: i=1; AJvYcCVwnu1YVWIS3de4ffLkq54FF9XCplNs7l8Q+AKxbYoprfcKSopsbyDh61uX4flfkxSx1ytUOJMzTF9cqBcqJP5q7FFJbDEILhy0
+X-Gm-Message-State: AOJu0YwA3QOMDqhjAbvh/OO7MkoMjhA6HCvEaY9gXonBMp7UL10GkWum
+	sA0r9kdlAW7ntxiLc45DDzVNB6DkyWdayueCpOigGdfXHhZZUxObrF5i7//+qs3ksxRH+TyUcnJ
+	P
+X-Google-Smtp-Source: AGHT+IE+SaHGz6P8E0eXuWhe11tMhAz/CEI8QJK+AP6jyh8H+aYeB/NqZ82bP9jvyuqJQ7FTmFLt9Q==
+X-Received: by 2002:a5d:64c7:0:b0:364:4321:271a with SMTP id ffacd0b85a97d-36443212c16mr3981802f8f.25.1718889088845;
+        Thu, 20 Jun 2024 06:11:28 -0700 (PDT)
+Received: from ?IPV6:2001:a61:138e:201:27e2:fe9:90b9:6b9a? ([2001:a61:138e:201:27e2:fe9:90b9:6b9a])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-362fbbff809sm5526546f8f.73.2024.06.20.06.11.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Jun 2024 06:11:28 -0700 (PDT)
+Message-ID: <a772eccd-f5e3-4281-9162-b81b5f8124fa@suse.com>
+Date: Thu, 20 Jun 2024 15:11:27 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CA+fCnZeLRqk-FOkJ81qMY0NMZC7YnW=beTw=w_DVA=OhOnywRw@mail.gmail.com>
- <8b7aa23c-9976-46c2-b64f-1d4614aefe89@rowland.harvard.edu>
- <CA+fCnZd1UOqCiH7L1FMMqLhepiMSBfgVb-tXfc81F_VuX_zy4w@mail.gmail.com>
- <73838855-fe52-4d2f-a826-c5757f75bd92@rowland.harvard.edu> <ZnI376uuUb34I1go@pyrite.rasen.tech>
-In-Reply-To: <ZnI376uuUb34I1go@pyrite.rasen.tech>
-From: Andrey Konovalov <andreyknvl@gmail.com>
-Date: Thu, 20 Jun 2024 14:57:34 +0200
-Message-ID: <CA+fCnZc6CbnT18MJGNUfWuFfcqOhYKGZeU+rpnaZ7rim56Vnag@mail.gmail.com>
-Subject: Re: Stalling non-0-length OUT control requests in Raw Gadget/GadgetFS
-To: Paul Elder <paul.elder@ideasonboard.com>
-Cc: Alan Stern <stern@rowland.harvard.edu>, USB list <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb: gadget: printer: fix races against disable
+To: Greg KH <gregkh@linuxfoundation.org>, Oliver Neukum <oneukum@suse.com>
+Cc: qiang.zhang@windriver.com, ivan.orlov0322@gmail.com,
+ christophe.jaillet@wanadoo.fr, linux-usb@vger.kernel.org
+References: <20240620114039.5767-1-oneukum@suse.com>
+ <2024062039-twerp-magnify-2469@gregkh>
+Content-Language: en-US
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <2024062039-twerp-magnify-2469@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Jun 19, 2024 at 3:44=E2=80=AFAM Paul Elder <paul.elder@ideasonboard=
-.com> wrote:
->
-> > > This series below is the one you're referring to, right?
-> > >
-> > > https://lore.kernel.org/linux-kernel/20190124030228.19840-1-paul.elde=
-r@ideasonboard.com/
-> >
-> > Yes, that's it.  I'm impressed that you were able to find it; I had los=
-t
-> > track of it.
-> >
-> > > Do you know why it wasn't merged? (CC Paul). There are no comments on
-> > > the latest version I managed to find.
-> >
-> > I guess Felipe Balbi (the USB Gadget maintainer at the time) just wasn'=
-t
-> > very interested in fixing the problem.
->
-> So that's why we never continued with merging it...
->
-> Is it time to dust it off and try to upstream it again? :)
+On 20.06.24 14:28, Greg KH wrote:
 
-Thank would be awesome! :)
+> What?  Why is MITRE assigning CVEs for the kernel now?  Who asked for
+> this and who assigned this?  Do I need to go poke someone with a big
+> stick?
 
-If you get around to it, I can add Raw Gadget integration on top and test i=
-t.
+I don't know about that. I just get the bug reports and this one
+said that the issue is a CVE.
 
-Do you know, what would be the better board to get with an MUSB UDC
-for testing? Ideally, something that supports the mainline kernel.
+	Regards
+		Oliver
 
-Thanks!
 
