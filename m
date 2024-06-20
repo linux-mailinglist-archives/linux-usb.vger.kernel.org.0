@@ -1,252 +1,152 @@
-Return-Path: <linux-usb+bounces-11475-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11476-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E20B910331
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Jun 2024 13:40:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 346B3910345
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Jun 2024 13:44:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 367431C21238
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Jun 2024 11:40:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2775C1C21FBC
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Jun 2024 11:44:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B79971AB91A;
-	Thu, 20 Jun 2024 11:40:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6A311AC234;
+	Thu, 20 Jun 2024 11:44:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="I4cYmxTW";
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="I4cYmxTW"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QWoyWzaY"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB10F4F606
-	for <linux-usb@vger.kernel.org>; Thu, 20 Jun 2024 11:40:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F0251ABCD3
+	for <linux-usb@vger.kernel.org>; Thu, 20 Jun 2024 11:43:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718883647; cv=none; b=d74yWhm5JL3aMoDebT7fpWdN/aTiHZw1MqatTz3lffNjIulZ2InaF1MYS46ZYFuTFuxtddvCYD3M0hy58MtPvXIrC9/84hBxYw0dexhY8oHdNDXu6Ga6Ja2QIANulzI7nMHMgqj2haT1rpnYeuXlvc4e6823hn58DV+7Apvfno0=
+	t=1718883842; cv=none; b=qSsxxYqVvU1Mos1p1QQ/hRulW5CsjvW9MvHoE2BWBw9Rv9roBR0jLcE2tGMxNawF6MgJNvg8bl5voXd6ARXH3Eu09CQ0NOkjjvZKIAo/iT34iTrcnSftksdjMlTT3KK6Z7GzHgUB+39JlVs9CZPK/ubsZBWSPDyIAQXEhvCxUYY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718883647; c=relaxed/simple;
-	bh=bwDHfJxbtO4zBsBI+THuQwCzPt6BKAhC7ZRvPdCTRNo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qpQgZD22EUFXOxc+MgqILkgeRzjmOjGiynh9xAiuuw1jlOWA3qcr7dEEp6dyvjS0wFVapsN3/S70NVFze/VXmAwtPap4MygRa3hTQWVTVWDOX1SijPoaKgbiISuOdreR4+8VjJCf0ooF4XYki357fQ/44DN0RNCca8ZpEjDfR9M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=I4cYmxTW; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=I4cYmxTW; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 0148E1F455;
-	Thu, 20 Jun 2024 11:40:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1718883643; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=NRh5uuT6NJIbA7LBq3G2n29v1NipNN/TUHqa0t4THvQ=;
-	b=I4cYmxTWdFa4BTBTkMY726U1HeKebuV+mm/33vjGrJR3j/Elh/GYUDFHJLE6VIMRKi04FD
-	NRm/4blFckeVFMADWSuBNaukWir19GL4zEOe+lt3iOH6Rly0adHtdjbnijmwgocidIXhAT
-	YkDNBJQWZkbKWiOhIBGsLrZnveP7QlI=
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.com header.s=susede1 header.b=I4cYmxTW
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1718883643; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=NRh5uuT6NJIbA7LBq3G2n29v1NipNN/TUHqa0t4THvQ=;
-	b=I4cYmxTWdFa4BTBTkMY726U1HeKebuV+mm/33vjGrJR3j/Elh/GYUDFHJLE6VIMRKi04FD
-	NRm/4blFckeVFMADWSuBNaukWir19GL4zEOe+lt3iOH6Rly0adHtdjbnijmwgocidIXhAT
-	YkDNBJQWZkbKWiOhIBGsLrZnveP7QlI=
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id AA7C713AC1;
-	Thu, 20 Jun 2024 11:40:42 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id 3Ll+JzoVdGZ6JQAAD6G6ig
-	(envelope-from <oneukum@suse.com>); Thu, 20 Jun 2024 11:40:42 +0000
-From: Oliver Neukum <oneukum@suse.com>
-To: qiang.zhang@windriver.com,
-	ivan.orlov0322@gmail.com,
-	christophe.jaillet@wanadoo.fr,
-	gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org
-Cc: Oliver Neukum <oneukum@suse.com>
-Subject: [PATCH] usb: gadget: printer: fix races against disable
-Date: Thu, 20 Jun 2024 13:40:26 +0200
-Message-ID: <20240620114039.5767-1-oneukum@suse.com>
-X-Mailer: git-send-email 2.45.1
+	s=arc-20240116; t=1718883842; c=relaxed/simple;
+	bh=sUtS8W51dT3L0ul8hIazPODbd/otl0eNspJXJPrWCnA=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=bWARwN9USC/AFikhMnDWCATRiM3txgSH03IRpyIuYRSO7YmcuGP0XGrNE8xiGBHMqJoP9uMSBuyChdkXc6+Lyj84pE9tu50i6o+Psv9A4kWkzYsH8LTQ9r/IJWY6KvsRhtR7dgiV0p3diqrNkM2heSrmU5UOHczK5LZCQdyIXC0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QWoyWzaY; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1718883838;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=9LHnXr1dLaOuf5iJD69TLLMfEQC+zklonGqGsW0jKFE=;
+	b=QWoyWzaYWOpe0MVG02jGobCp7BXOAoOYmgdhKExRWl3wQEg1SPMIAAlQZBuMTOKR+1BKpL
+	GnO2Ktfso/Of1xj1szCrnccNxr8HYEVjOpLNbZaKKQunQrXfTcV01YOLVEzH2Q5ds7DzFo
+	DGbOVfuZDuGtlsLK6G+6o29FuLvDTl0=
+Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com
+ [209.85.167.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-583-3H7O2ruOOjSDeLUyxJuQGg-1; Thu, 20 Jun 2024 07:43:57 -0400
+X-MC-Unique: 3H7O2ruOOjSDeLUyxJuQGg-1
+Received: by mail-oi1-f198.google.com with SMTP id 5614622812f47-3c9b5776fccso52203b6e.1
+        for <linux-usb@vger.kernel.org>; Thu, 20 Jun 2024 04:43:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718883836; x=1719488636;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9LHnXr1dLaOuf5iJD69TLLMfEQC+zklonGqGsW0jKFE=;
+        b=s/jE//zghe4SXRwLBE7FTE6vKA0Dbzg5PNLdeQBvgCYub/mPn0lFp07TdNnSlnXLpf
+         Q6JPA+nl4+ckoa/b0CQ4bDcz7zqHntc0xWl9MNOco+TE3vRixqBMChaNPmgtVzbs/Xqk
+         hiy5GWeQ5qAaQzWICHoHcsZ7gTIIr2ZoFdEguUjOhwZ3f2M/l3ZwSHy9BVu7KwRhPzT9
+         Vd9vx6IkoERJShaTtOA2I1LJaJHByolit/Akebzq+xd6vO6P/GOc6WQdFa1CMLWKZcw5
+         Ny6prt3ac3WaOJKm6596V50Mk30zhKnjK2gqS4phVoLCbkXASmENQD2mUIw/VfCbzIFm
+         QJSw==
+X-Forwarded-Encrypted: i=1; AJvYcCXApvdZH58ickcP19zNQpWEApCWONf3qeEzWjYpv8VS3Xhyl5B45eVmqgiX41ema0gC9iXkUOmBDz3Cgi0O4zUzcGmozSlCm7xj
+X-Gm-Message-State: AOJu0YwJhrNaJ+yKzItWmF6EiFcWngTKSC/hUMLRYpSmgE3cZqEzwxVg
+	D29ByFvKMCIO0ZCEqyEYIERi1dGKXMjmQSY83Ev4o1gEEMKQ5I6+ceByYjGv7QtfbdyAdFHrYn3
+	HIULt4HDjPEKws8jYIyZJ2cuVBz1ikXgsiVK8ulOcRmxhGIWpFsJr+8NQ/g==
+X-Received: by 2002:a05:6808:1b22:b0:3d2:2755:3300 with SMTP id 5614622812f47-3d51bb1a5eemr5584727b6e.5.1718883836567;
+        Thu, 20 Jun 2024 04:43:56 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFNO8UolfSq8Wa0y7Zsg/4/vlxB2P5l49ds3c6yjja5vIFPszlLSH+v5Sw6c1KsemJfnkhpJg==
+X-Received: by 2002:a05:6808:1b22:b0:3d2:2755:3300 with SMTP id 5614622812f47-3d51bb1a5eemr5584710b6e.5.1718883836205;
+        Thu, 20 Jun 2024 04:43:56 -0700 (PDT)
+Received: from gerbillo.redhat.com ([2a0d:3341:b0b7:b110::f71])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-798abc0cfb9sm689021485a.92.2024.06.20.04.43.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Jun 2024 04:43:55 -0700 (PDT)
+Message-ID: <c76d1786c308aeb6e4c836334084e3049c0f108a.camel@redhat.com>
+Subject: Re: [PATCH v2] net: usb: ax88179_178a: improve link status logs
+From: Paolo Abeni <pabeni@redhat.com>
+To: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>, davem@davemloft.net,
+  edumazet@google.com, kuba@kernel.org, horms@kernel.org,
+ linux-usb@vger.kernel.org,  netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Cc: stable@vger.kernel.org
+Date: Thu, 20 Jun 2024 13:43:52 +0200
+In-Reply-To: <20240618115054.101577-1-jtornosm@redhat.com>
+References: <20240618115054.101577-1-jtornosm@redhat.com>
+Autocrypt: addr=pabeni@redhat.com; prefer-encrypt=mutual; keydata=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
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.4 (3.50.4-1.fc39) 
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-1.51 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[suse.com:s=susede1];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	DKIM_SIGNED(0.00)[suse.com:s=susede1];
-	FREEMAIL_TO(0.00)[windriver.com,gmail.com,wanadoo.fr,linuxfoundation.org,vger.kernel.org];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email,suse.com:dkim];
-	MIME_TRACE(0.00)[0:+];
-	ARC_NA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	TAGGED_RCPT(0.00)[];
-	DWL_DNSWL_BLOCKED(0.00)[suse.com:dkim];
-	RCVD_COUNT_TWO(0.00)[2];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	DKIM_TRACE(0.00)[suse.com:+];
-	RCPT_COUNT_FIVE(0.00)[6];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com,wanadoo.fr]
-X-Rspamd-Action: no action
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Rspamd-Queue-Id: 0148E1F455
-X-Spam-Flag: NO
-X-Spam-Score: -1.51
-X-Spam-Level: 
 
-printer_read() and printer_write() guard against the race
-against disable() by checking the dev->interface flag,
-which in turn is guarded by a spinlock.
-These functions, however, drop the lock on multiple occasions.
-This means that the test has to be redone after reacquiring
-the lock and before doing IO.
+On Tue, 2024-06-18 at 13:50 +0200, Jose Ignacio Tornos Martinez wrote:
+> Avoid spurious link status logs that may ultimately be wrong; for example=
+,
+> if the link is set to down with the cable plugged, then the cable is
+> unplugged and after this the link is set to up, the last new log that is
+> appearing is incorrectly telling that the link is up.
+>=20
+> In order to avoid errors, show link status logs after link_reset
+> processing, and in order to avoid spurious as much as possible, only show
+> the link loss when some link status change is detected.
+>=20
+> cc: stable@vger.kernel.org
+> Fixes: e2ca90c276e1 ("ax88179_178a: ASIX AX88179_178A USB 3.0/2.0 to giga=
+bit ethernet adapter driver")
+> Signed-off-by: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
 
-Add the tests.
+Please always include the target tree in the subj prefix - in this case
+it should have been 'net'.
 
-This also addresses CVE-2024-25741
+> ---
+> v2:
+>   - Fix the nits
+> v1: https://lore.kernel.org/netdev/20240617103405.654567-1-jtornosm@redha=
+t.com/
+>=20
+>  drivers/net/usb/ax88179_178a.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178=
+a.c
+> index c2fb736f78b2..d90ceab282ff 100644
+> --- a/drivers/net/usb/ax88179_178a.c
+> +++ b/drivers/net/usb/ax88179_178a.c
+> @@ -326,7 +326,9 @@ static void ax88179_status(struct usbnet *dev, struct=
+ urb *urb)
+> =20
+>  	if (netif_carrier_ok(dev->net) !=3D link) {
+>  		usbnet_link_change(dev, link, 1);
+> -		netdev_info(dev->net, "ax88179 - Link status is: %d\n", link);
+> +		if (!link)
+> +			netdev_info(dev->net, "ax88179 - Link status is: %d\n",
+> +				    link);
 
-Fixes: 7f2ca14d2f9b9 ("usb: gadget: function: printer: Interface is disabled and returns error")
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
----
- drivers/usb/gadget/function/f_printer.c | 39 ++++++++++++++++++-------
- 1 file changed, 29 insertions(+), 10 deletions(-)
+Here                                ^^^^ link value is always 0, so you
+should using a constant string.
 
-diff --git a/drivers/usb/gadget/function/f_printer.c b/drivers/usb/gadget/function/f_printer.c
-index 4c0b7c2970f1..44e20c6c36d3 100644
---- a/drivers/usb/gadget/function/f_printer.c
-+++ b/drivers/usb/gadget/function/f_printer.c
-@@ -450,11 +450,8 @@ printer_read(struct file *fd, char __user *buf, size_t len, loff_t *ptr)
- 	mutex_lock(&dev->lock_printer_io);
- 	spin_lock_irqsave(&dev->lock, flags);
- 
--	if (dev->interface < 0) {
--		spin_unlock_irqrestore(&dev->lock, flags);
--		mutex_unlock(&dev->lock_printer_io);
--		return -ENODEV;
--	}
-+	if (dev->interface < 0)
-+		goto out_disabled;
- 
- 	/* We will use this flag later to check if a printer reset happened
- 	 * after we turn interrupts back on.
-@@ -462,6 +459,9 @@ printer_read(struct file *fd, char __user *buf, size_t len, loff_t *ptr)
- 	dev->reset_printer = 0;
- 
- 	setup_rx_reqs(dev);
-+	/* this dropped the lock - need to retest */
-+	if (dev->interface < 0)
-+		goto out_disabled;
- 
- 	bytes_copied = 0;
- 	current_rx_req = dev->current_rx_req;
-@@ -495,6 +495,8 @@ printer_read(struct file *fd, char __user *buf, size_t len, loff_t *ptr)
- 		wait_event_interruptible(dev->rx_wait,
- 				(likely(!list_empty(&dev->rx_buffers))));
- 		spin_lock_irqsave(&dev->lock, flags);
-+		if (dev->interface < 0)
-+			goto out_disabled;
- 	}
- 
- 	/* We have data to return then copy it to the caller's buffer.*/
-@@ -538,6 +540,9 @@ printer_read(struct file *fd, char __user *buf, size_t len, loff_t *ptr)
- 			return -EAGAIN;
- 		}
- 
-+		if (dev->interface < 0)
-+			goto out_disabled;
-+
- 		/* If we not returning all the data left in this RX request
- 		 * buffer then adjust the amount of data left in the buffer.
- 		 * Othewise if we are done with this RX request buffer then
-@@ -567,6 +572,11 @@ printer_read(struct file *fd, char __user *buf, size_t len, loff_t *ptr)
- 		return bytes_copied;
- 	else
- 		return -EAGAIN;
-+
-+out_disabled:
-+	spin_unlock_irqrestore(&dev->lock, flags);
-+	mutex_unlock(&dev->lock_printer_io);
-+	return -ENODEV;
- }
- 
- static ssize_t
-@@ -587,11 +597,8 @@ printer_write(struct file *fd, const char __user *buf, size_t len, loff_t *ptr)
- 	mutex_lock(&dev->lock_printer_io);
- 	spin_lock_irqsave(&dev->lock, flags);
- 
--	if (dev->interface < 0) {
--		spin_unlock_irqrestore(&dev->lock, flags);
--		mutex_unlock(&dev->lock_printer_io);
--		return -ENODEV;
--	}
-+	if (dev->interface < 0)
-+		goto out_disabled;
- 
- 	/* Check if a printer reset happens while we have interrupts on */
- 	dev->reset_printer = 0;
-@@ -614,6 +621,8 @@ printer_write(struct file *fd, const char __user *buf, size_t len, loff_t *ptr)
- 		wait_event_interruptible(dev->tx_wait,
- 				(likely(!list_empty(&dev->tx_reqs))));
- 		spin_lock_irqsave(&dev->lock, flags);
-+		if (dev->interface < 0)
-+			goto out_disabled;
- 	}
- 
- 	while (likely(!list_empty(&dev->tx_reqs)) && len) {
-@@ -663,6 +672,9 @@ printer_write(struct file *fd, const char __user *buf, size_t len, loff_t *ptr)
- 			return -EAGAIN;
- 		}
- 
-+		if (dev->interface < 0)
-+			goto out_disabled;
-+
- 		list_add(&req->list, &dev->tx_reqs_active);
- 
- 		/* here, we unlock, and only unlock, to avoid deadlock. */
-@@ -675,6 +687,8 @@ printer_write(struct file *fd, const char __user *buf, size_t len, loff_t *ptr)
- 			mutex_unlock(&dev->lock_printer_io);
- 			return -EAGAIN;
- 		}
-+		if (dev->interface < 0)
-+			goto out_disabled;
- 	}
- 
- 	spin_unlock_irqrestore(&dev->lock, flags);
-@@ -686,6 +700,11 @@ printer_write(struct file *fd, const char __user *buf, size_t len, loff_t *ptr)
- 		return bytes_copied;
- 	else
- 		return -EAGAIN;
-+
-+out_disabled:
-+	spin_unlock_irqrestore(&dev->lock, flags);
-+	mutex_unlock(&dev->lock_printer_io);
-+	return -ENODEV;
- }
- 
- static int
--- 
-2.45.1
+
+Thanks,
+
+Paolo
 
 
