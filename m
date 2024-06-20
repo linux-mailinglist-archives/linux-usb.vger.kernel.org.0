@@ -1,91 +1,94 @@
-Return-Path: <linux-usb+bounces-11487-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11488-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A19279106E3
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Jun 2024 15:56:27 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C244910803
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Jun 2024 16:20:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B3D02825DE
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Jun 2024 13:56:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 90382B249AB
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Jun 2024 14:20:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11DD91AD4B4;
-	Thu, 20 Jun 2024 13:56:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C31E1AE0A6;
+	Thu, 20 Jun 2024 14:20:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TZzYNznD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ApgRTr0h"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FFDD48CCD
-	for <linux-usb@vger.kernel.org>; Thu, 20 Jun 2024 13:56:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C33B1AD4AF;
+	Thu, 20 Jun 2024 14:20:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718891762; cv=none; b=AKHwPyQwIl8ncJGXxK3xcPsmu1q5z8lMlOyQX8CtdYtQqoLMsNnxL2SlDsBRl2MAjTfVF2HoYJGm4OA7M7e7kXnlS38jmzS1tr6kKX3yiy7jUCp/s9F1BXHs5lwlKese1ldB0VA8SNgjBeX02hIb+fzyJI6DpUhS15kQtxfeT9U=
+	t=1718893230; cv=none; b=t1Cswqw4JniA8z2CIFFHqQJSoZXBB/oaCcYpX5qJi78+CwhN0C1jtH2O6AWJXeVtSr8oivgwdHs+ZOCD5VQVQvl2iMShPJdf43vZcAzVJoskooc2R0mJrIzHdDWyy3DwK0VLwqZzmWoDbQOqTcnZnrg+pFjuFZIPN5SubhtzmvE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718891762; c=relaxed/simple;
-	bh=pyeA2/ECAQpOoN3nf6Y96o3NO/9EZ/VAvHuLw0WaTkw=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=AExqaFVbGjsssDwVnY/K2yNswFhNrkq0m+Fs236QyfYxVAjZMiNIzOVfOqTRcmIzu3exkA7L9V4RtP+ht09/w2++S7jle9bPvwvsIdgTnM57tsUNXp/9ACqnehWthMJtcYyszTgVYmT5iV0NGMs61UuFcIrz6SEA+lnk8vTu+Wk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TZzYNznD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 343C3C4AF07
-	for <linux-usb@vger.kernel.org>; Thu, 20 Jun 2024 13:56:02 +0000 (UTC)
+	s=arc-20240116; t=1718893230; c=relaxed/simple;
+	bh=cAY4YNjsaO/pgwkfEF4denp9cphxu8+CRGJm/rhUhx0=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=ZsZwR5FJ1hO3tm74sC1sGHhhSl3ZxIgkFFWw89g4gnKkACtNh2aL+hIdsuwrA9/SDufMvRe0ROnXmZWIl9OLUMhOBDKXRZXyNHd31kxINKSFW0LXmKDFW2+wshDYH8seSdPj6pX1HIt30cOHff1/vt+S67rJ4DDVWsmhsa9vpio=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ApgRTr0h; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 95CDFC4AF09;
+	Thu, 20 Jun 2024 14:20:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718891762;
-	bh=pyeA2/ECAQpOoN3nf6Y96o3NO/9EZ/VAvHuLw0WaTkw=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=TZzYNznDtMYoaMF/IfWlqoWfxmt/uYhX6Qc7sglUAUEghpOUuFMCCeQhEVhnvO3CT
-	 PhB5rC/VBFbKQuhtA/A46lD6aRokzsJ8rGWk217TUlD5A17rGLidOjPxZpsJDEOuPd
-	 M9h7imPY3lTiO+qGOjteCwirm45ys0h8eHQ2yT+bKYe9qNC9YPphfP3AvCIQ5iE6Fb
-	 70sCV1aS7lnWYNoVgVX/sRNchYPo5lEJsr7L/a2eMep391f0nDyIMO/QEPwopep575
-	 oD5g6ze2JXyVSoNTNiNJmt3RsFAbNzEGdUR3V31nX/zuimZ599sULtN3CqJiCZR9Ww
-	 KdlxHQcbKXBSA==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 1F26DC53B73; Thu, 20 Jun 2024 13:56:02 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 218890] reset SuperSpeed USB device number 2 using xhci_hcd
-Date: Thu, 20 Jun 2024 13:56:01 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: stern@rowland.harvard.edu
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-218890-208809-5jbnGEqick@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218890-208809@https.bugzilla.kernel.org/>
-References: <bug-218890-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=k20201202; t=1718893229;
+	bh=cAY4YNjsaO/pgwkfEF4denp9cphxu8+CRGJm/rhUhx0=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=ApgRTr0hKC70A6GhRdGfiuAXmp4dDjy90Kkx7SiEyG34DMI+HaT4/ECv+NzqAU1lt
+	 QW9CYh14MAUuVvM/14FdJh/ksTl+dwjvEBsWBfPXkBrVlL0er5O5MoaZEsVvzqI4ON
+	 hx1+vLwx1RYhUuJtRE7KZXq3l1UCYw6gjXr7O9p00WOXb04WDDoAal4qvE0Rr8Iu8z
+	 V0Qam18pUVGhWKABoHV10Xc26JjJdLb1Uo72XEYbCw9iMnRUYi0mAqp3kqJ5eR0clv
+	 yF9Lhkez5Z4kb4uRTd3llq2xXcNbc6arCS+fT1GnbzmgyXmc6FGXu46pkNFkZ6k2cx
+	 8lVZLWND3xhnw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7F30CC39563;
+	Thu, 20 Jun 2024 14:20:29 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net] net: usb: rtl8150 fix unintiatilzed variables in
+ rtl8150_get_link_ksettings
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <171889322951.30997.6577917822297455148.git-patchwork-notify@kernel.org>
+Date: Thu, 20 Jun 2024 14:20:29 +0000
+References: <20240619132816.11526-1-oneukum@suse.com>
+In-Reply-To: <20240619132816.11526-1-oneukum@suse.com>
+To: Oliver Neukum <oneukum@suse.com>
+Cc: petkan@nucleusys.com, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, linux-usb@vger.kernel.org,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ syzbot+5186630949e3c55f0799@syzkaller.appspotmail.com
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218890
+Hello:
 
---- Comment #16 from Alan Stern (stern@rowland.harvard.edu) ---
-Pierre, unless you're still having any problems, you can go ahead and close=
- out
-this bug report.
+This patch was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
---=20
-You may reply to this email to add a comment.
+On Wed, 19 Jun 2024 15:28:03 +0200 you wrote:
+> This functions retrieves values by passing a pointer. As the function
+> that retrieves them can fail before touching the pointers, the variables
+> must be initialized.
+> 
+> Reported-by: syzbot+5186630949e3c55f0799@syzkaller.appspotmail.com
+> Signed-off-by: Oliver Neukum <oneukum@suse.com>
+> 
+> [...]
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Here is the summary with links:
+  - [net] net: usb: rtl8150 fix unintiatilzed variables in rtl8150_get_link_ksettings
+    https://git.kernel.org/netdev/net/c/fba383985354
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
 
