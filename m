@@ -1,120 +1,106 @@
-Return-Path: <linux-usb+bounces-11524-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11525-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 938B2911819
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Jun 2024 03:40:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DCBD591186A
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Jun 2024 04:24:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 48C071F2252E
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Jun 2024 01:40:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 87FA31F22A75
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Jun 2024 02:24:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB3B782863;
-	Fri, 21 Jun 2024 01:40:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E5CD83CD9;
+	Fri, 21 Jun 2024 02:24:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hwUAdP6e"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mdth8ysO"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8D7E823C3;
-	Fri, 21 Jun 2024 01:40:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8A67625
+	for <linux-usb@vger.kernel.org>; Fri, 21 Jun 2024 02:24:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718934025; cv=none; b=s2XQudOV55omwJq+PEddMPcYK5PJLNlkGe5OEJErFC7R5gtGBH2cneSRojG9A0dBJ7i2WF7JwdpYYb5TPf4ql9GCuW+B6ZkWahMRp437PUJTOvX84WIZ6qC5yiNblRgt2RMi153wcH7+3iPGnQwnNrfgNbyT1MWaCieE1TvfaBc=
+	t=1718936654; cv=none; b=COZlXG+FQmyjEdSMxFcPOMx5st/Ghn1S/Rm63V+SYMG7+oZPolnRbZKqVKaD5u81R8qo49zMcakYfTsZ3SFLjQxaEj7rIYGvpKDQvuYpBjkHMjm2Pv6/fat2Ia2l8fZmPHhR3QMrbVvkRqtbcie7I7CeReVvyAmy4m5VbxMP6v0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718934025; c=relaxed/simple;
-	bh=1Z+1pSECJCcJNFpchITMfwuTw//Gxxq9YXpt6KsYM9M=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=L+2EnU6TO+9vVt6Y/iS6hsiawlNhagSSWoCZ3X7zXuTHB8oOCvK/2UlEw8JekYHb0nXEmtoVngTmZKB2102ze/2orTORDrV9yKWs4CK7IDHGabfUe4r0bsWW0OW6GFSgopUa+0SvekHkjyJXuE+jz57Gp3MI1fobcgfq4WNuzsc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hwUAdP6e; arc=none smtp.client-ip=209.85.218.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a6ef64b092cso167450966b.1;
-        Thu, 20 Jun 2024 18:40:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718934022; x=1719538822; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XGQtzgqEz5YLBdkBn3WvUxx0bdndpPW+TjQwMlI5mWU=;
-        b=hwUAdP6essCYtjUU/iW/jEjS+qXcWsMBcV6TJ1xDJijadzfZLHHiQJVjPAtmUXWxE8
-         XvSI2qHhj/+Ny8o7XxFd5sew0yKr+v38aklhR8zVwXRp0ndJruHlnoy0ZSecVuCQ/1K9
-         jO5hge9nxTyBLMaNT5R0lrck+EDcMHGBBjmLJbA4i4f43pbqaaYYfnkk+f08S4DHyEsv
-         ldWC7ZW3hy310fuSLGTvh0igSFiawTXOaHznvbvS1R0W9TfT6VACas86U3fUKgdwXEg8
-         NChcnvM3NJsr3TM2dt5rOEOCiyy9YUnwYC28+sF7+OCsy+wtt9/F6OV0anxrUBCqqBAn
-         RBCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718934022; x=1719538822;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XGQtzgqEz5YLBdkBn3WvUxx0bdndpPW+TjQwMlI5mWU=;
-        b=YNQ8Na8HcCnUMuqjfQDb4FcmPuxgWC4ZQorItgdMYNXpp521TUYEpcjM4Cx14woZE1
-         6Z0tz7BntQ9/MgFX8wHZw1LuVp9DNR+v2Nqips5H11i8L51043I9zyeprt9HOt5A9miA
-         UuUElGnrhJyjRrtrB74BZ34pkFDatA/HzsCqO0/W2w2wnM2/mBSOKcuO1gKozJ/tc/1h
-         GeopUsHfTJIAVzTxg8Jq0DE+rgtBLarU26kp8IZ/HFjNzX+5fEV9mm3bnMtIZH9m0E2t
-         8U76rG+8jIw9KRcCMY9xYGSb40o8DvNhd5UIW1j6WAZVtMDTceFZqtZAg4RCj/chUfpo
-         SwXQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWYj/e/wwzDHHWaRaZEbDo9yamHCtdIfvaY8/sastekJol5YNzWcIsCyKHgk2Bdgd1AZPZZ2Tn1VCo1pu7wraAu1S+q9oyWXGxzQyl3qhEwePFFxfNUMLhjTZB3maOOqBN1lcxA
-X-Gm-Message-State: AOJu0YySqWfScicadYTa3IEKDISSjv1Mio80K3cl4HG8FYUoVsqIHoty
-	kNqesSOn46ECLbkcNk85/nDvYDPvnZnVjU8o1UVGmleXOI+Qc5Y8dn1ZL2bWdZF8sfvpl88ZGk2
-	i0t2+cQjuAdlSpNRkHvsi/wlWgwM=
-X-Google-Smtp-Source: AGHT+IFaIC7bIusgiaQh44+XU4MNDVuFgkfJ2qcxkgIRa505tpICKdxUNzPrkgHC4ujUZEfh2+JsCIzv42UYpZ+bN/E=
-X-Received: by 2002:a17:907:175e:b0:a6f:80ff:4050 with SMTP id
- a640c23a62f3a-a6fab62f501mr405848466b.25.1718934021813; Thu, 20 Jun 2024
- 18:40:21 -0700 (PDT)
+	s=arc-20240116; t=1718936654; c=relaxed/simple;
+	bh=HMAlvFP7AkEUYUS0aWhPLsP8o6LFJWCthDqhqdmFdYk=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=kMeMvcYeRjxUk+LcuXEzWcJx9ZQHD0ymkZajLor29UjC4Doax6MCxlM38Xe+lPNtGVG8+rPzb7xpeyF8X70saV0l6YrTI40/Dm6QxCaJqSXIIehKI87OwbHS8bDmVENGQvgq/k/jKIBjp6OxkY1vXauuUWp+5uOEio/Yo/oSr3M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mdth8ysO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6AE03C32786
+	for <linux-usb@vger.kernel.org>; Fri, 21 Jun 2024 02:24:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718936653;
+	bh=HMAlvFP7AkEUYUS0aWhPLsP8o6LFJWCthDqhqdmFdYk=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=Mdth8ysOJ56gTb3dJnxHzhHfG6rHYAmkLRVzmXPWS+r8URd1TucosmAVNhV5xkJ2U
+	 Fwr69B7xjsRjRVanOA2BdEkJ7ahBbgZN9Za4QmjmPxQRG3fAxIRZJWFy+Pa1z0HQa8
+	 FUfheO0R3vlYM9KrMp7zPQrTFe6oguEUka7DGfiPXLYgvFPpfxvKLkta0Q3qwxEiIv
+	 FVYWQZm7C1sXZWOHUeO3HlWq/MWgjp2U23de1OXMNSwvzPgihSZ7dI2nHDBfL2GCBJ
+	 Y8fuYFdgFTsk9Ol1fM2s72dWnSFAu/GsOAsPHfc+HhfDBQat7OyK0ka2TIsJ2vzsj3
+	 rirfARwrg8UFg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 5B2A2C53BB7; Fri, 21 Jun 2024 02:24:13 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 218943] No SuperSpeedPlus on AM4/5 Hubs
+Date: Fri, 21 Jun 2024 02:24:13 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: jarrard@proton.me
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-218943-208809-u8V53GmkQx@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-218943-208809@https.bugzilla.kernel.org/>
+References: <bug-218943-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240619114529.3441-1-joswang1221@gmail.com> <2024062051-washtub-sufferer-d756@gregkh>
-In-Reply-To: <2024062051-washtub-sufferer-d756@gregkh>
-From: joswang <joswang1221@gmail.com>
-Date: Fri, 21 Jun 2024 09:40:10 +0800
-Message-ID: <CAMtoTm06MTJ_Gc4NvenycvWRxhLSaPptT1DLvBRs4RWVZO9Y_g@mail.gmail.com>
-Subject: Re: [PATCH v7] usb: dwc3: core: Workaround for CSR read timeout
-To: Greg KH <gregkh@linuxfoundation.org>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	stable@vger.kernel.org, Jos Wang <joswang@lenovo.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jun 21, 2024 at 1:16=E2=80=AFAM Greg KH <gregkh@linuxfoundation.org=
-> wrote:
->
-> On Wed, Jun 19, 2024 at 07:45:29PM +0800, joswang wrote:
-> > From: Jos Wang <joswang@lenovo.com>
-> >
-> > This is a workaround for STAR 4846132, which only affects
-> > DWC_usb31 version2.00a operating in host mode.
-> >
-> > There is a problem in DWC_usb31 version 2.00a operating
-> > in host mode that would cause a CSR read timeout When CSR
-> > read coincides with RAM Clock Gating Entry. By disable
-> > Clock Gating, sacrificing power consumption for normal
-> > operation.
-> >
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Jos Wang <joswang@lenovo.com>
->
-> What commit id does this fix?  How far back should it be backported in
-> the stable releases?
->
-> thanks,
->
-> greg k-h
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218943
 
-Hello Greg Thinh
+--- Comment #32 from Jarrard (jarrard@proton.me) ---
+To conclude this bug report I have moved the OBS server to windows as a temp
+solution but would like to return it to Linux eventually.=20
 
-It seems first begin from the commit 1e43c86d84fb ("usb: dwc3: core:
-Add DWC31 version 2.00a controller")
-in 6.8.0-rc6 branch ?
+However for that to happen I think 10Gbps would need to be manually flagged=
+ on
+this vendor+device ID with some patch.=20=20
 
-Thanks
+I have tried the suggested PATCH set already and it allows the HUB to conne=
+ct
+at 10Gbps but the device itself remains at 5Gbps so further patching would =
+be
+need. I do not know how to do this.
 
-Jos Wang
+If anyone is able to help with a manual kernel patch to test other then the=
+ one
+in the comments here then I'm happy to test.
+
+Thankyou.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
