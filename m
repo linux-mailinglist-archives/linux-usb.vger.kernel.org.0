@@ -1,114 +1,108 @@
-Return-Path: <linux-usb+bounces-11549-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11550-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B90839131A7
-	for <lists+linux-usb@lfdr.de>; Sat, 22 Jun 2024 04:36:25 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D7EA99131DE
+	for <lists+linux-usb@lfdr.de>; Sat, 22 Jun 2024 06:04:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CBAB41C21B12
-	for <lists+linux-usb@lfdr.de>; Sat, 22 Jun 2024 02:36:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 78CB6B22054
+	for <lists+linux-usb@lfdr.de>; Sat, 22 Jun 2024 04:04:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF13B79F9;
-	Sat, 22 Jun 2024 02:36:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D34458F66;
+	Sat, 22 Jun 2024 04:04:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oFraftUG"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VLih18L0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A5A179DF
-	for <linux-usb@vger.kernel.org>; Sat, 22 Jun 2024 02:36:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F03228F4
+	for <linux-usb@vger.kernel.org>; Sat, 22 Jun 2024 04:04:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719023779; cv=none; b=uZj8CDclZG7jO1V4p/RNbKnOP12rsc4IDWt7aP8kxQGYwElU2Rk7vdG/jJVUVFMD6B120FNxZrBHogfBBWGcZFpbLGFb/oU3XYIYOwvz+Ixp+89ctmMey+rv8DkS1DZXrZs4hxBARnMG5sCNmlpwDv/4EhXJ0GywnhVbHZk5kbk=
+	t=1719029088; cv=none; b=WHAlS+LMkAgLA5zoahhY2VEe3zYDsMFvsYYoNQEMjouVSQrNK+7bM+0gJc92EbDhGX9CE/x5rXnDYNW18CIJ2/84V1A+FohCozAAZ5nP+lAdDxfZ/vz9PHgYgarIY+Jls3XPH8u/LAmYTgtIQ1WGq4XmwZmiE+8wC5fmTeldG7o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719023779; c=relaxed/simple;
-	bh=TnDoEE0OHHBCCLROYVVevQ17TdtECzAP5nqXLuVC7o0=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=lmhcR9ZVhkGdAPj/n2N6bv+mNyS4ScVkfmEygCjuggWvHtcqMHVsCtGz1GAMShQsTKVGDgwEj05ktGhwapEiFh+MPUGFe/RY3JIhfhirM62P1NauDkUhjcRJRYEsWOe9BvPt/P4uBWsfZC5Ofu6uQzcSpgBX5RGOcII3BqYGokU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oFraftUG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DD026C2BBFC
-	for <linux-usb@vger.kernel.org>; Sat, 22 Jun 2024 02:36:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719023778;
-	bh=TnDoEE0OHHBCCLROYVVevQ17TdtECzAP5nqXLuVC7o0=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=oFraftUGDTvwWjNyQNzzRqZxOdREiNaFVF05fs9EHelaGMicgW0LkLqnerM+RIeE9
-	 K3kitzvz2QLGxaJyz31a82/jSuaEMV7kIgZ5ssU4RExij9yX9xRo4uzn8md7TOC3u1
-	 cEiHKpE4+1OwHzL7hPmu3M6AjxnycbB/A3nHJtjr7qe1WSy0B3pgaSyCMlgHkEg977
-	 +UqGjuVwSlwrb+8heRgnm3qplh/ha9ODBb3uRkvLFfXjpkb2xkbMLlusdgyDiRmbd3
-	 pbK7TNzTVNzS/BL+jLYQxB6m3myzt7RgaWBp+spFpBP0QmPcd3wCDFsMPOq2Hsl+St
-	 TIxQ57YPqOpXw==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id CA038C53B7E; Sat, 22 Jun 2024 02:36:18 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 218943] No SuperSpeedPlus on AM4/5 Hubs
-Date: Sat, 22 Jun 2024 02:36:18 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: jarrard@proton.me
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-218943-208809-UkF4n3xpTq@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218943-208809@https.bugzilla.kernel.org/>
-References: <bug-218943-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1719029088; c=relaxed/simple;
+	bh=xE3YYs/FP+8u4HvVjhAhss6xmzIFAPW59mnZYTQnnJ0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=b7htVk9T/9VXy5pJ3aHxjY3vW80HMaNwqokHVLBPW6pBRf1y4UbXJMxfbPBaeMy7MN2bGZJu8eJULt5Q/MCNfF+Z+Jb7/vkdZh8dXfKdgqRUhswdgfTBKrdi9HMFBhNPlfDJ9E6n5JdefdR5CfVh1Ddgglq/mOU6vIGCcxRT1zI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VLih18L0; arc=none smtp.client-ip=209.85.210.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-6f98178ceb3so1591865a34.0
+        for <linux-usb@vger.kernel.org>; Fri, 21 Jun 2024 21:04:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1719029086; x=1719633886; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lL3cYOy5cYINargx9VxFNfKzm+6SWFBJMbMZY1t3oSo=;
+        b=VLih18L0MC94CIbosYzqBWDGDfKqHoQU8XjfhLZacIv3iMHDNKTKex9LMBNNNBc8lf
+         3TdJNOSbIz/MOXwjhejBiTW9ViE9oVHCbcFIwxnpHpIVtcDAjZ+/55yczVAs6LdY/CpO
+         FHaVxkcnEUBj29iXwC6UXK7e+XXezZ5kiTZgDZXMzgnRanELKiynzaWN/zMr1P5eQidC
+         64/7KbkxUsk7jGwIs3UAYd40v+xnfXvojSIUSHsxdZpO+WhBkBjBE3YxQV99cpI48Sv6
+         nQ855pvEKVZAFAnr0IVvM8tDDE3FE8nQHGujd9Z0FEciEZ5et6uR8wK3V1ieK3pUGy7Q
+         bK9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719029086; x=1719633886;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lL3cYOy5cYINargx9VxFNfKzm+6SWFBJMbMZY1t3oSo=;
+        b=ZVSr13+R8JK0LlPeYwobdY3uc3MDWrekbK1UylfGKfh6jSDCrUUvTSNlkanzYP7cgU
+         V1GbCu6kGtlUbxOVeH6utQcvvAgDOoZV5im5rFwPTzdyBf+EscUA0Gv/gAsjyOakIVGh
+         5s9F4d8FBTy9pD7G6JGRxG1rAxhBeANSRFfjvHyaG4AQiaPybVLhg1C+U5ONCVBRkR4B
+         2I4WUbLtj6M9PTux/64xYQNgZkQ8yYaqSMN1QYLlnxAXsFK8lQM3sgri8ROxrB7burB1
+         uyLT44si4KIWGc2FwCGfoIisGPVHCJPWmbqTawn265esKbKrqDpG22zWuutixdHXXI/K
+         rXoA==
+X-Gm-Message-State: AOJu0YzEJg8V0IHEJQmfRG6ngaCasqWXDd8VZqEVEzYDHBi4JUiXlDr5
+	VXA0XcEldhtqtAXxzEtPGflD2sxGdEabu3VTWREcHg384CfNsZ18qeDgPXlwD0d3foikEEWOJDg
+	wlqjZT4giEn9Ou5DuRfgV9MKhT67/yffHowE=
+X-Google-Smtp-Source: AGHT+IEiI5ezlSd3YYXtBtKzsV0Z/xGk0+s/ItVVO9ZX7/jEHatQskKjrbuSS5ooGkEvqgSP5HHRTN9xmqeCJedaJ2c=
+X-Received: by 2002:a05:6870:c088:b0:258:359f:6a95 with SMTP id
+ 586e51a60fabf-25c94d0790dmr10992962fac.38.1719029086031; Fri, 21 Jun 2024
+ 21:04:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <CALzsdVJ+Dy=z1JGur71CG-ZzoCH6nxbCuRBHVdOQ2bCgiOeutQ@mail.gmail.com>
+ <2024062113-open-knoll-e452@gregkh> <CALzsdV+3xCVuC3oQaE4nCf3F6YAOZ1nyYywSzyUW9jiMDVUHAg@mail.gmail.com>
+ <2024062124-dish-decade-c5b7@gregkh> <CALzsdV+J+99x55x7+cioKsBB9Qb76bV_1LFnd4QnuBDfMnsH0w@mail.gmail.com>
+ <2024062104-pull-spearmint-068b@gregkh>
+In-Reply-To: <2024062104-pull-spearmint-068b@gregkh>
+From: minh quan le <minhquan07032001@gmail.com>
+Date: Sat, 22 Jun 2024 04:04:34 +0700
+Message-ID: <CALzsdVKfnOCorwE5WoHhEO+EXAVHuuTZ9Uig2GCBg_J1oYTitw@mail.gmail.com>
+Subject: Re: Repo: linux-usb-gadgets / ptp-gadget
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218943
+Actually I don't know who exactly are the developers of that repo. As
+the README of that repo, it said to contact the developers of that
+software please write to the Linux USB mailing
+list. I also did CC to the original author of DENX but it had a
+failure: User doesn't exist: lg@denx.de.
 
---- Comment #34 from Jarrard (jarrard@proton.me) ---
-(In reply to Thinh.Nguyen from comment #33)
-> On Fri, Jun 21, 2024, bugzilla-daemon@kernel.org wrote:
-> >
-> >
-> https://urldefense.com/v3/__https://bugzilla.kernel.org/show_bug.cgi?id=
-=3D218943__;!!A4F2R9G_pg!fODPpvu8QMI1SH2NW38mJgNxScddtxlr7-FRbFln8qt4ISm6Ib=
-7P6OXrtb1YRRyf5zD7koRGYGLNbyWW0Ts_xUuGkHNHpFhB$=20
-> >=20
+Thanks,
+Quan
 
->=20
-> It'd be better for the vendor to provide the support and patches to
-> resolve this since they have the knowledge and the tools to debug their
-> hardware.
->=20
-> I can only provide clues for whoever needs to proceed further.
->=20
-> BR,
-> Thinh
-
-
-I cannot modify my posts so where I say AsMedia I actually meant AverMedia.=
-=20
-
-Also I talked to the vendor and they do not support linux and that was the =
-end
-of it.
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+V=C3=A0o Th 6, 21 thg 6, 2024 va=CC=80o lu=CC=81c 17:29 Greg KH
+<gregkh@linuxfoundation.org> =C4=91=C3=A3 vi=E1=BA=BFt:
+>
+> On Fri, Jun 21, 2024 at 04:46:28PM +0700, minh quan le wrote:
+> > Here is the repo link: https://github.com/linux-usb-gadgets/ptp-gadget
+>
+> Ah, interesting.  You might also want to cc: the developers involved as
+> per the README of that page.
+>
+> good luck!
+>
+> greg k-h
 
