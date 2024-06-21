@@ -1,54 +1,56 @@
-Return-Path: <linux-usb+bounces-11539-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11540-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB3D7912267
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Jun 2024 12:29:37 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C7B091232C
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Jun 2024 13:19:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DC3721C22FA3
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Jun 2024 10:29:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 432B21F236E8
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Jun 2024 11:19:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B82B917164C;
-	Fri, 21 Jun 2024 10:29:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34179172BD9;
+	Fri, 21 Jun 2024 11:18:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="WVmRPn+m"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V3XnesmB"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EC3B17165B
-	for <linux-usb@vger.kernel.org>; Fri, 21 Jun 2024 10:29:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F89512D771;
+	Fri, 21 Jun 2024 11:18:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718965768; cv=none; b=NzS96OvGVndDDmLDfKVIvRigfBH2l/AlwLoMaEJpdrAdA0bnrPo16VGubHsSJ4OoBnEzQQoLnhHq1i8KvJWHEB19u/T2AA7AJspWDPT2CR63KctwlKENX+pXX7l++EM4gAP9F5SE6B0nUU3+7QdrIvXVHeMoFzVbbL6YJ+wgr4o=
+	t=1718968730; cv=none; b=Evm81pmOFCUfzaPmH/jz80skvoPUZ0S7zJlCimdAH0yaGgWlOaJ/gUDJgHg2mvYI/qwKgLPBVvFsPPuhtn6ZVVTQ1d6RqJFtj8POzT9A543VfmbDgu40H6dxfS4wsEqjTOfu9U1JhCZM5OMfvZ2sunOAnkAQiWGkA1TGBDMzNvU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718965768; c=relaxed/simple;
-	bh=SdESykqwYFqfYYTWRM6ppHyzfSs/uLaUhHzlKtB+msQ=;
+	s=arc-20240116; t=1718968730; c=relaxed/simple;
+	bh=HfbIjyxVlOvSKRVZrwhoYszewBmElsV/Orv22ajzXTA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GGgXe60jvf1bedoisjsaT8D1n5ig9NgTVR8W1HzFbaoU0swIwfKZ7CEsnvR9/JmLakJwcgeDG1UNmCFt9unjTv9oMaJmpRP2hIj/Cp2CNcKJyFyGtN/5c41b3IWTswUcJoElYA2DGnKSNqcohTXrB/kn5gvSLf3wQkLaXe45Zzk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=WVmRPn+m; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F363C2BBFC;
-	Fri, 21 Jun 2024 10:29:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1718965767;
-	bh=SdESykqwYFqfYYTWRM6ppHyzfSs/uLaUhHzlKtB+msQ=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=sXTkz+yWo0zG65hcl5fexg7B600UQh8UKe1lNuQXMiNVf+bb7q4RlrHJ5nJw5L6M3q2hlQj65pTm7VmRatAHwrCv8uf44+Jlz9KBU+wW1gRigPVmEYd04+eq481ZNPL6piM0JeKsEplu7/PTCwdV62Gz5ERdBuuEknXJiFJo9FQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V3XnesmB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 521D1C2BBFC;
+	Fri, 21 Jun 2024 11:18:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718968730;
+	bh=HfbIjyxVlOvSKRVZrwhoYszewBmElsV/Orv22ajzXTA=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WVmRPn+mS0j1uXZCoqqv6VUrUSeNtI08j1U/7n4lJ77v27eZ+BCUNfpOPF3mDm3Zq
-	 mdYDEmBTBH94LVHK/bKbHqLdpC0kxFAwas4efhKTZJa2WTxqA36a/7GCXIG/+iSna1
-	 +lNgkwoE7Aqr+l3q6/86G5WLOcCmZGQCPtFqbygo=
-Date: Fri, 21 Jun 2024 12:29:25 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: minh quan le <minhquan07032001@gmail.com>
-Cc: linux-usb@vger.kernel.org
-Subject: Re: Repo: linux-usb-gadgets / ptp-gadget
-Message-ID: <2024062104-pull-spearmint-068b@gregkh>
-References: <CALzsdVJ+Dy=z1JGur71CG-ZzoCH6nxbCuRBHVdOQ2bCgiOeutQ@mail.gmail.com>
- <2024062113-open-knoll-e452@gregkh>
- <CALzsdV+3xCVuC3oQaE4nCf3F6YAOZ1nyYywSzyUW9jiMDVUHAg@mail.gmail.com>
- <2024062124-dish-decade-c5b7@gregkh>
- <CALzsdV+J+99x55x7+cioKsBB9Qb76bV_1LFnd4QnuBDfMnsH0w@mail.gmail.com>
+	b=V3XnesmB6GvSGy81HjBWiwKZRiakH/Nv4MMWhfuuuDRfGll8SrNhFJixdUTo6eAkw
+	 wKP9vFPnADGFBn/FK2fbI8mqB3Z6i67e9P1oLF9uziC0g9+jxCP2XrZXqZFILVddz9
+	 72n3iQxXJzq+oV5rKlyZYUW2JxgfyJ4+MyDfzGDvj0Mco5zOFFo0BCpvfXwIPUXw9Y
+	 sY+PByyBurfV5pC5wZgysIiVXUs8QKSFYm19Q0l621ehinW0R+shJiX21K5l6gfMqw
+	 ggF7LRo90wRoPwwbMLBstGTz+dHj9ifVQsa/0k8SiNKHNJDIWK83CJAeSAx9DrS1Ge
+	 lWmLoaBEqKdTA==
+Date: Fri, 21 Jun 2024 12:18:46 +0100
+From: Simon Horman <horms@kernel.org>
+To: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH net v3] net: usb: ax88179_178a: improve link status logs
+Message-ID: <20240621111846.GD1098275@kernel.org>
+References: <20240620133439.102296-1-jtornosm@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -57,15 +59,22 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CALzsdV+J+99x55x7+cioKsBB9Qb76bV_1LFnd4QnuBDfMnsH0w@mail.gmail.com>
+In-Reply-To: <20240620133439.102296-1-jtornosm@redhat.com>
 
-On Fri, Jun 21, 2024 at 04:46:28PM +0700, minh quan le wrote:
-> Here is the repo link: https://github.com/linux-usb-gadgets/ptp-gadget
+On Thu, Jun 20, 2024 at 03:34:31PM +0200, Jose Ignacio Tornos Martinez wrote:
+> Avoid spurious link status logs that may ultimately be wrong; for example,
+> if the link is set to down with the cable plugged, then the cable is
+> unplugged and after this the link is set to up, the last new log that is
+> appearing is incorrectly telling that the link is up.
+> 
+> In order to avoid errors, show link status logs after link_reset
+> processing, and in order to avoid spurious as much as possible, only show
+> the link loss when some link status change is detected.
+> 
+> cc: stable@vger.kernel.org
+> Fixes: e2ca90c276e1 ("ax88179_178a: ASIX AX88179_178A USB 3.0/2.0 to gigabit ethernet adapter driver")
+> Signed-off-by: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
 
-Ah, interesting.  You might also want to cc: the developers involved as
-per the README of that page.
+Reviewed-by: Simon Horman <horms@kernel.org>
 
-good luck!
-
-greg k-h
 
