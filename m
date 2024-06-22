@@ -1,124 +1,106 @@
-Return-Path: <linux-usb+bounces-11554-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11555-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C934D91346E
-	for <lists+linux-usb@lfdr.de>; Sat, 22 Jun 2024 16:23:46 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D92D59134D1
+	for <lists+linux-usb@lfdr.de>; Sat, 22 Jun 2024 17:25:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7515A1F22742
-	for <lists+linux-usb@lfdr.de>; Sat, 22 Jun 2024 14:23:46 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 59A35B217B3
+	for <lists+linux-usb@lfdr.de>; Sat, 22 Jun 2024 15:25:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87C7616F85F;
-	Sat, 22 Jun 2024 14:23:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65EFA16FF59;
+	Sat, 22 Jun 2024 15:25:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="TiC6xX/q"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from mout.web.de (mout.web.de [212.227.15.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9B0814B965;
-	Sat, 22 Jun 2024 14:23:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2161CB660;
+	Sat, 22 Jun 2024 15:25:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719066218; cv=none; b=pGI1ABDg3IpVgULUdM42UGQ/zb+bkeXSEr17SdLVCF0E3cg0bQnQTqe7hKfcCAeCEp8Wcr2jE66a6q7cxN6r1WVz7T0SqtORYCuSyCDKAcoh8X+uZfdDY5EwX8sMkHR+wtONTJ/4fne4MakpGycGx4vDNKByQRF8kYHGncrr4gU=
+	t=1719069908; cv=none; b=sc2ELyi3pAekSNnKltqDLwgok5N6gc+aLrlrwtgrdBqO8Wijy5m7/o97Z0GfFOgmd6vrNtLc/tmaFtGfPBVteLmm2jNA39MbWwpbZog3P2EKZiGWh5f+vDZfeoJrNgCz9/V3sdEpBYrl5apqgNu6vz5j6LgKfw6fkJw8WtOmcCQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719066218; c=relaxed/simple;
-	bh=6RRg/nOTb67RkzxMaWSRqqe+Hwc0N6oaElgH4k+aOuE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=JUEVstAUyLbrKeiVqea4e9YxkGHO2zcaR46zkwPJOO4uPf3vtrTk7ZQ48h/ni7IlPbc5nB/lvy5Q2tfiU16tj+Sgj6Io1V2usRtyqyfaXFmy1q6ILJuxy6l9Z8JficSWeoWo3uGst+CWukv33YSpHCDltYeRGA6RNJmh/7KBkyk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
-Received: from icess-ProLiant-DL380-Gen10.. (unknown [183.174.60.14])
-	by APP-03 (Coremail) with SMTP id rQCowACnrr5V3nZm3ZLZEQ--.44139S2;
-	Sat, 22 Jun 2024 22:23:22 +0800 (CST)
-From: Ma Ke <make24@iscas.ac.cn>
-To: gregkh@linuxfoundation.org,
-	u.kleine-koenig@pengutronix.de,
-	make24@iscas.ac.cn
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: gadget: r8a66597-udc: validate endpoint index for r8a66597 udc
-Date: Sat, 22 Jun 2024 22:23:08 +0800
-Message-Id: <20240622142308.1929531-1-make24@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1719069908; c=relaxed/simple;
+	bh=fUdDu2yoZ6+wNUWrwToAORtf2lLzJ28mpOYZoq94kRY=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
+	 In-Reply-To:Content-Type; b=neLcfQLlBrx37q32apQ6HXbXKBk2fHXrYeu0vykpGM8RdwmkX060/cedeODZY2VJJPKsOJMRTPTkqRFALgIn99fBHpwkeLdFtJt0vSsQSCklffwBkx6cTIlwMEzI0bweTXE5WVChnkMZERXWoh8654UdvxoXvVdJSdrFgK6I7j8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=TiC6xX/q; arc=none smtp.client-ip=212.227.15.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1719069870; x=1719674670; i=markus.elfring@web.de;
+	bh=WECqVRv0TZb8C3EeVUwSaylaWepEfohQXMBJFu7n5+E=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
+	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 cc:content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=TiC6xX/qTiwXM7MccOqGzXJiM8o/dpIoCuaAGXGIu0lL3Z2+vQpe3lZNIgE2X7kS
+	 thJmUMEfvw1L2Brpg0vdQTpRABf137nKUrUTIWpAfhnCsgdIDftlMZZmWOJq1cQpy
+	 pNndir5cSc/kwWMvXonAnP9E9evOd4aV43k46dyNYeajDWrulZOTcHRPjTZtrkuAn
+	 AySA9dV5A2ClcTF+y9T4r6vChAFOpepBsiHdp0TJfOO2CknUodTj9OgM+O80n8Hai
+	 HHt3QZpVEil/Ho102vR/h+rf9qp7czrhCSRg1YVPXRr4siKGiOBkvcJE0zppEcaNh
+	 ++pne4RzU+7MgZjIkw==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.85.95]) by smtp.web.de (mrweb005
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 1M6091-1sIZtd2lpL-00DHjP; Sat, 22
+ Jun 2024 17:24:30 +0200
+Message-ID: <bb23a7b0-dce6-4359-995a-2c12cf30cfff@web.de>
+Date: Sat, 22 Jun 2024 17:24:25 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:rQCowACnrr5V3nZm3ZLZEQ--.44139S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7ZrWkWr4xCFW5AFWrZF43Wrg_yoW8Cw4rpF
-	WDGayrKF12yry8CrW8ta98ZF1Yka9akrZFkFZxtw1a9FnrJr98Aw1UtF1xKr4DtFW8ZFsa
-	gF1rtwsxKwn8ZwUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUkE14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWUGVWUWwAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r1j
-	6r4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr
-	1j6F4UJwAac4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40E
-	FcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr
-	0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8v
-	x2IErcIFxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
-	0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1l
-	IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
-	AFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j
-	6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUq-e
-	rUUUUU=
-X-CM-SenderInfo: ppdnvj2u6l2u1dvotugofq/
+User-Agent: Mozilla Thunderbird
+To: Ma Ke <make24@iscas.ac.cn>, linux-aspeed@lists.ozlabs.org,
+ linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ Andrew Jeffery <andrew@codeconstruct.com.au>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Joel Stanley <joel@jms.id.au>, Neal Liu <neal_liu@aspeedtech.com>
+Cc: LKML <linux-kernel@vger.kernel.org>
+References: <20240622095618.1890093-1-make24@iscas.ac.cn>
+Subject: Re: [PATCH] usb: gadget: aspeed_udc: validate endpoint index for ast
+ udc
+Content-Language: en-GB
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <20240622095618.1890093-1-make24@iscas.ac.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:yIDH9MnOrIf0xCjyLzgV99kn2dkVnUILL8Ig2mwCXjJ1DMn9JRf
+ hwtJM/HMYJDzvWmRpWzeOVbgEWfOmdeqpLtVm6dy+WImF6+hxuh41iczAODFZj+4EjHeylD
+ RWJTXrMJlJBKN5/aXx+aHfGF1vixbncCTvj6umHs2Vf0oeLQkx7xdhUDyhs9scmvZz+rlIc
+ KrfidPgw7I1m/gpW/02/Q==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:BtDLJqtpZP4=;YBAa051E6UtkLYeabXtx0bDWGu/
+ O3XQy4Cw5LGx+hpgnHBQF7I1hj0zHDYrqkcxs0vfCcNBZ7MWjhJDV4XzO9n2OSExZMaCegZUX
+ vEaznDvYvvI4Q6kIunFKmKtqeedik/tYOq1iyfwndJz0UB9YkQbpNQkg6SZW8rQ/uhX9V+fsU
+ 0Oj9GMYfVFceTioDSTBp5MPOcXQGkSc+FFKsQsAvRSr9+OXiQpZgOFlZnZNFAvMvsYvMc6Lik
+ KkTndu3bUBGdu1XsHLV7L1t8NlxoAZn5/666WLlY459CHusNOwHSf18g2hHo+sbSN9OoG5jjw
+ X9kcDRBXaEJUCdONvGS/rQQpp5x8c+MP7JBEH6wkIhBRd7CytNABNLyUMKPURBPcRWztrY2AE
+ PHWbs3SqMnpm2WFqOgjfoyTGWZ427jhDnJRzgZANAkD2Vv6oksEp0dgeYP8GOJ5dnyJnUluhw
+ 3XaKyDVr7pfVxNcBcEcH6Umm1ypb22Mk5FZSfdT1MDgyJ55MNXHPMHHZNq0onLkY53unuZP/1
+ kU68XdYcktGMkNnebqcZBQzhe1ZR4yJztjIPCmhGj2l/ttozoYQ11kBiHZbmmTXIAFTlG8Enh
+ EzxzstMLsev/GzqPD1idi9+8P5gGvwoPTkStZ5j5a6NsIefh/fA5OL9PLiZuAK5e0sZlpMFHi
+ kYlqQLs6SP0cOZh46dqHIPv2XP+bLl3u6e+l0MN0lofv5o7lWtXgjbFo+uwKCbnSNKIgGQNeL
+ w+x9kUlgGE885pW5DbqiSdSJufJZfWP9pKdjggWsQ91JBcumc1hs0bnRzd1P+hJ/1D6rS3Jd8
+ 5GmvR0yOUG+rLGwqv83NIZxwadLxHplV9kJP2OiEhni9g=
 
-We should verify the bound of the array to assure that host
-may not manipulate the index to point past endpoint array.
+> We should verify the bound of the array to assure that host
+> may not manipulate the index to point past endpoint array.
 
-Signed-off-by: Ma Ke <make24@iscas.ac.cn>
----
- drivers/usb/gadget/udc/r8a66597-udc.c | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
+* Can an imperative wording be more desirable for such a change descriptio=
+n?
+  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/=
+Documentation/process/submitting-patches.rst?h=3Dv6.10-rc4#n94
 
-diff --git a/drivers/usb/gadget/udc/r8a66597-udc.c b/drivers/usb/gadget/udc/r8a66597-udc.c
-index db4a10a979f9..93fc4201c0ae 100644
---- a/drivers/usb/gadget/udc/r8a66597-udc.c
-+++ b/drivers/usb/gadget/udc/r8a66597-udc.c
-@@ -1173,7 +1173,11 @@ __acquires(r8a66597->lock)
- 		status = 0;
- 		break;
- 	case USB_RECIP_ENDPOINT:
--		ep = r8a66597->epaddr2ep[w_index & USB_ENDPOINT_NUMBER_MASK];
-+		int pipe = w_index & USB_ENDPOINT_NUMBER_MASK;
-+
-+		if (pipe >= USB_MAX_ENDPOINTS)
-+			break;
-+		ep = r8a66597->epaddr2ep[pipe];
- 		pid = control_reg_get_pid(r8a66597, ep->pipenum);
- 		if (pid == PID_STALL)
- 			status = 1 << USB_ENDPOINT_HALT;
-@@ -1208,8 +1212,11 @@ static void clear_feature(struct r8a66597 *r8a66597,
- 		struct r8a66597_ep *ep;
- 		struct r8a66597_request *req;
- 		u16 w_index = le16_to_cpu(ctrl->wIndex);
-+		int pipe = w_index & USB_ENDPOINT_NUMBER_MASK;
- 
--		ep = r8a66597->epaddr2ep[w_index & USB_ENDPOINT_NUMBER_MASK];
-+		if (pipe >= USB_MAX_ENDPOINTS)
-+			break;
-+		ep = r8a66597->epaddr2ep[pipe];
- 		if (!ep->wedge) {
- 			pipe_stop(r8a66597, ep->pipenum);
- 			control_reg_sqclr(r8a66597, ep->pipenum);
-@@ -1268,8 +1275,11 @@ static void set_feature(struct r8a66597 *r8a66597, struct usb_ctrlrequest *ctrl)
- 	case USB_RECIP_ENDPOINT: {
- 		struct r8a66597_ep *ep;
- 		u16 w_index = le16_to_cpu(ctrl->wIndex);
-+		int pipe = w_index & USB_ENDPOINT_NUMBER_MASK;
- 
--		ep = r8a66597->epaddr2ep[w_index & USB_ENDPOINT_NUMBER_MASK];
-+		if (pipe >= USB_MAX_ENDPOINTS)
-+			break;
-+		ep = r8a66597->epaddr2ep[pipe];
- 		pipe_stall(r8a66597, ep->pipenum);
- 
- 		control_end(r8a66597, 1);
--- 
-2.25.1
+* Will any tags (like =E2=80=9CFixes=E2=80=9D) become relevant here?
 
+
+Regards,
+Markus
 
