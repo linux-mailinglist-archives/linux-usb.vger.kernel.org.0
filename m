@@ -1,177 +1,208 @@
-Return-Path: <linux-usb+bounces-11560-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11564-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A28249136F5
-	for <lists+linux-usb@lfdr.de>; Sun, 23 Jun 2024 01:48:56 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0529C9137A3
+	for <lists+linux-usb@lfdr.de>; Sun, 23 Jun 2024 06:39:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 57FF62819C0
-	for <lists+linux-usb@lfdr.de>; Sat, 22 Jun 2024 23:48:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7CE7C1F2208D
+	for <lists+linux-usb@lfdr.de>; Sun, 23 Jun 2024 04:39:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71FDE12C491;
-	Sat, 22 Jun 2024 23:48:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E0F6179B2;
+	Sun, 23 Jun 2024 04:39:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R6lODbS3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02B65129E94
-	for <linux-usb@vger.kernel.org>; Sat, 22 Jun 2024 23:48:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B26A7D518;
+	Sun, 23 Jun 2024 04:39:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719100126; cv=none; b=p2nmjEvwdsb5qffNm+Ty4+Brn0FqfBmU9ZrD36LRF9dVrz1vcZSvv0StFoe2+HSKRoOxtOa6ukOx+IgF2eyEV5QaSlUE2MHx2oZP3BCjdD28MvlwWXYghfm8+WSp5qB0BWMb6VJV0m9BbUgZnvbNoflz7wFwxZlDIkXn8oW3iBw=
+	t=1719117564; cv=none; b=q9Nt1LAB0dEOTrmb5mrLaHZU7jLrHXsEURw6Nu19vfxaWz4gclLkzVPBLl7lUsAvCaMw/D7xNpfj/bFKAJnXy/7e3o5tbDRSeQMj5FbltHrmHqrCPzs+WAuyJjGwTpS8TDr5R1G5mzgGUlc8fLgON/bNtauLK33mkqP2fK1t3Pk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719100126; c=relaxed/simple;
-	bh=G7Bdwm2LgSzcu8hKez+YkvaF4kB0cS8V8sK1sTJqTBo=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=sMs0uicR7+RzKJ1/FHTGUOsggfUtIi97YTfLhv9Q1cR93nVjrLX+Hs+xQU2DL4B4e2MmrgLVjts3Qazvxyu3p9ZOP6EOdXjjxLHr9QqBQLbxXISYXWty8YStqswlFvRW+zkWqHnUkDJqfb3aTWztjpfT6WCcBcAqLVFuLbqkcgs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <m.grzeschik@pengutronix.de>)
-	id 1sLATD-0002cg-5F; Sun, 23 Jun 2024 01:48:35 +0200
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <m.grzeschik@pengutronix.de>)
-	id 1sLATC-004Hke-HQ; Sun, 23 Jun 2024 01:48:34 +0200
-Received: from localhost ([::1] helo=dude04.red.stw.pengutronix.de)
-	by dude04.red.stw.pengutronix.de with esmtp (Exim 4.96)
-	(envelope-from <m.grzeschik@pengutronix.de>)
-	id 1sLATC-000IWx-37;
-	Sun, 23 Jun 2024 01:48:34 +0200
-From: Michael Grzeschik <m.grzeschik@pengutronix.de>
-Date: Sun, 23 Jun 2024 01:48:31 +0200
-Subject: [PATCH v2 3/3] usb: gadget: uvc: set req_size and n_requests based
- on the frame interval
+	s=arc-20240116; t=1719117564; c=relaxed/simple;
+	bh=EKy19ZjGn/aS+LlJEXMy4mVOfboYhqedqM97sjJR2xU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=lcgQdHAt2Hc7XLYzBgj+EBsQpa8+qUeKD71y6mzFSJotl932rRsimkjFWZ/Ap5xxHGgKxUBlJsG228OQwVwLqk14joQ6uD1pW6KanjmCtAlacucrfRq+qPEzAG+p8XvLxLu1FnHrNZ8Q/WzfVi9h9S9nUjD6m+4NGRyqlYr9zcs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R6lODbS3; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1f9cc1d7379so662835ad.1;
+        Sat, 22 Jun 2024 21:39:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1719117562; x=1719722362; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8PnQ01roy4700N+vwuQEr8zP1UPIft7myTscZi49+x8=;
+        b=R6lODbS3T39Ws+beurS7EirmOTPa4LSeR45JNrCxqiwlNuOiOM/AEpJuxZMJV+PBNy
+         QtqLf0IIjU5cny3qYmTBxhbHZh57VCwN/uETp9BqQGxyQwXm9vxEBAcjuxxnkLFWjZLX
+         vovliMhS8oWtSvKgkSbc5NZobYwhyAZjdvh7DIynLWLHQ1iemV7KHaqyNVceEwgCfxS+
+         BM3wQ0e24v0QJJbzhAl0NkQt1yvHu1pZLuQewWcI+vYk3mNFnO26qMEupl66HM8UpJuJ
+         mYT/oCy3z9G2tWiH907OVpkNhcDtXciUAyZ7jIquoLPJEYZO2qjoVC+vVG3RtukRDNY4
+         rApg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719117562; x=1719722362;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8PnQ01roy4700N+vwuQEr8zP1UPIft7myTscZi49+x8=;
+        b=Lmki24jdqvQcjIuVTua3nC6wileuAX5hh7mvM8OuC+rCe5rYBjyjuyFCj1a4poGKUK
+         keGKPKbo6LhGdZArTMFYfe4H7PIC9D3bcYgHQVURJ2KDQykn0/30Uy1lTaEpWPofzUQs
+         jmO6EBlOhAUNb3LMR4pOIDaDMPeWL7yBDDNuY0/bUpVF2VtuKPvRrgA2LoyuiOSnnrYd
+         RoHLnYYb0tcUfL0pHOnpbRwOwmC34wtpyyq0B4vhXHSR/yOTA6yrbcZ+V+v2DGytVu3D
+         E6VqWg/CQ2bfePMf+YHDcip3zPnwISQikdif1RtujABbjjpRtPGAQzmWC7JkHm/DiZtq
+         awWg==
+X-Forwarded-Encrypted: i=1; AJvYcCXm7QVWZ8ieD/lLGc+nGVez6M01ZJMXVS++0nQM0qrYCZ8WFZFGlbxe5l2JzuOuYMtU6km0b1/MaLFy7zOoB8HooURvRjq9E2JTEDSyUhEsYFV1Q+0bcl9TrkVyCPtnCPf3UP8HPLnYbX9rEYVKAYCcGJ+AQ2S486A3zuLCViqo
+X-Gm-Message-State: AOJu0YwxyZh88QfYu1c91LnmYPyWvtrOor9Jro39Bl8wQBOZGr1AAwcQ
+	uCaV4Y/3rXz8QAJg7vjfi/2NIgeqP9y5f1Y52p7nZdZaVTK6HXiLgX6cLhzrPraeICLQZ1Oqu2Z
+	aqW5U4gdPeF50azeUHWwH0ONQNew=
+X-Google-Smtp-Source: AGHT+IEuu0QwsdejhKfPShJWJoz+ec41/6FyOZ32R9rp5sOVmGlXuGGSg68xJZLuEm99D/3jKPARtKqtkdMXQmY2yuY=
+X-Received: by 2002:a17:903:234a:b0:1f9:b35f:65dc with SMTP id
+ d9443c01a7336-1fa0d832226mr33410285ad.6.1719117561784; Sat, 22 Jun 2024
+ 21:39:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240403-uvc_request_length_by_interval-v2-3-12690f7a2eff@pengutronix.de>
-References: <20240403-uvc_request_length_by_interval-v2-0-12690f7a2eff@pengutronix.de>
-In-Reply-To: <20240403-uvc_request_length_by_interval-v2-0-12690f7a2eff@pengutronix.de>
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
- Daniel Scally <dan.scally@ideasonboard.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Avichal Rakesh <arakesh@google.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Michael Grzeschik <m.grzeschik@pengutronix.de>
-X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3182;
- i=m.grzeschik@pengutronix.de; h=from:subject:message-id;
- bh=G7Bdwm2LgSzcu8hKez+YkvaF4kB0cS8V8sK1sTJqTBo=;
- b=owEBbQKS/ZANAwAKAb9pWET5cfSrAcsmYgBmd2LSvQDIFbhZh1nGSdlJ6iKp1YiKTCaR4Flr/
- XaLR/EK/lKJAjMEAAEKAB0WIQQV2+2Fpbqd6fvv0Gi/aVhE+XH0qwUCZndi0gAKCRC/aVhE+XH0
- q9YFEADCdz7a9ExUObvtVWFP8ta1exn5yyW8RaWwyUPA0FbvgczUKbvDUSTkzLnSBXi1Sx/Vqgu
- WLmzqGVZCEzJfrbYKNSduz9Rz0MyM1Pp5hE2zVqdp/4H3mxbHXSmfmfweHymsY8jdj7zSdrNSJr
- y+j0/8Y7HU1bFyBlDzPtMDCSotGQ42VowD5JyFyxn/xvvTy2nXeJCBsaD0Ykyy5GqcLMfXIxbOR
- dcrcWVaow/cOumdeQ3orgODjhQd5kE1nCUlrOsE46HfK+TyCBdsiTYUvH7vlg+gthsjFrgNruJZ
- Z3WE53ZsZNkHy3oQTuiv5FzIaLqZs8bh91hX5Rhm9NIZ3vtbJGDjIgnmbSH8uavFDV1uucnZyzu
- GziduKL0c37gx7CY0h6uVOh2XGUoyosqtP0M2VbtEyAj7BOeuWjfTDduDsoDYEB4pn0h4zABvLv
- BNbh0kMg963Kazdl7eqQONd0fdHq/K7/N6mqFjtaPCA5M3FhZPXiNN/DScerhpFaTRchkbUqbdN
- utQd3mcf8d7SJqNmMi8vF3OS9yKIxuPjcFvbEefwf62dAKKJB23nMNQRD8Q18kLr1yOTajAhYDp
- FhIkw90X3Eb0JGL+Orgauu9xJeqwdbRtbcJjfxi6LMlWvWe5ZFFa9QN8zw3ZtAOfxBKjDDQmdF0
- VqDx5VgtNsypwxg==
-X-Developer-Key: i=m.grzeschik@pengutronix.de; a=openpgp;
- fpr=957BC452CE953D7EA60CF4FC0BE9E3157A1E2C64
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: m.grzeschik@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+References: <20240619054808.12861-1-ki.chiang65@gmail.com> <2024061903-shadow-pesky-1205@gregkh>
+In-Reply-To: <2024061903-shadow-pesky-1205@gregkh>
+From: Kuangyi Chiang <ki.chiang65@gmail.com>
+Date: Sun, 23 Jun 2024 12:39:10 +0800
+Message-ID: <CAHN5xi2qy666O_SBkGb2SadRyPFPaxsk5HFH01bgSZTy05R6Sw@mail.gmail.com>
+Subject: Re: [PATCH v2] xhci: Don't issue Reset Device command to Etron xHCI host
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: mathias.nyman@intel.com, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-With the information of the interval frame length it is now possible to
-calculate the number of usb requests by the frame duration. Based on the
-request size and the imagesize we calculate the actual size per request.
-This has calculation has the benefit that the frame data is equally
-distributed over all allocated requests.
+Hi Greg,
 
-We keep the current req_size calculation as a fallback, if the interval
-callbacks did not set the interval property.
+Greg KH <gregkh@linuxfoundation.org> =E6=96=BC 2024=E5=B9=B46=E6=9C=8819=E6=
+=97=A5 =E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=882:15=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> On Wed, Jun 19, 2024 at 01:48:08PM +0800, Kuangyi Chiang wrote:
+> > Sometimes the hub driver does not recognize the USB device connected
+> > to the external USB2.0 hub when the system resumes from S4.
+> >
+> > This happens when the xHCI driver issue the Reset Device command to
+> > inform the Etron xHCI host that the USB device has been reset.
+> >
+> > Seems that the Etron xHCI host can not perform this command correctly,
+> > affecting the USB device.
+> >
+> > Instead, to avoid this, disabling slot ID and then enabling slot ID
+> > is a workable solution to replace the Reset Device command.
+> >
+> > An easy way to issue these commands in sequence is to call
+> > xhci_free_dev() and then xhci_alloc_dev().
+> >
+> > Applying this patch then the issue is gone.
+> >
+> > Cc: <stable@vger.kernel.org>
+> > Signed-off-by: Kuangyi Chiang <ki.chiang65@gmail.com>
+>
+> What commit id does this fix?
 
-Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+Fixes: 2a8f82c4ceaf ("USB: xhci: Notify the xHC when a device is reset.")
 
----
-v1 -> v2: - add headersize per request into calculation
----
- drivers/usb/gadget/function/uvc_queue.c | 30 +++++++++++++++++++++++-------
- drivers/usb/gadget/function/uvc_video.c |  2 +-
- 2 files changed, 24 insertions(+), 8 deletions(-)
+However, this patch is a workaround for Etron xHCI hosts, should I add this
+in the commit message?
 
-diff --git a/drivers/usb/gadget/function/uvc_queue.c b/drivers/usb/gadget/function/uvc_queue.c
-index ce51643fc4639..141e52e34c610 100644
---- a/drivers/usb/gadget/function/uvc_queue.c
-+++ b/drivers/usb/gadget/function/uvc_queue.c
-@@ -44,7 +44,7 @@ static int uvc_queue_setup(struct vb2_queue *vq,
- {
- 	struct uvc_video_queue *queue = vb2_get_drv_priv(vq);
- 	struct uvc_video *video = container_of(queue, struct uvc_video, queue);
--	unsigned int req_size;
-+	unsigned int req_size, max_req_size, header_size;
- 	unsigned int nreq;
- 
- 	if (*nbuffers > UVC_MAX_VIDEO_BUFFERS)
-@@ -54,15 +54,31 @@ static int uvc_queue_setup(struct vb2_queue *vq,
- 
- 	sizes[0] = video->imagesize;
- 
--	req_size = video->ep->maxpacket
-+	nreq = DIV_ROUND_UP(video->interval, video->ep->desc->bInterval * 1250);
-+
-+	header_size = nreq * UVCG_REQUEST_HEADER_LEN;
-+
-+	req_size = DIV_ROUND_UP(video->imagesize + header_size, nreq);
-+
-+	max_req_size = video->ep->maxpacket
- 		 * max_t(unsigned int, video->ep->maxburst, 1)
- 		 * (video->ep->mult);
- 
--	/* We divide by two, to increase the chance to run
--	 * into fewer requests for smaller framesizes.
--	 */
--	nreq = DIV_ROUND_UP(DIV_ROUND_UP(sizes[0], 2), req_size);
--	nreq = clamp(nreq, 4U, 64U);
-+	if (!req_size) {
-+		req_size = max_req_size;
-+
-+		/* We divide by two, to increase the chance to run
-+		 * into fewer requests for smaller framesizes.
-+		 */
-+		nreq = DIV_ROUND_UP(DIV_ROUND_UP(sizes[0], 2), req_size);
-+		nreq = clamp(nreq, 4U, 64U);
-+	} else if (req_size > max_req_size) {
-+		/* The prepared interval length and expected buffer size
-+		 * is not possible to stream with the currently configured
-+		 * isoc bandwidth
-+		 */
-+		return -EINVAL;
-+	}
- 
- 	video->req_size = req_size;
- 	video->uvc_num_requests = nreq;
-diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
-index 95bb64e16f3da..d197c46e93fb4 100644
---- a/drivers/usb/gadget/function/uvc_video.c
-+++ b/drivers/usb/gadget/function/uvc_video.c
-@@ -304,7 +304,7 @@ static int uvcg_video_usb_req_queue(struct uvc_video *video,
- 		 */
- 		if (list_empty(&video->req_free) || ureq->last_buf ||
- 			!(video->req_int_count %
--			DIV_ROUND_UP(video->uvc_num_requests, 4))) {
-+			clamp(DIV_ROUND_UP(video->uvc_num_requests, 4), 4U, 16U))) {
- 			video->req_int_count = 0;
- 			req->no_interrupt = 0;
- 		} else {
+>
+> > ---
+> > Changes in v2:
+> > - Change commit log
+> > - Add a comment for the workaround
+> > - Revert "global xhci_free_dev()"
+> > - Remove XHCI_ETRON_HOST quirk bit
+> >
+> >  drivers/usb/host/xhci.c | 16 ++++++++++++++++
+> >  1 file changed, 16 insertions(+)
+> >
+> > diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> > index 37eb37b0affa..c892750a89c5 100644
+> > --- a/drivers/usb/host/xhci.c
+> > +++ b/drivers/usb/host/xhci.c
+> > @@ -3682,6 +3682,8 @@ void xhci_free_device_endpoint_resources(struct x=
+hci_hcd *xhci,
+> >                               xhci->num_active_eps);
+> >  }
+> >
+> > +static void xhci_free_dev(struct usb_hcd *hcd, struct usb_device *udev=
+);
+> > +
+> >  /*
+> >   * This submits a Reset Device Command, which will set the device stat=
+e to 0,
+> >   * set the device address to 0, and disable all the endpoints except t=
+he default
+> > @@ -3752,6 +3754,20 @@ static int xhci_discover_or_reset_device(struct =
+usb_hcd *hcd,
+> >                                               SLOT_STATE_DISABLED)
+> >               return 0;
+> >
+> > +     if (dev_is_pci(hcd->self.controller) &&
+> > +             to_pci_dev(hcd->self.controller)->vendor =3D=3D 0x1b6f) {
+>
+> Odd indentation :(
 
--- 
-2.39.2
+Oops, one tab is missing, right? I will modify it.
 
+>
+> Also, that's a specific value, shouldn't it be in a #define somewhere?
+
+OK, I will add a #define near xhci_discover_or_reset_device() in the same f=
+ile.
+
+>
+> > +             /*
+> > +              * Disabling and then enabling device slot ID to inform x=
+HCI
+> > +              * host that the USB device has been reset.
+> > +              */
+> > +             xhci_free_dev(hcd, udev);
+> > +             ret =3D xhci_alloc_dev(hcd, udev);
+>
+> You are relying on the behavior of free/alloc here to disable/enable the
+> slot id, why not just do that instead?  What happens if the free/alloc
+> call stops doing that?  This feels very fragile to me.
+>
+
+These functions are helpers that can be used to enable/disable the slot id
+and allocate/free associated data structures, I think they should be
+called, right?
+
+Or you would like to call xhci_disable_slot() + xhci_alloc_dev(), as in com=
+mit
+651aaf36a7d7 ("usb: xhci: Handle USB transaction error on address command")=
+.
+
+If so, I will modify it and resend this patch.
+
+> > +             if (ret =3D=3D 1)
+> > +                     return 0;
+> > +             else
+> > +                     return -EINVAL;
+>
+> Why -EINVAL?  What value was wrong?
+
+I followed commit f0615c45ce5f ("USB: xHCI: change xhci_reset_device()
+to allocate new device") to return -EINVAL, I think it means running out of
+device slots.
+
+>
+> thanks,
+>
+> greg k-h
+
+Thanks,
+Kuangyi Chiang
 
