@@ -1,163 +1,184 @@
-Return-Path: <linux-usb+bounces-11567-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11568-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 89FA6913995
-	for <lists+linux-usb@lfdr.de>; Sun, 23 Jun 2024 12:35:28 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53EDF913AD2
+	for <lists+linux-usb@lfdr.de>; Sun, 23 Jun 2024 15:27:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2735B2823CE
-	for <lists+linux-usb@lfdr.de>; Sun, 23 Jun 2024 10:35:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BFFF21F2188B
+	for <lists+linux-usb@lfdr.de>; Sun, 23 Jun 2024 13:27:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C8D212C559;
-	Sun, 23 Jun 2024 10:35:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AC6518132C;
+	Sun, 23 Jun 2024 13:27:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z4aRN9jK"
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="PbKY8Dfs"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A30512DD8E;
-	Sun, 23 Jun 2024 10:35:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B835D268
+	for <linux-usb@vger.kernel.org>; Sun, 23 Jun 2024 13:27:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.22
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719138920; cv=none; b=u7eNZeqFQ8c8OiEfSATXEBFpOaoubwpN4SbDCab4hs6WRZkEZBKcSFNr4EHcHxvuN6wP6n7BZBNAXleP/LStwLxf0C9cqAv0bFbIaf7ujJjJiOAq+iYi53Fha7HhL/eijDvd/rIYxgQsVcNcgdWuhn6lG/pudsS4ZgEAnxN8nxU=
+	t=1719149255; cv=none; b=BxvSG/eu5FcocTh/75YsTsR/42ZNPQC24joSjJ7yAP+9wFHmn4WUj+qsH8ZTSrimEtZ1GGqfLSBfMlLuQGwqBqspYdfPy74YgevDRo9kpoETfIsqvZh+MiRH0uhQUYbIaxDgrIIYhlSM0MqtkFd7/7xLKUFDEASU9UiRYi5Ke5g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719138920; c=relaxed/simple;
-	bh=FxJFq2Zu0xdJEBU+ACbCyheOIBxfVpNwZGkLyj9+2qA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=ak6FkG+9lveghXasj+swx96uSW9RQPQsnCTWmiEZOpRoSPiq4bYj9LbVIpHJGn+ytL7wtWLuK5ZcribrBAhxmz+bF0IZfTzllIVQV0L6l0an/T9ipVkpX8pQ8NljY1ol/2QT7dsQHpTFLRxSK9JVioRfu2ehiEuKgjLYr/Kp4ls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z4aRN9jK; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-421f4d1c057so29313805e9.3;
-        Sun, 23 Jun 2024 03:35:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719138917; x=1719743717; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=RDlSa6zikaW9BcixltoR0hCmj2l7mTdd8TF9b5/qKaY=;
-        b=Z4aRN9jKCzr6s1oYRBiZ+CwNoYOoU1BXAhoEFP6ZkQ3Gp8LTS+xoQetsjJUFmIY7T0
-         UZ++jaurrq6+2XqyhQW7zdkRg4/yJA1cjq35hk3ReMk/q0aOaypF/vPM3ToRS889yOvW
-         n5NMDPDoECPCx9ren/iutJw6PuaXUUlU+a+DcPXslfoixt9z7/EXr3+SQH1KfAwgr8rq
-         C6dtp7tom7c1vugf2XkQx59uMwXSZ7TPrUEiYRFHH+FKF8W2TrCS5l1A/MUM5mWJWGjs
-         O7zS7IjIzs5ErGT8SR4DwE2vQW9QtFLt9383eP4JU1fRti4Z6qoo94GMuIAJihm4DljC
-         cQWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719138917; x=1719743717;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RDlSa6zikaW9BcixltoR0hCmj2l7mTdd8TF9b5/qKaY=;
-        b=E0oskPX35EG4F6wF+D9iWYGaEQ4UrtHyBKPLvVAob093goVOyEOC6PpXJK2DUqUTXJ
-         YI9qfoEB/VXs0EbOHo2ttdkL7R+Fl9fJ95NSzPd2ibpR4EZ+ZlZi182pjctG9IfNL0as
-         afFxIh/YbX/EiaOhQEKFshYy1ABL3WkLP6SxpA7DBA+wmxW9OkkgkycnWsHeQfLTXORb
-         9Q6sZXujzqXnzvqWRSY8b/jKTJfw9zoRIfJQZkB7pFDagOuZMzMJKdTiQWedyBOaMuOz
-         DLg5ZufKzNdDAK/kK4tbUtsXPORKsnl2Fd6Yy0IaN7lFUrbO4mrJK9L3JB/bSS90q/9m
-         CT1A==
-X-Forwarded-Encrypted: i=1; AJvYcCUcDn2cadvryEkZUt5Xfi8xePhosErSDct5wqvvO2oUsccCVivki+2dQ2zoYM6i2n7cfnEUQPz4XzkzkFb9nm3xIpnGeFxHferqq4F4
-X-Gm-Message-State: AOJu0YzhwvY3pLraZ3k/cp/fAowxHBNDlghBMPWBPYJzkMQCM46Ry7Ga
-	oLcsrtbfcNoC3aYMQxyR5nlD7lSaiXODf3A6zGBczJFAoWGsS24m
-X-Google-Smtp-Source: AGHT+IEtNHcmbv7bOpkQl0Yk9zopa9sGSiM7q6O2LsF3za6ZlKck7Q8fH0abfO+3JFGEMoAky8bZmA==
-X-Received: by 2002:a05:600c:28b:b0:421:7e88:821 with SMTP id 5b1f17b1804b1-4248b9cfab2mr22346775e9.32.1719138917411;
-        Sun, 23 Jun 2024 03:35:17 -0700 (PDT)
-Received: from [127.0.1.1] (84-115-213-103.cable.dynamic.surfer.at. [84.115.213.103])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-424817aa340sm94789735e9.19.2024.06.23.03.35.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Jun 2024 03:35:17 -0700 (PDT)
-From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Date: Sun, 23 Jun 2024 12:35:11 +0200
-Subject: [PATCH] usb: typec: ucsi: glink: use
- device_for_each_child_node_scoped()
+	s=arc-20240116; t=1719149255; c=relaxed/simple;
+	bh=XZnYZiD7wzWyZWTLnIj9lV6GcB8MYQcMis/umczXQwo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=H35GQsNrm6TONV9ujcMrXuVcvE3rp4FGhS9fVo6PTTSTyQ5vAg11P1iAdmABLFDytVidoY4ERv3IxCZo9UYJ612Fxb+9t2+sxlF5vyPkgWdpsvA6LiCqVo1XYDrVHJ8P4nmFxJ1n/15Ozj8GmyvKEaMq9dlA8PasKm+XUP4hqNs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=PbKY8Dfs; arc=none smtp.client-ip=212.227.17.22
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
+	s=s31663417; t=1719149225; x=1719754025; i=wahrenst@gmx.net;
+	bh=8SQQswEKYBD31C3P6GFs7QXvRbVnU438NN6jkdWJfaE=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=PbKY8DfsEUWN4VnoAec8uZcZoEwyZ7JgPoCnnFXZ2P1rMq6w2vdP4F256d8RRY/+
+	 QfWLl25lqL/AlD2bVME8MIFwJAYoyjmDIAnTZA+TKo/lAD3NbBzFbcBjYTKzfan+n
+	 up1XGljVqLlkdRjfO+QlL3dq+dUbQM1g5PMGFYl9ixzfBb1iJYXBzZ/lMArAnXnmD
+	 0v7aCAuavAFkjjDppTzeqhW0KkBgPuLaxU9eOQte8GtcTmWkwHnlEURa54lxFGwm3
+	 ZEksgu2OcngsDF/BVzbHEqv36nuaRCc6tsveAyMeHHpMoiJigcm0KeHd9akHf6ie/
+	 +2cku1lFBKXHCbdgvA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.1.127] ([37.4.248.43]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MLzFx-1s47Vg0MKH-00KULo; Sun, 23
+ Jun 2024 15:27:05 +0200
+Message-ID: <eb4a0b47-b382-4ca9-8008-94feb1a34c03@gmx.net>
+Date: Sun, 23 Jun 2024 15:27:03 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240623-ucsi_glink-scoped-v1-1-f0fdcfec69bb@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAF/6d2YC/x3MQQqAIBBA0avErBPSoqirRIQ4Yw2FhkMRRHdPW
- r7F/w8IJSaBoXgg0cXCMWTosgC32rCQYswGU5mmak2tTic8LzuHTYmLB6Ey2OjOu956rCF3RyL
- P9/8cp/f9AHQciZljAAAA
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Javier Carrasco <javier.carrasco.cruz@gmail.com>
-X-Mailer: b4 0.14-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1719138916; l=2145;
- i=javier.carrasco.cruz@gmail.com; s=20240312; h=from:subject:message-id;
- bh=FxJFq2Zu0xdJEBU+ACbCyheOIBxfVpNwZGkLyj9+2qA=;
- b=hljqv3P3CBVnJBFBidEb5lVJ9MXZkFW+wdMEE1JdNkPeto1e/9jCMEvwNvQnjThjliNzo47NK
- Qq4jZqtbbGqCX/wElrofL5zzssYNpuwPASavvEVPk6WDSqZEa2NrWxN
-X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
- pk=lzSIvIzMz0JhJrzLXI0HAdPwsNPSSmEn6RbS+PTS9aQ=
+User-Agent: Mozilla Thunderbird
+Subject: Re: dwc2: irq 66: nobody cared triggered on resume
+To: Lukas Wunner <lukas@wunner.de>
+Cc: Minas Harutyunyan <hminas@synopsys.com>,
+ Florian Fainelli <florian.fainelli@broadcom.com>,
+ Thomas Gleixner <tglx@linutronix.de>,
+ "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+ Linux ARM <linux-arm-kernel@lists.infradead.org>,
+ bcm-kernel-feedback-list@broadcom.com, Ray Jui <rjui@broadcom.com>,
+ Scott Branden <sbranden@broadcom.com>, Marc Zyngier <maz@kernel.org>
+References: <2bcf7fac-8e8f-4d7a-a837-08805a0076e3@gmx.net>
+ <ZnccVLINb_xQcmZG@wunner.de>
+Content-Language: en-US
+From: Stefan Wahren <wahrenst@gmx.net>
+In-Reply-To: <ZnccVLINb_xQcmZG@wunner.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:Bd9+/wHAU0uQ9P+3mYih3Eb1TH6A0pql19YjZNb30557tffkyAs
+ TmyUHY4QIb2zMf0rSxL/hoNAJygGdcqYvF7ISXiSJAGABBpU+rldMJpFurnpZV7znKO3PGN
+ f8ZDsxT52USyqBkNWc0iBxk1T+eXVllXyaPIa+3cIXeHQK0MZ28oCUA+lMl8FZC9dsLBJXg
+ sI+hnp1t2vOJ8+tgGprUg==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:3C764Lyrsyw=;pCKo+pXxkBXmMw7bIKbDUPlDPuT
+ LDVEk5BkZM6V1a3iouiruHZPSZVTm8/VbGM78U0Y3od0jJInk/sMD1nZuPxcAXAEGpGCxB74B
+ Na2b20yjm3Gia2c3m+rNooJK8f2jliOXzCsHUPsXJ8axM5PwN6dyN0bRGgsNeJsx2mkjmug7l
+ jfUPgEpFwtvqoAmq8WpBzoIgygUWj8aPiAnxqnEyxVqZQTErIwNCbwbzVNA8gD+jqXc49zycx
+ KS6ELkYbpjOT6emW1K7V2AAMhq5+Z0Vo8DXXpy5zjvTsRjD3XYjfgNw87JisRvveaulO99ySE
+ Ni9cQ/0WmKynwl2eOMPMA9dwZY+pURSltGVnGEMI18/sFnUg781VMKKY+MOHShpJb6UqlBntn
+ w2JbekRSg1JT/yAd/jIDyxf7YF+3EMZmxT1vlFvKD3l9aTzDyuvLCdXmV0g8OCx4EKVsfktCl
+ NeJjTjJDw+uIL208T5OQxdINF8GHvNfrs+zWrhT6lyoiNIyU03vkpkw7xv+TE6yBViOsYqbky
+ qBR81WSdoFq5/FV5whKqsoMTmQUctMM7URgZgZCPuE/dJflDZTTNQKDRoUzowC2TtY2PxtbOz
+ 3Jj21Z4iL0YGkSTrBLODKuT+PLCyF2QhTswl/kPKMGjEoZ8zH8sNcAua9Wv+gaXPYG0C39Hdt
+ 8sNEtpz+MFBZgti6ZAtmA+yNpEq6I9y2FP3BnGi2O0dMGjcYFpxAlv8wsWC5x2CsDUeWV6Rw5
+ n6mcEnPKZXI1xpEPF2MzW2OpU3qX9qejlZjprWAT6YRicbBBDw2iCK4BzAzicjk63Pkcwk5MU
+ 2QqxnWHODHOFFLBspQtZTBAf8tE65I7PVhnUYEqgsj7Hk=
 
-Use the scoped variant of `device_for_each_child_node()` to
-automatically handle early exits.
+Hello Lukas,
 
-This prevents memory leaks if new error paths are introduced,
-as no explicit refcount decrement via `fwnode_handle_put()` is needed.
+Am 22.06.24 um 20:47 schrieb Lukas Wunner:
+> On Sat, Jun 22, 2024 at 02:23:33PM +0200, Stefan Wahren wrote:
+>> i currently experiment with suspend to idle on the Raspberry Pi 3 A+.
+>> Supend & resume works expected as long as no USB device is connected to
+>> the board. If i connect a USB hub to the Pi, the resume phase is
+>> significantly delayed and the kernel disabled IRQ 66 which belongs to D=
+WC2.
+> [...]
+>> [ 1131.109996] PM: noirq resume of devices complete after 1.273 msecs
+>> [ 1131.111208] PM: early resume of devices complete after 1.051 msecs
+>> [ 1131.230277] brcmfmac: brcmf_fw_alloc_request: using
+>> brcm/brcmfmac43455-sdio for chip BCM4345/6
+>> [ 1131.458687] irq 66: nobody cared (try booting with the "irqpoll" opt=
+ion)
+>> [ 1131.458714] CPU: 0 PID: 0 Comm: swapper/0 Tainted: G W 6.10.0-rc3-g7=
+fd4227d1bd5-dirty #49
+>> [ 1131.458734] Hardware name: BCM2835
+>> [ 1131.458744] Call trace:
+> [...]
+>> [ 1131.458877] note_interrupt from handle_irq_event+0x88/0x8c
+>> [ 1131.458900] handle_irq_event from handle_level_irq+0xb4/0x1ac
+>> [ 1131.458923] handle_level_irq from generic_handle_domain_irq+0x24/0x3=
+4
+>> [ 1131.458957] generic_handle_domain_irq from bcm2836_chained_handle_ir=
+q+0x24/0x28
+>> [ 1131.458992] bcm2836_chained_handle_irq from generic_handle_domain_ir=
+q+0x24/0x34
+>> [ 1131.459024] generic_handle_domain_irq from generic_handle_arch_irq+0=
+x34/0x44
+>> [ 1131.459056] generic_handle_arch_irq from __irq_svc+0x88/0xb0
+>> [ 1131.459079] Exception stack(0xc1b01f20 to 0xc1b01f68)
+>> [ 1131.459142] __irq_svc from default_idle_call+0x1c/0xb0
+>> [ 1131.459167] default_idle_call from do_idle+0x21c/0x284
+>> [ 1131.459202] do_idle from cpu_startup_entry+0x28/0x2c
+>> [ 1131.459239] cpu_startup_entry from kernel_init+0x0/0x12c
+>> [ 1131.459271] handlers:
+>> [ 1131.459279] [<f539e0f4>] dwc2_handle_common_intr
+>> [ 1131.459308] [<75cd278b>] usb_hcd_irq
+>> [ 1131.459329] Disabling IRQ #66
+> [...]
+>> An ideas what causing this issue?
+> Interrupts are re-enabled after the resume_noirq phase.  Looks like
+> the chip signals an interrupt right afterwards but the two hardirq
+> handlers do not feel responsible.
+>
+> The only option might be to add a few printk() in dwc2_handle_common_int=
+r(),
+> usb_hcd_irq() and dwc2_handle_hcd_intr() (called from usb_hcd_irq())
+> to see why they're all returning IRQ_NONE without clearing the source
+> of the interrupt.  The chip just keeps signaling interrupts because
+> the driver doesn't handle them, hence the IRQ storm which the IRQ core
+> eventually stops by outright disabling the interrupt.
+thanks for your suggestion. Unfortunately placing printk in those busy
+interrupt handler is futile, so i switched to debugfs. This issue would
+be much easier in case the interrupt wouldn't be shared. But first let
+me share some outputs before i start to extend debugfs further:
 
-Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
----
-This patch is a follow-up to the recently introduced commit c68942624e25
-("usb: typec: ucsi: glink: fix child node release in probe function")
-to account for a safer approach to iterating over child nodes.
----
- drivers/usb/typec/ucsi/ucsi_glink.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+1. No hub connected to Rpi 3 A+
 
-diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c b/drivers/usb/typec/ucsi/ucsi_glink.c
-index 2fa973afe4e6..d41c9caa84e0 100644
---- a/drivers/usb/typec/ucsi/ucsi_glink.c
-+++ b/drivers/usb/typec/ucsi/ucsi_glink.c
-@@ -333,7 +333,6 @@ static int pmic_glink_ucsi_probe(struct auxiliary_device *adev,
- 	struct pmic_glink_ucsi *ucsi;
- 	struct device *dev = &adev->dev;
- 	const struct of_device_id *match;
--	struct fwnode_handle *fwnode;
- 	int ret;
- 
- 	ucsi = devm_kzalloc(dev, sizeof(*ucsi), GFP_KERNEL);
-@@ -365,14 +364,13 @@ static int pmic_glink_ucsi_probe(struct auxiliary_device *adev,
- 
- 	ucsi_set_drvdata(ucsi->ucsi, ucsi);
- 
--	device_for_each_child_node(dev, fwnode) {
-+	device_for_each_child_node_scoped(dev, fwnode) {
- 		struct gpio_desc *desc;
- 		u32 port;
- 
- 		ret = fwnode_property_read_u32(fwnode, "reg", &port);
- 		if (ret < 0) {
- 			dev_err(dev, "missing reg property of %pOFn\n", fwnode);
--			fwnode_handle_put(fwnode);
- 			return ret;
- 		}
- 
-@@ -387,11 +385,10 @@ static int pmic_glink_ucsi_probe(struct auxiliary_device *adev,
- 		if (!desc)
- 			continue;
- 
--		if (IS_ERR(desc)) {
--			fwnode_handle_put(fwnode);
-+		if (IS_ERR(desc))
- 			return dev_err_probe(dev, PTR_ERR(desc),
- 					     "unable to acquire orientation gpio\n");
--		}
-+
- 		ucsi->port_orientation[port] = desc;
- 	}
- 
+root@raspberrypi:/sys/kernel/debug/usb/3f980000.usb# cat state
+DCFG=3D0x00000000, DCTL=3D0x00000000, DSTS=3D0x0007ff02
+DIEPMSK=3D0x00000000, DOEPMASK=3D0x00000000
+GINTMSK=3D0xf3000806, GINTSTS=3D0x04000023
+DAINTMSK=3D0x00000000, DAINT=3D0x00000000
+GNPTXSTS=3D0x00080100, GRXSTSR=3D3f83bbfe
 
----
-base-commit: f76698bd9a8ca01d3581236082d786e9a6b72bb7
-change-id: 20240623-ucsi_glink-scoped-2d417fc9afd3
+2. Hub connected before suspend / irq issue
 
-Best regards,
--- 
-Javier Carrasco <javier.carrasco.cruz@gmail.com>
+DCFG=3D0x00000000, DCTL=3D0x00000000, DSTS=3D0x0007a202
+DIEPMSK=3D0x00000000, DOEPMASK=3D0x00000000
+GINTMSK=3D0xf300080e, GINTSTS=3D0x04000023
+DAINTMSK=3D0x00000000, DAINT=3D0x00000000
+GNPTXSTS=3D0x08080100, GRXSTSR=3D789a460a
 
+3. Hub connected after suspend / irq issue
+
+DCFG=3D0x00000000, DCTL=3D0x00000000, DSTS=3D0x0007ff02
+DIEPMSK=3D0x00000000, DOEPMASK=3D0x00000000
+GINTMSK=3D0xf1000806, GINTSTS=3D0x0500002b
+DAINTMSK=3D0x000000ff, DAINT=3D0x00000000
+GNPTXSTS=3D0x29080100, GRXSTSR=3Dbefdf595
+
+Based on my limited knowledge and observations the issue seems related
+to GINTMSK/GINTSTS and a outstanding GINTSTS_PRTINT.
+
+Regards
 
