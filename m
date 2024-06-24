@@ -1,105 +1,129 @@
-Return-Path: <linux-usb+bounces-11594-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11596-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 725B891538D
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Jun 2024 18:24:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B1249153A3
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Jun 2024 18:26:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D0204B265FA
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Jun 2024 16:24:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3D19F1C2322D
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Jun 2024 16:26:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9644F19E808;
-	Mon, 24 Jun 2024 16:23:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3989F19E803;
+	Mon, 24 Jun 2024 16:25:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A8uhoAnX"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Zez7tI6q"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C31F19E7F6;
-	Mon, 24 Jun 2024 16:23:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B4EA19E7E2;
+	Mon, 24 Jun 2024 16:25:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719246192; cv=none; b=QSGjkAXtWswANQIZB7Ulnbjjwdg9eY7XT9k0+Y0ukz/2gwrovAz+WiWD9S79l1ojBkYTklPUKZosv6mrqM9YLwlQJnXSowM++wHr1MUXC648j+yaWzurWU28Gg2u0sgF7SznyHz84I2buEEUNfsvOwXh/vPHm5g6gqZWo/hQbLs=
+	t=1719246307; cv=none; b=A5ip511682hN8wehktsJlI6K+K1xo/8oG6Cd4+SlR8BSkEhNHB52nkLVa0OOigE7FUT6r+dLlCF2XV53v2Xko/t0BLx97l8f/uMdS8jm6dZiVB0zVkGWYpCeI2Wq1CYQtAtf/FdIMZfxlRdv1u7+GXmvqYQyVc5up9dIND1uOUo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719246192; c=relaxed/simple;
-	bh=4EFcG92bn8m3C7P7WSc1UKVb67kZ/q7dj6odcHRRAYE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fqjhy2mC1CadunCepD16Y9nd+h16YRuMUHKU2fP5TneAAYc3WPMHKu7CxNl8RxbkngmxbeLU012478gWzZPFkLWC2Wj2i7acqpmqJ4UJao/jwhN63ZcH2DZkr4GjKd9dWeENtEp3IrrtgFQbLElYz3OTg0KXsxp4cKW7jVcqDTc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A8uhoAnX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3A80C2BBFC;
-	Mon, 24 Jun 2024 16:23:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719246191;
-	bh=4EFcG92bn8m3C7P7WSc1UKVb67kZ/q7dj6odcHRRAYE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=A8uhoAnXMhwh0jFhx3rbLY0lhbWqRGx0PT2geeamzLGuRsnq/PxpDiLEAs4Ye4C9r
-	 lXOZNt2ne0d2TqqjfwOWudF3IYY174wUqZifQUF+UJvuHprzUyxH5sc2ijiA8HqaMi
-	 GSocEH1/6C2rk+oNX1tT6LegLWUSG8jZFPmEFY1cQKT5jWc11ZyMcYjmftG8okLDXL
-	 KyE9fd5iTc0wiD2agYJQ1WWPl+/0oFonQYbzqYT1ymCW5KQkC37h63fbvTqcQhXJMZ
-	 MYxRUdTYkC7YER6nKH5CZnkuIFIm4ECoO1cw1sOJE5jwXtJPssRfQx8Lx2GECGWPga
-	 GoZ5LHSdNb0Bg==
-Date: Mon, 24 Jun 2024 17:23:06 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Neil Armstrong <neil.armstrong@linaro.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: usb: dwc2: switch to unevaluatedProperties
-Message-ID: <20240624-venus-parish-e1159f455537@spud>
-References: <20240624-topic-amlogic-upstream-bindings-fixes-dwc2-subnodes-v1-1-f2544f21f594@linaro.org>
+	s=arc-20240116; t=1719246307; c=relaxed/simple;
+	bh=fbCoAVw5u4SsXGsY9Q4TwtAMZSfeZ8xtbvxJxzRDzEQ=;
+	h=From:Date:To:cc:Subject:Message-ID:MIME-Version:Content-Type; b=AGbJnL3xsktQvlZNW8g6Ppcx3g3JCGgEWyhjKlo8dNKj2KBo+IIGlD/6aLTZaHquL4EkkpzODjGLLd2Xzz7TY7xVzeu3o73Wiu4EypZnaP3+IAUcr2mRhOl12ipk8MFx96BNpb3o/kIy1lDhYXLD5UqqNxFPpDcPtRWDIMfHzwE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Zez7tI6q; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1719246306; x=1750782306;
+  h=from:date:to:cc:subject:message-id:mime-version;
+  bh=fbCoAVw5u4SsXGsY9Q4TwtAMZSfeZ8xtbvxJxzRDzEQ=;
+  b=Zez7tI6qo7n3L2ZjSbUbAi3SEDZQ3M/KSo7HG9UmNBxHKJ2hvOU8NlZo
+   95yJO/a1SmzqJOThzaSJqGshwcBu9Gw0X2vSpaS2V5+/JamaoKKSBCk0S
+   dAKMpndlu54k5eWYpwRh0BYI/VHpB3VFMQUkSnltXmd/mHmZ1RG1UxP+3
+   u4yzJyk7wGP5KFW7NdtD5+D4hwkWlMVwqh2Lx6zKWInBlCxwxA/3TTSb4
+   GKiuIlKRxODQgBidnT5xt759xBc+a2oCGsSUJXhobvvMsh4mkufG62G1V
+   7vG6yYSRRa/mg6mhmJOhUPQ2Akk5vB2l/01/7cfFX5QvMLQ3BXFgijCZS
+   w==;
+X-CSE-ConnectionGUID: 0c8P+Sn9QjieRCW7DaNIVA==
+X-CSE-MsgGUID: 6LIcOikfSwazQoxZ6v868g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11113"; a="16356537"
+X-IronPort-AV: E=Sophos;i="6.08,262,1712646000"; 
+   d="scan'208";a="16356537"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2024 09:25:05 -0700
+X-CSE-ConnectionGUID: g4niJvsaQbGtyeXmdH28uw==
+X-CSE-MsgGUID: hqDaBJICQkeSfs4KYI8E2g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,262,1712646000"; 
+   d="scan'208";a="48520499"
+Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.247.61])
+  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2024 09:25:00 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Mon, 24 Jun 2024 19:24:55 +0300 (EEST)
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
+    Sebastian Reichel <sre@kernel.org>, 
+    Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+    Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+    Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
+    Hans de Goede <hdegoede@redhat.com>, 
+    Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
+    Konrad Dybcio <konrad.dybcio@linaro.org>, linux-pm@vger.kernel.org, 
+    devicetree@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
+    platform-driver-x86@vger.kernel.org, linux-usb@vger.kernel.org, 
+    linux-arm-msm@vger.kernel.org, Nikita Travkin <nikita@trvn.ru>, 
+    Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [GIT PULL RESEND] Immutable branch between pdx86 lenovo c630 branch,
+ power/supply and USB
+Message-ID: <e42fb2e9-81d4-4e40-ff3a-f9d6a46d03f9@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="NcujpWxopTaQHiCu"
-Content-Disposition: inline
-In-Reply-To: <20240624-topic-amlogic-upstream-bindings-fixes-dwc2-subnodes-v1-1-f2544f21f594@linaro.org>
+Content-Type: text/plain; charset=US-ASCII
 
+Hi,
 
---NcujpWxopTaQHiCu
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This is v2 of the lenovo c630 IB branch with the build fix for non-ARM64 
+platforms (built on top of the commits in the previous IB PR). Resent with 
+full Subject line.
 
-On Mon, Jun 24, 2024 at 10:58:23AM +0200, Neil Armstrong wrote:
-> Define "unevaluatedProperties" instead of "additionalProperties"
-> to allow properties from common schemas but still disallow undefined
-> properties.
->=20
-> This allow defining a device subnode and fixes:
-> meson-gxbb-odroidc2.dtb: usb@c9100000: '#address-cells', '#size-cells', '=
-hub@1' do not match any of the regexes: 'p
-> inctrl-[0-9]+'
->         from schema $id: http://devicetree.org/schemas/usb/dwc2.yaml#
->=20
-> Fixes: bb88dbbee2c9 ("dt-bindings: usb: dwc2: Add reference to usb-drd.ya=
-ml")
-> Fixes: 54bd6c9a3b7b ("dt-bindings: usb: dwc2: document TPL support")
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+The following changes since commit 1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0:
 
+  Linux 6.10-rc1 (2024-05-26 15:20:12 -0700)
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+are available in the Git repository at:
 
---NcujpWxopTaQHiCu
-Content-Type: application/pgp-signature; name="signature.asc"
+  https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git tags/platform-drivers-x86-ib-lenovo-c630-v6.11-2
 
------BEGIN PGP SIGNATURE-----
+for you to fetch changes up to 13bbe1c83bc401c2538c758228d27b4042b08341:
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZnmdagAKCRB4tDGHoIJi
-0g9zAPoCSvn4/xhuGIyIa/DMhbg1Og78t4fwZV9QHM33OlR1tAD/TUSZdkYIS+CN
-XFzwMRH40fgQ6O3n52qC2uBuNQSeYQI=
-=ko+5
------END PGP SIGNATURE-----
+  platform/arm64: build drivers even on non-ARM64 platforms (2024-06-24 18:22:15 +0300)
 
---NcujpWxopTaQHiCu--
+----------------------------------------------------------------
+Immutable branch between pdx86 lenovo c630 branch, power/supply and USB
+subsystems due for the v6.11 merge window.
+
+platform-drivers-x86-ib-lenovo-c630-v6.11-2:
+  v6.10-rc1 + platform-drivers-x86-lenovo-c630
+for merging into the power/supply and USB subsystems for v6.11.
+
+----------------------------------------------------------------
+Bjorn Andersson (1):
+      dt-bindings: platform: Add Lenovo Yoga C630 EC
+
+Dmitry Baryshkov (2):
+      platform: arm64: add Lenovo Yoga C630 WOS EC driver
+      platform/arm64: build drivers even on non-ARM64 platforms
+
+ .../bindings/platform/lenovo,yoga-c630-ec.yaml     |  83 ++++++
+ drivers/platform/Makefile                          |   2 +-
+ drivers/platform/arm64/Kconfig                     |  14 +
+ drivers/platform/arm64/Makefile                    |   1 +
+ drivers/platform/arm64/lenovo-yoga-c630.c          | 291 +++++++++++++++++++++
+ include/linux/platform_data/lenovo-yoga-c630.h     |  44 ++++
+ 6 files changed, 434 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/platform/lenovo,yoga-c630-ec.yaml
+ create mode 100644 drivers/platform/arm64/lenovo-yoga-c630.c
+ create mode 100644 include/linux/platform_data/lenovo-yoga-c630.h
 
