@@ -1,117 +1,107 @@
-Return-Path: <linux-usb+bounces-11581-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11582-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F953914FC9
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Jun 2024 16:21:27 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id F002D914FD7
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Jun 2024 16:25:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7F94C1C217B3
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Jun 2024 14:21:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9A5411F23296
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Jun 2024 14:25:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E43A3143C5C;
-	Mon, 24 Jun 2024 14:21:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A527173356;
+	Mon, 24 Jun 2024 14:25:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="BW33TQUy"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="1nw1ZwBZ"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C20514D294;
-	Mon, 24 Jun 2024 14:21:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CA9014882F;
+	Mon, 24 Jun 2024 14:25:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719238878; cv=none; b=EUZg33I/2qEstAyKZMVtC+KblK1ZmzRig2I9vA37a4OiE4e9hrvTGCJXrMASUkikS7KeKWbjZLlBlGR5Qv2jXKVjiHiTx/QRzdviaXqm9g1eS6UT3aFE+AlouotGojHXtslYee8Q+1gzkuo+l6FmEfEcBV2g4JWfh5pVJar4Xlo=
+	t=1719239101; cv=none; b=Wivsj0Eiv3Gm8Y5LYROQJ7Ce1XdkrWq5zMfaNMFAFJXUH8ax5BK+jpPNrt/dhaRfOUd7wXx2BIvl4MFUIBG2VLOCXZb9Sxm4NrxLeESqgHaoirCTpyM0wTEjNyEVJC3S9UbXxdueY9KZn7PJpJAYYlcga7BiLe6Hccjd0Ko7MWY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719238878; c=relaxed/simple;
-	bh=Pjqrb8+wFHR1mGeMA625VXKLN5bcap7zHfFbkRKORj8=;
+	s=arc-20240116; t=1719239101; c=relaxed/simple;
+	bh=EK+Fi7+C5OPwFD7IS458Gg7eVjvzpeQgfsxONCxGrgw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WmPXjn3DgzuFm48aM2aBVVMDLEeQqVUunHCKlmXYjrKqnFGX0nwoMSYHlsN4MNC0Fu2tacEaxBKxV52Csz3qgmj8VEPfyIlrXcgxEr2OcnqRQF0CRhkSjh7ZKmMVMM3q7znVZ3JPcUb1483bK2ekT8e4Gf3R/+NoL+jE/TRitDU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=BW33TQUy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9769EC4AF0C;
-	Mon, 24 Jun 2024 14:21:15 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=gFxh7sg+TDqmzcOPDG4wa4NPsRsjKYH+Lc/ikfgTf6zcyfKgN4w6JoN3/yqQ9hbnkvD8NWjjWtvVnBqv9zFvdeliovdkpwkBz+JF4k+D5GP/RPtIe+GLMR+V853cIQqO++1e8484IODtSC6sWDw58S38cpH9Tp0lLzd91M4xbYA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=1nw1ZwBZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08CDCC4AF0A;
+	Mon, 24 Jun 2024 14:24:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1719238876;
-	bh=Pjqrb8+wFHR1mGeMA625VXKLN5bcap7zHfFbkRKORj8=;
+	s=korg; t=1719239100;
+	bh=EK+Fi7+C5OPwFD7IS458Gg7eVjvzpeQgfsxONCxGrgw=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BW33TQUyWAv0krdvhK3ThO1kHwVz1Ijn+D89YF5vkpPsMtJqcJtqMFIIQnQ7ifqOV
-	 vkj9JFgWkLZwm/GiHUdz4L1QukNeI6GDvuL72rEgUYr/Rxz41/0fFQTzsl7eT23krn
-	 4+bM7aQoqB6MfhbBucAgLAuZJG5QAJS1Inv4Mvqo=
-Date: Mon, 24 Jun 2024 16:21:13 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Ma Ke <make24@iscas.ac.cn>
-Cc: neal_liu@aspeedtech.com, joel@jms.id.au, andrew@codeconstruct.com.au,
-	linux-aspeed@lists.ozlabs.org, linux-usb@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] usb: gadget: aspeed_udc: validate endpoint index for
- ast udc
-Message-ID: <2024062400-yearning-curfew-3c9d@gregkh>
-References: <20240624015314.2249128-1-make24@iscas.ac.cn>
+	b=1nw1ZwBZRR3NRfv3uvREIcwzG+g7aWxFxCZbqJ32+bK+MuDVrw7g/dclvnpC9juO1
+	 T3krYY/CCt5txVJtjaOJatqbMZn2Ga2TVUVeyfogKtCzy3yvgVer4riMx1kT4iFmfS
+	 4wV5JctRid46BcyMZ/Y5nYdaFAucm3wuifudk1Rk=
+Date: Mon, 24 Jun 2024 16:24:57 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Bjorn Andersson <andersson@kernel.org>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	Nikita Travkin <nikita@trvn.ru>
+Subject: Re: [PATCH v8] usb: typec: ucsi: add Lenovo Yoga C630 glue driver
+Message-ID: <2024062411-neutron-striving-f16c@gregkh>
+References: <20240621-ucsi-yoga-ec-driver-v8-1-e03f3536b8c6@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20240624015314.2249128-1-make24@iscas.ac.cn>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240621-ucsi-yoga-ec-driver-v8-1-e03f3536b8c6@linaro.org>
 
-On Mon, Jun 24, 2024 at 09:53:13AM +0800, Ma Ke wrote:
-> We should verify the bound of the array to assure that host
-> may not manipulate the index to point past endpoint array.
+On Fri, Jun 21, 2024 at 01:21:26AM +0300, Dmitry Baryshkov wrote:
+> The Lenovo Yoga C630 WOS laptop provides implements UCSI interface in
+> the onboard EC. Add glue driver to interface the platform's UCSI
+> implementation.
 > 
-> Found by static analysis.
-> 
-> Signed-off-by: Ma Ke <make24@iscas.ac.cn>
+> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 > ---
->  drivers/usb/gadget/udc/aspeed_udc.c | 2 ++
->  1 file changed, 2 insertions(+)
+> Add driver for the UCSI on the Lenovo Yoga C630 laptop, as implemented
+> by the Embedded Controlller of the laptop.
 > 
-> diff --git a/drivers/usb/gadget/udc/aspeed_udc.c b/drivers/usb/gadget/udc/aspeed_udc.c
-> index 3916c8e2ba01..d972ef4644bc 100644
-> --- a/drivers/usb/gadget/udc/aspeed_udc.c
-> +++ b/drivers/usb/gadget/udc/aspeed_udc.c
-> @@ -1009,6 +1009,8 @@ static void ast_udc_getstatus(struct ast_udc_dev *udc)
->  		break;
->  	case USB_RECIP_ENDPOINT:
->  		epnum = crq.wIndex & USB_ENDPOINT_NUMBER_MASK;
-> +		if (epnum >= AST_UDC_NUM_ENDPOINTS)
-> +			goto stall;
->  		status = udc->ep[epnum].stopped;
->  		break;
->  	default:
-> -- 
-> 2.25.1
+> Support for this EC was implemented by Bjorn, who later could not work
+> on this driver. I've picked this patchset up and updated it following
+> the pending review comments.
 > 
+> NOTE: the patch depends on the header from the platform driver. Ilpo
+> Järvinen has created an immutable branch based on v6.10-rc1, please pull
+> it before merging the patches:
 > 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git tags/platform-drivers-x86-ib-lenovo-c630-v6.11
+> 
+>   platform: arm64: add Lenovo Yoga C630 WOS EC driver (2024-06-14 12:51:30 +0300)
 
-Hi,
+I have that branch, yet when building this driver as a module I get the
+following errors:
+ERROR: modpost: "yoga_c630_ec_unregister_notify" [drivers/usb/typec/ucsi/ucsi_yoga_c630.ko] undefined!
+ERROR: modpost: "yoga_c630_ec_ucsi_get_version" [drivers/usb/typec/ucsi/ucsi_yoga_c630.ko] undefined!
+ERROR: modpost: "yoga_c630_ec_register_notify" [drivers/usb/typec/ucsi/ucsi_yoga_c630.ko] undefined!
+ERROR: modpost: "yoga_c630_ec_ucsi_write" [drivers/usb/typec/ucsi/ucsi_yoga_c630.ko] undefined!
+ERROR: modpost: "yoga_c630_ec_ucsi_read" [drivers/usb/typec/ucsi/ucsi_yoga_c630.ko] undefined!
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+So something went wrong :(
 
-You are receiving this message because of the following common error(s)
-as indicated below:
-
-- This looks like a new version of a previously submitted patch, but you
-  did not list below the --- line any changes from the previous version.
-  Please read the section entitled "The canonical patch format" in the
-  kernel file, Documentation/process/submitting-patches.rst for what
-  needs to be done here to properly describe this.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
+I'll unwind that branch pull now as well and wait for a fixed up version
+to be sent.
 
 thanks,
 
-greg k-h's patch email bot
+greg k-h
 
