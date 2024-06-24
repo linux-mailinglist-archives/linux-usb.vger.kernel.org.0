@@ -1,188 +1,304 @@
-Return-Path: <linux-usb+bounces-11590-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11591-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 449649151CF
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Jun 2024 17:16:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD35F9152EE
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Jun 2024 17:53:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 67B241C212A0
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Jun 2024 15:16:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 833F3283546
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Jun 2024 15:53:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE63419D082;
-	Mon, 24 Jun 2024 15:15:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5F0719D09F;
+	Mon, 24 Jun 2024 15:53:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="UGCya0us"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f208.google.com (mail-il1-f208.google.com [209.85.166.208])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2061.outbound.protection.outlook.com [40.107.92.61])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D30591DFEA
-	for <linux-usb@vger.kernel.org>; Mon, 24 Jun 2024 15:15:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.208
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719242123; cv=none; b=a/RSqE4///YUWCfnXk2nOUtIwlSJGMEHjRdZYBhzDghnywsG2eiBEPsCgW3/YGV0omBiEWPMsg5nIEMw4gQghWCmW01nOtL3uwY2UorepgMC4QrgEEPMP/T3/sO6ALwTY+fWJxz5gwoRBVcezCtqINa2SsxPZpvwFQwPKJQdmDE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719242123; c=relaxed/simple;
-	bh=MNr/iW7hektiD1H3kRheYm/jFxPg/XU6IynSNsEZCbQ=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=FjOYhZ94mTilzRPTo/zozbvnRC96aJYXlsfl6a2zUvoti1kBOFps2bm9pKfN7DeABaI/dvlLGuDEL9yv2olUgidSsIF4ZTakU0YpV2rnno+eEAsXu8N0PF1EdwwzBGSP49d//wIYRdd6M7Cw3UQCjSnLf/oBTq3xcj8POvRjg18=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.208
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f208.google.com with SMTP id e9e14a558f8ab-375e4d55457so53740585ab.0
-        for <linux-usb@vger.kernel.org>; Mon, 24 Jun 2024 08:15:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719242121; x=1719846921;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ONAk/9gMOLl8MwIxQFP3SbpLQofEWlsXstY30enpvjw=;
-        b=qyZFpmolMY8XSeqZBYVCWvZSIyF/tVmScMik5K+2+mdC3MR0531GQ7fish0TeeVMEL
-         VqtE3G4LRw4dOISWys9/0vV5OQGQhs0bCM+E/rFYkAhY0y8QMlpayE8sj9lA1Sz0N+3g
-         G+yaxpdkfbXjzt8el+/kXGDqWbBX7lVgylez8QNOiTKJqJbrrN3zl+incjpQA0O9eu2K
-         zsH4PfSNB22NLe74qKxDbLQAccCbggkAKj5/yyA1/IzNv1PNa4Qr7m7bcDXvU7aZvTfo
-         zSx6FamTbaBLzW/li9YaWiDp1+mwK7bPNO3OoJwSdrMFZ3iGdAYKAnuar3hsR8RnGFNz
-         alHw==
-X-Forwarded-Encrypted: i=1; AJvYcCViI/5z8KSr7r5OYf7TjZtayYF9fApfvHNQCeZ5Ebatcm/gktmdbthHv3i/VlX9Et2nHTFFtHd9SHfQHD1rEN0u+5WlZ24lQ0KC
-X-Gm-Message-State: AOJu0YwwsW4VNVRzW/XgLgrCN1m+zkKjuLKxGxUycWDUdxCjsgnlw3iO
-	BY+VytFfvGUYVWN04Zmx/VWdCHhSpJdCldPRiEZZOhYftBHr9F4IZD94HOZ3hLnUJpJzru15idz
-	9ks7zqQTL8otRHQ8dTRI5m8SUVuJDZdUH+9XAD73DqAOy4U6mjyOMr3g=
-X-Google-Smtp-Source: AGHT+IEoIocCWQfOAZR+v0VwMf8y02t3JJsst6mQZtIsxeuPxTjIs24h6sQVoVN5ty+G51QWUkqIWxu0IRxfgynuMCksvDsLWLRH
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70EFD1D53C;
+	Mon, 24 Jun 2024 15:53:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.61
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1719244386; cv=fail; b=ZOy7qQTeHMlr0OsQrpmxHBRPMLIBFsf0NhrfnRYGFwUTn+yTXo1MoQGqcAtGRxR3RwxGBPQvqAmnlP1pC19c7BbtayL89led1HBm4q4KLiUl57DHW9zxD5sA/8HtGwZLT+bZmRojCHLWMhtbsLsjgoW2kgk7+9v/uDYXxKR8Zpo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1719244386; c=relaxed/simple;
+	bh=wfZFDa31tHhXL++v+DNbZ7ZYWKcOa91Yp8Jisp/I5LY=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=bKMf8Ecn7H90lvxLe8a+U928uoEMj9cPdgDpckH+WZCXlFabfjbjB8PSd6YNgwnixDsUWaI0r0Z7PbiMD/TGSy73V9NKqoSSiBa5m/neR61GpmcoFqunv/9wf7Nd5YeeBs7sW772rz7tUGQY0aZchi9f+Lp8YiMh+yxZTj8arbU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=UGCya0us; arc=fail smtp.client-ip=40.107.92.61
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TrnFhaMFiwpd46+dQ7gmuBrg5io3O9LvLmb2zzWORlW+zQaHlKSjR66Fi9C5To+Ej9EWtA9auY3aCJlXTRhTx5t0wAHfs1dXLTTBXYgzBbFGRTURJds9fA8zDMTdZow2Af3S5Mg3zAqZs+X+QGQqSM+v6LyyC1YOzvAu0xnkF02p3rLtrhEt6eegDKgzkTIECCmKqeCytACHl5zFzvU62I8VMdBBqFW7HbwFK2PmD+2397+IHj1akUIS5z0Jpf+5Ywkg6uo0LGuDfdZxHBWktDQNQ8tcWgov3z0YmiIfohU+L/RzbBdqm/E8njp9qc3botcnLcpEKS7DZ5ed5EE9KA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1C334Glgp1JXrDuZnI7iG3D7/JUHOqdHpVeLvZraC9I=;
+ b=LQJi6cEvYG2kIIK3m6KFjPS/rVFQCFx0au3CZESh73Te54hH/eqJWQMctidQfN7mDfNmBJ6T2nP5WmAqLDgNiNVV6dSxpI97ZPbpGQ6oX8mevBW31nyVLfpRe/n+A2rNwP8hMScGGJhQOHisdx8gEOmMWLnTz66uwmeB0RpdcafZKrH3xcu5yZ5bOdX3QoH7B5ggknkVaWjQ9kyV4bOfHAuRaYdMG5ksrbXN00IXOfLePVvOcnGjAP7Fnui+GBfG5fx7n623gdOSqpGGhOrTAvtW3vCjOilMQopUlQGECByBoEKSEJdoxkv83k1Arrtva1TCcZp1Y+3+IYNk9gOuOA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1C334Glgp1JXrDuZnI7iG3D7/JUHOqdHpVeLvZraC9I=;
+ b=UGCya0usTkimKmbano4nntLt8NPVVO11YLGLSmtaYzHOEbRR6qwFtGGMHhkpwgGR8BTJwK0A9C+oWTZLxQsh+uW1TSQgenBnTeBOxCLaRnOGDMo9eMP3wq51xIp1d2hlhrqx6ye1zx2/g9we2Fv+07pXa9F+tOF9QDlWP1YX07DC3J0/Cs+LnNj/x8m8d2ozSMlOlwIdK3uHpM3Exj2A8Y/o0hsSZcgTd84QAegfXk38iuTO0tLU3PRNLZsj6MCZhsfH4XbP14A1YGkVDeaLDDs0nGC7GQs3jqKs4cq3ISpWFfL0QAp+p7QjYKpUJLT9+2x2yM5tGkCJ+RxG7PTxkw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
+ DM4PR12MB7744.namprd12.prod.outlook.com (2603:10b6:8:100::14) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7698.29; Mon, 24 Jun 2024 15:53:01 +0000
+Received: from CO6PR12MB5444.namprd12.prod.outlook.com
+ ([fe80::ae68:3461:c09b:e6e3]) by CO6PR12MB5444.namprd12.prod.outlook.com
+ ([fe80::ae68:3461:c09b:e6e3%6]) with mapi id 15.20.7698.025; Mon, 24 Jun 2024
+ 15:53:01 +0000
+Message-ID: <bc9cd446-5e19-41c4-a316-9eb362f2d190@nvidia.com>
+Date: Mon, 24 Jun 2024 16:52:53 +0100
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 4/4] usb: typec: ucsi: Always set number of alternate
+ modes
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Jameson Thies <jthies@google.com>, heikki.krogerus@linux.intel.com,
+ linux-usb@vger.kernel.org, pmalani@chromium.org, bleung@google.com,
+ abhishekpandit@chromium.org, andersson@kernel.org,
+ fabrice.gasnier@foss.st.com, gregkh@linuxfoundation.org,
+ hdegoede@redhat.com, neil.armstrong@linaro.org, rajaram.regupathy@intel.com,
+ saranya.gopal@intel.com, linux-kernel@vger.kernel.org,
+ Benson Leung <bleung@chromium.org>,
+ "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
+References: <20240510201244.2968152-1-jthies@google.com>
+ <20240510201244.2968152-5-jthies@google.com>
+ <21d4a05a-3f64-447a-b8e3-772b60ef8423@nvidia.com>
+ <7b46779f-3f44-45f4-8884-2f9f625485ae@nvidia.com>
+ <CAA8EJprxHq65mAU6a9iGD6Yus-VB2x3WP5Z8JWN1oUwn+zQDfg@mail.gmail.com>
+From: Jon Hunter <jonathanh@nvidia.com>
+Content-Language: en-US
+In-Reply-To: <CAA8EJprxHq65mAU6a9iGD6Yus-VB2x3WP5Z8JWN1oUwn+zQDfg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO4P123CA0065.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:153::16) To CO6PR12MB5444.namprd12.prod.outlook.com
+ (2603:10b6:5:35e::8)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1988:b0:376:4441:9 with SMTP id
- e9e14a558f8ab-376444101f9mr4206395ab.2.1719242121035; Mon, 24 Jun 2024
- 08:15:21 -0700 (PDT)
-Date: Mon, 24 Jun 2024 08:15:21 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e85d76061ba43f6d@google.com>
-Subject: [syzbot] [net?] WARNING in dev_deactivate_many
-From: syzbot <syzbot+e9121deb112a224121e0@syzkaller.appspotmail.com>
-To: davem@davemloft.net, edumazet@google.com, jhs@mojatatu.com, 
-	jiri@resnulli.us, kuba@kernel.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, netdev@vger.kernel.org, pabeni@redhat.com, 
-	syzkaller-bugs@googlegroups.com, xiyou.wangcong@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-
-Hello,
-
-syzbot found the following issue on:
-
-HEAD commit:    819984a0dd36 kselftest: devices: Add of-fullname-regex pro..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=12779c82980000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=9ccd5ad0e0c891e3
-dashboard link: https://syzkaller.appspot.com/bug?extid=e9121deb112a224121e0
-compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1680423e980000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1690b5ea980000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/4a1c28712015/disk-819984a0.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/be01b9b3db3a/vmlinux-819984a0.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/5c8994363c20/bzImage-819984a0.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+e9121deb112a224121e0@syzkaller.appspotmail.com
-
- asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:702
-ref_tracker: freed in:
- netdev_tracker_free include/linux/netdevice.h:4058 [inline]
- netdev_put include/linux/netdevice.h:4075 [inline]
- netdev_put include/linux/netdevice.h:4071 [inline]
- dev_watchdog_down net/sched/sch_generic.c:570 [inline]
- dev_deactivate_many+0x214/0xb40 net/sched/sch_generic.c:1362
- dev_deactivate+0xf9/0x1c0 net/sched/sch_generic.c:1396
- linkwatch_do_dev+0x11e/0x160 net/core/link_watch.c:175
- __linkwatch_run_queue+0x233/0x690 net/core/link_watch.c:234
- linkwatch_event+0x8f/0xc0 net/core/link_watch.c:277
- process_one_work+0x9fb/0x1b60 kernel/workqueue.c:3231
- process_scheduled_works kernel/workqueue.c:3312 [inline]
- worker_thread+0x6c8/0xf70 kernel/workqueue.c:3393
- kthread+0x2c1/0x3a0 kernel/kthread.c:389
- ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 2496 at lib/ref_tracker.c:255 ref_tracker_free+0x61e/0x820 lib/ref_tracker.c:255
-Modules linked in:
-CPU: 0 PID: 2496 Comm: kworker/0:0 Not tainted 6.10.0-rc4-syzkaller-00053-g819984a0dd36 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/07/2024
-Workqueue: usb_hub_wq hub_event
-RIP: 0010:ref_tracker_free+0x61e/0x820 lib/ref_tracker.c:255
-Code: 00 44 8b 6b 18 31 ff 44 89 ee e8 4d d8 f1 fe 45 85 ed 0f 85 a6 00 00 00 e8 3f dd f1 fe 48 8b 34 24 48 89 ef e8 83 f3 32 04 90 <0f> 0b 90 bb ea ff ff ff e9 4e fd ff ff e8 20 dd f1 fe 4c 8d 6d 44
-RSP: 0018:ffffc900002d7298 EFLAGS: 00010202
-RAX: 0000000000000201 RBX: ffff8881137311c0 RCX: 0000000000000000
-RDX: 0000000000000202 RSI: ffffffff86c7d6e0 RDI: 0000000000000001
-RBP: ffff88811fc185e0 R08: 0000000000000001 R09: fffffbfff1997dae
-R10: ffffffff8ccbed77 R11: fffffffffffda9a0 R12: 1ffff9200005ae55
-R13: 0000000005a60115 R14: ffff8881137311d8 R15: 0000000000000001
-FS:  0000000000000000(0000) GS:ffff8881f6400000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fae50793120 CR3: 00000001026b6000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- netdev_tracker_free include/linux/netdevice.h:4058 [inline]
- netdev_put include/linux/netdevice.h:4075 [inline]
- netdev_put include/linux/netdevice.h:4071 [inline]
- dev_watchdog_down net/sched/sch_generic.c:570 [inline]
- dev_deactivate_many+0x214/0xb40 net/sched/sch_generic.c:1362
- __dev_close_many+0x145/0x310 net/core/dev.c:1543
- dev_close_many+0x24c/0x6a0 net/core/dev.c:1581
- unregister_netdevice_many_notify+0x46d/0x19f0 net/core/dev.c:11194
- unregister_netdevice_many net/core/dev.c:11277 [inline]
- unregister_netdevice_queue+0x307/0x3f0 net/core/dev.c:11156
- unregister_netdevice include/linux/netdevice.h:3119 [inline]
- unregister_netdev+0x1c/0x30 net/core/dev.c:11295
- usbnet_disconnect+0xed/0x500 drivers/net/usb/usbnet.c:1621
- usb_unbind_interface+0x1e8/0x970 drivers/usb/core/driver.c:461
- device_remove drivers/base/dd.c:568 [inline]
- device_remove+0x122/0x170 drivers/base/dd.c:560
- __device_release_driver drivers/base/dd.c:1270 [inline]
- device_release_driver_internal+0x44a/0x610 drivers/base/dd.c:1293
- bus_remove_device+0x22f/0x420 drivers/base/bus.c:574
- device_del+0x396/0x9f0 drivers/base/core.c:3868
- usb_disable_device+0x36c/0x7f0 drivers/usb/core/message.c:1418
- usb_disconnect+0x2e1/0x920 drivers/usb/core/hub.c:2304
- hub_port_connect drivers/usb/core/hub.c:5361 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5661 [inline]
- port_event drivers/usb/core/hub.c:5821 [inline]
- hub_event+0x1be4/0x4f50 drivers/usb/core/hub.c:5903
- process_one_work+0x9fb/0x1b60 kernel/workqueue.c:3231
- process_scheduled_works kernel/workqueue.c:3312 [inline]
- worker_thread+0x6c8/0xf70 kernel/workqueue.c:3393
- kthread+0x2c1/0x3a0 kernel/kthread.c:389
- ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
- </TASK>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO6PR12MB5444:EE_|DM4PR12MB7744:EE_
+X-MS-Office365-Filtering-Correlation-Id: cf652fa4-064d-456e-0985-08dc9465b9c4
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230037|366013|7416011|376011|1800799021;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?b1VjQWJuUXYwTXNGQUdmUkEzRUJNb2RSN2szaUNLaStxLytRQmlJeUg3Q3ln?=
+ =?utf-8?B?cUN5NTc3bUxZOTVMSkFvMlF6aGsxQmxGZGRhMUFENHc4dU94UExURWZGajVY?=
+ =?utf-8?B?Vjd1UEZsQWJjM1lySDJpYWkyQVA4VHJxZm1hVWNldEVleVJJL0o0YzFpajds?=
+ =?utf-8?B?YmJ4WWxIVldKcHRWWUdibGlXQ09kdjhoZVlMK1YxRkFCRGU1emZ5aXJrYU9F?=
+ =?utf-8?B?NHBYMUcweWlUY0l0bk5jZXZobW5PQnRNSHZNREhmOVhlemJBYVJUTUtrNnlG?=
+ =?utf-8?B?MWJxeTlMVHEyeXlqQUZLTms2a3pCbWtleXpJbjNoSVdkVTBON1dwR2NRaWhZ?=
+ =?utf-8?B?N0E5Ri9UUEpjeDVYUUYzblVLY1dZZXR4bmRXc3pwWHBXY2xXTUFHZ2F1OVl6?=
+ =?utf-8?B?S05mNDlkV1I5aXhwQ0RNalMrWXA3aUw5ZGpXNDFWb2ErYytzSGhRUWRtMzlH?=
+ =?utf-8?B?aWtUenNveC9iSmN3RGt3cmZzTE9nSm95R2dGV0FrMjRadEJzbUEyTm5VTVVr?=
+ =?utf-8?B?ZTVmb0V3L0Y3em1LNFJoanZEU2p6aFJ5eWRMVTlJa3A1NFI1aWR5ajcxV3Rr?=
+ =?utf-8?B?MjJScDFFV2p6Wnp3VlZwM1kvTjJ0ZDlpMkRrZktic3UrdStiMTZoZGR4VjJZ?=
+ =?utf-8?B?MEpWVS9aUDJacXdEc0g3S2drd1BQRG45eFE4VjE0WDBUWTMxWVQ5Rm03bjhr?=
+ =?utf-8?B?d01tdDkrQ2EzVDYwKzcxTUlWMXJkcnhHQUVneVA4ZkluV2pzb05FK1hBUE03?=
+ =?utf-8?B?KzhQaFZuaDIxNnFlLzdZaDVSdEkyeElvV2RlUElPOWhrQjZnZXZCZjE0bEIz?=
+ =?utf-8?B?TGhJTGhraEhwcEVyRXc3UUNoQmd3OElTQWtmRFpLZG00VnZ3cVNrWFY3VGNr?=
+ =?utf-8?B?Um5ISVdKcEhGRHl4OHJwVDAxNGpaeDRTbExqSGxYWmZJVGx0aUgwUTRMZ1Nz?=
+ =?utf-8?B?UUtVRXVOK1NNQ1ZuY3FaRTNlemRQK0hsLzFKa3RIQVhlbVJseDlUTTdZNytL?=
+ =?utf-8?B?KytVaWVkZWRCeHM5bXBnWmhDdEg3WUxuTHM4WlhNRTU0VzU1KzJkRk54VjFh?=
+ =?utf-8?B?YjBlSzYyL0lvaDBReXY5WE9TRWZFWHlMVWJPc2FJcTJUL21leXRlVVFBRG9v?=
+ =?utf-8?B?aWVZZHJ5VVdHcE8yYTQ1enlRTXdOdUdmM3RxUmNqU3dOTm0rd0Y0NXVJNFhz?=
+ =?utf-8?B?S1ZGZzRwLzR1VFdRNno3eGF0MDRpU0dtOEdWdzhGV2xld3hMaWg1di8rTDVt?=
+ =?utf-8?B?Y0JTU2tha29HRnl1M3cyVm9nME4yODZtajFHYWpjMVFwekVBUnJUL3AvYUYw?=
+ =?utf-8?B?T1NSODc4Uk8vNXllZlJsOVJENE9HVXhlL1RlTGVQVUg2WHExZ3pwUFFjREdm?=
+ =?utf-8?B?UVRmNEJKM0h6cGNsRmdaUGp5dUZWcjAyZjltSnY3VjUyZUhUZlRVZGtWQkhi?=
+ =?utf-8?B?eGFOakE5OTFmVlZPSEp5NlM5cFlULzBzcjhPQzJTcm5GQVNoOExCQlhiclI3?=
+ =?utf-8?B?V1RGWlBQeGw3dXBlM015ZXhRYjdNVXlpdXJhNm9xQ1AybzNNWlVqMzg1cUw2?=
+ =?utf-8?B?VHhQcit5YXFpSlo0bXE2Slp4TEtGYzdhcTZ0aEQrcUtWZWhzRXNxNnBDZmNp?=
+ =?utf-8?B?aWJyYTZydGxXUm40Qi9NbkVNd0xsYzZmZFNCbUsyZUlhVkhUOGdoamE0dkpi?=
+ =?utf-8?B?Y0V2V0ZrZGpGNGhPTW9ZcEJZWEpKQTU0b01QUXNFRHRiSEwzUFNBVkdWU3Vv?=
+ =?utf-8?Q?xhd7eIbhqJzDvKf+EsorwmPC/oscPL9jcZtq+dD?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230037)(366013)(7416011)(376011)(1800799021);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?ME9oNTcwREo3THVPdzlWYjUxWVJkRkJpRTJXMU9rMldSWXp4clVSeUR2eGtR?=
+ =?utf-8?B?V2JsdlNZVHdmQ0t3UFdjVHN4MG1FS2tuVlN3M2VuOWN3N3NNY0VKeG5VV044?=
+ =?utf-8?B?ekFtRzd0NDN5MlU1V1psNUZIRWl1L1JVYzd3d0g3cm53a3VnMElrcG1CbGw4?=
+ =?utf-8?B?NWhueXllK08vOG13dis5RzZDR1BpeXZCTUkxcFZIUDBzVjZINXl5WUxkZU9L?=
+ =?utf-8?B?amo4bVQ3d0FMd2IvekxHZm82T2VpcGFvaTZUWjh4S1orbVBQbGRaV2JZczN1?=
+ =?utf-8?B?VWIrQUdmcFNmNGxGQkdhQnJGS1crYTk4Y2ttNTJLTDFIWjBTSUR4eUF2OVhZ?=
+ =?utf-8?B?V1BVUXRHTnhneW10MFVhaUhDMUpIRSswUXJzNVltTlJld2p1QzRCZWZJMTZp?=
+ =?utf-8?B?MU00VGVWbXR2QU5WTTlEYUs4dVVMRDhSWnNETzR0ejhmMzllM0VvM1JxRGdG?=
+ =?utf-8?B?czdFWGZMcVlCSHliOFpyM09mQ0Z1VmJWQWhHQVFHWEd4cU9tVFUvMmljSUpw?=
+ =?utf-8?B?WmZ3RlY5Sy85ay9BSTlHUWtGa3ZBYlZ1ZFpGMVl5N25IdVNKcTN4ZTY3ZllP?=
+ =?utf-8?B?UDVmK3EzR01mbkc3WVdvQzNOc3dNOU50ZG43Zi9MKzdRalBpN3FtL1JjOXRT?=
+ =?utf-8?B?SlBkUTRlR3duZmhxWXp2VUZ0K1JhRDJ5d0pjcnNNWjMwcklzTEpPSlNmVVI3?=
+ =?utf-8?B?NnJVMVJOWHFSWkkzbjh3Ti9BZVdIQW1UWElCK09UalB2c3dRWm15bnNmbU5T?=
+ =?utf-8?B?aWR1UWROMTlhTnRSUXZuUzhMdWxuWVdPMDBTSmcrUGpqQ2Z6YUpmVndVa0kx?=
+ =?utf-8?B?RXVNeXVEeVFZbUgrTndoVkJWSytXVVViSi9qWjQzVFRpanRMQWJjY2lCWWU3?=
+ =?utf-8?B?TUM0Z1RpUWtmRzY4OVYvQ3MwQXBvdENEaUtvV2JOdjFubEE0T0VNb21oSnNC?=
+ =?utf-8?B?TkVnT1lXd0tZNUpuNkt5L1F6aGJWL3BnaWR6RmlMb21oTGNraFI0Rm1ENnpv?=
+ =?utf-8?B?OWduSWtuMmRaLzJ4cHl5c092WHVVTlRXMU5yUllwSWgwc3hVMUd1ckdDdFB1?=
+ =?utf-8?B?M05kQXFiWTl0a21Wa09Ob3pNb3psQXc2dk5uRU1FWW56WTVjd05hN3c4MnNu?=
+ =?utf-8?B?TUVMVUtDS0IrVFJHT1d0WkY4MTVjRlVBcVVOZktiWmhETlFJN0Y3NEVKRzNu?=
+ =?utf-8?B?ZzlPejlUVVRKWjEzaWhzTm40aVN0ZmhvcFYyU2s3elhZOGRLODNlUDdROWhp?=
+ =?utf-8?B?SFY5cFBSRzg5MnlwV25Jb1duQUZPczdwR1kzL1czcHZBemp4eGtqM1FCeWRO?=
+ =?utf-8?B?QmV6NjY4aVcvajg2cGxOSWxweXU3aUlIOWw4ZmNXM014cmJSWDFnL3I4QVRs?=
+ =?utf-8?B?RFhRdVNScEpaZWNWUTAxS3lWTmxYQUJJM1N4UGU1aTZSRlBFT29zVXgyY09l?=
+ =?utf-8?B?V2xPd0RNaUhxTVhKNFRiWkpkYmlqT2dTS2ZDcTI4N1BNbmhhdkxHc3RsdkQ4?=
+ =?utf-8?B?NGYwMWV0Ny9ubENUdHBwMi9rRTcyekwxQ1JYUkdFTFRieEd4VGsyZkp1bzFj?=
+ =?utf-8?B?djJJaDhpck9nTmJyc0pueDNWVTJWQ1Zxbk16NllvV0M4d01ZQUVHSVdlSGg4?=
+ =?utf-8?B?RmJRZ2N2bDhHaUI4T2FDL1Q4RHNrNzl3cmQ4MEo2NzV5VHB6REJndFBzNzZB?=
+ =?utf-8?B?bnF3MVl3QzVjZjliTTJFOFVDbmxBalM3ZmRDaHFwNmEyRFEwbTNZcVBNR09B?=
+ =?utf-8?B?eFB0TldPNVZKNTQ5NmtWa3g5S3orUHFoNzZIVXhjWnl0QVNMeklqZmlsdE5j?=
+ =?utf-8?B?ZHc0eC81R3FRZStXVUtkaWpyMkVMc3JhZzkrcndEYW4xYnNCK3lxMXRJekNF?=
+ =?utf-8?B?NUtDM2xOSndKSlhPQjloTWkwS0wrT2lLVzhFOUVpY0p0REp5S09XMmpOVWg4?=
+ =?utf-8?B?RlVpaHF0TDNEL25zSGQ1WnpwWGM0dkhtL0VnOWFhWlpiMzhrUTNvQXVWZjZx?=
+ =?utf-8?B?eWZ5R0xQR0NRYy9rMmNXWnliUEI3aGgrVU0yNE5YQ1htUXhoNTdCVjRMRHJZ?=
+ =?utf-8?B?NEdLSk95TkIrd0JjNEV2WHZUWEFSU3ZzY1FPOXlRcDNsSnBKSi9VbzRObWhi?=
+ =?utf-8?B?ZkZreEhKUm5BcEZvTjhhMU8zaDJLY2JvckppaFo0NjFORXlaOVI5ZkRQZGUx?=
+ =?utf-8?B?aVNnWjFUVWpKTW9odWtxV0EwLzBJZk1QNlFmdDFEY09vZ0NHNlAyb1B6VGg2?=
+ =?utf-8?B?TnZIb3BqZFMxcEpzY0FqeE5sSFdRPT0=?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cf652fa4-064d-456e-0985-08dc9465b9c4
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jun 2024 15:53:01.1622
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: NDpsiKVoAW4bAGUUv/9yrVkZVN2d3lk294ngDDwedK8m97ZHov+jZAoBNaNuGs3uajxNW3zC5JAjWm3ptaNazA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB7744
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+On 24/06/2024 15:33, Dmitry Baryshkov wrote:
+> On Mon, 24 Jun 2024 at 16:42, Jon Hunter <jonathanh@nvidia.com> wrote:
+>>
+>>
+>> On 24/06/2024 13:51, Jon Hunter wrote:
+>>> Hi Jameson,
+>>>
+>>> On 10/05/2024 21:12, Jameson Thies wrote:
+>>>> Providing the number of known alternate modes allows user space to
+>>>> determine when device registration has completed. Always register a
+>>>> number of known alternate modes for the partner and cable plug, even
+>>>> when the number of supported alternate modes is 0.
+>>>>
+>>>> Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+>>>> Reviewed-by: Benson Leung <bleung@chromium.org>
+>>>> Signed-off-by: Jameson Thies <jthies@google.com>
+>>>> ---
+>>>> Changes in V5:
+>>>> - None.
+>>>>
+>>>> Changes in V4:
+>>>> - None.
+>>>>
+>>>> Changes in V3:
+>>>> - None.
+>>>>
+>>>> Changes in V2:
+>>>> - None.
+>>>>
+>>>>    drivers/usb/typec/ucsi/ucsi.c | 14 +++++++++++---
+>>>>    1 file changed, 11 insertions(+), 3 deletions(-)
+>>>>
+>>>> diff --git a/drivers/usb/typec/ucsi/ucsi.c
+>>>> b/drivers/usb/typec/ucsi/ucsi.c
+>>>> index bb6e57064513d..52a14bfe4107e 100644
+>>>> --- a/drivers/usb/typec/ucsi/ucsi.c
+>>>> +++ b/drivers/usb/typec/ucsi/ucsi.c
+>>>> @@ -812,10 +812,11 @@ static int ucsi_check_altmodes(struct
+>>>> ucsi_connector *con)
+>>>>        /* Ignoring the errors in this case. */
+>>>>        if (con->partner_altmode[0]) {
+>>>>            num_partner_am = ucsi_get_num_altmode(con->partner_altmode);
+>>>> -        if (num_partner_am > 0)
+>>>> -            typec_partner_set_num_altmodes(con->partner,
+>>>> num_partner_am);
+>>>> +        typec_partner_set_num_altmodes(con->partner, num_partner_am);
+>>>>            ucsi_altmode_update_active(con);
+>>>>            return 0;
+>>>> +    } else {
+>>>> +        typec_partner_set_num_altmodes(con->partner, 0);
+>>>>        }
+>>>>        return ret;
+>>>> @@ -1138,7 +1139,7 @@ static int ucsi_check_connection(struct
+>>>> ucsi_connector *con)
+>>>>    static int ucsi_check_cable(struct ucsi_connector *con)
+>>>>    {
+>>>>        u64 command;
+>>>> -    int ret;
+>>>> +    int ret, num_plug_am;
+>>>>        if (con->cable)
+>>>>            return 0;
+>>>> @@ -1172,6 +1173,13 @@ static int ucsi_check_cable(struct
+>>>> ucsi_connector *con)
+>>>>                return ret;
+>>>>        }
+>>>> +    if (con->plug_altmode[0]) {
+>>>> +        num_plug_am = ucsi_get_num_altmode(con->plug_altmode);
+>>>> +        typec_plug_set_num_altmodes(con->plug, num_plug_am);
+>>>> +    } else {
+>>>> +        typec_plug_set_num_altmodes(con->plug, 0);
+>>>> +    }
+>>>> +
+>>>>        return 0;
+>>>>    }
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Looking at this some more, the plug is only registered in
+ucsi_check_cable() if UCSI_CAP_ALT_MODE_DETAILS is specified
+for the Type C controller. The Cypress CCG explicitly clears
+this flag.
 
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
+The following will only call typec_plug_set_num_altmodes()
+if the call to ucsi_register_plug() is successful ...
 
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+index 134ef4e17d85..e268af88a7d2 100644
+--- a/drivers/usb/typec/ucsi/ucsi.c
++++ b/drivers/usb/typec/ucsi/ucsi.c
+@@ -1176,13 +1176,13 @@ static int ucsi_check_cable(struct ucsi_connector *con)
+                 ret = ucsi_register_altmodes(con, UCSI_RECIPIENT_SOP_P);
+                 if (ret < 0)
+                         return ret;
+-       }
+  
+-       if (con->plug_altmode[0]) {
+-               num_plug_am = ucsi_get_num_altmode(con->plug_altmode);
+-               typec_plug_set_num_altmodes(con->plug, num_plug_am);
+-       } else {
+-               typec_plug_set_num_altmodes(con->plug, 0);
++               if (con->plug_altmode[0]) {
++                       num_plug_am = ucsi_get_num_altmode(con->plug_altmode);
++                       typec_plug_set_num_altmodes(con->plug, num_plug_am);
++               } else {
++                       typec_plug_set_num_altmodes(con->plug, 0);
++               }
+         }
+  
+         return 0;
 
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
+>> It is crashing because 'con->plug' is not initialised when
+>> typec_plug_set_num_altmodes() is called. Do we need to add a check to
+>> see if 'con->plug' is valid in ucsi_check_cable()?
+> 
+> Yes. Either of  con->calbe and con->plug can be NULL.
 
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
+Thanks for confirming.
 
-If you want to undo deduplication, reply with:
-#syz undup
+Jon
+
+-- 
+nvpublic
 
