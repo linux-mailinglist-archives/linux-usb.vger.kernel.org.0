@@ -1,226 +1,137 @@
-Return-Path: <linux-usb+bounces-11601-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11602-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1B4C9154F3
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Jun 2024 19:02:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 12B959155C2
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Jun 2024 19:49:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4F13FB24AF5
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Jun 2024 17:02:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AF0711F22A6C
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Jun 2024 17:49:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E9FA19E839;
-	Mon, 24 Jun 2024 17:02:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A54F61A01D4;
+	Mon, 24 Jun 2024 17:47:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="aieM7N45"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="rnNGkniw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1D7513D539
-	for <linux-usb@vger.kernel.org>; Mon, 24 Jun 2024 17:02:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB09B19FA7C
+	for <linux-usb@vger.kernel.org>; Mon, 24 Jun 2024 17:47:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719248545; cv=none; b=oxnaZzAOOzUFx9l4v9MLdgmz7B9mUyni4Sodf06W6lk3et8E/zGdEQT9Pm8eN3HMrgunSQY6AMjFlaC9g7XCTBc9Zvj2ErfBPhpUqOMYvY+UFXYw2DF+6Rq5ldNBbOukp+cCXI4FfXXikqiibyzzsRGOQwYRsrxHs+ncRKRTF5I=
+	t=1719251269; cv=none; b=rUTv9PMqVCLZWhwF4qLcO6oxln82NG10Syf1o2TfBc72/Pu5KmZWFv0DDCUYJ8QC2YghQ8sInjwq8DeQ5wSBQ3+0mJxajYz8KZTWyPvErvH3sghpSliEt/qolrINBLQoKnQI81OXj5XRkrV2Re1dBtOdUwALRdtl9gT9SugcoVI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719248545; c=relaxed/simple;
-	bh=qOE56w0ktJJd9akk7x9QFeWDNrCx33c/tpi1K5dettI=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=mJYKA8sZ7McCsumFsb61yylBQYnWX+nl2pPt6KkL6sgOywabeCVL7F6RhIZSYavC0WgCpPfImY2in230ueaDByrixhFMfjmDM6VGDzzeskBwCpcBA6WEhwme4UPnjFkqMzbMjc2DbOGn0PrSteU9KPiI6uqYqCheMai9mwkiJgE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=aieM7N45; arc=none smtp.client-ip=212.227.15.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
-	s=s31663417; t=1719248523; x=1719853323; i=wahrenst@gmx.net;
-	bh=qOE56w0ktJJd9akk7x9QFeWDNrCx33c/tpi1K5dettI=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:From:To:
-	 Cc:References:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 cc:content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=aieM7N45SG4j2wJp8qQ0vkUp7ju+mEcESJiSvL/Qi/TFdQWCZAyVQ5gj1LvaICb1
-	 V4I74pF1PXV3jtyn/8Iaccq9h+cnqdL7mDGxXv6RQyt1GAjRXaNQJEI1XHT7l2xJM
-	 8eD2d1Sa3t/5e0EGjPlKfe7BWbp39bc07PdfEpCe7hzvYvG2YtXi4j99driGeE/TU
-	 Jf5n3N500hcJ8NdIKC5ydPMePqeVhsQQaoe7VK2vZDlK6e1xTeAugJb/5qTZMZPaa
-	 CxS8KHOVCxmRRGg8KLNSjViqgGWoopdIF/w2BUkkFJAFbOXTQeb6pNM7E/p7RByYx
-	 gIVFFu9N42OSTe6pkg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.1.127] ([37.4.248.43]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1Msq6M-1sb84J1Oh6-014n1e; Mon, 24
- Jun 2024 19:02:03 +0200
-Message-ID: <3fd0c2fb-4752-45b3-94eb-42352703e1fd@gmx.net>
-Date: Mon, 24 Jun 2024 19:02:02 +0200
+	s=arc-20240116; t=1719251269; c=relaxed/simple;
+	bh=ohdxU8Fz2mDeaBiw2qfvNxp2pYsWpiZOLLaWbZEbBXY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eJm2OadPjFDlkJoD7cxz3ez+6t6BWME/fuNvkx9CJiIluxsLGoqKMCKOl11Nrf+sJ1AvtepWhQMnVyY8DSPmx1UydWHZoJXIPMBQApSAPwwmv5w66liy5KiKyqde3KPe03GkoXFEh1vJoUU5LP1ZUlYwt9hN1YeBHuY10WTEMDc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=rnNGkniw; arc=none smtp.client-ip=209.85.208.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2ec408c6d94so53704201fa.3
+        for <linux-usb@vger.kernel.org>; Mon, 24 Jun 2024 10:47:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1719251263; x=1719856063; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=19dor3frlktKucc3yoQbNWT6473/8aB2is7dibOXrAc=;
+        b=rnNGkniwqrQmWnEfMMxHlEba8HAQldw5lTblKG8ZJ5fARVVNZYnNpuHxY6P52BcL8X
+         stj71Qtf5kvK+6kjolKM0I6cWr1o12hSeW9YD2OtZPp930xfOb0uj9mzZipG52BnTc0G
+         bw26LiYwTPljGbi3csdjjWfdXvXM7FcASDDWEkVLAwwvYm2LCTmZJar3Ktyp93+L8Tqu
+         tJGTLs7ZQ/j6RcnNC58wpgk1K2VtYzsbKhZxXdwT29e0ikDTRN3lYCGSTYAa+eKXr1xl
+         UfyXxcHSC2NNvbdR8GQjJIMJAjJVgI4Qj6yDGV0k3n598dvpoU6qdel2SW8/ijQBDV1C
+         BYkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719251263; x=1719856063;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=19dor3frlktKucc3yoQbNWT6473/8aB2is7dibOXrAc=;
+        b=Ut3EB0K/Qb30sol+bDHAOw9XYUXCFcfwECU2adzd9pPmjyGltjvMIHlNxYzICE4cls
+         rJXsWTMYB8MYx5WYpx+TZaFt58P46BgtJsPt8oGodAXumuRDnSBYKQruFwKsxyzU0Nqt
+         4b/kuAqUVhY26QSqzantnSE/6HT2OKoFUp16RUaxurDtubqRtrthl60XPVtU2MAwuPnC
+         OyGxuCXRhGlpVpvXv+WFRCUdXc2UfFvxBBQV04dRIabmEghQtbDxtmfceFa99YwMI05P
+         g1HX0s7/gREVBO+6XHN4sBwIm94J5c/3x25dMcuJ0osn4HEdEvvfj8NJp4ORB1sKn0BC
+         JVnQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXVOsUM/b9uj9pD4WfBzuzNcAeJxC9v3cPSDaCY4dmCTfp1BOqU8e2fFa/C+3pCS6g6CZCQarOu6RNnitCJFOtxhvJk3J+xihUl
+X-Gm-Message-State: AOJu0YyO9BsOhxVHzekpFjiH0EBWlAIN+jpY5uQPmTolobYYMLZBw8dY
+	Oa0uXHIX/sayjBJMo/cUlOUP2KfB2vwDgTafUQ/BT7DE+A4dazC7OOM51O951/4=
+X-Google-Smtp-Source: AGHT+IF8CTA6Pf5r+RZJ3Engm2T2PxiUfFSoo1ekVgw+8UlquVeQoifd/SwdniSFe07K8tIcUz5OFQ==
+X-Received: by 2002:a2e:9c88:0:b0:2ec:5364:c790 with SMTP id 38308e7fff4ca-2ec5931d8cemr48224931fa.22.1719251262910;
+        Mon, 24 Jun 2024 10:47:42 -0700 (PDT)
+Received: from eriador.lumag.spb.ru (dzdbxzyyyyyyyyyyybrhy-3.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::b8c])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2ec64af4afdsm1753071fa.55.2024.06.24.10.47.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Jun 2024 10:47:42 -0700 (PDT)
+Date: Mon, 24 Jun 2024 20:47:40 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>
+Cc: Bjorn Andersson <andersson@kernel.org>, 
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
+	LKML <linux-kernel@vger.kernel.org>, platform-driver-x86@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-arm-msm@vger.kernel.org, Nikita Travkin <nikita@trvn.ru>
+Subject: Re: [PATCH v9 1/2] platform/arm64: build drivers even on non-ARM64
+ platforms
+Message-ID: <jtrwgljegbiebihr3d5ccbhlokqxe5ovasg5xxxh4mrrw2ccux@24iebp7zkqqi>
+References: <20240624-ucsi-yoga-ec-driver-v9-0-53af411a9bd6@linaro.org>
+ <20240624-ucsi-yoga-ec-driver-v9-1-53af411a9bd6@linaro.org>
+ <645b8ae6-10ad-11f9-eb18-a931f258bfd2@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: dwc2: irq 66: nobody cared triggered on resume
-From: Stefan Wahren <wahrenst@gmx.net>
-To: Lukas Wunner <lukas@wunner.de>, Minas Harutyunyan <hminas@synopsys.com>
-Cc: Florian Fainelli <florian.fainelli@broadcom.com>,
- Thomas Gleixner <tglx@linutronix.de>,
- "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
- Linux ARM <linux-arm-kernel@lists.infradead.org>,
- bcm-kernel-feedback-list@broadcom.com, Ray Jui <rjui@broadcom.com>,
- Scott Branden <sbranden@broadcom.com>, Marc Zyngier <maz@kernel.org>
-References: <2bcf7fac-8e8f-4d7a-a837-08805a0076e3@gmx.net>
- <ZnccVLINb_xQcmZG@wunner.de> <eb4a0b47-b382-4ca9-8008-94feb1a34c03@gmx.net>
-Content-Language: en-US
-In-Reply-To: <eb4a0b47-b382-4ca9-8008-94feb1a34c03@gmx.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:CCpXIav8XGdBBv7GqvLBNq4Tv2xl2XffNnzZ8LT9zWFijYP26Te
- 8kZCJ/wwv3AYOkr8GHy+xNoWDun2YbmdRxLx7egpWRUoziB3s/SiAK1tEFrARBvHzIghBRP
- Q5J8E0dtIZ6Xtf3yMI/hGfRqq+079l2Kf6gQ+L8+GA5oTRyW9QACbZxVuT+eQMJESFJ8Cmj
- pevrLJY4g9kPCNCflJnzw==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:B9irqgBdb8Y=;8TxSaOGZXdglIlDb/kpsT/AN/zZ
- h8frn1B8kJFeVP///uGFRu54h++I25+16V4aUg+J6z5MqQY1IuPW7HnhAGQk9tTiuCMcKr6Zg
- ZKeHdK9vFrrZ780NwRmoBzRgT4gxR09Yq9GUf2LH+ItwZ3ZUkL8ac+s5NnRjFrp2jmgfExgp5
- sdFtpWknYeYAwvmJO5Cyktv6PL6Q9mNnns1hLBzWmUFcNVzheSuAO7tL9y+jRUY3TWQBBc0uJ
- zi7zxh5NlgWGyHj4kdWNkeuxNeMmOrLSDriqfapzj3Sf39vpO5pE2h7PQ4vpOL7kPkVC8CseO
- 4nF2W9HgVlE/pIc+AbSP+eq/UvKCGD44Nf4MhTcDf84Rvlm8hg6DR80SJNLD01XGleoF+gKpJ
- dzWhnwrsKwU0t3MdFw65G+a4L5kHSdbIHR79tfXEstvzVIwXyfgUiJcrvxVZqXp3a6P4DTWj8
- taA2le4zIWuXz0+e1sghGhSguRAOGPT6Prt50zLBf0zeXiSiym8OBG+K6r8NmwmNDCWmRudPv
- d0LM+ScfuQ2nlaKQ4TaHGZ4VvJ5YwxQQy9owy6iya4IC18GBRXelmEWrBnXHUixKQ2EQsDmlk
- YM2WLwdieQCevqlz1XGfwL0IN640PDdRBfk53oEs+cdJyKR8CTmfAEH1N37BfMq/OGik39tJQ
- wZ2TZzM9ia1mjDFJYMDGq7OQQvKKcaJfxxf6SHc34MT8gBNqtNUQ0iV+XEnLy/BOrnO00zFeA
- EnoYFK2irTvsmEFLBY2x3uwqtcH0EF2YtyHzKUuZKIE4G+yUuSxmtbg4vOTmBu+upDmQqBi9M
- WMgRFx+MJzlQ8B8mU8DIx85oF/X/WUA9wjRj5XqjuJmFo=
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <645b8ae6-10ad-11f9-eb18-a931f258bfd2@linux.intel.com>
 
-Hi,
+On Mon, Jun 24, 2024 at 07:27:41PM GMT, Ilpo Järvinen wrote:
+> On Mon, 24 Jun 2024, Dmitry Baryshkov wrote:
+> 
+> > The Kconfig for platforms/arm64 has 'depends on ARM64 || COMPILE_TEST'.
+> > However due to Makefile having just obj-$(CONFIG_ARM64) the subdir will
+> > not be descended for !ARM64 platforms and thus the drivers won't get
+> > built. This breaks modular builds of other driver drivers which depend
+> > on arm64 platform drivers.
+> > 
+> > Reported-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Fixes: 363c8aea2572 ("platform: Add ARM64 platform directory")
+> > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> > ---
+> >  drivers/platform/Makefile | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/platform/Makefile b/drivers/platform/Makefile
+> > index fbbe4f77aa5d..837202842a6f 100644
+> > --- a/drivers/platform/Makefile
+> > +++ b/drivers/platform/Makefile
+> > @@ -11,4 +11,4 @@ obj-$(CONFIG_OLPC_EC)		+= olpc/
+> >  obj-$(CONFIG_GOLDFISH)		+= goldfish/
+> >  obj-$(CONFIG_CHROME_PLATFORMS)	+= chrome/
+> >  obj-$(CONFIG_SURFACE_PLATFORMS)	+= surface/
+> > -obj-$(CONFIG_ARM64)		+= arm64/
+> > +obj-$(CONFIG_ARM64_PLATFORM_DEVICES)	+= arm64/
+> 
+> I made a second ib tag with this patch.
 
-Am 23.06.24 um 15:27 schrieb Stefan Wahren:
-> Hello Lukas,
->
-> Am 22.06.24 um 20:47 schrieb Lukas Wunner:
->> On Sat, Jun 22, 2024 at 02:23:33PM +0200, Stefan Wahren wrote:
->>> i currently experiment with suspend to idle on the Raspberry Pi 3 A+.
->>> Supend & resume works expected as long as no USB device is connected t=
-o
->>> the board. If i connect a USB hub to the Pi, the resume phase is
->>> significantly delayed and the kernel disabled IRQ 66 which belongs
->>> to DWC2.
->> [...]
->>> [ 1131.109996] PM: noirq resume of devices complete after 1.273 msecs
->>> [ 1131.111208] PM: early resume of devices complete after 1.051 msecs
->>> [ 1131.230277] brcmfmac: brcmf_fw_alloc_request: using
->>> brcm/brcmfmac43455-sdio for chip BCM4345/6
->>> [ 1131.458687] irq 66: nobody cared (try booting with the "irqpoll"
->>> option)
->>> [ 1131.458714] CPU: 0 PID: 0 Comm: swapper/0 Tainted: G W
->>> 6.10.0-rc3-g7fd4227d1bd5-dirty #49
->>> [ 1131.458734] Hardware name: BCM2835
->>> [ 1131.458744] Call trace:
->> [...]
->>> [ 1131.458877] note_interrupt from handle_irq_event+0x88/0x8c
->>> [ 1131.458900] handle_irq_event from handle_level_irq+0xb4/0x1ac
->>> [ 1131.458923] handle_level_irq from
->>> generic_handle_domain_irq+0x24/0x34
->>> [ 1131.458957] generic_handle_domain_irq from
->>> bcm2836_chained_handle_irq+0x24/0x28
->>> [ 1131.458992] bcm2836_chained_handle_irq from
->>> generic_handle_domain_irq+0x24/0x34
->>> [ 1131.459024] generic_handle_domain_irq from
->>> generic_handle_arch_irq+0x34/0x44
->>> [ 1131.459056] generic_handle_arch_irq from __irq_svc+0x88/0xb0
->>> [ 1131.459079] Exception stack(0xc1b01f20 to 0xc1b01f68)
->>> [ 1131.459142] __irq_svc from default_idle_call+0x1c/0xb0
->>> [ 1131.459167] default_idle_call from do_idle+0x21c/0x284
->>> [ 1131.459202] do_idle from cpu_startup_entry+0x28/0x2c
->>> [ 1131.459239] cpu_startup_entry from kernel_init+0x0/0x12c
->>> [ 1131.459271] handlers:
->>> [ 1131.459279] [<f539e0f4>] dwc2_handle_common_intr
->>> [ 1131.459308] [<75cd278b>] usb_hcd_irq
->>> [ 1131.459329] Disabling IRQ #66
->> [...]
->>> An ideas what causing this issue?
->> Interrupts are re-enabled after the resume_noirq phase.=C2=A0 Looks lik=
-e
->> the chip signals an interrupt right afterwards but the two hardirq
->> handlers do not feel responsible.
->>
->> The only option might be to add a few printk() in
->> dwc2_handle_common_intr(),
->> usb_hcd_irq() and dwc2_handle_hcd_intr() (called from usb_hcd_irq())
->> to see why they're all returning IRQ_NONE without clearing the source
->> of the interrupt.=C2=A0 The chip just keeps signaling interrupts becaus=
-e
->> the driver doesn't handle them, hence the IRQ storm which the IRQ core
->> eventually stops by outright disabling the interrupt.
-> thanks for your suggestion. Unfortunately placing printk in those busy
-> interrupt handler is futile, so i switched to debugfs. This issue
-> would be much easier in case the interrupt wouldn't be shared. But
-> first let me share some outputs before i start to extend debugfs further=
-:
->
-> 1. No hub connected to Rpi 3 A+
->
-> root@raspberrypi:/sys/kernel/debug/usb/3f980000.usb# cat state
-> DCFG=3D0x00000000, DCTL=3D0x00000000, DSTS=3D0x0007ff02
-> DIEPMSK=3D0x00000000, DOEPMASK=3D0x00000000
-> GINTMSK=3D0xf3000806, GINTSTS=3D0x04000023
-> DAINTMSK=3D0x00000000, DAINT=3D0x00000000
-> GNPTXSTS=3D0x00080100, GRXSTSR=3D3f83bbfe
->
-> 2. Hub connected before suspend / irq issue
->
-> DCFG=3D0x00000000, DCTL=3D0x00000000, DSTS=3D0x0007a202
-> DIEPMSK=3D0x00000000, DOEPMASK=3D0x00000000
-> GINTMSK=3D0xf300080e, GINTSTS=3D0x04000023
-> DAINTMSK=3D0x00000000, DAINT=3D0x00000000
-> GNPTXSTS=3D0x08080100, GRXSTSR=3D789a460a
->
-> 3. Hub connected after suspend / irq issue
->
-> DCFG=3D0x00000000, DCTL=3D0x00000000, DSTS=3D0x0007ff02
-> DIEPMSK=3D0x00000000, DOEPMASK=3D0x00000000
-> GINTMSK=3D0xf1000806, GINTSTS=3D0x0500002b
-> DAINTMSK=3D0x000000ff, DAINT=3D0x00000000
-> GNPTXSTS=3D0x29080100, GRXSTSR=3Dbefdf595
->
-> Based on my limited knowledge and observations the issue seems related
-> to GINTMSK/GINTSTS and a outstanding GINTSTS_PRTINT.
-i narrowed this a little bit further. At least i know the reason for the
-"nobody cared". It's clear that the issue is triggered by
-GINTSTS_PRTINT. The DWC2 controller is in host mode so
-dwc2_handle_common_intr() ignores the interrupt and returns IRQ_NONE.
-But usb_hcd_irq() also cannot handle it because HCD_FLAG_HW_ACCESSIBLE
-is still clear, so the handler also returns IRQ_NONE :-(
+Thank you!
 
-Is disabling the IRQ via the upper layers an expected behavior instead
-of letting the DWC2 controller driver resolve the situation?
+> I'm a bit disappointed that LKP didn't catch this in the patch stage, it 
+> feels almost as if it never built any of the versions.
 
-But back to the root cause. I followed the suspend/resume path, why the
-HCD_FLAG_HW_ACCESSIBLE is not cleared.
+Yes, I had this feeling for several other patchsets. We started getting
+build errors, despite having the patch on the maling list for quite a
+while. I've just got the modpost build error for drm/msm driver, for the
+patchset that was on the ML for weeks.
 
-Suspend path:
-
-The power down is DWC2_POWER_DOWN_PARAM_NONE so the
-HCD_FLAG_HW_ACCESSIBLE is cleared (
-https://elixir.bootlin.com/linux/v6.10-rc3/source/drivers/usb/dwc2/hcd.c#L=
-4385
-).
-
-Resume path:
-
-During resume the HPRT0_CONNSTS flag is set, so the
-HCD_FLAG_HW_ACCESSIBLE is not set (
-https://elixir.bootlin.com/linux/v6.10-rc3/source/drivers/usb/dwc2/hcd.c#L=
-4435
-).
-
-Is the reason for this behavior the lack of clock gating support on
-BCM283x or is it a driver bug?
-
-How can i figure out clock gating is supported?
-
-Regards
-
->
-> Regards
-
+-- 
+With best wishes
+Dmitry
 
