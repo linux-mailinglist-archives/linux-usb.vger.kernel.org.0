@@ -1,98 +1,142 @@
-Return-Path: <linux-usb+bounces-11599-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11600-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CBA1C9153E1
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Jun 2024 18:33:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AFE2A91549B
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Jun 2024 18:45:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 078E01C203BC
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Jun 2024 16:33:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 643AD1F24675
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Jun 2024 16:45:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAB4519DF93;
-	Mon, 24 Jun 2024 16:32:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FC1119E833;
+	Mon, 24 Jun 2024 16:44:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ILigQyi3"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RPoQ5zju"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20D1519DF57
-	for <linux-usb@vger.kernel.org>; Mon, 24 Jun 2024 16:32:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1C8019E7F1;
+	Mon, 24 Jun 2024 16:44:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719246779; cv=none; b=eZBLXmjh6S21u2zT4tQlIzfdR2HTBtmg+qw6xqZ1ykYYa7sj0s3pJC/+iEIEC9L2YQdo7ZFOYJVX7B4moW3RW9UwXwwW4BYisgqgKNi/Z7HmVU0InbN95+/iUE1K95f/4Ho0gqPoXgsIixGTKvPMOsEOClbsoXLjG1Bh+5KGn0Y=
+	t=1719247477; cv=none; b=hgt5ZlthrQyIRme5NNPOunNMbdqCAEdlBvLDbJNkDp8SHLdDfLYrMA7d7Nz7BRh0QIF8aCYf+dmRElOnvNBrCDZGj02j8bC8LX22V531U+gHLbeU0PpwemA00EZfqDaWa3keTL+whlhxCJOki0znxufPIm+JnPabAJm2nyUGUeA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719246779; c=relaxed/simple;
-	bh=kmJtgTsgtZTlkCh8FeE1ujdxkosMVSUNwf8QsgGWP6A=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EC2gd7MwZjvEtNplQS3zQ0GaK9SX+uMsoNGwCBIzhIp92YbnGbTbcN5WbYVCUZY1aOepEALAylIlGdPFoeAKAMMqlOeEn6e1oVcNzaIoLMNdr9a5624Pd7g9yl1Ik+giaDhhgjF3LG8YlHgciSUSwklCmKj/OQISRVBe03U9v5o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ILigQyi3; arc=none smtp.client-ip=209.85.208.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-57a16f4b8bfso44542a12.0
-        for <linux-usb@vger.kernel.org>; Mon, 24 Jun 2024 09:32:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1719246776; x=1719851576; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=kmJtgTsgtZTlkCh8FeE1ujdxkosMVSUNwf8QsgGWP6A=;
-        b=ILigQyi3LBa4hmMenrdSL4FPDgJUCZawM9qsvvEGDgiaTwCGPfwEkZxQOEDs11DyNP
-         pqT+l2/YWncQnbuguTrsN8IEXwsOR4jWJA5U70X/vsb1uuTh1lCFPKyzAf0kz0hyy8tc
-         9/rWQumy095m3vcpAJQtNuScYT4cEAc/DuwnyP/zTX749pV47KrwfcOsOxVj7BxxPXU8
-         liedgocXgQqkiJczdRsiiApzylAlZeENXC6LDVtO/im/16BzED3h975aF0wQG5zAyg3g
-         1dfGVXWek6ztE7RDYxTmf7ODqUqZo2ZsOKjcDLjhWRMv3c5iuk93WnluEjyjVsEfp2d7
-         yn7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719246776; x=1719851576;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kmJtgTsgtZTlkCh8FeE1ujdxkosMVSUNwf8QsgGWP6A=;
-        b=H2edM4pzOrsWU5kGKWoRTZ9iNNfQu+aj9S501r2ypqaqHtjMNElaWEf/0EE+Ea2Ia1
-         wjp2abA6NfDxCnoIdDSW7zf8vt5Tplq49ljlya3lNnbTKDCQXsBzzT7nR0LnOcimf14I
-         39UtVW2gpQFWZAWfP49is0hslZ3VnY9KmELU6puqMGMeAwqQDnI3fZjq4NvkmWhGgJ4O
-         B28nAfWYzqv8YgFfl9vYGRwNgV96ZVyECegJorZgyZt3u44eeaka3DIB7d11emorE/zX
-         3NaZc8RJofPfTzGZqW8KZm1jh31ZsdHuGV4QG5z8G5zHDevlRAvjYQ/jISVdOPIZDsH8
-         AdgQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWmOwFkUl6c7nEum+sYNFCHDroGidaDrMvAxbPGae1OS62BJe0y9SyHIcCD3QQLepAzdE+z2OAvhfaf/uZ+P2sGpjhRnjd+Fh/Q
-X-Gm-Message-State: AOJu0Yyaq8n2/ukO615qcRQqtRN2i1BacoQi/vtvqNWpzt1XT3jw/gKf
-	9NR2UOxnnVe5jVkRDnJ/5o6p3lXAzOAG8wAORPc4viJdR6Eqbd9lq20U04ua8ayIK8ajniyQp8F
-	l1lzx2BC+l0F0asNvpYIBCtWiQu+Myf64pIZt
-X-Google-Smtp-Source: AGHT+IEl5Ew5w+PWn74FGxxwXzaaD09WahDkImti/Go2baFYDXsiLn8hpTeaw26FMKmyFQ7L9WFL0AFDnp6HfsfXAqA=
-X-Received: by 2002:a05:6402:2788:b0:57c:c3a7:dab6 with SMTP id
- 4fb4d7f45d1cf-57d419eced6mr382420a12.3.1719246776229; Mon, 24 Jun 2024
- 09:32:56 -0700 (PDT)
+	s=arc-20240116; t=1719247477; c=relaxed/simple;
+	bh=rqFwVvO7kc9furriT+NUoRa0+2A0hpN6NQP3M97zoLI=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=OdqGy1y8fELiCxlScKwmOtNBLMaimgsXFxR6C0MMud4+UwxbGiXHmycaLGhtxoBLKe3P3RnUvLtEfK2ZVqgLlAFPJjyusXm98RhRBRn6bqkJsYMoqEFvZzOgFDoztqp3MI5aVvhylW98uaUW4kjqjlZLNq9RvredFjI+hK7/cqc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RPoQ5zju; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1719247476; x=1750783476;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version:content-id;
+  bh=rqFwVvO7kc9furriT+NUoRa0+2A0hpN6NQP3M97zoLI=;
+  b=RPoQ5zjuB7QRUglcWnRtO7QLOTgcn+fPMlvHAfS7wy6qRzZflENd7M+L
+   JmLLUAckpzoG4s6AHVa7DgmXmjA+AprJ2g3EnQEp/NqdQcWghRWDKnOI4
+   enrD71mX51aDtCkDDHu2vGUC1I6bkI2Li1gvKZ8abjY9Oy2Xf4UeoVV6e
+   RL3yrR86xDpaiH9SV6st+8QVjeayh6LWkkvz+xH/VrWbIAcYL65C+2B+8
+   Z7SIENOOMh27YHuz4bwblXEi4fypIh0tTdmHOyEg8B1+kuiuUcaIEh46S
+   +4DBdbQA8cTek78zq/hzrvBgPodNWnuR9bXlyGjbO8/PRyq1OB53Uiwrv
+   Q==;
+X-CSE-ConnectionGUID: YjlFGaxkSUCYQTy2F3w8nQ==
+X-CSE-MsgGUID: nIssueWOQ1Cw7uLCgIHyVQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11113"; a="16054535"
+X-IronPort-AV: E=Sophos;i="6.08,262,1712646000"; 
+   d="scan'208";a="16054535"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2024 09:44:35 -0700
+X-CSE-ConnectionGUID: Viurw4iDREuNu7E0+Riarw==
+X-CSE-MsgGUID: stii1T48R1uXiBgx2xfTYg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,262,1712646000"; 
+   d="scan'208";a="43234237"
+Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.247.61])
+  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2024 09:44:29 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Mon, 24 Jun 2024 19:44:26 +0300 (EEST)
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
+    Sebastian Reichel <sre@kernel.org>, 
+    Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+    Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+    Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
+    Hans de Goede <hdegoede@redhat.com>, 
+    Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
+    Konrad Dybcio <konrad.dybcio@linaro.org>, linux-pm@vger.kernel.org, 
+    devicetree@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
+    platform-driver-x86@vger.kernel.org, linux-usb@vger.kernel.org, 
+    linux-arm-msm@vger.kernel.org, Nikita Travkin <nikita@trvn.ru>, 
+    Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [GIT PULL RESEND] Immutable branch between pdx86 lenovo c630
+ branch, power/supply and USB
+In-Reply-To: <2024062440-guide-knoll-94d0@gregkh>
+Message-ID: <948b6f71-7a72-d03d-c36f-ff4f08987f0d@linux.intel.com>
+References: <e42fb2e9-81d4-4e40-ff3a-f9d6a46d03f9@linux.intel.com> <2024062440-guide-knoll-94d0@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240510201244.2968152-1-jthies@google.com> <20240510201244.2968152-5-jthies@google.com>
- <21d4a05a-3f64-447a-b8e3-772b60ef8423@nvidia.com> <7b46779f-3f44-45f4-8884-2f9f625485ae@nvidia.com>
- <CAA8EJprxHq65mAU6a9iGD6Yus-VB2x3WP5Z8JWN1oUwn+zQDfg@mail.gmail.com> <bc9cd446-5e19-41c4-a316-9eb362f2d190@nvidia.com>
-In-Reply-To: <bc9cd446-5e19-41c4-a316-9eb362f2d190@nvidia.com>
-From: Jameson Thies <jthies@google.com>
-Date: Mon, 24 Jun 2024 09:32:44 -0700
-Message-ID: <CAMFSARerhgEVy4u2Guq5D_ygp5Fm4Ay6CtqjaL8iZHqJPYzD4g@mail.gmail.com>
-Subject: Re: [PATCH v5 4/4] usb: typec: ucsi: Always set number of alternate modes
-To: Jon Hunter <jonathanh@nvidia.com>
-Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, heikki.krogerus@linux.intel.com, 
-	linux-usb@vger.kernel.org, pmalani@chromium.org, bleung@google.com, 
-	abhishekpandit@chromium.org, andersson@kernel.org, 
-	fabrice.gasnier@foss.st.com, gregkh@linuxfoundation.org, hdegoede@redhat.com, 
-	neil.armstrong@linaro.org, rajaram.regupathy@intel.com, 
-	saranya.gopal@intel.com, linux-kernel@vger.kernel.org, 
-	Benson Leung <bleung@chromium.org>, 
-	"linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/mixed; BOUNDARY="8323328-236211645-1719247216=:1031"
+Content-ID: <a331f82f-a069-a912-3ae6-d6a9e525b17e@linux.intel.com>
 
-Hi Jon,
-thank you for catching this. I'll post a fix to address the null
-pointer dereferencing.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Thanks,
-Jameson
+--8323328-236211645-1719247216=:1031
+Content-Type: text/plain; CHARSET=ISO-8859-15
+Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-ID: <a4bfb34c-7c70-2d12-377b-ceb5cfaa1972@linux.intel.com>
+
+On Mon, 24 Jun 2024, Greg Kroah-Hartman wrote:
+
+> On Mon, Jun 24, 2024 at 07:24:55PM +0300, Ilpo J=E4rvinen wrote:
+> > Hi,
+> >=20
+> > This is v2 of the lenovo c630 IB branch with the build fix for non-ARM6=
+4=20
+> > platforms (built on top of the commits in the previous IB PR). Resent w=
+ith=20
+> > full Subject line.
+> >=20
+> > The following changes since commit 1613e604df0cd359cf2a7fbd9be7a0bcfacf=
+abd0:
+> >=20
+> >   Linux 6.10-rc1 (2024-05-26 15:20:12 -0700)
+> >=20
+> > are available in the Git repository at:
+> >=20
+> >   https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-driver=
+s-x86.git tags/platform-drivers-x86-ib-lenovo-c630-v6.11-2
+> >=20
+> > for you to fetch changes up to 13bbe1c83bc401c2538c758228d27b4042b08341=
+:
+> >=20
+> >   platform/arm64: build drivers even on non-ARM64 platforms (2024-06-24=
+ 18:22:15 +0300)
+>
+> So was the first one rewritten?  Or is this just the second patch on
+> top of the previous one?
+
+Nothing was rewritten, just one patch added on top of the previous PR. The=
+=20
+previous PR had only 2 of these 3 commits:
+
+> > Bjorn Andersson (1):
+> >      dt-bindings: platform: Add Lenovo Yoga C630 EC
+> >
+> > Dmitry Baryshkov (2):
+> >      platform: arm64: add Lenovo Yoga C630 WOS EC driver
+> >      platform/arm64: build drivers even on non-ARM64 platforms
+
+--=20
+ i.
+--8323328-236211645-1719247216=:1031--
 
