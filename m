@@ -1,145 +1,178 @@
-Return-Path: <linux-usb+bounces-11605-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11606-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A73B915873
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Jun 2024 23:10:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 588A6915914
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Jun 2024 23:34:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 949951F2581B
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Jun 2024 21:10:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3EE721C22155
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Jun 2024 21:33:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10D571A08C8;
-	Mon, 24 Jun 2024 21:10:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25B041A08CF;
+	Mon, 24 Jun 2024 21:33:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C5mMH+P+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="klrMYFCE"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09259FBEF;
-	Mon, 24 Jun 2024 21:10:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEDB82233B
+	for <linux-usb@vger.kernel.org>; Mon, 24 Jun 2024 21:33:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719263421; cv=none; b=FsGCrIWE25zr3wwePdZ/MVf41D6/4wJ/jU/qVbPuVNucIx99XezVlALN6Xq8JnY+S4LLzM6PyjhTmAcSrnpJufFTBaSwTXRgq3ysR+pbql3RgBjNbnE+Zd3BjcR4mJRUpyPTkg99z+sYyE0oi44B/gxdUdxLlCT7A9b8pYlcx/c=
+	t=1719264834; cv=none; b=PHahWa+msQgUkW3nWPwYEOawxBy9fKVGxeWTSYO3hiXQedOjIB5Lf2gzA+dSZ933fon5XdbH6PL/4zdM2OFeALD1T4ZOC5QTlEjA5Wf+ZW998WcRSQcMda0yTAVgYfZKkCd8g0oYCSmUj+LM3LqNuoTOcvRd7EdiZbhI7Kv0VRk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719263421; c=relaxed/simple;
-	bh=zIXCk75aYHpcTxk2IWR/+FVXsSNkawGDCSBB195Y8Q0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=YXN5qvOK4Aaw9Y7B9CvlNrKZjDLM4RJy80iFSvlKDbWUIG5m0z5lmtjxbkBXVp3yeBEyBPjzBVQwrijKURpMeOSq7k9K9JhWAwim5e8jzZ0eoNdRTNTL8z2P/rxDwZHZX6gmoUJRM4Gd9ii1wwHhSAlfNbtdourkcLurXJJHwEQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C5mMH+P+; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4217990f8baso42606925e9.2;
-        Mon, 24 Jun 2024 14:10:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719263418; x=1719868218; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=7h4Mx2Vzzy1/ph7K1w6trMWSYerI+1F9zFKh72PTopU=;
-        b=C5mMH+P+nDgR3umbV0Lm2065/kvjkfhC5vmpWMNmqgFDFrRSKJQehtViAXc+MBMHXW
-         +CxdcNBTxrDuGng/nmbuVssT6h07EfCdteL3Afx92Dm1ExzxeIiafp+vJ4BdOrFRQTjb
-         dGVeJpcOmm68L5bRipKS0SKSISHJLMCPy3Q4/lWL4UCstFQFjGM0jL3ekzkGAVT3Wjnv
-         oeuoLoSnunVHhwUZikPglZeEWrCX0YwEVm6CluRo/OSUMewduzVYVmhGJuVKscRV4ETM
-         HuZ6Pwr2uFFZTkW7QSphoVWm01M6NX9aGXLae578GRHEaZZVO42LReJPzZ9LwX1Q63eV
-         OxhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719263418; x=1719868218;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7h4Mx2Vzzy1/ph7K1w6trMWSYerI+1F9zFKh72PTopU=;
-        b=ncqtz7UdN+zfboCK+OcxD5LiCDVKKk4NVruxq2ukUKrMpMSSPb5ZPaN1CiNsIu1CYX
-         ojMRjF8D7ndBSCO8dFSVY47UShhYHBZF0EaZ/JlFVfVcik8sILajtC1yJX0EeE5UTJya
-         qVA6qNFDYVc7MVrWDl+tyG1DnXU+QdPrZUyHdaWXf7wBEFDInfD7GS2zKnXGANdZzR1g
-         fgzCD7XNsLeuPB2zfd7z/j10b11Y0T0xW4EAkm1govc3rx6lF9T7ZkgToiPvktnOtXKP
-         GHjMYVyPb1+V9uIKZM/ERcjWDjv1Rn+pKCFLJgyddUsC/zYCmzGjIuVPqvzLaJmvvVWv
-         1LZA==
-X-Forwarded-Encrypted: i=1; AJvYcCX0aYSMIODetbd1ViZj8CxVTywui36qgTLp6/NZUtXmJjvq+2PBB36hFBi0tDpI0qt02w4tI4rbGtwK/av1kd1OLSoHbW2HIPJIyQtdmdd1T8TVoO7yiBSOQYOOmaWoM9cxkzhI
-X-Gm-Message-State: AOJu0Yy5lYgcGMzmW+axRagfLpRMaWeo0b25imcQVtavv04Xh9AbsZ+U
-	atty+5mLWCs55Ad6HEZbX6jVlsVuVNCd6tKyZdqKty5aG7CBGlRMXwFMSVcX
-X-Google-Smtp-Source: AGHT+IFL2g9nbddRwxvFCZcjQygcMRWl9lESJW9Y7LWtGqJ2anOaUschGrkdt6Ny6ai/6teIVtnsCw==
-X-Received: by 2002:adf:fd87:0:b0:360:81d2:b06b with SMTP id ffacd0b85a97d-366e79fdfbcmr3360529f8f.18.1719263418139;
-        Mon, 24 Jun 2024 14:10:18 -0700 (PDT)
-Received: from [127.0.1.1] (84-115-213-103.cable.dynamic.surfer.at. [84.115.213.103])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-36638f86566sm11110573f8f.64.2024.06.24.14.10.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jun 2024 14:10:17 -0700 (PDT)
-From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Date: Mon, 24 Jun 2024 23:10:06 +0200
-Subject: [PATCH] usb: core: add missing of_node_put() in
- usb_of_has_devices_or_graph
+	s=arc-20240116; t=1719264834; c=relaxed/simple;
+	bh=GgKw4AlDV/tYiAX2rONV4hlR8YRZdM4Pb3vzK0X9E/E=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=dF3/BTD1+7G4o8OOvTwIClBBwiUrI0SNgkQvjBnHRMXu87Zu7GrdJQF4GLtbMyWAnHonA9G6tQzVTcfHT9dK9ObwPBJ23rBrq9tfCn473vAs0lmaCIsLghLcolfNihUpxLLJ9YyvYM3xowZQsQqGHzeij26npUvA8xYDf0NrDUo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=klrMYFCE; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1719264833; x=1750800833;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=GgKw4AlDV/tYiAX2rONV4hlR8YRZdM4Pb3vzK0X9E/E=;
+  b=klrMYFCEgkQTrNXbBSNW5VrhV5DGTvV5LgLo+nTP1xkxqqzWNDWuuJsD
+   s5Wr7BpFFmEJ5D7tzmSNvr/8QtIwHlD3rdSds2XLT0fdPENLrjFKoj9p4
+   2a8o+Nckz76RVtmRuqhA4s4SsRfQbUaXneRjSqmH3AmuD/xC4/3mvOstn
+   zvq1gzvjrLVz37rpvTkRrS1n6ODi+8GVLbr756G2+rSFSufvB4Z+Ipuih
+   OCUvFb4s/n8iJW+etvtR+0MHYzJRDJVFM0La57XKis3+w00hGbc3vTimi
+   E2cqDFSSGqNvRL2M2f13mmfHRUR3YE/0WMgBd4dNiaL7zODHu8r4R+mst
+   Q==;
+X-CSE-ConnectionGUID: /H9uURL9TVm7WRSGLRnHkA==
+X-CSE-MsgGUID: YNMugVQ6T7ybuI17FGK8XA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11113"; a="16013399"
+X-IronPort-AV: E=Sophos;i="6.08,262,1712646000"; 
+   d="scan'208";a="16013399"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2024 14:33:52 -0700
+X-CSE-ConnectionGUID: VKKH6yoRR76QLZAe5gD02Q==
+X-CSE-MsgGUID: b83eRgeETTyyP3kNtMkWPA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,262,1712646000"; 
+   d="scan'208";a="43304843"
+Received: from pooja-lin-vm.fm.intel.com ([10.80.128.159])
+  by orviesa010.jf.intel.com with ESMTP; 24 Jun 2024 14:33:51 -0700
+From: Pooja Katiyar <pooja.katiyar@intel.com>
+To: linux-usb@vger.kernel.org,
+	gregkh@linuxfoundation.org
+Cc: heikki.krogerus@intel.com,
+	pooja.katiyar@intel.com,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Subject: [PATCH v2] usb: typec: ucsi: UCSI2.0 Get Error Status changes
+Date: Mon, 24 Jun 2024 14:33:59 -0700
+Message-Id: <20240624213359.1270018-1-pooja.katiyar@intel.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240624-usb_core_of_memleak-v1-1-af6821c1a584@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAK3geWYC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIxMDMyMT3dLipPjk/KLU+Py0+NzU3JzUxGxdc0tDM0MzI+MkM6NUJaDOgqL
- UtMwKsKnRsbW1AJ+KZjllAAAA
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Stephen Boyd <swboyd@chromium.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
- stable@vger.kernel.org, Javier Carrasco <javier.carrasco.cruz@gmail.com>
-X-Mailer: b4 0.14-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1719263416; l=1531;
- i=javier.carrasco.cruz@gmail.com; s=20240312; h=from:subject:message-id;
- bh=zIXCk75aYHpcTxk2IWR/+FVXsSNkawGDCSBB195Y8Q0=;
- b=+ByHjcUALzgzweObJ0Ak9OHgaplq8/LAdvC9xDCh1inm6nL1TSPfW/zbMcSEfGTcAuQwNZ/oI
- PGEVDaWv2upBwgyNRcBV6e447rk2NwklbZh7a14JEzGBzRbv9rWhR0b
-X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
- pk=lzSIvIzMz0JhJrzLXI0HAdPwsNPSSmEn6RbS+PTS9aQ=
+Content-Transfer-Encoding: 8bit
 
-The for_each_child_of_node() macro requires an explicit call to
-of_node_put() on early exits to decrement the child refcount and avoid a
-memory leak.
-The child node is not required outsie the loop, and the resource must be
-released before the function returns.
+Add support for UCSI 2.0 Get Error Status command to add connector
+number field to the command structure.
 
-Add the missing of_node_put().
+Connector number field is extracted from the previous UCSI command
+which has failed and is used to get the failure reason/Error using
+Get Error Status command.
 
-Cc: stable@vger.kernel.org
-Fixes: 82e82130a78b ("usb: core: Set connect_type of ports based on DT node")
-Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Signed-off-by: Pooja Katiyar <pooja.katiyar@intel.com>
 ---
-This bug was found while doing some code analysis, and I could not test
-it with real hardware. Although the issue and it solution are
-straightforward, any validation beyond compilation and static analysis
-is always welcome.
----
- drivers/usb/core/of.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+Change in v2:
+- Rebasing the patch to the latest USB tree tip to address the patch
+apply issue
 
-diff --git a/drivers/usb/core/of.c b/drivers/usb/core/of.c
-index f1a499ee482c..763e4122ed5b 100644
---- a/drivers/usb/core/of.c
-+++ b/drivers/usb/core/of.c
-@@ -84,9 +84,12 @@ static bool usb_of_has_devices_or_graph(const struct usb_device *hub)
- 	if (of_graph_is_present(np))
- 		return true;
+ drivers/usb/typec/ucsi/ucsi.c | 29 ++++++++++++++++++++++++++---
+ drivers/usb/typec/ucsi/ucsi.h |  3 +++
+ 2 files changed, 29 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+index 2cc7aedd490f..016ba2f4583e 100644
+--- a/drivers/usb/typec/ucsi/ucsi.c
++++ b/drivers/usb/typec/ucsi/ucsi.c
+@@ -65,8 +65,9 @@ static int ucsi_acknowledge(struct ucsi *ucsi, bool conn_ack)
  
--	for_each_child_of_node(np, child)
--		if (of_property_present(child, "reg"))
-+	for_each_child_of_node(np, child) {
-+		if (of_property_present(child, "reg")) {
-+			of_node_put(child);
- 			return true;
+ static int ucsi_exec_command(struct ucsi *ucsi, u64 command);
+ 
+-static int ucsi_read_error(struct ucsi *ucsi)
++static int ucsi_read_error(struct ucsi *ucsi, u8 connector_num)
+ {
++	u64 command;
+ 	u16 error;
+ 	int ret;
+ 
+@@ -75,7 +76,8 @@ static int ucsi_read_error(struct ucsi *ucsi)
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = ucsi_exec_command(ucsi, UCSI_GET_ERROR_STATUS);
++	command = UCSI_GET_ERROR_STATUS | UCSI_CONNECTOR_NUMBER(connector_num);
++	ret = ucsi_exec_command(ucsi, command);
+ 	if (ret < 0)
+ 		return ret;
+ 
+@@ -128,9 +130,30 @@ static int ucsi_read_error(struct ucsi *ucsi)
+ 
+ static int ucsi_exec_command(struct ucsi *ucsi, u64 cmd)
+ {
++	u8 connector_num;
+ 	u32 cci;
+ 	int ret;
+ 
++	if (ucsi->version > UCSI_VERSION_1_2) {
++		switch (UCSI_COMMAND(cmd)) {
++		case UCSI_GET_ALTERNATE_MODES:
++			connector_num = UCSI_GET_ALTMODE_GET_CONNECTOR_NUMBER(cmd);
++			break;
++		case UCSI_PPM_RESET:
++		case UCSI_CANCEL:
++		case UCSI_ACK_CC_CI:
++		case UCSI_SET_NOTIFICATION_ENABLE:
++		case UCSI_GET_CAPABILITY:
++			connector_num = 0;
++			break;
++		default:
++			connector_num = UCSI_DEFAULT_GET_CONNECTOR_NUMBER(cmd);
++			break;
 +		}
++	} else {
++		connector_num = 0;
 +	}
++
+ 	ret = ucsi->ops->sync_write(ucsi, UCSI_CONTROL, &cmd, sizeof(cmd));
+ 	if (ret)
+ 		return ret;
+@@ -160,7 +183,7 @@ static int ucsi_exec_command(struct ucsi *ucsi, u64 cmd)
  
- 	return false;
- }
-
----
-base-commit: 62c97045b8f720c2eac807a5f38e26c9ed512371
-change-id: 20240624-usb_core_of_memleak-79161623b62e
-
-Best regards,
+ 			return -EIO;
+ 		}
+-		return ucsi_read_error(ucsi);
++		return ucsi_read_error(ucsi, connector_num);
+ 	}
+ 
+ 	if (cmd == UCSI_CANCEL && cci & UCSI_CCI_CANCEL_COMPLETE) {
+diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
+index c4d103db9d0f..608d88f3b827 100644
+--- a/drivers/usb/typec/ucsi/ucsi.h
++++ b/drivers/usb/typec/ucsi/ucsi.h
+@@ -116,6 +116,9 @@ void ucsi_connector_change(struct ucsi *ucsi, u8 num);
+ #define UCSI_CONNECTOR_NUMBER(_num_)		((u64)(_num_) << 16)
+ #define UCSI_COMMAND(_cmd_)			((_cmd_) & 0xff)
+ 
++#define UCSI_GET_ALTMODE_GET_CONNECTOR_NUMBER(_cmd_)	(((_cmd_) >> 24) & GENMASK(6, 0))
++#define UCSI_DEFAULT_GET_CONNECTOR_NUMBER(_cmd_)	(((_cmd_) >> 16) & GENMASK(6, 0))
++
+ /* CONNECTOR_RESET command bits */
+ #define UCSI_CONNECTOR_RESET_HARD		BIT(23) /* Deprecated in v1.1 */
+ 
 -- 
-Javier Carrasco <javier.carrasco.cruz@gmail.com>
+2.34.1
 
 
