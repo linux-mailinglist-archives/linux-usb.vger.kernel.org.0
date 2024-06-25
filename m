@@ -1,112 +1,100 @@
-Return-Path: <linux-usb+bounces-11633-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11634-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 170ED916A28
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2024 16:22:37 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C1B1916A5D
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2024 16:31:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C309A28180C
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2024 14:22:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F3B5FB25189
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2024 14:31:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53CD516B388;
-	Tue, 25 Jun 2024 14:22:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7893616F0CD;
+	Tue, 25 Jun 2024 14:27:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YIswairP"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="eX4XOT27"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EADF155336;
-	Tue, 25 Jun 2024 14:22:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 807EF16B725
+	for <linux-usb@vger.kernel.org>; Tue, 25 Jun 2024 14:27:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719325348; cv=none; b=ASZsWSXoUOrN8XjlbzuHO3vIVgd1rRWqY2h1qc+TzjUf+tmIwbPGv0t2cCH52ArT4gF0A8wYv4csXu4ffC38a8rLTvOzYpxs/8LmhjfR5dpGOXiY754C2BvTB7HNpugA3sU/p8mRWNlsm3IuavYNjT0aE92kv5gkde6/RoAe+HM=
+	t=1719325637; cv=none; b=XWQYx/pVEjoIK9r8/fTbK0kU8gpmDx06fkvyfOtmq3vZr7YUVYWv5n423vrin31tshkmwk4gP3Uzt30qQNQnUUeW9pS3xDgPq0h4dWIRdpXI2UNAR9Gy/ENDqO2VzUuIi54maNo0se7jo5l+a99Wgu7cCmaSl7QCwfRXN7Gkn8o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719325348; c=relaxed/simple;
-	bh=wnPvsC8e0yOKqSzsqPFIBHLz+FOAW4Icxiaj/GUeQaU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jIRwP3tpYE4QeP9Ui9XzokpDc7xubNdrUtg5mzP95P88b0aw4CsYekVIzPGkDpJATHYPXlWEGR60VI+Omj4BN2P8mP8x41SO3r18trYbWSxOmQZfRJR6irLjCaqY8if50emsJPpH6iDt8c5YbpOt7RW5yJYiJMGgPrD51gAw24M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YIswairP; arc=none smtp.client-ip=209.85.216.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2c80637ee79so3835327a91.0;
-        Tue, 25 Jun 2024 07:22:27 -0700 (PDT)
+	s=arc-20240116; t=1719325637; c=relaxed/simple;
+	bh=knO37GDukZpiNtbnbyInUf67MD3lGHaNFx28byTdB+E=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qzWRBNNFfhyrbh43YHrbGri+NNdQzcQJ+qgit3XjEsYgLiwp34sX8Pr3s+nOEerHQU6IWDNcJp7wlNXacnGRTQjqE+LaPbM83jwuiYiKiWl+GiF3RuwcgPTK0nF9keVNd9SP2FU1D+6Nqqq8CHkERUg9I0OrWCNKb3lZFEyN+rk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=eX4XOT27; arc=none smtp.client-ip=209.85.208.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-57d00a51b71so12333a12.0
+        for <linux-usb@vger.kernel.org>; Tue, 25 Jun 2024 07:27:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719325347; x=1719930147; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yDGsqPcbEpd2LyCxfncGiISuzeJxwCMrz9xRntGBtZ8=;
-        b=YIswairPb8gqQUn9PE3o0xC4dx6XAuKptA05jNbxDSfEtYpRcNELtI0mC38tHcZoqU
-         cw+aSUqzSq4M22kmDA25rVmfXy7TcZrkJJUZvI3Jl0ujQ9KB6VVxo22A9AN5rZlu1y97
-         FlShAmuNNVCZ3MJ/nreben/66AlDypDMMp1x2JY/ODxNHJDwMZegCmoxqaDWYDi3lfCX
-         xOZg5bDFmUpaZSvqusFzv9ZbkyW0ffFxdOoS7grx/4h4rAJ1P8q/O0zWyYU1VZTuj4oG
-         yP3KO4OBVrSpK0D1hGELyT6XTINuCgXd6AmU2H1k/4td7GeLG+TcYZxp81cmYrOEnvuw
-         6w0A==
+        d=google.com; s=20230601; t=1719325634; x=1719930434; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=knO37GDukZpiNtbnbyInUf67MD3lGHaNFx28byTdB+E=;
+        b=eX4XOT27ymOofLAhI4xdB0902gFsMVOrba+mEXGmiYQbk/bPaJ6yiNCAMxvohXB52B
+         KrlG42IY2yJEQ8JS6r1flBH66P34ZKYw4ikqb6cWjpqrvh5MiPt61BvMAkB6a9XZB9jK
+         1zu8ynJazEPt7owO3c8dEh++BPWJynHnhY5hCpaw/io7NYy9dlw9T5j124K/aaBvF+Xz
+         nyZ5c6nusUqEBiwWEmaXFa3L3jlaFFDOtE8pPgfnt78amAIvLvCpvK0VidP7JfRAK6Zi
+         VEXTnGytCxVDbkTsl/fXHBs/Sf6SaxhPpkJgp2Hh/oJHnPEiLUh4ZmL7dSOenYhUdJF5
+         HOBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719325347; x=1719930147;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yDGsqPcbEpd2LyCxfncGiISuzeJxwCMrz9xRntGBtZ8=;
-        b=A70nJlUhzTmSgpzG1xzOuuwAq7X8k/H3ufzGL+hUxZ/VQg5miDB06y4gdea9o4tEfE
-         WnHmtg4WzTeJS3+iJibNXyL52VH1F9XhgamiIihDBPMTAda8PN2eSQYvsJjSYK8W2IoE
-         v3dfPj5w1qj/WTIrqKNjxNYOKInl1Y/5yQguf8+izkul1td4Xmbfxw1GJdIormrKlUhN
-         KSQtis8oX2xwk29lQpBykRJG3duT4MJh1O81YnYsmRRHcJfAo9eAhy1mVaxhbKVIdmOy
-         Pnhafmn1QG4pGQIk9G6LQWsffEt4p290HBsCP3GNojTsgaeOJ9+N96sDyGOuk+Jjf4ip
-         VhmQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVzIKxWxsQrl4CznjWLS97GCUaMitb0CRtWyBpx2M2vHngVw8JpornQauRqHkTSzv5DmrKxZBgbewHzzLfwmwDWFj9Um2hIYzBvGvbk
-X-Gm-Message-State: AOJu0Yyh/SFNQFKAv6Er/Qneh6HoEEeI4VIR7xQG5ZNa4Y+Cf4HLvd6D
-	45YCKHfGlP6L+OpNQgP1L6fAN+NAoi4JvUEJTjEUFQS8Ex/xeGbuXm7XcQ9G
-X-Google-Smtp-Source: AGHT+IFNRdXhvs1wwkcBrpk4hY9tumdf4HK02pblsvKehBcseIhhxW0iGifDQSzGb7umbqOni++Usg==
-X-Received: by 2002:a17:90a:d490:b0:2c6:fabe:b2e0 with SMTP id 98e67ed59e1d1-2c8613db148mr6292425a91.26.1719325346698;
-        Tue, 25 Jun 2024 07:22:26 -0700 (PDT)
-Received: from [192.168.1.7] ([159.192.83.206])
-        by smtp.googlemail.com with ESMTPSA id 98e67ed59e1d1-2c819dd0cf7sm8740279a91.48.2024.06.25.07.22.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Jun 2024 07:22:26 -0700 (PDT)
-Message-ID: <bb98f8f0-0326-4fc1-8b24-dd35ed0b80fb@gmail.com>
-Date: Tue, 25 Jun 2024 21:22:20 +0700
+        d=1e100.net; s=20230601; t=1719325634; x=1719930434;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=knO37GDukZpiNtbnbyInUf67MD3lGHaNFx28byTdB+E=;
+        b=SScU7kXMDB1STpY6gXKB01s+aIkETE8e/3N53enHB+oz991WOTGYRjl8MgphqSQuuj
+         /vA3XagY4qaDaXdtg9StjRmNHW12HMgnrFK0nVVmHeWlqSnZq20rDQE1RsPZ4rVwi8rc
+         K0kkm12wNufgVCzH17nGw8vnct9DZj0SHQqt51WROr8hXi8paVsc1E3sFKQuq+tP06uv
+         GyI89Vc8yIM79YWLWH/JarQMoNFTBW+uRFw+bG8M35XoQ8J2fLuYRUdDlYcNj+9/oWEO
+         6TzfJYSTPubpW9zAGnsc0b8qpWoO4u0AjhX+qmPuAPE0PprDE2dy5r9GnGlppaqfhelq
+         2CWw==
+X-Forwarded-Encrypted: i=1; AJvYcCUhZHpHEBTeqorKa0XSLpoQErrwHFXZy1X4Kzgcixac7DRluq3+0shRL6BYUIgu0WfdwQPnePwCrlNmoE4hdBQ/fpb/80gioKst
+X-Gm-Message-State: AOJu0YySu4u9GXRZh6H8dl8pUtdR8os2OtNwzwljQuDcXGQTK5hxfSE4
+	w9cD/2zG3wYUX7F3z78KJFBnNI5Cv1ZCrKUgC6X62go8LxAzdjVlDG9rvUR9jj2LkqXRBstzZo0
+	yDIwE1g7WL26Fq4MqDbO75Zjizmg5n138g+eT
+X-Google-Smtp-Source: AGHT+IHT3NVolr6Ef6aOrP30B/kob1o8Kc+MQP0V7uf4eVGsPB5MquC1QY9yCGsgJGZT5y2nYfKZOd04HyEN63bfGTw=
+X-Received: by 2002:a05:6402:5206:b0:57d:436b:68d6 with SMTP id
+ 4fb4d7f45d1cf-57ea5f50837mr166319a12.7.1719325633577; Tue, 25 Jun 2024
+ 07:27:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] drv/usb: Fix the issue with Realtek USB wireless adapter
- AC650
-To: tuhaowen <tuhaowen@uniontech.com>, stern@rowland.harvard.edu,
- gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
- linux-kernel@vger.kernel.org, wangyuli@uniontech.com
-References: <20240625070724.22044-1-tuhaowen@uniontech.com>
-Content-Language: en-US
-From: Lars Melin <larsm17@gmail.com>
-In-Reply-To: <20240625070724.22044-1-tuhaowen@uniontech.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20240612180448.1.I805556c176c626872c15ce001f0e8198e1f95ae1@changeid>
+ <2024062032-bobbing-backspace-8bd5@gregkh>
+In-Reply-To: <2024062032-bobbing-backspace-8bd5@gregkh>
+From: Jameson Thies <jthies@google.com>
+Date: Tue, 25 Jun 2024 07:27:01 -0700
+Message-ID: <CAMFSARehnCK-xEe31_diLV_oavMSctXgZZcJKARN8gg443R4nA@mail.gmail.com>
+Subject: Re: [PATCH] usb: misc: onboard_usb_dev: Add match function
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Matthias Kaehlcke <mka@chromium.org>, Benson Leung <bleung@google.com>, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 2024-06-25 14:07, tuhaowen wrote:
-> Due to the dual-mode functionality of the Realtek USB wireless
-> adapter AC650, it initially presents itself as a flash drive
-> before the driver is installed.
-> 
-> In Linux, multi-state devices are recognized as storage devices
-> on startup because the driver has not yet been loaded.
-> 
-> As a result, the AC650 is identified as a DISK device at boot,
-> preventing the use of its WLAN mode. The issue can only be
-> resolved by unplugging and replugging the adapter.
-> 
+Hi Greg,
+this fixes an existing problem. On chromebooks using this driver for
+an onboard hub, connecting an external hub in this ID table fails to
+bind to the generic USB driver at the lock screen (devices default to
+unauthorized). We are still trying to figure out why the hub isn't
+able to bind to the generic USB driver after the onboard_usb_dev
+driver when the device is authorized after it enumerates. But, I think
+it would be preferable for this driver to not match external devices
+in the ID table. This resolves the issue for me.
 
-It can be resolved by manually ejecting the created cdrom drive or by 
-using usb_modeswitch which will eject the drive as soon as it is 
-detected. No need for unplugging/replugging.
+Tested-by: Jameson Thies <jthies@google.com>
+Reviewed-by: Jameson Thies <jthies@google.com>
 
-thanks
-Lars
-
+Thanks,
+Jameson
 
