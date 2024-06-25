@@ -1,80 +1,84 @@
-Return-Path: <linux-usb+bounces-11660-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11661-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9646917499
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Jun 2024 01:10:43 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 422E191749A
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Jun 2024 01:10:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4CD011F217A9
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2024 23:10:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C0B571F21642
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2024 23:10:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CFAF17F4F4;
-	Tue, 25 Jun 2024 23:10:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 286DD17F500;
+	Tue, 25 Jun 2024 23:10:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e+SV1iaI"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="alL2Li5+"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F3E117F4E5
-	for <linux-usb@vger.kernel.org>; Tue, 25 Jun 2024 23:10:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62B4D17F4F7
+	for <linux-usb@vger.kernel.org>; Tue, 25 Jun 2024 23:10:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719357036; cv=none; b=aOVLWwpSVrksWyNerthVjOe8l20cTfvidxaAmELTEOohCibtQoe5JCrOT3+evikm88/X2s0n/OSH91S0dfN1i4UzTxmf47+ZtMpzpltdiH257fFuy/lQmC493PvMj2AMRdZBMS8ztMQqM8NV6FnrbUwdz8eFUVzVupSIiImBLKk=
+	t=1719357038; cv=none; b=GJ2fOO7lIyrjLATx2SLYUiZXTdu6L+DSZRT03upoVfwQf5oj+jsszAlq9rwg9Eecs8/EeLrl4YTIGarA/hk/6ZACShK2+oVHHP4Qh0xQSPRgNBJVgYc9Tm/ZWNriUNO6rQkftSe/S2eMnfbooz6kA1y3miywtZEr9Xa/i0QqKDw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719357036; c=relaxed/simple;
-	bh=SxOrbuoNbvfQr7CP4JU8lZ3CIEKTcmSIOqMQOFcXQhE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=gRzA9yV8wMsmYa4E3/Yi0aehDk1wkIR1lOf9juHCfByUDMiEtihstBPzBeHg7nmJ0HfMBF3PH9ELq59PAqWS/jCghKOxPPPx2FgCxQQtavTq3VcTJnzHDqFh8cnqeOdWOb7ITnAfVWPJqtS0Jd/4iAK+D51Dkhz9ta/kvhRlYIw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e+SV1iaI; arc=none smtp.client-ip=209.85.210.174
+	s=arc-20240116; t=1719357038; c=relaxed/simple;
+	bh=IM5zcGBJ+zT7t/1agzVMJrCJKtgAkgbPZ08DgtZCQ/s=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=boXxp+hxSSdoWTM2kAaY0B1NYqjJq3ZrwsvpEiJ2F3x1HD/C88B5hxyAI9w2SNpvTW6pMvtVSmqS2ONymzD75JRchDzTV8wzktr8vzf5BWH2kOTZMxlqc1ApEEsYTQcRbR0mYJsSp9BZCvasLTNeVhzMV0BXw2d40WhnmHo9tB0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=alL2Li5+; arc=none smtp.client-ip=209.85.210.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-7065c413655so221265b3a.3
-        for <linux-usb@vger.kernel.org>; Tue, 25 Jun 2024 16:10:34 -0700 (PDT)
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-70677fe5d87so111150b3a.1
+        for <linux-usb@vger.kernel.org>; Tue, 25 Jun 2024 16:10:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719357034; x=1719961834; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=OcF3DaDVxoLxwp70f8UuOqrTC98O97C9l2i22Q6HAbo=;
-        b=e+SV1iaIxEsWUirB9PSAFR3LMP7/YD2fQvjyEddgJdZDhm75WfLC3Gk1+aL87lLVhm
-         VyPC+BXoxlIh9B2/Qdnb261j+nvEvdeyufJkgGgsecTfBHE4fwdLukond5XNCt8+OklX
-         7HxgnN50OoC3OVzCMqloERYVtI5jGuKD62AoncjMk5bfs901UnAxe5uuNN3ImwZjK2NJ
-         pnyGl11qQ1pEI8PSrmxt1b77b97GiIJiG+nNlDWewAljd4fENlN1Jr+OJxgGMG1yyvhO
-         J97jC4mWsJ/dsBD74vWy6xajbUA6RVsGvLtKjFC5Z9yRQgcYT9LLzf9lw0ri63TK0j0P
-         eu1A==
+        d=gmail.com; s=20230601; t=1719357037; x=1719961837; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=20liNpV52OBTnI1eg5T5BQ+42IauGzSVqUcpZqIs4tc=;
+        b=alL2Li5+0zgjW1+vvfZvBrTp8IYaZac50r9qvWZlAKRrwN30lET1XmY3XWks87fWNV
+         4lOAv3OJP7ZvpjI3jV4rrtwaarBhvhqulb51D410YvUkwJ5JFHkv4EU2o3hXw3xBsgCK
+         P6J2MjjAFibk/DSk9xyDBDw0Dj8lI2aSbGYQaQ8ScIDrc9nFFPTX+KreaUFHYMBlBvEl
+         qvNDcEM3HANINF1FpWY2wX9bHTq2ZDoL9TPkdB9i627wsGIsA9QPBATJ8FhpNz7fonbR
+         nDKeaXy76QBxOn2JoLGHIuGeq8Hgf3zXdbd63x4s+RkBveHPi4uFuM5hY1dSEzksadTb
+         7EHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719357034; x=1719961834;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OcF3DaDVxoLxwp70f8UuOqrTC98O97C9l2i22Q6HAbo=;
-        b=vZ6ffm5zPPWV5RZLVU7hMxzMxAQvA0ghGNgf+bsnaVZE+CYvOzpJ08ulvoRvuwIvK8
-         qI9iKucyYZr4Y16dA64i14SEk1+/2XFvK8XuYwyCrqGRiL4CRYcGADkTYdDzAo7t+qlM
-         aVYsJ0728k7KT08ouljxSAmSHqk1veDuSdNFYkqCCoKU+ewNMjU7n2NIZyOvz+ZWnMb6
-         t6bKrlxI0JzankMazP/J1xptmQLll9DL28wma7SkxJb6ttnhhrtNF5USm7r+/ZfSRf+P
-         T1anlwBWbG6qTxP8NgiwYbMCZhD4mdStRfZre/9klrSd6459MhL2yIBVo/oPuDnn4UFD
-         2Pow==
-X-Forwarded-Encrypted: i=1; AJvYcCVjUZIXSzbklNcMDGk2cd6QYQPWJ1dNrJ/U43AH6y+o0BOGbe4aaLfsusP/Yhfat+dGCqyAooQcnJPg4hE3XWaBFC4hTdMotkH0
-X-Gm-Message-State: AOJu0YztxeQjbl5p5gv5Axj7lHSB//QXUyjDgrFLLvc5jY1CJDQASIKt
-	G5I0mGglWXrwAw2IMvDXzcC6df3Srh02ICPeIjG2R19/1wLxGd4UWfUM+A==
-X-Google-Smtp-Source: AGHT+IHlvDj1WHYJl2LBgMB8izkUuEAvDZNt+cG3rJ6b6o0SPa4F+ilf5AR8m9nDisdgcuTIsoZ2fg==
-X-Received: by 2002:a05:6a20:432c:b0:1bc:e987:493f with SMTP id adf61e73a8af0-1bce9874c7amr12933150637.1.1719357034322;
-        Tue, 25 Jun 2024 16:10:34 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1719357037; x=1719961837;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=20liNpV52OBTnI1eg5T5BQ+42IauGzSVqUcpZqIs4tc=;
+        b=h5bQbKgcItnVQB8nveKIqQ0uiFNjDdN3bDHyyvtEFl8w6UP/CjiW396ANmLtbY0vGK
+         xh42uz5MZcaUk4kmIt8VkQkbl/5i9tZna/UDHiBw5tYB5ED+aHRdITK5IZkqSIot0k2J
+         OXj9uF6P2zILFN3pBuhnMUstBO1yr6HGq/Qg0hRTx37V5I1WtSkwuVktnyPx2VDj4WmV
+         C931/GtqBTr4vFo5hNCQR8tEVzoZYKF4THiavLkIljpFTAQ4aH8yMEcGKYJTExomQQ2P
+         v4IVdvDlLjhHIL+AA2Qd+o/pmZ63dmKzEUm/gJn+hBEud1o2utCiSPPYWeUhd2oksImz
+         jSFw==
+X-Forwarded-Encrypted: i=1; AJvYcCURdoX8XiwWC+yjFmlMm6zG16lGEtx2phIY9yKi1lMJsjnHcUmJWgBswynq0c5ar0GCRPnd4KaN0vr1ou8+zCAmk9ZzeNugE3O2
+X-Gm-Message-State: AOJu0YxupM6OTDVj0LBgw8ITa2nhUr4oUKx0u/WjBAVb5S8P1GK3uITl
+	72Fr4L3th+xYOFszvAulgOiRfsfhf7iYORYgoxEa2oqiCCeE/nLxCzGcJA==
+X-Google-Smtp-Source: AGHT+IFjUVqcU/qZZHKkSS3Wsb2QFYnDj3iTT2PNtbPof8dfHHDA6zsphUyNVBEhWSRp325eVbdW7g==
+X-Received: by 2002:a05:6a00:8702:b0:705:daf0:9004 with SMTP id d2e1a72fcca58-706680c1610mr10794220b3a.3.1719357036484;
+        Tue, 25 Jun 2024 16:10:36 -0700 (PDT)
 Received: from fabio-Precision-3551.. ([2804:14c:485:4b61:1451:872:213b:5880])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70666aa4760sm6895073b3a.40.2024.06.25.16.10.32
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70666aa4760sm6895073b3a.40.2024.06.25.16.10.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jun 2024 16:10:33 -0700 (PDT)
+        Tue, 25 Jun 2024 16:10:36 -0700 (PDT)
 From: Fabio Estevam <festevam@gmail.com>
 To: gregkh@linuxfoundation.org
 Cc: peter.chen@kernel.org,
 	thierry.reding@gmail.com,
 	linux-usb@vger.kernel.org,
 	Fabio Estevam <festevam@denx.de>
-Subject: [PATCH 1/2] usb: chipidea: ci_hdrc_imx: Switch to RUNTIME/SYSTEM_SLEEP_PM_OPS()
-Date: Tue, 25 Jun 2024 20:10:22 -0300
-Message-Id: <20240625231023.436403-1-festevam@gmail.com>
+Subject: [PATCH 2/2] usb: chipidea: ci_hdrc_tegra: Switch to RUNTIME_PM_OPS()
+Date: Tue, 25 Jun 2024 20:10:23 -0300
+Message-Id: <20240625231023.436403-2-festevam@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240625231023.436403-1-festevam@gmail.com>
+References: <20240625231023.436403-1-festevam@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -85,98 +89,61 @@ Content-Transfer-Encoding: 8bit
 
 From: Fabio Estevam <festevam@denx.de>
 
-Replace SET_RUNTIME_PM_OPS()/SET SYSTEM_SLEEP_PM_OPS() with their modern
-RUNTIME_PM_OPS() and SYSTEM_SLEEP_PM_OPS() alternatives.
+Replace SET_RUNTIME_PM_OPS() with its modern RUNTIME_PM_OPS()
+alternative.
 
-The combined usage of pm_ptr() and RUNTIME_PM_OPS/SYSTEM_SLEEP_PM_OPS()
-allows the compiler to evaluate if the runtime suspend/resume() functions
-are used at build time or are simply dead code.
+The combined usage of pm_ptr() and RUNTIME_PM_OPS allows the compiler
+to evaluate if the runtime suspend/resume() functions are used at build
+time or are simply dead code.
 
 This allows removing the __maybe_unused notation from the runtime
 suspend/resume() functions.
 
 Signed-off-by: Fabio Estevam <festevam@denx.de>
 ---
- drivers/usb/chipidea/ci_hdrc_imx.c | 19 +++++++++----------
- 1 file changed, 9 insertions(+), 10 deletions(-)
+ drivers/usb/chipidea/ci_hdrc_tegra.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/usb/chipidea/ci_hdrc_imx.c b/drivers/usb/chipidea/ci_hdrc_imx.c
-index a17b6d619305..bdc04ce919f7 100644
---- a/drivers/usb/chipidea/ci_hdrc_imx.c
-+++ b/drivers/usb/chipidea/ci_hdrc_imx.c
-@@ -557,7 +557,7 @@ static void ci_hdrc_imx_shutdown(struct platform_device *pdev)
- 	ci_hdrc_imx_remove(pdev);
+diff --git a/drivers/usb/chipidea/ci_hdrc_tegra.c b/drivers/usb/chipidea/ci_hdrc_tegra.c
+index 2cc305803217..9538d425f0a0 100644
+--- a/drivers/usb/chipidea/ci_hdrc_tegra.c
++++ b/drivers/usb/chipidea/ci_hdrc_tegra.c
+@@ -372,7 +372,7 @@ static void tegra_usb_remove(struct platform_device *pdev)
+ 	pm_runtime_force_suspend(&pdev->dev);
  }
  
--static int __maybe_unused imx_controller_suspend(struct device *dev,
-+static int imx_controller_suspend(struct device *dev,
- 						 pm_message_t msg)
+-static int __maybe_unused tegra_usb_runtime_resume(struct device *dev)
++static int tegra_usb_runtime_resume(struct device *dev)
  {
- 	struct ci_hdrc_imx_data *data = dev_get_drvdata(dev);
-@@ -582,7 +582,7 @@ static int __maybe_unused imx_controller_suspend(struct device *dev,
+ 	struct tegra_usb *usb = dev_get_drvdata(dev);
+ 	int err;
+@@ -386,7 +386,7 @@ static int __maybe_unused tegra_usb_runtime_resume(struct device *dev)
  	return 0;
  }
  
--static int __maybe_unused imx_controller_resume(struct device *dev,
-+static int imx_controller_resume(struct device *dev,
- 						pm_message_t msg)
+-static int __maybe_unused tegra_usb_runtime_suspend(struct device *dev)
++static int tegra_usb_runtime_suspend(struct device *dev)
  {
- 	struct ci_hdrc_imx_data *data = dev_get_drvdata(dev);
-@@ -618,7 +618,7 @@ static int __maybe_unused imx_controller_resume(struct device *dev,
- 	return ret;
+ 	struct tegra_usb *usb = dev_get_drvdata(dev);
+ 
+@@ -396,15 +396,14 @@ static int __maybe_unused tegra_usb_runtime_suspend(struct device *dev)
  }
  
--static int __maybe_unused ci_hdrc_imx_suspend(struct device *dev)
-+static int ci_hdrc_imx_suspend(struct device *dev)
- {
- 	int ret;
- 
-@@ -636,7 +636,7 @@ static int __maybe_unused ci_hdrc_imx_suspend(struct device *dev)
- 	return ret;
- }
- 
--static int __maybe_unused ci_hdrc_imx_resume(struct device *dev)
-+static int ci_hdrc_imx_resume(struct device *dev)
- {
- 	struct ci_hdrc_imx_data *data = dev_get_drvdata(dev);
- 	int ret;
-@@ -652,7 +652,7 @@ static int __maybe_unused ci_hdrc_imx_resume(struct device *dev)
- 	return ret;
- }
- 
--static int __maybe_unused ci_hdrc_imx_runtime_suspend(struct device *dev)
-+static int ci_hdrc_imx_runtime_suspend(struct device *dev)
- {
- 	struct ci_hdrc_imx_data *data = dev_get_drvdata(dev);
- 
-@@ -664,15 +664,14 @@ static int __maybe_unused ci_hdrc_imx_runtime_suspend(struct device *dev)
- 	return imx_controller_suspend(dev, PMSG_AUTO_SUSPEND);
- }
- 
--static int __maybe_unused ci_hdrc_imx_runtime_resume(struct device *dev)
-+static int ci_hdrc_imx_runtime_resume(struct device *dev)
- {
- 	return imx_controller_resume(dev, PMSG_AUTO_RESUME);
- }
- 
- static const struct dev_pm_ops ci_hdrc_imx_pm_ops = {
--	SET_SYSTEM_SLEEP_PM_OPS(ci_hdrc_imx_suspend, ci_hdrc_imx_resume)
--	SET_RUNTIME_PM_OPS(ci_hdrc_imx_runtime_suspend,
--			ci_hdrc_imx_runtime_resume, NULL)
-+	SYSTEM_SLEEP_PM_OPS(ci_hdrc_imx_suspend, ci_hdrc_imx_resume)
-+	RUNTIME_PM_OPS(ci_hdrc_imx_runtime_suspend, ci_hdrc_imx_runtime_resume, NULL)
+ static const struct dev_pm_ops tegra_usb_pm = {
+-	SET_RUNTIME_PM_OPS(tegra_usb_runtime_suspend, tegra_usb_runtime_resume,
+-			   NULL)
++	RUNTIME_PM_OPS(tegra_usb_runtime_suspend, tegra_usb_runtime_resume, NULL)
  };
- static struct platform_driver ci_hdrc_imx_driver = {
- 	.probe = ci_hdrc_imx_probe,
-@@ -681,7 +680,7 @@ static struct platform_driver ci_hdrc_imx_driver = {
+ 
+ static struct platform_driver tegra_usb_driver = {
  	.driver = {
- 		.name = "imx_usb",
- 		.of_match_table = ci_hdrc_imx_dt_ids,
--		.pm = &ci_hdrc_imx_pm_ops,
-+		.pm = pm_ptr(&ci_hdrc_imx_pm_ops),
- 	 },
- };
- 
+ 		.name = "tegra-usb",
+ 		.of_match_table = tegra_usb_of_match,
+-		.pm = &tegra_usb_pm,
++		.pm = pm_ptr(&tegra_usb_pm),
+ 	},
+ 	.probe = tegra_usb_probe,
+ 	.remove_new = tegra_usb_remove,
 -- 
 2.34.1
 
