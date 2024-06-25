@@ -1,111 +1,220 @@
-Return-Path: <linux-usb+bounces-11622-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11623-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 880979166C9
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2024 14:01:05 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3DC569167AD
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2024 14:24:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0489FB21EE0
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2024 12:01:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 92C52B22526
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2024 12:24:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3FFA14D294;
-	Tue, 25 Jun 2024 12:00:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 390B8155353;
+	Tue, 25 Jun 2024 12:23:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="sFBk7ez+"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g7vGgrow"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mout.web.de (mout.web.de [212.227.15.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C530F44C9E;
-	Tue, 25 Jun 2024 12:00:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BB561494A0;
+	Tue, 25 Jun 2024 12:23:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719316858; cv=none; b=Nkv5oSsqeT853cYjUuKRVogrLL6lQGH2I2aNYBIWG3EopJDqXFren28fFtNvnTDIIUAkGYn1V4QHIAFo7MRCR5N0g52xbYm0jHY8m983j8kcvaYQIMt9A4nQP9pTd2iVOMzElPQ+ktiIMqEVS+DtR8nqdQgY1PshxaZsjUPpOtY=
+	t=1719318201; cv=none; b=LBAXhgCqPnDHUJHPImBR+d80ROANNQVwDXAvWm7jgdkIrRCmzEqSqIC0Hjb9ivHLiWOwBkRRNdznXriAqVGva3sFMnzm+RcgAgkrLsF8SZrxThRL2KOukKjOAcIsDFidkg1XyuNcQA5SWCe5chU7R79s0QrdOX20v/S3HWpWTUI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719316858; c=relaxed/simple;
-	bh=nV8EQhdVfjwA7JCFBgocPJknEFZBPmI8Rb4r1ePjiDE=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
-	 In-Reply-To:Content-Type; b=GBXZzS/xD8iCDATs8blApcNMdZXWzByFLPSLwA6ukUUnjA7+w0+zB/NKWTpaoYPyhJyvpHnXcf3V09K0MVjQWovRjhQlqoz3P0Ts/SgGw2iMFKHgNg4L1ODvsCqH9MOon21zIcaT7GNdyAVlyCzLB/OyytpMUnl7pYJgMepE/ds=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=sFBk7ez+; arc=none smtp.client-ip=212.227.15.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1719316820; x=1719921620; i=markus.elfring@web.de;
-	bh=nV8EQhdVfjwA7JCFBgocPJknEFZBPmI8Rb4r1ePjiDE=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
-	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 cc:content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=sFBk7ez+UH1rLu5gwotCV36zUpmzQDQm/amBjsErRIlbuQQVbxmAXUU7PXVb2xKf
-	 Ofj+x/BYAo2gNc0Y2r3HqgfdbgbzkLQ1NtIFnwtL0LR1T2gK/saI5Wv0vaxJZ8AEu
-	 IX7P+lOQtr+4ECDgR1p7/Advch3l8qEcIs03Gf6AVCSEeTdIxRmJHp9DR9u9QDFFN
-	 gwctNoIo/eBngu3ioKjwretwW8tFJ4IMUbhKcutb1z2RfNcMY4yAh6vMH2+h3ndbR
-	 P8VAexRePjAH2G+MsqHT8SxgAOE31rnXKakFgKnObWhmcqznwvPdE7cPjA7/6Ud5Q
-	 /G7TKXS0hCw0tJrNMA==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.21] ([94.31.85.95]) by smtp.web.de (mrweb006
- [213.165.67.108]) with ESMTPSA (Nemesis) id 1MYLmo-1rqkSH3yJ0-00OW46; Tue, 25
- Jun 2024 14:00:20 +0200
-Message-ID: <edeaa699-7cfe-44ed-abde-7cf3d3efe3bf@web.de>
-Date: Tue, 25 Jun 2024 14:00:15 +0200
+	s=arc-20240116; t=1719318201; c=relaxed/simple;
+	bh=XNipA7WM4LlHtrfo1peU5XTzzP16pFJt8SAtSql/dd8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MuItYHvjNToIu/Uy3NDkTM79KNGT7IUr7nvvHoaSOvD6t8Y9ID6MI9ZY0v+Vex7uOUGQpJYj3VJ5D7P+M0B6GJqMbJAtGRje/HjX90BnSlueuhYsDX2l985wvrtH+ddj4gnnWIhrp2NFKvk6Ct83qUVQ6A8HYQHP8M9YCHOdr/M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g7vGgrow; arc=none smtp.client-ip=209.85.208.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-57cc1c00ba6so6763838a12.1;
+        Tue, 25 Jun 2024 05:23:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1719318198; x=1719922998; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JPdVzEGKSLX2+NwkSqu7FU59prs3gqdqHeBd/jKqpqs=;
+        b=g7vGgrowyoLeORIRVk/1fFQiUiViknSmDbixooZ79wF2UtP2f0B8TpEjaZI5gCmMCE
+         gbUFLez2f9BIMUWnQAWMRSWWfGnTQm+TZc9ItbMQHWOyXKHXRhjPhKehWd6UcSE/o2wL
+         t4OwwX4n+aRaiuQ0rMgmTYGV7Kqi8HOlpuAitOVrn1I0nF/iCSlo//IWAcO5xWl/J1PX
+         tY52WzdC1OCfa35Dg0/+Zw9WbtwsAIlTqkm2OkSGS4Cuyfmm36G1I4whTfxu6tl2Yfbt
+         SnA1uMPkr33c3JRyzRNROEjyOgnN3S8clJNOYq5JC/zFpAwvpqo6gQAsFlSXhCSfMDRV
+         Svgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719318198; x=1719922998;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JPdVzEGKSLX2+NwkSqu7FU59prs3gqdqHeBd/jKqpqs=;
+        b=ehTYBgcLEMiS8vELWL8Zr+8XNegnTld7I4urOkblrgrS1iU+v3eESKI8G9msCijg1l
+         1Kqv1M2rc49DqxjyfsDWtzEyXa06cpH4lGEDTn7gSbN4ZO4JK9G14AlQuwh2LYiCydy3
+         1niaWWph9bj80EmRGG8Q1HeXWLsdoqrzY9xEL5Jh6jlBr6au+cVugxBFf6pqKafBfBhY
+         QV1vU0VPRYGc0zWhBDo/h8C456utsv4sJQ/0JWxfGCSpGmm4bUpbAodKARwVtUuGBcSz
+         vYdV4kmDU4bxILFCjkDaYv8HPExcko+dh6kR3PxeENL5fmIv+lhoev02NlR/IoPfd5Kk
+         DIyQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUAYKCrHHCnzOKSlh3XSs4Xw5CpSoeLAs7mEBPNMYIxeigw7cNDzOqIZMLhNK66PWjPWD5w8lDMnrSlTbRqi+pLwj0uAG6kQIfeMtLu+siW876wSOm9S/0tf4Fp/EGXswOL3jep
+X-Gm-Message-State: AOJu0YysZrU3QN4zoMtVfmcpiuCisQoM5ZqBcN7BP6Wg+krz6Z+uQRJe
+	DJWivH23eEStxZ6nbwG8cBoU1lvVgXrLciOtoDFmwe6lZgqHYoxjXn1Ohst/p82CBmQlPAW0lta
+	+aZMe5JlJMu0eCF2vCz6AdcbqlAbv6TzxGvY=
+X-Google-Smtp-Source: AGHT+IFVIZyc/+AyCQqQC5uBq8MF6nLmt4ueuogjzBWCBowhY/W4tpo5sHEfp6moVR+WNbxQt4ecn4DSI8mXnFlkh2s=
+X-Received: by 2002:a50:d4d5:0:b0:57d:2650:5f62 with SMTP id
+ 4fb4d7f45d1cf-57d4bd606damr4809931a12.14.1719318198082; Tue, 25 Jun 2024
+ 05:23:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Ma Ke <make24@iscas.ac.cn>, linux-aspeed@lists.ozlabs.org,
- linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- Andrew Jeffery <andrew@codeconstruct.com.au>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Joel Stanley <joel@jms.id.au>, Neal Liu <neal_liu@aspeedtech.com>
-Cc: LKML <linux-kernel@vger.kernel.org>
-References: <20240625022306.2568122-1-make24@iscas.ac.cn>
-Subject: Re: [PATCH v4] usb: gadget: aspeed_udc: validate endpoint index for
- ast udc
-Content-Language: en-GB
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <20240625022306.2568122-1-make24@iscas.ac.cn>
-Content-Type: text/plain; charset=UTF-8
+References: <20240619114529.3441-1-joswang1221@gmail.com> <2024062051-washtub-sufferer-d756@gregkh>
+ <CAMtoTm06MTJ_Gc4NvenycvWRxhLSaPptT1DLvBRs4RWVZO9Y_g@mail.gmail.com>
+ <2024062151-professor-squeak-a4a7@gregkh> <20240621054239.mskjqbuhovydvmu4@synopsys.com>
+ <2024062150-justify-skillet-e80e@gregkh> <20240621062036.2rhksldny7dzijv2@synopsys.com>
+ <2024062126-whacky-employee-74a4@gregkh> <20240621230846.izl447eymxqxi5p2@synopsys.com>
+In-Reply-To: <20240621230846.izl447eymxqxi5p2@synopsys.com>
+From: joswang <joswang1221@gmail.com>
+Date: Tue, 25 Jun 2024 20:23:06 +0800
+Message-ID: <CAMtoTm2UE31gcM7dGxvz_CbFoKotOJ1p7PeQwgBuTDE9nq7CJw@mail.gmail.com>
+Subject: Re: [PATCH v7] usb: dwc3: core: Workaround for CSR read timeout
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>, Greg KH <gregkh@linuxfoundation.org>
+Cc: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"stable@vger.kernel.org" <stable@vger.kernel.org>, Jos Wang <joswang@lenovo.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:WVa6AenrwtXGDQwCcWoxbgw+LKV4V+A6XRWd/cms6/7gM3UruC2
- W55cgmEsHf7rJ1egtv/DYzxyxmf+mpE8zVssjVA8cWkJFSGeJ3PJn6wgm3LE7L2TtykeJ0V
- qXFcrr192CZEI7PseoDPhr7Bb0KI4eo7LboXxYefkvv8YJyHngnLmFnxdDdKMk5uHoSesPx
- f87llrL1qknVoUE5h52FA==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:d0DxsRFHnpM=;39WEZlnVUSXcpVzJf2TNAjcfdTC
- qneCOiATJ2Eo+K8g5pM0CXNFoJlCvei3fCDXmuQdnaw8nZo+SToG5+j2wm7ZBApJ/V0QX64j0
- InGaZZVLjL85xlguXXTMxenwE3fs8mGQLbRaZLqHG1OxAhODpY1mTSUaiOFLEapoL94Xhj20l
- T+ngoClCO3fKRCxHuDKmVJfgvll+Cd62pdwsZdtqpbZ7pv5Qz2b1gWgJWaUJOaOFgoL5ESBkV
- NCC5o5NWSBcFJDzmMuY2MY1SR7Sr+xQpFcdNNj5Jyh/sd64NFPB9kOfscGPr5E7OFG3XVW2My
- /9LWVu5IxyB3Mh0aWAeB8ZXHxVHfl15pHXrbQOrqSw7MLsrgL5q3WqgO6mnI+1cL5EGLQ1nyf
- jMv5aFHf6YDc5N4bZS6h4Azl4i3Fzj+dWisc2adb7tHkNjYtM/EbsxQ56+NeSJsZVypqb7MhA
- Ad1nPkUhiHV0OVwGm0s6ZlDsFwNB0ImN6Jr9VrPWFfbIOu3Jdb6sLA+RxAD+kCCH3AW9vVfEp
- dAr8B+ciUWVn5/tfSCO19EBQYzcEdQr3RtntscSmW6ZEjn6r71H+udqcMLTXr+4Fw9Wx/PWrf
- ezvN8Crzo4DPMd0ZPqmIIadSMd98mFokyZk2u1ORjcdyUA5uK1tWGX7YsGvnbuq5KBkSfusUr
- qKHrwelFrpRFqXzJYA3KrhMguT8trK4/nc3LsiaDjqxjj6MdwfOXAyQ8HLz1xJ5r5OgNa/svI
- WzsnjC2cFnWxnK+tQ2y+nhJaQA9eICw56MTmjgK7fze611FTkBd+qm7G9K3gvT4RypL2K4LRP
- S3KMvS6na6fjJlVDncunwRs+UsWouhnyEImat1RWXmayc=
 
-> We should verify the bound of the array to assure that host
-> may not manipulate the index to point past endpoint array.
+On Sat, Jun 22, 2024 at 7:09=E2=80=AFAM Thinh Nguyen <Thinh.Nguyen@synopsys=
+.com> wrote:
+>
+> On Fri, Jun 21, 2024, Greg KH wrote:
+> > On Fri, Jun 21, 2024 at 06:20:38AM +0000, Thinh Nguyen wrote:
+> > > On Fri, Jun 21, 2024, Greg KH wrote:
+> > > > On Fri, Jun 21, 2024 at 05:42:42AM +0000, Thinh Nguyen wrote:
+> > > > > On Fri, Jun 21, 2024, Greg KH wrote:
+> > > > > > On Fri, Jun 21, 2024 at 09:40:10AM +0800, joswang wrote:
+> > > > > > > On Fri, Jun 21, 2024 at 1:16=E2=80=AFAM Greg KH <gregkh@linux=
+foundation.org> wrote:
+> > > > > > > >
+> > > > > > > > On Wed, Jun 19, 2024 at 07:45:29PM +0800, joswang wrote:
+> > > > > > > > > From: Jos Wang <joswang@lenovo.com>
+> > > > > > > > >
+> > > > > > > > > This is a workaround for STAR 4846132, which only affects
+> > > > > > > > > DWC_usb31 version2.00a operating in host mode.
+> > > > > > > > >
+> > > > > > > > > There is a problem in DWC_usb31 version 2.00a operating
+> > > > > > > > > in host mode that would cause a CSR read timeout When CSR
+> > > > > > > > > read coincides with RAM Clock Gating Entry. By disable
+> > > > > > > > > Clock Gating, sacrificing power consumption for normal
+> > > > > > > > > operation.
+> > > > > > > > >
+> > > > > > > > > Cc: stable@vger.kernel.org
+> > > > > > > > > Signed-off-by: Jos Wang <joswang@lenovo.com>
+> > > > > > > >
+> > > > > > > > What commit id does this fix?  How far back should it be ba=
+ckported in
+> > > > > > > > the stable releases?
+> > > > > > > >
+> > > > > > > > thanks,
+> > > > > > > >
+> > > > > > > > greg k-h
+> > > > > > >
+> > > > > > > Hello Greg Thinh
+> > > > > > >
+> > > > > > > It seems first begin from the commit 1e43c86d84fb ("usb: dwc3=
+: core:
+> > > > > > > Add DWC31 version 2.00a controller")
+> > > > > > > in 6.8.0-rc6 branch ?
+> > > > > >
+> > > > > > That commit showed up in 6.9, not 6.8.  And if so, please resen=
+d with a
+> > > > > > proper "Fixes:" tag.
+> > > > > >
+> > > > >
+> > > > > This patch workarounds the controller's issue.
+> > > >
+> > > > So it fixes a bug?  Or does not fix a bug?  I'm confused.
+> > >
+> > > The bug is not a driver's bug. The fix applies to a hardware bug and =
+not
+> > > any particular commit that can be referenced with a "Fixes" tag.
+> >
+> > So it's a bug that the kernel needs to work around, that's fine.  But
+> > that implies it should go to "all" stable kernels that it can, right?
+>
+> Yes. That's right.
+>
+> >
+> > > > > It doesn't resolve any
+> > > > > particular commit that requires a "Fixes" tag. So, this should go=
+ on
+> > > > > "next". It can be backported as needed.
+> > > >
+> > > > Who would do the backporting and when?
+> > >
+> > > For anyone who doesn't use mainline kernel that needs this patch
+> > > backported to their kernel version.
+> >
+> > I can not poarse this, sorry.  We can't do anything about people who
+> > don't use our kernel trees, so what does this mean?
+>
+> Sorry, I wasn't being clear. What I meant is that it needs some work to
+> backport to stable version prior to v6.9. Anyone who needs to backport
+> this prior to this will need to resolve these dependencies.
+>
+> >
+> > > > > If it's to be backported, it can
+> > > > > probably go back to as far as v4.3, to commit 690fb3718a70 ("usb:=
+ dwc3:
+> > > > > Support Synopsys USB 3.1 IP"). But you'd need to collect all the
+> > > > > dependencies including the commit mention above.
+> > > >
+> > > > I don't understand, sorry.  Is this just a normal "evolve the drive=
+r to
+> > > > work better" change, or is it a "fix broken code" change, or is it
+> > > > something else?
+> > > >
+> > > > In other words, what do you want to see happen to this?  What tree(=
+s)
+> > > > would you want it applied to?
+> > > >
+> > >
+> > > It's up to you, but it seems to fit "usb-testing" branch more since i=
+t
+> > > doesn't have a "Fixes" tag. The severity of this fix is debatable sin=
+ce
+> > > it doesn't apply to every DWC_usb31 configuration or every scenario.
+> >
+> > As it is "cc: stable" that implies that it should get to Linus for
+> > 6.10-final, not wait for 6.11-rc1 as the 6.11 release is months away,
+> > and anyone who has this issue would want it fixed sooner.
+> >
+> > still confused,
+> >
+>
+> Ok. I may have misunderstood what can go into rc2 and beyond then. If we
+> don't have to wait for the next rc1 for it to be picked up for stable,
+> then can we add it to "usb-linus" branch?
+>
+> There won't be a Fixes tag, but we can backport it up to 5.10.x:
+>
+> Cc: <stable@vger.kernel.org> # 5.10.x: 1e43c86d: usb: dwc3: core: Add DWC=
+31 version 2.00a controller
+> Cc: <stable@vger.kernel.org> # 5.10.x
+>
+> This can go after the versioning scheme in dwc3 in the 5.10.x lts. I did
+> not check what other dependencies are needed in addition to the change
+> above.
+>
+> Thanks,
+> Thinh
 
-Why did you not choose an imperative wording for your change description?
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Do=
-cumentation/process/submitting-patches.rst?h=3Dv6.10-rc5#n94
+Is there anything else I need to modify for this patch?
 
-
-> Found by static analysis.
-
-Were any special tools involved?
-
-
-How do you think about to add any tags (like =E2=80=9CFixes=E2=80=9D and =
-=E2=80=9CCc=E2=80=9D) accordingly?
-
-Regards,
-Markus
+Thanks,
+Jos Wang
 
