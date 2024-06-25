@@ -1,131 +1,161 @@
-Return-Path: <linux-usb+bounces-11618-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11619-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40606916490
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2024 11:59:00 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E749791653D
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2024 12:27:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EB2B81F221BB
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2024 09:58:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2D8DEB21A9C
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2024 10:27:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A75CE14A4FF;
-	Tue, 25 Jun 2024 09:58:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A48DE145FF4;
+	Tue, 25 Jun 2024 10:27:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bgwqzpV8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZxBfCKV1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6791114A09F
-	for <linux-usb@vger.kernel.org>; Tue, 25 Jun 2024 09:58:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BB5714A0AA;
+	Tue, 25 Jun 2024 10:27:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719309518; cv=none; b=fASuNHrA1ZNNckK+B1LtM3Q0Xi+hPSVJhmsuabEUI0ggNi/tNLFIGVm/8D/pSojlwPWUVs9gagf5wQSbcIQBuQCfWv+lPZFJmHu+EEMZw+BKOKwkcWFnsfjdDLbA5MmNN/pUxm3O6LI5+QPCDwwTJLMvmAQdK+tW1BvuSDmYQhM=
+	t=1719311227; cv=none; b=lvUuaGExilbX6o1NftpMMgusRzbS+kGeDgx6YbTHbbALLiP8SM+KdhpAcv321GEKnE6x/YaZICUaiXvWximG03aY7ddTwMzt+FIonsOzayN01/vUB+6gYQx1cZOuryZOZ5/5no4HVzhjZjSEo2NW04aC/WPnlzI79lwloAkyajc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719309518; c=relaxed/simple;
-	bh=RMWJCm6OgHcy1a3SZSqV0ioLenglU6im2vNBQZOJ6dk=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=OHqeZS1cd6lMUlbozlwvr31npXqrYCD0IaJN66jRMRCVAdAssM/5fj+6O0hvHZUYXG7HyjH6gdusFuZrOxOyPfmMpirwACZYOnPpoKTD4U6fwhLEMHHlLugvz29PUCULyIYaA4p1AQr0BLkbxfP+Fj5OiTXYkfz5kV5vCE/FTHM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bgwqzpV8; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1719309517; x=1750845517;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=RMWJCm6OgHcy1a3SZSqV0ioLenglU6im2vNBQZOJ6dk=;
-  b=bgwqzpV8jycBwUBAd8sMZq2Yrk8/2TFPoH4XeRUIbpQ7FzumI/gT6HAw
-   Mtl5bN9ymSriyUm5dSp+VvA1+koT70ql5TcBQx2D7EgnYowgy+4QVXAMV
-   429oYHIX+rdQTaljm5K6bq7srjQFgpovCKdc/mP/CWR2lcXqnJYtQHlfg
-   jh36ErTr4qHP47YQSU43k+RmXZFMHYxYNijv1k0nhe9l5Px404hoY7xSC
-   GdcerP8ea18yXA3WrN71303tv/6usw+mLz4trzqGZ/U5vtwEvEGV/ypRT
-   oGnfz2LlX3XpRtbjo3NmOkguNGrq55ZWqQP39M1RjaSbmxmg/iuKRZYLP
-   w==;
-X-CSE-ConnectionGUID: zh5WV4WKR+q+A0ZiETwvew==
-X-CSE-MsgGUID: 4bZN8/wGTjiINYXY41LrWA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11113"; a="16448270"
-X-IronPort-AV: E=Sophos;i="6.08,263,1712646000"; 
-   d="scan'208";a="16448270"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2024 02:58:36 -0700
-X-CSE-ConnectionGUID: MULa9/yzR5qJxbXsTlTlvw==
-X-CSE-MsgGUID: GnISs+rlRN21pmsxzv+mmw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,263,1712646000"; 
-   d="scan'208";a="43468264"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa010.jf.intel.com with ESMTP; 25 Jun 2024 02:58:34 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id C167C144; Tue, 25 Jun 2024 12:58:32 +0300 (EEST)
-Date: Tue, 25 Jun 2024 12:58:32 +0300
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
-	Michael Jamet <michael.jamet@intel.com>,
-	Lukas Wunner <lukas@wunner.de>,
-	Andreas Noever <andreas.noever@gmail.com>,
+	s=arc-20240116; t=1719311227; c=relaxed/simple;
+	bh=7Qtgp71+BzcIUEJgdn5Nm+SHa7E/QAv5ZzijEMiTZIU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=sv6x2RhliqeDlbJV22pxClWJVFR01lBsxldCKtxllp05oww1DkpoiVaDAIpzlB/KnyrTpxPLP3lkJPkJe7oQtxSv+jcNd5MRGJJ4TCyMTCXc4BnqLGbteXa91MILvJVdME+FpHj314gzRkOT0qK6GWbRZ/l20iBb4kNlFy6K6yY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZxBfCKV1; arc=none smtp.client-ip=209.85.208.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-57d0eca877cso6318352a12.2;
+        Tue, 25 Jun 2024 03:27:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1719311224; x=1719916024; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ndUU3uZ6Zd9u4W/+552CURvE9KjzN6S1wQnmLnM8yl8=;
+        b=ZxBfCKV1wo/dufUMKZS8i8nJ+jza7rXALArkiGm8e0BvCBugSWGlLUKxovDXc/uWZV
+         AjUt8ttuiwLFYQr1dXDFllSKO21PS5s6qBaZr8sbG32aUyohDTa6LfA9xIK36Adi0gEK
+         D6J0m4aVzyMsLj0Y9dPd2DzsaACdNEz2fyMcdTAf1tSyvXkvp2v1a9nxyYVHAMndaMIq
+         HHEVm9yorMh6vVJRWD866dO0cNh/0CEMJEsha0ue2UsZM1xE+xDkbD0sMpqrvtqzlP4c
+         DlwtYlO/Oatmf2tQCP/DYn63NN1uXRhbx7WCi5OuF9W+B+FMcww5SGESonahEC/WTSq4
+         dD/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719311224; x=1719916024;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ndUU3uZ6Zd9u4W/+552CURvE9KjzN6S1wQnmLnM8yl8=;
+        b=mIasLmwqnNPCSH3i2Hs9f1jr2/E3GTfj6zJcBYLdsf6OPZBn7sYRUmkYlms9zmvayC
+         VO4KLlR+/rC4rMN4BsB4azcGXu1S2+ClNj6cQC5b1qREWNfB6XnUpPDw+UFM9FhBTgBE
+         uuK1ds8ORCAoh2gxSOYJ+SzLhDAD+f+F94aqxGXQV0qoqgTbEsfwyfRlMv0ilY5DcfG4
+         rsRFPn//LMAY1N8ezRK1FHHlJ+ZfgwpLP4rFhVUX0dUvymQjHzJRNEkksh/puQVKRLuQ
+         wokwa0eMT7BE99lV1ewlRsJ1DrzdmO2hoIHaIi4rM7RiqSHF17PCX5lliFvbIsJGeyCW
+         dImQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXvaRvPjM3ABJAgsGvZJpMzP+f6tCv1DUtqW6M+y4de3bTkSnAPKOMxTkDFylVrJuYXFBW13LUZYxyjHjIGCvEoY+MfieNHxHf3
+X-Gm-Message-State: AOJu0Yy0QPe/2xfcWrwbrz42xF8PEhcRdNdx89Gx5Hta4cRBgaipLJOz
+	NUlxMbQAGEi/TA8x75lVMH1sOmX4GCZcFEb9HhQAwh8h/HuZpHit
+X-Google-Smtp-Source: AGHT+IGnvry/TKO+R6+cTKLpTEIbeUzpq7lzSSIBNA8seZoSJKdTTTXFg/T7X3vsUH5CQYX+gf+QWw==
+X-Received: by 2002:aa7:c34f:0:b0:57d:4f47:d9ee with SMTP id 4fb4d7f45d1cf-57d4f47dbb1mr5642090a12.31.1719311223606;
+        Tue, 25 Jun 2024 03:27:03 -0700 (PDT)
+Received: from ThinkStation-P340.tmt.telital.com ([2a01:7d0:4800:7:e733:8331:ea5b:c314])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-57d303da254sm5745444a12.1.2024.06.25.03.27.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Jun 2024 03:27:03 -0700 (PDT)
+From: Daniele Palmas <dnlplm@gmail.com>
+To: =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
+	"David S . Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Eric Dumazet <edumazet@google.com>
+Cc: netdev@vger.kernel.org,
 	linux-usb@vger.kernel.org,
-	Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [GIT PULL] USB4/Thunderbolt changes for v6.11 merge window
-Message-ID: <20240625095832.GT1532424@black.fi.intel.com>
+	Daniele Palmas <dnlplm@gmail.com>
+Subject: [PATCH net 1/1] net: usb: qmi_wwan: add Telit FN912 compositions
+Date: Tue, 25 Jun 2024 12:22:36 +0200
+Message-Id: <20240625102236.69539-1-dnlplm@gmail.com>
+X-Mailer: git-send-email 2.37.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-Hi Greg,
+Add the following Telit FN912 compositions:
 
-I'm sending this early because my vacation starts after this week. I
-hope it is fine for you. Thanks!
+0x3000: rmnet + tty (AT/NMEA) + tty (AT) + tty (diag)
+T:  Bus=03 Lev=01 Prnt=03 Port=07 Cnt=01 Dev#=  8 Spd=480  MxCh= 0
+D:  Ver= 2.01 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=1bc7 ProdID=3000 Rev=05.15
+S:  Manufacturer=Telit Cinterion
+S:  Product=FN912
+S:  SerialNumber=92c4c4d8
+C:  #Ifs= 4 Cfg#= 1 Atr=e0 MxPwr=500mA
+I:  If#= 0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=50 Driver=qmi_wwan
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=82(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
+I:  If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=60 Driver=option
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+I:  If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+I:  If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 
-The following changes since commit 6ba59ff4227927d3a8530fc2973b80e94b54d58f:
+0x3001: rmnet + tty (AT) + tty (diag) + DPL (data packet logging) + adb
+T:  Bus=03 Lev=01 Prnt=03 Port=07 Cnt=01 Dev#=  7 Spd=480  MxCh= 0
+D:  Ver= 2.01 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=1bc7 ProdID=3001 Rev=05.15
+S:  Manufacturer=Telit Cinterion
+S:  Product=FN912
+S:  SerialNumber=92c4c4d8
+C:  #Ifs= 5 Cfg#= 1 Atr=e0 MxPwr=500mA
+I:  If#= 0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=50 Driver=qmi_wwan
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=82(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
+I:  If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+I:  If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#= 3 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=80 Driver=(none)
+E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=usbfs
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 
-  Linux 6.10-rc4 (2024-06-16 13:40:16 -0700)
+Signed-off-by: Daniele Palmas <dnlplm@gmail.com>
+---
+ drivers/net/usb/qmi_wwan.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-are available in the Git repository at:
+diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
+index 663e46348ce3..386d62769ded 100644
+--- a/drivers/net/usb/qmi_wwan.c
++++ b/drivers/net/usb/qmi_wwan.c
+@@ -1372,6 +1372,8 @@ static const struct usb_device_id products[] = {
+ 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1260, 2)},	/* Telit LE910Cx */
+ 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1261, 2)},	/* Telit LE910Cx */
+ 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1900, 1)},	/* Telit LN940 series */
++	{QMI_QUIRK_SET_DTR(0x1bc7, 0x3000, 0)},	/* Telit FN912 series */
++	{QMI_QUIRK_SET_DTR(0x1bc7, 0x3001, 0)},	/* Telit FN912 series */
+ 	{QMI_FIXED_INTF(0x1c9e, 0x9801, 3)},	/* Telewell TW-3G HSPA+ */
+ 	{QMI_FIXED_INTF(0x1c9e, 0x9803, 4)},	/* Telewell TW-3G HSPA+ */
+ 	{QMI_FIXED_INTF(0x1c9e, 0x9b01, 3)},	/* XS Stick W100-2 from 4G Systems */
+-- 
+2.37.1
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git tags/thunderbolt-for-v6.11-rc1
-
-for you to fetch changes up to 49056c95df448c1fa870c8688f34e5d1abffb154:
-
-  thunderbolt: debugfs: Use FIELD_GET() (2024-06-19 07:30:20 +0300)
-
-----------------------------------------------------------------
-thunderbolt: Changes for v6.11 merge window
-
-This includes following USB4/Thunderbolt changes for the v6.11 merge
-window:
-
-  - Add receiver lane margining support for retimers
-  - Add sideband register access to debugfs
-  - Minor cleanups.
-
-All these have been in linux-next with no reported issues.
-
-----------------------------------------------------------------
-Aapo Vienamo (1):
-      thunderbolt: debugfs: Use FIELD_GET()
-
-Mika Westerberg (7):
-      thunderbolt: Mention Thunderbolt/USB4 debugging tools in Kconfig
-      thunderbolt: Move usb4_port_margining_caps() declaration into correct place
-      thunderbolt: Make usb4_port_sb_read/write() available outside of usb4.c
-      thunderbolt: Add sideband register access to debugfs
-      thunderbolt: Split out margining from USB4 port
-      thunderbolt: Make margining functions accept target and retimer index
-      thunderbolt: Add receiver lane margining support for retimers
-
- drivers/thunderbolt/Kconfig   |  17 +-
- drivers/thunderbolt/debugfs.c | 648 +++++++++++++++++++++++++++++++-----------
- drivers/thunderbolt/retimer.c |  53 ++--
- drivers/thunderbolt/sb_regs.h |  18 +-
- drivers/thunderbolt/tb.h      |  45 ++-
- drivers/thunderbolt/usb4.c    | 183 ++++++------
- 6 files changed, 669 insertions(+), 295 deletions(-)
 
