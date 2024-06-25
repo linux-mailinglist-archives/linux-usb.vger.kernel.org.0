@@ -1,97 +1,97 @@
-Return-Path: <linux-usb+bounces-11616-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11617-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8AB8915ED9
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2024 08:22:52 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C90A6915FA6
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2024 09:11:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 673D9282EE6
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2024 06:22:51 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9F6F6B239A1
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2024 07:11:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBBBD146006;
-	Tue, 25 Jun 2024 06:22:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ridPjmwv"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2854A1494D0;
+	Tue, 25 Jun 2024 07:08:30 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtpbgbr1.qq.com (smtpbgbr1.qq.com [54.207.19.206])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53964143889
-	for <linux-usb@vger.kernel.org>; Tue, 25 Jun 2024 06:22:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CE58146A61;
+	Tue, 25 Jun 2024 07:08:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.207.19.206
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719296558; cv=none; b=VpNk+f1WroML/13p/pkSOxWXQ1kO9HVlOnzc9jrpijbnND0CMVDlbCVxxjF88dOhFXqyTofVEAPZJL16XD4AY/Ct+DhEZGgjvGozjJKEe4DJ8mbfaoHzPQc30Zc6wY0pb/RPF4laVsshee5VEPiv92ZMW+CPvO47ey8q1Fiz1vM=
+	t=1719299309; cv=none; b=BIxIWy3WnY7SvmdQbwA+iBhhrwDinhyyepnJvew764t52XkMghOiEPvSJoiDMqBwASFlDZVts9TG8PTGyWPhSYyIFSwb+fATuntgjluP5XPOjxAnYTElo/MSuOphnVwi+LHtRoUWKPcxOp1rNLWcfFHYRuCLUVFxskAgedZRT0M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719296558; c=relaxed/simple;
-	bh=LDhCz3EezznKRWBrOaP+glB3YtmcAfXCLfL3/fo+LWM=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=n/+wFrWCAboiwBkC+HWBaLCd31i5RCH70mfkJZSFDQJAOB5DkcyVgKbjiNIihbobjnwcyT+VeqdddtphPUXPomfsiRFyf7dj987r9lF7GXw2+SQdr2S6AjegSTYIas2qrEMNOY+GdmniogUkwSRWUngkWP680FbsD5X/CVDfM00=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ridPjmwv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DA571C32781
-	for <linux-usb@vger.kernel.org>; Tue, 25 Jun 2024 06:22:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719296557;
-	bh=LDhCz3EezznKRWBrOaP+glB3YtmcAfXCLfL3/fo+LWM=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=ridPjmwvA3SKVwYirHT7SV3XtH/gQtajTuc2BAgClYAduZshH17Z2XKveyRjSa5gX
-	 iJ75SHy/hd8Q00m/obb/X6VN7fKtJoPFTxoTjEaywXGu/BcE9y3dhydGe3qxm5dZsD
-	 Fbl0tiYpYi8kFPVZ1Ig4VuENDc/5gzx/pNax1ozbqKvZawDeXp6Ol26aLf/mHujrh9
-	 R9EXJQjtULVgYrL15PukZaqLbqooncHRoQviHjBzIqDaCDgZRxALkTdAm/eFn3A9h8
-	 LnaKOyR+75vy8oNF4gCynFLxwExyqBYHzRZgKPQSO5BlzQWTnFHe3Plr4jXNfIEAao
-	 ZtC5TKyW6YROw==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id C693CC53BB7; Tue, 25 Jun 2024 06:22:37 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 218977] new dtb break orangepi's usb gadget
-Date: Tue, 25 Jun 2024 06:22:37 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: plusls@qq.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-218977-208809-NjsXzUp3hd@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218977-208809@https.bugzilla.kernel.org/>
-References: <bug-218977-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1719299309; c=relaxed/simple;
+	bh=jAhgjQFN+adi60g26UrrBz1dnQ/ZYDx4EBX/2olRQIk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=QUTJq1HZrjlFcc1mkcq3ssXobArjOyoTxQw9lwyXwOrCBAUxmRPgWH+RRhvvPScyM4lpAUQzwnnfCAxzbQlvyoB0B/W0hv6dk/4VNPlXG1NXkjyWShOwsnYif78hEjdkrJPfJr0+TcdO8vZrpXwEFOPdrBtoEkmMyRKnbPyGWcY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; arc=none smtp.client-ip=54.207.19.206
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+X-QQ-mid: bizesmtp81t1719299249tfmqd336
+X-QQ-Originating-IP: YsTpw8TXEcRnmEuuIyqSvNkkmr5rT8eEDSQNnxCh5hw=
+Received: from localhost.localdomain ( [113.57.152.160])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Tue, 25 Jun 2024 15:07:28 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 1584190134348375892
+From: tuhaowen <tuhaowen@uniontech.com>
+To: stern@rowland.harvard.edu,
+	gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	usb-storage@lists.one-eyed-alien.net,
+	linux-kernel@vger.kernel.org,
+	wangyuli@uniontech.com,
+	tuhaowen <tuhaowen@uniontech.com>
+Subject: [PATCH] drv/usb: Fix the issue with Realtek USB wireless adapter AC650
+Date: Tue, 25 Jun 2024 15:07:24 +0800
+Message-Id: <20240625070724.22044-1-tuhaowen@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218977
+Due to the dual-mode functionality of the Realtek USB wireless
+adapter AC650, it initially presents itself as a flash drive
+before the driver is installed.
 
---- Comment #2 from plusls (plusls@qq.com) ---
-(In reply to The Linux kernel's regression tracker (Thorsten Leemhuis) from
-comment #1)
-> You are unlikely to reach the right people here. Best to write a mail to
-> Andre Przywara <andre.przywara@arm.com>, who authored that commit; ideally
-> do so as a reply to
-> https://lore.kernel.org/all/20221110005507.19464-1-andre.przywara@arm.com/
-> while keeping the list of recipients.
+In Linux, multi-state devices are recognized as storage devices
+on startup because the driver has not yet been loaded.
 
-Thank you for your reply, I will write a mail to the author later.
+As a result, the AC650 is identified as a DISK device at boot,
+preventing the use of its WLAN mode. The issue can only be
+resolved by unplugging and replugging the adapter.
 
---=20
-You may reply to this email to add a comment.
+Signed-off-by: tuhaowen <tuhaowen@uniontech.com>
+---
+ drivers/usb/storage/unusual_devs.h | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+diff --git a/drivers/usb/storage/unusual_devs.h b/drivers/usb/storage/unusual_devs.h
+index fd68204374f2..f660d3e52436 100644
+--- a/drivers/usb/storage/unusual_devs.h
++++ b/drivers/usb/storage/unusual_devs.h
+@@ -1487,6 +1487,12 @@ UNUSUAL_DEV( 0x0bc2, 0x3332, 0x0000, 0x9999,
+ 		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+ 		US_FL_NO_WP_DETECT ),
+ 
++UNUSUAL_DEV(0x0bda, 0x1a2b, 0x0000, 0x9999,
++		"Realtek",
++		"USB Network Device",
++		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
++		US_FL_IGNORE_DEVICE),
++
+ UNUSUAL_DEV(  0x0d49, 0x7310, 0x0000, 0x9999,
+ 		"Maxtor",
+ 		"USB to SATA",
+-- 
+2.20.1
+
 
