@@ -1,56 +1,69 @@
-Return-Path: <linux-usb+bounces-11650-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11652-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A485916CEC
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2024 17:25:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 29115916CFC
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2024 17:27:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C515BB20A30
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2024 15:25:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A77A31F2BB4C
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2024 15:27:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E03117836F;
-	Tue, 25 Jun 2024 15:20:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2F06171657;
+	Tue, 25 Jun 2024 15:26:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="MVECx75F"
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="ehy0eJlm"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mout.web.de (mout.web.de [212.227.17.11])
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05DCE16EBF5;
-	Tue, 25 Jun 2024 15:20:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30F75154C18;
+	Tue, 25 Jun 2024 15:26:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.132.182.106
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719328856; cv=none; b=ljyzOIuXi7j5fkZuqM09eNTTAllyusQ21FoH6ZdtIF7rGp1g3StMm8bHdMzFC6Uc+OosQhqSgZlmXMFPhqHb+UpNDxYDJi0kTFsg0kQ/uls1wToc0iRPWT6t3MqmlWeD4XlOLNCXKvM46RS1zcFQjdrrf4/WAK/4+W2XvYZpmBs=
+	t=1719329169; cv=none; b=hiXjbWNgbbDr57iYP4e7zeG9kPlgKl/U/GmKq5LoAXhk6sgl2JovxZH7Rx+AyLzeqkGfs8zN6/NstVFhXDIyeR7CFzls26l90hHLzA+6BoLlZHQmTSO8P1kdGjumgxKGY2SY2khRuj/BmseQqXQZd8N/NOw+6U9uIqEGNTqX3xA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719328856; c=relaxed/simple;
-	bh=GaqeeluCDzxgG97kwSNBxAr1a962XBnV49RFQmhG90I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NjW4QGiHxO0yWi5Na6KDReaLLfnsk/ou+zv1EbvhLDGGtBof/k2UUC+5gG889DNdyRGAidmGmQjd/AdjkYe8oilXjnZjguBy3HlLlAVOOx8DT7Zur964+GX7DyZjHLHSqODM7HPBHYubKjVsvVvAZ3/uof8UMrpezC51j1nECJQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=MVECx75F; arc=none smtp.client-ip=212.227.17.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1719328812; x=1719933612; i=markus.elfring@web.de;
-	bh=YVD/tJNvGbYivDfpDiivk2bEEs6GBmCeIdOyyXsf5u8=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=MVECx75F0X3d1N8GDmuYHco2iBYYP25lTijAqHV+rQHmWrwwvl+AtuYPc+ao1yKm
-	 qT7uHx5CW3svQ5Na82hwZzx/iqTpdoYJ40q0WAUWM5z7b6r4m4GwbsG2aRLIolUdo
-	 JLP7CW1HXY6sm7FsL9EHwxDKO9W3Q7YWH7ljWeMYT7VUym/JVZFeeK4TNsJSe7t95
-	 bSGcdx++g9gYhkL+t2uS5+Rfv6TYLc0zKtFqJYgLSIcxE4VRIA32K9KHnMBWzoCcv
-	 8OgUYlmH4oUwweRhnt7V/iKq7WUx1QCXWfRI6d+r6tsCDQKCdoxhWlZ5pfJjOierE
-	 Ci5rnrDu4aYNR6Csaw==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.21] ([94.31.85.95]) by smtp.web.de (mrweb106
- [213.165.67.124]) with ESMTPSA (Nemesis) id 1Mpl0p-1shA252rWv-00eio5; Tue, 25
- Jun 2024 17:20:12 +0200
-Message-ID: <5fa430f5-3e18-4c20-93d4-6733afd6bdcf@web.de>
-Date: Tue, 25 Jun 2024 17:20:07 +0200
+	s=arc-20240116; t=1719329169; c=relaxed/simple;
+	bh=sdfaXkV0ZRdCj960vhUIBQqa7zAxMkZ3euRIAUnaJOQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=V1N8PmocMVZhV9FGwkf0fcsESuf4vWoFpu4gHtcvsGxosrHl5/JpoJZb13SoWCW/RLfO04IjedebSBKvfU1/SkVuMws2jmQKNEBBDzblquywlD1+mvH6uFMM6nmgSXnEZ40esokahbOlKnDq10CW6pWaUdGX3uKyITZotU5/3Uw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=ehy0eJlm; arc=none smtp.client-ip=185.132.182.106
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45PCWaBS026625;
+	Tue, 25 Jun 2024 17:25:44 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=selector1; bh=
+	5edzio71DzaT5lNquA9f78o6eePUxXY41XuAi046gC4=; b=ehy0eJlmIYtr75+D
+	t5lfKHRXhqco67FEjoxZRxxu4q9xgtDTyVo605dSwBCoOvioEqvy7QW/ZRVEMMVY
+	Q6umtClhHR8P93I4qtodN+U9uFw4Locy32XqC1Xw/8R1JCE54wN6JU9NacB/UTjG
+	U9yqd7fZ4fBNWuvlEqJZ0/Q72i6MEhxBsWT/vZ9JhPD/aFk8TL5BEAI0MW4LA4cx
+	UEiVUZVCFRvNlcAiH/6jfsm7aOTaS9v9Pkkr4n0Uf0sd9E/nl69qENwWoYf+JOl0
+	DW3M+bHx55b6Gde7pwcxg41J6W0dkdr2wRMYxBSAqEVypfoLoFDbmXbEfQ1AbHzw
+	56kVxg==
+Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3ywnxxcgkb-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 25 Jun 2024 17:25:43 +0200 (MEST)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 7223C4002D;
+	Tue, 25 Jun 2024 17:25:37 +0200 (CEST)
+Received: from Webmail-eu.st.com (eqndag1node5.st.com [10.75.129.134])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 9B79A220B42;
+	Tue, 25 Jun 2024 17:24:56 +0200 (CEST)
+Received: from SAFDAG1NODE1.st.com (10.75.90.17) by EQNDAG1NODE5.st.com
+ (10.75.129.134) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Tue, 25 Jun
+ 2024 17:24:56 +0200
+Received: from [10.48.86.222] (10.48.86.222) by SAFDAG1NODE1.st.com
+ (10.75.90.17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Tue, 25 Jun
+ 2024 17:24:55 +0200
+Message-ID: <160e7af5-29c8-49a6-ae4f-dbfc3dd608c1@foss.st.com>
+Date: Tue, 25 Jun 2024 17:24:54 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -58,80 +71,183 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4] usb: gadget: aspeed_udc: validate endpoint index for
- ast udc
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- linux-aspeed@lists.ozlabs.org, linux-usb@vger.kernel.org,
- kernel-janitors@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc: Ma Ke <make24@iscas.ac.cn>, Andrew Jeffery <andrew@codeconstruct.com.au>,
- Joel Stanley <joel@jms.id.au>, Julia Lawall <julia.lawall@inria.fr>,
- Neal Liu <neal_liu@aspeedtech.com>, LKML <linux-kernel@vger.kernel.org>
-References: <20240625022306.2568122-1-make24@iscas.ac.cn>
- <edeaa699-7cfe-44ed-abde-7cf3d3efe3bf@web.de>
- <2024062556-ladder-canister-1ab1@gregkh>
- <ff2aaf0d-5456-43d1-af52-78986b3401f9@web.de>
- <2024062532-strep-president-44d7@gregkh>
-Content-Language: en-GB
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <2024062532-strep-president-44d7@gregkh>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:n7N8SoQuEumAxkKN67/A45ARqVyO0jTW3y4tbOJ0enxIUT/JB4Z
- jwc527Jhth5DLaABBIzU1LevsZcydRwgmMCp2WAH6SLBe/wRgO3S4+pBGx/IXkus3J39PrZ
- lYX4/DkzpmLPK2X5k/RWPu53aTPmDKKrmBqtV++d+fWmJKH+KwfYXEz9G8XH9yQmn1rLAMD
- dLrVgGrfxVyUt7lTcM6Cw==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:OqfYbzbqvxk=;5Z3b8yRWNTSCO8osebXlPRAScJk
- a6d2G9e3ovbjDa6NlBzZytC5inZUrWz8TFvm8ExHuZOmV9k/Qo9KDt3t/N4C4Y1dLP3WKJTN3
- lQLRoJc4g8GiU/RvhJ9wKqsudHr42nS1H4t02s9ILLfRby0tKZk7n1a9lDIvxx8xUqBM4cSgk
- L9MY4vVxXvy4UOmEOjkAWpetIfj8MA7iIDhzGfzMScq8vW4EZRaKqrzzVvStkY9w+xG43fJMu
- a1TEQcT2JlfLhEsepHPafSB9NRQgttA0lYJ/Yr4ycJo5L/xT23MFGChhZ1jR9MQDQeYT25/NJ
- LJF9A1pJFbw5EwBYV1PMc8si9EUqWe6yu1Jf7F6NcwRfhWaBUq2OlHS1Wra7A/8q+j5R+qugN
- z2yDA7VSEG06fxvrUvxpyxxT2gaYtun6oEzY58o7a1nwoXArSJ8d2KyVN2htOFFnWDtKO9uef
- BE28Z6PXSCqMBZGbXA70O4LPHSTbtzclAmBAKFxAe4IwPveyOoyn+rVsuR+Z6C6i3+7viI4pA
- EYP3HyUHHJlwfImnv4oSYuEMGj0oImE24zXZVJDRvihVTx8GJY6QbMJYQ4LMpItlSQBrRao0C
- UtyYjBVlH2578wHM/jpVq1LWG8IuokpBx8X1ZbpjcIH4n/Y+jTfj3QAfgP+PQSsq+8r1ZS67k
- xW1pKBBZNj9vbIP8B/npY484BIaLzluT01bKzY/uDIsbwk6xaXHPexs/ioLrNvvHIg/03itTZ
- uILgTfV7KnjfSFxqPfJCnwwnb2xz+MH09Bgfjnb9cE6MoAKs8KbL3xkrsa5FMCufDmbKgdGK1
- zoFl7KDoEuK1bo78nDTuK2k3BdP9s0ekGCutzcNk004so=
+Subject: Re: [Linux-stm32] [PATCH v2 6/7] usb: typec: ucsi: extract common
+ code for command handling
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Heikki Krogerus
+	<heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+CC: Neil Armstrong <neil.armstrong@linaro.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Nikita Travkin <nikita@trvn.ru>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>
+References: <20240621-ucsi-rework-interface-v2-0-a399ff96bf88@linaro.org>
+ <20240621-ucsi-rework-interface-v2-6-a399ff96bf88@linaro.org>
+Content-Language: en-US
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+In-Reply-To: <20240621-ucsi-rework-interface-v2-6-a399ff96bf88@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SAFDAG1NODE1.st.com
+ (10.75.90.17)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-06-25_10,2024-06-25_01,2024-05-17_01
 
->>>>> We should verify the bound of the array to assure that host
->>>>> may not manipulate the index to point past endpoint array.
->>>>
->>>> Why did you not choose an imperative wording for your change descript=
-ion?
->>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tr=
-ee/Documentation/process/submitting-patches.rst?h=3Dv6.10-rc5#n94
->>>
->>> Markus, please stop reviewing USB patches.  This is not helpful at all=
-,
->>> and causes new developers extra work for no reason at all.
->>
->> How does this feedback fit to the linked information source?
->
-> That is not what I wrote.
+On 6/21/24 00:55, Dmitry Baryshkov wrote:
+> Extract common functions to handle command sending and to handle events
+> from UCSI. This ensures that all UCSI glue drivers handle the ACKs in
+> the same way.
+> 
+> The CCG driver used DEV_CMD_PENDING both for internal
+> firmware-related commands and for UCSI control handling. Leave the
+> former use case intact.
+> 
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> ---
+>  drivers/usb/typec/ucsi/ucsi.c           | 43 +++++++++++++++++++++++++++
+>  drivers/usb/typec/ucsi/ucsi.h           |  7 +++++
+>  drivers/usb/typec/ucsi/ucsi_acpi.c      | 46 ++---------------------------
+>  drivers/usb/typec/ucsi/ucsi_ccg.c       | 21 ++-----------
+>  drivers/usb/typec/ucsi/ucsi_glink.c     | 47 ++---------------------------
+>  drivers/usb/typec/ucsi/ucsi_stm32g0.c   | 44 ++--------------------------
+>  drivers/usb/typec/ucsi/ucsi_yoga_c630.c | 52 ++-------------------------------
+>  7 files changed, 62 insertions(+), 198 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index 4ba22323dbf9..691ee0c4ef87 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -36,6 +36,48 @@
+>   */
+>  #define UCSI_SWAP_TIMEOUT_MS	5000
+>  
+> +void ucsi_notify_common(struct ucsi *ucsi, u32 cci)
+> +{
+> +	if (UCSI_CCI_CONNECTOR(cci))
+> +		ucsi_connector_change(ucsi, UCSI_CCI_CONNECTOR(cci));
+> +
+> +	if (cci & UCSI_CCI_ACK_COMPLETE &&
+> +	    test_bit(ACK_PENDING, &ucsi->flags))
+> +		complete(&ucsi->complete);
+> +
+> +	if (cci & UCSI_CCI_COMMAND_COMPLETE &&
+> +	    test_bit(COMMAND_PENDING, &ucsi->flags))
+> +		complete(&ucsi->complete);
 
-You indicated concerns according to patch review processes,
-didn't you?
+Hi Dmitry,
 
-See also:
-* Patch submission notes
-  https://elixir.bootlin.com/linux/v6.10-rc5/source/Documentation/process/=
-maintainer-tip.rst#L100
+I've recently faced some race with ucsi_stm32g0 driver, and have sent a
+fix for it [1], as you've noticed in the cover letter.
 
-* Contributor Covenant Code of Conduct
-  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/=
-Documentation/process/code-of-conduct.rst?h=3Dv6.10-rc5#n3
+To fix that, I've used test_and_clear_bit() in above two cases, instead
+of test_bit().
 
+https://lore.kernel.org/linux-usb/20240612124656.2305603-1-fabrice.gasnier@foss.st.com/
 
-> I wrote, "Please stop reviewing USB patches."
->
-> Please stop now.
+> +}
+> +EXPORT_SYMBOL_GPL(ucsi_notify_common);
+> +
+> +int ucsi_sync_control_common(struct ucsi *ucsi, u64 command)
+> +{
+> +	bool ack = UCSI_COMMAND(command) == UCSI_ACK_CC_CI;
+> +	int ret;
+> +
+> +	if (ack)
+> +		set_bit(ACK_PENDING, &ucsi->flags);
+> +	else
+> +		set_bit(COMMAND_PENDING, &ucsi->flags);
+> +
+> +	ret = ucsi->ops->async_control(ucsi, command);
+> +	if (ret)
+> +		goto out_clear_bit;
+> +
+> +	if (!wait_for_completion_timeout(&ucsi->complete, 5 * HZ))
+> +		ret = -ETIMEDOUT;
 
-I might be going to influence evolution of this software area in other way=
-s
-under other circumstances.
+With test_and_clear_bit(), could return 0, in case of success here.
 
-Regards,
-Markus
+I'd suggest to use similar approach here, unless you see some drawback?
+
+Best Regards,
+Fabrice
+
+> +
+> +out_clear_bit:
+> +	if (ack)
+> +		clear_bit(ACK_PENDING, &ucsi->flags);
+> +	else
+> +		clear_bit(COMMAND_PENDING, &ucsi->flags);
+> +
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(ucsi_sync_control_common);
+> +
+>  static int ucsi_acknowledge(struct ucsi *ucsi, bool conn_ack)
+>  {
+>  	u64 ctrl;
+> @@ -1883,6 +1925,7 @@ struct ucsi *ucsi_create(struct device *dev, const struct ucsi_operations *ops)
+>  	INIT_WORK(&ucsi->resume_work, ucsi_resume_work);
+>  	INIT_DELAYED_WORK(&ucsi->work, ucsi_init_work);
+>  	mutex_init(&ucsi->ppm_lock);
+> +	init_completion(&ucsi->complete);
+>  	ucsi->dev = dev;
+>  	ucsi->ops = ops;
+
+[snip]
+
+>  	ucsi->ucsi = ucsi_create(dev, &pmic_glink_ucsi_ops);
+> diff --git a/drivers/usb/typec/ucsi/ucsi_stm32g0.c b/drivers/usb/typec/ucsi/ucsi_stm32g0.c
+> index 14737ca3724c..d948c3f579e1 100644
+> --- a/drivers/usb/typec/ucsi/ucsi_stm32g0.c
+> +++ b/drivers/usb/typec/ucsi/ucsi_stm32g0.c
+> @@ -61,11 +61,7 @@ struct ucsi_stm32g0 {
+
+[snip]
+
+> -
+> -	ret = ucsi_stm32g0_async_control(ucsi, command);
+> -	if (ret)
+> -		goto out_clear_bit;
+> -
+> -	if (!wait_for_completion_timeout(&g0->complete, msecs_to_jiffies(5000)))
+> -		ret = -ETIMEDOUT;
+> -	else
+> -		return 0;
+> -
+> -out_clear_bit:
+> -	if (ack)
+> -		clear_bit(ACK_PENDING, &g0->flags);
+> -	else
+> -		clear_bit(COMMAND_PENDING, &g0->flags);
+> -
+> -	return ret;
+> -}
+> -
+>  static irqreturn_t ucsi_stm32g0_irq_handler(int irq, void *data)
+>  {
+>  	struct ucsi_stm32g0 *g0 = data;
+> @@ -449,13 +416,7 @@ static irqreturn_t ucsi_stm32g0_irq_handler(int irq, void *data)
+>  	if (ret)
+>  		return IRQ_NONE;
+>  
+> -	if (UCSI_CCI_CONNECTOR(cci))
+> -		ucsi_connector_change(g0->ucsi, UCSI_CCI_CONNECTOR(cci));
+> -
+> -	if (cci & UCSI_CCI_ACK_COMPLETE && test_and_clear_bit(ACK_PENDING, &g0->flags))
+> -		complete(&g0->complete);
+> -	if (cci & UCSI_CCI_COMMAND_COMPLETE && test_and_clear_bit(COMMAND_PENDING, &g0->flags))
+> -		complete(&g0->complete);
+> +	ucsi_notify_common(g0->ucsi, cci);
+
+I can see the fix "test_and_clear_bit()" sent earlier is removed from here.
+
+I'd suggest to use similar approach as here, unless you see some drawback?
+
+Please advise,
+Best Regards,
+Fabrice
 
