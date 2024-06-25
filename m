@@ -1,102 +1,112 @@
-Return-Path: <linux-usb+bounces-11632-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11633-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA3E491691D
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2024 15:38:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 170ED916A28
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2024 16:22:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 123F51C24A6D
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2024 13:38:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C309A28180C
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2024 14:22:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18EDF16D335;
-	Tue, 25 Jun 2024 13:37:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53CD516B388;
+	Tue, 25 Jun 2024 14:22:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YIswairP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id DDF2F1607B3
-	for <linux-usb@vger.kernel.org>; Tue, 25 Jun 2024 13:37:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EADF155336;
+	Tue, 25 Jun 2024 14:22:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719322628; cv=none; b=mMgcRtMmPod/4KZyowNNhndzENHJJEAEwAFtWfMyyiv94PSdywOt7VI0+LQs0NcC1jGEeIUHG8iHqg2lUZv/99YhGV+p32VGXLruFzZ7G0swwpkekavg2DJPW0h97xIEyE+WkUdzYbqpreYt9R7ZyQk83SN9oIrr2BvcBPZz40k=
+	t=1719325348; cv=none; b=ASZsWSXoUOrN8XjlbzuHO3vIVgd1rRWqY2h1qc+TzjUf+tmIwbPGv0t2cCH52ArT4gF0A8wYv4csXu4ffC38a8rLTvOzYpxs/8LmhjfR5dpGOXiY754C2BvTB7HNpugA3sU/p8mRWNlsm3IuavYNjT0aE92kv5gkde6/RoAe+HM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719322628; c=relaxed/simple;
-	bh=Wcc8J5L5SEDDqR2fCyXyRMAE3HdEjSKFjS+qFSRMFgU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=R1z22rc4r03M/CKS5nfvJDMn/7Nr8sCzhf4OCdRFUgs7RDiMYe51GWqsVHNueNXswWucBIOMLUb4e6iFZVkKD6RKDSuZP/Atfg9nztrHxV2joGyluWmKiZgnGSeA0MfvyJzedc6uNJhlbr0O00+QpspFDDVJRTjurwVYSh2rTZA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
-Received: (qmail 664288 invoked by uid 1000); 25 Jun 2024 09:36:59 -0400
-Date: Tue, 25 Jun 2024 09:36:59 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: tuhaowen <tuhaowen@uniontech.com>
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-  usb-storage@lists.one-eyed-alien.net, linux-kernel@vger.kernel.org,
-  wangyuli@uniontech.com
-Subject: Re: [PATCH] drv/usb: Fix the issue with Realtek USB wireless adapter
- AC650
-Message-ID: <83fd1171-5397-40ea-b9e3-54cba073c09a@rowland.harvard.edu>
-References: <20240625070724.22044-1-tuhaowen@uniontech.com>
+	s=arc-20240116; t=1719325348; c=relaxed/simple;
+	bh=wnPvsC8e0yOKqSzsqPFIBHLz+FOAW4Icxiaj/GUeQaU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=jIRwP3tpYE4QeP9Ui9XzokpDc7xubNdrUtg5mzP95P88b0aw4CsYekVIzPGkDpJATHYPXlWEGR60VI+Omj4BN2P8mP8x41SO3r18trYbWSxOmQZfRJR6irLjCaqY8if50emsJPpH6iDt8c5YbpOt7RW5yJYiJMGgPrD51gAw24M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YIswairP; arc=none smtp.client-ip=209.85.216.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2c80637ee79so3835327a91.0;
+        Tue, 25 Jun 2024 07:22:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1719325347; x=1719930147; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yDGsqPcbEpd2LyCxfncGiISuzeJxwCMrz9xRntGBtZ8=;
+        b=YIswairPb8gqQUn9PE3o0xC4dx6XAuKptA05jNbxDSfEtYpRcNELtI0mC38tHcZoqU
+         cw+aSUqzSq4M22kmDA25rVmfXy7TcZrkJJUZvI3Jl0ujQ9KB6VVxo22A9AN5rZlu1y97
+         FlShAmuNNVCZ3MJ/nreben/66AlDypDMMp1x2JY/ODxNHJDwMZegCmoxqaDWYDi3lfCX
+         xOZg5bDFmUpaZSvqusFzv9ZbkyW0ffFxdOoS7grx/4h4rAJ1P8q/O0zWyYU1VZTuj4oG
+         yP3KO4OBVrSpK0D1hGELyT6XTINuCgXd6AmU2H1k/4td7GeLG+TcYZxp81cmYrOEnvuw
+         6w0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719325347; x=1719930147;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yDGsqPcbEpd2LyCxfncGiISuzeJxwCMrz9xRntGBtZ8=;
+        b=A70nJlUhzTmSgpzG1xzOuuwAq7X8k/H3ufzGL+hUxZ/VQg5miDB06y4gdea9o4tEfE
+         WnHmtg4WzTeJS3+iJibNXyL52VH1F9XhgamiIihDBPMTAda8PN2eSQYvsJjSYK8W2IoE
+         v3dfPj5w1qj/WTIrqKNjxNYOKInl1Y/5yQguf8+izkul1td4Xmbfxw1GJdIormrKlUhN
+         KSQtis8oX2xwk29lQpBykRJG3duT4MJh1O81YnYsmRRHcJfAo9eAhy1mVaxhbKVIdmOy
+         Pnhafmn1QG4pGQIk9G6LQWsffEt4p290HBsCP3GNojTsgaeOJ9+N96sDyGOuk+Jjf4ip
+         VhmQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVzIKxWxsQrl4CznjWLS97GCUaMitb0CRtWyBpx2M2vHngVw8JpornQauRqHkTSzv5DmrKxZBgbewHzzLfwmwDWFj9Um2hIYzBvGvbk
+X-Gm-Message-State: AOJu0Yyh/SFNQFKAv6Er/Qneh6HoEEeI4VIR7xQG5ZNa4Y+Cf4HLvd6D
+	45YCKHfGlP6L+OpNQgP1L6fAN+NAoi4JvUEJTjEUFQS8Ex/xeGbuXm7XcQ9G
+X-Google-Smtp-Source: AGHT+IFNRdXhvs1wwkcBrpk4hY9tumdf4HK02pblsvKehBcseIhhxW0iGifDQSzGb7umbqOni++Usg==
+X-Received: by 2002:a17:90a:d490:b0:2c6:fabe:b2e0 with SMTP id 98e67ed59e1d1-2c8613db148mr6292425a91.26.1719325346698;
+        Tue, 25 Jun 2024 07:22:26 -0700 (PDT)
+Received: from [192.168.1.7] ([159.192.83.206])
+        by smtp.googlemail.com with ESMTPSA id 98e67ed59e1d1-2c819dd0cf7sm8740279a91.48.2024.06.25.07.22.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Jun 2024 07:22:26 -0700 (PDT)
+Message-ID: <bb98f8f0-0326-4fc1-8b24-dd35ed0b80fb@gmail.com>
+Date: Tue, 25 Jun 2024 21:22:20 +0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] drv/usb: Fix the issue with Realtek USB wireless adapter
+ AC650
+To: tuhaowen <tuhaowen@uniontech.com>, stern@rowland.harvard.edu,
+ gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+ linux-kernel@vger.kernel.org, wangyuli@uniontech.com
+References: <20240625070724.22044-1-tuhaowen@uniontech.com>
+Content-Language: en-US
+From: Lars Melin <larsm17@gmail.com>
 In-Reply-To: <20240625070724.22044-1-tuhaowen@uniontech.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Jun 25, 2024 at 03:07:24PM +0800, tuhaowen wrote:
+On 2024-06-25 14:07, tuhaowen wrote:
 > Due to the dual-mode functionality of the Realtek USB wireless
 > adapter AC650, it initially presents itself as a flash drive
 > before the driver is installed.
-
-Does this flash-drive mode have a real purpose?  For instance, can 
-people upload new firmware by writing it to the flash drive?  I can't 
-imagine that the manufacturer would have implemented the dual-mode 
-functionality for no reason at all.
-
+> 
 > In Linux, multi-state devices are recognized as storage devices
 > on startup because the driver has not yet been loaded.
 > 
 > As a result, the AC650 is identified as a DISK device at boot,
 > preventing the use of its WLAN mode. The issue can only be
 > resolved by unplugging and replugging the adapter.
-
-If there's no way to resolve this issue other than by unplugging and 
-replugging the adapter, how can a patch help?
-
-Are you sure that the problem can't be solved by a userspace helper, 
-such as the usbmodeswitch program?
-
-Alan Stern
-
-> Signed-off-by: tuhaowen <tuhaowen@uniontech.com>
-> ---
->  drivers/usb/storage/unusual_devs.h | 6 ++++++
->  1 file changed, 6 insertions(+)
 > 
-> diff --git a/drivers/usb/storage/unusual_devs.h b/drivers/usb/storage/unusual_devs.h
-> index fd68204374f2..f660d3e52436 100644
-> --- a/drivers/usb/storage/unusual_devs.h
-> +++ b/drivers/usb/storage/unusual_devs.h
-> @@ -1487,6 +1487,12 @@ UNUSUAL_DEV( 0x0bc2, 0x3332, 0x0000, 0x9999,
->  		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
->  		US_FL_NO_WP_DETECT ),
->  
-> +UNUSUAL_DEV(0x0bda, 0x1a2b, 0x0000, 0x9999,
-> +		"Realtek",
-> +		"USB Network Device",
-> +		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
-> +		US_FL_IGNORE_DEVICE),
-> +
->  UNUSUAL_DEV(  0x0d49, 0x7310, 0x0000, 0x9999,
->  		"Maxtor",
->  		"USB to SATA",
-> -- 
-> 2.20.1
-> 
-> 
+
+It can be resolved by manually ejecting the created cdrom drive or by 
+using usb_modeswitch which will eject the drive as soon as it is 
+detected. No need for unplugging/replugging.
+
+thanks
+Lars
+
 
