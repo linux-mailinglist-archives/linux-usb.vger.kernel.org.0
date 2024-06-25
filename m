@@ -1,110 +1,132 @@
-Return-Path: <linux-usb+bounces-11654-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11655-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A4A4916DC7
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2024 18:08:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 82275916DCE
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2024 18:13:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9E9A2B277A0
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2024 16:08:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BAB23B223F0
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2024 16:13:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A111917165B;
-	Tue, 25 Jun 2024 16:07:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04339172761;
+	Tue, 25 Jun 2024 16:12:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Uyh46b93"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="FwfKPqOs"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.web.de (mout.web.de [212.227.17.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC95C170838
-	for <linux-usb@vger.kernel.org>; Tue, 25 Jun 2024 16:07:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FDDA14A627;
+	Tue, 25 Jun 2024 16:12:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719331677; cv=none; b=sAtnZs4xE+bktZJxCLbgKY2xieQa5MQI5YRm+sSxJSG2XFrz5ZA2x1droa8b+/d1Xf+r9ZcM7dRDAbj3ODyeZMAsOv6yp5mSzqxYIHOGR804iAUsyepmYkmmcD8u9XllpJBwdnehn7JDBdY1hwnwfjwDGEB7EzuRsqYS/N1YNwg=
+	t=1719331972; cv=none; b=e45nTrrOEk4LxQJ1cvhcB0/1nMGxtv5DGI5wSKbhgGhzrZTyz5avdvJ8HtQVl6De9unN4PmXqh0mMmJMnhdPjSvPvjD3dhdAt9Cwb21IGX5B3c5Z7iYxcq23a2MMst26sfjHopAdpS6mWVa3Yde6Gk+6dpYrk+e5pQyCwCIWEFA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719331677; c=relaxed/simple;
-	bh=MITC5Dpw59PNG3gH9LJkI2TRRsflwYIg4/sSfG8aFOQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=g4vm88tO1qYH/aLwd6djYYeylQJXFXd6GApcSDiOe6TFWFxmLQamXu8mPRkdkGhJkOc38mCopj8hcNZD1GWSb7y0T1ku+6/7B1LrKtvb9cddK3HvnWJieJv4azuh248l17kJergN/T7p51N/jpf3fU2rqjKMTxFF66BiJZ2JOWw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Uyh46b93; arc=none smtp.client-ip=209.85.166.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-io1-f41.google.com with SMTP id ca18e2360f4ac-7eee7728b00so211147139f.3
-        for <linux-usb@vger.kernel.org>; Tue, 25 Jun 2024 09:07:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1719331675; x=1719936475; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0MP9ThQ+daRDKC61/fbRCzsXnGThsgTesQ7WwlFfdMA=;
-        b=Uyh46b9389kxL/t8N/4CMzoaYmjGi7YaepdvgWkrG/h7ACzLySV8TkaE8QuG0x4P0l
-         yfav7s+YOcvmntuAwpcOJi09CNiik/oPuLqwf0aDqyhMX+ozfKdGLa3P3p6cHVlS8A4A
-         6JeziXA5i69LrkkYBH1Ar7LeGQ3wgJ8f1Nnx8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719331675; x=1719936475;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0MP9ThQ+daRDKC61/fbRCzsXnGThsgTesQ7WwlFfdMA=;
-        b=oB6jpEItkkLXb2xC62Nv+SnPjrsd7pMxSuEW+xVVobfCdwOHtPStZZPC5OaXn29weC
-         QtBeamWvhFsphaaT97h8dm/wvwXlqydk3Fb7PmYCZXWuFy9tdiaZTmu/WvIFaxDIn5L+
-         unC+pCQkDPvyyJUOJbQvur1k0p60uMU5nQuDL7NJ4f1BV2vrJhPcNBJA1xSvI73VUCH8
-         34Z6E1DoXvUafZlHHr5iJBj5hAqHYibEiNDps6pXBaD0F3pIG2RCLEhzZH6in5AbTykh
-         hoVwGJJFSF16l0VWaFfaUWlT0gFBiN83ecmyj4AfZKuM6a3b1Abx7TYEX2vznsd/QoF2
-         kC0Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXEIg7f7SuCe9FvNR1cNqRWelqNprJxvtncbFv1R8T/GNYPJO2xkRU9K3CGLXXUdwaUKZChlWxGKkwPYzhoLAePTY2Wo0Afbb08
-X-Gm-Message-State: AOJu0Yzvy0VuzS0bHL1rSuIcEwIzqsTa5nKxMpz5Ksw5jVhhzEP8LWTI
-	ISd5ewmOnYVyE+Tv68wI3TQTQr197JVwyls/5yDpWRrcWakVk8b3C0RywCNCEQ==
-X-Google-Smtp-Source: AGHT+IFmpORz7FTl3zC3V3Mc8GsQORkCPn6Jex2m3rT9i9BCFGhLbaBTsW1U1XoDluMsGW6HyNjfnQ==
-X-Received: by 2002:a05:6602:3f81:b0:7eb:b257:65ec with SMTP id ca18e2360f4ac-7f3a75e3622mr719116439f.20.1719331672894;
-        Tue, 25 Jun 2024 09:07:52 -0700 (PDT)
-Received: from localhost (11.249.122.34.bc.googleusercontent.com. [34.122.249.11])
-        by smtp.gmail.com with UTF8SMTPSA id 8926c6da1cb9f-4b9ecf47885sm1829652173.140.2024.06.25.09.07.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Jun 2024 09:07:52 -0700 (PDT)
-Date: Tue, 25 Jun 2024 16:07:51 +0000
-From: Matthias Kaehlcke <mka@chromium.org>
-To: Jameson Thies <jthies@google.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Benson Leung <bleung@google.com>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: misc: onboard_usb_dev: Add match function
-Message-ID: <ZnrrV6A01WWbVNqv@google.com>
-References: <20240612180448.1.I805556c176c626872c15ce001f0e8198e1f95ae1@changeid>
- <2024062032-bobbing-backspace-8bd5@gregkh>
- <CAMFSARehnCK-xEe31_diLV_oavMSctXgZZcJKARN8gg443R4nA@mail.gmail.com>
+	s=arc-20240116; t=1719331972; c=relaxed/simple;
+	bh=M4zqVrfxiNAFsT6ctqK1XKNWsBCMjv6lM8g4olf2aak=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=tcMDll5A8frRRKoRwU7wQL7yJl+V8zWhFDc5uWUd4KcaIs2OEd7v/ML/NoMAiWc+KFiQ3chJx2qwQMKMd1Eu3dRvwIOzhtOAeMpTsDCB8CpJbP7AxZfBkYK2IBgTFMu2ix0Wlm3zh38FauuJcmKPGzZCplygg3NcPJwRXA6Fuq8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=FwfKPqOs; arc=none smtp.client-ip=212.227.17.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1719331942; x=1719936742; i=markus.elfring@web.de;
+	bh=a6i52JC6Jz9SMj7x18Xrbev5HZKfpMpu1ptSSS7AvsE=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=FwfKPqOskwVJaj6zll4hhIt4YIMMutlU1MUPKdiNNiljKFefTx7HPc4XuI/CRpKi
+	 rg+Eq07A2W3x4VfgdXmMah0p/AerzLhJFWfXKkaASmmtyUf2chAcLnOX8G/ycKv/+
+	 uTaXyGALct2IiAKqyyWrrsq6wPySIS4dFaQt/gdrnXfmaQavUuQ+kEfNEWNVpksC1
+	 +smyND++jtPrNrR7MH3oy/SHRLxAIWU7x4BmmNjN4gs7Mff9wefIxkGdSHyxf6SVs
+	 AxviH8GiXOmwLINk1s8btfhrek9zyJfgs6hqIsZUARzsD2Su2F6Tmnn1cKYtjxoit
+	 LBxnVALaM1BBn7WknQ==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.85.95]) by smtp.web.de (mrweb105
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1MRk0W-1rssmK3NH8-00Mo7u; Tue, 25
+ Jun 2024 18:12:22 +0200
+Message-ID: <fcb2c59a-b0e2-4a07-853d-8dda94db628e@web.de>
+Date: Tue, 25 Jun 2024 18:12:18 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAMFSARehnCK-xEe31_diLV_oavMSctXgZZcJKARN8gg443R4nA@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [v4] usb: gadget: aspeed_udc: validate endpoint index for ast udc
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ linux-aspeed@lists.ozlabs.org, linux-usb@vger.kernel.org,
+ kernel-janitors@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc: Ma Ke <make24@iscas.ac.cn>, Andrew Jeffery <andrew@codeconstruct.com.au>,
+ Joel Stanley <joel@jms.id.au>, Julia Lawall <julia.lawall@inria.fr>,
+ Neal Liu <neal_liu@aspeedtech.com>, LKML <linux-kernel@vger.kernel.org>
+References: <20240625022306.2568122-1-make24@iscas.ac.cn>
+ <edeaa699-7cfe-44ed-abde-7cf3d3efe3bf@web.de>
+ <2024062556-ladder-canister-1ab1@gregkh>
+ <ff2aaf0d-5456-43d1-af52-78986b3401f9@web.de>
+ <2024062532-strep-president-44d7@gregkh>
+ <5fa430f5-3e18-4c20-93d4-6733afd6bdcf@web.de>
+ <2024062553-koala-granddad-50f1@gregkh>
+Content-Language: en-GB
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <2024062553-koala-granddad-50f1@gregkh>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:67NMm2dfE8kCd5D9WldFr8mlygFuTOO43QrxnGpmnD+xIJUF6H3
+ D4ScmAVARb/Inj6uEZFHub9SHzZbRIxBi7PX1Cpqr+Lz1umOzzPY5AhlyhzbQsEpprvY1Iw
+ WmkgQPp0okATcu1/GtKcBehtJXaBF4G0c3T/Po8cfPQgOf69Hnds5YEezTVMnW00ooPRxfG
+ iP8/D8RbmGEOfD1Nnnzlw==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:aFOZ6XKuxOA=;TuMWGKgmPIC6zCZ7YGB3r/khXrd
+ LqhyjFJ01jYlt6SFluDqvDwA6R6yfGaku98gjKZ1HhxcS8ZpKYCBWUBL4qfIJh8KEe3v6GlgD
+ fcpK0W4rx7rLF7lQZ6EpgEZOsP50baKpAHx0geyH4C+bVzfH4H722BVSEv7pMmTmwB4U0qEq2
+ nJ9dxanHYSG6TCNW69PDgm2yKSupRI2C4JMlmgbK9nd/3Oett9/4dXRkeNfe5vLg1AHur9kiq
+ CoIoGBQbHog/FqjdSjk80GroADrYcrZTQsRa1LiPPZV1OflwhBq3YmcJpVU1pnErKsJIVphVB
+ UxEV0AURoYssYb8rP2t9iEyg3vZ8FYNL8nuTHfSyC/7R3TVsxqt9WA5hxs/M0zT9YgT7e5Tl/
+ DVJSg+oL/HsbTOYuGhnvcLbatHREMkiqNHJiZLUWll2laDHlnL8kc7EbxbV73SgN6jeY02DEX
+ hpBhfIF0knKL7U3bVBP589PdiUsf6b+mU6cPII6/8FV4oNbqphlg58IMTyjwfWtEm7/URh4Qh
+ YSslPUAoyViwKGdpZibfuSMXuc0vBRFf4PTmTa/GsmSKfM/VLBSjv+r2tmd0ls1pOEpfvNQme
+ ha5jJ0vaZB6vHpRiLSr1YS4qkHvSvFnerGW2erfveaiFFVncqiSS32uRWyr9qGZopCGiMJHR5
+ CmJta59i4maay9WtcofxR9LC8MGXaVyTjKBgoWP/kPyldCS24lkqn1QLceojmBWEQEPa3QnRY
+ uNPHMdlTwpe55O/ngotKA3xSrXGaZFjVLBkO96HOjhKipadjO7BWSh2NkIpfz451Eb51/n4TF
+ arTjQnrCXyMUw3+L6B/C6PjnVUdYwLKNR/ZM+s73qJzL0=
 
-On Tue, Jun 25, 2024 at 07:27:01AM -0700, Jameson Thies wrote:
-> Hi Greg,
-> this fixes an existing problem. On chromebooks using this driver for
-> an onboard hub, connecting an external hub in this ID table fails to
-> bind to the generic USB driver at the lock screen (devices default to
-> unauthorized). We are still trying to figure out why the hub isn't
-> able to bind to the generic USB driver after the onboard_usb_dev
-> driver when the device is authorized after it enumerates. But, I think
-> it would be preferable for this driver to not match external devices
-> in the ID table. This resolves the issue for me.
-> 
-> Tested-by: Jameson Thies <jthies@google.com>
-> Reviewed-by: Jameson Thies <jthies@google.com>
+>> You indicated concerns according to patch review processes,
+>> didn't you?
+>>
+>> See also:
+>> * Patch submission notes
+>>   https://elixir.bootlin.com/linux/v6.10-rc5/source/Documentation/proce=
+ss/maintainer-tip.rst#L100
+>
+> This is not the tip tree.
 
-Thanks Jameson!
+I know.
 
-To Greg's question: from the perspective of the onboard usb dev driver
-I would call the change an optimization, there is no point in binding
-the device to the driver if it is known beforehand that probing will
-fail.
+But I got the impression that some information sources
+(also from the Linux development reference documentation)
+can provide advices and further guidance for recurring patch review concer=
+ns.
 
-With respect to the issue Jameson described the change is a workaround,
-but not a proper fix.
+
+>> I might be going to influence evolution of this software area in other =
+ways
+>> under other circumstances.
+>
+> Please take some time and find other projects to help out.
+
+I found several opportunities already to improve something through the yea=
+rs.
+
+Concrete example for a selected data representation:
+https://patchwork.kernel.org/project/linux-usb/list/?submitter=3D170303&ar=
+chive=3Dboth
+
+Regards,
+Markus
 
