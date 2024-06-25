@@ -1,164 +1,107 @@
-Return-Path: <linux-usb+bounces-11609-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11610-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4AF4915B20
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2024 02:50:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 158E4915BFD
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2024 04:04:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 51513B224A4
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2024 00:50:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BA20E2838ED
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2024 02:04:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5F764C80;
-	Tue, 25 Jun 2024 00:50:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="EOPgn7Rn"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5F0728DD5;
+	Tue, 25 Jun 2024 02:04:09 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from cstnet.cn (smtp21.cstnet.cn [159.226.251.21])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0358F14005
-	for <linux-usb@vger.kernel.org>; Tue, 25 Jun 2024 00:50:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 176AA101D5;
+	Tue, 25 Jun 2024 02:04:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719276627; cv=none; b=uRXIYqkYEkAxmr3I4rzS1fK/72Vl0WmtAlT3wkFpXZoKXiD2TKsCxzpFe4K0Ff63vjYyB6dulabEgbHcqOGITpMEsrGaTOozF6eOFhAk93zPCvgY5AOmoo6PX0BDwhg1p5fHvOBhCSy3D1Ak/QuawsKjs9BuMbxh5lizMbyTeQc=
+	t=1719281049; cv=none; b=FBJQUP+vB92KSQt3AVc7UjoSQYswrwN8J+IVnECaadh4P1PNXJDHKH6YZ/TvpxIat2mPB68KyI2Rf3L7/dHvI+A2Fxoos/tPZoQgY7wa9AuRBLNFzSgu6IHzdputZKL9P7uTXwxitCrvvD24PMY+aH0PcJjxq7ewk2OQXBeJayc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719276627; c=relaxed/simple;
-	bh=rB2MbipxDzsiH1Hfswz8Ykw9O8jI2q01H75IMdchmOY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=H1JrjJ10RDhISdGHu+c8WhHq7gL50ZHWy/6QvdndkUrdgMGm4HCsgffD0XiX2XNlXYLmVxIOUEfCChdDVhit0sSVKal/hBIR12Q6Q/LwOAX1wJDRwPetOPp7vu55ykuTI5+YeYefAoog4NcRowv3lKzu2l03BnPFQQE/HyefsL8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=EOPgn7Rn; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1fa3086cf25so39405ad.1
-        for <linux-usb@vger.kernel.org>; Mon, 24 Jun 2024 17:50:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1719276625; x=1719881425; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=HuUUmuhyiaTVcKA0vONscsWMwteJeDj/FdD7FnMQHHk=;
-        b=EOPgn7RnRMisQgyTZwaJxGo47m/04av63u0D+kaSjDVUgxGG3Okellna5LIY0FuYCq
-         FLFexHNsL6EdWIIK7m4DRC/r9rdjIwxmNgNiiC45kFySzBPf99b7kwfVt87gbW/Bg1X0
-         wu5Z/Uz6cCwP9/IaG1qvHg4OLXg6+7hYjZ/CYRF9zcuf5Y0XidiPdGy1te/qdSCi45yL
-         POcMWkB5b5F4WLaNGwN+jkvfZfSv5fqg52LBk0d8fFNmgO/8v9V2Wm0/m+y2CgAIgfoa
-         GKsP7Jvr0sBdNSmNw+LJgqr+0tHvwXfGVENmlcDDtLttu7SKUkbhciQD2BTrSLGeKpkT
-         pMPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719276625; x=1719881425;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HuUUmuhyiaTVcKA0vONscsWMwteJeDj/FdD7FnMQHHk=;
-        b=rC0RAbdO0ILb9jYbBzDzDitXMkHzgwk+y051i0KFhnd0et4J+c9K6EdiN1JHV8jNPP
-         x2SqAR59tbk3dCVdO7nOColWwrYNPervdtlZVbduqvZKdI9DAMr0tz9SwTi6U926DlVf
-         4/Cey8T9SeSK7v3lGXLkoRHsBJO5tJGWVoY5YN39JIK7wSST3bXDpUG+jXr1Ad67vfQB
-         69pgkSp8aVc+9k7p5Sz2qW6MdsVu4cUzd8p6gZEbv3cAzpuv8JcnVe8QmFYp5Qack0j5
-         mOteFZvcBPp5QOXVsc9m1jjILx3BaH1BOMLYuDmcpg2ZO//u/SkGNYSIatccTcMtuiXc
-         pkZw==
-X-Forwarded-Encrypted: i=1; AJvYcCW04DW56aNNUHpXclANtcI35jvHeiaXHCwSrA6fvhnTjUTbCHNjRyLiGfZiMLI1E3NEfSCHW9KCLBJbnJ/u6lByu7fvhdpgIYO1
-X-Gm-Message-State: AOJu0YwtBiGHl1G/3QNQfBhVG45Vka5XmxreV/AQNWZXmkYc8MUk4wZS
-	VHsDebm1OFGxFtTKuY/WxBFAk9/n+8XzGtmFzQv7dldyGRbzzoIuEaGW1wapaA==
-X-Google-Smtp-Source: AGHT+IGY3Bx4DM3ftR/tJGFuyc+1khlNaAKY6t6qe6ia5l6qoIh3a9h1jB0maMsux+9q1/QJ+kVtug==
-X-Received: by 2002:a17:902:b186:b0:1f6:b033:a4e with SMTP id d9443c01a7336-1fa68fb0a2fmr1524945ad.4.1719276624897;
-        Mon, 24 Jun 2024 17:50:24 -0700 (PDT)
-Received: from google.com (109.120.125.34.bc.googleusercontent.com. [34.125.120.109])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f9eb2f058bsm68735405ad.13.2024.06.24.17.50.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jun 2024 17:50:23 -0700 (PDT)
-Date: Tue, 25 Jun 2024 00:50:19 +0000
-From: Benson Leung <bleung@google.com>
-To: Jameson Thies <jthies@google.com>
-Cc: heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
-	jonathanh@nvidia.com, abhishekpandit@chromium.org,
-	andersson@kernel.org, dmitry.baryshkov@linaro.org,
-	fabrice.gasnier@foss.st.com, gregkh@linuxfoundation.org,
-	hdegoede@redhat.com, neil.armstrong@linaro.org,
-	rajaram.regupathy@intel.com, saranya.gopal@intel.com,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] usb: typec: ucsi: Only set number of plug altmodes
- after registration
-Message-ID: <ZnoUS1kOL3aYar-Q@google.com>
-References: <20240625004607.3223757-1-jthies@google.com>
+	s=arc-20240116; t=1719281049; c=relaxed/simple;
+	bh=EEDCAWWAMrsn5ELWPNy29DPWUfY1dnkpvyxXL4Jl0Rg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=QpBfrZGZPE9CcGJJRdVMqs60lJtimFYSfdLutusNeuu27tlaMVdsO9AlXMgcambeU/PbbbU7lv/B1fNem5B4vil6ktmptXpWPd0lHZ5PznSBeK6wRwxxE9u3xbeWrYFYHfySF3FyUuB2UTQHliDGbBLfI/ybwK25boN7TNe+Xbs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
+Received: from icess-ProLiant-DL380-Gen10.. (unknown [183.174.60.14])
+	by APP-01 (Coremail) with SMTP id qwCowADX3BhwJXpmUTqVDA--.2757S2;
+	Tue, 25 Jun 2024 10:03:44 +0800 (CST)
+From: Ma Ke <make24@iscas.ac.cn>
+To: neal_liu@aspeedtech.com,
+	gregkh@linuxfoundation.org,
+	joel@jms.id.au,
+	andrew@codeconstruct.com.au
+Cc: linux-aspeed@lists.ozlabs.org,
+	linux-usb@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	Ma Ke <make_ruc2021@163.com>
+Subject: [PATCH v3] usb: gadget: aspeed_udc: validate endpoint index for ast udc
+Date: Tue, 25 Jun 2024 10:03:26 +0800
+Message-Id: <20240625020326.2564860-1-make24@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="XS2a0J9riWCr4B+Z"
-Content-Disposition: inline
-In-Reply-To: <20240625004607.3223757-1-jthies@google.com>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qwCowADX3BhwJXpmUTqVDA--.2757S2
+X-Coremail-Antispam: 1UD129KBjvdXoWruFy7urW8Xr18Wr4kuF17Jrb_yoWDCrbE9a
+	y8ursxur17Ka92qr1UZ3Waqry29a4kW3WDuF1Dtr9xAryUJFWxJr1kWrWkt3y5ZF47urZx
+	u3yDKw13ZryaqjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUbcxYjsxI4VWkKwAYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I
+	6I8E6xAIw20EY4v20xvaj40_JrC_JFWl1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
+	8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0
+	cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I
+	8E87Iv6xkF7I0E14v26r4UJVWxJr1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8I
+	j28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr
+	4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxG
+	rwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r
+	1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij
+	64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr
+	0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
+	0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU5qeHPUUUUU==
+X-CM-SenderInfo: ppdnvj2u6l2u1dvotugofq/
 
+From: Ma Ke <make_ruc2021@163.com>
 
---XS2a0J9riWCr4B+Z
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+We should verify the bound of the array to assure that host
+may not manipulate the index to point past endpoint array.
 
-Hi Jameson,
+Found by static analysis.
 
-On Tue, Jun 25, 2024 at 12:46:07AM +0000, Jameson Thies wrote:
-> Move the setting of the plug's number of alternate modes into the
-> same condition as the plug's registration to prevent dereferencing the
-> connector's plug pointer while it is null.
->=20
-> Fixes: c313a44ac9cd ("usb: typec: ucsi: Always set number of alternate mo=
-des")
-> Suggested-by: Jon Hunter <jonathanh@nvidia.com>
-> Signed-off-by: Jameson Thies <jthies@google.com>
+Signed-off-by: Ma Ke <make_ruc2021@163.com>
+---
+Changes in v3:
+- added the changelog as suggested.
+Changes in v2:
+- use correct macro-defined constants as suggested;
+- explain the method for finding and testing vulnearabilities.
+---
+ drivers/usb/gadget/udc/aspeed_udc.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Reviewed-by: Benson Leung <bleung@chromium.org>
+diff --git a/drivers/usb/gadget/udc/aspeed_udc.c b/drivers/usb/gadget/udc/aspeed_udc.c
+index 3916c8e2ba01..d972ef4644bc 100644
+--- a/drivers/usb/gadget/udc/aspeed_udc.c
++++ b/drivers/usb/gadget/udc/aspeed_udc.c
+@@ -1009,6 +1009,8 @@ static void ast_udc_getstatus(struct ast_udc_dev *udc)
+ 		break;
+ 	case USB_RECIP_ENDPOINT:
+ 		epnum = crq.wIndex & USB_ENDPOINT_NUMBER_MASK;
++		if (epnum >= AST_UDC_NUM_ENDPOINTS)
++			goto stall;
+ 		status = udc->ep[epnum].stopped;
+ 		break;
+ 	default:
+-- 
+2.25.1
 
-Thanks,
-Benson
-
-> ---
->  drivers/usb/typec/ucsi/ucsi.c | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
->=20
-> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> index 76c48d873b2a..77e46bf4a098 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.c
-> +++ b/drivers/usb/typec/ucsi/ucsi.c
-> @@ -1180,13 +1180,13 @@ static int ucsi_check_cable(struct ucsi_connector=
- *con)
->  		ret =3D ucsi_register_altmodes(con, UCSI_RECIPIENT_SOP_P);
->  		if (ret < 0)
->  			return ret;
-> -	}
-> =20
-> -	if (con->plug_altmode[0]) {
-> -		num_plug_am =3D ucsi_get_num_altmode(con->plug_altmode);
-> -		typec_plug_set_num_altmodes(con->plug, num_plug_am);
-> -	} else {
-> -		typec_plug_set_num_altmodes(con->plug, 0);
-> +		if (con->plug_altmode[0]) {
-> +			num_plug_am =3D ucsi_get_num_altmode(con->plug_altmode);
-> +			typec_plug_set_num_altmodes(con->plug, num_plug_am);
-> +		} else {
-> +			typec_plug_set_num_altmodes(con->plug, 0);
-> +		}
->  	}
-> =20
->  	return 0;
->=20
-> base-commit: 819984a0dd3606b7c46fe156cd56a0dc0d604788
-> --=20
-> 2.45.2.741.gdbec12cfda-goog
->=20
-
---XS2a0J9riWCr4B+Z
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCZnoURwAKCRBzbaomhzOw
-wmZFAQCFp47heT1YN6FYLm2P3DWbSZj4vlnGqrr7kPehVyjGNAD9GQw4MJzKCCzu
-gO9WMGBnDcnudVrf3zovAhs8ESu4fAo=
-=y+Vr
------END PGP SIGNATURE-----
-
---XS2a0J9riWCr4B+Z--
 
