@@ -1,92 +1,175 @@
-Return-Path: <linux-usb+bounces-11630-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11631-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2FA38916899
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2024 15:08:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 811169168DB
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2024 15:31:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5EDF21C20E60
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2024 13:08:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 37987286042
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2024 13:31:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 215CD157A5C;
-	Tue, 25 Jun 2024 13:08:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C72C15EFC8;
+	Tue, 25 Jun 2024 13:31:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KQYH+VHa"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PsWpwEMV"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F1BA1482F8
-	for <linux-usb@vger.kernel.org>; Tue, 25 Jun 2024 13:08:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B79614F9E0;
+	Tue, 25 Jun 2024 13:31:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719320902; cv=none; b=dD9WzG+Al+/30zhUDSu8Sn0vxZWK/azHXP9+jCNCwm/ejxMAYXmdDwfWlsSZfQNA7AR9XNsfXIdFr0NEZoUrKvel3i0LcFpwlsu2TgLQcHJv28fWmHJRVVuBvdj17JSMy0e8mdRjIbEOJj9rpGHD20nIuxF9ulxpf0pQ6xSwqio=
+	t=1719322303; cv=none; b=h5sB9O6dq6mLn4AoVlt1FISmluoU+mgs/vvJOsqn9xTxCJ8Gh4sXfljWg6V2WPVll5ikQ5zPKWE1QHD/YGWTgEGhqJ2z0qm7lNIpGxbCK1daFeRegmyb/cNvKj/hPjUUgM91UAcNn5w6/FDulVVeiaVGv/rFLldPRwZc6S9Jl44=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719320902; c=relaxed/simple;
-	bh=BKoajj2TVRJdnrX37ghdq0/0LXQOCUndx2bRNwlMI9Y=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=IdfCrzRp1/PiG8idHMJ9GVfDsH2iHI0v80HlgF2KbOG2zbeg71/52vPeCYHohhzEv1+zZ1VW5izXeKtq8LjZhPWJAZQZsH47zAIOidlq9t9p5eDXaRl04xdh2SBRUtS4Zk40pTqVjgU/Sb/oWYsU306T0TS50LvByo/cnKq1J5c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KQYH+VHa; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3A42EC32781
-	for <linux-usb@vger.kernel.org>; Tue, 25 Jun 2024 13:08:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719320902;
-	bh=BKoajj2TVRJdnrX37ghdq0/0LXQOCUndx2bRNwlMI9Y=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=KQYH+VHawH/EBbTFg4yJkyqBhMniYLXCT0AiDZSM8XcASEneML9dMLMWl5EPpTQXi
-	 stp14R74A91l2cpELkrfxvHwA+IWEN7N3X7lbdsknFRHDasWTCzZHfB5CLBZ9orWxr
-	 gdJ1gldcJoxHghCvpt7qrUNVuxOVg0+r8A9RbnLXj28py4HKA2rnuJzUugjcM+gbSv
-	 LMnFTIC+nGd3rZh3zmvwOZfQMztov1BCWGIzh9D9EsfRkLYeotrtrk2mNke7+wxLlL
-	 4yOPUuhS7CCYwHYJOlHnQYrnKGi9M4T+SPhdZcKA3xBuUvy2QkSTURe6RmWIMKuuFc
-	 xyJnAFuSQwBQQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 317A6C433E5; Tue, 25 Jun 2024 13:08:22 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 218987] USB devices are not detected after Save/Restore error
- on Intel xHC
-Date: Tue, 25 Jun 2024 13:08:22 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: repk@triplefau.lt
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-218987-208809-Y9rEWugFf4@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218987-208809@https.bugzilla.kernel.org/>
-References: <bug-218987-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1719322303; c=relaxed/simple;
+	bh=JhTOvlv/fFw83z9MA/JanU9QLXx5eZ/OqqxpAh6VhHc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=FTB5ylLalJKz6rRPVnXVWDTDynmFrUCu1ARv1SHy+CzKhKTjjGdSYWjoYJIEbt6CUXQpgq9ZgLZwbJExN0MMCWBXvEEF5LfozMf3ghVTHCiVlUXIPu10aTjCqvJyCKA9vI9SkMAzHpKmju6PUrwgZRYbFW87gRzi1EWFWJfQvL4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PsWpwEMV; arc=none smtp.client-ip=209.85.208.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-57d106e69a2so214449a12.0;
+        Tue, 25 Jun 2024 06:31:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1719322300; x=1719927100; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0FIaUi0sIcr6xli/A2+XeBULbh1JSIVXUEV5tbDKSEc=;
+        b=PsWpwEMVUK4oWdQo1SXjUIDkcoZwJ1Z43qs4LLQcsXwRT5c4poBZqdfZP/NyVDeJVe
+         s5mEFHYty6cKrC2VOI51tD8gyM6KiueU+ri/gLmznPmLz6fUMZQOoyv0EC6lGQDiSMgM
+         MEZGY52OiMR7mzv1zWOerYxmwB3ik6Gf+6fyQNebn/gAXLnqWtoaqscL30OS9hdvuZpR
+         QJ01xvRhio/BOjfiuQTrP9MCZhCXLTxePERISM9m/JyFnc86tozKJ8Pi/xtfaLcwN8Sf
+         UdLIphTg//gM5XMhs4O4KpyRJBO8+mzNHkVPbUblmMoVko0iXNdwgg/fj+57fEzCfVa4
+         AslA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719322300; x=1719927100;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0FIaUi0sIcr6xli/A2+XeBULbh1JSIVXUEV5tbDKSEc=;
+        b=YPYW+PR2aBgeP4CUEzqhGFphk/GdPzcWcKMfpZus7sjhcDsYr4Gl/UrjnbUpXiC5FW
+         /pIvc6TjOr5P9Qls02KaBz+hyHbyX77CgexhgY0hm/YSVtufHCjGCeupgaf1d8ENFP2L
+         V84D0WWgN/CLZa1wnI6I4uXba5bz6MhAFaeYiS8onx33b/UtgXzecZRQrfrNma9FRcUT
+         ZCuyY7YZD2mIXBdHcFin6106zcgy9a8sWv2BqNRoQNRgiGXxZUAfNq5kQ/u3nC8caxpA
+         e0RYx3/jqziEjg+GiyGGBq9Hx8etQvJVXCQU6/xda7Wi1akE9ZEFZvdQGfo8mcqvKqVv
+         v9jQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUJB7KJf+EP35D18JDtWGo7BC6HCiuF1aCg+OMPngtVjQkgJIo5VI+Tq7YqlW9jOrr/+amRsu2eBkUVPP36YDc3HYZfFd0gYRnU3cDOgESPNFAoFUmnwEtHaaWeRxiHBrkX4OvzfHzL4MnNrWZVIetpGcpIbEf2F+UDms7VAo2Lj6JgGQ==
+X-Gm-Message-State: AOJu0YyAc93VCJ0MAQN0CRtC+f3fUumKnUPB7dhaJyPcFf/mnW7XXEsU
+	A3YZFYMtM2uKW7Wb/KMtWW7jk05AacSN4Gvd83qXyI5K8dqOp+uiQW3qPwMeOeAlXDqDh/5VhEt
+	WsQIUk7UFDO6pHm2ml7Y2AR5e+G8Fq4sWhmc=
+X-Google-Smtp-Source: AGHT+IFuiZIfFcuCgctYUzMapk4c0sCuzgKH79nA6kGjmiB1u9HpHIFJXlFCzVabBY8PqSs02KZ/7t64IBwgQ4+rnyA=
+X-Received: by 2002:a50:c004:0:b0:57c:b82e:884b with SMTP id
+ 4fb4d7f45d1cf-57d70231a13mr2099283a12.19.1719322299429; Tue, 25 Jun 2024
+ 06:31:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20240601092646.52139-1-joswang1221@gmail.com> <20240603130126.25758-1-joswang1221@gmail.com>
+ <20240604000147.2xxkkp7efjsbr3i5@synopsys.com> <CAMtoTm0S2WSO6VxK79DkTs+1aq5xBYBMRsPXWAFuWo4DoymUEw@mail.gmail.com>
+ <20240622000528.3keexfbetetkrxpy@synopsys.com>
+In-Reply-To: <20240622000528.3keexfbetetkrxpy@synopsys.com>
+From: joswang <joswang1221@gmail.com>
+Date: Tue, 25 Jun 2024 21:31:28 +0800
+Message-ID: <CAMtoTm2_QoT6YL=9fDJfdgcc__X-dkJymwDXj8VpyYdXx1mHAA@mail.gmail.com>
+Subject: Re: [PATCH v2, 2/3] usb: dwc3: core: add p3p2tranok quirk
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: "robh@kernel.org" <robh@kernel.org>, "krzk+dt@kernel.org" <krzk+dt@kernel.org>, 
+	"conor+dt@kernel.org" <conor+dt@kernel.org>, 
+	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>, 
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, "balbi@kernel.org" <balbi@kernel.org>, 
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, joswang <joswang@lenovo.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218987
+On Sat, Jun 22, 2024 at 8:05=E2=80=AFAM Thinh Nguyen <Thinh.Nguyen@synopsys=
+.com> wrote:
+>
+> Sorry for the delay response regarding this.
+>
+> On Wed, Jun 19, 2024, joswang wrote:
+> > Hi Thinh
+> >
+> > The workaround solution provided by your company for this issue is as f=
+ollows:
+> >   Workaround=EF=BC=9Aif the phy support direct P3 to P2 transition=EF=
+=BC=8Cprogram
+> > GUSB3PIPECTL.P3P2Tranok=3D1
+> >
+> > As the databook mentions:
+> > This bit is used only for some non-Synopsys PHYs that cannot do LFPS in=
+ P3.
+> > This bit is used by third-party SS PHY. It must be set to '0' for Synop=
+sys PHY.
+> >
+> > For Synopsys PHY, if this bit is set to "1", will it cause unknown prob=
+lems?
+> > Please help confirm this, thank you!
+> >
+>
+> That depends on what your use case and requirements are.
+>
+> I've reviewed this case. The impact to this issue is that power state
+> change may take longer than expected. It may violate the PIPE spec, but
+> functionally, at least for how linux drivers are handled, I'm not clear
+> on how this will impact the typical user.
+>
+> Can you help clarify your use case and what does this resolve beside the
+> fact that it workaround the increase latency/response time.
+>
+> Thanks,
+> Thinh
 
---- Comment #2 from Remi Pommarel (repk@triplefau.lt) ---
-Created attachment 306494
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D306494&action=3Dedit
-Patch attempt to get devices enumerated when a SRE occurs
+Your company provides usage scenarios:
+System software places the controller in low-power when there is no
+traffic on the USB.
+Subsequently, system software programs the controller to exit
+low-power to resume traffic.
 
---=20
-You may reply to this email to add a comment.
+The method to reproduce the problem provided by your company:
+1. Program the DWC_usb31 controller to operate in device mode of
+operation. Program GUSB3PIPECTL.P3P2TranOK=3D0. To increase the
+probability of hitting the problem run with a slower frequency for
+suspend_clk (for example, 32 KHz and 160 KHz).
+2. Place the link in U3 while ensuring that pipe_powerdown is driven to P3.
+3. Program DWC_usb31 controller to exit U3. Ensure that for P0 ->P2
+transition pipe_PhyStatus is returned immediately.
+4. Program U3 exit from the remote link.
+5. Program a D3 entry (pm_power_state_request=3DD3) at the same time
+(from the device application) and observe if the D3 entry
+acknowledgement (current_power_state_u3pmu=3DD3) takes longer than
+expected (> 10 ms).
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Currently, we do not have a real environment to verify this case, but
+considering the Android GKI regulations, we need to submit patches to
+Linux in advance. Based on the following workaround solution provided
+by your company=EF=BC=8Csince the hardware cannot be changed, we can only u=
+se
+workaround 1 at present.
+Workaround 1: If the PHY supports direct P3 to P2 transition, program
+GUSB3PIPECTL.P3P2TranOK=3D1. However, note that as per PIPE4
+Specification, direct transition from P3 to P2 is illegal.
+Workaround 2: Delay the pipe_PhyStatus assertion by an amount greater
+than two suspend_clk durations at the input of the controller's PIPE
+interface.
+
+We have the following questions and hope you can help us confirm them.
+Thank you!
+1. This case seems to describe that the P3 to P2 power state change
+takes a long time, that is, the DWC3_usb31 controller takes a long
+time to exit the D3 state. Please help evaluate whether this problem
+is perceived from the software perspective, such as whether there is a
+problem in the xhci_suspend or xhci_resume process. If from the
+software perspective, this case will not cause the xhci driver to
+fail, then we may not deal with this problem.
+2. If this case causes the above problem, for Synopsys PHY,
+configuring GUSB3PIPECTL.P3P2TranOK=3D1 will cause other unknown
+problems?
 
