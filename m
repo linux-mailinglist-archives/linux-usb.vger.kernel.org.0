@@ -1,130 +1,218 @@
-Return-Path: <linux-usb+bounces-11670-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11671-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0DF40917C22
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Jun 2024 11:14:35 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC456917C60
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Jun 2024 11:26:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7D469B2657B
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Jun 2024 09:14:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 54E2EB212B2
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Jun 2024 09:26:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EFDB16CD0D;
-	Wed, 26 Jun 2024 09:10:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEF3C16A930;
+	Wed, 26 Jun 2024 09:26:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nTIMGq7D"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rvGuClsM"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB1831662F2
-	for <linux-usb@vger.kernel.org>; Wed, 26 Jun 2024 09:10:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4304A1684A1;
+	Wed, 26 Jun 2024 09:26:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719393016; cv=none; b=RgP/en8D6bhMWi0z453KQS9HoYYC85faNNVmCOE70aamNuROYtP3pkBzrcLqfHrVIZ7RGD5+pF7GCGbFRFEKZfzmDZ7xQJdrUQoboIUeg8tAOt1Pf9IfJnhAFYZgUA+7Ue96UrL5DoYVSq5EvQiocvz0807S6HdgSnriP1BRrt8=
+	t=1719393985; cv=none; b=NtEUfORJss2NUpTi8hr2nm38fXETWgDhQ0h3OWOqCqBTOef+M9yzacXR8+nKkjLejj9TZjkonUOExNtyPup6ufWP+nErxo/I6po4tNXwc8hfGKiYkgFWyKQG4RQhtxNUZy9usor4MY1lKmMwbNVtaDhLLvZrPYjlckD3C+WqnT8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719393016; c=relaxed/simple;
-	bh=OsIKUNtTa4B6ujR3xENU9V66GS5ayWtkIniVUqfCtaA=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=trytzynH1JT1e1GFcTCLoD6v9yPH/AXKwh3bpco4VHEXqJRlHS3bEtnf2XH4cUUrtj1OfxX169mq+906S8JboKih3KsOa8SA1Vtk96Ms4vawzuQL9lVbihqqX6eDvBCtyjkYZS2EkZ7ThHOM/fzBCrBH9m1uBrnkHIUsAIGb3G8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nTIMGq7D; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7EF87C4AF0D
-	for <linux-usb@vger.kernel.org>; Wed, 26 Jun 2024 09:10:16 +0000 (UTC)
+	s=arc-20240116; t=1719393985; c=relaxed/simple;
+	bh=dU3Jf3E3jO241GPXBxa5WTQyTqsdhtXznavqyzipez4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=tkj69nNb1lkvLPu2DSW3Y6yJiXwAHamAfBtAFlWqC+UducMYjhp7CcJ+hDap5byvpp8XLNmyD1UE83/yMVQ48GO105/dxG2vUAe4yTwB0uwn+++bFPjv4UvEtaEefOI6c3O33+3SR3P2DBzySqA/qxQ9iy+Sl5I9khiE0uqAkKU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rvGuClsM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FBBFC2BD10;
+	Wed, 26 Jun 2024 09:26:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719393016;
-	bh=OsIKUNtTa4B6ujR3xENU9V66GS5ayWtkIniVUqfCtaA=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=nTIMGq7DQCcwknGA1H50QBd1M6+7E9AgB43caiqd7GsnIyK92xbyh8peqceYfzukA
-	 11SHh1fWCWyT1kqQlrSqIZGPLHfoNmIr117JPzmwS0bpuz6wFvgQ9mPFD3KS+kVKMS
-	 sCz2LKYwi1CqpweGKHUVC+x0ddkxJbKnGXnHJV08h5EuuGhPKRCQn8LNkicdZ5aqGp
-	 wAwna832AvtfrEzisNPQtSa/tGRg0Au1tN9330rP62jQJKxopT844XUyZgusocTS7T
-	 hdQgdPQNiakQC13A0wvYTn9A1dq7vpofCWV87gfcPERG0xZEEzlymf9G2XM/qt69gJ
-	 LY57nmtJrdFVw==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 67B94C53B73; Wed, 26 Jun 2024 09:10:16 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 218987] USB devices are not detected after Save/Restore error
- on Intel xHC
-Date: Wed, 26 Jun 2024 09:10:16 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: mathias.nyman@linux.intel.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-218987-208809-dkJpk5DaEh@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218987-208809@https.bugzilla.kernel.org/>
-References: <bug-218987-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=k20201202; t=1719393983;
+	bh=dU3Jf3E3jO241GPXBxa5WTQyTqsdhtXznavqyzipez4=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=rvGuClsMJi8Rp5M0RmlNKoW4ESnGgHPbSrZJoPtoYSDaSmDo5+swAXK28qxLyyiZH
+	 mKe0G9ToslSNeZIImr+2HbQVjZMejq1eR69llSY24KIH8Kod1+Ingn/g+3bRRTAMni
+	 7bPa28aQrqF3pQJzNHCU9lPqf4Egb4RvxuKrVH+m6iht67yhELWkZcfad5182D3qqn
+	 5MsF+3YAWmm5mMUb1qIaJy3dtzrHgK63MFnFJ85LpBym5CvLy7jTPnxfBHiDhUI+Nt
+	 k7X+Ol9GVwBYzfzog+bGwG/42nVgRd65OuhvDGSsCJ75Zve3PL0URTdVgXmK2JPaPb
+	 BHdJLxs9jNFTA==
+Message-ID: <b354d11e-9031-47f1-8a23-bbd14ea3d5dd@kernel.org>
+Date: Wed, 26 Jun 2024 11:26:18 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/1] dt-bindings: usb: Convert fsl-usb to yaml
+To: Frank Li <Frank.Li@nxp.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
+ "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS"
+ <devicetree@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
+Cc: imx@lists.linux.dev
+References: <20240625022541.2007010-1-Frank.Li@nxp.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20240625022541.2007010-1-Frank.Li@nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218987
+On 25/06/2024 04:25, Frank Li wrote:
+> Convert fsl-usb binding doc to yaml format.
+> 
+> Additional change:
 
-Mathias Nyman (mathias.nyman@linux.intel.com) changed:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |mathias.nyman@linux.intel.c
-                   |                            |om
+> -	usb@4000 {
+> -		compatible = "fsl,mpc5121-usb2-dr";
+> -		reg = <0x4000 0x1000>;
+> -		#address-cells = <1>;
+> -		#size-cells = <0>;
+> -		interrupt-parent = < &ipic >;
+> -		interrupts = <44 0x8>;
+> -		dr_mode = "otg";
+> -		phy_type = "utmi_wide";
+> -		fsl,invert-drvvbus;
+> -		fsl,invert-pwr-fault;
+> -	};
+> diff --git a/Documentation/devicetree/bindings/usb/fsl-usb.yaml b/Documentation/devicetree/bindings/usb/fsl-usb.yaml
+> new file mode 100644
+> index 0000000000000..8b5724e213f09
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/fsl-usb.yaml
 
---- Comment #3 from Mathias Nyman (mathias.nyman@linux.intel.com) ---
-Thanks for debugging this.
+fsl,usb.yaml
+or: fsl,usb2.yaml
 
-Issue 1, reason for SRE is unknown to me as well.
-Issue 2 is probably due to PORTSC not immediately showing connected devices
-after host is restarted. This is especially true for USB3 devices where dev=
-ice
-only shows up in PORTSC after successful link training.=20=20=20
+> +
+> +maintainers:
+> +  - Frank Li <Frank.Li@nxp.com>
+> +
+> +description: |
 
-A similar issue was solved in:
-commit 33e321586e37 ("xhci: Add grace period after xHC start to prevent
-premature runtime suspend")
+Do not need '|' unless you need to preserve formatting.
 
-In your SRE case we never event start polling the roothub.
+> +  The device node for a USB controller that is part of a Freescale
+> +  SOC is as described in the document "Open Firmware Recommended
+> +  Practice: Universal Serial Bus" with the following modifications
+> +  and additions.
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - enum:
+> +          - fsl-usb2-mph
+> +          - fsl-usb2-dr
+> +          - fsl-usb2-dr-v2.2
 
-How about a solution that is similar to your patch but doesn't touch
-pending_portevent. Instead we always resume roothubs in case xHC was reset
-during resume.
+It cannot be standalone and not-standalone. Cannot be both. Choose one.
 
-Does the oneliner below work for you?
+> +      - items:
+> +          - enum:
+> +              - fsl-usb2-dr-v2.2
+> +              - fsl-usb2-dr-v2.5
+> +          - const: fsl-usb2-dr
+> +
+> +  phy_type:
+> +    $ref: /schemas/types.yaml#/definitions/string
+> +    enum: [ulpi, serial, utmi, utmi_wide]
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  port0:
+> +    $ref: /schemas/types.yaml#/definitions/flag
+> +    description:
+> +      Indicates port0 is connected for fsl-usb2-mph compatible controllers.
+> +
+> +  port1:
+> +    $ref: /schemas/types.yaml#/definitions/flag
+> +    description:
+> +      Indicates port1 is connected for "fsl-usb2-mph" compatible controllers.
+> +
+> +  fsl,invert-drvvbus:
+> +    $ref: /schemas/types.yaml#/definitions/flag
+> +    description:
+> +      for MPC5121 USB0 only. Indicates the
+> +      port power polarity of internal PHY signal DRVVBUS is inverted.
+> +
+> +  fsl,invert-pwr-fault:
+> +    $ref: /schemas/types.yaml#/definitions/flag
+> +    description:
+> +      for MPC5121 USB0 only. Indicates
+> +      the PWR_FAULT signal polarity is inverted.
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - phy_type
 
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 37eb37b0affa..12b9c2c7f39f 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -1172,7 +1172,7 @@ int xhci_resume(struct xhci_hcd *xhci, pm_message_t m=
-sg)
-                        pending_portevent =3D xhci_pending_portevent(xhci);
-                }
+Keep the same order as in "properties:". Preferably this order, so
+adjust "properties:" to match "required:".
 
--               if (pending_portevent) {
-+               if (pending_portevent || reinit_xhc) {
-                        if (xhci->shared_hcd)
-                                usb_hcd_resume_root_hub(xhci->shared_hcd);
-                        usb_hcd_resume_root_hub(hcd);
+> +
+> +allOf:
+> +  - $ref: usb-drd.yaml#
+> +
 
---=20
-You may reply to this email to add a comment.
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Best regards,
+Krzysztof
+
 
