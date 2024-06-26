@@ -1,182 +1,108 @@
-Return-Path: <linux-usb+bounces-11695-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11697-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C8FA9182F1
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Jun 2024 15:45:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A6C2A91834A
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Jun 2024 15:51:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 19BF31F2165B
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Jun 2024 13:45:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 65EA62893B5
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Jun 2024 13:51:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 453BC184106;
-	Wed, 26 Jun 2024 13:45:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17EBB18F2DC;
+	Wed, 26 Jun 2024 13:47:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mork.no header.i=@mork.no header.b="KGNsPbGF"
+	dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b="dBiV9eWC"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from dilbert.mork.no (dilbert.mork.no [65.108.154.246])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DED41836E8;
-	Wed, 26 Jun 2024 13:45:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.108.154.246
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D76E1836F7
+	for <linux-usb@vger.kernel.org>; Wed, 26 Jun 2024 13:47:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719409507; cv=none; b=r73GdbPJ8a7NeB0u6lorGJpgFDC7KUj4GawldkKwtYuVwcdMZg9HUE97sWFni4liJ9Xh18GMCcbaJ9M7iRdiffd2h8yA7/0Of+bMxn20AVjN9bgzA4JZ8tKWEjhwuiF4Q0qiEamGwRej7T32B3Nd+K44CEtuorTyLSNDGeK9waA=
+	t=1719409651; cv=none; b=ianym4gxQlnmuHpyrP41WEb3gcoP067si3RTTDaKF2NCdpTV3u9QOWxy124uyqpq3oszQtv1/5lEt6gf8B7+OJpujrv65r7I9PlPHiFP4ZOaCxe2rek25bu2kMtZeX3dnSAlsmmq98okkLjCeY3EWDQB9aNjdITGGuHH71UrK7s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719409507; c=relaxed/simple;
-	bh=mAVRzzjl2ml2u8Gmy2oB6sT+YlAVVokF49bVXnJUqi8=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=BM7ubBFnw09LuLpPygcrYq+feUACOVyq4x0nkLtuXDalbRHcAlerzIjtwHEb5bMmT1diN7ACYxtD9kzC0qhn78yIAIg23tc16VZMNVVs/bBWmPA768e0kGU1WYGm1rDvJBqQwJB9P4LfWYaUqJhJqdKD4SNBWxc2UDnIC+Iz+BE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mork.no; spf=pass smtp.mailfrom=miraculix.mork.no; dkim=pass (1024-bit key) header.d=mork.no header.i=@mork.no header.b=KGNsPbGF; arc=none smtp.client-ip=65.108.154.246
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mork.no
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=miraculix.mork.no
-Received: from canardo.dyn.mork.no ([IPv6:2a01:799:10da:6900:0:0:0:1])
-	(authenticated bits=0)
-	by dilbert.mork.no (8.17.1.9/8.17.1.9) with ESMTPSA id 45QDWY7F785538
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
-	Wed, 26 Jun 2024 14:32:35 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-	t=1719408754; bh=kx9LHtWevguXGUlSVbRkqpwgE6B/HVVWlJYSESFJwrA=;
-	h=From:To:Cc:Subject:Date:Message-Id:From;
-	b=KGNsPbGFmIs6ninv526omMMespR1WgnKV4dKhVF8mudTO/qTMeNSTOkahKOcGBVDn
-	 LZSpFZQYYu1i7UyUM8dZCollOTWL2wW5tfyX9WBF/Vsz7jLgGXaM6UVd2jDcDnwfMO
-	 Pm87OB2yUaCO/NMNscGrxG3WrhF0a3OqMrtPUwGg=
-Received: from miraculix.mork.no ([IPv6:2a01:799:964:4b0a:9af7:269:d286:bcf0])
-	(authenticated bits=0)
-	by canardo.dyn.mork.no (8.17.1.9/8.17.1.9) with ESMTPSA id 45QDWYQF3643882
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
-	Wed, 26 Jun 2024 15:32:34 +0200
-Received: (nullmailer pid 2316567 invoked by uid 1000);
-	Wed, 26 Jun 2024 13:32:34 -0000
-From: =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>
-To: linux-usb@vger.kernel.org
-Cc: Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>, stable@vger.kernel.org
-Subject: [PATCH] USB: serial: option: add Fibocom FM350-GL
-Date: Wed, 26 Jun 2024 15:32:23 +0200
-Message-Id: <20240626133223.2316555-1-bjorn@mork.no>
-X-Mailer: git-send-email 2.39.2
+	s=arc-20240116; t=1719409651; c=relaxed/simple;
+	bh=/jEClEHDxEl+djPgKLOGRJWMVDG+RYF17xauYwyh5qE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ed5H+SzEJPsjeBukmnULeK5wGLssg2EJ/lJZrj0c2UfxB4+tt+hmYdM6rYFREXnivZ9UOjogdSyCViJw4pUIFO2w7qwKSw61bZ5fkXYgTQjuJbdnfrpzYDlsz7GfxT9GtIo74lSXnNJJ3PpW/A7VgWpSwbMVEdBGUf4J8ZpQVDM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=9elements.com; spf=pass smtp.mailfrom=9elements.com; dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b=dBiV9eWC; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=9elements.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=9elements.com
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4248ea53493so25980445e9.3
+        for <linux-usb@vger.kernel.org>; Wed, 26 Jun 2024 06:47:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google; t=1719409647; x=1720014447; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=RHiBgnfP/0rnnPCnPMDBOWshAUvOWKD1FEoaKWD/1kE=;
+        b=dBiV9eWCrfWN0NfagsXskNqpQO1bN72mc/aYMIsNuWgCM7smDauPkOv9mc/aJEMLiS
+         60PRKToVI+B6PBYuk/wjbSQ0DmvWcGAyhtOFFiqLjkpBRcxDnj6jTECqyAA355Ox7AaN
+         dGbVgNcd577qoSkz7uMK4ScAcmM5KOkVlMNii/2OVqVgJ7idoAiMLX+7yE/oUA6d2jeR
+         SLRALhL5UnYSsU/UcaC1vH45/avc3Njnorpz/7tIeCCr1PolRYDQqzUYOOOe66xYVXYF
+         jcJI9isTTKtn3zv3RBv0rvrH4OY8FvSLcz9VL9gCzNNJlvYKJeD8W5tXljXzZDDrHbPc
+         9bcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719409647; x=1720014447;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RHiBgnfP/0rnnPCnPMDBOWshAUvOWKD1FEoaKWD/1kE=;
+        b=DEpEH6aNz0bYTp3pm1SNdXIifAlQQVooRmVfuYC6t5PjdGdezBR8OR9bEuncL+LFRk
+         cblmpY+/h1m7q+g8qNqJr97UnRqmaX1a07OgmRA23S1wCiksaDEU64G2nXM8qA7WkNIe
+         3JIV60MmvQImAoFooVwSNjTdWh1J3twIbK7zocSCXTTGtx3QNdS1T3ok4/zkWhdIf+tj
+         x5xDfTrAm4x/QBPssruDUNP6haJgTvEQwJgmgPviBG0W7CBQxejpu+EytI0bUilcmrFP
+         PoOmmILIlltKzAVBYVRZ/15BC7odGVmHVfgqpUxchCfZcxuJQHkTOkQkwS5/6N0u5c/A
+         K0KQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVG7x8NRcXoaH+BwdyrG3RVQxp0mF+Bu2CnOSS7ItFJRA8QHB/f67au5kPOAMSjuguugroIJLPp3VkT4XXMS9qWxAy2Y8QatEpH
+X-Gm-Message-State: AOJu0YxR9o3UEMavXUIHYGPMWe0naG2ydHe7rm7hzZZcWEhqzuk6Qixi
+	TTUp3XW/aam3/NDdVJlblr+6oK+C9ngQ0S5KTnneY2nr6kSdgpPiXjaNXj8methurpoMeSf6zVz
+	7
+X-Google-Smtp-Source: AGHT+IEmS2OWbS79dMTwL4fhRrin/KFAoeZqHlZtaieH7je5p3m5/smsvb2C9xkGG3a3QPu3VxqGvA==
+X-Received: by 2002:a05:600c:3503:b0:422:218e:b8d7 with SMTP id 5b1f17b1804b1-4248cc66a78mr89547365e9.38.1719409646730;
+        Wed, 26 Jun 2024 06:47:26 -0700 (PDT)
+Received: from T14s.n1ce.space ([185.254.75.30])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-424c8475aacsm26611625e9.47.2024.06.26.06.47.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jun 2024 06:47:26 -0700 (PDT)
+From: Marcello Sylvester Bauer <marcello.bauer@9elements.com>
+To: linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Uwe Kleine-Koenig <u.kleine-koenig@pengutronix.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Matthias Stoeckl <matthias.stoeckl@secunet.com>,
+	Marcello Sylvester Bauer <marcello.bauer@9elements.com>
+Subject: [PATCH v1 0/1] usb: gadget: dummy_hcd: Fix regression due to hrtimer migration
+Date: Wed, 26 Jun 2024 15:47:19 +0200
+Message-ID: <cover.1719405791.git.marcello.bauer@9elements.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 1.0.3 at canardo
-X-Virus-Status: Clean
 
-FM350-GL is 5G Sub-6 WWAN module which uses M.2 form factor interface.
-It is based on Mediatek's MTK T700 CPU. The module supports PCIe Gen3
-x1 and USB 2.0 and 3.0 interfaces.
+The kernel CI bots such as syzbot and intel kernel bot reported a
+regression due to the migration of the transfare scheduler from timer
+list to hrtimer. The current assumption is that this is because timer
+list uses soft interrupt context. I have not been able to reproduce the
+regression consistently. So I'm submitting this patch in the hope that
+it solves the issue.
 
-The manufacturer states that USB is "for debug" but it has been
-confirmed to be fully functional, except for modem-control requests on
-some of the interfaces.
+Do not apply the patch if any bot still reports the problem.
 
-USB device composition is controlled by AT+GTUSBMODE=<mode> command.
-Two values are currently supported for the <mode>:
+Marcello Sylvester Bauer (1):
+  usb: gadget: dummy_hcd: make hrtimer expire in soft irq context
 
-40: RNDIS+AT+AP(GNSS)+META+DEBUG+NPT+ADB
-41: RNDIS+AT+AP(GNSS)+META+DEBUG+NPT+ADB+AP(LOG)+AP(META)(default value)
+ drivers/usb/gadget/udc/dummy_hcd.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-Mode 40 corresponds to:
-
-T:  Bus=03 Lev=02 Prnt=02 Port=00 Cnt=01 Dev#= 22 Spd=480  MxCh= 0
-D:  Ver= 2.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-P:  Vendor=0e8d ProdID=7126 Rev= 0.01
-S:  Manufacturer=Fibocom Wireless Inc.
-S:  Product=FM350-GL
-C:* #Ifs= 8 Cfg#= 1 Atr=a0 MxPwr=500mA
-A:  FirstIf#= 0 IfCount= 2 Cls=e0(wlcon) Sub=01 Prot=03
-I:* If#= 0 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=02 Prot=ff Driver=rndis_host
-E:  Ad=82(I) Atr=03(Int.) MxPS=  64 Ivl=125us
-I:* If#= 1 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=rndis_host
-E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
-E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 6 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=06(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 7 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=07(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-
-Mode 41 corresponds to:
-
-T:  Bus=03 Lev=02 Prnt=02 Port=00 Cnt=01 Dev#=  7 Spd=480  MxCh= 0
-D:  Ver= 2.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-P:  Vendor=0e8d ProdID=7127 Rev= 0.01
-S:  Manufacturer=Fibocom Wireless Inc.
-S:  Product=FM350-GL
-C:* #Ifs=10 Cfg#= 1 Atr=a0 MxPwr=500mA
-A:  FirstIf#= 0 IfCount= 2 Cls=e0(wlcon) Sub=01 Prot=03
-I:* If#= 0 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=02 Prot=ff Driver=rndis_host
-E:  Ad=82(I) Atr=03(Int.) MxPS=  64 Ivl=125us
-I:* If#= 1 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=rndis_host
-E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
-E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 6 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=06(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 7 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=07(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 8 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=89(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=08(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 9 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=8a(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=09(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-
-Cc: stable@vger.kernel.org
-Signed-off-by: Bjørn Mork <bjorn@mork.no>
----
- drivers/usb/serial/option.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index 8a5846d4adf6..599439bddfb7 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -2224,6 +2224,10 @@ static const struct usb_device_id option_ids[] = {
- 	{ USB_DEVICE_AND_INTERFACE_INFO(MEDIATEK_VENDOR_ID, MEDIATEK_PRODUCT_7106_2COM, 0x02, 0x02, 0x01) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(MEDIATEK_VENDOR_ID, MEDIATEK_PRODUCT_DC_4COM2, 0xff, 0x02, 0x01) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(MEDIATEK_VENDOR_ID, MEDIATEK_PRODUCT_DC_4COM2, 0xff, 0x00, 0x00) },
-+	{ USB_DEVICE_AND_INTERFACE_INFO(MEDIATEK_VENDOR_ID, 0x7126, 0xff, 0x00, 0x00),
-+	  .driver_info = NCTRL(2) },
-+	{ USB_DEVICE_AND_INTERFACE_INFO(MEDIATEK_VENDOR_ID, 0x7127, 0xff, 0x00, 0x00),
-+	  .driver_info = NCTRL(2) | NCTRL(3) | NCTRL(4) },
- 	{ USB_DEVICE(CELLIENT_VENDOR_ID, CELLIENT_PRODUCT_MEN200) },
- 	{ USB_DEVICE(CELLIENT_VENDOR_ID, CELLIENT_PRODUCT_MPL200),
- 	  .driver_info = RSVD(1) | RSVD(4) },
 -- 
-2.39.2
+2.45.2
 
 
