@@ -1,218 +1,182 @@
-Return-Path: <linux-usb+bounces-11694-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11695-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2AEA491815F
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Jun 2024 14:49:10 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C8FA9182F1
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Jun 2024 15:45:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4CB121C22D45
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Jun 2024 12:49:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 19BF31F2165B
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Jun 2024 13:45:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96E791836F6;
-	Wed, 26 Jun 2024 12:47:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 453BC184106;
+	Wed, 26 Jun 2024 13:45:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="feqtQsRf"
+	dkim=pass (1024-bit key) header.d=mork.no header.i=@mork.no header.b="KGNsPbGF"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from dilbert.mork.no (dilbert.mork.no [65.108.154.246])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C315186E43
-	for <linux-usb@vger.kernel.org>; Wed, 26 Jun 2024 12:47:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DED41836E8;
+	Wed, 26 Jun 2024 13:45:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.108.154.246
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719406037; cv=none; b=ozuFd+HR8Uipu1Q7jj87gDQOY/QtQ/WSRxAc96Pq/8Zm0Y/Qs3hBP1XIn8/B2e28Vv1pK+Sddyle8BmfiuwFAbSXf8b0B4Rvxn8LT+qbHGD93oyCNgKNiuQYvNfkO3Ci9FF7xwGREXMGZARLiIv8KU5oXui2m0CSwM07rUp0xOQ=
+	t=1719409507; cv=none; b=r73GdbPJ8a7NeB0u6lorGJpgFDC7KUj4GawldkKwtYuVwcdMZg9HUE97sWFni4liJ9Xh18GMCcbaJ9M7iRdiffd2h8yA7/0Of+bMxn20AVjN9bgzA4JZ8tKWEjhwuiF4Q0qiEamGwRej7T32B3Nd+K44CEtuorTyLSNDGeK9waA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719406037; c=relaxed/simple;
-	bh=vmBUWblzpmIXath72nBkIqVv4PUWSos71TXTYhsxET0=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=EeOCgMUdyCiclpxTbeo/nvlR0ROoitztLgHJFJbrf1o5nU+pJiEy2MqlCcjYI4zcUMl/q9K3sEH7tSdAiqPHRH++sFgOMoAd8HYY1419W8c/avY5B7erIA935vxd52t5O+2As322zgC6mTwMO9vWykyLr5qdQjZVFTCofofF2dU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=feqtQsRf; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1719406036; x=1750942036;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=vmBUWblzpmIXath72nBkIqVv4PUWSos71TXTYhsxET0=;
-  b=feqtQsRfd69zYPFykg6AjhVkpjXyrZGgZ6ANi+1W+7RHmgMwcPIRNTkr
-   cZWQt12XOBdtbgzQwsXYa8LHUM0QBuiNruf8UexSGi/A52Bx9WBivWvT0
-   UzQ+7Tp6uWchmrNTgi1rYBzI8DIJgCDv9rWi/dHxR+n7jqutxMAxeKffZ
-   OC7ge9yCYtuBk8S+07+F/+2Ou9Dsq6C/EfW/osRgvvnHGaz8Yz3DsGJ0L
-   WEmY71mmiI+vogqQgphbUTzS20dL/N5iWFxZtEu6wPRHDf3bxK3KWg0F/
-   cKgxTFxhb8mqrLXBFicGe17JmhXPS6UqkgShg4F6NzjeqJo71cY1gS+lO
-   A==;
-X-CSE-ConnectionGUID: Mp8LjKlIRHe5uF4P+p+hpQ==
-X-CSE-MsgGUID: NNpfozK/SMSjjPI52tBABw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11114"; a="16353440"
-X-IronPort-AV: E=Sophos;i="6.08,266,1712646000"; 
-   d="scan'208";a="16353440"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2024 05:47:15 -0700
-X-CSE-ConnectionGUID: VPEENAWRS4iTxtwXd7HdgQ==
-X-CSE-MsgGUID: ZJcsSEWOTEeQUL3mzP4FUQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,266,1712646000"; 
-   d="scan'208";a="48442776"
-Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
-  by fmviesa005.fm.intel.com with ESMTP; 26 Jun 2024 05:47:13 -0700
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-To: <gregkh@linuxfoundation.org>
-Cc: <linux-usb@vger.kernel.org>,
-	niklas.neronin@linux.intel.com,
-	Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH 21/21] xhci: sort out TRB Endpoint ID bitfield macros
-Date: Wed, 26 Jun 2024 15:48:35 +0300
-Message-Id: <20240626124835.1023046-22-mathias.nyman@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20240626124835.1023046-1-mathias.nyman@linux.intel.com>
-References: <20240626124835.1023046-1-mathias.nyman@linux.intel.com>
+	s=arc-20240116; t=1719409507; c=relaxed/simple;
+	bh=mAVRzzjl2ml2u8Gmy2oB6sT+YlAVVokF49bVXnJUqi8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=BM7ubBFnw09LuLpPygcrYq+feUACOVyq4x0nkLtuXDalbRHcAlerzIjtwHEb5bMmT1diN7ACYxtD9kzC0qhn78yIAIg23tc16VZMNVVs/bBWmPA768e0kGU1WYGm1rDvJBqQwJB9P4LfWYaUqJhJqdKD4SNBWxc2UDnIC+Iz+BE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mork.no; spf=pass smtp.mailfrom=miraculix.mork.no; dkim=pass (1024-bit key) header.d=mork.no header.i=@mork.no header.b=KGNsPbGF; arc=none smtp.client-ip=65.108.154.246
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mork.no
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=miraculix.mork.no
+Received: from canardo.dyn.mork.no ([IPv6:2a01:799:10da:6900:0:0:0:1])
+	(authenticated bits=0)
+	by dilbert.mork.no (8.17.1.9/8.17.1.9) with ESMTPSA id 45QDWY7F785538
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
+	Wed, 26 Jun 2024 14:32:35 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
+	t=1719408754; bh=kx9LHtWevguXGUlSVbRkqpwgE6B/HVVWlJYSESFJwrA=;
+	h=From:To:Cc:Subject:Date:Message-Id:From;
+	b=KGNsPbGFmIs6ninv526omMMespR1WgnKV4dKhVF8mudTO/qTMeNSTOkahKOcGBVDn
+	 LZSpFZQYYu1i7UyUM8dZCollOTWL2wW5tfyX9WBF/Vsz7jLgGXaM6UVd2jDcDnwfMO
+	 Pm87OB2yUaCO/NMNscGrxG3WrhF0a3OqMrtPUwGg=
+Received: from miraculix.mork.no ([IPv6:2a01:799:964:4b0a:9af7:269:d286:bcf0])
+	(authenticated bits=0)
+	by canardo.dyn.mork.no (8.17.1.9/8.17.1.9) with ESMTPSA id 45QDWYQF3643882
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
+	Wed, 26 Jun 2024 15:32:34 +0200
+Received: (nullmailer pid 2316567 invoked by uid 1000);
+	Wed, 26 Jun 2024 13:32:34 -0000
+From: =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>
+To: linux-usb@vger.kernel.org
+Cc: Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>, stable@vger.kernel.org
+Subject: [PATCH] USB: serial: option: add Fibocom FM350-GL
+Date: Wed, 26 Jun 2024 15:32:23 +0200
+Message-Id: <20240626133223.2316555-1-bjorn@mork.no>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 1.0.3 at canardo
+X-Virus-Status: Clean
 
-xhci macros that read and write endpoint ID bitfields of TRBs are mixing
-the 1-based Endpoint ID as described in the xHCI specification, and
-0-based endpoint index used by driver as an array index.
+FM350-GL is 5G Sub-6 WWAN module which uses M.2 form factor interface.
+It is based on Mediatek's MTK T700 CPU. The module supports PCIe Gen3
+x1 and USB 2.0 and 3.0 interfaces.
 
-Sort this out by naming macros that deal with 1 based Endpoint ID fields
-to *_EP_ID_*, and 0 based endpoint index values to *_EP_INDEX_*.
+The manufacturer states that USB is "for debug" but it has been
+confirmed to be fully functional, except for modem-control requests on
+some of the interfaces.
 
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+USB device composition is controlled by AT+GTUSBMODE=<mode> command.
+Two values are currently supported for the <mode>:
+
+40: RNDIS+AT+AP(GNSS)+META+DEBUG+NPT+ADB
+41: RNDIS+AT+AP(GNSS)+META+DEBUG+NPT+ADB+AP(LOG)+AP(META)(default value)
+
+Mode 40 corresponds to:
+
+T:  Bus=03 Lev=02 Prnt=02 Port=00 Cnt=01 Dev#= 22 Spd=480  MxCh= 0
+D:  Ver= 2.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+P:  Vendor=0e8d ProdID=7126 Rev= 0.01
+S:  Manufacturer=Fibocom Wireless Inc.
+S:  Product=FM350-GL
+C:* #Ifs= 8 Cfg#= 1 Atr=a0 MxPwr=500mA
+A:  FirstIf#= 0 IfCount= 2 Cls=e0(wlcon) Sub=01 Prot=03
+I:* If#= 0 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=02 Prot=ff Driver=rndis_host
+E:  Ad=82(I) Atr=03(Int.) MxPS=  64 Ivl=125us
+I:* If#= 1 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=rndis_host
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
+E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 6 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=06(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 7 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=07(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+
+Mode 41 corresponds to:
+
+T:  Bus=03 Lev=02 Prnt=02 Port=00 Cnt=01 Dev#=  7 Spd=480  MxCh= 0
+D:  Ver= 2.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+P:  Vendor=0e8d ProdID=7127 Rev= 0.01
+S:  Manufacturer=Fibocom Wireless Inc.
+S:  Product=FM350-GL
+C:* #Ifs=10 Cfg#= 1 Atr=a0 MxPwr=500mA
+A:  FirstIf#= 0 IfCount= 2 Cls=e0(wlcon) Sub=01 Prot=03
+I:* If#= 0 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=02 Prot=ff Driver=rndis_host
+E:  Ad=82(I) Atr=03(Int.) MxPS=  64 Ivl=125us
+I:* If#= 1 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=rndis_host
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
+E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 6 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=06(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 7 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=07(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 8 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=89(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=08(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 9 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=8a(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=09(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+
+Cc: stable@vger.kernel.org
+Signed-off-by: Bjørn Mork <bjorn@mork.no>
 ---
- drivers/usb/host/xhci-ring.c |  6 +++---
- drivers/usb/host/xhci.h      | 33 ++++++++++++++-------------------
- 2 files changed, 17 insertions(+), 22 deletions(-)
+ drivers/usb/serial/option.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 49f8f980776b..b7517c3c8059 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -715,7 +715,7 @@ static int xhci_move_dequeue_past_td(struct xhci_hcd *xhci,
- 		lower_32_bits(addr) | trb_sct | new_cycle,
- 		upper_32_bits(addr),
- 		STREAM_ID_FOR_TRB(stream_id), SLOT_ID_FOR_TRB(slot_id) |
--		EP_ID_FOR_TRB(ep_index) | TRB_TYPE(TRB_SET_DEQ), false);
-+		EP_INDEX_FOR_TRB(ep_index) | TRB_TYPE(TRB_SET_DEQ), false);
- 	if (ret < 0) {
- 		xhci_free_command(xhci, cmd);
- 		return ret;
-@@ -4379,7 +4379,7 @@ int xhci_queue_stop_endpoint(struct xhci_hcd *xhci, struct xhci_command *cmd,
- 			     int slot_id, unsigned int ep_index, int suspend)
- {
- 	u32 trb_slot_id = SLOT_ID_FOR_TRB(slot_id);
--	u32 trb_ep_index = EP_ID_FOR_TRB(ep_index);
-+	u32 trb_ep_index = EP_INDEX_FOR_TRB(ep_index);
- 	u32 type = TRB_TYPE(TRB_STOP_RING);
- 	u32 trb_suspend = SUSPEND_PORT_FOR_TRB(suspend);
- 
-@@ -4392,7 +4392,7 @@ int xhci_queue_reset_ep(struct xhci_hcd *xhci, struct xhci_command *cmd,
- 			enum xhci_ep_reset_type reset_type)
- {
- 	u32 trb_slot_id = SLOT_ID_FOR_TRB(slot_id);
--	u32 trb_ep_index = EP_ID_FOR_TRB(ep_index);
-+	u32 trb_ep_index = EP_INDEX_FOR_TRB(ep_index);
- 	u32 type = TRB_TYPE(TRB_RESET_EP);
- 
- 	if (reset_type == EP_SOFT_RESET)
-diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index 65c84185c7fd..9fa1b58121f0 100644
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -805,13 +805,19 @@ struct xhci_transfer_event {
- 	__le32	flags;
- };
- 
-+/* Transfer event flags bitfield, also for select command completion events */
-+#define TRB_TO_SLOT_ID(p)	(((p) >> 24) & 0xff)
-+#define SLOT_ID_FOR_TRB(p)	(((p) & 0xff) << 24)
-+
-+#define TRB_TO_EP_ID(p)		(((p) >> 16) & 0x1f) /* Endpoint ID 1 - 31 */
-+#define EP_ID_FOR_TRB(p)	(((p) & 0x1f) << 16)
-+
-+#define TRB_TO_EP_INDEX(p)	(TRB_TO_EP_ID(p) - 1) /* Endpoint index 0 - 30 */
-+#define EP_INDEX_FOR_TRB(p)	((((p) + 1) & 0x1f) << 16)
-+
- /* Transfer event TRB length bit mask */
--/* bits 0:23 */
- #define	EVENT_TRB_LEN(p)		((p) & 0xffffff)
- 
--/** Transfer Event bit fields **/
--#define	TRB_TO_EP_ID(p)	(((p) >> 16) & 0x1f)
--
- /* Completion Code - only applicable for some types of TRBs */
- #define	COMP_CODE_MASK		(0xff << 24)
- #define GET_COMP_CODE(p)	(((p) & COMP_CODE_MASK) >> 24)
-@@ -950,8 +956,6 @@ struct xhci_event_cmd {
- 	__le32 flags;
- };
- 
--/* flags bitmasks */
--
- /* Address device - disable SetAddress */
- #define TRB_BSR		(1<<9)
- 
-@@ -987,13 +991,8 @@ enum xhci_setup_dev {
- 
- /* bits 16:23 are the virtual function ID */
- /* bits 24:31 are the slot ID */
--#define TRB_TO_SLOT_ID(p)	(((p) & (0xff<<24)) >> 24)
--#define SLOT_ID_FOR_TRB(p)	(((p) & 0xff) << 24)
- 
- /* Stop Endpoint TRB - ep_index to endpoint ID for this TRB */
--#define TRB_TO_EP_INDEX(p)		((((p) & (0x1f << 16)) >> 16) - 1)
--#define	EP_ID_FOR_TRB(p)		((((p) + 1) & 0x1f) << 16)
--
- #define SUSPEND_PORT_FOR_TRB(p)		(((p) & 1) << 23)
- #define TRB_TO_SUSPEND_PORT(p)		(((p) & (1 << 23)) >> 23)
- #define LAST_EP_INDEX			30
-@@ -2023,8 +2022,7 @@ static inline const char *xhci_decode_trb(char *str, size_t size,
- 			field1, field0,
- 			xhci_trb_comp_code_string(GET_COMP_CODE(field2)),
- 			EVENT_TRB_LEN(field2), TRB_TO_SLOT_ID(field3),
--			/* Macro decrements 1, maybe it shouldn't?!? */
--			TRB_TO_EP_INDEX(field3) + 1,
-+			TRB_TO_EP_ID(field3),
- 			xhci_trb_type_string(type),
- 			field3 & EVENT_DATA ? 'E' : 'e',
- 			field3 & TRB_CYCLE ? 'C' : 'c');
-@@ -2139,8 +2137,7 @@ static inline const char *xhci_decode_trb(char *str, size_t size,
- 			xhci_trb_type_string(type),
- 			field1, field0,
- 			TRB_TO_SLOT_ID(field3),
--			/* Macro decrements 1, maybe it shouldn't?!? */
--			TRB_TO_EP_INDEX(field3) + 1,
-+			TRB_TO_EP_ID(field3),
- 			field3 & TRB_TSP ? 'T' : 't',
- 			field3 & TRB_CYCLE ? 'C' : 'c');
- 		break;
-@@ -2150,8 +2147,7 @@ static inline const char *xhci_decode_trb(char *str, size_t size,
- 			xhci_trb_type_string(type),
- 			TRB_TO_SLOT_ID(field3),
- 			TRB_TO_SUSPEND_PORT(field3),
--			/* Macro decrements 1, maybe it shouldn't?!? */
--			TRB_TO_EP_INDEX(field3) + 1,
-+			TRB_TO_EP_ID(field3),
- 			field3 & TRB_CYCLE ? 'C' : 'c');
- 		break;
- 	case TRB_SET_DEQ:
-@@ -2161,8 +2157,7 @@ static inline const char *xhci_decode_trb(char *str, size_t size,
- 			field1, field0,
- 			TRB_TO_STREAM_ID(field2),
- 			TRB_TO_SLOT_ID(field3),
--			/* Macro decrements 1, maybe it shouldn't?!? */
--			TRB_TO_EP_INDEX(field3) + 1,
-+			TRB_TO_EP_ID(field3),
- 			field3 & TRB_CYCLE ? 'C' : 'c');
- 		break;
- 	case TRB_RESET_DEV:
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index 8a5846d4adf6..599439bddfb7 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -2224,6 +2224,10 @@ static const struct usb_device_id option_ids[] = {
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(MEDIATEK_VENDOR_ID, MEDIATEK_PRODUCT_7106_2COM, 0x02, 0x02, 0x01) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(MEDIATEK_VENDOR_ID, MEDIATEK_PRODUCT_DC_4COM2, 0xff, 0x02, 0x01) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(MEDIATEK_VENDOR_ID, MEDIATEK_PRODUCT_DC_4COM2, 0xff, 0x00, 0x00) },
++	{ USB_DEVICE_AND_INTERFACE_INFO(MEDIATEK_VENDOR_ID, 0x7126, 0xff, 0x00, 0x00),
++	  .driver_info = NCTRL(2) },
++	{ USB_DEVICE_AND_INTERFACE_INFO(MEDIATEK_VENDOR_ID, 0x7127, 0xff, 0x00, 0x00),
++	  .driver_info = NCTRL(2) | NCTRL(3) | NCTRL(4) },
+ 	{ USB_DEVICE(CELLIENT_VENDOR_ID, CELLIENT_PRODUCT_MEN200) },
+ 	{ USB_DEVICE(CELLIENT_VENDOR_ID, CELLIENT_PRODUCT_MPL200),
+ 	  .driver_info = RSVD(1) | RSVD(4) },
 -- 
-2.25.1
+2.39.2
 
 
