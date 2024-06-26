@@ -1,99 +1,124 @@
-Return-Path: <linux-usb+bounces-11704-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11705-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C1CA91876C
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Jun 2024 18:31:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E1E749187BA
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Jun 2024 18:45:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E82561F21B26
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Jun 2024 16:31:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1F20E1C21C63
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Jun 2024 16:45:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C659818EFF6;
-	Wed, 26 Jun 2024 16:31:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11F3218FC9A;
+	Wed, 26 Jun 2024 16:44:08 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF7D32BB02
-	for <linux-usb@vger.kernel.org>; Wed, 26 Jun 2024 16:31:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6582F18EFC6
+	for <linux-usb@vger.kernel.org>; Wed, 26 Jun 2024 16:44:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719419487; cv=none; b=dj6LXsokBL6T0dr+OhgE/kVs2mrJMfCbCH9sOd1A5OBayO4JSHrKllIQ4M7lRx4B44yeTFF/nT1QOsf4ewe5MieBsBL87Hb/xVQBgB+qk1qC8wgbOTIBHK+eN6RMZ8TiOFyCveWOmLY9QZSz4ZL7uA52lYw3mR4s82nHGAOAH0Q=
+	t=1719420247; cv=none; b=WPkV73HF2ZeNfO2v1iB9oEaN5JqrX9A1T2m0hh72C2IWGPUFZHLqfCzQs02i/hnV+IzE8xAhT2Ab8A1kCNlJKhrc2g8PQfP9XUQn9v1AhpHNp+ggSM4g1/VEW5Sm2QiMvjEdurtZXosxvEs9bgLnIa7SfBhsYs8c/IPlc5sRZkU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719419487; c=relaxed/simple;
-	bh=L3DMo6xjUcb0NUtbnq+M9VldQ0YVOfIyVz4Yk9W8rFg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=K84MbOwqX+Xhs5ebrwoARjmhm+wgukL30y8VotFVdHPW/Vh8RFj7xKRnxPAsi9PehYTga9ZWYljDD2YQ998KEN2VhQYtnLB5L4Vr3WuFvHjKP7Ar+5jxomyKUp/1v63q/nZ/oLrfZ4Mr3Dh4uXqvPfZLnWevBSPIicg9QwIwahU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1sMVY5-00023P-8W; Wed, 26 Jun 2024 18:31:09 +0200
-Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1sMVY4-005AYB-13; Wed, 26 Jun 2024 18:31:08 +0200
-Received: from mfe by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1sMVY3-00GABg-30;
-	Wed, 26 Jun 2024 18:31:07 +0200
-Date: Wed, 26 Jun 2024 18:31:07 +0200
-From: Marco Felsch <m.felsch@pengutronix.de>
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: gregkh@linuxfoundation.org, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-	linux@roeck-us.net, jun.li@nxp.com, devicetree@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	kernel@pengutronix.de
-Subject: Re: [PATCH v3 4/4] usb: typec: tcpci: add support to set connector
- orientation
-Message-ID: <20240626163107.mnivhlyjvttzmaw4@pengutronix.de>
-References: <20240222210903.208901-1-m.felsch@pengutronix.de>
- <20240222210903.208901-5-m.felsch@pengutronix.de>
- <ZfA8XHyxzPePwzV6@kuha.fi.intel.com>
+	s=arc-20240116; t=1719420247; c=relaxed/simple;
+	bh=i2HhrJu+f00NMOiApxp2TBALSE/2IGKOYZHtHhvVe9c=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=kSZYoNCgL4kiRxnfq+sYlzdHgYPquchJFGRTLBNloh2wyHtbVHUOUPzeECrVtPvSkaS8v4/+t5gRXR8YSvXoIF+0a+g4z/ce0YwL9+MiadMYfHXi+BzEOhlXcNokzEJoHY3V4mHllNnw7wK+BfEmrevLWAYy2O7D5rl4sMQOuWM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-7f38c10cab9so890584239f.2
+        for <linux-usb@vger.kernel.org>; Wed, 26 Jun 2024 09:44:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719420245; x=1720025045;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0gpscJH4jSbJKWt3h1G8JLIQGkiNocoueoaYePHWuPs=;
+        b=C02I1GueSq+EpGCiJWi9DdL+ZWQCDsiUvGZBPjXGk00xTw/e3lsWKjAJOtSe245ihg
+         5VLF8I5yJlAAA6Y6FNZSPx7x9OBmzA4p2spOxL2qt44ouy8FAPWp9tKlMVubwrCbW6bN
+         2mlGBuifyDJk4fElVheochJsAgCRsrAmPNQlZtT/CJdGVk3Uk4KGJ8iyY5dj/BAKo4YA
+         xLayz/PDQIC9VLIcwCnjneukg37HY24AI5GPtDU/hn1ejl4SCpgZ4KbBWb98sIKdtK4/
+         YIzyoHj7190gCZrLa+a4qUytWXdca3DpmLemrAgsPSt4wdo+H2NlHaITqOAYG2DExfp2
+         KFoQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXm5RXgrFnBPPgKzh+LZjMqtmgW6ZXtZLSu/lfHpcuagWLL3M7QYqHogDe5wninRcXpe4e2SJuRyJvfzruCahk+WHPhhlTH0wi2
+X-Gm-Message-State: AOJu0YzSsXrmcswJuCoWqS+6XsHUBVNBT1mGlM2+/juDZFZh65+w++2z
+	ildwrIjVOQW9VPwQhB4U0MJmdkFKUpUeuKeWln4HrkI84zIuLcwO1wrw/mdFUuRFYvLqsJ+rvdQ
+	FtQe4QJa1gQUL2EVRs2Rpqj4wGug2pXdN+iK4NceMm1ds8c0prrLCwD4=
+X-Google-Smtp-Source: AGHT+IGyfXq3VobGnQcA3fF0g9Hu3/ixTAGpM8s9AlCUJsAuBqvHBgf4zBFJ6jVp9GIlKvTZYQBbbsQymEiCEK+BuziYaL7S+PFZ
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZfA8XHyxzPePwzV6@kuha.fi.intel.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+X-Received: by 2002:a05:6602:1503:b0:7eb:d640:263 with SMTP id
+ ca18e2360f4ac-7f3a4f758bfmr19109439f.3.1719420243586; Wed, 26 Jun 2024
+ 09:44:03 -0700 (PDT)
+Date: Wed, 26 Jun 2024 09:44:03 -0700
+In-Reply-To: <a6eb3c4e-411f-4fbf-a85c-f3435170341d@rowland.harvard.edu>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000d6c39d061bcdb82c@google.com>
+Subject: Re: [syzbot] [usb?] [bluetooth?] WARNING in btusb_submit_intr_urb/usb_submit_urb
+From: syzbot <syzbot+8693a0bb9c10b554272a@syzkaller.appspotmail.com>
+To: linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, luiz.dentz@gmail.com, marcel@holtmann.org, 
+	stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Greg,
+Hello,
 
-On 24-03-12, Heikki Krogerus wrote:
-> On Thu, Feb 22, 2024 at 10:09:03PM +0100, Marco Felsch wrote:
-> > This add the support to set the optional connector orientation bit which
-> > is part of the optional CONFIG_STANDARD_OUTPUT register 0x18 [1]. This
-> > allows system designers to connect the tcpc orientation pin directly to
-> > the 2:1 ss-mux.
-> > 
-> > [1] https://www.usb.org/sites/default/files/documents/usb-port_controller_specification_rev2.0_v1.0_0.pdf
-> > 
-> > Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
-> 
-> Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+WARNING in btusb_submit_intr_urb/usb_submit_urb
 
-seems like this has fallen through the cracks. Since it doesn't apply to
-v6.10-rc1 anymore I will send a new version with Heikki's r-b tag.
+btusb 1-1:0.0: Pipe 404d8280 ep ffff8880234bee00
+usb 1-1: Error pipe 404d8280 ep ffff8880234beea0 epaddr 8b
+------------[ cut here ]------------
+usb 1-1: BOGUS urb xfer, pipe 1 != type 3
+WARNING: CPU: 1 PID: 53 at drivers/usb/core/urb.c:507 usb_submit_urb+0xbfa/0x17e0 drivers/usb/core/urb.c:506
+Modules linked in:
+CPU: 1 PID: 53 Comm: kworker/u9:0 Not tainted 6.10.0-rc4-syzkaller-00164-g66cc544fd75c-dirty #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/07/2024
+Workqueue: hci1 hci_power_on
+RIP: 0010:usb_submit_urb+0xbfa/0x17e0 drivers/usb/core/urb.c:506
+Code: f0 48 c1 e8 03 0f b6 04 18 84 c0 0f 85 8c 08 00 00 45 8b 06 48 c7 c7 c0 90 6d 8c 48 8b 34 24 4c 89 fa 89 e9 e8 a7 99 3c fa 90 <0f> 0b 90 90 45 89 e6 4c 89 f7 48 c7 c6 b0 4b f2 8e e8 10 6f 7a fa
+RSP: 0018:ffffc90000bd77a0 EFLAGS: 00010246
+RAX: 7b355395d6059e00 RBX: dffffc0000000000 RCX: ffff8880157d5a00
+RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000000
+RBP: 0000000000000001 R08: ffffffff81585822 R09: 1ffff9200017ae94
+R10: dffffc0000000000 R11: fffff5200017ae95 R12: 0000000000000002
+R13: ffff888018acd300 R14: ffffffff8c6d8e68 R15: ffff888023a90c60
+FS:  0000000000000000(0000) GS:ffff8880b9500000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000055da0d81ae28 CR3: 000000000e132000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ btusb_submit_intr_urb+0x4a2/0x890 drivers/bluetooth/btusb.c:1410
+ btusb_open+0x1a1/0x770 drivers/bluetooth/btusb.c:1866
+ hci_dev_open_sync+0x2cc/0x2b40 net/bluetooth/hci_sync.c:4889
+ hci_dev_do_open net/bluetooth/hci_core.c:485 [inline]
+ hci_power_on+0x1c7/0x6b0 net/bluetooth/hci_core.c:1012
+ process_one_work kernel/workqueue.c:3231 [inline]
+ process_scheduled_works+0xa2c/0x1830 kernel/workqueue.c:3312
+ worker_thread+0x86d/0xd70 kernel/workqueue.c:3393
+ kthread+0x2f0/0x390 kernel/kthread.c:389
+ ret_from_fork+0x4b/0x80 arch/x86/kernel/process.c:147
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
+ </TASK>
 
-Regards,
-  Marco
 
-> 
-> 
-> -- 
-> heikki
+Tested on:
+
+commit:         66cc544f Merge tag 'dmaengine-fix-6.10' of git://git.k..
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=1503e301980000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3f7b9f99610e0e87
+dashboard link: https://syzkaller.appspot.com/bug?extid=8693a0bb9c10b554272a
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=13ec9e82980000
+
 
