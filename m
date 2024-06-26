@@ -1,44 +1,83 @@
-Return-Path: <linux-usb+bounces-11707-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11708-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F19B6918A4E
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Jun 2024 19:46:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 284E1918E79
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Jun 2024 20:29:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2EF781C22D99
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Jun 2024 17:46:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 599E81C21E97
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Jun 2024 18:29:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E54919006E;
-	Wed, 26 Jun 2024 17:46:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17098190669;
+	Wed, 26 Jun 2024 18:28:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="xmyLlT4n"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id E7B14190056
-	for <linux-usb@vger.kernel.org>; Wed, 26 Jun 2024 17:46:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E64936E613
+	for <linux-usb@vger.kernel.org>; Wed, 26 Jun 2024 18:28:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719423987; cv=none; b=nFvFHkbBhBOgQgVDVtAeHe3RCoStYl2dtZv1Kfug72Sd0j9OwaQ+ZBs3uWgRggPLQyPVjLK9DpaE8ohfuDUHki/2x2h0bC3k8+GotIfMo+hN3CZ9TSdOZ7nowXc1Rg6EeRtvCQcVsx8IUZLIIR10XKqHj2rpEsnOeMK9awDMPFQ=
+	t=1719426538; cv=none; b=CzzPTb90AwQQX3fbnZfTJ7U0orgY48Umh9053lH4dMCqKDJW4qk+EzdICQUEiP51XZDekhBu97ioNyEuIyuowah2rMt/tI0I2lyIGkkszaSnTWySTeB1ecTRHDOFT8dm1W2d8J6W1UAJg+oicNGPd9C83zfIGYqkR2FbRiVdqsQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719423987; c=relaxed/simple;
-	bh=UDy2EAAAedZm8c+seUJoRJmo7fvPySwdZEOjQGes8Qg=;
+	s=arc-20240116; t=1719426538; c=relaxed/simple;
+	bh=eKRBvuVsBIUht4VwixhBBiAcPNSRigXXTjzRFdC3l0E=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Yc9Er/QGe6WIYCsKrdv54mV0eFMQYmMCdMgLD1iVkTdCQuJPUbuz6jIXHfvNfGrjbwDci+yTFlevs4Lt8ypaDnMXtfHvd7Rqyf252By0IU6nWp6cnndqooMsbGkbcT18galODT0N33vP9d94ZVnK/sIZ0w1jdVUkQsIOZ/fCBlc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
-Received: (qmail 712417 invoked by uid 1000); 26 Jun 2024 13:46:24 -0400
-Date: Wed, 26 Jun 2024 13:46:24 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: syzbot <syzbot+8693a0bb9c10b554272a@syzkaller.appspotmail.com>
-Cc: linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-  linux-usb@vger.kernel.org, luiz.dentz@gmail.com, marcel@holtmann.org,
-  syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [usb?] [bluetooth?] WARNING in
- btusb_submit_intr_urb/usb_submit_urb
-Message-ID: <6d1f6bcc-2918-48cd-bbb3-e8cca46622a1@rowland.harvard.edu>
-References: <a6eb3c4e-411f-4fbf-a85c-f3435170341d@rowland.harvard.edu>
- <000000000000d6c39d061bcdb82c@google.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=qvK4xs0R5MAWo8xyxa8wI9LG87Iz/9OTR+yY4w2zTjEawsPVLain3gxkU2bdSnTaWXrmpsoBfb+BCp23AzDLp4YEw7ZCfUcHY/aQaiHZaoO++m/kMyV/5Xua5qFoqKEryl0sQiaHCJug+GEjMq+YvYsuPY7lF/jYeKMAXSJrRYw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=xmyLlT4n; arc=none smtp.client-ip=209.85.167.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-52cdd893e5cso5116582e87.1
+        for <linux-usb@vger.kernel.org>; Wed, 26 Jun 2024 11:28:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1719426535; x=1720031335; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=llV5RmcUgj5BZ1LNtC4Xqg2HQ2Qk2/PW4RR/EDhyLcM=;
+        b=xmyLlT4nwsfQuW5RLZtU5U15uAhyxO7ZTOE5FNhyytIKAzMmEEX6hK6o8Kx0PtlrWo
+         PUmJYc7CD+S7rvU2BMuG4iWpNtNBQEC0L7MOaeNt6ugjmvwwbFBiK6qmq1HKBU1PR1OU
+         L2ZQMOcli8EkUPlJBHtI9Ro2Y4rcwxhQ8PRQMWHl1HRhDs1Ltpn+uH4uKpWeaE4bXCpB
+         Tg/XFcNp1Ky5jDCcr5o3LkKe6L1YsaTZbKN241ztzuJ4WZda2zzGJOJ6sF1gfzsF4H9X
+         8zMtb+pl1uehouEMxjzmArlgkQzDSmDHMNVzvM4GoA1x7v4Pl8yT/RFY5wCTUsB6lNaa
+         68QQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719426535; x=1720031335;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=llV5RmcUgj5BZ1LNtC4Xqg2HQ2Qk2/PW4RR/EDhyLcM=;
+        b=EQkDBOnxpiBvhmFYpenk1+yTNGIVF/9gQhB1f0BD52NXRbphv0pS0peMD74hipocCh
+         E3MVJxm2oRQhpRyyzp0ZHqCu39E1PJEPISYsSqEmZ2fYUwRaFMWAY0hsVRVgw7CbLYTj
+         PICgw+JIyf7kFM74x0RkkvphNqEuMhWAxBizDgsr2mQNfOtZJR37wKmkzVUpei+95EyZ
+         tmvft2PMpVwK5pfTnW8M2y64YQc6bwyLg3TgukSHMg2TzPfVEOhULu+Zp3b6Igt9LSTy
+         uqnk2vh/ZoJ2+NEDMgbvIq4PnL+XOJjx2V88NWVMYNE5uErFG+Z1tO9839OaofV8br3R
+         n2TQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUlr9UA99z4ZJYJJN5ymkAjF8beYAxcGRMlj3pv59mTfBG0+aTtzUrao4CfirohN69iPxDO2h2psAcptl+P9BDloChZqoB9tZIc
+X-Gm-Message-State: AOJu0YxxZW0f/nW4esP6aqpFEidVZhwx5RjptcQIEQU614/T5jw6Nq6X
+	01rfuGOeSL2i/r3UuRdLO75JW2/gy9GzWSwVgMh5sjulFtugRvTr/p1NVvnK49s=
+X-Google-Smtp-Source: AGHT+IFbP34C6diNqJLLb3MTQo9AnJsVc+x8hC7VON+KEozVXfyLzLz94epjeKUeENRIlr8qwKg6eA==
+X-Received: by 2002:ac2:4c86:0:b0:52c:d27b:ddcb with SMTP id 2adb3069b0e04-52ce183270emr8553919e87.3.1719426535066;
+        Wed, 26 Jun 2024 11:28:55 -0700 (PDT)
+Received: from eriador.lumag.spb.ru (dzdbxzyyyyyyyyyyybrhy-3.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::b8c])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52cdc4ad815sm1491621e87.306.2024.06.26.11.28.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jun 2024 11:28:54 -0700 (PDT)
+Date: Wed, 26 Jun 2024 21:28:52 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, 
+	Nikita Travkin <nikita@trvn.ru>, Neil Armstrong <neil.armstrong@linaro.org>, 
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-stm32@st-md-mailman.stormreply.com, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v3 0/7] usb: typec: ucsi: rework glue driver interface
+Message-ID: <2gbvt24uete2mg32eq66rksfjb5gehazwfszoceowejmskxmb6@jv2k74clpiwa>
+References: <20240625-ucsi-rework-interface-v3-0-7a6c8e17be3a@linaro.org>
+ <ZnwkloBH6UVzPOjg@kuha.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -47,92 +86,42 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <000000000000d6c39d061bcdb82c@google.com>
+In-Reply-To: <ZnwkloBH6UVzPOjg@kuha.fi.intel.com>
 
-On Wed, Jun 26, 2024 at 09:44:03AM -0700, syzbot wrote:
-> Hello,
+On Wed, Jun 26, 2024 at 05:24:22PM GMT, Heikki Krogerus wrote:
+> On Tue, Jun 25, 2024 at 05:54:25PM +0300, Dmitry Baryshkov wrote:
+> > The interface between UCSI and the glue driver is very low-level. It
+> > allows reading the UCSI data from any offset (but in reality the UCSI
+> > driver reads only VERSION, CCI an MESSAGE_IN data). All event handling
+> > is to be done by the glue driver (which already resulted in several
+> > similar-but-slightly different implementations). It leaves no place to
+> > optimize the write-read-read sequence for the command execution (which
+> > might be beneficial for some of the drivers), etc.
+> > 
+> > The patchseries attempts to restructure the UCSI glue driver interface
+> > in order to provide sensible operations instead of a low-level read /
+> > write calls.
+> > 
+> > If this approach is found to be acceptable, I plan to further rework the
+> > command interface, moving reading CCI and MESSAGE_IN to the common
+> > control code, which should simplify driver's implementation and remove
+> > necessity to split quirks between sync_control and read_message_in e.g.
+> > as implemented in the ucsi_ccg.c.
+> > 
+> > Note, the series was tested only on the ucsi_glink platforms. Further
+> > testing is appreciated.
 > 
-> syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-> WARNING in btusb_submit_intr_urb/usb_submit_urb
+> I tested these on couple of systems that use the acpi mailbox, and
+> didn't see any problems. I'll be away for most of July, so if there's
+> nothing else, for the series:
+> 
+> Tested-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> 
 
-As expected.  The interesting information is in the console log:
+Thanks!
 
-[  100.266326][   T25] btusb 1-1:0.0: Ep ffff8880234bee00 epaddr 9b epattr 67
-[  100.280938][   T53] btusb 1-1:0.0: Pipe 404d8280 ep ffff8880234bee00
-[  100.287918][   T53] usb 1-1: Error pipe 404d8280 ep ffff8880234beea0 epaddr 8b
-
-Notice the difference in the "ep" values (the addresses of the endpoint 
-descriptors).  The kernel thinks two different endpoints are the same.
-
-The reason is that the two descriptors have the same direction and 
-address, but the parsing code in config.c doesn't realize they are 
-duplicates because they differ in the value of the reserved bits in 
-bEndpointAddress.  You can see this in the epaddr values above: 0x9b 
-versus 0x8b.
-
-Let's see what happens if we reject endpoint descriptors in which any of 
-the reserved bits in bEndpointAddress are set.
-
-Alan Stern
-
-#syz test: upstream 66cc544fd75c
-
-Index: usb-devel/drivers/bluetooth/btusb.c
-===================================================================
---- usb-devel.orig/drivers/bluetooth/btusb.c
-+++ usb-devel/drivers/bluetooth/btusb.c
-@@ -1398,6 +1398,7 @@ static int btusb_submit_intr_urb(struct
- 	}
- 
- 	pipe = usb_rcvintpipe(data->udev, data->intr_ep->bEndpointAddress);
-+	dev_info(&data->intf->dev, "Pipe %x ep %p\n", pipe, data->intr_ep);
- 
- 	usb_fill_int_urb(urb, data->udev, pipe, buf, size,
- 			 btusb_intr_complete, hdev, data->intr_ep->bInterval);
-@@ -4283,6 +4284,9 @@ static int btusb_probe(struct usb_interf
- 
- 		if (!data->intr_ep && usb_endpoint_is_int_in(ep_desc)) {
- 			data->intr_ep = ep_desc;
-+			dev_info(&intf->dev, "Ep %p epaddr %x epattr %x\n",
-+					ep_desc, ep_desc->bEndpointAddress,
-+					ep_desc->bmAttributes);
- 			continue;
- 		}
- 
-Index: usb-devel/drivers/usb/core/urb.c
-===================================================================
---- usb-devel.orig/drivers/usb/core/urb.c
-+++ usb-devel/drivers/usb/core/urb.c
-@@ -208,8 +208,11 @@ int usb_pipe_type_check(struct usb_devic
- 	ep = usb_pipe_endpoint(dev, pipe);
- 	if (!ep)
- 		return -EINVAL;
--	if (usb_pipetype(pipe) != pipetypes[usb_endpoint_type(&ep->desc)])
-+	if (usb_pipetype(pipe) != pipetypes[usb_endpoint_type(&ep->desc)]) {
-+		dev_info(&dev->dev, "Error pipe %x ep %p epaddr %x\n",
-+				pipe, &ep->desc, ep->desc.bEndpointAddress);
- 		return -EINVAL;
-+	}
- 	return 0;
- }
- EXPORT_SYMBOL_GPL(usb_pipe_type_check);
-Index: usb-devel/drivers/usb/core/config.c
-===================================================================
---- usb-devel.orig/drivers/usb/core/config.c
-+++ usb-devel/drivers/usb/core/config.c
-@@ -287,6 +287,13 @@ static int usb_parse_endpoint(struct dev
- 		goto skip_to_next_endpoint_or_interface_descriptor;
- 	}
- 
-+	if (d->bEndpointAddress &
-+			~(USB_ENDPOINT_DIR_MASK | USB_ENDPOINT_NUMBER_MASK)) {
-+		dev_notice(ddev, "config %d interface %d altsetting %d has an invalid endpoint descriptor with address 0x%02x, skipping\n",
-+		    cfgno, inum, asnum, d->bEndpointAddress);
-+		goto skip_to_next_endpoint_or_interface_descriptor;
-+	}
-+
- 	/* Only store as many endpoints as we have room for */
- 	if (ifp->desc.bNumEndpoints >= num_ep)
- 		goto skip_to_next_endpoint_or_interface_descriptor;
-
+-- 
+With best wishes
+Dmitry
 
