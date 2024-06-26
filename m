@@ -1,165 +1,116 @@
-Return-Path: <linux-usb+bounces-11668-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11669-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50D91917A2F
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Jun 2024 09:53:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4045E917B7D
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Jun 2024 10:56:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 890461C2299C
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Jun 2024 07:53:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DE9DF1F24B6D
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Jun 2024 08:56:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1029415EFC6;
-	Wed, 26 Jun 2024 07:53:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 801CD1684B4;
+	Wed, 26 Jun 2024 08:56:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RM6M8uLa"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="UtBMb89y"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mout.web.de (mout.web.de [212.227.17.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E023015B55D;
-	Wed, 26 Jun 2024 07:53:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B398160796;
+	Wed, 26 Jun 2024 08:56:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719388427; cv=none; b=e5KMXzVyDmF+tni/jCWvJf1siRhNFDEHmJT9cY0q75ZkK83MWuDZ3Muahg879vfUQ/0fLWSGnGRiMVxLLGfQrXT7sodSvPAqFNOekuFrvpR9I7kd8jfV5JWZbm0JfbPlwnVJwjoMfNM8h8usiO5pGU8BgmSKX87BTw+rKF2/O6A=
+	t=1719392210; cv=none; b=b1AIGXK7WeAd/jpFGnIi3sB3ImMNQFkt6AIxn91nMPw02plotc2emDTILNZxH5KDB8Jv5cgzEVx0t10EdDjXZIQy0iJww0rli4/jGguiFOO3ywdKRFTc7ZB6dMrKEzsX78CToO1184cixYt08ViR6Wb8g77RMm09Crrf3AspkMI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719388427; c=relaxed/simple;
-	bh=fsRwahzF+DAn3/q4k6IPtufQdWLhcg2lFAnXar2y644=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LsVRLkqohJDqWfqk2gF5lIQLgdjSAQTvlERMuS+Kb8kUPntcv1vi/tCQ2h351bQIpW81JKLsE1GFD6PKnt74s2YFoyrlinbBRmNuZ9vkR/ReBjJZ3K0432G3I1AxhkIOVnX6PjUcdFNP4ZswkcMhfiXD3uxp/KfCRYA0+DT0ndk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RM6M8uLa; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1719388426; x=1750924426;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=fsRwahzF+DAn3/q4k6IPtufQdWLhcg2lFAnXar2y644=;
-  b=RM6M8uLaVXenjM8Fi7IQSaeuNEGXWuTZHjEEpxfFckCy8g63wRWs3h0f
-   mokruKoTEQ2jLdBSnACoWtaEmrwa4axGmLrCSySJXxJNvUOAFTgwh4HIE
-   TgtrGqhfu+qd4VvYlF0iLndfIv5veR5ZI/XSt8cTy+i/E2d3g/kd9i8/q
-   P6NZuHUNcyyp7HgyCl2qCE5zJ7byZ/5ljE2sRH5xFWEVXvCniWCRJrbY2
-   2xbBSQDCgYXut8bGaUYLRmmiyPO0mSYwYwKb4urr/LvMAmnx6JBJe+Hfo
-   Z1iGvyF/q2yqmiztkj5JsC0H0REzc498o0+Ei7L1Gxw0p+J7UlsvWlI34
-   g==;
-X-CSE-ConnectionGUID: VZq/so0xT5mxkpHui2/boQ==
-X-CSE-MsgGUID: RDxSzAbFSEmWBthBq4kriQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11114"; a="16669603"
-X-IronPort-AV: E=Sophos;i="6.08,266,1712646000"; 
-   d="scan'208";a="16669603"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2024 00:53:45 -0700
-X-CSE-ConnectionGUID: DdDVk+asRuCOixyJq2FVXQ==
-X-CSE-MsgGUID: WeSwgWUCTXqIyWlzFtOimw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,266,1712646000"; 
-   d="scan'208";a="49088979"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa004.jf.intel.com with ESMTP; 26 Jun 2024 00:53:42 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id 64B56346; Wed, 26 Jun 2024 10:53:41 +0300 (EEST)
-Date: Wed, 26 Jun 2024 10:53:41 +0300
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Mario Limonciello <mario.limonciello@amd.com>
-Cc: Bjorn Helgaas <bhelgaas@google.com>,
-	Mathias Nyman <mathias.nyman@intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
-	Daniel Drake <drake@endlessos.org>, Gary Li <Gary.Li@amd.com>
-Subject: Re: [PATCH 0/4] Verify devices transition from D3cold to D0
-Message-ID: <20240626075341.GY1532424@black.fi.intel.com>
-References: <20240613054204.5850-1-mario.limonciello@amd.com>
- <20240618131452.GC1532424@black.fi.intel.com>
- <9f465ec4-32b9-4cd8-89de-a57a99880360@amd.com>
- <20240619052927.GF1532424@black.fi.intel.com>
- <5a04e554-9f18-43c0-8095-d3e0c83db76d@amd.com>
- <a9436f1c-330b-469d-bb93-3e89102b09b9@amd.com>
+	s=arc-20240116; t=1719392210; c=relaxed/simple;
+	bh=dqN7RMr1ENoXwQSJOuRDf7RcOZcpC3x1Eq9p6j1DL3s=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=rb5VKWigkWhSBdt58GPrmxWFLtfAeju+1l+qXCXDOa2Ru8w0dzkry8FQzdbEL3BJGVsJC+W8cE0K2rgGBXLbtLoMo7jVQk/gkZ1YCZnH3LszOGSOdmH4tZa+rx65v80yew0W38WntruM7XtwzRdJyYElyhMvHCGhfulI/N0wzO0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=UtBMb89y; arc=none smtp.client-ip=212.227.17.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1719392168; x=1719996968; i=markus.elfring@web.de;
+	bh=uHpBbe5Y1ciXIOpkMuiiWV5X9R8Qj10UQWwEFWd/0kc=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=UtBMb89yxkN/4fE8WTQmaHr1dsRFCz7YlpxKHXzi2hhw87EZD0QXvHczGoC8zK4C
+	 bxs46Sx5ME/30TY1yXnx+GcDfBczARqfuq9n0tEbyeP9bjUuzSyhlkqA+zgxyNmKV
+	 hfINLFpKAcaA9arKRjXzuoHhFVd/JQQSjDbjFcy+QPxTNAGV6Tr+jSWK+01Vl8q5y
+	 aBGGij92NgG7FWoSlpwutJHawlqIr5hv621j6s5SmNC3b2Y0UzRWajL3kB50o2/W9
+	 j8bvh+dtxuN9TdbbNO6WhvKysawYc2TMuBeMnhba9RKQg99wja4JwPGFwQxAg9XCk
+	 2A2DwGsVEei87pFdYQ==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.91.95]) by smtp.web.de (mrweb106
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1MODiN-1rxqFd2O8P-00V3Tx; Wed, 26
+ Jun 2024 10:56:08 +0200
+Message-ID: <95612a56-63ee-4ba8-beaa-4b773ccca5e8@web.de>
+Date: Wed, 26 Jun 2024 10:55:38 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a9436f1c-330b-469d-bb93-3e89102b09b9@amd.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC] usb: Patch review processes?
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org,
+ linux-doc@vger.kernel.org
+Cc: LKML <linux-kernel@vger.kernel.org>, linux-aspeed@lists.ozlabs.org,
+ linux-arm-kernel@lists.infradead.org, Ma Ke <make24@iscas.ac.cn>,
+ Andrew Jeffery <andrew@codeconstruct.com.au>, Joel Stanley <joel@jms.id.au>,
+ Julia Lawall <julia.lawall@inria.fr>, Neal Liu <neal_liu@aspeedtech.com>
+References: <20240625022306.2568122-1-make24@iscas.ac.cn>
+ <edeaa699-7cfe-44ed-abde-7cf3d3efe3bf@web.de>
+ <2024062556-ladder-canister-1ab1@gregkh>
+ <ff2aaf0d-5456-43d1-af52-78986b3401f9@web.de>
+ <2024062532-strep-president-44d7@gregkh>
+ <5fa430f5-3e18-4c20-93d4-6733afd6bdcf@web.de>
+ <2024062553-koala-granddad-50f1@gregkh>
+Content-Language: en-GB
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <2024062553-koala-granddad-50f1@gregkh>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:01Zgw4SpZxal5aX+cdD8nOTCspwL5KOnoabCgPJR2tnzNKav2ey
+ kY81u5ra8MXgMOxtiZZXjPFI8MKtKPtnTNvanxr3aMrubDK53O5Q6lSYjFBWX1oD6o/QsQ/
+ ftgq9FJV0X2wtZ5m2KTV2zcl4yJrdgwpm4E1Enl7Cdz0yfBdQO2N2lhvZFHzDtIdhINqskr
+ POn2J1dxCNUh+sBbgoPPg==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:gfrLLhDtPD0=;UlbLOaeVxgTqqoy5hNUBJ8gBGCp
+ vnSvPRqj7AtVm2SCQt8tVy4oNIw3HPJfJdNp6DTZsXaQCyDzJHJtJkHrl4lNR2YrTg2gHLJaj
+ VBjz2dCD8QXbthggUT1rffygNJm8L6SsgL7eBQkJ1OXI2IJfJ9vP39oJHNQZB+B7yO+KzSPuD
+ 70Jd4fp/wP+9Sw5zHI3Eb2ZNo28MXO+BTRQVXz2qoUCEsmBVXq75RSCMCHCNgRGQtpOqA+cb3
+ XaMn69X30IdlbPA3JaCUb/2Wa4XVNFKaAi6yJytX6XjRH4gZlZVMTmw1QQnx5D2v8vbBl0RLb
+ +IAiqXDSTXHNoOPDS/kjEfHvziRfKdJETXzkfla/K43mRNADraVPhMoU7EFql/KJ4ceuB7W0K
+ Wob7idlraKRvfThiNUA6s0vfh8kttP3KcfuGWDpcgUbtds1RY+8L8VXYKuNd0DXG6ycHBv6CM
+ yWag7wrDclPLugGnlfkAcpm4LhvkyyEHqtEFpEkrwf0Dpg3OFX1SBuiomX2Ig3HdMjlgKzGlm
+ dLWTn7jO1BQMq34P8fqTfKxXKkpbELQxqZcgSGCVq5c11n6jW1JKYeapPN14783isi4ldaW89
+ xJ616XTleXAi0PBWoJVEvJYWmLtan7rz9MVNSSEuZpukcjjrsC09riSDH/W8L6dz9h9OFR8rz
+ CuqVYp8bnvdrqSMvL3mNI+4DHfZgqsRc6KtYKm8YVhsbZOXztXzgk7cFl7apeGr0EjfN7t/NH
+ sVZ0X49TPfZuHqnxoasaTFvlXG5QHrV/X4YIDTpNG4oWME+B1a1WQ/m42mp9okc4jdDXK+Zxw
+ CTCNxvLaXxOY5R335wGi0XnPLfkCLULuEZW7YkSp8IqV0=
 
-On Tue, Jun 25, 2024 at 10:43:20AM -0500, Mario Limonciello wrote:
-> On 6/19/2024 13:50, Mario Limonciello wrote:
-> > On 6/19/2024 00:29, Mika Westerberg wrote:
-> > > On Tue, Jun 18, 2024 at 11:56:50AM -0500, Mario Limonciello wrote:
-> > > > On 6/18/2024 08:14, Mika Westerberg wrote:
-> > > > > Hi Mario,
-> > > > > 
-> > > > > On Thu, Jun 13, 2024 at 12:42:00AM -0500, Mario Limonciello wrote:
-> > > > > > Gary has reported that when a dock is plugged into a
-> > > > > > system at the same
-> > > > > > time the autosuspend delay has tripped that the USB4
-> > > > > > stack malfunctions.
-> > > > > > 
-> > > > > > Messages show up like this:
-> > > > > > 
-> > > > > > ```
-> > > > > > thunderbolt 0000:e5:00.6: ring_interrupt_active:
-> > > > > > interrupt for TX ring 0 is already enabled
-> > > > > > ```
-> > > > > > 
-> > > > > > Furthermore the USB4 router is non-functional at this point.
-> > > > > 
-> > > > > Once the USB4 domain starts the sleep transition, it cannot be
-> > > > > interrupted by anything so it always should go through full sleep
-> > > > > transition and only then back from sleep.
-> > > > > 
-> > > > > > Those messages happen because the device is still in
-> > > > > > D3cold at the time
-> > > > > > that the PCI core handed control back to the USB4 connection manager
-> > > > > > (thunderbolt).
-> > > > > 
-> > > > > This is weird. Yes we should be getting the wake from the hotplug but
-> > > > > that should happen only after the domain is fully in sleep
-> > > > > (D3cold). The
-> > > > > BIOS ACPI code is supposed to deal with this.
-> > > > 
-> > > > Is that from from experience or do you mean there is a spec behavior?
-> > > > 
-> > > > IE I'm wondering if we have different "expectations" from different
-> > > > company's hardware designers.
-> > > 
-> > > The spec and the CM guide "imply" this behaviour as far as I can tell,
-> > > so that the "sleep event" is done completely once started. I guess this
-> > > can be interpreted differently too because it is not explicitly said
-> > > there.
-> > > 
-> > > Can you ask AMD HW folks if this is their interpretation too? Basically
-> > > when we get "Sleep Ready" bit set for all the routers in the domain and
-> > > turn off power (send PERST) there cannot be wake events until that is
-> > > fully completed.
-> > > 
-> > > There is typically a timeout mechanism in the BIOS side (part of the
-> > > power off method) that waits for the PCIe links to enter L2 before it
-> > > triggers PERST. We have seen an issue on our side that if this L2
-> > > transition is not completed in time a wake event triggered but that was
-> > > a BIOS issue.
-> > 
-> > Sure thing.  I'll discuss it with them and get back with the results.
-> 
-> From the hardware team they describe this as an abnormal state that they
-> don't expect.  I don't believe there is anything in the BIOS to prevent it
-> though.
+>> You indicated concerns according to patch review processes,
+>> didn't you?
+>>
+>> See also:
+>> * Patch submission notes
+>>   https://elixir.bootlin.com/linux/v6.10-rc5/source/Documentation/proce=
+ss/maintainer-tip.rst#L100
+>
+> This is not the tip tree.
 
-Okay thanks for checking.
+Would you eventually like to support the creation and maintenance of a doc=
+ument
+like =E2=80=9CDocumentation/process/maintainer-usb.rst=E2=80=9D?
 
-> 
-> I could discuss options for this with the BIOS team in the future for the
-> USB4 router ACPI device, but as this "seems" to be the same problem as XHCI
-> controllers going back at least 5 generations with those quirks I put
-> reverts in this series I think a general kernel solution to make "sure" that
-> devices have transitioned is the better way to go.
-
-Agreed.
+Regards,
+Markus
 
