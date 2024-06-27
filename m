@@ -1,108 +1,83 @@
-Return-Path: <linux-usb+bounces-11728-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11729-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA83391A36C
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Jun 2024 12:04:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DC13591A377
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Jun 2024 12:06:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 708901F23692
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Jun 2024 10:04:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 902081F22F12
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Jun 2024 10:06:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98C6313C801;
-	Thu, 27 Jun 2024 10:04:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 809CD13C80E;
+	Thu, 27 Jun 2024 10:05:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ETiyBmLT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XPe0Byxf"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22D1026AF5
-	for <linux-usb@vger.kernel.org>; Thu, 27 Jun 2024 10:04:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D29C22EF2
+	for <linux-usb@vger.kernel.org>; Thu, 27 Jun 2024 10:05:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719482687; cv=none; b=OFsafiNgCoM0/TJmlYUAJW4EbqfxKgrn7q5ieO49NzrVKZFgZ6+fDYjo3cbZqQguVB0vyABbxPMGd2sdkQTUXP5NQUo0l5uO37dcexWgYe0KUhZHUZk5fkQQuEau27WoB4zqoHBCHmSfWgz5yuHRsE/7ys5boT/lxxUwb8hxtoE=
+	t=1719482751; cv=none; b=Xu1R34U7VQUg6Wa8tl1WsANU34N4DRMQxYQT+xVPyjeHMfaPEtQHqCea4SGwKp853yrkK6wGXvNRY8+cjmzSZcGElH/+3lhwUqvFPkUORBmjoemKK8DdBeCtiB6Ks4sSDj+5aNEsrrBAI9pr0/XnW3NSrlmoKK+WyKkIRat5Jbg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719482687; c=relaxed/simple;
-	bh=+FHdFlT4rpKhq413YrXcMQj5NWlurCmuIa8iZeW+tws=;
-	h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version; b=lUBJKn1ePJJx8clVCA9jg1Lz1niHY1Qx8h8THesOLZVjipSku0XyJQxtI2DvKmYq6eS92HaiBifmT1Idc32Y/6kHjaz88jQiqNzizvw0SXLHMswwpDVtrbtA+SemOi6Mm1lHJxpRszncN4PuB8KL/phi3vIUcP0ToidtVOQXwRg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ETiyBmLT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A4E24C2BBFC
-	for <linux-usb@vger.kernel.org>; Thu, 27 Jun 2024 10:04:46 +0000 (UTC)
+	s=arc-20240116; t=1719482751; c=relaxed/simple;
+	bh=O5udVY2QqMi/9KMEodOwRTHcslF4RcG2tjMCFylWe90=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Z9vRDjDd/pAGJmeF3duBi7uNk2XFI0e+u7efIaKLO9oULzoLYm+U6PW/H1JAg1nkuFjT2/9ygfYBjoMpvoJfkXd7X4u+IQLRxbDrJE+CBKL17jX5nT7flDRpw0RDNWGI3oKou2ojte9TtRkiQdGOeu3gsNQaKj2le2dvFZs0RZ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XPe0Byxf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E03C1C2BBFC;
+	Thu, 27 Jun 2024 10:05:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719482686;
-	bh=+FHdFlT4rpKhq413YrXcMQj5NWlurCmuIa8iZeW+tws=;
-	h=From:To:Subject:Date:From;
-	b=ETiyBmLTaI4qP9U43KiFkrMFteLinBrK7ggEViteQ88uxRdTJtyb0dcW3F10iPEfs
-	 QyXbYEuuZIoJUtS0yIZ15I08P4Gk7xNiqOWTMAHv99n2aXnVICk9tbuo6QP1QagV37
-	 t+ELaRhULSiOpX7hFT0fwLbehwYvtiZ7xHyaOyxSBj1KOuv6PF7JLxMcPYS7/YCp+D
-	 pMULUQ6I4Hj2b1FxEA+3aInKhl8To3K5hMu8NIHP1BXVhgqJincf9/nBTbJ18E5tvm
-	 P9WmTOy8Im1AyV7bdz1yHcPHJQQsSP2TQ7n0suEfGxxC1fc/w0JkKKBIxGsXiZxotZ
-	 zZndkhjV4l7UQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 8FE15C433E5; Thu, 27 Jun 2024 10:04:46 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 218992] New: headset
-Date: Thu, 27 Jun 2024 10:04:46 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: new
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: quic_ugoswami@quicinc.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
- op_sys bug_status bug_severity priority component assigned_to reporter
- cf_regression
-Message-ID: <bug-218992-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=k20201202; t=1719482750;
+	bh=O5udVY2QqMi/9KMEodOwRTHcslF4RcG2tjMCFylWe90=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=XPe0ByxfpHrBh8n6sEzqasFACNKvXK/OzydGQMNCI7TN3vk82RMWuQ1n4e2asKEk4
+	 3PT7VSmg0IkZzlNzBuluWFj+Z+vviw5oGH5SnFayb9oMpFHbodqd2P2k/LuUPqKwNf
+	 +CCvVCdhqV8HWfpUyzx+WfcE+8fHtrYDEmiYQJMQupag7VXOJTUw37XEOrrA23dOIO
+	 mheBtQ2l/BiRSvVQ0IFWeNk6r8YJ7d2/LGPfG56ia+zm5muavC97Mi1oqw6q3EsSN6
+	 m3sxhCDlcP3DE/vtbTS/KYp7Owj1E4T9t7cMjDc1X+7e57H10uxx+lK10lBv7nIUjB
+	 J6SzlZspnOHgg==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1sMm0y-000000003uL-1cpE;
+	Thu, 27 Jun 2024 12:06:04 +0200
+Date: Thu, 27 Jun 2024 12:06:04 +0200
+From: Johan Hovold <johan@kernel.org>
+To: Daniele Palmas <dnlplm@gmail.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH 1/1] USB: serial: option: add Telit generic core-dump
+ composition
+Message-ID: <Zn05jBuPDBC9Q5CL@hovoldconsulting.com>
+References: <20240530080053.1094657-1-dnlplm@gmail.com>
+ <Zn0SAXwM45_XF1VX@hovoldconsulting.com>
+ <CAGRyCJFsr8BLBtwyLv3oFgpwS2cqGKu8GRhFOKY4CJAx2sGdEg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGRyCJFsr8BLBtwyLv3oFgpwS2cqGKu8GRhFOKY4CJAx2sGdEg@mail.gmail.com>
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218992
+On Thu, Jun 27, 2024 at 11:51:05AM +0200, Daniele Palmas wrote:
+> Il giorno gio 27 giu 2024 alle ore 09:17 Johan Hovold
+> <johan@kernel.org> ha scritto:
 
-            Bug ID: 218992
-           Summary: headset
-           Product: Drivers
-           Version: 2.5
-          Hardware: ARM
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P3
-         Component: USB
-          Assignee: drivers_usb@kernel-bugs.kernel.org
-          Reporter: quic_ugoswami@quicinc.com
-        Regression: No
+> > > +     { USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x9000, 0xff),    /* Telit generic core-dump device */
+> > > +       .driver_info = NCTRL(0) },
+> >
+> > ZLP not needed like for the other flashing device entries?
+> 
+> not needed for this one.
 
-I'm encountering an issue where the USB audio is transmitted in noise inste=
-ad
-of valid data. This was found on SM8650.
+Thanks for confirming, now applied.
 
-Steps to reproduce are as follows:
-1. Start Connect USB type-c headset.
-2. Start the Karaoke with USB-headset
-Result:
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Johan
 
