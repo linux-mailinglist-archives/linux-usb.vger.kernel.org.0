@@ -1,52 +1,52 @@
-Return-Path: <linux-usb+bounces-11731-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11732-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E9DA91A3B0
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Jun 2024 12:25:00 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F27891A3B1
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Jun 2024 12:25:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 423CD1F2340E
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Jun 2024 10:25:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8F5DA1C2122D
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Jun 2024 10:25:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADBA813D50B;
-	Thu, 27 Jun 2024 10:24:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EE6D13D52A;
+	Thu, 27 Jun 2024 10:25:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KGlnTQgM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kXvzUE2x"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37D0A26AF5
-	for <linux-usb@vger.kernel.org>; Thu, 27 Jun 2024 10:24:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1582422EF2
+	for <linux-usb@vger.kernel.org>; Thu, 27 Jun 2024 10:25:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719483889; cv=none; b=aP7cu4e9mFy7tRQ/izBq3YWB5IyhTMekZybPJCdokFNIQZGU135HeMdEtNazqRrigMP0rlOJtGKfRnmlpI2Bw3TxBPjuKNu3xmLVNC2rF/8g+N3ux6CRPud3WFOrWZhxuiUdO7ghAdsnBbWdg5jFO9zN0clN6RUN88g97WVnvn0=
+	t=1719483915; cv=none; b=H5NoDJ4rfBGGUOrtfkZpI6pkJFNev6w74EydCPbRulXtIJH9RjZpNMF36Xr7w96iHrsGJVYC64A0sZlGfGcqrPFSEha5Umxg14vlbo3Y48431F3dZTMiikav9lozYmFhOhY9eVEPhkrCiFz2PdQtEAtbMUOVKtfX/AJbGCBsG7g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719483889; c=relaxed/simple;
-	bh=VnhgeiyI45wfF1ivP/B3jCuvigzjWwhpr3Lw0lEwUvg=;
+	s=arc-20240116; t=1719483915; c=relaxed/simple;
+	bh=wZ/G8LHzkiYmo4prSjNCYvrImcvwGfwp91fiNOgMeIM=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=GmezGdXbs+x2bAPRsIuos95V8DHpkfLDDwnDfhyar5lnkNN9ro4AMQVnckiUIZgxY46cqRQidmhpkB6y1DqrQiZwNzHppoZ0XZ9w52d3Cs+q741qrBr2Ux9ZM1oOi2Rbsub5bN3FZoQ2NOp/2peHms9XsdczN6nWOYhYEQZsNhk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KGlnTQgM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id BB0A3C2BBFC
-	for <linux-usb@vger.kernel.org>; Thu, 27 Jun 2024 10:24:48 +0000 (UTC)
+	 Content-Type:MIME-Version; b=QtB/SkRBlk6oGBiYfBWgjaLOsBEEz7qYF5zOU49ZUhgCnvzxx3AdCCUP4uCc2NiHuPgbqg8OO+qogehC45Co7Of3DS1Sk5fywf8k/foliyAjQ03HPFPMphW7yyDUqe4WnhN/IveY59mG5rTR7vfX3R/oVCqb+Ip89RP+hd4rOXc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kXvzUE2x; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A1531C2BBFC
+	for <linux-usb@vger.kernel.org>; Thu, 27 Jun 2024 10:25:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719483888;
-	bh=VnhgeiyI45wfF1ivP/B3jCuvigzjWwhpr3Lw0lEwUvg=;
+	s=k20201202; t=1719483914;
+	bh=wZ/G8LHzkiYmo4prSjNCYvrImcvwGfwp91fiNOgMeIM=;
 	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=KGlnTQgMkZheZ7CyPonk0+QUYlSYLF3orfSemmVdxbW2QJb0s9F4OpNbR61EcU3A0
-	 jJmKyERjsAt61SSmHUUH1KvG1sh6MeTa0ujy8Xp47g+B69YdfMnBY+YXNVVIrZtTvH
-	 JfN0/TZvdzrGSNiXex2d5cpQzRCUL8l3NDUSjXN5WGqdIrb4agZN+ydYSrp5mKyDXo
-	 +Qgjj4U6ZABxfL80QGoEuA75LQv+abPwbeAaLt/RBh1SJXFF3uxJkhzDIWzfNrjv7t
-	 uudl8gME0jYz/atRIHZxyO6UBPRxAB73ZKesXFm1WwoaaWmrse1xBo5nuPsLRX7exd
-	 7njRZMly4ejtA==
+	b=kXvzUE2xhH1YXKaUjn3dV2w9REEVwr0rAbfKJcBZSG1+UeXLayO9SsWeaANc2+ozV
+	 s0YZ1B/oBYbc4gWkL7vCsMF0bVdxEUc3SJyfmYKrxXzPl6kCaROfiRMT81xNGJQy53
+	 l8J/1L76vAr3eku8deZHNfZl0m93XAHYZb8uFm1ABmuPI8cWKUXie7tkae4u6RzVL3
+	 MrKXKE9asRZZNU3bgrErV/DHBRZaRnxbrt+tcSYCICmM6/jIF71CEdcoqGaaJ/Rao+
+	 vHhtNP1lGJ7E6sPfo9GI6P3PkZbNn2fIVD7laYSr2mjlgTvBUDKuTsuc7WdY2CnXaQ
+	 UpLO9ksimU2ow==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id AB98EC53B50; Thu, 27 Jun 2024 10:24:48 +0000 (UTC)
+	id 99C62C433E5; Thu, 27 Jun 2024 10:25:14 +0000 (UTC)
 From: bugzilla-daemon@kernel.org
 To: linux-usb@vger.kernel.org
 Subject: [Bug 218992] Usb Type-C headset TX is noise
-Date: Thu, 27 Jun 2024 10:24:48 +0000
+Date: Thu, 27 Jun 2024 10:25:14 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -62,7 +62,7 @@ X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-218992-208809-i09yt2HdeH@https.bugzilla.kernel.org/>
+Message-ID: <bug-218992-208809-7esPQ4yuXb@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-218992-208809@https.bugzilla.kernel.org/>
 References: <bug-218992-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -78,7 +78,7 @@ MIME-Version: 1.0
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D218992
 
---- Comment #2 from Udipto (quic_ugoswami@quicinc.com) ---
+--- Comment #3 from Udipto (quic_ugoswami@quicinc.com) ---
 One more info:
 
 Looking at endpoint.c code I think the function snd_usb_endpoint_open extra=
