@@ -1,59 +1,58 @@
-Return-Path: <linux-usb+bounces-11720-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11721-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E4A091A034
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Jun 2024 09:17:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E72591A043
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Jun 2024 09:18:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8E9051C210DA
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Jun 2024 07:17:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A0DA91C21280
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Jun 2024 07:18:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6504C46B83;
-	Thu, 27 Jun 2024 07:17:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FB8E4B5C1;
+	Thu, 27 Jun 2024 07:18:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vQEEZlXU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="db7rACDG"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5BD62F41
-	for <linux-usb@vger.kernel.org>; Thu, 27 Jun 2024 07:17:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8C351BF3A;
+	Thu, 27 Jun 2024 07:18:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719472629; cv=none; b=OA1AOB1J5soqtJn5L/oGt1VD8mvja4Kmj6ptbGhrygUHHBqJ0k2EBXqBIZfHSr3V4YyeYlnOQJt2mH1fmjFkVxq/JFUw3ma5mA7O5VVha27R4eURJfM3s+ITI0ToR98/M5VFUz0HGTEn7gO70QJdnOogvYXOeR+mojrFrbXW658=
+	t=1719472726; cv=none; b=q9sQR0DGA8jq4ncMaC3YWntH4+wnEavNobd9rmNZPsxcAwFdhPd/QBoyIkff8FGOcKm5gWU6bTZGxlUFmXcgJ+cCR98lcFrxwyzdKujPKYPBr9UhN/OLe04JkaJZlueZgMKWvvQl7BRAm4xwJOTwmZya/22hZXvu0NSWPE83vKM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719472629; c=relaxed/simple;
-	bh=tA+evfTFjDfgsAI4Bs+Tachrc/lHuwT6z3zqIzz2plw=;
+	s=arc-20240116; t=1719472726; c=relaxed/simple;
+	bh=N77V0dE/apH22+7RK8IW/xhIj81SUdpfM54CWaNtWbI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ck2fHNwxGbf1yZbkM+oE9Wsyv88JXFQfxFWSBiofRAcgDqbALSPFvQ6q4+wdUWYJDw8w0P3gZ+SsfnTU8YFPOSeloyrcoztVQ7VZCqihX6/iWbq47RpqEVGx6WjqYOgnR5gz8EOUxC8wwWsLsR7MlaJyteVv0scnn8ECPQQSdMQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vQEEZlXU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79B40C2BBFC;
-	Thu, 27 Jun 2024 07:17:08 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=vBJkQhzMjM95ToIBpsY9fV3oO/xfaJQHUgHEpOrtk2Hp0dTymAgGWxOqNlT5qCw5MHSZI/tHxtxCZPD7OoLRCKwHJ0oeZtKxfxMnqxbPxtzCwFOr7hDO+pflPW6f+OGDXqUiHF3WRrKq7wgytrKUHoGiPY4KhFlTvpzZn1yVNiM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=db7rACDG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41D4EC2BBFC;
+	Thu, 27 Jun 2024 07:18:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719472628;
-	bh=tA+evfTFjDfgsAI4Bs+Tachrc/lHuwT6z3zqIzz2plw=;
+	s=k20201202; t=1719472726;
+	bh=N77V0dE/apH22+7RK8IW/xhIj81SUdpfM54CWaNtWbI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=vQEEZlXUp1gx8fB38wrJj+jK77wPIbpDbVLGn+VfB3f3rOdeA7t0u3bde4i47ZZvw
-	 qkv4KuLOWWPeSVPJRPD53JhagwflWhVEikpOAQ2ldKAc3OQOAoc2rnXAj7x0Mg+jHX
-	 SjI9RQDi18CaxwzmuY+C5+d2qFustPtynIRGo6GAi5iikueqkE3XmQriW4DhkAnOcu
-	 yR9QzayxPJ6hQBpoq+dvToK6u+lx4HRXmmTgZQO8LWZ6XTrcaYFPxSN3gMn9oSeUwR
-	 zXtLeN8q+WP19ZxlG6hId8PW4J4Q6aG+cu1nkon1IppeOZcOacu7LjNaaJE9BdpPPn
-	 SJKf5l8vFozfA==
+	b=db7rACDG7c+uVpFm8X+Q2C8rjsq2oVLPGxfrfmVEKxyIdamcn7Lr6N1e/jXeEZuiB
+	 u+0EoEZ7zbMfbBW/BVN6OZ37nN+cJ7F9cpmyCypsoceLUsikDh0k1+X913R5sYjfsY
+	 hPWy/wpdVQ+Q34Gwpkx4xUUsBN36c/6PTXzXaZpGgY+YXQBxlzVGDdVUpUqWtzohxH
+	 5v+u0BLxjL2W7/8Fgejx9uFlKhe08XJPY9V5FnfBSjvsD+SFdmyE+l/YSQwdKjN2sd
+	 S6fGjmM9IkKea0DgNqJ7vFsW+HE50oqDudWh9cbyq1p+DLFmnuy1ceO9vZJMzXBf4k
+	 0zQydjO+6flAQ==
 Received: from johan by xi.lan with local (Exim 4.97.1)
 	(envelope-from <johan@kernel.org>)
-	id 1sMjNh-000000000YK-2Vkc;
-	Thu, 27 Jun 2024 09:17:21 +0200
-Date: Thu, 27 Jun 2024 09:17:21 +0200
+	id 1sMjPH-000000000Zg-1AXV;
+	Thu, 27 Jun 2024 09:18:59 +0200
+Date: Thu, 27 Jun 2024 09:18:59 +0200
 From: Johan Hovold <johan@kernel.org>
-To: Daniele Palmas <dnlplm@gmail.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH 1/1] USB: serial: option: add Telit generic core-dump
- composition
-Message-ID: <Zn0SAXwM45_XF1VX@hovoldconsulting.com>
-References: <20240530080053.1094657-1-dnlplm@gmail.com>
+To: Vanillan Wang <vanillanwang@163.com>
+Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] USB: serial: option: add Rolling RW350-GL variants
+Message-ID: <Zn0SY4nQzESrQ4xw@hovoldconsulting.com>
+References: <20240531024012.29805-1-vanillanwang@163.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -62,44 +61,72 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240530080053.1094657-1-dnlplm@gmail.com>
+In-Reply-To: <20240531024012.29805-1-vanillanwang@163.com>
 
-On Thu, May 30, 2024 at 10:00:53AM +0200, Daniele Palmas wrote:
-> Add the following core-dump composition, used in different Telit modems:
+On Fri, May 31, 2024 at 10:40:12AM +0800, Vanillan Wang wrote:
+> Update the USB serial option driver support for the Rolling
+> RW350-GL
+> - VID:PID 33f8:0802, RW350-GL are laptop M.2 cards (with
+> MBIM interfaces for /Linux/Chrome OS)
 > 
-> 0x9000: tty (sahara)
-> T:  Bus=03 Lev=01 Prnt=03 Port=07 Cnt=01 Dev#= 41 Spd=480  MxCh= 0
-> D:  Ver= 2.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-> P:  Vendor=1bc7 ProdID=9000 Rev=00.00
-> S:  Manufacturer=Telit Cinterion
-> S:  Product=FN990-dump
-> S:  SerialNumber=e815bdde
-> C:  #Ifs= 1 Cfg#= 1 Atr=a0 MxPwr=2mA
-> I:  If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=10 Driver=option
-> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> Here are the outputs of usb-devices:
 > 
-> Signed-off-by: Daniele Palmas <dnlplm@gmail.com>
-> ---
->  drivers/usb/serial/option.c | 2 ++
->  1 file changed, 2 insertions(+)
+> usbmode=63: mbim, pipe
 > 
-> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-> index 8a5846d4adf6..a58dd4ef461b 100644
-> --- a/drivers/usb/serial/option.c
-> +++ b/drivers/usb/serial/option.c
-> @@ -1433,6 +1433,8 @@ static const struct usb_device_id option_ids[] = {
->  	  .driver_info = NCTRL(2) },
->  	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x701b, 0xff),	/* Telit LE910R1 (ECM) */
->  	  .driver_info = NCTRL(2) },
-> +	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x9000, 0xff),	/* Telit generic core-dump device */
-> +	  .driver_info = NCTRL(0) },
+> T:  Bus=02 Lev=01 Prnt=01 Port=02 Cnt=01 Dev#=  2 Spd=5000 MxCh= 0
+> D:  Ver= 3.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  1
+> P:  Vendor=33f8 ProdID=0802 Rev=00.01
+> S:  Manufacturer=Rolling Wireless S.a.r.l.
+> S:  Product=USB DATA CARD
+> C:  #Ifs= 3 Cfg#= 1 Atr=a0 MxPwr=896mA
+> I:  If#= 0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
+> E:  Ad=82(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
+> I:  If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+> E:  Ad=01(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> E:  Ad=81(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> I:  If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> E:  Ad=02(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> E:  Ad=83(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> 
+> usbmode=64: mbim, others at (If#= 5 adb)
 
-ZLP not needed like for the other flashing device entries?
+Can you be more specific about the other interface?
 
->  	{ USB_DEVICE(TELIT_VENDOR_ID, 0x9010),				/* Telit SBL FN980 flashing device */
->  	  .driver_info = NCTRL(0) | ZLP },
->  	{ USB_DEVICE(TELIT_VENDOR_ID, 0x9200),				/* Telit LE910S1 flashing device */
+> T:  Bus=02 Lev=01 Prnt=01 Port=02 Cnt=01 Dev#=  5 Spd=5000 MxCh= 0
+> D:  Ver= 3.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  1
+> P:  Vendor=33f8 ProdID=0802 Rev=00.01
+> S:  Manufacturer=Rolling Wireless S.a.r.l.
+> S:  Product=USB DATA CARD
+> C:  #Ifs=10 Cfg#= 1 Atr=a0 MxPwr=896mA
+> I:  If#= 0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
+> E:  Ad=82(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
+> I:  If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+> E:  Ad=01(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> E:  Ad=81(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> I:  If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> E:  Ad=02(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> E:  Ad=83(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> I:  If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> E:  Ad=03(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> E:  Ad=84(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> I:  If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> E:  Ad=04(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> E:  Ad=85(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> I:  If#= 5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=usbfs
+> E:  Ad=05(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> E:  Ad=86(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> I:  If#= 6 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> E:  Ad=06(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> E:  Ad=87(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> I:  If#= 7 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> E:  Ad=07(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> E:  Ad=88(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> I:  If#= 8 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> E:  Ad=08(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> E:  Ad=89(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> I:  If#= 9 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> E:  Ad=09(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> E:  Ad=8a(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
 
 Johan
 
