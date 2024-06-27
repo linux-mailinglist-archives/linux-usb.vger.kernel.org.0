@@ -1,77 +1,89 @@
-Return-Path: <linux-usb+bounces-11723-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11724-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8FE7E91A06A
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Jun 2024 09:29:56 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 223D891A079
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Jun 2024 09:35:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C06251C2100E
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Jun 2024 07:29:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CC13B1F20F62
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Jun 2024 07:35:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 114D64D11D;
-	Thu, 27 Jun 2024 07:29:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4090E50A6C;
+	Thu, 27 Jun 2024 07:35:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UqnpIone"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r2vV8BJu"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 902304D8CF
-	for <linux-usb@vger.kernel.org>; Thu, 27 Jun 2024 07:29:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B69C64206E;
+	Thu, 27 Jun 2024 07:35:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719473389; cv=none; b=McQe/scoAMEI/SNPXaSEliBtYbeHo3dL0lOh7J2a+fxa4U2V2au1mMEggmD8Xb2+rw4TgkKcopWh6BG07z9sYzEz6nWwj0Mcu+dnZrRd6TbY0+q2rm6gXHswdiscnknwcOq8wQsffMGyd+a6zALBBM1OEyg93roP9U1dNDkqTHA=
+	t=1719473723; cv=none; b=TN6LHn6RsKGaXaS/mc3e4jwPvoO8AYiUaRlBcbhlRzBvnnD2imP+UtpRCstNro8PG/F1mT9z4yEiOhgXsj4Bu30F/b/Z53AbuAbTb8ol19/ucj92WUSlZYAkqFHLQka2Wivwsz7X2/C578BqRwZWpyclN5qE3h5JbSMiikBPzQ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719473389; c=relaxed/simple;
-	bh=KK51XvgZfeJmU5FQtOzANC5/kKPerCeaF7qRpssoqhI=;
+	s=arc-20240116; t=1719473723; c=relaxed/simple;
+	bh=EBVtQzYYf28HCqiLVfi9dagu/Hn6fovIcMy9j8tI0wY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=h41z3mNDHU87mvUiJpa2/xue9tpKAuq4P2W7sUBj2cD2OHdP9rnO/5QQkawAeXbz0C+JB1T9xYPZ8bljy7bow4UNY14CAzODEgHu2v6UWEU1fQAp9FD5ybVLah1IFvl1zLk85F/NiHMeaSQcPpMa5X7OxXkWQY5WhJcScWJEhzg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UqnpIone; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CCD6C2BBFC;
-	Thu, 27 Jun 2024 07:29:49 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=iexR4YBwG1jXMejKksYS7FCeDcopc/TvUleJw8LIMaopDJVVRIuKXSrhUU/0hSMfrWrEPE45MnWFwCRZ2K+lkhDU0BXhZXHjS0rB1QnpkXWbW7K440kagNiLjnrqUN4GgR4qqrH2Mm2mtAKq7cph/9rqCSvUdzy5JZA3GPTm8Wc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r2vV8BJu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DFE5C2BBFC;
+	Thu, 27 Jun 2024 07:35:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719473389;
-	bh=KK51XvgZfeJmU5FQtOzANC5/kKPerCeaF7qRpssoqhI=;
+	s=k20201202; t=1719473723;
+	bh=EBVtQzYYf28HCqiLVfi9dagu/Hn6fovIcMy9j8tI0wY=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UqnpIonel8er3VhW47Wi6iIXPfLt40Ods4BvasUkI5BqBWq7vnYjZEOgSRKINlzSP
-	 wOt2qAU2m0udNxeeHGSUQVRsPv/0YOpnesL/8z1Yz4AjKvs91pwSOJaMjq4R9BDmPY
-	 EarwJSWqKUPR+sq1qOMTXcch0o6n9BQlXzKoUYBdu6AnVED0aT92y0YR1L2PRFbZ6g
-	 RZiFgdceWtwuFuFM/Y7UcLgkgezfDieDLMjoQHiebKF7ldkeHl1Uvd+XOgHjhtIZ6k
-	 4QQNND7rKNYUzvU1DZu/OE2PkeqDCXTswQNPtkJUGnk5TRC1iJwtI4QtYB7vpGXL0x
-	 8LPFQQxQp5qow==
+	b=r2vV8BJuL7yNvQYdm494+Q/1/p2WLcty+bvq7+U+7ljb/I9Obn+AxmgWASyc3Fj+O
+	 C7GH/DZJ+TizgrSp8zG6YLcJmEIba7hDBX8F38VcxmZDAhSd/VabARLnZfFh75DG5p
+	 8Z/y+S7YWhwOTmyLgtVDwcifqd5Kv5Ga3MNS9I5pqBF+xQlwSo32KDI+VQ2R07Zn8d
+	 blM6e/mEnqoYuY/LFd3qnUVwURRM/6+Njs2YBKPM2xUZJZs1hXfU7NAaQD/tU/6aFL
+	 uyJBhf90ToluJe+EHN+h3rf3wHmXQaSHOXxQYdF6pRgwfUP4D1KjSS5AXi078PQ1WX
+	 kYuA/WW9jOwgQ==
 Received: from johan by xi.lan with local (Exim 4.97.1)
 	(envelope-from <johan@kernel.org>)
-	id 1sMjZy-000000001My-18bd;
-	Thu, 27 Jun 2024 09:30:02 +0200
-Date: Thu, 27 Jun 2024 09:30:02 +0200
+	id 1sMjfM-000000001Qn-26te;
+	Thu, 27 Jun 2024 09:35:36 +0200
+Date: Thu, 27 Jun 2024 09:35:36 +0200
 From: Johan Hovold <johan@kernel.org>
-To: Daniele Palmas <dnlplm@gmail.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH 1/1] USB: serial: option: add Telit FN912 rmnet
- compositions
-Message-ID: <Zn0U-iQFuXiz7n0Z@hovoldconsulting.com>
-References: <20240625102716.70515-1-dnlplm@gmail.com>
+To: =?utf-8?B?QmrDuHJu?= Mork <bjorn@mork.no>
+Cc: linux-usb@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] USB: serial: option: add Fibocom FM350-GL
+Message-ID: <Zn0WSAHHQQr61-Og@hovoldconsulting.com>
+References: <20240626133223.2316555-1-bjorn@mork.no>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240625102716.70515-1-dnlplm@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240626133223.2316555-1-bjorn@mork.no>
 
-On Tue, Jun 25, 2024 at 12:27:16PM +0200, Daniele Palmas wrote:
-> Add the following Telit FN912 compositions:
+On Wed, Jun 26, 2024 at 03:32:23PM +0200, Bjørn Mork wrote:
+> FM350-GL is 5G Sub-6 WWAN module which uses M.2 form factor interface.
+> It is based on Mediatek's MTK T700 CPU. The module supports PCIe Gen3
+> x1 and USB 2.0 and 3.0 interfaces.
 > 
-> 0x3000: rmnet + tty (AT/NMEA) + tty (AT) + tty (diag)
- 
-> 0x3001: rmnet + tty (AT) + tty (diag) + DPL (data packet logging) + adb
+> The manufacturer states that USB is "for debug" but it has been
+> confirmed to be fully functional, except for modem-control requests on
+> some of the interfaces.
+> 
+> USB device composition is controlled by AT+GTUSBMODE=<mode> command.
+> Two values are currently supported for the <mode>:
+> 
+> 40: RNDIS+AT+AP(GNSS)+META+DEBUG+NPT+ADB
+> 41: RNDIS+AT+AP(GNSS)+META+DEBUG+NPT+ADB+AP(LOG)+AP(META)(default value)
 
-Applied, thanks.
+The order here does not seem to match the usb-devices output below (e.g.
+with ADB as interface 3 and 5, respectively). 
+
+Could you just update these two lines so we the interface mapping right?
 
 Johan
 
