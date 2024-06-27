@@ -1,106 +1,101 @@
-Return-Path: <linux-usb+bounces-11739-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11740-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40CC791A91A
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Jun 2024 16:22:48 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1730091A91E
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Jun 2024 16:23:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 71D091C222C9
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Jun 2024 14:22:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 45D551C21C32
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Jun 2024 14:23:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3E55195FEF;
-	Thu, 27 Jun 2024 14:22:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 454E4195FCE;
+	Thu, 27 Jun 2024 14:23:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="WIGnU2zY"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="CUNNgeqm"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65DCD1946BA;
-	Thu, 27 Jun 2024 14:22:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDC8219306A;
+	Thu, 27 Jun 2024 14:23:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719498156; cv=none; b=YIyXaqSpGoTpmz9WXbKpGgtZ6DUkR3x3eTuQfrLQe5E8GBQGiStCybWwVdfmILb+5VTnqV8lwSAQ8U/RIPTFxgYh1pWEoE3elygAJrCjIeWKZSeKhxwlYWAdlJpOQ7xvq22RPEa8O408aWdj+XPmNR9Yu5G9fuOZr1w9P/gA0So=
+	t=1719498228; cv=none; b=ijxgXaF2tL2tjY+O3ma4Yy1X1EGUt4cGnDfW7rWcTg7L70+01vO1WgR0y8U3WOyBB/9B2ReHGQj/eMAhS8IJU1GpYgHMJejKNLXnPd/k7XI6D5F0uYGVetd5xqZCvJ6QGEwGyFiaDZ/oXY3uk3zHX6i4fRv9P4K6iIcyeKzGeLE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719498156; c=relaxed/simple;
-	bh=9xrRxnIRm7GTZ2539gbpxCSlGii5etL2gkmbrgIrNQ4=;
+	s=arc-20240116; t=1719498228; c=relaxed/simple;
+	bh=hNSjLU6Q2DOaKZ/pmqxycisVgItFODKa0ss4BjbT01o=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=APfuDgZ6zDUHlgAUZzvfO/C/OTWeIAom0JIHQl7BQNF0lYlczTzYQwkqgKVFEIQvDP9Uw+NOBLHlmE6siK4OZEhXU9q7gsOgV1nuSUaPxHBt5hayZ3+x1gOtXkx+N/AZR9jdHhFfRRBAH1wi9vsygFcvNGVi4qEZRfyNfZ4WrFo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=WIGnU2zY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DD43C2BBFC;
-	Thu, 27 Jun 2024 14:22:35 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=mCTHQzkdaAA9iy0AFSzC4MJx2cBKo4tbrDyJxhMUxv3W+biWeumC9S5E3EbZXPl9oLt/yC9IMuNOHePnc1g2WrpM9lmsw7Vhj6T3mWe94Y1QHALF5ivGq3XWilRgPtvVPrfoAnm+L89qgokcGN6ustg6Do8jhwvNyg5gR+aA13Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=CUNNgeqm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29D21C2BBFC;
+	Thu, 27 Jun 2024 14:23:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1719498155;
-	bh=9xrRxnIRm7GTZ2539gbpxCSlGii5etL2gkmbrgIrNQ4=;
+	s=korg; t=1719498228;
+	bh=hNSjLU6Q2DOaKZ/pmqxycisVgItFODKa0ss4BjbT01o=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WIGnU2zYTIa2aISUmSCGZaR9Zy7OkpGWVYyZ/bghHv3cWF+ETvXpyTdohzSSZi56g
-	 PiAiivQXV5n1iNgBw30v4N8R7R7TPHmLe39M8N7mVGbJY186QYRXeMGBCdIrAB0g4f
-	 KdD/+Ad0wsi9CyfpVpAirlVrbJoeaa/cEV6IL6S0=
-Date: Thu, 27 Jun 2024 16:22:32 +0200
+	b=CUNNgeqmeuVOreC17XDwpSSbnAZhMQ92J1wR0SRfTHaW2EavuMNdkzZNoEGC0gE+x
+	 xcEnlUC5fd5/rNuGehohsM5P2T2fxaI6sgj+CdVrCA2z6e2bBAdaoNfgY5q0dd+kE1
+	 VBglty5ojzj8HMzbkDwKYdj/vMEOW0/b9z/FK6c4=
+Date: Thu, 27 Jun 2024 16:23:45 +0200
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Sebastian Reichel <sre@kernel.org>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>, linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-	platform-driver-x86@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, Nikita Travkin <nikita@trvn.ru>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [GIT PULL RESEND] Immutable branch between pdx86 lenovo c630
- branch, power/supply and USB
-Message-ID: <2024062722-sadness-tiger-a040@gregkh>
-References: <e42fb2e9-81d4-4e40-ff3a-f9d6a46d03f9@linux.intel.com>
- <2024062440-guide-knoll-94d0@gregkh>
- <948b6f71-7a72-d03d-c36f-ff4f08987f0d@linux.intel.com>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Nikita Travkin <nikita@trvn.ru>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v3 0/7] usb: typec: ucsi: rework glue driver interface
+Message-ID: <2024062723-unwed-sleeve-47b7@gregkh>
+References: <20240625-ucsi-rework-interface-v3-0-7a6c8e17be3a@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <948b6f71-7a72-d03d-c36f-ff4f08987f0d@linux.intel.com>
+In-Reply-To: <20240625-ucsi-rework-interface-v3-0-7a6c8e17be3a@linaro.org>
 
-On Mon, Jun 24, 2024 at 07:44:26PM +0300, Ilpo Järvinen wrote:
-> On Mon, 24 Jun 2024, Greg Kroah-Hartman wrote:
+On Tue, Jun 25, 2024 at 05:54:25PM +0300, Dmitry Baryshkov wrote:
+> The interface between UCSI and the glue driver is very low-level. It
+> allows reading the UCSI data from any offset (but in reality the UCSI
+> driver reads only VERSION, CCI an MESSAGE_IN data). All event handling
+> is to be done by the glue driver (which already resulted in several
+> similar-but-slightly different implementations). It leaves no place to
+> optimize the write-read-read sequence for the command execution (which
+> might be beneficial for some of the drivers), etc.
 > 
-> > On Mon, Jun 24, 2024 at 07:24:55PM +0300, Ilpo Järvinen wrote:
-> > > Hi,
-> > > 
-> > > This is v2 of the lenovo c630 IB branch with the build fix for non-ARM64 
-> > > platforms (built on top of the commits in the previous IB PR). Resent with 
-> > > full Subject line.
-> > > 
-> > > The following changes since commit 1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0:
-> > > 
-> > >   Linux 6.10-rc1 (2024-05-26 15:20:12 -0700)
-> > > 
-> > > are available in the Git repository at:
-> > > 
-> > >   https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git tags/platform-drivers-x86-ib-lenovo-c630-v6.11-2
-> > > 
-> > > for you to fetch changes up to 13bbe1c83bc401c2538c758228d27b4042b08341:
-> > > 
-> > >   platform/arm64: build drivers even on non-ARM64 platforms (2024-06-24 18:22:15 +0300)
-> >
-> > So was the first one rewritten?  Or is this just the second patch on
-> > top of the previous one?
+> The patchseries attempts to restructure the UCSI glue driver interface
+> in order to provide sensible operations instead of a low-level read /
+> write calls.
 > 
-> Nothing was rewritten, just one patch added on top of the previous PR. The 
-> previous PR had only 2 of these 3 commits:
+> If this approach is found to be acceptable, I plan to further rework the
+> command interface, moving reading CCI and MESSAGE_IN to the common
+> control code, which should simplify driver's implementation and remove
+> necessity to split quirks between sync_control and read_message_in e.g.
+> as implemented in the ucsi_ccg.c.
+> 
+> Note, the series was tested only on the ucsi_glink platforms. Further
+> testing is appreciated.
+> 
+> Depends: [1], [2]
+> 
+> [1] https://lore.kernel.org/linux-usb/20240612124656.2305603-1-fabrice.gasnier@foss.st.com/
+> 
+> [2] https://lore.kernel.org/linux-usb/20240621-ucsi-yoga-ec-driver-v8-1-e03f3536b8c6@linaro.org/
+> 
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-Now pulled into my tree too, thanks.
+This doesn't apply to my tree at all, can you rebase and add Heikki's
+review and resend?
+
+thanks,
 
 greg k-h
 
