@@ -1,59 +1,67 @@
-Return-Path: <linux-usb+bounces-11724-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11725-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 223D891A079
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Jun 2024 09:35:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EEAEE91A121
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Jun 2024 10:10:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CC13B1F20F62
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Jun 2024 07:35:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A495128644B
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Jun 2024 08:10:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4090E50A6C;
-	Thu, 27 Jun 2024 07:35:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B26878C9A;
+	Thu, 27 Jun 2024 08:09:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r2vV8BJu"
+	dkim=pass (1024-bit key) header.d=mork.no header.i=@mork.no header.b="UhgkfjoX"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from dilbert.mork.no (dilbert.mork.no [65.108.154.246])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B69C64206E;
-	Thu, 27 Jun 2024 07:35:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99708137930;
+	Thu, 27 Jun 2024 08:09:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.108.154.246
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719473723; cv=none; b=TN6LHn6RsKGaXaS/mc3e4jwPvoO8AYiUaRlBcbhlRzBvnnD2imP+UtpRCstNro8PG/F1mT9z4yEiOhgXsj4Bu30F/b/Z53AbuAbTb8ol19/ucj92WUSlZYAkqFHLQka2Wivwsz7X2/C578BqRwZWpyclN5qE3h5JbSMiikBPzQ4=
+	t=1719475791; cv=none; b=Ts55XxiBX8UBJearhU1UZHOo95OzfWAhQJ650oKI7sxfmZOI9Vnmiqw2Pj/6lfegOSIvUl9Ja3QO/eJkj2VJNJwg0ljvl0sDKqnshbiAvi4XCMrk3NIhNpp+xNGI3CzMLD5Q7t+vmS4RGpONCr0u3SoY9kOcQSaAvobgLp6rUYI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719473723; c=relaxed/simple;
-	bh=EBVtQzYYf28HCqiLVfi9dagu/Hn6fovIcMy9j8tI0wY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iexR4YBwG1jXMejKksYS7FCeDcopc/TvUleJw8LIMaopDJVVRIuKXSrhUU/0hSMfrWrEPE45MnWFwCRZ2K+lkhDU0BXhZXHjS0rB1QnpkXWbW7K440kagNiLjnrqUN4GgR4qqrH2Mm2mtAKq7cph/9rqCSvUdzy5JZA3GPTm8Wc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r2vV8BJu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DFE5C2BBFC;
-	Thu, 27 Jun 2024 07:35:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719473723;
-	bh=EBVtQzYYf28HCqiLVfi9dagu/Hn6fovIcMy9j8tI0wY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=r2vV8BJuL7yNvQYdm494+Q/1/p2WLcty+bvq7+U+7ljb/I9Obn+AxmgWASyc3Fj+O
-	 C7GH/DZJ+TizgrSp8zG6YLcJmEIba7hDBX8F38VcxmZDAhSd/VabARLnZfFh75DG5p
-	 8Z/y+S7YWhwOTmyLgtVDwcifqd5Kv5Ga3MNS9I5pqBF+xQlwSo32KDI+VQ2R07Zn8d
-	 blM6e/mEnqoYuY/LFd3qnUVwURRM/6+Njs2YBKPM2xUZJZs1hXfU7NAaQD/tU/6aFL
-	 uyJBhf90ToluJe+EHN+h3rf3wHmXQaSHOXxQYdF6pRgwfUP4D1KjSS5AXi078PQ1WX
-	 kYuA/WW9jOwgQ==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1sMjfM-000000001Qn-26te;
-	Thu, 27 Jun 2024 09:35:36 +0200
-Date: Thu, 27 Jun 2024 09:35:36 +0200
-From: Johan Hovold <johan@kernel.org>
-To: =?utf-8?B?QmrDuHJu?= Mork <bjorn@mork.no>
-Cc: linux-usb@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+	s=arc-20240116; t=1719475791; c=relaxed/simple;
+	bh=4wqX6OAAhotGiMku/AG1t7B/YGfc5JqSZyFMKW/QnKU=;
+	h=From:To:Cc:Subject:References:Date:In-Reply-To:Message-ID:
+	 MIME-Version:Content-Type; b=Y93rnyZywGk1APcOrCay5yTTSGOGTAkrHxbbijBdD5gpfxK3UoZiiQ7C1026M84HAUrpflSjBCE9Ve8IriZDijZw8sPtHTwZFd7QzDnPYD/x8dBzNzJl+d/WDBGhkTXfZT/IBAvytknvYNgtIHXg4q954Cyn9F2KhXDPhMxBLhw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mork.no; spf=pass smtp.mailfrom=miraculix.mork.no; dkim=pass (1024-bit key) header.d=mork.no header.i=@mork.no header.b=UhgkfjoX; arc=none smtp.client-ip=65.108.154.246
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mork.no
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=miraculix.mork.no
+Received: from canardo.dyn.mork.no ([IPv6:2a01:799:10da:6900:0:0:0:1])
+	(authenticated bits=0)
+	by dilbert.mork.no (8.17.1.9/8.17.1.9) with ESMTPSA id 45R89VNZ857280
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
+	Thu, 27 Jun 2024 09:09:33 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
+	t=1719475771; bh=4wqX6OAAhotGiMku/AG1t7B/YGfc5JqSZyFMKW/QnKU=;
+	h=From:To:Cc:Subject:References:Date:Message-ID:From;
+	b=UhgkfjoXY97WOWqQYRrVNEqClvjsqERPojeO+w1hx2OGPhBWiEfba9JszUaSTcJVe
+	 mwR0ZqC/Z8D/BfBgeqT3lsEs+MLrjtGvMKxKbNJ8cnvhaB41AZJZOo3yH4jVHdK/gL
+	 cawFB5JhN2seAloN3wpKU9fG0+rI4OeddTjoS7Bk=
+Received: from miraculix.mork.no ([IPv6:2a01:799:964:4b0a:9af7:269:d286:bcf0])
+	(authenticated bits=0)
+	by canardo.dyn.mork.no (8.17.1.9/8.17.1.9) with ESMTPSA id 45R89V4D3809957
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
+	Thu, 27 Jun 2024 10:09:31 +0200
+Received: (nullmailer pid 2347208 invoked by uid 1000);
+	Thu, 27 Jun 2024 08:09:31 -0000
+From: =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
+To: Johan Hovold <johan@kernel.org>
+Cc: linux-usb@vger.kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Subject: Re: [PATCH] USB: serial: option: add Fibocom FM350-GL
-Message-ID: <Zn0WSAHHQQr61-Og@hovoldconsulting.com>
+Organization: m
 References: <20240626133223.2316555-1-bjorn@mork.no>
+	<Zn0WSAHHQQr61-Og@hovoldconsulting.com>
+Date: Thu, 27 Jun 2024 10:09:31 +0200
+In-Reply-To: <Zn0WSAHHQQr61-Og@hovoldconsulting.com> (Johan Hovold's message
+	of "Thu, 27 Jun 2024 09:35:36 +0200")
+Message-ID: <87ed8i958k.fsf@miraculix.mork.no>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -61,29 +69,44 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240626133223.2316555-1-bjorn@mork.no>
+Content-Transfer-Encoding: quoted-printable
+X-Virus-Scanned: clamav-milter 1.0.3 at canardo
+X-Virus-Status: Clean
 
-On Wed, Jun 26, 2024 at 03:32:23PM +0200, Bjørn Mork wrote:
-> FM350-GL is 5G Sub-6 WWAN module which uses M.2 form factor interface.
-> It is based on Mediatek's MTK T700 CPU. The module supports PCIe Gen3
-> x1 and USB 2.0 and 3.0 interfaces.
-> 
-> The manufacturer states that USB is "for debug" but it has been
-> confirmed to be fully functional, except for modem-control requests on
-> some of the interfaces.
-> 
-> USB device composition is controlled by AT+GTUSBMODE=<mode> command.
-> Two values are currently supported for the <mode>:
-> 
-> 40: RNDIS+AT+AP(GNSS)+META+DEBUG+NPT+ADB
-> 41: RNDIS+AT+AP(GNSS)+META+DEBUG+NPT+ADB+AP(LOG)+AP(META)(default value)
+Johan Hovold <johan@kernel.org> writes:
+> On Wed, Jun 26, 2024 at 03:32:23PM +0200, Bj=C3=B8rn Mork wrote:
+>> FM350-GL is 5G Sub-6 WWAN module which uses M.2 form factor interface.
+>> It is based on Mediatek's MTK T700 CPU. The module supports PCIe Gen3
+>> x1 and USB 2.0 and 3.0 interfaces.
+>>=20
+>> The manufacturer states that USB is "for debug" but it has been
+>> confirmed to be fully functional, except for modem-control requests on
+>> some of the interfaces.
+>>=20
+>> USB device composition is controlled by AT+GTUSBMODE=3D<mode> command.
+>> Two values are currently supported for the <mode>:
+>>=20
+>> 40: RNDIS+AT+AP(GNSS)+META+DEBUG+NPT+ADB
+>> 41: RNDIS+AT+AP(GNSS)+META+DEBUG+NPT+ADB+AP(LOG)+AP(META)(default value)
+>
+> The order here does not seem to match the usb-devices output below (e.g.
+> with ADB as interface 3 and 5, respectively).=20
+>
+> Could you just update these two lines so we the interface mapping right?
 
-The order here does not seem to match the usb-devices output below (e.g.
-with ADB as interface 3 and 5, respectively). 
+Thanks, I didn't notice that.
 
-Could you just update these two lines so we the interface mapping right?
+This part was copied from the Fibocom AT+GTUSBMODE documentation and
+seems to list supported functions independently of the resulting USB
+interface order.
 
-Johan
+I'm afraid I can't verify the actual order since I don't have access to
+this module myself, and there is no way to tell the AT, GNSS, META,
+DEBUG, NPT and LOG functons from eacohother based on USB descriptors.
+
+The best I can do is dropping these two lines. Is that better?
+
+
+
+Bj=C3=B8rn
 
