@@ -1,97 +1,105 @@
-Return-Path: <linux-usb+bounces-11719-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11720-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55F3991A02A
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Jun 2024 09:15:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E4A091A034
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Jun 2024 09:17:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 10E30285815
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Jun 2024 07:15:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8E9051C210DA
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Jun 2024 07:17:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C54884D8DB;
-	Thu, 27 Jun 2024 07:14:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6504C46B83;
+	Thu, 27 Jun 2024 07:17:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uZ/ykt0b"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vQEEZlXU"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AA6F4D8A4;
-	Thu, 27 Jun 2024 07:14:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5BD62F41
+	for <linux-usb@vger.kernel.org>; Thu, 27 Jun 2024 07:17:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719472476; cv=none; b=rW4G8t6jBTjWF/cz6h/TIvD7nBL43M2InDGfiTszQvMYXdTCAaHx39NeRtKQrS8XhpEP7/c4SorOfmzleEj36Q1w+udboWQSzUH4h12+OhEsHQy00wKI2xtKdL4zzGz9v1ytJfBb2il9jZGG373myDjfDLpQFmzzTW+eWrnJZZY=
+	t=1719472629; cv=none; b=OA1AOB1J5soqtJn5L/oGt1VD8mvja4Kmj6ptbGhrygUHHBqJ0k2EBXqBIZfHSr3V4YyeYlnOQJt2mH1fmjFkVxq/JFUw3ma5mA7O5VVha27R4eURJfM3s+ITI0ToR98/M5VFUz0HGTEn7gO70QJdnOogvYXOeR+mojrFrbXW658=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719472476; c=relaxed/simple;
-	bh=po6sWyrFWew/mEgOCGOEB2oznE/qGvJjuvegU6U6f8c=;
+	s=arc-20240116; t=1719472629; c=relaxed/simple;
+	bh=tA+evfTFjDfgsAI4Bs+Tachrc/lHuwT6z3zqIzz2plw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tWCghXxOb3m/vUEzoFBe8bXT0Gug3c8/2/mMK8LBZfwl5K453gbi7B/PnFKp5UIx7vppzCfQ5/ef4ss2T5HyPInUiPdt3H1KYzxT7SfYm9z/2XWBiJfNwe3dUCsULneLuLUpTgI2HckuO7/fWvZt0tOlCcbEKLyw0jCGUzR5CX0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uZ/ykt0b; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D88F9C2BBFC;
-	Thu, 27 Jun 2024 07:14:35 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ck2fHNwxGbf1yZbkM+oE9Wsyv88JXFQfxFWSBiofRAcgDqbALSPFvQ6q4+wdUWYJDw8w0P3gZ+SsfnTU8YFPOSeloyrcoztVQ7VZCqihX6/iWbq47RpqEVGx6WjqYOgnR5gz8EOUxC8wwWsLsR7MlaJyteVv0scnn8ECPQQSdMQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vQEEZlXU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79B40C2BBFC;
+	Thu, 27 Jun 2024 07:17:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719472475;
-	bh=po6sWyrFWew/mEgOCGOEB2oznE/qGvJjuvegU6U6f8c=;
+	s=k20201202; t=1719472628;
+	bh=tA+evfTFjDfgsAI4Bs+Tachrc/lHuwT6z3zqIzz2plw=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=uZ/ykt0bR/9aFwtj/gDxjCHjc+TDfW5iINdPHl3zedegTkJPafF6W7SrW+wOeWF8p
-	 9rifOPzuhs8V3PWslyIyJ8iKpq1VlG5X1fXE/wQktV5EaExutpxYDPDya2bDII80rw
-	 py5sFdzz4PAUiKaM6saUxnPdRBgDlmaQvme8P8x+ktLswbfl/BS5TqefyOvVdA8YA5
-	 eXbMvMFqlRvG7UbnuT6GuU0sFQwa18UtERtwrXdXj3+YM+iQ1qwnuk5CaAA8l3zYOx
-	 Et272YAQxQIsPsC0e8Eny9777pIk3DDcPVj4+A4RSXCvrxAZ8GxfeVbVRxM0XoeI3w
-	 hiYIGnMb04OSw==
+	b=vQEEZlXUp1gx8fB38wrJj+jK77wPIbpDbVLGn+VfB3f3rOdeA7t0u3bde4i47ZZvw
+	 qkv4KuLOWWPeSVPJRPD53JhagwflWhVEikpOAQ2ldKAc3OQOAoc2rnXAj7x0Mg+jHX
+	 SjI9RQDi18CaxwzmuY+C5+d2qFustPtynIRGo6GAi5iikueqkE3XmQriW4DhkAnOcu
+	 yR9QzayxPJ6hQBpoq+dvToK6u+lx4HRXmmTgZQO8LWZ6XTrcaYFPxSN3gMn9oSeUwR
+	 zXtLeN8q+WP19ZxlG6hId8PW4J4Q6aG+cu1nkon1IppeOZcOacu7LjNaaJE9BdpPPn
+	 SJKf5l8vFozfA==
 Received: from johan by xi.lan with local (Exim 4.97.1)
 	(envelope-from <johan@kernel.org>)
-	id 1sMjLE-000000000Tt-3r4l;
-	Thu, 27 Jun 2024 09:14:48 +0200
-Date: Thu, 27 Jun 2024 09:14:48 +0200
+	id 1sMjNh-000000000YK-2Vkc;
+	Thu, 27 Jun 2024 09:17:21 +0200
+Date: Thu, 27 Jun 2024 09:17:21 +0200
 From: Johan Hovold <johan@kernel.org>
-To: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc: Paul Spooren <mail@aparcar.org>, Corentin Labbe <clabbe@baylibre.com>,
-	gregkh@linuxfoundation.org,
-	linux-kernel <linux-kernel@vger.kernel.org>,
-	linux-usb@vger.kernel.org, david@ixit.cz
-Subject: Re: [PATCH 1/1 v7] usb: serial: add support for CH348
-Message-ID: <Zn0RaATKGAn2Ja3b@hovoldconsulting.com>
-References: <20240507131522.3546113-1-clabbe@baylibre.com>
- <20240507131522.3546113-2-clabbe@baylibre.com>
- <A4B2BDF4-263F-4879-A0C3-399D8A1BF3FE@aparcar.org>
- <CAFBinCBwCCKUS1k0Qb0GttucF3_Nn6CJUTe090RV5AD4CDM-NQ@mail.gmail.com>
+To: Daniele Palmas <dnlplm@gmail.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH 1/1] USB: serial: option: add Telit generic core-dump
+ composition
+Message-ID: <Zn0SAXwM45_XF1VX@hovoldconsulting.com>
+References: <20240530080053.1094657-1-dnlplm@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAFBinCBwCCKUS1k0Qb0GttucF3_Nn6CJUTe090RV5AD4CDM-NQ@mail.gmail.com>
+In-Reply-To: <20240530080053.1094657-1-dnlplm@gmail.com>
 
-On Sat, Jun 22, 2024 at 09:00:17PM +0200, Martin Blumenstingl wrote:
-> On Wed, Jun 19, 2024 at 3:35 PM Paul Spooren <mail@aparcar.org> wrote:
-> > > On 7. May 2024, at 15:15, Corentin Labbe <clabbe@baylibre.com> wrote:
-> > >
-> > > The CH348 is an USB octo port serial adapter.
-> > > The device multiplexes all 8 ports in the same pair of Bulk endpoints.
-> > > Since there is no public datasheet, unfortunately it remains some magic values
-> > >
-> > > Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
-> > Tested-by: Paul Spooren <mail@aparcar.org <mailto:mail@aparcar.org>>
+On Thu, May 30, 2024 at 10:00:53AM +0200, Daniele Palmas wrote:
+> Add the following core-dump composition, used in different Telit modems:
+> 
+> 0x9000: tty (sahara)
+> T:  Bus=03 Lev=01 Prnt=03 Port=07 Cnt=01 Dev#= 41 Spd=480  MxCh= 0
+> D:  Ver= 2.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+> P:  Vendor=1bc7 ProdID=9000 Rev=00.00
+> S:  Manufacturer=Telit Cinterion
+> S:  Product=FN990-dump
+> S:  SerialNumber=e815bdde
+> C:  #Ifs= 1 Cfg#= 1 Atr=a0 MxPwr=2mA
+> I:  If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=10 Driver=option
+> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> 
+> Signed-off-by: Daniele Palmas <dnlplm@gmail.com>
+> ---
+>  drivers/usb/serial/option.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+> index 8a5846d4adf6..a58dd4ef461b 100644
+> --- a/drivers/usb/serial/option.c
+> +++ b/drivers/usb/serial/option.c
+> @@ -1433,6 +1433,8 @@ static const struct usb_device_id option_ids[] = {
+>  	  .driver_info = NCTRL(2) },
+>  	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x701b, 0xff),	/* Telit LE910R1 (ECM) */
+>  	  .driver_info = NCTRL(2) },
+> +	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x9000, 0xff),	/* Telit generic core-dump device */
+> +	  .driver_info = NCTRL(0) },
 
-> Thanks Paul!
-> Johan, is the Tested-by something that you can fix up while applying?
+ZLP not needed like for the other flashing device entries?
 
-Sure.
-
-> Speaking of applying this patch, it would be great to have it queued
-> for Linux 6.11.
-> If you have any questions or review comments then please let Corentin
-> and me know.
-
-If you think the outstanding issues have been addressed now then I'll
-find some time to review it again.
+>  	{ USB_DEVICE(TELIT_VENDOR_ID, 0x9010),				/* Telit SBL FN980 flashing device */
+>  	  .driver_info = NCTRL(0) | ZLP },
+>  	{ USB_DEVICE(TELIT_VENDOR_ID, 0x9200),				/* Telit LE910S1 flashing device */
 
 Johan
 
