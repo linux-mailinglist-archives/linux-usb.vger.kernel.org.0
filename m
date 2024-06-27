@@ -1,81 +1,86 @@
-Return-Path: <linux-usb+bounces-11737-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11738-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 377F591A8D5
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Jun 2024 16:13:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4AB0A91A914
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Jun 2024 16:22:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 67C611C22A30
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Jun 2024 14:13:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0809C2817BC
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Jun 2024 14:22:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8E8F197A7F;
-	Thu, 27 Jun 2024 14:11:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FF19195F3A;
+	Thu, 27 Jun 2024 14:22:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Q8WArM9O"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="y55/YVSn"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35D26195B33;
-	Thu, 27 Jun 2024 14:11:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 889D6178CCB;
+	Thu, 27 Jun 2024 14:22:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719497465; cv=none; b=SM7CwWt/8d+3kGSE3CvGt+0DuAAQ24cp5lgHVgp3paPy+q1ZA/JgBZF8o/t7WeNCTRcfz1MbbMMaj6iBoX6neW4ke3XlY2+m1pfASySJpsP4Vm946e2rwDq56CyD1aiNUBmweTxLnzqPeW8CgFNaI4efdLJKEGQxPrHMIqTzkds=
+	t=1719498139; cv=none; b=tQxqdtpHXMZYl+sQ6TmlTDbBvv0vJeN7fVk+7SCA5zjdKCQFzyBOGScBl6MAnP851cyDUd8XiNo+s3ZGy/d8nFoXaC79pWu7qyMOGIvEYclahkP97gFEQUGlvQ+1ByJro2sSAJLMkRu8laiMpT9pC9uzdF17eTkw7y0wHtQKl6s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719497465; c=relaxed/simple;
-	bh=4pyKeghgWQAKtrX0/RiOwcJJoKa0Ods4Nme4C33tAR0=;
+	s=arc-20240116; t=1719498139; c=relaxed/simple;
+	bh=yS2yL3/tn3Cw8IPl616aI0+FdfPZgH9pKmml9kGuYXg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iAYn5ip014BN4MIarJJj23KSQTKgUwievrEGOR2GgGpDckjURiwsicZ2jd5C3FnMh1hwEyG22RJSYAGqD1wL/N/+vccWKsWHadIz2EuWBeX7d0Y6OU0Z98hWZDiiw7Bcsu/yMuDJQQ0mHXNhCKTLPStmcSAzqYprOpDkCn+FTLs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Q8WArM9O; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4421BC32786;
-	Thu, 27 Jun 2024 14:11:03 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=TWv9UM4h38aGuKihxz0jp3jOhL0MQNDhW9yf6+7G1PtZOLTumlyYZAL5mK5xLxN6W7rck/kJr/piJqrhrKK9KsKgu3kOLpgcwH7h7hE60YUNlqNFsReXAJd77I8eA76aucqr2R9FD/zlbVPt6rD0eoP5tf8v0GExsDsGor+hw30=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=y55/YVSn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 432FFC2BBFC;
+	Thu, 27 Jun 2024 14:22:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1719497464;
-	bh=4pyKeghgWQAKtrX0/RiOwcJJoKa0Ods4Nme4C33tAR0=;
+	s=korg; t=1719498139;
+	bh=yS2yL3/tn3Cw8IPl616aI0+FdfPZgH9pKmml9kGuYXg=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Q8WArM9O4a6jLSPyHq5pSrM9W2+3PSUywjYNcvCUH0MWl/8jg4hlvlAOwetA75RP8
-	 vWTN2P5qaad7xuT73/etb59KL3O8Z+Z/wM22Ml0qhqLMFs9cGHfqiLBx1slWDb9WU0
-	 /o9O3cw6Bw2Z5DnHIPTy/sKJbcGscg+zTOgXXmWo=
-Date: Thu, 27 Jun 2024 16:11:01 +0200
+	b=y55/YVSn1vFGOZ4+u5zeFwHI/Q6C7QKxZ4M4p4Jt5EalUOMN0t5bhuvJqe9K0h62r
+	 jR35Doo8TDIytQGcAGDEQGZX/e7z23hj0RmkxEvhjKGKDtKobE9n2Y9ErcaFcrFQev
+	 6ERDRlRmOpJc9ubYi1RqzXFhgcWHu/UuekS3NmIo=
+Date: Thu, 27 Jun 2024 16:22:15 +0200
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: ucsi: glink: use
- device_for_each_child_node_scoped()
-Message-ID: <2024062735-railway-stoning-566a@gregkh>
-References: <20240623-ucsi_glink-scoped-v1-1-f0fdcfec69bb@gmail.com>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Bjorn Andersson <andersson@kernel.org>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	Nikita Travkin <nikita@trvn.ru>
+Subject: Re: [PATCH v9 2/2] usb: typec: ucsi: add Lenovo Yoga C630 glue driver
+Message-ID: <2024062701-afar-rogue-4f37@gregkh>
+References: <20240624-ucsi-yoga-ec-driver-v9-0-53af411a9bd6@linaro.org>
+ <20240624-ucsi-yoga-ec-driver-v9-2-53af411a9bd6@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20240623-ucsi_glink-scoped-v1-1-f0fdcfec69bb@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240624-ucsi-yoga-ec-driver-v9-2-53af411a9bd6@linaro.org>
 
-On Sun, Jun 23, 2024 at 12:35:11PM +0200, Javier Carrasco wrote:
-> Use the scoped variant of `device_for_each_child_node()` to
-> automatically handle early exits.
+On Mon, Jun 24, 2024 at 06:08:13PM +0300, Dmitry Baryshkov wrote:
+> The Lenovo Yoga C630 WOS laptop provides implements UCSI interface in
+> the onboard EC. Add glue driver to interface the platform's UCSI
+> implementation.
 > 
-> This prevents memory leaks if new error paths are introduced,
-> as no explicit refcount decrement via `fwnode_handle_put()` is needed.
-> 
-> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 > ---
-> This patch is a follow-up to the recently introduced commit c68942624e25
-> ("usb: typec: ucsi: glink: fix child node release in probe function")
-> to account for a safer approach to iterating over child nodes.
+>  drivers/usb/typec/ucsi/Kconfig          |   9 ++
+>  drivers/usb/typec/ucsi/Makefile         |   1 +
+>  drivers/usb/typec/ucsi/ucsi_yoga_c630.c | 204 ++++++++++++++++++++++++++++++++
+>  3 files changed, 214 insertions(+)
+> 
 
-What branch/tree is this against?  It fails to apply to my usb-testing
-branch at all :(
-
-Can you rebase and resubmit?
-
-thanks,
+Ok, worked this time, now in my tree, thanks for sticking with it!
 
 greg k-h
 
