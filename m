@@ -1,124 +1,171 @@
-Return-Path: <linux-usb+bounces-11781-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11782-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 096A291C2F3
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Jun 2024 17:51:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7EC6A91C385
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Jun 2024 18:14:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BB4E92825FD
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Jun 2024 15:51:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3C524285746
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Jun 2024 16:14:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 078DE1C68AD;
-	Fri, 28 Jun 2024 15:51:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1504D1C9EA4;
+	Fri, 28 Jun 2024 16:14:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="ct79PK2S"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="KcmU2isO"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from m15.mail.163.com (m15.mail.163.com [45.254.50.219])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B4031C2329;
-	Fri, 28 Jun 2024 15:51:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.50.219
+Received: from mout.web.de (mout.web.de [217.72.192.78])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6221158DDC;
+	Fri, 28 Jun 2024 16:14:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.72.192.78
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719589907; cv=none; b=MVyA1KR66Fe8E05w8ssx4mwqDJQloaiNXtT90IzpMWJqaY6klCRR9juoX9IXdi6LSO2Gngw5lnLy1Qvxr040wrvDM1qhZEG93Oy2T5XCb/Q7QGeqsGsQzwHQb/3kAt7QLUXovhFc46Y/3E8xuQM7WWEztM/mCKZiK7v/cT0tppw=
+	t=1719591266; cv=none; b=Jxi8h0spMi5wBw6bcgH6IEVH6cxRNeI5T2aer4Wfp6bRGkCfmk/w0/S2+lzDV2/Q3+oX3IbeICp0Ywe90lpvyFDQuOYKldKBXxOQ2y1OR5k7oAwXC8fC4AQNNjgkJctQ3AnOXAxu0yQoVERqUyHWKA3n0jJu2fZgdvfeUwT2pT4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719589907; c=relaxed/simple;
-	bh=JZwPPIkhyFRqxAleqe5fNX8WbkaeqPpf7vUxiuYuUaI=;
-	h=From:To:Cc:Subject:Date:Message-Id; b=eAIReD3Q8qm0aznA9bk8P+L2uWAgn64Qh2iwvc3izRMcEsQJVtPLbwmO+H7tZ8/X4ZuNneisdXMOMtGpfeTMahssXIRN46DG2iRYixskEGQ9tc8uizKhNc3VZtzZsNTSLsjGSALpuNBJIMKo4OqDTFkSkfEYM87ojL3Ikt5BJHI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=ct79PK2S; arc=none smtp.client-ip=45.254.50.219
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-Id; bh=MUygOs7rlNEqd3apO4
-	imoIIi+WIT5IxawzxSj+Zc+0M=; b=ct79PK2SJNaKRJxjQD2nSYaUfF/c34APCi
-	prGO71lWsXAgoKHLXpL3/gZFDpefn1ewYm3QwmNfFUtK1T//9nK7ckHrr3Yr5DOl
-	igqMnDYmildnCmhQev3tNyVL/MoRud1MaWaJLAJJdsRl58GbfbWpydFeQ5xoXie3
-	L/fHBtSco=
-Received: from localhost.localdomain (unknown [114.92.92.233])
-	by gzga-smtp-mta-g0-4 (Coremail) with SMTP id _____wD3n7Ly235mondeAw--.10451S2;
-	Fri, 28 Jun 2024 23:51:30 +0800 (CST)
-From: Lizhe <sensor1010@163.com>
-To: mathias.nyman@intel.com,
-	gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Lizhe <sensor1010@163.com>
-Subject: [PATCH] usb: xhci: Covert to update_device callback returning void
-Date: Fri, 28 Jun 2024 08:51:02 -0700
-Message-Id: <20240628155103.3585-1-sensor1010@163.com>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID:_____wD3n7Ly235mondeAw--.10451S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7ZryfAFyfKFWDuryfJrW5Wrg_yoW8uw15pF
-	Wfua4fKrWUKr43Wr1UZr48Aa1rZw4kA345tryxG34S939Fkw4rKFyDArZ5GayfXrWDCF1a
-	qF42grW5C3WUCF7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0p_7KIdUUUUU=
-X-CM-SenderInfo: 5vhq20jurqiii6rwjhhfrp/1tbiKAMMq2XAmAMSpwAAsH
+	s=arc-20240116; t=1719591266; c=relaxed/simple;
+	bh=feF1lOyhnHeQGXNKtOQi+xZFfMBlR7bnlTEk0I8pZ7E=;
+	h=Message-ID:Date:MIME-Version:To:From:Subject:Cc:Content-Type; b=fEkSHhR6pg7iJewd/RSRFFhJ4dkW6Vgutcbcm2fFftCImSAHKbihpG+7VkY4ckMkkUSyHnh9/DokfWEOUbSBb7gaeRYQDrcrJod0Y7CJCcLpsUubSiJ/CkPD5wjsLO0mGLVITSPnEjYJrF5ZxoB0TdAVYYxqLQdBlkGd4+YpThY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=KcmU2isO; arc=none smtp.client-ip=217.72.192.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1719590913; x=1720195713; i=markus.elfring@web.de;
+	bh=jMjENFh+f5y9wyjB5cxn4bcX9t6DsGiG5xIjoFHNnL4=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:From:Subject:
+	 Cc:Content-Type:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=KcmU2isOzbZdqyyKmg87LJN7CYNLrBhng4oN6+Uq9FP6ivUE17oN7cD3XpH952my
+	 12kn7y9w7KVj1dttLKnnhYUgSXTz5DBFnCRYqwSsDRkrSrBQrloK8AGQ9q+w6g4+R
+	 /Zwx/tC6VtR09zxc3Z7M5iTUHkZJiNFiq0XqLbHDIJBbnhf2eZsFguDp6mj9KARsl
+	 RufkUP7Qt8R+06043CHda2KdIbVGS6iPUSmQZXsYLlDNSEpcfpHc8nLCVZYg7yQo5
+	 FniDToohr+aR5fBquVEiAQpHvhwDG6/0Q7sPg/e60VQntiujkRWVG50B+VNkA9FXG
+	 RxaMjSh7z66T8NXiXg==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.91.95]) by smtp.web.de (mrweb105
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1MQxsD-1rzoHe1nVP-00Uk7W; Fri, 28
+ Jun 2024 18:08:33 +0200
+Message-ID: <c05e397c-5ed1-49d9-92a0-826f21fe2469@web.de>
+Date: Fri, 28 Jun 2024 18:08:27 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org,
+ Andy Shevchenko <andy.shevchenko@gmail.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ =?UTF-8?B?R8O8bnRlciBSw7Zjaw==?= <linux@roeck-us.net>,
+ Hans de Goede <hdegoede@redhat.com>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Prashant Malani <pmalani@chromium.org>, Wen Yang <wenyang@linux.alibaba.com>
+Content-Language: en-GB
+From: Markus Elfring <Markus.Elfring@web.de>
+Subject: [PATCH] usb: typec: Prevent memory leak in typec_register_port()
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
+ Julia Lawall <julia.lawall@inria.fr>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:Op0AhE/oYVUbpffMnqL1KB0klyIoNEWbyvj7Rl1SdHSSCKNv+eQ
+ MFfe5GqAwDNji7jlyykH+eisfGcwrLVPEoaUGUsBinSgRrt+ehKY6D4lUQDOTvAYLoLIHCP
+ GYGSenPeQFJVAAcpFkUw+59iK7YCNqpst77f+KcoE7VYg01gO+WZlqLnxAmoxxDkQpkjdeC
+ bgw6iB5M75uZ6OXPva5Ug==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:JrQC0Yt1hKA=;mPfok86m0LGA7E1Y/8tQE24en8v
+ dXNDcbAtVLN/ETAB0d/cR1otpdFGqO+YRr4Pb98IRi0uPQ09CIlrFPhV9BVv6+u2moArd48/A
+ 7kblJFV/HtzxrfUc6bepLCoDQfeNFnBVon/iul1wJ+iWrndX2LFqwwXbroDPPOyS0Cbrx/2kL
+ pa4PN9TsOCZAykjgBJdFpg8PCTfULDm35FFjAe8QwQyyKX428aUV0RB23mMNoBvmreLX6Ym8y
+ oMOhGnDxX0zJnWjAoPdNDyVBIcMZl3NG4GVH/DjizGo8dLPmTzIJSzV3p1Tn2eXA59t7KRTer
+ 6NMH7VVca6/OdC+ZDlVtuAqc4IGJjAtm7VZQACOOfuMzAnKvrXydTZKd0JyzGiG2E1OkRdMMl
+ iKjdEY5+84fZIwAwcSJOXgEUYbU/tC+mMJmT6iSkgJSTyfzEn0WB+KuKSAw2m4iHc/LciHUKY
+ IIlntfBXBej3onWxp5O5evsj8dOgiosgK9TVclfHJGGp/yNyzKTRLspjAxyg90AExwvaRnz9R
+ FGBumynauwl+zYDO6wSSIGvxtUdEZhtlVE8veMB8YdrU21+KoiEukt9bP6jscENzfnSI7+1TO
+ RYmH/lqJUHQvNQ6TZA7biysx/rua+Fm+LrI9VO+gMn++vAAIX729x1LTC+s8Ty1y3+c7yS40A
+ YAnUGOy7yyw1DfJq0piMC+qFvAXXtM8bfFCaS2ukdhtxkBG9wvrcbk7BU+jl3BY2FS1xVB9w8
+ QAjN9WIvqVvkCdVs1gvBj8wXKRBtE7THCY1KlAW3D1DvhNiyWa12J1DzrCv7KGdZZrJ/1aO/O
+ iua+Ry4DzFGfWAe2qy9LQfWcL6T3WZNO6qjThfpF2ioo0=
 
-the returned value is ignored, and to improve this situation,
-it is proposed to modify the return type of the xhci_update_device()
-callback function to void.
+From: Markus Elfring <elfring@users.sourceforge.net>
+Date: Fri, 28 Jun 2024 17:46:19 +0200
 
-Signed-off-by: Lizhe <sensor1010@163.com>
----
- drivers/usb/host/xhci.c | 8 +++-----
- include/linux/usb/hcd.h | 2 +-
- 2 files changed, 4 insertions(+), 6 deletions(-)
+Memory is allocated for the data structure =E2=80=9Ctypec_port=E2=80=9D at=
+ the beginning
+of this function implementation.
+Unfortunately, it was not released in all subsequent error cases.
 
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 37eb37b0affa..63db4957d3af 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -4507,19 +4507,19 @@ static int xhci_set_usb2_hardware_lpm(struct usb_hcd *hcd,
- 	return 0;
- }
- 
--static int xhci_update_device(struct usb_hcd *hcd, struct usb_device *udev)
-+static void xhci_update_device(struct usb_hcd *hcd, struct usb_device *udev)
+Thus apply scope-based resource management which became supported
+for this programming interface by contributions of Peter Zijlstra
+on 2023-05-26.
+See also the commit 54da6a0924311c7cf5015533991e44fb8eb12773 ("locking:
+Introduce __cleanup() based infrastructure").
+
+* Use the attribute =E2=80=9C__free(kfree)=E2=80=9D accordingly.
+
+* Reduce the scope for the local variable =E2=80=9Cport=E2=80=9D.
+
+Cc: stable@vger.kernel.org
+Fixes: f31a8702cd36 ("usb: typec: Add retimer handle to port")
+Fixes: a7cff92f0635 ("usb: typec: USB Power Delivery helpers for ports and=
+ partners")
+Fixes: 5c388abefda0 ("usb: typec: fix use after free in typec_register_por=
+t()")
+Fixes: ad772c39b2fb ("usb: typec: Copy everything from struct typec_capabi=
+lity during registration")
+Fixes: cf6e06cddf29 ("usb: typec: Start using ERR_PTR")
+Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
+=2D--
+
+I guess that clarifications can become interesting also for backporting co=
+ncerns
+because of the proposed software transformation.
+
+
+drivers/usb/typec/class.c | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+index 9262fcd4144f..97c0afd41e35 100644
+=2D-- a/drivers/usb/typec/class.c
++++ b/drivers/usb/typec/class.c
+@@ -2372,19 +2372,16 @@ EXPORT_SYMBOL_GPL(typec_port_register_cable_ops);
+ struct typec_port *typec_register_port(struct device *parent,
+ 				       const struct typec_capability *cap)
  {
- 	struct xhci_hcd	*xhci = hcd_to_xhci(hcd);
- 	struct xhci_port *port;
- 	u32 capability;
- 
- 	if (hcd->speed >= HCD_USB3 || !udev->lpm_capable || !xhci->hw_lpm_support)
--		return 0;
-+		return;
- 
- 	/* we only support lpm for non-hub device connected to root hub yet */
- 	if (!udev->parent || udev->parent->parent ||
- 			udev->descriptor.bDeviceClass == USB_CLASS_HUB)
--		return 0;
-+		return;
- 
- 	port = xhci->usb2_rhub.ports[udev->portnum - 1];
- 	capability = port->port_cap->protocol_caps;
-@@ -4531,8 +4531,6 @@ static int xhci_update_device(struct usb_hcd *hcd, struct usb_device *udev)
- 		if (capability & XHCI_BLC)
- 			udev->usb2_hw_lpm_besl_capable = 1;
- 	}
--
--	return 0;
+-	struct typec_port *port;
+ 	int ret;
+ 	int id;
+
+-	port =3D kzalloc(sizeof(*port), GFP_KERNEL);
++	struct typec_port *port __free(kfree) =3D kzalloc(sizeof(*port), GFP_KER=
+NEL);
+ 	if (!port)
+ 		return ERR_PTR(-ENOMEM);
+
+ 	id =3D ida_alloc(&typec_index_ida, GFP_KERNEL);
+-	if (id < 0) {
+-		kfree(port);
++	if (id < 0)
+ 		return ERR_PTR(id);
+-	}
+
+ 	switch (cap->type) {
+ 	case TYPEC_PORT_SRC:
+@@ -2483,7 +2480,7 @@ struct typec_port *typec_register_port(struct device=
+ *parent,
+ 	if (ret)
+ 		dev_warn(&port->dev, "failed to create symlinks (%d)\n", ret);
+
+-	return port;
++	return_ptr(port);
  }
- 
- /*---------------------- USB 3.0 Link PM functions ------------------------*/
-diff --git a/include/linux/usb/hcd.h b/include/linux/usb/hcd.h
-index ac95e7c89df5..c3fd1643ff1a 100644
---- a/include/linux/usb/hcd.h
-+++ b/include/linux/usb/hcd.h
-@@ -386,7 +386,7 @@ struct hc_driver {
- 		/* Notifies the HCD after a device is connected and its
- 		 * address is set
- 		 */
--	int	(*update_device)(struct usb_hcd *, struct usb_device *);
-+	void	(*update_device)(struct usb_hcd *, struct usb_device *);
- 	int	(*set_usb2_hw_lpm)(struct usb_hcd *, struct usb_device *, int);
- 	/* USB 3.0 Link Power Management */
- 		/* Returns the USB3 hub-encoded value for the U1/U2 timeout. */
--- 
-2.17.1
+ EXPORT_SYMBOL_GPL(typec_register_port);
+
+=2D-
+2.45.2
 
 
