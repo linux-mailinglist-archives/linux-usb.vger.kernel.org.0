@@ -1,61 +1,60 @@
-Return-Path: <linux-usb+bounces-11777-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11778-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD28891BF1F
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Jun 2024 15:03:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 07A6191C0C7
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Jun 2024 16:24:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1A79C1C22DC4
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Jun 2024 13:03:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 37AF51C2166E
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Jun 2024 14:24:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8A2F1BE259;
-	Fri, 28 Jun 2024 13:03:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24A211BF334;
+	Fri, 28 Jun 2024 14:24:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="mZ4atJA2"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="UI9boTjU"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71FD7155C88;
-	Fri, 28 Jun 2024 13:03:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95F1E1E517;
+	Fri, 28 Jun 2024 14:24:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719579819; cv=none; b=sJHCcyV475ksbxanfCs9hjC9xV2JDVC5Upk2XtXACuTCK+9iAmXzASjvwrrBOakuFUM6YDSBTJmsuX6ioi03TB9bqtvs7ol7MGkfkTPDWWc17HU8D7+TPWgNDKX+cWT9FgC3Pb3HCl0s/6R7ix+VPypXrCZTeKo/Fk4fhQkuUZ8=
+	t=1719584659; cv=none; b=K6zMuougGLJAGRb/15HLD4W0IQGD/VcUdXzcavOWR7M/UT2fbBZ8JOYXjxXA5bIzIJ9nDugYwVQIzuzXXM0rm8hKojnU77g/p37jup5I3XOTHgNSUycXUAGVeJzqanH9WAENm/hJCm7KiKhQmFHuQ5kelYRAD8dNsC4OW0aoLNQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719579819; c=relaxed/simple;
-	bh=WxBr0rSr2Oj5lFd/V5f2z2g/Y1b3owlQaVz68AcreBU=;
+	s=arc-20240116; t=1719584659; c=relaxed/simple;
+	bh=JAPwgChZN6CJo7VckcEiHT25iuUEOe0hF8TE18RBwTM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZX0HRmKYc4aLlnAHha3cx4ANL43cbzCcIFMAEWorZh9BrbzAwQyPGSr8dpawbRzj4YFJ9592jbdkAwcRwMJYSAVKlLRrqHL5u7f+ARpIMKNqApIRgelDSdzqcIK44wrtjUAMSlmuAFUWfXm2Ys4hWZwXnkF3MuuijeOEcSE5RyU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=mZ4atJA2; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=9otMkeMdAgkNNBSByYFZ3WjG0J5NuzixzkYCbswttpA=; b=mZ4atJA2zwGWgI4BmHXCCpePhf
-	I9cdzxkqOpvLZmEDU/QtUSmnRw0WBgks7oeYFlCgpo5CmKdgK+8lLsmoxC5mW6GxaaInm2K0/xSPk
-	VkHUFFeIGy3nEd0GjYjiuwumaRfW41EQwcehO4NNuZZUD47V0s+7AYQthkxhJxZ7Zitk=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1sNBGB-001HWK-IB; Fri, 28 Jun 2024 15:03:27 +0200
-Date: Fri, 28 Jun 2024 15:03:27 +0200
-From: Andrew Lunn <andrew@lunn.ch>
-To: Rengarajan.S@microchip.com
-Cc: linux-usb@vger.kernel.org, davem@davemloft.net,
-	Woojung.Huh@microchip.com, linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org, pabeni@redhat.com,
-	UNGLinuxDriver@microchip.com, edumazet@google.com, kuba@kernel.org
-Subject: Re: [PATCH net-next v1] lan78xx: lan7801 MAC support with lan8841
-Message-ID: <2aa4fba0-c5bd-47e9-97a7-3f73048282cb@lunn.ch>
-References: <20240611094233.865234-1-rengarajan.s@microchip.com>
- <6eec7a37-13d0-4451-9b32-4b031c942aa1@lunn.ch>
- <06a180e5c21761c53c18dd208c9ea756570dd142.camel@microchip.com>
- <d72dd190-39d1-49ca-aeb2-9c0bc1357b68@lunn.ch>
- <369cd82f60db7a9d6fd67a467e3c45b68348155b.camel@microchip.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=I/Xc5CoMKRuFhqdKtd2npibhnAePqrXyQpu2avxK/eGdgEQEvlYXAj8xsZQijHQqqda+nAdsQOYw2j1p/hWYywHSeAW2C1KJ3MoGLo5TRIx79LCYN0rIGWzYlewqY5RPOqoo3eBzqceEhOSg6BeEq3zpyAFUqlQksEx21wA/CXY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=UI9boTjU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5925C116B1;
+	Fri, 28 Jun 2024 14:24:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1719584659;
+	bh=JAPwgChZN6CJo7VckcEiHT25iuUEOe0hF8TE18RBwTM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=UI9boTjU+ZfPf/k4cPKLZzogtXABLgtB/P5hxo1i8NO7q+EwSk3Abk8c8iG+MGhYQ
+	 VqRGIwdZ5M5BO8buV84vBDUJ3A9dI2KyY3W1hhyS/upFhqu02X74rrxHt1wMxeA+rG
+	 5asqB4U6iowhP39z9FCDBz6V8q/M7ocenyMJXgt0=
+Date: Fri, 28 Jun 2024 16:24:16 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Nikita Travkin <nikita@trvn.ru>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v4 0/7] usb: typec: ucsi: rework glue driver interface
+Message-ID: <2024062825-balancing-resigned-e383@gregkh>
+References: <20240627-ucsi-rework-interface-v4-0-289ddc6874c7@linaro.org>
+ <2024062717-foster-document-eb2f@gregkh>
+ <CAA8EJprAshnt3YchBv0ssi4Vet9b6oMcf3z8nuRkoZVYNBq64w@mail.gmail.com>
+ <CAA8EJpqCJ8_wOO7yLYA85KYtbLO6hvS-yb7DA6kJ2sH4QH43QA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -64,34 +63,65 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <369cd82f60db7a9d6fd67a467e3c45b68348155b.camel@microchip.com>
+In-Reply-To: <CAA8EJpqCJ8_wOO7yLYA85KYtbLO6hvS-yb7DA6kJ2sH4QH43QA@mail.gmail.com>
 
-> Although, there is no specific errata available for adding fixup
-> specific to lan78xx USB dongle, we have added the fixup for handing
-> specific configurations to ensure the PHY operates correctly with the
-> MAC. In this case while transmitting from MAC to PHY the device does
-> not add the delay locally at its TX input pins. It expects the TXC
-> delay to be provided by on-chip MAC. Since the delay calculated in this
-> case is specific to the lan78xx USB dongle it is not possible to use
-> this fixup for interfacing with generic MAC.
-
-Have you tried PHY_INTERFACE_MODE_RGMII_TXID when connecting to the
-PHY? The four PHY_INTERFACE_MODE_RGMII_* values are the official way
-to ask the PHY to insert delays, or not. If that is all you are doing,
-i don't think you need these fixups at all.
-
-> > Please give me a details explanation why this fixup will not be
-> > applied to other instances of this PHY in the system.
+On Thu, Jun 27, 2024 at 06:08:07PM +0300, Dmitry Baryshkov wrote:
+> On Thu, 27 Jun 2024 at 17:57, Dmitry Baryshkov
+> <dmitry.baryshkov@linaro.org> wrote:
+> >
+> > On Thu, 27 Jun 2024 at 17:54, Greg Kroah-Hartman
+> > <gregkh@linuxfoundation.org> wrote:
+> > >
+> > > On Thu, Jun 27, 2024 at 05:44:39PM +0300, Dmitry Baryshkov wrote:
+> > > > The interface between UCSI and the glue driver is very low-level. It
+> > > > allows reading the UCSI data from any offset (but in reality the UCSI
+> > > > driver reads only VERSION, CCI an MESSAGE_IN data). All event handling
+> > > > is to be done by the glue driver (which already resulted in several
+> > > > similar-but-slightly different implementations). It leaves no place to
+> > > > optimize the write-read-read sequence for the command execution (which
+> > > > might be beneficial for some of the drivers), etc.
+> > > >
+> > > > The patchseries attempts to restructure the UCSI glue driver interface
+> > > > in order to provide sensible operations instead of a low-level read /
+> > > > write calls.
+> > > >
+> > > > If this approach is found to be acceptable, I plan to further rework the
+> > > > command interface, moving reading CCI and MESSAGE_IN to the common
+> > > > control code, which should simplify driver's implementation and remove
+> > > > necessity to split quirks between sync_control and read_message_in e.g.
+> > > > as implemented in the ucsi_ccg.c.
+> > > >
+> > > > Note, the series was tested only on the ucsi_glink platforms. Further
+> > > > testing is appreciated.
+> > > >
+> > > > Depends: [1], [2]
+> > > >
+> > > > [1] https://lore.kernel.org/linux-usb/20240612124656.2305603-1-fabrice.gasnier@foss.st.com/
+> > > >
+> > > > [2] https://lore.kernel.org/linux-usb/20240621-ucsi-yoga-ec-driver-v8-1-e03f3536b8c6@linaro.org/
+> > > >
+> > > > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> > > > ---
+> > > > Changes in v4:
+> > > > - Rebased on top of Greg's tree to resolve conflicts.
+> > >
+> > > Nope, still got conflicts, are you sure you updated properly?  Patch 1
+> > > applied, but #2 did not.
+> >
+> > I feel stupid enough now. I rebased on top of usb-next instead of
+> > usb-testing. Let me spam it once again
 > 
-> As stated above, the TXC delay calculated for the PHY is specific to
-> the lan78xx on-chip MAC. This delay ensures that both the phy and MAC
-> clock delay timing is met. Any other MACs connected will need a
-> different delay values to be synchronized with MAC and hence these
-> instances will get failed.
+> Hmm, I see what happened. I had a next+usb-next. Simple usb-next
+> doesn't contain changes from 9e3caa9dd51b ("usb: typec: ucsi_acpi: Add
+> LG Gram quirk") which this patch also modifies. I can rebase it on top
+> of your tree, but then we will have build issues once usb-linus and
+> usb-next get merged together.
 
-You did not answer my question. Show me the code path which prevents
-this being applied to other PHYs. Is there a comparison to netdev
-somewhere when applying the fixup? Give me the file:line number.
+Ah, you need/want stuff from both branches, right?  Then just wait until
+next week when my -linus branch will be in Linus's tree and then I will
+merge that into the -next branch.
 
-	  Andrew
+thanks,
+
+greg k-h
 
