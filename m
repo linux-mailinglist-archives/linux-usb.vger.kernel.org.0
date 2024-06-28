@@ -1,176 +1,192 @@
-Return-Path: <linux-usb+bounces-11767-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11768-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 54B3391B61D
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Jun 2024 07:29:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C0B391B841
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Jun 2024 09:27:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0D10B284CF4
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Jun 2024 05:29:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4A8F0282FEC
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Jun 2024 07:27:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EF3D3BBE9;
-	Fri, 28 Jun 2024 05:29:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB9341422C4;
+	Fri, 28 Jun 2024 07:27:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kwdpu6n8"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="GvNIrfqu"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.web.de (mout.web.de [212.227.17.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5032D36B11;
-	Fri, 28 Jun 2024 05:29:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 757B013E3FD;
+	Fri, 28 Jun 2024 07:27:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719552574; cv=none; b=GfNfIFZ1695A9uF+TMrmhouHXlqR6uuMwom3+W/8hxynRA3vO1Jc/+lgA+BHQbMwFRSPKYt+R5oUG9BDa7rVAxqLfJ6kPdGfdCg+zh6maKmu+QXRA9MPskxnj5jmMGwxJjNbSDIFAf/wX6fd6B3X2UuuFd/5jLN7cqvA6tnKkM4=
+	t=1719559647; cv=none; b=I2FSN1F51a31kfb5JN+mxIjBEKN1+tS1ye7c5BOUgKtE0r8YdZSw6l/QeUNEd6U+HxwQAHqNTmKz1KitEmKgWR4OtSem3s+pthA0Lp7ZdttWQai5MlA+QvdPVZnsnX9kvUQ2U6soQUh9ud7+tH0bjbfolwDcxy9DLddQaPy5+us=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719552574; c=relaxed/simple;
-	bh=ks1F6Sn9pTxTI0BwOCBA0EESvxRrUUHI3vfdcNjpIUw=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=TOrjZwJQELbdlNiDAKFj05T1a2Stdqe6Ij0Fptc3zFQD8ZESsUUpFAJmBMP18F0QA3/hHnhpp5Io0SYqt8KlV1IzM8gG+4CzFVvGmJsMVDa3wwC2i8C/5UWL44d9C6ktoSF5A6+YalAvUJWgLUvvnUbVat+KgxH3Pri7uunf++U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kwdpu6n8; arc=none smtp.client-ip=209.85.216.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-2c7af3116aaso56096a91.2;
-        Thu, 27 Jun 2024 22:29:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719552572; x=1720157372; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=PJ/M56ThtwrsFD5Lfw9SbGejoYETZHoSJEMo2+pp2ms=;
-        b=kwdpu6n8pNn9eyb+lBJKj44mYs5+fAc4M3IRux4ckG5ZGhHbCLMln9GxjW/V9Mdt6H
-         EYTtcjXGwCp2DXcQTftMIM20Nl8+zjOJEuSYePhPNBK8GU3TYQU+4qzQt5vrvoiCxvEk
-         qcbeageydIWL2hpkGPlHQuXZMondcrNUTJMsiJoUGL28wpgvUfYKNCLk8CaGG751yLnV
-         Z8dv+pjvSJ8kiAfQWfQoops2dtTXBqLmjd9z5RArzTLNKw9g6ntvMaGeA0cPaQwudACj
-         ln+/xqr42P/amow7KThd6eWB2XVAh4ta95l5lqTZM5w/3LMVLUzJBYM1YdFFNd9eV2hw
-         4qHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719552572; x=1720157372;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PJ/M56ThtwrsFD5Lfw9SbGejoYETZHoSJEMo2+pp2ms=;
-        b=CGc3q46fNmzYXzX0ujBC3obDay9B5H3WltfmT9GW0Gc9RUI8ENZ41IJbkWKL3ppkUg
-         JiehWops1buy+JKWsH9Rmg2Fl8P8+VFxp01/Hq90Ab0nXu38qDyb5M/sLmlUkEae/6c/
-         7qJSGdfcnqPdQ9a0zYWNHIIqQNryJNdZst4Cn32M2GIu4Dd1EY8/FRNvI6DjRnnDKQJt
-         ba6hgBjINDY+wJYByYBb3mA2X/l10SkUD/dyW7GmmMq2kpN59GozmXMd2fyv7fDDH2NE
-         b9WDU5LkQ7sQadIi7/428npytwlhs/Qr/yZzcSlCg6N0hB3x7hjh+VvARazVnkW91xTL
-         Spwg==
-X-Forwarded-Encrypted: i=1; AJvYcCVzfFUJ9G7XD3djr+ZiEARnbN+1dSQ1w/vRRIqZyph5Yx+2qj2B/sRKRw/QZLGI+E/lNTLWl1jDfn+tHjBqvFMOmtZJXkI5BJB8haiCkRWksQnGlYoCHu6J318M5uTg2edBsHZj
-X-Gm-Message-State: AOJu0YwyCEntHdUVHFx4e8MaBQuRBPxWhzRmGdiZmbnbm+L4FjLYck86
-	fL01xDw6o++cdmdRUrDrBAQDWhD4Qyvijr7968kqx+SHrb+SnRx3KP23bS15
-X-Google-Smtp-Source: AGHT+IHLv5sQ9sNkcIC/nJeiyanw64nDmI2PGR16Y8htj0wpAT+P7CbV8FfgwKGWVS9OAZ3ykXJVGA==
-X-Received: by 2002:a17:90a:db94:b0:2c2:d11b:14dd with SMTP id 98e67ed59e1d1-2c8452e0fdbmr15923350a91.0.1719552572391;
-        Thu, 27 Jun 2024 22:29:32 -0700 (PDT)
-Received: from localhost.localdomain (122-117-151-175.hinet-ip.hinet.net. [122.117.151.175])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c91c7ddb23sm735599a91.0.2024.06.27.22.29.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Jun 2024 22:29:31 -0700 (PDT)
-From: Kuangyi Chiang <ki.chiang65@gmail.com>
-To: mathias.nyman@intel.com,
-	gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	ki.chiang65@gmail.com,
-	stable@vger.kernel.org
-Subject: [PATCH v3] xhci: Don't issue Reset Device command to Etron xHCI host
-Date: Fri, 28 Jun 2024 13:29:14 +0800
-Message-Id: <20240628052914.5215-1-ki.chiang65@gmail.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1719559647; c=relaxed/simple;
+	bh=GzFaYYQU3q+oka/5f4J6D9YJgYGUys2RDo5EPNs7WLs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KtdDJhh25y7wWa5HjBwAJT3zjpu94msSwyWw0gvUFG4ZMR01lNjxG9t4IOeexW8L4yrVz0kAbuOk1uNUbdEpsylv2XsXWmpRb6L2awbGobJ7RinAWKluKDnCRCpl0J4KinubKZlhb6vUyyZiO10LZEcKm7WK+6+NSGaiaVSTRsg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=GvNIrfqu; arc=none smtp.client-ip=212.227.17.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1719559620; x=1720164420; i=markus.elfring@web.de;
+	bh=nl0CL9GDIaeTPnglvyjXELGMdmLp+0wQCRgVbrDa0Xc=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=GvNIrfquwx4IxnfzelRFzL06vT+ZrXCBp8ECAZhYWDDJke7/sN2mpOOyAAEQZy9f
+	 G6ZgRL0v+nV7ll3aneE+TBVb0dwvJRptMY+Rnutx9kZXdPE0xDiKX+3wVsoiWmPhQ
+	 pFRHgunBu6n35lX24q/5rZn3WphUz2ataWOd2Mrzs18t0AUns7w/OPGoNFH8Smify
+	 om5wq6ZiEW2GK+h3ViMpwjy5cH0k6gtUMMbywXNbpGd19jBNkNGbftnRFwrsBIe9v
+	 z2AMvGJrj3gq2fuSAL9tNhlKDhyD2X4JUhfDaMw+v9QiSOE1JUxPOwwfJDa5Dh3Mb
+	 cU1vgnWKsiGKWGGzdw==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.91.95]) by smtp.web.de (mrweb105
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1M5j1c-1sFyTW3WiA-009URR; Fri, 28
+ Jun 2024 09:27:00 +0200
+Message-ID: <0d2704d9-202c-457b-a83d-75a427966564@web.de>
+Date: Fri, 28 Jun 2024 09:26:47 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: [PATCH 2] usb: typec: anx7411: Use scope-based resource management in
+ anx7411_typec_port_probe()
+To: linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Jonathan Cameron <Jonathan.Cameron@Huawei.com>, Xin Ji <xji@analogixsemi.com>
+Cc: LKML <linux-kernel@vger.kernel.org>, Julia Lawall <julia.lawall@inria.fr>
+References: <889729ac-3fc5-4666-b9f5-ce6e588a341a@web.de>
+ <20240606101757.0000331f@Huawei.com>
+Content-Language: en-GB
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <20240606101757.0000331f@Huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:iGRJMg3HVVWt+ehkSA2MzkeVAPv/Hn5WVwelrW7NtILx9T7WsC2
+ zI86UvidMu9tiMK2rVoK6Ia0f7fDMn77Yw31x7afp97lDWE87HPembl1DydWP4PeiJ3UtdL
+ z8bVAL8GaUICf7cfoCzglJ/ucWJv4WmSQcEcAga6yaw/TXCHPJ46UAWTIeeUvIGOvcs43Zk
+ rctE3izcHnYeEMYymzniA==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:WMNp1tp+eX0=;7SG/gANxHI2ek2gitqo80qqvDDd
+ GTmzPe8GerRu2Au6/GL13hP605zrf0Kyi8Qq2dyFs9QT+55WH8FJQiLvmSsbxyh/OaCLS3BOc
+ 3+QfP0YHl6o5iK3u4Zr6yxRMxA93aak6ALYs+HDd7iHoojzJAiWlnMoQ1AeREwgZkCVG8L6E6
+ yH0sNpnFs3vseBKEbedZjt0/ut10xcfkpeL2rP68OvL15ujQtaik+a4ePACZ9aBzwhwMUF2jZ
+ 4ANraoppJG9YJsh4CP58S7R3pmcdfJ1W+wYqTeGYgPyt7oobGtXhAQpbiKDuBFP5p9PlbhJyh
+ amIqGuEjoPDSYlNgm8hKWS2Iq+G+KEaAyMqzMRw4H0lhEHZxviGoxX1hE0LnEgvte/hI0L/hJ
+ ktmE2PPtIvIrbBvwlKwQSur2TTgK9VNptS3xeB4Uc00vNrk5CqRnu+Gi9WLLDvfFfxpM5fHjE
+ e1Jvi0LG9bISmh85oqs8h0MDyCxH0yQcIY13EL1xnpANLvAbCfqabQC8Ew/tHHvS4Fms5HPAL
+ ZFLtP8ws/Kua3DCksaRLLjP9rvkBWugFyDAuN91/DfTdifUWoXQ5NPZHSnSMzaw5l/u5CNDTW
+ QaneYLeceuxLYdGMTmr2rT7ylEJHZywlQ8KiMXuJc89NqY16800d0RAgMQqDv+ohBhR6fg8DR
+ r+DMxFJGxjGjjK1VOxjEcDqK6EqMZshWsD5uXOFH/7GmG8M1qi4xrY4G995HVqLZYyhVB6bnc
+ gHKO/iQxi/iJ26D7Le9Mzkkp6b9FUHbEHSS6xEZk97yu1d+DQfqhtBPFFZNgUbDV1aiQwpQtO
+ LeM2aeDJLllpOxeTi79Ca8HT+7dqGGS2amrhtSLbyHDYI=
 
-Sometimes the hub driver does not recognize the USB device connected
-to the external USB2.0 hub when the system resumes from S4.
+From: Markus Elfring <elfring@users.sourceforge.net>
+Date: Fri, 28 Jun 2024 08:25:34 +0200
 
-After the SetPortFeature(PORT_RESET) request is completed, the hub
-driver calls the HCD reset_device callback, which will issue a Reset
-Device command and free all structures associated with endpoints
-that were disabled.
+The API documentation for the function =E2=80=9Cdevice_get_named_child_nod=
+e=E2=80=9D
+contains the following information:
+=E2=80=9C=E2=80=A6
+The caller is responsible for calling fwnode_handle_put()
+on the returned fwnode pointer.
+=E2=80=A6=E2=80=9D
 
-This happens when the xHCI driver issue a Reset Device command to
-inform the Etron xHCI host that the USB device associated with a
-device slot has been reset. Seems that the Etron xHCI host can not
-perform this command correctly, affecting the USB device.
+The mentioned requirement was not fulfilled so that a resource leak
+will occur in some error cases after a device_get_named_child_node() call
+succeeded in this function implementation.
 
-To work around this, the xHCI driver should obtain a new device slot
-with reference to commit 651aaf36a7d7 ("usb: xhci: Handle USB transaction
-error on address command"), which is another way to inform the Etron
-xHCI host that the USB device has been reset.
+Thus apply scope-based resource management which became supported also
+for this programming interface by contributions of Jonathan Cameron
+on 2024-02-17.
+See also the commit 59ed5e2d505bf5f9b4af64d0021cd0c96aec1f7c ("device
+property: Add cleanup.h based fwnode_handle_put() scope based cleanup.").
 
-Both EJ168 and EJ188 have the same problem, applying this patch then
-the problem is gone.
+* Use the attribute =E2=80=9C__free(fwnode_handle)=E2=80=9D accordingly.
 
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Kuangyi Chiang <ki.chiang65@gmail.com>
----
-Changes in v3:
-- Modify commit message
-- Modify comment
-- Fix coding style, add a #define PCI_VENDOR_ID_ETRON
-- Code refactor, call xhci_disable_slot() + xhci_free_virt_device() helper
+* Reduce the scope for the local variable =E2=80=9Cfwnode=E2=80=9D.
 
-Changes in v2:
-- Change commit log
-- Add a comment for the workaround
-- Revert "global xhci_free_dev()"
-- Remove XHCI_ETRON_HOST quirk bit
+Cc: stable@vger.kernel.org
+Fixes: fe6d8a9c8e64 ("usb: typec: anx7411: Add Analogix PD ANX7411 support=
+")
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
+=2D--
 
- drivers/usb/host/xhci.c | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+V2:
+* The change description was extended as requested by patch reviewers.
 
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 37eb37b0affa..abaef0adacf1 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -3682,6 +3682,10 @@ void xhci_free_device_endpoint_resources(struct xhci_hcd *xhci,
- 				xhci->num_active_eps);
- }
- 
-+#define PCI_VENDOR_ID_ETRON		0x1b6f
-+
-+static void xhci_free_dev(struct usb_hcd *hcd, struct usb_device *udev);
-+
- /*
-  * This submits a Reset Device Command, which will set the device state to 0,
-  * set the device address to 0, and disable all the endpoints except the default
-@@ -3711,6 +3715,7 @@ static int xhci_discover_or_reset_device(struct usb_hcd *hcd,
- 	struct xhci_command *reset_device_cmd;
- 	struct xhci_slot_ctx *slot_ctx;
- 	int old_active_eps = 0;
-+	struct device *dev = hcd->self.controller;
- 
- 	ret = xhci_check_args(hcd, udev, NULL, 0, false, __func__);
- 	if (ret <= 0)
-@@ -3752,6 +3757,23 @@ static int xhci_discover_or_reset_device(struct usb_hcd *hcd,
- 						SLOT_STATE_DISABLED)
- 		return 0;
- 
-+	if (dev_is_pci(dev) && to_pci_dev(dev)->vendor == PCI_VENDOR_ID_ETRON) {
-+		/*
-+		 * Obtaining a new device slot to inform the xHCI host that
-+		 * the USB device has been reset.
-+		 */
-+		ret = xhci_disable_slot(xhci, udev->slot_id);
-+		xhci_free_virt_device(xhci, udev->slot_id);
-+		if (!ret) {
-+			ret = xhci_alloc_dev(hcd, udev);
-+			if (ret == 1)
-+				ret = 0;
-+			else
-+				ret = -EINVAL;
-+		}
-+		return ret;
-+	}
-+
- 	trace_xhci_discover_or_reset_device(slot_ctx);
- 
- 	xhci_dbg(xhci, "Resetting device with slot ID %u\n", slot_id);
--- 
-2.25.1
+* The tag =E2=80=9CReviewed-by=E2=80=9D was added according to feedback by=
+ Heikki Krogerus.
+
+* A =E2=80=9Cstable tag=E2=80=9D was added.
+
+
+V1:
+Initial patch review
+https://lore.kernel.org/r/889729ac-3fc5-4666-b9f5-ce6e588a341a@web.de/
+https://lkml.org/lkml/2024/6/5/1276
+
+
+
+I guess that clarifications can become interesting also for backporting co=
+ncerns
+because of the proposed software transformation.
+
+
+
+ drivers/usb/typec/anx7411.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/usb/typec/anx7411.c b/drivers/usb/typec/anx7411.c
+index b12a07edc71b..9fb52f233a30 100644
+=2D-- a/drivers/usb/typec/anx7411.c
++++ b/drivers/usb/typec/anx7411.c
+@@ -16,6 +16,7 @@
+ #include <linux/of_graph.h>
+ #include <linux/of_platform.h>
+ #include <linux/pm_runtime.h>
++#include <linux/property.h>
+ #include <linux/regulator/consumer.h>
+ #include <linux/slab.h>
+ #include <linux/types.h>
+@@ -1142,11 +1143,11 @@ static int anx7411_typec_port_probe(struct anx7411=
+_data *ctx,
+ {
+ 	struct typec_capability *cap =3D &ctx->typec.caps;
+ 	struct typec_params *typecp =3D &ctx->typec;
+-	struct fwnode_handle *fwnode;
+ 	const char *buf;
+ 	int ret, i;
+
+-	fwnode =3D device_get_named_child_node(dev, "connector");
++	struct fwnode_handle *fwnode __free(fwnode_handle)
++				     =3D device_get_named_child_node(dev, "connector");
+ 	if (!fwnode)
+ 		return -EINVAL;
+
+@@ -1237,7 +1238,7 @@ static int anx7411_typec_port_probe(struct anx7411_d=
+ata *ctx,
+ 		typecp->caps_flags |=3D HAS_SINK_WATT;
+ 	}
+
+-	cap->fwnode =3D fwnode;
++	cap->fwnode =3D no_free_ptr(fwnode);
+
+ 	ctx->typec.role_sw =3D usb_role_switch_get(dev);
+ 	if (IS_ERR(ctx->typec.role_sw)) {
+=2D-
+2.45.2
+
 
 
