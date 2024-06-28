@@ -1,127 +1,116 @@
-Return-Path: <linux-usb+bounces-11786-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11787-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9DEEF91C492
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Jun 2024 19:16:55 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A46691C591
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Jun 2024 20:23:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 162CBB22923
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Jun 2024 17:16:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9E58F1C22E58
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Jun 2024 18:23:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 392D71CCCD4;
-	Fri, 28 Jun 2024 17:16:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB5E11CD5BD;
+	Fri, 28 Jun 2024 18:23:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="FXUoZ8qG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AcxSceGu"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73E946AB9
-	for <linux-usb@vger.kernel.org>; Fri, 28 Jun 2024 17:16:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A9AA1E532;
+	Fri, 28 Jun 2024 18:23:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719594991; cv=none; b=G8M7C94vc9LycubUZMMySNsebb13f3ygH7wBKdM8PBIq7AxDjU67eV+pM3BAS6t9FAGIbxIIk8nIsKA7EbXv8+6PWcn+CrM5yCcqVqtOSZq+oAfL4CfKMQRVeoC7qHBFevmO+7R6uVB0OBBCKfZxiydGJ8V9LHEteAh6EVnTWO8=
+	t=1719598994; cv=none; b=LyvsFVGRvkhNLqo7A4D4jMuvqGydAFL51FqkUTxAypeWTuOsaMqALgYgsDKhkaQ9bzxPsvm4yiKkcHV4NZ3EsoawOeTL+JjQPw6WNmjizHsbeWV8YAiZGRS84q6+adtcR5qgZwRSiLDbAJIv+x6wiS+2SHU+RlSU1faZ2u2TY2g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719594991; c=relaxed/simple;
-	bh=HDethv1SZLS+naRJvAeYJVIme+PRI3d8lM7PY0zTCCQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ivOYijpd0Gmhz4shG2NOyrD3sG0BJgnuJAhkfprauak/tFrrc6qzMVRYO5ij/p5NQxHxaYykaBEVapLYNwy1swI431jjfiucxNF8kVLTLWsMxsnPIVpysIZoQ6UNvD5P0fK1S6+Rqk69h1p9+jh3P3bRcJr7NcS54pxVEsCrgkE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=FXUoZ8qG; arc=none smtp.client-ip=209.85.166.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f49.google.com with SMTP id ca18e2360f4ac-7f4cfed0fddso1660139f.0
-        for <linux-usb@vger.kernel.org>; Fri, 28 Jun 2024 10:16:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1719594988; x=1720199788; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Dyak7fcy4WheUrx/4rowppCVwuEbhDjQTwxSTAFmUc4=;
-        b=FXUoZ8qGOme1XfCi1jmcmREmO/1IXYRY4EXzcTZoHAog0HkqQqJeFZDDbF9gOo9lm7
-         Zy+L5VDRQMvLvfiMP5TDs3pCFwbGkXbix7KB4nnivwHKkYZN+fTjUzyn3CDObkSqZ+65
-         dZRlEGsjZZSeAC+GJtzO996B6e9C9pKfnQ2u8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719594988; x=1720199788;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Dyak7fcy4WheUrx/4rowppCVwuEbhDjQTwxSTAFmUc4=;
-        b=qtYARdGBz8dbf39Jp/FPH83VId+qYoW8FORPgfwjL7ryrQSHnbEc0ueqRpDHlfhgY1
-         yqW0cOaqpV3hwGqQ4Uq1u/6YjSq1jm1r+G0BzE1TwH0upAzMNgrRDGsV1E8uEUqUxbal
-         TSmFdVcLl41LEGr+lEV7P790xxrR9BnT9C3ZR1HhwJWXneEHpsOFOI2QyYh9C45Aq6W6
-         x/3FKOlGowqe5b/1AQHysNeNmzbAPWZ5URN+F2fpAtfnwv6KgTFqaCgO7GIjHbEsifpE
-         nCvVCYBcOjNn84P9XRuezXr4gGRzdbtfavQp5mqb7FvWBuylr4oroAsBw6IyWE2UQU2x
-         51FA==
-X-Forwarded-Encrypted: i=1; AJvYcCWA2n5kNeeEvZheaPEXkPwnYmNpv8LC04TgnkqE58MbEmJLZuOsiw6CiDlceLxOi9TtKh6raroBkKt5VTBAfZ1owMdE6UKfgnSn
-X-Gm-Message-State: AOJu0YyHjdEzTjKyCwi0/tRG0tfPv6Kq5WayTihc5jYg0jXovXehvMaw
-	Kv23o6/S13FE6vDy8z3hIxcV9QSQfuH5JvwOOJrYswqczlz2CDMwX4E5uurN1IQ=
-X-Google-Smtp-Source: AGHT+IFK3DO4c20czIEvbq5qRhqWcSTIKZNPs0uSrMmXkXhSNxR4GXk5EtfU0/1h6EjR3whEXfik5w==
-X-Received: by 2002:a5d:994f:0:b0:7f3:b778:6966 with SMTP id ca18e2360f4ac-7f3b7786c2amr1445450439f.2.1719594988622;
-        Fri, 28 Jun 2024 10:16:28 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-7f61ce88113sm58879939f.7.2024.06.28.10.16.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Jun 2024 10:16:28 -0700 (PDT)
-Message-ID: <53a6df2e-a160-48ec-92eb-44b1ee2d663d@linuxfoundation.org>
-Date: Fri, 28 Jun 2024 11:16:27 -0600
+	s=arc-20240116; t=1719598994; c=relaxed/simple;
+	bh=cb+WMxhhWTVOUFDmRnkqtfo3qZmA4hA8QTbiIA68f5o=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=awyPwvmUTNa4dgkIh8iTIwWAFsgoxtkMqgVeV94gcRBZwkJetjvibT7ndcDC2oIxb+BXQokumBszaoAa1X8YgWzkknQ1GOg4F6zqHHe4LlWrkUCSAU9PZXjZT7xlMkIK8s/r8GrlgfIuzYg2mTYI7K0SwoU3eKTAKxzpTOSU01Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AcxSceGu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0A3F3C32786;
+	Fri, 28 Jun 2024 18:23:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1719598994;
+	bh=cb+WMxhhWTVOUFDmRnkqtfo3qZmA4hA8QTbiIA68f5o=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=AcxSceGu7L5XdsxF1/H+vDN69Np0bgoLh3iRplpaBdQA2NlqvJtVbwCUQxPlE3/k3
+	 xlS9kRtssxDu4rkXRWZ9cSW1BrHJ5RiILa2b5Wff8OKw4TbByHcYXn65TdtaYYaMe/
+	 07kpwp3oq2C9KMTDUxFY73wssKY9P54E5rSF+NbZZgd/epB04Wu3q6rPv+pRLWbrhO
+	 6/MNNpq60pnpDa3CBKhmDkErtRLXVKRlQ39VPGmkgV5Ltce2xtAI2pLXszArMtCfnT
+	 ODq1dogkS2+OaIelCgynZhW00Ap/rcAfKNXo+oDz82EjrqYIDieHRsuZdPvkVb0AO/
+	 Xy2xPts8PggPQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EC5E7C4332E;
+	Fri, 28 Jun 2024 18:23:13 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb/usbip: remove unnecessary code
-To: Xiaobo Liu <cppcoffee@gmail.com>, valentina.manea.m@gmail.com,
- shuah@kernel.org, i@zenithal.me
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
-References: <20240625051321.63761-1-cppcoffee@gmail.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20240625051321.63761-1-cppcoffee@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] USB: class: cdc-wdm: Fix CPU lockup caused by excessive log
+ messages
+From: patchwork-bot+bluetooth@kernel.org
+Message-Id: 
+ <171959899396.26186.528799806468905607.git-patchwork-notify@kernel.org>
+Date: Fri, 28 Jun 2024 18:23:13 +0000
+References: <29855215-52f5-4385-b058-91f42c2bee18@rowland.harvard.edu>
+In-Reply-To: <29855215-52f5-4385-b058-91f42c2bee18@rowland.harvard.edu>
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: gregkh@linuxfoundation.org,
+ syzbot+1b2abad17596ad03dcff@syzkaller.appspotmail.com,
+ syzbot+5f996b83575ef4058638@syzkaller.appspotmail.com,
+ johan.hedberg@gmail.com, linux-bluetooth@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ luiz.dentz@gmail.com, marcel@holtmann.org, syzkaller-bugs@googlegroups.com
 
-On 6/24/24 23:13, Xiaobo Liu wrote:
-> Both if branches assign a value to the `cmd` variable.
-> We can remove the cmd variable and use `pdu->base.command` directly.
+Hello:
+
+This patch was applied to bluetooth/bluetooth-next.git (master)
+by Greg Kroah-Hartman <gregkh@linuxfoundation.org>:
+
+On Thu, 13 Jun 2024 21:30:43 -0400 you wrote:
+> The syzbot fuzzer found that the interrupt-URB completion callback in
+> the cdc-wdm driver was taking too long, and the driver's immediate
+> resubmission of interrupt URBs with -EPROTO status combined with the
+> dummy-hcd emulation to cause a CPU lockup:
 > 
-> Signed-off-by: Xiaobo Liu <cppcoffee@gmail.com>
-
-This is a duplicate patch and same comments and NAK on this
-patch.
-
-> ---
->   drivers/usb/usbip/usbip_common.c | 10 +---------
->   1 file changed, 1 insertion(+), 9 deletions(-)
 > 
-> diff --git a/drivers/usb/usbip/usbip_common.c b/drivers/usb/usbip/usbip_common.c
-> index a2b2da125..74a01a265 100644
-> --- a/drivers/usb/usbip/usbip_common.c
-> +++ b/drivers/usb/usbip/usbip_common.c
-> @@ -568,17 +568,9 @@ static void correct_endian_ret_unlink(struct usbip_header_ret_unlink *pdu,
->   
->   void usbip_header_correct_endian(struct usbip_header *pdu, int send)
->   {
-> -	__u32 cmd = 0;
-> -
-> -	if (send)
-> -		cmd = pdu->base.command;
-> -
->   	correct_endian_basic(&pdu->base, send);
->   
-> -	if (!send)
-> -		cmd = pdu->base.command;
-> -
-> -	switch (cmd) {
-> +	switch (pdu->base.command) {
->   	case USBIP_CMD_SUBMIT:
->   		correct_endian_cmd_submit(&pdu->u.cmd_submit, send);
->   		break;
+> cdc_wdm 1-1:1.0: nonzero urb status received: -71
+> cdc_wdm 1-1:1.0: wdm_int_callback - 0 bytes
+> watchdog: BUG: soft lockup - CPU#0 stuck for 26s! [syz-executor782:6625]
+> CPU#0 Utilization every 4s during lockup:
+> 	#1:  98% system,	  0% softirq,	  3% hardirq,	  0% idle
+> 	#2:  98% system,	  0% softirq,	  3% hardirq,	  0% idle
+> 	#3:  98% system,	  0% softirq,	  3% hardirq,	  0% idle
+> 	#4:  98% system,	  0% softirq,	  3% hardirq,	  0% idle
+> 	#5:  98% system,	  1% softirq,	  3% hardirq,	  0% idle
+> Modules linked in:
+> irq event stamp: 73096
+> hardirqs last  enabled at (73095): [<ffff80008037bc00>] console_emit_next_record kernel/printk/printk.c:2935 [inline]
+> hardirqs last  enabled at (73095): [<ffff80008037bc00>] console_flush_all+0x650/0xb74 kernel/printk/printk.c:2994
+> hardirqs last disabled at (73096): [<ffff80008af10b00>] __el1_irq arch/arm64/kernel/entry-common.c:533 [inline]
+> hardirqs last disabled at (73096): [<ffff80008af10b00>] el1_interrupt+0x24/0x68 arch/arm64/kernel/entry-common.c:551
+> softirqs last  enabled at (73048): [<ffff8000801ea530>] softirq_handle_end kernel/softirq.c:400 [inline]
+> softirqs last  enabled at (73048): [<ffff8000801ea530>] handle_softirqs+0xa60/0xc34 kernel/softirq.c:582
+> softirqs last disabled at (73043): [<ffff800080020de8>] __do_softirq+0x14/0x20 kernel/softirq.c:588
+> CPU: 0 PID: 6625 Comm: syz-executor782 Tainted: G        W          6.10.0-rc2-syzkaller-g8867bbd4a056 #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/02/2024
+> 
+> [...]
 
-thanks,
--- Shuah
+Here is the summary with links:
+  - USB: class: cdc-wdm: Fix CPU lockup caused by excessive log messages
+    https://git.kernel.org/bluetooth/bluetooth-next/c/22f008128625
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
 
