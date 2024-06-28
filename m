@@ -1,113 +1,97 @@
-Return-Path: <linux-usb+bounces-11776-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11777-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5B4E91BD43
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Jun 2024 13:18:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD28891BF1F
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Jun 2024 15:03:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 60577B21CB3
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Jun 2024 11:18:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1A79C1C22DC4
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Jun 2024 13:03:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DE1D156661;
-	Fri, 28 Jun 2024 11:18:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8A2F1BE259;
+	Fri, 28 Jun 2024 13:03:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AGuLqpoY"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="mZ4atJA2"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D786B15572D
-	for <linux-usb@vger.kernel.org>; Fri, 28 Jun 2024 11:18:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71FD7155C88;
+	Fri, 28 Jun 2024 13:03:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719573529; cv=none; b=RfE7RdsczzvquSeJvzrb0101H9gqzz5ZZ5U/9MXRuVJtPQYm+iJhhsDZC1fOfuZ0r6w9Bf0gBjAPru3DeaDc54so+GuEC/7YVM8lmL3VxHuUKw9o7XeGgufyrvv5H3lxSU5I4qwUOjnFfaPCCbHEyuBfGuRRbQf5A0mZk3ONQ78=
+	t=1719579819; cv=none; b=sJHCcyV475ksbxanfCs9hjC9xV2JDVC5Upk2XtXACuTCK+9iAmXzASjvwrrBOakuFUM6YDSBTJmsuX6ioi03TB9bqtvs7ol7MGkfkTPDWWc17HU8D7+TPWgNDKX+cWT9FgC3Pb3HCl0s/6R7ix+VPypXrCZTeKo/Fk4fhQkuUZ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719573529; c=relaxed/simple;
-	bh=JoBJ1aj7l1zim+s5ucqZVEjoWbJ7Q+hKG6/OpyUy1zI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jeqZFZAUc1LOgkygp41r5Q/v8oU5oXw1cm8BtXdZ0HkrfWuu8ykuB6gb+oYVSjdIN1Ji8hR1NwQ0Z7PRW/arwMcYHLV65yzI1YOTVwXmzEPozVYHluZ1IDvsd/anCfKNbfrPW+xTEe0a0ser06FVoLrOgaGQ2kAIsXiW/oRjzRM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AGuLqpoY; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1719573528; x=1751109528;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=JoBJ1aj7l1zim+s5ucqZVEjoWbJ7Q+hKG6/OpyUy1zI=;
-  b=AGuLqpoYiNybqIDIehK0kGgdez+Bklhc5oApoYXNUXLhipkzFs9YCgOq
-   v9vI1OE5x4buA0Y4VicC5BlbLOMv8n22cSFcpPu2LLOyIDZ8siLhQGF2u
-   S6uh5skWGUg6uaCKMrGoOsTs9nLK/l2Ts+ra0z7hYTq9Zusby4vb7RuTD
-   hTJiv1GKi6RA+7XYNpxqYDdv+qke9aCvwXDiX8BPFOREyKCVjuRJwNJBE
-   wLEcnhrta6oOVppF0f0BQwxJAGLrScGW4rcSvG1+LlhjfjnadFMOgMN6V
-   y/xA+cwosXvUes+KnBEVdiwe1mUVMtlKGGRa5buHd4tbL3yJT7ZjjNzSI
-   A==;
-X-CSE-ConnectionGUID: R3phoSTPS6eGlv6UnkmUMA==
-X-CSE-MsgGUID: 0se3Uo2VRNiD9+mjKc7l5w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11116"; a="34289217"
-X-IronPort-AV: E=Sophos;i="6.09,168,1716274800"; 
-   d="scan'208";a="34289217"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2024 04:18:38 -0700
-X-CSE-ConnectionGUID: 3ypKx5OBSPqaTepGQf2YzA==
-X-CSE-MsgGUID: WgOCFnTYSsOabaDfVcrgFQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,168,1716274800"; 
-   d="scan'208";a="49666384"
-Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by orviesa005.jf.intel.com with ESMTP; 28 Jun 2024 04:18:36 -0700
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Subject: [PATCH] usb: dwc3: pci: add support for the Intel Panther Lake
-Date: Fri, 28 Jun 2024 14:18:34 +0300
-Message-ID: <20240628111834.1498461-1-heikki.krogerus@linux.intel.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1719579819; c=relaxed/simple;
+	bh=WxBr0rSr2Oj5lFd/V5f2z2g/Y1b3owlQaVz68AcreBU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZX0HRmKYc4aLlnAHha3cx4ANL43cbzCcIFMAEWorZh9BrbzAwQyPGSr8dpawbRzj4YFJ9592jbdkAwcRwMJYSAVKlLRrqHL5u7f+ARpIMKNqApIRgelDSdzqcIK44wrtjUAMSlmuAFUWfXm2Ys4hWZwXnkF3MuuijeOEcSE5RyU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=mZ4atJA2; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=9otMkeMdAgkNNBSByYFZ3WjG0J5NuzixzkYCbswttpA=; b=mZ4atJA2zwGWgI4BmHXCCpePhf
+	I9cdzxkqOpvLZmEDU/QtUSmnRw0WBgks7oeYFlCgpo5CmKdgK+8lLsmoxC5mW6GxaaInm2K0/xSPk
+	VkHUFFeIGy3nEd0GjYjiuwumaRfW41EQwcehO4NNuZZUD47V0s+7AYQthkxhJxZ7Zitk=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1sNBGB-001HWK-IB; Fri, 28 Jun 2024 15:03:27 +0200
+Date: Fri, 28 Jun 2024 15:03:27 +0200
+From: Andrew Lunn <andrew@lunn.ch>
+To: Rengarajan.S@microchip.com
+Cc: linux-usb@vger.kernel.org, davem@davemloft.net,
+	Woojung.Huh@microchip.com, linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org, pabeni@redhat.com,
+	UNGLinuxDriver@microchip.com, edumazet@google.com, kuba@kernel.org
+Subject: Re: [PATCH net-next v1] lan78xx: lan7801 MAC support with lan8841
+Message-ID: <2aa4fba0-c5bd-47e9-97a7-3f73048282cb@lunn.ch>
+References: <20240611094233.865234-1-rengarajan.s@microchip.com>
+ <6eec7a37-13d0-4451-9b32-4b031c942aa1@lunn.ch>
+ <06a180e5c21761c53c18dd208c9ea756570dd142.camel@microchip.com>
+ <d72dd190-39d1-49ca-aeb2-9c0bc1357b68@lunn.ch>
+ <369cd82f60db7a9d6fd67a467e3c45b68348155b.camel@microchip.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <369cd82f60db7a9d6fd67a467e3c45b68348155b.camel@microchip.com>
 
-This patch adds the necessary PCI IDs for Intel Panther Lake
-devices.
+> Although, there is no specific errata available for adding fixup
+> specific to lan78xx USB dongle, we have added the fixup for handing
+> specific configurations to ensure the PHY operates correctly with the
+> MAC. In this case while transmitting from MAC to PHY the device does
+> not add the delay locally at its TX input pins. It expects the TXC
+> delay to be provided by on-chip MAC. Since the delay calculated in this
+> case is specific to the lan78xx USB dongle it is not possible to use
+> this fixup for interfacing with generic MAC.
 
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
----
- drivers/usb/dwc3/dwc3-pci.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Have you tried PHY_INTERFACE_MODE_RGMII_TXID when connecting to the
+PHY? The four PHY_INTERFACE_MODE_RGMII_* values are the official way
+to ask the PHY to insert delays, or not. If that is all you are doing,
+i don't think you need these fixups at all.
 
-diff --git a/drivers/usb/dwc3/dwc3-pci.c b/drivers/usb/dwc3/dwc3-pci.c
-index 9ef821ca2fc7..052852f80146 100644
---- a/drivers/usb/dwc3/dwc3-pci.c
-+++ b/drivers/usb/dwc3/dwc3-pci.c
-@@ -54,6 +54,10 @@
- #define PCI_DEVICE_ID_INTEL_MTL			0x7e7e
- #define PCI_DEVICE_ID_INTEL_ARLH_PCH		0x777e
- #define PCI_DEVICE_ID_INTEL_TGL			0x9a15
-+#define PCI_DEVICE_ID_INTEL_PTLH		0xe332
-+#define PCI_DEVICE_ID_INTEL_PTLH_PCH		0xe37e
-+#define PCI_DEVICE_ID_INTEL_PTLU		0xe432
-+#define PCI_DEVICE_ID_INTEL_PTLU_PCH		0xe47e
- #define PCI_DEVICE_ID_AMD_MR			0x163a
- 
- #define PCI_INTEL_BXT_DSM_GUID		"732b85d5-b7a7-4a1b-9ba0-4bbd00ffd511"
-@@ -430,6 +434,10 @@ static const struct pci_device_id dwc3_pci_id_table[] = {
- 	{ PCI_DEVICE_DATA(INTEL, MTLS, &dwc3_pci_intel_swnode) },
- 	{ PCI_DEVICE_DATA(INTEL, ARLH_PCH, &dwc3_pci_intel_swnode) },
- 	{ PCI_DEVICE_DATA(INTEL, TGL, &dwc3_pci_intel_swnode) },
-+	{ PCI_DEVICE_DATA(INTEL, PTLH, &dwc3_pci_intel_swnode) },
-+	{ PCI_DEVICE_DATA(INTEL, PTLH_PCH, &dwc3_pci_intel_swnode) },
-+	{ PCI_DEVICE_DATA(INTEL, PTLU, &dwc3_pci_intel_swnode) },
-+	{ PCI_DEVICE_DATA(INTEL, PTLU_PCH, &dwc3_pci_intel_swnode) },
- 
- 	{ PCI_DEVICE_DATA(AMD, NL_USB, &dwc3_pci_amd_swnode) },
- 	{ PCI_DEVICE_DATA(AMD, MR, &dwc3_pci_amd_mr_swnode) },
--- 
-2.43.0
+> > Please give me a details explanation why this fixup will not be
+> > applied to other instances of this PHY in the system.
+> 
+> As stated above, the TXC delay calculated for the PHY is specific to
+> the lan78xx on-chip MAC. This delay ensures that both the phy and MAC
+> clock delay timing is met. Any other MACs connected will need a
+> different delay values to be synchronized with MAC and hence these
+> instances will get failed.
 
+You did not answer my question. Show me the code path which prevents
+this being applied to other PHYs. Is there a comparison to netdev
+somewhere when applying the fixup? Give me the file:line number.
+
+	  Andrew
 
