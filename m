@@ -1,127 +1,110 @@
-Return-Path: <linux-usb+bounces-11783-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11784-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4EF5691C3B3
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Jun 2024 18:27:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BBDC791C444
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Jun 2024 19:00:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 03AC5283DD7
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Jun 2024 16:27:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ECCBA1C22D8B
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Jun 2024 17:00:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A242E1C9EB1;
-	Fri, 28 Jun 2024 16:27:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A6561CCCA5;
+	Fri, 28 Jun 2024 17:00:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G1xA6/An"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id 3FD441B94F
-	for <linux-usb@vger.kernel.org>; Fri, 28 Jun 2024 16:27:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D95571CB33B
+	for <linux-usb@vger.kernel.org>; Fri, 28 Jun 2024 17:00:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719592027; cv=none; b=lbc3f5om+vtWHlwqzpY9yluA8ufpG/r5F1pjK3CEOgjg5JyUOe23C8yXVjTFsCbOEHOr/VzD3SC9NR8uMIMWhLHyUVRJlrzJUuLV1NWwrRDxeyqg88rYyOwf0vzW823sEgN2DhV+/LiUgjmbgftZib723EssVp14T1bJfHHU41g=
+	t=1719594032; cv=none; b=MKQ/4LpTQnjhxes4a9B7aMBeadYXmv4QywGDg0T8EfUxaSUbGncjxNKZT0nhA0deIb4DcZJBr3aUk+v8Zlnb2SncdpwVmAfmrrw2oedINmxyXVD6vP3oUKWXITxS2inFQ0BG/YLIL1vOIeWsGjHE9m1rioSYXLTVmY4/fUi75sc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719592027; c=relaxed/simple;
-	bh=ntrJ9FOQYqk3ISt9xSv0McV1UhZUfYv75Sjx8CS8+qs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=X8vC2i6Qwj6Kk+GPff1inE+WNSFz/uZV1eaYK39tp8Nq9TQWEyvvoVj1Enrv9hQ03YxyqSpaVtfBOAej7vPDwZPVMp+gXau3hGHsw9dL3FNFY5bN6i0+P1ODLthguf6HSdnFUMim5gtV3IaWDGBjm3yBZDUmzH0/j5omqLGPwL8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
-Received: (qmail 776495 invoked by uid 1000); 28 Jun 2024 12:27:02 -0400
-Date: Fri, 28 Jun 2024 12:27:02 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Andrey Konovalov <andreyknvl@gmail.com>
-Cc: Darrion Ramos <darrionramos@gmail.com>,
-  USB list <linux-usb@vger.kernel.org>
-Subject: Re: Remote wake up in gadget drivers
-Message-ID: <612f3eee-35fb-4888-b5d9-c17c223d40df@rowland.harvard.edu>
-References: <a306a653-b6cf-41e4-875f-6c520569b1fdn@googlegroups.com>
- <CA+fCnZdZ96yW5tRfm-c1qXWfmNrVg9J1Yb779Ryht6M9v9FQbQ@mail.gmail.com>
+	s=arc-20240116; t=1719594032; c=relaxed/simple;
+	bh=a56pJhD2dztLLUmbQCMie96AmkAv1+nG2BWkcEyi1v4=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=MjtH7RIHNKkk3PX+MCxQNoIJRz3ogsOL3K+/32Q+Stbr1BjgkbjcGULVSAd0MCPf63162a/EYUBJmLkEF5625sj5er5CWIM4doSapuZCLyblKlK8LHsUAsURLtIb7dRrZuYKERiUvpWA+UcPssMhmCeObDJRj6kSmPRXglkkf2o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G1xA6/An; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6AC25C2BD10
+	for <linux-usb@vger.kernel.org>; Fri, 28 Jun 2024 17:00:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1719594032;
+	bh=a56pJhD2dztLLUmbQCMie96AmkAv1+nG2BWkcEyi1v4=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=G1xA6/AnXJYlal+su331Z0ZEjZEpbwUhBYNllbe0OBFdzZNws49Y45fD0POCJdviT
+	 +6ZgoAGFtR0SIrE3ROeMemPpNAORY1t06/dxb5jxS6u8wFjy1yz32wKF0JbzCWnID3
+	 SifrWKN+zPbpHYXfx0hFJswk6kPj6HSb5Pswb27Er5hGLg2aC2R7aZWD33/sYa1tgP
+	 AWCljhqIVYV7wyedQ5zxLD9rkcfpYuU3PyTivHDb+VlstR+p071MosPK2cxZum2X6A
+	 nQj5sTFiHwsFEBf7DZW/w6uuKSeapeDCIUtuWoYTGhaxu5xG/e+dNv5ibV8TrOSxCT
+	 XeMlQ/yhhSKpA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 4EB16C433E5; Fri, 28 Jun 2024 17:00:32 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 218987] USB devices are not detected after Save/Restore error
+ on Intel xHC
+Date: Fri, 28 Jun 2024 17:00:32 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: repk@triplefau.lt
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: CODE_FIX
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-218987-208809-sy3Qy5vxVc@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-218987-208809@https.bugzilla.kernel.org/>
+References: <bug-218987-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+fCnZdZ96yW5tRfm-c1qXWfmNrVg9J1Yb779Ryht6M9v9FQbQ@mail.gmail.com>
 
-On Fri, Jun 28, 2024 at 05:39:45PM +0200, Andrey Konovalov wrote:
-> (syzkaller to bcc)
-> 
-> Hi Alan,
-> 
-> I hope you could you clarify some things wrt the remote wake up
-> support in gadget drivers.
-> 
-> Please see the Darrion's message first:
-> 
-> On Fri, Jun 28, 2024 at 5:34 AM Darrion Ramos <darrionramos@gmail.com> wrote:
-> >
-> > Additionally, we have been looking into the raw_gadget and have 
-> > noticed that the keyboard example (both a physical instance on a 
-> > raspberry pi and the virtual instance) do not wakeup the host device 
-> > from suspend.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218987
 
-I don't understand the second part.  With a virtual instance, the gadget 
-is physically on the host.  So if the host is suspended, how can the 
-gadget do anything at all, let alone wake up the host?
+--- Comment #11 from Remi Pommarel (repk@triplefau.lt) ---
+(In reply to Mathias Nyman from comment #10)
+> About SRE,=20
+>=20
 
-> >  It seems that the emulated device does not communicate 
-> > to the host that it is a wakeup capable device. The 
-> > /sys/bus/devices/.../power directory for the respective udc is 
-> > missing the wakeup files that would enable this.
+...
 
-What you wrote here is not what you meant; there is no /sys/bus/devices/ 
-path.  Did you mean /sys/bus/usb/devices/... on the host, or did you 
-mean /sys/bus/platform/... (or whatever) on the RPi?
+> Not sure if it makes a difference but could be worth testing if skipping =
+the
+> soft reset impacts SRE.
+>=20
+> Can be done by setting quirk:
+> xhci->quirks |=3D XHCI_NO_SOFT_RETRY
 
-> >  From my research on 
-> > this I only found that the usb_gadget struct for the device needs to 
-> > have the wakeup_capable flag set for the host to recognize the 
-> > device as a remote wakeup source. I have printed the value during 
-> > the gadget_bind and it seems to be set so I am not sure what else 
-> > could be causing the host to not have the device recognized for 
-> > remote wakeup. If anybody has any ideas on what needs to be modified 
-> > in the raw_gadget or any resources for looking into it more it would 
-> > be greatly appreciated, thanks!
+Thanks.
 
-The /sys/bus/usb/devices/.../power/wakeup file on the host will 
-generally reflect the setting of the USB_CONFIG_ATT_WAKEUP bit in the 
-gadget's configuration descriptor bmAttributes byte.  The code that 
-sets wakeup_capable is in drivers/usb/core/hub.c, in the 
-usb_set_device_state() function.  You can see that it uses the 
-USB_CONFIG_ATT_WAKEUP bit.
+Unfortunately this does not help.
 
-> I assume that to take advantage of remote wake up, the device needs to
-> first of all set the USB_DEVICE_REMOTE_WAKEUP bit in bmAttributes.
+What is funny is that it is related to if the HDMI is plugged or not. So I
+think it is related to DP alt mode of type C. I don't know if xHC needs to =
+even
+know about alternate mode, it does not look like so to me.
 
-That bit gets set when the host tells the gadget to enable remote 
-wakeup.  And generally the UDC driver handles this, not the gadget 
-driver.
+--=20
+You may reply to this email to add a comment.
 
-> But then, is the wake up supposed to be initiated through the gadget
-> driver or through the UDC sysfs files as the ones that Darrion
-> mentioned?
-
-The wakeup request is initiated by the gadget driver calling 
-usb_gadget_wakeup().
-
-> For the former case, I assume that adding a new ioctl to Raw Gadget
-> that calls usb_gadget_wakeup() would be a way to support this?
-
-Yes.
-
-> AFAICS, only the g_zero gadget driver calls usb_gadget_wakeup(). Do
-> the other gadget drivers just have no support for remote wake up?
-
-Grep shows that function/u_ether.c also calls usb_gadget_wakeup().  I 
-don't know about most of the gadget drivers.  The f_mass_storage driver 
-has no need for remote wakeup, for example, and the same is probably 
-true for a lot of the others.  You'd think that the f_hid function would 
-support remote wakeup, but maybe nobody ever implemented it.
-
-Alan Stern
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
