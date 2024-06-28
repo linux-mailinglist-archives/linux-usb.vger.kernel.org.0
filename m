@@ -1,223 +1,125 @@
-Return-Path: <linux-usb+bounces-11779-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11780-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6FE8B91C0D0
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Jun 2024 16:25:53 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4668891C2C4
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Jun 2024 17:40:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BD1851F22617
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Jun 2024 14:25:51 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C40B4B211A9
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Jun 2024 15:40:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C3441C0046;
-	Fri, 28 Jun 2024 14:25:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 704461C688A;
+	Fri, 28 Jun 2024 15:40:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="S1iDHBLO"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JZOgCTSh"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E22A41BF333
-	for <linux-usb@vger.kernel.org>; Fri, 28 Jun 2024 14:25:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DA701DFFB
+	for <linux-usb@vger.kernel.org>; Fri, 28 Jun 2024 15:39:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719584734; cv=none; b=mNFEYrgavXgmMB2aHPRujA4LB30uwJ4y4Zn4//8FBis38BSlvehqosIeld8rYN45ZIE61j1H1f4gWOeyVgleIJB88S/dcofpEkTjFrBCXwVVhkCbV1DNuXCJ4dpvthJvE3h/5MOxcc37mfBGcumvtCsg6pQZTr3FQDM5+4ofALI=
+	t=1719589200; cv=none; b=r/a+8acHlZjRObNgfH/oS7Xm1qjnquaWuqv3DA7B2f0trf76d+krnxZWoGX0ZafgpHQFlbtxDrOFzH0xAUldE37teKnYTdDnAI2M53M5Uggi2xZcc6ka3D4pBTsOQt/KAyTUj2+PlW0fVAu5hDUOpcl0jOcZcGzj/IK4VpNmNjI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719584734; c=relaxed/simple;
-	bh=Sca9heCYzPNqZOuh91bo5j7Bf6Gy2w1eZjtipZWqzkc=;
+	s=arc-20240116; t=1719589200; c=relaxed/simple;
+	bh=W8xTh+SD4YRaIeEhONA/PVIhSG1kSzsyRzYnA31kxVw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FzLOwVS1xG+ekBrmcn1ynaXlM3YwSV1HFLGwGuS+WN8LNW/YuFEIIHRXsXVuczLLjSbfWbPojnRKGpVF2rQNFhUHLZuwWsnBgqavaKJq7HUNmMIEa7gHnPFYNvgl4k6W1RGRJ3+cE0YndOrHri4pN3BIkPX0G9sz2xWrK2h6pvU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=S1iDHBLO; arc=none smtp.client-ip=209.85.128.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-64a6bf15db9so6431537b3.0
-        for <linux-usb@vger.kernel.org>; Fri, 28 Jun 2024 07:25:32 -0700 (PDT)
+	 To:Cc:Content-Type; b=r38A01dliwF+H6f3DIWhSrsTAZDHEmxYOnb9+Qd4DFIDGGLpistgP7SHOTBrmFvj5HkW5ZKreuQiA7HXKmYHJ0fR4/uZ4nrM6DXBGz80/CZFGFGaQ1yrPErJaSYWf8BzyxeGMHnNQpWMy54bvqDkbXpyJ9OvbUNJ/ypHfHYvqew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JZOgCTSh; arc=none smtp.client-ip=209.85.167.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-52caebc6137so788177e87.0
+        for <linux-usb@vger.kernel.org>; Fri, 28 Jun 2024 08:39:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1719584732; x=1720189532; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=wrEi/WACEa6FBCLeXGH4a1qm/TO6DqKPmGGcMFyn4W0=;
-        b=S1iDHBLOH1K7T+bAqtsSXQu1mMDjfPrjkicrxPH1NY7gsfrrMUqTNyE3Woxzpf9YsC
-         TVuZdbnNk3EuNx1l700iIjXfXwLyAwoDXBcCMUgnYnlvrErmbRYzvqSuTQUkx8MzMyb4
-         vmJcFx94zC8ZMwwDzwjFTUUB7DKK/V/gsD06I+XJ5E8nBxEcR2I5Z7S2rTDJf6glHjjA
-         yqGXrvjnzWWu8cBWBxxC0EjqzpolxOSuCNop4hZDQYsftdsGOCgu7UlC0XSX+0P5A+w6
-         TGOiZCRHl4Nzv5JfW433cMJxgbLBCn43wWk//NRSPQakxRg/9jvmaNXa02qki6vGoJcz
-         U6WQ==
+        d=gmail.com; s=20230601; t=1719589197; x=1720193997; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=W8xTh+SD4YRaIeEhONA/PVIhSG1kSzsyRzYnA31kxVw=;
+        b=JZOgCTShQUMxhTn6tS4eO/Z0DKv0Ssw1PFE7ZZyQsYChOM7479MhPRLZuOfOp3c+eX
+         TvQ3yE9c/JBb11IAIDjHmgWvSGDtrlX9I7AZkbXBGa6Iu+nTDiVsHM3kTnNPio06o6na
+         PALyaY8jqwNpp/Fa1ac1Om8D537yt9uOPb2MwL6qQ3t+qYD901pPAcKDjp0fcy3xdJfd
+         AXkxapudtxy3zIHoB9MOjyY0k80jXIrBG+pon2i6hgcIjfKZZaovsnKj1nAsD41RNPSj
+         eBsViaswIbyDVCEF3wUwTZfGY1LUYES4QIrE8ZFn2FTO1gVoVyHidDrTTlc5LEKyTHQM
+         uthw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719584732; x=1720189532;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wrEi/WACEa6FBCLeXGH4a1qm/TO6DqKPmGGcMFyn4W0=;
-        b=f0oSagdu9Lyyakqy9dsoQo9VivQNTSv5cd0CRRFKk8iUEQeImyb5iVAuXK9hxzFHrh
-         /S6cu9oR3kMODHj6PGYEDejcHpKl+gcbR3dNvh8lUrgNr6znIe+4bYsiBvdh4LJ4N9Hk
-         mWAG/le7r8gHp91S78ZeUGU4VM/aUgQP64Juk3v1zmryglgD/r6mnYjMfSmopsDUeK5K
-         pAqnHEQUibOurFISCnve7HR1rJsfB8O9uAjTccsXIR7JFpMGkd1G/yQ+2LhOD3VlvmM2
-         gjIVtGouZuTCzqPqWNI+nspCpsfCgaWw3bqAE0L71SVBIOmmQuHKCXGR5KVb1Y515R6q
-         1qKA==
-X-Forwarded-Encrypted: i=1; AJvYcCV8IqiVvGNJb4NP2hZHj/2urOz6LholtFHLUxEK7s2ApHRFKPNjgyJTb92KymUIQHntXzkSpUO4GL8U+ETZfgAMb9gksi5e0Bvd
-X-Gm-Message-State: AOJu0YzNRUh3pb4ecT+D/ILdYDDHcZsQ1AqTRHqob0Vq2ukySSD1o4fg
-	uXREZzqF79cMsgy5DhhWK6JP8e15off7w/WO0NmM1G3lF2YbrefhGkF2rVCz73XiGL/WmfNmzkw
-	3NDJq7tZc9EkIWu9Ca6nlk5oLBvhh8IWnd8UZ1Q==
-X-Google-Smtp-Source: AGHT+IGj8wVl5pbaPJkk0Ot2oWBFmKObQZKDXj4G/2axlfG0NZXI9SrYjaAq5/esf9Gfy7A4E0YOFo/bQa5SOx4UVLE=
-X-Received: by 2002:a81:8444:0:b0:64b:5cc7:bcbc with SMTP id
- 00721157ae682-64b5cc7c0f9mr11323487b3.32.1719584731747; Fri, 28 Jun 2024
- 07:25:31 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1719589197; x=1720193997;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=W8xTh+SD4YRaIeEhONA/PVIhSG1kSzsyRzYnA31kxVw=;
+        b=CuW53dVAKClGGfFUt3amoyAjyhGWxhPUxQBrcP3kvUJ7h+YBQly+enifZxkciZEeKo
+         QNV5v/Lm3nP5vKr40e7E+9v3l5ediYF26MCSXlkqxuKNRZ1Uex8zt0mEq7daaX+7geq0
+         0yPoM/Wi53HK5BZEUtmagAZKB8fiet24Epvd99eqJL/gQ/a09k1SdorZ3pVev03gIzZu
+         E+A9kEd+cOMXrsYGmSvzWJiYMR80Y34HRVEQs77N4yICGkaj0iewv3jl0cIE1cUjwn/v
+         AUxsupLt1t+MqhJjfIPhQr2PuolsLD5JX9K6IN8Sr91tg73JhywOudmActe6l4autlkY
+         GWkg==
+X-Forwarded-Encrypted: i=1; AJvYcCVb4vkTvGm/mTR/Ot1OZvvZ4XC1nRjp/dMbR+BmD2GbS6zGYQhnqvtaGvAewrDjf9JCVK4iiwpvJnLjBQLs/oIPvHA5vEevFk4k
+X-Gm-Message-State: AOJu0YwuWp2Sd5eTOJ1twwNSF1Xpm9JVuk7ZxTCATbtA/ST610De3aAy
+	w9djnb5z4QO7GTa2DNk1lNAHIgN9QHOINlNe1OjHNFuNAUDRL6gxLTo01Vusd1DUX2SH4BShjrb
+	FJDv4Y9/tfFGDYmGLTEoTB5Mu/XE=
+X-Google-Smtp-Source: AGHT+IGzo7VlZM2A0SVwBMwjDFW3TvoZffvVh/F0uBb39XEK9cF/t6OoFswGsgKztd5v6Jx65ja+eUkPSmGKEYX/+HY=
+X-Received: by 2002:a05:6512:4884:b0:52c:d657:8322 with SMTP id
+ 2adb3069b0e04-52ce1834ff8mr9943525e87.23.1719589196349; Fri, 28 Jun 2024
+ 08:39:56 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240627-ucsi-rework-interface-v4-0-289ddc6874c7@linaro.org>
- <2024062717-foster-document-eb2f@gregkh> <CAA8EJprAshnt3YchBv0ssi4Vet9b6oMcf3z8nuRkoZVYNBq64w@mail.gmail.com>
- <CAA8EJpqCJ8_wOO7yLYA85KYtbLO6hvS-yb7DA6kJ2sH4QH43QA@mail.gmail.com> <2024062825-balancing-resigned-e383@gregkh>
-In-Reply-To: <2024062825-balancing-resigned-e383@gregkh>
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Fri, 28 Jun 2024 17:25:17 +0300
-Message-ID: <CAA8EJprsJLMTnd9epLR4Uc02Vg2veW1mpqFxxL=rHU9DtJ8UqQ@mail.gmail.com>
-Subject: Re: [PATCH v4 0/7] usb: typec: ucsi: rework glue driver interface
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, 
-	Nikita Travkin <nikita@trvn.ru>, Neil Armstrong <neil.armstrong@linaro.org>, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
-	linux-arm-kernel@lists.infradead.org
+References: <a306a653-b6cf-41e4-875f-6c520569b1fdn@googlegroups.com>
+In-Reply-To: <a306a653-b6cf-41e4-875f-6c520569b1fdn@googlegroups.com>
+From: Andrey Konovalov <andreyknvl@gmail.com>
+Date: Fri, 28 Jun 2024 17:39:45 +0200
+Message-ID: <CA+fCnZdZ96yW5tRfm-c1qXWfmNrVg9J1Yb779Ryht6M9v9FQbQ@mail.gmail.com>
+Subject: Remote wake up in gadget drivers
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: Darrion Ramos <darrionramos@gmail.com>, USB list <linux-usb@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 28 Jun 2024 at 17:24, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+(syzkaller to bcc)
+
+Hi Alan,
+
+I hope you could you clarify some things wrt the remote wake up
+support in gadget drivers.
+
+Please see the Darrion's message first:
+
+On Fri, Jun 28, 2024 at 5:34=E2=80=AFAM Darrion Ramos <darrionramos@gmail.c=
+om> wrote:
 >
-> On Thu, Jun 27, 2024 at 06:08:07PM +0300, Dmitry Baryshkov wrote:
-> > On Thu, 27 Jun 2024 at 17:57, Dmitry Baryshkov
-> > <dmitry.baryshkov@linaro.org> wrote:
-> > >
-> > > On Thu, 27 Jun 2024 at 17:54, Greg Kroah-Hartman
-> > > <gregkh@linuxfoundation.org> wrote:
-> > > >
-> > > > On Thu, Jun 27, 2024 at 05:44:39PM +0300, Dmitry Baryshkov wrote:
-> > > > > The interface between UCSI and the glue driver is very low-level. It
-> > > > > allows reading the UCSI data from any offset (but in reality the UCSI
-> > > > > driver reads only VERSION, CCI an MESSAGE_IN data). All event handling
-> > > > > is to be done by the glue driver (which already resulted in several
-> > > > > similar-but-slightly different implementations). It leaves no place to
-> > > > > optimize the write-read-read sequence for the command execution (which
-> > > > > might be beneficial for some of the drivers), etc.
-> > > > >
-> > > > > The patchseries attempts to restructure the UCSI glue driver interface
-> > > > > in order to provide sensible operations instead of a low-level read /
-> > > > > write calls.
-> > > > >
-> > > > > If this approach is found to be acceptable, I plan to further rework the
-> > > > > command interface, moving reading CCI and MESSAGE_IN to the common
-> > > > > control code, which should simplify driver's implementation and remove
-> > > > > necessity to split quirks between sync_control and read_message_in e.g.
-> > > > > as implemented in the ucsi_ccg.c.
-> > > > >
-> > > > > Note, the series was tested only on the ucsi_glink platforms. Further
-> > > > > testing is appreciated.
-> > > > >
-> > > > > Depends: [1], [2]
-> > > > >
-> > > > > [1] https://lore.kernel.org/linux-usb/20240612124656.2305603-1-fabrice.gasnier@foss.st.com/
-> > > > >
-> > > > > [2] https://lore.kernel.org/linux-usb/20240621-ucsi-yoga-ec-driver-v8-1-e03f3536b8c6@linaro.org/
-> > > > >
-> > > > > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > > > > ---
-> > > > > Changes in v4:
-> > > > > - Rebased on top of Greg's tree to resolve conflicts.
-> > > >
-> > > > Nope, still got conflicts, are you sure you updated properly?  Patch 1
-> > > > applied, but #2 did not.
-> > >
-> > > I feel stupid enough now. I rebased on top of usb-next instead of
-> > > usb-testing. Let me spam it once again
-> >
-> > Hmm, I see what happened. I had a next+usb-next. Simple usb-next
-> > doesn't contain changes from 9e3caa9dd51b ("usb: typec: ucsi_acpi: Add
-> > LG Gram quirk") which this patch also modifies. I can rebase it on top
-> > of your tree, but then we will have build issues once usb-linus and
-> > usb-next get merged together.
->
-> Ah, you need/want stuff from both branches, right?  Then just wait until
-> next week when my -linus branch will be in Linus's tree and then I will
-> merge that into the -next branch.
+> Additionally, we have been looking into the raw_gadget and have noticed t=
+hat the keyboard example (both a physical instance on a raspberry pi and th=
+e virtual instance) do not wakeup the host device from suspend. It seems th=
+at the emulated device does not communicate to the host that it is a wakeup=
+ capable device. The /sys/bus/devices/.../power directory for the respectiv=
+e udc is missing the wakeup files that would enable this. From my research =
+on this I only found that the usb_gadget struct for the device needs to hav=
+e the wakeup_capable flag set for the host to recognize the device as a rem=
+ote wakeup source. I have printed the value during the gadget_bind and it s=
+eems to be set so I am not sure what else could be causing the host to not =
+have the device recognized for remote wakeup. If anybody has any ideas on w=
+hat needs to be modified in the raw_gadget or any resources for looking int=
+o it more it would be greatly appreciated, thanks!
 
-Ack. Maybe I'll post another iteration based on the discussion on the
-mailing list.
+I assume that to take advantage of remote wake up, the device needs to
+first of all set the USB_DEVICE_REMOTE_WAKEUP bit in bmAttributes.
 
--- 
-With best wishes
-Dmitry
+But then, is the wake up supposed to be initiated through the gadget
+driver or through the UDC sysfs files as the ones that Darrion
+mentioned?
 
-On Fri, 28 Jun 2024 at 17:24, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Thu, Jun 27, 2024 at 06:08:07PM +0300, Dmitry Baryshkov wrote:
-> > On Thu, 27 Jun 2024 at 17:57, Dmitry Baryshkov
-> > <dmitry.baryshkov@linaro.org> wrote:
-> > >
-> > > On Thu, 27 Jun 2024 at 17:54, Greg Kroah-Hartman
-> > > <gregkh@linuxfoundation.org> wrote:
-> > > >
-> > > > On Thu, Jun 27, 2024 at 05:44:39PM +0300, Dmitry Baryshkov wrote:
-> > > > > The interface between UCSI and the glue driver is very low-level. It
-> > > > > allows reading the UCSI data from any offset (but in reality the UCSI
-> > > > > driver reads only VERSION, CCI an MESSAGE_IN data). All event handling
-> > > > > is to be done by the glue driver (which already resulted in several
-> > > > > similar-but-slightly different implementations). It leaves no place to
-> > > > > optimize the write-read-read sequence for the command execution (which
-> > > > > might be beneficial for some of the drivers), etc.
-> > > > >
-> > > > > The patchseries attempts to restructure the UCSI glue driver interface
-> > > > > in order to provide sensible operations instead of a low-level read /
-> > > > > write calls.
-> > > > >
-> > > > > If this approach is found to be acceptable, I plan to further rework the
-> > > > > command interface, moving reading CCI and MESSAGE_IN to the common
-> > > > > control code, which should simplify driver's implementation and remove
-> > > > > necessity to split quirks between sync_control and read_message_in e.g.
-> > > > > as implemented in the ucsi_ccg.c.
-> > > > >
-> > > > > Note, the series was tested only on the ucsi_glink platforms. Further
-> > > > > testing is appreciated.
-> > > > >
-> > > > > Depends: [1], [2]
-> > > > >
-> > > > > [1] https://lore.kernel.org/linux-usb/20240612124656.2305603-1-fabrice.gasnier@foss.st.com/
-> > > > >
-> > > > > [2] https://lore.kernel.org/linux-usb/20240621-ucsi-yoga-ec-driver-v8-1-e03f3536b8c6@linaro.org/
-> > > > >
-> > > > > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > > > > ---
-> > > > > Changes in v4:
-> > > > > - Rebased on top of Greg's tree to resolve conflicts.
-> > > >
-> > > > Nope, still got conflicts, are you sure you updated properly?  Patch 1
-> > > > applied, but #2 did not.
-> > >
-> > > I feel stupid enough now. I rebased on top of usb-next instead of
-> > > usb-testing. Let me spam it once again
-> >
-> > Hmm, I see what happened. I had a next+usb-next. Simple usb-next
-> > doesn't contain changes from 9e3caa9dd51b ("usb: typec: ucsi_acpi: Add
-> > LG Gram quirk") which this patch also modifies. I can rebase it on top
-> > of your tree, but then we will have build issues once usb-linus and
-> > usb-next get merged together.
->
-> Ah, you need/want stuff from both branches, right?  Then just wait until
-> next week when my -linus branch will be in Linus's tree and then I will
-> merge that into the -next branch.
->
-> thanks,
->
-> greg k-h
+For the former case, I assume that adding a new ioctl to Raw Gadget
+that calls usb_gadget_wakeup() would be a way to support this?
 
+AFAICS, only the g_zero gadget driver calls usb_gadget_wakeup(). Do
+the other gadget drivers just have no support for remote wake up?
 
-
--- 
-With best wishes
-Dmitry
+Thank you!
 
