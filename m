@@ -1,151 +1,71 @@
-Return-Path: <linux-usb+bounces-11796-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11797-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40A4F91C9CB
-	for <lists+linux-usb@lfdr.de>; Sat, 29 Jun 2024 02:39:37 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5901791C9F3
+	for <lists+linux-usb@lfdr.de>; Sat, 29 Jun 2024 03:20:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F3851283480
-	for <lists+linux-usb@lfdr.de>; Sat, 29 Jun 2024 00:39:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F380B1F230E3
+	for <lists+linux-usb@lfdr.de>; Sat, 29 Jun 2024 01:20:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4403880B;
-	Sat, 29 Jun 2024 00:39:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Cvdaex9w"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28A10184F;
+	Sat, 29 Jun 2024 01:20:07 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC96A3FC2
-	for <linux-usb@vger.kernel.org>; Sat, 29 Jun 2024 00:39:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id 15A191C17
+	for <linux-usb@vger.kernel.org>; Sat, 29 Jun 2024 01:20:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719621567; cv=none; b=XCsUM87jwu9a8Mn4KP4V4V7rV+qlC1mcdAwXGFwGzwXrjyJ5t9+0esddu4rsmSFbK+GwNO/34QK9FBZRqzbjnsBTaWDUNekMzlQhTE0cxGO3lUF4qK2awZKTmvsJ8g5n9jUBjJnf+QVm3xg5m4nRgtlZE/WEokNielyryEC4lng=
+	t=1719624006; cv=none; b=Z6wtVGYxBsj6KXaSbCbzV0kitPM4xWyqVnvxvYAV9UD1fziBtUaL87fXJOKH9rF4NbBTS8OcRSHWAUoeEYGFJmiWmv0jUWonS45gtzJ2X5W3qw2vYUzq67g9HHr48Q3fKm/PPS+TVDlxbHD68r8OZ1abwRKTCbXkuonMhhyKMQA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719621567; c=relaxed/simple;
-	bh=Zkzr6b31lgmRSyDAljLHYf+AtrS0GPC5X+RgsSHOoGI=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=s5jDQqumsGJrtvwTE9NU6xsC63OgrTmW6k3pd4oakaNFGsNxcfpEKNVo05QvllZ0jHQjITAvYDFhtD5k/q6rQ7qE+N2TznBIfA23M6mPeAnraLsyFgbOnLw7MCB0K2ApdJFt75ZXI+2t/dAWQyv9/0G9ROFLSmwedXtZpnphygc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Cvdaex9w; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1719621566; x=1751157566;
-  h=date:from:to:cc:subject:message-id;
-  bh=Zkzr6b31lgmRSyDAljLHYf+AtrS0GPC5X+RgsSHOoGI=;
-  b=Cvdaex9wFh0whjo9m7bnJ+EQ69Oy47nH8Oe72iCT2sPAnqyaq1df7k4B
-   QwkKOj2DDGBi+mCuBz0TuvjnDl5RkHVC9pUmKDxz8cCuysnmVkPVAnM29
-   fFD3ZZWy3OsK83LMCrBEGFV9f8GUtcjQUc+PkrS9vq/H2/P3rJLtxvMFX
-   Wvyh69gQ1AQ1fx00yIkD0qz1xrQsixhFD2w5dEJU5+LeferA7xQOqXUih
-   7gG5iv6DiECHnBWMrfbJa+NpHo9kLXBdlUujcisueFRf1lqNh6BY4aZ6G
-   1C/QSiC9aOsgeP3K8ErWTr9I44NgaZa+6xVS6ANRnlC3FP1r3kt7M0wBi
-   g==;
-X-CSE-ConnectionGUID: Pz4NWF+HTfeMysXMjxEWog==
-X-CSE-MsgGUID: bV/GRVsSRZ+aR9io4HWHww==
-X-IronPort-AV: E=McAfee;i="6700,10204,11117"; a="16772278"
-X-IronPort-AV: E=Sophos;i="6.09,170,1716274800"; 
-   d="scan'208";a="16772278"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2024 17:39:25 -0700
-X-CSE-ConnectionGUID: Id2SQrwVR7O5Z3QdaMpjrA==
-X-CSE-MsgGUID: /nhl+WqXSm+NoHNLa1feSg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,170,1716274800"; 
-   d="scan'208";a="44806127"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 28 Jun 2024 17:39:24 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sNM7e-000Imi-0E;
-	Sat, 29 Jun 2024 00:39:22 +0000
-Date: Sat, 29 Jun 2024 08:39:04 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Subject: [usb:usb-linus] BUILD SUCCESS
- fc1d1a712b517bbcb383b1f1f7ef478e7d0579f2
-Message-ID: <202406290802.BP1Th88S-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1719624006; c=relaxed/simple;
+	bh=YpA1Bw6OyqXECpxXQy9mE+clNWRd976ka3hg1OnQUgg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Wcs5tDdC9/xJZjVceJW8knydKrDZ1AJ06l9G0QIJUDr/Xao8xwAja8qZ7u8bLpfv+To+lRsBRh/YyJjCen1u18wqrFLvyxEGZ6MnpYowlJNdsPHjxIEV6itBIYujU4OpkD53mlPVbrxcLU/ZWddb/AXEHleEsB0UJnj8/vF8lFQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
+Received: (qmail 786847 invoked by uid 1000); 28 Jun 2024 21:19:55 -0400
+Date: Fri, 28 Jun 2024 21:19:55 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: Andrey Konovalov <andreyknvl@gmail.com>,
+  Darrion Ramos <darrionramos@gmail.com>, USB list <linux-usb@vger.kernel.org>
+Subject: Re: Remote wake up in gadget drivers
+Message-ID: <4539c3c5-61bf-4b4d-9391-a041a2a08b57@rowland.harvard.edu>
+References: <a306a653-b6cf-41e4-875f-6c520569b1fdn@googlegroups.com>
+ <CA+fCnZdZ96yW5tRfm-c1qXWfmNrVg9J1Yb779Ryht6M9v9FQbQ@mail.gmail.com>
+ <612f3eee-35fb-4888-b5d9-c17c223d40df@rowland.harvard.edu>
+ <CA+fCnZcrn1sr-sMbwk6i5RDMMh3q9TpBgkGAN+4cg4RaCo9S+g@mail.gmail.com>
+ <28b478e2-4b17-483a-9584-0e6342677ef0@rowland.harvard.edu>
+ <20240628211140.va5ghcr65dl6g323@synopsys.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240628211140.va5ghcr65dl6g323@synopsys.com>
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
-branch HEAD: fc1d1a712b517bbcb383b1f1f7ef478e7d0579f2  usb: dwc3: core: Workaround for CSR read timeout
+On Fri, Jun 28, 2024 at 09:11:39PM +0000, Thinh Nguyen wrote:
+> Hi Alan,
+> 
+> On Fri, Jun 28, 2024, Alan Stern wrote:
+> > 
+> > While the wakeup_capable and wakeup_armed bitflags are defined in 
+> > linux/usb/gadget.h, it doesn't look like any of the UDC drivers 
+> > implement them.  So it may not be possible to see whether the UDC 
+> > supports remote wakeup (but it appears that most of them do).
+> > 
+> 
+> The dwc3 driver handles those bitflags.
 
-elapsed time: 2013m
+I stand corrected; I should have said that none of the UDC drivers in 
+drivers/usb/gadget/udc implements the flags.
 
-configs tested: 58
-configs skipped: 0
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-i386         buildonly-randconfig-001-20240628   gcc-10
-i386         buildonly-randconfig-001-20240629   gcc-7
-i386         buildonly-randconfig-002-20240628   gcc-10
-i386         buildonly-randconfig-002-20240628   gcc-13
-i386         buildonly-randconfig-002-20240629   gcc-7
-i386         buildonly-randconfig-003-20240628   gcc-10
-i386         buildonly-randconfig-003-20240628   gcc-13
-i386         buildonly-randconfig-003-20240629   gcc-7
-i386         buildonly-randconfig-004-20240628   gcc-10
-i386         buildonly-randconfig-004-20240628   gcc-13
-i386         buildonly-randconfig-004-20240629   gcc-7
-i386         buildonly-randconfig-005-20240628   clang-18
-i386         buildonly-randconfig-005-20240628   gcc-10
-i386         buildonly-randconfig-005-20240629   gcc-7
-i386         buildonly-randconfig-006-20240628   gcc-10
-i386         buildonly-randconfig-006-20240628   gcc-13
-i386         buildonly-randconfig-006-20240629   gcc-7
-i386                  randconfig-001-20240628   gcc-10
-i386                  randconfig-001-20240629   gcc-7
-i386                  randconfig-002-20240628   gcc-10
-i386                  randconfig-002-20240628   gcc-13
-i386                  randconfig-002-20240629   gcc-7
-i386                  randconfig-003-20240628   clang-18
-i386                  randconfig-003-20240628   gcc-10
-i386                  randconfig-003-20240629   gcc-7
-i386                  randconfig-004-20240628   gcc-10
-i386                  randconfig-004-20240628   gcc-13
-i386                  randconfig-004-20240629   gcc-7
-i386                  randconfig-005-20240628   clang-18
-i386                  randconfig-005-20240628   gcc-10
-i386                  randconfig-005-20240629   gcc-7
-i386                  randconfig-006-20240628   gcc-10
-i386                  randconfig-006-20240628   gcc-13
-i386                  randconfig-006-20240629   gcc-7
-i386                  randconfig-011-20240628   clang-18
-i386                  randconfig-011-20240628   gcc-10
-i386                  randconfig-011-20240629   gcc-7
-i386                  randconfig-012-20240628   gcc-10
-i386                  randconfig-012-20240628   gcc-9
-i386                  randconfig-012-20240629   gcc-7
-i386                  randconfig-013-20240628   gcc-10
-i386                  randconfig-013-20240628   gcc-13
-i386                  randconfig-013-20240629   gcc-7
-i386                  randconfig-014-20240628   clang-18
-i386                  randconfig-014-20240628   gcc-10
-i386                  randconfig-014-20240629   gcc-7
-i386                  randconfig-015-20240628   gcc-10
-i386                  randconfig-015-20240628   gcc-13
-i386                  randconfig-015-20240629   gcc-7
-i386                  randconfig-016-20240628   gcc-10
-i386                  randconfig-016-20240628   gcc-7
-i386                  randconfig-016-20240629   gcc-7
-openrisc                          allnoconfig   gcc-13.2.0
-parisc                            allnoconfig   gcc-13.2.0
-powerpc                           allnoconfig   gcc-13.2.0
-riscv                             allnoconfig   gcc-13.2.0
-s390                              allnoconfig   gcc-13.2.0
-um                                allnoconfig   gcc-13.2.0
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Alan Stern
 
