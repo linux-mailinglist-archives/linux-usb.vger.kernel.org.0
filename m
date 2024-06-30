@@ -1,121 +1,129 @@
-Return-Path: <linux-usb+bounces-11800-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11801-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B21F91CDA4
-	for <lists+linux-usb@lfdr.de>; Sat, 29 Jun 2024 16:40:59 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF50691D1F9
+	for <lists+linux-usb@lfdr.de>; Sun, 30 Jun 2024 16:12:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 74825B222CC
-	for <lists+linux-usb@lfdr.de>; Sat, 29 Jun 2024 14:40:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8BAA4281CF0
+	for <lists+linux-usb@lfdr.de>; Sun, 30 Jun 2024 14:12:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01A1382483;
-	Sat, 29 Jun 2024 14:40:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E85814B953;
+	Sun, 30 Jun 2024 14:11:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="U023f2iv"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="axmNJQY9"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mout.web.de (mout.web.de [212.227.15.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF2E25660;
-	Sat, 29 Jun 2024 14:40:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3CFD1474B4;
+	Sun, 30 Jun 2024 14:11:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719672047; cv=none; b=eopcBHJ6ihvKK5e5sdj2R2RqAW4+1W49kYM73ZuMiCAcOsy47MUTkV8o/a+17BHw22Sr7AebbLobjX8w5IucX95YuF7yugaPpMOThFAAvB+5HfYtJerrRhCaKbUSjVJTaLFq36LguWhLrwYuozwiABN8KAft+QK2dnrLsGRLM94=
+	t=1719756714; cv=none; b=ZhvXicXl2lcLV6ZryktV+miBYjP0e3gT67rKRodXOM0ko/yF08m2sY2EqoUe9HmsI1DAeZOjMJWC2a07B4ns6jPaRtJNCkJvZOpVWPvb5jSpHTI01a0aKE4GTgrLhfIW7QaHevywpDrM0LOV53QlsgCB1tfixBfUfIAItUhZOjM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719672047; c=relaxed/simple;
-	bh=4BbzsoAcYjjslEn0KSNDVOtRhzU2MoWz1axFIMNUH+A=;
-	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=lmcjW6RjlofdkV2d6yfHz55XQdkHAoGfp3KKYUiW6hShWlQEpuSEmL8yclhD7wjLIfeA/Jhg5grXyWGknRmTd5eUVn01d9H5RoLiKUWAPfViTRG00CGn0QSr1VsuLgHGqMOhzsL1ZO557qX+MvccEGfn5ry8fHJCw5hH0JVhTyY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=U023f2iv; arc=none smtp.client-ip=212.227.15.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1719672024; x=1720276824; i=markus.elfring@web.de;
-	bh=PaPR7WLBZJA1HrQa7Iavj/L9F3coe01A/6bOeloyPcI=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:From:
-	 Subject:Content-Type:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=U023f2ivaOADosPdQNx7ZFM8a5bMFWc2S+Nrvvz+a2PK0cqkI3NmdrxTKX89G0Zv
-	 GSpRMhAaUSoatfz1wY3UcrvuQa9IpthzHxZM4OZyWDoGqGabNcNPlTmk+p7wCVRsb
-	 hu12G+w+WumW3TalVjCkVMQV2wqEfEJ1G0h4NTMmIeLA5ayAJs3lBNVttf7vx8pf/
-	 5nZV3/IEeMAM+pPiq+jiBn3UOl5iwKCzUyHWh4Lyd5dn/9jIFphJskynDP7lOhnug
-	 QS1mOho8eOyiO1bD2phwy0PCVZjQlKPCYFRIG76UhPKjxNnEWSxiNPECqdr3of1+S
-	 FR0nreGS+Ph/HtH40A==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.21] ([94.31.82.95]) by smtp.web.de (mrweb005
- [213.165.67.108]) with ESMTPSA (Nemesis) id 1MyNwm-1sDqM812aa-0165Bv; Sat, 29
- Jun 2024 16:40:24 +0200
-Message-ID: <5d97e724-928d-45aa-b526-ee9c0d71dfd5@web.de>
-Date: Sat, 29 Jun 2024 16:40:20 +0200
+	s=arc-20240116; t=1719756714; c=relaxed/simple;
+	bh=00tTz6jiapt35L8jKidRiTBV5oh83sFn0omMIT1H/yM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=JNcPSJB45LJYTL22QhpiX9qBKqVxPmRLLFkw8Lo2y3g79tbKfhcYQgPQN++sI4Go7BNuipNPskbUDITesd2JE9AM0SURhyHqX1nH0GjXQ9T4ud0U7g5A33HPxS1KiIH0x2O74BQ/nQM+CQqYhDBbjh8r75fdX+4Olj6XVaWuSvQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=axmNJQY9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C80D6C2BD10;
+	Sun, 30 Jun 2024 14:11:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1719756714;
+	bh=00tTz6jiapt35L8jKidRiTBV5oh83sFn0omMIT1H/yM=;
+	h=Date:From:To:Cc:Subject:From;
+	b=axmNJQY9Bm3D6yzxa1VNUUNUQUHgKLWGP94U3NFljpAsk8M4dvYEXnoKGFOa4HZqH
+	 EE86DIqaC2yj6kaVdpTogMA8AYa9HIhkLApLtgCjifL6JxOLPGRcEmWYUXgm3+FrWO
+	 KZQO0qMe0RfDSuxoIVnqUUIhipkR6CWg8aGm5rKY=
+Date: Sun, 30 Jun 2024 16:11:46 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB driver fixes for 6.10-rc6
+Message-ID: <ZoFnokzotlrCPKfs@kroah.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org,
- Amelie Delaunay <amelie.delaunay@st.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Content-Language: en-GB
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
- Julia Lawall <julia.lawall@inria.fr>
-From: Markus Elfring <Markus.Elfring@web.de>
-Subject: [PATCH] usb: typec: stusb160x: Use common code in stusb160x_probe()
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:XjXAvu5rOee3IFBmLF07cD2Wldccy5BMejPO8HHUoJI1MQVEM0T
- /US+0bD3lPhS7JIN0hw3xdXW83j9POdZQqKZNiNN4oU1Wv4hVa9HjNEMYzMU9xawJFXqHZi
- oTYOry/WZrI8+2wmiUGIXvGPk+g+aHD/93I65NDf/BQMqFIrOwnBjOMchCfdSBKuMaU1knl
- 1freYno+s5UvLFfPriPhQ==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:vR2SkLRsqGY=;qK9Zj4+2CL+s1ELaJlKjU7yC4F6
- QceVF5bhFm00CspckrgTmtkMklRknQqKPSmGtDO6q6LXFvQ4uZcbsyOzx4TCKfg7Ka/TmJ6f0
- KNf4pw4gKXNoF55U5/X88jdpHC2GYMEh43sSij0GdflE0XGcCa28eJyCfQzxNyjk+4ceQrydn
- jzN52R6aYSy8EIDjaZ+EF0Voghub+coQU0Y9hnmgL6WgHkaxbzR4UD9fxBwCE39cbhkHN0GsN
- FEZ5rxKxF3Ex78sAsT36td5Ra4JdkmYMo15SKLdn4qE3kXuVaL+PJbzSengijncI3PXrlivbV
- I1QlJftvexNJtS8IexVkjm1ULhrroXtWd5rRAeyhHSYV/Ysh3IvQVdh8Tv/+PFiFb5OB38MsS
- /jgA63O94acPBB8EoRGnSsAyjiP4nu6cRQ91UJtvkYiRkn567KKaY3AZ5hC1gs5C0WfBAzKH0
- iujBHTiVvN+MX+5wxZ7GcbzKDdQS1Zwc9N2zpRmCjjj3NbYSNWs41cpoFuD7ElpPYrYgdlGlh
- ZoQYx/R+mPT2T8FPs/UxTvHeyNfC8OfqLvbPJwFbNlLLErccee1l0Pw7QrQR3qFzSLRYnLiB6
- KKVoRkJTeMHwDx1x4LHuhnvAfJscj9cirxBJIOecdogct0iIFtDJISpou5VGzmqqdX2yr8MWZ
- qxV16OrQZ4tmNq6TgwipqwRi9itMUnoa8rBb9lCyLJps9djxinRlHHaVR6eQlIP8CCCbZddKa
- 3MAtgXQ4sjp6USWV9qf/6fZkC/23OBjQ/HEGbZfrBkrjJeAvaZyiTYTHiuI1Q0F3qaJXKYj0L
- EHHJ3ZaK6mpGWWf/dz2Bs2oOl5kjcvJyikmlEjV79emOo=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-From: Markus Elfring <elfring@users.sourceforge.net>
-Date: Sat, 29 Jun 2024 16:18:23 +0200
+The following changes since commit 6ba59ff4227927d3a8530fc2973b80e94b54d58f:
 
-Replace a function call and a return statement by a status code assignment
-and a goto statement so that a bit of common code can be better reused
-at the end of this function implementation.
+  Linux 6.10-rc4 (2024-06-16 13:40:16 -0700)
 
-Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
-=2D--
- drivers/usb/typec/stusb160x.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+are available in the Git repository at:
 
-diff --git a/drivers/usb/typec/stusb160x.c b/drivers/usb/typec/stusb160x.c
-index f3140fc04c12..e610f19126b7 100644
-=2D-- a/drivers/usb/typec/stusb160x.c
-+++ b/drivers/usb/typec/stusb160x.c
-@@ -777,9 +777,8 @@ static int stusb160x_probe(struct i2c_client *client)
- 		}
- 	}
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.10-rc6
 
--	fwnode_handle_put(fwnode);
--
--	return 0;
-+	ret =3D 0;
-+	goto fwnode_put;
+for you to fetch changes up to fc1d1a712b517bbcb383b1f1f7ef478e7d0579f2:
 
- role_sw_put:
- 	if (chip->role_sw)
-=2D-
-2.45.2
+  usb: dwc3: core: Workaround for CSR read timeout (2024-06-27 16:25:38 +0200)
 
+----------------------------------------------------------------
+USB fixes for 6.10-rc6
+
+Here are a handful of small USB driver fixes for 6.10-rc6 to resolve
+some reported issues.  Included in here are:
+  - typec driver bugfixes
+  - usb gadget driver reverts for commits that were reported to have
+    problems
+  - resource leak bugfix
+  - gadget driver bugfixes
+  - dwc3 driver bugfixes
+  - usb atm driver bugfix for when syzbot got loose on it
+
+All of these have been in linux-next this week with no reported issues.
+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+Dan Carpenter (1):
+      usb: musb: da8xx: fix a resource leak in probe()
+
+Diogo Ivo (1):
+      usb: typec: ucsi_acpi: Add LG Gram quirk
+
+Fabrice Gasnier (1):
+      usb: ucsi: stm32: fix command completion handling
+
+Ferry Toth (2):
+      Revert "usb: gadget: u_ether: Re-attach netif device to mirror detachment"
+      Revert "usb: gadget: u_ether: Replace netif_stop_queue with netif_device_detach"
+
+Javier Carrasco (1):
+      usb: typec: ucsi: glink: fix child node release in probe function
+
+Jeremy Kerr (1):
+      usb: gadget: aspeed_udc: fix device address configuration
+
+Jos Wang (1):
+      usb: dwc3: core: Workaround for CSR read timeout
+
+Meng Li (1):
+      usb: dwc3: core: remove lock of otg mode during gadget suspend/resume to avoid deadlock
+
+Nikita Zhandarovich (1):
+      usb: atm: cxacru: fix endpoint checking in cxacru_bind()
+
+Oliver Neukum (2):
+      usb: gadget: printer: SS+ support
+      usb: gadget: printer: fix races against disable
+
+ drivers/usb/atm/cxacru.c                | 14 ++++++++
+ drivers/usb/dwc3/core.c                 | 26 ++++++++++----
+ drivers/usb/gadget/function/f_printer.c | 40 +++++++++++++++------
+ drivers/usb/gadget/function/u_ether.c   |  4 +--
+ drivers/usb/gadget/udc/aspeed_udc.c     |  4 +--
+ drivers/usb/musb/da8xx.c                |  8 +++--
+ drivers/usb/typec/ucsi/ucsi_acpi.c      | 61 +++++++++++++++++++++++++++++++++
+ drivers/usb/typec/ucsi/ucsi_glink.c     |  5 ++-
+ drivers/usb/typec/ucsi/ucsi_stm32g0.c   | 19 +++++++---
+ 9 files changed, 152 insertions(+), 29 deletions(-)
 
