@@ -1,60 +1,51 @@
-Return-Path: <linux-usb+bounces-11821-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11822-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D8D6891DF6B
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Jul 2024 14:35:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 02E9791E086
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Jul 2024 15:22:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 831931F2484A
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Jul 2024 12:35:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AD18528568B
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Jul 2024 13:22:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1A4A14B97D;
-	Mon,  1 Jul 2024 12:35:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=inbox.lv header.i=@inbox.lv header.b="V3hYOWf2"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C45115E5C9;
+	Mon,  1 Jul 2024 13:21:50 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from shark3.inbox.lv (shark3.inbox.lv [194.152.32.83])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D34826BB33
-	for <linux-usb@vger.kernel.org>; Mon,  1 Jul 2024 12:35:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.152.32.83
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC2E315DBB7
+	for <linux-usb@vger.kernel.org>; Mon,  1 Jul 2024 13:21:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719837325; cv=none; b=nhSxq035U+gZC6VnTBg4DTNDoThgiFnpNzL0Hi0ugtrxNZZB31tQ2O/BVBi9hVVBiKf/JJJIV/mPPneO9pW0acLcvWvuYj6l2NqsXA35a8IKU0fPJ3R+iESdmhT/71IuobcPY86sJG/U/CaMHHVEB/vedfPoY+Z/Q5qnaqz4tzA=
+	t=1719840110; cv=none; b=kHA7jF+oXRHrp5z2h2JCizALLXLtEGWSro7iUvE+r6s589L4V2Y2AHliKftctosGBCvdjdpdsWNZt1f3npc9QNQg0eJXKXR9DpWkBTn/gH1wQamIOGaVsSjaSUGdFR7KtJD2QIz/Pdaz7Jqjww0vrTq8EGwaY9LfaHbUvaMxzW8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719837325; c=relaxed/simple;
-	bh=d6iQRsbW4HOdZ+2IUpqrmV4MQAwypxkgPd+rbrtg+1Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=N5AWuJ4j71BeUBkGJdNwSp6cygOeN9dD3rjhNVkkKV/Vf5lXSo2jea+pvXi5Y//UMSI4MGYiJTQ3crhHDhvXsGn7b+EBI56gK3bgarQWr74PST7NzjK2KtWEyyg1NX1OzSqTwlStnbrSjKz8t+ZorswIeG3l3nK7bujwCgUz2uk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=inbox.lv; spf=pass smtp.mailfrom=inbox.lv; dkim=pass (1024-bit key) header.d=inbox.lv header.i=@inbox.lv header.b=V3hYOWf2; arc=none smtp.client-ip=194.152.32.83
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=inbox.lv
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=inbox.lv
-Received: from shark3.inbox.lv (localhost [127.0.0.1])
-	by shark3-out.inbox.lv (Postfix) with ESMTP id 4WCQMs0nvszMl0k;
-	Mon,  1 Jul 2024 15:29:29 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=inbox.lv;
-	s=p20220324; t=1719836969; x=1719838769;
-	bh=d6iQRsbW4HOdZ+2IUpqrmV4MQAwypxkgPd+rbrtg+1Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:X-ESPOL:
-	 From:Date:To:Cc:Message-ID:Subject:Reply-To;
-	b=V3hYOWf2JUnq6VJ3X5uJ8tsZnkSJU2kAcUuKCbSqrPQtduybVmHLolNOIlZAltt47
-	 gw2oxYMnW+1OSGMRf2RpbBts2A/rUEioBSAtdPVa+l98MfXquZMuCgixs54UNWJPyS
-	 udb0iMlxHwfxJZzMyp+URnR6EDn74oWvpLCbqwrc=
-Received: from mail.inbox.lv (pop1 [127.0.0.1])
-	by shark3-in.inbox.lv (Postfix) with ESMTP id 4WCQMs0HJMzMkw0;
-	Mon,  1 Jul 2024 15:29:29 +0300 (EEST)
-From: Dmitry Smirnov <d.smirnov@inbox.lv>
-To: gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
-	Dmitry Smirnov <d.smirnov@inbox.lv>
-Subject: Re: [PATCH V4] usb: serial: Fix mos7840 hangup on resume
-Date: Mon,  1 Jul 2024 15:28:56 +0300
-Message-ID: <20240701122909.54840-1-d.smirnov@inbox.lv>
-X-Mailer: git-send-email 2.45.1
-In-Reply-To: <20240614224556.23215-1-d.smirnov@inbox.lv>
-References: <20240614224556.23215-1-d.smirnov@inbox.lv>
+	s=arc-20240116; t=1719840110; c=relaxed/simple;
+	bh=1lv3rmU3lcZ4g6M+nFqKfNb30Sta/UTaQTJbhcJNPv8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=AgS3bnqwDO6D/wbEDcyHnAWw02RfUkkOSY934mNTxsX5OaCHQPIDlQq+HB7XfgdzY/3HA8JFNwozsN6mSZtyM9zvgM/rybbI+tRbJH8g86txUYa+L5Mb3kfKLn9rxUVoO3zKpVQe1gmB6fCKQXPZwHE1uAqzRW6yggzIuRJm/ac=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from dude02.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::28])
+	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
+	(envelope-from <m.felsch@pengutronix.de>)
+	id 1sOGyT-0007ES-NJ; Mon, 01 Jul 2024 15:21:41 +0200
+From: Marco Felsch <m.felsch@pengutronix.de>
+To: heikki.krogerus@linux.intel.com,
+	gregkh@linuxfoundation.org,
+	m.felsch@pengutronix.de,
+	rdbabiera@google.com,
+	festevam@denx.de
+Cc: kernel@pengutronix.de,
+	linux@roeck-us.net,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2] usb: typec: tcpci: add support to set connector orientation
+Date: Mon,  1 Jul 2024 15:21:24 +0200
+Message-Id: <20240701132133.3054394-1-m.felsch@pengutronix.de>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -62,11 +53,150 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: OK
-X-ESPOL: EZeEAiZdmGU/2M22KJpl7v3lxN6tV14/zlT3stssiwZUt7LCst1zeGmRGZiNag+6bg==
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::28
+X-SA-Exim-Mail-From: m.felsch@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
-Are any further steps required on my part?
+This add the support to set the optional connector orientation bit which
+is part of the optional CONFIG_STANDARD_OUTPUT register 0x18 [1]. This
+allows system designers to connect the tcpc orientation pin directly to
+the 2:1 ss-mux.
 
+[1] https://www.usb.org/sites/default/files/documents/usb-port_controller_specification_rev2.0_v1.0_0.pdf
+
+Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 ---
-Dmitry
+Changelog:
+v2:
+- added Heikki's reviewed-by
+- rebased on top of v6.10-rc1
+
+v1:
+- https://lore.kernel.org/all/20240222210903.208901-1-m.felsch@pengutronix.de/
+
+ drivers/usb/typec/tcpm/tcpci.c | 44 ++++++++++++++++++++++++++++++++++
+ include/linux/usb/tcpci.h      |  8 +++++++
+ 2 files changed, 52 insertions(+)
+
+diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
+index c962014bba4e..8a18d561b063 100644
+--- a/drivers/usb/typec/tcpm/tcpci.c
++++ b/drivers/usb/typec/tcpm/tcpci.c
+@@ -67,6 +67,18 @@ static int tcpci_write16(struct tcpci *tcpci, unsigned int reg, u16 val)
+ 	return regmap_raw_write(tcpci->regmap, reg, &val, sizeof(u16));
+ }
+ 
++static bool tcpci_check_std_output_cap(struct regmap *regmap, u8 mask)
++{
++	unsigned int reg;
++	int ret;
++
++	ret = regmap_read(regmap, TCPC_STD_OUTPUT_CAP, &reg);
++	if (ret < 0)
++		return ret;
++
++	return (reg & mask) == mask;
++}
++
+ static int tcpci_set_cc(struct tcpc_dev *tcpc, enum typec_cc_status cc)
+ {
+ 	struct tcpci *tcpci = tcpc_to_tcpci(tcpc);
+@@ -301,6 +313,28 @@ static int tcpci_set_polarity(struct tcpc_dev *tcpc,
+ 			   TCPC_TCPC_CTRL_ORIENTATION : 0);
+ }
+ 
++static int tcpci_set_orientation(struct tcpc_dev *tcpc,
++				 enum typec_orientation orientation)
++{
++	struct tcpci *tcpci = tcpc_to_tcpci(tcpc);
++	unsigned int reg;
++
++	switch (orientation) {
++	case TYPEC_ORIENTATION_NONE:
++		/* We can't put a single output into high impedance */
++		fallthrough;
++	case TYPEC_ORIENTATION_NORMAL:
++		reg = TCPC_CONFIG_STD_OUTPUT_ORIENTATION_NORMAL;
++		break;
++	case TYPEC_ORIENTATION_REVERSE:
++		reg = TCPC_CONFIG_STD_OUTPUT_ORIENTATION_FLIPPED;
++		break;
++	}
++
++	return regmap_update_bits(tcpci->regmap, TCPC_CONFIG_STD_OUTPUT,
++				  TCPC_CONFIG_STD_OUTPUT_ORIENTATION_MASK, reg);
++}
++
+ static void tcpci_set_partner_usb_comm_capable(struct tcpc_dev *tcpc, bool capable)
+ {
+ 	struct tcpci *tcpci = tcpc_to_tcpci(tcpc);
+@@ -830,6 +864,9 @@ struct tcpci *tcpci_register_port(struct device *dev, struct tcpci_data *data)
+ 	if (tcpci->data->vbus_vsafe0v)
+ 		tcpci->tcpc.is_vbus_vsafe0v = tcpci_is_vbus_vsafe0v;
+ 
++	if (tcpci->data->set_orientation)
++		tcpci->tcpc.set_orientation = tcpci_set_orientation;
++
+ 	err = tcpci_parse_config(tcpci);
+ 	if (err < 0)
+ 		return ERR_PTR(err);
+@@ -873,6 +910,13 @@ static int tcpci_probe(struct i2c_client *client)
+ 	if (err < 0)
+ 		return err;
+ 
++	err = tcpci_check_std_output_cap(chip->data.regmap,
++					 TCPC_STD_OUTPUT_CAP_ORIENTATION);
++	if (err < 0)
++		return err;
++
++	chip->data.set_orientation = err;
++
+ 	chip->tcpci = tcpci_register_port(&client->dev, &chip->data);
+ 	if (IS_ERR(chip->tcpci))
+ 		return PTR_ERR(chip->tcpci);
+diff --git a/include/linux/usb/tcpci.h b/include/linux/usb/tcpci.h
+index 47a86b8a4a50..0ab39b6ea205 100644
+--- a/include/linux/usb/tcpci.h
++++ b/include/linux/usb/tcpci.h
+@@ -47,6 +47,9 @@
+ #define TCPC_SINK_FAST_ROLE_SWAP	BIT(0)
+ 
+ #define TCPC_CONFIG_STD_OUTPUT		0x18
++#define TCPC_CONFIG_STD_OUTPUT_ORIENTATION_MASK		BIT(0)
++#define TCPC_CONFIG_STD_OUTPUT_ORIENTATION_NORMAL	0
++#define TCPC_CONFIG_STD_OUTPUT_ORIENTATION_FLIPPED	1
+ 
+ #define TCPC_TCPC_CTRL			0x19
+ #define TCPC_TCPC_CTRL_ORIENTATION	BIT(0)
+@@ -127,6 +130,7 @@
+ #define TCPC_DEV_CAP_2			0x26
+ #define TCPC_STD_INPUT_CAP		0x28
+ #define TCPC_STD_OUTPUT_CAP		0x29
++#define TCPC_STD_OUTPUT_CAP_ORIENTATION	BIT(0)
+ 
+ #define TCPC_MSG_HDR_INFO		0x2e
+ #define TCPC_MSG_HDR_INFO_DATA_ROLE	BIT(3)
+@@ -209,6 +213,9 @@ struct tcpci;
+  *		swap following Discover Identity on SOP' occurs.
+  *		Return true when the TCPM is allowed to request a Vconn swap
+  *		after Discovery Identity on SOP.
++ * @set_orientation:
++ *		Optional; Enable setting the connector orientation
++ *		CONFIG_STANDARD_OUTPUT (0x18) bit0.
+  */
+ struct tcpci_data {
+ 	struct regmap *regmap;
+@@ -216,6 +223,7 @@ struct tcpci_data {
+ 	unsigned char auto_discharge_disconnect:1;
+ 	unsigned char vbus_vsafe0v:1;
+ 	unsigned char cable_comm_capable:1;
++	unsigned char set_orientation:1;
+ 
+ 	int (*init)(struct tcpci *tcpci, struct tcpci_data *data);
+ 	int (*set_vconn)(struct tcpci *tcpci, struct tcpci_data *data,
+-- 
+2.39.2
+
 
