@@ -1,272 +1,199 @@
-Return-Path: <linux-usb+bounces-11818-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11819-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3703B91DC07
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Jul 2024 12:04:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 878CB91DE46
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Jul 2024 13:44:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B60761F23DAA
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Jul 2024 10:04:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EA6BA2879A1
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Jul 2024 11:44:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63E2712C479;
-	Mon,  1 Jul 2024 10:03:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D4CB143737;
+	Mon,  1 Jul 2024 11:44:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TVH2Jv0Z"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="axQMZMd5"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f179.google.com (mail-il1-f179.google.com [209.85.166.179])
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6420784D13;
-	Mon,  1 Jul 2024 10:03:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4236D2B9C6;
+	Mon,  1 Jul 2024 11:44:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719828226; cv=none; b=ohf+UcsuGcHPH85bN5A4PNmFLyZSsB+O4BKlNfTLBscASIk0jjPSL85OP5NJP821HlVGBH497I3yXyUZ0MtQ7o+2dtjk2x9c9CqmTvU3CdRc7l/6iPbFI/JWrCE+Heor7JjWNmJZ1/jAiSw0EGgCHsMzBj7CkCPfKypcbXeV6j0=
+	t=1719834258; cv=none; b=SELffUt0IzB434VU8OKLzezYyKkq796z5zWKVaGMTwbAxTIRps8B9jWpNPJp42MiYh1I/EJ5TXhbswMpMe2YHs4I15mkW3WYdS5DpAANCQCGVoXAOamZvmvOrjpSzgUoTsSKfhPuXnPT76Ezsvk9IHjIRjQBfVcdo0VbDdgQipU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719828226; c=relaxed/simple;
-	bh=WoyZo3J48/BTK8Q5qPu8vu9i2RepQ1vve6EEIdIv+D4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Wt7QHGtNU8P/M9TWQwiff+1MP1qZ8ytEI7FcGrtQ/9hCgf8lalbwjD2ROgUtjFQNck9xVrudxk5jHdDQ8YPW9r/Mk8ewxAtaF7mF1drJ23698LZhofJTgPGdJON6SwluumD5f6wRVms5gFRJ+jh0GMt/RbyDqFcTMkg/6W5GWsE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TVH2Jv0Z; arc=none smtp.client-ip=209.85.166.179
+	s=arc-20240116; t=1719834258; c=relaxed/simple;
+	bh=EFhHZ8krS3YX4Rhnw6tPzG9ivsvic2w0ICte+D7epPw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=B3Ppn5O0RKy4OS6+wu8ESEAi492T3qH3A7+sLHiN3vmYySzvjEtrs4BIF/6KRrySgPwwC8kAB0TO4Sms/ES0CBx0DkhMSHQhiZgxeY64ZRWTr5WuvkiPfyh0w9X8ibjFepV+HFXZpNnsFuLrUgYuV1tSsAMHg0pZsoyy+olTdms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=axQMZMd5; arc=none smtp.client-ip=209.85.218.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-il1-f179.google.com with SMTP id e9e14a558f8ab-3738690172eso13950565ab.1;
-        Mon, 01 Jul 2024 03:03:45 -0700 (PDT)
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a70c0349b64so367127566b.1;
+        Mon, 01 Jul 2024 04:44:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719828224; x=1720433024; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=hurOhyWpabhW0TJQF2bFgJMj9d8jgnZbSnHU4diB3eQ=;
-        b=TVH2Jv0ZAHODdIV6HA9r3/0oJB/bFMlp3+05QBOrSF17U+lZv7ybVOI+K9qpiNzKW7
-         rdztwwremAARPUtC/XyWzr/8TXUHNL469MCI7ruNHoXaxzd3fWrRu8hRP2xsm0omHCj6
-         6HrxSuUoG7NHQtBXbxC2SV43Nv9KKDzP/hZstJY8S8T+JgcOA225KuYPIAJlbf6uQ0PA
-         Lv0rk45gFgFYpKZWHsMQGQthyB6gs5LvfbDR/VUrah6ooNf6NSeBw7sXKbVj10aOk206
-         vXg6PqV0kQFyn/2oy/v2b/x9kfVqtjND+cv1cSmMEF+1zV9YyM7Sj90dYLeOs5jHNR4E
-         cYow==
+        d=gmail.com; s=20230601; t=1719834255; x=1720439055; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=I9iAbQtFtdSiqgpd9jNTe/QjQNj0w6DRstuBh7C3leo=;
+        b=axQMZMd5OCWzLut2fDRNWCCuXKnEy5FT/zP+x4RUqELVeeYlSO1ws3HMCObzX35N0Y
+         UfaWToknLrPBO7HBnuC+yL+sYBgVWMfiZHS5U1yp5GxxEbw+L8LvrX33I55xfYaDNTir
+         FdTI5CNkbF/HVrlb8VWx4/tcVTGehuhDf6lP/fYvbgIeXAQuM8WQh5rwE2z/JyJDKVuJ
+         4qKgmBuCgdybzh8Pxd7fQLhnmUSRHEuPZf5vtEvmodoSlev5AFR66x9UMywqusGh/9Ex
+         Rb6rW0oADK0vrjq5VEb17vkY3gGM1+ZNr9kFCDIq7cSl2KwT9U0wUHik8LFs05gUjT39
+         +eRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719828224; x=1720433024;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hurOhyWpabhW0TJQF2bFgJMj9d8jgnZbSnHU4diB3eQ=;
-        b=JyRVlYnIkYhtMVuX6hrioqVqwmdYEKZFjzq8di+RdnbSfrDoSeFhD1k08o+eHrvYyu
-         P7FrtqK7QfaOncqykJsVC666ggMPk+m9A+9vr0pc9k5No9B6tPsvRF0naM0k61jlPjKn
-         wveoIBx2P2hQQ0WCLXMO0r+PuD7o2XTSkd2+m/p9vW26Yb6ZYtcmWqM1Uvyr9U0r3TBr
-         f5iiadoanUDfNie09vvpNj3v0yGZyon9dAAcClhIWpLjuCR8DEhYFWgmQpWqhI2Zwasd
-         o2wwf0hTTOQiFny+0fSYgmVw3wIzwjLo088ZDpDtpFyvgT3UWMGWCtrYouMpqtdoVbRP
-         f0Gw==
-X-Forwarded-Encrypted: i=1; AJvYcCUjpKdFZ8wLlLqEyP4GC9FtbtOnaC7fEf5uOz/bnCKyzu498i/mSCAkzl+35vtN462LFYpItjzfOdN+tyREsTI4z2eVy2nlQpVafFmcPB7aHOki1cuHmxa/3FvQRjfCg66qFaxqglPhlJbl6g2P8X+ow7nugE4VHSnnJZYp1r8/
-X-Gm-Message-State: AOJu0YxjTaFOXe5uFI1KaF3E43TDVe2M9vwAPMssz3CI3eXfg8ShpF+D
-	LSB9L2ZPTZaic7M8onMp3yc/k8NZtmPRo/ctz3EPVtRngnsB8JxuaC6qbw==
-X-Google-Smtp-Source: AGHT+IFGnU2mjoz9gPp3FUwgjA97XxV1JEWCuXRDRqFSmhKcNWhwZKoBv6J80NpwJ8GuF7c72ZQdsA==
-X-Received: by 2002:a05:6e02:1c41:b0:375:b2c1:a783 with SMTP id e9e14a558f8ab-37cd1793dacmr79099545ab.17.1719828224285;
-        Mon, 01 Jul 2024 03:03:44 -0700 (PDT)
-Received: from localhost.localdomain ([113.30.217.222])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-72c69b5188csm4073202a12.3.2024.07.01.03.03.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Jul 2024 03:03:43 -0700 (PDT)
-From: Anand Moon <linux.amoon@gmail.com>
-To: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>
-Cc: Anand Moon <linux.amoon@gmail.com>,
-	linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH-next v1] r8152: Convert tasklet API to new bottom half workqueue mechanism
-Date: Mon,  1 Jul 2024 15:33:27 +0530
-Message-ID: <20240701100329.93531-1-linux.amoon@gmail.com>
-X-Mailer: git-send-email 2.44.0
+        d=1e100.net; s=20230601; t=1719834255; x=1720439055;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=I9iAbQtFtdSiqgpd9jNTe/QjQNj0w6DRstuBh7C3leo=;
+        b=S/4G5HDqoBurPy+5IlCDdR4YyslSExMn0BVI0/o8YQ9spYGa6N3NHnpxtwU3VN8+N9
+         k1YERbweVf0JgPkWOQk6vjoIaqyVNM4H0j7ZYYWo4TXzfDTvSbbjoDDlDGnNFlKxCsb7
+         XB10h1gW9LBkues+nE/P+yjvE8zPF+VzfxWVThqQX/tZT9iZ6zo+wApICIttvMLANKx0
+         ch+XUXc+ya35FIpc7mXMrrk0wSWRkaVzvDZggp2W000Kkn6lRh6b7hwNbauw/dcL7Ny0
+         nxmEtz1O9NiICapykJVBDcZ9CNAVVuScID2LuQLuuXsX8yDsPVmT5OvBwjGh/4h4wPk9
+         yTsQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV8H87JMuKZ9LM37IWHSxyNAM41JkSKm/FFVZHVLroz8wT/S2Xmzl17EPtDJsoJrlRWNQsO9aIdb3uVSRMAXuNElDkDnU7EoOGv/eMtapyDZlpo1zUnQc5LAqchZ5/v6lsVC1C+/6xp
+X-Gm-Message-State: AOJu0YxndMvBsboNoL8tipkAaeNg8kBH8dUwSjLc2pgrBOev1Dz+6fms
+	/aLiGQAbKZri2irDhveXOfIxNfInhJjEJc2hybqvFJmymzVf/gNXnRzTKqOXSQ+IYSEtPQyGP3i
+	8v5xZh0GOEzW7fnN2EmSWd8Rs2PvWfG7piw8=
+X-Google-Smtp-Source: AGHT+IGP2RE/XOGWNnQ5wOLWhmgKlYA0QFP79Xr7+7awa8VbxGp5MuJB+YxschZcRrEBfy59TFrTmr4UL3Jh49GmJe0=
+X-Received: by 2002:a17:906:5643:b0:a72:6849:cb09 with SMTP id
+ a640c23a62f3a-a7514495b0dmr369152466b.53.1719834255355; Mon, 01 Jul 2024
+ 04:44:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240601120640.73556-1-joswang1221@gmail.com> <1662c9c9-7330-4794-843a-940f05802021@linux.intel.com>
+ <CAMtoTm1u+8ynBRaWgCMVgaR+dBoZfNGhzGqmvooBSDxZm5Qx+g@mail.gmail.com>
+ <c9430561-ecfe-5b36-9574-73a946410eea@linux.intel.com> <CAMtoTm1xYUuaV1rO3dZexS=q_5Xf61+QAZ1++VvzK10VtGHexA@mail.gmail.com>
+ <2521588d-30a6-0224-c7c9-3015e9cc65a3@linux.intel.com> <CAMtoTm2G-w+yRjechji7scJO-JZo6N==VK6Wun3ATRc7do9rEg@mail.gmail.com>
+ <b5deb873-7151-46fa-164e-9e2c6a339636@linux.intel.com> <CAMtoTm1cqeFhko_+D7cZL5vAv7ea+bvF0yGHn0Uy7cwyU=O0zw@mail.gmail.com>
+In-Reply-To: <CAMtoTm1cqeFhko_+D7cZL5vAv7ea+bvF0yGHn0Uy7cwyU=O0zw@mail.gmail.com>
+From: joswang <joswang1221@gmail.com>
+Date: Mon, 1 Jul 2024 19:44:03 +0800
+Message-ID: <CAMtoTm2MGnT+_U1JQFmbH7OgcH6s89ZtkNALkO44vSE35yi=qQ@mail.gmail.com>
+Subject: Re: [RFC 1/1] usb: host: xhci-plat: add enable XHCI-AVOID-BEI quirk
+ by dts
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: mathias.nyman@intel.com, gregkh@linuxfoundation.org, 
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	joswang <joswang@lenovo.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Migrate tasklet APIs to the new bottom half workqueue mechanism. It
-replaces all occurrences of tasklet usage with the appropriate workqueue
-APIs throughout the alteon driver. This transition ensures compatibility
-with the latest design and enhances performance
+Hi Mathias
 
-Signed-off-by: Anand Moon <linux.amoon@gmail.com>
----
-Tested on odroidxu4
----
- drivers/net/usb/r8152.c | 41 +++++++++++++++++++++--------------------
- 1 file changed, 21 insertions(+), 20 deletions(-)
+Do you have a better idea about this question?
 
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 15e12f46d0ea..57a932a6f759 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -26,6 +26,7 @@
- #include <linux/atomic.h>
- #include <linux/acpi.h>
- #include <linux/firmware.h>
-+#include <linux/workqueue.h>
- #include <crypto/hash.h>
- #include <linux/usb/r8152.h>
- #include <net/gso.h>
-@@ -883,7 +884,7 @@ struct r8152 {
- #ifdef CONFIG_PM_SLEEP
- 	struct notifier_block pm_notifier;
- #endif
--	struct tasklet_struct tx_tl;
-+	struct work_struct tx_work;
- 
- 	struct rtl_ops {
- 		void (*init)(struct r8152 *tp);
-@@ -1950,7 +1951,7 @@ static void write_bulk_callback(struct urb *urb)
- 		return;
- 
- 	if (!skb_queue_empty(&tp->tx_queue))
--		tasklet_schedule(&tp->tx_tl);
-+		queue_work(system_bh_wq, &tp->tx_work);
- }
- 
- static void intr_callback(struct urb *urb)
-@@ -2748,9 +2749,9 @@ static void tx_bottom(struct r8152 *tp)
- 	} while (res == 0);
- }
- 
--static void bottom_half(struct tasklet_struct *t)
-+static void bottom_half(struct work_struct *t)
- {
--	struct r8152 *tp = from_tasklet(tp, t, tx_tl);
-+	struct r8152 *tp = from_work(tp, t, tx_work);
- 
- 	if (test_bit(RTL8152_INACCESSIBLE, &tp->flags))
- 		return;
-@@ -2944,7 +2945,7 @@ static netdev_tx_t rtl8152_start_xmit(struct sk_buff *skb,
- 			schedule_delayed_work(&tp->schedule, 0);
- 		} else {
- 			usb_mark_last_busy(tp->udev);
--			tasklet_schedule(&tp->tx_tl);
-+			queue_work(system_bh_wq, &tp->tx_work);
- 		}
- 	} else if (skb_queue_len(&tp->tx_queue) > tp->tx_qlen) {
- 		netif_stop_queue(netdev);
-@@ -6826,11 +6827,11 @@ static void set_carrier(struct r8152 *tp)
- 	} else {
- 		if (netif_carrier_ok(netdev)) {
- 			netif_carrier_off(netdev);
--			tasklet_disable(&tp->tx_tl);
-+			disable_work_sync(&tp->tx_work);
- 			napi_disable(napi);
- 			tp->rtl_ops.disable(tp);
- 			napi_enable(napi);
--			tasklet_enable(&tp->tx_tl);
-+			enable_and_queue_work(system_bh_wq, &tp->tx_work);
- 			netif_info(tp, link, netdev, "carrier off\n");
- 		}
- 	}
-@@ -6866,7 +6867,7 @@ static void rtl_work_func_t(struct work_struct *work)
- 	/* don't schedule tasket before linking */
- 	if (test_and_clear_bit(SCHEDULE_TASKLET, &tp->flags) &&
- 	    netif_carrier_ok(tp->netdev))
--		tasklet_schedule(&tp->tx_tl);
-+		queue_work(system_bh_wq, &tp->tx_work);
- 
- 	if (test_and_clear_bit(RX_EPROTO, &tp->flags) &&
- 	    !list_empty(&tp->rx_done))
-@@ -6973,7 +6974,7 @@ static int rtl8152_open(struct net_device *netdev)
- 		goto out_unlock;
- 	}
- 	napi_enable(&tp->napi);
--	tasklet_enable(&tp->tx_tl);
-+	enable_and_queue_work(system_bh_wq, &tp->tx_work);
- 
- 	mutex_unlock(&tp->control);
- 
-@@ -7001,7 +7002,7 @@ static int rtl8152_close(struct net_device *netdev)
- #ifdef CONFIG_PM_SLEEP
- 	unregister_pm_notifier(&tp->pm_notifier);
- #endif
--	tasklet_disable(&tp->tx_tl);
-+	disable_work_sync(&tp->tx_work);
- 	clear_bit(WORK_ENABLE, &tp->flags);
- 	usb_kill_urb(tp->intr_urb);
- 	cancel_delayed_work_sync(&tp->schedule);
-@@ -8423,7 +8424,7 @@ static int rtl8152_pre_reset(struct usb_interface *intf)
- 		return 0;
- 
- 	netif_stop_queue(netdev);
--	tasklet_disable(&tp->tx_tl);
-+	disable_work_sync(&tp->tx_work);
- 	clear_bit(WORK_ENABLE, &tp->flags);
- 	usb_kill_urb(tp->intr_urb);
- 	cancel_delayed_work_sync(&tp->schedule);
-@@ -8468,7 +8469,7 @@ static int rtl8152_post_reset(struct usb_interface *intf)
- 	}
- 
- 	napi_enable(&tp->napi);
--	tasklet_enable(&tp->tx_tl);
-+	enable_and_queue_work(system_bh_wq, &tp->tx_work);
- 	netif_wake_queue(netdev);
- 	usb_submit_urb(tp->intr_urb, GFP_KERNEL);
- 
-@@ -8640,12 +8641,12 @@ static int rtl8152_system_suspend(struct r8152 *tp)
- 
- 		clear_bit(WORK_ENABLE, &tp->flags);
- 		usb_kill_urb(tp->intr_urb);
--		tasklet_disable(&tp->tx_tl);
-+		disable_work_sync(&tp->tx_work);
- 		napi_disable(napi);
- 		cancel_delayed_work_sync(&tp->schedule);
- 		tp->rtl_ops.down(tp);
- 		napi_enable(napi);
--		tasklet_enable(&tp->tx_tl);
-+		enable_and_queue_work(system_bh_wq, &tp->tx_work);
- 	}
- 
- 	/* If we're inaccessible here then some of the work that we did to
-@@ -9407,11 +9408,11 @@ static int rtl8152_change_mtu(struct net_device *dev, int new_mtu)
- 		if (netif_carrier_ok(dev)) {
- 			netif_stop_queue(dev);
- 			napi_disable(&tp->napi);
--			tasklet_disable(&tp->tx_tl);
-+			disable_work_sync(&tp->tx_work);
- 			tp->rtl_ops.disable(tp);
- 			tp->rtl_ops.enable(tp);
- 			rtl_start_rx(tp);
--			tasklet_enable(&tp->tx_tl);
-+			enable_and_queue_work(system_bh_wq, &tp->tx_work);
- 			napi_enable(&tp->napi);
- 			rtl8152_set_rx_mode(dev);
- 			netif_wake_queue(dev);
-@@ -9839,8 +9840,8 @@ static int rtl8152_probe_once(struct usb_interface *intf,
- 	mutex_init(&tp->control);
- 	INIT_DELAYED_WORK(&tp->schedule, rtl_work_func_t);
- 	INIT_DELAYED_WORK(&tp->hw_phy_work, rtl_hw_phy_work_func_t);
--	tasklet_setup(&tp->tx_tl, bottom_half);
--	tasklet_disable(&tp->tx_tl);
-+	INIT_WORK(&tp->tx_work, bottom_half);
-+	disable_work_sync(&tp->tx_work);
- 
- 	netdev->netdev_ops = &rtl8152_netdev_ops;
- 	netdev->watchdog_timeo = RTL8152_TX_TIMEOUT;
-@@ -9974,7 +9975,7 @@ static int rtl8152_probe_once(struct usb_interface *intf,
- 	unregister_netdev(netdev);
- 
- out1:
--	tasklet_kill(&tp->tx_tl);
-+	cancel_work_sync(&tp->tx_work);
- 	cancel_delayed_work_sync(&tp->hw_phy_work);
- 	if (tp->rtl_ops.unload)
- 		tp->rtl_ops.unload(tp);
-@@ -10030,7 +10031,7 @@ static void rtl8152_disconnect(struct usb_interface *intf)
- 		rtl_set_unplug(tp);
- 
- 		unregister_netdev(tp->netdev);
--		tasklet_kill(&tp->tx_tl);
-+		cancel_work_sync(&tp->tx_work);
- 		cancel_delayed_work_sync(&tp->hw_phy_work);
- 		if (tp->rtl_ops.unload)
- 			tp->rtl_ops.unload(tp);
--- 
-2.44.0
+Thanks=EF=BC=8C
 
+Jos Wang
+
+On Wed, Jun 12, 2024 at 10:23=E2=80=AFPM joswang <joswang1221@gmail.com> wr=
+ote:
+>
+> On Tue, Jun 11, 2024 at 11:00=E2=80=AFPM Mathias Nyman
+> <mathias.nyman@linux.intel.com> wrote:
+> >
+> > On 11.6.2024 17.45, joswang wrote:
+> > > On Tue, Jun 11, 2024 at 6:01=E2=80=AFPM Mathias Nyman
+> > > <mathias.nyman@linux.intel.com> wrote:
+> > >>
+> > >> On 6.6.2024 17.08, joswang wrote:
+> > >>> On Wed, Jun 5, 2024 at 6:31=E2=80=AFPM Mathias Nyman
+> > >>> <mathias.nyman@linux.intel.com> wrote:
+> > >> ...
+> > >>>>
+> > >>>> I was thinking of turning XHCI_AVOID_BEI behavior into the new def=
+ault, so no
+> > >>>> quirk flag would be needed:
+> > >>>>
+> > >>>> Currently without the quirk flag:
+> > >>>>
+> > >>>> - ISOC TRBs trigger interrupt if TRB is the last in the TD
+> > >>>>
+> > >>>> Currently with XHCI_AVOID_BEI quirk flag:
+> > >>>>
+> > >>>> - ISOC TRBs trigger interrupt if TRB is the last in the TD
+> > >>>> - Interrupt is additionally triggered every 32 isoc TRB (initially=
+).
+> > >>>> - if more than 128 events are processed in one interrupt then the
+> > >>>>      32 is halved, and we trigger an interrupts every 16th isoc TR=
+B, and so
+> > >>>>      on, 16 -> 8...
+> > >>>>
+> > >>>> I would remove the quirk flag, and make all controllers interrupt
+> > >>>> behave as if it was set. i.e. interrupt at least every 32 isoc TRB
+> > >>>
+> > >>> Thank you for your detailed analysis.
+> > >>> Excuse me, I have a question, do you mean to set "Currently with
+> > >>> XHCI_AVOID_BEI quirk flag" as the default behavior?
+> > >>
+> > >> Yes, unless it causes some issues or there are strong objections
+> > >>
+> > >>>>
+> > >>>> Is there an actual real world case where interrupting every 32nd I=
+SOC TRB is
+> > >>>> too often?
+> > >>>
+> > >>> I mean that if the XHCI_AVOID_BEI quirk flag is set, an interrupt w=
+ill
+> > >>> be triggered every 8 TRBs, which makes the interrupts seem to be qu=
+ite
+> > >>> frequent.
+> > >>> Thanks
+> > >>> Jos
+> > >>>
+> > >>
+> > >> It should start with interrupting every 32nd isoc TD, not 8th
+> > >>
+> > >> #define AVOID_BEI_INTERVAL_MAX   32
+> > >>
+> > >> ir->isoc_bei_interval =3D AVOID_BEI_INTERVAL_MAX;
+> > >>
+> > >> Thanks
+> > >> Mathias
+> > >
+> > > As you mentioned=EF=BC=8Cif more than 128 events are processed in one
+> > > interrupt then the 32 is halved, and we trigger an interrupts every
+> > > 16th isoc TRB, and so on, 16 -> 8...
+> > > xhci_handle_events()
+> > >      ......
+> > >      if (event_loop++ > TRBS_PER_SEGMENT / 2) {
+> > >           if (ir->isoc_bei_interval > AVOID_BEI_INTERVAL_MIN)
+> > >                ir->isoc_bei_interval =3D ir->isoc_bei_interval / 2;
+> > >      }
+> > >      .......
+> >
+> > Yes, and to me this seems reasonable .
+> > If there are over 128 events per interrupt then we should interrupt mor=
+e often.
+> >
+> > Would this work as the default for the Synopsys hosts you are working w=
+ith?
+> >
+> > Thanks
+> > Mathias
+>
+> Without enabling XHCI_AVOID_BEI quirk, that is, triggering an
+> interrupt once for every 32TRB:
+> For some USB cameras (such as high-resolution cameras, etc.), the data
+> volume of one frame is relatively large, and the host controller will
+> frequently trigger interrupts during data transmission. For some SOC
+> platforms (such as rockchip platforms, which also use Synopsys USB IP)
+> with poor performance, it is possible that the CPU cannot respond to
+> interrupts in time, resulting in frame loss.
+> Therefore, I think that using XHCI_AVOID_BEI quirk by default may
+> aggravate the above problem. Please help evaluate, thank you.
+>
+> Thanks,
+> Jos Wang
 
