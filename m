@@ -1,202 +1,87 @@
-Return-Path: <linux-usb+bounces-11822-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11823-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02E9791E086
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Jul 2024 15:22:52 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CBB2191E717
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Jul 2024 20:05:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AD18528568B
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Jul 2024 13:22:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 08EAC1C21BE8
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Jul 2024 18:05:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C45115E5C9;
-	Mon,  1 Jul 2024 13:21:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAF8915F40A;
+	Mon,  1 Jul 2024 18:05:47 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC2E315DBB7
-	for <linux-usb@vger.kernel.org>; Mon,  1 Jul 2024 13:21:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id E9B58F9DF
+	for <linux-usb@vger.kernel.org>; Mon,  1 Jul 2024 18:05:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719840110; cv=none; b=kHA7jF+oXRHrp5z2h2JCizALLXLtEGWSro7iUvE+r6s589L4V2Y2AHliKftctosGBCvdjdpdsWNZt1f3npc9QNQg0eJXKXR9DpWkBTn/gH1wQamIOGaVsSjaSUGdFR7KtJD2QIz/Pdaz7Jqjww0vrTq8EGwaY9LfaHbUvaMxzW8=
+	t=1719857147; cv=none; b=s6z1Ej5FTuIJwumoZXwROqvh+I0Hwki0NR1EBdtyxro129IwBv7GBXUDn27Oka/HPOr6dnHgaHvAKh5vwGjktPdf75Wd2tkpIKATlXHXU1tzV9JeVkGotG8/AC3yo3U63QVWhFtk3W1J1k+mQ8fAUxs3eul1kdyS1f73Yp0WvA0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719840110; c=relaxed/simple;
-	bh=1lv3rmU3lcZ4g6M+nFqKfNb30Sta/UTaQTJbhcJNPv8=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=AgS3bnqwDO6D/wbEDcyHnAWw02RfUkkOSY934mNTxsX5OaCHQPIDlQq+HB7XfgdzY/3HA8JFNwozsN6mSZtyM9zvgM/rybbI+tRbJH8g86txUYa+L5Mb3kfKLn9rxUVoO3zKpVQe1gmB6fCKQXPZwHE1uAqzRW6yggzIuRJm/ac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from dude02.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::28])
-	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
-	(envelope-from <m.felsch@pengutronix.de>)
-	id 1sOGyT-0007ES-NJ; Mon, 01 Jul 2024 15:21:41 +0200
-From: Marco Felsch <m.felsch@pengutronix.de>
-To: heikki.krogerus@linux.intel.com,
-	gregkh@linuxfoundation.org,
-	m.felsch@pengutronix.de,
-	rdbabiera@google.com,
-	festevam@denx.de
-Cc: kernel@pengutronix.de,
-	linux@roeck-us.net,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2] usb: typec: tcpci: add support to set connector orientation
-Date: Mon,  1 Jul 2024 15:21:24 +0200
-Message-Id: <20240701132133.3054394-1-m.felsch@pengutronix.de>
-X-Mailer: git-send-email 2.39.2
+	s=arc-20240116; t=1719857147; c=relaxed/simple;
+	bh=QF23pLORqxgoiVCNdaY9QAL0PiZh1UC8yw2kYnFKBdA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=W1+3uB1243ZmJzP34CcqveVnzA1pRMxErbA0VLjGH2IR9pyB+jnNsllgifPTAfoR+bx9xYrgNwgDuvnCnXAikuxfDPYylDwXdRlH3xOnh/+ZWcw5zhumlrhi2xwbP9A4SvEtavEjOi0kVSMPbUbQVJgPVwaoMfp30k/GNdVqChg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
+Received: (qmail 864720 invoked by uid 1000); 1 Jul 2024 14:05:37 -0400
+Date: Mon, 1 Jul 2024 14:05:37 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Darrion Ramos <darrionramos@gmail.com>
+Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+  Andrey Konovalov <andreyknvl@gmail.com>,
+  USB list <linux-usb@vger.kernel.org>
+Subject: Re: Remote wake up in gadget drivers
+Message-ID: <21f8608d-8df7-47eb-8400-9a5a2165f57e@rowland.harvard.edu>
+References: <a306a653-b6cf-41e4-875f-6c520569b1fdn@googlegroups.com>
+ <CA+fCnZdZ96yW5tRfm-c1qXWfmNrVg9J1Yb779Ryht6M9v9FQbQ@mail.gmail.com>
+ <612f3eee-35fb-4888-b5d9-c17c223d40df@rowland.harvard.edu>
+ <CA+fCnZcrn1sr-sMbwk6i5RDMMh3q9TpBgkGAN+4cg4RaCo9S+g@mail.gmail.com>
+ <28b478e2-4b17-483a-9584-0e6342677ef0@rowland.harvard.edu>
+ <20240628211140.va5ghcr65dl6g323@synopsys.com>
+ <4539c3c5-61bf-4b4d-9391-a041a2a08b57@rowland.harvard.edu>
+ <CAE=33HWobLgdhx3nWrQGqcsVxPBK5zDxO4pL8YAOaPW1wTs09A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::28
-X-SA-Exim-Mail-From: m.felsch@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAE=33HWobLgdhx3nWrQGqcsVxPBK5zDxO4pL8YAOaPW1wTs09A@mail.gmail.com>
 
-This add the support to set the optional connector orientation bit which
-is part of the optional CONFIG_STANDARD_OUTPUT register 0x18 [1]. This
-allows system designers to connect the tcpc orientation pin directly to
-the 2:1 ss-mux.
+On Sun, Jun 30, 2024 at 11:22:12PM -0400, Darrion Ramos wrote:
+> (resending in plain text) Hello all, thank you for all your
+> information. It has been very helpful. I was able to implement the
+> usb_gadget_wakeup() call and set the USB_CONFIG_ATT_WAKEUP bit.
+> Setting the bit did create the  /sys/bus/usb/devices/.../power wakeup
+> files that I noticed were missing. Unfortunately usb_gadget_wakeup()
+> calls gadget->ops functions to send the signal and these need to be
+> implemented as well. From my understanding I need to translate the
+> __dwc3_gadget_wakeup() function in linux/drivers/usb/dwc3/gadget.c
+> into raw_gadget.c.
 
-[1] https://www.usb.org/sites/default/files/documents/usb-port_controller_specification_rev2.0_v1.0_0.pdf
+No, that's not right.  All raw_gadget.c has to do is call 
+usb_gadget_wakeup().
 
-Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
----
-Changelog:
-v2:
-- added Heikki's reviewed-by
-- rebased on top of v6.10-rc1
+The dwc3 gadget driver _does_ define a wakeup member of gadget->ops; it 
+points to the dwc3_gadget_wakeup() routine, which definitely is 
+implemented.
 
-v1:
-- https://lore.kernel.org/all/20240222210903.208901-1-m.felsch@pengutronix.de/
+>  I have not been able to properly look through the
+> __dwc3_gadget_wakeup() function yet, Andrey is it feasible to write
+> that function in the raw_gadget currently or is there something else I
+> am missing where I do not need that ops function in raw_gadget?
 
- drivers/usb/typec/tcpm/tcpci.c | 44 ++++++++++++++++++++++++++++++++++
- include/linux/usb/tcpci.h      |  8 +++++++
- 2 files changed, 52 insertions(+)
+You're missing something.  Think of it this way: If raw_gadget was 
+running on some device other than a Raspberry Pi, with a UDC controller 
+that wasn't DWC3, then it certainly would have no need to do anything 
+connected with __dwc3_gadget_wakeup().  The same is true when it _is_ 
+running on a Raspberry Pi.
 
-diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-index c962014bba4e..8a18d561b063 100644
---- a/drivers/usb/typec/tcpm/tcpci.c
-+++ b/drivers/usb/typec/tcpm/tcpci.c
-@@ -67,6 +67,18 @@ static int tcpci_write16(struct tcpci *tcpci, unsigned int reg, u16 val)
- 	return regmap_raw_write(tcpci->regmap, reg, &val, sizeof(u16));
- }
- 
-+static bool tcpci_check_std_output_cap(struct regmap *regmap, u8 mask)
-+{
-+	unsigned int reg;
-+	int ret;
-+
-+	ret = regmap_read(regmap, TCPC_STD_OUTPUT_CAP, &reg);
-+	if (ret < 0)
-+		return ret;
-+
-+	return (reg & mask) == mask;
-+}
-+
- static int tcpci_set_cc(struct tcpc_dev *tcpc, enum typec_cc_status cc)
- {
- 	struct tcpci *tcpci = tcpc_to_tcpci(tcpc);
-@@ -301,6 +313,28 @@ static int tcpci_set_polarity(struct tcpc_dev *tcpc,
- 			   TCPC_TCPC_CTRL_ORIENTATION : 0);
- }
- 
-+static int tcpci_set_orientation(struct tcpc_dev *tcpc,
-+				 enum typec_orientation orientation)
-+{
-+	struct tcpci *tcpci = tcpc_to_tcpci(tcpc);
-+	unsigned int reg;
-+
-+	switch (orientation) {
-+	case TYPEC_ORIENTATION_NONE:
-+		/* We can't put a single output into high impedance */
-+		fallthrough;
-+	case TYPEC_ORIENTATION_NORMAL:
-+		reg = TCPC_CONFIG_STD_OUTPUT_ORIENTATION_NORMAL;
-+		break;
-+	case TYPEC_ORIENTATION_REVERSE:
-+		reg = TCPC_CONFIG_STD_OUTPUT_ORIENTATION_FLIPPED;
-+		break;
-+	}
-+
-+	return regmap_update_bits(tcpci->regmap, TCPC_CONFIG_STD_OUTPUT,
-+				  TCPC_CONFIG_STD_OUTPUT_ORIENTATION_MASK, reg);
-+}
-+
- static void tcpci_set_partner_usb_comm_capable(struct tcpc_dev *tcpc, bool capable)
- {
- 	struct tcpci *tcpci = tcpc_to_tcpci(tcpc);
-@@ -830,6 +864,9 @@ struct tcpci *tcpci_register_port(struct device *dev, struct tcpci_data *data)
- 	if (tcpci->data->vbus_vsafe0v)
- 		tcpci->tcpc.is_vbus_vsafe0v = tcpci_is_vbus_vsafe0v;
- 
-+	if (tcpci->data->set_orientation)
-+		tcpci->tcpc.set_orientation = tcpci_set_orientation;
-+
- 	err = tcpci_parse_config(tcpci);
- 	if (err < 0)
- 		return ERR_PTR(err);
-@@ -873,6 +910,13 @@ static int tcpci_probe(struct i2c_client *client)
- 	if (err < 0)
- 		return err;
- 
-+	err = tcpci_check_std_output_cap(chip->data.regmap,
-+					 TCPC_STD_OUTPUT_CAP_ORIENTATION);
-+	if (err < 0)
-+		return err;
-+
-+	chip->data.set_orientation = err;
-+
- 	chip->tcpci = tcpci_register_port(&client->dev, &chip->data);
- 	if (IS_ERR(chip->tcpci))
- 		return PTR_ERR(chip->tcpci);
-diff --git a/include/linux/usb/tcpci.h b/include/linux/usb/tcpci.h
-index 47a86b8a4a50..0ab39b6ea205 100644
---- a/include/linux/usb/tcpci.h
-+++ b/include/linux/usb/tcpci.h
-@@ -47,6 +47,9 @@
- #define TCPC_SINK_FAST_ROLE_SWAP	BIT(0)
- 
- #define TCPC_CONFIG_STD_OUTPUT		0x18
-+#define TCPC_CONFIG_STD_OUTPUT_ORIENTATION_MASK		BIT(0)
-+#define TCPC_CONFIG_STD_OUTPUT_ORIENTATION_NORMAL	0
-+#define TCPC_CONFIG_STD_OUTPUT_ORIENTATION_FLIPPED	1
- 
- #define TCPC_TCPC_CTRL			0x19
- #define TCPC_TCPC_CTRL_ORIENTATION	BIT(0)
-@@ -127,6 +130,7 @@
- #define TCPC_DEV_CAP_2			0x26
- #define TCPC_STD_INPUT_CAP		0x28
- #define TCPC_STD_OUTPUT_CAP		0x29
-+#define TCPC_STD_OUTPUT_CAP_ORIENTATION	BIT(0)
- 
- #define TCPC_MSG_HDR_INFO		0x2e
- #define TCPC_MSG_HDR_INFO_DATA_ROLE	BIT(3)
-@@ -209,6 +213,9 @@ struct tcpci;
-  *		swap following Discover Identity on SOP' occurs.
-  *		Return true when the TCPM is allowed to request a Vconn swap
-  *		after Discovery Identity on SOP.
-+ * @set_orientation:
-+ *		Optional; Enable setting the connector orientation
-+ *		CONFIG_STANDARD_OUTPUT (0x18) bit0.
-  */
- struct tcpci_data {
- 	struct regmap *regmap;
-@@ -216,6 +223,7 @@ struct tcpci_data {
- 	unsigned char auto_discharge_disconnect:1;
- 	unsigned char vbus_vsafe0v:1;
- 	unsigned char cable_comm_capable:1;
-+	unsigned char set_orientation:1;
- 
- 	int (*init)(struct tcpci *tcpci, struct tcpci_data *data);
- 	int (*set_vconn)(struct tcpci *tcpci, struct tcpci_data *data,
--- 
-2.39.2
-
+Alan Stern
 
