@@ -1,100 +1,151 @@
-Return-Path: <linux-usb+bounces-11832-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11833-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D14E9247C6
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Jul 2024 21:01:00 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 26CF1924893
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Jul 2024 21:47:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 149CD1F22DA9
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Jul 2024 19:01:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DE14C28A644
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Jul 2024 19:47:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 197891CD5CE;
-	Tue,  2 Jul 2024 19:00:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 703481CE0BB;
+	Tue,  2 Jul 2024 19:47:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Aex1PcL4"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="Gn3N4xBd"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6921E1EB25
-	for <linux-usb@vger.kernel.org>; Tue,  2 Jul 2024 19:00:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA8261CE0BC;
+	Tue,  2 Jul 2024 19:47:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.60.130.6
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719946838; cv=none; b=LBQWF7Ni2IvPjdUTJtNVB1+L15QOG9pVCV02UIh5doOgbbcg5GJx7ri5Te6DIjXWoAUR6W8u/8EQ/WKvXnewCCMfe7tAQiMjSIsLbzuaINzuEh4me5dVxlJglLGXjeH/lz32Q6j82pQhyaXD26NQLnjKyu+SE/lqJmFzhBvhlgU=
+	t=1719949627; cv=none; b=un8PWMGyYrvhDe3xH1W3X/VtXiPk0YmyvXkdgGIvTNCHfZLIAIYAXBCko6paBcXt3Av6MZ8ADkQ4aq26TRloMxFjFLBulaOHM2IKs7uaOQ+FP05ttfTcS8ZoHLa8SqpF9OZEHhIe1/PyOGaAGW5EmQTr+Ef5ZJaTOFdCTn1xXwQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719946838; c=relaxed/simple;
-	bh=TRh3kCtvO58B3TS/ro9pEJNNo6FOlD9/z7qzRrzSlqs=;
-	h=MIME-Version:In-Reply-To:References:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oqTIH13CyFiim1dT3bHmlP3vhPP3/8EWqCmyxAk8Lood5N07dn8Ccy0MvsFj3t+1LWQWVp6EUY6yJl+rR4jSk9RLwH3zoIbX8VAVwv6Uyt96IU1IcB19Y1bbaNEuAishGYibRZEpg9kpFytN9pXgL1U9oUl0otNUe6xy/OU6Bbk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Aex1PcL4; arc=none smtp.client-ip=209.85.210.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-701eea2095eso2699374a34.2
-        for <linux-usb@vger.kernel.org>; Tue, 02 Jul 2024 12:00:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1719946835; x=1720551635; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TRh3kCtvO58B3TS/ro9pEJNNo6FOlD9/z7qzRrzSlqs=;
-        b=Aex1PcL4TQzx8xBTycaadMgX5n4tITaDJ7ONqUNBdF1vjeiOMgSC7gfpdYgMNs2lpz
-         sN8BIfgFJPooNk7fLnAPOogWzWhcLP/V/GdwoECSQQ1PBIpuB69W9QQKCLX8UVGKuOV/
-         hoy2aSRq+4RZcb1OEn93WMKX2ZPMXrFFYB+x8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719946835; x=1720551635;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TRh3kCtvO58B3TS/ro9pEJNNo6FOlD9/z7qzRrzSlqs=;
-        b=T49UBQ6w1ZhsAfcpmddUxX6fYlpDxFaN7fI87bQjyAzfRNVu3tfXQHEduSgCvPPaz4
-         zJF2GWUUs8mp1mTcXEeRimYr2u0WbPekFe9+ZRkNBIar/FkbSB9QLeDmsOeSCHaZAaeL
-         pu+ZcIgXeQhzFIRcqwNmnBqkkvNnFriAEbT2pECRRp8uUkhlxsDe0SZmljZxC3pInV0Q
-         MoKI9yzfcfWGk3wsnzzHF1ZU3++vSadaEAbV4hfLGFBGP9379S7RLOyCBgnLATZWWMLg
-         SA6A1pz0S6tXsCG+TIlvV2VTNgjf6srC5zZiuGcoxzaKPsovP2CGbBtHoBCAk+HtMG9x
-         sRmw==
-X-Gm-Message-State: AOJu0YykpMOkN2iCHTsqnbeKi0POILor5hgprcSbjxSQjn5ccfYkhb/0
-	IjyGc8EdrHq3TOhZxB8ChRjrx64tsSBomaQQf6erL30rJIWZceaIBS5tGZwnqwbnVvdMuzZSCJg
-	cicxW+0MXG7HTsncjCD5qRf5R9oFE7cpPV+d9
-X-Google-Smtp-Source: AGHT+IEuctwteLzkcWtPEA88NJi6Q3ar2tx3qa3jOR7L3cOw0C0DH0EuKI1yUKU29vx9JV4sFz9I67UQX3NV/JxAMfc=
-X-Received: by 2002:a9d:6c56:0:b0:702:526:284e with SMTP id
- 46e09a7af769-702076f2ed8mr10449874a34.33.1719946835587; Tue, 02 Jul 2024
- 12:00:35 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 2 Jul 2024 12:00:34 -0700
+	s=arc-20240116; t=1719949627; c=relaxed/simple;
+	bh=K4x11SUOMM6y1zNMKACNbl8folHmYwsL2pwPSCj15uM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=OHaWls+VTZTKwoFpyDm0g2vC/h1J7rZvggiFn6sVhHyIM9DzbPHVxvL8FivAWglebw/gbV2SM7LY/wukaskFV5HOaZ/4+QRJMlkqOIk0qLBQT/jwMVszfKCYMw1UFvEdazoIRVCV3Yd5ILl5ak+kUvx2VUuC6imxPENHYiRMJgE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=Gn3N4xBd; arc=none smtp.client-ip=178.60.130.6
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+	References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=7Y/kIBa4MocqL5VsX4pa8YlTzbYsFHxrleMVSoRGylU=; b=Gn3N4xBdm+qM8pwbIk7A5brYm7
+	LexsVZJ2whsJBS+iv3Ia2IW+LxgYzbSkz3gi0Zbtip7pmL3yAxQRAJ8Pe/ejdn3AKXwITEsy4NYUX
+	C2vKGo/5jifhIwFVu8HuXl3D0UgDBdW1wfnCHj46j0lEF9YJQldF5U06WiRH7tw5N3KuziY6PI0dt
+	HqE6LXEPstM4BUYS6lLqWwjMLoemkOMRlrpL324EFjEJ8fV10h7KuS2l/VnIFJ+XOLxkyizifp5oC
+	Njsy0wi0DMtb2QkxqkX1bWiRj1DAEaVdJQn9qZdKZCU6rt/YzLC4Vb3E2v1mQeIkOewXf+gVdAj5y
+	NjzTm7tQ==;
+Received: from [187.36.213.55] (helo=[192.168.1.212])
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+	id 1sOjSK-00ARCD-DC; Tue, 02 Jul 2024 21:46:24 +0200
+Message-ID: <1e8b7043-b92f-4a91-8b71-48117a2da0c0@igalia.com>
+Date: Tue, 2 Jul 2024 16:46:12 -0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20240624-usb_core_of_memleak-v1-1-af6821c1a584@gmail.com>
-References: <20240624-usb_core_of_memleak-v1-1-af6821c1a584@gmail.com>
-From: Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date: Tue, 2 Jul 2024 12:00:34 -0700
-Message-ID: <CAE-0n51SfZiQ_XnPXYrG4Fyu=H8xDc0zpJ_Hxa+MrFq8V8PXTQ@mail.gmail.com>
-Subject: Re: [PATCH] usb: core: add missing of_node_put() in usb_of_has_devices_or_graph
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 06/11] drm/vc4: hdmi: Handle error case of
+ pm_runtime_resume_and_get
+To: Stefan Wahren <wahrenst@gmx.net>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Florian Fainelli <florian.fainelli@broadcom.com>, Ray Jui
+ <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+ Jassi Brar <jassisinghbrar@gmail.com>, Ulf Hansson <ulf.hansson@linaro.org>,
+ Jiri Slaby <jirislaby@kernel.org>, Minas Harutyunyan <hminas@synopsys.com>
+Cc: Dave Stevenson <dave.stevenson@raspberrypi.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
+ Daniel Vetter <daniel@ffwll.ch>, Lukas Wunner <lukas@wunner.de>,
+ Peter Robinson <pbrobinson@gmail.com>, dri-devel@lists.freedesktop.org,
+ bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org,
+ linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, kernel-list@raspberrypi.com
+References: <20240630153652.318882-1-wahrenst@gmx.net>
+ <20240630153652.318882-7-wahrenst@gmx.net>
+Content-Language: en-US
+From: =?UTF-8?Q?Ma=C3=ADra_Canal?= <mcanal@igalia.com>
+Autocrypt: addr=mcanal@igalia.com; keydata=
+ xjMEZIsaeRYJKwYBBAHaRw8BAQdAGU6aY8oojw61KS5rGGMrlcilFqR6p6ID45IZ6ovX0h3N
+ H01haXJhIENhbmFsIDxtY2FuYWxAaWdhbGlhLmNvbT7CjwQTFggANxYhBDMCqFtIvFKVRJZQ
+ hDSPnHLaGFVuBQJkixp5BQkFo5qAAhsDBAsJCAcFFQgJCgsFFgIDAQAACgkQNI+cctoYVW5u
+ GAEAwpaC5rI3wD8zqETKwGVoXd6+AbmGfZuVD40xepy7z/8BAM5w95/oyPsHUqOsg/xUTlNp
+ rlbhA+WWoaOXA3XgR+wCzjgEZIsaeRIKKwYBBAGXVQEFAQEHQGoOK0jgh0IorMAacx6WUUWb
+ s3RLiJYWUU6iNrk5wWUbAwEIB8J+BBgWCAAmFiEEMwKoW0i8UpVEllCENI+cctoYVW4FAmSL
+ GnkFCQWjmoACGwwACgkQNI+cctoYVW6cqwD/Q9R98msvkhgRvi18fzUPFDwwogn+F+gQJJ6o
+ pwpgFkAA/R2zOfla3IT6G3SBoV5ucdpdCpnIXFpQLbmfHK7dXsAC
+In-Reply-To: <20240630153652.318882-7-wahrenst@gmx.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Quoting Javier Carrasco (2024-06-24 14:10:06)
-> The for_each_child_of_node() macro requires an explicit call to
-> of_node_put() on early exits to decrement the child refcount and avoid a
-> memory leak.
-> The child node is not required outsie the loop, and the resource must be
-> released before the function returns.
->
-> Add the missing of_node_put().
->
-> Cc: stable@vger.kernel.org
-> Fixes: 82e82130a78b ("usb: core: Set connect_type of ports based on DT node")
-> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+On 6/30/24 12:36, Stefan Wahren wrote:
+> The commit 0f5251339eda ("drm/vc4: hdmi: Make sure the controller is
+> powered in detect") introduced the necessary power management handling
+> to avoid register access while controller is powered down.
+> Unfortunately it just print a warning if pm_runtime_resume_and_get()
+> fails and proceed anyway.
+> 
+> This could happen during suspend to idle. So we must assume it is unsafe
+> to access the HDMI register. So bail out properly.
+> 
+> Fixes: 0f5251339eda ("drm/vc4: hdmi: Make sure the controller is powered in detect")
+> Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
+
+ From the docs, I see that `DRM_ERROR` was deprecated in favor of
+`pr_err()` (although I'm seeing some drivers using `dev_err()`). So,
+after this change, this is:
+
+Reviewed-by: Maíra Canal <mcanal@igalia.com>
+
+It would be nice to have a follow-up patch changing other vc4 files,
+as they are using `DRM_ERROR` when returning the error from
+`pm_runtime_resume_and_get()`.
+
+Best Regards,
+- Maíra
+
 > ---
-
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+>   drivers/gpu/drm/vc4/vc4_hdmi.c | 7 ++++++-
+>   1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.c b/drivers/gpu/drm/vc4/vc4_hdmi.c
+> index d57c4a5948c8..b3a42b709718 100644
+> --- a/drivers/gpu/drm/vc4/vc4_hdmi.c
+> +++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
+> @@ -429,6 +429,7 @@ static int vc4_hdmi_connector_detect_ctx(struct drm_connector *connector,
+>   {
+>   	struct vc4_hdmi *vc4_hdmi = connector_to_vc4_hdmi(connector);
+>   	enum drm_connector_status status = connector_status_disconnected;
+> +	int ret;
+> 
+>   	/*
+>   	 * NOTE: This function should really take vc4_hdmi->mutex, but
+> @@ -441,7 +442,11 @@ static int vc4_hdmi_connector_detect_ctx(struct drm_connector *connector,
+>   	 * the lock for now.
+>   	 */
+> 
+> -	WARN_ON(pm_runtime_resume_and_get(&vc4_hdmi->pdev->dev));
+> +	ret = pm_runtime_resume_and_get(&vc4_hdmi->pdev->dev);
+> +	if (ret) {
+> +		DRM_ERROR("Failed to retain HDMI power domain: %d\n", ret);
+> +		return status;
+> +	}
+> 
+>   	if (vc4_hdmi->hpd_gpio) {
+>   		if (gpiod_get_value_cansleep(vc4_hdmi->hpd_gpio))
+> --
+> 2.34.1
+> 
 
