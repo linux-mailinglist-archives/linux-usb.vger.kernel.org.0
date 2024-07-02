@@ -1,344 +1,192 @@
-Return-Path: <linux-usb+bounces-11837-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11838-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E1449249E4
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Jul 2024 23:22:59 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DEF19924C24
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Jul 2024 01:34:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 92E601C2233B
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Jul 2024 21:22:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 85652284CFC
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Jul 2024 23:34:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EC2020127F;
-	Tue,  2 Jul 2024 21:22:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEE6B17A5B1;
+	Tue,  2 Jul 2024 23:34:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=lsitec.org.br header.i=@lsitec.org.br header.b="aUzH3vzw"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="UjyzXxDd"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E8DF201272
-	for <linux-usb@vger.kernel.org>; Tue,  2 Jul 2024 21:22:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D11C51DA320;
+	Tue,  2 Jul 2024 23:34:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719955369; cv=none; b=IO5QSIoY4sE09SRDOOexjYFqzoeYBrkFYx6wigJlBviCihu/iBmp4MTwlNQWOhOW3UagSBW3WN0yRaD+QsDXkkRFPnWp8vWuv8ZcfDSOJnrglHzhZJ92nixEKruH5Gb//CovWBASOx2NYIbWDSDwrhkeddfuGarZYQmblY4EO5w=
+	t=1719963273; cv=none; b=cnZVSOARCDtZQ3HnCtC2Cyt1ivDzVFVR46dLlI8u+ecEHUDPzWv6oNpH+bmwmYEnOEWXfUTfDtwHRKwPEK3tQ5588C0nfVhOJgfZ+VJpF5NMHvBfiDJGXj9OSzCXXhNbx/wPdmOW7Zcg125w/K5JrozET/xrMCkeOkxxqGaIy9E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719955369; c=relaxed/simple;
-	bh=9XQ/XFucmvXQsChb0lxuW9xBaIZyh+Ul+/PYTdKXJxk=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=bANWTiCPzKuOz2A9azwI/1l478MAuV6qBShVhWyk5kSDR/bH+YE6MLOTb2ZobhXO5UWLeW04Q4YovHL/j66RGVl8GqA4qb6xb8QCH8HmdxOBewR/WKETvK1NFKQ028hh31OIa1nVuZA9DpoJXN0bQPGk3PY5kcCwOfgBeWVOwW4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lsitec.org.br; spf=pass smtp.mailfrom=lsitec.org.br; dkim=pass (2048-bit key) header.d=lsitec.org.br header.i=@lsitec.org.br header.b=aUzH3vzw; arc=none smtp.client-ip=209.85.167.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lsitec.org.br
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lsitec.org.br
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-52e829086f3so5006791e87.3
-        for <linux-usb@vger.kernel.org>; Tue, 02 Jul 2024 14:22:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=lsitec.org.br; s=google; t=1719955364; x=1720560164; darn=vger.kernel.org;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=85DvFvtf7/GmIiQVSW202ysBkpsRBMOZmG/3K6FvFnk=;
-        b=aUzH3vzwg//wAERRX9V30xNnfFQ5URWuIbYXhFfww+Mfbmagajj3PBD4VvQ9932Aqj
-         xwUgDXvAIgQubsl6ADwGlGAziC7yN3QyO5rKdanqYPVDbAeFQAEpsCP7xjh1jspx3nDf
-         XCHhEvoPOeF/MS2Vcj76G7r+XlroKaMMu526UNWYybDPqucrxEpdBXCRhSvTwvAdMgnZ
-         KaA3qBfozPAJCY88ZAoj6dSIRoQ3W2U2IzkZNDICAIh/wMHzg8jUoVh+3p8sCH3gpLiK
-         MWeUNN2AhrOgVUs735hRsOiQbck/VSwhtZYAdz+9ArARC+hovQsE0qHUQ2tqVw3myQjc
-         buuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719955364; x=1720560164;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=85DvFvtf7/GmIiQVSW202ysBkpsRBMOZmG/3K6FvFnk=;
-        b=tqPmJFtAeiK/tIL6OtYNUgjx9tspoaml7nRfCNp0FlBfaEMtNFj8oC8Sr1jfuKoFYq
-         cAVRER56GQcmT+nZjqLZ5gd0ZQpRBglmyE+bDMMmKqCU3LJlCn7eqLMSWbRRK61VSMEO
-         GbGM2ARDmbsUgy/06gpXpHVG67Lt9EBcgx0rf1GvAcx5H7FIcLjF9365rGNES+R4xe+t
-         laIwqthzrbVD5H1sAfiSlDZ8JwDy26Awzibet1GWpmB8CNGKQq9yWKVzpDf2coalsquR
-         uxd9Sf8MZPvFpOf8kcGnGpPGArj0QCJ11XO9hDwNU5ggV/aneqR4XNvK+MTbgtzyzGWR
-         Z7uw==
-X-Forwarded-Encrypted: i=1; AJvYcCVeuIYB/Kxy3fuTZknnivVovBOcGDEluZvZyQOjtHppHug17/bcRibIOnYaKZXpPmYDYDoyoInEQia3lXfozupH00zNQxQVW6LL
-X-Gm-Message-State: AOJu0YywHl1vnV3mSbsQy3JZbjjE9M5UhkwO5tJfQgv3ZqvphukQCzWl
-	mhcFeG6b09NgAEXCSwsF2ugoI4uJs37wPviYvTlravOHdNLG3RNeN2dci9K38JC+X08o+UCfPah
-	XHuatfJAfRgs6IGrT/02qHymo6aw4kAEukDRkciI6wdGVSYSr3fcp
-X-Google-Smtp-Source: AGHT+IHVvWDPRQyGw3UKDi/vgI3K0IGB9FFqk0/fgGIM0bX7JUiaZU+OJ5MvbGPtyn5TAvzJNBBz5UQpbKCxcsa6UR8=
-X-Received: by 2002:a05:6512:33c8:b0:52c:c9b6:df0f with SMTP id
- 2adb3069b0e04-52e82733f9dmr6420668e87.61.1719955363661; Tue, 02 Jul 2024
- 14:22:43 -0700 (PDT)
+	s=arc-20240116; t=1719963273; c=relaxed/simple;
+	bh=LNH3O5IfY6PoWnz4btQ0PNI/uE/ZJQXWAD5uRijVgoo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=GIC0xIOPI2eDEOELR3nARsj6mel+kf1KNIZ8xDM6tV31osyr+A1qyn1/dGbtndqSqFettWuG6O6ZtqtfFCGkLBcAdfUvoMw0KOSJU7YHNKQb/Lu5AwZv1HIDeyXzcrBsRZ9mMB2/xxeodn3KCWKUy8uKy3Xrc5SWwC+YenU7RW4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=UjyzXxDd; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 462HJL7W023818;
+	Tue, 2 Jul 2024 23:34:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	LNH3O5IfY6PoWnz4btQ0PNI/uE/ZJQXWAD5uRijVgoo=; b=UjyzXxDdt3+S5ipz
+	Xqb3V2a6qismCtxLuKBWoGkFU/4i4P80dIpDf8hww/0NdkOcf7oQfGohv0VMi8R+
+	y8DxI9fx6D9jhL9djOr4FdUF9VmxopCNyV025AvR+pdjiOiTXLLO+loqMAbT1kIQ
+	sP7XTQYtIdSlr27WW/NYQK8KWkCInJaynzhFcl95Lqiaeijdrb7cmsYBYlvpixmx
+	nzWHDiaZmNnfb7AcCthsYEruft40PmKI2wGPDttTquo/XrgCwa9HX2XXiMT+Jx9U
+	h6Dq71Pv1qv5zq0fRBM98o672loSsxC2gatRt5lvBNg6VgY8RHqESJoTwc8qQcV4
+	7ieS9w==
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 40297rt2vy-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 02 Jul 2024 23:34:09 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA05.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 462NY96V026581
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 2 Jul 2024 23:34:09 GMT
+Received: from [10.110.95.24] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 2 Jul 2024
+ 16:34:08 -0700
+Message-ID: <3c358604-6926-4f90-8fc8-8139c68c3418@quicinc.com>
+Date: Tue, 2 Jul 2024 16:34:07 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Ana Clara Forcelli <ana.forcelli@lsitec.org.br>
-Date: Tue, 2 Jul 2024 18:22:31 -0300
-Message-ID: <CALWWSVGAg_4hW-a-SHFvQQ1N2A7jjTQpfO34fRUWdfR6N43ZRA@mail.gmail.com>
-Subject: Issues while implementing Designware DWC3 on an Actions S700 chip.
-To: felipe.balbi@linux.intel.com, linux-usb@vger.kernel.org
-Content-Type: multipart/mixed; boundary="0000000000007b3f7a061c4a5055"
-
---0000000000007b3f7a061c4a5055
-Content-Type: multipart/alternative; boundary="0000000000007b3f78061c4a5053"
-
---0000000000007b3f78061c4a5053
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v23 32/32] ASoC: doc: Add documentation for SOC USB
+To: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        =?UTF-8?Q?Amadeusz_S=C5=82awi=C5=84ski?=
+	<amadeuszx.slawinski@linux.intel.com>,
+        <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
+        <perex@perex.cz>, <conor+dt@kernel.org>, <corbet@lwn.net>,
+        <broonie@kernel.org>, <lgirdwood@gmail.com>, <krzk+dt@kernel.org>,
+        <Thinh.Nguyen@synopsys.com>, <bgoswami@quicinc.com>, <tiwai@suse.com>,
+        <robh@kernel.org>, <gregkh@linuxfoundation.org>
+CC: <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-sound@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>
+References: <20240610235808.22173-1-quic_wcheng@quicinc.com>
+ <20240610235808.22173-33-quic_wcheng@quicinc.com>
+ <5be51e1f-70c9-4bbc-96fa-1e50e441bd35@linux.intel.com>
+ <408d9e8e-0f40-7e66-54be-2f8d2c0783a3@quicinc.com>
+ <ca1e1063-e1bd-4e03-a7cd-91985e9954e9@linux.intel.com>
+ <096d59a0-5e18-092c-c9ae-d98130226f06@quicinc.com>
+ <368d9019-2c96-468e-b472-7e1127f76213@linux.intel.com>
+ <eb6370ea-47a0-3659-3c10-cb7f95e3e520@quicinc.com>
+ <510468c7-b181-48d0-bf2d-3e478b2f2aca@linux.intel.com>
+ <c7a95157-1b71-1489-3657-8fe67f9acb4e@quicinc.com>
+ <90463a4e-c2e7-4b59-9a79-23533b4acd1e@linux.intel.com>
+ <fd8f1eb0-4b21-4697-8175-a61bc3858852@quicinc.com>
+ <f982842a-1804-420b-a539-a609ecf8fb8a@linux.intel.com>
+Content-Language: en-US
+From: Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <f982842a-1804-420b-a539-a609ecf8fb8a@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: sz5hhODFOp_NmTAUPVtNmQvfhu6jIR9c
+X-Proofpoint-GUID: sz5hhODFOp_NmTAUPVtNmQvfhu6jIR9c
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-02_16,2024-07-02_02,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxlogscore=999
+ lowpriorityscore=0 clxscore=1011 mlxscore=0 suspectscore=0 spamscore=0
+ adultscore=0 impostorscore=0 malwarescore=0 priorityscore=1501
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2406140001 definitions=main-2407020173
 
-Greetings!
+Hi Pierre/Amadeusz,
 
-I've come to you because I stumbled upon an impasse while attempting to
-make the USB3 device work in my company's custom SBC project, which uses
-Actions Semiconductor's S700 SoC.
+On 7/2/2024 1:30 AM, Pierre-Louis Bossart wrote:
+>>> There are really multiple layers to deal with
+>>>
+>>> a) is the controller able to support the offload path? IIRC this is
+>>> embedded in an obscure XHCI property, it would make sense to expose it
+>>> as a control, or component string, of the USB card.
+>> If a component string/tag is desired, I already have some way of doing that.  I can add it to the USB card.
+>>
+>>> b) is there a companion card capable of dealing with the offload path?
+>>> Since the presence of this card may depend on driver probe, there should
+>>> be a control on the USB card. userspace could detect changes to this
+>>> control and detect if that path is or is no longer enabled.
+>> So currently, the "USB Offload Playback Capable Card" kcontrol (on the USB card) will determine if there is an offload path.  However, this differs than what Amadeusz is suggesting, in that he wants a single kcontrol created for EACH USB card identified (per USB audio device), and a simple enable/disable control to determine if the offload path is enabled for that card/pcm stream.
+>>
+>> It would be a simpler approach for the userspace, and if the card that handles the offload card isn't present, then these enable/disable control will be set to "disabled," and even if users attempt to set the control, it won't go through.
+> Not following. Are you suggesting userspace would modify the
+> enable/disable status?
 
-*First, the context:* since the chip was discontinued, the manufacturer
-stopped updating the kernel source, so it was stuck in version 3.something.
-The USB3 subsystem used to work with the manufacturer's code at that point,
-but so many new features were added to the mainline that we had to move on
-to newer versions.
+Yes, this is the suggestion.  One writeable kcontrol on the USB SND audio device that will control if that USB audio device is going to be offloaded.  If the kcontrol reads back "enabled" (or 1) then userspace knows that the offload path is active.  Else, if it reads "disabled" (or 0) after the attempt to set the kcontrol, then the offload path was unsuccessfully enabled, ie maybe due to no available offload streams.
 
-Right now, we are using Debian's patched version of the 6.1.76 kernel. Our
-repo is public at github.com/caninos-loucos/labrador-linux-6 . We
-implemented the device tree nodes, glue layer and PHY code on the usb3
-branch. Some code is from the old repo (the phys especially), some was
-adapted to the more modern format.
+> I would just have a read-only control that reports what the hardware can
+> do and which other card can deal with offload. It's up to userspace to
+> select the offloaded PCM device or not.
+>
+That is what I have implemented in the previous patch series.  One USB SND kcontrol within each USB audio device, which points to the ASoC platform card that supports offloading:
 
-*The problem: *Only a few devices (keyboard, mouse and some pendrives) work
-correctly using the usb3 port, and only when they are connected before the
-modules load. Otherwise, the device stops at the stop endpoint  command and
-the whole XHCI module dies. I tried to debug using the guide at
-kernel.org/doc/html/latest/driver-api/usb/dwc3.html
-<https://www.kernel.org/doc/html/latest/driver-api/usb/dwc3.html>, but I
-was quickly overwhelmed by how complex this system is. I followed the
-commands
+"USB Offload Playback Capable Card" --> returns the card index to the ASoC platform card
 
-# mkdir -p /d# mkdir -p /t# mount -t debugfs none /d# mount -t tracefs
-none /t# echo 81920 > /t/buffer_size_kb# echo 1 >
-/t/events/dwc3/enable
+From there the offloading control is all within the ASoC platform card.  This is opposite to what Amaduesz suggested in that, the offload control of which USB device to offload should be within USB SND (not ASoC)
 
-# cp /t/trace /root/trace.txt# cat /d/*usb*/*dwc3*/regdump >
-/root/regdump.txt <--- this had to be modified
+>
+>>> c) which PCM device is actually offloaded? This could be plural for some
+>>> implementations. The mapping between PCM devices exposed by the USB
+>>> card, and those exposed by the companion card, should be known to
+>>> userspace. I am not sure how this would be done though, a variable
+>>> number of controls is a sure way to confuse userspace.
+>> Expanding on Amadeusz's suggestion, my idea is to have an enable/disable kcontrol per USB stream.  For example, one USB card could have multiple PCM devices (USB streams).  So we would have something like:
+>>
+>> PCM Offload Playback Enable Stream#0  enable/disable
+>>
+>> PCM Offload Playback Enable Stream#1  enable/disable
+>>
+>> ....
+> are those read-only or not?
 
-but tracefs returned nothing from dwc3 and the regdump is incomprehensible
-to me, since I don't have access to the IP handbook. I tried more ways to
-access the trace, and even enabled all functions, but I'm mostly sure that
-the aforementioned command works just fine.
+No, writable and readable.
 
-The regdump.txt file attached to this email shows the dump after connecting
-a generic USB pendrive and waiting for the dmesg output:
-[   90.800444] xhci-hcd xhci-hcd.0.auto: xHCI host not responding to stop
-endpoint command
-[   90.828621] xhci-hcd xhci-hcd.0.auto: xHCI host controller not
-responding, assume dead
-[   90.836534] xhci-hcd xhci-hcd.0.auto: HC died; cleaning up
-[   90.842256] usb usb3-port1: couldn't allocate usb_device
+>
+>> So we'd know which USB card and PCM device is selected for USB SND.  However, I see what you're getting at in case there are multiple supported streams, because userspace needs to know which ASoC card/pcm combination corresponds to which USB device/combination.
+> I don't understand how this would help map the two parts? There's got to
+> be an additional mapping...
+It won't help with the mapping.  That is something which we'd need to add, suggestion below.
+>> What do you think about having a USB card kcontrol to display the mapped ASoC card and PCM indexes?
+>>
+>> PCM Offload Playback Enable Stream Mapping#0  0, 1 (ASoC card#0, PCM device#1)
+>>
+>> To summarize, if we did this, I'd plan to remove all the kcontrols in ASoC card, and have the following in the USB card for an USB audio device that supports one USB stream:
+>>
+>> PCM Offload Playback Enable Stream#0  enable/disable
+>>
+>> PCM Offload Playback Enable Stream Mapping#0  0, 1 (ASoC card#0, PCM device#1)
+> ... which is suggested here.
+>
+> Assuming these are read-only controls, we would need to know which PCM
+> device on the USB card can be optimized with the use of which PCM device
+> on the ASoC card. That means a set of three values. You would also want
+> a number of streams to make the guesswork on controls less painful.
 
-Can you guys lend me a hand?
+OK, so now to just figuring out something that both you and Amadeusz can agree on before I put time implementing it.  So I've implemented the "enable/disable" path that Amadeusz suggested, which is highlighted in my previous response, for evaluation purposes.  The overall question is which layer should control the devices that will be offloaded.  In my submissions up until now, the control was given to the ASoC platform card to determine which USB device to offload.  Amadeusz mentioned that it might be beneficial to move the control to the USB SND devices, because what if the offloading is NOT backed by ASoC. (highlighted in [1])  However, IMO the current implementation assumes there is ASoC involved, which should mean that there is some platform "card" that is backing the offload path.  Please let me know if my understanding is incorrect, @Amadeusz. 
 
-Many thanks!
+[1] - Re: [PATCH v23 32/32] ASoC: doc: Add documentation for SOC USB - Amadeusz Sławiński (kernel.org) <https://lore.kernel.org/linux-usb/510468c7-b181-48d0-bf2d-3e478b2f2aca@linux.intel.com/>
 
-Ana Clara Forcelli
-Firmware Developer at Caninos Loucos - LSI-TEC
+Thanks
 
---0000000000007b3f78061c4a5053
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Wesley Cheng
 
-<div dir=3D"ltr"><div>Greetings!</div><div><br></div><div>I&#39;ve come to =
-you because I stumbled upon an impasse while attempting to make the USB3 de=
-vice work in my company&#39;s custom SBC project, which uses Actions Semico=
-nductor&#39;s S700 SoC.<br></div><div><br></div><div><b>First, the context:=
-</b> since the chip was discontinued, the manufacturer stopped updating the=
- kernel source, so it was stuck in version 3.something. The USB3 subsystem =
-used to work with the manufacturer&#39;s code at that point, but so many ne=
-w features were added to the mainline that we had to move on to newer versi=
-ons. <br></div><div><br></div><div>Right now, we are using Debian&#39;s pat=
-ched version of the 6.1.76 kernel. Our repo is public at <a href=3D"http://=
-github.com/caninos-loucos/labrador-linux-6">github.com/caninos-loucos/labra=
-dor-linux-6</a> . We implemented the device tree nodes, glue layer and PHY =
-code on the usb3 branch. Some code is from the old repo (the phys especiall=
-y), some was adapted to the more modern format. <br></div><div><br></div><d=
-iv><b>The problem: </b>Only a few devices (keyboard, mouse and some pendriv=
-es) work correctly using the usb3 port, and only when they are connected be=
-fore the modules load. Otherwise, the device stops at the stop endpoint=C2=
-=A0 command and the whole XHCI module dies. I tried to debug using the guid=
-e at <a href=3D"https://www.kernel.org/doc/html/latest/driver-api/usb/dwc3.=
-html">kernel.org/doc/html/latest/driver-api/usb/dwc3.html</a>, but I was qu=
-ickly overwhelmed by how complex this system is. I followed the commands=C2=
-=A0<div class=3D"gmail-highlight-sh gmail-notranslate"><div class=3D"gmail-=
-highlight"><pre><span class=3D"gmail-c1"># mkdir -p /d</span>
-<span class=3D"gmail-c1"># mkdir -p /t</span>
-<span class=3D"gmail-c1"># mount -t debugfs none /d</span>
-<span class=3D"gmail-c1"># mount -t tracefs none /t</span>
-<span class=3D"gmail-c1"># echo 81920 &gt; /t/buffer_size_kb</span>
-<span class=3D"gmail-c1"># echo 1 &gt; /t/events/dwc3/enable</span>
-</pre></div></div><div class=3D"gmail-highlight-sh gmail-notranslate"><div =
-class=3D"gmail-highlight"><pre><span></span><span class=3D"gmail-c1"># cp /=
-t/trace /root/trace.txt</span>
-<span class=3D"gmail-c1"># cat /d/<b>usb</b>/*dwc3*/regdump &gt; /root/regd=
-ump.txt</span> &lt;--- this had to be modified
-</pre></div>
-</div>but tracefs returned nothing from dwc3 and the regdump is incomprehen=
-sible to me, since I don&#39;t have access to the IP handbook. I tried more=
- ways to access the trace, and even enabled all functions, but I&#39;m most=
-ly sure that the aforementioned command works just fine.</div><div><br></di=
-v><div>The regdump.txt file attached to this email shows the dump after con=
-necting a generic USB pendrive and waiting for the dmesg output:</div><div>=
-<span style=3D"font-family:monospace">[ =C2=A0 90.800444] xhci-hcd xhci-hcd=
-.0.auto: xHCI host not responding to stop endpoint command<br>[ =C2=A0 90.8=
-28621] xhci-hcd xhci-hcd.0.auto: xHCI host controller not responding, assum=
-e dead<br>[ =C2=A0 90.836534] xhci-hcd xhci-hcd.0.auto: HC died; cleaning u=
-p<br>[ =C2=A0 90.842256] usb usb3-port1: couldn&#39;t allocate usb_device</=
-span></div><div><br></div><div>Can you guys lend me a hand? <br></div><div>=
-<br></div><div>Many thanks! <br></div><div><br></div><div>Ana Clara Forcell=
-i</div><div>Firmware Developer at Caninos Loucos - LSI-TEC<br></div></div>
-
---0000000000007b3f78061c4a5053--
---0000000000007b3f7a061c4a5055
-Content-Type: text/plain; charset="US-ASCII"; name="regdump2.txt"
-Content-Disposition: attachment; filename="regdump2.txt"
-Content-Transfer-Encoding: base64
-Content-ID: <f_ly4w0bqh0>
-X-Attachment-Id: f_ly4w0bqh0
-
-R1NCVVNDRkcwID0gMHgwMDAwMDAwOApHU0JVU0NGRzEgPSAweDAwMDAwZjAwCkdUWFRIUkNGRyA9
-IDB4MDAwMDAwMDAKR1JYVEhSQ0ZHID0gMHgwMDAwMDAwMApHQ1RMID0gMHgzMGMxMTQwMQpHRVZU
-RU4gPSAweDAwMDAwMDAwCkdTVFMgPSAweDNlODAwMDAyCkdVQ1RMMSA9IDB4MDAwMDAwMDAKR1NO
-UFNJRCA9IDB4NTUzMzI0MGEKR0dQSU8gPSAweDAwMDAwMDAwCkdVSUQgPSAweDAwMDYwMTRjCkdV
-Q1RMID0gMHgwMjAwODAxMApHQlVTRVJSQUREUjAgPSAweDAwMDAwMDAwCkdCVVNFUlJBRERSMSA9
-IDB4MDAwMDAwMDAKR1BSVEJJTUFQMCA9IDB4MDAwMDAwMDAKR1BSVEJJTUFQMSA9IDB4MDAwMDAw
-MDAKR0hXUEFSQU1TMCA9IDB4MjAyMDQwMGEKR0hXUEFSQU1TMSA9IDB4ODFlMGM5MTgKR0hXUEFS
-QU1TMiA9IDB4MDAwNTIxMWEKR0hXUEFSQU1TMyA9IDB4MDUxNGEwODUKR0hXUEFSQU1TNCA9IDB4
-NDg4MjIwMDgKR0hXUEFSQU1TNSA9IDB4MDQyMDIwODgKR0hXUEFSQU1TNiA9IDB4MDc2ZTgwMjAK
-R0hXUEFSQU1TNyA9IDB4MDMwODA1NTAKR0RCR0ZJRk9TUEFDRSA9IDB4MDA4MjAwMDAKR0RCR0xU
-U1NNID0gMHgwMTU1MDQ2MgpHREJHQk1VID0gMHgyMDMwMDAxMApHUFJUQklNQVBfSFMwID0gMHgw
-MDAwMDAwMApHUFJUQklNQVBfSFMxID0gMHgwMDAwMDAwMApHUFJUQklNQVBfRlMwID0gMHgwMDAw
-MDAwMApHUFJUQklNQVBfRlMxID0gMHgwMDAwMDAwMApHVVNCMlBIWUNGRygwKSA9IDB4MDAwMDI1
-NDgKR1VTQjJQSFlDRkcoMSkgPSAweDAwMDAwMDAwCkdVU0IyUEhZQ0ZHKDIpID0gMHgwMDAwMDAw
-MApHVVNCMlBIWUNGRygzKSA9IDB4MDAwMDAwMDAKR1VTQjJQSFlDRkcoNCkgPSAweDAwMDAwMDAw
-CkdVU0IyUEhZQ0ZHKDUpID0gMHgwMDAwMDAwMApHVVNCMlBIWUNGRyg2KSA9IDB4MDAwMDAwMDAK
-R1VTQjJQSFlDRkcoNykgPSAweDAwMDAwMDAwCkdVU0IyUEhZQ0ZHKDgpID0gMHgwMDAwMDAwMApH
-VVNCMlBIWUNGRyg5KSA9IDB4MDAwMDAwMDAKR1VTQjJQSFlDRkcoMTApID0gMHgwMDAwMDAwMApH
-VVNCMlBIWUNGRygxMSkgPSAweDAwMDAwMDAwCkdVU0IyUEhZQ0ZHKDEyKSA9IDB4MDAwMDAwMDAK
-R1VTQjJQSFlDRkcoMTMpID0gMHgwMDAwMDAwMApHVVNCMlBIWUNGRygxNCkgPSAweDAwMDAwMDAw
-CkdVU0IyUEhZQ0ZHKDE1KSA9IDB4MDAwMDAwMDAKR1VTQjJJMkNDVEwoMCkgPSAweDAwMDAwMDAw
-CkdVU0IySTJDQ1RMKDEpID0gMHgwMDAwMDAwMApHVVNCMkkyQ0NUTCgyKSA9IDB4MDAwMDAwMDAK
-R1VTQjJJMkNDVEwoMykgPSAweDAwMDAwMDAwCkdVU0IySTJDQ1RMKDQpID0gMHgwMDAwMDAwMApH
-VVNCMkkyQ0NUTCg1KSA9IDB4MDAwMDAwMDAKR1VTQjJJMkNDVEwoNikgPSAweDAwMDAwMDAwCkdV
-U0IySTJDQ1RMKDcpID0gMHgwMDAwMDAwMApHVVNCMkkyQ0NUTCg4KSA9IDB4MDAwMDAwMDAKR1VT
-QjJJMkNDVEwoOSkgPSAweDAwMDAwMDAwCkdVU0IySTJDQ1RMKDEwKSA9IDB4MDAwMDAwMDAKR1VT
-QjJJMkNDVEwoMTEpID0gMHgwMDAwMDAwMApHVVNCMkkyQ0NUTCgxMikgPSAweDAwMDAwMDAwCkdV
-U0IySTJDQ1RMKDEzKSA9IDB4MDAwMDAwMDAKR1VTQjJJMkNDVEwoMTQpID0gMHgwMDAwMDAwMApH
-VVNCMkkyQ0NUTCgxNSkgPSAweDAwMDAwMDAwCkdVU0IyUEhZQUNDKDApID0gMHgwMDAwMDAwMApH
-VVNCMlBIWUFDQygxKSA9IDB4MDAwMDAwMDAKR1VTQjJQSFlBQ0MoMikgPSAweDAwMDAwMDAwCkdV
-U0IyUEhZQUNDKDMpID0gMHgwMDAwMDAwMApHVVNCMlBIWUFDQyg0KSA9IDB4MDAwMDAwMDAKR1VT
-QjJQSFlBQ0MoNSkgPSAweDAwMDAwMDAwCkdVU0IyUEhZQUNDKDYpID0gMHgwMDAwMDAwMApHVVNC
-MlBIWUFDQyg3KSA9IDB4MDAwMDAwMDAKR1VTQjJQSFlBQ0MoOCkgPSAweDAwMDAwMDAwCkdVU0Iy
-UEhZQUNDKDkpID0gMHgwMDAwMDAwMApHVVNCMlBIWUFDQygxMCkgPSAweDAwMDAwMDAwCkdVU0Iy
-UEhZQUNDKDExKSA9IDB4MDAwMDAwMDAKR1VTQjJQSFlBQ0MoMTIpID0gMHgwMDAwMDAwMApHVVNC
-MlBIWUFDQygxMykgPSAweDAwMDAwMDAwCkdVU0IyUEhZQUNDKDE0KSA9IDB4MDAwMDAwMDAKR1VT
-QjJQSFlBQ0MoMTUpID0gMHgwMDAwMDAwMApHVVNCM1BJUEVDVEwoMCkgPSAweDAxMGUwMjAyCkdV
-U0IzUElQRUNUTCgxKSA9IDB4MDAwMDAwMDAKR1VTQjNQSVBFQ1RMKDIpID0gMHgwMDAwMDAwMApH
-VVNCM1BJUEVDVEwoMykgPSAweDAwMDAwMDAwCkdVU0IzUElQRUNUTCg0KSA9IDB4MDAwMDAwMDAK
-R1VTQjNQSVBFQ1RMKDUpID0gMHgwMDAwMDAwMApHVVNCM1BJUEVDVEwoNikgPSAweDAwMDAwMDAw
-CkdVU0IzUElQRUNUTCg3KSA9IDB4MDAwMDAwMDAKR1VTQjNQSVBFQ1RMKDgpID0gMHgwMDAwMDAw
-MApHVVNCM1BJUEVDVEwoOSkgPSAweDAwMDAwMDAwCkdVU0IzUElQRUNUTCgxMCkgPSAweDAwMDAw
-MDAwCkdVU0IzUElQRUNUTCgxMSkgPSAweDAwMDAwMDAwCkdVU0IzUElQRUNUTCgxMikgPSAweDAw
-MDAwMDAwCkdVU0IzUElQRUNUTCgxMykgPSAweDAwMDAwMDAwCkdVU0IzUElQRUNUTCgxNCkgPSAw
-eDAwMDAwMDAwCkdVU0IzUElQRUNUTCgxNSkgPSAweDAwMDAwMDAwCkdUWEZJRk9TSVooMCkgPSAw
-eDAwMDAwMDgyCkdUWEZJRk9TSVooMSkgPSAweDAwODIwMTAzCkdUWEZJRk9TSVooMikgPSAweDAx
-ODUwMjA1CkdUWEZJRk9TSVooMykgPSAweDAzOGEwMDIyCkdUWEZJRk9TSVooNCkgPSAweDAzYWMw
-MDAwCkdUWEZJRk9TSVooNSkgPSAweDAwMDAwMDAwCkdUWEZJRk9TSVooNikgPSAweDAwMDAwMDAw
-CkdUWEZJRk9TSVooNykgPSAweDAwMDAwMDAwCkdUWEZJRk9TSVooOCkgPSAweDAwMDAwMDAwCkdU
-WEZJRk9TSVooOSkgPSAweDAwMDAwMDAwCkdUWEZJRk9TSVooMTApID0gMHgwMDAwMDAwMApHVFhG
-SUZPU0laKDExKSA9IDB4MDAwMDAwMDAKR1RYRklGT1NJWigxMikgPSAweDAwMDAwMDAwCkdUWEZJ
-Rk9TSVooMTMpID0gMHgwMDAwMDAwMApHVFhGSUZPU0laKDE0KSA9IDB4MDAwMDAwMDAKR1RYRklG
-T1NJWigxNSkgPSAweDAwMDAwMDAwCkdUWEZJRk9TSVooMTYpID0gMHgwMDAwMDAwMApHVFhGSUZP
-U0laKDE3KSA9IDB4MDAwMDAwMDAKR1RYRklGT1NJWigxOCkgPSAweDAwMDAwMDAwCkdUWEZJRk9T
-SVooMTkpID0gMHgwMDAwMDAwMApHVFhGSUZPU0laKDIwKSA9IDB4MDAwMDAwMDAKR1RYRklGT1NJ
-WigyMSkgPSAweDAwMDAwMDAwCkdUWEZJRk9TSVooMjIpID0gMHgwMDAwMDAwMApHVFhGSUZPU0la
-KDIzKSA9IDB4MDAwMDAwMDAKR1RYRklGT1NJWigyNCkgPSAweDAwMDAwMDAwCkdUWEZJRk9TSVoo
-MjUpID0gMHgwMDAwMDAwMApHVFhGSUZPU0laKDI2KSA9IDB4MDAwMDAwMDAKR1RYRklGT1NJWigy
-NykgPSAweDAwMDAwMDAwCkdUWEZJRk9TSVooMjgpID0gMHgwMDAwMDAwMApHVFhGSUZPU0laKDI5
-KSA9IDB4MDAwMDAwMDAKR1RYRklGT1NJWigzMCkgPSAweDAwMDAwMDAwCkdUWEZJRk9TSVooMzEp
-ID0gMHgwMDAwMDAwMApHUlhGSUZPU0laKDApID0gMHgwMDAwMDA4NApHUlhGSUZPU0laKDEpID0g
-MHgwMDg0MDEwNApHUlhGSUZPU0laKDIpID0gMHgwMTg4MDE4MApHUlhGSUZPU0laKDMpID0gMHgw
-MDAwMDAwMApHUlhGSUZPU0laKDQpID0gMHgwMDAwMDAwMApHUlhGSUZPU0laKDUpID0gMHgwMDAw
-MDAwMApHUlhGSUZPU0laKDYpID0gMHgwMDAwMDAwMApHUlhGSUZPU0laKDcpID0gMHgwMDAwMDAw
-MApHUlhGSUZPU0laKDgpID0gMHgwMDAwMDAwMApHUlhGSUZPU0laKDkpID0gMHgwMDAwMDAwMApH
-UlhGSUZPU0laKDEwKSA9IDB4MDAwMDAwMDAKR1JYRklGT1NJWigxMSkgPSAweDAwMDAwMDAwCkdS
-WEZJRk9TSVooMTIpID0gMHgwMDAwMDAwMApHUlhGSUZPU0laKDEzKSA9IDB4MDAwMDAwMDAKR1JY
-RklGT1NJWigxNCkgPSAweDAwMDAwMDAwCkdSWEZJRk9TSVooMTUpID0gMHgwMDAwMDAwMApHUlhG
-SUZPU0laKDE2KSA9IDB4MDAwMDAwMDAKR1JYRklGT1NJWigxNykgPSAweDAwMDAwMDAwCkdSWEZJ
-Rk9TSVooMTgpID0gMHgwMDAwMDAwMApHUlhGSUZPU0laKDE5KSA9IDB4MDAwMDAwMDAKR1JYRklG
-T1NJWigyMCkgPSAweDAwMDAwMDAwCkdSWEZJRk9TSVooMjEpID0gMHgwMDAwMDAwMApHUlhGSUZP
-U0laKDIyKSA9IDB4MDAwMDAwMDAKR1JYRklGT1NJWigyMykgPSAweDAwMDAwMDAwCkdSWEZJRk9T
-SVooMjQpID0gMHgwMDAwMDAwMApHUlhGSUZPU0laKDI1KSA9IDB4MDAwMDAwMDAKR1JYRklGT1NJ
-WigyNikgPSAweDAwMDAwMDAwCkdSWEZJRk9TSVooMjcpID0gMHgwMDAwMDAwMApHUlhGSUZPU0la
-KDI4KSA9IDB4MDAwMDAwMDAKR1JYRklGT1NJWigyOSkgPSAweDAwMDAwMDAwCkdSWEZJRk9TSVoo
-MzApID0gMHgwMDAwMDAwMApHUlhGSUZPU0laKDMxKSA9IDB4MDAwMDAwMDAKR0VWTlRBRFJMTygw
-KSA9IDB4MDAwMDAwMDAKR0VWTlRBRFJISSgwKSA9IDB4MDAwMDAwMDAKR0VWTlRTSVooMCkgPSAw
-eDAwMDAwMDAwCkdFVk5UQ09VTlQoMCkgPSAweDAwMDAwMDAwCkdIV1BBUkFNUzggPSAweDAwMDAw
-NzZlCkRDRkcgPSAweDAwMDgwODA0CkRDVEwgPSAweDAwZjAwMDAwCkRFVlRFTiA9IDB4MDAwMDAw
-MDAKRFNUUyA9IDB4MDA1NjAwMDQKREdDTURQQVIgPSAweDAwMDAwMDAwCkRHQ01EID0gMHgwMDAw
-MDAwMApEQUxFUEVOQSA9IDB4MDAwMDAwMDAKREVQQ01EUEFSMigwKSA9IDB4MDAwMDAwMDAKREVQ
-Q01EUEFSMSgwKSA9IDB4MDAwMDAwMDIKREVQQ01EUEFSMCgwKSA9IDB4MGNiNjYwMDEKREVQQ01E
-KDApID0gMHgwMDAwMDAwMApERVBDTURQQVIyKDEpID0gMHgwMDAwMDAwMApERVBDTURQQVIxKDEp
-ID0gMHgwMDAwMDAwMApERVBDTURQQVIwKDEpID0gMHgwMDAwMDAwMApERVBDTUQoMSkgPSAweDAw
-MDAwMDAwCkRFUENNRFBBUjIoMikgPSAweDBjYjY3MDAwCkRFUENNRFBBUjEoMikgPSAweDAwMDAw
-MDAwCkRFUENNRFBBUjAoMikgPSAweDAwMDAwMDQwCkRFUENNRCgyKSA9IDB4MDAwMDAwMDAKREVQ
-Q01EUEFSMigzKSA9IDB4MDAwMDAwMDAKREVQQ01EUEFSMSgzKSA9IDB4MDAwMDAwMDAKREVQQ01E
-UEFSMCgzKSA9IDB4MDAwMDAwMDAKREVQQ01EKDMpID0gMHgwMDAwMDAwMApERVBDTURQQVIyKDQp
-ID0gMHgwY2I2NDAwMApERVBDTURQQVIxKDQpID0gMHgwMDAwMDAwMApERVBDTURQQVIwKDQpID0g
-MHgwY2I2NTA0OApERVBDTUQoNCkgPSAweDAwMDAwMDAwCkRFUENNRFBBUjIoNSkgPSAweDAwMDAw
-MDAwCkRFUENNRFBBUjEoNSkgPSAweDAwMDAwMDAwCkRFUENNRFBBUjAoNSkgPSAweDAwMDAwMDAw
-CkRFUENNRCg1KSA9IDB4MDAwMDAwMDAKREVQQ01EUEFSMig2KSA9IDB4MDAwMDAwMDAKREVQQ01E
-UEFSMSg2KSA9IDB4MDAwMDAwMDAKREVQQ01EUEFSMCg2KSA9IDB4MDAwMDAwMDAKREVQQ01EKDYp
-ID0gMHgwMDAwMDAwMApERVBDTURQQVIyKDcpID0gMHgwMDAwMDAwMApERVBDTURQQVIxKDcpID0g
-MHgwMDAwMDAwMApERVBDTURQQVIwKDcpID0gMHgwMDAwMDAwMApERVBDTUQoNykgPSAweDAwMDAw
-MDAwCkRFUENNRFBBUjIoOCkgPSAweDAwMDAwMDAwCkRFUENNRFBBUjEoOCkgPSAweDAwMDAwMDAw
-CkRFUENNRFBBUjAoOCkgPSAweDAwMDAwMDAwCkRFUENNRCg4KSA9IDB4MDAwMDAwMDAKREVQQ01E
-UEFSMig5KSA9IDB4MDAwMDAwMDAKREVQQ01EUEFSMSg5KSA9IDB4MDAwMDAwMDAKREVQQ01EUEFS
-MCg5KSA9IDB4MDAwMDAwMDAKREVQQ01EKDkpID0gMHgwMDAwMDAwMApERVBDTURQQVIyKDEwKSA9
-IDB4MDAwMDAwMDAKREVQQ01EUEFSMSgxMCkgPSAweDAwMDAwMDAwCkRFUENNRFBBUjAoMTApID0g
-MHgwMDAwMDAwMApERVBDTUQoMTApID0gMHgwMDAwMDAwMApERVBDTURQQVIyKDExKSA9IDB4MDAw
-MDAwMDAKREVQQ01EUEFSMSgxMSkgPSAweDAwMDAwMDAwCkRFUENNRFBBUjAoMTEpID0gMHgwMDAw
-MDAwMApERVBDTUQoMTEpID0gMHgwMDAwMDAwMApERVBDTURQQVIyKDEyKSA9IDB4MDAwMDAwMDAK
-REVQQ01EUEFSMSgxMikgPSAweDAwMDAwMDAwCkRFUENNRFBBUjAoMTIpID0gMHgwMDAwMDAwMApE
-RVBDTUQoMTIpID0gMHgwMDAwMDAwMApERVBDTURQQVIyKDEzKSA9IDB4MDAwMDAwMDAKREVQQ01E
-UEFSMSgxMykgPSAweDAwMDAwMDAwCkRFUENNRFBBUjAoMTMpID0gMHgwMDAwMDAwMApERVBDTUQo
-MTMpID0gMHgwMDAwMDAwMApERVBDTURQQVIyKDE0KSA9IDB4MDAwMDAwMDAKREVQQ01EUEFSMSgx
-NCkgPSAweDAwMDAwMDAwCkRFUENNRFBBUjAoMTQpID0gMHgwMDAwMDAwMApERVBDTUQoMTQpID0g
-MHgwMDAwMDAwMApERVBDTURQQVIyKDE1KSA9IDB4MDAwMDAwMDAKREVQQ01EUEFSMSgxNSkgPSAw
-eDAwMDAwMDAwCkRFUENNRFBBUjAoMTUpID0gMHgwMDAwMDAwMApERVBDTUQoMTUpID0gMHgwMDAw
-MDAwMApERVBDTURQQVIyKDE2KSA9IDB4MDAwMDAwMDAKREVQQ01EUEFSMSgxNikgPSAweDAwMDAw
-MDAwCkRFUENNRFBBUjAoMTYpID0gMHgwMDAwMDAwMApERVBDTUQoMTYpID0gMHgwMDAwMDAwMApE
-RVBDTURQQVIyKDE3KSA9IDB4MDAwMDAwMDAKREVQQ01EUEFSMSgxNykgPSAweDAwMDAwMDAwCkRF
-UENNRFBBUjAoMTcpID0gMHgwMDAwMDAwMApERVBDTUQoMTcpID0gMHgwMDAwMDAwMApERVBDTURQ
-QVIyKDE4KSA9IDB4MDAwMDAwMDAKREVQQ01EUEFSMSgxOCkgPSAweDAwMDAwMDAwCkRFUENNRFBB
-UjAoMTgpID0gMHgwMDAwMDAwMApERVBDTUQoMTgpID0gMHgwMDAwMDAwMApERVBDTURQQVIyKDE5
-KSA9IDB4MDAwMDAwMDAKREVQQ01EUEFSMSgxOSkgPSAweDAwMDAwMDAwCkRFUENNRFBBUjAoMTkp
-ID0gMHgwMDAwMDAwMApERVBDTUQoMTkpID0gMHgwMDAwMDAwMApERVBDTURQQVIyKDIwKSA9IDB4
-MDAwMDAwMDAKREVQQ01EUEFSMSgyMCkgPSAweDAwMDAwMDAwCkRFUENNRFBBUjAoMjApID0gMHgw
-MDAwMDAwMApERVBDTUQoMjApID0gMHgwMDAwMDAwMApERVBDTURQQVIyKDIxKSA9IDB4MDAwMDAw
-MDAKREVQQ01EUEFSMSgyMSkgPSAweDAwMDAwMDAwCkRFUENNRFBBUjAoMjEpID0gMHgwMDAwMDAw
-MApERVBDTUQoMjEpID0gMHgwMDAwMDAwMApERVBDTURQQVIyKDIyKSA9IDB4MDAwMDAwMDAKREVQ
-Q01EUEFSMSgyMikgPSAweDAwMDAwMDAwCkRFUENNRFBBUjAoMjIpID0gMHgwMDAwMDAwMApERVBD
-TUQoMjIpID0gMHgwMDAwMDAwMApERVBDTURQQVIyKDIzKSA9IDB4MDAwMDAwMDAKREVQQ01EUEFS
-MSgyMykgPSAweDAwMDAwMDAwCkRFUENNRFBBUjAoMjMpID0gMHgwMDAwMDAwMApERVBDTUQoMjMp
-ID0gMHgwMDAwMDAwMApERVBDTURQQVIyKDI0KSA9IDB4MDAwMDAwMDAKREVQQ01EUEFSMSgyNCkg
-PSAweDAwMDAwMDAwCkRFUENNRFBBUjAoMjQpID0gMHgwMDAwMDAwMApERVBDTUQoMjQpID0gMHgw
-MDAwMDAwMApERVBDTURQQVIyKDI1KSA9IDB4MDAwMDAwMDAKREVQQ01EUEFSMSgyNSkgPSAweDAw
-MDAwMDAwCkRFUENNRFBBUjAoMjUpID0gMHgwMDAwMDAwMApERVBDTUQoMjUpID0gMHgwMDAwMDAw
-MApERVBDTURQQVIyKDI2KSA9IDB4MDAwMDAwMDAKREVQQ01EUEFSMSgyNikgPSAweDAwMDAwMDAw
-CkRFUENNRFBBUjAoMjYpID0gMHgwMDAwMDAwMApERVBDTUQoMjYpID0gMHgwMDAwMDAwMApERVBD
-TURQQVIyKDI3KSA9IDB4MDAwMDAwMDAKREVQQ01EUEFSMSgyNykgPSAweDAwMDAwMDAwCkRFUENN
-RFBBUjAoMjcpID0gMHgwMDAwMDAwMApERVBDTUQoMjcpID0gMHgwMDAwMDAwMApERVBDTURQQVIy
-KDI4KSA9IDB4MDAwMDAwMDAKREVQQ01EUEFSMSgyOCkgPSAweDAwMDAwMDAwCkRFUENNRFBBUjAo
-MjgpID0gMHgwMDAwMDAwMApERVBDTUQoMjgpID0gMHgwMDAwMDAwMApERVBDTURQQVIyKDI5KSA9
-IDB4MDAwMDAwMDAKREVQQ01EUEFSMSgyOSkgPSAweDAwMDAwMDAwCkRFUENNRFBBUjAoMjkpID0g
-MHgwMDAwMDAwMApERVBDTUQoMjkpID0gMHgwMDAwMDAwMApERVBDTURQQVIyKDMwKSA9IDB4MDAw
-MDAwMDAKREVQQ01EUEFSMSgzMCkgPSAweDAwMDAwMDAwCkRFUENNRFBBUjAoMzApID0gMHgwMDAw
-MDAwMApERVBDTUQoMzApID0gMHgwMDAwMDAwMApERVBDTURQQVIyKDMxKSA9IDB4MDAwMDAwMDAK
-REVQQ01EUEFSMSgzMSkgPSAweDAwMDAwMDAwCkRFUENNRFBBUjAoMzEpID0gMHgwMDAwMDAwMApE
-RVBDTUQoMzEpID0gMHgwMDAwMDAwMApPQ0ZHID0gMHgwMDAwMDAwMApPQ1RMID0gMHgwMDAwMDAw
-MApPRVZUID0gMHgwMDAwMDAwMApPRVZURU4gPSAweDAwMDAwMDAwCk9TVFMgPSAweDAwMDAwMDAw
-Cg==
---0000000000007b3f7a061c4a5055--
 
