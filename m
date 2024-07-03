@@ -1,62 +1,115 @@
-Return-Path: <linux-usb+bounces-11966-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11967-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C9F49262CB
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Jul 2024 16:05:39 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 08364926465
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Jul 2024 17:10:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 342991C21505
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Jul 2024 14:05:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8CFCD1F211BB
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Jul 2024 15:10:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7E2617B4FE;
-	Wed,  3 Jul 2024 14:05:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C01B117FAB6;
+	Wed,  3 Jul 2024 15:09:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="sps+pOmG"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="e52F586N"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C14E1DA318;
-	Wed,  3 Jul 2024 14:05:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA08117FAD3
+	for <linux-usb@vger.kernel.org>; Wed,  3 Jul 2024 15:09:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720015530; cv=none; b=pEgPRP0oAgUKiX4GsyuurTdEQa4VrJdf1oeyGLsAsUaWp3oL8REKLm/LO+OPlLk4Eh0CuEJzKFwrdoHepdbhIltPfbbqZ1ck5YDBa1N7QfMzHUckKzDw7sVPU3o6txnCxw4U9UYMABZZRE1wDVeFS2aILL4M6X3aPxCv3CH9NPA=
+	t=1720019391; cv=none; b=K1VbjQHwv9/kPACwGiwm2Ou9aICwrkYkAaxzcvO5B6otiJIOXW2nXhhPu7qvxNNPHkiIVuft0eEQr7XWXx6Zx+Mrnp+BdLQzc5HyEESnCtajAvsXkDFbdsxlMbI69+FCpGEMgxBTsbc/YwaG/+Xy603VjgFVKWUUVYF+KZPPlfc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720015530; c=relaxed/simple;
-	bh=SBuiLlAm8KdKJg4F9Y0YoQ0A1QaiAy6w/Qr73jLhApo=;
+	s=arc-20240116; t=1720019391; c=relaxed/simple;
+	bh=fhpejWcF/vfLe6nwrakqQTsElpgre49BCBgEinb2+BE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eAmguks613ZzGAXaAILmvHxo2/fO3NbJf613IjJA31mKjkeubtqfhimgxYsSNUhTaGhdrvtLiiUcp2WmEQpKbsGOE0TKUnENurIDX0c/7ZrHT2NM/6nnFfFEGluKtm1aiLUqPb/RZLDfvQ7dmAn/azcYKMIgPSnmDMjEYZfaelo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=sps+pOmG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CD7AC2BD10;
-	Wed,  3 Jul 2024 14:05:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1720015529;
-	bh=SBuiLlAm8KdKJg4F9Y0YoQ0A1QaiAy6w/Qr73jLhApo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=sps+pOmGOcLZTVV9gSreDYf32GXk4Sa3XE8agNk7MvVkVWlhHYVJAkc5E0yJnbttA
-	 9NCCGPfPfIFZXp3rBmgBxXEjVim7Ke4nDtWYF8gz7DidP8S03BIpuILdH9e8p8QH5P
-	 h6Eb7Cs6LoF/il5mumcvp/t9iqQ52jxIrxJa1AfU=
-Date: Wed, 3 Jul 2024 16:05:19 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Nikita Travkin <nikita@trvn.ru>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v4 0/7] usb: typec: ucsi: rework glue driver interface
-Message-ID: <2024070310-iodine-synopsis-4fd9@gregkh>
-References: <20240627-ucsi-rework-interface-v4-0-289ddc6874c7@linaro.org>
- <2024062717-foster-document-eb2f@gregkh>
- <CAA8EJprAshnt3YchBv0ssi4Vet9b6oMcf3z8nuRkoZVYNBq64w@mail.gmail.com>
- <CAA8EJpqCJ8_wOO7yLYA85KYtbLO6hvS-yb7DA6kJ2sH4QH43QA@mail.gmail.com>
- <2024062825-balancing-resigned-e383@gregkh>
- <CAA8EJprsJLMTnd9epLR4Uc02Vg2veW1mpqFxxL=rHU9DtJ8UqQ@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=n6aIZu8NJPrPa/bkt8GmhqpetUV6QdUYdj3o1PTP4jZRGVyEfliDEzLqCoSlNVJcSs1hgmkUJK/czRMQuB/UsS1USCx+cVnp2OSk8lfvxRHNG9Ni5H9JTWK/ykaQivYzyI3oM2y1JrjM/9Z8QBXimtAj8McKHrgi+KhjtEVC44c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=e52F586N; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1720019388;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=OwJT/oF0rqnt+S31sg05vpTbadEupYIHlD2ocZCHgDI=;
+	b=e52F586NIB84ITfcy2V8nSvLTtElmJHPUfmPuuDiZd9zwPiNVk1909O1xNXgGTzV8Le+fH
+	NfFAbc7XZZDP6ym/1mQt81SWERqw/d1OeHPN3skISyh8yjK4EOlfgPJwLOywaShql0/OFx
+	kkwLXl5vT8l40vYZifvcvwpdCCsqzEM=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-353-NCQ1IlvmN-uYrVphfVx8Rw-1; Wed, 03 Jul 2024 11:09:47 -0400
+X-MC-Unique: NCQ1IlvmN-uYrVphfVx8Rw-1
+Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-446102c711bso65942401cf.2
+        for <linux-usb@vger.kernel.org>; Wed, 03 Jul 2024 08:09:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720019382; x=1720624182;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OwJT/oF0rqnt+S31sg05vpTbadEupYIHlD2ocZCHgDI=;
+        b=kX+l6LtL4tkPseRt0aNyeWfnfcuPxcUOWuQ/CnTpYvzDAbuPgu+epTzw+Us/2A17sD
+         bBem+3bS4yJdB627bPAQ9GSbhPpby0hGMD0p7MsnLs2/gR4imBaEzrgXXsk5txd85R92
+         CWtra7AJxST2fnssWXvMR2GXqCaBBrnmGYTOhZz1hSx5NwEKzmui/2Phd0XErh69/lYo
+         E+qiitpTdLeKQn0KTSWA4dbsraARah1/x8Cz49VwufJqKk5BjbGavfvgWQLcAXcqmltu
+         gKRyY8NgIzANKSYO5i7tSKx/l6GpsmtQ/VEU1ZtA6fW1L97PopdG8Pw9osBAGh2T//VM
+         UUuA==
+X-Forwarded-Encrypted: i=1; AJvYcCW/LQ7OmHVUMbaZle6oF2sSSU9dCTM5mjFFLLV3SNvBZz9syfjNqmJkAQwYSNcw3ek/k+648jSsFLZuZ3ousRWLK0W4U+pvVIGQ
+X-Gm-Message-State: AOJu0Yx4ooXxtZ7KG+ZKsjq/deVDy1+QlwalpiIt6WTIrVzzFFHaRERG
+	fkx/HTJof+qYA/8WTUEC57gHyV60ung+Dan9/ktxpIDImYKntNV0/ajPes0DCQ6CmVFdHaiHq+W
+	5Qfw+qHSbSemeo6VmZ4vMxi7hyhL82QXUMirOyI/46SJ/piuC0TyNMW3OXA==
+X-Received: by 2002:ac8:7d84:0:b0:444:b495:e94d with SMTP id d75a77b69052e-44662c99f4bmr119753171cf.3.1720019381986;
+        Wed, 03 Jul 2024 08:09:41 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IE8jWmpy5/3+Y1qV1pkAlEofbtK+RF6spB2E3wXQKII8gdILaaxSAxoLFic14g5Q4iTwcc7CA==
+X-Received: by 2002:ac8:7d84:0:b0:444:b495:e94d with SMTP id d75a77b69052e-44662c99f4bmr119751991cf.3.1720019381501;
+        Wed, 03 Jul 2024 08:09:41 -0700 (PDT)
+Received: from x1gen2nano ([2600:1700:1ff0:d0e0::40])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4465c4bf7ecsm43222571cf.80.2024.07.03.08.09.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Jul 2024 08:09:41 -0700 (PDT)
+Date: Wed, 3 Jul 2024 10:09:36 -0500
+From: Andrew Halaney <ahalaney@redhat.com>
+To: Tengfei Fan <quic_tengfan@quicinc.com>
+Cc: andersson@kernel.org, konrad.dybcio@linaro.org, robh@kernel.org, 
+	krzk+dt@kernel.org, conor+dt@kernel.org, djakov@kernel.org, mturquette@baylibre.com, 
+	sboyd@kernel.org, jassisinghbrar@gmail.com, herbert@gondor.apana.org.au, 
+	davem@davemloft.net, manivannan.sadhasivam@linaro.org, will@kernel.org, 
+	joro@8bytes.org, conor@kernel.org, tglx@linutronix.de, amitk@kernel.org, 
+	thara.gopinath@gmail.com, linus.walleij@linaro.org, wim@linux-watchdog.org, 
+	linux@roeck-us.net, rafael@kernel.org, viresh.kumar@linaro.org, vkoul@kernel.org, 
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, mcoquelin.stm32@gmail.com, 
+	robimarko@gmail.com, quic_gurus@quicinc.com, bartosz.golaszewski@linaro.org, 
+	kishon@kernel.org, quic_wcheng@quicinc.com, alim.akhtar@samsung.com, 
+	avri.altman@wdc.com, bvanassche@acm.org, agross@kernel.org, 
+	gregkh@linuxfoundation.org, quic_tdas@quicinc.com, robin.murphy@arm.com, 
+	daniel.lezcano@linaro.org, rui.zhang@intel.com, lukasz.luba@arm.com, 
+	quic_rjendra@quicinc.com, ulf.hansson@linaro.org, quic_sibis@quicinc.com, 
+	otto.pflueger@abscue.de, quic_rohiagar@quicinc.com, luca@z3ntu.xyz, 
+	neil.armstrong@linaro.org, abel.vesa@linaro.org, bhupesh.sharma@linaro.org, 
+	alexandre.torgue@foss.st.com, peppe.cavallaro@st.com, joabreu@synopsys.com, 
+	netdev@vger.kernel.org, lpieralisi@kernel.org, kw@linux.com, bhelgaas@google.com, 
+	krzysztof.kozlowski@linaro.org, u.kleine-koenig@pengutronix.de, dmitry.baryshkov@linaro.org, 
+	quic_cang@quicinc.com, danila@jiaxyga.com, quic_nitirawa@quicinc.com, 
+	mantas@8devices.com, athierry@redhat.com, quic_kbajaj@quicinc.com, 
+	quic_bjorande@quicinc.com, quic_msarkar@quicinc.com, quic_devipriy@quicinc.com, 
+	quic_tsoni@quicinc.com, quic_rgottimu@quicinc.com, quic_shashim@quicinc.com, 
+	quic_kaushalk@quicinc.com, quic_tingweiz@quicinc.com, quic_aiquny@quicinc.com, 
+	srinivas.kandagatla@linaro.org, linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, linux-clk@vger.kernel.org, 
+	linux-phy@lists.infradead.org, linux-crypto@vger.kernel.org, linux-scsi@vger.kernel.org, 
+	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev, 
+	linux-riscv@lists.infradead.org, linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org, 
+	linux-pci@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, kernel@quicinc.com
+Subject: Re: [PATCH 29/47] dt-bindings: net: qcom,ethqos: add description for
+ qcs9100
+Message-ID: <u5ekupjqvgoehkl76pv7ljyqqzbnnyh6ci2dilfxfkcdvdy3dp@ehdujhkul7ow>
+References: <20240703025850.2172008-1-quic_tengfan@quicinc.com>
+ <20240703025850.2172008-30-quic_tengfan@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -65,72 +118,69 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAA8EJprsJLMTnd9epLR4Uc02Vg2veW1mpqFxxL=rHU9DtJ8UqQ@mail.gmail.com>
+In-Reply-To: <20240703025850.2172008-30-quic_tengfan@quicinc.com>
 
-On Fri, Jun 28, 2024 at 05:25:17PM +0300, Dmitry Baryshkov wrote:
-> On Fri, 28 Jun 2024 at 17:24, Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Thu, Jun 27, 2024 at 06:08:07PM +0300, Dmitry Baryshkov wrote:
-> > > On Thu, 27 Jun 2024 at 17:57, Dmitry Baryshkov
-> > > <dmitry.baryshkov@linaro.org> wrote:
-> > > >
-> > > > On Thu, 27 Jun 2024 at 17:54, Greg Kroah-Hartman
-> > > > <gregkh@linuxfoundation.org> wrote:
-> > > > >
-> > > > > On Thu, Jun 27, 2024 at 05:44:39PM +0300, Dmitry Baryshkov wrote:
-> > > > > > The interface between UCSI and the glue driver is very low-level. It
-> > > > > > allows reading the UCSI data from any offset (but in reality the UCSI
-> > > > > > driver reads only VERSION, CCI an MESSAGE_IN data). All event handling
-> > > > > > is to be done by the glue driver (which already resulted in several
-> > > > > > similar-but-slightly different implementations). It leaves no place to
-> > > > > > optimize the write-read-read sequence for the command execution (which
-> > > > > > might be beneficial for some of the drivers), etc.
-> > > > > >
-> > > > > > The patchseries attempts to restructure the UCSI glue driver interface
-> > > > > > in order to provide sensible operations instead of a low-level read /
-> > > > > > write calls.
-> > > > > >
-> > > > > > If this approach is found to be acceptable, I plan to further rework the
-> > > > > > command interface, moving reading CCI and MESSAGE_IN to the common
-> > > > > > control code, which should simplify driver's implementation and remove
-> > > > > > necessity to split quirks between sync_control and read_message_in e.g.
-> > > > > > as implemented in the ucsi_ccg.c.
-> > > > > >
-> > > > > > Note, the series was tested only on the ucsi_glink platforms. Further
-> > > > > > testing is appreciated.
-> > > > > >
-> > > > > > Depends: [1], [2]
-> > > > > >
-> > > > > > [1] https://lore.kernel.org/linux-usb/20240612124656.2305603-1-fabrice.gasnier@foss.st.com/
-> > > > > >
-> > > > > > [2] https://lore.kernel.org/linux-usb/20240621-ucsi-yoga-ec-driver-v8-1-e03f3536b8c6@linaro.org/
-> > > > > >
-> > > > > > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > > > > > ---
-> > > > > > Changes in v4:
-> > > > > > - Rebased on top of Greg's tree to resolve conflicts.
-> > > > >
-> > > > > Nope, still got conflicts, are you sure you updated properly?  Patch 1
-> > > > > applied, but #2 did not.
-> > > >
-> > > > I feel stupid enough now. I rebased on top of usb-next instead of
-> > > > usb-testing. Let me spam it once again
-> > >
-> > > Hmm, I see what happened. I had a next+usb-next. Simple usb-next
-> > > doesn't contain changes from 9e3caa9dd51b ("usb: typec: ucsi_acpi: Add
-> > > LG Gram quirk") which this patch also modifies. I can rebase it on top
-> > > of your tree, but then we will have build issues once usb-linus and
-> > > usb-next get merged together.
-> >
-> > Ah, you need/want stuff from both branches, right?  Then just wait until
-> > next week when my -linus branch will be in Linus's tree and then I will
-> > merge that into the -next branch.
+On Wed, Jul 03, 2024 at 10:58:32AM GMT, Tengfei Fan wrote:
+> Add the compatible for the MAC controller on qcs9100 platforms. This MAC
+> works with a single interrupt so add minItems to the interrupts property.
+> The fourth clock's name is different here so change it. Enable relevant
+> PHY properties. Add the relevant compatibles to the binding document for
+> snps,dwmac as well.
+
+This description doesn't match what was done in this patch, its what
+Bart did when he made changes to add the sa8775 changes. Please consider
+using a blurb indicating that this is the same SoC as sa8775p, just with
+different firmware strategies or something along those lines?
+
 > 
-> Ack. Maybe I'll post another iteration based on the discussion on the
-> mailing list.
+> Signed-off-by: Tengfei Fan <quic_tengfan@quicinc.com>
+> ---
+>  Documentation/devicetree/bindings/net/qcom,ethqos.yaml | 1 +
+>  Documentation/devicetree/bindings/net/snps,dwmac.yaml  | 3 +++
+>  2 files changed, 4 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/net/qcom,ethqos.yaml b/Documentation/devicetree/bindings/net/qcom,ethqos.yaml
+> index 6672327358bc..8ab11e00668c 100644
+> --- a/Documentation/devicetree/bindings/net/qcom,ethqos.yaml
+> +++ b/Documentation/devicetree/bindings/net/qcom,ethqos.yaml
+> @@ -20,6 +20,7 @@ properties:
+>    compatible:
+>      enum:
+>        - qcom,qcs404-ethqos
+> +      - qcom,qcs9100-ethqos
+>        - qcom,sa8775p-ethqos
+>        - qcom,sc8280xp-ethqos
+>        - qcom,sm8150-ethqos
+> diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+> index 3bab4e1f3fbf..269c21779396 100644
+> --- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+> +++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+> @@ -67,6 +67,7 @@ properties:
+>          - loongson,ls2k-dwmac
+>          - loongson,ls7a-dwmac
+>          - qcom,qcs404-ethqos
+> +        - qcom,qcs9100-ethqos
+>          - qcom,sa8775p-ethqos
+>          - qcom,sc8280xp-ethqos
+>          - qcom,sm8150-ethqos
+> @@ -582,6 +583,7 @@ allOf:
+>                - ingenic,x1600-mac
+>                - ingenic,x1830-mac
+>                - ingenic,x2000-mac
+> +              - qcom,qcs9100-ethqos
+>                - qcom,sa8775p-ethqos
+>                - qcom,sc8280xp-ethqos
+>                - snps,dwmac-3.50a
+> @@ -639,6 +641,7 @@ allOf:
+>                - ingenic,x1830-mac
+>                - ingenic,x2000-mac
+>                - qcom,qcs404-ethqos
+> +              - qcom,qcs9100-ethqos
+>                - qcom,sa8775p-ethqos
+>                - qcom,sc8280xp-ethqos
+>                - qcom,sm8150-ethqos
+> -- 
+> 2.25.1
+> 
 
-Now queued up, thanks.
-
-greg k-h
 
