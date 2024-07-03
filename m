@@ -1,95 +1,62 @@
-Return-Path: <linux-usb+bounces-11965-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11966-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D593926255
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Jul 2024 15:54:54 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C9F49262CB
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Jul 2024 16:05:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 499C91F235BE
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Jul 2024 13:54:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 342991C21505
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Jul 2024 14:05:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5158717B4E8;
-	Wed,  3 Jul 2024 13:53:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7E2617B4FE;
+	Wed,  3 Jul 2024 14:05:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="Vt6aatF6";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="FquwXcBm"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="sps+pOmG"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from fhigh5-smtp.messagingengine.com (fhigh5-smtp.messagingengine.com [103.168.172.156])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9133217084B
-	for <linux-usb@vger.kernel.org>; Wed,  3 Jul 2024 13:53:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.156
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C14E1DA318;
+	Wed,  3 Jul 2024 14:05:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720014826; cv=none; b=B0XlbaeGDCiKFvxt3EzKlXU1jGur6MY4PHvYhqMEBY8HbX/mRzYmcNjRkxcZ6rd+5Vn6aqy98U38CXzactMHHGxF7oSKR4MB/4upvodXM2bh403b1mecHZqmjFpP582AJlK5xdUvgfSosB4I9FfG9ce92agZgMFHDo5E076BPJ4=
+	t=1720015530; cv=none; b=pEgPRP0oAgUKiX4GsyuurTdEQa4VrJdf1oeyGLsAsUaWp3oL8REKLm/LO+OPlLk4Eh0CuEJzKFwrdoHepdbhIltPfbbqZ1ck5YDBa1N7QfMzHUckKzDw7sVPU3o6txnCxw4U9UYMABZZRE1wDVeFS2aILL4M6X3aPxCv3CH9NPA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720014826; c=relaxed/simple;
-	bh=IlUqf7tBZHK7qjTmXCmr0+qCZg+7AVOdaOYBMQKNk5k=;
+	s=arc-20240116; t=1720015530; c=relaxed/simple;
+	bh=SBuiLlAm8KdKJg4F9Y0YoQ0A1QaiAy6w/Qr73jLhApo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZVPFOxYXLW10Ub6Rqhs16JDdIElpTaHHbl0Xt+Awy/+SUUQMEY6Fvg9L1evyOZs1G1eknUNZxyyM0YIwg3OYS6IKYDJcjEg19otKVfAJgM/rCYPnJzx7jtJVWd51WjHsqhU8j0ie8W2YSFN5J6CHrzGTqpgLh4/agWMD+wxxdgI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com; spf=pass smtp.mailfrom=kroah.com; dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b=Vt6aatF6; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=FquwXcBm; arc=none smtp.client-ip=103.168.172.156
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
-Received: from compute7.internal (compute7.nyi.internal [10.202.2.48])
-	by mailfhigh.nyi.internal (Postfix) with ESMTP id 82B4D11401B2;
-	Wed,  3 Jul 2024 09:53:43 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute7.internal (MEProxy); Wed, 03 Jul 2024 09:53:43 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm2; t=1720014823; x=1720101223; bh=7CyqDQ3Md9
-	TuknspqOsoAyYjEX9JlfZpNaLVaYf1uJ0=; b=Vt6aatF6PQ2TTFIf5rkq+/avM1
-	cqNkyVlqjEAipVbOCz6IvSubWJ+3BQ5Setj6+XTVkW6VSsUJemCbPbTUa8XK2nqH
-	/uoI6kFkv8UAsQXPmUztW/IjiW14PC3IhYsZKqKJ+N/rOFBLLJg9KqFHGxELSUXy
-	2CiRBxdZgkq1r8HI5S7NEQLKDSn36rqnCnSczDX7iyuVqvRlzL7aUhtXP/af3cMm
-	yxzNIXBmynEF00yA3JuttzgxS6Ov/V2gIKkhtS6p8bZx4guWKDJTNCEWn+jAboPG
-	WA0o2r9cfL6Y80x2HQpVGcsH+G6HnxFpoTvzGh6CPN+mEnlqj0/t4rxYmGDQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm2; t=1720014823; x=1720101223; bh=7CyqDQ3Md9TuknspqOsoAyYjEX9J
-	lfZpNaLVaYf1uJ0=; b=FquwXcBmAIssElkR9ggnyoLzLgPQqdYa4BlWxGdgJbml
-	O9Rel8HWw2HclwO7nqmYI1mNl1sIB08dWViWT/7iex3prGrT+QwF+wcI6EE9l+ut
-	CxdC6ZpN6iMazx722RJe5Pva7JB3gO/uaRqYxSomgDjQCpOqB41lBpGV0QZjEJkK
-	O27warYtHUZpd0goXFpNVwou6EFG2QlrZu7PfoW7ieTavEGi/Z+5sIFhPAsLjsnU
-	AuwDiCTTJEIb6PvH4u5KaYcKLaNhfW3CQl+Yhmva6Ll7b/ilD3IjZyKBgqZeGSCs
-	aSomCBYlB/kzVlZQK/DX2uPSEjsb8QJW3lMpegQy/w==
-X-ME-Sender: <xms:51eFZpLUpWRFvfRLeIgFVFc_PBPeUGQ40VwqTvcqrKIQYYE0LdcjIw>
-    <xme:51eFZlLKJLKVd6LbxqPUuIc-u7HYNNHDrpyvOwSOe0Y4vKC9n1E3vdYKAd3Zp_bm_
-    DcqLrzxiA2y_w>
-X-ME-Received: <xmr:51eFZhspaH4IQDsb1s3FwS-RAw3fMg0zDfEOypWCGWcsazYv0spD55AvI7A43s3wnYX01uq1p6yelEcEkmLe8TM_rmcor0ZCE3Mk2Q>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudejgdeilecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
-    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehgedvve
-    dvleejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhushht
-    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhh
-    drtghomh
-X-ME-Proxy: <xmx:51eFZqYuD_uPeUCYF4fgwCfZTna7Uo7tq8PMYjHOcumm6b-ZpWMbqQ>
-    <xmx:51eFZgbFq7oPdR60BCbkmvtYtm-Jb9jvGW9F-OFnM0RzHBbRKbZ58g>
-    <xmx:51eFZuDjlCTgP51fY8kAty1fyM37unWWEgqi1qnX9uBlJEJL0A7ANA>
-    <xmx:51eFZubXPR3iWQY6vDoe5I_T-p7Co-b_0-zbNnk2R2o4mQVvM23_ow>
-    <xmx:51eFZsSdR6O_50WWYhYn__jeleStFLWzxkWW0Ukoa_fdKR-9hyZ_ZhwZ>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 3 Jul 2024 09:53:42 -0400 (EDT)
-Date: Wed, 3 Jul 2024 15:53:40 +0200
-From: Greg KH <greg@kroah.com>
-To: Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
-	Michael Jamet <michael.jamet@intel.com>,
-	Lukas Wunner <lukas@wunner.de>,
-	Andreas Noever <andreas.noever@gmail.com>,
-	linux-usb@vger.kernel.org
-Subject: Re: USB4/Thunderbolt maintenance on vacation during July
-Message-ID: <2024070333-deplored-patrol-a4a2@gregkh>
-References: <20240628090736.GC1532424@black.fi.intel.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=eAmguks613ZzGAXaAILmvHxo2/fO3NbJf613IjJA31mKjkeubtqfhimgxYsSNUhTaGhdrvtLiiUcp2WmEQpKbsGOE0TKUnENurIDX0c/7ZrHT2NM/6nnFfFEGluKtm1aiLUqPb/RZLDfvQ7dmAn/azcYKMIgPSnmDMjEYZfaelo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=sps+pOmG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CD7AC2BD10;
+	Wed,  3 Jul 2024 14:05:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1720015529;
+	bh=SBuiLlAm8KdKJg4F9Y0YoQ0A1QaiAy6w/Qr73jLhApo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=sps+pOmGOcLZTVV9gSreDYf32GXk4Sa3XE8agNk7MvVkVWlhHYVJAkc5E0yJnbttA
+	 9NCCGPfPfIFZXp3rBmgBxXEjVim7Ke4nDtWYF8gz7DidP8S03BIpuILdH9e8p8QH5P
+	 h6Eb7Cs6LoF/il5mumcvp/t9iqQ52jxIrxJa1AfU=
+Date: Wed, 3 Jul 2024 16:05:19 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Nikita Travkin <nikita@trvn.ru>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v4 0/7] usb: typec: ucsi: rework glue driver interface
+Message-ID: <2024070310-iodine-synopsis-4fd9@gregkh>
+References: <20240627-ucsi-rework-interface-v4-0-289ddc6874c7@linaro.org>
+ <2024062717-foster-document-eb2f@gregkh>
+ <CAA8EJprAshnt3YchBv0ssi4Vet9b6oMcf3z8nuRkoZVYNBq64w@mail.gmail.com>
+ <CAA8EJpqCJ8_wOO7yLYA85KYtbLO6hvS-yb7DA6kJ2sH4QH43QA@mail.gmail.com>
+ <2024062825-balancing-resigned-e383@gregkh>
+ <CAA8EJprsJLMTnd9epLR4Uc02Vg2veW1mpqFxxL=rHU9DtJ8UqQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -98,16 +65,72 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240628090736.GC1532424@black.fi.intel.com>
+In-Reply-To: <CAA8EJprsJLMTnd9epLR4Uc02Vg2veW1mpqFxxL=rHU9DtJ8UqQ@mail.gmail.com>
 
-On Fri, Jun 28, 2024 at 12:07:36PM +0300, Mika Westerberg wrote:
-> Hi all,
+On Fri, Jun 28, 2024 at 05:25:17PM +0300, Dmitry Baryshkov wrote:
+> On Fri, 28 Jun 2024 at 17:24, Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Thu, Jun 27, 2024 at 06:08:07PM +0300, Dmitry Baryshkov wrote:
+> > > On Thu, 27 Jun 2024 at 17:57, Dmitry Baryshkov
+> > > <dmitry.baryshkov@linaro.org> wrote:
+> > > >
+> > > > On Thu, 27 Jun 2024 at 17:54, Greg Kroah-Hartman
+> > > > <gregkh@linuxfoundation.org> wrote:
+> > > > >
+> > > > > On Thu, Jun 27, 2024 at 05:44:39PM +0300, Dmitry Baryshkov wrote:
+> > > > > > The interface between UCSI and the glue driver is very low-level. It
+> > > > > > allows reading the UCSI data from any offset (but in reality the UCSI
+> > > > > > driver reads only VERSION, CCI an MESSAGE_IN data). All event handling
+> > > > > > is to be done by the glue driver (which already resulted in several
+> > > > > > similar-but-slightly different implementations). It leaves no place to
+> > > > > > optimize the write-read-read sequence for the command execution (which
+> > > > > > might be beneficial for some of the drivers), etc.
+> > > > > >
+> > > > > > The patchseries attempts to restructure the UCSI glue driver interface
+> > > > > > in order to provide sensible operations instead of a low-level read /
+> > > > > > write calls.
+> > > > > >
+> > > > > > If this approach is found to be acceptable, I plan to further rework the
+> > > > > > command interface, moving reading CCI and MESSAGE_IN to the common
+> > > > > > control code, which should simplify driver's implementation and remove
+> > > > > > necessity to split quirks between sync_control and read_message_in e.g.
+> > > > > > as implemented in the ucsi_ccg.c.
+> > > > > >
+> > > > > > Note, the series was tested only on the ucsi_glink platforms. Further
+> > > > > > testing is appreciated.
+> > > > > >
+> > > > > > Depends: [1], [2]
+> > > > > >
+> > > > > > [1] https://lore.kernel.org/linux-usb/20240612124656.2305603-1-fabrice.gasnier@foss.st.com/
+> > > > > >
+> > > > > > [2] https://lore.kernel.org/linux-usb/20240621-ucsi-yoga-ec-driver-v8-1-e03f3536b8c6@linaro.org/
+> > > > > >
+> > > > > > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> > > > > > ---
+> > > > > > Changes in v4:
+> > > > > > - Rebased on top of Greg's tree to resolve conflicts.
+> > > > >
+> > > > > Nope, still got conflicts, are you sure you updated properly?  Patch 1
+> > > > > applied, but #2 did not.
+> > > >
+> > > > I feel stupid enough now. I rebased on top of usb-next instead of
+> > > > usb-testing. Let me spam it once again
+> > >
+> > > Hmm, I see what happened. I had a next+usb-next. Simple usb-next
+> > > doesn't contain changes from 9e3caa9dd51b ("usb: typec: ucsi_acpi: Add
+> > > LG Gram quirk") which this patch also modifies. I can rebase it on top
+> > > of your tree, but then we will have build issues once usb-linus and
+> > > usb-next get merged together.
+> >
+> > Ah, you need/want stuff from both branches, right?  Then just wait until
+> > next week when my -linus branch will be in Linus's tree and then I will
+> > merge that into the -next branch.
 > 
-> It is that time of the year again. Finland closes up due to vacations
-> and so does USB4/Thunderbolt maintenance. I will be offline during the
-> whole July but will be back in August. Everyone have a nice, relaxing
-> summer. See you again in August! :)
-> 
+> Ack. Maybe I'll post another iteration based on the discussion on the
+> mailing list.
 
-Have a great vacation!
+Now queued up, thanks.
+
+greg k-h
 
