@@ -1,63 +1,65 @@
-Return-Path: <linux-usb+bounces-11931-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11932-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4210D925742
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Jul 2024 11:50:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D0B5925756
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Jul 2024 11:51:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4B48F1C224DB
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Jul 2024 09:50:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 18D3528A0B2
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Jul 2024 09:51:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37509142623;
-	Wed,  3 Jul 2024 09:50:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0390415DBAE;
+	Wed,  3 Jul 2024 09:50:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="fgOb2eyl"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FpCtg51m"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33D3C13DDA3;
-	Wed,  3 Jul 2024 09:50:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0004B142621;
+	Wed,  3 Jul 2024 09:50:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720000213; cv=none; b=Nyn4XIsjvW+XQbX/zPVSAwb+sar0zqG80iBx52pWu1I14LJE5XRz/vsW8KO4H7NmQghPWyoGSHeK6sGGe9/1Npu4VJJypKXuEleJZ8nhfE0NeSWXdCzzCdFAagR/xnJi4S4wDkeEw1l1KeO4yxOVdYeMWpoB881rjPX0MBna5gk=
+	t=1720000234; cv=none; b=RcTjgif6n4W3/5CctrOhop/a98aVKxZvEldYVdWSUCxE7kkiRfCII3JxzZn92soMMPvNNBpo/vnTXOJgytM/sJL0+ipjJmcETcxZfDF2RDaX3qKv/eIS9mFgsNYwv7VZkyJIvUthRfUNwNZfK1U4N/P21FdhTavBKYbc1tPJ6hE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720000213; c=relaxed/simple;
-	bh=acghGTS4hAklAZ2imwEsU8Dr1XC4qbENVq+v8SXSkhQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=Ia8bafeTbzJNe0UbNIP4d/ReUae/VTS3H0bbiSpc+epnvedDCWFTXjIiB0mBH/aROdUDz4LMTE+55HOio9F1jIURN2nysTDNdZUbUklhPcWiDJPOQFzv61U7wvayS6zuX9xHQbD5NnFpUPvu59TKp3dW6AGvQOmGAKd1yu6U4Oc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=fgOb2eyl; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4637uuPo026176;
-	Wed, 3 Jul 2024 09:48:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	r6PDo3ZmiND29AWr6xwATv2xdbzZhoXvEb3979p8hvo=; b=fgOb2eylbajis5N8
-	ilInFJsChuMPbqsDA/wN7LFmAn5tS+jCd49TPxAQklol/D7qgTGt0Y1EZeZjsxuY
-	EgALPNsEoSpujmS1DMKVxI7BJ/iK9yyKw3DROVe/RAPYMthBoNT07ja1G9QJybJ1
-	3ijh0MmK4g5PkY5yjhqjVCeT9QtxVwDh2KBfC0Rq3X33uHZeJdTluSYNSyHr/DUh
-	d+SuPBMD7VYAPUN80xDPa45ckZvYduMHTxgOH++tG6zHEW4U6qJrupzkB8Q1zzd/
-	cRHhAiktD1GpLNCL7l7cLRyhcIWKrcCoNeSx2d/n35tuRSbwR/rcEQQJk+BLdxYk
-	qB58XA==
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4027mnrqvf-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 03 Jul 2024 09:48:30 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA02.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 4639mSdZ005772
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 3 Jul 2024 09:48:28 GMT
-Received: from [10.239.132.204] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 3 Jul 2024
- 02:48:06 -0700
-Message-ID: <d60e0658-b670-44eb-bf6a-60a58c1742be@quicinc.com>
-Date: Wed, 3 Jul 2024 17:48:04 +0800
+	s=arc-20240116; t=1720000234; c=relaxed/simple;
+	bh=DJpEKaO0GRS1/3x/TYtrZypLe7tnIvtbnFwzw/W3d3o=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=EIc94QgouhDZx8ZIRHRpCd/Tslp0v3rpp76hfd3nEu8v47IdtbSRCjcmkw51apsFvtE6I5akCtkLtpr1g46MrjmB+dDRbbNaOvG/jSRlkL86FLWeX98UUFv1S5C3KMGDfpXmosYGzaRQcPYWunaz9P+EDLI5gt+8RQb0FIHOpLw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FpCtg51m; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1720000232; x=1751536232;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=DJpEKaO0GRS1/3x/TYtrZypLe7tnIvtbnFwzw/W3d3o=;
+  b=FpCtg51mA5+NOxPLz1E+yRkEdF2rsDcRFH0KOLP0ZNYXJ5XWxQErhZXQ
+   5ciz5taafpcMMxG30IWxASpM/GzsXOrBZ7h8jtq/k1gc+tE6hfeHLqb63
+   +U50NoSUVtT9aqc6kUO31zzjEuV4/slaCiohtvg/hPptBEYxrOovtKOnn
+   i7IAQnZj6xI5gmuRongw+zW7ufeSrkZgPPe8YJn6kDTqNLfH3wbJrb1j3
+   nh/GyezANbNPcKeOxwTlGAs8E49q7/pvOnw3MU64cN+BOFfpZJxa7si8z
+   HZdQWMjtS12z6ySIpf50lZitqiqy+y8nVbOCVSga1VqOG09YKSBTSRJ0X
+   w==;
+X-CSE-ConnectionGUID: nbIBZQz/RVqbmCgAFgBoMA==
+X-CSE-MsgGUID: XytG+FgyT1WNPYJ1vPOQOQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11121"; a="17353927"
+X-IronPort-AV: E=Sophos;i="6.09,181,1716274800"; 
+   d="scan'208";a="17353927"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2024 02:50:31 -0700
+X-CSE-ConnectionGUID: HisMjqEsSnu1KvOGzxeF/Q==
+X-CSE-MsgGUID: o6LxAqoWSDaNPEVrfSuhqQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,181,1716274800"; 
+   d="scan'208";a="83754897"
+Received: from klitkey1-mobl1.ger.corp.intel.com (HELO [10.245.246.242]) ([10.245.246.242])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2024 02:50:25 -0700
+Message-ID: <ab734271-58ee-4981-926c-9b57f36b8ac6@linux.intel.com>
+Date: Wed, 3 Jul 2024 11:50:21 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -65,109 +67,213 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 01/47] dt-bindings: arm: qcom: Document QCS9100 SoC and
- RIDE board
-To: Krzysztof Kozlowski <krzk@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
-        <conor+dt@kernel.org>, <djakov@kernel.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <jassisinghbrar@gmail.com>,
-        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
-        <manivannan.sadhasivam@linaro.org>, <will@kernel.org>,
-        <joro@8bytes.org>, <conor@kernel.org>, <tglx@linutronix.de>,
-        <amitk@kernel.org>, <thara.gopinath@gmail.com>,
-        <linus.walleij@linaro.org>, <wim@linux-watchdog.org>,
-        <linux@roeck-us.net>, <rafael@kernel.org>, <viresh.kumar@linaro.org>,
-        <vkoul@kernel.org>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <mcoquelin.stm32@gmail.com>
-CC: <robimarko@gmail.com>, <bartosz.golaszewski@linaro.org>,
-        <kishon@kernel.org>, <quic_wcheng@quicinc.com>,
-        <alim.akhtar@samsung.com>, <avri.altman@wdc.com>, <bvanassche@acm.org>,
-        <agross@kernel.org>, <gregkh@linuxfoundation.org>,
-        <quic_tdas@quicinc.com>, <robin.murphy@arm.com>,
-        <daniel.lezcano@linaro.org>, <rui.zhang@intel.com>,
-        <lukasz.luba@arm.com>, <quic_rjendra@quicinc.com>,
-        <ulf.hansson@linaro.org>, <quic_sibis@quicinc.com>,
-        <otto.pflueger@abscue.de>, <luca@z3ntu.xyz>,
-        <neil.armstrong@linaro.org>, <abel.vesa@linaro.org>,
-        <bhupesh.sharma@linaro.org>, <alexandre.torgue@foss.st.com>,
-        <peppe.cavallaro@st.com>, <joabreu@synopsys.com>,
-        <netdev@vger.kernel.org>, <lpieralisi@kernel.org>, <kw@linux.com>,
-        <bhelgaas@google.com>, <ahalaney@redhat.com>,
-        <krzysztof.kozlowski@linaro.org>, <u.kleine-koenig@pengutronix.de>,
-        <dmitry.baryshkov@linaro.org>, <quic_cang@quicinc.com>,
-        <danila@jiaxyga.com>, <quic_nitirawa@quicinc.com>,
-        <mantas@8devices.com>, <athierry@redhat.com>,
-        <quic_kbajaj@quicinc.com>, <quic_bjorande@quicinc.com>,
-        <quic_msarkar@quicinc.com>, <quic_devipriy@quicinc.com>,
-        <quic_tsoni@quicinc.com>, <quic_rgottimu@quicinc.com>,
-        <quic_shashim@quicinc.com>, <quic_kaushalk@quicinc.com>,
-        <quic_tingweiz@quicinc.com>, <quic_aiquny@quicinc.com>,
-        <srinivas.kandagatla@linaro.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <linux-crypto@vger.kernel.org>,
-        <linux-scsi@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <iommu@lists.linux.dev>,
-        <linux-gpio@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
-        <linux-pci@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>, <kernel@quicinc.com>
-References: <20240703025850.2172008-1-quic_tengfan@quicinc.com>
- <20240703025850.2172008-2-quic_tengfan@quicinc.com>
- <665f6c8c-4f43-4d20-90e9-9e037a942066@kernel.org>
- <fbeb5969-0b3a-455e-88eb-b83734bf2c50@quicinc.com>
- <97c9484b-e257-4163-a104-3457d59bc69b@kernel.org>
-From: Tengfei Fan <quic_tengfan@quicinc.com>
-In-Reply-To: <97c9484b-e257-4163-a104-3457d59bc69b@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 4iQ3c_4SVvTyiCWE8YBXnnMoC_qGpXdF
-X-Proofpoint-GUID: 4iQ3c_4SVvTyiCWE8YBXnnMoC_qGpXdF
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-07-03_06,2024-07-02_02,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
- spamscore=0 malwarescore=0 adultscore=0 priorityscore=1501
- lowpriorityscore=0 phishscore=0 mlxscore=0 suspectscore=0 clxscore=1015
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2406140001 definitions=main-2407030072
+Subject: Re: [PATCH v23 32/32] ASoC: doc: Add documentation for SOC USB
+To: =?UTF-8?Q?Amadeusz_S=C5=82awi=C5=84ski?=
+ <amadeuszx.slawinski@linux.intel.com>, Wesley Cheng
+ <quic_wcheng@quicinc.com>, srinivas.kandagatla@linaro.org,
+ mathias.nyman@intel.com, perex@perex.cz, conor+dt@kernel.org,
+ corbet@lwn.net, broonie@kernel.org, lgirdwood@gmail.com, krzk+dt@kernel.org,
+ Thinh.Nguyen@synopsys.com, bgoswami@quicinc.com, tiwai@suse.com,
+ robh@kernel.org, gregkh@linuxfoundation.org
+Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-sound@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, linux-doc@vger.kernel.org,
+ alsa-devel@alsa-project.org
+References: <20240610235808.22173-1-quic_wcheng@quicinc.com>
+ <20240610235808.22173-33-quic_wcheng@quicinc.com>
+ <5be51e1f-70c9-4bbc-96fa-1e50e441bd35@linux.intel.com>
+ <408d9e8e-0f40-7e66-54be-2f8d2c0783a3@quicinc.com>
+ <ca1e1063-e1bd-4e03-a7cd-91985e9954e9@linux.intel.com>
+ <096d59a0-5e18-092c-c9ae-d98130226f06@quicinc.com>
+ <368d9019-2c96-468e-b472-7e1127f76213@linux.intel.com>
+ <eb6370ea-47a0-3659-3c10-cb7f95e3e520@quicinc.com>
+ <510468c7-b181-48d0-bf2d-3e478b2f2aca@linux.intel.com>
+ <c7a95157-1b71-1489-3657-8fe67f9acb4e@quicinc.com>
+ <90463a4e-c2e7-4b59-9a79-23533b4acd1e@linux.intel.com>
+ <fd8f1eb0-4b21-4697-8175-a61bc3858852@quicinc.com>
+ <f982842a-1804-420b-a539-a609ecf8fb8a@linux.intel.com>
+ <3c358604-6926-4f90-8fc8-8139c68c3418@quicinc.com>
+ <70bf10a7-7f87-4fd1-bd44-1733d3b2b15e@linux.intel.com>
+ <b1fcef2a-2af9-4985-ae00-f348ca5df3f1@linux.intel.com>
+Content-Language: en-US
+From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <b1fcef2a-2af9-4985-ae00-f348ca5df3f1@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
 
 
-On 7/3/2024 5:33 PM, Krzysztof Kozlowski wrote:
-> On 03/07/2024 11:21, Tengfei Fan wrote:
->>>>          - items:
->>>>              - enum:
->>>> +              - qcom,qcs9100-ride
->>>>                  - qcom,sa8775p-ride
->>>> +          - const: qcom,qcs9100
+
+>>>>>> There are really multiple layers to deal with
+>>>>>>
+>>>>>> a) is the controller able to support the offload path? IIRC this is
+>>>>>> embedded in an obscure XHCI property, it would make sense to
+>>>>>> expose it
+>>>>>> as a control, or component string, of the USB card.
+>>>>> If a component string/tag is desired, I already have some way of
+>>>>> doing that.  I can add it to the USB card.
+>>>>>
+>>>>>> b) is there a companion card capable of dealing with the offload
+>>>>>> path?
+>>>>>> Since the presence of this card may depend on driver probe, there
+>>>>>> should
+>>>>>> be a control on the USB card. userspace could detect changes to this
+>>>>>> control and detect if that path is or is no longer enabled.
+>>>>> So currently, the "USB Offload Playback Capable Card" kcontrol (on
+>>>>> the USB card) will determine if there is an offload path.  However,
+>>>>> this differs than what Amadeusz is suggesting, in that he wants a
+>>>>> single kcontrol created for EACH USB card identified (per USB audio
+>>>>> device), and a simple enable/disable control to determine if the
+>>>>> offload path is enabled for that card/pcm stream.
+>>>>>
+>>>>> It would be a simpler approach for the userspace, and if the card
+>>>>> that handles the offload card isn't present, then these
+>>>>> enable/disable control will be set to "disabled," and even if users
+>>>>> attempt to set the control, it won't go through.
+>>>> Not following. Are you suggesting userspace would modify the
+>>>> enable/disable status?
 >>>
->>> This changes existing compatible for sa8775p without any explanation in
->>> commit msg.
->>>
->>> Best regards,
->>> Krzysztof
->>>
+>>> Yes, this is the suggestion.  One writeable kcontrol on the USB SND
+>>> audio device that will control if that USB audio device is going to
+>>> be offloaded.  If the kcontrol reads back "enabled" (or 1) then
+>>> userspace knows that the offload path is active.  Else, if it reads
+>>> "disabled" (or 0) after the attempt to set the kcontrol, then the
+>>> offload path was unsuccessfully enabled, ie maybe due to no available
+>>> offload streams.
 >>
->> In the next verion patch series, I will provide relevant explanatory
->> information in this patch commit message.
+>> It's a bit over-engineered IMHO.
+>>
+>> My alternate suggestion is a read-only control reporting that offload is
+>> possible. Then userspace attempts to open a PCM device on the ASoC card,
+>> any failures due to resources would be handled at that point.
+>>
+>>>> I would just have a read-only control that reports what the hardware
+>>>> can
+>>>> do and which other card can deal with offload. It's up to userspace to
+>>>> select the offloaded PCM device or not.
+>>>>
+>>> That is what I have implemented in the previous patch series.  One
+>>> USB SND kcontrol within each USB audio device, which points to the
+>>> ASoC platform card that supports offloading:
+>>>
+>>> "USB Offload Playback Capable Card" --> returns the card index to the
+>>> ASoC platform card
+>>>
+>>> >From there the offloading control is all within the ASoC platform
+>>> card.  This is opposite to what Amaduesz suggested in that, the
+>>> offload control of which USB device to offload should be within USB
+>>> SND (not ASoC)
+>>
+>> It's very hard to follow, I don't understand what userspace needs to
+>> 'control' - in the modify sense. What userspace needs is a place to read
+>> from, and then select the PCM device and follow usual ALSA configuration
+>> with hw_params.
+>>
 > 
-> TBH, I cannot think of any reasonable explanation for this, especially
-> considering rest of the patchset which does not fix resulting dtbs_check
-> warning.
-> 
-> Best regards,
-> Krzysztof
-> 
+> From what I've seen I assumed that goal is to allow Offloading of
+> specific stream from USB card. Otherwise I would say controls are not
+> needed at all, as more user friendly solution is Offloading streams in
+> order they are used as long as resources are available.
 
-This patch may need to be updated based on the results of dtbs_check. In 
-the new version patch series, I will revise the commit message according 
-to the patch updates made.
+That's not great in terms of audio routing, you'd really want more rules
+or controlled behavior where the order in which devices are used does
+not matter.
 
--- 
-Thx and BRs,
-Tengfei Fan
+>>>>>> c) which PCM device is actually offloaded? This could be plural
+>>>>>> for some
+>>>>>> implementations. The mapping between PCM devices exposed by the USB
+>>>>>> card, and those exposed by the companion card, should be known to
+>>>>>> userspace. I am not sure how this would be done though, a variable
+>>>>>> number of controls is a sure way to confuse userspace.
+>>>>> Expanding on Amadeusz's suggestion, my idea is to have an
+>>>>> enable/disable kcontrol per USB stream.  For example, one USB card
+>>>>> could have multiple PCM devices (USB streams).  So we would have
+>>>>> something like:
+>>>>>
+>>>>> PCM Offload Playback Enable Stream#0  enable/disable
+>>>>>
+>>>>> PCM Offload Playback Enable Stream#1  enable/disable
+>>>>>
+>>>>> ....
+>>>> are those read-only or not?
+>>>
+>>> No, writable and readable.
+>>
+>> The writable part introduces a complicated error handling, e.g. what
+>> happens if you have an offloaded stream and then this control is changed
+>> with amixer while streaming?
+>>
+> 
+> -EBUSY? and keep old value
+
+That would require a stop, fw_free, close, reopening of the
+non-offloaded device and restart. Best to avoid interrupting streams, if
+there are no resources that should be detected with an early fail during
+open/hw_params. Once the stream is flowing, it should not be interrupted
+- unless the USB device is removed of course.
+
+>>>>> So we'd know which USB card and PCM device is selected for USB
+>>>>> SND.  However, I see what you're getting at in case there are
+>>>>> multiple supported streams, because userspace needs to know which
+>>>>> ASoC card/pcm combination corresponds to which USB device/combination.
+>>>> I don't understand how this would help map the two parts? There's
+>>>> got to
+>>>> be an additional mapping...
+>>> It won't help with the mapping.  That is something which we'd need to
+>>> add, suggestion below.
+>>>>> What do you think about having a USB card kcontrol to display the
+>>>>> mapped ASoC card and PCM indexes?
+>>>>>
+>>>>> PCM Offload Playback Enable Stream Mapping#0  0, 1 (ASoC card#0,
+>>>>> PCM device#1)
+>>>>>
+>>>>> To summarize, if we did this, I'd plan to remove all the kcontrols
+>>>>> in ASoC card, and have the following in the USB card for an USB
+>>>>> audio device that supports one USB stream:
+>>>>>
+>>>>> PCM Offload Playback Enable Stream#0  enable/disable
+>>>>>
+>>>>> PCM Offload Playback Enable Stream Mapping#0  0, 1 (ASoC card#0,
+>>>>> PCM device#1)
+>>>> ... which is suggested here.
+>>>>
+>>>> Assuming these are read-only controls, we would need to know which PCM
+>>>> device on the USB card can be optimized with the use of which PCM
+>>>> device
+>>>> on the ASoC card. That means a set of three values. You would also want
+>>>> a number of streams to make the guesswork on controls less painful.
+>>>
+>>> OK, so now to just figuring out something that both you and Amadeusz
+>>> can agree on before I put time implementing it.  So I've implemented
+>>> the "enable/disable" path that Amadeusz suggested, which is
+>>> highlighted in my previous response, for evaluation purposes.  The
+>>> overall question is which layer should control the devices that will
+>>> be offloaded.  In my submissions up until now, the control was given
+>>> to the ASoC platform card to determine which USB device to offload. 
+>>> Amadeusz mentioned that it might be beneficial to move the control to
+>>> the USB SND devices, because what if the offloading is NOT backed by
+>>> ASoC. (highlighted in [1])  However, IMO the current implementation
+>>> assumes there is ASoC involved, which should mean that there is some
+>>> platform "card" that is backing the offload path.  Please let me know
+>>> if my understanding is incorrect, @Amadeusz.
+>>
+>> I still fundamentally don't get why userspace would try and modify any
+>> controls, this makes the flows more complicated IMHO since you also have
+>> the PCM open/hw_params stages.
+>> I really think it'd be more than enough if the USB card exposed
+>> read-only values showing that offload is possible and which card/device
+>> to map to. Then userspace uses the ASoC PCM device and errors are
+>> handled at that level.
+> 
+> I tend to agree, less values to change, less chance something breaks.
+> However I think that there should be some way to disable Offload in case
+> something doesn't work properly. (It doesn't have to be control, one can
+> go with module parameter or sysfs toggle or something.)
+
+Agree with this, a 'static' configuration to disable offload would be
+just fine. Module parameter is fine.
+
+A control to read if offload is possible and what the mapping is would
+be good. From there on, userspace may open the offloaded PCM and deal
+with all events (hw_params not supported, xruns, removal, etc).
 
