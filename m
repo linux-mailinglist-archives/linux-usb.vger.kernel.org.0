@@ -1,63 +1,56 @@
-Return-Path: <linux-usb+bounces-11934-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11935-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 08DAD925874
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Jul 2024 12:25:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A2C409258B4
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Jul 2024 12:33:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8B1661F21813
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Jul 2024 10:25:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 36867288D4E
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Jul 2024 10:31:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EDBC171085;
-	Wed,  3 Jul 2024 10:24:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40277172760;
+	Wed,  3 Jul 2024 10:29:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="MPBGboiD"
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="epj26xkK"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D63C14430D;
-	Wed,  3 Jul 2024 10:24:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CAB116B3A1;
+	Wed,  3 Jul 2024 10:29:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720002277; cv=none; b=M4JhlszjgQTMXkJORTSq6wzf2zjXd3CDp/kc8x9iyGgVTb2O1ktxuPYzkYOpRFZ1earhtccQl3kE6FtCe+ujQkpCZFJ01YVkgFsyLPWBg6ABV10PgSA8uVPl4xrxrbTO2V1n0SZa+KK8LdUZHdPqjQE3egu31YVxFDAl4eJ7I2g=
+	t=1720002557; cv=none; b=V3BOr6bwajet+vykO9RXrDf+MXLexpX+D7dqId17ITQkAQKtULZuPL9ujKGofB9naqOzjY9Gs8tEWDBBBJOAsm8ZY/HwsfFkyM8hqVT4W6qXHJS+5JEMkWEE9wTqNWeCEqZil4Rvu0Wrb1EyyTWdz7XD66F55cLiR5rz/VoUcE4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720002277; c=relaxed/simple;
-	bh=VlMke9/MAyPWh0km8onK0q3jYF77Mesj4vmu5K7fKAI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=KRQF7toUbIlVGhKba/G/V6duckny3hSBi7UHuHU8t7roR0MX3D4qbO3F6EzdAo9rnDlwI0eeBg77JTP1Zrc5RTCXUd452ClhGF7fyiPNHfcrZwZYzftEKwCByEzdjmQKURYVNuG+2OHcYfAaeqSCjAKoqZ6ZuOjvMF4FumromM0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=MPBGboiD; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4634MZEL026763;
-	Wed, 3 Jul 2024 10:22:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	WJ4OnCz046UbEw8QxyCK0QrEWS4jubaPabe072kzd94=; b=MPBGboiDw+jAbje8
-	y6LN10YkftB1qyXbDq26qKk2JNyro6pL4GWYFQI/bQ5Qy2c6nEjKu64WNazcJrkF
-	JBm+GQB9jpLmaeQ1BCbsomrTBJRUQDSafJfwKlDoETUZ0h9CJpp+ujSwxjcvAYyr
-	/txFWLk5oEhOeDakAEuYsT7z7K1sn+oXPPUTxyWYFwnwC59WxYFzRVEBOewtRHg/
-	X3Lbz9LepgtMU3QBUFFCCZdvyCfmITPSinamwN52h4SI86SYU4l9xcW9j+ThQNGW
-	K4jU8tI//niKqL7FG3GlC5Z+0T/kfOlVjDmfFVhaiUHVp1jFzcb7WMxtCb4Mekq6
-	FqCI+A==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 404yjhrspf-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 03 Jul 2024 10:22:42 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA01.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 463AMe3H007270
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 3 Jul 2024 10:22:40 GMT
-Received: from [10.239.132.204] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 3 Jul 2024
- 03:22:19 -0700
-Message-ID: <ac4830e3-2945-4021-9c2e-0819e26c8069@quicinc.com>
-Date: Wed, 3 Jul 2024 18:22:17 +0800
+	s=arc-20240116; t=1720002557; c=relaxed/simple;
+	bh=B4WNw8wXkBCKBFf58QT0zrSvxmAlav4aJPMPgYIbRMk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ka6jBqhqGMV6dyW3y4kb+cJeuAj0ICo4GzxHrRMJiNalWxyF5WuOg5orE0kIVTgHF3pKB9eaPgRzMtXOBrbkHgK53dlS4Az/Ha5mIlnz+Ujt8CdbjsqoyJNZB2LuKl1HzZ7rybeVy52+vCKBgrcTPi3ATV4A3XPM34wl8O0cjFc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=epj26xkK; arc=none smtp.client-ip=212.227.15.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
+	s=s31663417; t=1720002518; x=1720607318; i=wahrenst@gmx.net;
+	bh=jAC02KoradPvzXqRnWmVxtR3gPH1OjzL5CZrr+jt7K4=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=epj26xkKFAdLT2ZLpnBFCxpXzXmDA1U1rVUV3gtZjpAd1iltqsS32pAvbySx+pTI
+	 TKUHAKcmOi8nDGOmum2qJ3XmZE8OBkwpFK9Jl/y3dPXG1NiVRiIEYRpI4OvsVrgjc
+	 /zNi5Kuw7ioThNbdUWVhHXyPEuHEvzOAKEyz/9BNAQhQy18iL4mlytBHwAxUZV/bx
+	 QyEROm/F1I6L1RhzcNcqlSPZa2kz4xK6Nj1WfG1NYt6J70v9XgmA1r9ZpVz1BC5Q1
+	 Whb/dswGckhGTyvpm/r/V2dKUmEsSH8YaFazFduSeg56rkeH6nDp1vl30d7uoHOgc
+	 Yp6GbhOD79JOnXWTeQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.1.127] ([37.4.248.43]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MLzBj-1sgLUC3E8n-00Xvif; Wed, 03
+ Jul 2024 12:28:37 +0200
+Message-ID: <b4295be1-6fa4-4118-8554-b8a7cc605f9d@gmx.net>
+Date: Wed, 3 Jul 2024 12:28:35 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -65,89 +58,102 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 27/47] dt-bindings: cpufreq: cpufreq-qcom-hw: Add QCS9100
- compatibles
-To: Taniya Das <quic_tdas@quicinc.com>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
-        <conor+dt@kernel.org>, <djakov@kernel.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <jassisinghbrar@gmail.com>,
-        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
-        <manivannan.sadhasivam@linaro.org>, <will@kernel.org>,
-        <joro@8bytes.org>, <conor@kernel.org>, <tglx@linutronix.de>,
-        <amitk@kernel.org>, <thara.gopinath@gmail.com>,
-        <linus.walleij@linaro.org>, <wim@linux-watchdog.org>,
-        <linux@roeck-us.net>, <rafael@kernel.org>, <viresh.kumar@linaro.org>,
-        <vkoul@kernel.org>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <mcoquelin.stm32@gmail.com>
-CC: <robimarko@gmail.com>, <bartosz.golaszewski@linaro.org>,
-        <kishon@kernel.org>, <quic_wcheng@quicinc.com>,
-        <alim.akhtar@samsung.com>, <avri.altman@wdc.com>, <bvanassche@acm.org>,
-        <agross@kernel.org>, <gregkh@linuxfoundation.org>,
-        <robin.murphy@arm.com>, <daniel.lezcano@linaro.org>,
-        <rui.zhang@intel.com>, <lukasz.luba@arm.com>,
-        <quic_rjendra@quicinc.com>, <ulf.hansson@linaro.org>,
-        <quic_sibis@quicinc.com>, <otto.pflueger@abscue.de>, <luca@z3ntu.xyz>,
-        <neil.armstrong@linaro.org>, <abel.vesa@linaro.org>,
-        <bhupesh.sharma@linaro.org>, <alexandre.torgue@foss.st.com>,
-        <peppe.cavallaro@st.com>, <joabreu@synopsys.com>,
-        <netdev@vger.kernel.org>, <lpieralisi@kernel.org>, <kw@linux.com>,
-        <bhelgaas@google.com>, <ahalaney@redhat.com>,
-        <krzysztof.kozlowski@linaro.org>, <u.kleine-koenig@pengutronix.de>,
-        <dmitry.baryshkov@linaro.org>, <quic_cang@quicinc.com>,
-        <danila@jiaxyga.com>, <quic_nitirawa@quicinc.com>,
-        <mantas@8devices.com>, <athierry@redhat.com>,
-        <quic_kbajaj@quicinc.com>, <quic_bjorande@quicinc.com>,
-        <quic_msarkar@quicinc.com>, <quic_devipriy@quicinc.com>,
-        <quic_tsoni@quicinc.com>, <quic_rgottimu@quicinc.com>,
-        <quic_shashim@quicinc.com>, <quic_kaushalk@quicinc.com>,
-        <quic_tingweiz@quicinc.com>, <quic_aiquny@quicinc.com>,
-        <srinivas.kandagatla@linaro.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <linux-crypto@vger.kernel.org>,
-        <linux-scsi@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <iommu@lists.linux.dev>,
-        <linux-gpio@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
-        <linux-pci@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>, <kernel@quicinc.com>
-References: <20240703025850.2172008-1-quic_tengfan@quicinc.com>
- <20240703035735.2182165-1-quic_tengfan@quicinc.com>
- <20240703035735.2182165-28-quic_tengfan@quicinc.com>
- <23303bc2-4fa2-4b28-af5d-2cadf6795b94@quicinc.com>
-From: Tengfei Fan <quic_tengfan@quicinc.com>
-In-Reply-To: <23303bc2-4fa2-4b28-af5d-2cadf6795b94@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: fmqj1c2QtSYfPoaxODgL9LrlxrCldNNV
-X-Proofpoint-ORIG-GUID: fmqj1c2QtSYfPoaxODgL9LrlxrCldNNV
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-07-03_06,2024-07-02_02,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 bulkscore=0
- mlxlogscore=633 clxscore=1015 lowpriorityscore=0 suspectscore=0
- malwarescore=0 mlxscore=0 priorityscore=1501 adultscore=0 impostorscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2406140001 definitions=main-2407030076
+Subject: Re: [PATCH 07/11] drm/vc4: hdmi: Disable connector status polling
+ during suspend
+To: Maxime Ripard <mripard@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Florian Fainelli <florian.fainelli@broadcom.com>, Ray Jui
+ <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+ Thomas Gleixner <tglx@linutronix.de>, Jassi Brar <jassisinghbrar@gmail.com>,
+ Ulf Hansson <ulf.hansson@linaro.org>, Jiri Slaby <jirislaby@kernel.org>,
+ Minas Harutyunyan <hminas@synopsys.com>,
+ Dave Stevenson <dave.stevenson@raspberrypi.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
+ Daniel Vetter <daniel@ffwll.ch>, Lukas Wunner <lukas@wunner.de>,
+ Peter Robinson <pbrobinson@gmail.com>, dri-devel@lists.freedesktop.org,
+ bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org,
+ linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, kernel-list@raspberrypi.com
+References: <20240630153652.318882-1-wahrenst@gmx.net>
+ <20240630153652.318882-8-wahrenst@gmx.net>
+ <20240702-qualified-archetypal-worm-416a2f@houat>
+Content-Language: en-US
+From: Stefan Wahren <wahrenst@gmx.net>
+In-Reply-To: <20240702-qualified-archetypal-worm-416a2f@houat>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:UT5+Yw3VYpcDi8q6bxX8BCK3eK10KEYEuU0gMCBDS36Ky3v9LJS
+ RjheGoBf7eRKRfWfYMUMQ6TvroecTcRXQG5eYxLs+cf4cZxgH3b4sqoQ0Qn9Xzhf0nwdbVS
+ a1FlBLRfEmsSBj3A/qtP6kO5amazUu8UM1EAvv0N7tlkOALRd48YohXybfIiwTtR9yqUfOF
+ Y/BH6DougG2G4ILmVqDZg==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:I5jGHXRSDwM=;awFPIeF3O6wHlhyhVR5TIjSRdLj
+ +8jbRAvxFK7f8ezP8Hl8y3ZqWH3q7qgAEUoaszJsr+1fvOnys4FIQqThEIw5YmeWgPbXp5s99
+ kHtORwpkkK5hgRrvj2SToeBGjttzbummBtK17Fnp8wTsQU1xerPSeywHjiuXDKXxsRL8mQ+s6
+ EhSuh6hXgdTU6IwBHdN3QZRGZxnvRvWSk5oQh2/bz5FCZ2sCK6TvHVYiRntqseVhVLuxngj05
+ DpV1xsI4hI3dsIswyg57JAe9nI6eFd8iNVrYdxWSktz4emW2YM7kXeK6VZsx3LWbDP0jk5gvY
+ ZfKbJavtcVWztldEOAprtD8x0AkrrWvDh4N4uh8Xhp792ze5YxbxOptjq9gHg+wCTVVrcPv1K
+ 5cJw82qQ6/OdE+3zDNFpmQDrRJZ6sDZZEdHCdmpyIfAJNuOEY/Bdrw/7LtFD8ju4uzFcb7wVZ
+ o9FS0nQlsujNIX7Jebp4AtfqfrdHlbGoZXt1GZzQcBqgQUBh9sw5PjB49Y4qe3/DXTcqWBxBr
+ 5hPg1fE+3k1u0II7jwaTVqYPUVL5ghBFaKiwuWWtHce1mcoB5N2JaVBWuAKWna5D+CFvMbYLw
+ +mQnPlQP19RraIdtpZPc0IEiiFzWvII0OGqkgRo9qTISy4v0ApIJa1Z72mvUJgJI4b6Ij2NFu
+ i/TruhnFj3B1dpdXh7d1CPNSMkg/x59dcW043EX/vBWQv+tB4Jca8HzQ2xG8RmAiXcPCkLAnx
+ Y/qZOuTWrKXO+YiCOx74MGb8SYKcJPxJIPMnYo70x7PO6Qe2BAR6hvA7jdDY2U0Hr7OpDhDTQ
+ AYEgnud0LIdC9YqQ+P1BeiPIR3s1Y3Vo7AYH0o+Uzvzf8=
 
+Hi Maxime,
 
+Am 02.07.24 um 15:48 schrieb Maxime Ripard:
+> Hi,
+>
+> On Sun, Jun 30, 2024 at 05:36:48PM GMT, Stefan Wahren wrote:
+>> Suspend of VC4 HDMI will likely triggers a warning from
+>> vc4_hdmi_connector_detect_ctx() during poll of connector status.
+>> The power management will prevent the resume and keep the relevant
+>> power domain disabled.
+>>
+>> Since there is no reason to poll the connector status during
+>> suspend, the polling should be disabled during this.
+>>
+>> It not possible to use drm_mode_config_helper_suspend() here,
+>> because the callbacks might be called during bind phase and not all
+>> components are fully initialized.
+>>
+>> Link: https://lore.kernel.org/dri-devel/7003512d-7303-4f41-b0d6-a8af5bf=
+8e497@gmx.net/
+>> Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
+>> ---
+>>   drivers/gpu/drm/vc4/vc4_hdmi.c | 11 +++++++++++
+>>   1 file changed, 11 insertions(+)
+>>
+>> diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.c b/drivers/gpu/drm/vc4/vc4_h=
+dmi.c
+>> index b3a42b709718..e80495cea6ac 100644
+>> --- a/drivers/gpu/drm/vc4/vc4_hdmi.c
+>> +++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
+>> @@ -3106,6 +3106,13 @@ static int vc5_hdmi_init_resources(struct drm_de=
+vice *drm,
+>>   static int vc4_hdmi_runtime_suspend(struct device *dev)
+>>   {
+>>   	struct vc4_hdmi *vc4_hdmi =3D dev_get_drvdata(dev);
+>> +	struct drm_device *drm =3D vc4_hdmi->connector.dev;
+>> +
+>> +	/*
+>> +	 * Don't disable polling if it was never initialized
+>> +	 */
+>> +	if (drm && drm->mode_config.poll_enabled)
+>> +		drm_kms_helper_poll_disable(drm);
+> Does it make sense to add it to runtime_suspend?
+i saw that other drm drivers used drm_mode_config_helper_suspend() in
+the RUNTIME_PM_OPS. But i agree, it should be better moved to
+SYSTEM_SLEEP_PM_OPS.
+> What if the board boots without a display connected, and only after a
+> while one is connected? Wouldn't that prevent the driver from detecting
+> it?
+tbh I noticed that HDMI re-detection didn't worked in my setup 6.10-rcX
+before this series. I need to investigate ...
+>
+> Maxime
 
-On 7/3/2024 1:35 PM, Taniya Das wrote:
-> 
-> 
-> On 7/3/2024 9:27 AM, Tengfei Fan wrote:
->> +              - qcom,qcs9100-cpufreq-epss
-> 
-> This is not required as we already have sa8775p bindings.
-
-This is necessary. The reason is same as my reply in patch 41/47.
-
-> 
-
--- 
-Thx and BRs,
-Tengfei Fan
 
