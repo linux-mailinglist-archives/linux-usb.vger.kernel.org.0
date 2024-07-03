@@ -1,298 +1,224 @@
-Return-Path: <linux-usb+bounces-11975-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11976-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18E88926B38
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Jul 2024 00:06:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6DACB926C47
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Jul 2024 01:07:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 98BAB1F21EF5
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Jul 2024 22:06:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 23601284DE9
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Jul 2024 23:07:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F12D18FDC2;
-	Wed,  3 Jul 2024 22:05:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B62B74964E;
+	Wed,  3 Jul 2024 23:07:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="jW47AWJt"
+	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="OH3nMtqY"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2081.outbound.protection.outlook.com [40.107.20.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B571613D892;
-	Wed,  3 Jul 2024 22:05:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720044355; cv=none; b=AGke+s+/gNBhotYZdg8H9bdR4VB4xZh7tOsOlkZuD5I+N4nB07iTqsa1Y6+38YT+UGr5+lPR/XNV0kV0I0h5ummvXfS+U/X9Sn8H3OxOgtog8y6RdXmuF3PkaBjzaOqtD/jjHhUkd2xZNna9cX7q+nRKc0pnqf+tJDrr0e9aR8Y=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720044355; c=relaxed/simple;
-	bh=B6bn+IdAVzy7PjyJsRO/2/rruEaHBUOXEVoxMJWgCNU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=hptAS4zcoHudYTx7e23rMhftPz1bk/FCTaY2hGOj12JwTTsWzFGA0hyl7SXDMdCPd2Z8vbslxkzz/KKKRt+D54PnqzRaScLV5K4BbTfZScujPkHftmvAbNqNUigRAoKG/VN+NyGcBM+tCkvktdI7VRotnVCoLLXqoDKlgys9JX8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=jW47AWJt; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 463AAYpc013722;
-	Wed, 3 Jul 2024 22:05:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	B6bn+IdAVzy7PjyJsRO/2/rruEaHBUOXEVoxMJWgCNU=; b=jW47AWJtw7FzZ4QS
-	alda3BHC4sd8wQ3KVOlbwfBxbeMivv2bVIBaI8AwiMjFbn6vMk+eiRGVL3x8Rr0G
-	VHzXsL9A1Ewltug0NfGCbW/PAYhYXv5FwQ/eyxBbBu7qJbUDjGjUpGk+mOiwz0Ul
-	zNqJmqADn3QVBDlNYZ50tiLmf+V5kmaiyuLIohQ8lI2iRM//4oG4RgAX/HkrfKWt
-	GsH6F/LCXWJu8Xiiky1PJqS8yolnG4F7+5oK+HmxQ/wa7SRVN44GT8nuPu2nVbCB
-	Kg1Wxy4Zx7pXKbOEfLbPTTdTFCsX+Vi0Euy7igZx2hCA3cj41i1HyeTgfMqQw6eW
-	Os/4EQ==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4054ndsdnb-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 03 Jul 2024 22:05:31 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA01.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 463M5Ulw014857
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 3 Jul 2024 22:05:30 GMT
-Received: from [10.110.8.54] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 3 Jul 2024
- 15:05:29 -0700
-Message-ID: <ccbf9366-f3de-4a80-bffc-e32a8409e1a7@quicinc.com>
-Date: Wed, 3 Jul 2024 15:05:29 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AC8E1DA313;
+	Wed,  3 Jul 2024 23:07:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.20.81
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1720048035; cv=fail; b=a61p1O/zx1SNLHFRJiquc2RF9MeikElDU92WuZ5JSszTNQaWIjH3IBVue7E2g59cNotrrcSBKFxXTXQB6IKxngj3TyVkYV1EB31NRlu650TXJoWoxYulD1GuCwAM0/1Vn2IEeY41pQbDRdGwaSlfW6MVtq7icQazEMRZN+7iw6s=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1720048035; c=relaxed/simple;
+	bh=UEwIi6PG2Ortvh0ehIWDp33CtLYDrZbyvTUJLpOuJ6I=;
+	h=From:Subject:Date:Message-Id:Content-Type:To:Cc:MIME-Version; b=l2yhf//hP40R1r3Zt04N5c2plqsgb1yr5jcQvyjK5ajh/+XsU0Di5CU1gtGa3pGrM+Q6vBZItc5h7dw72TMFEJ8D0bGj4kccj9xDsQ/pEV2d2h370cqughoQi0o43PoDWrHrXDOmtljMZsRqVVrRSMN79IjPwb/nuvSrGMKPEe8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b=OH3nMtqY; arc=fail smtp.client-ip=40.107.20.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=D65oZgHVeOdAmfzz6GX0bap8li73MvJrU9AOTY1ZbirmPxlhcsuClADJopXmbjLg89JLpF62L7V8Fgc0f4k9DbY8N9dWx9kcbwSbk9c1hWJXunHl4KZ3cP+9QkvheTUAj5GiHCmA0hlQeAkG1FPolavIixi8z6Vcm9k46vBM9qwTBUcfZ4GysrTgxm3Ob1NpXGho042zYbYUYHscIjJ4zG5P0VDLDSldM8GKS4MFGeDKFg1acRol37oHx9SDxW8uzLWt8imuX0OB+YXUmPYSRkUCjSXWMypnKRTuKo1yL/sahOLm7aKGkcVqJU1dK1XYHu9HtFLk9fUzH7vgpzzkqg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ummwOsFF89Ina+kHn0dNj3ckyMftyrH2ufVOlkq9puU=;
+ b=FAB5IjRgDkbVkUXcLIsTxUG0WRfIL3HB6iWIqxwXxrIDcU20iVntdL1c6Vtu2hfmoQp1zPV477ahhKtPbQzLV+J4U8RU2IrDORdqjCaFyFYituaKKSz+UUm4VEDUC4Tf2fWsdp/rcATVhJU3VzOWZL2Put0OqrBQ48E3gQh9hpe384Iy+mN+r92M8bUX/4H364LyZH0rCDQok/f9JxnomLBt/JgC/K1VE4r/HSFulPSBlpd9gzcUEs0+jlPV0l+xPjt5D9jQ/hqnbvJvaiZWCuFSWuNQuM92cuTuMR/+bdVfQEQAw/adLCo4+PF91l4USk11/WRiAiq3bt/sh0nEkg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ummwOsFF89Ina+kHn0dNj3ckyMftyrH2ufVOlkq9puU=;
+ b=OH3nMtqYoxXg4JBbJONeAgO0kiX3Il4T05gcbYjKCZjLaRl5RdGqdwZJnm1k2AUdTqreE8q6f5g0/5jPGMfDZnwk1DCrCfYboiUKKq0kQEwOew910eCT+SUBu0OMXjqMHMe+pd4H25rP88RdYCrB8/WBav5HkeFwUXWMsmiKdc0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from PAXPR04MB9642.eurprd04.prod.outlook.com (2603:10a6:102:240::14)
+ by PR3PR04MB7242.eurprd04.prod.outlook.com (2603:10a6:102:91::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7741.29; Wed, 3 Jul
+ 2024 23:07:10 +0000
+Received: from PAXPR04MB9642.eurprd04.prod.outlook.com
+ ([fe80::9126:a61e:341d:4b06]) by PAXPR04MB9642.eurprd04.prod.outlook.com
+ ([fe80::9126:a61e:341d:4b06%2]) with mapi id 15.20.7719.029; Wed, 3 Jul 2024
+ 23:07:10 +0000
+From: Frank Li <Frank.Li@nxp.com>
+Subject: [PATCH 0/2] usb: dwc3: Add cache type configuration support for
+ freescale layerscape
+Date: Wed, 03 Jul 2024 19:06:53 -0400
+Message-Id: <20240703-dwc-v1-0-9cbc93d49180@nxp.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAI3ZhWYC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDcwNj3ZTyZF3TpFTjVGNzi5SUpFQloMqCotS0zAqwKdGxtbUALoPY+lU
+ AAAA=
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Felipe Balbi <balbi@kernel.org>, 
+ Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, imx@lists.linux.dev, 
+ Frank Li <Frank.Li@nxp.com>, Ran Wang <ran.wang_1@nxp.com>, 
+ Jun Li <jun.li@nxp.com>
+X-Mailer: b4 0.13-dev-e586c
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1720048027; l=1375;
+ i=Frank.Li@nxp.com; s=20240130; h=from:subject:message-id;
+ bh=UEwIi6PG2Ortvh0ehIWDp33CtLYDrZbyvTUJLpOuJ6I=;
+ b=jARtpgxtmKpXW1wesdq1PKSuF25vX8ltBhZExZA+dT2I2aKAQmrj2m6L+MU2EMptzBWEFw8ss
+ jBay/v9y+e5B/4GU7erO0hqZLSiH2g/XP8csyzex28KzkmFRgig46sx
+X-Developer-Key: i=Frank.Li@nxp.com; a=ed25519;
+ pk=I0L1sDUfPxpAkRvPKy7MdauTuSENRq+DnA+G4qcS94Q=
+X-ClientProxiedBy: SJ0PR03CA0063.namprd03.prod.outlook.com
+ (2603:10b6:a03:331::8) To PAXPR04MB9642.eurprd04.prod.outlook.com
+ (2603:10a6:102:240::14)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v23 32/32] ASoC: doc: Add documentation for SOC USB
-To: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        =?UTF-8?Q?Amadeusz_S=C5=82awi=C5=84ski?=
-	<amadeuszx.slawinski@linux.intel.com>,
-        <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
-        <perex@perex.cz>, <conor+dt@kernel.org>, <corbet@lwn.net>,
-        <broonie@kernel.org>, <lgirdwood@gmail.com>, <krzk+dt@kernel.org>,
-        <Thinh.Nguyen@synopsys.com>, <bgoswami@quicinc.com>, <tiwai@suse.com>,
-        <robh@kernel.org>, <gregkh@linuxfoundation.org>
-CC: <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-sound@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>
-References: <20240610235808.22173-1-quic_wcheng@quicinc.com>
- <20240610235808.22173-33-quic_wcheng@quicinc.com>
- <5be51e1f-70c9-4bbc-96fa-1e50e441bd35@linux.intel.com>
- <408d9e8e-0f40-7e66-54be-2f8d2c0783a3@quicinc.com>
- <ca1e1063-e1bd-4e03-a7cd-91985e9954e9@linux.intel.com>
- <096d59a0-5e18-092c-c9ae-d98130226f06@quicinc.com>
- <368d9019-2c96-468e-b472-7e1127f76213@linux.intel.com>
- <eb6370ea-47a0-3659-3c10-cb7f95e3e520@quicinc.com>
- <510468c7-b181-48d0-bf2d-3e478b2f2aca@linux.intel.com>
- <c7a95157-1b71-1489-3657-8fe67f9acb4e@quicinc.com>
- <90463a4e-c2e7-4b59-9a79-23533b4acd1e@linux.intel.com>
- <fd8f1eb0-4b21-4697-8175-a61bc3858852@quicinc.com>
- <f982842a-1804-420b-a539-a609ecf8fb8a@linux.intel.com>
- <3c358604-6926-4f90-8fc8-8139c68c3418@quicinc.com>
- <70bf10a7-7f87-4fd1-bd44-1733d3b2b15e@linux.intel.com>
- <b1fcef2a-2af9-4985-ae00-f348ca5df3f1@linux.intel.com>
- <ab734271-58ee-4981-926c-9b57f36b8ac6@linux.intel.com>
-Content-Language: en-US
-From: Wesley Cheng <quic_wcheng@quicinc.com>
-In-Reply-To: <ab734271-58ee-4981-926c-9b57f36b8ac6@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: JDIa4Q4OAlCRprDiFXGZhlSTj4qMpCAJ
-X-Proofpoint-ORIG-GUID: JDIa4Q4OAlCRprDiFXGZhlSTj4qMpCAJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-07-03_16,2024-07-03_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
- phishscore=0 impostorscore=0 priorityscore=1501 mlxscore=0 suspectscore=0
- bulkscore=0 adultscore=0 lowpriorityscore=0 clxscore=1015 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2406140001
- definitions=main-2407030164
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PAXPR04MB9642:EE_|PR3PR04MB7242:EE_
+X-MS-Office365-Filtering-Correlation-Id: a16d7ce6-eab3-4692-278c-08dc9bb4de0e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|376014|7416014|52116014|1800799024|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?SE0zQUxpdytWTmQxT2tGcFJMZTFZeTNqc3ZlM0QyNEhvZFhLVndZaEdsQUZU?=
+ =?utf-8?B?dEJlVXhJSHl1M01GSzhpZjlUNytiVHN1bEU5Y0hram12b1Axajh2eXNteWo5?=
+ =?utf-8?B?ZVlrN0Y2ZkU0Tmt0WEpTRWJZdiszQm1KbHQ1cUlzMnE0Y25qRmtUTkNTU3lE?=
+ =?utf-8?B?UmpFMEhIM0tLQlAyYkRwUnN1NHJodEp0T0pOVTR1WmtlaGkyT3FhdlVWdFBW?=
+ =?utf-8?B?a1pEa2ZFUkU5eE4yOU1pcnNTRXF4YmQ1WDc5eVV2MUh3VVJmK3ozVzl4Q0J0?=
+ =?utf-8?B?ekl0WSsvSVNuT0dBVU41Mjl2cVlrOG9RN1FhSTdOT3d2RHU1OWV3NkdZbGFW?=
+ =?utf-8?B?QTM5UkowMzYxUkVJdEx0TmRSZUs1SE51U0dLWVo0ZjZrbTRNWlFncWpmOVl6?=
+ =?utf-8?B?eGxhSlNGV1ZaTGdvRU9lalUvQXhJQ0FWYWVRREE0MWljSndrUDJKZ2xaVng4?=
+ =?utf-8?B?Q1VKbkZxRkZPUk52MEZRcnhTU05BV3JIKzlSWG5seFVaTmc0RjhtUVJ2RTVL?=
+ =?utf-8?B?MWZ2Ty96T0dVR1daUVFSMi9teE5qTlVaR2hQYWVWRTNDWTNHQlB0MzAvMVow?=
+ =?utf-8?B?UDNwa2lJRnFvbWkzNjlYQklIanJKUDhCcUpoaXhZcnNZTFI1OXQrcElqQnFo?=
+ =?utf-8?B?N2t4WDl6dzlMdTk4QzJtK3lNSzRJdWNRU1dHSFNxM1R6MDVhdzFXZWg5OWVn?=
+ =?utf-8?B?aVkzcHNRNnQ2ZUc4QlZaaFJIZjVkNFI5VUpZSEFnVmxUVjBjUHlET1hxbVQy?=
+ =?utf-8?B?dFZrd3E5b3M4SUlYcGxlcjZ6cEZSNUE2cmwyY0tnUW5jUjFsL09tREJhbjcv?=
+ =?utf-8?B?OFJjTThVRDBaOEJteFJ6MkRlcUhRZXFhRDVrR0IxWEEweEFySGNOZ3ZwMnZV?=
+ =?utf-8?B?TGZNb2IzK2tmU3V0em5nOGFKdlJaaTl0SVRrZ05WZzhYWVZ5alJwNWJNa1pB?=
+ =?utf-8?B?bXdESXI2YjFNOHR0eTV3YkNGK2pjNkVlYXVqVExFa0Y4eTFxOUtQcHNFVHUz?=
+ =?utf-8?B?d3hoNTNVUXc3MGc0MUkwWUxhS3NVcU1UUDhzVU44UmduOXcxQkFqMVR6WXdF?=
+ =?utf-8?B?SmZ2N1UzcmVFTU9peHd5ZHdQRDhxL0xCSllrU0xqSmVJcW1kL1hYZUpKUUNL?=
+ =?utf-8?B?VGJKYXFxanhGRWo4MWtuVjhEYnY1c3FJcnFESHoza2x3STlwRGdyZFlpcnQ4?=
+ =?utf-8?B?R0NQcHZGb05sZ2RGR0NGZHlFaUpVYzhNVktTc09EWElrWE9FcndNREJIaVBP?=
+ =?utf-8?B?dTRUaWtYR0xsNnUyTGVoeDV1eVUvQnphOFFJZWFKMFgxaTFkWUg3anVDM0VK?=
+ =?utf-8?B?R0U2bzVpaXIyTW8rUlFQTDN3cTNSZnBoY3R1Vk1vWDZmcU9SYkF3bHpwV09t?=
+ =?utf-8?B?cStXdmllNU5KSjNaSXFvQUxnNkVwWWFnVEttYUxGcTRnTXlhNDhLUWdaY015?=
+ =?utf-8?B?VFVpRWl0QktxRmJDaHdHUkoxTHdoK2tzQzg4SEV6R1JtTmp6dHhSOEJaVGRr?=
+ =?utf-8?B?ZExqRHduNXpPSFBnWi93cUdNeWNDZnZnREpoQ3hXMXVDcHlJR0wxNzQxQzZQ?=
+ =?utf-8?B?U1RtUkh5Yit1WFFHQTc1RjlrcmhIVjgwdC9Pdi96VmFPOFQySmZkWTZ6R2pN?=
+ =?utf-8?B?VnpEOFp5UW9sT0tNUzNKN2J2UGt6czdxd0o5YkVnUm1PaEhQWi9reHRlekpD?=
+ =?utf-8?B?K083blJFVzFjR3NabHkxQ3NoL1dQeXBPWmgrZlJvdCtUUjdEVGppb1Vnemd0?=
+ =?utf-8?B?QUVXOUY1RUp0ODhlRGsrcEhmR21mSEU4YzVpZWJ6K0FUcVZEQ2lJS2xYQXVK?=
+ =?utf-8?Q?EdIidrQD/51IMLazJ/5sxW3+HNIN8PY3aU4tI=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(52116014)(1800799024)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?ZWdSQmJUSHQvelY4UDZTVGJQUS95MmZtMnZnbG43T3JRN3dLN2EwUEZ1QnQ1?=
+ =?utf-8?B?R2tyc0JqVS9qME5DOVkxcGFVNTg2Mjd5R1NITGxqdThhajQ4TFJ0MDRvMUlu?=
+ =?utf-8?B?OWNzVWgxYjUyVGtRZjhiWmFLTmtVOVIyY0h1TTNCc3FQeXF0R3BHMGVUZ1ZS?=
+ =?utf-8?B?VFlhS1BKRzRISS9HN0orKy83L01MVE5NTDVPRG55ZUhNK3dvRHZPWlVSbGE1?=
+ =?utf-8?B?bThNbzhqWlAvQnkzSktFak5iZnJrd0QxcndkUzUrRGRCejc5SGtYUkxWWDNQ?=
+ =?utf-8?B?M0M0V1JSN2YwTWNRdU0vbDVhQk1KQWxIdEhzeURkNndkS0M4WG5SN0VDMGN3?=
+ =?utf-8?B?N0Yyb29venZkYUxJQ0dONkFQaUtENnF4SjlWWFNvdDYvWld1YlRoNnFERmZs?=
+ =?utf-8?B?M0VaU0lCYlJzL2x2MnJ1T2tmeU85UmpMYmpYQ3U5R1Jhc2lLNDhJV2l3eXM3?=
+ =?utf-8?B?aTVFd1ZiS295MWxLZnpWb0RjQTJ4STM3T2FIeitkaUlBS0V6SXJqVHJjS0w4?=
+ =?utf-8?B?Zmx3djByM3h2aHA3YktPVFhIUjVZeU1rNk1udzg0U0NESDZwenJIcUZmeVNG?=
+ =?utf-8?B?UEgxT2g1RWhaK0tSeU15bHlmN3lnNHJHcWp4RUMvdnpUTkkzVnBUbDEwL0N0?=
+ =?utf-8?B?b28rMEx5c0RBdm1GSXFiMHR2YXNEbHBXSTNueTAzS0Y2SzJMcElsQUJZdHRK?=
+ =?utf-8?B?a0hsY0NtVnVhS21sMVc3VDNGc09LS3NGeTFIK3A3eXdoQnNCaUZjdlNUWkNv?=
+ =?utf-8?B?S1RnckhqR3J6L0Y5VldnMjF1TjFtMERRR2dlSDlIVXdTd0xxb2NoOGEwZ0w4?=
+ =?utf-8?B?UnVVTUtCZ0tKVWQ5QVpXeTdSdTBtOUM4b3ZiOElpVFJjcUhoOEVlN0pVaXVX?=
+ =?utf-8?B?SzRnNVRXT0VUdzJEeHM4aGhvTXVpRlVmQ3kvUDUzakt3aGRsVXJKa2RuMzlz?=
+ =?utf-8?B?WDljVmVjbWtiWkpTdDZ4ZGlpQ29xN2h0UE1TdXUzc2RUb2lXSzBtZmhXbUQy?=
+ =?utf-8?B?eUNrS3ROWHhKZjhXNWQ1a0hLWEFnWTROWnFVN0ZVNC83SkxsOE5jNUZTQmc4?=
+ =?utf-8?B?cEJRLzB3YWI2aytFNW5CNS9vUGNRS0RHbTRKWGd2S3pBZzdFVVZ0OGo1ZkZS?=
+ =?utf-8?B?ZkhVSkZ0WXNPSTFVT1VreUNaRWxUbmdjNS9ZTnhUaEUyejNYQS9iZFVTVkxD?=
+ =?utf-8?B?L0dBTjlRcTJIbHZtTHo2TUxvN0s0MGZUNTIzbkU2eXZwZkJUc2g2bEpQSTQ4?=
+ =?utf-8?B?bUZzUmhDeFoxNko1UlR4WVpBK0pOKzRTMFg4MVJHcmJ2UFJsVFpWMVlPN1M1?=
+ =?utf-8?B?WmNHVk5JQWNtZ3NMRS9DWXo2Z25VV2o3TXh3bnVscVYrTjVRR0t3Yk5EQU9G?=
+ =?utf-8?B?NjFpaEJwdjRQL016TXl4RC9BYTdhd2VmeDE1YXFxTGhnWGhQbE1LZVU3MU0v?=
+ =?utf-8?B?NERpV2lZY3c0Wmc2Y2VJczJGV0RBRkxuWWdMQURoZHhsWDV3WWdBdGtkVGRt?=
+ =?utf-8?B?a2NZL1ZCZEFZOXM5MTZCZDVucDFqaFdvbUJLTEd1bDNXWkprUm5HVjQ2b3k0?=
+ =?utf-8?B?QVE5bzNLYWx1cmhkUXREYlh6OVBRdmIxQXQrQTMwR2RiSjY3b3M2Y1l4Z2hS?=
+ =?utf-8?B?UkM5M2JrY0pHS2wyYjgzU3ZIYzU2WHY2VXFUZ3kzcWpWakF5QVVZWkNJOHAz?=
+ =?utf-8?B?bXB3eDlwbjg4WkdnZWNYdmxWb050cXY4bTJ6cEtCd0U2SExiT1BhTGQxTUxu?=
+ =?utf-8?B?aVkvM3RoTW94R2FZWFVPQUlQc1VwbDN0MWozYkE5QkFnOFQ5YzJrNjAySFlj?=
+ =?utf-8?B?VCtmSUFZa3crOXoyMStJcGJzcHhPSmI3SHZBUC9NVHV1czNpSUdxOHhUWHNt?=
+ =?utf-8?B?TzY1VHVmK2duNmlhb1hLZUpxTjVlMU5qWGl2eUdMQXJTV2ExeGhkRm9lbWtX?=
+ =?utf-8?B?OU9jQ2tDWmd6QXZXWUJYdjZTRmNXZXlaRm1FMjZhRlNHSkZUcndxY0t6cHZl?=
+ =?utf-8?B?K3M1eklMSEdZbFVXQzdhdUw2d1VwcjA0eW0rR1dvUmNMdmU3T05wVkFza1pR?=
+ =?utf-8?B?Z1hXYndodXhlNFFWSG1QQXJpZ0x2SDZTS3lUWngzS2d4cnlxcXhSQlVhNmk3?=
+ =?utf-8?Q?5c9c0GO8Jy5g5Y4+kGOPIUv9N?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a16d7ce6-eab3-4692-278c-08dc9bb4de0e
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9642.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jul 2024 23:07:10.3177
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: mTHbSMLTFew8uQvEt72TB164dXMO1MeInvIDmodM8/wvlYYqV+m4o6KU3eMbzMu00WRq0lghW3rRHdlv2q/NLg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR3PR04MB7242
 
+There are several attempt to upstream this code in past year.
 
-On 7/3/2024 2:50 AM, Pierre-Louis Bossart wrote:
->
->
->>>>>>> There are really multiple layers to deal with
->>>>>>>
->>>>>>> a) is the controller able to support the offload path? IIRC this is
->>>>>>> embedded in an obscure XHCI property, it would make sense to
->>>>>>> expose it
->>>>>>> as a control, or component string, of the USB card.
->>>>>> If a component string/tag is desired, I already have some way of
->>>>>> doing that.  I can add it to the USB card.
->>>>>>
->>>>>>> b) is there a companion card capable of dealing with the offload
->>>>>>> path?
->>>>>>> Since the presence of this card may depend on driver probe, there
->>>>>>> should
->>>>>>> be a control on the USB card. userspace could detect changes to this
->>>>>>> control and detect if that path is or is no longer enabled.
->>>>>> So currently, the "USB Offload Playback Capable Card" kcontrol (on
->>>>>> the USB card) will determine if there is an offload path.  However,
->>>>>> this differs than what Amadeusz is suggesting, in that he wants a
->>>>>> single kcontrol created for EACH USB card identified (per USB audio
->>>>>> device), and a simple enable/disable control to determine if the
->>>>>> offload path is enabled for that card/pcm stream.
->>>>>>
->>>>>> It would be a simpler approach for the userspace, and if the card
->>>>>> that handles the offload card isn't present, then these
->>>>>> enable/disable control will be set to "disabled," and even if users
->>>>>> attempt to set the control, it won't go through.
->>>>> Not following. Are you suggesting userspace would modify the
->>>>> enable/disable status?
->>>> Yes, this is the suggestion.  One writeable kcontrol on the USB SND
->>>> audio device that will control if that USB audio device is going to
->>>> be offloaded.  If the kcontrol reads back "enabled" (or 1) then
->>>> userspace knows that the offload path is active.  Else, if it reads
->>>> "disabled" (or 0) after the attempt to set the kcontrol, then the
->>>> offload path was unsuccessfully enabled, ie maybe due to no available
->>>> offload streams.
->>> It's a bit over-engineered IMHO.
->>>
->>> My alternate suggestion is a read-only control reporting that offload is
->>> possible. Then userspace attempts to open a PCM device on the ASoC card,
->>> any failures due to resources would be handled at that point.
->>>
->>>>> I would just have a read-only control that reports what the hardware
->>>>> can
->>>>> do and which other card can deal with offload. It's up to userspace to
->>>>> select the offloaded PCM device or not.
->>>>>
->>>> That is what I have implemented in the previous patch series.  One
->>>> USB SND kcontrol within each USB audio device, which points to the
->>>> ASoC platform card that supports offloading:
->>>>
->>>> "USB Offload Playback Capable Card" --> returns the card index to the
->>>> ASoC platform card
->>>>
->>>> >From there the offloading control is all within the ASoC platform
->>>> card.  This is opposite to what Amaduesz suggested in that, the
->>>> offload control of which USB device to offload should be within USB
->>>> SND (not ASoC)
->>> It's very hard to follow, I don't understand what userspace needs to
->>> 'control' - in the modify sense. What userspace needs is a place to read
->>> from, and then select the PCM device and follow usual ALSA configuration
->>> with hw_params.
->>>
->> From what I've seen I assumed that goal is to allow Offloading of
->> specific stream from USB card. Otherwise I would say controls are not
->> needed at all, as more user friendly solution is Offloading streams in
->> order they are used as long as resources are available.
-> That's not great in terms of audio routing, you'd really want more rules
-> or controlled behavior where the order in which devices are used does
-> not matter.
+The first attempt:
+https://lore.kernel.org/linux-usb/20191121095356.GB7503@b29397-desktop/
 
-So to clarify, when I mention to 'control' this is in case userspace does want to modify which USB device is offloaded.  By default, the current behavior is that the latest USB headset is going to be enabled for offloading.  IF say...userspace has some mechanism to switch which USB device is offloaded, they can do so using:
+cache type is dwc core setting, not glue layer. So It'd better change in
+dwc core instead of glue layer code.
 
-USB Offload Playback Route Card Select
+The second attempt:
+https://lore.kernel.org/linux-usb/20240123170206.3702413-1-Frank.Li@nxp.com/#t
 
-USB Offload Playback Route PCM Select
+DT team think there are not variable for property 'snps,dat-wr-reqinfo'.
+And suggest use vendor compatible string.
 
-The above controls are read/write.  read will fetch the current USB card and pcm indexes being enabled for offload.  write will set the USB card and pcm index to enable offload on.  Both reside on the ASoC card that is associated w/ the USB BE DAI link.
+This is third attempt:
+Compared with first attempt:
+- reduce compatible string to one 'fsl,ls-dwc3' because all setting are the
+same.
+- move update burst type code into dwc3_set_incr_burst_type(). and check
+compatible string 'fsl,ls-dwc3'.
+- Using bit field help macro.
 
->>>>>>> c) which PCM device is actually offloaded? This could be plural
->>>>>>> for some
->>>>>>> implementations. The mapping between PCM devices exposed by the USB
->>>>>>> card, and those exposed by the companion card, should be known to
->>>>>>> userspace. I am not sure how this would be done though, a variable
->>>>>>> number of controls is a sure way to confuse userspace.
->>>>>> Expanding on Amadeusz's suggestion, my idea is to have an
->>>>>> enable/disable kcontrol per USB stream.  For example, one USB card
->>>>>> could have multiple PCM devices (USB streams).  So we would have
->>>>>> something like:
->>>>>>
->>>>>> PCM Offload Playback Enable Stream#0  enable/disable
->>>>>>
->>>>>> PCM Offload Playback Enable Stream#1  enable/disable
->>>>>>
->>>>>> ....
->>>>> are those read-only or not?
->>>> No, writable and readable.
->>> The writable part introduces a complicated error handling, e.g. what
->>> happens if you have an offloaded stream and then this control is changed
->>> with amixer while streaming?
->>>
->> -EBUSY? and keep old value
-> That would require a stop, fw_free, close, reopening of the
-> non-offloaded device and restart. Best to avoid interrupting streams, if
-> there are no resources that should be detected with an early fail during
-> open/hw_params. Once the stream is flowing, it should not be interrupted
-> - unless the USB device is removed of course.
-I agree.  We don't want to interrupt streams if some reason someone tries to switch the offload path.  If there is already an active offload stream, then any attempt to switch/control which USB card/pcm stream is offload is going to be ignored.
->
->>>>>> So we'd know which USB card and PCM device is selected for USB
->>>>>> SND.  However, I see what you're getting at in case there are
->>>>>> multiple supported streams, because userspace needs to know which
->>>>>> ASoC card/pcm combination corresponds to which USB device/combination.
->>>>> I don't understand how this would help map the two parts? There's
->>>>> got to
->>>>> be an additional mapping...
->>>> It won't help with the mapping.  That is something which we'd need to
->>>> add, suggestion below.
->>>>>> What do you think about having a USB card kcontrol to display the
->>>>>> mapped ASoC card and PCM indexes?
->>>>>>
->>>>>> PCM Offload Playback Enable Stream Mapping#0  0, 1 (ASoC card#0,
->>>>>> PCM device#1)
->>>>>>
->>>>>> To summarize, if we did this, I'd plan to remove all the kcontrols
->>>>>> in ASoC card, and have the following in the USB card for an USB
->>>>>> audio device that supports one USB stream:
->>>>>>
->>>>>> PCM Offload Playback Enable Stream#0  enable/disable
->>>>>>
->>>>>> PCM Offload Playback Enable Stream Mapping#0  0, 1 (ASoC card#0,
->>>>>> PCM device#1)
->>>>> ... which is suggested here.
->>>>>
->>>>> Assuming these are read-only controls, we would need to know which PCM
->>>>> device on the USB card can be optimized with the use of which PCM
->>>>> device
->>>>> on the ASoC card. That means a set of three values. You would also want
->>>>> a number of streams to make the guesswork on controls less painful.
->>>> OK, so now to just figuring out something that both you and Amadeusz
->>>> can agree on before I put time implementing it.  So I've implemented
->>>> the "enable/disable" path that Amadeusz suggested, which is
->>>> highlighted in my previous response, for evaluation purposes.  The
->>>> overall question is which layer should control the devices that will
->>>> be offloaded.  In my submissions up until now, the control was given
->>>> to the ASoC platform card to determine which USB device to offload. 
->>>> Amadeusz mentioned that it might be beneficial to move the control to
->>>> the USB SND devices, because what if the offloading is NOT backed by
->>>> ASoC. (highlighted in [1])  However, IMO the current implementation
->>>> assumes there is ASoC involved, which should mean that there is some
->>>> platform "card" that is backing the offload path.  Please let me know
->>>> if my understanding is incorrect, @Amadeusz.
->>> I still fundamentally don't get why userspace would try and modify any
->>> controls, this makes the flows more complicated IMHO since you also have
->>> the PCM open/hw_params stages.
->>> I really think it'd be more than enough if the USB card exposed
->>> read-only values showing that offload is possible and which card/device
->>> to map to. Then userspace uses the ASoC PCM device and errors are
->>> handled at that level.
-Just so I understand...is it really desired that userspace doesn't have the flexibility to choose which USB device is offloaded?  I know it complicates what needs to be done, but it could be just an additional feature that can be added later on.  Again, by default, we select the last USB headset plugged in to be enabled for offload by default.
->> I tend to agree, less values to change, less chance something breaks.
->> However I think that there should be some way to disable Offload in case
->> something doesn't work properly. (It doesn't have to be control, one can
->> go with module parameter or sysfs toggle or something.)
-> Agree with this, a 'static' configuration to disable offload would be
-> just fine. Module parameter is fine.
->
-> A control to read if offload is possible and what the mapping is would
-> be good. From there on, userspace may open the offloaded PCM and deal
-> with all events (hw_params not supported, xruns, removal, etc).
+Signed-off-by: Frank Li <Frank.Li@nxp.com>
+---
+Ran Wang (2):
+      dt-bindings: usb: Add chip-specific compatible string 'fsl,ls-dwc3'
+      usb: dwc3: Set cache type to 'snoop' for freescale layerscape chip
 
-I can look into adding this mapping part to the USB SND card, so we know which ASoC card/pcm devices are associated to the USB SND device for offloading.  Thank you for the discussions and input!
+ Documentation/devicetree/bindings/usb/snps,dwc3.yaml |  1 +
+ drivers/usb/dwc3/core.c                              | 12 ++++++++++++
+ drivers/usb/dwc3/core.h                              |  4 ++++
+ 3 files changed, 17 insertions(+)
+---
+base-commit: 0b58e108042b0ed28a71cd7edf5175999955b233
+change-id: 20240703-dwc-5be3e378ddbe
 
-Thanks
-
-Wesley Cheng
+Best regards,
+---
+Frank Li <Frank.Li@nxp.com>
 
 
