@@ -1,71 +1,71 @@
-Return-Path: <linux-usb+bounces-11991-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11992-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F2C79277F6
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Jul 2024 16:14:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C9F09277FE
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Jul 2024 16:14:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B2E191C20B8F
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Jul 2024 14:14:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BF1381C232FC
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Jul 2024 14:14:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D1331AEFDD;
-	Thu,  4 Jul 2024 14:14:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D86FD1B0100;
+	Thu,  4 Jul 2024 14:14:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="fkVyNLZh"
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="gjIbklv/"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
+Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F2191AE850
-	for <linux-usb@vger.kernel.org>; Thu,  4 Jul 2024 14:13:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06EE11AEFFE
+	for <linux-usb@vger.kernel.org>; Thu,  4 Jul 2024 14:14:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720102439; cv=none; b=JFypx6jmBK4pJEhjv9wBNkdj3j4R3b/TwnZVUJGpkxX85frxMsEadXmpTuYVjn3A9kBLkAF7lC5T31Kv6Fgc/dw8N2dFesL2jgAUDa+eBFhIpO3vNEIjB6vJKhylHGvSj2BaCKxxlG2e9UEpwb+YlGMtKjTGfIAYilLpUZNnU5U=
+	t=1720102456; cv=none; b=NUQ5SChR44v6/zl2qevOcgAcf50f19EA/56Yrfjn3QfJ46O8i+nDFAOBJ7gyL1mJUYREKJNbUtYkzJG9uFNjdoKNDQ8EfZ3irsNx2BTGfptuHltDUZUQyVTX5OhdG2G53JlJPCWmPFDRCPPSop5RZr4LfkocYoZ+PnSMcYZZgfk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720102439; c=relaxed/simple;
-	bh=DapxR6FS/+w7RtCt86BuRPkFxC8NzH3A9KoElvrb3gI=;
+	s=arc-20240116; t=1720102456; c=relaxed/simple;
+	bh=zBT7+VaiXT4raOJZw+3rdG7Fem1BRPyRUL30DbyKZPs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pMRIt4lKQqYSYGJFmd856Kyn2O+7jq72qY4dzKLlfUKPCLeU8f0G438TH0IO890V2yxIUNgW0uOQLMXW5m5eaC6PRomVwQIE8aENK3Y79zMDha6eyoZtoHFc38SqwRd/JS6q6P9290uVqZjc/mYg2CCvIBiVETpwEaS6enQW47s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=fkVyNLZh; arc=none smtp.client-ip=209.85.160.169
+	 In-Reply-To:Content-Type; b=g+wD+eXyJDfU/GC3/dY+Zsl+kvSj4v3/OyhSXk/HjCyuwA8twcxrbxKIxQIsEETBPY7mS1l4q9WSqfajjiGeikbzIVrbTVktuKHIKsNihVmk4k1O/2mlCM4X6p9djqRGJ+nMfZ8ecaxJ9cKYa8GK3sW4rsw0Bgs2ToEE557By9M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=gjIbklv/; arc=none smtp.client-ip=209.85.210.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
-Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-446428931a0so3063951cf.1
-        for <linux-usb@vger.kernel.org>; Thu, 04 Jul 2024 07:13:58 -0700 (PDT)
+Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-7021dd7ffebso395724a34.3
+        for <linux-usb@vger.kernel.org>; Thu, 04 Jul 2024 07:14:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1720102437; x=1720707237; darn=vger.kernel.org;
+        d=broadcom.com; s=google; t=1720102454; x=1720707254; darn=vger.kernel.org;
         h=in-reply-to:autocrypt:from:references:cc:to:subject:user-agent
          :mime-version:date:message-id:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=W/vkF3QOkOxQe2HNNirwh/327rtpR28ODrt8a0994x4=;
-        b=fkVyNLZhwgN14kZjepUV6NqaGI0JoNW4alBGdmNjLAXNaPx6Xd4TU0piOBAz37N/7J
-         TXJfJ/Mz9eaVUv4MmB/WZemPa8XonGRhS2SpDXgp3XDR5/RFSlQN+x98gVN5yIN0WdJy
-         gAnC2NKls0/cxRwtIfEl6SIDIFGWQKcUscuNg=
+        bh=0qdHO96nA6xuZztOzf+HLnPtSqfqSUWxs15BjiXvMuA=;
+        b=gjIbklv/jbhZ6b5XwfGrqC0MsOu7UVQqiCkABwn9wuH58i2rnPnMo/Db8G9aBi/E9g
+         +i69ddOSg9GIuO5gILY14WDPT3do1Y1gWUUBSZoTRpbDSeuGPJdRxYY1TPfVgZ3gy3ai
+         xTUQq80bsM2aOfp5qaBCTYlwFQz0i40h01CQ0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720102437; x=1720707237;
+        d=1e100.net; s=20230601; t=1720102454; x=1720707254;
         h=in-reply-to:autocrypt:from:references:cc:to:subject:user-agent
          :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=W/vkF3QOkOxQe2HNNirwh/327rtpR28ODrt8a0994x4=;
-        b=IzwGR3qoISyPgDC4pTROeB1Ye+V1kMTQ5aG5sj6VBS+vyx8uvvSn8rI+QggnmZIyOk
-         a94ZwxXcy5LU46oCCLAMaoppum5jl0UCyLuWhVlGSecV000RApSj9aA44+5rw/cydHF4
-         6GxsqgppAVtd66J7PZVXDBFk2/uixgbHQhjrcgeeW61c4dFmdTlZ216/afx9tCqVMna9
-         9IsDtk8U4haFt95a62HkkahwpP9RsjZvRE90UHWKCh/AYjluxcQFY2rO7Qc7/qFZyJ6t
-         r5zEB1KtS5PWUVpbzRSrt/dsQW7JwmXJM60eySDyBon8lhmOsTCHZoX9pj2Xu5O59lxv
-         JRBQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVG6JhY4vFFNBeX/OkuX0BCxqIjApy9aZu7J80QF6K9ipPZbCWhGLFevQwlu5+Gn7m7VeRsQxAr8KLdZuuxSNDFfQHut0XdWfdL
-X-Gm-Message-State: AOJu0YwKchBgZ9l79SNWCs9W6LRcZ3X4TI/A55AHnPYw7zPiJSYJWhes
-	D6ZHcwOEnAln5uQmlx1pShCQgyeK44xhGgNaeI2f2RHBQ5E7InIl+BtvLztBaA==
-X-Google-Smtp-Source: AGHT+IHRp77Od5AfvvEZdWw9+IFLlANIpXkVdkZNUhGr4sgtyMOmjrxVm/saDjitOtgruk8P/lX/Lg==
-X-Received: by 2002:a05:622a:1206:b0:441:338c:77cf with SMTP id d75a77b69052e-447cbfa00a3mr19696591cf.65.1720102437241;
-        Thu, 04 Jul 2024 07:13:57 -0700 (PDT)
+        bh=0qdHO96nA6xuZztOzf+HLnPtSqfqSUWxs15BjiXvMuA=;
+        b=OQ/ItpQcFUluEZj2LWJOpYqE5BykL/vK29QHo4KvnUxGxmBhqhLiFLaCNZsTE5jjaV
+         JPVXM+Qxs6RqbIi021ghUMAt90fyUbO2lx8pxiLrad9GCrDVEHDqj8GhdBy13NMZZ1Hp
+         3lX6acAq407WZv1+jM6o0cgKGeLRewYBcOC3a1hZp3Zcjiu3JchhD//qg1ViODss20KQ
+         cA8LdBvQ7AgZUMRCoPrFGpg8hknSHEtRFJ45WGQ1hjji7UROXe8pqYwWqliDbmxmQQLz
+         xXsP4e+uk1ZcgIL4A4687066jzEiuqHg2CvKhjPGLuJMBMW9KptG/xcd2jZHslAuNG/x
+         acwg==
+X-Forwarded-Encrypted: i=1; AJvYcCUMdhJ0x3Iwoa1eA4DvY+iDbCv2YyqQW7Kkxn7y7ocZYjTptsfDeH3wly9bcStMVw66gsmhIqdrAyCapyU5SeqTdoj+kdCaDGMQ
+X-Gm-Message-State: AOJu0YxwrRLdrk/Rg/IkXIeO4d6iWrWUh0FrARb1kuXPyAGyxlXVVmuG
+	2Csj498KBrpGfuwzK4+M63RCBWKd42rX9C1u81iloLKm5K/RQf2/OxJdeS/aIQ==
+X-Google-Smtp-Source: AGHT+IFT29S2/XQChpc79Qq3mBvTKtkHafcbD4GyYx9MlO+jXcpUJuXaD+vn/fyCndbwcUnJ7jIzoQ==
+X-Received: by 2002:a05:6870:610f:b0:254:9ded:a3bf with SMTP id 586e51a60fabf-25e2bf1f10bmr1373747fac.45.1720102454087;
+        Thu, 04 Jul 2024 07:14:14 -0700 (PDT)
 Received: from [10.230.29.79] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4465140bf35sm60862281cf.37.2024.07.04.07.13.41
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4465140bf35sm60862281cf.37.2024.07.04.07.13.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Jul 2024 07:13:56 -0700 (PDT)
-Message-ID: <a1b87121-9818-41bf-9916-f21a9a7c3088@broadcom.com>
-Date: Thu, 4 Jul 2024 15:13:37 +0100
+        Thu, 04 Jul 2024 07:14:13 -0700 (PDT)
+Message-ID: <86705667-1320-436f-b845-da5efdd80de3@broadcom.com>
+Date: Thu, 4 Jul 2024 15:13:56 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -73,7 +73,7 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 11/11] ARM: bcm2835_defconfig: Enable SUSPEND
+Subject: Re: [PATCH 08/11] usb: dwc2: debugfs: Print parameter no_clock_gating
 To: Stefan Wahren <wahrenst@gmx.net>,
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Ray Jui
  <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
@@ -89,7 +89,7 @@ Cc: Dave Stevenson <dave.stevenson@raspberrypi.com>,
  linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org, kernel-list@raspberrypi.com
 References: <20240630153652.318882-1-wahrenst@gmx.net>
- <20240630171926.323426-1-wahrenst@gmx.net>
+ <20240630153652.318882-9-wahrenst@gmx.net>
 From: Florian Fainelli <florian.fainelli@broadcom.com>
 Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
  xsBNBFPAG8ABCAC3EO02urEwipgbUNJ1r6oI2Vr/+uE389lSEShN2PmL3MVnzhViSAtrYxeT
@@ -123,20 +123,25 @@ Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
  MIlnaE6V0U8f5zNHB7Y46yJjjYT/Ds1TJo3pvwevDWPvv6rdBeV07D9s43frUS6xYd1uFxHC
  7dZYWJjZmyUf5evr1W1gCgwLXG0PEi9n3qmz1lelQ8lSocmvxBKtMbX/OKhAfuP/iIwnTsww
  95A2SaPiQZA51NywV8OFgsN0ITl2PlZ4Tp9hHERDe6nQCsNI/Us=
-In-Reply-To: <20240630171926.323426-1-wahrenst@gmx.net>
+In-Reply-To: <20240630153652.318882-9-wahrenst@gmx.net>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="000000000000c4f916061c6c8ee5"
+	boundary="000000000000c61b10061c6c8f36"
 
---000000000000c4f916061c6c8ee5
+--000000000000c61b10061c6c8f36
 Content-Language: en-US
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
 
-On 6/30/2024 6:19 PM, Stefan Wahren wrote:
-> Since the Raspberry Pi supports Suspend-To-Idle now, this option
-> should be enabled. This should make power management testing easier.
+On 6/30/2024 4:36 PM, 'Stefan Wahren' via BCM-KERNEL-FEEDBACK-LIST,PDL 
+wrote:
+> The commit c4a0f7a6ab54 ("usb: dwc2: Skip clock gating on Samsung
+> SoCs") introduced a parameter to skip enabling clock gating mode
+> even the hardware platform should supports it.
+> 
+> In order to make this more visible also print this in show
+> parameters of debugfs.
 > 
 > Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
 
@@ -144,7 +149,7 @@ Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
 -- 
 Florian
 
---000000000000c4f916061c6c8ee5
+--000000000000c61b10061c6c8f36
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -215,15 +220,15 @@ kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
 NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
 AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
 LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
-/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIGT0oxhqwTEBVy/T
-B/qMjqjoCAiLiYvab29v3NEGGv+1MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
-AQkFMQ8XDTI0MDcwNDE0MTM1N1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
+/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIOqA1BQIPRkNcPTZ
+EJUh6usakW/8XoYBsi3kJlE3/Gl2MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
+AQkFMQ8XDTI0MDcwNDE0MTQxNFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
 AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
-MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQC1Sk8N/f/af/8RU+iHCtiADqN85fqRR0RJ
-5FXCHYgzO2iUvFQrW7Gd4Z0hRv9HsGa/MtmQWTdt6bf3yaSHuSQt/Tg7uMnwsiWVgzvNqDn4db4Y
-cRiZuxhv1HiaswHfbH+xtbSIIWLyrtTbzdc0qSJdK3QACkj1TCvMNHrvDLsmfMSiRniIWdm0GnJI
-5CzgrhtBXBoXzg+RLv0pVdiOoYOlB68uHki3vXsjhXLbOMlSmIILG4QhxZq/BcC5xRZQn6xOxIRo
-QW9SIhRIKvuIj6gxoSY80CPSPtCDoIkyZucD2NGN3FoM5H1kvlWT/OfCtEu2WQ4TrblaTZBDZd4L
-/tgJ
---000000000000c4f916061c6c8ee5--
+MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQBSumw113x46gLiiaY0G7WfUhWEAZJZ1Xmk
+Y+EG9CTdj0TiUpcxcBArff5+wEO8Nzui/EIHJE523f+nKsRAWTjTVtxXv/TD0a8+rN9HM6OqwLhG
+0PzNNXpUPouj6jUD0bqrEyVdaG94t+4vlBxG6Qvk9BKTmEPFR6h7upyx0Lb5N2KYxFG8ofhRUmww
+fxoxz/zq8ThNAekzYBWfe6mg6a7UPOvf6Btg2DhoG+udGbaAstmtkmZiv5dHR4scASLlFkTc4UJJ
+PW2iRomFflCNh2RLbIdDar0Yb6Ybf0x/YAxFImM6A+bRYdRRqGLc5gKlm/vWQWMPku1e198F8XRv
+Y44J
+--000000000000c61b10061c6c8f36--
 
