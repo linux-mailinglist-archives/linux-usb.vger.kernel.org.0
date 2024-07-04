@@ -1,152 +1,117 @@
-Return-Path: <linux-usb+bounces-12004-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12005-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 566CA927EA1
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Jul 2024 23:34:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A5C0927F1C
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2024 00:57:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0BFE31F22B1E
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Jul 2024 21:34:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D1A191F22939
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Jul 2024 22:57:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 988C3143C62;
-	Thu,  4 Jul 2024 21:34:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 738571442EA;
+	Thu,  4 Jul 2024 22:57:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="OW87Yyqx"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="m5GeRjvd"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D9D06EB7D;
-	Thu,  4 Jul 2024 21:34:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09245142640
+	for <linux-usb@vger.kernel.org>; Thu,  4 Jul 2024 22:57:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720128846; cv=none; b=T7gwvFceKmXueK1W0WUoBG0O+0vaURCAz3mHHC/I8L2TEA4j9loSogbsiDmBjzWic9381U8EB+gHpOGKXpzQ5V7aeavTxWxQo26LCUrtIg9v8viqKCng+n35xD+TLhCGPb72HHoVAiopg/K8olaiLAeRXBG1Bt23FHpgUDsrqi4=
+	t=1720133840; cv=none; b=IsUToeu66OeR5rrd4lyj8goQGsdUG6ZlBGuLO2D2kaooQSrtthn8L9lVbmYveNh/MW0DLkPWI/lBAWG2cSqzkoa517oYwEoyxYIiwCFBTTcB1lm7TYzzyFR3VSheovHcbzreP7vroIq39RGymPhcxsEiFCVjVIPAsXmudM37I00=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720128846; c=relaxed/simple;
-	bh=3vfbqv9gQQpm1LW9Dts5ISDGsd5fjFLtPgac8Es5wPo=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=uQxQjDowf0w6HFYDNPTI+AlfN8d4qzPBvgbt/gzyo0wfcLIZ33sGgmMbX3z5DA9DbDTGXy9nAt5ELsGI4xtA4ZWK2QCZUqhtlaaBndO3SX4fZpqYpmU8ahxat2jNTTg7qlGJGd65f8aVo2C97321R4fsr7Z3q46A/lh0T7sCoaE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=OW87Yyqx; arc=none smtp.client-ip=217.70.183.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 2FECD240006;
-	Thu,  4 Jul 2024 21:33:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1720128840;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=q5IBUlpk519TSgD6Osr1ZyaFchjMZnggQfjeK80Zda4=;
-	b=OW87YyqxfC/aisrIaK1t9t5rNi1tv8W2h+PNzPy/mbY2MLmPV40lXp/tAQHoWvKu4AWsjJ
-	t1azANkvi0z3C8c1zRY+dEwMFTe4IitMjntGqs0weShRTHE6S9YLuTRM50bq5PQggOGH3h
-	VTb1TQxTb2kbXJ5aFHoZUbrXoTHiCyUiMq8h02kLT12CEGs/CoF9H4DdX4VqNE0u4czR5l
-	eyYcAzvCetxJAj9pUcmrGPPibpICDtqgs90easLdjOXXyAP4rPd46IcoQOzY7rAZwcoezR
-	bPShL3nDBJRC3irR8YI4aF7W8jyTpxGZxv27dKpKX4ap2xqwkURoZOagKsVprQ==
-Date: Thu, 4 Jul 2024 23:33:46 +0200
-From: Luca Ceresoli <luca.ceresoli@bootlin.com>
-To: Rob Herring <robh@kernel.org>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Saravana Kannan <saravanak@google.com>,
- Nathan Chancellor <nathan@kernel.org>, Michael Turquette
- <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, Tony Lindgren
- <tony@atomide.com>, Bjorn Andersson <andersson@kernel.org>, Emilio
- =?UTF-8?Q?L=C3=B3pez?= <emilio@elopez.com.ar>, Chen-Yu Tsai
- <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland
- <samuel@sholland.org>, Krzysztof Kozlowski <krzk@kernel.org>, Daniel
- Lezcano <daniel.lezcano@linaro.org>, Thomas Gleixner <tglx@linutronix.de>,
- Florian Fainelli <florian.fainelli@broadcom.com>, Broadcom internal kernel
- review list <bcm-kernel-feedback-list@broadcom.com>, Linus Walleij
- <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, Jonathan
- Cameron <jic23@kernel.org>, Lee Jones <lee@kernel.org>, Shawn Guo
- <shawnguo@kernel.org>, Pengutronix Kernel Team <kernel@pengutronix.de>, Uwe
- =?UTF-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, Richard
- Leitner <richard.leitner@linux.dev>, Liam Girdwood <lgirdwood@gmail.com>,
- Mark Brown <broonie@kernel.org>, Nicolas Ferre
- <nicolas.ferre@microchip.com>, Michael Ellerman <mpe@ellerman.id.au>,
- Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy
- <christophe.leroy@csgroup.eu>, "Naveen N. Rao"
- <naveen.n.rao@linux.ibm.com>, Damien Le Moal <dlemoal@kernel.org>, "Peng
- Fan (OSS)" <peng.fan@oss.nxp.com>, Thomas Petazzoni
- <thomas.petazzoni@bootlin.com>, linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org, llvm@lists.linux.dev,
- linux-clk@vger.kernel.org, linux-omap@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-sunxi@lists.linux.dev, linux-samsung-soc@vger.kernel.org,
- linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org,
- linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
- linux-usb@vger.kernel.org, patches@opensource.cirrus.com,
- linux-sound@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- linux-riscv@lists.infradead.org
-Subject: Re: [PATCH 20/20] of: deprecate and rename
- of_property_for_each_u32()
-Message-ID: <20240704233346.478431f8@booty>
-In-Reply-To: <20240703180111.GA1245093-robh@kernel.org>
-References: <20240703-of_property_for_each_u32-v1-0-42c1fc0b82aa@bootlin.com>
-	<20240703-of_property_for_each_u32-v1-20-42c1fc0b82aa@bootlin.com>
-	<20240703180111.GA1245093-robh@kernel.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1720133840; c=relaxed/simple;
+	bh=MoZz7itoEYZaF17Te6Z9RXYWUd5M0SSHngCMSRxP6M8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=raBnd9c1MmrEmcEwgQ9MTDGHcC3zqGvP0BYZoqLrmTFZeSSQs96cx+UB62nuP6xg26NAI+AIVl9ubJqoSpdyYPpqmECnpt4jw51yTzOCdQAv0GC7jKwmY8Pb2EWJJfR3NV/keolUMgNY9PYDngHodB9FOim8ckKNSE+zVR7gWyU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=m5GeRjvd; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1720133837; x=1751669837;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=MoZz7itoEYZaF17Te6Z9RXYWUd5M0SSHngCMSRxP6M8=;
+  b=m5GeRjvdvNaAyJ2dSo1Xfpg/poPm27LAb61+9PpgAY5VjQK7rLEblP8O
+   7zC0BcZyW8gE6jXVpa6GGSMqBNeJG7wAqcLdNMXDo5t09Pnxo56bWYTwk
+   NohNevQ2A+2mEh+NAyzQsvQFVDzWK7l3+3nGg+redo6ea5dZ8R65Vfnvf
+   ywXTipn0kOgJY4zf1C908AZHqv+uBeiBiNAKeGG5VnjJICXB/Yns9G4tX
+   3yq9C+o/2Mb3kh1p0XtmqrRGpueBXWqSSOAXkcmCQAR4/Olc7+Qcvz1KB
+   uF6HNz4qfqyZgbvG3JGUq2NCGJe/PQtm8+77v+2gmMz/JfpeeP8HcVNdD
+   g==;
+X-CSE-ConnectionGUID: 8eXBbEwvT7GUHtdFHlVbGA==
+X-CSE-MsgGUID: J8DAOXILQYe5f6kblSy2rg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11123"; a="17529018"
+X-IronPort-AV: E=Sophos;i="6.09,183,1716274800"; 
+   d="scan'208";a="17529018"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2024 15:57:17 -0700
+X-CSE-ConnectionGUID: 1qNf3jCLT8S/iqmnP7skEA==
+X-CSE-MsgGUID: swJxC19sQDOnDyPGZgEOvQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,183,1716274800"; 
+   d="scan'208";a="46487203"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 04 Jul 2024 15:57:15 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sPVO5-000RbK-00;
+	Thu, 04 Jul 2024 22:57:13 +0000
+Date: Fri, 5 Jul 2024 06:57:03 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: oe-kbuild-all@lists.linux.dev, linux-usb@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Subject: [usb:usb-next 4/11] drivers/usb/typec/ucsi/ucsi_ccg.c:572:14:
+ sparse: sparse: incorrect type in assignment (different base types)
+Message-ID: <202407050600.HGza0qcn-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-GND-Sasl: luca.ceresoli@bootlin.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hello Rob,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-next
+head:   179264157bbaf3d169b184160d0b5283f8a50e73
+commit: 467399d989d799433ec7dd8da2ebbfbc70207d03 [4/11] usb: typec: ucsi: split read operation
+config: hexagon-randconfig-r112-20240704 (https://download.01.org/0day-ci/archive/20240705/202407050600.HGza0qcn-lkp@intel.com/config)
+compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+reproduce: (https://download.01.org/0day-ci/archive/20240705/202407050600.HGza0qcn-lkp@intel.com/reproduce)
 
-On Wed, 3 Jul 2024 12:01:11 -0600
-Rob Herring <robh@kernel.org> wrote:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407050600.HGza0qcn-lkp@intel.com/
 
-> On Wed, Jul 03, 2024 at 12:37:04PM +0200, Luca Ceresoli wrote:
-> > of_property_for_each_u32() is meant to disappear. All the call sites not
-> > using the 3rd and 4th arguments have already been replaced by
-> > of_property_for_each_u32_new().
-> > 
-> > Deprecate the old macro. Also rename it to minimize the number of new
-> > usages and encourage conversion to the of_property_for_each_u32_new() macro
-> > in not(-yet)-upstream code.
-> > 
-> > Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-> > 
-> > ---
-> > 
-> > Notes:
-> > 
-> >  * The following files have not been build-tested simply because I haven't
-> >    managed to have a config that enables them so far:
-> > 
-> >      drivers/irqchip/irq-pic32-evic.c
-> >      drivers/pinctrl/pinctrl-k210.c
-> > 
-> >  * These have not been converted yet as they are not trivial, and they will
-> >    need to use a more specific function that does the lookup they need and
-> >    returns the result:
-> > 
-> >      drivers/clk/clk-si5351.c  
-> 
-> I would do something like this:
+sparse warnings: (new ones prefixed by >>)
+>> drivers/usb/typec/ucsi/ucsi_ccg.c:572:14: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int [usertype] @@     got restricted __le32 [usertype] cci @@
+   drivers/usb/typec/ucsi/ucsi_ccg.c:572:14: sparse:     expected unsigned int [usertype]
+   drivers/usb/typec/ucsi/ucsi_ccg.c:572:14: sparse:     got restricted __le32 [usertype] cci
 
-Thanks for the suggestions.
+vim +572 drivers/usb/typec/ucsi/ucsi_ccg.c
 
-I literally did not even try to look at what the code does in these few
-places, and still haven't, simply due to time availability. But I wanted
-to get a first series out as soon as possible as it would probably be
-useful to Peng [0]. Yours will be a good starting point for when I
-tackle those few remaining usages of the "old" macro. Thanks.
-
-[0] https://lore.kernel.org/all/20240628161617.6bc9ca3c@booty/
-
-Luca
+   566	
+   567	static int ucsi_ccg_read_cci(struct ucsi *ucsi, u32 *cci)
+   568	{
+   569		struct ucsi_ccg *uc = ucsi_get_drvdata(ucsi);
+   570	
+   571		spin_lock(&uc->op_lock);
+ > 572		*cci = uc->op_data.cci;
+   573		spin_unlock(&uc->op_lock);
+   574	
+   575		return 0;
+   576	}
+   577	
 
 -- 
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
