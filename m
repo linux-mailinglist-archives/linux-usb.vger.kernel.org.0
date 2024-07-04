@@ -1,72 +1,72 @@
-Return-Path: <linux-usb+bounces-11994-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11995-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6EC2A92791F
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Jul 2024 16:46:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 67D77927931
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Jul 2024 16:48:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9A238B213D3
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Jul 2024 14:46:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BF1F3B2534B
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Jul 2024 14:48:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 637C41AE873;
-	Thu,  4 Jul 2024 14:46:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B4821B1433;
+	Thu,  4 Jul 2024 14:47:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Q5jDgcqm"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LLZtbihl"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB63C15491
-	for <linux-usb@vger.kernel.org>; Thu,  4 Jul 2024 14:46:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4509C1AE0AB
+	for <linux-usb@vger.kernel.org>; Thu,  4 Jul 2024 14:47:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720104394; cv=none; b=ij/Nl1+3AtRDuJm9cWA8fi4wnEEdMmqJV3NdWpg29OgXk4RdodepHBs0TinK423DjVolJ8SzSnkLUwMEzxdWglP5ALr7ugOI5QrIBV9i3MDF0Y4+xfVpss1/IUfBSVNIAgUk+dXthpnJq4g5V+2PJTxOlDrYAlRFqWKSOOnr9WY=
+	t=1720104464; cv=none; b=UqsmDAK0gluR8da5c2V1M+Mv/+id1ldTkuKDw4jy+s46KzTbpVivdncPtOVZPtlvAaYdCNIu6J32kAyzK15tuIlI0O8m7Vp/WJSWDnkjSOYzin54YeA/jFBqM9frYl7Sn4bzaosyf13g7r9AWVLV1A6vmR5iqSMZK55Vlz84aGs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720104394; c=relaxed/simple;
-	bh=8SHYq6cEZ9dt6k0mKy1i1kWzYoODLqhef4sxDenfTNU=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=bRmF8G0oFToPQyT4T6OKkXWI9OhnbhCv6f79qvoloeeoHjMTw++IG/PxiWKaJUfmaIO5TQz636tqCKK8SlW8/K6mKg/nCWc8l2UWahHuvdr1+gNtFH5YmbtYginR7K2naGkIOCxQa608oFrAScYF12INTgvmf0ifHkDB8u58SHo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Q5jDgcqm; arc=none smtp.client-ip=198.175.65.15
+	s=arc-20240116; t=1720104464; c=relaxed/simple;
+	bh=3xb+uVVbA+Fq/IsQiv31pDaBAuPCRkboJ2/voDa+k1A=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=B7wQkZIwvUtnMGISEdvWSLAOMtShVxBHk/lrE180INE1aKT0SsUwDyQrjomhFlVqs2SVgnSsG24khbF/u9gb+4FTamV9IOXD+Lg0J6hVqSJe3CcqT8xZCuZuyx8pG+WPbLrQ4BjSNBmFPvGKng7LUR3RaLDuAXUVCEhPet6rZ8U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LLZtbihl; arc=none smtp.client-ip=192.198.163.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1720104393; x=1751640393;
+  t=1720104462; x=1751640462;
   h=date:from:to:cc:subject:message-id;
-  bh=8SHYq6cEZ9dt6k0mKy1i1kWzYoODLqhef4sxDenfTNU=;
-  b=Q5jDgcqm+FCYG0yd+8XYRAFWhLyj72FpN9WCHrAJnIwduF9XFFL1oB1W
-   pukowjbysbBDiOyOWqYIbqtCs92dRjLYGeHaAMBUnCEInDTpgTQeSPp1p
-   f4HbWHdmpgjfr5PBd89ZMWcK2Ww9qj15SEQMoArMV3/q+fRETxSHc3KxS
-   kAMAPT+MS6hnTIHDPVTXGi58RbIcKEU92m6fQkcJtTLJEl4XlGOlxA8Rg
-   wMy5bOwPzzNSbyUeiQdQrT7agrk4BYmfJbEvMN52dkTc48TwEtIBgZxr/
-   TyNH+BACkYr9ee9aHzoujXp3yPublYR0gxFhAnYNBToBeUWyw/WhRlu9W
-   Q==;
-X-CSE-ConnectionGUID: IFmk79PnT9KHyv7qsLAQhg==
-X-CSE-MsgGUID: x0IceibJSpK3ojSuXGD4TA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11123"; a="21153984"
+  bh=3xb+uVVbA+Fq/IsQiv31pDaBAuPCRkboJ2/voDa+k1A=;
+  b=LLZtbihli4Ukih4wQKCFSzjIfSgTRXRmNft1ewVgBlkdk3HrhwEeLVEc
+   MEwDAnYAQJ0He/TrRx2yiFdo6A9JiJ/cOFd5xRtGddgbORUIVgeC2IrY9
+   rGjenkFHguK5mj47AMJgtqj+vbiNMNC+6yH8LIlVjfDrLlfVPbBHUTGRd
+   rArP5HwvIfb+Klg9nYKzB8O6yBN6HMhT0DB0JFFriZPH6qz0XIXsi1qS4
+   Kvp7p2zF3++eXV3VWfiJILwEUvtbYNGP4kHh58Q1xRXCOOe46WihdJl+9
+   hP+B+RIMjI3I3km5u3JOqTj56TteJuVn3pgSahcFzkdyHPi5LBLBaeQmG
+   w==;
+X-CSE-ConnectionGUID: S9Gi6d9WToejb5nMaR0gVQ==
+X-CSE-MsgGUID: 0VTCw/9MRNesuYdBpC0ePg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11123"; a="34927391"
 X-IronPort-AV: E=Sophos;i="6.09,183,1716274800"; 
-   d="scan'208";a="21153984"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2024 07:46:33 -0700
-X-CSE-ConnectionGUID: 76e2HCECSmuGWxkmBhVWQg==
-X-CSE-MsgGUID: ETnfckyfTG6gbcEp5NwBPA==
+   d="scan'208";a="34927391"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2024 07:47:41 -0700
+X-CSE-ConnectionGUID: E3dcYBFqSPORUsRoMATqeg==
+X-CSE-MsgGUID: /17zlRgOQK2L1pSfc/G3YQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.09,183,1716274800"; 
-   d="scan'208";a="47267104"
+   d="scan'208";a="46590420"
 Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 04 Jul 2024 07:46:31 -0700
+  by fmviesa008.fm.intel.com with ESMTP; 04 Jul 2024 07:47:41 -0700
 Received: from kbuild by 68891e0c336b with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sPNjA-000R6M-2u;
-	Thu, 04 Jul 2024 14:46:28 +0000
-Date: Thu, 04 Jul 2024 22:45:59 +0800
+	id 1sPNkI-000R6g-1z;
+	Thu, 04 Jul 2024 14:47:38 +0000
+Date: Thu, 04 Jul 2024 22:46:32 +0800
 From: kernel test robot <lkp@intel.com>
 To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
 Cc: linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- 179264157bbaf3d169b184160d0b5283f8a50e73
-Message-ID: <202407042257.8PtXRd5a-lkp@intel.com>
+Subject: [usb:usb-linus] BUILD SUCCESS
+ 2bf35ea46d0bc379c456e14c0ec1dc1e003b39f1
+Message-ID: <202407042230.gqTOUMml-lkp@intel.com>
 User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -74,31 +74,10 @@ List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: 179264157bbaf3d169b184160d0b5283f8a50e73  usb: dwc3: core: Check all ports when set phy suspend
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
+branch HEAD: 2bf35ea46d0bc379c456e14c0ec1dc1e003b39f1  usb: dwc3: pci: add support for the Intel Panther Lake
 
-Warning ids grouped by kconfigs:
-
-recent_errors
-`-- arm64-randconfig-051-20240704
-    |-- arch-arm64-boot-dts-qcom-sc818-lenovo-flex-5g.dtb:usb-a6f8800:interrupt-names:dm_hs_phy_irq-was-expected
-    |-- arch-arm64-boot-dts-qcom-sc818-lenovo-flex-5g.dtb:usb-a6f8800:interrupt-names:dp_hs_phy_irq-was-expected
-    |-- arch-arm64-boot-dts-qcom-sc818-lenovo-flex-5g.dtb:usb-a6f8800:interrupt-names:hs_phy_irq-ss_phy_irq-dm_hs_phy_irq-dp_hs_phy_irq-is-too-short
-    |-- arch-arm64-boot-dts-qcom-sc818-lenovo-flex-5g.dtb:usb-a6f8800:interrupt-names:hs_phy_irq-was-expected
-    |-- arch-arm64-boot-dts-qcom-sc818-lenovo-flex-5g.dtb:usb-a8f8800:interrupt-names:dm_hs_phy_irq-was-expected
-    |-- arch-arm64-boot-dts-qcom-sc818-lenovo-flex-5g.dtb:usb-a8f8800:interrupt-names:dp_hs_phy_irq-was-expected
-    |-- arch-arm64-boot-dts-qcom-sc818-lenovo-flex-5g.dtb:usb-a8f8800:interrupt-names:hs_phy_irq-ss_phy_irq-dm_hs_phy_irq-dp_hs_phy_irq-is-too-short
-    |-- arch-arm64-boot-dts-qcom-sc818-lenovo-flex-5g.dtb:usb-a8f8800:interrupt-names:hs_phy_irq-was-expected
-    |-- arch-arm64-boot-dts-qcom-sc818-primus.dtb:usb-a6f8800:interrupt-names:dm_hs_phy_irq-was-expected
-    |-- arch-arm64-boot-dts-qcom-sc818-primus.dtb:usb-a6f8800:interrupt-names:dp_hs_phy_irq-was-expected
-    |-- arch-arm64-boot-dts-qcom-sc818-primus.dtb:usb-a6f8800:interrupt-names:hs_phy_irq-ss_phy_irq-dm_hs_phy_irq-dp_hs_phy_irq-is-too-short
-    |-- arch-arm64-boot-dts-qcom-sc818-primus.dtb:usb-a6f8800:interrupt-names:hs_phy_irq-was-expected
-    |-- arch-arm64-boot-dts-qcom-sc818-primus.dtb:usb-a8f8800:interrupt-names:dm_hs_phy_irq-was-expected
-    |-- arch-arm64-boot-dts-qcom-sc818-primus.dtb:usb-a8f8800:interrupt-names:dp_hs_phy_irq-was-expected
-    |-- arch-arm64-boot-dts-qcom-sc818-primus.dtb:usb-a8f8800:interrupt-names:hs_phy_irq-ss_phy_irq-dm_hs_phy_irq-dp_hs_phy_irq-is-too-short
-    `-- arch-arm64-boot-dts-qcom-sc818-primus.dtb:usb-a8f8800:interrupt-names:hs_phy_irq-was-expected
-
-elapsed time: 1452m
+elapsed time: 1453m
 
 configs tested: 187
 configs skipped: 5
