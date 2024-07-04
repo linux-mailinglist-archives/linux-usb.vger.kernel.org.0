@@ -1,71 +1,71 @@
-Return-Path: <linux-usb+bounces-11989-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11990-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id CEB059277E4
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Jul 2024 16:11:51 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EEF099277E9
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Jul 2024 16:13:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3D9EDB211C4
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Jul 2024 14:11:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1DEE21C21890
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Jul 2024 14:13:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2E401AE87F;
-	Thu,  4 Jul 2024 14:11:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AE6C1ABC25;
+	Thu,  4 Jul 2024 14:13:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="YYr6FduS"
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="FadziyFi"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09B9E1AED5F
-	for <linux-usb@vger.kernel.org>; Thu,  4 Jul 2024 14:11:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3ECF61AEFC5
+	for <linux-usb@vger.kernel.org>; Thu,  4 Jul 2024 14:13:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720102300; cv=none; b=fzG566gLPwMqzWi890z0uumPCeCRxcp+OV14eomkuSuo687LRY67ubalsguUHOsxbjRhJV2iFB8o0G9Fw24rsVnVYDVvbmmnmY9O5R1FDUzQE50A/Du9mBCO8GW+6kDEJM2igoAd1Iog5QJoiJJSyv7WzWAN8sI6cpfapWERgfs=
+	t=1720102383; cv=none; b=kYyMy+t8qhgMwI50j+Rexy/9FtOIapWZDPjYYT/Dr/XnAOFRvCdHL06wmxSk/qb+Hn5t7izpca7v+3jB8VQ5TZjp0fDyLC4MJSAx9A6V868BZrDNTWokOgxfPdkycgeLR6aaZPlMnvUenNGNXC90owRtpMAsF/Or7qhOx1N/pFg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720102300; c=relaxed/simple;
-	bh=WC/sxnHbQMcqrNFIVqd/RL7Up/dGYRa6aKfr7+ujd6A=;
+	s=arc-20240116; t=1720102383; c=relaxed/simple;
+	bh=I9jhF2WlO0ig2gx8tLx5GlDUeHnNDyF06VSoMKv2tQM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mCSlveX5+l2oHxNhftqY3KR9QF0rYCW2XkUkENQwU+ig6Xh8ymQUDDs2sJkSEWOl9KOD6u3raFJaNrOisnA2Ekn0Vi8bU7+WcDvcM3YKHvyJ5gnjv99YOpTeQ9bhF0aBsyfup3BS78DediCQAVqPnIzfkj+iWGU2WTCCwf3KzIU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=YYr6FduS; arc=none smtp.client-ip=209.85.214.174
+	 In-Reply-To:Content-Type; b=JeqBHpDOD5ZuewViqXKj3K0aAyMD1dttP/w2YpHWYbHWgTjUs5yelQ/e84U5QIdvMEC7RMrdYkbzKy+psPY/iysmw3lJ1gYd/w/k+WcGdRNRJOHGtJxtpjTuMlzwr5bdME2JePfxNrn6OH/RdI8x8UELcXnaVktsuvqqe3ZCEmI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=FadziyFi; arc=none smtp.client-ip=209.85.222.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-1fafb9a33b3so3780175ad.1
-        for <linux-usb@vger.kernel.org>; Thu, 04 Jul 2024 07:11:38 -0700 (PDT)
+Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-79d5d1a54fcso115612585a.1
+        for <linux-usb@vger.kernel.org>; Thu, 04 Jul 2024 07:13:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1720102298; x=1720707098; darn=vger.kernel.org;
+        d=broadcom.com; s=google; t=1720102381; x=1720707181; darn=vger.kernel.org;
         h=in-reply-to:autocrypt:from:references:cc:to:subject:user-agent
          :mime-version:date:message-id:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=0PX7nYSPkPYEi/b5IGhu2QEpBcELb4STksEbQJ4YVko=;
-        b=YYr6FduSWYcBoyvgGBhB15gYnd0ORGp9yOpuG6audD/DBRaeKkcIr9V8E97xkVtxaB
-         hjaAP6uMAFH1ohzhdI8vUE7JyhArS3f7ZBjHC5Cl3lAqEPj87X/+PbNBKrKfSDw4a6kP
-         LGLHiCZACtHStO6N/wdnQzM10gcKwTLrblxuE=
+        bh=SndvP/UeZ862OdNp91QZi4IfkTcgO437dd055O546r8=;
+        b=FadziyFi2IXC9jmAnNOUy31wBUTkvgfk0eB8XHSlm7/7sO+QB5RW8NapZG4Qr7fBCF
+         C1HQNEhpQfpDfHjPigF5hOfkOzKt9nDYcTQGawKsqTw3Wg+GP+wSn3JI6f25GeapL5bc
+         ltpOQIAjctuDKXFQZH0Vp/IOO1BzCRm95Hqfs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720102298; x=1720707098;
+        d=1e100.net; s=20230601; t=1720102381; x=1720707181;
         h=in-reply-to:autocrypt:from:references:cc:to:subject:user-agent
          :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=0PX7nYSPkPYEi/b5IGhu2QEpBcELb4STksEbQJ4YVko=;
-        b=oWjitNB1HNrrBETjfd4y5p8XSlkKF2/tsfV23H3zzcpX287rWVc4l2dB/CMh53ildq
-         5k56scjDfgLGZxuYEekUkuReVp//MoQ+wYPYNLN+iuumJN2m+yVcIbp0I4otapWM2CQs
-         8q4VgMNfmtl5un+4FQJ3s3lKZqc+oF9s9K3015DzCFMVVYsiHYPmtcYk1PEWvHkmRibK
-         LdEEVhoc78Ll7XfvwE2wDbSQD/VKmUfTlLWAFwGKg5z5qav8EKMaoL7NkNlZNH0iATOk
-         JvraNgsgriUPayf/jy2h/LCrpgq2Jf1DBNbUskMzgz1bkcmVhA0YluLegTRS3jia0ki/
-         NBIQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVM9xi4/4cWlkbdiKCMomElT3VS/iIOk8i5Ie69aA9fk66qsnKP4x81Jy6blLxZMTXaYZNB8XdqBFZjG8b9wS6otrjkKeKJJru5
-X-Gm-Message-State: AOJu0YzC8esrMdOvnHOmL76cAkbX+ybVc5lnOBcHk3PkzZrzgcGMPKYA
-	xnWMGwZ72hN0Zg2hz+ZTyrdFtd6iLsiJIB0C4p25zJf3wxKcP0voUgsLQ7ytqQ==
-X-Google-Smtp-Source: AGHT+IHyCoQeFtMQ1zKUiilu29pAHD5KerfvrevUcYiPvLHm4Y8t9zB57H8y8qClJfNio83Lu+ygrw==
-X-Received: by 2002:a17:903:22c6:b0:1fa:12a5:a4f9 with SMTP id d9443c01a7336-1fb33efe2b6mr14725455ad.47.1720102298181;
-        Thu, 04 Jul 2024 07:11:38 -0700 (PDT)
-Received: from [10.40.5.113] ([89.207.175.15])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fac1596657sm123250375ad.255.2024.07.04.07.11.30
+        bh=SndvP/UeZ862OdNp91QZi4IfkTcgO437dd055O546r8=;
+        b=qru/mO5F+6AlAvsiS4C7cXJwIXyPz85Kjlx6p2ihfSNP6J1OAn7HrQ70311SLXUvRK
+         oOGJr+B6o1x0H+wbVP3Pjzl48UN1Yb8IbFonzqY8i//5S8tr2k2x0Q/b9zH4NoHVh53w
+         7r1PUEyiKTn/wPg8TzJsYKPM45g1VN+d1/thSjZj+LvrIjxEoHMtppvFUY4CL9+c5UYB
+         wKeNl3xaJNzzigspG/cOSvn9kTraE92PI0dBsyq+LeuHLoZ6i2a2/aVXG/8R5i+Vdlq9
+         KCR+UbkHKRKB24XGsTvTVQz5XGlIBxScbM4xlJoK5coiVSTNMobPG8+F6mnSskSSkE6R
+         p90g==
+X-Forwarded-Encrypted: i=1; AJvYcCUoD41wxUYop5vE8MZM3S1WUFRtcEKA96SHxV+WpQp7eQ2MprznJ20NztCDqWUTIE59wvDN9tGXOuc/bL1wga+Dsyoj9/cA5v/U
+X-Gm-Message-State: AOJu0YxWvJ8kkARK93lCrGvMvMlVtpyrTfqYKaIn8HwKc0rnm1utDovG
+	T+bJEHUUHKjGnxerO9rhCtpQ93skwuOQ8n/6Bt8ULY6BakvMJfTJMNAi+RkXoQ==
+X-Google-Smtp-Source: AGHT+IFBEG9+/D5d42wXwUlBbIyJNvFXZz+rh/6M84PbUVv+JPfYiKubVfYxon2cJ5yyFgWdL/q1vw==
+X-Received: by 2002:a05:620a:901:b0:795:4a3a:7170 with SMTP id af79cd13be357-79eef3a994bmr230162885a.18.1720102381184;
+        Thu, 04 Jul 2024 07:13:01 -0700 (PDT)
+Received: from [10.230.29.79] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-79d692f05dcsm683324585a.92.2024.07.04.07.12.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Jul 2024 07:11:37 -0700 (PDT)
-Message-ID: <41f89d96-079e-46fa-ad77-255ebe70e9a2@broadcom.com>
-Date: Thu, 4 Jul 2024 15:11:29 +0100
+        Thu, 04 Jul 2024 07:13:00 -0700 (PDT)
+Message-ID: <6b987d6c-daa0-481f-8333-9e0fb9996a69@broadcom.com>
+Date: Thu, 4 Jul 2024 15:12:42 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -73,8 +73,8 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 05/11] irqchip/bcm2835: Enable SKIP_SET_WAKE and
- MASK_ON_SUSPEND
+Subject: Re: [PATCH RFT 10/11] serial: 8250_bcm2835aux: add PM suspend/resume
+ support
 To: Stefan Wahren <wahrenst@gmx.net>,
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Ray Jui
  <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
@@ -90,7 +90,7 @@ Cc: Dave Stevenson <dave.stevenson@raspberrypi.com>,
  linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org, kernel-list@raspberrypi.com
 References: <20240630153652.318882-1-wahrenst@gmx.net>
- <20240630153652.318882-6-wahrenst@gmx.net>
+ <20240630165304.323095-1-wahrenst@gmx.net>
 From: Florian Fainelli <florian.fainelli@broadcom.com>
 Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
  xsBNBFPAG8ABCAC3EO02urEwipgbUNJ1r6oI2Vr/+uE389lSEShN2PmL3MVnzhViSAtrYxeT
@@ -124,36 +124,50 @@ Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
  MIlnaE6V0U8f5zNHB7Y46yJjjYT/Ds1TJo3pvwevDWPvv6rdBeV07D9s43frUS6xYd1uFxHC
  7dZYWJjZmyUf5evr1W1gCgwLXG0PEi9n3qmz1lelQ8lSocmvxBKtMbX/OKhAfuP/iIwnTsww
  95A2SaPiQZA51NywV8OFgsN0ITl2PlZ4Tp9hHERDe6nQCsNI/Us=
-In-Reply-To: <20240630153652.318882-6-wahrenst@gmx.net>
+In-Reply-To: <20240630165304.323095-1-wahrenst@gmx.net>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="0000000000007c291b061c6c862a"
+	boundary="0000000000006dbf53061c6c8b2f"
 
---0000000000007c291b061c6c862a
+--0000000000006dbf53061c6c8b2f
 Content-Language: en-US
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
 
-On 6/30/2024 4:36 PM, 'Stefan Wahren' via BCM-KERNEL-FEEDBACK-LIST,PDL 
-wrote:
-> The BCM2835 ARMCTRL interrupt controller doesn't provide any facility
-> to configure the wakeup sources. That's the reason why this
-> implementation lacks the irq_set_wake implementation. But this prevent
-> us from properly entering power management states like "suspend to
-> idle".
-> 
-> So enable the flags IRQCHIP_SKIP_SET_WAKE and
-> IRQCHIP_MASK_ON_SUSPEND to let the irqchip core allows and handles
-> the power management.
+On 6/30/2024 5:53 PM, Stefan Wahren wrote:
+> This adds suspend/resume support for the 8250_bcm2835aux
+> driver to provide power management support on attached
+> devices.
 > 
 > Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
+> ---
+> 
+> Since i don't have a RS485 setup, any test feedback would be great.
+> 
+>   drivers/tty/serial/8250/8250_bcm2835aux.c | 23 +++++++++++++++++++++++
+>   1 file changed, 23 insertions(+)
+> 
+> diff --git a/drivers/tty/serial/8250/8250_bcm2835aux.c b/drivers/tty/serial/8250/8250_bcm2835aux.c
+> index 121a5ce86050..cccd2a09cb6f 100644
+> --- a/drivers/tty/serial/8250/8250_bcm2835aux.c
+> +++ b/drivers/tty/serial/8250/8250_bcm2835aux.c
+> @@ -213,11 +213,34 @@ static const struct acpi_device_id bcm2835aux_serial_acpi_match[] = {
+>   };
+>   MODULE_DEVICE_TABLE(acpi, bcm2835aux_serial_acpi_match);
+> 
+> +static int __maybe_unused bcm2835aux_suspend(struct device *dev)
+> +{
+> +	struct bcm2835aux_data *data = dev_get_drvdata(dev);
+> +
+> +	serial8250_suspend_port(data->line);
 
-Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
+Don't you also need to disable the clock here, unless the device is a 
+wake-up source, and conversely re-enable the clock upon resume?
 -- 
 Florian
 
---0000000000007c291b061c6c862a
+--0000000000006dbf53061c6c8b2f
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -224,15 +238,15 @@ kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
 NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
 AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
 LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
-/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIPQbeM0zSvkK7aTg
-xxgrh+IdJRKWJbfHIQqo/kJ7cBTeMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
-AQkFMQ8XDTI0MDcwNDE0MTEzOFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
+/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIAYuXLohUuScCWoP
+gga6loHhWxl08L4Dw8uj86AXjhdLMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
+AQkFMQ8XDTI0MDcwNDE0MTMwMVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
 AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
-MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCKxvBQNwoTJ46hULhTdhYeoRMgL8eXJgrb
-IabscgNQSIpVim1YiYrLSaFXOOlmo1n/JbQvP0YWz+yjFFRH1ijX9kRloC5AhCjo/Ifp6mlbmFUa
-mW7AlolcMA6sQ7qE3EovHBaa2DAV9WQUyUb+SCpO54HxAQqv4soiiEvNCPPCal1T7ctGiGKs0Kj5
-hneCnmLET1Y7HgRlgxlFRVuqSojRfZzQUm04QpsL3R8/BbxskdxbAGD5PSvTtcydZz/VavhPlxTu
-pUJxVw/Gernm86lyz6QESTNaf+IYbUnW6c+LzCEaA51Hd8Ht3xeHT1MQaBbwG/eit1ulujPz57uT
-jt62
---0000000000007c291b061c6c862a--
+MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCfWPsl7Q/J6e7PiuBlS7SKch3abi1zH1Ob
+g2eaMmNBA5qxZTcSeFCdPa1czRTa1f4dm5xSMzbaMY9jIq9v0m9kvVwCenR0JuKhseWcr5P+nXrm
+aHufOcbClxWNfUsWjwOtyRB8+i3X7J1zBSKygqEeCBTdfkF04I0yMmt/fXeXwr/8fwFvRbvqKrVr
+N/NX5cyk1Qdn2n81HwFUQBYkwYsNOd5T+BSFvyqil6cyCSSZWlzxsHqhk0xZRlZM+J9xa2MPBjC2
+1jUaGaDNVnUXsdCOe9/FAzDxp1RtaCJvD4aSE5x8lTt5/SFwSksCt+TY4UJW6tYUJay4X1m0/jn/
+wUp3
+--0000000000006dbf53061c6c8b2f--
 
