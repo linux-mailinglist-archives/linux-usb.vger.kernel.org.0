@@ -1,55 +1,55 @@
-Return-Path: <linux-usb+bounces-12011-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12013-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4FC6A9284D4
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2024 11:11:56 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C57899284F6
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2024 11:19:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0A4BF28CBF5
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2024 09:11:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6F0D61F2249E
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2024 09:19:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C70FA1465A3;
-	Fri,  5 Jul 2024 09:11:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2104C146A67;
+	Fri,  5 Jul 2024 09:19:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=163.com header.i=@163.com header.b="HeJfC9Uh"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=163.com header.i=@163.com header.b="R7xEq5ze"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E9BC14659D;
-	Fri,  5 Jul 2024 09:11:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEA633A8CB;
+	Fri,  5 Jul 2024 09:19:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720170710; cv=none; b=sw4MIABavMSRZI2ireWkmiBFT+X7DH9DCkd839X+mD7wchygLG0TUSjV4ezr1oqWUJgNeD7CDmz+3xbesszFIMFTQYeYDMzNWGF9Vt4CsJDbZGn1j2ty6+/yWxWEFoxMQykwvf+sPSAnH4+vNyBkzLdB7Mvw2ao4doQWgCVeIWg=
+	t=1720171157; cv=none; b=jt1s6OFuanbUQDemJ6PQSWWHUJzIvaxxTk+hr+h8uywtl38c7az5dYZTCZa6xdUfWh+nGQ+57ec9jpungeA+MP0xshrycyTT7g7jvZ+XR6d2mh4X5Z3pfj726BqTWi2+Z/qlrQnxZ35dWdlzRBYiKT+gQwzlVXCLddIuTkcfZeA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720170710; c=relaxed/simple;
-	bh=ZxOkMPLLO4TWWVtV0zDTV13SIp/eIXM0dGLkQvxSFN4=;
+	s=arc-20240116; t=1720171157; c=relaxed/simple;
+	bh=h7tI3UX9MF6Z8Rfjd4kC9TY6gTQpLashC2p1HGV+8b4=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=Y1AhI9tPrvup4UXxC8Q6bCdWvJkFcmD2NMLk5V/NhCu/VJT54dS5mCHmphcI+JKqh4Rn64QSFrMIHFaJwvyqbQh7o44PtOQaM6C84cSwdyCSKEe3v5ZGvV3SwlUgzp7fbNNRQ7Je6TgmgcbBgEjia6lbevdc9iUBt436vJIPaeg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=fail (1024-bit key) header.d=163.com header.i=@163.com header.b=HeJfC9Uh reason="signature verification failed"; arc=none smtp.client-ip=117.135.210.2
+	 MIME-Version:Message-ID; b=lDvQPq73RrxrY6P/jToLlJ7mHsCuwV6p9XfvcAeDligXtz40aNE0ciH3j5eJHTbR+mDaOAo6qPSLlshjXnECSQkl+GyCrfX2XEgXpxW+ozJSVRjKBO8K2J9jXttRyi5SdWnMtMq61DgB3vuCyNvwny8Brzm+ZgqfrREHvGFAGEk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=fail (1024-bit key) header.d=163.com header.i=@163.com header.b=R7xEq5ze reason="signature verification failed"; arc=none smtp.client-ip=117.135.210.2
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
 	s=s110527; h=Date:From:Subject:Content-Type:MIME-Version:
-	Message-ID; bh=Nw8Y/d4fbRo5a9YCTwvqTSz2Pd/J8LfElH2weiOPuv8=; b=H
-	eJfC9UhSb2PC+0t5FQctqlhhDZLstB+SAaTzB+genXBO7lqZPiysxfpoMRxZZf8Y
-	OJP6wqCC1L1EhmbruNX0YVwWPNDWZqxcpNNlth5WngGlbwZYC8bVpNoT2aTj+saz
-	q+QDfIMBI2NN/1V1Pbt15netWcZlW3PuWudRgsHuwI=
-Received: from slark_xiao$163.com ( [223.104.68.157] ) by
- ajax-webmail-wmsvr-40-111 (Coremail) ; Fri, 5 Jul 2024 17:11:22 +0800 (CST)
-Date: Fri, 5 Jul 2024 17:11:22 +0800 (CST)
-From: "Slark Xiao" <slark_xiao@163.com>
+	Message-ID; bh=lfNkSWR+BPmvBsA3/0LjgsVzzxpvFDzXGDNdUl4T8cQ=; b=R
+	7xEq5zeF8zahh3ljjQwi4Yqw1bsINRy/6D+hShk0ZpRrEjppyW68IVvAKuQ+rSzN
+	tB6YkiXkdWLaFqMtRLNuD47d3gCv1+BGur3CrwDJfhCN+vvBoZyxxp8PbSR0hGwm
+	hgcfNEZqODwgaH93W2iCzPAiZJ7EsjYdf2MSzbegrk=
+Received: from vanillanwang$163.com ( [124.89.89.114] ) by
+ ajax-webmail-wmsvr-40-137 (Coremail) ; Fri, 5 Jul 2024 17:18:52 +0800 (CST)
+Date: Fri, 5 Jul 2024 17:18:52 +0800 (CST)
+From: vanillanwang  <vanillanwang@163.com>
 To: "Johan Hovold" <johan@kernel.org>
 Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org, 
 	linux-kernel@vger.kernel.org
-Subject: Re:Re: [PATCH] USB: serial: option: add support for Foxconn T99W651
+Subject: Re: [PATCH] USB: serial: option: add Rolling RW350-GL variants
 X-Priority: 3
 X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20230109(dcb5de15)
  Copyright (c) 2002-2024 www.mailtech.cn 163com
-In-Reply-To: <Zoe3qBwWG33AZaU9@hovoldconsulting.com>
-References: <20240705081709.105496-1-slark_xiao@163.com>
- <Zoe3qBwWG33AZaU9@hovoldconsulting.com>
-X-NTES-SC: AL_Qu2ZAv2cv04j5CGYZOkfmk8Sg+84W8K3v/0v1YVQOpF8jDjp+j0MYERlA2nE9/KtDiu+jT6xbAlu2slFYrRcX6QNh9WsPIF2YjLRd0MMcCBMIA==
+In-Reply-To: <Zn0SY4nQzESrQ4xw@hovoldconsulting.com>
+References: <20240531024012.29805-1-vanillanwang@163.com>
+ <Zn0SY4nQzESrQ4xw@hovoldconsulting.com>
+X-NTES-SC: AL_Qu2ZAv2cvkko5CibZukfm0YWgOk5Ucqzuf8k1YZTO598jBLo9j4Qe1xgLXT998KNJzmtlzu0WRx/58FkVoZ0b7ovXxPWZFjlzJtstf+vF+hJQA==
 Content-Transfer-Encoding: base64
 Content-Type: text/plain; charset=GBK
 Precedence: bulk
@@ -58,19 +58,14 @@ List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <5b098485.965d.190822996fc.Coremail.slark_xiao@163.com>
+Message-ID: <5273fe7a.9647.190823077a9.Coremail.vanillanwang@163.com>
 X-Coremail-Locale: zh_CN
-X-CM-TRANSID:_____wD3_766uIdmZWQoAA--.26909W
-X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbiow0TZGVOEPiVBAACsJ
+X-CM-TRANSID:_____wD3_7t9uodmlHEoAA--.7805W
+X-CM-SenderInfo: pydqxz5odq4tlqj6il2tof0z/1tbiExETUmXAl9mMewADsc
 X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
 
-CkF0IDIwMjQtMDctMDUgMTc6MDY6NDgsICJKb2hhbiBIb3ZvbGQiIDxqb2hhbkBrZXJuZWwub3Jn
-PiB3cm90ZToKPk9uIEZyaSwgSnVsIDA1LCAyMDI0IGF0IDA0OjE3OjA5UE0gKzA4MDAsIFNsYXJr
-IFhpYW8gd3JvdGU6Cj4+IFQ5OVc2NTEgaXMgYSBSTkRJUyBiYXNlZCBtb2RlbSBkZXZpY2UuIFRo
-ZXJlIGFyZSAzIHNlcmlhbCBwb3J0cwo+PiBuZWVkIHRvIGJlIGVudW1lcmF0ZWQ6IERpYWcsIE5N
-RUEgYW5kIEFULgo+Cj4+IFNpZ25lZC1vZmYtYnk6IFNsYXJrIFhpYW8gPHNsYXJrX3hpYW9AMTYz
-LmNvbT4KPgo+QXBwbGllZCwgdGhhbmtzLgo+Cj5Kb2hhbgpIaSBKb2hhbiwKSSBoYXZlIGEgY29u
-Y2VybiBhYm91dCB0aGUgdGVzdCByZXN1bHQgb2YgInVzYi1kZXZpY2VzIiBpbiBVYnVudHUKMjIu
-MDQuIERvIHlvdSBrbm93IHdoeSBpdCB3b3VsZG4ndCBzaG93IG91ciBkZXZpY2VzIGFueSBtb3Jl
-PyAK
+PkNhbiB5b3UgYmUgbW9yZSBzcGVjaWZpYyBhYm91dCB0aGUgb3RoZXIgaW50ZXJmYWNlPwoKSGkg
+Sm9oYW46Ck9uIHVzYm1vZGU9NjQsIHRoZSBwb3J0cyBhcmU6IAoKICBNQklNKE1JMCkrR05TUyhN
+STIpK0FQIGxvZyhNSTMpICsgQVAgTUVUQShNSTQpICsgQURCKE1JNSkgKyBNRCBBVChNSTYpICsg
+TUQgTUVUQShNSTcpICsgTlBUKE1JOCkgKyBEZWJ1ZyhNSTkpLgoKVGhhbmtz
 
