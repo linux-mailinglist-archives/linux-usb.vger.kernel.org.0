@@ -1,93 +1,93 @@
-Return-Path: <linux-usb+bounces-12025-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12026-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id ECF0C92885F
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2024 14:04:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F788928909
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2024 14:52:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 951981F22517
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2024 12:04:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DDC8C28791C
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2024 12:52:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3915A1487E3;
-	Fri,  5 Jul 2024 12:04:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF50A14AD2C;
+	Fri,  5 Jul 2024 12:52:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N8KCx9+W"
+	dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b="aKWmIexE"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx.treblig.org (mx.treblig.org [46.235.229.95])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4AF81487FE;
-	Fri,  5 Jul 2024 12:04:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFC4914A611;
+	Fri,  5 Jul 2024 12:52:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.229.95
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720181059; cv=none; b=c8kisZpNDRhKkiOHLOATB5eGN/LkVBh1noue5XsgE+FLaC7LRQDWYdPKNfG+7PZ1s9krkrEi1HA0fkMUx0ai6N21g8jpBwwgUbMTgCaB6m0tpdyziA2WAqRqrCXnXrNT2xUdgB4CHJzxsgD4anrGCZOokbJXovxtxE8h9le00pI=
+	t=1720183939; cv=none; b=CXG9f47JPHOZWopZY6tMbGShPwpYuiOoIN4yWP+buRJTvwEij81DFfQaaasO0wkO/ykbxNI8mbrnkIogM9bkVPN6ZlsNwYlO8uRgzI8uxz2INDciYfw0TGwApON3zYciNL2JtVoV78pOEgcP2OoNPs5xVc+uXQBYg7VlwDmRjnw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720181059; c=relaxed/simple;
-	bh=1oUR9Y0C1q+vdr3FNHCBM/69qcTQYNHIa5X5pQnwP20=;
+	s=arc-20240116; t=1720183939; c=relaxed/simple;
+	bh=7kBlWX5IEjt76uHtdjl0JfbnGpCYIXt9+Cd5iPfrNAM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=d5CNEDrfBtrsjHjyreLWzLMXv6lAX75mSBlMTKbS+VmqwqdgbBoONPeiB6YBxD5a7A3uIfeHK6y7kZFkC5nxKrIW9s4Hf3e4A6IQ/364SyN4ptCKooxwlGKLoPO2iogX1Qv9mlmyABipk/8J4vrsSU5dZEfp8evt3oTQlcSPotA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N8KCx9+W; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3417DC116B1;
-	Fri,  5 Jul 2024 12:04:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720181059;
-	bh=1oUR9Y0C1q+vdr3FNHCBM/69qcTQYNHIa5X5pQnwP20=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=N8KCx9+Wf1Y2ccoBaDCuzUe7bHZhyzChrmfBgJ9WoUkmGKnGBWTXfxT2Kogr3DWrb
-	 bCA6dllwLH53jIQRJn+j9P21TBMJg8FVaFv5MKfxDcUWfpnJapTw0RGEc9XVNUEgN1
-	 a7VZCEl7FmrYOY1fG/BbHcixlbFJz29YohawGP19e92YQNpel/S5VHkBnk71iJDxSa
-	 qND0y9oeJZrrGlPImOIEmIMwLBM+rzzTRS3VDZrJM5s9VrAj5gGPxB3Jg1jClHAd7K
-	 H5hrKTl2ZivEQ68TK6RQO3Y6aOExQNXfsRg4pE+x5R4VPVO453qbhh0AjqVbW2+g6D
-	 CNNPyCSJIhKSw==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1sPhfq-000000007PG-00h2;
-	Fri, 05 Jul 2024 14:04:22 +0200
-Date: Fri, 5 Jul 2024 14:04:21 +0200
-From: Johan Hovold <johan@kernel.org>
-To: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Kees Cook <kees@kernel.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v2 0/2] USB: serial: garmin_gps: annotate struct
- garmin_packet with __counted_by
-Message-ID: <ZofhReiVQ3k8IaFy@hovoldconsulting.com>
-References: <20240619-garmin_gps_counted_by-v2-0-f82f10ebbf28@gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=sIuK7V8x6aoglkRK62wopxL/d3dImGNCzfTIs5AA9R3qdnq828lUosNuJTkcIl/wLY7LCnaEA5gKexC+aNhQuC2lKykv0QCs/JdVOsA6stYx1CNWwe8o1hJwdr5MqmUMcACN89Cho5I3xko+GAeeA5upL7mnkxfqI9D0Vz6Z5H4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org; spf=pass smtp.mailfrom=treblig.org; dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b=aKWmIexE; arc=none smtp.client-ip=46.235.229.95
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=treblig.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
+	; s=bytemarkmx; h=Content-Type:MIME-Version:Message-ID:Subject:From:Date:From
+	:Subject; bh=aqopr3TWiXyLLHh0M88tvYFmQ9Q3ye+UGysR6XfsiKc=; b=aKWmIexEWBsczvVA
+	+NDFFj0tI8zU2UkeLSEwvmBxrjmq/sGQuRAb/Y3pPsJT1AeEs0NM2i0v8dqLTqaTdKXWzWVg7fpt/
+	69fa9UqcqR7ZYXZLMc12wcFhh5ihMhw9thiWq9pVEWzA35V19NizRZTyNKtUtfWt5hoN3PmyLc5KW
+	GH9Y7+gVyxZkC1aehbSAPL/dCQ/UrjLXrltgPvKu/jFApzd9Y8uYGV2vnTBgVfOxUwAK5P6ziHa3p
+	/0cwXi4QWP4R5lCVNFng3+h13whnAn9LjR4Tkhvd8nW9Zmfo9wMV4PoCvi22hIkg8v2fMgM2QLzha
+	m95okxBCJOMCJ+eSWQ==;
+Received: from dg by mx.treblig.org with local (Exim 4.96)
+	(envelope-from <dg@treblig.org>)
+	id 1sPiQA-00ACVr-3C;
+	Fri, 05 Jul 2024 12:52:14 +0000
+Date: Fri, 5 Jul 2024 12:52:14 +0000
+From: "Dr. David Alan Gilbert" <linux@treblig.org>
+To: Johan Hovold <johan@kernel.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] USB: serial: spcp8x5: remove unused struct
+ 'spcp8x5_usb_ctrl_arg'
+Message-ID: <Zofsfme4wSK3gKrb@gallifrey>
+References: <20240529234722.130609-1-linux@treblig.org>
+ <ZofSj98X-uEr-Awj@hovoldconsulting.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20240619-garmin_gps_counted_by-v2-0-f82f10ebbf28@gmail.com>
+In-Reply-To: <ZofSj98X-uEr-Awj@hovoldconsulting.com>
+X-Chocolate: 70 percent or better cocoa solids preferably
+X-Operating-System: Linux/6.1.0-21-amd64 (x86_64)
+X-Uptime: 12:52:05 up 58 days, 6 min,  1 user,  load average: 0.00, 0.00, 0.00
+User-Agent: Mutt/2.2.12 (2023-09-09)
 
-On Wed, Jun 19, 2024 at 09:42:43PM +0200, Javier Carrasco wrote:
-> The size is assigned before the first reference to the flexible array
-> (see pkt_add()), which allows for a straightforward annotation without
-> further modifications.
+* Johan Hovold (johan@kernel.org) wrote:
+> On Thu, May 30, 2024 at 12:47:22AM +0100, linux@treblig.org wrote:
+> > From: "Dr. David Alan Gilbert" <linux@treblig.org>
+> > 
+> > 'spcp8x5_usb_ctrl_arg' has been unused since the original
+> > commit 619a6f1d1423 ("USB: add usb-serial spcp8x5 driver").
+> > 
+> > Remove it.
+> > 
+> > Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
 > 
-> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-> ---
-> Changes in v2:
-> - Use struct_size to calculate the size of pkt.
-> - Link to v1: https://lore.kernel.org/r/20240619-garmin_gps_counted_by-v1-1-d8d816f085d9@gmail.com
+> Now applied, thanks.
+
+Thanks!
+
+Dave
+
+> Johan
 > 
-> ---
-> Javier Carrasco (2):
->       USB: serial: garmin_gps: annotate struct garmin_packet with __counted_by
->       USB: serial: garmin_gps: use struct_size to allocate pkt
-
-Now applied (after adding parentheses to struct_size() in the summary).
-
-Johan
+-- 
+ -----Open up your eyes, open up your mind, open up your code -------   
+/ Dr. David Alan Gilbert    |       Running GNU/Linux       | Happy  \ 
+\        dave @ treblig.org |                               | In Hex /
+ \ _________________________|_____ http://www.treblig.org   |_______/
 
