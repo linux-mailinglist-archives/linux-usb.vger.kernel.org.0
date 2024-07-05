@@ -1,107 +1,146 @@
-Return-Path: <linux-usb+bounces-12007-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12008-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 457D0928389
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2024 10:18:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C56A192840D
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2024 10:48:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E577A1F22FC1
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2024 08:18:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 810BB283264
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2024 08:48:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4217F145B0F;
-	Fri,  5 Jul 2024 08:17:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="IGrkMXYM"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A5BB145FF4;
+	Fri,  5 Jul 2024 08:48:20 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1DE72BD18;
-	Fri,  5 Jul 2024 08:17:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.5
+Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [83.223.95.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F1BE144D0E;
+	Fri,  5 Jul 2024 08:48:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.223.95.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720167472; cv=none; b=rRGvibCtfZkG9WEyK5fhwZ241CALRf9BId/CHC5Y5p2U3BuR5L4k0RYryK1N8Mi13gcJV8ZpK0vqyazm3mY4oy7WZqUtNW1jsp6Ezez41hemTaqMp71+oaVKqPfnpabPh+59SrF/1S7QhGzo/B6ja29KaJD1A499gYNHws9tfq0=
+	t=1720169299; cv=none; b=gIHj08HqnTak6sniKkFdrsBS/xwQcn++xTaI2EWsN4F017JG1v1Pb1+k2pfuo74RXRbovSilJmROCo+un7/BQ0/SSgcJKNNv9zzyxeqqmv01NOiEU8pzWjPuqX8+AIUbaQWXXj+O4M/G0ZrzVmcW+BsHjcgs/R/LQXle5ptQFjU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720167472; c=relaxed/simple;
-	bh=N62di29Oedf7GoIGih7+uiyJQLoR834Yqg6nabF1rSI=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=cy8nwHu7x1jroX7FkERHKZBvYzI4rcvmzemZFTJm1ugjOFzu3d+hBy61AkHXIcL/64Tcb9P7YCwS17LoY9LizIqhMkFuK4dVTE9YAetVI6BpSHfydfm7hn/li1qaPFIsDz3SUFS29en+JYXT+uN6TA7LQ/1uFgYbRAqq19sUejY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=IGrkMXYM; arc=none smtp.client-ip=220.197.31.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=bLr8/
-	EeBth9+HcrumTkeLcx679O6m9o8qb++SNgq8HI=; b=IGrkMXYMUFegPJEDu9jR9
-	JuXacEhWUT0SPR6zarzhka6C71UtDF4kJIoQLw4u88wZEMFEOqhzdSb2guvleX1b
-	HUsgk2O+3mAgn9vOj5kQj+XfNOvSup8kpkinC3CEPktGKNrWRLOXw8UO8PZwfV4o
-	wfjQMsd+pikzZIQEG24j5w=
-Received: from localhost.localdomain (unknown [223.104.77.193])
-	by gzga-smtp-mta-g1-5 (Coremail) with SMTP id _____wD3vwoWrIdmYRHZBg--.27334S2;
-	Fri, 05 Jul 2024 16:17:27 +0800 (CST)
-From: Slark Xiao <slark_xiao@163.com>
-To: johan@kernel.org
-Cc: gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Slark Xiao <slark_xiao@163.com>
-Subject: [PATCH] USB: serial: option: add support for Foxconn T99W651
-Date: Fri,  5 Jul 2024 16:17:09 +0800
-Message-Id: <20240705081709.105496-1-slark_xiao@163.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1720169299; c=relaxed/simple;
+	bh=nvSl3iBk/fZcuCRP386vT6ZbD9nSkasbsf8j9vWzPtU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VaKwTZALSOkEjvl3oBhEAHRSwWhoHg3gnUy8Xmhpw6NRziw+EAC4wL3zNeoTPFHPFixYn1tQmqjNMvrLdcihDHl2AoXhrqacUDyDzTUAhRg/Ix/5EAztXMLR7t8G5/FApNIIyEyjBLO0z2IYp5tebmWTvTXnYmZQ2jhSsXygpkg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de; spf=none smtp.mailfrom=h08.hostsharing.net; arc=none smtp.client-ip=83.223.95.100
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=h08.hostsharing.net
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
+	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS RSA CA G1" (verified OK))
+	by bmailout1.hostsharing.net (Postfix) with ESMTPS id 77A2E3000D5B1;
+	Fri,  5 Jul 2024 10:48:06 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+	id 637213E9B8; Fri,  5 Jul 2024 10:48:06 +0200 (CEST)
+Date: Fri, 5 Jul 2024 10:48:06 +0200
+From: Lukas Wunner <lukas@wunner.de>
+To: Florian Fainelli <florian.fainelli@broadcom.com>
+Cc: Stefan Wahren <wahrenst@gmx.net>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Jassi Brar <jassisinghbrar@gmail.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Minas Harutyunyan <hminas@synopsys.com>,
+	Dave Stevenson <dave.stevenson@raspberrypi.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+	Peter Robinson <pbrobinson@gmail.com>,
+	dri-devel@lists.freedesktop.org,
+	bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org,
+	linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, kernel-list@raspberrypi.com
+Subject: Re: [PATCH 09/11] usb: dwc2: Skip clock gating on Broadcom SoCs
+Message-ID: <ZoezRpXBgB1B5WjB@wunner.de>
+References: <20240630153652.318882-1-wahrenst@gmx.net>
+ <20240630153652.318882-10-wahrenst@gmx.net>
+ <95762956-b46a-4dfa-b22f-bccbfa39558d@broadcom.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wD3vwoWrIdmYRHZBg--.27334S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxJr1kCFy3Jr47uF4DAF4Dtwb_yoW8CrW8pF
-	n0yryavrWDWayrXFyDtrn3Zr95uan3K3ySgasrAw4aqFyfZrs7t3sFyFy8XF17Kr4rKrnF
-	vrs0yrWUKF1kJrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pRhNVhUUUUU=
-X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbiRxkTZGV4KIaf7wAAsq
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <95762956-b46a-4dfa-b22f-bccbfa39558d@broadcom.com>
 
-T99W651 is a RNDIS based modem device. There are 3 serial ports
-need to be enumerated: Diag, NMEA and AT.
+On Thu, Jul 04, 2024 at 03:14:50PM +0100, Florian Fainelli wrote:
+> On 6/30/2024 4:36 PM, Stefan Wahren wrote:
+> > On resume of the Raspberry Pi the dwc2 driver fails to enable
+> > HCD_FLAG_HW_ACCESSIBLE before re-enabling the interrupts.
+> > This causes a situation where both handler ignore a incoming port
+> > interrupt and force the upper layers to disable the dwc2 interrupt line.
+> > This leaves the USB interface in a unusable state:
+> > 
+> > irq 66: nobody cared (try booting with the "irqpoll" option)
+> > CPU: 0 PID: 0 Comm: swapper/0 Tainted: G W          6.10.0-rc3
+> > Hardware name: BCM2835
+> > Call trace:
+> > unwind_backtrace from show_stack+0x10/0x14
+> > show_stack from dump_stack_lvl+0x50/0x64
+> > dump_stack_lvl from __report_bad_irq+0x38/0xc0
+> > __report_bad_irq from note_interrupt+0x2ac/0x2f4
+> > note_interrupt from handle_irq_event+0x88/0x8c
+> > handle_irq_event from handle_level_irq+0xb4/0x1ac
+> > handle_level_irq from generic_handle_domain_irq+0x24/0x34
+> > generic_handle_domain_irq from bcm2836_chained_handle_irq+0x24/0x28
+> > bcm2836_chained_handle_irq from generic_handle_domain_irq+0x24/0x34
+> > generic_handle_domain_irq from generic_handle_arch_irq+0x34/0x44
+> > generic_handle_arch_irq from __irq_svc+0x88/0xb0
 
-Test evidence as below:
-T:  Bus=01 Lev=02 Prnt=02 Port=00 Cnt=01 Dev#=  6 Spd=480 MxCh= 0
-D:  Ver= 2.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-P:  Vendor=0489 ProdID=e145 Rev=05.15
-S:  Manufacturer=QCOM
-S:  Product=SDXPINN-IDP _SN:93B562B2
-S:  SerialNumber=82e6fe26
-C:  #Ifs= 7 Cfg#= 1 Atr=a0 MxPwr=500mA
-I:  If#=0x0 Alt= 0 #EPs= 1 Cls=ef(misc ) Sub=04 Prot=01 Driver=rndis_host
-I:  If#=0x1 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=rndis_host
-I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-I:  If#=0x4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-I:  If#=0x5 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=70 Driver=(none)
-I:  If#=0x6 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
+A similar issue was reported for Agilex platforms back in 2021:
 
-0&1: RNDIS, 2:AT, 3:NMEA, 4:DIAG, 5:QDSS, 6:ADB
-QDSS is not a serial port.
+https://lore.kernel.org/all/5e8cbce0-3260-2971-484f-fc73a3b2bd28@synopsys.com/
 
-Signed-off-by: Slark Xiao <slark_xiao@163.com>
----
- drivers/usb/serial/option.c | 2 ++
- 1 file changed, 2 insertions(+)
+It was fixed by commit 3d8d3504d233 ("usb: dwc2: Add platform specific
+data for Intel's Agilex"), which sets the no_clock_gating flag on that
+platform.
 
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index 178760bc7b92..4a43cec86db7 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -2294,6 +2294,8 @@ static const struct usb_device_id option_ids[] = {
- 	  .driver_info = RSVD(3) },
- 	{ USB_DEVICE_INTERFACE_CLASS(0x0489, 0xe0f0, 0xff),			/* Foxconn T99W373 MBIM */
- 	  .driver_info = RSVD(3) },
-+	{ USB_DEVICE_INTERFACE_CLASS(0x0489, 0xe145, 0xff),			/* Foxconn T99W651 RNDIS */
-+	  .driver_info = RSVD(5) | RSVD(6) },
- 	{ USB_DEVICE(0x1508, 0x1001),						/* Fibocom NL668 (IOT version) */
- 	  .driver_info = RSVD(4) | RSVD(5) | RSVD(6) },
- 	{ USB_DEVICE(0x1782, 0x4d10) },						/* Fibocom L610 (AT mode) */
--- 
-2.25.1
+Looking at drivers/usb/dwc2/params.c, numerous other platforms need
+the same flag.
 
+Please amend the commit message to mention the Agilex issue and
+resulting commit.
+
+
+> > --- a/drivers/usb/dwc2/params.c
+> > +++ b/drivers/usb/dwc2/params.c
+> > @@ -23,6 +23,7 @@ static void dwc2_set_bcm_params(struct dwc2_hsotg *hsotg)
+> >   	p->max_transfer_size = 65535;
+> >   	p->max_packet_count = 511;
+> >   	p->ahbcfg = 0x10;
+> > +	p->no_clock_gating = true;
+> 
+> Could we set this depending upon whether the dwc2 host controller is a
+> wake-up source for the system or not?
+
+The flag seems to mean whether the platform is actually capable of
+disabling the clock of the USB controller.  BCM2835 seems to be
+incapable and as a result, even though dwc2_host_enter_clock_gating()
+is called, the chip signals interrupts.
+
+There doesn't seem to be a relation to using the controller as a
+wakeup source, so your comment doesn't seem to make sense.
+If the clock can't be gated, the chip can always serve as a
+wakeup source.
+
+The real question is whether BCM2848 platforms likewise cannot disable
+the clock of the dwc2 controller or whether this is specific to the
+BCM2835.  Right now dwc2_set_bcm_params() is applied to both the
+BCM2848 and BCM2835.  If the BCM2848 behaves differently in this
+regard, we'd have to duplicate dwc2_set_bcm_params() for the BCM2835.
+
+Thanks,
+
+Lukas
 
