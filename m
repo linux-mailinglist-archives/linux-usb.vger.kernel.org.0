@@ -1,59 +1,58 @@
-Return-Path: <linux-usb+bounces-12009-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12010-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 81FA99284A0
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2024 11:06:09 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 75DE29284B8
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2024 11:08:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2D70D1F21DC7
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2024 09:06:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1144FB2248E
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2024 09:08:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A73C2146597;
-	Fri,  5 Jul 2024 09:04:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EE9D1465A3;
+	Fri,  5 Jul 2024 09:06:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SJayOQP1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ndhbWdS3"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28BB613665A
-	for <linux-usb@vger.kernel.org>; Fri,  5 Jul 2024 09:04:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8A7B145FF9;
+	Fri,  5 Jul 2024 09:06:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720170278; cv=none; b=JJgu01c0G1tDoKoicRYNe8SAknaG0JmsupeaIPmUrMfDNW1Cn8DCKEEf6wk+SYK5jGg2e/FL3yOkTPsIA8UcNGZevvI53XE3Rrsrln+mYLI2S/pjCL/iYDxf53C+d8b8/RlfV92uq7X9vJGXHUPixsL6lCYajIccr8jySSZ14n0=
+	t=1720170406; cv=none; b=FcfIn4ouMRTA/iE0k03bIKwgOEZsQNeYjGswANvYB2zyDfl2K4XNoFKvhUQat9cs93Yux20bUvriG/2Ag9eK+vEeZrNwukIeQ7IV7pMnNWdAZ7Vz0II3+kwfGoGq5g8meQ9IWqK31f8XWl5h5o62+tfNH9bWUG3PNITKzza6H8Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720170278; c=relaxed/simple;
-	bh=cpl/k9SkzN3FWjQr/yGhrq6iMugCjL47e/N7+rYsWIU=;
+	s=arc-20240116; t=1720170406; c=relaxed/simple;
+	bh=n9zRIZadghj9Zw2cWL2aSpx+pK6cYMFtWAXRLv47UCc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fu0vitMjLf8op6V3OxCTZdvcX4p6qqouzW5AB0phOCForlERXHzBfWhVoktW3jxMBOJeWWYD6u3uNVCWCOsWEy2QdwhaQaM3m8YCEtD7OXYvhfN2eHv6LkCL7G/L3ka6hZc/3yuVbcoL/mjBIR+BVbaG+F6fAkBQsgApSvrEV4Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SJayOQP1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3259C116B1;
-	Fri,  5 Jul 2024 09:04:37 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=TkOE/DSYIcMfKKdpxMCzR5Hr/IMT33/bQDm5j+tc6gAVBLJH3dvOKHr5SjFCD1mqoKbLJykP85uiUozD0Ql4e39c2A+jH7QTQ3FUcEgU/sabs0M0Unkxrq6EoBcRxdazQcIrUG8h2HbxBk3Fp5NSr/oet6NUjKHJzBGZMZH2yDs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ndhbWdS3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AA56C116B1;
+	Fri,  5 Jul 2024 09:06:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720170277;
-	bh=cpl/k9SkzN3FWjQr/yGhrq6iMugCjL47e/N7+rYsWIU=;
+	s=k20201202; t=1720170406;
+	bh=n9zRIZadghj9Zw2cWL2aSpx+pK6cYMFtWAXRLv47UCc=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=SJayOQP11s6fcBLk4qTmbAd8s9+qMa/4MrYclPJ+kju9uESk6DwelZoki1/Sbio/I
-	 hUF9AzuoV1e8y87RtScSL2AuNRRZh/NHifZbYLkDxHC57k/SjnI6jDGggEWfzyRl6o
-	 mkX8ZEdfyFYCvLxd4z78njN8Xeyz1bAIFCDLiIg/wwDoJ1oeqQd7ovvU+xxkcB/hwb
-	 dCRctdNhcK5BsnOSxZryjWlGJqfEGA3xA7LqMpkSiv86juW+ktJW2Mx/o4ZqY6405Q
-	 OXVnH2NOiJJTBdZuY9K9LyBtmrN5t9AjTWw6FJ0I6ijWrojoQX/DuK1fG1aTJ2zNal
-	 Kxk0UP9WfQq3Q==
+	b=ndhbWdS3H19m/U4WuLLQev/lZy2c50WO2LwQJRamERTk+dB4mvDJ+37aOQzFuatxK
+	 ssvBCKeh1uc4yjC9og1mR3mSRPT+9g+IqlNIa10kC50XkBZwFmbcTewyO2d0d7co8F
+	 8YCrJ2x8RKdD9McU6tslmcOlMzdh4TWamUtCPE+B0H7QNE4vwUIF1AVgZ/QFxbfWUI
+	 6oREkxt3ha3LlWzrRIS0rZKwlJr+SD/hxOLmIIlLp+8hV2/qSqVtaciKRhz9QNo1lr
+	 e3OLx+3ZxSDYRGJlXcKJN+EI8gIpUtAlVaGM6VxY/tgC+mI4lRv5IWllpVRjFi+ZSg
+	 z8+jSaT8U0jdg==
 Received: from johan by xi.lan with local (Exim 4.97.1)
 	(envelope-from <johan@kernel.org>)
-	id 1sPerw-000000004xv-0yOY;
-	Fri, 05 Jul 2024 11:04:40 +0200
-Date: Fri, 5 Jul 2024 11:04:40 +0200
+	id 1sPeu0-000000006Bg-3dCd;
+	Fri, 05 Jul 2024 11:06:48 +0200
+Date: Fri, 5 Jul 2024 11:06:48 +0200
 From: Johan Hovold <johan@kernel.org>
-To: Mank Wang <mank.wang@netprisma.us>
-Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH V2] USB: serial: option: add Netprisma LCUK54 series
- modules
-Message-ID: <Zoe3KPnvOXFLQuok@hovoldconsulting.com>
-References: <CH3PR22MB438518FE39766ACDBFE6748081D12@CH3PR22MB4385.namprd22.prod.outlook.com>
+To: Slark Xiao <slark_xiao@163.com>
+Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] USB: serial: option: add support for Foxconn T99W651
+Message-ID: <Zoe3qBwWG33AZaU9@hovoldconsulting.com>
+References: <20240705081709.105496-1-slark_xiao@163.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -62,35 +61,15 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CH3PR22MB438518FE39766ACDBFE6748081D12@CH3PR22MB4385.namprd22.prod.outlook.com>
+In-Reply-To: <20240705081709.105496-1-slark_xiao@163.com>
 
-On Sat, Jun 29, 2024 at 01:54:45AM +0000, Mank Wang wrote:
-> Add support for Netprisma LCUK54 series modules.
-> 
-> LCUK54-WRD-LWW(0x3731/0x0100): NetPrisma LCUK54-WWD for Global
-> LCUK54-WRD-LWW(0x3731/0x0101): NetPrisma LCUK54-WRD for Global SKU
-> LCUK54-WRD-LCN(0x3731/0x0106): NetPrisma LCUK54-WRD for China SKU
-> LCUK54-WRD-LWW(0x3731/0x0111): NetPrisma LCUK54-WWD for SA
-> LCUK54-WRD-LWW(0x3731/0x0112): NetPrisma LCUK54-WWD for EU
-> LCUK54-WRD-LWW(0x3731/0x0113): NetPrisma LCUK54-WWD for NA
-> LCUK54-WWD-LCN(0x3731/0x0115): NetPrisma LCUK54-WWD for China EDU
-> LCUK54-WWD-LWW(0x3731/0x0116): NetPrisma LCUK54-WWD for Golbal EDU
-> 
-> Above products use the exact same interface layout and option
-> driver:
-> MBIM + GNSS + DIAG + NMEA + AT + QDSS + DPL
+On Fri, Jul 05, 2024 at 04:17:09PM +0800, Slark Xiao wrote:
+> T99W651 is a RNDIS based modem device. There are 3 serial ports
+> need to be enumerated: Diag, NMEA and AT.
 
-> ---
-> V1 -> V2:
-> 1.Use comments instead of product macro definitions.
-> 2.Add more NetPrisma LCUK54 products for different regions.
-> 
-> Signed-off-by: Mank Wang <mank.wang@netprisma.us>
+> Signed-off-by: Slark Xiao <slark_xiao@163.com>
 
-Thanks for the update. Next time remember to put you SoB above the ---
-line (and changelog) as otherwise it does not make it into the git logs.
-
-I've fixed it up manually this time.
+Applied, thanks.
 
 Johan
 
