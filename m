@@ -1,60 +1,58 @@
-Return-Path: <linux-usb+bounces-12020-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12021-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E19BB928726
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2024 12:53:59 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8950A92876F
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2024 13:02:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9DBA8284EF8
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2024 10:53:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2551AB23CB4
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2024 11:02:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86141148FF7;
-	Fri,  5 Jul 2024 10:53:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D97DB149C7A;
+	Fri,  5 Jul 2024 11:01:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="csVwHVGT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Snts7QGu"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BD93148823;
-	Fri,  5 Jul 2024 10:53:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6045E149C59;
+	Fri,  5 Jul 2024 11:01:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720176828; cv=none; b=VDCNDDdbbRVwtU/t9PLqmZnujzezCnjDOU7aUeqoY58ay4/B70OpiJU6sQHyFdk7YJGCCeCraEqZmSUTUPcxBvCKxJv2+o5MdeHJZ0EeUBv0RVT2iqhuYdo3ALdP4AT2mrb8Tc0MJk+YQKpZCmGAO2YmYwF3c0ZCcFYOPR8lmEw=
+	t=1720177293; cv=none; b=Xbg4U+7qgybG+9JMxYcwTQKsLeJvUOkOmMj+9Oq21QZn1FX1PKbJ5jE2Nxbb4fWolrF1lQ0JFewLtjuYmKnMEfxz/psNK6fl9YernafN8wS8b3v3mAFeQVR4lzbLC2z147ZbZVjWwiHDsCJ2sftdLIM1ceyu2uRO5jZTqGvllpQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720176828; c=relaxed/simple;
-	bh=deZ5CVzki2dlQ1nDscybgPumpHVNxsbMWwIchAdcmkY=;
+	s=arc-20240116; t=1720177293; c=relaxed/simple;
+	bh=EhVybWgGeHW8VqFy+izcO3+7vqNtnv4UC1PQgr1iIpE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Xqjsp6Yp9zx2Ho+dQcJKzS6TaHEpSh6NPk+p3iLJtcfJRi1ENTEB6CSCUBZmBGVY+W9YG6dw5LAQDGv+MBro7jt8x3qOoSL3FbxetolIPIa+WpXM1Wcx68tYEKof9+zb5x0LpooQFfX6LrQFM4g6uNWHagLaFPFiIVhB0/zsvtY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=csVwHVGT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DA67C4AF0F;
-	Fri,  5 Jul 2024 10:53:47 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=UJd6HdKxDr6JE2Zjm3yiRVLkwizbh51f60XYBAWhOv+kSHbC/vWzPS4cKwo6ry++oGhfcX5mB2ewFb7hORy2g+oxYGrVfRWeKXbPYKS0W44NO8x9puEWWys8qkkEpSLgPU8M6UMranXMGanbrhsAGfPBi8kgPoCBra4Cs8bF5TM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Snts7QGu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E806DC116B1;
+	Fri,  5 Jul 2024 11:01:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720176827;
-	bh=deZ5CVzki2dlQ1nDscybgPumpHVNxsbMWwIchAdcmkY=;
+	s=k20201202; t=1720177292;
+	bh=EhVybWgGeHW8VqFy+izcO3+7vqNtnv4UC1PQgr1iIpE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=csVwHVGT0qIEKP81HIkI7H373oS6WdQcSDvc17RPERcwdxU9p8otnjJYWtaFaWiW/
-	 ljzgwPGF7Ud6Su2g0NSnLya6NlNkMc9HBMZjqZt9H93OKRwRYR7f11E1DLuFGobzET
-	 BY23GCTRXouM2+HWjATQ73JiPue6gbjLdE3U1UMfHmrJEtREl9cl65BUsjf1l4BbTO
-	 eeXQhXl/hOmntyMp3qMnzKni6Gpg41NN+MxN1FOut5AYCnBP5cEL8xwYLNVSTGHTw6
-	 5yIxn1JpFQYHRgqnzVYyS2loXL+YtfH7h7TsR70VDx0QAZJHWqtBFrFLoETIiaCJzE
-	 67PPORvysyQ7g==
+	b=Snts7QGuZAPwkv83dy0VrmrGWCBdEnQpAtgyF+iWkpzmQm/ckgJSMaesuhQRvRFrl
+	 tS+5jD25dvg0dqE90Fg9ZOrTfMfMzpeRrGPKYKuaZRC0jbz09gQw9FZDmfQs/eXD4b
+	 SVILwn3zjg/rKb4j6akHxS+o3OFJkWqhz+msPc/nVkvAORq/HPHz3TviAFNOIdgVYB
+	 DQqY5HIjGWkVgllF7Du3FQ7Vc/cwEJlWOkIUhAczU8nmt1p9vLocC1zDnh735FfCmj
+	 1Oqm+9qul8vMWihNViyYgVg1rpQXMopqYASBxw8Us5bInxMnuF36CHG6EkdkTiheda
+	 OZWzYw8jx5+Uw==
 Received: from johan by xi.lan with local (Exim 4.97.1)
 	(envelope-from <johan@kernel.org>)
-	id 1sPgZa-000000006nP-1sJC;
-	Fri, 05 Jul 2024 12:53:50 +0200
-Date: Fri, 5 Jul 2024 12:53:50 +0200
+	id 1sPgh5-000000002UP-38FG;
+	Fri, 05 Jul 2024 13:01:35 +0200
+Date: Fri, 5 Jul 2024 13:01:35 +0200
 From: Johan Hovold <johan@kernel.org>
-To: vanillanwang <vanillanwang@163.com>
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: option: add Rolling RW350-GL variants
-Message-ID: <ZofQvjc0T6RXFOMz@hovoldconsulting.com>
-References: <20240531024012.29805-1-vanillanwang@163.com>
- <Zn0SY4nQzESrQ4xw@hovoldconsulting.com>
- <5273fe7a.9647.190823077a9.Coremail.vanillanwang@163.com>
+To: linux@treblig.org
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] USB: serial: spcp8x5: remove unused struct
+ 'spcp8x5_usb_ctrl_arg'
+Message-ID: <ZofSj98X-uEr-Awj@hovoldconsulting.com>
+References: <20240529234722.130609-1-linux@treblig.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -63,17 +61,19 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5273fe7a.9647.190823077a9.Coremail.vanillanwang@163.com>
+In-Reply-To: <20240529234722.130609-1-linux@treblig.org>
 
-On Fri, Jul 05, 2024 at 05:18:52PM +0800, vanillanwang wrote:
-> >Can you be more specific about the other interface?
+On Thu, May 30, 2024 at 12:47:22AM +0100, linux@treblig.org wrote:
+> From: "Dr. David Alan Gilbert" <linux@treblig.org>
 > 
-> Hi Johan:
-> On usbmode=64, the ports are: 
+> 'spcp8x5_usb_ctrl_arg' has been unused since the original
+> commit 619a6f1d1423 ("USB: add usb-serial spcp8x5 driver").
 > 
->   MBIM(MI0)+GNSS(MI2)+AP log(MI3) + AP META(MI4) + ADB(MI5) + MD AT(MI6) + MD META(MI7) + NPT(MI8) + Debug(MI9).
+> Remove it.
+> 
+> Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
 
-Ok, thanks, I'll amend the commit message with this.
+Now applied, thanks.
 
 Johan
 
