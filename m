@@ -1,115 +1,87 @@
-Return-Path: <linux-usb+bounces-12012-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12014-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 382C39284F5
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2024 11:19:18 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0517C928505
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2024 11:22:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E6D32282FEC
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2024 09:19:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B50182868F2
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2024 09:22:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D137C14601C;
-	Fri,  5 Jul 2024 09:19:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9925B1465AC;
+	Fri,  5 Jul 2024 09:22:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="lkgKPWW0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AhMuO46h"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFEF23A8CB
-	for <linux-usb@vger.kernel.org>; Fri,  5 Jul 2024 09:19:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EA54139E;
+	Fri,  5 Jul 2024 09:22:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720171152; cv=none; b=H7sYd69r8KwAVqPvXS48tMJNCKwQM/vUocjBwrFEB8Px7jA80dO3kRwfwCgJlwysjrUefIHcTBYKd7X6LivPElExDdnFDG5vuzdHV395yxgIZo+SjCu0bnxz2lF5MSa1qCWKF3tVPAAlM5QGeQa8bFrGoJeL56ygzdYpk8NI5oo=
+	t=1720171331; cv=none; b=g41Ur647AVG5AvvHoh896Pi/xjM9H8l1H0kLSD3Une0PjFCJ+8sXkb4qXhN1htpDOMDikgX+dvixL/xfi9/ZWD3G7fGfiIr5rOwr/+0PThqALhzXuQVlh83kSQrq+gCLudWH/k9TMbOMOye6pRAmcD39ukRUc+CHxD9vNoSRb/o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720171152; c=relaxed/simple;
-	bh=Oqk8V9K6PqOXK0GzY8MkpfUtRmEMGl3IHQNk8YchvrQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=JnOZ99qK762d4Ow4I6tQh+FatdxtduX4QhGa5d2lssI1ByaJfz/fDz6h75LoOi5oUoakv4YPDyJw1YO2EPhvIfK9RtOSRIZMehkD9oRK5QfV/ojQaN6SRtqoaHspbl6cq14ri81/qwfOSGMnL3XDCgFsR14WW7bvibHhCYzZZOY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=lkgKPWW0; arc=none smtp.client-ip=209.85.208.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-58bac81f3f9so1898774a12.2
-        for <linux-usb@vger.kernel.org>; Fri, 05 Jul 2024 02:19:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1720171149; x=1720775949; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=mvrzYVWaCV49RK2aNH0vmYg1ydT7xzKbRY6MIWC1fmk=;
-        b=lkgKPWW0OVDcM0/UTma49rwGe5RkPZ/BNXmzwqNoTAquhncjgbLQz6JR948F7xTWBF
-         w6wZdiIYCT3rwqhANORNvGdV2ZiGj+ElRn9NVMJOHX5rpclrvOPL+XKTzr5RnfbML6l5
-         u5XFknAwO1Gd5nJDFzm25QLfOBDWsW+Rq8vHI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720171149; x=1720775949;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mvrzYVWaCV49RK2aNH0vmYg1ydT7xzKbRY6MIWC1fmk=;
-        b=Q22F5BXhU/LeLotjaWWhZAT2GR9ttJsRjH+nTPyZDvKUJseNpIuKyNqUovVemwP1V/
-         2ouYIp0C3+PmMDzd7jXMVz/aZXr0b05eCeciIutoag2J2WRqyFMKioGkyfiOXh4SvjfX
-         Myv1T2iRo5LtkbMzO+jxvD+Pnc6zn+NcO5kxjmt0lg7QYKFXEzd7o7oGp1GeZN5eiGeL
-         j61Yo1mOh1DonuqeH3zr54l8D5mcUz22UcjJUGIHDezBxHtrQKIZfXqSe8cyquweOaDU
-         mxz12K8diFq22tJxDCnOjB42vbJWGjMX7rh37JGAA5qk1LggWWpg45iT8HgabRrkt2tG
-         VIYw==
-X-Gm-Message-State: AOJu0YzM3v5Jk3fyC/agjeM88Jv9nspf9wF3kx+CWvRXzKc73lWl7kfG
-	Ng1tiT6o3UWQ28pku2eh4TryOI0vobu5Y1I0I07sfR6JWeq9tL4z1+CPCd88
-X-Google-Smtp-Source: AGHT+IF24wz2N7yERLG2TwGRCzniWnc4OFT6s2Q+xPpsp1WURYwBDQ82I6DERRgHypsV3ss2Qzhpyw==
-X-Received: by 2002:a17:907:77d6:b0:a77:c080:11fc with SMTP id a640c23a62f3a-a77c080128cmr200683866b.36.1720171148992;
-        Fri, 05 Jul 2024 02:19:08 -0700 (PDT)
-Received: from ukaszb-ng.c.googlers.com.com (61.134.90.34.bc.googleusercontent.com. [34.90.134.61])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a72ab08d0f8sm667456266b.178.2024.07.05.02.19.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Jul 2024 02:19:08 -0700 (PDT)
-From: =?UTF-8?q?=C5=81ukasz=20Bartosik?= <ukaszb@chromium.org>
-To: Valentina Manea <valentina.manea.m@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Hongren Zheng <i@zenithal.me>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Subject: [PATCH v1] usbip: Add USB_SPEED_SUPER_PLUS as valid arg
-Date: Fri,  5 Jul 2024 09:19:02 +0000
-Message-ID: <20240705091902.789643-1-ukaszb@chromium.org>
-X-Mailer: git-send-email 2.45.2.803.g4e1b14247a-goog
+	s=arc-20240116; t=1720171331; c=relaxed/simple;
+	bh=TdxFLpeeW3XQKl3frGnYYgNter4Yc8kHn7G/NIclOAY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=T8N9tM0MWwtQy3XdqOU8VlR1yG4+K8KVfmj0SPWIItMEE3xWwsKIDVE7URbUqax0bFUqBcLS6X1BJ1w0g6HzGiBuh57wGkwnyc5LsW1Mz6n7rjpYOS1ZUj+lAAyBSJ6ngxqWVEUJWVPtflyq8CJ9tiNehVQG1+xr817odcn+iLE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AhMuO46h; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ED7DC116B1;
+	Fri,  5 Jul 2024 09:22:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1720171330;
+	bh=TdxFLpeeW3XQKl3frGnYYgNter4Yc8kHn7G/NIclOAY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=AhMuO46hjK1VINCj0SesbEJ8hJCVjwEeXYlNZbVA+Hf2F0wE+jBQ53PFIwW7LW1jY
+	 m9m53vBTLR1E1G6kGaKHdMNknKvIfjY+8d5mhqb4L9rNr/Nw1DCXphBK2ft7h4DgRB
+	 1E/LbCrkQw9PjdpoM3U8sCQ3rrKXAlWFAJ2vRnF6nFUGj4WGnCmKzDh8OkUyQe26qf
+	 oW1XWARwHD1QCb+R0VR7Tb4Mv+3cg/pVAzr4C3FXgP6EVHGIsm7zNdraoHhJORi9ZI
+	 xixJ8dlx4f2ZPVf00aPHiWxSIyOp+OrwQDf/ePUxoasYOEX6NA5pHTIOxVBXXEwVyC
+	 yIbemC8tuU4cA==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1sPf8v-000000005og-1gP2;
+	Fri, 05 Jul 2024 11:22:13 +0200
+Date: Fri, 5 Jul 2024 11:22:13 +0200
+From: Johan Hovold <johan@kernel.org>
+To: Slark Xiao <slark_xiao@163.com>
+Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: Re: [PATCH] USB: serial: option: add support for Foxconn T99W651
+Message-ID: <Zoe7RT7o39C7iXmA@hovoldconsulting.com>
+References: <20240705081709.105496-1-slark_xiao@163.com>
+ <Zoe3qBwWG33AZaU9@hovoldconsulting.com>
+ <5b098485.965d.190822996fc.Coremail.slark_xiao@163.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5b098485.965d.190822996fc.Coremail.slark_xiao@163.com>
 
-Add USB_SPEED_SUPER_PLUS as valid argument to allow
-to attach USB SuperSpeed+ devices.
+On Fri, Jul 05, 2024 at 05:11:22PM +0800, Slark Xiao wrote:
 
-Signed-off-by: Łukasz Bartosik <ukaszb@chromium.org>
----
- drivers/usb/usbip/vhci_sysfs.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+> I have a concern about the test result of "usb-devices" in Ubuntu
+> 22.04. Do you know why it wouldn't show our devices any more? 
 
-diff --git a/drivers/usb/usbip/vhci_sysfs.c b/drivers/usb/usbip/vhci_sysfs.c
-index e2847cd3e6e3..d5865460e82d 100644
---- a/drivers/usb/usbip/vhci_sysfs.c
-+++ b/drivers/usb/usbip/vhci_sysfs.c
-@@ -283,6 +283,7 @@ static int valid_args(__u32 *pdev_nr, __u32 *rhport,
- 	case USB_SPEED_HIGH:
- 	case USB_SPEED_WIRELESS:
- 	case USB_SPEED_SUPER:
-+	case USB_SPEED_SUPER_PLUS:
- 		break;
- 	default:
- 		pr_err("Failed attach request for unsupported USB speed: %s\n",
-@@ -349,7 +350,7 @@ static ssize_t attach_store(struct device *dev, struct device_attribute *attr,
- 	vhci_hcd = hcd_to_vhci_hcd(hcd);
- 	vhci = vhci_hcd->vhci;
- 
--	if (speed == USB_SPEED_SUPER)
-+	if (speed >= USB_SPEED_SUPER)
- 		vdev = &vhci->vhci_hcd_ss->vdev[rhport];
- 	else
- 		vdev = &vhci->vhci_hcd_hs->vdev[rhport];
--- 
-2.45.2.803.g4e1b14247a-goog
+No, sorry, no idea. Everything seems to work here with the latest
+usbutils-017.
 
+Is it just your devices that no longer show up or doesn't it work at
+all?
+
+Perhaps a change like this one could be involved:
+
+	https://github.com/gregkh/usbutils/commit/3b79e9c866a17f0a5178b3b0bee63fab59a0003a	
+
+I suggest you try an older version first and then either file a bug on
+github or to Ubuntu.
+
+Johan
 
