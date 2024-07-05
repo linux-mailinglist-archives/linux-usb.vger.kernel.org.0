@@ -1,71 +1,115 @@
-Return-Path: <linux-usb+bounces-12013-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12012-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C57899284F6
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2024 11:19:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 382C39284F5
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2024 11:19:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6F0D61F2249E
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2024 09:19:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E6D32282FEC
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2024 09:19:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2104C146A67;
-	Fri,  5 Jul 2024 09:19:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D137C14601C;
+	Fri,  5 Jul 2024 09:19:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=163.com header.i=@163.com header.b="R7xEq5ze"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="lkgKPWW0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEA633A8CB;
-	Fri,  5 Jul 2024 09:19:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFEF23A8CB
+	for <linux-usb@vger.kernel.org>; Fri,  5 Jul 2024 09:19:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720171157; cv=none; b=jt1s6OFuanbUQDemJ6PQSWWHUJzIvaxxTk+hr+h8uywtl38c7az5dYZTCZa6xdUfWh+nGQ+57ec9jpungeA+MP0xshrycyTT7g7jvZ+XR6d2mh4X5Z3pfj726BqTWi2+Z/qlrQnxZ35dWdlzRBYiKT+gQwzlVXCLddIuTkcfZeA=
+	t=1720171152; cv=none; b=H7sYd69r8KwAVqPvXS48tMJNCKwQM/vUocjBwrFEB8Px7jA80dO3kRwfwCgJlwysjrUefIHcTBYKd7X6LivPElExDdnFDG5vuzdHV395yxgIZo+SjCu0bnxz2lF5MSa1qCWKF3tVPAAlM5QGeQa8bFrGoJeL56ygzdYpk8NI5oo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720171157; c=relaxed/simple;
-	bh=h7tI3UX9MF6Z8Rfjd4kC9TY6gTQpLashC2p1HGV+8b4=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=lDvQPq73RrxrY6P/jToLlJ7mHsCuwV6p9XfvcAeDligXtz40aNE0ciH3j5eJHTbR+mDaOAo6qPSLlshjXnECSQkl+GyCrfX2XEgXpxW+ozJSVRjKBO8K2J9jXttRyi5SdWnMtMq61DgB3vuCyNvwny8Brzm+ZgqfrREHvGFAGEk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=fail (1024-bit key) header.d=163.com header.i=@163.com header.b=R7xEq5ze reason="signature verification failed"; arc=none smtp.client-ip=117.135.210.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=Date:From:Subject:Content-Type:MIME-Version:
-	Message-ID; bh=lfNkSWR+BPmvBsA3/0LjgsVzzxpvFDzXGDNdUl4T8cQ=; b=R
-	7xEq5zeF8zahh3ljjQwi4Yqw1bsINRy/6D+hShk0ZpRrEjppyW68IVvAKuQ+rSzN
-	tB6YkiXkdWLaFqMtRLNuD47d3gCv1+BGur3CrwDJfhCN+vvBoZyxxp8PbSR0hGwm
-	hgcfNEZqODwgaH93W2iCzPAiZJ7EsjYdf2MSzbegrk=
-Received: from vanillanwang$163.com ( [124.89.89.114] ) by
- ajax-webmail-wmsvr-40-137 (Coremail) ; Fri, 5 Jul 2024 17:18:52 +0800 (CST)
-Date: Fri, 5 Jul 2024 17:18:52 +0800 (CST)
-From: vanillanwang  <vanillanwang@163.com>
-To: "Johan Hovold" <johan@kernel.org>
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: option: add Rolling RW350-GL variants
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20230109(dcb5de15)
- Copyright (c) 2002-2024 www.mailtech.cn 163com
-In-Reply-To: <Zn0SY4nQzESrQ4xw@hovoldconsulting.com>
-References: <20240531024012.29805-1-vanillanwang@163.com>
- <Zn0SY4nQzESrQ4xw@hovoldconsulting.com>
-X-NTES-SC: AL_Qu2ZAv2cvkko5CibZukfm0YWgOk5Ucqzuf8k1YZTO598jBLo9j4Qe1xgLXT998KNJzmtlzu0WRx/58FkVoZ0b7ovXxPWZFjlzJtstf+vF+hJQA==
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+	s=arc-20240116; t=1720171152; c=relaxed/simple;
+	bh=Oqk8V9K6PqOXK0GzY8MkpfUtRmEMGl3IHQNk8YchvrQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=JnOZ99qK762d4Ow4I6tQh+FatdxtduX4QhGa5d2lssI1ByaJfz/fDz6h75LoOi5oUoakv4YPDyJw1YO2EPhvIfK9RtOSRIZMehkD9oRK5QfV/ojQaN6SRtqoaHspbl6cq14ri81/qwfOSGMnL3XDCgFsR14WW7bvibHhCYzZZOY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=lkgKPWW0; arc=none smtp.client-ip=209.85.208.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-58bac81f3f9so1898774a12.2
+        for <linux-usb@vger.kernel.org>; Fri, 05 Jul 2024 02:19:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1720171149; x=1720775949; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mvrzYVWaCV49RK2aNH0vmYg1ydT7xzKbRY6MIWC1fmk=;
+        b=lkgKPWW0OVDcM0/UTma49rwGe5RkPZ/BNXmzwqNoTAquhncjgbLQz6JR948F7xTWBF
+         w6wZdiIYCT3rwqhANORNvGdV2ZiGj+ElRn9NVMJOHX5rpclrvOPL+XKTzr5RnfbML6l5
+         u5XFknAwO1Gd5nJDFzm25QLfOBDWsW+Rq8vHI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720171149; x=1720775949;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mvrzYVWaCV49RK2aNH0vmYg1ydT7xzKbRY6MIWC1fmk=;
+        b=Q22F5BXhU/LeLotjaWWhZAT2GR9ttJsRjH+nTPyZDvKUJseNpIuKyNqUovVemwP1V/
+         2ouYIp0C3+PmMDzd7jXMVz/aZXr0b05eCeciIutoag2J2WRqyFMKioGkyfiOXh4SvjfX
+         Myv1T2iRo5LtkbMzO+jxvD+Pnc6zn+NcO5kxjmt0lg7QYKFXEzd7o7oGp1GeZN5eiGeL
+         j61Yo1mOh1DonuqeH3zr54l8D5mcUz22UcjJUGIHDezBxHtrQKIZfXqSe8cyquweOaDU
+         mxz12K8diFq22tJxDCnOjB42vbJWGjMX7rh37JGAA5qk1LggWWpg45iT8HgabRrkt2tG
+         VIYw==
+X-Gm-Message-State: AOJu0YzM3v5Jk3fyC/agjeM88Jv9nspf9wF3kx+CWvRXzKc73lWl7kfG
+	Ng1tiT6o3UWQ28pku2eh4TryOI0vobu5Y1I0I07sfR6JWeq9tL4z1+CPCd88
+X-Google-Smtp-Source: AGHT+IF24wz2N7yERLG2TwGRCzniWnc4OFT6s2Q+xPpsp1WURYwBDQ82I6DERRgHypsV3ss2Qzhpyw==
+X-Received: by 2002:a17:907:77d6:b0:a77:c080:11fc with SMTP id a640c23a62f3a-a77c080128cmr200683866b.36.1720171148992;
+        Fri, 05 Jul 2024 02:19:08 -0700 (PDT)
+Received: from ukaszb-ng.c.googlers.com.com (61.134.90.34.bc.googleusercontent.com. [34.90.134.61])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a72ab08d0f8sm667456266b.178.2024.07.05.02.19.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Jul 2024 02:19:08 -0700 (PDT)
+From: =?UTF-8?q?=C5=81ukasz=20Bartosik?= <ukaszb@chromium.org>
+To: Valentina Manea <valentina.manea.m@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Hongren Zheng <i@zenithal.me>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Subject: [PATCH v1] usbip: Add USB_SPEED_SUPER_PLUS as valid arg
+Date: Fri,  5 Jul 2024 09:19:02 +0000
+Message-ID: <20240705091902.789643-1-ukaszb@chromium.org>
+X-Mailer: git-send-email 2.45.2.803.g4e1b14247a-goog
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <5273fe7a.9647.190823077a9.Coremail.vanillanwang@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID:_____wD3_7t9uodmlHEoAA--.7805W
-X-CM-SenderInfo: pydqxz5odq4tlqj6il2tof0z/1tbiExETUmXAl9mMewADsc
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-PkNhbiB5b3UgYmUgbW9yZSBzcGVjaWZpYyBhYm91dCB0aGUgb3RoZXIgaW50ZXJmYWNlPwoKSGkg
-Sm9oYW46Ck9uIHVzYm1vZGU9NjQsIHRoZSBwb3J0cyBhcmU6IAoKICBNQklNKE1JMCkrR05TUyhN
-STIpK0FQIGxvZyhNSTMpICsgQVAgTUVUQShNSTQpICsgQURCKE1JNSkgKyBNRCBBVChNSTYpICsg
-TUQgTUVUQShNSTcpICsgTlBUKE1JOCkgKyBEZWJ1ZyhNSTkpLgoKVGhhbmtz
+Add USB_SPEED_SUPER_PLUS as valid argument to allow
+to attach USB SuperSpeed+ devices.
+
+Signed-off-by: Łukasz Bartosik <ukaszb@chromium.org>
+---
+ drivers/usb/usbip/vhci_sysfs.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/usbip/vhci_sysfs.c b/drivers/usb/usbip/vhci_sysfs.c
+index e2847cd3e6e3..d5865460e82d 100644
+--- a/drivers/usb/usbip/vhci_sysfs.c
++++ b/drivers/usb/usbip/vhci_sysfs.c
+@@ -283,6 +283,7 @@ static int valid_args(__u32 *pdev_nr, __u32 *rhport,
+ 	case USB_SPEED_HIGH:
+ 	case USB_SPEED_WIRELESS:
+ 	case USB_SPEED_SUPER:
++	case USB_SPEED_SUPER_PLUS:
+ 		break;
+ 	default:
+ 		pr_err("Failed attach request for unsupported USB speed: %s\n",
+@@ -349,7 +350,7 @@ static ssize_t attach_store(struct device *dev, struct device_attribute *attr,
+ 	vhci_hcd = hcd_to_vhci_hcd(hcd);
+ 	vhci = vhci_hcd->vhci;
+ 
+-	if (speed == USB_SPEED_SUPER)
++	if (speed >= USB_SPEED_SUPER)
+ 		vdev = &vhci->vhci_hcd_ss->vdev[rhport];
+ 	else
+ 		vdev = &vhci->vhci_hcd_hs->vdev[rhport];
+-- 
+2.45.2.803.g4e1b14247a-goog
+
 
