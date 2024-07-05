@@ -1,117 +1,93 @@
-Return-Path: <linux-usb+bounces-12005-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12006-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A5C0927F1C
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2024 00:57:26 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A5B879282FE
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2024 09:43:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D1A191F22939
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Jul 2024 22:57:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D1E951C21AFA
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2024 07:43:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 738571442EA;
-	Thu,  4 Jul 2024 22:57:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5372714533C;
+	Fri,  5 Jul 2024 07:43:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="m5GeRjvd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p3vaEXd4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09245142640
-	for <linux-usb@vger.kernel.org>; Thu,  4 Jul 2024 22:57:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBEE71442F4;
+	Fri,  5 Jul 2024 07:43:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720133840; cv=none; b=IsUToeu66OeR5rrd4lyj8goQGsdUG6ZlBGuLO2D2kaooQSrtthn8L9lVbmYveNh/MW0DLkPWI/lBAWG2cSqzkoa517oYwEoyxYIiwCFBTTcB1lm7TYzzyFR3VSheovHcbzreP7vroIq39RGymPhcxsEiFCVjVIPAsXmudM37I00=
+	t=1720165426; cv=none; b=s1odXfDM2mjFqxrjsTSqs9eG69la/Qz1CiiPu1oqkGQnE2NNp2SZAT6dv6UsrZQn3x+I5zXQTNCu43RJMnmJLeqXjTiYU7zpLx5rdG7DqV5Z8mpOVpu069wwpjnUnxZTPOIdLGkuhRRKKjbSao3Dl07Fwy8us2vtWCDypVRfrRs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720133840; c=relaxed/simple;
-	bh=MoZz7itoEYZaF17Te6Z9RXYWUd5M0SSHngCMSRxP6M8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=raBnd9c1MmrEmcEwgQ9MTDGHcC3zqGvP0BYZoqLrmTFZeSSQs96cx+UB62nuP6xg26NAI+AIVl9ubJqoSpdyYPpqmECnpt4jw51yTzOCdQAv0GC7jKwmY8Pb2EWJJfR3NV/keolUMgNY9PYDngHodB9FOim8ckKNSE+zVR7gWyU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=m5GeRjvd; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1720133837; x=1751669837;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=MoZz7itoEYZaF17Te6Z9RXYWUd5M0SSHngCMSRxP6M8=;
-  b=m5GeRjvdvNaAyJ2dSo1Xfpg/poPm27LAb61+9PpgAY5VjQK7rLEblP8O
-   7zC0BcZyW8gE6jXVpa6GGSMqBNeJG7wAqcLdNMXDo5t09Pnxo56bWYTwk
-   NohNevQ2A+2mEh+NAyzQsvQFVDzWK7l3+3nGg+redo6ea5dZ8R65Vfnvf
-   ywXTipn0kOgJY4zf1C908AZHqv+uBeiBiNAKeGG5VnjJICXB/Yns9G4tX
-   3yq9C+o/2Mb3kh1p0XtmqrRGpueBXWqSSOAXkcmCQAR4/Olc7+Qcvz1KB
-   uF6HNz4qfqyZgbvG3JGUq2NCGJe/PQtm8+77v+2gmMz/JfpeeP8HcVNdD
-   g==;
-X-CSE-ConnectionGUID: 8eXBbEwvT7GUHtdFHlVbGA==
-X-CSE-MsgGUID: J8DAOXILQYe5f6kblSy2rg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11123"; a="17529018"
-X-IronPort-AV: E=Sophos;i="6.09,183,1716274800"; 
-   d="scan'208";a="17529018"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2024 15:57:17 -0700
-X-CSE-ConnectionGUID: 1qNf3jCLT8S/iqmnP7skEA==
-X-CSE-MsgGUID: swJxC19sQDOnDyPGZgEOvQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,183,1716274800"; 
-   d="scan'208";a="46487203"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 04 Jul 2024 15:57:15 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sPVO5-000RbK-00;
-	Thu, 04 Jul 2024 22:57:13 +0000
-Date: Fri, 5 Jul 2024 06:57:03 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: oe-kbuild-all@lists.linux.dev, linux-usb@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Subject: [usb:usb-next 4/11] drivers/usb/typec/ucsi/ucsi_ccg.c:572:14:
- sparse: sparse: incorrect type in assignment (different base types)
-Message-ID: <202407050600.HGza0qcn-lkp@intel.com>
+	s=arc-20240116; t=1720165426; c=relaxed/simple;
+	bh=t4kXHg4frzsPSSTQ4jwgylMVLomLutzNdMNloKpmrgc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WFaEGhHuTcN9itazeMEpAg4Pv4SG8sd3AFHuw9K7ZI6pua1b4vELsIVR2U22sTZKVoBfWQq9ZnLI9DBtSAdD74qPYDJgmYQ/PspOTKAb0Qw1ytgN7qkr2Y+mtxwfFamBnzlKiAcNn5AJx3JVS5sSkRkXAdRW63Bf9XSmWT4DgFE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p3vaEXd4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 657D0C116B1;
+	Fri,  5 Jul 2024 07:43:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1720165426;
+	bh=t4kXHg4frzsPSSTQ4jwgylMVLomLutzNdMNloKpmrgc=;
+	h=From:To:Cc:Subject:Date:From;
+	b=p3vaEXd48lD2RbryODvsQOyJuaC/Ld1MKO1HlXkg6KCn9JDRjMmFqZSGgSFVc5p5q
+	 Y6AYk/6gindaSpMl7jIXmTZNt34jyvMTcDSvTRkrfyl5RSfR9/KABGRmqCKeQJEmXm
+	 n7DoUZ0ll3PWj2HJDu8gou+M1yPSdNARNQb3CvjIIe/QPMWfwkdj12qScPEnp2/+yH
+	 5XNGLO3St5IsmxT+Jr5fKlR8Sm5RkJzgXnqYJKYrJPT9r4xO98fsH+Z4Hel0SrQAAd
+	 P+hdURBAh/MP8jkXuXS0rNkggP9C5/EFe5CVww2z4MrNLJeau7AbpOfqVzCT3l6HO9
+	 avm6+VpJXtzsA==
+From: Lee Jones <lee@kernel.org>
+To: lee@kernel.org,
+	gregkh@linuxfoundation.org
+Cc: linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: [PATCH 1/1] usb: gadget: configfs: Prevent OOB read/write in usb_string_copy()
+Date: Fri,  5 Jul 2024 08:43:39 +0100
+Message-ID: <20240705074339.633717-1-lee@kernel.org>
+X-Mailer: git-send-email 2.45.2.803.g4e1b14247a-goog
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-next
-head:   179264157bbaf3d169b184160d0b5283f8a50e73
-commit: 467399d989d799433ec7dd8da2ebbfbc70207d03 [4/11] usb: typec: ucsi: split read operation
-config: hexagon-randconfig-r112-20240704 (https://download.01.org/0day-ci/archive/20240705/202407050600.HGza0qcn-lkp@intel.com/config)
-compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
-reproduce: (https://download.01.org/0day-ci/archive/20240705/202407050600.HGza0qcn-lkp@intel.com/reproduce)
+Userspace provided string 's' could trivially have the length zero. Left
+unchecked this will firstly result in an OOB read in the form
+`if (str[0 - 1] == '\n') followed closely by an OOB write in the form
+`str[0 - 1] = '\0'`.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407050600.HGza0qcn-lkp@intel.com/
+There is already a validating check to catch strings that are too long.
+Let's supply an additional check for invalid strings that are too short.
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/usb/typec/ucsi/ucsi_ccg.c:572:14: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int [usertype] @@     got restricted __le32 [usertype] cci @@
-   drivers/usb/typec/ucsi/ucsi_ccg.c:572:14: sparse:     expected unsigned int [usertype]
-   drivers/usb/typec/ucsi/ucsi_ccg.c:572:14: sparse:     got restricted __le32 [usertype] cci
+Signed-off-by: Lee Jones <lee@kernel.org>
+---
+ drivers/usb/gadget/configfs.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-vim +572 drivers/usb/typec/ucsi/ucsi_ccg.c
-
-   566	
-   567	static int ucsi_ccg_read_cci(struct ucsi *ucsi, u32 *cci)
-   568	{
-   569		struct ucsi_ccg *uc = ucsi_get_drvdata(ucsi);
-   570	
-   571		spin_lock(&uc->op_lock);
- > 572		*cci = uc->op_data.cci;
-   573		spin_unlock(&uc->op_lock);
-   574	
-   575		return 0;
-   576	}
-   577	
-
+diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
+index ce3cfa1f36f51..0e7c1e947c0a0 100644
+--- a/drivers/usb/gadget/configfs.c
++++ b/drivers/usb/gadget/configfs.c
+@@ -115,9 +115,12 @@ static int usb_string_copy(const char *s, char **s_copy)
+ 	int ret;
+ 	char *str;
+ 	char *copy = *s_copy;
++
+ 	ret = strlen(s);
+ 	if (ret > USB_MAX_STRING_LEN)
+ 		return -EOVERFLOW;
++	if (ret < 1)
++		return -EINVAL;
+ 
+ 	if (copy) {
+ 		str = copy;
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.45.2.803.g4e1b14247a-goog
+
 
