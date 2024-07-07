@@ -1,168 +1,275 @@
-Return-Path: <linux-usb+bounces-12052-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12053-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E043E9293A9
-	for <lists+linux-usb@lfdr.de>; Sat,  6 Jul 2024 14:56:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00CF492992C
+	for <lists+linux-usb@lfdr.de>; Sun,  7 Jul 2024 19:25:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3130BB21C5C
-	for <lists+linux-usb@lfdr.de>; Sat,  6 Jul 2024 12:56:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 085FD1C20A6F
+	for <lists+linux-usb@lfdr.de>; Sun,  7 Jul 2024 17:25:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D96F12DDA2;
-	Sat,  6 Jul 2024 12:56:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=live.com header.i=@live.com header.b="Y7TJ9JCu"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 292615644E;
+	Sun,  7 Jul 2024 17:25:20 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from IND01-MAX-obe.outbound.protection.outlook.com (mail-maxind01olkn2081.outbound.protection.outlook.com [40.92.102.81])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A52DD23BE;
-	Sat,  6 Jul 2024 12:56:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.102.81
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720270582; cv=fail; b=YeqSIKdMvwaiWysvkO2RIDqOd/1A0l/3iBfc3mruf2DyyWuK7YsW8M99eriSPRk8lAaCxCY0GXXHskHf79E5swJ26RTXti23jcNREhO+MmxpO7BV0wLyDZNT2cNsIED2evYlBgol2aihBPcpAcJAl9SVNcZWQ75K3s6FuSSbTBY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720270582; c=relaxed/simple;
-	bh=QWNBRCb7JbXWO2xGWDsp3WrYX6YbvrpK3aNJdDamE+s=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=uwpICcdlcKcys2RJYLB0hbctpqqOH6M4laawT1htF8MfoWCaM0kdt/9uLRq6W77js57iVR+Tzq6ucRfwnvZS0x2UDMioTGb/Rap0pS1zOC0VTF395u3pCuwsIyZmSuldxfySlSbZjLXDwcUP1FeFJrlFATA8gPdSQ2wSghtwEqE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=live.com; spf=pass smtp.mailfrom=live.com; dkim=pass (2048-bit key) header.d=live.com header.i=@live.com header.b=Y7TJ9JCu; arc=fail smtp.client-ip=40.92.102.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=live.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=live.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=J2GWtUNg2M3cI0QPASBLynzcENmLun6g3IkHoIdXiQNKOsdf1rfOBqZPFDIg0zzwuiwEsVPpNmb8q4Re7K+PPcQAJLIlcpExFwrR3KSIBZwE0kJ23/f7I1cyW+xqDFBaNmNur/rm8Haue6L5o/8Zr/lpvJU2Me1dtW0DFNo38ItMB0IawL6+W/tDgzSp88jnQpza1ORTTj25X5f71HBavqZr6ELlaSy/raTkuZm3RGEtUb34pBFt3R8vu86YwJ494iBgnVp8rJpMULOdk9MnIiBqSqSX61QeKUIACOdWAegnIhKorMGHlOM7S5PmNuI/5rjgXeGHXnsgrP3ivIc/Gw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QWNBRCb7JbXWO2xGWDsp3WrYX6YbvrpK3aNJdDamE+s=;
- b=n0gFp0pGfiXys5iQLNJA3Z+aU2kKY9nQJI/UgB/A9vHEWsA68gA/RaWupOCGjRBshMhcHu/7QmSm1vJTEDytvK7Orjwph0CgA3b153Ko+bVrZskQ/zcV00MhGaH8Ym8G8IlHQ/msZtOp3qoQ4n9vZh3kM+qDidBs3nGSffXfxU9tfwl6m5bPcr6GrnPxAXmK3JXIeaKrF4Nk/bh4Uzy1fzwu+gMlcSMa8NGl6T0Qsi354FFlepbITOoprnfcI3zYLeBRZZOuyD437jz5Q1d6J0UJv8qI+dNVu8AHESkTU4aF3TYzG4R9k/X4DGo/2OJTIyvzGKXA+YYn9TbvlcFJEA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QWNBRCb7JbXWO2xGWDsp3WrYX6YbvrpK3aNJdDamE+s=;
- b=Y7TJ9JCuhWcO9Af+93NVcInNvONvNUXJWUbSir9Hm5Rk2Hmd9ZDcKTUfK40E5dkbGUOEhOrBsEfWvfVL5i6HqkQOW0k6w/c6FTG0IuFALbGkDLP//hFn1ycTJieR3lYiq2CYNOUbC2jeErFZEq5EpdrxRDCq6gtvk13LmcYeXwp3V+Dk6fWntFL9Pkig+AwL8fpQmQlp/+sBfigBoelJb324TMOCQIsdhJQCOk5PFRFPGEWRwNDfBt+3DUv6I2D3wgFkjEK0j6TQf+VFWdMru51YfbHpX88NRwHlSoa6FRUw5Xf/UQqVEib6oEcPAJswGILI2C/8ydUWNm8p9SKj8Q==
-Received: from MA0P287MB0217.INDP287.PROD.OUTLOOK.COM (2603:1096:a01:b3::9) by
- PN3P287MB0789.INDP287.PROD.OUTLOOK.COM (2603:1096:c01:174::5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7741.31; Sat, 6 Jul 2024 12:56:15 +0000
-Received: from MA0P287MB0217.INDP287.PROD.OUTLOOK.COM
- ([fe80::98d2:3610:b33c:435a]) by MA0P287MB0217.INDP287.PROD.OUTLOOK.COM
- ([fe80::98d2:3610:b33c:435a%4]) with mapi id 15.20.7741.031; Sat, 6 Jul 2024
- 12:56:15 +0000
-From: Aditya Garg <gargaditya08@live.com>
-To: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-CC: "oneukum@suse.com" <oneukum@suse.com>, "stern@rowland.harvard.edu"
-	<stern@rowland.harvard.edu>, Kerem Karabay <kekrby@gmail.com>, Orlando
- Chamberlain <orlandoch.dev@gmail.com>, Linux Kernel Mailing List
-	<linux-kernel@vger.kernel.org>, "linux-usb@vger.kernel.org"
-	<linux-usb@vger.kernel.org>, "linux-scsi@vger.kernel.org"
-	<linux-scsi@vger.kernel.org>, "usb-storage@lists.one-eyed-alien.net"
-	<usb-storage@lists.one-eyed-alien.net>
-Subject: Re: [PATCH v3 1/2] USB: core: add 'shutdown' callback to usb_driver
-Thread-Topic: [PATCH v3 1/2] USB: core: add 'shutdown' callback to usb_driver
-Thread-Index: AQHaz5yAS+i+TdTeKU6c11DkRXEKIrHpoxgAgAACioCAAALZgA==
-Date: Sat, 6 Jul 2024 12:56:13 +0000
-Message-ID: <7CF44361-A11B-4C30-B2F7-A66C986D3143@live.com>
-References: <58227E2C-1886-40AD-8F80-7C618EF2D8F2@live.com>
- <7AAC1BF4-8B60-448D-A3C1-B7E80330BE42@live.com>
- <2024070612-squealer-wackiness-c885@gregkh>
- <1E1BF62B-E8F6-411F-B06C-4A28C96B4897@live.com>
-In-Reply-To: <1E1BF62B-E8F6-411F-B06C-4A28C96B4897@live.com>
-Accept-Language: en-IN, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-ms-exchange-messagesentrepresentingtype: 1
-x-tmn: [Qoeu7CdgzfrwjYO7YijztYGtA3DtNBvetGnIGEVvsJcGHW4212a+xtyWck0CgThV]
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MA0P287MB0217:EE_|PN3P287MB0789:EE_
-x-ms-office365-filtering-correlation-id: 8c5696dd-35fc-4d76-50ae-08dc9dbb0448
-x-microsoft-antispam:
- BCL:0;ARA:14566002|19110799003|8060799006|461199028|3412199025|4302099013|440099028|1602099012|102099032;
-x-microsoft-antispam-message-info:
- GSUpfrP89OQR5qh9pnY4AIl0UNFVzMdrKS6ahE5pLJt9Ps1ofhWuQvdlDQi/PwETz/NL3ay6H8k0bk6DBOPRTYN7QRcaehAGpr1g0aA8RqcdQdic3R2ZQLKL/5VhSlN8Pxb9Ga+2gp0nhY3FAly30HjDEn45bFUke81ykUgY9xGUEfoc2SkRUURV70MpYjgKRSVfVyM3JiFOtOKzboMHR3LTtTbJsxByxJc1Z/YdOhlcbOUGYLKGeu2qfi+eS0C71PAfGdNcW5I92fqoUjh11Zlfv+LgT+rBSLWnEfMl9aec6iC0O843QCiToUqUURNfjG2xp74AAjQKWolqOcJfxQ6wPEYt6yLK02Mu1KkVJnQUi0buCH3x9hsP/fPU/T3yttQlDqLenXLqlm+pxqEH0LuefTTWcpGSP3FYgVS1Xed+oLEJ5TIbeE4zoER1fLIK+YVEZ1+YsuOc/scEUr39i80WgnmtnG1dB22qR3PangGRYfUVdzTRwq1oHxpsI/mLjZZyoOmJW1y9UuVigJ5lEIioXjmbOpCXMD6fj5t1MjMKuyR6QdLX5Pnm5Eaoo1fxU4hs6zDHvzLZLdv9nG4ygfIqPnTBIQa/xvR85o/70X19qx7/8Zg8vpcqZedIxwlI3kzya7rDc3sleDyxvJMjXmslVu6MHChlgY81AeXkrUMB4l8PGgjTIfxfA1FOGdrJEsF7kU8rANOZn7nIwSTmYKr5Li+LSb/rqxKZ/vJqZXQg//UJZJ5FF3/7ltLtUq6Ve2UxXnnoP09eRDYxlP2ilQ==
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?aFRRNmJOQWtRdS9ZRnFTVzZ1dEJZdDNLekQ0NlFxV0ViTEs4QnZ0VXdHMjhz?=
- =?utf-8?B?enNCNFl1dmxSNE9zMnNqK2NwdzNGVEwxZTk5ak9VdGxmUndqamEwMHExdXdU?=
- =?utf-8?B?REVOSHBjWkJHQjZYakQ4YzRFUlYrbDJmTWs2alN5cjRqcXhtR09Vbm5UMkdy?=
- =?utf-8?B?MG5BU1lhSGhlRWVwRFJ0RFA2WnNUcVNoazBPTC9iWVdIQzRHSEJmUVRhQWpK?=
- =?utf-8?B?ajhTL1dDcjB0RnpXM1lkb2Z6OEpQRTA4aWdFSDZVM0JqVUZmNzRvUWY4dlhy?=
- =?utf-8?B?L1BPekczU2Z2bEhERnNUWWFXTURqeDRYbGV4WTZWMHAzNVpuZmluSHl3eUM5?=
- =?utf-8?B?ZmFLK1gxNi8wRHpiSWM2bzdPNjZOVUVFaENJc2p3UnRuZnhyN0tkMytxYWR6?=
- =?utf-8?B?Yzcwd1d1SzVHeEhHTVdrMjZhSmNFdWxaQVE5Smd5Z2diTWx5MktCeEZqRUVV?=
- =?utf-8?B?ekhxc0lwS3JoUXNUdzVoQm01TndjbEVkdXI3ZUVtK21RYkpaRVBXQW8veWtk?=
- =?utf-8?B?VzhaQTY2SnNTSE1RRkd3b3pUWlc2UGh2THhQKzVZTDRaOTRDaTRFczloRXA0?=
- =?utf-8?B?M3RCZHRzL2hLRTVWaXEybGNGdXR0cnRIL0tRd3ovZTZzYUlSWlRnTWtVTnhi?=
- =?utf-8?B?UWh6V09DQ01hYlFUYUNyam5sWlZ3ME40aUhDc2ZxZEJLM3FoYm5HZ2FsSU4w?=
- =?utf-8?B?c2hSRXZiQ2k1VFpBMWc3bkdINlY4UzZQWXRQTW5XNzF0djZ1eTJzQ3BJc0s2?=
- =?utf-8?B?VWVrYlFRVmZhUFFIMzVMN011aEs3bWNLdnNQVnYvWFRaZ1ZyWHQ4eit3d0wr?=
- =?utf-8?B?NDFWNTl4UVN3bUEzUUh0ak5KbG04UitZS0NQSGU4TUhYNmhNell4ZUpvdWIv?=
- =?utf-8?B?SlJmaGtoWm9pajNLM1JYKzl3UUFneEhON1Vsc2IyV2tmOFh4eVVleG5Rb0Rq?=
- =?utf-8?B?ZlNsL2VsNU5mM0ZlQVVIK2RVd0RVamJ0NUJ2M3RrQ01jbDhaVmlRTjlrbXNv?=
- =?utf-8?B?dFpBTnVuV2Rrb0VJNWFqVHNobUtDZmJMTEhsdlBERElvV3g0bmRzTldJOUtV?=
- =?utf-8?B?Ujd6MDN4ckIyTzB6bGQrV0pZL0J2MHA1alpiQVo5dnVaanJsaFFrdnoxOUFp?=
- =?utf-8?B?aGNaVHY4VnNIQlduQ2x2VjQ5Y1VvQ3ViZHEwS0Q4bkwrN1pjY2dYRWpGRnU2?=
- =?utf-8?B?YU42T0RjRXoxekR3b2wraklSdXZQTFlvZXlWUlpXa1UzRUlwWjExTHNsVFVz?=
- =?utf-8?B?L0hqZUMrdmZweUhuQkR0Qk5tc1V2WVFScDRNV0NjZWJjS2IwYVN6NEFIRXJV?=
- =?utf-8?B?MGJKa0pNbmNtYUtubWxxeHNjTTlyT3RnQzg5WUFRQ3grM0NiellzTnlyMFVs?=
- =?utf-8?B?WFVvSnNVMXNySzJKTUFnTHgvQ05lck9VNjBCZG1YSDBNbS90NVdxV2xHWFJa?=
- =?utf-8?B?NnZqc01BZ1ovNmtkYlpGbjhaTStibStIQk90OGRxSjRuaWViWDdrSUtLeThj?=
- =?utf-8?B?d0hpRWVCREkrcDFOZVFPNEhtK09ncjEyeXBzZkFNamdkazd5SnNuZ25rQXFi?=
- =?utf-8?B?UnhPYUNVOUZnYjRtS0dFYmVnYXZyemgxSzhIU2hqQVdORE5ucFpoWEZYK01D?=
- =?utf-8?B?dmFmQ241ZkZhVTdrMFV6bUtibnBwZW03dkc4L2loTDdJVy94K0FxWFZGRXRU?=
- =?utf-8?B?KzU4RDdjcUozMGEvZmkwaXpSRENXNVlQL1E1ZmNEUXIxaG9pTElWZUtReVND?=
- =?utf-8?Q?qTx+91PyC5KiFOOpHxBrBq9wNuJyH4cH9Qc90ep?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <0EED9A1C0EE4A34AB199B9B3403048F9@INDP287.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2702D3FBA5
+	for <linux-usb@vger.kernel.org>; Sun,  7 Jul 2024 17:25:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.197
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1720373119; cv=none; b=W9hOCmOeRZIt9/lVzimo358KHTQmiz0aIVfyoFHrehSEB0PkspmmYH+T4o0yEu0hOMGDhfioAqUuS/hpxEDLdHd+72XdF70VhHWWdVNfcDbL3qCtQ1lAw5e59Tx6bIYu1/O/Gwya1MUbtOt6zjJggV6Cf2OeDSyp+hfVVI8v73s=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1720373119; c=relaxed/simple;
+	bh=hYWc0fnoJfL/S4AxDF/vL9lDRA/n49nxTnKu0Pd8jBU=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=Ty7fmShkO2+WjoLBnpdwinUIeYt2gvmzjwz5S+Ir6YkAoaRBcJbUxbD77Bs4mq2tIAxgTvNaXP0a0KyaJvrA7fTw9Dberd2YPNH23AhIHdJoZYA2ayWVHWW6xi3LLKCeaoqlaNpkP4MwYvaR3GD8Yzm5MCjXvjHSiV9ePykUC1U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f197.google.com with SMTP id e9e14a558f8ab-38268e4ebfeso42763055ab.1
+        for <linux-usb@vger.kernel.org>; Sun, 07 Jul 2024 10:25:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720373117; x=1720977917;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6uN3cimjsesEKu9bosGKjMpRnCpFu7332mLAefsdeDU=;
+        b=l7B0GX79dXj4mYk/Oct3uHqU+aH/x4IkreU97L46xqkoeTSbK+U+U2r/UpswQB8FOy
+         nzBF+vJH23tgtE7isx9Cg+oEE4PcnVcxvD92MrbkSwvPveSkofthz0CwGRguHpZLfwO/
+         FIdNgUUp9SSdZcr58Qc71fawYsXMjPj/MDbCOo4vdNamDSezsDjXLwJfRoxvUDF+OJ+E
+         j/v0WXRXTA557swOEfPr8/FJM7ClJr0XFJkHPga5u8sZ9iEqW02KUpPXF1P0VBB459h3
+         fnE+y2+zoa1lput+TpsywRal4mxr7PM0xryKfd9Toqes+NpKx2lC47U4CXvNEoa4pJHB
+         fiBQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWVL5wIF6uptKvtxl9Ch2v5f9hrkQvY7NwFyx8W8kedoG3hiiqSfdMpQutlRhfaF5a08WheCFGaeN4GZZ8QeQ19V61du85bQvdI
+X-Gm-Message-State: AOJu0YyEuJuyPwYzpyNOtK09shfkFc8lTbUL5IF0KtdK3RKSDsaaBVBx
+	pUkKLVlOQ2cB8A/5J8Gxs5VYR0uWZSTNd60vCmXxKudMVLxCqqBsitStS8CRNNSy9ptEbkfrEMG
+	m5s8f0l6GRBF2iNmsk7+TW6Oo94kW099V14NQ6TkbfBI9BAJEGaYoteE=
+X-Google-Smtp-Source: AGHT+IHJspczQjbi5u6WVk8Kla2XnHKlRQt4j/sLjpUiVALsAIXJZDIORmT0ruBLT8rbNqwxN/XocmfrqlVBKVokPExgOmHGk/KH
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: sct-15-20-7719-20-msonline-outlook-24072.templateTenant
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MA0P287MB0217.INDP287.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8c5696dd-35fc-4d76-50ae-08dc9dbb0448
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Jul 2024 12:56:13.6017
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PN3P287MB0789
+X-Received: by 2002:a92:2908:0:b0:376:4523:7ab1 with SMTP id
+ e9e14a558f8ab-38398fd1e99mr1428115ab.2.1720373117164; Sun, 07 Jul 2024
+ 10:25:17 -0700 (PDT)
+Date: Sun, 07 Jul 2024 10:25:17 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000087b507061cab9490@google.com>
+Subject: [syzbot] [pm?] [usb?] possible deadlock in dpm_for_each_dev
+From: syzbot <syzbot+2a03726f1d4eff48b278@syzkaller.appspotmail.com>
+To: len.brown@intel.com, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux-usb@vger.kernel.org, pavel@ucw.cz, 
+	rafael@kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-DQoNCj4gT24gNiBKdWwgMjAyNCwgYXQgNjoxNeKAr1BNLCBBZGl0eWEgR2FyZyA8Z2FyZ2FkaXR5
-YTA4QGxpdmUuY29tPiB3cm90ZToNCj4gDQo+IA0KPiANCj4+IE9uIDYgSnVsIDIwMjQsIGF0IDY6
-MDbigK9QTSwgZ3JlZ2toQGxpbnV4Zm91bmRhdGlvbi5vcmcgd3JvdGU6DQo+PiANCj4+IE9uIFNh
-dCwgSnVsIDA2LCAyMDI0IGF0IDEyOjAzOjIzUE0gKzAwMDAsIEFkaXR5YSBHYXJnIHdyb3RlOg0K
-Pj4+IEZyb206IEtlcmVtIEthcmFiYXkgPGtla3JieUBnbWFpbC5jb20+DQo+Pj4gDQo+Pj4gQ3Vy
-cmVudGx5IHRoZXJlIGlzIG5vIHN0YW5kYXJkaXplZCBtZXRob2QgZm9yIFVTQiBkcml2ZXJzIHRv
-IGhhbmRsZQ0KPj4+IHNodXRkb3duIGV2ZW50cy4gVGhpcyBwYXRjaCBzaW1wbGlmaWVzIHJ1bm5p
-bmcgY29kZSBvbiBzaHV0ZG93biBmb3IgVVNCDQo+Pj4gZGV2aWNlcyBieSBhZGRpbmcgYSBzaHV0
-ZG93biBjYWxsYmFjayB0byB1c2JfZHJpdmVyLg0KPj4+IA0KPj4+IFNpZ25lZC1vZmYtYnk6IEtl
-cmVtIEthcmFiYXkgPGtla3JieUBnbWFpbC5jb20+DQo+PiANCj4+IFdoZXJlIGRpZCBLZXJlbSBk
-byB0aGlzIHdvcms/ICBBbnkgcmVhc29uIHdoeSB0aGV5IGFyZW4ndCBzdWJtaXR0aW5nDQo+PiB0
-aGVzZSB0aGVtc2VsdmVzPyAgTm90IHRoYXQgdGhpcyBpcyBhIHByb2JsZW0sIGp1c3QgdHJ5aW5n
-IHRvIGZpZ3VyZSBvdXQNCj4+IHdoYXQgd2VudCB3cm9uZyB3aXRoIHRoZSBkZXZlbG9wbWVudCBw
-cm9jZXNzIGhlcmUuDQo+IA0KPiBJIHdvcmsgYXQgaHR0cHM6Ly90MmxpbnV4Lm9yZy8sIGEgcHJv
-amVjdCBhaW1lZCB0byBicmluZyBMaW51eCB0byBUMiBNYWNzLg0KPiANCj4gS2VyZW0gaGVscGVk
-IGluIGRldmVsb3BpbmcgdGhlIGRyaXZlciBmb3IgdGhlIFRvdWNoIEJhciBvbiB0aGVzZSBNYWNz
-Lg0KPiBEdXJpbmcgZGV2ZWxvcG1lbnQsIGhlIGRpZCBzb21lIGltcHJvdmVtZW50cyB0byB0aGUg
-SElEIGNvcmUsIFVTQiBjb3JlDQo+IGFuZCBEUk0sIHdoaWNoIGFyZSBub3Qgc3BlY2lmaWMgdG8g
-dGhlIE1hY3MsIGJ1dCBhcmUgdXNlZCBpbiB0aGUgZHJpdmVyLg0KPiANCj4gQXMgdG8gd2h5IGhl
-IGRpZG4ndCBzdWJtaXQgaGltc2VsZiwgdW5mb3J0dW5hdGVseSBLZXJlbSBzZWVtcyB0byBoYXZl
-IGxlZnQNCj4gdGhlIHByb2plY3QgYW5kIGlzIG5vdCBjb250YWN0YWJsZSBhdCBhbGwuIEZvcnR1
-bmF0ZWx5LCB0aGUgcGF0Y2hlcyBoZSBjb250cmlidXRlZA0KPiB3ZXJlIHNpZ25lZCBvZmYgYnkg
-aGltLiBTaW5jZSB3ZSBoYXZlIGhpcyBTaWduZWQtb2ZmLWJ5IGFuZCB0aGUgY29kZSBpcyBHUEwy
-LA0KPiBJTU8sIEkgY2FuIGxlZ2FsbHkgc3VibWl0IHRoaXMuDQo+IA0KPiBMaW5rIHRvIG91ciBw
-YXRjaHNldDogaHR0cHM6Ly9naXRodWIuY29tL3QybGludXgvbGludXgtdDItcGF0Y2hlcw0KDQpZ
-b3UgY2FuIGFsc28gZmluZCBoaXMgbGludXggdHJlZSB3aXRoIHRoZSBkcml2ZXIgb3ZlciBoZXJl
-Og0KaHR0cHM6Ly9naXRodWIuY29tL2tla3JieS9saW51eC10Mi90cmVlL3RvdWNoYmFyDQoNCj4+
-IA0KPj4gdGhhbmtzLA0KPj4gDQo+PiBncmVnIGstaA0KDQoNCg==
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    e9d22f7a6655 Merge tag 'linux_kselftest-fixes-6.10-rc7' of..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=13fff269980000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=864caee5f78cab51
+dashboard link: https://syzkaller.appspot.com/bug?extid=2a03726f1d4eff48b278
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17013a35980000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16d7af25980000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/c3dd72a93425/disk-e9d22f7a.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/9d79986da9dc/vmlinux-e9d22f7a.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/0df271bec574/bzImage-e9d22f7a.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+2a03726f1d4eff48b278@syzkaller.appspotmail.com
+
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007fb90b6ce6c0
+R13: 00007fb90b60f210 R14: 0000000000000001 R15: 616e732f7665642f
+ </TASK>
+(NULL device *): loading /lib/firmware/dvb-usb-dib0700-1.20.fw failed with error -12
+(NULL device *): Direct firmware load for dvb-usb-dib0700-1.20.fw failed with error -12
+(NULL device *): Falling back to sysfs fallback for: dvb-usb-dib0700-1.20.fw
+======================================================
+WARNING: possible circular locking dependency detected
+6.10.0-rc6-syzkaller-00061-ge9d22f7a6655 #0 Not tainted
+------------------------------------------------------
+syz-executor143/5112 is trying to acquire lock:
+ffffffff8e1dd7b0 (umhelper_sem){++++}-{3:3}, at: usermodehelper_read_trylock+0x140/0x300 kernel/umh.c:215
+
+but task is already holding lock:
+ffffffff8ec6ea08 (dpm_list_mtx){+.+.}-{3:3}, at: device_pm_lock drivers/base/power/main.c:113 [inline]
+ffffffff8ec6ea08 (dpm_list_mtx){+.+.}-{3:3}, at: dpm_for_each_dev+0x2b/0xc0 drivers/base/power/main.c:1961
+
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #1 (dpm_list_mtx){+.+.}-{3:3}:
+       lock_acquire+0x1ed/0x550 kernel/locking/lockdep.c:5754
+       __mutex_lock_common kernel/locking/mutex.c:608 [inline]
+       __mutex_lock+0x136/0xd70 kernel/locking/mutex.c:752
+       device_pm_add+0x78/0x320 drivers/base/power/main.c:137
+       device_add+0x5e8/0xbf0 drivers/base/core.c:3642
+       fw_load_sysfs_fallback drivers/base/firmware_loader/fallback.c:86 [inline]
+       fw_load_from_user_helper drivers/base/firmware_loader/fallback.c:162 [inline]
+       firmware_fallback_sysfs+0x307/0x9e0 drivers/base/firmware_loader/fallback.c:238
+       _request_firmware+0xcf5/0x12b0 drivers/base/firmware_loader/main.c:914
+       request_firmware_work_func+0x12a/0x280 drivers/base/firmware_loader/main.c:1165
+       process_one_work kernel/workqueue.c:3248 [inline]
+       process_scheduled_works+0xa2c/0x1830 kernel/workqueue.c:3329
+       worker_thread+0x86d/0xd50 kernel/workqueue.c:3409
+       kthread+0x2f0/0x390 kernel/kthread.c:389
+       ret_from_fork+0x4b/0x80 arch/x86/kernel/process.c:147
+       ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
+
+-> #0 (umhelper_sem){++++}-{3:3}:
+       check_prev_add kernel/locking/lockdep.c:3134 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3253 [inline]
+       validate_chain+0x18e0/0x5900 kernel/locking/lockdep.c:3869
+       __lock_acquire+0x1346/0x1fd0 kernel/locking/lockdep.c:5137
+       lock_acquire+0x1ed/0x550 kernel/locking/lockdep.c:5754
+       down_read+0xb1/0xa40 kernel/locking/rwsem.c:1526
+       usermodehelper_read_trylock+0x140/0x300 kernel/umh.c:215
+       fw_load_from_user_helper drivers/base/firmware_loader/fallback.c:147 [inline]
+       firmware_fallback_sysfs+0x184/0x9e0 drivers/base/firmware_loader/fallback.c:238
+       _request_firmware+0xcf5/0x12b0 drivers/base/firmware_loader/main.c:914
+       request_firmware drivers/base/firmware_loader/main.c:963 [inline]
+       cache_firmware drivers/base/firmware_loader/main.c:1265 [inline]
+       __async_dev_cache_fw_image+0xe7/0x320 drivers/base/firmware_loader/main.c:1379
+       async_schedule_node_domain+0xdc/0x110 kernel/async.c:221
+       async_schedule_domain include/linux/async.h:72 [inline]
+       dev_cache_fw_image+0x36d/0x3e0 drivers/base/firmware_loader/main.c:1435
+       dpm_for_each_dev+0x58/0xc0 drivers/base/power/main.c:1963
+       device_cache_fw_images drivers/base/firmware_loader/main.c:1485 [inline]
+       fw_pm_notify+0x24a/0x2f0 drivers/base/firmware_loader/main.c:1536
+       notifier_call_chain+0x19f/0x3e0 kernel/notifier.c:93
+       notifier_call_chain_robust kernel/notifier.c:128 [inline]
+       blocking_notifier_call_chain_robust+0xe8/0x1e0 kernel/notifier.c:353
+       pm_notifier_call_chain_robust+0x2c/0x60 kernel/power/main.c:102
+       snapshot_open+0x1a1/0x280 kernel/power/user.c:77
+       misc_open+0x313/0x390 drivers/char/misc.c:165
+       chrdev_open+0x5b0/0x630 fs/char_dev.c:414
+       do_dentry_open+0x970/0x1450 fs/open.c:955
+       vfs_open+0x3e/0x330 fs/open.c:1086
+       do_open fs/namei.c:3654 [inline]
+       path_openat+0x2c01/0x35f0 fs/namei.c:3813
+       do_filp_open+0x235/0x490 fs/namei.c:3840
+       do_sys_openat2+0x13e/0x1d0 fs/open.c:1413
+       do_sys_open fs/open.c:1428 [inline]
+       __do_sys_openat fs/open.c:1444 [inline]
+       __se_sys_openat fs/open.c:1439 [inline]
+       __x64_sys_openat+0x247/0x2a0 fs/open.c:1439
+       do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+       do_syscall_64+0xf3/0x230 arch/x86/entry/common.c:83
+       entry_SYSCALL_64_after_hwframe+0x77/0x7f
+
+other info that might help us debug this:
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(dpm_list_mtx);
+                               lock(umhelper_sem);
+                               lock(dpm_list_mtx);
+  rlock(umhelper_sem);
+
+ *** DEADLOCK ***
+
+5 locks held by syz-executor143/5112:
+ #0: ffffffff8eb2f6e8 (misc_mtx){+.+.}-{3:3}, at: misc_open+0x5c/0x390 drivers/char/misc.c:129
+ #1: ffffffff8e1e7368 (system_transition_mutex){+.+.}-{3:3}, at: lock_system_sleep+0x60/0xa0 kernel/power/main.c:56
+ #2: ffffffff8e2077f0 ((pm_chain_head).rwsem){++++}-{3:3}, at: blocking_notifier_call_chain_robust+0xac/0x1e0 kernel/notifier.c:352
+ #3: ffffffff8ec73968 (fw_lock){+.+.}-{3:3}, at: device_cache_fw_images drivers/base/firmware_loader/main.c:1483 [inline]
+ #3: ffffffff8ec73968 (fw_lock){+.+.}-{3:3}, at: fw_pm_notify+0x232/0x2f0 drivers/base/firmware_loader/main.c:1536
+ #4: ffffffff8ec6ea08 (dpm_list_mtx){+.+.}-{3:3}, at: device_pm_lock drivers/base/power/main.c:113 [inline]
+ #4: ffffffff8ec6ea08 (dpm_list_mtx){+.+.}-{3:3}, at: dpm_for_each_dev+0x2b/0xc0 drivers/base/power/main.c:1961
+
+stack backtrace:
+CPU: 0 PID: 5112 Comm: syz-executor143 Not tainted 6.10.0-rc6-syzkaller-00061-ge9d22f7a6655 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/07/2024
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x241/0x360 lib/dump_stack.c:114
+ check_noncircular+0x36a/0x4a0 kernel/locking/lockdep.c:2187
+ check_prev_add kernel/locking/lockdep.c:3134 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3253 [inline]
+ validate_chain+0x18e0/0x5900 kernel/locking/lockdep.c:3869
+ __lock_acquire+0x1346/0x1fd0 kernel/locking/lockdep.c:5137
+ lock_acquire+0x1ed/0x550 kernel/locking/lockdep.c:5754
+ down_read+0xb1/0xa40 kernel/locking/rwsem.c:1526
+ usermodehelper_read_trylock+0x140/0x300 kernel/umh.c:215
+ fw_load_from_user_helper drivers/base/firmware_loader/fallback.c:147 [inline]
+ firmware_fallback_sysfs+0x184/0x9e0 drivers/base/firmware_loader/fallback.c:238
+ _request_firmware+0xcf5/0x12b0 drivers/base/firmware_loader/main.c:914
+ request_firmware drivers/base/firmware_loader/main.c:963 [inline]
+ cache_firmware drivers/base/firmware_loader/main.c:1265 [inline]
+ __async_dev_cache_fw_image+0xe7/0x320 drivers/base/firmware_loader/main.c:1379
+ async_schedule_node_domain+0xdc/0x110 kernel/async.c:221
+ async_schedule_domain include/linux/async.h:72 [inline]
+ dev_cache_fw_image+0x36d/0x3e0 drivers/base/firmware_loader/main.c:1435
+ dpm_for_each_dev+0x58/0xc0 drivers/base/power/main.c:1963
+ device_cache_fw_images drivers/base/firmware_loader/main.c:1485 [inline]
+ fw_pm_notify+0x24a/0x2f0 drivers/base/firmware_loader/main.c:1536
+ notifier_call_chain+0x19f/0x3e0 kernel/notifier.c:93
+ notifier_call_chain_robust kernel/notifier.c:128 [inline]
+ blocking_notifier_call_chain_robust+0xe8/0x1e0 kernel/notifier.c:353
+ pm_notifier_call_chain_robust+0x2c/0x60 kernel/power/main.c:102
+ snapshot_open+0x1a1/0x280 kernel/power/user.c:77
+ misc_open+0x313/0x390 drivers/char/misc.c:165
+ chrdev_open+0x5b0/0x630 fs/char_dev.c:414
+ do_dentry_open+0x970/0x1450 fs/open.c:955
+ vfs_open+0x3e/0x330 fs/open.c:1086
+ do_open fs/namei.c:3654 [inline]
+ path_openat+0x2c01/0x35f0 fs/namei.c:3813
+ do_filp_open+0x235/0x490 fs/namei.c:3840
+ do_sys_openat2+0x13e/0x1d0 fs/open.c:1413
+ do_sys_open fs/open.c:1428 [inline]
+ __do_sys_openat fs/open.c:1444 [inline]
+ __se_sys_openat fs/open.c:1439 [inline]
+ __x64_sys_openat+0x247/0x2a0 fs/open.c:1439
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xf3/0x230 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7fb90b681389
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 c1 1b 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fb90b60f208 EFLAGS: 00000246 ORIG_RAX: 0000000000000101
+RAX: ffffffffffffffda RBX: 00007fb90b7013f8 RCX: 00007fb90b681389
+RDX: 0000000000000000 RSI: 0000000020000080 RDI: ffffffffffffff9c
+RBP: 00007fb90b7013f0 R08: 00007fb90b60efa7 R09: 0000000000000038
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007fb90b6ce6c0
+R13: 00007fb90b60f210 R14: 0000000000000001 R15: 616e732f7665642f
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
