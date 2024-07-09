@@ -1,129 +1,136 @@
-Return-Path: <linux-usb+bounces-12074-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12075-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C3B292BEC1
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Jul 2024 17:50:08 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3346792BF7A
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Jul 2024 18:16:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CB8331F232D3
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Jul 2024 15:50:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 652451C234DB
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Jul 2024 16:16:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB85E19D882;
-	Tue,  9 Jul 2024 15:50:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32CD619D893;
+	Tue,  9 Jul 2024 16:15:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dFMPc4tZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="id1Lou3B"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B0071DFCF;
-	Tue,  9 Jul 2024 15:49:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEA0912C498
+	for <linux-usb@vger.kernel.org>; Tue,  9 Jul 2024 16:15:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720540200; cv=none; b=O0YnjFh8b0NT7wf0/ISEaUBat0HHBA7moD8zybkUr4/Cy005V7zOahQanbXYn75qaJVN8ycTeXusdx6O8HPFLEuZUh3Qg3XYD/f5nEUdAqjj5H5ZJks4mQ3ThAJK37uSoS0qQ4Yuv4fu9KjDVqNots+jDwZEF3t6ALSBAXgtDI8=
+	t=1720541705; cv=none; b=MZFqdfrNgnHL3gjL4eNQzfw1t0A2cJAwFHAE0c0yJH2b6bmJjhz04ffEUuVtL5jkVG2bNg63a8GNhpmIEyncEHKEpx48qZewFtiXCY1yNugs8JHkIHKTgK64P5rD/Q6GuvxRQSanG0COI+cNjiRm5aySHQwwFxhUZuhGbARB+o8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720540200; c=relaxed/simple;
-	bh=9MrxDoNPhTi1XI4NxjDlhW/N0h70bpLtcvV0dqXfW+k=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=GsHifXNYwe080Wguno7OsWTWIh7z2rEQzSsgt96JyFIMK5NGSzNKjAfxwZ5H7X1AHNn62D3GPNC5YRdHQfoCZ373rJ76punm6LF2na/wVd3QqBkANNuF7X647Q/8V97yiFcqd52fsJUyHIh6f8XjpI/Uesbk9w98ma4Xzkgfueg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dFMPc4tZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6CDEC3277B;
-	Tue,  9 Jul 2024 15:49:59 +0000 (UTC)
+	s=arc-20240116; t=1720541705; c=relaxed/simple;
+	bh=T7zKFPMTBpIy7o0lsUG3L8Sb3Zxel4t7xkrPDZmnv1o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WxsFIqrkN2L8bRjKOCizEkyFFGCe1AUEZGnJEk0hJPBdXyxbiAoRtyis4l0sntMcs6cx+wOho2OD6E3MweGDXp8tKzbkSMu5Yd6Dd6b3TFh372PGPlIsVgiGtAlFBKed7SsDdnPRSGu0p2uK7eME83/vuzuzAyTyWcA7A7nRTHQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=id1Lou3B; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55005C32786;
+	Tue,  9 Jul 2024 16:15:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720540199;
-	bh=9MrxDoNPhTi1XI4NxjDlhW/N0h70bpLtcvV0dqXfW+k=;
-	h=From:To:Cc:Subject:Date:From;
-	b=dFMPc4tZijAFt5E7miIzqmOv8UaDJkyCdGLYa6AqapQq59vw/gnOgwDW51JpXKFHJ
-	 wTQCGVbsSuKjnU3nJ10yLuiawkAEhi4ytVmEVBVDO3LBfdfRAB1VLP89Kbd1rPYl0e
-	 IfN+pYZKEJ6URea3KQnZnNjMveukZDmqtqclk/0ooe5dBiajYogw0P7eescFCibcMt
-	 rhwaibker90/8Ec6ekigekJASKkOt4h1gfRk9s8BjvKn3rjE+c1Ifm2jQKD8ANCdmw
-	 oAdW+Tq0HxjaInXSKs8/Z72MFT8po5dC2sAiRyEnaW6/Fzoa+f/V/lMr+h6ESdPVVh
-	 V2fqZl/hoig8Q==
-From: Kees Cook <kees@kernel.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Kees Cook <kees@kernel.org>,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org
-Subject: [PATCH] usb: gadget: Use u16 types for 16-bit fields
-Date: Tue,  9 Jul 2024 08:49:56 -0700
-Message-Id: <20240709154953.work.953-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+	s=k20201202; t=1720541705;
+	bh=T7zKFPMTBpIy7o0lsUG3L8Sb3Zxel4t7xkrPDZmnv1o=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=id1Lou3BLXO/I09h917HQQ2GNmL/nOsJ0kH7bOAqvWgm9Md4J1CTKWi9kqSBMK7L0
+	 ql7n9TiFfk9K+GZhpTBnduxWDYfySRZ5l/57iTfCXfB1ts84ZeCq2VtTmcFqGIu/Dw
+	 BROgUVB24rxfE+EEno9jkO00lsVtpAyhmJJVhvqtTrv2mShzLMOkB7sSbxQ4ClhmR6
+	 /HhRHjcFkcs7oY9HEoiMMjaZj0FQsyaCeHDCSnzgNPsdXlRyPuTtux9awjf7BDTqTw
+	 fFdaZqvWwP3B5CXwdfovTxw0gkf4gra97bK2QFKRwzksSeFGagULY4/Px9+6bkpH+b
+	 2shBNgRgFiwIg==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1sRDUl-000000002HO-3PNE;
+	Tue, 09 Jul 2024 18:15:12 +0200
+Date: Tue, 9 Jul 2024 18:15:11 +0200
+From: Johan Hovold <johan@kernel.org>
+To: Dmitry Smirnov <d.smirnov@inbox.lv>
+Cc: linux-usb@vger.kernel.org
+Subject: Re: [PATCH V4] usb: serial: Fix mos7840 hangup on resume
+Message-ID: <Zo1iDx4SLq8S7Um0@hovoldconsulting.com>
+References: <20240614224556.23215-1-d.smirnov@inbox.lv>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2309; i=kees@kernel.org; h=from:subject:message-id; bh=9MrxDoNPhTi1XI4NxjDlhW/N0h70bpLtcvV0dqXfW+k=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBmjVwk0t22Uyu2+atEHAcV5lh9rZAh/DghXMDBf pwV37Mm4YiJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZo1cJAAKCRCJcvTf3G3A JtyZD/0TajsMXBzlOFR/SgJkyNP2VxbKrBJbj1cOvS9BZl6LZoJW9d3zSFPJTd9ccLSOyTGazbi z04/mOErf464BXNQrY79sXaqEOk4oywlGUBAK3LddjBOHJdQy/TzwX0rT98YiqHyA1nsmdt95yX T4QLXFOcYddr/5HRQ+3rm2otfvhDJGzVoQWY7xsiIgqdckIUhXfyMGXQ6wQB2OFih0YkF4Eu0xv iOespH+8oFjxk+/eujupsRs/QY+Oj7hYrx9kl9gj1eEBrlJwjiG2BJQSP/bt1rSV18PsfBpIi7l ffLfREQJ16+IG3oPKVBgCS9jFHBDmxL4V0g/919G/JdP96OZdrqOtuPpUVhChOgMkvP6iw0SFi+ PlFbBpfjaALF2SK+DS+3azXgCSjJsnWqNP25wX0jUHgGCxhOa+zJ0ezH5SJMS6cX+QT+trDkMbY nlLdqCWbP/6gDps2eLFKUM0ktJ0sBCEZEDhZ1mWhWwoqWZaDVz+23joFEC2YxrPt9JMMcgyghDx zc5xCJnwbuZ3yP23UaBY9bPnu41K/5HjIRePJdPm4uojCNyAVyhxlYtZbjVuwHiehHAlz2AbtZm FbC2YHSsOAtJ/bdHc97c58x/FCSijXh6Ka7YWQETFmRldbhkp/lau0mtN+83ccnY+2OzT3hR8n2 tH1JzXaYiMCzW
- vw==
-X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240614224556.23215-1-d.smirnov@inbox.lv>
 
-Since the beginning of time, struct usb_ep::maxpacket was a bitfield,
-and when new 16-bit members were added, the convention was followed:
+On Sat, Jun 15, 2024 at 01:45:56AM +0300, Dmitry Smirnov wrote:
+> This patch addresses a kernel hang issue with the mos7840 driver when
+> PC resuming from a suspend with a device connected to the serial port.
+> 
+> This patch introduces two new functions: mos7840_suspend() and mos7840_resume().
+> 
+> Tested with Delock 87414 USB 2.0 to 4x serial adapter.
+> 
+> Signed-off-by: Dmitry Smirnov <d.smirnov@inbox.lv>
+> ---
+> V4: Removed debug prints
+> V3: Code cleanup
+> V2: Reworked mos7840_suspend() based on comments from reviewer
+> V1: Initial version
 
-1da177e4c3f41 (Linus Torvalds   2005-04-16 236) unsigned maxpacket:16;
-e117e742d3106 (Robert Baldyga   2013-12-13 237) unsigned maxpacket_limit:16;
-a59d6b91cbca5 (Tatyana Brokhman 2011-06-28 238) unsigned max_streams:16;
+Thanks for the fix and sorry about the late reply on this one.
 
-However, there is no need for this as a simple u16 can be used instead,
-simplifying the struct and the resulting compiler binary output. Switch
-to u16 for all three, and rearrange struct slightly to minimize holes.
-No change in the final size of the struct results; the 2 byte gap is
-just moved to the end, as seen with pahole:
+I took a closer look at this today, and indeed we have a kernel crash
+here on resume with mos7840. This is a bug that dates back to 2011 when
+I added support for multiple read URBs and failed to notice this
+interaction with drivers that only uses one URB.
 
--       /* XXX 2 bytes hole, try to pack */
-        ...
-        /* size: 72, cachelines: 2, members: 15 */
-        ...
-+       /* padding: 2 */
+This actually affects a few more drivers, but judging from a quick look
+not as severely as for mos7840 which uses a different structure for the
+URB context. I'll make sure to go back and review this more thoroughly
+in the next few weeks.
 
-Changing this simplifies future introspection[1] of maxpacket's type during
-allocations:
+> +static int mos7840_resume(struct usb_serial *serial)
+> +{
+> +	struct moschip_port *mos7840_port;
+> +	struct usb_serial_port *port;
+> +	int res;
+> +	int i;
+> +
+> +	for (i = 0; i < serial->num_ports; ++i) {
+> +		port = serial->port[i];
+> +		if (!tty_port_initialized(&port->port))
+> +			continue;
+> +
+> +		mos7840_port = usb_get_serial_port_data(port);
+> +
+> +		if (port->bulk_in_size) {
 
-drivers/usb/gadget/function/f_tcm.c:330:24: error: 'typeof' applied to a bit-field
-     330 |  fu->cmd.buf = kmalloc(fu->ep_out->maxpacket, GFP_KERNEL);
+Not needed, checked on probe.
 
-Link: https://lore.kernel.org/all/202407090928.6UaOAZAJ-lkp@intel.com [1]
-Signed-off-by: Kees Cook <kees@kernel.org>
----
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
----
- include/linux/usb/gadget.h | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+Need to set the read_urb_busy flag here.
 
-diff --git a/include/linux/usb/gadget.h b/include/linux/usb/gadget.h
-index 56dda8e1562d..df33333650a0 100644
---- a/include/linux/usb/gadget.h
-+++ b/include/linux/usb/gadget.h
-@@ -229,18 +229,18 @@ struct usb_ep {
- 
- 	const char		*name;
- 	const struct usb_ep_ops	*ops;
-+	const struct usb_endpoint_descriptor	*desc;
-+	const struct usb_ss_ep_comp_descriptor	*comp_desc;
- 	struct list_head	ep_list;
- 	struct usb_ep_caps	caps;
- 	bool			claimed;
- 	bool			enabled;
--	unsigned		maxpacket:16;
--	unsigned		maxpacket_limit:16;
--	unsigned		max_streams:16;
- 	unsigned		mult:2;
- 	unsigned		maxburst:5;
- 	u8			address;
--	const struct usb_endpoint_descriptor	*desc;
--	const struct usb_ss_ep_comp_descriptor	*comp_desc;
-+	u16			maxpacket;
-+	u16			maxpacket_limit;
-+	u16			max_streams;
- };
- 
- /*-------------------------------------------------------------------------*/
--- 
-2.34.1
+> +			res = usb_submit_urb(mos7840_port->read_urb, GFP_NOIO);
+> +			if (res) {
+> +				usb_kill_urb(mos7840_port->read_urb);
 
+Not needed as submission failed.
+
+> +				mos7840_port->read_urb_busy = false;
+> +			}
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+
+I've reworded the commit message to provide some more background on the
+crash, added the missing busy flag set, dropped the unnecessary
+bulk_in_size check and dropped the unnecessary usb_kill_urb() in case
+submission fails on resume.
+
+The end result is here:
+
+	https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git/commit/?h=usb-linus&id=c15a688e49987385baa8804bf65d570e362f8576	
+
+Johan
 
