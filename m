@@ -1,46 +1,46 @@
-Return-Path: <linux-usb+bounces-12076-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12077-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D434792C028
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Jul 2024 18:32:22 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2BB3B92C08F
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Jul 2024 18:40:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 76AE61F227D6
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Jul 2024 16:32:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 570901C219F8
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Jul 2024 16:40:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05B0C1B6A54;
-	Tue,  9 Jul 2024 16:21:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F47C1D47A0;
+	Tue,  9 Jul 2024 16:23:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ldMCLG3b"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CI0bTNGC"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73F8E1B5818;
-	Tue,  9 Jul 2024 16:21:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 076A91D3647;
+	Tue,  9 Jul 2024 16:23:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720542117; cv=none; b=pinS50DEznue6h0VIi+ngi0RQ9WWQwbOyoeWvvh7JSy+/7iFhD5fTOZV2ltrlM2DcuqJbrbLI22o3LmOYdVlqbTGf/vTJEk22R5DYVQ4Nex8x47wN56DHgUXugsb1eIeu3/vIPeSZWCxNuj6B80to6Fi246G3LpnICuu4Wm55U4=
+	t=1720542220; cv=none; b=LouxP7E8J95ZEO3amdpRKjZnrLnkx3WqnsRHXSvqKnDPmXY255hSg7wTX88jcYpFUGkd/1srps5hXY8VoplkAdc99B650CBe62pM77yGv8ViPMNRdNtuph8oHOXUVaW9X336pshfujUIP5AN6FVjaAcUyngEs7+o2rasSpBhnH4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720542117; c=relaxed/simple;
+	s=arc-20240116; t=1720542220; c=relaxed/simple;
 	bh=TrGBeVNk1Ux+gY07gT8pEvFKBb4XYgPsQ7mcBnzDkYM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=PNixylnkmFjPuRUUvkyI7W7wnk1cg6tmNdmNlpx8Uc3zuiKHalnkGy6/OZNN3boRYd8aPlKcAFTlHb/gcRbzC0idrRzF7K9RaaQapoGcCFDkdbrwdf5kASjGqYUu2MrSWwQO4zw07n5LVrcBXOGVXJPijwXGrtyyTLVe/XHUk5A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ldMCLG3b; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23C98C3277B;
-	Tue,  9 Jul 2024 16:21:56 +0000 (UTC)
+	 MIME-Version:Content-Type; b=ZdlKDee6lgdkusxDJa18iznrXeuWoXqw80Rwofj+o05eX4rJfWZAkUWzD1ztGN6tQE07yF/OUPygrl56o8rtgIWh+54lUY29vSpGuxl7RPbaxHBlzF8Hhf1KxXdd6W07ESrydK/9qdnsTsUcQ4BW03Z2I8DL37F9X51WZqIyKus=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CI0bTNGC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6BA6C3277B;
+	Tue,  9 Jul 2024 16:23:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720542117;
+	s=k20201202; t=1720542219;
 	bh=TrGBeVNk1Ux+gY07gT8pEvFKBb4XYgPsQ7mcBnzDkYM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ldMCLG3bes1X5Z/8mtEBeEqkCSKvj3wTQy5x5sZdp/byCbZ5epwEIK8e89EADyOY9
-	 Mka8MHHyXrrKqED3VLmZStpmUKTmbvoQzXvhP/KOqgUTwi1iAWuI/CMfm+km/a5ZFF
-	 w3bithMNyuOplbBV7UK0PhWn/Vd+a1UtgdcvJShNTdELsozAEnXtJg2gmqA0pt+x2J
-	 70Enwpj95i4zajQs5QWAnavhenIOEmIj1rlRWv4nQrCz3OsPO1Z5h1HAG7wolMMSey
-	 a6DtHIkCYxTMTVRY8bry18/Hp4bCYPC0XjjnKpPcxZrsRPG0tKCQLFOVqLlskpnxOO
-	 SrCbbqj3OlWCA==
+	b=CI0bTNGCm98Ky06yKaqxKijjEPAVbFCy40RAOZNpIlMwmrTkEC530Sz73mOBlyEJ5
+	 j5TyEM5wtiKrUkNzk0dElRM8Vyed/YDDEe+xOvR+wh93DFFGBQ5cROXCe86HyryBF7
+	 JTzaVEuIiO/Lnlxvd0XGci0zMRAdMF5O8A3YxCDB5xlqdjH2xu3Olfj0rBklE4vh8j
+	 EfYoXeBZm8qxJHq7ybGimyAhBi0Rd1CgTFwZZNmi7io2CaG+cxjq87IgCNZbO9EwVm
+	 HeaTdfFcAcC6rYSOgN2nLOr6twxvz0REvo6VanGwc5WKMKTT5nzdIpzM4lbZ4E28C+
+	 IF+igw2gsE8+w==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -53,12 +53,12 @@ Cc: Daniele Palmas <dnlplm@gmail.com>,
 	pabeni@redhat.com,
 	netdev@vger.kernel.org,
 	linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.9 40/40] net: usb: qmi_wwan: add Telit FN912 compositions
-Date: Tue,  9 Jul 2024 12:19:20 -0400
-Message-ID: <20240709162007.30160-40-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.6 33/33] net: usb: qmi_wwan: add Telit FN912 compositions
+Date: Tue,  9 Jul 2024 12:21:59 -0400
+Message-ID: <20240709162224.31148-33-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240709162007.30160-1-sashal@kernel.org>
-References: <20240709162007.30160-1-sashal@kernel.org>
+In-Reply-To: <20240709162224.31148-1-sashal@kernel.org>
+References: <20240709162224.31148-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -68,7 +68,7 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.9.8
+X-stable-base: Linux 6.6.38
 Content-Transfer-Encoding: 8bit
 
 From: Daniele Palmas <dnlplm@gmail.com>
