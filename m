@@ -1,180 +1,129 @@
-Return-Path: <linux-usb+bounces-12073-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12074-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3112792BCAF
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Jul 2024 16:17:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C3B292BEC1
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Jul 2024 17:50:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DA567281A2A
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Jul 2024 14:17:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CB8331F232D3
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Jul 2024 15:50:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4626F1940B2;
-	Tue,  9 Jul 2024 14:17:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB85E19D882;
+	Tue,  9 Jul 2024 15:50:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="OhbneQZ+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dFMPc4tZ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6177F15B980;
-	Tue,  9 Jul 2024 14:17:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B0071DFCF;
+	Tue,  9 Jul 2024 15:49:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720534650; cv=none; b=SsujSP7mV3yduTa9E51DSebRoI34QZIZqUphduxBN5TFsZF8vVf8XJG0sAy9C2u8kzjBWxzLy4ZZLawqOxgSCdxNzC2KVSifV++oS28CKaVg6EwgTpz2zxxrZxeTaJdYLVDJLK7PmJ7bH7w05LLGib6hHJAG7r87UuSXd/06T88=
+	t=1720540200; cv=none; b=O0YnjFh8b0NT7wf0/ISEaUBat0HHBA7moD8zybkUr4/Cy005V7zOahQanbXYn75qaJVN8ycTeXusdx6O8HPFLEuZUh3Qg3XYD/f5nEUdAqjj5H5ZJks4mQ3ThAJK37uSoS0qQ4Yuv4fu9KjDVqNots+jDwZEF3t6ALSBAXgtDI8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720534650; c=relaxed/simple;
-	bh=tjILeo76FHcfSaOIMoDBHiWlSrPwZ2Isv+c/sTP1zMQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:To:CC; b=GNCC2dliKu+X/ie5wxIbF6Wg7F34bP/x9kqO8bMfpuRSRO06z1WTbjy+dyL2RZ5nuvTWEAhSVSoJQPpfHl5oqcvjzNRn1KDk1k/gFwrjs1HYszzxo2+jcUhbMApo4jUNpJ1oEBte+ZHFDqXULPAw/qKZUFG+HqNrkNuStsNRBEw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=OhbneQZ+; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 469AIKD9016998;
-	Tue, 9 Jul 2024 14:17:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=qcppdkim1; bh=lBOWCVqQmDJo0O/MI5XdKb
-	EslB7uhsU2+0kvIMfOXfw=; b=OhbneQZ+PmEAqr8H3YxqdgIN0+afLh1K+VthAU
-	q4Zhp7gBGNjiSvs+EgR/gt+SK33o4LGmUILkTB3zoQgQ8E2DDNOj33zbgC9HyGle
-	8wbE8dHYf9Y2nTcRNi3nZjnl26UDBaIzagXmfqHO9Pz3JTJ4zm3qe0XhbE+S/ehf
-	hpNl6bfTxJR7AKUyI5TF1NmKUEE0XtS8akS5uttN8b/oYQYkjc55H/ViTg+U+HcG
-	IQvpBOQtNLNKjU0cEvVbgegvP2wAu3FY11RFJcs7Xh0xlTBEB69tyHTs2EPu3oke
-	oWNsgv5evwH4x3sgXU+PbfP1qsBjGhiyrwCg5PQKPKpOwVaA==
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 406xa66kqr-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 09 Jul 2024 14:17:25 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA03.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 469EHO5B029487
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 9 Jul 2024 14:17:24 GMT
-Received: from tengfan-gv.ap.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Tue, 9 Jul 2024 07:17:19 -0700
-From: Tengfei Fan <quic_tengfan@quicinc.com>
-Date: Tue, 9 Jul 2024 22:17:09 +0800
-Subject: [PATCH v2] dt-bindings: usb: dwc3: Add QCS9100 compatible
+	s=arc-20240116; t=1720540200; c=relaxed/simple;
+	bh=9MrxDoNPhTi1XI4NxjDlhW/N0h70bpLtcvV0dqXfW+k=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=GsHifXNYwe080Wguno7OsWTWIh7z2rEQzSsgt96JyFIMK5NGSzNKjAfxwZ5H7X1AHNn62D3GPNC5YRdHQfoCZ373rJ76punm6LF2na/wVd3QqBkANNuF7X647Q/8V97yiFcqd52fsJUyHIh6f8XjpI/Uesbk9w98ma4Xzkgfueg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dFMPc4tZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6CDEC3277B;
+	Tue,  9 Jul 2024 15:49:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1720540199;
+	bh=9MrxDoNPhTi1XI4NxjDlhW/N0h70bpLtcvV0dqXfW+k=;
+	h=From:To:Cc:Subject:Date:From;
+	b=dFMPc4tZijAFt5E7miIzqmOv8UaDJkyCdGLYa6AqapQq59vw/gnOgwDW51JpXKFHJ
+	 wTQCGVbsSuKjnU3nJ10yLuiawkAEhi4ytVmEVBVDO3LBfdfRAB1VLP89Kbd1rPYl0e
+	 IfN+pYZKEJ6URea3KQnZnNjMveukZDmqtqclk/0ooe5dBiajYogw0P7eescFCibcMt
+	 rhwaibker90/8Ec6ekigekJASKkOt4h1gfRk9s8BjvKn3rjE+c1Ifm2jQKD8ANCdmw
+	 oAdW+Tq0HxjaInXSKs8/Z72MFT8po5dC2sAiRyEnaW6/Fzoa+f/V/lMr+h6ESdPVVh
+	 V2fqZl/hoig8Q==
+From: Kees Cook <kees@kernel.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Kees Cook <kees@kernel.org>,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org
+Subject: [PATCH] usb: gadget: Use u16 types for 16-bit fields
+Date: Tue,  9 Jul 2024 08:49:56 -0700
+Message-Id: <20240709154953.work.953-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20240709-document_qcs9100_dwc3_compatible-v2-1-ed543ae02117@quicinc.com>
-X-B4-Tracking: v=1; b=H4sIAGRGjWYC/zXNQQ6CMBCF4auYri2ZFrHgynsY0tQywCTSAgXUE
- O5uIXH5vcX7VxZwJAzsdlrZiAsF8i5Cnk/MtsY1yKmKZhLkBRQUvPJ27tBNerChEAC6ettUW9/
- 1ZqLnC7lRV6XSHEVqCxZv+hFr+hyJRxndUpj8+D2Ki9jX/3kKMsszSKRQEiDngg8zWT2ha2rj7
- jvI2SS2WLlt2w8o06YJvAAAAA==
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring
-	<robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
-	<conor+dt@kernel.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>
-CC: <kernel@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Tengfei Fan <quic_tengfan@quicinc.com>
-X-Mailer: b4 0.15-dev-a66ce
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1720534639; l=2902;
- i=quic_tengfan@quicinc.com; s=20240709; h=from:subject:message-id;
- bh=tjILeo76FHcfSaOIMoDBHiWlSrPwZ2Isv+c/sTP1zMQ=;
- b=h8EJVfXo6dhkJHfLMfvOyyWtwE4y40GOuuB742DhRXomjmBJSdksplsEaa0P+/SrtlkxrHsOw
- jDq2dVxMR8IDt2Eh+lgLSptcer7/56I2KtKckz8wUWWlHtayBIVChvk
-X-Developer-Key: i=quic_tengfan@quicinc.com; a=ed25519;
- pk=4VjoTogHXJhZUM9XlxbCAcZ4zmrLeuep4dfOeKqQD0c=
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: OFGKl6FiqQLFYiosgGonJBRtvy6dyBvU
-X-Proofpoint-ORIG-GUID: OFGKl6FiqQLFYiosgGonJBRtvy6dyBvU
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-07-09_04,2024-07-09_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=617
- suspectscore=0 lowpriorityscore=0 impostorscore=0 phishscore=0 spamscore=0
- clxscore=1015 adultscore=0 malwarescore=0 mlxscore=0 bulkscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2406140001 definitions=main-2407090092
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2309; i=kees@kernel.org; h=from:subject:message-id; bh=9MrxDoNPhTi1XI4NxjDlhW/N0h70bpLtcvV0dqXfW+k=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBmjVwk0t22Uyu2+atEHAcV5lh9rZAh/DghXMDBf pwV37Mm4YiJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZo1cJAAKCRCJcvTf3G3A JtyZD/0TajsMXBzlOFR/SgJkyNP2VxbKrBJbj1cOvS9BZl6LZoJW9d3zSFPJTd9ccLSOyTGazbi z04/mOErf464BXNQrY79sXaqEOk4oywlGUBAK3LddjBOHJdQy/TzwX0rT98YiqHyA1nsmdt95yX T4QLXFOcYddr/5HRQ+3rm2otfvhDJGzVoQWY7xsiIgqdckIUhXfyMGXQ6wQB2OFih0YkF4Eu0xv iOespH+8oFjxk+/eujupsRs/QY+Oj7hYrx9kl9gj1eEBrlJwjiG2BJQSP/bt1rSV18PsfBpIi7l ffLfREQJ16+IG3oPKVBgCS9jFHBDmxL4V0g/919G/JdP96OZdrqOtuPpUVhChOgMkvP6iw0SFi+ PlFbBpfjaALF2SK+DS+3azXgCSjJsnWqNP25wX0jUHgGCxhOa+zJ0ezH5SJMS6cX+QT+trDkMbY nlLdqCWbP/6gDps2eLFKUM0ktJ0sBCEZEDhZ1mWhWwoqWZaDVz+23joFEC2YxrPt9JMMcgyghDx zc5xCJnwbuZ3yP23UaBY9bPnu41K/5HjIRePJdPm4uojCNyAVyhxlYtZbjVuwHiehHAlz2AbtZm FbC2YHSsOAtJ/bdHc97c58x/FCSijXh6Ka7YWQETFmRldbhkp/lau0mtN+83ccnY+2OzT3hR8n2 tH1JzXaYiMCzW
+ vw==
+X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 
-Document the QCS9100 dwc3 compatible.
-QCS9100 is drived from SA8775p. Currently, both the QCS9100 and SA8775p
-platform use non-SCMI resource. In the future, the SA8775p platform will
-move to use SCMI resources and it will have new sa8775p-related device
-tree. Consequently, introduce "qcom,qcs9100-dwc3" to describe non-SCMI
-based DWC3.
+Since the beginning of time, struct usb_ep::maxpacket was a bitfield,
+and when new 16-bit members were added, the convention was followed:
 
-Signed-off-by: Tengfei Fan <quic_tengfan@quicinc.com>
+1da177e4c3f41 (Linus Torvalds   2005-04-16 236) unsigned maxpacket:16;
+e117e742d3106 (Robert Baldyga   2013-12-13 237) unsigned maxpacket_limit:16;
+a59d6b91cbca5 (Tatyana Brokhman 2011-06-28 238) unsigned max_streams:16;
+
+However, there is no need for this as a simple u16 can be used instead,
+simplifying the struct and the resulting compiler binary output. Switch
+to u16 for all three, and rearrange struct slightly to minimize holes.
+No change in the final size of the struct results; the 2 byte gap is
+just moved to the end, as seen with pahole:
+
+-       /* XXX 2 bytes hole, try to pack */
+        ...
+        /* size: 72, cachelines: 2, members: 15 */
+        ...
++       /* padding: 2 */
+
+Changing this simplifies future introspection[1] of maxpacket's type during
+allocations:
+
+drivers/usb/gadget/function/f_tcm.c:330:24: error: 'typeof' applied to a bit-field
+     330 |  fu->cmd.buf = kmalloc(fu->ep_out->maxpacket, GFP_KERNEL);
+
+Link: https://lore.kernel.org/all/202407090928.6UaOAZAJ-lkp@intel.com [1]
+Signed-off-by: Kees Cook <kees@kernel.org>
 ---
-Introduce support for the QCS9100 SoC device tree (DTSI) and the
-QCS9100 RIDE board DTS. The QCS9100 is a variant of the SA8775p.
-While the QCS9100 platform is still in the early design stage, the
-QCS9100 RIDE board is identical to the SA8775p RIDE board, except it
-mounts the QCS9100 SoC instead of the SA8775p SoC.
-
-The QCS9100 SoC DTSI is directly renamed from the SA8775p SoC DTSI, and
-all the compatible strings will be updated from "SA8775p" to "QCS9100".
-The QCS9100 device tree patches will be pushed after all the device tree
-bindings and device driver patches are reviewed.
-
-The final dtsi will like:
-https://lore.kernel.org/linux-arm-msm/20240703025850.2172008-3-quic_tengfan@quicinc.com/
-
-The detailed cover letter reference:
-https://lore.kernel.org/linux-arm-msm/20240703025850.2172008-1-quic_tengfan@quicinc.com/
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
 ---
-Changes in v2:
-  - Split huge patch series into different patch series according to
-    subsytems
-  - Update patch commit message
+ include/linux/usb/gadget.h | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-prevous disscussion here:
-[1] v1: https://lore.kernel.org/linux-arm-msm/20240703025850.2172008-1-quic_tengfan@quicinc.com/
----
- Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-index efde47a5b145..07b0b6530b78 100644
---- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-+++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-@@ -26,6 +26,7 @@ properties:
-           - qcom,msm8998-dwc3
-           - qcom,qcm2290-dwc3
-           - qcom,qcs404-dwc3
-+          - qcom,qcs9100-dwc3
-           - qcom,qdu1000-dwc3
-           - qcom,sa8775p-dwc3
-           - qcom,sc7180-dwc3
-@@ -199,6 +200,7 @@ allOf:
-               - qcom,msm8953-dwc3
-               - qcom,msm8996-dwc3
-               - qcom,msm8998-dwc3
-+              - qcom,qcs9100-dwc3
-               - qcom,sa8775p-dwc3
-               - qcom,sc7180-dwc3
-               - qcom,sc7280-dwc3
-@@ -448,6 +450,7 @@ allOf:
-               - qcom,ipq4019-dwc3
-               - qcom,ipq8064-dwc3
-               - qcom,msm8994-dwc3
-+              - qcom,qcs9100-dwc3
-               - qcom,qdu1000-dwc3
-               - qcom,sa8775p-dwc3
-               - qcom,sc7180-dwc3
-
----
-base-commit: 0b58e108042b0ed28a71cd7edf5175999955b233
-change-id: 20240709-document_qcs9100_dwc3_compatible-a767738e13c9
-
-Best regards,
+diff --git a/include/linux/usb/gadget.h b/include/linux/usb/gadget.h
+index 56dda8e1562d..df33333650a0 100644
+--- a/include/linux/usb/gadget.h
++++ b/include/linux/usb/gadget.h
+@@ -229,18 +229,18 @@ struct usb_ep {
+ 
+ 	const char		*name;
+ 	const struct usb_ep_ops	*ops;
++	const struct usb_endpoint_descriptor	*desc;
++	const struct usb_ss_ep_comp_descriptor	*comp_desc;
+ 	struct list_head	ep_list;
+ 	struct usb_ep_caps	caps;
+ 	bool			claimed;
+ 	bool			enabled;
+-	unsigned		maxpacket:16;
+-	unsigned		maxpacket_limit:16;
+-	unsigned		max_streams:16;
+ 	unsigned		mult:2;
+ 	unsigned		maxburst:5;
+ 	u8			address;
+-	const struct usb_endpoint_descriptor	*desc;
+-	const struct usb_ss_ep_comp_descriptor	*comp_desc;
++	u16			maxpacket;
++	u16			maxpacket_limit;
++	u16			max_streams;
+ };
+ 
+ /*-------------------------------------------------------------------------*/
 -- 
-Tengfei Fan <quic_tengfan@quicinc.com>
+2.34.1
 
 
