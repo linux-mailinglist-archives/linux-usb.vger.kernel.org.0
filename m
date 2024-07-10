@@ -1,170 +1,186 @@
-Return-Path: <linux-usb+bounces-12109-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12111-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 377EE92CF81
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Jul 2024 12:43:21 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D02B992CFCE
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Jul 2024 12:52:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 63F721C20C78
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Jul 2024 10:43:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 82BC128BE04
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Jul 2024 10:52:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3457194C69;
-	Wed, 10 Jul 2024 10:36:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CD1D19048D;
+	Wed, 10 Jul 2024 10:50:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="GtbYkouH"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="nV8xyR/C"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EEB8194082
-	for <linux-usb@vger.kernel.org>; Wed, 10 Jul 2024 10:36:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CF9619048B
+	for <linux-usb@vger.kernel.org>; Wed, 10 Jul 2024 10:50:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720607794; cv=none; b=ObIV0bwIdbt1gw4XEB5FJs8z+9HPepiNCY5Pqb1tN2ef8Pv4Mdzw+0F/bWzIcDOzw7h0tyAr31WDAS2vauRGTV+FpBqmupLEUnQrwy7FuxIdB8CtHNieXRSPirhsO1QcS7EACCuKgmjBG0AK0HG3iU2glUnGyxvKciW0akSeWeA=
+	t=1720608626; cv=none; b=jHEQlfYU5tiN9S9vfzo6hS5R88fzSZe6CG1qPiIV3UBHQSjL1vvge14Akn7UicQijzav+WWiv5K70GUNae3qEfm0758RS95dCrWargSWXuUClRkd3Xww1QJTiEMxnln9H76buzMl4wtPr1q8XMvJXuIvUB1Ghyc8IEFT4/VeTxw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720607794; c=relaxed/simple;
-	bh=v+I5fZKIK+3f31tZX+uZTfNTTOvQkNNPPT3FGfrJxo0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=B89jn2xzuH1YGFzvFwlXlkvsiJ+ZzjT2Sy+qvU3IBAew0OJB/xCj7QrKkWCBzyZk+1JKRNT+VxxU8GxrXrT59lEOap67FPlYuRmv0VXyke2pITvf49BwGsDEI0qwFJi/PFPLw8CUmptSkzXW3bQLQY+zVLOzjP6rttAY0mb2cB4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=GtbYkouH; arc=none smtp.client-ip=209.85.218.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-a77cbb5e987so589521066b.3
-        for <linux-usb@vger.kernel.org>; Wed, 10 Jul 2024 03:36:32 -0700 (PDT)
+	s=arc-20240116; t=1720608626; c=relaxed/simple;
+	bh=i7CSWNQWSBb5QVaqACvy6fhXtiishbPOrh0hdBypJnI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DkVIffWjMUHDQOD7haaiziZ4lWfCuqddgll9qfZBUM9uS2H/PPL+27Ainic58ccGhucmIiI2tvWqGx64eMQY8so+JsqRrqGZv9eZa/ePbMxrQC6d2n0OjA0R28DQEcj5J0Zyh1fudow9Ac/Mat7KoKuwyHlz/uFzIfwSAkDS0HQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=nV8xyR/C; arc=none smtp.client-ip=209.85.167.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-52ea7bdde68so5538712e87.0
+        for <linux-usb@vger.kernel.org>; Wed, 10 Jul 2024 03:50:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1720607791; x=1721212591; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2EHz6jGnv+MSlXLIFJTYz0j3V4QrlhRk5xlWpqxujXQ=;
-        b=GtbYkouH9DhQu2BJZIWgcBQ4f0ismW72b1jmrRUmxnpCiiZy2uwhg8I9gg8LCvGRbv
-         /+/yqIb9CykbiIhZx17d0Zxm1KNqRVu9CagxlPg6dEws/PYB9xIxQHTBYLxyAQE88thl
-         7+0DynZW4zNv0iHD56phWgIOWJdvFVBR+UzakpaF9Pf+9ZF1PZl874vtvKQdY2kzd4nV
-         8QXRZj+njSC3RSlC4KTbehFkuzQbXOK6HPeeJWkd8c75IClf2/E7Xuod2WFsDmyRGEcX
-         8hXGknAPyciJYOcA8y8fpaPWElHzOgWG7TOBCfMDAfxI1Zii3Zeco8untVBxASf88mzs
-         /exQ==
+        d=chromium.org; s=google; t=1720608622; x=1721213422; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9rAwS+UQr65lkvj2GXDyVuos1V01g26GHnUtj2lCW+8=;
+        b=nV8xyR/CUErO0uOmz95WKm1xzrAntIGFuPUVONKWDQhwXHqADSqEXyUaaF2ANNX+if
+         lVE85fW+R7EG5pHExH8D/ngiDVbu+MNIGZf3iaQnIDKOu2D1gr/LGNLCC+7dp759K9yL
+         KUjwL/Eed1qfJXYBjY5c860R9iGRBZTjp2WBQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720607791; x=1721212591;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1720608622; x=1721213422;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=2EHz6jGnv+MSlXLIFJTYz0j3V4QrlhRk5xlWpqxujXQ=;
-        b=gMS05NWq/mKYCwvRu6c3zHxiIqXe8cWyTqHGcsOMjeLtyCiqEk0UtunnY4Pk62gDvs
-         9YgxF9Yh6Tjy/kQaEdd1a3jmOsq+HAn0GVbprEdFwpvzazIda+SciWcG9gs6A/DQt64j
-         FNcIe1N/F6plgr4Sr6iTAe0zCmJkh2sRsI8LQQiN97ntAF9lGC1cgjI6C0zBJDAxusom
-         01yopvMdFlauzKrMJ51zWIbUuBNagzFGtQIY6kWbR5wjUOnvYCTBuiJ0u+VUxWDhkAXM
-         bohlL6EaVWHaqbynG9n4oic9OHnCBm7ktTpyP1/GGS226YGLAbhK51FoAS9YAtR47cPi
-         49dA==
-X-Forwarded-Encrypted: i=1; AJvYcCWT9jN5VTZDfr6si0oVgz77yiGOzh6zNcsIvFjNhGJhKWOIra/vPZgHlGgw7ZeHPDjsFnBLi25IUV2oWxX8P7C24LfoBEPQN2Ji
-X-Gm-Message-State: AOJu0YwRTPjBA9wF4onob7oi98TbdwnscmFipHlnnsQwQk/arIP7mvN3
-	Coyd+VWK+k5PY7wmuzQIXoXbBjZL0fvIUq9yNs2ZWCGndRyhQ0fsr5sAK2SW6hs=
-X-Google-Smtp-Source: AGHT+IHONz7ukaXxFyPTjynNVCKibzciLGDtNH5tc/vYHzKXbY/8i2tsQWiv7EwjCwlhWObWe5BgqA==
-X-Received: by 2002:a17:907:2d2b:b0:a75:2d52:8ca8 with SMTP id a640c23a62f3a-a780b89f457mr441045866b.75.1720607790824;
-        Wed, 10 Jul 2024 03:36:30 -0700 (PDT)
-Received: from puffmais.c.googlers.com (8.239.204.35.bc.googleusercontent.com. [35.204.239.8])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a780a6dc77dsm146576966b.52.2024.07.10.03.36.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Jul 2024 03:36:30 -0700 (PDT)
-From: =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
-Date: Wed, 10 Jul 2024 11:36:22 +0100
-Subject: [PATCH 15/15] usb: typec: tcpm/tcpci_maxim: use device managed
- TCPCI port deregistration
+        bh=9rAwS+UQr65lkvj2GXDyVuos1V01g26GHnUtj2lCW+8=;
+        b=NeV83Vao8ofZnu7/gRCC2X5cmo2vryY8XX8LHfUAbVAKMlY89SP0hV/k6T+MpAK+s9
+         g14/eIQ/kevviCGfvVw6lvkKET/y421hWw8fDwJ5hz3q+A0DFx9GYvItADEXBgPYMbCW
+         SYzFDJ3iy2jMBx/Rtf1MxvTLZevchFkYT1G2AF7LUpUnWPv8QDhuBGKPJgwn9A+DM2Hw
+         ck85vjQchEpPrv0d7FXwnUOzC7V/ggWCA+H/UjpwQV9WfkI4E1aTX8Hq8k2JKLZdS5O3
+         XKsrdaK4lZ2ceMNIl7y77PByU1LmHR7i8lep5I350VvjjjubjDWAF5CZTle3aHFZwOVM
+         G97Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVVOmRuXhNhQK8rabCc3EF60H5dWcB0oM4Y9wBrEYIQCWHSQYI/T96Qa8cVSM3IFzYEADbG7jIGiIA3U+hHJA6Hjgr+nJK7kVOz
+X-Gm-Message-State: AOJu0YyiWSI/uDcXFkc2YEwRTOH4vJhITiUv86hByt1QgAVqiw8NRShr
+	edzmPrKzjACVKkm6S53VEZYzy/G8oF+JNiwpzhI5W0Pd2Xw5Cf3NQVVfBi6g+2VhBj/2C3Nvijv
+	9+CvdrdjLkKPBfXbnpXh+kNyCY74qdFAFVh4=
+X-Google-Smtp-Source: AGHT+IHSCdDzJwMkWu4MZg08gC5bLfQUtPN0L/W6NIS2hI6xWeefEu1yS0wys6kJBEPf8RpK2ohSibYzpPMUrH8xjmw=
+X-Received: by 2002:a05:6512:3191:b0:52e:767a:ada7 with SMTP id
+ 2adb3069b0e04-52eb99d1644mr3383291e87.50.1720608622129; Wed, 10 Jul 2024
+ 03:50:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20240710-tcpc-cleanup-v1-15-0ec1f41f4263@linaro.org>
-References: <20240710-tcpc-cleanup-v1-0-0ec1f41f4263@linaro.org>
-In-Reply-To: <20240710-tcpc-cleanup-v1-0-0ec1f41f4263@linaro.org>
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Peter Griffin <peter.griffin@linaro.org>, 
- Tudor Ambarus <tudor.ambarus@linaro.org>, 
- Will McVicker <willmcvicker@google.com>, 
- Badhri Jagan Sridharan <badhri@google.com>, kernel-team@android.com, 
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
- =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
-X-Mailer: b4 0.13.0
+References: <20240705091902.789643-1-ukaszb@chromium.org> <2024070534-sculpture-spooky-daa6@gregkh>
+ <CALwA+Nakqb1re4H8YO8FnaYGOKP-jWLhvtnkvYAvdkRato-cRw@mail.gmail.com> <5cea8570-318d-47af-a669-cc89253de803@linuxfoundation.org>
+In-Reply-To: <5cea8570-318d-47af-a669-cc89253de803@linuxfoundation.org>
+From: =?UTF-8?Q?=C5=81ukasz_Bartosik?= <ukaszb@chromium.org>
+Date: Wed, 10 Jul 2024 12:50:10 +0200
+Message-ID: <CALwA+NYjE3REBAJR6y+UMdZC2otozBtrFZ_eFY4yN2DjOboP1Q@mail.gmail.com>
+Subject: Re: [PATCH v1] usbip: Add USB_SPEED_SUPER_PLUS as valid arg
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Valentina Manea <valentina.manea.m@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Hongren Zheng <i@zenithal.me>, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Instead of open-coding the call to tcpci_unregister_port() in various
-places, let's just register a hook using devm_add_action_or_reset() so
-that it gets called automatically as and when necessary by the device
-management APIs.
+On Tue, Jul 9, 2024 at 9:27=E2=80=AFPM Shuah Khan <skhan@linuxfoundation.or=
+g> wrote:
+>
+> On 7/5/24 04:43, =C5=81ukasz Bartosik wrote:
+> > On Fri, Jul 5, 2024 at 11:40=E2=80=AFAM Greg Kroah-Hartman
+> > <gregkh@linuxfoundation.org> wrote:
+> >>
+> >> On Fri, Jul 05, 2024 at 09:19:02AM +0000, =C5=81ukasz Bartosik wrote:
+> >>> Add USB_SPEED_SUPER_PLUS as valid argument to allow
+> >>> to attach USB SuperSpeed+ devices.
+> >>>
+> >>> Signed-off-by: =C5=81ukasz Bartosik <ukaszb@chromium.org>
+> >>> ---
+> >>>   drivers/usb/usbip/vhci_sysfs.c | 3 ++-
+> >>>   1 file changed, 2 insertions(+), 1 deletion(-)
+> >>>
+> >>> diff --git a/drivers/usb/usbip/vhci_sysfs.c b/drivers/usb/usbip/vhci_=
+sysfs.c
+> >>> index e2847cd3e6e3..d5865460e82d 100644
+> >>> --- a/drivers/usb/usbip/vhci_sysfs.c
+> >>> +++ b/drivers/usb/usbip/vhci_sysfs.c
+> >>> @@ -283,6 +283,7 @@ static int valid_args(__u32 *pdev_nr, __u32 *rhpo=
+rt,
+> >>>        case USB_SPEED_HIGH:
+> >>>        case USB_SPEED_WIRELESS:
+> >>>        case USB_SPEED_SUPER:
+> >>> +     case USB_SPEED_SUPER_PLUS:
+> >>>                break;
+> >>>        default:
+> >>>                pr_err("Failed attach request for unsupported USB spee=
+d: %s\n",
+> >>> @@ -349,7 +350,7 @@ static ssize_t attach_store(struct device *dev, s=
+truct device_attribute *attr,
+> >>>        vhci_hcd =3D hcd_to_vhci_hcd(hcd);
+> >>>        vhci =3D vhci_hcd->vhci;
+> >>>
+> >>> -     if (speed =3D=3D USB_SPEED_SUPER)
+> >>> +     if (speed >=3D USB_SPEED_SUPER)
+> >>
+> >> It's an enum, are you sure this will work?
+> >>
+> >
+> > Gcc (gcc (Debian 13.2.0-13) 13.2.0) which I used to compile the patch
+> > does not complain about this change at all:
+> >    make
+> >    ...
+> >    CC [M]  drivers/usb/usbip/vhci_sysfs.o
+> >    LD [M]  drivers/usb/usbip/vhci-hcd.o
+> >
+> >
+> >
+> > Without the patch I was getting the following error when trying to
+> > attach a device:
+> > vhci_hcd: Failed attach request for unsupported USB speed: super-speed-=
+plus
+> >
+> > With the patch USB SS+ device attaches successfully:
+> > [248223.654445] vhci_hcd vhci_hcd.0: pdev(0) rhport(0) sockfd(3)
+> > [248223.660701] vhci_hcd vhci_hcd.0: devid(65538) speed(6)
+> > speed_str(super-speed-plus)
+> > [248223.668540] vhci_hcd vhci_hcd.0: Device attached
+> > [248223.936363] usb 2-1: SetAddress Request (2) to port 0
+> > [248223.941698] usb 2-1: new SuperSpeed USB device number 2 using vhci_=
+hcd
+> > [248224.138020] usb 2-1: LPM exit latency is zeroed, disabling LPM.
+> > [248224.331984] usb 2-1: New USB device found, idVendor=3D18d1,
+> > idProduct=3D0010, bcdDevice=3D 0.10
+> > [248224.340416] usb 2-1: New USB device strings: Mfr=3D1, Product=3D2,
+> > SerialNumber=3D3
+> > [248224.347805] usb 2-1: Product: Linux USB Debug Target
+> > [248224.352984] usb 2-1: Manufacturer: Linux Foundation
+> > [248224.358162] usb 2-1: SerialNumber: 0001
+> >
+> > I hope this will resolve your doubts.
+> >
+>
+> What about the other places that check for USB_SPEED_SUPER?
+> take a look at attach_store() that checks for USB_SPEED_SUPER
+> and picks the correct vdev.
+>
 
-Signed-off-by: André Draszik <andre.draszik@linaro.org>
----
- drivers/usb/typec/tcpm/tcpci_maxim_core.c | 30 ++++++++++++++----------------
- 1 file changed, 14 insertions(+), 16 deletions(-)
+This patch already updates attach_store() to select the correct vdev.
+Please see lines:
+-     if (speed =3D=3D USB_SPEED_SUPER)
++     if (speed >=3D USB_SPEED_SUPER)
 
-diff --git a/drivers/usb/typec/tcpm/tcpci_maxim_core.c b/drivers/usb/typec/tcpm/tcpci_maxim_core.c
-index ee3e86797f17..7abfd29b4b01 100644
---- a/drivers/usb/typec/tcpm/tcpci_maxim_core.c
-+++ b/drivers/usb/typec/tcpm/tcpci_maxim_core.c
-@@ -472,6 +472,11 @@ static bool max_tcpci_attempt_vconn_swap_discovery(struct tcpci *tcpci, struct t
- 	return true;
- }
- 
-+static void max_tcpci_unregister_tcpci_port(void *tcpci)
-+{
-+	tcpci_unregister_port(tcpci);
-+}
-+
- static int max_tcpci_probe(struct i2c_client *client)
- {
- 	int ret;
-@@ -515,27 +520,21 @@ static int max_tcpci_probe(struct i2c_client *client)
- 		return dev_err_probe(&client->dev, PTR_ERR(chip->tcpci),
- 				     "TCPCI port registration failed\n");
- 
-+        ret = devm_add_action_or_reset(&client->dev,
-+				       max_tcpci_unregister_tcpci_port,
-+				       chip->tcpci);
-+        if (ret)
-+                return ret;
-+
- 	chip->port = tcpci_get_tcpm_port(chip->tcpci);
-+
- 	ret = max_tcpci_init_alert(chip, client);
- 	if (ret < 0)
--		goto unreg_port;
-+		return dev_err_probe(&client->dev, ret,
-+				     "IRQ initialization failed\n");
- 
- 	device_init_wakeup(chip->dev, true);
- 	return 0;
--
--unreg_port:
--	tcpci_unregister_port(chip->tcpci);
--
--	return dev_err_probe(&client->dev, ret,
--			     "Maxim TCPCI driver initialization failed\n");
--}
--
--static void max_tcpci_remove(struct i2c_client *client)
--{
--	struct max_tcpci_chip *chip = i2c_get_clientdata(client);
--
--	if (!IS_ERR_OR_NULL(chip->tcpci))
--		tcpci_unregister_port(chip->tcpci);
- }
- 
- static const struct i2c_device_id max_tcpci_id[] = {
-@@ -558,7 +557,6 @@ static struct i2c_driver max_tcpci_i2c_driver = {
- 		.of_match_table = of_match_ptr(max_tcpci_of_match),
- 	},
- 	.probe = max_tcpci_probe,
--	.remove = max_tcpci_remove,
- 	.id_table = max_tcpci_id,
- };
- module_i2c_driver(max_tcpci_i2c_driver);
+Also there are two other places where USB_SPEED_SUPER is used:
+1) vhci_hcd.c:1158: hcd->self.root_hub->speed =3D USB_SPEED_SUPER - IMHO
+no need for a change as it is ok to attach USB3.1 device (taking into
+account it is backwards compatible) to USB3.0 HC
+2) vudc_transfer.c:34: case USB_SPEED_SUPER - this seems to be
+unrelated to this patch
 
--- 
-2.45.2.803.g4e1b14247a-goog
+Thanks,
+Lukasz
 
+> This change is incomplete and will break things.
+>
+> thanks,
+> -- Shuah
+>
 
