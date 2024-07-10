@@ -1,202 +1,147 @@
-Return-Path: <linux-usb+bounces-12114-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12115-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB9F592D2D1
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Jul 2024 15:30:34 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0032592D2ED
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Jul 2024 15:34:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7278628439B
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Jul 2024 13:30:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AB6AD1F23B75
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Jul 2024 13:34:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F8A919306B;
-	Wed, 10 Jul 2024 13:30:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AA92193067;
+	Wed, 10 Jul 2024 13:34:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=inmusicbrands.com header.i=@inmusicbrands.com header.b="GxTUkcqD"
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="Yty8WZIB"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2124.outbound.protection.outlook.com [40.107.94.124])
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44833193066;
-	Wed, 10 Jul 2024 13:30:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.124
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720618212; cv=fail; b=EvR8LIEL1FFuBpzVfKBTEMeQZ5pb9R5SnVYNtYodkNaJKHFj79L8+V5CvDK5HAHEtiu5FwTb8qiQtZ80ZRsYHbPD2oDc6sFzMv+2vhvAy3lNMi53w0ZmuF+UB1lp0+HM9OIgjKoHMjR+eQ8Y67U570TSigYT6Nc3z84ci9Z6Al4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720618212; c=relaxed/simple;
-	bh=n1KG49TH2twW3IiVz7fRytYKHiex0b6K/SoZS/QPsUU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=u7iUuRLaOJDk9/rtOiSBmv6DNa35aWdTsUMQcV8UzfOkvo9HwXpbB8sY2gmRrQWlty6lf83TsuNC58HyRHquA+PreXkh/oI+d3dLaI4Rcr17zgBr1F3wq3iMb+slG+AgUyHBjdhawz93Gzs9ceCew0j3WnpPqvIlJvwqajjGdh0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=inmusicbrands.com; spf=pass smtp.mailfrom=inmusicbrands.com; dkim=pass (1024-bit key) header.d=inmusicbrands.com header.i=@inmusicbrands.com header.b=GxTUkcqD; arc=fail smtp.client-ip=40.107.94.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=inmusicbrands.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=inmusicbrands.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ibxasrC35T7HSIBUUHzK3c6yOhZB+dHmVtRT4R9e07leDfPqkQLzl58ipTJfBbp/LtUXB0farz+GuQlj5Iue2x777i1mp6naI0VvVvDXYb+wrsFTfph60I71ulKi5Sja4Pifaqs/M2zVOku5AWvhITF8cGfd/5T7je3MyGcgGUATdE9QnKpmOXNSkZ0aOgferHgACBcWHi1G5j7OeXcX0mQCaVGvE30OcXreLSskRQLuaedkUC2PJ8fGoUlWPyNyPaP2+dlrSPAXG86W/rr1Y5EVFkBuQ0UfFlZ90bclShapGDJlfulML0KvYI3cp/VnEj44MhHRWN/PFqPPy4kr7g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4wU44XrNTCcAo4dNR4aN/lThIy6KqSkpNUSIe+IsqHY=;
- b=fY5j43r2lOGohopHE/K2uqog3ZLh0LhDo4kSIoL5HkeFeDoBTgR/JfDiCHMVuj4vQvr+FjfDe+MESjr8oQzIga7czIBEuBosUl8YCct0rMKcgJ7JRJHHHAt/XFE1sA/yaq3FjuxK6X9l7Cw/GNQl2Q9YJGxQ+YW9Ox91xt3h//FFo1vEtTKFaatGCsJnO520mxFHpIHHniOZgvdj9nQvPBMG07Pi0iK4Zx9SaWx3ahvo0RE+9JyKQzG5qBfd3xAzQxMv4lM8o5SjtvHoeCFpGElIs3ae/pQZy6F+/cIbarEgj9sA1vLna19E+qS2reKSXDvvZtWbg2JjpGbsg9OKSw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=inmusicbrands.com; dmarc=pass action=none
- header.from=inmusicbrands.com; dkim=pass header.d=inmusicbrands.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=inmusicbrands.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4wU44XrNTCcAo4dNR4aN/lThIy6KqSkpNUSIe+IsqHY=;
- b=GxTUkcqD7u7ivUGDDaJJOBSkPOoHH55Vyg36e2nNLJEAo9556SpLwyBlN6Yr/TOltbPiR7bHfS3GZGKNH0lpXaBDjAPDOkYuuux3xm/4sLLvdXXMWucyi3nWFNLDxiSk6pma3K9HqXvhmPmytyZxY3+6q7t7n5BAz5VERPVqJNU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=inmusicbrands.com;
-Received: from MW4PR08MB8282.namprd08.prod.outlook.com (2603:10b6:303:1bd::18)
- by PH0PR08MB8471.namprd08.prod.outlook.com (2603:10b6:510:292::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7741.35; Wed, 10 Jul
- 2024 13:30:06 +0000
-Received: from MW4PR08MB8282.namprd08.prod.outlook.com
- ([fe80::55b3:31f1:11c0:4401]) by MW4PR08MB8282.namprd08.prod.outlook.com
- ([fe80::55b3:31f1:11c0:4401%6]) with mapi id 15.20.7762.016; Wed, 10 Jul 2024
- 13:30:06 +0000
-Date: Wed, 10 Jul 2024 14:30:01 +0100
-From: John Keeping <jkeeping@inmusicbrands.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: John Keeping <jkeeping@inmusicbrands.com>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: f_uac2: fix non-newline-terminated function
- name
-Message-ID: <Zo6M2RntMo6Qnx3B-jkeeping@inmusicbrands.com>
-References: <20240708142553.3995022-1-jkeeping@inmusicbrands.com>
- <2024071022-exemplary-zipping-1f34@gregkh>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2024071022-exemplary-zipping-1f34@gregkh>
-X-ClientProxiedBy: LO4P265CA0275.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:37a::11) To MW4PR08MB8282.namprd08.prod.outlook.com
- (2603:10b6:303:1bd::18)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A45F12C530;
+	Wed, 10 Jul 2024 13:34:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.20
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1720618481; cv=none; b=TAf/QT6dGlnECRNPkYG1jSp3gzA5ptXjPE0S81ww8La/sucqGjee3TJLy9BAtKrYcGBx//2XkWFfYzYbEhO24Mqby/26SUGvs/cVpDqh1GncCfLjvLVn23RQbBQ5Arhye+3dGhVka9wIZY6QeGI6QYAWIRuahA1pLdzfmlkyhHM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1720618481; c=relaxed/simple;
+	bh=KHzmV6iQeN0ga/s2PWtC2cr6j5Xn1gW9AyxeuXWnzNM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=e5XnRZT8dBTBu8NW+sWwUVPI0XIS/XQxG4OEnNhpYOL/9DS6cg0N7Rqocuhok0CohQ1dGl6PUb6BwUQCHtixOFlvDgDplMlxgbdyF1CaNmv2phZmBTHmvGCspDMRjFPQIP83wegjG19oH9dAVjJMcMyyi90lhm3prMky1bLJZuo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=Yty8WZIB; arc=none smtp.client-ip=212.227.17.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
+	s=s31663417; t=1720618442; x=1721223242; i=wahrenst@gmx.net;
+	bh=+3tUuSexjnpG44HlEeCMDYkMDHwEt8wqzMLss58tItk=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=Yty8WZIBncC6TRsiVPWwLLzEUluGlOV5HTyvD35ojHzE9TkvDt2+MJmwkODumCz4
+	 MUEdwgdtylDqbUKZpDfbF4S1kfHUt6IdBEdzTJ8Fdhzr9bOMLyFFoc3fMeYugJnld
+	 mnaTBBFOXKxnWqOjgVenbNf2/YnlhqygfDlhMSl8F4Km3xNYpo6Ilj/5LBZs5GSRZ
+	 MbcLWB1zjIESTsc2F0c8r9xOUWv3qKPGpfmt/2oaqFc+wAk2UJjAQwAtMCwHxn/aZ
+	 oGaDibQ+DCUK7l/TnenQ9AIUkorF3s1d+6LL9cvaZat610cNNKGEGSf8G1CXNrgmc
+	 jWdhnkZD9UR4gwVmhw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.1.127] ([37.4.248.43]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MfYLQ-1ruPZ40HDk-00qV0p; Wed, 10
+ Jul 2024 15:34:02 +0200
+Message-ID: <8dd6def7-58b7-4578-b427-281aab70645a@gmx.net>
+Date: Wed, 10 Jul 2024 15:33:58 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MW4PR08MB8282:EE_|PH0PR08MB8471:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4caec1c7-6ae7-47f1-3489-08dca0e469a9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|52116014|366016|376014|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?9E3DKEp7Z5lf3KE0RQmF0SR81qEI3gyXfHhifpvG/6PfCuT3ObTO99X120Kp?=
- =?us-ascii?Q?29NdasqUeOizgUX66vfVhLPrZ2PvlRnS6G2uPz9Fi7rqrP1aytr51pyIizQ7?=
- =?us-ascii?Q?iXEuLJgAn5gr85/jF0BX0NI36VQny6scFSqPNh072AHdNu4LTdqCP08tSoof?=
- =?us-ascii?Q?kiGnc3WDGsJqOX4gu1261HdhWnbgoVGgRSiPxrpigI0zaGfo/qlrgi8BkiZ8?=
- =?us-ascii?Q?D/R0rDRSMD4HMhZAZuJ74qGrLKG5SJb0e8ikN+nB4qtvS+xQuTXeNn5Pw4EJ?=
- =?us-ascii?Q?2jc8X+x1jSj86cf7NTPHeeLGTUxrMTdoZ78AyZp6JIu1ygfmEyEM/6b7ufH0?=
- =?us-ascii?Q?1j3W1mQ+CV1rckXg1rI1qF7XpcWp4NbisCZzFv7YTHqiy7t6Xn61x7GdV4SU?=
- =?us-ascii?Q?qSuLVJ6G7HhM4j5CdHi8uvRjUkChv8M7CWEmPZbeocGAq6M/HMlRWT3JvI/e?=
- =?us-ascii?Q?28CfMd1nOC4fg9CV7qOtaJtsc9Oq/BcQRSDMDH5Ex2VsKZMpJCRUGrrAMWfs?=
- =?us-ascii?Q?fGHqZIW3flerQz+S7uHzhnpPkjS4aN0HSdVnyWO8HN8KS+jeMOGe8+hMB9r4?=
- =?us-ascii?Q?2YBfW9g9oP/j/O4JI5TRE6kU/xKjFEEC7YEDIV1fhxw5wYf/UFQCZUz2U3Yf?=
- =?us-ascii?Q?peiQ8e0p810koMDqelhu28k4oxMOXdqWa0cxoSDdb4O1Ribf1imiWZ1GX1CJ?=
- =?us-ascii?Q?d2Wi15jvmhr6874t9bKznaiOauyvwretJliOZ+4mZ+WTbJd1iGki1whkMGmW?=
- =?us-ascii?Q?I9rLOpIMzqFCOMoe0rjpfh0LFA9bazZ5qpYfnCwluOoFOjBp4Ggdlci5fs4h?=
- =?us-ascii?Q?jBnPBwhzdxjGgkEkQwu4QlB2THAeGOJ2SpHvqtDHMdZP4FPm9Yk4RjicAQ7z?=
- =?us-ascii?Q?n+cHXJ+GcMNxKrl9BgPOzcfEWV4CCYdtjkBfwJ5qhe3D7lcK3xndCSrheAVw?=
- =?us-ascii?Q?gqQi7QaOGBMrKBac417fR/yi1KjKIS5IAKwob9mHN4NoWVzi/gVpv0+erQMl?=
- =?us-ascii?Q?iu71da5h7zAUPEmlBQQVt9JXF8epXJd5U2vZSblW1sFo8XCopK8Hr86EfaDt?=
- =?us-ascii?Q?3X08mmNAISZqHjup9PaJpiufl1vYWlCGjapxlaVDwK6ydvHwGjpjFxOO+Tf0?=
- =?us-ascii?Q?skaE60og+QHK/h5C1Tb5DQai4Xp2eAAGrQOeFoVcxumTxSfJK8Q6c+W+yTOh?=
- =?us-ascii?Q?M/p9qsVUzVZmNS1/XBypRYA0X/oLH88ZwU4y4wD9UdippZDGXxx+pbgWs0A/?=
- =?us-ascii?Q?q0qSa9OoOImyYQvjDKlJzT0Sj0BeCwA7HZIBHiT+cgqzCemasdqefG7BYnIZ?=
- =?us-ascii?Q?vBeJ2bW7lFlyz9wPJdevxjPy/q2ajTvKcOn1DyaFUS4pWXTxG3Ls7mia2wX1?=
- =?us-ascii?Q?AsCw1uzX2+4NbZ9L4jR8qmDQ1eILTMRa5nzFGjw87CsLxhlWCQ=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR08MB8282.namprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(52116014)(366016)(376014)(38350700014);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?MPJecT3URltTjU6dqVd86f4yv2eCIjtb2iqVKeSBryNI6kU32+Xj9EYbSWeq?=
- =?us-ascii?Q?exQSXIvoWoUPe6ML3FGRhLXUP590WewetnBgeN1huLmW+yJD8/ihZVObhQCK?=
- =?us-ascii?Q?nqcp4BKntf7gHvFRAa/2e/bKni1gDFiAF/yIrmFDgm78/SuBs1s1XTJiGQ9h?=
- =?us-ascii?Q?O5Le4N2xMaLUOrGPq3MZXUkMwYcTrgszgiztDZuu93nnQTIKzei8vLSIsyDV?=
- =?us-ascii?Q?3denYuw8FPaW7hKIimK/7F6/4vD/eaVEUjyyAoZsq8Rk80Q2CRHiqlIE2wfJ?=
- =?us-ascii?Q?NeCa/JdWCLbSrl9PBP6ufZyhwN9R3so3ONGiwzDeRagzuSnWnjHlXf99PEGy?=
- =?us-ascii?Q?nTJRWrzKkC+3Z6+7jz/yoVCemWA7rVljZ1phOQN8RpilE/rlv/1JgN/e2uqH?=
- =?us-ascii?Q?epvg5YiUacklXL1aLiSZIa1y1end2jX3OYAV3eYg8Lf06pbWhBW/nOTvPuyg?=
- =?us-ascii?Q?7iPT/iF+kytpW1nkee+mTKz0NKIsqnwcbsfr1ZEsQN8t/CsVK9d5o777k4ru?=
- =?us-ascii?Q?eNva0s8VFOGdNeEEO8/bK6pcAWkVNpok1HcppIZX3wF5onVJOvsl76Q1iK97?=
- =?us-ascii?Q?6D1xHJnRwl9RGmsYth3l5EKoiMqIfrrNZ+hGbbeJo9R089GbsBQQ1e0xpklf?=
- =?us-ascii?Q?W3wtDlmVmflGzmsa2nfLYxbbH3XhdY7381l9WlY5JmeuwKIUjcKSSVuPeizH?=
- =?us-ascii?Q?uSJNETDRVxcIwab0IUqdNyA3O2/4/wY8CLCQPow8TEHQPwnftPkd9nMabxQC?=
- =?us-ascii?Q?n81FuxOeCTyy7IUeSZ8DCiZ9p4o3jWtfXMSpLHEMGfZ5B0fHWQFsSKeIqjU6?=
- =?us-ascii?Q?+gLZp9xCWBXDDbY0GJvA0fByPYoVRcc9nb9S+ZABCyTZRElDiYjzAl/9bluh?=
- =?us-ascii?Q?cJigoXmTx5yPSv6kwKncuob8eJH4YAYCZ+5E0xcP1SEjA2beb463Xy+nGTci?=
- =?us-ascii?Q?LKZykdg4YLOqTgpoNaN2lykqPgwfK8kObCSdXJo29upHBHNViuEFY1rq/+0r?=
- =?us-ascii?Q?WUNRE1HxYjkWuBvolwvyoNIeV+2qUls1qqdSd89H9baykvgTg79mtQH02A+V?=
- =?us-ascii?Q?unQqhi1Unt+Lrq3gSacI4NiLTon+ZBERMEhn99G1RFmg+ZVrz52UtjoOiZLJ?=
- =?us-ascii?Q?eQSqWk8GySwni50yD+AS7N/YZHIeRfllBvWjx/2SHZ2j8JJvtgzZsBsdjTIK?=
- =?us-ascii?Q?uSLXcg3T6vv4lI9fAL8QMuDvKjJgsfIhJv6KaRwtr/RtmbE0bpGmsN7wxx8H?=
- =?us-ascii?Q?r54ldeTssBmgoIGg/r63AgRDIRKJWJ7ZwY0HWMBpHCq8+t1HMucOcFkXOs7K?=
- =?us-ascii?Q?kx3g+tJ3rOBDuSpEPILbaGLyDQ0yxGfVOhLzkFvedZgp/uz1H8/1v+RBBpaL?=
- =?us-ascii?Q?d6cj3ERvarxNrRbv4jnw1i8ZAqTPcShdZ2INiREypQ8Q76WGgoJH2M0Jvczm?=
- =?us-ascii?Q?OA1Zun/4LOtdGDjvkT13wrvqXiI1VASWD54mWfHhWdqxn8Vtc3jXzkYv8BPW?=
- =?us-ascii?Q?jJfZd9Hudkg8VBpWfB9boPYMzqXEvGlrUE0P1lNP5E/3AP1HC2hdhDhL4MqQ?=
- =?us-ascii?Q?DnYoHTSRLzEnoKp5avuE5eI1LJ9ri6ro28KadRP2i7PpY7a3oGSGmCJ7NBQu?=
- =?us-ascii?Q?Bg=3D=3D?=
-X-OriginatorOrg: inmusicbrands.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4caec1c7-6ae7-47f1-3489-08dca0e469a9
-X-MS-Exchange-CrossTenant-AuthSource: MW4PR08MB8282.namprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jul 2024 13:30:06.6251
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 24507e43-fb7c-4b60-ab03-f78fafaf0a65
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: DdkVpWpLaD2wR8CLqccSSH82RL5NW3wEFygyrAdY4MW+TzKyCgdpLoQJJIyPme/0kLyeochuLQI/POsbhsH8WF3WVv8SLZ6n0Hh6Pvn1F+I=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR08MB8471
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 09/11] usb: dwc2: Skip clock gating on Broadcom SoCs
+To: Lukas Wunner <lukas@wunner.de>, Jeremy Linton <jeremy.linton@arm.com>
+Cc: Florian Fainelli <florian.fainelli@broadcom.com>,
+ Minas Harutyunyan <hminas@synopsys.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Ray Jui
+ <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+ Jassi Brar <jassisinghbrar@gmail.com>, Ulf Hansson <ulf.hansson@linaro.org>,
+ Jiri Slaby <jirislaby@kernel.org>,
+ Dave Stevenson <dave.stevenson@raspberrypi.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
+ Daniel Vetter <daniel@ffwll.ch>, Peter Robinson <pbrobinson@gmail.com>,
+ dri-devel@lists.freedesktop.org, bcm-kernel-feedback-list@broadcom.com,
+ linux-pm@vger.kernel.org, linux-serial@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ kernel-list@raspberrypi.com
+References: <20240630153652.318882-1-wahrenst@gmx.net>
+ <20240630153652.318882-10-wahrenst@gmx.net>
+ <95762956-b46a-4dfa-b22f-bccbfa39558d@broadcom.com>
+ <ZoezRpXBgB1B5WjB@wunner.de> <4502d826-d80c-4a98-a889-da7badfa698e@gmx.net>
+ <ZogLXYopViQO11ta@wunner.de> <43fa421c-5e5b-40a6-a546-d80e753586e3@gmx.net>
+ <38e46b44-6248-45e8-bdf9-66008a2fe290@arm.com> <ZohiJgyaDwAoGtAx@wunner.de>
+Content-Language: en-US
+From: Stefan Wahren <wahrenst@gmx.net>
+In-Reply-To: <ZohiJgyaDwAoGtAx@wunner.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:dviN9n5mJNy5LcG+dhLGDfMtO1l0d0odq4AVYBIUuTcOGdBVkbZ
+ CQP2qJF5WQHb8YNJbsitIYBk2IsAJNvaxAV+HpXanK0ElZtDncslaoxv3nMsMVLo0xNFhv3
+ PwdDhrZ7r63ll9+Ag9kDc5oq8wPxguGNg3KKVs8+uJmCSRK3JZuyNUa+naUr+ufZvbDcGVM
+ jlP1915LEhg8OB/OYByLw==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:Yq/sCgCsZM8=;BqY06MQMuRa21r/LEhc0tIsTBaf
+ LAUQiaC9WWtNMVJhX5wq7hL9w6UQye8vO6Xe+hbggCrl69p/UIzBFApWQquDStybs17EE0Rb/
+ pHcb+9tGC02gKSMxQkokQ5+V7+W3CtmS4I1hwSPPKQocEK4/WU08cWfjoYhAD0uxtWB5UQwDz
+ yrG3nf1j/mLAg5h+hM6B3kfh1d+KMqyjg6EAtigDxOYIF4WgnZe79yuA1h09mYwIth39WKdTk
+ LFiLNXkGG8bC+RnP+uablmhQhmHNkDlUW4JkuDPSlh47eWp6B6VHOxDT8CXLLmCTC1UolbKUR
+ +w9gK2JXQ0p9jQk1VRcJKiW0SJm9ufJj/TJQAJS7JlJGlfr5joIDwUDSDFerUqCN6rXP1fk5C
+ HlVeBWQcuDc6S//lOPDuYzf2PrBOurW22Rz1m0r18QkG9v8gKlhx6Ql/1vM3UMwalzUOVDYKA
+ 6L/aIpSiFF+4ks+7eq0Hrp9DUMaIwoUMIOpEOoyS2RoFQCmywgNDh/8UNhVLI6SFQTp/QgoO1
+ YBibO7veRgglwLfJPv/3EyG4xg6AZ6WXYy5TQkRdMjhZy4rNm7yPake2vWSPEh/U3LsHQVqZM
+ TPVmuQHqranmx3CSrR026vHSSd6trXeBtH0TZz/P5ge1b5J4SJrsWc5Spz589XuG6R8Y2sORZ
+ meWmgNCSbucAkRij9VRovAFDQpCjL9RPQJfC8FtCbXpPeYi/oeF6vvZyGxwc9Fz0EJxgMmA+P
+ Eg7syDNhbeQP0tU/5q48/SEdrlS2qau8EetjGry9xGWT+t3NgBzwwUwO17yLSYoCYzeL4tdx/
+ F19utBxHvwa3tjHksyuhLX8A==
 
-On Wed, Jul 10, 2024 at 01:53:22PM +0200, Greg Kroah-Hartman wrote:
-> On Mon, Jul 08, 2024 at 03:25:53PM +0100, John Keeping wrote:
-> > Most writes to configfs handle an optional newline, but do not require
-> > it.  By using the number of bytes written as the limit for scnprintf()
-> > it is guaranteed that the final character in the buffer will be
-> > overwritten.
-> > 
-> > This is expected if it is a newline but is undesirable when a string is
-> > written "as-is" (as libusbgx does, for example).
-> 
-> So we are changing kernel functionality because a userspace program does
-> not work?  Why not fix the userspace program?
+Am 05.07.24 um 23:14 schrieb Lukas Wunner:
+> On Fri, Jul 05, 2024 at 12:16:14PM -0500, Jeremy Linton wrote:
+>>> Am 05.07.24 um 17:03 schrieb Lukas Wunner:
+>>>> Careful there, the patch vaguely says...
+>>>>
+>>>>      With that added and identified as "BCM2848",
+>>>>      an id in use by other OSs for this device, the dw2
+>>>>      controller on the BCM2711 will work.
+>>>>
+>>>> ...which sounds like they copy-pasted the BCM2848 id from somewhere e=
+lse.
+>>>> I would assume that BCM2848 is really a different SoC and not just
+>>>> a different name for the BCM2835, but hopefully BroadCom folks will
+>>>> be able to confirm or deny this (and thus the necessity of the quirk
+>>>> on BCM2848 and not just on BCM2835).
+>> This id comes from the edk2-platforms ACPI tables and is currently used=
+ by
+>> both the rpi3 and rpi4, and AFAIK nothing else as the rpi5-dev work is
+>> currently only exposing XHCI.
+>>
+>> The ID is strictly the USB controller not the SoC. Its a bit confusingl=
+y
+>> named, but something we inherited from the much older windows/edk2 port=
+,
+>> where it appears that the peripheral HID's were just picked in numerica=
+l
+>> order.
+>>
+>> [0] https://github.com/tianocore/edk2-platforms/blob/12f68d29abdc9d703f=
+67bd743fdec23ebb1e966e/Platform/RaspberryPi/AcpiTables/GpuDevs.asl#L15
+> So BCM2848, BCM2849, BCM2850 and so on are just made-up IDs
+> for a Windows/EDK2 port that got cargo-culted into the kernel?
+> Yikes!
+>
+> Has anyone checked whether they collide with actual Broadcom products?
+Using public available information like this [1], I wasn't able to find
+any collision.
 
-This file behaves differently from every other sysfs/debugfs/configfs
-file AFAICT.  In most places the behaviour of the following two commands
-is equivalent:
-
-	$ echo foo >file
-
-	$ printf foo >file
-
-But for this function_name the result is that the final character is
-dropped unconditionally, so the name reported in the USB descriptors
-will be "fo" in the second case.
-
-> > Update the store function to strip an optional newline, matching the
-> > behaviour of usb_string_copy().
-> 
-> This changes the behaviour of a lot of configfs files right?  What will
-> break if this happens?
-
-No, this is just one file in f_uac2.
-
-I can't see any scenario where a newline in a USB string descriptor
-makes sense so it's unlikely to break any existing use cases.
-
-This brings the audio function name more in line with other string
-descriptors for the device manufacturer/product or configuration name
-which use usb_string_copy() and strip a trailing newline if it's
-present.
-
-
-Regards,
-John
+[1] - https://github.com/anholt/linux/wiki/Devices-with-Videocore-graphics
 
