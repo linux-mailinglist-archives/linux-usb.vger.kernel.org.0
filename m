@@ -1,121 +1,139 @@
-Return-Path: <linux-usb+bounces-12129-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12130-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1187D92DC7E
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Jul 2024 01:17:38 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2DA992DE1F
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Jul 2024 03:47:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BAE601F263CB
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Jul 2024 23:17:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 685221F2266D
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Jul 2024 01:47:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DB56156F21;
-	Wed, 10 Jul 2024 23:17:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4F51C121;
+	Thu, 11 Jul 2024 01:47:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h3sYo3Ee"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="pHru8cC0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42A6113C679;
-	Wed, 10 Jul 2024 23:17:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 031C83D66
+	for <linux-usb@vger.kernel.org>; Thu, 11 Jul 2024 01:47:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720653436; cv=none; b=OSQKzxGGRVlC2vbGm0qLxg2bW+Gr3FHKGSUMWx8w7JobKwH0wPLDQMOcfgJD8p0JTqhCAXF6tLCbhyaGNzNtKzjcC0fyluAazJH3h318UFFFCv2+lrqsjEmc1aR9+mUxSO3QH8pAfWnD+zaTSFd1WsjGYmnq0uIYqp/NSJAiG6I=
+	t=1720662465; cv=none; b=hnYb29apPl0HJmuitNU4zkTIhln/eOqmvTN5etG7qV8dQvaBp4zbOUZ7wMcRuVmEO4UgIcyYaiX1i3242CVrdCH762rhrQTkziUaAFKqDME82lj9l5oVT6YMDR004qMLmA9JReRKaN5TILpRDWLwpxuGKc+LcZcNhY++1uuN5LI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720653436; c=relaxed/simple;
-	bh=UvnaxlqmvLPi8Lr06uQh+kZE7yBmnckwmYquWml+mFU=;
-	h=From:To:Cc:Subject:Date:Message-Id; b=rbBnwuPaM3gv/RfIIFqckzIhafEq7x/Zlyr/KDdUyyuMPkqlK9kSPunqdmCovtNiWd5bgn5TcyRBpFvU7cOV9mcYr7+yFYCTJTt6QKrufmR33nrzowwnoMJ1wrvB87h6S7bBDKR3neZXwLmTRZ4SaipqqzeDT6Fvft2IPoyAaAE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h3sYo3Ee; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1fbc3a9d23bso1948245ad.1;
-        Wed, 10 Jul 2024 16:17:15 -0700 (PDT)
+	s=arc-20240116; t=1720662465; c=relaxed/simple;
+	bh=tMFHkxFPolROgECg5vVgfcIDDwUKCaXiGLwl/jzzNxg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lIDHAHRRf8VBLZv5n2koRMJURPpV0HI2wUWwAuDi7LT9w0rqXPExWFjp3+bjbevqKSa5eFtl8dVtOq0OmhmLqbinI1HOAYo0oGIS2fLxPvvXEYK3DoxWoMUACyHHnNh0dOX7Z6nzUu0yujay/Jm5eQVXFOXlYXIDXnY6NGSBIyc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=pHru8cC0; arc=none smtp.client-ip=209.85.222.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=g.harvard.edu
+Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-79ef7ecc7d4so25012585a.0
+        for <linux-usb@vger.kernel.org>; Wed, 10 Jul 2024 18:47:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1720653434; x=1721258234; darn=vger.kernel.org;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PQWSgKIn8SEmuSNSdTgDWNDQAMDWOagG0JDZoov0LeU=;
-        b=h3sYo3EeMMxrd8tQNFdADJIl2MZL5g8XcibMpYdGUPCBYh/llbk8nxTdl9YdGPbrHj
-         xM8MgDduxBbX9UI4xMgpMPcBa4meBj8TIxzVIlHAW0XvxSAIpvJrxWHbW1KUUdm2usYg
-         7Kr1V+e1vJyYIIdPH2AqJg+J5dsHX230h1Ar0oi7geI3Q742VyhYmtdtRCVmSZ93svsm
-         Pvq+FXjpne1YntqFFVsnhSmKDPBekXzojTcIVI+A+HpjL/qdYAt0KrzDz/TK6TchwKmd
-         561mLaiyKX3O4nxuXYEHTwNkhubrW24EtA64VtxSe9e28IDm/ObsgrGMTRqNC/vLeTzx
-         uZpA==
+        d=rowland.harvard.edu; s=google; t=1720662462; x=1721267262; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0tN5R4YnhjAUO3BS4jN/9VwPte3wOBowtI6nf3MDomk=;
+        b=pHru8cC0YN6mRmgOdmfgJIWkpiUVicLikpcJ/YpZl+2g5WE5cv04ifNnrvPZg5SF1w
+         u9qh01sSs+okmblCat905LupU4j2bM9nZRmDuU5PgjdZSoWBYR1OOmzek1+dfWQXA+bx
+         n2jImCartjAPXCz+fC6IcQrBzeDAR4o83b3+UGPM8SScfeakR8tnZT1198ct/SWWhR91
+         +CuM/nNOXF/YWAEw18sTGSIJizY3fo+mdjM07pqRoI4BlB9xMuXigqP71rW725rhvXJK
+         wl26JOzrs+PosLJKlWwUmAY2GwC6mXFOELpKwiPmyoSvbZnnrZDfCIIyBlHaJeSkyEca
+         F4JA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720653434; x=1721258234;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PQWSgKIn8SEmuSNSdTgDWNDQAMDWOagG0JDZoov0LeU=;
-        b=u9c0JLZzqyKEQdFzKAMavS9nsaq9N1IPzYNVO/2vjVbxUw45Mxpq4KrrJvtidF1+3j
-         MKGlGboVJSgD2wAgESL0VK0taAU1gbgMeScjEnc/S8t9p4JDn0XNMHS8p4CTVbHEr6lU
-         pSzAedCQXV0q9uHvHG38SvwoDKAkQ8r50zx1qRDmIlEpcaVhcUd+p3pwnGm8jSAOWwQO
-         fPw2Qo+y/cT7JOFI8dU7VzArdL7H4KNjKwtvZMIGHTUKsITGoX3UpMeJyhxFPpWI5U2n
-         AueZzsUj7pZoAGVrLOWkGktY9Kzfk/Y3l0oocar5u3tcV8OLiTvH54sm2lnbvC4Iwonj
-         mYUQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVU7DLw2Q0gKE4sSaq7V680IPq/NlVVoAzPopI67TWBDFbh2WcuAq8jXxgWprmBs1owDMA1BcERbJ5fruE3h/0AKMtP7AGNlYHCUsDNc/9VYJjETiv71Njj4C1A4+eeBUGCBz009Jb5
-X-Gm-Message-State: AOJu0YxqboRM/7ohnxxiM6Owdm1T7L06Qpnyp8byuuKAFUAPBBEbh//o
-	9cLTpFyJbCxIDOdNZOz/XZMLlXnQSAS7mGaGI2HpJI62FTRnNUvQ
-X-Google-Smtp-Source: AGHT+IF0369HLlf0s7HuwPmn5hGEIVx0M9loDIYoTAscU8I/4tLonBO2sWtXOaotBw0tCDfUpnNMbw==
-X-Received: by 2002:a17:902:ec8a:b0:1fb:35c7:8ea4 with SMTP id d9443c01a7336-1fbb6d25092mr56341335ad.2.1720653434291;
-        Wed, 10 Jul 2024 16:17:14 -0700 (PDT)
-Received: from localhost.localdomain ([46.232.120.226])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fbb6ad1e47sm38492715ad.282.2024.07.10.16.17.12
+        d=1e100.net; s=20230601; t=1720662462; x=1721267262;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0tN5R4YnhjAUO3BS4jN/9VwPte3wOBowtI6nf3MDomk=;
+        b=v/919EQuPzJPZ1y9+7wG6Tdv/xYIxUVW27QRktSvt0r/2hAsxIjWV7x2+gBZLYjOn7
+         xL+mXJgUbcjuJX7L8I9n0SC3djhpM80ewHBu6XHrQIvqwdZmE4Ek4b51V1Od0SuYVNXu
+         02+8tnUVi4Iz32nHubm4x+CEfqx4/M0864fb/gxJa+9/m+RTMUFH9/5psAdqU0xetBMJ
+         I3obt+jPuYZVcmBwrojy02L1+Ud/WQt7erHoogN4ROrSH90J3606Zo5p+jlzKW2yIic8
+         nLVrgMexisNus98dfRJaP3262N4JuMFR/jkg962bHcb7ocmGsH137MdVRZ1OwNfaMZRJ
+         r8Bg==
+X-Forwarded-Encrypted: i=1; AJvYcCW5eOb0kclixXrQTI81Bc2y28j6unln6geCpv6x5hUz/BUTkxfKwfZMYUFI0weH3AwHnpOEXWesENT+vOS8aR2fcmT8Tvgbg6tf
+X-Gm-Message-State: AOJu0YzMYI9FgtvXMKwfD6a5z+Us+z2zjrCJW7vDXAJaI7vuReStGAGq
+	O5Sj+AJYwxFaq8mEfWJgzaGvcyArGNqplhkbn8UdWzFT4c0eo6gQupba4GGp1Q==
+X-Google-Smtp-Source: AGHT+IEdvBZ5AhAWw7kB3UrCG2h7ixiJqeq8PURLRH1rrR34tzFsUpVzykFcjUiDfx5fm+R2MjzjKw==
+X-Received: by 2002:a05:620a:2482:b0:79f:b3c:8fcc with SMTP id af79cd13be357-79f199e43e8mr1031660585a.10.1720662461925;
+        Wed, 10 Jul 2024 18:47:41 -0700 (PDT)
+Received: from rowland.harvard.edu ([2601:19b:681:fd10::cad7])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-79f18f1a32bsm246551285a.0.2024.07.10.18.47.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Jul 2024 16:17:13 -0700 (PDT)
-From: ryan <ryanzhou54@gmail.com>
-To: jikos@kernel.org
-Cc: gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	ryan <ryanzhou54@gmail.com>
-Subject: [PATCH] hid: usbhid: Enable remote wake-up based on device configuration
-Date: Thu, 11 Jul 2024 07:16:06 +0800
-Message-Id: <20240710231606.3029-1-ryanzhou54@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        Wed, 10 Jul 2024 18:47:41 -0700 (PDT)
+Date: Wed, 10 Jul 2024 21:47:39 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: ryan <ryanzhou54@gmail.com>
+Cc: jikos@kernel.org, gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hid: usbhid: Enable remote wake-up based on device
+ configuration
+Message-ID: <f0c789d8-8ae0-4a46-a5b3-aa9a5a758915@rowland.harvard.edu>
+References: <20240710231606.3029-1-ryanzhou54@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240710231606.3029-1-ryanzhou54@gmail.com>
 
-According to the USB protocol, the host should automatically
-adapt the remote wake-up function based on the configuration
-descriptor reported by the device, rather than only the default
-keyboard support. Therefore, it's necessary to support other hid
-devices, such as digital headsets,mice,etc.
+On Thu, Jul 11, 2024 at 07:16:06AM +0800, ryan wrote:
+> According to the USB protocol, the host should automatically
+> adapt the remote wake-up function based on the configuration
+> descriptor reported by the device, rather than only the default
+> keyboard support. Therefore, it's necessary to support other hid
+> devices, such as digital headsets,mice,etc.
 
-Signed-off-by: ryan <ryanzhou54@gmail.com>
----
- drivers/hid/usbhid/hid-core.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+It's true that the host shouldn't try to enable remote wakeup if the 
+configuration descriptor shows that the device doesn't support it.
 
-diff --git a/drivers/hid/usbhid/hid-core.c b/drivers/hid/usbhid/hid-core.c
-index a90ed2ceae84..d2901ad9a871 100644
---- a/drivers/hid/usbhid/hid-core.c
-+++ b/drivers/hid/usbhid/hid-core.c
-@@ -1179,16 +1179,16 @@ static int usbhid_start(struct hid_device *hid)
- 	/* Some keyboards don't work until their LEDs have been set.
- 	 * Since BIOSes do set the LEDs, it must be safe for any device
- 	 * that supports the keyboard boot protocol.
--	 * In addition, enable remote wakeup by default for all keyboard
--	 * devices supporting the boot protocol.
- 	 */
- 	if (interface->desc.bInterfaceSubClass == USB_INTERFACE_SUBCLASS_BOOT &&
- 			interface->desc.bInterfaceProtocol ==
- 				USB_INTERFACE_PROTOCOL_KEYBOARD) {
- 		usbhid_set_leds(hid);
--		device_set_wakeup_enable(&dev->dev, 1);
- 	}
- 
-+	if (dev->actconfig->desc.bmAttributes & USB_CONFIG_ATT_WAKEUP)
-+		device_set_wakeup_enable(&dev->dev, 1);
-+
- 	mutex_unlock(&usbhid->mutex);
- 	return 0;
- 
--- 
-2.17.1
+However, it's not true that the host should try to enable remote wakeup 
+for devices other than keyboards with boot-protocol support.  History 
+has shown that quite a few HID devices don't handle remote wakeup 
+properly; the decision about whether to enable it should be left to the 
+user.
 
+Alan Stern
+
+> Signed-off-by: ryan <ryanzhou54@gmail.com>
+> ---
+>  drivers/hid/usbhid/hid-core.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/hid/usbhid/hid-core.c b/drivers/hid/usbhid/hid-core.c
+> index a90ed2ceae84..d2901ad9a871 100644
+> --- a/drivers/hid/usbhid/hid-core.c
+> +++ b/drivers/hid/usbhid/hid-core.c
+> @@ -1179,16 +1179,16 @@ static int usbhid_start(struct hid_device *hid)
+>  	/* Some keyboards don't work until their LEDs have been set.
+>  	 * Since BIOSes do set the LEDs, it must be safe for any device
+>  	 * that supports the keyboard boot protocol.
+> -	 * In addition, enable remote wakeup by default for all keyboard
+> -	 * devices supporting the boot protocol.
+>  	 */
+>  	if (interface->desc.bInterfaceSubClass == USB_INTERFACE_SUBCLASS_BOOT &&
+>  			interface->desc.bInterfaceProtocol ==
+>  				USB_INTERFACE_PROTOCOL_KEYBOARD) {
+>  		usbhid_set_leds(hid);
+> -		device_set_wakeup_enable(&dev->dev, 1);
+>  	}
+>  
+> +	if (dev->actconfig->desc.bmAttributes & USB_CONFIG_ATT_WAKEUP)
+> +		device_set_wakeup_enable(&dev->dev, 1);
+> +
+>  	mutex_unlock(&usbhid->mutex);
+>  	return 0;
+>  
+> -- 
+> 2.17.1
+> 
+> 
 
