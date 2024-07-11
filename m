@@ -1,124 +1,113 @@
-Return-Path: <linux-usb+bounces-12132-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12133-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A81692E069
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Jul 2024 08:58:09 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3051B92E0DB
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Jul 2024 09:31:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7F1D11C21ACA
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Jul 2024 06:58:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D6D77283E22
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Jul 2024 07:31:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA79B13D626;
-	Thu, 11 Jul 2024 06:57:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="iiAVYWt/"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42F6714F9F3;
+	Thu, 11 Jul 2024 07:30:29 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09A411311B6;
-	Thu, 11 Jul 2024 06:57:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FB1A14D431
+	for <linux-usb@vger.kernel.org>; Thu, 11 Jul 2024 07:30:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.69
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720681068; cv=none; b=JGplnQ49QN3JjalsVPA208zrjr+rWocNDQcs1QEYEn0JREv+qvA7ewA9mFiLu3rhCavVIYDFrCgaOxIhdIf2k3MCyZp0ANfEbhrEGQksGtJn4COJLg7G9HV8koXmoPzGxl+cVMZMvV4SAiAWLi6gDl0b7k2RQpgJgljuq0kUjRU=
+	t=1720683028; cv=none; b=LGYtrDa5mBCbsNhHhNbMfo+HACj8tPhHiN29QiZv06xTNUxfccYrX6uxuuVa9fWULwuc0l4Nt0IfMhuP9UegJX5l4OxjzYQukuc4uomKrNK04yTX8DekLrdwPUUutQ4M6CaSiWss2I9nv+wZXtOum6ii4N5UXxndlb/IcU8L5Kw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720681068; c=relaxed/simple;
-	bh=uWymqDSon2CSXk55pUNRBKKppMvTwwsTROmbIcw7vjA=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=HUi4/dPmNPkV2j28THZOXKAzXlfsuhhMrHRNZRDoSMgOVtY2o98/1JoQqJdLWJN0HIEuTBUxSc2SFOJ0sObNXq5KOmC8uo0LP4qeWdYuXaz1UsAI0hHqc4UA6TjziCQgY5Md8GV6IAHPrI/smEpvTBJ+cieM4TwrL7sLtx7ip38=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=iiAVYWt/; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46B4mmAO007428;
-	Thu, 11 Jul 2024 06:57:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	kITZnJLZKcK3CjT974AcnPC6vDsu0JNzqV7gmcgEJHk=; b=iiAVYWt/UB5PGC6/
-	ALBFHyV9i249eqbid/OuKSb41r2MjCZsPj2qJ06tytOUCHmdQvlpCQPhZEVOBNqA
-	vkkY0Jh3XevrHzamEmXmgcEQeJR2+AOv0sZ1BDaidiGW4FG2izOkHz5lNvmkkKhZ
-	CE4g1gqYXng5AezAfPIQDAohWCfYHKk3TMtHbW2mhZDDphypgMi2gSvstivymzl0
-	4UfgL1kRnq/nsMiSvDxl+qQlb4yj7pBx7LEhijwBKoh+38uyC8ENmu7cb5JLaoY7
-	aogvD1ZO7avpogNTjWzqReUt8PZby12FRv69lLaW2BbpPnU8/UJBzQsYz/8BEkj8
-	Y+uMLQ==
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 406wg43rea-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 11 Jul 2024 06:57:42 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA04.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 46B6vfsh029111
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 11 Jul 2024 06:57:41 GMT
-Received: from hu-varada-blr.qualcomm.com (10.80.80.8) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Wed, 10 Jul 2024 23:57:37 -0700
-From: Varadarajan Narayanan <quic_varada@quicinc.com>
-To: <gregkh@linuxfoundation.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
-        <conor+dt@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <quic_wcheng@quicinc.com>,
-        <johan+linaro@kernel.org>, <quic_kriskura@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC: Varadarajan Narayanan <quic_varada@quicinc.com>
-Subject: [PATCH v0 2/2] arm64: dts: qcom: ipq5332: Fix interrupt trigger type for usb
-Date: Thu, 11 Jul 2024 12:26:15 +0530
-Message-ID: <20240711065615.2720367-2-quic_varada@quicinc.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240711065615.2720367-1-quic_varada@quicinc.com>
-References: <20240711065615.2720367-1-quic_varada@quicinc.com>
+	s=arc-20240116; t=1720683028; c=relaxed/simple;
+	bh=CT2w5QA35aLjTLwarP/4uLIBR6BEN1ANVUeRxdhmPoo=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=DmYfg+aD2wUgYoCIG6en29DSh4KyvOgZRB+ViV7SmqBQ8KLzt1kyiOYuRK2HUvC8dD4weIDI3yPrkxeVZsbFHQj5mns9+ss4sk+PcLSvqiaylKDL5WXirzzztBkqiljQbwN+bMPmB7yoZobjXcx+Pchb/ibaSbIaQ4kPeZtwVsA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.69
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-800e520a01dso65286639f.3
+        for <linux-usb@vger.kernel.org>; Thu, 11 Jul 2024 00:30:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720683026; x=1721287826;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=54aAvm6LePKSlwnTq172Rk/A87OMUsHrkKd5lTJvMzw=;
+        b=KhzjC3nKUnNVC7kQ8W5Pbo63fB364N19YvkDciEn0MrtIHIhzLgDv+ZCH6lhusTaoC
+         zYLy0ffM0qK9kYJWf75SZ4+XOBtHHi92q/pWrisWRW5l2Ve5o0pEt1qVADL1oe0zFCE5
+         VVQ237HfP752/De504z2X4F4LRHUrI+njlKMk8rKhUYCIyWqzt5FoW+DrwpXq5vRGPPl
+         1tGRxEh17STsJ+qzyTibg5VCvaRb37YKNx/9qE93TngtkHYb2DwNEB+tco4qZvQLhRm7
+         pqmGsIDL/lTlnWRErkRqm3nQjjiG60Va0Cq38zYGE8ixNpJyKv1Agtc/XM6v8hVpvAht
+         /tkw==
+X-Forwarded-Encrypted: i=1; AJvYcCUKhO0825v7coYTglppz7H9h2gNQYiMAVevECNh/dvc8P+KS/dr31FP90ECsWGhPZQkdqa8fEjZAAL8ExnbAz/0rOIqukRSLNzB
+X-Gm-Message-State: AOJu0Yzll2sEjBw1lFWioFkJroHAmkSNKqGGiUiLdnnhI9dhS6sk3xSp
+	ZWMvFrtt4hK5H3STJiVuH1dmq52HMkOmnQ7nIZRIyQmaO/VkpYEXngIj0dN3oubhlxUeY0fdVrs
+	wNAAOtP3EbzFxMCh35oiuv2sgUcwvur2d+SoeNyBFi1+2g2nay39z77Q=
+X-Google-Smtp-Source: AGHT+IF/9euBIQ8zE0JKguMDceR5Txqske6VIpLr3rdn5XagQic/P7rQaUz5coAD0DCaNkSKSoUML/Ltyklv+OrBMlhbLdTOadxK
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: C8pBg98kCxrF0cgxFnN-mIZg1APYmqen
-X-Proofpoint-GUID: C8pBg98kCxrF0cgxFnN-mIZg1APYmqen
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-07-11_03,2024-07-10_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- mlxlogscore=609 clxscore=1015 impostorscore=0 malwarescore=0 mlxscore=0
- bulkscore=0 spamscore=0 adultscore=0 suspectscore=0 lowpriorityscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2406140001 definitions=main-2407110046
+X-Received: by 2002:a05:6638:24d5:b0:4c0:a8a5:81f5 with SMTP id
+ 8926c6da1cb9f-4c0b2b331c3mr630013173.4.1720683026355; Thu, 11 Jul 2024
+ 00:30:26 -0700 (PDT)
+Date: Thu, 11 Jul 2024 00:30:26 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000008ea816061cf3bc76@google.com>
+Subject: [syzbot] Monthly usb report (Jul 2024)
+From: syzbot <syzbot+listeb8d66e6043d7c79c774@syzkaller.appspotmail.com>
+To: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-Trigger type is incorrectly specified as IRQ_TYPE_EDGE_BOTH
-instead of IRQ_TYPE_LEVEL_HIGH. This trigger type is not
-supported for SPIs and results in probe failure with -EINVAL.
+Hello usb maintainers/developers,
 
-Fixes: 927173bf8a0e ("arm64: dts: qcom: Add missing interrupts for qcs404/ipq5332")
-Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+This is a 31-day syzbot report for the usb subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/usb
+
+During the period, 2 new issues were detected and 3 were fixed.
+In total, 74 issues are still open and 343 have been fixed so far.
+
+Some of the still happening issues:
+
+Ref  Crashes Repro Title
+<1>  870     Yes   general protection fault in ir_raw_event_store_with_filter
+                   https://syzkaller.appspot.com/bug?extid=34008406ee9a31b13c73
+<2>  751     Yes   INFO: task hung in uevent_show
+                   https://syzkaller.appspot.com/bug?extid=edd9fe0d3a65b14588d5
+<3>  700     Yes   INFO: task hung in usbdev_open (2)
+                   https://syzkaller.appspot.com/bug?extid=b73659f5bb96fac34820
+<4>  646     Yes   INFO: task hung in hub_port_init (3)
+                   https://syzkaller.appspot.com/bug?extid=b6f11035e572f08bc20f
+<5>  498     Yes   INFO: rcu detected stall in hub_event
+                   https://syzkaller.appspot.com/bug?extid=ec5f884c4a135aa0dbb9
+<6>  483     Yes   INFO: rcu detected stall in corrupted (4)
+                   https://syzkaller.appspot.com/bug?extid=aa7d098bd6fa788fae8e
+<7>  409     Yes   INFO: task hung in r871xu_dev_remove
+                   https://syzkaller.appspot.com/bug?extid=f39c1dad0b7db49ca4a8
+<8>  377     Yes   INFO: rcu detected stall in syscall_exit_to_user_mode (2)
+                   https://syzkaller.appspot.com/bug?extid=a68ef3b1f46bc3aced5c
+<9>  304     Yes   KASAN: use-after-free Read in v4l2_fh_init
+                   https://syzkaller.appspot.com/bug?extid=c025d34b8eaa54c571b8
+<10> 243     Yes   INFO: rcu detected stall in addrconf_rs_timer (6)
+                   https://syzkaller.appspot.com/bug?extid=fecf8bd19c1f78edb255
+
 ---
- arch/arm64/boot/dts/qcom/ipq5332.dtsi | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/arch/arm64/boot/dts/qcom/ipq5332.dtsi b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
-index 7a39e66d51f1..ff8ad1036ac7 100644
---- a/arch/arm64/boot/dts/qcom/ipq5332.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
-@@ -322,8 +322,8 @@ usb: usb@8af8800 {
- 			reg = <0x08af8800 0x400>;
- 
- 			interrupts = <GIC_SPI 62 IRQ_TYPE_LEVEL_HIGH>,
--				     <GIC_SPI 53 IRQ_TYPE_EDGE_BOTH>,
--				     <GIC_SPI 52 IRQ_TYPE_EDGE_BOTH>;
-+				     <GIC_SPI 53 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 52 IRQ_TYPE_LEVEL_HIGH>;
- 			interrupt-names = "pwr_event",
- 					  "dp_hs_phy_irq",
- 					  "dm_hs_phy_irq";
--- 
-2.34.1
+To disable reminders for individual bugs, reply with the following command:
+#syz set <Ref> no-reminders
 
+To change bug's subsystems, reply with:
+#syz set <Ref> subsystems: new-subsystem
+
+You may send multiple commands in a single email message.
 
