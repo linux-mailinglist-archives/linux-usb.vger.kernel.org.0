@@ -1,74 +1,48 @@
-Return-Path: <linux-usb+bounces-12141-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12142-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1DE4A92E2E8
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Jul 2024 11:00:25 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2600192E302
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Jul 2024 11:04:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 501CE1C2340F
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Jul 2024 09:00:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 578CD1C203B5
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Jul 2024 09:04:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0025C155A52;
-	Thu, 11 Jul 2024 09:00:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6796115574C;
+	Thu, 11 Jul 2024 09:03:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Pqcntlhs"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y7kzFF/1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3622A15573B
-	for <linux-usb@vger.kernel.org>; Thu, 11 Jul 2024 09:00:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFCC714F9E5;
+	Thu, 11 Jul 2024 09:03:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720688402; cv=none; b=XU8iVK58nMlizXGrYxVhgsELJIaGr3rqlptJlwpVHzMG0l7T88JE2JkH1CeZbSYYuzlFo0la1YJeMo7IGaQ2vMGb3MG1qdwmVDoqjWN+P+jD0dKjHiKiMgUV89Ai868KKGJY/MA1jC52mUqfs/UngrOVAt6ez5+zhRg6Y/znGE0=
+	t=1720688612; cv=none; b=uQZFeKW9hFsrJ9E4B9dXpEw9bX2ohqo4n80IY7MdI+wsKPay+wfCBm13dSya8V4mMcfhjwE6DaEXDCLi+gBbeO6wcOLUZv7PoY8c96uZ+CyrVyXaLt+TlvjVHQuKZvSXVhjGfSRSfpFZtUFMLLzLR7VJFSMg7tnVlEVOszXEK8U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720688402; c=relaxed/simple;
-	bh=Kf/OlZEIAfKJfskw1GEmYoycLqweYJlEWfMIyhbvHgs=;
+	s=arc-20240116; t=1720688612; c=relaxed/simple;
+	bh=LGXu2f+ne3Pa6dQNTyj0b356prG0u1EZevfQ4skWBt0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SFs6bpUlMclarTjjOhkO7Z/lqzsbxvetUHEn2ViKf9IhPsZ1QznF3EwiLfJ8IksS4yGrQqpaOJtf0ufGA7cZpUPnd2IeB7mPBQq2XpU2JO5Frl44GlYkBQrLtMC9NAABcKRm1svJGrnOV3LmIvlFQOzejmRIsJnItss6eXubq6Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Pqcntlhs; arc=none smtp.client-ip=209.85.208.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-2eabd22d3f4so6615781fa.1
-        for <linux-usb@vger.kernel.org>; Thu, 11 Jul 2024 01:59:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1720688398; x=1721293198; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9TQVNqV/55qcmWSodfaodGl8kIRqYK6zmB9ZbQbvagA=;
-        b=Pqcntlhs0Dl16Hh/ylpYKQSEYxGkkc9PZ9e5W5QmqD7L/2W6t0xmYodnKtuCal241r
-         6CKQo+i/Ci/Q0kOWuDZOO3Jb4GoHgdf1gaAPSpeSbgInmx1XAOA0W3PxFRuDciLA3Hhi
-         Vs2aYGGK6R+v1+KiRCpo5Mc03HU+wBT8UZeUGPNcBA+mYJb7RWOAfLHtP5+tz4p95L+z
-         fpAJShevnRoxBRBWeepfESOviiBNUNU5f0YtopVhaU6A8HVdqhfB7EWINizfpxZrjYwO
-         qPVWjZpW2sFcoOEhjaszedTUlbsIloF4ef0FBuaUcsj36JqJZ6gkt6Z0fumPaUDoMpcw
-         dYJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720688398; x=1721293198;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9TQVNqV/55qcmWSodfaodGl8kIRqYK6zmB9ZbQbvagA=;
-        b=XDwT38hu1kLE0B6kg0kaAit006snsnndIK/TXE86tuhbEIJxFRoYWAIIjEA6O3Zy8J
-         OzuOvMlHKgPn1Lfducm1I9lp772b1sKCs4oxfOlC/MFJ/2H3krzHvnmuTDjVn0uQE506
-         88gFyyMA6ollh6SThF47lxCm8rhr/zri4cVOKQbATfIAWCuvWDB8Dvt955SAyLz5emEa
-         uvWx4f12xYNC9Nkv/8Ba+oxXf1smYQwIfFQCCdj786D7dqXINHfGdA3uMfUDXJIKVu8/
-         deR96xkfI+2ymb2fT/MGcDqHU1QzuRqSdINDNQf6LWsLhMuhEEyvHbzOXguKj+wHQBGA
-         lLRw==
-X-Forwarded-Encrypted: i=1; AJvYcCWOGYz90MZRnPFJ4HmqSmSBl8UVYV4Fp5dkTqTkIXmricZmVqWCDbXQO7XitGkFCTMXiDciLdv13JuwlTumK5v9JXUWsgDaHLI/
-X-Gm-Message-State: AOJu0Yz1DEtLDJKVqD4w9DiTpamgt9LbKUTWi6ENaGDpRtrAlpez74fB
-	60jb3/9IJcsh5xExL5MJH8VVL3GBSJDFIZgRls7ngg0UaMqhnPCnCK2miO/heOc=
-X-Google-Smtp-Source: AGHT+IHc18o4aVyduopTkQAgdU/QnaNP+1ksS70cAtHQ0NH2O6pxD9zY29Hfwo70ZeQyHbs0jq5ycw==
-X-Received: by 2002:a05:651c:1025:b0:2ee:8b58:5ebc with SMTP id 38308e7fff4ca-2eeb30fee32mr53398011fa.29.1720688398055;
-        Thu, 11 Jul 2024 01:59:58 -0700 (PDT)
-Received: from ?IPV6:2001:a61:137b:5001:be5a:c750:b487:ff1b? ([2001:a61:137b:5001:be5a:c750:b487:ff1b])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42662315363sm189294335e9.26.2024.07.11.01.59.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Jul 2024 01:59:57 -0700 (PDT)
-Message-ID: <527927b8-9475-47da-bf2b-7a5d9e81e470@suse.com>
-Date: Thu, 11 Jul 2024 10:59:56 +0200
+	 In-Reply-To:Content-Type; b=pnt9PO4zl9TuTWhdpVWmCBTDR2NBVq6FFm1CfDqaseF58bZNAOYiyPxmjhS4YJx7tT6fHOKDnwqXpBblIcxg/6Qc/OI4hQehKpANg+bWkYEPv5b/zhEQbLuMBuR423TmGdUJwCksuReBLJHPB8UQExm6GTGDwoQWnPGq8JXhEJg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y7kzFF/1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E240C116B1;
+	Thu, 11 Jul 2024 09:03:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1720688610;
+	bh=LGXu2f+ne3Pa6dQNTyj0b356prG0u1EZevfQ4skWBt0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Y7kzFF/1hcd531fRFM18HJf/STpggnHpTEoJpbXPuQw6+ehkq1a/Ct5lowQLmyf7R
+	 NjavW4sgLRtZ/uieXg7iER5o/MVd3iLlcTkDWKtikXmKiQmKyVq8GvCwlG/RG76uwO
+	 OrEQZRXf4FNdKR9u3tLZkHwiUoGIDtba3M9MlRfTKLR8MtcuxoxaLKr7yQLqNJILLs
+	 ndiPWYMj6LTdfIiGF3bW5CUjjgw2xvsvYIpxFMX04oHGOxCnRJpnyoWz2jrBTvSpRZ
+	 GAsNBpQsm6ShECIoRFcp6OtetF3jNYur1vHfPavACNvCdBT9CpO2YNxCLGtfKay/JK
+	 qbna+otpAnPfA==
+Message-ID: <a908a3fb-22f0-4ee5-9550-bc716debd4aa@kernel.org>
+Date: Thu, 11 Jul 2024 11:03:22 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -76,40 +50,88 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH next] usb: usbfs: Add reset_resume for usbfs
-To: Hongyu Xie <xiehongyu1@kylinos.cn>, gregkh@linuxfoundation.org
-Cc: brauner@kernel.org, jlayton@kernel.org, jack@suse.cz,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240711084321.44916-1-xiehongyu1@kylinos.cn>
+Subject: Re: [PATCH v0 1/2] dt-bindings: usb: qcom,dwc3: Add minItems for
+ interrupt info
+To: Varadarajan Narayanan <quic_varada@quicinc.com>
+Cc: gregkh@linuxfoundation.org, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+ quic_wcheng@quicinc.com, johan+linaro@kernel.org, quic_kriskura@quicinc.com,
+ linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240711065615.2720367-1-quic_varada@quicinc.com>
+ <5fb21a62-9c9e-45ed-bf3f-c4d54f243886@kernel.org>
+ <Zo+cDxiog/IXdt9S@hu-varada-blr.qualcomm.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <20240711084321.44916-1-xiehongyu1@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <Zo+cDxiog/IXdt9S@hu-varada-blr.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-
-
-On 11.07.24 10:43, Hongyu Xie wrote:
-> During hibernation, usb_resume_interface will set needs_binding to 1 if
-> the usb_driver has no reset_resume implimentation. The USB interface
-> will be rebind after usb_resume_complete.
+On 11/07/2024 10:47, Varadarajan Narayanan wrote:
+> On Thu, Jul 11, 2024 at 09:47:23AM +0200, Krzysztof Kozlowski wrote:
+>> On 11/07/2024 08:56, Varadarajan Narayanan wrote:
+>>> IPQ5332 has only three interrupts. Update min items
+>>> accordingly for interrupt names to fix the following
+>>> dt_binding_check errors.
+>>>
+>>> 	interrupt-names: ['pwr_event', 'dp_hs_phy_irq', 'dm_hs_phy_irq'] is too short
+>>>
+>>> Fixes: a5c7592366af ("dt-bindings: usb: qcom,dwc3: add SC8280XP binding")
+>>
+>> There is no ipq5332 at this commit, so I do not understand which bug are
+>> you fixing.
 > 
-> Normally, that's fine. But if a USB interface has a matched kernel
-> driver, and a userspace driver or application is using this USB
-> interface through usbfs during hibernation, usbfs will be
-> detatched with the USB interface after resume. And this USB interface
-> will be bind with a kernel driver instead of usbfs.
-> 
-> So add reset_resume to fix this.
+> a5c7592366af introduced this interrupt and interrupt-names block. Later, 53c6d854be4e9 added ipq5332 to this section. Since a5c7592366af introduced the maxItems and I wanted to include minItems also (to accomodate ipq5332) I used a5c7592366af in the fixes tag. Will 53c6d854be4e9 be a more appropriate choice?
 
-The device has lost all settings, yet we continue like nothing
-changed. That strikes me as a very bad idea. If a device has undergone
-a reset user space has not requested, we need to return an error upon
-the next interaction.
+At least a5c7592366af cannot be, because there is no bug in
+a5c7592366af. Otherwise please explain what bug is present at time of
+a5c7592366af?
 
-I am sorry, but this implementation has some fundamental issues.
 
-	Regards
-		Oliver
-  
+Best regards,
+Krzysztof
+
 
