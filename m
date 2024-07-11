@@ -1,176 +1,277 @@
-Return-Path: <linux-usb+bounces-12146-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12147-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4FE092E3AF
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Jul 2024 11:43:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4CBE092E3C0
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Jul 2024 11:51:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0792AB2148C
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Jul 2024 09:43:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7040A1C211AF
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Jul 2024 09:51:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4729515747C;
-	Thu, 11 Jul 2024 09:43:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E03B1553BC;
+	Thu, 11 Jul 2024 09:51:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="PkaEpaNW"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dkTzfi7w"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58F3776034;
-	Thu, 11 Jul 2024 09:43:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79A8B14C583
+	for <linux-usb@vger.kernel.org>; Thu, 11 Jul 2024 09:51:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720691026; cv=none; b=noagUcZTfC4ypww+s8jPtZrjXL9680184kgGAWozrDJVQ6BkiCAEXooo2NXK3J0+KhF6FgitxHjAYZLGDmhBwbfDSTUQ4kK9rNesMDx60MFqcBzkBwrZt3q+mFewqedDdKOZ7FRL4ILJ3kh+p8w2QL1lJR5p5V8YTVI1goF1uE4=
+	t=1720691482; cv=none; b=WAiWB8292rGOFgvao1QM+snLhZN5Dmw04TSZCj609jBOCYGXUNnEG4XdtshzsOAiLnlDYxwQtKPa0/bgujv4giDgmY5hf/kVxw2gxuE+m6Y61mNnc6hhCJbj3sWba1oXMY+Hj+PUA+FohObpLcdWAO9RZofEHv9JW80E1EMX6hU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720691026; c=relaxed/simple;
-	bh=lxeC2HRksD/2EGtekqXvQBbesVtQRF93t8d10rL4PLc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=mf2Z97H7pJiKZDzAupbN3t3RJWXWT1ZAdyxRas0e11cI8/HdHeZS7VsZ4RmfEG6zHFVikyZYQeM5Ax5uG9BOkF3aq7MDHoyCN9h55ohlhV1BHW3Aeq+XH/csg31ziLME+5/kxzYZZj1sZCo/AeL087kS/c0GFn16XBELMeFubK8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=PkaEpaNW; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46B4mjJb024418;
-	Thu, 11 Jul 2024 09:43:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	vBJCEU/0J5y5AI2xVAzJBP/pcTBiq107ZH5xXFu89Jw=; b=PkaEpaNW1rktVuRw
-	OWlfeaCSYlyMzDE0CcHf5nAb17dS6nJHYEOXKa8ZDsxeT9v8UP3si7QUzV1d7zkN
-	7WlePZuCfrnPgIeeAfeXBuWBmC+oXcv1ETtagARQuXOziqdNjBJN59EHvFjjxn5v
-	kfM/EbptxZr57RfVxXl1iRTD4yDEf/BCDh5eIAAw7awIT47R/gu2h6FgsqBON2a9
-	a/TAj3eNXNiZHnF7S86KZZhPz9QFMNIOY7+Uoil+BzTmvjUwHrFE5DKRzIjW8GsU
-	/hzwVIoXFOfkg2zMIlLoF1XoczJASKNKb13RczcPeDMeCglwLWlHlrMsKjb2go5b
-	ip6IqA==
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 406x0tc624-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 11 Jul 2024 09:43:38 +0000 (GMT)
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-	by NASANPPMTA01.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 46B9hbYf008995
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 11 Jul 2024 09:43:37 GMT
-Received: from [10.217.219.148] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Thu, 11 Jul
- 2024 02:43:30 -0700
-Message-ID: <0f3fe4b4-5451-480e-a9e4-11ee921521b9@quicinc.com>
-Date: Thu, 11 Jul 2024 15:13:27 +0530
+	s=arc-20240116; t=1720691482; c=relaxed/simple;
+	bh=om72R0e4m5zPNwZrFeZSkkcuMewkZf9f5svbjoc0P+s=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=qOhr1mMTeqZRkDSZoAgZo6TbpF14rfDzNmjEt8zt5PhY4WCKIQ/ZopfvFXIOGcPrzw8d0jcmhFbwJobbD5rBMZwzriEFYqGTADndKDTBPUgq1RgzvP1tlS9aR83+6Sg+7Fn6eQtRV+TRnGR80WbXjK/gNFabCSJSJznzgaX9/ik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dkTzfi7w; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1720691481; x=1752227481;
+  h=date:from:to:cc:subject:message-id;
+  bh=om72R0e4m5zPNwZrFeZSkkcuMewkZf9f5svbjoc0P+s=;
+  b=dkTzfi7wnYKc4jkM3qm8xS/OD35QK+rDu7GY98TsLhwWoDMjSmhoZgv9
+   Fb8L/zzB/5HkjkCAL/+7ak1oRQvp6PAht0LnhnSMg7w737OyYI+U3gqwK
+   +VlMQsppygpRiICfaowxdgB7BlQEMfK8gMS8b7+aljlvWFpgsl39z8B3Z
+   eVVUeHGUpVmFNg8+lPSbfQF3MVLvG/eIqVPikZuAKV3NUUDLlwfoKJP0k
+   tDQUyKMCsrGabRoExMSIpPm1FF4rpNqFA+6WVCoabijLYIp9+ywYp67eX
+   yQv5fuRFWvJPwrN8LwUBSJ4ckGOH1yPrDCfJHj6UoUpec7Ea5giIMZnlK
+   Q==;
+X-CSE-ConnectionGUID: XuRybnuoRea2x+VC+omLYg==
+X-CSE-MsgGUID: 3srSX6GJRjWaOjorAAZmuw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11129"; a="21876441"
+X-IronPort-AV: E=Sophos;i="6.09,199,1716274800"; 
+   d="scan'208";a="21876441"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2024 02:51:20 -0700
+X-CSE-ConnectionGUID: 2QrnaiweR+KwLSN258etwg==
+X-CSE-MsgGUID: mSyQGiodQhC5jIB1lwEjLw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,199,1716274800"; 
+   d="scan'208";a="48497557"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 11 Jul 2024 02:51:19 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sRqSK-000Z7M-1C;
+	Thu, 11 Jul 2024 09:51:16 +0000
+Date: Thu, 11 Jul 2024 17:50:25 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ e60284b63245b84c3ae352427ed5ff8b79266b91
+Message-ID: <202407111723.HxWwUtmj-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] usb: gadget: uvc: Add H264 frame format support
-Content-Language: en-US
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC: Thinh Nguyen <Thinh.Nguyen@synopsys.com>, Felipe Balbi <balbi@kernel.org>,
-        Jack Pham <quic_jackp@quicinc.com>, <kernel@quicinc.com>,
-        Wesley Cheng
-	<quic_wcheng@quicinc.com>,
-        Laurent Pinchart
-	<laurent.pinchart@ideasonboard.com>,
-        Daniel Scally
-	<dan.scally@ideasonboard.com>,
-        Vijayavardhan Vennapusa
-	<quic_vvreddy@quicinc.com>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20240711082304.1363-1-quic_akakum@quicinc.com>
- <2024071126-napped-cobbler-4693@gregkh>
-From: AKASH KUMAR <quic_akakum@quicinc.com>
-In-Reply-To: <2024071126-napped-cobbler-4693@gregkh>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: b8iaPYtXhLXRpz49BumE2R96or7rduPd
-X-Proofpoint-ORIG-GUID: b8iaPYtXhLXRpz49BumE2R96or7rduPd
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-07-11_06,2024-07-10_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 bulkscore=0
- lowpriorityscore=0 impostorscore=0 adultscore=0 suspectscore=0
- phishscore=0 mlxlogscore=800 priorityscore=1501 malwarescore=0 spamscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2406140001 definitions=main-2407110068
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: e60284b63245b84c3ae352427ed5ff8b79266b91  usb: gadget: f_uac2: fix non-newline-terminated function name
 
-On 7/11/2024 2:37 PM, Greg Kroah-Hartman wrote:
-> On Thu, Jul 11, 2024 at 01:53:04PM +0530, Akash Kumar wrote:
->> Add support for framebased frame format which can be used to support
->> multiple formats like H264 or H265 other than mjpeg and YUV frames.
->>
->> Framebased format is set to H264 by default, which can be updated to
->> other formats by updating the GUID through guid configfs attribute.
->> Using Different structures for all 3 formats as H264 has different
->> structure than mjpeg and uncompressed which will be paased to
->> frame make func based on active format instead of common frame
->> structure, have updated all apis in driver accordingly.
->> h264 is not recognized by hosts machine during enumeration
->> with common frame structure, so we need to pass h264 frame
->> structure separately.
->>
->> Signed-off-by: Akash Kumar <quic_akakum@quicinc.com>
->> ---
->>   .../ABI/testing/configfs-usb-gadget-uvc       |  88 ++-
->>   drivers/usb/gadget/function/uvc_configfs.c    | 570 +++++++++++++++---
->>   drivers/usb/gadget/function/uvc_configfs.h    |  34 +-
->>   drivers/usb/gadget/function/uvc_v4l2.c        |  80 ++-
->>   include/uapi/linux/usb/video.h                |  62 ++
->>   5 files changed, 714 insertions(+), 120 deletions(-)
->>
->> Changes for v2:
->> - Added H264 frame format Details in Documentation/ABI/
->>    and new configsfs attribute path for mjpeg and
->>    uncompresseed formats.
->>
->> diff --git a/Documentation/ABI/testing/configfs-usb-gadget-uvc b/Documentation/ABI/testing/configfs-usb-gadget-uvc
->> index 4feb692c4c1d..2580083cdcc5 100644
->> --- a/Documentation/ABI/testing/configfs-usb-gadget-uvc
->> +++ b/Documentation/ABI/testing/configfs-usb-gadget-uvc
->> @@ -224,13 +224,13 @@ Description:	Additional color matching descriptors
->>   					  white
->>   		========================  ======================================
->>   
->> -What:		/config/usb-gadget/gadget/functions/uvc.name/streaming/mjpeg
->> -Date:		Dec 2014
->> +What:		/config/usb-gadget/gadget/functions/uvc.name/streaming/mjpeg/name
-> You are changing an existing api, how will all existing code handle 
-> this? Will it not break? What is ensuring that this will work as-is ok?
-> I have modified all existing apis in kernel and have handled it and 
-> all existing formats
-are working along with H264 in this change. Only user needs to change 
-configfs parameter
-path according to updated path in documentation in Userspace.Currently 
-H264 doesn't work with same
-structure and we need add it differently as a result these configfs 
-paths are getting updated.
-Daniel and Laurent can you suggest if it ok?
->> -#define UVCG_FRAME_ATTR(cname, aname, bits) \
->> -static ssize_t uvcg_frame_##cname##_show(struct config_item *item, char *page)\
->> +#define UVCG_FRAME_ATTR(cname, fname, bits) \
->> +static ssize_t uvcg_frame_##fname##_##cname##_show(struct config_item *item, char *page)\
->>   {									\
->>   	struct uvcg_frame *f = to_uvcg_frame(item);			\
->>   	struct f_uvc_opts *opts;					\
->> @@ -1936,14 +1941,14 @@ static ssize_t uvcg_frame_##cname##_show(struct config_item *item, char *page)\
->>   	opts = to_f_uvc_opts(opts_item);				\
->>   									\
->>   	mutex_lock(&opts->lock);					\
->> -	result = sprintf(page, "%u\n", f->frame.cname);			\
->> +	result = scnprintf(page, PAGE_SIZE, "%u\n", f->frame.fname.cname);\
-> sysfs_emit() is made for this.
+elapsed time: 1178m
 
-Sure, will change.
+configs tested: 184
+configs skipped: 7
 
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Thanks,
-Akash
+tested configs:
+alpha                             allnoconfig   gcc-13.2.0
+alpha                            allyesconfig   gcc-13.3.0
+alpha                               defconfig   gcc-13.2.0
+arc                              allmodconfig   gcc-13.2.0
+arc                               allnoconfig   gcc-13.2.0
+arc                              allyesconfig   gcc-13.2.0
+arc                          axs103_defconfig   gcc-13.2.0
+arc                                 defconfig   gcc-13.2.0
+arc                   randconfig-001-20240711   gcc-13.2.0
+arc                   randconfig-002-20240711   gcc-13.2.0
+arm                              allmodconfig   gcc-13.2.0
+arm                               allnoconfig   gcc-13.2.0
+arm                              allyesconfig   gcc-13.2.0
+arm                       aspeed_g4_defconfig   gcc-13.2.0
+arm                                 defconfig   gcc-13.2.0
+arm                   milbeaut_m10v_defconfig   gcc-13.2.0
+arm                            mps2_defconfig   clang-19
+arm                            qcom_defconfig   clang-19
+arm                   randconfig-001-20240711   gcc-13.2.0
+arm                   randconfig-002-20240711   gcc-13.2.0
+arm                   randconfig-003-20240711   gcc-13.2.0
+arm                   randconfig-004-20240711   gcc-13.2.0
+arm                          sp7021_defconfig   clang-19
+arm64                            allmodconfig   gcc-13.2.0
+arm64                             allnoconfig   gcc-13.2.0
+arm64                               defconfig   clang-19
+arm64                               defconfig   gcc-13.2.0
+arm64                 randconfig-001-20240711   gcc-13.2.0
+arm64                 randconfig-002-20240711   gcc-13.2.0
+arm64                 randconfig-003-20240711   gcc-13.2.0
+arm64                 randconfig-004-20240711   gcc-13.2.0
+csky                              allnoconfig   gcc-13.2.0
+csky                                defconfig   gcc-13.2.0
+csky                  randconfig-001-20240711   gcc-13.2.0
+csky                  randconfig-002-20240711   gcc-13.2.0
+hexagon                          allmodconfig   clang-19
+hexagon                          allyesconfig   clang-19
+i386                             allmodconfig   clang-18
+i386                              allnoconfig   clang-18
+i386                             allyesconfig   clang-18
+i386         buildonly-randconfig-001-20240711   gcc-13
+i386         buildonly-randconfig-002-20240711   gcc-13
+i386         buildonly-randconfig-003-20240711   gcc-13
+i386         buildonly-randconfig-004-20240711   gcc-13
+i386         buildonly-randconfig-005-20240711   gcc-13
+i386         buildonly-randconfig-006-20240711   gcc-13
+i386                                defconfig   clang-18
+i386                  randconfig-001-20240711   gcc-13
+i386                  randconfig-002-20240711   gcc-13
+i386                  randconfig-003-20240711   gcc-13
+i386                  randconfig-004-20240711   gcc-13
+i386                  randconfig-005-20240711   gcc-13
+i386                  randconfig-006-20240711   gcc-13
+i386                  randconfig-011-20240711   gcc-13
+i386                  randconfig-012-20240711   gcc-13
+i386                  randconfig-013-20240711   gcc-13
+i386                  randconfig-014-20240711   gcc-13
+i386                  randconfig-015-20240711   gcc-13
+i386                  randconfig-016-20240711   gcc-13
+loongarch                        allmodconfig   gcc-13.3.0
+loongarch                         allnoconfig   gcc-13.2.0
+loongarch                           defconfig   gcc-13.2.0
+loongarch             randconfig-001-20240711   gcc-13.2.0
+loongarch             randconfig-002-20240711   gcc-13.2.0
+m68k                             allmodconfig   gcc-13.3.0
+m68k                              allnoconfig   gcc-13.2.0
+m68k                             allyesconfig   gcc-13.3.0
+m68k                                defconfig   gcc-13.2.0
+m68k                       m5249evb_defconfig   gcc-13.2.0
+microblaze                       allmodconfig   gcc-13.2.0
+microblaze                       allmodconfig   gcc-13.3.0
+microblaze                        allnoconfig   gcc-13.2.0
+microblaze                       allyesconfig   gcc-13.2.0
+microblaze                       allyesconfig   gcc-13.3.0
+microblaze                          defconfig   gcc-13.2.0
+mips                              allnoconfig   gcc-13.2.0
+mips                         db1xxx_defconfig   clang-19
+nios2                             allnoconfig   gcc-13.2.0
+nios2                               defconfig   gcc-13.2.0
+nios2                 randconfig-001-20240711   gcc-13.2.0
+nios2                 randconfig-002-20240711   gcc-13.2.0
+openrisc                          allnoconfig   gcc-13.2.0
+openrisc                          allnoconfig   gcc-13.3.0
+openrisc                         allyesconfig   gcc-13.3.0
+openrisc                            defconfig   gcc-13.2.0
+parisc                           allmodconfig   gcc-13.3.0
+parisc                            allnoconfig   gcc-13.2.0
+parisc                            allnoconfig   gcc-13.3.0
+parisc                           allyesconfig   gcc-13.3.0
+parisc                              defconfig   gcc-13.2.0
+parisc                randconfig-001-20240711   gcc-13.2.0
+parisc                randconfig-002-20240711   gcc-13.2.0
+parisc64                            defconfig   gcc-13.2.0
+powerpc                          allmodconfig   gcc-13.3.0
+powerpc                           allnoconfig   gcc-13.2.0
+powerpc                           allnoconfig   gcc-13.3.0
+powerpc                          allyesconfig   gcc-13.3.0
+powerpc                      chrp32_defconfig   gcc-13.2.0
+powerpc                       ebony_defconfig   clang-19
+powerpc                  mpc866_ads_defconfig   gcc-13.2.0
+powerpc                      pcm030_defconfig   gcc-13.2.0
+powerpc                         ps3_defconfig   clang-19
+powerpc               randconfig-001-20240711   gcc-13.2.0
+powerpc               randconfig-002-20240711   gcc-13.2.0
+powerpc               randconfig-003-20240711   gcc-13.2.0
+powerpc                     redwood_defconfig   gcc-13.2.0
+powerpc                  storcenter_defconfig   gcc-13.2.0
+powerpc                     stx_gp3_defconfig   clang-19
+powerpc                         wii_defconfig   clang-19
+powerpc64             randconfig-001-20240711   gcc-13.2.0
+powerpc64             randconfig-002-20240711   gcc-13.2.0
+powerpc64             randconfig-003-20240711   gcc-13.2.0
+riscv                            allmodconfig   gcc-13.3.0
+riscv                             allnoconfig   gcc-13.2.0
+riscv                             allnoconfig   gcc-13.3.0
+riscv                            allyesconfig   gcc-13.3.0
+riscv                               defconfig   gcc-13.2.0
+riscv             nommu_k210_sdcard_defconfig   gcc-13.2.0
+riscv                 randconfig-001-20240711   gcc-13.2.0
+riscv                 randconfig-002-20240711   gcc-13.2.0
+s390                             allmodconfig   clang-19
+s390                              allnoconfig   clang-19
+s390                              allnoconfig   gcc-13.2.0
+s390                             allyesconfig   clang-19
+s390                             allyesconfig   gcc-13.2.0
+s390                                defconfig   gcc-13.2.0
+s390                  randconfig-001-20240711   gcc-13.2.0
+s390                  randconfig-002-20240711   gcc-13.2.0
+sh                               allmodconfig   gcc-13.3.0
+sh                                allnoconfig   gcc-13.2.0
+sh                               allyesconfig   gcc-13.3.0
+sh                                  defconfig   gcc-13.2.0
+sh                          polaris_defconfig   gcc-13.2.0
+sh                    randconfig-001-20240711   gcc-13.2.0
+sh                    randconfig-002-20240711   gcc-13.2.0
+sh                           se7751_defconfig   gcc-13.2.0
+sparc                            allmodconfig   gcc-13.3.0
+sparc64                             defconfig   gcc-13.2.0
+sparc64               randconfig-001-20240711   gcc-13.2.0
+sparc64               randconfig-002-20240711   gcc-13.2.0
+um                               allmodconfig   clang-19
+um                               allmodconfig   gcc-13.3.0
+um                                allnoconfig   clang-17
+um                                allnoconfig   gcc-13.2.0
+um                               allyesconfig   gcc-13
+um                               allyesconfig   gcc-13.3.0
+um                                  defconfig   gcc-13.2.0
+um                             i386_defconfig   gcc-13.2.0
+um                    randconfig-001-20240711   gcc-13.2.0
+um                    randconfig-002-20240711   gcc-13.2.0
+um                           x86_64_defconfig   gcc-13.2.0
+x86_64                            allnoconfig   clang-18
+x86_64                           allyesconfig   clang-18
+x86_64       buildonly-randconfig-001-20240711   clang-18
+x86_64       buildonly-randconfig-002-20240711   clang-18
+x86_64       buildonly-randconfig-003-20240711   clang-18
+x86_64       buildonly-randconfig-004-20240711   clang-18
+x86_64       buildonly-randconfig-005-20240711   clang-18
+x86_64       buildonly-randconfig-006-20240711   clang-18
+x86_64                              defconfig   clang-18
+x86_64                randconfig-001-20240711   clang-18
+x86_64                randconfig-002-20240711   clang-18
+x86_64                randconfig-003-20240711   clang-18
+x86_64                randconfig-004-20240711   clang-18
+x86_64                randconfig-005-20240711   clang-18
+x86_64                randconfig-006-20240711   clang-18
+x86_64                randconfig-011-20240711   clang-18
+x86_64                randconfig-012-20240711   clang-18
+x86_64                randconfig-013-20240711   clang-18
+x86_64                randconfig-014-20240711   clang-18
+x86_64                randconfig-015-20240711   clang-18
+x86_64                randconfig-016-20240711   clang-18
+x86_64                randconfig-071-20240711   clang-18
+x86_64                randconfig-072-20240711   clang-18
+x86_64                randconfig-073-20240711   clang-18
+x86_64                randconfig-074-20240711   clang-18
+x86_64                randconfig-075-20240711   clang-18
+x86_64                randconfig-076-20240711   clang-18
+x86_64                          rhel-8.3-rust   clang-18
+xtensa                            allnoconfig   gcc-13.2.0
+xtensa                  cadence_csp_defconfig   gcc-13.2.0
+xtensa                randconfig-001-20240711   gcc-13.2.0
+xtensa                randconfig-002-20240711   gcc-13.2.0
+xtensa                    smp_lx200_defconfig   gcc-13.2.0
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
