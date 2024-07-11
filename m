@@ -1,119 +1,146 @@
-Return-Path: <linux-usb+bounces-12139-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12140-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD45092E29D
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Jul 2024 10:43:37 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4449892E2AF
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Jul 2024 10:47:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 40C2B2859D3
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Jul 2024 08:43:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C86D7B21174
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Jul 2024 08:47:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 447EA15250C;
-	Thu, 11 Jul 2024 08:43:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CE36154C09;
+	Thu, 11 Jul 2024 08:47:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="i3LtjVgC"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8185C78283;
-	Thu, 11 Jul 2024 08:43:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FD6012BF02;
+	Thu, 11 Jul 2024 08:47:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720687411; cv=none; b=oO23ncdJcgnxD5nlAnkmRb3aDYI15XcCh2yVSOGwuYYjlD2SDY2zm1J1kxu6woxg+W4lQfzXZxxurvg5pwp9aF0EvkU+I5TCnt1KEU9mFax3hKzW3vNrETb8u+L3Qw1KekB+htYwasL0kAB8cVjynq21wzHsDzihcER/lFJei2o=
+	t=1720687646; cv=none; b=rnnI8+5TJ2zu69aIm+B9KjGejC0dkgauFNKsw7gwAeBqoGEDVJHuhoI63Pawj6Aq9wVjNJ5SEDg0TytwcNc7ib9Na8PViQM94wgkl8QLJ+RWuzGUGV6XS6W4Wb1w879XZ50HBqcBU6JITDjt/wV4ZK6YwcywROvnkDqWswrOZ14=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720687411; c=relaxed/simple;
-	bh=3Ih/lm7QXJqZDZmmBWIqjoo6KPLaLwCxI6zVQJrKHtw=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=JL+bkqT4CTn184rdKJkYpv/7mhs/cQorDXx/locTJW7BdL3NGjt8SVx0omTXJFsHax3xMTPOGzxdoU2XEN9s8fK0SPVsTK/I3aENMeYQlf75SiguZpxSwJaoRhn+3SCkLY3McnwTQ4nwq9DIWPgOd8FYHVSt+lSjShv1gO0+WTM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-70af2b1a35aso515925b3a.1;
-        Thu, 11 Jul 2024 01:43:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720687408; x=1721292208;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wcSuUAbudwUQC1/YmfPyNbFicLu/cAqT4mx6S8tQT58=;
-        b=J9fp9CpQdhQU7h7f5bby4Mn2ymXXKxjdIvOlna4McrGhTkkrXw9tlfUmntEgEQHNR3
-         VkKyWjB3sNcqGtN6csMkrfwtZ83eDBgD3CSuvJ939kMHnwROsrFky+tDNuFXn05Ju7h8
-         kvdd7UuUU6aOuIqVXKW5xIX8vrNk+RmZzlIoW5KO2MMLuKl+8Wtow9tzyrWI1o+yDNwN
-         w/8FT6cmLXeU/c8TTnRlp32Kn+ymlKqDRS9mgkSAdzz8gzzblKNvyCNxqiaBUOdNDSlB
-         r8H+Prja7TmWxm3Kk6AP9JMJ65weJU62+9GoymlmCr1oPQIJ77k+hM2NSaMVlyixvgmY
-         uziA==
-X-Forwarded-Encrypted: i=1; AJvYcCU7UXkIZYRW8GXCjzw7XEqfWowfCNCm5Z3EUVY+jLtWar3Yqr3kjGVfV8uglkXfgJs9PlZIk76dK3ESWXgtnCxjLI2Zn51TS5ALxA0eV4Z20GhjkdkTusrY1h1ujIEw61w2waF613Tg
-X-Gm-Message-State: AOJu0Yzbexa+TKCQvhVGmgHb8B8yK5ncixAR5g42hEUPYvpILI0c66/t
-	WOnzLPd4WBOZz+oIB/b3gSAdrs7eAZ95OaTj+p2QHFwAMwc7LvnZGPbg2Mkqd0Cu2A==
-X-Google-Smtp-Source: AGHT+IFNTCeBwYnSATF4CAYjcNXdYzI8De3Rb96vSVzVauhm7s+zeJIwmav9SvADkWgl7Vhg2kgE1A==
-X-Received: by 2002:a05:6a00:4650:b0:706:6248:93e with SMTP id d2e1a72fcca58-70b43522345mr9062405b3a.1.1720687407610;
-        Thu, 11 Jul 2024 01:43:27 -0700 (PDT)
-Received: from js-pc.. ([2408:8453:10:1e58:b448:78db:2fd2:8dd3])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70b43984adcsm5103591b3a.162.2024.07.11.01.43.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Jul 2024 01:43:27 -0700 (PDT)
-From: Hongyu Xie <xiehongyu1@kylinos.cn>
-To: gregkh@linuxfoundation.org
-Cc: brauner@kernel.org,
-	jlayton@kernel.org,
-	xiehongyu1@kylinos.cn,
-	jack@suse.cz,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH next] usb: usbfs: Add reset_resume for usbfs
-Date: Thu, 11 Jul 2024 16:43:21 +0800
-Message-Id: <20240711084321.44916-1-xiehongyu1@kylinos.cn>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1720687646; c=relaxed/simple;
+	bh=d8GpfJ2Q1PfZDN0jCBnDHCEhlArsUTNAUFulOADfJEo=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nb5GuF7lR71VSKnYAme74PNRjYisziLa2nTXkrkeig8cQjRkktxUVMRRUoYTcJ/lPzs12y05OQeXyLLyshMhgaqqWDpweKefmVdWFNa2VAbHfL0YnPmq+pSp5sOPSOPv4KKNKvPAjt8KGNGm3JLHkwOKqkK1WHERIN1TK5RVy7Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=i3LtjVgC; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46B4mi5V007118;
+	Thu, 11 Jul 2024 08:47:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=pDWMgpKauJzTFZP1oKOt5i47
+	Al4+cP5bsW3pHJR+wK8=; b=i3LtjVgCf9OyOGwwKU8jNbIXSB2S0O3P524TOQBf
+	Vvd6K4UxZn3PEt6YHoqzVOmSbfNUgTWqmHPgh1EDZiuwubw+ug3Hh2yN9D+8sMYn
+	9EU8apPhfyg1KY8NC+iD6UN76FFPKx6ckejqDP9Ji6Q6j0ADe1XKATxdPkYfFtPG
+	j1ANFoF58WjBPgcjCk/N2wKFLUp2WLqc+rix8HWyFxnkKfIKlsQx2hFaQp6XJS0U
+	pDQ2cWztWSNnfyVprk+3uUi+xSIViHGdzhhLsk93XVx5LVxAXghujQSRETe6fhK0
+	qoUE7fBXCJ2Mv0mjMSARDJwxYWyOfPxmNuOk3gJnWPhmCA==
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4091jdp2p5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 11 Jul 2024 08:47:20 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA01.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 46B8lK1f018713
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 11 Jul 2024 08:47:20 GMT
+Received: from hu-varada-blr.qualcomm.com (10.80.80.8) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Thu, 11 Jul 2024 01:47:15 -0700
+Date: Thu, 11 Jul 2024 14:17:11 +0530
+From: Varadarajan Narayanan <quic_varada@quicinc.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+CC: <gregkh@linuxfoundation.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
+        <conor+dt@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <quic_wcheng@quicinc.com>,
+        <johan+linaro@kernel.org>, <quic_kriskura@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v0 1/2] dt-bindings: usb: qcom,dwc3: Add minItems for
+ interrupt info
+Message-ID: <Zo+cDxiog/IXdt9S@hu-varada-blr.qualcomm.com>
+References: <20240711065615.2720367-1-quic_varada@quicinc.com>
+ <5fb21a62-9c9e-45ed-bf3f-c4d54f243886@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <5fb21a62-9c9e-45ed-bf3f-c4d54f243886@kernel.org>
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: wl6Zn0K8xLOwam16kYEJ3VO2eRJP6dGX
+X-Proofpoint-ORIG-GUID: wl6Zn0K8xLOwam16kYEJ3VO2eRJP6dGX
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-11_05,2024-07-10_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
+ lowpriorityscore=0 adultscore=0 spamscore=0 malwarescore=0 mlxlogscore=786
+ mlxscore=0 priorityscore=1501 phishscore=0 clxscore=1015 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2406140001
+ definitions=main-2407110061
 
-During hibernation, usb_resume_interface will set needs_binding to 1 if
-the usb_driver has no reset_resume implimentation. The USB interface
-will be rebind after usb_resume_complete.
+On Thu, Jul 11, 2024 at 09:47:23AM +0200, Krzysztof Kozlowski wrote:
+> On 11/07/2024 08:56, Varadarajan Narayanan wrote:
+> > IPQ5332 has only three interrupts. Update min items
+> > accordingly for interrupt names to fix the following
+> > dt_binding_check errors.
+> >
+> > 	interrupt-names: ['pwr_event', 'dp_hs_phy_irq', 'dm_hs_phy_irq'] is too short
+> >
+> > Fixes: a5c7592366af ("dt-bindings: usb: qcom,dwc3: add SC8280XP binding")
+>
+> There is no ipq5332 at this commit, so I do not understand which bug are
+> you fixing.
 
-Normally, that's fine. But if a USB interface has a matched kernel
-driver, and a userspace driver or application is using this USB
-interface through usbfs during hibernation, usbfs will be
-detatched with the USB interface after resume. And this USB interface
-will be bind with a kernel driver instead of usbfs.
+a5c7592366af introduced this interrupt and interrupt-names block. Later, 53c6d854be4e9 added ipq5332 to this section. Since a5c7592366af introduced the maxItems and I wanted to include minItems also (to accomodate ipq5332) I used a5c7592366af in the fixes tag. Will 53c6d854be4e9 be a more appropriate choice?
 
-So add reset_resume to fix this.
+> > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> > ---
+> >  Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 3 +++
+> >  1 file changed, 3 insertions(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> > index efde47a5b145..283bac1efba9 100644
+> > --- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> > +++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> > @@ -432,8 +432,11 @@ allOf:
+> >      then:
+> >        properties:
+> >          interrupts:
+> > +          minItems: 3
+> >            maxItems: 4
+> >          interrupt-names:
+> > +          minItems: 3
+> > +          maxItems: 4
+>
+> but x1e80100 has 4, right?
 
-Signed-off-by: Hongyu Xie <xiehongyu1@kylinos.cn>
----
- drivers/usb/core/devio.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+Yes. Will have a separate block for ipq5332. Went with min/max based
+on one of the previous blocks that had min/max as two and three for
+a group of SoCs.
 
-diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
-index 3beb6a862e80..8c07df104c9a 100644
---- a/drivers/usb/core/devio.c
-+++ b/drivers/usb/core/devio.c
-@@ -746,6 +746,11 @@ static int driver_resume(struct usb_interface *intf)
- 	return 0;
- }
- 
-+static int driver_reset_resume(struct usb_interface *intf)
-+{
-+	return 0;
-+}
-+
- #ifdef CONFIG_PM
- /* The following routines apply to the entire device, not interfaces */
- void usbfs_notify_suspend(struct usb_device *udev)
-@@ -773,6 +778,7 @@ struct usb_driver usbfs_driver = {
- 	.disconnect =	driver_disconnect,
- 	.suspend =	driver_suspend,
- 	.resume =	driver_resume,
-+	.reset_resume =	driver_reset_resume,
- 	.supports_autosuspend = 1,
- };
- 
--- 
-2.34.1
 
+Thanks
+Varada
+
+> >            items:
+> >              - const: pwr_event
+> >              - const: dp_hs_phy_irq
+>
+> Best regards,
+> Krzysztof
 
