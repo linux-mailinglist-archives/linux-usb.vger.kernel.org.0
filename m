@@ -1,139 +1,123 @@
-Return-Path: <linux-usb+bounces-12130-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12131-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2DA992DE1F
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Jul 2024 03:47:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 982E792E065
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Jul 2024 08:57:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 685221F2266D
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Jul 2024 01:47:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4FF6A1F221C3
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Jul 2024 06:57:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4F51C121;
-	Thu, 11 Jul 2024 01:47:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52C6812F581;
+	Thu, 11 Jul 2024 06:57:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="pHru8cC0"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="B8PtdSML"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 031C83D66
-	for <linux-usb@vger.kernel.org>; Thu, 11 Jul 2024 01:47:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D56912C54A;
+	Thu, 11 Jul 2024 06:57:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720662465; cv=none; b=hnYb29apPl0HJmuitNU4zkTIhln/eOqmvTN5etG7qV8dQvaBp4zbOUZ7wMcRuVmEO4UgIcyYaiX1i3242CVrdCH762rhrQTkziUaAFKqDME82lj9l5oVT6YMDR004qMLmA9JReRKaN5TILpRDWLwpxuGKc+LcZcNhY++1uuN5LI=
+	t=1720681064; cv=none; b=N53WA4ZljcAOLtEKp1uNJTqywUlu7LaeIEiTQr8l1jlkZ4PDE0N1Tymcm18vxTTeC/aVaT4TencjByVEm/MTS4sCwjYJ57am5iOX1jTUxHSey8akKV6fiXUr7GwDO4PEalCpnEcuH6QpoSKgO7Tvsyzs//BGnq89moHNgaYv24A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720662465; c=relaxed/simple;
-	bh=tMFHkxFPolROgECg5vVgfcIDDwUKCaXiGLwl/jzzNxg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lIDHAHRRf8VBLZv5n2koRMJURPpV0HI2wUWwAuDi7LT9w0rqXPExWFjp3+bjbevqKSa5eFtl8dVtOq0OmhmLqbinI1HOAYo0oGIS2fLxPvvXEYK3DoxWoMUACyHHnNh0dOX7Z6nzUu0yujay/Jm5eQVXFOXlYXIDXnY6NGSBIyc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=pHru8cC0; arc=none smtp.client-ip=209.85.222.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=g.harvard.edu
-Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-79ef7ecc7d4so25012585a.0
-        for <linux-usb@vger.kernel.org>; Wed, 10 Jul 2024 18:47:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1720662462; x=1721267262; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0tN5R4YnhjAUO3BS4jN/9VwPte3wOBowtI6nf3MDomk=;
-        b=pHru8cC0YN6mRmgOdmfgJIWkpiUVicLikpcJ/YpZl+2g5WE5cv04ifNnrvPZg5SF1w
-         u9qh01sSs+okmblCat905LupU4j2bM9nZRmDuU5PgjdZSoWBYR1OOmzek1+dfWQXA+bx
-         n2jImCartjAPXCz+fC6IcQrBzeDAR4o83b3+UGPM8SScfeakR8tnZT1198ct/SWWhR91
-         +CuM/nNOXF/YWAEw18sTGSIJizY3fo+mdjM07pqRoI4BlB9xMuXigqP71rW725rhvXJK
-         wl26JOzrs+PosLJKlWwUmAY2GwC6mXFOELpKwiPmyoSvbZnnrZDfCIIyBlHaJeSkyEca
-         F4JA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720662462; x=1721267262;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0tN5R4YnhjAUO3BS4jN/9VwPte3wOBowtI6nf3MDomk=;
-        b=v/919EQuPzJPZ1y9+7wG6Tdv/xYIxUVW27QRktSvt0r/2hAsxIjWV7x2+gBZLYjOn7
-         xL+mXJgUbcjuJX7L8I9n0SC3djhpM80ewHBu6XHrQIvqwdZmE4Ek4b51V1Od0SuYVNXu
-         02+8tnUVi4Iz32nHubm4x+CEfqx4/M0864fb/gxJa+9/m+RTMUFH9/5psAdqU0xetBMJ
-         I3obt+jPuYZVcmBwrojy02L1+Ud/WQt7erHoogN4ROrSH90J3606Zo5p+jlzKW2yIic8
-         nLVrgMexisNus98dfRJaP3262N4JuMFR/jkg962bHcb7ocmGsH137MdVRZ1OwNfaMZRJ
-         r8Bg==
-X-Forwarded-Encrypted: i=1; AJvYcCW5eOb0kclixXrQTI81Bc2y28j6unln6geCpv6x5hUz/BUTkxfKwfZMYUFI0weH3AwHnpOEXWesENT+vOS8aR2fcmT8Tvgbg6tf
-X-Gm-Message-State: AOJu0YzMYI9FgtvXMKwfD6a5z+Us+z2zjrCJW7vDXAJaI7vuReStGAGq
-	O5Sj+AJYwxFaq8mEfWJgzaGvcyArGNqplhkbn8UdWzFT4c0eo6gQupba4GGp1Q==
-X-Google-Smtp-Source: AGHT+IEdvBZ5AhAWw7kB3UrCG2h7ixiJqeq8PURLRH1rrR34tzFsUpVzykFcjUiDfx5fm+R2MjzjKw==
-X-Received: by 2002:a05:620a:2482:b0:79f:b3c:8fcc with SMTP id af79cd13be357-79f199e43e8mr1031660585a.10.1720662461925;
-        Wed, 10 Jul 2024 18:47:41 -0700 (PDT)
-Received: from rowland.harvard.edu ([2601:19b:681:fd10::cad7])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-79f18f1a32bsm246551285a.0.2024.07.10.18.47.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Jul 2024 18:47:41 -0700 (PDT)
-Date: Wed, 10 Jul 2024 21:47:39 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: ryan <ryanzhou54@gmail.com>
-Cc: jikos@kernel.org, gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hid: usbhid: Enable remote wake-up based on device
- configuration
-Message-ID: <f0c789d8-8ae0-4a46-a5b3-aa9a5a758915@rowland.harvard.edu>
-References: <20240710231606.3029-1-ryanzhou54@gmail.com>
+	s=arc-20240116; t=1720681064; c=relaxed/simple;
+	bh=rvFokjMcH2Ex/2sqj6Lvfn5GGs0uXi19tWJfPrxNctY=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Esif2zSRlRAehyDvCMe6uI8qJFqshjJ3PaoVZ3GuznOi74Mh3s9rXCWgT2NOaEXazyfcVkRheYLGqvqnDAzbTDQEHdQmsoQHtlGo0KUszbavL2JEY50kvRQbKlb2zGl5C47L+NKHMNO+PzWZ83ednYkzQPhePRRaH2El99aqNyo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=B8PtdSML; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46B4mjeQ014562;
+	Thu, 11 Jul 2024 06:57:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=jJQbWE0IuygwAYsyxFdL5S
+	xbT/d7/I46uvXwI+FP9GA=; b=B8PtdSMLSpRyI1T7HVRy/jV5srooMnHRrIRqB7
+	yuhTkppTtZGF7w/lr/OreXaT4FqNzD2kdHEhU5/aHeA2TyrK+Gtb2yybhTN4q9CW
+	qusiVkm6wIU+ofFm59Qpv9LrXVPf856rPoEzXJas6kptUkYHqiZpdV6FifCNevXH
+	SUfQ4eL2Fte7hWZbFjX+zQbakdH1hQNYeYuPaTWqwX9PHKczaIMe3RCpxXkUFRF/
+	UJnqiO+2yVoSA/qJCKrTPkatlRJz4eG9Yl/X2u08GC5EpmZljzlDK6NaP9kIi8Sl
+	I/Pvhymmwwj8I1AUsXBgvoi/tlJ+g4eYKR/9befh1ZrWYR+A==
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 409kdtka78-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 11 Jul 2024 06:57:38 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA05.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 46B6vbOS022133
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 11 Jul 2024 06:57:37 GMT
+Received: from hu-varada-blr.qualcomm.com (10.80.80.8) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Wed, 10 Jul 2024 23:57:32 -0700
+From: Varadarajan Narayanan <quic_varada@quicinc.com>
+To: <gregkh@linuxfoundation.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
+        <conor+dt@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <quic_wcheng@quicinc.com>,
+        <johan+linaro@kernel.org>, <quic_kriskura@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC: Varadarajan Narayanan <quic_varada@quicinc.com>
+Subject: [PATCH v0 1/2] dt-bindings: usb: qcom,dwc3: Add minItems for interrupt info
+Date: Thu, 11 Jul 2024 12:26:14 +0530
+Message-ID: <20240711065615.2720367-1-quic_varada@quicinc.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240710231606.3029-1-ryanzhou54@gmail.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: dHsWOK36fNf4snaCrKKEbTTV3Dj2YW_C
+X-Proofpoint-GUID: dHsWOK36fNf4snaCrKKEbTTV3Dj2YW_C
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-11_03,2024-07-10_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1011
+ impostorscore=0 mlxlogscore=610 lowpriorityscore=0 malwarescore=0
+ adultscore=0 suspectscore=0 phishscore=0 bulkscore=0 priorityscore=1501
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2406140001 definitions=main-2407110046
 
-On Thu, Jul 11, 2024 at 07:16:06AM +0800, ryan wrote:
-> According to the USB protocol, the host should automatically
-> adapt the remote wake-up function based on the configuration
-> descriptor reported by the device, rather than only the default
-> keyboard support. Therefore, it's necessary to support other hid
-> devices, such as digital headsets,mice,etc.
+IPQ5332 has only three interrupts. Update min items
+accordingly for interrupt names to fix the following
+dt_binding_check errors.
 
-It's true that the host shouldn't try to enable remote wakeup if the 
-configuration descriptor shows that the device doesn't support it.
+	interrupt-names: ['pwr_event', 'dp_hs_phy_irq', 'dm_hs_phy_irq'] is too short
 
-However, it's not true that the host should try to enable remote wakeup 
-for devices other than keyboards with boot-protocol support.  History 
-has shown that quite a few HID devices don't handle remote wakeup 
-properly; the decision about whether to enable it should be left to the 
-user.
+Fixes: a5c7592366af ("dt-bindings: usb: qcom,dwc3: add SC8280XP binding")
+Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+---
+ Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Alan Stern
+diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+index efde47a5b145..283bac1efba9 100644
+--- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
++++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+@@ -432,8 +432,11 @@ allOf:
+     then:
+       properties:
+         interrupts:
++          minItems: 3
+           maxItems: 4
+         interrupt-names:
++          minItems: 3
++          maxItems: 4
+           items:
+             - const: pwr_event
+             - const: dp_hs_phy_irq
+-- 
+2.34.1
 
-> Signed-off-by: ryan <ryanzhou54@gmail.com>
-> ---
->  drivers/hid/usbhid/hid-core.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/hid/usbhid/hid-core.c b/drivers/hid/usbhid/hid-core.c
-> index a90ed2ceae84..d2901ad9a871 100644
-> --- a/drivers/hid/usbhid/hid-core.c
-> +++ b/drivers/hid/usbhid/hid-core.c
-> @@ -1179,16 +1179,16 @@ static int usbhid_start(struct hid_device *hid)
->  	/* Some keyboards don't work until their LEDs have been set.
->  	 * Since BIOSes do set the LEDs, it must be safe for any device
->  	 * that supports the keyboard boot protocol.
-> -	 * In addition, enable remote wakeup by default for all keyboard
-> -	 * devices supporting the boot protocol.
->  	 */
->  	if (interface->desc.bInterfaceSubClass == USB_INTERFACE_SUBCLASS_BOOT &&
->  			interface->desc.bInterfaceProtocol ==
->  				USB_INTERFACE_PROTOCOL_KEYBOARD) {
->  		usbhid_set_leds(hid);
-> -		device_set_wakeup_enable(&dev->dev, 1);
->  	}
->  
-> +	if (dev->actconfig->desc.bmAttributes & USB_CONFIG_ATT_WAKEUP)
-> +		device_set_wakeup_enable(&dev->dev, 1);
-> +
->  	mutex_unlock(&usbhid->mutex);
->  	return 0;
->  
-> -- 
-> 2.17.1
-> 
-> 
 
