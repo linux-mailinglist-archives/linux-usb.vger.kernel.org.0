@@ -1,157 +1,188 @@
-Return-Path: <linux-usb+bounces-12159-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12160-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4281992EBB5
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Jul 2024 17:28:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7562E92ED72
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Jul 2024 19:07:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E25C71F24C3D
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Jul 2024 15:28:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EB8C81F23214
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Jul 2024 17:07:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF01716CD05;
-	Thu, 11 Jul 2024 15:28:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5C4516D4ED;
+	Thu, 11 Jul 2024 17:07:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="B0XkhEFJ"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="e7i8KamD"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A08612FB1B;
-	Thu, 11 Jul 2024 15:28:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AE0B450FA
+	for <linux-usb@vger.kernel.org>; Thu, 11 Jul 2024 17:07:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720711711; cv=none; b=uic8PSE3VN0oFbUSm0GNriVxEzxrcko6digceEfmkIT5y7T/d8ZFt0EbzpX85ojaNL+0aFH1jzsJmXBTPLWONo3JXtiA6E57rF68DeZ4kYLoCgiCJrhcZKrZkbIBu2lhZ+j5Bed6POEpmKUDWAV5w2nWPOUoqmyqCxg7WKYvDJE=
+	t=1720717665; cv=none; b=PB/9J2dBIdBYC+VZftTRDaBQzGLmed9s9LLJIMOWQPx0pB0ORB00qKctdA7E8oONpG/e/g2f2kCBS6IcFQoJkrpX/N+eDuaHPOG/mOk1tw9/Ce+7FXe7e2yU3JwbVXktd9eonkw01I10/xzZFqSRe77BbmX+sEZUhiYMTWlII1U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720711711; c=relaxed/simple;
-	bh=Mp6aeP16rDe0NgNWIzBoWpraUHDvr79iZxKuBFhJlTM=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=M3Uwk30mB5C9as93E04Pg83Y5bJF58DO0m47oWO/C4g9EZcPKH3bZu90XHS85NGRRWQT27Ej78hTBK7Dg6U2j0f7l+F72twAoLE2no9N9+SjsXhqMRK2thk+jJuw2/AGLQUKAqiGjOWmfj6F9wVErPAJhoAv16nWBZG8TNx6hJM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=B0XkhEFJ; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1720711709; x=1752247709;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=Mp6aeP16rDe0NgNWIzBoWpraUHDvr79iZxKuBFhJlTM=;
-  b=B0XkhEFJL+gxn7leHDTjx+e7axY0ldGNr1uqQTAofPOK/IEv31lXxvm4
-   +w88YKYHxN7cRYz3L6zfkAWZtcOD9Ad9ojfHB4ycWTTdYXRhUR3VPLr2p
-   cxIT7Ozc+hVTfwFwm4iblpdbIU7I0NrIyji0F0FVqLe7XhmtY4vTaXo14
-   0J+NTRF3Ztpov8JuWUDCUewlALtMveXZiw8vTjYAOxUYpDkPWY0DS1EKj
-   f6i4YjkuW/EAybStLTGkkKcLJ55dJTYC/uCMfFaZzW7PoI8dPQ+Ap9yvc
-   MsH+pqq8l60Raw1v/zf+cccsE9xo4L7RxhF+pKVZms6y6u9uzaw9RY0lo
-   A==;
-X-CSE-ConnectionGUID: jwo3iKt3TOCpUZ2AT6Ts5w==
-X-CSE-MsgGUID: Lk2x2/jrTkuY6CHR44HuJg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11130"; a="17808699"
-X-IronPort-AV: E=Sophos;i="6.09,200,1716274800"; 
-   d="scan'208";a="17808699"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2024 08:27:21 -0700
-X-CSE-ConnectionGUID: c9wssgMYS8W+5OlqCdzdcA==
-X-CSE-MsgGUID: kGuY6bOZRN+tTexzDVQivA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,200,1716274800"; 
-   d="scan'208";a="49027757"
-Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.247.127])
-  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2024 08:27:17 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Thu, 11 Jul 2024 18:27:13 +0300 (EEST)
-To: superm1@kernel.org
-cc: Bjorn Helgaas <bhelgaas@google.com>, 
-    Mathias Nyman <mathias.nyman@intel.com>, 
-    Mika Westerberg <mika.westerberg@linux.intel.com>, 
-    "open list : PCI SUBSYSTEM" <linux-pci@vger.kernel.org>, 
-    open list <linux-kernel@vger.kernel.org>, 
-    "open list : USB XHCI DRIVER" <linux-usb@vger.kernel.org>, 
-    Daniel Drake <drake@endlessos.org>, Gary Li <Gary.Li@amd.com>, 
-    Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-    Mario Limonciello <mario.limonciello@amd.com>
-Subject: Re: [PATCH v2 2/4] PCI: Verify functions currently in D3cold have
- entered D0
-In-Reply-To: <20240710205838.2413465-3-superm1@kernel.org>
-Message-ID: <29d388a8-b529-6af1-d3a3-a0846e1f0692@linux.intel.com>
-References: <20240710205838.2413465-1-superm1@kernel.org> <20240710205838.2413465-3-superm1@kernel.org>
+	s=arc-20240116; t=1720717665; c=relaxed/simple;
+	bh=Hhd3ojOGTTgHpOvaGKhK7MvcUfGq2Nyal2Kl375BA7o=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=QJuuQwf0kfKs/eVh9UgDq0iB3QzawKP7JvB9A3znJyeS0n4d/udmq1pdhDuDn7PZxYmBkFs1LpgGtgTWcFWnNjAneE5jcdROw6GyVkWXn2rT4/a1R/ebkvrs6E3CVFGQQ4P31bg3akOvBgr5Q17kBAUFruHK4wQ13eLpAIkun0k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=e7i8KamD; arc=none smtp.client-ip=209.85.166.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f53.google.com with SMTP id ca18e2360f4ac-804bc63afe2so4262839f.2
+        for <linux-usb@vger.kernel.org>; Thu, 11 Jul 2024 10:07:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1720717663; x=1721322463; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=An08rRhrhJhB7bf/IvxT+wmTxYRUICZmPhbaIqcpp7M=;
+        b=e7i8KamDVmMdRbFuA0hX+MLZjvzksTIfUH8fbYnBlINAXT0TnE0g4qpMX7T5BRRfnw
+         RZlWCv1J03XO4tgGStoTegvg8iWbnPQIwfR1Eq46BsFp0eL/vgnd6Tu5QNsMvBtuQYvH
+         q9R5tmI2JG/hko3k/93SHDapqkqSU233fKHSY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720717663; x=1721322463;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=An08rRhrhJhB7bf/IvxT+wmTxYRUICZmPhbaIqcpp7M=;
+        b=VdzHXaiHlvvMqm2pAxBXVjZkdOK0u1UWK9lY463I3gsit3g6Mub4Lb9SokAmiHmkHp
+         RGPWVtSy5XzjXGUqtMsFM83EyPBp0PQg+74KQT86iqPdwtCgZZiCM7/6Te1XBXpWVEkt
+         NSbyrnUR8+CfQRWTQBSQYh1ohYIWq5bdwSr9cdVeHS1VQ0+WBkpHqqSzdlkNVkzrBrpJ
+         5yJhi4L9keo1yfy25c8UU6+Lmqscl5Kb6WnhdBjYR/D0oQcO33Zc6zPoEBA6vBI48b3t
+         Q2m2k9SXw5qCpOVuwgGboPXBCJ9dmppYJBxTIK7X3pP8Did4Df7WYxvHr1743QARGesb
+         HyEw==
+X-Forwarded-Encrypted: i=1; AJvYcCWPUSSkhKIw3TBtMDYMrCp+1ixigbn46ZM8lc2fndhCk5hGevJX5R4y2+4eZC+sVAeZkf/f9v9h0cmmqq6Nfd7a4IOqf/+ox134
+X-Gm-Message-State: AOJu0YwtHaOhJ60dtyqxJNoE4y5ILKtM7lfp+1gzR51JVjQgm0BszpBX
+	OuY737x8bGQcGad02GQWRvU9c9xvHG1QoEQgHUop5YUVIKhH+/AWNICd/xrYYCo=
+X-Google-Smtp-Source: AGHT+IHqoLg56yT2gi2Uy85KWpBQaIPD/Amh6eUdTyJccERl1zHSfvNnHQO0XEuEkmiEL9EAm/00vg==
+X-Received: by 2002:a05:6602:6103:b0:7f6:85d1:f81a with SMTP id ca18e2360f4ac-80004dea088mr1009106539f.2.1720717663326;
+        Thu, 11 Jul 2024 10:07:43 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-7ffed680f78sm192970039f.50.2024.07.11.10.07.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 Jul 2024 10:07:42 -0700 (PDT)
+Message-ID: <36d991df-2a25-42d5-be44-d731e962c6d7@linuxfoundation.org>
+Date: Thu, 11 Jul 2024 11:07:42 -0600
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323328-2025960674-1720711633=:6262"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1] usbip: Add USB_SPEED_SUPER_PLUS as valid arg
+To: =?UTF-8?Q?=C5=81ukasz_Bartosik?= <ukaszb@chromium.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Valentina Manea <valentina.manea.m@gmail.com>, Shuah Khan
+ <shuah@kernel.org>, Hongren Zheng <i@zenithal.me>,
+ linux-usb@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
+References: <20240705091902.789643-1-ukaszb@chromium.org>
+ <2024070534-sculpture-spooky-daa6@gregkh>
+ <CALwA+Nakqb1re4H8YO8FnaYGOKP-jWLhvtnkvYAvdkRato-cRw@mail.gmail.com>
+ <5cea8570-318d-47af-a669-cc89253de803@linuxfoundation.org>
+ <CALwA+NYjE3REBAJR6y+UMdZC2otozBtrFZ_eFY4yN2DjOboP1Q@mail.gmail.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <CALwA+NYjE3REBAJR6y+UMdZC2otozBtrFZ_eFY4yN2DjOboP1Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+On 7/10/24 04:50, Łukasz Bartosik wrote:
+> On Tue, Jul 9, 2024 at 9:27 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
+>>
+>> On 7/5/24 04:43, Łukasz Bartosik wrote:
+>>> On Fri, Jul 5, 2024 at 11:40 AM Greg Kroah-Hartman
+>>> <gregkh@linuxfoundation.org> wrote:
+>>>>
+>>>> On Fri, Jul 05, 2024 at 09:19:02AM +0000, Łukasz Bartosik wrote:
+>>>>> Add USB_SPEED_SUPER_PLUS as valid argument to allow
+>>>>> to attach USB SuperSpeed+ devices.
+>>>>>
+>>>>> Signed-off-by: Łukasz Bartosik <ukaszb@chromium.org>
+>>>>> ---
+>>>>>    drivers/usb/usbip/vhci_sysfs.c | 3 ++-
+>>>>>    1 file changed, 2 insertions(+), 1 deletion(-)
+>>>>>
+>>>>> diff --git a/drivers/usb/usbip/vhci_sysfs.c b/drivers/usb/usbip/vhci_sysfs.c
+>>>>> index e2847cd3e6e3..d5865460e82d 100644
+>>>>> --- a/drivers/usb/usbip/vhci_sysfs.c
+>>>>> +++ b/drivers/usb/usbip/vhci_sysfs.c
+>>>>> @@ -283,6 +283,7 @@ static int valid_args(__u32 *pdev_nr, __u32 *rhport,
+>>>>>         case USB_SPEED_HIGH:
+>>>>>         case USB_SPEED_WIRELESS:
+>>>>>         case USB_SPEED_SUPER:
+>>>>> +     case USB_SPEED_SUPER_PLUS:
+>>>>>                 break;
+>>>>>         default:
+>>>>>                 pr_err("Failed attach request for unsupported USB speed: %s\n",
+>>>>> @@ -349,7 +350,7 @@ static ssize_t attach_store(struct device *dev, struct device_attribute *attr,
+>>>>>         vhci_hcd = hcd_to_vhci_hcd(hcd);
+>>>>>         vhci = vhci_hcd->vhci;
+>>>>>
+>>>>> -     if (speed == USB_SPEED_SUPER)
+>>>>> +     if (speed >= USB_SPEED_SUPER)
+>>>>
+>>>> It's an enum, are you sure this will work?
+>>>>
+>>>
+>>> Gcc (gcc (Debian 13.2.0-13) 13.2.0) which I used to compile the patch
+>>> does not complain about this change at all:
+>>>     make
+>>>     ...
+>>>     CC [M]  drivers/usb/usbip/vhci_sysfs.o
+>>>     LD [M]  drivers/usb/usbip/vhci-hcd.o
+>>>
+>>>
+>>>
+>>> Without the patch I was getting the following error when trying to
+>>> attach a device:
+>>> vhci_hcd: Failed attach request for unsupported USB speed: super-speed-plus
+>>>
+>>> With the patch USB SS+ device attaches successfully:
+>>> [248223.654445] vhci_hcd vhci_hcd.0: pdev(0) rhport(0) sockfd(3)
+>>> [248223.660701] vhci_hcd vhci_hcd.0: devid(65538) speed(6)
+>>> speed_str(super-speed-plus)
+>>> [248223.668540] vhci_hcd vhci_hcd.0: Device attached
+>>> [248223.936363] usb 2-1: SetAddress Request (2) to port 0
+>>> [248223.941698] usb 2-1: new SuperSpeed USB device number 2 using vhci_hcd
+>>> [248224.138020] usb 2-1: LPM exit latency is zeroed, disabling LPM.
+>>> [248224.331984] usb 2-1: New USB device found, idVendor=18d1,
+>>> idProduct=0010, bcdDevice= 0.10
+>>> [248224.340416] usb 2-1: New USB device strings: Mfr=1, Product=2,
+>>> SerialNumber=3
+>>> [248224.347805] usb 2-1: Product: Linux USB Debug Target
+>>> [248224.352984] usb 2-1: Manufacturer: Linux Foundation
+>>> [248224.358162] usb 2-1: SerialNumber: 0001
+>>>
+>>> I hope this will resolve your doubts.
+>>>
+>>
+>> What about the other places that check for USB_SPEED_SUPER?
+>> take a look at attach_store() that checks for USB_SPEED_SUPER
+>> and picks the correct vdev.
+>>
+> 
+> This patch already updates attach_store() to select the correct vdev.
+> Please see lines:
+> -     if (speed == USB_SPEED_SUPER)
+> +     if (speed >= USB_SPEED_SUPER)
+> 
+> Also there are two other places where USB_SPEED_SUPER is used:
+> 1) vhci_hcd.c:1158: hcd->self.root_hub->speed = USB_SPEED_SUPER - IMHO
+> no need for a change as it is ok to attach USB3.1 device (taking into
+> account it is backwards compatible) to USB3.0 HC
 
---8323328-2025960674-1720711633=:6262
-Content-Type: text/plain; charset=ISO-8859-15
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Let's update them all.
 
-On Wed, 10 Jul 2024, superm1@kernel.org wrote:
+> 2) vudc_transfer.c:34: case USB_SPEED_SUPER - this seems to be
+> unrelated to this patch
 
-> From: Mario Limonciello <mario.limonciello@amd.com>
->=20
-> It is reported that USB4 routers and downstream devices may behave
-> incorrectly if a dock cable is plugged in at approximately the time that
-> the autosuspend_delay is configured. In this situation the device has
-> attempted to enter D3cold, but didn't finish D3cold entry when the PCI
-> core tried to transition it back to D0.
->=20
-> Empirically measuring this situation an "aborted" D3cold exit takes
-> ~60ms and a "normal" D3cold exit takes ~10ms.
->=20
-> The PCI-PM 1.2 spec specifies that the restore time for functions
-> in D3cold is either 'Full context restore or boot latency'.
->=20
-> As PCIe r6.0 sec 5.8 specifies that the device will have gone
-> through a conventional reset it may take some time for the
+This isn't related - however feel free to send the patch if you are
+bale to.
 
-I'd add comma after reset.
-
-The code change looks okay though,
-
-Reviewed-by: Ilpo J=E4rvinen <ilpo.jarvinen@linux.intel.com>
-
-> device to be ready.
->=20
-> Wait up to 1 sec as specified in PCIe r6.0 sec 6.6.1 for a device
-> in D3cold to return to D0.
->=20
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> ---
->  drivers/pci/pci.c | 11 +++++++++++
->  1 file changed, 11 insertions(+)
->=20
-> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> index 4ad02ad640518..9af324ab6bb02 100644
-> --- a/drivers/pci/pci.c
-> +++ b/drivers/pci/pci.c
-> @@ -1388,6 +1388,17 @@ int pci_power_up(struct pci_dev *dev)
->  =09else if (state =3D=3D PCI_D2)
->  =09=09udelay(PCI_PM_D2_DELAY);
-> =20
-> +=09/*
-> +=09 * D3cold -> D0 will have gone through a conventional reset and may n=
-eed
-> +=09 * time to be ready.
-> +=09 */
-> +=09if (dev->current_state =3D=3D PCI_D3cold) {
-> +=09=09int ret;
-> +
-> +=09=09ret =3D pci_dev_wait(dev, "D3cold->D0", PCI_RESET_WAIT);
-> +=09=09if (ret)
-> +=09=09=09return ret;
-> +=09}
->  end:
->  =09dev->current_state =3D PCI_D0;
->  =09if (need_restore)
->=20
-
---=20
- i.
-
---8323328-2025960674-1720711633=:6262--
+thanks,
+-- Shuah
 
