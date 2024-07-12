@@ -1,115 +1,137 @@
-Return-Path: <linux-usb+bounces-12162-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12163-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E68092F138
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Jul 2024 23:39:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C0D692F448
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Jul 2024 05:11:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 551BA1F22E0D
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Jul 2024 21:39:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E0FD52847BB
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Jul 2024 03:11:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F02CA1A01AD;
-	Thu, 11 Jul 2024 21:38:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F22F6D26D;
+	Fri, 12 Jul 2024 03:11:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bt8wYhhR"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bwp7TUVV"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6633612F385;
-	Thu, 11 Jul 2024 21:38:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A102749A;
+	Fri, 12 Jul 2024 03:11:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720733928; cv=none; b=Cr01HC3t3ogOaa7lKV63gG6blDZMkejYJVikftjPlKBr0GwY/O+Dx1HferHy5UvIZJRbeujTTURUi2AY97FrSasgfPNE5OUnjNM69g25zLNDJ/m+4IHC2YgO6eJ09pDTKwOZITyAfFifOe29XLaSGwC/XURKoKbCMKSrbO7eGK4=
+	t=1720753865; cv=none; b=Mc6nJU3NJqSSXNJ75ARAkRU0Sqj/v1zS7ALQ+UFBFH5CyIxz6Ryyjkm9mM62vxqCSKVx+7VIixh06aqbMf2K88anvCGlAP3WlS2HePUtvEnG3MSbUUnKQz2npoPY3OQw7sz1U1oH69KpBMZV8veBkN+bWqv7znd5+PczJuEF0kw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720733928; c=relaxed/simple;
-	bh=mSHQDPosDfKU1D8H0/EEVCf/SnYHDoua5Vn7yYsQoaI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mcuKUIkkqzXeqEXJba4B/pilISja2++KQ/WsbPrmwbSpj0mi26x88gb63HA7FZYL8V4k4B0G+sfeMcxvaPE82W1agYCf3TL4u63Ff4j2h0utEMNiXujki/E/0KF0p9FDzTyvaGRZuhN14HqUBEX/A3oQg8k2gtmhdRdfvvzNq10=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Bt8wYhhR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6A68C116B1;
-	Thu, 11 Jul 2024 21:38:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720733928;
-	bh=mSHQDPosDfKU1D8H0/EEVCf/SnYHDoua5Vn7yYsQoaI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Bt8wYhhRbsosxOUHAr4wDJBsjg3BaM5IZoZjxxYP8i0a4X2nFfm9xppaKEZGRXy3a
-	 yNpyUZb53OjU6IIlVGvz9LXD0F59CkCDsvVFl+7RNVwvx2/h9kFzSuXMYnfiaNJYpH
-	 lEcEJEzY9RiWHksrSEcs8TGrw5/DhkAYXBWlsPzW9KMIA4jdfm1kVvrO38FxKNkZvk
-	 oKiSPNucdCf31BR5MqSSV4+D0bqf/DYnDk9YPFKA7J7kvKO6mua7QM7MTOK/MDjUqN
-	 eDFG/jpcnVLMy7awKcKZQ1HdPrqqp2q9eJRjKZnIKqgGQhrA2b1ALt3URP78rCnlHi
-	 A3YHVLJ7jPfpQ==
-Date: Thu, 11 Jul 2024 15:38:46 -0600
-From: Rob Herring <robh@kernel.org>
-To: Frank Li <Frank.Li@nxp.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Shawn Guo <shawnguo@kernel.org>, linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, imx@lists.linux.dev
-Subject: Re: [PATCH 3/3] arm64: dts: layerscape: move dwc3 usb under glue
- layer node
-Message-ID: <20240711213846.GA3049961-robh@kernel.org>
-References: <20240710-ls-dwc-v1-0-62f8cbed31d7@nxp.com>
- <20240710-ls-dwc-v1-3-62f8cbed31d7@nxp.com>
+	s=arc-20240116; t=1720753865; c=relaxed/simple;
+	bh=dEAa5YzE2n5OuCjrIwY5pzmm3A0j7RiyhpI0nGWcSAY=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=PRxZBOHXai70aP4/RsBmQqWxv9uMvCTJ4/YmZiTX367HZjfpZzANsQJe8avMpCgBSrn7NsTk3Yt9XdYy8xO7xe/hpRnYyVALOX8q96zE1YTYShVDT1iD14s93HyeOWw/raNXOox9YAMZawtld+2o83+vgcPNZaBG/9gIlu7A/vo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bwp7TUVV; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1fa9ecfb321so13043265ad.0;
+        Thu, 11 Jul 2024 20:11:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1720753863; x=1721358663; darn=vger.kernel.org;
+        h=content-transfer-encoding:fcc:content-language:user-agent
+         :mime-version:references:in-reply-to:message-id:date:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ml2DPYAyUJyVltqbgbaMwabyFMeG/DO22mcUV9WuoFM=;
+        b=bwp7TUVVoCLh/0BiFVB6mQWtFvHrowRhUauAIMo0cGWwBYBpy90XpacAzK4q3t4dWp
+         5tOl/ApFrH/v1iUJi9aTGDjsmzsTJtOIlRgVfKHf6lgFhpMh2glsHyRQnPOzsqxaGlR4
+         n/w4uZsRpFT/HvlB0ZiCR5c85JVJHud6aeV6RZxSTryHY3hAzpV6GUEof9HXWKFRvOqr
+         p2PHrDkdIE7lEZwcrJfJbDU46dHO612aBJYWEurte9TTUFIp9dnucxTngza9vfH1K89H
+         VzUHCrPZ9JddmGJVTVl5M94Y/N/7JJsCrGCfGWn4UPBwvPdbU+xUFIqsJ46NtYjPS4bc
+         UUZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720753863; x=1721358663;
+        h=content-transfer-encoding:fcc:content-language:user-agent
+         :mime-version:references:in-reply-to:message-id:date:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ml2DPYAyUJyVltqbgbaMwabyFMeG/DO22mcUV9WuoFM=;
+        b=I+gzVMBpCB3sQwTWxalgCKwdWa3mAC0tK8RsG95E+pNO3ADMP5ehJzayqU49ZhJLxG
+         HbYn5XoGAMxg96tjO8mw34wTaTLADaYsCVDio+Xyh7/fnke/Czbu58qcMZVZBqtIaenC
+         jaikkEEuurjoTrMZWud2VE7JTUtrnU4yeyuEWK6VmtETmRPUimtmk1KT019N4WTA2Lz9
+         KIk6xwKwg4CT9Z+3l2zK3bXNV0viRDjYm3Sboe+SQAoT1d0M6TuzyI4dNUDAS6fUEqBA
+         EBX4SLU/LYVgyYB88sSDJntQogFyvRNBkDNc/oNA4ntQCj+I3o/EvCCDcsjfnl+xtx0S
+         LODQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWwQyCwhCjZGSbtKWyLG6/N0IF5PhBKPcJwpncbdilmQ3i6SJSkb2lKfNrYq3xAT5zuwxAy7bZzbRJI+KXu+foBAlf2B21mEtToEu3fZHfUvyXIEbTxVt2kQcaiYHBA7v5g9grlUh7B
+X-Gm-Message-State: AOJu0YyO5HGh1psMNQkBEFG77fQ5tu3LZ138VQggAidSfGYRTZfq0iUg
+	riFusCrPTtrBNbab2Ah5Hel4OkFc0i2hFsraLvdiJDoUDVs+NaXc
+X-Google-Smtp-Source: AGHT+IH7+npEXds1wOtBP0PIPRz96ImAaPJyGAUkcxxUuZrzMdDol6p9jVgUYeJoIltue3djNGcPOA==
+X-Received: by 2002:a17:902:f54f:b0:1fb:389b:1054 with SMTP id d9443c01a7336-1fbb6ec4012mr85996495ad.52.1720753863191;
+        Thu, 11 Jul 2024 20:11:03 -0700 (PDT)
+Received: from js-pc.. ([2408:8453:6d:7f1e:41e8:c2e1:ca4f:c196])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fbb6a2a5a9sm57404765ad.87.2024.07.11.20.11.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Jul 2024 20:11:02 -0700 (PDT)
+From: Hongyu Xie <xy521521@gmail.com>
+To: gregkh@linuxfoundation.org,
+	oneukum@suse.com
+Cc: brauner@kernel.org,
+	jlayton@kernel.org,
+	xiehongyu1@kylinos.cn,
+	jack@suse.cz,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH next] usb: usbfs: Add reset_resume for usbfs
+Date: Fri, 12 Jul 2024 11:10:57 +0800
+Message-Id: <a782c5bc-fc8b-43ad-9c6e-1e6799243364@kylinos.cn>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <527927b8-9475-47da-bf2b-7a5d9e81e470@suse.com>
+References: <20240711084321.44916-1-xiehongyu1@kylinos.cn>
+ <527927b8-9475-47da-bf2b-7a5d9e81e470@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240710-ls-dwc-v1-3-62f8cbed31d7@nxp.com>
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+X-Mozilla-Draft-Info: internal/draft; vcard=0; receipt=0; DSN=0; uuencode=0;
+ attachmentreminder=0; deliveryformat=1
+X-Identity-Key: id1
+Fcc: imap://xiehongyu1%40kylinos.cn@imap.kylinos.cn/Sent
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jul 10, 2024 at 07:02:24PM -0400, Frank Li wrote:
-> New usb glue layer driver support enable dma-coherent. So put dwc3 usb node
-> under glue layer node and enable dma-coherent.
-> 
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> ---
->  arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi | 43 ++++++++++++++++----------
->  1 file changed, 26 insertions(+), 17 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi b/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
-> index 70b8731029c4e..24b937032480f 100644
-> --- a/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
-> @@ -615,24 +615,33 @@ gpio3: gpio@2320000 {
->  			little-endian;
->  		};
->  
-> -		usb0: usb@3100000 {
-> -			compatible = "fsl,ls1028a-dwc3", "snps,dwc3";
-> -			reg = <0x0 0x3100000 0x0 0x10000>;
-> -			interrupts = <GIC_SPI 80 IRQ_TYPE_LEVEL_HIGH>;
-> -			snps,dis_rxdet_inp3_quirk;
-> -			snps,quirk-frame-length-adjustment = <0x20>;
-> -			snps,incr-burst-type-adjustment = <1>, <4>, <8>, <16>;
-> -			status = "disabled";
-> -		};
-> +		usb {
-> +			compatible = "fsl,ls1028a-dwc3";
-> +			#address-cells = <2>;
-> +			#size-cells = <2>;
-> +			ranges;
+From: Hongyu Xie <xiehongyu1@kylinos.cn>=0D
 
-No, the existing way is preferred unless you have actual glue/wrapper 
-registers. Plus this breaks compatibility.
-
-> +
-> +			usb0: usb@3100000 {
-> +				compatible = "snps,dwc3";
-> +				reg = <0x0 0x3100000 0x0 0x10000>;
-> +				interrupts = <GIC_SPI 80 IRQ_TYPE_LEVEL_HIGH>;
-> +				dma-coherent;
-> +				snps,dis_rxdet_inp3_quirk;
-> +				snps,quirk-frame-length-adjustment = <0x20>;
-> +				snps,incr-burst-type-adjustment = <1>, <4>, <8>, <16>;
-> +				status = "disabled";
-> +			};
+=0D
+=0D
+On 2024/7/11 16:59, Oliver Neukum wrote:=0D
+> =0D
+> =0D
+> On 11.07.24 10:43, Hongyu Xie wrote:=0D
+>> During hibernation, usb_resume_interface will set needs_binding to 1 if=
+=0D
+>> the usb_driver has no reset_resume implimentation. The USB interface=0D
+>> will be rebind after usb_resume_complete.=0D
+>>=0D
+>> Normally, that's fine. But if a USB interface has a matched kernel=0D
+>> driver, and a userspace driver or application is using this USB=0D
+>> interface through usbfs during hibernation, usbfs will be=0D
+>> detatched with the USB interface after resume. And this USB interface=0D
+>> will be bind with a kernel driver instead of usbfs.=0D
+>>=0D
+>> So add reset_resume to fix this.=0D
+> =0D
+> The device has lost all settings, yet we continue like nothing=0D
+> changed. That strikes me as a very bad idea. If a device has undergone=0D
+> a reset user space has not requested, we need to return an error upon=0D
+> the next interaction.=0D
+Sorry I don't understand your concern.=0D
+When will "a reset user space has not requested" happen if there is a=0D
+reset_resume in usbfs?=0D
+> =0D
+> I am sorry, but this implementation has some fundamental issues.=0D
+> =0D
+>  =C2=A0=C2=A0=C2=A0=C2=A0Regards=0D
+>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Oliver=0D
+> =0D
+Regards=0D
+Hongyu Xie=0D
 
