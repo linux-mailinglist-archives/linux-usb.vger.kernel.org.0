@@ -1,88 +1,48 @@
-Return-Path: <linux-usb+bounces-12163-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12164-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C0D692F448
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Jul 2024 05:11:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2536A92F7DC
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Jul 2024 11:25:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E0FD52847BB
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Jul 2024 03:11:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D56FA285032
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Jul 2024 09:25:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F22F6D26D;
-	Fri, 12 Jul 2024 03:11:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B582A14F9D0;
+	Fri, 12 Jul 2024 09:24:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bwp7TUVV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mlnOQRm6"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A102749A;
-	Fri, 12 Jul 2024 03:11:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EF8B14830D;
+	Fri, 12 Jul 2024 09:24:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720753865; cv=none; b=Mc6nJU3NJqSSXNJ75ARAkRU0Sqj/v1zS7ALQ+UFBFH5CyIxz6Ryyjkm9mM62vxqCSKVx+7VIixh06aqbMf2K88anvCGlAP3WlS2HePUtvEnG3MSbUUnKQz2npoPY3OQw7sz1U1oH69KpBMZV8veBkN+bWqv7znd5+PczJuEF0kw=
+	t=1720776291; cv=none; b=XcnI8N+qm2f3JG48fGjGuAWDP/TNa5S3ZsyclPsufy/ktg1oRDvlXYuel5N58SwfnGA6rAonhQu6NWKqQgdSdOeBCS+f9Q5XI3ktQb40NOiPOlUeGlO3UBcHEPk+H3oyiaIzI1RVsObWeGAvC76iCkOETblAQNyrDXVsl32TMI8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720753865; c=relaxed/simple;
-	bh=dEAa5YzE2n5OuCjrIwY5pzmm3A0j7RiyhpI0nGWcSAY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=PRxZBOHXai70aP4/RsBmQqWxv9uMvCTJ4/YmZiTX367HZjfpZzANsQJe8avMpCgBSrn7NsTk3Yt9XdYy8xO7xe/hpRnYyVALOX8q96zE1YTYShVDT1iD14s93HyeOWw/raNXOox9YAMZawtld+2o83+vgcPNZaBG/9gIlu7A/vo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bwp7TUVV; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1fa9ecfb321so13043265ad.0;
-        Thu, 11 Jul 2024 20:11:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1720753863; x=1721358663; darn=vger.kernel.org;
-        h=content-transfer-encoding:fcc:content-language:user-agent
-         :mime-version:references:in-reply-to:message-id:date:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ml2DPYAyUJyVltqbgbaMwabyFMeG/DO22mcUV9WuoFM=;
-        b=bwp7TUVVoCLh/0BiFVB6mQWtFvHrowRhUauAIMo0cGWwBYBpy90XpacAzK4q3t4dWp
-         5tOl/ApFrH/v1iUJi9aTGDjsmzsTJtOIlRgVfKHf6lgFhpMh2glsHyRQnPOzsqxaGlR4
-         n/w4uZsRpFT/HvlB0ZiCR5c85JVJHud6aeV6RZxSTryHY3hAzpV6GUEof9HXWKFRvOqr
-         p2PHrDkdIE7lEZwcrJfJbDU46dHO612aBJYWEurte9TTUFIp9dnucxTngza9vfH1K89H
-         VzUHCrPZ9JddmGJVTVl5M94Y/N/7JJsCrGCfGWn4UPBwvPdbU+xUFIqsJ46NtYjPS4bc
-         UUZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720753863; x=1721358663;
-        h=content-transfer-encoding:fcc:content-language:user-agent
-         :mime-version:references:in-reply-to:message-id:date:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ml2DPYAyUJyVltqbgbaMwabyFMeG/DO22mcUV9WuoFM=;
-        b=I+gzVMBpCB3sQwTWxalgCKwdWa3mAC0tK8RsG95E+pNO3ADMP5ehJzayqU49ZhJLxG
-         HbYn5XoGAMxg96tjO8mw34wTaTLADaYsCVDio+Xyh7/fnke/Czbu58qcMZVZBqtIaenC
-         jaikkEEuurjoTrMZWud2VE7JTUtrnU4yeyuEWK6VmtETmRPUimtmk1KT019N4WTA2Lz9
-         KIk6xwKwg4CT9Z+3l2zK3bXNV0viRDjYm3Sboe+SQAoT1d0M6TuzyI4dNUDAS6fUEqBA
-         EBX4SLU/LYVgyYB88sSDJntQogFyvRNBkDNc/oNA4ntQCj+I3o/EvCCDcsjfnl+xtx0S
-         LODQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWwQyCwhCjZGSbtKWyLG6/N0IF5PhBKPcJwpncbdilmQ3i6SJSkb2lKfNrYq3xAT5zuwxAy7bZzbRJI+KXu+foBAlf2B21mEtToEu3fZHfUvyXIEbTxVt2kQcaiYHBA7v5g9grlUh7B
-X-Gm-Message-State: AOJu0YyO5HGh1psMNQkBEFG77fQ5tu3LZ138VQggAidSfGYRTZfq0iUg
-	riFusCrPTtrBNbab2Ah5Hel4OkFc0i2hFsraLvdiJDoUDVs+NaXc
-X-Google-Smtp-Source: AGHT+IH7+npEXds1wOtBP0PIPRz96ImAaPJyGAUkcxxUuZrzMdDol6p9jVgUYeJoIltue3djNGcPOA==
-X-Received: by 2002:a17:902:f54f:b0:1fb:389b:1054 with SMTP id d9443c01a7336-1fbb6ec4012mr85996495ad.52.1720753863191;
-        Thu, 11 Jul 2024 20:11:03 -0700 (PDT)
-Received: from js-pc.. ([2408:8453:6d:7f1e:41e8:c2e1:ca4f:c196])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fbb6a2a5a9sm57404765ad.87.2024.07.11.20.11.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Jul 2024 20:11:02 -0700 (PDT)
-From: Hongyu Xie <xy521521@gmail.com>
-To: gregkh@linuxfoundation.org,
-	oneukum@suse.com
-Cc: brauner@kernel.org,
-	jlayton@kernel.org,
-	xiehongyu1@kylinos.cn,
-	jack@suse.cz,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH next] usb: usbfs: Add reset_resume for usbfs
-Date: Fri, 12 Jul 2024 11:10:57 +0800
-Message-Id: <a782c5bc-fc8b-43ad-9c6e-1e6799243364@kylinos.cn>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <527927b8-9475-47da-bf2b-7a5d9e81e470@suse.com>
-References: <20240711084321.44916-1-xiehongyu1@kylinos.cn>
- <527927b8-9475-47da-bf2b-7a5d9e81e470@suse.com>
+	s=arc-20240116; t=1720776291; c=relaxed/simple;
+	bh=djvrCrgXIatS3AA0W2BdkTYYGmXY1PlmcN5CcMKVbq0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=d8e7QplBc3wGnLA5vgTch0JIOnZ2f5Ext8BFp2ScC/z+8i8ZBhinKA3F9TpqU0kN9yxD19AZxplg14Qugsg/smZVDQRJ7cq67XIkRzC9EcoNZVuPcPrYf1QWHEY/8lo6+tPzXRToohEt1npo3lUh25VXVIz+9dSt2N3BJOsrfhQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mlnOQRm6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9D5AC4AF07;
+	Fri, 12 Jul 2024 09:24:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1720776290;
+	bh=djvrCrgXIatS3AA0W2BdkTYYGmXY1PlmcN5CcMKVbq0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=mlnOQRm6qzvj6TMpGkqX9xm1CHmeKfgRd3X/qQ/bCZAFyxfb4jlPfWJnJn7//a48O
+	 fAgvUlI9Muy7qU04T+cZ5BGJAD0kI2OED/hIu4fLEe34mzRMziu96r+x12zX4PDmfm
+	 0e3HWxpGxCOainWVvG5EVm56mVIQpqhystKFO0ZUxvH1gCA4M5Td6uByFe3FofeWSn
+	 MCYp6lU9G15Xue9992m4hwi0fDyaWzJy+vlnUqcFpdG3N2j3LD3TzyOip1bjLT75W1
+	 BMhpzhE8WPvIqdsTX6f3rDYlh+6irVwf7bRa0S4+Y3SSoBvnlNqB5uk6Cj6kaDqrq6
+	 sl7WffZl5+7ew==
+Message-ID: <2bed7dbe-1f43-4560-b9df-f9df8bf6fc9d@kernel.org>
+Date: Fri, 12 Jul 2024 11:24:42 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -90,48 +50,104 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/3] dt-bindings: usb: Add fsl,ls-dwc3.yaml for layerscape
+ usb3 glue layer
+To: Frank Li <Frank.Li@nxp.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Thinh Nguyen
+ <Thinh.Nguyen@synopsys.com>, Shawn Guo <shawnguo@kernel.org>
+Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ imx@lists.linux.dev
+References: <20240710-ls-dwc-v1-0-62f8cbed31d7@nxp.com>
+ <20240710-ls-dwc-v1-1-62f8cbed31d7@nxp.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
-X-Mozilla-Draft-Info: internal/draft; vcard=0; receipt=0; DSN=0; uuencode=0;
- attachmentreminder=0; deliveryformat=1
-X-Identity-Key: id1
-Fcc: imap://xiehongyu1%40kylinos.cn@imap.kylinos.cn/Sent
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20240710-ls-dwc-v1-1-62f8cbed31d7@nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: Hongyu Xie <xiehongyu1@kylinos.cn>=0D
+On 11/07/2024 01:02, Frank Li wrote:
+> Add fsl,ls-dwc3.yaml for layerscape usb3 glue layer.
+> 
+> Layerscape supports DMA coherent bus fabric. It needs to pass down a
+> software-managed property to the DWC3 core.
+> 
+> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> ---
+>  .../devicetree/bindings/usb/fsl,ls-dwc3.yaml       | 50 ++++++++++++++++++++++
+>  1 file changed, 50 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/fsl,ls-dwc3.yaml b/Documentation/devicetree/bindings/usb/fsl,ls-dwc3.yaml
+> new file mode 100644
+> index 0000000000000..e79416122d12b
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/fsl,ls-dwc3.yaml
+> @@ -0,0 +1,50 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/usb/fsl,ls-dwc3.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Freescale layerscape DWC3 USB controller
+> +
+> +maintainers:
+> +  - Frank Li <Frank.Li@nxp.com>
+> +
+> +properties:
+> +  compatible:
+> +    const: fsl,ls1028a-dwc3
 
-=0D
-=0D
-On 2024/7/11 16:59, Oliver Neukum wrote:=0D
-> =0D
-> =0D
-> On 11.07.24 10:43, Hongyu Xie wrote:=0D
->> During hibernation, usb_resume_interface will set needs_binding to 1 if=
-=0D
->> the usb_driver has no reset_resume implimentation. The USB interface=0D
->> will be rebind after usb_resume_complete.=0D
->>=0D
->> Normally, that's fine. But if a USB interface has a matched kernel=0D
->> driver, and a userspace driver or application is using this USB=0D
->> interface through usbfs during hibernation, usbfs will be=0D
->> detatched with the USB interface after resume. And this USB interface=0D
->> will be bind with a kernel driver instead of usbfs.=0D
->>=0D
->> So add reset_resume to fix this.=0D
-> =0D
-> The device has lost all settings, yet we continue like nothing=0D
-> changed. That strikes me as a very bad idea. If a device has undergone=0D
-> a reset user space has not requested, we need to return an error upon=0D
-> the next interaction.=0D
-Sorry I don't understand your concern.=0D
-When will "a reset user space has not requested" happen if there is a=0D
-reset_resume in usbfs?=0D
-> =0D
-> I am sorry, but this implementation has some fundamental issues.=0D
-> =0D
->  =C2=A0=C2=A0=C2=A0=C2=A0Regards=0D
->  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Oliver=0D
-> =0D
-Regards=0D
-Hongyu Xie=0D
+Responding also here, so Greg won't pick it up: as Rob explained,
+without reg this is an useless placeholder/wrapper, so instead go
+without the wrapper node.
+
+Best regards,
+Krzysztof
+
 
