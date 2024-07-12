@@ -1,79 +1,118 @@
-Return-Path: <linux-usb+bounces-12176-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12177-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44D6292FE37
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Jul 2024 18:08:02 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 413D2930046
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Jul 2024 20:16:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DA73E1F2554A
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Jul 2024 16:08:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5AAD41C20BA1
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Jul 2024 18:16:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7F5A17A930;
-	Fri, 12 Jul 2024 16:05:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7E3217C9EE;
+	Fri, 12 Jul 2024 18:12:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uKJNo+9d"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VbwPpmtt"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BCD117839E;
-	Fri, 12 Jul 2024 16:05:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A38417C7D5;
+	Fri, 12 Jul 2024 18:12:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720800350; cv=none; b=MeChP5Y5ktq/aIdlqRPqthIodkyZqaPcYpFpkqduG0UkItXjaLBd1EXI1XFN2H8lHxvQYHwa8Mp+Lh4oYmdUniH4SNSqsu1GuOLLxYtsK8KpD5UawCSkTDaqUASe+qi073cerPEYD6XkBTfyrq+1YngOTSLeaueVNi9T1nmy3xU=
+	t=1720807972; cv=none; b=NrF203BobiBSihhjRSKq4NDR/XeNJbgSaa3LF5q/hvtK4Y3drBVUG0LOkRZe0h5JH7u/K3Af3dmC3a5wOBnPLwKQPJ7VM4Q+xsQTzSan84i5BOycRWP4RIUHEV9xV1w6nDbeX+sHzZXrtMjQncx/5pJ2OT0OZDIsY3OBaeioQS0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720800350; c=relaxed/simple;
-	bh=K2e/z0FUveDK57CAtbFJZg9dUOn7SdN6CleNSbeSgqY=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=cx5m0UOs4/XI0/c6YrfX+Xeukq0tum0z3fItQE+mKaHPxnR5oF0Q1KZwbSqlv52mstK60nCy8n1TQ054TAKHorVdcLOE1536v94p+jQm8n8Wffo++eUBW1mG7vgypPt9rbcBq/2BFt9GShESV6KqQzxlxwfTykD03pvYhcBEkPk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uKJNo+9d; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0B7E5C4AF0B;
-	Fri, 12 Jul 2024 16:05:50 +0000 (UTC)
+	s=arc-20240116; t=1720807972; c=relaxed/simple;
+	bh=Aqw7ADBkx3Tvs2SkoNlVlFbMaz51qnfHYmKZBMA5iFU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=KNO8nHi+TZgMo2W0lKNAd5hXYc1x8wjf4/rly4aaQpEvITuEe2eiMur/aIUfd3yyGcmcdlsk3osGoW74arsg5l4hCRmtUmYtosePRG6fwWJkbUWnWVZMShkajTr0E9KOYVBtViNtZF1+DOI0/+SvIudAbZ7sJ6AwSU7584EjUqE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VbwPpmtt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C993C4AF10;
+	Fri, 12 Jul 2024 18:12:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720800350;
-	bh=K2e/z0FUveDK57CAtbFJZg9dUOn7SdN6CleNSbeSgqY=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=uKJNo+9d4tySZEgflUbZK/RdfTfdmtFhLnNGI8qhEmQP0ovHMIDJCSQav5QUe3eC9
-	 ZbnLjC9RBBzvPGq6sPR9/ylreMMz4yP3PACXFRcbwgRU00bT7Ok1ubQDPrn3ydZKKP
-	 ZJqE+f4ZC1YTZKmMp1dGm9Vd9APqOOAToLoHrl0BPrUg+lFtf0M2zM2z+38/RUFLqi
-	 zYRUcV6FOqHFPxMkr2T6xEgzJrhiib1+y9JrjJ0adaozFHIxassTmE1JMED2kaViaS
-	 +1e4jwmntLY3Q9V6A+TrP11wRKigTwl78+FHdlmqCB7lc6NdRBoCJuPq60pFQOqid7
-	 skuXBfBpkmqPw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id F2701C43153;
-	Fri, 12 Jul 2024 16:05:49 +0000 (UTC)
-Subject: Re: [GIT PULL] USB driver fixes for 6.10-final
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <ZpEIK6JklAx8aZ08@kroah.com>
-References: <ZpEIK6JklAx8aZ08@kroah.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <ZpEIK6JklAx8aZ08@kroah.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.10-final
-X-PR-Tracked-Commit-Id: 70c8e3944063a83b7fae1996db7971e9b858c635
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 1293147aa8c79381de155ef480e5b5769725182a
-Message-Id: <172080034998.10368.6931484274376268477.pr-tracker-bot@kernel.org>
-Date: Fri, 12 Jul 2024 16:05:49 +0000
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+	s=k20201202; t=1720807971;
+	bh=Aqw7ADBkx3Tvs2SkoNlVlFbMaz51qnfHYmKZBMA5iFU=;
+	h=From:To:Cc:Subject:Date:From;
+	b=VbwPpmttay5n2gDokSId049TrwG4+rF/e0W3D52q+36T1lcmKsK244PFsOGStdklY
+	 pONoJV35SJgfz2uhpQzz9PSuKw67VKP9WFwqyA3vEk4tHAi0z7kObaidY2cMZT09EJ
+	 LMklNaJZmAi9uczmjUwCEgQxXousSQd8lUs78hQE92eD8AIbf5QHM6v0I1QRiB6lZ5
+	 HYNYKdV0kRB6b4WIRtHGXrxvLIpd4ZzKCj0NCORocWiivtgStQaen9gs800xSehjw4
+	 gBQWCNXp5bYDHy0uKMC07V55TxtIKT1fz6ceh8lzCPvQk0aNOmJ1ta6R1wqNpBMeiW
+	 2N4n2qyU1FBiQ==
+From: superm1@kernel.org
+To: Bjorn Helgaas <bhelgaas@google.com>,
+	Mathias Nyman <mathias.nyman@intel.com>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: "open list : PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
+	open list <linux-kernel@vger.kernel.org>,
+	"open list : USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
+	Daniel Drake <drake@endlessos.org>,
+	Gary Li <Gary.Li@amd.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Mario Limonciello <mario.limonciello@amd.com>
+Subject: [PATCH v3 0/5] Verify devices transition from D3cold to D0
+Date: Fri, 12 Jul 2024 13:12:41 -0500
+Message-ID: <20240712181246.811044-1-superm1@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-The pull request you sent on Fri, 12 Jul 2024 12:40:43 +0200:
+From: Mario Limonciello <mario.limonciello@amd.com>
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.10-final
+Gary has reported that when a dock is plugged into a system at the same
+time the autosuspend delay has tripped that the USB4 stack malfunctions.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/1293147aa8c79381de155ef480e5b5769725182a
+Messages show up like this:
 
-Thank you!
+```
+thunderbolt 0000:e5:00.6: ring_interrupt_active: interrupt for TX ring 0 is already enabled
+```
+
+Furthermore the USB4 router is non-functional at this point.
+
+Those messages happen because the device is still in D3cold at the time
+that the PCI core handed control back to the USB4 connection manager
+(thunderbolt).
+
+The issue is that it takes time for a device to enter D3cold and do a
+conventional reset, and then more time for it to exit D3cold.
+
+This appears not to be a new problem; previously there were very similar
+reports from Ryzen XHCI controllers.  Quirks were added for those.
+Furthermore; adding extra logging it's apparent that other PCI devices
+in the system can take more than 10ms to recover from D3cold as well.
+
+This series add a wait into pci_power_up() specifically for D3cold exit and
+then drops the quirks that were previously used for the Ryzen XHCI controllers.
+
+v2->v3:
+ * Add an enum for reset types and pass that instead.
+v1->v2:
+ * Add a fix for a suspend problem
+
+Mario Limonciello (5):
+  PCI: Use an enum for reset type in pci_dev_wait()
+  PCI: Check PCI_PM_CTRL instead of PCI_COMMAND in pci_dev_wait()
+  PCI: Verify functions currently in D3cold have entered D0
+  PCI: Allow Ryzen XHCI controllers into D3cold and drop delays
+  PCI: Drop Radeon quirk for Macbook Pro 8.2
+
+ drivers/pci/pci-driver.c    |  2 +-
+ drivers/pci/pci.c           | 68 +++++++++++++++++++++++++++----------
+ drivers/pci/pci.h           | 12 ++++++-
+ drivers/pci/pcie/dpc.c      |  2 +-
+ drivers/pci/quirks.c        | 25 --------------
+ drivers/usb/host/xhci-pci.c | 11 ------
+ 6 files changed, 63 insertions(+), 57 deletions(-)
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.43.0
+
 
