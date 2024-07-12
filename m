@@ -1,63 +1,57 @@
-Return-Path: <linux-usb+bounces-12182-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12183-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F58F930059
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Jul 2024 20:17:59 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA70F930098
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Jul 2024 20:54:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E4BE82867B8
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Jul 2024 18:17:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 75BC2283745
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Jul 2024 18:54:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B4E317DE20;
-	Fri, 12 Jul 2024 18:12:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF5CE1EB3E;
+	Fri, 12 Jul 2024 18:54:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XzUGdd9h"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pmmh/NJ4"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC1A717DE03;
-	Fri, 12 Jul 2024 18:12:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52E2118C08;
+	Fri, 12 Jul 2024 18:54:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720807978; cv=none; b=qtgvsa6Kxs5anu0VqNQfmYGum3x2R09v+sU+7ELzq8kGS/5y5QhTBEMHBI+anhBNI4+VVfJIuxyFuOFPX2b3oIqePuZWeDM/7TEz6Mppj99OofxJkADUI5Qiac2jtcL5fczByNVFJkT45HThkpWO6/G/1Axsot27C+Qtb2IC2eg=
+	t=1720810463; cv=none; b=hZc6d32lPfB+bmwMeztfM+VFU0ZDGsUeeVEyDChmKn4g9QhlIzgy4JvWU0IIe5GRoygMR4eIQtREpn4JG1FM7wuKKNFrcKHaMV3NpXrs/am0jq+bpoaK9r6PiW26nL9hDIZlPpaw0xV18Q6o9+AtXljf64hgq+j99L6iz3JDRhI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720807978; c=relaxed/simple;
-	bh=I3YOKrgcX9tYEahHIc86VPfwH1MjXcqGLk7gRDw/2fI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WkIo22CRY03jOCcl4bjWXXXZeTmjXSmLzmWUD6Uwe2UG2c1BvYkkGQ6REXk/O3RTaWCX0kkD8VXdfy6aQHG/wxs1Ss1r5bmsJhEUQI5USUgNr53gviUOSe49GSrdtmwHXDpl2VrbfTWgxiqB8b0qyrzGgyC3UINplhSn6M8ZYDg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XzUGdd9h; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43485C4AF0B;
-	Fri, 12 Jul 2024 18:12:57 +0000 (UTC)
+	s=arc-20240116; t=1720810463; c=relaxed/simple;
+	bh=/FRO0tmyhfcgTXW2WSGH+l5CQEbA0ZXqOR+40diEmPU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rqCwzdmEXbtShNGn1/3o75j7CjKatinplIkMRbluvkpIJ+4rDC9m6+ABLaOZmc/VV7Rmg4oDomv3vXohUCtJSvDXJDlkXY5HGVJ8ODdFzU/v7gdhtJdEwibhpa0UOhUyeyeWczBx/OXtCG/x7jq3ayzFEEWB/5BUxxlsaHYQSYM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pmmh/NJ4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A053C32782;
+	Fri, 12 Jul 2024 18:54:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720807978;
-	bh=I3YOKrgcX9tYEahHIc86VPfwH1MjXcqGLk7gRDw/2fI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=XzUGdd9hxzX8GfjEwuF0oDiL740HXQIoEZOCyRPWXRX0Bv7uuTnG/d7jslvwJNJ2w
-	 iGV8yn3ogTMp6RQ1Po3Qpd2cxjvsk7p0U/dwie8LMWORRHHk7WxWzj8Iy3JjWZLw24
-	 ffJyV2nIhfaKLjk9NsgGCgL8UtC5XbZD9tvZMT3WLu3z/3fM67psVQjvbpCh6v3BR7
-	 6X2L4Da69mjTsW7snnGtDR4ynwk97E4SmfBi9CjbEUbp6OEKM1cPXbCHlESPNeFKip
-	 9ayt7nNHMkZx/2KWUlYuT/t/f0CKULEgXeleb/78HgDcJGqHBowlotrO840eKt4m5y
-	 EnRzU3B7084uA==
+	s=k20201202; t=1720810462;
+	bh=/FRO0tmyhfcgTXW2WSGH+l5CQEbA0ZXqOR+40diEmPU=;
+	h=From:To:Cc:Subject:Date:From;
+	b=pmmh/NJ42eA0VurfR3KqgY/cQuV4L+J80Bc4cu1eyHNinRr0dyaWGHDylmhv25Aae
+	 oBHNd7I9UplI3/XFTzirKc08fJqWHLfznHyk7U0132YOg6iM8IcQtZaJ4NcfIlSeHu
+	 +NY00kC8hoo2q84STU3Q1UjBpLhN1m/lmOf231pBBKQPHJxdHlGCVU4tWuSzW4Mg1t
+	 3sLSnVdep2hqiwYyD9zB/Bl5IvJQDWw+hGRTyXsnfc00LeQ57Z4qdK+Idv3JfsAcip
+	 E/uh5qsY9LvWYBuAnz7PLvVljBiH2Ir1TNC59r1U1g9xAPJ/eCa68OTIgYmjrTj+Gi
+	 cR717kmQfRnAg==
 From: superm1@kernel.org
-To: Bjorn Helgaas <bhelgaas@google.com>,
-	Mathias Nyman <mathias.nyman@intel.com>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: "open list : PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list : USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
-	Daniel Drake <drake@endlessos.org>,
-	Gary Li <Gary.Li@amd.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+To: Mathias Nyman <mathias.nyman@intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org (open list:USB XHCI DRIVER),
+	linux-kernel@vger.kernel.org (open list),
+	Kai-Heng Feng <kai.heng.feng@canonical.com>,
+	mika.westerberg@linux.intel.com,
 	Mario Limonciello <mario.limonciello@amd.com>
-Subject: [PATCH v3 5/5] PCI: Drop Radeon quirk for Macbook Pro 8.2
-Date: Fri, 12 Jul 2024 13:12:46 -0500
-Message-ID: <20240712181246.811044-6-superm1@kernel.org>
+Subject: [PATCH 0/2] Put XHCI controllers into D3 at S4/S5
+Date: Fri, 12 Jul 2024 13:54:16 -0500
+Message-ID: <20240712185418.937087-1-superm1@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240712181246.811044-1-superm1@kernel.org>
-References: <20240712181246.811044-1-superm1@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -68,38 +62,31 @@ Content-Transfer-Encoding: 8bit
 
 From: Mario Limonciello <mario.limonciello@amd.com>
 
-commit 5938628c51a7 ("drm/radeon: make MacBook Pro d3_delay quirk more
-generic") introduced a generic quirk for Macbook Pro 8.2s that contain
-Radeon graphics to ensure that enough time had past when the device
-was powered on.
+When the system is put into S4 or S5 XHCI controllers remain in D0.  This
+causes higher power consumption and may compromise energy certifications.
+Consequently some systems consume more power in S5 than s0i3.
 
-As the PCI core now verifies the device is in D0 during power on this
-extra artificial delay is no longer necessary.
+This affects all PCIe devices, but looking at breakdowns XHCI is the
+biggest offender for power consumption.
 
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
----
- drivers/pci/quirks.c | 8 --------
- 1 file changed, 8 deletions(-)
+This series checks if any wakeups are needed and puts controllers into D3
+if no wakeup necessary.
 
-diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-index 942d0fe12cb1a..19be953c9f373 100644
---- a/drivers/pci/quirks.c
-+++ b/drivers/pci/quirks.c
-@@ -2038,14 +2038,6 @@ static void quirk_d3hot_delay(struct pci_dev *dev, unsigned int delay)
- 		 dev->d3hot_delay);
- }
- 
--static void quirk_radeon_pm(struct pci_dev *dev)
--{
--	if (dev->subsystem_vendor == PCI_VENDOR_ID_APPLE &&
--	    dev->subsystem_device == 0x00e2)
--		quirk_d3hot_delay(dev, 20);
--}
--DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI, 0x6741, quirk_radeon_pm);
--
- /*
-  * NVIDIA Ampere-based HDA controllers can wedge the whole device if a bus
-  * reset is performed too soon after transition to D0, extend d3hot_delay
+This series is a spiritual successor to [1] which aimed to do this more
+generally in PCI.  It also accomplishes similar goals as [2], but aims for
+both S4 and S5.
+
+[1] https://lore.kernel.org/linux-pci/20231213182656.6165-1-mario.limonciello@amd.com/#t
+[2] https://lore.kernel.org/linux-pci/9d2f1619-1c61-4e8c-b28d-d4eddefa45c3@amd.com/T/
+
+Mario Limonciello (2):
+  xhci: pci: If no ports have wakeup enabled then disable PCI device at
+    S4
+  xhci: pci: Put XHCI controllers into D3hot at shutdown
+
+ drivers/usb/host/xhci-pci.c | 17 +++++++++++------
+ 1 file changed, 11 insertions(+), 6 deletions(-)
+
 -- 
 2.43.0
 
