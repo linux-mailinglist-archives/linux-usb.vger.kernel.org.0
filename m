@@ -1,482 +1,133 @@
-Return-Path: <linux-usb+bounces-12187-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12188-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CDEFF93032B
-	for <lists+linux-usb@lfdr.de>; Sat, 13 Jul 2024 04:09:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1CA76930337
+	for <lists+linux-usb@lfdr.de>; Sat, 13 Jul 2024 04:18:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4ED0228295D
-	for <lists+linux-usb@lfdr.de>; Sat, 13 Jul 2024 02:09:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BDA771F21CF6
+	for <lists+linux-usb@lfdr.de>; Sat, 13 Jul 2024 02:18:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BD50101E6;
-	Sat, 13 Jul 2024 02:09:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD25C125BA;
+	Sat, 13 Jul 2024 02:18:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MWu+ZxNg"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="EzCF3223"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 457D73D6B
-	for <linux-usb@vger.kernel.org>; Sat, 13 Jul 2024 02:09:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47CEE33D1
+	for <linux-usb@vger.kernel.org>; Sat, 13 Jul 2024 02:18:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720836543; cv=none; b=LR7ocLGga507pOc0SLhiUhWmLNO/atSOJ+ykvs5Il1BoqrVJkOg4J5SDn6G4+eMcC2JxKXm5CS0T6RyBlT2D3p8FjPpKj3bmLSXmiaSUHpyQQ9bw8Haq1STIeKbuFjqNLvRh737PuhPn2Qp0gtyO8eCaCuHtzu155mYt5kLD1j0=
+	t=1720837090; cv=none; b=VYgaCpd9ZMZAqa2gVmbEflfpsksznLviDdt9agfEVT/DkRS9MmqVw6ufW3rssrbSGDJsn2sUwiIRvXC5HcOEQHR2ryR3mKgwJD0G49pov2gWsriNO7eqZwS2BKifupMgal18ip8D+Mo27p1DR089//wQZoeEz1csyYQx4h01Wf8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720836543; c=relaxed/simple;
-	bh=/KcTT5fiNz0UHpcdY1VKFOpfY18DxGvriyoBn0m00mM=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=MUbJhfp6hDKBcZImPLbkcjqDo8T+XDYPvXTeij3z2O3sW829fHodEZtmu2LbJsGRlMqcv69XHVAHR9fSb1Qw+r3uSyNchhVcKePhANaUtVNo9MWsHDlfvVwkHNYPaWHoXe1V+TiZedxvMg9PeO5yyviekJ/SurXjMye+Jur4eRY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MWu+ZxNg; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1720836540; x=1752372540;
-  h=date:from:to:cc:subject:message-id;
-  bh=/KcTT5fiNz0UHpcdY1VKFOpfY18DxGvriyoBn0m00mM=;
-  b=MWu+ZxNgrnS/WMPaN8Nw0d4sPQJpL2EUoElIn8KkgL70G60wkb8fhCMx
-   jXwoHfqPkrcARMkJrVdtWclhXz/TLvaXWZFhGvhomjxtITMFJ4SrvBJTU
-   ISarltwXly90AURxmIE3tVOmon0XcFPt22dalJXMMBt+H8JnsaFbRsULK
-   f4gv8S3WpsyzLzJ63DI4naRqc3xpS1Rrc4tqaXRH97jCLbNyjLMWAo8n8
-   4O6R3zqi5mSgcbuq++scY37lLz1SUhN9j0l3wCQZdCcou18svjDj71mRV
-   d1+m2yqEETepBp+V3vY66qfsw2OTZD5hZw1N85HpNqexowensY3Fqbwl9
-   Q==;
-X-CSE-ConnectionGUID: VJAHEe1IRfeAzPhVQcwJPg==
-X-CSE-MsgGUID: papOn2vAR96w8eiVQ1vzkA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11131"; a="21210147"
-X-IronPort-AV: E=Sophos;i="6.09,204,1716274800"; 
-   d="scan'208";a="21210147"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2024 19:08:59 -0700
-X-CSE-ConnectionGUID: EAsBzQGjQbadqQli1PtLLQ==
-X-CSE-MsgGUID: /gh+oHHSSSKrpMWpUNYUKg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,204,1716274800"; 
-   d="scan'208";a="48972556"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 12 Jul 2024 19:08:59 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sSSBz-000bYG-2e;
-	Sat, 13 Jul 2024 02:08:55 +0000
-Date: Sat, 13 Jul 2024 10:08:11 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- b727493011123db329e2901e3abf81a8d146b6fe
-Message-ID: <202407131006.PX690bOd-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1720837090; c=relaxed/simple;
+	bh=hIdtXzR2PQnsAKWeiPInLMv+lItza5ODBCFpLDMd+ls=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=kFR7Fu0FlkCsn+QmZQRjYw0oPnKrkUJmUD4meg9PQT1CEXhwlYRdMWq+FHcc69gIzDIPi1SwSH9DEZ1VfSkD3P9p74jPlWfMjrgQoUnboioow+XO7W3oTUlP6CxvQOyhDdmHuFSQkEBlTsT0mcGxqskyNopHfFjjHu7HTHWIVOY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=EzCF3223; arc=none smtp.client-ip=209.85.167.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=g.harvard.edu
+Received: by mail-oi1-f182.google.com with SMTP id 5614622812f47-3d9400a1ad9so1501284b6e.1
+        for <linux-usb@vger.kernel.org>; Fri, 12 Jul 2024 19:18:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1720837087; x=1721441887; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-disposition:mime-version
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=P4/vQGc924ZtBHUCsIbXJM+oSQ41bTSKdLtLmWvVwcc=;
+        b=EzCF3223HqFuO7i+yPBS3pvcmSYUoaqQJbxzWKrJmofU0CYl+JM2NnylsZe9U8ne58
+         eM6ZX0DcZ3t5Pl/RoV4uAVMSWCvRQiyD02fHlVBFYd/Wv5rZcBP1vXi4Q/7MCASalNab
+         9khpIgGwMaoTGf5Zn7RoHgoaMRwP83lmaL9Ide7slQF/o9iCZIYzzZnDHkj4CzH1pXN8
+         LBAB071aVpb8nju/uvmrZfVGHrywxVRwboSTJIaYPRIhpClzXzYarijLUV1EY7CcFGik
+         4YIix7cPW2OLGJWK6D42if6s6OXki4TIEhM1X65x1eDL971z5LpvaPdor2Oel3MhJH+e
+         g3TQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720837087; x=1721441887;
+        h=content-transfer-encoding:content-disposition:mime-version
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=P4/vQGc924ZtBHUCsIbXJM+oSQ41bTSKdLtLmWvVwcc=;
+        b=dmjWV1AW2V0l+INa51I7es+Y5LLCaG8O2wqzXT+hqmIZjZ2T7mhFE3D1XuVPyJcj3U
+         3Uq3IIN98qSdQwwyOAmxy5Y04Shmz2WETbZQ/WW1GitjaLfVVIu9sIgR/YnqBfB0coD8
+         3ck9B3CCLEXaS6ktmrf6Ksp4+X5yp+P7helHOneOAsMpwR2RKuBelY9KO1jZxYuVL/RD
+         3BIoOJTGlJa2s/O1ssMPK/TppTdlrUFDgIOd8ms03ujFcSOTuIwHEIa0pa0cbLoARu9Q
+         PUrjEJKiryAbqXV8p9iCUwQV9BGW2rpLORDpmVJJgXim4VKgXkJNjrEJlWkxf4gAQfNv
+         nZPQ==
+X-Gm-Message-State: AOJu0YwabIJOCF0ACsj3KfGYpgNNqzdVEPzz0snnZQpEXg/0gEfj5mqy
+	LwzhyTL4F5tEzCKIQMGjokhtxxDbmGzE80RAYYPjcUpGL6e+41V/hX8UTsdBNviGn8nw3c99KNc
+	=
+X-Google-Smtp-Source: AGHT+IG/L4q90OJeEDd2vgiTcymYpsKhCUx9J/rY6m5Z39M8RoDey0geD/D45vE0rEJ2zCP57l8Brg==
+X-Received: by 2002:a05:6808:16ab:b0:3d6:32d2:2c10 with SMTP id 5614622812f47-3d93c03902dmr16933123b6e.31.1720837087123;
+        Fri, 12 Jul 2024 19:18:07 -0700 (PDT)
+Received: from rowland.harvard.edu ([2601:19b:681:fd10::cad7])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7a160ba4e00sm10843585a.2.2024.07.12.19.18.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Jul 2024 19:18:06 -0700 (PDT)
+Date: Fri, 12 Jul 2024 22:18:03 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: =?utf-8?B?6b6Z6YeN5L2Z?= <longchongyu22@mails.ucas.edu.cn>
+Cc: linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net
+Subject: Re: Consultation about max_sectors in Linux SCSI Drivers
+Message-ID: <98ce660b-cd13-4ffa-851c-ec3cdca9bdcc@rowland.harvard.edu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: b727493011123db329e2901e3abf81a8d146b6fe  kselftest: devices: Add test to detect device error logs
+On Thu, Jul 11, 2024 at 10:16 PM, 龙重余 wrote:
+> Hello!
+> 
+> 
+> I'm sorry to bother you. Here is the problem: My usb storage device
+> has a 64kB (limited by hardware) buffer used to cache reads/writes
+> which means it can only cache up to 128 blocks(512B) of memory.  The
+> SCSI Write-10 and Read-10 command has a total-blocks field that can be
+> up to 240 blocks (120kB) for USB2.0.  When originally testing the
+> product on Windows 11 it never writes more than 128 blocks at a time
+> but when tested on Linux it sometimes writes more than 128 blocks,
+> which causes the usb storage device to crash.
+> 
+> 
+> Is there a way to tell the host OS not to request more than 128 blocks?
+> I have implemented block limit VPD page, and it works well on Windows
+> 10/11.  I even set the block limit to be 64 blocks, it's OK too.
+> Because before the data transfer, the windows host issue an SCSI
+> inquiry order with the VPD PAGE CODE is 0xB0, so the device could
+> transmit the block limits information to the host. And then the
+> windows host could adjust the amount of data transferred.
+> 
+> However, on Linux or MacOS, the host does not appear to be running the
+> block limits command.  So the host don't know what is the block
+> limits. So the write/read blocks number beyond the buffer size.
+> 
+> 
+> Could you please tell me what can I do to dissolve the problem?
 
-Unverified Warning (likely false positive, please contact us if interested):
+(Note that this is really a SCSI question, not a USB question.)
 
-arch/powerpc/boot/dts/fsl/mvme2500.dtb: usb@22000: compatible: 'oneOf' conditional failed, one must be fixed:
-arch/powerpc/boot/dts/fsl/p1010rdb-pa.dtb: usb@22000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'compatible' were unexpected)
-arch/powerpc/boot/dts/fsl/p1010rdb-pa_36b.dtb: usb@22000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'compatible' were unexpected)
-arch/powerpc/boot/dts/fsl/p1010rdb-pb.dtb: usb@22000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'compatible' were unexpected)
-arch/powerpc/boot/dts/fsl/p1020mbg-pc_36b.dtb: usb@22000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'compatible' were unexpected)
-arch/powerpc/boot/dts/fsl/p1020mbg-pc_36b.dtb: usb@22000: compatible: 'oneOf' conditional failed, one must be fixed:
-arch/powerpc/boot/dts/fsl/p1020rdb-pc_32b.dtb: usb@22000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'compatible' were unexpected)
-arch/powerpc/boot/dts/fsl/p1020rdb-pc_36b.dtb: usb@22000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'compatible' were unexpected)
-arch/powerpc/boot/dts/fsl/p1020rdb-pc_36b.dtb: usb@22000: compatible: 'oneOf' conditional failed, one must be fixed:
-arch/powerpc/boot/dts/fsl/p1020rdb-pc_camp_core0.dtb: usb@22000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'compatible' were unexpected)
-arch/powerpc/boot/dts/fsl/p1020rdb-pc_camp_core0.dtb: usb@22000: compatible: 'oneOf' conditional failed, one must be fixed:
-arch/powerpc/boot/dts/fsl/p1020rdb.dtb: usb@22000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'compatible' were unexpected)
-arch/powerpc/boot/dts/fsl/p1020rdb.dtb: usb@22000: compatible: 'oneOf' conditional failed, one must be fixed:
-arch/powerpc/boot/dts/fsl/p1020rdb_36b.dtb: usb@22000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'compatible' were unexpected)
-arch/powerpc/boot/dts/fsl/p1020utm-pc_32b.dtb: usb@22000: compatible: 'oneOf' conditional failed, one must be fixed:
-arch/powerpc/boot/dts/fsl/p1020utm-pc_36b.dtb: usb@22000: compatible: 'oneOf' conditional failed, one must be fixed:
-arch/powerpc/boot/dts/fsl/p1021mds.dtb: usb@22000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'compatible' were unexpected)
-arch/powerpc/boot/dts/fsl/p1021mds.dtb: usb@22000: compatible: 'oneOf' conditional failed, one must be fixed:
-arch/powerpc/boot/dts/fsl/p1021rdb-pc_32b.dtb: usb@22000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'compatible' were unexpected)
-arch/powerpc/boot/dts/fsl/p1022ds_32b.dtb: usb@22000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'compatible' were unexpected)
-arch/powerpc/boot/dts/fsl/p1023rdb.dtb: usb@22000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'compatible' were unexpected)
-arch/powerpc/boot/dts/fsl/p1024rdb_32b.dtb: usb@22000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'compatible' were unexpected)
-arch/powerpc/boot/dts/fsl/p1024rdb_32b.dtb: usb@22000: compatible: 'oneOf' conditional failed, one must be fixed:
-arch/powerpc/boot/dts/fsl/p1025rdb_32b.dtb: usb@22000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'compatible' were unexpected)
-arch/powerpc/boot/dts/fsl/p1025twr.dtb: usb@22000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'compatible' were unexpected)
-arch/powerpc/boot/dts/fsl/p2020ds.dtb: usb@22000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'compatible' were unexpected)
-arch/powerpc/boot/dts/fsl/p2020rdb-pc_32b.dtb: usb@22000: compatible: 'oneOf' conditional failed, one must be fixed:
-arch/powerpc/boot/dts/fsl/p2020rdb-pc_36b.dtb: usb@22000: compatible: 'oneOf' conditional failed, one must be fixed:
-arch/powerpc/boot/dts/fsl/p2020rdb.dtb: usb@22000: compatible: 'oneOf' conditional failed, one must be fixed:
-arch/powerpc/boot/dts/fsl/p5020ds.dtb: usb@210000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'compatible', 'fsl,iommu-parent', 'fsl,liodn-reg' were unexpected)
-arch/powerpc/boot/dts/fsl/p5020ds.dtb: usb@210000: compatible: 'oneOf' conditional failed, one must be fixed:
-arch/powerpc/boot/dts/fsl/p5040ds.dtb: usb@210000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'compatible', 'fsl,iommu-parent', 'fsl,liodn-reg' were unexpected)
-arch/powerpc/boot/dts/fsl/t1023rdb.dtb: usb@210000: compatible: 'oneOf' conditional failed, one must be fixed:
-arch/powerpc/boot/dts/fsl/t1023rdb.dtb: usb@211000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'fsl,iommu-parent', 'fsl,liodn-reg' were unexpected)
-arch/powerpc/boot/dts/fsl/t1024qds.dtb: usb@210000: compatible: 'oneOf' conditional failed, one must be fixed:
-arch/powerpc/boot/dts/fsl/t1024rdb.dtb: usb@210000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'compatible', 'fsl,iommu-parent', 'fsl,liodn-reg' were unexpected)
-arch/powerpc/boot/dts/fsl/t1040d4rdb.dtb: usb@211000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'fsl,iommu-parent', 'fsl,liodn-reg' were unexpected)
-arch/powerpc/boot/dts/fsl/t1040qds.dtb: usb@210000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'compatible', 'fsl,iommu-parent', 'fsl,liodn-reg' were unexpected)
-arch/powerpc/boot/dts/fsl/t1040rdb.dtb: usb@211000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'fsl,iommu-parent', 'fsl,liodn-reg' were unexpected)
-arch/powerpc/boot/dts/fsl/t1042d4rdb.dtb: usb@210000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'compatible', 'fsl,iommu-parent', 'fsl,liodn-reg' were unexpected)
-arch/powerpc/boot/dts/fsl/t1042qds.dtb: usb@210000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'compatible', 'fsl,iommu-parent', 'fsl,liodn-reg' were unexpected)
-arch/powerpc/boot/dts/fsl/t1042qds.dtb: usb@210000: compatible: 'oneOf' conditional failed, one must be fixed:
-arch/powerpc/boot/dts/fsl/t1042rdb.dtb: usb@211000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'fsl,iommu-parent', 'fsl,liodn-reg' were unexpected)
-arch/powerpc/boot/dts/fsl/t1042rdb_pi.dtb: usb@210000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'compatible', 'fsl,iommu-parent', 'fsl,liodn-reg' were unexpected)
-arch/powerpc/boot/dts/fsl/t2080qds.dtb: usb@211000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'fsl,iommu-parent', 'fsl,liodn-reg' were unexpected)
-arch/powerpc/boot/dts/fsl/t2081qds.dtb: usb@210000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'compatible', 'fsl,iommu-parent', 'fsl,liodn-reg' were unexpected)
-arch/powerpc/boot/dts/fsl/t2081qds.dtb: usb@211000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'fsl,iommu-parent', 'fsl,liodn-reg' were unexpected)
-arch/powerpc/boot/dts/fsl/t4240rdb.dtb: usb@210000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'compatible' were unexpected)
-arch/powerpc/boot/dts/fsl/t4240rdb.dtb: usb@210000: compatible: 'oneOf' conditional failed, one must be fixed:
-arch/powerpc/boot/dts/fsl/t4240rdb.dtb: usb@211000: Unevaluated properties are not allowed ('#address-cells', '#size-cells' were unexpected)
+You tell the Linux host the maximum number of sectors the device's 
+hardware can transfer in a single command by writing to the 
+max_hw_sectors_kb file in sysfs.  For example, if your device shows up 
+as /dev/sdc then you could do:
 
-Warning ids grouped by kconfigs:
+	echo 64 >/sys/block/sdc/queue/max_hw_sectors_kb
 
-recent_errors
-|-- arm64-randconfig-051-20240712
-|   |-- arch-arm64-boot-dts-qcom-sc818-lenovo-flex-5g.dtb:usb-a6f8800:interrupt-names:dm_hs_phy_irq-was-expected
-|   |-- arch-arm64-boot-dts-qcom-sc818-lenovo-flex-5g.dtb:usb-a6f8800:interrupt-names:dp_hs_phy_irq-was-expected
-|   |-- arch-arm64-boot-dts-qcom-sc818-lenovo-flex-5g.dtb:usb-a6f8800:interrupt-names:hs_phy_irq-ss_phy_irq-dm_hs_phy_irq-dp_hs_phy_irq-is-too-short
-|   |-- arch-arm64-boot-dts-qcom-sc818-lenovo-flex-5g.dtb:usb-a6f8800:interrupt-names:hs_phy_irq-was-expected
-|   |-- arch-arm64-boot-dts-qcom-sc818-lenovo-flex-5g.dtb:usb-a8f8800:interrupt-names:dm_hs_phy_irq-was-expected
-|   |-- arch-arm64-boot-dts-qcom-sc818-lenovo-flex-5g.dtb:usb-a8f8800:interrupt-names:dp_hs_phy_irq-was-expected
-|   |-- arch-arm64-boot-dts-qcom-sc818-lenovo-flex-5g.dtb:usb-a8f8800:interrupt-names:hs_phy_irq-ss_phy_irq-dm_hs_phy_irq-dp_hs_phy_irq-is-too-short
-|   |-- arch-arm64-boot-dts-qcom-sc818-lenovo-flex-5g.dtb:usb-a8f8800:interrupt-names:hs_phy_irq-was-expected
-|   |-- arch-arm64-boot-dts-qcom-sc818-primus.dtb:usb-a6f8800:interrupt-names:dm_hs_phy_irq-was-expected
-|   |-- arch-arm64-boot-dts-qcom-sc818-primus.dtb:usb-a6f8800:interrupt-names:dp_hs_phy_irq-was-expected
-|   |-- arch-arm64-boot-dts-qcom-sc818-primus.dtb:usb-a6f8800:interrupt-names:hs_phy_irq-ss_phy_irq-dm_hs_phy_irq-dp_hs_phy_irq-is-too-short
-|   |-- arch-arm64-boot-dts-qcom-sc818-primus.dtb:usb-a6f8800:interrupt-names:hs_phy_irq-was-expected
-|   |-- arch-arm64-boot-dts-qcom-sc818-primus.dtb:usb-a8f8800:interrupt-names:dm_hs_phy_irq-was-expected
-|   |-- arch-arm64-boot-dts-qcom-sc818-primus.dtb:usb-a8f8800:interrupt-names:dp_hs_phy_irq-was-expected
-|   |-- arch-arm64-boot-dts-qcom-sc818-primus.dtb:usb-a8f8800:interrupt-names:hs_phy_irq-ss_phy_irq-dm_hs_phy_irq-dp_hs_phy_irq-is-too-short
-|   `-- arch-arm64-boot-dts-qcom-sc818-primus.dtb:usb-a8f8800:interrupt-names:hs_phy_irq-was-expected
-`-- powerpc-randconfig-051-20240712
-    |-- arch-powerpc-boot-dts-fsl-mvme2500.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-mvme2500.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-powerpc-boot-dts-fsl-oca4080.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-powerpc-boot-dts-fsl-p1010rdb-pa.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-p1010rdb-pa.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-powerpc-boot-dts-fsl-p1010rdb-pa_36b.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-p1010rdb-pa_36b.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-powerpc-boot-dts-fsl-p1010rdb-pb.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-p1010rdb-pb.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-powerpc-boot-dts-fsl-p1010rdb-pb_36b.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-p1010rdb-pb_36b.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-powerpc-boot-dts-fsl-p1020mbg-pc_32b.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-p1020mbg-pc_32b.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-powerpc-boot-dts-fsl-p1020mbg-pc_36b.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-p1020mbg-pc_36b.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-powerpc-boot-dts-fsl-p1020rdb-pc_32b.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-p1020rdb-pc_32b.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-powerpc-boot-dts-fsl-p1020rdb-pc_32b.dtb:usb:phy_type-is-a-required-property
-    |-- arch-powerpc-boot-dts-fsl-p1020rdb-pc_36b.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-p1020rdb-pc_36b.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-powerpc-boot-dts-fsl-p1020rdb-pc_36b.dtb:usb:phy_type-is-a-required-property
-    |-- arch-powerpc-boot-dts-fsl-p1020rdb-pc_camp_core0.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-p1020rdb-pc_camp_core0.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-powerpc-boot-dts-fsl-p1020rdb-pc_camp_core0.dtb:usb:phy_type-is-a-required-property
-    |-- arch-powerpc-boot-dts-fsl-p1020rdb-pc_camp_core1.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-p1020rdb-pc_camp_core1.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-powerpc-boot-dts-fsl-p1020rdb-pc_camp_core1.dtb:usb:phy_type-is-a-required-property
-    |-- arch-powerpc-boot-dts-fsl-p1020rdb-pd.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-p1020rdb-pd.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-powerpc-boot-dts-fsl-p1020rdb-pd.dtb:usb:phy_type-is-a-required-property
-    |-- arch-powerpc-boot-dts-fsl-p1020rdb.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-p1020rdb.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-powerpc-boot-dts-fsl-p1020rdb_36b.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-p1020rdb_36b.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-powerpc-boot-dts-fsl-p1020utm-pc_32b.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-p1020utm-pc_32b.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-powerpc-boot-dts-fsl-p1020utm-pc_36b.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-p1020utm-pc_36b.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-powerpc-boot-dts-fsl-p1021mds.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-p1021mds.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-powerpc-boot-dts-fsl-p1021rdb-pc_32b.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-p1021rdb-pc_32b.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-powerpc-boot-dts-fsl-p1021rdb-pc_36b.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-p1021rdb-pc_36b.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-powerpc-boot-dts-fsl-p1022ds_32b.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-p1022ds_32b.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-powerpc-boot-dts-fsl-p1022ds_36b.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-p1022ds_36b.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-powerpc-boot-dts-fsl-p1022rdk.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-p1022rdk.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-powerpc-boot-dts-fsl-p1023rdb.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-p1023rdb.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-powerpc-boot-dts-fsl-p1024rdb_32b.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-p1024rdb_32b.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-powerpc-boot-dts-fsl-p1024rdb_36b.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-p1024rdb_36b.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-powerpc-boot-dts-fsl-p1025rdb_32b.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-p1025rdb_32b.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-powerpc-boot-dts-fsl-p1025rdb_36b.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-p1025rdb_36b.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-powerpc-boot-dts-fsl-p1025twr.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-p1025twr.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-powerpc-boot-dts-fsl-p2020ds.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-p2020ds.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-powerpc-boot-dts-fsl-p2020rdb-pc_32b.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-p2020rdb-pc_32b.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-powerpc-boot-dts-fsl-p2020rdb-pc_36b.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-p2020rdb-pc_36b.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-powerpc-boot-dts-fsl-p2020rdb.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-p2020rdb.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-powerpc-boot-dts-fsl-p2041rdb.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-p2041rdb.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-powerpc-boot-dts-fsl-p3041ds.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-p3041ds.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-powerpc-boot-dts-fsl-p4080ds.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-p4080ds.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-powerpc-boot-dts-fsl-p5020ds.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-p5020ds.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-powerpc-boot-dts-fsl-p5040ds.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-p5040ds.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-powerpc-boot-dts-fsl-t1023rdb.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-t1023rdb.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-t1023rdb.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-powerpc-boot-dts-fsl-t1024qds.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-t1024qds.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-t1024qds.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-powerpc-boot-dts-fsl-t1024rdb.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-t1024rdb.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-t1024rdb.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-powerpc-boot-dts-fsl-t1040d4rdb.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-t1040d4rdb.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-t1040d4rdb.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-powerpc-boot-dts-fsl-t1040qds.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-t1040qds.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-t1040qds.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-powerpc-boot-dts-fsl-t1040rdb-rev-a.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-t1040rdb-rev-a.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-t1040rdb-rev-a.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-powerpc-boot-dts-fsl-t1040rdb.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-t1040rdb.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-t1040rdb.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-powerpc-boot-dts-fsl-t1042d4rdb.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-t1042d4rdb.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-t1042d4rdb.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-powerpc-boot-dts-fsl-t1042qds.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-t1042qds.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-t1042qds.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-powerpc-boot-dts-fsl-t1042rdb.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-t1042rdb.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-t1042rdb.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-powerpc-boot-dts-fsl-t1042rdb_pi.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-t1042rdb_pi.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-t1042rdb_pi.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-powerpc-boot-dts-fsl-t2080qds.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-t2080qds.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-t2080qds.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-powerpc-boot-dts-fsl-t2080rdb.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-t2080rdb.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-t2080rdb.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-powerpc-boot-dts-fsl-t2081qds.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-t2081qds.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-fsl-iommu-parent-fsl-liodn-reg-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-t2081qds.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-powerpc-boot-dts-fsl-t4240qds.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-t4240qds.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-t4240qds.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
-    |-- arch-powerpc-boot-dts-fsl-t4240rdb.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-compatible-were-unexpected)
-    |-- arch-powerpc-boot-dts-fsl-t4240rdb.dtb:usb:Unevaluated-properties-are-not-allowed-(-address-cells-size-cells-were-unexpected)
-    `-- arch-powerpc-boot-dts-fsl-t4240rdb.dtb:usb:compatible:oneOf-conditional-failed-one-must-be-fixed:
+You can even write a udev script to do this for you automatically 
+whenever the storage device is detected.
 
-elapsed time: 969m
+I don't know why this doesn't happen automatically.  Maybe the SCSI 
+layer doesn't try to read VPD page 0xb0 on USB mass-storage devices.  
+You should be able to find out by asking on the 
+linux-scsi@vger.kernel.org mailing list.
 
-configs tested: 186
-configs skipped: 4
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                             allnoconfig   gcc-13.2.0
-alpha                            allyesconfig   gcc-13.3.0
-alpha                               defconfig   gcc-13.2.0
-arc                              allmodconfig   gcc-13.2.0
-arc                               allnoconfig   gcc-13.2.0
-arc                              allyesconfig   gcc-13.2.0
-arc                          axs103_defconfig   gcc-13.2.0
-arc                                 defconfig   gcc-13.2.0
-arc                   randconfig-001-20240713   gcc-13.2.0
-arc                   randconfig-002-20240713   gcc-13.2.0
-arm                              allmodconfig   gcc-13.2.0
-arm                               allnoconfig   gcc-13.2.0
-arm                              allyesconfig   gcc-13.2.0
-arm                     davinci_all_defconfig   gcc-13.2.0
-arm                                 defconfig   gcc-13.2.0
-arm                       imx_v4_v5_defconfig   gcc-13.2.0
-arm                      integrator_defconfig   gcc-13.2.0
-arm                          pxa168_defconfig   gcc-13.2.0
-arm                             pxa_defconfig   gcc-13.2.0
-arm                   randconfig-001-20240713   gcc-13.2.0
-arm                   randconfig-002-20240713   gcc-13.2.0
-arm                   randconfig-003-20240713   gcc-13.2.0
-arm                   randconfig-004-20240713   gcc-13.2.0
-arm                             rpc_defconfig   gcc-13.2.0
-arm64                            allmodconfig   gcc-13.2.0
-arm64                             allnoconfig   gcc-13.2.0
-arm64                               defconfig   gcc-13.2.0
-arm64                 randconfig-001-20240713   gcc-13.2.0
-arm64                 randconfig-002-20240713   gcc-13.2.0
-arm64                 randconfig-003-20240713   gcc-13.2.0
-arm64                 randconfig-004-20240713   gcc-13.2.0
-csky                              allnoconfig   gcc-13.2.0
-csky                                defconfig   gcc-13.2.0
-csky                  randconfig-001-20240713   gcc-13.2.0
-csky                  randconfig-002-20240713   gcc-13.2.0
-hexagon                          allmodconfig   clang-19
-hexagon                          allyesconfig   clang-19
-i386                             allmodconfig   clang-18
-i386                             allmodconfig   gcc-13
-i386                              allnoconfig   clang-18
-i386                              allnoconfig   gcc-13
-i386                             allyesconfig   clang-18
-i386                             allyesconfig   gcc-13
-i386         buildonly-randconfig-001-20240713   clang-18
-i386         buildonly-randconfig-002-20240713   clang-18
-i386         buildonly-randconfig-003-20240713   clang-18
-i386         buildonly-randconfig-003-20240713   gcc-8
-i386         buildonly-randconfig-004-20240713   clang-18
-i386         buildonly-randconfig-005-20240713   clang-18
-i386         buildonly-randconfig-005-20240713   gcc-13
-i386         buildonly-randconfig-006-20240713   clang-18
-i386                                defconfig   clang-18
-i386                  randconfig-001-20240713   clang-18
-i386                  randconfig-001-20240713   gcc-10
-i386                  randconfig-002-20240713   clang-18
-i386                  randconfig-002-20240713   gcc-13
-i386                  randconfig-003-20240713   clang-18
-i386                  randconfig-003-20240713   gcc-13
-i386                  randconfig-004-20240713   clang-18
-i386                  randconfig-005-20240713   clang-18
-i386                  randconfig-005-20240713   gcc-10
-i386                  randconfig-006-20240713   clang-18
-i386                  randconfig-006-20240713   gcc-12
-i386                  randconfig-011-20240713   clang-18
-i386                  randconfig-012-20240713   clang-18
-i386                  randconfig-012-20240713   gcc-7
-i386                  randconfig-013-20240713   clang-18
-i386                  randconfig-013-20240713   gcc-13
-i386                  randconfig-014-20240713   clang-18
-i386                  randconfig-014-20240713   gcc-13
-i386                  randconfig-015-20240713   clang-18
-i386                  randconfig-015-20240713   gcc-11
-i386                  randconfig-016-20240713   clang-18
-loongarch                        allmodconfig   gcc-14.1.0
-loongarch                         allnoconfig   gcc-13.2.0
-loongarch                           defconfig   gcc-13.2.0
-loongarch             randconfig-001-20240713   gcc-13.2.0
-loongarch             randconfig-002-20240713   gcc-13.2.0
-m68k                             allmodconfig   gcc-14.1.0
-m68k                              allnoconfig   gcc-13.2.0
-m68k                             allyesconfig   gcc-14.1.0
-m68k                         apollo_defconfig   gcc-13.2.0
-m68k                                defconfig   gcc-13.2.0
-microblaze                       allmodconfig   gcc-14.1.0
-microblaze                        allnoconfig   gcc-13.2.0
-microblaze                       allyesconfig   gcc-14.1.0
-microblaze                          defconfig   gcc-13.2.0
-mips                              allnoconfig   gcc-13.2.0
-mips                        omega2p_defconfig   gcc-13.2.0
-nios2                         3c120_defconfig   gcc-13.2.0
-nios2                             allnoconfig   gcc-13.2.0
-nios2                               defconfig   gcc-13.2.0
-nios2                 randconfig-001-20240713   gcc-13.2.0
-nios2                 randconfig-002-20240713   gcc-13.2.0
-openrisc                          allnoconfig   gcc-14.1.0
-openrisc                         allyesconfig   gcc-14.1.0
-openrisc                            defconfig   gcc-14.1.0
-parisc                           allmodconfig   gcc-14.1.0
-parisc                            allnoconfig   gcc-14.1.0
-parisc                           allyesconfig   gcc-14.1.0
-parisc                              defconfig   gcc-14.1.0
-parisc                randconfig-001-20240713   gcc-13.2.0
-parisc                randconfig-002-20240713   gcc-13.2.0
-parisc64                            defconfig   gcc-13.2.0
-powerpc                          allmodconfig   gcc-14.1.0
-powerpc                           allnoconfig   gcc-14.1.0
-powerpc                          allyesconfig   gcc-14.1.0
-powerpc                    gamecube_defconfig   gcc-13.2.0
-powerpc                    ge_imp3a_defconfig   gcc-13.2.0
-powerpc                 mpc8313_rdb_defconfig   gcc-13.2.0
-powerpc                 mpc834x_itx_defconfig   gcc-13.2.0
-powerpc               randconfig-001-20240713   gcc-13.2.0
-powerpc               randconfig-002-20240713   gcc-13.2.0
-powerpc               randconfig-003-20240713   gcc-13.2.0
-powerpc                        warp_defconfig   gcc-13.2.0
-powerpc64             randconfig-001-20240713   gcc-13.2.0
-powerpc64             randconfig-002-20240713   gcc-13.2.0
-powerpc64             randconfig-003-20240713   gcc-13.2.0
-riscv                            allmodconfig   gcc-14.1.0
-riscv                             allnoconfig   gcc-14.1.0
-riscv                            allyesconfig   gcc-14.1.0
-riscv                               defconfig   gcc-14.1.0
-riscv                 randconfig-001-20240713   gcc-13.2.0
-riscv                 randconfig-002-20240713   gcc-13.2.0
-s390                             allmodconfig   clang-19
-s390                              allnoconfig   clang-19
-s390                              allnoconfig   gcc-14.1.0
-s390                             allyesconfig   clang-19
-s390                             allyesconfig   gcc-14.1.0
-s390                                defconfig   gcc-14.1.0
-s390                  randconfig-001-20240713   gcc-13.2.0
-s390                  randconfig-002-20240713   gcc-13.2.0
-sh                               allmodconfig   gcc-14.1.0
-sh                                allnoconfig   gcc-13.2.0
-sh                               allyesconfig   gcc-14.1.0
-sh                                  defconfig   gcc-14.1.0
-sh                    randconfig-001-20240713   gcc-13.2.0
-sh                    randconfig-002-20240713   gcc-13.2.0
-sh                          sdk7780_defconfig   gcc-13.2.0
-sparc                            allmodconfig   gcc-14.1.0
-sparc64                             defconfig   gcc-14.1.0
-sparc64               randconfig-001-20240713   gcc-13.2.0
-sparc64               randconfig-002-20240713   gcc-13.2.0
-um                               allmodconfig   clang-19
-um                               allmodconfig   gcc-13.3.0
-um                                allnoconfig   clang-17
-um                                allnoconfig   gcc-14.1.0
-um                               allyesconfig   gcc-13
-um                               allyesconfig   gcc-13.3.0
-um                                  defconfig   gcc-14.1.0
-um                             i386_defconfig   gcc-14.1.0
-um                    randconfig-001-20240713   gcc-13.2.0
-um                    randconfig-002-20240713   gcc-13.2.0
-um                           x86_64_defconfig   gcc-14.1.0
-x86_64                            allnoconfig   clang-18
-x86_64                           allyesconfig   clang-18
-x86_64       buildonly-randconfig-001-20240713   clang-18
-x86_64       buildonly-randconfig-002-20240713   clang-18
-x86_64       buildonly-randconfig-003-20240713   clang-18
-x86_64       buildonly-randconfig-004-20240713   clang-18
-x86_64       buildonly-randconfig-005-20240713   clang-18
-x86_64       buildonly-randconfig-006-20240713   clang-18
-x86_64                              defconfig   clang-18
-x86_64                              defconfig   gcc-13
-x86_64                randconfig-001-20240713   clang-18
-x86_64                randconfig-002-20240713   clang-18
-x86_64                randconfig-003-20240713   clang-18
-x86_64                randconfig-004-20240713   clang-18
-x86_64                randconfig-005-20240713   clang-18
-x86_64                randconfig-006-20240713   clang-18
-x86_64                randconfig-011-20240713   clang-18
-x86_64                randconfig-012-20240713   clang-18
-x86_64                randconfig-013-20240713   clang-18
-x86_64                randconfig-014-20240713   clang-18
-x86_64                randconfig-015-20240713   clang-18
-x86_64                randconfig-016-20240713   clang-18
-x86_64                randconfig-071-20240713   clang-18
-x86_64                randconfig-072-20240713   clang-18
-x86_64                randconfig-073-20240713   clang-18
-x86_64                randconfig-074-20240713   clang-18
-x86_64                randconfig-075-20240713   clang-18
-x86_64                randconfig-076-20240713   clang-18
-x86_64                          rhel-8.3-rust   clang-18
-xtensa                            allnoconfig   gcc-13.2.0
-xtensa                randconfig-001-20240713   gcc-13.2.0
-xtensa                randconfig-002-20240713   gcc-13.2.0
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Alan Stern
 
