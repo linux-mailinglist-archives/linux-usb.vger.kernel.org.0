@@ -1,134 +1,182 @@
-Return-Path: <linux-usb+bounces-12189-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12190-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6050E930354
-	for <lists+linux-usb@lfdr.de>; Sat, 13 Jul 2024 04:23:19 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A9F193048C
+	for <lists+linux-usb@lfdr.de>; Sat, 13 Jul 2024 10:39:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1A80B281283
-	for <lists+linux-usb@lfdr.de>; Sat, 13 Jul 2024 02:23:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1D9681F223AB
+	for <lists+linux-usb@lfdr.de>; Sat, 13 Jul 2024 08:39:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5675F17591;
-	Sat, 13 Jul 2024 02:22:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C12B747A62;
+	Sat, 13 Jul 2024 08:39:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="ifBQmJ7h"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kzsw4PjF"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 540F917557
-	for <linux-usb@vger.kernel.org>; Sat, 13 Jul 2024 02:22:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 528C410E0;
+	Sat, 13 Jul 2024 08:39:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720837349; cv=none; b=BrWVPwLAcnI4zC80j+abFUDTrdg18mZW11VcI+T+N0HciC+h8HYVbkqQ5wq7loVNnUlXYj1Nf2Sjp+k+VfANHE5THmQNqkWPqgS8zOpDhpufpXL5Esihw7x6jG+/LyE/6nJ88n4DQiK4gyJKN08oADXN3ucn8O587t3jYh7yskE=
+	t=1720859956; cv=none; b=kua87xZk+HKX6N3EEmUd6qY6BwtLmh8rVXjcxItIYJRkbGluDrH1c60sGrMLFRAneUH2JGJ/cf43qalpvqo+gDfOf5m6dmk25aUfwvsvnLFgt26dvOODh5FAA2Qu+0+2ZcLuIkXU8Ry9HVwwkrs7aZud/+c639hwR9jTAdG7T7c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720837349; c=relaxed/simple;
-	bh=lXqgkt2H22OrWd0Xr/ds8mNtVYxJTGNWblZs/3ShZU8=;
+	s=arc-20240116; t=1720859956; c=relaxed/simple;
+	bh=7Ehlij/hfs0O3RF04lOWinYMsT9WzZnkv318/p052kw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=auByjlRnZ1E5QaEhS04DIodCIfRxUJPpfJvr9oq953+QT0BTLtABKrfKV163KzyxnGFflIkz0J3oBuHceaDDdjeExOdF5XG6vX83kOVlv3oxMkUnSZEKDDeLeoS419T+F4xHL/iT16GnvZZz+mlEEWm9t8dX8DEa33WqGwLhjhM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=ifBQmJ7h; arc=none smtp.client-ip=209.85.222.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=g.harvard.edu
-Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-79f0c08aa45so181108585a.0
-        for <linux-usb@vger.kernel.org>; Fri, 12 Jul 2024 19:22:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1720837347; x=1721442147; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=KcCJozulqARBvuu4ti/BgXI4cG4IJiyyKAoDsbuvkyI=;
-        b=ifBQmJ7hifOOeiJtURNJ5zcqjDfweQa8HxFZJOFQ7bphSMGl3KOyrVh2X15Jyh/dFo
-         YS0Xxs4ZWN2mzjvamMxvQrt4y1fYCI1Gnj1dGu6OZTTReAwxlYScvJ9SpUjIQXc278Sg
-         eo1XxmdSEi5w86KDVWUVwjJ2LXmyKPFc33eb0y2zi8CxLz4+aOghxvL9uH7Sk+nFBsGY
-         iO4xVLbepcR/8AZBc8PY7pgg2qcoPN85ECUu16Q56ZgSjd14cO465002OVru0w6VN0P8
-         /efj9tPdbZAEKje3Nigm508CxkcFGdRiiZnmb6mlJXgVdz8jPVy4a9dR9V/0gb+QmXfv
-         70tA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720837347; x=1721442147;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KcCJozulqARBvuu4ti/BgXI4cG4IJiyyKAoDsbuvkyI=;
-        b=OPwBx2fkSqx6C4fdVFhMCOMOzICocYR10tirSyOkc1Vigwdgp6ZWqgBmNLijQczq7W
-         TT9fNKBpHGvLG1QwzRrgVNmhqsD4VKJ0v04nMRaRSQhzEkPyp1v7J+moPXUsUgdcIpvp
-         STYGfa4VHPzsG3eqIMxTquxbfTKGZz3ek3WdJcvAqA1lEGV5teytRDHQl95PKoH79Qdd
-         zFtoj2FUzUFaGbgIMZHDyG6arZJIpjE2fffaQDBukAVALenN4dAwwFM24O5KRuPScIfT
-         N124JzOwrkrjhLXaSLQk3bNnKGSikSIb6gzORZLB6t2KXFOE0IjnxOnXP2QGltc5NRoV
-         UaFA==
-X-Forwarded-Encrypted: i=1; AJvYcCUOWBefj7Blv7Mcr5XCqZrEv7lzLAqOiqTiQO4pQIot6uhmUanVw9EQEmoFVLWhO717b4FJJYKyfqkF1GHkWp42/P2u2Ovqph3n
-X-Gm-Message-State: AOJu0Ywy0ojfTilmR3n0+FcSGqss9NqMA8IbHFrUBO9ncFtAaduRNR0/
-	Uy0lXrx2AxaxX0KKU5UJpXiZ+8Z8XWnAC6qnN+kHGMnz0kBQwu48TXXTU7O1NlbLi0P1tH9lqc0
-	=
-X-Google-Smtp-Source: AGHT+IHI0rkfaG2cSk9khBWAyN7byMc87Kw8sb7ZOHvEZC2TVKLMXwflVSRFs9KJYlTz3UJkFFzIZA==
-X-Received: by 2002:ae9:f717:0:b0:79f:f1:2a with SMTP id af79cd13be357-79f19a64fa4mr1324430585a.28.1720837347270;
-        Fri, 12 Jul 2024 19:22:27 -0700 (PDT)
-Received: from rowland.harvard.edu ([2601:19b:681:fd10::cad7])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7a160c63880sm10444485a.72.2024.07.12.19.22.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Jul 2024 19:22:26 -0700 (PDT)
-Date: Fri, 12 Jul 2024 22:22:24 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Hongyu Xie <xy521521@gmail.com>
-Cc: gregkh@linuxfoundation.org, oneukum@suse.com, brauner@kernel.org,
-	jlayton@kernel.org, xiehongyu1@kylinos.cn, jack@suse.cz,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH next] usb: usbfs: Add reset_resume for usbfs
-Message-ID: <8a16e1c2-fd59-4279-8b36-806a214385b6@rowland.harvard.edu>
-References: <20240711084321.44916-1-xiehongyu1@kylinos.cn>
- <527927b8-9475-47da-bf2b-7a5d9e81e470@suse.com>
- <a782c5bc-fc8b-43ad-9c6e-1e6799243364@kylinos.cn>
+	 Content-Type:Content-Disposition:In-Reply-To; b=kfKxs5uC3brCFTGBNedM1VRegt63s16O+ntpp1CcyAw3ZDpJnXefzXmOVzfIH7JwSXlFB1NHwxZG0ymjE6Gs+rzA0r3ZGMFVrrBV3AP4VUKev180wb21E4s/XFQvye1CZEmogFtOOZn8PeFQ/0gGc0IbdcT5Fa9bGjQqF88q16g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kzsw4PjF; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1720859954; x=1752395954;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7Ehlij/hfs0O3RF04lOWinYMsT9WzZnkv318/p052kw=;
+  b=kzsw4PjFcT6uluBrl3DA+tv+Ri8rF5qEIH38b3g1P3Kh+8pg8n2E6kz1
+   iR5HkbWz7k5tRRAyXP6JkGAolkMHUI8Gx0jX4c7jw7VdhCe9mtJDPoozu
+   U+tYO69poM81dQ++6JqBZ2uGZlZdT7QF5zoTnmDLZy1V7a4LTEN47NPNO
+   PW1kzifwNcQYb+7oQeRQlqvzXAkVfirFKFJJV8FeWDv7WVPMvW+GLwAhQ
+   kjjEs7wZjgB4BmzVFB3GXavaSDsBk1vmJ8l1NigSxcze927MXn5KRU1gF
+   TVYsJHItSGm8d9N5BoU9OmsoDNVsYVXacJT8joBNtxgFUaD4zWYVw1l0a
+   w==;
+X-CSE-ConnectionGUID: 9XpQgt4fT7qJjmZdhmv2eA==
+X-CSE-MsgGUID: 18l/dQQRReCOuzrsm4ux/w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11131"; a="29698598"
+X-IronPort-AV: E=Sophos;i="6.09,205,1716274800"; 
+   d="scan'208";a="29698598"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2024 01:39:14 -0700
+X-CSE-ConnectionGUID: KPpkD71tS66ZzgJfslQW0w==
+X-CSE-MsgGUID: yfphIIOmQxyUiLc+/M67Tw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,205,1716274800"; 
+   d="scan'208";a="86642299"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 13 Jul 2024 01:39:10 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sSYHb-000bt8-2S;
+	Sat, 13 Jul 2024 08:39:07 +0000
+Date: Sat, 13 Jul 2024 16:38:13 +0800
+From: kernel test robot <lkp@intel.com>
+To: superm1@kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
+	Mathias Nyman <mathias.nyman@intel.com>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: oe-kbuild-all@lists.linux.dev,
+	"open list : PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
+	"open list : USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
+	Daniel Drake <drake@endlessos.org>, Gary Li <Gary.Li@amd.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: Re: [PATCH v3 1/5] PCI: Use an enum for reset type in pci_dev_wait()
+Message-ID: <202407131650.S68TetNP-lkp@intel.com>
+References: <20240712181246.811044-2-superm1@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a782c5bc-fc8b-43ad-9c6e-1e6799243364@kylinos.cn>
+In-Reply-To: <20240712181246.811044-2-superm1@kernel.org>
 
-On Fri, Jul 12, 2024 at 11:10:57AM +0800, Hongyu Xie wrote:
-> From: Hongyu Xie <xiehongyu1@kylinos.cn>
-> 
-> 
-> 
-> On 2024/7/11 16:59, Oliver Neukum wrote:
-> > 
-> > 
-> > On 11.07.24 10:43, Hongyu Xie wrote:
-> > > During hibernation, usb_resume_interface will set needs_binding to 1 if
-> > > the usb_driver has no reset_resume implimentation. The USB interface
-> > > will be rebind after usb_resume_complete.
-> > > 
-> > > Normally, that's fine. But if a USB interface has a matched kernel
-> > > driver, and a userspace driver or application is using this USB
-> > > interface through usbfs during hibernation, usbfs will be
-> > > detatched with the USB interface after resume. And this USB interface
-> > > will be bind with a kernel driver instead of usbfs.
-> > > 
-> > > So add reset_resume to fix this.
-> > 
-> > The device has lost all settings, yet we continue like nothing
-> > changed. That strikes me as a very bad idea. If a device has undergone
-> > a reset user space has not requested, we need to return an error upon
-> > the next interaction.
-> Sorry I don't understand your concern.
-> When will "a reset user space has not requested" happen if there is a
-> reset_resume in usbfs?
+Hi,
 
-That's what a reset-resume is: a reset that occurs when the device is 
-resumed, rather than when the driver has requested a reset.
+kernel test robot noticed the following build warnings:
 
-Alan Stern
+[auto build test WARNING on usb/usb-testing]
+[also build test WARNING on usb/usb-next usb/usb-linus westeri-thunderbolt/next linus/master v6.10-rc7 next-20240712]
+[cannot apply to pci/next pci/for-linus]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> > I am sorry, but this implementation has some fundamental issues.
-> > 
-> >      Regards
-> >          Oliver
-> > 
-> Regards
-> Hongyu Xie
+url:    https://github.com/intel-lab-lkp/linux/commits/superm1-kernel-org/PCI-Use-an-enum-for-reset-type-in-pci_dev_wait/20240713-022018
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20240712181246.811044-2-superm1%40kernel.org
+patch subject: [PATCH v3 1/5] PCI: Use an enum for reset type in pci_dev_wait()
+config: x86_64-randconfig-121-20240713 (https://download.01.org/0day-ci/archive/20240713/202407131650.S68TetNP-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240713/202407131650.S68TetNP-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407131650.S68TetNP-lkp@intel.com/
+
+sparse warnings: (new ones prefixed by >>)
+>> drivers/pci/pci.c:184:12: sparse: sparse: symbol 'pci_reset_types' was not declared. Should it be static?
+   drivers/pci/pci.c:1208:36: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted pci_power_t [usertype] current_state @@     got int @@
+   drivers/pci/pci.c:1208:36: sparse:     expected restricted pci_power_t [usertype] current_state
+   drivers/pci/pci.c:1208:36: sparse:     got int
+   drivers/pci/pci.c:1367:15: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted pci_power_t [assigned] [usertype] state @@     got int @@
+   drivers/pci/pci.c:1367:15: sparse:     expected restricted pci_power_t [assigned] [usertype] state
+   drivers/pci/pci.c:1367:15: sparse:     got int
+   drivers/pci/pci.c:1369:50: sparse: sparse: restricted pci_power_t degrades to integer
+   drivers/pci/pci.c:1369:69: sparse: sparse: restricted pci_power_t degrades to integer
+   drivers/pci/pci.c:1422:28: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted pci_power_t [usertype] current_state @@     got int @@
+   drivers/pci/pci.c:1422:28: sparse:     expected restricted pci_power_t [usertype] current_state
+   drivers/pci/pci.c:1422:28: sparse:     got int
+   drivers/pci/pci.c:1512:16: sparse: sparse: restricted pci_power_t degrades to integer
+   drivers/pci/pci.c:1512:35: sparse: sparse: restricted pci_power_t degrades to integer
+   drivers/pci/pci.c:1512:52: sparse: sparse: restricted pci_power_t degrades to integer
+   drivers/pci/pci.c:1512:70: sparse: sparse: restricted pci_power_t degrades to integer
+   drivers/pci/pci.c:1534:15: sparse: sparse: invalid assignment: |=
+   drivers/pci/pci.c:1534:15: sparse:    left side has type unsigned short
+   drivers/pci/pci.c:1534:15: sparse:    right side has type restricted pci_power_t
+   drivers/pci/pci.c:1546:28: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted pci_power_t [usertype] current_state @@     got int @@
+   drivers/pci/pci.c:1546:28: sparse:     expected restricted pci_power_t [usertype] current_state
+   drivers/pci/pci.c:1546:28: sparse:     got int
+   drivers/pci/pci.c:1563:13: sparse: sparse: restricted pci_power_t degrades to integer
+   drivers/pci/pci.c:1563:21: sparse: sparse: restricted pci_power_t degrades to integer
+   drivers/pci/pci.c:1565:18: sparse: sparse: restricted pci_power_t degrades to integer
+   drivers/pci/pci.c:1565:26: sparse: sparse: restricted pci_power_t degrades to integer
+   drivers/pci/pci.c:1588:13: sparse: sparse: restricted pci_power_t degrades to integer
+   drivers/pci/pci.c:1588:22: sparse: sparse: restricted pci_power_t degrades to integer
+   drivers/pci/pci.c:1920:38: sparse: sparse: array of flexible structures
+   drivers/pci/pci.c:2370:44: sparse: sparse: restricted pci_power_t degrades to integer
+   drivers/pci/pci.c:2689:60: sparse: sparse: restricted pci_power_t degrades to integer
+   drivers/pci/pci.c:2690:30: sparse: sparse: restricted pci_power_t degrades to integer
+   drivers/pci/pci.c:2861:20: sparse: sparse: restricted pci_power_t degrades to integer
+   drivers/pci/pci.c:2861:38: sparse: sparse: restricted pci_power_t degrades to integer
+   drivers/pci/pci.c:2884:49: sparse: sparse: restricted pci_power_t degrades to integer
+   drivers/pci/pci.c:2884:67: sparse: sparse: restricted pci_power_t degrades to integer
+   drivers/pci/pci.c:4580:13: sparse: sparse: invalid assignment: |=
+   drivers/pci/pci.c:4580:13: sparse:    left side has type unsigned short
+   drivers/pci/pci.c:4580:13: sparse:    right side has type restricted pci_power_t
+   drivers/pci/pci.c:4585:13: sparse: sparse: invalid assignment: |=
+   drivers/pci/pci.c:4585:13: sparse:    left side has type unsigned short
+   drivers/pci/pci.c:4585:13: sparse:    right side has type restricted pci_power_t
+   drivers/pci/pci.c: note: in included file (through include/linux/resource_ext.h, include/linux/acpi.h):
+   include/linux/list.h:83:21: sparse: sparse: self-comparison always evaluates to true
+   drivers/pci/pci.c:1163:24: sparse: sparse: incorrect type in return expression (different base types) @@     expected int @@     got restricted pci_power_t [usertype] @@
+   drivers/pci/pci.c:1163:24: sparse:     expected int
+   drivers/pci/pci.c:1163:24: sparse:     got restricted pci_power_t [usertype]
+   drivers/pci/pci.c:1163:24: sparse: sparse: incorrect type in return expression (different base types) @@     expected int @@     got restricted pci_power_t [usertype] @@
+   drivers/pci/pci.c:1163:24: sparse:     expected int
+   drivers/pci/pci.c:1163:24: sparse:     got restricted pci_power_t [usertype]
+
+vim +/pci_reset_types +184 drivers/pci/pci.c
+
+   183	
+ > 184	const char * const pci_reset_types[] = {
+   185		"FLR",
+   186		"AF_FLR",
+   187		"PM D3HOT->D0",
+   188		"bus reset",
+   189		"resume",
+   190		"DPC",
+   191	};
+   192	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
