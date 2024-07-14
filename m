@@ -1,107 +1,112 @@
-Return-Path: <linux-usb+bounces-12206-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12207-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BDC94930ACF
-	for <lists+linux-usb@lfdr.de>; Sun, 14 Jul 2024 18:33:00 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5300F930BA7
+	for <lists+linux-usb@lfdr.de>; Sun, 14 Jul 2024 22:42:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 740321F21B93
-	for <lists+linux-usb@lfdr.de>; Sun, 14 Jul 2024 16:33:00 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D352DB21B0F
+	for <lists+linux-usb@lfdr.de>; Sun, 14 Jul 2024 20:41:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A0C213B28F;
-	Sun, 14 Jul 2024 16:32:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 858B513E41A;
+	Sun, 14 Jul 2024 20:41:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nfA0bUvo"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N45LsQ0l"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22B0E320E
-	for <linux-usb@vger.kernel.org>; Sun, 14 Jul 2024 16:32:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B3EC13D89B;
+	Sun, 14 Jul 2024 20:41:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720974775; cv=none; b=kCLtJRojlg6JEs98w8MZpGQkpbHyXed75hvHLQdAofIYJuoldoReSYW1O8/+qsxZCwfY3hIgkEBYc1rnZW/VaNpkrLs/ESnKuK110GQGLMyBh1Q17qbb8dZCk8GeSJ2YoQJgYnF9ENuZBiKxVczjHAyFBSQtTrqzZUFIZ7yyGsw=
+	t=1720989707; cv=none; b=IDIdgI5be+dNkNCsWLl22S+hEQMctnfZaTHXooAQwP4kJt4LTV6JxtK0uf38vxN8Gkc7eim+rmRPDDbUmlea/Kaqbq0oezf6G0SFnHkv5VdwnYiEjRwEe02BrYk6BPTkn9Bp8uEgmF4EVkF3/lyCpYbXZW8gMd8lqB10ZtPCJOM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720974775; c=relaxed/simple;
-	bh=Z/rK2tjiO79FnLJpx/y1R+OXecIA75hJ8fZVhnEE5J0=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Duza9ncmJd8LPV2IRiBRRQq+kjtH5L+NWM199IoAnkWpMEJsy/NolDbid6Nwo2T7QIKy/Dsi+q5CHYNuq5nVkBigwGZmAjclB5F2zdTGqCit36VU7OQS1TVmQnK/v4cBtKEKfiZECHrnn7Nb9rhpdoP7cMsVwxJauZpee80K9eU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nfA0bUvo; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 95A81C4AF09
-	for <linux-usb@vger.kernel.org>; Sun, 14 Jul 2024 16:32:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720974774;
-	bh=Z/rK2tjiO79FnLJpx/y1R+OXecIA75hJ8fZVhnEE5J0=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=nfA0bUvofX0D9oWLcw6S+1tMp6PK52GmTqcq+b6hDkcnHaT0iItEv/rHBSU9qxqtg
-	 FKHueex5JjXH4P8tTYbMo72tKgjUACevg2pmqUOASPAiOJ4zDBhWr/eFIEe8cVatdw
-	 co8SbWt1sR87vPFxTS1/croBD0oXFfE6dbSj5JZBsrnVflYpLKytFCFXPN1jCe+6W7
-	 Fzbgh4D77FL4v7uaBeL8roBxyHK8RHdTNc9cnxGJvbv63rhNWjhQUtya7ouxlZJuob
-	 xysRCCnJjR6CqezxpQsE+HMocOFJU0LGpJ2av/JuNhcAiH7EUeUOTe72vz3yibPWhw
-	 oyolMZgb7b2KQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 82AD0C53B50; Sun, 14 Jul 2024 16:32:54 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 219039] kernel 6.6.39 freezes with QNAP TL-D800C usb case
-Date: Sun, 14 Jul 2024 16:32:54 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: matthias@bodenbinder.de
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-219039-208809-u8MKwkVPCn@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-219039-208809@https.bugzilla.kernel.org/>
-References: <bug-219039-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1720989707; c=relaxed/simple;
+	bh=Rbhi9raS35yjLs44ICMqmzwlTLdlFu8DJr1zq7AF6AA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=NJGmSSNnxhy2gp42LA3ULlZTNSVsdtQIifx+2CTvy9vkWNTcKgE09guGSA4ovzKZIGHeZVbirZHKJrPNEVMwZ6AXu/ViOF/LFlxrTuTIS1q1ubwbri8B5I+VNhf7vLdSyqhbcOyC5cRZK2nvTbFurLd4LAQVOCUQudJddKosXhM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N45LsQ0l; arc=none smtp.client-ip=209.85.208.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-595850e7e11so4460488a12.1;
+        Sun, 14 Jul 2024 13:41:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1720989704; x=1721594504; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Z/cK++aNJsVXbuZ4CO83IGAtI8ojo7ZZbJZliVitl0M=;
+        b=N45LsQ0l2Bvria4dNQMr2t+IdhoiOH2w2MeNq7VDJVGDRIb4RIyrWL3HXdcnVhQtBI
+         DIGTkw34p8Olf+QaOFppnfbzDurVZCmGBH8cd23rryD26bCT0SgXrzv8jF0q7nC/OmEm
+         eFiArPh85U93J0dAcYe3AdABTwsHPOEeCQa/eq7su6bmPdolxraDyMeun4gkMn4MdXML
+         +dJc+VWbpTESj1nRZFdmvzpWA4GaNoUQ1OoF93nEzjmL1yAKg7DMplp5yuLlMClcD/lZ
+         oPLJzJb07fzjRKnulLQ1Cpzh+fosStEDrXg9u3Um4ZeBnnxLE9TpWNRDxZ7E02OciMBV
+         w4Bw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720989704; x=1721594504;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Z/cK++aNJsVXbuZ4CO83IGAtI8ojo7ZZbJZliVitl0M=;
+        b=O8hpcd4DWIeXlGBMCjAkTQCOnXwMOCOy5/cWQqdcGhDY1P4CU07Np63/22TfmRBudd
+         xkCvnSU/q3aFhyp39+Uud9EPKInTd2S39EgMjiPXGZlTyUxEh8Am2qv10tpWwdMZkLHg
+         /LlpZldBAaEKf0wxyTsQu+f58LvjG4VbASE2VFhaDxVhHM7XnlHoU0R23B512lbY818x
+         YAdp93vvUtk+33oHbOGBotyeru5eYYbVuz/23N0N8V6MY/DZwB7ELg7gKupPta2+rURa
+         nmIAjqViSAzXEEAfGQqYf1P6TXvhWg0OeBrpQVDZs4Ro0owg2vrJmPJeout2xb/NyT6R
+         Z24A==
+X-Forwarded-Encrypted: i=1; AJvYcCUSoOWdX52FijYPIfDui55txZ4cAJHHeT3bygoBWk9ICmx0DONhmeVa2QLJ+gNfNTo0wJGo2myTQy/ODX2Coh60MbRyCGKcTfO7eMeyZ5Bxca9fwMDsKkthAnFqFAxAqHKISYlLcThaPikumbEHdtPSq4HPc5z2ZNJzzds3Me3g
+X-Gm-Message-State: AOJu0YxQb1yqwz4lawEe9IlPdMWWgnbHTbVB8oJPFGanNZq3YOLJ8A/M
+	db7ck//g8+QBIb/QogFmEPOsMK/aG2puAotdj6ooB50WorpQU0D1ePCEbOQa9eDkIWEbXNXuGqB
+	hnWmC3Fr2Mo98RKCfLQe8C5jkbnU=
+X-Google-Smtp-Source: AGHT+IFFU4LKVj2rB7Y2ql4XbS+Q0ZtDsClPyxLPu1EwMtucLEgaSQSDlc3rjRfkgzPGNZviraCFeIooj9FdKqL4z9M=
+X-Received: by 2002:a50:ee0b:0:b0:58d:836e:5d83 with SMTP id
+ 4fb4d7f45d1cf-594ba59f8eamr10226955a12.22.1720989703622; Sun, 14 Jul 2024
+ 13:41:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <CA+3zgmsCgQs_LVV6fOwu3v2t_Vd=C3Wrv9QrbNpsmMq4RD=ZoQ@mail.gmail.com>
+ <20240714173043.668756e4@foxbook> <ZpP3RU-MKb4pMmZH@eldamar.lan>
+In-Reply-To: <ZpP3RU-MKb4pMmZH@eldamar.lan>
+From: Tim Lewis <elatllat@gmail.com>
+Date: Sun, 14 Jul 2024 16:41:31 -0400
+Message-ID: <CA+3zgmtwunPaLbKygi0y+XY7XUd2cBGVP8So8MXxK_1pOX3miQ@mail.gmail.com>
+Subject: Re: [PATCH 6.1 000/102] 6.1.98-rc1 review
+To: gregkh@linuxfoundation.org
+Cc: =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	mathias.nyman@linux.intel.com, niklas.neronin@linux.intel.com, 
+	stable@vger.kernel.org, regressions@lists.linux.dev, 
+	Salvatore Bonaccorso <carnil@debian.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D219039
+On Sun, Jul 14, 2024 at 11:32=E2=80=AFAM Micha=C5=82 Pecio <michal.pecio@gm=
+ail.com> wrote:
+>  see if my suggested solution works.
 
---- Comment #6 from matthias@bodenbinder.de ---
-I created a patch file for 6.6.39 based on Michael's proposal (comment #3):
+On Sun, Jul 14, 2024 at 12:05=E2=80=AFPM Salvatore Bonaccorso <carnil@debia=
+n.org> wrote:
+> https://bugzilla.kernel.org/show_bug.cgi?id=3D219039
 
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -2657,6 +2657,7 @@
-                                 slot_id, ep_index);
-                        goto err_out;
-                }
-+               inc_deq(xhci, ir->event_ring);
-                return 0;
-        }
+Not on 6.1.y:
+    drivers/usb/host/xhci-ring.c:2644:31: error: ~@~Xir~@~Y undeclared
+(first use in this fuunction); did you mean ~@~Xidr~@~Y?
+    2644 |                 inc_deq(xhci, ir->event_ring);
 
+On Sun, Jul 14, 2024 at 2:30=E2=80=AFAM Greg KH <gregkh@linuxfoundation.org=
+> wrote:
+> Ick
 
-I can confirm that this prevents the freezing. The device and the attached =
-hard
-discs work normal as far as I can tell. I did a fio benchmark run on one of=
- the
-zfs pools in that QNAP case and it executed just fine with the usual result=
-s.
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+We now have 3 USB HDD Vendors that are reported to crash the kernel
+because of this patch.  I think it best we take time to sort out the
+long standing minor issue this patch is for, after we quickly revert
+the major issues it is causing. Can we get it removed from 6.6.y and
+older branches for the hopefully soon next release?
 
