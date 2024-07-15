@@ -1,51 +1,80 @@
-Return-Path: <linux-usb+bounces-12228-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12229-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 899169317CE
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Jul 2024 17:43:28 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64D669319C2
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Jul 2024 19:45:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 43386283ABF
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Jul 2024 15:43:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B110DB2242D
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Jul 2024 17:45:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C80CB18F2F6;
-	Mon, 15 Jul 2024 15:43:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04E8350284;
+	Mon, 15 Jul 2024 17:45:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="jwIUsPse"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="SEaZWoBD"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41BC01849DD;
-	Mon, 15 Jul 2024 15:43:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51F761E50F
+	for <linux-usb@vger.kernel.org>; Mon, 15 Jul 2024 17:45:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721058201; cv=none; b=omE4xdxHs0/UOVHjSSN0V7yITA4Rii7GgFmZ0BYZHKX0wj0J6IzKUHFrX5ZVMUcxbUnE2SHv4+E7uVYlqKz9hrmgOf+74s8Z0HkPMnXjx+1tnjkQ7a+FkVhkUGfwETR0EiGfrvDGSHJsXlBAL9yVeDC3Yzjubr+etMUmqsSflUE=
+	t=1721065523; cv=none; b=celK7agjlQPTw/XeiilLmfMLagsWcWqQOThBb4JqnXUv1rX7ePmSpfmltopcw5aiJ3vrzx+pVF4A5/l0m5Eo/L+zq4Zk2hIYlQzwWEW+xy4N1co2aWB81BJgEZh4j/vWdh4bFGnRjlW0bO+RFPcOBsL1B2t5k6AVbQPptXeyzx4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721058201; c=relaxed/simple;
-	bh=mE2xxwtTjMUyrjUohekIkGGG3Hq3+me6hazFaOgSVrA=;
+	s=arc-20240116; t=1721065523; c=relaxed/simple;
+	bh=nOBlQgtAlgDItpnQdVd3V9sx/2XgibT5pIhRqxVWGsE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ptj0ObCXWMv/q0ahkafAp586YrllTy0G9Ryel/1nuUDzCe9OAI2nJGeXvcb4AUl/xJ7U9jImqnxjOzSecGqFOBxJUcfyhtDAMYc4lsBaTl7uU6XXaUQkfS0CDQQKGjTEJMs6Xs6SquhJ8MPvqCC0j79aqku39LZN5Hh0OVFXQCo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=jwIUsPse; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63716C32782;
-	Mon, 15 Jul 2024 15:43:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1721058200;
-	bh=mE2xxwtTjMUyrjUohekIkGGG3Hq3+me6hazFaOgSVrA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jwIUsPse2yBvTbsC1TRGwdD9v8LCNOTX1Wu442U0Ni4tFXySw+0vWPhU5OMMXvny7
-	 cVATWs8dMtadx0kO3s8x06E5B754Ao16i4p/tpiUBxSPda194Ce6FZwUYJYSrqB/zD
-	 vn8J1BYr2XOm5Ai4NdAneBx+adZzdtNlRTQd59yg=
-Date: Mon, 15 Jul 2024 17:43:18 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=kuMDvfxiZgrpdKrzy7aiuplyPESyEA30wm4YpNXNvaq9RugdFWNZnX/F1yR5P1s+dYSJuibBWZ4k0XPC8RRYfIncFK6PpD9Of32FAD74eZbvxTao4oX1iN5Etj1mBwgXCgfCI1Kyu6d+Fr/Ex3QG4qPcr1HbGvGg79gswirYRXY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=SEaZWoBD; arc=none smtp.client-ip=209.85.128.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=g.harvard.edu
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-64b0d45a7aaso47425447b3.0
+        for <linux-usb@vger.kernel.org>; Mon, 15 Jul 2024 10:45:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1721065520; x=1721670320; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=pWgMzMoGC1SSc45C4tLbWtle5jcf5t5Lok5AlzYR2Cw=;
+        b=SEaZWoBDGhDDaUey9kwLxQ69CAObEkoZ8t4+w7xAu3DYK14wwlrClR6UpAsCAfUTrd
+         sIky0eiZxW34l/VvLrm/4kaYVwA6wXwyhvqGoZx9QpuFCMkGRGwCJZlXl0koe5XhLwZQ
+         NizB2HEOahduK3rnSu0I9yaXxuxNaCEHUXyk1x7Amkk406wgt0mSezqZxvCAI81xdSRq
+         O+eNTXAjx0zFvuxhmpK7wEEZlmjFmNvVSqfY3AUVsB2aH1LMAWegJEExXkJ1IfhYFv6F
+         Av4muanh+vNpNPuVHjnolSHhuUdz6/TIlsIK08rLDcL1MOxccaZqBV+7HIwBKP4WchtP
+         f5YA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721065520; x=1721670320;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pWgMzMoGC1SSc45C4tLbWtle5jcf5t5Lok5AlzYR2Cw=;
+        b=JJK6vb2W8U1rDwZX/qVNxZ4YrAhvbzGV28q3r0oIWO4qpoHyC+u7CcH4nNsDDRNFCA
+         I10zfLCIFBALNL4LIxUoOurdyMURsic5zUywCKV6v1R1eALZAJoK5L7kPEoHkP6j3zF0
+         0vyygFWWWRqV4f4YhLDa3PVeZjEI5v+fKPDkdFi1OZZY5GVVhrlWUiAH/ej/6WIOMjid
+         KPq/adpHCj4UvPd2KPPEO5b+olXKOoQxXf4yUShwu7yhxAefVFpuZy7nR0QjrCig+bM8
+         G8iE3lwEy0PiOa45+S8W/tHmLh305USrgIpdrUvYmaei1kj6yNocZ6zsEzu8IUtmcboQ
+         XVsg==
+X-Forwarded-Encrypted: i=1; AJvYcCUF0FgnBMvndQ60KBpjXRXNaIa/6hYaNNjFqVyz9eKbVrNWn1KXYm0Cg+mSz6BExKA8VdsZYfa0ZFmVByMVKN8DAhfXsZR26WM+
+X-Gm-Message-State: AOJu0YzLG0OK6YEFp18g2w9izuHsdFikkU9g+bde44cmERjWPNxidQa7
+	CL5bYCKtNB+PbZtJlB90eoIpSLYbIrLurdXltqfxhq3pD9OK4qzB6MkNfAY5GQ==
+X-Google-Smtp-Source: AGHT+IGFlOEMQ5tIm5XeOu3THOlXOegaoO1kOuZJB7JlT87gjw2PQQxIn2cFTdcE4EK4n8OvQQs/VQ==
+X-Received: by 2002:a81:8646:0:b0:652:e91f:a1bc with SMTP id 00721157ae682-66353dd10e7mr2223447b3.3.1721065520261;
+        Mon, 15 Jul 2024 10:45:20 -0700 (PDT)
+Received: from rowland.harvard.edu (iolanthe.rowland.org. [192.131.102.54])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7a160c6382esm218593085a.87.2024.07.15.10.45.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Jul 2024 10:45:19 -0700 (PDT)
+Date: Mon, 15 Jul 2024 13:45:17 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
 To: ryan zhou <ryanzhou54@gmail.com>
-Cc: Alan Stern <stern@rowland.harvard.edu>, jikos@kernel.org,
+Cc: Greg KH <gregkh@linuxfoundation.org>, jikos@kernel.org,
 	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] hid: usbhid: Enable remote wake-up based on device
  configuration
-Message-ID: <2024071518-progeny-unsecured-2926@gregkh>
+Message-ID: <dc4cb035-13a0-45ad-9234-1719890f4edc@rowland.harvard.edu>
 References: <20240710231606.3029-1-ryanzhou54@gmail.com>
  <f0c789d8-8ae0-4a46-a5b3-aa9a5a758915@rowland.harvard.edu>
  <2024071104-rental-bleak-b273@gregkh>
@@ -107,12 +136,7 @@ On Mon, Jul 15, 2024 at 11:36:57PM +0800, ryan zhou wrote:
 > wakeup when loading
 > a HID class drivers, from my perspective. Could you please give me
 > some advice if possible.
-
-You can run anything you want at device-plugin-time in userspace by
-writing a udev rule, that's exactly what that was designed for.  The
-policy you decide is under your control in userspace, no need to do
-anything special in the kernel at all.
-
+> 
 > I have spent some time studying your responses, and learned a lot. I
 > absolutely agree with many
 > of your points, but still have some doubts.
@@ -122,7 +146,16 @@ anything special in the kernel at all.
 > and in addation boot
 > protocol is used in BIOS,why is it used as a wakeup judgment condition
 > in the OS?
-> 
+
+In general we did not want to enable wakeup by default for mouse 
+devices.  We didn't want to have a situation where somebody puts their 
+computer to sleep and then accidentally moves the mouse, and that 
+causes the computer to wake up.
+
+I don't remember the reason why only keyboards supporting the boot 
+protocol are enabled by default.  Maybe we thought those were likely to 
+be the most reliable ones.
+
 > Q2: for Alan Stern:  As you comment 'History has shown that quite a
 > few HID devices don't
 > handle remote wakeup properly'  I consulted the USB20 Spec in Chapter
@@ -135,14 +168,8 @@ anything special in the kernel at all.
 > so, shouldn't we
 > support these non-standard devices.
 
-If you do not support "non-standard" devices, your operating system will
-not be used by anyone in the real-world as there are TONS of
-"non-standard" devices out there, sorry.
+Sometimes supporting a device means _not_ enabling it for remote wakeup, 
+because its wakeup support is broken.
 
-try it and see, go to the local store and buy a shopping cart of cheap
-mice and keyboards and see what happens...
-
-thanks,
-
-greg k-h
+Alan Stern
 
