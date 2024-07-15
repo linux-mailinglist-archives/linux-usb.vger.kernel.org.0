@@ -1,85 +1,97 @@
-Return-Path: <linux-usb+bounces-12214-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12215-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C705A930E79
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Jul 2024 09:11:54 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E8C5930EF7
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Jul 2024 09:41:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 51DF8B20CBE
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Jul 2024 07:11:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C6A611C20EE4
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Jul 2024 07:41:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61B5D1836CE;
-	Mon, 15 Jul 2024 07:11:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B8EA145B1D;
+	Mon, 15 Jul 2024 07:41:49 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0994F13A252
-	for <linux-usb@vger.kernel.org>; Mon, 15 Jul 2024 07:11:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08AF63EA98;
+	Mon, 15 Jul 2024 07:41:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.84
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721027508; cv=none; b=gFb0P1RdevvohxqqiI5+0aai0g58Cdq4yTYrF+eDhyhv+nP2j/OSMAlHE16VxD+K/992EovgJpop/F0WQNGDwriSf7NcbeiP2/j5eKI1CpYYTdAtwQIA8dsjGjgqRxPkG6AjalqPCo74g9vETz0BwhgDyjP/zMOdUBtNZ0QeNfw=
+	t=1721029309; cv=none; b=HRrQin5i10mXgmH4rZBa5JsgiwuOoN9p6YChWJ2fW93GHAbb2oMyXakw6KBrYGiQrdBVanYJmEPklsXyUS6qQBnBtkEuKKR52Rw/hqbaJpGQvqwNN/wT3aoyZfBlaP/4ZMHDy4TCCYNLz+bdCNHn5xL862E5YHOGrwLSEmlXdP0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721027508; c=relaxed/simple;
-	bh=Jl9F54gKC2HZ6RkFE/JPLXbjvDwLcSrFahwOTKM89U8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ay1rQFVQE9GZ0mR8HjWAR6A/3OeTy65s7kig99H82upAvyGFaX7uTNgw/xqdrZky8eQuSAk8cxoBP+4AiXM+2iVwff0NON05Ysh6dCpMHxZwfuKHPtBqpcGvbbdxyaSEjFYQjbiGZnD/yH82BnCuHlVkuU38DCdN9qs1oeqmsu8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1sTFrr-0000ot-Hi; Mon, 15 Jul 2024 09:11:27 +0200
-Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1sTFrq-009e7s-32; Mon, 15 Jul 2024 09:11:26 +0200
-Received: from mfe by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1sTFrp-000JYF-3D;
-	Mon, 15 Jul 2024 09:11:26 +0200
-Date: Mon, 15 Jul 2024 09:11:25 +0200
-From: Marco Felsch <m.felsch@pengutronix.de>
-To: Dan Carpenter <dan.carpenter@linaro.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	RD Babiera <rdbabiera@google.com>,
-	Guenter Roeck <linux@roeck-us.net>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: tcpci: Fix error code in
- tcpci_check_std_output_cap()
-Message-ID: <20240715071125.p5a7eidkvo2jqcvk@pengutronix.de>
-References: <b0880888-6719-4614-91fc-8ee63b71d304@stanley.mountain>
+	s=arc-20240116; t=1721029309; c=relaxed/simple;
+	bh=+ngG0sf8DVROZxeHNSnraiS0QJDX2RWWNmGGuKghrho=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=TajjJNIMkC60qO5az2pYTxXBfRLpkPZVIsjCj1fzOM3rIjQuu4HRYjs9joRvDoyEP5QjhqmJsR++GLuZYd7ugfAzLECl0fRaNdBgmM44Tw73tYTaC2OdW8ErwrdyNfGadMWI9qStT1f8DS15KrT//Ci6ruyCPa0e0ilScxNFYRM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.84
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
+Received: from localhost (unknown [124.16.138.129])
+	by APP-05 (Coremail) with SMTP id zQCowAB3f7ek0pRmPwBoAw--.42734S2;
+	Mon, 15 Jul 2024 15:41:24 +0800 (CST)
+From: Chen Ni <nichen@iscas.ac.cn>
+To: heikki.krogerus@linux.intel.com,
+	gregkh@linuxfoundation.org,
+	dmitry.baryshkov@linaro.org,
+	neil.armstrong@linaro.org,
+	johan+linaro@kernel.org,
+	quic_kriskura@quicinc.com
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Chen Ni <nichen@iscas.ac.cn>
+Subject: [PATCH] usb: typec: ucsi: glink: Remove unnecessary semicolon
+Date: Mon, 15 Jul 2024 15:39:47 +0800
+Message-Id: <20240715073947.4028319-1-nichen@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b0880888-6719-4614-91fc-8ee63b71d304@stanley.mountain>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:zQCowAB3f7ek0pRmPwBoAw--.42734S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7WryUGFyUZryktr48Jr1UWrg_yoW3XFX_u3
+	Z7WFsxGr1jkF95Kw1fXas0vr1akw4qv3WkWFnYqrZ5Ca47Aw1rW3yjvFWDXw1rK345AFn3
+	Wrn8Xa4UGrWS9jkaLaAFLSUrUUUUbb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUbckFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+	A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+	Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+	Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+	I7IYx2IY67AKxVWUtVWrXwAv7VC2z280aVAFwI0_Gr1j6F4UJwAm72CE4IkC6x0Yz7v_Jr
+	0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8
+	CwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r
+	1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij
+	64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr
+	0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
+	0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUmD73UUUUU=
+X-CM-SenderInfo: xqlfxv3q6l2u1dvotugofq/
 
-Hi,
+Remove unnecessary semicolon at the end of the switch statement.
+This is detected by coccinelle.
 
-On 24-07-12, Dan Carpenter wrote:
-> The tcpci_check_std_output_cap() function is supposed to return negative
-> error codes but it's declared as type bool so the error handling doesn't
-> work.  Declare it as an int instead.
+Signed-off-by: Chen Ni <nichen@iscas.ac.cn>
+---
+ drivers/usb/typec/ucsi/ucsi_glink.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-sorry I missed this :/ in the first place, thank you for the fix.
+diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c b/drivers/usb/typec/ucsi/ucsi_glink.c
+index 16c328497e0b..459a5af02910 100644
+--- a/drivers/usb/typec/ucsi/ucsi_glink.c
++++ b/drivers/usb/typec/ucsi/ucsi_glink.c
+@@ -263,7 +263,7 @@ static void pmic_glink_ucsi_callback(const void *data, size_t len, void *priv)
+ 	case UC_UCSI_USBC_NOTIFY_IND:
+ 		schedule_work(&ucsi->notify_work);
+ 		break;
+-	};
++	}
+ }
+ 
+ static void pmic_glink_ucsi_pdr_notify(void *priv, int state)
+-- 
+2.25.1
 
-> Fixes: 62ce9ef14797 ("usb: typec: tcpci: add support to set connector orientation")
-> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
-
-Reviewed-by: Marco Felsch <m.felsch@pengutronix.de>
 
