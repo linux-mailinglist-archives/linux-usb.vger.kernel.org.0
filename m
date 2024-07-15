@@ -1,97 +1,112 @@
-Return-Path: <linux-usb+bounces-12215-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12216-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E8C5930EF7
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Jul 2024 09:41:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A4A60930FCE
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Jul 2024 10:30:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C6A611C20EE4
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Jul 2024 07:41:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D5A6A1C211BF
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Jul 2024 08:30:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B8EA145B1D;
-	Mon, 15 Jul 2024 07:41:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1979185E56;
+	Mon, 15 Jul 2024 08:29:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="OSxyOhru"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08AF63EA98;
-	Mon, 15 Jul 2024 07:41:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.84
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 419DA1849E8;
+	Mon, 15 Jul 2024 08:29:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721029309; cv=none; b=HRrQin5i10mXgmH4rZBa5JsgiwuOoN9p6YChWJ2fW93GHAbb2oMyXakw6KBrYGiQrdBVanYJmEPklsXyUS6qQBnBtkEuKKR52Rw/hqbaJpGQvqwNN/wT3aoyZfBlaP/4ZMHDy4TCCYNLz+bdCNHn5xL862E5YHOGrwLSEmlXdP0=
+	t=1721032177; cv=none; b=cie2Y+BjYeVT9y0UjG1ycyWK+8x2uqS8jPWuqNTu33tYVgfN/5bTMyn5+mucyQYQ8KvM/5ZxuUJIxKwjANwpez3y6knCdts2NK2BYdWKgj9xrnR5eCnVZmPobL8tbNkKxUJmMXbdM7cSHIfoJmbnxsxpaz6w0FoHgoZmAimT/Rc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721029309; c=relaxed/simple;
-	bh=+ngG0sf8DVROZxeHNSnraiS0QJDX2RWWNmGGuKghrho=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=TajjJNIMkC60qO5az2pYTxXBfRLpkPZVIsjCj1fzOM3rIjQuu4HRYjs9joRvDoyEP5QjhqmJsR++GLuZYd7ugfAzLECl0fRaNdBgmM44Tw73tYTaC2OdW8ErwrdyNfGadMWI9qStT1f8DS15KrT//Ci6ruyCPa0e0ilScxNFYRM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.84
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
-Received: from localhost (unknown [124.16.138.129])
-	by APP-05 (Coremail) with SMTP id zQCowAB3f7ek0pRmPwBoAw--.42734S2;
-	Mon, 15 Jul 2024 15:41:24 +0800 (CST)
-From: Chen Ni <nichen@iscas.ac.cn>
-To: heikki.krogerus@linux.intel.com,
-	gregkh@linuxfoundation.org,
-	dmitry.baryshkov@linaro.org,
-	neil.armstrong@linaro.org,
-	johan+linaro@kernel.org,
-	quic_kriskura@quicinc.com
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Chen Ni <nichen@iscas.ac.cn>
-Subject: [PATCH] usb: typec: ucsi: glink: Remove unnecessary semicolon
-Date: Mon, 15 Jul 2024 15:39:47 +0800
-Message-Id: <20240715073947.4028319-1-nichen@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1721032177; c=relaxed/simple;
+	bh=wiTo8uBl8LYt418qIZjGZMOgjUMZtIisDShPynw5eOI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tIH+nHLUdzD0cwxSIg8sRa8deiGPW9qKRnQnMxM4pFOqBNJ/w9b2/4YpOZ1ian2zJ277K8AwJAYmC1MSIYJ8YRrdRdj7MTu6m/jP4JGZ67Yod7W0eMIvrdmnkmoxJ1FdhYVfxWRjwdNqWtHVtuGHGUbGezqEWCjV7lX+QCJNDI4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=OSxyOhru; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 582D7C4AF0B;
+	Mon, 15 Jul 2024 08:29:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1721032176;
+	bh=wiTo8uBl8LYt418qIZjGZMOgjUMZtIisDShPynw5eOI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=OSxyOhruJLRr7Wo0Q5xnXFqG94BSlCOaeiCveX1PJmeA+5RqytgkkTW7hDFKDGFuz
+	 v9t/7p1pU7EG9BtMn1IXRA8Gjh5JMfW+s926C3TUjiwr/pG/4DQEu8Y8iJ/bLLi5L0
+	 SupB/ic8cW/DOdfx7F0DwhjzLcaMkOGoiDN2vops=
+Date: Mon, 15 Jul 2024 10:29:33 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Salvatore Bonaccorso <carnil@debian.org>
+Cc: =?utf-8?Q?Micha=C5=82?= Pecio <michal.pecio@gmail.com>,
+	elatllat@gmail.com, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, mathias.nyman@linux.intel.com,
+	niklas.neronin@linux.intel.com, stable@vger.kernel.org,
+	regressions@lists.linux.dev
+Subject: Re: [PATCH 6.1 000/102] 6.1.98-rc1 review
+Message-ID: <2024071556-perceive-zit-6a0c@gregkh>
+References: <CA+3zgmsCgQs_LVV6fOwu3v2t_Vd=C3Wrv9QrbNpsmMq4RD=ZoQ@mail.gmail.com>
+ <20240714173043.668756e4@foxbook>
+ <ZpP3RU-MKb4pMmZH@eldamar.lan>
+ <2024071540-commute-curler-26d3@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:zQCowAB3f7ek0pRmPwBoAw--.42734S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7WryUGFyUZryktr48Jr1UWrg_yoW3XFX_u3
-	Z7WFsxGr1jkF95Kw1fXas0vr1akw4qv3WkWFnYqrZ5Ca47Aw1rW3yjvFWDXw1rK345AFn3
-	Wrn8Xa4UGrWS9jkaLaAFLSUrUUUUbb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUIcSsGvfJTRUUUbckFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-	A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
-	Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-	Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-	I7IYx2IY67AKxVWUtVWrXwAv7VC2z280aVAFwI0_Gr1j6F4UJwAm72CE4IkC6x0Yz7v_Jr
-	0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8
-	CwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r
-	1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij
-	64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr
-	0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
-	0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUmD73UUUUU=
-X-CM-SenderInfo: xqlfxv3q6l2u1dvotugofq/
+In-Reply-To: <2024071540-commute-curler-26d3@gregkh>
 
-Remove unnecessary semicolon at the end of the switch statement.
-This is detected by coccinelle.
+On Mon, Jul 15, 2024 at 07:45:07AM +0200, Greg KH wrote:
+> On Sun, Jul 14, 2024 at 06:05:25PM +0200, Salvatore Bonaccorso wrote:
+> > Hi,
+> > 
+> > On Sun, Jul 14, 2024 at 05:32:39PM +0200, Michał Pecio wrote:
+> > > This looks like bug 219039, please see if my suggested solution works.
+> > > 
+> > > The upstream commit is correct, because the call to inc_deq() has been
+> > > moved outside handle_tx_event() so there is no longer this critical
+> > > difference between doing 'goto cleanup' and 'return 0'. The intended
+> > > change of this commit also makes sense to me.
+> > > 
+> > > This refactor is already present in v6.9 so I don't think the commit
+> > > will have any effect besides fixing the isochronous bug which it is
+> > > meant to fix.
+> > > 
+> > > But it is not present in v6.6 and v6.1, so they break/crash/hang/etc.
+> > > Symptoms may vary, but I believe the root cause is the same because the
+> > > code is visibly wrong.
+> > > 
+> > > 
+> > > I would like to use this opportunity to point out that the xhci driver
+> > > is currenty undergoing (much needed IMO) cleanups and refactors and
+> > > this is not the first time when a naive, verbatim backport is attempted
+> > > of a patch which works fine on upstream, but causes problems on earlier
+> > > kernels. These things need special scrutiny, beyond just "CC:stable".
+> > 
+> > For tracking I guess this should go as well to the regressions list?
+> > 
+> > #regzbot introduced: 948554f1bb16e15b90006c109c3a558c66d4c4ac
+> > #regzbot title: freezes on plugging USB connector due to 948554f1bb16 ("usb: xhci: prevent potential failure in handle_tx_event() for Transfer events without TRB")
+> > #regzbot monitor: https://bugzilla.kernel.org/show_bug.cgi?id=219039
+> > 
+> > Thorsten I hope I got the most bits correctly, how would one inform
+> > regzbot about the regresssion for 6.1.98 and 6.6.39 but not happening
+> > in the upper versions?
+> 
+> I'll handle this and go release new kernels with just this reverted in
+> it.  Let my morning coffee kick in first...
 
-Signed-off-by: Chen Ni <nichen@iscas.ac.cn>
----
- drivers/usb/typec/ucsi/ucsi_glink.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Should all now be fixed in the 6.6.40 and 6.1.99 releases.  If not,
+please let me know.
 
-diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c b/drivers/usb/typec/ucsi/ucsi_glink.c
-index 16c328497e0b..459a5af02910 100644
---- a/drivers/usb/typec/ucsi/ucsi_glink.c
-+++ b/drivers/usb/typec/ucsi/ucsi_glink.c
-@@ -263,7 +263,7 @@ static void pmic_glink_ucsi_callback(const void *data, size_t len, void *priv)
- 	case UC_UCSI_USBC_NOTIFY_IND:
- 		schedule_work(&ucsi->notify_work);
- 		break;
--	};
-+	}
- }
- 
- static void pmic_glink_ucsi_pdr_notify(void *priv, int state)
--- 
-2.25.1
+thanks,
 
+greg k-h
 
