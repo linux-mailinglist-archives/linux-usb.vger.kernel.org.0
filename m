@@ -1,89 +1,108 @@
-Return-Path: <linux-usb+bounces-12221-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12222-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5CB293137F
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Jul 2024 13:53:21 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4844931423
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Jul 2024 14:23:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9B8561F21EDA
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Jul 2024 11:53:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DF6571C21643
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Jul 2024 12:23:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A433018A939;
-	Mon, 15 Jul 2024 11:53:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F29B18C173;
+	Mon, 15 Jul 2024 12:23:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bywvfhkW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BjNbc7dU"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E6B0189F5C
-	for <linux-usb@vger.kernel.org>; Mon, 15 Jul 2024 11:53:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88ACF18787F;
+	Mon, 15 Jul 2024 12:23:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721044395; cv=none; b=GPxunVd48+cqiymBJBFru29bLbPK6U4XiKw7iV5yBrx7v1Lm9SQTnnjUcNDzyjdO8fVsuVlj0DyAUBEhGuTLIeQSxKpyo6pe1d1L5Gtd7WiUUEAtPt84tZGHVE98bUXVJrk7GoYdKpO4xswMWGMyhHzqdUfBi9N3yTcmuxStrfA=
+	t=1721046212; cv=none; b=BQwBAjOUHjU+6scnQ3KKOlAenf1WqOGKCgzvn29KO4mlOp5WVkv+HsBIzID5g5tYS3HPOflPVLRCIUdV42kyIwfrzRFJJv3LfiYcoIqUH8zuJqcROgqIEi289pr08auZIVaSj61zJM0KAoPKKEg5Z0WJxViQ5Er6pEv8gHHDkgw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721044395; c=relaxed/simple;
-	bh=xUSD8B7uXYUVctm5ueeSzQNxMsvuRfG+6jyLV5KKVjY=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=kRyk/gdkVRsGJUqpIaqJ9vlWHzrsFICRyAPjk6G8QbsE5meVsexk1QwgtdMmAtTbpnhyurC4NRT70CZYGcLe85NA8rEfaaVPzz5fvi/26xwDQHvSMzHuShZAPirEnqBAGPRyfkg0c2QCm0Q+MbTO8JGhqRebekHMZ8CpD4lFjlg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bywvfhkW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0AE46C32782
-	for <linux-usb@vger.kernel.org>; Mon, 15 Jul 2024 11:53:15 +0000 (UTC)
+	s=arc-20240116; t=1721046212; c=relaxed/simple;
+	bh=t6723AQNf/YQrYz1eVjW0ufSQyLk7R1O+zDaPu5mrZw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Gf73PhFePnvdZ0RNLw+tLriBOV+cYqBkkXigumB3HM6HtDjH/dU3QBRRW0/BxoKd0dltzwRFGnGDamHUeRXFnYJYPZz/ngj6c5sBARxre9PbGBeLVr5zqJbeqjIHCVrFOmhien9PYN1YhwU5ydgR6OK+N+1ElyZ6HChruof3d/4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BjNbc7dU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26420C32782;
+	Mon, 15 Jul 2024 12:23:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721044395;
-	bh=xUSD8B7uXYUVctm5ueeSzQNxMsvuRfG+6jyLV5KKVjY=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=bywvfhkW6zbBd5c21Z01Sxlm5Mj23bIMdBlMchr5xssCRmneamHDWjlHkyWxIYsZu
-	 o+D+Jd6HA1MuhMktFGrj5i8+0ii27G53p+yVnrmDzyNAdHT9CHsgMbKW3A9rapXawh
-	 b/iE3BgM0kjwuk5j9uC+bCIKYh1Z6BDqg8QG27XTbdg5WE197ND0VfssxGaLINAHip
-	 VNPT/tJxLDAuJ7OHrVNOt+XDMmwvj+aV+eMgaFAlz1ybWCl0vRrqQ9He2dJd65BHG5
-	 HRh09OaJzg1PsCM4m4BdYkzPR/AYxa0S8pv699jmzRKg0XTS6hhkEvgGyROxxrM6sY
-	 dU9RycVShglCw==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id ECB55C433E5; Mon, 15 Jul 2024 11:53:14 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 219039] kernel 6.6.39 freezes with QNAP TL-D800C usb case
-Date: Mon, 15 Jul 2024 11:53:14 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: elatllat@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-219039-208809-hf1dQrMMUC@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-219039-208809@https.bugzilla.kernel.org/>
-References: <bug-219039-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=k20201202; t=1721046212;
+	bh=t6723AQNf/YQrYz1eVjW0ufSQyLk7R1O+zDaPu5mrZw=;
+	h=Date:From:To:Cc:Subject:From;
+	b=BjNbc7dU1CzCLdyM3zjisiEfr3PjU+OKOJ89yy0JzhMrVYdtzWLOh0NExU4cgS/7p
+	 50XuNNw2kg/c4H7YFLDPCnhdP+FBsKYlh4HxcOVvYQChOC3KjHvHrf+uEcm217bYkh
+	 Yw7UPCEfwGoqgXsnjiF5cwQoJxOsdpU1rS2vNT/QQuAW63TRFuCvhfk1AIOdBTFaqf
+	 TMHBX0gkHKnFOZXxq22aNg1gaLGqs6ZVe8NPyZoKVrkkpgKYQlZlLGVVbX2sYfUGJA
+	 21vqVb22gbEYASaR0bjaw/mmm3JLF2i0Il67JO0QMykXJvCHKgf3C+JKQy/WBFyI1d
+	 sfJ52KZIz2x5Q==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1sTKjq-000000007Rr-2EPZ;
+	Mon, 15 Jul 2024 14:23:30 +0200
+Date: Mon, 15 Jul 2024 14:23:30 +0200
+From: Johan Hovold <johan@kernel.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] USB-serial updates for 6.11-rc1
+Message-ID: <ZpUUwvgpSEj8mojg@hovoldconsulting.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D219039
+The following changes since commit 22a40d14b572deb80c0648557f4bd502d7e83826:
 
---- Comment #7 from elatllat@gmail.com ---
- RESOLVED with 6.1.99 and 6.6.40 .
+  Linux 6.10-rc6 (2024-06-30 14:40:44 -0700)
 
---=20
-You may reply to this email to add a comment.
+are available in the Git repository at:
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-6.11-rc1
+
+for you to fetch changes up to df8c0b8a03e871431587a13a6765cb4c601e1573:
+
+  USB: serial: garmin_gps: use struct_size() to allocate pkt (2024-07-05 14:01:43 +0200)
+
+----------------------------------------------------------------
+USB-serial updates for 6.11-rc1
+
+Here are the USB-serial updates for 6.11-rc1, including:
+
+ - add missing module descriptions
+ - add flexible array annotation in garmin_gps
+
+Included are also various clean ups.
+
+All have been in linux-next with no reported issues.
+
+----------------------------------------------------------------
+Dr. David Alan Gilbert (1):
+      USB: serial: spcp8x5: remove unused struct 'spcp8x5_usb_ctrl_arg'
+
+Javier Carrasco (2):
+      USB: serial: garmin_gps: annotate struct garmin_packet with __counted_by
+      USB: serial: garmin_gps: use struct_size() to allocate pkt
+
+Jeff Johnson (1):
+      USB: serial: add missing MODULE_DESCRIPTION() macros
+
+ drivers/usb/serial/ch341.c             |  1 +
+ drivers/usb/serial/garmin_gps.c        |  5 ++---
+ drivers/usb/serial/mxuport.c           |  1 +
+ drivers/usb/serial/navman.c            |  1 +
+ drivers/usb/serial/qcaux.c             |  1 +
+ drivers/usb/serial/spcp8x5.c           | 10 ----------
+ drivers/usb/serial/symbolserial.c      |  1 +
+ drivers/usb/serial/usb-serial-simple.c |  1 +
+ drivers/usb/serial/usb_debug.c         |  1 +
+ 9 files changed, 9 insertions(+), 13 deletions(-)
 
