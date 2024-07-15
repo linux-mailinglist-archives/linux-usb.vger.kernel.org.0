@@ -1,308 +1,276 @@
-Return-Path: <linux-usb+bounces-12223-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12224-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B906931476
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Jul 2024 14:37:11 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 87952931577
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Jul 2024 15:12:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4F6EC1C214CA
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Jul 2024 12:37:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D8C17B21B63
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Jul 2024 13:11:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B99D618C32C;
-	Mon, 15 Jul 2024 12:37:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E2FE18C351;
+	Mon, 15 Jul 2024 13:11:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WriNx1Kw"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="T60GL+qs"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7B9E18A944;
-	Mon, 15 Jul 2024 12:36:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1FA2172BA6
+	for <linux-usb@vger.kernel.org>; Mon, 15 Jul 2024 13:11:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721047021; cv=none; b=E3ufxU/m9w23as1Z93B06omEuX7zb3UeuV+N55HsvWGHhKA2J/OrenvWbpq0Nf+u3H9bh0fHkeGLAb6/dL9xueYbwHh8PIcmUCsyq655xbp6eyDolHMERp37gkhNMkj5r5NenISXkLnRHJpddm+psHbAS8QqdDi/qWASGYmyy+I=
+	t=1721049114; cv=none; b=oMl8i7R7Jw4dRIMnbYwJdbsg2de2krI1c+mRg9GD7MJH1SmNYSNPbhZMIldD2CKzC6BtC/Te2CWOrK71cQ++HC5/+51ZfjfN1InEvp6ZjbpUr4XTtZgQ0mHkDW/aqe1NqBYzXui7uYw+X5lk3L/NIwZ0JLXtRj9D4TIAVvraM/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721047021; c=relaxed/simple;
-	bh=lGTgDdw0D3LgnUyX4dXtePNOhp9in10pEAeYuGJ54gU=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=YAXIT0jDJ206YpV0/dX5DWf+Fv1sWEJF1qKE2cmRW9N7Q0wc7TDg9Mi0jEV6RQGg9tnqorZm6OCCDwnSwGc8ZFoV8hyqdtYKjcbfZSqI/KiNPXs2KqjOM0eodcdbbL2NoUypkNlSOtwZ26QK1i1JdLG/wtacU2yKz5Va9HSmxMs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WriNx1Kw; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1721047019; x=1752583019;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version:content-id;
-  bh=lGTgDdw0D3LgnUyX4dXtePNOhp9in10pEAeYuGJ54gU=;
-  b=WriNx1KwLAohhyialObweRLoxZu+zw4ldANGsmbmBqMte76ud3fA8b2s
-   lIfHk5I77lvvxFckk/N6qrX+L1P/L3rm1DJB9XpbkNz/+1AX9tDEqJpUJ
-   r1fqHPA6YNQGhEaOTeLW9mRlDYxuFFl69LtfKO7iBD6kdxupUJt8MYHiM
-   jWF6RITfxK9xqsYTMcXXZaAa4oha2Ol6XZ8oyIO+JeItEl1IuEBhVudfg
-   zaDP9LOGUAgqiEwUGfx52js24pnsFJ8Xznv1Em+rAWd2DQjAWGNb29G7y
-   G8xCwbT9HcwdSpve8N1dJmCTciIrKZHgd49XI5iDWmRbgWIPp9LPj2cfH
-   g==;
-X-CSE-ConnectionGUID: aCJYLc8KRCC6rIXrFJlQVw==
-X-CSE-MsgGUID: vmh8KRdWR/KOE1FSi4iMWg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11133"; a="29012835"
-X-IronPort-AV: E=Sophos;i="6.09,210,1716274800"; 
-   d="scan'208";a="29012835"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2024 05:36:59 -0700
-X-CSE-ConnectionGUID: p79mAvRxS6uC/AWugJ5V4Q==
-X-CSE-MsgGUID: 0bsbbmOVQXK+BgeNncbNrg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,210,1716274800"; 
-   d="scan'208";a="49497247"
-Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.247.131])
-  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2024 05:36:55 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Mon, 15 Jul 2024 15:36:50 +0300 (EEST)
-To: superm1@kernel.org
-cc: Bjorn Helgaas <bhelgaas@google.com>, 
-    Mathias Nyman <mathias.nyman@intel.com>, 
-    Mika Westerberg <mika.westerberg@linux.intel.com>, 
-    "open list : PCI SUBSYSTEM" <linux-pci@vger.kernel.org>, 
-    open list <linux-kernel@vger.kernel.org>, 
-    "open list : USB XHCI DRIVER" <linux-usb@vger.kernel.org>, 
-    Daniel Drake <drake@endlessos.org>, Gary Li <Gary.Li@amd.com>, 
-    Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-    Mario Limonciello <mario.limonciello@amd.com>
-Subject: Re: [PATCH v3 1/5] PCI: Use an enum for reset type in
- pci_dev_wait()
-In-Reply-To: <20240712181246.811044-2-superm1@kernel.org>
-Message-ID: <c67b005a-2378-2ce9-e55b-da807fd1811a@linux.intel.com>
-References: <20240712181246.811044-1-superm1@kernel.org> <20240712181246.811044-2-superm1@kernel.org>
+	s=arc-20240116; t=1721049114; c=relaxed/simple;
+	bh=w/7/9TTvagokP9jCmrheC/zWmi++jwech1MbOMghMSc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=bjm3CcINqHmBcbjGxP7jfXb0KC9bL4LaKFiptXzDmQNxIvDEQmd/a5u+5cpvWgzXzq6S6+yZbNSJ/w4l+VIEFYcANbsKhpnS/kkdkDE/6W3WZBlxgMuRyvEaIIM8yQJondRa2rPJbA2YafNiij3NG0/4Op4XfYw/6J2tdwqDfq0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=T60GL+qs; arc=none smtp.client-ip=209.85.218.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a77c7d3e8bcso541039166b.1
+        for <linux-usb@vger.kernel.org>; Mon, 15 Jul 2024 06:11:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1721049110; x=1721653910; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0W0EZnbCTDfx8ue6jdJ/HJG+huwv9bMMjew4b0UU0A8=;
+        b=T60GL+qsbJTCsPYMnEOblFMIEh2qBfSLlUYQ5alQJW4SxUin2oOPlGSslAhWNuNR5u
+         pJTikGB9f5fFwzU7h5nLd/pcXKocyWuKuJvzwVCVFRQRUcMG7XgqgrVCKZcSONrX/Gqz
+         IWSGIHGejLpRLoSxgkNvWMmOSKXscgdL6oZiY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721049110; x=1721653910;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0W0EZnbCTDfx8ue6jdJ/HJG+huwv9bMMjew4b0UU0A8=;
+        b=m13iwYJzz6ES4k0wiiP5W3xFs2kDsKsZWCyAGwc7nF996tyPPIs8JPjHAOZQXAfC6I
+         eAYJ/kwkXEoczaGxV7tebpRW/Sl7Ef4C73oxqdDmCg6ZfAoS/4eeSUevb1AWKkZBCL4g
+         nN+N+DCjY7WhoFT4iLjWAr0H9CN5J0WI6QgmBSI41EsOF3DK0xANkMOsdcmZz9aJI6BE
+         i3bQi4NCoelM0l5kk8eNnxT4xvWfxkbADchmamvZnOREKAGXHj03/vYINgJMTA3y3gEa
+         FtdRUFmCtnmZHDhEixqWG7YlVS9ytq3lpYnN0a/KeE7x44JilFTSCK9Gmd7c5hIKZbbX
+         sFTw==
+X-Gm-Message-State: AOJu0Ywgw4bl0mzsqtQXM5WRnwalHAczFBtxSvcrWloJwmoIiUJpUio0
+	p6TIWsX3kEc8KcMo8cZgS8BfVH2ropwgduDsDlqeFGVPggDD6O6LH0uNgCnY
+X-Google-Smtp-Source: AGHT+IGnenYqNp8dLOVEBHndlO1qkSt5WHuyBSK7yob0HW9xjm2KHgHQheosrkDy24uL2ap1KYFAcw==
+X-Received: by 2002:a17:906:6b01:b0:a77:dbf0:d29 with SMTP id a640c23a62f3a-a780b705373mr1156932166b.46.1721049109980;
+        Mon, 15 Jul 2024 06:11:49 -0700 (PDT)
+Received: from ukaszb-ng.c.googlers.com.com (61.134.90.34.bc.googleusercontent.com. [34.90.134.61])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-59b268a2948sm3346982a12.66.2024.07.15.06.11.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Jul 2024 06:11:49 -0700 (PDT)
+From: =?UTF-8?q?=C5=81ukasz=20Bartosik?= <ukaszb@chromium.org>
+To: Valentina Manea <valentina.manea.m@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Hongren Zheng <i@zenithal.me>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Subject: [PATCH v2] usbip: Add USB_SPEED_SUPER_PLUS as valid arg
+Date: Mon, 15 Jul 2024 13:11:30 +0000
+Message-ID: <20240715131131.3876380-1-ukaszb@chromium.org>
+X-Mailer: git-send-email 2.45.2.993.g49e7a77208-goog
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323328-1789045202-1721046575=:1424"
-Content-ID: <798844da-5d0a-555d-6478-d69161bbec3b@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+Add USB_SPEED_SUPER_PLUS as valid argument to allow
+to attach USB SuperSpeed+ devices. Update speed of
+virtual HC to SuperSpeed+ as well.
 
---8323328-1789045202-1721046575=:1424
-Content-Type: text/plain; CHARSET=ISO-8859-15
-Content-Transfer-Encoding: QUOTED-PRINTABLE
-Content-ID: <3b6b0dbd-8593-9c57-8b49-00a0de00e557@linux.intel.com>
+Signed-off-by: Łukasz Bartosik <ukaszb@chromium.org>
+---
+Changes v2->v1:
+- Updated virtual HC speed to SS+,
+- Updated commit message.
+---
+ drivers/usb/usbip/vhci_hcd.c   | 36 +++++++++++++++++-----------------
+ drivers/usb/usbip/vhci_sysfs.c |  3 ++-
+ 2 files changed, 20 insertions(+), 19 deletions(-)
 
-On Fri, 12 Jul 2024, superm1@kernel.org wrote:
+diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
+index 82650c11e451..fff27c529513 100644
+--- a/drivers/usb/usbip/vhci_hcd.c
++++ b/drivers/usb/usbip/vhci_hcd.c
+@@ -372,7 +372,7 @@ static int vhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
+ 		}
+ 		switch (wValue) {
+ 		case USB_PORT_FEAT_SUSPEND:
+-			if (hcd->speed == HCD_USB3) {
++			if (hcd->speed >= HCD_USB3) {
+ 				pr_err(" ClearPortFeature: USB_PORT_FEAT_SUSPEND req not "
+ 				       "supported for USB 3.0 roothub\n");
+ 				goto error;
+@@ -388,7 +388,7 @@ static int vhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
+ 		case USB_PORT_FEAT_POWER:
+ 			usbip_dbg_vhci_rh(
+ 				" ClearPortFeature: USB_PORT_FEAT_POWER\n");
+-			if (hcd->speed == HCD_USB3)
++			if (hcd->speed >= HCD_USB3)
+ 				vhci_hcd->port_status[rhport] &= ~USB_SS_PORT_STAT_POWER;
+ 			else
+ 				vhci_hcd->port_status[rhport] &= ~USB_PORT_STAT_POWER;
+@@ -404,19 +404,19 @@ static int vhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
+ 		break;
+ 	case GetHubDescriptor:
+ 		usbip_dbg_vhci_rh(" GetHubDescriptor\n");
+-		if (hcd->speed == HCD_USB3 &&
++		if (hcd->speed >= HCD_USB3 &&
+ 				(wLength < USB_DT_SS_HUB_SIZE ||
+ 				 wValue != (USB_DT_SS_HUB << 8))) {
+ 			pr_err("Wrong hub descriptor type for USB 3.0 roothub.\n");
+ 			goto error;
+ 		}
+-		if (hcd->speed == HCD_USB3)
++		if (hcd->speed >= HCD_USB3)
+ 			ss_hub_descriptor((struct usb_hub_descriptor *) buf);
+ 		else
+ 			hub_descriptor((struct usb_hub_descriptor *) buf);
+ 		break;
+ 	case DeviceRequest | USB_REQ_GET_DESCRIPTOR:
+-		if (hcd->speed != HCD_USB3)
++		if (hcd->speed < HCD_USB3)
+ 			goto error;
+ 
+ 		if ((wValue >> 8) != USB_DT_BOS)
+@@ -503,7 +503,7 @@ static int vhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
+ 		case USB_PORT_FEAT_LINK_STATE:
+ 			usbip_dbg_vhci_rh(
+ 				" SetPortFeature: USB_PORT_FEAT_LINK_STATE\n");
+-			if (hcd->speed != HCD_USB3) {
++			if (hcd->speed < HCD_USB3) {
+ 				pr_err("USB_PORT_FEAT_LINK_STATE req not "
+ 				       "supported for USB 2.0 roothub\n");
+ 				goto error;
+@@ -521,7 +521,7 @@ static int vhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
+ 			usbip_dbg_vhci_rh(
+ 				" SetPortFeature: USB_PORT_FEAT_U2_TIMEOUT\n");
+ 			/* TODO: add suspend/resume support! */
+-			if (hcd->speed != HCD_USB3) {
++			if (hcd->speed < HCD_USB3) {
+ 				pr_err("USB_PORT_FEAT_U1/2_TIMEOUT req not "
+ 				       "supported for USB 2.0 roothub\n");
+ 				goto error;
+@@ -531,7 +531,7 @@ static int vhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
+ 			usbip_dbg_vhci_rh(
+ 				" SetPortFeature: USB_PORT_FEAT_SUSPEND\n");
+ 			/* Applicable only for USB2.0 hub */
+-			if (hcd->speed == HCD_USB3) {
++			if (hcd->speed >= HCD_USB3) {
+ 				pr_err("USB_PORT_FEAT_SUSPEND req not "
+ 				       "supported for USB 3.0 roothub\n");
+ 				goto error;
+@@ -551,7 +551,7 @@ static int vhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
+ 				pr_err("invalid port number %d\n", wIndex);
+ 				goto error;
+ 			}
+-			if (hcd->speed == HCD_USB3)
++			if (hcd->speed >= HCD_USB3)
+ 				vhci_hcd->port_status[rhport] |= USB_SS_PORT_STAT_POWER;
+ 			else
+ 				vhci_hcd->port_status[rhport] |= USB_PORT_STAT_POWER;
+@@ -564,7 +564,7 @@ static int vhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
+ 				goto error;
+ 			}
+ 			/* Applicable only for USB3.0 hub */
+-			if (hcd->speed != HCD_USB3) {
++			if (hcd->speed < HCD_USB3) {
+ 				pr_err("USB_PORT_FEAT_BH_PORT_RESET req not "
+ 				       "supported for USB 2.0 roothub\n");
+ 				goto error;
+@@ -578,7 +578,7 @@ static int vhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
+ 				goto error;
+ 			}
+ 			/* if it's already enabled, disable */
+-			if (hcd->speed == HCD_USB3) {
++			if (hcd->speed >= HCD_USB3) {
+ 				vhci_hcd->port_status[rhport] = 0;
+ 				vhci_hcd->port_status[rhport] =
+ 					(USB_SS_PORT_STAT_POWER |
+@@ -602,7 +602,7 @@ static int vhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
+ 			}
+ 			if (wValue >= 32)
+ 				goto error;
+-			if (hcd->speed == HCD_USB3) {
++			if (hcd->speed >= HCD_USB3) {
+ 				if ((vhci_hcd->port_status[rhport] &
+ 				     USB_SS_PORT_STAT_POWER) != 0) {
+ 					vhci_hcd->port_status[rhport] |= (1 << wValue);
+@@ -616,7 +616,7 @@ static int vhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
+ 		break;
+ 	case GetPortErrorCount:
+ 		usbip_dbg_vhci_rh(" GetPortErrorCount\n");
+-		if (hcd->speed != HCD_USB3) {
++		if (hcd->speed < HCD_USB3) {
+ 			pr_err("GetPortErrorCount req not "
+ 			       "supported for USB 2.0 roothub\n");
+ 			goto error;
+@@ -626,7 +626,7 @@ static int vhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
+ 		break;
+ 	case SetHubDepth:
+ 		usbip_dbg_vhci_rh(" SetHubDepth\n");
+-		if (hcd->speed != HCD_USB3) {
++		if (hcd->speed < HCD_USB3) {
+ 			pr_err("SetHubDepth req not supported for "
+ 			       "USB 2.0 roothub\n");
+ 			goto error;
+@@ -646,7 +646,7 @@ static int vhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
+ 		if (!invalid_rhport) {
+ 			dump_port_status_diff(prev_port_status[rhport],
+ 					      vhci_hcd->port_status[rhport],
+-					      hcd->speed == HCD_USB3);
++					      hcd->speed >= HCD_USB3);
+ 		}
+ 	}
+ 	usbip_dbg_vhci_rh(" bye\n");
+@@ -1154,8 +1154,8 @@ static int vhci_setup(struct usb_hcd *hcd)
+ 	} else {
+ 		vhci->vhci_hcd_ss = hcd_to_vhci_hcd(hcd);
+ 		vhci->vhci_hcd_ss->vhci = vhci;
+-		hcd->speed = HCD_USB3;
+-		hcd->self.root_hub->speed = USB_SPEED_SUPER;
++		hcd->speed = HCD_USB31;
++		hcd->self.root_hub->speed = USB_SPEED_SUPER_PLUS;
+ 	}
+ 
+ 	/*
+@@ -1316,7 +1316,7 @@ static const struct hc_driver vhci_hc_driver = {
+ 	.product_desc	= driver_desc,
+ 	.hcd_priv_size	= sizeof(struct vhci_hcd),
+ 
+-	.flags		= HCD_USB3 | HCD_SHARED,
++	.flags		= HCD_USB31 | HCD_SHARED,
+ 
+ 	.reset		= vhci_setup,
+ 	.start		= vhci_start,
+diff --git a/drivers/usb/usbip/vhci_sysfs.c b/drivers/usb/usbip/vhci_sysfs.c
+index e2847cd3e6e3..d5865460e82d 100644
+--- a/drivers/usb/usbip/vhci_sysfs.c
++++ b/drivers/usb/usbip/vhci_sysfs.c
+@@ -283,6 +283,7 @@ static int valid_args(__u32 *pdev_nr, __u32 *rhport,
+ 	case USB_SPEED_HIGH:
+ 	case USB_SPEED_WIRELESS:
+ 	case USB_SPEED_SUPER:
++	case USB_SPEED_SUPER_PLUS:
+ 		break;
+ 	default:
+ 		pr_err("Failed attach request for unsupported USB speed: %s\n",
+@@ -349,7 +350,7 @@ static ssize_t attach_store(struct device *dev, struct device_attribute *attr,
+ 	vhci_hcd = hcd_to_vhci_hcd(hcd);
+ 	vhci = vhci_hcd->vhci;
+ 
+-	if (speed == USB_SPEED_SUPER)
++	if (speed >= USB_SPEED_SUPER)
+ 		vdev = &vhci->vhci_hcd_ss->vdev[rhport];
+ 	else
+ 		vdev = &vhci->vhci_hcd_hs->vdev[rhport];
+-- 
+2.45.2.993.g49e7a77208-goog
 
-> From: Mario Limonciello <mario.limonciello@amd.com>
->=20
-> A string is passed to all callers of pci_dev_wait() which is utilized
-> to demonstrate what kind of reset happened when there was a problem.
->=20
-> This doesn't allow making the behavior for different reset types
-> conditional though. Lay some plumbing to allow making comparisons of
-> reset types with integers instead. No functional changes.
->=20
-> Suggested-by: Ilpo J=E4rvinen <ilpo.jarvinen@linux.intel.com>
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> ---
->  drivers/pci/pci-driver.c |  2 +-
->  drivers/pci/pci.c        | 29 +++++++++++++++++++----------
->  drivers/pci/pci.h        | 11 ++++++++++-
->  drivers/pci/pcie/dpc.c   |  2 +-
->  4 files changed, 31 insertions(+), 13 deletions(-)
->=20
-> diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
-> index af2996d0d17ff..ff97d08741df7 100644
-> --- a/drivers/pci/pci-driver.c
-> +++ b/drivers/pci/pci-driver.c
-> @@ -572,7 +572,7 @@ static void pci_pm_bridge_power_up_actions(struct pci=
-_dev *pci_dev)
->  {
->  =09int ret;
-> =20
-> -=09ret =3D pci_bridge_wait_for_secondary_bus(pci_dev, "resume");
-> +=09ret =3D pci_bridge_wait_for_secondary_bus(pci_dev, PCI_DEV_WAIT_RESUM=
-E);
->  =09if (ret) {
->  =09=09/*
->  =09=09 * The downstream link failed to come up, so mark the
-> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> index 35fb1f17a589c..115361a08d9e3 100644
-> --- a/drivers/pci/pci.c
-> +++ b/drivers/pci/pci.c
-> @@ -181,6 +181,15 @@ static int __init pcie_port_pm_setup(char *str)
->  }
->  __setup("pcie_port_pm=3D", pcie_port_pm_setup);
-> =20
-> +const char * const pci_reset_types[] =3D {
-
-Sparse is not happy about this and expects static as it is not defined=20
-by any header (LKP seems to also have caught this).
-
-> +=09"FLR",
-> +=09"AF_FLR",
-> +=09"PM D3HOT->D0",
-> +=09"bus reset",
-> +=09"resume",
-> +=09"DPC",
-
-Perhaps the index-based array initialization format would be beneficial=20
-here.
-
---=20
- i.
-
-> +};
-> +
->  /**
->   * pci_bus_max_busnr - returns maximum PCI bus number of given bus' chil=
-dren
->   * @bus: pointer to PCI bus structure to search
-> @@ -1250,7 +1259,7 @@ void pci_resume_bus(struct pci_bus *bus)
->  =09=09pci_walk_bus(bus, pci_resume_one, NULL);
->  }
-> =20
-> -static int pci_dev_wait(struct pci_dev *dev, char *reset_type, int timeo=
-ut)
-> +static int pci_dev_wait(struct pci_dev *dev, enum pci_reset_type reset_t=
-ype, int timeout)
->  {
->  =09int delay =3D 1;
->  =09bool retrain =3D false;
-> @@ -1288,7 +1297,7 @@ static int pci_dev_wait(struct pci_dev *dev, char *=
-reset_type, int timeout)
-> =20
->  =09=09if (delay > timeout) {
->  =09=09=09pci_warn(dev, "not ready %dms after %s; giving up\n",
-> -=09=09=09=09 delay - 1, reset_type);
-> +=09=09=09=09 delay - 1, pci_reset_types[reset_type]);
->  =09=09=09return -ENOTTY;
->  =09=09}
-> =20
-> @@ -1301,7 +1310,7 @@ static int pci_dev_wait(struct pci_dev *dev, char *=
-reset_type, int timeout)
->  =09=09=09=09}
->  =09=09=09}
->  =09=09=09pci_info(dev, "not ready %dms after %s; waiting\n",
-> -=09=09=09=09 delay - 1, reset_type);
-> +=09=09=09=09 delay - 1, pci_reset_types[reset_type]);
->  =09=09}
-> =20
->  =09=09msleep(delay);
-> @@ -1310,10 +1319,10 @@ static int pci_dev_wait(struct pci_dev *dev, char=
- *reset_type, int timeout)
-> =20
->  =09if (delay > PCI_RESET_WAIT)
->  =09=09pci_info(dev, "ready %dms after %s\n", delay - 1,
-> -=09=09=09 reset_type);
-> +=09=09=09 pci_reset_types[reset_type]);
->  =09else
->  =09=09pci_dbg(dev, "ready %dms after %s\n", delay - 1,
-> -=09=09=09reset_type);
-> +=09=09=09pci_reset_types[reset_type]);
-> =20
->  =09return 0;
->  }
-> @@ -4465,7 +4474,7 @@ int pcie_flr(struct pci_dev *dev)
->  =09 */
->  =09msleep(100);
-> =20
-> -=09return pci_dev_wait(dev, "FLR", PCIE_RESET_READY_POLL_MS);
-> +=09return pci_dev_wait(dev, PCI_DEV_WAIT_FLR, PCIE_RESET_READY_POLL_MS);
->  }
->  EXPORT_SYMBOL_GPL(pcie_flr);
-> =20
-> @@ -4532,7 +4541,7 @@ static int pci_af_flr(struct pci_dev *dev, bool pro=
-be)
->  =09 */
->  =09msleep(100);
-> =20
-> -=09return pci_dev_wait(dev, "AF_FLR", PCIE_RESET_READY_POLL_MS);
-> +=09return pci_dev_wait(dev, PCI_DEV_WAIT_AF_FLR, PCIE_RESET_READY_POLL_M=
-S);
->  }
-> =20
->  /**
-> @@ -4577,7 +4586,7 @@ static int pci_pm_reset(struct pci_dev *dev, bool p=
-robe)
->  =09pci_write_config_word(dev, dev->pm_cap + PCI_PM_CTRL, csr);
->  =09pci_dev_d3_sleep(dev);
-> =20
-> -=09return pci_dev_wait(dev, "PM D3hot->D0", PCIE_RESET_READY_POLL_MS);
-> +=09return pci_dev_wait(dev, PCI_DEV_WAIT_D3HOT_D0, PCIE_RESET_READY_POLL=
-_MS);
->  }
-> =20
->  /**
-> @@ -4751,7 +4760,7 @@ static int pci_bus_max_d3cold_delay(const struct pc=
-i_bus *bus)
->   * Return 0 on success or -ENOTTY if the first device on the secondary b=
-us
->   * failed to become accessible.
->   */
-> -int pci_bridge_wait_for_secondary_bus(struct pci_dev *dev, char *reset_t=
-ype)
-> +int pci_bridge_wait_for_secondary_bus(struct pci_dev *dev, enum pci_rese=
-t_type reset_type)
->  {
->  =09struct pci_dev *child;
->  =09int delay;
-> @@ -4885,7 +4894,7 @@ int pci_bridge_secondary_bus_reset(struct pci_dev *=
-dev)
->  {
->  =09pcibios_reset_secondary_bus(dev);
-> =20
-> -=09return pci_bridge_wait_for_secondary_bus(dev, "bus reset");
-> +=09return pci_bridge_wait_for_secondary_bus(dev, PCI_DEV_WAIT_BUS_RESET)=
-;
->  }
->  EXPORT_SYMBOL_GPL(pci_bridge_secondary_bus_reset);
-> =20
-> diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
-> index fd44565c47562..88f54d22118dc 100644
-> --- a/drivers/pci/pci.h
-> +++ b/drivers/pci/pci.h
-> @@ -4,6 +4,15 @@
-> =20
->  #include <linux/pci.h>
-> =20
-> +enum pci_reset_type {
-> +=09PCI_DEV_WAIT_FLR,
-> +=09PCI_DEV_WAIT_AF_FLR,
-> +=09PCI_DEV_WAIT_D3HOT_D0,
-> +=09PCI_DEV_WAIT_BUS_RESET,
-> +=09PCI_DEV_WAIT_RESUME,
-> +=09PCI_DEV_WAIT_DPC,
-> +};
-> +
->  /* Number of possible devfns: 0.0 to 1f.7 inclusive */
->  #define MAX_NR_DEVFNS 256
-> =20
-> @@ -94,7 +103,7 @@ void pci_msi_init(struct pci_dev *dev);
->  void pci_msix_init(struct pci_dev *dev);
->  bool pci_bridge_d3_possible(struct pci_dev *dev);
->  void pci_bridge_d3_update(struct pci_dev *dev);
-> -int pci_bridge_wait_for_secondary_bus(struct pci_dev *dev, char *reset_t=
-ype);
-> +int pci_bridge_wait_for_secondary_bus(struct pci_dev *dev, enum pci_rese=
-t_type reset_type);
-> =20
->  static inline void pci_wakeup_event(struct pci_dev *dev)
->  {
-> diff --git a/drivers/pci/pcie/dpc.c b/drivers/pci/pcie/dpc.c
-> index a668820696dc0..306efc399e503 100644
-> --- a/drivers/pci/pcie/dpc.c
-> +++ b/drivers/pci/pcie/dpc.c
-> @@ -174,7 +174,7 @@ pci_ers_result_t dpc_reset_link(struct pci_dev *pdev)
->  =09pci_write_config_word(pdev, cap + PCI_EXP_DPC_STATUS,
->  =09=09=09      PCI_EXP_DPC_STATUS_TRIGGER);
-> =20
-> -=09if (pci_bridge_wait_for_secondary_bus(pdev, "DPC")) {
-> +=09if (pci_bridge_wait_for_secondary_bus(pdev, PCI_DEV_WAIT_DPC)) {
->  =09=09clear_bit(PCI_DPC_RECOVERED, &pdev->priv_flags);
->  =09=09ret =3D PCI_ERS_RESULT_DISCONNECT;
->  =09} else {
->=20
---8323328-1789045202-1721046575=:1424--
 
