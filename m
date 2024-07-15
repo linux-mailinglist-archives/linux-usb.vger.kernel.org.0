@@ -1,109 +1,103 @@
-Return-Path: <linux-usb+bounces-12218-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12219-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42E5A9310A8
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Jul 2024 10:53:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B6EF931281
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Jul 2024 12:44:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 430C71C21DB8
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Jul 2024 08:53:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5761A284457
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Jul 2024 10:44:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA34F185081;
-	Mon, 15 Jul 2024 08:53:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEFEA1891A4;
+	Mon, 15 Jul 2024 10:44:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="V9Ljm2kD"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="cCJQdAdx"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 727611836CE
-	for <linux-usb@vger.kernel.org>; Mon, 15 Jul 2024 08:53:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2339188CD6
+	for <linux-usb@vger.kernel.org>; Mon, 15 Jul 2024 10:44:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721033599; cv=none; b=GStT45s0q0Cw/n1CPZ/nt/I3ZIsCpl6IA3m435cB6hi5k59T43BwoPXa6T0WPGqt1aWYj08HnJ7E3FoqB7R1+KOCD9zwGML7KvaFRQh/l+f3fl2CWuAMdA7svcfTDIhL25Sr+Fxo8L8anl8Y1Ma+oL4nxNC5kAxP+BW8jRonCi8=
+	t=1721040251; cv=none; b=NioYu6ef8dTwo/wwvewLtGl4lTxrNgcezDwcx3Be3WcSGWv1TmCkCdqEv2iegJ8zmg1sDTW94T88AhhOw4CJae95vXbWA5n/hPV61wka1BuwznpkJpgP6J7dU928ObFY/lUP+5R8c+hPJpW1RdLAT99cCsZwPxos0+GQYfVgfY8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721033599; c=relaxed/simple;
-	bh=PvIHSvHDyCqHlg4FzdOm/9JZDBPadb9yALdKopHDcRc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HA3lb0u/xkcUqQL2ZAgoEGOjjW0hvPqnA1ZBBlQNimXNeHIbeYh6AoD/6VqJHCW4S2xOC/uOcU8emnyZ3LMFDKD4tkcTXXnQLXOnNoHHefGUuyGdaPjYUSYbAjwEMn/JoBHgR9hjxTnd+Uf51cLZ2vJ1ryJuR9mYIZLQVI5g2y0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=V9Ljm2kD; arc=none smtp.client-ip=209.85.221.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-367ac08f80fso2140083f8f.1
-        for <linux-usb@vger.kernel.org>; Mon, 15 Jul 2024 01:53:17 -0700 (PDT)
+	s=arc-20240116; t=1721040251; c=relaxed/simple;
+	bh=ArjFpvyZSZjnJ0EBwp7II7TtY5rAXouqIJMsKyh7dpA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HsJDjUXppaBT+cOReVAEKWv1R2ysd5sXXYwx8B6yL6G04koo5oKv4F0Je5kgwspuGtS0ZMClnze+yTEcrpDZhumLT3GwArYnpur1kuv0hz8yfVLRXnwb4bs/nAUUuDPwvJEvJ0gTjuY21p6icpb1aG0FcLucGwqNty7z+Z+PqyY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=cCJQdAdx; arc=none smtp.client-ip=209.85.208.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2ebed33cb65so56356611fa.2
+        for <linux-usb@vger.kernel.org>; Mon, 15 Jul 2024 03:44:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1721033596; x=1721638396; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3odnsVgnGxuOUiR7+Vp9cvYXGHiYs1cqaY5JH4bJ45g=;
-        b=V9Ljm2kDw/zAUJGXF8rLKqiaVpnAMnK1S5YusyH/MXXGNxwgfUgbkMAznvJR640L5l
-         Ap3exzR8BEUsU1JiGBnHfWieq8Nd1K2G3sk+rZu8WyKugnlfRyqvDZyWm874gYcFxj39
-         DQYvhl/YKu7j0FgHBnUOvwEfbDeHZfwgINojF1A8dKdtwvxDL0x06n3Q72lPmn1+trmX
-         cQgqEJn/TmANEEl77LHuUJ0TBqdSMbe0yImTeUfyo//d5pMuRyDQLon+33FBObZjNi8p
-         Dx6QEmq3QkV1+v/TOKrbmEdxVMiwkpZv63/x81D4PUxtigvT0AvadXbT14LvmgZkvgSV
-         PLJw==
+        d=linaro.org; s=google; t=1721040248; x=1721645048; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=u6DOZ74q6LaS+OZDxCfdEKnLwse8S4I+GqgO+t/odvM=;
+        b=cCJQdAdxBz7M5xnQQTZj/RW4pea84TWQcr/M/uWkc+MoQtEMy9IxWjav8nK0bdvC9g
+         JZQ+Am+NoxSXRuc5XSIDZPUT3/KbQGNgOSuRbXHulJdOjWk4CkF0ScbCRi8PecmSdVK4
+         ZZPmIXwx6ZZmqDhzl+62SvOAomRgGmlqt8LDDtQ88LXzPNAPJuLoBHUsAcYTC8hgwQNr
+         NDgfcJ4SOBWo4+Z0gm2QJKb+MAUeSqrZXugeb+RHkheOTQla7G6NOZoEQNkQxDYA1ViW
+         tAi+EHIbE3LOTAasJ+oh5y7tqD07/2CDqKVzgib37BHoJq2zf64007GydDjvywcQortV
+         N6KA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721033596; x=1721638396;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3odnsVgnGxuOUiR7+Vp9cvYXGHiYs1cqaY5JH4bJ45g=;
-        b=wO2Q/1T+61HkLTVBp9LFWvPdWgExKaJlrjkncp1Bf5K4J37P8iLZ8LYMi9FIy7G+id
-         Rzye1FKk/zaFa6t8qM4voQDFkWMicR7uJAICBTbTh9t4Tgcz/GcrSRRAmvyyNsji/lxv
-         nHTGaXB3BiM9o4CPy8XCRR6xdUFCT6MIWrsYmpUqtRgch0C4Eg6evGNLaC5sBmAcepTr
-         jmZm6TMcO0JLQNINnhy5dh3nTYDFaf1mGNuHU4wsRpP++DDh3PsMGmlI8kWTmsTU0bwN
-         BbYHtZnA3JmU6kHoXUKiK8RRGzBYp7PsqTQKTrwyl/AG8Sp036HvlmYCkFSA+hMWSY4Z
-         he/A==
-X-Forwarded-Encrypted: i=1; AJvYcCW9E0ENKSH0iZxI6tux3L1w/xQdO5FAmBUk1rH4Mi3J3QCo6Jgbz1pkGp6ofzsn13louhp/6qMJMF1gcSbsByQXyCSx74fBalh8
-X-Gm-Message-State: AOJu0YyDdGCisN+VlwqV9JSEFGMchajchejf0dAhlZZyikvirQ3SZsdZ
-	dgqkT7cjgW6CAZUpMEIiTQfak9/MDJ2vNuacT/oarr13TqEicxSgw7c3BKZdDTc=
-X-Google-Smtp-Source: AGHT+IGcbA7Mwq7h0WiIhyo8KuepT/D1REFUiK2c6xTrJurCwDRfFLaG/d2cskZbQnaFqO6Qk3d9sw==
-X-Received: by 2002:adf:fb0e:0:b0:367:9387:fb14 with SMTP id ffacd0b85a97d-367cea735a4mr12099028f8f.27.1721033595554;
-        Mon, 15 Jul 2024 01:53:15 -0700 (PDT)
-Received: from ?IPV6:2001:a61:137b:5001:be5a:c750:b487:ff1b? ([2001:a61:137b:5001:be5a:c750:b487:ff1b])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3680db047c4sm5711198f8f.108.2024.07.15.01.53.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Jul 2024 01:53:15 -0700 (PDT)
-Message-ID: <2a80d11d-029f-4e7e-9a8e-3abae1034add@suse.com>
-Date: Mon, 15 Jul 2024 10:53:14 +0200
+        d=1e100.net; s=20230601; t=1721040248; x=1721645048;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=u6DOZ74q6LaS+OZDxCfdEKnLwse8S4I+GqgO+t/odvM=;
+        b=DFQ6NbNR8lvqh6oExyQ9Bd/T+EjMbViyEy6ThwQWvWn3xzlytyX8Ct/QkdZquUBawS
+         rqkcxJd0jDLZKRqTxO3bLYEtvLErBcWwmwue/9kABV/wQTrxtX1vuCjVbBDFDFrXnF5X
+         cegHFmYU2jek70t+YOypVFrG/GkiGEQwE/Z8EWLo60Sd9JODhYoytTH2vRf/JXk73hoW
+         q/+7uMgb6syLKcEIN96TY8L2pq+oKU9kJmA/4l5WSXUNiIDhV36/6fkL+eyauH3+8Bh9
+         EvoLO9R2GJn3iYa0sIIkzJ24I0sLDEOBxYxASBCUMyUdBBLOJNE/00CAVGtEVNjkLQ2Z
+         JeQg==
+X-Forwarded-Encrypted: i=1; AJvYcCVvqk1EcZ5PWinjrkvgo49Y71zLU8yi4obxBmEx+yBWrl5tX/npn0ZNJJQ5QCQjMgpihTVXoquq5LG+awgavODvSLnKVB7RIR5q
+X-Gm-Message-State: AOJu0Yz24Gr4afHCg1V3DSoqFSEV4Ud6+D8yPrDb1RIORHwrmNIpOh6t
+	qvD5+1tNd9QWgBcmNZ/pJgsq2xXLeS2Ra3hdHkSXdw4M/q/iOFlbtXJuaEYwh7E=
+X-Google-Smtp-Source: AGHT+IGnyG/Ll9H6oeJ1EFHxhpSIWM36luDTN8GTUj1UNcKQxukVJP29d+tdlNljt20MhCCO1QXm6w==
+X-Received: by 2002:a05:651c:1a08:b0:2ec:1a8b:c377 with SMTP id 38308e7fff4ca-2eeb30b4cbemr141866201fa.5.1721040247851;
+        Mon, 15 Jul 2024 03:44:07 -0700 (PDT)
+Received: from eriador.lumag.spb.ru (dzdbxzyyyyyyyyyyybrhy-3.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::b8c])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2eee18bf096sm8128601fa.61.2024.07.15.03.44.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Jul 2024 03:44:07 -0700 (PDT)
+Date: Mon, 15 Jul 2024 13:44:05 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Chen Ni <nichen@iscas.ac.cn>
+Cc: heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org, 
+	neil.armstrong@linaro.org, johan+linaro@kernel.org, quic_kriskura@quicinc.com, 
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: ucsi: glink: Remove unnecessary semicolon
+Message-ID: <txweguq75ghx6aqxkllvurfiituyki7skfgkiq6t4wk6xbgjxw@foigeiebnrzm>
+References: <20240715073947.4028319-1-nichen@iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH next] usb: usbfs: Add reset_resume for usbfs
-To: Alan Stern <stern@rowland.harvard.edu>, Oliver Neukum <oneukum@suse.com>
-Cc: Hongyu Xie <xiehongyu1@kylinos.cn>, gregkh@linuxfoundation.org,
- brauner@kernel.org, jlayton@kernel.org, jack@suse.cz,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240711084321.44916-1-xiehongyu1@kylinos.cn>
- <527927b8-9475-47da-bf2b-7a5d9e81e470@suse.com>
- <9ef72886-13b8-46cf-a0aa-54dad36102e9@rowland.harvard.edu>
-Content-Language: en-US
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <9ef72886-13b8-46cf-a0aa-54dad36102e9@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240715073947.4028319-1-nichen@iscas.ac.cn>
 
-
-
-On 11.07.24 16:41, Alan Stern wrote:
-> On Thu, Jul 11, 2024 at 10:59:56AM +0200, Oliver Neukum wrote:
-
->> I am sorry, but this implementation has some fundamental issues.
+On Mon, Jul 15, 2024 at 03:39:47PM GMT, Chen Ni wrote:
+> Remove unnecessary semicolon at the end of the switch statement.
+> This is detected by coccinelle.
 > 
-> Agreed, but the solution is pretty simple.  Because the device was
-> suspended, the userspace driver must have enabled suspend via the
-> USBDEVFS_ALLOW_SUSPEND ioctl.
+> Signed-off-by: Chen Ni <nichen@iscas.ac.cn>
+> ---
+>  drivers/usb/typec/ucsi/ucsi_glink.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
 
-The whole system could have been suspended, in particularly to S4.
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-	Regards
-		Oliver
-
+-- 
+With best wishes
+Dmitry
 
