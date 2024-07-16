@@ -1,80 +1,74 @@
-Return-Path: <linux-usb+bounces-12233-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12234-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27C9593273C
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Jul 2024 15:14:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 961D793296B
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Jul 2024 16:44:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AC7D6B21396
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Jul 2024 13:14:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C85591C208E6
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Jul 2024 14:44:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06EB919AD5D;
-	Tue, 16 Jul 2024 13:14:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 193D81A01C6;
+	Tue, 16 Jul 2024 14:33:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZO4HDa4H"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="HxdVyO/5"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 810EE2AE6A
-	for <linux-usb@vger.kernel.org>; Tue, 16 Jul 2024 13:14:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AD9A19DF50
+	for <linux-usb@vger.kernel.org>; Tue, 16 Jul 2024 14:33:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721135684; cv=none; b=J3xMCrE2VqNoO6fEMAAaTtCuW2m3Bxa5mmC/BRey48wX1ILXFkiZFeP4cZ/0653YLTUPiJNTGFxvqpAi4S26uw9QQ+NLZ18052++2H4RaPeV6GyMFeubIRoV+dkrCGNWLsyEaeuPKzw2unY6flnY0h+jRGWtEPfzJCet2yAXWQM=
+	t=1721140424; cv=none; b=Fuo4sODnigvxdDqCR/A8Mscux0kyQK8Iary/me4OtIFF97Y1AEzEf/HET4AR4/1eKtqCguGaOeEs6FgSvm1EBlxhSUMTMWJ7rQsXQ0Q3ayOrRTlQ8cytyL4XF6S1tC+Hpd/T3J64ZORfCK+jHFvP/be/Gew06HT/Kj5DmCmfjVI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721135684; c=relaxed/simple;
-	bh=6dRbIrshTheomuibRAqbFDbRKbFnbPCmtotF4+QiYF4=;
+	s=arc-20240116; t=1721140424; c=relaxed/simple;
+	bh=RQeQSD2wQctlzQqeddyaJO40BzkW4FuAIiCKk+yLxro=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=XYn7RSZdng/dqfzZSTC51pV9oXNC5EhIV+8lW8bRXPMv1PwupBuRRR0hISTwxYlbfTNDKesWZ7Pxxw4pEYQR+3A1OMr5K6PJLfoqIreNBCE5N4PNEwyFg83SBCisHtoVw+Mj5kS/+/DcKJTKe4xp5XFLaqbdOyAvETAIwh1LyW4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZO4HDa4H; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1721135681;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=0LEDQDLQ3briFZ7Dh19M97K7riFuoWHHeSMgTzHc0b0=;
-	b=ZO4HDa4HsAAXKISr4ry6IiL2m143GT8t/0N51a7wOZIMx7o+hzotkrNo+nKgwVqh+slkbN
-	XaN/03cQlE1jWv760igXtqFyI6YmtqkXGRhhoSqsWo3hAjwwStAVHoduL1ON4XyS8jTjXq
-	LvI96fU+SW3gob+SN/SeokFNBGegAc0=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-28-Cs8yFVofPUuvZxY5zGbSMQ-1; Tue, 16 Jul 2024 09:14:40 -0400
-X-MC-Unique: Cs8yFVofPUuvZxY5zGbSMQ-1
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-4279f241ae6so4067415e9.0
-        for <linux-usb@vger.kernel.org>; Tue, 16 Jul 2024 06:14:40 -0700 (PDT)
+	 In-Reply-To:Content-Type; b=VXiwk3MKn2bPaNMPrFYyB3nRmcEm7Qb+Jsr79D35gVdbGrkY25Eyl14ppwax+stZWag5B0ZLbwXA0GDIsNQiCTWNjhJJY7/UI+gujiYfWEbvOUMjJ2Dv5caAmr4QKmSsYPsvFovJAk/kcf1RiERYl4XphrZ9B87bUGIpAhJOBvI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=HxdVyO/5; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4266edee10cso35919775e9.2
+        for <linux-usb@vger.kernel.org>; Tue, 16 Jul 2024 07:33:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1721140420; x=1721745220; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=SAoN+lGsoTU9UL3D4vZrsnnJ+oEcV+/X3gR00PYCnt0=;
+        b=HxdVyO/5Tqw4qkz19WIRmlZJC/N5VhEXS2qZSsTm4U6HNEa58s7HrJLJw4/PSc+GNm
+         sI2pflclxfBv2u3788l8TKOKS3F7A685+CH/YbK9zaxb69LZ/INJyP6fTsPalawJHw3C
+         n7dCPWNZO4dsWaRFFQDxbOs16FJArOtSggCIWb/pgj7nOTt5rTAl+MDlSGx27jNnq+Oz
+         PPXVK4VCR5x3er/SRjtGNfwnYh64wZVFTutZRbgOjDmNjEdnxNA36mdAnv+N1AifPn8Q
+         faLQHnSv32LOoHS/SVUgJMgOJL36UR+/U2BMEveWeEHNO7AbrhhNxGjJ2qm3T+Snq7KN
+         p6Xg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721135678; x=1721740478;
+        d=1e100.net; s=20230601; t=1721140420; x=1721745220;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0LEDQDLQ3briFZ7Dh19M97K7riFuoWHHeSMgTzHc0b0=;
-        b=Nst9BEGLmTuE9NtInmtFyRlFSw5f7/k3M7Au1QD6JcqUIdau5CqHkrmY41phee29rg
-         7z/kI9/MsU1K70wa/p+5u7oJXPw1UnVOvqYMDrHZBlQhQAVpCgcWiVf2zcMP0b1zqMeD
-         4kEMHRi6RoP5NFaZD2alliOjJNTOsThtXh2YPUOGy6qymVg1+DHDbC14CWaWVf/hN7hb
-         LB9a7NyCqr370sBKZaTH8lvmfAyQB5I7EAmXoL2e7KsAEQGJTHs2thiF0hn5r7KfIVlr
-         VcoJUArQob6FwIfJ4LHkBCOVyUFesDpX6zE82ccvphq3ctkOmQHa1a25FtXk2m2aTqAC
-         h8rA==
-X-Forwarded-Encrypted: i=1; AJvYcCWPqqW5M6CfttKUWbOZY/s/cFg/RNEpWK+wzibnXC7DV/qxAyXvpi408d0SM00kJ6Cem85gQofBj8xXh46zKSVoMfVAwCj9O7xF
-X-Gm-Message-State: AOJu0YzAduj2Ze/TJhsgw6hyhRQ1OUEBJnXYMMbitt++9NrHZer6ACnp
-	PyOzomxFUoV9/gFZ4r3PXlMg4iG+iK6LAsmbUb5j1j50Ru35ybwhfd9DmrfCzbcNys8Ml2Kl1VV
-	o3GbJnZP8tmOSrKNWCCGbEQ2nnNj75Y3PcLAXAfvJp6D+S4sYR9AfYDWHMdoV335+Yw==
-X-Received: by 2002:a5d:47af:0:b0:368:4c5:b67 with SMTP id ffacd0b85a97d-368240c5cecmr1297772f8f.8.1721135678528;
-        Tue, 16 Jul 2024 06:14:38 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFUbkZufXxQmRD68YJ0BeYGsi3kx+leKWXkuE2NaNvjicZkL5J0TGrRmp7vSDKiJutaHe6Utg==
-X-Received: by 2002:a5d:47af:0:b0:368:4c5:b67 with SMTP id ffacd0b85a97d-368240c5cecmr1297756f8f.8.1721135678126;
-        Tue, 16 Jul 2024 06:14:38 -0700 (PDT)
-Received: from ?IPV6:2a0d:3344:1738:5210::f71? ([2a0d:3344:1738:5210::f71])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-427a5e93c92sm129511955e9.22.2024.07.16.06.14.37
+        bh=SAoN+lGsoTU9UL3D4vZrsnnJ+oEcV+/X3gR00PYCnt0=;
+        b=EvgDtXXXvO50K6iO5vtF8ful0lqWyonETTVV8rdVdJnqnQJK/06Fz8bDeMYv3ZyhJZ
+         33lMXQ7F34MBmUnG3pL1m1ibA2TrCFJMd8rDgRaP/aOTH+ew0bYiiE8ECzPSuTEH9EDR
+         /Tp912RFhwSVqeRfg7EaGr3K7xZI/nGU8poHJHH/FvWDNBEBN0XTp5rJ0cqBnunx6IOy
+         ZcYuAIcFZcbrL6IE1Qrn9Rsy+HJmK+8al79/PFTmuztSnyF/zBLTj7swS6k2O6EAHOSa
+         48YXLs7SxMOTkSI7qqS0iltJV6uoFRI+RSKIgpWQdDQhxf0E9OqYEWPK6gtF0dK/VfP0
+         vpRw==
+X-Forwarded-Encrypted: i=1; AJvYcCWUuN5aVU8xXm1XtXr0kJxwBpsioTlHtWxn2GdQQPgjWelR21eZyf8zV2lSoBByuCadswHEpPFmvKuyQ9WPRGGT6oFYaqfj8mk+
+X-Gm-Message-State: AOJu0YyjsXghq/fgFkYwmJBc6T+44I3BHwXfl2GCzoz14W33V58HoGou
+	TFVqdvo7Z9btZusVi5RcrlOzM/xoOTk2BJDQcIzs0rS2WYteD5smGaFuSfSWIVI=
+X-Google-Smtp-Source: AGHT+IEzXfimsxjIWml18ttj8Fc+idKnUTz61gGP2qi/8EpAYJIDv+NB8IsKkCdwykWfnnmGp/TDEQ==
+X-Received: by 2002:a05:600c:1383:b0:426:67ad:38e3 with SMTP id 5b1f17b1804b1-427ba654c0cmr18085675e9.3.1721140420220;
+        Tue, 16 Jul 2024 07:33:40 -0700 (PDT)
+Received: from ?IPV6:2001:a61:137b:5001:be5a:c750:b487:ff1b? ([2001:a61:137b:5001:be5a:c750:b487:ff1b])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-427a574e1f3sm131136365e9.0.2024.07.16.07.33.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Jul 2024 06:14:37 -0700 (PDT)
-Message-ID: <e5603fa0-0755-4b49-ad5f-9f999e8d4e3f@redhat.com>
-Date: Tue, 16 Jul 2024 15:14:36 +0200
+        Tue, 16 Jul 2024 07:33:40 -0700 (PDT)
+Message-ID: <f8b192bd-55e3-4b00-92b3-67ba99b5b86e@suse.com>
+Date: Tue, 16 Jul 2024 16:33:38 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -82,44 +76,40 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 net-next] lan78xx: Refactor interrupt handling and
- redundant messages
-To: Rengarajan S <rengarajan.s@microchip.com>, woojung.huh@microchip.com,
- UNGLinuxDriver@microchip.com, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, netdev@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20240716045818.1257906-1-rengarajan.s@microchip.com>
+Subject: Re: [PATCH] usb: vhci-hcd: Do not drop references before new
+ references are gained
+To: Shuah Khan <skhan@linuxfoundation.org>, valentina.manea.m@gmail.com,
+ shuah@kernel.org, i@zenithal.me, gregkh@linuxfoundation.org,
+ linux-usb@vger.kernel.org
+References: <20240709113851.14691-1-oneukum@suse.com>
+ <e1b713a6-de8d-4df9-979e-12cb9876bf33@linuxfoundation.org>
 Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <20240716045818.1257906-1-rengarajan.s@microchip.com>
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <e1b713a6-de8d-4df9-979e-12cb9876bf33@linuxfoundation.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 7/16/24 06:58, Rengarajan S wrote:
-> The MAC and PHY interrupt are not synchronized. When multiple phy
-> interrupt occur while the MAC interrupt is cleared, the phy handle
-> will not be called which causes the PHY interrupt to remain set
-> throughout. This is avoided by not clearing the MAC interrupt each
-> time. When the PHY interrupt is set, the MAC calls the PHY handle
-> and after processing the timestamp the PHY interrupt is cleared.
-> Also, avoided repetitive debug messages by replacing netdev_err
-> with netif_dbg.
+
+
+On 09.07.24 21:38, Shuah Khan wrote:
+> On 7/9/24 05:38, Oliver Neukum wrote:
+>> At a few places the driver carries stale pointers
+>> to references that can still be used. Make sure that does not happen.
+>> This strictly speaking closes ZDI-CAN-22273, though there may be
+>> similar races in the driver.
+>>
+>> Signed-off-by: Oliver Neukum <oneukum@suse.com>
 > 
-> Signed-off-by: Rengarajan S <rengarajan.s@microchip.com>
+> Sorry I need a bit more explanation to follow the change you
+> are making. Also how did you find the problem?
 
-## Form letter - net-next-closed
+Hi,
 
-The merge window for v6.11 and therefore net-next is closed for new 
-drivers, features, code refactoring and optimizations. We are currently 
-accepting bug fixes only.
+I looked at the initial report you wrote and it seemed to me that the issue
+was that vhci_device_reset() leaves a stale pointer around and vhci_urb_enqueue()
+in the special cases drops the old reference before it gets a new reference,
+which together causes the race condition you were hitting.
 
-Please repost when net-next reopens after July 29th.
-
-RFC patches sent for review only are obviously welcome at any time.
-
-See: 
-https://www.kernel.org/doc/html/next/process/maintainer-netdev.html#development-cycle
--- 
-pw-bot: defer
-
+	Regards
+		Oliver
 
