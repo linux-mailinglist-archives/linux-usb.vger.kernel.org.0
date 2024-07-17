@@ -1,147 +1,136 @@
-Return-Path: <linux-usb+bounces-12245-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-12247-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BDF61933861
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Jul 2024 09:57:15 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C0E1933A4B
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Jul 2024 11:49:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DFA4B1C21813
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Jul 2024 07:57:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DC7CA2832ED
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Jul 2024 09:49:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D695C20DC3;
-	Wed, 17 Jul 2024 07:57:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADBAF17F378;
+	Wed, 17 Jul 2024 09:49:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="A2wuJnYs"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="HGIijW84"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71B4922625
-	for <linux-usb@vger.kernel.org>; Wed, 17 Jul 2024 07:57:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC1A817E8F9;
+	Wed, 17 Jul 2024 09:49:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721203023; cv=none; b=ASjiuhxPR7tmLRa++eJMyRBZBStdxX50xHzxpqfIP1l4x2Zp2rW19eljn+o8LiHrSX3Qg0DQZtKWlHeCVwLFaW3nYw1PTwFC+M/SdwaClMtfq3OsOp3f5AV1clTKk8Scs3WJWfyky5er0UQdUGZY716rwKBuCsaeKcIcJRlqhAw=
+	t=1721209768; cv=none; b=ZDEbcUAPSDNcIAAywWgT1nYUdKhFBghJ0xgD/wqP8FgmgKkg/ahhH3AaOzUi6uN510idzSSpKbzYIYBZ/eHkvuJes+Ieoz6eSXt0fiiRLWTLTlN8LjeRr0aEBAG/CiOi40lmWPW2+e77wzDbFeODx8uKCJzpj3q4/Fc/4mse4MA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721203023; c=relaxed/simple;
-	bh=gOQIhVwlUv2eV47vH5ppdulwGYt5SzMln0kAJPHsrV0=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=lJPQzDD12yetYmeXbz5dY+dLvGntIcCw3ah3pJud/QpT1E/k8EFUPRhotf5nrgggxpidliKaIRTCGwagmPAgOE/PfhlnYZSPZBh88+KR28bjZPuxU57XCP6EW4pSI6Jlv1fL0TlM9iuTyIV3dVUUxlpL0ZLl0KjJM7+9p3zGb8k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=A2wuJnYs; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4266dc7591fso45404575e9.0
-        for <linux-usb@vger.kernel.org>; Wed, 17 Jul 2024 00:57:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1721203019; x=1721807819; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/z2Dk0w9xhkDO1EnnbnjHajHb+TSL/Zs7A5uSiMV1RU=;
-        b=A2wuJnYsL9HLX/fWL7Z2JOG0ArV9wkSaoT+pQKHZv7luPUiaMoT9j0R9bK/pQINcEZ
-         EfJ+CNMyf6rjtTHt6RdPGHawHBK1QPC4DvNqTwbzls1ok4gzAUxd86KfRpX0zObMPPaZ
-         DScMq44UUu27WJURwUCzwHBhwOw3zbkiKe7y9EJOy2u3N3Zs4DqMjTm4DGBQpnxn8CTx
-         j2EkiWQybO6/Vd3oL91zbLDWknhByFrSRWPKsd9Tbldz27eURPb6F2rYPR204QHLp3Ap
-         uq89+FqsS+qIleHXdmREqnh2pPiprtp9PVpWsFz09WUMfXX95ZsToIyXgEiBV2GQ2uw9
-         /O0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721203019; x=1721807819;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=/z2Dk0w9xhkDO1EnnbnjHajHb+TSL/Zs7A5uSiMV1RU=;
-        b=l+nQ0Fz7NPkd5wgIufVu79Eramvg8OsA12FmCkj54rq99LmZdgPDyQurqvRDUht5I8
-         6WVQrsJ9K4jcLja+XmBw6GZ7C7Lf188ldCxit2eMafNgfGREzqOeZ8d45aNGGhnDEAeS
-         74sM0x1BmZhNAeV9vj6g7o/eHMFb4LU70U1RH+Fbdpq5B+d2oTWM14jCYy8/FYXjiAmd
-         PpzVHcWwH/e3B8qg9krcApyJ/jpGRJ3T3UmBQ+eey7lYGcXpuFJdaYWhqSKqPSqiw6du
-         68M89OUiN+KHWW5IxeTlWo/KqhMjrcV1CkNz9d07PteAjxb5ZqDXWaUHgIzthqkqd88e
-         gS/A==
-X-Forwarded-Encrypted: i=1; AJvYcCWFLepK/ZaHmpl/o6RCpVIT3+KSWczkAFNUhU+WIHTHYjK/KuwWqc/S2OxmJbtBs7IWBacXEu+BSsc42EuUBaSaG77NU2DAUUAO
-X-Gm-Message-State: AOJu0YwH77IsIQ5410Ol2RUocA0QSwN/Gs1So4/SRV0X0SBoK14r0syU
-	AHp2u19d6XYygxrvVVUYzj2IjUm9tfOmXEdmD6WGQhE9U1Wc9v9U+6/j/OsMb6A=
-X-Google-Smtp-Source: AGHT+IFTy8c9UCCsxgJAFU5uC3fKaWL8SWqf1jjti9B5styvGlmZXCFH7iXEA2pTbA1qsBmrijZl8Q==
-X-Received: by 2002:a05:6000:1fa6:b0:368:38af:9a2e with SMTP id ffacd0b85a97d-36838af9ceemr398786f8f.21.1721203018298;
-        Wed, 17 Jul 2024 00:56:58 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:c5b9:9b90:b1c4:1a1d? ([2a01:e0a:982:cbb0:c5b9:9b90:b1c4:1a1d])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3680dafba03sm11005798f8f.76.2024.07.17.00.56.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Jul 2024 00:56:57 -0700 (PDT)
-Message-ID: <06f1b509-220e-415b-a24b-7fe8dc796328@linaro.org>
-Date: Wed, 17 Jul 2024 09:56:56 +0200
+	s=arc-20240116; t=1721209768; c=relaxed/simple;
+	bh=26CUJ3fTo1PVxcLPtvOiRCqkB2bx1YYQ/UoSpcFrCNg=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=oYtnY6bcAmDaqJf7md+6G+l5+T8uWEUGrL1BGrqj6yKNexcwdK5v3GVQf/oIK5RNCW83WK4nX0q/dRcQVzGvhTLPDJapgfpzhmw+gKkAabsPx8Ie/jki7dS8+3N5O38Urf3xuJa6cWDsNL1zcPz0LH1HWSx04TR22Pdhqj+QUL8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=HGIijW84; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46H79vco029055;
+	Wed, 17 Jul 2024 09:49:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=5E9h2/RoTdgVUBIiWmCHLa
+	lzQuAZA0+NEPCzWP40ZBE=; b=HGIijW84kKA5XcRZYA3adU9htYYBu95d/NtyX8
+	Qd5JEA0XRCDV08sr5CCA4jd6wdG5EUqaR3ZnDBimQSAZt6h1SuS/brQfdW0NFNCV
+	4FmMMBhFEP6TUd7aQzamKJET1dD586NqGgZrarEZK7+h76Htjbicn4yPC0yA6zK/
+	tq5gYXcWS1w4yETgmSv4cM3GA0HGzYob58nUIw2lCe9SWze7bKLdz8+kpocgYVfy
+	4KqNyIZ3cCV0JKU2hpxS6Ba1Zrl13HE+wzRXU2/x0nAEKgZtYf0k7Gi0T/M363Fi
+	fplLJKCsPVIQhYJcmX7HuC6udQ+CbIpGbQiy+/BsIxL0h1lg==
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 40dwj1hwcc-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 17 Jul 2024 09:49:10 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA01.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 46H9nAvw005358
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 17 Jul 2024 09:49:10 GMT
+Received: from hu-varada-blr.qualcomm.com (10.80.80.8) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Wed, 17 Jul 2024 02:49:06 -0700
+From: Varadarajan Narayanan <quic_varada@quicinc.com>
+To: <gregkh@linuxfoundation.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
+        <conor+dt@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <quic_wcheng@quicinc.com>,
+        <quic_kriskura@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC: Varadarajan Narayanan <quic_varada@quicinc.com>
+Subject: [PATCH v2 1/2] dt-bindings: usb: qcom,dwc3: Update ipq5332 interrupt info
+Date: Wed, 17 Jul 2024 15:18:47 +0530
+Message-ID: <20240717094848.3536239-1-quic_varada@quicinc.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: neil.armstrong@linaro.org
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v1 4/4] usb: typec: ucsi: Fix SET_PDR typo in UCSI header
- file
-To: Jameson Thies <jthies@google.com>, heikki.krogerus@linux.intel.com,
- linux-usb@vger.kernel.org
-Cc: bleung@google.com, abhishekpandit@chromium.org, andersson@kernel.org,
- dmitry.baryshkov@linaro.org, fabrice.gasnier@foss.st.com,
- gregkh@linuxfoundation.org, hdegoede@redhat.com,
- rajaram.regupathy@intel.com, saranya.gopal@intel.com,
- linux-kernel@vger.kernel.org
-References: <20240717004949.3638557-1-jthies@google.com>
- <20240717004949.3638557-5-jthies@google.com>
-Content-Language: en-US, fr
-Autocrypt: addr=neil.armstrong@linaro.org; keydata=
- xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
- GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
- BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
- qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
- 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
- AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
- OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
- Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
- YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
- GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
- UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
- GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
- yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
- QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
- SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
- 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
- Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
- oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
- M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
- 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
- KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
- 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
- QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
-Organization: Linaro
-In-Reply-To: <20240717004949.3638557-5-jthies@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: pZ7zxeHShegCEf0BTIljOtaSWOGPivB6
+X-Proofpoint-ORIG-GUID: pZ7zxeHShegCEf0BTIljOtaSWOGPivB6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-17_06,2024-07-16_02,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=815 phishscore=0
+ lowpriorityscore=0 bulkscore=0 adultscore=0 malwarescore=0 suspectscore=0
+ mlxscore=0 impostorscore=0 clxscore=1015 priorityscore=1501 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2407110000
+ definitions=main-2407170075
 
-On 17/07/2024 02:49, Jameson Thies wrote:
-> Fix SET_PDR typo in UCSI header file.
-> 
-> Signed-off-by: Jameson Thies <jthies@google.com>
-> ---
->   drivers/usb/typec/ucsi/ucsi.h | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
-> index 57129f3c0814..375f1881c1e2 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.h
-> +++ b/drivers/usb/typec/ucsi/ucsi.h
-> @@ -152,7 +152,7 @@ void ucsi_connector_change(struct ucsi *ucsi, u8 num);
->   #define UCSI_SET_UOR_ROLE(_r_)		(((_r_) == TYPEC_HOST ? 1 : 2) << 23)
->   #define UCSI_SET_UOR_ACCEPT_ROLE_SWAPS		BIT(25)
->   
-> -/* SET_PDF command bits */
-> +/* SET_PDR command bits */
->   #define UCSI_SET_PDR_ROLE(_r_)		(((_r_) == TYPEC_SOURCE ? 1 : 2) << 23)
->   #define UCSI_SET_PDR_ACCEPT_ROLE_SWAPS		BIT(25)
->   
+IPQ5332 has only three interrupts. Update the constraints
+to fix the following dt_binding_check errors.
 
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+	interrupt-names: ['pwr_event', 'dp_hs_phy_irq', 'dm_hs_phy_irq'] is too short
+
+Fixes: 53c6d854be4e ("dt-bindings: usb: dwc3: Clean up hs_phy_irq in binding")
+Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+---
+v2: Fix patch version numbering. Incorrectly marked the first version as v0
+    Add interrupts and interrupt-names for ipq5332 instead of clubbing it with
+    qcom,x1e80100-dwc3
+---
+ Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+index 6c5f962bbcf9..5e5cc2175526 100644
+--- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
++++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+@@ -235,6 +235,13 @@ allOf:
+             - const: core
+             - const: sleep
+             - const: mock_utmi
++        interrupts:
++          maxItems: 3
++        interrupt-names:
++          items:
++            - const: pwr_event
++            - const: dp_hs_phy_irq
++            - const: dm_hs_phy_irq
+ 
+   - if:
+       properties:
+@@ -442,7 +449,6 @@ allOf:
+         compatible:
+           contains:
+             enum:
+-              - qcom,ipq5332-dwc3
+               - qcom,x1e80100-dwc3
+     then:
+       properties:
+-- 
+2.34.1
+
 
